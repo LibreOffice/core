@@ -189,7 +189,7 @@ void SvxRTFParser::NextToken( int nToken )
     case RTF_RDBLQUOTE:		cCh = 0x201D;	goto INSINGLECHAR;
 INSINGLECHAR:
         aToken = OUString(cCh);
-        // no Break, aToken is set as Text
+        SAL_FALLTHROUGH; // aToken is set as Text
     case RTF_TEXTTOKEN:
         {
             InsertText();
@@ -420,7 +420,7 @@ void SvxRTFParser::ReadColorTable()
                     : -1 == aToken.indexOf( ";" ) )
                 break;      // At least the ';' must be found
 
-            // else no break !!
+            SAL_FALLTHROUGH;
 
         case ';':
             if( IsParserWorking() )
@@ -509,7 +509,7 @@ void SvxRTFParser::ReadFontTable()
             // for technical/symbolic font of the rtl_TextEncoding is changed!
             case RTF_FTECH:
                 pFont->SetCharSet( RTL_TEXTENCODING_SYMBOL );
-                // deliberate fall through
+                SAL_FALLTHROUGH;
             case RTF_FNIL:
                 pFont->SetFamily( FAMILY_DONTKNOW );
                 break;

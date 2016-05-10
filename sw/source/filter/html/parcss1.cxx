@@ -578,7 +578,7 @@ CSS1Token CSS1Parser::GetNextToken()
                 bNextCh = false;
                 break;
             }
-            // no break
+            SAL_FALLTHROUGH;
 
         default: // IDENT | syntax error
             if (rtl::isAsciiAlpha(cNextCh))
@@ -1043,7 +1043,7 @@ CSS1Expression *CSS1Parser::ParseDeclaration( OUString& rProperty )
         case CSS1_EMX:
             if( '-'==cSign )
                 nValue = -nValue;
-            //fall-through
+            SAL_FALLTHROUGH;
         case CSS1_STRING:
         case CSS1_PERCENTAGE:
         case CSS1_IDENT:
@@ -1308,7 +1308,7 @@ bool CSS1Expression::GetColor( Color &rColor ) const
         if( bRet || CSS1_STRING != eType || aValue.isEmpty() ||
             aValue[0] != '#' )
             break;
-
+        SAL_FALLTHROUGH;
     case CSS1_HEXCOLOR:
         {
             // HACK fuer MS-IE: DIe Farbe kann auch in einem String stehen

@@ -862,7 +862,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             const sal_uInt16 nWhich = GetPool().GetWhich( nSlot );
             if ( pArgs && pArgs->GetItemState( nWhich ) == SfxItemState::SET )
                 bUseDialog = false;
-            // intentionally no break
+            SAL_FALLTHROUGH;
         }
         case SID_CHAR_DLG:
         case SID_CHAR_DLG_EFFECT:
@@ -895,8 +895,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             const sal_uInt16 nWhich = GetPool().GetWhich( nSlot );
             if ( pArgs && pArgs->GetItemState( nWhich ) == SfxItemState::SET )
                 bUseDialog = false;
-            // intentionally no break
-
+            SAL_FALLTHROUGH;
         }
         case SID_PARA_DLG:
         {

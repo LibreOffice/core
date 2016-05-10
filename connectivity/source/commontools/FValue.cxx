@@ -1151,7 +1151,7 @@ bool ORowSetValue::getBool()    const
                         break;
                     }
                 }
-                // run through
+                SAL_FALLTHROUGH;
             case DataType::DECIMAL:
             case DataType::NUMERIC:
 
@@ -2045,7 +2045,7 @@ Sequence<sal_Int8>  ORowSetValue::getSequence() const
             case DataType::OBJECT:
             default:
                 OSL_ENSURE( false, "ORowSetValue::getDate: cannot retrieve the data!" );
-                // NO break!
+                SAL_FALLTHROUGH;
 
             case DataType::BINARY:
             case DataType::VARBINARY:

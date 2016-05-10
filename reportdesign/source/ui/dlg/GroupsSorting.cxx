@@ -752,7 +752,7 @@ void OFieldExpressionControl::Command(const CommandEvent& rEvt)
                         break;
                 }
             }
-            // run through
+            SAL_FALLTHROUGH;
         }
         default:
             EditBrowseBox::Command(rEvt);

@@ -1767,7 +1767,7 @@ void VCLXWindow::setProperty( const OUString& PropertyName, const css::uno::Any&
                 case WINDOW_CANCELBUTTON:
                 case WINDOW_HELPBUTTON:
                     nAlign = PROPERTY_ALIGN_CENTER;
-                    // no break here!
+                    SAL_FALLTHROUGH;
                 case WINDOW_FIXEDTEXT:
                 case WINDOW_EDIT:
                 case WINDOW_MULTILINEEDIT:

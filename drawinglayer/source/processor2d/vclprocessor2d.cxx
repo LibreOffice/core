@@ -228,7 +228,7 @@ namespace drawinglayer
                         {
                             default:
                                 SAL_WARN( "drawinglayer", "Unknown Relief style " << pTCPP->getTextRelief() );
-                                // fall through
+                                SAL_FALLTHROUGH;
                             case primitive2d::TEXT_RELIEF_NONE:     eFontRelief = RELIEF_NONE; break;
                             case primitive2d::TEXT_RELIEF_EMBOSSED: eFontRelief = RELIEF_EMBOSSED; break;
                             case primitive2d::TEXT_RELIEF_ENGRAVED: eFontRelief = RELIEF_ENGRAVED; break;

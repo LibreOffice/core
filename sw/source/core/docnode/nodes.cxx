@@ -699,7 +699,7 @@ bool SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
                 --aIdx;
                 break;
             }
-            // no break !!
+            SAL_FALLTHROUGH;
         case ND_TABLENODE:
         case ND_STARTNODE:
             {

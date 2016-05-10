@@ -443,6 +443,14 @@ namespace css = ::com::sun::star;
 #define SAL_CONSTEXPR
 #endif
 
+#if defined LIBO_INTERNAL_ONLY
+#if defined __clang__
+#define SAL_FALLTHROUGH [[clang::fallthrough]]
+#else
+#define SAL_FALLTHROUGH
+#endif
+#endif
+
 #endif /* __cplusplus */
 
 #ifdef __cplusplus

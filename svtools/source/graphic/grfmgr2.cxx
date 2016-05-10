@@ -1139,35 +1139,35 @@ bool GraphicManager::ImplCreateOutput( OutputDevice* pOut,
                         aFont.SetWidth( aFontMetric.GetWidth() );
                         pModAct = new MetaFontAction( aFont );
                     }
+                    SAL_FALLTHROUGH;
                 }
-                    // FALLTHROUGH intended
                 case MetaActionType::NONE:
-                    // FALLTHROUGH intended
+                    SAL_FALLTHROUGH;
 
                     // OutDev state changes (which don't affect bitmap
                     // output)
                 case MetaActionType::LINECOLOR:
-                    // FALLTHROUGH intended
+                    SAL_FALLTHROUGH;
                 case MetaActionType::FILLCOLOR:
-                    // FALLTHROUGH intended
+                    SAL_FALLTHROUGH;
                 case MetaActionType::TEXTCOLOR:
-                    // FALLTHROUGH intended
+                    SAL_FALLTHROUGH;
                 case MetaActionType::TEXTFILLCOLOR:
-                    // FALLTHROUGH intended
+                    SAL_FALLTHROUGH;
                 case MetaActionType::TEXTALIGN:
-                    // FALLTHROUGH intended
+                    SAL_FALLTHROUGH;
                 case MetaActionType::TEXTLINECOLOR:
-                    // FALLTHROUGH intended
+                    SAL_FALLTHROUGH;
                 case MetaActionType::TEXTLINE:
-                    // FALLTHROUGH intended
+                    SAL_FALLTHROUGH;
                 case MetaActionType::PUSH:
-                    // FALLTHROUGH intended
+                    SAL_FALLTHROUGH;
                 case MetaActionType::POP:
-                    // FALLTHROUGH intended
+                    SAL_FALLTHROUGH;
                 case MetaActionType::LAYOUTMODE:
-                    // FALLTHROUGH intended
+                    SAL_FALLTHROUGH;
                 case MetaActionType::TEXTLANGUAGE:
-                    // FALLTHROUGH intended
+                    SAL_FALLTHROUGH;
                 case MetaActionType::COMMENT:
                     break;
 
@@ -1284,79 +1284,79 @@ bool GraphicManager::ImplCreateOutput( OutputDevice* pOut,
                 case MetaActionType::RASTEROP:
                     if( static_cast<MetaRasterOpAction*>(pAct)->GetRasterOp() == ROP_OVERPAINT )
                         break;
-                    // FALLTHROUGH intended
+                    SAL_FALLTHROUGH;
                 case MetaActionType::PIXEL:
-                    // FALLTHROUGH intended
+                    SAL_FALLTHROUGH;
                 case MetaActionType::POINT:
-                    // FALLTHROUGH intended
+                    SAL_FALLTHROUGH;
                 case MetaActionType::LINE:
-                    // FALLTHROUGH intended
+                    SAL_FALLTHROUGH;
                 case MetaActionType::RECT:
-                    // FALLTHROUGH intended
+                    SAL_FALLTHROUGH;
                 case MetaActionType::ROUNDRECT:
-                    // FALLTHROUGH intended
+                    SAL_FALLTHROUGH;
                 case MetaActionType::ELLIPSE:
-                    // FALLTHROUGH intended
+                    SAL_FALLTHROUGH;
                 case MetaActionType::ARC:
-                    // FALLTHROUGH intended
+                    SAL_FALLTHROUGH;
                 case MetaActionType::PIE:
-                    // FALLTHROUGH intended
+                    SAL_FALLTHROUGH;
                 case MetaActionType::CHORD:
-                    // FALLTHROUGH intended
+                    SAL_FALLTHROUGH;
                 case MetaActionType::POLYLINE:
-                    // FALLTHROUGH intended
+                    SAL_FALLTHROUGH;
                 case MetaActionType::POLYGON:
-                    // FALLTHROUGH intended
+                    SAL_FALLTHROUGH;
                 case MetaActionType::POLYPOLYGON:
-                    // FALLTHROUGH intended
+                    SAL_FALLTHROUGH;
 
                 case MetaActionType::TEXT:
-                    // FALLTHROUGH intended
+                    SAL_FALLTHROUGH;
                 case MetaActionType::TEXTARRAY:
-                    // FALLTHROUGH intended
+                    SAL_FALLTHROUGH;
                 case MetaActionType::STRETCHTEXT:
-                    // FALLTHROUGH intended
+                    SAL_FALLTHROUGH;
                 case MetaActionType::TEXTRECT:
-                    // FALLTHROUGH intended
+                    SAL_FALLTHROUGH;
 
                 case MetaActionType::MASK:
-                    // FALLTHROUGH intended
+                    SAL_FALLTHROUGH;
                 case MetaActionType::MASKSCALE:
-                    // FALLTHROUGH intended
+                    SAL_FALLTHROUGH;
                 case MetaActionType::MASKSCALEPART:
-                    // FALLTHROUGH intended
+                    SAL_FALLTHROUGH;
 
                 case MetaActionType::GRADIENT:
-                    // FALLTHROUGH intended
+                    SAL_FALLTHROUGH;
                 case MetaActionType::HATCH:
-                    // FALLTHROUGH intended
+                    SAL_FALLTHROUGH;
                 case MetaActionType::WALLPAPER:
-                    // FALLTHROUGH intended
+                    SAL_FALLTHROUGH;
 
                 case MetaActionType::Transparent:
-                    // FALLTHROUGH intended
+                    SAL_FALLTHROUGH;
                 case MetaActionType::EPS:
-                    // FALLTHROUGH intended
+                    SAL_FALLTHROUGH;
                 case MetaActionType::FLOATTRANSPARENT:
-                    // FALLTHROUGH intended
+                    SAL_FALLTHROUGH;
                 case MetaActionType::GRADIENTEX:
-                    // FALLTHROUGH intended
+                    SAL_FALLTHROUGH;
 
                     // OutDev state changes that _do_ affect bitmap
                     // output
                 case MetaActionType::CLIPREGION:
-                    // FALLTHROUGH intended
+                    SAL_FALLTHROUGH;
                 case MetaActionType::ISECTRECTCLIPREGION:
-                    // FALLTHROUGH intended
+                    SAL_FALLTHROUGH;
                 case MetaActionType::ISECTREGIONCLIPREGION:
-                    // FALLTHROUGH intended
+                    SAL_FALLTHROUGH;
                 case MetaActionType::MOVECLIPREGION:
-                    // FALLTHROUGH intended
+                    SAL_FALLTHROUGH;
 
                 case MetaActionType::MAPMODE:
-                    // FALLTHROUGH intended
+                    SAL_FALLTHROUGH;
                 case MetaActionType::REFPOINT:
-                    // FALLTHROUGH intended
+                    SAL_FALLTHROUGH;
                 default:
                     bNonBitmapActionEncountered = true;
                     break;

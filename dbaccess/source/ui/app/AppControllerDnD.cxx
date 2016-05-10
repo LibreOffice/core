@@ -783,7 +783,7 @@ void OApplicationController::getSupportedFormats(ElementType _eType,::std::vecto
             _rFormatIds.push_back(SotClipboardFormatId::DBACCESS_TABLE);
             _rFormatIds.push_back(SotClipboardFormatId::RTF);
             _rFormatIds.push_back(SotClipboardFormatId::HTML);
-            // run through
+            SAL_FALLTHROUGH;
         case E_QUERY:
             _rFormatIds.push_back(SotClipboardFormatId::DBACCESS_QUERY);
             break;

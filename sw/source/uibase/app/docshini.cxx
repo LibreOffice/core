@@ -531,7 +531,7 @@ bool  SwDocShell::Load( SfxMedium& rMedium )
                 }
                 // suppress SfxProgress, when we are Embedded
                 SW_MOD()->SetEmbeddedLoadSave( true );
-                // no break;
+                SAL_FALLTHROUGH;
 
             case SfxObjectCreateMode::STANDARD:
             case SfxObjectCreateMode::PREVIEW:

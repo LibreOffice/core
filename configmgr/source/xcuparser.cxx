@@ -646,7 +646,7 @@ void XcuParser::handleUnknownGroupProp(
             recordModification(false);
             break;
         }
-        // fall through
+        SAL_FALLTHROUGH;
     default:
         SAL_WARN(
             "configmgr",

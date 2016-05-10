@@ -215,7 +215,8 @@ void XMLTextMarkImportContext::EndElement()
                                 break; // don't insert
                             }
                         }
-                    } // fall through
+                    }
+                    SAL_FALLTHROUGH;
                 case TypeFieldmark:
                     {
                         const char *formFieldmarkName=lcl_getFormFieldmarkName(m_sFieldName);
@@ -282,7 +283,8 @@ void XMLTextMarkImportContext::EndElement()
                                 break; // don't insert
                             }
                         }
-                    } // fall through
+                    }
+                    SAL_FALLTHROUGH;
                 case TypeFieldmarkEnd:
                 {
                     // get old range, and construct

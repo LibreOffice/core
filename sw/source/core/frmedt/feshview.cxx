@@ -388,7 +388,8 @@ bool SwFEShell::MoveAnchor( SwMove nDir )
                     if( pos != *aAnch.GetContentAnchor())
                         aAnch.SetAnchor( &pos );
                 }
-            } // no break!
+                SAL_FALLTHROUGH;
+            }
             case FLY_AT_PARA:
             {
                 OSL_ENSURE( pOld->IsContentFrame(), "Wrong anchor, page expected." );

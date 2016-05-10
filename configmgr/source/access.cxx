@@ -696,7 +696,7 @@ void Access::setName(OUString const & aName)
                     }
                 }
             }
-            // fall through
+            SAL_FALLTHROUGH;
         case Node::KIND_LOCALIZED_PROPERTY:
             // renaming a property could only work for an extension property,
             // but a localized property is never an extension property

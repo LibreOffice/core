@@ -1470,7 +1470,7 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId) const
                     aReturn.bEnabled = m_aCurrentFrame.isActive();
                     break;
                 }
-                // run through
+                SAL_FALLTHROUGH;
             case ID_BROWSER_PASTE:
             case ID_BROWSER_CUT:
             {
@@ -1526,7 +1526,7 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId) const
                     aReturn.bEnabled = true;
                     break;
                 }
-                // no break
+                SAL_FALLTHROUGH;
             case ID_BROWSER_ORDERCRIT:
                 {
                     const Reference< XPropertySet >  xFormSet(getRowSet(), UNO_QUERY);
@@ -1950,7 +1950,7 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId, const Sequence< Property
                 getBrowserView()->getVclControl()->CopySelectedRowsToClipboard();
                 break;
             }
-            // run through
+            SAL_FALLTHROUGH;
         case ID_BROWSER_CUT:
         case ID_BROWSER_PASTE:
         {
@@ -1978,7 +1978,7 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId, const Sequence< Property
 
         case ID_BROWSER_SORTDOWN:
             bSortUp = false;
-            // DON'T break
+            SAL_FALLTHROUGH;
         case ID_BROWSER_SORTUP:
         {
             if (!SaveModified())

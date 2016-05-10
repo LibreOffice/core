@@ -2123,7 +2123,7 @@ void cppuhelper::TypeManager::readRdbDirectory(
             SAL_INFO("cppuhelper", "Ignored optional " << uri);
             return;
         }
-        // fall through
+        SAL_FALLTHROUGH;
     default:
         throw css::uno::DeploymentException(
             "Cannot open directory " + uri,

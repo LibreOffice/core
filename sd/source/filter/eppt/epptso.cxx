@@ -1935,16 +1935,16 @@ void PPTWriter::ImplWriteClickAction( SvStream& rSt, css::presentation::ClickAct
     {
         case css::presentation::ClickAction_STOPPRESENTATION :
             nJump += 2;
-            //fall-through
+            SAL_FALLTHROUGH;
         case css::presentation::ClickAction_LASTPAGE :
             nJump++;
-            //fall-through
+            SAL_FALLTHROUGH;
         case css::presentation::ClickAction_FIRSTPAGE :
             nJump++;
-            //fall-through
+            SAL_FALLTHROUGH;
         case css::presentation::ClickAction_PREVPAGE :
             nJump++;
-            //fall-through
+            SAL_FALLTHROUGH;
         case css::presentation::ClickAction_NEXTPAGE :
         {
             nJump++;

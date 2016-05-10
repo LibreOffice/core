@@ -1478,8 +1478,6 @@ bool XclExpCellAlign::FillFromItemSet(
 
     switch( eBiff )
     {
-        // ALL 'case's - run through!
-
         case EXC_BIFF8: // attributes new in BIFF8
         {
             // text indent
@@ -1495,6 +1493,8 @@ bool XclExpCellAlign::FillFromItemSet(
             // CTL text direction
             SetScFrameDir( GETITEMVALUE( rItemSet, SvxFrameDirectionItem, ATTR_WRITINGDIR, SvxFrameDirection ) );
             bUsed |= ScfTools::CheckItem( rItemSet, ATTR_WRITINGDIR, bStyle );
+
+            SAL_FALLTHROUGH;
         }
 
         case EXC_BIFF5: // attributes new in BIFF5
@@ -1519,6 +1519,8 @@ bool XclExpCellAlign::FillFromItemSet(
                 bUsed |= ScfTools::CheckItem( rItemSet, ATTR_ROTATE_VALUE, bStyle );
             }
             mnOrient = XclTools::GetXclOrientFromRot( mnRotation );
+
+            SAL_FALLTHROUGH;
         }
 
         case EXC_BIFF3: // attributes new in BIFF3
@@ -1526,6 +1528,8 @@ bool XclExpCellAlign::FillFromItemSet(
             // text wrap
             mbLineBreak = bForceLineBreak || GETITEMBOOL( rItemSet, ATTR_LINEBREAK );
             bUsed |= bForceLineBreak || ScfTools::CheckItem( rItemSet, ATTR_LINEBREAK, bStyle );
+
+            SAL_FALLTHROUGH;
         }
 
         case EXC_BIFF2: // attributes new in BIFF2
@@ -1711,8 +1715,6 @@ bool XclExpCellBorder::FillFromItemSet(
 
     switch( eBiff )
     {
-        // ALL 'case's - run through!
-
         case EXC_BIFF8: // attributes new in BIFF8
         {
             const SvxLineItem& rTLBRItem = GETITEM( rItemSet, SvxLineItem, ATTR_BORDER_TLBR );
@@ -1740,6 +1742,8 @@ bool XclExpCellBorder::FillFromItemSet(
 
             bUsed |= ScfTools::CheckItem( rItemSet, ATTR_BORDER_TLBR, bStyle ) ||
                      ScfTools::CheckItem( rItemSet, ATTR_BORDER_BLTR, bStyle );
+
+            SAL_FALLTHROUGH;
         }
 
         case EXC_BIFF5:

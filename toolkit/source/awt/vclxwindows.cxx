@@ -2902,8 +2902,8 @@ void VCLXFixedHyperlink::ProcessWindowEvent( const VclWindowEvent& rVclWindowEve
                     }
                 }
             }
+            SAL_FALLTHROUGH;
         }
-        //fall-through
         default:
             VCLXWindow::ProcessWindowEvent( rVclWindowEvent );
             break;

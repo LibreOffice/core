@@ -414,7 +414,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
                     case EXC_BIFF4: aIn.Ignore( 10 );   break;
                     case EXC_BIFF5:
                         SAL_INFO( "sc", "-ExcelToSc::Convert(): 0x1A does not exist in Biff5!" );
-                        //fall-through
+                        SAL_FALLTHROUGH;
                     default:
                         SAL_INFO( "sc", "-ExcelToSc::Convert(): A little oblivious?" );
                 }
@@ -427,7 +427,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
                     case EXC_BIFF4: aIn.Ignore( 4 );    break;
                     case EXC_BIFF5:
                         SAL_INFO( "sc", "-ExcelToSc::Convert(): 0x1B does not exist in Biff5!" );
-                        //fall-through
+                        SAL_FALLTHROUGH;
                     default:
                         SAL_INFO( "sc", "-ExcelToSc::Convert(): A little oblivious?" );
                 }
@@ -625,7 +625,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
             case 0x66:
             case 0x26: // Constant Reference Subexpression      [321 271]
                 aExtensions.push_back( EXTENSION_MEMAREA );
-                // fall through
+                SAL_FALLTHROUGH;
 
             case 0x47:
             case 0x67:
@@ -1028,7 +1028,7 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sal
                     case EXC_BIFF3:
                     case EXC_BIFF4: nIgnore = 10;   break;
                     case EXC_BIFF5: SAL_INFO( "sc", "-ExcelToSc::Convert(): 0x1A does not exist in Biff5!" );
-                                    //fall-through
+                                    SAL_FALLTHROUGH;
                     default:        SAL_INFO( "sc", "-ExcelToSc::Convert(): A little oblivious?" );
                 }
                 break;
@@ -1039,7 +1039,7 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sal
                     case EXC_BIFF3:
                     case EXC_BIFF4: nIgnore = 4;        break;
                     case EXC_BIFF5: SAL_INFO( "sc", "-ExcelToSc::Convert(): 0x1B does not exist in Biff5!" );
-                                    //fall-through
+                                    SAL_FALLTHROUGH;
                     default:        SAL_INFO( "sc", "-ExcelToSc::Convert(): A little oblivious?" );
                 }
                 break;

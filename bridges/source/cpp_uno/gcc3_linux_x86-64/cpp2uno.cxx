@@ -364,7 +364,8 @@ typelib_TypeClass cpp_vtable_call(
                         }
                         TYPELIB_DANGER_RELEASE( pTD );
                     }
-                } // else perform queryInterface()
+                    SAL_FALLTHROUGH; // else perform queryInterface()
+                }
                 default:
                 {
                     typelib_InterfaceMethodTypeDescription *pMethodTD =

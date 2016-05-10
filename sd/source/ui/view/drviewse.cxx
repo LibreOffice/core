@@ -971,7 +971,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
 
             // AutoLayouts have to be ready.
             GetDoc()->StopWorkStartupDelay();
-            // Fall through to following case statements.
+            SAL_FALLTHROUGH;
 
         case SID_DRAWINGMODE:
         case SID_SLIDE_SORTER_MODE:

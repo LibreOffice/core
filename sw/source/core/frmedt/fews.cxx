@@ -109,7 +109,8 @@ const SwRect& SwFEShell::GetAnyCurRect( CurRectType eType, const Point* pPt,
     bool bFrame = true;
     switch ( eType )
     {
-        case RECT_PAGE_PRT:         bFrame = false; /* no break */
+        case RECT_PAGE_PRT:         bFrame = false;
+                                    SAL_FALLTHROUGH;
         case RECT_PAGE :            pFrame = pFrame->FindPageFrame();
                                     break;
 
@@ -118,7 +119,8 @@ const SwRect& SwFEShell::GetAnyCurRect( CurRectType eType, const Point* pPt,
                                     pFrame->Calc(Imp()->GetShell()->GetOut());
                                     break;
 
-        case RECT_FLY_PRT_EMBEDDED: bFrame = false; /* no break */
+        case RECT_FLY_PRT_EMBEDDED: bFrame = false;
+                                    SAL_FALLTHROUGH;
         case RECT_FLY_EMBEDDED:     pFrame = xObj.is() ? FindFlyFrame( xObj )
                                                 : pFrame->IsFlyFrame()
                                                     ? pFrame
@@ -131,7 +133,7 @@ const SwRect& SwFEShell::GetAnyCurRect( CurRectType eType, const Point* pPt,
                                     else {
                                         OSL_FAIL( "Missing Table" );
                                     }
-                                    /* no break */
+                                    SAL_FALLTHROUGH;
         case RECT_SECTION_PRT:
         case RECT_SECTION:          if( pFrame->IsInSct() )
                                         pFrame = pFrame->FindSctFrame();
@@ -144,7 +146,8 @@ const SwRect& SwFEShell::GetAnyCurRect( CurRectType eType, const Point* pPt,
                                         bFrame = false;
                                     break;
 
-        case RECT_HEADERFOOTER_PRT: bFrame = false; /* no break */
+        case RECT_HEADERFOOTER_PRT: bFrame = false;
+                                    SAL_FALLTHROUGH;
         case RECT_HEADERFOOTER:     if( nullptr == (pFrame = pFrame->FindFooterOrHeader()) )
                                         return GetLayout()->Frame();
                                     break;
@@ -738,7 +741,7 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
             {
                 case text::RelOrientation::PAGE_RIGHT:
                 case text::RelOrientation::FRAME_RIGHT: aPos.Y() += pFrame->Prt().Height();
-                // no break!
+                    SAL_FALLTHROUGH;
                 case text::RelOrientation::PRINT_AREA:
                 case text::RelOrientation::PAGE_PRINT_AREA: aPos.Y() += pFrame->Prt().Top(); break;
                 default: break;
@@ -750,7 +753,7 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
             {
                 case text::RelOrientation::PRINT_AREA:
                 case text::RelOrientation::PAGE_PRINT_AREA: aPos.X() += pFrame->Prt().Width();
-                // no break
+                    SAL_FALLTHROUGH;
                 case text::RelOrientation::PAGE_RIGHT:
                 case text::RelOrientation::FRAME_RIGHT: aPos.X() += pFrame->Prt().Left(); break;
                 default: aPos.X() += pFrame->Frame().Width();
@@ -762,7 +765,7 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
             {
                 case text::RelOrientation::PRINT_AREA:
                 case text::RelOrientation::PAGE_PRINT_AREA: aPos.X() += pFrame->Prt().Width();
-                // no break!
+                    SAL_FALLTHROUGH;
                 case text::RelOrientation::PAGE_LEFT:
                 case text::RelOrientation::FRAME_LEFT: aPos.X() += pFrame->Prt().Left() -
                                                pFrame->Frame().Width(); break;
@@ -775,7 +778,7 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
             {
                 case text::RelOrientation::PAGE_RIGHT:
                 case text::RelOrientation::FRAME_RIGHT:   aPos.X() += pFrame->Prt().Width();
-                // no break!
+                    SAL_FALLTHROUGH;
                 case text::RelOrientation::PRINT_AREA:
                 case text::RelOrientation::PAGE_PRINT_AREA: aPos.X() += pFrame->Prt().Left(); break;
                 default:break;

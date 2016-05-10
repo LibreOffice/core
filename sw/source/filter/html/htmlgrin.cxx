@@ -390,21 +390,21 @@ void SwHTMLParser::InsertImage()
 
             case HTML_O_SDONLOAD:
                 eScriptType2 = STARBASIC;
-                //fallthrough
+                SAL_FALLTHROUGH;
             case HTML_O_ONLOAD:
                 nEvent = SVX_EVENT_IMAGE_LOAD;
                 goto IMAGE_SETEVENT;
 
             case HTML_O_SDONABORT:
                 eScriptType2 = STARBASIC;
-                //fallthrough
+                SAL_FALLTHROUGH;
             case HTML_O_ONABORT:
                 nEvent = SVX_EVENT_IMAGE_ABORT;
                 goto IMAGE_SETEVENT;
 
             case HTML_O_SDONERROR:
                 eScriptType2 = STARBASIC;
-                //fallthrough
+                SAL_FALLTHROUGH;
             case HTML_O_ONERROR:
                 nEvent = SVX_EVENT_IMAGE_ERROR;
                 goto IMAGE_SETEVENT;
@@ -874,7 +874,7 @@ void SwHTMLParser::InsertBodyOptions()
 
             case HTML_O_SDONLOAD:
                 eScriptType2 = STARBASIC;
-                //fallthrough
+                SAL_FALLTHROUGH;
             case HTML_O_ONLOAD:
                 aEvent = GlobalEventConfig::GetEventName( GlobalEventId::OPENDOC );
                 bSetEvent = true;
@@ -882,7 +882,7 @@ void SwHTMLParser::InsertBodyOptions()
 
             case HTML_O_SDONUNLOAD:
                 eScriptType2 = STARBASIC;
-                //fallthrough
+                SAL_FALLTHROUGH;
             case HTML_O_ONUNLOAD:
                 aEvent = GlobalEventConfig::GetEventName( GlobalEventId::PREPARECLOSEDOC );
                 bSetEvent = true;
@@ -890,7 +890,7 @@ void SwHTMLParser::InsertBodyOptions()
 
             case HTML_O_SDONFOCUS:
                 eScriptType2 = STARBASIC;
-                //fallthrough
+                SAL_FALLTHROUGH;
             case HTML_O_ONFOCUS:
                 aEvent = GlobalEventConfig::GetEventName( GlobalEventId::ACTIVATEDOC );
                 bSetEvent = true;
@@ -898,7 +898,7 @@ void SwHTMLParser::InsertBodyOptions()
 
             case HTML_O_SDONBLUR:
                 eScriptType2 = STARBASIC;
-                //fallthrough
+                SAL_FALLTHROUGH;
             case HTML_O_ONBLUR:
                 aEvent = GlobalEventConfig::GetEventName( GlobalEventId::DEACTIVATEDOC );
                 bSetEvent = true;
@@ -1118,21 +1118,21 @@ void SwHTMLParser::NewAnchor()
 
             case HTML_O_SDONCLICK:
                 eScriptType2 = STARBASIC;
-                //fall-through
+                SAL_FALLTHROUGH;
             case HTML_O_ONCLICK:
                 nEvent = SFX_EVENT_MOUSECLICK_OBJECT;
                 goto ANCHOR_SETEVENT;
 
             case HTML_O_SDONMOUSEOVER:
                 eScriptType2 = STARBASIC;
-                //fall-through
+                SAL_FALLTHROUGH;
             case HTML_O_ONMOUSEOVER:
                 nEvent = SFX_EVENT_MOUSEOVER_OBJECT;
                 goto ANCHOR_SETEVENT;
 
             case HTML_O_SDONMOUSEOUT:
                 eScriptType2 = STARBASIC;
-                //fall-through
+                SAL_FALLTHROUGH;
             case HTML_O_ONMOUSEOUT:
                 nEvent = SFX_EVENT_MOUSEOUT_OBJECT;
                 goto ANCHOR_SETEVENT;

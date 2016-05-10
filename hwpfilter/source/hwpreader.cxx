@@ -1812,7 +1812,7 @@ void HwpReader::makeColumns(ColumnDef *coldef)
         {
              case 1:                           /* thin line */
                   padd("style:width", sXML_CDATA, "0.02mm");
-                  //fall-through
+                  SAL_FALLTHROUGH;
              case 3:                           /* dotted line */
                   padd("style:style", sXML_CDATA, "dotted");
                   padd("style:width", sXML_CDATA, "0.02mm");
@@ -3402,7 +3402,7 @@ void HwpReader::makeDateFormat(DateCode * hbox)
                 break;
             case '_':
                 padd("number:style", sXML_CDATA, "long");
-                //fall-through
+                SAL_FALLTHROUGH;
             case '6':
             case '^':
                 rstartEl("number:day-of-week", rList);

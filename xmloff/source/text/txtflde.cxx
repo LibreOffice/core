@@ -849,7 +849,7 @@ void XMLTextFieldExport::ExportFieldAutoStyle(
         {
             ExportMetaField(xPropSet, true, bProgress);
         }
-        // fall-through: for the meta-field itself!
+        SAL_FALLTHROUGH;
     case FIELD_ID_DOCINFO_PRINT_TIME:
     case FIELD_ID_DOCINFO_PRINT_DATE:
     case FIELD_ID_DOCINFO_CREATION_DATE:

@@ -139,7 +139,7 @@ namespace dbaui
 
             case E_OPEN_FOR_MAIL:
                 aArguments.put( "Hidden", true );
-                // fall through
+                SAL_FALLTHROUGH;
 
             case E_OPEN_DESIGN:
                 sOpenMode = "openDesign";

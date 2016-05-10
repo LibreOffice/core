@@ -165,7 +165,7 @@ void wwSection::SetDirection()
     {
         default:
             OSL_ENSURE(false, "Unknown layout type");
-            //fall-through
+            SAL_FALLTHROUGH;
         case 0:
             meDir=FRMDIR_HORI_LEFT_TOP;
             break;
@@ -240,7 +240,7 @@ void SwWW8ImplReader::SetDocumentGrid(SwFrameFormat &rFormat, const wwSection &r
             break;
         default:
             OSL_ENSURE(false, "Unknown grid type");
-            //fall-through
+            SAL_FALLTHROUGH;
         case 3:
             eType = GRID_LINES_CHARS;
             aGrid.SetSnapToChars(true);

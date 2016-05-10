@@ -382,7 +382,7 @@ TOPIC DifParser::GetNextTopic()
             case S_UNKNOWN:
                 // skip 2 lines
                 ReadNextLine( aLine );
-                // fall-through
+                SAL_FALLTHROUGH;
             case S_ERROR_L2:                // error happened in line 2
                 // skip 1 line
                 ReadNextLine( aLine );
@@ -700,8 +700,9 @@ bool DifParser::ScanFloatVal( const sal_Unicode* pStart )
                             eS = S_EXP;
                             break;
                         case 0x00:              // IsNumberEnding( cAkt )
-                            bRet = true;        // no
-                        default:                // break!
+                            bRet = true;
+                            SAL_FALLTHROUGH;
+                        default:
                             eS = S_END;
                     }
                 }
@@ -721,8 +722,9 @@ bool DifParser::ScanFloatVal( const sal_Unicode* pStart )
                             eS = S_EXP_FIRST;
                             break;
                         case 0x00:              // IsNumberEnding( cAkt )
-                            bRet = true;        // no
-                        default:                // break!
+                            bRet = true;
+                            SAL_FALLTHROUGH;
+                        default:
                             eS = S_END;
                     }
                 }

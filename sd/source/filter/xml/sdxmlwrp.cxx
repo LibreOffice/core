@@ -692,7 +692,7 @@ bool SdXMLFilter::Import( ErrCode& nError )
             nError = ERRCODE_IO_BROKENPACKAGE;
             break;
         }
-        // fall through intended
+        SAL_FALLTHROUGH;
     default:
         {
             // TODO/LATER: this is completely wrong! Filter code should never call ErrorHandler directly!

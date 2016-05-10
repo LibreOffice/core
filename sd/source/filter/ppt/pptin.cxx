@@ -1255,7 +1255,7 @@ bool ImplSdPPTImport::Import()
                     break;
                     case 10 :   // titlemaster
                         nSelectedPage = 1;
-                        //fall-through
+                        SAL_FALLTHROUGH;
                     case 2 :    // master
                     {
                         ePageKind = PK_STANDARD;
@@ -1264,7 +1264,7 @@ bool ImplSdPPTImport::Import()
                     break;
                     case 5 :    // notes master
                         eEditMode = EM_MASTERPAGE;
-                        //fall-through
+                        SAL_FALLTHROUGH;
                     case 3 :    // notes
                         ePageKind = PK_NOTES;
                     break;
@@ -2367,10 +2367,12 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
                         {
                             case PptPlaceholder::NOTESBODY :            ePresObjKind = PRESOBJ_NOTES;   break;
                             case PptPlaceholder::VERTICALTEXTTITLE :
-                                bVertical = true;   // PASSTHROUGH !!!
+                                bVertical = true;
+                                SAL_FALLTHROUGH;
                             case PptPlaceholder::TITLE :                ePresObjKind = PRESOBJ_TITLE;   break;
                             case PptPlaceholder::VERTICALTEXTBODY :
-                                bVertical = true;   // PASSTHROUGH !!!
+                                bVertical = true;
+                                SAL_FALLTHROUGH;
                             case PptPlaceholder::BODY :                 ePresObjKind = PRESOBJ_OUTLINE; break;
                             case PptPlaceholder::CENTEREDTITLE :        ePresObjKind = PRESOBJ_TITLE;   break;
                             case PptPlaceholder::SUBTITLE :             ePresObjKind = PRESOBJ_TEXT;    break;      // PRESOBJ_OUTLINE

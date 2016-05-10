@@ -1188,7 +1188,7 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
                     DeactivateAggregate( tpBoolDefault );
                     break;
                 }
-                // run through
+                SAL_FALLTHROUGH;
             case DataType::BOOLEAN:
                 DeactivateAggregate( tpTextLen );
                 DeactivateAggregate( tpFormat );

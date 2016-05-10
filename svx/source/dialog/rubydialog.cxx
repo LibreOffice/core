@@ -888,8 +888,8 @@ void RubyPreview::Paint(vcl::RenderContext& rRenderContext, const Rectangle& /*r
                 nLeftStart += nCharWidth;
                 nRightEnd -= nCharWidth;
             }
+            SAL_FALLTHROUGH;
         }
-        // no break!
         case RubyAdjust_BLOCK:
         {
             if (sOutputText.getLength() > 1)
@@ -905,8 +905,8 @@ void RubyPreview::Paint(vcl::RenderContext& rRenderContext, const Rectangle& /*r
                 }
                 break;
             }
+            SAL_FALLTHROUGH;
         }
-        //no break;
         case RubyAdjust_CENTER:
             rRenderContext.DrawText(Point(nCenter - nOutTextWidth / 2 , nYOutput),  sOutputText);
         break;

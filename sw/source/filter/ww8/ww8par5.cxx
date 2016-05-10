@@ -983,7 +983,7 @@ long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
             case FLD_TAGTXT:
                 if ((m_nFieldTagBad[nI] & nMask)) // Flag: Tag bad
                     return Read_F_Tag(&aF);       // Taggen
-                //fall through...
+                SAL_FALLTHROUGH;
             case FLD_TEXT:
                 // so viele ueberlesen, das Resultfeld wird wie Haupttext
                 // eingelesen

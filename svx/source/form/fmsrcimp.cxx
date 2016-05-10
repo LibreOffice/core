@@ -613,7 +613,7 @@ FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchRegularApprox(const OUString
                         bFound = false;
                         break;
                     }
-                    // laeuft in den naechsten Case rein !
+                    SAL_FALLTHROUGH;
                 case MATCHING_BEGINNING :
                     if (nStart != 0)
                         bFound = false;

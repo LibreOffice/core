@@ -1785,7 +1785,7 @@ bool SwContentTree::FillTransferData( TransferDataContainer& rTransfer,
         break;
         case ContentTypeId::URLFIELD:
             sUrl = static_cast<SwURLFieldContent*>(pCnt)->GetURL();
-        // no break;
+            SAL_FALLTHROUGH;
         case ContentTypeId::OLE:
         case ContentTypeId::GRAPHIC:
             if(GetParentWindow()->GetRegionDropMode() != RegionMode::NONE)
@@ -2236,7 +2236,7 @@ void SwContentTree::ExecCommand(sal_uInt16 nCmd, bool bModifier)
         case FN_ITEM_DOWN:
         case FN_ITEM_UP:
             bMove = true;
-            //fall-through
+            SAL_FALLTHROUGH;
         case FN_ITEM_LEFT:
         case FN_ITEM_RIGHT:
         if( !GetWrtShell()->GetView().GetDocShell()->IsReadOnly() &&

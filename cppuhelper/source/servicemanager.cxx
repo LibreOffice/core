@@ -188,7 +188,7 @@ Parser::Parser(
                 state = STATE_COMPONENTS;
                 break;
             }
-            // fall through
+            SAL_FALLTHROUGH;
         case STATE_COMPONENT_INITIAL:
             if (res == xmlreader::XmlReader::RESULT_BEGIN && nsId == ucNsId
                 && name.equals(RTL_CONSTASCII_STRINGPARAM("implementation")))
@@ -1516,7 +1516,7 @@ void cppuhelper::ServiceManager::readRdbDirectory(
             SAL_INFO("cppuhelper", "Ignored optional " << uri);
             return;
         }
-        // fall through
+        SAL_FALLTHROUGH;
     default:
         throw css::uno::DeploymentException(
             "Cannot open directory " + uri,
@@ -1578,7 +1578,7 @@ bool cppuhelper::ServiceManager::readLegacyRdbFile(rtl::OUString const & uri) {
                 }
             }
         }
-        // fall through
+        SAL_FALLTHROUGH;
     default:
         return false;
     }

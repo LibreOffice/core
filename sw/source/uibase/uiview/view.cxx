@@ -1604,7 +1604,7 @@ void SwView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     m_pVRuler->SetActive( !bModal );
                 }
 
-                /* no break here */
+                SAL_FALLTHROUGH;
 
             case SFX_HINT_TITLECHANGED:
                 if ( GetDocShell()->IsReadOnly() != GetWrtShell().GetViewOptions()->IsReadonly() )

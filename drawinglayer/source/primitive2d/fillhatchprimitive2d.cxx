@@ -73,7 +73,7 @@ namespace drawinglayer
 
                         aHatch.appendTransformations(aMatrices);
 
-                        // fall-through by purpose
+                        SAL_FALLTHROUGH;
                     }
                     case attribute::HATCHSTYLE_DOUBLE:
                     {
@@ -86,7 +86,7 @@ namespace drawinglayer
 
                         aHatch.appendTransformations(aMatrices);
 
-                        // fall-through by purpose
+                        SAL_FALLTHROUGH;
                     }
                     case attribute::HATCHSTYLE_SINGLE:
                     {

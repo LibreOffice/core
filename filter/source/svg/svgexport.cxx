@@ -2331,7 +2331,7 @@ IMPL_LINK_TYPED( SVGFilter, CalcFieldHdl, EditFieldInfo*, pInfo, void )
                                     aDate.SetDay( i );
                                     sDate += SvxDateField::GetFormatted( aDate, eDateFormat, *pNumberFormatter, eLang );
                                 }
-                                // No break here! We need months too!
+                                SAL_FALLTHROUGH; // We need months too!
                             case SVXDATEFORMAT_C:       // 13.Feb 1996
                             case SVXDATEFORMAT_D:       // 13.February 1996
                                 for( sal_uInt16 i = 1; i <= 12; ++i ) // we get all months in a year

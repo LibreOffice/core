@@ -194,7 +194,7 @@ void Marshal::writeValue(
         break;
     case typelib_TypeClass_BOOLEAN:
         assert(*static_cast< sal_uInt8 const * >(value) <= 1);
-        // fall through
+        SAL_FALLTHROUGH;
     case typelib_TypeClass_BYTE:
         write8(buffer, *static_cast< sal_uInt8 const * >(value));
         break;

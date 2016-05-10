@@ -214,14 +214,14 @@ namespace frm
                 {
                     Reference< XListBox >  xListBox( getPeer(), UNO_QUERY_THROW );
                     xListBox->addItemListener( this );
+                    SAL_FALLTHROUGH;
                 }
-                // no break
 
                 case FormComponentType::COMBOBOX:
                 {
                     xVclWindow->setProperty(PROPERTY_AUTOCOMPLETE, makeAny( true ) );
+                    SAL_FALLTHROUGH;
                 }
-                // no break
 
                 default:
                 {

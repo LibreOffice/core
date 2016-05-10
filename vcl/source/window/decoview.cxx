@@ -256,7 +256,7 @@ void ImplDrawSymbol( OutputDevice* pDev, Rectangle nRect, const SymbolType eType
             pDev->DrawLine( Point( nRect.Left(), aCenter.Y()-n2+1 ),
                             Point( nRect.Left(), aCenter.Y()+n2-1 ) );
             ++nRect.Left();
-            // Intentional fall-through
+            SAL_FALLTHROUGH;
         case SymbolType::WINDBACKWARD:
             pDev->DrawPixel( Point( nRect.Left(), aCenter.Y() ) );
             pDev->DrawPixel( Point( nRect.Left()+n2, aCenter.Y() ) );
@@ -274,7 +274,7 @@ void ImplDrawSymbol( OutputDevice* pDev, Rectangle nRect, const SymbolType eType
             pDev->DrawLine( Point( nRect.Right(), aCenter.Y()-n2+1 ),
                             Point( nRect.Right(), aCenter.Y()+n2-1 ) );
             --nRect.Right();
-            // Intentional fall-through
+            SAL_FALLTHROUGH;
         case SymbolType::WINDFORWARD:
             pDev->DrawPixel( Point( nRect.Right(), aCenter.Y() ) );
             pDev->DrawPixel( Point( nRect.Right()-n2, aCenter.Y() ) );
@@ -313,7 +313,7 @@ void ImplDrawSymbol( OutputDevice* pDev, Rectangle nRect, const SymbolType eType
                             Point( nRect.Right(), nRect.Bottom() ) );
             pDev->DrawLine( Point( nRect.Left(), nRect.Bottom() ),
                             Point( nRect.Right(), nRect.Bottom() ) );
-            // Intentional fall-through
+            SAL_FALLTHROUGH;
         case SymbolType::ROLLUP:
             pDev->DrawRect( Rectangle( nRect.Left(), nRect.Top(),
                                        nRect.Right(), nRect.Top()+n8 ) );

@@ -1005,7 +1005,7 @@ bool SvtSecurityOptions::isSecureMacroUri(
             // is considered safe:
             return true;
         }
-        // fall through
+        SAL_FALLTHROUGH;
     case INetProtocol::Slot:
         return referer.equalsIgnoreAsciiCase("private:user")
             || isTrustedLocationUri(referer);

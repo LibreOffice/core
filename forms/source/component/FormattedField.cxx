@@ -943,8 +943,8 @@ Any OFormattedModel::translateControlValueToExternalValue( ) const
             aExternalValue <<= sString;
             break;
         }
+        SAL_FALLTHROUGH;
     }
-    // NO break here!
     case TypeClass_BOOLEAN:
     {
         double fValue = 0;

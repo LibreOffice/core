@@ -197,7 +197,7 @@ void PPTWriter::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_
         {
             case 1 :        // automatic
                 mnDiaMode++;
-                // fall-through
+                SAL_FALLTHROUGH;
             case 2 :        // semi-automatic
                 mnDiaMode++;
             default :
@@ -1216,7 +1216,8 @@ void PPTWriter::ImplWriteBackground( css::uno::Reference< css::beans::XPropertyS
                 nFillColor = EscherEx::GetColor( *static_cast<sal_uInt32 const *>(mAny.getValue()) );
                 nFillBackColor = nFillColor ^ 0xffffff;
             }
-        }   // PASSTHROUGH INTENDED
+            SAL_FALLTHROUGH;
+        }
         case css::drawing::FillStyle_NONE :
         default:
             aPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x120012 );

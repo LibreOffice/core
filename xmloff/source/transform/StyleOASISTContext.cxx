@@ -859,7 +859,7 @@ void XMLStyleOASISTContext::StartElement(
                 break;
             case XML_ATACTION_DECODE_STYLE_NAME:
                 m_bControlStyle = rAttrValue.startsWith( "ctrl" );
-                // fall-through
+                SAL_FALLTHROUGH;
             case XML_ATACTION_DECODE_STYLE_NAME_REF:
                 {
                     OUString aAttrValue( rAttrValue );

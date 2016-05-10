@@ -449,7 +449,7 @@ namespace frm
                 {
                 case RET_NO:
                     shouldCommit = false;
-                    // no break on purpose: don't ask again!
+                    SAL_FALLTHROUGH; // don't ask again!
                 case RET_YES:
                     needConfirmation = false;
                     return true;

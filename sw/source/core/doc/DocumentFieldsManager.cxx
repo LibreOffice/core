@@ -176,7 +176,7 @@ SwFieldType* DocumentFieldsManager::InsertFieldType(const SwFieldType &rFieldTyp
             //constructing string pools and when reading SetExp fields
             if( nsSwGetSetExpType::GSE_SEQ & static_cast<const SwSetExpFieldType&>(rFieldTyp).GetType() )
                 i -= INIT_SEQ_FLDTYPES;
-        // no break;
+            SAL_FALLTHROUGH;
     case RES_DBFLD:
     case RES_USERFLD:
     case RES_DDEFLD:
@@ -308,7 +308,7 @@ void DocumentFieldsManager::RemoveFieldType(size_t nField)
         case RES_SETEXPFLD:
         case RES_USERFLD:
             mpUpdateFields->RemoveFieldType( *pTmp );
-            // no break;
+            SAL_FALLTHROUGH;
         case RES_DDEFLD:
             if( pTmp->HasWriterListeners() && !m_rDoc.IsUsed( *pTmp ) )
             {
@@ -553,7 +553,7 @@ bool DocumentFieldsManager::UpdateField(SwTextField * pDstTextField, SwField & r
                 pDBField->InitContent();
             }
 #endif
-            // no break;
+            SAL_FALLTHROUGH;
 
         default:
             pDstFormatField->ModifyNotification( nullptr, pMsgHint );

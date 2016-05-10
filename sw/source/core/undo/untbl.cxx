@@ -2888,7 +2888,7 @@ SwUndoSplitTable::SwUndoSplitTable( const SwTableNode& rTableNd,
     {
     case HEADLINE_BOXATRCOLLCOPY:
             pHistory = new SwHistory;
-            // no break
+            SAL_FALLTHROUGH;
     case HEADLINE_BORDERCOPY:
     case HEADLINE_BOXATTRCOPY:
         pSavTable = new _SaveTable( rTableNd.GetTable(), 1, false );
@@ -2939,7 +2939,7 @@ void SwUndoSplitTable::UndoImpl(::sw::UndoRedoContext & rContext)
     case HEADLINE_BOXATRCOLLCOPY:
         if( pHistory )
             pHistory->TmpRollback( pDoc, nFormulaEnd );
-        // no break
+        SAL_FALLTHROUGH;
     case HEADLINE_BOXATTRCOPY:
     case HEADLINE_BORDERCOPY:
         {

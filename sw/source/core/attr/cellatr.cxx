@@ -149,7 +149,7 @@ void SwTableBoxFormula::ChangeState( const SfxPoolItem* pItem )
             }
             else
                 pUpdateField->m_bBehindSplitLine = false;
-            // no break
+            SAL_FALLTHROUGH;
         case TBL_MERGETBL:
             if( pUpdateField->m_pHistory )
             {

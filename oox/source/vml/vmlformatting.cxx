@@ -781,7 +781,7 @@ void FillModel::pushToPropMap( ShapePropertyMap& rPropMap, const GraphicHelper& 
                     }
                 }
             }
-            // run-through to XML_solid in case of missing bitmap path intended!
+            SAL_FALLTHROUGH; // to XML_solid in case of missing bitmap path intended!
 
             case XML_solid:
             default:

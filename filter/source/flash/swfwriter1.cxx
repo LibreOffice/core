@@ -1766,6 +1766,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
             {
                 const MetaISectRectClipRegionAction* pA = static_cast<const MetaISectRectClipRegionAction*>(pAction);
                 clipRect = pA->GetRect();
+                SAL_FALLTHROUGH;
             }
             // fall-through
             case( MetaActionType::CLIPREGION ):
@@ -1779,6 +1780,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
             case( MetaActionType::MAPMODE ):
             {
                 bMap++;
+                SAL_FALLTHROUGH;
             }
             // fall-through
             case( MetaActionType::REFPOINT ):

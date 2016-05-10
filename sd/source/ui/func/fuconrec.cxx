@@ -289,7 +289,7 @@ void FuConstructRectangle::Activate()
         case SID_LINE_ARROW_SQUARE:
         case SID_LINE_SQUARE_ARROW:
             mpView->SetGlueVisible();
-            // no break !
+            SAL_FALLTHROUGH;
         case SID_DRAW_LINE :
         case SID_DRAW_XLINE:
             aObjKind = OBJ_LINE;

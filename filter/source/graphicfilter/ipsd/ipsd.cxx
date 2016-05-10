@@ -241,7 +241,7 @@ bool PSDReader::ImplReadHeader()
         case PSD_DUOTONE :                  // we'll handle the duotone color like a normal grayscale picture
             m_rPSD.SeekRel( nColorLength );
             nColorLength = 0;
-            /* Fall through */
+            SAL_FALLTHROUGH;
         case PSD_GRAYSCALE :
         {
             if ( nColorLength )

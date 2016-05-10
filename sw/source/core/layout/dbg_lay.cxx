@@ -538,7 +538,8 @@ void SwImplProtocol::_Record( const SwFrame* pFrame, sal_uLong nFunction, sal_uL
                             if( nAct == ACT_START )
                                 lcl_Flags( aOut, pFrame );
                             break;
-        case PROT_MOVE_FWD: bTmp = true; // NoBreak
+        case PROT_MOVE_FWD: bTmp = true;
+                            SAL_FALLTHROUGH;
         case PROT_MOVE_BWD:
                             if (nFunction == (bTmp ? 1U : 0U))
                                 aOut.append("Fwd");
@@ -560,7 +561,8 @@ void SwImplProtocol::_Record( const SwFrame* pFrame, sal_uLong nFunction, sal_uL
                             aOut.append("TestShrink");
                             break;
         case PROT_ADJUSTN :
-        case PROT_SHRINK:   bTmp = true; // NoBreak
+        case PROT_SHRINK:   bTmp = true;
+                            SAL_FALLTHROUGH;
         case PROT_GROW:
                             if (!bTmp)
                                 aOut.append("Grow");
@@ -601,7 +603,8 @@ void SwImplProtocol::_Record( const SwFrame* pFrame, sal_uLong nFunction, sal_uL
                             break;
         case PROT_SECTION:  SectFunc(aOut, pFrame, nAct, pParam);
                             break;
-        case PROT_CUT:      bTmp = true; // NoBreak
+        case PROT_CUT:      bTmp = true;
+                            SAL_FALLTHROUGH;
         case PROT_PASTE:
                             if (bTmp)
                                 aOut.append("Cut from ");
@@ -667,7 +670,8 @@ void SwImplProtocol::SectFunc(OStringBuffer &rOut, const SwFrame* , sal_uLong nA
         case ACT_MERGE:         rOut.append("Merge Section ");
                                 rOut.append(static_cast<sal_Int64>(lcl_GetFrameId(static_cast<SwFrame*>(pParam))));
                                 break;
-        case ACT_CREATE_MASTER: bTmp = true; // NoBreak
+        case ACT_CREATE_MASTER: bTmp = true;
+                                SAL_FALLTHROUGH;
         case ACT_CREATE_FOLLOW: rOut.append("Create Section ");
                                 if (bTmp)
                                     rOut.append("Master to ");
@@ -675,7 +679,8 @@ void SwImplProtocol::SectFunc(OStringBuffer &rOut, const SwFrame* , sal_uLong nA
                                     rOut.append("Follow from ");
                                 rOut.append(static_cast<sal_Int64>(lcl_GetFrameId(static_cast<SwFrame*>(pParam))));
                                 break;
-        case ACT_DEL_MASTER:    bTmp = true; // NoBreak
+        case ACT_DEL_MASTER:    bTmp = true;
+                                SAL_FALLTHROUGH;
         case ACT_DEL_FOLLOW:    rOut.append("Delete Section ");
                                 if (bTmp)
                                     rOut.append("Master to ");

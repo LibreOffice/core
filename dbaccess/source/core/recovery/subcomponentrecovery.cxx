@@ -444,7 +444,7 @@ namespace dbaccess
                 m_aCompDesc.bForEditing = true;
                 break;
             }
-            // fall through
+            SAL_FALLTHROUGH;
 
         case FORM:
             m_aCompDesc.bForEditing = !lcl_determineReadOnly( m_xComponent );

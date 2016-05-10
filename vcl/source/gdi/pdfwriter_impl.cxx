@@ -5388,7 +5388,7 @@ bool PDFWriterImpl::emitWidgetAnnotations()
                         else
                             appendName( rWidget.m_aValue, aValue );
                     }
-                    // fall-through
+                    SAL_FALLTHROUGH;
                 case PDFWriter::PushButton:
                     aLine.append( "Btn" );
                     break;
@@ -10980,7 +10980,7 @@ bool PDFWriterImpl::writeGradientFunction( GradientEmit& rObject )
             aCol[1] = rObject.m_aGradient.GetEndColor().GetGreen();
             aCol[2] = rObject.m_aGradient.GetEndColor().GetBlue();
             CHECK_RETURN( writeBuffer( aCol, 3 ) );
-            // fall-through
+            SAL_FALLTHROUGH;
         case GradientStyle_LINEAR:
         {
             aCol[0] = rObject.m_aGradient.GetStartColor().GetRed();

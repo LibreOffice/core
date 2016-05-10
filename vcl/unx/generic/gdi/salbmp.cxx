@@ -181,7 +181,7 @@ BitmapBuffer* X11SalBitmap::ImplCreateDIB(
 #endif
                 default:
                     nBitCount = 24;
-                    //fall through
+                    SAL_FALLTHROUGH;
                 case 24:
                     pDIB->mnFormat |= BMP_FORMAT_24BIT_TC_BGR;
                 break;

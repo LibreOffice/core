@@ -1389,7 +1389,7 @@ void SAL_CALL SdUnoEventsAccess::replaceByName( const OUString& aName, const uno
 
                 bOk = true;
 
-                // NOTE: No break here!!!
+                SAL_FALLTHROUGH;
 
             case presentation::ClickAction_SOUND:
                 if( nFound & FOUND_SOUNDURL )
@@ -1634,7 +1634,7 @@ uno::Any SAL_CALL SdUnoEventsAccess::getByName( const OUString& aName )
             pProperties->State = beans::PropertyState_DIRECT_VALUE;
             pProperties++;
 
-            // NOTE: no break here!!!
+            SAL_FALLTHROUGH;
 
         case presentation::ClickAction_SOUND:
             if( eClickAction == presentation::ClickAction_SOUND || pInfo->mbSecondSoundOn )

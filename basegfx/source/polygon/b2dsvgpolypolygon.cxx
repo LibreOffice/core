@@ -109,8 +109,7 @@ namespace basegfx
                             o_rPolyPolygon.append(aCurrPoly);
                             aCurrPoly.clear();
                         }
-
-                        // FALLTHROUGH intended to add coordinate data as 1st point of new polygon
+                        SAL_FALLTHROUGH; // to add coordinate data as 1st point of new polygon
                     }
                     case 'l' :
                     case 'L' :
@@ -150,7 +149,7 @@ namespace basegfx
                     case 'h' :
                     {
                         bRelative = true;
-                        // FALLTHROUGH intended
+                        SAL_FALLTHROUGH;
                     }
                     case 'H' :
                     {
@@ -180,7 +179,7 @@ namespace basegfx
                     case 'v' :
                     {
                         bRelative = true;
-                        // FALLTHROUGH intended
+                        SAL_FALLTHROUGH;
                     }
                     case 'V' :
                     {
@@ -210,7 +209,7 @@ namespace basegfx
                     case 's' :
                     {
                         bRelative = true;
-                        // FALLTHROUGH intended
+                        SAL_FALLTHROUGH;
                     }
                     case 'S' :
                     {
@@ -269,7 +268,7 @@ namespace basegfx
                     case 'c' :
                     {
                         bRelative = true;
-                        // FALLTHROUGH intended
+                        SAL_FALLTHROUGH;
                     }
                     case 'C' :
                     {
@@ -319,7 +318,7 @@ namespace basegfx
                     case 'q' :
                     {
                         bRelative = true;
-                        // FALLTHROUGH intended
+                        SAL_FALLTHROUGH;
                     }
                     case 'Q' :
                     {
@@ -370,7 +369,7 @@ namespace basegfx
                     case 't' :
                     {
                         bRelative = true;
-                        // FALLTHROUGH intended
+                        SAL_FALLTHROUGH;
                     }
                     case 'T' :
                     {
@@ -444,7 +443,7 @@ namespace basegfx
                     case 'a' :
                     {
                         bRelative = true;
-                        // FALLTHROUGH intended
+                        SAL_FALLTHROUGH;
                     }
                     case 'A' :
                     {

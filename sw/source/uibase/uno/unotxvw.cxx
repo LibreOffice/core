@@ -344,10 +344,9 @@ uno::Any SwXTextView::getSelection()
                     aRef.set(xCursor, uno::UNO_QUERY);
                     break;
                 }
-
+                SAL_FALLTHROUGH;
+                    // without a table selection the text will be delivered
             }
-            //Without a table selection the text will be delivered.
-            //break;
             case SHELL_MODE_LIST_TEXT       :
             case SHELL_MODE_TABLE_LIST_TEXT:
             case SHELL_MODE_TEXT            :

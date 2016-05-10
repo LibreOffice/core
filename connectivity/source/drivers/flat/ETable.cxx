@@ -743,7 +743,7 @@ bool OFlatTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int32 n
     {
         case IResultSetHelper::FIRST:
             m_nRowPos = 0;
-            // run through
+            SAL_FALLTHROUGH;
         case IResultSetHelper::NEXT:
             {
                 assert(m_nRowPos >= 0);

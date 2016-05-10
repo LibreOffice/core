@@ -875,9 +875,8 @@ void AnimationNodeContext::init_node(  const ::com::sun::star::uno::Reference< :
                     xAudio->setSource( makeAny( GetImport().GetAbsoluteReference( rValue ) ) );
                     break;
                 }
-
+                SAL_FALLTHROUGH;
             }
-            // fall through intended!
             case ANA_Target:
             {
                 {

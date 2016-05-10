@@ -569,7 +569,7 @@ void fillTypeInfo(  const Reference< css::sdbc::XConnection>& _rxConnection,
                         aName = _rsTypeNames.getToken(TYPE_BIT, ';');
                         break;
                     }
-                    // run through
+                    SAL_FALLTHROUGH;
                 case DataType::BOOLEAN:
                     aName = _rsTypeNames.getToken(TYPE_BOOL, ';');
                     break;
@@ -1221,19 +1221,19 @@ TOTypeInfoSP queryTypeInfoByType(sal_Int32 _nDataType,const OTypeInfoMap& _rType
         case DataType::TINYINT:
             if( (pTypeInfo = queryTypeInfoByType(DataType::SMALLINT,_rTypeInfo) ) )
                 break;
-            // run through
+            SAL_FALLTHROUGH;
         case DataType::SMALLINT:
             if( (pTypeInfo = queryTypeInfoByType(DataType::INTEGER,_rTypeInfo) ) )
                 break;
-            // run through
+            SAL_FALLTHROUGH;
         case DataType::INTEGER:
             if( (pTypeInfo = queryTypeInfoByType(DataType::FLOAT,_rTypeInfo) ) )
                 break;
-            // run through
+            SAL_FALLTHROUGH;
         case DataType::FLOAT:
             if( (pTypeInfo = queryTypeInfoByType(DataType::REAL,_rTypeInfo) ) )
                 break;
-            // run through
+            SAL_FALLTHROUGH;
         case DataType::DATE:
         case DataType::TIME:
             if( DataType::DATE == _nDataType || DataType::TIME == _nDataType )
@@ -1241,17 +1241,17 @@ TOTypeInfoSP queryTypeInfoByType(sal_Int32 _nDataType,const OTypeInfoMap& _rType
                 if( (pTypeInfo = queryTypeInfoByType(DataType::TIMESTAMP,_rTypeInfo) ) )
                     break;
             }
-            // run through
+            SAL_FALLTHROUGH;
         case DataType::TIMESTAMP:
         case DataType::REAL:
         case DataType::BIGINT:
             if (  (pTypeInfo = queryTypeInfoByType(DataType::DOUBLE,_rTypeInfo) ) )
                 break;
-            // run through
+            SAL_FALLTHROUGH;
         case DataType::DOUBLE:
             if (  (pTypeInfo = queryTypeInfoByType(DataType::NUMERIC,_rTypeInfo) ) )
                 break;
-            // run through
+            SAL_FALLTHROUGH;
         case DataType::NUMERIC:
              pTypeInfo = queryTypeInfoByType(DataType::DECIMAL,_rTypeInfo);
             break;

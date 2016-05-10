@@ -539,7 +539,8 @@ void SbiParser::Resume()
             {
                 aGen.Gen( _RESUME, 0 );
                 break;
-            } // fall through
+            }
+            SAL_FALLTHROUGH;
         case SYMBOL:
             if( MayBeLabel() )
             {
@@ -547,7 +548,8 @@ void SbiParser::Resume()
                 aGen.Gen( _RESUME, nLbl );
                 Next();
                 break;
-            } // fall through
+            }
+            SAL_FALLTHROUGH;
         default:
             Error( ERRCODE_BASIC_LABEL_EXPECTED );
     }

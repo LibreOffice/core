@@ -489,7 +489,7 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
                         aServerLst.Remove( DrawDocShell::Factory().GetClassId() );
                     }
 
-                    // intentionally no break!
+                    SAL_FALLTHROUGH;
                 }
                 case SID_INSERT_PLUGIN :
                 case SID_INSERT_FLOATINGFRAME :

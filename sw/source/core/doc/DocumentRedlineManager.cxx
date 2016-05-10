@@ -1187,7 +1187,7 @@ bool DocumentRedlineManager::AppendRedline( SwRangeRedline* pNewRedl, bool bCall
                             bCompress = true;
                             mpRedlineTable->DeleteAndDestroy( n );
                             bDec = true;
-                            // no break!
+                            SAL_FALLTHROUGH;
 
                         case POS_INSIDE:
                             if( bCallDelete )

@@ -291,7 +291,8 @@ void SAL_CALL ORowSet::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const 
             break;
         case PROPERTY_ID_FETCHDIRECTION:
             if( m_nResultSetType == ResultSetType::FORWARD_ONLY)
-                throw Exception(); // else run through
+                throw Exception();
+            SAL_FALLTHROUGH;
         default:
             OPropertyStateContainer::setFastPropertyValue_NoBroadcast(nHandle,rValue);
     }

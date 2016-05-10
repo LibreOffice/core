@@ -1254,7 +1254,7 @@ void SwDrawContact::_Changed( const SdrObject& rObj,
                     }
                 }
             }
-            // fallthrough intended here
+            SAL_FALLTHROUGH;
         }
         case SDRUSERCALL_MOVEONLY:
         case SDRUSERCALL_RESIZE:

@@ -497,14 +497,14 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
 
         case FN_FRAME_UP:
             bTopParam = false;
-            /* no break */
+            SAL_FALLTHROUGH;
         case SID_FRAME_TO_TOP:
             pSh->SelectionToTop( bTopParam );
             break;
 
         case FN_FRAME_DOWN:
             bBottomParam = false;
-            /* no break */
+            SAL_FALLTHROUGH;
         case SID_FRAME_TO_BOTTOM:
             pSh->SelectionToBottom( bBottomParam );
             break;

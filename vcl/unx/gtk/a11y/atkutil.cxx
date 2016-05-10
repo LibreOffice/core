@@ -627,7 +627,7 @@ void WindowEventHandler(void *, VclSimpleEvent& rEvent)
 
         case VCLEVENT_OBJECT_DYING:
             g_aWindowList.erase( static_cast< ::VclWindowEvent const * >(&rEvent)->GetWindow() );
-            // fallthrough intentional !
+            SAL_FALLTHROUGH;
         case VCLEVENT_TOOLBOX_HIGHLIGHTOFF:
             handle_toolbox_highlightoff(static_cast< ::VclWindowEvent const * >(&rEvent)->GetWindow());
             break;

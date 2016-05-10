@@ -1201,8 +1201,8 @@ void INetMIMEEncodedWordOutputSink::finish(bool bWriteTrailer)
                     m_rSink << '_';
                 }
                 m_rSink << "?=";
+                SAL_FALLTHROUGH;
             }
-            //fall-through
             case CODING_ENCODED_TERMINATED:
                 m_rSink << ' ';
                 break;

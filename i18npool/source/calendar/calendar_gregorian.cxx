@@ -868,7 +868,7 @@ static sal_Int16 SAL_CALL NatNumForCalendar(const css::lang::Locale& aLocale,
             case NativeNumberMode::NATNUM4:
                 if (isKorean)
                     return isShort ? NativeNumberMode::NATNUM9 : NativeNumberMode::NATNUM11;
-                // fall through
+                SAL_FALLTHROUGH;
             default: return 0;
         }
     }
@@ -1092,7 +1092,7 @@ Calendar_gregorian::getDisplayStringImpl( sal_Int32 nCalendarDisplayCode, sal_In
         switch( nCalendarDisplayCode ) {
             case CalendarDisplayCode::SHORT_MONTH:
                 value += 1;     // month is zero based
-                // fall through
+                SAL_FALLTHROUGH;
             case CalendarDisplayCode::SHORT_DAY:
                 sprintf(aStr, "%d", value);     // #100211# - checked
                 break;

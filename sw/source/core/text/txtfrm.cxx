@@ -1525,7 +1525,7 @@ bool SwTextFrame::Prepare( const PrepareHint ePrep, const void* pVoid,
                                 Prt().Height(0);
                                 _InvalidatePrt();
                                 _InvalidateSize();
-                                /* no break here */
+                                SAL_FALLTHROUGH;
         case PREP_ADJUST_FRM :  pPara->SetPrepAdjust();
                                 if( IsFootnoteNumFrame() != pPara->IsFootnoteNum() ||
                                     IsUndersized() )
@@ -1536,7 +1536,7 @@ bool SwTextFrame::Prepare( const PrepareHint ePrep, const void* pVoid,
                                 }
                                 break;
         case PREP_MUST_FIT :        pPara->SetPrepMustFit();
-                                /* no break here */
+                                    SAL_FALLTHROUGH;
         case PREP_WIDOWS_ORPHANS :  pPara->SetPrepAdjust();
                                     break;
 
@@ -1783,7 +1783,7 @@ bool SwTextFrame::Prepare( const PrepareHint ePrep, const void* pVoid,
                 InvalidateRange( SwCharRange( nWhere, 1 ) );
                 return bParaPossiblyInvalid;
             }
-            // else: continue with default case block
+            SAL_FALLTHROUGH; // else: continue with default case block
         }
         case PREP_CLEAR:
         default:

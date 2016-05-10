@@ -734,7 +734,7 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
                 break;
             }
             // Reduce sequence of CR/LF/BLANK/TAB to a single blank
-            // no break!!
+            SAL_FALLTHROUGH;
         case '\t':
             if( '\t'==nNextCh && bReadPRE && '>'!=cBreak )
             {
@@ -742,7 +742,7 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
                 bContinue = false;
                 break;
             }
-            // no break
+            SAL_FALLTHROUGH;
         case '\x0b':
             if( '\x0b'==nNextCh && (bReadPRE || bReadXMP ||bReadListing) &&
                 '>'!=cBreak )
@@ -750,7 +750,7 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
                 break;
             }
             nNextCh = ' ';
-            // no break;
+            SAL_FALLTHROUGH;
         case ' ':
             sTmpBuffer.append( nNextCh );
             if( '>'!=cBreak && (!bReadListing && !bReadXMP &&
@@ -1012,7 +1012,7 @@ int HTMLParser::_GetNextRawToken()
                 }
                 break;
             }
-            // no break
+            SAL_FALLTHROUGH;
         default:
             // all remaining characters are appended to the buffer
             sTmpBuffer.append( nNextCh );
@@ -1359,16 +1359,16 @@ int HTMLParser::_GetNextToken()
                 nRet = HTML_NEWPARA;
                 break;
             }
-            // no break !
+            SAL_FALLTHROUGH;
         case '\t':
             if( bReadPRE )
             {
                 nRet = HTML_TABCHAR;
                 break;
             }
-            // no break !
+            SAL_FALLTHROUGH;
         case ' ':
-            // no break !
+            SAL_FALLTHROUGH;
         default:
 
 scan_text:
@@ -1595,7 +1595,7 @@ int HTMLParser::FilterPRE( int nToken )
     // in Netscape they only have impact in not empty paragraphs
     case HTML_PARABREAK_ON:
         nToken = HTML_LINEBREAK;
-        //fall-through
+        SAL_FALLTHROUGH;
     case HTML_LINEBREAK:
     case HTML_NEWPARA:
         nPre_LinePos = 0;

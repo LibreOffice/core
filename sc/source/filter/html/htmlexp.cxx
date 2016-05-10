@@ -1181,7 +1181,7 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
             bFieldText = WriteFieldText(aCell.mpEditText);
             if ( bFieldText )
                 break;
-            //! else: fallthru
+            SAL_FALLTHROUGH;
         default:
             ScCellFormat::GetString(aCell, nFormat, aStrOut, &pColor, *pFormatter, pDoc);
     }

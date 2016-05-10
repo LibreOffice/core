@@ -5364,19 +5364,19 @@ bool WW8Fib::GetBaseCp(ManTypes nType, WW8_CP * cp) const
         default:
         case MAN_TXBX_HDFT:
             nOffset = ccpTxbx;
-            // fall through
+            SAL_FALLTHROUGH;
         case MAN_TXBX:
             if (ccpEdn > std::numeric_limits<WW8_CP>::max() - nOffset) {
                 return false;
             }
             nOffset += ccpEdn;
-            // fall through
+            SAL_FALLTHROUGH;
         case MAN_EDN:
             if (ccpAtn > std::numeric_limits<WW8_CP>::max() - nOffset) {
                 return false;
             }
             nOffset += ccpAtn;
-            // fall through
+            SAL_FALLTHROUGH;
         case MAN_AND:
             if (ccpMcr > std::numeric_limits<WW8_CP>::max() - nOffset) {
                 return false;
@@ -5395,19 +5395,19 @@ bool WW8Fib::GetBaseCp(ManTypes nType, WW8_CP * cp) const
                 return false;
             }
             nOffset += ccpHdr;
-            // fall through
+            SAL_FALLTHROUGH;
         case MAN_HDFT:
             if (ccpFootnote > std::numeric_limits<WW8_CP>::max() - nOffset) {
                 return false;
             }
             nOffset += ccpFootnote;
-            // fall through
+            SAL_FALLTHROUGH;
         case MAN_FTN:
             if (ccpText > std::numeric_limits<WW8_CP>::max() - nOffset) {
                 return false;
             }
             nOffset += ccpText;
-            // fall through
+            SAL_FALLTHROUGH;
         case MAN_MAINTEXT:
             break;
     }

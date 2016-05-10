@@ -1046,7 +1046,7 @@ OUString SdDrawDocument::CreatePageNumValue(sal_uInt16 nNum) const
             break;
         case SVX_ROMAN_UPPER:
             bUpper = true;
-            //fall-through
+            SAL_FALLTHROUGH;
         case SVX_ROMAN_LOWER:
             aPageNumValue += SvxNumberFormat::CreateRomanString(nNum, bUpper);
             break;

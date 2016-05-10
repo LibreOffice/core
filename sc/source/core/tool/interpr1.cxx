@@ -2631,7 +2631,7 @@ void ScInterpreter::ScFormula()
                 PushMatrix( pResMat);
                 return;
             }
-            // fallthru
+            SAL_FALLTHROUGH;
         case svSingleRef :
         {
             ScAddress aAdr;
@@ -3133,7 +3133,7 @@ void ScInterpreter::ScValue()
                 {
                     case SC_MATVAL_EMPTY:
                         fVal = 0.0;
-                        // fallthru
+                        SAL_FALLTHROUGH;
                     case SC_MATVAL_VALUE:
                     case SC_MATVAL_BOOLEAN:
                         PushDouble( fVal);
@@ -5939,7 +5939,7 @@ void ScInterpreter::ScLookup()
                     break;
                 case svDoubleRef:
                     aResAdr.Set( nResCol1, nResRow1, nResTab);
-                    // fallthru
+                    SAL_FALLTHROUGH;
                 case svSingleRef:
                     PushCellResultToken( true, aResAdr, nullptr, nullptr);
                     break;

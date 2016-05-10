@@ -93,8 +93,8 @@ static bool lcl_HasRelRef( ScDocument* pDoc, ScTokenArray* pFormula, sal_uInt16 
                     ScSingleRefData& rRef2 = t->GetDoubleRef()->Ref2;
                     if ( rRef2.IsColRel() || rRef2.IsRowRel() || rRef2.IsTabRel() )
                         return true;
+                    SAL_FALLTHROUGH;
                 }
-                // fall through
 
                 case svSingleRef:
                 {

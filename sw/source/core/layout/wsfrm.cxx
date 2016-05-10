@@ -276,7 +276,7 @@ void SwFrame::_UpdateAttrFrame( const SfxPoolItem *pOld, const SfxPoolItem *pNew
         case RES_BOX:
         case RES_SHADOW:
             Prepare( PREP_FIXSIZE_CHG );
-            // no break here!
+            SAL_FALLTHROUGH;
         case RES_LR_SPACE:
         case RES_UL_SPACE:
             rInvFlags |= 0x0B;
@@ -2003,7 +2003,7 @@ void SwContentFrame::_UpdateAttr( const SfxPoolItem* pOld, const SfxPoolItem* pN
     {
         case RES_FMT_CHG:
             rInvFlags = 0xFF;
-            /* no break here */
+            SAL_FALLTHROUGH;
 
         case RES_PAGEDESC:                      //attribute changes (on/off)
             if ( IsInDocBody() && !IsInTab() )
@@ -2053,7 +2053,7 @@ void SwContentFrame::_UpdateAttr( const SfxPoolItem* pOld, const SfxPoolItem* pN
                 }
                 Prepare( PREP_UL_SPACE );   //TextFrame has to correct line spacing.
                 rInvFlags |= 0x80;
-                /* no break here */
+                SAL_FALLTHROUGH;
             }
         case RES_LR_SPACE:
         case RES_BOX:
@@ -2124,7 +2124,7 @@ void SwContentFrame::_UpdateAttr( const SfxPoolItem* pOld, const SfxPoolItem* pN
 
         case RES_FRM_SIZE:
             rInvFlags |= 0x01;
-            /* no break here */
+            SAL_FALLTHROUGH;
 
         default:
             bClear = false;

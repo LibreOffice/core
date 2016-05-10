@@ -1363,7 +1363,8 @@ SwRect SwTextFrame::_AutoSpell( const SwContentNode* pActNode, sal_Int32 nActPos
                                 pNode->GetWrong()->Insert(OUString(), nullptr, nBegin, nLen, nInsertPos++);
                                 break;
                             case SwWrongList::FreshState::CURSOR:
-                                bPending = true; // fall-through to mark as invalid
+                                bPending = true;
+                                SAL_FALLTHROUGH; // to mark as invalid
                             case SwWrongList::FreshState::NOTHING:
                                 nInvStart = nBegin;
                                 nInvEnd = nBegin + nLen;

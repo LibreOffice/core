@@ -2058,7 +2058,7 @@ IMPL_LINK_NOARG_TYPED(SvxExtParagraphTabPage, WidowHdl_Impl, Button*, void)
             if ( m_pOrphanBox->GetState() == TRISTATE_FALSE )
                 m_pKeepTogetherBox->Enable();
 
-        // no break
+            SAL_FALLTHROUGH;
         case TRISTATE_INDET:
             m_pWidowRowNo->Enable(false);
             m_pWidowRowLabel->Enable(false);
@@ -2080,7 +2080,7 @@ IMPL_LINK_NOARG_TYPED(SvxExtParagraphTabPage, OrphanHdl_Impl, Button*, void)
             if ( m_pWidowBox->GetState() == TRISTATE_FALSE )
                 m_pKeepTogetherBox->Enable();
 
-        // no break
+            SAL_FALLTHROUGH;
         case TRISTATE_INDET:
             m_pOrphanRowNo->Enable(false);
             m_pOrphanRowLabel->Enable(false);

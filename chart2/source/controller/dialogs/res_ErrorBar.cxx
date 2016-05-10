@@ -563,7 +563,7 @@ void ErrorBarResources::Reset(const SfxItemSet& rInAttrs)
             case CHINDICATE_NONE :
                 // no longer used, use both as default
                 m_eIndicate = CHINDICATE_BOTH;
-                // fall-through intended to BOTH
+                SAL_FALLTHROUGH; // to BOTH
             case CHINDICATE_BOTH :
                 m_pRbBoth->Check(); break;
             case CHINDICATE_UP :

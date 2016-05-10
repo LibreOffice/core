@@ -1812,7 +1812,7 @@ OUString OSingleSelectQueryComposer::getKeyword( SQLPart _ePart )
     {
         default:
             SAL_WARN("dbaccess", "OSingleSelectQueryComposer::getKeyWord: Invalid enum value!" );
-            // no break, fallback to WHERE
+            SAL_FALLTHROUGH; // fallback to WHERE
         case Where:
             sKeyword = STR_WHERE;
             break;

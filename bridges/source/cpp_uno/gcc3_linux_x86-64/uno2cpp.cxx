@@ -432,7 +432,8 @@ void unoInterfaceProxyDispatch(
                 }
                 TYPELIB_DANGER_RELEASE( pTD );
             }
-        } // else perform queryInterface()
+            SAL_FALLTHROUGH; // else perform queryInterface()
+        }
         default:
             // dependent dispatch
             cpp_call(

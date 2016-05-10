@@ -2268,7 +2268,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                 break;
             case NF_KEY_THAI_T :
                 bThaiT = true;
-                // fall through
+                SAL_FALLTHROUGH;
             case NF_KEY_M:                          // M
             case NF_KEY_MM:                         // MM
             case NF_KEY_MMM:                        // MMM
@@ -2424,7 +2424,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                 break;
             case NF_KEY_THAI_T :
                 bThaiT = true;
-                // fall through
+                SAL_FALLTHROUGH;
             case NF_KEY_MI:                         // M
             case NF_KEY_MMI:                        // MM
             case NF_KEY_H:                          // H

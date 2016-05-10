@@ -2335,7 +2335,7 @@ void AttributeOutputBase::GetNumberPara( OUString& rStr, const SwField& rField )
         default:
             OSL_ENSURE(rField.GetFormat() == SVX_NUM_ARABIC,
                 "Unknown numbering type exported as default of Arabic\n");
-            //fallthrough
+            SAL_FALLTHROUGH;
         case SVX_NUM_ARABIC:
             rStr += "\\* ARABIC ";
             break;
@@ -3467,7 +3467,7 @@ void AttributeOutputBase::FormatBreak( const SvxFormatBreakItem& rBreak )
 
             case SVX_BREAK_COLUMN_BEFORE:                       // ColumnBreak
                 bBefore = true;
-                // no break;
+                SAL_FALLTHROUGH;
             case SVX_BREAK_COLUMN_AFTER:
             case SVX_BREAK_COLUMN_BOTH:
                 if ( GetExport().Sections().CurrentNumberOfColumns( *GetExport().m_pDoc ) > 1 || GetExport().SupportsOneColumnBreak() )
@@ -3567,7 +3567,7 @@ void WW8AttributeOutput::FormatTextGrid( const SwTextGridItem& rGrid )
         {
             default:
                 OSL_FAIL("Unknown grid type");
-                //fall-through
+                SAL_FALLTHROUGH;
             case GRID_NONE:
                 nGridType = 0;
                 break;
@@ -4444,7 +4444,7 @@ void WW8AttributeOutput::FormatFrameDirection( const SvxFrameDirectionItem& rDir
         default:
             //Can't get an unknown type here
             OSL_FAIL("Unknown frame direction");
-            //fall-through
+            SAL_FALLTHROUGH;
         case FRMDIR_HORI_LEFT_TOP:
             nTextFlow = 0;
             break;

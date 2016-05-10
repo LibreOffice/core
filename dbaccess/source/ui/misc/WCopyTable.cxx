@@ -1451,19 +1451,19 @@ TOTypeInfoSP OCopyTableWizard::convertType(const TOTypeInfoSP& _pType, bool& _bN
             case DataType::TINYINT:
                 if(supportsType(DataType::SMALLINT,nDefaultType))
                     break;
-                // run through
+                SAL_FALLTHROUGH;
             case DataType::SMALLINT:
                 if(supportsType(DataType::INTEGER,nDefaultType))
                     break;
-                // run through
+                SAL_FALLTHROUGH;
             case DataType::INTEGER:
                 if(supportsType(DataType::FLOAT,nDefaultType))
                     break;
-                // run through
+                SAL_FALLTHROUGH;
             case DataType::FLOAT:
                 if(supportsType(DataType::REAL,nDefaultType))
                     break;
-                // run through
+                SAL_FALLTHROUGH;
             case DataType::DATE:
             case DataType::TIME:
                 if( DataType::DATE == _pType->nType || DataType::TIME == _pType->nType )
@@ -1471,17 +1471,17 @@ TOTypeInfoSP OCopyTableWizard::convertType(const TOTypeInfoSP& _pType, bool& _bN
                     if(supportsType(DataType::TIMESTAMP,nDefaultType))
                         break;
                 }
-                // run through
+                SAL_FALLTHROUGH;
             case DataType::TIMESTAMP:
             case DataType::REAL:
             case DataType::BIGINT:
                 if ( supportsType(DataType::DOUBLE,nDefaultType) )
                     break;
-                // run through
+                SAL_FALLTHROUGH;
             case DataType::DOUBLE:
                 if ( supportsType(DataType::NUMERIC,nDefaultType) )
                     break;
-                // run through
+                SAL_FALLTHROUGH;
             case DataType::NUMERIC:
                 supportsType(DataType::DECIMAL,nDefaultType);
                 break;

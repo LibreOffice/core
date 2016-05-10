@@ -1308,7 +1308,7 @@ static inline void typelib_typedescription_destructExtendedMembers(
     case typelib_TypeClass_STRUCT:
         delete[] reinterpret_cast< typelib_StructTypeDescription * >(pTD)->
             pParameterizedTypes;
-        // Fall-through intentional
+        SAL_FALLTHROUGH;
     case typelib_TypeClass_EXCEPTION:
     {
         typelib_CompoundTypeDescription * pCTD = reinterpret_cast<typelib_CompoundTypeDescription*>(pTD);

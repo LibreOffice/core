@@ -120,7 +120,7 @@ SwFrameFormat *DocumentLayoutManager::MakeLayoutFormat( RndStdIds eRequest, cons
     case RND_STD_HEADERR:
         {
             bHeader = true;
-            // no break, we continue further down
+            SAL_FALLTHROUGH;
         }
     case RND_STD_FOOTER:
     case RND_STD_FOOTERL:

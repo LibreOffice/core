@@ -477,7 +477,7 @@ static Bootstrap::FailureCode describeError(OUStringBuffer& _rBuf, Bootstrap::Im
             eErrCode = Bootstrap::INVALID_VERSION_FILE_ENTRY;
             break;
         }
-        // else fall through
+        else SAL_FALLTHROUGH;
 
     case Bootstrap::DATA_MISSING:
         switch (_rData.aVersionINI_.status)

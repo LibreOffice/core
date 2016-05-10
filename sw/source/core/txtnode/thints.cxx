@@ -1159,7 +1159,7 @@ void SwTextNode::DestroyAttr( SwTextAttr* pAttr )
                 {
                 case RES_HIDDENPARAFLD:
                     SetCalcHiddenParaField();
-                    // no break
+                    SAL_FALLTHROUGH;
                 case RES_DBSETNUMBERFLD:
                 case RES_GETEXPFLD:
                 case RES_DBFLD:

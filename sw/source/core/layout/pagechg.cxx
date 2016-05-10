@@ -586,8 +586,9 @@ void SwPageFrame::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
             if( rOldF != rNewF )
                 rInvFlags |= 0x10;
             CheckDirChange();
+
+            SAL_FALLTHROUGH;
         }
-        // no break
         case RES_FRM_SIZE:
         {
             const SwRect aOldPageFrameRect( Frame() );

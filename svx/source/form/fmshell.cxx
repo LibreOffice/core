@@ -274,7 +274,7 @@ bool FmFormShell::PrepareClose(bool bUI)
                         {
                             case RET_YES:
                                 bResult = rController->commitCurrentRecord( );
-                                // fallthrough to next case
+                                SAL_FALLTHROUGH;
                             case RET_NO:
                                 GetImpl()->didPrepareClose( true );
                                 break;
@@ -872,7 +872,7 @@ void FmFormShell::GetState(SfxItemSet &rSet)
                     rSet.Put( SfxVisibilityItem( nWhich, false ) );
                     break;
                 }
-                // NO break!
+                SAL_FALLTHROUGH;
 
             case SID_FM_SCROLLBAR:
             case SID_FM_IMAGECONTROL:

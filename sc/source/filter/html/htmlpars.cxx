@@ -1594,7 +1594,8 @@ void ScHTMLLayoutParser::ProcToken( ImportInfo* pInfo )
             // Do not set bInCell to true, TableDataOn does that
             pActEntry->aItemSet.Put(
                 SvxWeightItem( WEIGHT_BOLD, ATTR_FONT_WEIGHT) );
-        }   // fall through
+            SAL_FALLTHROUGH;
+        }
         case HTML_TABLEDATA_ON:         // Opens cell
         {
             TableDataOn( pInfo );

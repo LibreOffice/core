@@ -363,7 +363,7 @@ sal_uInt16 LwpObjectStream::DecompressBuffer(sal_uInt8* pDst, sal_uInt8* pSrc, s
 
                 *pDst++ = 0;
                 DstSize++;
-                // fall through into next case!
+                SAL_FALLTHROUGH;
 
             case 0xC0:
                 // 1 - 64 bytes of non-zero

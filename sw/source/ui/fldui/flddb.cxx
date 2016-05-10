@@ -345,7 +345,7 @@ void SwFieldDBPage::TypeHdl( ListBox* pBox )
 
             case TYP_DBNUMSETFLD:
                 bSetNo = true;
-                // no break!
+                SAL_FALLTHROUGH;
             case TYP_DBNEXTSETFLD:
                 bCond = true;
                 if (IsFieldEdit())

@@ -4681,7 +4681,7 @@ void INetURLObject::appendUCS4(OUStringBuffer& rTheText, sal_uInt32 nUCS4,
         {
             default:
                 OSL_FAIL("INetURLObject::appendUCS4(): Unsupported charset");
-                //fallthrough
+                SAL_FALLTHROUGH;
             case RTL_TEXTENCODING_ASCII_US:
             case RTL_TEXTENCODING_ISO_8859_1:
                 appendEscape(rTheText, nUCS4);
@@ -4726,7 +4726,7 @@ sal_uInt32 INetURLObject::getUTF32(sal_Unicode const *& rBegin,
                     default:
                         OSL_FAIL(
                             "INetURLObject::getUTF32(): Unsupported charset");
-                        //fall-through
+                        SAL_FALLTHROUGH;
                     case RTL_TEXTENCODING_ASCII_US:
                         rEscapeType = rtl::isAscii(nUTF32) ?
                                           ESCAPE_UTF32 : ESCAPE_OCTET;

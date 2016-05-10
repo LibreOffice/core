@@ -571,7 +571,7 @@ svl::SharedString ScMatrixImpl::GetString(SCSIZE nC, SCSIZE nR) const
             case mdds::mtm::element_numeric:
             case mdds::mtm::element_boolean:
                 fErr = maMat.get_numeric(aPos);
-                //fallthrough
+                SAL_FALLTHROUGH;
             default:
                 OSL_FAIL("ScMatrixImpl::GetString: access error, no string");
         }

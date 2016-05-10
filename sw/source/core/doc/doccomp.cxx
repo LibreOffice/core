@@ -1979,7 +1979,7 @@ sal_uInt16 SaveMergeRedline::InsertRedline(SwPaM* pLastDestRedline)
                 case POS_EQUAL:
                     delete pDestRedl;
                     pDestRedl = nullptr;
-                    // break; -> no break !!!!
+                    SAL_FALLTHROUGH;
 
                 case POS_COLLIDE_END:
                 case POS_BEFORE:

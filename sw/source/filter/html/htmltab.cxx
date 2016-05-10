@@ -3692,7 +3692,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                         break;
                     case SVX_ADJUST_LEFT:
                         eSurround = SURROUND_RIGHT;
-                        //fall-through
+                        SAL_FALLTHROUGH;
                     default:
                         eHori = text::HoriOrientation::LEFT;
                         break;
@@ -3881,7 +3881,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
         case HTML_TBODY_OFF:
         case HTML_TABLE_OFF:
             SkipToken();
-            //fall-through
+            SAL_FALLTHROUGH;
         case HTML_TABLEHEADER_OFF:
         case HTML_TABLEDATA_OFF:
             bDone = true;
@@ -4284,7 +4284,7 @@ void SwHTMLParser::BuildTableRow( HTMLTable *pCurTable, bool bReadOptions,
         case HTML_TFOOT_OFF:
         case HTML_TABLE_OFF:
             SkipToken();
-            //fall-through
+            SAL_FALLTHROUGH;
         case HTML_TABLEROW_OFF:
             bDone = true;
             break;
@@ -4457,7 +4457,7 @@ void SwHTMLParser::BuildTableSection( HTMLTable *pCurTable,
         case HTML_TBODY_ON:
         case HTML_TABLE_OFF:
             SkipToken();
-            //fall-through
+            SAL_FALLTHROUGH;
         case HTML_THEAD_OFF:
         case HTML_TBODY_OFF:
         case HTML_TFOOT_OFF:
@@ -4653,7 +4653,7 @@ void SwHTMLParser::BuildTableColGroup( HTMLTable *pCurTable,
         case HTML_TABLEROW_ON:
         case HTML_TABLE_OFF:
             SkipToken();
-            //fall-through
+            SAL_FALLTHROUGH;
         case HTML_COLGROUP_OFF:
             bDone = true;
             break;

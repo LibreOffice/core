@@ -1576,7 +1576,7 @@ sal_Int32 SwTextFormatInfo::ScanPortionEnd( const sal_Int32 nStart,
         case CH_TXTATR_INWORD:
             if( !HasHint( i ))
                 break;
-            // no break;
+            SAL_FALLTHROUGH;
 
         case CHAR_SOFTHYPHEN:
         case CHAR_HARDHYPHEN:

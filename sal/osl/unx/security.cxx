@@ -132,7 +132,7 @@ oslSecurity SAL_CALL osl_getCurrentSecurity()
             if (found != nullptr) {
                 return p;
             }
-            /* fall through */
+            SAL_FALLTHROUGH;
         default:
             deleteSecurityImpl(p);
             return nullptr;

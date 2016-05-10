@@ -301,7 +301,7 @@ int RTFSdrImport::initShape(uno::Reference<drawing::XShape>& o_xShape,
                 o_xPropSet->setPropertyValue(aDefaults[j].Name, aDefaults[j].Value);
             break;
         }
-    // fall-through intended
+        SAL_FALLTHROUGH;
     default:
         createShape("com.sun.star.drawing.CustomShape", o_xShape, o_xPropSet);
         o_rIsCustomShape = true;

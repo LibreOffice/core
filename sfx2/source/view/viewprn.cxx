@@ -343,7 +343,7 @@ void SfxPrinterController::jobFinished( css::view::PrintableState nState )
                 OUString aMsg( SfxResId(STR_NOSTARTPRINTER).toString() );
                 if ( !m_bApi )
                     ScopedVclPtrInstance<MessageDialog>::Create(mpViewShell->GetWindow(), aMsg)->Execute();
-                // intentionally no break
+                SAL_FALLTHROUGH;
             }
             case view::PrintableState_JOB_ABORTED :
             {

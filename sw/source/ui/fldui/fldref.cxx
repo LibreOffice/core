@@ -387,7 +387,7 @@ IMPL_LINK_NOARG_TYPED(SwFieldRefPage, TypeHdl, ListBox&, void)
 
             case REFFLDFLAG_BOOKMARK:
                 bName = true;
-                // no break!!!
+                SAL_FALLTHROUGH;
             default:
                 if( REFFLDFLAG & nTypeId )
                 {
@@ -692,7 +692,7 @@ sal_Int32 SwFieldRefPage::FillFormatLB(sal_uInt16 nTypeId)
         case REFFLDFLAG_HEADING:
         case REFFLDFLAG_NUMITEM:
             bAddCrossRefFormats = true;
-            // intentional no break here
+            SAL_FALLTHROUGH;
 
         case TYP_GETREFFLD:
         case REFFLDFLAG_BOOKMARK:

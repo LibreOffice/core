@@ -204,7 +204,7 @@ const int* getStateTransitionTable( sal_Int16 nRestartMode,
         // same value: animations::AnimationRestart::INHERIT:
         OSL_FAIL(
             "getStateTransitionTable(): unexpected case for restart" );
-        // FALLTHROUGH intended
+        SAL_FALLTHROUGH;
     case animations::AnimationRestart::NEVER:
         nRestartValue = 0;
         break;
@@ -224,7 +224,7 @@ const int* getStateTransitionTable( sal_Int16 nRestartMode,
         // same value: animations::AnimationFill::INHERIT:
         OSL_FAIL(
             "getStateTransitionTable(): unexpected case for fill" );
-        // FALLTHROUGH intended
+        SAL_FALLTHROUGH;
     case animations::AnimationFill::REMOVE:
         nFillValue = 0;
         break;

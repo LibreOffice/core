@@ -190,7 +190,7 @@ bool WildCard::Matches( const OUString& rString ) const
                 else
                     break;
 
-                // Note: fall-through are intended!
+                SAL_FALLTHROUGH;
 
             case '*':
                 while ( *pWild == '*' )

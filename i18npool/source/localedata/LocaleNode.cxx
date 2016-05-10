@@ -778,7 +778,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
                                 sTheCompatibleCurrency = aCode.copy( nStart + 2, nHyphen - nStart - 2);
                         }
                     }
-                    // fallthru
+                    SAL_FALLTHROUGH;
                 case cssi::NumberFormatIndex::CURRENCY_1000INT :
                 case cssi::NumberFormatIndex::CURRENCY_1000INT_RED :
                 case cssi::NumberFormatIndex::CURRENCY_1000DEC2_RED :
@@ -1111,7 +1111,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
                     // separators and generate a second pattern with the
                     // format's separator at the current position.
                     cDateSep2 = cChar;
-                    // fallthru
+                    SAL_FALLTHROUGH;
                 default:
                 handleDefault:
                     if (!cDateSep)

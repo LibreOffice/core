@@ -523,7 +523,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
         case SID_EXPORTDOCASPDF:
         case SID_DIRECTEXPORTDOCASPDF:
             bIsPDFExport = true;
-            //fall-through
+            SAL_FALLTHROUGH;
         case SID_EXPORTDOC:
         case SID_SAVEASDOC:
         case SID_SAVEASREMOTE:

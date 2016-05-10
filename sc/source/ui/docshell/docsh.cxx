@@ -938,7 +938,8 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                             SetError( ERRCODE_IO_ABORT, OSL_LOG_PREFIX ); // this error code will produce no error message, but will break the further saving process
                         }
                     }
-                } // fall through
+                    SAL_FALLTHROUGH;
+                }
             case SFX_EVENT_SAVETODOC:
                 // #i108978# If no event is sent before saving, there will also be no "...DONE" event,
                 // and SAVE/SAVEAS can't be distinguished from SAVETO. So stream copying is only enabled
@@ -951,7 +952,8 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                 {
                     // new positions are used after "save" and "save as", but not "save to"
                     UseSheetSaveEntries();      // use positions from saved file for next saving
-                } // fall through
+                    SAL_FALLTHROUGH;
+                }
             case SFX_EVENT_SAVETODOCDONE:
                 // only reset the flag, don't use the new positions
                 if (pSheetSaveData)

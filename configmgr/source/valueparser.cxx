@@ -260,7 +260,7 @@ xmlreader::XmlReader::Text ValueParser::getTextMode() const {
             if (!items_.empty()) {
                 break;
             }
-            // fall through
+            SAL_FALLTHROUGH;
         case STATE_IT:
             return
                 (type_ == TYPE_STRING || type_ == TYPE_STRING_LIST ||
@@ -292,7 +292,7 @@ bool ValueParser::startElement(
             state_ = STATE_IT;
             return true;
         }
-        // fall through
+        SAL_FALLTHROUGH;
     case STATE_IT:
         if (nsId == xmlreader::XmlReader::NAMESPACE_NONE &&
             name.equals("unicode") &&

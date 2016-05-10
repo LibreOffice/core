@@ -2272,7 +2272,7 @@ namespace svt { namespace table
                 m_aSelectedRows[0] = i_rowIndex;
                 break;
             }
-            // fall through
+            SAL_FALLTHROUGH;
 
         case MULTIPLE_SELECTION:
             m_aSelectedRows.push_back( i_rowIndex );

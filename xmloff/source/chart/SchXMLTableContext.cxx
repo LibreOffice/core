@@ -245,7 +245,7 @@ SvXMLImportContext *SchXMLTableContext::CreateChildContext(
     {
         case XML_TOK_TABLE_HEADER_COLS:
             mrTable.bHasHeaderColumn = true;
-            // fall through intended
+            SAL_FALLTHROUGH;
         case XML_TOK_TABLE_COLUMNS:
             pContext = new SchXMLTableColumnsContext( GetImport(), rLocalName, mrTable );
             break;
@@ -256,7 +256,7 @@ SvXMLImportContext *SchXMLTableContext::CreateChildContext(
 
         case XML_TOK_TABLE_HEADER_ROWS:
             mrTable.bHasHeaderRow = true;
-            // fall through intended
+            SAL_FALLTHROUGH;
         case XML_TOK_TABLE_ROWS:
             pContext = new SchXMLTableRowsContext( mrImportHelper, GetImport(), rLocalName, mrTable );
             break;

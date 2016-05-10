@@ -2273,7 +2273,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
     break;
     case NS_ooxml::LN_paratrackchange:
         m_pImpl->StartParaMarkerChange( );
-        /* fallthrough */
+        SAL_FALLTHROUGH;
     case NS_ooxml::LN_CT_PPr_pPrChange:
     case NS_ooxml::LN_trackchange:
     case NS_ooxml::LN_EG_RPrContent_rPrChange:
@@ -3364,7 +3364,7 @@ void DomainMapper::handleUnderlineType(const Id nId, const ::std::shared_ptr<Pro
         break;
     case NS_ooxml::LN_Value_ST_Underline_words:
         rContext->Insert(PROP_CHAR_WORD_MODE, uno::makeAny(true));
-        // fall-through intended
+        SAL_FALLTHROUGH;
     case NS_ooxml::LN_Value_ST_Underline_single:
         nUnderline = awt::FontUnderline::SINGLE;
         break;
@@ -3435,7 +3435,7 @@ void DomainMapper::handleParaJustification(const sal_Int32 nIntValue, const ::st
         break;
     case 4:
         nLastLineAdjust = style::ParagraphAdjust_BLOCK;
-        //no break;
+        SAL_FALLTHROUGH;
     case NS_ooxml::LN_Value_ST_Jc_both:
         nAdjust = style::ParagraphAdjust_BLOCK;
         aStringValue = "both";

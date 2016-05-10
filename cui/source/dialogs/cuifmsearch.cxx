@@ -735,8 +735,8 @@ IMPL_LINK_TYPED(FmSearchDialog, OnSearchProgress, const FmSearchProgress*, pProg
                 ? RID_STR_SEARCH_GENERAL_ERROR
                 : RID_STR_SEARCH_NORECORD;
             ScopedVclPtrInstance<MessageDialog>::Create(this, CUI_RES(nErrorId))->Execute();
+            SAL_FALLTHROUGH;
         }
-            // NO break !
         case FmSearchProgress::STATE_CANCELED:
             EnableSearchUI(true);
             if (m_lnkCanceledNotFoundHdl.IsSet())

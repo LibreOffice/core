@@ -329,8 +329,8 @@ bool Model::setSimpleContent( const XNode_t& xConstNode,
             OSL_ENSURE( xNode.is() &&
                         xNode->getNodeType() == NodeType_TEXT_NODE,
                         "text node creation failed?" );
+            SAL_FALLTHROUGH; // continue as with text node:
         }
-        // no break; continue as with text node:
 
         case NodeType_TEXT_NODE:
         case NodeType_ATTRIBUTE_NODE:

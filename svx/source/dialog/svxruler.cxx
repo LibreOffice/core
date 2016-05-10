@@ -1764,7 +1764,7 @@ void SvxRuler::UpdateParaContents_Impl(
             break;
         case MOVE_ALL:
             mpIndents[INDENT_RIGHT_MARGIN].nPos += lDifference;
-            // no break
+            SAL_FALLTHROUGH;
         case MOVE_LEFT:
         {
             mpIndents[INDENT_FIRST_LINE].nPos += lDifference;
@@ -1848,7 +1848,7 @@ ADD_DEBUG_TEXT("lLastLMargin: ", OUString::number(mxRulerImpl->lLastLMargin))
                 {
                 default: ;//prevent warning
                     OSL_FAIL("svx::SvxRuler::DragBorders(), unknown drag type!" );
-                    //fall-through
+                    SAL_FALLTHROUGH;
                 case RULER_TYPE_BORDER:
                     if(mxRulerImpl->bIsTableRows)
                     {

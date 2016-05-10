@@ -2407,7 +2407,7 @@ void SfxTemplateDialog_Impl::EnableItem(sal_uInt16 nMesId, bool bCheck)
         case SID_STYLE_WATERCAN :
             if(!bCheck && IsCheckedItem(SID_STYLE_WATERCAN))
                 Execute_Impl(SID_STYLE_WATERCAN, "", "", 0);
-            //fall-through
+            SAL_FALLTHROUGH;
         case SID_STYLE_NEW_BY_EXAMPLE:
         case SID_STYLE_UPDATE_BY_EXAMPLE:
             m_aActionTbR->EnableItem(nMesId,bCheck);

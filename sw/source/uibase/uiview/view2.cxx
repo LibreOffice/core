@@ -1158,8 +1158,8 @@ void SwView::Execute(SfxRequest &rReq)
                 xDictionary->clear();
             // put cursor to the start of the document
             m_pWrtShell->SttDoc();
+            SAL_FALLTHROUGH; // call spell/grammar dialog
         }
-        // no break; - but call spell/grammar dialog
         case FN_SPELL_GRAMMAR_DIALOG:
         {
             SfxViewFrame* pViewFrame = GetViewFrame();

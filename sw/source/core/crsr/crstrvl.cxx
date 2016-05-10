@@ -1934,7 +1934,7 @@ bool SwCursorShell::SetShadowCursorPos( const Point& rPt, SwFillMode eFillMode )
                     if (!sInsert.isEmpty())
                         GetDoc()->getIDocumentContentOperations().InsertString( *m_pCurrentCursor, sInsert.makeStringAndClear());
                 }
-                // no break - still need to set orientation
+                SAL_FALLTHROUGH; // still need to set orientation
             case FILL_MARGIN:
                 if( text::HoriOrientation::NONE != aFPos.eOrient )
                 {

@@ -154,7 +154,7 @@ Status finalize() {
         if (isCreated()) {
             return EXISTED;
         }
-        // fall through
+        SAL_FALLTHROUGH;
     case utl::Bootstrap::PATH_VALID:
         return create(uri);
     default:

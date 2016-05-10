@@ -1136,7 +1136,7 @@ void ScMatrixFormulaCellToken::SetUpperLeftDouble( double f )
                 xUpperLeft = new FormulaDoubleToken( f);
                 break;
             }
-            // fall through
+            SAL_FALLTHROUGH;
         default:
             {
                 OSL_FAIL("ScMatrixFormulaCellToken::SetUpperLeftDouble: not modifying unhandled token type");
@@ -1914,7 +1914,7 @@ FormulaToken* ScTokenArray::MergeArray( )
 
             case ocArrayOpen :
                 nStart = i; // stop iteration
-                // fall through to ArrayRowSep
+                SAL_FALLTHROUGH; // to ArrayRowSep
 
             case ocArrayRowSep :
                 if( checkArraySep( bPrevWasSep, true ) )
@@ -2278,7 +2278,7 @@ void ScTokenArray::ReadjustRelative3DReferences( const ScAddress& rOldPos,
                             rRef2.SetAddress(aAbs, rNewPos);
                         }
                     }
-                    // fall through
+                    SAL_FALLTHROUGH;
                 case svSingleRef :
                     {
                         ScSingleRefData& rRef1 = *p->GetSingleRef();
@@ -2295,7 +2295,7 @@ void ScTokenArray::ReadjustRelative3DReferences( const ScAddress& rOldPos,
                         ScAddress aAbs = rRef2.toAbs(rOldPos);
                         rRef2.SetAddress(aAbs, rNewPos);
                     }
-                    // fall through
+                    SAL_FALLTHROUGH;
                 case svExternalSingleRef :
                     {
                         ScSingleRefData& rRef1 = *p->GetSingleRef();
@@ -2345,7 +2345,8 @@ bool SkipReference(formula::FormulaToken* pToken, const ScAddress& rPos, const S
                     ScSingleRefData& rRef = *pToken->GetSingleRef2();
                     if (rRef.IsColRel() || rRef.IsRowRel())
                         return true;
-                } // fall through
+                }
+                SAL_FALLTHROUGH;
             case svSingleRef:
                 {
                     ScSingleRefData& rRef = *pToken->GetSingleRef();
@@ -4109,7 +4110,7 @@ void ScTokenArray::AdjustReferenceOnMovedOriginIfOtherSheet( const ScAddress& rO
             {
                 case svExternalSingleRef:
                     bAdjust = true;     // always
-                    // fallthru
+                    SAL_FALLTHROUGH;
                 case svSingleRef:
                     {
                         ScSingleRefData& rRef = *p->GetSingleRef();
@@ -4122,7 +4123,7 @@ void ScTokenArray::AdjustReferenceOnMovedOriginIfOtherSheet( const ScAddress& rO
                     break;
                 case svExternalDoubleRef:
                     bAdjust = true;     // always
-                    // fallthru
+                    SAL_FALLTHROUGH;
                 case svDoubleRef:
                     {
                         ScComplexRefData& rRef = *p->GetDoubleRef();

@@ -329,7 +329,7 @@ IMPL_LINK_TYPED(CustomAnimationPane,EventMultiplexerListener,
                     break;
                 }
             }
-        // fall through intended
+            SAL_FALLTHROUGH;
         case tools::EventMultiplexerEvent::EID_MAIN_VIEW_REMOVED:
             mxView = nullptr;
             mxCurrentPage = nullptr;

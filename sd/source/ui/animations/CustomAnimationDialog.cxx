@@ -1901,7 +1901,7 @@ void CustomAnimationDurationTabPage::update( STLPropertySet* pSet )
                 aEvent.Repeat = 0;
                 aEnd <<= aEvent;
             }
-            // ATTENTION: FALL THROUGH INTENDED!
+            SAL_FALLTHROUGH;
         case 7:
             aRepeatCount <<= Timing_INDEFINITE;
             break;

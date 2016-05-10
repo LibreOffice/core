@@ -201,10 +201,10 @@ struct FileHandle
         case store_AccessCreate:
         case store_AccessReadCreate:
             nFlags |= osl_File_OpenFlag_Create;
-            // fall through
+            SAL_FALLTHROUGH;
         case store_AccessReadWrite:
             nFlags |= osl_File_OpenFlag_Write;
-            // fall through
+            SAL_FALLTHROUGH;
         case store_AccessReadOnly:
             nFlags |= osl_File_OpenFlag_Read;
             break;

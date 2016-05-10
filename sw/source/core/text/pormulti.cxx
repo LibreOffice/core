@@ -642,9 +642,11 @@ void SwRubyPortion::_Adjust( SwTextFormatInfo &rInf )
     sal_Int32 nSub = 0;
     switch ( nAdjustment )
     {
-        case 1: nRight = static_cast<sal_uInt16>(nLineDiff / 2);    // no break
+        case 1: nRight = static_cast<sal_uInt16>(nLineDiff / 2);
+            SAL_FALLTHROUGH;
         case 2: nLeft  = static_cast<sal_uInt16>(nLineDiff - nRight); break;
-        case 3: nSub   = 1; // no break
+        case 3: nSub   = 1;
+            SAL_FALLTHROUGH;
         case 4:
         {
             sal_Int32 nCharCnt = 0;

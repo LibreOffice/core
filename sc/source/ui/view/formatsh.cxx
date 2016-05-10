@@ -420,8 +420,8 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                     {
                     }
                 }
+                SAL_FALLTHROUGH;
             }
-            //fall-through
             case SID_STYLE_EDIT:
             case SID_STYLE_DELETE:
             case SID_STYLE_HIDE:

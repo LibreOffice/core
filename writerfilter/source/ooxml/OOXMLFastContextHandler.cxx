@@ -1638,7 +1638,7 @@ OOXMLFastContextHandlerShape::lcl_createFastChildContext
         case NMSP_vmlOffice:
             if (!bGroupShape)
                 xContextHandler.set(OOXMLFactory::createFastChildContextFromStart(this, Element));
-        // no break;
+            SAL_FALLTHROUGH;
         default:
             if (!xContextHandler.is())
             {

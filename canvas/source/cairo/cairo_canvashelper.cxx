@@ -1197,7 +1197,7 @@ namespace cairocanvas
             {
                 case rendering::PathJoinType::NONE:
                     bNoLineJoin = true;
-                    // cairo doesn't have join type NONE so we use MITER as it's pretty close
+                    SAL_FALLTHROUGH; // cairo doesn't have join type NONE so we use MITER as it's pretty close
                 case rendering::PathJoinType::MITER:
                     cairo_set_line_join( mpCairo.get(), CAIRO_LINE_JOIN_MITER );
                     break;

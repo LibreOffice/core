@@ -718,7 +718,7 @@ bool SbaTableQueryBrowser::InitializeGridModel(const Reference< css::form::XForm
                     case DataType::LONGVARCHAR:
                     case DataType::CLOB:
                         aInitialValues.push_back( NamedValue( OUString( "MultiLine" ), makeAny( true ) ) );
-                        // NO break!
+                        SAL_FALLTHROUGH;
                     case DataType::BINARY:
                     case DataType::VARBINARY:
                     case DataType::LONGVARBINARY:
@@ -729,7 +729,7 @@ bool SbaTableQueryBrowser::InitializeGridModel(const Reference< css::form::XForm
                     case DataType::VARCHAR:
                     case DataType::CHAR:
                         bFormattedIsNumeric = false;
-                        // NO break!
+                        SAL_FALLTHROUGH;
                     default:
                         aCurrentModelType = "FormattedField";
                         sDefaultProperty = PROPERTY_EFFECTIVEDEFAULT;
@@ -1678,7 +1678,7 @@ FeatureState SbaTableQueryBrowser::GetState(sal_uInt16 nId) const
             if ( !m_pTreeView->HasChildPathFocus() )
                 // handled below
                 break;
-            // NO break!
+            SAL_FALLTHROUGH;
         case ID_TREE_CLOSE_CONN:
         case ID_TREE_EDIT_DATABASE:
         {
@@ -1825,7 +1825,7 @@ FeatureState SbaTableQueryBrowser::GetState(sal_uInt16 nId) const
                         aReturn.bEnabled = pControl->canCopyCellText(pControl->GetCurRow(), pControl->GetCurColumnId());
                     break;
                 }
-                // NO break here
+                SAL_FALLTHROUGH;
             default:
                 return SbaXDataBrowserController::GetState(nId);
         }
@@ -1885,7 +1885,7 @@ void SbaTableQueryBrowser::Execute(sal_uInt16 nId, const Sequence< PropertyValue
                 SbaXDataBrowserController::Execute(nId,aArgs);
                 break;
             }
-            // NO break here!
+            SAL_FALLTHROUGH;
         }
 
         case ID_BROWSER_REFRESH_REBUILD:

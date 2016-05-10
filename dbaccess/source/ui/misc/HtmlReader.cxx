@@ -147,7 +147,7 @@ void OHTMLReader::NextToken( int nToken )
                         }
                     }
                 }
-                //fall-through
+                SAL_FALLTHROUGH;
             case HTML_THEAD_ON:
             case HTML_TBODY_ON:
                 {

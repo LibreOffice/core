@@ -752,7 +752,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
                 {
                     case TBLMERGE_OK:
                          bCallDone = true;
-                        //no break;
+                         SAL_FALLTHROUGH;
                     case TBLMERGE_NOSELECTION:
                         break;
                     case TBLMERGE_TOOCOMPLEX:
@@ -933,8 +933,9 @@ void SwTableShell::Execute(SfxRequest &rReq)
             }
 
             nSlot = bColumn ? FN_TABLE_INSERT_COL_DLG : FN_TABLE_INSERT_ROW_DLG;
+
+            SAL_FALLTHROUGH; // on Count = 0 appears the dialog
         }
-        // No break;  on Count = 0 appears the dialog
         case FN_TABLE_INSERT_COL_DLG:
         case FN_TABLE_INSERT_ROW_DLG:
         {
