@@ -606,8 +606,8 @@ bool OpenGLSalGraphicsImpl::UseInvert( SalInvert nFlags )
 {
     OpenGLZone aZone;
 
-    if( ( nFlags & SAL_INVERT_50 ) ||
-        ( nFlags & SAL_INVERT_TRACKFRAME ) )
+    if( ( nFlags & SalInvert::N50 ) ||
+        ( nFlags & SalInvert::TrackFrame ) )
     {
         // FIXME: Trackframe really should be 2 pix. on/off stipple.
         if( !UseInvert50() )
@@ -2251,7 +2251,7 @@ void OpenGLSalGraphicsImpl::invert(
 
     if( UseInvert( nFlags ) )
     {
-        if( nFlags & SAL_INVERT_TRACKFRAME )
+        if( nFlags & SalInvert::TrackFrame )
         { // FIXME: could be more efficient.
             DrawRect( nX, nY, nWidth, 1 );
             DrawRect( nX, nY + nHeight, nWidth, 1 );

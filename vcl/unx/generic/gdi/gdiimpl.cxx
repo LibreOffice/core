@@ -1419,14 +1419,14 @@ void X11SalGraphicsImpl::invert( long       nX,
                                 SalInvert   nFlags )
 {
     GC pGC;
-    if( SAL_INVERT_50 & nFlags )
+    if( SalInvert::N50 & nFlags )
     {
         pGC = GetInvert50GC();
         XFillRectangle( mrParent.GetXDisplay(), mrParent.GetDrawable(), pGC, nX, nY, nDX, nDY );
     }
     else
     {
-        if ( SAL_INVERT_TRACKFRAME & nFlags )
+        if ( SalInvert::TrackFrame & nFlags )
         {
             pGC = GetTrackingGC();
             XDrawRectangle( mrParent.GetXDisplay(), mrParent.GetDrawable(),  pGC, nX, nY, nDX, nDY );
@@ -1446,15 +1446,15 @@ void X11SalGraphicsImpl::invert( sal_uInt32 nPoints,
     SalPolyLine Points ( nPoints, pPtAry );
 
     GC pGC;
-    if( SAL_INVERT_50 & nFlags )
+    if( SalInvert::N50 & nFlags )
         pGC = GetInvert50GC();
     else
-        if ( SAL_INVERT_TRACKFRAME & nFlags )
+        if ( SalInvert::TrackFrame & nFlags )
             pGC = GetTrackingGC();
         else
             pGC = GetInvertGC();
 
-    if( SAL_INVERT_TRACKFRAME & nFlags )
+    if( SalInvert::TrackFrame & nFlags )
         DrawLines ( nPoints, Points, pGC, true );
     else
         XFillPolygon( mrParent.GetXDisplay(),
