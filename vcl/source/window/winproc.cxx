@@ -2610,9 +2610,7 @@ bool ImplWindowFrameProc( vcl::Window* _pWindow, SalEvent nEvent, const void* pE
 
 
         default:
-#ifdef DBG_UTIL
             SAL_WARN( "vcl.layout", "ImplWindowFrameProc(): unknown event (" << (int)nEvent << ")" );
-#endif
             break;
     }
 
