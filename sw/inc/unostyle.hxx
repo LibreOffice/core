@@ -38,6 +38,7 @@
 #include <com/sun/star/style/XAutoStyleFamily.hpp>
 #include <com/sun/star/style/XAutoStyles.hpp>
 #include <com/sun/star/style/XAutoStyle.hpp>
+#include <tblafmt.hxx>
 
 #include <istyleaccess.hxx>
 #include <memory>
@@ -246,6 +247,52 @@ protected:
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
 
 };
+
+
+class XTextTableStyle : public cppu::WeakImplHelper< css::style::XStyle >
+{
+    SwTableAutoFormat* m_pSwTableAutoFormat;
+public:
+    XTextTableStyle(SwTableAutoFormat* pSwTableAutoFormat);
+    // XStyle
+    virtual sal_Bool SAL_CALL isUserDefined() throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL isInUse() throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getParentStyle() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setParentStyle( const OUString& aParentStyle ) throw (css::container::NoSuchElementException, css::uno::RuntimeException, std::exception) override;
+
+    //XNamed
+    virtual OUString SAL_CALL getName() throw( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL setName(const OUString& Name_) throw( css::uno::RuntimeException, std::exception ) override;
+
+};
+
+
+class XTableStyleFamily : public cppu::WeakImplHelper
+<
+    css::container::XNameContainer,
+    css::container::XIndexAccess
+>
+{
+    SwDocShell* m_pDocShell;
+public:
+    XTableStyleFamily(SwDocShell* pDocShell);
+    // XNameContainer
+    virtual void SAL_CALL insertByName( const OUString& aName, const css::uno::Any& aElement ) throw(css::lang::IllegalArgumentException, css::container::ElementExistException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL replaceByName(const OUString& Name, const css::uno::Any& Element) throw( css::lang::IllegalArgumentException, css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL removeByName( const OUString& Name ) throw(css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
+    // XIndexAccess
+    virtual sal_Int32 SAL_CALL getCount() throw(css::uno::RuntimeException, std::exception) override ;
+    virtual css::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) throw(css::lang::IndexOutOfBoundsException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
+    //XElementAccess
+    virtual css::uno::Type SAL_CALL getElementType(  ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL hasElements(  ) throw(css::uno::RuntimeException, std::exception) override;
+    //XNameAccess
+    virtual css::uno::Any SAL_CALL getByName(const OUString& Name) throw( css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() throw( css::uno::RuntimeException, std::exception ) override;
+    virtual sal_Bool SAL_CALL hasByName(const OUString& Name) throw( css::uno::RuntimeException, std::exception ) override;
+};
+
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

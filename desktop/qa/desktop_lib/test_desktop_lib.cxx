@@ -258,6 +258,7 @@ void DesktopLOKTest::testGetStyles()
             rPair.first != "NumberingStyles" &&
             rPair.first != "CellStyles" &&
             rPair.first != "ShapeStyles" &&
+            rPair.first != "TableStyles" &&
             rPair.first != "Commands")
         {
             CPPUNIT_FAIL("Unknown style family: " + rPair.first);
