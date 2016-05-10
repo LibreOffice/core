@@ -14,6 +14,8 @@
 #include <vcl/window.hxx>
 #include <vcl/dllapi.h>
 
+#include <set>
+
 typedef std::map<const OUString, OUString> StringMap;
 
 /**
@@ -53,6 +55,11 @@ public:
      *
      */
     virtual std::unique_ptr<UIObject> get_child(const OUString& rID);
+
+    /**
+     * Returns a set containing all decendants of the object.
+     */
+    virtual std::set<OUString> get_children() const;
 
     /**
      * Currently an internal method to dump the state of the current UIObject as represented by get_state().
@@ -97,6 +104,8 @@ public:
     virtual OUString get_type() const override;
 
     virtual std::unique_ptr<UIObject> get_child(const OUString& rID) override;
+
+    virtual std::set<OUString> get_children() const override;
 
     virtual void dumpState() const override;
 

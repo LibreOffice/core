@@ -56,6 +56,11 @@ std::unique_ptr<UIObject> UIObject::get_child(const OUString&)
     return std::unique_ptr<UIObject>();
 }
 
+std::set<OUString> UIObject::get_children() const
+{
+    return std::set<OUString>();
+}
+
 void UIObject::dumpState() const
 {
 }
@@ -311,6 +316,29 @@ vcl::Window* findChild(vcl::Window* pParent, const OUString& rID)
     return nullptr;
 }
 
+void addChildren(vcl::Window* pParent, std::set<OUString>& rChildren)
+{
+    if (!pParent)
+        return;
+
+    size_t nCount = pParent->GetChildCount();
+    for (size_t i = 0; i < nCount; ++i)
+    {
+        vcl::Window* pChild = pParent->GetChild(i);
+        if (pChild)
+        {
+            OUString aId = pChild->get_id();
+            if (!aId.isEmpty())
+            {
+                auto ret = rChildren.insert(aId);
+                SAL_WARN_IF(!ret.second, "vcl.uitest", "duplicate ids for ui elements. violates locally unique requirement");
+            }
+
+            addChildren(pChild, rChildren);
+        }
+    }
+}
+
 }
 
 std::unique_ptr<UIObject> WindowUIObject::get_child(const OUString& rID)
@@ -320,6 +348,15 @@ std::unique_ptr<UIObject> WindowUIObject::get_child(const OUString& rID)
 
     FactoryFunction aFunction = pWindow->GetUITestFactory();
     return aFunction(pWindow);
+}
+
+std::set<OUString> WindowUIObject::get_children() const
+{
+    vcl::Window* pDialogParent = get_dialog_parent(mxWindow.get());
+    std::set<OUString> aChildren;
+    aChildren.insert(pDialogParent->get_id());
+    addChildren(pDialogParent, aChildren);
+    return aChildren;
 }
 
 OUString WindowUIObject::get_name() const
