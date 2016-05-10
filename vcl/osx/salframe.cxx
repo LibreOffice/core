@@ -575,7 +575,7 @@ void AquaSalFrame::SetWindowState( const SalFrameState* pState )
     // get new geometry
     UpdateFrameGeometry();
 
-    sal_uInt16 nEvent = 0;
+    SalEvent nEvent = SalEvent::NONE;
     if( pState->mnMask & (WindowStateMask::X | WindowStateMask::Y) )
     {
         mbPositioned = true;

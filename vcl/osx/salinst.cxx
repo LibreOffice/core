@@ -580,7 +580,7 @@ SalYieldResult AquaSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents
         sal_uLong nCount = ReleaseYieldMutex();
 
         // get one user event
-        SalUserEvent aEvent( nullptr, nullptr, 0 );
+        SalUserEvent aEvent( nullptr, nullptr, SalEvent::NONE );
         {
             osl::MutexGuard g( maUserEventListMutex );
             if( ! maUserEvents.empty() )
