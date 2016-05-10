@@ -59,8 +59,6 @@ namespace basegfx {
 #define SAL_SETFONT_USEDRAWTEXTARRAY        ((sal_uInt16)0x0004)
 #define SAL_SETFONT_BADFONT                 ((sal_uInt16)0x1000)
 
-#define SAL_COPYAREA_WINDOWINVALIDATE       ((sal_uInt16)0x0001)
-
 typedef sal_Unicode sal_Ucs; // TODO: use sal_UCS4 instead of sal_Unicode
 typedef std::map< sal_Ucs, sal_Int32 >    Ucs2SIntMap;
 typedef std::map< sal_Ucs, sal_uInt32 >   Ucs2UIntMap;
@@ -499,8 +497,7 @@ protected:
     virtual void                copyArea(
                                     long nDestX, long nDestY,
                                     long nSrcX, long nSrcY,
-                                    long nSrcWidth, long nSrcHeight,
-                                    sal_uInt16 nFlags ) = 0;
+                                    long nSrcWidth, long nSrcHeight ) = 0;
 
     // CopyBits and DrawBitmap --> RasterOp and ClipRegion
     // CopyBits() --> pSrcGraphics == NULL, then CopyBits on same Graphics

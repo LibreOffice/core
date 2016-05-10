@@ -187,8 +187,7 @@ public:
     virtual void copyArea(
                 long nDestX, long nDestY,
                 long nSrcX, long nSrcY,
-                long nSrcWidth, long nSrcHeight,
-                sal_uInt16 nFlags ) override;
+                long nSrcWidth, long nSrcHeight ) override;
 
     // CopyBits and DrawBitmap --> RasterOp and ClipRegion
     // CopyBits() --> pSrcGraphics == NULL, then CopyBits on same Graphics

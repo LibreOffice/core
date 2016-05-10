@@ -523,7 +523,7 @@ void AquaSalGraphics::ApplyXorContext()
 }
 
 void AquaSalGraphics::copyArea( long nDstX, long nDstY,long nSrcX, long nSrcY,
-                                long nSrcWidth, long nSrcHeight, sal_uInt16 /*nFlags*/ )
+                                long nSrcWidth, long nSrcHeight )
 {
     SAL_WARN_IF( !mxLayer, "vcl.quartz",
                  "AquaSalGraphics::copyArea() for non-layered graphics this=" << this );
