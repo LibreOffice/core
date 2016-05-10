@@ -23,6 +23,7 @@
 #include <vcl/taskpanelist.hxx>
 
 #include <svdata.hxx>
+#include "menubarwindow.hxx"
 
 #include <functional>
 #include <algorithm>
@@ -161,9 +162,7 @@ bool TaskPaneList::HandleKeyEvent(const KeyEvent& rKeyEvent)
     bool bForward = !aKeyCode.IsShift();
     if( aKeyCode.GetCode() == KEY_F6 && ! aKeyCode.IsMod2() ) // F6
     {
-        bool bSplitterOnly;
-
-        bSplitterOnly = aKeyCode.IsMod1() && aKeyCode.IsShift();
+        bool bSplitterOnly = aKeyCode.IsMod1() && aKeyCode.IsShift();
 
         // is the focus in the list ?
         auto p = mTaskPanes.begin();
@@ -280,12 +279,9 @@ vcl::Window* TaskPaneList::FindNextFloat( vcl::Window *pWindow, bool bForward )
                 if( p == mTaskPanes.end() )
                     break; // do not wrap, send focus back to document at end of list
                 /* #i83908# do not use the menubar if it is native and invisible
-                   this relies on MenuBar::ImplCreate setting the height of the menubar
-                   to 0 in this case
                 */
                 if( (*p)->IsReallyVisible() && !(*p)->ImplIsSplitter() &&
-                    ( (*p)->GetType() != WINDOW_MENUBARWINDOW || (*p)->GetSizePixel().Height() > 0 )
-                    )
+                    ( (*p)->GetType() != WINDOW_MENUBARWINDOW || static_cast<MenuBarWindow*>(p->get())->CanGetFocus() ) )
                 {
                     pWindow = *p;
                     break;

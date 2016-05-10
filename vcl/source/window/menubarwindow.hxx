@@ -148,6 +148,7 @@ public:
     bool GetMBWHideAccel() const { return mbHideAccel; }
     void SetMBWMenuKey(bool val) { mbMenuKey = val; }
     bool GetMBWMenuKey() const { return mbMenuKey; }
+    bool CanGetFocus() const;
 };
 
 #endif // INCLUDED_VCL_SOURCE_WINDOW_MENUBARWINDOW_HXX

@@ -1178,4 +1178,13 @@ bool MenuBarWindow::HandleMenuButtonEvent( sal_uInt16 i_nButtonId )
     return false;
 }
 
+bool MenuBarWindow::CanGetFocus() const
+{
+    /* #i83908# do not use the menubar if it is native and invisible
+       this relies on MenuBar::ImplCreate setting the height of the menubar
+       to 0 in this case
+    */
+    return GetSizePixel().Height() > 0;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
