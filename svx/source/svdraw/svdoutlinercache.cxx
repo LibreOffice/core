@@ -24,8 +24,9 @@
 
 SdrOutlinerCache::SdrOutlinerCache( SdrModel* pModel )
 :   mpModel( pModel ),
-    mpModeOutline( nullptr ),
-    mpModeText( nullptr )
+    maModeOutline(),
+    maModeText(),
+    maActiveOutliners()
 {
 }
 
@@ -33,22 +34,22 @@ SdrOutliner* SdrOutlinerCache::createOutliner( sal_uInt16 nOutlinerMode )
 {
     SdrOutliner* pOutliner = nullptr;
 
-    if( (OUTLINERMODE_OUTLINEOBJECT == nOutlinerMode) && mpModeOutline )
+    if( (OUTLINERMODE_OUTLINEOBJECT == nOutlinerMode) && !maModeOutline.empty() )
     {
-        pOutliner = mpModeOutline;
-        mpModeOutline = nullptr;
+        pOutliner = maModeOutline.back();
+        maModeOutline.pop_back();
     }
-    else if( (OUTLINERMODE_TEXTOBJECT == nOutlinerMode) && mpModeText )
+    else if( (OUTLINERMODE_TEXTOBJECT == nOutlinerMode) && !maModeText.empty() )
     {
-        pOutliner = mpModeText;
-        mpModeText = nullptr;
+        pOutliner = maModeText.back();
+        maModeText.pop_back();
     }
     else
     {
         pOutliner = SdrMakeOutliner(nOutlinerMode, *mpModel);
         Outliner& aDrawOutliner = mpModel->GetDrawOutliner();
         pOutliner->SetCalcFieldValueHdl( aDrawOutliner.GetCalcFieldValueHdl() );
-        maActiveOutliners.push_back(pOutliner);
+        maActiveOutliners.insert(pOutliner);
     }
 
     return pOutliner;
@@ -56,17 +57,19 @@ SdrOutliner* SdrOutlinerCache::createOutliner( sal_uInt16 nOutlinerMode )
 
 SdrOutlinerCache::~SdrOutlinerCache()
 {
-    if( mpModeOutline )
+    for( auto candA : maModeOutline )
     {
-        delete mpModeOutline;
-        mpModeOutline = nullptr;
+        delete candA;
     }
 
-    if( mpModeText )
+    maModeOutline.clear();
+
+    for( auto candB : maModeText )
     {
-        delete mpModeText;
-        mpModeText = nullptr;
+        delete candB;
     }
+
+    maModeText.clear();
 }
 
 void SdrOutlinerCache::disposeOutliner( SdrOutliner* pOutliner )
@@ -75,18 +78,18 @@ void SdrOutlinerCache::disposeOutliner( SdrOutliner* pOutliner )
     {
         sal_uInt16 nOutlMode = pOutliner->GetOutlinerMode();
 
-        if( (OUTLINERMODE_OUTLINEOBJECT == nOutlMode) && (nullptr == mpModeOutline) )
+        if( OUTLINERMODE_OUTLINEOBJECT == nOutlMode )
         {
-            mpModeOutline = pOutliner;
+            maModeOutline.push_back(pOutliner);
             pOutliner->Clear();
             pOutliner->SetVertical( false );
 
             // Deregister on outliner, might be reused from outliner cache
             pOutliner->SetNotifyHdl( Link<EENotify&,void>() );
         }
-        else if( (OUTLINERMODE_TEXTOBJECT == nOutlMode) && (nullptr == mpModeText) )
+        else if( OUTLINERMODE_TEXTOBJECT == nOutlMode )
         {
-            mpModeText = pOutliner;
+            maModeText.push_back(pOutliner);
             pOutliner->Clear();
             pOutliner->SetVertical( false );
 
@@ -95,11 +98,15 @@ void SdrOutlinerCache::disposeOutliner( SdrOutliner* pOutliner )
         }
         else
         {
-            maActiveOutliners.erase(std::remove(maActiveOutliners.begin(), maActiveOutliners.end(), pOutliner), maActiveOutliners.end());
+            maActiveOutliners.erase(pOutliner);
             delete pOutliner;
         }
     }
 }
 
+std::vector< SdrOutliner* > SdrOutlinerCache::GetActiveOutliners() const
+{
+    return std::vector< SdrOutliner* >(maActiveOutliners.begin(), maActiveOutliners.end());
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
