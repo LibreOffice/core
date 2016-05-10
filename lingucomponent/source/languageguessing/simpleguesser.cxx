@@ -47,10 +47,25 @@
 
 #include <sal/types.h>
 
-#include "altstrfunc.hxx"
+#include<rtl/character.hxx>
 #include "simpleguesser.hxx"
 
 using namespace std;
+
+static int startsAsciiCaseInsensitive(const std::string &s1, const std::string &s2){
+            size_t i;
+            int ret = 0;
+
+            size_t min = s1.length();
+            if (min > s2.length())
+                min = s2.length();
+
+            for(i = 0; i < min && s2[i] && s1[i] && !ret; i++){
+                    ret =   rtl::toAsciiUpperCase(s1[i]) -  rtl::toAsciiUpperCase(s2[i]);
+                    if(s1[i] == '.' || s2[i] == '.') {ret = 0;}    //. is a neutral character
+            }
+        return ret;
+ }
 
 /**
  * This 3 following structures are from fingerprint.c and textcat.c
@@ -197,7 +212,7 @@ void SimpleGuesser::XableLanguage(const string& lang, char mask)
     for (size_t i=0; i<tables->size; i++)
     {
         string language(fp_Name(tables->fprint[i]));
-        if (start(language,lang) == 0)
+        if (startsAsciiCaseInsensitive(language,lang) == 0)
             tables->fprint_disable[i] = mask;
     }
 }
