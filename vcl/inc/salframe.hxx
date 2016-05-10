@@ -26,6 +26,7 @@
 
 #include <vcl/help.hxx>
 #include <vcl/window.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
 // complete vcl::Window for SalFrame::CallCallback under -fsanitize=function
 
@@ -39,10 +40,16 @@ struct SalInputContext;
 struct SystemEnvData;
 
 // SalFrame types
-#define SAL_FRAME_TOTOP_RESTOREWHENMIN      ((sal_uInt16)0x0001)
-#define SAL_FRAME_TOTOP_FOREGROUNDTASK      ((sal_uInt16)0x0002)
-#define SAL_FRAME_TOTOP_GRABFOCUS           ((sal_uInt16)0x0004)
-#define SAL_FRAME_TOTOP_GRABFOCUS_ONLY       ((sal_uInt16)0x0008)
+enum class SalFrameToTop {
+    NONE             = 0x00,
+    RestoreWhenMin   = 0x01,
+    ForegroundTask   = 0x02,
+    GrabFocus        = 0x04,
+    GrabFocusOnly    = 0x08
+};
+namespace o3tl {
+    template<> struct typed_flags<SalFrameToTop> : is_typed_flags<SalFrameToTop, 0x0f> {};
+};
 
 // SalFrame styles
 enum class SalFrameStyleFlags
@@ -160,7 +167,7 @@ public:
     virtual void            SetAlwaysOnTop( bool bOnTop ) = 0;
 
     // Window to top and grab focus
-    virtual void            ToTop( sal_uInt16 nFlags ) = 0;
+    virtual void            ToTop( SalFrameToTop nFlags ) = 0;
 
     // this function can call with the same
     // pointer style

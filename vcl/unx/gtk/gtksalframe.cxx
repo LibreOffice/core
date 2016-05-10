@@ -2164,7 +2164,7 @@ void GtkSalFrame::SetAlwaysOnTop( bool bOnTop )
         gtk_window_set_keep_above( GTK_WINDOW( m_pWindow ), bOnTop );
 }
 
-void GtkSalFrame::ToTop( sal_uInt16 nFlags )
+void GtkSalFrame::ToTop( SalFrameToTop nFlags )
 {
     if( m_pWindow )
     {
@@ -2172,7 +2172,7 @@ void GtkSalFrame::ToTop( sal_uInt16 nFlags )
             gtk_widget_grab_focus( m_pWindow );
         else if( IS_WIDGET_MAPPED( m_pWindow ) )
         {
-            if( ! (nFlags & SAL_FRAME_TOTOP_GRABFOCUS_ONLY) )
+            if( ! (nFlags & SalFrameToTop::GrabFocusOnly) )
                 gtk_window_present( GTK_WINDOW(m_pWindow) );
             else
             {
@@ -2197,7 +2197,7 @@ void GtkSalFrame::ToTop( sal_uInt16 nFlags )
         }
         else
         {
-            if( nFlags & SAL_FRAME_TOTOP_RESTOREWHENMIN )
+            if( nFlags & SalFrameToTop::RestoreWhenMin )
                 gtk_window_present( GTK_WINDOW(m_pWindow) );
         }
     }

@@ -1359,9 +1359,9 @@ void X11SalFrame::Show( bool bVisible, bool bNoActivate )
     }
 }
 
-void X11SalFrame::ToTop( sal_uInt16 nFlags )
+void X11SalFrame::ToTop( SalFrameToTop nFlags )
 {
-    if( ( nFlags & SAL_FRAME_TOTOP_RESTOREWHENMIN )
+    if( ( nFlags & SalFrameToTop::RestoreWhenMin )
         && ! ( nStyle_ & SalFrameStyleFlags::FLOAT )
         && nShowState_ != SHOWSTATE_HIDDEN
         && nShowState_ != SHOWSTATE_UNKNOWN
@@ -1374,16 +1374,16 @@ void X11SalFrame::ToTop( sal_uInt16 nFlags )
     }
 
     ::Window aToTopWindow = IsSysChildWindow() ? GetWindow() : GetShellWindow();
-    if( ! (nFlags & SAL_FRAME_TOTOP_GRABFOCUS_ONLY) )
+    if( ! (nFlags & SalFrameToTop::GrabFocusOnly) )
     {
         XRaiseWindow( GetXDisplay(), aToTopWindow );
         if( ! GetDisplay()->getWMAdaptor()->isTransientBehaviourAsExpected() )
             for( std::list< X11SalFrame* >::const_iterator it = maChildren.begin();
                  it != maChildren.end(); ++it )
-                (*it)->ToTop( nFlags & ~SAL_FRAME_TOTOP_GRABFOCUS );
+                (*it)->ToTop( nFlags & ~SalFrameToTop::GrabFocus );
     }
 
-    if( ( ( nFlags & SAL_FRAME_TOTOP_GRABFOCUS ) || ( nFlags & SAL_FRAME_TOTOP_GRABFOCUS_ONLY ) )
+    if( ( ( nFlags & SalFrameToTop::GrabFocus ) || ( nFlags & SalFrameToTop::GrabFocusOnly ) )
         && bMapped_ )
     {
         if( m_bXEmbed )
@@ -3565,7 +3565,7 @@ long X11SalFrame::HandleSizeEvent( XConfigureEvent *pEvent )
 IMPL_LINK_NOARG_TYPED(X11SalFrame, HandleAlwaysOnTopRaise, Timer *, void)
 {
     if( bMapped_ )
-        ToTop( 0 );
+        ToTop( SalFrameToTop::NONE );
 }
 
 long X11SalFrame::HandleReparentEvent( XReparentEvent *pEvent )
