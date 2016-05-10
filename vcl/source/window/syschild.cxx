@@ -50,14 +50,14 @@
 using namespace ::com::sun::star;
 
 long ImplSysChildProc( void* pInst, SalObject* /* pObject */,
-                       sal_uInt16 nEvent, const void* /* pEvent */ )
+                       SalObjEvent nEvent, const void* /* pEvent */ )
 {
     VclPtr<SystemChildWindow> pWindow = static_cast<SystemChildWindow*>(pInst);
     long nRet = 0;
 
     switch ( nEvent )
     {
-        case SALOBJ_EVENT_GETFOCUS:
+        case SalObjEvent::GetFocus:
             // get focus, such that all handlers are called,
             // as if this window gets the focus assuring
             // that the frame does not steal it
@@ -74,7 +74,7 @@ long ImplSysChildProc( void* pInst, SalObject* /* pObject */,
             pWindow->ImplGetFrameData()->mbInSysObjFocusHdl = false;
             break;
 
-        case SALOBJ_EVENT_LOSEFOCUS:
+        case SalObjEvent::LoseFocus:
             // trigger a LoseFocus which matches the status
             // of the window with matching Activate-Status
             pWindow->ImplGetFrameData()->mbSysObjFocus = false;
@@ -85,7 +85,7 @@ long ImplSysChildProc( void* pInst, SalObject* /* pObject */,
             }
             break;
 
-        case SALOBJ_EVENT_TOTOP:
+        case SalObjEvent::ToTop:
             pWindow->ImplGetFrameData()->mbInSysObjToTopHdl = true;
             if ( !Application::GetFocusWindow() || pWindow->HasChildPathFocus() )
                 pWindow->ToTop( ToTopFlags::NoGrabFocus );
@@ -98,6 +98,8 @@ long ImplSysChildProc( void* pInst, SalObject* /* pObject */,
                 break;
             pWindow->ImplGetFrameData()->mbInSysObjToTopHdl = false;
             break;
+
+        default: break;
     }
 
     return nRet;

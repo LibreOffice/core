@@ -108,7 +108,7 @@ LRESULT CALLBACK SalSysMsgProc( int nCode, WPARAM wParam, LPARAM lParam )
                 pObject->mhLastFocusWnd = pData->hwnd;
                 if ( ImplSalYieldMutexTryToAcquire() )
                 {
-                    pObject->CallCallback( SALOBJ_EVENT_GETFOCUS, 0 );
+                    pObject->CallCallback( SalObjEvent::GetFocus, 0 );
                     ImplSalYieldMutexRelease();
                 }
                 else
@@ -128,7 +128,7 @@ LRESULT CALLBACK SalSysMsgProc( int nCode, WPARAM wParam, LPARAM lParam )
                 {
                     if ( ImplSalYieldMutexTryToAcquire() )
                     {
-                        pObject->CallCallback( SALOBJ_EVENT_LOSEFOCUS, 0 );
+                        pObject->CallCallback( SalObjEvent::LoseFocus, 0 );
                         ImplSalYieldMutexRelease();
                     }
                     else
@@ -286,7 +286,7 @@ LRESULT CALLBACK SalSysObjWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM l
                 ImplSalYieldMutexAcquireWithWait();
                 pSysObj = GetSalObjWindowPtr( hWnd );
                 if ( pSysObj && !pSysObj->IsMouseTransparent() )
-                    pSysObj->CallCallback( SALOBJ_EVENT_TOTOP, 0 );
+                    pSysObj->CallCallback( SalObjEvent::ToTop, 0 );
                 ImplSalYieldMutexRelease();
             }
             }
@@ -309,7 +309,7 @@ LRESULT CALLBACK SalSysObjWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM l
             if ( ImplSalYieldMutexTryToAcquire() )
             {
                 pSysObj = GetSalObjWindowPtr( hWnd );
-                pSysObj->CallCallback( SALOBJ_EVENT_TOTOP, 0 );
+                pSysObj->CallCallback( SalObjEvent::ToTop, 0 );
                 ImplSalYieldMutexRelease();
                 rDef = FALSE;
             }
@@ -325,11 +325,11 @@ LRESULT CALLBACK SalSysObjWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM l
             {
                 pSysObj = GetSalObjWindowPtr( hWnd );
                 HWND    hFocusWnd = ::GetFocus();
-                sal_uInt16 nEvent;
+                SalObjEvent nEvent;
                 if ( hFocusWnd && ImplIsSysWindowOrChild( hWnd, hFocusWnd ) )
-                    nEvent = SALOBJ_EVENT_GETFOCUS;
+                    nEvent = SalObjEvent::GetFocus;
                 else
-                    nEvent = SALOBJ_EVENT_LOSEFOCUS;
+                    nEvent = SalObjEvent::LoseFocus;
                 pSysObj->CallCallback( nEvent, 0 );
                 ImplSalYieldMutexRelease();
             }
