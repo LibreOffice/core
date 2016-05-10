@@ -78,18 +78,18 @@ void lcl_ConvertSequenceToValues(
         }
     }
 
-    sal_uInt16 nItemBits(0);
+    StatusBarItemBits nItemBits(StatusBarItemBits::NONE);
     if ( bAutoSize )
-        nItemBits |= SIB_AUTOSIZE;
+        nItemBits |= StatusBarItemBits::AutoSize;
     if ( bOwnerDraw )
-        nItemBits |= SIB_USERDRAW;
+        nItemBits |= StatusBarItemBits::UserDraw;
     if ( sAlignment == STATUSBAR_ALIGN_CENTER )
-        nItemBits |= SIB_CENTER;
+        nItemBits |= StatusBarItemBits::Center;
     else if ( sAlignment == STATUSBAR_ALIGN_RIGHT )
-        nItemBits |= SIB_RIGHT;
+        nItemBits |= StatusBarItemBits::Right;
     else
         // if unset, defaults to left alignment
-        nItemBits |= SIB_LEFT;
+        nItemBits |= StatusBarItemBits::Left;
     rItem.nItemBits = nItemBits;
 }
 

@@ -28,17 +28,17 @@ namespace framework
 
 struct AddonStatusbarItemData
 {
-    rtl::OUString aLabel;
-    sal_uInt16    nItemBits;
+    rtl::OUString     aLabel;
+    StatusBarItemBits nItemBits;
 };
 
 struct AddonStatusbarItem
 {
-    rtl::OUString aCommandURL;
-    rtl::OUString aLabel;
-    rtl::OUString aContext;
-    sal_uInt16    nItemBits;
-    sal_Int16     nWidth;
+    rtl::OUString     aCommandURL;
+    rtl::OUString     aLabel;
+    rtl::OUString     aContext;
+    StatusBarItemBits nItemBits;
+    sal_Int16         nWidth;
 };
 
 typedef ::std::vector< AddonStatusbarItem > AddonStatusbarItemContainer;

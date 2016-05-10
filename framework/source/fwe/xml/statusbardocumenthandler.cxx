@@ -602,7 +602,7 @@ throw ( SAXException, RuntimeException )
                              ATTRIBUTE_ALIGN_LEFT );
     }
 
-    // style ( SIB_IN is default )
+    // style ( StatusBarItemBits::In is default )
     if ( nStyle & ItemStyle::DRAW_FLAT )
     {
         pList->AddAttribute( m_aXMLStatusBarNS + ATTRIBUTE_STYLE,
