@@ -40,17 +40,7 @@ namespace desktop {
 
             // Add the states that are safe to skip duplicates on,
             // even when not consequent.
-            m_states.emplace(LOK_CALLBACK_TEXT_SELECTION_START, "NIL");
-            m_states.emplace(LOK_CALLBACK_TEXT_SELECTION_END, "NIL");
-            m_states.emplace(LOK_CALLBACK_TEXT_SELECTION, "NIL");
-            m_states.emplace(LOK_CALLBACK_GRAPHIC_SELECTION, "NIL");
-            m_states.emplace(LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, "NIL");
             m_states.emplace(LOK_CALLBACK_STATE_CHANGED, "NIL");
-            m_states.emplace(LOK_CALLBACK_MOUSE_POINTER, "NIL");
-            m_states.emplace(LOK_CALLBACK_CELL_CURSOR, "NIL");
-            m_states.emplace(LOK_CALLBACK_CELL_FORMULA, "NIL");
-            m_states.emplace(LOK_CALLBACK_CURSOR_VISIBLE, "NIL");
-            m_states.emplace(LOK_CALLBACK_SET_PART, "NIL");
 
             Start();
         }
@@ -129,7 +119,6 @@ namespace desktop {
                 case LOK_CALLBACK_CELL_CURSOR:
                 case LOK_CALLBACK_CELL_FORMULA:
                 case LOK_CALLBACK_CURSOR_VISIBLE:
-                case LOK_CALLBACK_SET_PART:
                 case LOK_CALLBACK_STATUS_INDICATOR_SET_VALUE:
                     removeAllButLast(type, false);
                 break;
