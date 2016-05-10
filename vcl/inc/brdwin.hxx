@@ -29,11 +29,17 @@
 class ImplBorderWindowView;
 enum class DrawButtonFlags;
 
-#define BORDERWINDOW_STYLE_OVERLAP          ((sal_uInt16)0x0001)
-#define BORDERWINDOW_STYLE_BORDER           ((sal_uInt16)0x0002)
-#define BORDERWINDOW_STYLE_FLOAT            ((sal_uInt16)0x0004)
-#define BORDERWINDOW_STYLE_FRAME            ((sal_uInt16)0x0008)
-#define BORDERWINDOW_STYLE_APP              ((sal_uInt16)0x0010)
+enum class BorderWindowStyle {
+    NONE             = 0x0000,
+    Overlap          = 0x0001,
+    Border           = 0x0002,
+    Float            = 0x0004,
+    Frame            = 0x0008,
+    App              = 0x0010
+};
+namespace o3tl {
+    template<> struct typed_flags<BorderWindowStyle> : is_typed_flags<BorderWindowStyle, 0x001f> {};
+};
 
 enum class BorderWindowHitTest {
     NONE           = 0x0000,
@@ -118,10 +124,10 @@ private:
 
     using Window::ImplInit;
     void                    ImplInit( vcl::Window* pParent,
-                                      WinBits nStyle, sal_uInt16 nTypeStyle,
+                                      WinBits nStyle, BorderWindowStyle nTypeStyle,
                                       SystemParentData* pParentData );
     void                    ImplInit( vcl::Window* pParent,
-                                      WinBits nStyle, sal_uInt16 nTypeStyle,
+                                      WinBits nStyle, BorderWindowStyle nTypeStyle,
                                       const css::uno::Any& );
 
                             ImplBorderWindow (const ImplBorderWindow &) = delete;
@@ -131,9 +137,9 @@ public:
                             ImplBorderWindow( vcl::Window* pParent,
                                               SystemParentData* pParentData,
                                               WinBits nStyle = 0,
-                                              sal_uInt16 nTypeStyle = 0 );
+                                              BorderWindowStyle nTypeStyle = BorderWindowStyle::NONE );
                             ImplBorderWindow( vcl::Window* pParent, WinBits nStyle = 0,
-                                              sal_uInt16 nTypeStyle = 0 );
+                                              BorderWindowStyle nTypeStyle = BorderWindowStyle::NONE );
     virtual                 ~ImplBorderWindow();
     virtual void            dispose() override;
 

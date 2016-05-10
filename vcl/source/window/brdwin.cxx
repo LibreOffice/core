@@ -1723,27 +1723,27 @@ void ImplStdBorderWindowView::DrawWindow(vcl::RenderContext& rRenderContext, Bor
 }
 
 void ImplBorderWindow::ImplInit( vcl::Window* pParent,
-                                 WinBits nStyle, sal_uInt16 nTypeStyle,
+                                 WinBits nStyle, BorderWindowStyle nTypeStyle,
                                  const css::uno::Any& )
 {
     ImplInit( pParent, nStyle, nTypeStyle, nullptr );
 }
 
 void ImplBorderWindow::ImplInit( vcl::Window* pParent,
-                                 WinBits nStyle, sal_uInt16 nTypeStyle,
+                                 WinBits nStyle, BorderWindowStyle nTypeStyle,
                                  SystemParentData* pSystemParentData
                                  )
 {
     // remove all unwanted WindowBits
     WinBits nOrgStyle = nStyle;
     WinBits nTestStyle = (WB_MOVEABLE | WB_SIZEABLE | WB_ROLLABLE | WB_PINABLE | WB_CLOSEABLE | WB_STANDALONE | WB_DIALOGCONTROL | WB_NODIALOGCONTROL | WB_SYSTEMFLOATWIN | WB_INTROWIN | WB_DEFAULTWIN | WB_TOOLTIPWIN | WB_NOSHADOW | WB_OWNERDRAWDECORATION | WB_SYSTEMCHILDWINDOW  | WB_POPUP);
-    if ( nTypeStyle & BORDERWINDOW_STYLE_APP )
+    if ( nTypeStyle & BorderWindowStyle::App )
         nTestStyle |= WB_APP;
     nStyle &= nTestStyle;
 
     mpWindowImpl->mbBorderWin       = true;
     mbSmallOutBorder    = false;
-    if ( nTypeStyle & BORDERWINDOW_STYLE_FRAME )
+    if ( nTypeStyle & BorderWindowStyle::Frame )
     {
         if( (nStyle & WB_SYSTEMCHILDWINDOW) )
         {
@@ -1767,7 +1767,7 @@ void ImplBorderWindow::ImplInit( vcl::Window* pParent,
                 mbSmallOutBorder = true;
         }
     }
-    else if ( nTypeStyle & BORDERWINDOW_STYLE_OVERLAP )
+    else if ( nTypeStyle & BorderWindowStyle::Overlap )
     {
         mpWindowImpl->mbOverlapWin  = true;
         mbFrameBorder   = true;
@@ -1775,7 +1775,7 @@ void ImplBorderWindow::ImplInit( vcl::Window* pParent,
     else
         mbFrameBorder   = false;
 
-    if ( nTypeStyle & BORDERWINDOW_STYLE_FLOAT )
+    if ( nTypeStyle & BorderWindowStyle::Float )
         mbFloatWindow = true;
     else
         mbFloatWindow = false;
@@ -1799,7 +1799,7 @@ void ImplBorderWindow::ImplInit( vcl::Window* pParent,
     mbHideBtn       = false;
     mbDisplayActive = IsActive();
 
-    if ( nTypeStyle & BORDERWINDOW_STYLE_FLOAT )
+    if ( nTypeStyle & BorderWindowStyle::Float )
         mnTitleType = BorderWindowTitleType::Small;
     else
         mnTitleType = BorderWindowTitleType::Normal;
@@ -1809,14 +1809,14 @@ void ImplBorderWindow::ImplInit( vcl::Window* pParent,
 
 ImplBorderWindow::ImplBorderWindow( vcl::Window* pParent,
                                     SystemParentData* pSystemParentData,
-                                    WinBits nStyle, sal_uInt16 nTypeStyle
+                                    WinBits nStyle, BorderWindowStyle nTypeStyle
                                     ) : Window( WINDOW_BORDERWINDOW )
 {
     ImplInit( pParent, nStyle, nTypeStyle, pSystemParentData );
 }
 
 ImplBorderWindow::ImplBorderWindow( vcl::Window* pParent, WinBits nStyle ,
-                                    sal_uInt16 nTypeStyle ) :
+                                    BorderWindowStyle nTypeStyle ) :
     Window( WINDOW_BORDERWINDOW )
 {
     ImplInit( pParent, nStyle, nTypeStyle, css::uno::Any() );

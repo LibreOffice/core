@@ -97,16 +97,16 @@ void FloatingWindow::ImplInit( vcl::Window* pParent, WinBits nStyle )
         else
         {
             VclPtr<ImplBorderWindow> pBorderWin;
-            sal_uInt16 nBorderStyle = BORDERWINDOW_STYLE_BORDER | BORDERWINDOW_STYLE_FLOAT;
+            BorderWindowStyle nBorderStyle = BorderWindowStyle::Border | BorderWindowStyle::Float;
 
             if (nStyle & WB_OWNERDRAWDECORATION)
-                nBorderStyle |= BORDERWINDOW_STYLE_FRAME;
+                nBorderStyle |= BorderWindowStyle::Frame;
             else
-                nBorderStyle |= BORDERWINDOW_STYLE_OVERLAP;
+                nBorderStyle |= BorderWindowStyle::Overlap;
 
             if ((nStyle & WB_SYSTEMWINDOW) && !(nStyle & (WB_MOVEABLE | WB_SIZEABLE)))
             {
-                nBorderStyle |= BORDERWINDOW_STYLE_FRAME;
+                nBorderStyle |= BorderWindowStyle::Frame;
                 nStyle |= WB_CLOSEABLE; // make undecorated floaters closeable
             }
             pBorderWin  = VclPtr<ImplBorderWindow>::Create(pParent, nStyle, nBorderStyle);

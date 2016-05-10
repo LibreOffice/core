@@ -45,9 +45,9 @@ void WorkWindow::ImplInitWorkWindowData()
 
 void WorkWindow::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* pSystemParentData )
 {
-    sal_uInt16 nFrameStyle = BORDERWINDOW_STYLE_FRAME;
+    BorderWindowStyle nFrameStyle = BorderWindowStyle::Frame;
     if ( nStyle & WB_APP )
-        nFrameStyle |= BORDERWINDOW_STYLE_APP;
+        nFrameStyle |= BorderWindowStyle::App;
 
     VclPtrInstance<ImplBorderWindow> pBorderWin( pParent, pSystemParentData, nStyle, nFrameStyle );
     Window::ImplInit( pBorderWin, nStyle & (WB_3DLOOK | WB_CLIPCHILDREN | WB_DIALOGCONTROL | WB_SYSTEMFLOATWIN), nullptr );
