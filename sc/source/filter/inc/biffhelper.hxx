@@ -257,20 +257,41 @@ enum BiffType
     BIFF_UNKNOWN                /// Unknown BIFF version.
 };
 
-const sal_uInt16 BIFF2_MAXRECSIZE           = 2080;
-const sal_uInt16 BIFF8_MAXRECSIZE           = 8224;
+/** unused -- keep for documentation */
+//const sal_uInt16 BIFF2_MAXRECSIZE           = 2080;
+//const sal_uInt16 BIFF8_MAXRECSIZE           = 8224;
 
 // record identifiers ---------------------------------------------------------
 
+const sal_uInt16 BIFF2_ID_BOF               = 0x0009;
+const sal_uInt16 BIFF3_ID_BOF               = 0x0209;
+const sal_uInt16 BIFF4_ID_BOF               = 0x0409;
+const sal_uInt16 BIFF5_ID_BOF               = 0x0809;
+const sal_uInt16 BIFF_ID_CONT               = 0x003C;
+const sal_uInt16 BIFF_ID_EOF                = 0x000A;
+const sal_uInt16 BIFF_ID_PCDEFINITION       = 0x00C6;
+const sal_uInt16 BIFF_ID_PCDEFINITION2      = 0x0122;
+const sal_uInt16 BIFF_ID_PCDFDISCRETEPR     = 0x00D9;
+const sal_uInt16 BIFF_ID_PCDFIELD           = 0x00C7;
+const sal_uInt16 BIFF_ID_PCDFRANGEPR        = 0x00D8;
+const sal_uInt16 BIFF_ID_PCDFSQLTYPE        = 0x01BB;
+const sal_uInt16 BIFF_ID_PCITEM_BOOL        = 0x00CA;
+const sal_uInt16 BIFF_ID_PCITEM_DATE        = 0x00CE;
+const sal_uInt16 BIFF_ID_PCITEM_DOUBLE      = 0x00C9;
+const sal_uInt16 BIFF_ID_PCITEM_ERROR       = 0x00CB;
+const sal_uInt16 BIFF_ID_PCITEM_INDEXLIST   = 0x00C8;
+const sal_uInt16 BIFF_ID_PCITEM_INTEGER     = 0x00CC;
+const sal_uInt16 BIFF_ID_PCITEM_MISSING     = 0x00CF;
+const sal_uInt16 BIFF_ID_PCITEM_STRING      = 0x00CD;
+
+const sal_uInt16 BIFF_ID_UNKNOWN            = SAL_MAX_UINT16;
+
+/** unused -- keep for documentation
 const sal_uInt16 BIFF2_ID_ARRAY             = 0x0021;
 const sal_uInt16 BIFF3_ID_ARRAY             = 0x0221;
 const sal_uInt16 BIFF_ID_AUTOFILTER         = 0x009D;
 const sal_uInt16 BIFF2_ID_BLANK             = 0x0001;
 const sal_uInt16 BIFF3_ID_BLANK             = 0x0201;
-const sal_uInt16 BIFF2_ID_BOF               = 0x0009;
-const sal_uInt16 BIFF3_ID_BOF               = 0x0209;
-const sal_uInt16 BIFF4_ID_BOF               = 0x0409;
-const sal_uInt16 BIFF5_ID_BOF               = 0x0809;
 const sal_uInt16 BIFF_ID_BOOKBOOL           = 0x00DA;
 const sal_uInt16 BIFF_ID_BOOKEXT            = 0x0863;
 const sal_uInt16 BIFF2_ID_BOOLERR           = 0x0005;
@@ -358,7 +379,6 @@ const sal_uInt16 BIFF_ID_COLUMNDEFAULT      = 0x0020;
 const sal_uInt16 BIFF_ID_COLWIDTH           = 0x0024;
 const sal_uInt16 BIFF_ID_COMPRESSPICS       = 0x089B;
 const sal_uInt16 BIFF_ID_CONNECTION         = 0x0876;
-const sal_uInt16 BIFF_ID_CONT               = 0x003C;
 const sal_uInt16 BIFF_ID_COORDLIST          = 0x00A9;
 const sal_uInt16 BIFF_ID_COUNTRY            = 0x008C;
 const sal_uInt16 BIFF_ID_CRN                = 0x005A;
@@ -383,7 +403,6 @@ const sal_uInt16 BIFF_ID_DELTA              = 0x0010;
 const sal_uInt16 BIFF2_ID_DIMENSION         = 0x0000;
 const sal_uInt16 BIFF3_ID_DIMENSION         = 0x0200;
 const sal_uInt16 BIFF_ID_DXF                = 0x088D;
-const sal_uInt16 BIFF_ID_EOF                = 0x000A;
 const sal_uInt16 BIFF_ID_EXTERNALBOOK       = 0x01AE;
 const sal_uInt16 BIFF2_ID_EXTERNALNAME      = 0x0023;
 const sal_uInt16 BIFF3_ID_EXTERNALNAME      = 0x0223;
@@ -446,23 +465,9 @@ const sal_uInt16 BIFF_ID_PALETTE            = 0x0092;
 const sal_uInt16 BIFF_ID_PANE               = 0x0041;
 const sal_uInt16 BIFF_ID_PARAMQUERY         = 0x00DC;
 const sal_uInt16 BIFF_ID_PASSWORD           = 0x0013;
-const sal_uInt16 BIFF_ID_PCDEFINITION       = 0x00C6;
-const sal_uInt16 BIFF_ID_PCDEFINITION2      = 0x0122;
-const sal_uInt16 BIFF_ID_PCDFDISCRETEPR     = 0x00D9;
-const sal_uInt16 BIFF_ID_PCDFIELD           = 0x00C7;
 const sal_uInt16 BIFF_ID_PCDFIELDINDEX      = 0x0103;
 const sal_uInt16 BIFF_ID_PCDFORMULAFIELD    = 0x00F9;
-const sal_uInt16 BIFF_ID_PCDFRANGEPR        = 0x00D8;
-const sal_uInt16 BIFF_ID_PCDFSQLTYPE        = 0x01BB;
 const sal_uInt16 BIFF_ID_PCDSOURCE          = 0x00E3;
-const sal_uInt16 BIFF_ID_PCITEM_BOOL        = 0x00CA;
-const sal_uInt16 BIFF_ID_PCITEM_DATE        = 0x00CE;
-const sal_uInt16 BIFF_ID_PCITEM_DOUBLE      = 0x00C9;
-const sal_uInt16 BIFF_ID_PCITEM_ERROR       = 0x00CB;
-const sal_uInt16 BIFF_ID_PCITEM_INDEXLIST   = 0x00C8;
-const sal_uInt16 BIFF_ID_PCITEM_INTEGER     = 0x00CC;
-const sal_uInt16 BIFF_ID_PCITEM_MISSING     = 0x00CF;
-const sal_uInt16 BIFF_ID_PCITEM_STRING      = 0x00CD;
 const sal_uInt16 BIFF_ID_PHONETICPR         = 0x00EF;
 const sal_uInt16 BIFF_ID_PICTURE            = 0x00E9;
 const sal_uInt16 BIFF_ID_PIVOTCACHE         = 0x00D5;
@@ -531,11 +536,10 @@ const sal_uInt16 BIFF4_ID_XF                = 0x0443;
 const sal_uInt16 BIFF5_ID_XF                = 0x00E0;
 const sal_uInt16 BIFF_ID_XFCRC              = 0x087C;
 const sal_uInt16 BIFF_ID_XFEXT              = 0x087D;
-
-const sal_uInt16 BIFF_ID_UNKNOWN            = SAL_MAX_UINT16;
+*/
 
 // OBJ subrecord identifiers --------------------------------------------------
-
+/**  unused -- keep for documentation
 const sal_uInt16 BIFF_ID_OBJEND             = 0x0000;   /// End of OBJ.
 const sal_uInt16 BIFF_ID_OBJMACRO           = 0x0004;   /// Macro link.
 const sal_uInt16 BIFF_ID_OBJBUTTON          = 0x0005;   /// Button data.
@@ -555,14 +559,8 @@ const sal_uInt16 BIFF_ID_OBJCBLSDATA        = 0x0012;   /// Check box/radio butt
 const sal_uInt16 BIFF_ID_OBJLBSDATA         = 0x0013;   /// List box/combo box data.
 const sal_uInt16 BIFF_ID_OBJCBLSFMLA        = 0x0014;   /// Check box/radio button cell link.
 const sal_uInt16 BIFF_ID_OBJCMO             = 0x0015;   /// Common object settings.
-
+*/
 // record constants -----------------------------------------------------------
-
-const sal_uInt16 BIFF_BOF_BIFF2             = 0x0200;
-const sal_uInt16 BIFF_BOF_BIFF3             = 0x0300;
-const sal_uInt16 BIFF_BOF_BIFF4             = 0x0400;
-const sal_uInt16 BIFF_BOF_BIFF5             = 0x0500;
-const sal_uInt16 BIFF_BOF_BIFF8             = 0x0600;
 
 const sal_uInt8 BIFF_ERR_NULL               = 0x00;
 const sal_uInt8 BIFF_ERR_DIV0               = 0x07;
@@ -572,6 +570,13 @@ const sal_uInt8 BIFF_ERR_NAME               = 0x1D;
 const sal_uInt8 BIFF_ERR_NUM                = 0x24;
 const sal_uInt8 BIFF_ERR_NA                 = 0x2A;
 
+/**  unused -- keep for documentation
+const sal_uInt16 BIFF_BOF_BIFF2             = 0x0200;
+const sal_uInt16 BIFF_BOF_BIFF3             = 0x0300;
+const sal_uInt16 BIFF_BOF_BIFF4             = 0x0400;
+const sal_uInt16 BIFF_BOF_BIFF5             = 0x0500;
+const sal_uInt16 BIFF_BOF_BIFF8             = 0x0600;
+
 const sal_uInt8 BIFF_DATATYPE_EMPTY         = 0;
 const sal_uInt8 BIFF_DATATYPE_DOUBLE        = 1;
 const sal_uInt8 BIFF_DATATYPE_STRING        = 2;
@@ -580,6 +585,7 @@ const sal_uInt8 BIFF_DATATYPE_ERROR         = 16;
 
 const sal_uInt8 BIFF_BOOLERR_BOOL           = 0;
 const sal_uInt8 BIFF_BOOLERR_ERROR          = 1;
+*/
 
 // BIFF8 unicode strings ------------------------------------------------------
 
