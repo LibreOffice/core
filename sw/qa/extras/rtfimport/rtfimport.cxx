@@ -2590,6 +2590,15 @@ DECLARE_RTFIMPORT_TEST(testTdf95707, "tdf95707.rtf")
     CPPUNIT_ASSERT(getProperty<OUString>(getShape(1), "GraphicURL") != "vnd.sun.star.GraphicObject:0000000000000000000000000000000000000000");
 }
 
+DECLARE_RTFIMPORT_TEST(testTdf96275, "tdf96275.rtf")
+{
+    uno::Reference<text::XTextTable> xTable(getParagraphOrTable(1), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A1"), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xParagraph = getParagraphOfText(3, xCell->getText());
+    // This was text: the shape's frame was part of the 1st paragraph instead of the 3rd one.
+    CPPUNIT_ASSERT_EQUAL(OUString("Frame"), getProperty<OUString>(getRun(xParagraph, 1), "TextPortionType"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
