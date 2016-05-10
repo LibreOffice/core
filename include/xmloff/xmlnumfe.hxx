@@ -52,6 +52,7 @@ private:
     SvXMLNumUsedList_Impl*      pUsedList;
     CharClass*                  pCharClass;
     LocaleDataWrapper*          pLocaleData;
+    bool                        m_bIsQuotedText;
 
     SAL_DLLPRIVATE void AddCalendarAttr_Impl( const OUString& rCalendar );
     SAL_DLLPRIVATE void AddStyleAttr_Impl( bool bLong );
