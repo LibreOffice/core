@@ -63,10 +63,10 @@ void WinSalGraphics::copyBits( const SalTwoRect& rPosAry, SalGraphics* pSrcGraph
 void WinSalGraphics::copyArea( long nDestX, long nDestY,
                             long nSrcX, long nSrcY,
                             long nSrcWidth, long nSrcHeight,
-                            sal_uInt16 nFlags )
+                            bool bWindowInvalidate )
 {
     mpImpl->copyArea( nDestX, nDestY, nSrcX, nSrcY,
-            nSrcWidth, nSrcHeight, nFlags );
+            nSrcWidth, nSrcHeight, bWindowInvalidate );
 }
 
 namespace

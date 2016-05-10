@@ -492,7 +492,7 @@ void GenPspGraphics::copyBits( const SalTwoRect&,
     OSL_FAIL( "Error: PrinterGfx::CopyBits() not implemented" );
 }
 
-void GenPspGraphics::copyArea ( long,long,long,long,long,long,sal_uInt16 )
+void GenPspGraphics::copyArea ( long,long,long,long,long,long,bool )
 {
     OSL_FAIL( "Error: PrinterGfx::CopyArea() not implemented" );
 }

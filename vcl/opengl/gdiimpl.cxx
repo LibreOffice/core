@@ -2104,8 +2104,7 @@ bool OpenGLSalGraphicsImpl::drawPolyPolygonBezier(
 void OpenGLSalGraphicsImpl::copyArea(
             long nDestX, long nDestY,
             long nSrcX, long nSrcY,
-            long nSrcWidth, long nSrcHeight,
-            sal_uInt16 /*nFlags*/ )
+            long nSrcWidth, long nSrcHeight, bool /*bWindowInvalidate*/ )
 {
     VCL_GL_INFO( "::copyArea " << nSrcX << "," << nSrcY << " >> " << nDestX << "," << nDestY << " (" << nSrcWidth << "," << nSrcHeight << ")" );
     OpenGLTexture aTexture;
@@ -2144,7 +2143,7 @@ void OpenGLSalGraphicsImpl::DoCopyBits( const SalTwoRect& rPosAry, OpenGLSalGrap
             return;
         // use copyArea() if source and destination context are identical
         copyArea( rPosAry.mnDestX, rPosAry.mnDestY, rPosAry.mnSrcX, rPosAry.mnSrcY,
-            rPosAry.mnSrcWidth, rPosAry.mnSrcHeight, 0 );
+            rPosAry.mnSrcWidth, rPosAry.mnSrcHeight, false/*bWindowInvalidate*/ );
         return;
     }
 

@@ -634,7 +634,7 @@ void X11SalGraphicsImpl::copyBits( const SalTwoRect& rPosAry,
 void X11SalGraphicsImpl::copyArea ( long nDestX,    long nDestY,
                                 long nSrcX,     long nSrcY,
                                 long nSrcWidth, long nSrcHeight,
-                                sal_uInt16 )
+                                bool /*bWindowInvalidate*/)
 {
     SalTwoRect aPosAry(nSrcX, nSrcY, nSrcWidth, nSrcHeight, nDestX, nDestY, nSrcWidth, nSrcHeight);
     copyBits(aPosAry, nullptr);

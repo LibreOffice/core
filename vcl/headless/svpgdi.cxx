@@ -923,12 +923,12 @@ void SvpSalGraphics::drawPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPoly)
 }
 
 void SvpSalGraphics::copyArea( long nDestX,
-                                      long nDestY,
-                                      long nSrcX,
-                                      long nSrcY,
-                                      long nSrcWidth,
-                                      long nSrcHeight,
-                                      sal_uInt16 /*nFlags*/ )
+                               long nDestY,
+                               long nSrcX,
+                               long nSrcY,
+                               long nSrcWidth,
+                               long nSrcHeight,
+                               bool /*bWindowInvalidate*/ )
 {
     SalTwoRect aTR(nSrcX, nSrcY, nSrcWidth, nSrcHeight, nDestX, nDestY, nSrcWidth, nSrcHeight);
     copyBits(aTR, this);
