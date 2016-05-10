@@ -200,6 +200,7 @@ bool AstService::dump(RegistryKey& rKey)
                     getRealService()->getRelativName();
                 break;
             }
+            SAL_FALLTHROUGH;
         case NT_interface_member:
         case NT_observes:
         case NT_needs:
