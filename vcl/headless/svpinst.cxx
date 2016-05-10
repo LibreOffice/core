@@ -67,8 +67,8 @@ static void atfork_child()
 {
     if (SvpSalInstance::s_pDefaultInstance != nullptr)
     {
-        SvpSalInstance::s_pDefaultInstance->CloseWakeupPipe();
-        SvpSalInstance::s_pDefaultInstance->CreateWakeupPipe();
+        SvpSalInstance::s_pDefaultInstance->CloseWakeupPipe(false);
+        SvpSalInstance::s_pDefaultInstance->CreateWakeupPipe(false);
     }
 }
 
@@ -82,7 +82,7 @@ SvpSalInstance::SvpSalInstance( SalYieldMutex *pMutex ) :
     m_nTimeoutMS            = 0;
 
     m_pTimeoutFDS[0] = m_pTimeoutFDS[1] = -1;
-    CreateWakeupPipe();
+    CreateWakeupPipe(true);
     if( s_pDefaultInstance == nullptr )
         s_pDefaultInstance = this;
 #ifndef ANDROID
@@ -95,29 +95,38 @@ SvpSalInstance::~SvpSalInstance()
     if( s_pDefaultInstance == this )
         s_pDefaultInstance = nullptr;
 
-    CloseWakeupPipe();
+    CloseWakeupPipe(true);
 }
 
-void SvpSalInstance::CloseWakeupPipe()
+void SvpSalInstance::CloseWakeupPipe(bool log)
 {
     if (m_pTimeoutFDS[0] != -1)
     {
-        SAL_INFO("vcl.headless", "CloseWakeupPipe: Closing inherited wakeup pipe: [" << m_pTimeoutFDS[0] << "," << m_pTimeoutFDS[1] << "]");
+        if (log)
+        {
+            SAL_INFO("vcl.headless", "CloseWakeupPipe: Closing inherited wakeup pipe: [" << m_pTimeoutFDS[0] << "," << m_pTimeoutFDS[1] << "]");
+        }
         close (m_pTimeoutFDS[0]);
         close (m_pTimeoutFDS[1]);
         m_pTimeoutFDS[0] = m_pTimeoutFDS[1] = -1;
     }
 }
 
-void SvpSalInstance::CreateWakeupPipe()
+void SvpSalInstance::CreateWakeupPipe(bool log)
 {
     if (pipe (m_pTimeoutFDS) == -1)
     {
-        SAL_WARN("vcl.headless", "Could not create wakeup pipe: " << strerror(errno));
+        if (log)
+        {
+            SAL_WARN("vcl.headless", "Could not create wakeup pipe: " << strerror(errno));
+        }
     }
     else
     {
-        SAL_INFO("vcl.headless", "CreateWakeupPipe: Created wakeup pipe: [" << m_pTimeoutFDS[0] << "," << m_pTimeoutFDS[1] << "]");
+        if (log)
+        {
+            SAL_INFO("vcl.headless", "CreateWakeupPipe: Created wakeup pipe: [" << m_pTimeoutFDS[0] << "," << m_pTimeoutFDS[1] << "]");
+        }
 
         // initialize 'wakeup' pipe.
         int flags;
