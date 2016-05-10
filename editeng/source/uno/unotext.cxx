@@ -1911,6 +1911,7 @@ void SAL_CALL SvxUnoTextBase::insertControlCharacter( const uno::Reference< text
 
                 return;
             }
+            SAL_FALLTHROUGH;
         }
         default:
             throw lang::IllegalArgumentException();

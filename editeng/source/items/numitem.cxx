@@ -549,8 +549,8 @@ OUString SvxNumberFormat::CreateRomanString( sal_uLong nNo, bool bUpper )
         }
         switch( nZahl )
         {
-        case 3:     { sRet += OUString(*cRomanArr); }
-        case 2:     { sRet += OUString(*cRomanArr); }
+        case 3:     { sRet += OUString(*cRomanArr); SAL_FALLTHROUGH; }
+        case 2:     { sRet += OUString(*cRomanArr); SAL_FALLTHROUGH; }
         case 1:     { sRet += OUString(*cRomanArr); }
                     break;
 
