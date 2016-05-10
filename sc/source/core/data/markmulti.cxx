@@ -222,7 +222,7 @@ void ScMultiSel::SetMarkArea( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, S
     // and move row marks from aRowSel to aMultiSelContainer
     if ( !bMark && aRowSel.HasMarks() )
     {
-        SCROW nBeg, nLast = nEndRow + 1;
+        SCROW nBeg, nLast = nEndRow;
         if ( aRowSel.GetMark( nStartRow ) )
         {
             nBeg = nStartRow;
