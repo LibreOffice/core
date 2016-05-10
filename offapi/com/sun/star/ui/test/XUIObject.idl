@@ -23,6 +23,8 @@ interface XUIObject
     com::sun::star::beans::PropertyValues getState();
 
     string getType();
+
+    sequence<string> getChildren();
 };
 
 }; }; }; }; };
