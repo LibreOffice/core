@@ -81,6 +81,7 @@
 
 #include <sfx2/request.hxx>
 #include <comphelper/lok.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 using namespace com::sun::star;
 
@@ -923,6 +924,10 @@ bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage)
         // also select this page (mpActualPage always points at a drawing page,
         // never at a masterpage)
         GetDoc()->SetSelected(mpActualPage, true);
+
+        // notify LibreOfficeKit about changed page
+        OString aPayload = OString::number(nSelectedPage);
+        GetDoc()->libreOfficeKitCallback(LOK_CALLBACK_SET_PART, aPayload.getStr());
 
         rtl::Reference< sd::SlideShow > xSlideshow( SlideShow::GetSlideShow( GetDoc() ) );
         if( !xSlideshow.is() || !xSlideshow->isRunning() || ( xSlideshow->getAnimationMode() != ANIMATIONMODE_SHOW ) )
