@@ -116,6 +116,7 @@ sal_Int32 Inflater::doInflateBytes (Sequence < sal_Int8 >  &rBuffer, sal_Int32 n
     {
         case Z_STREAM_END:
             bFinished = true;
+            SAL_FALLTHROUGH;
         case Z_OK:
             nOffset += nLength - pStream->avail_in;
             nLength = pStream->avail_in;
