@@ -365,14 +365,9 @@ bool CairoTextRender::GetFontCapabilities(vcl::FontCapabilities &rGetImplFontCap
 
 // SalGraphics
 
-sal_uInt16 CairoTextRender::SetFont( FontSelectPattern *pEntry, int nFallbackLevel )
+void CairoTextRender::SetFont( FontSelectPattern *pEntry, int nFallbackLevel )
 {
-    sal_uInt16 nRetVal = 0;
-    if (!setFont(pEntry, nFallbackLevel))
-        nRetVal |= SAL_SETFONT_BADFONT;
-    if (mpServerFont[nFallbackLevel])
-        nRetVal |= SAL_SETFONT_USEDRAWTEXTARRAY;
-    return nRetVal;
+    setFont(pEntry, nFallbackLevel);
 }
 
 void

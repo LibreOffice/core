@@ -24,9 +24,9 @@
 #include <config_cairo_canvas.h>
 #include "impfontmetricdata.hxx"
 
-sal_uInt16 SvpSalGraphics::SetFont( FontSelectPattern* pIFSD, int nFallbackLevel )
+void SvpSalGraphics::SetFont( FontSelectPattern* pIFSD, int nFallbackLevel )
 {
-    return m_aTextRenderImpl.SetFont(pIFSD, nFallbackLevel);
+    m_aTextRenderImpl.SetFont(pIFSD, nFallbackLevel);
 }
 
 void SvpSalGraphics::GetFontMetric( ImplFontMetricDataPtr& xFontMetric, int nFallbackLevel )

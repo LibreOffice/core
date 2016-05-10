@@ -1782,7 +1782,7 @@ void Printer::InitFont() const
     if ( mbInitFont )
     {
         // select font in the device layers
-        mpFontInstance->mnSetFontFlags = mpGraphics->SetFont( &(mpFontInstance->maFontSelData), 0 );
+        mpGraphics->SetFont( &(mpFontInstance->maFontSelData), 0 );
         mbInitFont = false;
     }
 }

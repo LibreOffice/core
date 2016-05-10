@@ -378,7 +378,7 @@ public:
     // set the text color to a specific color
     virtual void            SetTextColor( SalColor nSalColor ) override;
     // set the font
-    virtual sal_uInt16      SetFont( FontSelectPattern*, int nFallbackLevel ) override;
+    virtual void            SetFont( FontSelectPattern*, int nFallbackLevel ) override;
     // get the current font's metrics
     virtual void            GetFontMetric( ImplFontMetricDataPtr&, int nFallbackLevel ) override;
     // get the repertoire of the current font

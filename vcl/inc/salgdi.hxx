@@ -56,9 +56,6 @@ namespace basegfx {
     class B2DPolyPolygon;
 }
 
-#define SAL_SETFONT_USEDRAWTEXTARRAY        ((sal_uInt16)0x0004)
-#define SAL_SETFONT_BADFONT                 ((sal_uInt16)0x1000)
-
 #define SAL_COPYAREA_WINDOWINVALIDATE       ((sal_uInt16)0x0001)
 
 typedef sal_Unicode sal_Ucs; // TODO: use sal_UCS4 instead of sal_Unicode
@@ -131,7 +128,7 @@ public:
     virtual void                SetTextColor( SalColor nSalColor ) = 0;
 
     // set the font
-    virtual sal_uInt16          SetFont( FontSelectPattern*, int nFallbackLevel ) = 0;
+    virtual void                SetFont( FontSelectPattern*, int nFallbackLevel ) = 0;
 
     // release the fonts
     void                        ReleaseFonts() { SetFont( nullptr, 0 ); }
