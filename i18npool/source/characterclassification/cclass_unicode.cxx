@@ -63,7 +63,7 @@ cclass_Unicode::toUpper( const OUString& Text, sal_Int32 nPos, sal_Int32 nCount,
     if (nCount + nPos > len)
         nCount = len - nPos;
 
-    trans->setMappingType(MappingTypeToUpper, rLocale);
+    trans->setMappingType(MappingType::ToUpper, rLocale);
     return trans->transliterateString2String(Text, nPos, nCount);
 }
 
@@ -75,7 +75,7 @@ cclass_Unicode::toLower( const OUString& Text, sal_Int32 nPos, sal_Int32 nCount,
     if (nCount + nPos > len)
         nCount = len - nPos;
 
-    trans->setMappingType(MappingTypeToLower, rLocale);
+    trans->setMappingType(MappingType::ToLower, rLocale);
     return trans->transliterateString2String(Text, nPos, nCount);
 }
 
@@ -89,7 +89,7 @@ cclass_Unicode::toTitle( const OUString& Text, sal_Int32 nPos, sal_Int32 nCount,
         if (nCount + nPos > len)
             nCount = len - nPos;
 
-        trans->setMappingType(MappingTypeToTitle, rLocale);
+        trans->setMappingType(MappingType::ToTitle, rLocale);
         rtl_uString* pStr = rtl_uString_alloc(nCount);
         sal_Unicode* out = pStr->buffer;
         Reference< BreakIteratorImpl > xBrk(new BreakIteratorImpl(m_xContext));

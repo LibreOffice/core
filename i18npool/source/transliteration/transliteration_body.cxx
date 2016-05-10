@@ -40,7 +40,7 @@ namespace com { namespace sun { namespace star { namespace i18n {
 
 Transliteration_body::Transliteration_body()
 {
-    nMappingType = 0;
+    nMappingType = MappingType::NONE;
     transliterationName = "Transliteration_body";
     implementationName = "com.sun.star.i18n.Transliteration.Transliteration_body";
 }
@@ -68,22 +68,22 @@ Transliteration_body::transliterateRange( const OUString& str1, const OUString& 
     return ostr;
 }
 
-static sal_uInt8 lcl_getMappingTypeForToggleCase( sal_uInt8 nMappingType, sal_Unicode cChar )
+static MappingType lcl_getMappingTypeForToggleCase( MappingType nMappingType, sal_Unicode cChar )
 {
-    sal_uInt8 nRes = nMappingType;
+    MappingType nRes = nMappingType;
 
     // take care of TOGGLE_CASE transliteration:
     // nMappingType should not be a combination of flags, thuse we decide now
     // which one to use.
-    if (nMappingType == (MappingTypeLowerToUpper | MappingTypeUpperToLower))
+    if (nMappingType == (MappingType::LowerToUpper | MappingType::UpperToLower))
     {
         const sal_Int16 nType = unicode::getUnicodeType( cChar );
         if (nType & 0x02 /* lower case*/)
-            nRes = MappingTypeLowerToUpper;
+            nRes = MappingType::LowerToUpper;
         else
         {
             // should also work properly for non-upper characters like white spaces, numbers, ...
-            nRes = MappingTypeUpperToLower;
+            nRes = MappingType::UpperToLower;
         }
     }
 
@@ -106,8 +106,8 @@ Transliteration_body::transliterate(
         for (i = 0; i < nCount; i++)
         {
             // take care of TOGGLE_CASE transliteration:
-            sal_uInt8 nTmpMappingType = nMappingType;
-            if (nMappingType == (MappingTypeLowerToUpper | MappingTypeUpperToLower))
+            MappingType nTmpMappingType = nMappingType;
+            if (nMappingType == (MappingType::LowerToUpper | MappingType::UpperToLower))
                 nTmpMappingType = lcl_getMappingTypeForToggleCase( nMappingType, in[i] );
 
             const Mapping &map = casefolding::getValue( in, i, nCount, aLocale, nTmpMappingType );
@@ -124,8 +124,8 @@ Transliteration_body::transliterate(
         for (i = 0; i < nCount; i++)
         {
             // take care of TOGGLE_CASE transliteration:
-            sal_uInt8 nTmpMappingType = nMappingType;
-            if (nMappingType == (MappingTypeLowerToUpper | MappingTypeUpperToLower))
+            MappingType nTmpMappingType = nMappingType;
+            if (nMappingType == (MappingType::LowerToUpper | MappingType::UpperToLower))
                 nTmpMappingType = lcl_getMappingTypeForToggleCase( nMappingType, in[i] );
 
             const Mapping &map = casefolding::getValue( in, i, nCount, aLocale, nTmpMappingType );
@@ -164,8 +164,8 @@ Transliteration_body::transliterate(
         for ( sal_Int32 i = 0; i < nCount; i++)
         {
             // take care of TOGGLE_CASE transliteration:
-            sal_uInt8 nTmpMappingType = nMappingType;
-            if (nMappingType == (MappingTypeLowerToUpper | MappingTypeUpperToLower))
+            MappingType nTmpMappingType = nMappingType;
+            if (nMappingType == (MappingType::LowerToUpper | MappingType::UpperToLower))
                 nTmpMappingType = lcl_getMappingTypeForToggleCase( nMappingType, in[i] );
 
             const Mapping &map = casefolding::getValue( in, i, nCount, aLocale, nTmpMappingType );
@@ -213,13 +213,13 @@ Transliteration_body::folding( const OUString& inStr, sal_Int32 startPos, sal_In
 
 Transliteration_casemapping::Transliteration_casemapping()
 {
-    nMappingType = 0;
+    nMappingType = MappingType::NONE;
     transliterationName = "casemapping(generic)";
     implementationName = "com.sun.star.i18n.Transliteration.Transliteration_casemapping";
 }
 
 void SAL_CALL
-Transliteration_casemapping::setMappingType( const sal_uInt8 rMappingType, const Locale& rLocale )
+Transliteration_casemapping::setMappingType( const MappingType rMappingType, const Locale& rLocale )
 {
     nMappingType = rMappingType;
     aLocale = rLocale;
@@ -227,14 +227,14 @@ Transliteration_casemapping::setMappingType( const sal_uInt8 rMappingType, const
 
 Transliteration_u2l::Transliteration_u2l()
 {
-    nMappingType = MappingTypeUpperToLower;
+    nMappingType = MappingType::UpperToLower;
     transliterationName = "upper_to_lower(generic)";
     implementationName = "com.sun.star.i18n.Transliteration.Transliteration_u2l";
 }
 
 Transliteration_l2u::Transliteration_l2u()
 {
-    nMappingType = MappingTypeLowerToUpper;
+    nMappingType = MappingType::LowerToUpper;
     transliterationName = "lower_to_upper(generic)";
     implementationName = "com.sun.star.i18n.Transliteration.Transliteration_l2u";
 }
@@ -245,14 +245,14 @@ Transliteration_togglecase::Transliteration_togglecase()
     // but we take care of that problem in Transliteration_body::transliterate above
     // before that value is used. There we will decide which of both is to be used on
     // a per character basis.
-    nMappingType = MappingTypeLowerToUpper | MappingTypeUpperToLower;
+    nMappingType = MappingType::LowerToUpper | MappingType::UpperToLower;
     transliterationName = "toggle(generic)";
     implementationName = "com.sun.star.i18n.Transliteration.Transliteration_togglecase";
 }
 
 Transliteration_titlecase::Transliteration_titlecase()
 {
-    nMappingType = MappingTypeToTitle;
+    nMappingType = MappingType::ToTitle;
     transliterationName = "title(generic)";
     implementationName = "com.sun.star.i18n.Transliteration.Transliteration_titlecase";
 }
@@ -316,7 +316,7 @@ OUString SAL_CALL Transliteration_titlecase::transliterate(
 
 Transliteration_sentencecase::Transliteration_sentencecase()
 {
-    nMappingType = MappingTypeToTitle;  // though only to be applied to the first word...
+    nMappingType = MappingType::ToTitle;  // though only to be applied to the first word...
     transliterationName = "sentence(generic)";
     implementationName = "com.sun.star.i18n.Transliteration.Transliteration_sentencecase";
 }
