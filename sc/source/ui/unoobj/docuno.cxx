@@ -543,11 +543,7 @@ Size ScModelObj::getDocumentSize()
     SCROW nEndRow = 0;
     const ScDocument& rDoc = pDocShell->GetDocument();
 
-    if (!rDoc.GetTiledRenderingArea(nTab, nEndCol, nEndRow))
-        return aSize;
-
-    nEndCol = std::max(nEndCol, pViewData->GetMaxTiledCol());
-    nEndRow = std::max(nEndRow, pViewData->GetMaxTiledRow());
+    rDoc.GetTiledRenderingArea(nTab, nEndCol, nEndRow);
 
     // convert to twips
     aSize.setWidth(rDoc.GetColWidth(0, nEndCol, nTab));
