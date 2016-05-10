@@ -48,6 +48,7 @@
 #include <vcl/keycod.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/syswin.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
 
@@ -701,6 +702,11 @@ void SAL_CALL BackingComp::initialize( /*IN*/ const css::uno::Sequence< css::uno
         xBroadcaster->addEventListener(static_cast< css::lang::XEventListener* >(this));
 
     m_xWindow->setVisible(true);
+
+    // hide NotebookBar
+    SystemWindow* pSysWindow = static_cast<SystemWindow*>(pParent);
+    if (pSysWindow->GetNotebookBar())
+        pSysWindow->GetNotebookBar()->Hide();
 
     /* } SAFE */
 }
