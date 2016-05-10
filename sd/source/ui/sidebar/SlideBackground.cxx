@@ -587,6 +587,7 @@ IMPL_LINK_NOARG_TYPED(SlideBackground, FillStyleModifyHdl, ListBox&, void)
         default:
         break;
     }
+    mpFillStyle->Selected();
 }
 
 IMPL_LINK_NOARG_TYPED(SlideBackground, PaperSizeModifyHdl, ListBox&, void)

@@ -72,7 +72,7 @@ private:
     VclPtr<ListBox> mpPaperSizeBox;
     VclPtr<ListBox> mpPaperOrientation;
     VclPtr<ListBox> mpMasterSlide;
-    VclPtr<ListBox> mpFillStyle;
+    VclPtr<SvxFillTypeBox> mpFillStyle;
     VclPtr<ColorLB> mpFillLB;
     VclPtr<SvxFillAttrBox> mpFillAttr;
     VclPtr<ColorLB> mpFillGrad;
