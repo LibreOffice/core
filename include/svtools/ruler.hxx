@@ -264,9 +264,9 @@ it has been dragged. There are the following query methods:
     - GetDragSize()
         If Borders are dragged, this can be used to query whether the size
         resp. which side or the position should be changed.
-            RULER_DRAGSIZE_MOVE oder 0      - Move
-            RULER_DRAGSIZE_1                - left/upper border
-            RULER_DRAGSIZE_2                - right/bottom border
+            RulerDragSize::Move oder 0      - Move
+            RulerDragSize::N1                - left/upper border
+            RulerDragSize::N2                - right/bottom border
 
     - IsDragDelete()
         This method can be used to query whether the mouse has been
@@ -473,9 +473,11 @@ enum RulerExtra { RULER_EXTRA_DONTKNOW,
 #define RULER_STYLE_DONTKNOW    ((sal_uInt16)0x4000)
 #define RULER_STYLE_INVISIBLE   ((sal_uInt16)0x2000)
 
-#define RULER_DRAGSIZE_MOVE     0
-#define RULER_DRAGSIZE_1        1
-#define RULER_DRAGSIZE_2        2
+enum class RulerDragSize {
+    Move,
+    N1,
+    N2
+};
 
 #define RULER_MOUSE_BORDERMOVE  5
 #define RULER_MOUSE_BORDERWIDTH 5
@@ -538,19 +540,19 @@ struct RulerLine
 
 struct RulerSelection
 {
-    long        nPos;
-    RulerType   eType;
-    sal_uInt16  nAryPos;
-    sal_uInt16  mnDragSize;
-    bool        bSize;
-    bool        bSizeBar;
-    bool        bExpandTest;
+    long          nPos;
+    RulerType     eType;
+    sal_uInt16    nAryPos;
+    RulerDragSize mnDragSize;
+    bool          bSize;
+    bool          bSizeBar;
+    bool          bExpandTest;
 
     RulerSelection()
         : nPos(0)
         , eType(RULER_TYPE_DONTKNOW)
         , nAryPos(0)
-        , mnDragSize(0)
+        , mnDragSize(RulerDragSize::Move)
         , bSize(false)
         , bSizeBar(false)
         , bExpandTest( false )
@@ -618,7 +620,7 @@ private:
     WinBits         mnWinStyle;
     sal_uInt16      mnUnitIndex;
     sal_uInt16      mnDragAryPos;
-    sal_uInt16      mnDragSize;
+    RulerDragSize   mnDragSize;
     sal_uInt16      mnDragModifier;
     sal_uInt16      mnExtraStyle;
     sal_uInt16      mnExtraClicks;
@@ -741,7 +743,7 @@ public:
     RulerType       GetDragType() const { return meDragType; }
     long            GetDragPos() const { return mnDragPos; }
     sal_uInt16      GetDragAryPos() const { return mnDragAryPos; }
-    sal_uInt16      GetDragSize() const { return mnDragSize; }
+    RulerDragSize   GetDragSize() const { return mnDragSize; }
     bool            IsDragDelete() const { return mbDragDelete; }
     bool            IsDragCanceled() const { return mbDragCanceled; }
     sal_uInt16      GetDragModifier() const { return mnDragModifier; }
