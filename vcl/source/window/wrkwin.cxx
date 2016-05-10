@@ -208,8 +208,10 @@ bool WorkWindow::IsMinimized() const
 {
     //return mpWindowImpl->mpFrameData->mbMinimized;
     SalFrameState aState;
-    mpWindowImpl->mpFrame->GetWindowState(&aState);
-    return bool(aState.mnState & WindowStateState::Minimized);
+    if (mpWindowImpl->mpFrame->GetWindowState(&aState))
+        return bool(aState.mnState & WindowStateState::Minimized);
+    else
+        return false;
 }
 
 bool WorkWindow::SetPluginParent( SystemParentData* pParent )
