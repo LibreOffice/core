@@ -386,7 +386,7 @@ void AquaSalGraphics::copyBits( const SalTwoRect& rPosAry, SalGraphics *pSrcGrap
         }
         // use copyArea() if source and destination context are identical
         copyArea( rPosAry.mnDestX, rPosAry.mnDestY, rPosAry.mnSrcX, rPosAry.mnSrcY,
-                  rPosAry.mnSrcWidth, rPosAry.mnSrcHeight, 0 );
+                  rPosAry.mnSrcWidth, rPosAry.mnSrcHeight );
         return;
     }
 
@@ -523,7 +523,7 @@ void AquaSalGraphics::ApplyXorContext()
 }
 
 void AquaSalGraphics::copyArea( long nDstX, long nDstY,long nSrcX, long nSrcY,
-                                long nSrcWidth, long nSrcHeight, sal_uInt16 /*nFlags*/ )
+                                long nSrcWidth, long nSrcHeight )
 {
     SAL_WARN_IF( !mxLayer, "vcl.quartz",
                  "AquaSalGraphics::copyArea() for non-layered graphics this=" << this );
