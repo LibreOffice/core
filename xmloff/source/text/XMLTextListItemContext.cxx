@@ -143,6 +143,7 @@ SvXMLImportContext *XMLTextListItemContext::CreateChildContext(
     {
     case XML_TOK_TEXT_H:
         bHeading = true;
+        SAL_FALLTHROUGH;
     case XML_TOK_TEXT_P:
         pContext = new XMLParaContext( GetImport(),
                                        nPrefix, rLocalName,

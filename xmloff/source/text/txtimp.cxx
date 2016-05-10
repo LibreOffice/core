@@ -2150,6 +2150,7 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
     {
     case XML_TOK_TEXT_H:
         bHeading = true;
+        SAL_FALLTHROUGH;
     case XML_TOK_TEXT_P:
         pContext = new XMLParaContext( rImport,
                                        nPrefix, rLocalName,
