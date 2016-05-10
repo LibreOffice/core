@@ -63,13 +63,13 @@ void FolderTree::FillTreeEntry( SvTreeListEntry* pEntry )
 
             if ( SUCCESS == eResult )
             {
-                for( std::vector<SortingData_Impl *>::size_type i = 0; i < aContent.size(); i++ )
+                for(SortingData_Impl* i : aContent)
                 {
-                    if( aContent[i]->mbIsFolder )
+                    if( i->mbIsFolder )
                     {
-                        SvTreeListEntry* pNewEntry = InsertEntry( aContent[i]->GetTitle(), pEntry, true );
+                        SvTreeListEntry* pNewEntry = InsertEntry( i->GetTitle(), pEntry, true );
 
-                        OUString* sData = new OUString( aContent[i]->maTargetURL );
+                        OUString* sData = new OUString( i->maTargetURL );
                         pNewEntry->SetUserData( static_cast< void* >( sData ) );
                     }
                 }

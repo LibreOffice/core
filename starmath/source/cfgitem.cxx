@@ -253,11 +253,11 @@ const SmFontFormat * SmFontFormatList::GetFontFormat( const OUString &rFntFmtId 
 {
     const SmFontFormat *pRes = nullptr;
 
-    for (size_t i = 0;  i < aEntries.size();  ++i)
+    for (const auto & rEntry : aEntries)
     {
-        if (aEntries[i].aId == rFntFmtId)
+        if (rEntry.aId == rFntFmtId)
         {
-            pRes = &aEntries[i].aFntFmt;
+            pRes = &rEntry.aFntFmt;
             break;
         }
     }
@@ -279,11 +279,11 @@ const OUString SmFontFormatList::GetFontFormatId( const SmFontFormat &rFntFmt ) 
 {
     OUString aRes;
 
-    for (size_t i = 0;  i < aEntries.size();  ++i)
+    for (const auto & rEntry : aEntries)
     {
-        if (aEntries[i].aFntFmt == rFntFmt)
+        if (rEntry.aFntFmt == rFntFmt)
         {
-            aRes = aEntries[i].aId;
+            aRes = rEntry.aId;
             break;
         }
     }

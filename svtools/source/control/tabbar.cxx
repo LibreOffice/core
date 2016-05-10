@@ -506,9 +506,9 @@ struct TabBar_Impl
 
     ~TabBar_Impl()
     {
-        for (size_t i = 0; i < mpItemList.size(); ++i)
+        for (ImplTabBarItem* i : mpItemList)
         {
-            delete mpItemList[i];
+            delete i;
         }
         mpItemList.clear();
     }
@@ -708,9 +708,8 @@ bool TabBar::ImplCalcWidth()
         mnCurMaxWidth = 0;
 
     bool bChanged = false;
-    for (size_t i = 0; i < mpImpl->mpItemList.size(); ++i)
+    for (ImplTabBarItem* pItem : mpImpl->mpItemList)
     {
-        ImplTabBarItem* pItem = mpImpl->mpItemList[i];
         long nNewWidth = GetTextWidth(pItem->maText);
         if (mnCurMaxWidth && (nNewWidth > mnCurMaxWidth))
         {
@@ -747,9 +746,8 @@ void TabBar::ImplFormat()
 
     sal_uInt16 n = 0;
     long x = mnOffX;
-    for (size_t i = 0; i < mpImpl->mpItemList.size(); ++i)
+    for (ImplTabBarItem* pItem : mpImpl->mpItemList)
     {
-        ImplTabBarItem* pItem = mpImpl->mpItemList[i];
         // At all non-visible tabs an empty rectangle is set
         if ((n + 1 < mnFirstPos) || (x > mnLastOffX))
             pItem->maRect.SetEmpty();
@@ -1149,9 +1147,9 @@ void TabBar::MouseButtonDown(const MouseEvent& rMEvt)
                             bUpdate = true;
 
                         // deselect all selected items
-                        for (size_t i = 0; i < mpImpl->mpItemList.size(); ++i)
+                        for (ImplTabBarItem* i : mpImpl->mpItemList)
                         {
-                            pItem = mpImpl->mpItemList[i];
+                            pItem = i;
                             if (pItem->mbSelect || (pItem->mnId == mnCurPageId))
                             {
                                 pItem->mbSelect = false;
@@ -1800,9 +1798,9 @@ void TabBar::MovePage(sal_uInt16 nPageId, sal_uInt16 nNewPos)
 void TabBar::Clear()
 {
     // delete all items
-    for (size_t i = 0; i < mpImpl->mpItemList.size(); ++i)
+    for (ImplTabBarItem* i : mpImpl->mpItemList)
     {
-        delete mpImpl->mpItemList[i];
+        delete i;
     }
     mpImpl->mpItemList.clear();
 
@@ -1882,9 +1880,8 @@ sal_uInt16 TabBar::GetPagePos(sal_uInt16 nPageId) const
 
 sal_uInt16 TabBar::GetPageId(const Point& rPos) const
 {
-    for (size_t i = 0; i < mpImpl->mpItemList.size(); ++i)
+    for (ImplTabBarItem* pItem : mpImpl->mpItemList)
     {
-        ImplTabBarItem* pItem = mpImpl->mpItemList[i];
         if (pItem->maRect.IsInside(rPos))
             return pItem->mnId;
     }
@@ -2084,9 +2081,8 @@ void TabBar::SelectPage(sal_uInt16 nPageId, bool bSelect)
 sal_uInt16 TabBar::GetSelectPageCount() const
 {
     sal_uInt16 nSelected = 0;
-    for (size_t i = 0; i < mpImpl->mpItemList.size();  ++i)
+    for (ImplTabBarItem* pItem : mpImpl->mpItemList)
     {
-        ImplTabBarItem* pItem = mpImpl->mpItemList[i];
         if (pItem->mbSelect)
             nSelected++;
     }
@@ -2566,9 +2562,8 @@ Size TabBar::CalcWindowSizePixel() const
     if (mpImpl->mpItemList.size() > 0)
     {
         const_cast<TabBar*>(this)->ImplCalcWidth();
-        for (size_t i = 0; i < mpImpl->mpItemList.size(); ++i)
+        for (ImplTabBarItem* pItem : mpImpl->mpItemList)
         {
-            ImplTabBarItem* pItem = mpImpl->mpItemList[i];
             nWidth += pItem->mnWidth;
         }
     }

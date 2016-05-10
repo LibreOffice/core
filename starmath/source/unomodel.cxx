@@ -845,9 +845,8 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
                 vector < const SmSym * > aVector;
 
                 const SymbolPtrVec_t aSymbols( rManager.GetSymbols() );
-                for (size_t i = 0; i < aSymbols.size(); ++i)
+                for (const SmSym* pSymbol : aSymbols)
                 {
-                    const SmSym * pSymbol = aSymbols[ i ];
                     if (pSymbol && !pSymbol->IsPredefined() &&
                         (!bUsedSymbolsOnly ||
                          rUsedSymbols.find( pSymbol->GetName() ) != rUsedSymbols.end()))

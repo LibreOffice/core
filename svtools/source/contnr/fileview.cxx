@@ -1356,9 +1356,9 @@ OUString SvtFileView::GetConfigString() const
 {
     ::std::vector< SvtContentEntry > aContent;
 
-    for( ::std::vector< SortingData_Impl* >::size_type i = 0; i < mpImp->maContent.size(); i++ )
+    for(SortingData_Impl* i : mpImp->maContent)
     {
-        SvtContentEntry aEntry( mpImp->maContent[i]->maTargetURL, mpImp->maContent[i]->mbIsFolder );
+        SvtContentEntry aEntry( i->maTargetURL, i->mbIsFolder );
         aContent.push_back( aEntry );
     }
 

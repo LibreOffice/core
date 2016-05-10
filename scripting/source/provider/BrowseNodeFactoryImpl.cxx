@@ -91,12 +91,12 @@ public:
 
         sal_Int32 numChildren = 0;
 
-        for ( size_t i = 0; i < m_Nodes.size(); i++ )
+        for (Reference<XBrowseNode> & xNode : m_Nodes)
         {
             Sequence< Reference < browse::XBrowseNode > > children;
             try
             {
-                children = m_Nodes[ i ]->getChildNodes();
+                children = xNode->getChildNodes();
                 seqs.push_back( children );
                 numChildren += children.getLength();
             }
@@ -128,11 +128,11 @@ public:
     {
         if ( !m_Nodes.empty() )
         {
-            for ( size_t i = 0 ; i < m_Nodes.size(); i++ )
+            for (Reference<XBrowseNode> & xNode : m_Nodes)
             {
                 try
                 {
-                    if ( m_Nodes[ i ]->hasChildNodes() )
+                    if ( xNode->hasChildNodes() )
                     {
                         return true;
                     }
@@ -538,9 +538,9 @@ public:
         std::vector< Reference< browse::XBrowseNode > > nodes =
             getAllBrowseNodes( xCtx );
 
-        for ( size_t i=0; i<nodes.size(); i++ )
+        for (Reference< browse::XBrowseNode > & xNode : nodes)
         {
-            m_vNodes.push_back( new DefaultBrowseNode( xCtx, nodes[ i ] ) );
+            m_vNodes.push_back( new DefaultBrowseNode( xCtx, xNode ) );
         }
         m_Name = "Root";
     }

@@ -48,8 +48,8 @@ void FileList::ClearAll()
 
 FileList& FileList::operator=( const FileList& rFileList )
 {
-    for ( size_t i = 0, n = rFileList.aStrList.size(); i < n; ++i )
-        aStrList.push_back( rFileList.aStrList[ i ] );
+    for (const auto & i : rFileList.aStrList)
+        aStrList.push_back( i );
     return *this;
 }
 

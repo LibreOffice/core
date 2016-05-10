@@ -223,8 +223,8 @@ void BrowserDataWin::dispose()
 {
     bInDtor = true;
 
-    for ( size_t i = 0, n = aInvalidRegion.size(); i < n; ++i )
-        delete aInvalidRegion[ i ];
+    for (Rectangle* i : aInvalidRegion)
+        delete i;
     aInvalidRegion.clear();
     pHeaderBar.clear();
     pEventWin.clear();
@@ -650,9 +650,9 @@ void BrowserDataWin::SetUpdateMode( bool bMode )
 
 void BrowserDataWin::DoOutstandingInvalidations()
 {
-    for ( size_t i = 0, n = aInvalidRegion.size(); i < n; ++i ) {
-        Control::Invalidate( *aInvalidRegion[ i ] );
-        delete aInvalidRegion[ i ];
+    for (Rectangle* i : aInvalidRegion) {
+        Control::Invalidate( *i );
+        delete i;
     }
     aInvalidRegion.clear();
 }
@@ -662,8 +662,8 @@ void BrowserDataWin::Invalidate( InvalidateFlags nFlags )
 {
     if ( !GetUpdateMode() )
     {
-        for ( size_t i = 0, n = aInvalidRegion.size(); i < n; ++i )
-            delete aInvalidRegion[ i ];
+        for (Rectangle* i : aInvalidRegion)
+            delete i;
         aInvalidRegion.clear();
         aInvalidRegion.push_back( new Rectangle( Point( 0, 0 ), GetOutputSizePixel() ) );
     }

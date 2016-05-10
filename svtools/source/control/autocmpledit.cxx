@@ -67,11 +67,11 @@ bool AutocompleteEdit::Match( const OUString& rText )
 
     m_aMatching.clear();
 
-    for( std::vector< OUString >::size_type i = 0; i < m_aEntries.size(); ++i )
+    for(const OUString & rEntry : m_aEntries)
     {
-        if( m_aEntries[i].startsWithIgnoreAsciiCase( rText ) )
+        if( rEntry.startsWithIgnoreAsciiCase( rText ) )
         {
-            m_aMatching.push_back( m_aEntries[i] );
+            m_aMatching.push_back( rEntry );
             bRet = true;
         }
     }
