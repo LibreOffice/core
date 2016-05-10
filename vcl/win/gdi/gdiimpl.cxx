@@ -906,7 +906,7 @@ SalColor WinSalGraphicsImpl::getPixel( long nX, long nY )
 
 void WinSalGraphicsImpl::invert( long nX, long nY, long nWidth, long nHeight, SalInvert nFlags )
 {
-    if ( nFlags & SAL_INVERT_TRACKFRAME )
+    if ( nFlags & SalInvert::TrackFrame )
     {
         HPEN    hDotPen = CreatePen( PS_DOT, 0, 0 );
         HPEN    hOldPen = SelectPen( mrParent.getHDC(), hDotPen );
@@ -920,7 +920,7 @@ void WinSalGraphicsImpl::invert( long nX, long nY, long nWidth, long nHeight, Sa
         SelectBrush( mrParent.getHDC(), hOldBrush );
         DeletePen( hDotPen );
     }
-    else if ( nFlags & SAL_INVERT_50 )
+    else if ( nFlags & SalInvert::N50 )
     {
         SalData* pSalData = GetSalData();
         if ( !pSalData->mh50Brush )
@@ -956,12 +956,12 @@ void WinSalGraphicsImpl::invert( sal_uInt32 nPoints, const SalPoint* pPtAry, Sal
     COLORREF    nOldTextColor RGB(0,0,0);
     int         nOldROP = SetROP2( mrParent.getHDC(), R2_NOT );
 
-    if ( nSalFlags & SAL_INVERT_TRACKFRAME )
+    if ( nSalFlags & SalInvert::TrackFrame )
         hPen = CreatePen( PS_DOT, 0, 0 );
     else
     {
 
-        if ( nSalFlags & SAL_INVERT_50 )
+        if ( nSalFlags & SalInvert::N50 )
         {
             SalData* pSalData = GetSalData();
             if ( !pSalData->mh50Brush )
@@ -988,7 +988,7 @@ void WinSalGraphicsImpl::invert( sal_uInt32 nPoints, const SalPoint* pPtAry, Sal
 
     pWinPtAry = (POINT*)pPtAry;
     // for Windows 95 and its maximum number of points
-    if ( nSalFlags & SAL_INVERT_TRACKFRAME )
+    if ( nSalFlags & SalInvert::TrackFrame )
     {
         if ( !Polyline( mrParent.getHDC(), pWinPtAry, (int)nPoints ) && (nPoints > MAX_64KSALPOINTS) )
             Polyline( mrParent.getHDC(), pWinPtAry, MAX_64KSALPOINTS );
@@ -1002,7 +1002,7 @@ void WinSalGraphicsImpl::invert( sal_uInt32 nPoints, const SalPoint* pPtAry, Sal
     SetROP2( mrParent.getHDC(), nOldROP );
     SelectPen( mrParent.getHDC(), hOldPen );
 
-    if ( nSalFlags & SAL_INVERT_TRACKFRAME )
+    if ( nSalFlags & SalInvert::TrackFrame )
         DeletePen( hPen );
     else
     {

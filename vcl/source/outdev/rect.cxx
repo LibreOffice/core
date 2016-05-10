@@ -154,13 +154,13 @@ void OutputDevice::Invert( const Rectangle& rRect, InvertFlags nFlags )
     if ( mbOutputClipped )
         return;
 
-    SalInvert nSalFlags = 0;
+    SalInvert nSalFlags = SalInvert::NONE;
     if ( nFlags & InvertFlags::Highlight )
-        nSalFlags |= SAL_INVERT_HIGHLIGHT;
+        nSalFlags |= SalInvert::Highlight;
     if ( nFlags & InvertFlags::N50 )
-        nSalFlags |= SAL_INVERT_50;
+        nSalFlags |= SalInvert::N50;
     if ( nFlags == (InvertFlags) 0xffff ) // vcldemo trackframe test
-        nSalFlags = SAL_INVERT_TRACKFRAME;
+        nSalFlags = SalInvert::TrackFrame;
     mpGraphics->Invert( aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight(), nSalFlags, this );
 }
 
@@ -190,11 +190,11 @@ void OutputDevice::Invert( const tools::Polygon& rPoly, InvertFlags nFlags )
     if ( mbOutputClipped )
         return;
 
-    SalInvert nSalFlags = 0;
+    SalInvert nSalFlags = SalInvert::NONE;
     if ( nFlags & InvertFlags::Highlight )
-        nSalFlags |= SAL_INVERT_HIGHLIGHT;
+        nSalFlags |= SalInvert::Highlight;
     if ( nFlags & InvertFlags::N50 )
-        nSalFlags |= SAL_INVERT_50;
+        nSalFlags |= SalInvert::N50;
     const SalPoint* pPtAry = reinterpret_cast<const SalPoint*>(aPoly.GetConstPointAry());
     mpGraphics->Invert( nPoints, pPtAry, nSalFlags, this );
 }

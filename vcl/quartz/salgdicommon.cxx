@@ -1690,7 +1690,7 @@ void AquaSalGraphics::invert( long nX, long nY, long nWidth, long nHeight, SalIn
         SAL_INFO( "vcl.cg", "CGContextSaveGState(" << mrContext << ") " << ++mnContextStackDepth);
         CGContextSaveGState(mrContext);
 
-        if ( nFlags & SAL_INVERT_TRACKFRAME )
+        if ( nFlags & SalInvert::TrackFrame )
         {
             const CGFloat dashLengths[2]  = { 4.0, 4.0 };     // for drawing dashed line
             CGContextSetBlendMode( mrContext, kCGBlendModeDifference );
@@ -1701,7 +1701,7 @@ void AquaSalGraphics::invert( long nX, long nY, long nWidth, long nHeight, SalIn
             SAL_INFO( "vcl.cg", "CGContextStrokeRect(" << mrContext << "," << aCGRect << ")" );
             CGContextStrokeRect ( mrContext, aCGRect );
         }
-        else if ( nFlags & SAL_INVERT_50 )
+        else if ( nFlags & SalInvert::N50 )
         {
             //CGContextSetAllowsAntialiasing( mrContext, false );
             CGContextSetBlendMode(mrContext, kCGBlendModeDifference);
@@ -1748,7 +1748,7 @@ void AquaSalGraphics::invert( sal_uInt32 nPoints, const SalPoint*  pPtAry, SalIn
         CGContextSaveGState(mrContext);
         CGPoint* CGpoints = makeCGptArray(nPoints,pPtAry);
         CGContextAddLines ( mrContext, CGpoints, nPoints );
-        if ( nSalFlags & SAL_INVERT_TRACKFRAME )
+        if ( nSalFlags & SalInvert::TrackFrame )
         {
             const CGFloat dashLengths[2]  = { 4.0, 4.0 };     // for drawing dashed line
             CGContextSetBlendMode( mrContext, kCGBlendModeDifference );
@@ -1759,7 +1759,7 @@ void AquaSalGraphics::invert( sal_uInt32 nPoints, const SalPoint*  pPtAry, SalIn
             SAL_INFO( "vcl.cg", "CGContextStrokePath(" << mrContext << ")" );
             CGContextStrokePath ( mrContext );
         }
-        else if ( nSalFlags & SAL_INVERT_50 )
+        else if ( nSalFlags & SalInvert::N50 )
         {
             CGContextSetBlendMode(mrContext, kCGBlendModeDifference);
             Pattern50Fill();
