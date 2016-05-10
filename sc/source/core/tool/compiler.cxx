@@ -1260,7 +1260,7 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
     virtual void makeRefStr( OUStringBuffer&   rBuf,
                      formula::FormulaGrammar::Grammar /*eGram*/,
                      const ScAddress& rPos,
-                     const OUString& /*rErrRef*/, const std::vector<OUString>& rTabNames,
+                     const OUString& rErrRef, const std::vector<OUString>& rTabNames,
                      const ScComplexRefData& rRef,
                      bool bSingleRef,
                      bool /*bFromRangeName*/ ) const override
@@ -1275,7 +1275,7 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
 
         if (!ValidAddress(aAbs1))
         {
-            rBuf.append(ScGlobal::GetRscString(STR_NO_REF_TABLE));
+            rBuf.append(rErrRef);
             return;
         }
 
@@ -1284,7 +1284,7 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
             aAbs2 = aRef.Ref2.toAbs(rPos);
             if (!ValidAddress(aAbs2))
             {
-                rBuf.append(ScGlobal::GetRscString(STR_NO_REF_TABLE));
+                rBuf.append(rErrRef);
                 return;
             }
 
