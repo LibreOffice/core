@@ -300,6 +300,7 @@ FileHandleReader::readLine(OString * pLine)
             {
             case 0x0D:
                 m_bLf = true;
+                SAL_FALLTHROUGH;
             case 0x0A:
                 *pLine += OString(m_aBuffer + nStart,
                                        m_nIndex - 1 - nStart);
@@ -360,6 +361,7 @@ void AsynchReader::execute()
         {
         case osl_File_E_PIPE: //HACK! for windows
             nRead = 0;
+            SAL_FALLTHROUGH;
         case osl_File_E_None:
             break;
         default:
