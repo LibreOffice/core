@@ -1170,6 +1170,7 @@ FileViewResult SvtFileView::Initialize(
 
     case eStillRunning:
         OSL_ENSURE( pAsyncDescriptor, "SvtFileView::Initialize: we told it to read synchronously!" );
+        SAL_FALLTHROUGH;
     case eSuccess:
         return eResult;
     }

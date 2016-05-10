@@ -1760,6 +1760,7 @@ int HTMLParser::FilterXMP( int nToken )
     case HTML_NEWPARA:
         if( bPre_IgnoreNewPara )
             nToken = 0;
+        SAL_FALLTHROUGH;
     case HTML_TEXTTOKEN:
     case HTML_NONBREAKSPACE:
     case HTML_SOFTHYPH:
@@ -1800,6 +1801,7 @@ int HTMLParser::FilterListing( int nToken )
     case HTML_NEWPARA:
         if( bPre_IgnoreNewPara )
             nToken = 0;
+        SAL_FALLTHROUGH;
     case HTML_TEXTTOKEN:
     case HTML_NONBREAKSPACE:
     case HTML_SOFTHYPH:

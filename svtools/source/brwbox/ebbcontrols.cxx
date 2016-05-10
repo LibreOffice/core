@@ -109,6 +109,7 @@ namespace svt
             case KEY_RETURN:
                 if (rBox.IsInDropDown())
                     return false;
+                SAL_FALLTHROUGH;
             default:
                 return true;
         }
@@ -188,6 +189,7 @@ namespace svt
             case KEY_PAGEDOWN:
                 if (rBox.IsTravelSelect())
                     return false;
+                SAL_FALLTHROUGH;
             default:
                 return true;
         }
