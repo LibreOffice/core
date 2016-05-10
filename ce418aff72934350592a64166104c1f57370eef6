@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_230ec934",
+        "filename": "sw/source/core/unocore/unostyle.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1001243
+      },
+      "writtenOn": "2016-05-10T14:22:58Z",
+      "side": 1,
+      "message": "not sorted yet",
+      "revId": "ce418aff72934350592a64166104c1f57370eef6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_0309c52c",
+        "filename": "sw/source/core/unocore/unostyle.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 466,
+      "author": {
+        "id": 1001243
+      },
+      "writtenOn": "2016-05-10T14:22:58Z",
+      "side": 1,
+      "message": "this approach would be applied to all SwXStyleFamilies interfaces",
+      "revId": "ce418aff72934350592a64166104c1f57370eef6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
