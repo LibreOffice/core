@@ -3036,6 +3036,7 @@ sal_Int32 SvNumberformat::ImpUseMonthCase( int & io_nState, const ImpSvNumFor& r
         default:
             ;   // nothing
         }
+        break;
     case 2:
         // Day of month follows month (the month's 17th)
         switch (eCodeType)
@@ -3049,6 +3050,7 @@ sal_Int32 SvNumberformat::ImpUseMonthCase( int & io_nState, const ImpSvNumFor& r
         default:
             ;   // Nothing
         }
+        break;
     case 3:
         // Day of month precedes month (17 of month)
         switch (eCodeType)
@@ -3062,6 +3064,7 @@ sal_Int32 SvNumberformat::ImpUseMonthCase( int & io_nState, const ImpSvNumFor& r
         default:
             ;   // nothing
         }
+        break;
     }
     SAL_WARN( "svl.numbers", "ImpUseMonthCase: unhandled keyword index eCodeType");
     return CalendarDisplayCode::LONG_MONTH_NAME;
