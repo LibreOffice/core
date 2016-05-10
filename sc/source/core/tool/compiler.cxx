@@ -1541,7 +1541,7 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
     virtual void makeRefStr( OUStringBuffer&   rBuf,
                      formula::FormulaGrammar::Grammar /*eGram*/,
                      const ScAddress& rPos,
-                     const OUString& /*rErrRef*/, const std::vector<OUString>& rTabNames,
+                     const OUString& rErrRef, const std::vector<OUString>& rTabNames,
                      const ScComplexRefData& rRef,
                      bool bSingleRef,
                      bool /*bFromRangeName*/ ) const override
@@ -1555,7 +1555,7 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
         // Foo!A1:#REF! versus #REF! at this point
         if (!ValidCol(aAbsRef.aStart.Col()) || !ValidRow(aAbsRef.aStart.Row()))
         {
-            rBuf.append(ScGlobal::GetRscString(STR_NO_REF_TABLE));
+            rBuf.append(rErrRef);
             return;
         }
 
@@ -1563,7 +1563,7 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
         {
             if (!ValidCol(aAbsRef.aEnd.Col()) || !ValidRow(aAbsRef.aEnd.Row()))
             {
-                rBuf.append(ScGlobal::GetRscString(STR_NO_REF_TABLE));
+                rBuf.append(rErrRef);
                 return;
             }
 
