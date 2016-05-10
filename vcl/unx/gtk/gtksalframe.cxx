@@ -3749,7 +3749,8 @@ void GtkSalFrame::IMHandler::signalIMPreeditChanged( GtkIMContext*, gpointer im_
             switch (pango_attr->klass->type)
             {
                 case PANGO_ATTR_BACKGROUND:
-                    sal_attr |= (EXTTEXTINPUT_ATTR_HIGHLIGHT | EXTTEXTINPUT_CURSOR_INVISIBLE);
+                    sal_attr |= EXTTEXTINPUT_ATTR_HIGHLIGHT;
+                    pThis->m_aInputEvent.mnCursorFlags |= EXTTEXTINPUT_CURSOR_INVISIBLE;
                     break;
                 case PANGO_ATTR_UNDERLINE:
                     sal_attr |= EXTTEXTINPUT_ATTR_UNDERLINE;
