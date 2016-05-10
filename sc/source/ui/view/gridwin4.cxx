@@ -1615,9 +1615,7 @@ void ScGridWindow::GetSelectionRects( ::std::vector< Rectangle >& rPixelRects )
     {
         SCCOL nMaxTiledCol;
         SCROW nMaxTiledRow;
-        pDoc->GetTiledRenderingArea( nTab, nMaxTiledCol, nMaxTiledRow );
-        nMaxTiledCol = std::max(nMaxTiledCol, pViewData->GetMaxTiledCol());
-        nMaxTiledRow = std::max(nMaxTiledRow, pViewData->GetMaxTiledRow());
+        pDoc->GetTiledRenderingArea(nTab, nMaxTiledCol, nMaxTiledRow);
 
         if (nX2 > nMaxTiledCol)
             nX2 = nMaxTiledCol;
