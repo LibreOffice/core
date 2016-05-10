@@ -129,7 +129,7 @@ public:
                 long nDestX, long nDestY,
                 long nSrcX, long nSrcY,
                 long nSrcWidth, long nSrcHeight,
-                sal_uInt16 nFlags ) = 0;
+                bool bWindowInvalidate ) = 0;
 
     // CopyBits and DrawBitmap --> RasterOp and ClipRegion
     // CopyBits() --> pSrcGraphics == NULL, then CopyBits on same Graphics

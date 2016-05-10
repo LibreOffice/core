@@ -206,7 +206,7 @@ public:
                                         long nSrcY,
                                         long nSrcWidth,
                                         long nSrcHeight,
-                                        sal_uInt16 nFlags ) override;
+                                        bool bWindowInvalidate ) override;
 
     virtual void                    copyBits(
                                         const SalTwoRect& rPosAry,
