@@ -25,6 +25,9 @@ def select_entry_pos(xContext):
     actionProps = mkPropertyValues(props)
     categoryLB.executeAction("SELECT", actionProps)
 
+    xOkBtn = xCellsDlg.getChild("ok")
+    xOkBtn.executeAction("CLICK", tuple())
+
     ui_test.close_doc()
 
 def select_entry_text(xContext):
@@ -43,6 +46,9 @@ def select_entry_text(xContext):
 
     actionProps = mkPropertyValues(props)
     categoryLB.executeAction("SELECT", actionProps)
+
+    xOkBtn = xCellsDlg.getChild("ok")
+    xOkBtn.executeAction("CLICK", tuple())
 
     ui_test.close_doc()
 

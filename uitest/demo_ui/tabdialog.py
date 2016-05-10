@@ -26,6 +26,9 @@ def select_tab_page_pos(xContext):
     propsUNO = mkPropertyValues(props)
     xCellsDlg.executeAction("SELECT", propsUNO)
 
+    xOkBtn = xCellsDlg.getChild("ok")
+    xOkBtn.executeAction("CLICK", tuple())
+
     ui_test.close_doc()
 
 def select_tab_page_name(xContext):
@@ -42,6 +45,9 @@ def select_tab_page_name(xContext):
     props = {"NAME": "Borders"}
     propsUNO = mkPropertyValues(props)
     xCellsDlg.executeAction("SELECT", propsUNO)
+
+    xOkBtn = xCellsDlg.getChild("ok")
+    xOkBtn.executeAction("CLICK", tuple())
 
     ui_test.close_doc()
 
