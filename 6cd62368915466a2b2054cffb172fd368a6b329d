@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_e386a164",
+        "filename": "vcl/unx/generic/glyphs/gcach_layout.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 542,
+      "author": {
+        "id": 1000381
+      },
+      "writtenOn": "2016-05-10T16:36:46Z",
+      "side": 0,
+      "message": "You should update the last part of this comment to reflect the new reality.",
+      "revId": "6cd62368915466a2b2054cffb172fd368a6b329d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
