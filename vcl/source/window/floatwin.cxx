@@ -648,15 +648,15 @@ void FloatingWindow::SetTitleType( FloatWinTitleType nTitle )
     {
         mnTitle = nTitle;
         Size aOutSize = GetOutputSizePixel();
-        sal_uInt16 nTitleStyle;
+        BorderWindowTitleType nTitleStyle;
         if ( nTitle == FloatWinTitleType::Normal )
-            nTitleStyle = BORDERWINDOW_TITLE_SMALL;
+            nTitleStyle = BorderWindowTitleType::Small;
         else if ( nTitle == FloatWinTitleType::TearOff )
-            nTitleStyle = BORDERWINDOW_TITLE_TEAROFF;
+            nTitleStyle = BorderWindowTitleType::Tearoff;
         else if ( nTitle == FloatWinTitleType::Popup )
-            nTitleStyle = BORDERWINDOW_TITLE_POPUP;
+            nTitleStyle = BorderWindowTitleType::Popup;
         else // nTitle == FloatWinTitleType::NONE
-            nTitleStyle = BORDERWINDOW_TITLE_NONE;
+            nTitleStyle = BorderWindowTitleType::NONE;
         static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow.get())->SetTitleType( nTitleStyle, aOutSize );
         static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow.get())->GetBorder( mpWindowImpl->mnLeftBorder, mpWindowImpl->mnTopBorder, mpWindowImpl->mnRightBorder, mpWindowImpl->mnBottomBorder );
     }

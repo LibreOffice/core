@@ -22,6 +22,7 @@
 
 #include <vcl/notebookbar.hxx>
 #include <vcl/window.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
 #include <com/sun/star/frame/XFrame.hpp>
 
@@ -72,11 +73,16 @@ enum class DrawButtonFlags;
                                              BORDERWINDOW_DRAW_PIN  |       \
                                              BORDERWINDOW_DRAW_MENU)
 
-#define BORDERWINDOW_TITLE_NORMAL           ((sal_uInt16)0x0001)
-#define BORDERWINDOW_TITLE_SMALL            ((sal_uInt16)0x0002)
-#define BORDERWINDOW_TITLE_TEAROFF          ((sal_uInt16)0x0004)
-#define BORDERWINDOW_TITLE_POPUP            ((sal_uInt16)0x0008)
-#define BORDERWINDOW_TITLE_NONE             ((sal_uInt16)0x0010)
+enum class BorderWindowTitleType {
+    Normal           = 0x0001,
+    Small            = 0x0002,
+    Tearoff          = 0x0004,
+    Popup            = 0x0008,
+    NONE             = 0x0010
+};
+namespace o3tl {
+    template<> struct typed_flags<BorderWindowTitleType> : is_typed_flags<BorderWindowTitleType, 0x001f> {};
+};
 
 class ImplBorderWindow : public vcl::Window
 {
@@ -95,7 +101,7 @@ private:
     long                    mnMaxHeight;
     long                    mnRollHeight;
     long                    mnOrgMenuHeight;
-    sal_uInt16              mnTitleType;
+    BorderWindowTitleType   mnTitleType;
     WindowBorderStyle       mnBorderStyle;
     bool                    mbFloatWindow;
     bool                    mbSmallOutBorder;
@@ -148,7 +154,7 @@ public:
     void                    Draw( const Rectangle& rRect, OutputDevice* pDev, const Point& rPos );
 
     void                    SetDisplayActive( bool bActive );
-    void                    SetTitleType( sal_uInt16 nTitleType, const Size& rSize );
+    void                    SetTitleType( BorderWindowTitleType nTitleType, const Size& rSize );
     void                    SetBorderStyle( WindowBorderStyle nStyle );
     WindowBorderStyle       GetBorderStyle() const { return mnBorderStyle; }
     void                    SetPin( bool bPin );
@@ -213,7 +219,7 @@ struct ImplBorderFrameData
     DrawButtonFlags          mnMenuState;
     DrawButtonFlags          mnHideState;
     DrawButtonFlags          mnHelpState;
-    sal_uInt16               mnTitleType;
+    BorderWindowTitleType    mnTitleType;
     bool                     mbFloatWindow;
     bool                     mbDragFull;
     bool                     mbTitleClipped;
