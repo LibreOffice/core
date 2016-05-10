@@ -549,7 +549,7 @@ PhysicalFontFamily* PhysicalFontCollection::FindFontFamilyByAttributes( ImplFont
             {
                 nTestMatch += 10000000*5;
             }
-            else if ( pData->GetTypeFaces() & FONT_FAMILY_SYMBOL )
+            else if ( pData->GetTypeFaces() & FontTypeFaces::Symbol )
             {
                 nTestMatch += 10000000*4;
             }
@@ -561,7 +561,7 @@ PhysicalFontFamily* PhysicalFontCollection::FindFontFamilyByAttributes( ImplFont
                     nTestMatch += 10000000;
             }
         }
-        else if ( (pData->GetTypeFaces() & (FONT_FAMILY_SYMBOL | FONT_FAMILY_NONESYMBOL)) == FONT_FAMILY_SYMBOL )
+        else if ( (pData->GetTypeFaces() & (FontTypeFaces::Symbol | FontTypeFaces::NoneSymbol)) == FontTypeFaces::Symbol )
         {
             nTestMatch -= 10000000;
         }
@@ -728,14 +728,14 @@ PhysicalFontFamily* PhysicalFontCollection::FindFontFamilyByAttributes( ImplFont
         // test ITALIC attribute
         if( nSearchType & ImplFontAttrs::Italic )
         {
-            if( pData->GetTypeFaces() & FONT_FAMILY_ITALIC )
+            if( pData->GetTypeFaces() & FontTypeFaces::Italic )
                 nTestMatch += 1000000*3;
             if( nMatchType & ImplFontAttrs::Italic )
                 nTestMatch += 1000000;
         }
         else if( !(nSearchType & ImplFontAttrs::AllScript) &&
                  ((nMatchType & ImplFontAttrs::Italic) ||
-                  !(pData->GetTypeFaces() & FONT_FAMILY_NONEITALIC)) )
+                  !(pData->GetTypeFaces() & FontTypeFaces::NoneItalic)) )
         {
             nTestMatch -= 1000000*2;
         }
@@ -770,14 +770,14 @@ PhysicalFontFamily* PhysicalFontCollection::FindFontFamilyByAttributes( ImplFont
         {
             if( eSearchWeight < WEIGHT_NORMAL )
             {
-                if( pData->GetTypeFaces() & FONT_FAMILY_LIGHT )
+                if( pData->GetTypeFaces() & FontTypeFaces::Light )
                     nTestMatch += 1000000;
                 if( (eMatchWeight < WEIGHT_NORMAL) && (eMatchWeight != WEIGHT_DONTKNOW) )
                     nTestMatch += 1000000;
             }
             else
             {
-                if( pData->GetTypeFaces() & FONT_FAMILY_BOLD )
+                if( pData->GetTypeFaces() & FontTypeFaces::Bold )
                     nTestMatch += 1000000;
                 if( eMatchWeight > WEIGHT_BOLD )
                     nTestMatch += 1000000;
@@ -786,13 +786,13 @@ PhysicalFontFamily* PhysicalFontCollection::FindFontFamilyByAttributes( ImplFont
         else if( ((eMatchWeight != WEIGHT_DONTKNOW) &&
                   (eMatchWeight != WEIGHT_NORMAL) &&
                   (eMatchWeight != WEIGHT_MEDIUM)) ||
-                 !(pData->GetTypeFaces() & FONT_FAMILY_NORMAL) )
+                 !(pData->GetTypeFaces() & FontTypeFaces::Normal) )
         {
             nTestMatch -= 1000000;
         }
 
         // prefer scalable fonts
-        if( pData->GetTypeFaces() & FONT_FAMILY_SCALABLE )
+        if( pData->GetTypeFaces() & FontTypeFaces::Scalable )
             nTestMatch += 10000*4;
         else
             nTestMatch -= 10000*4;
@@ -1269,14 +1269,14 @@ PhysicalFontFamily* PhysicalFontCollection::FindFontFamily( FontSelectPattern& r
         // overwrite font selection attributes using info from the typeface flags
         if( (eSearchWeight >= WEIGHT_BOLD) &&
             (eSearchWeight > rFSD.GetWeight()) &&
-            (pFoundData->GetTypeFaces() & FONT_FAMILY_BOLD) )
+            (pFoundData->GetTypeFaces() & FontTypeFaces::Bold) )
         {
             rFSD.SetWeight( eSearchWeight );
         }
         else if( (eSearchWeight < WEIGHT_NORMAL) &&
                  (eSearchWeight < rFSD.GetWeight()) &&
                  (eSearchWeight != WEIGHT_DONTKNOW) &&
-                 (pFoundData->GetTypeFaces() & FONT_FAMILY_LIGHT) )
+                 (pFoundData->GetTypeFaces() & FontTypeFaces::Light) )
         {
             rFSD.SetWeight( eSearchWeight );
         }
@@ -1284,7 +1284,7 @@ PhysicalFontFamily* PhysicalFontCollection::FindFontFamily( FontSelectPattern& r
         if( (nSearchType & ImplFontAttrs::Italic) &&
             ((rFSD.GetItalic() == ITALIC_DONTKNOW) ||
              (rFSD.GetItalic() == ITALIC_NONE)) &&
-            (pFoundData->GetTypeFaces() & FONT_FAMILY_ITALIC) )
+            (pFoundData->GetTypeFaces() & FontTypeFaces::Italic) )
         {
             rFSD.SetItalic( ITALIC_NORMAL );
         }

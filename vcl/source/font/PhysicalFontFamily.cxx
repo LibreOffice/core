@@ -87,7 +87,7 @@ static ImplFontAttrs lcl_IsCJKFont( const OUString& rFontName )
 
 PhysicalFontFamily::PhysicalFontFamily( const OUString& rSearchName )
 :   maSearchName( rSearchName ),
-    mnTypeFaces( 0 ),
+    mnTypeFaces( FontTypeFaces::NONE ),
     meFamily( FAMILY_DONTKNOW ),
     mePitch( PITCH_DONTKNOW ),
     mnMinQuality( -1 ),
@@ -129,28 +129,28 @@ bool PhysicalFontFamily::AddFontFace( PhysicalFontFace* pNewFontFace )
 
     // set attributes for attribute based font matching
     if( pNewFontFace->IsScalable() )
-        mnTypeFaces |= FONT_FAMILY_SCALABLE;
+        mnTypeFaces |= FontTypeFaces::Scalable;
 
     if( pNewFontFace->IsSymbolFont() )
-        mnTypeFaces |= FONT_FAMILY_SYMBOL;
+        mnTypeFaces |= FontTypeFaces::Symbol;
     else
-        mnTypeFaces |= FONT_FAMILY_NONESYMBOL;
+        mnTypeFaces |= FontTypeFaces::NoneSymbol;
 
     if( pNewFontFace->GetWeight() != WEIGHT_DONTKNOW )
     {
         if( pNewFontFace->GetWeight() >= WEIGHT_SEMIBOLD )
-            mnTypeFaces |= FONT_FAMILY_BOLD;
+            mnTypeFaces |= FontTypeFaces::Bold;
         else if( pNewFontFace->GetWeight() <= WEIGHT_SEMILIGHT )
-            mnTypeFaces |= FONT_FAMILY_LIGHT;
+            mnTypeFaces |= FontTypeFaces::Light;
         else
-            mnTypeFaces |= FONT_FAMILY_NORMAL;
+            mnTypeFaces |= FontTypeFaces::Normal;
     }
 
     if( pNewFontFace->GetItalic() == ITALIC_NONE )
-        mnTypeFaces |= FONT_FAMILY_NONEITALIC;
+        mnTypeFaces |= FontTypeFaces::NoneItalic;
     else if( (pNewFontFace->GetItalic() == ITALIC_NORMAL)
          ||  (pNewFontFace->GetItalic() == ITALIC_OBLIQUE) )
-        mnTypeFaces |= FONT_FAMILY_ITALIC;
+        mnTypeFaces |= FontTypeFaces::Italic;
 
     // reassign name (sharing saves memory)
     if( pNewFontFace->GetFamilyName() == GetFamilyName() )
