@@ -56,7 +56,7 @@ public:
         const OUString& str2 ) throw(css::uno::RuntimeException, std::exception) override;
 
 protected:
-    sal_uInt8 nMappingType;
+    MappingType nMappingType;
 };
 
 class Transliteration_u2l : public Transliteration_body
@@ -75,7 +75,7 @@ class Transliteration_casemapping : public Transliteration_body
 {
 public:
     Transliteration_casemapping();
-    void SAL_CALL setMappingType(const sal_uInt8 rMappingType, const css::lang::Locale& rLocale );
+    void SAL_CALL setMappingType(const MappingType rMappingType, const css::lang::Locale& rLocale );
 };
 
 class Transliteration_togglecase : public Transliteration_body

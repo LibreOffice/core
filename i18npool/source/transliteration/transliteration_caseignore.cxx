@@ -31,7 +31,7 @@ namespace com { namespace sun { namespace star { namespace i18n {
 
 Transliteration_caseignore::Transliteration_caseignore()
 {
-    nMappingType = MappingTypeFullFolding;
+    nMappingType = MappingType::FullFolding;
     moduleLoaded = (TransliterationModules)0;
     transliterationName = "case ignore (generic)";
     implementationName = "com.sun.star.i18n.Transliteration.Transliteration_caseignore";
