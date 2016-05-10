@@ -1171,6 +1171,7 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
                         break;
                     }
                 }
+                SAL_FALLTHROUGH;
             default:
             {
                 // For INetProtocol::File, allow an empty authority ("//") to be
