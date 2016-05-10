@@ -4034,6 +4034,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
             if (pWrdCnt)
                 pWrdCnt->UpdateCounts();
             }
+            SAL_FALLTHROUGH;
 
         case MOUSE_LEFT + KEY_SHIFT:
         case MOUSE_LEFT + KEY_SHIFT + KEY_MOD1:
@@ -4478,6 +4479,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                 bCallBase = false;
                 break;
             }
+            SAL_FALLTHROUGH;
         case MOUSE_LEFT + KEY_MOD1:
         case MOUSE_LEFT + KEY_MOD2:
         case MOUSE_LEFT + KEY_SHIFT + KEY_MOD1:

@@ -1586,6 +1586,7 @@ void SwHTMLParser::InsertInput()
 
     case HTML_IT_BUTTON:
         bKeepCRLFInValue = true;
+        SAL_FALLTHROUGH;
     case HTML_IT_SUBMIT:
     case HTML_IT_RESET:
         pType = "CommandButton";
