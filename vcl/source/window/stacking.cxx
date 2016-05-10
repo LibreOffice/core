@@ -252,13 +252,13 @@ void Window::ImplToTop( ToTopFlags nFlags )
             // do not bring floating windows on the client to top
             if( !ImplGetClientWindow() || !(ImplGetClientWindow()->GetStyle() & WB_SYSTEMFLOATWIN) )
             {
-                sal_uInt16 nSysFlags = 0;
+                SalFrameToTop nSysFlags = SalFrameToTop::NONE;
                 if ( nFlags & ToTopFlags::RestoreWhenMin )
-                    nSysFlags |= SAL_FRAME_TOTOP_RESTOREWHENMIN;
+                    nSysFlags |= SalFrameToTop::RestoreWhenMin;
                 if ( nFlags & ToTopFlags::ForegroundTask )
-                    nSysFlags |= SAL_FRAME_TOTOP_FOREGROUNDTASK;
+                    nSysFlags |= SalFrameToTop::ForegroundTask;
                 if ( nFlags & ToTopFlags::GrabFocusOnly )
-                    nSysFlags |= SAL_FRAME_TOTOP_GRABFOCUS_ONLY;
+                    nSysFlags |= SalFrameToTop::GrabFocusOnly;
                 mpWindowImpl->mpFrame->ToTop( nSysFlags );
             }
         }
@@ -985,7 +985,7 @@ void Window::SetParent( vcl::Window* pNewParent )
         mpWindowImpl->mpFrameData->mpFocusWin = Application::GetFocusWindow();
         if ( !mpWindowImpl->mpFrameData->mbHasFocus )
         {
-            mpWindowImpl->mpFrame->ToTop( 0 );
+            mpWindowImpl->mpFrame->ToTop( SalFrameToTop::NONE );
         }
     }
 

@@ -90,7 +90,7 @@ public:
     virtual void                ShowFullScreen( bool bFullScreen, sal_Int32 nDisplay ) override;
     virtual void                StartPresentation( bool bStart ) override;
     virtual void                SetAlwaysOnTop( bool bOnTop ) override;
-    virtual void                ToTop( sal_uInt16 nFlags ) override;
+    virtual void                ToTop( SalFrameToTop nFlags ) override;
     virtual void                SetPointer( PointerStyle ePointerStyle ) override;
     virtual void                CaptureMouse( bool bMouse ) override;
     virtual void                SetPointerPos( long nX, long nY ) override;
