@@ -1922,8 +1922,10 @@ static sal_Unicode* lcl_UnicodeStrNCpy( sal_Unicode* pDst, const sal_Unicode* pS
 
 // NextSymbol
 
-// Parses the formula into separate symbols for further
-// processing (Turing-Machine).
+// Parses the formula into separate symbols for further processing.
+// XXX NOTE: this is a rough sketch of the original idea, there are other
+// states that were added and didn't make it into this table and things are
+// more complicated. Use the source, Luke.
 
 // initial state = GetChar
 
