@@ -18,6 +18,11 @@
 
 interface ImpressDocument : DrawDocument
 {
+    SID_NOTEBOOKBAR
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+    ]
 }
 
 shell DrawDocShell
