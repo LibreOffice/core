@@ -46,6 +46,9 @@ public:
     css::uno::Sequence<css::beans::PropertyValue> SAL_CALL getState()
         throw (css::uno::RuntimeException, std::exception) override;
 
+    css::uno::Sequence<OUString> SAL_CALL getChildren()
+        throw (css::uno::RuntimeException, std::exception) override;
+
     OUString SAL_CALL getType()
         throw (css::uno::RuntimeException, std::exception) override;
 

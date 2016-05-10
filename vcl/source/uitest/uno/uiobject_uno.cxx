@@ -10,6 +10,8 @@
 #include "uiobject_uno.hxx"
 #include <vcl/svapp.hxx>
 
+#include <set>
+
 UIObjectUnoObj::UIObjectUnoObj(std::unique_ptr<UIObject> pObj):
     UIObjectBase(m_aMutex),
     mpObj(std::move(pObj))
@@ -67,6 +69,24 @@ css::uno::Sequence<css::beans::PropertyValue> UIObjectUnoObj::getState()
     }
 
     return aProps;
+}
+
+css::uno::Sequence<OUString> UIObjectUnoObj::getChildren()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    if (!mpObj)
+        throw css::uno::RuntimeException();
+
+    std::set<OUString> aChildren = mpObj->get_children();
+
+    css::uno::Sequence<OUString> aRet(aChildren.size());
+    sal_Int32 i = 0;
+    for (auto itr = aChildren.begin(), itrEnd = aChildren.end(); itr != itrEnd; ++itr, ++i)
+    {
+        aRet[i] = *itr;
+    }
+
+    return aRet;
 }
 
 OUString SAL_CALL UIObjectUnoObj::getType()
