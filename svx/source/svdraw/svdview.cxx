@@ -1135,6 +1135,7 @@ Pointer SdrView::GetPreferredPointer(const Point& rMousePos, const OutputDevice*
                     if (!IsCrookAllowed(true) && !IsCrookAllowed()) return Pointer(PointerStyle::NotAllowed);
                     return Pointer(PointerStyle::Crook);
                 }
+                break;
             }
 
             case SDRDRAG_CROP:
