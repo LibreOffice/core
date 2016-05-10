@@ -1426,7 +1426,7 @@ HFONT WinSalGraphics::ImplDoSetFont( FontSelectPattern* i_pFont, float& o_rFontS
     return hNewFont;
 }
 
-sal_uInt16 WinSalGraphics::SetFont( FontSelectPattern* pFont, int nFallbackLevel )
+void WinSalGraphics::SetFont( FontSelectPattern* pFont, int nFallbackLevel )
 {
     // return early if there is no new font
     if( !pFont )
@@ -1449,7 +1449,7 @@ sal_uInt16 WinSalGraphics::SetFont( FontSelectPattern* pFont, int nFallbackLevel
             mpWinFontData[i] = nullptr;
         }
         mhDefFont = 0;
-        return 0;
+        return;
     }
 
     assert(pFont->mpFontData);
@@ -1505,14 +1505,6 @@ sal_uInt16 WinSalGraphics::SetFont( FontSelectPattern* pFont, int nFallbackLevel
         }
         mnFontKernPairCount = 0;
     }
-
-    // some printers have higher internal resolution, so their
-    // text output would be different from what we calculated
-    // => suggest DrawTextArray to workaround this problem
-    if ( mbPrinter )
-        return SAL_SETFONT_USEDRAWTEXTARRAY;
-    else
-        return 0;
 }
 
 void WinSalGraphics::GetFontMetric( ImplFontMetricDataPtr& rxFontMetric, int nFallbackLevel )

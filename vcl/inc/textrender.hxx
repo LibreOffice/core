@@ -36,7 +36,7 @@ public:
     virtual ~TextRenderImpl() {}
 
     virtual void                    SetTextColor( SalColor nSalColor ) = 0;
-    virtual sal_uInt16              SetFont( FontSelectPattern*, int nFallbackLevel ) = 0;
+    virtual void                    SetFont( FontSelectPattern*, int nFallbackLevel ) = 0;
     virtual void                    GetFontMetric( ImplFontMetricDataPtr&, int nFallbackLevel ) = 0;
     virtual const FontCharMapPtr    GetFontCharMap() const = 0;
     virtual bool                    GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const = 0;

@@ -44,7 +44,6 @@ LogicalFontInstance::LogicalFontInstance( const FontSelectPattern& rFontSelData 
     , mpConversion( nullptr )
     , mnLineHeight( 0 )
     , mnRefCount( 1 )
-    , mnSetFontFlags( 0 )
     , mnOwnOrientation( 0 )
     , mnOrientation( 0 )
     , mbInit( false )

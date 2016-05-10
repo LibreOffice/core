@@ -417,7 +417,7 @@ void AquaSalGraphics::DrawServerFontLayout( const ServerFontLayout& )
 {
 }
 
-sal_uInt16 AquaSalGraphics::SetFont( FontSelectPattern* pReqFont, int /*nFallbackLevel*/ )
+void AquaSalGraphics::SetFont( FontSelectPattern* pReqFont, int /*nFallbackLevel*/ )
 {
     // release the text style
     delete mpTextStyle;
@@ -427,7 +427,7 @@ sal_uInt16 AquaSalGraphics::SetFont( FontSelectPattern* pReqFont, int /*nFallbac
     if( !pReqFont )
     {
         mpFontData = nullptr;
-        return 0;
+        return;
     }
 
     // update the text style
@@ -446,8 +446,6 @@ sal_uInt16 AquaSalGraphics::SetFont( FontSelectPattern* pReqFont, int /*nFallbac
             << " size="   << pReqFont->mnHeight << "x" << pReqFont->mnWidth
             << " orientation=" << pReqFont->mnOrientation
             );
-
-    return 0;
 }
 
 SalLayout* AquaSalGraphics::GetTextLayout( ImplLayoutArgs& /*rArgs*/, int /*nFallbackLevel*/ )

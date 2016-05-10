@@ -92,7 +92,7 @@ public:
     virtual void            SetROPFillColor( SalROPColor nROPColor ) override;
 
     virtual void            SetTextColor( SalColor nSalColor ) override;
-    virtual sal_uInt16      SetFont( FontSelectPattern*, int nFallbackLevel ) override;
+    virtual void            SetFont( FontSelectPattern*, int nFallbackLevel ) override;
     virtual void            GetFontMetric( ImplFontMetricDataPtr&, int nFallbackLevel ) override;
     virtual const FontCharMapPtr GetFontCharMap() const override;
     virtual bool            GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const override;
