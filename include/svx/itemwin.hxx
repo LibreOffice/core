@@ -94,7 +94,7 @@ public:
 
 // class SvxFillTypeBox --------------------------------------------------
 
-class SvxFillTypeBox : public FillTypeLB
+class SVX_DLLPUBLIC SvxFillTypeBox : public FillTypeLB
 {
 public:
     SvxFillTypeBox( vcl::Window* pParent, WinBits nBits = WB_BORDER | WB_DROPDOWN | WB_AUTOHSCROLL );
