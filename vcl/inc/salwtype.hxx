@@ -219,13 +219,15 @@ struct SalQueryCharPositionEvent
 
 typedef bool (*SALFRAMEPROC)( vcl::Window* pInst, SalEvent nEvent, const void* pEvent );
 
-#define SALOBJ_EVENT_GETFOCUS           ((sal_uInt16)1)
-#define SALOBJ_EVENT_LOSEFOCUS          ((sal_uInt16)2)
-#define SALOBJ_EVENT_TOTOP              ((sal_uInt16)3)
-#define SALOBJ_EVENT_COUNT              ((sal_uInt16)4)
+enum class SalObjEvent {
+    GetFocus           = 1,
+    LoseFocus          = 2,
+    ToTop              = 3,
+    Count              = 4
+};
 
 typedef long (*SALOBJECTPROC)( void* pInst, SalObject* pObject,
-                               sal_uInt16 nEvent, const void* pEvent );
+                               SalObjEvent nEvent, const void* pEvent );
 
 struct SalFrameState
 {
