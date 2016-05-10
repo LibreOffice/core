@@ -52,7 +52,7 @@ public:
 
     void                            SetCallback( void* pInst, SALOBJECTPROC pProc )
                                         { m_pInst = pInst; m_pCallback = pProc; }
-    void                            CallCallback( sal_uInt16 nEvent, const void* pEvent )
+    void                            CallCallback( SalObjEvent nEvent, const void* pEvent )
                                         { if (m_pCallback) m_pCallback( m_pInst, this, nEvent, pEvent ); }
 
     void                            SetMouseTransparent( bool bMouseTransparent )
