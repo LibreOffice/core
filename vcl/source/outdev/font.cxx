@@ -1006,7 +1006,7 @@ void OutputDevice::InitFont() const
         mpFontInstance->maFontSelData.mbNonAntialiased = bNonAntialiased;
 
         // select font in the device layers
-        mpFontInstance->mnSetFontFlags = mpGraphics->SetFont( &(mpFontInstance->maFontSelData), 0 );
+        mpGraphics->SetFont( &(mpFontInstance->maFontSelData), 0 );
         mbInitFont = false;
     }
 }
@@ -1323,7 +1323,7 @@ void OutputDevice::ImplDrawEmphasisMarks( SalLayout& rSalLayout )
     mpMetaFile = pOldMetaFile;
 }
 
-SalLayout* OutputDevice::getFallbackFont(LogicalFontInstance &rFallbackFont,
+SalLayout* OutputDevice::getFallbackFont(
     FontSelectPattern &rFontSelData, int nFallbackLevel,
     ImplLayoutArgs& rLayoutArgs) const
 {
@@ -1332,7 +1332,7 @@ SalLayout* OutputDevice::getFallbackFont(LogicalFontInstance &rFallbackFont,
         return nullptr;
 
     assert(mpGraphics != nullptr);
-    rFallbackFont.mnSetFontFlags = mpGraphics->SetFont( &rFontSelData, nFallbackLevel );
+    mpGraphics->SetFont( &rFontSelData, nFallbackLevel );
 
     rLayoutArgs.ResetPos();
     SalLayout* pFallback = mpGraphics->GetTextLayout( rLayoutArgs, nFallbackLevel );
@@ -1410,7 +1410,7 @@ SalLayout* OutputDevice::ImplGlyphFallbackLayout( SalLayout* pSalLayout, ImplLay
         }
 
         // create and add glyph fallback layout to multilayout
-        SalLayout* pFallback = getFallbackFont(*pFallbackFont, aFontSelData,
+        SalLayout* pFallback = getFallbackFont(aFontSelData,
             nFallbackLevel, rLayoutArgs);
         if (pFallback)
         {
