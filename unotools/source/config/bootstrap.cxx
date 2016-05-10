@@ -504,7 +504,7 @@ static Bootstrap::FailureCode describeError(OUStringBuffer& _rBuf, Bootstrap::Im
                     eErrCode = Bootstrap::INVALID_BOOTSTRAP_FILE_ENTRY;
                 break;
 
-            case Bootstrap::DATA_INVALID: OSL_ASSERT(false);
+            case Bootstrap::DATA_INVALID: OSL_ASSERT(false); SAL_FALLTHROUGH;
             case Bootstrap::PATH_VALID:
                 addFileError(_rBuf, _rData.aBootstrapINI_.path, IS_MISSING);
                 eErrCode = Bootstrap::MISSING_BOOTSTRAP_FILE;
