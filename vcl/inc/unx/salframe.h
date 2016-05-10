@@ -181,7 +181,7 @@ public:
     ::Window                GetShellWindow() const { return mhShellWindow; }
     ::Window                GetForeignParent() const { return mhForeignParent; }
     ::Window                GetStackingWindow() const { return mhStackingWindow; }
-    void                    Close() const { CallCallback( SALEVENT_CLOSE, NULL ); }
+    void                    Close() const { CallCallback( SalEvent::Close, NULL ); }
     SalFrameStyleFlags      GetStyle() const { return nStyle_; }
 
     Cursor                  GetCursor() const { return hCursor_; }

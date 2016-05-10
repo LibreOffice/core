@@ -86,23 +86,23 @@ void DebugEventInjector::InjectMenuEvent()
     if (!pMenuBar)
         return;
 
-    sal_uInt16 nEvents[] = {
-        SALEVENT_MENUCOMMAND,
-        SALEVENT_MENUCOMMAND,
-        SALEVENT_MENUACTIVATE,
-        SALEVENT_MENUDEACTIVATE,
-        SALEVENT_MENUHIGHLIGHT,
-        SALEVENT_MENUCOMMAND,
-        SALEVENT_MENUCOMMAND,
-        SALEVENT_MENUCOMMAND,
-        SALEVENT_MENUBUTTONCOMMAND,
-        SALEVENT_MENUBUTTONCOMMAND,
+    SalEvent nEvents[] = {
+        SalEvent::MenuCommand,
+        SalEvent::MenuCommand,
+        SalEvent::MenuActivate,
+        SalEvent::MenuDeactivate,
+        SalEvent::MenuHighlight,
+        SalEvent::MenuCommand,
+        SalEvent::MenuCommand,
+        SalEvent::MenuCommand,
+        SalEvent::MenuButtonCommand,
+        SalEvent::MenuButtonCommand,
     };
 
     MenuItemIds aIds;
     CollectMenuItemIds( pMenuBar, aIds );
 
-    sal_uInt16 nEvent = nEvents[ (int)(getRandom() * SAL_N_ELEMENTS( nEvents )) ];
+    SalEvent nEvent = nEvents[ (int)(getRandom() * SAL_N_ELEMENTS( nEvents )) ];
     SalMenuEvent aEvent = aIds[ getRandom() * aIds.size() ];
     bool bHandled = ImplWindowFrameProc( pSysWin, nEvent, &aEvent);
 
@@ -160,14 +160,14 @@ void DebugEventInjector::InjectTextEvent()
     if( getRandom() < 0.05 ) // modifier
         aKeyEvent.mnCode |= (sal_uInt16)( getRandom() * KEY_MODIFIERS_MASK ) & KEY_MODIFIERS_MASK;
 
-    bool bHandled = ImplWindowFrameProc( pWindow, SALEVENT_KEYINPUT, &aKeyEvent);
+    bool bHandled = ImplWindowFrameProc( pWindow, SalEvent::KeyInput, &aKeyEvent);
 
     SAL_INFO( "vcl.debugevent",
               "Injected key 0x" << std::hex << (int) aKeyEvent.mnCode << std::dec
               << " -> " << bHandled
               << " win " << pWindow );
 
-    ImplWindowFrameProc( pWindow, SALEVENT_KEYUP, &aKeyEvent );
+    ImplWindowFrameProc( pWindow, SalEvent::KeyUp, &aKeyEvent );
 }
 
 /*
@@ -242,13 +242,13 @@ void DebugEventInjector::InjectKeyNavEdit()
 
     aKeyEvent.mnCharCode = 0x0; // hopefully unused.
 
-    bool bHandled = ImplWindowFrameProc( pWindow, SALEVENT_KEYINPUT, &aKeyEvent );
+    bool bHandled = ImplWindowFrameProc( pWindow, SalEvent::KeyInput, &aKeyEvent );
 
     SAL_INFO( "vcl.debugevent",
               "Injected edit / move key 0x" << std::hex << (int) aKeyEvent.mnCode << std::dec
               << " -> " << bHandled
               << " win " <<  pWindow );
-    ImplWindowFrameProc( pWindow, SALEVENT_KEYUP, &aKeyEvent );
+    ImplWindowFrameProc( pWindow, SalEvent::KeyUp, &aKeyEvent );
 }
 
 void DebugEventInjector::Invoke()

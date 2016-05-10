@@ -1965,7 +1965,7 @@ bool SalX11Display::Dispatch( XEvent *pEvent )
                     {
                         std::list< SalFrame* >::const_iterator it;
                         for( it = m_aFrames.begin(); it != m_aFrames.end(); ++it )
-                            (*it)->CallCallback( SALEVENT_SETTINGSCHANGED, nullptr );
+                            (*it)->CallCallback( SalEvent::SettingsChanged, nullptr );
                         return false;
                     }
                 }

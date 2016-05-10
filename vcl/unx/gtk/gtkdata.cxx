@@ -138,7 +138,7 @@ GdkFilterReturn GtkSalDisplay::filterGdkEvent( GdkXEvent* sys_event,
             ! m_aFrames.empty()
            )
         {
-            SendInternalEvent( m_aFrames.front(), nullptr, SALEVENT_SETTINGSCHANGED );
+            SendInternalEvent( m_aFrames.front(), nullptr, SalEvent::SettingsChanged );
         }
         // let's see if one of our frames wants to swallow these events
         // get the frame

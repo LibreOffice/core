@@ -89,7 +89,7 @@ SvpSalFrame::~SvpSalFrame()
         // SAL_DEBUG("SvpSalFrame::~SvpSalFrame: losing focus: " << this);
         s_pFocusFrame = nullptr;
         // call directly here, else an event for a destroyed frame would be dispatched
-        CallCallback( SALEVENT_LOSEFOCUS, nullptr );
+        CallCallback( SalEvent::LoseFocus, nullptr );
         // if the handler has not set a new focus frame
         // pass focus to another frame, preferably a document style window
         if( s_pFocusFrame == nullptr )
@@ -126,7 +126,7 @@ void SvpSalFrame::GetFocus()
             s_pFocusFrame->LoseFocus();
         // SAL_DEBUG("SvpSalFrame::GetFocus(): " << this);
         s_pFocusFrame = this;
-        m_pInstance->PostEvent( this, nullptr, SALEVENT_GETFOCUS );
+        m_pInstance->PostEvent( this, nullptr, SalEvent::GetFocus );
     }
 }
 
@@ -135,7 +135,7 @@ void SvpSalFrame::LoseFocus()
     if( s_pFocusFrame == this )
     {
         // SAL_DEBUG("SvpSalFrame::LoseFocus: " << this);
-        m_pInstance->PostEvent( this, nullptr, SALEVENT_LOSEFOCUS );
+        m_pInstance->PostEvent( this, nullptr, SalEvent::LoseFocus );
         s_pFocusFrame = nullptr;
     }
 }
@@ -159,7 +159,7 @@ void SvpSalFrame::ReleaseGraphics( SalGraphics* pGraphics )
 
 bool SvpSalFrame::PostEvent(ImplSVEvent* pData)
 {
-    m_pInstance->PostEvent( this, pData, SALEVENT_USEREVENT );
+    m_pInstance->PostEvent( this, pData, SalEvent::UserEvent );
     return true;
 }
 
@@ -169,7 +169,7 @@ void SvpSalFrame::PostPaint() const
     {
         SalPaintEvent aPEvt(0, 0, maGeometry.nWidth, maGeometry.nHeight);
         aPEvt.mbImmediateUpdate = false;
-        CallCallback( SALEVENT_PAINT, &aPEvt );
+        CallCallback( SalEvent::Paint, &aPEvt );
     }
 }
 
@@ -199,7 +199,7 @@ void SvpSalFrame::Show( bool bVisible, bool bNoActivate )
     {
         // SAL_DEBUG("SvpSalFrame::Show: showing: " << this);
         m_bVisible = true;
-        m_pInstance->PostEvent( this, nullptr, SALEVENT_RESIZE );
+        m_pInstance->PostEvent( this, nullptr, SalEvent::Resize );
         if( ! bNoActivate )
             GetFocus();
     }
@@ -207,7 +207,7 @@ void SvpSalFrame::Show( bool bVisible, bool bNoActivate )
     {
         // SAL_DEBUG("SvpSalFrame::Show: hiding: " << this);
         m_bVisible = false;
-        m_pInstance->PostEvent( this, nullptr, SALEVENT_RESIZE );
+        m_pInstance->PostEvent( this, nullptr, SalEvent::Resize );
         LoseFocus();
     }
     else
@@ -279,7 +279,7 @@ void SvpSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_u
         }
     }
     if( m_bVisible )
-        m_pInstance->PostEvent( this, nullptr, SALEVENT_RESIZE );
+        m_pInstance->PostEvent( this, nullptr, SalEvent::Resize );
 #endif
 }
 

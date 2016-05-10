@@ -68,9 +68,9 @@ class VCL_DLLPUBLIC SvpSalInstance : public SalGenericInstance
     {
         const SalFrame*     m_pFrame;
         ImplSVEvent*        m_pData;
-        sal_uInt16          m_nEvent;
+        SalEvent            m_nEvent;
 
-        SalUserEvent( const SalFrame* pFrame, ImplSVEvent* pData, sal_uInt16 nEvent = SALEVENT_USEREVENT )
+        SalUserEvent( const SalFrame* pFrame, ImplSVEvent* pData, SalEvent nEvent = SalEvent::UserEvent )
                 : m_pFrame( pFrame ),
                   m_pData( pData ),
                   m_nEvent( nEvent )
@@ -95,7 +95,7 @@ public:
     void                    CloseWakeupPipe(bool log);
     void                    CreateWakeupPipe(bool log);
 
-    void                    PostEvent(const SalFrame* pFrame, ImplSVEvent* pData, sal_uInt16 nEvent);
+    void                    PostEvent(const SalFrame* pFrame, ImplSVEvent* pData, SalEvent nEvent);
 
 #ifdef ANDROID
     bool                    PostedEventsInQueue();

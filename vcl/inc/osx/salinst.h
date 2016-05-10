@@ -57,9 +57,9 @@ class AquaSalInstance : public SalInstance
     {
         AquaSalFrame*   mpFrame;
         void*           mpData;
-        sal_uInt16          mnType;
+        SalEvent        mnType;
 
-        SalUserEvent( AquaSalFrame* pFrame, void* pData, sal_uInt16 nType ) :
+        SalUserEvent( AquaSalFrame* pFrame, void* pData, SalEvent nType ) :
             mpFrame( pFrame ), mpData( pData ), mnType( nType )
         {}
     };

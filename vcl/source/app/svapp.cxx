@@ -966,54 +966,54 @@ IMPL_STATIC_LINK_TYPED( Application, PostEventHandler, void*, pCallData, void )
     const SolarMutexGuard aGuard;
     ImplPostEventData*  pData = static_cast< ImplPostEventData * >( pCallData );
     const void*         pEventData;
-    sal_uLong           nEvent;
+    SalEvent            nEvent;
     ImplSVEvent * const nEventId = pData->mnEventId;
 
     switch( pData->mnEvent )
     {
         case VCLEVENT_WINDOW_MOUSEMOVE:
-            nEvent = SALEVENT_EXTERNALMOUSEMOVE;
+            nEvent = SalEvent::ExternalMouseMove;
             pEventData = &pData->maMouseEvent;
         break;
 
         case VCLEVENT_WINDOW_MOUSEBUTTONDOWN:
-            nEvent = SALEVENT_EXTERNALMOUSEBUTTONDOWN;
+            nEvent = SalEvent::ExternalMouseButtonDown;
             pEventData = &pData->maMouseEvent;
         break;
 
         case VCLEVENT_WINDOW_MOUSEBUTTONUP:
-            nEvent = SALEVENT_EXTERNALMOUSEBUTTONUP;
+            nEvent = SalEvent::ExternalMouseButtonUp;
             pEventData = &pData->maMouseEvent;
         break;
 
         case VCLEVENT_WINDOW_KEYINPUT:
-            nEvent = SALEVENT_EXTERNALKEYINPUT;
+            nEvent = SalEvent::ExternalKeyInput;
             pEventData = &pData->maKeyEvent;
         break;
 
         case VCLEVENT_WINDOW_KEYUP:
-            nEvent = SALEVENT_EXTERNALKEYUP;
+            nEvent = SalEvent::ExternalKeyUp;
             pEventData = &pData->maKeyEvent;
         break;
 
         case VCLEVENT_WINDOW_ZOOM:
-            nEvent = SALEVENT_EXTERNALZOOM;
+            nEvent = SalEvent::ExternalZoom;
             pEventData = &pData->maZoomEvent;
         break;
 
         case VCLEVENT_WINDOW_SCROLL:
-            nEvent = SALEVENT_EXTERNALSCROLL;
+            nEvent = SalEvent::ExternalScroll;
             pEventData = &pData->maScrollEvent;
         break;
 
         default:
-            nEvent = 0;
+            nEvent = SalEvent::NONE;
             pEventData = nullptr;
         break;
     };
 
     if( pData->mpWin && pData->mpWin.get()->mpWindowImpl->mpFrameWindow.get() && pEventData )
-        ImplWindowFrameProc( pData->mpWin.get()->mpWindowImpl->mpFrameWindow.get(), (sal_uInt16) nEvent, pEventData );
+        ImplWindowFrameProc( pData->mpWin.get()->mpWindowImpl->mpFrameWindow.get(), nEvent, pEventData );
 
     // remove this event from list of posted events, watch for destruction of internal data
     ::std::list< ImplPostEventPair >::iterator aIter( aPostedEventList.begin() );

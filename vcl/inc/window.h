@@ -47,6 +47,7 @@ enum class ActivateModeFlags;
 enum class DialogControlFlags;
 enum class GetFocusFlags;
 enum class ParentClipMode;
+enum class SalEvent;
 
 namespace com { namespace sun { namespace star {
 
@@ -77,7 +78,7 @@ namespace dnd {
     class XDropTarget;
 }}}}}
 
-bool ImplWindowFrameProc( vcl::Window* pInst, sal_uInt16 nEvent, const void* pEvent );
+bool ImplWindowFrameProc( vcl::Window* pInst, SalEvent nEvent, const void* pEvent );
 
 #define WINDOW_HITTEST_INSIDE           ((sal_uInt16)0x0001)
 #define WINDOW_HITTEST_TRANSPARENT      ((sal_uInt16)0x0002)

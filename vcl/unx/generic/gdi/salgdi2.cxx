@@ -141,7 +141,7 @@ void X11SalGraphics::YieldGraphicsExpose()
     while( XCheckTypedWindowEvent( pDisplay, aWindow, Expose, &aEvent ) )
     {
         SalPaintEvent aPEvt( aEvent.xexpose.x, aEvent.xexpose.y, aEvent.xexpose.width+1, aEvent.xexpose.height+1 );
-        pFrame->CallCallback( SALEVENT_PAINT, &aPEvt );
+        pFrame->CallCallback( SalEvent::Paint, &aPEvt );
     }
 
     do
@@ -156,7 +156,7 @@ void X11SalGraphics::YieldGraphicsExpose()
         if( pFrame )
         {
             SalPaintEvent aPEvt( aEvent.xgraphicsexpose.x, aEvent.xgraphicsexpose.y, aEvent.xgraphicsexpose.width+1, aEvent.xgraphicsexpose.height+1 );
-            pFrame->CallCallback( SALEVENT_PAINT, &aPEvt );
+            pFrame->CallCallback( SalEvent::Paint, &aPEvt );
         }
     } while( aEvent.xgraphicsexpose.count != 0 );
 }

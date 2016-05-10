@@ -45,7 +45,7 @@ void SalGenericDisplay::deregisterFrame( SalFrame* pFrame )
         {
             if( it->m_pFrame == pFrame )
             {
-                if (it->m_nEvent == SALEVENT_USEREVENT) {
+                if (it->m_nEvent == SalEvent::UserEvent) {
                     delete static_cast<ImplSVEvent *>(it->m_pData);
                 }
                 it = m_aUserEvents.erase( it );
@@ -61,14 +61,14 @@ void SalGenericDisplay::deregisterFrame( SalFrame* pFrame )
 void SalGenericDisplay::emitDisplayChanged()
 {
     if( !m_aFrames.empty() )
-        m_aFrames.front()->CallCallback( SALEVENT_DISPLAYCHANGED, nullptr );
+        m_aFrames.front()->CallCallback( SalEvent::DisplayChanged, nullptr );
 }
 
 bool SalGenericDisplay::DispatchInternalEvent()
 {
     void* pData = nullptr;
     SalFrame* pFrame = nullptr;
-    sal_uInt16 nEvent = 0;
+    SalEvent nEvent = SalEvent::NONE;
 
     {
         osl::MutexGuard g( m_aEventGuard );
@@ -88,7 +88,7 @@ bool SalGenericDisplay::DispatchInternalEvent()
     return pFrame != nullptr;
 }
 
-void SalGenericDisplay::SendInternalEvent( SalFrame* pFrame, void* pData, sal_uInt16 nEvent )
+void SalGenericDisplay::SendInternalEvent( SalFrame* pFrame, void* pData, SalEvent nEvent )
 {
     osl::MutexGuard g( m_aEventGuard );
 
@@ -97,7 +97,7 @@ void SalGenericDisplay::SendInternalEvent( SalFrame* pFrame, void* pData, sal_uI
     PostUserEvent(); // wakeup the concrete mainloop
 }
 
-void SalGenericDisplay::CancelInternalEvent( SalFrame* pFrame, void* pData, sal_uInt16 nEvent )
+void SalGenericDisplay::CancelInternalEvent( SalFrame* pFrame, void* pData, SalEvent nEvent )
 {
     osl::MutexGuard g( m_aEventGuard );
     if( ! m_aUserEvents.empty() )

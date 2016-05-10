@@ -256,7 +256,7 @@ void AquaSalFrame::screenParametersChanged()
 
     if( mpGraphics )
         mpGraphics->updateResolution();
-    CallCallback( SALEVENT_DISPLAYCHANGED, nullptr );
+    CallCallback( SalEvent::DisplayChanged, nullptr );
 }
 
 SalGraphics* AquaSalFrame::AcquireGraphics()
@@ -283,7 +283,7 @@ void AquaSalFrame::ReleaseGraphics( SalGraphics *pGraphics )
 
 bool AquaSalFrame::PostEvent(ImplSVEvent* pData)
 {
-    GetSalData()->mpFirstInstance->PostUserEvent( this, SALEVENT_USEREVENT, pData );
+    GetSalData()->mpFirstInstance->PostUserEvent( this, SalEvent::UserEvent, pData );
     return TRUE;
 }
 
@@ -400,7 +400,7 @@ void AquaSalFrame::SendPaintEvent( const Rectangle* pRect )
         aPaintEvt.mnBoundHeight = pRect->GetHeight();
     }
 
-    CallCallback(SALEVENT_PAINT, &aPaintEvt);
+    CallCallback(SalEvent::Paint, &aPaintEvt);
 }
 
 void AquaSalFrame::Show(bool bVisible, bool bNoActivate)
@@ -417,7 +417,7 @@ void AquaSalFrame::Show(bool bVisible, bool bNoActivate)
         if( mbInitShow )
             initShow();
 
-        CallCallback(SALEVENT_RESIZE, nullptr);
+        CallCallback(SalEvent::Resize, nullptr);
         // trigger filling our backbuffer
         SendPaintEvent();
 
@@ -579,13 +579,13 @@ void AquaSalFrame::SetWindowState( const SalFrameState* pState )
     if( pState->mnMask & (WindowStateMask::X | WindowStateMask::Y) )
     {
         mbPositioned = true;
-        nEvent = SALEVENT_MOVE;
+        nEvent = SalEvent::Move;
     }
 
     if( pState->mnMask & (WindowStateMask::Width | WindowStateMask::Height) )
     {
         mbSized = true;
-        nEvent = (nEvent == SALEVENT_MOVE) ? SALEVENT_MOVERESIZE : SALEVENT_RESIZE;
+        nEvent = (nEvent == SalEvent::Move) ? SalEvent::MoveResize : SalEvent::Resize;
     }
     // send event that we were moved/sized
     if( nEvent )
@@ -746,7 +746,7 @@ void AquaSalFrame::ShowFullScreen( bool bFullScreen, sal_Int32 nDisplay )
         UpdateFrameGeometry();
 
         if( mbShown )
-            CallCallback( SALEVENT_MOVERESIZE, nullptr );
+            CallCallback( SalEvent::MoveResize, nullptr );
     }
     else
     {
@@ -756,7 +756,7 @@ void AquaSalFrame::ShowFullScreen( bool bFullScreen, sal_Int32 nDisplay )
         UpdateFrameGeometry();
 
         if( mbShown )
-            CallCallback( SALEVENT_MOVERESIZE, nullptr );
+            CallCallback( SalEvent::MoveResize, nullptr );
 
         // show the dock and the menubar
         [NSMenu setMenuBarVisible:YES];
@@ -1253,13 +1253,13 @@ void AquaSalFrame::SetPosSize(long nX, long nY, long nWidth, long nHeight, sal_u
     if (nFlags & (SAL_FRAME_POSSIZE_X | SAL_FRAME_POSSIZE_Y))
     {
         mbPositioned = true;
-        nEvent = SALEVENT_MOVE;
+        nEvent = SalEvent::Move;
     }
 
     if (nFlags & (SAL_FRAME_POSSIZE_WIDTH | SAL_FRAME_POSSIZE_HEIGHT))
     {
         mbSized = true;
-        nEvent = (nEvent == SALEVENT_MOVE) ? SALEVENT_MOVERESIZE : SALEVENT_RESIZE;
+        nEvent = (nEvent == SalEvent::Move) ? SalEvent::MoveResize : SalEvent::Resize;
     }
 
     NSRect aFrameRect = [mpNSWindow frame];

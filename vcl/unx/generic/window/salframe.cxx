@@ -1281,7 +1281,7 @@ void X11SalFrame::Show( bool bVisible, bool bNoActivate )
                               );
             }
         }
-        CallCallback( SALEVENT_RESIZE, nullptr );
+        CallCallback( SalEvent::Resize, nullptr );
 
         /*
          *  sometimes a message box/dialogue is brought up when a frame is not mapped
@@ -1978,11 +1978,11 @@ void X11SalFrame::SetPosSize( const Rectangle &rPosSize )
 
     updateScreenNumber();
     if( bSized && ! bMoved )
-        CallCallback( SALEVENT_RESIZE, nullptr );
+        CallCallback( SalEvent::Resize, nullptr );
     else if( bMoved && ! bSized )
-        CallCallback( SALEVENT_MOVE, nullptr );
+        CallCallback( SalEvent::Move, nullptr );
     else
-        CallCallback( SALEVENT_MOVERESIZE, nullptr );
+        CallCallback( SalEvent::MoveResize, nullptr );
 
     // allow the external status window to reposition
     if (mbInputFocus && mpInputContext != nullptr)
@@ -2246,16 +2246,16 @@ X11SalFrame::HandleExtTextEvent (XClientMessageEvent *pEvent)
     #else
     void* pExtTextEvent = reinterpret_cast<void*>(pEvent->data.l[0]);
     #endif
-    sal_uInt16 nExtTextEventType = sal_uInt16(pEvent->data.l[2]);
+    SalEvent nExtTextEventType = SalEvent(pEvent->data.l[2]);
 
     CallCallback(nExtTextEventType, pExtTextEvent);
 
     switch (nExtTextEventType)
     {
-        case SALEVENT_ENDEXTTEXTINPUT:
+        case SalEvent::EndExtTextInput:
             break;
 
-        case SALEVENT_EXTTEXTINPUT:
+        case SalEvent::ExtTextInput:
             break;
 
         default:
@@ -2586,7 +2586,7 @@ Bool compressWheelEvents( Display*, XEvent* event, XPointer p )
 long X11SalFrame::HandleMouseEvent( XEvent *pEvent )
 {
     SalMouseEvent       aMouseEvt = {0, 0, 0, 0, 0};
-    sal_uInt16          nEvent = 0;
+    SalEvent            nEvent = SalEvent::NONE;
     bool                bClosePopups = false;
 
     if( nVisibleFloats && pEvent->type == EnterNotify )
@@ -2618,8 +2618,8 @@ long X11SalFrame::HandleMouseEvent( XEvent *pEvent )
         aMouseEvt.mnButton  = 0;
 
         nEvent              = LeaveNotify == pEvent->type
-                              ? SALEVENT_MOUSELEAVE
-                              : SALEVENT_MOUSEMOVE;
+                              ? SalEvent::MouseLeave
+                              : SalEvent::MouseMove;
     }
     else if( pEvent->type == MotionNotify )
     {
@@ -2630,7 +2630,7 @@ long X11SalFrame::HandleMouseEvent( XEvent *pEvent )
 
         aMouseEvt.mnButton  = 0;
 
-        nEvent              = SALEVENT_MOUSEMOVE;
+        nEvent              = SalEvent::MouseMove;
         if( nVisibleFloats > 0 && mpParent )
         {
             Cursor aCursor = mpParent->GetCursor();
@@ -2740,8 +2740,8 @@ long X11SalFrame::HandleMouseEvent( XEvent *pEvent )
                 aMouseEvt.mnButton  = MOUSE_RIGHT;
 
             nEvent              = ButtonPress == pEvent->type
-                ? SALEVENT_MOUSEBUTTONDOWN
-                : SALEVENT_MOUSEBUTTONUP;
+                ? SalEvent::MouseButtonDown
+                : SalEvent::MouseButtonUp;
         }
         else if( pEvent->xbutton.button == Button4 ||
                  pEvent->xbutton.button == Button5 ||
@@ -2787,7 +2787,7 @@ long X11SalFrame::HandleMouseEvent( XEvent *pEvent )
             aWheelEvt.mnCode        = sal_GetCode( pEvent->xbutton.state );
             aWheelEvt.mbHorz        = bHoriz;
 
-            nEvent = SALEVENT_WHEELMOUSE;
+            nEvent = SalEvent::WheelMouse;
 
             // --- RTL --- (mirror mouse pos)
             if( AllSettings::GetLayoutRTL() )
@@ -2797,7 +2797,7 @@ long X11SalFrame::HandleMouseEvent( XEvent *pEvent )
     }
 
     int nRet = 0;
-    if( nEvent == SALEVENT_MOUSELEAVE
+    if( nEvent == SalEvent::MouseLeave
         || ( aMouseEvt.mnX <  nWidth_  && aMouseEvt.mnX >  -1 &&
              aMouseEvt.mnY <  nHeight_ && aMouseEvt.mnY >  -1 )
         || pDisplay_->MouseCaptured( this )
@@ -2871,7 +2871,7 @@ void X11SalFrame::beginUnicodeSequence()
         aEv.mnCursorFlags   = 0;
         aEv.mbOnlyCursor    = false;
 
-        CallCallback(SALEVENT_EXTTEXTINPUT, static_cast<void*>(&aEv));
+        CallCallback(SalEvent::ExtTextInput, static_cast<void*>(&aEv));
     }
 }
 
@@ -2900,7 +2900,7 @@ bool X11SalFrame::appendUnicodeSequence( sal_Unicode c )
             aEv.mnCursorFlags   = 0;
             aEv.mbOnlyCursor    = false;
 
-            CallCallback(SALEVENT_EXTTEXTINPUT, static_cast<void*>(&aEv));
+            CallCallback(SalEvent::ExtTextInput, static_cast<void*>(&aEv));
             bRet = true;
         }
         else
@@ -2931,13 +2931,13 @@ bool X11SalFrame::endUnicodeSequence()
             aEv.mnCursorPos     = 0;
             aEv.mnCursorFlags   = 0;
             aEv.mbOnlyCursor    = false;
-            CallCallback(SALEVENT_EXTTEXTINPUT, static_cast<void*>(&aEv));
+            CallCallback(SalEvent::ExtTextInput, static_cast<void*>(&aEv));
         }
     }
     bool bWasInput = !rSeq.isEmpty();
     rSeq.clear();
     if( bWasInput && ! aDeleteWatch.isDeleted() )
-        CallCallback(SALEVENT_ENDEXTTEXTINPUT, nullptr);
+        CallCallback(SalEvent::EndExtTextInput, nullptr);
     return bWasInput;
 }
 
@@ -3123,7 +3123,7 @@ long X11SalFrame::HandleKeyEvent( XKeyEvent *pEvent )
         aModEvt.mnCode = nModCode;
         aModEvt.mnTime = pEvent->time;
 
-        int nRet = CallCallback( SALEVENT_KEYMODCHANGE, &aModEvt );
+        int nRet = CallCallback( SalEvent::KeyModChange, &aModEvt );
 
         return nRet;
     }
@@ -3248,11 +3248,11 @@ long X11SalFrame::HandleKeyEvent( XKeyEvent *pEvent )
 
         if( KeyRelease == pEvent->type )
         {
-            CallCallback( SALEVENT_KEYUP, &aKeyEvt );
+            CallCallback( SalEvent::KeyUp, &aKeyEvt );
         }
         else
         {
-            if ( ! CallCallback(SALEVENT_KEYINPUT, &aKeyEvt) )
+            if ( ! CallCallback(SalEvent::KeyInput, &aKeyEvt) )
             {
                 // independent layer doesn't want to handle key-event, so check
                 // whether the keycode may have an alternate meaning
@@ -3262,7 +3262,7 @@ long X11SalFrame::HandleKeyEvent( XKeyEvent *pEvent )
                     aKeyEvt.mnCode = aAlternate.nKeyCode | nModCode;
                     if( aAlternate.nCharCode )
                         aKeyEvt.mnCharCode = aAlternate.nCharCode;
-                    CallCallback(SALEVENT_KEYINPUT, &aKeyEvt);
+                    CallCallback(SalEvent::KeyInput, &aKeyEvt);
                 }
             }
         }
@@ -3324,7 +3324,7 @@ long X11SalFrame::HandleFocusEvent( XFocusChangeEvent *pEvent )
             mbInputFocus = True;
             ImplSVData* pSVData = ImplGetSVData();
 
-            long nRet = CallCallback( SALEVENT_GETFOCUS,  nullptr );
+            long nRet = CallCallback( SalEvent::GetFocus,  nullptr );
             if ((mpParent != nullptr && nStyle_ == SalFrameStyleFlags::NONE)
                 && pSVData->maWinData.mpFirstFloat )
             {
@@ -3339,7 +3339,7 @@ long X11SalFrame::HandleFocusEvent( XFocusChangeEvent *pEvent )
             mbInputFocus = False;
             mbSendExtKeyModChange = false;
             mnExtKeyMod = 0;
-            return CallCallback( SALEVENT_LOSEFOCUS, nullptr );
+            return CallCallback( SalEvent::LoseFocus, nullptr );
         }
     }
 
@@ -3384,7 +3384,7 @@ long X11SalFrame::HandleExposeEvent( XEvent *pEvent )
 
     SalPaintEvent aPEvt( maPaintRegion.Left(), maPaintRegion.Top(), maPaintRegion.GetWidth(), maPaintRegion.GetHeight() );
 
-     CallCallback( SALEVENT_PAINT, &aPEvt );
+     CallCallback( SalEvent::Paint, &aPEvt );
     maPaintRegion = Rectangle();
 
     return 1;
@@ -3518,7 +3518,7 @@ long X11SalFrame::HandleSizeEvent( XConfigureEvent *pEvent )
         {
             maGeometry.nX = pEvent->x;
             maGeometry.nY = pEvent->y;
-            CallCallback( SALEVENT_MOVE, nullptr );
+            CallCallback( SalEvent::Move, nullptr );
         }
         return 1;
     }
@@ -3553,11 +3553,11 @@ long X11SalFrame::HandleSizeEvent( XConfigureEvent *pEvent )
     RestackChildren();
 
     if( bSized && ! bMoved )
-        CallCallback( SALEVENT_RESIZE, nullptr );
+        CallCallback( SalEvent::Resize, nullptr );
     else if( bMoved && ! bSized )
-        CallCallback( SALEVENT_MOVE, nullptr );
+        CallCallback( SalEvent::Move, nullptr );
     else if( bMoved && bSized )
-        CallCallback( SALEVENT_MOVERESIZE, nullptr );
+        CallCallback( SalEvent::MoveResize, nullptr );
 
     return 1;
 }
@@ -3745,7 +3745,7 @@ long X11SalFrame::HandleReparentEvent( XReparentEvent *pEvent )
         }
     }
     if( bResized )
-        CallCallback( SALEVENT_RESIZE, nullptr );
+        CallCallback( SalEvent::Resize, nullptr );
 
     GetGenericData()->ErrorTrapPop();
 
@@ -3925,7 +3925,7 @@ long X11SalFrame::Dispatch( XEvent *pEvent )
                     nRet = 1;
                     if ( mpInputContext != nullptr )
                         mpInputContext->Map( this );
-                    CallCallback( SALEVENT_RESIZE, nullptr );
+                    CallCallback( SalEvent::Resize, nullptr );
 
                     bool bSetFocus = m_bSetFocusOnMap;
                     /*  another workaround for sawfish: if a transient window for the same parent is shown
@@ -3984,7 +3984,7 @@ long X11SalFrame::Dispatch( XEvent *pEvent )
                     nRet = 1;
                     if ( mpInputContext != nullptr )
                         mpInputContext->Unmap( this );
-                    CallCallback( SALEVENT_RESIZE, nullptr );
+                    CallCallback( SalEvent::Resize, nullptr );
                 }
                 break;
 

@@ -75,7 +75,7 @@ const AquaSalMenu* AquaSalMenu::pCurrentMenuBar = nullptr;
         const AquaSalFrame* pFrame = AquaSalMenu::pCurrentMenuBar->mpFrame;
         if( pFrame && AquaSalFrame::isAlive( pFrame ) )
         {
-            pFrame->CallCallback( SALEVENT_SHOWDIALOG, reinterpret_cast<void*>(nDialog) );
+            pFrame->CallCallback( SalEvent::ShowDialog, reinterpret_cast<void*>(nDialog) );
         }
     }
     else

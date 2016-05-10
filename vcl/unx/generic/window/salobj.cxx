@@ -427,7 +427,7 @@ bool X11SalObject::Dispatch( XEvent* pEvent )
                 aEvt.mnTime     = pEvent->xbutton.time;
                 aEvt.mnCode     = sal_GetCode( pEvent->xbutton.state );
                 aEvt.mnButton   = 0;
-                sal_uInt16 nEvent = 0;
+                SalEvent nEvent = SalEvent::NONE;
                 if( pEvent->type == ButtonPress ||
                     pEvent->type == ButtonRelease )
                 {
@@ -438,13 +438,13 @@ bool X11SalObject::Dispatch( XEvent* pEvent )
                         case Button3: aEvt.mnButton = MOUSE_RIGHT;break;
                     }
                     nEvent = (pEvent->type == ButtonPress) ?
-                             SALEVENT_MOUSEBUTTONDOWN :
-                             SALEVENT_MOUSEBUTTONUP;
+                             SalEvent::MouseButtonDown :
+                             SalEvent::MouseButtonUp;
                 }
                 else if( pEvent->type == EnterNotify )
-                    nEvent = SALEVENT_MOUSELEAVE;
+                    nEvent = SalEvent::MouseLeave;
                 else
-                    nEvent = SALEVENT_MOUSEMOVE;
+                    nEvent = SalEvent::MouseMove;
                 pObject->mpParent->CallCallback( nEvent, &aEvt );
             }
             else
