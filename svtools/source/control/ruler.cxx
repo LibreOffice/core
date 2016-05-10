@@ -701,7 +701,7 @@ void Ruler::ImplDrawBorders(vcl::RenderContext& rRenderContext, long nMin, long 
 
     for (i = 0; i < mpData->pBorders.size(); i++)
     {
-        if (mpData->pBorders[i].nStyle & RULER_STYLE_INVISIBLE)
+        if (mpData->pBorders[i].nStyle & RulerBorderStyle::Invisible)
             continue;
 
         n1 = mpData->pBorders[i].nPos + mpData->nNullVirOff;
@@ -727,7 +727,7 @@ void Ruler::ImplDrawBorders(vcl::RenderContext& rRenderContext, long nMin, long 
                 rRenderContext.SetLineColor(rStyleSettings.GetDarkShadowColor());
                 ImplVDrawLine(rRenderContext, n2, nVirTop, n2, nVirBottom);
 
-                if (mpData->pBorders[i].nStyle & RULER_BORDER_VARIABLE)
+                if (mpData->pBorders[i].nStyle & RulerBorderStyle::Variable)
                 {
                     if (n2 - n1 > RULER_VAR_SIZE + 4)
                     {
@@ -754,7 +754,7 @@ void Ruler::ImplDrawBorders(vcl::RenderContext& rRenderContext, long nMin, long 
                     }
                 }
 
-                if (mpData->pBorders[i].nStyle & RULER_BORDER_SIZEABLE)
+                if (mpData->pBorders[i].nStyle & RulerBorderStyle::Sizeable)
                 {
                     if (n2 - n1 > RULER_VAR_SIZE + 10)
                     {
@@ -772,9 +772,9 @@ void Ruler::ImplDrawBorders(vcl::RenderContext& rRenderContext, long nMin, long 
                 n = n1 + ((n2 - n1) / 2);
                 rRenderContext.SetLineColor(rStyleSettings.GetShadowColor());
 
-                if (mpData->pBorders[i].nStyle & RULER_BORDER_SNAP)
+                if (mpData->pBorders[i].nStyle & RulerBorderStyle::Snap)
                     ImplVDrawLine(rRenderContext, n, nVirTop, n, nVirBottom);
-                else if (mpData->pBorders[i].nStyle & RULER_BORDER_MARGIN)
+                else if (mpData->pBorders[i].nStyle & RulerBorderStyle::Margin)
                     ImplVDrawLine(rRenderContext, n, nVirTop, n, nVirBottom);
                 else
                 {
@@ -1643,15 +1643,15 @@ bool Ruler::ImplHitTest( const Point& rPos, RulerSelection* pHitTest,
 
         if ( (nX >= n1) && (nX <= n2) )
         {
-            nStyle = mpData->pBorders[i-1].nStyle;
-            if ( !(nStyle & RULER_STYLE_INVISIBLE) )
+            RulerBorderStyle nBorderStyle = mpData->pBorders[i-1].nStyle;
+            if ( !(nBorderStyle & RulerBorderStyle::Invisible) )
             {
                 pHitTest->eType     = RULER_TYPE_BORDER;
                 pHitTest->nAryPos   = i-1;
 
-                if ( !(nStyle & RULER_BORDER_SIZEABLE) )
+                if ( !(nBorderStyle & RulerBorderStyle::Sizeable) )
                 {
-                    if ( nStyle & RULER_BORDER_MOVEABLE )
+                    if ( nBorderStyle & RulerBorderStyle::Moveable )
                     {
                         pHitTest->bSizeBar = true;
                         pHitTest->mnDragSize = RulerDragSize::Move;
@@ -1683,7 +1683,7 @@ bool Ruler::ImplHitTest( const Point& rPos, RulerSelection* pHitTest,
                     }
                     else
                     {
-                        if ( nStyle & RULER_BORDER_MOVEABLE )
+                        if ( nBorderStyle & RulerBorderStyle::Moveable )
                         {
                             pHitTest->bSizeBar = true;
                             pHitTest->mnDragSize = RulerDragSize::Move;
