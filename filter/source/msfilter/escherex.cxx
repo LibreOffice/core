@@ -1062,6 +1062,8 @@ void EscherPropertyContainer::CreateLineProperties(
                         AddOpt( ESCHER_Prop_lineDashing, eDash );
                     }
                 }
+                break;
+
                 case css::drawing::LineStyle_SOLID :
                 default:
                 {
