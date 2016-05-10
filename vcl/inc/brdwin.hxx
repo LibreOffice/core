@@ -35,22 +35,28 @@ enum class DrawButtonFlags;
 #define BORDERWINDOW_STYLE_FRAME            ((sal_uInt16)0x0008)
 #define BORDERWINDOW_STYLE_APP              ((sal_uInt16)0x0010)
 
-#define BORDERWINDOW_HITTEST_TITLE          ((sal_uInt16)0x0001)
-#define BORDERWINDOW_HITTEST_LEFT           ((sal_uInt16)0x0002)
-#define BORDERWINDOW_HITTEST_MENU           ((sal_uInt16)0x0004)
-#define BORDERWINDOW_HITTEST_TOP            ((sal_uInt16)0x0008)
-#define BORDERWINDOW_HITTEST_RIGHT          ((sal_uInt16)0x0010)
-#define BORDERWINDOW_HITTEST_BOTTOM         ((sal_uInt16)0x0020)
-#define BORDERWINDOW_HITTEST_TOPLEFT        ((sal_uInt16)0x0040)
-#define BORDERWINDOW_HITTEST_TOPRIGHT       ((sal_uInt16)0x0080)
-#define BORDERWINDOW_HITTEST_BOTTOMLEFT     ((sal_uInt16)0x0100)
-#define BORDERWINDOW_HITTEST_BOTTOMRIGHT    ((sal_uInt16)0x0200)
-#define BORDERWINDOW_HITTEST_CLOSE          ((sal_uInt16)0x0400)
-#define BORDERWINDOW_HITTEST_ROLL           ((sal_uInt16)0x0800)
-#define BORDERWINDOW_HITTEST_DOCK           ((sal_uInt16)0x1000)
-#define BORDERWINDOW_HITTEST_HIDE           ((sal_uInt16)0x2000)
-#define BORDERWINDOW_HITTEST_HELP           ((sal_uInt16)0x4000)
-#define BORDERWINDOW_HITTEST_PIN            ((sal_uInt16)0x8000)
+enum class BorderWindowHitTest {
+    NONE           = 0x0000,
+    Title          = 0x0001,
+    Left           = 0x0002,
+    Menu           = 0x0004,
+    Top            = 0x0008,
+    Right          = 0x0010,
+    Bottom         = 0x0020,
+    TopLeft        = 0x0040,
+    TopRight       = 0x0080,
+    BottomLeft     = 0x0100,
+    BottomRight    = 0x0200,
+    Close          = 0x0400,
+    Roll           = 0x0800,
+    Dock           = 0x1000,
+    Hide           = 0x2000,
+    Help           = 0x4000,
+    Pin            = 0x8000
+};
+namespace o3tl {
+    template<> struct typed_flags<BorderWindowHitTest> : is_typed_flags<BorderWindowHitTest, 0xffff> {};
+};
 
 enum class BorderWindowDraw {
     Title         = 0x0001,
@@ -207,7 +213,7 @@ struct ImplBorderFrameData
     long                     mnNoTitleTop;
     long                     mnBorderSize;
     long                     mnTitleHeight;
-    sal_uInt16               mnHitTest;
+    BorderWindowHitTest      mnHitTest;
     DrawButtonFlags          mnPinState;
     DrawButtonFlags          mnCloseState;
     DrawButtonFlags          mnRollState;
@@ -239,7 +245,7 @@ public:
     virtual Rectangle       GetMenuRect() const;
 
     static void             ImplInitTitle( ImplBorderFrameData* pData );
-    static sal_uInt16       ImplHitTest( ImplBorderFrameData* pData, const Point& rPos );
+    static BorderWindowHitTest ImplHitTest( ImplBorderFrameData* pData, const Point& rPos );
     static bool             ImplMouseMove( ImplBorderFrameData* pData, const MouseEvent& rMEvt );
     static OUString         ImplRequestHelp( ImplBorderFrameData* pData, const Point& rPos, Rectangle& rHelpRect );
     static long             ImplCalcTitleWidth( const ImplBorderFrameData* pData );
