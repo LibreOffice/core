@@ -380,7 +380,7 @@ void ImplCalcOutSideRgn( const RECT& rSrcRect,
 void WinSalGraphicsImpl::copyArea( long nDestX, long nDestY,
                             long nSrcX, long nSrcY,
                             long nSrcWidth, long nSrcHeight,
-                            sal_uInt16 nFlags )
+                            bool bWindowInvalidate )
 {
     bool    bRestoreClipRgn = false;
     HRGN    hOldClipRgn = 0;
@@ -388,7 +388,7 @@ void WinSalGraphicsImpl::copyArea( long nDestX, long nDestY,
     HRGN    hInvalidateRgn = 0;
 
     // do we have to invalidate also the overlapping regions?
-    if ( (nFlags & SAL_COPYAREA_WINDOWINVALIDATE) && mrParent.isWindow() )
+    if ( bWindowInvalidate && mrParent.isWindow() )
     {
         // compute and invalidate those parts that were either off-screen or covered by other windows
         //  while performing the above BitBlt

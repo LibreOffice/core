@@ -170,9 +170,9 @@ void X11SalGraphics::copyBits( const SalTwoRect& rPosAry,
 void X11SalGraphics::copyArea ( long nDestX,    long nDestY,
                                 long nSrcX,     long nSrcY,
                                 long nSrcWidth, long nSrcHeight,
-                                sal_uInt16 n )
+                                bool bWindowInvalidate)
 {
-    mxImpl->copyArea( nDestX, nDestY, nSrcX, nSrcY, nSrcWidth, nSrcHeight, n );
+    mxImpl->copyArea( nDestX, nDestY, nSrcX, nSrcY, nSrcWidth, nSrcHeight, bWindowInvalidate );
 }
 
 bool X11SalGraphics::blendBitmap( const SalTwoRect& rTR,
