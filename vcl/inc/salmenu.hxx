@@ -80,6 +80,8 @@ public:
     virtual void RemoveMenuBarButton( sal_uInt16 nId );
     virtual void Update() {}
 
+    virtual bool CanGetFocus() const { return false; }
+
     // TODO: implement show/hide for the Win/Mac VCL native backends
     virtual void ShowItem( unsigned nPos, bool bShow ) { EnableItem( nPos, bShow ); }
 

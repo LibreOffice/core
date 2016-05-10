@@ -1180,10 +1180,13 @@ bool MenuBarWindow::HandleMenuButtonEvent( sal_uInt16 i_nButtonId )
 
 bool MenuBarWindow::CanGetFocus() const
 {
-    /* #i83908# do not use the menubar if it is native and invisible
+    /* #i83908# do not use the menubar if it is native or invisible
        this relies on MenuBar::ImplCreate setting the height of the menubar
        to 0 in this case
     */
+    SalMenu *pNativeMenu = pMenu ? pMenu->ImplGetSalMenu() : nullptr;
+    if (pNativeMenu && pNativeMenu->VisibleMenuBar())
+        return pNativeMenu->CanGetFocus();
     return GetSizePixel().Height() > 0;
 }
 
