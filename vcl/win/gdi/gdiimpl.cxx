@@ -225,7 +225,7 @@ static BYTE aOrdDither16Bit[8][8] =
 SalColor ImplGetROPSalColor( SalROPColor nROPColor )
 {
     SalColor nSalColor;
-    if ( nROPColor == SAL_ROP_0 )
+    if ( nROPColor == SalROPColor::N0 )
         nSalColor = MAKE_SALCOLOR( 0, 0, 0 );
     else
         nSalColor = MAKE_SALCOLOR( 255, 255, 255 );

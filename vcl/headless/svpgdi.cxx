@@ -450,13 +450,13 @@ void SvpSalGraphics::SetROPLineColor( SalROPColor nROPColor )
 {
     switch( nROPColor )
     {
-        case SAL_ROP_0:
+        case SalROPColor::N0:
             m_aLineColor = MAKE_SALCOLOR(0, 0, 0);
             break;
-        case SAL_ROP_1:
+        case SalROPColor::N1:
             m_aLineColor = MAKE_SALCOLOR(0xff, 0xff, 0xff);
             break;
-        case SAL_ROP_INVERT:
+        case SalROPColor::Invert:
             m_aLineColor = MAKE_SALCOLOR(0xff, 0xff, 0xff);
             break;
     }
@@ -466,13 +466,13 @@ void SvpSalGraphics::SetROPFillColor( SalROPColor nROPColor )
 {
     switch( nROPColor )
     {
-        case SAL_ROP_0:
+        case SalROPColor::N0:
             m_aFillColor = MAKE_SALCOLOR(0, 0, 0);
             break;
-        case SAL_ROP_1:
+        case SalROPColor::N1:
             m_aFillColor = MAKE_SALCOLOR(0xff, 0xff, 0xff);
             break;
-        case SAL_ROP_INVERT:
+        case SalROPColor::Invert:
             m_aFillColor = MAKE_SALCOLOR(0xff, 0xff, 0xff);
             break;
     }

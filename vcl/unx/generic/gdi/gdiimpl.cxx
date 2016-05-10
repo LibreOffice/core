@@ -1158,13 +1158,13 @@ void X11SalGraphicsImpl::SetROPLineColor( SalROPColor nROPColor )
 {
     switch( nROPColor )
     {
-        case SAL_ROP_0 : // 0
+        case SalROPColor::N0 : // 0
             mnPenPixel = (Pixel)0;
             break;
-        case SAL_ROP_1 : // 1
+        case SalROPColor::N1 : // 1
             mnPenPixel = (Pixel)(1 << mrParent.GetVisual().GetDepth()) - 1;
             break;
-        case SAL_ROP_INVERT : // 2
+        case SalROPColor::Invert : // 2
             mnPenPixel = (Pixel)(1 << mrParent.GetVisual().GetDepth()) - 1;
             break;
     }
@@ -1176,13 +1176,13 @@ void X11SalGraphicsImpl::SetROPFillColor( SalROPColor nROPColor )
 {
     switch( nROPColor )
     {
-        case SAL_ROP_0 : // 0
+        case SalROPColor::N0 : // 0
             mnBrushPixel = (Pixel)0;
             break;
-        case SAL_ROP_1 : // 1
+        case SalROPColor::N1 : // 1
             mnBrushPixel = (Pixel)(1 << mrParent.GetVisual().GetDepth()) - 1;
             break;
-        case SAL_ROP_INVERT : // 2
+        case SalROPColor::Invert : // 2
             mnBrushPixel = (Pixel)(1 << mrParent.GetVisual().GetDepth()) - 1;
             break;
     }
