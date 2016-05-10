@@ -458,13 +458,13 @@ bool X11SalObject::Dispatch( XEvent* pEvent )
                     pObject->mbVisible = true;
                     return true;
                     case ButtonPress:
-                    pObject->CallCallback( SALOBJ_EVENT_TOTOP, nullptr );
+                    pObject->CallCallback( SalObjEvent::ToTop, nullptr );
                     return true;
                     case FocusIn:
-                    pObject->CallCallback( SALOBJ_EVENT_GETFOCUS, nullptr );
+                    pObject->CallCallback( SalObjEvent::GetFocus, nullptr );
                     return true;
                     case FocusOut:
-                    pObject->CallCallback( SALOBJ_EVENT_LOSEFOCUS, nullptr );
+                    pObject->CallCallback( SalObjEvent::LoseFocus, nullptr );
                     return true;
                     default: break;
                 }
