@@ -53,7 +53,7 @@ ImplToolBoxPrivateData::ImplToolBoxPrivateData() :
     mpMenu = new PopupMenu();
     mnEventId = nullptr;
 
-    maMenuType = TOOLBOX_MENUTYPE_NONE;
+    maMenuType = ToolBoxMenuType::NONE;
     maMenubuttonItem.maItemSize = Size( TB_MENUBUTTON_SIZE+TB_MENUBUTTON_OFFSET, TB_MENUBUTTON_SIZE+TB_MENUBUTTON_OFFSET );
     maMenubuttonItem.meState = TRISTATE_FALSE;
     mnMenuButtonWidth = TB_MENUBUTTON_SIZE;
@@ -1737,7 +1737,7 @@ void ToolBox::SetDropdownClickHdl( const Link<ToolBox *, void>& rLink )
     }
 }
 
-void ToolBox::SetMenuType( sal_uInt16 aType )
+void ToolBox::SetMenuType( ToolBoxMenuType aType )
 {
     if( aType != mpData->maMenuType )
     {
@@ -1747,7 +1747,7 @@ void ToolBox::SetMenuType( sal_uInt16 aType )
             // the menu button may have to be moved into the decoration which changes the layout
             ImplDockingWindowWrapper *pWrapper = ImplGetDockingManager()->GetDockingWindowWrapper( this );
             if( pWrapper )
-                pWrapper->ShowTitleButton( TitleButton::Menu, ( aType & TOOLBOX_MENUTYPE_CUSTOMIZE) != 0 );
+                pWrapper->ShowTitleButton( TitleButton::Menu, bool( aType & ToolBoxMenuType::Customize) );
 
             mbFormat = true;
             ImplFormat();
@@ -1762,14 +1762,14 @@ void ToolBox::SetMenuType( sal_uInt16 aType )
     }
 }
 
-sal_uInt16 ToolBox::GetMenuType() const
+ToolBoxMenuType ToolBox::GetMenuType() const
 {
     return mpData->maMenuType;
 }
 
 bool ToolBox::IsMenuEnabled() const
 {
-    return mpData->maMenuType != TOOLBOX_MENUTYPE_NONE;
+    return mpData->maMenuType != ToolBoxMenuType::NONE;
 }
 
 PopupMenu* ToolBox::GetMenu() const
@@ -1894,7 +1894,7 @@ void ToolBox::ImplExecuteCustomMenu()
 {
     if( IsMenuEnabled() )
     {
-        if( GetMenuType() & TOOLBOX_MENUTYPE_CUSTOMIZE )
+        if( GetMenuType() & ToolBoxMenuType::Customize )
             // call button handler to allow for menu customization
             mpData->maMenuButtonHdl.Call( this );
 

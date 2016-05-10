@@ -537,11 +537,11 @@ bool ToolbarLayoutManager::createToolbar( const OUString& rResourceURL )
             if ( pWindow && pWindow->GetType() == WINDOW_TOOLBOX )
             {
                 ToolBox* pToolbar = static_cast<ToolBox *>(pWindow);
-                sal_uInt16 nMenuType = pToolbar->GetMenuType();
+                ToolBoxMenuType nMenuType = pToolbar->GetMenuType();
                 if ( aCmdOptions.Lookup( SvtCommandOptions::CMDOPTION_DISABLED, "ConfigureDialog" ))
-                    pToolbar->SetMenuType( nMenuType & ~TOOLBOX_MENUTYPE_CUSTOMIZE );
+                    pToolbar->SetMenuType( nMenuType & ~ToolBoxMenuType::Customize );
                 else
-                    pToolbar->SetMenuType( nMenuType | TOOLBOX_MENUTYPE_CUSTOMIZE );
+                    pToolbar->SetMenuType( nMenuType | ToolBoxMenuType::Customize );
             }
             bNotify = true;
 
