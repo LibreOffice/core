@@ -931,6 +931,7 @@ void OControlModel::getFastPropertyValue( Any& _rValue, sal_Int32 _nHandle ) con
             break;
         case PROPERTY_ID_GENERATEVBAEVENTS:
             _rValue <<= m_bGenerateVbEvents;
+            break;
         // added for exporting OCX control
         case PROPERTY_ID_CONTROL_TYPE_IN_MSO:
             _rValue <<= (sal_Int16)m_nControlTypeinMSO;
