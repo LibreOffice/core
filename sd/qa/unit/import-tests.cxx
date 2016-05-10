@@ -1173,6 +1173,7 @@ void SdImportTest::testTdf93097()
 
 void SdImportTest::testTdf93124()
 {
+#if defined(MACOSX) || defined(WNT)
     sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/ppt/tdf93124.ppt"), PPT);
     uno::Reference < uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
     uno::Reference< drawing::XGraphicExportFilter > xGraphicExporter = drawing::GraphicExportFilter::create(xContext);
@@ -1214,6 +1215,7 @@ void SdImportTest::testTdf93124()
         }
     CPPUNIT_ASSERT_MESSAGE("Tdf93124: vertical alignment of text is incorrect!", nNonWhiteCount>100);
     xDocShRef->DoClose();
+#endif
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdImportTest);
