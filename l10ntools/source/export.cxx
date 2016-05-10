@@ -378,7 +378,7 @@ void Export::Execute( int nToken, const char * pToken )
             return;
         case RSCDEFINE:
             bDefine = true; // res. defined in macro
-
+            SAL_FALLTHROUGH;
         case RESOURCE:
         case RESOURCEEXPR: {
             if ( nToken != RSCDEFINE )
