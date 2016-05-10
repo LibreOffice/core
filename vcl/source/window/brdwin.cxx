@@ -210,28 +210,28 @@ void ImplBorderWindowView::ImplInitTitle(ImplBorderFrameData* pData)
     }
 }
 
-sal_uInt16 ImplBorderWindowView::ImplHitTest( ImplBorderFrameData* pData, const Point& rPos )
+BorderWindowHitTest ImplBorderWindowView::ImplHitTest( ImplBorderFrameData* pData, const Point& rPos )
 {
     ImplBorderWindow* pBorderWindow = pData->mpBorderWindow;
 
     if ( pData->maTitleRect.IsInside( rPos ) )
     {
         if ( pData->maCloseRect.IsInside( rPos ) )
-            return BORDERWINDOW_HITTEST_CLOSE;
+            return BorderWindowHitTest::Close;
         else if ( pData->maRollRect.IsInside( rPos ) )
-            return BORDERWINDOW_HITTEST_ROLL;
+            return BorderWindowHitTest::Roll;
         else if ( pData->maMenuRect.IsInside( rPos ) )
-            return BORDERWINDOW_HITTEST_MENU;
+            return BorderWindowHitTest::Menu;
         else if ( pData->maDockRect.IsInside( rPos ) )
-            return BORDERWINDOW_HITTEST_DOCK;
+            return BorderWindowHitTest::Dock;
         else if ( pData->maHideRect.IsInside( rPos ) )
-            return BORDERWINDOW_HITTEST_HIDE;
+            return BorderWindowHitTest::Hide;
         else if ( pData->maHelpRect.IsInside( rPos ) )
-            return BORDERWINDOW_HITTEST_HELP;
+            return BorderWindowHitTest::Help;
         else if ( pData->maPinRect.IsInside( rPos ) )
-            return BORDERWINDOW_HITTEST_PIN;
+            return BorderWindowHitTest::Pin;
         else
-            return BORDERWINDOW_HITTEST_TITLE;
+            return BorderWindowHitTest::Title;
     }
 
     if ( (pBorderWindow->GetStyle() & WB_SIZEABLE) &&
@@ -249,42 +249,42 @@ sal_uInt16 ImplBorderWindowView::ImplHitTest( ImplBorderFrameData* pData, const 
         if ( rPos.X() < pData->mnLeftBorder )
         {
             if ( rPos.Y() < nSizeWidth )
-                return BORDERWINDOW_HITTEST_TOPLEFT;
+                return BorderWindowHitTest::TopLeft;
             else if ( rPos.Y() >= pData->mnHeight-nSizeWidth )
-                return BORDERWINDOW_HITTEST_BOTTOMLEFT;
+                return BorderWindowHitTest::BottomLeft;
             else
-                return BORDERWINDOW_HITTEST_LEFT;
+                return BorderWindowHitTest::Left;
         }
         else if ( rPos.X() >= pData->mnWidth-pData->mnRightBorder )
         {
             if ( rPos.Y() < nSizeWidth )
-                return BORDERWINDOW_HITTEST_TOPRIGHT;
+                return BorderWindowHitTest::TopRight;
             else if ( rPos.Y() >= pData->mnHeight-nSizeWidth )
-                return BORDERWINDOW_HITTEST_BOTTOMRIGHT;
+                return BorderWindowHitTest::BottomRight;
             else
-                return BORDERWINDOW_HITTEST_RIGHT;
+                return BorderWindowHitTest::Right;
         }
         else if ( rPos.Y() < pData->mnNoTitleTop )
         {
             if ( rPos.X() < nSizeWidth )
-                return BORDERWINDOW_HITTEST_TOPLEFT;
+                return BorderWindowHitTest::TopLeft;
             else if ( rPos.X() >= pData->mnWidth-nSizeWidth )
-                return BORDERWINDOW_HITTEST_TOPRIGHT;
+                return BorderWindowHitTest::TopRight;
             else
-                return BORDERWINDOW_HITTEST_TOP;
+                return BorderWindowHitTest::Top;
         }
         else if ( rPos.Y() >= pData->mnHeight-pData->mnBottomBorder )
         {
             if ( rPos.X() < nSizeWidth )
-                return BORDERWINDOW_HITTEST_BOTTOMLEFT;
+                return BorderWindowHitTest::BottomLeft;
             else if ( rPos.X() >= pData->mnWidth-nSizeWidth )
-                return BORDERWINDOW_HITTEST_BOTTOMRIGHT;
+                return BorderWindowHitTest::BottomRight;
             else
-                return BORDERWINDOW_HITTEST_BOTTOM;
+                return BorderWindowHitTest::Bottom;
         }
     }
 
-    return 0;
+    return BorderWindowHitTest::NONE;
 }
 
 bool ImplBorderWindowView::ImplMouseMove( ImplBorderFrameData* pData, const MouseEvent& rMEvt )
@@ -295,27 +295,27 @@ bool ImplBorderWindowView::ImplMouseMove( ImplBorderFrameData* pData, const Mous
     pData->mnMenuState &= ~DrawButtonFlags::Highlight;
 
     Point aMousePos = rMEvt.GetPosPixel();
-    sal_uInt16 nHitTest = ImplHitTest( pData, aMousePos );
+    BorderWindowHitTest nHitTest = ImplHitTest( pData, aMousePos );
     PointerStyle ePtrStyle = PointerStyle::Arrow;
-    if ( nHitTest & BORDERWINDOW_HITTEST_LEFT )
+    if ( nHitTest & BorderWindowHitTest::Left )
         ePtrStyle = PointerStyle::WindowWSize;
-    else if ( nHitTest & BORDERWINDOW_HITTEST_RIGHT )
+    else if ( nHitTest & BorderWindowHitTest::Right )
         ePtrStyle = PointerStyle::WindowESize;
-    else if ( nHitTest & BORDERWINDOW_HITTEST_TOP )
+    else if ( nHitTest & BorderWindowHitTest::Top )
         ePtrStyle = PointerStyle::WindowNSize;
-    else if ( nHitTest & BORDERWINDOW_HITTEST_BOTTOM )
+    else if ( nHitTest & BorderWindowHitTest::Bottom )
         ePtrStyle = PointerStyle::WindowSSize;
-    else if ( nHitTest & BORDERWINDOW_HITTEST_TOPLEFT )
+    else if ( nHitTest & BorderWindowHitTest::TopLeft )
         ePtrStyle = PointerStyle::WindowNWSize;
-    else if ( nHitTest & BORDERWINDOW_HITTEST_BOTTOMRIGHT )
+    else if ( nHitTest & BorderWindowHitTest::BottomRight )
         ePtrStyle = PointerStyle::WindowSESize;
-    else if ( nHitTest & BORDERWINDOW_HITTEST_TOPRIGHT )
+    else if ( nHitTest & BorderWindowHitTest::TopRight )
         ePtrStyle = PointerStyle::WindowNESize;
-    else if ( nHitTest & BORDERWINDOW_HITTEST_BOTTOMLEFT )
+    else if ( nHitTest & BorderWindowHitTest::BottomLeft )
         ePtrStyle = PointerStyle::WindowSWSize;
-    else if ( nHitTest & BORDERWINDOW_HITTEST_CLOSE )
+    else if ( nHitTest & BorderWindowHitTest::Close )
         pData->mnCloseState |= DrawButtonFlags::Highlight;
-    else if ( nHitTest & BORDERWINDOW_HITTEST_MENU )
+    else if ( nHitTest & BorderWindowHitTest::Menu )
         pData->mnMenuState |= DrawButtonFlags::Highlight;
     pData->mpBorderWindow->SetPointer( Pointer( ePtrStyle ) );
 
@@ -333,15 +333,15 @@ OUString ImplBorderWindowView::ImplRequestHelp( ImplBorderFrameData* pData,
 {
     sal_uInt16 nHelpId = 0;
     OUString aHelpStr;
-    sal_uInt16 nHitTest = ImplHitTest( pData, rPos );
-    if ( nHitTest )
+    BorderWindowHitTest nHitTest = ImplHitTest( pData, rPos );
+    if ( nHitTest != BorderWindowHitTest::NONE )
     {
-        if ( nHitTest & BORDERWINDOW_HITTEST_CLOSE )
+        if ( nHitTest & BorderWindowHitTest::Close )
         {
             nHelpId     = SV_HELPTEXT_CLOSE;
             rHelpRect   = pData->maCloseRect;
         }
-        else if ( nHitTest & BORDERWINDOW_HITTEST_ROLL )
+        else if ( nHitTest & BorderWindowHitTest::Roll )
         {
             if ( pData->mpBorderWindow->mbRollUp )
                 nHelpId = SV_HELPTEXT_ROLLDOWN;
@@ -349,27 +349,27 @@ OUString ImplBorderWindowView::ImplRequestHelp( ImplBorderFrameData* pData,
                 nHelpId = SV_HELPTEXT_ROLLUP;
             rHelpRect   = pData->maRollRect;
         }
-        else if ( nHitTest & BORDERWINDOW_HITTEST_DOCK )
+        else if ( nHitTest & BorderWindowHitTest::Dock )
         {
             nHelpId     = SV_HELPTEXT_MAXIMIZE;
             rHelpRect   = pData->maDockRect;
         }
-        else if ( nHitTest & BORDERWINDOW_HITTEST_HIDE )
+        else if ( nHitTest & BorderWindowHitTest::Hide )
         {
             nHelpId     = SV_HELPTEXT_MINIMIZE;
             rHelpRect   = pData->maHideRect;
         }
-        else if ( nHitTest & BORDERWINDOW_HITTEST_HELP )
+        else if ( nHitTest & BorderWindowHitTest::Help )
         {
             nHelpId     = SV_HELPTEXT_HELP;
             rHelpRect   = pData->maHelpRect;
         }
-        else if ( nHitTest & BORDERWINDOW_HITTEST_PIN )
+        else if ( nHitTest & BorderWindowHitTest::Pin )
         {
             nHelpId     = SV_HELPTEXT_ALWAYSVISIBLE;
             rHelpRect   = pData->maPinRect;
         }
-        else if ( nHitTest & BORDERWINDOW_HITTEST_TITLE )
+        else if ( nHitTest & BorderWindowHitTest::Title )
         {
             if( !pData->maTitleRect.IsEmpty() )
             {
@@ -790,7 +790,7 @@ ImplStdBorderWindowView::ImplStdBorderWindowView( ImplBorderWindow* pBorderWindo
 {
     maFrameData.mpBorderWindow  = pBorderWindow;
     maFrameData.mbDragFull      = false;
-    maFrameData.mnHitTest       = 0;
+    maFrameData.mnHitTest       = BorderWindowHitTest::NONE;
     maFrameData.mnPinState      = DrawButtonFlags::NONE;
     maFrameData.mnCloseState    = DrawButtonFlags::NONE;
     maFrameData.mnRollState     = DrawButtonFlags::NONE;
@@ -823,28 +823,28 @@ bool ImplStdBorderWindowView::MouseButtonDown( const MouseEvent& rMEvt )
     {
         maFrameData.maMouseOff = rMEvt.GetPosPixel();
         maFrameData.mnHitTest = ImplHitTest( &maFrameData, maFrameData.maMouseOff );
-        if ( maFrameData.mnHitTest )
+        if ( maFrameData.mnHitTest != BorderWindowHitTest::NONE )
         {
             DragFullOptions nDragFullTest = DragFullOptions::NONE;
             bool bTracking = true;
             bool bHitTest = true;
 
-            if ( maFrameData.mnHitTest & BORDERWINDOW_HITTEST_CLOSE )
+            if ( maFrameData.mnHitTest & BorderWindowHitTest::Close )
             {
                 maFrameData.mnCloseState |= DrawButtonFlags::Pressed;
                 pBorderWindow->InvalidateBorder();
             }
-            else if ( maFrameData.mnHitTest & BORDERWINDOW_HITTEST_ROLL )
+            else if ( maFrameData.mnHitTest & BorderWindowHitTest::Roll )
             {
                 maFrameData.mnRollState |= DrawButtonFlags::Pressed;
                 pBorderWindow->InvalidateBorder();
             }
-            else if ( maFrameData.mnHitTest & BORDERWINDOW_HITTEST_DOCK )
+            else if ( maFrameData.mnHitTest & BorderWindowHitTest::Dock )
             {
                 maFrameData.mnDockState |= DrawButtonFlags::Pressed;
                 pBorderWindow->InvalidateBorder();
             }
-            else if ( maFrameData.mnHitTest & BORDERWINDOW_HITTEST_MENU )
+            else if ( maFrameData.mnHitTest & BorderWindowHitTest::Menu )
             {
                 maFrameData.mnMenuState |= DrawButtonFlags::Pressed;
                 pBorderWindow->InvalidateBorder();
@@ -856,17 +856,17 @@ bool ImplStdBorderWindowView::MouseButtonDown( const MouseEvent& rMEvt )
                     pClientWindow->TitleButtonClick( TitleButton::Menu );
                 }
             }
-            else if ( maFrameData.mnHitTest & BORDERWINDOW_HITTEST_HIDE )
+            else if ( maFrameData.mnHitTest & BorderWindowHitTest::Hide )
             {
                 maFrameData.mnHideState |= DrawButtonFlags::Pressed;
                 pBorderWindow->InvalidateBorder();
             }
-            else if ( maFrameData.mnHitTest & BORDERWINDOW_HITTEST_HELP )
+            else if ( maFrameData.mnHitTest & BorderWindowHitTest::Help )
             {
                 maFrameData.mnHelpState |= DrawButtonFlags::Pressed;
                 pBorderWindow->InvalidateBorder();
             }
-            else if ( maFrameData.mnHitTest & BORDERWINDOW_HITTEST_PIN )
+            else if ( maFrameData.mnHitTest & BorderWindowHitTest::Pin )
             {
                 maFrameData.mnPinState |= DrawButtonFlags::Pressed;
                 pBorderWindow->InvalidateBorder();
@@ -884,7 +884,7 @@ bool ImplStdBorderWindowView::MouseButtonDown( const MouseEvent& rMEvt )
                         maFrameData.mnTrackWidth  = aSize.Width();
                         maFrameData.mnTrackHeight = aSize.Height();
 
-                        if ( maFrameData.mnHitTest & BORDERWINDOW_HITTEST_TITLE )
+                        if ( maFrameData.mnHitTest & BorderWindowHitTest::Title )
                             nDragFullTest = DragFullOptions::WindowMove;
                         else
                             nDragFullTest = DragFullOptions::WindowSize;
@@ -894,10 +894,10 @@ bool ImplStdBorderWindowView::MouseButtonDown( const MouseEvent& rMEvt )
                 {
                     bTracking = false;
 
-                    if ( (maFrameData.mnHitTest & BORDERWINDOW_DRAW_TITLE) &&
+                    if ( (maFrameData.mnHitTest & BorderWindowHitTest::Title) &&
                          ((rMEvt.GetClicks() % 2) == 0) )
                     {
-                        maFrameData.mnHitTest = 0;
+                        maFrameData.mnHitTest = BorderWindowHitTest::NONE;
                         bHitTest = false;
 
                         if ( pBorderWindow->ImplGetClientWindow()->IsSystemWindow() )
@@ -929,7 +929,7 @@ bool ImplStdBorderWindowView::MouseButtonDown( const MouseEvent& rMEvt )
                 pBorderWindow->StartTracking(eFlags);
             }
             else if ( bHitTest )
-                maFrameData.mnHitTest = 0;
+                maFrameData.mnHitTest = BorderWindowHitTest::NONE;
         }
     }
 
@@ -942,10 +942,10 @@ bool ImplStdBorderWindowView::Tracking( const TrackingEvent& rTEvt )
 
     if ( rTEvt.IsTrackingEnded() )
     {
-        sal_uInt16 nHitTest = maFrameData.mnHitTest;
-        maFrameData.mnHitTest = 0;
+        BorderWindowHitTest nHitTest = maFrameData.mnHitTest;
+        maFrameData.mnHitTest = BorderWindowHitTest::NONE;
 
-        if ( nHitTest & BORDERWINDOW_HITTEST_CLOSE )
+        if ( nHitTest & BorderWindowHitTest::Close )
         {
             if ( maFrameData.mnCloseState & DrawButtonFlags::Pressed )
             {
@@ -967,7 +967,7 @@ bool ImplStdBorderWindowView::Tracking( const TrackingEvent& rTEvt )
                 }
             }
         }
-        else if ( nHitTest & BORDERWINDOW_HITTEST_ROLL )
+        else if ( nHitTest & BorderWindowHitTest::Roll )
         {
             if ( maFrameData.mnRollState & DrawButtonFlags::Pressed )
             {
@@ -989,7 +989,7 @@ bool ImplStdBorderWindowView::Tracking( const TrackingEvent& rTEvt )
                 }
             }
         }
-        else if ( nHitTest & BORDERWINDOW_HITTEST_DOCK )
+        else if ( nHitTest & BorderWindowHitTest::Dock )
         {
             if ( maFrameData.mnDockState & DrawButtonFlags::Pressed )
             {
@@ -1007,7 +1007,7 @@ bool ImplStdBorderWindowView::Tracking( const TrackingEvent& rTEvt )
                 }
             }
         }
-        else if ( nHitTest & BORDERWINDOW_HITTEST_MENU )
+        else if ( nHitTest & BorderWindowHitTest::Menu )
         {
             if ( maFrameData.mnMenuState & DrawButtonFlags::Pressed )
             {
@@ -1017,7 +1017,7 @@ bool ImplStdBorderWindowView::Tracking( const TrackingEvent& rTEvt )
                 // handler already called on mouse down
             }
         }
-        else if ( nHitTest & BORDERWINDOW_HITTEST_HIDE )
+        else if ( nHitTest & BorderWindowHitTest::Hide )
         {
             if ( maFrameData.mnHideState & DrawButtonFlags::Pressed )
             {
@@ -1035,7 +1035,7 @@ bool ImplStdBorderWindowView::Tracking( const TrackingEvent& rTEvt )
                 }
             }
         }
-        else if ( nHitTest & BORDERWINDOW_HITTEST_HELP )
+        else if ( nHitTest & BorderWindowHitTest::Help )
         {
             if ( maFrameData.mnHelpState & DrawButtonFlags::Pressed )
             {
@@ -1048,7 +1048,7 @@ bool ImplStdBorderWindowView::Tracking( const TrackingEvent& rTEvt )
                 }
             }
         }
-        else if ( nHitTest & BORDERWINDOW_HITTEST_PIN )
+        else if ( nHitTest & BorderWindowHitTest::Pin )
         {
             if ( maFrameData.mnPinState & DrawButtonFlags::Pressed )
             {
@@ -1096,7 +1096,7 @@ bool ImplStdBorderWindowView::Tracking( const TrackingEvent& rTEvt )
     {
         Point aMousePos = rTEvt.GetMouseEvent().GetPosPixel();
 
-        if ( maFrameData.mnHitTest & BORDERWINDOW_HITTEST_CLOSE )
+        if ( maFrameData.mnHitTest & BorderWindowHitTest::Close )
         {
             if ( maFrameData.maCloseRect.IsInside( aMousePos ) )
             {
@@ -1115,7 +1115,7 @@ bool ImplStdBorderWindowView::Tracking( const TrackingEvent& rTEvt )
                 }
             }
         }
-        else if ( maFrameData.mnHitTest & BORDERWINDOW_HITTEST_ROLL )
+        else if ( maFrameData.mnHitTest & BorderWindowHitTest::Roll )
         {
             if ( maFrameData.maRollRect.IsInside( aMousePos ) )
             {
@@ -1134,7 +1134,7 @@ bool ImplStdBorderWindowView::Tracking( const TrackingEvent& rTEvt )
                 }
             }
         }
-        else if ( maFrameData.mnHitTest & BORDERWINDOW_HITTEST_DOCK )
+        else if ( maFrameData.mnHitTest & BorderWindowHitTest::Dock )
         {
             if ( maFrameData.maDockRect.IsInside( aMousePos ) )
             {
@@ -1153,7 +1153,7 @@ bool ImplStdBorderWindowView::Tracking( const TrackingEvent& rTEvt )
                 }
             }
         }
-        else if ( maFrameData.mnHitTest & BORDERWINDOW_HITTEST_MENU )
+        else if ( maFrameData.mnHitTest & BorderWindowHitTest::Menu )
         {
             if ( maFrameData.maMenuRect.IsInside( aMousePos ) )
             {
@@ -1172,7 +1172,7 @@ bool ImplStdBorderWindowView::Tracking( const TrackingEvent& rTEvt )
                 }
             }
         }
-        else if ( maFrameData.mnHitTest & BORDERWINDOW_HITTEST_HIDE )
+        else if ( maFrameData.mnHitTest & BorderWindowHitTest::Hide )
         {
             if ( maFrameData.maHideRect.IsInside( aMousePos ) )
             {
@@ -1191,7 +1191,7 @@ bool ImplStdBorderWindowView::Tracking( const TrackingEvent& rTEvt )
                 }
             }
         }
-        else if ( maFrameData.mnHitTest & BORDERWINDOW_HITTEST_HELP )
+        else if ( maFrameData.mnHitTest & BorderWindowHitTest::Help )
         {
             if ( maFrameData.maHelpRect.IsInside( aMousePos ) )
             {
@@ -1210,7 +1210,7 @@ bool ImplStdBorderWindowView::Tracking( const TrackingEvent& rTEvt )
                 }
             }
         }
-        else if ( maFrameData.mnHitTest & BORDERWINDOW_HITTEST_PIN )
+        else if ( maFrameData.mnHitTest & BorderWindowHitTest::Pin )
         {
             if ( maFrameData.maPinRect.IsInside( aMousePos ) )
             {
@@ -1234,7 +1234,7 @@ bool ImplStdBorderWindowView::Tracking( const TrackingEvent& rTEvt )
             aMousePos.X()    -= maFrameData.maMouseOff.X();
             aMousePos.Y()    -= maFrameData.maMouseOff.Y();
 
-            if ( maFrameData.mnHitTest & BORDERWINDOW_HITTEST_TITLE )
+            if ( maFrameData.mnHitTest & BorderWindowHitTest::Title )
             {
                 maFrameData.mpBorderWindow->SetPointer( Pointer( PointerStyle::Move ) );
 
@@ -1278,7 +1278,7 @@ bool ImplStdBorderWindowView::Tracking( const TrackingEvent& rTEvt )
                 }
                 if ( nMinWidth2 > nMinWidth )
                     nMinWidth = nMinWidth2;
-                if ( maFrameData.mnHitTest & (BORDERWINDOW_HITTEST_LEFT | BORDERWINDOW_HITTEST_TOPLEFT | BORDERWINDOW_HITTEST_BOTTOMLEFT) )
+                if ( maFrameData.mnHitTest & (BorderWindowHitTest::Left | BorderWindowHitTest::TopLeft | BorderWindowHitTest::BottomLeft) )
                 {
                     aNewRect.Left() += aMousePos.X();
                     if ( aNewRect.GetWidth() < nMinWidth )
@@ -1286,7 +1286,7 @@ bool ImplStdBorderWindowView::Tracking( const TrackingEvent& rTEvt )
                     else if ( aNewRect.GetWidth() > nMaxWidth )
                         aNewRect.Left() = aNewRect.Right()-nMaxWidth+1;
                 }
-                else if ( maFrameData.mnHitTest & (BORDERWINDOW_HITTEST_RIGHT | BORDERWINDOW_HITTEST_TOPRIGHT | BORDERWINDOW_HITTEST_BOTTOMRIGHT) )
+                else if ( maFrameData.mnHitTest & (BorderWindowHitTest::Right | BorderWindowHitTest::TopRight | BorderWindowHitTest::BottomRight) )
                 {
                     aNewRect.Right() += aMousePos.X();
                     if ( aNewRect.GetWidth() < nMinWidth )
@@ -1294,7 +1294,7 @@ bool ImplStdBorderWindowView::Tracking( const TrackingEvent& rTEvt )
                     else if ( aNewRect.GetWidth() > nMaxWidth )
                         aNewRect.Right() = aNewRect.Left()+nMaxWidth+1;
                 }
-                if ( maFrameData.mnHitTest & (BORDERWINDOW_HITTEST_TOP | BORDERWINDOW_HITTEST_TOPLEFT | BORDERWINDOW_HITTEST_TOPRIGHT) )
+                if ( maFrameData.mnHitTest & (BorderWindowHitTest::Top | BorderWindowHitTest::TopLeft | BorderWindowHitTest::TopRight) )
                 {
                     aNewRect.Top() += aMousePos.Y();
                     if ( aNewRect.GetHeight() < nMinHeight )
@@ -1302,7 +1302,7 @@ bool ImplStdBorderWindowView::Tracking( const TrackingEvent& rTEvt )
                     else if ( aNewRect.GetHeight() > nMaxHeight )
                         aNewRect.Top() = aNewRect.Bottom()-nMaxHeight+1;
                 }
-                else if ( maFrameData.mnHitTest & (BORDERWINDOW_HITTEST_BOTTOM | BORDERWINDOW_HITTEST_BOTTOMLEFT | BORDERWINDOW_HITTEST_BOTTOMRIGHT) )
+                else if ( maFrameData.mnHitTest & (BorderWindowHitTest::Bottom | BorderWindowHitTest::BottomLeft | BorderWindowHitTest::BottomRight) )
                 {
                     aNewRect.Bottom() += aMousePos.Y();
                     if ( aNewRect.GetHeight() < nMinHeight )
@@ -1329,11 +1329,11 @@ bool ImplStdBorderWindowView::Tracking( const TrackingEvent& rTEvt )
                         aSize.Width() = nMaxWidth;
                     if ( aSize.Height() > nMaxHeight )
                         aSize.Height() = nMaxHeight;
-                    if ( maFrameData.mnHitTest & (BORDERWINDOW_HITTEST_LEFT | BORDERWINDOW_HITTEST_TOPLEFT | BORDERWINDOW_HITTEST_BOTTOMLEFT) )
+                    if ( maFrameData.mnHitTest & (BorderWindowHitTest::Left | BorderWindowHitTest::TopLeft | BorderWindowHitTest::BottomLeft) )
                         aNewRect.Left() = aNewRect.Right()-aSize.Width()+1;
                     else
                         aNewRect.Right() = aNewRect.Left()+aSize.Width()-1;
-                    if ( maFrameData.mnHitTest & (BORDERWINDOW_HITTEST_TOP | BORDERWINDOW_HITTEST_TOPLEFT | BORDERWINDOW_HITTEST_TOPRIGHT) )
+                    if ( maFrameData.mnHitTest & (BorderWindowHitTest::Top | BorderWindowHitTest::TopLeft | BorderWindowHitTest::TopRight) )
                         aNewRect.Top() = aNewRect.Bottom()-aSize.Height()+1;
                     else
                         aNewRect.Bottom() = aNewRect.Top()+aSize.Height()-1;
@@ -1351,9 +1351,9 @@ bool ImplStdBorderWindowView::Tracking( const TrackingEvent& rTEvt )
 
                     pBorderWindow->ImplUpdateAll();
                     pBorderWindow->ImplGetFrameWindow()->ImplUpdateAll();
-                    if ( maFrameData.mnHitTest & (BORDERWINDOW_HITTEST_RIGHT | BORDERWINDOW_HITTEST_TOPRIGHT | BORDERWINDOW_HITTEST_BOTTOMRIGHT) )
+                    if ( maFrameData.mnHitTest & (BorderWindowHitTest::Right | BorderWindowHitTest::TopRight | BorderWindowHitTest::BottomRight) )
                         maFrameData.maMouseOff.X() += aNewRect.GetWidth()-nOldWidth;
-                    if ( maFrameData.mnHitTest & (BORDERWINDOW_HITTEST_BOTTOM | BORDERWINDOW_HITTEST_BOTTOMLEFT | BORDERWINDOW_HITTEST_BOTTOMRIGHT) )
+                    if ( maFrameData.mnHitTest & (BorderWindowHitTest::Bottom | BorderWindowHitTest::BottomLeft | BorderWindowHitTest::BottomRight) )
                         maFrameData.maMouseOff.Y() += aNewRect.GetHeight()-nOldHeight;
                 }
                 else
