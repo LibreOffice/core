@@ -84,6 +84,8 @@ boost_patches += boost_1_60_0.undef.warning.patch
 boost_patches += boost.wdeprecated-auto_ptr.patch.0
 boost_patches += boost_1_60_0.android.undef.warning.patch
 
+# <https://github.com/boostorg/format/pull/11> "BOOST_FALLTHROUGH to silence
+# Clang -Wimplicit-fallthrough":
 boost_patches += fallthrough.patch.0
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,boost))
