@@ -31,6 +31,7 @@ double ImpGetDouble( const SbxValues* p )
     {
         case SbxNULL:
             SbxBase::SetError( ERRCODE_SBX_CONVERSION );
+            SAL_FALLTHROUGH;
         case SbxEMPTY:
             nRes = 0; break;
         case SbxCHAR:

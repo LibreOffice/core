@@ -29,6 +29,7 @@ enum SbxBOOL ImpGetBool( const SbxValues* p )
     {
         case SbxNULL:
             SbxBase::SetError( ERRCODE_SBX_CONVERSION );
+            SAL_FALLTHROUGH;
         case SbxEMPTY:
             nRes = SbxFALSE; break;
         case SbxCHAR:
