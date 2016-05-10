@@ -194,6 +194,7 @@ bool SwFlowFrame::IsKeep( const SwAttrSet& rAttrs, bool bCheckIfLastRowShouldKee
             case SVX_BREAK_PAGE_BOTH:
             {
                 bKeep = false;
+                break;
             }
             default: break;
         }
@@ -247,6 +248,7 @@ bool SwFlowFrame::IsKeep( const SwAttrSet& rAttrs, bool bCheckIfLastRowShouldKee
                         case SVX_BREAK_PAGE_BEFORE:
                         case SVX_BREAK_PAGE_BOTH:
                             bKeep = false;
+                            break;
                         default: break;
                     }
                 }

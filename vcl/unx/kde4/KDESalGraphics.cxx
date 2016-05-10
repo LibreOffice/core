@@ -903,6 +903,7 @@ bool KDESalGraphics::getNativeControlRegion( ControlType type, ControlPart part,
                 contentRect = boundingRect = rect;
                 retVal = true;
             }
+            break;
         }
         default:
             break;

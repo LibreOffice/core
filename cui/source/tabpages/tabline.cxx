@@ -80,6 +80,7 @@ SvxLineTabDialog::SvxLineTabDialog
         case OBJ_MEASURE:
         case OBJ_EDGE:
             bLineOnly = true;
+            break;
 
         default:
             break;

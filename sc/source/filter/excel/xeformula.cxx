@@ -2143,6 +2143,7 @@ void XclExpFmlaCompImpl::ProcessExternalName( const XclExpScToken& rTokData )
                                 mxData->mpLinkMgr->StoreCellRange(
                                     nFileId, pScToken->GetString().getString(), aRefData.toAbs(*mxData->mpScBasePos));
                             }
+                            break;
                             default:
                                 ;   // nothing, avoid compiler warning
                         }

@@ -73,8 +73,9 @@ OUString lcl_createClassificationStringForType( ObjectType eObjectType
         case OBJECTTYPE_DATA_ERRORS_Y: //parent is intended to be OBJECTTYPE_DATA_ERRORS
         case OBJECTTYPE_DATA_ERRORS_Z: //parent is intended to be OBJECTTYPE_DATA_ERRORS
             aRet=m_aMultiClick;
+            break;
         default:
-            ;//empty string
+            break;//empty string
     }
     if( !rDragMethodServiceName.isEmpty() )
     {

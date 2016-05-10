@@ -983,6 +983,7 @@ void Window::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* p
             case WINDOW_ERRORBOX:
             case WINDOW_QUERYBOX:
                 nFrameStyle |= SalFrameStyleFlags::DIALOG;
+                break;
             default:
                 break;
         }

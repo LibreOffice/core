@@ -578,7 +578,10 @@ void SwDocStyleSheet::SetHidden( bool bValue )
                     bChg = true;
                 }
             }
-        default:;
+            break;
+
+        default:
+            break;
     }
 
     if( bChg )
@@ -625,7 +628,9 @@ bool SwDocStyleSheet::IsHidden( ) const
                 SwNumRule* pRule = rDoc.FindNumRulePtr( aName );
                 bRet = pRule && pRule->IsHidden( );
             }
-        default:;
+            break;
+        default:
+            break;
     }
 
     return bRet;
@@ -717,6 +722,7 @@ bool  SwDocStyleSheet::HasParentSupport() const
         case SfxStyleFamily::Char :
         case SfxStyleFamily::Para :
         case SfxStyleFamily::Frame: bRet = true;
+            break;
         default:; //prevent warning
     }
     return bRet;
@@ -730,6 +736,7 @@ bool  SwDocStyleSheet::HasClearParentSupport() const
         case SfxStyleFamily::Para :
         case SfxStyleFamily::Char :
         case SfxStyleFamily::Frame: bRet = true;
+            break;
         default:; //prevent warning
     }
     return bRet;

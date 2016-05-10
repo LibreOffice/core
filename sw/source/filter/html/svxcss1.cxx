@@ -1264,9 +1264,10 @@ static void ParseCSS1_font_variant( const CSS1Expression *pExpr,
                 rItemSet.Put( SvxCaseMapItem( (SvxCaseMap)nCaseMap,
                                                 aItemIds.nCaseMap ) );
             }
+            break;
         }
     default:
-        ;
+        break;
     }
 }
 
@@ -1290,9 +1291,10 @@ static void ParseCSS1_text_transform( const CSS1Expression *pExpr,
                 rItemSet.Put( SvxCaseMapItem( (SvxCaseMap)nCaseMap,
                                                 aItemIds.nCaseMap ) );
             }
+            break;
         }
     default:
-        ;
+        break;
     }
 }
 

@@ -1605,6 +1605,7 @@ struct ShapeWritingVisitor
                             break;
                         case XML_R:
                             r = convLength(sAttributeValue,maCurrState,'r');
+                            break;
                         default:
                             // skip
                             break;
@@ -1643,6 +1644,7 @@ struct ShapeWritingVisitor
                             break;
                         case XML_RY:
                             ry = convLength(sAttributeValue,maCurrState,'v');
+                            break;
                         default:
                             // skip
                             break;

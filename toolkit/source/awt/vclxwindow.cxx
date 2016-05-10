@@ -1637,7 +1637,9 @@ void VCLXWindow::setProperty( const OUString& PropertyName, const css::uno::Any&
                         case WINDOW_GROUPBOX:
                         case WINDOW_FIXEDLINE:
                             pWindow->SetPaintTransparent( false );
-                        default: ;
+                            break;
+                        default:
+                            break;
                     }
                     pWindow->Invalidate();  // Invalidate if control does not respond to it
                 }

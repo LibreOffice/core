@@ -826,6 +826,7 @@ OSQLParseNode* OSQLParser::convertNode(sal_Int32 nType, OSQLParseNode* pLiteral)
             case DataType::CLOB:
                 if ( !SQL_ISRULE(pReturn,char_value_exp) && !buildStringNodes(pReturn) )
                     pReturn = nullptr;
+                break;
             default:
                 break;
         }

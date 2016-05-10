@@ -1304,6 +1304,7 @@ short WW8_BRCVer9::DetermineBorderProperties(short *pSpace) const
         case 5:
         case 22:
             OSL_FAIL("Can't create these from the menus, please report");
+            break;
         default:
         case 23:    //Only 3pt in the menus, but honours the size setting.
             break;

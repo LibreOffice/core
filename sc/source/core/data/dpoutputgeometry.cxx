@@ -179,6 +179,7 @@ void ScDPOutputGeometry::adjustFieldsForDataLayout(sal_uInt32& rColumnFields, sa
             case Row:
                 if (rRowFields > 0)
                     rRowFields -= 1;
+            break;
             default:
                 ;
         }

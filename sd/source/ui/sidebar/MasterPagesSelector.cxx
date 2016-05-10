@@ -446,6 +446,7 @@ void MasterPagesSelector::NotifyContainerChangeEvent (const MasterPageContainerC
         {
             int nIndex (GetIndexForToken(rEvent.maChildToken));
             SetItem(nIndex, MasterPageContainer::NIL_TOKEN);
+            break;
         }
 
         default:

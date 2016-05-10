@@ -276,6 +276,7 @@ XclExpExtCfRule::XclExpExtCfRule( const XclExpRoot& rRoot, const ScFormatEntry& 
             mxEntry.reset(new XclExpExtIconSet(*this, rIconSet, rPos));
             pType = "iconSet";
         }
+        break;
         default:
         break;
     }

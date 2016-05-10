@@ -379,6 +379,7 @@ uno::Any SAL_CALL IFrameObject::getPropertyValue(const OUString& aPropertyName)
     {
         aAny <<= (sal_Int32 ) maFrmDescr.GetMargin().Height();
     }
+    break;
     default: ;
     }
     return aAny;

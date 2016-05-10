@@ -1436,6 +1436,7 @@ OUString SwXTextViewCursor::getString()
                 SwWrtShell& rSh = m_pView->GetWrtShell();
                 SwPaM* pShellCursor = rSh.GetCursor();
                 SwUnoCursorHelper::GetTextFromPam(*pShellCursor, uRet);
+                break;
             }
             default:;//prevent warning
         }
@@ -1467,6 +1468,7 @@ void SwXTextViewCursor::setString(const OUString& aString)
                 SwWrtShell& rSh = m_pView->GetWrtShell();
                 SwCursor* pShellCursor = rSh.GetSwCursor();
                 SwUnoCursorHelper::SetString(*pShellCursor, aString);
+                break;
             }
             default:;//prevent warning
         }

@@ -1815,6 +1815,8 @@ void WinMtfOutput::ResolveBitmapActions( BSaveStructList_impl& rSaveList )
                             SetRasterOp( R2_NOT );
                             DrawRect( aRect, false );
                         }
+                        break;
+
                         case 0xa :  // no operation
                         break;
                     }

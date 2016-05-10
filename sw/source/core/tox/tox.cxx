@@ -635,6 +635,7 @@ OUString SwFormToken::GetString() const
             {
                  sData = OUString::number( nAuthorityField ) + sData;
             }
+            break;
         default:
             break;
     }

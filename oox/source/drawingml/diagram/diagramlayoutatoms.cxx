@@ -354,6 +354,7 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
             }
 
             rShape->setSize(aTotalSize);
+            break;
         }
 
         default:

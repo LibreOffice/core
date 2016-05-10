@@ -286,8 +286,9 @@ void NumberFormatPropertyPanel::NotifyItemUpdate(
                 mpEdDecimals->SetValue(nPrecision);
             mpEdLeadZeroes->SetValue(nLeadZeroes);
         }
+        break;
     default:
-        ;
+        break;
     }
 }
 

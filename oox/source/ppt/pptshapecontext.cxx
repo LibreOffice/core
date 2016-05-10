@@ -118,6 +118,7 @@ ContextHandlerRef PPTShapeContext::onCreateContext( sal_Int32 aElementToken, con
                               case XML_sldImg :     // notes/notesmaster
                               case XML_pic :            // slide/layout
                                   nFirstPlaceholder = nSubType;
+                                  break;
                               default:
                                   break;
                         }

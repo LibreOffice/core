@@ -562,6 +562,7 @@ sal_Bool SAL_CALL OTableController::suspend(sal_Bool /*_bSuspend*/) throw( Runti
                     break;
                 case RET_CANCEL:
                     bCheck = false;
+                    break;
                 default:
                     break;
             }
@@ -589,6 +590,7 @@ sal_Bool SAL_CALL OTableController::suspend(sal_Bool /*_bSuspend*/) throw( Runti
                     break;
                 case RET_CANCEL:
                     bCheck = false;
+                    break;
                 default:
                     break;
             }

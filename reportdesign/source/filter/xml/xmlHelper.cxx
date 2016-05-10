@@ -91,8 +91,9 @@ const XMLPropertyHandler* OPropertyHandlerFactory::GetPropertyHandler(sal_Int32 
             break;
         case (XML_SD_TYPES_START+34):
             pHandler = new xmloff::ImageScaleModeHandler();
+            break;
         default:
-            ;
+            break;
     }
 
     if ( !pHandler )

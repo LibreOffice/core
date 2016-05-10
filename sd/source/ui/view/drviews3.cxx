@@ -473,6 +473,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
             UpdatePreview( mpActualPage );
             rReq.Done();
         }
+        break;
 
         default:
         break;

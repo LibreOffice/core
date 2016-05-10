@@ -227,6 +227,7 @@ awt::Point RelativePositionHelper::getCenterOfAnchoredObject(
         case drawing::Alignment_TOP:
         case drawing::Alignment_TOP_RIGHT:
             fYDelta += aUnrotatedObjectSize.Height/2;
+            break;
         default:
             // nothing to do
             break;

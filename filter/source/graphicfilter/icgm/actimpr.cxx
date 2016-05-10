@@ -718,6 +718,7 @@ void CGMImpressOutAct::DrawText( awt::Point& rTextPos, awt::Size& rTextSize, cha
             case TAV_BOTTOM :
             case TAV_NORMAL :
                 aTextPos.Y -= static_cast<sal_Int32>( mpCGM->pElement->nCharacterHeight * 1.5 );
+                break;
             case TAV_TOP :
                 break;
             case TAV_CAP:

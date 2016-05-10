@@ -2486,6 +2486,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                 case mso_sptTextCircleCurve :
                 case mso_sptTextButtonCurve :
                     bTextPathFitShape = false;
+                    break;
                 default : break;
             }
         }
@@ -5133,6 +5134,7 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
                     case mso_txflHorzA:
                         bVerticalText = true;
                         nTextRotationAngle = 9000;
+                    break;
                     case mso_txflHorzN:
                     default :
                         break;

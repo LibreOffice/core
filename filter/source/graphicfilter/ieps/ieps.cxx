@@ -632,6 +632,7 @@ ipsGraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
                                                 case 0x0a :
                                                     if ( --nScanLines < 0 )
                                                         bIsValid = false;
+                                                    break;
                                                 case 0x09 :
                                                 case 0x0d :
                                                 case 0x20 :

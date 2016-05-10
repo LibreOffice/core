@@ -964,6 +964,7 @@ namespace accessibility
         case text::textfield::Type::EXTENDED_FILE:
         case text::textfield::Type::DOCINFO_TITLE:
             strFldType = "file name";
+            break;
         default:
             break;
         }

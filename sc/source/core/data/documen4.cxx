@@ -461,8 +461,9 @@ bool setCacheTableReferenced(formula::FormulaToken& rToken, ScExternalRefManager
              * have to be marked as well, if so. Mechanism would be
              * different. */
             OSL_FAIL("ScDocument::MarkUsedExternalReferences: implement the svExternalName case!");
+            break;
         default:
-            ;
+            break;
     }
     return false;
 }

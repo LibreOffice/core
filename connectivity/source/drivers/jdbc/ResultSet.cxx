@@ -917,8 +917,9 @@ sal_Bool java_sql_ResultSet::convertFastPropertyValue(
             break;
         case PROPERTY_ID_FETCHSIZE:
             bRet = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, getFetchSize());
+            break;
         default:
-            ;
+            break;
     }
     return bRet;
 }

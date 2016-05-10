@@ -663,6 +663,7 @@ void SAL_CALL GeometryHandler::setPropertyValue(const OUString & PropertyName, c
                 Value >>= sValue;
                 aNewValue <<= impl_ConvertUIToMimeType_nothrow(sValue);
             }
+            break;
         default:
             break;
     }

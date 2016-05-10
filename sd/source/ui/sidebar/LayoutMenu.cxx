@@ -400,6 +400,7 @@ void LayoutMenu::AssignLayoutToSelectedSlides (AutoLayout aLayout)
                 if (pDrawViewShell != nullptr)
                     if (pDrawViewShell->GetEditMode() == EM_MASTERPAGE)
                         bMasterPageMode = true;
+                break;
             }
             default:
                 break;

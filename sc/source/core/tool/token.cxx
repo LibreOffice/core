@@ -1564,6 +1564,7 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
             case svUnknown:
                 // We don't support vectorization on these.
                 meVectorState = FormulaVectorDisabled;
+            break;
             default:
                 ;
         }

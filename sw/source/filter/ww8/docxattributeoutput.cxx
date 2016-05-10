@@ -2553,6 +2553,7 @@ void DocxAttributeOutput::StartRedline( const SwRedlineData * pRedlineData )
 
         case nsRedlineType_t::REDLINE_FORMAT:
             OSL_TRACE( "TODO DocxAttributeOutput::StartRedline()" );
+            break;
         default:
             break;
     }

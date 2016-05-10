@@ -6223,6 +6223,7 @@ sal_Int16 GetCustomShapeConnectionTypeDefault( MSO_SPT eSpType )
             case mso_sptVerticalScroll :
             case mso_sptHorizontalScroll :
                 nGluePointType = css::drawing::EnhancedCustomShapeGluePointType::RECT;
+                break;
             default: break;
         }
     }

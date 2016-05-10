@@ -178,9 +178,8 @@ void Formula::makeExpr(Node *res)
              break;
          case ID_BLOCK:
              makeBlock(tmp);
-             //fall-through
+             break;
          case ID_BEGIN:
-             //fall-through
          case ID_END:
              break;
     }

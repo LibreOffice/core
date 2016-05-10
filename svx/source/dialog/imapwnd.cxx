@@ -753,6 +753,7 @@ IMPL_LINK_TYPED( IMapWindow, MenuSelectHdl, Menu*, pMenu, bool )
 
         case MN_DELETE1:
             pView->DeleteMarked();
+        break;
 
         default :
         break;

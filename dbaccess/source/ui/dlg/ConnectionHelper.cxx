@@ -331,6 +331,7 @@ namespace dbaui
                 aFileDlg.AddFilter(sFilterName,sExt);
                 aFileDlg.SetCurrentFilter(sFilterName);
                 askForFileName(aFileDlg);
+                break;
             }
             default:
                 break;
@@ -355,6 +356,7 @@ namespace dbaui
                 aFileDlg.AddFilter(sFilterName,sExt);
                 aFileDlg.SetCurrentFilter(sFilterName);
                 askForFileName(aFileDlg);
+                break;
             }
             default:
                 break;

@@ -1009,6 +1009,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
                     case HEADLINE_BOXATTRCOPY:
                     case HEADLINE_BOXATRCOLLCOPY:
                         rSh.SplitTable(pType->GetValue()) ;
+                        break;
                     default: ;//wrong parameter, do nothing
                 }
             }

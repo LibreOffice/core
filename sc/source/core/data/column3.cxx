@@ -2329,6 +2329,7 @@ public:
                 break;
                 case CELLTYPE_STRING:
                     rColumn.SetRawString(aBlockPos, r.mnRow, *r.maValue.mpString, false);
+                break;
                 default:
                     ;
             }

@@ -91,9 +91,10 @@ static bool relatesToInterface(typelib_TypeDescription * pTypeDescr)
                 TYPELIB_DANGER_RELEASE( pTD );
                 if (bRel)
                     return true;
+                break;
             }
             default:
-                ;
+                break;
             }
         }
         if (pComp->pBaseTypeDescription)

@@ -430,6 +430,7 @@ void ControlConverter::convertToAxBorder( PropertySet& rPropSet,
             break;
         case API_BORDER_SUNKEN:
             nSpecialEffect =  AX_SPECIALEFFECT_SUNKEN;
+            break;
         case API_BORDER_NONE:
         default:
             break;

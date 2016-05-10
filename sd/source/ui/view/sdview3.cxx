@@ -229,6 +229,7 @@ bool View::InsertMetaFile( TransferableDataHelper& rDataHelper, const Point& rPo
                             break;
                         default: break;
                     }
+                    break;
                 default: break;
             }
 

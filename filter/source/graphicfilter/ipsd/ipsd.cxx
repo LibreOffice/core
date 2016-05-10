@@ -209,6 +209,7 @@ bool PSDReader::ImplReadHeader()
     {
         case 2 :
             mbTransparent = true;
+            break;
         case 1 :
             break;
         case 4 :

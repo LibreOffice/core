@@ -3726,8 +3726,9 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                         case SVX_BREAK_PAGE_BOTH:
                             pFrameFormat->SetFormatAttr( *pItem2 );
                             pOldTextNd->ResetAttr( RES_BREAK );
+                            break;
                         default:
-                            ;
+                            break;
                         }
                     }
                 }

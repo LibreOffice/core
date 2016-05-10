@@ -541,6 +541,7 @@ sal_Bool SAL_CALL OApplicationController::suspend(sal_Bool bSuspend) throw( Runt
                     break;
                 case RET_CANCEL:
                     bCanSuspend = false;
+                    break;
                 default:
                     break;
             }

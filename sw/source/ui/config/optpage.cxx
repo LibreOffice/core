@@ -155,6 +155,7 @@ SwContentOptPage::SwContentOptPage( vcl::Window* pParent,
                    sal_Int32 nPos = m_pVMetric->InsertEntry( sMetric );
                    m_pVMetric->SetEntryData( nPos, reinterpret_cast<void*>((sal_IntPtr)eFUnit) );
                 }
+                break;
             }
             default:;//prevent warning
         }

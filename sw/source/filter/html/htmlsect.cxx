@@ -820,8 +820,9 @@ void SwHTMLParser::MovePageDescAttrs( SwNode *pSrcNd,
                 if( bFormatBreak )
                     pDestContentNd->SetAttr( *pItem );
                 pSrcContentNd->ResetAttr( RES_BREAK );
+                break;
             default:
-                ;
+                break;
             }
         }
     }

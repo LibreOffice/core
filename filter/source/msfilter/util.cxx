@@ -549,6 +549,7 @@ EquationResult Read_SubF_Combined(WW8ReadFieldParams& rReadParam)
                     }
                 }
             }
+            break;
         }
     default:
         break;

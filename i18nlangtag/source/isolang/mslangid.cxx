@@ -263,6 +263,7 @@ bool MsLangId::isTraditionalChinese( LanguageType nLang )
         case LANGUAGE_CHINESE_HONGKONG:
         case LANGUAGE_CHINESE_MACAU:
             bRet = true;
+            break;
         default:
             break;
     }

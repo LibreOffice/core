@@ -3258,6 +3258,7 @@ PPTExtParaProv::PPTExtParaProv( SdrPowerPointImport& rMan, SvStream& rSt, const 
 #ifdef DBG_UTIL
                 default :
                     OSL_FAIL( "PPTExParaProv::PPTExParaProv - unknown atom reading ppt2000 num rules (SJ)" );
+                break;
                 case PPT_PST_MasterText :   // first seen in: ms-tt02.ppt
                 case PPT_PST_SrKinsoku :
                 case PPT_PST_TextDefaults9Atom :
@@ -3312,6 +3313,7 @@ PPTExtParaProv::PPTExtParaProv( SdrPowerPointImport& rMan, SvStream& rSt, const 
                 break;
                 default :
                     OSL_FAIL( "PPTExParaProv::PPTExParaProv - unknown atom, assuming PPT_PST_ExtendedParagraphMasterAtom (SJ)" );
+                break;
                 case PPT_PST_HashCodeAtom :
                 case PPT_PST_BuildList :
                 case PPT_PST_SlideFlags10Atom :
@@ -6555,6 +6557,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                         // fall-through
                     case PPT_MASTERPAGE :
                         nInstance++;
+                        break;
                     case PPT_SLIDEPAGE :
                     break;
                     default :

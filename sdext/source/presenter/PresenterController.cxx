@@ -1038,6 +1038,7 @@ void PresenterController::HandleNumericKeyPress (
                     // Ignore unsupported key.
                     break;
             }
+            break;
 
         default:
             // Ignore unsupported modifiers.

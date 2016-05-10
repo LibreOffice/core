@@ -422,6 +422,7 @@ void Player::processMessage( GstMessage *message )
             if (mbPlayPending)
                 mbPlayPending = ((newstate == GST_STATE_READY) || (newstate == GST_STATE_PAUSED));
         }
+        break;
     default:
         break;
     }

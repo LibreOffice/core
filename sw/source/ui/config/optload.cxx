@@ -99,6 +99,7 @@ SwLoadOptPage::SwLoadOptPage(vcl::Window* pParent, const SfxItemSet& rSet)
                 // use only these metrics
                 sal_Int32 nPos = m_pMetricLB->InsertEntry( sMetric );
                 m_pMetricLB->SetEntryData( nPos, reinterpret_cast<void*>((sal_IntPtr)eFUnit) );
+                break;
             }
             default:; //prevent warning
         }

@@ -3088,9 +3088,10 @@ void DrawViewShell::ExecChar( SfxRequest &rReq )
                 FuText::ChangeFontSize( nSId == SID_GROW_FONT_SIZE, nullptr, pFontList, mpView );
                 GetViewFrame()->GetBindings().Invalidate( SID_ATTR_CHAR_FONTHEIGHT );
             }
+            break;
         }
     default:
-        ;
+        break;
     }
 
     mpDrawView->SetAttributes(aNewAttr);

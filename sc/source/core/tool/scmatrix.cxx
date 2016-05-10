@@ -684,6 +684,7 @@ ScMatrixValue ScMatrixImpl::Get(SCSIZE nC, SCSIZE nR) const
                         assert(false);
                 }
                 aVal.fVal = 0.0;
+            break;
             default:
                 ;
         }
@@ -1554,6 +1555,7 @@ public:
                 for (size_t i = 0; i < node.size; ++i)
                     compare();
             }
+            break;
             default:
                 ;
         }
@@ -1792,6 +1794,7 @@ public:
                     *miPos = op(*miPos, 0.0);
                 }
             }
+            break;
             default:
                 ;
         }

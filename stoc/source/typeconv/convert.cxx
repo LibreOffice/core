@@ -120,6 +120,7 @@ static bool getNumericValue( double & rfVal, const OUString & rStr )
                     bNeg = true;
                 else if (trim[0] != '+')
                     return false;
+                break;
             case 1: // 0x...
                 break;
             default:
@@ -200,6 +201,7 @@ static bool getHyperValue( sal_Int64 & rnVal, const OUString & rStr )
                     bNeg = true;
                 else if (trim[0] != '+')
                     return false;
+                break;
             case 1: // 0x...
                 break;
             default:
@@ -728,9 +730,8 @@ Any TypeConverter_Impl::convertToSimpleType( const Any& rVal, TypeClass aDestina
         switch (aSourceClass)
         {
         default:
-        {
             aRet <<= (toDouble( rVal ) != 0.0);
-        }
+            break;
         case TypeClass_ENUM:  // exclude enums
             break;
 

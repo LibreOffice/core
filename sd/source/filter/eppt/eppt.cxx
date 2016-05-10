@@ -201,6 +201,7 @@ void PPTWriter::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_
                 // fall-through
             case 2 :        // semi-automatic
                 mnDiaMode++;
+                break;
             default :
             case 0 :        // manual
             break;

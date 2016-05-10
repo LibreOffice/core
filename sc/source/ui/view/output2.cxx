@@ -3519,6 +3519,7 @@ void ScOutputData::DrawEditBottomTop(DrawEditParam& rParam)
             case SVX_VER_JUSTIFY_TOP:
                 // align to top
                 aLogicStart.Y() -= nGap;
+            break;
             default:
                 ;
         }

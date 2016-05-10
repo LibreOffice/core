@@ -243,6 +243,7 @@ void DrawViewShell::FuTable(SfxRequest& rReq)
 
         Cancel();
         rReq.Done ();
+        break;
     }
     default:
         break;

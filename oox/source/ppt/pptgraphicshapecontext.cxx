@@ -123,6 +123,7 @@ ContextHandlerRef PPTGraphicShapeContext::onCreateContext( sal_Int32 aElementTok
                         case XML_sldImg :       // notes/notesmaster
                         case XML_pic :          // slide/layout
                             nFirstPlaceholder = nSubType;
+                            break;
                         default:
                             break;
                     }

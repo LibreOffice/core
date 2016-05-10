@@ -786,6 +786,7 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
                     case mso_txflHorzA:
                         bVerticalText = true;
                         nTextRotationAngle = 9000;
+                    break;
                     case mso_txflHorzN:
                     default :
                         break;

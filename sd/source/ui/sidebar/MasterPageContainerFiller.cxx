@@ -90,6 +90,7 @@ void MasterPageContainerFiller::RunNextStep()
                 mrContainerAdapter.FillingDone();
                 mpScannerTask.reset();
             }
+            break;
         default:
             break;
     }
