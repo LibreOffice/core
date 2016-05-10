@@ -1842,7 +1842,25 @@ void SAL_CALL SvxCustomShape::setPropertyValue( const OUString& aPropertyName, c
     throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, std::exception)
 {
     ::SolarMutexGuard aGuard;
+
     SdrObject* pObject = mpObj.get();
+
+    // tdf#98163 Use a custom slot to have filter code flush the UNO
+    // API implementations of SdrObjCustomShape. Used e.g. by
+    // ~SdXMLCustomShapeContext, see there for more information
+    const OUString sFlushCustomShapeUnoApiObjects("FlushCustomShapeUnoApiObjects");
+    if(sFlushCustomShapeUnoApiObjects == aPropertyName)
+    {
+        SdrObjCustomShape* pTarget = dynamic_cast< SdrObjCustomShape* >(pObject);
+        if(pTarget)
+        {
+            // Luckily, the object causing problems in tdf#93994 is not the
+            // UNO API object, but the XCustomShapeEngine involved. This
+            // object is on-demand replacable and can be reset here. This
+            // will free the involved EditEngine and VirtualDevice.
+            pTarget->mxCustomShapeEngine.set(nullptr);
+        }
+    }
 
     bool bCustomShapeGeometry = pObject && aPropertyName == "CustomShapeGeometry";
 

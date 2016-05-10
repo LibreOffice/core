@@ -606,40 +606,6 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
 
     throwIfDisposed();
 
-    // tdf#93994 Use a custom slot to have filter code flush the UNO
-    // API implementations of SdrObjCustomShape. Used e.g. by
-    // SdXMLDrawPageContext::EndElement(), see there for more
-    // information
-    if(SvxFmDrawPage::mpPage)
-    {
-        const OUString sFlushCustomShapeUnoApiObjects("FlushCustomShapeUnoApiObjects");
-
-        if(sFlushCustomShapeUnoApiObjects == aPropertyName)
-        {
-            SdrObjListIter aIter(static_cast< SdPage& >(*SvxFmDrawPage::mpPage), IM_DEEPWITHGROUPS);
-
-            while(aIter.IsMore())
-            {
-                SdrObjCustomShape* pCustomShape = dynamic_cast< SdrObjCustomShape* >(aIter.Next());
-
-                if(pCustomShape)
-                {
-                    // tdf#96522 do not reset UNO API implementation since e.g. the
-                    // animation evtl. added to the object uses weak references and
-                    // will be lost when resetting it. In that sense it is *not* a
-                    // on-demand recreatable ressource.
-                    // Luckily, the object causing problems in tdf#93994 is not the
-                    // UNO API object, but the XCustomShapeEngine involved. This
-                    // object is on-demand replacable and can be reset here. This
-                    // will free the involved EditEngine and VirtualDevice.
-                    pCustomShape->mxCustomShapeEngine.set(nullptr);
-                }
-            }
-
-            return;
-        }
-    }
-
     const SfxItemPropertySimpleEntry* pEntry = mpPropSet->getPropertyMapEntry(aPropertyName);
 
     switch( pEntry ? pEntry->nWID : -1 )
