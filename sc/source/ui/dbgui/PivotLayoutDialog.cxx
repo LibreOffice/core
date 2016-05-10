@@ -404,6 +404,7 @@ void ScPivotLayoutDialog::ItemInserted(ScItemValue* pItemValue, ScPivotLayoutTre
             mpListBoxColumn->RemoveEntryForItem(pItemValue);
             mpListBoxPage->RemoveEntryForItem(pItemValue);
         }
+        break;
         case ScPivotLayoutTreeList::LABEL_LIST:
         {
             mpListBoxRow->RemoveEntryForItem(pItemValue);
