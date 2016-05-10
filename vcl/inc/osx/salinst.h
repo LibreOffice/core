@@ -35,6 +35,7 @@
 class AquaSalFrame;
 class ApplicationEvent;
 class Image;
+enum class SalEvent;
 
 class SalYieldMutex : public comphelper::SolarMutex
 {
