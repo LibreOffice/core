@@ -12,6 +12,7 @@
 #include "document.hxx"
 #include "dbdata.hxx"
 #include "externalrefmgr.hxx"
+#include "globstr.hrc"
 
 using namespace com::sun::star;
 
@@ -39,6 +40,11 @@ TokenStringContext::TokenStringContext( const ScDocument* pDoc, formula::Formula
     mxOpCodeMap = aComp.GetOpCodeMap(formula::FormulaGrammar::extractFormulaLanguage(eGram));
     if (mxOpCodeMap)
         maErrRef = mxOpCodeMap->getSymbol(ocErrRef);
+    else
+    {
+        assert(!"TokenStringContext - no OpCodeMap?!?");
+        maErrRef = ScGlobal::GetRscString(STR_NO_REF_TABLE);
+    }
 
     if (!pDoc)
         return;
