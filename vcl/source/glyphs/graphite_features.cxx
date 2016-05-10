@@ -266,6 +266,7 @@ short GrFeatureParser::getIntValue(const OString & id, size_t offset, size_t len
                 mbErrors = true;
                 break;
             }
+            break;
         default:
             mbErrors = true;
             break;
