@@ -44,7 +44,7 @@ enum class RTFBorderState
     CHARACTER
 };
 
-/// Minimalistic buffer of elements for nested cells.
+/// Different kind of buffers for table cell contents.
 enum RTFBufferTypes
 {
     BUFFER_PROPS,
@@ -56,6 +56,8 @@ enum RTFBufferTypes
     BUFFER_ENDRUN,
     BUFFER_PAR,
     BUFFER_STARTSHAPE,
+    /// Imports a shape.
+    BUFFER_RESOLVESHAPE,
     BUFFER_ENDSHAPE,
     BUFFER_RESOLVESUBSTREAM
 };
