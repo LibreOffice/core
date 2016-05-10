@@ -90,10 +90,10 @@ public:
 
     bool insert(OpenGLTexture& rTexture, const SalColor& aColor, const SalTwoRect& r2Rect)
     {
-        GLuint nTextureId = rTexture.Id();
-
         if (!rTexture)
             return false;
+
+        GLuint nTextureId = rTexture.Id();
 
         if (maEntries.find(nTextureId) == maEntries.end())
         {
