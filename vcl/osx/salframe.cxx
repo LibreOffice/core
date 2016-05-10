@@ -588,7 +588,7 @@ void AquaSalFrame::SetWindowState( const SalFrameState* pState )
         nEvent = (nEvent == SalEvent::Move) ? SalEvent::MoveResize : SalEvent::Resize;
     }
     // send event that we were moved/sized
-    if( nEvent )
+    if( nEvent != SalEvent::NONE )
         CallCallback( nEvent, nullptr );
 
     if( mbShown && mpNSWindow )
