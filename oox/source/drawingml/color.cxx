@@ -121,7 +121,7 @@ PresetColorsPool::PresetColorsPool() :
         {XML_white,             0xFFFFFF},    {XML_whiteSmoke,        0xF5F5F5},
         {XML_yellow,            0xFFFF00},    {XML_yellowGreen,       0x9ACD32}
     };
-    for(auto const nEntry : spnDmlColors)
+    for(auto const& nEntry : spnDmlColors)
         maDmlColors[ static_cast< size_t >(nEntry.first) ] = nEntry.second;
 
     // predefined colors in VML (map XML token identifiers to RGB values)
@@ -136,7 +136,7 @@ PresetColorsPool::PresetColorsPool() :
         {XML_silver,            0xC0C0C0},    {XML_teal,              0x008080},
         {XML_white,             0xFFFFFF},    {XML_yellow,            0xFFFF00}
     };
-    for(auto const nEntry : spnVmlColors)
+    for(auto const& nEntry : spnVmlColors)
         maVmlColors[ static_cast< size_t >(nEntry.first) ] = nEntry.second;
 }
 
