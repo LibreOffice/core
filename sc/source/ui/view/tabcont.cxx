@@ -36,8 +36,6 @@
 #include <gridwin.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
-// STATIC DATA -----------------------------------------------------------
-
 ScTabControl::ScTabControl( vcl::Window* pParent, ScViewData* pData )
     : TabBar(pParent, WB_3DLOOK | WB_MINSCROLL | WB_SCROLL | WB_RANGESELECT | WB_MULTISELECT | WB_DRAG)
     , DropTargetHelper(this)
