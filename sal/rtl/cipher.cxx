@@ -47,12 +47,19 @@
     switch ((n)) \
     { \
         case 8: (xr)  = ((sal_uInt32)(*(--(c)))); \
+            SAL_FALLTHROUGH; \
         case 7: (xr) |= ((sal_uInt32)(*(--(c)))) <<  8L; \
+            SAL_FALLTHROUGH; \
         case 6: (xr) |= ((sal_uInt32)(*(--(c)))) << 16L; \
+            SAL_FALLTHROUGH; \
         case 5: (xr) |= ((sal_uInt32)(*(--(c)))) << 24L; \
+            SAL_FALLTHROUGH; \
         case 4: (xl)  = ((sal_uInt32)(*(--(c)))); \
+            SAL_FALLTHROUGH; \
         case 3: (xl) |= ((sal_uInt32)(*(--(c)))) <<  8L; \
+            SAL_FALLTHROUGH; \
         case 2: (xl) |= ((sal_uInt32)(*(--(c)))) << 16L; \
+            SAL_FALLTHROUGH; \
         case 1: (xl) |= ((sal_uInt32)(*(--(c)))) << 24L; \
     } \
 }
@@ -63,12 +70,19 @@
     switch ((n)) \
     { \
         case 8: *(--(c)) = (sal_uInt8)(((xr)       ) & 0xff); \
+            SAL_FALLTHROUGH; \
         case 7: *(--(c)) = (sal_uInt8)(((xr) >>  8L) & 0xff); \
+            SAL_FALLTHROUGH; \
         case 6: *(--(c)) = (sal_uInt8)(((xr) >> 16L) & 0xff); \
+            SAL_FALLTHROUGH; \
         case 5: *(--(c)) = (sal_uInt8)(((xr) >> 24L) & 0xff); \
+            SAL_FALLTHROUGH; \
         case 4: *(--(c)) = (sal_uInt8)(((xl)       ) & 0xff); \
+            SAL_FALLTHROUGH; \
         case 3: *(--(c)) = (sal_uInt8)(((xl) >>  8L) & 0xff); \
+            SAL_FALLTHROUGH; \
         case 2: *(--(c)) = (sal_uInt8)(((xl) >> 16L) & 0xff); \
+            SAL_FALLTHROUGH; \
         case 1: *(--(c)) = (sal_uInt8)(((xl) >> 24L) & 0xff); \
     } \
 }

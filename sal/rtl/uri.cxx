@@ -624,6 +624,7 @@ void SAL_CALL rtl_uriDecode(rtl_uString * pText,
                         writeEscapeOctet(pResult, &nCapacity, nUtf32);
                         break;
                     }
+                    SAL_FALLTHROUGH;
                 case EscapeNo:
                     writeUcs4(pResult, &nCapacity, nUtf32);
                     break;
