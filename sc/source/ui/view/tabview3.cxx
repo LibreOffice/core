@@ -304,16 +304,17 @@ void ScTabView::SetCursor( SCCOL nPosX, SCROW nPosY, bool bNew )
 
         if (comphelper::LibreOfficeKit::isActive())
         {
-            if ( nPosX > aViewData.GetMaxTiledCol() || nPosY > aViewData.GetMaxTiledRow() )
+            if (nPosX > aViewData.GetMaxTiledCol() - 10 || nPosY > aViewData.GetMaxTiledRow() - 25)
             {
-                aViewData.SetMaxTiledCol( std::max( nPosX, aViewData.GetMaxTiledCol() ) );
-                aViewData.SetMaxTiledRow( std::max( nPosY, aViewData.GetMaxTiledRow() ) );
+                if (nPosX > aViewData.GetMaxTiledCol() - 10)
+                    aViewData.SetMaxTiledCol(std::max(nPosX, aViewData.GetMaxTiledCol()) + 10);
+
+                if (nPosY > aViewData.GetMaxTiledRow() - 25)
+                    aViewData.SetMaxTiledRow(std::max(nPosY, aViewData.GetMaxTiledRow()) + 25);
 
                 ScDocShell* pDocSh = aViewData.GetDocShell();
                 if (pDocSh)
-                {
                     pDocSh->libreOfficeKitCallback(LOK_CALLBACK_DOCUMENT_SIZE_CHANGED, "");
-                }
             }
         }
     }
