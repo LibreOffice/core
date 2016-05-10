@@ -101,6 +101,7 @@ using namespace ::com::sun::star;
 #include "formulacell.hxx"
 #include <documentlinkmgr.hxx>
 #include <memory>
+#include <sfx2/notebookbar/SfxNotebookBar.hxx>
 
 void ScDocShell::Execute( SfxRequest& rReq )
 {
@@ -1103,6 +1104,12 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 { &aApp, &aTarget });
         }
         break;
+        case SID_NOTEBOOKBAR:
+        {
+            if (pBindings)
+                sfx2::SfxNotebookBar::ExecMethod(*pBindings);
+        }
+        break;
         default:
         {
             // kleiner (?) Hack -> forward der Slots an TabViewShell
@@ -1855,6 +1862,13 @@ void ScDocShell::GetState( SfxItemSet &rSet )
 
             case SID_ATTR_CHAR_FONTLIST:
                 rSet.Put( SvxFontListItem( pImpl->pFontList, nWhich ) );
+                break;
+
+            case SID_NOTEBOOKBAR:
+                {
+                    if (GetViewBindings())
+                        sfx2::SfxNotebookBar::StateMethod(*GetViewBindings(), "modules/scalc/ui/notebookbar.ui");
+                }
                 break;
 
             default:
