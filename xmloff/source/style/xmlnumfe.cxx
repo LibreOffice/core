@@ -231,7 +231,8 @@ SvXMLNumFmtExport::SvXMLNumFmtExport(
     sPrefix( OUString("N") ),
     pFormatter( nullptr ),
     pCharClass( nullptr ),
-    pLocaleData( nullptr )
+    pLocaleData( nullptr ),
+    m_bQuotedText( false )
 {
     //  supplier must be SvNumberFormatsSupplierObj
     SvNumberFormatsSupplierObj* pObj =
@@ -265,7 +266,8 @@ SvXMLNumFmtExport::SvXMLNumFmtExport(
     sPrefix( rPrefix ),
     pFormatter( nullptr ),
     pCharClass( nullptr ),
-    pLocaleData( nullptr )
+    pLocaleData( nullptr ),
+    m_bQuotedText( false )
 {
     //  supplier must be SvNumberFormatsSupplierObj
     SvNumberFormatsSupplierObj* pObj =
@@ -329,6 +331,14 @@ void SvXMLNumFmtExport::AddTextualAttr_Impl( bool bText )
     }
 }
 
+void SvXMLNumFmtExport::AddQuotedAttr_Impl( bool bQuoted )
+{
+    if ( bQuoted )            // quoted text
+    {
+        rExport.AddAttribute( XML_NAMESPACE_LO_EXT, XML_QUOTED, XML_TRUE );
+    }
+}
+
 void SvXMLNumFmtExport::AddStyleAttr_Impl( bool bLong )
 {
     if ( bLong )            // short is default
@@ -360,6 +370,8 @@ void SvXMLNumFmtExport::FinishTextElement_Impl(bool bUseExtensionNS)
 {
     if ( !sTextContent.isEmpty() )
     {
+        AddQuotedAttr_Impl( m_bQuotedText );
+        m_bQuotedText = false;
         sal_uInt16 nNS = bUseExtensionNS ? XML_NAMESPACE_LO_EXT : XML_NAMESPACE_NUMBER;
         SvXMLElementExport aElem( rExport, nNS, XML_TEXT,
                                   true, false );
@@ -1334,6 +1346,8 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                     bEnd = true;                // end of format reached
                     break;
                 case NF_SYMBOLTYPE_STRING:
+                    m_bQuotedText = true;     // to force quote with delimeter as text tdf#97837
+                    SAL_FALLTHROUGH;
                 case NF_SYMBOLTYPE_DATESEP:
                 case NF_SYMBOLTYPE_TIMESEP:
                 case NF_SYMBOLTYPE_TIME100SECSEP:
