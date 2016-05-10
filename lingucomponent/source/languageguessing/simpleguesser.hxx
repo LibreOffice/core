@@ -24,6 +24,7 @@
 #include <cstdlib>
 #include <vector>
 #include <guess.hxx>
+#include<rtl/character.hxx>
 
 #define MAX_STRING_LENGTH_TO_ANALYSE 200
 
@@ -109,6 +110,23 @@ protected:
     //Like getManagedLanguages, this function enable or disable a language and it depends of the mask
     void XableLanguage(const string& lang, char mask);
 };
+namespace {
+        int startsAsciiCaseInsensitive(const std::string &s1, const std::string &s2){
+            size_t i;
+            int ret = 0;
+
+            size_t min = s1.length();
+            if (min > s2.length())
+                min = s2.length();
+
+            for(i = 0; i < min && s2[i] && s1[i] && !ret; i++){
+                    ret =   rtl::toAsciiUpperCase(s1[i]) -  rtl::toAsciiUpperCase(s2[i]);
+                    if(s1[i] == '.' || s2[i] == '.') {ret = 0;}    //. is a neutral character
+            }
+        return ret;
+        }
+}
+
 
 #endif
 

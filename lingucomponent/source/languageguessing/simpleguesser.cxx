@@ -47,7 +47,6 @@
 
 #include <sal/types.h>
 
-#include "altstrfunc.hxx"
 #include "simpleguesser.hxx"
 
 using namespace std;
@@ -197,7 +196,7 @@ void SimpleGuesser::XableLanguage(const string& lang, char mask)
     for (size_t i=0; i<tables->size; i++)
     {
         string language(fp_Name(tables->fprint[i]));
-        if (start(language,lang) == 0)
+        if (startsAsciiCaseInsensitive(language,lang) == 0)
             tables->fprint_disable[i] = mask;
     }
 }
