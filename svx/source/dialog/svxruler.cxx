@@ -597,7 +597,7 @@ void SvxRuler::MouseMove( const MouseEvent& rMEvt )
 
     RulerSelection aSelection = GetHoverSelection();
 
-    if (aSelection.eType == RULER_TYPE_DONTKNOW)
+    if (aSelection.eType == RulerType::DontKnow)
     {
         SetQuickHelpText("");
         return;
@@ -610,7 +610,7 @@ void SvxRuler::MouseMove( const MouseEvent& rMEvt )
 
     switch (aSelection.eType)
     {
-        case RULER_TYPE_INDENT:
+        case RulerType::Indent:
         {
             if (!mxParaItem.get())
                 break;
@@ -631,7 +631,7 @@ void SvxRuler::MouseMove( const MouseEvent& rMEvt )
             SetQuickHelpText(OUString::number(fValue) + " " + sUnit);
             break;
         }
-        case RULER_TYPE_BORDER:
+        case RulerType::Border:
         {
             if (mxColumnItem.get() == nullptr)
                 break;
@@ -651,7 +651,7 @@ void SvxRuler::MouseMove( const MouseEvent& rMEvt )
                 OUString::number(fEnd)   + " " + sUnit );
             break;
         }
-        case RULER_TYPE_MARGIN1:
+        case RulerType::Margin1:
         {
             long nLeft = 0.0;
             if (mxLRSpaceItem.get())
@@ -667,7 +667,7 @@ void SvxRuler::MouseMove( const MouseEvent& rMEvt )
 
             break;
         }
-        case RULER_TYPE_MARGIN2:
+        case RulerType::Margin2:
         {
             long nRight = 0.0;
             if (mxLRSpaceItem.get())
@@ -1745,7 +1745,7 @@ void SvxRuler::DragBorders()
     bool bRightIndentsCorrected = false;
     int nIndex;
 
-    if(GetDragType() == RULER_TYPE_BORDER)
+    if(GetDragType() == RulerType::Border)
     {
         DrawLine_Impl(lTabPos, 7, bHorz);
         nIndex = GetDragAryPos();
@@ -1766,10 +1766,10 @@ void SvxRuler::DragBorders()
         case RulerDragSize::Move:
         {
 ADD_DEBUG_TEXT("lLastLMargin: ", OUString::number(mxRulerImpl->lLastLMargin))
-            if(GetDragType() == RULER_TYPE_BORDER)
+            if(GetDragType() == RulerType::Border)
                 lDiff = lPos - nDragOffset - mpBorders[nIndex].nPos;
             else
-                lDiff = GetDragType() == RULER_TYPE_MARGIN1 ? lPos - mxRulerImpl->lLastLMargin : lPos - mxRulerImpl->lLastRMargin;
+                lDiff = GetDragType() == RulerType::Margin1 ? lPos - mxRulerImpl->lLastLMargin : lPos - mxRulerImpl->lLastRMargin;
 
             if(nDragType & SvxRulerDragFlags::OBJECT_SIZE_LINEAR)
             {
@@ -1804,7 +1804,7 @@ ADD_DEBUG_TEXT("lLastLMargin: ", OUString::number(mxRulerImpl->lLastLMargin))
                 default: ;//prevent warning
                     OSL_FAIL("svx::SvxRuler::DragBorders(), unknown drag type!" );
                     SAL_FALLTHROUGH;
-                case RULER_TYPE_BORDER:
+                case RulerType::Border:
                     if(mxRulerImpl->bIsTableRows)
                     {
                         mpBorders[nIndex].nPos += lDiff;
@@ -1830,12 +1830,12 @@ ADD_DEBUG_TEXT("lLastLMargin: ", OUString::number(mxRulerImpl->lLastLMargin))
                         mxRulerImpl->nTotalDist -= lDiff;
                     }
                 break;
-                case RULER_TYPE_MARGIN1:
+                case RulerType::Margin1:
                     nLimit = 0;
                     lLeft = mxRulerImpl->lLastLMargin + lDiff;
                     mxRulerImpl->nTotalDist -= lDiff;
                 break;
-                case RULER_TYPE_MARGIN2:
+                case RulerType::Margin2:
                     nLimit = 0;
                     lLeft= 0;
                     nStartLimit = mpBorders.size() - 2;
@@ -1893,7 +1893,7 @@ ADD_DEBUG_TEXT("lLastLMargin: ", OUString::number(mxRulerImpl->lLastLMargin))
                 //This includes the left border when the table is not limited
                 //to a lower frame border.
                 int nLimit;
-                if(GetDragType()==RULER_TYPE_BORDER)
+                if(GetDragType()==RulerType::Border)
                 {
                     nLimit = nIndex + 1;
                     mpBorders[nIndex].nPos += lDiff;
@@ -2348,11 +2348,11 @@ void SvxRuler::PrepareProportional_Impl(RulerType eType)
        proportional share of the total width in parts per thousand.
     */
     mxRulerImpl->nTotalDist = GetMargin2();
-    switch((int)eType)
+    switch(eType)
     {
-      case RULER_TYPE_MARGIN2:
-      case RULER_TYPE_MARGIN1:
-      case RULER_TYPE_BORDER:
+      case RulerType::Margin2:
+      case RulerType::Margin1:
+      case RulerType::Border:
         {
             DBG_ASSERT(mxColumnItem.get(), "no ColumnItem");
 
@@ -2366,7 +2366,7 @@ void SvxRuler::PrepareProportional_Impl(RulerType eType)
             long lActBorderSum;
             long lOrigLPos;
 
-            if(eType != RULER_TYPE_BORDER)
+            if(eType != RulerType::Border)
             {
                 lOrigLPos = GetMargin1();
                 nStart = 0;
@@ -2390,7 +2390,7 @@ void SvxRuler::PrepareProportional_Impl(RulerType eType)
             //in horizontal mode the percentage value has to be
             //calculated on a "current change" position base
             //because the height of the table changes while dragging
-            if(mxRulerImpl->bIsTableRows && RULER_TYPE_BORDER == eType)
+            if(mxRulerImpl->bIsTableRows && RulerType::Border == eType)
             {
                 sal_uInt16 nStartBorder;
                 sal_uInt16 nEndBorder;
@@ -2451,7 +2451,7 @@ void SvxRuler::PrepareProportional_Impl(RulerType eType)
             }
         }
         break;
-        case RULER_TYPE_TAB:
+        case RulerType::Tab:
         {
             const sal_uInt16 nIdx = GetDragAryPos()+TAB_GAP;
             mxRulerImpl->nTotalDist -= mpTabs[nIdx].nPos;
@@ -2464,6 +2464,7 @@ void SvxRuler::PrepareProportional_Impl(RulerType eType)
             }
             break;
         }
+        default: break;
     }
 }
 
@@ -2501,10 +2502,10 @@ void SvxRuler::EvalModifier()
         {
             const RulerType eType = GetDragType();
             nDragType = SvxRulerDragFlags::OBJECT_SIZE_PROPORTIONAL;
-            if( RULER_TYPE_TAB == eType ||
-                ( ( RULER_TYPE_BORDER == eType  ||
-                    RULER_TYPE_MARGIN1 == eType ||
-                    RULER_TYPE_MARGIN2 == eType ) &&
+            if( RulerType::Tab == eType ||
+                ( ( RulerType::Border == eType  ||
+                    RulerType::Margin1 == eType ||
+                    RulerType::Margin2 == eType ) &&
                 mxColumnItem.get() ) )
             {
                 PrepareProportional_Impl(eType);
@@ -2512,8 +2513,8 @@ void SvxRuler::EvalModifier()
         }
         break;
         case KEY_MOD1 | KEY_SHIFT:
-            if( GetDragType() != RULER_TYPE_MARGIN1 &&
-                GetDragType() != RULER_TYPE_MARGIN2 )
+            if( GetDragType() != RulerType::Margin1 &&
+                GetDragType() != RulerType::Margin2 )
             {
                 nDragType = SvxRulerDragFlags::OBJECT_ACTLINE_ONLY;
             }
@@ -2595,7 +2596,7 @@ void SvxRuler::CalcMinMax()
     mxRulerImpl->lMaxLeftLogic=mxRulerImpl->lMaxRightLogic=-1;
     switch(GetDragType())
     {
-        case RULER_TYPE_MARGIN1:
+        case RulerType::Margin1:
         {        // left edge of the surrounding Frame
             // DragPos - NOf between left - right
             mxRulerImpl->lMaxLeftLogic = GetLeftMin();
@@ -2684,7 +2685,7 @@ void SvxRuler::CalcMinMax()
             }
             break;
         }
-        case RULER_TYPE_MARGIN2:
+        case RulerType::Margin2:
         {        // right edge of the surrounding Frame
             mxRulerImpl->lMaxRightLogic =
                 mxMinMaxItem.get() ?
@@ -2765,7 +2766,7 @@ void SvxRuler::CalcMinMax()
             }
             break;
         }
-        case RULER_TYPE_BORDER:
+        case RulerType::Border:
         {                // Table, column (Modifier)
         const sal_uInt16 nIdx = GetDragAryPos();
         switch(GetDragSize())
@@ -3014,7 +3015,7 @@ void SvxRuler::CalcMinMax()
         nMaxRight += nDragOffset;
         break;
     }
-      case RULER_TYPE_INDENT:
+      case RulerType::Indent:
         {
         const sal_uInt16 nIdx = GetDragAryPos();
         switch(nIdx) {
@@ -3103,7 +3104,7 @@ void SvxRuler::CalcMinMax()
         }
         break;
     }
-    case RULER_TYPE_TAB:                // Tabs (Modifier)
+    case RulerType::Tab:                // Tabs (Modifier)
         /* left = NOf + Max(LAR, EZ)
            right = NOf + RAR */
 
@@ -3144,8 +3145,8 @@ bool SvxRuler::StartDrag()
     lInitialDragPos = GetDragPos();
     switch(GetDragType())
     {
-        case RULER_TYPE_MARGIN1:        // left edge of the surrounding Frame
-        case RULER_TYPE_MARGIN2:        // right edge of the surrounding Frame
+        case RulerType::Margin1:        // left edge of the surrounding Frame
+        case RulerType::Margin2:        // right edge of the surrounding Frame
             if((bHorz && mxLRSpaceItem.get()) || (!bHorz && mxULSpaceItem.get()))
             {
                 if(!mxColumnItem.get())
@@ -3158,7 +3159,7 @@ bool SvxRuler::StartDrag()
                 bOk = false;
             }
             break;
-        case RULER_TYPE_BORDER: // Table, column (Modifier)
+        case RulerType::Border: // Table, column (Modifier)
             if(mxColumnItem.get())
             {
                 nDragOffset = 0;
@@ -3169,7 +3170,7 @@ bool SvxRuler::StartDrag()
             else
                 nDragOffset = 0;
             break;
-        case RULER_TYPE_INDENT: // Paragraph indents (Modifier)
+        case RulerType::Indent: // Paragraph indents (Modifier)
         {
             if( bContentProtected )
                 return false;
@@ -3185,7 +3186,7 @@ bool SvxRuler::StartDrag()
             mpIndents[1] = mpIndents[GetDragAryPos() + INDENT_GAP];
             break;
         }
-        case RULER_TYPE_TAB: // Tabs (Modifier)
+        case RulerType::Tab: // Tabs (Modifier)
             if( bContentProtected )
                 return false;
             EvalModifier();
@@ -3211,24 +3212,24 @@ void  SvxRuler::Drag()
         return;
     }
     switch(GetDragType()) {
-        case RULER_TYPE_MARGIN1: // left edge of the surrounding Frame
+        case RulerType::Margin1: // left edge of the surrounding Frame
             DragMargin1();
             mxRulerImpl->lLastLMargin = GetMargin1();
             break;
-        case RULER_TYPE_MARGIN2: // right edge of the surrounding Frame
+        case RulerType::Margin2: // right edge of the surrounding Frame
             DragMargin2();
             mxRulerImpl->lLastRMargin = GetMargin2();
             break;
-        case RULER_TYPE_INDENT: // Paragraph indents
+        case RulerType::Indent: // Paragraph indents
             DragIndents();
             break;
-        case RULER_TYPE_BORDER: // Table, columns
+        case RulerType::Border: // Table, columns
             if(mxColumnItem.get())
                 DragBorders();
             else if(mxObjectItem.get())
                 DragObjectBorder();
             break;
-        case RULER_TYPE_TAB: // Tabs
+        case RulerType::Tab: // Tabs
             DragTabs();
             break;
         default:
@@ -3253,8 +3254,8 @@ void SvxRuler::EndDrag()
     {
         switch(GetDragType())
         {
-            case RULER_TYPE_MARGIN1: // upper left edge of the surrounding Frame
-            case RULER_TYPE_MARGIN2: // lower right edge of the surrounding Frame
+            case RulerType::Margin1: // upper left edge of the surrounding Frame
+            case RulerType::Margin2: // lower right edge of the surrounding Frame
                 {
                     if(!mxColumnItem.get() || !mxColumnItem->IsTable())
                         ApplyMargins();
@@ -3266,7 +3267,7 @@ void SvxRuler::EndDrag()
 
                 }
                 break;
-            case RULER_TYPE_BORDER: // Table, columns
+            case RulerType::Border: // Table, columns
                 if(lInitialDragPos != lPos ||
                     (mxRulerImpl->bIsTableRows && bHorz)) //special case - the null offset is changed here
                 {
@@ -3280,12 +3281,12 @@ void SvxRuler::EndDrag()
                         ApplyObject();
                 }
                 break;
-            case RULER_TYPE_INDENT: // Paragraph indents
+            case RulerType::Indent: // Paragraph indents
                 if(lInitialDragPos != lPos)
                     ApplyIndents();
                 SetIndents(INDENT_COUNT, &mpIndents[0] + INDENT_GAP);
                 break;
-            case RULER_TYPE_TAB: // Tabs
+            case RulerType::Tab: // Tabs
                 {
                     ApplyTabs();
                     mpTabs[GetDragAryPos()].nStyle &= ~RULER_STYLE_INVISIBLE;
@@ -3382,7 +3383,7 @@ void SvxRuler::Command( const CommandEvent& rCommandEvent )
         CancelDrag();
         bool bRTL = mxRulerImpl->pTextRTLItem && mxRulerImpl->pTextRTLItem->GetValue();
         if ( !mpTabs.empty() &&
-             RULER_TYPE_TAB ==
+             RulerType::Tab ==
              GetType( rCommandEvent.GetMousePosPixel(), &mxRulerImpl->nIdx ) &&
              mpTabs[mxRulerImpl->nIdx + TAB_GAP].nStyle < RULER_TAB_DEFAULT )
         {

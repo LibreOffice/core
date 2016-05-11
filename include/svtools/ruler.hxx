@@ -244,11 +244,11 @@ it has been dragged. There are the following query methods:
 
     - GetDragType()
         Returns what has been dragged.
-            RULER_TYPE_MARGIN1
-            RULER_TYPE_MARGIN2
-            RULER_TYPE_BORDER
-            RULER_TYPE_INDENT
-            RULER_TYPE_TAB
+            RulerType::Margin1
+            RulerType::Margin2
+            RulerType::Border
+            RulerType::Indent
+            RulerType::Tab
 
     - GetDragPos()
         Returns the pixel position to which the user has moved the mouse
@@ -298,13 +298,13 @@ it has been dragged. There are the following query methods:
 
     - GetClickType()
         Returns what is applied by double click:
-            RULER_TYPE_DONTKNOW             (no element in the ruler area)
-            RULER_TYPE_OUTSIDE              (outside of the ruler area)
-            RULER_TYPE_MARGIN1              (only Margin1 border)
-            RULER_TYPE_MARGIN2              (only Margin2 border)
-            RULER_TYPE_BORDER               (Border: GetClickAryPos())
-            RULER_TYPE_INDENT               (indent: GetClickAryPos())
-            RULER_TYPE_TAB                  (Tab: GetClickAryPos())
+            RulerType::DontKnow             (no element in the ruler area)
+            RulerType::Outside              (outside of the ruler area)
+            RulerType::Margin1              (only Margin1 border)
+            RulerType::Margin2              (only Margin2 border)
+            RulerType::Border               (Border: GetClickAryPos())
+            RulerType::Indent               (indent: GetClickAryPos())
+            RulerType::Tab                  (Tab: GetClickAryPos())
 
     - GetClickAryPos()
         Returns the index in the array if a Border, an Indent or a Tab
@@ -318,13 +318,13 @@ it has been dragged. There are the following query methods:
         sal_uInt16 are passed, in order to determine the array position
         of a Tab, an Indent, or a Border. The following values are
         returned as type:
-            RULER_TYPE_DONTKNOW             (no element in the ruler area)
-            RULER_TYPE_OUTSIDE              (outside of the ruler area)
-            RULER_TYPE_MARGIN1              (only Margin1 border)
-            RULER_TYPE_MARGIN2              (only Margin2 border)
-            RULER_TYPE_BORDER               (Border: GetClickAryPos())
-            RULER_TYPE_INDENT               (indent: GetClickAryPos())
-            RULER_TYPE_TAB                  (Tab: GetClickAryPos())
+            RulerType::DontKnow             (no element in the ruler area)
+            RulerType::Outside              (outside of the ruler area)
+            RulerType::Margin1              (only Margin1 border)
+            RulerType::Margin2              (only Margin2 border)
+            RulerType::Border               (Border: GetClickAryPos())
+            RulerType::Indent               (indent: GetClickAryPos())
+            RulerType::Tab                  (Tab: GetClickAryPos())
 
 If the drag process should be canceled, this can be done using CancelDrag().
 There are the following methods for controlling the Drag:
@@ -342,7 +342,7 @@ methods:
 
     - StartDocDrag()
         This method is passed the MouseEvent of the document window
-        and what should be dragged. If RULER_TYPE_DONTKNOW is passed
+        and what should be dragged. If RulerType::DontKnow is passed
         as DragType, the ruler decides what should be dragged. In case
         of the other types, the Drag is only started if a respective
         element was found at the given position.
@@ -435,22 +435,22 @@ Tips for the use of the ruler:
   multiple of one value because the screen resolution is very imprecise.
 
 - DoubleClicks should be handled in the following way (GetClickType()):
-    - RULER_TYPE_DONTKNOW
-      RULER_TYPE_MARGIN1
-      RULER_TYPE_MARGIN2
+    - RulerType::DontKnow
+      RulerType::Margin1
+      RulerType::Margin2
         If the conditions GetClickPos() <= GetMargin1() or
         GetClickPos() >= GetMargin2() are met or the type is equal to
-        RULER_TYPE_MARGIN1 or RULER_TYPE_MARGIN2, a side dialog should
+        RulerType::Margin1 or RulerType::Margin2, a side dialog should
         be displayed in which the focus is at the respective border.
-    - RULER_TYPE_BORDER
+    - RulerType::Border
         A column or table dialog should be shown in which the focus
         is at the respective column that can be queried using
         GetClickAryPos().
-    - RULER_TYPE_INDENT
+    - RulerType::Indent
         The dialog, in which the indents can be configured, should be
         shown. In this, the focus should be on the indent which can
         be queried using GetClickAryPos().
-    - RULER_TYPE_TAB
+    - RulerType::Tab
         A TabDialog should be displayed in which the Tab, that can be
         queried using GetClickAryPos(), should be selected.
 
@@ -462,9 +462,9 @@ Tips for the use of the ruler:
 #define WB_STDRULER       WB_HORZ
 
 
-enum RulerType { RULER_TYPE_DONTKNOW, RULER_TYPE_OUTSIDE,
-                 RULER_TYPE_MARGIN1, RULER_TYPE_MARGIN2,
-                 RULER_TYPE_BORDER, RULER_TYPE_INDENT, RULER_TYPE_TAB };
+enum class RulerType { DontKnow, Outside,
+                 Margin1, Margin2,
+                 Border, Indent, Tab };
 
 enum RulerExtra { RULER_EXTRA_DONTKNOW,
                   RULER_EXTRA_NULLOFFSET, RULER_EXTRA_TAB };
@@ -555,7 +555,7 @@ struct RulerSelection
 
     RulerSelection()
         : nPos(0)
-        , eType(RULER_TYPE_DONTKNOW)
+        , eType(RulerType::DontKnow)
         , nAryPos(0)
         , mnDragSize(RulerDragSize::Move)
         , bSize(false)
@@ -744,7 +744,7 @@ public:
     void            SetExtraType( RulerExtra eNewExtraType, sal_uInt16 nStyle = 0 );
 
     bool            StartDocDrag( const MouseEvent& rMEvt,
-                                  RulerType eDragType = RULER_TYPE_DONTKNOW );
+                                  RulerType eDragType = RulerType::DontKnow );
     RulerType       GetDragType() const { return meDragType; }
     long            GetDragPos() const { return mnDragPos; }
     sal_uInt16      GetDragAryPos() const { return mnDragAryPos; }
