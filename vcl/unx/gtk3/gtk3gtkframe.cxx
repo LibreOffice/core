@@ -587,7 +587,7 @@ gboolean ensure_dbus_setup( gpointer data )
 
         // Create menu model and action group attached to this frame.
         GMenuModel* pMenuModel = G_MENU_MODEL( g_lo_menu_new() );
-        GActionGroup* pActionGroup = reinterpret_cast<GActionGroup*>(g_lo_action_group_new( static_cast< gpointer >( pSalFrame ) ));
+        GActionGroup* pActionGroup = reinterpret_cast<GActionGroup*>(g_lo_action_group_new());
 
         // Generate menu paths.
         sal_uIntPtr windowId = pSalFrame->GetNativeWindowHandle(pSalFrame->getWindow());

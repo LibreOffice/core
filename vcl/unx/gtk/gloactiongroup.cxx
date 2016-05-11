@@ -100,7 +100,6 @@ g_lo_action_class_init (GLOActionClass *klass)
 struct GLOActionGroupPrivate
 {
     GHashTable  *table;    /* string -> GLOAction */
-    GtkSalFrame *frame;    /* Frame to which GActionGroup is associated. */
 };
 
 static void g_lo_action_group_iface_init (GActionGroupInterface *);
@@ -318,7 +317,6 @@ g_lo_action_group_init (GLOActionGroup *group)
                                                  GLOActionGroupPrivate);
     group->priv->table = g_hash_table_new_full (g_str_hash, g_str_equal,
                                                   g_free, g_object_unref);
-    group->priv->frame = nullptr;
 }
 
 static void
@@ -341,11 +339,9 @@ g_lo_action_group_iface_init (GActionGroupInterface *iface)
 }
 
 GLOActionGroup *
-g_lo_action_group_new (gpointer frame)
+g_lo_action_group_new()
 {
     GLOActionGroup* group = G_LO_ACTION_GROUP (g_object_new (G_TYPE_LO_ACTION_GROUP, nullptr));
-    group->priv->frame = static_cast< GtkSalFrame* > (frame);
-
     return group;
 }
 

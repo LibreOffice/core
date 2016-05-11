@@ -42,7 +42,7 @@ struct GLOActionGroupClass
 
 GType               g_lo_action_group_get_type              (void) G_GNUC_CONST;
 
-GLOActionGroup *    g_lo_action_group_new                   (gpointer           frame);
+GLOActionGroup *    g_lo_action_group_new                   (void);
 
 void                g_lo_action_group_set_top_menu          (GLOActionGroup     *group,
                                                              gpointer           top_menu);

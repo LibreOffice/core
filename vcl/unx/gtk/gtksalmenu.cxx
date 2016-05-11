@@ -368,7 +368,7 @@ bool GtkSalMenu::ShowNativePopupMenu(FloatingWindow* pWin, const Rectangle& rRec
     Point aPos = FloatingWindow::ImplCalcPos(pWin, rRect, nFlags, nArrangeIndex);
     aPos = FloatingWindow::ImplConvertToAbsPos(xParent, aPos);
 
-    GLOActionGroup* pActionGroup = g_lo_action_group_new(static_cast<gpointer>(mpFrame));
+    GLOActionGroup* pActionGroup = g_lo_action_group_new();
     mpActionGroup = G_ACTION_GROUP(pActionGroup);
     mpMenuModel = G_MENU_MODEL(g_lo_menu_new());
     // Generate the main menu structure, populates mpMenuModel
