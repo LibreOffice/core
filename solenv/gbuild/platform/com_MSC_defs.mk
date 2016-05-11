@@ -232,6 +232,7 @@ endif
 ifeq ($(COM_IS_CLANG),TRUE)
 gb_CXXFLAGS += \
 	-Wendif-labels \
+	-Wimplicit-fallthrough \
 	-Wno-missing-braces \
 	-Wno-missing-braces \
 	-Wnon-virtual-dtor \

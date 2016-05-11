@@ -101,6 +101,10 @@ gb_CXXFLAGS_COMMON += \
     -Wunused-const-variable=1
 endif
 
+ifeq ($(COM_IS_CLANG),TRUE)
+gb_CXXFLAGS_COMMON += -Wimplicit-fallthrough
+endif
+
 
 ifeq ($(HAVE_GCC_VISIBILITY_FEATURE),TRUE)
 gb_VISIBILITY_FLAGS := -DHAVE_GCC_VISIBILITY_FEATURE
