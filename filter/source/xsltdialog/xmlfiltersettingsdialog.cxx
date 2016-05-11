@@ -877,8 +877,7 @@ void XMLFilterSettingsDialog::onSave()
 
     // Open Fileopen-Dialog
        ::sfx2::FileDialogHelper aDlg(
-        css::ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION,
-        0 );
+        css::ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION );
 
     OUString aExtensions( "*.jar" );
     OUString aFilterName(RESIDSTR(STR_FILTER_PACKAGE));
@@ -920,7 +919,7 @@ void XMLFilterSettingsDialog::onOpen()
 
     // Open Fileopen-Dialog
        ::sfx2::FileDialogHelper aDlg(
-        css::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, 0 );
+        css::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE );
 
     OUString aExtensions( "*.jar" );
     OUString aFilterName(RESIDSTR(STR_FILTER_PACKAGE));

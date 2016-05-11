@@ -994,7 +994,7 @@ void SvxJavaClassPathDlg::dispose()
 
 IMPL_LINK_NOARG_TYPED(SvxJavaClassPathDlg, AddArchiveHdl_Impl, Button*, void)
 {
-    sfx2::FileDialogHelper aDlg( TemplateDescription::FILEOPEN_SIMPLE, 0 );
+    sfx2::FileDialogHelper aDlg( TemplateDescription::FILEOPEN_SIMPLE );
     aDlg.SetTitle( CUI_RES( RID_SVXSTR_ARCHIVE_TITLE ) );
     aDlg.AddFilter( CUI_RES( RID_SVXSTR_ARCHIVE_HEADLINE ), "*.jar;*.zip" );
     OUString sFolder;

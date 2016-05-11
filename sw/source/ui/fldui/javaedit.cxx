@@ -260,7 +260,7 @@ IMPL_LINK_TYPED( SwJavaEditDialog, InsertFileHdl, Button *, pBtn, void )
 
         pFileDlg = new ::sfx2::FileDialogHelper(
             ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
-            SFXWB_INSERT, OUString("swriter") );
+            FileDialogFlags::Insert, OUString("swriter") );
     }
 
     pFileDlg->StartExecuteModal( LINK( this, SwJavaEditDialog, DlgClosedHdl ) );

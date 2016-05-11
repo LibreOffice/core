@@ -847,7 +847,7 @@ static open_or_save_t lcl_OpenOrSave(sal_Int16 const nDialogType)
 FileDialogHelper_Impl::FileDialogHelper_Impl(
     FileDialogHelper* _pAntiImpl,
     sal_Int16 nDialogType,
-    sal_Int64 nFlags,
+    FileDialogFlags nFlags,
     sal_Int16 nDialog,
     vcl::Window* _pPreferredParentWindow,
     const OUString& sStandardDir,
@@ -888,12 +888,12 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
     mbHasVersions           = false;
     mbHasPreview            = false;
     mbShowPreview           = false;
-    mbAddGraphicFilter      = SFXWB_GRAPHIC == (nFlags & SFXWB_GRAPHIC);
+    mbAddGraphicFilter      = bool(nFlags & FileDialogFlags::Graphic);
     mbDeleteMatcher         = false;
-    mbInsert                = SFXWB_INSERT == ( nFlags & SFXWB_INSERT );
-    mbExport                = SFXWB_EXPORT == ( nFlags & SFXWB_EXPORT );
+    mbInsert                = bool(nFlags & FileDialogFlags::Insert);
+    mbExport                = bool(nFlags & FileDialogFlags::Export);
     mbIsSaveDlg             = false;
-    mbIsSaveACopyDlg        = SFXWB_SAVEACOPY == ( nFlags & SFXWB_SAVEACOPY );
+    mbIsSaveACopyDlg        = bool(nFlags & FileDialogFlags::SaveACopy);
     mbPwdCheckBoxState      = false;
     mbSelection             = false;
     mbSelectionEnabled      = true;
@@ -1068,7 +1068,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
 
 
     // set multiselection mode
-    if ( nFlags & SFXWB_MULTISELECTION )
+    if ( nFlags & FileDialogFlags::MultiSelection )
         mxFileDlg->setMultiSelectionMode( true );
 
     if (mbAddGraphicFilter) // generate graphic filter only on demand
@@ -2208,7 +2208,7 @@ void FileDialogHelper_Impl::SetContext( FileDialogHelper::Context _eNewContext )
 
 FileDialogHelper::FileDialogHelper(
     sal_Int16 nDialogType,
-    sal_Int64 nFlags,
+    FileDialogFlags nFlags,
     const OUString& rFact,
     SfxFilterFlags nMust,
     SfxFilterFlags nDont )
@@ -2224,7 +2224,7 @@ FileDialogHelper::FileDialogHelper(
 
 FileDialogHelper::FileDialogHelper(
     sal_Int16 nDialogType,
-    sal_Int64 nFlags,
+    FileDialogFlags nFlags,
     const OUString& rFact,
     sal_Int16 nDialog,
     SfxFilterFlags nMust,
@@ -2243,7 +2243,7 @@ FileDialogHelper::FileDialogHelper(
 
 FileDialogHelper::FileDialogHelper(
     sal_Int16 nDialogType,
-    sal_Int64 nFlags,
+    FileDialogFlags nFlags,
     vcl::Window* _pPreferredParent )
     : m_nError(0)
 {
@@ -2253,7 +2253,7 @@ FileDialogHelper::FileDialogHelper(
 
 FileDialogHelper::FileDialogHelper(
     sal_Int16 nDialogType,
-    sal_Int64 nFlags,
+    FileDialogFlags nFlags,
     const OUString& aFilterUIName,
     const OUString& aExtName,
     const OUString& rStandardDir,
@@ -2573,7 +2573,7 @@ void SAL_CALL FileDialogHelper::DialogClosed( const DialogClosedEvent& _rEvent )
 }
 
 ErrCode FileOpenDialog_Impl( sal_Int16 nDialogType,
-                             sal_Int64 nFlags,
+                             FileDialogFlags nFlags,
                              const OUString& rFact,
                              std::vector<OUString>& rpURLList,
                              OUString& rFilter,

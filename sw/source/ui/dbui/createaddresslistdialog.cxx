@@ -623,7 +623,7 @@ IMPL_LINK_NOARG_TYPED(SwCreateAddressListDialog, OkHdl_Impl, Button*, void)
 {
     if(m_sURL.isEmpty())
     {
-        sfx2::FileDialogHelper aDlgHelper( TemplateDescription::FILESAVE_SIMPLE, 0 );
+        sfx2::FileDialogHelper aDlgHelper( TemplateDescription::FILESAVE_SIMPLE );
         uno::Reference < XFilePicker2 > xFP = aDlgHelper.GetFilePicker();
 
         const OUString sPath( SvtPathOptions().SubstituteVariable("$(userurl)/database") );

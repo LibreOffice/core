@@ -1755,7 +1755,7 @@ void AssistentDlg::FinishHdl()
         if (aFileToOpen.isEmpty())
         {
             sfx2::FileDialogHelper aFileDlg(
-                ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION, 0,
+                ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION, FileDialogFlags::NONE,
                 OUString("simpress") );
 
             if ( aFileDlg.Execute() == ERRCODE_NONE )

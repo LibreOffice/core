@@ -539,7 +539,7 @@ FileDialogHelper & SvBaseLink::GetInsertFileDialog(const OUString& rFactory) con
         delete pImpl->m_pFileDlg;
     pImpl->m_pFileDlg = new FileDialogHelper(
             ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
-            SFXWB_INSERT, rFactory);
+            FileDialogFlags::Insert, rFactory);
     return *pImpl->m_pFileDlg;
 }
 

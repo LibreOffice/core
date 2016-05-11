@@ -445,7 +445,7 @@ void SdTPAction::OpenFileDialog()
         else
         {
             sfx2::FileDialogHelper aFileDialog(
-                ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION, 0);
+                ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION);
 
             if (bDocument && aFile.isEmpty())
                 aFile = SvtPathOptions().GetWorkPath();

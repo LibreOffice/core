@@ -29,6 +29,7 @@
 namespace sfx2 { class FileDialogHelper; }
 class SfxMedium;
 class SfxItemSet;
+enum class FileDialogFlags;
 
 typedef ::std::vector< SfxMedium* > SfxMediumList;
 
@@ -41,7 +42,7 @@ private:
     OUString                m_sFilter;
     Link<sfx2::FileDialogHelper*,void> m_aDialogClosedLink;
 
-    sal_Int64 const         m_nDlgFlags;
+    FileDialogFlags const m_nDlgFlags;
     ErrCode                 m_nError;
 
     sfx2::FileDialogHelper* m_pFileDlg;

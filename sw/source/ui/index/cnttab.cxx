@@ -100,7 +100,7 @@ static OUString lcl_CreateAutoMarkFileDlg( const OUString& rURL,
     OUString sRet;
 
     FileDialogHelper aDlgHelper( bOpen ?
-                TemplateDescription::FILEOPEN_SIMPLE : TemplateDescription::FILESAVE_AUTOEXTENSION, 0 );
+                TemplateDescription::FILEOPEN_SIMPLE : TemplateDescription::FILESAVE_AUTOEXTENSION );
     uno::Reference < XFilePicker2 > xFP = aDlgHelper.GetFilePicker();
 
     uno::Reference<XFilterManager> xFltMgr(xFP, UNO_QUERY);

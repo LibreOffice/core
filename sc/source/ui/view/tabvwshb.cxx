@@ -302,7 +302,7 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
             try
             {
                 sfx2::FileDialogHelper aDlg(ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
-                        0, OUString("com.sun.star.chart2.ChartDocument"));
+                        FileDialogFlags::NONE, OUString("com.sun.star.chart2.ChartDocument"));
                 if(aDlg.Execute() == ERRCODE_NONE )
                 {
                     INetURLObject aURLObj( aDlg.GetPath() );

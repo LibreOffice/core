@@ -214,7 +214,7 @@ void SdFileDialog_Imp::CheckSelectionState()
 }
 
 SdFileDialog_Imp::SdFileDialog_Imp( const short     nDialogType    ) :
-    FileDialogHelper( nDialogType, 0 ),
+    FileDialogHelper( nDialogType ),
     mnPlaySoundEvent( nullptr ),
     mbUsableSelection( false ),
     mbLabelPlaying(false)

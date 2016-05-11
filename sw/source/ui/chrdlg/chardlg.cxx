@@ -302,7 +302,7 @@ VclPtr<SfxTabPage> SwCharURLPage::Create(  vcl::Window* pParent,
 
 IMPL_LINK_NOARG_TYPED(SwCharURLPage, InsertFileHdl, Button*, void)
 {
-    FileDialogHelper aDlgHelper( TemplateDescription::FILEOPEN_SIMPLE, 0 );
+    FileDialogHelper aDlgHelper( TemplateDescription::FILEOPEN_SIMPLE );
     if( aDlgHelper.Execute() == ERRCODE_NONE )
     {
         Reference < XFilePicker2 > xFP = aDlgHelper.GetFilePicker();

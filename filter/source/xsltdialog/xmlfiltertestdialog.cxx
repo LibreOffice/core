@@ -311,8 +311,7 @@ void XMLFilterTestDialog::onExportBrowse()
     {
         // Open Fileopen-Dialog
            ::sfx2::FileDialogHelper aDlg(
-            css::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
-            0 );
+            css::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE );
 
         Reference< XNameAccess > xFilterContainer( mxContext->getServiceManager()->createInstanceWithContext( "com.sun.star.document.FilterFactory", mxContext ), UNO_QUERY );
         Reference< XNameAccess > xTypeDetection( mxContext->getServiceManager()->createInstanceWithContext( "com.sun.star.document.TypeDetection", mxContext ), UNO_QUERY );
@@ -546,7 +545,7 @@ void XMLFilterTestDialog::onImportBrowse()
 {
     // Open Fileopen-Dialog
        ::sfx2::FileDialogHelper aDlg(
-        css::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, 0 );
+        css::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE );
     OUString aFilterName( m_pFilterInfo->maInterfaceName );
     OUString aExtensions;
 

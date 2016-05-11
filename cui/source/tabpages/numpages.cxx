@@ -998,7 +998,7 @@ IMPL_LINK_NOARG_TYPED(SvxBitmapPickTabPage, DoubleClickHdl_Impl, ValueSet*, void
 IMPL_LINK_NOARG_TYPED(SvxBitmapPickTabPage, ClickAddBrowseHdl_Impl, Button*, void)
 {
 
-    sfx2::FileDialogHelper aFileDialog(0, 0);
+    sfx2::FileDialogHelper aFileDialog(0);
     aFileDialog.SetTitle(CUI_RES(RID_SVXSTR_ADD_IMAGE));
     if ( aFileDialog.Execute() != ERRCODE_NONE )
         return;

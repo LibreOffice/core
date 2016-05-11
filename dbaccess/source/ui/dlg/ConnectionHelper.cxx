@@ -222,7 +222,7 @@ namespace dbaui
                 SvtModuleOptions aModule;
                 ::sfx2::FileDialogHelper aFileDlg(
                     ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION,
-                    0,
+                    FileDialogFlags::NONE,
                     aModule.GetFactoryEmptyDocumentURL(SvtModuleOptions::EFactory::CALC)
                     ,SfxFilterFlags::IMPORT);
                 askForFileName(aFileDlg);
@@ -233,8 +233,7 @@ namespace dbaui
                 const OUString sExt("*.mdb;*.mde");
                 OUString sFilterName(ModuleRes (STR_MSACCESS_FILTERNAME));
                 ::sfx2::FileDialogHelper aFileDlg(
-                    ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION,
-                    0);
+                    ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION);
                 aFileDlg.AddFilter(sFilterName,sExt);
                 aFileDlg.SetCurrentFilter(sFilterName);
                 askForFileName(aFileDlg);
@@ -245,8 +244,7 @@ namespace dbaui
                 const OUString sAccdb("*.accdb;*.accde");
                 OUString sFilterName2(ModuleRes (STR_MSACCESS_2007_FILTERNAME));
                 ::sfx2::FileDialogHelper aFileDlg(
-                    ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION,
-                    0);
+                    ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION);
                 aFileDlg.AddFilter(sFilterName2,sAccdb);
                 aFileDlg.SetCurrentFilter(sFilterName2);
                 askForFileName(aFileDlg);
@@ -326,8 +324,7 @@ namespace dbaui
                 const OUString sExt("*.fdb");
                 OUString sFilterName(ModuleRes (STR_FIREBIRD_FILTERNAME));
                 ::sfx2::FileDialogHelper aFileDlg(
-                    ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
-                    0);
+                    ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE);
                 aFileDlg.AddFilter(sFilterName,sExt);
                 aFileDlg.SetCurrentFilter(sFilterName);
                 askForFileName(aFileDlg);
@@ -351,8 +348,7 @@ namespace dbaui
                 const OUString sExt("*.fdb");
                 OUString sFilterName(ModuleRes (STR_FIREBIRD_FILTERNAME));
                 ::sfx2::FileDialogHelper aFileDlg(
-                    ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION,
-                    0);
+                    ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION);
                 aFileDlg.AddFilter(sFilterName,sExt);
                 aFileDlg.SetCurrentFilter(sFilterName);
                 askForFileName(aFileDlg);

@@ -835,7 +835,7 @@ bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
            FILESAVE_AUTOEXTENSION_PASSWORD_FILTEROPTIONS)
         : (css::ui::dialogs::TemplateDescription::
            FILESAVE_AUTOEXTENSION_PASSWORD);
-    sal_Int64 aDialogFlags = 0;
+    FileDialogFlags aDialogFlags = FileDialogFlags::NONE;
 
     if( ( nStoreMode & EXPORT_REQUESTED ) && !( nStoreMode & WIDEEXPORT_REQUESTED ) )
     {
@@ -845,12 +845,12 @@ bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
         else
             aDialogMode = css::ui::dialogs::TemplateDescription::
                 FILESAVE_AUTOEXTENSION_SELECTION;
-        aDialogFlags = SFXWB_EXPORT;
+        aDialogFlags = FileDialogFlags::Export;
     }
 
     if( ( nStoreMode & EXPORT_REQUESTED ) && ( nStoreMode & SAVEACOPY_REQUESTED ) && ( nStoreMode & WIDEEXPORT_REQUESTED ) )
     {
-        aDialogFlags = SFXWB_SAVEACOPY;
+        aDialogFlags = FileDialogFlags::SaveACopy;
     }
 
     std::unique_ptr<sfx2::FileDialogHelper> pFileDlg;

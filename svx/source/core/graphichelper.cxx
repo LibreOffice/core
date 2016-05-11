@@ -98,7 +98,7 @@ OUString GraphicHelper::ExportGraphic( const Graphic& rGraphic, const OUString& 
     SvtPathOptions aPathOpt;
     OUString sGraphicsPath( aPathOpt.GetGraphicPath() );
 
-    FileDialogHelper aDialogHelper( TemplateDescription::FILESAVE_AUTOEXTENSION, 0 );
+    FileDialogHelper aDialogHelper( TemplateDescription::FILESAVE_AUTOEXTENSION );
     Reference < XFilePicker2 > xFilePicker = aDialogHelper.GetFilePicker();
 
     INetURLObject aPath;
@@ -211,7 +211,7 @@ void GraphicHelper::SaveShapeAsGraphic( const Reference< drawing::XShape >& xSha
         SvtPathOptions aPathOpt;
         OUString sGraphicPath( aPathOpt.GetGraphicPath() );
 
-        FileDialogHelper aDialogHelper( TemplateDescription::FILESAVE_AUTOEXTENSION, 0 );
+        FileDialogHelper aDialogHelper( TemplateDescription::FILESAVE_AUTOEXTENSION );
         Reference < XFilePicker2 > xFilePicker = aDialogHelper.GetFilePicker();
 
         aDialogHelper.SetTitle( "Save as Image" );
