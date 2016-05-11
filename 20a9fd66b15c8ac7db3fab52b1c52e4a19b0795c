@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_1e6d9c04",
+        "filename": "svx/source/tbxctrls/tbcontrl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1885,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2016-05-11T22:01:57Z",
+      "side": 1,
+      "message": "Every click to the currency button calls constructer and Lİstbox refilled again. I think it can delete our MRU entries. the first culprit is here i think? what do u think?",
+      "range": {
+        "startLine": 1885,
+        "startChar": 4,
+        "endLine": 1885,
+        "endChar": 15
+      },
+      "revId": "20a9fd66b15c8ac7db3fab52b1c52e4a19b0795c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_3e7260e6",
+        "filename": "svx/source/tbxctrls/tbcontrl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1896,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2016-05-11T22:01:57Z",
+      "side": 1,
+      "message": "I noticed it when i added this line.",
+      "range": {
+        "startLine": 1896,
+        "startChar": 8,
+        "endLine": 1896,
+        "endChar": 40
+      },
+      "revId": "20a9fd66b15c8ac7db3fab52b1c52e4a19b0795c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
