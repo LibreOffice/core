@@ -721,9 +721,22 @@ void SvXMLNumFmtExport::WriteScientificElement_Impl(
 
 void SvXMLNumFmtExport::WriteFractionElement_Impl(
                             sal_Int32 nInteger, bool bGrouping,
-                            sal_Int32 nNumeratorDigits, sal_Int32 nDenominatorDigits, sal_Int32 nDenominator )
+                            const OUString& aNumeratorString , const OUString& aDenominatorString )
 {
     FinishTextElement_Impl();
+    sal_Int32 nMaxNumeratorDigits = aNumeratorString.getLength();
+    sal_Int32 nMinNumeratorDigits = aNumeratorString.indexOf('?');
+    if ( nMinNumeratorDigits >= 0 )
+        nMinNumeratorDigits = nMaxNumeratorDigits - nMinNumeratorDigits;
+    else
+        nMinNumeratorDigits = 0;
+    sal_Int32 nMaxDenominatorDigits = aDenominatorString.getLength();
+    sal_Int32 nMinDenominatorDigits = aDenominatorString.indexOf('?');
+    if ( nMinDenominatorDigits >= 0 )
+        nMinDenominatorDigits = nMaxDenominatorDigits - nMinDenominatorDigits;
+    else
+        nMinDenominatorDigits = 0;
+    sal_Int32 nDenominator = aDenominatorString.toInt32();
 
     //  integer digits
     if ( nInteger >= 0 )        // negative = default (no integer part)
@@ -739,10 +752,17 @@ void SvXMLNumFmtExport::WriteFractionElement_Impl(
     }
 
     //  numerator digits
-    if ( nNumeratorDigits >= 0 )
+    if ( nMinNumeratorDigits == 0 ) // at least one digit to keep compatibility with previous versions
+        nMinNumeratorDigits++;
+    rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_MIN_NUMERATOR_DIGITS,
+                          OUString::number( nMinNumeratorDigits ) );
+    // Export only for 1.2 with extensions or 1.3 and later.
+    SvtSaveOptions::ODFSaneDefaultVersion eVersion = rExport.getSaneDefaultVersion();
+    if ((eVersion & SvtSaveOptions::ODFSVER_EXTENDED) != 0)
     {
-        rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_MIN_NUMERATOR_DIGITS,
-                                 OUString::number( nNumeratorDigits ) );
+        // For extended ODF use loext namespace
+        rExport.AddAttribute( XML_NAMESPACE_LO_EXT, XML_MAX_NUMERATOR_DIGITS,
+                              OUString::number( nMaxNumeratorDigits ) );
     }
 
     if ( nDenominator )
@@ -750,12 +770,22 @@ void SvXMLNumFmtExport::WriteFractionElement_Impl(
         rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_DENOMINATOR_VALUE,
                               OUString::number( nDenominator) );
     }
-    //  I guess it's not necessary to export nDenominatorDigits
-    //  if we have a forced denominator ( remove ? )
-    if ( nDenominatorDigits >= 0 )
+    //  it's not necessary to export nDenominatorDigits
+    //  if we have a forced denominator
+    else
     {
+        if ( nMinDenominatorDigits == 0 ) // at least one digit to keep compatibility with previous versions
+            nMinDenominatorDigits++;
         rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_MIN_DENOMINATOR_DIGITS,
-                              OUString::number( nDenominatorDigits ) );
+                              OUString::number( nMinDenominatorDigits ) );
+        if (eVersion > SvtSaveOptions::ODFSVER_012)
+        {
+            // For 1.2+ use loext namespace, for 1.3 use number namespace.
+            rExport.AddAttribute(
+                ((eVersion < SvtSaveOptions::ODFSVER_013) ? XML_NAMESPACE_LO_EXT : XML_NAMESPACE_NUMBER),
+                                 XML_MAX_DENOMINATOR_VALUE,
+                                 OUString::number( pow ( 10.0, nMaxDenominatorDigits ) - 1 ) ); // 9, 99 or 999
+        }
     }
 
     SvXMLElementExport aElem( rExport, XML_NAMESPACE_NUMBER, XML_FRACTION,
@@ -1486,10 +1516,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                                         //  min-integer-digits attribute must be written.
                                         nInteger = -1;
                                     }
-                                    OUString aDenominatorString = rFormat.GetDenominatorString( nPart );
-                                    sal_Int32 nDenominator = aDenominatorString.toInt32();
-                                    sal_Int32 nDenominatorLength = aDenominatorString.getLength();
-                                    WriteFractionElement_Impl( nInteger, bThousand, nPrecision, nDenominatorLength, nDenominator );
+                                    WriteFractionElement_Impl( nInteger, bThousand,  rFormat.GetNumeratorString( nPart ), rFormat.GetDenominatorString( nPart ) );
                                     bAnyContent = true;
                                 }
                                 break;
