@@ -370,9 +370,9 @@ that can be used to handle specific actions.
         With this method, it can be defined what should be displayed in
         the extra field.
             - ExtraType         what should be displayed in the extra field
-                                RULER_EXTRA_DONTKNOW        (nothing)
-                                RULER_EXTRA_NULLOFFSET      (coordinate axes)
-                                RULER_EXTRA_TAB             (Tab)
+                                RulerExtra::DontKnow        (nothing)
+                                RulerExtra::NullOffset      (coordinate axes)
+                                RulerExtra::Tab             (Tab)
             - sal_uInt16 nStyle     bit field as style:
                                     RULER_STYLE_HIGHLIGHT   (selected)
                                     RULER_TAB_...           (a Tab style)
@@ -466,8 +466,7 @@ enum RulerType { RULER_TYPE_DONTKNOW, RULER_TYPE_OUTSIDE,
                  RULER_TYPE_MARGIN1, RULER_TYPE_MARGIN2,
                  RULER_TYPE_BORDER, RULER_TYPE_INDENT, RULER_TYPE_TAB };
 
-enum RulerExtra { RULER_EXTRA_DONTKNOW,
-                  RULER_EXTRA_NULLOFFSET, RULER_EXTRA_TAB };
+enum class RulerExtra { DontKnow, NullOffset, Tab };
 
 #define RULER_STYLE_HIGHLIGHT   ((sal_uInt16)0x8000)
 #define RULER_STYLE_DONTKNOW    ((sal_uInt16)0x4000)
