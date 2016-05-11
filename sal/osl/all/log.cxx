@@ -65,7 +65,7 @@ char const * toString(sal_detail_LogLevel level) {
     switch (level) {
     default:
         assert(false); // this cannot happen
-        // fall through
+        SAL_FALLTHROUGH;
     case SAL_DETAIL_LOG_LEVEL_INFO:
         return "info";
     case SAL_DETAIL_LOG_LEVEL_WARN:
@@ -246,7 +246,7 @@ void log(
             break;
         default:
             assert(false); // this cannot happen
-            // fall through
+            SAL_FALLTHROUGH;
         case SAL_DETAIL_LOG_LEVEL_WARN:
             prio = LOG_WARNING;
             break;
