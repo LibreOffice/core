@@ -111,7 +111,7 @@ void Ruler::MouseButtonDown(const MouseEvent& rMEvt)
 
     if ( !pDrViewShell->GetView()->IsTextEdit() &&
         rMEvt.IsLeft() && rMEvt.GetClicks() == 1 &&
-        (eType == RULER_TYPE_DONTKNOW || eType == RULER_TYPE_OUTSIDE) )
+        (eType == RulerType::DontKnow || eType == RulerType::Outside) )
     {
         pDrViewShell->StartRulerDrag(*this, rMEvt);
     }

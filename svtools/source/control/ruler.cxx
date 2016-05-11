@@ -254,7 +254,7 @@ void Ruler::ImplInit( WinBits nWinBits )
     mnUpdateFlags   = 0;                    // What needs to be updated
     mpData          = mpSaveData;           // Pointer to normal data
     meExtraType     = RulerExtra::DontKnow; // What is in extra field
-    meDragType      = RULER_TYPE_DONTKNOW;  // Which element is dragged
+    meDragType      = RulerType::DontKnow;  // Which element is dragged
 
     // Initialize Units
     mnUnitIndex     = RULER_UNIT_CM;
@@ -854,11 +854,11 @@ void Ruler::ImplDrawIndents(vcl::RenderContext& rRenderContext, long nMin, long 
             if (RulerIndentStyle::Border != nIndentStyle)
             {
                 bool bIsHit = false;
-                if(mxCurrentHitTest.get() != nullptr && mxCurrentHitTest->eType == RULER_TYPE_INDENT)
+                if(mxCurrentHitTest.get() != nullptr && mxCurrentHitTest->eType == RulerType::Indent)
                 {
                     bIsHit = mxCurrentHitTest->nAryPos == j;
                 }
-                else if(mbDrag && meDragType == RULER_TYPE_INDENT)
+                else if(mbDrag && meDragType == RulerType::Indent)
                 {
                     bIsHit = mnDragAryPos == j;
                 }
@@ -1520,13 +1520,13 @@ bool Ruler::ImplHitTest( const Point& rPos, RulerSelection* pHitTest,
          (nY > nHitBottom) )
     {
         pHitTest->nPos = 0;
-        pHitTest->eType = RULER_TYPE_OUTSIDE;
+        pHitTest->eType = RulerType::Outside;
         return false;
     }
 
     nX -= mpData->nNullVirOff;
     pHitTest->nPos  = nX;
-    pHitTest->eType = RULER_TYPE_DONTKNOW;
+    pHitTest->eType = RulerType::DontKnow;
 
     // first test the tabs
     Rectangle aRect;
@@ -1565,7 +1565,7 @@ bool Ruler::ImplHitTest( const Point& rPos, RulerSelection* pHitTest,
 
                     if ( aRect.IsInside( Point( nX, nY ) ) )
                     {
-                        pHitTest->eType   = RULER_TYPE_TAB;
+                        pHitTest->eType   = RulerType::Tab;
                         pHitTest->nAryPos = i;
                         return true;
                     }
@@ -1605,7 +1605,7 @@ bool Ruler::ImplHitTest( const Point& rPos, RulerSelection* pHitTest,
 
                 if ( aRect.IsInside( Point( nX, nY ) ) )
                 {
-                    pHitTest->eType     = RULER_TYPE_INDENT;
+                    pHitTest->eType     = RulerType::Indent;
                     pHitTest->nAryPos   = i-1;
                     return true;
                 }
@@ -1617,7 +1617,7 @@ bool Ruler::ImplHitTest( const Point& rPos, RulerSelection* pHitTest,
     if ( (nXTemp < mpData->nRulVirOff) || (nXTemp > mpData->nRulVirOff+mpData->nRulWidth) )
     {
         pHitTest->nPos = 0;
-        pHitTest->eType = RULER_TYPE_OUTSIDE;
+        pHitTest->eType = RulerType::Outside;
         return false;
     }
 
@@ -1646,7 +1646,7 @@ bool Ruler::ImplHitTest( const Point& rPos, RulerSelection* pHitTest,
             RulerBorderStyle nBorderStyle = mpData->pBorders[i-1].nStyle;
             if ( !(nBorderStyle & RulerBorderStyle::Invisible) )
             {
-                pHitTest->eType     = RULER_TYPE_BORDER;
+                pHitTest->eType     = RulerType::Border;
                 pHitTest->nAryPos   = i-1;
 
                 if ( !(nBorderStyle & RulerBorderStyle::Sizeable) )
@@ -1704,7 +1704,7 @@ bool Ruler::ImplHitTest( const Point& rPos, RulerSelection* pHitTest,
         n1 = mpData->nMargin1;
         if ( (nX >= n1 - nMarginTolerance) && (nX <= n1 + nMarginTolerance) )
         {
-            pHitTest->eType = RULER_TYPE_MARGIN1;
+            pHitTest->eType = RulerType::Margin1;
             pHitTest->bSize = true;
             return true;
         }
@@ -1714,7 +1714,7 @@ bool Ruler::ImplHitTest( const Point& rPos, RulerSelection* pHitTest,
         n1 = mpData->nMargin2;
         if ( (nX >= n1 - nMarginTolerance) && (nX <= n1 + nMarginTolerance) )
         {
-            pHitTest->eType = RULER_TYPE_MARGIN2;
+            pHitTest->eType = RulerType::Margin2;
             pHitTest->bSize = true;
             return true;
         }
@@ -1759,7 +1759,7 @@ bool Ruler::ImplHitTest( const Point& rPos, RulerSelection* pHitTest,
 
                     if ( aRect.IsInside( Point( nX, nY ) ) )
                     {
-                        pHitTest->eType   = RULER_TYPE_TAB;
+                        pHitTest->eType   = RulerType::Tab;
                         pHitTest->nAryPos = i;
                         return true;
                     }
@@ -1778,7 +1778,7 @@ bool Ruler::ImplDocHitTest( const Point& rPos, RulerType eDragType,
     bool bRequiredStyle = false;
     RulerIndentStyle nRequiredStyle = RulerIndentStyle::Top;
 
-    if (eDragType == RULER_TYPE_INDENT)
+    if (eDragType == RulerType::Indent)
     {
         bRequiredStyle = true;
         nRequiredStyle = RulerIndentStyle::Bottom;
@@ -1789,7 +1789,7 @@ bool Ruler::ImplDocHitTest( const Point& rPos, RulerType eDragType,
     else
         aPos.Y() += mnWinOff;
 
-    if ( (eDragType == RULER_TYPE_INDENT) || (eDragType == RULER_TYPE_DONTKNOW) )
+    if ( (eDragType == RulerType::Indent) || (eDragType == RulerType::DontKnow) )
     {
         if ( mnWinStyle & WB_HORZ )
             aPos.Y() = RULER_OFF + 1;
@@ -1798,14 +1798,14 @@ bool Ruler::ImplDocHitTest( const Point& rPos, RulerType eDragType,
 
         if ( ImplHitTest( aPos, pHitTest, bRequiredStyle, nRequiredStyle ) )
         {
-            if ( (pHitTest->eType == eDragType) || (eDragType == RULER_TYPE_DONTKNOW) )
+            if ( (pHitTest->eType == eDragType) || (eDragType == RulerType::DontKnow) )
                 return true;
         }
     }
 
-    if ( (eDragType == RULER_TYPE_INDENT) ||
-         (eDragType == RULER_TYPE_TAB) ||
-         (eDragType == RULER_TYPE_DONTKNOW) )
+    if ( (eDragType == RulerType::Indent) ||
+         (eDragType == RulerType::Tab) ||
+         (eDragType == RulerType::DontKnow) )
     {
         if ( mnWinStyle & WB_HORZ )
             aPos.Y() = mnHeight - RULER_OFF - 1;
@@ -1814,13 +1814,13 @@ bool Ruler::ImplDocHitTest( const Point& rPos, RulerType eDragType,
 
         if ( ImplHitTest( aPos, pHitTest, bRequiredStyle, nRequiredStyle ) )
         {
-            if ( (pHitTest->eType == eDragType) || (eDragType == RULER_TYPE_DONTKNOW) )
+            if ( (pHitTest->eType == eDragType) || (eDragType == RulerType::DontKnow) )
                 return true;
         }
     }
 
-    if ( (eDragType == RULER_TYPE_MARGIN1) || (eDragType == RULER_TYPE_MARGIN2) ||
-         (eDragType == RULER_TYPE_BORDER) || (eDragType == RULER_TYPE_DONTKNOW) )
+    if ( (eDragType == RulerType::Margin1) || (eDragType == RulerType::Margin2) ||
+         (eDragType == RulerType::Border) || (eDragType == RulerType::DontKnow) )
     {
         if ( mnWinStyle & WB_HORZ )
             aPos.Y() = RULER_OFF + (mnVirHeight / 2);
@@ -1829,12 +1829,12 @@ bool Ruler::ImplDocHitTest( const Point& rPos, RulerType eDragType,
 
         if ( ImplHitTest( aPos, pHitTest ) )
         {
-            if ( (pHitTest->eType == eDragType) || (eDragType == RULER_TYPE_DONTKNOW) )
+            if ( (pHitTest->eType == eDragType) || (eDragType == RulerType::DontKnow) )
                 return true;
         }
     }
 
-    pHitTest->eType = RULER_TYPE_DONTKNOW;
+    pHitTest->eType = RulerType::DontKnow;
 
     return false;
 }
@@ -1842,7 +1842,7 @@ bool Ruler::ImplDocHitTest( const Point& rPos, RulerType eDragType,
 bool Ruler::ImplStartDrag( RulerSelection* pHitTest, sal_uInt16 nModifier )
 {
     // don't trigger drag if a border that was clicked can not be changed
-    if ( (pHitTest->eType == RULER_TYPE_BORDER) &&
+    if ( (pHitTest->eType == RulerType::Border) &&
          !pHitTest->bSize && !pHitTest->bSizeBar )
         return false;
 
@@ -1868,7 +1868,7 @@ bool Ruler::ImplStartDrag( RulerSelection* pHitTest, sal_uInt16 nModifier )
     else
     {
         // otherwise reset the data
-        meDragType      = RULER_TYPE_DONTKNOW;
+        meDragType      = RulerType::DontKnow;
         mnDragPos       = 0;
         mnDragAryPos    = 0;
         mnDragSize      = RulerDragSize::Move;
@@ -1969,7 +1969,7 @@ void Ruler::ImplEndDrag()
     EndDrag();
 
     // reset drag values
-    meDragType      = RULER_TYPE_DONTKNOW;
+    meDragType      = RulerType::DontKnow;
     mnDragPos       = 0;
     mnDragAryPos    = 0;
     mnDragSize      = RulerDragSize::Move;
@@ -2018,7 +2018,7 @@ void Ruler::MouseButtonDown( const MouseEvent& rMEvt )
                 else
                 {
                     // calculate position inside of ruler area
-                    if ( pHitTest->eType == RULER_TYPE_DONTKNOW )
+                    if ( pHitTest->eType == RulerType::DontKnow )
                     {
                         mnDragPos = pHitTest->nPos;
                         Click();
@@ -2041,7 +2041,7 @@ void Ruler::MouseButtonDown( const MouseEvent& rMEvt )
 
                 DoubleClick();
 
-                meDragType      = RULER_TYPE_DONTKNOW;
+                meDragType      = RulerType::DontKnow;
                 mnDragPos       = 0;
                 mnDragAryPos    = 0;
             }
@@ -2057,7 +2057,7 @@ void Ruler::MouseMove( const MouseEvent& rMEvt )
 
     mxCurrentHitTest.reset(new RulerSelection);
 
-    maHoverSelection.eType = RULER_TYPE_DONTKNOW;
+    maHoverSelection.eType = RulerType::DontKnow;
 
     if (ImplHitTest( rMEvt.GetPosPixel(), mxCurrentHitTest.get() ))
     {
@@ -2314,7 +2314,7 @@ bool Ruler::StartDocDrag( const MouseEvent& rMEvt, RulerType eDragType )
         sal_uInt16     nMouseModifier = rMEvt.GetModifier();
         RulerSelection aHitTest;
 
-        if(eDragType != RULER_TYPE_DONTKNOW)
+        if(eDragType != RulerType::DontKnow)
             aHitTest.bExpandTest = true;
 
         // update ruler
