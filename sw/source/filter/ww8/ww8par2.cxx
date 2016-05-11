@@ -94,8 +94,8 @@ public:
 WW8TabBandDesc::WW8TabBandDesc()
 {
     memset(this, 0, sizeof(*this));
-    for (size_t i = 0; i < sizeof(maDirections)/sizeof(sal_uInt16); ++i)
-        maDirections[i] = 4;
+    for (sal_uInt16 & rn : maDirections)
+        rn = 4;
 }
 
 WW8TabBandDesc::~WW8TabBandDesc()

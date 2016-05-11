@@ -1781,12 +1781,11 @@ bool WW8_WrPlcSepx::WriteKFText( WW8Export& rWrt )
     unsigned int nOldIndex = rWrt.GetHdFtIndex();
     rWrt.SetHdFtIndex( 0 );
 
-    for ( size_t i = 0; i < aSects.size(); ++i )
+    for (WW8_SepInfo & rSepInfo : aSects)
     {
         std::shared_ptr<WW8_PdAttrDesc> const pAttrDesc(new WW8_PdAttrDesc);
         m_SectionAttributes.push_back(pAttrDesc);
 
-        WW8_SepInfo& rSepInfo = aSects[i];
         rWrt.SectionProperties( rSepInfo, pAttrDesc.get() );
 
         // FIXME: this writes the section properties, but not of all sections;
@@ -1825,9 +1824,9 @@ void WW8_WrPlcSepx::WriteSepx( SvStream& rStrm ) const
 {
     OSL_ENSURE(m_SectionAttributes.size() == static_cast<size_t>(aSects.size())
         , "WriteSepx(): arrays out of sync!");
-    for (size_t i = 0; i < m_SectionAttributes.size(); i++) // all sections
+    for (const auto & rSectionAttribute : m_SectionAttributes) // all sections
     {
-        WW8_PdAttrDesc *const pA = m_SectionAttributes[i].get();
+        WW8_PdAttrDesc *const pA = rSectionAttribute.get();
         if (pA->m_nLen && pA->m_pData != nullptr)
         {
             SVBT16 nL;
@@ -1857,10 +1856,10 @@ void WW8_WrPlcSepx::WritePlcSed( WW8Export& rWrt ) const
 
     static WW8_SED aSed = {{4, 0},{0, 0, 0, 0},{0, 0},{0xff, 0xff, 0xff, 0xff}};
 
-    for (size_t j = 0; j < m_SectionAttributes.size(); j++ )
+    for (const auto & rSectionAttribute : m_SectionAttributes)
     {
         // Sepx-Pos
-        UInt32ToSVBT32( m_SectionAttributes[j]->m_nSepxFcPos, aSed.fcSepx );
+        UInt32ToSVBT32( rSectionAttribute->m_nSepxFcPos, aSed.fcSepx );
         rWrt.pTableStrm->Write( &aSed, sizeof( aSed ) );
     }
     rWrt.pFib->fcPlcfsed = nFcStart;
@@ -2008,8 +2007,8 @@ bool WW8_WrPlcAnnotations::IsNewRedlineComment( const SwRedlineData *pRedline )
 
 WW8_WrPlcAnnotations::~WW8_WrPlcAnnotations()
 {
-    for( size_t n=0; n < aContent.size(); n++ )
-        delete static_cast<WW8_Annotation const *>(aContent[n]);
+    for(const void * p : aContent)
+        delete static_cast<WW8_Annotation const *>(p);
 }
 
 bool WW8_WrPlcSubDoc::WriteGenericText( WW8Export& rWrt, sal_uInt8 nTTyp,

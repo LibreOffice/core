@@ -1589,7 +1589,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
 
                         // Link PageNums
                         std::vector<sal_Int32> aNotePageNums = CalcOutputPageNums( rNoteRect );
-                        for ( size_t nNumIdx = 0; nNumIdx < aNotePageNums.size(); ++nNumIdx )
+                        for (sal_Int32 aNotePageNum : aNotePageNums)
                         {
                             // Link Note
                             vcl::PDFNote aNote;
@@ -1612,7 +1612,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
 
                             // Link Export
                             Rectangle aRect(SwRectToPDFRect(pCurrPage, rNoteRect.SVRect()));
-                            pPDFExtOutDevData->CreateNote(aRect, aNote, aNotePageNums[nNumIdx]);
+                            pPDFExtOutDevData->CreateNote(aRect, aNote, aNotePageNum);
                         }
                     }
                 }
@@ -1706,12 +1706,12 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                             // Link PageNums
                             std::vector<sal_Int32> aLinkPageNums = CalcOutputPageNums( rLinkRect );
 
-                            for ( size_t nNumIdx = 0; nNumIdx < aLinkPageNums.size(); ++nNumIdx )
+                            for (sal_Int32 aLinkPageNum : aLinkPageNums)
                             {
                                 // Link Export
                                 Rectangle aRect(SwRectToPDFRect(pSelectionPage, rLinkRect.SVRect()));
                                 const sal_Int32 nLinkId =
-                                    pPDFExtOutDevData->CreateLink(aRect, aLinkPageNums[nNumIdx]);
+                                    pPDFExtOutDevData->CreateLink(aRect, aLinkPageNum);
 
                                 // Store link info for tagged pdf output:
                                 const IdMapEntry aLinkEntry( rLinkRect, nLinkId );
@@ -1784,11 +1784,11 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                     std::vector<sal_Int32> aLinkPageNums = CalcOutputPageNums( aLinkRect );
 
                     // Link Export
-                    for ( size_t nNumIdx = 0; nNumIdx < aLinkPageNums.size(); ++nNumIdx )
+                    for (sal_Int32 aLinkPageNum : aLinkPageNums)
                     {
                         Rectangle aRect(SwRectToPDFRect(pCurrPage, aLinkRect.SVRect()));
                         const sal_Int32 nLinkId =
-                            pPDFExtOutDevData->CreateLink(aRect, aLinkPageNums[nNumIdx]);
+                            pPDFExtOutDevData->CreateLink(aRect, aLinkPageNum);
 
                         // Connect Link and Destination:
                         if ( bIntern )
@@ -1875,12 +1875,12 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                             // Link PageNums
                             std::vector<sal_Int32> aLinkPageNums = CalcOutputPageNums( rLinkRect );
 
-                            for ( size_t nNumIdx = 0; nNumIdx < aLinkPageNums.size(); ++nNumIdx )
+                            for (sal_Int32 aLinkPageNum : aLinkPageNums)
                             {
                                 // Link Export
                                 aRect = SwRectToPDFRect(pCurrPage, rLinkRect.SVRect());
                                 const sal_Int32 nLinkId =
-                                    pPDFExtOutDevData->CreateLink(aRect, aLinkPageNums[nNumIdx]);
+                                    pPDFExtOutDevData->CreateLink(aRect, aLinkPageNum);
 
                                 // Store link info for tagged pdf output:
                                 const IdMapEntry aLinkEntry( rLinkRect, nLinkId );
@@ -1955,12 +1955,12 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                 // Destination PageNum
                 const sal_Int32 nDestPageNum = CalcOutputPageNum( rDestRect );
 
-                for ( size_t nNumIdx = 0; nNumIdx < aLinkPageNums.size(); ++nNumIdx )
+                for (sal_Int32 aLinkPageNum : aLinkPageNums)
                 {
                     // Link Export
                     Rectangle aRect(SwRectToPDFRect(pCurrPage, aLinkRect.SVRect()));
                     const sal_Int32 nLinkId =
-                        pPDFExtOutDevData->CreateLink(aRect, aLinkPageNums[nNumIdx]);
+                        pPDFExtOutDevData->CreateLink(aRect, aLinkPageNum);
 
                     // Store link info for tagged pdf output:
                     const IdMapEntry aLinkEntry( aLinkRect, nLinkId );
@@ -2233,12 +2233,12 @@ void SwEnhancedPDFExportHelper::MakeHeaderFooterLinks( vcl::PDFExtOutDevData& rP
                 // Link PageNums
                 std::vector<sal_Int32> aHFLinkPageNums = CalcOutputPageNums( aHFLinkRect );
 
-                for ( size_t nNumIdx = 0; nNumIdx < aHFLinkPageNums.size(); ++nNumIdx )
+                for (sal_Int32 aHFLinkPageNum : aHFLinkPageNums)
                 {
                     // Link Export
                     Rectangle aRect(SwRectToPDFRect(pPageFrame, aHFLinkRect.SVRect()));
                     const sal_Int32 nHFLinkId =
-                        rPDFExtOutDevData.CreateLink(aRect, aHFLinkPageNums[nNumIdx]);
+                        rPDFExtOutDevData.CreateLink(aRect, aHFLinkPageNum);
 
                     // Connect Link and Destination:
                     if ( bIntern )

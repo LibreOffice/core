@@ -38,9 +38,8 @@ static std::vector<SwProgress*> *pProgressContainer = nullptr;
 
 static SwProgress *lcl_SwFindProgress( SwDocShell *pDocShell )
 {
-    for ( size_t i = 0; i < pProgressContainer->size(); ++i )
+    for (SwProgress* pTmp : *pProgressContainer)
     {
-        SwProgress *pTmp = (*pProgressContainer)[i];
         if ( pTmp->pDocShell == pDocShell )
             return pTmp;
     }

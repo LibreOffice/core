@@ -309,9 +309,8 @@ void SwFrame::dumpAsXml( xmlTextWriterPtr writer ) const
         {
             xmlTextWriterStartElement( writer, BAD_CAST( "anchored" ) );
 
-            for ( size_t i = 0, len = pAnchored->size(); i < len; ++i )
+            for (SwAnchoredObject* pObject : *pAnchored)
             {
-                SwAnchoredObject* pObject = (*pAnchored)[i];
                 pObject->dumpAsXml( writer );
             }
 

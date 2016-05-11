@@ -250,12 +250,12 @@ bool SwInsertBookmarkDlg::HaveBookmarksChanged()
         return true;
 
     IDocumentMarkAccess::const_iterator_t ppBookmark = pMarkAccess->getBookmarksBegin();
-    for (sal_Int32 i = 0; i < static_cast<sal_Int32>(aTableBookmarks.size()); i++)
+    for (std::pair<sw::mark::IMark*,OUString> & aTableBookmark : aTableBookmarks)
     {
         if (IDocumentMarkAccess::MarkType::BOOKMARK == IDocumentMarkAccess::GetType(**ppBookmark))
         {
-            if (aTableBookmarks[i].first != ppBookmark->get() ||
-                aTableBookmarks[i].second != ppBookmark->get()->GetName())
+            if (aTableBookmark.first != ppBookmark->get() ||
+                aTableBookmark.second != ppBookmark->get()->GetName())
                 return true;
         }
         ++ppBookmark;

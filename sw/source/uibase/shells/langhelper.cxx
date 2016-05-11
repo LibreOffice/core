@@ -339,25 +339,25 @@ namespace SwLangHelper
             OSL_ENSURE( !pOLV || pEditEngine, "OutlinerView without EditEngine???" );
             if (pEditEngine)
             {
-                for (size_t i = 0; i < SAL_N_ELEMENTS(aLangWhichId_EE); ++i)
-                    rCoreSet.Put( SvxLanguageItem( LANGUAGE_NONE, aLangWhichId_EE[i] ));
+                for (sal_uInt16 i : aLangWhichId_EE)
+                    rCoreSet.Put( SvxLanguageItem( LANGUAGE_NONE, i ));
                 pEditEngine->QuickSetAttribs(rCoreSet, rSelection);
             }
             else
             {
                 rWrtSh.GetCurAttr( rCoreSet );
-                for (size_t i = 0; i < SAL_N_ELEMENTS(aLangWhichId_Writer); ++i)
-                    rCoreSet.Put( SvxLanguageItem( LANGUAGE_NONE, aLangWhichId_Writer[i] ));
+                for (sal_uInt16 i : aLangWhichId_Writer)
+                    rCoreSet.Put( SvxLanguageItem( LANGUAGE_NONE, i ));
                 rWrtSh.SetAttrSet( rCoreSet );
             }
         }
         else // change language for all text
         {
             std::set<sal_uInt16> aAttribs;
-            for (size_t i = 0; i < SAL_N_ELEMENTS(aLangWhichId_Writer); ++i)
+            for (sal_uInt16 i : aLangWhichId_Writer)
             {
-                rWrtSh.SetDefault( SvxLanguageItem( LANGUAGE_NONE, aLangWhichId_Writer[i] ) );
-                aAttribs.insert( aLangWhichId_Writer[i] );
+                rWrtSh.SetDefault( SvxLanguageItem( LANGUAGE_NONE, i ) );
+                aAttribs.insert( i );
             }
 
             // set all language attributes to default
@@ -471,9 +471,9 @@ namespace SwLangHelper
                 RES_CHRATR_CTL_LANGUAGE
             };
             nCurrentLang = LANGUAGE_NONE;
-            for (size_t i = 0; i < SAL_N_ELEMENTS(aScriptTypes); ++i)
+            for (sal_uInt16 aScriptType : aScriptTypes)
             {
-                LanguageType nTmpLang = GetLanguage( rSh, aScriptTypes[i] );
+                LanguageType nTmpLang = GetLanguage( rSh, aScriptType );
                 if (nTmpLang != LANGUAGE_NONE)
                 {
                     nCurrentLang = LANGUAGE_DONTKNOW;
@@ -519,9 +519,9 @@ namespace SwLangHelper
                 EE_CHAR_LANGUAGE_CTL
             };
             nCurrentLang = LANGUAGE_NONE;
-            for (size_t i = 0; i < SAL_N_ELEMENTS(aScriptTypes); ++i)
+            for (sal_uInt16 aScriptType : aScriptTypes)
             {
-                LanguageType nTmpLang = GetLanguage( aSet, aScriptTypes[i] );
+                LanguageType nTmpLang = GetLanguage( aSet, aScriptType );
                 if (nTmpLang != LANGUAGE_NONE)
                 {
                     nCurrentLang = LANGUAGE_DONTKNOW;

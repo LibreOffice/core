@@ -357,9 +357,9 @@ bool SwAutoCompleteWord::GetWordsMatching(const OUString& aMatch, std::vector<OU
         return false;
     }
 
-    for (size_t i = 0; i < suggestions.size(); i++)
+    for (const OUString & suggestion : suggestions)
     {
-        aWords.push_back( suggestions[i] );
+        aWords.push_back( suggestion );
     }
 
     return true;

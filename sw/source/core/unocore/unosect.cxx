@@ -1134,9 +1134,8 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                 }
                 const SwRedlineTable& rRedTable =
                     pFormat->GetDoc()->getIDocumentRedlineAccess().GetRedlineTable();
-                for (size_t nRed = 0; nRed < rRedTable.size(); ++nRed)
+                for (SwRangeRedline* pRedline : rRedTable)
                 {
-                    const SwRangeRedline* pRedline = rRedTable[nRed];
                     const SwNode& rRedPointNode = pRedline->GetNode();
                     const SwNode& rRedMarkNode = pRedline->GetNode(false);
                     if ((&rRedPointNode == pSectNode) ||

@@ -614,18 +614,16 @@ void SwSpellPopup::checkRedline()
     };
     SwDoc *pDoc = m_pSh->GetDoc();
     SfxItemSet aSet(pDoc->GetAttrPool(), FN_REDLINE_ACCEPT_DIRECT, FN_REDLINE_PREV_CHANGE);
-    for (size_t i = 0; i < SAL_N_ELEMENTS(pRedlineIds); ++i)
+    for (sal_uInt16 nWhich : pRedlineIds)
     {
-        const sal_uInt16 nWhich = pRedlineIds[i];
         aSet.Put(SfxVoidItem(nWhich), nWhich);
     }
     m_pSh->GetView().GetState(aSet);
 
     // Enable/disable items based on if the which id of the void items are
     // cleared or not.
-    for (size_t i = 0; i < SAL_N_ELEMENTS(pRedlineIds); ++i)
+    for (sal_uInt16 nWhich : pRedlineIds)
     {
-        const sal_uInt16 nWhich = pRedlineIds[i];
         EnableItem(nWhich, aSet.Get(nWhich).Which());
     }
 }

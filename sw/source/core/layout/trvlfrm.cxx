@@ -380,9 +380,8 @@ bool SwPageFrame::FillSelection( SwSelectionList& rList, const SwRect& rRect ) c
         if( GetSortedObjs() )
         {
             const SwSortedObjs &rObjs = *GetSortedObjs();
-            for ( size_t i = 0; i < rObjs.size(); ++i )
+            for (SwAnchoredObject* pAnchoredObj : rObjs)
             {
-                const SwAnchoredObject* pAnchoredObj = rObjs[i];
                 if( dynamic_cast< const SwFlyFrame *>( pAnchoredObj ) ==  nullptr )
                     continue;
                 const SwFlyFrame* pFly = static_cast<const SwFlyFrame*>(pAnchoredObj);
@@ -1905,10 +1904,9 @@ bool SwRootFrame::MakeTableCursors( SwTableCursor& rTableCursor )
 
         const bool bReadOnlyAvailable = rTableCursor.IsReadOnlyAvailable();
 
-        for ( size_t i = 0; i < aUnions.size(); ++i )
+        for (SwSelUnion & rUnion : aUnions)
         {
-            SwSelUnion *pUnion = &aUnions[i];
-            const SwTabFrame *pTable = pUnion->GetTable();
+            const SwTabFrame *pTable = rUnion.GetTable();
 
             // Skip any repeated headlines in the follow:
             SwLayoutFrame* pRow = pTable->IsFollow() ?
@@ -1917,14 +1915,14 @@ bool SwRootFrame::MakeTableCursors( SwTableCursor& rTableCursor )
 
             while ( pRow )
             {
-                if ( pRow->Frame().IsOver( pUnion->GetUnion() ) )
+                if ( pRow->Frame().IsOver( rUnion.GetUnion() ) )
                 {
                     const SwLayoutFrame *pCell = pRow->FirstCell();
 
                     while ( pCell && pRow->IsAnLower( pCell ) )
                     {
                         OSL_ENSURE( pCell->IsCellFrame(), "Frame without cell" );
-                        if( IsFrameInTableSel( pUnion->GetUnion(), pCell ) &&
+                        if( IsFrameInTableSel( rUnion.GetUnion(), pCell ) &&
                             (bReadOnlyAvailable ||
                              !pCell->GetFormat()->GetProtect().IsContentProtected()))
                         {
@@ -2571,9 +2569,8 @@ void SwRootFrame::CalcFrameRects(SwShellCursor &rCursor)
         if ( pPage->GetSortedObjs() )
         {
             const SwSortedObjs &rObjs = *pPage->GetSortedObjs();
-            for ( size_t i = 0; i < rObjs.size(); ++i )
+            for (SwAnchoredObject* pAnchoredObj : rObjs)
             {
-                SwAnchoredObject* pAnchoredObj = rObjs[i];
                 if ( dynamic_cast< const SwFlyFrame *>( pAnchoredObj ) ==  nullptr )
                     continue;
                 const SwFlyFrame* pFly = static_cast<const SwFlyFrame*>(pAnchoredObj);

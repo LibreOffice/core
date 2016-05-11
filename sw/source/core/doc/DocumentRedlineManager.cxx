@@ -72,14 +72,14 @@ using namespace com::sun::star;
             const SwRedlineTable& rTable = redlineAccess.GetRedlineTable();
 
             // verify valid redline positions
-            for( size_t i = 0; i < rTable.size(); ++i )
-                lcl_CheckPam( rTable[ i ] );
+            for(SwRangeRedline* i : rTable)
+                lcl_CheckPam( i );
 
-            for( size_t j = 0; j < rTable.size(); ++j )
+            for(SwRangeRedline* j : rTable)
             {
                 // check for empty redlines
-                OSL_ENSURE( ( *(rTable[j]->GetPoint()) != *(rTable[j]->GetMark()) ) ||
-                            ( rTable[j]->GetContentIdx() != nullptr ),
+                OSL_ENSURE( ( *(j->GetPoint()) != *(j->GetMark()) ) ||
+                            ( j->GetContentIdx() != nullptr ),
                             ERROR_PREFIX "empty redline" );
              }
 
@@ -2614,9 +2614,8 @@ sal_uInt16 DocumentRedlineManager::InsertRedlineAuthor( const OUString& rNew )
 void DocumentRedlineManager::UpdateRedlineAttr()
 {
     const SwRedlineTable& rTable = GetRedlineTable();
-    for( size_t n = 0; n < rTable.size(); ++n )
+    for(SwRangeRedline* pRedl : rTable)
     {
-        SwRangeRedline* pRedl = rTable[ n ];
         if( pRedl->IsVisible() )
             pRedl->InvalidateRange();
     }

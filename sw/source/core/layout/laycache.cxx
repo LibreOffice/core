@@ -275,9 +275,8 @@ void SwLayoutCache::Write( SvStream &rStream, const SwDoc& rDoc )
             if( pPage->GetSortedObjs() )
             {
                 SwSortedObjs &rObjs = *pPage->GetSortedObjs();
-                for ( size_t i = 0; i < rObjs.size(); ++i )
+                for (SwAnchoredObject* pAnchoredObj : rObjs)
                 {
-                    SwAnchoredObject* pAnchoredObj = rObjs[i];
                     if (SwFlyFrame *pFly = dynamic_cast<SwFlyFrame*>(pAnchoredObj))
                     {
                         if( pFly->Frame().Left() != FAR_AWAY &&
@@ -939,9 +938,8 @@ void SwLayHelper::CheckFlyCache_( SwPageFrame* pPage )
 
         // sort objects on this page by ordnum
         std::set< const SdrObject*, SdrObjectCompare > aFlySet;
-        for ( size_t i = 0; i < rObjs.size(); ++i )
+        for (SwAnchoredObject* pAnchoredObj : rObjs)
         {
-            SwAnchoredObject* pAnchoredObj = rObjs[i];
             if (SwFlyFrame *pFly = dynamic_cast<SwFlyFrame*>(pAnchoredObj))  // a text frame?
             {
                 if( pFly->GetAnchorFrame() &&

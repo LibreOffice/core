@@ -430,9 +430,8 @@ bool SwFEShell::MoveAnchor( SwMove nDir )
                     Point aCenter( pOld->Frame().Left() + pOld->Frame().Width()/2,
                                    pOld->Frame().Top() + pOld->Frame().Height()/2 );
                     Point aBest;
-                    for( size_t i = 0; i<pPage->GetSortedObjs()->size(); ++i )
+                    for(SwAnchoredObject* pAnchObj : *pPage->GetSortedObjs())
                     {
-                        SwAnchoredObject* pAnchObj = (*pPage->GetSortedObjs())[i];
                         if( dynamic_cast<const SwFlyFrame*>( pAnchObj) !=  nullptr )
                         {
                             SwFlyFrame* pTmp = static_cast<SwFlyFrame*>(pAnchObj);

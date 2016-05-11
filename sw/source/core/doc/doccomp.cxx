@@ -2079,9 +2079,8 @@ long SwDoc::MergeDoc( const SwDoc& rDoc )
         const SwRedlineTable& rSrcRedlTable = rSrcDoc.getIDocumentRedlineAccess().GetRedlineTable();
         sal_uLong nEndOfExtra = rSrcDoc.GetNodes().GetEndOfExtras().GetIndex();
         sal_uLong nMyEndOfExtra = GetNodes().GetEndOfExtras().GetIndex();
-        for( SwRedlineTable::size_type n = 0; n < rSrcRedlTable.size(); ++n )
+        for(const SwRangeRedline* pRedl : rSrcRedlTable)
         {
-            const SwRangeRedline* pRedl = rSrcRedlTable[ n ];
             sal_uLong nNd = pRedl->GetPoint()->nNode.GetIndex();
             RedlineType_t eType = pRedl->GetType();
             if( nEndOfExtra < nNd &&

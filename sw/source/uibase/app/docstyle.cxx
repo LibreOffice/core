@@ -2956,43 +2956,43 @@ void SwStyleSheetIterator::AppendStyleList(const ::std::vector<OUString>& rList,
 {
     SwDoc& rDoc = static_cast<SwDocStyleSheetPool*>(pBasePool)->GetDoc();
     bool bUsed = false;
-    for ( size_t i=0; i < rList.size(); ++i )
+    for (const auto & i : rList)
     {
         bool bHidden = false;
-        sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(rList[i], (SwGetPoolIdFromName)nSection);
+        sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(i, (SwGetPoolIdFromName)nSection);
         switch ( nSection )
         {
             case nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL:
                 {
                     bUsed = rDoc.getIDocumentStylePoolAccess().IsPoolTextCollUsed( nId );
-                    SwFormat* pFormat = rDoc.FindTextFormatCollByName( rList[i] );
+                    SwFormat* pFormat = rDoc.FindTextFormatCollByName( i );
                     bHidden = pFormat && pFormat->IsHidden( );
                 }
                 break;
             case nsSwGetPoolIdFromName::GET_POOLID_CHRFMT:
                 {
                     bUsed = rDoc.getIDocumentStylePoolAccess().IsPoolFormatUsed( nId );
-                    SwFormat* pFormat = rDoc.FindCharFormatByName( rList[i] );
+                    SwFormat* pFormat = rDoc.FindCharFormatByName( i );
                     bHidden = pFormat && pFormat->IsHidden( );
                 }
                 break;
             case nsSwGetPoolIdFromName::GET_POOLID_FRMFMT:
                 {
                     bUsed = rDoc.getIDocumentStylePoolAccess().IsPoolFormatUsed( nId );
-                    SwFormat* pFormat = rDoc.FindFrameFormatByName( rList[i] );
+                    SwFormat* pFormat = rDoc.FindFrameFormatByName( i );
                     bHidden = pFormat && pFormat->IsHidden( );
                 }
                 break;
             case nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC:
                 {
                     bUsed = rDoc.getIDocumentStylePoolAccess().IsPoolPageDescUsed( nId );
-                    SwPageDesc* pPgDesc = rDoc.FindPageDesc(rList[i]);
+                    SwPageDesc* pPgDesc = rDoc.FindPageDesc(i);
                     bHidden = pPgDesc && pPgDesc->IsHidden( );
                 }
                 break;
             case nsSwGetPoolIdFromName::GET_POOLID_NUMRULE:
                 {
-                    SwNumRule* pRule = rDoc.FindNumRulePtr( rList[i] );
+                    SwNumRule* pRule = rDoc.FindNumRulePtr( i );
                     bUsed = pRule && SwDoc::IsUsed( *pRule );
                     bHidden = pRule && pRule->IsHidden( );
                 }
@@ -3003,7 +3003,7 @@ void SwStyleSheetIterator::AppendStyleList(const ::std::vector<OUString>& rList,
 
         bool bMatchHidden = ( bTestHidden && ( bHidden || !bOnlyHidden ) ) || ( !bTestHidden && ( !bHidden || bUsed ) );
         if ( ( !bTestUsed && bMatchHidden ) || ( bTestUsed && bUsed ) )
-            aLst.Append( cType, rList[i] );
+            aLst.Append( cType, i );
     }
 }
 

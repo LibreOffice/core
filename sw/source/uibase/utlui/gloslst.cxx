@@ -358,9 +358,8 @@ void SwGlossaryList::Invoke()
 
 AutoTextGroup* SwGlossaryList::FindGroup(const OUString& rGroupName)
 {
-    for(size_t i = 0; i < aGroupArr.size(); ++i)
+    for(AutoTextGroup* pRet : aGroupArr)
     {
-        AutoTextGroup* pRet = aGroupArr[i];
         if(pRet->sName == rGroupName)
             return pRet;
     }

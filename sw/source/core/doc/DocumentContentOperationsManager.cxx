@@ -701,10 +701,10 @@ namespace
         RedlineMode_t eOld = pDoc->getIDocumentRedlineAccess().GetRedlineMode();
         pDoc->getIDocumentRedlineAccess().SetRedlineMode_intern( (RedlineMode_t)(( eOld & ~nsRedlineMode_t::REDLINE_IGNORE) | nsRedlineMode_t::REDLINE_ON ));
 
-        for( size_t n = 0; n < rArr.size(); ++n )
+        for(SaveRedline & rSvRedLine : rArr)
         {
-            rArr[ n ].SetPos( rPos );
-            pDoc->getIDocumentRedlineAccess().AppendRedline( rArr[ n ].pRedl, true );
+            rSvRedLine.SetPos( rPos );
+            pDoc->getIDocumentRedlineAccess().AppendRedline( rSvRedLine.pRedl, true );
         }
 
         pDoc->getIDocumentRedlineAccess().SetRedlineMode_intern( eOld );
@@ -798,10 +798,10 @@ namespace
         RedlineMode_t eOld = pDoc->getIDocumentRedlineAccess().GetRedlineMode();
         pDoc->getIDocumentRedlineAccess().SetRedlineMode_intern( (RedlineMode_t)(( eOld & ~nsRedlineMode_t::REDLINE_IGNORE) | nsRedlineMode_t::REDLINE_ON ));
 
-        for( size_t n = 0; n < rArr.size(); ++n )
+        for(SaveRedline & rSvRedLine : rArr)
         {
-            rArr[ n ].SetPos( nInsPos );
-            pDoc->getIDocumentRedlineAccess().AppendRedline( rArr[ n ].pRedl, true );
+            rSvRedLine.SetPos( nInsPos );
+            pDoc->getIDocumentRedlineAccess().AppendRedline( rSvRedLine.pRedl, true );
         }
 
         pDoc->getIDocumentRedlineAccess().SetRedlineMode_intern( eOld );
@@ -2260,9 +2260,8 @@ bool DocumentContentOperationsManager::MoveNodeRange( SwNodeRange& rRange, SwNod
     if( !aSavRedlInsPosArr.empty() )
     {
         SwNode* pNewNd = &aIdx.GetNode();
-        for( size_t n = 0; n < aSavRedlInsPosArr.size(); ++n )
+        for(SwRangeRedline* pTmp : aSavRedlInsPosArr)
         {
-            SwRangeRedline* pTmp = aSavRedlInsPosArr[ n ];
             if( m_rDoc.getIDocumentRedlineAccess().GetRedlineTable().Contains( pTmp ) )
             {
                 SwPosition* pEnd = pTmp->End();

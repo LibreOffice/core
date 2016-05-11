@@ -137,12 +137,12 @@ static bool lcl_RstAttr( const SwNodePtr& rpNd, void* pArgs )
         const SfxPoolItem* pItem;
 
         sal_uInt16 const aSavIds[3] = { RES_PAGEDESC, RES_BREAK, RES_PARATR_NUMRULE };
-        for (int n = 0; n < 3; ++n)
+        for (sal_uInt16 aSavId : aSavIds)
         {
-            if (SfxItemState::SET == pAttrSetOfNode->GetItemState(aSavIds[n], false, &pItem))
+            if (SfxItemState::SET == pAttrSetOfNode->GetItemState(aSavId, false, &pItem))
             {
                 bool bSave = false;
-                switch( aSavIds[ n ] )
+                switch( aSavId )
                 {
                     case RES_PAGEDESC:
                         bSave = nullptr != static_cast<const SwFormatPageDesc*>(pItem)->GetPageDesc();
@@ -157,7 +157,7 @@ static bool lcl_RstAttr( const SwNodePtr& rpNd, void* pArgs )
                 if( bSave )
                 {
                     aSavedAttrsSet.Put(*pItem);
-                    aClearWhichIds.push_back(aSavIds[n]);
+                    aClearWhichIds.push_back(aSavId);
                 }
             }
         }
@@ -1972,9 +1972,8 @@ std::set<Color> SwDoc::GetDocColors()
     std::set<Color> aDocColors;
     SwAttrPool& rPool = GetAttrPool();
     const sal_uInt16 pAttribs[] = {RES_CHRATR_COLOR, RES_CHRATR_HIGHLIGHT, RES_BACKGROUND};
-    for (size_t i=0; i<SAL_N_ELEMENTS(pAttribs); i++)
+    for (sal_uInt16 nAttrib : pAttribs)
     {
-        const sal_uInt16 nAttrib = pAttribs[i];
         const sal_uInt32 nCount = rPool.GetItemCount2(nAttrib);
         for (sal_uInt32 j=0; j<nCount; j++)
         {

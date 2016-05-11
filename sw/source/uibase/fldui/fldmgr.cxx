@@ -1604,9 +1604,9 @@ void SwFieldType::GetFieldName_()
     // insert infos for fields
     SwFieldType::s_pFieldNames = new std::vector<OUString>;
     SwFieldType::s_pFieldNames->reserve(SAL_N_ELEMENTS(coFieldNms));
-    for( sal_uInt16 nIdx = 0; nIdx < SAL_N_ELEMENTS(coFieldNms); ++nIdx )
+    for(sal_uInt16 i : coFieldNms)
     {
-        const OUString aTmp(SW_RES( coFieldNms[ nIdx ] ));
+        const OUString aTmp(SW_RES( i ));
         SwFieldType::s_pFieldNames->push_back(MnemonicGenerator::EraseAllMnemonicChars( aTmp ));
     }
 }

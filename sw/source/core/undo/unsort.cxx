@@ -92,12 +92,12 @@ void SwUndoSort::UndoImpl(::sw::UndoRedoContext & rContext)
         const SwTable& rTable = pTableNd->GetTable();
 
         SwMovedBoxes aMovedList;
-        for (size_t i=0; i < m_SortList.size(); i++)
+        for (std::unique_ptr<SwSortUndoElement> & i : m_SortList)
         {
             const SwTableBox* pSource = rTable.GetTableBox(
-                    *m_SortList[i]->SORT_TXT_TBL.TBL.pSource );
+                    *i->SORT_TXT_TBL.TBL.pSource );
             const SwTableBox* pTarget = rTable.GetTableBox(
-                    *m_SortList[i]->SORT_TXT_TBL.TBL.pTarget );
+                    *i->SORT_TXT_TBL.TBL.pTarget );
 
             // move back
             MoveCell(&rDoc, pTarget, pSource,
@@ -125,12 +125,12 @@ void SwUndoSort::UndoImpl(::sw::UndoRedoContext & rContext)
 
         for (size_t i = 0; i < m_SortList.size(); ++i)
         {
-            for (size_t ii = 0; ii < m_SortList.size(); ++ii)
+            for (std::unique_ptr<SwSortUndoElement> & j : m_SortList)
             {
-                if (m_SortList[ii]->SORT_TXT_TBL.TXT.nSource == nSttNode + i)
+                if (j->SORT_TXT_TBL.TXT.nSource == nSttNode + i)
                 {
                     SwNodeIndex* pIdx = new SwNodeIndex( rDoc.GetNodes(),
-                        m_SortList[ii]->SORT_TXT_TBL.TXT.nTarget );
+                        j->SORT_TXT_TBL.TXT.nTarget );
                     aIdxList.insert( aIdxList.begin() + i, pIdx );
                     break;
                 }
@@ -171,12 +171,12 @@ void SwUndoSort::RedoImpl(::sw::UndoRedoContext & rContext)
         const SwTable& rTable = pTableNd->GetTable();
 
         SwMovedBoxes aMovedList;
-        for (size_t i = 0; i < m_SortList.size(); ++i)
+        for (std::unique_ptr<SwSortUndoElement> & i : m_SortList)
         {
             const SwTableBox* pSource = rTable.GetTableBox(
-                    *m_SortList[i]->SORT_TXT_TBL.TBL.pSource );
+                    *i->SORT_TXT_TBL.TBL.pSource );
             const SwTableBox* pTarget = rTable.GetTableBox(
-                    *m_SortList[i]->SORT_TXT_TBL.TBL.pTarget );
+                    *i->SORT_TXT_TBL.TBL.pTarget );
 
             // move back
             MoveCell(&rDoc, pSource, pTarget,

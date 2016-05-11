@@ -1998,13 +1998,13 @@ void DocxAttributeOutput::WriteCollectedRunProperties()
 
     if (!m_aTextEffectsGrabBag.empty())
     {
-        for (size_t i = 0; i < m_aTextEffectsGrabBag.size(); ++i)
+        for (beans::PropertyValue & i : m_aTextEffectsGrabBag)
         {
-            boost::optional<sal_Int32> aElementId = lclGetElementIdForName(m_aTextEffectsGrabBag[i].Name);
+            boost::optional<sal_Int32> aElementId = lclGetElementIdForName(i.Name);
             if(aElementId)
             {
                 uno::Sequence<beans::PropertyValue> aGrabBagSeq;
-                m_aTextEffectsGrabBag[i].Value >>= aGrabBagSeq;
+                i.Value >>= aGrabBagSeq;
                 lclProcessRecursiveGrabBag(*aElementId, aGrabBagSeq, m_pSerializer);
             }
         }
@@ -6652,12 +6652,10 @@ void DocxAttributeOutput::WritePostitFieldReference()
 
 void DocxAttributeOutput::WritePostitFields()
 {
-    for( size_t i = 0;
-         i < m_postitFields.size();
-         ++i )
+    for(const std::pair<const SwPostItField*,int> & rPair : m_postitFields)
     {
-        OString idstr = OString::number( m_postitFields[ i ].second);
-        const SwPostItField* f = m_postitFields[ i ].first;
+        OString idstr = OString::number( rPair.second);
+        const SwPostItField* f = rPair.first;
         m_pSerializer->startElementNS( XML_w, XML_comment, FSNS( XML_w, XML_id ), idstr.getStr(),
             FSNS( XML_w, XML_author ), OUStringToOString( f->GetPar1(), RTL_TEXTENCODING_UTF8 ).getStr(),
             FSNS( XML_w, XML_date ), DateTimeToOString(f->GetDateTime()).getStr(),

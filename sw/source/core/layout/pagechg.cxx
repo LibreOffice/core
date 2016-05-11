@@ -236,9 +236,8 @@ void SwPageFrame::DestroyImpl()
     {
         // Objects can be anchored at pages that are before their anchors (why ever...).
         // In such cases, we would access already freed memory.
-        for ( size_t i = 0; i < m_pSortedObjs->size(); ++i )
+        for (SwAnchoredObject* pAnchoredObj : *m_pSortedObjs)
         {
-            SwAnchoredObject* pAnchoredObj = (*m_pSortedObjs)[i];
             pAnchoredObj->SetPageFrame( nullptr );
         }
         delete m_pSortedObjs;
@@ -910,10 +909,9 @@ static void lcl_PrepFlyInCntRegister( SwContentFrame *pFrame )
     pFrame->Prepare( PREP_REGISTER );
     if( pFrame->GetDrawObjs() )
     {
-        for( size_t i = 0; i < pFrame->GetDrawObjs()->size(); ++i )
+        for(SwAnchoredObject* pAnchoredObj : *pFrame->GetDrawObjs())
         {
             // #i28701#
-            SwAnchoredObject* pAnchoredObj = (*pFrame->GetDrawObjs())[i];
             if ( dynamic_cast< const SwFlyInContentFrame *>( pAnchoredObj ) !=  nullptr )
             {
                 SwFlyFrame* pFly = static_cast<SwFlyInContentFrame*>(pAnchoredObj);
@@ -940,10 +938,9 @@ void SwPageFrame::PrepareRegisterChg()
     }
     if( GetSortedObjs() )
     {
-        for( size_t i = 0; i < GetSortedObjs()->size(); ++i )
+        for(SwAnchoredObject* pAnchoredObj : *GetSortedObjs())
         {
             // #i28701#
-            SwAnchoredObject* pAnchoredObj = (*GetSortedObjs())[i];
             if ( dynamic_cast< const SwFlyFrame *>( pAnchoredObj ) !=  nullptr )
             {
                 SwFlyFrame *pFly = static_cast<SwFlyFrame*>(pAnchoredObj);
@@ -1767,9 +1764,8 @@ static void lcl_MoveAllLowerObjs( SwFrame* pFrame, const Point& rOffset )
 
     // note: pSortedObj elements may be removed and inserted from
     // MoveObjectIfActive(), invalidating iterators
-    for (size_t i = 0; i < pSortedObj->size(); ++i)
+    for (SwAnchoredObject* pAnchoredObj : *pSortedObj)
     {
-        SwAnchoredObject *const pAnchoredObj = (*pSortedObj)[i];
         const SwFrameFormat& rObjFormat = pAnchoredObj->GetFrameFormat();
         const SwFormatAnchor& rAnchor = rObjFormat.GetAnchor();
 

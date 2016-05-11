@@ -6137,10 +6137,8 @@ void QuickHelpData::FillStrArr( SwWrtShell& rSh, const OUString& rWord )
 
     if ( rACList.GetWordsMatching( rWord, strings ) )
     {
-        for (size_t i= 0; i<strings.size(); i++)
+        for (const OUString & aCompletedString : strings)
         {
-            OUString aCompletedString = strings[i];
-
             // when we have a matching current date, avoid to suggest
             // other words with the same matching starting characters,
             // for example 2016-01-3 instead of 2016-01-30

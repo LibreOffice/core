@@ -1192,8 +1192,8 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
 
         rSt.ReadUInt32( aLST.nIdLst );
         rSt.ReadUInt32( aLST.nTplC );
-        for (sal_uInt16 nLevel = 0; nLevel < nMaxLevel; ++nLevel)
-            rSt.ReadUInt16( aLST.aIdSty[ nLevel ] );
+        for (sal_uInt16 & nLevel : aLST.aIdSty)
+            rSt.ReadUInt16( nLevel );
 
         sal_uInt8 aBits1(0);
         rSt.ReadUChar( aBits1 );
