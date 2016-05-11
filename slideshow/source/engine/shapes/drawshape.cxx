@@ -46,7 +46,6 @@
 #include <comphelper/scopeguard.hxx>
 #include <canvas/canvastools.hxx>
 
-#include <boost/mem_fn.hpp>
 #include <cmath>
 #include <algorithm>
 #include <iterator>
@@ -569,7 +568,7 @@ namespace slideshow
                     pShape->maAnimationFrames.begin(),
                     pShape->maAnimationFrames.end(),
                     std::back_insert_iterator< std::vector<double> >( aTimeout ),
-                    boost::mem_fn(&MtfAnimationFrame::getDuration) );
+                    std::mem_fn(&MtfAnimationFrame::getDuration) );
 
                 WakeupEventSharedPtr pWakeupEvent(
                     new WakeupEvent( rContext.mrEventQueue.getTimer(),
