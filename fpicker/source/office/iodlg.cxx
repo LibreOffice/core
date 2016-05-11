@@ -295,7 +295,7 @@ namespace
 SvtFileDialog::SvtFileDialog
 (
     vcl::Window* _pParent,
-    WinBits nBits,
+    PickerFlags nBits,
     WinBits nExtraBits
 ) :
     SvtFileDialog_Base( _pParent, "ExplorerFileDialog", "fps/ui/explorerfiledialog.ui" )
@@ -309,7 +309,7 @@ SvtFileDialog::SvtFileDialog
     ,_pPrevBmp( nullptr )
     ,_pFileView( nullptr )
     ,_pFileNotifier( nullptr )
-    ,_pImp( new SvtExpFileDlg_Impl( nBits ) )
+    ,_pImp( new SvtExpFileDlg_Impl )
     ,_nExtraBits( nExtraBits )
     ,_bIsInExecute( false )
     ,m_bInExecuteAsync( false )
@@ -320,7 +320,7 @@ SvtFileDialog::SvtFileDialog
 }
 
 
-SvtFileDialog::SvtFileDialog ( vcl::Window* _pParent, WinBits nBits )
+SvtFileDialog::SvtFileDialog ( vcl::Window* _pParent, PickerFlags nBits )
     :SvtFileDialog_Base( _pParent, "ExplorerFileDialog", "fps/ui/explorerfiledialog.ui" )
     ,_pCbReadOnly( nullptr )
     ,_pCbLinkBox( nullptr)
@@ -331,7 +331,7 @@ SvtFileDialog::SvtFileDialog ( vcl::Window* _pParent, WinBits nBits )
     ,_pPrevBmp( nullptr )
     ,_pFileView( nullptr )
     ,_pFileNotifier( nullptr )
-    ,_pImp( new SvtExpFileDlg_Impl( nBits ) )
+    ,_pImp( new SvtExpFileDlg_Impl )
     ,_nExtraBits( 0L )
     ,_bIsInExecute( false )
     ,m_bHasFilename( false )
@@ -551,7 +551,7 @@ void SvtFileDialog::dispose()
 
 void SvtFileDialog::Init_Impl
 (
-    WinBits nStyle
+    PickerFlags nStyle
 )
 {
     get(_pCbReadOnly, "readonly");
@@ -592,10 +592,10 @@ void SvtFileDialog::Init_Impl
     _pImp->_pBtnUp->Show();
 
     _pImp->_nStyle = nStyle;
-    _pImp->_eMode = ( nStyle & WB_SAVEAS ) ? FILEDLG_MODE_SAVE : FILEDLG_MODE_OPEN;
+    _pImp->_eMode = ( nStyle & PickerFlags::SAVEAS ) ? FILEDLG_MODE_SAVE : FILEDLG_MODE_OPEN;
     _pImp->_eDlgType = FILEDLG_TYPE_FILEDLG;
 
-    if ( ( nStyle & SFXWB_PATHDIALOG ) == SFXWB_PATHDIALOG )
+    if ( nStyle & PickerFlags::PATHDIALOG )
         _pImp->_eDlgType = FILEDLG_TYPE_PATHDLG;
 
     // Set the directory for the "back to the default dir" button
@@ -619,7 +619,7 @@ void SvtFileDialog::Init_Impl
     _pImp->_pBtnUp->SetAccessibleName( _pImp->_pBtnUp->GetQuickHelpText() );
     _pImp->_pBtnNewFolder->SetAccessibleName( _pImp->_pBtnNewFolder->GetQuickHelpText() );
 
-    if ( ( nStyle & SFXWB_MULTISELECTION ) == SFXWB_MULTISELECTION )
+    if ( nStyle & PickerFlags::MULTISELECTION )
         _pImp->_bMultiSelection = true;
 
     _pContainer.reset(VclPtr<CustomContainer>::Create(get<vcl::Window>("container")));
@@ -645,7 +645,7 @@ void SvtFileDialog::Init_Impl
     Image aNewFolderImg( GetButtonImage( IMG_FILEDLG_CREATEFOLDER ) );
     _pImp->_pBtnNewFolder->SetModeImage( aNewFolderImg );
 
-    if ( nStyle & SFXWB_READONLY )
+    if ( nStyle & PickerFlags::READONLY )
     {
         _pCbReadOnly->SetHelpId( HID_FILEOPEN_READONLY );
         _pCbReadOnly->SetText( SvtResId( STR_SVT_FILEPICKER_READONLY ) );
@@ -653,7 +653,7 @@ void SvtFileDialog::Init_Impl
         _pCbReadOnly->Show();
     }
 
-    if ( nStyle & SFXWB_PASSWORD )
+    if ( nStyle & PickerFlags::PASSWORD )
     {
         _pImp->_pCbPassword->SetText( SvtResId( STR_SVT_FILEPICKER_PASSWORD ) );
         _pImp->_pCbPassword->SetClickHdl( LINK( this, SvtFileDialog, ClickHdl_Impl ) );
@@ -669,13 +669,13 @@ void SvtFileDialog::Init_Impl
     sal_uInt16 nResId = STR_EXPLORERFILE_OPEN;
     sal_uInt16 nButtonResId = 0;
 
-    if ( nStyle & WB_SAVEAS )
+    if ( nStyle & PickerFlags::SAVEAS )
     {
         nResId = STR_EXPLORERFILE_SAVE;
         nButtonResId = STR_EXPLORERFILE_BUTTONSAVE;
     }
 
-    if ( ( nStyle & SFXWB_PATHDIALOG ) == SFXWB_PATHDIALOG )
+    if ( nStyle & PickerFlags::PATHDIALOG )
     {
         _pImp->_pFtFileName->SetText( SvtResId( STR_PATHNAME ) );
         nResId = STR_PATHSELECT;
@@ -713,7 +713,7 @@ void SvtFileDialog::Init_Impl
     _pImp->_aFilterTimer.SetTimeout( TRAVELFILTER_TIMEOUT );
     _pImp->_aFilterTimer.SetTimeoutHdl( LINK( this, SvtFileDialog, FilterSelectTimerHdl_Impl ) );
 
-    if ( WB_SAVEAS & nStyle )
+    if ( PickerFlags::SAVEAS & nStyle )
     {
         // different help ids if in save-as mode
         SetHelpId( HID_FILESAVE_DIALOG );
@@ -1888,7 +1888,7 @@ short SvtFileDialog::PrepareExecute()
         }
     }
 
-    if ( ( _pImp->_nStyle & WB_SAVEAS ) && m_bHasFilename )
+    if ( ( _pImp->_nStyle & PickerFlags::SAVEAS ) && m_bHasFilename )
         // when doing a save-as, we do not want the handler to handle "this file does not exist" messages
         // - finally we're going to save that file, aren't we?
         m_aContent.enableOwnInteractionHandler(::svt::OFilePickerInteractionHandler::E_DOESNOTEXIST);
@@ -1920,7 +1920,7 @@ short SvtFileDialog::PrepareExecute()
 
     _aPath = implGetInitialURL( _aPath, GetStandardDir() );
 
-    if ( _pImp->_nStyle & WB_SAVEAS && !m_bHasFilename )
+    if ( _pImp->_nStyle & PickerFlags::SAVEAS && !m_bHasFilename )
         // when doing a save-as, we do not want the handler to handle "this file does not exist" messages
         // - finally we're going to save that file, aren't we?
         m_aContent.enableOwnInteractionHandler(::svt::OFilePickerInteractionHandler::E_DOESNOTEXIST);

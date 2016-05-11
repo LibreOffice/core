@@ -37,9 +37,9 @@
 #include <list>
 
 class Dialog;
-
 struct FilterEntry;
 struct ElementEntry_Impl;
+enum class PickerFlags;
 
 typedef ::std::list< FilterEntry >             FilterList;     // can be maintained more effectively
 typedef ::std::list < ElementEntry_Impl >      ElementList;
@@ -212,7 +212,7 @@ protected:
                             ) override;
 
 protected:
-    WinBits             getWinBits( WinBits& rExtraBits );
+    PickerFlags         getWinBits( WinBits& rExtraBits );
     virtual void        notify( sal_Int16 _nEventId, sal_Int16 _nControlId ) override;
 
     bool                FilterNameExists( const OUString& rTitle );

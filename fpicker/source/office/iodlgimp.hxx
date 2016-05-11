@@ -154,7 +154,7 @@ public:
 
     SvtFileDlgMode                  _eMode;
     SvtFileDlgType                  _eDlgType;
-    WinBits                         _nStyle;
+    PickerFlags                     _nStyle;
 
     OUString                        _aStdDir;
 
@@ -175,7 +175,7 @@ public:
     // remember sizes
     OUString                        _aIniKey;
 
-    explicit                SvtExpFileDlg_Impl( WinBits nBits );
+    explicit                SvtExpFileDlg_Impl();
                             ~SvtExpFileDlg_Impl();
 
 
