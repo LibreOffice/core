@@ -1791,6 +1791,7 @@ bool SwContentTree::FillTransferData( TransferDataContainer& rTransfer,
                 break;
             else
                 rDragMode &= ~( DND_ACTION_MOVE | DND_ACTION_LINK );
+            SAL_FALLTHROUGH; //TODO ???
         default:
             sEntry = GetEntryText(pEntry);
     }

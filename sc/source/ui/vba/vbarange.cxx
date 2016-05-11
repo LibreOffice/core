@@ -5460,6 +5460,7 @@ ScVbaRange::SpecialCellsImpl( sal_Int32 nType, const uno::Any& _oValue) throw ( 
             }
             case excel::XlCellType::xlCellTypeLastCell:
                 xRange = Cells( uno::makeAny( getCount() ), uno::Any() );
+                SAL_FALLTHROUGH; //TODO ???
             case excel::XlCellType::xlCellTypeVisible:
                 xLocSheetCellRanges = xQuery->queryVisibleCells();
                 break;

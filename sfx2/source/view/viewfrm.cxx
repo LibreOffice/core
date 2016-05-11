@@ -533,6 +533,8 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
 
             rReq.AppendItem( SfxBoolItem( SID_FORCERELOAD, true) );
             rReq.AppendItem( SfxBoolItem( SID_SILENT, true ));
+
+            SAL_FALLTHROUGH; //TODO ???
         }
 
         case SID_RELOAD:

@@ -427,6 +427,7 @@ void SwBaseShell::StateClpbrd(SfxItemSet &rSet)
                 rSet.DisableItem( nWhich );
                 break;
             }
+            SAL_FALLTHROUGH; //TODO ???
         case SID_COPY:
             if( !bCopy )
                 rSet.DisableItem( nWhich );
