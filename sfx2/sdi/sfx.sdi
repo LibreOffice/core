@@ -4934,7 +4934,7 @@ SfxVoidItem RunBasic SID_BASICRUN
 
 
 SfxBoolItem Save SID_SAVEDOC
-(SfxStringItem VersionComment SID_DOCINFO_COMMENTS,SfxStringItem Author SID_DOCINFO_AUTHOR)
+(SfxStringItem VersionComment SID_DOCINFO_COMMENTS,SfxStringItem Author SID_DOCINFO_AUTHOR,SfxBoolItem DontTerminateEdit FN_PARAM_1)
 [
     /* flags: */
     AutoUpdate = FALSE,
