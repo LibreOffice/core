@@ -495,10 +495,10 @@ inline sal_uInt16 SvxRuler::GetObjectBordersOff(sal_uInt16 nIdx) const
 */
 void SvxRuler::UpdateFrame()
 {
-    const sal_uInt16 nMarginStyle =
+    const RulerMarginStyle nMarginStyle =
         ( mxRulerImpl->aProtectItem.IsSizeProtected() ||
           mxRulerImpl->aProtectItem.IsPosProtected() ) ?
-        0 : RULER_MARGIN_SIZEABLE;
+        RulerMarginStyle::NONE : RulerMarginStyle::Sizeable;
 
     if(mxLRSpaceItem.get() && mxPagePosItem.get())
     {
@@ -1398,8 +1398,8 @@ void SvxRuler::AdjustMargin1(long lInputDiff)
         mxRulerImpl->aProtectItem.IsSizeProtected() ||
         mxRulerImpl->aProtectItem.IsPosProtected();
 
-    const sal_uInt16 nMarginStyle =
-        bProtectColumns ? 0 : RULER_MARGIN_SIZEABLE;
+    const RulerMarginStyle nMarginStyle =
+        bProtectColumns ? RulerMarginStyle::NONE : RulerMarginStyle::Sizeable;
 
     if(!bAppSetNullOffset)
     {
@@ -1527,7 +1527,7 @@ void SvxRuler::DragMargin2()
         mxRulerImpl->aProtectItem.IsSizeProtected() ||
         mxRulerImpl->aProtectItem.IsPosProtected();
 
-    const sal_uInt16 nMarginStyle = bProtectColumns ? 0 : RULER_MARGIN_SIZEABLE;
+    const RulerMarginStyle nMarginStyle = bProtectColumns ? RulerMarginStyle::NONE : RulerMarginStyle::Sizeable;
 
     SetMargin2( aDragPosition, nMarginStyle );
 
@@ -1882,7 +1882,7 @@ ADD_DEBUG_TEXT("lLastLMargin: ", OUString::number(mxRulerImpl->lLastLMargin))
                         //otherwise the right borders are moved
                         for(int i  = mxColumnItem->Count() - 1; i > nIndex; --i)
                             mpBorders[i].nPos += lDiff;
-                        SetMargin2( GetMargin2() + lDiff, 0 );
+                        SetMargin2( GetMargin2() + lDiff, RulerMarginStyle::NONE );
                     }
                 }
             }
@@ -1918,7 +1918,7 @@ ADD_DEBUG_TEXT("lLastLMargin: ", OUString::number(mxRulerImpl->lLastLMargin))
                     {
                         mpBorders[i].nPos += lDiff;
                     }
-                    SetMargin2( GetMargin2() + lDiff, 0 );
+                    SetMargin2( GetMargin2() + lDiff, RulerMarginStyle::NONE );
                 }
             }
             else
