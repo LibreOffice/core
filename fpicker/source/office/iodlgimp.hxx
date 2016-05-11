@@ -112,11 +112,6 @@ protected:
     virtual Size        GetOptimalSize() const override;
 };
 
-typedef sal_uInt8 SvtFileDlgState;
-
-#define FILEDLG_STATE_NONE        ((SvtFileDlgState)0x00)
-#define FILEDLG_STATE_REMOTE      ((SvtFileDlgState)0x01)
-
 class SvtURLBox;
 class SvtExpFileDlg_Impl
 {
@@ -159,7 +154,6 @@ public:
 
     SvtFileDlgMode                  _eMode;
     SvtFileDlgType                  _eDlgType;
-    SvtFileDlgState                 _nState;
     WinBits                         _nStyle;
 
     OUString                        _aStdDir;

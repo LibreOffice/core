@@ -230,7 +230,6 @@ SvtExpFileDlg_Impl::SvtExpFileDlg_Impl( WinBits )   :
     _pBtnConnectToServer( nullptr ),
     _eMode              ( FILEDLG_MODE_OPEN ),
     _eDlgType           ( FILEDLG_TYPE_FILEDLG ),
-    _nState             ( FILEDLG_STATE_REMOTE ),
     _nStyle             ( 0 ),
     _bDoubleClick       ( false ),
     m_bNeedDelayedFilterExecute ( false ),
