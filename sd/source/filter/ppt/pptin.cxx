@@ -602,8 +602,8 @@ bool ImplSdPPTImport::Import()
                         if ( pSheet )
                         {
                             SfxItemSet& rItemSet = pSheet->GetItemSet();
-                            PPTParagraphObj aParagraph( *pPPTStyleSheet, TSS_TYPE_TEXT_IN_SHAPE, 0 );
-                            PPTPortionObj aPortion( *pPPTStyleSheet, TSS_TYPE_TEXT_IN_SHAPE, 0 );
+                            PPTParagraphObj aParagraph( *pPPTStyleSheet, TSS_Type::TextInShape, 0 );
+                            PPTPortionObj aPortion( *pPPTStyleSheet, TSS_Type::TextInShape, 0 );
                             aParagraph.AppendPortion( aPortion );
                             aParagraph.ApplyTo( rItemSet, oStartNumbering, (SdrPowerPointImport&)*this, 0xffffffff, nullptr );
                             aPortion.ApplyTo( rItemSet, (SdrPowerPointImport&)*this, 0xffffffff );
@@ -615,8 +615,8 @@ bool ImplSdPPTImport::Import()
                     if ( pSheet )
                     {
                         SfxItemSet& rItemSet = pSheet->GetItemSet();
-                        PPTParagraphObj aParagraph( *pPPTStyleSheet, TSS_TYPE_TEXT_IN_SHAPE, 0 );
-                        PPTPortionObj aPortion( *pPPTStyleSheet, TSS_TYPE_TEXT_IN_SHAPE, 0 );
+                        PPTParagraphObj aParagraph( *pPPTStyleSheet, TSS_Type::TextInShape, 0 );
+                        PPTPortionObj aPortion( *pPPTStyleSheet, TSS_Type::TextInShape, 0 );
                         aParagraph.AppendPortion( aPortion );
                         aParagraph.ApplyTo( rItemSet, oStartNumbering, (SdrPowerPointImport&)*this, 0xffffffff, nullptr );
                         aPortion.ApplyTo( rItemSet, (SdrPowerPointImport&)*this, 0xffffffff );
@@ -645,14 +645,14 @@ bool ImplSdPPTImport::Import()
                     // set stylesheets
                     if ( pPage->GetPageKind() == PK_STANDARD )
                     {
-                        sal_uInt32 nTitleInstance = TSS_TYPE_PAGETITLE;
-                        sal_uInt32 nOutlinerInstance = TSS_TYPE_BODY;
+                        sal_uInt32 nTitleInstance = TSS_Type::PageTitle;
+                        sal_uInt32 nOutlinerInstance = TSS_Type::Body;
                         const PptSlideLayoutAtom* pSlideLayout = GetSlideLayoutAtom();
                         bool bSwapStyleSheet = pSlideLayout->eLayout == PptSlideLayout::TITLEMASTERSLIDE;
                         if ( bSwapStyleSheet )
                         {
-                            nTitleInstance = TSS_TYPE_TITLE;
-                            nOutlinerInstance = TSS_TYPE_SUBTITLE;
+                            nTitleInstance = TSS_Type::Title;
+                            nOutlinerInstance = TSS_Type::Subtitle;
                         }
 
                         // titelstylesheet
@@ -699,8 +699,8 @@ bool ImplSdPPTImport::Import()
                         if ( pSheet )
                         {
                             SfxItemSet& rItemSet = pSheet->GetItemSet();
-                            PPTParagraphObj aParagraph( *pPPTStyleSheet, TSS_TYPE_SUBTITLE, 0 );
-                            PPTPortionObj aPortion( *pPPTStyleSheet, TSS_TYPE_SUBTITLE, 0 );
+                            PPTParagraphObj aParagraph( *pPPTStyleSheet, TSS_Type::Subtitle, 0 );
+                            PPTPortionObj aPortion( *pPPTStyleSheet, TSS_Type::Subtitle, 0 );
                             aParagraph.AppendPortion( aPortion );
                             aParagraph.ApplyTo( rItemSet, oStartNumbering, (SdrPowerPointImport&)*this, 0xffffffff, nullptr );
                             aPortion.ApplyTo( rItemSet, (SdrPowerPointImport&)*this, 0xffffffff );
@@ -712,8 +712,8 @@ bool ImplSdPPTImport::Import()
                         if ( pSheet )
                         {
                             SfxItemSet& rItemSet = pSheet->GetItemSet();
-                            PPTParagraphObj aParagraph( *pPPTStyleSheet, TSS_TYPE_NOTES, 0 );
-                            PPTPortionObj aPortion( *pPPTStyleSheet, TSS_TYPE_NOTES, 0 );
+                            PPTParagraphObj aParagraph( *pPPTStyleSheet, TSS_Type::Notes, 0 );
+                            PPTPortionObj aPortion( *pPPTStyleSheet, TSS_Type::Notes, 0 );
                             aParagraph.AppendPortion( aPortion );
                             aParagraph.ApplyTo( rItemSet, oStartNumbering, (SdrPowerPointImport&)*this, 0xffffffff, nullptr );
                             aPortion.ApplyTo( rItemSet, (SdrPowerPointImport&)*this, 0xffffffff );
@@ -2213,8 +2213,8 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
     }
     switch ( pTextObj->GetDestinationInstance() )
     {
-        case TSS_TYPE_PAGETITLE :
-        case TSS_TYPE_TITLE :
+        case TSS_Type::PageTitle :
+        case TSS_Type::Title :
         {
             pSheet = pPage->GetStyleSheetForPresObj( PRESOBJ_TITLE );
             if ( pSheet )
@@ -2222,7 +2222,7 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
             DBG_ASSERT( pSheet, "ImplSdPPTImport::ApplyTextObj -> could not get stylesheet for titleobject (SJ)" );
         }
         break;
-        case TSS_TYPE_SUBTITLE :
+        case TSS_Type::Subtitle :
         {
             pSheet = pPage->GetStyleSheetForPresObj( PRESOBJ_TEXT );
             if ( pSheet )
@@ -2230,9 +2230,9 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
             DBG_ASSERT( pSheet, "ImplSdPPTImport::ApplyTextObj -> could not get stylesheet for subtitleobject (SJ)" );
         }
         break;
-        case TSS_TYPE_BODY :
-        case TSS_TYPE_HALFBODY :
-        case TSS_TYPE_QUARTERBODY :
+        case TSS_Type::Body :
+        case TSS_Type::HalfBody :
+        case TSS_Type::QuarterBody :
         {
             for ( sal_uInt16 nLevel = 9; nLevel; nLevel-- )
             {
@@ -2250,7 +2250,7 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
             ppStyleSheetAry = &pStyleSheetAry[ 0 ];
         }
         break;
-        case TSS_TYPE_NOTES :
+        case TSS_Type::Notes :
         {
             if ( pPlaceHolder && ( ( pPlaceHolder->nPlaceholderId == PptPlaceholder::NOTESSLIDEIMAGE )
                 || ( pPlaceHolder->nPlaceholderId == PptPlaceholder::MASTERNOTESSLIDEIMAGE ) ) )
@@ -2269,8 +2269,8 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
             }
         }
         break;
-        case TSS_TYPE_UNUSED :
-        case TSS_TYPE_TEXT_IN_SHAPE :
+        case TSS_Type::Unused :
+        case TSS_Type::TextInShape :
         {
             switch( ePresKind )
             {
@@ -2291,10 +2291,10 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
     {
         if ( eAktPageKind == PPT_MASTERPAGE )
         {
-            bool bCreatePlaceHolder = ( pTextObj->GetInstance() != TSS_TYPE_UNUSED );
+            bool bCreatePlaceHolder = ( pTextObj->GetInstance() != TSS_Type::Unused );
             bool bIsHeaderFooter = ( ePresKind == PRESOBJ_HEADER) || (ePresKind == PRESOBJ_FOOTER)
                                         || (ePresKind == PRESOBJ_DATETIME) || (ePresKind == PRESOBJ_SLIDENUMBER);
-            if ( bCreatePlaceHolder && ( pTextObj->GetInstance() == TSS_TYPE_TEXT_IN_SHAPE ) )
+            if ( bCreatePlaceHolder && ( pTextObj->GetInstance() == TSS_Type::TextInShape ) )
                 bCreatePlaceHolder = bIsHeaderFooter;
             if ( bCreatePlaceHolder )
             {
@@ -2306,7 +2306,7 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
                 pText->SetUserCall( pPage );
                 pPage->InsertPresObj( pText, ePresKind );
                 SdrOutliner* pOutl = nullptr;
-                if ( pTextObj->GetInstance() == TSS_TYPE_NOTES )
+                if ( pTextObj->GetInstance() == TSS_Type::Notes )
                     pOutl = GetDrawOutliner( pText );
                 if ( !aPresentationText.isEmpty() )
                     pPage->SetObjText( pText, pOutl, ePresKind, aPresentationText );
@@ -2323,8 +2323,8 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
                         rItemSet.Put( static_cast<const SdrMetricItem&>(pText->GetMergedItem( SDRATTR_TEXT_LOWERDIST )) );
                         rItemSet.Put( static_cast<const SdrTextVertAdjustItem&>(pText->GetMergedItem( SDRATTR_TEXT_VERTADJUST )) );
                         rItemSet.Put( static_cast<const SdrTextHorzAdjustItem&>(pText->GetMergedItem( SDRATTR_TEXT_HORZADJUST )) );
-                        if (  pTextObj->GetInstance() ==  TSS_TYPE_TITLE
-                            || pTextObj->GetInstance() == TSS_TYPE_SUBTITLE)
+                        if (  pTextObj->GetInstance() ==  TSS_Type::Title
+                            || pTextObj->GetInstance() == TSS_Type::Subtitle)
                         {
                             rItemSet.Put( pText->GetMergedItemSet() );
                         }
