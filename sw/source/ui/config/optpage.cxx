@@ -502,9 +502,9 @@ IMPL_LINK_NOARG_TYPED(SwAddPrinterTabPage, AutoClickHdl, Button*, void)
 void  SwAddPrinterTabPage::SetFax( const std::vector<OUString>& rFaxLst )
 {
     m_pFaxLB->InsertEntry(sNone);
-    for(size_t i = 0; i < rFaxLst.size(); ++i)
+    for(const auto & i : rFaxLst)
     {
-        m_pFaxLB->InsertEntry(rFaxLst[i]);
+        m_pFaxLB->InsertEntry(i);
     }
     m_pFaxLB->SelectEntryPos(0);
 }
@@ -527,8 +527,8 @@ void SwAddPrinterTabPage::PageCreated( const SfxAllItemSet& aSet)
     {
         std::vector<OUString> aFaxList;
         const std::vector<OUString>& rPrinters = Printer::GetPrinterQueues();
-        for (size_t i = 0; i < rPrinters.size(); ++i)
-            aFaxList.insert(aFaxList.begin(), rPrinters[i]);
+        for (const auto & rPrinter : rPrinters)
+            aFaxList.insert(aFaxList.begin(), rPrinter);
         SetFax( aFaxList );
     }
 }

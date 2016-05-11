@@ -352,9 +352,9 @@ namespace
     {
         rDstArr.clear();
         rDstArr.reserve(rSrcArr.size());
-        for(size_t i = 0; i < rSrcArr.size(); ++i)
+        for(DrawObj & i : rSrcArr)
         {
-            rDstArr.push_back( &rSrcArr[i] );
+            rDstArr.push_back( &i );
         }
         std::sort(rDstArr.begin(), rDstArr.end(), CompareDrawObjs(rWrt));
     }
@@ -3101,9 +3101,9 @@ void SwEscherEx::MakeZOrderArrAndFollowIds(
     //Now set up the follow IDs
     aFollowShpIds.clear();
 
-    for (size_t n = 0; n < rDstArr.size(); ++n)
+    for (DrawObj* p : rDstArr)
     {
-        const SwFrameFormat &rFormat = rDstArr[n]->maContent.GetFrameFormat();
+        const SwFrameFormat &rFormat = p->maContent.GetFrameFormat();
         bool bNeedsShapeId = false;
 
         if (RES_FLYFRMFMT == rFormat.Which())

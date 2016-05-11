@@ -679,12 +679,12 @@ void SwFieldRefPage::UpdateSubType(const OUString& filterString)
     {
         std::vector<OUString> aLst;
         GetFieldMgr().GetSubTypes(nTypeId, aLst);
-        for(size_t i = 0; i < aLst.size(); ++i)
+        for(const OUString & i : aLst)
         {
-            bool isSubstring = MatchSubstring( aLst[i] , filterString );
+            bool isSubstring = MatchSubstring( i , filterString );
             if(isSubstring)
             {
-                m_pSelectionLB->InsertEntry(aLst[i]);
+                m_pSelectionLB->InsertEntry(i);
             }
         }
 

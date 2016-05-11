@@ -349,8 +349,8 @@ SwUndoTransliterate::SwUndoTransliterate(
 
 SwUndoTransliterate::~SwUndoTransliterate()
 {
-    for (size_t i = 0; i < aChanges.size();  ++i)
-        delete aChanges[i];
+    for (UndoTransliterate_Data* p : aChanges)
+        delete p;
 }
 
 void SwUndoTransliterate::UndoImpl(::sw::UndoRedoContext & rContext)

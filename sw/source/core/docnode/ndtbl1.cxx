@@ -1514,9 +1514,9 @@ void SwDoc::AdjustCellWidth( const SwCursor& rCursor, bool bBalance )
             }
         }
         nWish /= nCnt;
-        for ( size_t i = 0; i < aWish.size(); ++i )
-            if ( aWish[i] )
-                aWish[i] = nWish;
+        for (sal_uInt16 & rn : aWish)
+            if ( rn )
+                rn = nWish;
     }
 
     const long nOldRight = aTabCols.GetRight();

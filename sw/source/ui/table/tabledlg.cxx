@@ -874,16 +874,16 @@ IMPL_LINK_TYPED( SwTableColumnPage, AutoClickHdl, Button*, pControl, void )
     {
         if(aValueTable[0] > 0)
         {
-            for( sal_uInt16 i=0; i < MET_FIELDS; i++ )
-                aValueTable[i] -= 1;
+            for(sal_uInt16 & rn : aValueTable)
+                rn -= 1;
         }
     }
     if (pControl == m_pUpBtn.get())
     {
         if( aValueTable[ MET_FIELDS -1 ] < nNoOfVisibleCols -1  )
         {
-            for(sal_uInt16 i=0;i < MET_FIELDS;i++)
-                aValueTable[i] += 1;
+            for(sal_uInt16 & rn : aValueTable)
+                rn += 1;
         }
     }
     for( sal_uInt16 i = 0; (i < nNoOfVisibleCols ) && ( i < MET_FIELDS); i++ )
@@ -939,11 +939,11 @@ IMPL_LINK_TYPED( SwTableColumnPage, ModeHdl, Button*, pBox, void )
 
 bool  SwTableColumnPage::FillItemSet( SfxItemSet* )
 {
-    for( sal_uInt16 i = 0; i < MET_FIELDS; i++ )
+    for(PercentField & i : m_aFieldArr)
     {
-        if (m_aFieldArr[i].HasFocus())
+        if (i.HasFocus())
         {
-            LoseFocusHdl(*m_aFieldArr[i].get());
+            LoseFocusHdl(*i.get());
             break;
         }
     }

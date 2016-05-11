@@ -846,8 +846,8 @@ void WW8_WrPlc1::Finish( sal_uLong nLastCp, sal_uLong nSttCp )
     {
         aPos.push_back( nLastCp );
         if( nSttCp )
-            for( size_t n = 0; n < aPos.size(); ++n )
-                aPos[ n ] -= nSttCp;
+            for(WW8_CP & rCp : aPos)
+                rCp -= nSttCp;
     }
 }
 
@@ -1047,9 +1047,9 @@ void WW8_WrPlcPn::WriteFkps()
 {
     nFkpStartPage = (sal_uInt16) ( SwWW8Writer::FillUntil( rWrt.Strm() ) >> 9 );
 
-    for( size_t i = 0; i < m_Fkps.size(); i++ )
+    for(const std::unique_ptr<WW8_WrFkp> & rp : m_Fkps)
     {
-        m_Fkps[ i ]->Write( rWrt.Strm(), *rWrt.m_pGrf );
+        rp->Write( rWrt.Strm(), *rWrt.m_pGrf );
     }
 
     if( CHP == ePlc )
@@ -1441,9 +1441,9 @@ void WW8Export::AppendBookmarks( const SwTextNode& rNd, sal_Int32 nAktPos, sal_I
     if( GetWriter().GetBookmarks( rNd, nAktPos, nAktEnd, aArr ))
     {
         sal_uLong nNd = rNd.GetIndex(), nSttCP = Fc2Cp( Strm().Tell() );
-        for( size_t n = 0; n < aArr.size(); ++n )
+        for(const ::sw::mark::IMark* p : aArr)
         {
-            const ::sw::mark::IMark& rBkmk = *(aArr[ n ]);
+            const ::sw::mark::IMark& rBkmk = *p;
             if(dynamic_cast< const ::sw::mark::IFieldmark *>(&rBkmk))
                 continue;
 
@@ -1553,9 +1553,9 @@ int MSWordExportBase::CollectGrfsOfBullets()
                 if ( pGraf )
                 {
                     bool bHas = false;
-                    for (size_t i = 0; i < m_vecBulletPic.size(); ++i)
+                    for (const Graphic* p : m_vecBulletPic)
                     {
-                        if (m_vecBulletPic[i]->GetChecksum() == pGraf->GetChecksum())
+                        if (p->GetChecksum() == pGraf->GetChecksum())
                         {
                             bHas = true;
                             break;
@@ -2557,9 +2557,9 @@ void WW8AttributeOutput::TableBackgrounds( ww8::WW8TableNodeInfoInner::Pointer_t
     if (nBoxes0 > 21)
         nBoxes0 = 21;
 
-    for (sal_uInt32 m = 0; m < 2; m++)
+    for (sal_uInt32 m : aSprmIds)
     {
-        m_rWW8Export.InsUInt16( aSprmIds[m] );
+        m_rWW8Export.InsUInt16( m );
         m_rWW8Export.pO->push_back( static_cast<sal_uInt8>(nBoxes0 * 10) );
 
         for ( sal_uInt8 n = 0; n < nBoxes0; n++ )

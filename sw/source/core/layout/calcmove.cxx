@@ -612,11 +612,10 @@ static void lcl_CheckObjects( SwSortedObjs* pSortedObjs, const SwFrame* pFrame, 
 {
     // And then there can be paragraph anchored frames that sit below their paragraph.
     long nMax = 0;
-    for ( size_t i = 0; i < pSortedObjs->size(); ++i )
+    for (SwAnchoredObject* pObj : *pSortedObjs)
     {
         // #i28701# - consider changed type of <SwSortedObjs>
         // entries.
-        SwAnchoredObject* pObj = (*pSortedObjs)[i];
         long nTmp = 0;
         if ( dynamic_cast<const SwFlyFrame*>( pObj) !=  nullptr )
         {

@@ -819,11 +819,9 @@ void FinitCore()
     delete SwStyleNameMapper::m_pNumRuleProgMap;
 
     // delete all default attributes
-    for( sal_uInt16 n = 0; n < POOLATTR_END - POOLATTR_BEGIN; n++ )
+    for(SfxPoolItem* pHt : aAttrTab)
     {
-        SfxPoolItem* pHt;
-        if( nullptr != ( pHt = aAttrTab[n] ))
-            delete pHt;
+        delete pHt;
     }
 
     ::ClearFEShellTabCols();
@@ -837,8 +835,8 @@ void FinitCore()
     delete[] SwAttrPool::pVersionMap6;
     delete[] SwAttrPool::pVersionMap7;
 
-    for ( size_t i = 0; i < pGlobalOLEExcludeList->size(); ++i )
-        delete (*pGlobalOLEExcludeList)[i];
+    for (SvGlobalName* p : *pGlobalOLEExcludeList)
+        delete p;
     delete pGlobalOLEExcludeList;
 }
 

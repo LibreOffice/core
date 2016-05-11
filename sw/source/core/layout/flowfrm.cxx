@@ -1060,11 +1060,10 @@ bool SwFlowFrame::IsPrevObjMove() const
         // #i26945# - re-factoring
         // use <GetVertPosOrientFrame()> to determine, if object has followed the
         // text flow to the next layout frame
-        for ( size_t i = 0; i < pPre->GetDrawObjs()->size(); ++i )
+        for (SwAnchoredObject* pObj : *pPre->GetDrawObjs())
         {
             // #i28701# - consider changed type of
             // <SwSortedObjs> entries.
-            const SwAnchoredObject* pObj = (*pPre->GetDrawObjs())[i];
             // OD 2004-01-20 #110582# - do not consider hidden objects
             // #i26945# - do not consider object, which
             // doesn't follow the text flow.
@@ -2257,9 +2256,8 @@ bool SwFlowFrame::MoveBwd( bool &rbReformat )
         // has restarted the layout process.
         else if ( m_rThis.GetDrawObjs() )
         {
-            for ( size_t i = 0; i < m_rThis.GetDrawObjs()->size(); ++i )
+            for (SwAnchoredObject* pAnchoredObj : *m_rThis.GetDrawObjs())
             {
-                SwAnchoredObject* pAnchoredObj = (*m_rThis.GetDrawObjs())[i];
                 // #i47697# - refine condition - see above
                 if ( pAnchoredObj->RestartLayoutProcess() &&
                      !pAnchoredObj->IsTmpConsiderWrapInfluence() )

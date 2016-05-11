@@ -540,14 +540,14 @@ void SwWW8WrGrf::WritePICFHeader(SvStream& rStrm, const ww8::Frame &rFly,
 
             static const SvxBoxItemLine aLnArr[4] = { SvxBoxItemLine::TOP, SvxBoxItemLine::LEFT,
                                 SvxBoxItemLine::BOTTOM, SvxBoxItemLine::RIGHT };
-            for( sal_uInt8 i = 0; i < 4; ++i )
+            for(const SvxBoxItemLine & i : aLnArr)
             {
-                const ::editeng::SvxBorderLine* pLn = pBox->GetLine( aLnArr[i] );
+                const ::editeng::SvxBorderLine* pLn = pBox->GetLine( i );
                 WW8_BRC aBrc;
                 if (pLn)
                 {
                     WW8_BRCVer9 aBrc90 = WW8Export::TranslateBorderLine( *pLn,
-                        pBox->GetDistance( aLnArr[i] ), bShadow );
+                        pBox->GetDistance( i ), bShadow );
                     sal_uInt8 ico = msfilter::util::TransColToIco(msfilter::util::BGRToRGB(
                         aBrc90.cv()));
                     aBrc = WW8_BRC(aBrc90.dptLineWidth(), aBrc90.brcType(), ico,
@@ -558,7 +558,7 @@ void SwWW8WrGrf::WritePICFHeader(SvStream& rStrm, const ww8::Frame &rFly,
                 // border will really be in word and adjust accordingly
                 short nSpacing;
                 short nThick = aBrc.DetermineBorderProperties(&nSpacing);
-                switch (aLnArr[i])
+                switch (i)
                 {
                     case SvxBoxItemLine::TOP:
                     case SvxBoxItemLine::BOTTOM:
@@ -694,13 +694,13 @@ void SwWW8WrGrf::WritePICBulletFHeader(SvStream& rStrm, const Graphic &rGrf,
 
     static const SvxBoxItemLine aLnArr[4] = { SvxBoxItemLine::TOP, SvxBoxItemLine::LEFT,
         SvxBoxItemLine::BOTTOM, SvxBoxItemLine::RIGHT };
-    for( sal_uInt8 i = 0; i < 4; ++i )
+    for(const SvxBoxItemLine & i : aLnArr)
     {
         WW8_BRC aBrc;
 
         short nSpacing;
         short nThick = aBrc.DetermineBorderProperties(&nSpacing);
-        switch (aLnArr[i])
+        switch (i)
         {
             case SvxBoxItemLine::TOP:
             case SvxBoxItemLine::BOTTOM:

@@ -1299,16 +1299,16 @@ void DocumentFieldsManager::SetFixFields( const DateTime* pNewDateTime )
         /*3*/   RES_FILENAMEFLD,
         /*4*/   RES_DATETIMEFLD };  // MUST be at the end!
 
-    for( sal_uInt16 nStt = 0; nStt < 5; ++nStt )
+    for(sal_uInt16 aType : aTypes)
     {
-        SwFieldType* pFieldType = GetSysFieldType( aTypes[ nStt ] );
+        SwFieldType* pFieldType = GetSysFieldType( aType );
         SwIterator<SwFormatField,SwFieldType> aIter( *pFieldType );
         for( SwFormatField* pFormatField = aIter.First(); pFormatField; pFormatField = aIter.Next() )
         {
             if( pFormatField && pFormatField->GetTextField() )
             {
                 bool bChgd = false;
-                switch( aTypes[ nStt ] )
+                switch( aType )
                 {
                 case RES_DOCINFOFLD:
                     if( static_cast<SwDocInfoField*>(pFormatField->GetField())->IsFixed() )

@@ -1198,8 +1198,8 @@ void SwXMLExport::DeleteTableLines()
 {
     if ( pTableLines )
     {
-        for ( size_t i = 0, n = pTableLines->size(); i < n; ++i )
-            delete pTableLines->at( i );
+        for (SwXMLTableLines_Impl* p : *pTableLines)
+            delete p;
         pTableLines->clear();
         delete pTableLines;
     }

@@ -1880,13 +1880,13 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const ww8::Frame& rFrame, const Poi
         lcl_TextFrameShadow(m_aFlyProperties, rFrameFormat);
         lcl_TextFrameRelativeSize(m_aFlyProperties, rFrameFormat);
 
-        for (std::size_t i = 0; i < m_aFlyProperties.size(); ++i)
+        for (std::pair<OString,OString> & rPair : m_aFlyProperties)
         {
             m_rExport.Strm().WriteCharPtr("{" OOO_STRING_SVTOOLS_RTF_SP "{");
             m_rExport.Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_SN " ");
-            m_rExport.Strm().WriteCharPtr(m_aFlyProperties[i].first.getStr());
+            m_rExport.Strm().WriteCharPtr(rPair.first.getStr());
             m_rExport.Strm().WriteCharPtr("}{" OOO_STRING_SVTOOLS_RTF_SV " ");
-            m_rExport.Strm().WriteCharPtr(m_aFlyProperties[i].second.getStr());
+            m_rExport.Strm().WriteCharPtr(rPair.second.getStr());
             m_rExport.Strm().WriteCharPtr("}}");
         }
         m_aFlyProperties.clear();
@@ -3966,13 +3966,13 @@ void RtfAttributeOutput::FlyFrameGraphic(const SwFlyFrameFormat* pFlyFrameFormat
         if (!pFlyFrameFormat->GetOpaque().GetValue())
             aFlyProperties.push_back(std::make_pair<OString, OString>("fBehindDocument", "1"));
 
-        for (std::size_t i = 0; i < aFlyProperties.size(); ++i)
+        for (std::pair<OString,OString> & rPair : aFlyProperties)
         {
             m_rExport.Strm().WriteCharPtr("{" OOO_STRING_SVTOOLS_RTF_SP "{");
             m_rExport.Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_SN " ");
-            m_rExport.Strm().WriteCharPtr(aFlyProperties[i].first.getStr());
+            m_rExport.Strm().WriteCharPtr(rPair.first.getStr());
             m_rExport.Strm().WriteCharPtr("}{" OOO_STRING_SVTOOLS_RTF_SV " ");
-            m_rExport.Strm().WriteCharPtr(aFlyProperties[i].second.getStr());
+            m_rExport.Strm().WriteCharPtr(rPair.second.getStr());
             m_rExport.Strm().WriteCharPtr("}}");
         }
         m_rExport.Strm().WriteCharPtr("{" OOO_STRING_SVTOOLS_RTF_SP "{" OOO_STRING_SVTOOLS_RTF_SN " pib" "}{" OOO_STRING_SVTOOLS_RTF_SV " ");

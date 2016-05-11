@@ -122,11 +122,11 @@ public:
 
     StyleRedefinition* get(const OUString& aString)
     {
-        for (size_t i = 0; i < maStyles.size(); i++)
+        for (StyleRedefinition & rStyle : maStyles)
         {
-            if (maStyles[i].maElementName == aString)
+            if (rStyle.maElementName == aString)
             {
-                return &maStyles[i];
+                return &rStyle;
             }
         }
         return nullptr;
@@ -341,10 +341,10 @@ std::vector<FontSet> initFontSets()
 
 FontSet getFontSet(const OUString& rFontVariant, std::vector<FontSet>& aFontSets)
 {
-    for (size_t i = 0; i < aFontSets.size(); ++i)
+    for (FontSet & rFontSet : aFontSets)
     {
-        if (aFontSets[i].maName == rFontVariant)
-            return aFontSets[i];
+        if (rFontSet.maName == rFontVariant)
+            return rFontSet;
     }
     return aFontSets[0];
 }
@@ -453,9 +453,9 @@ ThemePanel::ThemePanel(vcl::Window* pParent,
     mpValueSetColors->SetDoubleClickHdl(LINK(this, ThemePanel, DoubleClickValueSetHdl));
 
     std::vector<FontSet> aFontSets = initFontSets();
-    for (size_t i = 0; i < aFontSets.size(); ++i)
+    for (FontSet & rFontSet : aFontSets)
     {
-        mpListBoxFonts->InsertEntry(aFontSets[i].maName);
+        mpListBoxFonts->InsertEntry(rFontSet.maName);
     }
 
     maColorSets.init();

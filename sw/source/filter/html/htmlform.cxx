@@ -831,9 +831,8 @@ static void lcl_html_setEvents(
             OUString sSearch( sListener );
             sSearch += "-" +sMethod + "-";
             sal_Int32 nLen = sSearch.getLength();
-            for(size_t j = 0; j < rUnoMacroParamTable.size(); ++j)
+            for(const auto & rParam : rUnoMacroParamTable)
             {
-                const OUString& rParam = rUnoMacroParamTable[j];
                 if( rParam.startsWith( sSearch ) && rParam.getLength() > nLen )
                 {
                     rDesc.AddListenerParam = rParam.copy(nLen);

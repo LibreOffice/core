@@ -46,10 +46,8 @@ SwXMLFontAutoStylePool_Impl::SwXMLFontAutoStylePool_Impl(
 
     const SfxItemPool& rPool = _rExport.getDoc()->GetAttrPool();
     const SfxPoolItem* pItem;
-    for( size_t i=0; i < SAL_N_ELEMENTS(aWhichIds); ++i )
+    for(sal_uInt16 nWhichId : aWhichIds)
     {
-        const sal_uInt16 nWhichId = aWhichIds[i];
-
         const SvxFontItem& rFont =
             static_cast<const SvxFontItem&>(rPool.GetDefaultItem( nWhichId ));
         Add( rFont.GetFamilyName(), rFont.GetStyleName(),

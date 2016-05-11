@@ -72,20 +72,20 @@ void SwWrongList::CopyFrom( const SwWrongList& rCopy )
     meType = rCopy.meType;
     nBeginInvalid = rCopy.nBeginInvalid;
     nEndInvalid = rCopy.nEndInvalid;
-    for( size_t i = 0; i < maList.size(); ++i )
+    for(SwWrongArea & i : maList)
     {
-        if( maList[i].mpSubList )
-            maList[i].mpSubList = maList[i].mpSubList->Clone();
+        if( i.mpSubList )
+            i.mpSubList = i.mpSubList->Clone();
     }
 }
 
 void SwWrongList::ClearList()
 {
-    for ( size_t i = 0; i < maList.size(); ++i)
+    for (SwWrongArea & i : maList)
     {
-        if (maList[i].mpSubList)
-            delete maList[i].mpSubList;
-        maList[i].mpSubList = nullptr;
+        if (i.mpSubList)
+            delete i.mpSubList;
+        i.mpSubList = nullptr;
     }
     maList.clear();
 }

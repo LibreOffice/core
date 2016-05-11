@@ -5386,9 +5386,9 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss)
                         }
                     }
                     // Remove additional pictures
-                    for (size_t i = 0; i < vecFrameFormat.size(); ++i)
+                    for (SwFrameFormat* p : vecFrameFormat)
                     {
-                        m_rDoc.getIDocumentLayoutAccess().DelLayoutFormat(vecFrameFormat[i]);
+                        m_rDoc.getIDocumentLayoutAccess().DelLayoutFormat(p);
                     }
                 }
             }
@@ -5848,10 +5848,8 @@ void SwWW8ImplReader::SetOutlineStyles()
     const SwNumRule* pChosenWW8ListStyle = nullptr;
     {
         std::map<const SwNumRule*, int> aWW8ListStyleCounts;
-        for (size_t nI = 0; nI < m_vColl.size(); ++nI)
+        for (SwWW8StyInf & rSI : m_vColl)
         {
-            SwWW8StyInf& rSI = m_vColl[nI];
-
             if (!rSI.IsWW8BuiltInHeadingStyle() || !rSI.HasWW8OutlineLevel())
             {
                 continue;

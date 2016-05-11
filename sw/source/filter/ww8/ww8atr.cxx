@@ -4072,11 +4072,11 @@ void WW8Export::Out_SwFormatTableBox( ww::bytes& rO, const SvxBoxItem * pBox )
     };
     static const SvxBorderLine aBorderLine;
 
-    for( int i = 0; i < 4; ++i )
+    for(const SvxBoxItemLine & rBorder : aBorders)
     {
         const SvxBorderLine* pLn;
         if (pBox != nullptr)
-            pLn = pBox->GetLine( aBorders[i] );
+            pLn = pBox->GetLine( rBorder );
         else
             pLn = & aBorderLine;
 
@@ -5132,10 +5132,8 @@ void AttributeOutputBase::FormatCharBorder( const SvxBoxItem& rBox )
 const SwRedlineData* AttributeOutputBase::GetParagraphMarkerRedline( const SwTextNode& rNode, RedlineType_t aRedlineType)
 {
     // ToDo : this is not the most ideal ... should start maybe from 'nCurRedlinePos'
-    for( size_t nRedlinePos = 0; nRedlinePos < GetExport().m_pDoc->getIDocumentRedlineAccess().GetRedlineTable().size(); ++nRedlinePos )
+    for(SwRangeRedline* pRedl : GetExport().m_pDoc->getIDocumentRedlineAccess().GetRedlineTable())
     {
-        const SwRangeRedline* pRedl = GetExport().m_pDoc->getIDocumentRedlineAccess().GetRedlineTable()[ nRedlinePos ];
-
         // Only check redlines that are of type 'Delete'
         if ( pRedl->GetRedlineData().GetType() != aRedlineType )
             continue;

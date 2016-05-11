@@ -677,14 +677,14 @@ static FormTokenType lcl_GetTokenType(const OUString & sToken,
         { SwForm::GetFormAuth(),        3, TOKEN_AUTHORITY }
     };
 
-    for( size_t i = 0; i<SAL_N_ELEMENTS(aTokenArr); ++i )
+    for(const auto & i : aTokenArr)
     {
-        const sal_Int32 nLen(aTokenArr[i].sNm.getLength());
-        if( sToken.startsWith( aTokenArr[i].sNm.copy(0, nLen - aTokenArr[i].nOffset) ))
+        const sal_Int32 nLen(i.sNm.getLength());
+        if( sToken.startsWith( i.sNm.copy(0, nLen - i.nOffset) ))
         {
             if (pTokenLen)
                 *pTokenLen = nLen;
-            return aTokenArr[ i ].eToken;
+            return i.eToken;
         }
     }
 
