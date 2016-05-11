@@ -640,7 +640,7 @@ void ScCsvRuler::ImplDrawTrackingRect()
 {
     if( HasFocus() )
         InvertTracking( Rectangle( 0, 0, GetWidth() - 1, GetHeight() - 2 ),
-            SHOWTRACK_SMALL | SHOWTRACK_WINDOW );
+            ShowTrackFlags::Small | ShowTrackFlags::TrackWindow );
 }
 
 void ScCsvRuler::ImplSetMousePointer( sal_Int32 nPos )

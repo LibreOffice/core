@@ -148,7 +148,7 @@ IMPL_LINK_NOARG_TYPED(ImplDockFloatWin, DockTimerHdl, Idle *, void)
     }
     else
     {
-        mpDockWin->GetParent()->ImplGetFrameWindow()->ShowTracking( maDockRect, SHOWTRACK_BIG | SHOWTRACK_WINDOW );
+        mpDockWin->GetParent()->ImplGetFrameWindow()->ShowTracking( maDockRect, ShowTrackFlags::Big | ShowTrackFlags::TrackWindow );
         maDockIdle.Start();
     }
 }
@@ -176,7 +176,7 @@ IMPL_LINK_NOARG_TYPED(ImplDockFloatWin, DockingHdl, void*, void)
         bool bFloatMode = mpDockWin->Docking( aMousePos, maDockRect );
         if( ! bFloatMode )
         {
-            mpDockWin->GetParent()->ImplGetFrameWindow()->ShowTracking( maDockRect, SHOWTRACK_OBJECT | SHOWTRACK_WINDOW );
+            mpDockWin->GetParent()->ImplGetFrameWindow()->ShowTracking( maDockRect, ShowTrackFlags::Object | ShowTrackFlags::TrackWindow );
             DockTimerHdl( nullptr );
         }
         else
@@ -583,11 +583,11 @@ void DockingWindow::Tracking( const TrackingEvent& rTEvt )
             }
             else
             {
-                sal_uInt16 nTrackStyle;
+                ShowTrackFlags nTrackStyle;
                 if ( bFloatMode )
-                    nTrackStyle = SHOWTRACK_BIG;
+                    nTrackStyle = ShowTrackFlags::Big;
                 else
-                    nTrackStyle = SHOWTRACK_OBJECT;
+                    nTrackStyle = ShowTrackFlags::Object;
                 Rectangle aShowTrackRect = aTrackRect;
                 aShowTrackRect.SetPos( ImplFrameToOutput( aShowTrackRect.TopLeft() ) );
                 ShowTracking( aShowTrackRect, nTrackStyle );
