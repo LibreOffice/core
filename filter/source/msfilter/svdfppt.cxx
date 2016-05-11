@@ -118,6 +118,7 @@
 #include <com/sun/star/table/BorderLineStyle.hpp>
 #include <vcl/virdev.hxx>
 #include <svtools/embedhlp.hxx>
+#include <o3tl/enumrange.hxx>
 
 #include <algorithm>
 #include <cassert>
@@ -979,17 +980,17 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                 if ( ( aPlaceholderAtom.nPlaceholderId == PptPlaceholder::NOTESSLIDEIMAGE )
                     || ( aPlaceholderAtom.nPlaceholderId == PptPlaceholder::MASTERNOTESSLIDEIMAGE ) )
                 {
-                    aTextObj.SetInstance( 2 );
+                    aTextObj.SetInstance( TSS_Type::Notes );
                     eTextKind = OBJ_TITLETEXT;
                 }
                 else if ( ( aPlaceholderAtom.nPlaceholderId == PptPlaceholder::MASTERNOTESBODYIMAGE )
                     || ( aPlaceholderAtom.nPlaceholderId == PptPlaceholder::NOTESBODY ) )
                 {
-                    aTextObj.SetInstance( 2 );
+                    aTextObj.SetInstance( TSS_Type::Notes );
                     eTextKind = OBJ_TEXT;
                 }
 
-                sal_uInt32 nDestinationInstance = aTextObj.GetInstance();
+                TSS_Type nDestinationInstance = aTextObj.GetInstance();
                 if ( rPersistEntry.ePageKind == PPT_MASTERPAGE )
                 {
                     if ( !rPersistEntry.pPresentationObjects )
@@ -997,43 +998,45 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                         rPersistEntry.pPresentationObjects = new sal_uInt32[ PPT_STYLESHEETENTRYS ];
                         memset( rPersistEntry.pPresentationObjects, 0, PPT_STYLESHEETENTRYS * 4 );
                     }
-                    if ( !rPersistEntry.pPresentationObjects[ nDestinationInstance ] )
-                        rPersistEntry.pPresentationObjects[ nDestinationInstance ] = rObjData.rSpHd.GetRecBegFilePos();
+                    if ( !rPersistEntry.pPresentationObjects[ (int)nDestinationInstance ] )
+                        rPersistEntry.pPresentationObjects[ (int)nDestinationInstance ] = rObjData.rSpHd.GetRecBegFilePos();
                 }
                 switch ( nDestinationInstance )
                 {
-                    case TSS_TYPE_PAGETITLE :
-                    case TSS_TYPE_TITLE :
+                    case TSS_Type::PageTitle :
+                    case TSS_Type::Title :
                     {
                         if ( GetSlideLayoutAtom()->eLayout == PptSlideLayout::TITLEMASTERSLIDE )
-                            nDestinationInstance = TSS_TYPE_TITLE;
+                            nDestinationInstance = TSS_Type::Title;
                         else
-                            nDestinationInstance = TSS_TYPE_PAGETITLE;
+                            nDestinationInstance = TSS_Type::PageTitle;
                     }
                     break;
-                    case TSS_TYPE_BODY :
-                    case TSS_TYPE_HALFBODY :
-                    case TSS_TYPE_QUARTERBODY :
-                        nDestinationInstance = TSS_TYPE_BODY;
+                    case TSS_Type::Body :
+                    case TSS_Type::HalfBody :
+                    case TSS_Type::QuarterBody :
+                        nDestinationInstance = TSS_Type::Body;
                     break;
+                    default: break;
                 }
-                aTextObj.SetDestinationInstance( (sal_uInt16)nDestinationInstance );
+                aTextObj.SetDestinationInstance( nDestinationInstance );
 
                 bool bAutoFit = false; // auto-scale text into shape box
                 switch ( aTextObj.GetInstance() )
                 {
-                    case TSS_TYPE_PAGETITLE :
-                    case TSS_TYPE_TITLE : eTextKind = OBJ_TITLETEXT; break;
-                    case TSS_TYPE_SUBTITLE : eTextKind = OBJ_TEXT; break;
-                    case TSS_TYPE_BODY :
-                    case TSS_TYPE_HALFBODY :
-                    case TSS_TYPE_QUARTERBODY : eTextKind = OBJ_OUTLINETEXT; bAutoFit = true; break;
+                    case TSS_Type::PageTitle :
+                    case TSS_Type::Title : eTextKind = OBJ_TITLETEXT; break;
+                    case TSS_Type::Subtitle : eTextKind = OBJ_TEXT; break;
+                    case TSS_Type::Body :
+                    case TSS_Type::HalfBody :
+                    case TSS_Type::QuarterBody : eTextKind = OBJ_OUTLINETEXT; bAutoFit = true; break;
+                    default: break;
                 }
-                if ( aTextObj.GetDestinationInstance() != TSS_TYPE_TEXT_IN_SHAPE )
+                if ( aTextObj.GetDestinationInstance() != TSS_Type::TextInShape )
                 {
                     if ( !aTextObj.GetOEPlaceHolderAtom() || aTextObj.GetOEPlaceHolderAtom()->nPlaceholderId == PptPlaceholder::NONE )
                     {
-                        aTextObj.SetDestinationInstance( TSS_TYPE_TEXT_IN_SHAPE );
+                        aTextObj.SetDestinationInstance( TSS_Type::TextInShape );
                         eTextKind = OBJ_RECT;
                     }
                 }
@@ -2216,7 +2219,7 @@ SdrObject* SdrPowerPointImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* 
     SdrTextObj* pText = pSdrText;
     if ( pTextObj->Count() )
     {
-        sal_uInt32 nDestinationInstance = pTextObj->GetDestinationInstance() ;
+        TSS_Type nDestinationInstance = pTextObj->GetDestinationInstance() ;
         SdrOutliner& rOutliner = pText->ImpGetDrawOutliner();
         if ( ( pText->GetObjInventor() == SdrInventor ) && ( pText->GetObjIdentifier() == OBJ_TITLETEXT ) ) // Outliner-Style for Title-Text object?!? (->of DL)
             rOutliner.Init( OutlinerMode::TitleObject );             // Outliner reset
@@ -2605,18 +2608,19 @@ bool SdrPowerPointImport::SeekToShape( SvStream& rSt, void* pClientData, sal_uIn
                                 sal_uInt32 nShapePos = 0;
                                 switch ( aTextObj.GetInstance() )
                                 {
-                                    case TSS_TYPE_TITLE :
-                                        nShapePos = rPersist.pPresentationObjects[ TSS_TYPE_PAGETITLE ];
+                                    case TSS_Type::Title :
+                                        nShapePos = rPersist.pPresentationObjects[ (int)TSS_Type::PageTitle ];
                                     break;
-                                    case TSS_TYPE_PAGETITLE :
-                                        nShapePos = rPersist.pPresentationObjects[ TSS_TYPE_PAGETITLE ];
+                                    case TSS_Type::PageTitle :
+                                        nShapePos = rPersist.pPresentationObjects[ (int)TSS_Type::PageTitle ];
                                     break;
-                                    case TSS_TYPE_SUBTITLE :
-                                    case TSS_TYPE_HALFBODY :
-                                    case TSS_TYPE_QUARTERBODY :
-                                    case TSS_TYPE_BODY :
-                                        nShapePos = rPersist.pPresentationObjects[ TSS_TYPE_BODY ];
+                                    case TSS_Type::Subtitle :
+                                    case TSS_Type::HalfBody :
+                                    case TSS_Type::QuarterBody :
+                                    case TSS_Type::Body :
+                                        nShapePos = rPersist.pPresentationObjects[ (int)TSS_Type::Body ];
                                     break;
+                                    default: break;
                                 }
                                 if ( nShapePos )
                                 {
@@ -3294,7 +3298,7 @@ PPTExtParaProv::PPTExtParaProv( SdrPowerPointImport& rMan, SvStream& rSt, const 
                             while ( ( rSt.GetError() == 0 ) && ( rSt.Tell() < nHdEndRecPos ) && ( i < nDepth ) )
                             {
                                 bStyles = true;
-                                ReadPPTExtParaLevel( rSt, aExtParaSheet[ aHd.nRecInstance ].aExtParaLevel[ i++ ] );
+                                ReadPPTExtParaLevel( rSt, aExtParaSheet[ (TSS_Type)aHd.nRecInstance ].aExtParaLevel[ i++ ] );
                             }
 #ifdef DBG_UTIL
                             if ( rSt.Tell() != aHd.GetRecEndFilePos() )
@@ -3351,10 +3355,10 @@ PPTNumberFormatCreator::~PPTNumberFormatCreator()
 }
 
 bool PPTNumberFormatCreator::ImplGetExtNumberFormat( SdrPowerPointImport& rManager,
-    SvxNumberFormat& rNumberFormat, sal_uInt32 nLevel, sal_uInt32 nInstance, sal_uInt32 nDestinationInstance,
+    SvxNumberFormat& rNumberFormat, sal_uInt32 nLevel, TSS_Type nInstance, TSS_Type nDestinationInstance,
         boost::optional< sal_Int16 >& rStartNumbering, sal_uInt32 nFontHeight,  PPTParagraphObj* pPara )
 {
-    bool bHardAttribute = ( nDestinationInstance == 0xffffffff );
+    bool bHardAttribute = ( nDestinationInstance == TSS_Type::Unknown );
 
     sal_uInt32  nBuFlags = 0;
     sal_uInt16  nHasAnm = 0;
@@ -3594,7 +3598,7 @@ bool PPTNumberFormatCreator::ImplGetExtNumberFormat( SdrPowerPointImport& rManag
     return bHardAttribute;
 }
 
-void PPTNumberFormatCreator::GetNumberFormat( SdrPowerPointImport& rManager, SvxNumberFormat& rNumberFormat, sal_uInt32 nLevel, const PPTParaLevel& rParaLevel, const PPTCharLevel& rCharLevel, sal_uInt32 nInstance )
+void PPTNumberFormatCreator::GetNumberFormat( SdrPowerPointImport& rManager, SvxNumberFormat& rNumberFormat, sal_uInt32 nLevel, const PPTParaLevel& rParaLevel, const PPTCharLevel& rCharLevel, TSS_Type nInstance )
 {
     nIsBullet = ( rParaLevel.mnBuFlags & ( 1 << PPT_ParaAttr_BulletOn ) ) != 0 ? 1 : 0;
     nBulletChar = rParaLevel.mnBulletChar;
@@ -3611,7 +3615,7 @@ void PPTNumberFormatCreator::GetNumberFormat( SdrPowerPointImport& rManager, Svx
     nBulletOfs = rParaLevel.mnBulletOfs;
 
     boost::optional< sal_Int16 > oStartNumbering;
-    ImplGetExtNumberFormat( rManager, rNumberFormat, nLevel, nInstance, 0xffffffff, oStartNumbering, rCharLevel.mnFontHeight, nullptr );
+    ImplGetExtNumberFormat( rManager, rNumberFormat, nLevel, nInstance, TSS_Type::Unknown, oStartNumbering, rCharLevel.mnFontHeight, nullptr );
     if ( ( rNumberFormat.GetNumberingType() != SVX_NUM_BITMAP ) && ( nBulletHeight > 0x7fff ) )
         nBulletHeight = rCharLevel.mnFontHeight ? ((-((sal_Int16)nBulletHeight)) * 100 ) / rCharLevel.mnFontHeight : 100;
     ImplGetNumberFormat( rManager, rNumberFormat, nLevel );
@@ -3642,7 +3646,7 @@ void PPTNumberFormatCreator::GetNumberFormat( SdrPowerPointImport& rManager, Svx
 }
 
 bool PPTNumberFormatCreator::GetNumberFormat( SdrPowerPointImport& rManager, SvxNumberFormat& rNumberFormat, PPTParagraphObj* pParaObj,
-                                                sal_uInt32 nDestinationInstance, boost::optional< sal_Int16 >& rStartNumbering )
+                                                TSS_Type nDestinationInstance, boost::optional< sal_Int16 >& rStartNumbering )
 {
     sal_uInt32 nHardCount = 0;
     nHardCount += pParaObj->GetAttrib( PPT_ParaAttr_BulletOn, nIsBullet, nDestinationInstance ) ? 1 : 0;
@@ -3734,32 +3738,33 @@ void PPTNumberFormatCreator::ImplGetNumberFormat( SdrPowerPointImport& rManager,
     rNumberFormat.SetFirstLineOffset( -nFirstLineOffset );
 }
 
-PPTCharSheet::PPTCharSheet( sal_uInt32 nInstance )
+PPTCharSheet::PPTCharSheet( TSS_Type nInstance )
 {
     sal_uInt32 nColor = PPT_COLSCHEME_TEXT_UND_ZEILEN;
     sal_uInt16 nFontHeight(0);
     switch ( nInstance )
     {
-        case TSS_TYPE_PAGETITLE :
-        case TSS_TYPE_TITLE :
+        case TSS_Type::PageTitle :
+        case TSS_Type::Title :
         {
             nColor = PPT_COLSCHEME_TITELTEXT;
             nFontHeight = 44;
         }
         break;
-        case TSS_TYPE_BODY :
-        case TSS_TYPE_SUBTITLE :
-        case TSS_TYPE_HALFBODY :
-        case TSS_TYPE_QUARTERBODY :
+        case TSS_Type::Body :
+        case TSS_Type::Subtitle :
+        case TSS_Type::HalfBody :
+        case TSS_Type::QuarterBody :
             nFontHeight = 32;
         break;
-        case TSS_TYPE_NOTES :
+        case TSS_Type::Notes :
             nFontHeight = 12;
         break;
-        case TSS_TYPE_UNUSED :
-        case TSS_TYPE_TEXT_IN_SHAPE :
+        case TSS_Type::Unused :
+        case TSS_Type::TextInShape :
             nFontHeight = 24;
         break;
+        default: break;
     }
     for (PPTCharLevel & nDepth : maCharLevel)
     {
@@ -3825,7 +3830,7 @@ void PPTCharSheet::Read( SvStream& rIn, bool /*bMasterStyle*/, sal_uInt32 nLevel
     }
 }
 
-PPTParaSheet::PPTParaSheet( sal_uInt32 nInstance )
+PPTParaSheet::PPTParaSheet( TSS_Type nInstance )
 {
     sal_uInt16 nBuFlags = 0;
     sal_uInt32 nBulletColor = 0x8000000;
@@ -3833,22 +3838,23 @@ PPTParaSheet::PPTParaSheet( sal_uInt32 nInstance )
 
     switch ( nInstance )
     {
-        case TSS_TYPE_PAGETITLE :
-        case TSS_TYPE_TITLE :
+        case TSS_Type::PageTitle :
+        case TSS_Type::Title :
             nBulletColor = PPT_COLSCHEME_TITELTEXT;
         break;
-        case TSS_TYPE_BODY :
-        case TSS_TYPE_SUBTITLE :
-        case TSS_TYPE_HALFBODY :
-        case TSS_TYPE_QUARTERBODY :
+        case TSS_Type::Body :
+        case TSS_Type::Subtitle :
+        case TSS_Type::HalfBody :
+        case TSS_Type::QuarterBody :
         {
             nBuFlags = 1;
             nUpperDist = 0x14;
         }
         break;
-        case TSS_TYPE_NOTES :
+        case TSS_Type::Notes :
             nUpperDist = 0x1e;
         break;
+        default: break;
     }
     for (PPTParaLevel & i : maParaLevel)
     {
@@ -4024,22 +4030,21 @@ PPTStyleSheet::PPTStyleSheet( const DffRecordHeader& rSlideHd, SvStream& rIn, Sd
     PPTNumberFormatCreator  ( new PPTExtParaProv( rManager, rIn, &rSlideHd ) ),
     maTxSI                  ( rTextSpecInfo )
 {
-    sal_uInt32 i;
     sal_uInt32 nOldFilePos = rIn.Tell();
 
     // default stylesheets
-    mpCharSheet[ TSS_TYPE_PAGETITLE ] = new PPTCharSheet( TSS_TYPE_PAGETITLE );
-    mpCharSheet[ TSS_TYPE_BODY ] = new PPTCharSheet( TSS_TYPE_BODY );
-    mpCharSheet[ TSS_TYPE_NOTES ] = new PPTCharSheet(  TSS_TYPE_NOTES );
-    mpCharSheet[ TSS_TYPE_UNUSED ] = new PPTCharSheet( TSS_TYPE_UNUSED );   // this entry is not used by ppt
-    mpCharSheet[ TSS_TYPE_TEXT_IN_SHAPE ] = new PPTCharSheet( TSS_TYPE_TEXT_IN_SHAPE );
-    mpParaSheet[ TSS_TYPE_PAGETITLE ] = new PPTParaSheet( TSS_TYPE_PAGETITLE );
-    mpParaSheet[ TSS_TYPE_BODY ] = new PPTParaSheet( TSS_TYPE_BODY );
-    mpParaSheet[ TSS_TYPE_NOTES ] = new PPTParaSheet( TSS_TYPE_NOTES );
-    mpParaSheet[ TSS_TYPE_UNUSED ] = new PPTParaSheet( TSS_TYPE_UNUSED );
-    mpParaSheet[ TSS_TYPE_TEXT_IN_SHAPE ] = new PPTParaSheet( TSS_TYPE_TEXT_IN_SHAPE );
-    mpCharSheet[ TSS_TYPE_QUARTERBODY ] = mpCharSheet[ TSS_TYPE_HALFBODY ] = mpCharSheet[ TSS_TYPE_TITLE ] = mpCharSheet[ TSS_TYPE_SUBTITLE ] = nullptr;
-    mpParaSheet[ TSS_TYPE_QUARTERBODY ] = mpParaSheet[ TSS_TYPE_HALFBODY ] = mpParaSheet[ TSS_TYPE_TITLE ] = mpParaSheet[ TSS_TYPE_SUBTITLE ] = nullptr;
+    mpCharSheet[ TSS_Type::PageTitle ] = new PPTCharSheet( TSS_Type::PageTitle );
+    mpCharSheet[ TSS_Type::Body ] = new PPTCharSheet( TSS_Type::Body );
+    mpCharSheet[ TSS_Type::Notes ] = new PPTCharSheet(  TSS_Type::Notes );
+    mpCharSheet[ TSS_Type::Unused ] = new PPTCharSheet( TSS_Type::Unused );   // this entry is not used by ppt
+    mpCharSheet[ TSS_Type::TextInShape ] = new PPTCharSheet( TSS_Type::TextInShape );
+    mpParaSheet[ TSS_Type::PageTitle ] = new PPTParaSheet( TSS_Type::PageTitle );
+    mpParaSheet[ TSS_Type::Body ] = new PPTParaSheet( TSS_Type::Body );
+    mpParaSheet[ TSS_Type::Notes ] = new PPTParaSheet( TSS_Type::Notes );
+    mpParaSheet[ TSS_Type::Unused ] = new PPTParaSheet( TSS_Type::Unused );
+    mpParaSheet[ TSS_Type::TextInShape ] = new PPTParaSheet( TSS_Type::TextInShape );
+    mpCharSheet[ TSS_Type::QuarterBody ] = mpCharSheet[ TSS_Type::HalfBody ] = mpCharSheet[ TSS_Type::Title ] = mpCharSheet[ TSS_Type::Subtitle ] = nullptr;
+    mpParaSheet[ TSS_Type::QuarterBody ] = mpParaSheet[ TSS_Type::HalfBody ] = mpParaSheet[ TSS_Type::Title ] = mpParaSheet[ TSS_Type::Subtitle ] = nullptr;
 
     /* SJ: try to locate the txMasterStyleAtom in the Environment
 
@@ -4069,16 +4074,16 @@ PPTStyleSheet::PPTStyleSheet( const DffRecordHeader& rSlideHd, SvStream& rIn, Sd
                 {
                     if ( nLev )
                     {
-                        mpParaSheet[ TSS_TYPE_TEXT_IN_SHAPE ]->maParaLevel[ nLev ] = mpParaSheet[ TSS_TYPE_TEXT_IN_SHAPE ]->maParaLevel[ nLev - 1 ];
-                        mpCharSheet[ TSS_TYPE_TEXT_IN_SHAPE ]->maCharLevel[ nLev ] = mpCharSheet[ TSS_TYPE_TEXT_IN_SHAPE ]->maCharLevel[ nLev - 1 ];
+                        mpParaSheet[ TSS_Type::TextInShape ]->maParaLevel[ nLev ] = mpParaSheet[ TSS_Type::TextInShape ]->maParaLevel[ nLev - 1 ];
+                        mpCharSheet[ TSS_Type::TextInShape ]->maCharLevel[ nLev ] = mpCharSheet[ TSS_Type::TextInShape ]->maCharLevel[ nLev - 1 ];
                     }
-                    mpParaSheet[ TSS_TYPE_TEXT_IN_SHAPE ]->Read( rManager, rIn, true, nLev, bFirst );
+                    mpParaSheet[ TSS_Type::TextInShape ]->Read( rManager, rIn, true, nLev, bFirst );
                     if ( !nLev )
                     {
-                        // set paragraph defaults for instance 4 (TSS_TYPE_TEXT_IN_SHAPE)
+                        // set paragraph defaults for instance 4 (TSS_Type::TextInShape)
                         if ( rTxPFStyle.bValid )
                         {
-                            PPTParaLevel& rParaLevel = mpParaSheet[ TSS_TYPE_TEXT_IN_SHAPE ]->maParaLevel[ 0 ];
+                            PPTParaLevel& rParaLevel = mpParaSheet[ TSS_Type::TextInShape ]->maParaLevel[ 0 ];
                             rParaLevel.mnAsianLineBreak = 0;
                             if ( rTxPFStyle.bForbiddenRules )
                                 rParaLevel.mnAsianLineBreak |= 1;
@@ -4088,8 +4093,8 @@ PPTStyleSheet::PPTStyleSheet( const DffRecordHeader& rSlideHd, SvStream& rIn, Sd
                                 rParaLevel.mnAsianLineBreak |= 4;
                         }
                     }
-                    mpCharSheet[ TSS_TYPE_TEXT_IN_SHAPE ]->Read( rIn, true, nLev, bFirst );
-                    mpParaSheet[ TSS_TYPE_TEXT_IN_SHAPE ]->UpdateBulletRelSize(  nLev, mpCharSheet[ TSS_TYPE_TEXT_IN_SHAPE ]->maCharLevel[ nLev ].mnFontHeight );
+                    mpCharSheet[ TSS_Type::TextInShape ]->Read( rIn, true, nLev, bFirst );
+                    mpParaSheet[ TSS_Type::TextInShape ]->UpdateBulletRelSize(  nLev, mpCharSheet[ TSS_Type::TextInShape ]->maCharLevel[ nLev ].mnFontHeight );
                     bFirst = false;
                     nLev++;
                 }
@@ -4120,42 +4125,43 @@ PPTStyleSheet::PPTStyleSheet( const DffRecordHeader& rSlideHd, SvStream& rIn, Sd
     }
     while ( ( aTxMasterStyleHd.nRecType == PPT_PST_TxMasterStyleAtom ) && ( rIn.Tell() < nEndRecPos ) ) //TODO: aTxMasterStyleHd may be used without having been properly initialized
     {
-        sal_uInt32 nInstance = aTxMasterStyleHd.nRecInstance;
-        if ( ( nInstance < PPT_STYLESHEETENTRYS ) &&
-            ( ( nInstance != TSS_TYPE_TEXT_IN_SHAPE ) || !bFoundTxMasterStyleAtom04 ) )
+        TSS_Type nInstance = (TSS_Type)aTxMasterStyleHd.nRecInstance;
+        if ( ( nInstance < TSS_Type::LAST ) &&
+            ( ( nInstance != TSS_Type::TextInShape ) || !bFoundTxMasterStyleAtom04 ) )
         {
-            if ( nInstance > 4 )
+            if ( nInstance > TSS_Type::TextInShape )
             {
                 delete mpCharSheet[ nInstance ];    // be sure to delete the old one if this instance comes twice
                 delete mpParaSheet[ nInstance ];
 
                 switch ( nInstance )
                 {
-                    case TSS_TYPE_SUBTITLE :
+                    case TSS_Type::Subtitle :
                     {
-                        mpCharSheet[ TSS_TYPE_SUBTITLE ] = new PPTCharSheet( *( mpCharSheet[ TSS_TYPE_BODY ] ) );
-                        mpParaSheet[ TSS_TYPE_SUBTITLE ] = new PPTParaSheet( *( mpParaSheet[ TSS_TYPE_BODY ] ) );
+                        mpCharSheet[ TSS_Type::Subtitle ] = new PPTCharSheet( *( mpCharSheet[ TSS_Type::Body ] ) );
+                        mpParaSheet[ TSS_Type::Subtitle ] = new PPTParaSheet( *( mpParaSheet[ TSS_Type::Body ] ) );
                     }
                     break;
-                    case TSS_TYPE_TITLE :
+                    case TSS_Type::Title :
                     {
-                        mpCharSheet[ TSS_TYPE_TITLE ] = new PPTCharSheet( *( mpCharSheet[ TSS_TYPE_PAGETITLE ] ) );
-                        mpParaSheet[ TSS_TYPE_TITLE ] = new PPTParaSheet( *( mpParaSheet[ TSS_TYPE_PAGETITLE ] ) );
+                        mpCharSheet[ TSS_Type::Title ] = new PPTCharSheet( *( mpCharSheet[ TSS_Type::PageTitle ] ) );
+                        mpParaSheet[ TSS_Type::Title ] = new PPTParaSheet( *( mpParaSheet[ TSS_Type::PageTitle ] ) );
                     }
                     break;
-                    case TSS_TYPE_HALFBODY :
+                    case TSS_Type::HalfBody :
                     {
-                        mpCharSheet[ TSS_TYPE_HALFBODY ] = new PPTCharSheet( *( mpCharSheet[ TSS_TYPE_BODY ] ) );
-                        mpParaSheet[ TSS_TYPE_HALFBODY ] = new PPTParaSheet( *( mpParaSheet[ TSS_TYPE_BODY ] ) );
+                        mpCharSheet[ TSS_Type::HalfBody ] = new PPTCharSheet( *( mpCharSheet[ TSS_Type::Body ] ) );
+                        mpParaSheet[ TSS_Type::HalfBody ] = new PPTParaSheet( *( mpParaSheet[ TSS_Type::Body ] ) );
                     }
                     break;
 
-                    case TSS_TYPE_QUARTERBODY :
+                    case TSS_Type::QuarterBody :
                     {
-                        mpCharSheet[ TSS_TYPE_QUARTERBODY ] = new PPTCharSheet( *( mpCharSheet[ TSS_TYPE_BODY ] ) );
-                        mpParaSheet[ TSS_TYPE_QUARTERBODY ] = new PPTParaSheet( *( mpParaSheet[ TSS_TYPE_BODY ] ) );
+                        mpCharSheet[ TSS_Type::QuarterBody ] = new PPTCharSheet( *( mpCharSheet[ TSS_Type::Body ] ) );
+                        mpParaSheet[ TSS_Type::QuarterBody ] = new PPTParaSheet( *( mpParaSheet[ TSS_Type::Body ] ) );
                     }
                     break;
+                    default: break;
                 }
             }
             sal_uInt16 nLevelAnz(0);
@@ -4171,14 +4177,14 @@ PPTStyleSheet::PPTStyleSheet( const DffRecordHeader& rSlideHd, SvStream& rIn, Sd
             auto nTxEndRecPos = DffPropSet::SanitizeEndPos(rIn, aTxMasterStyleHd.GetRecEndFilePos());
             while ( rIn.GetError() == 0 && rIn.Tell() < nTxEndRecPos && nLev < nLevelAnz )
             {
-                if ( nLev && ( nInstance < 5 ) )
+                if ( nLev && ( nInstance < TSS_Type::Subtitle ) )
                 {
                     mpParaSheet[ nInstance ]->maParaLevel[ nLev ] = mpParaSheet[ nInstance ]->maParaLevel[ nLev - 1 ];
                     mpCharSheet[ nInstance ]->maCharLevel[ nLev ] = mpCharSheet[ nInstance ]->maCharLevel[ nLev - 1 ];
                 }
 
                 // Exception: Template 5, 6 (MasterTitle Title und SubTitle)
-                if ( nInstance >= TSS_TYPE_SUBTITLE )
+                if ( nInstance >= TSS_Type::Subtitle )
                 {
                     bFirst = false;
 
@@ -4222,25 +4228,25 @@ PPTStyleSheet::PPTStyleSheet( const DffRecordHeader& rSlideHd, SvStream& rIn, Sd
             break;
         ReadDffRecordHeader( rIn, aTxMasterStyleHd );
     }
-    if ( !mpCharSheet[ TSS_TYPE_SUBTITLE ] )
+    if ( !mpCharSheet[ TSS_Type::Subtitle ] )
     {
-        mpCharSheet[ TSS_TYPE_SUBTITLE ] = new PPTCharSheet( *( mpCharSheet[ TSS_TYPE_BODY ] ) );
-        mpParaSheet[ TSS_TYPE_SUBTITLE ] = new PPTParaSheet( *( mpParaSheet[ TSS_TYPE_BODY ] ) );
+        mpCharSheet[ TSS_Type::Subtitle ] = new PPTCharSheet( *( mpCharSheet[ TSS_Type::Body ] ) );
+        mpParaSheet[ TSS_Type::Subtitle ] = new PPTParaSheet( *( mpParaSheet[ TSS_Type::Body ] ) );
     }
-    if ( !mpCharSheet[ TSS_TYPE_TITLE ] )
+    if ( !mpCharSheet[ TSS_Type::Title ] )
     {
-        mpCharSheet[ TSS_TYPE_TITLE ] = new PPTCharSheet( *( mpCharSheet[ TSS_TYPE_PAGETITLE ] ) );
-        mpParaSheet[ TSS_TYPE_TITLE ] = new PPTParaSheet( *( mpParaSheet[ TSS_TYPE_PAGETITLE ] ) );
+        mpCharSheet[ TSS_Type::Title ] = new PPTCharSheet( *( mpCharSheet[ TSS_Type::PageTitle ] ) );
+        mpParaSheet[ TSS_Type::Title ] = new PPTParaSheet( *( mpParaSheet[ TSS_Type::PageTitle ] ) );
     }
-    if ( !mpCharSheet[ TSS_TYPE_HALFBODY ] )
+    if ( !mpCharSheet[ TSS_Type::HalfBody ] )
     {
-        mpCharSheet[ TSS_TYPE_HALFBODY ] = new PPTCharSheet( *( mpCharSheet[ TSS_TYPE_BODY ] ) );
-        mpParaSheet[ TSS_TYPE_HALFBODY ] = new PPTParaSheet( *( mpParaSheet[ TSS_TYPE_BODY ] ) );
+        mpCharSheet[ TSS_Type::HalfBody ] = new PPTCharSheet( *( mpCharSheet[ TSS_Type::Body ] ) );
+        mpParaSheet[ TSS_Type::HalfBody ] = new PPTParaSheet( *( mpParaSheet[ TSS_Type::Body ] ) );
     }
-    if ( !mpCharSheet[ TSS_TYPE_QUARTERBODY ] )
+    if ( !mpCharSheet[ TSS_Type::QuarterBody ] )
     {
-        mpCharSheet[ TSS_TYPE_QUARTERBODY ] = new PPTCharSheet( *( mpCharSheet[ TSS_TYPE_BODY ] ) );
-        mpParaSheet[ TSS_TYPE_QUARTERBODY ] = new PPTParaSheet( *( mpParaSheet[ TSS_TYPE_BODY ] ) );
+        mpCharSheet[ TSS_Type::QuarterBody ] = new PPTCharSheet( *( mpCharSheet[ TSS_Type::Body ] ) );
+        mpParaSheet[ TSS_Type::QuarterBody ] = new PPTParaSheet( *( mpParaSheet[ TSS_Type::Body ] ) );
     }
     if ( !bFoundTxMasterStyleAtom04 )
     {   // try to locate the txMasterStyleAtom in the Environment
@@ -4265,16 +4271,16 @@ PPTStyleSheet::PPTStyleSheet( const DffRecordHeader& rSlideHd, SvStream& rIn, Sd
                     {
                         if ( nLev )
                         {
-                            mpParaSheet[ TSS_TYPE_TEXT_IN_SHAPE ]->maParaLevel[ nLev ] = mpParaSheet[ TSS_TYPE_TEXT_IN_SHAPE ]->maParaLevel[ nLev - 1 ];
-                            mpCharSheet[ TSS_TYPE_TEXT_IN_SHAPE ]->maCharLevel[ nLev ] = mpCharSheet[ TSS_TYPE_TEXT_IN_SHAPE ]->maCharLevel[ nLev - 1 ];
+                            mpParaSheet[ TSS_Type::TextInShape ]->maParaLevel[ nLev ] = mpParaSheet[ TSS_Type::TextInShape ]->maParaLevel[ nLev - 1 ];
+                            mpCharSheet[ TSS_Type::TextInShape ]->maCharLevel[ nLev ] = mpCharSheet[ TSS_Type::TextInShape ]->maCharLevel[ nLev - 1 ];
                         }
-                        mpParaSheet[ TSS_TYPE_TEXT_IN_SHAPE ]->Read( rManager, rIn, true, nLev, bFirst );
+                        mpParaSheet[ TSS_Type::TextInShape ]->Read( rManager, rIn, true, nLev, bFirst );
                         if ( !nLev )
                         {
-                            // set paragraph defaults for instance 4 (TSS_TYPE_TEXT_IN_SHAPE)
+                            // set paragraph defaults for instance 4 (TSS_Type::TextInShape)
                             if ( rTxPFStyle.bValid )
                             {
-                                PPTParaLevel& rParaLevel = mpParaSheet[ TSS_TYPE_TEXT_IN_SHAPE ]->maParaLevel[ 0 ];
+                                PPTParaLevel& rParaLevel = mpParaSheet[ TSS_Type::TextInShape ]->maParaLevel[ 0 ];
                                 rParaLevel.mnAsianLineBreak = 0;
                                 if ( rTxPFStyle.bForbiddenRules )
                                     rParaLevel.mnAsianLineBreak |= 1;
@@ -4284,8 +4290,8 @@ PPTStyleSheet::PPTStyleSheet( const DffRecordHeader& rSlideHd, SvStream& rIn, Sd
                                     rParaLevel.mnAsianLineBreak |= 4;
                             }
                         }
-                        mpCharSheet[ TSS_TYPE_TEXT_IN_SHAPE ]->Read( rIn, true, nLev, bFirst );
-                        mpParaSheet[ TSS_TYPE_TEXT_IN_SHAPE ]->UpdateBulletRelSize(  nLev, mpCharSheet[ TSS_TYPE_TEXT_IN_SHAPE ]->maCharLevel[ nLev ].mnFontHeight );
+                        mpCharSheet[ TSS_Type::TextInShape ]->Read( rIn, true, nLev, bFirst );
+                        mpParaSheet[ TSS_Type::TextInShape ]->UpdateBulletRelSize(  nLev, mpCharSheet[ TSS_Type::TextInShape ]->maCharLevel[ nLev ].mnFontHeight );
                         bFirst = false;
                         nLev++;
                     }
@@ -4302,32 +4308,32 @@ PPTStyleSheet::PPTStyleSheet( const DffRecordHeader& rSlideHd, SvStream& rIn, Sd
     rIn.Seek( nOldFilePos );
 
     // will will create the default numbulletitem for each instance
-    for ( i = 0; i < PPT_STYLESHEETENTRYS; i++ )
+    for ( auto i : o3tl::enumrange<TSS_Type>() )
     {
         sal_uInt16          nLevels, nDepth = 0;
         SvxNumRuleType  eNumRuleType;
 
         switch ( i )
         {
-            case TSS_TYPE_PAGETITLE :
-            case TSS_TYPE_TITLE :
+            case TSS_Type::PageTitle :
+            case TSS_Type::Title :
                 nLevels = 1;
                 eNumRuleType = SvxNumRuleType::NUMBERING;
             break;
-            case TSS_TYPE_SUBTITLE :
+            case TSS_Type::Subtitle :
                 nLevels = SVX_MAX_NUM;
                 eNumRuleType = SvxNumRuleType::NUMBERING;
             break;
-            case TSS_TYPE_BODY :
-            case TSS_TYPE_HALFBODY :
-            case TSS_TYPE_QUARTERBODY :
+            case TSS_Type::Body :
+            case TSS_Type::HalfBody :
+            case TSS_Type::QuarterBody :
                 nLevels = SVX_MAX_NUM;
                 eNumRuleType = SvxNumRuleType::PRESENTATION_NUMBERING;
             break;
             default :
-            case TSS_TYPE_NOTES :
-            case TSS_TYPE_UNUSED :
-            case TSS_TYPE_TEXT_IN_SHAPE :
+            case TSS_Type::Notes :
+            case TSS_Type::Unused :
+            case TSS_Type::TextInShape :
                 nLevels = SVX_MAX_NUM;
                 eNumRuleType = SvxNumRuleType::NUMBERING;
             break;
@@ -4357,7 +4363,7 @@ PPTStyleSheet::PPTStyleSheet( const DffRecordHeader& rSlideHd, SvStream& rIn, Sd
 
 PPTStyleSheet::~PPTStyleSheet()
 {
-    for ( sal_uInt32 i = 0; i < PPT_STYLESHEETENTRYS; i++ )
+    for ( auto i : o3tl::enumrange<TSS_Type>() )
     {
         delete mpCharSheet[ i ];
         delete mpParaSheet[ i ];
@@ -4854,7 +4860,7 @@ void StyleTextProp9::Read( SvStream& rIn )
 }
 
 PPTStyleTextPropReader::PPTStyleTextPropReader( SvStream& rIn, const DffRecordHeader& rTextHeader,
-                                                        PPTTextRulerInterpreter& rRuler, const DffRecordHeader& rExtParaHd, sal_uInt32 nInstance )
+                                                        PPTTextRulerInterpreter& rRuler, const DffRecordHeader& rExtParaHd, TSS_Type nInstance )
 {
     Init(rIn, rTextHeader, rRuler, rExtParaHd, nInstance);
 }
@@ -5203,7 +5209,7 @@ void PPTStyleTextPropReader::ReadCharProps( SvStream& rIn, PPTCharPropSet& aChar
 }
 
 void PPTStyleTextPropReader::Init( SvStream& rIn, const DffRecordHeader& rTextHeader,
-                                   PPTTextRulerInterpreter& rRuler, const DffRecordHeader& rExtParaHd, sal_uInt32 nInstance )
+                                   PPTTextRulerInterpreter& rRuler, const DffRecordHeader& rExtParaHd, TSS_Type nInstance )
 {
     sal_uInt32 nMerk = rIn.Tell();
     sal_uInt32 nExtParaPos = ( rExtParaHd.nRecType == PPT_PST_ExtendedParagraphAtom ) ? rExtParaHd.nFilePos + 8 : 0;
@@ -5257,7 +5263,7 @@ void PPTStyleTextPropReader::Init( SvStream& rIn, const DffRecordHeader& rTextHe
                 aSpecMarkerList.push_back( (sal_uInt32)( i | PPT_SPEC_SYMBOL ) );
             else if ( nChar == 0xd )
             {
-                if ( nInstance == TSS_TYPE_PAGETITLE )
+                if ( nInstance == TSS_Type::PageTitle )
                     *pPtr = 0xb;
                 else
                     aSpecMarkerList.push_back( (sal_uInt32)( i | PPT_SPEC_NEWLINE ) );
@@ -5279,7 +5285,7 @@ void PPTStyleTextPropReader::Init( SvStream& rIn, const DffRecordHeader& rTextHe
                 break;
             if ( cLo == 0xd )
             {
-                if ( nInstance == TSS_TYPE_PAGETITLE )
+                if ( nInstance == TSS_Type::PageTitle )
                     *pPtr = 0xb;
                 else
                     aSpecMarkerList.push_back( (sal_uInt32)( (pPtr - pBuf.get()) | PPT_SPEC_NEWLINE ) );
@@ -5438,7 +5444,7 @@ PPTStyleTextPropReader::~PPTStyleTextPropReader()
         delete *it;
 }
 
-PPTPortionObj::PPTPortionObj( const PPTStyleSheet& rStyleSheet, sal_uInt32 nInstance, sal_uInt32 nDepth ) :
+PPTPortionObj::PPTPortionObj( const PPTStyleSheet& rStyleSheet, TSS_Type nInstance, sal_uInt32 nDepth ) :
     PPTCharPropSet  ( 0 ),
     mrStyleSheet    ( rStyleSheet ),
     mnInstance      ( nInstance ),
@@ -5446,7 +5452,7 @@ PPTPortionObj::PPTPortionObj( const PPTStyleSheet& rStyleSheet, sal_uInt32 nInst
 {
 }
 
-PPTPortionObj::PPTPortionObj( const PPTCharPropSet& rCharPropSet, const PPTStyleSheet& rStyleSheet, sal_uInt32 nInstance, sal_uInt32 nDepth ) :
+PPTPortionObj::PPTPortionObj( const PPTCharPropSet& rCharPropSet, const PPTStyleSheet& rStyleSheet, TSS_Type nInstance, sal_uInt32 nDepth ) :
     PPTCharPropSet  ( rCharPropSet ),
     mrStyleSheet    ( rStyleSheet ),
     mnInstance      ( nInstance ),
@@ -5483,7 +5489,7 @@ bool PPTPortionObj::HasTabulator()
     return bRetValue;
 }
 
-bool PPTPortionObj::GetAttrib( sal_uInt32 nAttr, sal_uInt32& rRetValue, sal_uInt32 nDestinationInstance ) const
+bool PPTPortionObj::GetAttrib( sal_uInt32 nAttr, sal_uInt32& rRetValue, TSS_Type nDestinationInstance ) const
 {
     sal_uInt32  nMask = 1 << nAttr;
     rRetValue = 0;
@@ -5525,8 +5531,8 @@ bool PPTPortionObj::GetAttrib( sal_uInt32 nAttr, sal_uInt32& rRetValue, sal_uInt
     {
         const PPTCharLevel& rCharLevel = mrStyleSheet.mpCharSheet[ mnInstance ]->maCharLevel[ mnDepth ];
         PPTCharLevel* pCharLevel = nullptr;
-        if ( ( nDestinationInstance == 0xffffffff )
-                || ( mnDepth && ( ( mnInstance == TSS_TYPE_SUBTITLE ) || ( mnInstance == TSS_TYPE_TEXT_IN_SHAPE ) ) ) )
+        if ( ( nDestinationInstance == TSS_Type::Unknown )
+                || ( mnDepth && ( ( mnInstance == TSS_Type::Subtitle ) || ( mnInstance == TSS_Type::TextInShape ) ) ) )
             bIsHardAttribute = true;
         else if ( nDestinationInstance != mnInstance )
             pCharLevel = &mrStyleSheet.mpCharSheet[ nDestinationInstance ]->maCharLevel[ mnDepth ];
@@ -5590,12 +5596,12 @@ bool PPTPortionObj::GetAttrib( sal_uInt32 nAttr, sal_uInt32& rRetValue, sal_uInt
     return bIsHardAttribute;
 }
 
-void PPTPortionObj::ApplyTo(  SfxItemSet& rSet, SdrPowerPointImport& rManager, sal_uInt32 nDestinationInstance )
+void PPTPortionObj::ApplyTo(  SfxItemSet& rSet, SdrPowerPointImport& rManager, TSS_Type nDestinationInstance )
 {
     ApplyTo( rSet, rManager, nDestinationInstance, nullptr );
 }
 
-void PPTPortionObj::ApplyTo(  SfxItemSet& rSet, SdrPowerPointImport& rManager, sal_uInt32 nDestinationInstance, const PPTTextObj* pTextObj )
+void PPTPortionObj::ApplyTo(  SfxItemSet& rSet, SdrPowerPointImport& rManager, TSS_Type nDestinationInstance, const PPTTextObj* pTextObj )
 {
     sal_uInt32  nVal;
     if ( GetAttrib( PPT_CharAttr_Bold, nVal, nDestinationInstance ) )
@@ -5786,7 +5792,7 @@ void PPTPortionObj::ApplyTo(  SfxItemSet& rSet, SdrPowerPointImport& rManager, s
         {
             Color aCol( rManager.MSO_TEXT_CLR_ToColor( nVal ) );
             rSet.Put( SvxColorItem( aCol, EE_CHAR_COLOR ) );
-            if ( nDestinationInstance == 0xffffffff )
+            if ( nDestinationInstance == TSS_Type::Unknown )
                 mrStyleSheet.mpCharSheet[ mnInstance ]->maCharLevel[ mnDepth ].mnFontColorInStyleSheet = aCol;
         }
         else if ( nVal & 0x0f000000 )   // this is not a hard attribute, but maybe the page has a different colorscheme,
@@ -5826,7 +5832,7 @@ SvxFieldItem* PPTPortionObj::GetTextField()
     return nullptr;
 }
 
-PPTParagraphObj::PPTParagraphObj( const PPTStyleSheet& rStyleSheet, sal_uInt32 nInstance, sal_uInt16 nDepth ) :
+PPTParagraphObj::PPTParagraphObj( const PPTStyleSheet& rStyleSheet, TSS_Type nInstance, sal_uInt16 nDepth ) :
     PPTNumberFormatCreator  ( nullptr ),
     mrStyleSheet            ( rStyleSheet ),
     mnInstance              ( nInstance ),
@@ -5841,7 +5847,7 @@ PPTParagraphObj::PPTParagraphObj( const PPTStyleSheet& rStyleSheet, sal_uInt32 n
 PPTParagraphObj::PPTParagraphObj( PPTStyleTextPropReader& rPropReader,
         size_t const nCurParaPos, size_t& rnCurCharPos,
         const PPTStyleSheet& rStyleSheet,
-                                    sal_uInt32 nInstance, PPTTextRulerInterpreter& rRuler ) :
+        TSS_Type nInstance, PPTTextRulerInterpreter& rRuler ) :
     PPTParaPropSet          ( *rPropReader.aParaPropList[nCurParaPos] ),
     PPTNumberFormatCreator  ( nullptr ),
     PPTTextRulerInterpreter ( rRuler ),
@@ -5905,7 +5911,7 @@ void PPTParagraphObj::UpdateBulletRelSize( sal_uInt32& nBulletRelSize ) const
     }
 }
 
-bool PPTParagraphObj::GetAttrib( sal_uInt32 nAttr, sal_uInt32& rRetValue, sal_uInt32 nDestinationInstance )
+bool PPTParagraphObj::GetAttrib( sal_uInt32 nAttr, sal_uInt32& rRetValue, TSS_Type nDestinationInstance )
 {
     sal_uInt32  nMask = 1 << nAttr;
     rRetValue = 0;
@@ -5933,7 +5939,7 @@ bool PPTParagraphObj::GetAttrib( sal_uInt32 nAttr, sal_uInt32& rRetValue, sal_uI
             else
             {
                 rRetValue = PPT_COLSCHEME_TEXT_UND_ZEILEN;
-                if ((nDestinationInstance != 0xffffffff) && !m_PortionList.empty())
+                if ((nDestinationInstance != TSS_Type::Unknown) && !m_PortionList.empty())
                 {
                     PPTPortionObj const& rPortion = *m_PortionList.front();
                     if (rPortion.pCharSet->mnAttrSet & (1 << PPT_CharAttr_FontColor))
@@ -5961,7 +5967,7 @@ bool PPTParagraphObj::GetAttrib( sal_uInt32 nAttr, sal_uInt32& rRetValue, sal_uI
             {
                 // it is the font used which assigned to the first character of the following text
                 rRetValue = 0;
-                if ((nDestinationInstance != 0xffffffff) && !m_PortionList.empty())
+                if ((nDestinationInstance != TSS_Type::Unknown) && !m_PortionList.empty())
                 {
                     PPTPortionObj const& rPortion = *m_PortionList.front();
                     if (rPortion.pCharSet->mnAttrSet & ( 1 << PPT_CharAttr_Font ) )
@@ -5983,8 +5989,8 @@ bool PPTParagraphObj::GetAttrib( sal_uInt32 nAttr, sal_uInt32& rRetValue, sal_uI
         const PPTParaLevel& rParaLevel = mrStyleSheet.mpParaSheet[ mnInstance ]->maParaLevel[ pParaSet->mnDepth ];
 
         PPTParaLevel* pParaLevel = nullptr;
-        if ( ( nDestinationInstance == 0xffffffff )
-            || ( pParaSet->mnDepth && ( ( mnInstance == TSS_TYPE_SUBTITLE ) || ( mnInstance == TSS_TYPE_TEXT_IN_SHAPE ) ) ) )
+        if ( ( nDestinationInstance == TSS_Type::Unknown )
+            || ( pParaSet->mnDepth && ( ( mnInstance == TSS_Type::Subtitle ) || ( mnInstance == TSS_Type::TextInShape ) ) ) )
             bIsHardAttribute = true;
         else if ( nDestinationInstance != mnInstance )
             pParaLevel = &mrStyleSheet.mpParaSheet[ nDestinationInstance ]->maParaLevel[ pParaSet->mnDepth ];
@@ -6169,13 +6175,13 @@ bool PPTParagraphObj::GetAttrib( sal_uInt32 nAttr, sal_uInt32& rRetValue, sal_uI
     return bIsHardAttribute;
 }
 
-void PPTParagraphObj::ApplyTo( SfxItemSet& rSet,  boost::optional< sal_Int16 >& rStartNumbering, SdrPowerPointImport& rManager, sal_uInt32 nDestinationInstance, const PPTParagraphObj* /*pPrev*/)
+void PPTParagraphObj::ApplyTo( SfxItemSet& rSet,  boost::optional< sal_Int16 >& rStartNumbering, SdrPowerPointImport& rManager, TSS_Type nDestinationInstance, const PPTParagraphObj* /*pPrev*/)
 {
     sal_Int16   nVal2;
     sal_uInt32  nVal, nUpperDist, nLowerDist;
-    sal_uInt32  nInstance = nDestinationInstance != 0xffffffff ? nDestinationInstance : mnInstance;
+    TSS_Type    nInstance = nDestinationInstance != TSS_Type::Unknown ? nDestinationInstance : mnInstance;
 
-    if ( ( nDestinationInstance != 0xffffffff ) || ( pParaSet->mnDepth <= 1 ) )
+    if ( ( nDestinationInstance != TSS_Type::Unknown ) || ( pParaSet->mnDepth <= 1 ) )
     {
         SvxNumBulletItem* pNumBulletItem = mrStyleSheet.mpNumBulletItem[ nInstance ];
         if ( pNumBulletItem )
@@ -6479,7 +6485,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
     mpImplTextObj->mnShapeId = 0;
     mpImplTextObj->mnShapeMaster = 0;
     mpImplTextObj->mpPlaceHolderAtom = nullptr;
-    mpImplTextObj->mnDestinationInstance = mpImplTextObj->mnInstance = 4;
+    mpImplTextObj->mnDestinationInstance = mpImplTextObj->mnInstance = TSS_Type::TextInShape;
     mpImplTextObj->mnCurrentObject = 0;
     mpImplTextObj->mnParagraphCount = 0;
     mpImplTextObj->mpParagraphList = nullptr;
@@ -6664,10 +6670,11 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                 if ( SvxMSDffManager::SeekToRec( rIn, PPT_PST_TextHeaderAtom, aClientTextBoxHd.GetRecEndFilePos(), &aTextHd ) )
                 {
                     // TextHeaderAtom is always the first Atom
-                    sal_uInt16 nInstance;
-                    rIn.ReadUInt16( nInstance );   // this number tells us the TxMasterStyleAtom Instance
-                    if ( nInstance > 8 )
-                        nInstance = 4;
+                    sal_uInt16 nTmp;
+                    rIn.ReadUInt16( nTmp );   // this number tells us the TxMasterStyleAtom Instance
+                    if ( nTmp > 8 )
+                        nTmp = 4;
+                    TSS_Type nInstance = (TSS_Type)nTmp;
                     aTextHd.SeekToEndOfRecord( rIn );
                     mpImplTextObj->mnInstance = nInstance;
 
