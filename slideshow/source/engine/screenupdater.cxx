@@ -22,7 +22,7 @@
 
 #include <osl/diagnose.h>
 
-#include <boost/mem_fn.hpp>
+#include <functional>
 #include <memory>
 #include <vector>
 #include <algorithm>
@@ -125,12 +125,12 @@ namespace internal
         // any ViewUpdate-triggered updates?
         const bool bViewUpdatesNeeded(
             mpImpl->maUpdaters.apply(
-                boost::mem_fn(&ViewUpdate::needsUpdate)) );
+                std::mem_fn(&ViewUpdate::needsUpdate)) );
 
         if( bViewUpdatesNeeded )
         {
             mpImpl->maUpdaters.applyAll(
-                boost::mem_fn((bool (ViewUpdate::*)())&ViewUpdate::update) );
+                std::mem_fn((bool (ViewUpdate::*)())&ViewUpdate::update) );
         }
 
         if( bViewUpdatesNeeded ||

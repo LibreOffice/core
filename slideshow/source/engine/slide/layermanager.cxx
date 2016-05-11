@@ -25,7 +25,7 @@
 #include <comphelper/anytostring.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 
-#include <boost/mem_fn.hpp>
+#include <functional>
 #include <algorithm>
 
 #include "layermanager.hxx"
@@ -436,7 +436,7 @@ namespace slideshow
 
             return std::any_of( maLayers.begin(),
                                 maLayers.end(),
-                                boost::mem_fn(&Layer::isUpdatePending) );
+                                std::mem_fn(&Layer::isUpdatePending) );
         }
 
         bool LayerManager::updateSprites()
@@ -492,7 +492,7 @@ namespace slideshow
             // any non-sprite update areas left?
             if( std::none_of( maLayers.begin(),
                               maLayers.end(),
-                              boost::mem_fn( &Layer::isUpdatePending ) ) )
+                              std::mem_fn( &Layer::isUpdatePending ) ) )
                 return bRet; // nope, done.
 
             // update each shape on each layer, that has
