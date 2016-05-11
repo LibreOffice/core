@@ -423,7 +423,7 @@ lcl_SetFlyFrameAttr(SwDoc & rDoc,
         case RES_ANCHOR:
             if( DONTMAKEFRMS != nMakeFrames )
                 break;
-
+            SAL_FALLTHROUGH;
         default:
             if( !IsInvalidItem( aIter.GetCurItem() ) && ( SfxItemState::SET !=
                 rFlyFormat.GetAttrSet().GetItemState( nWhich, true, &pItem ) ||
