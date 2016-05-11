@@ -4040,6 +4040,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
         case MOUSE_LEFT + KEY_SHIFT + KEY_MOD1:
             if ( !m_bMBPressed )
                 break;
+            SAL_FALLTHROUGH;
         case MOUSE_LEFT + KEY_MOD1:
             if ( g_bFrameDrag && rSh.IsSelFrameMode() )
             {

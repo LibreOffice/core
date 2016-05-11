@@ -109,7 +109,7 @@ namespace utl
         OUString getBootstrapValue(OUString const& _sName, OUString const& _sDefault) const;
         static bool getVersionValue(OUString const& _sName, OUString& _rValue, OUString const& _sDefault);
 
-        OUString getImplName() const { return m_aImplName; }
+        const OUString& getImplName() const { return m_aImplName; }
 
     private: // implementation
         bool initBaseInstallationData(rtl::Bootstrap& _rData);
@@ -477,7 +477,7 @@ static Bootstrap::FailureCode describeError(OUStringBuffer& _rBuf, Bootstrap::Im
             eErrCode = Bootstrap::INVALID_VERSION_FILE_ENTRY;
             break;
         }
-        else SAL_FALLTHROUGH;
+        SAL_FALLTHROUGH;
 
     case Bootstrap::DATA_MISSING:
         switch (_rData.aVersionINI_.status)
@@ -504,7 +504,7 @@ static Bootstrap::FailureCode describeError(OUStringBuffer& _rBuf, Bootstrap::Im
                     eErrCode = Bootstrap::INVALID_BOOTSTRAP_FILE_ENTRY;
                 break;
 
-            case Bootstrap::DATA_INVALID: OSL_ASSERT(false);
+            case Bootstrap::DATA_INVALID: OSL_ASSERT(false); SAL_FALLTHROUGH;
             case Bootstrap::PATH_VALID:
                 addFileError(_rBuf, _rData.aBootstrapINI_.path, IS_MISSING);
                 eErrCode = Bootstrap::MISSING_BOOTSTRAP_FILE;
