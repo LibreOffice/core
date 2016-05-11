@@ -642,7 +642,7 @@ bool GtkSalMenu::TakeFocus()
     //(given that we wnt to show it with no menus popped down)
     GdkEvent *event = gdk_event_new(GDK_KEY_PRESS);
     event->key.window = GDK_WINDOW(g_object_ref(gtk_widget_get_window(mpMenuBarWidget)));
-    event->key.send_event = TRUE;
+    event->key.send_event = 1 /* TRUE */;
     event->key.time = gtk_get_current_event_time();
     event->key.state = 0;
     event->key.keyval = 0;
