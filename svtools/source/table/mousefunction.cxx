@@ -74,7 +74,7 @@ namespace svt { namespace table
                 Point( aPoint.X(), 0 ),
                 Size( 1, tableSize.Height() )
             ),
-            SHOWTRACK_SPLIT | SHOWTRACK_WINDOW
+            ShowTrackFlags::Split | ShowTrackFlags::TrackWindow
         );
 
         (void)i_event;

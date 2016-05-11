@@ -690,7 +690,7 @@ void HeaderBar::ImplStartDrag( const Point& rMousePos, bool bCommand )
             else
             {
                 Rectangle aSizeRect( mnDragPos, 0, mnDragPos, mnDragSize+mnDY );
-                ShowTracking( aSizeRect, SHOWTRACK_SPLIT );
+                ShowTracking( aSizeRect, ShowTrackFlags::Split );
             }
         }
         else
@@ -797,7 +797,7 @@ void HeaderBar::ImplDrag( const Point& rMousePos )
         else
         {
             Rectangle aSizeRect( mnDragPos, 0, mnDragPos, mnDragSize+mnDY );
-            ShowTracking( aSizeRect, SHOWTRACK_SPLIT );
+            ShowTracking( aSizeRect, ShowTrackFlags::Split );
         }
     }
 

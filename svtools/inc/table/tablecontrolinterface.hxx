@@ -230,7 +230,7 @@ namespace svt { namespace table
         virtual long    pixelWidthToAppFont( long const i_pixels ) const = 0;
 
         /// shows a tracking rectangle
-        virtual void    showTracking( Rectangle const & i_location, sal_uInt16 const i_flags ) = 0;
+        virtual void    showTracking( Rectangle const & i_location, ShowTrackFlags const i_flags ) = 0;
 
         /// hides a prviously shown tracking rectangle
         virtual void    hideTracking() = 0;

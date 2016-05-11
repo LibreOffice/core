@@ -94,7 +94,7 @@ struct ImplWinData
     long                mnCompositionCharRects;
     Rectangle*          mpFocusRect;
     Rectangle*          mpTrackRect;
-    sal_uInt16          mnTrackFlags;
+    ShowTrackFlags      mnTrackFlags;
     sal_uInt16          mnIsTopWindow;
     bool                mbMouseOver;            //< tracks mouse over for native widget paint effect
     bool                mbEnableNativeWidget;   //< toggle native widget rendering

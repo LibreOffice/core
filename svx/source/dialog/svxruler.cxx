@@ -1587,7 +1587,7 @@ void SvxRuler::DrawLine_Impl(long& lTabPosition, int nNew, bool bHorizontal)
             pEditWin->InvertTracking(
                 Rectangle( Point(lTabPosition, -aZero.Y()),
                            Point(lTabPosition, -aZero.Y() + nHeight)),
-                SHOWTRACK_SPLIT | SHOWTRACK_CLIP );
+                ShowTrackFlags::Split | ShowTrackFlags::Clip );
         }
         if( nNew & 1 )
         {
@@ -1599,7 +1599,7 @@ void SvxRuler::DrawLine_Impl(long& lTabPosition, int nNew, bool bHorizontal)
             pEditWin->InvertTracking(
                 Rectangle( Point(lTabPosition, -aZero.Y()),
                            Point(lTabPosition, -aZero.Y() + nHeight) ),
-                SHOWTRACK_CLIP | SHOWTRACK_SPLIT );
+                ShowTrackFlags::Clip | ShowTrackFlags::Split );
         }
     }
     else
@@ -1611,7 +1611,7 @@ void SvxRuler::DrawLine_Impl(long& lTabPosition, int nNew, bool bHorizontal)
             pEditWin->InvertTracking(
                 Rectangle( Point(-aZero.X(),          lTabPosition),
                            Point(-aZero.X() + nWidth, lTabPosition)),
-                SHOWTRACK_SPLIT | SHOWTRACK_CLIP );
+                ShowTrackFlags::Split | ShowTrackFlags::Clip );
         }
 
         if(nNew & 1)
@@ -1624,7 +1624,7 @@ void SvxRuler::DrawLine_Impl(long& lTabPosition, int nNew, bool bHorizontal)
             pEditWin->InvertTracking(
                 Rectangle( Point(-aZero.X(),        lTabPosition),
                            Point(-aZero.X()+nWidth, lTabPosition)),
-                SHOWTRACK_CLIP | SHOWTRACK_SPLIT );
+                ShowTrackFlags::Clip | ShowTrackFlags::Split );
         }
     }
 }

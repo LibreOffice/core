@@ -689,7 +689,7 @@ void FrameSelectorImpl::DrawAllTrackingRects()
 
     aPPoly.Optimize(PolyOptimizeFlags::CLOSE);
     for(sal_uInt16 nIdx = 0, nCount = aPPoly.Count(); nIdx < nCount; ++nIdx)
-        mrFrameSel.InvertTracking(aPPoly.GetObject(nIdx), SHOWTRACK_SMALL | SHOWTRACK_WINDOW);
+        mrFrameSel.InvertTracking(aPPoly.GetObject(nIdx), ShowTrackFlags::Small | ShowTrackFlags::TrackWindow);
 }
 
 Point FrameSelectorImpl::GetDevPosFromMousePos( const Point& rMousePos ) const
