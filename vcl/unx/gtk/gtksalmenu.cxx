@@ -974,6 +974,7 @@ namespace
         GtkSalMenu* pSalSubMenu = reinterpret_cast<GtkSalMenu*>(sGtkSalMenu.toInt64());
 
         assert(sWindow == "window" && pSalSubMenu);
+        (void) sWindow; // TODO should we throw an exception ?
 
         return MenuAndId(pSalSubMenu, sItemId.toInt32());
     }
