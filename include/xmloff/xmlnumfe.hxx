@@ -56,6 +56,7 @@ private:
     SAL_DLLPRIVATE void AddCalendarAttr_Impl( const OUString& rCalendar );
     SAL_DLLPRIVATE void AddStyleAttr_Impl( bool bLong );
     SAL_DLLPRIVATE void AddTextualAttr_Impl( bool bText );
+    SAL_DLLPRIVATE void AddQuotedAttr_Impl( bool bQuoted );
     SAL_DLLPRIVATE void AddLanguageAttr_Impl( sal_Int32 nLang );
 
     SAL_DLLPRIVATE void AddToTextElement_Impl( const OUString& rString );
@@ -69,7 +70,7 @@ private:
     SAL_DLLPRIVATE void WriteScientificElement_Impl( sal_Int32 nDecimals, sal_Int32 nMinDecimals, sal_Int32 nInteger,
                                         bool bGrouping, sal_Int32 nExp, sal_Int32 nExpInterval, bool bExpSign );
     SAL_DLLPRIVATE void WriteFractionElement_Impl( sal_Int32 nInteger, bool bGrouping,
-                                        sal_Int32 nNumeratorDigits, sal_Int32 nDenominatorDigits, sal_Int32 nDenominator );
+                                                   const OUString& aNumeratorString, const OUString& aDenominatorString );
     SAL_DLLPRIVATE void WriteCurrencyElement_Impl( const OUString& rString,
                                         const OUString& rExt );
     SAL_DLLPRIVATE void WriteBooleanElement_Impl();
