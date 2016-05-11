@@ -26,6 +26,7 @@
 #include "strings.hrc"
 #include "ViewShell.hxx"
 #include "View.hxx"
+#include "Window.hxx"
 #include "drawdoc.hxx"
 #include "DrawDocShell.hxx"
 #include <vcl/wrkwin.hxx>
@@ -101,7 +102,7 @@ void FuCopy::DoExecute( SfxRequest& rReq )
             SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
             if( pFact )
             {
-                std::unique_ptr<AbstractCopyDlg> pDlg(pFact->CreateCopyDlg(aSet, mpDoc->GetColorList(), mpView ));
+                std::unique_ptr<AbstractCopyDlg> pDlg(pFact->CreateCopyDlg(mpViewShell->GetActiveWindow(), aSet, mpDoc->GetColorList(), mpView ));
                 if (!pDlg)
                     return;
 

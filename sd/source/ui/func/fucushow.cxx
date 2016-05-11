@@ -24,6 +24,7 @@
 #include "app.hrc"
 #include "sdresid.hxx"
 #include "ViewShell.hxx"
+#include "Window.hxx"
 #include "drawdoc.hxx"
 #include "sdpage.hxx"
 #include <vcl/msgbox.hxx>
@@ -56,7 +57,7 @@ rtl::Reference<FuPoor> FuCustomShowDlg::Create( ViewShell* pViewSh, ::sd::Window
 void FuCustomShowDlg::DoExecute( SfxRequest& )
 {
     SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-    std::unique_ptr<AbstractSdCustomShowDlg> pDlg(pFact ? pFact->CreateSdCustomShowDlg( *mpDoc ) : nullptr);
+    std::unique_ptr<AbstractSdCustomShowDlg> pDlg(pFact ? pFact->CreateSdCustomShowDlg(mpViewShell->GetActiveWindow(), *mpDoc) : nullptr);
     if( pDlg )
     {
         sal_uInt16 nRet = pDlg->Execute();

@@ -305,7 +305,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
 
                 if (eFamily == SD_STYLE_FAMILY_GRAPHICS)
                 {
-                    pStdDlg.reset(pFact ? pFact->CreateSdTabTemplateDlg( mpDoc->GetDocSh(), *pStyleSheet, mpDoc, mpView ) : nullptr);
+                    pStdDlg.reset(pFact ? pFact->CreateSdTabTemplateDlg(mpViewShell->GetActiveWindow(), mpDoc->GetDocSh(), *pStyleSheet, mpDoc, mpView) : nullptr);
                 }
                 else if (eFamily == SD_STYLE_FAMILY_PSEUDO)
                 {
@@ -369,7 +369,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
 
                     if( !bOldDocInOtherLanguage )
                     {
-                        pPresDlg.reset(pFact ? pFact->CreateSdPresLayoutTemplateDlg( mpDocSh, nullptr, SdResId(nDlgId), *pStyleSheet, ePO, pSSPool ) : nullptr);
+                        pPresDlg.reset(pFact ? pFact->CreateSdPresLayoutTemplateDlg( mpDocSh,  mpViewShell->GetActiveWindow(), SdResId(nDlgId), *pStyleSheet, ePO, pSSPool ) : nullptr);
                     }
                 }
                 else if (eFamily == SD_STYLE_FAMILY_CELL)

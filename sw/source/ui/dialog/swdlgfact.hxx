@@ -434,6 +434,7 @@ public:
                                                 const OString& sDefPage = OString(),
                                                 const OUString*   pFormatStr  = nullptr) override;
     virtual SfxAbstractApplyTabDialog*  CreateTemplateDialog(
+                                                vcl::Window *pParent,
                                                 SfxStyleSheetBase&  rBase,
                                                 SfxStyleFamily      nRegion,
                                                 const OString&      sPage = OString(),

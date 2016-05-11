@@ -40,6 +40,7 @@
 #include "unoaprms.hxx"
 #include "sdundogr.hxx"
 #include "View.hxx"
+#include "Window.hxx"
 #include "sdabstdlg.hxx"
 #include "sdresid.hxx"
 #include <tools/helpers.hxx>
@@ -445,7 +446,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
             aSet.Put(SfxBoolItem(ATTR_ACTION_PLAYFULL, false));
 
         SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-        std::unique_ptr<SfxAbstractDialog> pDlg(pFact ? pFact->CreatSdActionDialog( &aSet, mpView ) : nullptr);
+        std::unique_ptr<SfxAbstractDialog> pDlg(pFact ? pFact->CreatSdActionDialog(mpViewShell->GetActiveWindow(), &aSet, mpView) : nullptr);
 
         short nResult = pDlg ? pDlg->Execute() : static_cast<short>(RET_CANCEL);
 

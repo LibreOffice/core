@@ -1416,7 +1416,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 aNewAttr.Put( SdAttrLayerThisPage() );
 
                 SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-                std::unique_ptr<AbstractSdInsertLayerDlg> pDlg(pFact ? pFact->CreateSdInsertLayerDlg(aNewAttr, true, SD_RESSTR(STR_INSERTLAYER)) : nullptr);
+                std::unique_ptr<AbstractSdInsertLayerDlg> pDlg(pFact ? pFact->CreateSdInsertLayerDlg(GetActiveWindow(), aNewAttr, true, SD_RESSTR(STR_INSERTLAYER)) : nullptr);
                 if( pDlg )
                 {
                     pDlg->SetHelpId( SD_MOD()->GetSlotPool()->GetSlot( SID_INSERTLAYER )->GetCommand() );
@@ -1584,7 +1584,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 aNewAttr.Put( SdAttrLayerThisPage() );
 
                 SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-                std::unique_ptr<AbstractSdInsertLayerDlg> pDlg(pFact ? pFact->CreateSdInsertLayerDlg(aNewAttr, bDelete, SD_RESSTR(STR_MODIFYLAYER)) : nullptr);
+                std::unique_ptr<AbstractSdInsertLayerDlg> pDlg(pFact ? pFact->CreateSdInsertLayerDlg(GetActiveWindow(), aNewAttr, bDelete, SD_RESSTR(STR_MODIFYLAYER)) : nullptr);
                 if( pDlg )
                 {
                     pDlg->SetHelpId( SD_MOD()->GetSlotPool()->GetSlot( SID_MODIFYLAYER )->GetCommand() );

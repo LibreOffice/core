@@ -31,6 +31,7 @@
 #include "app.hrc"
 #include "View.hxx"
 #include "ViewShell.hxx"
+#include "Window.hxx"
 #include "drawdoc.hxx"
 #include "sdabstdlg.hxx"
 #include "sdattr.hrc"
@@ -90,7 +91,7 @@ void FuParagraph::DoExecute( SfxRequest& rReq )
         }
 
         SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-        std::unique_ptr<SfxAbstractTabDialog> pDlg(pFact ? pFact->CreateSdParagraphTabDlg( &aNewAttr ) : nullptr);
+        std::unique_ptr<SfxAbstractTabDialog> pDlg(pFact ? pFact->CreateSdParagraphTabDlg(mpViewShell->GetActiveWindow(), &aNewAttr) : nullptr);
         if (!pDlg)
             return;
 

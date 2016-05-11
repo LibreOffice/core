@@ -935,14 +935,15 @@ SfxAbstractTabDialog* SwAbstractDialogFactory_Impl::CreateFrameTabDialog(const O
 }
 
 SfxAbstractApplyTabDialog* SwAbstractDialogFactory_Impl::CreateTemplateDialog(
+                                                vcl::Window *pParent,
                                                 SfxStyleSheetBase&  rBase,
                                                 SfxStyleFamily      nRegion,
                                                 const OString&      sPage,
                                                 SwWrtShell*         pActShell,
                                                 bool                bNew )
 {
-    VclPtr<SfxTabDialog> pDlg = VclPtr<SwTemplateDlg>::Create( nullptr, rBase, nRegion, sPage, pActShell, bNew );
-    return new AbstractApplyTabDialog_Impl( pDlg );
+    VclPtr<SfxTabDialog> pDlg = VclPtr<SwTemplateDlg>::Create(pParent, rBase, nRegion, sPage, pActShell, bNew);
+    return new AbstractApplyTabDialog_Impl(pDlg);
 }
 
 AbstractGlossaryDlg* SwAbstractDialogFactory_Impl::CreateGlossaryDlg(SfxViewFrame* pViewFrame,
