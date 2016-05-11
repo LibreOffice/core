@@ -284,6 +284,7 @@ void SwFormatField::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
         case RES_HIDDENPARAFLD:
             if( !pOld || RES_HIDDENPARA_PRINT != pOld->Which() )
                 break;
+            SAL_FALLTHROUGH;
         case RES_DBSETNUMBERFLD:
         case RES_DBNUMSETFLD:
         case RES_DBNEXTSETFLD:

@@ -3987,6 +3987,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
             if( !pSaveStruct->IsInSection() && 1==aToken.getLength() &&
                 ' '==aToken[0] )
                 break;
+            SAL_FALLTHROUGH;
         default:
             if( !pSaveStruct->IsInSection() )
             {
@@ -4282,6 +4283,7 @@ void SwHTMLParser::BuildTableRow( HTMLTable *pCurTable, bool bReadOptions,
                  !pCurTable->HasParentSection()) &&
                 1==aToken.getLength() && ' '==aToken[0] )
                 break;
+            SAL_FALLTHROUGH;
         default:
             pCurTable->MakeParentContents();
             NextToken( nToken );
@@ -4444,6 +4446,7 @@ void SwHTMLParser::BuildTableSection( HTMLTable *pCurTable,
                  !pCurTable->HasParentSection()) &&
                 1==aToken.getLength() && ' ' == aToken[0] )
                 break;
+            SAL_FALLTHROUGH;
         default:
             pCurTable->MakeParentContents();
             NextToken( nToken );
@@ -4660,6 +4663,7 @@ void SwHTMLParser::BuildTableColGroup( HTMLTable *pCurTable,
                  !pCurTable->HasParentSection()) &&
                 1==aToken.getLength() && ' '==aToken[0] )
                 break;
+            SAL_FALLTHROUGH;
         default:
             pCurTable->MakeParentContents();
             NextToken( nToken );
@@ -5233,6 +5237,7 @@ HTMLTable *SwHTMLParser::BuildTable( SvxAdjust eParentAdjust,
                  !pCurTable->HasParentSection()) &&
                 1==aToken.getLength() && ' '==aToken[0] )
                 break;
+            SAL_FALLTHROUGH;
         default:
             pCurTable->MakeParentContents();
             NextToken( nToken );
