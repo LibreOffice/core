@@ -551,7 +551,7 @@ PaintHelper::~PaintHelper()
         }
     }
 
-    if ( pWindowImpl->mpWinData && pWindowImpl->mbTrackVisible && (pWindowImpl->mpWinData->mnTrackFlags & SHOWTRACK_WINDOW) )
+    if ( pWindowImpl->mpWinData && pWindowImpl->mbTrackVisible && (pWindowImpl->mpWinData->mnTrackFlags & ShowTrackFlags::TrackWindow) )
         /* #98602# need to invert the tracking rect AFTER
         * the children have painted
         */
@@ -1618,7 +1618,7 @@ void Window::ImplScroll( const Rectangle& rRect,
         {
             if ( mpWindowImpl->mbFocusVisible )
                 ImplInvertFocus( *(mpWindowImpl->mpWinData->mpFocusRect) );
-            if ( mpWindowImpl->mbTrackVisible && (mpWindowImpl->mpWinData->mnTrackFlags & SHOWTRACK_WINDOW) )
+            if ( mpWindowImpl->mbTrackVisible && (mpWindowImpl->mpWinData->mnTrackFlags & ShowTrackFlags::TrackWindow) )
                 InvertTracking( *(mpWindowImpl->mpWinData->mpTrackRect), mpWindowImpl->mpWinData->mnTrackFlags );
         }
 #ifndef IOS
@@ -1654,7 +1654,7 @@ void Window::ImplScroll( const Rectangle& rRect,
         {
             if ( mpWindowImpl->mbFocusVisible )
                 ImplInvertFocus( *(mpWindowImpl->mpWinData->mpFocusRect) );
-            if ( mpWindowImpl->mbTrackVisible && (mpWindowImpl->mpWinData->mnTrackFlags & SHOWTRACK_WINDOW) )
+            if ( mpWindowImpl->mbTrackVisible && (mpWindowImpl->mpWinData->mnTrackFlags & ShowTrackFlags::TrackWindow) )
                 InvertTracking( *(mpWindowImpl->mpWinData->mpTrackRect), mpWindowImpl->mpWinData->mnTrackFlags );
         }
     }

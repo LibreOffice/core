@@ -304,7 +304,7 @@ void SmGraphicWindow::ShowCursor(bool bShow)
     bool  bInvert = bShow != IsCursorVisible();
 
     if (bInvert)
-        InvertTracking(aCursorRect, SHOWTRACK_SMALL | SHOWTRACK_WINDOW);
+        InvertTracking(aCursorRect, ShowTrackFlags::Small | ShowTrackFlags::TrackWindow);
 
     SetIsCursorVisible(bShow);
 }

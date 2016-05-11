@@ -277,13 +277,20 @@ namespace o3tl
 }
 
 // Flags for ShowTracking()
-#define SHOWTRACK_SMALL                 ((sal_uInt16)0x0001)
-#define SHOWTRACK_BIG                   ((sal_uInt16)0x0002)
-#define SHOWTRACK_SPLIT                 ((sal_uInt16)0x0003)
-#define SHOWTRACK_OBJECT                ((sal_uInt16)0x0004)
-#define SHOWTRACK_WINDOW                ((sal_uInt16)0x1000)
-#define SHOWTRACK_CLIP                  ((sal_uInt16)0x2000)
-#define SHOWTRACK_STYLE                 ((sal_uInt16)0x000F)
+enum class ShowTrackFlags {
+    NONE                  = 0x0000,
+    Small                 = 0x0001,
+    Big                   = 0x0002,
+    Split                 = 0x0003,
+    Object                = 0x0004,
+    StyleMask             = 0x000F,
+    TrackWindow           = 0x1000,
+    Clip                  = 0x2000,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<ShowTrackFlags> : is_typed_flags<ShowTrackFlags, 0x300a> {};
+}
 
 // Flags for StartTracking()
 enum class StartTrackingFlags
@@ -1187,11 +1194,11 @@ public:
     void                                DrawSelectionBackground( const Rectangle& rRect, sal_uInt16 highlight, bool bChecked, bool bDrawBorder, Color* pSelectionTextColor, Color* pPaintColor );
 
     void                                ShowTracking( const Rectangle& rRect,
-                                                      sal_uInt16 nFlags = SHOWTRACK_SMALL );
+                                                      ShowTrackFlags nFlags = ShowTrackFlags::Small );
     void                                HideTracking();
     void                                InvertTracking( const Rectangle& rRect,
-                                                        sal_uInt16 nFlags = SHOWTRACK_SMALL );
-    void                                InvertTracking( const tools::Polygon& rPoly, sal_uInt16 nFlags = 0 );
+                                                        ShowTrackFlags nFlags = ShowTrackFlags::Small );
+    void                                InvertTracking( const tools::Polygon& rPoly, ShowTrackFlags nFlags = ShowTrackFlags::NONE );
 
     void                                StartTracking( StartTrackingFlags nFlags = StartTrackingFlags::NONE );
     void                                EndTracking( TrackingEventFlags nFlags = TrackingEventFlags::NONE );

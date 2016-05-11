@@ -258,7 +258,7 @@ namespace svt { namespace table
         virtual void                invalidate( TableArea const i_what ) override;
         virtual long                pixelWidthToAppFont( long const i_pixels ) const override;
         virtual void                hideTracking() override;
-        virtual void                showTracking( Rectangle const & i_location, sal_uInt16 const i_flags ) override;
+        virtual void                showTracking( Rectangle const & i_location, ShowTrackFlags const i_flags ) override;
         RowPos                      getRowAtPoint( const Point& rPoint ) const;
         ColPos                      getColAtPoint( const Point& rPoint ) const;
         virtual TableCell           hitTest( const Point& rPoint ) const override;
