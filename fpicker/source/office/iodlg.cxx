@@ -296,7 +296,7 @@ SvtFileDialog::SvtFileDialog
 (
     vcl::Window* _pParent,
     WinBits nBits,
-    WinBits nExtraBits
+    PickerExtraBits nExtraBits
 ) :
     SvtFileDialog_Base( _pParent, "ExplorerFileDialog", "fps/ui/explorerfiledialog.ui" )
 
@@ -332,7 +332,7 @@ SvtFileDialog::SvtFileDialog ( vcl::Window* _pParent, WinBits nBits )
     ,_pFileView( nullptr )
     ,_pFileNotifier( nullptr )
     ,_pImp( new SvtExpFileDlg_Impl( nBits ) )
-    ,_nExtraBits( 0L )
+    ,_nExtraBits( PickerExtraBits::NONE )
     ,_bIsInExecute( false )
     ,m_bHasFilename( false )
 {
@@ -2484,7 +2484,7 @@ void SvtFileDialog::enableControl( sal_Int16 _nControlId, bool _bEnable )
 void SvtFileDialog::AddControls_Impl( )
 {
     // create the "insert as link" checkbox, if needed
-    if ( _nExtraBits & SFX_EXTRA_INSERTASLINK )
+    if ( _nExtraBits & PickerExtraBits::InsertAsLink )
     {
         _pCbLinkBox ->SetText( SvtResId( STR_SVT_FILEPICKER_INSERT_AS_LINK ) );
         _pCbLinkBox ->SetHelpId( HID_FILEDLG_LINK_CB );
@@ -2493,7 +2493,7 @@ void SvtFileDialog::AddControls_Impl( )
     }
 
     // create the "show preview" checkbox ( and the preview window, too ), if needed
-    if ( _nExtraBits & SFX_EXTRA_SHOWPREVIEW  )
+    if ( _nExtraBits & PickerExtraBits::ShowPreview  )
     {
         _pImp->_aIniKey = "ImportGraphicDialog";
         // because the "<All Formats> (*.bmp,*...)" entry is to wide,
@@ -2517,7 +2517,7 @@ void SvtFileDialog::AddControls_Impl( )
         _pPrevBmp->SetAccessibleName(SVT_RESSTR(STR_PREVIEW));
     }
 
-    if ( _nExtraBits & SFX_EXTRA_AUTOEXTENSION )
+    if ( _nExtraBits & PickerExtraBits::AutoExtension )
     {
         _pImp->_pCbAutoExtension->SetText( SvtResId( STR_SVT_FILEPICKER_AUTO_EXTENSION ) );
         _pImp->_pCbAutoExtension->Check();
@@ -2525,21 +2525,21 @@ void SvtFileDialog::AddControls_Impl( )
         _pImp->_pCbAutoExtension->Show();
     }
 
-    if ( _nExtraBits & SFX_EXTRA_FILTEROPTIONS )
+    if ( _nExtraBits & PickerExtraBits::FilterOptions )
     {
         _pImp->_pCbOptions->SetText( SvtResId( STR_SVT_FILEPICKER_FILTER_OPTIONS ) );
         _pImp->_pCbOptions->SetClickHdl( LINK( this, SvtFileDialog, ClickHdl_Impl ) );
         _pImp->_pCbOptions->Show();
     }
 
-    if ( _nExtraBits & SFX_EXTRA_SELECTION )
+    if ( _nExtraBits & PickerExtraBits::Selection )
     {
         _pCbSelection->SetText( SvtResId( STR_SVT_FILEPICKER_SELECTION ) );
         _pCbSelection->SetClickHdl( LINK( this, SvtFileDialog, ClickHdl_Impl ) );
         _pCbSelection->Show();
     }
 
-    if ( _nExtraBits & SFX_EXTRA_PLAYBUTTON )
+    if ( _nExtraBits & PickerExtraBits::PlayButton )
     {
         _pPbPlay->SetText( SvtResId( STR_SVT_FILEPICKER_PLAY ) );
         _pPbPlay->SetHelpId( HID_FILESAVE_DOPLAY );
@@ -2547,7 +2547,7 @@ void SvtFileDialog::AddControls_Impl( )
         _pPbPlay->Show();
     }
 
-    if ( _nExtraBits & SFX_EXTRA_SHOWVERSIONS )
+    if ( _nExtraBits & PickerExtraBits::ShowVersions )
     {
         _pImp->_pFtFileVersion->SetText( SvtResId( STR_SVT_FILEPICKER_VERSION ) );
         _pImp->_pFtFileVersion->Show();
@@ -2555,7 +2555,7 @@ void SvtFileDialog::AddControls_Impl( )
         _pImp->_pLbFileVersion->SetHelpId( HID_FILEOPEN_VERSION );
         _pImp->_pLbFileVersion->Show();
     }
-    else if ( _nExtraBits & SFX_EXTRA_TEMPLATES )
+    else if ( _nExtraBits & PickerExtraBits::Templates )
     {
         _pImp->_pFtTemplates->SetText( SvtResId( STR_SVT_FILEPICKER_TEMPLATES ) );
         _pImp->_pFtTemplates->Show();
@@ -2566,7 +2566,7 @@ void SvtFileDialog::AddControls_Impl( )
             // is set in the "Templates mode". This was hidden in the previous implementation.
             // Shouldn't this be a more meaningfull help id.
     }
-    else if ( _nExtraBits & SFX_EXTRA_IMAGE_TEMPLATE )
+    else if ( _nExtraBits & PickerExtraBits::ImageTemplate )
     {
         _pImp->_pFtImageTemplates->SetText( SvtResId( STR_SVT_FILEPICKER_IMAGE_TEMPLATE ) );
         _pImp->_pFtImageTemplates->Show();
