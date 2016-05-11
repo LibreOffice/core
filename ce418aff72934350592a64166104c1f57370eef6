@@ -87,6 +87,24 @@
       "revId": "ce418aff72934350592a64166104c1f57370eef6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_43890dca",
+        "filename": "sw/source/core/unocore/unostyle.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 466,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-05-11T07:32:42Z",
+      "side": 1,
+      "message": "Using SfxStyleFamily::Pseudo would be an option, but it\u0027s already used for numbering styles in Writer. ;-) Which means then we\u0027ll still need to add a new SfxStyleFamily::Table. Sorry for the misleading suggestion previously!",
+      "parentUuid": "da7fb54a_43410d39",
+      "revId": "ce418aff72934350592a64166104c1f57370eef6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
