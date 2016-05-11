@@ -715,9 +715,14 @@ void ScTabViewShell::UpdateInputHandlerCellAdjust( SvxCellHorJustify eJust )
 void ScTabViewShell::ExecuteSave( SfxRequest& rReq )
 {
     // only SID_SAVEDOC / SID_SAVEASDOC
+    bool bDontTerminateEdit = false;
+    const SfxItemSet* pReqArgs = rReq.GetArgs();
+    const SfxPoolItem* pItem;
+    if (pReqArgs && pReqArgs->HasItem(FN_PARAM_1, &pItem))
+        bDontTerminateEdit = static_cast<const SfxBoolItem*>(pItem)->GetValue();
 
-    // Finish entering in any case, even if a formula is being processed
-    SC_MOD()->InputEnterHandler();
+    if (!bDontTerminateEdit)
+        SC_MOD()->InputEnterHandler();
 
     if ( GetViewData().GetDocShell()->IsDocShared() )
     {
