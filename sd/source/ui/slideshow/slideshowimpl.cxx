@@ -78,7 +78,6 @@
 #include "customshowlist.hxx"
 #include "unopage.hxx"
 
-#include <boost/mem_fn.hpp>
 
 using ::com::sun::star::animations::XAnimationNode;
 using ::com::sun::star::animations::XAnimationListener;
@@ -3364,35 +3363,55 @@ void SAL_CALL SlideShowListenerProxy::paused(  ) throw (css::uno::RuntimeExcepti
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    maListeners.forEach<XSlideShowListener>( boost::mem_fn( &XSlideShowListener::paused ) );
+    maListeners.forEach<XSlideShowListener>(
+        [](uno::Reference<presentation::XSlideShowListener> const& xListener)
+        {
+            xListener->paused();
+        });
 }
 
 void SAL_CALL SlideShowListenerProxy::resumed(  ) throw (css::uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    maListeners.forEach<XSlideShowListener>( boost::mem_fn( &XSlideShowListener::resumed ) );
+    maListeners.forEach<XSlideShowListener>(
+        [](uno::Reference<presentation::XSlideShowListener> const& xListener)
+        {
+            xListener->resumed();
+        });
 }
 
 void SAL_CALL SlideShowListenerProxy::slideTransitionStarted( ) throw (RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    maListeners.forEach<XSlideShowListener>( boost::mem_fn( &XSlideShowListener::slideTransitionStarted ) );
+    maListeners.forEach<XSlideShowListener>(
+        [](uno::Reference<presentation::XSlideShowListener> const& xListener)
+        {
+            xListener->slideTransitionStarted();
+        });
 }
 
 void SAL_CALL SlideShowListenerProxy::slideTransitionEnded( ) throw (css::uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    maListeners.forEach<XSlideShowListener>( boost::mem_fn( &XSlideShowListener::slideTransitionEnded ) );
+    maListeners.forEach<XSlideShowListener>(
+        [](uno::Reference<presentation::XSlideShowListener> const& xListener)
+        {
+            xListener->slideTransitionEnded ();
+        });
 }
 
 void SAL_CALL SlideShowListenerProxy::slideAnimationsEnded(  ) throw (css::uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    maListeners.forEach<XSlideShowListener>( boost::mem_fn( &XSlideShowListener::slideAnimationsEnded ) );
+    maListeners.forEach<XSlideShowListener>(
+        [](uno::Reference<presentation::XSlideShowListener> const& xListener)
+        {
+            xListener->slideAnimationsEnded ();
+        });
 }
 
 void SlideShowListenerProxy::slideEnded(sal_Bool bReverse) throw (RuntimeException, std::exception)
