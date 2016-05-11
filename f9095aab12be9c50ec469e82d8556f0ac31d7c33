@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_de9a54c5",
+        "filename": "svtools/uiconfig/ui/restartdialog.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2016-05-11T11:31:56Z",
+      "side": 1,
+      "message": "In the translatable string, please write “Java” with an initial uppercase letter, as it is a proper name \u003d)",
+      "range": {
+        "startLine": 158,
+        "startChar": 75,
+        "endLine": 158,
+        "endChar": 79
+      },
+      "revId": "f9095aab12be9c50ec469e82d8556f0ac31d7c33",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
