@@ -1444,6 +1444,11 @@ static bool lcl_ErgoVadis( SwTextFrame* pFrame, sal_Int32 &rPos, const PrepareHi
     return true;
 }
 
+// Silence over-eager warning emitted at least by GCC 5.3.1 in certain
+// instantiations:
+#if defined __GNUC__ && !defined __clang__
+# pragma GCC diagnostic push
+# pragma GCC diagnostic ignored "-Wstrict-overflow"
 bool SwTextFrame::Prepare( const PrepareHint ePrep, const void* pVoid,
                         bool bNotify )
 {
@@ -1819,6 +1824,8 @@ bool SwTextFrame::Prepare( const PrepareHint ePrep, const void* pVoid,
 
     return bParaPossiblyInvalid;
 }
+#if defined __GNUC__ && !defined __clang__
+# pragma GCC diagnostic pop
 
 /**
  * Small Helper class:
