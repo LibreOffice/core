@@ -55,6 +55,9 @@
 
 #define CLASSPATH_DELIMITER SAL_PATHSEPARATOR
 
+#include <svtools/restartdialog.hxx>
+#include <comphelper/solarmutex.hxx>
+
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::ui::dialogs;
@@ -329,8 +332,8 @@ IMPL_LINK_NOARG_TYPED(SvxJavaOptionsPage, ParameterHdl_Impl, Button*, void)
             (void)eErr;
             if ( bRunning )
             {
-                ScopedVclPtrInstance< MessageDialog > aWarnBox( this, CUI_RES( RID_SVXSTR_OPTIONS_RESTART ), VCL_MESSAGE_INFO );
-                aWarnBox->Execute();
+                SolarMutexGuard aGuard;
+                svtools::executeRestartDialog(comphelper::getProcessComponentContext(), nullptr, svtools::RESTART_REASON_ASSIGNING_JAVAPARAMETERS);
             }
         }
     }
@@ -374,8 +377,8 @@ IMPL_LINK_NOARG_TYPED(SvxJavaOptionsPage, ClassPathHdl_Impl, Button*, void)
             (void)eErr;
             if ( bRunning )
             {
-                ScopedVclPtrInstance< MessageDialog > aWarnBox( this, CUI_RES( RID_SVXSTR_OPTIONS_RESTART ), VCL_MESSAGE_INFO );
-                aWarnBox->Execute();
+                SolarMutexGuard aGuard;
+                svtools::executeRestartDialog(comphelper::getProcessComponentContext(), nullptr, svtools::RESTART_REASON_ASSIGNING_FOLDERS);
             }
         }
     }
@@ -650,8 +653,8 @@ bool SvxJavaOptionsPage::FillItemSet( SfxItemSet* /*rCoreSet*/ )
         SvtMiscOptions aMiscOpt;
         aMiscOpt.SetExperimentalMode( m_pExperimentalCB->IsChecked() );
         bModified = true;
-        ScopedVclPtrInstance< MessageDialog > aWarnBox( this, CUI_RES( RID_SVXSTR_OPTIONS_RESTART ), VCL_MESSAGE_INFO );
-        aWarnBox->Execute();
+        SolarMutexGuard aGuard;
+        svtools::executeRestartDialog(comphelper::getProcessComponentContext(), nullptr, svtools::RESTART_REASON_EXP_FEATURES);
     }
 
     if ( m_pMacroCB->IsValueChangedFromSaved() )
