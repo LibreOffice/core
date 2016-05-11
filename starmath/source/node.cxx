@@ -60,7 +60,7 @@ SmNode::SmNode(SmNodeType eNodeType, const SmToken &rNodeToken)
     , meType( eNodeType )
     , meScaleMode( SCALE_NONE )
     , meRectHorAlign( RectHorAlign::Left )
-    , mnFlags( 0 )
+    , mnFlags( FontChangeMask::None )
     , mnAttributes( 0 )
     , mbIsPhantom( false )
     , mbIsSelected( false )
@@ -107,7 +107,7 @@ const SmNode * SmNode::GetLeftMost() const
 
 void SmNode::SetPhantom(bool bIsPhantomP)
 {
-    if (! (Flags() & FLG_VISIBLE))
+    if (! (Flags() & FontChangeMask::Phantom))
         mbIsPhantom = bIsPhantomP;
 
     bool b = mbIsPhantom;
@@ -117,7 +117,7 @@ void SmNode::SetPhantom(bool bIsPhantomP)
 
 void SmNode::SetColor(const Color& rColor)
 {
-    if (! (Flags() & FLG_COLOR))
+    if (! (Flags() & FontChangeMask::Color))
         GetFont().SetColor(rColor);
 
     ForEachNonNull(this, [&rColor](SmNode *pNode){pNode->SetColor(rColor);});
@@ -127,8 +127,8 @@ void SmNode::SetColor(const Color& rColor)
 void SmNode::SetAttribut(sal_uInt16 nAttrib)
 {
     if (
-        (nAttrib == ATTR_BOLD && !(Flags() & FLG_BOLD)) ||
-        (nAttrib == ATTR_ITALIC && !(Flags() & FLG_ITALIC))
+        (nAttrib == ATTR_BOLD && !(Flags() & FontChangeMask::Bold)) ||
+        (nAttrib == ATTR_ITALIC && !(Flags() & FontChangeMask::Italic))
        )
     {
         mnAttributes |= nAttrib;
@@ -141,8 +141,8 @@ void SmNode::SetAttribut(sal_uInt16 nAttrib)
 void SmNode::ClearAttribut(sal_uInt16 nAttrib)
 {
     if (
-        (nAttrib == ATTR_BOLD && !(Flags() & FLG_BOLD)) ||
-        (nAttrib == ATTR_ITALIC && !(Flags() & FLG_ITALIC))
+        (nAttrib == ATTR_BOLD && !(Flags() & FontChangeMask::Bold)) ||
+        (nAttrib == ATTR_ITALIC && !(Flags() & FontChangeMask::Italic))
        )
     {
         mnAttributes &= ~nAttrib;
@@ -154,7 +154,7 @@ void SmNode::ClearAttribut(sal_uInt16 nAttrib)
 
 void SmNode::SetFont(const SmFace &rFace)
 {
-    if (!(Flags() & FLG_FONT))
+    if (!(Flags() & FontChangeMask::Face))
         GetFont() = rFace;
 
     ForEachNonNull(this, [&rFace](SmNode *pNode){pNode->SetFont(rFace);});
@@ -166,7 +166,7 @@ void SmNode::SetFontSize(const Fraction &rSize, FontSizeType nType)
 {
     Size  aFntSize;
 
-    if (!(Flags() & FLG_SIZE))
+    if (!(Flags() & FontChangeMask::Size))
     {
         Fraction  aVal (SmPtsTo100th_mm(rSize.GetNumerator()),
                         rSize.GetDenominator());
@@ -222,7 +222,7 @@ void SmNode::SetSize(const Fraction &rSize)
 
 void SmNode::SetRectHorAlign(RectHorAlign eHorAlign, bool bApplyToSubTree )
 {
-    if (!(Flags() & FLG_HORALIGN))
+    if (!(Flags() & FontChangeMask::HorAlign))
         meRectHorAlign = eHorAlign;
 
     if (bApplyToSubTree)
@@ -240,7 +240,7 @@ void SmNode::PrepareAttributes()
 void SmNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell)
 {
     mbIsPhantom  = false;
-    mnFlags      = 0;
+    mnFlags      = FontChangeMask::None;
     mnAttributes = 0;
 
     switch (rFormat.GetHorAlign())
@@ -591,7 +591,7 @@ void SmLineNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell)
     // Here we use the 'FNT_VARIABLE' font since it's ascent and descent in general fit better
     // to the rest of the formula compared to the 'FNT_MATH' font.
     GetFont() = rFormat.GetFont(FNT_VARIABLE);
-    Flags() |= FLG_FONT;
+    Flags() |= FontChangeMask::Face;
 }
 
 
@@ -1921,7 +1921,7 @@ void SmFontNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell)
 
     //! prevent overwrites of this font by 'Arrange' or 'SetFont' calls of
     //! other font nodes (those with lower depth in the tree)
-    Flags() |= FLG_FONT;
+    Flags() |= FontChangeMask::Face;
 }
 
 void SmFontNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
@@ -2507,7 +2507,7 @@ void SmMathSymbolNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocSh
                GetFont().GetCharSet() == RTL_TEXTENCODING_UNICODE,
         "wrong charset for character from StarMath/OpenSymbol font");
 
-    Flags() |= FLG_FONT | FLG_ITALIC;
+    Flags() |= FontChangeMask::Face | FontChangeMask::Italic;
 };
 
 
@@ -2711,7 +2711,7 @@ void SmSpecialNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell
     if (IsBold( GetFont() ))
         SetAttribut(ATTR_BOLD);
 
-    Flags() |= FLG_FONT;
+    Flags() |= FontChangeMask::Face;
 
     if (bIsFromGreekSymbolSet)
     {
@@ -2775,7 +2775,7 @@ void SmPlaceNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell)
     SmNode::Prepare(rFormat, rDocShell);
 
     GetFont().SetColor(COL_GRAY);
-    Flags() |= FLG_COLOR | FLG_FONT | FLG_ITALIC;
+    Flags() |= FontChangeMask::Color | FontChangeMask::Face | FontChangeMask::Italic;
 };
 
 
@@ -2798,8 +2798,8 @@ void SmErrorNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell)
     SmNode::Prepare(rFormat, rDocShell);
 
     GetFont().SetColor(COL_RED);
-    Flags() |= FLG_VISIBLE | FLG_BOLD | FLG_ITALIC
-               | FLG_COLOR | FLG_FONT | FLG_SIZE;
+    Flags() |= FontChangeMask::Phantom | FontChangeMask::Bold | FontChangeMask::Italic
+               | FontChangeMask::Color | FontChangeMask::Face | FontChangeMask::Size;
 }
 
 
@@ -2838,7 +2838,7 @@ void SmBlankNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell)
     // used in Arrange a normal (non-clipped) rectangle is generated
     GetFont() = rFormat.GetFont(FNT_VARIABLE);
 
-    Flags() |= FLG_FONT | FLG_BOLD | FLG_ITALIC;
+    Flags() |= FontChangeMask::Face | FontChangeMask::Bold | FontChangeMask::Italic;
 }
 
 

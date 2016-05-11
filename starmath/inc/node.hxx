@@ -26,6 +26,8 @@
 #include "rect.hxx"
 #include "format.hxx"
 
+#include <o3tl/typed_flags_set.hxx>
+
 #include <cassert>
 #include <memory>
 #include <vector>
@@ -44,13 +46,21 @@ enum class FontSizeType {
 };
 
 // flags to interdict respective status changes
-#define FLG_FONT        0x0001
-#define FLG_SIZE        0x0002
-#define FLG_BOLD        0x0004
-#define FLG_ITALIC      0x0008
-#define FLG_COLOR       0x0010
-#define FLG_VISIBLE     0x0020
-#define FLG_HORALIGN    0x0040
+enum class FontChangeMask {
+    None     = 0x0000,
+    Face     = 0x0001,
+    Size     = 0x0002,
+    Bold     = 0x0004,
+    Italic   = 0x0008,
+    Color    = 0x0010,
+    Phantom  = 0x0020,
+    HorAlign = 0x0040
+};
+
+namespace o3tl
+{
+    template<> struct typed_flags<FontChangeMask> : is_typed_flags<FontChangeMask, 0x007f> {};
+}
 
 
 class SmVisitor;
@@ -93,8 +103,8 @@ class SmNode : public SmRect
     SmNodeType      meType;
     SmScaleMode     meScaleMode;
     RectHorAlign    meRectHorAlign;
-    sal_uInt16      mnFlags,
-                    mnAttributes;
+    FontChangeMask  mnFlags;
+    sal_uInt16      mnAttributes;
     bool            mbIsPhantom;
     bool            mbIsSelected;
 
@@ -121,7 +131,7 @@ public:
 
     virtual const SmNode * GetLeftMost() const;
 
-            sal_uInt16 &    Flags() { return mnFlags; }
+            FontChangeMask &Flags() { return mnFlags; }
             sal_uInt16 &    Attributes() { return mnAttributes; }
 
             bool IsPhantom() const { return mbIsPhantom; }
