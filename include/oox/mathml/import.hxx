@@ -10,10 +10,8 @@
 #define INCLUDED_OOX_MATHML_IMPORT_HXX
 
 #include <oox/dllapi.h>
-
-#include <tools/gen.hxx>
-
 #include <rtl/ref.hxx>
+#include <tools/gen.hxx>
 
 namespace oox
 {
