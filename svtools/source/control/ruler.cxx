@@ -81,8 +81,8 @@ private:
     long       nMargin2;
     long       nLeftFrameMargin;
     long       nRightFrameMargin;
-    sal_uInt16 nMargin1Style;
-    sal_uInt16 nMargin2Style;
+    RulerMarginStyle nMargin1Style;
+    RulerMarginStyle nMargin2Style;
     bool       bAutoPageWidth;
     bool       bTextRTL;
 
@@ -104,8 +104,8 @@ ImplRulerData::ImplRulerData() :
     nMargin2          (0),
     nLeftFrameMargin  (0),
     nRightFrameMargin (0),
-    nMargin1Style     (0),
-    nMargin2Style     (0),
+    nMargin1Style     (RulerMarginStyle::NONE),
+    nMargin2Style     (RulerMarginStyle::NONE),
     bAutoPageWidth    (true), // Page width == EditWin width
     bTextRTL          (false)
 {
@@ -603,7 +603,7 @@ void Ruler::ImplDrawTicks(vcl::RenderContext& rRenderContext, long nMin, long nM
                 if (nStart > nMin)
                 {
                     // 0 is only painted when Margin1 is not equal to zero
-                    if ((mpData->nMargin1Style & RULER_STYLE_INVISIBLE) || (mpData->nMargin1 != 0))
+                    if ((mpData->nMargin1Style & RulerMarginStyle::Invisible) || (mpData->nMargin1 != 0))
                     {
                         aNumString = "0";
                         ImplVDrawText(rRenderContext, nStart, nCenter, aNumString);
@@ -1200,7 +1200,7 @@ void Ruler::ImplFormat(vcl::RenderContext& rRenderContext)
         maVirDev->Erase();
 
     // calculate margins
-    if (!(mpData->nMargin1Style & RULER_STYLE_INVISIBLE))
+    if (!(mpData->nMargin1Style & RulerMarginStyle::Invisible))
     {
         nM1 = mpData->nMargin1 + nNullVirOff;
         if (mpData->bAutoPageWidth)
@@ -1217,7 +1217,7 @@ void Ruler::ImplFormat(vcl::RenderContext& rRenderContext)
         nM1 = nVirLeft-1;
         nP1 = nM1;
     }
-    if (!(mpData->nMargin2Style & RULER_STYLE_INVISIBLE))
+    if (!(mpData->nMargin2Style & RulerMarginStyle::Invisible))
     {
         nM2 = mpData->nMargin2 + nNullVirOff;
         if (mpData->bAutoPageWidth)
@@ -1699,7 +1699,7 @@ bool Ruler::ImplHitTest( const Point& rPos, RulerSelection* pHitTest,
     // Margins
     int nMarginTolerance = pHitTest->bExpandTest ? nBorderTolerance : RULER_MOUSE_MARGINWIDTH;
 
-    if ( (mpData->nMargin1Style & (RULER_MARGIN_SIZEABLE | RULER_STYLE_INVISIBLE)) == RULER_MARGIN_SIZEABLE )
+    if ( (mpData->nMargin1Style & (RulerMarginStyle::Sizeable | RulerMarginStyle::Invisible)) == RulerMarginStyle::Sizeable )
     {
         n1 = mpData->nMargin1;
         if ( (nX >= n1 - nMarginTolerance) && (nX <= n1 + nMarginTolerance) )
@@ -1709,7 +1709,7 @@ bool Ruler::ImplHitTest( const Point& rPos, RulerSelection* pHitTest,
             return true;
         }
     }
-    if ( (mpData->nMargin2Style & (RULER_MARGIN_SIZEABLE | RULER_STYLE_INVISIBLE)) == RULER_MARGIN_SIZEABLE )
+    if ( (mpData->nMargin2Style & (RulerMarginStyle::Sizeable | RulerMarginStyle::Invisible)) == RulerMarginStyle::Sizeable )
     {
         n1 = mpData->nMargin2;
         if ( (nX >= n1 - nMarginTolerance) && (nX <= n1 + nMarginTolerance) )
@@ -2545,7 +2545,7 @@ void Ruler::SetRightFrameMargin( long nPos )
     }
 }
 
-void Ruler::SetMargin1( long nPos, sal_uInt16 nMarginStyle )
+void Ruler::SetMargin1( long nPos, RulerMarginStyle nMarginStyle )
 {
     if ( (mpData->nMargin1 != nPos) || (mpData->nMargin1Style != nMarginStyle) )
     {
@@ -2555,11 +2555,11 @@ void Ruler::SetMargin1( long nPos, sal_uInt16 nMarginStyle )
     }
 }
 
-void Ruler::SetMargin2( long nPos, sal_uInt16 nMarginStyle )
+void Ruler::SetMargin2( long nPos, RulerMarginStyle nMarginStyle )
 {
     DBG_ASSERT( (nPos >= mpData->nMargin1) ||
-                (mpData->nMargin1Style & RULER_STYLE_INVISIBLE) ||
-                (mpData->nMargin2Style & RULER_STYLE_INVISIBLE),
+                (mpData->nMargin1Style & RulerMarginStyle::Invisible) ||
+                (mpData->nMargin2Style & RulerMarginStyle::Invisible),
                 "Ruler::SetMargin2() - Margin2 < Margin1" );
 
     if ( (mpData->nMargin2 != nPos) || (mpData->nMargin2Style != nMarginStyle) )

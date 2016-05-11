@@ -484,7 +484,14 @@ enum class RulerDragSize {
 #define RULER_MOUSE_MARGINWIDTH 3
 
 
-#define RULER_MARGIN_SIZEABLE   ((sal_uInt16)0x0001)
+enum class RulerMarginStyle {
+    NONE       = 0x0000,
+    Sizeable   = 0x0001,
+    Invisible  = 0x0002
+};
+namespace o3tl {
+    template<> struct typed_flags<RulerMarginStyle> : is_typed_flags<RulerMarginStyle, 0x0003> {};
+}
 
 
 enum class RulerBorderStyle {
@@ -764,11 +771,11 @@ public:
 
     void            SetNullOffset( long nPos );
     long            GetNullOffset() const;
-    void            SetMargin1() { SetMargin1( 0, RULER_STYLE_INVISIBLE ); }
-    void            SetMargin1( long nPos, sal_uInt16 nMarginStyle = RULER_MARGIN_SIZEABLE );
+    void            SetMargin1() { SetMargin1( 0, RulerMarginStyle::Invisible ); }
+    void            SetMargin1( long nPos, RulerMarginStyle nMarginStyle = RulerMarginStyle::Sizeable );
     long            GetMargin1() const;
-    void            SetMargin2() { SetMargin2( 0, RULER_STYLE_INVISIBLE ); }
-    void            SetMargin2( long nPos, sal_uInt16 nMarginStyle = RULER_MARGIN_SIZEABLE );
+    void            SetMargin2() { SetMargin2( 0, RulerMarginStyle::Invisible ); }
+    void            SetMargin2( long nPos, RulerMarginStyle nMarginStyle = RulerMarginStyle::Sizeable );
     long            GetMargin2() const;
 
     void            SetLeftFrameMargin( long nPos );
