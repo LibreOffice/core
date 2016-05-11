@@ -86,9 +86,9 @@ void FrameNotify( SwViewShell* pVwSh, FlyMode eMode )
 bool SwEditWin::RulerColumnDrag( const MouseEvent& rMEvt, bool bVerticalMode)
 {
     SvxRuler& rRuler = bVerticalMode ?  m_rView.GetVRuler() : m_rView.GetHRuler();
-    return (!rRuler.StartDocDrag( rMEvt, RULER_TYPE_BORDER ) &&
-            !rRuler.StartDocDrag( rMEvt, RULER_TYPE_MARGIN1) &&
-            !rRuler.StartDocDrag( rMEvt, RULER_TYPE_MARGIN2));
+    return (!rRuler.StartDocDrag( rMEvt, RulerType::Border ) &&
+            !rRuler.StartDocDrag( rMEvt, RulerType::Margin1) &&
+            !rRuler.StartDocDrag( rMEvt, RulerType::Margin2));
 }
 
 // #i23726#
@@ -98,7 +98,7 @@ bool SwEditWin::RulerMarginDrag( const MouseEvent& rMEvt,
                                  const bool bVerticalMode )
 {
     SvxRuler& rRuler = bVerticalMode ?  m_rView.GetVRuler() : m_rView.GetHRuler();
-    return !rRuler.StartDocDrag( rMEvt, RULER_TYPE_INDENT);
+    return !rRuler.StartDocDrag( rMEvt, RulerType::Indent);
 }
 
 TableChgMode GetTableChgDefaultMode()

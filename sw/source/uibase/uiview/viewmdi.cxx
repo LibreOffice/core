@@ -523,11 +523,11 @@ IMPL_LINK_TYPED( SwView, ExecRulerClick, Ruler *, pRuler, void )
     OUString sDefPage;
     switch( pRuler->GetClickType() )
     {
-        case RULER_TYPE_DONTKNOW:
-        case RULER_TYPE_OUTSIDE:
-        case RULER_TYPE_INDENT:
-        case RULER_TYPE_MARGIN1:
-        case RULER_TYPE_MARGIN2:
+        case RulerType::DontKnow:
+        case RulerType::Outside:
+        case RulerType::Indent:
+        case RulerType::Margin1:
+        case RulerType::Margin2:
             sDefPage = "indents";
         break;
         default:
