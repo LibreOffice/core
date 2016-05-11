@@ -167,7 +167,7 @@ IMPL_LINK_TYPED( MyWin, Test, PushButton*, pBtn, void )
 printf("Test\n");
     if ( pBtn == &aOKBtn )
     {
-        ScopedVclPtrInstance<SvtFileDialog> pDlg(this,SFXWB_PATHDIALOG);
+        ScopedVclPtrInstance<SvtFileDialog> pDlg(this, PickerFlags::PathDialog);
         pDlg->Execute();
         printf("ok\n");
     }
