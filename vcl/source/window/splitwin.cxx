@@ -1295,7 +1295,7 @@ void SplitWindow::ImplDrawSplitTracking(const Point& rPos)
             aRect.Bottom() += SPLITWIN_SPLITSIZEEXLN;
         }
     }
-    ShowTracking(aRect, SHOWTRACK_SPLIT);
+    ShowTracking(aRect, ShowTrackFlags::Split);
 }
 
 void SplitWindow::ImplInit( vcl::Window* pParent, WinBits nStyle )

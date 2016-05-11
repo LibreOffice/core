@@ -578,7 +578,7 @@ void ScOutlineWindow::ShowFocus()
                 bool bClip = (mnFocusEntry != SC_OL_HEADERENTRY);
                 if ( bClip )
                     SetEntryAreaClipRegion();
-                InvertTracking( maFocusRect, SHOWTRACK_SMALL | SHOWTRACK_WINDOW );
+                InvertTracking( maFocusRect, ShowTrackFlags::Small | ShowTrackFlags::TrackWindow );
                 if ( bClip )
                     SetClipRegion();
             }
@@ -593,7 +593,7 @@ void ScOutlineWindow::HideFocus()
         bool bClip = (mnFocusEntry != SC_OL_HEADERENTRY);
         if ( bClip )
             SetEntryAreaClipRegion();
-        InvertTracking( maFocusRect, SHOWTRACK_SMALL | SHOWTRACK_WINDOW );
+        InvertTracking( maFocusRect, ShowTrackFlags::Small | ShowTrackFlags::TrackWindow );
         if ( bClip )
             SetClipRegion();
         maFocusRect.SetEmpty();
