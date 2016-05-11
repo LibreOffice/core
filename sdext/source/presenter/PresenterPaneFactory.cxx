@@ -30,7 +30,6 @@
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <boost/bind.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -298,9 +297,8 @@ Reference<XResource> PresenterPaneFactory::CreatePane (
     {
         if (bIsSpritePane)
         {
-            pDescriptor->maSpriteProvider = ::boost::bind(
-                &PresenterSpritePane::GetSprite,
-                dynamic_cast<PresenterSpritePane*>(xPane.get()));
+            auto const pPane(dynamic_cast<PresenterSpritePane*>(xPane.get()));
+            pDescriptor->maSpriteProvider = [pPane](){ return pPane->GetSprite(); };
             pDescriptor->mbIsSprite = true;
             pDescriptor->mbNeedsClipping = false;
         }

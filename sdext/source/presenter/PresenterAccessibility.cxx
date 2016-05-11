@@ -39,7 +39,7 @@
 #include <com/sun/star/drawing/framework/XView.hpp>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <boost/bind.hpp>
+
 #include <algorithm>
 
 using namespace ::com::sun::star;
@@ -1915,9 +1915,10 @@ void AccessibleNotes::SetTextView (
         // events and handles text changes.  Register the corresponding
         // listeners here.
         mpTextView->GetCaret()->SetCaretMotionBroadcaster(
-            ::boost::bind(&AccessibleNotes::NotifyCaretChange, this, _1, _2, _3, _4));
+            [this](sal_Int32 a, sal_Int32 b, sal_Int32 c, sal_Int32 d)
+                { return this->NotifyCaretChange(a, b, c, d); });
         mpTextView->SetTextChangeBroadcaster(
-            ::boost::bind(&AccessibleNotes::HandleTextChange, this));
+            [this]() { return this->HandleTextChange(); });
     }
 }
 

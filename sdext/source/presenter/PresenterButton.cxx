@@ -29,7 +29,6 @@
 #include <com/sun/star/drawing/XPresenterHelper.hpp>
 #include <com/sun/star/rendering/CompositeOperation.hpp>
 #include <com/sun/star/rendering/TextDirection.hpp>
-#include <boost/bind.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -495,10 +494,11 @@ Reference<beans::XPropertySet> PresenterButton::GetConfigurationProperties (
             Reference<container::XNameAccess>(
                 aConfiguration.GetConfigurationNode("PresenterScreenSettings/Buttons"),
                 UNO_QUERY),
-            ::boost::bind(&PresenterConfigurationAccess::IsStringPropertyEqual,
-                rsConfgurationName,
-                OUString("Name"),
-                _2)),
+            [&rsConfgurationName](OUString const&, uno::Reference<beans::XPropertySet> const& xProps) -> bool
+            {
+                return PresenterConfigurationAccess::IsStringPropertyEqual(
+                        rsConfgurationName, OUString("Name"), xProps);
+            }),
         UNO_QUERY);
 }
 

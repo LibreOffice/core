@@ -22,7 +22,6 @@
 #include "PresenterPaneContainer.hxx"
 #include <com/sun/star/awt/InvalidateStyle.hpp>
 #include <com/sun/star/awt/XWindowPeer.hpp>
-#include <boost/bind.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -44,15 +43,10 @@ PresenterPaintManager::PresenterPaintManager (
     PresenterPaintManager::GetInvalidator (
         const css::uno::Reference<css::awt::XWindow>& rxWindow)
 {
-    return ::boost::bind(
-        static_cast<void (PresenterPaintManager::*)(
-            const css::uno::Reference<css::awt::XWindow>&,
-            const css::awt::Rectangle&,
-            const bool)>(&PresenterPaintManager::Invalidate),
-        this,
-        rxWindow,
-        _1,
-        false/*bSynchronous*/);
+    return [this, rxWindow] (css::awt::Rectangle const& rRepaintBox)
+            {
+                return this->Invalidate(rxWindow, rRepaintBox, false/*bSynchronous*/);
+            };
 }
 
 void PresenterPaintManager::Invalidate (
