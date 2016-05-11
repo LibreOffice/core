@@ -807,7 +807,7 @@ void OJoinTableView::Tracking( const TrackingEvent& rTEvt )
             Point aMousePos = rTEvt.GetMouseEvent().GetPosPixel();
             m_aSizingRect = m_pSizingWin->getSizingRect(aMousePos,m_aOutputSize);
             Update();
-            ShowTracking( m_aSizingRect, SHOWTRACK_SMALL | SHOWTRACK_WINDOW );
+            ShowTracking( m_aSizingRect, ShowTrackFlags::Small | ShowTrackFlags::Window );
         }
     }
 }
@@ -1072,7 +1072,7 @@ void OJoinTableView::ScrollWhileDragging()
     // redraw DraggingRect
     m_aDragRect = Rectangle(m_ptPrevDraggingPos - m_aDragOffset, m_pDragWin->GetSizePixel());
     Update();
-    ShowTracking( m_aDragRect, SHOWTRACK_SMALL | SHOWTRACK_WINDOW );
+    ShowTracking( m_aDragRect, ShowTrackFlags::Small | ShowTrackFlags::Window );
 }
 
 IMPL_LINK_NOARG_TYPED(OJoinTableView, OnDragScrollTimer, Idle *, void)

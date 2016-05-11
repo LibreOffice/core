@@ -129,7 +129,7 @@ IMPL_LINK_NOARG_TYPED(ImplDockFloatWin2, DockTimerHdl, Idle *, void)
     }
     else
     {
-        mpDockWin->GetWindow()->GetParent()->ImplGetFrameWindow()->ShowTracking( maDockRect, SHOWTRACK_BIG | SHOWTRACK_WINDOW );
+        mpDockWin->GetWindow()->GetParent()->ImplGetFrameWindow()->ShowTracking( maDockRect, ShowTrackFlags::Big | ShowTrackFlags::Window );
         maDockIdle.Start();
     }
 }
@@ -209,7 +209,7 @@ IMPL_LINK_NOARG_TYPED(ImplDockFloatWin2, DockingHdl, void*, void)
             // indicates that the window could be docked at maDockRect
             maDockRect.SetPos( mpDockWin->GetWindow()->GetParent()->ImplGetFrameWindow()->ScreenToOutputPixel(
                  maDockRect.TopLeft() ) );
-            mpDockWin->GetWindow()->GetParent()->ImplGetFrameWindow()->ShowTracking( maDockRect, SHOWTRACK_BIG | SHOWTRACK_WINDOW );
+            mpDockWin->GetWindow()->GetParent()->ImplGetFrameWindow()->ShowTracking( maDockRect, ShowTrackFlags::Big | ShowTrackFlags::Window );
             maEndDockIdle.Stop();
             DockTimerHdl( nullptr );
         }
@@ -949,11 +949,11 @@ void ImplDockingWindowWrapper::Tracking( const TrackingEvent& rTEvt )
                 mbLastFloatMode = bFloatMode;
             }
 
-            sal_uInt16 nTrackStyle;
+            ShowTrackFlags nTrackStyle;
             if ( bFloatMode )
-                nTrackStyle = SHOWTRACK_OBJECT;
+                nTrackStyle = ShowTrackFlags::Object;
             else
-                nTrackStyle = SHOWTRACK_BIG;
+                nTrackStyle = ShowTrackFlags::Big;
             Rectangle aShowTrackRect = aTrackRect;
             aShowTrackRect.SetPos( GetWindow()->ImplFrameToOutput( aShowTrackRect.TopLeft() ) );
 

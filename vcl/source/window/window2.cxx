@@ -127,11 +127,11 @@ void Window::HideFocus()
     mpWindowImpl->mbInHideFocus = false;
 }
 
-void Window::ShowTracking( const Rectangle& rRect, sal_uInt16 nFlags )
+void Window::ShowTracking( const Rectangle& rRect, ShowTrackFlags nFlags )
 {
     ImplWinData* pWinData = ImplGetWinData();
 
-    if ( !mpWindowImpl->mbInPaint || !(nFlags & SHOWTRACK_WINDOW) )
+    if ( !mpWindowImpl->mbInPaint || !(nFlags & ShowTrackFlags::Window) )
     {
         if ( mpWindowImpl->mbTrackVisible )
         {
@@ -158,13 +158,13 @@ void Window::HideTracking()
     if ( mpWindowImpl->mbTrackVisible )
     {
         ImplWinData* pWinData = ImplGetWinData();
-        if ( !mpWindowImpl->mbInPaint || !(pWinData->mnTrackFlags & SHOWTRACK_WINDOW) )
+        if ( !mpWindowImpl->mbInPaint || !(pWinData->mnTrackFlags & ShowTrackFlags::Window) )
             InvertTracking( *(pWinData->mpTrackRect), pWinData->mnTrackFlags );
         mpWindowImpl->mbTrackVisible = false;
     }
 }
 
-void Window::InvertTracking( const Rectangle& rRect, sal_uInt16 nFlags )
+void Window::InvertTracking( const Rectangle& rRect, ShowTrackFlags nFlags )
 {
     OutputDevice *pOutDev = GetOutDev();
     Rectangle aRect( pOutDev->ImplLogicToDevicePixel( rRect ) );
@@ -175,7 +175,7 @@ void Window::InvertTracking( const Rectangle& rRect, sal_uInt16 nFlags )
 
     SalGraphics* pGraphics;
 
-    if ( nFlags & SHOWTRACK_WINDOW )
+    if ( nFlags & ShowTrackFlags::Window )
     {
         if ( !IsDeviceOutputNecessary() )
             return;
@@ -199,7 +199,7 @@ void Window::InvertTracking( const Rectangle& rRect, sal_uInt16 nFlags )
     {
         pGraphics = ImplGetFrameGraphics();
 
-        if ( nFlags & SHOWTRACK_CLIP )
+        if ( nFlags & ShowTrackFlags::Clip )
         {
             Point aPoint( mnOutOffX, mnOutOffY );
             vcl::Region aRegion( Rectangle( aPoint,
@@ -209,15 +209,15 @@ void Window::InvertTracking( const Rectangle& rRect, sal_uInt16 nFlags )
         }
     }
 
-    sal_uInt16 nStyle = nFlags & SHOWTRACK_STYLE;
-    if ( nStyle == SHOWTRACK_OBJECT )
+    ShowTrackFlags nStyle = nFlags & ShowTrackFlags::StyleMask;
+    if ( nStyle == ShowTrackFlags::Object )
         pGraphics->Invert( aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight(), SalInvert::TrackFrame, this );
-    else if ( nStyle == SHOWTRACK_SPLIT )
+    else if ( nStyle == ShowTrackFlags::Split )
         pGraphics->Invert( aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight(), SalInvert::N50, this );
     else
     {
         long nBorder = 1;
-        if ( nStyle == SHOWTRACK_BIG )
+        if ( nStyle == ShowTrackFlags::Big )
             nBorder = 5;
         pGraphics->Invert( aRect.Left(), aRect.Top(), aRect.GetWidth(), nBorder, SalInvert::N50, this );
         pGraphics->Invert( aRect.Left(), aRect.Bottom()-nBorder+1, aRect.GetWidth(), nBorder, SalInvert::N50, this );
@@ -226,7 +226,7 @@ void Window::InvertTracking( const Rectangle& rRect, sal_uInt16 nFlags )
     }
 }
 
-void Window::InvertTracking( const tools::Polygon& rPoly, sal_uInt16 nFlags )
+void Window::InvertTracking( const tools::Polygon& rPoly, ShowTrackFlags nFlags )
 {
     sal_uInt16 nPoints = rPoly.GetSize();
 
@@ -239,7 +239,7 @@ void Window::InvertTracking( const tools::Polygon& rPoly, sal_uInt16 nFlags )
 
     SalGraphics* pGraphics;
 
-    if ( nFlags & SHOWTRACK_WINDOW )
+    if ( nFlags & ShowTrackFlags::Window )
     {
         if ( !IsDeviceOutputNecessary() )
             return;
@@ -263,7 +263,7 @@ void Window::InvertTracking( const tools::Polygon& rPoly, sal_uInt16 nFlags )
     {
         pGraphics = ImplGetFrameGraphics();
 
-        if ( nFlags & SHOWTRACK_CLIP )
+        if ( nFlags & ShowTrackFlags::Clip )
         {
             Point aPoint( mnOutOffX, mnOutOffY );
             vcl::Region aRegion( Rectangle( aPoint,

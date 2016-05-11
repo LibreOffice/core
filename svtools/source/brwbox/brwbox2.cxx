@@ -1422,7 +1422,7 @@ void BrowseBox::MouseMove( const MouseEvent& rEvt )
                     // draw new auxiliary line
                     pDataWin->ShowTracking( Rectangle( Point( nDragX, 0 ),
                             Size( 1, pDataWin->GetSizePixel().Height() ) ),
-                            SHOWTRACK_SPLIT|SHOWTRACK_WINDOW );
+                            ShowTrackFlags::Split|ShowTrackFlags::Window );
                 }
 
             }

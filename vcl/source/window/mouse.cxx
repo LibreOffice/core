@@ -178,7 +178,7 @@ IMPL_LINK_NOARG_TYPED(Window, ImplGenerateMouseMoveHdl, void*, void)
 
 void Window::ImplInvertFocus( const Rectangle& rRect )
 {
-    InvertTracking( rRect, SHOWTRACK_SMALL | SHOWTRACK_WINDOW );
+    InvertTracking( rRect, ShowTrackFlags::Small | ShowTrackFlags::Window );
 }
 
 static bool IsWindowFocused(const WindowImpl& rWinImpl)

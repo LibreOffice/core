@@ -341,7 +341,7 @@ void SvSimpleTable::HBarStartDrag()
             SvHeaderTabListBox::GetOutputSizePixel());
         aSizeRect.Left()=-GetXOffset()+aHeaderBar->GetDragPos();
         aSizeRect.Right()=-GetXOffset()+aHeaderBar->GetDragPos();
-        ShowTracking( aSizeRect, SHOWTRACK_SPLIT );
+        ShowTracking( aSizeRect, ShowTrackFlags::Split );
     }
 }
 void SvSimpleTable::HBarDrag()
@@ -353,7 +353,7 @@ void SvSimpleTable::HBarDrag()
             SvHeaderTabListBox::GetOutputSizePixel());
         aSizeRect.Left()=-GetXOffset()+aHeaderBar->GetDragPos();
         aSizeRect.Right()=-GetXOffset()+aHeaderBar->GetDragPos();
-        ShowTracking( aSizeRect, SHOWTRACK_SPLIT );
+        ShowTracking( aSizeRect, ShowTrackFlags::Split );
     }
 }
 void SvSimpleTable::HBarEndDrag()

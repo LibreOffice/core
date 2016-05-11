@@ -1351,7 +1351,7 @@ void ScCsvGrid::ImplDrawTrackingRect( sal_uInt32 nColIndex )
         sal_Int32 nX1 = std::max( GetColumnX( nColIndex ), GetFirstX() ) + 1;
         sal_Int32 nX2 = std::min( GetColumnX( nColIndex + 1 ) - sal_Int32( 1 ), GetLastX() );
         sal_Int32 nY2 = std::min( GetY( GetLastVisLine() + 1 ), GetHeight() ) - 1;
-        InvertTracking( Rectangle( nX1, 0, nX2, nY2 ), SHOWTRACK_SMALL | SHOWTRACK_WINDOW );
+        InvertTracking( Rectangle( nX1, 0, nX2, nY2 ), ShowTrackFlags::Small | ShowTrackFlags::Window );
     }
 }
 

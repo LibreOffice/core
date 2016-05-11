@@ -1826,7 +1826,7 @@ namespace svt { namespace table
     }
 
 
-    void TableControl_Impl::showTracking( Rectangle const & i_location, sal_uInt16 const i_flags )
+    void TableControl_Impl::showTracking( Rectangle const & i_location, ShowTrackFlags const i_flags )
     {
         m_pDataWindow->ShowTracking( i_location, i_flags );
     }

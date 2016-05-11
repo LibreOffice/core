@@ -1251,7 +1251,7 @@ bool ImplStdBorderWindowView::Tracking( const TrackingEvent& rTEvt )
                 {
                     maFrameData.mnTrackX = aPos.X();
                     maFrameData.mnTrackY = aPos.Y();
-                    pBorderWindow->ShowTracking( Rectangle( pBorderWindow->ScreenToOutputPixel( aPos ), pBorderWindow->GetOutputSizePixel() ), SHOWTRACK_BIG );
+                    pBorderWindow->ShowTracking( Rectangle( pBorderWindow->ScreenToOutputPixel( aPos ), pBorderWindow->GetOutputSizePixel() ), ShowTrackFlags::Big );
                 }
             }
             else
@@ -1362,7 +1362,7 @@ bool ImplStdBorderWindowView::Tracking( const TrackingEvent& rTEvt )
                     maFrameData.mnTrackY        = aNewRect.Top();
                     maFrameData.mnTrackWidth    = aNewRect.GetWidth();
                     maFrameData.mnTrackHeight   = aNewRect.GetHeight();
-                    pBorderWindow->ShowTracking( Rectangle( pBorderWindow->ScreenToOutputPixel( aNewRect.TopLeft() ), aNewRect.GetSize() ), SHOWTRACK_BIG );
+                    pBorderWindow->ShowTracking( Rectangle( pBorderWindow->ScreenToOutputPixel( aNewRect.TopLeft() ), aNewRect.GetSize() ), ShowTrackFlags::Big );
                 }
             }
         }

@@ -451,7 +451,7 @@ void ViewShell::DrawMarkRect(const Rectangle& rRect) const
 {
     if (mpContentWindow.get() != nullptr)
     {
-        mpContentWindow->InvertTracking(rRect, SHOWTRACK_OBJECT | SHOWTRACK_WINDOW);
+        mpContentWindow->InvertTracking(rRect, ShowTrackFlags::Object | ShowTrackFlags::Window);
     }
 }
 
