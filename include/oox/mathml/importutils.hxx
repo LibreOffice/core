@@ -9,12 +9,18 @@
 #ifndef INCLUDED_OOX_MATHML_IMPORTUTILS_HXX
 #define INCLUDED_OOX_MATHML_IMPORTUTILS_HXX
 
-#include <com/sun/star/xml/sax/XFastAttributeList.hpp>
-#include <oox/token/tokens.hxx>
 #include <map>
 #include <vector>
 
+#include <com/sun/star/uno/Reference.hxx>
 #include <oox/dllapi.h>
+#include <oox/token/tokens.hxx>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
+
+namespace com { namespace sun { namespace star {
+    namespace xml { namespace sax { class XFastAttributeList; } }
+} } }
 
 namespace oox
 {

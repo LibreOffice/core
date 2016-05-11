@@ -9,11 +9,12 @@
 #ifndef INCLUDED_OOX_MATHML_EXPORT_HXX
 #define INCLUDED_OOX_MATHML_EXPORT_HXX
 
-#include <sax/fshelper.hxx>
-#include <rtl/strbuf.hxx>
 #include <oox/core/filterbase.hxx>
-#include <oox/export/utils.hxx>
 #include <oox/dllapi.h>
+#include <oox/export/utils.hxx>
+#include <rtl/strbuf.hxx>
+#include <rtl/textenc.h>
+#include <sax/fshelper.hxx>
 
 namespace oox
 {

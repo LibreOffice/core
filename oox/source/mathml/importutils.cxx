@@ -11,6 +11,8 @@
 
 #include <assert.h>
 
+#include <com/sun/star/xml/FastAttribute.hpp>
+#include <com/sun/star/xml/sax/XFastAttributeList.hpp>
 #include <oox/token/namespacemap.hxx>
 #include <oox/token/tokenmap.hxx>
 #include <oox/token/tokens.hxx>
