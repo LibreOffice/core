@@ -872,7 +872,7 @@ void SfxTemplateManagerDlg::OnTemplateImport ()
     sal_Int16 nDialogType =
         css::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE;
 
-    sfx2::FileDialogHelper aFileDlg(nDialogType, SFXWB_MULTISELECTION);
+    sfx2::FileDialogHelper aFileDlg(nDialogType, FileDialogFlags::MultiSelection);
 
     // add "All" filter
     aFileDlg.AddFilter( SfxResId(STR_SFX_FILTERNAME_ALL).toString(),

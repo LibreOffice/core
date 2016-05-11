@@ -571,7 +571,7 @@ IMPL_LINK_TYPED( SwGlossaryDlg, MenuHdl, Menu *, pMn, bool )
     else if (sItemIdent == "import")
     {
         // call the FileOpenDialog do find WinWord - Files with templates
-        FileDialogHelper aDlgHelper( TemplateDescription::FILEOPEN_SIMPLE, 0 );
+        FileDialogHelper aDlgHelper( TemplateDescription::FILEOPEN_SIMPLE );
         uno::Reference < XFilePicker2 > xFP = aDlgHelper.GetFilePicker();
 
         SvtPathOptions aPathOpt;

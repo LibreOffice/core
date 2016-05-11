@@ -1065,9 +1065,7 @@ IMPL_LINK_TYPED(  SvxEMailTabPage, FileDialogHdl_Impl, Button*, pButton, void )
 {
     if (m_pMailerURLPB == pButton && !pImpl->bROProgram)
     {
-        FileDialogHelper aHelper(
-            css::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
-            0 );
+        FileDialogHelper aHelper( css::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE );
         OUString sPath = m_pMailerURLED->GetText();
         if ( sPath.isEmpty() )
             sPath = "/usr/bin";

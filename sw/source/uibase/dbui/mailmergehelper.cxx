@@ -55,7 +55,7 @@ namespace SwMailMergeHelper
 OUString CallSaveAsDialog(OUString& rFilter)
 {
     ::sfx2::FileDialogHelper aDialog( ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION,
-                0,
+                FileDialogFlags::NONE,
                 OUString::createFromAscii(SwDocShell::Factory().GetShortName()) );
 
     if (aDialog.Execute()!=ERRCODE_NONE)

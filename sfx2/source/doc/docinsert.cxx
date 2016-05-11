@@ -53,8 +53,8 @@ DocumentInserter::DocumentInserter(
 
       m_sDocFactory             ( rFactory )
     , m_nDlgFlags               ( (bEnableMultiSelection)
-                                    ? (SFXWB_INSERT|SFXWB_MULTISELECTION)
-                                    : SFXWB_INSERT )
+                                    ? (FileDialogFlags::Insert|FileDialogFlags::MultiSelection)
+                                    : FileDialogFlags::Insert )
     , m_nError                  ( ERRCODE_NONE )
     , m_pFileDlg                ( nullptr )
     , m_pItemSet                ( nullptr )
@@ -209,7 +209,7 @@ IMPL_LINK_NOARG_TYPED(DocumentInserter, DialogClosedHdl, sfx2::FileDialogHelper*
             catch( const IllegalArgumentException& ){}
         }
 
-        if ( SFXWB_EXPORT == ( m_nDlgFlags & SFXWB_EXPORT ) )
+        if ( m_nDlgFlags & FileDialogFlags::Export )
         {
             try
             {
@@ -226,7 +226,7 @@ IMPL_LINK_NOARG_TYPED(DocumentInserter, DialogClosedHdl, sfx2::FileDialogHelper*
 
 
         // set the read-only flag. When inserting a file, this flag is always set
-        if ( SFXWB_INSERT == ( m_nDlgFlags & SFXWB_INSERT ) )
+        if ( m_nDlgFlags & FileDialogFlags::Insert )
             m_pItemSet->Put( SfxBoolItem( SID_DOC_READONLY, true ) );
         else
         {

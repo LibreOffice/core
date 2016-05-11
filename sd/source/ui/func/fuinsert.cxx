@@ -770,7 +770,7 @@ rtl::Reference<FuPoor> FuInsert3DModel::Create( ViewShell* pViewSh, ::sd::Window
 
 void FuInsert3DModel::DoExecute( SfxRequest& )
 {
-    sfx2::FileDialogHelper aDlg( ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, 0 );
+    sfx2::FileDialogHelper aDlg( ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE );
 
     aDlg.SetTitle( SD_RESSTR( STR_INSERT_3D_MODEL_TITLE ) );
 

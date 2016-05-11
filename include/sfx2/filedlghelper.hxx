@@ -58,12 +58,17 @@ namespace com
 class SfxItemSet;
 namespace vcl { class Window; }
 
-// the SFXWB constants are for the nFlags parameter of the constructor
-#define SFXWB_INSERT            0x04000000L     // turn Open into Insert dialog
-#define SFXWB_EXPORT            0x40000000L     // turn Save into Export dialog
-#define SFXWB_SAVEACOPY         0x00400000L     // turn Save into Save a Copy dialog
-#define SFXWB_MULTISELECTION    0x20000000L
-#define SFXWB_GRAPHIC           0x00800000L     // register graphic formats
+enum class FileDialogFlags {
+    NONE              = 0x00,
+    Insert            = 0x01,    // turn Open into Insert dialog
+    Export            = 0x02,    // turn Save into Export dialog
+    SaveACopy         = 0x04,    // turn Save into Save a Copy dialog
+    MultiSelection    = 0x08,
+    Graphic           = 0x10     // register graphic formats
+};
+namespace o3tl {
+    template<> struct typed_flags<FileDialogFlags> : is_typed_flags<FileDialogFlags, 0x1f> {};
+}
 
 #define FILEDIALOG_FILTER_ALL   "*.*"
 
@@ -101,17 +106,17 @@ private:
 
 public:
                             FileDialogHelper( sal_Int16 nDialogType,
-                                              sal_Int64 nFlags,
+                                              FileDialogFlags nFlags = FileDialogFlags::NONE,
                                               vcl::Window* _pPreferredParent = nullptr );
 
                             FileDialogHelper( sal_Int16 nDialogType,
-                                              sal_Int64 nFlags,
+                                              FileDialogFlags nFlags,
                                               const OUString& rFactory,
                                               SfxFilterFlags nMust = SfxFilterFlags::NONE,
                                               SfxFilterFlags nDont = SfxFilterFlags::NONE );
 
                             FileDialogHelper( sal_Int16 nDialogType,
-                                              sal_Int64 nFlags,
+                                              FileDialogFlags nFlags,
                                               const OUString& rFactory,
                                               sal_Int16 nDialog,
                                               SfxFilterFlags nMust,
@@ -121,7 +126,7 @@ public:
                                               vcl::Window* _pPreferredParent = nullptr);
 
                             FileDialogHelper( sal_Int16 nDialogType,
-                                              sal_Int64 nFlags,
+                                              FileDialogFlags nFlags,
                                               const OUString& aFilterUIName,
                                               const OUString& aExtName,
                                               const OUString& rStandardDir,
@@ -240,7 +245,7 @@ public:
 #define SFX2_IMPL_DIALOG_REMOTE 3
 
 ErrCode FileOpenDialog_Impl( sal_Int16 nDialogType,
-                             sal_Int64 nFlags,
+                             FileDialogFlags nFlags,
                              const OUString& rFact,
                              std::vector<OUString>& rpURLList,
                              OUString& rFilter,

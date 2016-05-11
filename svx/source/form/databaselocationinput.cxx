@@ -230,7 +230,7 @@ namespace svx
     {
         ::sfx2::FileDialogHelper aFileDlg(
             TemplateDescription::FILESAVE_AUTOEXTENSION,
-            0,
+            FileDialogFlags::NONE,
             m_rLocationInput.GetSystemWindow()
         );
         aFileDlg.SetDisplayDirectory( impl_getCurrentURL() );

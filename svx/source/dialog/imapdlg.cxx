@@ -459,7 +459,7 @@ IMPL_LINK_TYPED( SvxIMapDlg, TbxClickHdl, ToolBox*, pTbx, void )
 void SvxIMapDlg::DoOpen()
 {
     ::sfx2::FileDialogHelper aDlg(
-        css::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, 0 );
+        css::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE );
 
     ImageMap        aLoadIMap;
     const OUString  aFilter( IMAP_ALL_FILTER );
@@ -498,7 +498,7 @@ void SvxIMapDlg::DoOpen()
 bool SvxIMapDlg::DoSave()
 {
     ::sfx2::FileDialogHelper aDlg(
-        css::ui::dialogs::TemplateDescription::FILESAVE_SIMPLE, 0 );
+        css::ui::dialogs::TemplateDescription::FILESAVE_SIMPLE );
 
     const OUString    aBinFilter( IMAP_BINARY_FILTER );
     const OUString    aCERNFilter( IMAP_CERN_FILTER );

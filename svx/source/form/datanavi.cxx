@@ -3402,7 +3402,7 @@ namespace svxform
     IMPL_LINK_NOARG_TYPED(AddInstanceDialog, FilePickerHdl, Button*, void)
     {
         ::sfx2::FileDialogHelper aDlg(
-            css::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, 0 );
+            css::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE );
         INetURLObject aFile( SvtPathOptions().GetWorkPath() );
 
         aDlg.AddFilter( m_sAllFilterName, FILEDIALOG_FILTER_ALL );

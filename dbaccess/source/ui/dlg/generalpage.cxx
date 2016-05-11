@@ -717,7 +717,7 @@ namespace dbaui
     {
         ::sfx2::FileDialogHelper aFileDlg(
                 ui::dialogs::TemplateDescription::FILEOPEN_READONLY_VERSION,
-                0, OUString("sdatabase") );
+                FileDialogFlags::NONE, OUString("sdatabase") );
         std::shared_ptr<const SfxFilter> pFilter = getStandardDatabaseFilter();
         if ( pFilter )
         {

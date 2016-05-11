@@ -550,7 +550,7 @@ IMPL_LINK_NOARG_TYPED(SvxLineEndDefTabPage, ClickLoadHdl_Impl, Button*, void)
 
     if ( nReturn != RET_CANCEL )
     {
-        ::sfx2::FileDialogHelper aDlg(css::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, 0 );
+        ::sfx2::FileDialogHelper aDlg(css::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE );
         OUString aStrFilterType( "*.soe" );
         aDlg.AddFilter( aStrFilterType, aStrFilterType );
 
@@ -617,7 +617,7 @@ IMPL_LINK_NOARG_TYPED(SvxLineEndDefTabPage, ClickLoadHdl_Impl, Button*, void)
 
 IMPL_LINK_NOARG_TYPED(SvxLineEndDefTabPage, ClickSaveHdl_Impl, Button*, void)
 {
-    ::sfx2::FileDialogHelper aDlg( css::ui::dialogs::TemplateDescription::FILESAVE_SIMPLE, 0 );
+    ::sfx2::FileDialogHelper aDlg( css::ui::dialogs::TemplateDescription::FILESAVE_SIMPLE );
     OUString aStrFilterType( "*.soe" );
     aDlg.AddFilter( aStrFilterType, aStrFilterType );
 
