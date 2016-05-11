@@ -253,7 +253,7 @@ void Ruler::ImplInit( WinBits nWinBits )
     mbActive        = true;                 // Is ruler active
     mnUpdateFlags   = 0;                    // What needs to be updated
     mpData          = mpSaveData;           // Pointer to normal data
-    meExtraType     = RULER_EXTRA_DONTKNOW; // What is in extra field
+    meExtraType     = RulerExtra::DontKnow; // What is in extra field
     meDragType      = RULER_TYPE_DONTKNOW;  // Which element is dragged
 
     // Initialize Units
@@ -1416,7 +1416,7 @@ void Ruler::ImplDrawExtra(vcl::RenderContext& rRenderContext)
     }
 
     // output content
-    if (meExtraType == RULER_EXTRA_NULLOFFSET)
+    if (meExtraType == RulerExtra::NullOffset)
     {
         rRenderContext.SetLineColor(rStyleSettings.GetButtonTextColor());
         rRenderContext.DrawLine(Point(aRect.Left() + 1, aRect.Top() + 4),
@@ -1424,7 +1424,7 @@ void Ruler::ImplDrawExtra(vcl::RenderContext& rRenderContext)
         rRenderContext.DrawLine(Point(aRect.Left() + 4, aRect.Top() + 1),
                                 Point(aRect.Left() + 4, aRect.Bottom() - 1));
     }
-    else if (meExtraType == RULER_EXTRA_TAB)
+    else if (meExtraType == RulerExtra::Tab)
     {
         sal_uInt16 nTabStyle = mnExtraStyle & RULER_TAB_STYLE;
         if (mpData->bTextRTL)

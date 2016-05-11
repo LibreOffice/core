@@ -278,7 +278,7 @@ SvxRuler::SvxRuler(
     {
         sal_uInt16 nTabStopId = bHorz ? SID_ATTR_TABSTOP : SID_ATTR_TABSTOP_VERTICAL;
         pCtrlItems[i++].reset(new SvxRulerItem(nTabStopId, *this, rBindings));
-        SetExtraType(RULER_EXTRA_TAB, nDefTabType);
+        SetExtraType(RulerExtra::Tab, nDefTabType);
     }
 
     if(nFlags & (SvxRulerSupportFlags::PARAGRAPH_MARGINS |SvxRulerSupportFlags::PARAGRAPH_MARGINS_VERTICAL))
@@ -328,7 +328,7 @@ SvxRuler::SvxRuler(
     mxRulerImpl->nControlerItems=i;
 
     if( (nFlags & SvxRulerSupportFlags::SET_NULLOFFSET) == SvxRulerSupportFlags::SET_NULLOFFSET )
-        SetExtraType(RULER_EXTRA_NULLOFFSET);
+        SetExtraType(RulerExtra::NullOffset);
 
     rBindings.LeaveRegistrations();
 
@@ -3323,7 +3323,7 @@ void SvxRuler::ExtraDown()
         ++nDefTabType;
         if(RULER_TAB_DEFAULT == nDefTabType)
             nDefTabType = RULER_TAB_LEFT;
-        SetExtraType(RULER_EXTRA_TAB, nDefTabType);
+        SetExtraType(RulerExtra::Tab, nDefTabType);
     }
     Ruler::ExtraDown();
 }
