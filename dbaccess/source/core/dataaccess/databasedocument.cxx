@@ -81,8 +81,6 @@
 #include <osl/diagnose.h>
 #include <tools/errcode.hxx>
 
-#include <boost/bind.hpp>
-
 #include <functional>
 #include <list>
 
@@ -1500,7 +1498,8 @@ void ODatabaseDocument::impl_disposeControllerFrames_nothrow()
     }
 }
 
-void SAL_CALL ODatabaseDocument::close( sal_Bool _bDeliverOwnership ) throw (CloseVetoException, RuntimeException, std::exception)
+void SAL_CALL ODatabaseDocument::close(sal_Bool bDeliverOwnership)
+throw (CloseVetoException, RuntimeException, std::exception)
 {
     // nearly everything below can/must be done without our mutex locked, the below is just for
     // the checks for being disposed and the like
@@ -1517,12 +1516,14 @@ void SAL_CALL ODatabaseDocument::close( sal_Bool _bDeliverOwnership ) throw (Clo
         // allow listeners to veto
         lang::EventObject aEvent( *this );
         m_aCloseListener.forEach< XCloseListener >(
-            boost::bind( &XCloseListener::queryClosing, _1, boost::cref( aEvent ), boost::cref( _bDeliverOwnership ) ) );
+            [&aEvent, &bDeliverOwnership] (uno::Reference<XCloseListener> const& xListener) {
+                return xListener->queryClosing(aEvent, bDeliverOwnership);
+            });
 
         // notify that we're going to unload
         m_aEventNotifier.notifyDocumentEvent( "OnPrepareUnload" );
 
-        impl_closeControllerFrames_nolck_throw( _bDeliverOwnership );
+        impl_closeControllerFrames_nolck_throw( bDeliverOwnership );
 
         m_aCloseListener.notifyEach( &XCloseListener::notifyClosing, (const lang::EventObject&)aEvent );
 
@@ -1777,12 +1778,14 @@ Sequence< OUString > SAL_CALL ODatabaseDocument::getDocumentSubStoragesNames(  )
     return xStorageAccess->getDocumentSubStoragesNames();
 }
 
-void ODatabaseDocument::impl_notifyStorageChange_nolck_nothrow( const Reference< XStorage >& _rxNewRootStorage )
+void ODatabaseDocument::impl_notifyStorageChange_nolck_nothrow( const Reference< XStorage >& xNewRootStorage )
 {
     Reference< XInterface > xMe( *this );
 
     m_aStorageListeners.forEach< XStorageChangeListener >(
-        boost::bind( &XStorageChangeListener::notifyStorageChange, _1, boost::cref( xMe ), boost::cref( _rxNewRootStorage ) ) );
+        [&xMe, &xNewRootStorage] (uno::Reference<XStorageChangeListener> const& xListener) {
+            return xListener->notifyStorageChange(xMe, xNewRootStorage);
+        });
 }
 
 void ODatabaseDocument::disposing()
