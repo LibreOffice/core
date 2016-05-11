@@ -102,52 +102,50 @@ oslSignalAction SAL_CALL VCLExceptionSignal_impl( void* /*pData*/, oslSignalInfo
     static volatile bool bIn = false;
 
     // if we crash again, bail out immediately
-    if ( !bIn )
+    if ( bIn )
+        return osl_Signal_ActCallNextHdl;
+
+    ExceptionCategory nVCLException = ExceptionCategory::NONE;
+
+    // UAE
+    if ( (pInfo->Signal == osl_Signal_AccessViolation)     ||
+         (pInfo->Signal == osl_Signal_IntegerDivideByZero) ||
+         (pInfo->Signal == osl_Signal_FloatDivideByZero)   ||
+         (pInfo->Signal == osl_Signal_DebugBreak) )
     {
-        sal_uInt16 nVCLException = 0;
-
-        // UAE
-        if ( (pInfo->Signal == osl_Signal_AccessViolation)     ||
-             (pInfo->Signal == osl_Signal_IntegerDivideByZero) ||
-             (pInfo->Signal == osl_Signal_FloatDivideByZero)   ||
-             (pInfo->Signal == osl_Signal_DebugBreak) )
-        {
-            nVCLException = EXCEPTION_SYSTEM;
+        nVCLException = ExceptionCategory::System;
 #if HAVE_FEATURE_OPENGL
-            if (OpenGLZone::isInZone())
-                OpenGLZone::hardDisable();
+        if (OpenGLZone::isInZone())
+            OpenGLZone::hardDisable();
 #endif
-        }
+    }
 
-        // RC
-        if ((pInfo->Signal == osl_Signal_User) &&
-            (pInfo->UserSignal == OSL_SIGNAL_USER_RESOURCEFAILURE) )
-            nVCLException = EXCEPTION_RESOURCENOTLOADED;
+    // RC
+    if ((pInfo->Signal == osl_Signal_User) &&
+        (pInfo->UserSignal == OSL_SIGNAL_USER_RESOURCEFAILURE) )
+        nVCLException = ExceptionCategory::ResourceNotLoaded;
 
-        // DISPLAY-Unix
-        if ((pInfo->Signal == osl_Signal_User) &&
-            (pInfo->UserSignal == OSL_SIGNAL_USER_X11SUBSYSTEMERROR) )
-            nVCLException = EXCEPTION_DISPLAY;
+    // DISPLAY-Unix
+    if ((pInfo->Signal == osl_Signal_User) &&
+        (pInfo->UserSignal == OSL_SIGNAL_USER_X11SUBSYSTEMERROR) )
+        nVCLException = ExceptionCategory::Display;
 
-        if ( nVCLException )
+    if ( nVCLException != ExceptionCategory::NONE )
+    {
+        bIn = true;
+
+        SolarMutexGuard aLock;
+
+        // do not stop timer because otherwise the UAE-Box will not be painted as well
+        ImplSVData* pSVData = ImplGetSVData();
+        if ( pSVData->mpApp )
         {
-            bIn = true;
-
-            SolarMutexGuard aLock;
-
-            // do not stop timer because otherwise the UAE-Box will not be painted as well
-            ImplSVData* pSVData = ImplGetSVData();
-            if ( pSVData->mpApp )
-            {
-                SystemWindowFlags nOldMode = Application::GetSystemWindowMode();
-                Application::SetSystemWindowMode( nOldMode & ~SystemWindowFlags::NOAUTOMODE );
-                pSVData->mpApp->Exception( nVCLException );
-                Application::SetSystemWindowMode( nOldMode );
-            }
-            bIn = false;
-
-            return osl_Signal_ActCallNextHdl;
+            SystemWindowFlags nOldMode = Application::GetSystemWindowMode();
+            Application::SetSystemWindowMode( nOldMode & ~SystemWindowFlags::NOAUTOMODE );
+            pSVData->mpApp->Exception( nVCLException );
+            Application::SetSystemWindowMode( nOldMode );
         }
+        bIn = false;
     }
 
     return osl_Signal_ActCallNextHdl;

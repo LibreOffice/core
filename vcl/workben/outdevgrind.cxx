@@ -57,7 +57,7 @@ class GrindApp : public Application
 {
 public:
     virtual int Main() override;
-    virtual void Exception( sal_uInt16 nError ) override;
+    virtual void Exception( ExceptionCategory nCategory ) override;
 };
 
 class TestWindow : public Dialog
@@ -669,13 +669,14 @@ void TestWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
     fflush(stdout);
 }
 
-void GrindApp::Exception( sal_uInt16 nError )
+void GrindApp::Exception( ExceptionCategory nCategory )
 {
-    switch( nError & EXCEPTION_MAJORTYPE )
+    switch( nCategory )
     {
-        case EXCEPTION_RESOURCENOTLOADED:
+        case ExceptionCategory::ResourceNotLoaded:
             Abort( "Error: could not load language resources.\nPlease check your installation.\n" );
             break;
+        default: break;
     }
 }
 
