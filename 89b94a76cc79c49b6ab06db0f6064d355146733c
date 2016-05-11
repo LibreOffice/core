@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_23ede98b",
+        "filename": "lingucomponent/source/languageguessing/simpleguesser.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-05-11T07:09:48Z",
+      "side": 1,
+      "message": "this should either be inside an anonymous namespace, or declared \"static\", since it is only used inside this file",
+      "revId": "89b94a76cc79c49b6ab06db0f6064d355146733c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
