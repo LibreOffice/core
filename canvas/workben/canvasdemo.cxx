@@ -64,7 +64,7 @@ class DemoApp : public Application
 {
 public:
     virtual void Main();
-    virtual USHORT  Exception( USHORT nError );
+    virtual void Exception( ExceptionCategory nCategory );
 };
 
 static void PrintHelp()
@@ -621,15 +621,14 @@ void TestWindow::Paint( const Rectangle& /*rRect*/ )
     }
 }
 
-USHORT DemoApp::Exception( USHORT nError )
+void DemoApp::Exception( ExceptionCategory nCategory )
 {
-    switch( nError & EXCEPTION_MAJORTYPE )
+    switch( nCategory )
     {
-        case EXCEPTION_RESOURCENOTLOADED:
+        case ExceptionCategory::ResourceNotLoaded:
             Abort( "Error: could not load language resources.\nPlease check your installation.\n" );
             break;
     }
-    return 0;
 }
 
 void DemoApp::Main()
