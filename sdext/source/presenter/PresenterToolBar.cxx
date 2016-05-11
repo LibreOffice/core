@@ -49,7 +49,6 @@
 #include <com/sun/star/util/Color.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <rtl/ustrbuf.hxx>
-#include <boost/bind.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -658,7 +657,10 @@ void PresenterToolBar::CreateControls (
         {
             PresenterConfigurationAccess::ForAll(
                 xEntries,
-                ::boost::bind(&PresenterToolBar::ProcessEntry, this, _2, ::boost::ref(aContext)));
+                [this, &aContext] (OUString const&, uno::Reference<beans::XPropertySet> const& xProps)
+                {
+                    return this->ProcessEntry(xProps, aContext);
+                });
         }
     }
 }
