@@ -40,7 +40,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/awt/Command.hpp>
-#include <com/sun/star/ui/XStatusbarItem.hdl>
+#include <com/sun/star/ui/XStatusbarItem.hpp>
 #include <comphelper/processfactory.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <svtools/statusbarcontroller.hxx>

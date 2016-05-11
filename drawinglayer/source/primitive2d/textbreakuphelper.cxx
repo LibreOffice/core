@@ -21,7 +21,7 @@
 #include <drawinglayer/primitive2d/textdecoratedprimitive2d.hxx>
 #include <com/sun/star/i18n/BreakIterator.hpp>
 #include <comphelper/processfactory.hxx>
-#include <com/sun/star/i18n/CharacterIteratorMode.hdl>
+#include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
 #include <com/sun/star/i18n/CharType.hpp>
 

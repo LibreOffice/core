@@ -31,7 +31,7 @@
 
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
-#include <com/sun/star/frame/XController.hdl>
+#include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 
 #include <cppuhelper/implbase.hxx>
