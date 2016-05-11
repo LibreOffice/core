@@ -95,7 +95,6 @@
 #include "framerate.hxx"
 #include "pointersymbol.hxx"
 
-#include <boost/mem_fn.hpp>
 #include <map>
 #include <vector>
 #include <iterator>
@@ -1175,7 +1174,10 @@ void SlideShowImpl::displaySlide(
     } // finally
 
     maListenerContainer.forEach<presentation::XSlideShowListener>(
-        boost::mem_fn( &presentation::XSlideShowListener::slideTransitionStarted ) );
+        [](uno::Reference<presentation::XSlideShowListener> const& xListener)
+        {
+            xListener->slideTransitionStarted();
+        });
 
     // We are currently rewinding an effect.  This lead us from the next
     // slide to this one.  To complete this we have to play back all main
@@ -1206,7 +1208,10 @@ void SlideShowImpl::redisplayCurrentSlide()
             "SlideShowImpl::notifySlideTransitionEnded"));
 
     maListenerContainer.forEach<presentation::XSlideShowListener>(
-        boost::mem_fn( &presentation::XSlideShowListener::slideTransitionStarted ) );
+        [](uno::Reference<presentation::XSlideShowListener> const& xListener)
+        {
+            xListener->slideTransitionStarted();
+        });
 }
 
 sal_Bool SlideShowImpl::nextEffect() throw (uno::RuntimeException, std::exception)
@@ -2278,7 +2283,10 @@ void SlideShowImpl::notifySlideAnimationsEnded()
     } // finally
 
     maListenerContainer.forEach<presentation::XSlideShowListener>(
-        boost::mem_fn( &presentation::XSlideShowListener::slideAnimationsEnded ) );
+        [](uno::Reference<presentation::XSlideShowListener> const& xListener)
+        {
+            xListener->slideAnimationsEnded();
+        });
 }
 
 void SlideShowImpl::notifySlideEnded (const bool bReverse)
