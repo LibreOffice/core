@@ -1462,6 +1462,7 @@ bool SwTextFrame::Prepare( const PrepareHint ePrep, const void* pVoid,
         {
             case PREP_BOSS_CHGD:
                 SetInvalidVert( true ); // Test
+                SAL_FALLTHROUGH;
             case PREP_WIDOWS_ORPHANS:
             case PREP_WIDOWS:
             case PREP_FTN_GONE :    return bParaPossiblyInvalid;
