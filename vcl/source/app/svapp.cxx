@@ -279,17 +279,17 @@ OUString Application::GetAppFileName()
     return aAppFileName;
 }
 
-void Application::Exception( sal_uInt16 nError )
+void Application::Exception( ExceptionCategory nCategory )
 {
-    switch ( nError & EXCEPTION_MAJORTYPE )
+    switch ( nCategory )
     {
         // System has precedence (so do nothing)
-        case EXCEPTION_SYSTEM:
-        case EXCEPTION_DISPLAY:
+        case ExceptionCategory::System:
+        case ExceptionCategory::UserInterface:
             break;
 
 #ifdef DBG_UTIL
-        case EXCEPTION_RESOURCENOTLOADED:
+        case ExceptionCategory::ResourceNotLoaded:
             Abort("Resource not loaded");
             break;
         default:

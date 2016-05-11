@@ -1223,7 +1223,7 @@ void restartOnMac(bool passArguments) {
 
 }
 
-void Desktop::Exception(sal_uInt16 nError)
+void Desktop::Exception(ExceptionCategory nCategory)
 {
     // protect against recursive calls
     static bool bInException = false;
@@ -1246,7 +1246,7 @@ void Desktop::Exception(sal_uInt16 nError)
     bool bAllowRecoveryAndSessionManagement = (
                                                     ( !rArgs.IsNoRestore()                    ) && // some use cases of office must work without recovery
                                                     ( !rArgs.IsHeadless()                     ) &&
-                                                    (( nError & EXCEPTION_MAJORTYPE ) != EXCEPTION_DISPLAY ) && // recovery can't work without UI ... but UI layer seems to be the reason for this crash
+                                                    ( nCategory != ExceptionCategory::UserInterface ) && // recovery can't work without UI ... but UI layer seems to be the reason for this crash
                                                     ( Application::IsInExecute()               )    // crashes during startup and shutdown should be ignored (they indicates a corrupt installation ...)
                                                   );
     if ( bAllowRecoveryAndSessionManagement )
@@ -1254,9 +1254,9 @@ void Desktop::Exception(sal_uInt16 nError)
 
     FlushConfiguration();
 
-    switch( nError & EXCEPTION_MAJORTYPE )
+    switch( nCategory )
     {
-        case EXCEPTION_RESOURCENOTLOADED:
+        case ExceptionCategory::ResourceNotLoaded:
         {
             OUString aResExceptionString;
             Application::Abort( aResExceptionString );
