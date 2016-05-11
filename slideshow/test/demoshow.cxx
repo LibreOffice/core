@@ -301,7 +301,7 @@ class DemoApp : public Application
 {
 public:
     virtual void Main();
-    virtual sal_uInt16  Exception( sal_uInt16 nError );
+    virtual void  Exception( ExceptionCategory nCategory );
 };
 
 class ChildWindow : public vcl::Window
@@ -481,15 +481,14 @@ void DemoWindow::Resize()
     // TODO
 }
 
-sal_uInt16 DemoApp::Exception( sal_uInt16 nError )
+void DemoApp::Exception( ExceptionCategory nCategory )
 {
-    switch( nError & EXCEPTION_MAJORTYPE )
+    switch( nCategory )
     {
-        case EXCEPTION_RESOURCENOTLOADED:
+        case ExceptionCategory::ResourceNotLoaded:
             Abort( "Error: could not load language resources.\nPlease check your installation.\n" );
             break;
     }
-    return 0;
 }
 
 void DemoApp::Main()

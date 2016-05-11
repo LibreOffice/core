@@ -20,11 +20,9 @@
 #ifndef INCLUDED_VCL_EXCEPTIONTYPES_HXX
 #define INCLUDED_VCL_EXCEPTIONTYPES_HXX
 
-#define EXCEPTION_RESOURCENOTLOADED   ((sal_uInt16)0x0100)
-#define EXCEPTION_SYSTEM         ((sal_uInt16)0x0300)
-#define EXCEPTION_DISPLAY        ((sal_uInt16)0x0400)
-#define EXCEPTION_MAJORTYPE      ((sal_uInt16)0xFF00)
-#define EXCEPTION_MINORTYPE      ((sal_uInt16)0x00FF)
+enum class ExceptionCategory {
+    NONE, ResourceNotLoaded, System, UserInterface
+};
 
 #endif // INCLUDED_VCL_EXCEPTIONTYPES_HXX
 

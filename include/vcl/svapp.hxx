@@ -421,18 +421,13 @@ public:
         @{
     */
 
-    /** Handles an error code.
+    /** Handles an error.
 
-     @remark This is not actually an exception. It merely takes an
-        error code, then in most cases aborts. The list of exception
-        identifiers can be found at include/vcl/inputtypes.hxx - each
-        one starts with EXC_*
-
-     @param nError      The error code identifier
+     @param nCategory    The error category, see include/vcl/exceptiontypes.hxx
 
      @see Abort
     */
-    virtual void          Exception( sal_uInt16 nError );
+    virtual void          Exception( ExceptionCategory nCategory );
 
     /** Ends the program prematurely with an error message.
 
