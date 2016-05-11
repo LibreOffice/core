@@ -155,7 +155,7 @@ struct ListenerOperations< std::weak_ptr<ListenerTargetT> >
             std::shared_ptr<ListenerTargetT> pListener( rCurr.lock() );
 
             if( pListener.get() &&
-                FunctionApply< typename ::std::result_of< FuncT( const typename ContainerT::value_type& ) >::type,
+                FunctionApply<typename ::std::result_of<FuncT (std::shared_ptr<ListenerTargetT> const&)>::type,
                                std::shared_ptr<ListenerTargetT> >::apply(func,pListener) )
             {
                 bRet = true;
