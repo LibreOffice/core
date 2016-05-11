@@ -2527,13 +2527,13 @@ void OpenGLSalGraphicsImpl::doFlush()
 
     if( !maOffscreenTex )
     {
-        VCL_GL_INFO( "flushAndSwap - odd no texture !" );
+        VCL_GL_INFO( "doFlush - odd no texture !" );
         return;
     }
 
     if( mnDrawCountAtFlush == mnDrawCount )
     {
-        VCL_GL_INFO( "eliding redundant flushAndSwap, no drawing since last!" );
+        VCL_GL_INFO( "eliding redundant doFlush, no drawing since last!" );
         return;
     }
 
@@ -2541,7 +2541,7 @@ void OpenGLSalGraphicsImpl::doFlush()
 
     OpenGLZone aZone;
 
-    VCL_GL_INFO( "flushAndSwap" );
+    VCL_GL_INFO( "doFlush" );
 
     if( !mpWindowContext.is() )
     {
@@ -2557,7 +2557,7 @@ void OpenGLSalGraphicsImpl::doFlush()
     mpWindowContext->makeCurrent();
     CHECK_GL_ERROR();
 
-    VCL_GL_INFO( "flushAndSwap - acquire default framebuffer" );
+    VCL_GL_INFO( "doFlush - acquire default framebuffer" );
 
     mpWindowContext->state()->sync();
 
@@ -2614,7 +2614,7 @@ void OpenGLSalGraphicsImpl::doFlush()
             mpWindowContext->swapBuffers();
     }
 
-    VCL_GL_INFO( "flushAndSwap - end." );
+    VCL_GL_INFO( "doFlush - end." );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
