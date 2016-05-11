@@ -41,7 +41,6 @@ class SvtFileDialogFilter_Impl;
 #define SFXWB_PATHDIALOG        WB_PATH
 #define SFXWB_CLASSPATH         ( 0x08000000L | SFXWB_PATHDIALOG )
 #define SFXWB_MULTISELECTION    0x20000000L     // activate Multiselection
-#define SFXWB_NOREMOTE          0x40000000L
 
 #define SFX_EXTRA_AUTOEXTENSION     0x00000001L
 #define SFX_EXTRA_FILTEROPTIONS     0x00000002L

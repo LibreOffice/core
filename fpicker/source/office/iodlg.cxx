@@ -602,12 +602,6 @@ void SvtFileDialog::Init_Impl
     INetURLObject aStdDirObj( SvtPathOptions().GetWorkPath() );
     SetStandardDir( aStdDirObj.GetMainURL( INetURLObject::NO_DECODE ) );
 
-    // determine range
-    if ( !( nStyle & SFXWB_NOREMOTE ) )
-    {
-        _pImp->_nState |= FILEDLG_STATE_REMOTE;
-    }
-
     // Create control element, the order defines the tab control.
     _pImp->_pEdFileName->SetSelectHdl( LINK( this, SvtFileDialog, EntrySelectHdl_Impl ) );
     _pImp->_pEdFileName->SetOpenHdl( LINK( this, SvtFileDialog, OpenUrlHdl_Impl ) );
