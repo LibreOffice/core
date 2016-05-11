@@ -1058,8 +1058,8 @@ PopupMenu* FmXFormShell::GetConversionMenu()
 
 bool FmXFormShell::isControlConversionSlot( sal_uInt16 nSlotId )
 {
-    for ( size_t i = 0; i < SAL_N_ELEMENTS(nConvertSlots); ++i )
-        if (nConvertSlots[i] == nSlotId)
+    for (sal_Int16 nConvertSlot : nConvertSlots)
+        if (nConvertSlot == nSlotId)
             return true;
     return false;
 }
@@ -2023,8 +2023,8 @@ bool FmXFormShell::setCurrentSelection( const InterfaceBag& _rSelection )
         impl_updateCurrentForm( xNewCurrentForm );
 
     // ensure some slots are updated
-    for ( size_t i = 0; i < SAL_N_ELEMENTS(SelObjectSlotMap); ++i )
-        InvalidateSlot( SelObjectSlotMap[i], false);
+    for (sal_Int16 i : SelObjectSlotMap)
+        InvalidateSlot( i, false);
 
     return true;
 }
@@ -2063,8 +2063,8 @@ void FmXFormShell::impl_updateCurrentForm( const Reference< XForm >& _rxNewCurFo
         pPage->GetImpl().setCurForm( m_xCurrentForm );
 
     // ensure the UI which depends on the current form is up-to-date
-    for ( size_t i = 0; i < SAL_N_ELEMENTS( DlgSlotMap ); ++i )
-        InvalidateSlot( DlgSlotMap[i], false );
+    for (sal_Int16 i : DlgSlotMap)
+        InvalidateSlot( i, false );
 }
 
 

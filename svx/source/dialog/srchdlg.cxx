@@ -143,10 +143,10 @@ void ListToStrArr_Impl( sal_uInt16 nId, std::vector<OUString>& rStrLst, ComboBox
     {
         std::vector<OUString> aLst = pSrchItem->GetList();
 
-        for ( size_t i = 0; i < aLst.size(); ++i )
+        for (const OUString & s : aLst)
         {
-            rStrLst.push_back(aLst[i]);
-            rCBox.InsertEntry(aLst[i]);
+            rStrLst.push_back(s);
+            rCBox.InsertEntry(s);
         }
     }
 }

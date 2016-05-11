@@ -170,8 +170,8 @@ Gallery::Gallery( const OUString& rMultiPath )
 Gallery::~Gallery()
 {
     // erase theme list
-    for ( size_t i = 0, n = aThemeList.size(); i < n; ++i )
-        delete aThemeList[ i ];
+    for (GalleryThemeEntry* p : aThemeList)
+        delete p;
     aThemeList.clear();
 }
 

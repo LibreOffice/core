@@ -541,16 +541,16 @@ sal_uInt16 DbGridControl::NavigationBar::ArrangeControls()
             m_aNewBtn.get()
         };
 
-        for (size_t i=0; i < SAL_N_ELEMENTS(pWindows); ++i)
+        for (vcl::Window* pWindow : pWindows)
         {
-            if (pWindows[i]->GetPosPixel().X() < 0)
-                pWindows[i]->SetSizePixel(Size(0, nH));
-            aSize = pWindows[i]->GetSizePixel();
-            auto nExcess = (pWindows[i]->GetPosPixel().X() + aSize.Width()) - nW;
+            if (pWindow->GetPosPixel().X() < 0)
+                pWindow->SetSizePixel(Size(0, nH));
+            aSize = pWindow->GetSizePixel();
+            auto nExcess = (pWindow->GetPosPixel().X() + aSize.Width()) - nW;
             if (nExcess > 0)
             {
                 aSize.Width() -= nExcess;
-                pWindows[i]->SetSizePixel(aSize);
+                pWindow->SetSizePixel(aSize);
             }
         }
 
@@ -812,8 +812,8 @@ void DbGridControl::NavigationBar::StateChanged(StateChangedType nType)
         case StateChangedType::Mirroring:
         {
             bool bIsRTLEnabled = IsRTLEnabled();
-            for (size_t i=0; i < SAL_N_ELEMENTS(pWindows); ++i)
-                pWindows[i]->EnableRTL( bIsRTLEnabled );
+            for (vcl::Window* pWindow : pWindows)
+                pWindow->EnableRTL( bIsRTLEnabled );
         }
         break;
 
@@ -826,10 +826,10 @@ void DbGridControl::NavigationBar::StateChanged(StateChangedType nType)
             if (IsControlFont())
                 aFont.Merge(GetControlFont());
 
-            for (size_t i=0; i < SAL_N_ELEMENTS(pWindows); ++i)
+            for (vcl::Window* pWindow : pWindows)
             {
-                pWindows[i]->SetZoom(aZoom);
-                pWindows[i]->SetZoomedPointFont(*pWindows[i], aFont);
+                pWindow->SetZoom(aZoom);
+                pWindow->SetZoomedPointFont(*pWindow, aFont);
             }
 
             SetZoomedPointFont(*this, aFont);
@@ -891,8 +891,8 @@ DbGridRow::DbGridRow(CursorWrapper* pCur, bool bPaintCursor)
 
 DbGridRow::~DbGridRow()
 {
-    for ( size_t i = 0, n = m_aVariants.size(); i < n; ++i )
-        delete m_aVariants[ i ];
+    for (DataColumn* p : m_aVariants)
+        delete p;
     m_aVariants.clear();
 }
 
@@ -1118,9 +1118,8 @@ void DbGridControl::Select()
 
 void DbGridControl::ImplInitWindow( const InitWindowFacet _eInitWhat )
 {
-    for ( size_t i = 0; i < m_aColumns.size(); ++i )
+    for (DbGridColumn* pCol : m_aColumns)
     {
-        DbGridColumn* pCol = m_aColumns[ i ];
         if (pCol)
             pCol->ImplInitWindow( GetDataWindow(), _eInitWhat );
     }
@@ -1190,8 +1189,8 @@ void DbGridControl::RemoveRows()
 
     // de-initialize all columns
     // if there are columns, free all controllers
-    for (size_t i = 0; i < m_aColumns.size(); i++)
-        m_aColumns[ i ]->Clear();
+    for (DbGridColumn* pColumn : m_aColumns)
+        pColumn->Clear();
 
     DELETEZ(m_pSeekCursor);
     DELETEZ(m_pDataCursor);
@@ -1665,8 +1664,8 @@ void DbGridControl::RemoveColumns()
     if ( IsEditing() )
         DeactivateCell();
 
-    for (size_t i = 0, n = m_aColumns.size(); i < n; i++)
-        delete m_aColumns[ i ];
+    for (DbGridColumn* pColumn : m_aColumns)
+        delete pColumn;
     m_aColumns.clear();
 
     DbGridControl_Base::RemoveColumns();
@@ -2665,9 +2664,8 @@ void DbGridControl::SetFilterMode(bool bMode)
             m_xEmptyRow = new DbGridRow();
 
             // setting the new filter controls
-            for ( size_t i = 0; i < m_aColumns.size(); ++i )
+            for (DbGridColumn* pCurCol : m_aColumns)
             {
-                DbGridColumn* pCurCol = m_aColumns[ i ];
                 if (!pCurCol->IsHidden())
                     pCurCol->UpdateControl();
             }
@@ -3582,9 +3580,8 @@ void DbGridControl::ConnectToFields()
         m_pFieldListeners = pListeners;
     }
 
-    for ( size_t i = 0; i < m_aColumns.size(); ++i )
+    for (DbGridColumn* pCurrent : m_aColumns)
     {
-        DbGridColumn* pCurrent = m_aColumns[ i ];
         sal_uInt16 nViewPos = pCurrent ? GetViewColumnPos(pCurrent->GetId()) : GRID_COLUMN_NOT_FOUND;
         if (GRID_COLUMN_NOT_FOUND == nViewPos)
             continue;

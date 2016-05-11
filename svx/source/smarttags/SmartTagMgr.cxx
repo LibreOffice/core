@@ -91,9 +91,9 @@ void SmartTagMgr::RecognizeString( const OUString& rText,
                              const lang::Locale& rLocale,
                              sal_uInt32 nStart, sal_uInt32 nLen ) const
 {
-    for ( size_t i = 0; i < maRecognizerList.size(); i++ )
+    for (const auto & i : maRecognizerList)
     {
-        Reference < smarttags::XSmartTagRecognizer > xRecognizer = maRecognizerList[i];
+        Reference < smarttags::XSmartTagRecognizer > xRecognizer = i;
 
         // if all smart tag types supported by this recognizer have been
         // disabled, we do not have to call the recognizer:
@@ -109,7 +109,7 @@ void SmartTagMgr::RecognizeString( const OUString& rText,
         if ( bCallRecognizer )
         {
             CreateBreakIterator();
-            maRecognizerList[i]->recognize( rText, nStart, nLen,
+            i->recognize( rText, nStart, nLen,
                                             smarttags::SmartTagRecognizerMode_PARAGRAPH,
                                             rLocale, xMarkup, maApplicationName, xController,
                                             mxBreakIter );
@@ -121,10 +121,8 @@ void SmartTagMgr::RecognizeTextRange(const Reference< text::XTextRange>& xRange,
                              const Reference< text::XTextMarkup >& xMarkup,
                              const Reference< frame::XController >& xController) const
 {
-    for ( size_t i = 0; i < maRecognizerList.size(); i++ )
+    for (const Reference<smarttags::XSmartTagRecognizer>& xRecognizer : maRecognizerList)
     {
-        Reference < smarttags::XSmartTagRecognizer > xRecognizer = maRecognizerList[i];
-
         Reference< smarttags::XRangeBasedSmartTagRecognizer > xRangeBasedRecognizer( xRecognizer, UNO_QUERY);
 
         if (!xRangeBasedRecognizer.is()) continue;

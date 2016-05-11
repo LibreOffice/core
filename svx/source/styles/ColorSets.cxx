@@ -113,10 +113,10 @@ void ColorSets::init()
 
 const ColorSet& ColorSets::getColorSet(const OUString& rName)
 {
-    for (size_t i = 0; i < maColorSets.size(); ++i)
+    for (ColorSet & rColorSet : maColorSets)
     {
-        if (maColorSets[i].getName() == rName)
-            return maColorSets[i];
+        if (rColorSet.getName() == rName)
+            return rColorSet;
     }
     return maColorSets[0];
 }

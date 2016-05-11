@@ -62,11 +62,11 @@ XmlSecStatusBarControl::XmlSecStatusBarControl( sal_uInt16 _nSlotId,  sal_uInt16
     {
         Image arr[3] = {mpImpl->maImage, mpImpl->maImageBroken, mpImpl->maImageNotValidated};
 
-        for (int i = 0; i < 3; i++)
+        for (Image & i : arr)
         {
-            BitmapEx b = arr[i].GetBitmapEx();
+            BitmapEx b = i.GetBitmapEx();
             b.Scale(_rStb.GetDPIScaleFactor(), _rStb.GetDPIScaleFactor(), BmpScaleFlag::Fast);
-            arr[i] = Image(b);
+            i = Image(b);
         }
 
         mpImpl->maImage = arr[0];

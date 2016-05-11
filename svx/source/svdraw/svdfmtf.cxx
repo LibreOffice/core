@@ -295,9 +295,8 @@ size_t ImpSdrGDIMetaFileImport::DoImport(
 
     SdrInsertReason aReason(SDRREASON_VIEWCALL);
 
-    for(size_t i = 0; i < maTmpList.size(); ++i)
+    for(SdrObject* pObj : maTmpList)
     {
-        SdrObject* pObj = maTmpList[i];
         rOL.NbcInsertObject(pObj, nInsPos, &aReason);
         nInsPos++;
 

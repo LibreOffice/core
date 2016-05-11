@@ -168,8 +168,8 @@ void FmEntryDataList::insert( FmEntryData* pItem, size_t Index )
 
 void FmEntryDataList::clear()
 {
-    for ( size_t i = 0, n = maEntryDataList.size(); i < n; ++i )
-        delete maEntryDataList[ i ];
+    for (FmEntryData* p : maEntryDataList)
+        delete p;
     maEntryDataList.clear();
 }
 

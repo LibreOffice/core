@@ -26,9 +26,9 @@
 
 bool SetOfByte::IsEmpty() const
 {
-    for(sal_uInt16 i(0); i < 32; i++)
+    for(sal_uInt8 i : aData)
     {
-        if(aData[i] != 0)
+        if(i != 0)
             return false;
     }
 

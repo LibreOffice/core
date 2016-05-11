@@ -1616,9 +1616,9 @@ void FmXGridPeer::removeColumnListeners(const Reference< XPropertySet >& xCol)
     };
 
     Reference< XPropertySetInfo >  xInfo = xCol->getPropertySetInfo();
-    for (sal_uInt16 i=0; i<SAL_N_ELEMENTS(aPropsListenedTo); ++i)
-        if (xInfo->hasPropertyByName(aPropsListenedTo[i]))
-            xCol->removePropertyChangeListener(aPropsListenedTo[i], this);
+    for (const auto & i : aPropsListenedTo)
+        if (xInfo->hasPropertyByName(i))
+            xCol->removePropertyChangeListener(i, this);
 }
 
 
@@ -1833,9 +1833,8 @@ void FmXGridPeer::setProperty( const OUString& PropertyName, const Any& Value) t
 
         // need to forward this to the columns
         DbGridColumns& rColumns = const_cast<DbGridColumns&>(pGrid->GetColumns());
-        for ( size_t i = 0, n = rColumns.size(); i < n; ++i )
+        for (DbGridColumn* pLoop : rColumns)
         {
-            DbGridColumn* pLoop = rColumns[ i ];
             FmXGridCell* pXCell = pLoop->GetCell();
             if (pXCell)
             {

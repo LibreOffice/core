@@ -291,9 +291,9 @@ XFillBitmapItem::XFillBitmapItem(SvStream& rIn, sal_uInt16 nVer)
             {
                 sal_uInt16 aArray[64];
 
-                for(sal_uInt16 i(0); i < 64; i++)
+                for(sal_uInt16 & i : aArray)
                 {
-                    rIn.ReadUInt16( aArray[i] );
+                    rIn.ReadUInt16( i );
                 }
 
                 Color aColorPix;

@@ -549,9 +549,9 @@ bool SvXMLGraphicHelper::ImplWriteGraphic( const OUString& rPictureStorageName,
             bool bCompressed = aMimeType.isEmpty();
             if( !bCompressed )
             {
-                for( size_t i = 0; i < SAL_N_ELEMENTS(aCompressiblePics); ++i )
+                for(const char* p : aCompressiblePics)
                 {
-                    if( aMimeType.equalsIgnoreAsciiCaseAscii(aCompressiblePics[i]) )
+                    if( aMimeType.equalsIgnoreAsciiCaseAscii(p) )
                     {
                         bCompressed = true;
                         break;
