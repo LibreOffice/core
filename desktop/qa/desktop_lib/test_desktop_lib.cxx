@@ -815,33 +815,33 @@ void DesktopLOKTest::testNotificationCompression()
     handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "15 25 15 10"); // Superseeded.
     handler->queue(LOK_CALLBACK_TEXT_SELECTION, "15 25 15 10"); // Should be dropped.
     handler->queue(LOK_CALLBACK_TEXT_SELECTION, ""); // Superseeded.
-    handler->queue(LOK_CALLBACK_STATE_CHANGED, ""); // 1
-    handler->queue(LOK_CALLBACK_STATE_CHANGED, ".uno:Bold"); // 2
-    handler->queue(LOK_CALLBACK_STATE_CHANGED, ""); // 3
-    handler->queue(LOK_CALLBACK_MOUSE_POINTER, "text"); // Superseeded.
-    handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "15 25 15 10"); // 4
-    handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "15 25 15 10"); // Should be dropped.
+    handler->queue(LOK_CALLBACK_STATE_CHANGED, ""); // 2
+    handler->queue(LOK_CALLBACK_STATE_CHANGED, ".uno:Bold"); // 3
+    handler->queue(LOK_CALLBACK_STATE_CHANGED, ""); // 4
     handler->queue(LOK_CALLBACK_MOUSE_POINTER, "text"); // 5
+    handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "15 25 15 10"); // 6
+    handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "15 25 15 10"); // Should be dropped.
+    handler->queue(LOK_CALLBACK_MOUSE_POINTER, "text"); // Should be dropped.
     handler->queue(LOK_CALLBACK_TEXT_SELECTION_START, "15 25 15 10"); // Superseeded.
     handler->queue(LOK_CALLBACK_TEXT_SELECTION_END, "15 25 15 10"); // Superseeded.
     handler->queue(LOK_CALLBACK_TEXT_SELECTION, "15 25 15 10"); // Superseedd.
     handler->queue(LOK_CALLBACK_TEXT_SELECTION_START, "15 25 15 10"); // Should be dropped.
     handler->queue(LOK_CALLBACK_TEXT_SELECTION_END, "15 25 15 10"); // Should be dropped.
-    handler->queue(LOK_CALLBACK_TEXT_SELECTION, ""); // 6
-    handler->queue(LOK_CALLBACK_TEXT_SELECTION_START, "15 25 15 10"); // 7
-    handler->queue(LOK_CALLBACK_TEXT_SELECTION_END, "15 25 15 10"); // 8
-    handler->queue(LOK_CALLBACK_CELL_CURSOR, "15 25 15 10"); // 9
-    handler->queue(LOK_CALLBACK_CURSOR_VISIBLE, ""); // Superseeded.
+    handler->queue(LOK_CALLBACK_TEXT_SELECTION, ""); // 7
+    handler->queue(LOK_CALLBACK_TEXT_SELECTION_START, "15 25 15 10"); // 8
+    handler->queue(LOK_CALLBACK_TEXT_SELECTION_END, "15 25 15 10"); // 9
+    handler->queue(LOK_CALLBACK_CELL_CURSOR, "15 25 15 10"); // 10
+    handler->queue(LOK_CALLBACK_CURSOR_VISIBLE, ""); // 11
     handler->queue(LOK_CALLBACK_CELL_CURSOR, "15 25 15 10"); // Should be dropped.
-    handler->queue(LOK_CALLBACK_CELL_FORMULA, "blah"); // Superseeded.
-    handler->queue(LOK_CALLBACK_SET_PART, "1"); // 11
-    handler->queue(LOK_CALLBACK_CURSOR_VISIBLE, ""); // 12
-    handler->queue(LOK_CALLBACK_CELL_FORMULA, "blah"); // 13
-    handler->queue(LOK_CALLBACK_SET_PART, "1"); // 14
+    handler->queue(LOK_CALLBACK_CELL_FORMULA, "blah"); // 12
+    handler->queue(LOK_CALLBACK_SET_PART, "1"); // 13
+    handler->queue(LOK_CALLBACK_CURSOR_VISIBLE, ""); // Should be dropped.
+    handler->queue(LOK_CALLBACK_CELL_FORMULA, "blah"); // Should be dropped.
+    handler->queue(LOK_CALLBACK_SET_PART, "1"); // Should be dropped.
 
     Scheduler::ProcessEventsToIdle();
 
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(14), notifs.size());
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(13), notifs.size());
 
     size_t i = 0;
     CPPUNIT_ASSERT_EQUAL((int)LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, (int)std::get<0>(notifs[i]));
@@ -856,11 +856,11 @@ void DesktopLOKTest::testNotificationCompression()
     CPPUNIT_ASSERT_EQUAL((int)LOK_CALLBACK_STATE_CHANGED, (int)std::get<0>(notifs[i]));
     CPPUNIT_ASSERT_EQUAL(std::string(""), std::get<1>(notifs[i++]));
 
-    CPPUNIT_ASSERT_EQUAL((int)LOK_CALLBACK_INVALIDATE_TILES, (int)std::get<0>(notifs[i]));
-    CPPUNIT_ASSERT_EQUAL(std::string("15 25 15 10"), std::get<1>(notifs[i++]));
-
     CPPUNIT_ASSERT_EQUAL((int)LOK_CALLBACK_MOUSE_POINTER, (int)std::get<0>(notifs[i]));
     CPPUNIT_ASSERT_EQUAL(std::string("text"), std::get<1>(notifs[i++]));
+
+    CPPUNIT_ASSERT_EQUAL((int)LOK_CALLBACK_INVALIDATE_TILES, (int)std::get<0>(notifs[i]));
+    CPPUNIT_ASSERT_EQUAL(std::string("15 25 15 10"), std::get<1>(notifs[i++]));
 
     CPPUNIT_ASSERT_EQUAL((int)LOK_CALLBACK_TEXT_SELECTION, (int)std::get<0>(notifs[i]));
     CPPUNIT_ASSERT_EQUAL(std::string(""), std::get<1>(notifs[i++]));
@@ -873,9 +873,6 @@ void DesktopLOKTest::testNotificationCompression()
 
     CPPUNIT_ASSERT_EQUAL((int)LOK_CALLBACK_CELL_CURSOR, (int)std::get<0>(notifs[i]));
     CPPUNIT_ASSERT_EQUAL(std::string("15 25 15 10"), std::get<1>(notifs[i++]));
-
-    CPPUNIT_ASSERT_EQUAL((int)LOK_CALLBACK_SET_PART, (int)std::get<0>(notifs[i]));
-    CPPUNIT_ASSERT_EQUAL(std::string("1"), std::get<1>(notifs[i++]));
 
     CPPUNIT_ASSERT_EQUAL((int)LOK_CALLBACK_CURSOR_VISIBLE, (int)std::get<0>(notifs[i]));
     CPPUNIT_ASSERT_EQUAL(std::string(""), std::get<1>(notifs[i++]));
