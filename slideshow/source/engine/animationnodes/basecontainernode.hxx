@@ -69,7 +69,7 @@ protected:
     void repeat();
 
     template <typename FuncT>
-    inline void forEachChildNode( FuncT const& func,
+    inline void forEachChildNode( FuncT func,
                                   int nodeStateMask = -1 ) const
     {
         VectorOfNodes::const_iterator iPos( maChildren.begin() );
