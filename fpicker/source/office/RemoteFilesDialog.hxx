@@ -70,7 +70,7 @@ class FileViewContainer;
 class RemoteFilesDialog : public SvtFileDialog_Base
 {
 public:
-    RemoteFilesDialog( vcl::Window* pParent, WinBits nBits );
+    RemoteFilesDialog( vcl::Window* pParent, PickerFlags nBits );
     virtual ~RemoteFilesDialog();
 
     virtual void dispose() override;

@@ -168,7 +168,7 @@ class FileViewContainer : public vcl::Window
     }
 };
 
-RemoteFilesDialog::RemoteFilesDialog( vcl::Window* pParent, WinBits nBits )
+RemoteFilesDialog::RemoteFilesDialog( vcl::Window* pParent, PickerFlags nBits )
     : SvtFileDialog_Base( pParent, "RemoteFilesDialog", "fps/ui/remotefilesdialog.ui" )
     , m_xContext( comphelper::getProcessComponentContext() )
     , m_xMasterPasswd( PasswordContainer::create( m_xContext ) )
@@ -189,9 +189,9 @@ RemoteFilesDialog::RemoteFilesDialog( vcl::Window* pParent, WinBits nBits )
     get( m_pListView_btn, "list_view" );
     get( m_pIconView_btn, "icon_view" );
 
-    m_eMode = ( nBits & WB_SAVEAS ) ? REMOTEDLG_MODE_SAVE : REMOTEDLG_MODE_OPEN;
-    m_eType = ( nBits & WB_PATH ) ? REMOTEDLG_TYPE_PATHDLG : REMOTEDLG_TYPE_FILEDLG;
-    m_bMultiselection = ( nBits & SFXWB_MULTISELECTION ) != 0;
+    m_eMode = ( nBits & PickerFlags::SaveAs ) ? REMOTEDLG_MODE_SAVE : REMOTEDLG_MODE_OPEN;
+    m_eType = ( nBits & PickerFlags::PathDialog ) ? REMOTEDLG_TYPE_PATHDLG : REMOTEDLG_TYPE_FILEDLG;
+    m_bMultiselection = bool( nBits & PickerFlags::MultiSelection );
     m_bIsUpdated = false;
     m_bIsConnected = false;
     m_bServiceChanged = false;

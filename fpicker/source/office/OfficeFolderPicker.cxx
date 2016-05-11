@@ -69,7 +69,7 @@ void SAL_CALL SvtFolderPicker::startExecuteModal( const Reference< css::ui::dial
 
 VclPtr<SvtFileDialog_Base> SvtFolderPicker::implCreateDialog( vcl::Window* _pParent )
 {
-    return VclPtr<SvtFileDialog>::Create( _pParent, SFXWB_PATHDIALOG );
+    return VclPtr<SvtFileDialog>::Create( _pParent, PickerFlags::PathDialog );
 }
 
 sal_Int16 SvtFolderPicker::implExecutePicker( )
