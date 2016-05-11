@@ -26,7 +26,7 @@
 
 #include "shapemanagerimpl.hxx"
 
-#include <boost/mem_fn.hpp>
+#include <functional>
 
 using namespace com::sun::star;
 
@@ -393,13 +393,13 @@ void ShapeManagerImpl::removeIntrinsicAnimationHandler( const IntrinsicAnimation
 void ShapeManagerImpl::notifyIntrinsicAnimationsEnabled()
 {
     maIntrinsicAnimationEventHandlers.applyAll(
-        boost::mem_fn(&IntrinsicAnimationEventHandler::enableAnimations));
+        std::mem_fn(&IntrinsicAnimationEventHandler::enableAnimations));
 }
 
 void ShapeManagerImpl::notifyIntrinsicAnimationsDisabled()
 {
     maIntrinsicAnimationEventHandlers.applyAll(
-        boost::mem_fn(&IntrinsicAnimationEventHandler::disableAnimations));
+        std::mem_fn(&IntrinsicAnimationEventHandler::disableAnimations));
 }
 
 
