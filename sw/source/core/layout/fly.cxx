@@ -818,8 +818,8 @@ void SwFlyFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
                 if ( FrameSizeChg( rNew ) )
                     NotifyDrawObj();
                 rInvFlags |= 0x1A;
-                break;
             }
+            break;
 
         case RES_FRM_SIZE:
         case RES_FMT_CHG:
