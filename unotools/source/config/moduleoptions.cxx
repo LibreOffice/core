@@ -50,7 +50,7 @@
                     e.g.:
                             NAMELIST[ PROPERTYHANDLE_xxx ] => VALUELIST[ PROPERTYHANDLE_xxx ]
 *//*-*************************************************************************************************************/
-#define ROOTNODE_FACTORIES                  OUString("Setup/Office/Factories"        )
+#define ROOTNODE_FACTORIES                  OUString("Setup/Office/Factories")
 #define PATHSEPARATOR                       "/"
 
 // Attention: The property "ooSetupFactoryEmptyDocumentURL" is read from configuration but not used! There is
@@ -208,9 +208,7 @@ struct FactoryInfo
         {
             if ( !sNewTemplateFile.isEmpty() )
             {
-                sTemplateFile
-                    = getStringSubstitution()
-                        ->substituteVariables( sNewTemplateFile, false );
+                sTemplateFile= getStringSubstitution()->substituteVariables( sNewTemplateFile, false );
             }
             else
             {
@@ -246,14 +244,14 @@ struct FactoryInfo
             return xSubstVars;
         }
 
-        bool            bInstalled;
+        bool         bInstalled;
         OUString     sFactory;
         OUString     sShortName;
         OUString     sTemplateFile;
         OUString     sWindowAttributes;
         OUString     sEmptyDocumentURL;
         OUString     sDefaultFilter;
-        sal_Int32           nIcon;
+        sal_Int32    nIcon;
 
         bool            bChangedTemplateFile        :1;
         bool            bChangedWindowAttributes    :1;
@@ -312,14 +310,10 @@ class SvtModuleOptions_Impl : public ::utl::ConfigItem
     //  private methods
 
     private:
-        static css::uno::Sequence< OUString > impl_ExpandSetNames ( const css::uno::Sequence< OUString >& lSetNames   );
-               void                                  impl_Read           ( const css::uno::Sequence< OUString >& lSetNames   );
+        static css::uno::Sequence< OUString > impl_ExpandSetNames ( const css::uno::Sequence< OUString >& lSetNames );
+        void impl_Read ( const css::uno::Sequence< OUString >& lSetNames );
 
         virtual void ImplCommit() override;
-
-    //  private types
-
-    private:
 
     //  private member
 
@@ -435,8 +429,6 @@ void SvtModuleOptions_Impl::ImplCommit()
                 We use it directly as index in our internal list. If enum value isn't right - we crash with an
                 "index out of range"!!! Please use me right - otherwise there is no guarantee.
     @param      "eModule"  , index in list - specify module
-    @param      "eFactory" , index in list - specify factory
-    @param      "sTemplate", set new standard template for these factory
     @return     Queried information.
 
     @onerror    We return default values. (mostly "not installed"!)
@@ -444,34 +436,33 @@ void SvtModuleOptions_Impl::ImplCommit()
 *//*-*****************************************************************************************************/
 bool SvtModuleOptions_Impl::IsModuleInstalled( SvtModuleOptions::EModule eModule ) const
 {
-    bool bInstalled = false;
     switch( eModule )
     {
-        case SvtModuleOptions::EModule::WRITER    :   bInstalled = m_lFactories[SvtModuleOptions::EFactory::WRITER].getInstalled();
-                                                break;
-        case SvtModuleOptions::EModule::WEB       :   bInstalled = m_lFactories[SvtModuleOptions::EFactory::WRITERWEB].getInstalled();
-                                                break;
-        case SvtModuleOptions::EModule::GLOBAL    :   bInstalled = m_lFactories[SvtModuleOptions::EFactory::WRITERGLOBAL].getInstalled();
-                                                break;
-        case SvtModuleOptions::EModule::CALC      :   bInstalled = m_lFactories[SvtModuleOptions::EFactory::CALC].getInstalled();
-                                                break;
-        case SvtModuleOptions::EModule::DRAW      :   bInstalled = m_lFactories[SvtModuleOptions::EFactory::DRAW].getInstalled();
-                                                break;
-        case SvtModuleOptions::EModule::IMPRESS   :   bInstalled = m_lFactories[SvtModuleOptions::EFactory::IMPRESS].getInstalled();
-                                                break;
-        case SvtModuleOptions::EModule::MATH      :   bInstalled = m_lFactories[SvtModuleOptions::EFactory::MATH].getInstalled();
-                                                break;
-        case SvtModuleOptions::EModule::CHART     :   bInstalled = m_lFactories[SvtModuleOptions::EFactory::CHART].getInstalled();
-                                                break;
-        case SvtModuleOptions::EModule::STARTMODULE : bInstalled = m_lFactories[SvtModuleOptions::EFactory::STARTMODULE].getInstalled();
-                                                break;
-        case SvtModuleOptions::EModule::BASIC     :   bInstalled = true; // Couldn't be deselected by setup yet!
-                                                break;
-        case SvtModuleOptions::EModule::DATABASE  :   bInstalled = m_lFactories[SvtModuleOptions::EFactory::DATABASE].getInstalled();
-                                                break;
+        case SvtModuleOptions::EModule::WRITER:
+            return m_lFactories[SvtModuleOptions::EFactory::WRITER].getInstalled();
+        case SvtModuleOptions::EModule::WEB:
+            return m_lFactories[SvtModuleOptions::EFactory::WRITERWEB].getInstalled();
+        case SvtModuleOptions::EModule::GLOBAL:
+            return m_lFactories[SvtModuleOptions::EFactory::WRITERGLOBAL].getInstalled();
+        case SvtModuleOptions::EModule::CALC:
+            return m_lFactories[SvtModuleOptions::EFactory::CALC].getInstalled();
+        case SvtModuleOptions::EModule::DRAW:
+            return m_lFactories[SvtModuleOptions::EFactory::DRAW].getInstalled();
+        case SvtModuleOptions::EModule::IMPRESS:
+            return m_lFactories[SvtModuleOptions::EFactory::IMPRESS].getInstalled();
+        case SvtModuleOptions::EModule::MATH:
+            return m_lFactories[SvtModuleOptions::EFactory::MATH].getInstalled();
+        case SvtModuleOptions::EModule::CHART:
+            return m_lFactories[SvtModuleOptions::EFactory::CHART].getInstalled();
+        case SvtModuleOptions::EModule::STARTMODULE:
+            return m_lFactories[SvtModuleOptions::EFactory::STARTMODULE].getInstalled();
+        case SvtModuleOptions::EModule::BASIC:
+            return true; // Couldn't be deselected by setup yet!
+        case SvtModuleOptions::EModule::DATABASE:
+            return m_lFactories[SvtModuleOptions::EFactory::DATABASE].getInstalled();
     }
 
-    return bInstalled;
+    return false;
 }
 
 css::uno::Sequence < OUString > SvtModuleOptions_Impl::GetAllServiceNames()
@@ -613,10 +604,10 @@ void SvtModuleOptions_Impl::SetFactoryDefaultFilter(       SvtModuleOptions::EFa
 *//*-*************************************************************************************************************/
 css::uno::Sequence< OUString > SvtModuleOptions_Impl::impl_ExpandSetNames( const css::uno::Sequence< OUString >& lSetNames )
 {
-    sal_Int32                             nCount     = lSetNames.getLength();
+    sal_Int32 nCount     = lSetNames.getLength();
     css::uno::Sequence< OUString > lPropNames ( nCount*PROPERTYCOUNT );
-    OUString*                      pPropNames = lPropNames.getArray();
-    sal_Int32                             nPropStart = 0;
+    OUString* pPropNames = lPropNames.getArray();
+    sal_Int32 nPropStart = 0;
 
     for( sal_Int32 nName=0; nName<nCount; ++nName )
     {
