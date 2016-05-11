@@ -3228,6 +3228,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                             {
                                 if ( nPlaceHolderAtom < 19 )
                                     break;
+                                SAL_FALLTHROUGH;
                             }
                             case EPP_PLACEHOLDER_NOTESBODY :
                             case EPP_PLACEHOLDER_MASTERDATE :
