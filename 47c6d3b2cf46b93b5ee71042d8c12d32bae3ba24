@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_1ef3dc0b",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 3215,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-05-11T12:44:41Z",
+      "side": 1,
+      "message": "pInputWin \u0026\u0026 ...\n\nchanges the original logic. Now without pInputWin entering a newline if !bInputLine (i.e. in cell edit mode only) is not possible at all (however we might reach a state without pInputWin isn\u0027t clear to me at the moment).\n\nI rather suggest to keep the original flow and do something like\n\n    ((pInputWin \u0026\u0026 bInputLine \u0026\u0026 bControl !\u003d bShift) ||\n    (!bInputLine \u0026\u0026 bControl \u0026\u0026 !bShift)))",
+      "range": {
+        "startLine": 3215,
+        "startChar": 16,
+        "endLine": 3215,
+        "endChar": 28
+      },
+      "revId": "47c6d3b2cf46b93b5ee71042d8c12d32bae3ba24",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_dee89419",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 3218,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-05-11T12:44:41Z",
+      "side": 1,
+      "message": "Just a nitpick, indenting the condition one level more would make it easier distinguishable from the actual statement, adding block braces in this case might be a further enhancement for readability..",
+      "revId": "47c6d3b2cf46b93b5ee71042d8c12d32bae3ba24",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
