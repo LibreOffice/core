@@ -2004,7 +2004,6 @@ void lcl_GetOutputStringScientific(double fNumber, sal_uInt16 nCharCount,
                                               nPrec, rFormatter.GetNumDecimalSep()[0], true );
 }
 
-
 OUString lcl_GetDenominatorString(const ImpSvNumberformatInfo &rInfo, sal_uInt16 nAnz)
 {
     sal_uInt16 i;
@@ -2023,6 +2022,24 @@ OUString lcl_GetDenominatorString(const ImpSvNumberformatInfo &rInfo, sal_uInt16
         }
     }
     return aDenominatorString.makeStringAndClear();
+}
+
+OUString lcl_GetNumeratorString(const ImpSvNumberformatInfo &rInfo, sal_uInt16 nAnz)
+{
+    sal_Int16 i;
+    OUStringBuffer aNumeratorString;
+    for( i = 0; i < nAnz; i++ )
+    {
+        if( rInfo.nTypeArray[i] == NF_SYMBOLTYPE_FRAC )
+        {
+            for( i--; i >= 0 && rInfo.nTypeArray[i] == NF_SYMBOLTYPE_DIGIT ; i-- )
+            {
+                aNumeratorString.insert( 0, rInfo.sStrArray[i] );
+            }
+            i = nAnz;
+        }
+    }
+    return aNumeratorString.makeStringAndClear();
 }
 
 // TODO: More optimizations?
@@ -2049,6 +2066,13 @@ OUString SvNumberformat::GetDenominatorString( sal_uInt16 nNumFor ) const
     const ImpSvNumberformatInfo& rInfo = NumFor[nNumFor].Info();
     sal_uInt16 nAnz = NumFor[nNumFor].GetCount();
     return lcl_GetDenominatorString( rInfo, nAnz );
+}
+
+OUString SvNumberformat::GetNumeratorString( sal_uInt16 nNumFor ) const
+{
+    const ImpSvNumberformatInfo& rInfo = NumFor[nNumFor].Info();
+    sal_uInt16 nAnz = NumFor[nNumFor].GetCount();
+    return lcl_GetNumeratorString( rInfo, nAnz );
 }
 
 bool SvNumberformat::GetOutputString(double fNumber, sal_uInt16 nCharCount, OUString& rOutString) const
