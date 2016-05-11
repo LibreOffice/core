@@ -494,6 +494,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
 
                 rReq.Ignore();//XXX is handled by SFX
             }
+            break;
 
         case SID_PRINTPREVIEW:
             {
