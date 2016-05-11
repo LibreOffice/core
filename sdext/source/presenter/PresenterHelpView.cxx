@@ -33,7 +33,6 @@
 #include <com/sun/star/util/Color.hpp>
 #include <algorithm>
 #include <vector>
-#include <boost/bind.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -366,7 +365,10 @@ void PresenterHelpView::ReadHelpStrings()
         UNO_QUERY);
     PresenterConfigurationAccess::ForAll(
         xStrings,
-        ::boost::bind(&PresenterHelpView::ProcessString, this, _2));
+        [this](OUString const&, uno::Reference<beans::XPropertySet> const& xProps)
+        {
+            return this->ProcessString(xProps);
+        });
 }
 
 void PresenterHelpView::ProcessString (
