@@ -246,8 +246,8 @@ void SvxLineDefTabPage::CheckChanges_Impl()
                                                       OUString( ResId( RID_SVXSTR_ASK_CHANGE_LINESTYLE, rMgr ) ),
                                                       &aWarningBoxImage );
         DBG_ASSERT(aMessDlg, "Dialog creation failed!");
-        aMessDlg->SetButtonText( MESS_BTN_1, OUString( ResId( RID_SVXSTR_CHANGE, rMgr ) ) );
-        aMessDlg->SetButtonText( MESS_BTN_2, OUString( ResId( RID_SVXSTR_ADD, rMgr ) ) );
+        aMessDlg->SetButtonText( SvxMessDialogButton::N1, OUString( ResId( RID_SVXSTR_CHANGE, rMgr ) ) );
+        aMessDlg->SetButtonText( SvxMessDialogButton::N2, OUString( ResId( RID_SVXSTR_ADD, rMgr ) ) );
 
         short nRet = aMessDlg->Execute();
 

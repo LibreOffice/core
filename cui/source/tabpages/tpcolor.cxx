@@ -540,9 +540,9 @@ long SvxColorTabPage::CheckChanges_Impl()
                                                           SVX_RESSTR( RID_SVXSTR_COLOR ),
                                                           ResId( RID_SVXSTR_ASK_CHANGE_COLOR, rMgr ),
                                                           &aWarningBoxImage );
-            aMessDlg->SetButtonText( MESS_BTN_1,
+            aMessDlg->SetButtonText( SvxMessDialogButton::N1,
                                     ResId( RID_SVXSTR_CHANGE, rMgr ) );
-            aMessDlg->SetButtonText( MESS_BTN_2,
+            aMessDlg->SetButtonText( SvxMessDialogButton::N2,
                                     ResId( RID_SVXSTR_ADD, rMgr ) );
 
             short nRet = aMessDlg->Execute();

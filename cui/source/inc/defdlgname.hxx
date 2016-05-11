@@ -19,10 +19,6 @@
 #ifndef INCLUDED_CUI_SOURCE_INC_DEFDLGNAME_HXX
 #define INCLUDED_CUI_SOURCE_INC_DEFDLGNAME_HXX
 
-// define ----------------------------------------------------------------
-
-#define MESS_BTN_1  ((sal_uInt16)0)
-#define MESS_BTN_2  ((sal_uInt16)1)
 
 // const -----------------------------------------------------------------
 

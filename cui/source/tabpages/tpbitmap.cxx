@@ -440,8 +440,8 @@ long SvxBitmapTabPage::CheckChanges_Impl()
                                                           CUI_RES( RID_SVXSTR_ASK_CHANGE_BITMAP ),
                                                           &aWarningBoxImage );
             DBG_ASSERT(aMessDlg, "Dialog creation failed!");
-            aMessDlg->SetButtonText( MESS_BTN_1, ResId( RID_SVXSTR_CHANGE, rMgr ) );
-            aMessDlg->SetButtonText( MESS_BTN_2, ResId( RID_SVXSTR_ADD, rMgr ) );
+            aMessDlg->SetButtonText( SvxMessDialogButton::N1, ResId( RID_SVXSTR_CHANGE, rMgr ) );
+            aMessDlg->SetButtonText( SvxMessDialogButton::N2, ResId( RID_SVXSTR_ADD, rMgr ) );
 
             short nRet = aMessDlg->Execute();
 

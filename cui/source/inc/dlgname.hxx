@@ -124,6 +124,10 @@ public:
     void GetDescription(OUString& rDescription) {rDescription = pEdtDescription->GetText(); }
 };
 
+enum class SvxMessDialogButton {
+    N1, N2
+};
+
 /// Dialog to cancel, save, or add
 class SvxMessDialog : public ModalDialog
 {
@@ -142,7 +146,7 @@ public:
     virtual ~SvxMessDialog();
     virtual void dispose() override;
 
-    void    SetButtonText( sal_uInt16 nBtnId, const OUString& rNewTxt );
+    void    SetButtonText( SvxMessDialogButton nBtnId, const OUString& rNewTxt );
 };
 
 

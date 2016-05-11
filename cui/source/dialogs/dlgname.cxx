@@ -202,20 +202,17 @@ IMPL_LINK_NOARG_TYPED(SvxMessDialog, Button2Hdl, Button*, void)
 
 /*************************************************************************/
 
-void SvxMessDialog::SetButtonText( sal_uInt16 nBtnId, const OUString& rNewTxt )
+void SvxMessDialog::SetButtonText( SvxMessDialogButton nBtnId, const OUString& rNewTxt )
 {
     switch ( nBtnId )
     {
-        case MESS_BTN_1:
+        case SvxMessDialogButton::N1:
             pBtn1->SetText( rNewTxt );
             break;
 
-        case MESS_BTN_2:
+        case SvxMessDialogButton::N2:
             pBtn2->SetText( rNewTxt );
             break;
-
-        default:
-            OSL_FAIL( "Invalid button number!!!" );
     }
 }
 

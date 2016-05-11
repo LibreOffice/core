@@ -292,9 +292,9 @@ long SvxGradientTabPage::CheckChanges_Impl()
                                                           CUI_RESSTR( RID_SVXSTR_ASK_CHANGE_GRADIENT ),
                                                           &aWarningBoxImage );
             DBG_ASSERT(aMessDlg, "Dialog creation failed!");
-            aMessDlg->SetButtonText( MESS_BTN_1,
+            aMessDlg->SetButtonText( SvxMessDialogButton::N1,
                                     OUString( ResId( RID_SVXSTR_CHANGE, rMgr ) ) );
-            aMessDlg->SetButtonText( MESS_BTN_2,
+            aMessDlg->SetButtonText( SvxMessDialogButton::N2,
                                     OUString( ResId( RID_SVXSTR_ADD, rMgr ) ) );
 
             short nRet = aMessDlg->Execute();
