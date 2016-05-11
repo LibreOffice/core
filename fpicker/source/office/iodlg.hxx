@@ -66,7 +66,7 @@ private:
     VclPtr<Splitter>            _pSplitter;
     ::svt::IFilePickerListener* _pFileNotifier;
     SvtExpFileDlg_Impl*         _pImp;
-    WinBits                     _nExtraBits;
+    PickerExtraBits             _nExtraBits;
     bool                        _bIsInExecute   :   1;
 
     ImageList                   m_aImages;
@@ -159,7 +159,7 @@ protected:
     short                       PrepareExecute();
 
 public:
-                                SvtFileDialog( vcl::Window* _pParent, WinBits nBits, WinBits nExtraBits );
+                                SvtFileDialog( vcl::Window* _pParent, WinBits nBits, PickerExtraBits nExtraBits );
                                 SvtFileDialog( vcl::Window* _pParent, WinBits nBits );
                                 virtual ~SvtFileDialog();
     virtual void                dispose() override;
