@@ -3364,40 +3364,35 @@ void SAL_CALL SlideShowListenerProxy::paused(  ) throw (css::uno::RuntimeExcepti
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    if( maListeners.getLength() >= 0 )
-        maListeners.forEach<XSlideShowListener>( boost::mem_fn( &XSlideShowListener::paused ) );
+    maListeners.forEach<XSlideShowListener>( boost::mem_fn( &XSlideShowListener::paused ) );
 }
 
 void SAL_CALL SlideShowListenerProxy::resumed(  ) throw (css::uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    if( maListeners.getLength() >= 0 )
-        maListeners.forEach<XSlideShowListener>( boost::mem_fn( &XSlideShowListener::resumed ) );
+    maListeners.forEach<XSlideShowListener>( boost::mem_fn( &XSlideShowListener::resumed ) );
 }
 
 void SAL_CALL SlideShowListenerProxy::slideTransitionStarted( ) throw (RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    if( maListeners.getLength() >= 0 )
-        maListeners.forEach<XSlideShowListener>( boost::mem_fn( &XSlideShowListener::slideTransitionStarted ) );
+    maListeners.forEach<XSlideShowListener>( boost::mem_fn( &XSlideShowListener::slideTransitionStarted ) );
 }
 
 void SAL_CALL SlideShowListenerProxy::slideTransitionEnded( ) throw (css::uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    if( maListeners.getLength() >= 0 )
-        maListeners.forEach<XSlideShowListener>( boost::mem_fn( &XSlideShowListener::slideTransitionEnded ) );
+    maListeners.forEach<XSlideShowListener>( boost::mem_fn( &XSlideShowListener::slideTransitionEnded ) );
 }
 
 void SAL_CALL SlideShowListenerProxy::slideAnimationsEnded(  ) throw (css::uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    if( maListeners.getLength() >= 0 )
-        maListeners.forEach<XSlideShowListener>( boost::mem_fn( &XSlideShowListener::slideAnimationsEnded ) );
+    maListeners.forEach<XSlideShowListener>( boost::mem_fn( &XSlideShowListener::slideAnimationsEnded ) );
 }
 
 void SlideShowListenerProxy::slideEnded(sal_Bool bReverse) throw (RuntimeException, std::exception)

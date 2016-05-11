@@ -51,7 +51,6 @@
 #include <unordered_map>
 #include <utility>
 #include <vector>
-#include <boost/assign/list_of.hpp>
 #include <boost/intrusive_ptr.hpp>
 #include <boost/optional.hpp>
 #include <boost/optional/optional.hpp>
