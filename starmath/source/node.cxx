@@ -1700,19 +1700,31 @@ void SmOperNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     assert(pOper);
     assert(pBody);
 
-    pBody->Arrange(rDev,rFormat);
-    long nHeight = pBody->GetHeight();
+    //patch pBody->Arrange(rDev,rFormat);
+    //patch long nHeight = pBody->GetHeight();
     SmNode *pSymbol = GetSymbol();
+    pSymbol->SetSize(Fraction(CalcSymbolHeight(*pSymbol, rFormat),
+                              pSymbol->GetFont().GetFontSize().Height()));
+
+    pBody->Arrange(rDev, rFormat);
     pOper->Arrange(rDev, rFormat);
 
-    pSymbol->AdaptToY(rDev,nHeight);
-    pSymbol->Arrange(rDev, rFormat);
-    Point aPos= pSymbol->AlignTo(*pBody, RectPos::Left, RectHorAlign::Center, RectVerAlign::Mid);
-    aPos.Y() = pSymbol->GetTop()+pBody->GetBottom() - pSymbol->GetBottom();
-    pSymbol->MoveTo(aPos);
+    //patch pSymbol->AdaptToY(rDev,nHeight);
+    //patch pSymbol->Arrange(rDev, rFormat);
+    //patch Point aPos= pSymbol->AlignTo(*pBody, RectPos::Left, RectHorAlign::Center, RectVerAlign::Mid);
+    //patch aPos.Y() = pSymbol->GetTop()+pBody->GetBottom() - pSymbol->GetBottom();
+    //patch pSymbol->MoveTo(aPos);
+    long  nOrigHeight = GetFont().GetFontSize().Height(),
+          nDist = nOrigHeight
+                  * rFormat.GetDistance(DIS_OPERATORSPACE) / 100L;
+
+    Point aPos = pOper->AlignTo(*pBody, RectPos::Left, RectHorAlign::Center, /*RectVerAlign::CenterY*/RectVerAlign::Mid);
+    aPos.X() -= nDist;
+    pOper->MoveTo(aPos);
 
     SmRect::operator = (*pBody);
-    ExtendBy(*pSymbol, RectCopyMBL::This);
+    //patch ExtendBy(*pSymbol, RectCopyMBL::This);
+    ExtendBy(*pOper, RectCopyMBL::This);
 }
 
 
