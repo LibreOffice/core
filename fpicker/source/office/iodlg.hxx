@@ -100,7 +100,7 @@ private:
     DECL_LINK_TYPED(            Split_Hdl, Splitter*, void );
 
     void                        OpenHdl_Impl(void* pVoid);
-    void                        Init_Impl( WinBits nBits );
+    void                        Init_Impl( PickerFlags nBits );
     /** find a filter with the given wildcard
     @param _rFilter
         the wildcard pattern to look for in the filter list
@@ -159,8 +159,8 @@ protected:
     short                       PrepareExecute();
 
 public:
-                                SvtFileDialog( vcl::Window* _pParent, WinBits nBits, WinBits nExtraBits );
-                                SvtFileDialog( vcl::Window* _pParent, WinBits nBits );
+                                SvtFileDialog( vcl::Window* _pParent, PickerFlags nBits, WinBits nExtraBits );
+                                SvtFileDialog( vcl::Window* _pParent, PickerFlags nBits );
                                 virtual ~SvtFileDialog();
     virtual void                dispose() override;
 

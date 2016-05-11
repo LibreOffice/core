@@ -226,69 +226,69 @@ IMPL_LINK_TYPED( SvtFilePicker, DialogClosedHdl, Dialog&, rDlg, void )
 // SvtFilePicker
 
 
-WinBits SvtFilePicker::getWinBits( WinBits& rExtraBits )
+PickerFlags SvtFilePicker::getWinBits( WinBits& rExtraBits )
 {
     // set the winbits for creating the filedialog
-    WinBits nBits = 0L;
+    PickerFlags nBits = PickerFlags::NONE;
     rExtraBits = 0L;
 
     // set the standard bits according to the service name
     if ( m_nServiceType == TemplateDescription::FILEOPEN_SIMPLE )
     {
-        nBits = WB_OPEN;
+        nBits = PickerFlags::OPEN;
     }
     else if ( m_nServiceType == TemplateDescription::FILESAVE_SIMPLE )
     {
-        nBits = WB_SAVEAS;
+        nBits = PickerFlags::SAVEAS;
     }
     else if ( m_nServiceType == TemplateDescription::FILESAVE_AUTOEXTENSION )
     {
-        nBits = WB_SAVEAS;
+        nBits = PickerFlags::SAVEAS;
         rExtraBits = SFX_EXTRA_AUTOEXTENSION;
     }
     else if ( m_nServiceType == TemplateDescription::FILESAVE_AUTOEXTENSION_PASSWORD )
     {
-        nBits = WB_SAVEAS | SFXWB_PASSWORD;
+        nBits = PickerFlags::SAVEAS | PickerFlags::PASSWORD;
         rExtraBits = SFX_EXTRA_AUTOEXTENSION;
     }
     else if ( m_nServiceType == TemplateDescription::FILESAVE_AUTOEXTENSION_PASSWORD_FILTEROPTIONS )
     {
-        nBits = WB_SAVEAS | SFXWB_PASSWORD;
+        nBits = PickerFlags::SAVEAS | PickerFlags::PASSWORD;
         rExtraBits = SFX_EXTRA_AUTOEXTENSION | SFX_EXTRA_FILTEROPTIONS;
     }
     else if ( m_nServiceType == TemplateDescription::FILESAVE_AUTOEXTENSION_TEMPLATE )
     {
-        nBits = WB_SAVEAS;
+        nBits = PickerFlags::SAVEAS;
         rExtraBits = SFX_EXTRA_AUTOEXTENSION | SFX_EXTRA_TEMPLATES;
     }
     else if ( m_nServiceType == TemplateDescription::FILESAVE_AUTOEXTENSION_SELECTION )
     {
-        nBits = WB_SAVEAS;
+        nBits = PickerFlags::SAVEAS;
         rExtraBits = SFX_EXTRA_AUTOEXTENSION | SFX_EXTRA_SELECTION;
     }
 
     else if ( m_nServiceType == TemplateDescription::FILEOPEN_LINK_PREVIEW_IMAGE_TEMPLATE )
     {
-        nBits = WB_OPEN;
+        nBits = PickerFlags::OPEN;
         rExtraBits = SFX_EXTRA_INSERTASLINK | SFX_EXTRA_SHOWPREVIEW | SFX_EXTRA_IMAGE_TEMPLATE;
     }
     else if ( m_nServiceType == TemplateDescription::FILEOPEN_PLAY )
     {
-        nBits = WB_OPEN;
+        nBits = PickerFlags::OPEN;
         rExtraBits = SFX_EXTRA_PLAYBUTTON;
     }
     else if ( m_nServiceType == TemplateDescription::FILEOPEN_READONLY_VERSION )
     {
-        nBits = WB_OPEN | SFXWB_READONLY;
+        nBits = PickerFlags::OPEN | PickerFlags::READONLY;
         rExtraBits = SFX_EXTRA_SHOWVERSIONS;
     }
     else if ( m_nServiceType == TemplateDescription::FILEOPEN_LINK_PREVIEW )
     {
-        nBits = WB_OPEN;
+        nBits = PickerFlags::OPEN;
         rExtraBits = SFX_EXTRA_INSERTASLINK | SFX_EXTRA_SHOWPREVIEW;
     }
-    if ( m_bMultiSelection && ( ( nBits & WB_OPEN ) == WB_OPEN ) )
-        nBits |= SFXWB_MULTISELECTION;
+    if ( m_bMultiSelection && ( nBits & PickerFlags::OPEN ) )
+        nBits |= PickerFlags::MULTISELECTION;
 
     return nBits;
 }
@@ -449,7 +449,7 @@ sal_Int16 SvtFilePicker::implExecutePicker( )
 VclPtr<SvtFileDialog_Base> SvtFilePicker::implCreateDialog( vcl::Window* _pParent )
 {
     WinBits nExtraBits;
-    WinBits nBits = getWinBits( nExtraBits );
+    PickerFlags nBits = getWinBits( nExtraBits );
 
     VclPtrInstance<SvtFileDialog> dialog( _pParent, nBits, nExtraBits );
 
@@ -1147,7 +1147,7 @@ SvtRemoteFilePicker::SvtRemoteFilePicker()
 VclPtr<SvtFileDialog_Base> SvtRemoteFilePicker::implCreateDialog( vcl::Window* _pParent )
 {
     WinBits nExtraBits;
-    WinBits nBits = getWinBits( nExtraBits );
+    PickerFlags nBits = getWinBits( nExtraBits );
 
     VclPtrInstance<RemoteFilesDialog> dialog( _pParent, nBits); // TODO: extrabits
 

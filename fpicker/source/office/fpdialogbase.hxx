@@ -35,12 +35,18 @@ class SvtFileView;
 class SvtFileDialogFilter_Impl;
 
 
-#define SFXWB_INSERT            ( 0x04000000L | WB_OPEN )
-#define SFXWB_PASSWORD          WB_PASSWORD
-#define SFXWB_READONLY          WB_READONLY
-#define SFXWB_PATHDIALOG        WB_PATH
-#define SFXWB_CLASSPATH         ( 0x08000000L | SFXWB_PATHDIALOG )
-#define SFXWB_MULTISELECTION    0x20000000L     // activate Multiselection
+enum class PickerFlags {
+    NONE              = 0x00000000,
+    PATHDIALOG        = 0x00100000,
+    OPEN              = 0x00200000,
+    SAVEAS            = 0x00400000,
+    PASSWORD          = 0x01000000,
+    READONLY          = 0x02000000,
+    MULTISELECTION    = 0x20000000L,
+};
+namespace o3tl {
+    template<> struct typed_flags<PickerFlags> : is_typed_flags<PickerFlags, 0xf> {};
+}
 
 #define SFX_EXTRA_AUTOEXTENSION     0x00000001L
 #define SFX_EXTRA_FILTEROPTIONS     0x00000002L
