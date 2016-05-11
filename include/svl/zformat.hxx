@@ -250,6 +250,7 @@ public:
     short GetNumForType( sal_uInt16 nNumFor, sal_uInt16 nPos ) const;
 
     OUString GetDenominatorString( sal_uInt16 nNumFor ) const;
+    OUString GetNumeratorString( sal_uInt16 nNumFor ) const;
     /** If the count of string elements (substrings, ignoring [modifiers] and
         so on) in a subformat code nNumFor (0..3) is equal to the given number.
         Used by ImpSvNumberInputScan::IsNumberFormatMain() to detect a matched
