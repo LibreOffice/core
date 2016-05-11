@@ -175,8 +175,8 @@ void IMapWindow::SetTargetList( TargetList& rTargetList )
     aTargetList.clear();
 
     // Fill with the provided list
-    for( size_t i = 0, n = rTargetList.size(); i < n; ++i )
-        aTargetList.push_back( rTargetList[ i ] );
+    for(const OUString & s : rTargetList)
+        aTargetList.push_back( s );
 
     pModel->SetChanged( false );
 }

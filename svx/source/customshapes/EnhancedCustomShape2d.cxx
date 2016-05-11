@@ -2181,9 +2181,8 @@ SdrObject* EnhancedCustomShape2d::CreatePathObj( bool bLineGeometryNeededOnly )
         {
             std::vector< SdrPathObj* > vTempList;
 
-            for(size_t i = 0; i < vObjectList.size(); ++i)
+            for(SdrPathObj* pObj : vObjectList)
             {
-                SdrPathObj* pObj(vObjectList[i]);
                 const drawing::LineStyle eLineStyle =static_cast<const XLineStyleItem&>(pObj->GetMergedItem(XATTR_LINESTYLE)).GetValue();
                 const drawing::FillStyle eFillStyle = static_cast<const XFillStyleItem&>(pObj->GetMergedItem(XATTR_FILLSTYLE)).GetValue();
 
@@ -2208,10 +2207,8 @@ SdrObject* EnhancedCustomShape2d::CreatePathObj( bool bLineGeometryNeededOnly )
             sal_Int32 nAreaObjectCount = 0;
 
             // correct some values and collect content data
-            for ( size_t i = 0; i < vObjectList.size(); ++i )
+            for (SdrPathObj* pObj : vObjectList)
             {
-                SdrPathObj* pObj( vObjectList[ i ] );
-
                 if(pObj->IsLine())
                 {
                     nLineObjectCount++;
@@ -2234,20 +2231,16 @@ SdrObject* EnhancedCustomShape2d::CreatePathObj( bool bLineGeometryNeededOnly )
                 std::vector< SdrPathObj* > vTempList;
                 vTempList.reserve(vObjectList.size());
 
-                for ( size_t i = 0; i < vObjectList.size(); ++i )
+                for (SdrPathObj* pObj : vObjectList)
                 {
-                    SdrPathObj* pObj( vObjectList[ i ] );
-
                     if ( !pObj->IsLine() )
                     {
                         vTempList.push_back(pObj);
                     }
                 }
 
-                for ( size_t i = 0; i < vObjectList.size(); ++i )
+                for (SdrPathObj* pObj : vObjectList)
                 {
-                    SdrPathObj* pObj( vObjectList[ i ] );
-
                     if ( pObj->IsLine() )
                     {
                         vTempList.push_back(pObj);
@@ -2267,9 +2260,8 @@ SdrObject* EnhancedCustomShape2d::CreatePathObj( bool bLineGeometryNeededOnly )
         {
             pRet = new SdrObjGroup;
 
-            for (size_t i = 0; i < vObjectList.size(); ++i)
+            for (SdrPathObj* pObj : vObjectList)
             {
-                SdrObject* pObj(vObjectList[i]);
                 pRet->GetSubList()->NbcInsertObject(pObj);
             }
         }

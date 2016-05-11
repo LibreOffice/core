@@ -2394,9 +2394,9 @@ SdrObject* SdrObject::ImpConvertToContourObj(SdrObject* pRet, bool bForceLineDas
             if(!aExtractedHairlines.empty())
             {
                 // for SdrObject creation, just copy all to a single Hairline-PolyPolygon
-                for(size_t a(0); a < aExtractedHairlines.size(); a++)
+                for(basegfx::B2DPolygon & rExtractedHairline : aExtractedHairlines)
                 {
-                    aMergedHairlinePolyPolygon.append(aExtractedHairlines[a]);
+                    aMergedHairlinePolyPolygon.append(rExtractedHairline);
                 }
             }
 

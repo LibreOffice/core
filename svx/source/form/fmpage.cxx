@@ -189,8 +189,8 @@ bool FmFormPage::RequestHelp( vcl::Window* pWindow, SdrView* pView,
                     INetProtocol::Https, INetProtocol::Javascript,
                     INetProtocol::Ldap
                 };
-            for (sal_uInt16 i=0; i<SAL_N_ELEMENTS(s_aQuickHelpSupported); ++i)
-                if (s_aQuickHelpSupported[i] == aProtocol)
+            for (const INetProtocol& i : s_aQuickHelpSupported)
+                if (i == aProtocol)
                 {
                     aHelpText = INetURLObject::decode(aUrl.GetURLNoPass(), INetURLObject::DECODE_UNAMBIGUOUS);
                     break;

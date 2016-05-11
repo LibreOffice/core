@@ -1562,9 +1562,9 @@ bool SvxNumberFormatShell::IsInTable(sal_uInt16 const nPos,
                 pFormatter->GetCurrencyFormatStrings( aWSStringsDtor,
                                 *pTmpCurrencyEntry, bTmpBanking );
 
-                for(size_t i=0;i<aWSStringsDtor.size();i++)
+                for(const OUString & s : aWSStringsDtor)
                 {
-                    if (aWSStringsDtor[i] == rFmtString)
+                    if (s == rFmtString)
                     {
                         bFlag=true;
                         break;

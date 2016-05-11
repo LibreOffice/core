@@ -249,8 +249,8 @@ void SvxUndoRedoControl::StateChanged(
             const SfxStringListItem &rItem = *static_cast<const SfxStringListItem *>(pState);
 
             const std::vector<OUString> &aLst = rItem.GetList();
-            for( long nI = 0, nEnd = aLst.size(); nI < nEnd; ++nI )
-                aUndoRedoList.push_back( aLst[nI] );
+            for(const auto & i : aLst)
+                aUndoRedoList.push_back( i );
         }
     }
 }
@@ -271,8 +271,8 @@ VclPtr<SfxPopupWindow> SvxUndoRedoControl::CreatePopupWindow()
     ListBox &rListBox = pPopupWin->GetListBox();
     rListBox.SetSelectHdl( LINK( this, SvxUndoRedoControl, SelectHdl ) );
 
-    for( size_t n = 0; n < aUndoRedoList.size(); n++ )
-        rListBox.InsertEntry( aUndoRedoList[n] );
+    for(const OUString & s : aUndoRedoList)
+        rListBox.InsertEntry( s );
 
     rListBox.SelectEntryPos( 0 );
     aActionStr = SVX_RESSTR(SID_UNDO == GetSlotId() ?

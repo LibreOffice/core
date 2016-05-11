@@ -886,14 +886,14 @@ ImpXPolyPolygon::ImpXPolyPolygon( const ImpXPolyPolygon& rImpXPolyPoly ) :
     nRefCount = 1;
 
     // duplicate elements
-    for ( size_t i = 0, n = aXPolyList.size(); i < n; ++i )
-        aXPolyList[ i ] = new XPolygon( *aXPolyList[ i ] );
+    for (XPolygon*& rp : aXPolyList)
+        rp = new XPolygon( *rp );
 }
 
 ImpXPolyPolygon::~ImpXPolyPolygon()
 {
-    for ( size_t i = 0, n = aXPolyList.size(); i < n; ++i )
-        delete aXPolyList[ i ];
+    for (XPolygon* p : aXPolyList)
+        delete p;
     aXPolyList.clear();
 }
 
@@ -972,8 +972,8 @@ void XPolyPolygon::Clear()
     }
     else
     {
-        for( size_t i = 0, n = pImpXPolyPolygon->aXPolyList.size(); i < n; ++i )
-            delete pImpXPolyPolygon->aXPolyList[ i ];
+        for(XPolygon* p : pImpXPolyPolygon->aXPolyList)
+            delete p;
         pImpXPolyPolygon->aXPolyList.clear();
     }
 }

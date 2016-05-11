@@ -155,8 +155,8 @@ SvxIMapDlg::SvxIMapDlg(SfxBindings *_pBindings, SfxChildWindow *pCW, vcl::Window
     //as entries are added later on
     TargetList aTmpList;
     SfxFrame::GetDefaultTargetList(aTmpList);
-    for (size_t i = 0, n = aTmpList.size(); i < n; ++i)
-        m_pCbbTarget->InsertEntry(aTmpList[i]);
+    for (const OUString & s : aTmpList)
+        m_pCbbTarget->InsertEntry(s);
     Size aPrefSize(m_pCbbTarget->get_preferred_size());
     m_pCbbTarget->set_width_request(aPrefSize.Width());
     m_pCbbTarget->Clear();
@@ -301,8 +301,8 @@ void SvxIMapDlg::SetTargetList( const TargetList& rTargetList )
 
     m_pCbbTarget->Clear();
 
-    for ( size_t i = 0, n = aNewList.size(); i < n; ++i )
-        m_pCbbTarget->InsertEntry( aNewList[ i ] );
+    for (const OUString & s : aNewList)
+        m_pCbbTarget->InsertEntry( s );
 }
 
 void SvxIMapDlg::UpdateLink( const Graphic& rGraphic, const ImageMap* pImageMap,
@@ -328,8 +328,8 @@ void SvxIMapDlg::UpdateLink( const Graphic& rGraphic, const ImageMap* pImageMap,
     {
         TargetList aTargetList( *pTargetList );
 
-        for ( size_t i = 0, n = aTargetList.size(); i < n; ++i )
-            pOwnData->aUpdateTargetList.push_back( aTargetList[ i ] );
+        for (const OUString & s : aTargetList)
+            pOwnData->aUpdateTargetList.push_back( s );
     }
 
     pOwnData->aIdle.Start();
