@@ -35,7 +35,6 @@
 #include <com/sun/star/drawing/XSlideSorterBase.hpp>
 #include <com/sun/star/presentation/XSlideShow.hpp>
 #include <com/sun/star/presentation/XSlideShowView.hpp>
-#include <boost/bind.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -490,8 +489,11 @@ Reference<XView> PresenterViewFactory::CreateSlideSorterView(
         PresenterPaneContainer::SharedPaneDescriptor pDescriptor (
             mpPresenterController->GetPaneContainer()->FindPaneId(rxViewId->getAnchor()));
         if (pDescriptor.get() != nullptr)
-            pDescriptor->maActivator = ::boost::bind(
-                &PresenterSlideSorter::SetActiveState, _1);
+        {
+            pDescriptor->maActivator = [] (bool const isActive) {
+                    return PresenterSlideSorter::SetActiveState(isActive);
+                };
+        }
         xView = pView.get();
     }
     catch (RuntimeException&)
