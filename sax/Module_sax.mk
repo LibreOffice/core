@@ -18,6 +18,7 @@ $(eval $(call gb_Module_add_check_targets,sax,\
 	CppunitTest_sax \
 	CppunitTest_sax_attributes \
 	CppunitTest_sax_parser \
+	CppunitTest_sax_xmlimport \
 ))
 
 # vim: set noet sw=4 ts=4:
