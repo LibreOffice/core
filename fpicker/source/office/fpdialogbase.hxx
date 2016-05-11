@@ -42,15 +42,21 @@ class SvtFileDialogFilter_Impl;
 #define SFXWB_CLASSPATH         ( 0x08000000L | SFXWB_PATHDIALOG )
 #define SFXWB_MULTISELECTION    0x20000000L     // activate Multiselection
 
-#define SFX_EXTRA_AUTOEXTENSION     0x00000001L
-#define SFX_EXTRA_FILTEROPTIONS     0x00000002L
-#define SFX_EXTRA_SHOWVERSIONS      0x00000004L
-#define SFX_EXTRA_INSERTASLINK      0x00000008L
-#define SFX_EXTRA_SHOWPREVIEW       0x00000010L
-#define SFX_EXTRA_TEMPLATES         0x00000020L
-#define SFX_EXTRA_PLAYBUTTON        0x00000040L
-#define SFX_EXTRA_SELECTION         0x00000080L
-#define SFX_EXTRA_IMAGE_TEMPLATE    0x00000100L
+enum class PickerExtraBits {
+    NONE              = 0x0000,
+    AutoExtension     = 0x0001,
+    FilterOptions     = 0x0002,
+    ShowVersions      = 0x0004,
+    InsertAsLink      = 0x0008,
+    ShowPreview       = 0x0010,
+    Templates         = 0x0020,
+    PlayButton        = 0x0040,
+    Selection         = 0x0080,
+    ImageTemplate     = 0x0100
+};
+namespace o3tl {
+    template<> struct typed_flags<PickerExtraBits> : is_typed_flags<PickerExtraBits, 0x01ff> {};
+}
 
 #define FILEDIALOG_FILTER_ALL   "*.*"
 
