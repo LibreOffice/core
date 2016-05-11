@@ -1,6 +1,14 @@
 --- boost/format/parsing.hpp
 +++ boost/format/parsing.hpp
-@@ -267,6 +267,7 @@
+@@ -19,6 +19,7 @@
+ #include <boost/format/exceptions.hpp>
+ #include <boost/throw_exception.hpp>
+ #include <boost/assert.hpp>
++#include <boost/config.hpp>
+ 
+ 
+ namespace boost {
+@@ -267,6 +268,7 @@
          switch ( wrap_narrow(fac, *start, 0) ) {
          case 'X':
              fpar->fmtstate_.flags_ |= std::ios_base::uppercase;
@@ -8,7 +16,7 @@
          case 'p': // pointer => set hex.
          case 'x':
              fpar->fmtstate_.flags_ &= ~std::ios_base::basefield;
-@@ -280,6 +281,7 @@
+@@ -280,6 +282,7 @@
  
          case 'E':
              fpar->fmtstate_.flags_ |=  std::ios_base::uppercase;
@@ -16,7 +24,7 @@
          case 'e':
              fpar->fmtstate_.flags_ &= ~std::ios_base::floatfield;
              fpar->fmtstate_.flags_ |=  std::ios_base::scientific;
-@@ -291,6 +293,7 @@
+@@ -291,6 +294,7 @@
          case 'f':
              fpar->fmtstate_.flags_ &= ~std::ios_base::floatfield;
              fpar->fmtstate_.flags_ |=  std::ios_base::fixed;
