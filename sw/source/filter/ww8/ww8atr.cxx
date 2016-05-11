@@ -3489,6 +3489,7 @@ void AttributeOutputBase::FormatBreak( const SvxFormatBreakItem& rBreak )
                         PageBreakBefore(true);
                     break;
                 }
+                SAL_FALLTHROUGH;
             case SVX_BREAK_PAGE_AFTER:
             case SVX_BREAK_PAGE_BOTH:
                 nC = msword::PageBreak;
