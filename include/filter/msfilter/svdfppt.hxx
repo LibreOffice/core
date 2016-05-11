@@ -39,6 +39,7 @@
 #include <vector>
 #include <memory>
 #include <boost/optional.hpp>
+#include <o3tl/enumarray.hxx>
 
 class SdrModel;
 class SdPage;
@@ -152,15 +153,19 @@ enum PPT_TextHeader
     PPTTH_QUARTERBODY  // Body in four-body slide
 };
 
-#define TSS_TYPE_PAGETITLE      (0)
-#define TSS_TYPE_BODY           (1)
-#define TSS_TYPE_NOTES          (2)
-#define TSS_TYPE_UNUSED         (3)
-#define TSS_TYPE_TEXT_IN_SHAPE  (4)
-#define TSS_TYPE_SUBTITLE       (5)
-#define TSS_TYPE_TITLE          (6)
-#define TSS_TYPE_HALFBODY       (7)
-#define TSS_TYPE_QUARTERBODY    (8)
+enum class TSS_Type : unsigned {
+    PageTitle      = 0,
+    Body           = 1,
+    Notes          = 2,
+    Unused         = 3,
+    TextInShape    = 4,
+    Subtitle       = 5,
+    Title          = 6,
+    HalfBody       = 7,
+    QuarterBody    = 8,
+    LAST = QuarterBody,
+    Unknown        = 0xffffffff // or invalid
+};
 
 // Inventor-Id for PPT UserData
 const sal_uInt32 PPTInventor = sal_uInt32('P') * 0x00000001
@@ -712,7 +717,7 @@ public:
     bool                bGraphics;
     DffRecordManager    aExtendedPresRules;
 
-    PPTExtParaSheet     aExtParaSheet[ PPT_STYLESHEETENTRYS ];
+    o3tl::enumarray<TSS_Type, PPTExtParaSheet> aExtParaSheet;
 
     bool                GetGraphic( sal_uInt32 nInstance, Graphic& rGraphic ) const;
 
@@ -739,7 +744,7 @@ struct PPTCharSheet
 {
     PPTCharLevel    maCharLevel[nMaxPPTLevels];
 
-                    explicit PPTCharSheet( sal_uInt32 nInstance );
+                    explicit PPTCharSheet( TSS_Type nInstance );
                     PPTCharSheet( const PPTCharSheet& rCharSheet );
 
     void            Read( SvStream& rIn, bool bMasterStyle, sal_uInt32 nLevel, bool bFirst );
@@ -772,7 +777,7 @@ public:
 
     PPTParaLevel    maParaLevel[nMaxPPTLevels];
 
-                    explicit PPTParaSheet( sal_uInt32 nInstance );
+                    explicit PPTParaSheet( TSS_Type nInstance );
                     PPTParaSheet( const PPTParaSheet& rParaSheet );
 
     void            Read(
@@ -805,8 +810,8 @@ class PPTNumberFormatCreator
                     SdrPowerPointImport& rMan,
                     SvxNumberFormat& rNumberFormat,
                     sal_uInt32 nLevel,
-                    sal_uInt32 nInstance,
-                    sal_uInt32 nInstanceInSheet,
+                    TSS_Type nInstance,
+                    TSS_Type nInstanceInSheet,
                     boost::optional< sal_Int16 >& rStartNumbering,
                     sal_uInt32 nFontHeight,
                     PPTParagraphObj* pPara
@@ -827,14 +832,14 @@ public:
                     sal_uInt32 nLevel,
                     const PPTParaLevel& rParaLevel,
                     const PPTCharLevel& rCharLevel,
-                    sal_uInt32 nInstance
+                    TSS_Type nInstance
                 );
 
     bool        GetNumberFormat(
                     SdrPowerPointImport& rMan,
                     SvxNumberFormat& rNumberFormat,
                     PPTParagraphObj* pPara,
-                    sal_uInt32 nInstanceInSheet,
+                    TSS_Type nInstanceInSheet,
                     boost::optional< sal_Int16 >& rStartNumbering
                 );
 };
@@ -843,9 +848,9 @@ class SvxNumBulletItem;
 struct PPTStyleSheet : public PPTNumberFormatCreator
 {
     PPTTextSpecInfo     maTxSI;
-    PPTCharSheet*       mpCharSheet[ PPT_STYLESHEETENTRYS ];
-    PPTParaSheet*       mpParaSheet[ PPT_STYLESHEETENTRYS ];
-    SvxNumBulletItem*   mpNumBulletItem[ PPT_STYLESHEETENTRYS ];
+    o3tl::enumarray<TSS_Type, PPTCharSheet*>     mpCharSheet;
+    o3tl::enumarray<TSS_Type, PPTParaSheet*>     mpParaSheet;
+    o3tl::enumarray<TSS_Type, SvxNumBulletItem*> mpNumBulletItem;
 
                         PPTStyleSheet(
                             const DffRecordHeader& rSlideHd,
@@ -1057,7 +1062,7 @@ struct PPTStyleTextPropReader
                 const DffRecordHeader& rClientTextBoxHd,
                 PPTTextRulerInterpreter& rInterpreter,
                 const DffRecordHeader& rExtParaHd,
-                sal_uInt32 nTextInstance
+                TSS_Type nTextInstance
             );
             ~PPTStyleTextPropReader();
 
@@ -1066,7 +1071,7 @@ struct PPTStyleTextPropReader
                 const DffRecordHeader& rClientTextBoxHd,
                 PPTTextRulerInterpreter& rInterpreter,
                 const DffRecordHeader& rExtParaHd,
-                sal_uInt32 nTextInstance
+                TSS_Type nTextInstance
             );
     void    ReadParaProps(
                 SvStream& rIn,
@@ -1099,19 +1104,19 @@ class MSFILTER_DLLPUBLIC PPTPortionObj : public PPTCharPropSet
     friend class PPTParagraphObj;
 
     const PPTStyleSheet&    mrStyleSheet;
-    sal_uInt32              mnInstance;
+    TSS_Type                mnInstance;
     sal_uInt32              mnDepth;
 
 public:
 
-    bool            GetAttrib( sal_uInt32 nAttr, sal_uInt32& nVal, sal_uInt32 nInstanceInSheet ) const;
+    bool            GetAttrib( sal_uInt32 nAttr, sal_uInt32& nVal, TSS_Type nInstanceInSheet ) const;
     SvxFieldItem*   GetTextField();
 
-                    PPTPortionObj( const PPTStyleSheet&, sal_uInt32 nInstance, sal_uInt32 nDepth );
+                    PPTPortionObj( const PPTStyleSheet&, TSS_Type nInstance, sal_uInt32 nDepth );
                     PPTPortionObj(
                         const PPTCharPropSet&,
                         const PPTStyleSheet&,
-                        sal_uInt32 nInstance,
+                        TSS_Type nInstance,
                         sal_uInt32 nDepth
                     );
                     PPTPortionObj( const PPTPortionObj& );
@@ -1121,12 +1126,12 @@ public:
     void            ApplyTo(
                         SfxItemSet& rSet,
                         SdrPowerPointImport& rManager,
-                        sal_uInt32 nInstanceInSheet
+                        TSS_Type nInstanceInSheet
                     );
     void            ApplyTo(
                         SfxItemSet& rSet,
                         SdrPowerPointImport& rManager,
-                        sal_uInt32 nInstanceInSheet,
+                        TSS_Type nInstanceInSheet,
                         const PPTTextObj* pTextObj
                     );
     sal_uInt32      Count() const { return ( mpFieldItem ) ? 1 : maString.getLength(); };
@@ -1142,7 +1147,7 @@ class MSFILTER_DLLPUBLIC PPTParagraphObj
     friend class PPTNumberFormatCreator;
 
     const PPTStyleSheet&    mrStyleSheet;
-    sal_uInt32              mnInstance;
+    TSS_Type                mnInstance;
 
     PPTParagraphObj(PPTParagraphObj const&) = delete;
     void operator=(PPTParagraphObj const&) = delete;
@@ -1155,11 +1160,11 @@ public:
     ::std::vector<std::unique_ptr<PPTPortionObj>> m_PortionList;
 
     void                    UpdateBulletRelSize( sal_uInt32& nBulletRelSize ) const;
-    bool                    GetAttrib( sal_uInt32 nAttr, sal_uInt32& nVal, sal_uInt32 nInstanceInSheet );
+    bool                    GetAttrib( sal_uInt32 nAttr, sal_uInt32& nVal, TSS_Type nInstanceInSheet );
 
                             PPTParagraphObj(
                                 const PPTStyleSheet&,
-                                sal_uInt32 nInstance,
+                                TSS_Type nInstance,
                                 sal_uInt16 nDepth
                             );
                             PPTParagraphObj(
@@ -1167,7 +1172,7 @@ public:
                                 size_t nCurParaPos,
                                 size_t& rnCurCharPos,
                                 const PPTStyleSheet&,
-                                sal_uInt32 nInstance,
+                                TSS_Type nInstance,
                                 PPTTextRulerInterpreter& rRuler
                             );
                             ~PPTParagraphObj();
@@ -1181,7 +1186,7 @@ public:
                                 SfxItemSet& rSet,
                                 boost::optional< sal_Int16 >& rStartNumbering,
                                 SdrPowerPointImport& rManager,
-                                sal_uInt32 nInstanceInSheet,
+                                TSS_Type nInstanceInSheet,
                                 const PPTParagraphObj* pPrev
                             );
 };
@@ -1198,8 +1203,8 @@ struct ImplPPTTextObj
     sal_uInt32                  mnShapeId;
     sal_uInt32                  mnShapeMaster;
     PptOEPlaceholderAtom*       mpPlaceHolderAtom;
-    sal_uInt16                  mnInstance;
-    sal_uInt16                  mnDestinationInstance;
+    TSS_Type                    mnInstance;
+    TSS_Type                    mnDestinationInstance;
     MSO_SPT                     meShapeType;
 
     sal_uInt32                  mnCurrentObject;
@@ -1214,8 +1219,8 @@ struct ImplPPTTextObj
         , mnShapeId(0)
         , mnShapeMaster(0)
         , mpPlaceHolderAtom(nullptr)
-        , mnInstance(0)
-        , mnDestinationInstance(0)
+        , mnInstance(TSS_Type::PageTitle)
+        , mnDestinationInstance(TSS_Type::PageTitle)
         , meShapeType(mso_sptMin)
         , mnCurrentObject(0)
         , mnParagraphCount(0)
@@ -1245,14 +1250,14 @@ public:
     PPTParagraphObj*        First();
     PPTParagraphObj*        Next();
     MSO_SPT                 GetShapeType() const { return mpImplTextObj->meShapeType; };
-    sal_uInt32              GetInstance() const { return mpImplTextObj->mnInstance; };
-    void                    SetInstance( sal_uInt16 nInstance )
+    TSS_Type                GetInstance() const { return mpImplTextObj->mnInstance; };
+    void                    SetInstance( TSS_Type nInstance )
                             { mpImplTextObj->mnInstance = nInstance; }
 
-    sal_uInt32              GetDestinationInstance() const
+    TSS_Type                GetDestinationInstance() const
                             { return mpImplTextObj->mnDestinationInstance; }
 
-    void                    SetDestinationInstance( sal_uInt16 nInstance )
+    void                    SetDestinationInstance( TSS_Type nInstance )
                             { mpImplTextObj->mnDestinationInstance = nInstance; }
 
     PptOEPlaceholderAtom*   GetOEPlaceHolderAtom() const { return mpImplTextObj->mpPlaceHolderAtom; }
