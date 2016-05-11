@@ -49,6 +49,15 @@ public:
         case svtools::RESTART_REASON_ADDING_PATH:
             get(reason_, "reason_adding_path");
             break;
+        case svtools::RESTART_REASON_ASSIGNING_JAVAPARAMETERS:
+            get(reason_, "reason_assigning_javaparameters");
+            break;
+        case svtools::RESTART_REASON_ASSIGNING_FOLDERS:
+            get(reason_, "reason_assigning_folders");
+            break;
+        case svtools::RESTART_REASON_EXP_FEATURES:
+            get(reason_,"reason_exp_features");
+            break;
         default:
             assert(false); // this cannot happen
         }

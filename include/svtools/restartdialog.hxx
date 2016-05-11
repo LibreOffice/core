@@ -38,8 +38,17 @@ enum RestartReason {
     RESTART_REASON_LANGUAGE_CHANGE,
         // "For the updated language settings to take effect,
         // %PRODUCTNAME must be restarted."
-    RESTART_REASON_ADDING_PATH
+    RESTART_REASON_ADDING_PATH,
         // "For the added path to take effect,
+        // %PRODUCTNAME must be restarted."
+    RESTART_REASON_ASSIGNING_JAVAPARAMETERS,
+        // "For the assigned java parameters to take effect,
+        // %PRODUCTNAME must be restarted."
+    RESTART_REASON_ASSIGNING_FOLDERS,
+        // "For the assigned folders and archives to take effect,
+        // %PRODUCTNAME must be restarted."
+    RESTART_REASON_EXP_FEATURES
+        // "For the modified experimental features to take effect,
         // %PRODUCTNAME must be restarted."
 };
 
