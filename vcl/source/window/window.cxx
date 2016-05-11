@@ -752,7 +752,8 @@ ImplWinData::ImplWinData() :
     mpFocusRect(nullptr),
     mpTrackRect(nullptr),
     mnTrackFlags(0),
-    mnIsTopWindow((sal_uInt16) ~0) // not initialized yet, 0/1 will indicate TopWindow (see IsTopWindow())
+    mnIsTopWindow((sal_uInt16) ~0), // not initialized yet, 0/1 will indicate TopWindow (see IsTopWindow())
+    mbMouseOver(false)
 {
 }
 
