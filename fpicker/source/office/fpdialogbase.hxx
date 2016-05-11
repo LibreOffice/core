@@ -35,27 +35,26 @@ class SvtFileView;
 class SvtFileDialogFilter_Impl;
 
 
-#define SFXWB_INSERT            ( 0x04000000L | WB_OPEN )
-#define SFXWB_PASSWORD          WB_PASSWORD
-#define SFXWB_READONLY          WB_READONLY
-#define SFXWB_PATHDIALOG        WB_PATH
-#define SFXWB_CLASSPATH         ( 0x08000000L | SFXWB_PATHDIALOG )
-#define SFXWB_MULTISELECTION    0x20000000L     // activate Multiselection
-
-enum class PickerExtraBits {
-    NONE              = 0x0000,
-    AutoExtension     = 0x0001,
-    FilterOptions     = 0x0002,
-    ShowVersions      = 0x0004,
-    InsertAsLink      = 0x0008,
-    ShowPreview       = 0x0010,
-    Templates         = 0x0020,
-    PlayButton        = 0x0040,
-    Selection         = 0x0080,
-    ImageTemplate     = 0x0100
+enum class PickerFlags {
+    NONE              = 0x000000,
+    AutoExtension     = 0x000001,
+    FilterOptions     = 0x000002,
+    ShowVersions      = 0x000004,
+    InsertAsLink      = 0x000008,
+    ShowPreview       = 0x000010,
+    Templates         = 0x000020,
+    PlayButton        = 0x000040,
+    Selection         = 0x000080,
+    ImageTemplate     = 0x000100,
+    PathDialog        = 0x000200,
+    Open              = 0x000400,
+    SaveAs            = 0x000800,
+    Password          = 0x001000,
+    ReadOnly          = 0x002000,
+    MultiSelection    = 0x004000,
 };
 namespace o3tl {
-    template<> struct typed_flags<PickerExtraBits> : is_typed_flags<PickerExtraBits, 0x01ff> {};
+    template<> struct typed_flags<PickerFlags> : is_typed_flags<PickerFlags, 0x007fff> {};
 }
 
 #define FILEDIALOG_FILTER_ALL   "*.*"

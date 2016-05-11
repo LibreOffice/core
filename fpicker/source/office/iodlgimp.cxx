@@ -203,7 +203,7 @@ Size SvtUpButton_Impl::GetOptimalSize() const
 }
 
 // SvtExpFileDlg_Impl
-SvtExpFileDlg_Impl::SvtExpFileDlg_Impl( WinBits )   :
+SvtExpFileDlg_Impl::SvtExpFileDlg_Impl()   :
 
     _pCurFilter         ( nullptr ),
     _pUserFilter        ( nullptr ),
@@ -230,7 +230,7 @@ SvtExpFileDlg_Impl::SvtExpFileDlg_Impl( WinBits )   :
     _pBtnConnectToServer( nullptr ),
     _eMode              ( FILEDLG_MODE_OPEN ),
     _eDlgType           ( FILEDLG_TYPE_FILEDLG ),
-    _nStyle             ( 0 ),
+    _nStyle             ( PickerFlags::NONE ),
     _bDoubleClick       ( false ),
     m_bNeedDelayedFilterExecute ( false ),
     _pDefaultFilter     ( nullptr ),

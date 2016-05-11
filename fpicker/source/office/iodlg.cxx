@@ -295,8 +295,7 @@ namespace
 SvtFileDialog::SvtFileDialog
 (
     vcl::Window* _pParent,
-    WinBits nBits,
-    PickerExtraBits nExtraBits
+    PickerFlags nBits
 ) :
     SvtFileDialog_Base( _pParent, "ExplorerFileDialog", "fps/ui/explorerfiledialog.ui" )
 
@@ -309,8 +308,8 @@ SvtFileDialog::SvtFileDialog
     ,_pPrevBmp( nullptr )
     ,_pFileView( nullptr )
     ,_pFileNotifier( nullptr )
-    ,_pImp( new SvtExpFileDlg_Impl( nBits ) )
-    ,_nExtraBits( nExtraBits )
+    ,_pImp( new SvtExpFileDlg_Impl )
+    ,_nPickerFlags( nBits )
     ,_bIsInExecute( false )
     ,m_bInExecuteAsync( false )
     ,m_bHasFilename( false )
@@ -319,25 +318,6 @@ SvtFileDialog::SvtFileDialog
     Init_Impl( nBits );
 }
 
-
-SvtFileDialog::SvtFileDialog ( vcl::Window* _pParent, WinBits nBits )
-    :SvtFileDialog_Base( _pParent, "ExplorerFileDialog", "fps/ui/explorerfiledialog.ui" )
-    ,_pCbReadOnly( nullptr )
-    ,_pCbLinkBox( nullptr)
-    ,_pCbPreviewBox( nullptr )
-    ,_pCbSelection( nullptr )
-    ,_pPbPlay( nullptr )
-    ,_pPrevWin( nullptr )
-    ,_pPrevBmp( nullptr )
-    ,_pFileView( nullptr )
-    ,_pFileNotifier( nullptr )
-    ,_pImp( new SvtExpFileDlg_Impl( nBits ) )
-    ,_nExtraBits( PickerExtraBits::NONE )
-    ,_bIsInExecute( false )
-    ,m_bHasFilename( false )
-{
-    Init_Impl( nBits );
-}
 
 class CustomContainer : public vcl::Window
 {
@@ -551,7 +531,7 @@ void SvtFileDialog::dispose()
 
 void SvtFileDialog::Init_Impl
 (
-    WinBits nStyle
+    PickerFlags nStyle
 )
 {
     get(_pCbReadOnly, "readonly");
@@ -592,10 +572,10 @@ void SvtFileDialog::Init_Impl
     _pImp->_pBtnUp->Show();
 
     _pImp->_nStyle = nStyle;
-    _pImp->_eMode = ( nStyle & WB_SAVEAS ) ? FILEDLG_MODE_SAVE : FILEDLG_MODE_OPEN;
+    _pImp->_eMode = ( nStyle & PickerFlags::SaveAs ) ? FILEDLG_MODE_SAVE : FILEDLG_MODE_OPEN;
     _pImp->_eDlgType = FILEDLG_TYPE_FILEDLG;
 
-    if ( ( nStyle & SFXWB_PATHDIALOG ) == SFXWB_PATHDIALOG )
+    if ( nStyle & PickerFlags::PathDialog )
         _pImp->_eDlgType = FILEDLG_TYPE_PATHDLG;
 
     // Set the directory for the "back to the default dir" button
@@ -619,7 +599,7 @@ void SvtFileDialog::Init_Impl
     _pImp->_pBtnUp->SetAccessibleName( _pImp->_pBtnUp->GetQuickHelpText() );
     _pImp->_pBtnNewFolder->SetAccessibleName( _pImp->_pBtnNewFolder->GetQuickHelpText() );
 
-    if ( ( nStyle & SFXWB_MULTISELECTION ) == SFXWB_MULTISELECTION )
+    if ( nStyle & PickerFlags::MultiSelection )
         _pImp->_bMultiSelection = true;
 
     _pContainer.reset(VclPtr<CustomContainer>::Create(get<vcl::Window>("container")));
@@ -645,7 +625,7 @@ void SvtFileDialog::Init_Impl
     Image aNewFolderImg( GetButtonImage( IMG_FILEDLG_CREATEFOLDER ) );
     _pImp->_pBtnNewFolder->SetModeImage( aNewFolderImg );
 
-    if ( nStyle & SFXWB_READONLY )
+    if ( nStyle & PickerFlags::ReadOnly )
     {
         _pCbReadOnly->SetHelpId( HID_FILEOPEN_READONLY );
         _pCbReadOnly->SetText( SvtResId( STR_SVT_FILEPICKER_READONLY ) );
@@ -653,7 +633,7 @@ void SvtFileDialog::Init_Impl
         _pCbReadOnly->Show();
     }
 
-    if ( nStyle & SFXWB_PASSWORD )
+    if ( nStyle & PickerFlags::Password )
     {
         _pImp->_pCbPassword->SetText( SvtResId( STR_SVT_FILEPICKER_PASSWORD ) );
         _pImp->_pCbPassword->SetClickHdl( LINK( this, SvtFileDialog, ClickHdl_Impl ) );
@@ -669,13 +649,13 @@ void SvtFileDialog::Init_Impl
     sal_uInt16 nResId = STR_EXPLORERFILE_OPEN;
     sal_uInt16 nButtonResId = 0;
 
-    if ( nStyle & WB_SAVEAS )
+    if ( nStyle & PickerFlags::SaveAs )
     {
         nResId = STR_EXPLORERFILE_SAVE;
         nButtonResId = STR_EXPLORERFILE_BUTTONSAVE;
     }
 
-    if ( ( nStyle & SFXWB_PATHDIALOG ) == SFXWB_PATHDIALOG )
+    if ( nStyle & PickerFlags::PathDialog )
     {
         _pImp->_pFtFileName->SetText( SvtResId( STR_PATHNAME ) );
         nResId = STR_PATHSELECT;
@@ -713,7 +693,7 @@ void SvtFileDialog::Init_Impl
     _pImp->_aFilterTimer.SetTimeout( TRAVELFILTER_TIMEOUT );
     _pImp->_aFilterTimer.SetTimeoutHdl( LINK( this, SvtFileDialog, FilterSelectTimerHdl_Impl ) );
 
-    if ( WB_SAVEAS & nStyle )
+    if ( PickerFlags::SaveAs & nStyle )
     {
         // different help ids if in save-as mode
         SetHelpId( HID_FILESAVE_DIALOG );
@@ -1874,7 +1854,7 @@ short SvtFileDialog::PrepareExecute()
         }
     }
 
-    if ( ( _pImp->_nStyle & WB_SAVEAS ) && m_bHasFilename )
+    if ( ( _pImp->_nStyle & PickerFlags::SaveAs ) && m_bHasFilename )
         // when doing a save-as, we do not want the handler to handle "this file does not exist" messages
         // - finally we're going to save that file, aren't we?
         m_aContent.enableOwnInteractionHandler(::svt::OFilePickerInteractionHandler::E_DOESNOTEXIST);
@@ -1906,7 +1886,7 @@ short SvtFileDialog::PrepareExecute()
 
     _aPath = implGetInitialURL( _aPath, GetStandardDir() );
 
-    if ( _pImp->_nStyle & WB_SAVEAS && !m_bHasFilename )
+    if ( _pImp->_nStyle & PickerFlags::SaveAs && !m_bHasFilename )
         // when doing a save-as, we do not want the handler to handle "this file does not exist" messages
         // - finally we're going to save that file, aren't we?
         m_aContent.enableOwnInteractionHandler(::svt::OFilePickerInteractionHandler::E_DOESNOTEXIST);
@@ -2469,7 +2449,7 @@ void SvtFileDialog::enableControl( sal_Int16 _nControlId, bool _bEnable )
 void SvtFileDialog::AddControls_Impl( )
 {
     // create the "insert as link" checkbox, if needed
-    if ( _nExtraBits & PickerExtraBits::InsertAsLink )
+    if ( _nPickerFlags & PickerFlags::InsertAsLink )
     {
         _pCbLinkBox ->SetText( SvtResId( STR_SVT_FILEPICKER_INSERT_AS_LINK ) );
         _pCbLinkBox ->SetHelpId( HID_FILEDLG_LINK_CB );
@@ -2478,7 +2458,7 @@ void SvtFileDialog::AddControls_Impl( )
     }
 
     // create the "show preview" checkbox ( and the preview window, too ), if needed
-    if ( _nExtraBits & PickerExtraBits::ShowPreview  )
+    if ( _nPickerFlags & PickerFlags::ShowPreview  )
     {
         _pImp->_aIniKey = "ImportGraphicDialog";
         // because the "<All Formats> (*.bmp,*...)" entry is to wide,
@@ -2502,7 +2482,7 @@ void SvtFileDialog::AddControls_Impl( )
         _pPrevBmp->SetAccessibleName(SVT_RESSTR(STR_PREVIEW));
     }
 
-    if ( _nExtraBits & PickerExtraBits::AutoExtension )
+    if ( _nPickerFlags & PickerFlags::AutoExtension )
     {
         _pImp->_pCbAutoExtension->SetText( SvtResId( STR_SVT_FILEPICKER_AUTO_EXTENSION ) );
         _pImp->_pCbAutoExtension->Check();
@@ -2510,21 +2490,21 @@ void SvtFileDialog::AddControls_Impl( )
         _pImp->_pCbAutoExtension->Show();
     }
 
-    if ( _nExtraBits & PickerExtraBits::FilterOptions )
+    if ( _nPickerFlags & PickerFlags::FilterOptions )
     {
         _pImp->_pCbOptions->SetText( SvtResId( STR_SVT_FILEPICKER_FILTER_OPTIONS ) );
         _pImp->_pCbOptions->SetClickHdl( LINK( this, SvtFileDialog, ClickHdl_Impl ) );
         _pImp->_pCbOptions->Show();
     }
 
-    if ( _nExtraBits & PickerExtraBits::Selection )
+    if ( _nPickerFlags & PickerFlags::Selection )
     {
         _pCbSelection->SetText( SvtResId( STR_SVT_FILEPICKER_SELECTION ) );
         _pCbSelection->SetClickHdl( LINK( this, SvtFileDialog, ClickHdl_Impl ) );
         _pCbSelection->Show();
     }
 
-    if ( _nExtraBits & PickerExtraBits::PlayButton )
+    if ( _nPickerFlags & PickerFlags::PlayButton )
     {
         _pPbPlay->SetText( SvtResId( STR_SVT_FILEPICKER_PLAY ) );
         _pPbPlay->SetHelpId( HID_FILESAVE_DOPLAY );
@@ -2532,7 +2512,7 @@ void SvtFileDialog::AddControls_Impl( )
         _pPbPlay->Show();
     }
 
-    if ( _nExtraBits & PickerExtraBits::ShowVersions )
+    if ( _nPickerFlags & PickerFlags::ShowVersions )
     {
         _pImp->_pFtFileVersion->SetText( SvtResId( STR_SVT_FILEPICKER_VERSION ) );
         _pImp->_pFtFileVersion->Show();
@@ -2540,7 +2520,7 @@ void SvtFileDialog::AddControls_Impl( )
         _pImp->_pLbFileVersion->SetHelpId( HID_FILEOPEN_VERSION );
         _pImp->_pLbFileVersion->Show();
     }
-    else if ( _nExtraBits & PickerExtraBits::Templates )
+    else if ( _nPickerFlags & PickerFlags::Templates )
     {
         _pImp->_pFtTemplates->SetText( SvtResId( STR_SVT_FILEPICKER_TEMPLATES ) );
         _pImp->_pFtTemplates->Show();
@@ -2551,7 +2531,7 @@ void SvtFileDialog::AddControls_Impl( )
             // is set in the "Templates mode". This was hidden in the previous implementation.
             // Shouldn't this be a more meaningfull help id.
     }
-    else if ( _nExtraBits & PickerExtraBits::ImageTemplate )
+    else if ( _nPickerFlags & PickerFlags::ImageTemplate )
     {
         _pImp->_pFtImageTemplates->SetText( SvtResId( STR_SVT_FILEPICKER_IMAGE_TEMPLATE ) );
         _pImp->_pFtImageTemplates->Show();
