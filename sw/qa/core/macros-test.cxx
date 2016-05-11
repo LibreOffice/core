@@ -221,8 +221,8 @@ void SwMacrosTest::testBookmarkDeleteAndJoin()
     for (IDocumentMarkAccess::const_iterator_t i = rIDMA.getAllMarksBegin(); i != rIDMA.getAllMarksEnd(); ++i)
     {
         // problem was that the nContent was pointing at deleted node
-        CPPUNIT_ASSERT((*i)->GetMarkStart().nNode.GetNode().GetContentNode() ==
-            static_cast<const SwContentNode*>((*i)->GetMarkStart().nContent.GetIdxReg()));
+        CPPUNIT_ASSERT_EQUAL(static_cast<const SwContentNode*>((*i)->GetMarkStart().nContent.GetIdxReg()),
+            static_cast<const SwContentNode*>((*i)->GetMarkStart().nNode.GetNode().GetContentNode()));
     }
 }
 
@@ -251,8 +251,8 @@ void SwMacrosTest::testBookmarkDeleteTdf90816()
     auto iter = rIDMA.getAllMarksBegin();
     CPPUNIT_ASSERT_MESSAGE("the bookmark was deleted",
             iter != rIDMA.getAllMarksEnd());
-    CPPUNIT_ASSERT(*aPaM.Start() == (*iter)->GetMarkPos());
-    CPPUNIT_ASSERT(*aPaM.End() == (*iter)->GetOtherMarkPos());
+    CPPUNIT_ASSERT_EQUAL((*iter)->GetMarkPos(), *aPaM.Start());
+    CPPUNIT_ASSERT_EQUAL((*iter)->GetOtherMarkPos(), *aPaM.End());
 }
 
 #if 0
