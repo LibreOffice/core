@@ -730,7 +730,7 @@ RequestHandler::Status RequestHandler::Enable(bool ipc)
     enum class Kind { Pipe, Dbus };
     Kind kind = Kind::Pipe;
 #if ENABLE_DBUS
-    if (std::getenv("LIBO_XDGAPP") != nullptr) {
+    if (std::getenv("LIBO_FLATPAK") != nullptr) {
         kind = Kind::Dbus;
     }
 #endif

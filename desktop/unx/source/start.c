@@ -757,7 +757,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
     if ( pUsePlugin && !strcmp(pUsePlugin, "svp") )
         args->bInhibitSplash = sal_True;
 
-    if ( !args->bInhibitPipe && getenv("LIBO_XDGAPP") == NULL )
+    if ( !args->bInhibitPipe && getenv("LIBO_FLATPAK") == NULL )
     {
         int fd = 0;
         pPipePath = get_pipe_path( args->pAppPath );
