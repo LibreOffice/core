@@ -150,6 +150,8 @@ namespace drawinglayer
                                                         fAngle - F_PI4);
 
                                                     aHatch.appendTransformations(aMatrices);
+
+                                                    SAL_FALLTHROUGH;
                                                 }
                                                 case attribute::HATCHSTYLE_DOUBLE:
                                                 {
@@ -161,6 +163,8 @@ namespace drawinglayer
                                                         fAngle - F_PI2);
 
                                                     aHatch.appendTransformations(aMatrices);
+
+                                                    SAL_FALLTHROUGH;
                                                 }
                                                 case attribute::HATCHSTYLE_SINGLE:
                                                 {
