@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <cstdlib>
+
 #include "scitems.hxx"
 #include <editeng/eeitem.hxx>
 #include <svx/svdpool.hxx>
@@ -337,12 +341,11 @@ OUString SAL_CALL ScHeaderFooterTextObj::getString() throw(uno::RuntimeException
         case ScHeaderFooterPart::CENTER:
             pData = rContentObj->GetCenterEditObject();
         break;
-        default: //needed for compiler warning: possible uninitialized pointer
-            assert(!"unexpected enum value of ScHeaderFooterPart");
-        // fall through
         case ScHeaderFooterPart::RIGHT:
             pData = rContentObj->GetRightEditObject();
         break;
+        default: //needed for compiler warning: possible uninitialized pointer
+            for (;;) std::abort();
     }
 
     if (pData)
