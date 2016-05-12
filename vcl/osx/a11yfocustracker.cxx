@@ -57,7 +57,7 @@ void AquaA11yFocusTracker::WindowEventHandler(void * pThis, VclSimpleEvent& rEve
         break;
     case VCLEVENT_OBJECT_DYING:
         pFocusTracker->m_aDocumentWindowList.erase( getWindow(&rEvent) );
-        // intentional pass through ..
+        SAL_FALLTHROUGH;
     case VCLEVENT_TOOLBOX_HIGHLIGHTOFF:
         pFocusTracker->toolbox_highlight_off( getWindow(&rEvent) );
         break;
