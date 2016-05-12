@@ -6851,7 +6851,7 @@ void Test::testFuncMDETERM()
         // interim results or optimization not catching it, this test fails
         // when comparing to 0.0, so have a narrow error margin. See also
         // commit message of 8140309d636d4a870875f2dd75ed3dfff2c0fbaf
-#if SAL_TYPES_SIZEOFPOINTER == 4
+#if SAL_TYPES_SIZEOFPOINTER == 4 || defined(__aarch64__)
         CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of MDETERM incorrect for singular integer matrix",
                 0.0, m_pDoc->GetValue(aPos), 1e-12);
 #else
