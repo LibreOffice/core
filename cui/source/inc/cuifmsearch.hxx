@@ -73,8 +73,14 @@ class FmSearchDialog : public ModalDialog
     VclPtr<FixedText>       m_pftHint;
     VclPtr<PushButton>      m_pbSearchAgain;
     VclPtr<CancelButton>    m_pbClose;
-    OUString        m_sSearch;
-    OUString        m_sCancel;
+    VclPtr<RadioButton>     m_prbReplaceWithText;   // Replace part starts
+    VclPtr<RadioButton>     m_prbSetToNull;
+    VclPtr<ComboBox>        m_pcmbReplaceText;
+    VclPtr<PushButton>      m_pbReplace;
+    VclPtr<PushButton>      m_pbReplaceAll;
+    OUString                m_sReplaceAll;          // Replace part ends
+    OUString                m_sSearch;
+    OUString                m_sCancel;
 
     VclPtr<vcl::Window>         m_pPreSearchFocus;
 
@@ -147,6 +153,7 @@ protected:
     void EnableSearchUI(bool bEnable);
 
     void EnableSearchForDependees(bool bEnable);
+    void EnableReplace(bool bEnable);
 
     void EnableControlPaint(bool bEnable);
 
@@ -158,10 +165,13 @@ protected:
 private:
     // Handler for the Controls
     DECL_LINK_TYPED( OnClickedFieldRadios, Button*, void );
-    DECL_LINK_TYPED(OnClickedSearchAgain, Button *, void);
+    DECL_LINK_TYPED( OnClickedSearchAgain, Button *, void );
     DECL_LINK_TYPED( OnClickedSpecialSettings, Button*, void );
+    DECL_LINK_TYPED( OnClickedReplace, Button *, void ); // Replace part starts
+    DECL_LINK_TYPED( OnClickedReplaceAll, Button *, void ); // Replace part ends
 
-    DECL_LINK_TYPED(OnSearchTextModified, Edit&, void);
+    DECL_LINK_TYPED( OnSearchTextModified, Edit&, void );
+    DECL_LINK_TYPED( OnReplaceTextModified, Edit&, void ); // Replace part
 
     DECL_LINK_TYPED( OnPositionSelected, ListBox&, void );
     DECL_LINK_TYPED( OnFieldSelected, ListBox&, void );
