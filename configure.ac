@@ -8832,7 +8832,7 @@ AC_SUBST(SYSTEM_BOOST)
 dnl ===================================================================
 dnl Check for system mdds
 dnl ===================================================================
-libo_CHECK_SYSTEM_MODULE([mdds], [MDDS], [mdds-1.0 >= 1.1.0], ["-I${WORKDIR}/UnpackedTarball/mdds/include"])
+libo_CHECK_SYSTEM_MODULE([mdds], [MDDS], [mdds-1.2 >= 1.2.0], ["-I${WORKDIR}/UnpackedTarball/mdds/include"])
 
 dnl ===================================================================
 dnl Check for system glm
@@ -9148,7 +9148,7 @@ if test -z "$enable_orcus" -o "$enable_orcus" != no; then
     ENABLE_ORCUS="TRUE"
     AC_DEFINE(ENABLE_ORCUS)
 
-    libo_CHECK_SYSTEM_MODULE([orcus],[ORCUS],[liborcus-0.11 >= 0.11.0])
+    libo_CHECK_SYSTEM_MODULE([orcus],[ORCUS],[liborcus-0.11 >= 0.11.2])
     if test "$with_system_orcus" != "yes"; then
         if test "$SYSTEM_BOOST" = "TRUE"; then
             # ===========================================================
