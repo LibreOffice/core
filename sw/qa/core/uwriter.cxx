@@ -169,7 +169,7 @@ void SwDocTest::testPageDescName()
     std::sort(aResults.begin(), aResults.end());
     aResults.erase(std::unique(aResults.begin(), aResults.end()), aResults.end());
 
-    CPPUNIT_ASSERT_MESSAGE("GetPageDescName results must be unique", aResults.size() == 3);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("GetPageDescName results must be unique", static_cast<size_t>(3), aResults.size());
 }
 
 //See https://bugs.libreoffice.org/show_bug.cgi?id=32463
@@ -201,13 +201,13 @@ void SwDocTest::testFileNameFields()
         OUString sResult(aNameField.Expand(FF_NAME));
         OUString sExpected(rUrlObj.getName(INetURLObject::LAST_SEGMENT,
             true,INetURLObject::DECODE_WITH_CHARSET));
-        CPPUNIT_ASSERT_MESSAGE("Expected Readable FileName", sResult == sExpected);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected Readable FileName", sExpected, sResult);
     }
 
     {
         OUString sResult(aNameField.Expand(FF_PATHNAME));
         OUString sExpected(rUrlObj.GetFull());
-        CPPUNIT_ASSERT_MESSAGE("Expected Readable FileName", sResult == sExpected);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected Readable FileName", sExpected, sResult);
     }
 
     {
@@ -215,7 +215,7 @@ void SwDocTest::testFileNameFields()
         INetURLObject aTemp(rUrlObj);
         aTemp.removeSegment();
         OUString sExpected(aTemp.PathToFileName());
-        CPPUNIT_ASSERT_MESSAGE("Expected Readable FileName", sResult == sExpected);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected Readable FileName", sExpected, sResult);
     }
 
     {
@@ -224,7 +224,7 @@ void SwDocTest::testFileNameFields()
             true,INetURLObject::DECODE_WITH_CHARSET));
         //Chop off .tmp
         sExpected = sExpected.copy(0, sExpected.getLength() - 4);
-        CPPUNIT_ASSERT_MESSAGE("Expected Readable FileName", sResult == sExpected);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected Readable FileName", sExpected, sResult);
     }
 
     m_xDocShRef->DoInitNew();
@@ -235,7 +235,7 @@ void SwDocTest::testFileNameFields()
 //motivation
 void SwDocTest::testDocStat()
 {
-    CPPUNIT_ASSERT_MESSAGE("Expected initial 0 count", m_pDoc->getIDocumentStatistics().GetDocStat().nChar == 0);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected initial 0 count", static_cast<sal_uLong>(0), m_pDoc->getIDocumentStatistics().GetDocStat().nChar);
 
     SwNodeIndex aIdx(m_pDoc->GetNodes().GetEndOfContent(), -1);
     SwPaM aPaM(aIdx);
@@ -243,14 +243,14 @@ void SwDocTest::testDocStat()
     OUString sText("Hello World");
     m_pDoc->getIDocumentContentOperations().InsertString(aPaM, sText);
 
-    CPPUNIT_ASSERT_MESSAGE("Should still be non-updated 0 count", m_pDoc->getIDocumentStatistics().GetDocStat().nChar == 0);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Should still be non-updated 0 count", static_cast<sal_uLong>(0), m_pDoc->getIDocumentStatistics().GetDocStat().nChar);
 
     SwDocStat aDocStat = m_pDoc->getIDocumentStatistics().GetUpdatedDocStat( false, true );
     sal_uLong nLen = static_cast<sal_uLong>(sText.getLength());
 
-    CPPUNIT_ASSERT_MESSAGE("Should now have updated count", aDocStat.nChar == nLen);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Should now have updated count", nLen, aDocStat.nChar);
 
-    CPPUNIT_ASSERT_MESSAGE("And cache is updated too", m_pDoc->getIDocumentStatistics().GetDocStat().nChar == nLen);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("And cache is updated too", nLen, m_pDoc->getIDocumentStatistics().GetDocStat().nChar);
 }
 
 //For UI character counts we should follow UAX#29 and display the user
@@ -265,14 +265,14 @@ void SwDocTest::testUserPerceivedCharCount()
     const sal_Unicode ALEF_QAMATS [] = { 0x05D0, 0x05B8 };
     OUString sALEF_QAMATS(ALEF_QAMATS, SAL_N_ELEMENTS(ALEF_QAMATS));
     sal_Int32 nGraphemeCount = pBreakIter->getGraphemeCount(sALEF_QAMATS);
-    CPPUNIT_ASSERT_MESSAGE("Grapheme Count should be 1", nGraphemeCount == 1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Grapheme Count should be 1", static_cast<sal_Int32>(1), nGraphemeCount);
 
     //Surrogate pair example, one single unicode code-point (U+1D11E)
     //represented as two code units in UTF-16
     const sal_Unicode GCLEF[] = { 0xD834, 0xDD1E };
     OUString sGCLEF(GCLEF, SAL_N_ELEMENTS(GCLEF));
     sal_Int32 nCount = pBreakIter->getGraphemeCount(sGCLEF);
-    CPPUNIT_ASSERT_MESSAGE("Surrogate Pair should be counted as single character", nCount == 1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Surrogate Pair should be counted as single character", static_cast<sal_Int32>(1), nCount);
 }
 
 SwTextNode* getModelToViewTestDocument(SwDoc *pDoc)
@@ -292,7 +292,7 @@ SwTextNode* getModelToViewTestDocument(SwDoc *pDoc)
     nPos = aPaM.GetPoint()->nContent.GetIndex();
     pTextNode->InsertItem(aFootnote, nPos, nPos);
     pDoc->getIDocumentContentOperations().InsertString(aPaM, " DDDDD");
-    CPPUNIT_ASSERT(pTextNode->GetText().getLength() == (4*5) + 5 + 2);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>((4*5) + 5 + 2), pTextNode->GetText().getLength());
 
     //set start of selection to first B
     aPaM.GetPoint()->nContent.Assign(aPaM.GetContentNode(), 6);
@@ -576,14 +576,12 @@ void SwDocTest::testSwScanner()
         bool bFirstOk = aScanner.NextWord();
         CPPUNIT_ASSERT_MESSAGE("First Token", bFirstOk);
         const OUString &rHello = aScanner.GetWord();
-        CPPUNIT_ASSERT_MESSAGE("Should be Hello",
-            rHello == "Hello");
+        CPPUNIT_ASSERT_EQUAL(OUString("Hello"), rHello);
 
         bool bSecondOk = aScanner.NextWord();
         CPPUNIT_ASSERT_MESSAGE("Second Token", bSecondOk);
         const OUString &rWorld = aScanner.GetWord();
-        CPPUNIT_ASSERT_MESSAGE("Should be World",
-            rWorld == "World");
+        CPPUNIT_ASSERT_EQUAL(OUString("World"), rWorld);
     }
 
     //See https://www.libreoffice.org/bugzilla/show_bug.cgi?id=45271
@@ -602,8 +600,8 @@ void SwDocTest::testSwScanner()
         pTextNode = aPaM.GetNode().GetTextNode();
         pTextNode->CountWords(aDocStat, 0, SAL_N_ELEMENTS(IDEOGRAPHICFULLSTOP_D));
 
-        CPPUNIT_ASSERT_MESSAGE("Should be 2", aDocStat.nChar == 2);
-        CPPUNIT_ASSERT_MESSAGE("Should be 2", aDocStat.nCharExcludingSpaces == 2);
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_uLong>(2), aDocStat.nChar);
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_uLong>(2), aDocStat.nCharExcludingSpaces);
     }
     {
         const sal_Unicode test[] =
@@ -637,10 +635,10 @@ void SwDocTest::testSwScanner()
         SwDocStat aDocStat;
         pTextNode = aPaM.GetNode().GetTextNode();
         pTextNode->CountWords(aDocStat, 0, SAL_N_ELEMENTS(test));
-        CPPUNIT_ASSERT_MESSAGE("58 words", aDocStat.nWord == 58);
-        CPPUNIT_ASSERT_MESSAGE("43 Asian characters and Korean syllables", aDocStat.nAsianWord == 43);
-        CPPUNIT_ASSERT_MESSAGE("105 non-whitespace chars", aDocStat.nCharExcludingSpaces == 105);
-        CPPUNIT_ASSERT_MESSAGE("128 characters", aDocStat.nChar == 128);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("words", static_cast<sal_uLong>(58), aDocStat.nWord);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Asian characters and Korean syllables", static_cast<sal_uLong>(43), aDocStat.nAsianWord);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("non-whitespace chars", static_cast<sal_uLong>(105), aDocStat.nCharExcludingSpaces);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("characters", static_cast<sal_uLong>(128), aDocStat.nChar);
     }
 
     //See https://bz.apache.org/ooo/show_bug.cgi?id=89042
@@ -658,7 +656,7 @@ void SwDocTest::testSwScanner()
         m_pDoc->getIDocumentContentOperations().InsertString(aPaM, OUString(aShouldBeThree, SAL_N_ELEMENTS(aShouldBeThree)));
         pTextNode = aPaM.GetNode().GetTextNode();
         pTextNode->CountWords(aDocStat, 0, SAL_N_ELEMENTS(aShouldBeThree));
-        CPPUNIT_ASSERT_MESSAGE("Should be 3", aDocStat.nWord == 3);
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_uLong>(3), aDocStat.nWord);
 
         const sal_Unicode aShouldBeFive[] = {
             // f    r       e       n       c       h       space
@@ -676,7 +674,7 @@ void SwDocTest::testSwScanner()
         pTextNode = aPaM.GetNode().GetTextNode();
         aDocStat.Reset();
         pTextNode->CountWords(aDocStat, 0, SAL_N_ELEMENTS(aShouldBeFive));
-        CPPUNIT_ASSERT_MESSAGE("Should be 5", aDocStat.nWord == 5);
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_uLong>(5), aDocStat.nWord);
     }
 
     //See https://bugs.libreoffice.org/show_bug.cgi?id=49629
@@ -691,13 +689,13 @@ void SwDocTest::testSwScanner()
         aFootnote.SetNumStr("banana");
         SwTextAttr* pTA = pTextNode->InsertItem(aFootnote, nPos, nPos);
         CPPUNIT_ASSERT(pTA);
-        CPPUNIT_ASSERT(pTextNode->Len() == 6); //Apple + 0x02
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(6), pTextNode->Len()); //Apple + 0x02
         pTextNode->CountWords(aDocStat, 0, pTextNode->Len());
-        CPPUNIT_ASSERT(aDocStat.nWord == 1);
-        CPPUNIT_ASSERT_MESSAGE("footnote should be expanded", aDocStat.nChar == 11);
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_uLong>(1), aDocStat.nWord);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("footnote should be expanded", static_cast<sal_uLong>(11), aDocStat.nChar);
 
         const sal_Int32 nNextPos = aPaM.GetPoint()->nContent.GetIndex();
-        CPPUNIT_ASSERT(nNextPos == nPos+1);
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(nPos+1), nNextPos);
         SwFormatRefMark aRef(OUString("refmark"));
         pTA = pTextNode->InsertItem(aRef, nNextPos, nNextPos);
         CPPUNIT_ASSERT(pTA);
@@ -705,8 +703,8 @@ void SwDocTest::testSwScanner()
         aDocStat.Reset();
         pTextNode->SetWordCountDirty(true);
         pTextNode->CountWords(aDocStat, 0, pTextNode->Len());
-        CPPUNIT_ASSERT(aDocStat.nWord == 1);
-        CPPUNIT_ASSERT_MESSAGE("refmark anchor should not be counted", aDocStat.nChar == 11);
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_uLong>(1), aDocStat.nWord);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("refmark anchor should not be counted", static_cast<sal_uLong>(11), aDocStat.nChar);
 
         m_pDoc->getIDocumentContentOperations().AppendTextNode(*aPaM.GetPoint());
         m_pDoc->getIDocumentContentOperations().InsertString(aPaM, "Apple");
@@ -721,9 +719,9 @@ void SwDocTest::testSwScanner()
         pTextNode = aPaM.GetNode().GetTextNode();
         aDocStat.Reset();
         pTextNode->CountWords(aDocStat, 0, pTextNode->Len());
-        CPPUNIT_ASSERT(aDocStat.nWord == 1);
-        CPPUNIT_ASSERT_MESSAGE("postit anchor should effectively not exist", aDocStat.nChar == 10);
-        CPPUNIT_ASSERT(pTextNode->Len() == 11);
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_uLong>(1), aDocStat.nWord);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("postit anchor should effectively not exist", static_cast<sal_uLong>(10), aDocStat.nChar);
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(11), pTextNode->Len());
 
         aDocStat.Reset();
     }
@@ -765,15 +763,15 @@ void SwDocTest::testSwScanner()
 
         aDocStat.Reset();
         pTextNode->CountWords(aDocStat, 0, pTextNode->Len()); //but word-counting the text should only count the non-deleted text
-        CPPUNIT_ASSERT_EQUAL(aDocStat.nWord, static_cast<sal_uLong>(1));
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_uLong>(1), aDocStat.nWord);
 
         OUString sLorem = pTextNode->GetText();
-        CPPUNIT_ASSERT(sLorem == "Lorem");
+        CPPUNIT_ASSERT_EQUAL(OUString("Lorem"), sLorem);
 
         const SwRedlineTable& rTable = m_pDoc->getIDocumentRedlineAccess().GetRedlineTable();
 
         SwNodes& rNds = m_pDoc->GetNodes();
-        CPPUNIT_ASSERT(rTable.size() == 1);
+        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rTable.size());
 
         SwNodeIndex* pNodeIdx = rTable[0]->GetContentIdx();
         CPPUNIT_ASSERT(pNodeIdx);
@@ -782,7 +780,7 @@ void SwDocTest::testSwScanner()
         CPPUNIT_ASSERT(pTextNode);
 
         OUString sIpsum = pTextNode->GetText();
-        CPPUNIT_ASSERT(sIpsum == " ipsum");
+        CPPUNIT_ASSERT_EQUAL(OUString(" ipsum"), sIpsum);
 
         aDocStat.Reset();
         pTextNode->CountWords(aDocStat, 0, pTextNode->Len()); //word-counting the text should only count the non-deleted text, and this whole chunk should be ignored
@@ -950,7 +948,7 @@ void SwDocTest::testMergePortionsDeleteNotSorted()
 //See https://bugs.libreoffice.org/show_bug.cgi?id=40599
 void SwDocTest::testGraphicAnchorDeletion()
 {
-    CPPUNIT_ASSERT_MESSAGE("Expected initial 0 count", m_pDoc->getIDocumentStatistics().GetDocStat().nChar == 0);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Expected initial 0 count", static_cast<sal_uLong>(0), m_pDoc->getIDocumentStatistics().GetDocStat().nChar);
 
     SwNodeIndex aIdx(m_pDoc->GetNodes().GetEndOfContent(), -1);
     SwPaM aPaM(aIdx);
@@ -975,7 +973,7 @@ void SwDocTest::testGraphicAnchorDeletion()
     SwFlyFrameFormat *pFrame = m_pDoc->getIDocumentContentOperations().Insert(aPaM, OUString(), OUString(), nullptr, &aFlySet, nullptr, nullptr);
     CPPUNIT_ASSERT_MESSAGE("Expected frame", pFrame != nullptr);
 
-    CPPUNIT_ASSERT_MESSAGE("Should be 1 graphic", m_pDoc->GetFlyCount(FLYCNTTYPE_GRF) == 1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Should be 1 graphic", static_cast<size_t>(1), m_pDoc->GetFlyCount(FLYCNTTYPE_GRF));
 
     //Delete >X<
     aPaM.GetPoint()->nNode = nPara2;
@@ -996,7 +994,7 @@ void SwDocTest::testGraphicAnchorDeletion()
     }
 #endif
 
-    CPPUNIT_ASSERT_MESSAGE("Should be 0 graphics", m_pDoc->GetFlyCount(FLYCNTTYPE_GRF) == 0);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Should be 0 graphics", static_cast<size_t>(0), m_pDoc->GetFlyCount(FLYCNTTYPE_GRF));
 
     //Now, if instead we swap FLY_AS_CHAR (inline graphic) to FLY_AT_CHAR (anchored to character)
     //and repeat the above, graphic is *not* deleted, i.e. it belongs to the paragraph, not the
@@ -1590,7 +1588,7 @@ void SwDocTest::test64kPageDescs()
     size_t nPos;
     SwPageDesc *pDesc = m_pDoc->FindPageDesc( aChanged, &nPos );
     CPPUNIT_ASSERT( pDesc != nullptr );
-    CPPUNIT_ASSERT( nPos == nPageDescCount );
+    CPPUNIT_ASSERT_EQUAL( nPageDescCount, nPos );
 
     // check if we didn't mess up PageDesc at pos 0
     // (happens with 16bit int overflow)
@@ -1601,13 +1599,13 @@ void SwDocTest::test64kPageDescs()
     m_pDoc->DelPageDesc( aChanged, nPos );
     pDesc = m_pDoc->FindPageDesc( aChanged, &nPos );
     // not there anymore
-    CPPUNIT_ASSERT( pDesc == nullptr );
-    CPPUNIT_ASSERT( nPos == SIZE_MAX );
+    CPPUNIT_ASSERT( !pDesc );
+    CPPUNIT_ASSERT_EQUAL( std::numeric_limits<size_t>::max(), nPos);
 
     // check if PageDesc at pos 0 is still there
     pDesc = m_pDoc->FindPageDesc( aZeroName, &nPos );
     CPPUNIT_ASSERT( pDesc != nullptr );
-    CPPUNIT_ASSERT( nPos == 0 );
+    CPPUNIT_ASSERT_EQUAL( static_cast<size_t>(0), nPos );
 }
 
 void SwDocTest::testTdf92308()
