@@ -293,9 +293,9 @@ void ScViewFunc::InsertCurrentTime(short nReqFmt, const OUString& rUndoStr)
                 }
                 break;
             default:
-                assert(!"unhandled current date/time request");
+                SAL_WARN("sc.ui","unhandled current date/time request");
                 nReqFmt = css::util::NumberFormat::DATETIME;
-                // fallthru
+                SAL_FALLTHROUGH;
             case css::util::NumberFormat::DATETIME:
                 {
                     DateTime aActDateTime( DateTime::SYSTEM );
@@ -387,9 +387,9 @@ void ScViewFunc::InsertCurrentTime(short nReqFmt, const OUString& rUndoStr)
                 }
                 break;
             default:
-                assert(!"unhandled current date/time request");
+                SAL_WARN("sc.ui","unhandled current date/time request");
                 nReqFmt = css::util::NumberFormat::DATETIME;
-                // fallthru
+                SAL_FALLTHROUGH;
             case css::util::NumberFormat::DATETIME:
                 break;
         }
