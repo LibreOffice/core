@@ -60,8 +60,7 @@ OUString getExpression(sal_Int32 nIndex)
             return ScGlobal::GetRscString(STR_COND_DUPLICATE);
         case 9:
             return ScGlobal::GetRscString(STR_COND_UNIQUE);
-        case 10:
-            assert(false);
+
         case 11:
             return ScGlobal::GetRscString(STR_COND_TOP10);
         case 12:
@@ -90,6 +89,9 @@ OUString getExpression(sal_Int32 nIndex)
             return ScGlobal::GetRscString(STR_COND_CONTAINS);
         case 24:
             return ScGlobal::GetRscString(STR_COND_NOT_CONTAINS);
+
+        case 10:
+            assert(false);
     }
     return OUString();
 }
