@@ -153,7 +153,7 @@ protected:
     static void     SetInDrag(bool bSet) {bIsInDrag = bSet;}
 
     virtual std::unique_ptr<PopupMenu> CreateContextMenu() override;
-    virtual void    ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry ) override;
+    virtual void    ExecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry ) override;
 
 public:
     SwContentTree(vcl::Window* pParent, const ResId& rResId);
@@ -327,7 +327,7 @@ protected:
     DECL_STATIC_LINK_TYPED(SwGlobalTree, ShowFrameHdl, void*, void);
 
     virtual std::unique_ptr<PopupMenu> CreateContextMenu() override;
-    virtual void    ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry ) override;
+    virtual void    ExecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry ) override;
 
 public:
     SwGlobalTree(vcl::Window* pParent, const ResId& rResId);

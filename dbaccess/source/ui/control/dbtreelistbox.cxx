@@ -635,7 +635,7 @@ std::unique_ptr<PopupMenu> DBTreeListBox::CreateContextMenu()
     return pContextMenu;
 }
 
-void DBTreeListBox::ExcecuteContextMenuAction( sal_uInt16 _nSelectedPopupEntry )
+void DBTreeListBox::ExecuteContextMenuAction( sal_uInt16 _nSelectedPopupEntry )
 {
     if ( m_pContextMenuProvider && _nSelectedPopupEntry )
         m_pContextMenuProvider->getCommandController().executeChecked( _nSelectedPopupEntry, Sequence< PropertyValue >() );

@@ -770,11 +770,11 @@ void    SwGlobalTree::EditContent(const SwGlblDocContent* pCont )
 
 IMPL_LINK_TYPED( SwGlobalTree, PopupHdl, Menu* , pMenu, bool)
 {
-    ExcecuteContextMenuAction( pMenu->GetCurItemId());
+    ExecuteContextMenuAction( pMenu->GetCurItemId());
     return true;
 }
 
-void    SwGlobalTree::ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry )
+void    SwGlobalTree::ExecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry )
 {
     SvTreeListEntry* pEntry = FirstSelected();
     SwGlblDocContent* pCont = pEntry ? static_cast<SwGlblDocContent*>(pEntry->GetUserData()) : nullptr;

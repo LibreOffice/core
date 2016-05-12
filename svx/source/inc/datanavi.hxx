@@ -120,7 +120,7 @@ namespace svxform
         virtual void dispose() override;
 
         virtual std::unique_ptr<PopupMenu> CreateContextMenu() override;
-        virtual void            ExcecuteContextMenuAction( sal_uInt16 _nSelectedPopupEntry ) override;
+        virtual void            ExecuteContextMenuAction( sal_uInt16 _nSelectedPopupEntry ) override;
         virtual sal_Int8        AcceptDrop( const AcceptDropEvent& rEvt ) override;
         virtual sal_Int8        ExecuteDrop( const ExecuteDropEvent& rEvt ) override;
         virtual void            StartDrag( sal_Int8 nAction, const Point& rPosPixel ) override;

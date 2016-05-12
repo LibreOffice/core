@@ -947,7 +947,7 @@ std::unique_ptr<PopupMenu> CustomAnimationList::CreateContextMenu()
     return pMenu;
 }
 
-void CustomAnimationList::ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry )
+void CustomAnimationList::ExecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry )
 {
     mpController->onContextMenu( nSelectedPopupEntry );
 }

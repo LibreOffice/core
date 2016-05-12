@@ -2849,7 +2849,7 @@ void SwContentTree::RequestHelp( const HelpEvent& rHEvt )
         Window::RequestHelp( rHEvt );
 }
 
-void SwContentTree::ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry )
+void SwContentTree::ExecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry )
 {
     SvTreeListEntry* pFirst = FirstSelected();
     switch( nSelectedPopupEntry )

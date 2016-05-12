@@ -205,7 +205,7 @@ public:
     DECL_LINK_TYPED(ResetQuickSearch_Impl, Timer *, void);
 
     virtual std::unique_ptr<PopupMenu> CreateContextMenu() override;
-    virtual void        ExcecuteContextMenuAction( sal_uInt16 nSelectedPopentry ) override;
+    virtual void        ExecuteContextMenuAction( sal_uInt16 nSelectedPopentry ) override;
 };
 
 // provides a list of _unique_ Entries
@@ -711,7 +711,7 @@ std::unique_ptr<PopupMenu> ViewTabListBox_Impl::CreateContextMenu()
 }
 
 
-void ViewTabListBox_Impl::ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry )
+void ViewTabListBox_Impl::ExecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry )
 {
     switch ( nSelectedPopupEntry )
     {
