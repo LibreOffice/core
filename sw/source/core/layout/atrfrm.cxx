@@ -3002,7 +3002,7 @@ void SwFlyFrameFormat::MakeFrames()
 
             if( bAdd )
             {
-                SwFlyFrame *pFly;
+                SwFlyFrame *pFly = nullptr; // avoid warnings
                 switch( aAnchorAttr.GetAnchorId() )
                 {
                 case FLY_AT_FLY:
@@ -3014,12 +3014,12 @@ void SwFlyFrameFormat::MakeFrames()
                     pFly = new SwFlyAtContentFrame( this, pFrame, pFrame );
                     break;
 
-                default:
-                    assert(false && "Neuer Ankertyp" );
-                    SAL_FALLTHROUGH;
                 case FLY_AS_CHAR:
                     pFly = new SwFlyInContentFrame( this, pFrame, pFrame );
                     break;
+
+                default:
+                    assert(false && "Neuer Ankertyp" );
                 }
                 pFrame->AppendFly( pFly );
                 pFly->GetFormat()->SetObjTitle(GetObjTitle());
