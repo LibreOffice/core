@@ -1132,9 +1132,9 @@ ImplTBDragMgr::~ImplTBDragMgr()
 
 ToolBox* ImplTBDragMgr::FindToolBox( const Rectangle& rRect )
 {
-    for ( size_t i = 0, n = mpBoxList->size(); i < n; ++i )
+    for (VclPtr<ToolBox> & i : *mpBoxList)
     {
-        ToolBox* pBox = (*mpBoxList)[ i ];
+        ToolBox* pBox = i;
         /*
          *  FIXME: since we can have multiple frames now we cannot
          *  find the drag target by its position alone.
@@ -4190,9 +4190,9 @@ void ToolBox::Resize()
                 {
                     //Get how big the optimal size is
                     Rectangle aBounds;
-                    for (size_t i = 0; i < mpData->m_aItems.size(); ++i)
+                    for (const ImplToolItem & rItem : mpData->m_aItems)
                     {
-                        aBounds.Union( mpData->m_aItems[i].maRect );
+                        aBounds.Union( rItem.maRect );
                     }
 
                     long nOptimalWidth = aBounds.GetWidth();
@@ -4201,9 +4201,8 @@ void ToolBox::Resize()
 
                     //share out the diff from optimal to real across
                     //expandable entries
-                    for (size_t i = 0; i < aExpandables.size(); ++i)
+                    for (size_t nIndex : aExpandables)
                     {
-                        size_t nIndex = aExpandables[i];
                         vcl::Window *pWindow = mpData->m_aItems[nIndex].mpWindow;
                         Size aWinSize(pWindow->GetSizePixel());
                         Size aPrefSize(pWindow->get_preferred_size());
@@ -4809,11 +4808,11 @@ Size ToolBox::GetOptimalSize() const
     // If we have any expandable entries, then force them to their
     // optimal sizes, then reset them afterwards
     std::map<vcl::Window*, Size> aExpandables;
-    for (size_t i = 0; i < mpData->m_aItems.size(); ++i)
+    for (ImplToolItem & rItem : mpData->m_aItems)
     {
-        if (mpData->m_aItems[i].mbExpand)
+        if (rItem.mbExpand)
         {
-            vcl::Window *pWindow = mpData->m_aItems[i].mpWindow;
+            vcl::Window *pWindow = rItem.mpWindow;
             SAL_INFO_IF(!pWindow, "vcl.layout", "only tabitems with window supported at the moment");
             if (!pWindow)
                 continue;

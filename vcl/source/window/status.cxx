@@ -159,8 +159,8 @@ StatusBar::~StatusBar()
 void StatusBar::dispose()
 {
     // delete all items
-    for ( size_t i = 0, n = mpItemList->size(); i < n; ++i ) {
-        delete (*mpItemList)[ i ];
+    for (ImplStatusItem* i : *mpItemList) {
+        delete i;
     }
     delete mpItemList;
 
@@ -235,8 +235,8 @@ void StatusBar::ImplFormat()
     // sum up widths
     mnItemsWidth = STATUSBAR_OFFSET_X;
     long nOffset = 0;
-    for ( size_t i = 0, n = mpItemList->size(); i < n; ++i ) {
-        pItem = (*mpItemList)[ i ];
+    for (ImplStatusItem* i : *mpItemList) {
+        pItem = i;
         if ( pItem->mbVisible )
         {
             if ( pItem->mnBits & StatusBarItemBits::AutoSize ) {
@@ -277,8 +277,8 @@ void StatusBar::ImplFormat()
             nX += ImplGetSVData()->maNWFData.mnStatusBarLowerRightOffset;
     }
 
-    for ( size_t i = 0, n = mpItemList->size(); i < n; ++i ) {
-        pItem = (*mpItemList)[ i ];
+    for (ImplStatusItem* i : *mpItemList) {
+        pItem = i;
         if ( pItem->mbVisible ) {
             if ( pItem->mnBits & StatusBarItemBits::AutoSize ) {
                 pItem->mnExtraWidth = nExtraWidth;
@@ -865,9 +865,8 @@ void StatusBar::DataChanged( const DataChangedEvent& rDCEvt )
         mbFormat = true;
         ImplInitSettings();
         long nFudge = GetTextHeight() / 4;
-        for ( size_t i = 0, n = mpItemList->size(); i < n; ++i )
+        for (ImplStatusItem* pItem : *mpItemList)
         {
-            ImplStatusItem* pItem = (*mpItemList)[ i ];
             long nWidth = GetTextWidth( pItem->maText ) + nFudge;
             if( nWidth > pItem->mnWidth + STATUSBAR_OFFSET )
                 pItem->mnWidth = nWidth + STATUSBAR_OFFSET;
@@ -1008,8 +1007,8 @@ bool StatusBar::IsItemVisible( sal_uInt16 nItemId ) const
 void StatusBar::Clear()
 {
     // delete all items
-    for ( size_t i = 0, n = mpItemList->size(); i < n; ++i ) {
-        delete (*mpItemList)[ i ];
+    for (ImplStatusItem* i : *mpItemList) {
+        delete i;
     }
     mpItemList->clear();
 

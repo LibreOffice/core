@@ -115,10 +115,10 @@ void Octree::ImplCreateOctree()
 
 void Octree::ImplDeleteOctree( NODE** ppNode )
 {
-    for ( sal_uLong i = 0UL; i < 8UL; i++ )
+    for (OctreeNode* i : (*ppNode)->pChild)
     {
-        if ( (*ppNode)->pChild[ i ] )
-            ImplDeleteOctree( &(*ppNode)->pChild[ i ] );
+        if ( i )
+            ImplDeleteOctree( &i );
     }
 
     pNodeCache->ImplReleaseNode( *ppNode );
@@ -209,9 +209,9 @@ void Octree::CreatePalette( NODE* pNode )
                                            (sal_uInt8) ( (double) pNode->nGreen / pNode->nCount ),
                                            (sal_uInt8) ( (double) pNode->nBlue / pNode->nCount ) );
     }
-    else for( sal_uLong i = 0UL; i < 8UL; i++ )
-        if( pNode->pChild[ i ] )
-            CreatePalette( pNode->pChild[ i ] );
+    else for(OctreeNode* i : pNode->pChild)
+        if( i )
+            CreatePalette( i );
 
 }
 

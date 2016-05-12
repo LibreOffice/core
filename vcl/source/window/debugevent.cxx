@@ -222,13 +222,13 @@ void DebugEventInjector::InjectKeyNavEdit()
 
     double d = 0.0, nRand = getRandom();
     sal_uInt16 nKey = KEY_SPACE;
-    for ( size_t i = 0; i < SAL_N_ELEMENTS( nWeights ); ++i )
+    for (auto & rWeight : nWeights)
     {
-        d += nWeights[i].mnProb;
+        d += rWeight.mnProb;
         assert (d < 1.01);
         if ( nRand < d )
         {
-            nKey = nWeights[i].mnKey;
+            nKey = rWeight.mnKey;
             break;
         }
     }

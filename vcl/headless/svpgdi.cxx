@@ -837,8 +837,8 @@ void SvpSalGraphics::setupPolyPolygon(cairo_t* cr, const basegfx::B2DPolyPolygon
 {
     clipRegion(cr);
 
-    for (const basegfx::B2DPolygon* pPoly = rPolyPoly.begin(); pPoly != rPolyPoly.end(); ++pPoly)
-        AddPolygonToPath(cr, *pPoly, true, !getAntiAliasB2DDraw(), m_aLineColor != SALCOLOR_NONE);
+    for (const auto & rPoly : rPolyPoly)
+        AddPolygonToPath(cr, rPoly, true, !getAntiAliasB2DDraw(), m_aLineColor != SALCOLOR_NONE);
 }
 
 bool SvpSalGraphics::drawPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPoly, double fTransparency)

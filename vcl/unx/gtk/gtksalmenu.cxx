@@ -993,9 +993,8 @@ void GtkSalMenu::ActivateAllSubmenus(Menu* pMenuBar)
 {
     pMenuBar->HandleMenuActivateEvent(mpVCLMenu);
     pMenuBar->HandleMenuDeActivateEvent(mpVCLMenu);
-    for ( size_t nPos = 0; nPos < maItems.size(); nPos++ )
+    for (GtkSalMenuItem* pSalItem : maItems)
     {
-        GtkSalMenuItem *pSalItem = maItems[ nPos ];
         if ( pSalItem->mpSubMenu != nullptr )
         {
             pSalItem->mpSubMenu->ActivateAllSubmenus(pMenuBar);
