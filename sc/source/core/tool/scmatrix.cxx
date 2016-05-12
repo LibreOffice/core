@@ -57,17 +57,15 @@ using ::std::unary_function;
  * Custom string trait struct to tell mdds::multi_type_matrix about the
  * custom string type and how to handle blocks storing them.
  */
-struct custom_string_trait
+struct matrix_trait
 {
-    typedef svl::SharedString string_type;
     typedef sc::string_block string_element_block;
-
-    static const mdds::mtv::element_t string_type_identifier = sc::element_type_string;
+    typedef sc::uint16_block integer_element_block;
 
     typedef mdds::mtv::custom_block_func1<sc::string_block> element_block_func;
 };
 
-typedef mdds::multi_type_matrix<custom_string_trait> MatrixImplType;
+typedef mdds::multi_type_matrix<matrix_trait> MatrixImplType;
 
 namespace {
 
@@ -2304,6 +2302,7 @@ public:
                 }
             }
             break;
+            case mdds::mtm::element_integer:
             case mdds::mtm::element_empty:
             break;
         }
