@@ -527,17 +527,12 @@ void SwAccessibleEventList_Impl::MoveInvalidXAccToEnd()
         return;
     }
     SwAccessibleEventList_Impl lstEvent;
-    iterator li = begin();
-    for ( ;li != end();)
+    for (iterator li = begin(); li != end(); )
     {
-        SwAccessibleEvent_Impl e = *li;
-        if (e.IsNoXaccParentFrame())
+        if (li->IsNoXaccParentFrame())
         {
-            iterator liNext = li;
-            ++liNext;
-            erase(li);
-            li = liNext;
-            lstEvent.insert(lstEvent.end(),e);
+            lstEvent.insert(lstEvent.end(), *li);
+            li = erase(li);
         }
         else
             ++li;
