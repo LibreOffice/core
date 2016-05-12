@@ -162,9 +162,9 @@ ImplAccelEntry* Accelerator::ImplGetAccelData( const vcl::KeyCode& rKeyCode ) co
 void Accelerator::ImplCopyData( ImplAccelData& rAccelData )
 {
     // copy table
-    for ( size_t i = 0, n = rAccelData.maIdList.size(); i < n; ++i )
+    for (ImplAccelEntry* i : rAccelData.maIdList)
     {
-        ImplAccelEntry* pEntry = new ImplAccelEntry( *rAccelData.maIdList[ i ] );
+        ImplAccelEntry* pEntry = new ImplAccelEntry( *i );
 
         // sequence accelerator, then copy also
         if ( pEntry->mpAccel )
@@ -183,8 +183,7 @@ void Accelerator::ImplCopyData( ImplAccelData& rAccelData )
 void Accelerator::ImplDeleteData()
 {
     // delete accelerator-entries using the id-table
-    for ( size_t i = 0, n = mpData->maIdList.size(); i < n; ++i ) {
-        ImplAccelEntry* pEntry = mpData->maIdList[ i ];
+    for (ImplAccelEntry* pEntry : mpData->maIdList) {
         if ( pEntry->mpAutoAccel ) {
             delete pEntry->mpAutoAccel;
         }
