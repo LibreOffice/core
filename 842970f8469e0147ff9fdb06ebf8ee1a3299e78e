@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_39f8bae5",
+        "filename": "vcl/unx/gtk/gtksalmenu.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 977,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-05-12T08:04:22Z",
+      "side": 1,
+      "message": "If at all, such a TODO comment should appertain to the assert, not the void-cast.  I think the comment is unrelated to the topic of this commit.  Better clarify with the author of the code through another channel whether this should be an assert or something else.",
+      "range": {
+        "startLine": 977,
+        "startChar": 24,
+        "endLine": 977,
+        "endChar": 62
+      },
+      "revId": "842970f8469e0147ff9fdb06ebf8ee1a3299e78e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
