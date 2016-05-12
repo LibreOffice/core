@@ -91,7 +91,7 @@ class SW_DLLPUBLIC SwTransferable : public TransferableHelper
     static bool PasteFileContent( TransferableDataHelper&,
                                     SwWrtShell& rSh, SotClipboardFormatId nFormat, bool bMsg );
     static bool PasteOLE( TransferableDataHelper& rData, SwWrtShell& rSh,
-                            SotClipboardFormatId nFormat, sal_uInt8 nActionFlags, bool bMsg );
+                            SotClipboardFormatId nFormat, SotExchangeActionFlags nActionFlags, bool bMsg );
     static bool PasteTargetURL( TransferableDataHelper& rData, SwWrtShell& rSh,
                         SwPasteSdr nAction, const Point* pPt, bool bInsertGRF );
 
@@ -100,11 +100,11 @@ class SW_DLLPUBLIC SwTransferable : public TransferableHelper
 
     static bool PasteSdrFormat(  TransferableDataHelper& rData,
                                     SwWrtShell& rSh, SwPasteSdr nAction,
-                                    const Point* pPt, sal_uInt8 nActionFlags, bool bNeedToSelectBeforePaste);
+                                    const Point* pPt, SotExchangeActionFlags nActionFlags, bool bNeedToSelectBeforePaste);
 
     static bool PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
                                 SotClipboardFormatId nFormat, SwPasteSdr nAction, const Point* pPt,
-                                sal_uInt8 nActionFlags, sal_Int8 nDropAction, bool bNeedToSelectBeforePaste, sal_uInt16 nAnchorType = 0 );
+                                SotExchangeActionFlags nActionFlags, sal_Int8 nDropAction, bool bNeedToSelectBeforePaste, sal_uInt16 nAnchorType = 0 );
 
     static bool PasteImageMap( TransferableDataHelper& rData,
                                     SwWrtShell& rSh );
@@ -114,7 +114,7 @@ class SW_DLLPUBLIC SwTransferable : public TransferableHelper
 
     static bool PasteFileName( TransferableDataHelper& rData,
                             SwWrtShell& rSh, SotClipboardFormatId nFormat, SwPasteSdr nAction,
-                            const Point* pPt, sal_uInt8 nActionFlags, bool bMsg, bool * graphicInserted );
+                            const Point* pPt, SotExchangeActionFlags nActionFlags, bool bMsg, bool * graphicInserted );
 
     static bool PasteDBData( TransferableDataHelper& rData, SwWrtShell& rSh,
                             SotClipboardFormatId nFormat, bool bLink, const Point* pDragPt,
@@ -169,7 +169,8 @@ public:
     static bool IsPaste( const SwWrtShell&, const TransferableDataHelper& );
     static bool Paste( SwWrtShell&, TransferableDataHelper&, sal_uInt16 nAnchorType = 0 );
     static bool PasteData( TransferableDataHelper& rData,
-                          SwWrtShell& rSh, sal_uInt16 nAction, SotClipboardFormatId nFormat,
+                          SwWrtShell& rSh, sal_uInt8 nAction, SotExchangeActionFlags nActionFlags,
+                          SotClipboardFormatId nFormat,
                           SotExchangeDest nDestination, bool bIsPasteFormat,
                           bool bIsDefault,
                           const Point* pDDPos = nullptr, sal_Int8 nDropAction = 0,

@@ -5502,22 +5502,23 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
             if( !aDataHelper.GetXTransferable().is() )
                 break;
 
-            SotClipboardFormatId nDropFormat;
-            sal_uInt16 nEventAction, nDropAction;
-            SotExchangeDest nDropDestination;
-            nDropDestination = GetDropDestination( rCEvt.GetMousePosPixel() );
+            SotExchangeDest nDropDestination = GetDropDestination( rCEvt.GetMousePosPixel() );
             if( !bool(nDropDestination) )
                 break;
-
+            SotClipboardFormatId nDropFormat;
+            sal_uInt8 nEventAction, nDropAction;
+            SotExchangeActionFlags nActionFlags;
             nDropAction = SotExchange::GetExchangeAction(
                                 aDataHelper.GetDataFlavorExVector(),
                                 nDropDestination, EXCHG_IN_ACTION_COPY,
                                 EXCHG_IN_ACTION_COPY, nDropFormat,
-                                nEventAction );
+                                nEventAction,
+                                SotClipboardFormatId::NONE, nullptr,
+                                &nActionFlags );
             if( EXCHG_INOUT_ACTION_NONE != nDropAction )
             {
                 const Point aDocPt( PixelToLogic( rCEvt.GetMousePosPixel() ) );
-                SwTransferable::PasteData( aDataHelper, rSh, nDropAction,
+                SwTransferable::PasteData( aDataHelper, rSh, nDropAction, nActionFlags,
                                     nDropFormat, nDropDestination, false,
                                     false, &aDocPt, EXCHG_IN_ACTION_COPY,
                                     true );
