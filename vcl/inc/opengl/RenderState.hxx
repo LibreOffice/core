@@ -117,11 +117,36 @@ public:
     static std::string className() { return std::string("StencilState"); }
 };
 
+class BlendState : public GenericCapabilityState<GL_BLEND, BlendState>
+{
+    GLenum mnSourceMode;
+    GLenum mnDestinationMode;
+public:
+    BlendState()
+        : mnSourceMode(GL_ZERO)
+        , mnDestinationMode(GL_ZERO)
+    {}
+
+    static std::string className() { return std::string("BlendState"); }
+
+    void func(GLenum nSource, GLenum nDestination)
+    {
+        if (mnSourceMode != nSource || mnDestinationMode != nDestination)
+        {
+            glBlendFunc(nSource, nDestination);
+            CHECK_GL_ERROR();
+            mnSourceMode = nSource;
+            mnDestinationMode = nDestination;
+        }
+    }
+};
+
 class RenderState
 {
     TextureState maTexture;
     ScissorState maScissor;
     StencilState maStencil;
+    BlendState   maBlend;
 
     Rectangle maCurrentViewport;
 
@@ -142,12 +167,14 @@ public:
     TextureState& texture() { return maTexture; }
     ScissorState& scissor() { return maScissor; }
     StencilState& stencil() { return maStencil; }
+    BlendState&   blend()   { return maBlend; }
 
     void sync()
     {
         VCL_GL_INFO("RenderState::sync");
         maScissor.sync();
         maStencil.sync();
+        maBlend.sync();
     }
 };
 
