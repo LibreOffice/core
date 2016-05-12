@@ -113,14 +113,6 @@ SvxAreaTabPage::SvxAreaTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs
     get(m_pLbBitmap,"LB_BITMAP");
     get(m_pCtlBitmapPreview,"CTL_BITMAP_PREVIEW");
 
-    get(m_pTsbStepCount,"TSB_STEPCOUNT");
-    get(m_pFlStepCount,"FL_STEPCOUNT");
-    get(m_pNumFldStepCount,"NUM_FLD_STEPCOUNT");
-
-    get(m_pFlHatchBckgrd,"FL_HATCHCOLORS");
-    get(m_pLbHatchBckgrdColor,"LB_HATCHBCKGRDCOLOR");
-    get(m_pCbxHatchBckgrd,"CB_HATCHBCKGRD");
-
     get(m_pBxBitmap,"boxBITMAP");
 
     get(m_pFlSize,"FL_SIZE");
@@ -153,12 +145,8 @@ SvxAreaTabPage::SvxAreaTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs
     //size required for any of the areas which might be selected
     //later, so that there's sufficient space
     VclContainer *pMainFrame = get<VclContainer>("mainframe");
-    Size aIncrementsSize(m_pFlStepCount->get_preferred_size());
-    Size aHatchSize(m_pFlHatchBckgrd->get_preferred_size());
     Size aBitmapSize(m_pBxBitmap->get_preferred_size());
-    Size aMainFrame(
-        std::max(std::max(aIncrementsSize.Width(), aHatchSize.Width()), aBitmapSize.Width()),
-        std::max(std::max(aIncrementsSize.Height(), aHatchSize.Height()), aBitmapSize.Height()));
+    Size aMainFrame(aBitmapSize.Width(),aBitmapSize.Height());
     pMainFrame->set_width_request(aMainFrame.Width());
     pMainFrame->set_height_request(aMainFrame.Height());
 
@@ -167,12 +155,7 @@ SvxAreaTabPage::SvxAreaTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs
     m_pLbBitmap->Hide();
     m_pCtlBitmapPreview->Hide();
 
-    m_pFlStepCount->Hide();
-
     m_pBxBitmap->Hide();
-
-    // Controls for Hatch-Background
-    m_pFlHatchBckgrd->Hide();
 
     m_pTsbOriginal->EnableTriState( false );
 
@@ -205,17 +188,12 @@ SvxAreaTabPage::SvxAreaTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs
     m_pCtlBitmapPreview->SetAttributes( m_aXFillAttr.GetItemSet() );
 
     m_pLbColor->SetSelectHdl( LINK( this, SvxAreaTabPage, ModifyColorHdl_Impl ) );
-    m_pLbHatchBckgrdColor->SetSelectHdl( LINK( this, SvxAreaTabPage, ModifyHatchBckgrdColorHdl_Impl ) );
-    m_pCbxHatchBckgrd->SetToggleHdl( LINK( this, SvxAreaTabPage, ToggleHatchBckgrdColorHdl_Impl ) );
     //UUUU
     m_pBtnImport->SetClickHdl(LINK(this, SvxAreaTabPage, ClickImportHdl_Impl));
 
     m_pLbGradient->SetSelectHdl( LINK( this, SvxAreaTabPage, ModifyGradientHdl_Impl ) );
     m_pLbHatching->SetSelectHdl( LINK( this, SvxAreaTabPage, ModifyHatchingHdl_Impl ) );
     m_pLbBitmap->SetSelectHdl(   LINK( this, SvxAreaTabPage, ModifyBitmapHdl_Impl ) );
-
-    m_pTsbStepCount->SetClickHdl( LINK( this, SvxAreaTabPage, ModifyStepCountClickHdl_Impl ) );
-    m_pNumFldStepCount->SetModifyHdl( LINK( this, SvxAreaTabPage, ModifyStepCountEditHdl_Impl ) );
 
     Link<Edit&,void> aLink( LINK( this, SvxAreaTabPage, ModifyTileHdl_Impl ) );
     Link<Button*,void> aClickLink( LINK( this, SvxAreaTabPage, ModifyTileClickHdl_Impl ) );
@@ -272,12 +250,6 @@ void SvxAreaTabPage::dispose()
     m_pLbHatching.clear();
     m_pLbBitmap.clear();
     m_pCtlBitmapPreview.clear();
-    m_pTsbStepCount.clear();
-    m_pFlStepCount.clear();
-    m_pNumFldStepCount.clear();
-    m_pFlHatchBckgrd.clear();
-    m_pCbxHatchBckgrd.clear();
-    m_pLbHatchBckgrdColor.clear();
     m_pBxBitmap.clear();
     m_pFlSize.clear();
     m_pTsbOriginal.clear();
@@ -309,7 +281,6 @@ void SvxAreaTabPage::Construct()
 {
     // fill colortables / lists
     m_pLbColor->Fill( m_pColorList );
-    m_pLbHatchBckgrdColor->Fill ( m_pColorList );
 
     m_pLbGradient->Fill( m_pGradientList );
     m_pLbHatching->Fill( m_pHatchingList );
@@ -372,8 +343,6 @@ void SvxAreaTabPage::ActivatePage( const SfxItemSet& rSet )
                 else
                     m_pLbHatching->SelectEntryPos( _nPos );
                 ModifyHatchingHdl_Impl( *m_pLbHatching );
-
-                ModifyHatchBckgrdColorHdl_Impl( *m_pLbHatchBckgrdColor );
             }
 
             if( *m_pnGradientListState != ChangeType::NONE )
@@ -412,20 +381,6 @@ void SvxAreaTabPage::ActivatePage( const SfxItemSet& rSet )
                     m_pLbColor->SelectEntryPos( _nPos );
 
                 ModifyColorHdl_Impl( *m_pLbColor );
-
-                // Backgroundcolor of hatch
-                _nPos = m_pLbHatchBckgrdColor->GetSelectEntryPos();
-                m_pLbHatchBckgrdColor->Clear();
-                m_pLbHatchBckgrdColor->Fill( m_pColorList );
-                nCount = m_pLbHatchBckgrdColor->GetEntryCount();
-                if( nCount == 0 )
-                    ; // This case should never occur
-                else if( nCount <= _nPos )
-                    m_pLbHatchBckgrdColor->SelectEntryPos( 0 );
-                else
-                    m_pLbHatchBckgrdColor->SelectEntryPos( _nPos );
-
-                ModifyHatchBckgrdColorHdl_Impl( *m_pLbHatchBckgrdColor );
             }
 
             // evaluate if any other Tabpage set another filltype
@@ -454,7 +409,6 @@ void SvxAreaTabPage::ActivatePage( const SfxItemSet& rSet )
                     case PT_COLOR:
                         m_pTypeLB->SelectEntryPos( drawing::FillStyle_SOLID );
                         m_pLbColor->SelectEntryPos( _nPos );
-                        m_pLbHatchBckgrdColor->SelectEntryPos( _nPos );
                         ClickColorHdl_Impl();
                     break;
                 }
@@ -620,21 +574,6 @@ bool SvxAreaTabPage::FillItemSet( SfxItemSet* rAttrs )
                         bModified = true;
                     }
                 }
-                XFillBackgroundItem aItem ( m_pCbxHatchBckgrd->IsChecked() );
-                rAttrs->Put( aItem );
-                m_nPos = m_pLbHatchBckgrdColor->GetSelectEntryPos();
-                if( m_nPos != LISTBOX_ENTRY_NOTFOUND &&
-                    m_pLbHatchBckgrdColor->IsValueChangedFromSaved() )
-                {
-                    XFillColorItem aFillColorItem( m_pLbHatchBckgrdColor->GetSelectEntry(),
-                                          m_pLbHatchBckgrdColor->GetSelectEntryColor() );
-                    pOld = GetOldItem( *rAttrs, XATTR_FILLCOLOR );
-                    if ( !pOld || !( *static_cast<const XFillColorItem*>(pOld) == aFillColorItem ) )
-                    {
-                        rAttrs->Put( aFillColorItem );
-                        bModified = true;
-                    }
-                }
                 // NEW
                 if( (eSavedStyle != eStyle) &&
                     ( bModified ||
@@ -693,39 +632,6 @@ bool SvxAreaTabPage::FillItemSet( SfxItemSet* rAttrs )
            }
            break;
        }
-
-        // step size
-        if( m_pTsbStepCount->IsEnabled() )
-        {
-            sal_uInt16 nValue = 0;
-            bool   bValueModified = false;
-            TriState eState = m_pTsbStepCount->GetState();
-            if( eState == TRISTATE_TRUE )
-            {
-                if( m_pTsbStepCount->IsValueChangedFromSaved() )
-                    bValueModified = true;
-            }
-            else
-            {
-                // condition != Disabled ?
-                if( !m_pNumFldStepCount->GetText().isEmpty() )
-                {
-                    nValue = (sal_uInt16) m_pNumFldStepCount->GetValue();
-                    if( m_pNumFldStepCount->IsValueChangedFromSaved() )
-                        bValueModified = true;
-                }
-            }
-            if( bValueModified )
-            {
-                XGradientStepCountItem aFillBitmapItem( nValue );
-                pOld = GetOldItem( *rAttrs, XATTR_GRADIENTSTEPCOUNT );
-                if ( !pOld || !( *static_cast<const XGradientStepCountItem*>(pOld) == aFillBitmapItem ) )
-                {
-                    rAttrs->Put( aFillBitmapItem );
-                    bModified = true;
-                }
-            }
-        }
 
         if( m_pTsbTile->IsEnabled() )
         {
@@ -977,7 +883,6 @@ void SvxAreaTabPage::Reset( const SfxItemSet* rAttrs )
             XFillColorItem const& rColorItem(static_cast<const XFillColorItem&>(
                                 rAttrs->Get(XATTR_FILLCOLOR)) );
             m_pLbColor->SelectEntry( rColorItem.GetColorValue() );
-            m_pLbHatchBckgrdColor->SelectEntry( rColorItem.GetColorValue() );
         }
 
         SfxItemState const eGradState(rAttrs->GetItemState(XATTR_FILLGRADIENT));
@@ -1013,11 +918,6 @@ void SvxAreaTabPage::Reset( const SfxItemSet* rAttrs )
             m_pLbHatching->SelectEntryPos(0); // anything better than nothing
             isMissingHatching = true;
         }
-        if (SfxItemState::DONTCARE != rAttrs->GetItemState(XATTR_FILLBACKGROUND))
-        {
-            m_pCbxHatchBckgrd->Check( static_cast<const XFillBackgroundItem&>(
-                        rAttrs->Get(XATTR_FILLBACKGROUND)).GetValue() );
-        }
 
         SfxItemState const eBitmapState(rAttrs->GetItemState(XATTR_FILLBITMAP));
         XFillBitmapItem const* pBitmapItem(nullptr);
@@ -1051,7 +951,6 @@ void SvxAreaTabPage::Reset( const SfxItemSet* rAttrs )
 
             case drawing::FillStyle_HATCH:
                 ClickHatchingHdl_Impl();
-                ToggleHatchBckgrdColorHdl_Impl( *m_pCbxHatchBckgrd );
             break;
 
             case drawing::FillStyle_BITMAP:
@@ -1076,30 +975,6 @@ void SvxAreaTabPage::Reset( const SfxItemSet* rAttrs )
 
         // so that Reset() also works correctly with Back
         m_pTypeLB->SetNoSelection();
-    }
-
-    // step size
-    if( ( rAttrs->GetItemState( XATTR_GRADIENTSTEPCOUNT ) != SfxItemState::DONTCARE ) ||
-        ( rAttrs->GetItemState( XATTR_FILLSTYLE ) != SfxItemState::DONTCARE ) )
-    {
-        m_pTsbStepCount->EnableTriState( false );
-        sal_uInt16 nValue = static_cast<const XGradientStepCountItem&>( rAttrs->Get( XATTR_GRADIENTSTEPCOUNT ) ).GetValue();
-        if( nValue == 0 )
-        {
-            m_pTsbStepCount->SetState( TRISTATE_TRUE );
-            m_pNumFldStepCount->SetText( "" );
-        }
-        else
-        {
-            m_pTsbStepCount->SetState( TRISTATE_FALSE );
-            m_pNumFldStepCount->SetValue( nValue );
-        }
-        ModifyStepCountHdl_Impl( m_pTsbStepCount );
-    }
-    else
-    {
-        m_pTsbStepCount->SetState( TRISTATE_INDET );
-        m_pNumFldStepCount->SetText( "" );
     }
 
     // attributes for the bitmap filling
@@ -1273,11 +1148,8 @@ void SvxAreaTabPage::Reset( const SfxItemSet* rAttrs )
         m_pLbGradient->SaveValue();
     if (!isMissingHatching)
         m_pLbHatching->SaveValue();
-    m_pLbHatchBckgrdColor->SaveValue();
     if (!isMissingBitmap)
         m_pLbBitmap->SaveValue();
-    m_pTsbStepCount->SaveValue();
-    m_pNumFldStepCount->SaveValue();
     m_pTsbTile->SaveValue();
     m_pTsbStretch->SaveValue();
     m_pTsbScale->SaveValue();
@@ -1296,10 +1168,7 @@ void SvxAreaTabPage::ChangesApplied()
     m_pLbColor->SaveValue();
     m_pLbGradient->SaveValue();
     m_pLbHatching->SaveValue();
-    m_pLbHatchBckgrdColor->SaveValue();
     m_pLbBitmap->SaveValue();
-    m_pTsbStepCount->SaveValue();
-    m_pNumFldStepCount->SaveValue();
     m_pTsbTile->SaveValue();
     m_pTsbStretch->SaveValue();
     m_pTsbScale->SaveValue();
@@ -1340,11 +1209,6 @@ void SvxAreaTabPage::ClickInvisibleHdl_Impl()
     m_pCtlXRectPreview->Hide();
     m_pCtlBitmapPreview->Hide();
 
-    m_pFlStepCount->Hide();
-
-    // Controls for Hatch-Background
-    m_pFlHatchBckgrd->Hide();
-
     m_rXFSet.Put( XFillStyleItem( drawing::FillStyle_NONE ) );
     m_pCtlXRectPreview->SetAttributes( m_aXFillAttr.GetItemSet() );
     m_pCtlBitmapPreview->SetAttributes( m_aXFillAttr.GetItemSet() );
@@ -1368,11 +1232,6 @@ void SvxAreaTabPage::ClickColorHdl_Impl()
     m_pCtlXRectPreview->Show();
     m_pCtlBitmapPreview->Hide();
 
-    m_pFlStepCount->Hide();
-
-    // Controls for Hatch-Background
-    m_pFlHatchBckgrd->Hide();
-
     ModifyColorHdl_Impl( *m_pLbColor );
 }
 
@@ -1381,7 +1240,6 @@ IMPL_LINK_NOARG_TYPED(SvxAreaTabPage, ModifyColorHdl_Impl, ListBox&, void)
 {
     const SfxPoolItem* pPoolItem = nullptr;
     sal_Int32 _nPos = m_pLbColor->GetSelectEntryPos();
-    m_pLbHatchBckgrdColor->SelectEntryPos( _nPos );
     if( _nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         m_rXFSet.Put( XFillStyleItem( drawing::FillStyle_SOLID ) );
@@ -1416,17 +1274,7 @@ void SvxAreaTabPage::ClickGradientHdl_Impl()
     m_pCtlXRectPreview->Show();
     m_pCtlBitmapPreview->Hide();
 
-    m_pFlStepCount->Enable();
-    m_pFlStepCount->Show();
-    m_pTsbStepCount->Enable();
-    m_pTsbStepCount->Show();
-    m_pNumFldStepCount->Show();
-
-    // Controls for Hatch-Background
-    m_pFlHatchBckgrd->Hide();
-
     ModifyGradientHdl_Impl( *m_pLbGradient );
-    ModifyStepCountHdl_Impl( m_pTsbStepCount );
 }
 
 
@@ -1467,23 +1315,15 @@ void SvxAreaTabPage::ClickHatchingHdl_Impl()
     m_pCtlXRectPreview->Show();
     m_pCtlBitmapPreview->Hide();
 
-    m_pFlStepCount->Hide();
-
     m_pBxBitmap->Hide();
 
-    // Controls for Hatch-Background
-    m_pFlHatchBckgrd->Show();
-    m_pCbxHatchBckgrd->Enable();
-    m_pLbHatchBckgrdColor->Enable();
-
     ModifyHatchingHdl_Impl( *m_pLbHatching );
-    ModifyHatchBckgrdColorHdl_Impl( *m_pLbHatchBckgrdColor );
-    ToggleHatchBckgrdColorHdl_Impl( *m_pCbxHatchBckgrd );
 }
 
 
 IMPL_LINK_NOARG_TYPED(SvxAreaTabPage, ModifyHatchingHdl_Impl, ListBox&, void)
 {
+    // fill Hatch ItemSet
     const SfxPoolItem* pPoolItem = nullptr;
     sal_Int32 _nPos = m_pLbHatching->GetSelectEntryPos();
     if( _nPos != LISTBOX_ENTRY_NOTFOUND )
@@ -1502,54 +1342,23 @@ IMPL_LINK_NOARG_TYPED(SvxAreaTabPage, ModifyHatchingHdl_Impl, ListBox&, void)
     else
         m_rXFSet.Put( XFillStyleItem( drawing::FillStyle_NONE ) );
 
-    m_pCtlXRectPreview->SetAttributes( m_aXFillAttr.GetItemSet() );
-    m_pCtlXRectPreview->Invalidate();
-}
-
-
-IMPL_LINK_NOARG_TYPED(SvxAreaTabPage, ModifyHatchBckgrdColorHdl_Impl, ListBox&, void)
-{
-    const SfxPoolItem* pPoolItem = nullptr;
-    sal_Int32 _nPos = m_pLbHatchBckgrdColor->GetSelectEntryPos();
-    m_pLbColor->SelectEntryPos( _nPos );
-    if( _nPos != LISTBOX_ENTRY_NOTFOUND )
+    // fill Hatch background ItemSet
+    XFillBackgroundItem aItem(static_cast<const XFillBackgroundItem&>(m_rOutAttrs.Get( XATTR_FILLBACKGROUND )));
+    m_rXFSet.Put( aItem, XATTR_FILLBACKGROUND );
+    if(aItem.GetValue())
     {
-        m_rXFSet.Put( XFillColorItem( OUString(), m_pLbHatchBckgrdColor->GetSelectEntryColor() ) );
-    }
-    else if( SfxItemState::SET == m_rOutAttrs.GetItemState( GetWhich( XATTR_FILLCOLOR ), true, &pPoolItem ) )
-    {
-        Color aColor( static_cast<const XFillColorItem*>( pPoolItem )->GetColorValue() );
-        m_rXFSet.Put( XFillColorItem( OUString(), aColor ) );
-    }
-    else
-        m_rXFSet.Put( XFillStyleItem( drawing::FillStyle_NONE ) );
-
-    m_pCtlXRectPreview->SetAttributes( m_aXFillAttr.GetItemSet() );
-    m_pCtlXRectPreview->Invalidate();
-}
-
-
-IMPL_LINK_NOARG_TYPED(SvxAreaTabPage, ToggleHatchBckgrdColorHdl_Impl, CheckBox&, void)
-{
-    // switch on/off backgroundcolor for hatches
-    m_pLbHatchBckgrdColor->Enable( m_pCbxHatchBckgrd->IsChecked() );
-
-    XFillBackgroundItem aItem( m_pCbxHatchBckgrd->IsChecked() );
-    m_rXFSet.Put ( aItem, XATTR_FILLBACKGROUND );
-
-    m_pCtlXRectPreview->SetAttributes( m_aXFillAttr.GetItemSet() );
-    m_pCtlXRectPreview->Invalidate();
-
-    if( m_pLbHatchBckgrdColor->GetSelectEntryPos() == LISTBOX_ENTRY_NOTFOUND )
-    {
-        if ( SfxItemState::SET == m_rOutAttrs.GetItemState( XATTR_FILLCOLOR ) )//>= SfxItemState::DEFAULT )
+        if( SfxItemState::SET == m_rOutAttrs.GetItemState( GetWhich( XATTR_FILLCOLOR ), true, &pPoolItem ) )
         {
-            XFillColorItem aColorItem( static_cast<const XFillColorItem&>(m_rOutAttrs.Get( XATTR_FILLCOLOR )) );
-            m_pLbHatchBckgrdColor->SelectEntry( aColorItem.GetColorValue() );
+            Color aColor( static_cast<const XFillColorItem*>( pPoolItem )->GetColorValue() );
+            m_rXFSet.Put( XFillColorItem( OUString(), aColor ) );
         }
+        else
+            m_rXFSet.Put( XFillStyleItem( drawing::FillStyle_NONE ) );
     }
-}
 
+    m_pCtlXRectPreview->SetAttributes( m_aXFillAttr.GetItemSet() );
+    m_pCtlXRectPreview->Invalidate();
+}
 
 void SvxAreaTabPage::ClickBitmapHdl_Impl()
 {
@@ -1576,8 +1385,6 @@ void SvxAreaTabPage::ClickBitmapHdl_Impl()
     m_pCtlBitmapPreview->Show();
     m_pCtlXRectPreview->Hide();
 
-    m_pFlStepCount->Hide();
-
     m_pBxTile->Enable();
 
     m_pFlSize->Enable();
@@ -1586,9 +1393,6 @@ void SvxAreaTabPage::ClickBitmapHdl_Impl()
 
     if (!m_pRbtRow->IsChecked() && !m_pRbtColumn->IsChecked())
         m_pRbtRow->Check();
-
-    // Controls for Hatch-Background
-    m_pFlHatchBckgrd->Hide();
 
     m_pBxBitmap->Show();
 
@@ -1624,42 +1428,6 @@ IMPL_LINK_NOARG_TYPED(SvxAreaTabPage, ModifyBitmapHdl_Impl, ListBox&, void)
 
     m_pCtlBitmapPreview->SetAttributes( m_aXFillAttr.GetItemSet() );
     m_pCtlBitmapPreview->Invalidate();
-}
-
-
-IMPL_LINK_TYPED( SvxAreaTabPage, ModifyStepCountClickHdl_Impl, Button*, p, void )
-{
-    ModifyStepCountHdl_Impl(p);
-}
-IMPL_LINK_TYPED( SvxAreaTabPage, ModifyStepCountEditHdl_Impl, Edit&, r, void )
-{
-    ModifyStepCountHdl_Impl(&r);
-}
-void SvxAreaTabPage::ModifyStepCountHdl_Impl( void* p )
-{
-    if( p == m_pTsbStepCount )
-    {
-        if( m_pTsbStepCount->GetState() == TRISTATE_FALSE )
-        {
-            if( m_pNumFldStepCount->GetText().isEmpty() )
-                m_pNumFldStepCount->SetText("64");
-
-            m_pNumFldStepCount->Enable();
-        }
-        else
-            m_pNumFldStepCount->Disable();
-    }
-
-    sal_uInt16 nValue = 0;
-    if( m_pTsbStepCount->GetState() != TRISTATE_TRUE )
-    {
-        // condition != Disabled ?
-        if( !m_pNumFldStepCount->GetText().isEmpty() )
-            nValue = (sal_uInt16) m_pNumFldStepCount->GetValue();
-    }
-    m_rXFSet.Put( XGradientStepCountItem( nValue ) );
-    m_pCtlXRectPreview->SetAttributes( m_aXFillAttr.GetItemSet() );
-    m_pCtlXRectPreview->Invalidate();
 }
 
 IMPL_LINK_NOARG_TYPED( SvxAreaTabPage, ClickImportHdl_Impl, Button*, void )
