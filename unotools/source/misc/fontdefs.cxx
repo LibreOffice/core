@@ -341,10 +341,10 @@ OUString StripScriptFromName(const OUString& _aName)
     while (!bFinished)
     {
         bFinished = true;
-        for (size_t i = 0; i < SAL_N_ELEMENTS(suffixes); ++i)
+        for (const char* suffix : suffixes)
         {
-            size_t nLen = strlen(suffixes[i]);
-            if (aName.endsWithIgnoreAsciiCaseAsciiL(suffixes[i], nLen))
+            size_t nLen = strlen(suffix);
+            if (aName.endsWithIgnoreAsciiCaseAsciiL(suffix, nLen))
             {
                 bFinished = false;
                 aName = aName.copy(0, aName.getLength() - nLen);

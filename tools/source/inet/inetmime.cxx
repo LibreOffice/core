@@ -2224,9 +2224,9 @@ static EncodingEntry const aEncodingMap[]
 rtl_TextEncoding getCharsetEncoding(sal_Char const * pBegin,
                                               sal_Char const * pEnd)
 {
-    for (sal_Size i = 0; i < SAL_N_ELEMENTS(aEncodingMap); ++i)
-        if (equalIgnoreCase(pBegin, pEnd, aEncodingMap[i].m_aName))
-            return aEncodingMap[i].m_eEncoding;
+    for (const EncodingEntry& i : aEncodingMap)
+        if (equalIgnoreCase(pBegin, pEnd, i.m_aName))
+            return i.m_eEncoding;
     return RTL_TEXTENCODING_DONTKNOW;
 }
 
