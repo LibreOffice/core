@@ -2194,6 +2194,7 @@ void SmParser::DoStack()
 
 void SmParser::DoMatrix()
 {
+    std::unique_ptr<SmMatrixNode> pMNode(new SmMatrixNode(m_aCurToken));
     NextToken();
     if (m_aCurToken.eType == TLGROUP)
     {
@@ -2240,12 +2241,11 @@ void SmParser::DoMatrix()
         if (m_aCurToken.eType != TRGROUP)
             Error(PE_RGROUP_EXPECTED);
 
-        NextToken();
-
-        std::unique_ptr<SmMatrixNode> pMNode(new SmMatrixNode(m_aCurToken));
         pMNode->SetSubNodes(ExpressionArray);
         pMNode->SetRowCol(r, c);
         m_aNodeStack.push_front(std::move(pMNode));
+
+        NextToken();
     }
     else
         Error(PE_LGROUP_EXPECTED);
