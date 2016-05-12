@@ -39,7 +39,7 @@ enum class BoolAttrFlags {
     InverseSemantics      = 0x04,
 };
 namespace o3tl {
-    template<> struct typed_flags<BoolAttrFlags> : is_typed_flags<BoolAttrFlags, 0x0a> {};
+    template<> struct typed_flags<BoolAttrFlags> : is_typed_flags<BoolAttrFlags, 0x07> {};
 }
 
 namespace xmloff
