@@ -41,6 +41,7 @@
 #include <svx/xflbckit.hxx>
 #include <svx/xbtmpit.hxx>
 #include <svx/xflhtit.hxx>
+#include "EventMultiplexer.hxx"
 
 namespace sd { namespace sidebar {
 
@@ -64,6 +65,9 @@ public:
         const SfxItemState eState,
         const SfxPoolItem* pState,
         const bool bIsEnabled) override;
+
+    // callbacks
+    void onSlideChange();
 
 private:
 
@@ -109,6 +113,7 @@ private:
     DECL_LINK_TYPED(AssignMasterPage, ListBox&, void);
     DECL_LINK_TYPED(DspBackground, Button*, void);
     DECL_LINK_TYPED(DspObjects, Button*, void);
+    DECL_LINK_TYPED(EventMultiplexerListener, tools::EventMultiplexerEvent&, void );
 
     void Initialize();
     void Update();
@@ -116,6 +121,8 @@ private:
     XGradient GetGradientSetOrDefault();
     const OUString GetHatchingSetOrDefault();
     const OUString GetBitmapSetOrDefault();
+    void addListener();
+    void removeListener();
 };
 
 }}

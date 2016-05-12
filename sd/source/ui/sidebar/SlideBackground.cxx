@@ -59,6 +59,7 @@
 #include <sfx2/objface.hxx>
 #include <svx/dlgutil.hxx>
 #include <algorithm>
+#include "EventMultiplexer.hxx"
 
 using namespace ::com::sun::star;
 
@@ -147,6 +148,7 @@ SlideBackground::SlideBackground(
     get(mpFillLB, "fillattr");
     get(mpDspMasterBackground, "displaymasterbackground");
     get(mpDspMasterObjects, "displaymasterobjects");
+    addListener();
     Initialize();
 }
 
@@ -159,7 +161,7 @@ void SlideBackground::Initialize()
 {
     lcl_FillPaperSizeListbox( *mpPaperSizeBox );
     mpPaperSizeBox->SetSelectHdl(LINK(this,SlideBackground,PaperSizeModifyHdl));
-    mpPaperOrientation->SetSelectHdl(LINK(this,SlideBackground,PaperOrientationModifyHdl));
+    mpPaperOrientation->SetSelectHdl(LINK(this,SlideBackground,PaperSizeModifyHdl));
 
     ::sd::DrawDocShell* pDocSh = dynamic_cast<::sd::DrawDocShell*>( SfxObjectShell::Current() );
     SdDrawDocument* pDoc = pDocSh ? pDocSh->GetDoc() : nullptr;
@@ -294,8 +296,36 @@ void SlideBackground::Update()
     }
 }
 
+void SlideBackground::addListener()
+{
+    Link<tools::EventMultiplexerEvent&,void> aLink( LINK(this, SlideBackground, EventMultiplexerListener) );
+    mrBase.GetEventMultiplexer()->AddEventListener (
+        aLink,
+        tools::EventMultiplexerEvent::EID_CURRENT_PAGE );
+}
+
+void SlideBackground::removeListener()
+{
+    Link<tools::EventMultiplexerEvent&,void> aLink( LINK(this, SlideBackground, EventMultiplexerListener) );
+    mrBase.GetEventMultiplexer()->RemoveEventListener( aLink );
+}
+
+IMPL_LINK_TYPED(SlideBackground, EventMultiplexerListener,
+                tools::EventMultiplexerEvent&, rEvent, void)
+{
+    switch (rEvent.meEventId)
+    {
+        // add more events as per requirement
+        case tools::EventMultiplexerEvent::EID_CURRENT_PAGE:
+            onSlideChange();
+            break;
+    }
+}
+
 void SlideBackground::dispose()
 {
+    removeListener();
+
     mpPaperSizeBox.clear();
     mpPaperOrientation.clear();
     mpMasterSlide.clear();
@@ -378,6 +408,103 @@ const OUString SlideBackground::GetBitmapSetOrDefault()
 void SlideBackground::DataChanged (const DataChangedEvent& /*rEvent*/)
 {
 
+}
+
+void SlideBackground::onSlideChange()
+{
+    ViewShell* pMainViewShell = mrBase.GetMainViewShell().get();
+    DrawViewShell* pDrawViewShell = static_cast<DrawViewShell*>(pMainViewShell);
+    SdPage* pPage = pDrawViewShell->getCurrentPage();
+
+    const SfxItemSet &rPageAttr = pPage->getSdrPageProperties().GetItemSet();
+    drawing::FillStyle eXFS = (drawing::FillStyle) static_cast<const XFillStyleItem*>( rPageAttr.GetItem( XATTR_FILLSTYLE ) )->GetValue();
+    SfxObjectShell* pSh = SfxObjectShell::Current();
+    switch( eXFS )
+    {
+        case drawing::FillStyle_NONE:
+        {
+            mpFillStyle->SelectEntryPos(0);
+            mpFillAttr->Hide();
+            mpFillGrad->Hide();
+            mpFillLB->Hide();
+            break;
+        }
+        case drawing::FillStyle_SOLID:
+        {
+            mpFillStyle->SelectEntryPos(1);
+            mpFillAttr->Hide();
+            mpFillGrad->Hide();
+            mpFillLB->Clear();
+            const SvxColorListItem aItem( *static_cast<const SvxColorListItem*>(pSh->GetItem(SID_COLOR_TABLE)));
+            mpFillLB->Fill(aItem.GetColorList());
+            mpFillLB->Show();
+            Color aColor =  static_cast<const XFillColorItem*>( rPageAttr.GetItem( XATTR_FILLCOLOR ) )->GetColorValue();
+            mpFillLB->SelectEntry( aColor );
+
+            if(mpFillLB->GetSelectEntryCount() == 0)
+            {
+                mpFillLB->InsertEntry(aColor, OUString());
+                mpFillLB->SelectEntry(aColor);
+            }
+            break;
+        }
+        case drawing::FillStyle_GRADIENT:
+        {
+            const SvxColorListItem aItem(*static_cast<const SvxColorListItem*>(pSh->GetItem(SID_COLOR_TABLE)));
+            mpFillStyle->SelectEntryPos(2);
+            mpFillAttr->Hide();
+            mpFillLB->Clear();
+            mpFillGrad->Clear();
+            mpFillLB->Fill(aItem.GetColorList());
+            mpFillGrad->Fill(aItem.GetColorList());
+            mpFillLB->Show();
+            mpFillGrad->Show();
+            const XGradient& xGradient =  static_cast<const XFillGradientItem*>( rPageAttr.GetItem( XATTR_FILLGRADIENT ) )->GetGradientValue();
+            const Color aStartColor = xGradient.GetStartColor();
+            const Color aEndColor = xGradient.GetEndColor();
+            mpFillLB->SelectEntry( aStartColor );
+            mpFillGrad->SelectEntry( aEndColor );
+
+            if(mpFillLB->GetSelectEntryCount() == 0)
+            {
+                mpFillLB->InsertEntry(aStartColor, OUString());
+                mpFillLB->SelectEntry(aStartColor);
+            }
+
+            if(mpFillGrad->GetSelectEntryCount() == 0)
+            {
+                mpFillGrad->InsertEntry(aEndColor, OUString());
+                mpFillGrad->SelectEntry(aEndColor);
+            }
+            break;
+        }
+        case drawing::FillStyle_HATCH:
+        {
+            const SvxHatchListItem aItem(*static_cast<const SvxHatchListItem*>(pSh->GetItem(SID_HATCH_LIST)));
+            mpFillStyle->SelectEntryPos(3);
+            mpFillLB->Hide();
+            mpFillGrad->Hide();
+            mpFillAttr->Clear();
+            mpFillAttr->Fill(aItem.GetHatchList());
+            mpFillAttr->Show();
+            const XFillHatchItem *pFillHatchItem( static_cast<const XFillHatchItem*>( rPageAttr.GetItem( XATTR_FILLHATCH ) ) );
+            mpFillAttr->SelectEntry( pFillHatchItem->GetName() );
+            break;
+        }
+        case drawing::FillStyle_BITMAP:
+        {
+            const SvxBitmapListItem aItem(*static_cast<const SvxBitmapListItem*>(pSh->GetItem(SID_BITMAP_LIST)));
+            mpFillStyle->SelectEntryPos(4);
+            mpFillLB->Hide();
+            mpFillGrad->Hide();
+            mpFillAttr->Fill(aItem.GetBitmapList());
+            mpFillAttr->Show();
+            const XFillBitmapItem *pFillBitmapItem = static_cast<const XFillBitmapItem*>( rPageAttr.GetItem( XATTR_FILLBITMAP ) );
+            mpFillAttr->SelectEntry( pFillBitmapItem->GetName() );
+        }
+        default:
+            break;
+    }
 }
 
 void SlideBackground::NotifyItemUpdate(
@@ -600,14 +727,6 @@ IMPL_LINK_NOARG_TYPED(SlideBackground, PaperSizeModifyHdl, ListBox&, void)
 
     SvxSizeItem aSizeItem(SID_ATTR_PAGE_SIZE,aSize);
     GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_SIZE, SfxCallMode::RECORD, { &aSizeItem });
-}
-
-IMPL_LINK_NOARG_TYPED(SlideBackground, PaperOrientationModifyHdl, ListBox&, void)
-{
-    SvxPageItem aPageItem(SID_ATTR_PAGE);
-    aPageItem.SetLandscape( mpPaperOrientation->GetSelectEntryPos() == 0 );
-
-    GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE, SfxCallMode::RECORD,{ &aPageItem });
 }
 
 IMPL_LINK_NOARG_TYPED(SlideBackground, FillColorHdl, ListBox&, void)
