@@ -1444,8 +1444,7 @@ static bool lcl_ErgoVadis( SwTextFrame* pFrame, sal_Int32 &rPos, const PrepareHi
     return true;
 }
 
-// Silence over-eager warning emitted at least by GCC 5.3.1 in certain
-// instantiations:
+// Silence over-eager warning emitted at least by GCC 5.3.1
 #if defined __GNUC__ && !defined __clang__
 # pragma GCC diagnostic push
 # pragma GCC diagnostic ignored "-Wstrict-overflow"
