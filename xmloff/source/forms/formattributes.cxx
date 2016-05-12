@@ -35,47 +35,47 @@ namespace xmloff
     using namespace ::com::sun::star::beans;
 
     //= OAttributeMetaData
-    const sal_Char* OAttributeMetaData::getCommonControlAttributeName(sal_Int32 _nId)
+    const sal_Char* OAttributeMetaData::getCommonControlAttributeName(CCAFlags _nId)
     {
         switch (_nId)
         {
-            case CCA_NAME:              return "name";
-            case CCA_SERVICE_NAME:      return "control-implementation";
-            case CCA_BUTTON_TYPE:       return "button-type";
-// disabled(AddAttributeIdLegacy)   case CCA_CONTROL_ID:        return "id";
-            case CCA_CURRENT_SELECTED:  return "current-selected";
-            case CCA_CURRENT_VALUE:     return "current-value";
-            case CCA_DISABLED:          return "disabled";
-            case CCA_ENABLEVISIBLE:     return "visible";
-            case CCA_DROPDOWN:          return "dropdown";
-            case CCA_FOR:               return "for";
-            case CCA_IMAGE_DATA:        return "image-data";
-            case CCA_LABEL:             return "label";
-            case CCA_MAX_LENGTH:        return "max-length";
-            case CCA_PRINTABLE:         return "printable";
-            case CCA_READONLY:          return "readonly";
-            case CCA_SELECTED:          return "selected";
-            case CCA_SIZE:              return "size";
-            case CCA_TAB_INDEX:         return "tab-index";
-            case CCA_TARGET_FRAME:      return "target-frame";
-            case CCA_TARGET_LOCATION:   return "href";      // the only special thing here: TargetLocation is represented by an xlink:href attribute
-            case CCA_TAB_STOP:          return "tab-stop";
-            case CCA_TITLE:             return "title";
-            case CCA_VALUE:             return "value";
-            case CCA_ORIENTATION:       return "orientation";
-            case CCA_VISUAL_EFFECT:     return "visual-effect";
+            case CCAFlags::Name:              return "name";
+            case CCAFlags::ServiceName:      return "control-implementation";
+            case CCAFlags::ButtonType:       return "button-type";
+// disabled(AddAttributeIdLegacy)   case CCAFlags::ControlId:        return "id";
+            case CCAFlags::CurrentSelected:  return "current-selected";
+            case CCAFlags::CurrentValue:     return "current-value";
+            case CCAFlags::Disabled:          return "disabled";
+            case CCAFlags::EnableVisible:     return "visible";
+            case CCAFlags::Dropdown:          return "dropdown";
+            case CCAFlags::For:               return "for";
+            case CCAFlags::ImageData:        return "image-data";
+            case CCAFlags::Label:             return "label";
+            case CCAFlags::MaxLength:        return "max-length";
+            case CCAFlags::Printable:         return "printable";
+            case CCAFlags::ReadOnly:          return "readonly";
+            case CCAFlags::Selected:          return "selected";
+            case CCAFlags::Size:              return "size";
+            case CCAFlags::TabIndex:         return "tab-index";
+            case CCAFlags::TargetFrame:      return "target-frame";
+            case CCAFlags::TargetLocation:   return "href";      // the only special thing here: TargetLocation is represented by an xlink:href attribute
+            case CCAFlags::TabStop:          return "tab-stop";
+            case CCAFlags::Title:             return "title";
+            case CCAFlags::Value:             return "value";
+            case CCAFlags::Orientation:       return "orientation";
+            case CCAFlags::VisualEffect:     return "visual-effect";
             default:
                 OSL_FAIL("OAttributeMetaData::getCommonControlAttributeName: invalid id (maybe you or-ed two flags?)!");
         }
         return "";
     }
 
-    sal_uInt16 OAttributeMetaData::getCommonControlAttributeNamespace(sal_Int32 _nId)
+    sal_uInt16 OAttributeMetaData::getCommonControlAttributeNamespace(CCAFlags _nId)
     {
-        if (CCA_TARGET_LOCATION == _nId)
+        if (CCAFlags::TargetLocation == _nId)
             return XML_NAMESPACE_XLINK;
 
-        if (CCA_TARGET_FRAME == _nId)
+        if (CCAFlags::TargetFrame == _nId)
             return XML_NAMESPACE_OFFICE;
 
         return XML_NAMESPACE_FORM;

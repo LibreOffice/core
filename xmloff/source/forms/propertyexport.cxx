@@ -392,15 +392,15 @@ namespace xmloff
         OUString sTargetFrame = comphelper::getString(m_xProps->getPropertyValue(PROPERTY_TARGETFRAME));
         if( sTargetFrame != "_blank" )
         {   // an empty string and "_blank" have the same meaning and don't have to be written
-            AddAttribute(OAttributeMetaData::getCommonControlAttributeNamespace(CCA_TARGET_FRAME)
-                        ,OAttributeMetaData::getCommonControlAttributeName(CCA_TARGET_FRAME)
+            AddAttribute(OAttributeMetaData::getCommonControlAttributeNamespace(CCAFlags::TargetFrame)
+                        ,OAttributeMetaData::getCommonControlAttributeName(CCAFlags::TargetFrame)
                         ,sTargetFrame);
         }
 
         exportedProperty(PROPERTY_TARGETFRAME);
     }
 
-    void OPropertyExport::exportRelativeTargetLocation(const OUString& _sPropertyName,sal_Int32 _nProperty,bool _bAddType)
+    void OPropertyExport::exportRelativeTargetLocation(const OUString& _sPropertyName,CCAFlags _nProperty,bool _bAddType)
     {
         DBG_CHECK_PROPERTY( _sPropertyName, OUString );
 

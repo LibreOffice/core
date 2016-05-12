@@ -76,19 +76,19 @@ OFormLayerXMLImport_Impl::OFormLayerXMLImport_Impl(SvXMLImport& _rImporter)
     // build the attribute2property map
     // string properties which are exported as attributes
     m_aAttributeMetaData.addStringProperty(
-        OAttributeMetaData::getCommonControlAttributeName(CCA_NAME), PROPERTY_NAME);
+        OAttributeMetaData::getCommonControlAttributeName(CCAFlags::Name), PROPERTY_NAME);
     m_aAttributeMetaData.addStringProperty(
             OAttributeMetaData::getSpecialAttributeName(SCA_GROUP_NAME), PROPERTY_GROUP_NAME);
         m_aAttributeMetaData.addStringProperty(
-        OAttributeMetaData::getCommonControlAttributeName(CCA_IMAGE_DATA), PROPERTY_IMAGEURL);
+        OAttributeMetaData::getCommonControlAttributeName(CCAFlags::ImageData), PROPERTY_IMAGEURL);
     m_aAttributeMetaData.addStringProperty(
-        OAttributeMetaData::getCommonControlAttributeName(CCA_LABEL), PROPERTY_LABEL);
+        OAttributeMetaData::getCommonControlAttributeName(CCAFlags::Label), PROPERTY_LABEL);
     m_aAttributeMetaData.addStringProperty(
-        OAttributeMetaData::getCommonControlAttributeName(CCA_TARGET_LOCATION), PROPERTY_TARGETURL);
+        OAttributeMetaData::getCommonControlAttributeName(CCAFlags::TargetLocation), PROPERTY_TARGETURL);
     m_aAttributeMetaData.addStringProperty(
-        OAttributeMetaData::getCommonControlAttributeName(CCA_TITLE), PROPERTY_TITLE);
+        OAttributeMetaData::getCommonControlAttributeName(CCAFlags::Title), PROPERTY_TITLE);
     m_aAttributeMetaData.addStringProperty(
-        OAttributeMetaData::getCommonControlAttributeName(CCA_TARGET_FRAME), PROPERTY_TARGETFRAME, "_blank");
+        OAttributeMetaData::getCommonControlAttributeName(CCAFlags::TargetFrame), PROPERTY_TARGETFRAME, "_blank");
     m_aAttributeMetaData.addStringProperty(
         OAttributeMetaData::getDatabaseAttributeName(DA_DATA_FIELD), PROPERTY_DATAFIELD);
     m_aAttributeMetaData.addStringProperty(
@@ -102,34 +102,34 @@ OFormLayerXMLImport_Impl::OFormLayerXMLImport_Impl(SvXMLImport& _rImporter)
 
     // properties not added because they're already present in another form
     OSL_ENSURE(
-        OUString::createFromAscii(OAttributeMetaData::getCommonControlAttributeName(CCA_TARGET_LOCATION)).equalsAscii(
+        OUString::createFromAscii(OAttributeMetaData::getCommonControlAttributeName(CCAFlags::TargetLocation)).equalsAscii(
             OAttributeMetaData::getFormAttributeName(faAction)),
         "OFormLayerXMLImport_Impl::OFormLayerXMLImport_Impl: invalid attribute names (1)!");
         // if this fails, we would have to add a translation from faAction->PROPERTY_TARGETURL
-        // We did not because we already have one CCA_TARGET_LOCATION->PROPERTY_TARGETURL,
-        // and CCA_TARGET_LOCATION and faAction should be represented by the same attribute
+        // We did not because we already have one CCAFlags::TargetLocation->PROPERTY_TARGETURL,
+        // and CCAFlags::TargetLocation and faAction should be represented by the same attribute
 
     OSL_ENSURE(
-        OUString::createFromAscii(OAttributeMetaData::getCommonControlAttributeName(CCA_NAME)).equalsAscii(
+        OUString::createFromAscii(OAttributeMetaData::getCommonControlAttributeName(CCAFlags::Name)).equalsAscii(
             OAttributeMetaData::getFormAttributeName(faName)),
         "OFormLayerXMLImport_Impl::OFormLayerXMLImport_Impl: invalid attribute names (2)!");
-        // the same for faName, CCA_NAME and PROPERTY_NAME
+        // the same for faName, CCAFlags::Name and PROPERTY_NAME
 
     // boolean properties which are exported as attributes
     m_aAttributeMetaData.addBooleanProperty(
-        OAttributeMetaData::getCommonControlAttributeName(CCA_CURRENT_SELECTED), PROPERTY_STATE, false);
+        OAttributeMetaData::getCommonControlAttributeName(CCAFlags::CurrentSelected), PROPERTY_STATE, false);
     m_aAttributeMetaData.addBooleanProperty(
-        OAttributeMetaData::getCommonControlAttributeName(CCA_DISABLED), PROPERTY_ENABLED, false, true);
+        OAttributeMetaData::getCommonControlAttributeName(CCAFlags::Disabled), PROPERTY_ENABLED, false, true);
     m_aAttributeMetaData.addBooleanProperty(
-        OAttributeMetaData::getCommonControlAttributeName(CCA_DROPDOWN), PROPERTY_DROPDOWN, false);
+        OAttributeMetaData::getCommonControlAttributeName(CCAFlags::Dropdown), PROPERTY_DROPDOWN, false);
     m_aAttributeMetaData.addBooleanProperty(
-        OAttributeMetaData::getCommonControlAttributeName(CCA_PRINTABLE), PROPERTY_PRINTABLE, true);
+        OAttributeMetaData::getCommonControlAttributeName(CCAFlags::Printable), PROPERTY_PRINTABLE, true);
     m_aAttributeMetaData.addBooleanProperty(
-        OAttributeMetaData::getCommonControlAttributeName(CCA_READONLY), PROPERTY_READONLY, false);
+        OAttributeMetaData::getCommonControlAttributeName(CCAFlags::ReadOnly), PROPERTY_READONLY, false);
     m_aAttributeMetaData.addBooleanProperty(
-        OAttributeMetaData::getCommonControlAttributeName(CCA_SELECTED), PROPERTY_DEFAULT_STATE, false);
+        OAttributeMetaData::getCommonControlAttributeName(CCAFlags::Selected), PROPERTY_DEFAULT_STATE, false);
     m_aAttributeMetaData.addBooleanProperty(
-        OAttributeMetaData::getCommonControlAttributeName(CCA_TAB_STOP), PROPERTY_TABSTOP, true);
+        OAttributeMetaData::getCommonControlAttributeName(CCAFlags::TabStop), PROPERTY_TABSTOP, true);
     m_aAttributeMetaData.addBooleanProperty(
         OAttributeMetaData::getDatabaseAttributeName(DA_CONVERT_EMPTY), PROPERTY_EMPTY_IS_NULL, false);
     m_aAttributeMetaData.addBooleanProperty(
@@ -165,11 +165,11 @@ OFormLayerXMLImport_Impl::OFormLayerXMLImport_Impl(SvXMLImport& _rImporter)
 
     // the int16 attributes
     m_aAttributeMetaData.addInt16Property(
-        OAttributeMetaData::getCommonControlAttributeName(CCA_MAX_LENGTH), PROPERTY_MAXTEXTLENGTH, 0);
+        OAttributeMetaData::getCommonControlAttributeName(CCAFlags::MaxLength), PROPERTY_MAXTEXTLENGTH, 0);
     m_aAttributeMetaData.addInt16Property(
-        OAttributeMetaData::getCommonControlAttributeName(CCA_SIZE), PROPERTY_LINECOUNT, 5);
+        OAttributeMetaData::getCommonControlAttributeName(CCAFlags::Size), PROPERTY_LINECOUNT, 5);
     m_aAttributeMetaData.addInt16Property(
-        OAttributeMetaData::getCommonControlAttributeName(CCA_TAB_INDEX), PROPERTY_TABINDEX, 0);
+        OAttributeMetaData::getCommonControlAttributeName(CCAFlags::TabIndex), PROPERTY_TABINDEX, 0);
     m_aAttributeMetaData.addInt16Property(
         OAttributeMetaData::getDatabaseAttributeName(DA_BOUND_COLUMN), PROPERTY_BOUNDCOLUMN, 0);
 
@@ -179,15 +179,15 @@ OFormLayerXMLImport_Impl::OFormLayerXMLImport_Impl(SvXMLImport& _rImporter)
 
     // the enum attributes
     m_aAttributeMetaData.addEnumProperty(
-        OAttributeMetaData::getCommonControlAttributeName( CCA_VISUAL_EFFECT ), PROPERTY_VISUAL_EFFECT,
+        OAttributeMetaData::getCommonControlAttributeName( CCAFlags::VisualEffect ), PROPERTY_VISUAL_EFFECT,
         VisualEffect::LOOK3D, OEnumMapper::getEnumMap( OEnumMapper::epVisualEffect ),
         &::cppu::UnoType<sal_Int16>::get() );
     m_aAttributeMetaData.addEnumProperty(
-        OAttributeMetaData::getCommonControlAttributeName( CCA_ORIENTATION ), PROPERTY_ORIENTATION,
+        OAttributeMetaData::getCommonControlAttributeName( CCAFlags::Orientation ), PROPERTY_ORIENTATION,
         ScrollBarOrientation::HORIZONTAL, OEnumMapper::getEnumMap( OEnumMapper::epOrientation ),
         &::cppu::UnoType<sal_Int32>::get() );
     m_aAttributeMetaData.addEnumProperty(
-        OAttributeMetaData::getCommonControlAttributeName(CCA_BUTTON_TYPE), PROPERTY_BUTTONTYPE,
+        OAttributeMetaData::getCommonControlAttributeName(CCAFlags::ButtonType), PROPERTY_BUTTONTYPE,
         FormButtonType_PUSH, OEnumMapper::getEnumMap(OEnumMapper::epButtonType),
         &::cppu::UnoType<FormButtonType>::get());
     m_aAttributeMetaData.addEnumProperty(

@@ -28,38 +28,45 @@
 #include <sal/types.h>
 #include <salhelper/simplereferenceobject.hxx>
 #include <xmloff/xmlnmspe.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
 struct SvXMLEnumMapEntry;
 
+    // flags for common control attributes
+enum class CCAFlags {
+    NONE                  = 0x00000000,
+    Name                  = 0x00000001,
+    ServiceName           = 0x00000002,
+    ButtonType            = 0x00000004,
+    ControlId             = 0x00000008,
+    CurrentSelected       = 0x00000010,
+    CurrentValue          = 0x00000020,
+    Disabled              = 0x00000040,
+    Dropdown              = 0x00000080,
+    For                   = 0x00000100,
+    ImageData             = 0x00000200,
+    Label                 = 0x00000400,
+    MaxLength             = 0x00000800,
+    Printable             = 0x00001000,
+    ReadOnly              = 0x00002000,
+    Selected              = 0x00004000,
+    Size                  = 0x00008000,
+    TabIndex              = 0x00010000,
+    TargetFrame           = 0x00020000,
+    TargetLocation        = 0x00040000,
+    TabStop               = 0x00080000,
+    Title                 = 0x00100000,
+    Value                 = 0x00200000,
+    Orientation           = 0x00400000,
+    VisualEffect          = 0x00800000,
+    EnableVisible         = 0x01000000,
+};
+namespace o3tl {
+    template<> struct typed_flags<CCAFlags> : is_typed_flags<CCAFlags, 0x01ffffff> {};
+}
+
 namespace xmloff
 {
-
-    // flags for common control attributes
-    #define CCA_NAME                    0x00000001
-    #define CCA_SERVICE_NAME            0x00000002
-    #define CCA_BUTTON_TYPE             0x00000004
-    #define CCA_CONTROL_ID              0x00000008
-    #define CCA_CURRENT_SELECTED        0x00000010
-    #define CCA_CURRENT_VALUE           0x00000020
-    #define CCA_DISABLED                0x00000040
-    #define CCA_DROPDOWN                0x00000080
-    #define CCA_FOR                     0x00000100
-    #define CCA_IMAGE_DATA              0x00000200
-    #define CCA_LABEL                   0x00000400
-    #define CCA_MAX_LENGTH              0x00000800
-    #define CCA_PRINTABLE               0x00001000
-    #define CCA_READONLY                0x00002000
-    #define CCA_SELECTED                0x00004000
-    #define CCA_SIZE                    0x00008000
-    #define CCA_TAB_INDEX               0x00010000
-    #define CCA_TARGET_FRAME            0x00020000
-    #define CCA_TARGET_LOCATION         0x00040000
-    #define CCA_TAB_STOP                0x00080000
-    #define CCA_TITLE                   0x00100000
-    #define CCA_VALUE                   0x00200000
-    #define CCA_ORIENTATION             0x00400000
-    #define CCA_VISUAL_EFFECT           0x00800000
-    #define CCA_ENABLEVISIBLE                 0x01000000
 
     // flags for database control attributes
     #define DA_BOUND_COLUMN             0x00000001
@@ -152,13 +159,13 @@ namespace xmloff
             @param _nId
                 the id of the attribute. Has to be one of the CCA_* constants.
         */
-        static const sal_Char* getCommonControlAttributeName(sal_Int32 _nId);
+        static const sal_Char* getCommonControlAttributeName(CCAFlags _nId);
 
         /** calculates the xml namespace key to use for a common control attribute
             @param _nId
                 the id of the attribute. Has to be one of the CCA_* constants.
         */
-        static sal_uInt16 getCommonControlAttributeNamespace(sal_Int32 _nId);
+        static sal_uInt16 getCommonControlAttributeNamespace(CCAFlags _nId);
 
         /** retrieves the name of an attribute of a form xml representation
             @param  _eAttrib

@@ -752,8 +752,8 @@ namespace xmloff
         if ( OElementImport::tryGenericAttribute( _nNamespaceKey, _rLocalName, _rValue ) )
             return true;
 
-        static const sal_Char* pValueAttributeName = OAttributeMetaData::getCommonControlAttributeName(CCA_VALUE);
-        static const sal_Char* pCurrentValueAttributeName = OAttributeMetaData::getCommonControlAttributeName(CCA_CURRENT_VALUE);
+        static const sal_Char* pValueAttributeName = OAttributeMetaData::getCommonControlAttributeName(CCAFlags::Value);
+        static const sal_Char* pCurrentValueAttributeName = OAttributeMetaData::getCommonControlAttributeName(CCAFlags::CurrentValue);
         static const sal_Char* pMinValueAttributeName = OAttributeMetaData::getSpecialAttributeName(SCA_MIN_VALUE);
         static const sal_Char* pMaxValueAttributeName = OAttributeMetaData::getSpecialAttributeName(SCA_MAX_VALUE);
         static const sal_Char* pRepeatDelayAttributeName = OAttributeMetaData::getSpecialAttributeName( SCA_REPEAT_DELAY );
@@ -1193,7 +1193,7 @@ namespace xmloff
     bool OReferredControlImport::handleAttribute(sal_uInt16 _nNamespaceKey, const OUString& _rLocalName,
         const OUString& _rValue)
     {
-        static const char * s_sReferenceAttributeName = OAttributeMetaData::getCommonControlAttributeName(CCA_FOR);
+        static const char * s_sReferenceAttributeName = OAttributeMetaData::getCommonControlAttributeName(CCAFlags::For);
         if (_rLocalName.equalsAscii(s_sReferenceAttributeName))
         {
             m_sReferringControls = _rValue;
@@ -1240,8 +1240,8 @@ namespace xmloff
     {
         // need special handling for the State & CurrentState properties:
         // they're stored as booleans, but expected to be int16 properties
-        static const sal_Char* pCurrentSelectedAttributeName = OAttributeMetaData::getCommonControlAttributeName(CCA_CURRENT_SELECTED);
-        static const sal_Char* pSelectedAttributeName = OAttributeMetaData::getCommonControlAttributeName(CCA_SELECTED);
+        static const sal_Char* pCurrentSelectedAttributeName = OAttributeMetaData::getCommonControlAttributeName(CCAFlags::CurrentSelected);
+        static const sal_Char* pSelectedAttributeName = OAttributeMetaData::getCommonControlAttributeName(CCAFlags::Selected);
         if  (  _rLocalName.equalsAscii( pCurrentSelectedAttributeName )
             || _rLocalName.equalsAscii( pSelectedAttributeName )
             )
@@ -1274,8 +1274,8 @@ namespace xmloff
 
     bool OURLReferenceImport::handleAttribute(sal_uInt16 _nNamespaceKey, const OUString& _rLocalName, const OUString& _rValue)
     {
-        static const sal_Char* s_pTargetLocationAttributeName   = OAttributeMetaData::getCommonControlAttributeName( CCA_TARGET_LOCATION );
-        static const sal_Char* s_pImageDataAttributeName        = OAttributeMetaData::getCommonControlAttributeName( CCA_IMAGE_DATA );
+        static const sal_Char* s_pTargetLocationAttributeName   = OAttributeMetaData::getCommonControlAttributeName( CCAFlags::TargetLocation );
+        static const sal_Char* s_pImageDataAttributeName        = OAttributeMetaData::getCommonControlAttributeName( CCAFlags::ImageData );
 
         // need to make the URL absolute if
         // * it's the image-data attribute
@@ -1319,7 +1319,7 @@ namespace xmloff
         OURLReferenceImport::StartElement(_rxAttrList);
 
         // handle the target-frame attribute
-        simulateDefaultedAttribute(OAttributeMetaData::getCommonControlAttributeName(CCA_TARGET_FRAME), PROPERTY_TARGETFRAME, "_blank");
+        simulateDefaultedAttribute(OAttributeMetaData::getCommonControlAttributeName(CCAFlags::TargetFrame), PROPERTY_TARGETFRAME, "_blank");
     }
 
     //= OValueRangeImport
@@ -1786,9 +1786,9 @@ namespace xmloff
 
         // the current-selected and selected
         const OUString sSelectedAttribute = rMap.GetQNameByKey(
-            GetPrefix(), OUString::createFromAscii(OAttributeMetaData::getCommonControlAttributeName(CCA_CURRENT_SELECTED)));
+            GetPrefix(), OUString::createFromAscii(OAttributeMetaData::getCommonControlAttributeName(CCAFlags::CurrentSelected)));
         const OUString sDefaultSelectedAttribute = rMap.GetQNameByKey(
-            GetPrefix(), OUString::createFromAscii(OAttributeMetaData::getCommonControlAttributeName(CCA_SELECTED)));
+            GetPrefix(), OUString::createFromAscii(OAttributeMetaData::getCommonControlAttributeName(CCAFlags::Selected)));
 
         // propagate the selected flag
         bool bSelected(false);
@@ -1818,7 +1818,7 @@ namespace xmloff
     void OComboItemImport::StartElement(const Reference< XAttributeList >& _rxAttrList)
     {
         const OUString sLabelAttributeName = GetImport().GetNamespaceMap().GetQNameByKey(
-            GetPrefix(), OUString::createFromAscii(OAttributeMetaData::getCommonControlAttributeName(CCA_LABEL)));
+            GetPrefix(), OUString::createFromAscii(OAttributeMetaData::getCommonControlAttributeName(CCAFlags::Label)));
         m_xListBoxImport->implPushBackLabel(_rxAttrList->getValueByName(sLabelAttributeName));
 
         SvXMLImportContext::StartElement(_rxAttrList);
@@ -1935,7 +1935,7 @@ namespace xmloff
         OFormImport_Base::StartElement(_rxAttrList);
 
         // handle the target-frame attribute
-        simulateDefaultedAttribute(OAttributeMetaData::getCommonControlAttributeName(CCA_TARGET_FRAME), PROPERTY_TARGETFRAME, "_blank");
+        simulateDefaultedAttribute(OAttributeMetaData::getCommonControlAttributeName(CCAFlags::TargetFrame), PROPERTY_TARGETFRAME, "_blank");
     }
 
     void OFormImport::EndElement()
@@ -2050,8 +2050,8 @@ namespace xmloff
             OUString sAttrName = _xAttrList->getNameByIndex( i );
             sal_uInt16 nPrefix = rMap.GetKeyByAttrName( sAttrName, &sLocalName );
 
-            if  (   ( nPrefix == OAttributeMetaData::getCommonControlAttributeNamespace( CCA_TARGET_LOCATION ) )
-                &&  ( sLocalName.equalsAscii( OAttributeMetaData::getCommonControlAttributeName( CCA_TARGET_LOCATION ) ) )
+            if  (   ( nPrefix == OAttributeMetaData::getCommonControlAttributeNamespace( CCAFlags::TargetLocation ) )
+                &&  ( sLocalName.equalsAscii( OAttributeMetaData::getCommonControlAttributeName( CCAFlags::TargetLocation ) ) )
                 )
             {
                 OUString sValue = _xAttrList->getValueByIndex( i );
