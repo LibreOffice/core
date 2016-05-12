@@ -219,19 +219,21 @@ sal_Int8 SwEditWin::ExecuteDrop( const ExecuteDropEvent& rEvt )
     // (according to KA due to Java D&D), we'll have to
     // reevaluate the drop action once more _with_ the
     // Transferable.
-    sal_uInt16 nEventAction;
+    sal_uInt8 nEventAction;
     sal_Int8 nUserOpt = rEvt.mbDefault ? EXCHG_IN_ACTION_DEFAULT
                                        : rEvt.mnAction;
+    SotExchangeActionFlags nActionFlags;
     m_nDropAction = SotExchange::GetExchangeAction(
                                 GetDataFlavorExVector(),
                                 m_nDropDestination,
                                 rEvt.mnAction,
                                 nUserOpt, m_nDropFormat, nEventAction, SotClipboardFormatId::NONE,
-                                &rEvt.maDropEvent.Transferable );
+                                &rEvt.maDropEvent.Transferable,
+                                &nActionFlags );
 
     TransferableDataHelper aData( rEvt.maDropEvent.Transferable );
     nRet = rEvt.mnAction;
-    if( !SwTransferable::PasteData( aData, rSh, m_nDropAction, m_nDropFormat,
+    if( !SwTransferable::PasteData( aData, rSh, m_nDropAction, nActionFlags, m_nDropFormat,
                                 m_nDropDestination, false, rEvt.mbDefault, &aDocPt, nRet))
         nRet = DND_ACTION_NONE;
     else if ( SW_MOD()->m_pDragDrop )
@@ -373,7 +375,7 @@ sal_Int8 SwEditWin::AcceptDrop( const AcceptDropEvent& rEvt )
     if( !bool(m_nDropDestination) )
         return DND_ACTION_NONE;
 
-    sal_uInt16 nEventAction;
+    sal_uInt8 nEventAction;
     sal_Int8 nUserOpt = rEvt.mbDefault ? EXCHG_IN_ACTION_DEFAULT
                                        : rEvt.mnAction;
 

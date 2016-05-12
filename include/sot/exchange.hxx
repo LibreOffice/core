@@ -28,6 +28,7 @@
 #include <sot/sotdllapi.h>
 #include <sot/formats.hxx>
 #include <tools/solar.h>
+#include <o3tl/typed_flags_set.hxx>
 
 class SotDataObject;
 
@@ -53,46 +54,51 @@ SOT_DLLPUBLIC bool IsFormatSupported( const DataFlavorExVector& rDataFlavorExVec
                                       SotClipboardFormatId nId );
 
 // actions
-#define EXCHG_ACTION_MASK                       ((sal_uInt16)0x00FF)
-#define EXCHG_INOUT_ACTION_NONE                 ((sal_uInt16)css::datatransfer::dnd::DNDConstants::ACTION_NONE)
+#define EXCHG_INOUT_ACTION_NONE                 ((sal_uInt8)css::datatransfer::dnd::DNDConstants::ACTION_NONE)
 #define EXCHG_IN_ACTION_DEFAULT                 EXCHG_INOUT_ACTION_NONE
-#define EXCHG_IN_ACTION_MOVE                    ((sal_uInt16)css::datatransfer::dnd::DNDConstants::ACTION_MOVE)
-#define EXCHG_IN_ACTION_COPY                    ((sal_uInt16)css::datatransfer::dnd::DNDConstants::ACTION_COPY)
-#define EXCHG_IN_ACTION_LINK                    ((sal_uInt16)css::datatransfer::dnd::DNDConstants::ACTION_LINK)
-#define EXCHG_OUT_ACTION_INSERT_OBJ             ((sal_uInt16)17)
-#define EXCHG_OUT_ACTION_INSERT_BOOKMARK        ((sal_uInt16)18)
-#define EXCHG_OUT_ACTION_INSERT_FILE            ((sal_uInt16)20)
-#define EXCHG_OUT_ACTION_INSERT_IMAGEMAP        ((sal_uInt16)22)
-#define EXCHG_OUT_ACTION_INSERT_OLE             ((sal_uInt16)23)
-#define EXCHG_OUT_ACTION_INSERT_INTERACTIVE     ((sal_uInt16)24)
-#define EXCHG_OUT_ACTION_REPLACE_IMAGEMAP       ((sal_uInt16)29)
-#define EXCHG_OUT_ACTION_GET_ATTRIBUTES         ((sal_uInt16)30)
-#define EXCHG_OUT_ACTION_MOVE_FILE              ((sal_uInt16)32)
-#define EXCHG_OUT_ACTION_MOVE_FILELIST          ((sal_uInt16)33)
-#define EXCHG_OUT_ACTION_UPDATE_RANGE           ((sal_uInt16)34)
-#define EXCHG_OUT_ACTION_INSERT_PRIVATE         ((sal_uInt16)35)
-#define EXCHG_OUT_ACTION_INSERT_HTML            ((sal_uInt16)36)
-#define EXCHG_OUT_ACTION_MOVE_PRIVATE           ((sal_uInt16)37)
-#define EXCHG_OUT_ACTION_INSERT_STRING          ((sal_uInt16)38)
-#define EXCHG_OUT_ACTION_INSERT_DRAWOBJ         ((sal_uInt16)39)
-#define EXCHG_OUT_ACTION_INSERT_SVXB            ((sal_uInt16)40)
-#define EXCHG_OUT_ACTION_INSERT_GDIMETAFILE     ((sal_uInt16)41)
-#define EXCHG_OUT_ACTION_INSERT_BITMAP          ((sal_uInt16)42)
-#define EXCHG_OUT_ACTION_INSERT_DDE             ((sal_uInt16)43)
-#define EXCHG_OUT_ACTION_INSERT_HYPERLINK       ((sal_uInt16)44)
-#define EXCHG_OUT_ACTION_REPLACE_DRAWOBJ        ((sal_uInt16)45)
-#define EXCHG_OUT_ACTION_REPLACE_SVXB           ((sal_uInt16)46)
-#define EXCHG_OUT_ACTION_REPLACE_GDIMETAFILE    ((sal_uInt16)47)
-#define EXCHG_OUT_ACTION_REPLACE_BITMAP         ((sal_uInt16)48)
-#define EXCHG_OUT_ACTION_REPLACE_GRAPH          ((sal_uInt16)49)
-#define EXCHG_OUT_ACTION_INSERT_GRAPH           ((sal_uInt16)50)
+#define EXCHG_IN_ACTION_MOVE                    ((sal_uInt8)css::datatransfer::dnd::DNDConstants::ACTION_MOVE)
+#define EXCHG_IN_ACTION_COPY                    ((sal_uInt8)css::datatransfer::dnd::DNDConstants::ACTION_COPY)
+#define EXCHG_IN_ACTION_LINK                    ((sal_uInt8)css::datatransfer::dnd::DNDConstants::ACTION_LINK)
+#define EXCHG_OUT_ACTION_INSERT_OBJ             ((sal_uInt8)17)
+#define EXCHG_OUT_ACTION_INSERT_BOOKMARK        ((sal_uInt8)18)
+#define EXCHG_OUT_ACTION_INSERT_FILE            ((sal_uInt8)20)
+#define EXCHG_OUT_ACTION_INSERT_IMAGEMAP        ((sal_uInt8)22)
+#define EXCHG_OUT_ACTION_INSERT_OLE             ((sal_uInt8)23)
+#define EXCHG_OUT_ACTION_INSERT_INTERACTIVE     ((sal_uInt8)24)
+#define EXCHG_OUT_ACTION_REPLACE_IMAGEMAP       ((sal_uInt8)29)
+#define EXCHG_OUT_ACTION_GET_ATTRIBUTES         ((sal_uInt8)30)
+#define EXCHG_OUT_ACTION_MOVE_FILE              ((sal_uInt8)32)
+#define EXCHG_OUT_ACTION_MOVE_FILELIST          ((sal_uInt8)33)
+#define EXCHG_OUT_ACTION_UPDATE_RANGE           ((sal_uInt8)34)
+#define EXCHG_OUT_ACTION_INSERT_PRIVATE         ((sal_uInt8)35)
+#define EXCHG_OUT_ACTION_INSERT_HTML            ((sal_uInt8)36)
+#define EXCHG_OUT_ACTION_MOVE_PRIVATE           ((sal_uInt8)37)
+#define EXCHG_OUT_ACTION_INSERT_STRING          ((sal_uInt8)38)
+#define EXCHG_OUT_ACTION_INSERT_DRAWOBJ         ((sal_uInt8)39)
+#define EXCHG_OUT_ACTION_INSERT_SVXB            ((sal_uInt8)40)
+#define EXCHG_OUT_ACTION_INSERT_GDIMETAFILE     ((sal_uInt8)41)
+#define EXCHG_OUT_ACTION_INSERT_BITMAP          ((sal_uInt8)42)
+#define EXCHG_OUT_ACTION_INSERT_DDE             ((sal_uInt8)43)
+#define EXCHG_OUT_ACTION_INSERT_HYPERLINK       ((sal_uInt8)44)
+#define EXCHG_OUT_ACTION_REPLACE_DRAWOBJ        ((sal_uInt8)45)
+#define EXCHG_OUT_ACTION_REPLACE_SVXB           ((sal_uInt8)46)
+#define EXCHG_OUT_ACTION_REPLACE_GDIMETAFILE    ((sal_uInt8)47)
+#define EXCHG_OUT_ACTION_REPLACE_BITMAP         ((sal_uInt8)48)
+#define EXCHG_OUT_ACTION_REPLACE_GRAPH          ((sal_uInt8)49)
+#define EXCHG_OUT_ACTION_INSERT_GRAPH           ((sal_uInt8)50)
 
-#define EXCHG_OUT_ACTION_FLAG_CREATE_THEME      ((sal_uInt16)0x0100)
-#define EXCHG_OUT_ACTION_FLAG_KEEP_POSSIZE      ((sal_uInt16)0x0200)
-#define EXCHG_OUT_ACTION_FLAG_INSERT_IMAGEMAP   ((sal_uInt16)0x0400)
-#define EXCHG_OUT_ACTION_FLAG_REPLACE_IMAGEMAP  ((sal_uInt16)0x0800)
-#define EXCHG_OUT_ACTION_FLAG_FILL              ((sal_uInt16)0x1000)
-#define EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL  ((sal_uInt16)0x2000)
+enum class SotExchangeActionFlags {
+    NONE             = 0x0000,
+    CreateTheme      = 0x0100,
+    KeepPosSize      = 0x0200,
+    InsertImageMap   = 0x0400,
+    ReplaceImageMap  = 0x0800,
+    Fill             = 0x1000,
+    InsertTargetUrl  = 0x2000,
+};
+namespace o3tl {
+    template<> struct typed_flags<SotExchangeActionFlags> : is_typed_flags<SotExchangeActionFlags, 0x3f00> {};
+}
 
 // destinations
 enum class SotExchangeDest
@@ -134,7 +140,7 @@ public:
     static SotClipboardFormatId   GetFormatIdFromMimeType( const OUString& rMimeType );
 
     // same for XTransferable interface
-    static sal_uInt16   GetExchangeAction(
+    static sal_uInt8   GetExchangeAction(
         // XTransferable
         const DataFlavorExVector& rDataFlavorExVector,
         // destination of an action
@@ -142,15 +148,17 @@ public:
         // action for a source
         sal_uInt16 nSourceOptions,
         // user action (EXCHG_IN_*, EXCHG_INOUT_*)
-        sal_uInt16 nUserAction,
+        sal_uInt8 nUserAction,
         // In:- Out: format to use
         SotClipboardFormatId& rFormat,
         // In:- Out: default action (EXCHG_IN_*, EXCHG_INOUT_*)
-        sal_uInt16& rDefaultAction,
+        sal_uInt8& rDefaultAction,
         // In:- optional - check only for this specific format
         SotClipboardFormatId nOnlyTestFormat = SotClipboardFormatId::NONE,
         // In:- optional - check the contents of Xtransferable
-        const css::uno::Reference< css::datatransfer::XTransferable >* pxTransferable = nullptr );
+        const css::uno::Reference< css::datatransfer::XTransferable >* pxTransferable = nullptr,
+        // Out: optional: - default action flags
+        SotExchangeActionFlags* pActionFlags = nullptr);
 
     static sal_uInt16 IsChart( const SvGlobalName& rName );
     static sal_uInt16 IsMath( const SvGlobalName& rName );

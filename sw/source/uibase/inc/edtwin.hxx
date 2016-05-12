@@ -109,8 +109,8 @@ friend void     PageNumNotify(  SwViewShell* pVwSh,
 
     int             m_aActHitType;    // current mouse pointer
 
-    SotClipboardFormatId m_nDropFormat;   // format from the last QueryDrop
-    sal_uInt16      m_nDropAction;   // action from the last QueryDrop
+    SotClipboardFormatId m_nDropFormat;  // format from the last QueryDrop
+    sal_uInt8       m_nDropAction;       // action from the last QueryDrop
     SotExchangeDest m_nDropDestination;  // destination from the last QueryDrop
 
     sal_uInt16      m_eBezierMode;
