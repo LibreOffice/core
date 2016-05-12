@@ -383,17 +383,21 @@ bool WinFontInstance::CacheGlyphToAtlas(bool bRealGlyphIndices, int nGlyphIndex,
 
     pTxt->BindFont(hDC);
 
-    // Bail for vertical text.
+    // Bail for non-horizontal text.
     {
         wchar_t sFaceName[200];
         int nFaceNameLen = GetTextFaceW(hDC, SAL_N_ELEMENTS(sFaceName), sFaceName);
-        SelectObject(hDC, hOrigFont);
-        DeleteDC(hDC);
 
         if (!nFaceNameLen)
             SAL_WARN("vcl.gdi", "GetTextFace failed: " << WindowsErrorString(GetLastError()));
 
-        if (sFaceName[0] == '@')
+        LOGFONTW aLogFont;
+        GetObjectW(rLayout.mhFont, sizeof(LOGFONTW), &aLogFont);
+
+        SelectObject(hDC, hOrigFont);
+        DeleteDC(hDC);
+
+        if (sFaceName[0] == '@' || aLogFont.lfOrientation != 0 || aLogFont.lfEscapement != 0)
         {
             pTxt->ReleaseFont();
             return false;
