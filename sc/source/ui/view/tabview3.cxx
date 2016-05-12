@@ -302,17 +302,48 @@ void ScTabView::SetCursor( SCCOL nPosX, SCROW nPosY, bool bNew )
 
         if (comphelper::LibreOfficeKit::isActive())
         {
-            if (nPosX > aViewData.GetMaxTiledCol() - 10 || nPosY > aViewData.GetMaxTiledRow() - 25)
+            ScDocument* pDoc = aViewData.GetDocument();
+            SCTAB nTab = aViewData.GetTabNo();
+            SCCOL nOldEndCol = aViewData.GetMaxTiledCol();
+            SCROW nOldEndRow = aViewData.GetMaxTiledRow();
+            SCCOL nNewEndCol = nOldEndCol;
+            SCROW nNewEndRow = nOldEndRow;
+            sal_uLong nOldWidthTwips = pDoc->GetColWidth(0, nOldEndCol, nTab);
+            sal_uLong nOldHeightTwips = pDoc->GetRowHeight(0, nOldEndRow, nTab);
+
+            if (nPosX > nOldEndCol - 10 || nPosY > nOldEndRow - 25)
             {
-                if (nPosX > aViewData.GetMaxTiledCol() - 10)
-                    aViewData.SetMaxTiledCol(std::max(nPosX, aViewData.GetMaxTiledCol()) + 10);
+                if (nPosX > nOldEndCol - 10)
+                {
+                    nNewEndCol = std::max(nPosX, nOldEndCol) + 10;
+                    aViewData.SetMaxTiledCol(nNewEndCol);
+                }
 
                 if (nPosY > aViewData.GetMaxTiledRow() - 25)
-                    aViewData.SetMaxTiledRow(std::max(nPosY, aViewData.GetMaxTiledRow()) + 25);
+                {
+                    nNewEndRow = std::max(nPosY, nOldEndRow) + 25;
+                    aViewData.SetMaxTiledRow(nNewEndRow);
+                }
+
+                sal_uLong nNewWidthTwips = pDoc->GetColWidth(0, nNewEndCol, nTab);
+                sal_uLong nNewHeightTwips = pDoc->GetRowHeight(0, nNewEndRow, nTab);
+
+                // New area extended to the right of the sheet after last column
+                Rectangle aNewColArea(nOldWidthTwips, 0, nNewWidthTwips, nNewHeightTwips);
+                // New area extended to the bottom of the sheet after last row
+                Rectangle aNewRowArea(0, nOldHeightTwips, nNewWidthTwips, nNewHeightTwips);
 
                 ScDocShell* pDocSh = aViewData.GetDocShell();
                 if (pDocSh)
                     pDocSh->libreOfficeKitCallback(LOK_CALLBACK_DOCUMENT_SIZE_CHANGED, "");
+
+                // Only invalidate if spreadsheet extended to the right
+                if (aNewColArea.getWidth())
+                    pDocSh->libreOfficeKitCallback(LOK_CALLBACK_INVALIDATE_TILES, aNewColArea.toString().getStr());
+
+                // Only invalidate if spreadsheet extended to the bottom
+                if (aNewRowArea.getHeight())
+                    pDocSh->libreOfficeKitCallback(LOK_CALLBACK_INVALIDATE_TILES, aNewRowArea.toString().getStr());
             }
         }
     }
