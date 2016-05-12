@@ -497,7 +497,7 @@ Reference<beans::XPropertySet> PresenterButton::GetConfigurationProperties (
             [&rsConfgurationName](OUString const&, uno::Reference<beans::XPropertySet> const& xProps) -> bool
             {
                 return PresenterConfigurationAccess::IsStringPropertyEqual(
-                        rsConfgurationName, OUString("Name"), xProps);
+                        rsConfgurationName, "Name", xProps);
             }),
         UNO_QUERY);
 }
