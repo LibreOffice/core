@@ -197,9 +197,8 @@ void UnoWrapper::ReleaseAllGraphics( OutputDevice* pOutDev )
     std::vector< VCLXGraphics* > *pLst = pOutDev->GetUnoGraphicsList();
     if ( pLst )
     {
-        for ( size_t n = 0; n < pLst->size(); n++ )
+        for (VCLXGraphics* pGrf : *pLst)
         {
-            VCLXGraphics* pGrf = (*pLst)[ n ];
             pGrf->SetOutputDevice( nullptr );
         }
     }

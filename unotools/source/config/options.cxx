@@ -68,8 +68,8 @@ void ConfigurationBroadcaster::NotifyListeners( sal_uInt32 nHint )
         nHint |= m_nBlockedHint;
         m_nBlockedHint = 0;
         if ( mpList ) {
-            for ( size_t n = 0; n < mpList->size(); n++ ) {
-                (*mpList)[ n ]->ConfigurationChanged( this, nHint );
+            for (ConfigurationListener* n : *mpList) {
+                n->ConfigurationChanged( this, nHint );
             }
         }
     }
