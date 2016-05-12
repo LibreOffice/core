@@ -3016,7 +3016,7 @@ void SwFlyFrameFormat::MakeFrames()
 
                 default:
                     assert(false && "Neuer Ankertyp" );
-                    //fall-through
+                    SAL_FALLTHROUGH;
                 case FLY_AS_CHAR:
                     pFly = new SwFlyInContentFrame( this, pFrame, pFrame );
                     break;
