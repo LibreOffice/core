@@ -1413,7 +1413,7 @@ namespace xmloff
         // same XML element), though not all of them know this property.
         // So we have to do a check ...
         if (m_xElement.is() && m_xInfo.is() && m_xInfo->hasPropertyByName(PROPERTY_EMPTY_IS_NULL) )
-            simulateDefaultedAttribute(OAttributeMetaData::getDatabaseAttributeName(DA_CONVERT_EMPTY), PROPERTY_EMPTY_IS_NULL, "false");
+            simulateDefaultedAttribute(OAttributeMetaData::getDatabaseAttributeName(DAFlags::ConvertEmpty), PROPERTY_EMPTY_IS_NULL, "false");
     }
 
     struct EqualHandle : public ::std::unary_function< PropertyValue, bool >
@@ -1580,7 +1580,7 @@ namespace xmloff
             simulateDefaultedAttribute( OAttributeMetaData::getSpecialAttributeName( SCA_AUTOMATIC_COMPLETION ), PROPERTY_AUTOCOMPLETE, "false");
 
             // same for the convert-empty-to-null attribute, which's default is different from the property default
-            simulateDefaultedAttribute( OAttributeMetaData::getDatabaseAttributeName( DA_CONVERT_EMPTY ), PROPERTY_EMPTY_IS_NULL, "false");
+            simulateDefaultedAttribute( OAttributeMetaData::getDatabaseAttributeName( DAFlags::ConvertEmpty ), PROPERTY_EMPTY_IS_NULL, "false");
         }
     }
 
@@ -1644,7 +1644,7 @@ namespace xmloff
 
     bool OListAndComboImport::handleAttribute(sal_uInt16 _nNamespaceKey, const OUString& _rLocalName, const OUString& _rValue)
     {
-        static const sal_Char* pListSourceAttributeName = OAttributeMetaData::getDatabaseAttributeName(DA_LIST_SOURCE);
+        static const sal_Char* pListSourceAttributeName = OAttributeMetaData::getDatabaseAttributeName(DAFlags::ListSource);
         if ( _rLocalName.equalsAscii(pListSourceAttributeName) )
         {
             PropertyValue aListSource;

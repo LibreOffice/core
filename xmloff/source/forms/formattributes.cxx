@@ -124,16 +124,16 @@ namespace xmloff
         return XML_NAMESPACE_FORM;
     }
 
-    const sal_Char* OAttributeMetaData::getDatabaseAttributeName(sal_Int32 _nId)
+    const sal_Char* OAttributeMetaData::getDatabaseAttributeName(DAFlags _nId)
     {
         switch (_nId)
         {
-            case DA_BOUND_COLUMN:       return "bound-column";
-            case DA_CONVERT_EMPTY:      return "convert-empty-to-null";
-            case DA_DATA_FIELD:         return "data-field";
-            case DA_LIST_SOURCE:        return "list-source";
-            case DA_LIST_SOURCE_TYPE:   return "list-source-type";
-            case DA_INPUT_REQUIRED:     return "input-required";
+            case DAFlags::BoundColumn:       return "bound-column";
+            case DAFlags::ConvertEmpty:      return "convert-empty-to-null";
+            case DAFlags::DataField:         return "data-field";
+            case DAFlags::ListSource:        return "list-source";
+            case DAFlags::ListSource_TYPE:   return "list-source-type";
+            case DAFlags::InputRequired:     return "input-required";
             default:
                 OSL_FAIL("OAttributeMetaData::getDatabaseAttributeName: invalid id (maybe you or-ed two flags?)!");
         }

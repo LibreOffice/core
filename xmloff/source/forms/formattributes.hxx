@@ -65,16 +65,22 @@ namespace o3tl {
     template<> struct typed_flags<CCAFlags> : is_typed_flags<CCAFlags, 0x01ffffff> {};
 }
 
+    // flags for database control attributes
+enum class DAFlags {
+    NONE                  = 0x0000,
+    BoundColumn           = 0x0001,
+    ConvertEmpty          = 0x0002,
+    DataField             = 0x0004,
+    ListSource            = 0x0008,
+    ListSource_TYPE       = 0x0010,
+    InputRequired         = 0x0020,
+};
+namespace o3tl {
+    template<> struct typed_flags<DAFlags> : is_typed_flags<DAFlags, 0x003f> {};
+}
+
 namespace xmloff
 {
-
-    // flags for database control attributes
-    #define DA_BOUND_COLUMN             0x00000001
-    #define DA_CONVERT_EMPTY            0x00000002
-    #define DA_DATA_FIELD               0x00000004
-    #define DA_LIST_SOURCE              0x00000008
-    #define DA_LIST_SOURCE_TYPE         0x00000010
-    #define DA_INPUT_REQUIRED           0x00000020
 
     // flags for binding related control attributes
     #define BA_LINKED_CELL              0x00000001
@@ -183,13 +189,13 @@ namespace xmloff
             @param _nId
                 the id of the attribute. Has to be one of the DA_* constants.
         */
-        static const sal_Char* getDatabaseAttributeName(sal_Int32 _nId);
+        static const sal_Char* getDatabaseAttributeName(DAFlags _nId);
 
         /** calculates the xml namespace key to use for a database attribute.
             @param _nId
                 the id of the attribute. Has to be one of the DA_* constants.
         */
-        static inline sal_uInt16 getDatabaseAttributeNamespace(sal_Int32 )
+        static inline sal_uInt16 getDatabaseAttributeNamespace(DAFlags )
         {
             // nothing special here
             return XML_NAMESPACE_FORM;

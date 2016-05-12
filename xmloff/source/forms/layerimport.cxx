@@ -90,7 +90,7 @@ OFormLayerXMLImport_Impl::OFormLayerXMLImport_Impl(SvXMLImport& _rImporter)
     m_aAttributeMetaData.addStringProperty(
         OAttributeMetaData::getCommonControlAttributeName(CCAFlags::TargetFrame), PROPERTY_TARGETFRAME, "_blank");
     m_aAttributeMetaData.addStringProperty(
-        OAttributeMetaData::getDatabaseAttributeName(DA_DATA_FIELD), PROPERTY_DATAFIELD);
+        OAttributeMetaData::getDatabaseAttributeName(DAFlags::DataField), PROPERTY_DATAFIELD);
     m_aAttributeMetaData.addStringProperty(
         OAttributeMetaData::getFormAttributeName(faCommand), PROPERTY_COMMAND);
     m_aAttributeMetaData.addStringProperty(
@@ -131,7 +131,7 @@ OFormLayerXMLImport_Impl::OFormLayerXMLImport_Impl(SvXMLImport& _rImporter)
     m_aAttributeMetaData.addBooleanProperty(
         OAttributeMetaData::getCommonControlAttributeName(CCAFlags::TabStop), PROPERTY_TABSTOP, true);
     m_aAttributeMetaData.addBooleanProperty(
-        OAttributeMetaData::getDatabaseAttributeName(DA_CONVERT_EMPTY), PROPERTY_EMPTY_IS_NULL, false);
+        OAttributeMetaData::getDatabaseAttributeName(DAFlags::ConvertEmpty), PROPERTY_EMPTY_IS_NULL, false);
     m_aAttributeMetaData.addBooleanProperty(
         OAttributeMetaData::getSpecialAttributeName(SCA_VALIDATION), PROPERTY_STRICTFORMAT, false);
     m_aAttributeMetaData.addBooleanProperty(
@@ -161,7 +161,7 @@ OFormLayerXMLImport_Impl::OFormLayerXMLImport_Impl(SvXMLImport& _rImporter)
     m_aAttributeMetaData.addBooleanProperty(
         OAttributeMetaData::getSpecialAttributeName( SCA_FOCUS_ON_CLICK ), PROPERTY_FOCUS_ON_CLICK, true );
     m_aAttributeMetaData.addBooleanProperty(
-        OAttributeMetaData::getDatabaseAttributeName( DA_INPUT_REQUIRED ), PROPERTY_INPUT_REQUIRED, false );
+        OAttributeMetaData::getDatabaseAttributeName( DAFlags::InputRequired ), PROPERTY_INPUT_REQUIRED, false );
 
     // the int16 attributes
     m_aAttributeMetaData.addInt16Property(
@@ -171,7 +171,7 @@ OFormLayerXMLImport_Impl::OFormLayerXMLImport_Impl(SvXMLImport& _rImporter)
     m_aAttributeMetaData.addInt16Property(
         OAttributeMetaData::getCommonControlAttributeName(CCAFlags::TabIndex), PROPERTY_TABINDEX, 0);
     m_aAttributeMetaData.addInt16Property(
-        OAttributeMetaData::getDatabaseAttributeName(DA_BOUND_COLUMN), PROPERTY_BOUNDCOLUMN, 0);
+        OAttributeMetaData::getDatabaseAttributeName(DAFlags::BoundColumn), PROPERTY_BOUNDCOLUMN, 0);
 
     // the int32 attributes
     m_aAttributeMetaData.addInt32Property(
@@ -191,7 +191,7 @@ OFormLayerXMLImport_Impl::OFormLayerXMLImport_Impl(SvXMLImport& _rImporter)
         FormButtonType_PUSH, OEnumMapper::getEnumMap(OEnumMapper::epButtonType),
         &::cppu::UnoType<FormButtonType>::get());
     m_aAttributeMetaData.addEnumProperty(
-        OAttributeMetaData::getDatabaseAttributeName(DA_LIST_SOURCE_TYPE), PROPERTY_LISTSOURCETYPE,
+        OAttributeMetaData::getDatabaseAttributeName(DAFlags::ListSource_TYPE), PROPERTY_LISTSOURCETYPE,
         ListSourceType_VALUELIST, OEnumMapper::getEnumMap(OEnumMapper::epListSourceType),
         &::cppu::UnoType<ListSourceType>::get());
     m_aAttributeMetaData.addEnumProperty(

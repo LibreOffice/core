@@ -95,7 +95,7 @@ namespace xmloff
         sal_Int16               m_nClassId;             // class id of the control we're representing
         ElementType             m_eType;                // (XML) type of the control we're representing
         CCAFlags                m_nIncludeCommon;       // common control attributes to include
-        sal_Int32               m_nIncludeDatabase;     // common database attributes to include
+        DAFlags                 m_nIncludeDatabase;     // common database attributes to include
         sal_Int32               m_nIncludeSpecial;      // special attributes to include
         sal_Int32               m_nIncludeEvents;       // events to include
         sal_Int32               m_nIncludeBindings;     // binding attributes to include

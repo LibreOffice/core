@@ -235,7 +235,7 @@ namespace xmloff
         ,m_nClassId(FormComponentType::CONTROL)
         ,m_eType( UNKNOWN )
         ,m_nIncludeCommon(CCAFlags::NONE)
-        ,m_nIncludeDatabase(0)
+        ,m_nIncludeDatabase(DAFlags::NONE)
         ,m_nIncludeSpecial(0)
         ,m_nIncludeEvents(0)
         ,m_nIncludeBindings(0)
@@ -824,75 +824,75 @@ namespace xmloff
     void OControlExport::exportDatabaseAttributes()
     {
 #if OSL_DEBUG_LEVEL > 0
-        sal_Int32 nIncludeDatabase = m_nIncludeDatabase;
+        DAFlags nIncludeDatabase = m_nIncludeDatabase;
 #endif
         // the only string property: DataField
-        if (DA_DATA_FIELD & m_nIncludeDatabase)
+        if (DAFlags::DataField & m_nIncludeDatabase)
         {
             exportStringPropertyAttribute(
-                OAttributeMetaData::getDatabaseAttributeNamespace(DA_DATA_FIELD),
-                OAttributeMetaData::getDatabaseAttributeName(DA_DATA_FIELD),
+                OAttributeMetaData::getDatabaseAttributeNamespace(DAFlags::DataField),
+                OAttributeMetaData::getDatabaseAttributeName(DAFlags::DataField),
                 PROPERTY_DATAFIELD);
-            RESET_BIT( nIncludeDatabase, DA_DATA_FIELD );
+            RESET_BIT( nIncludeDatabase, DAFlags::DataField );
         }
 
         // InputRequired
-        if ( DA_INPUT_REQUIRED & m_nIncludeDatabase )
+        if ( DAFlags::InputRequired & m_nIncludeDatabase )
         {
             exportBooleanPropertyAttribute(
-                OAttributeMetaData::getDatabaseAttributeNamespace( DA_INPUT_REQUIRED ),
-                OAttributeMetaData::getDatabaseAttributeName( DA_INPUT_REQUIRED ),
+                OAttributeMetaData::getDatabaseAttributeNamespace( DAFlags::InputRequired ),
+                OAttributeMetaData::getDatabaseAttributeName( DAFlags::InputRequired ),
                 PROPERTY_INPUT_REQUIRED,
                 BoolAttrFlags::DefaultTrue
             );
-            RESET_BIT( nIncludeDatabase, DA_INPUT_REQUIRED );
+            RESET_BIT( nIncludeDatabase, DAFlags::InputRequired );
         }
 
         // the only int16 property: BoundColumn
-        if (DA_BOUND_COLUMN & m_nIncludeDatabase)
+        if (DAFlags::BoundColumn & m_nIncludeDatabase)
         {
             exportInt16PropertyAttribute(
-                OAttributeMetaData::getDatabaseAttributeNamespace(DA_BOUND_COLUMN),
-                OAttributeMetaData::getDatabaseAttributeName(DA_BOUND_COLUMN),
+                OAttributeMetaData::getDatabaseAttributeNamespace(DAFlags::BoundColumn),
+                OAttributeMetaData::getDatabaseAttributeName(DAFlags::BoundColumn),
                 PROPERTY_BOUNDCOLUMN,
                 0,
                 true);
-            RESET_BIT( nIncludeDatabase, DA_BOUND_COLUMN );
+            RESET_BIT( nIncludeDatabase, DAFlags::BoundColumn );
         }
 
         // ConvertEmptyToNull
-        if (DA_CONVERT_EMPTY & m_nIncludeDatabase)
+        if (DAFlags::ConvertEmpty & m_nIncludeDatabase)
         {
             exportBooleanPropertyAttribute(
-                OAttributeMetaData::getDatabaseAttributeNamespace(DA_CONVERT_EMPTY),
-                OAttributeMetaData::getDatabaseAttributeName(DA_CONVERT_EMPTY),
+                OAttributeMetaData::getDatabaseAttributeNamespace(DAFlags::ConvertEmpty),
+                OAttributeMetaData::getDatabaseAttributeName(DAFlags::ConvertEmpty),
                 PROPERTY_EMPTY_IS_NULL,
                 BoolAttrFlags::DefaultFalse
                 );
-            RESET_BIT( nIncludeDatabase, DA_CONVERT_EMPTY );
+            RESET_BIT( nIncludeDatabase, DAFlags::ConvertEmpty );
         }
 
         // the only enum property: ListSourceType
-        if (DA_LIST_SOURCE_TYPE & m_nIncludeDatabase)
+        if (DAFlags::ListSource_TYPE & m_nIncludeDatabase)
         {
             exportEnumPropertyAttribute(
-                OAttributeMetaData::getDatabaseAttributeNamespace(DA_LIST_SOURCE_TYPE),
-                OAttributeMetaData::getDatabaseAttributeName(DA_LIST_SOURCE_TYPE),
+                OAttributeMetaData::getDatabaseAttributeNamespace(DAFlags::ListSource_TYPE),
+                OAttributeMetaData::getDatabaseAttributeName(DAFlags::ListSource_TYPE),
                 PROPERTY_LISTSOURCETYPE,
                 OEnumMapper::getEnumMap(OEnumMapper::epListSourceType),
                 ListSourceType_VALUELIST
                 );
-            RESET_BIT( nIncludeDatabase, DA_LIST_SOURCE_TYPE );
+            RESET_BIT( nIncludeDatabase, DAFlags::ListSource_TYPE );
         }
 
-        if (m_nIncludeDatabase & DA_LIST_SOURCE)
+        if (m_nIncludeDatabase & DAFlags::ListSource)
         {
             exportListSourceAsAttribute();
-            RESET_BIT( nIncludeDatabase, DA_LIST_SOURCE );
+            RESET_BIT( nIncludeDatabase, DAFlags::ListSource );
         }
 
 #if OSL_DEBUG_LEVEL > 0
-        OSL_ENSURE(0 == nIncludeDatabase,
+        OSL_ENSURE(DAFlags::NONE == nIncludeDatabase,
             "OControlExport::exportDatabaseAttributes: forgot some flags!");
             // in the dbg_util version, we should have removed every bit we handled from the mask, so it should
             // be 0 now ...
@@ -1250,15 +1250,15 @@ namespace xmloff
 
     void OControlExport::exportListSourceAsAttribute()
     {
-        // DA_LIST_SOURCE needs some special handling
+        // DAFlags::ListSource needs some special handling
         DBG_CHECK_PROPERTY_NO_TYPE( PROPERTY_LISTSOURCE );
 
         OUString sListSource = getScalarListSourceValue();
         if ( !sListSource.isEmpty() )
         {   // the ListSource property needs to be exported as attribute, and it is not empty
             AddAttribute(
-                OAttributeMetaData::getDatabaseAttributeNamespace(DA_LIST_SOURCE),
-                OAttributeMetaData::getDatabaseAttributeName(DA_LIST_SOURCE),
+                OAttributeMetaData::getDatabaseAttributeNamespace(DAFlags::ListSource),
+                OAttributeMetaData::getDatabaseAttributeName(DAFlags::ListSource),
                 sListSource);
         }
 
@@ -1284,7 +1284,7 @@ namespace xmloff
         m_xProps->getPropertyValue(PROPERTY_STRING_ITEM_LIST) >>= aItems;
 
         DBG_CHECK_PROPERTY( PROPERTY_LISTSOURCE, Sequence< OUString > );
-        if ( 0 == ( m_nIncludeDatabase & DA_LIST_SOURCE ) )
+        if ( DAFlags::NONE == ( m_nIncludeDatabase & DAFlags::ListSource ) )
             m_xProps->getPropertyValue(PROPERTY_LISTSOURCE) >>= aValues;
         // if we exported the list source as attribute, we do not repeat it as sub elements
 
@@ -1440,7 +1440,7 @@ namespace xmloff
 
     void OControlExport::examine()
     {
-        OSL_ENSURE( ( m_nIncludeCommon == CCAFlags::NONE ) && ( m_nIncludeSpecial == 0 ) && ( m_nIncludeDatabase == 0 )
+        OSL_ENSURE( ( m_nIncludeCommon == CCAFlags::NONE ) && ( m_nIncludeSpecial == 0 ) && ( m_nIncludeDatabase == DAFlags::NONE )
                  && ( m_nIncludeEvents == 0 ) && ( m_nIncludeBindings == 0),
                  "OControlExport::examine: called me twice? Not initialized?" );
 
@@ -1527,7 +1527,7 @@ namespace xmloff
                     m_nIncludeCommon |= CCAFlags::Value;
 
                 // database attributes
-                m_nIncludeDatabase = DA_DATA_FIELD | DA_INPUT_REQUIRED;
+                m_nIncludeDatabase = DAFlags::DataField | DAFlags::InputRequired;
 
                 // event attributes
                 m_nIncludeEvents = EA_CONTROL_EVENTS | EA_ON_CHANGE | EA_ON_SELECT;
@@ -1536,7 +1536,7 @@ namespace xmloff
                 if  (   ( m_nClassId == FormComponentType::TEXTFIELD )
                     ||  ( m_nClassId == FormComponentType::PATTERNFIELD )
                     )
-                    m_nIncludeDatabase |= DA_CONVERT_EMPTY;
+                    m_nIncludeDatabase |= DAFlags::ConvertEmpty;
 
                 // all controls but the file control fields have a readonly property
                 if ( m_nClassId != FormComponentType::FILECONTROL )
@@ -1593,7 +1593,7 @@ namespace xmloff
                     CCAFlags::Disabled | CCAFlags::Dropdown | CCAFlags::MaxLength | CCAFlags::Printable | CCAFlags::ReadOnly | CCAFlags::Size |
                     CCAFlags::TabIndex | CCAFlags::TabStop | CCAFlags::Title | CCAFlags::Value;
                 m_nIncludeSpecial = SCA_AUTOMATIC_COMPLETION;
-                m_nIncludeDatabase = DA_CONVERT_EMPTY | DA_DATA_FIELD | DA_INPUT_REQUIRED | DA_LIST_SOURCE | DA_LIST_SOURCE_TYPE;
+                m_nIncludeDatabase = DAFlags::ConvertEmpty | DAFlags::DataField | DAFlags::InputRequired | DAFlags::ListSource | DAFlags::ListSource_TYPE;
                 m_nIncludeEvents = EA_CONTROL_EVENTS | EA_ON_CHANGE | EA_ON_SELECT;
                 break;
 
@@ -1603,7 +1603,7 @@ namespace xmloff
                     CCAFlags::Name | CCAFlags::ServiceName | CCAFlags::Disabled | CCAFlags::Dropdown |
                     CCAFlags::Printable | CCAFlags::Size | CCAFlags::TabIndex | CCAFlags::TabStop | CCAFlags::Title;
                 m_nIncludeSpecial = SCA_MULTIPLE;
-                m_nIncludeDatabase = DA_BOUND_COLUMN | DA_DATA_FIELD | DA_INPUT_REQUIRED | DA_LIST_SOURCE_TYPE;
+                m_nIncludeDatabase = DAFlags::BoundColumn | DAFlags::DataField | DAFlags::InputRequired | DAFlags::ListSource_TYPE;
                 m_nIncludeEvents = EA_CONTROL_EVENTS | EA_ON_CHANGE | EA_ON_CLICK | EA_ON_DBLCLICK;
                 // check if we need to export the ListSource as attribute
                 {
@@ -1615,7 +1615,7 @@ namespace xmloff
                     OSL_ENSURE(bSuccess, "OControlExport::examineControl: could not retrieve the ListSourceType!");
                     if (ListSourceType_VALUELIST != eListSourceType)
                     {
-                        m_nIncludeDatabase |= DA_LIST_SOURCE;
+                        m_nIncludeDatabase |= DAFlags::ListSource;
                     }
                 }
 
@@ -1656,7 +1656,7 @@ namespace xmloff
                     m_nIncludeSpecial |= SCA_IMAGE_POSITION;
                 if ( m_xPropertyInfo->hasPropertyByName( PROPERTY_GROUP_NAME ) )
                     m_nIncludeSpecial |= SCA_GROUP_NAME;
-                m_nIncludeDatabase = DA_DATA_FIELD | DA_INPUT_REQUIRED;
+                m_nIncludeDatabase = DAFlags::DataField | DAFlags::InputRequired;
                 m_nIncludeEvents = EA_CONTROL_EVENTS | EA_ON_CHANGE;
                 break;
 
@@ -1673,7 +1673,7 @@ namespace xmloff
                 m_nIncludeCommon =
                     CCAFlags::Name | CCAFlags::ServiceName | CCAFlags::Disabled | CCAFlags::ImageData |
                     CCAFlags::Printable | CCAFlags::ReadOnly | CCAFlags::Title;
-                m_nIncludeDatabase = DA_DATA_FIELD | DA_INPUT_REQUIRED;
+                m_nIncludeDatabase = DAFlags::DataField | DAFlags::InputRequired;
                 m_nIncludeEvents = EA_CONTROL_EVENTS;
                 break;
 
