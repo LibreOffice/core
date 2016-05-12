@@ -248,8 +248,7 @@ codemaker::UnoType::Sort TypeManager::decompose(
             return
                 codemaker::UnoType::Sort::InstantiatedPolymorphicStruct;
         case codemaker::UnoType::Sort::Sequence:
-            assert(false); // this cannot happen
-            // fall through
+            for (;;) std::abort(); // this cannot happen
         default:
             throw CannotDumpException(
                 "unexpected \"" + n + "\" resolved from \"" + name
