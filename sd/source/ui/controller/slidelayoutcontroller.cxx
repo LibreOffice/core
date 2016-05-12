@@ -190,10 +190,10 @@ LayoutToolbarMenu::LayoutToolbarMenu( SlideLayoutController& rController, const 
     sal_Int16 nColCount = 4;
     switch( eMode )
     {
-    default: assert(false); // can't happen, will crash later otherwise
     case DrawViewMode_DRAW: pInfo = &standard[0]; break;
     case DrawViewMode_HANDOUT: pInfo = &handout[0]; nColCount = 2; break;
     case DrawViewMode_NOTES: pInfo = &notes[0]; nColCount = 1; break;
+    default: assert(false); // can't happen, will crash later otherwise
     }
 
     mpLayoutSet1->SetColCount( nColCount );
