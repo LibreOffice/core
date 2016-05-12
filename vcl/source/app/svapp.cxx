@@ -1442,7 +1442,7 @@ vcl::Window* Application::GetDefDialogParent()
 
     // current focus frame
     vcl::Window *pWin = pSVData->maWinData.mpFocusWin;
-    if (pWin)
+    if (pWin && !pWin->IsMenuFloatingWindow())
     {
         while (pWin->mpWindowImpl && pWin->mpWindowImpl->mpParent)
             pWin = pWin->mpWindowImpl->mpParent;
