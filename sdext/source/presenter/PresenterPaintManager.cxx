@@ -45,7 +45,7 @@ PresenterPaintManager::PresenterPaintManager (
 {
     return [this, rxWindow] (css::awt::Rectangle const& rRepaintBox)
             {
-                return this->Invalidate(rxWindow, rRepaintBox, false/*bSynchronous*/);
+                return this->Invalidate(rxWindow, rRepaintBox /* , bSynchronous=false */);
             };
 }
 
