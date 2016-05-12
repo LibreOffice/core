@@ -1806,8 +1806,12 @@ OpenGLProgram* OpenGLContext::UseProgram( const OUString& rVertexShader, const O
 
     OpenGLProgram* pProgram = GetProgram( rVertexShader, rFragmentShader, preamble );
 
-    if( pProgram == mpCurrentProgram )
+    if (pProgram == mpCurrentProgram)
+    {
+        VCL_GL_INFO("Context::UseProgram: Reusing existing program " << pProgram->Id());
+        pProgram->Reuse();
         return pProgram;
+    }
 
     mpCurrentProgram = pProgram;
 

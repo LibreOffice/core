@@ -51,13 +51,19 @@ bool OpenGLProgram::Load( const OUString& rVertexShader,
     return ( mnId != 0 );
 }
 
+void OpenGLProgram::Reuse()
+{
+    mbBlending = false;
+}
+
 bool OpenGLProgram::Use()
 {
-    if( !mnId )
+    if (!mnId)
         return false;
 
-    glUseProgram( mnId );
+    glUseProgram(mnId);
     CHECK_GL_ERROR();
+    Reuse();
     return true;
 }
 
@@ -82,14 +88,6 @@ bool OpenGLProgram::Clean()
             }
         }
         mnEnabledAttribs = 0;
-    }
-
-    // disable blending if enabled
-    if( mbBlending )
-    {
-        mbBlending = false;
-        glDisable( GL_BLEND );
-        CHECK_GL_ERROR();
     }
 
     return true;
@@ -149,6 +147,15 @@ GLuint OpenGLProgram::GetUniformLocation( const OString& rName )
     }
 
     return it->second;
+}
+
+void OpenGLProgram::DrawArrays(GLenum aMode, std::vector<GLfloat>& aVertices)
+{
+    if (!mbBlending)
+        OpenGLContext::getVCLContext()->state()->blend().disable();
+
+    SetVertices(aVertices.data());
+    glDrawArrays(aMode, 0, aVertices.size() / 2);
 }
 
 void OpenGLProgram::SetUniform1f( const OString& rName, GLfloat v1 )
@@ -301,12 +308,10 @@ void OpenGLProgram::ApplyMatrix(float fWidth, float fHeight, float fPixelOffset)
     CHECK_GL_ERROR();
 }
 
-void OpenGLProgram::SetBlendMode( GLenum nSFactor, GLenum nDFactor )
+void OpenGLProgram::SetBlendMode(GLenum nSFactor, GLenum nDFactor)
 {
-    glEnable( GL_BLEND );
-    CHECK_GL_ERROR();
-    glBlendFunc( nSFactor, nDFactor );
-    CHECK_GL_ERROR();
+    OpenGLContext::getVCLContext()->state()->blend().enable();
+    OpenGLContext::getVCLContext()->state()->blend().func(nSFactor, nDFactor);
     mbBlending = true;
 }
 
@@ -323,14 +328,18 @@ bool OpenGLProgram::DrawTexture( const OpenGLTexture& rTexture )
     float fMinY = 0.0f;
     float fMaxY = fHeight;
 
-    GLfloat aPosition[8] = { fMinX, fMaxY, fMinX, fMinY, fMaxX, fMinY, fMaxX, fMaxY };
+    std::vector<GLfloat> aPosition {
+        fMinX, fMaxY,
+        fMinX, fMinY,
+        fMaxX, fMinY,
+        fMaxX, fMaxY
+    };
     GLfloat aTexCoord[8];
 
     rTexture.GetWholeCoord( aTexCoord );
-    SetVertices( aPosition );
     SetTextureCoord( aTexCoord );
     ApplyMatrix(fWidth, fHeight);
-    glDrawArrays( GL_TRIANGLE_FAN, 0, 4 );
+    DrawArrays(GL_TRIANGLE_FAN, aPosition);
     CHECK_GL_ERROR();
 
     return true;
