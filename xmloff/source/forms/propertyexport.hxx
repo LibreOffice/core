@@ -31,15 +31,20 @@
 #include "callbacks.hxx"
 #include "strings.hxx"
 
+enum class BoolAttrFlags {
+    DefaultFalse          = 0x00,
+    DefaultTrue           = 0x01,
+    DefaultVoid           = 0x02,
+    DefaultMask           = 0x03,
+    InverseSemantics      = 0x04,
+};
+namespace o3tl {
+    template<> struct typed_flags<BoolAttrFlags> : is_typed_flags<BoolAttrFlags, 0x0a> {};
+}
+
 namespace xmloff
 {
 
-#define BOOLATTR_DEFAULT_FALSE          0x00
-#define BOOLATTR_DEFAULT_TRUE           0x01
-#define BOOLATTR_DEFAULT_VOID           0x02
-#define BOOLATTR_DEFAULT_MASK           0x03
-
-#define BOOLATTR_INVERSE_SEMANTICS      0x04
     // if sal_True, indicates that the semantic of the property referred by <arg>_pPropertyName</arg>
     // is inverse to the semantic of the XML attribute.<br/>
     // I.e. if the property value is <TRUE/>, <FALSE/> has to be written and vice versa.
@@ -146,7 +151,7 @@ namespace xmloff
             const sal_uInt16 _nNamespaceKey,
             const sal_Char* _pAttributeName,
             const OUString& _rPropertyName,
-            const sal_Int8 _nBooleanAttributeFlags);
+            const BoolAttrFlags _nBooleanAttributeFlags);
 
         /** add an attribute which is represented by a sal_Int16 property to the export context
 

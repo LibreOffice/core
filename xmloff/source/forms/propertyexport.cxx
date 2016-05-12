@@ -268,14 +268,14 @@ namespace xmloff
     }
 
     void OPropertyExport::exportBooleanPropertyAttribute(const sal_uInt16 _nNamespaceKey, const sal_Char* _pAttributeName,
-            const OUString& _rPropertyName, const sal_Int8 _nBooleanAttributeFlags)
+            const OUString& _rPropertyName, const BoolAttrFlags _nBooleanAttributeFlags)
     {
         DBG_CHECK_PROPERTY_NO_TYPE( _rPropertyName );
         // no check of the property value type: this method is allowed to be called with any integer properties
         // (e.g. sal_Int32, sal_uInt16 etc)
 
-        bool bDefault = (BOOLATTR_DEFAULT_TRUE == (BOOLATTR_DEFAULT_MASK & _nBooleanAttributeFlags));
-        bool bDefaultVoid = (BOOLATTR_DEFAULT_VOID == (BOOLATTR_DEFAULT_MASK & _nBooleanAttributeFlags));
+        bool bDefault = (BoolAttrFlags::DefaultTrue == (BoolAttrFlags::DefaultMask & _nBooleanAttributeFlags));
+        bool bDefaultVoid = (BoolAttrFlags::DefaultVoid == (BoolAttrFlags::DefaultMask & _nBooleanAttributeFlags));
 
         // get the value
         bool bCurrentValue = bDefault;
@@ -285,7 +285,7 @@ namespace xmloff
             bCurrentValue = ::cppu::any2bool(aCurrentValue);
             // this will extract a boolean value even if the Any contains a int or short or something like that ...
 
-            if (_nBooleanAttributeFlags & BOOLATTR_INVERSE_SEMANTICS)
+            if (_nBooleanAttributeFlags & BoolAttrFlags::InverseSemantics)
                 bCurrentValue = !bCurrentValue;
 
             // we have a non-void current value

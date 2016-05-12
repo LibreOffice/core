@@ -579,9 +579,9 @@ namespace xmloff
                 PROPERTY_READONLY, PROPERTY_DEFAULT_STATE,
                 PROPERTY_TABSTOP, PROPERTY_ENABLEVISIBLE
             };
-            static const sal_Int8 nBooleanPropertyAttrFlags[] =
+            static const BoolAttrFlags nBooleanPropertyAttrFlags[] =
             {   // attribute defaults
-                BOOLATTR_DEFAULT_FALSE, BOOLATTR_DEFAULT_FALSE | BOOLATTR_INVERSE_SEMANTICS, BOOLATTR_DEFAULT_FALSE, BOOLATTR_DEFAULT_TRUE, BOOLATTR_DEFAULT_FALSE, BOOLATTR_DEFAULT_FALSE, BOOLATTR_DEFAULT_VOID, BOOLATTR_DEFAULT_FALSE
+                BoolAttrFlags::DefaultFalse, BoolAttrFlags::DefaultFalse | BoolAttrFlags::InverseSemantics, BoolAttrFlags::DefaultFalse, BoolAttrFlags::DefaultTrue, BoolAttrFlags::DefaultFalse, BoolAttrFlags::DefaultFalse, BoolAttrFlags::DefaultVoid, BoolAttrFlags::DefaultFalse
             };
         #if OSL_DEBUG_LEVEL > 0
             static const sal_Int32 nIdCount = SAL_N_ELEMENTS(nBooleanPropertyAttributeIds);
@@ -843,7 +843,7 @@ namespace xmloff
                 OAttributeMetaData::getDatabaseAttributeNamespace( DA_INPUT_REQUIRED ),
                 OAttributeMetaData::getDatabaseAttributeName( DA_INPUT_REQUIRED ),
                 PROPERTY_INPUT_REQUIRED,
-                BOOLATTR_DEFAULT_TRUE
+                BoolAttrFlags::DefaultTrue
             );
             RESET_BIT( nIncludeDatabase, DA_INPUT_REQUIRED );
         }
@@ -867,7 +867,7 @@ namespace xmloff
                 OAttributeMetaData::getDatabaseAttributeNamespace(DA_CONVERT_EMPTY),
                 OAttributeMetaData::getDatabaseAttributeName(DA_CONVERT_EMPTY),
                 PROPERTY_EMPTY_IS_NULL,
-                BOOLATTR_DEFAULT_FALSE
+                BoolAttrFlags::DefaultFalse
                 );
             RESET_BIT( nIncludeDatabase, DA_CONVERT_EMPTY );
         }
@@ -992,7 +992,7 @@ namespace xmloff
                         OAttributeMetaData::getSpecialAttributeNamespace( *pAttributeId ),
                         OAttributeMetaData::getSpecialAttributeName( *pAttributeId ),
                         OUString::createFromAscii(pBooleanPropertyNames[i]),
-                        ( *pAttributeId == SCA_FOCUS_ON_CLICK ) ? BOOLATTR_DEFAULT_TRUE : BOOLATTR_DEFAULT_FALSE
+                        ( *pAttributeId == SCA_FOCUS_ON_CLICK ) ? BoolAttrFlags::DefaultTrue : BoolAttrFlags::DefaultFalse
                     );
             #if OSL_DEBUG_LEVEL > 0
                 //  reset the bit for later checking
@@ -2142,9 +2142,9 @@ namespace xmloff
                 PROPERTY_ESCAPEPROCESSING,
                 PROPERTY_IGNORERESULT
             };
-            static const sal_Int8 nBooleanPropertyAttrFlags[] =
+            static const BoolAttrFlags nBooleanPropertyAttrFlags[] =
             {
-                BOOLATTR_DEFAULT_TRUE, BOOLATTR_DEFAULT_TRUE, BOOLATTR_DEFAULT_TRUE, BOOLATTR_DEFAULT_FALSE, BOOLATTR_DEFAULT_TRUE, BOOLATTR_DEFAULT_FALSE
+                BoolAttrFlags::DefaultTrue, BoolAttrFlags::DefaultTrue, BoolAttrFlags::DefaultTrue, BoolAttrFlags::DefaultFalse, BoolAttrFlags::DefaultTrue, BoolAttrFlags::DefaultFalse
             };
             static const sal_Int32 nIdCount = SAL_N_ELEMENTS(eBooleanPropertyIds);
         #if OSL_DEBUG_LEVEL > 0
