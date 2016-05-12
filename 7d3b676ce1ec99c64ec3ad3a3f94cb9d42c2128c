@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_b9e4ca3b",
+        "filename": "sw/source/core/text/txtfrm.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1448,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-05-12T08:08:00Z",
+      "side": 1,
+      "message": "This comment appears to be copied from someplace else, where it presumably was about template code (where the warning was emitted for some specific instantiation).  \"Instantiations\" doesn\u0027t fit here.  Also, was it necessary to wrap the whole function, or would a more targeted pragma wrapping have worked, too?",
+      "range": {
+        "startLine": 1448,
+        "startChar": 3,
+        "endLine": 1448,
+        "endChar": 17
+      },
+      "revId": "7d3b676ce1ec99c64ec3ad3a3f94cb9d42c2128c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
