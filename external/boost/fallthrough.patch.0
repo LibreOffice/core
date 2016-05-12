@@ -34,11 +34,13 @@
          case 'i':
 --- ./boost/property_tree/detail/json_parser/standard_callbacks.hpp
 +++ ./boost/property_tree/detail/json_parser/standard_callbacks.hpp
-@@ -117,6 +117,7 @@
+@@ -116,8 +116,8 @@
+                 return *stack.back().t;
              }
              case object:
-                 assert(false); // must start with string, i.e. call new_value
-+                BOOST_FALLTHROUGH;
+-                assert(false); // must start with string, i.e. call new_value
              case key: {
++                assert(l.k != object); // must start with string, i.e. call new_value
                  l.t->push_back(std::make_pair(key_buffer, Ptree()));
                  l.k = object;
+                 layer nl = {leaf, &l.t->back().second};
