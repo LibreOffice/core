@@ -27,8 +27,8 @@ void MultiSelection::ImplClear()
     // no selected indexes
     nSelCount = 0;
 
-    for ( size_t i = 0, n = aSels.size(); i < n; ++i ) {
-        delete aSels[ i ];
+    for (Range* pSel : aSels) {
+        delete pSel;
     }
     aSels.clear();
 }
@@ -92,8 +92,8 @@ MultiSelection::MultiSelection( const MultiSelection& rOrig ) :
     }
 
     // copy the sub selections
-    for ( size_t n = 0; n < rOrig.aSels.size(); ++n )
-        aSels.push_back( new Range( *rOrig.aSels[ n ] ) );
+    for (const Range* pSel : rOrig.aSels)
+        aSels.push_back( new Range( *pSel ) );
 }
 
 MultiSelection::MultiSelection( const Range& rRange ):
@@ -109,8 +109,8 @@ MultiSelection::MultiSelection( const Range& rRange ):
 
 MultiSelection::~MultiSelection()
 {
-    for ( size_t i = 0, n = aSels.size(); i < n; ++i )
-        delete aSels[ i ];
+    for (Range* pSel : aSels)
+        delete pSel;
     aSels.clear();
 }
 
@@ -126,8 +126,8 @@ MultiSelection& MultiSelection::operator= ( const MultiSelection& rOrig )
 
     // clear the old and copy the sub selections
     ImplClear();
-    for ( size_t n = 0; n < rOrig.aSels.size(); ++n )
-        aSels.push_back( new Range( *rOrig.aSels[ n ] ) );
+    for (const Range* pSel : rOrig.aSels)
+        aSels.push_back( new Range( *pSel ) );
     nSelCount = rOrig.nSelCount;
 
     return *this;
@@ -527,8 +527,8 @@ void MultiSelection::SetTotalRange( const Range& rTotRange )
 
     // re-calculate selection count
     nSelCount = 0;
-    for ( size_t i = 0, n = aSels.size(); i < n; ++ i )
-        nSelCount += aSels[i]->Len();
+    for (Range* pSel : aSels)
+        nSelCount += pSel->Len();
 
     bCurValid = false;
     nCurIndex = 0;

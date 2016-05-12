@@ -544,19 +544,19 @@ namespace
             { FUNIT_FOOT,       MeasureUnit::FOOT,          1 },
             { FUNIT_MILE,       MeasureUnit::MILE,          1 },
         };
-        for ( size_t i = 0; i < SAL_N_ELEMENTS( aUnits ); ++i )
+        for (auto & aUnit : aUnits)
         {
             if ( eDirection == FieldUnitToMeasurementUnit )
             {
-                if ( ( aUnits[ i ].eFieldUnit == (FieldUnit)_nUnit ) && ( aUnits[ i ].nFieldToMeasureFactor == _rFieldToUNOValueFactor ) )
-                    return aUnits[ i ].nMeasurementUnit;
+                if ( ( aUnit.eFieldUnit == (FieldUnit)_nUnit ) && ( aUnit.nFieldToMeasureFactor == _rFieldToUNOValueFactor ) )
+                    return aUnit.nMeasurementUnit;
             }
             else
             {
-                if ( aUnits[ i ].nMeasurementUnit == _nUnit )
+                if ( aUnit.nMeasurementUnit == _nUnit )
                 {
-                    _rFieldToUNOValueFactor = aUnits[ i ].nFieldToMeasureFactor;
-                    return (sal_Int16)aUnits[ i ].eFieldUnit;
+                    _rFieldToUNOValueFactor = aUnit.nFieldToMeasureFactor;
+                    return (sal_Int16)aUnit.eFieldUnit;
                 }
             }
         }

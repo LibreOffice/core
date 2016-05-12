@@ -2751,10 +2751,8 @@ shell::getContentExchangedEventListeners( const OUString& aOldPrefix,
 void SAL_CALL
 shell::notifyContentExchanged( std::vector< std::list< ContentEventNotifier* >* >* listeners_vec )
 {
-    std::list< ContentEventNotifier* >* listeners;
-    for( size_t i = 0; i < listeners_vec->size(); ++i )
+    for( std::list< ContentEventNotifier* >* listeners : *listeners_vec)
     {
-        listeners = (*listeners_vec)[i];
         std::list< ContentEventNotifier* >::iterator it = listeners->begin();
         while( it != listeners->end() )
         {

@@ -1801,10 +1801,9 @@ SortListData::SortListData( sal_IntPtr nPos )
 
 void SortedEntryList::Clear()
 {
-    for ( std::deque< ListAction* >::size_type i = 0;
-          i < maData.size(); ++i )
+    for (SortListData* p : maData)
     {
-        delete maData[i];
+        delete p;
     }
 
     maData.clear();

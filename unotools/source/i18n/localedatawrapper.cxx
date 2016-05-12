@@ -138,14 +138,14 @@ void LocaleDataWrapper::invalidateData()
     nCurrPositiveFormat = nCurrNegativeFormat = nCurrDigits = nCurrFormatInvalid;
     if ( bLocaleDataItemValid )
     {
-        for (sal_Int32 j=0; j<LocaleItem::COUNT; ++j)
-            aLocaleItem[j].clear();
+        for (OUString & j : aLocaleItem)
+            j.clear();
         bLocaleDataItemValid = false;
     }
     if ( bReservedWordValid )
     {
-        for ( sal_Int16 j=0; j<reservedWords::COUNT; ++j )
-            aReservedWord[j].clear();
+        for (OUString & j : aReservedWord)
+            j.clear();
         bReservedWordValid = false;
     }
     xDefaultCalendar.reset();
