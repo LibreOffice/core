@@ -54,7 +54,7 @@ SvxHatchTabPage::SvxHatchTabPage
     SvxTabPage          ( pParent, "HatchPage", "cui/ui/hatchpage.ui", rInAttrs ),
 
     m_rOutAttrs           ( rInAttrs ),
-
+    eRP                   ( RP_LT ),
     m_pnHatchingListState ( nullptr ),
     m_pnColorListState    ( nullptr ),
     m_pPageType           ( nullptr ),
@@ -70,10 +70,10 @@ SvxHatchTabPage::SvxHatchTabPage
 {
     get(m_pMtrDistance, "distancemtr");
     get(m_pMtrAngle, "anglemtr");
-    get(m_pCtlAngle, "anglectl");
-    m_pCtlAngle->SetCS(CS_ANGLE);
+    get(m_pSliderAngle, "angleslider");
     get(m_pLbLineType, "linetypelb");
     get(m_pLbLineColor, "linecolorlb");
+    get(m_pLbBackgroundColor, "backgroundcolorlb");
     get(m_pLbHatchings, "hatchingslb");
     Size aSize = getDrawListBoxOptimalSize(this);
     m_pLbHatchings->set_width_request(aSize.Width());
@@ -109,6 +109,9 @@ SvxHatchTabPage::SvxHatchTabPage
     DBG_ASSERT( pPool, "Wo ist der Pool?" );
     m_ePoolUnit = pPool->GetMetric( SID_ATTR_FILL_HATCH );
 
+    // setting the slider range
+    m_pSliderAngle->SetRange(Range(0,359));
+
     // setting the output device
     m_rXFSet.Put( m_aXFStyleItem );
     m_rXFSet.Put( m_aXHatchItem );
@@ -120,8 +123,10 @@ SvxHatchTabPage::SvxHatchTabPage
     Link<ListBox&,void> aLink2 = LINK( this, SvxHatchTabPage, ModifiedListBoxHdl_Impl );
     m_pMtrDistance->SetModifyHdl( aLink );
     m_pMtrAngle->SetModifyHdl( aLink );
+    m_pSliderAngle->SetSlideHdl( LINK( this, SvxHatchTabPage, ModifiedSliderHdl_Impl ) );
     m_pLbLineType->SetSelectHdl( aLink2 );
     m_pLbLineColor->SetSelectHdl( aLink2 );
+    m_pLbBackgroundColor->SetSelectHdl( LINK( this, SvxHatchTabPage, ModifiedBackgroundHdl_Impl ) );
 
     m_pBtnAdd->SetClickHdl( LINK( this, SvxHatchTabPage, ClickAddHdl_Impl ) );
     m_pBtnModify->SetClickHdl(
@@ -145,9 +150,10 @@ void SvxHatchTabPage::dispose()
 {
     m_pMtrDistance.clear();
     m_pMtrAngle.clear();
-    m_pCtlAngle.clear();
+    m_pSliderAngle.clear();
     m_pLbLineType.clear();
     m_pLbLineColor.clear();
+    m_pLbBackgroundColor.clear();
     m_pLbHatchings.clear();
     m_pCtlPreview.clear();
     m_pBtnAdd.clear();
@@ -162,6 +168,7 @@ void SvxHatchTabPage::dispose()
 void SvxHatchTabPage::Construct()
 {
     m_pLbLineColor->Fill( m_pColorList );
+    m_pLbBackgroundColor->Fill( m_pColorList );
     m_pLbHatchings->Fill( m_pHatchingList );
 }
 
@@ -253,6 +260,7 @@ long SvxHatchTabPage::CheckChanges_Impl()
         m_pMtrAngle->IsValueChangedFromSaved() ||
         m_pLbLineType->IsValueChangedFromSaved()  ||
         m_pLbLineColor->IsValueChangedFromSaved() ||
+        m_pLbBackgroundColor->IsValueChangedFromSaved() ||
         m_pLbHatchings->IsValueChangedFromSaved() )
     {
         ResMgr& rMgr = CUI_MGR();
@@ -320,8 +328,19 @@ bool SvxHatchTabPage::FillItemSet( SfxItemSet* rSet )
                                  static_cast<long>(m_pMtrAngle->GetValue() * 10) ));
             }
             DBG_ASSERT( pXHatch, "XHatch konnte nicht erzeugt werden" );
+
+            sal_uInt32 nPosBckColor = m_pLbBackgroundColor->GetSelectEntryPos();
+            XFillBackgroundItem aItem( m_pLbBackgroundColor->GetSelectEntryColor() != COL_WHITE );
+            OUString aBckColorString;
+            if( nPosBckColor != LISTBOX_ENTRY_NOTFOUND )
+                aBckColorString = m_pLbBackgroundColor->GetSelectEntry();
+            else
+                aBckColorString = OUString();
+
             rSet->Put( XFillStyleItem( drawing::FillStyle_HATCH ) );
             rSet->Put( XFillHatchItem( aString, *pXHatch ) );
+            rSet->Put( aItem , XATTR_FILLBACKGROUND );
+            rSet->Put( XFillColorItem( aBckColorString, m_pLbBackgroundColor->GetSelectEntryColor() ) );
         }
     }
     return true;
@@ -364,27 +383,25 @@ IMPL_LINK_TYPED( SvxHatchTabPage, ModifiedListBoxHdl_Impl, ListBox&, rListBox, v
 {
     ModifiedHdl_Impl(&rListBox);
 }
+IMPL_LINK_TYPED( SvxHatchTabPage, ModifiedBackgroundHdl_Impl, ListBox&, rListBox, void )
+{
+    ModifiedHdl_Impl(&rListBox);
+}
 IMPL_LINK_TYPED( SvxHatchTabPage, ModifiedEditHdl_Impl, Edit&, rEdit, void )
 {
     ModifiedHdl_Impl(&rEdit);
 }
+IMPL_LINK_TYPED( SvxHatchTabPage, ModifiedSliderHdl_Impl, Slider*, rSlider, void )
+{
+    ModifiedHdl_Impl(rSlider);
+}
 void SvxHatchTabPage::ModifiedHdl_Impl( void* p )
 {
     if( p == m_pMtrAngle )
-    {
-        switch( m_pMtrAngle->GetValue() )
-        {
-            case 135: m_pCtlAngle->SetActualRP( RP_LT ); break;
-            case  90: m_pCtlAngle->SetActualRP( RP_MT ); break;
-            case  45: m_pCtlAngle->SetActualRP( RP_RT ); break;
-            case 180: m_pCtlAngle->SetActualRP( RP_LM ); break;
-            case   0: m_pCtlAngle->SetActualRP( RP_RM ); break;
-            case 225: m_pCtlAngle->SetActualRP( RP_LB ); break;
-            case 270: m_pCtlAngle->SetActualRP( RP_MB ); break;
-            case 315: m_pCtlAngle->SetActualRP( RP_RB ); break;
-            default:  m_pCtlAngle->SetActualRP( RP_MM ); break;
-        }
-    }
+        m_pSliderAngle->SetThumbPos( m_pMtrAngle->GetValue() );
+
+    if( p == m_pSliderAngle )
+        m_pMtrAngle->SetValue( m_pSliderAngle->GetThumbPos() );
 
     XHatch aXHatch( m_pLbLineColor->GetSelectEntryColor(),
                     (css::drawing::HatchStyle) m_pLbLineType->GetSelectEntryPos(),
@@ -392,6 +409,10 @@ void SvxHatchTabPage::ModifiedHdl_Impl( void* p )
                     static_cast<long>(m_pMtrAngle->GetValue() * 10) );
 
     m_rXFSet.Put( XFillHatchItem( OUString(), aXHatch ) );
+
+    XFillBackgroundItem aItem(true);
+    m_rXFSet.Put( aItem, XATTR_FILLBACKGROUND );
+    m_rXFSet.Put( XFillColorItem( OUString(), m_pLbBackgroundColor->GetSelectEntryColor() ) );
     m_pCtlPreview->SetAttributes( m_aXFillAttr.GetItemSet() );
 
     m_pCtlPreview->Invalidate();
@@ -438,20 +459,9 @@ IMPL_LINK_NOARG_TYPED(SvxHatchTabPage, ChangeHatchHdl_Impl, ListBox&, void)
             m_pLbLineColor->SelectEntry( pHatch->GetColor() );
         }
         SetMetricValue( *m_pMtrDistance, pHatch->GetDistance(), m_ePoolUnit );
-        m_pMtrAngle->SetValue( pHatch->GetAngle() / 10 );
-
-        switch( m_pMtrAngle->GetValue() )
-        {
-            case 135: m_pCtlAngle->SetActualRP( RP_LT ); break;
-            case  90: m_pCtlAngle->SetActualRP( RP_MT ); break;
-            case  45: m_pCtlAngle->SetActualRP( RP_RT ); break;
-            case 180: m_pCtlAngle->SetActualRP( RP_LM ); break;
-            case   0: m_pCtlAngle->SetActualRP( RP_RM ); break;
-            case 225: m_pCtlAngle->SetActualRP( RP_LB ); break;
-            case 270: m_pCtlAngle->SetActualRP( RP_MB ); break;
-            case 315: m_pCtlAngle->SetActualRP( RP_RB ); break;
-            default:  m_pCtlAngle->SetActualRP( RP_MM ); break;
-        }
+        long mHatchAngle = pHatch->GetAngle() / 10;
+        m_pMtrAngle->SetValue( mHatchAngle );
+        m_pSliderAngle->SetThumbPos( mHatchAngle );
 
         // fill ItemSet and pass it on to m_pCtlPreview
         m_rXFSet.Put( XFillHatchItem( OUString(), *pHatch ) );
@@ -464,6 +474,7 @@ IMPL_LINK_NOARG_TYPED(SvxHatchTabPage, ChangeHatchHdl_Impl, ListBox&, void)
     m_pMtrAngle->SaveValue();
     m_pLbLineType->SaveValue();
     m_pLbLineColor->SaveValue();
+    m_pLbBackgroundColor->SaveValue();
     m_pLbHatchings->SaveValue();
 }
 
@@ -613,6 +624,7 @@ IMPL_LINK_NOARG_TYPED(SvxHatchTabPage, ClickModifyHdl_Impl, Button*, void)
                 m_pMtrAngle->SaveValue();
                 m_pLbLineType->SaveValue();
                 m_pLbLineColor->SaveValue();
+                m_pLbBackgroundColor->SaveValue();
                 m_pLbHatchings->SaveValue();
 
                 *m_pnHatchingListState |= ChangeType::MODIFIED;
@@ -820,24 +832,9 @@ IMPL_LINK_NOARG_TYPED(SvxHatchTabPage, ClickSaveHdl_Impl, Button*, void)
 }
 
 
-void SvxHatchTabPage::PointChanged( vcl::Window* pWindow, RECT_POINT eRcPt )
+void SvxHatchTabPage::PointChanged( vcl::Window*, RECT_POINT eRcPt )
 {
-    if( pWindow == m_pCtlAngle )
-    {
-        switch( eRcPt )
-        {
-            case RP_LT: m_pMtrAngle->SetValue( 135 ); break;
-            case RP_MT: m_pMtrAngle->SetValue( 90 );  break;
-            case RP_RT: m_pMtrAngle->SetValue( 45 );  break;
-            case RP_LM: m_pMtrAngle->SetValue( 180 ); break;
-            case RP_RM: m_pMtrAngle->SetValue( 0 );   break;
-            case RP_LB: m_pMtrAngle->SetValue( 225 ); break;
-            case RP_MB: m_pMtrAngle->SetValue( 270 ); break;
-            case RP_RB: m_pMtrAngle->SetValue( 315 ); break;
-            case RP_MM: break;
-        }
-        ModifiedHdl_Impl( this );
-    }
+    eRP = eRcPt;
 }
 
 

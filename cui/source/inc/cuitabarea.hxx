@@ -22,6 +22,7 @@
 #include <svtools/valueset.hxx>
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
+#include <vcl/slider.hxx>
 #include <svx/dlgctrl.hxx>
 #include <svx/xsetit.hxx>
 #include <svx/xfillit0.hxx>
@@ -476,9 +477,10 @@ class SvxHatchTabPage : public SvxTabPage
 private:
     VclPtr<MetricField>        m_pMtrDistance;
     VclPtr<MetricField>        m_pMtrAngle;
-    VclPtr<SvxRectCtl>         m_pCtlAngle;
+    VclPtr<Slider>             m_pSliderAngle;
     VclPtr<ListBox>            m_pLbLineType;
     VclPtr<ColorLB>            m_pLbLineColor;
+    VclPtr<ColorLB>            m_pLbBackgroundColor;
     VclPtr<HatchingLB>         m_pLbHatchings;
     VclPtr<SvxXRectPreview>    m_pCtlPreview;
     VclPtr<PushButton>         m_pBtnAdd;
@@ -488,6 +490,7 @@ private:
     VclPtr<PushButton>         m_pBtnSave;
 
     const SfxItemSet&   m_rOutAttrs;
+    RECT_POINT          eRP;
 
     XColorListRef         m_pColorList;
     XHatchListRef         m_pHatchingList;
@@ -509,6 +512,8 @@ private:
     DECL_LINK_TYPED( ChangeHatchHdl_Impl, ListBox&, void );
     DECL_LINK_TYPED( ModifiedEditHdl_Impl, Edit&, void );
     DECL_LINK_TYPED( ModifiedListBoxHdl_Impl, ListBox&, void );
+    DECL_LINK_TYPED( ModifiedBackgroundHdl_Impl, ListBox&, void );
+    DECL_LINK_TYPED( ModifiedSliderHdl_Impl, Slider*, void );
     void ModifiedHdl_Impl(void*);
     DECL_LINK_TYPED( ClickAddHdl_Impl, Button*, void );
     DECL_LINK_TYPED( ClickModifyHdl_Impl, Button*, void );
