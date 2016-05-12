@@ -237,7 +237,7 @@ namespace xmloff
         ,m_nIncludeCommon(CCAFlags::NONE)
         ,m_nIncludeDatabase(DAFlags::NONE)
         ,m_nIncludeSpecial(0)
-        ,m_nIncludeEvents(0)
+        ,m_nIncludeEvents(EAFlags::NONE)
         ,m_nIncludeBindings(BAFlags::NONE)
         ,m_pOuterElement(nullptr)
     {
@@ -1441,7 +1441,7 @@ namespace xmloff
     void OControlExport::examine()
     {
         OSL_ENSURE( ( m_nIncludeCommon == CCAFlags::NONE ) && ( m_nIncludeSpecial == 0 ) && ( m_nIncludeDatabase == DAFlags::NONE )
-                 && ( m_nIncludeEvents == 0 ) && ( m_nIncludeBindings == BAFlags::NONE),
+                 && ( m_nIncludeEvents == EAFlags::NONE ) && ( m_nIncludeBindings == BAFlags::NONE),
                  "OControlExport::examine: called me twice? Not initialized?" );
 
         // get the class id to decide which kind of element we need in the XML stream
@@ -1530,7 +1530,7 @@ namespace xmloff
                 m_nIncludeDatabase = DAFlags::DataField | DAFlags::InputRequired;
 
                 // event attributes
-                m_nIncludeEvents = EA_CONTROL_EVENTS | EA_ON_CHANGE | EA_ON_SELECT;
+                m_nIncludeEvents = EAFlags::ControlEvents | EAFlags::OnChange | EAFlags::OnSelect;
 
                 // only text and pattern fields have a ConvertEmptyToNull property
                 if  (   ( m_nClassId == FormComponentType::TEXTFIELD )
@@ -1574,7 +1574,7 @@ namespace xmloff
                     CCAFlags::Name | CCAFlags::ServiceName | CCAFlags::CurrentValue | CCAFlags::Disabled |
                     CCAFlags::Printable | CCAFlags::TabIndex | CCAFlags::TabStop | CCAFlags::Title |
                     CCAFlags::Value;
-                m_nIncludeEvents = EA_CONTROL_EVENTS | EA_ON_CHANGE | EA_ON_SELECT;
+                m_nIncludeEvents = EAFlags::ControlEvents | EAFlags::OnChange | EAFlags::OnSelect;
                 break;
 
             case FormComponentType::FIXEDTEXT:
@@ -1583,7 +1583,7 @@ namespace xmloff
                     CCAFlags::Name | CCAFlags::ServiceName | CCAFlags::Disabled | CCAFlags::Label |
                     CCAFlags::Printable | CCAFlags::Title | CCAFlags::For;
                 m_nIncludeSpecial = SCA_MULTI_LINE;
-                m_nIncludeEvents = EA_CONTROL_EVENTS;
+                m_nIncludeEvents = EAFlags::ControlEvents;
                 break;
 
             case FormComponentType::COMBOBOX:
@@ -1594,7 +1594,7 @@ namespace xmloff
                     CCAFlags::TabIndex | CCAFlags::TabStop | CCAFlags::Title | CCAFlags::Value;
                 m_nIncludeSpecial = SCA_AUTOMATIC_COMPLETION;
                 m_nIncludeDatabase = DAFlags::ConvertEmpty | DAFlags::DataField | DAFlags::InputRequired | DAFlags::ListSource | DAFlags::ListSource_TYPE;
-                m_nIncludeEvents = EA_CONTROL_EVENTS | EA_ON_CHANGE | EA_ON_SELECT;
+                m_nIncludeEvents = EAFlags::ControlEvents | EAFlags::OnChange | EAFlags::OnSelect;
                 break;
 
             case FormComponentType::LISTBOX:
@@ -1604,7 +1604,7 @@ namespace xmloff
                     CCAFlags::Printable | CCAFlags::Size | CCAFlags::TabIndex | CCAFlags::TabStop | CCAFlags::Title;
                 m_nIncludeSpecial = SCA_MULTIPLE;
                 m_nIncludeDatabase = DAFlags::BoundColumn | DAFlags::DataField | DAFlags::InputRequired | DAFlags::ListSource_TYPE;
-                m_nIncludeEvents = EA_CONTROL_EVENTS | EA_ON_CHANGE | EA_ON_CLICK | EA_ON_DBLCLICK;
+                m_nIncludeEvents = EAFlags::ControlEvents | EAFlags::OnChange | EAFlags::OnClick | EAFlags::OnDoubleClick;
                 // check if we need to export the ListSource as attribute
                 {
                     // for a list box, if the ListSourceType is VALUE_LIST, no ListSource is stored, but instead
@@ -1636,7 +1636,7 @@ namespace xmloff
                     CCAFlags::Name | CCAFlags::ServiceName | CCAFlags::ButtonType | CCAFlags::Disabled |
                     CCAFlags::ImageData | CCAFlags::Printable | CCAFlags::TabIndex | CCAFlags::TargetFrame |
                     CCAFlags::TargetLocation | CCAFlags::Title;
-                m_nIncludeEvents = EA_CONTROL_EVENTS | EA_ON_CLICK  | EA_ON_DBLCLICK;
+                m_nIncludeEvents = EAFlags::ControlEvents | EAFlags::OnClick  | EAFlags::OnDoubleClick;
                 break;
 
             case FormComponentType::CHECKBOX:
@@ -1657,7 +1657,7 @@ namespace xmloff
                 if ( m_xPropertyInfo->hasPropertyByName( PROPERTY_GROUP_NAME ) )
                     m_nIncludeSpecial |= SCA_GROUP_NAME;
                 m_nIncludeDatabase = DAFlags::DataField | DAFlags::InputRequired;
-                m_nIncludeEvents = EA_CONTROL_EVENTS | EA_ON_CHANGE;
+                m_nIncludeEvents = EAFlags::ControlEvents | EAFlags::OnChange;
                 break;
 
             case FormComponentType::GROUPBOX:
@@ -1665,7 +1665,7 @@ namespace xmloff
                 m_nIncludeCommon =
                     CCAFlags::Name | CCAFlags::ServiceName | CCAFlags::Disabled | CCAFlags::Label |
                     CCAFlags::Printable | CCAFlags::Title | CCAFlags::For;
-                m_nIncludeEvents = EA_CONTROL_EVENTS;
+                m_nIncludeEvents = EAFlags::ControlEvents;
                 break;
 
             case FormComponentType::IMAGECONTROL:
@@ -1674,7 +1674,7 @@ namespace xmloff
                     CCAFlags::Name | CCAFlags::ServiceName | CCAFlags::Disabled | CCAFlags::ImageData |
                     CCAFlags::Printable | CCAFlags::ReadOnly | CCAFlags::Title;
                 m_nIncludeDatabase = DAFlags::DataField | DAFlags::InputRequired;
-                m_nIncludeEvents = EA_CONTROL_EVENTS;
+                m_nIncludeEvents = EAFlags::ControlEvents;
                 break;
 
             case FormComponentType::HIDDENCONTROL:
@@ -1688,7 +1688,7 @@ namespace xmloff
                 m_nIncludeCommon =
                     CCAFlags::Name | CCAFlags::ServiceName | CCAFlags::Disabled | CCAFlags::Printable |
                     CCAFlags::TabIndex | CCAFlags::TabStop | CCAFlags::Title;
-                m_nIncludeEvents = EA_CONTROL_EVENTS;
+                m_nIncludeEvents = EAFlags::ControlEvents;
                 break;
 
             case FormComponentType::SCROLLBAR:
@@ -1702,7 +1702,7 @@ namespace xmloff
                 if ( m_nClassId == FormComponentType::SCROLLBAR )
                     m_nIncludeSpecial |= SCA_PAGE_STEP_SIZE ;
 
-                m_nIncludeEvents = EA_CONTROL_EVENTS;
+                m_nIncludeEvents = EAFlags::ControlEvents;
                 break;
 
             default:
@@ -1720,7 +1720,7 @@ namespace xmloff
                     // at least a name should be there, 'cause without a name the control could never have been
                     // inserted into its parent container
                     // In addition, the service name is absolutely necessary to create the control upon reading.
-                m_nIncludeEvents = EA_CONTROL_EVENTS;
+                m_nIncludeEvents = EAFlags::ControlEvents;
                     // we always should be able to export events - this is not control type dependent
                 break;
         }

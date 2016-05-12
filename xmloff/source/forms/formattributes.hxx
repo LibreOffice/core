@@ -93,16 +93,21 @@ namespace o3tl {
     template<> struct typed_flags<BAFlags> : is_typed_flags<BAFlags, 0x003f> {};
 }
 
+    // flags for event attributes
+enum class EAFlags {
+    NONE                  = 0x0000,
+    ControlEvents         = 0x0001,
+    OnChange              = 0x0002,
+    OnClick               = 0x0004,
+    OnDoubleClick         = 0x0008,
+    OnSelect              = 0x0010
+};
+namespace o3tl {
+    template<> struct typed_flags<EAFlags> : is_typed_flags<EAFlags, 0x001f> {};
+}
 
 namespace xmloff
 {
-
-    // flags for event attributes
-    #define EA_CONTROL_EVENTS           0x00000001
-    #define EA_ON_CHANGE                0x00000002
-    #define EA_ON_CLICK                 0x00000004
-    #define EA_ON_DBLCLICK              0x00000008
-    #define EA_ON_SELECT                0x00000010
 
     /// attributes in the xml tag representing a form
     enum FormAttributes
