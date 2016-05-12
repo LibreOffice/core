@@ -1909,7 +1909,7 @@ SwTestFormat::~SwTestFormat()
 
 bool SwTextFrame::TestFormat( const SwFrame* pPrv, SwTwips &rMaxHeight, bool &bSplit )
 {
-    PROTOCOL_ENTER( this, PROT::TestFormat, 0, nullptr )
+    PROTOCOL_ENTER( this, PROT::TestFormat, DbgAction::NONE, nullptr )
 
     if( IsLocked() && GetUpper()->Prt().Width() <= 0 )
         return false;

@@ -1156,7 +1156,7 @@ SwTwips SwFrame::Grow( SwTwips nDist, bool bTst, bool bInfo )
 {
     OSL_ENSURE( nDist >= 0, "Negative growth?" );
 
-    PROTOCOL_ENTER( this, bTst ? PROT::GrowTest : PROT::Grow, 0, &nDist )
+    PROTOCOL_ENTER( this, bTst ? PROT::GrowTest : PROT::Grow, DbgAction::NONE, &nDist )
 
     if ( nDist )
     {
@@ -1200,7 +1200,7 @@ SwTwips SwFrame::Shrink( SwTwips nDist, bool bTst, bool bInfo )
 {
     OSL_ENSURE( nDist >= 0, "Negative reduction?" );
 
-    PROTOCOL_ENTER( this, bTst ? PROT::ShrinkTest : PROT::Shrink, 0, &nDist )
+    PROTOCOL_ENTER( this, bTst ? PROT::ShrinkTest : PROT::Shrink, DbgAction::NONE, &nDist )
 
     if ( nDist )
     {
@@ -1259,7 +1259,7 @@ SwTwips SwFrame::Shrink( SwTwips nDist, bool bTst, bool bInfo )
  */
 SwTwips SwFrame::AdjustNeighbourhood( SwTwips nDiff, bool bTst )
 {
-    PROTOCOL_ENTER( this, PROT::AdjustN, 0, &nDiff );
+    PROTOCOL_ENTER( this, PROT::AdjustN, DbgAction::NONE, &nDiff );
 
     if ( !nDiff || !GetUpper()->IsFootnoteBossFrame() ) // only inside pages/columns
         return 0L;

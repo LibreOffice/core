@@ -3186,7 +3186,7 @@ void SwRootFrame::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRect,
 {
     OSL_ENSURE( Lower() && Lower()->IsPageFrame(), "Lower of root is no page." );
 
-    PROTOCOL( this, PROT::FileInit, 0, nullptr)
+    PROTOCOL( this, PROT::FileInit, DbgAction::NONE, nullptr)
 
     bool bResetRootPaint = false;
     SwViewShell *pSh = mpCurrShell;

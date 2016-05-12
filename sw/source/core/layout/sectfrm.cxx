@@ -68,7 +68,7 @@ SwSectionFrame::SwSectionFrame( SwSectionFrame &rSect, bool bMaster ) :
 {
     mnFrameType = SwFrameType::Section;
 
-    PROTOCOL( this, PROT::Section, bMaster ? ACT_CREATE_MASTER : ACT_CREATE_FOLLOW, &rSect )
+    PROTOCOL( this, PROT::Section, bMaster ? DbgAction::CreateMaster : DbgAction::CreateFollow, &rSect )
 
     if( bMaster )
     {
@@ -129,7 +129,7 @@ void SwSectionFrame::DestroyImpl()
             SwSectionFrame *pMaster = FindMaster();
             if( pMaster )
             {
-                PROTOCOL( this, PROT::Section, ACT_DEL_FOLLOW, pMaster )
+                PROTOCOL( this, PROT::Section, DbgAction::DelFollow, pMaster )
                 pMaster->SetFollow( GetFollow() );
                 // A Master always grabs the space until the lower edge of his
                 // Upper. If he doesn't have a Follow anymore, he can
@@ -141,7 +141,7 @@ void SwSectionFrame::DestroyImpl()
         }
         else if( HasFollow() )
         {
-            PROTOCOL( this, PROT::Section, ACT_DEL_MASTER, GetFollow() )
+            PROTOCOL( this, PROT::Section, DbgAction::DelMaster, GetFollow() )
         }
     }
 
@@ -218,7 +218,7 @@ void SwSectionFrame::Cut_( bool bRemove )
 {
     OSL_ENSURE( GetUpper(), "Cut ohne Upper()." );
 
-    PROTOCOL( this, PROT::Cut, 0, GetUpper() )
+    PROTOCOL( this, PROT::Cut, DbgAction::NONE, GetUpper() )
 
     SwPageFrame *pPage = FindPageFrame();
     InvalidatePage( pPage );
@@ -299,7 +299,7 @@ void SwSectionFrame::Paste( SwFrame* pParent, SwFrame* pSibling )
     OSL_ENSURE( !GetPrev() && !GetUpper(),
             "I am still registered somewhere." );
 
-    PROTOCOL( this, PROT::Paste, 0, GetUpper() )
+    PROTOCOL( this, PROT::Paste, DbgAction::NONE, GetUpper() )
 
     // Add to the tree
     SwSectionFrame* pSect = pParent->FindSctFrame();
@@ -429,7 +429,7 @@ void SwSectionFrame::MergeNext( SwSectionFrame* pNxt )
 
     if (!pNxt->IsJoinLocked() && GetSection() == pNxt->GetSection())
     {
-        PROTOCOL( this, PROT::Section, ACT_MERGE, pNxt )
+        PROTOCOL( this, PROT::Section, DbgAction::Merge, pNxt )
 
         SwFrame* pTmp = ::SaveContent( pNxt );
         if( pTmp )
@@ -1223,7 +1223,7 @@ void SwSectionFrame::Format( vcl::RenderContext* pRenderContext, const SwBorderA
     SWRECTFN( this )
     if ( !mbValidPrtArea )
     {
-        PROTOCOL( this, PROT::PrintArea, 0, nullptr )
+        PROTOCOL( this, PROT::PrintArea, DbgAction::NONE, nullptr )
         mbValidPrtArea = true;
         SwTwips nUpper = CalcUpperSpace();
 
@@ -1243,7 +1243,7 @@ void SwSectionFrame::Format( vcl::RenderContext* pRenderContext, const SwBorderA
 
     if ( !mbValidSize )
     {
-        PROTOCOL_ENTER( this, PROT::Size, 0, nullptr )
+        PROTOCOL_ENTER( this, PROT::Size, DbgAction::NONE, nullptr )
         const long nOldHeight = (Frame().*fnRect->fnGetHeight)();
         bool bOldLock = IsColLocked();
         ColLock();
@@ -1431,7 +1431,7 @@ SwLayoutFrame *SwFrame::GetNextSctLeaf( MakePageType eMakePage )
 {
     // Attention: Nested sections are currently not supported
 
-    PROTOCOL_ENTER( this, PROT::Leaf, ACT_NEXT_SECT, GetUpper()->FindSctFrame() )
+    PROTOCOL_ENTER( this, PROT::Leaf, DbgAction::NextSect, GetUpper()->FindSctFrame() )
 
     // Shortcuts for "columned" sections, if we're not in the last column
     // Can we slide to the next column of the section?
@@ -1649,7 +1649,7 @@ SwLayoutFrame *SwFrame::GetNextSctLeaf( MakePageType eMakePage )
 /// Returns the preceding layout sheet where the frame can be moved into
 SwLayoutFrame *SwFrame::GetPrevSctLeaf( MakePageType )
 {
-    PROTOCOL_ENTER( this, PROT::Leaf, ACT_PREV_SECT, GetUpper()->FindSctFrame() )
+    PROTOCOL_ENTER( this, PROT::Leaf, DbgAction::PrevSect, GetUpper()->FindSctFrame() )
 
     SwLayoutFrame* pCol;
     // ColumnFrame always contain a BodyFrame now

@@ -48,15 +48,14 @@ namespace o3tl {
     template<> struct typed_flags<PROT> : is_typed_flags<PROT, 0x0007ffff> {};
 }
 
-#define ACT_START           1
-#define ACT_END             2
-#define ACT_CREATE_MASTER   3
-#define ACT_CREATE_FOLLOW   4
-#define ACT_DEL_MASTER      5
-#define ACT_DEL_FOLLOW      6
-#define ACT_MERGE           7
-#define ACT_NEXT_SECT       8
-#define ACT_PREV_SECT       9
+enum class DbgAction {
+    NONE,
+    Start, End,
+    CreateMaster, CreateFollow,
+    DelMaster, DelFollow,
+    Merge,
+    NextSect, PrevSect
+};
 
 #ifdef DBG_UTIL
 
@@ -78,7 +77,7 @@ public:
     static PROT Record() { return nRecord; }
     static void SetRecord( PROT nNew ) { nRecord = nNew; }
     static bool Record( PROT nFunc ) { return bool(( nFunc | PROT::Init ) & nRecord); }
-    static void Record( const SwFrame* pFrame, PROT nFunction, sal_uLong nAction, void* pParam );
+    static void Record( const SwFrame* pFrame, PROT nFunction, DbgAction nAction, void* pParam );
     static void Init();
     static void Stop();
 };
@@ -86,11 +85,11 @@ public:
 class SwEnterLeave
 {
     SwImplEnterLeave* pImpl;
-    void Ctor( const SwFrame* pFrame, PROT nFunc, sal_uLong nAct, void* pPar );
+    void Ctor( const SwFrame* pFrame, PROT nFunc, DbgAction nAct, void* pPar );
     void Dtor();
 
 public:
-    SwEnterLeave( const SwFrame* pFrame, PROT nFunc, sal_uLong nAct, void* pPar )
+    SwEnterLeave( const SwFrame* pFrame, PROT nFunc, DbgAction nAct, void* pPar )
     {
         if( SwProtocol::Record( nFunc ) )
             Ctor( pFrame, nFunc, nAct, pPar );

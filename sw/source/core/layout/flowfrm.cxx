@@ -1841,7 +1841,7 @@ bool SwFlowFrame::MoveFwd( bool bMakePage, bool bPageBreak, bool bMoveAlways )
 
     if ( pNewUpper )
     {
-        PROTOCOL_ENTER( &m_rThis, PROT::MoveFwd, 0, nullptr );
+        PROTOCOL_ENTER( &m_rThis, PROT::MoveFwd, DbgAction::NONE, nullptr );
         SwPageFrame *pOldPage = pOldBoss->FindPageFrame();
         // We move ourself and all the direct successors before the
         // first ContentFrame below the new Upper.
@@ -2399,7 +2399,7 @@ bool SwFlowFrame::MoveBwd( bool &rbReformat )
             "<SwFlowFrame::MoveBwd(..)> - moving backward to the current upper frame!?" );
     if ( pNewUpper )
     {
-        PROTOCOL_ENTER( &m_rThis, PROT::MoveBack, 0, nullptr );
+        PROTOCOL_ENTER( &m_rThis, PROT::MoveBack, DbgAction::NONE, nullptr );
         if ( pNewUpper->IsFootnoteContFrame() )
         {
             // I may have gotten a Container

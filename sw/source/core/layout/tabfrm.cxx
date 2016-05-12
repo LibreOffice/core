@@ -1745,7 +1745,7 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
             return;
     }
 
-    PROTOCOL_ENTER( this, PROT::MakeAll, 0, nullptr )
+    PROTOCOL_ENTER( this, PROT::MakeAll, DbgAction::NONE, nullptr )
 
     LockJoin(); //I don't want to be destroyed on the way.
     SwLayNotify aNotify( this );    //does the notification in the DTor
