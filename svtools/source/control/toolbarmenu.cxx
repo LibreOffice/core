@@ -447,6 +447,8 @@ void ToolbarMenu::dispose()
         mpImpl->mxStatusListener.clear();
     }
 
+    mpImpl->mxAccessible.clear();
+
     std::unique_ptr<ToolbarMenu_Impl> pImpl{mpImpl};
     mpImpl = nullptr;
 
