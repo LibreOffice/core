@@ -33,6 +33,7 @@
 #include "DrawViewShell.hxx"
 #include "DrawController.hxx"
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <boost/concept_check.hpp>
 #include "sdresid.hxx"
 #include <svtools/controldims.hrc>
 #include <svx/gallery.hxx>
@@ -59,6 +60,7 @@
 #include <sfx2/objface.hxx>
 #include <svx/dlgutil.hxx>
 #include <algorithm>
+#include "EventMultiplexer.hxx"
 
 using namespace ::com::sun::star;
 
@@ -147,6 +149,7 @@ SlideBackground::SlideBackground(
     get(mpFillLB, "fillattr");
     get(mpDspMasterBackground, "displaymasterbackground");
     get(mpDspMasterObjects, "displaymasterobjects");
+    addListener();
     Initialize();
 }
 
@@ -159,21 +162,9 @@ void SlideBackground::Initialize()
 {
     lcl_FillPaperSizeListbox( *mpPaperSizeBox );
     mpPaperSizeBox->SetSelectHdl(LINK(this,SlideBackground,PaperSizeModifyHdl));
-    mpPaperOrientation->SetSelectHdl(LINK(this,SlideBackground,PaperOrientationModifyHdl));
+    mpPaperOrientation->SetSelectHdl(LINK(this,SlideBackground,PaperSizeModifyHdl));
 
-    ::sd::DrawDocShell* pDocSh = dynamic_cast<::sd::DrawDocShell*>( SfxObjectShell::Current() );
-    SdDrawDocument* pDoc = pDocSh ? pDocSh->GetDoc() : nullptr;
-    sal_uInt16 nCount = pDoc ? pDoc->GetMasterPageCount() : 0;
-    for( sal_uInt16 nLayout = 0; nLayout < nCount; nLayout++ )
-    {
-        SdPage* pMaster = static_cast<SdPage*>(pDoc->GetMasterPage(nLayout));
-        if( pMaster->GetPageKind() == PK_STANDARD)
-        {
-            OUString aLayoutName(pMaster->GetLayoutName());
-            aLayoutName = aLayoutName.copy(0,aLayoutName.indexOf(SD_LT_SEPARATOR));
-            mpMasterSlide->InsertEntry(aLayoutName);
-        }
-    }
+    populateMasterSlideDropdown();
 
     meUnit = maPaperSizeController.GetCoreMetric();
 
@@ -294,8 +285,87 @@ void SlideBackground::Update()
     }
 }
 
+void SlideBackground::addListener()
+{
+    Link<tools::EventMultiplexerEvent&,void> aLink( LINK(this, SlideBackground, EventMultiplexerListener) );
+    mrBase.GetEventMultiplexer()->AddEventListener (
+        aLink,
+        tools::EventMultiplexerEvent::EID_CURRENT_PAGE |
+        tools::EventMultiplexerEvent::EID_SHAPE_CHANGED );
+}
+
+void SlideBackground::removeListener()
+{
+    Link<tools::EventMultiplexerEvent&,void> aLink( LINK(this, SlideBackground, EventMultiplexerListener) );
+    mrBase.GetEventMultiplexer()->RemoveEventListener( aLink );
+}
+
+IMPL_LINK_TYPED(SlideBackground, EventMultiplexerListener,
+                tools::EventMultiplexerEvent&, rEvent, void)
+{
+    switch (rEvent.meEventId)
+    {
+        // add more events as per requirement
+        // Master Page change triggers a shape change event. Solves sync problem.
+        case tools::EventMultiplexerEvent::EID_SHAPE_CHANGED:
+            populateMasterSlideDropdown();
+            break;
+        case tools::EventMultiplexerEvent::EID_CURRENT_PAGE:
+        {
+            static sal_uInt16 SidArray[] = {
+                SID_ATTR_PAGE_COLOR,
+                SID_ATTR_PAGE_HATCH,
+                SID_ATTR_PAGE_BITMAP,
+                SID_ATTR_PAGE_GRADIENT,
+                SID_ATTR_PAGE_FILLSTYLE,
+                SID_DISPLAY_MASTER_BACKGROUND,
+                SID_DISPLAY_MASTER_OBJECTS,
+                0 };
+            updateMasterSlideSelection();
+            GetBindings()->Invalidate( SidArray );
+        }
+        break;
+        default:
+            break;
+    }
+}
+
+void SlideBackground::populateMasterSlideDropdown()
+{
+    mpMasterSlide->Clear();
+    ::sd::DrawDocShell* pDocSh = dynamic_cast<::sd::DrawDocShell*>( SfxObjectShell::Current() );
+    SdDrawDocument* pDoc = pDocSh ? pDocSh->GetDoc() : nullptr;
+    sal_uInt16 nCount = pDoc ? pDoc->GetMasterPageCount() : 0;
+    for( sal_uInt16 nLayout = 0; nLayout < nCount; nLayout++ )
+    {
+        SdPage* pMaster = static_cast<SdPage*>(pDoc->GetMasterPage(nLayout));
+        if( pMaster->GetPageKind() == PK_STANDARD)
+        {
+            OUString aLayoutName(pMaster->GetLayoutName());
+            aLayoutName = aLayoutName.copy(0,aLayoutName.indexOf(SD_LT_SEPARATOR));
+            mpMasterSlide->InsertEntry(aLayoutName);
+        }
+    }
+    updateMasterSlideSelection();
+}
+
+void SlideBackground::updateMasterSlideSelection()
+{
+    SdPage* pPage = mrBase.GetMainViewShell().get()->getCurrentPage();
+    if (pPage != nullptr && pPage->TRG_HasMasterPage())
+    {
+        SdrPage& rMasterPage (pPage->TRG_GetMasterPage());
+        SdPage* pMasterPage = static_cast<SdPage*>(&rMasterPage);
+        mpMasterSlide->SelectEntry(pMasterPage->GetName());
+    }
+    else
+        mpMasterSlide->SetNoSelection();
+}
+
 void SlideBackground::dispose()
 {
+    removeListener();
+
     mpPaperSizeBox.clear();
     mpPaperOrientation.clear();
     mpMasterSlide.clear();
@@ -601,14 +671,6 @@ IMPL_LINK_NOARG_TYPED(SlideBackground, PaperSizeModifyHdl, ListBox&, void)
 
     SvxSizeItem aSizeItem(SID_ATTR_PAGE_SIZE,aSize);
     GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_SIZE, SfxCallMode::RECORD, { &aSizeItem });
-}
-
-IMPL_LINK_NOARG_TYPED(SlideBackground, PaperOrientationModifyHdl, ListBox&, void)
-{
-    SvxPageItem aPageItem(SID_ATTR_PAGE);
-    aPageItem.SetLandscape( mpPaperOrientation->GetSelectEntryPos() == 0 );
-
-    GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE, SfxCallMode::RECORD,{ &aPageItem });
 }
 
 IMPL_LINK_NOARG_TYPED(SlideBackground, FillColorHdl, ListBox&, void)
