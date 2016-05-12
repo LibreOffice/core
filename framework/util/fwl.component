@@ -85,4 +85,7 @@
   <implementation name="com.sun.star.comp.framework.services.DispatchHelper">
     <service name="com.sun.star.frame.DispatchHelper"/>
   </implementation>
+  <implementation name="com.sun.star.comp.framework.services.DispatchDisabler">
+    <service name="com.sun.star.frame.DispatchDisabler"/>
+  </implementation>
 </component>
