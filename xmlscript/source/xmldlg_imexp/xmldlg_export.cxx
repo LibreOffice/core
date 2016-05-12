@@ -1270,10 +1270,8 @@ OUString StyleBag::getStyleId( Style const & rStyle )
     }
 
     // lookup existing style
-    for ( size_t nStylesPos = 0; nStylesPos < _styles.size(); ++nStylesPos )
+    for (Style* pStyle : _styles)
     {
-        Style * pStyle = _styles[ nStylesPos ];
-
         short demanded_defaults = ~rStyle._set & rStyle._all;
         // test, if defaults are not set
         if ((~pStyle->_set & demanded_defaults) == demanded_defaults &&
@@ -1342,9 +1340,9 @@ OUString StyleBag::getStyleId( Style const & rStyle )
 
 StyleBag::~StyleBag()
 {
-    for ( size_t nPos = 0; nPos < _styles.size(); ++nPos )
+    for (Style* _style : _styles)
     {
-        delete _styles[ nPos ];
+        delete _style;
     }
 }
 
@@ -1356,9 +1354,9 @@ void StyleBag::dump( Reference< xml::sax::XExtendedDocumentHandler > const & xOu
         xOut->ignorableWhitespace( OUString() );
         xOut->startElement( aStylesName, Reference< xml::sax::XAttributeList >() );
         // export styles
-        for ( size_t nPos = 0; nPos < _styles.size(); ++nPos )
+        for (Style* _style : _styles)
         {
-            Reference< xml::sax::XAttributeList > xAttr( _styles[ nPos ]->createElement() );
+            Reference< xml::sax::XAttributeList > xAttr( _style->createElement() );
             static_cast< ElementDescriptor * >( xAttr.get() )->dump( xOut.get() );
         }
         xOut->ignorableWhitespace( OUString() );

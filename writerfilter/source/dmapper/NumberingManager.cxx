@@ -306,8 +306,8 @@ uno::Sequence< beans::PropertyValue > ListLevel::GetLevelProperties( )
         PROP_ADJUST, PROP_INDENT_AT, PROP_FIRST_LINE_INDENT,
             PROP_FIRST_LINE_OFFSET, PROP_LEFT_MARGIN
     };
-    for(int i=0; i<nIds; ++i) {
-        boost::optional<PropertyMap::Property> aProp = getProperty(aReadIds[i]);
+    for(PropertyIds & rReadId : aReadIds) {
+        boost::optional<PropertyMap::Property> aProp = getProperty(rReadId);
         if (aProp)
             aNumberingProperties.push_back(
                     beans::PropertyValue( getPropertyName(aProp->first), 0, aProp->second, beans::PropertyState_DIRECT_VALUE )

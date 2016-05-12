@@ -1026,10 +1026,10 @@ void XMLPropertiesOOoTContext_Impl::Characters( const OUString& )
 void XMLPropertiesOOoTContext_Impl::Export()
 {
 
-    for( sal_uInt16 i=0; i < MAX_PROP_TYPES; i++ )
+    for(rtl::Reference<XMLTypedPropertiesOOoTContext_Impl> & rPropContext : m_aPropContexts)
     {
-        if( m_aPropContexts[i].is() )
-            m_aPropContexts[i]->Export();
+        if( rPropContext.is() )
+            rPropContext->Export();
     }
 }
 

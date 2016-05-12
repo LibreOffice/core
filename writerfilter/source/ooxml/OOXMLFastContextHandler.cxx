@@ -129,9 +129,9 @@ bool OOXMLFastContextHandler::prepareMceContext(Token_t nElement, const uno::Ref
                 "wps",
                 "wpg",
             };
-            for (size_t i = 0; i < SAL_N_ELEMENTS(aFeatures); ++i)
+            for (const char *p : aFeatures)
             {
-                if (aRequires.equalsAscii(aFeatures[i]))
+                if (aRequires.equalsAscii(p))
                 {
                     m_bTookChoice = true;
                     return false;
@@ -1407,8 +1407,8 @@ void OOXMLFastContextHandlerTextTableRow::handleGridBefore( const OOXMLValue::Po
                 OOXMLPropertySet::Pointer_t pBorderProps( new OOXMLPropertySet );
                 static Id borders[] = { NS_ooxml::LN_CT_TcBorders_top, NS_ooxml::LN_CT_TcBorders_bottom,
                     NS_ooxml::LN_CT_TcBorders_start, NS_ooxml::LN_CT_TcBorders_end };
-                for( size_t j = 0; j < SAL_N_ELEMENTS( borders ); ++j )
-                    pBorderProps->add( fakeNoBorder( borders[ j ] ));
+                for(sal_uInt32 border : borders)
+                    pBorderProps->add( fakeNoBorder( border ));
                 OOXMLValue::Pointer_t pValue( new OOXMLPropertySetValue( pBorderProps ));
                 OOXMLProperty::Pointer_t pProp
                     (new OOXMLProperty(NS_ooxml::LN_CT_TcPrBase_tcBorders, pValue, OOXMLProperty::SPRM));

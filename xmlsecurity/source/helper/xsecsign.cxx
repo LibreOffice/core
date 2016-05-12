@@ -50,9 +50,9 @@ OUString XSecController::createId()
 
     char str[68]="ID_";
     int length = 3;
-    for (int i=0; i<16; ++i)
+    for (sal_uInt8 i : aSeq)
     {
-        length += sprintf(str+length, "%04x", aSeq[i]);
+        length += sprintf(str+length, "%04x", i);
     }
 
     return OUString::createFromAscii(str);
@@ -393,10 +393,8 @@ bool XSecController::WriteOOXMLSignature(const uno::Reference<embed::XStorage>& 
             // Export the signature template.
             cssu::Reference<xml::sax::XDocumentHandler> xSEKHandler(m_xSAXEventKeeper, uno::UNO_QUERY);
 
-            for (size_t i = 0; i < m_vInternalSignatureInformations.size(); ++i)
+            for (InternalSignatureInformation & rInformation : m_vInternalSignatureInformations)
             {
-                InternalSignatureInformation& rInformation = m_vInternalSignatureInformations[i];
-
                 // Prepare the signature creator.
                 rInformation.xReferenceResolvedListener = prepareSignatureToWrite(rInformation, embed::StorageFormats::OFOPXML);
 

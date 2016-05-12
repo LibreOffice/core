@@ -232,11 +232,11 @@ PropertyMapPtr TableStyleSheetEntry::GetLocalPropertiesFromMask( sal_Int32 nMask
 
     // Get the properties applying according to the mask
     PropertyMapPtr pProps( new PropertyMap( ) );
-    for (size_t i = 0; i < SAL_N_ELEMENTS(aOrderedStyleTable); ++i)
+    for (const TblStyleTypeAndMask & i : aOrderedStyleTable)
     {
-        TblStylePrs::iterator pIt = m_aStyles.find( aOrderedStyleTable[ i ].type );
-        if ( ( nMask & aOrderedStyleTable[ i ].mask ) && ( pIt != m_aStyles.end( ) ) )
-            lcl_mergeProps( pProps, pIt->second, aOrderedStyleTable[ i ].type );
+        TblStylePrs::iterator pIt = m_aStyles.find( i.type );
+        if ( ( nMask & i.mask ) && ( pIt != m_aStyles.end( ) ) )
+            lcl_mergeProps( pProps, pIt->second, i.type );
     }
     return pProps;
 }
@@ -1195,11 +1195,11 @@ void StyleSheetTable::ApplyStyleSheets( const FontTablePtr& rFontTable )
 const StyleSheetEntryPtr StyleSheetTable::FindStyleSheetByISTD(const OUString& sIndex)
 {
     StyleSheetEntryPtr pRet;
-    for( size_t nPos = 0; nPos < m_pImpl->m_aStyleSheetEntries.size(); ++nPos )
+    for(StyleSheetEntryPtr & rpEntry : m_pImpl->m_aStyleSheetEntries)
     {
-        if( m_pImpl->m_aStyleSheetEntries[nPos]->sStyleIdentifierD == sIndex)
+        if( rpEntry->sStyleIdentifierD == sIndex)
         {
-            pRet = m_pImpl->m_aStyleSheetEntries[nPos];
+            pRet = rpEntry;
             break;
         }
     }
@@ -1210,11 +1210,11 @@ const StyleSheetEntryPtr StyleSheetTable::FindStyleSheetByISTD(const OUString& s
 const StyleSheetEntryPtr StyleSheetTable::FindStyleSheetByStyleName(const OUString& sIndex)
 {
     StyleSheetEntryPtr pRet;
-    for( size_t nPos = 0; nPos < m_pImpl->m_aStyleSheetEntries.size(); ++nPos )
+    for(StyleSheetEntryPtr & rpEntry : m_pImpl->m_aStyleSheetEntries)
     {
-        if( m_pImpl->m_aStyleSheetEntries[nPos]->sStyleName == sIndex)
+        if( rpEntry->sStyleName == sIndex)
         {
-            pRet = m_pImpl->m_aStyleSheetEntries[nPos];
+            pRet = rpEntry;
             break;
         }
     }
@@ -1225,11 +1225,11 @@ const StyleSheetEntryPtr StyleSheetTable::FindStyleSheetByStyleName(const OUStri
 const StyleSheetEntryPtr StyleSheetTable::FindStyleSheetByConvertedStyleName(const OUString& sIndex)
 {
     StyleSheetEntryPtr pRet;
-    for( size_t nPos = 0; nPos < m_pImpl->m_aStyleSheetEntries.size(); ++nPos )
+    for(StyleSheetEntryPtr & rpEntry : m_pImpl->m_aStyleSheetEntries)
     {
-        if( m_pImpl->m_aStyleSheetEntries[nPos]->sConvertedStyleName == sIndex)
+        if( rpEntry->sConvertedStyleName == sIndex)
         {
-            pRet = m_pImpl->m_aStyleSheetEntries[nPos];
+            pRet = rpEntry;
             break;
         }
     }
@@ -1240,9 +1240,8 @@ const StyleSheetEntryPtr StyleSheetTable::FindStyleSheetByConvertedStyleName(con
 const StyleSheetEntryPtr StyleSheetTable::FindDefaultParaStyle()
 {
     StyleSheetEntryPtr pRet;
-    for (size_t i = 0; i < m_pImpl->m_aStyleSheetEntries.size(); ++i)
+    for (StyleSheetEntryPtr & pEntry : m_pImpl->m_aStyleSheetEntries)
     {
-        StyleSheetEntryPtr pEntry = m_pImpl->m_aStyleSheetEntries[i];
         if (pEntry->bIsDefaultStyle && pEntry->nStyleTypeCode == STYLE_TYPE_PARA)
         {
             pRet = pEntry;

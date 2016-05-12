@@ -623,8 +623,8 @@ void DomainMapperTableManager::endOfRowAction()
     // a grid of "20:40:20" and it doesn't have to do something with the tableWidth
     // -> so we have get the sum of each grid entry for the fullWidthRelative:
     int nFullWidthRelative = 0;
-    for (size_t i = 0 ; i < (*pTableGrid.get()).size(); i++ )
-        nFullWidthRelative += (*pTableGrid.get())[ i ];
+    for (sal_Int32 i : (*pTableGrid.get()))
+        nFullWidthRelative += i;
 
     if( pTableGrid->size() == ( m_nGridBefore + nGrids + m_nGridAfter ) && m_nCell.back( ) > 0 )
     {
