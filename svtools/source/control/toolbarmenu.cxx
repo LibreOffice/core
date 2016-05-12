@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <memory>
+
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <comphelper/processfactory.hxx>
@@ -445,16 +447,16 @@ void ToolbarMenu::dispose()
         mpImpl->mxStatusListener.clear();
     }
 
+    std::unique_ptr<ToolbarMenu_Impl> pImpl{mpImpl};
+    mpImpl = nullptr;
+
     // delete all menu entries
-    const int nEntryCount = mpImpl->maEntryVector.size();
+    const int nEntryCount = pImpl->maEntryVector.size();
     int nEntry;
     for( nEntry = 0; nEntry < nEntryCount; nEntry++ )
     {
-        delete mpImpl->maEntryVector[nEntry];
+        delete pImpl->maEntryVector[nEntry];
     }
-
-    delete mpImpl;
-    mpImpl = nullptr;
 
     DockingWindow::dispose();
 }
@@ -717,7 +719,7 @@ void ToolbarMenu::highlightFirstEntry()
 
 void ToolbarMenu::GetFocus()
 {
-    if( mpImpl->mnHighlightedEntry == -1 )
+    if( mpImpl && mpImpl->mnHighlightedEntry == -1 )
         implChangeHighlightEntry( 0 );
 
     DockingWindow::GetFocus();
