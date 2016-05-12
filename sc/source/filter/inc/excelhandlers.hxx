@@ -21,6 +21,7 @@
 #define INCLUDED_SC_SOURCE_FILTER_INC_EXCELHANDLERS_HXX
 
 #include <oox/core/fragmenthandler2.hxx>
+#include <oox/helper/binaryinputstream.hxx>
 #include "worksheethelper.hxx"
 
 namespace oox {

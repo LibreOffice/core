@@ -20,10 +20,19 @@
 #ifndef INCLUDED_OOX_OLE_OLESTORAGE_HXX
 #define INCLUDED_OOX_OLE_OLESTORAGE_HXX
 
+#include <vector>
+
+#include <com/sun/star/uno/Reference.hxx>
+#include <oox/dllapi.h>
 #include <oox/helper/storagebase.hxx>
+#include <rtl/ustring.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace container { class XNameContainer; }
+    namespace embed { class XStorage; }
+    namespace io { class XInputStream; }
+    namespace io { class XOutputStream; }
+    namespace io { class XStream; }
     namespace uno { class XComponentContext; }
 } } }
 

@@ -20,12 +20,19 @@
 #ifndef INCLUDED_OOX_OLE_AXCONTROL_HXX
 #define INCLUDED_OOX_OLE_AXCONTROL_HXX
 
+#include <memory>
+#include <vector>
+
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/Sequence.hxx>
+#include <oox/dllapi.h>
 #include <oox/helper/binarystreambase.hxx>
 #include <oox/helper/propertyset.hxx>
 #include <oox/ole/axbinaryreader.hxx>
+#include <oox/ole/axfontdata.hxx>
 #include <oox/ole/olehelper.hxx>
-#include <oox/dllapi.h>
-#include <memory>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
 
 namespace com { namespace sun { namespace star {
     namespace awt { class XControlModel; }
@@ -38,6 +45,7 @@ namespace com { namespace sun { namespace star {
 
 namespace oox {
     class BinaryInputStream;
+    class BinaryOutputStream;
     class GraphicHelper;
     class PropertyMap;
 }
