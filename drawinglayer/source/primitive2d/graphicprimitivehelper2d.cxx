@@ -378,14 +378,11 @@ namespace drawinglayer
                     aRetval = Primitive2DContainer { aPrimitiveBlackAndWhite };
                     break;
                 }
-                // coverity[dead_error_begin] - intentional dead case
-                case GRAPHICDRAWMODE_WATERMARK:
-                {
-                    assert(false && "OOps, GRAPHICDRAWMODE_WATERMARK should already be handled (see above)");
-                    // fallthrough intended
-                }
                 default: // case GRAPHICDRAWMODE_STANDARD:
                 {
+                    assert(
+                        aGraphicDrawMode != GRAPHICDRAWMODE_WATERMARK
+                        && "OOps, GRAPHICDRAWMODE_WATERMARK should already be handled (see above)");
                     // nothing to do
                     break;
                 }
