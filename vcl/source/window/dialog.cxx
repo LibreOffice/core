@@ -811,9 +811,7 @@ bool Dialog::ImplStartExecuteModal()
             "Dialog \"" << ImplGetDialogText(this).getStr()
                 << "\"cancelled in silent mode");
         return false;
-    default:
-        assert(false && "this cannot happen");
-        // fall through
+    default: // default cannot happen
     case Application::DIALOG_CANCEL_FATAL:
         std::abort();
     }
