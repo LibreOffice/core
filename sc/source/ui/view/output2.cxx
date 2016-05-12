@@ -67,7 +67,6 @@
 #include <com/sun/star/i18n/DirectionProperty.hpp>
 #include <comphelper/string.hxx>
 
-#include <cstdlib>
 #include <memory>
 #include <vector>
 
@@ -2632,6 +2631,10 @@ void ScOutputData::DrawEditParam::setAlignmentToEngine()
             if (meOrient == SVX_ORIENTATION_STANDARD)
                 switch (meHorJustResult)
                 {
+                    case SVX_HOR_JUSTIFY_REPEAT:            // repeat is not yet implemented
+                    case SVX_HOR_JUSTIFY_STANDARD:
+                        assert(!"meHorJustResult does not match getAlignmentFromContext()");
+                        // fallthru
                     case SVX_HOR_JUSTIFY_LEFT:
                         eSvxAdjust = SVX_ADJUST_LEFT;
                         break;
@@ -2644,9 +2647,6 @@ void ScOutputData::DrawEditParam::setAlignmentToEngine()
                     case SVX_HOR_JUSTIFY_BLOCK:
                         eSvxAdjust = SVX_ADJUST_BLOCK;
                         break;
-                    case SVX_HOR_JUSTIFY_REPEAT: // repeat is not yet implemented
-                    case SVX_HOR_JUSTIFY_STANDARD:
-                        for (;;) std::abort(); // meHorJustResult does not match getAlignmentFromContext()
                 }
             else
                 switch (meVerJust)
