@@ -21,6 +21,8 @@
 #define INCLUDED_OOX_OLE_VBAHELPER_HXX
 
 #include <oox/helper/binarystreambase.hxx>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
 
 namespace oox { class BinaryInputStream; }
 

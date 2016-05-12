@@ -20,8 +20,12 @@
 #ifndef INCLUDED_OOX_OLE_VBAINPUTSTREAM_HXX
 #define INCLUDED_OOX_OLE_VBAINPUTSTREAM_HXX
 
+#include <cstddef>
 #include <vector>
+
 #include <oox/helper/binaryinputstream.hxx>
+#include <oox/helper/binarystreambase.hxx>
+#include <sal/types.h>
 
 namespace oox {
 namespace ole {

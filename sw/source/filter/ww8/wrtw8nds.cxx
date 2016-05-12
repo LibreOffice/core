@@ -80,6 +80,7 @@
 #include <txtatr.hxx>
 #include <fmtsrnd.hxx>
 #include <fmtrowsplt.hxx>
+#include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
 #include <oox/export/vmlexport.hxx>

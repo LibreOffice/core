@@ -10,9 +10,12 @@
 #ifndef INCLUDED_OOX_OLE_VBAEXPORT_HXX
 #define INCLUDED_OOX_OLE_VBAEXPORT_HXX
 
-#include <com/sun/star/uno/XInterface.hpp>
+#include <cstddef>
 
+#include <com/sun/star/uno/Reference.hxx>
 #include <oox/dllapi.h>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
 
 class SotStorage;
 class SvStream;
