@@ -78,7 +78,7 @@ OFormLayerXMLImport_Impl::OFormLayerXMLImport_Impl(SvXMLImport& _rImporter)
     m_aAttributeMetaData.addStringProperty(
         OAttributeMetaData::getCommonControlAttributeName(CCAFlags::Name), PROPERTY_NAME);
     m_aAttributeMetaData.addStringProperty(
-            OAttributeMetaData::getSpecialAttributeName(SCA_GROUP_NAME), PROPERTY_GROUP_NAME);
+            OAttributeMetaData::getSpecialAttributeName(SCAFlags::GroupName), PROPERTY_GROUP_NAME);
         m_aAttributeMetaData.addStringProperty(
         OAttributeMetaData::getCommonControlAttributeName(CCAFlags::ImageData), PROPERTY_IMAGEURL);
     m_aAttributeMetaData.addStringProperty(
@@ -133,17 +133,17 @@ OFormLayerXMLImport_Impl::OFormLayerXMLImport_Impl(SvXMLImport& _rImporter)
     m_aAttributeMetaData.addBooleanProperty(
         OAttributeMetaData::getDatabaseAttributeName(DAFlags::ConvertEmpty), PROPERTY_EMPTY_IS_NULL, false);
     m_aAttributeMetaData.addBooleanProperty(
-        OAttributeMetaData::getSpecialAttributeName(SCA_VALIDATION), PROPERTY_STRICTFORMAT, false);
+        OAttributeMetaData::getSpecialAttributeName(SCAFlags::Validation), PROPERTY_STRICTFORMAT, false);
     m_aAttributeMetaData.addBooleanProperty(
-        OAttributeMetaData::getSpecialAttributeName(SCA_MULTI_LINE), PROPERTY_MULTILINE, false);
+        OAttributeMetaData::getSpecialAttributeName(SCAFlags::MultiLine), PROPERTY_MULTILINE, false);
     m_aAttributeMetaData.addBooleanProperty(
-        OAttributeMetaData::getSpecialAttributeName(SCA_AUTOMATIC_COMPLETION), PROPERTY_AUTOCOMPLETE, false);
+        OAttributeMetaData::getSpecialAttributeName(SCAFlags::AutoCompletion), PROPERTY_AUTOCOMPLETE, false);
     m_aAttributeMetaData.addBooleanProperty(
-        OAttributeMetaData::getSpecialAttributeName(SCA_MULTIPLE), PROPERTY_MULTISELECTION, false);
+        OAttributeMetaData::getSpecialAttributeName(SCAFlags::Multiple), PROPERTY_MULTISELECTION, false);
     m_aAttributeMetaData.addBooleanProperty(
-        OAttributeMetaData::getSpecialAttributeName(SCA_DEFAULT_BUTTON), PROPERTY_DEFAULTBUTTON, false);
+        OAttributeMetaData::getSpecialAttributeName(SCAFlags::DefaultButton), PROPERTY_DEFAULTBUTTON, false);
     m_aAttributeMetaData.addBooleanProperty(
-        OAttributeMetaData::getSpecialAttributeName(SCA_IS_TRISTATE), PROPERTY_TRISTATE, false);
+        OAttributeMetaData::getSpecialAttributeName(SCAFlags::IsTristate), PROPERTY_TRISTATE, false);
     m_aAttributeMetaData.addBooleanProperty(
         OAttributeMetaData::getFormAttributeName(faAllowDeletes), PROPERTY_ALLOWDELETES, true);
     m_aAttributeMetaData.addBooleanProperty(
@@ -157,9 +157,9 @@ OFormLayerXMLImport_Impl::OFormLayerXMLImport_Impl(SvXMLImport& _rImporter)
     m_aAttributeMetaData.addBooleanProperty(
         OAttributeMetaData::getFormAttributeName(faIgnoreResult), PROPERTY_IGNORERESULT, false);
     m_aAttributeMetaData.addBooleanProperty(
-        OAttributeMetaData::getSpecialAttributeName( SCA_TOGGLE ), PROPERTY_TOGGLE, false );
+        OAttributeMetaData::getSpecialAttributeName( SCAFlags::Toggle ), PROPERTY_TOGGLE, false );
     m_aAttributeMetaData.addBooleanProperty(
-        OAttributeMetaData::getSpecialAttributeName( SCA_FOCUS_ON_CLICK ), PROPERTY_FOCUS_ON_CLICK, true );
+        OAttributeMetaData::getSpecialAttributeName( SCAFlags::FocusOnClick ), PROPERTY_FOCUS_ON_CLICK, true );
     m_aAttributeMetaData.addBooleanProperty(
         OAttributeMetaData::getDatabaseAttributeName( DAFlags::InputRequired ), PROPERTY_INPUT_REQUIRED, false );
 
@@ -175,7 +175,7 @@ OFormLayerXMLImport_Impl::OFormLayerXMLImport_Impl(SvXMLImport& _rImporter)
 
     // the int32 attributes
     m_aAttributeMetaData.addInt32Property(
-        OAttributeMetaData::getSpecialAttributeName( SCA_PAGE_STEP_SIZE ), PROPERTY_BLOCK_INCREMENT, 10 );
+        OAttributeMetaData::getSpecialAttributeName( SCAFlags::PageStepSize ), PROPERTY_BLOCK_INCREMENT, 10 );
 
     // the enum attributes
     m_aAttributeMetaData.addEnumProperty(
@@ -195,11 +195,11 @@ OFormLayerXMLImport_Impl::OFormLayerXMLImport_Impl(SvXMLImport& _rImporter)
         ListSourceType_VALUELIST, OEnumMapper::getEnumMap(OEnumMapper::epListSourceType),
         &::cppu::UnoType<ListSourceType>::get());
     m_aAttributeMetaData.addEnumProperty(
-        OAttributeMetaData::getSpecialAttributeName(SCA_STATE), PROPERTY_DEFAULT_STATE, TRISTATE_FALSE,
+        OAttributeMetaData::getSpecialAttributeName(SCAFlags::State), PROPERTY_DEFAULT_STATE, TRISTATE_FALSE,
         OEnumMapper::getEnumMap(OEnumMapper::epCheckState),
         &::cppu::UnoType<sal_Int16>::get());
     m_aAttributeMetaData.addEnumProperty(
-        OAttributeMetaData::getSpecialAttributeName(SCA_CURRENT_STATE), PROPERTY_STATE, TRISTATE_FALSE,
+        OAttributeMetaData::getSpecialAttributeName(SCAFlags::CurrentState), PROPERTY_STATE, TRISTATE_FALSE,
         OEnumMapper::getEnumMap(OEnumMapper::epCheckState),
         &::cppu::UnoType<sal_Int16>::get());
     m_aAttributeMetaData.addEnumProperty(

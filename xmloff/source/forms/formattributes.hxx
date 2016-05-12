@@ -106,6 +106,34 @@ namespace o3tl {
     template<> struct typed_flags<EAFlags> : is_typed_flags<EAFlags, 0x001f> {};
 }
 
+    // any other attributes, which are special to some control types
+enum class SCAFlags {
+    NONE                  = 0x000000,
+    EchoChar              = 0x000001,
+    MaxValue              = 0x000002,
+    MinValue              = 0x000004,
+    Validation            = 0x000008,
+    GroupName             = 0x000010,
+    MultiLine             = 0x000020,
+    AutoCompletion        = 0x000080,
+    Multiple              = 0x000100,
+    DefaultButton         = 0x000200,
+    CurrentState          = 0x000400,
+    IsTristate            = 0x000800,
+    State                 = 0x001000,
+    ColumnStyleName       = 0x002000,
+    StepSize              = 0x004000,
+    PageStepSize          = 0x008000,
+    RepeatDelay           = 0x010000,
+    Toggle                = 0x020000,
+    FocusOnClick          = 0x040000,
+    ImagePosition         = 0x080000
+};
+namespace o3tl {
+    template<> struct typed_flags<SCAFlags> : is_typed_flags<SCAFlags, 0x0fffff> {};
+}
+
+
 namespace xmloff
 {
 
@@ -135,27 +163,6 @@ namespace xmloff
         faOrder,
         faTabbingCycle
     };
-
-    // any other attributes, which are special to some control types
-    #define SCA_ECHO_CHAR               0x00000001
-    #define SCA_MAX_VALUE               0x00000002
-    #define SCA_MIN_VALUE               0x00000004
-    #define SCA_VALIDATION              0x00000008
-    #define SCA_GROUP_NAME              0x00000010
-    #define SCA_MULTI_LINE              0x00000020
-    #define SCA_AUTOMATIC_COMPLETION    0x00000080
-    #define SCA_MULTIPLE                0x00000100
-    #define SCA_DEFAULT_BUTTON          0x00000200
-    #define SCA_CURRENT_STATE           0x00000400
-    #define SCA_IS_TRISTATE             0x00000800
-    #define SCA_STATE                   0x00001000
-    #define SCA_COLUMN_STYLE_NAME       0x00002000
-    #define SCA_STEP_SIZE               0x00004000
-    #define SCA_PAGE_STEP_SIZE          0x00008000
-    #define SCA_REPEAT_DELAY            0x00010000
-    #define SCA_TOGGLE                  0x00020000
-    #define SCA_FOCUS_ON_CLICK          0x00040000
-    #define SCA_IMAGE_POSITION          0x00080000
 
     // attributes of the office:forms element
     enum OfficeFormsAttributes
@@ -217,7 +224,7 @@ namespace xmloff
             @param _nId
                 the id of the attribute. Has to be one of the SCA_* constants.
         */
-        static const sal_Char* getSpecialAttributeName(sal_Int32 _nId);
+        static const sal_Char* getSpecialAttributeName(SCAFlags _nId);
 
         /** calculates the xml attribute representation of a binding attribute.
             @param _nId
@@ -239,7 +246,7 @@ namespace xmloff
             @param _nId
                 the id of the attribute. Has to be one of the SCA_* constants.
         */
-        static sal_uInt16 getSpecialAttributeNamespace(sal_Int32 _nId);
+        static sal_uInt16 getSpecialAttributeNamespace(SCAFlags _nId);
 
         /** calculates the xml attribute representation of a attribute of the office:forms element
             @param _nId

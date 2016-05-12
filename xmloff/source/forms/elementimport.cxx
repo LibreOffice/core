@@ -754,9 +754,9 @@ namespace xmloff
 
         static const sal_Char* pValueAttributeName = OAttributeMetaData::getCommonControlAttributeName(CCAFlags::Value);
         static const sal_Char* pCurrentValueAttributeName = OAttributeMetaData::getCommonControlAttributeName(CCAFlags::CurrentValue);
-        static const sal_Char* pMinValueAttributeName = OAttributeMetaData::getSpecialAttributeName(SCA_MIN_VALUE);
-        static const sal_Char* pMaxValueAttributeName = OAttributeMetaData::getSpecialAttributeName(SCA_MAX_VALUE);
-        static const sal_Char* pRepeatDelayAttributeName = OAttributeMetaData::getSpecialAttributeName( SCA_REPEAT_DELAY );
+        static const sal_Char* pMinValueAttributeName = OAttributeMetaData::getSpecialAttributeName(SCAFlags::MinValue);
+        static const sal_Char* pMaxValueAttributeName = OAttributeMetaData::getSpecialAttributeName(SCAFlags::MaxValue);
+        static const sal_Char* pRepeatDelayAttributeName = OAttributeMetaData::getSpecialAttributeName( SCAFlags::RepeatDelay );
 
         sal_Int32 nHandle = -1;
         if ( _rLocalName.equalsAscii( pValueAttributeName ) )
@@ -1211,7 +1211,7 @@ namespace xmloff
 
     bool OPasswordImport::handleAttribute(sal_uInt16 _nNamespaceKey, const OUString& _rLocalName, const OUString& _rValue)
     {
-        static const char * s_sEchoCharAttributeName = OAttributeMetaData::getSpecialAttributeName(SCA_ECHO_CHAR);
+        static const char * s_sEchoCharAttributeName = OAttributeMetaData::getSpecialAttributeName(SCAFlags::EchoChar);
         if (_rLocalName.equalsAscii(s_sEchoCharAttributeName))
         {
             // need a special handling for the EchoChar property
@@ -1333,7 +1333,7 @@ namespace xmloff
 
     bool OValueRangeImport::handleAttribute( sal_uInt16 _nNamespaceKey, const OUString& _rLocalName, const OUString& _rValue )
     {
-        if ( _rLocalName.equalsAscii( OAttributeMetaData::getSpecialAttributeName( SCA_STEP_SIZE ) ) )
+        if ( _rLocalName.equalsAscii( OAttributeMetaData::getSpecialAttributeName( SCAFlags::StepSize ) ) )
         {
             ::sax::Converter::convertNumber( m_nStepSizeValue, _rValue );
             return true;
@@ -1577,7 +1577,7 @@ namespace xmloff
             // for the auto-completion
             // the attribute default does not equal the property default, so in case we did not read this attribute,
             // we have to simulate it
-            simulateDefaultedAttribute( OAttributeMetaData::getSpecialAttributeName( SCA_AUTOMATIC_COMPLETION ), PROPERTY_AUTOCOMPLETE, "false");
+            simulateDefaultedAttribute( OAttributeMetaData::getSpecialAttributeName( SCAFlags::AutoCompletion ), PROPERTY_AUTOCOMPLETE, "false");
 
             // same for the convert-empty-to-null attribute, which's default is different from the property default
             simulateDefaultedAttribute( OAttributeMetaData::getDatabaseAttributeName( DAFlags::ConvertEmpty ), PROPERTY_EMPTY_IS_NULL, "false");

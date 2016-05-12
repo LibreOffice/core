@@ -153,39 +153,40 @@ namespace xmloff
         return "";
     }
 
-    const sal_Char* OAttributeMetaData::getSpecialAttributeName(sal_Int32 _nId)
+    const sal_Char* OAttributeMetaData::getSpecialAttributeName(SCAFlags _nId)
     {
         switch (_nId)
         {
-            case SCA_ECHO_CHAR:             return "echo-char";
-            case SCA_MAX_VALUE:             return "max-value";
-            case SCA_MIN_VALUE:             return "min-value";
-            case SCA_VALIDATION:            return "validation";
-            case SCA_GROUP_NAME:            return "group-name";
-            case SCA_MULTI_LINE:            return "multi-line";
-            case SCA_AUTOMATIC_COMPLETION:  return "auto-complete";
-            case SCA_MULTIPLE:              return "multiple";
-            case SCA_DEFAULT_BUTTON:        return "default-button";
-            case SCA_CURRENT_STATE:         return "current-state";
-            case SCA_IS_TRISTATE:           return "is-tristate";
-            case SCA_STATE:                 return "state";
-            case SCA_COLUMN_STYLE_NAME:     return "text-style-name";
-            case SCA_STEP_SIZE:             return "step-size";
-            case SCA_PAGE_STEP_SIZE:        return "page-step-size";
-            case SCA_REPEAT_DELAY:          return "delay-for-repeat";
-            case SCA_TOGGLE:                return "toggle";
-            case SCA_FOCUS_ON_CLICK:        return "focus-on-click";
+            case SCAFlags::EchoChar:             return "echo-char";
+            case SCAFlags::MaxValue:             return "max-value";
+            case SCAFlags::MinValue:             return "min-value";
+            case SCAFlags::Validation:            return "validation";
+            case SCAFlags::GroupName:            return "group-name";
+            case SCAFlags::MultiLine:            return "multi-line";
+            case SCAFlags::AutoCompletion:  return "auto-complete";
+            case SCAFlags::Multiple:              return "multiple";
+            case SCAFlags::DefaultButton:        return "default-button";
+            case SCAFlags::CurrentState:         return "current-state";
+            case SCAFlags::IsTristate:           return "is-tristate";
+            case SCAFlags::State:                 return "state";
+            case SCAFlags::ColumnStyleName:     return "text-style-name";
+            case SCAFlags::StepSize:             return "step-size";
+            case SCAFlags::PageStepSize:        return "page-step-size";
+            case SCAFlags::RepeatDelay:          return "delay-for-repeat";
+            case SCAFlags::Toggle:                return "toggle";
+            case SCAFlags::FocusOnClick:        return "focus-on-click";
             default:
                 OSL_FAIL("OAttributeMetaData::getSpecialAttributeName: invalid id (maybe you or-ed two flags?)!");
         }
         return "";
     }
 
-    sal_uInt16 OAttributeMetaData::getSpecialAttributeNamespace(sal_Int32 _nId)
+    sal_uInt16 OAttributeMetaData::getSpecialAttributeNamespace(SCAFlags _nId)
     {
         switch( _nId )
         {
-            case SCA_GROUP_NAME:            return XML_NAMESPACE_FORMX;
+            case SCAFlags::GroupName:            return XML_NAMESPACE_FORMX;
+            default: break;
         }
         return XML_NAMESPACE_FORM;
     }
