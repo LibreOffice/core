@@ -2604,7 +2604,9 @@ void OReportController::Notify(SfxBroadcaster & /* _rBc */, SfxHint const & _rHi
         }
         lang::EventObject aEvent(*this);
         m_aSelectionListeners.forEach<view::XSelectionChangeListener>(
-            ::boost::bind(&view::XSelectionChangeListener::selectionChanged,_1,boost::cref(aEvent)));
+            [&aEvent] (uno::Reference<view::XSelectionChangeListener> const& xListener) {
+                return xListener->selectionChanged(aEvent);
+            });
 
     }
 }

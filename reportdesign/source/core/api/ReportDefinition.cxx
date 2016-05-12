@@ -124,8 +124,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
 
-#include <boost/bind.hpp>
-
 //  page styles
 #define SC_UNO_PAGE_LEFTBORDER      "LeftBorder"
 #define SC_UNO_PAGE_RIGHTBORDER     "RightBorder"
@@ -1081,7 +1079,8 @@ void SAL_CALL OReportDefinition::removeCloseListener( const uno::Reference< util
 }
 
 // XCloseable
-void SAL_CALL OReportDefinition::close( sal_Bool _bDeliverOwnership ) throw (util::CloseVetoException, uno::RuntimeException, std::exception)
+void SAL_CALL OReportDefinition::close(sal_Bool bDeliverOwnership)
+throw (util::CloseVetoException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
 
@@ -1091,7 +1090,9 @@ void SAL_CALL OReportDefinition::close( sal_Bool _bDeliverOwnership ) throw (uti
     lang::EventObject aEvt( static_cast< ::cppu::OWeakObject* >( this ) );
     aGuard.clear();
     m_pImpl->m_aCloseListener.forEach<util::XCloseListener>(
-        ::boost::bind(&util::XCloseListener::queryClosing,_1,boost::cref(aEvt),boost::cref(_bDeliverOwnership)));
+        [&aEvt, &bDeliverOwnership] (uno::Reference<util::XCloseListener> const& xListener) {
+            return xListener->queryClosing(aEvt, bDeliverOwnership);
+        });
     aGuard.reset();
 
 
@@ -1106,7 +1107,7 @@ void SAL_CALL OReportDefinition::close( sal_Bool _bDeliverOwnership ) throw (uti
             {
                 uno::Reference< util::XCloseable> xFrame( (*aIter)->getFrame(), uno::UNO_QUERY );
                 if ( xFrame.is() )
-                    xFrame->close( _bDeliverOwnership );
+                    xFrame->close( bDeliverOwnership );
             }
             catch (const util::CloseVetoException&) { throw; }
             catch (const uno::Exception&)
@@ -1477,20 +1478,24 @@ void SAL_CALL OReportDefinition::storeToStorage( const uno::Reference< embed::XS
         xStatusIndicator->end();
 }
 
-void SAL_CALL OReportDefinition::switchToStorage( const uno::Reference< embed::XStorage >& _xStorage ) throw (lang::IllegalArgumentException, io::IOException, uno::Exception, uno::RuntimeException, std::exception)
+void SAL_CALL OReportDefinition::switchToStorage(
+        const uno::Reference< embed::XStorage >& xStorage)
+throw (lang::IllegalArgumentException, io::IOException, uno::Exception, uno::RuntimeException, std::exception)
 {
-    if ( !_xStorage.is() )
+    if (!xStorage.is())
         throw lang::IllegalArgumentException(RPT_RESSTRING(RID_STR_ARGUMENT_IS_NULL,m_aProps->m_xContext->getServiceManager()),*this,1);
     {
         ::osl::MutexGuard aGuard(m_aMutex);
         ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
-        m_pImpl->m_xStorage = _xStorage;
+        m_pImpl->m_xStorage = xStorage;
         lcl_setModelReadOnly(m_pImpl->m_xStorage,m_pImpl->m_pReportModel);
         m_pImpl->m_pObjectContainer->SwitchPersistence(m_pImpl->m_xStorage);
     }
     // notify our container listeners
     m_pImpl->m_aStorageChangeListeners.forEach<document::XStorageChangeListener>(
-            ::boost::bind(&document::XStorageChangeListener::notifyStorageChange,_1,static_cast<OWeakObject*>(this),boost::cref(_xStorage)));
+        [this, &xStorage] (uno::Reference<document::XStorageChangeListener> const& xListener) {
+            return xListener->notifyStorageChange(static_cast<OWeakObject*>(this), xStorage);
+        });
 }
 
 uno::Reference< embed::XStorage > SAL_CALL OReportDefinition::getDocumentStorage(  ) throw (io::IOException, uno::Exception, uno::RuntimeException, std::exception)

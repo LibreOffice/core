@@ -56,8 +56,6 @@
 #include <osl/mutex.hxx>
 #include <sal/macros.h>
 
-#include <boost/bind.hpp>
-
 #include <iterator>
 
 #define DEFAULT_LINE_WIDTH 2
@@ -1200,8 +1198,10 @@ void ORptExport::exportAutoStyle(XPropertySet* _xProp,const Reference<XFormatted
         aValue.LineStyle = table::BorderLineStyle::NONE;
         uno::Any aEmpty;
         aEmpty <<= aValue;
-        ::std::for_each(aProps.begin(),aProps.end(),
-            ::boost::bind(&beans::XPropertySet::setPropertyValue,xBorderProp,_1,aEmpty));
+        for (auto const& it : aProps)
+        {
+            xBorderProp->setPropertyValue(it, aEmpty);
+        }
 
         ::std::vector< XMLPropertyState > aBorderStates(m_xCellStylesExportPropertySetMapper->Filter(xBorderProp));
         ::std::copy(aBorderStates.begin(),aBorderStates.end(),::std::back_inserter(aPropertyStates));

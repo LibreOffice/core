@@ -709,7 +709,10 @@ void GeometryHandler::implCreateListLikeControl(
     );
 
     out_Descriptor.Control = xListControl.get();
-    ::std::for_each( _aEntries.begin(), _aEntries.end(),::boost::bind( &inspection::XStringListControl::appendListEntry, xListControl,_1 ));
+    for (auto const& it : _aEntries)
+    {
+        xListControl->appendListEntry(it);
+    }
 }
 
 
@@ -812,10 +815,14 @@ inspection::LineDescriptor SAL_CALL GeometryHandler::describePropertyLine(const 
                 }
                 else
                 {
-                    ::std::for_each( m_aFieldNames.getConstArray(), m_aFieldNames.getConstArray() + m_aFieldNames.getLength(),
-                        ::boost::bind( &inspection::XStringListControl::appendListEntry, xListControl, _1 ) );
-                    ::std::for_each( m_aParamNames.getConstArray(), m_aParamNames.getConstArray() + m_aParamNames.getLength(),
-                        ::boost::bind( &inspection::XStringListControl::appendListEntry, xListControl, _1 ) );
+                    for (auto const& it : m_aFieldNames)
+                    {
+                        xListControl->appendListEntry(it);
+                    }
+                    for (auto const& it : m_aParamNames)
+                    {
+                        xListControl->appendListEntry(it);
+                    }
                 }
             }
             break;
@@ -1633,14 +1640,19 @@ void GeometryHandler::checkPosAndSize(  const awt::Point& _aNewPos,
     }
 }
 
-void GeometryHandler::impl_fillFormulaList_nothrow(::std::vector< OUString >& _out_rList) const
+void GeometryHandler::impl_fillFormulaList_nothrow(::std::vector< OUString >& out_rList) const
 {
     if ( m_nDataFieldType == FUNCTION )
-        ::std::transform(m_aDefaultFunctions.begin(),m_aDefaultFunctions.end(),::std::back_inserter(_out_rList),::boost::bind( &DefaultFunction::getName, _1 ));
+    {
+        for (auto const& it : m_aDefaultFunctions)
+        {
+            out_rList.push_back(it.getName());
+        }
+    }
     else if ( m_nDataFieldType == USER_DEF_FUNCTION )
         ::std::transform( m_aFunctionNames.begin(),
                           m_aFunctionNames.end(),
-                          ::std::back_inserter(_out_rList),
+                          ::std::back_inserter(out_rList),
                           ::o3tl::select1st< TFunctions::value_type >() );
 }
 
