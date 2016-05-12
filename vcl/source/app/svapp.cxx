@@ -1441,51 +1441,51 @@ vcl::Window* Application::GetDefDialogParent()
     // as DefDialogParent
 
     // current focus frame
-    vcl::Window *pWin = nullptr;
-    if( (pWin = pSVData->maWinData.mpFocusWin) != nullptr )
+    vcl::Window *pWin = pSVData->maWinData.mpFocusWin;
+    if (pWin)
     {
-        while( pWin->mpWindowImpl && pWin->mpWindowImpl->mpParent )
+        while (pWin->mpWindowImpl && pWin->mpWindowImpl->mpParent)
             pWin = pWin->mpWindowImpl->mpParent;
 
         // check for corrupted window hierarchy, #122232#, may be we now crash somewhere else
-        if( !pWin->mpWindowImpl )
+        if (!pWin->mpWindowImpl)
         {
             OSL_FAIL( "Window hierarchy corrupted!" );
             pSVData->maWinData.mpFocusWin = nullptr;   // avoid further access
             return nullptr;
         }
 
-        if( (pWin->mpWindowImpl->mnStyle & WB_INTROWIN) == 0 )
+        if ((pWin->mpWindowImpl->mnStyle & WB_INTROWIN) == 0)
         {
             return pWin->mpWindowImpl->mpFrameWindow->ImplGetWindow();
         }
     }
 
     // last active application frame
-    if( nullptr != (pWin = pSVData->maWinData.mpActiveApplicationFrame) )
+    pWin = pSVData->maWinData.mpActiveApplicationFrame;
+    if (pWin)
     {
         return pWin->mpWindowImpl->mpFrameWindow->ImplGetWindow();
     }
-    else
+
+    // first visible top window (may be totally wrong....)
+    pWin = pSVData->maWinData.mpFirstFrame;
+    while (pWin)
     {
-        // first visible top window (may be totally wrong....)
-        pWin = pSVData->maWinData.mpFirstFrame;
-        while( pWin )
+        if( pWin->ImplGetWindow()->IsTopWindow() &&
+            pWin->mpWindowImpl->mbReallyVisible &&
+            (pWin->mpWindowImpl->mnStyle & WB_INTROWIN) == 0
+        )
         {
-            if( pWin->ImplGetWindow()->IsTopWindow() &&
-                pWin->mpWindowImpl->mbReallyVisible &&
-                (pWin->mpWindowImpl->mnStyle & WB_INTROWIN) == 0
-            )
-            {
-                while( pWin->mpWindowImpl->mpParent )
-                    pWin = pWin->mpWindowImpl->mpParent;
-                return pWin->mpWindowImpl->mpFrameWindow->ImplGetWindow();
-            }
-            pWin = pWin->mpWindowImpl->mpFrameData->mpNextFrame;
+            while( pWin->mpWindowImpl->mpParent )
+                pWin = pWin->mpWindowImpl->mpParent;
+            return pWin->mpWindowImpl->mpFrameWindow->ImplGetWindow();
         }
-        // use the desktop
-        return nullptr;
+        pWin = pWin->mpWindowImpl->mpFrameData->mpNextFrame;
     }
+
+    // use the desktop
+    return nullptr;
 }
 
 Application::DialogCancelMode Application::GetDialogCancelMode()
