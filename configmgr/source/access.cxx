@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <cassert>
+#include <cstdlib>
 #include <vector>
 
 #include <com/sun/star/beans/Property.hpp>
@@ -1564,17 +1565,11 @@ std::vector< rtl::Reference< ChildAccess > > Access::getAllChildren() {
 void Access::checkValue(css::uno::Any const & value, Type type, bool nillable) {
     bool ok;
     switch (type) {
-    case TYPE_NIL:
-        assert(false);
-        // fall through (cannot happen)
     case TYPE_ERROR:
         ok = false;
         break;
     case TYPE_ANY:
         switch (getDynamicType(value)) {
-        case TYPE_ANY:
-            assert(false);
-            // fall through (cannot happen)
         case TYPE_ERROR:
             ok = false;
             break;
@@ -1584,11 +1579,15 @@ void Access::checkValue(css::uno::Any const & value, Type type, bool nillable) {
         default:
             ok = true;
             break;
+        case TYPE_ANY:
+            for (;;) std::abort(); // cannot happen
         }
         break;
     default:
         ok = value.hasValue() ? value.isExtractableTo(mapType(type)) : nillable;
         break;
+    case TYPE_NIL:
+        for (;;) std::abort(); // cannot happen
     }
     if (!ok) {
         throw css::lang::IllegalArgumentException(
