@@ -238,7 +238,7 @@ namespace xmloff
         ,m_nIncludeDatabase(DAFlags::NONE)
         ,m_nIncludeSpecial(0)
         ,m_nIncludeEvents(0)
-        ,m_nIncludeBindings(0)
+        ,m_nIncludeBindings(BAFlags::NONE)
         ,m_pOuterElement(nullptr)
     {
         OSL_ENSURE(m_xProps.is(), "OControlExport::OControlExport: invalid arguments!");
@@ -902,56 +902,56 @@ namespace xmloff
     void OControlExport::exportBindingAtributes()
     {
 #if OSL_DEBUG_LEVEL > 0
-        sal_Int32 nIncludeBinding = m_nIncludeBindings;
+        BAFlags nIncludeBinding = m_nIncludeBindings;
 #endif
 
-        if ( m_nIncludeBindings & BA_LINKED_CELL )
+        if ( m_nIncludeBindings & BAFlags::LinkedCell )
         {
-            exportCellBindingAttributes( ( m_nIncludeBindings & BA_LIST_LINKING_TYPE ) != 0 );
+            exportCellBindingAttributes( bool(m_nIncludeBindings & BAFlags::ListLinkingType) );
         #if OSL_DEBUG_LEVEL > 0
             //  reset the bit for later checking
-            nIncludeBinding = nIncludeBinding & ~( BA_LINKED_CELL | BA_LIST_LINKING_TYPE );
+            nIncludeBinding = nIncludeBinding & ~BAFlags( BAFlags::LinkedCell | BAFlags::ListLinkingType );
         #endif
         }
 
-        if ( m_nIncludeBindings & BA_LIST_CELL_RANGE )
+        if ( m_nIncludeBindings & BAFlags::ListCellRange )
         {
             exportCellListSourceRange();
         #if OSL_DEBUG_LEVEL > 0
             //  reset the bit for later checking
-            nIncludeBinding = nIncludeBinding & ~BA_LIST_CELL_RANGE;
+            nIncludeBinding = nIncludeBinding & ~BAFlags::ListCellRange;
         #endif
         }
 
-        if ( m_nIncludeBindings & BA_XFORMS_BIND )
+        if ( m_nIncludeBindings & BAFlags::XFormsBind )
         {
             exportXFormsBindAttributes();
         #if OSL_DEBUG_LEVEL > 0
             //  reset the bit for later checking
-            nIncludeBinding = nIncludeBinding & ~BA_XFORMS_BIND;
+            nIncludeBinding = nIncludeBinding & ~BAFlags::XFormsBind;
         #endif
         }
 
-        if ( m_nIncludeBindings & BA_XFORMS_LISTBIND )
+        if ( m_nIncludeBindings & BAFlags::XFormsListBind )
         {
             exportXFormsListAttributes();
         #if OSL_DEBUG_LEVEL > 0
             //  reset the bit for later checking
-            nIncludeBinding = nIncludeBinding & ~BA_XFORMS_LISTBIND;
+            nIncludeBinding = nIncludeBinding & ~BAFlags::XFormsListBind;
         #endif
         }
 
-        if ( m_nIncludeBindings & BA_XFORMS_SUBMISSION )
+        if ( m_nIncludeBindings & BAFlags::XFormsSubmission )
         {
             exportXFormsSubmissionAttributes();
         #if OSL_DEBUG_LEVEL > 0
             //  reset the bit for later checking
-            nIncludeBinding = nIncludeBinding & ~BA_XFORMS_SUBMISSION;
+            nIncludeBinding = nIncludeBinding & ~BAFlags::XFormsSubmission;
         #endif
         }
 
         #if OSL_DEBUG_LEVEL > 0
-        OSL_ENSURE( 0 == nIncludeBinding,
+        OSL_ENSURE( BAFlags::NONE == nIncludeBinding,
             "OControlExport::exportBindingAtributes: forgot some flags!");
             // in the debug version, we should have removed every bit we handled from the mask, so it should
             // be 0 now ...
@@ -1441,7 +1441,7 @@ namespace xmloff
     void OControlExport::examine()
     {
         OSL_ENSURE( ( m_nIncludeCommon == CCAFlags::NONE ) && ( m_nIncludeSpecial == 0 ) && ( m_nIncludeDatabase == DAFlags::NONE )
-                 && ( m_nIncludeEvents == 0 ) && ( m_nIncludeBindings == 0),
+                 && ( m_nIncludeEvents == 0 ) && ( m_nIncludeBindings == BAFlags::NONE),
                  "OControlExport::examine: called me twice? Not initialized?" );
 
         // get the class id to decide which kind of element we need in the XML stream
@@ -1735,35 +1735,35 @@ namespace xmloff
             {
                 if ( FormCellBindingHelper::isCellBinding( aHelper.getCurrentBinding( ) ) )
                 {
-                    m_nIncludeBindings |= BA_LINKED_CELL;
+                    m_nIncludeBindings |= BAFlags::LinkedCell;
                     if ( m_nClassId == FormComponentType::LISTBOX )
-                        m_nIncludeBindings |= BA_LIST_LINKING_TYPE;
+                        m_nIncludeBindings |= BAFlags::ListLinkingType;
                 }
             }
 
             // is it a list-like control which uses a calc cell range as list source?
             {
                 if ( FormCellBindingHelper::isCellRangeListSource( aHelper.getCurrentListSource( ) ) )
-                    m_nIncludeBindings |= BA_LIST_CELL_RANGE;
+                    m_nIncludeBindings |= BAFlags::ListCellRange;
             }
         }
 
         // is control bound to XForms?
         if( !getXFormsBindName( m_xProps ).isEmpty() )
         {
-            m_nIncludeBindings |= BA_XFORMS_BIND;
+            m_nIncludeBindings |= BAFlags::XFormsBind;
         }
 
         // is (list-)control bound to XForms list?
         if( !getXFormsListBindName( m_xProps ).isEmpty() )
         {
-            m_nIncludeBindings |= BA_XFORMS_LISTBIND;
+            m_nIncludeBindings |= BAFlags::XFormsListBind;
         }
 
         // does the control have an XForms submission?
         if( !getXFormsSubmissionName( m_xProps ).isEmpty() )
         {
-            m_nIncludeBindings |= BA_XFORMS_SUBMISSION;
+            m_nIncludeBindings |= BAFlags::XFormsSubmission;
         }
     }
 
@@ -1777,8 +1777,8 @@ namespace xmloff
             if ( xBinding.is() )
             {
                 AddAttribute(
-                    OAttributeMetaData::getBindingAttributeNamespace( BA_LINKED_CELL ),
-                    OAttributeMetaData::getBindingAttributeName( BA_LINKED_CELL ),
+                    OAttributeMetaData::getBindingAttributeNamespace( BAFlags::LinkedCell ),
+                    OAttributeMetaData::getBindingAttributeName( BAFlags::LinkedCell ),
                     aHelper.getStringAddressFromCellBinding( xBinding )
                 );
 
@@ -1794,8 +1794,8 @@ namespace xmloff
                     );
 
                     AddAttribute(
-                        OAttributeMetaData::getBindingAttributeNamespace( BA_LIST_LINKING_TYPE ),
-                        OAttributeMetaData::getBindingAttributeName( BA_LIST_LINKING_TYPE ),
+                        OAttributeMetaData::getBindingAttributeNamespace( BAFlags::ListLinkingType ),
+                        OAttributeMetaData::getBindingAttributeName( BAFlags::ListLinkingType ),
                         sBuffer.makeStringAndClear()
                     );
                 }
@@ -1838,8 +1838,8 @@ namespace xmloff
                 FormCellBindingHelper aHelper( m_xProps, nullptr );
 
                 AddAttribute(
-                    OAttributeMetaData::getBindingAttributeNamespace( BA_LIST_CELL_RANGE ),
-                    OAttributeMetaData::getBindingAttributeName( BA_LIST_CELL_RANGE ),
+                    OAttributeMetaData::getBindingAttributeNamespace( BAFlags::ListCellRange ),
+                    OAttributeMetaData::getBindingAttributeName( BAFlags::ListCellRange ),
                     aHelper.getStringAddressFromCellListSource( xSource )
                 );
             }

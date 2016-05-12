@@ -140,13 +140,13 @@ namespace xmloff
         return "";
     }
 
-    const sal_Char* OAttributeMetaData::getBindingAttributeName(sal_Int32 _nId)
+    const sal_Char* OAttributeMetaData::getBindingAttributeName(BAFlags _nId)
     {
         switch (_nId)
         {
-            case BA_LINKED_CELL:       return "linked-cell";
-            case BA_LIST_LINKING_TYPE: return "list-linkage-type";
-            case BA_LIST_CELL_RANGE:   return "source-cell-range";
+            case BAFlags::LinkedCell:       return "linked-cell";
+            case BAFlags::ListLinkingType: return "list-linkage-type";
+            case BAFlags::ListCellRange:   return "source-cell-range";
             default:
                 OSL_FAIL("OAttributeMetaData::getBindingAttributeName: invalid id (maybe you or-ed two flags?)!");
         }

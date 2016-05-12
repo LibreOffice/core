@@ -701,7 +701,7 @@ namespace xmloff
 
     bool OControlImport::handleAttribute(sal_uInt16 _nNamespaceKey, const OUString& _rLocalName, const OUString& _rValue)
     {
-        static const sal_Char* pLinkedCellAttributeName = OAttributeMetaData::getBindingAttributeName(BA_LINKED_CELL);
+        static const sal_Char* pLinkedCellAttributeName = OAttributeMetaData::getBindingAttributeName(BAFlags::LinkedCell);
 
         if (IsXMLToken(_rLocalName, XML_ID))
         {   // it's the control id
@@ -1669,13 +1669,13 @@ namespace xmloff
             return true;
         }
 
-        if ( _rLocalName.equalsAscii( OAttributeMetaData::getBindingAttributeName( BA_LIST_CELL_RANGE ) ) )
+        if ( _rLocalName.equalsAscii( OAttributeMetaData::getBindingAttributeName( BAFlags::ListCellRange ) ) )
         {
             m_sCellListSource = _rValue;
             return true;
         }
 
-        if ( _rLocalName.equalsAscii( OAttributeMetaData::getBindingAttributeName( BA_LIST_LINKING_TYPE ) ) )
+        if ( _rLocalName.equalsAscii( OAttributeMetaData::getBindingAttributeName( BAFlags::ListLinkingType ) ) )
         {
             sal_Int16 nLinkageType = 0;
             PropertyConversion::convertString(

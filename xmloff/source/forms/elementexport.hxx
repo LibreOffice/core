@@ -98,7 +98,7 @@ namespace xmloff
         DAFlags                 m_nIncludeDatabase;     // common database attributes to include
         sal_Int32               m_nIncludeSpecial;      // special attributes to include
         sal_Int32               m_nIncludeEvents;       // events to include
-        sal_Int32               m_nIncludeBindings;     // binding attributes to include
+        BAFlags                 m_nIncludeBindings;     // binding attributes to include
 
         SvXMLElementExport*     m_pOuterElement;        // XML element doing the concrete startElement etc. for the outer element
 

@@ -79,16 +79,23 @@ namespace o3tl {
     template<> struct typed_flags<DAFlags> : is_typed_flags<DAFlags, 0x003f> {};
 }
 
+    // flags for binding related control attributes
+enum class BAFlags {
+    NONE                  = 0x0000,
+    LinkedCell            = 0x0001,
+    ListLinkingType       = 0x0002,
+    ListCellRange         = 0x0004,
+    XFormsBind            = 0x0008,
+    XFormsListBind        = 0x0010,
+    XFormsSubmission      = 0x0020
+};
+namespace o3tl {
+    template<> struct typed_flags<BAFlags> : is_typed_flags<BAFlags, 0x003f> {};
+}
+
+
 namespace xmloff
 {
-
-    // flags for binding related control attributes
-    #define BA_LINKED_CELL              0x00000001
-    #define BA_LIST_LINKING_TYPE        0x00000002
-    #define BA_LIST_CELL_RANGE          0x00000004
-    #define BA_XFORMS_BIND              0x00000008
-    #define BA_XFORMS_LISTBIND          0x00000010
-    #define BA_XFORMS_SUBMISSION        0x00000020
 
     // flags for event attributes
     #define EA_CONTROL_EVENTS           0x00000001
@@ -211,13 +218,13 @@ namespace xmloff
             @param _nId
                 the id of the attribute. Has to be one of the BA_* constants.
         */
-        static const sal_Char* getBindingAttributeName(sal_Int32 _nId);
+        static const sal_Char* getBindingAttributeName(BAFlags _nId);
 
         /** calculates the xml namespace key to use for a binding attribute.
             @param _nId
                 the id of the attribute. Has to be one of the BA_* constants.
         */
-        static inline sal_uInt16 getBindingAttributeNamespace(sal_Int32 )
+        static inline sal_uInt16 getBindingAttributeNamespace(BAFlags )
         {
             // nothing special here
             return XML_NAMESPACE_FORM;
