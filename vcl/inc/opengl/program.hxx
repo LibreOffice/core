@@ -51,9 +51,12 @@ public:
     OpenGLProgram();
     ~OpenGLProgram();
 
+    GLuint Id() { return mnId; }
+
     bool Load( const OUString& rVertexShader, const OUString& rFragmentShader,
                const rtl::OString& preamble = "", const rtl::OString& rDigest = "" );
     bool Use();
+    void Reuse();
     bool Clean();
 
     void SetVertices( const GLvoid* pData );
@@ -80,6 +83,8 @@ public:
     void ApplyMatrix(float fWidth, float fHeight, float fPixelOffset = 0.0f);
 
     bool DrawTexture( const OpenGLTexture& rTexture );
+
+    void DrawArrays(GLenum GLenum, std::vector<GLfloat>& aVertices);
 
 protected:
     void SetVertexAttrib( GLuint& rAttrib, const OString& rName, const GLvoid* pData, GLint nSize = 2 );

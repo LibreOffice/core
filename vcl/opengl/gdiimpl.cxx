@@ -628,14 +628,12 @@ void OpenGLSalGraphicsImpl::DrawPoint( long nX, long nY )
 {
     OpenGLZone aZone;
 
-    GLfloat pPoint[2];
-
-    pPoint[0] = GLfloat(nX);
-    pPoint[1] = GLfloat(nY);
+    std::vector<GLfloat> pPoint {
+        GLfloat(nX), GLfloat(nY)
+    };
 
     ApplyProgramMatrices(0.5f);
-    mpProgram->SetVertices( pPoint );
-    glDrawArrays( GL_POINTS, 0, 1 );
+    mpProgram->DrawArrays(GL_POINTS, pPoint);
     CHECK_GL_ERROR();
 }
 
@@ -643,16 +641,13 @@ void OpenGLSalGraphicsImpl::DrawLine( double nX1, double nY1, double nX2, double
 {
     OpenGLZone aZone;
 
-    GLfloat pPoints[4];
-
-    pPoints[0] = GLfloat(nX1);
-    pPoints[1] = GLfloat(nY1);
-    pPoints[2] = GLfloat(nX2);
-    pPoints[3] = GLfloat(nY2);
+    std::vector<GLfloat> pPoint {
+        GLfloat(nX1), GLfloat(nY1),
+        GLfloat(nX2), GLfloat(nY2)
+    };
 
     ApplyProgramMatrices(0.5f);
-    mpProgram->SetVertices( pPoints );
-    glDrawArrays( GL_LINES, 0, 2 );
+    mpProgram->DrawArrays(GL_LINES, pPoint);
     CHECK_GL_ERROR();
 }
 
@@ -722,8 +717,7 @@ void OpenGLSalGraphicsImpl::DrawLineCap(float x1, float y1, float x2, float y2, 
 
     ApplyProgramMatrices(0.0f);
     mpProgram->SetExtrusionVectors(aExtrusionVectors.data());
-    mpProgram->SetVertices(aVertices.data());
-    glDrawArrays(GL_TRIANGLE_STRIP, 0, aVertices.size() / 2);
+    mpProgram->DrawArrays(GL_TRIANGLE_STRIP, aVertices);
 
     CHECK_GL_ERROR();
 }
@@ -749,8 +743,7 @@ void OpenGLSalGraphicsImpl::DrawLineSegment(float x1, float y1, float x2, float 
 
     ApplyProgramMatrices(0.0f);
     mpProgram->SetExtrusionVectors(aExtrusionVectors.data());
-    mpProgram->SetVertices(aPoints.data());
-    glDrawArrays(GL_TRIANGLE_STRIP, 0, aPoints.size() / 2);
+    mpProgram->DrawArrays(GL_TRIANGLE_STRIP, aPoints);
 
     CHECK_GL_ERROR();
 }
@@ -944,8 +937,7 @@ void OpenGLSalGraphicsImpl::DrawPolyLine(const basegfx::B2DPolygon& rPolygon, fl
 
         ApplyProgramMatrices(0.0f);
         mpProgram->SetExtrusionVectors(aExtrusionVectors.data());
-        mpProgram->SetVertices(aVertices.data());
-        glDrawArrays(GL_TRIANGLE_STRIP, 0, aVertices.size() / 2);
+        mpProgram->DrawArrays(GL_TRIANGLE_STRIP, aVertices);
 
         CHECK_GL_ERROR();
     }
@@ -1109,7 +1101,7 @@ void OpenGLSalGraphicsImpl::ImplDrawLineAA( double nX1, double nY1, double nX2, 
         tx = ty = 0;
     }
 
-    GLfloat vertices[]=
+    std::vector<GLfloat> vertices
     {
         GLfloat(x1-tx-Rx), GLfloat(y1-ty-Ry), //fading edge1
         GLfloat(x2-tx-Rx), GLfloat(y2-ty-Ry),
@@ -1124,8 +1116,7 @@ void OpenGLSalGraphicsImpl::ImplDrawLineAA( double nX1, double nY1, double nX2, 
     ApplyProgramMatrices(0.0f);
     GLfloat aTexCoord[16] = { 0, 0, 1, 0, 2, 1, 3, 1, 4, 1, 5, 1, 6, 0, 7, 0 };
     mpProgram->SetTextureCoord( aTexCoord );
-    mpProgram->SetVertices( vertices );
-    glDrawArrays(GL_TRIANGLE_STRIP, 0, 8);
+    mpProgram->DrawArrays(GL_TRIANGLE_STRIP, vertices);
     CHECK_GL_ERROR();
 }
 
@@ -1160,8 +1151,7 @@ void OpenGLSalGraphicsImpl::DrawConvexPolygon( sal_uInt32 nPoints, const SalPoin
     }
 
     ApplyProgramMatrices();
-    mpProgram->SetVertices( &aVertices[0] );
-    glDrawArrays( GL_TRIANGLE_FAN, 0, nPoints );
+    mpProgram->DrawArrays(GL_TRIANGLE_FAN, aVertices);
     CHECK_GL_ERROR();
 
     if( !blockAA && mrParent.getAntiAliasB2DDraw())
@@ -1204,8 +1194,7 @@ void OpenGLSalGraphicsImpl::DrawConvexPolygon( const tools::Polygon& rPolygon, b
     }
 
     ApplyProgramMatrices();
-    mpProgram->SetVertices( &aVertices[0] );
-    glDrawArrays( GL_TRIANGLE_FAN, 0, nPoints );
+    mpProgram->DrawArrays(GL_TRIANGLE_FAN, aVertices);
     CHECK_GL_ERROR();
 
     if( !blockAA && mrParent.getAntiAliasB2DDraw())
@@ -1255,8 +1244,7 @@ void OpenGLSalGraphicsImpl::DrawTrapezoid( const basegfx::B2DTrapezoid& trapezoi
     }
 
     ApplyProgramMatrices();
-    mpProgram->SetVertices( &aVertices[0] );
-    glDrawArrays( GL_TRIANGLE_FAN, 0, nPoints );
+    mpProgram->DrawArrays(GL_TRIANGLE_FAN, aVertices);
     CHECK_GL_ERROR();
 
     if( !blockAA && mrParent.getAntiAliasB2DDraw())
@@ -1369,8 +1357,7 @@ void OpenGLSalGraphicsImpl::DrawRegionBand( const RegionBand& rRegion )
 #undef ADD_VERTICE
 
     ApplyProgramMatrices();
-    mpProgram->SetVertices( &aVertices[0] );
-    glDrawArrays( GL_TRIANGLES, 0, aVertices.size() / 2 );
+    mpProgram->DrawArrays(GL_TRIANGLES, aVertices);
     CHECK_GL_ERROR();
 }
 
@@ -1449,9 +1436,13 @@ void OpenGLSalGraphicsImpl::DrawTransformedTexture(
 {
     OpenGLZone aZone;
 
-    GLfloat aVertices[8] = {
-        0, (float) rTexture.GetHeight(), 0, 0,
-        (float) rTexture.GetWidth(), 0, (float) rTexture.GetWidth(), (float) rTexture.GetHeight() };
+    std::vector<GLfloat> aVertices = {
+        0, GLfloat(rTexture.GetHeight()),
+        0, 0,
+        GLfloat(rTexture.GetWidth()), 0,
+        GLfloat(rTexture.GetWidth()), GLfloat(rTexture.GetHeight())
+    };
+
     GLfloat aTexCoord[8];
 
     const long nDestWidth = basegfx::fround(basegfx::B2DVector(rX - rNull).getLength());
@@ -1587,8 +1578,7 @@ void OpenGLSalGraphicsImpl::DrawTransformedTexture(
     mpProgram->SetTexture("sampler", aInTexture);
     aInTexture.SetFilter(GL_LINEAR);
     mpProgram->SetTextureCoord( aTexCoord );
-    mpProgram->SetVertices( aVertices );
-    glDrawArrays( GL_TRIANGLE_FAN, 0, 4 );
+    mpProgram->DrawArrays(GL_TRIANGLE_FAN, aVertices);
 
     CHECK_GL_ERROR();
     mpProgram->Clean();
@@ -1730,8 +1720,7 @@ void OpenGLSalGraphicsImpl::FlushDeferredDrawing()
             TextureDrawParameters& rParameters = rColorTwoRectPair.second;
             ApplyProgramMatrices();
             mpProgram->SetTextureCoord(rParameters.maTextureCoords.data());
-            mpProgram->SetVertices(rParameters.maVertices.data());
-            glDrawArrays(GL_TRIANGLES, 0, rParameters.getNumberOfVertices());
+            mpProgram->DrawArrays(GL_TRIANGLES, rParameters.maVertices);
         }
     }
 #endif
@@ -1751,8 +1740,7 @@ void OpenGLSalGraphicsImpl::FlushDeferredDrawing()
             TextureDrawParameters& rParameters = rColorTwoRectPair.second;
             ApplyProgramMatrices();
             mpProgram->SetTextureCoord(rParameters.maTextureCoords.data());
-            mpProgram->SetVertices(rParameters.maVertices.data());
-            glDrawArrays(GL_TRIANGLES, 0, rParameters.getNumberOfVertices());
+            mpProgram->DrawArrays(GL_TRIANGLES, rParameters.maVertices);
         }
     }
     mpProgram->Clean();
@@ -1920,20 +1908,15 @@ void OpenGLSalGraphicsImpl::drawRect( long nX, long nY, long nWidth, long nHeigh
         GLfloat fX2(nX + nWidth - 1);
         GLfloat fY2(nY + nHeight - 1);
 
-        GLfloat pPoints[8];
-
-        pPoints[0] = fX1;
-        pPoints[1] = fY1;
-        pPoints[2] = fX2;
-        pPoints[3] = fY1;
-        pPoints[4] = fX2;
-        pPoints[5] = fY2;
-        pPoints[6] = fX1;
-        pPoints[7] = fY2;
+        std::vector<GLfloat> pPoints {
+            fX1, fY1,
+            fX2, fY1,
+            fX2, fY2,
+            fX1, fY2
+        };
 
         ApplyProgramMatrices(0.5f);
-        mpProgram->SetVertices(pPoints);
-        glDrawArrays(GL_LINE_LOOP, 0, 4);
+        mpProgram->DrawArrays(GL_LINE_LOOP, pPoints);
         CHECK_GL_ERROR();
     }
 
@@ -2294,13 +2277,15 @@ bool OpenGLSalGraphicsImpl::blendBitmap(
 
     VCL_GL_INFO( "::blendBitmap" );
     PreDraw();
-    glEnable( GL_BLEND );
-    CHECK_GL_ERROR();
-    glBlendFunc( GL_ZERO, GL_SRC_COLOR );
-    CHECK_GL_ERROR();
-    DrawTexture( rTexture, rPosAry );
-    glDisable( GL_BLEND );
-    CHECK_GL_ERROR();
+
+    if (!UseProgram("textureVertexShader", "textureFragmentShader"))
+        return true;
+
+    mpProgram->SetBlendMode(GL_ZERO, GL_SRC_COLOR);
+    mpProgram->SetTexture("sampler", rTexture);
+    DrawTextureRect(rTexture, rPosAry, false);
+    mpProgram->Clean();
+
     PostDraw();
     return true;
 }
@@ -2593,14 +2578,15 @@ void OpenGLSalGraphicsImpl::doFlush()
 
         GLfloat fWidth( maOffscreenTex.GetWidth() );
         GLfloat fHeight( maOffscreenTex.GetHeight() );
-        const GLfloat aVertices[] = { 0, fHeight,
-                                      0, 0,
-                                      fWidth, 0,
-                                      fWidth, fHeight };
+        std::vector<GLfloat> aVertices {
+            0, fHeight,
+            0, 0,
+            fWidth, 0,
+            fWidth, fHeight
+        };
 
         pProgram->ApplyMatrix(GetWidth(), GetHeight(), 0.0);
-        pProgram->SetVertices( &aVertices[0] );
-        glDrawArrays( GL_TRIANGLE_FAN, 0, 4 );
+        pProgram->DrawArrays(GL_TRIANGLE_FAN, aVertices);
 
         pProgram->Clean();
 
