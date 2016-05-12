@@ -5,7 +5,7 @@
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
- *
+*
  * This file incorporates work covered by the following license notice:
  *
  *   Licensed to the Apache Software Foundation (ASF) under one or more
@@ -21,6 +21,7 @@
 
 #include <algorithm>
 #include <cassert>
+#include <cstdlib>
 #include <map>
 #include <set>
 #include <vector>
@@ -870,8 +871,7 @@ void CppuType::dumpCppuGetType(
         }
         break;
     case codemaker::UnoType::Sort::Typedef:
-        assert(false); // this cannot happen
-        // fall through
+        for (;;) std::abort(); // this cannot happen
     default:
         throw CannotDumpException(
             "unexpected entity \"" + name

@@ -21,6 +21,7 @@
 
 #include <algorithm>
 #include <cassert>
+#include <cstdlib>
 #include <list>
 #include <map>
 #include <memory>
@@ -937,8 +938,7 @@ sal_uInt16 addFieldInit(
             }
         case codemaker::UnoType::Sort::Sequence:
         case codemaker::UnoType::Sort::Typedef:
-            assert(false); // this cannot happen
-            // fall through
+            for (;;) std::abort(); // this cannot happen
         default:
             throw CannotDumpException(
                 "unexpected entity \"" + fieldType
@@ -1241,8 +1241,7 @@ sal_uInt16 addLoadLocal(
                 break;
             case codemaker::UnoType::Sort::Sequence:
             case codemaker::UnoType::Sort::Typedef:
-                assert(false); // this cannot happen
-                // fall through
+                for (;;) std::abort(); // this cannot happen
             default:
                 throw CannotDumpException(
                     "unexpected entity \"" + type
@@ -1280,8 +1279,7 @@ sal_uInt16 addLoadLocal(
                     break;
                 case codemaker::UnoType::Sort::Sequence:
                 case codemaker::UnoType::Sort::Typedef:
-                    assert(false); // this cannot happen
-                    // fall through
+                    for (;;) std::abort(); // this cannot happen
                 default:
                     throw CannotDumpException(
                         "unexpected entity \"" + type
