@@ -10,9 +10,14 @@
 #ifndef INCLUDED_OOX_OLE_AXBINARYWRITER_HXX
 #define INCLUDED_OOX_OLE_AXBINARYWRITER_HXX
 
+#include <cstddef>
 #include <utility>
+
 #include <oox/helper/binaryoutputstream.hxx>
+#include <oox/helper/binarystreambase.hxx>
 #include <oox/helper/refvector.hxx>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
 
 namespace oox {
 namespace ole {

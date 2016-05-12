@@ -20,10 +20,14 @@
 #ifndef INCLUDED_OOX_OLE_AXFONTDATA_HXX
 #define INCLUDED_OOX_OLE_AXFONTDATA_HXX
 
-#include <oox/helper/binaryinputstream.hxx>
-#include <oox/helper/binaryoutputstream.hxx>
-#include <oox/helper/refvector.hxx>
 #include <oox/dllapi.h>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
+
+namespace oox {
+    class BinaryInputStream;
+    class BinaryOutputStream;
+}
 
 namespace oox {
 namespace ole {

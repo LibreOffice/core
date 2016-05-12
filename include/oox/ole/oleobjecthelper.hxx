@@ -20,8 +20,11 @@
 #ifndef INCLUDED_OOX_OLE_OLEOBJECTHELPER_HXX
 #define INCLUDED_OOX_OLE_OLEOBJECTHELPER_HXX
 
+#include <com/sun/star/uno/Reference.hxx>
 #include <oox/dllapi.h>
 #include <oox/helper/binarystreambase.hxx>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
 
 namespace com { namespace sun { namespace star {
     namespace awt { struct Size; }

@@ -20,27 +20,34 @@
 #ifndef INCLUDED_OOX_OLE_VBAPROJECT_HXX
 #define INCLUDED_OOX_OLE_VBAPROJECT_HXX
 
+#include <functional>
 #include <map>
-#include <com/sun/star/uno/XInterface.hpp>
-#include <oox/helper/refvector.hxx>
-#include <oox/helper/storagebase.hxx>
+
+#include <com/sun/star/uno/Reference.hxx>
 #include <oox/dllapi.h>
-#include <oox/ole/vbamodule.hxx>
+#include <oox/helper/refmap.hxx>
+#include <oox/helper/refvector.hxx>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
 
 namespace com { namespace sun { namespace star {
     namespace container { class XNameContainer; }
-    namespace document { class XEventsSupplier; }
     namespace frame { class XModel; }
     namespace script { class XLibraryContainer; }
     namespace script { namespace vba { class XVBAMacroResolver; } }
     namespace uno { class XComponentContext; }
+    namespace uno { class XInterface; }
 } } }
 
-namespace oox { class GraphicHelper; }
+namespace oox {
+    class GraphicHelper;
+    class StorageBase;
+}
 
 namespace oox {
 namespace ole {
 
+class VbaModule;
 
 class OOX_DLLPUBLIC VbaFilterConfig
 {

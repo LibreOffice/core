@@ -20,10 +20,17 @@
 #ifndef INCLUDED_OOX_OLE_AXBINARYREADER_HXX
 #define INCLUDED_OOX_OLE_AXBINARYREADER_HXX
 
+#include <cstddef>
 #include <utility>
+#include <vector>
+
 #include <oox/helper/binaryinputstream.hxx>
+#include <oox/helper/binarystreambase.hxx>
 #include <oox/helper/refvector.hxx>
-#include <oox/ole/axfontdata.hxx>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
+
+namespace oox { namespace ole { struct AxFontData; } }
 
 namespace oox {
 namespace ole {

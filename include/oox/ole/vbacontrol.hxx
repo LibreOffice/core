@@ -20,15 +20,29 @@
 #ifndef INCLUDED_OOX_OLE_VBACONTROL_HXX
 #define INCLUDED_OOX_OLE_VBACONTROL_HXX
 
+#include <memory>
+
+#include <com/sun/star/uno/Reference.hxx>
+#include <oox/helper/refvector.hxx>
+#include <oox/ole/axbinaryreader.hxx>
 #include <oox/ole/axcontrol.hxx>
-#include <com/sun/star/frame/XModel.hpp>
+#include <rtl/textenc.h>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
 
 namespace com { namespace sun { namespace star {
+    namespace awt { class XControlModel; }
     namespace container { class XNameContainer; }
+    namespace frame { class XModel; }
     namespace uno { class XComponentContext; }
 } } }
 
-namespace oox { class StorageBase; }
+namespace oox {
+    class BinaryInputStream;
+    class GraphicHelper;
+    class PropertyMap;
+    class StorageBase;
+}
 
 namespace oox {
 namespace ole {
