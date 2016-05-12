@@ -85,9 +85,6 @@ ScAreaLink::~ScAreaLink()
 void ScAreaLink::Edit(vcl::Window* pParent, const Link<SvBaseLink&,void>& /* rEndEditHdl */ )
 {
     //  use own dialog instead of SvBaseLink::Edit...
-    //  DefModalDialogParent setzen, weil evtl. aus der DocShell beim ConvertFrom
-    //  ein Optionen-Dialog kommt...
-
     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 

@@ -80,16 +80,7 @@ void ScLinkedAreaDlg::dispose()
 
 short ScLinkedAreaDlg::Execute()
 {
-    // set parent for file dialog or filter options
-
-    vcl::Window* pOldDefParent = Application::GetDefDialogParent();
-    Application::SetDefDialogParent( this );
-
-    short nRet = ModalDialog::Execute();
-
-    Application::SetDefDialogParent( pOldDefParent );
-
-    return nRet;
+    return ModalDialog::Execute();
 }
 
 #define FILTERNAME_HTML  "HTML (StarCalc)"

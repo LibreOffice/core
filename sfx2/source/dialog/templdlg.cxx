@@ -1861,13 +1861,6 @@ void SfxCommonTemplateDialog_Impl::NewHdl()
 {
     if ( nActFamily != 0xffff && (pTreeBox || aFmtLb->GetSelectionCount() <= 1))
     {
-        vcl::Window* pTmp;
-        pTmp = Application::GetDefDialogParent();
-        if ( dynamic_cast< const SfxTemplateDialog_Impl* >(this) !=  nullptr )
-            Application::SetDefDialogParent( pWindow->GetParent() );
-        else
-            Application::SetDefDialogParent( pWindow );
-
         const SfxStyleFamilyItem *pItem = GetFamilyItem_Impl();
         const SfxStyleFamily eFam=pItem->GetFamily();
         sal_uInt16 nMask;
@@ -1886,8 +1879,6 @@ void SfxCommonTemplateDialog_Impl::NewHdl()
                      "", GetSelectedEntry(),
                      ( sal_uInt16 )GetFamilyItem_Impl()->GetFamily(),
                      nMask);
-
-        Application::SetDefDialogParent( pTmp );
     }
 }
 
@@ -1899,18 +1890,10 @@ void SfxCommonTemplateDialog_Impl::EditHdl()
         sal_uInt16 nFilter = nActFilter;
         OUString aTemplName(GetSelectedEntry());
         GetSelectedStyle(); // -Wall required??
-        vcl::Window* pTmp;
-        //DefModalDialogParent set for modality of the following dialogs
-        pTmp = Application::GetDefDialogParent();
-        if ( dynamic_cast< const SfxTemplateDialog_Impl* >(this) !=  nullptr )
-            Application::SetDefDialogParent( pWindow->GetParent() );
-        else
-            Application::SetDefDialogParent( pWindow );
         if ( Execute_Impl( SID_STYLE_EDIT, aTemplName, OUString(),
                           (sal_uInt16)GetFamilyItem_Impl()->GetFamily(), 0, &nFilter ) )
         {
         }
-        Application::SetDefDialogParent( pTmp );
     }
 }
 

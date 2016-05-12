@@ -308,7 +308,6 @@ SwEditRegionDlg::SwEditRegionDlg( vcl::Window* pParent, SwWrtShell& rWrtSh )
     , aImageIL(SW_RES(IL_SECTION_BITMAPS))
     , rSh(rWrtSh)
     , m_pDocInserter(nullptr)
-    , m_pOldDefDlgParent(nullptr)
     , bDontCheckPasswd(true)
 {
     get(m_pCurName, "curname");
@@ -545,7 +544,6 @@ void SwEditRegionDlg::dispose()
     m_pOK.clear();
     m_pOptionsPB.clear();
     m_pDismiss.clear();
-    m_pOldDefDlgParent.clear();
     SfxModalDialog::dispose();
 }
 
@@ -1024,8 +1022,6 @@ IMPL_LINK_NOARG_TYPED(SwEditRegionDlg, FileSearchHdl, Button*, void)
 {
     if(!CheckPasswd())
         return;
-    m_pOldDefDlgParent = Application::GetDefDialogParent();
-    Application::SetDefDialogParent( this );
     delete m_pDocInserter;
     m_pDocInserter =
         new ::sfx2::DocumentInserter( "swriter" );
@@ -1342,8 +1338,6 @@ IMPL_LINK_TYPED( SwEditRegionDlg, DlgClosedHdl, sfx2::FileDialogHelper *, _pFile
         pSectRepr->GetSectionData().SetLinkFilePassword(sPassword);
         m_pFileNameED->SetText(pSectRepr->GetFile());
     }
-
-    Application::SetDefDialogParent( m_pOldDefDlgParent );
 }
 
 IMPL_LINK_TYPED( SwEditRegionDlg, SubRegionEventHdl, VclWindowEvent&, rEvent, void )
@@ -1504,7 +1498,6 @@ SwInsertSectionTabPage::SwInsertSectionTabPage(
         "modules/swriter/ui/sectionpage.ui", &rAttrSet)
     , m_pWrtSh(nullptr)
     , m_pDocInserter(nullptr)
-    , m_pOldDefDlgParent(nullptr)
 {
     get(m_pCurName, "sectionnames");
     m_pCurName->SetStyle(m_pCurName->GetStyle() | WB_SORT);
@@ -1563,7 +1556,6 @@ void SwInsertSectionTabPage::dispose()
     m_pConditionFT.clear();
     m_pConditionED.clear();
     m_pEditInReadonlyCB.clear();
-    m_pOldDefDlgParent.clear();
     SfxTabPage::dispose();
 }
 
@@ -1755,8 +1747,6 @@ IMPL_LINK_TYPED( SwInsertSectionTabPage, UseFileHdl, Button *, pButton, void )
 
 IMPL_LINK_NOARG_TYPED(SwInsertSectionTabPage, FileSearchHdl, Button*, void)
 {
-    m_pOldDefDlgParent = Application::GetDefDialogParent();
-    Application::SetDefDialogParent( this );
     delete m_pDocInserter;
     m_pDocInserter = new ::sfx2::DocumentInserter( "swriter" );
     m_pDocInserter->StartExecuteModal( LINK( this, SwInsertSectionTabPage, DlgClosedHdl ) );
@@ -1808,8 +1798,6 @@ IMPL_LINK_TYPED( SwInsertSectionTabPage, DlgClosedHdl, sfx2::FileDialogHelper *,
     }
     else
         m_sFilterName = m_sFilePasswd = aEmptyOUStr;
-
-    Application::SetDefDialogParent( m_pOldDefDlgParent );
 }
 
 SwSectionFootnoteEndTabPage::SwSectionFootnoteEndTabPage( vcl::Window *pParent,

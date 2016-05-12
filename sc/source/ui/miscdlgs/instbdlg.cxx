@@ -138,16 +138,10 @@ void ScInsertTableDlg::Init_Impl( bool bFromFile )
 
 short ScInsertTableDlg::Execute()
 {
-    // set Parent of DocumentInserter and Doc-Manager
-    vcl::Window* pOldDefParent = Application::GetDefDialogParent();
-    Application::SetDefDialogParent( this );
-
     if ( m_pBtnFromFile->IsChecked() )
         aBrowseTimer.Start();
 
-    short nRet = ModalDialog::Execute();
-    Application::SetDefDialogParent( pOldDefParent );
-    return nRet;
+    return ModalDialog::Execute();
 }
 
 void ScInsertTableDlg::SetNewTable_Impl()

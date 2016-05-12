@@ -503,13 +503,8 @@ void OrganizeDialog::dispose()
 
 short OrganizeDialog::Execute()
 {
-    vcl::Window* pPrevDlgParent = Application::GetDefDialogParent();
-    Application::SetDefDialogParent( this );
-    short nRet = TabDialog::Execute();
-    Application::SetDefDialogParent( pPrevDlgParent );
-    return nRet;
+    return TabDialog::Execute();
 }
-
 
 IMPL_LINK_TYPED( OrganizeDialog, ActivatePageHdl, TabControl *, pTabCtrl, void )
 {

@@ -242,15 +242,8 @@ short MacroChooser::Execute()
     if ( StarBASIC::IsRunning() )
         m_pCloseButton->GrabFocus();
 
-    vcl::Window* pPrevDlgParent = Application::GetDefDialogParent();
-    Application::SetDefDialogParent( this );
-    short nRet = ModalDialog::Execute();
-    // #57314# If the BasicIDE has been activated, don't reset the DefModalDialogParent to the inactive document.
-    if ( Application::GetDefDialogParent() == this )
-        Application::SetDefDialogParent( pPrevDlgParent );
-    return nRet;
+    return ModalDialog::Execute();
 }
-
 
 void MacroChooser::EnableButton( Button& rButton, bool bEnable )
 {

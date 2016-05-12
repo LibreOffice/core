@@ -153,7 +153,6 @@ SwGlobalTree::SwGlobalTree(vcl::Window* pParent, const ResId& rResId) :
     pEmphasisEntry      ( nullptr ),
     pDDSource           ( nullptr ),
     pSwGlblDocContents  ( nullptr ),
-    pDefParentWin       ( nullptr ),
     pDocContent         ( nullptr ),
     pDocInserter        ( nullptr ),
 
@@ -190,7 +189,6 @@ void SwGlobalTree::dispose()
     pSwGlblDocContents = nullptr;
     delete pDocInserter;
     pDocInserter = nullptr;
-    pDefParentWin.clear();
     aUpdateTimer.Stop();
     SvTreeListBox::dispose();
 }
@@ -721,8 +719,6 @@ void SwGlobalTree::InsertRegion( const SwGlblDocContent* pCont, const OUString* 
     Sequence< OUString > aFileNames;
     if ( !pFileName )
     {
-        pDefParentWin = Application::GetDefDialogParent();
-        Application::SetDefDialogParent( this );
         delete pDocInserter;
         pDocInserter = new ::sfx2::DocumentInserter(
                 OUString("swriter"), true );
@@ -1362,7 +1358,6 @@ void SwGlobalTree::InsertRegion( const SwGlblDocContent* _pContent, const Sequen
 
 IMPL_LINK_TYPED( SwGlobalTree, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg, void )
 {
-    Application::SetDefDialogParent( pDefParentWin );
     if ( ERRCODE_NONE != _pFileDlg->GetError() )
         return;
 

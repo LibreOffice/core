@@ -49,7 +49,6 @@
 SvFileObject::SvFileObject()
     : nPostUserEventId(nullptr)
     , mxDelMed()
-    , pOldParent(nullptr)
     , nType(FILETYPE_TEXT)
     , bLoadAgain(true)
     , bSynchron(false)
@@ -390,7 +389,7 @@ OUString impl_getFilter( const OUString& _rURL )
     return sFilter;
 }
 
-void SvFileObject::Edit( vcl::Window* pParent, sfx2::SvBaseLink* pLink, const Link<const OUString&, void>& rEndEditHdl )
+void SvFileObject::Edit( vcl::Window* /*pParent*/, sfx2::SvBaseLink* pLink, const Link<const OUString&, void>& rEndEditHdl )
 {
     aEndEditLink = rEndEditHdl;
     OUString sFile, sRange, sTmpFilter;
@@ -426,8 +425,6 @@ void SvFileObject::Edit( vcl::Window* pParent, sfx2::SvBaseLink* pLink, const Li
             case OBJECT_CLIENT_OLE:
             {
                 nType = FILETYPE_OBJECT; // if not set already
-                pOldParent = Application::GetDefDialogParent();
-                Application::SetDefDialogParent( pParent );
 
                 ::sfx2::FileDialogHelper & rFileDlg =
                     pLink->GetInsertFileDialog( OUString() );
@@ -439,8 +436,6 @@ void SvFileObject::Edit( vcl::Window* pParent, sfx2::SvBaseLink* pLink, const Li
             case OBJECT_CLIENT_FILE:
             {
                 nType = FILETYPE_TEXT; // if not set already
-                pOldParent = Application::GetDefDialogParent();
-                Application::SetDefDialogParent( pParent );
 
                 OUString sFactory;
                 SfxObjectShell* pShell = pLink->GetLinkManager()->GetPersist();
@@ -500,7 +495,6 @@ IMPL_LINK_NOARG_TYPED( SvFileObject, DelMedium_Impl, void*, void )
 IMPL_LINK_TYPED( SvFileObject, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg, void )
 {
     OUString sFile;
-    Application::SetDefDialogParent( pOldParent );
 
     if ( FILETYPE_TEXT == nType || FILETYPE_OBJECT == nType )
     {

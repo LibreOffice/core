@@ -215,8 +215,6 @@ IMPL_LINK_NOARG_TYPED(SfxNewFileDialog_Impl, Update, Idle*, void)
 
         if (!xDocShell.Is())
         {
-            vcl::Window *pParent = Application::GetDefDialogParent();
-            Application::SetDefDialogParent(pAntiImpl);
             SfxErrorContext eEC(ERRCTX_SFX_LOADTEMPLATE,pAntiImpl);
             SfxApplication *pSfxApp = SfxGetpApp();
             sal_uIntPtr lErr;
@@ -226,7 +224,6 @@ IMPL_LINK_NOARG_TYPED(SfxNewFileDialog_Impl, Update, Idle*, void)
             lErr = pSfxApp->LoadTemplate(xDocShell, aFileName, pSet);
             if (lErr)
                 ErrorHandler::HandleError(lErr);
-            Application::SetDefDialogParent(pParent);
             if (!xDocShell.Is())
             {
                 m_pPreviewWin->SetObjectShell(nullptr);

@@ -1612,20 +1612,6 @@ bool SvtFileDialog::Notify( NotifyEvent& rNEvt )
     return bRet || ModalDialog::Notify( rNEvt );
 }
 
-
-class SvtDefModalDialogParent_Impl
-{
-private:
-    VclPtr<vcl::Window> _pOld;
-
-public:
-    explicit SvtDefModalDialogParent_Impl( vcl::Window *pNew ) :
-        _pOld( Application::GetDefDialogParent() )
-        { Application::SetDefDialogParent( pNew ); }
-
-    ~SvtDefModalDialogParent_Impl() { Application::SetDefDialogParent( _pOld ); }
-};
-
 namespace
 {
 
@@ -2014,7 +2000,6 @@ short SvtFileDialog::PrepareExecute()
 
     _pFileView->Show();
     _pSplitter->Show();
-    SvtDefModalDialogParent_Impl aDefParent( this );
 
     // if applicable read and set size from ini
     InitSize();

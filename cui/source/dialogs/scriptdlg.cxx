@@ -533,11 +533,7 @@ short SvxScriptOrgDialog::Execute()
         pDoc = SfxObjectShell::GetNext(*pDoc);
     }
 
-    vcl::Window* pPrevDlgParent = Application::GetDefDialogParent();
-    Application::SetDefDialogParent( this );
-    short nRet = ModalDialog::Execute();
-    Application::SetDefDialogParent( pPrevDlgParent );
-    return nRet;
+    return ModalDialog::Execute();
 }
 
 void SvxScriptOrgDialog::CheckButtons( Reference< browse::XBrowseNode >& node )

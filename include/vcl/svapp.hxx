@@ -1165,24 +1165,14 @@ public:
     */
     ///@{
 
-    /** Set the default parent window for dialog boxes.
-
-     @param     pWindow         Pointer to window that should be the default parent.
-
-     @remark You can set pWindow to NULL, which means there \em is no default parent.
-
-     @see GetDefDialogParent
-    */
-    static void                 SetDefDialogParent( vcl::Window* pWindow );
-
     /** Get the default parent window for dialog boxes.
 
      @remark GetDefDialogParent does all sorts of things find a useful parent
-             window for dialogs. If it can't find one (it wasn't set!) then it
-             first uses the topmost parent of the active window to avoid using
-             floating windows or other dialog boxes. If there are no active
-             windows, then it will take a random stab and choose the first visible
-             top window. Otherwise, it defaults to the desktop.
+             window for dialogs. It first uses the topmost parent of the active
+             window to avoid using floating windows or other dialog boxes. If
+             there are no active windows, then it will take a random stab and
+             choose the first visible top window. Otherwise, it defaults to
+             the desktop.
 
      @returns Pointer to the default window.
     */

@@ -1431,70 +1431,60 @@ OUString Application::GetToolkitName()
         return OUString();
 }
 
-void Application::SetDefDialogParent( vcl::Window* pWindow )
-{
-    ImplGetSVData()->maWinData.mpDefDialogParent = pWindow;
-}
-
 vcl::Window* Application::GetDefDialogParent()
 {
     ImplSVData* pSVData = ImplGetSVData();
-    // #103442# find some useful dialog parent if there
-    // was no default set
-    // NOTE: currently even the default is not used
-    if( false && pSVData->maWinData.mpDefDialogParent.get() != nullptr )
-        return pSVData->maWinData.mpDefDialogParent;
-    else
+    // find some useful dialog parent
+
+    // always use the topmost parent of the candidate
+    // window to avoid using dialogs or floaters
+    // as DefDialogParent
+
+    // current focus frame
+    vcl::Window *pWin = nullptr;
+    if( (pWin = pSVData->maWinData.mpFocusWin) != nullptr )
     {
-        // always use the topmost parent of the candidate
-        // window to avoid using dialogs or floaters
-        // as DefDialogParent
+        while( pWin->mpWindowImpl && pWin->mpWindowImpl->mpParent )
+            pWin = pWin->mpWindowImpl->mpParent;
 
-        // current focus frame
-        vcl::Window *pWin = nullptr;
-        if( (pWin = pSVData->maWinData.mpFocusWin) != nullptr )
+        // check for corrupted window hierarchy, #122232#, may be we now crash somewhere else
+        if( !pWin->mpWindowImpl )
         {
-            while( pWin->mpWindowImpl && pWin->mpWindowImpl->mpParent )
-                pWin = pWin->mpWindowImpl->mpParent;
-
-            // check for corrupted window hierarchy, #122232#, may be we now crash somewhere else
-            if( !pWin->mpWindowImpl )
-            {
-                OSL_FAIL( "Window hierarchy corrupted!" );
-                pSVData->maWinData.mpFocusWin = nullptr;   // avoid further access
-                return nullptr;
-            }
-
-            if( (pWin->mpWindowImpl->mnStyle & WB_INTROWIN) == 0 )
-            {
-                return pWin->mpWindowImpl->mpFrameWindow->ImplGetWindow();
-            }
+            OSL_FAIL( "Window hierarchy corrupted!" );
+            pSVData->maWinData.mpFocusWin = nullptr;   // avoid further access
+            return nullptr;
         }
-        // last active application frame
-        if( nullptr != (pWin = pSVData->maWinData.mpActiveApplicationFrame) )
+
+        if( (pWin->mpWindowImpl->mnStyle & WB_INTROWIN) == 0 )
         {
             return pWin->mpWindowImpl->mpFrameWindow->ImplGetWindow();
         }
-        else
+    }
+
+    // last active application frame
+    if( nullptr != (pWin = pSVData->maWinData.mpActiveApplicationFrame) )
+    {
+        return pWin->mpWindowImpl->mpFrameWindow->ImplGetWindow();
+    }
+    else
+    {
+        // first visible top window (may be totally wrong....)
+        pWin = pSVData->maWinData.mpFirstFrame;
+        while( pWin )
         {
-            // first visible top window (may be totally wrong....)
-            pWin = pSVData->maWinData.mpFirstFrame;
-            while( pWin )
+            if( pWin->ImplGetWindow()->IsTopWindow() &&
+                pWin->mpWindowImpl->mbReallyVisible &&
+                (pWin->mpWindowImpl->mnStyle & WB_INTROWIN) == 0
+            )
             {
-                if( pWin->ImplGetWindow()->IsTopWindow() &&
-                    pWin->mpWindowImpl->mbReallyVisible &&
-                    (pWin->mpWindowImpl->mnStyle & WB_INTROWIN) == 0
-                )
-                {
-                    while( pWin->mpWindowImpl->mpParent )
-                        pWin = pWin->mpWindowImpl->mpParent;
-                    return pWin->mpWindowImpl->mpFrameWindow->ImplGetWindow();
-                }
-                pWin = pWin->mpWindowImpl->mpFrameData->mpNextFrame;
+                while( pWin->mpWindowImpl->mpParent )
+                    pWin = pWin->mpWindowImpl->mpParent;
+                return pWin->mpWindowImpl->mpFrameWindow->ImplGetWindow();
             }
-            // use the desktop
-            return nullptr;
+            pWin = pWin->mpWindowImpl->mpFrameData->mpNextFrame;
         }
+        // use the desktop
+        return nullptr;
     }
 }
 

@@ -54,7 +54,6 @@ private:
     SwFieldMgr*               pMgr;
     SwWrtShell*             pSh;
     sfx2::FileDialogHelper* pFileDlg;
-    VclPtr<vcl::Window>     pOldDefDlgParent;
 
     DECL_LINK_TYPED(OKHdl, Button*, void);
     DECL_LINK_TYPED(PrevHdl, Button*, void);

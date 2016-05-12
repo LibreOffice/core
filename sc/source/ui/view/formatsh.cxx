@@ -844,9 +844,8 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                 vcl::Window* pParent = Application::GetDefDialogParent();
                 if ( !pParent || !pParent->IsDialog() )
                 {
-                    //  GetDefDialogParent currently doesn't return the window
-                    //  that was set with SetDefDialogParent (but dynamically finds the
-                    //  topmost parent of the focus window), so IsDialog above is FALSE
+                    //  GetDefDialogParent dynamically finds the
+                    //  topmost parent of the focus window, so IsDialog above is FALSE
                     //  even if called from the style catalog.
                     //  -> Use NULL if a modal dialog is open, to enable the Dialog's
                     //  default parent handling.

@@ -257,7 +257,6 @@ private:
     SvTreeListEntry*        pDDSource;      // source for Drag'n Drop
     SwGlblDocContents*      pSwGlblDocContents; // array with sorted content
 
-    VclPtr<vcl::Window>     pDefParentWin;
     SwGlblDocContent*       pDocContent;
     sfx2::DocumentInserter* pDocInserter;
 

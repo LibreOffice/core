@@ -1230,8 +1230,6 @@ void Desktop::Exception(sal_uInt16 nError)
 
     SystemWindowFlags nOldMode = Application::GetSystemWindowMode();
     Application::SetSystemWindowMode( nOldMode & ~SystemWindowFlags::NOAUTOMODE );
-    Application::SetDefDialogParent( nullptr );
-
     if ( bInException )
     {
         OUString aDoubleExceptionString;

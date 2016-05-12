@@ -45,8 +45,7 @@ SwJavaEditDialog::SwJavaEditDialog(vcl::Window* pParent, SwWrtShell* pWrtSh) :
     bIsUrl(false),
 
     pSh(pWrtSh),
-    pFileDlg(nullptr),
-    pOldDefDlgParent(nullptr)
+    pFileDlg(nullptr)
 {
     get(m_pTypeED, "scripttype");
     get(m_pUrlRB, "url");
@@ -96,7 +95,6 @@ void SwJavaEditDialog::dispose()
     pSh->EnterStdMode();
     delete pMgr;
     delete pFileDlg;
-    Application::SetDefDialogParent( pOldDefDlgParent );
     m_pTypeED.clear();
     m_pUrlRB.clear();
     m_pEditRB.clear();
@@ -106,7 +104,6 @@ void SwJavaEditDialog::dispose()
     m_pOKBtn.clear();
     m_pPrevBtn.clear();
     m_pNextBtn.clear();
-    pOldDefDlgParent.clear();
     SvxStandardDialog::dispose();
 }
 
@@ -251,13 +248,10 @@ IMPL_LINK_NOARG_TYPED(SwJavaEditDialog, RadioButtonHdl, Button*, void)
     }
 }
 
-IMPL_LINK_TYPED( SwJavaEditDialog, InsertFileHdl, Button *, pBtn, void )
+IMPL_LINK_NOARG_TYPED( SwJavaEditDialog, InsertFileHdl, Button *, void )
 {
     if ( !pFileDlg )
     {
-        pOldDefDlgParent = Application::GetDefDialogParent();
-        Application::SetDefDialogParent( pBtn );
-
         pFileDlg = new ::sfx2::FileDialogHelper(
             ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
             FileDialogFlags::Insert, OUString("swriter") );

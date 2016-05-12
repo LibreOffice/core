@@ -531,15 +531,11 @@ void SwFieldFuncPage::UpdateSubType()
 }
 
 // call MacroBrowser, fill Listbox with Macros
-IMPL_LINK_TYPED( SwFieldFuncPage, MacroHdl, Button *, pBtn, void )
+IMPL_LINK_NOARG_TYPED( SwFieldFuncPage, MacroHdl, Button *, void)
 {
-    vcl::Window* pDefModalDlgParent = Application::GetDefDialogParent();
-    Application::SetDefDialogParent( pBtn );
     const OUString sMacro(TurnMacroString(m_pNameED->GetText()).replaceAll(".", ";"));
     if (GetFieldMgr().ChooseMacro(sMacro))
         UpdateSubType();
-
-    Application::SetDefDialogParent( pDefModalDlgParent );
 }
 
 bool SwFieldFuncPage::FillItemSet(SfxItemSet* )

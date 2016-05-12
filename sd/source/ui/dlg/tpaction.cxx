@@ -429,9 +429,6 @@ void SdTPAction::OpenFileDialog()
         }
         else if (bMacro)
         {
-            vcl::Window* pOldWin = Application::GetDefDialogParent();
-            Application::SetDefDialogParent( this );
-
             // choose macro dialog
             OUString aScriptURL = SfxApplication::ChooseScript();
 
@@ -439,8 +436,6 @@ void SdTPAction::OpenFileDialog()
             {
                 SetEditText( aScriptURL );
             }
-
-            Application::SetDefDialogParent( pOldWin );
         }
         else
         {

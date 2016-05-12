@@ -181,7 +181,6 @@ struct ImplSVGDIData
 struct ImplSVWinData
 {
     VclPtr<vcl::Window>     mpFirstFrame;                   // First FrameWindow
-    VclPtr<vcl::Window>     mpDefDialogParent;              // Default Dialog Parent
     VclPtr<WorkWindow>      mpAppWin;                       // Application-Window
     VclPtr<vcl::Window>     mpFocusWin;                     // window, that has the focus
     VclPtr<vcl::Window>     mpActiveApplicationFrame;       // the last active application frame, can be used as DefModalDialogParent if no focuswin set

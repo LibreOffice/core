@@ -95,7 +95,6 @@ class SwEditRegionDlg : public SfxModalDialog
     SectReprs_t             m_SectReprs;
     const SwSection*        pCurrSect;
     sfx2::DocumentInserter* m_pDocInserter;
-    VclPtr<vcl::Window>     m_pOldDefDlgParent;
 
     bool            bDontCheckPasswd :1;
     bool            bWeb            :1;
@@ -169,7 +168,6 @@ class SwInsertSectionTabPage : public SfxTabPage
     css::uno::Sequence <sal_Int8 > m_aNewPasswd;
     SwWrtShell*             m_pWrtSh;
     sfx2::DocumentInserter* m_pDocInserter;
-    VclPtr<vcl::Window>     m_pOldDefDlgParent;
 
     DECL_LINK_TYPED( ChangeHideHdl, Button *, void );
     DECL_LINK_TYPED( ChangeProtectHdl, Button *, void );

@@ -623,9 +623,6 @@ IMPL_LINK_TYPED( SfxInsertFloatingFrameDialog, CheckHdl, Button*, pButton, void 
 
 IMPL_LINK_NOARG_TYPED( SfxInsertFloatingFrameDialog, OpenHdl, Button*, void)
 {
-    vcl::Window* pOldParent = Application::GetDefDialogParent();
-    Application::SetDefDialogParent( this );
-
     // create the file dialog
     sfx2::FileDialogHelper aFileDlg(
             ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, FileDialogFlags::NONE, OUString() );
@@ -637,8 +634,6 @@ IMPL_LINK_NOARG_TYPED( SfxInsertFloatingFrameDialog, OpenHdl, Button*, void)
     if ( aFileDlg.Execute() == ERRCODE_NONE )
         m_pEDURL->SetText(
             INetURLObject( aFileDlg.GetPath() ).GetMainURL( INetURLObject::DECODE_WITH_CHARSET ) );
-
-    Application::SetDefDialogParent( pOldParent );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

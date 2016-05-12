@@ -332,14 +332,7 @@ bool FuInsertFile::InsSDDinDrMode(SfxMedium* pMedium)
     if( !pDlg )
         return false;
 
-    /* Maybe a QueryBox is opened ("update links?"), therefore the dialog
-       becomes the current DefModalDialogParent */
-    vcl::Window* pDefParent = Application::GetDefDialogParent();
-    Application::SetDefDialogParent(pDlg->GetWindow());
-
     sal_uInt16 nRet = pDlg->Execute();
-
-    Application::SetDefDialogParent(pDefParent);
 
     mpDocSh->SetWaitCursor( true );
 

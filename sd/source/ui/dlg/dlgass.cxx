@@ -1457,9 +1457,6 @@ void AssistentDlgImpl::UpdatePreview( bool bDocPreview )
     {
         CloseDocShell();
 
-        vcl::Window *pParent = Application::GetDefDialogParent();
-        Application::SetDefDialogParent( mpWindow );
-
         SfxErrorContext eEC(ERRCTX_SFX_LOADTEMPLATE,mpWindow);
 
         if(IsOwnFormat(aDocFile))
@@ -1489,8 +1486,6 @@ void AssistentDlgImpl::UpdatePreview( bool bDocPreview )
                 xDocShell = pRet->GetFrame()->GetObjectShell();
         }
 
-        Application::SetDefDialogParent( pParent );
-
         mnShowPage = 0;
         mbDocPreview = bDocPreview;
         maDocFile = aDocFile;
@@ -1503,9 +1498,6 @@ void AssistentDlgImpl::UpdatePreview( bool bDocPreview )
         SfxObjectShellLock xLayoutDocShell;
         SfxErrorContext eEC(ERRCTX_SFX_LOADTEMPLATE,mpWindow);
 
-        vcl::Window *pParent = Application::GetDefDialogParent();
-        Application::SetDefDialogParent( mpWindow );
-
         if(IsOwnFormat(aLayoutFile))
         {
             SfxItemSet* pSet = new SfxAllItemSet( pSfxApp->GetPool() );
@@ -1517,8 +1509,6 @@ void AssistentDlgImpl::UpdatePreview( bool bDocPreview )
                 ErrorHandler::HandleError(lErr);
             SavePassword( xLayoutDocShell, aLayoutFile );
         }
-
-        Application::SetDefDialogParent( pParent );
 
         // determine the implementation
         SfxObjectShell* pShell = xDocShell;

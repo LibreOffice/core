@@ -2224,19 +2224,16 @@ VclPtr<SfxTabPage> SwTOXEntryTabPage::Create( vcl::Window* pParent,     const Sf
     return VclPtr<SwTOXEntryTabPage>::Create(pParent, *rAttrSet);
 }
 
-IMPL_LINK_TYPED(SwTOXEntryTabPage, EditStyleHdl, Button*, pBtn, void)
+IMPL_LINK_NOARG_TYPED(SwTOXEntryTabPage, EditStyleHdl, Button*, void)
 {
     if( LISTBOX_ENTRY_NOTFOUND != m_pCharStyleLB->GetSelectEntryPos())
     {
         SfxStringItem aStyle(SID_STYLE_EDIT, m_pCharStyleLB->GetSelectEntry());
         SfxUInt16Item aFamily(SID_STYLE_FAMILY, (sal_uInt16)SfxStyleFamily::Char);
-        vcl::Window* pDefDlgParent = Application::GetDefDialogParent();
-        Application::SetDefDialogParent( pBtn );
         static_cast<SwMultiTOXTabDialog*>(GetTabDialog())->GetWrtShell().
         GetView().GetViewFrame()->GetDispatcher()->ExecuteList(SID_STYLE_EDIT,
                 SfxCallMode::SYNCHRON|SfxCallMode::MODAL,
                 { &aStyle, &aFamily });
-        Application::SetDefDialogParent( pDefDlgParent );
     }
 }
 
@@ -3737,19 +3734,16 @@ VclPtr<SfxTabPage> SwTOXStylesTabPage::Create( vcl::Window* pParent,
     return VclPtr<SwTOXStylesTabPage>::Create(pParent, *rAttrSet);
 }
 
-IMPL_LINK_TYPED( SwTOXStylesTabPage, EditStyleHdl, Button *, pBtn, void )
+IMPL_LINK_NOARG_TYPED(SwTOXStylesTabPage, EditStyleHdl, Button *, void)
 {
     if( LISTBOX_ENTRY_NOTFOUND != m_pParaLayLB->GetSelectEntryPos())
     {
         SfxStringItem aStyle(SID_STYLE_EDIT, m_pParaLayLB->GetSelectEntry());
         SfxUInt16Item aFamily(SID_STYLE_FAMILY, (sal_uInt16)SfxStyleFamily::Para);
-        vcl::Window* pDefDlgParent = Application::GetDefDialogParent();
-        Application::SetDefDialogParent( pBtn );
         SwWrtShell& rSh = static_cast<SwMultiTOXTabDialog*>(GetTabDialog())->GetWrtShell();
         rSh.GetView().GetViewFrame()->GetDispatcher()->ExecuteList(SID_STYLE_EDIT,
                 SfxCallMode::SYNCHRON|SfxCallMode::MODAL,
                 { &aStyle, &aFamily });
-        Application::SetDefDialogParent( pDefDlgParent );
     }
 }
 

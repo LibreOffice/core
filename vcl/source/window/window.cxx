@@ -255,8 +255,6 @@ void Window::dispose()
         EndTracking();
     if (IsMouseCaptured())
         ReleaseMouse();
-    if ( pSVData->maWinData.mpDefDialogParent == this )
-        pSVData->maWinData.mpDefDialogParent = nullptr;
 
 #if OSL_DEBUG_LEVEL > 0
     if ( true ) // always perform these tests in debug builds

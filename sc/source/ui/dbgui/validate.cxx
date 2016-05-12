@@ -842,14 +842,9 @@ IMPL_LINK_NOARG_TYPED(ScTPValidationError, SelectActionHdl, ListBox&, void)
 
 IMPL_LINK_NOARG_TYPED(ScTPValidationError, ClickSearchHdl, Button*, void)
 {
-    vcl::Window* pOld = Application::GetDefDialogParent();
-    Application::SetDefDialogParent( this );
-
     // Use static SfxApplication method to bring up selector dialog for
     // choosing a script
     OUString aScriptURL = SfxApplication::ChooseScript();
-
-    Application::SetDefDialogParent( pOld );
 
     if ( aScriptURL != nullptr && !aScriptURL.isEmpty() )
     {
