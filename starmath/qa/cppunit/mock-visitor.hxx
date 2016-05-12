@@ -94,6 +94,8 @@ public:
     void Visit( SmMatrixNode* pNode ) override {
         CPPUNIT_ASSERT_EQUAL_MESSAGE("SmMatrixNode should have type NMATRIX",
                                      NMATRIX, pNode->GetType());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("SmMatrixNode's token should be of type TMATRIX",
+                                     TMATRIX, pNode->GetToken().eType);
         VisitChildren( pNode );
     }
 
