@@ -487,10 +487,10 @@ void ScViewFunc::PasteFromSystem()
             SotExchangeDest nDestination = SotExchangeDest::SCDOC_FREE_AREA;
             sal_uInt16 nSourceOptions = EXCHG_IN_ACTION_COPY;
             SotClipboardFormatId nFormat; // output param for GetExchangeAction
-            sal_uInt16 nEventAction;      // output param for GetExchangeAction
+            sal_uInt8 nEventAction;      // output param for GetExchangeAction
 
             uno::Reference<css::datatransfer::XTransferable> xTransferable( aDataHelper.GetXTransferable() );
-            sal_uInt16 nAction = SotExchange::GetExchangeAction(
+            sal_uInt8 nAction = SotExchange::GetExchangeAction(
                                     aDataHelper.GetDataFlavorExVector(),
                                     nDestination,
                                     nSourceOptions,
@@ -500,8 +500,6 @@ void ScViewFunc::PasteFromSystem()
 
             if ( nAction != EXCHG_INOUT_ACTION_NONE )
             {
-                nAction = ( nAction & EXCHG_ACTION_MASK );
-
                 switch( nAction )
                 {
                 case EXCHG_OUT_ACTION_INSERT_SVXB:
