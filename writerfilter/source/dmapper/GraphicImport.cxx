@@ -1162,8 +1162,8 @@ uno::Reference< text::XTextContent > GraphicImport::createGraphicObject( const b
                 PROP_BOTTOM_BORDER
             };
 
-            for( sal_Int32 nBorder = 0; nBorder < 4; ++nBorder )
-                xGraphicObjectProperties->setPropertyValue(getPropertyName( aBorderProps[nBorder]), uno::makeAny(aBorderLine));
+            for(PropertyIds & rBorderProp : aBorderProps)
+                xGraphicObjectProperties->setPropertyValue(getPropertyName(rBorderProp), uno::makeAny(aBorderLine));
 
             // setting graphic object shadow proerties
             if (m_pImpl->bShadow)

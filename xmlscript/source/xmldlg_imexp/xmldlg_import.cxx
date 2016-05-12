@@ -1441,11 +1441,11 @@ void ImportContext::importEvents(
         Reference< container::XNameContainer > xEvents( xSupplier->getEvents() );
         if (xEvents.is())
         {
-            for ( size_t nPos = 0; nPos < rEvents.size(); ++nPos )
+            for (const auto & rEvent : rEvents)
             {
                 script::ScriptEventDescriptor descr;
 
-                EventElement * pEventElement = static_cast< EventElement * >( rEvents[ nPos ].get() );
+                EventElement * pEventElement = static_cast< EventElement * >( rEvent.get() );
                 sal_Int32 nUid = pEventElement->getUid();
                 OUString aLocalName( pEventElement->getLocalName() );
                 Reference< xml::input::XAttributes > xAttributes( pEventElement->getAttributes() );
