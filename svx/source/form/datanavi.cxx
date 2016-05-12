@@ -248,7 +248,7 @@ namespace svxform
         return pMenu;
     }
 
-    void DataTreeListBox::ExcecuteContextMenuAction( sal_uInt16 _nSelectedPopupEntry )
+    void DataTreeListBox::ExecuteContextMenuAction( sal_uInt16 _nSelectedPopupEntry )
     {
         m_pXFormsPage->DoMenuAction( _nSelectedPopupEntry );
     }

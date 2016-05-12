@@ -786,7 +786,7 @@ public:
     void            InitStartEntry();
 
     virtual std::unique_ptr<PopupMenu> CreateContextMenu();
-    virtual void    ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry );
+    virtual void    ExecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry );
 
     void            EnableContextMenuHandling();
 

@@ -3731,9 +3731,9 @@ std::unique_ptr<PopupMenu> SvTreeListBox::CreateContextMenu()
     return nullptr;
 }
 
-void SvTreeListBox::ExcecuteContextMenuAction( sal_uInt16 )
+void SvTreeListBox::ExecuteContextMenuAction( sal_uInt16 )
 {
-    SAL_INFO( "svtools", "SvTreeListBox::ExcecuteContextMenuAction(): now there's happening nothing!" );
+    SAL_INFO( "svtools", "SvTreeListBox::ExecuteContextMenuAction(): now there's happening nothing!" );
 }
 
 void SvTreeListBox::EnableContextMenuHandling()
