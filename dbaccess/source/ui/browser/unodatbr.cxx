@@ -1201,12 +1201,12 @@ SvTreeListEntry* SbaTableQueryBrowser::getObjectEntry(const OUString& _rDataSour
                         nIndex = -1;
                         break;
 
-                    default:
-                        assert(false);
-                        // in non-debug builds, fall through.
                     case CommandType::QUERY:
                         sPath = _rCommand.getToken( 0, '/', nIndex );
                         break;
+
+                    default:
+                        assert(false);
                     }
                     pObject = m_pTreeView->getListBox().GetEntryPosByName(sPath, pCommandType);
                     pCommandType = pObject;
