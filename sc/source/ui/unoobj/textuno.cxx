@@ -19,8 +19,6 @@
 
 #include <sal/config.h>
 
-#include <cstdlib>
-
 #include "scitems.hxx"
 #include <editeng/eeitem.hxx>
 #include <svx/svdpool.hxx>
@@ -344,8 +342,9 @@ OUString SAL_CALL ScHeaderFooterTextObj::getString() throw(uno::RuntimeException
         case ScHeaderFooterPart::RIGHT:
             pData = rContentObj->GetRightEditObject();
         break;
-        default: //needed for compiler warning: possible uninitialized pointer
-            for (;;) std::abort();
+        default:
+            SAL_WARN("sc.ui","unexpected enum value of ScHeaderFooterPart");
+            pData = nullptr;
     }
 
     if (pData)
