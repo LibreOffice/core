@@ -110,6 +110,12 @@ FmSearchDialog::FmSearchDialog(vcl::Window* pParent, const OUString& sInitialTex
     get(m_pftPosition,"ftPosition");
     get(m_pftForm,"ftForm");
     get(m_pbClose,"close");
+    get(m_prbReplaceWithText,"rbReplaceWithText"); // Replace part starts
+    get(m_prbSetToNull,"rbSetToNull");
+    get(m_pcmbReplaceText,"cmbReplaceText");
+    m_pcmbReplaceText->set_width_request(m_pcmbReplaceText->approximate_char_width() * 42);
+    get(m_pbReplace,"pbReplace");
+    get(m_pbReplaceAll,"pbReplaceAll"); // Replace part ends
 
     DBG_ASSERT(m_lnkContextSupplier.IsSet(), "FmSearchDialog::FmSearchDialog : have no ContextSupplier !");
 
@@ -204,6 +210,11 @@ void FmSearchDialog::dispose()
     m_pbSearchAgain.clear();
     m_pbClose.clear();
     m_pPreSearchFocus.clear();
+    m_prbReplaceWithText.clear(); // Replace part starts
+    m_prbSetToNull.clear();
+    m_pcmbReplaceText.clear();
+    m_pbReplace.clear();
+    m_pbReplaceAll.clear(); // Replace part ends
 
     ModalDialog::dispose();
 }
@@ -215,12 +226,18 @@ void FmSearchDialog::Init(const OUString& strVisibleFields, const OUString& sIni
     m_prbSearchForNull->SetClickHdl(LINK(this, FmSearchDialog, OnClickedFieldRadios));
     m_prbSearchForNotNull->SetClickHdl(LINK(this, FmSearchDialog, OnClickedFieldRadios));
 
+    m_prbReplaceWithText->SetClickHdl(LINK(this, FmSearchDialog, OnClickedFieldRadios)); // Replace part starts
+    m_prbSetToNull->SetClickHdl(LINK(this, FmSearchDialog, OnClickedFieldRadios)); // Replace part ends
+
     m_prbAllFields->SetClickHdl(LINK(this, FmSearchDialog, OnClickedFieldRadios));
     m_prbSingleField->SetClickHdl(LINK(this, FmSearchDialog, OnClickedFieldRadios));
 
     m_pbSearchAgain->SetClickHdl(LINK(this, FmSearchDialog, OnClickedSearchAgain));
     m_ppbApproxSettings->SetClickHdl(LINK(this, FmSearchDialog, OnClickedSpecialSettings));
     m_pSoundsLikeCJKSettings->SetClickHdl(LINK(this, FmSearchDialog, OnClickedSpecialSettings));
+
+    m_pbReplace->SetClickHdl(LINK(this, FmSearchDialog, OnClickedReplace)); // Replace part starts
+    m_pbReplaceAll->SetClickHdl(LINK(this, FmSearchDialog, OnClickedReplaceAll)); // Replace part ends
 
     m_plbPosition->SetSelectHdl(LINK(this, FmSearchDialog, OnPositionSelected));
     m_plbField->SetSelectHdl(LINK(this, FmSearchDialog, OnFieldSelected));
@@ -291,22 +308,26 @@ bool FmSearchDialog::Close()
 
 IMPL_LINK_TYPED(FmSearchDialog, OnClickedFieldRadios, Button*, pButton, void)
 {
-    if ((pButton == m_prbSearchForText) || (pButton == m_prbSearchForNull) || (pButton == m_prbSearchForNotNull))
+    // enable or disable field list box accordingly
+    if (pButton == m_prbSingleField)
+    {
+        m_plbField->Enable();
+        m_pSearchEngine->RebuildUsedFields(m_plbField->GetSelectEntryPos());
+    }
+    else if (pButton == m_prbAllFields)
+    {
+        m_plbField->Disable();
+        m_pSearchEngine->RebuildUsedFields(-1);
+    }
+    else if ((pButton == m_prbSearchForText) || (pButton == m_prbSearchForNull) || (pButton == m_prbSearchForNotNull))
     {
         EnableSearchForDependees(true);
+        EnableReplace(m_pbSearchAgain->IsEnabled());
     }
     else
-        // en- or disable field list box accordingly
-        if (pButton == m_prbSingleField)
-        {
-            m_plbField->Enable();
-            m_pSearchEngine->RebuildUsedFields(m_plbField->GetSelectEntryPos());
-        }
-        else
-        {
-            m_plbField->Disable();
-            m_pSearchEngine->RebuildUsedFields(-1);
-        }
+    {
+        EnableReplace(m_pbSearchAgain->IsEnabled());
+    }
 }
 
 IMPL_LINK_NOARG_TYPED(FmSearchDialog, OnClickedSearchAgain, Button*, void)
@@ -393,6 +414,18 @@ IMPL_LINK_TYPED(FmSearchDialog, OnClickedSpecialSettings, Button*, pButton, void
             OnCheckBoxToggled( *m_pHalfFullFormsCJK );
         }
     }
+}
+
+IMPL_LINK_NOARG_TYPED(FmSearchDialog, OnClickedReplace, Button*, void)
+{
+    //TODO: Implement
+    m_pbClose->SetText("Replace Basildi");
+}
+
+IMPL_LINK_NOARG_TYPED(FmSearchDialog, OnClickedReplaceAll, Button*, void)
+{
+    //TODO: Implement
+    m_pbClose->SetText("ReplaceAll Basildi");
 }
 
 IMPL_LINK_NOARG_TYPED(FmSearchDialog, OnSearchTextModified, Edit&, void)
@@ -639,18 +672,27 @@ void FmSearchDialog::EnableSearchForDependees(bool bEnable)
 
     bool bEnableRedundants = !m_pSoundsLikeCJK->IsChecked() || !SvtCJKOptions().IsJapaneseFindEnabled();
 
-    m_pcmbSearchText->Enable          (bEnable);
-    m_pftPosition->Enable             (bEnable && !m_pcbWildCard->IsChecked());
-    m_pcbWildCard->Enable             (bEnable && !m_pcbRegular->IsChecked() && !m_pcbApprox->IsChecked());
-    m_pcbRegular->Enable              (bEnable && !m_pcbWildCard->IsChecked() && !m_pcbApprox->IsChecked());
-    m_pcbApprox->Enable               (bEnable && !m_pcbWildCard->IsChecked() && !m_pcbRegular->IsChecked());
-    m_ppbApproxSettings->Enable       (bEnable && m_pcbApprox->IsChecked());
-    m_pHalfFullFormsCJK->Enable      (bEnable && bEnableRedundants);
-    m_pSoundsLikeCJK->Enable         (bEnable);
-    m_pSoundsLikeCJKSettings->Enable (bEnable && m_pSoundsLikeCJK->IsChecked());
-    m_plbPosition->Enable             (bEnable && !m_pcbWildCard->IsChecked());
-    m_pcbUseFormat->Enable            (bEnable);
-    m_pcbCase->Enable                 (bEnable && bEnableRedundants);
+    m_pcmbSearchText->Enable            (bEnable);
+    m_pftPosition->Enable               (bEnable && !m_pcbWildCard->IsChecked());
+    m_pcbWildCard->Enable               (bEnable && !m_pcbRegular->IsChecked() && !m_pcbApprox->IsChecked());
+    m_pcbRegular->Enable                (bEnable && !m_pcbWildCard->IsChecked() && !m_pcbApprox->IsChecked());
+    m_pcbApprox->Enable                 (bEnable && !m_pcbWildCard->IsChecked() && !m_pcbRegular->IsChecked());
+    m_ppbApproxSettings->Enable         (bEnable && m_pcbApprox->IsChecked());
+    m_pHalfFullFormsCJK->Enable         (bEnable && bEnableRedundants);
+    m_pSoundsLikeCJK->Enable            (bEnable);
+    m_pSoundsLikeCJKSettings->Enable    (bEnable && m_pSoundsLikeCJK->IsChecked());
+    m_plbPosition->Enable               (bEnable && !m_pcbWildCard->IsChecked());
+    m_pcbUseFormat->Enable              (bEnable);
+    m_pcbCase->Enable                   (bEnable && bEnableRedundants);
+}
+
+void FmSearchDialog::EnableReplace(bool bEnable)
+{
+    bool bReplacingWithText = m_prbReplaceWithText->IsChecked();
+    bEnable = bEnable && (!bReplacingWithText || (!m_pcmbReplaceText->GetText().isEmpty()));
+
+    m_pbReplace->Enable         (bEnable);
+    m_pbReplaceAll->Enable      (bEnable);
 }
 
 void FmSearchDialog::EnableControlPaint(bool bEnable)
