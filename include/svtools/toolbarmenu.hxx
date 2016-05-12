@@ -26,6 +26,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 
+#include <memory>
 #include <vector>
 
 #include <rtl/ref.hxx>
@@ -114,7 +115,7 @@ private:
 
     Size            implCalcSize();
 
-    void            appendEntry(ToolbarMenuEntry* pEntry);
+    void            appendEntry(std::unique_ptr<ToolbarMenuEntry> pEntry);
 
     void            implPaint(vcl::RenderContext& rRenderContext, ToolbarMenuEntry* pThisOnly = nullptr, bool bHighlight = false);
 

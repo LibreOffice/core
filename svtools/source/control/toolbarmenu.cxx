@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <memory>
-
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <comphelper/processfactory.hxx>
+
+#include <o3tl/make_unique.hxx>
 
 #include <vcl/dockwin.hxx>
 #include <vcl/decoview.hxx>
@@ -228,10 +228,8 @@ bool ToolbarMenu_Impl::hasAccessibleListeners()
 sal_Int32 ToolbarMenu_Impl::getAccessibleChildCount() throw (RuntimeException)
 {
     sal_Int32 nCount = 0;
-    const int nEntryCount = maEntryVector.size();
-    for( int nEntry = 0; nEntry < nEntryCount; nEntry++ )
+    for( const auto& pEntry : maEntryVector )
     {
-        ToolbarMenuEntry* pEntry = maEntryVector[nEntry];
         if( pEntry )
         {
             if( pEntry->mpControl )
@@ -251,10 +249,8 @@ sal_Int32 ToolbarMenu_Impl::getAccessibleChildCount() throw (RuntimeException)
 
 Reference< XAccessible > ToolbarMenu_Impl::getAccessibleChild( sal_Int32 index ) throw (IndexOutOfBoundsException, RuntimeException)
 {
-    const int nEntryCount = maEntryVector.size();
-    for( int nEntry = 0; nEntry < nEntryCount; nEntry++ )
+    for( const auto& pEntry : maEntryVector )
     {
-        ToolbarMenuEntry* pEntry = maEntryVector[nEntry];
         if( pEntry )
         {
             const sal_Int32 nCount = pEntry->getAccessibleChildCount();
@@ -272,10 +268,8 @@ Reference< XAccessible > ToolbarMenu_Impl::getAccessibleChild( sal_Int32 index )
 
 Reference< XAccessible > ToolbarMenu_Impl::getAccessibleChild( Control* pControl, sal_Int32 childIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
-    const int nEntryCount = maEntryVector.size();
-    for( int nEntry = 0; nEntry < nEntryCount; nEntry++ )
+    for( const auto& pEntry : maEntryVector )
     {
-        ToolbarMenuEntry* pEntry = maEntryVector[nEntry];
         if( pEntry && (pEntry->mpControl.get() == pControl) )
         {
             return pEntry->getAccessibleChild( childIndex );
@@ -291,7 +285,7 @@ void ToolbarMenu_Impl::selectAccessibleChild( sal_Int32 nChildIndex ) throw (Ind
     const int nEntryCount = maEntryVector.size();
     for( int nEntry = 0; nEntry < nEntryCount; nEntry++ )
     {
-        ToolbarMenuEntry* pEntry = maEntryVector[nEntry];
+        ToolbarMenuEntry* const pEntry = maEntryVector[nEntry].get();
         if( pEntry )
         {
             const sal_Int32 nCount = pEntry->getAccessibleChildCount();
@@ -321,7 +315,7 @@ bool ToolbarMenu_Impl::isAccessibleChildSelected( sal_Int32 nChildIndex ) throw 
     const int nEntryCount = maEntryVector.size();
     for( int nEntry = 0; nEntry < nEntryCount; nEntry++ )
     {
-        ToolbarMenuEntry* pEntry = maEntryVector[nEntry];
+        ToolbarMenuEntry* const pEntry = maEntryVector[nEntry].get();
         if( pEntry )
         {
             const sal_Int32 nCount = pEntry->getAccessibleChildCount();
@@ -400,7 +394,7 @@ ToolbarMenuEntry* ToolbarMenu_Impl::implGetEntry( int nEntry ) const
     if( (nEntry < 0) || (nEntry >= (int)maEntryVector.size() ) )
         return nullptr;
 
-    return maEntryVector[nEntry];
+    return maEntryVector[nEntry].get();
 }
 
 
@@ -452,13 +446,7 @@ void ToolbarMenu::dispose()
     std::unique_ptr<ToolbarMenu_Impl> pImpl{mpImpl};
     mpImpl = nullptr;
 
-    // delete all menu entries
-    const int nEntryCount = pImpl->maEntryVector.size();
-    int nEntry;
-    for( nEntry = 0; nEntry < nEntryCount; nEntry++ )
-    {
-        delete pImpl->maEntryVector[nEntry];
-    }
+    pImpl->maEntryVector.clear();
 
     DockingWindow::dispose();
 }
@@ -594,18 +582,14 @@ Size ToolbarMenu::implCalcSize()
     long nMaxTextWidth = 0;
     long nMinMenuItemHeight = nFontHeight+2;
 
-    const int nEntryCount = mpImpl->maEntryVector.size();
-    int nEntry;
-
     const StyleSettings& rSettings = GetSettings().GetStyleSettings();
     const bool bUseImages = rSettings.GetUseImagesInMenus();
 
     // get maximum image size
     if( bUseImages )
     {
-        for( nEntry = 0; nEntry < nEntryCount; nEntry++ )
+        for( const auto& pEntry : mpImpl->maEntryVector )
         {
-            ToolbarMenuEntry* pEntry = mpImpl->maEntryVector[nEntry];
             if( pEntry && pEntry->mbHasImage )
             {
                 Size aImgSz( pEntry->maImage.GetSizePixel() );
@@ -623,10 +607,8 @@ Size ToolbarMenu::implCalcSize()
         mpImpl->mnTextPos += std::max( nExtra, 7L );
 
     // set heights, calc maximum width
-    for( nEntry = 0; nEntry < nEntryCount; nEntry++ )
+    for( const auto& pEntry : mpImpl->maEntryVector )
     {
-        ToolbarMenuEntry* pEntry = mpImpl->maEntryVector[nEntry];
-
         if( pEntry )
         {
             // Text:
@@ -677,10 +659,8 @@ Size ToolbarMenu::implCalcSize()
 
     // positionate controls
     int nY = BORDER_Y;
-    for( nEntry = 0; nEntry < nEntryCount; nEntry++ )
+    for( const auto& pEntry : mpImpl->maEntryVector )
     {
-        ToolbarMenuEntry* pEntry = mpImpl->maEntryVector[nEntry];
-
         if (pEntry)
         {
             pEntry->maSize.Width() = nMaxTextWidth;
@@ -739,25 +719,25 @@ void ToolbarMenu::LoseFocus()
 
 void ToolbarMenu::appendEntry( int nEntryId, const OUString& rStr, MenuItemBits nItemBits )
 {
-    appendEntry( new ToolbarMenuEntry( *this, nEntryId, rStr, nItemBits ) );
+    appendEntry( o3tl::make_unique<ToolbarMenuEntry>( *this, nEntryId, rStr, nItemBits ) );
 }
 
 
 void ToolbarMenu::appendEntry( int nEntryId, const OUString& rStr, const Image& rImage )
 {
-    appendEntry( new ToolbarMenuEntry( *this, nEntryId, rImage, rStr, MenuItemBits::NONE ) );
+    appendEntry( o3tl::make_unique<ToolbarMenuEntry>( *this, nEntryId, rImage, rStr, MenuItemBits::NONE ) );
 }
 
 
 void ToolbarMenu::appendEntry( int nEntryId, Control* pControl )
 {
-    appendEntry( new ToolbarMenuEntry( *this, nEntryId, pControl, MenuItemBits::NONE ) );
+    appendEntry( o3tl::make_unique<ToolbarMenuEntry>( *this, nEntryId, pControl, MenuItemBits::NONE ) );
 }
 
 
-void ToolbarMenu::appendEntry( ToolbarMenuEntry* pEntry )
+void ToolbarMenu::appendEntry( std::unique_ptr<ToolbarMenuEntry> pEntry )
 {
-    mpImpl->maEntryVector.push_back(pEntry);
+    mpImpl->maEntryVector.push_back(std::move(pEntry));
     mpImpl->maSize = implCalcSize();
     if (IsVisible())
         Invalidate();
@@ -789,14 +769,11 @@ ToolbarMenuEntry* ToolbarMenu::implGetEntry( int nEntry ) const
 
 ToolbarMenuEntry* ToolbarMenu::implSearchEntry( int nEntryId ) const
 {
-    const int nEntryCount = mpImpl->maEntryVector.size();
-    int nEntry;
-    for( nEntry = 0; nEntry < nEntryCount; nEntry++ )
+    for( const auto& p : mpImpl->maEntryVector )
     {
-        ToolbarMenuEntry* p = mpImpl->maEntryVector[nEntry];
         if( p && p->mnEntryId == nEntryId )
         {
-            return p;
+            return p.get();
         }
     }
 
@@ -814,7 +791,7 @@ void ToolbarMenu::implHighlightEntry(vcl::RenderContext& rRenderContext, int nHi
 
     for (int nEntry = 0; nEntry < nEntryCount; nEntry++)
     {
-        ToolbarMenuEntry* pEntry = mpImpl->maEntryVector[nEntry];
+        ToolbarMenuEntry* const pEntry = mpImpl->maEntryVector[nEntry].get();
         if (pEntry && (nEntry == nHighlightEntry))
         {
             // no highlights for controls only items
@@ -890,7 +867,7 @@ void ToolbarMenu::implSelectEntry( int nSelectedEntry )
 
     ToolbarMenuEntry* pEntry = nullptr;
     if( nSelectedEntry != -1 )
-        pEntry = mpImpl->maEntryVector[ nSelectedEntry ];
+        pEntry = mpImpl->maEntryVector[ nSelectedEntry ].get();
 
     if( pEntry )
         mpImpl->maSelectHdl.Call( this );
@@ -928,10 +905,9 @@ void ToolbarMenu::implHighlightAtPosition(const MouseEvent& rMEvt, bool /*bMBDow
         bool bHighlighted = false;
 
         const int nEntryCount = mpImpl->maEntryVector.size();
-        int nEntry;
-        for( nEntry = 0; nEntry < nEntryCount; nEntry++ )
+        for( int nEntry = 0; nEntry < nEntryCount; nEntry++ )
         {
-            ToolbarMenuEntry* pEntry = mpImpl->maEntryVector[nEntry];
+            ToolbarMenuEntry* pEntry = mpImpl->maEntryVector[nEntry].get();
             if( pEntry )
             {
                 long nOldY = nY;
@@ -1020,7 +996,7 @@ ToolbarMenuEntry* ToolbarMenu::implCursorUpDown( bool bUp, bool bHomeEnd )
             // if we have a currently selected entry and
             // cursor keys are used than check if this entry
             // has a control that can use those cursor keys
-            ToolbarMenuEntry* pData = mpImpl->maEntryVector[n];
+            ToolbarMenuEntry* pData = mpImpl->maEntryVector[n].get();
             if( pData && pData->mpControl && !pData->mbHasText )
             {
                 if( implCheckSubControlCursorMove( pData->mpControl, bUp, mpImpl->mnLastColumn ) )
@@ -1067,7 +1043,7 @@ ToolbarMenuEntry* ToolbarMenu::implCursorUpDown( bool bUp, bool bHomeEnd )
                     break;
         }
 
-        ToolbarMenuEntry* pData = mpImpl->maEntryVector[n];
+        ToolbarMenuEntry* pData = mpImpl->maEntryVector[n].get();
         if( pData && (pData->mnEntryId != TITLE_ID) )
         {
             implChangeHighlightEntry( n );
@@ -1228,12 +1204,8 @@ void ToolbarMenu::implPaint(vcl::RenderContext& rRenderContext, ToolbarMenuEntry
     Point aTopLeft(nOuterSpace, nOuterSpace), aTmpPos;
 
     Size aOutSz(GetOutputSizePixel());
-    const int nEntryCount = mpImpl->maEntryVector.size();
-    int nEntry;
-    for (nEntry = 0; nEntry < nEntryCount; nEntry++)
+    for (const auto& pEntry : mpImpl->maEntryVector)
     {
-        ToolbarMenuEntry* pEntry = mpImpl->maEntryVector[nEntry];
-
         Point aPos(aTopLeft);
         aPos.Y() += nBorder;
         aPos.Y() += nStartY;
@@ -1250,7 +1222,7 @@ void ToolbarMenu::implPaint(vcl::RenderContext& rRenderContext, ToolbarMenuEntry
             rRenderContext.DrawLine(aTmpPos, Point( aOutSz.Width() - 3 - 2 * nOuterSpace, aTmpPos.Y()));
             rRenderContext.SetLineColor();
         }
-        else if (!pThisOnly || (pEntry == pThisOnly))
+        else if (!pThisOnly || (pEntry.get() == pThisOnly))
         {
             const bool bTitle = pEntry->mnEntryId == TITLE_ID;
 

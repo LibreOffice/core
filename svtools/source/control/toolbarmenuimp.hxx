@@ -37,6 +37,7 @@
 
 #include <rtl/ref.hxx>
 
+#include <memory>
 #include <vector>
 
 #include <svtools/framestatuslistener.hxx>
@@ -48,7 +49,7 @@ class ToolbarMenu;
 class ToolbarMenuEntry;
 
 typedef ::std::vector< css::uno::Reference< css::accessibility::XAccessibleEventListener > > EventListenerVector;
-typedef std::vector< ToolbarMenuEntry * > ToolbarMenuEntryVector;
+typedef std::vector< std::unique_ptr< ToolbarMenuEntry > > ToolbarMenuEntryVector;
 
 const int SEPARATOR_HEIGHT = 4;
 const int TITLE_ID = -1;

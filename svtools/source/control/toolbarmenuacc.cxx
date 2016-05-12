@@ -335,7 +335,7 @@ Reference< XAccessible > SAL_CALL ToolbarMenuAcc::getAccessibleAtPoint( const aw
     const int nEntryCount = mpParent->maEntryVector.size();
     for( int nEntry = 0; (nEntry < nEntryCount) && !xRet.is(); nEntry++ )
     {
-        ToolbarMenuEntry* pEntry = mpParent->maEntryVector[nEntry];
+        ToolbarMenuEntry* pEntry = mpParent->maEntryVector[nEntry].get();
         if( pEntry && pEntry->maRect.IsInside( aVclPoint ) )
         {
             if( pEntry->mpControl )
@@ -465,7 +465,7 @@ Reference< XAccessible > SAL_CALL ToolbarMenuAcc::getSelectedAccessibleChild( sa
 
     if( (mpParent->mnHighlightedEntry != -1) && (nSelectedChildIndex == 0) )
     {
-        ToolbarMenuEntry* pEntry = mpParent->maEntryVector[ mpParent->mnHighlightedEntry ];
+        ToolbarMenuEntry* pEntry = mpParent->maEntryVector[ mpParent->mnHighlightedEntry ].get();
         if( pEntry )
         {
             if( pEntry->mpControl )
