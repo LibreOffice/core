@@ -63,7 +63,7 @@ void SAL_CALL UnxSplashScreen::end()
 void SAL_CALL UnxSplashScreen::reset()
     throw ( uno::RuntimeException, std::exception )
 {
-    SAL_WARN("desktop.splash", "UNXSplashScreen::reset()");
+    SAL_INFO("desktop.splash", "UNXSplashScreen::reset()");
     if( !m_pOutFd )
         return;
 
