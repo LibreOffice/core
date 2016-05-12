@@ -207,7 +207,9 @@ public:
     void addSingletonContextEntries(
         std::vector< cppu::ContextEntry_Init > * entries);
 
-    css::uno::Reference< css::uno::XComponentContext > getContext() const {
+    css::uno::Reference< css::uno::XComponentContext > const & getContext()
+        const
+    {
         assert(context_.is());
         return context_;
     }
