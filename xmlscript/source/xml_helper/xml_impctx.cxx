@@ -207,7 +207,7 @@ DocumentHandlerImpl::~DocumentHandlerImpl() throw ()
     {
         delete m_pMutex;
 #if OSL_DEBUG_LEVEL == 0
-        m_pMutex = 0;
+        m_pMutex = nullptr;
 #endif
     }
 }
