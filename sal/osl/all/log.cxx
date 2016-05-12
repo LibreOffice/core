@@ -63,9 +63,6 @@ bool equalStrings(
 #if !defined ANDROID
 char const * toString(sal_detail_LogLevel level) {
     switch (level) {
-    default:
-        assert(false); // this cannot happen
-        SAL_FALLTHROUGH;
     case SAL_DETAIL_LOG_LEVEL_INFO:
         return "info";
     case SAL_DETAIL_LOG_LEVEL_WARN:
@@ -73,6 +70,9 @@ char const * toString(sal_detail_LogLevel level) {
     case SAL_DETAIL_LOG_LEVEL_DEBUG:
     case SAL_DETAIL_LOG_LEVEL_DEBUG_TRACE:
         return "debug";
+    default:
+        assert(false); // this cannot happen
+        return "broken";
     }
 }
 #endif
@@ -244,9 +244,6 @@ void log(
         case SAL_DETAIL_LOG_LEVEL_INFO:
             prio = LOG_INFO;
             break;
-        default:
-            assert(false); // this cannot happen
-            SAL_FALLTHROUGH;
         case SAL_DETAIL_LOG_LEVEL_WARN:
             prio = LOG_WARNING;
             break;
@@ -254,6 +251,9 @@ void log(
         case SAL_DETAIL_LOG_LEVEL_DEBUG_TRACE:
             prio = LOG_DEBUG;
             break;
+        default:
+            assert(false); // this cannot happen
+            prio = LOG_WARNING;
         }
         syslog(prio, "%s", s.str().c_str());
 #endif
