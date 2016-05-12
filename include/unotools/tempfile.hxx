@@ -84,7 +84,7 @@ public:
                     Returns the URL of the tempfile object.
                     If you want to have the system path file name, use the GetFileName() method of this object
                     */
-    OUString        GetURL();
+    OUString const & GetURL();
 
                     /**
                     Returns the system path name of the tempfile in host notation
