@@ -1597,10 +1597,9 @@ void SchXMLExportHelper_Impl::exportTable()
         SvXMLElementExport aColumns( mrExport, XML_NAMESPACE_TABLE, XML_TABLE_COLUMNS, true, true );
 
         sal_Int32 nNextIndex = 0;
-        for( size_t nN=0; nN< aData.aHiddenColumns.size(); nN++ )
+        for(sal_Int32 nHiddenIndex : aData.aHiddenColumns)
         {
             //i91578 display of hidden values (copy paste scenario; export hidden flag thus it can be used during migration to locale table upon paste )
-            sal_Int32 nHiddenIndex = aData.aHiddenColumns[nN];
             if( nHiddenIndex > nNextIndex )
             {
                 sal_Int64 nRepeat = static_cast< sal_Int64 >( nHiddenIndex - nNextIndex );
@@ -2245,9 +2244,8 @@ bool lcl_exportAxisType( const Reference< chart2::XAxis >& rChart2Axis, SvXMLExp
 void disableLinkedNumberFormat(
     std::vector<XMLPropertyState>& rPropStates, const rtl::Reference<XMLPropertySetMapper>& rMapper )
 {
-    for (size_t i = 0; i < rPropStates.size(); ++i)
+    for (XMLPropertyState & rState : rPropStates)
     {
-        XMLPropertyState& rState = rPropStates[i];
         if (rState.mnIndex < 0 || rMapper->GetEntryCount() <= rState.mnIndex)
             continue;
 

@@ -140,14 +140,14 @@ void RTFSdrImport::resolveLineColorAndWidth(bool bTextFrame, const uno::Referenc
         {
             "TopBorder", "LeftBorder", "BottomBorder", "RightBorder"
         };
-        for (unsigned int i = 0; i < SAL_N_ELEMENTS(aBorders); ++i)
+        for (const char* pBorder : aBorders)
         {
-            table::BorderLine2 aBorderLine = xPropertySet->getPropertyValue(OUString::createFromAscii(aBorders[i])).get<table::BorderLine2>();
+            table::BorderLine2 aBorderLine = xPropertySet->getPropertyValue(OUString::createFromAscii(pBorder)).get<table::BorderLine2>();
             if (rLineColor.hasValue())
                 aBorderLine.Color = rLineColor.get<sal_Int32>();
             if (rLineWidth.hasValue())
                 aBorderLine.LineWidth = rLineWidth.get<sal_Int32>();
-            xPropertySet->setPropertyValue(OUString::createFromAscii(aBorders[i]), uno::makeAny(aBorderLine));
+            xPropertySet->setPropertyValue(OUString::createFromAscii(pBorder), uno::makeAny(aBorderLine));
         }
     }
 }
@@ -298,8 +298,8 @@ int RTFSdrImport::initShape(uno::Reference<drawing::XShape>& o_xShape,
             createShape("com.sun.star.text.TextFrame", o_xShape, o_xPropSet);
             m_bTextFrame = true;
             std::vector<beans::PropertyValue> aDefaults = getTextFrameDefaults(true);
-            for (std::size_t j = 0; j < aDefaults.size(); ++j)
-                o_xPropSet->setPropertyValue(aDefaults[j].Name, aDefaults[j].Value);
+            for (beans::PropertyValue & i : aDefaults)
+                o_xPropSet->setPropertyValue(i.Name, i.Value);
             break;
         }
         SAL_FALLTHROUGH;

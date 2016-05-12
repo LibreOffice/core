@@ -379,17 +379,17 @@ void FieldParamExporter::Export()
     const Type aSeqType = cppu::UnoType<Sequence<OUString>>::get();
     const Type aIntType = ::cppu::UnoType<sal_Int32>::get();
     Sequence<OUString> vParameters(m_xFieldParams->getElementNames());
-    for(const OUString* pCurrent = vParameters.begin(); pCurrent != vParameters.end(); ++pCurrent)
+    for(const auto & rParameter : vParameters)
     {
-        const Any aValue = m_xFieldParams->getByName(*pCurrent);
+        const Any aValue = m_xFieldParams->getByName(rParameter);
         const Type& aValueType = aValue.getValueType();
         if(aValueType == aStringType)
         {
             OUString sValue;
             aValue >>= sValue;
-            ExportParameter(*pCurrent,sValue);
+            ExportParameter(rParameter,sValue);
 
-            if ( *pCurrent == ODF_OLE_PARAM )
+            if ( rParameter == ODF_OLE_PARAM )
             {
                 // Save the OLE object
                 Reference< embed::XStorage > xTargetStg = m_pExport->GetTargetStorage();
@@ -414,22 +414,22 @@ void FieldParamExporter::Export()
         {
             bool bValue = false;
             aValue >>= bValue;
-            ExportParameter(*pCurrent, OUString::boolean(bValue) );
+            ExportParameter(rParameter, OUString::boolean(bValue) );
         }
         else if(aValueType == aSeqType)
         {
             Sequence<OUString> vValue;
             aValue >>= vValue;
-            for(OUString* pSeqCurrent = vValue.begin(); pSeqCurrent != vValue.end(); ++pSeqCurrent)
+            for(const OUString & i : vValue)
             {
-                ExportParameter(*pCurrent, *pSeqCurrent);
+                ExportParameter(rParameter, i);
             }
         }
         else if(aValueType == aIntType)
         {
             sal_Int32 nValue = 0;
             aValue >>= nValue;
-            ExportParameter(*pCurrent, OUStringBuffer().append(nValue).makeStringAndClear());
+            ExportParameter(rParameter, OUStringBuffer().append(nValue).makeStringAndClear());
         }
     }
 }

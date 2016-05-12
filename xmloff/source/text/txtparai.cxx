@@ -2065,9 +2065,9 @@ XMLParaContext::~XMLParaContext()
 
     if (pHints && !pHints->GetHints().empty())
     {
-        for (size_t i = 0; i < pHints->GetHints().size(); ++i)
+        for (const auto & i : pHints->GetHints())
         {
-            XMLHint_Impl *const pHint = pHints->GetHints()[i].get();
+            XMLHint_Impl *const pHint = i.get();
             xAttrCursor->gotoRange( pHint->GetStart(), false );
             xAttrCursor->gotoRange( pHint->GetEnd(), true );
             switch( pHint->GetType() )
