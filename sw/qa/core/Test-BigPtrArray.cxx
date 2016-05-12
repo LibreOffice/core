@@ -115,10 +115,10 @@ public:
 
         BigPtrArray bparr;
 
-        CPPUNIT_ASSERT_MESSAGE
+        CPPUNIT_ASSERT_EQUAL_MESSAGE
         (
             "BigPtrArray ctor failed",
-            bparr.Count() == 0
+            static_cast<sal_uLong>(0), bparr.Count()
         );
     }
 
@@ -141,10 +141,10 @@ public:
 
         for (sal_uLong i = 0, j = NUM_ENTRIES - 1; i < NUM_ENTRIES; i++, j--)
         {
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "test_insert_entries_at_front failed",
-                static_cast<BigPtrEntryMock*>(bparr[i])->getCount() == j
+                j, static_cast<BigPtrEntryMock*>(bparr[i])->getCount()
             );
         }
 
@@ -212,10 +212,10 @@ public:
         // next 10 elements have counts: 0,1,..9
         for (sal_uLong i = 0, j = 30; i < bparr.Count(); i++, j++)
         {
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "test_insert_at_already_used_index failed",
-                static_cast<BigPtrEntryMock*>(bparr[i])->getCount() == (i < 5 ? j : i - 5)
+                (i < 5 ? j : i - 5), static_cast<BigPtrEntryMock*>(bparr[i])->getCount()
             );
         }
 
@@ -281,10 +281,10 @@ public:
 
             for (sal_uLong j = 0, k = i + 1; j < bparr.Count(); j++, k++)
             {
-                CPPUNIT_ASSERT_MESSAGE
+                CPPUNIT_ASSERT_EQUAL_MESSAGE
                 (
                     "test_remove_at_front failed",
-                    static_cast<BigPtrEntryMock*>(bparr[j])->getCount() == k
+                    k, static_cast<BigPtrEntryMock*>(bparr[j])->getCount()
                 );
             }
 
@@ -313,18 +313,18 @@ public:
             delete bparr[i];
             bparr.Remove(i);
 
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "test_remove_at_back failed (wrong count)",
-                (oldCount - 1 == bparr.Count())
+                (oldCount - 1), bparr.Count()
             );
 
             for (sal_uLong j = 0; j < bparr.Count(); j++)
             {
-                CPPUNIT_ASSERT_MESSAGE
+                CPPUNIT_ASSERT_EQUAL_MESSAGE
                 (
                     "test_remove_at_back failed",
-                    static_cast<BigPtrEntryMock*>(bparr[j])->getCount() == j
+                    j, static_cast<BigPtrEntryMock*>(bparr[j])->getCount()
                 );
             }
 
@@ -427,10 +427,10 @@ public:
         releaseBigPtrArrayContent(bparr);
         bparr.Remove(0, bparr.Count());
 
-        CPPUNIT_ASSERT_MESSAGE
+        CPPUNIT_ASSERT_EQUAL_MESSAGE
         (
             "test_remove_all_elements_at_once failed",
-            bparr.Count() == 0
+            static_cast<sal_uLong>(0), bparr.Count()
         );
 
         dumpBigPtrArray(bparr);
@@ -453,17 +453,17 @@ public:
 
         for (sal_uLong i = 0; i < (NUM_ENTRIES - 1); i++)
         {
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "test_move_elements_from_lower_to_higher_pos failed",
-                static_cast<BigPtrEntryMock*>(bparr[i])->getCount() == (i + 1)
+                (i + 1), static_cast<BigPtrEntryMock*>(bparr[i])->getCount()
             );
         }
 
-        CPPUNIT_ASSERT_MESSAGE
+        CPPUNIT_ASSERT_EQUAL_MESSAGE
         (
             "test_move_elements_from_lower_to_higher_pos failed",
-            static_cast<BigPtrEntryMock*>(bparr[NUM_ENTRIES -1])->getCount() == 0
+            static_cast<sal_uLong>(0), static_cast<BigPtrEntryMock*>(bparr[NUM_ENTRIES -1])->getCount()
         );
 
         CPPUNIT_ASSERT_MESSAGE
@@ -490,18 +490,18 @@ public:
             dumpBigPtrArray(bparr);
         }
 
-        CPPUNIT_ASSERT_MESSAGE
+        CPPUNIT_ASSERT_EQUAL_MESSAGE
         (
             "test_move_elements_from_higher_to_lower_pos failed",
-            static_cast<BigPtrEntryMock*>(bparr[0])->getCount() == (NUM_ENTRIES - 1)
+            (NUM_ENTRIES - 1), static_cast<BigPtrEntryMock*>(bparr[0])->getCount()
         );
 
         for (sal_uLong i = 1; i < NUM_ENTRIES; i++)
         {
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "test_move_elements_from_higher_to_lower_pos failed",
-                static_cast<BigPtrEntryMock*>(bparr[i])->getCount() == (i - 1)
+                (i - 1), static_cast<BigPtrEntryMock*>(bparr[i])->getCount()
             );
         }
 
@@ -532,10 +532,10 @@ public:
 
         for (sal_uLong i = 0; i < NUM_ENTRIES; i++)
         {
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "test_move_to_same_position failed",
-                static_cast<BigPtrEntryMock*>(bparr[i])->getCount() == i
+                i, static_cast<BigPtrEntryMock*>(bparr[i])->getCount()
             );
         }
 
@@ -567,10 +567,10 @@ public:
 
         for (sal_uLong i = 0; i < NUM_ENTRIES; i++)
         {
-            CPPUNIT_ASSERT_MESSAGE
+            CPPUNIT_ASSERT_EQUAL_MESSAGE
             (
                 "test_replace_elements failed",
-                static_cast<BigPtrEntryMock*>(bparr[i])->getCount() == (NUM_ENTRIES - i - 1)
+                (NUM_ENTRIES - i - 1), static_cast<BigPtrEntryMock*>(bparr[i])->getCount()
             );
         }
 
