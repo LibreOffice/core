@@ -186,7 +186,7 @@ public:
     const OUString&           getURL() const;
     Reference< XContent >          getContent();
     Reference< XCommandProcessor > getCommandProcessor();
-    Reference< XComponentContext > getComponentContext()
+    Reference< XComponentContext > const & getComponentContext()
     { assert(m_xCtx.is()); return m_xCtx; }
 
     Any  executeCommand( const Command& rCommand );
