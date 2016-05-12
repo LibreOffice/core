@@ -707,7 +707,7 @@ size_t SwPageFrame::GetContentHeight(const long nTop, const long nBottom) const
 
 void SwPageFrame::MakeAll(vcl::RenderContext* pRenderContext)
 {
-    PROTOCOL_ENTER( this, PROT_MAKEALL, 0, nullptr )
+    PROTOCOL_ENTER( this, PROT::MakeAll, 0, nullptr )
 
     const SwRect aOldRect( Frame() );     // Adjust root size
     const SwLayNotify aNotify( this );  // takes care of the notification in the dtor
@@ -835,7 +835,7 @@ void SwPageFrame::MakeAll(vcl::RenderContext* pRenderContext)
 
 void SwLayoutFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
 {
-    PROTOCOL_ENTER( this, PROT_MAKEALL, 0, nullptr )
+    PROTOCOL_ENTER( this, PROT::MakeAll, 0, nullptr )
 
     // takes care of the notification in the dtor
     const SwLayNotify aNotify( this );
@@ -1107,7 +1107,7 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
     long nFormatCount = 0;
     // - loop prevention
     int nConsecutiveFormatsWithoutChange = 0;
-    PROTOCOL_ENTER( this, PROT_MAKEALL, 0, nullptr )
+    PROTOCOL_ENTER( this, PROT::MakeAll, 0, nullptr )
 
 #ifdef DBG_UTIL
     const SwDoc *pDoc = GetAttrSet()->GetDoc();

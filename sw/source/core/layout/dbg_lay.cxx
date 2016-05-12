@@ -28,14 +28,14 @@
  *
  * The PROTOCOL macros accept the following parameters:
  * 1.   A pointer to an SwFrame (usually "this" or "rThis")
- * 2.   The function group i.e. PROT_MAKEALL. This is used to decide (inline)
+ * 2.   The function group i.e. PROT::MakeAll. This is used to decide (inline)
  *      whether this event shall be logged at the current time.
  * 3.   The action, usually 0. For example ACT_START indents output in the log
  *      file and ACT_END stops the indentation. This allows for example
  *      PROTOCOL_ENTER to indent at the beginning of a method and stop indenting
  *      when leaving the method.
  * 4.   The fourth parameter is a void pointer which allows to pass anything
- *      which can be used in the log. A good example is PROT_GROW: this requires
+ *      which can be used in the log. A good example is PROT::Grow: this requires
  *      a pointer to the value which defines how much to grow.
  *
  * The log file is called "dbg_lay.out", which is saved in the current (BIN-)
@@ -45,8 +45,8 @@
  * What exactly is going to be logged, can be defined as follows:
  * 1.   The static variable SwProtocol::nRecord contains the function groups
  *      which shall be logged.
- *      A value of i.e. PROT_GROW causes calls to SwFrame::Grow to be
- *      logged; PROT_MAKEALL logs the calls to xxx::MakeAll.
+ *      A value of i.e. PROT::Grow causes calls to SwFrame::Grow to be
+ *      logged; PROT::MakeAll logs the calls to xxx::MakeAll.
  *      The PROT_XY values can be combined using binary OR, the default value
  *      is null - no method calls are logged.
  * 2.   The SwImplProtocol class contains a filter for frame types, only method
@@ -64,7 +64,7 @@
  * 1.   Set a breakpoint in SwProtocol::Init() and manipulate nRecord there, set
  *      FrameIds accordingly then start logging during program start.
  * 2.   Set a breakpoint before any PROTOCOL or PROTOCOL_ENTER macro during
- *      program execution, then set the lowest bit (PROT_INIT) of
+ *      program execution, then set the lowest bit (PROT::Init) of
  *      SwProtocol::nRecord. This activates the function group of the following
  *      macro and causes it to be logged in the future.
  * 3.   There's a special case for 2: If one uses 2. in SwRootFrame::Paint(..),
@@ -103,7 +103,7 @@
 
 #include <comphelper/string.hxx>
 
-sal_uLong SwProtocol::nRecord = 0;
+PROT SwProtocol::nRecord = PROT::FileInit;
 SwImplProtocol* SwProtocol::pImpl = nullptr;
 
 static sal_uLong lcl_GetFrameId( const SwFrame* pFrame )
@@ -129,7 +129,7 @@ class SwImplProtocol
     sal_uInt16 nMaxLines;           // max lines to be printed
     sal_uInt8 nInitFile;            // range (FrameId,FrameType,Record) during reading of the INI file
     sal_uInt8 nTestMode;            // special for test formatting, logging may only be done in test formatting.
-    void Record_( const SwFrame* pFrame, sal_uLong nFunction, sal_uLong nAct, void* pParam );
+    void Record_( const SwFrame* pFrame, PROT nFunction, sal_uLong nAct, void* pParam );
     bool NewStream();
     void CheckLine( OString& rLine );
     static void SectFunc( OStringBuffer& rOut, const SwFrame* pFrame, sal_uLong nAct, void* pParam );
@@ -137,7 +137,7 @@ public:
     SwImplProtocol();
     ~SwImplProtocol();
     // logging
-    void Record( const SwFrame* pFrame, sal_uLong nFunction, sal_uLong nAct, void* pParam )
+    void Record( const SwFrame* pFrame, PROT nFunction, sal_uLong nAct, void* pParam )
         { if( pStream ) Record_( pFrame, nFunction, nAct, pParam ); }
     bool InsertFrame( sal_uInt16 nFrameId );    // take FrameId for logging
     bool DeleteFrame( sal_uInt16 nFrameId );    // remove FrameId; don't log him anymore
@@ -159,11 +159,12 @@ public:
 class SwImplEnterLeave
 {
 protected:
-    const SwFrame* pFrame;              // the frame
-    sal_uLong nFunction, nAction;   // the function, the action if needed
-    void* pParam;                   // further parameter
+    const SwFrame* pFrame;    // the frame
+    PROT           nFunction; // the function
+    sal_uLong      nAction;   // the action if needed
+    void*          pParam;    // further parameter
 public:
-    SwImplEnterLeave( const SwFrame* pF, sal_uLong nFunct, sal_uLong nAct, void* pPar )
+    SwImplEnterLeave( const SwFrame* pF, PROT nFunct, sal_uLong nAct, void* pPar )
         : pFrame( pF ), nFunction( nFunct ), nAction( nAct ), pParam( pPar ) {}
     virtual ~SwImplEnterLeave() {}
     virtual void Enter();           // message when entering
@@ -174,7 +175,7 @@ class SwSizeEnterLeave : public SwImplEnterLeave
 {
     long nFrameHeight;
 public:
-    SwSizeEnterLeave( const SwFrame* pF, sal_uLong nFunct, sal_uLong nAct, void* pPar )
+    SwSizeEnterLeave( const SwFrame* pF, PROT nFunct, sal_uLong nAct, void* pPar )
         : SwImplEnterLeave( pF, nFunct, nAct, pPar ), nFrameHeight( pF->Frame().Height() ) {}
     virtual ~SwSizeEnterLeave() {}
     virtual void Leave() override;           // resize message
@@ -184,7 +185,7 @@ class SwUpperEnterLeave : public SwImplEnterLeave
 {
     sal_uInt16 nFrameId;
 public:
-    SwUpperEnterLeave( const SwFrame* pF, sal_uLong nFunct, sal_uLong nAct, void* pPar )
+    SwUpperEnterLeave( const SwFrame* pF, PROT nFunct, sal_uLong nAct, void* pPar )
         : SwImplEnterLeave( pF, nFunct, nAct, pPar ), nFrameId( 0 ) {}
     virtual ~SwUpperEnterLeave() {}
     virtual void Enter() override;           // message
@@ -195,26 +196,26 @@ class SwFrameChangesLeave : public SwImplEnterLeave
 {
     SwRect aFrame;
 public:
-    SwFrameChangesLeave( const SwFrame* pF, sal_uLong nFunct, sal_uLong nAct, void* pPar )
+    SwFrameChangesLeave( const SwFrame* pF, PROT nFunct, sal_uLong nAct, void* pPar )
         : SwImplEnterLeave( pF, nFunct, nAct, pPar ), aFrame( pF->Frame() ) {}
     virtual ~SwFrameChangesLeave() {}
     virtual void Enter() override;           // no message
     virtual void Leave() override;           // message when resizing the Frame area
 };
 
-void SwProtocol::Record( const SwFrame* pFrame, sal_uLong nFunction, sal_uLong nAct, void* pParam )
+void SwProtocol::Record( const SwFrame* pFrame, PROT nFunction, sal_uLong nAct, void* pParam )
 {
     if( Start() )
-    {   // We reach this point if SwProtocol::nRecord is binary OR'd with PROT_INIT(0x1) using the debugger
+    {   // We reach this point if SwProtocol::nRecord is binary OR'd with PROT::Init(0x1) using the debugger
         bool bFinit = false; // This gives the possibility to stop logging of this action in the debugger
         if( bFinit )
         {
             nRecord &= ~nFunction;  // Don't log this function any longer
-            nRecord &= ~PROT_INIT;  // Always reset PROT_INIT
+            nRecord &= ~PROT::Init;  // Always reset PROT::Init
             return;
         }
         nRecord |= nFunction;       // Activate logging of this function
-        nRecord &= ~PROT_INIT;      // Always reset PROT_INIT
+        nRecord &= ~PROT::Init;      // Always reset PROT::Init
         if( pImpl )
             pImpl->ChkStream();
     }
@@ -229,7 +230,7 @@ void SwProtocol::Record( const SwFrame* pFrame, sal_uLong nFunction, sal_uLong n
 
 void SwProtocol::Init()
 {
-    nRecord = 0;
+    nRecord = PROT::FileInit;
     OUString aName("dbg_lay.go");
     SvFileStream aStream( aName, StreamMode::READ );
     if( aStream.IsOpen() )
@@ -251,7 +252,7 @@ void SwProtocol::Stop()
         if( pFntCache )
             pFntCache->Flush();
      }
-     nRecord = 0;
+     nRecord = PROT::FileInit;
 }
 
 SwImplProtocol::SwImplProtocol()
@@ -311,7 +312,7 @@ void SwImplProtocol::CheckLine( OString& rLine )
         else if (aTmp == "[record")// section functions
         {
             nInitFile = 3;
-            SwProtocol::SetRecord( 0 );// default: don't log any function
+            SwProtocol::SetRecord( PROT::FileInit );// default: don't log any function
         }
         else if (aTmp == "[test")// section functions
         {
@@ -360,11 +361,11 @@ void SwImplProtocol::CheckLine( OString& rLine )
                         }
                         break;
                 case 3: {
-                            sal_uLong nOld = SwProtocol::Record();
+                            PROT nOld = SwProtocol::Record();
                             if( bNo )
-                                nOld &= ~sal_uLong(nVal); // remove function
+                                nOld &= ~PROT(nVal); // remove function
                             else
-                                nOld |= sal_uLong(nVal);  // remove function
+                                nOld |= PROT(nVal);  // remove function
                             SwProtocol::SetRecord( nOld );
                         }
                         break;
@@ -498,7 +499,7 @@ static void lcl_FrameType( OStringBuffer& rOut, const SwFrame* pFrame )
  *
  * In this method we also check if FrameId and frame type should be logged.
  */
-void SwImplProtocol::Record_( const SwFrame* pFrame, sal_uLong nFunction, sal_uLong nAct, void* pParam )
+void SwImplProtocol::Record_( const SwFrame* pFrame, PROT nFunction, sal_uLong nAct, void* pParam )
 {
     sal_uInt16 nSpecial = 0;
     if( nSpecial )  // the possible debugger manipulations
@@ -522,7 +523,7 @@ void SwImplProtocol::Record_( const SwFrame* pFrame, sal_uLong nFunction, sal_uL
     if( !(pFrame->GetType() & nTypes) )
         return; // the type is unwanted
 
-    if( 1 == nTestMode && nFunction != PROT_TESTFORMAT )
+    if( 1 == nTestMode && nFunction != PROT::TestFormat )
         return; // we may only log inside a test formatting
     bool bTmp = false;
     OStringBuffer aOut(aLayer);
@@ -531,17 +532,17 @@ void SwImplProtocol::Record_( const SwFrame* pFrame, sal_uLong nFunction, sal_uL
     lcl_FrameType( aOut, pFrame );    // then the frame type
     switch ( nFunction )            // and the function
     {
-        case PROT_SNAPSHOT: lcl_Flags( aOut, pFrame );
+        case PROT::Snapshot: lcl_Flags( aOut, pFrame );
                             break;
-        case PROT_MAKEALL:  aOut.append("MakeAll");
+        case PROT::MakeAll:  aOut.append("MakeAll");
                             lcl_Start( aOut, aLayer, nAct );
                             if( nAct == ACT_START )
                                 lcl_Flags( aOut, pFrame );
                             break;
-        case PROT_MOVE_FWD: bTmp = true;
+        case PROT::MoveFwd: bTmp = true;
                             SAL_FALLTHROUGH;
-        case PROT_MOVE_BWD:
-                            if (nFunction == (bTmp ? 1U : 0U))
+        case PROT::MoveBack:
+                            if (nFunction == (bTmp ? PROT::Init : PROT::FileInit))
                                 aOut.append("Fwd");
                             else
                                 aOut.append("Bwd");
@@ -552,23 +553,23 @@ void SwImplProtocol::Record_( const SwFrame* pFrame, sal_uLong nFunction, sal_uL
                                 aOut.append(static_cast<sal_Int32>(*static_cast<sal_uInt16*>(pParam)));
                             }
                             break;
-        case PROT_GROW_TST: if( ACT_START != nAct )
+        case PROT::GrowTest: if( ACT_START != nAct )
                                 return;
                             aOut.append("TestGrow");
                             break;
-        case PROT_SHRINK_TST: if( ACT_START != nAct )
+        case PROT::ShrinkTest: if( ACT_START != nAct )
                                 return;
                             aOut.append("TestShrink");
                             break;
-        case PROT_ADJUSTN :
-        case PROT_SHRINK:   bTmp = true;
+        case PROT::AdjustN :
+        case PROT::Shrink:   bTmp = true;
                             SAL_FALLTHROUGH;
-        case PROT_GROW:
+        case PROT::Grow:
                             if (!bTmp)
                                 aOut.append("Grow");
                             else
                             {
-                                if (nFunction == PROT_SHRINK)
+                                if (nFunction == PROT::Shrink)
                                     aOut.append("Shrink");
                                 else
                                     aOut.append("AdjustNgbhd");
@@ -580,16 +581,16 @@ void SwImplProtocol::Record_( const SwFrame* pFrame, sal_uLong nFunction, sal_uL
                                 aOut.append(static_cast<sal_Int64>(*static_cast<long*>(pParam)));
                             }
                             break;
-        case PROT_POS:      break;
-        case PROT_PRTAREA:  aOut.append("PrtArea");
+        case PROT::Pos:      break;
+        case PROT::PrintArea:  aOut.append("PrtArea");
                             lcl_Start( aOut, aLayer, nAct );
                             break;
-        case PROT_SIZE:     aOut.append("Size");
+        case PROT::Size:     aOut.append("Size");
                             lcl_Start( aOut, aLayer, nAct );
                             aOut.append(' ');
                             aOut.append(static_cast<sal_Int64>(pFrame->Frame().Height()));
                             break;
-        case PROT_LEAF:     aOut.append("Prev/NextLeaf");
+        case PROT::Leaf:     aOut.append("Prev/NextLeaf");
                             lcl_Start( aOut, aLayer, nAct );
                             aOut.append(' ');
                             if( pParam )
@@ -598,21 +599,21 @@ void SwImplProtocol::Record_( const SwFrame* pFrame, sal_uLong nFunction, sal_uL
                                 aOut.append(static_cast<sal_Int64>(lcl_GetFrameId(static_cast<SwFrame*>(pParam))));
                             }
                             break;
-        case PROT_FILE_INIT: FileInit();
+        case PROT::FileInit: FileInit();
                             aOut.append("Initialize");
                             break;
-        case PROT_SECTION:  SectFunc(aOut, pFrame, nAct, pParam);
+        case PROT::Section:  SectFunc(aOut, pFrame, nAct, pParam);
                             break;
-        case PROT_CUT:      bTmp = true;
+        case PROT::Cut:      bTmp = true;
                             SAL_FALLTHROUGH;
-        case PROT_PASTE:
+        case PROT::Paste:
                             if (bTmp)
                                 aOut.append("Cut from ");
                             else
                                 aOut.append("Paste to ");
                             aOut.append(static_cast<sal_Int64>(lcl_GetFrameId(static_cast<SwFrame*>(pParam))));
                             break;
-        case PROT_TESTFORMAT:
+        case PROT::TestFormat:
                             aOut.append("Test");
                             lcl_Start( aOut, aLayer, nAct );
                             if( ACT_START == nAct )
@@ -620,7 +621,7 @@ void SwImplProtocol::Record_( const SwFrame* pFrame, sal_uLong nFunction, sal_uL
                             else
                                 nTestMode &= ~2;
                             break;
-        case PROT_FRMCHANGES:
+        case PROT::FrmChanges:
                             {
                                 SwRect& rFrame = *static_cast<SwRect*>(pParam);
                                 if( pFrame->Frame().Pos() != rFrame.Pos() )
@@ -653,12 +654,13 @@ void SwImplProtocol::Record_( const SwFrame* pFrame, sal_uLong nFunction, sal_uL
                                 }
                                 break;
                             }
+        default: break;
     }
     pStream->WriteCharPtr( aOut.getStr() );
     (*pStream) << endl;  // output
     pStream->Flush();   // to the disk, so we can read it immediately
     if( ++nLineCount >= nMaxLines )     // max number of lines reached?
-        SwProtocol::SetRecord( 0 );        // => end f logging
+        SwProtocol::SetRecord( PROT::FileInit );        // => end f logging
 }
 
 /// Handle the output of the SectionFrames.
@@ -723,16 +725,16 @@ bool SwImplProtocol::DeleteFrame( sal_uInt16 nId )
  * The task here is to find the right SwImplEnterLeave object based on the
  * function; everything else is then done in his Ctor/Dtor.
  */
-void SwEnterLeave::Ctor( const SwFrame* pFrame, sal_uLong nFunc, sal_uLong nAct, void* pPar )
+void SwEnterLeave::Ctor( const SwFrame* pFrame, PROT nFunc, sal_uLong nAct, void* pPar )
 {
     switch( nFunc )
     {
-        case PROT_ADJUSTN :
-        case PROT_GROW:
-        case PROT_SHRINK : pImpl = new SwSizeEnterLeave( pFrame, nFunc, nAct, pPar ); break;
-        case PROT_MOVE_FWD:
-        case PROT_MOVE_BWD : pImpl = new SwUpperEnterLeave( pFrame, nFunc, nAct, pPar ); break;
-        case PROT_FRMCHANGES : pImpl = new SwFrameChangesLeave( pFrame, nFunc, nAct, pPar ); break;
+        case PROT::AdjustN :
+        case PROT::Grow:
+        case PROT::Shrink : pImpl = new SwSizeEnterLeave( pFrame, nFunc, nAct, pPar ); break;
+        case PROT::MoveFwd:
+        case PROT::MoveBack : pImpl = new SwUpperEnterLeave( pFrame, nFunc, nAct, pPar ); break;
+        case PROT::FrmChanges : pImpl = new SwFrameChangesLeave( pFrame, nFunc, nAct, pPar ); break;
         default: pImpl = new SwImplEnterLeave( pFrame, nFunc, nAct, pPar ); break;
     }
     pImpl->Enter();
@@ -786,7 +788,7 @@ void SwFrameChangesLeave::Enter()
 void SwFrameChangesLeave::Leave()
 {
     if( pFrame->Frame() != aFrame )
-        SwProtocol::Record( pFrame, PROT_FRMCHANGES, 0, &aFrame );
+        SwProtocol::Record( pFrame, PROT::FrmChanges, 0, &aFrame );
 }
 
 #endif // DBG_UTIL

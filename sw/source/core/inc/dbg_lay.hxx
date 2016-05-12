@@ -20,26 +20,33 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_INC_DBG_LAY_HXX
 #define INCLUDED_SW_SOURCE_CORE_INC_DBG_LAY_HXX
 
-#define PROT_FILE_INIT  0x00000000
-#define PROT_INIT       0x00000001
-#define PROT_MAKEALL    0x00000002
-#define PROT_MOVE_FWD   0x00000004
-#define PROT_MOVE_BWD   0x00000008
-#define PROT_GROW       0x00000010
-#define PROT_SHRINK     0x00000020
-#define PROT_GROW_TST   0x00000040
-#define PROT_SHRINK_TST 0x00000080
-#define PROT_SIZE       0x00000100
-#define PROT_PRTAREA    0x00000200
-#define PROT_POS        0x00000400
-#define PROT_ADJUSTN    0x00000800
-#define PROT_SECTION    0x00001000
-#define PROT_CUT        0x00002000
-#define PROT_PASTE      0x00004000
-#define PROT_LEAF       0x00008000
-#define PROT_TESTFORMAT 0x00010000
-#define PROT_FRMCHANGES 0x00020000
-#define PROT_SNAPSHOT   0x00040000
+#include <o3tl/typed_flags_set.hxx>
+
+enum class PROT {
+    FileInit   = 0x00000000,
+    Init       = 0x00000001,
+    MakeAll    = 0x00000002,
+    MoveFwd    = 0x00000004,
+    MoveBack   = 0x00000008,
+    Grow       = 0x00000010,
+    Shrink     = 0x00000020,
+    GrowTest   = 0x00000040,
+    ShrinkTest = 0x00000080,
+    Size       = 0x00000100,
+    PrintArea  = 0x00000200,
+    Pos        = 0x00000400,
+    AdjustN    = 0x00000800,
+    Section    = 0x00001000,
+    Cut        = 0x00002000,
+    Paste      = 0x00004000,
+    Leaf       = 0x00008000,
+    TestFormat = 0x00010000,
+    FrmChanges = 0x00020000,
+    Snapshot   = 0x00040000
+};
+namespace o3tl {
+    template<> struct typed_flags<PROT> : is_typed_flags<PROT, 0x0007ffff> {};
+}
 
 #define ACT_START           1
 #define ACT_END             2
@@ -63,15 +70,15 @@ class SwImplEnterLeave;
 
 class SwProtocol
 {
-    static sal_uLong nRecord;
+    static PROT nRecord;
     static SwImplProtocol* pImpl;
-    static bool Start() { return 0 != ( PROT_INIT & nRecord ); }
+    static bool Start() { return bool( PROT::Init & nRecord ); }
 
 public:
-    static sal_uLong Record() { return nRecord; }
-    static void SetRecord( sal_uLong nNew ) { nRecord = nNew; }
-    static bool Record( sal_uLong nFunc ) { return 0 != (( nFunc | PROT_INIT ) & nRecord); }
-    static void Record( const SwFrame* pFrame, sal_uLong nFunction, sal_uLong nAction, void* pParam );
+    static PROT Record() { return nRecord; }
+    static void SetRecord( PROT nNew ) { nRecord = nNew; }
+    static bool Record( PROT nFunc ) { return bool(( nFunc | PROT::Init ) & nRecord); }
+    static void Record( const SwFrame* pFrame, PROT nFunction, sal_uLong nAction, void* pParam );
     static void Init();
     static void Stop();
 };
@@ -79,11 +86,11 @@ public:
 class SwEnterLeave
 {
     SwImplEnterLeave* pImpl;
-    void Ctor( const SwFrame* pFrame, sal_uLong nFunc, sal_uLong nAct, void* pPar );
+    void Ctor( const SwFrame* pFrame, PROT nFunc, sal_uLong nAct, void* pPar );
     void Dtor();
 
 public:
-    SwEnterLeave( const SwFrame* pFrame, sal_uLong nFunc, sal_uLong nAct, void* pPar )
+    SwEnterLeave( const SwFrame* pFrame, PROT nFunc, sal_uLong nAct, void* pPar )
     {
         if( SwProtocol::Record( nFunc ) )
             Ctor( pFrame, nFunc, nAct, pPar );

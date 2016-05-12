@@ -540,7 +540,7 @@ void SwLayAction::InternalAction(OutputDevice* pRenderContext)
                         ( pPage->IsInvalid() ||
                           (IS_FLYS && IS_INVAFLY) ) )
                 {
-                    PROTOCOL( pPage, PROT_FILE_INIT, 0, nullptr)
+                    PROTOCOL( pPage, PROT::FileInit, 0, nullptr)
                     XCHECKPAGE;
 
                     // #i81146# new loop control
