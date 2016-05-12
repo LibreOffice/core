@@ -181,6 +181,7 @@ static void MyCGPathApplierFunc( void* pData, const CGPathElement* pElement )
         {
             break;
         }
+        SAL_FALLTHROUGH;
     case kCGPathElementAddLineToPoint:
         rPolygon.append( basegfx::B2DPoint( +pElement->points[0].x, -pElement->points[0].y ) );
         break;
