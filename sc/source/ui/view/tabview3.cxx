@@ -306,15 +306,41 @@ void ScTabView::SetCursor( SCCOL nPosX, SCROW nPosY, bool bNew )
         {
             if (nPosX > aViewData.GetMaxTiledCol() - 10 || nPosY > aViewData.GetMaxTiledRow() - 25)
             {
+                ScDocShell* pDocSh = aViewData.GetDocShell();
+                ScModelObj* pModelObj = pDocSh ? ScModelObj::getImplementation( pDocSh->GetModel() ) : nullptr;
+                Size aOldSize(0, 0);
+                if (pModelObj)
+                    aOldSize = pModelObj->getDocumentSize();
+
                 if (nPosX > aViewData.GetMaxTiledCol() - 10)
                     aViewData.SetMaxTiledCol(std::max(nPosX, aViewData.GetMaxTiledCol()) + 10);
 
                 if (nPosY > aViewData.GetMaxTiledRow() - 25)
                     aViewData.SetMaxTiledRow(std::max(nPosY, aViewData.GetMaxTiledRow()) + 25);
 
-                ScDocShell* pDocSh = aViewData.GetDocShell();
+                Size aNewSize(0, 0);
+                if (pModelObj)
+                    aNewSize = pModelObj->getDocumentSize();
+
                 if (pDocSh)
+                {
                     pDocSh->libreOfficeKitCallback(LOK_CALLBACK_DOCUMENT_SIZE_CHANGED, "");
+
+                    // New area extended to the right of the sheet after last column
+                    // including overlapping area with aNewRowArea
+                    Rectangle aNewColArea(aOldSize.getWidth(), 0, aNewSize.getWidth(), aNewSize.getHeight());
+                    // New area extended to the bottom of the sheet after last row
+                    // excluding overlapping area with aNewColArea
+                    Rectangle aNewRowArea(0, aOldSize.getHeight(), aOldSize.getWidth(), aNewSize.getHeight());
+
+                    // Only invalidate if spreadsheet extended to the right
+                    if (aNewColArea.getWidth())
+                        pDocSh->libreOfficeKitCallback(LOK_CALLBACK_INVALIDATE_TILES, aNewColArea.toString().getStr());
+
+                    // Only invalidate if spreadsheet extended to the bottom
+                    if (aNewRowArea.getHeight())
+                        pDocSh->libreOfficeKitCallback(LOK_CALLBACK_INVALIDATE_TILES, aNewRowArea.toString().getStr());
+                }
             }
         }
     }
