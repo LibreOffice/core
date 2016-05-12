@@ -46,7 +46,6 @@
 #include "globalnames.hxx"
 #include "inputhdl.hxx"
 
-#include <cstdlib>
 #include <vector>
 
 using ::std::vector;
@@ -293,6 +292,10 @@ void ScViewFunc::InsertCurrentTime(short nReqFmt, const OUString& rUndoStr)
                         nFormat = nCurNumFormat;
                 }
                 break;
+            default:
+                assert(!"unhandled current date/time request");
+                nReqFmt = css::util::NumberFormat::DATETIME;
+                // fallthru
             case css::util::NumberFormat::DATETIME:
                 {
                     DateTime aActDateTime( DateTime::SYSTEM );
@@ -301,8 +304,6 @@ void ScViewFunc::InsertCurrentTime(short nReqFmt, const OUString& rUndoStr)
                         nFormat = nCurNumFormat;
                 }
                 break;
-            default:
-                for (;;) std::abort();
         }
 
         if (!nFormat)
@@ -385,10 +386,12 @@ void ScViewFunc::InsertCurrentTime(short nReqFmt, const OUString& rUndoStr)
                         break;
                 }
                 break;
+            default:
+                assert(!"unhandled current date/time request");
+                nReqFmt = css::util::NumberFormat::DATETIME;
+                // fallthru
             case css::util::NumberFormat::DATETIME:
                 break;
-            default:
-                for (;;) std::abort();
         }
         double fVal = 0.0;
         switch (nReqFmt)
