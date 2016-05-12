@@ -79,7 +79,6 @@
 #include <connectivity/dbconversion.hxx>
 #include <connectivity/dbtools.hxx>
 
-#include <boost/bind.hpp>
 #include "metadata.hxx"
 #include <svl/itempool.hxx>
 #include <svl/itemset.hxx>
@@ -120,15 +119,6 @@ namespace rptui
 using namespace ::com::sun::star;
 
 namespace{
-// comparing two property instances
-struct PropertyCompare : public ::std::binary_function< beans::Property, OUString , bool >
-{
-    bool operator() (const beans::Property& x, const OUString& y) const
-    {
-        return x.Name.equals(y);
-    }
-};
-
 
 OUString lcl_getQuotedFunctionName(const OUString& _sFunction)
 {
@@ -932,7 +922,10 @@ beans::Property GeometryHandler::getProperty(const OUString & PropertyName)
     uno::Sequence< beans::Property > aProps = getSupportedProperties();
     const beans::Property* pIter = aProps.getConstArray();
     const beans::Property* pEnd  = pIter + aProps.getLength();
-    const beans::Property* pFind = ::std::find_if(pIter,pEnd,::std::bind2nd(PropertyCompare(),boost::cref(PropertyName)));
+    const beans::Property* pFind = ::std::find_if(pIter, pEnd,
+            [&PropertyName] (const beans::Property& x) -> bool {
+                return x.Name.equals(PropertyName);
+            });
     if ( pFind == pEnd )
         return beans::Property();
     return *pFind;
@@ -1321,7 +1314,10 @@ uno::Sequence< beans::Property > SAL_CALL GeometryHandler::getSupportedPropertie
     {
         const beans::Property* pIter = aSeq.getConstArray();
         const beans::Property* pEnd  = pIter + aSeq.getLength();
-        const beans::Property* pFind = ::std::find_if(pIter,pEnd,::std::bind2nd(PropertyCompare(),boost::cref(rIncludeProp)));
+        const beans::Property* pFind = ::std::find_if(pIter, pEnd,
+            [&rIncludeProp] (const beans::Property& x) -> bool {
+                return x.Name.equals(rIncludeProp);
+            });
         if ( pFind != pEnd )
         {
             // special case for controls which contain a data field

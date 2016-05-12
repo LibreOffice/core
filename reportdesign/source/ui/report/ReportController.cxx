@@ -140,7 +140,6 @@
 #include "PageNumber.hxx"
 #include "UndoEnv.hxx"
 
-#include <boost/bind.hpp>
 #include <memory>
 
 #include <cppuhelper/exc_hlp.hxx>
@@ -183,15 +182,6 @@ using namespace ::cppu;
 
 namespace
 {
-    // comparing two PropertyValue instances
-    struct PropertyValueCompare : public ::std::binary_function< beans::PropertyValue, OUString , bool >
-    {
-        bool operator() (const beans::PropertyValue& x, const OUString& y) const
-        {
-            return x.Name.equals(y);
-        }
-    };
-
     void lcl_setFontWPU_nothrow(const uno::Reference< report::XReportControlFormat>& _xReportControlFormat,const sal_Int32 _nId)
     {
         if ( _xReportControlFormat.is() )
@@ -3984,7 +3974,10 @@ void OReportController::createDefaultControl(const uno::Sequence< beans::Propert
         const OUString sKeyModifier("KeyModifier");
         const beans::PropertyValue* pIter = _aArgs.getConstArray();
         const beans::PropertyValue* pEnd  = pIter + _aArgs.getLength();
-        const beans::PropertyValue* pKeyModifier = ::std::find_if(pIter,pEnd,::std::bind2nd(PropertyValueCompare(),boost::cref(sKeyModifier)));
+        const beans::PropertyValue* pKeyModifier = ::std::find_if(pIter, pEnd,
+            [&sKeyModifier] (const beans::PropertyValue& x) -> bool {
+                return x.Name.equals(sKeyModifier);
+            });
         sal_Int16 nKeyModifier = 0;
         if ( pKeyModifier == pEnd || ((pKeyModifier->Value >>= nKeyModifier) && nKeyModifier == KEY_MOD1) )
         {
