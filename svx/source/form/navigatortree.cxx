@@ -1071,7 +1071,7 @@ namespace svxform
             Reference< XIndexContainer >  xContainer(xCurrentChild->getParent(), UNO_QUERY);
 
             FmFormData* pCurrentParentUserData = static_cast<FmFormData*>(pCurrentUserData->GetParent());
-            DBG_ASSERT(pCurrentParentUserData == nullptr || dynamic_cast<const FmFormData*>( pCurrentParentUserData) !=  nullptr, "NavigatorTree::implExecuteDataTransfer: invalid parent");
+            DBG_ASSERT(pCurrentParentUserData == nullptr || dynamic_cast<const FmFormData*>(pCurrentUserData->GetParent()) !=  nullptr, "NavigatorTree::implExecuteDataTransfer: invalid parent");
 
             // remove from parent
             if (pCurrentParentUserData)
