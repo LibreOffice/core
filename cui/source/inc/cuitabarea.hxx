@@ -22,6 +22,7 @@
 #include <svtools/valueset.hxx>
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
+#include <vcl/slider.hxx>
 #include <svx/dlgctrl.hxx>
 #include <svx/xsetit.hxx>
 #include <svx/xfillit0.hxx>
@@ -192,14 +193,6 @@ private:
     VclPtr<BitmapLB>           m_pLbBitmap;
     VclPtr<SvxXRectPreview>    m_pCtlBitmapPreview;
 
-    VclPtr<TriStateBox>        m_pTsbStepCount;
-    VclPtr<VclFrame>           m_pFlStepCount;
-    VclPtr<NumericField>       m_pNumFldStepCount;
-
-    VclPtr<VclFrame>           m_pFlHatchBckgrd;
-    VclPtr<CheckBox>           m_pCbxHatchBckgrd;
-    VclPtr<ColorLB>            m_pLbHatchBckgrdColor;
-
     VclPtr<VclBox>             m_pBxBitmap;
 
     VclPtr<VclFrame>           m_pFlSize;
@@ -267,13 +260,9 @@ private:
 
     DECL_LINK_TYPED(SelectDialogTypeHdl_Impl, ListBox&, void);
     DECL_LINK_TYPED( ModifyColorHdl_Impl, ListBox&, void );
-    DECL_LINK_TYPED( ModifyHatchBckgrdColorHdl_Impl, ListBox&, void );
     DECL_LINK_TYPED( ModifyGradientHdl_Impl, ListBox&, void );
     DECL_LINK_TYPED( ModifyHatchingHdl_Impl, ListBox&, void );
-    DECL_LINK_TYPED( ToggleHatchBckgrdColorHdl_Impl, CheckBox&, void );
     DECL_LINK_TYPED( ModifyBitmapHdl_Impl, ListBox&, void );
-    DECL_LINK_TYPED( ModifyStepCountEditHdl_Impl, Edit&, void );
-    DECL_LINK_TYPED( ModifyStepCountClickHdl_Impl, Button*, void );
     void ModifyStepCountHdl_Impl(void*);
 
     //UUUU
@@ -390,18 +379,20 @@ class SvxGradientTabPage : public SfxTabPage
 
 private:
     VclPtr<ListBox>            m_pLbGradientType;
-    VclPtr<FixedText>          m_pFtCenterX;
+    VclPtr<FixedText>          m_pFtCenter;
     VclPtr<MetricField>        m_pMtrCenterX;
-    VclPtr<FixedText>          m_pFtCenterY;
     VclPtr<MetricField>        m_pMtrCenterY;
     VclPtr<FixedText>          m_pFtAngle;
     VclPtr<MetricField>        m_pMtrAngle;
     VclPtr<MetricField>        m_pMtrBorder;
+    VclPtr<Slider>             m_pSliderBorder;
     VclPtr<ColorLB>            m_pLbColorFrom;
     VclPtr<MetricField>        m_pMtrColorFrom;
     VclPtr<ColorLB>            m_pLbColorTo;
     VclPtr<MetricField>        m_pMtrColorTo;
     VclPtr<GradientLB>         m_pLbGradients;
+    VclPtr<MetricField>        m_pMtrIncrement;
+    VclPtr<Slider>             m_pSliderIncrement;
     VclPtr<SvxXRectPreview>    m_pCtlPreview;
     VclPtr<PushButton>         m_pBtnAdd;
     VclPtr<PushButton>         m_pBtnModify;
@@ -431,6 +422,7 @@ private:
     DECL_LINK_TYPED( ClickDeleteHdl_Impl, Button*, void );
     DECL_LINK_TYPED( ChangeGradientHdl_Impl, ListBox&, void );
     DECL_LINK_TYPED( ModifiedEditHdl_Impl, Edit&, void );
+    DECL_LINK_TYPED( ModifiedSliderHdl_Impl, Slider*, void );
     DECL_LINK_TYPED( ModifiedListBoxHdl_Impl, ListBox&, void );
     DECL_LINK_TYPED( ClickLoadHdl_Impl, Button*, void );
     DECL_LINK_TYPED( ClickSaveHdl_Impl, Button*, void );
@@ -476,9 +468,10 @@ class SvxHatchTabPage : public SvxTabPage
 private:
     VclPtr<MetricField>        m_pMtrDistance;
     VclPtr<MetricField>        m_pMtrAngle;
-    VclPtr<SvxRectCtl>         m_pCtlAngle;
+    VclPtr<Slider>             m_pSliderAngle;
     VclPtr<ListBox>            m_pLbLineType;
     VclPtr<ColorLB>            m_pLbLineColor;
+    VclPtr<ColorLB>            m_pLbBackgroundColor;
     VclPtr<HatchingLB>         m_pLbHatchings;
     VclPtr<SvxXRectPreview>    m_pCtlPreview;
     VclPtr<PushButton>         m_pBtnAdd;
@@ -488,6 +481,7 @@ private:
     VclPtr<PushButton>         m_pBtnSave;
 
     const SfxItemSet&   m_rOutAttrs;
+    RECT_POINT          eRP;
 
     XColorListRef         m_pColorList;
     XHatchListRef         m_pHatchingList;
@@ -509,6 +503,8 @@ private:
     DECL_LINK_TYPED( ChangeHatchHdl_Impl, ListBox&, void );
     DECL_LINK_TYPED( ModifiedEditHdl_Impl, Edit&, void );
     DECL_LINK_TYPED( ModifiedListBoxHdl_Impl, ListBox&, void );
+    DECL_LINK_TYPED( ModifiedBackgroundHdl_Impl, ListBox&, void );
+    DECL_LINK_TYPED( ModifiedSliderHdl_Impl, Slider*, void );
     void ModifiedHdl_Impl(void*);
     DECL_LINK_TYPED( ClickAddHdl_Impl, Button*, void );
     DECL_LINK_TYPED( ClickModifyHdl_Impl, Button*, void );
