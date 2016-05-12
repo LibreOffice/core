@@ -385,7 +385,7 @@ std::shared_ptr<PresenterConfigurationAccess> PresenterTheme::GetNodeForViewStyl
             [&rsStyleName] (OUString const&, uno::Reference<beans::XPropertySet> const& xProps)
             {
                 return PresenterConfigurationAccess::IsStringPropertyEqual(
-                        rsStyleName, OUString("StyleName"), xProps);
+                        rsStyleName, "StyleName", xProps);
             });
     }
     return pConfiguration;
