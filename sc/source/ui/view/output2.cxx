@@ -2633,8 +2633,8 @@ void ScOutputData::DrawEditParam::setAlignmentToEngine()
                 {
                     case SVX_HOR_JUSTIFY_REPEAT:            // repeat is not yet implemented
                     case SVX_HOR_JUSTIFY_STANDARD:
-                        assert(!"meHorJustResult does not match getAlignmentFromContext()");
-                        // fallthru
+                        SAL_WARN("sc.ui","meHorJustResult does not match getAlignmentFromContext()");
+                        SAL_FALLTHROUGH;
                     case SVX_HOR_JUSTIFY_LEFT:
                         eSvxAdjust = SVX_ADJUST_LEFT;
                         break;
