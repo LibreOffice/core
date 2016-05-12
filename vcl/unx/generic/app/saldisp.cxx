@@ -1959,9 +1959,9 @@ bool SalX11Display::Dispatch( XEvent *pEvent )
         case PropertyNotify:
             if( pEvent->xproperty.atom == getWMAdaptor()->getAtom( WMAdaptor::VCL_SYSTEM_SETTINGS ) )
             {
-                for( size_t i = 0; i < m_aScreens.size(); i++ )
+                for(ScreenData & rScreen : m_aScreens)
                 {
-                    if( pEvent->xproperty.window == m_aScreens[i].m_aRefWindow )
+                    if( pEvent->xproperty.window == rScreen.m_aRefWindow )
                     {
                         std::list< SalFrame* >::const_iterator it;
                         for( it = m_aFrames.begin(); it != m_aFrames.end(); ++it )

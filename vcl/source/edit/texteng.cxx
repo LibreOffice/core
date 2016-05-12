@@ -428,9 +428,8 @@ void TextEngine::ImpRemoveText()
     ImpInitDoc();
 
     const TextSelection aEmptySel;
-    for ( size_t nView = 0; nView < mpViews->size(); nView++ )
+    for (TextView* pView : *mpViews)
     {
-        TextView* pView = (*mpViews)[ nView ];
         pView->ImpSetSelection( aEmptySel );
     }
     ResetUndo();
@@ -450,9 +449,8 @@ void TextEngine::SetText( const OUString& rText )
     if ( !rText.isEmpty() )
         aPaM = ImpInsertText( aEmptySel, rText );
 
-    for ( size_t nView = 0; nView < mpViews->size(); nView++ )
+    for (TextView* pView : *mpViews)
     {
-        TextView* pView = (*mpViews)[ nView ];
         pView->ImpSetSelection( aEmptySel );
 
         // if no text, then no Format&Update => the text remains
@@ -889,9 +887,8 @@ Rectangle TextEngine::GetEditCursor( const TextPaM& rPaM, bool bSpecial, bool bP
     long nY = 0;
     sal_Int32 nCurIndex = 0;
     TextLine* pLine = nullptr;
-    for ( size_t nLine = 0; nLine < pPortion->GetLines().size(); nLine++ )
+    for (TextLine & rTmpLine : pPortion->GetLines())
     {
-        TextLine& rTmpLine = pPortion->GetLines()[ nLine ];
         if ( ( rTmpLine.GetStart() == rPaM.GetIndex() ) || ( rTmpLine.IsIn( rPaM.GetIndex(), bSpecial ) ) )
         {
             pLine = &rTmpLine;
@@ -1464,9 +1461,8 @@ void TextEngine::UpdateViews( TextView* pCurView )
 
     DBG_ASSERT( IsFormatted(), "UpdateViews: Doc not formatted!" );
 
-    for ( size_t nView = 0; nView < mpViews->size(); nView++ )
+    for (TextView* pView : *mpViews)
     {
-        TextView* pView = (*mpViews)[ nView ];
         pView->HideCursor();
 
         Rectangle aClipRect( maInvalidRect );

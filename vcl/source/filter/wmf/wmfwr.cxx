@@ -1756,8 +1756,8 @@ bool WMFWriter::WriteWMF( const GDIMetaFile& rMTF, SvStream& rTargetStream,
 
     pAttrStack=nullptr;
 
-    for (sal_uInt16 i=0; i<MAXOBJECTHANDLES; i++)
-        bHandleAllocated[i]=false;
+    for (bool & rn : bHandleAllocated)
+        rn=false;
 
     nDstPenHandle=0xffff;
     nDstFontHandle=0xffff;

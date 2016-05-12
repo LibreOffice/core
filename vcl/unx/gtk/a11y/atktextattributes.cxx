@@ -1071,8 +1071,8 @@ attribute_set_new_from_property_values(
     sal_Int32 aIndexList[TEXT_ATTRIBUTE_LAST] = { -1 };
 
     // Initialize index array with -1
-    for( sal_Int32 attr = 0; attr < TEXT_ATTRIBUTE_LAST; ++attr )
-        aIndexList[attr] = -1;
+    for(sal_Int32 & rn : aIndexList)
+        rn = -1;
 
     find_exported_attributes(aIndexList, rAttributeList);
 
