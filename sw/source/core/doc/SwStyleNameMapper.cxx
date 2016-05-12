@@ -430,9 +430,6 @@ const NameToIdHash & SwStyleNameMapper::getHashTable ( SwGetPoolIdFromName eFlag
 
     switch ( eFlags )
     {
-        default:
-            assert(false && "unknown pool family");
-            //fall-through
         case nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL:
         {
             pHashPointer = bProgName ? &m_pParaProgMap : &m_pParaUIMap;
@@ -469,6 +466,8 @@ const NameToIdHash & SwStyleNameMapper::getHashTable ( SwGetPoolIdFromName eFlag
             vIndexes.push_back( std::make_tuple(RES_POOLNUMRULE_BEGIN, RES_POOLNUMRULE_END, bProgName ? &GetNumRuleProgNameArray : &GetNumRuleUINameArray) );
         }
         break;
+        default:
+            assert(false && "unknown pool family");
     }
 
     // Proceed if we have a pointer to a hash, and the hash hasn't already been populated
