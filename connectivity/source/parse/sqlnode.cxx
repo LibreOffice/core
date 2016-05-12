@@ -1966,7 +1966,7 @@ void OSQLParseNode::negateSearchCondition(OSQLParseNode*& pSearchCondition, bool
             {
             default:
                 assert(false && "OSQLParseNode::negateSearchCondition: unexpected node type!");
-                // fall-through
+                SAL_FALLTHROUGH;
             case SQLNodeType::Equal:
                 pNewComparison = new OSQLParseNode(OUString("<>"),SQLNodeType::NotEqual,SQL_NOTEQUAL);
                 break;
