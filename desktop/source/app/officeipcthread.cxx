@@ -546,15 +546,14 @@ RequestHandler::Status DbusIpcThread::enable(rtl::Reference<IpcThread> * thread)
                 }
                 return RequestHandler::IPC_STATUS_2ND_OFFICE;
             }
-        default:
-            assert(false);
-            // fall through
         case DBUS_REQUEST_NAME_REPLY_IN_QUEUE:
         case DBUS_REQUEST_NAME_REPLY_ALREADY_OWNER:
             SAL_WARN(
                 "desktop.app",
                 "dbus_bus_request_name failed with unexpected " << +n);
             return RequestHandler::IPC_STATUS_BOOTSTRAP_ERROR;
+        default:
+            for (;;) std::abort();
         }
     }
 }
@@ -636,15 +635,14 @@ void DbusIpcThread::close() {
         break;
     case DBUS_RELEASE_NAME_REPLY_RELEASED:
         break;
-    default:
-        assert(false);
-        // fall through
     case DBUS_RELEASE_NAME_REPLY_NOT_OWNER:
     case DBUS_RELEASE_NAME_REPLY_NON_EXISTENT:
         SAL_WARN(
             "desktop.app",
             "dbus_bus_release_name failed with unexpected " << +n);
         break;
+    default:
+        for (;;) std::abort();
     }
     connection_.clear();
 }
