@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <cstdlib>
+
 #include <i18nlangtag/languagetag.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/util/TextSearch2.hpp>
@@ -163,12 +167,11 @@ css::util::SearchOptions2 TextSearch::UpgradeToSearchOptions2( const css::util::
         case SearchAlgorithms_APPROXIMATE:
             nAlgorithmType2 = SearchAlgorithms2::APPROXIMATE;
             break;
-        default:
-            assert(!"utl::TextSearch::UpgradeToSearchOptions2 - default what?");
-            // fallthru
         case SearchAlgorithms_ABSOLUTE:
             nAlgorithmType2 = SearchAlgorithms2::ABSOLUTE;
             break;
+        default:
+            for (;;) std::abort();
     }
     // It would be nice if an inherited struct had a ctor that takes an
     // instance of the object the struct derived from..
@@ -222,15 +225,15 @@ void TextSearch::Init( const SearchParam & rParam,
             aSOpt.searchFlag |= SearchFlags::LEV_RELAXED;
         break;
 
-    default:
-        assert(!"utl::TextSearch::Init - default what?");
-        // fallthru
     case SearchParam::SRCH_NORMAL:
         aSOpt.AlgorithmType2 = SearchAlgorithms2::ABSOLUTE;
         aSOpt.algorithmType = SearchAlgorithms_ABSOLUTE;
         if( rParam.IsSrchWordOnly() )
             aSOpt.searchFlag |= SearchFlags::NORM_WORD_ONLY;
         break;
+
+    default:
+        for (;;) std::abort();
     }
     aSOpt.searchString = rParam.GetSrchStr();
     aSOpt.replaceString = rParam.GetReplaceStr();
