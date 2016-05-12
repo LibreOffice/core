@@ -40,7 +40,7 @@ ImplWheelWindow::ImplWheelWindow( vcl::Window* pParent ) :
             FloatingWindow  ( pParent, 0 ),
             mnRepaintTime   ( 1UL ),
             mnTimeout       ( DEF_TIMEOUT ),
-            mnWheelMode     ( WHEELMODE_NONE ),
+            mnWheelMode     ( WheelMode::NONE ),
             mnActDist       ( 0UL ),
             mnActDeltaX     ( 0L ),
             mnActDeltaY     ( 0L )
@@ -67,11 +67,11 @@ ImplWheelWindow::ImplWheelWindow( vcl::Window* pParent ) :
 
     // set wheel mode
     if( bHorz && bVert )
-        ImplSetWheelMode( WHEELMODE_VH );
+        ImplSetWheelMode( WheelMode::VH );
     else if( bHorz )
-        ImplSetWheelMode( WHEELMODE_H );
+        ImplSetWheelMode( WheelMode::H );
     else
-        ImplSetWheelMode( WHEELMODE_V );
+        ImplSetWheelMode( WheelMode::V );
 
     // init timer
     mpTimer = new Timer("WheelWindowTimer");
@@ -126,13 +126,13 @@ void ImplWheelWindow::ImplCreateImageList()
             ( ResId( SV_RESID_BITMAP_SCROLLBMP, *pResMgr ), 6, nullptr );
 }
 
-void ImplWheelWindow::ImplSetWheelMode( sal_uLong nWheelMode )
+void ImplWheelWindow::ImplSetWheelMode( WheelMode nWheelMode )
 {
     if( nWheelMode != mnWheelMode )
     {
         mnWheelMode = nWheelMode;
 
-        if( WHEELMODE_NONE == mnWheelMode )
+        if( WheelMode::NONE == mnWheelMode )
         {
             if( IsVisible() )
                 Hide();
@@ -153,22 +153,22 @@ void ImplWheelWindow::ImplDrawWheel(vcl::RenderContext& rRenderContext)
 
     switch (mnWheelMode)
     {
-        case WHEELMODE_VH:
+        case WheelMode::VH:
             nId = 1;
         break;
-        case WHEELMODE_V:
+        case WheelMode::V:
             nId = 2;
         break;
-        case WHEELMODE_H:
+        case WheelMode::H:
             nId = 3;
         break;
-        case WHEELMODE_SCROLL_VH:
+        case WheelMode::ScrollVH:
             nId = 4;
         break;
-        case WHEELMODE_SCROLL_V:
+        case WheelMode::ScrollV:
             nId = 5;
         break;
-        case WHEELMODE_SCROLL_H:
+        case WheelMode::ScrollH:
             nId = 6;
         break;
         default:
@@ -344,11 +344,11 @@ void ImplWheelWindow::MouseMove( const MouseEvent& rMEvt )
     SetPointer( eActStyle );
 
     if( bHorz && bVert )
-        ImplSetWheelMode( bOuter ? WHEELMODE_SCROLL_VH : WHEELMODE_VH );
+        ImplSetWheelMode( bOuter ? WheelMode::ScrollVH : WheelMode::VH );
     else if( bHorz )
-        ImplSetWheelMode( bOuter ? WHEELMODE_SCROLL_H : WHEELMODE_H );
+        ImplSetWheelMode( bOuter ? WheelMode::ScrollH : WheelMode::H );
     else
-        ImplSetWheelMode( bOuter ? WHEELMODE_SCROLL_V : WHEELMODE_V );
+        ImplSetWheelMode( bOuter ? WheelMode::ScrollV : WheelMode::V );
 }
 
 void ImplWheelWindow::MouseButtonUp( const MouseEvent& rMEvt )

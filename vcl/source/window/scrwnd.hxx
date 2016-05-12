@@ -24,15 +24,20 @@
 #include <vcl/bitmap.hxx>
 #include <vcl/image.hxx>
 
-#define WHEELMODE_NONE      0x00000000UL
-#define WHEELMODE_VH        0x00000001UL
-#define WHEELMODE_V         0x00000002UL
-#define WHEELMODE_H         0x00000004UL
-#define WHEELMODE_SCROLL_VH 0x00000008UL
-#define WHEELMODE_SCROLL_V  0x00000010UL
-#define WHEELMODE_SCROLL_H  0x00000020UL
-
 class Timer;
+
+enum class WheelMode {
+    NONE      = 0x0000,
+    VH        = 0x0001,
+    V         = 0x0002,
+    H         = 0x0004,
+    ScrollVH  = 0x0008,
+    ScrollV   = 0x0010,
+    ScrollH   = 0x0020
+};
+namespace o3tl {
+    template<> struct typed_flags<WheelMode> : is_typed_flags<WheelMode, 0x003f> {};
+}
 
 class ImplWheelWindow : public FloatingWindow
 {
@@ -44,9 +49,9 @@ private:
     Timer*              mpTimer;
     sal_uInt64          mnRepaintTime;
     sal_uInt64          mnTimeout;
-    sal_uLong               mnWheelMode;
-    sal_uLong               mnMaxWidth;
-    sal_uLong               mnActDist;
+    WheelMode           mnWheelMode;
+    sal_uLong           mnMaxWidth;
+    sal_uLong           mnActDist;
     long                mnActDeltaX;
     long                mnActDeltaY;
 
@@ -72,7 +77,7 @@ public:
     virtual void        dispose() override;
 
     void                ImplStop();
-    void                ImplSetWheelMode( sal_uLong nWheelMode );
+    void                ImplSetWheelMode( WheelMode nWheelMode );
 };
 
 #endif // INCLUDED_VCL_SOURCE_WINDOW_SCRWND_HXX
