@@ -789,9 +789,7 @@ uno::Any SAL_CALL SwXTextView::getPropertyValue(
                 const SwViewOption *pOpt = m_pView->GetWrtShell().GetViewOptions();
                 if (!pOpt)
                     throw RuntimeException();
-                sal_uInt32 nFlag = VIEWOPT_1_ONLINESPELL;
-                bool bVal = 0 != (pOpt->GetCoreOptions() & nFlag);
-                aRet <<= bVal;
+                aRet <<= bool(pOpt->GetCoreOptions() & ViewOptFlags1::OnlineSpell);
             }
             break;
             default :
