@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_146e5dc9",
+        "filename": "sw/inc/unostyle.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-05-13T07:21:39Z",
+      "side": 1,
+      "message": "Please go with TableStyle instead of TableDesignStyle everywhere. TableDesign is an Impress concept, it doesn\u0027t have a meaning in Writer. :-)\n\nAlso: as a start, what about just implementing css::style::XStyle here and nothing else? That would allow you not just declaring the C++ class, but also implement it.",
+      "revId": "43cc9fb460bab6bebc5a8b370ee1ed2c38f93afc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_5468e5ba",
+        "filename": "sw/inc/unostyle.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-05-13T07:21:39Z",
+      "side": 1,
+      "message": "As the first step I would ignore cell styles. Let\u0027s just make it possible to create, update, remove, get table styles, where the table style is really just a wrapper around the internal table autoformats.",
+      "revId": "43cc9fb460bab6bebc5a8b370ee1ed2c38f93afc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_7465e9df",
+        "filename": "sw/inc/unostyle.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-05-13T07:21:39Z",
+      "side": 1,
+      "message": "Same here, no need for this at the moment.",
+      "revId": "43cc9fb460bab6bebc5a8b370ee1ed2c38f93afc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_f49f39b2",
+        "filename": "sw/source/core/unocore/unostyle.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-05-13T07:21:39Z",
+      "side": 1,
+      "message": "Please don\u0027t include any svx code here. That\u0027s for table shapes, while Writer table styles are supposed to wrap Writer table autoformats and SwTable, as discussed earlier.",
+      "revId": "43cc9fb460bab6bebc5a8b370ee1ed2c38f93afc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_14a57d03",
+        "filename": "sw/source/core/unocore/unostyle.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-05-13T07:21:39Z",
+      "side": 1,
+      "message": "If you add the table style to our_pStyleFamilyEntries, then this special case won\u0027t be necessary, I hope.",
+      "revId": "43cc9fb460bab6bebc5a8b370ee1ed2c38f93afc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_34aa81d5",
+        "filename": "sw/source/core/unocore/unostyle.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 466,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-05-13T07:21:39Z",
+      "side": 1,
+      "message": "This is ugly. :-) Hopefully with our_pStyleFamilyEntries, it won\u0027t be necessary.",
+      "revId": "43cc9fb460bab6bebc5a8b370ee1ed2c38f93afc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
