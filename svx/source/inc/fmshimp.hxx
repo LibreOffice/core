@@ -84,12 +84,15 @@ namespace o3tl
 
 
 // flags for controlling the behaviour when calling loadForms
-#define FORMS_LOAD          0x0000      // default: simply load
-#define FORMS_SYNC          0x0000      // default: do in synchronous
-
-#define FORMS_UNLOAD        0x0001      // unload
-#define FORMS_ASYNC         0x0002      // do this async
-
+enum class LoadFormsFlags {
+    Load          = 0x0000,      // default: simply load
+    Sync          = 0x0000,      // default: do in synchronous
+    Unload        = 0x0001,      // unload
+    Async         = 0x0002      // do this async
+};
+namespace o3tl {
+    template<> struct typed_flags<LoadFormsFlags> : is_typed_flags<LoadFormsFlags, 0x0003> {};
+}
 
 // a class iterating through all fields of a form which are bound to a field
 // sub forms are ignored, grid columns (where the grid is a direct child of the form) are included
@@ -110,10 +113,10 @@ struct FmLoadAction
 {
     FmFormPage* pPage;
     ImplSVEvent * nEventId;
-    sal_uInt16  nFlags;
+    LoadFormsFlags  nFlags;
 
-    FmLoadAction( ) : pPage( nullptr ), nEventId( nullptr ), nFlags( 0 ) { }
-    FmLoadAction( FmFormPage* _pPage, sal_uInt16 _nFlags, ImplSVEvent * _nEventId )
+    FmLoadAction( ) : pPage( nullptr ), nEventId( nullptr ), nFlags( LoadFormsFlags::Load ) { }
+    FmLoadAction( FmFormPage* _pPage, LoadFormsFlags _nFlags, ImplSVEvent * _nEventId )
         :pPage( _pPage ), nEventId( _nEventId ), nFlags( _nFlags )
     {
     }
@@ -323,7 +326,7 @@ protected:
 
     // form handling
     /// load or unload the forms on a page
-    SAL_DLLPRIVATE         void        loadForms( FmFormPage* _pPage, const sal_uInt16 _nBehaviour = FORMS_LOAD | FORMS_SYNC );
+    SAL_DLLPRIVATE         void        loadForms( FmFormPage* _pPage, const LoadFormsFlags _nBehaviour = LoadFormsFlags::Load | LoadFormsFlags::Sync );
     SAL_DLLPRIVATE         void        smartControlReset( const css::uno::Reference< css::container::XIndexAccess >& _rxModels );
 
 
