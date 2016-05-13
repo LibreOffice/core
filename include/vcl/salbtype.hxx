@@ -651,12 +651,12 @@ inline sal_uInt32 ColorMask::GetRedMask() const
     return maR.mnMask;
 }
 
-inline sal_uLong ColorMask::GetGreenMask() const
+inline sal_uInt32 ColorMask::GetGreenMask() const
 {
     return maG.mnMask;
 }
 
-inline sal_uLong ColorMask::GetBlueMask() const
+inline sal_uInt32 ColorMask::GetBlueMask() const
 {
     return maB.mnMask;
 }
