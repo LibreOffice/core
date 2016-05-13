@@ -445,7 +445,8 @@ private:
 
 public:
     explicit ImplPixelFormat8( const BitmapPalette& rPalette )
-        : mrPalette( rPalette )
+        : pData(nullptr)
+        , mrPalette(rPalette)
         {
         }
     virtual void StartLine( sal_uInt8* pLine ) override { pData = pLine; }
@@ -476,7 +477,10 @@ private:
 
 public:
     explicit ImplPixelFormat4( const BitmapPalette& rPalette )
-        : mrPalette( rPalette )
+        : pData(nullptr)
+        , mrPalette(rPalette)
+        , mnX(0)
+        , mnShift(0)
         {
         }
     virtual void SkipPixel( sal_uInt32 nPixel ) override
@@ -521,7 +525,9 @@ private:
 
 public:
     explicit ImplPixelFormat1( const BitmapPalette& rPalette )
-        : mrPalette( rPalette )
+        : pData(nullptr)
+        , mrPalette(rPalette)
+        , mnX(0)
         {
         }
     virtual void SkipPixel( sal_uInt32 nPixel ) override

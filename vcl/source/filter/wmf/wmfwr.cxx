@@ -151,6 +151,7 @@ WMFWriter::WMFWriter()
     , eDstTextAlign(ALIGN_BASELINE)
     , eDstHorTextAlign(W_TA_LEFT)
     , bDstIsClipping(false)
+    , bHandleAllocated{}
     , nDstPenHandle(0)
     , nDstFontHandle(0)
     , nDstBrushHandle(0)

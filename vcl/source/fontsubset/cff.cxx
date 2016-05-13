@@ -424,8 +424,11 @@ CffSubsetterContext::CffSubsetterContext( const U8* pBasePtr, int nBaseLen)
     , mpCharStringOps(nullptr)
     , mpCharStringEscs(nullptr)
     , mnStackIdx(0)
+    , mnValStack{}
+    , mnTransVals{}
     , mnHintSize(0)
     , mnHorzHintSize(0)
+    , mnHintStack{}
     , maCharWidth(-1)
 {
 //  setCharStringType( 1);
@@ -1406,12 +1409,6 @@ CffLocal::CffLocal()
 ,   mnLangGroup( 0)
 ,   mbForceBold( false)
 {
-    maStemSnapH.clear();
-    maStemSnapV.clear();
-    maBlueValues.clear();
-    maOtherBlues.clear();
-    maFamilyBlues.clear();
-    maFamilyOtherBlues.clear();
 }
 
 CffGlobal::CffGlobal()
@@ -1434,8 +1431,6 @@ CffGlobal::CffGlobal()
 ,   mnFullNameSID( 0)
 ,   mnFamilyNameSID( 0)
 {
-    maFontBBox.clear();
-    // TODO; maFontMatrix.clear();
 }
 
 bool CffSubsetterContext::initialCffRead()
@@ -1734,6 +1729,7 @@ public:
 Type1Emitter::Type1Emitter( FILE* pOutFile, bool bPfbSubset)
 :   mpFileOut( pOutFile)
 ,   mbCloseOutfile( false)
+,   maBuffer{}
 ,   mnEECryptR( 55665)  // default eexec seed, TODO: mnEECryptSeed
 ,   mpPtr( maBuffer)
 ,   mbPfbSubset( bPfbSubset)
