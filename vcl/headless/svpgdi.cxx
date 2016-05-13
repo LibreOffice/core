@@ -450,13 +450,13 @@ void SvpSalGraphics::SetROPLineColor( SalROPColor nROPColor )
 {
     switch( nROPColor )
     {
-        case SalROPColor::N0:
+        case SAL_ROP_0:
             m_aLineColor = MAKE_SALCOLOR(0, 0, 0);
             break;
-        case SalROPColor::N1:
+        case SAL_ROP_1:
             m_aLineColor = MAKE_SALCOLOR(0xff, 0xff, 0xff);
             break;
-        case SalROPColor::Invert:
+        case SAL_ROP_INVERT:
             m_aLineColor = MAKE_SALCOLOR(0xff, 0xff, 0xff);
             break;
     }
@@ -466,13 +466,13 @@ void SvpSalGraphics::SetROPFillColor( SalROPColor nROPColor )
 {
     switch( nROPColor )
     {
-        case SalROPColor::N0:
+        case SAL_ROP_0:
             m_aFillColor = MAKE_SALCOLOR(0, 0, 0);
             break;
-        case SalROPColor::N1:
+        case SAL_ROP_1:
             m_aFillColor = MAKE_SALCOLOR(0xff, 0xff, 0xff);
             break;
-        case SalROPColor::Invert:
+        case SAL_ROP_INVERT:
             m_aFillColor = MAKE_SALCOLOR(0xff, 0xff, 0xff);
             break;
     }
@@ -538,7 +538,7 @@ void SvpSalGraphics::drawPolyLine(sal_uInt32 nPoints, const SalPoint* pPtAry)
         aPoly.setB2DPoint(i, basegfx::B2DPoint(pPtAry[i].mnX, pPtAry[i].mnY));
     aPoly.setClosed(false);
 
-    drawPolyLine(aPoly, 0.0, basegfx::B2DVector(1.0, 1.0), basegfx::B2DLineJoin::Miter,
+    drawPolyLine(aPoly, 0.0, basegfx::B2DVector(1.0, 1.0), basegfx::B2DLineJoin::Middle,
                  css::drawing::LineCap_BUTT, 15.0 * F_PI180 /*default*/);
 }
 

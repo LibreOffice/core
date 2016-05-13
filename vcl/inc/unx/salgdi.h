@@ -114,7 +114,7 @@ public:
     virtual void                    SetROPFillColor( SalROPColor nROPColor ) SAL_OVERRIDE;
 
     virtual void                    SetTextColor( SalColor nSalColor ) SAL_OVERRIDE;
-    virtual sal_uInt16              SetFont( FontSelectPattern*, int nFallbackLevel ) SAL_OVERRIDE;
+    virtual void                    SetFont( FontSelectPattern*, int nFallbackLevel ) SAL_OVERRIDE;
     virtual void                    GetFontMetric( ImplFontMetricData*, int nFallbackLevel ) SAL_OVERRIDE;
     virtual const FontCharMapPtr    GetFontCharMap() const SAL_OVERRIDE;
     virtual bool                    GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const SAL_OVERRIDE;
@@ -212,11 +212,6 @@ public:
     virtual void                    drawBitmap(
                                         const SalTwoRect& rPosAry,
                                         const SalBitmap& rSalBitmap ) SAL_OVERRIDE;
-
-    virtual void                    drawBitmap(
-                                        const SalTwoRect& rPosAry,
-                                        const SalBitmap& rSalBitmap,
-                                        SalColor nTransparentColor ) SAL_OVERRIDE;
 
     virtual void                    drawBitmap(
                                         const SalTwoRect& rPosAry,
