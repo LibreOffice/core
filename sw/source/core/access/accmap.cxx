@@ -516,10 +516,12 @@ public:
         return mbFiring;
     }
 
-    void MoveInvalidXAccToEnd();
+    void MoveMissingXAccToEnd();
 };
 
-void SwAccessibleEventList_Impl::MoveInvalidXAccToEnd()
+// see comment in SwAccessibleMap::InvalidatePosOrSize()
+// last case "else if(pParent)" for why this surprising hack exists
+void SwAccessibleEventList_Impl::MoveMissingXAccToEnd()
 {
     size_t nSize = size();
     if (nSize < 2 )
@@ -3085,7 +3087,7 @@ void SwAccessibleMap::FireEvents()
         if( mpEvents )
         {
             mpEvents->SetFiring();
-            mpEvents->MoveInvalidXAccToEnd();
+            mpEvents->MoveMissingXAccToEnd();
             for( auto const& aEvent : *mpEvents )
                  FireEvent(aEvent);
 
