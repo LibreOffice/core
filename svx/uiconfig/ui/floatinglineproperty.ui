@@ -53,7 +53,7 @@
                 <property name="label" translatable="yes">Custom Line Width:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">spin:0.0pt</property>
-                <property name="ellipsize">middle</property>
+                <property name="ellipsize">end</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>

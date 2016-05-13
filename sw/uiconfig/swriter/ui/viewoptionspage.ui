@@ -317,7 +317,7 @@
                                 <property name="label" translatable="yes">Hori_zontal ruler</property>
                                 <property name="use_underline">True</property>
                                 <property name="mnemonic_widget">hrulercombobox</property>
-                                <property name="ellipsize">start</property>
+                                <property name="ellipsize">end</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
