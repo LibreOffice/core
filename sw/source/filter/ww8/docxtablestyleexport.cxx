@@ -679,7 +679,7 @@ void DocxTableStyleExport::Impl::TableStyle(uno::Sequence<beans::PropertyValue>&
     m_pSerializer->endElementNS(XML_w, XML_style);
 }
 
-void DocxTableStyleExport::SetSerializer(sax_fastparser::FSHelperPtr pSerializer)
+void DocxTableStyleExport::SetSerializer(const sax_fastparser::FSHelperPtr& pSerializer)
 {
     m_pImpl->m_pSerializer = pSerializer;
 }
