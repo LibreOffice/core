@@ -398,6 +398,7 @@ public:
     static OUString   GetLotusFilterName();
     static OUString   GetDBaseFilterName();
     static OUString   GetDifFilterName();
+    static OUString   GetExcelEncodingFilterName();
     static bool       HasAutomaticTableName( const OUString& rFilter );
 
     DECL_LINK_TYPED( RefreshDBDataHdl, Timer*, void );

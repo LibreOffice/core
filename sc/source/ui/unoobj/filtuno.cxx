@@ -274,6 +274,12 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute() throw(uno::RuntimeException, st
             // common for DIF import/export
             eEncoding = RTL_TEXTENCODING_MS_1252;
         }
+        else if ( aFilterString == ScDocShell::GetExcelEncodingFilterName() )
+        {
+            SAL_WARN_IF( bExport, "sc.ui", "Filter Options for Excel Export is not implemented" );
+            aTitle = ScGlobal::GetRscString( STR_IMPORT_EXCEL_ENCODING );
+            eEncoding = RTL_TEXTENCODING_MS_1252;
+        }
 
         ScImportOptions aOptions( cAsciiDel, cStrDel, eEncoding);
 

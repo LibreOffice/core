@@ -88,8 +88,11 @@ XclImpRoot::XclImpRoot( XclImpRootData& rImpRootData ) :
 
 void XclImpRoot::SetCodePage( sal_uInt16 nCodePage )
 {
-    SetTextEncoding( XclTools::GetTextEncoding( nCodePage ) );
-    mrImpData.mbHasCodePage = true;
+    if( !mrImpData.mbHasCodePage )
+    {
+        SetTextEncoding( XclTools::GetTextEncoding( nCodePage ) );
+        mrImpData.mbHasCodePage = true;
+    }
 }
 
 void XclImpRoot::SetAppFontEncoding( rtl_TextEncoding eAppFontEnc )
