@@ -63,13 +63,18 @@ namespace svtools{ class ColorConfig;}
 #define VIEWOPT_1_VIEWMETACHARS 0x20000000L
 #define VIEWOPT_1_PAGEBACK      0x40000000L
 
-#define VIEWOPT_CORE2_BLACKFONT         0x00000001L
-#define VIEWOPT_CORE2_HIDDENPARA        0x00000002L
-#define VIEWOPT_CORE2_SMOOTHSCROLL      0x00000004L
-#define VIEWOPT_CORE2_CRSR_IN_PROT      0x00000008L
-#define VIEWOPT_CORE2_PDF_EXPORT        0x00000010L
-#define VIEWOPT_CORE2_PRINTING          0x00000020L
-#define VIEWOPT_CORE2_IGNORE_PROT       0x00000040L
+enum class ViewOptCoreFlags2 {
+    BlackFont         = 0x0001,
+    HiddenPara        = 0x0002,
+    SmoothScroll      = 0x0004,
+    CursorInProt      = 0x0008,
+    PdfExport         = 0x0010,
+    Printing          = 0x0020,
+    IgnoreProt        = 0x0040
+};
+namespace o3tl {
+    template<> struct typed_flags<ViewOptCoreFlags2> : is_typed_flags<ViewOptCoreFlags2, 0x007f> {};
+};
 
 #define VIEWOPT_2_H_RULER           0x00000400L
 #define VIEWOPT_2_VSCROLLBAR        0x00000800L
@@ -129,7 +134,7 @@ protected:
 
     OUString        m_sSymbolFont;        // Symbolfont.
     sal_uInt32      m_nCoreOptions;       // Bits for SwViewShell.
-    sal_uInt32      m_nCore2Options;      // Bits for SwViewShell.
+    ViewOptCoreFlags2 m_nCore2Options;      // Bits for SwViewShell.
     sal_uInt32      m_nUIOptions;         // UI-Bits
     Color           m_aRetouchColor;     // DefaultBackground for BrowseView
     Size            m_aSnapSize;          // Describes horizontal and vertical snap.
@@ -317,50 +322,50 @@ public:
 
     // Options from nCore2Options
     inline bool IsBlackFont() const
-        {return (m_nCore2Options & VIEWOPT_CORE2_BLACKFONT) != 0; }
+        {return bool(m_nCore2Options & ViewOptCoreFlags2::BlackFont); }
 
     inline void SetBlackFont(bool b)
-        { b ? (m_nCore2Options |= VIEWOPT_CORE2_BLACKFONT) : (m_nCore2Options &= ~VIEWOPT_CORE2_BLACKFONT);}
+        { b ? (m_nCore2Options |= ViewOptCoreFlags2::BlackFont) : (m_nCore2Options &= ~ViewOptCoreFlags2::BlackFont);}
 
     inline bool IsShowHiddenPara() const
-        {return (m_nCore2Options & VIEWOPT_CORE2_HIDDENPARA) != 0; }
+        {return bool(m_nCore2Options & ViewOptCoreFlags2::HiddenPara); }
 
     inline void SetShowHiddenPara(bool b)
-        { b ? (m_nCore2Options |= VIEWOPT_CORE2_HIDDENPARA) : (m_nCore2Options &= ~VIEWOPT_CORE2_HIDDENPARA);}
+        { b ? (m_nCore2Options |= ViewOptCoreFlags2::HiddenPara) : (m_nCore2Options &= ~ViewOptCoreFlags2::HiddenPara);}
 
     inline bool IsSmoothScroll() const
-        {return (m_nCore2Options & VIEWOPT_CORE2_SMOOTHSCROLL) != 0; }
+        {return bool(m_nCore2Options & ViewOptCoreFlags2::SmoothScroll); }
 
     inline void SetSmoothScroll(bool b)
-        { b ? (m_nCore2Options |= VIEWOPT_CORE2_SMOOTHSCROLL) : (m_nCore2Options &= ~VIEWOPT_CORE2_SMOOTHSCROLL);}
+        { b ? (m_nCore2Options |= ViewOptCoreFlags2::SmoothScroll) : (m_nCore2Options &= ~ViewOptCoreFlags2::SmoothScroll);}
 
     inline bool IsCursorInProtectedArea() const
-        {return (m_nCore2Options & VIEWOPT_CORE2_CRSR_IN_PROT) != 0; }
+        {return bool(m_nCore2Options & ViewOptCoreFlags2::CursorInProt); }
 
     inline void SetCursorInProtectedArea(bool b)
-        { b ? (m_nCore2Options |= VIEWOPT_CORE2_CRSR_IN_PROT) : (m_nCore2Options &= ~VIEWOPT_CORE2_CRSR_IN_PROT);}
+        { b ? (m_nCore2Options |= ViewOptCoreFlags2::CursorInProt) : (m_nCore2Options &= ~ViewOptCoreFlags2::CursorInProt);}
 
     bool IsIgnoreProtectedArea() const
     {
-        return (m_nCore2Options & VIEWOPT_CORE2_IGNORE_PROT) != 0;
+        return bool(m_nCore2Options & ViewOptCoreFlags2::IgnoreProt);
     }
 
     void SetIgnoreProtectedArea(bool bSet)
     {
-        bSet ? (m_nCore2Options |= VIEWOPT_CORE2_IGNORE_PROT) : (m_nCore2Options &= ~VIEWOPT_CORE2_IGNORE_PROT);
+        bSet ? (m_nCore2Options |= ViewOptCoreFlags2::IgnoreProt) : (m_nCore2Options &= ~ViewOptCoreFlags2::IgnoreProt);
     }
 
     inline bool IsPDFExport() const
-        {return (m_nCore2Options & VIEWOPT_CORE2_PDF_EXPORT) != 0; }
+        {return bool(m_nCore2Options & ViewOptCoreFlags2::PdfExport); }
 
     inline void SetPDFExport(bool b)
-        { b ? (m_nCore2Options |= VIEWOPT_CORE2_PDF_EXPORT) : (m_nCore2Options &= ~VIEWOPT_CORE2_PDF_EXPORT);}
+        { b ? (m_nCore2Options |= ViewOptCoreFlags2::PdfExport) : (m_nCore2Options &= ~ViewOptCoreFlags2::PdfExport);}
 
     inline bool IsPrinting() const
-        {return (m_nCore2Options & VIEWOPT_CORE2_PRINTING) != 0; }
+        {return bool(m_nCore2Options & ViewOptCoreFlags2::Printing); }
 
     inline void SetPrinting(bool b)
-        { b ? (m_nCore2Options |= VIEWOPT_CORE2_PRINTING) : (m_nCore2Options &= ~VIEWOPT_CORE2_PRINTING);}
+        { b ? (m_nCore2Options |= ViewOptCoreFlags2::Printing) : (m_nCore2Options &= ~ViewOptCoreFlags2::Printing);}
 
     inline short GetDivisionX() const   { return m_nDivisionX; }
     inline void  SetDivisionX( short n ){ m_nDivisionX = n; }
