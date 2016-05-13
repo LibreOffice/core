@@ -42,7 +42,6 @@
 #include <vcl/graphicfilter.hxx>
 #include <tools/zcodec.hxx>
 
-#include <boost/bind.hpp>
 #include <map>
 
 #define OASIS_STR "urn:oasis:names:tc:opendocument:xmlns:"
@@ -1718,11 +1717,10 @@ struct ShapeWritingVisitor
             {
                 // collect text from all TEXT_NODE children into sText
                 OUStringBuffer sText;
-                visitChildren(boost::bind(
-                                  (OUStringBuffer& (OUStringBuffer::*)(const OUString& str))&OUStringBuffer::append,
-                                  boost::ref(sText),
-                                  boost::bind(&xml::dom::XNode::getNodeValue,
-                                              _1)),
+                visitChildren(
+                    [&sText] (xml::dom::XNode & rNode) {
+                        return sText.append(rNode.getNodeValue());
+                    },
                               xElem,
                               xml::dom::NodeType_TEXT_NODE);
 
@@ -1875,9 +1873,10 @@ struct ShapeWritingVisitor
         // TODO(F2): separate out shear, rotate etc.
         // apply transformation to polygon, to keep draw
         // import in 100th mm
-        std::for_each(aPolys.begin(),aPolys.end(),
-                      boost::bind(&basegfx::B2DPolyPolygon::transform,
-                                  _1,boost::cref(aState.maCTM)));
+        for (basegfx::B2DPolyPolygon & aPoly : aPolys)
+        {
+            aPoly.transform(aState.maCTM);
+        }
 
         for(basegfx::B2DPolyPolygon & aPoly : aPolys)
         {
