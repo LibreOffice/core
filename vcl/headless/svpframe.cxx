@@ -364,7 +364,7 @@ void SvpSalFrame::SetAlwaysOnTop( bool )
 {
 }
 
-void SvpSalFrame::ToTop( SalFrameToTop )
+void SvpSalFrame::ToTop( sal_uInt16 )
 {
     GetFocus();
 }
