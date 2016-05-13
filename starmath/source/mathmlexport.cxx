@@ -604,7 +604,7 @@ void SmXMLExport::ExportLine(const SmNode *pNode, int nLevel)
 
 void SmXMLExport::ExportBinaryHorizontal(const SmNode *pNode, int nLevel)
 {
-    sal_uLong nGroup = pNode->GetToken().nGroup;
+    TG nGroup = pNode->GetToken().nGroup;
 
     SvXMLElementExport* pRow = new SvXMLElementExport(*this,
         XML_NAMESPACE_MATH, XML_MROW, true, true);

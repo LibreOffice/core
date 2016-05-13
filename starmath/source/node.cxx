@@ -1260,7 +1260,7 @@ void SmSubSupNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
             continue;
 
         // switch position of limits if we are in textmode
-        if (rFormat.IsTextmode()  &&  (GetToken().nGroup & TGLIMIT))
+        if (rFormat.IsTextmode()  &&  (GetToken().nGroup & TG::Limit))
             switch (eSubSup)
             {   case CSUB:  eSubSup = RSUB;     break;
                 case CSUP:  eSubSup = RSUP;     break;
@@ -2250,7 +2250,7 @@ void SmTextNode::AdjustFontDesc()
     else {
         SmTokenType nTok;
         const SmTokenTableEntry *pEntry = SmParser::GetTokenTableEntry( aText );
-        if (pEntry && pEntry->nGroup == TGFUNCTION) {
+        if (pEntry && pEntry->nGroup == TG::Function) {
             nTok = pEntry->eType;
             nFontDesc = FNT_FUNCTION;
         } else {
