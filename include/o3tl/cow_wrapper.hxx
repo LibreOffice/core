@@ -343,12 +343,6 @@ int cow_wrapper_client::queryUnmodified() const
         a.swap(b);
     }
 
-    // to enable boost::mem_fn on cow_wrapper
-    template<class T, class P> inline T * get_pointer( const cow_wrapper<T,P>& r )
-    {
-        return r.get();
-    }
-
 }
 
 #endif /* INCLUDED_O3TL_COW_WRAPPER_HXX */
