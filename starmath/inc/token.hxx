@@ -22,27 +22,33 @@
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 #include <tools/solar.h>
+#include <o3tl/typed_flags_set.hxx>
 
 // TokenGroups
-#define TGOPER          0x00000001
-#define TGRELATION      0x00000002
-#define TGSUM           0x00000004
-#define TGPRODUCT       0x00000008
-#define TGUNOPER        0x00000010
-#define TGPOWER         0x00000020
-#define TGATTRIBUT      0x00000040
-#define TGALIGN         0x00000080
-#define TGFUNCTION      0x00000100
-#define TGBLANK         0x00000200
-#define TGLBRACES       0x00000400
-#define TGRBRACES       0x00000800
-#define TGCOLOR         0x00001000
-#define TGFONT          0x00002000
-#define TGSTANDALONE    0x00004000
-#define TGDISCARDED     0x00008000
-#define TGLIMIT         0x00010000
-#define TGFONTATTR      0x00020000
-
+enum class TG {
+    NONE          = 0x000000,
+    Oper          = 0x000001,
+    Relation      = 0x000002,
+    Sum           = 0x000004,
+    Product       = 0x000008,
+    Unoper        = 0x000010,
+    Power         = 0x000020,
+    Attribute     = 0x000040,
+    Align         = 0x000080,
+    Function      = 0x000100,
+    Blank         = 0x000200,
+    LBraces       = 0x000400,
+    RBraces       = 0x000800,
+    Color         = 0x001000,
+    Font          = 0x002000,
+    Standalone    = 0x004000,
+    Discarded     = 0x008000,
+    Limit         = 0x010000,
+    FontAttr      = 0x020000
+};
+namespace o3tl {
+    template<> struct typed_flags<TG> : is_typed_flags<TG, 0x03ffff> {};
+}
 
 enum SmTokenType
 {
@@ -105,7 +111,7 @@ struct SmToken
     sal_Unicode cMathChar;
 
     // parse-help info
-    sal_uLong       nGroup;
+    TG              nGroup;
     sal_uInt16      nLevel;
 
     // token position
@@ -116,7 +122,7 @@ struct SmToken
     SmToken(SmTokenType eTokenType,
             sal_Unicode cMath,
             const sal_Char* pText,
-            sal_uLong nTokenGroup = 0,
+            TG nTokenGroup = TG::NONE,
             sal_uInt16 nTokenLevel = 0);
 };
 
@@ -125,7 +131,7 @@ struct SmTokenTableEntry
     const sal_Char* pIdent;
     SmTokenType     eType;
     sal_Unicode     cMathChar;
-    sal_uLong       nGroup;
+    TG              nGroup;
     sal_uInt16      nLevel;
 };
 

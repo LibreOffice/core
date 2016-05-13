@@ -56,7 +56,7 @@ class SmParser
     sal_Int32       GetTokenIndex() const   { return m_nTokenIndex; }
     void            Replace( sal_Int32 nPos, sal_Int32 nLen, const OUString &rText );
 
-    inline bool     TokenInGroup( sal_uLong nGroup );
+    inline bool     TokenInGroup( TG nGroup );
 
     // grammar
     void    DoTable();
@@ -65,7 +65,7 @@ class SmParser
     void    DoRelation();
     void    DoSum();
     void    DoProduct();
-    void    DoSubSup(sal_uLong nActiveGroup);
+    void    DoSubSup(TG nActiveGroup);
     void    DoOpSubSup();
     void    DoPower();
     void    DoBlank();
@@ -119,9 +119,9 @@ public:
 };
 
 
-inline bool SmParser::TokenInGroup( sal_uLong nGroup)
+inline bool SmParser::TokenInGroup( TG nGroup)
 {
-    return (m_aCurToken.nGroup & nGroup) != 0;
+    return bool(m_aCurToken.nGroup & nGroup);
 }
 
 

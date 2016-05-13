@@ -537,7 +537,7 @@ void SmCursor::InsertSubSup(SmSubSup eSubSup) {
     SmSubSupNode* pSubSup;
     if(pSubject->GetType() != NSUBSUP){
         SmToken token;
-        token.nGroup = TGPOWER;
+        token.nGroup = TG::Power;
         pSubSup = new SmSubSupNode(token);
         pSubSup->SetBody(pSubject);
         *(--it) = pSubSup;
@@ -612,7 +612,7 @@ bool SmCursor::InsertLimit(SmSubSup eSubSup) {
         pSubSup = static_cast<SmSubSupNode*>(pSubject->GetSubNode(0));
     else { //if not create a new SmSubSupNode
         SmToken token;
-        token.nGroup = TGLIMIT;
+        token.nGroup = TG::Limit;
         pSubSup = new SmSubSupNode(token);
         //Set it's body
         pSubSup->SetBody(pSubject->GetSubNode(0));
@@ -693,7 +693,7 @@ void SmCursor::InsertBrackets(SmBracketType eBracketType) {
     delete pSelectedNodesList;
 
     //Create SmBraceNode
-    SmToken aTok(TLEFT, '\0', "left", 0, 5);
+    SmToken aTok(TLEFT, '\0', "left", TG::NONE, 5);
     SmBraceNode *pBrace = new SmBraceNode(aTok);
     pBrace->SetScaleMode(SCALE_HEIGHT);
     SmNode *pLeft = CreateBracket(eBracketType, true),
@@ -719,67 +719,67 @@ SmNode *SmCursor::CreateBracket(SmBracketType eBracketType, bool bIsLeft) {
     if(bIsLeft){
         switch(eBracketType){
             case NoneBrackets:
-                aTok = SmToken(TNONE, '\0', "none", TGLBRACES | TGRBRACES, 0);
+                aTok = SmToken(TNONE, '\0', "none", TG::LBraces | TG::RBraces, 0);
                 break;
             case RoundBrackets:
-                aTok = SmToken(TLPARENT, MS_LPARENT, "(", TGLBRACES, 5);
+                aTok = SmToken(TLPARENT, MS_LPARENT, "(", TG::LBraces, 5);
                 break;
             case SquareBrackets:
-                aTok = SmToken(TLBRACKET, MS_LBRACKET, "[", TGLBRACES, 5);
+                aTok = SmToken(TLBRACKET, MS_LBRACKET, "[", TG::LBraces, 5);
                 break;
             case DoubleSquareBrackets:
-                aTok = SmToken(TLDBRACKET, MS_LDBRACKET, "ldbracket", TGLBRACES, 5);
+                aTok = SmToken(TLDBRACKET, MS_LDBRACKET, "ldbracket", TG::LBraces, 5);
                 break;
             case LineBrackets:
-                aTok = SmToken(TLLINE, MS_VERTLINE, "lline", TGLBRACES, 5);
+                aTok = SmToken(TLLINE, MS_VERTLINE, "lline", TG::LBraces, 5);
                 break;
             case DoubleLineBrackets:
-                aTok = SmToken(TLDLINE, MS_DVERTLINE, "ldline", TGLBRACES, 5);
+                aTok = SmToken(TLDLINE, MS_DVERTLINE, "ldline", TG::LBraces, 5);
                 break;
             case CurlyBrackets:
-                aTok = SmToken(TLBRACE, MS_LBRACE, "lbrace", TGLBRACES, 5);
+                aTok = SmToken(TLBRACE, MS_LBRACE, "lbrace", TG::LBraces, 5);
                 break;
             case AngleBrackets:
-                aTok = SmToken(TLANGLE, MS_LMATHANGLE, "langle", TGLBRACES, 5);
+                aTok = SmToken(TLANGLE, MS_LMATHANGLE, "langle", TG::LBraces, 5);
                 break;
             case CeilBrackets:
-                aTok = SmToken(TLCEIL, MS_LCEIL, "lceil", TGLBRACES, 5);
+                aTok = SmToken(TLCEIL, MS_LCEIL, "lceil", TG::LBraces, 5);
                 break;
             case FloorBrackets:
-                aTok = SmToken(TLFLOOR, MS_LFLOOR, "lfloor", TGLBRACES, 5);
+                aTok = SmToken(TLFLOOR, MS_LFLOOR, "lfloor", TG::LBraces, 5);
                 break;
         }
     } else {
         switch(eBracketType) {
             case NoneBrackets:
-                aTok = SmToken(TNONE, '\0', "none", TGLBRACES | TGRBRACES, 0);
+                aTok = SmToken(TNONE, '\0', "none", TG::LBraces | TG::RBraces, 0);
                 break;
             case RoundBrackets:
-                aTok = SmToken(TRPARENT, MS_RPARENT, ")", TGRBRACES, 5);
+                aTok = SmToken(TRPARENT, MS_RPARENT, ")", TG::RBraces, 5);
                 break;
             case SquareBrackets:
-                aTok = SmToken(TRBRACKET, MS_RBRACKET, "]", TGRBRACES, 5);
+                aTok = SmToken(TRBRACKET, MS_RBRACKET, "]", TG::RBraces, 5);
                 break;
             case DoubleSquareBrackets:
-                aTok = SmToken(TRDBRACKET, MS_RDBRACKET, "rdbracket", TGRBRACES, 5);
+                aTok = SmToken(TRDBRACKET, MS_RDBRACKET, "rdbracket", TG::RBraces, 5);
                 break;
             case LineBrackets:
-                aTok = SmToken(TRLINE, MS_VERTLINE, "rline", TGRBRACES, 5);
+                aTok = SmToken(TRLINE, MS_VERTLINE, "rline", TG::RBraces, 5);
                 break;
             case DoubleLineBrackets:
-                aTok = SmToken(TRDLINE, MS_DVERTLINE, "rdline", TGRBRACES, 5);
+                aTok = SmToken(TRDLINE, MS_DVERTLINE, "rdline", TG::RBraces, 5);
                 break;
             case CurlyBrackets:
-                aTok = SmToken(TRBRACE, MS_RBRACE, "rbrace", TGRBRACES, 5);
+                aTok = SmToken(TRBRACE, MS_RBRACE, "rbrace", TG::RBraces, 5);
                 break;
             case AngleBrackets:
-                aTok = SmToken(TRANGLE, MS_RMATHANGLE, "rangle", TGRBRACES, 5);
+                aTok = SmToken(TRANGLE, MS_RMATHANGLE, "rangle", TG::RBraces, 5);
                 break;
             case CeilBrackets:
-                aTok = SmToken(TRCEIL, MS_RCEIL, "rceil", TGRBRACES, 5);
+                aTok = SmToken(TRCEIL, MS_RCEIL, "rceil", TG::RBraces, 5);
                 break;
             case FloorBrackets:
-                aTok = SmToken(TRFLOOR, MS_RFLOOR, "rfloor", TGRBRACES, 5);
+                aTok = SmToken(TRFLOOR, MS_RFLOOR, "rfloor", TG::RBraces, 5);
                 break;
         }
     }
@@ -948,7 +948,7 @@ void SmCursor::InsertFraction() {
     pSelectedNodesList = nullptr;
 
     //Create new fraction
-    SmBinVerNode *pFrac = new SmBinVerNode(SmToken(TOVER, '\0', "over", TGPRODUCT, 0));
+    SmBinVerNode *pFrac = new SmBinVerNode(SmToken(TOVER, '\0', "over", TG::Product, 0));
     SmNode *pRect = new SmRectangleNode(SmToken());
     pFrac->SetSubNodes(pNum, pRect, pDenom);
 
@@ -971,7 +971,7 @@ void SmCursor::InsertText(const OUString& aString)
     SmToken token;
     token.eType = TIDENT;
     token.cMathChar = '\0';
-    token.nGroup = 0;
+    token.nGroup = TG::NONE;
     token.nLevel = 5;
     token.aText = aString;
 
@@ -999,13 +999,13 @@ void SmCursor::InsertElement(SmFormulaElement element){
         case BlankElement:
         {
             SmToken token;
-            token.nGroup = TGBLANK;
+            token.nGroup = TG::Blank;
             token.aText = "~";
             pNewNode = new SmBlankNode(token);
         }break;
         case FactorialElement:
         {
-            SmToken token(TFACT, MS_FACT, "fact", TGUNOPER, 5);
+            SmToken token(TFACT, MS_FACT, "fact", TG::Unoper, 5);
             pNewNode = new SmMathSymbolNode(token);
         }break;
         case PlusElement:
@@ -1013,7 +1013,7 @@ void SmCursor::InsertElement(SmFormulaElement element){
             SmToken token;
             token.eType = TPLUS;
             token.cMathChar = MS_PLUS;
-            token.nGroup = TGUNOPER | TGSUM;
+            token.nGroup = TG::Unoper | TG::Sum;
             token.nLevel = 5;
             token.aText = "+";
             pNewNode = new SmMathSymbolNode(token);
@@ -1023,7 +1023,7 @@ void SmCursor::InsertElement(SmFormulaElement element){
             SmToken token;
             token.eType = TMINUS;
             token.cMathChar = MS_MINUS;
-            token.nGroup = TGUNOPER | TGSUM;
+            token.nGroup = TG::Unoper | TG::Sum;
             token.nLevel = 5;
             token.aText = "-";
             pNewNode = new SmMathSymbolNode(token);
@@ -1033,7 +1033,7 @@ void SmCursor::InsertElement(SmFormulaElement element){
             SmToken token;
             token.eType = TCDOT;
             token.cMathChar = MS_CDOT;
-            token.nGroup = TGPRODUCT;
+            token.nGroup = TG::Product;
             token.aText = "cdot";
             pNewNode = new SmMathSymbolNode(token);
         }break;
@@ -1042,7 +1042,7 @@ void SmCursor::InsertElement(SmFormulaElement element){
             SmToken token;
             token.eType = TASSIGN;
             token.cMathChar = MS_ASSIGN;
-            token.nGroup = TGRELATION;
+            token.nGroup = TG::Relation;
             token.aText = "=";
             pNewNode = new SmMathSymbolNode(token);
         }break;
@@ -1051,7 +1051,7 @@ void SmCursor::InsertElement(SmFormulaElement element){
             SmToken token;
             token.eType = TLT;
             token.cMathChar = MS_LT;
-            token.nGroup = TGRELATION;
+            token.nGroup = TG::Relation;
             token.aText = "<";
             pNewNode = new SmMathSymbolNode(token);
         }break;
@@ -1060,7 +1060,7 @@ void SmCursor::InsertElement(SmFormulaElement element){
             SmToken token;
             token.eType = TGT;
             token.cMathChar = MS_GT;
-            token.nGroup = TGRELATION;
+            token.nGroup = TG::Relation;
             token.aText = ">";
             pNewNode = new SmMathSymbolNode(token);
         }break;
@@ -1069,7 +1069,7 @@ void SmCursor::InsertElement(SmFormulaElement element){
             SmToken token;
             token.eType = TTEXT;
             token.cMathChar = MS_PERCENT;
-            token.nGroup = 0;
+            token.nGroup = TG::NONE;
             token.aText = "\"%\"";
             pNewNode = new SmMathSymbolNode(token);
         }break;
@@ -1102,7 +1102,7 @@ void SmCursor::InsertSpecial(const OUString& _aString)
     SmToken token;
     token.eType = TSPECIAL;
     token.cMathChar = '\0';
-    token.nGroup = 0;
+    token.nGroup = TG::NONE;
     token.nLevel = 5;
     token.aText = aString;
     SmSpecialNode* pSpecial = new SmSpecialNode(token);
@@ -1364,7 +1364,7 @@ void SmCursor::FinishEdit(SmNodeList* pLineList,
        nParentIndex == 0 &&
        entries > 1) {
         //Wrap pLine in scalable round brackets
-        SmToken aTok(TLEFT, '\0', "left", 0, 5);
+        SmToken aTok(TLEFT, '\0', "left", TG::NONE, 5);
         SmBraceNode *pBrace = new SmBraceNode(aTok);
         pBrace->SetScaleMode(SCALE_HEIGHT);
         SmNode *pLeft  = CreateBracket(RoundBrackets, true),
@@ -1684,15 +1684,15 @@ bool SmNodeListParser::IsOperator(const SmToken &token) {
 }
 
 bool SmNodeListParser::IsRelationOperator(const SmToken &token) {
-    return token.nGroup & TGRELATION;
+    return bool(token.nGroup & TG::Relation);
 }
 
 bool SmNodeListParser::IsSumOperator(const SmToken &token) {
-    return token.nGroup & TGSUM;
+    return bool(token.nGroup & TG::Sum);
 }
 
 bool SmNodeListParser::IsProductOperator(const SmToken &token) {
-    return token.nGroup & TGPRODUCT &&
+    return token.nGroup & TG::Product &&
            token.eType != TWIDESLASH &&
            token.eType != TWIDEBACKSLASH &&
            token.eType != TUNDERBRACE &&
@@ -1701,7 +1701,7 @@ bool SmNodeListParser::IsProductOperator(const SmToken &token) {
 }
 
 bool SmNodeListParser::IsUnaryOperator(const SmToken &token) {
-    return  token.nGroup & TGUNOPER &&
+    return  token.nGroup & TG::Unoper &&
             (token.eType == TPLUS ||
              token.eType == TMINUS ||
              token.eType == TPLUSMINUS ||
