@@ -441,7 +441,7 @@ class VimIntegrationGenerator(IdeIntegrationGenerator):
         json.dump(global_list, export_file)
 
     def generateCommand(self, lib, file):
-        command = 'clang++ '
+        command = 'clang++ -Wall'
         for key, value in lib.defs.items():
             command += ' -D'
             command += key
