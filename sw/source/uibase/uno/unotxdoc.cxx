@@ -2545,7 +2545,21 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
                 // PDF export should not make use of the SwPrtOptions
                 const SwPrintData *pPrtOptions = (bIsPDFExport)
                     ? nullptr : m_pRenderData->GetSwPrtOptions();
-                m_pRenderData->ViewOptionAdjust( pPrtOptions );
+                bool setShowPlaceHoldersInPDF = false;
+                if(bIsPDFExport)
+                {
+                    const sal_Int32 nLen = rxOptions.getLength();
+                    const beans::PropertyValue *pProps = rxOptions.getConstArray();
+                    for (sal_Int32 i = 0;  i < nLen;  ++i)
+                    {
+                        if (pProps[i].Name.equalsAscii( "ExportPlaceholders" ))
+                        {
+                            pProps[i].Value >>= setShowPlaceHoldersInPDF;
+                            break;
+                        }
+                    }
+                }
+                m_pRenderData->ViewOptionAdjust( pPrtOptions, setShowPlaceHoldersInPDF );
             }
 
             // since printing now also use the API for PDF export this option
@@ -4248,7 +4262,7 @@ SwViewOptionAdjust_Impl::~SwViewOptionAdjust_Impl()
 }
 
 void
-SwViewOptionAdjust_Impl::AdjustViewOptions(SwPrintData const*const pPrtOptions)
+SwViewOptionAdjust_Impl::AdjustViewOptions(SwPrintData const*const pPrtOptions, bool setShowPlaceHoldersInPDF)
 {
     // to avoid unnecessary reformatting the view options related to the content
     // below should only change if necessary, that is if respective content is present
@@ -4285,7 +4299,7 @@ SwViewOptionAdjust_Impl::AdjustViewOptions(SwPrintData const*const pPrtOptions)
     if (bContainsPlaceHolders)
     {
         // should always be printed in PDF export!
-        bVal = !pPrtOptions || pPrtOptions->m_bPrintTextPlaceholder;
+        bVal = !pPrtOptions ? setShowPlaceHoldersInPDF : pPrtOptions->m_bPrintTextPlaceholder;
         aRenderViewOptions.SetShowPlaceHolderFields( bVal );
     }
 
