@@ -253,7 +253,7 @@ void FmFormView::ChangeDesignMode(bool bDesign)
     if ( pCurPage )
     {
         if ( pFormShell && pFormShell->GetImpl() )
-            pFormShell->GetImpl()->loadForms( pCurPage, ( bDesign ? FORMS_UNLOAD : FORMS_LOAD ) );
+            pFormShell->GetImpl()->loadForms( pCurPage, ( bDesign ? LoadFormsFlags::Unload : LoadFormsFlags::Load ) );
     }
 
     // --- 5. base class functionality
