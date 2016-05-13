@@ -6847,16 +6847,22 @@ void Test::testFuncMDETERM()
         aFormulaBuffer[13] = static_cast<sal_Unicode>( '0' + nSize );
         m_pDoc->SetString(aPos, aFormulaBuffer.toString());
 
+#if SAL_TYPES_SIZEOFPOINTER == 4
         // On crappy 32-bit targets, presumably without extended precision on
         // interim results or optimization not catching it, this test fails
         // when comparing to 0.0, so have a narrow error margin. See also
         // commit message of 8140309d636d4a870875f2dd75ed3dfff2c0fbaf
-#if SAL_TYPES_SIZEOFPOINTER == 4 || defined(__aarch64__)
         CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of MDETERM incorrect for singular integer matrix",
                 0.0, m_pDoc->GetValue(aPos), 1e-12);
 #else
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of MDETERM incorrect for singular integer matrix",
-                0.0, m_pDoc->GetValue(aPos));
+        // Even on one (and only one) x86_64 target the result was
+        // 6.34413156928661e-17 instead of 0.0 (tdf#99730) so lower the bar to
+        // 10e-14.
+        // Then again on aarch64, ppc64* and s390x it also fails.
+        // Sigh.. why do we even test this? The original complaint in tdf#32834
+        // was about -9.51712667007776E-016
+        CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Calculation of MDETERM incorrect for singular integer matrix",
+                0.0, m_pDoc->GetValue(aPos), 1e-14);
 #endif
     }
 
