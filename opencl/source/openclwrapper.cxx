@@ -703,9 +703,10 @@ bool switchOpenCLDevice(const OUString* pDevice, bool bAutoSelect, bool bForceEv
         rtl::Bootstrap::expandMacros(url);
         OUString path;
         osl::FileBase::getSystemPathFromFileURL(url,path);
-        ds_device pSelectedDevice = getDeviceSelection(path, bForceEvaluation);
-        pDeviceId = pSelectedDevice.aDeviceID;
-
+        ds_device aSelectedDevice = getDeviceSelection(path, bForceEvaluation);
+        if ( aSelectedDevice.eType != DeviceType::OpenCLDevice)
+            return false;
+        pDeviceId = aSelectedDevice.aDeviceID;
     }
 
     if(gpuEnv.mpDevID == pDeviceId)
