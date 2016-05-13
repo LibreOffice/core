@@ -79,6 +79,7 @@ $(eval $(call gb_Library_add_exception_objects,fwe,\
     framework/source/fwe/xml/toolboxconfiguration \
     framework/source/fwe/xml/toolboxdocumenthandler \
     framework/source/fwe/xml/xmlnamespaces \
+    framework/source/services/dispatchhelper \
 ))
 
 # Runtime dependency for unit-tests
