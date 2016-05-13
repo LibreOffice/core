@@ -1921,11 +1921,11 @@ void FormController::setModel(const Reference< XTabControllerModel > & Model) th
 
                 sal_Int32 nColor = 0;
                 if ( xModelProps->getPropertyValue( FM_PROP_CONTROL_BORDER_COLOR_FOCUS ) >>= nColor )
-                    m_pControlBorderManager->setStatusColor( CONTROL_STATUS_FOCUSED, nColor );
+                    m_pControlBorderManager->setStatusColor( ControlStatus::Focused, nColor );
                 if ( xModelProps->getPropertyValue( FM_PROP_CONTROL_BORDER_COLOR_MOUSE ) >>= nColor )
-                    m_pControlBorderManager->setStatusColor( CONTROL_STATUS_MOUSE_HOVER, nColor );
+                    m_pControlBorderManager->setStatusColor( ControlStatus::MouseHover, nColor );
                 if ( xModelProps->getPropertyValue( FM_PROP_CONTROL_BORDER_COLOR_INVALID ) >>= nColor )
-                    m_pControlBorderManager->setStatusColor( CONTROL_STATUS_INVALID, nColor );
+                    m_pControlBorderManager->setStatusColor( ControlStatus::Invalid, nColor );
             }
         }
     }
