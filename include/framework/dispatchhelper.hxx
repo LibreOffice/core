@@ -20,18 +20,18 @@
 #ifndef INCLUDED_FRAMEWORK_INC_SERVICES_DISPATCHHELPER_HXX
 #define INCLUDED_FRAMEWORK_INC_SERVICES_DISPATCHHELPER_HXX
 
-#include <macros/xinterface.hxx>
-#include <macros/xtypeprovider.hxx>
-#include <macros/xserviceinfo.hxx>
-#include <general.h>
-
+#include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/frame/XDispatchHelper.hpp>
 #include <com/sun/star/frame/XDispatchResultListener.hpp>
-#include <com/sun/star/frame/DispatchResultEvent.hpp>
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+
 
 #include <cppuhelper/implbase.hxx>
 #include <osl/conditn.hxx>
+#include <framework/fwedllapi.h>
 
 namespace framework{
 
@@ -43,8 +43,7 @@ namespace framework{
                     - dispatching of the URL
                 All these steps are done inside one method call here.
 */
-
-class DispatchHelper : public ::cppu::WeakImplHelper< css::lang::XServiceInfo,css::frame::XDispatchHelper,css::frame::XDispatchResultListener >
+class FWE_DLLPUBLIC DispatchHelper : public ::cppu::WeakImplHelper< css::lang::XServiceInfo,css::frame::XDispatchHelper,css::frame::XDispatchResultListener >
 {
 
     // member
@@ -73,9 +72,20 @@ class DispatchHelper : public ::cppu::WeakImplHelper< css::lang::XServiceInfo,cs
                  DispatchHelper( const css::uno::Reference< css::uno::XComponentContext >& xContext );
         virtual ~DispatchHelper(                                                                    );
 
-        // XInterface, XTypeProvider, XServiceInfo
+        // XServiceInfo
+        virtual OUString                        SAL_CALL getImplementationName              (                                   ) throw( css::uno::RuntimeException, std::exception ) override;
+        virtual sal_Bool                        SAL_CALL supportsService                    ( const OUString&   sServiceName    ) throw( css::uno::RuntimeException, std::exception ) override;
+        virtual css::uno::Sequence< OUString >  SAL_CALL getSupportedServiceNames           (                                   ) throw( css::uno::RuntimeException, std::exception ) override;
 
-        DECLARE_XSERVICEINFO
+        static css::uno::Sequence< OUString >   SAL_CALL impl_getStaticSupportedServiceNames(                                   );
+        static OUString                         SAL_CALL impl_getStaticImplementationName   (                                   );
+        // Helper for initialization of service by using own reference!
+        void                                    SAL_CALL impl_initService                   (                                   );
+
+        // Helper for registry
+        static css::uno::Reference< css::uno::XInterface >             SAL_CALL impl_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager ) throw( css::uno::Exception );
+        static css::uno::Reference< css::lang::XSingleServiceFactory > SAL_CALL impl_createFactory ( const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager );
+
 
         // XDispatchHelper
         virtual css::uno::Any SAL_CALL executeDispatch(
@@ -85,6 +95,15 @@ class DispatchHelper : public ::cppu::WeakImplHelper< css::lang::XServiceInfo,cs
                                               sal_Int32                                             nSearchFlags      ,
                                         const css::uno::Sequence< css::beans::PropertyValue >&      lArguments        )
         throw(css::uno::RuntimeException, std::exception) override;
+
+        // not a public XDispatchHelper-method, need in sfx2/source/control/statcach.cxx for extentions
+        css::uno::Any SAL_CALL executeDispatch(
+                                        const css::uno::Reference< css::frame::XDispatch >&  xDispatch      ,
+                                        const  css::util::URL&                                  aURL        ,
+                                        bool                                                    SyncronFlag ,
+                                        const css::uno::Sequence< css::beans::PropertyValue >& lArguments   )
+        throw(css::uno::RuntimeException);
+
 
         // XDispatchResultListener
         virtual void SAL_CALL dispatchFinished(

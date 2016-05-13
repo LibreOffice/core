@@ -34,6 +34,7 @@
 #include <com/sun/star/frame/XDispatchProviderInterceptor.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
+#include <com/sun/star/frame/DispatchResultState.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/frame/XDispatchProviderInterception.hpp>
@@ -1014,10 +1015,15 @@ const SfxPoolItem* SfxBindings::Execute_Impl( sal_uInt16 nId, const SfxPoolItem*
                 aReq.AppendItem( **ppItems++ );
 
         // cache binds to an external dispatch provider
-        pCache->Dispatch( aReq.GetArgs(), nCallMode == SfxCallMode::SYNCHRON );
-        SfxPoolItem *pVoid = new SfxVoidItem( nId );
-        DeleteItemOnIdle( pVoid );
-        return pVoid;
+        sal_Int16 eRet = pCache->Dispatch( aReq.GetArgs(), nCallMode == SfxCallMode::SYNCHRON );
+        SfxPoolItem *pPool;
+        if ( eRet == css::frame::DispatchResultState::DONTKNOW )
+            pPool = new SfxVoidItem( nId );
+        else
+            pPool = new SfxBoolItem( nId, eRet == css::frame::DispatchResultState::SUCCESS);
+
+        DeleteItemOnIdle( pPool );
+        return pPool;
     }
 
     // slot is handled internally by SfxDispatcher
