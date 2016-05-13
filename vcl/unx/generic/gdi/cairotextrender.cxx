@@ -91,7 +91,7 @@ bool CairoTextRender::setFont( const FontSelectPattern *pEntry, int nFallbackLev
         mpServerFont[ nFallbackLevel ] = pServerFont;
 
         // apply font specific-hint settings
-        ServerFont* pSFE = static_cast<ServerFont*>( pEntry->mpFontInstance );
+        ServerFont* pSFE = static_cast<ServerFont*>( pEntry->mpFontEntry );
         pSFE->HandleFontOptions();
 
         return true;
@@ -100,9 +100,9 @@ bool CairoTextRender::setFont( const FontSelectPattern *pEntry, int nFallbackLev
     return false;
 }
 
-FontConfigFontOptions* GetFCFontOptions( const FontAttributes& rFontAttributes, int nSize);
+ImplFontOptions* GetFCFontOptions( const FontAttributes& rFontAttributes, int nSize);
 
-void ServerFont::HandleFontOptions()
+void ImplServerFontEntry::HandleFontOptions()
 {
     if( !mpServerFont )
         return;
@@ -260,7 +260,7 @@ void CairoTextRender::DrawServerFontLayout( const ServerFontLayout& rLayout )
         cairo_font_face_t* font_face = static_cast<cairo_font_face_t*>(CairoFontsCache::FindCachedFont(aId));
         if (!font_face)
         {
-            const FontConfigFontOptions *pOptions = rFont.GetFontOptions().get();
+            const ImplFontOptions *pOptions = rFont.GetFontOptions().get();
             void *pPattern = pOptions ? pOptions->GetPattern(aFace, aId.mbEmbolden) : nullptr;
             if (pPattern)
                 font_face = cairo_ft_font_face_create_for_pattern(static_cast<FcPattern*>(pPattern));
@@ -410,7 +410,7 @@ void CairoTextRender::GetDevFontList( PhysicalFontCollection* pFontCollection )
         int nFaceNum = rMgr.getFontFaceNumber( aInfo.m_nID );
 
         // inform GlyphCache about this font provided by the PsPrint subsystem
-        FontAttributes aDFA = GenPspGraphics::Info2FontAttributes( aInfo );
+        ImplFontAttributes aDFA = GenPspGraphics::Info2FontAttributes( aInfo );
         aDFA.IncreaseQualityBy( 4096 );
         const OString& rFileName = rMgr.getFontFileSysPath( aInfo.m_nID );
         rGC.AddFontFile( rFileName, nFaceNum, aInfo.m_nID, aDFA );

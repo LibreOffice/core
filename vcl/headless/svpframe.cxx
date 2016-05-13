@@ -120,7 +120,7 @@ void SvpSalFrame::GetFocus()
     if( s_pFocusFrame == this )
         return;
 
-    if( (m_nStyle & (SAL_FRAME_STYLE_OWNERDRAWDECORATION | SAL_FRAME_STYLE_FLOAT)) == SAL_FRAME_STYLE_NONE )
+    if( (m_nStyle & (SAL_FRAME_STYLE_OWNERDRAWDECORATION | SAL_FRAME_STYLE_FLOAT)) == 0 )
     {
         if( s_pFocusFrame )
             s_pFocusFrame->LoseFocus();
@@ -157,7 +157,7 @@ void SvpSalFrame::ReleaseGraphics( SalGraphics* pGraphics )
     delete pSvpGraphics;
 }
 
-bool SvpSalFrame::PostEvent(ImplSVEvent* pData)
+bool SvpSalFrame::PostEvent(void* pData)
 {
     m_pInstance->PostEvent( this, pData, SALEVENT_USEREVENT );
     return true;
@@ -340,7 +340,7 @@ void SvpSalFrame::SetWindowState( const SalFrameState *pState )
 
 bool SvpSalFrame::GetWindowState( SalFrameState* pState )
 {
-    pState->mnState = WindowStateState::Normal;
+    pState->mnState = WINDOWSTATE_STATE_NORMAL;
     pState->mnX      = maGeometry.nX;
     pState->mnY      = maGeometry.nY;
     pState->mnWidth  = maGeometry.nWidth;

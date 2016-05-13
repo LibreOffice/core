@@ -101,7 +101,7 @@ BitmapBuffer* ImplCreateDIB(
                 }
                 default:
                     nBitCount = 32;
-                    SAL_FALLTHROUGH;
+                    // fall-through
                 case 32:
                 {
                     pDIB->mnFormat = SVP_CAIRO_FORMAT;
