@@ -38,7 +38,7 @@
 #include <dispatch/popupmenudispatcher.hxx>
 #include <dispatch/servicehandler.hxx>
 #include <dispatch/dispatchdisabler.hxx>
-#include <services/dispatchhelper.hxx>
+#include <framework/dispatchhelper.hxx>
 #include <recording/dispatchrecorder.hxx>
 #include <recording/dispatchrecordersupplier.hxx>
 #include <services/uriabbreviation.hxx>
