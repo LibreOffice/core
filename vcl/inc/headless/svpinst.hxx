@@ -113,8 +113,8 @@ public:
     bool                    CheckTimeout( bool bExecuteTimers = true );
 
     // Frame
-    virtual SalFrame*       CreateChildFrame( SystemParentData* pParent, SalFrameStyleFlags nStyle ) override;
-    virtual SalFrame*       CreateFrame( SalFrame* pParent, SalFrameStyleFlags nStyle ) override;
+    virtual SalFrame*       CreateChildFrame( SystemParentData* pParent, sal_uLong nStyle ) override;
+    virtual SalFrame*       CreateFrame( SalFrame* pParent, sal_uLong nStyle ) override;
     virtual void            DestroyFrame( SalFrame* pFrame ) override;
 
     // Object (System Child Window)

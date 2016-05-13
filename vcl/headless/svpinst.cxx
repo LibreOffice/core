@@ -239,12 +239,12 @@ bool SvpSalInstance::CheckTimeout( bool bExecuteTimers )
     return bRet;
 }
 
-SalFrame* SvpSalInstance::CreateChildFrame( SystemParentData* pParent, SalFrameStyleFlags nStyle )
+SalFrame* SvpSalInstance::CreateChildFrame( SystemParentData* pParent, sal_uLong nStyle )
 {
     return new SvpSalFrame( this, nullptr, nStyle, pParent );
 }
 
-SalFrame* SvpSalInstance::CreateFrame( SalFrame* pParent, SalFrameStyleFlags nStyle )
+SalFrame* SvpSalInstance::CreateFrame( SalFrame* pParent, sal_uLong nStyle )
 {
     return new SvpSalFrame( this, pParent, nStyle );
 }

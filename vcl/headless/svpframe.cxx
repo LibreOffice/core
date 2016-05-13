@@ -38,7 +38,7 @@ SvpSalFrame* SvpSalFrame::s_pFocusFrame = nullptr;
 
 SvpSalFrame::SvpSalFrame( SvpSalInstance* pInstance,
                           SalFrame* pParent,
-                          SalFrameStyleFlags nSalFrameStyle,
+                          sal_uLong nSalFrameStyle,
                           SystemParentData* ) :
     m_pInstance( pInstance ),
     m_pParent( static_cast<SvpSalFrame*>(pParent) ),
@@ -100,9 +100,9 @@ SvpSalFrame::~SvpSalFrame()
                 SvpSalFrame* pFrame = const_cast<SvpSalFrame*>(static_cast<const SvpSalFrame*>(*it));
                 if( pFrame->m_bVisible        &&
                     pFrame->m_pParent == nullptr &&
-                    (pFrame->m_nStyle & (SalFrameStyleFlags::MOVEABLE |
-                                         SalFrameStyleFlags::SIZEABLE |
-                                         SalFrameStyleFlags::CLOSEABLE) )
+                    (pFrame->m_nStyle & (SAL_FRAME_STYLE_MOVEABLE |
+                                         SAL_FRAME_STYLE_SIZEABLE |
+                                         SAL_FRAME_STYLE_CLOSEABLE) )
                     )
                 {
                     pFrame->GetFocus();
@@ -120,7 +120,7 @@ void SvpSalFrame::GetFocus()
     if( s_pFocusFrame == this )
         return;
 
-    if( (m_nStyle & (SalFrameStyleFlags::OWNERDRAWDECORATION | SalFrameStyleFlags::FLOAT)) == SalFrameStyleFlags::NONE )
+    if( (m_nStyle & (SAL_FRAME_STYLE_OWNERDRAWDECORATION | SAL_FRAME_STYLE_FLOAT)) == SAL_FRAME_STYLE_NONE )
     {
         if( s_pFocusFrame )
             s_pFocusFrame->LoseFocus();

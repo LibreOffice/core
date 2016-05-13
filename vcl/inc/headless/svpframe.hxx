@@ -40,7 +40,7 @@ class VCL_DLLPUBLIC SvpSalFrame : public SalFrame
     SvpSalInstance*                     m_pInstance;
     SvpSalFrame*                        m_pParent;       // pointer to parent frame
     std::list< SvpSalFrame* >           m_aChildren;     // List of child frames
-    SalFrameStyleFlags                  m_nStyle;
+    sal_uLong                  m_nStyle;
     bool                                m_bVisible;
 #ifndef IOS
     cairo_surface_t*                    m_pSurface;
@@ -58,7 +58,7 @@ class VCL_DLLPUBLIC SvpSalFrame : public SalFrame
 public:
     SvpSalFrame( SvpSalInstance* pInstance,
                  SalFrame* pParent,
-                 SalFrameStyleFlags nSalFrameStyle,
+                 sal_uLong nSalFrameStyle,
                  SystemParentData* pSystemParent = nullptr );
     virtual ~SvpSalFrame();
 
