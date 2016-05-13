@@ -78,65 +78,81 @@ public class Type {
         TYPE_NAME_ANY
     };
 
-    private static final HashMap<Class<?>, TypeClass[]> __javaClassToTypeClass = new HashMap<Class<?>, TypeClass[]>();
+    private static final class TypeInfo {
+        TypeInfo(
+            TypeClass thePrimary, TypeClass theAlternative,
+            boolean theSequenceComponentType)
+        {
+            primary = thePrimary;
+            alternative = theAlternative;
+            sequenceComponentType = theSequenceComponentType;
+        }
+
+        final TypeClass primary;
+        final TypeClass alternative;
+        final boolean sequenceComponentType;
+    }
+
+    private static final HashMap<Class<?>, TypeInfo> __javaClassToTypeClass =
+        new HashMap<Class<?>, TypeInfo>();
     static {
         __javaClassToTypeClass.put(
-            void.class, new TypeClass[] { TypeClass.VOID, TypeClass.VOID });
+            void.class, new TypeInfo(TypeClass.VOID, TypeClass.VOID, false));
         __javaClassToTypeClass.put(
-            Void.class, new TypeClass[] { TypeClass.VOID, TypeClass.VOID });
+            Void.class, new TypeInfo(TypeClass.VOID, TypeClass.VOID, false));
         __javaClassToTypeClass.put(
             boolean.class,
-            new TypeClass[] { TypeClass.BOOLEAN, TypeClass.BOOLEAN });
+            new TypeInfo(TypeClass.BOOLEAN, TypeClass.BOOLEAN, true));
         __javaClassToTypeClass.put(
             Boolean.class,
-            new TypeClass[] { TypeClass.BOOLEAN, TypeClass.BOOLEAN });
+            new TypeInfo(TypeClass.BOOLEAN, TypeClass.BOOLEAN, false));
         __javaClassToTypeClass.put(
-            byte.class, new TypeClass[] { TypeClass.BYTE, TypeClass.BYTE });
+            byte.class, new TypeInfo(TypeClass.BYTE, TypeClass.BYTE, true));
         __javaClassToTypeClass.put(
-            Byte.class, new TypeClass[] { TypeClass.BYTE, TypeClass.BYTE });
+            Byte.class, new TypeInfo(TypeClass.BYTE, TypeClass.BYTE, false));
         __javaClassToTypeClass.put(
             short.class,
-            new TypeClass[] { TypeClass.SHORT, TypeClass.UNSIGNED_SHORT });
+            new TypeInfo(TypeClass.SHORT, TypeClass.UNSIGNED_SHORT, true));
         __javaClassToTypeClass.put(
             Short.class,
-            new TypeClass[] { TypeClass.SHORT, TypeClass.UNSIGNED_SHORT });
+            new TypeInfo(TypeClass.SHORT, TypeClass.UNSIGNED_SHORT, false));
         __javaClassToTypeClass.put(
             int.class,
-            new TypeClass[] { TypeClass.LONG, TypeClass.UNSIGNED_LONG });
+            new TypeInfo(TypeClass.LONG, TypeClass.UNSIGNED_LONG, true));
         __javaClassToTypeClass.put(
             Integer.class,
-            new TypeClass[] { TypeClass.LONG, TypeClass.UNSIGNED_LONG });
+            new TypeInfo(TypeClass.LONG, TypeClass.UNSIGNED_LONG, false));
         __javaClassToTypeClass.put(
             long.class,
-            new TypeClass[] { TypeClass.HYPER, TypeClass.UNSIGNED_HYPER });
+            new TypeInfo(TypeClass.HYPER, TypeClass.UNSIGNED_HYPER, true));
         __javaClassToTypeClass.put(
             Long.class,
-            new TypeClass[] { TypeClass.HYPER, TypeClass.UNSIGNED_HYPER });
+            new TypeInfo(TypeClass.HYPER, TypeClass.UNSIGNED_HYPER, false));
         __javaClassToTypeClass.put(
-            float.class, new TypeClass[] { TypeClass.FLOAT, TypeClass.FLOAT });
+            float.class, new TypeInfo(TypeClass.FLOAT, TypeClass.FLOAT, true));
         __javaClassToTypeClass.put(
-            Float.class, new TypeClass[] { TypeClass.FLOAT, TypeClass.FLOAT });
+            Float.class, new TypeInfo(TypeClass.FLOAT, TypeClass.FLOAT, false));
         __javaClassToTypeClass.put(
             double.class,
-            new TypeClass[] { TypeClass.DOUBLE, TypeClass.DOUBLE });
+            new TypeInfo(TypeClass.DOUBLE, TypeClass.DOUBLE, true));
         __javaClassToTypeClass.put(
             Double.class,
-            new TypeClass[] { TypeClass.DOUBLE, TypeClass.DOUBLE });
+            new TypeInfo(TypeClass.DOUBLE, TypeClass.DOUBLE, false));
         __javaClassToTypeClass.put(
-            char.class, new TypeClass[] { TypeClass.CHAR, TypeClass.CHAR });
+            char.class, new TypeInfo(TypeClass.CHAR, TypeClass.CHAR, true));
         __javaClassToTypeClass.put(
             Character.class,
-            new TypeClass[] { TypeClass.CHAR, TypeClass.CHAR });
+            new TypeInfo(TypeClass.CHAR, TypeClass.CHAR, false));
         __javaClassToTypeClass.put(
             String.class,
-            new TypeClass[] { TypeClass.STRING, TypeClass.STRING });
+            new TypeInfo(TypeClass.STRING, TypeClass.STRING, true));
         __javaClassToTypeClass.put(
-            Type.class, new TypeClass[] { TypeClass.TYPE, TypeClass.TYPE });
+            Type.class, new TypeInfo(TypeClass.TYPE, TypeClass.TYPE, true));
         __javaClassToTypeClass.put(
-            Any.class, new TypeClass[] { TypeClass.ANY, TypeClass.ANY });
+            Any.class, new TypeInfo(TypeClass.ANY, TypeClass.ANY, true));
         __javaClassToTypeClass.put(
             Object.class,
-            new TypeClass[] { TypeClass.ANY, TypeClass.INTERFACE });
+            new TypeInfo(TypeClass.ANY, TypeClass.INTERFACE, true));
     }
 
     public static final Type VOID = new Type(void.class);
@@ -162,7 +178,7 @@ public class Type {
      * Constructs a new <code>Type</code> which defaults to <code>VOID</code>.
      */
     public Type() {
-        init(null, void.class, false, false);
+        init(null, void.class, false, false, false);
     }
 
     /**
@@ -190,7 +206,7 @@ public class Type {
      *     <code>null</code>.
      */
     public Type(Class<?> zClass) {
-        init(null, zClass, false, false);
+        init(null, zClass, false, false, false);
     }
 
     /**
@@ -244,7 +260,13 @@ public class Type {
      * @since UDK 3.2.0
      */
     public Type(Class<?> zClass, boolean alternative) {
-        init(null, zClass, alternative, false);
+        init(null, zClass, alternative, false, false);
+    }
+
+    private Type(
+        Class<?> zClass, boolean alternative, boolean sequenceComponentType)
+    {
+        init(null, zClass, alternative, false, sequenceComponentType);
     }
 
     /**
@@ -282,7 +304,7 @@ public class Type {
             init(
                 typeName,
                 Class.forName(i < 0 ? typeName : typeName.substring(0, i)),
-                false, i >= 0);
+                false, i >= 0, false);
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -449,14 +471,19 @@ public class Type {
     }
 
     private void init(
-        String name, Class<?> zClass, boolean alternative, boolean arguments)
+        String name, Class<?> zClass, boolean alternative, boolean arguments,
+        boolean sequenceComponentType)
     {
-        TypeClass[] tc = __javaClassToTypeClass.get(zClass);
-        if (tc != null) {
-            // tc only contains primitive type classes, except for
+        TypeInfo info = __javaClassToTypeClass.get(zClass);
+        if (info != null) {
+            if (sequenceComponentType && !info.sequenceComponentType) {
+                throw new IllegalArgumentException(
+                    zClass + " cannot be sequence component type");
+            }
+            // info only contains primitive type classes, except for
             // TypeClass.INTERFACE, which stands for XInterface (the alternative
             // interpretation of java.lang.Object):
-            _typeClass = tc[alternative ? 1 : 0];
+            _typeClass = alternative ? info.alternative  : info.primary;
             _typeName = _typeClass == TypeClass.INTERFACE
                 ? XInterface.class.getName()
                 : __typeClassToTypeName[_typeClass.getValue()];
@@ -465,7 +492,7 @@ public class Type {
             // java.lang.Boolean.class); getZClass will later calculate the
             // correct class when needed
         } else if (zClass.isArray()) {
-            Type t = new Type(zClass.getComponentType(), alternative);
+            Type t = new Type(zClass.getComponentType(), alternative, true);
             _typeClass = t.getTypeClass() != TypeClass.UNKNOWN
                 ? TypeClass.SEQUENCE : TypeClass.UNKNOWN;
             _typeName = "[]" + t.getTypeName();

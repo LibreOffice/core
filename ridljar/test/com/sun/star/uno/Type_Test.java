@@ -76,7 +76,11 @@ public final class Type_Test {
         assertSame(boolean.class, new Type(boolean.class).getZClass());
         assertSame(boolean.class, new Type(Boolean.class).getZClass());
         assertSame(boolean[].class, new Type(boolean[].class).getZClass());
-        assertSame(boolean[].class, new Type(Boolean[].class).getZClass());
+
+        try {
+            new Type(Boolean[].class);
+            fail();
+        } catch (java.lang.RuntimeException e) {}
     }
 
     @Test public void testIsSupertypeOf() {
