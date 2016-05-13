@@ -30,10 +30,6 @@
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
-#include <comphelper/stl_types.hxx>
-
-#include <boost/bind.hpp>
-
 using namespace com::sun::star;
 
 namespace pdfi
@@ -126,10 +122,10 @@ void ImageContainer::writeBase64EncodedStream( ImageId nId, EmitContext& rContex
     const beans::PropertyValue* pAry(rEntry.getConstArray());
     const sal_Int32             nLen(rEntry.getLength());
     const beans::PropertyValue* pValue(
-        std::find_if(pAry,pAry+nLen,
-                     boost::bind(comphelper::TPropertyValueEqualFunctor(),
-                                 _1,
-                                 OUString("InputSequence"))));
+        std::find_if(pAry, pAry+nLen,
+            [] (beans::PropertyValue const& v) -> bool {
+                return v.Name == "InputSequence";
+            }));
     OSL_ENSURE( pValue != pAry+nLen,
                 "InputSequence not found" );
 
