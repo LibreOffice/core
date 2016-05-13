@@ -32,7 +32,7 @@ public:
     /// Writes <w:cnfStyle .../> based on grab-bagged para, cell or row properties.
     void CnfStyle(css::uno::Sequence<css::beans::PropertyValue>& rAttributeList);
 
-    void SetSerializer(sax_fastparser::FSHelperPtr pSerializer);
+    void SetSerializer(const sax_fastparser::FSHelperPtr& pSerializer);
     DocxTableStyleExport(SwDoc* pDoc, sax_fastparser::FSHelperPtr pSerializer);
     ~DocxTableStyleExport();
 };
