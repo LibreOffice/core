@@ -3638,7 +3638,7 @@ void FmXFormShell::viewActivated( FmFormView& _rCurrentView, bool _bSyncAction /
         if ( pPage )
         {
             if ( !pPage->GetImpl().hasEverBeenActivated() )
-                loadForms( pPage, FORMS_LOAD | ( _bSyncAction ? FORMS_SYNC : FORMS_ASYNC ) );
+                loadForms( pPage, LoadFormsFlags::Load | ( _bSyncAction ? LoadFormsFlags::Sync : LoadFormsFlags::Async ) );
             pPage->GetImpl().setHasBeenActivated( );
         }
 
@@ -3767,7 +3767,7 @@ IMPL_LINK_NOARG_TYPED( FmXFormShell, OnLoadForms, void*, void )
     FmLoadAction aAction = m_aLoadingPages.front();
     m_aLoadingPages.pop();
 
-    loadForms( aAction.pPage, aAction.nFlags & ~FORMS_ASYNC );
+    loadForms( aAction.pPage, aAction.nFlags & ~LoadFormsFlags::Async );
 }
 
 
@@ -3809,12 +3809,12 @@ namespace
 }
 
 
-void FmXFormShell::loadForms( FmFormPage* _pPage, const sal_uInt16 _nBehaviour /* FORMS_LOAD | FORMS_SYNC */ )
+void FmXFormShell::loadForms( FmFormPage* _pPage, const LoadFormsFlags _nBehaviour /* LoadFormsFlags::Load | LoadFormsFlags::Sync */ )
 {
-    DBG_ASSERT( ( _nBehaviour & ( FORMS_ASYNC | FORMS_UNLOAD ) )  != ( FORMS_ASYNC | FORMS_UNLOAD ),
+    DBG_ASSERT( ( _nBehaviour & ( LoadFormsFlags::Async | LoadFormsFlags::Unload ) )  != ( LoadFormsFlags::Async | LoadFormsFlags::Unload ),
         "FmXFormShell::loadForms: async loading not supported - this will heavily fail!" );
 
-    if ( _nBehaviour & FORMS_ASYNC )
+    if ( _nBehaviour & LoadFormsFlags::Async )
     {
         m_aLoadingPages.push( FmLoadAction(
             _pPage,
@@ -3848,7 +3848,7 @@ void FmXFormShell::loadForms( FmFormPage* _pPage, const sal_uInt16 _nBehaviour /
                 // a database form must be loaded for
                 try
                 {
-                    if ( 0 == ( _nBehaviour & FORMS_UNLOAD ) )
+                    if ( !( _nBehaviour & LoadFormsFlags::Unload ) )
                     {
                         if ( lcl_isLoadable( xForm ) && !xForm->isLoaded() )
                             xForm->load();
