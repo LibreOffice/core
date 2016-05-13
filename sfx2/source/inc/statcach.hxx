@@ -34,6 +34,7 @@
 
 #include "slotserv.hxx"
 
+
 class SfxControllerItem;
 class SfxDispatcher;
 class BindDispatch_Impl :   public ::cppu::WeakImplHelper< css::frame::XStatusListener >
@@ -56,7 +57,7 @@ public:
 
     void                    Release();
     const css::frame::FeatureStateEvent& GetStatus() const { return aStatus;}
-    void                    Dispatch( const css::uno::Sequence < css::beans::PropertyValue >& aProps, bool bForceSynchron = false );
+    short                   Dispatch( const css::uno::Sequence < css::beans::PropertyValue >& aProps, bool bForceSynchron = false );
 };
 
 class SfxStateCache
@@ -89,7 +90,7 @@ public:
     const SfxSlotServer*    GetSlotServer( SfxDispatcher &rDispat )
                             { return GetSlotServer( rDispat, css::uno::Reference< css::frame::XDispatchProvider > () ); }
     css::uno::Reference< css::frame::XDispatch >          GetDispatch() const;
-    void                    Dispatch( const SfxItemSet* pSet, bool bForceSynchron = false );
+    short                   Dispatch( const SfxItemSet* pSet, bool bForceSynchron = false );
     bool                    IsControllerDirty() const
                             { return bCtrlDirty; }
     void                    ClearCache();
