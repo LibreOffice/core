@@ -1468,6 +1468,10 @@ HFONT WinSalGraphics::ImplDoSetFont( FontSelectPattern* i_pFont, float& o_rFontS
     && (ImplSalWICompareAscii( aLogFont.lfFaceName, "Courier" ) == 0) )
         lstrcpynW( aLogFont.lfFaceName, L"Courier New", 11 );
 
+    // Prefer the scalable 'Microsoft Sans Serif' to the old raster 'MS Sans Serif'
+    if( ImplSalWICompareAscii( aLogFont.lfFaceName, "MS Sans Serif" ) == 0 )
+        wcscpy( aLogFont.lfFaceName, L"Microsoft Sans Serif" );
+
     // #i47675# limit font requests to MAXFONTHEIGHT
     // TODO: share MAXFONTHEIGHT font instance
     if( (-aLogFont.lfHeight <= MAXFONTHEIGHT)
