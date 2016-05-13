@@ -794,7 +794,7 @@ void SmXMLEncloseContext_Impl::EndElement()
     contents are treated as a single "inferred <mrow>" containing its
     arguments
     */
-    if (GetSmImport().GetNodeStack().size() - nElementCount > 1)
+    if (GetSmImport().GetNodeStack().size() - nElementCount != 1)
         SmXMLRowContext_Impl::EndElement();
 }
 
@@ -863,7 +863,7 @@ void SmXMLStyleContext_Impl::EndElement()
     arguments
     */
     SmNodeStack &rNodeStack = GetSmImport().GetNodeStack();
-    if (rNodeStack.size() - nElementCount > 1)
+    if (rNodeStack.size() - nElementCount != 1)
         SmXMLRowContext_Impl::EndElement();
     aStyleHelper.ApplyAttrs();
 }
@@ -887,7 +887,7 @@ void SmXMLPaddedContext_Impl::EndElement()
     contents are treated as a single "inferred <mrow>" containing its
     arguments
     */
-    if (GetSmImport().GetNodeStack().size() - nElementCount > 1)
+    if (GetSmImport().GetNodeStack().size() - nElementCount != 1)
         SmXMLRowContext_Impl::EndElement();
 }
 
@@ -910,7 +910,7 @@ void SmXMLPhantomContext_Impl::EndElement()
     contents are treated as a single "inferred <mrow>" containing its
     arguments
     */
-    if (GetSmImport().GetNodeStack().size() - nElementCount > 1)
+    if (GetSmImport().GetNodeStack().size() - nElementCount != 1)
         SmXMLRowContext_Impl::EndElement();
 
     SmToken aToken;
@@ -2158,7 +2158,7 @@ void SmXMLSqrtContext_Impl::EndElement()
     contents are treated as a single "inferred <mrow>" containing its
     arguments
     */
-    if (GetSmImport().GetNodeStack().size() - nElementCount > 1)
+    if (GetSmImport().GetNodeStack().size() - nElementCount != 1)
         SmXMLRowContext_Impl::EndElement();
 
     SmToken aToken;
