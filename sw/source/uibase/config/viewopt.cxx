@@ -191,9 +191,9 @@ SwViewOption::SwViewOption() :
         VIEWOPT_CORE2_HIDDENPARA;
 
     m_nUIOptions =
-        VIEWOPT_2_MODIFIED |
-        VIEWOPT_2_GRFKEEPZOOM |
-        VIEWOPT_2_ANY_RULER;
+        ViewOptFlags2::Modified |
+        ViewOptFlags2::GrfKeepZoom |
+        ViewOptFlags2::AnyRuler;
 
     if (!utl::ConfigManager::IsAvoidConfig() && MEASURE_METRIC != SvtSysLocale().GetLocaleData().getMeasurementSystemEnum())
         m_aSnapSize.Width() = m_aSnapSize.Height() = 720;   // 1/2"
