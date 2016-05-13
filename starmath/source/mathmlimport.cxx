@@ -2487,7 +2487,6 @@ void SmXMLTableContext_Impl::EndElement()
 
     SmToken aToken;
     aToken.cMathChar = '\0';
-    aToken.nGroup = TRGROUP;
     aToken.eType = TMATRIX;
     std::unique_ptr<SmMatrixNode> pSNode(new SmMatrixNode(aToken));
     pSNode->SetSubNodes(aExpressionArray);
