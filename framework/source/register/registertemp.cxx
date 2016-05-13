@@ -38,7 +38,6 @@
 #include <dispatch/popupmenudispatcher.hxx>
 #include <dispatch/servicehandler.hxx>
 #include <dispatch/dispatchdisabler.hxx>
-#include <services/dispatchhelper.hxx>
 #include <recording/dispatchrecorder.hxx>
 #include <recording/dispatchrecordersupplier.hxx>
 #include <services/uriabbreviation.hxx>
@@ -56,7 +55,6 @@ COMPONENTGETFACTORY ( fwl,
                         IFFACTORY( ::framework::MailToDispatcher                        )   else
                         IFFACTORY( ::framework::ServiceHandler                          )   else
                         IFFACTORY( ::framework::PopupMenuDispatcher                     )   else
-                        IFFACTORY( ::framework::DispatchHelper                          )   else
                         IFFACTORY( ::framework::DispatchDisabler                        )   else
                         IFFACTORY( ::framework::DispatchRecorder                        )   else
                         IFFACTORY( ::framework::DispatchRecorderSupplier                )   else
