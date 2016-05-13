@@ -596,7 +596,7 @@ void IcnGridMap_Impl::GetMinMapSize( sal_uInt16& rDX, sal_uInt16& rDY ) const
         nX = _pView->nMaxVirtWidth;
         if( !nX )
             nX = _pView->pView->GetOutputSizePixel().Width();
-        if( !(_pView->nFlags & F_ARRANGING) )
+        if( !(_pView->nFlags & IconChoiceFlags::Arranging) )
             nX -= _pView->nVerSBarWidth;
 
         nY = _pView->aVirtOutputSize.Height();
@@ -607,7 +607,7 @@ void IcnGridMap_Impl::GetMinMapSize( sal_uInt16& rDX, sal_uInt16& rDY ) const
         nY = _pView->nMaxVirtHeight;
         if( !nY )
             nY = _pView->pView->GetOutputSizePixel().Height();
-        if( !(_pView->nFlags & F_ARRANGING) )
+        if( !(_pView->nFlags & IconChoiceFlags::Arranging) )
             nY -= _pView->nHorSBarHeight;
         nX = _pView->aVirtOutputSize.Width();
     }

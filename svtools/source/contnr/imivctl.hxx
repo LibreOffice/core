@@ -48,18 +48,20 @@ class IcnGridMap_Impl;
 #define PAINTFLAG_HOR_CENTERED  0x0001
 #define PAINTFLAG_VER_CENTERED  0x0002
 
-#define F_VER_SBARSIZE_WITH_HBAR        0x0001
-#define F_HOR_SBARSIZE_WITH_VBAR        0x0002
-#define F_PAINTED                       0x0004  // true after first paint
-#define F_ADD_MODE                      0x0008
-#define F_SELECTING_RECT                0x0020
-#define F_DOWN_CTRL                     0x0080
-#define F_DOWN_DESELECT                 0x0100
-#define F_START_EDITTIMER_IN_MOUSEUP    0x0400
-#define F_MOVED_ENTRIES                 0x0800
-#define F_ENTRYLISTPOS_VALID            0x1000
-#define F_CLEARING_SELECTION            0x2000
-#define F_ARRANGING                     0x4000
+enum class IconChoiceFlags {
+    NONE                         = 0x0000,
+    AddMode                      = 0x0001,
+    SelectingRect                = 0x0002,
+    DownCtrl                     = 0x0004,
+    DownDeselect                 = 0x0008,
+    StartEditTimerInMouseUp      = 0x0010,
+    EntryListPosValid            = 0x0020,
+    ClearingSelection            = 0x0040,
+    Arranging                    = 0x0080
+};
+namespace o3tl {
+    template<> struct typed_flags<IconChoiceFlags> : is_typed_flags<IconChoiceFlags, 0x00ff> {};
+}
 
 // unit = pixels
 // distances from window borders
@@ -180,7 +182,7 @@ class SvxIconChoiceCtrl_Impl
     VclPtr<IcnViewEdit_Impl>   pEdit;
     WinBits                 nWinBits;
     long                    nMaxBoundHeight;            // height of highest BoundRects
-    sal_uInt16              nFlags;
+    IconChoiceFlags         nFlags;
     DrawTextFlags           nCurTextDrawFlags;
     ImplSVEvent *           nUserEventAdjustScrBars;
     ImplSVEvent *           nUserEventShowCursor;
@@ -464,13 +466,6 @@ public:
     SvxIconChoiceCtrlEntry* GetFirstSelectedEntry() const;
     SvxIconChoiceCtrlTextMode GetEntryTextModeSmart( const SvxIconChoiceCtrlEntry* pEntry ) const;
     void                SetSelectionMode( SelectionMode eMode ) { eSelectionMode=eMode; }
-    void                SetEntriesMoved( bool bMoved )
-                        {
-                            if( bMoved )
-                                nFlags |= F_MOVED_ENTRIES;
-                            else
-                                nFlags &= ~(F_MOVED_ENTRIES);
-                        }
     sal_Int32           GetEntryListPos( SvxIconChoiceCtrlEntry* ) const;
     void                InitSettings();
     Rectangle           GetOutputRect() const;
