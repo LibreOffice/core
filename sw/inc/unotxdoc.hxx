@@ -609,7 +609,7 @@ class SwViewOptionAdjust_Impl
 public:
     SwViewOptionAdjust_Impl( SwViewShell& rSh, const SwViewOption &rViewOptions );
     ~SwViewOptionAdjust_Impl();
-    void AdjustViewOptions( SwPrintData const* const pPrtOptions );
+    void AdjustViewOptions( SwPrintData const* const pPrtOptions, bool setShowPlaceHoldersInPDF );
     bool checkShell( const SwViewShell& rCompare ) const
     { return &rCompare == m_pShell; }
     void DontTouchThatViewShellItSmellsFunny() { m_pShell = nullptr; }

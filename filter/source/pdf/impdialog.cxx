@@ -84,6 +84,7 @@ ImpPDFTabDialog::ImpPDFTabDialog(vcl::Window* pParent, Sequence< PropertyValue >
     mbExportOnlyNotesPages( false ),
     mbUseTransitionEffects( false ),
     mbIsSkipEmptyPages( true ),
+    mbIsExportPlaceholders( false ),
     mbAddStream( false ),
     mnFormsType( 0 ),
     mbExportFormFields( true ),
@@ -201,6 +202,7 @@ ImpPDFTabDialog::ImpPDFTabDialog(vcl::Window* pParent, Sequence< PropertyValue >
     mnOpenBookmarkLevels = maConfigItem.ReadInt32( "OpenBookmarkLevels", -1 );
     mbUseTransitionEffects = maConfigItem.ReadBool( "UseTransitionEffects", true );
     mbIsSkipEmptyPages = maConfigItem.ReadBool( "IsSkipEmptyPages", false );
+    mbIsExportPlaceholders = maConfigItem.ReadBool( "ExportPlaceholders", false );
     mbAddStream = maConfigItem.ReadBool( "IsAddStream", false );
 
     mnFormsType = maConfigItem.ReadInt32( "FormsType", 0 );
@@ -409,6 +411,7 @@ Sequence< PropertyValue > ImpPDFTabDialog::GetFilterData()
         maConfigItem.WriteBool( "ExportHiddenSlides", mbExportHiddenSlides );
     maConfigItem.WriteBool( "UseTransitionEffects", mbUseTransitionEffects );
     maConfigItem.WriteBool( "IsSkipEmptyPages", mbIsSkipEmptyPages );
+    maConfigItem.WriteBool( "ExportPlaceholders", mbIsExportPlaceholders );
     maConfigItem.WriteBool( "IsAddStream", mbAddStream );
 
     /*
@@ -550,6 +553,7 @@ ImpPDFTabGeneralPage::ImpPDFTabGeneralPage(vcl::Window* pParent, const SfxItemSe
     get(mpCbExportNotesPages, "notes");
     get(mpCbExportOnlyNotesPages, "onlynotes");
     get(mpCbExportEmptyPages, "emptypages");
+    get(mpCbExportPlaceholders, "exportplaceholders" );
     get(mpCbViewPDF, "viewpdf");
 
     get(mpCbWatermark, "watermark");
@@ -589,6 +593,7 @@ void ImpPDFTabGeneralPage::dispose()
     mpCbExportNotesPages.clear();
     mpCbExportOnlyNotesPages.clear();
     mpCbExportEmptyPages.clear();
+    mpCbExportPlaceholders.clear();
     mpCbAddStream.clear();
     mpCbWatermark.clear();
     mpFtWatermark.clear();
@@ -616,6 +621,7 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem( ImpPDFTabDialog* paParent )
     mbIsWriter = paParent->mbIsWriter;
 
     mpCbExportEmptyPages->Enable( mbIsWriter );
+    mpCbExportPlaceholders->Enable( mbIsWriter );
 
     mpRbLosslessCompression->SetToggleHdl( LINK( this, ImpPDFTabGeneralPage, ToggleCompressionHdl ) );
     const bool bUseLosslessCompression = paParent->mbUseLosslessCompression;
@@ -689,8 +695,13 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem( ImpPDFTabDialog* paParent )
         mpCbExportHiddenSlides->Show(false);
         mpCbExportHiddenSlides->Check(false);
     }
-
+    mpCbExportPlaceholders->Show(mbIsWriter);
+    if( !mbIsWriter )
+    {
+        mpCbExportPlaceholders->Check(false);
+    }
     mpCbExportEmptyPages->Check(!paParent->mbIsSkipEmptyPages);
+    mpCbExportPlaceholders->Check(paParent->mbIsExportPlaceholders);
 
     mpCbAddStream->Show();
     mpCbAddStream->Check(paParent->mbAddStream);
@@ -719,6 +730,7 @@ void ImpPDFTabGeneralPage::GetFilterConfigItem( ImpPDFTabDialog* paParent )
         paParent->mbExportHiddenSlides = mpCbExportHiddenSlides->IsChecked();
 
     paParent->mbIsSkipEmptyPages = !mpCbExportEmptyPages->IsChecked();
+    paParent->mbIsExportPlaceholders = mpCbExportPlaceholders->IsChecked();
     paParent->mbAddStream = mpCbAddStream->IsVisible() && mpCbAddStream->IsChecked();
 
     paParent->mbIsRangeChecked = false;
