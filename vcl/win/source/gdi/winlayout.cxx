@@ -368,7 +368,12 @@ bool ImplWinFontEntry::CacheGlyphToAtlas(bool bRealGlyphIndices, int nGlyphIndex
     if (!pTxt)
         return false;
 
-    pTxt->BindFont(hDC);
+    if (!pTxt->BindFont(hDC))
+    {
+        SelectObject(hDC, hOrigFont);
+        DeleteDC(hDC);
+        return false;
+    }
 
     // Bail for non-horizontal text.
     {
