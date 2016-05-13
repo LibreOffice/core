@@ -25,6 +25,7 @@
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
 #include <comphelper/stl_types.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
 #include <set>
 
@@ -32,17 +33,20 @@ namespace com { namespace sun { namespace star { namespace form { namespace vali
     class XValidatableFormComponent;
 } } } } }
 
+enum class ControlStatus {
+    NONE        = 0x00,
+    Focused     = 0x01,
+    MouseHover  = 0x02,
+    Invalid     = 0x04
+};
+namespace o3tl {
+    template<> struct typed_flags<ControlStatus> : is_typed_flags<ControlStatus, 0x07> {};
+}
+
 
 namespace svxform
 {
 
-
-    typedef sal_Int16 ControlStatus;
-
-    #define CONTROL_STATUS_NONE         0x00
-    #define CONTROL_STATUS_FOCUSED      0x01
-    #define CONTROL_STATUS_MOUSE_HOVER  0x02
-    #define CONTROL_STATUS_INVALID      0x04
 
     struct BorderDescriptor
     {
@@ -147,7 +151,7 @@ namespace svxform
 
         /** sets a color to be used for a given status
             @param _nStatus
-                the status which the color should be applied for. Must not be CONTROL_STATUS_NONE
+                the status which the color should be applied for. Must not be ControlStatus::NONE
             @param _nColor
                 the color to apply for the given status
         */
@@ -200,7 +204,7 @@ namespace svxform
                 the peer of the control, to be passed herein for optimization the caller usually needs it, anyway).
                 Must not be <NULL/>
             @param _rFallback
-                the color/type to use when the control has the status CONTROL_STATUS_NONE
+                the color/type to use when the control has the status ControlStatus::NONE
         */
         void            updateBorderStyle(
                             const css::uno::Reference< css::awt::XControl >& _rxControl,

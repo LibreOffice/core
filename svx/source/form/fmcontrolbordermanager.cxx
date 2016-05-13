@@ -135,16 +135,16 @@ namespace svxform
 
     ControlStatus ControlBorderManager::getControlStatus( const Reference< XControl >& _rxControl )
     {
-        ControlStatus nStatus = CONTROL_STATUS_NONE;
+        ControlStatus nStatus = ControlStatus::NONE;
 
         if ( _rxControl.get() == m_aFocusControl.xControl.get() )
-            nStatus |= CONTROL_STATUS_FOCUSED;
+            nStatus |= ControlStatus::Focused;
 
         if ( _rxControl.get() == m_aMouseHoverControl.xControl.get() )
-            nStatus |= CONTROL_STATUS_MOUSE_HOVER;
+            nStatus |= ControlStatus::MouseHover;
 
         if ( m_aInvalidControls.find( ControlData( _rxControl ) ) != m_aInvalidControls.end() )
-            nStatus |= CONTROL_STATUS_INVALID;
+            nStatus |= ControlStatus::Invalid;
 
         return nStatus;
     }
@@ -153,15 +153,15 @@ namespace svxform
     sal_Int32 ControlBorderManager::getControlColorByStatus( ControlStatus _nStatus )
     {
         // "invalid" is ranked highest
-        if ( _nStatus & CONTROL_STATUS_INVALID )
+        if ( _nStatus & ControlStatus::Invalid )
             return m_nInvalidColor;
 
         // then, "focused" is more important than ...
-        if ( _nStatus & CONTROL_STATUS_FOCUSED )
+        if ( _nStatus & ControlStatus::Focused )
             return m_nFocusColor;
 
         // ... "mouse over"
-        if ( _nStatus & CONTROL_STATUS_MOUSE_HOVER )
+        if ( _nStatus & ControlStatus::MouseHover )
             return m_nMouseHoveColor;
 
         OSL_FAIL( "ControlBorderManager::getControlColorByStatus: invalid status!" );
@@ -175,10 +175,10 @@ namespace svxform
 
         ControlStatus nStatus = getControlStatus( _rxControl );
         BorderDescriptor aBorder;
-        aBorder.nBorderType =   ( nStatus == CONTROL_STATUS_NONE )
+        aBorder.nBorderType =   ( nStatus == ControlStatus::NONE )
                             ?   _rFallback.nBorderType
                             :   VisualEffect::FLAT;
-        aBorder.nBorderColor =   ( nStatus == CONTROL_STATUS_NONE )
+        aBorder.nBorderColor =   ( nStatus == ControlStatus::NONE )
                              ?   _rFallback.nBorderColor
                              :   getControlColorByStatus( nStatus );
         setBorder( _rxPeer, aBorder );
@@ -286,13 +286,13 @@ namespace svxform
     {
         switch ( _nStatus )
         {
-        case CONTROL_STATUS_FOCUSED:
+        case ControlStatus::Focused:
             m_nFocusColor = _nColor;
             break;
-        case CONTROL_STATUS_MOUSE_HOVER:
+        case ControlStatus::MouseHover:
             m_nMouseHoveColor = _nColor;
             break;
-        case CONTROL_STATUS_INVALID:
+        case ControlStatus::Invalid:
             m_nInvalidColor = _nColor;
             break;
         default:
