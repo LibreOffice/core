@@ -151,11 +151,6 @@ namespace dxcanvas
         T*  mp;
     };
 
-    // get_pointer() enables boost::mem_fn to recognize COMReference
-    template<class T> inline T * get_pointer(COMReference<T> const& p)
-    {
-        return p.get();
-    }
 }
 
 
