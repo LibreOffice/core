@@ -571,16 +571,6 @@ public:
     inline static SAL_WARN_UNUSED_RESULT Reference< interface_type > SAL_CALL query( XInterface * pInterface );
 };
 
-/// @cond INTERNAL
-/** Enables boost::mem_fn and boost::bind to recognize Reference.
-*/
-template <typename T>
-inline T * get_pointer( Reference<T> const& r )
-{
-    return r.get();
-}
-/// @endcond
-
 }
 }
 }
