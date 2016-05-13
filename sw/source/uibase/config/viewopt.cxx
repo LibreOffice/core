@@ -64,7 +64,7 @@ Color SwViewOption::m_aScriptIndicatorColor(COL_GREEN);
 Color SwViewOption::m_aShadowColor(COL_GRAY);
 Color SwViewOption::m_aHeaderFooterMarkColor(COL_BLUE);
 
-sal_Int32 SwViewOption::m_nAppearanceFlags = VIEWOPT_DOC_BOUNDARIES|VIEWOPT_OBJECT_BOUNDARIES;
+ViewOptFlags SwViewOption::m_nAppearanceFlags = ViewOptFlags::DocBoundaries|ViewOptFlags::ObjectBoundaries;
 sal_uInt16 SwViewOption::m_nPixelTwips = 0;   // one pixel on the screen
 
 static const char aPostItStr[] = "  ";
@@ -451,41 +451,41 @@ void SwViewOption::ApplyColorConfigValues(const svtools::ColorConfig& rConfig )
 
     svtools::ColorConfigValue aValue = rConfig.GetColorValue(svtools::DOCBOUNDARIES);
     m_aDocBoundColor.SetColor(aValue.nColor);
-    m_nAppearanceFlags = 0;
+    m_nAppearanceFlags = ViewOptFlags::NONE;
     if(aValue.bIsVisible)
-        m_nAppearanceFlags |= VIEWOPT_DOC_BOUNDARIES;
+        m_nAppearanceFlags |= ViewOptFlags::DocBoundaries;
 
     m_aAppBackgroundColor.SetColor(rConfig.GetColorValue(svtools::APPBACKGROUND).nColor);
 
     aValue = rConfig.GetColorValue(svtools::OBJECTBOUNDARIES);
     m_aObjectBoundColor.SetColor(aValue.nColor);
     if(aValue.bIsVisible)
-        m_nAppearanceFlags |= VIEWOPT_OBJECT_BOUNDARIES;
+        m_nAppearanceFlags |= ViewOptFlags::ObjectBoundaries;
 
     aValue = rConfig.GetColorValue(svtools::TABLEBOUNDARIES);
     m_aTableBoundColor.SetColor(aValue.nColor);
     if(aValue.bIsVisible)
-        m_nAppearanceFlags |= VIEWOPT_TABLE_BOUNDARIES;
+        m_nAppearanceFlags |= ViewOptFlags::TableBoundaries;
 
     aValue = rConfig.GetColorValue(svtools::WRITERIDXSHADINGS);
     m_aIndexShadingsColor.SetColor(aValue.nColor);
     if(aValue.bIsVisible)
-        m_nAppearanceFlags |= VIEWOPT_INDEX_SHADINGS;
+        m_nAppearanceFlags |= ViewOptFlags::IndexShadings;
 
     aValue = rConfig.GetColorValue(svtools::LINKS);
     m_aLinksColor.SetColor(aValue.nColor);
     if(aValue.bIsVisible)
-        m_nAppearanceFlags |= VIEWOPT_LINKS;
+        m_nAppearanceFlags |= ViewOptFlags::Links;
 
     aValue = rConfig.GetColorValue(svtools::LINKSVISITED);
     m_aVisitedLinksColor.SetColor(aValue.nColor);
     if(aValue.bIsVisible)
-        m_nAppearanceFlags |= VIEWOPT_VISITED_LINKS;
+        m_nAppearanceFlags |= ViewOptFlags::VisitedLinks;
 
     aValue = rConfig.GetColorValue(svtools::SHADOWCOLOR);
     m_aShadowColor.SetColor(aValue.nColor);
     if(aValue.bIsVisible)
-        m_nAppearanceFlags |= VIEWOPT_SHADOW;
+        m_nAppearanceFlags |= ViewOptFlags::Shadow;
 
     m_aDirectCursorColor.SetColor(rConfig.GetColorValue(svtools::WRITERDIRECTCURSOR).nColor);
 
@@ -500,12 +500,12 @@ void SwViewOption::ApplyColorConfigValues(const svtools::ColorConfig& rConfig )
     aValue = rConfig.GetColorValue(svtools::WRITERFIELDSHADINGS);
     m_aFieldShadingsColor.SetColor(aValue.nColor);
     if(aValue.bIsVisible)
-        m_nAppearanceFlags |= VIEWOPT_FIELD_SHADINGS;
+        m_nAppearanceFlags |= ViewOptFlags::FieldShadings;
 
     aValue = rConfig.GetColorValue(svtools::WRITERSECTIONBOUNDARIES);
     m_aSectionBoundColor.SetColor(aValue.nColor);
     if(aValue.bIsVisible)
-        m_nAppearanceFlags |= VIEWOPT_SECTION_BOUNDARIES;
+        m_nAppearanceFlags |= ViewOptFlags::SectionBoundaries;
 
     aValue = rConfig.GetColorValue(svtools::WRITERPAGEBREAKS);
     m_aPageBreakColor.SetColor(aValue.nColor);
@@ -516,7 +516,7 @@ void SwViewOption::ApplyColorConfigValues(const svtools::ColorConfig& rConfig )
     m_aScriptIndicatorColor.SetColor(rConfig.GetColorValue(svtools::WRITERSCRIPTINDICATOR).nColor);
 }
 
-void SwViewOption::SetAppearanceFlag(sal_Int32 nFlag, bool bSet, bool bSaveInConfig )
+void SwViewOption::SetAppearanceFlag(ViewOptFlags nFlag, bool bSet, bool bSaveInConfig )
 {
     if(bSet)
         m_nAppearanceFlags |= nFlag;
@@ -528,26 +528,26 @@ void SwViewOption::SetAppearanceFlag(sal_Int32 nFlag, bool bSet, bool bSaveInCon
         svtools::EditableColorConfig aEditableConfig;
         struct FlagToConfig_Impl
         {
-            sal_Int32               nFlag;
+            ViewOptFlags                nFlag;
             svtools::ColorConfigEntry   eEntry;
         };
         static const FlagToConfig_Impl aFlags[] =
         {
-            { VIEWOPT_DOC_BOUNDARIES     ,   svtools::DOCBOUNDARIES },
-            { VIEWOPT_OBJECT_BOUNDARIES  ,   svtools::OBJECTBOUNDARIES },
-            { VIEWOPT_TABLE_BOUNDARIES   ,   svtools::TABLEBOUNDARIES },
-            { VIEWOPT_INDEX_SHADINGS     ,   svtools::WRITERIDXSHADINGS },
-            { VIEWOPT_LINKS              ,   svtools::LINKS },
-            { VIEWOPT_VISITED_LINKS      ,   svtools::LINKSVISITED },
-            { VIEWOPT_FIELD_SHADINGS     ,   svtools::WRITERFIELDSHADINGS },
-            { VIEWOPT_SECTION_BOUNDARIES ,   svtools::WRITERSECTIONBOUNDARIES },
-            { VIEWOPT_SHADOW             ,   svtools::SHADOWCOLOR },
-            { 0                          ,   svtools::ColorConfigEntryCount }
+            { ViewOptFlags::DocBoundaries     ,   svtools::DOCBOUNDARIES },
+            { ViewOptFlags::ObjectBoundaries  ,   svtools::OBJECTBOUNDARIES },
+            { ViewOptFlags::TableBoundaries   ,   svtools::TABLEBOUNDARIES },
+            { ViewOptFlags::IndexShadings     ,   svtools::WRITERIDXSHADINGS },
+            { ViewOptFlags::Links             ,   svtools::LINKS },
+            { ViewOptFlags::VisitedLinks      ,   svtools::LINKSVISITED },
+            { ViewOptFlags::FieldShadings     ,   svtools::WRITERFIELDSHADINGS },
+            { ViewOptFlags::SectionBoundaries ,   svtools::WRITERSECTIONBOUNDARIES },
+            { ViewOptFlags::Shadow            ,   svtools::SHADOWCOLOR },
+            { ViewOptFlags::NONE              ,   svtools::ColorConfigEntryCount }
         };
         sal_uInt16 nPos = 0;
-        while(aFlags[nPos].nFlag)
+        while(aFlags[nPos].nFlag != ViewOptFlags::NONE)
         {
-            if(0 != (nFlag&aFlags[nPos].nFlag))
+            if(nFlag & aFlags[nPos].nFlag)
             {
                 svtools::ColorConfigValue aValue = aEditableConfig.GetColorValue(aFlags[nPos].eEntry);
                 aValue.bIsVisible = bSet;
@@ -558,9 +558,9 @@ void SwViewOption::SetAppearanceFlag(sal_Int32 nFlag, bool bSet, bool bSaveInCon
     }
 }
 
-bool SwViewOption::IsAppearanceFlag(sal_Int32 nFlag)
+bool SwViewOption::IsAppearanceFlag(ViewOptFlags nFlag)
 {
-    return 0 != (m_nAppearanceFlags & nFlag);
+    return bool(m_nAppearanceFlags & nFlag);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
