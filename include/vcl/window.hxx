@@ -289,7 +289,7 @@ enum class ShowTrackFlags {
 };
 namespace o3tl
 {
-    template<> struct typed_flags<ShowTrackFlags> : is_typed_flags<ShowTrackFlags, 0x300a> {};
+    template<> struct typed_flags<ShowTrackFlags> : is_typed_flags<ShowTrackFlags, 0x300f> {};
 }
 
 // Flags for StartTracking()
