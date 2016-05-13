@@ -2437,10 +2437,17 @@ void SwAccessibleMap::InvalidatePosOrSize( const SwFrame *pFrame,
         {
             if( GetShell()->ActionPend() )
             {
-                SwAccessibleEvent_Impl aEvent(
-                    SwAccessibleEvent_Impl::CHILD_POS_CHANGED,
-                    xParentAccImpl.get(), aFrameOrObj, rOldBox );
-                AppendEvent( aEvent );
+                assert(pParent);
+                // tdf#99722 faster not to buffer events that won't be sent
+                if (!SwAccessibleChild(pParent).IsVisibleChildrenOnly()
+                    || xParentAccImpl->IsShowing(rOldBox)
+                    || xParentAccImpl->IsShowing(*this, aFrameOrObj))
+                {
+                    SwAccessibleEvent_Impl aEvent(
+                        SwAccessibleEvent_Impl::CHILD_POS_CHANGED,
+                        xParentAccImpl.get(), aFrameOrObj, rOldBox );
+                    AppendEvent( aEvent );
+                }
             }
             else
             {
