@@ -24,6 +24,7 @@
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/queryinterface.hxx>
+#include <algorithm>
 
 using namespace osl;
 using namespace com::sun::star::uno;
@@ -53,7 +54,6 @@ public:
     explicit OWeakConnectionPoint( OWeakObject* pObj )
         : m_aRefCount( 0 )
         , m_pObject(pObj)
-        , m_aReferences( getWeakMutex() )
     {}
 
     // noncopyable
@@ -81,7 +81,7 @@ private:
     /// The weak object
     OWeakObject*                m_pObject;
     /// The container to hold the weak references
-    OInterfaceContainerHelper   m_aReferences;
+    std::vector<Reference<XReference>>  m_aReferences;
 };
 
 // XInterface
@@ -107,13 +107,17 @@ void SAL_CALL OWeakConnectionPoint::release() throw()
 
 void SAL_CALL OWeakConnectionPoint::dispose() throw(css::uno::RuntimeException)
 {
+    MutexGuard aGuard(getWeakMutex());
     Any ex;
-    OInterfaceIteratorHelper aIt( m_aReferences );
-    while( aIt.hasMoreElements() )
+    // other code is going to call removeReference while we are doing this, so we need a
+    // copy, but since we are disposing and going away, we can just take the original data
+    std::vector<Reference<XReference>> aCopy;
+    aCopy.swap(m_aReferences);
+    for (const Reference<XReference> & i : aCopy )
     {
         try
         {
-            static_cast<XReference *>(aIt.next())->dispose();
+            i->dispose();
         }
         catch (css::lang::DisposedException &) {}
         catch (RuntimeException &)
@@ -159,14 +163,20 @@ Reference< XInterface > SAL_CALL OWeakConnectionPoint::queryAdapted() throw(css:
 void SAL_CALL OWeakConnectionPoint::addReference(const Reference< XReference >& rRef)
     throw(css::uno::RuntimeException, std::exception)
 {
-    m_aReferences.addInterface( (const Reference< XInterface > &)rRef );
+    MutexGuard aGuard(getWeakMutex());
+    m_aReferences.push_back( rRef );
 }
 
 // XInterface
 void SAL_CALL OWeakConnectionPoint::removeReference(const Reference< XReference >& rRef)
     throw(css::uno::RuntimeException, std::exception)
 {
-    m_aReferences.removeInterface( (const Reference< XInterface > &)rRef );
+    MutexGuard aGuard(getWeakMutex());
+    // search from end because the thing that last added a ref is most likely to be the
+    // first to remove a ref
+    auto it = std::find(m_aReferences.rbegin(), m_aReferences.rend(), rRef);
+    if ( it != m_aReferences.rend() )
+        m_aReferences.erase( it.base()-1 );
 }
 
 
