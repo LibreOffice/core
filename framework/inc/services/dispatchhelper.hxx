@@ -86,6 +86,15 @@ class DispatchHelper : public ::cppu::WeakImplHelper< css::lang::XServiceInfo,cs
                                         const css::uno::Sequence< css::beans::PropertyValue >&      lArguments        )
         throw(css::uno::RuntimeException, std::exception) override;
 
+
+        virtual css::uno::Any SAL_CALL executeDispatch(
+                                        const css::uno::Reference< css::frame::XDispatch >&  xDispatch      ,
+                                        const  css::util::URL&                                  aURL        ,
+                                        bool                                                    SyncronFlag ,
+                                        const css::uno::Sequence< css::beans::PropertyValue >& lArguments   )
+                                        throw(css::uno::RuntimeException);
+
+
         // XDispatchResultListener
         virtual void SAL_CALL dispatchFinished(
                                 const css::frame::DispatchResultEvent& aResult )

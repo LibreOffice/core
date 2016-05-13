@@ -30,7 +30,10 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/FrameActionEvent.hpp>
 #include <com/sun/star/frame/FrameAction.hpp>
+#include <services/dispatchhelper.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/frame/XDispatchHelper.hpp>
+#include <com/sun/star/frame/DispatchHelper.hpp>
 #include <cppuhelper/weak.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
@@ -52,6 +55,8 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
+
+
 
 BindDispatch_Impl::BindDispatch_Impl( const css::uno::Reference< css::frame::XDispatch > & rDisp, const css::util::URL& rURL, SfxStateCache *pStateCache, const SfxSlot* pS )
     : xDisp( rDisp )
@@ -162,17 +167,22 @@ void BindDispatch_Impl::Release()
 }
 
 
-void BindDispatch_Impl::Dispatch( const uno::Sequence < beans::PropertyValue >& aProps, bool bForceSynchron )
+sal_Int16 BindDispatch_Impl::Dispatch( const css::uno::Sequence < css::beans::PropertyValue >& aProps, bool bForceSynchron )
 {
+    sal_Int16 eRet = css::frame::DispatchResultState::DONTKNOW;
+
     if ( xDisp.is() && aStatus.IsEnabled )
     {
-        sal_Int32 nLength = aProps.getLength();
-        uno::Sequence < beans::PropertyValue > aProps2 = aProps;
-        aProps2.realloc(nLength+1);
-        aProps2[nLength].Name = "SynchronMode";
-        aProps2[nLength].Value <<= bForceSynchron ;
-        xDisp->dispatch( aURL, aProps2 );
+        css::uno::Reference< css::frame::XDispatchHelper > xHelper(css::frame::DispatchHelper::create(nullptr));
+        css::uno::Any aResult = reinterpret_cast< ::framework::DispatchHelper *>( xHelper.get() )->executeDispatch(xDisp, aURL, bForceSynchron, aProps);
+
+        css::frame::DispatchResultEvent aEvent;
+        aResult >>= aEvent;
+
+        eRet = aEvent.State;
     }
+
+    return eRet;
 }
 
 
@@ -479,17 +489,22 @@ css::uno::Reference< css::frame::XDispatch >  SfxStateCache::GetDispatch() const
     return css::uno::Reference< css::frame::XDispatch > ();
 }
 
-void SfxStateCache::Dispatch( const SfxItemSet* pSet, bool bForceSynchron )
+sal_Int16 SfxStateCache::Dispatch( const SfxItemSet* pSet, bool bForceSynchron )
 {
     // protect pDispatch against destruction in the call
     css::uno::Reference < css::frame::XStatusListener > xKeepAlive( pDispatch );
+    sal_Int16 eRet = css::frame::DispatchResultState::DONTKNOW;
+
     if ( pDispatch )
     {
         uno::Sequence < beans::PropertyValue > aArgs;
         if (pSet)
             TransformItems( nId, *pSet, aArgs );
-        pDispatch->Dispatch( aArgs, bForceSynchron );
+
+        eRet = pDispatch->Dispatch( aArgs, bForceSynchron );
     }
+
+    return eRet;
 }
 
 
