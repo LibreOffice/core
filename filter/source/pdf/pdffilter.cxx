@@ -72,6 +72,7 @@ bool PDFFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
         aCfgItem.ReadBool(  "UseTaggedPDF", false );
         aCfgItem.ReadInt32( "SelectPdfVersion", 0 );
         aCfgItem.ReadBool(  "ExportNotes", false );
+        aCfgItem.ReadBool( "ExportPlaceholders", false );
         aCfgItem.ReadBool(  "ExportNotesPages", false );
         aCfgItem.ReadBool(  "UseTransitionEffects", true );
         aCfgItem.ReadBool(  "IsSkipEmptyPages", false );
