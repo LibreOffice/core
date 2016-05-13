@@ -32,11 +32,13 @@ public:
     void testSimple();
     void testNsPrefixMath();
     void testMaction();
+    void testtdf99556();
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testSimple);
     CPPUNIT_TEST(testNsPrefixMath);
     CPPUNIT_TEST(testMaction);
+    CPPUNIT_TEST(testtdf99556);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -102,6 +104,14 @@ void Test::testMaction()
     OUString sExpected("matrix {1 ## 2 ## 3}");
     CPPUNIT_ASSERT_EQUAL_MESSAGE("loaded text", sExpected, mxDocShell->GetText());
 }
+
+void Test::testtdf99556()
+{
+    loadURL(getURLFromSrc("starmath/qa/extras/data/tdf99556-1.mml"));
+    OUString sExpected("sqrt");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("loaded text", sExpected, mxDocShell->GetText());
+}
+
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
 
