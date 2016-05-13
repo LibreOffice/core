@@ -578,8 +578,8 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkCheckButton" id="comments">
-                    <property name="label" translatable="yes">_Export comments</property>
+                  <object class="GtkCheckButton" id="exportplaceholders">
+                    <property name="label" translatable="yes">Expo_rt placeholders</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -593,6 +593,21 @@
                   </packing>
                 </child>
                 <child>
+                  <object class="GtkCheckButton" id="comments">
+                    <property name="label" translatable="yes">_Export comments</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="use_underline">True</property>
+                    <property name="xalign">0</property>
+                    <property name="draw_indicator">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">7</property>
+                  </packing>
+                </child>
+                 <child>
                   <object class="GtkCheckButton" id="emptypages">
                     <property name="label" translatable="yes">Exp_ort automatically inserted blank pages</property>
                     <property name="visible">True</property>
@@ -604,7 +619,7 @@
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
-                    <property name="top_attach">10</property>
+                    <property name="top_attach">11</property>
                   </packing>
                 </child>
                 <child>
@@ -619,7 +634,7 @@
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
-                    <property name="top_attach">11</property>
+                    <property name="top_attach">12</property>
                   </packing>
                 </child>
                 <child>
@@ -649,7 +664,7 @@
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
-                    <property name="top_attach">7</property>
+                    <property name="top_attach">8</property>
                   </packing>
                 </child>
                 <child>
@@ -671,7 +686,7 @@
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
-                    <property name="top_attach">8</property>
+                    <property name="top_attach">9</property>
                   </packing>
                 </child>
               </object>
