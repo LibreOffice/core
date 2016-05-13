@@ -176,15 +176,15 @@ SwViewOption::SwViewOption() :
     // Initialisation is a little simpler now
     // all Bits to 0
     m_nCoreOptions =
-        VIEWOPT_1_HARDBLANK |
-        VIEWOPT_1_SOFTHYPH |
-        VIEWOPT_1_REF |
-        VIEWOPT_1_GRAPHIC |
-        VIEWOPT_1_TABLE |
-        VIEWOPT_1_DRAW |
-        VIEWOPT_1_CONTROL |
-        VIEWOPT_1_PAGEBACK |
-        VIEWOPT_1_POSTITS;
+        ViewOptFlags1::HardBlank |
+        ViewOptFlags1::SoftHyph |
+        ViewOptFlags1::Ref |
+        ViewOptFlags1::Graphic |
+        ViewOptFlags1::Table |
+        ViewOptFlags1::Draw |
+        ViewOptFlags1::Control |
+        ViewOptFlags1::Pageback |
+        ViewOptFlags1::Postits;
 
     m_nCore2Options =
         VIEWOPT_CORE2_BLACKFONT |
@@ -322,7 +322,7 @@ void SwViewOption::SetOnlineSpell(bool b)
     if (comphelper::LibreOfficeKit::isActive())
         return;
 
-    b ? (m_nCoreOptions |= VIEWOPT_1_ONLINESPELL ) : ( m_nCoreOptions &= ~VIEWOPT_1_ONLINESPELL);
+    b ? (m_nCoreOptions |= ViewOptFlags1::OnlineSpell ) : ( m_nCoreOptions &= ~ViewOptFlags1::OnlineSpell);
 }
 
 AuthorCharAttr::AuthorCharAttr() :

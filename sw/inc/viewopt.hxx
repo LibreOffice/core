@@ -37,31 +37,35 @@ class SwViewShell;
 class SwDocShell;
 namespace svtools{ class ColorConfig;}
 
-#define VIEWOPT_1_TAB           0x00000002L
-#define VIEWOPT_1_BLANK         0x00000004L
-#define VIEWOPT_1_HARDBLANK     0x00000008L
-#define VIEWOPT_1_PARAGRAPH     0x00000010L
-#define VIEWOPT_1_LINEBREAK     0x00000020L
-#define VIEWOPT_1_PAGEBREAK     0x00000040L
-#define VIEWOPT_1_COLUMNBREAK   0x00000080L
-#define VIEWOPT_1_SOFTHYPH      0x00000100L
-
-#define VIEWOPT_1_REF           0x00000400L
-#define VIEWOPT_1_FLDNAME       0x00000800L
-#define VIEWOPT_1_POSTITS       0x00004000L
-#define VIEWOPT_1_FLD_HIDDEN    0x00008000L
-#define VIEWOPT_1_CHAR_HIDDEN   0x00010000L
-#define VIEWOPT_1_GRAPHIC       0x00020000L
-#define VIEWOPT_1_TABLE         0x00040000L
-#define VIEWOPT_1_DRAW          0x00080000L
-#define VIEWOPT_1_CONTROL       0x00100000L
-#define VIEWOPT_1_CROSSHAIR     0x00400000L
-#define VIEWOPT_1_SNAP          0x00800000L
-#define VIEWOPT_1_SYNCHRONIZE   0x01000000L
-#define VIEWOPT_1_GRIDVISIBLE   0x02000000L
-#define VIEWOPT_1_ONLINESPELL   0x04000000L
-#define VIEWOPT_1_VIEWMETACHARS 0x20000000L
-#define VIEWOPT_1_PAGEBACK      0x40000000L
+enum class ViewOptFlags1 {
+    Tab           = 0x00000002,
+    Blank         = 0x00000004,
+    HardBlank     = 0x00000008,
+    Paragraph     = 0x00000010,
+    Linebreak     = 0x00000020,
+    Pagebreak     = 0x00000040,
+    Columnbreak   = 0x00000080,
+    SoftHyph      = 0x00000100,
+    Ref           = 0x00000400,
+    FieldName     = 0x00000800,
+    Postits       = 0x00004000,
+    FieldHidden   = 0x00008000,
+    CharHidden    = 0x00010000,
+    Graphic       = 0x00020000,
+    Table         = 0x00040000,
+    Draw          = 0x00080000,
+    Control       = 0x00100000,
+    Crosshair     = 0x00400000,
+    Snap          = 0x00800000,
+    Synchronize   = 0x01000000,
+    GridVisible   = 0x02000000,
+    OnlineSpell   = 0x04000000,
+    ViewMetachars = 0x20000000,
+    Pageback      = 0x40000000
+};
+namespace o3tl {
+    template<> struct typed_flags<ViewOptFlags1> : is_typed_flags<ViewOptFlags1, 0x67dfcdfe> {};
+}
 
 #define VIEWOPT_CORE2_BLACKFONT         0x00000001L
 #define VIEWOPT_CORE2_HIDDENPARA        0x00000002L
@@ -128,7 +132,7 @@ protected:
     static sal_uInt16   m_nPixelTwips;// 1 Pixel == ? Twips
 
     OUString        m_sSymbolFont;        // Symbolfont.
-    sal_uInt32      m_nCoreOptions;       // Bits for SwViewShell.
+    ViewOptFlags1   m_nCoreOptions;       // Bits for SwViewShell.
     sal_uInt32      m_nCore2Options;      // Bits for SwViewShell.
     sal_uInt32      m_nUIOptions;         // UI-Bits
     Color           m_aRetouchColor;     // DefaultBackground for BrowseView
@@ -180,7 +184,7 @@ public:
 
     static sal_uInt16 GetPixelTwips() { return m_nPixelTwips; }
 
-    inline sal_uInt32   GetCoreOptions() const {return m_nCoreOptions;}
+    inline ViewOptFlags1   GetCoreOptions() const {return m_nCoreOptions;}
     inline void     SetUIOptions( const SwViewOption& );
 
     // Options from nCoreOptions
@@ -195,125 +199,125 @@ public:
         { m_bIdle = b; }
 
     inline bool IsTab(bool bHard = false) const
-                    {   return !m_bReadonly && (m_nCoreOptions & VIEWOPT_1_TAB) &&
-                            ((m_nCoreOptions & VIEWOPT_1_VIEWMETACHARS)||bHard); }
+                    {   return !m_bReadonly && (m_nCoreOptions & ViewOptFlags1::Tab) &&
+                            ((m_nCoreOptions & ViewOptFlags1::ViewMetachars)||bHard); }
     inline void SetTab( bool b )        {
-        b ? (m_nCoreOptions |= VIEWOPT_1_TAB ) : ( m_nCoreOptions &= ~VIEWOPT_1_TAB); }
+        b ? (m_nCoreOptions |= ViewOptFlags1::Tab ) : ( m_nCoreOptions &= ~ViewOptFlags1::Tab); }
 
     inline bool IsBlank(bool bHard = false) const
-                    { return !m_bReadonly && (m_nCoreOptions & VIEWOPT_1_BLANK) &&
-                            ((m_nCoreOptions & VIEWOPT_1_VIEWMETACHARS)||bHard); }
+                    { return !m_bReadonly && (m_nCoreOptions & ViewOptFlags1::Blank) &&
+                            ((m_nCoreOptions & ViewOptFlags1::ViewMetachars)||bHard); }
     inline void SetBlank( bool b )
-        { b ? (m_nCoreOptions |= VIEWOPT_1_BLANK ) : ( m_nCoreOptions &= ~VIEWOPT_1_BLANK); }
+        { b ? (m_nCoreOptions |= ViewOptFlags1::Blank ) : ( m_nCoreOptions &= ~ViewOptFlags1::Blank); }
 
     inline bool IsHardBlank() const
-                    { return !m_bReadonly && (m_nCoreOptions & VIEWOPT_1_HARDBLANK) != 0; }
+                    { return !m_bReadonly && (m_nCoreOptions & ViewOptFlags1::HardBlank); }
     inline void SetHardBlank( bool b )
-        { b ? (m_nCoreOptions |= VIEWOPT_1_HARDBLANK ) : ( m_nCoreOptions &= ~VIEWOPT_1_HARDBLANK); }
+        { b ? (m_nCoreOptions |= ViewOptFlags1::HardBlank ) : ( m_nCoreOptions &= ~ViewOptFlags1::HardBlank); }
 
     inline bool IsParagraph(bool bHard = false) const
-                    {   return !m_bReadonly && (m_nCoreOptions & VIEWOPT_1_PARAGRAPH) &&
-                            ((m_nCoreOptions & VIEWOPT_1_VIEWMETACHARS)||bHard); }
+                    {   return !m_bReadonly && (m_nCoreOptions & ViewOptFlags1::Paragraph) &&
+                            ((m_nCoreOptions & ViewOptFlags1::ViewMetachars)||bHard); }
     inline void SetParagraph( bool b )
-        { b ? (m_nCoreOptions |= VIEWOPT_1_PARAGRAPH ) : ( m_nCoreOptions &= ~VIEWOPT_1_PARAGRAPH); }
+        { b ? (m_nCoreOptions |= ViewOptFlags1::Paragraph ) : ( m_nCoreOptions &= ~ViewOptFlags1::Paragraph); }
 
     inline bool IsLineBreak(bool bHard = false) const
-                    {   return !m_bReadonly && (m_nCoreOptions & VIEWOPT_1_LINEBREAK) &&
-                            ((m_nCoreOptions & VIEWOPT_1_VIEWMETACHARS)||bHard); }
+                    {   return !m_bReadonly && (m_nCoreOptions & ViewOptFlags1::Linebreak) &&
+                            ((m_nCoreOptions & ViewOptFlags1::ViewMetachars)||bHard); }
     inline void SetLineBreak( bool b )
-        { b ? (m_nCoreOptions |= VIEWOPT_1_LINEBREAK ) : ( m_nCoreOptions &= ~VIEWOPT_1_LINEBREAK); }
+        { b ? (m_nCoreOptions |= ViewOptFlags1::Linebreak ) : ( m_nCoreOptions &= ~ViewOptFlags1::Linebreak); }
 
     inline void SetPageBreak( bool b )
-        { b ? (m_nCoreOptions |= VIEWOPT_1_PAGEBREAK ) : ( m_nCoreOptions &= ~VIEWOPT_1_PAGEBREAK); }
+        { b ? (m_nCoreOptions |= ViewOptFlags1::Pagebreak ) : ( m_nCoreOptions &= ~ViewOptFlags1::Pagebreak); }
 
     inline void SetColumnBreak( bool b)
-        { b ? (m_nCoreOptions |= VIEWOPT_1_COLUMNBREAK ) : ( m_nCoreOptions &= ~VIEWOPT_1_COLUMNBREAK); }
+        { b ? (m_nCoreOptions |= ViewOptFlags1::Columnbreak ) : ( m_nCoreOptions &= ~ViewOptFlags1::Columnbreak); }
 
     inline bool IsSoftHyph() const
-                    { return !m_bReadonly && (m_nCoreOptions & VIEWOPT_1_SOFTHYPH) != 0; }
+                    { return !m_bReadonly && (m_nCoreOptions & ViewOptFlags1::SoftHyph); }
     inline void SetSoftHyph( bool b )
-        { b ? (m_nCoreOptions |= VIEWOPT_1_SOFTHYPH ) : ( m_nCoreOptions &= ~VIEWOPT_1_SOFTHYPH); }
+        { b ? (m_nCoreOptions |= ViewOptFlags1::SoftHyph ) : ( m_nCoreOptions &= ~ViewOptFlags1::SoftHyph); }
 
-    inline bool IsFieldName() const       { return !m_bReadonly && (m_nCoreOptions & VIEWOPT_1_FLDNAME) != 0; }
+    inline bool IsFieldName() const       { return !m_bReadonly && (m_nCoreOptions & ViewOptFlags1::FieldName); }
     inline void SetFieldName( bool b )
-        { b ? (m_nCoreOptions |= VIEWOPT_1_FLDNAME ) : ( m_nCoreOptions &= ~VIEWOPT_1_FLDNAME); }
+        { b ? (m_nCoreOptions |= ViewOptFlags1::FieldName ) : ( m_nCoreOptions &= ~ViewOptFlags1::FieldName); }
 
     inline bool IsPostIts() const
-        { return (m_nCoreOptions & VIEWOPT_1_POSTITS) != 0; }
+        { return bool(m_nCoreOptions & ViewOptFlags1::Postits); }
     inline void SetPostIts( bool b )
-        { b ? (m_nCoreOptions |= VIEWOPT_1_POSTITS ) : ( m_nCoreOptions &= ~VIEWOPT_1_POSTITS); }
+        { b ? (m_nCoreOptions |= ViewOptFlags1::Postits ) : ( m_nCoreOptions &= ~ViewOptFlags1::Postits); }
     static void PaintPostIts( OutputDevice *pOut, const SwRect &rRect,
                               bool bIsScript );
     static sal_uInt16 GetPostItsWidth( const OutputDevice *pOut = nullptr );
 
     inline bool IsShowHiddenChar(bool bHard = false) const
-        { return !m_bReadonly && (m_nCoreOptions & VIEWOPT_1_CHAR_HIDDEN) &&
-                            ((m_nCoreOptions & VIEWOPT_1_VIEWMETACHARS)||bHard); }
+        { return !m_bReadonly && (m_nCoreOptions & ViewOptFlags1::CharHidden) &&
+                            ((m_nCoreOptions & ViewOptFlags1::ViewMetachars)||bHard); }
 
     inline void SetShowHiddenChar( bool b )
-        { b ? (m_nCoreOptions |= VIEWOPT_1_CHAR_HIDDEN ) : ( m_nCoreOptions &= ~VIEWOPT_1_CHAR_HIDDEN); }
+        { b ? (m_nCoreOptions |= ViewOptFlags1::CharHidden ) : ( m_nCoreOptions &= ~ViewOptFlags1::CharHidden); }
 
     inline bool IsShowHiddenField() const
-        { return !m_bReadonly && (m_nCoreOptions & VIEWOPT_1_FLD_HIDDEN) != 0; }
+        { return !m_bReadonly && (m_nCoreOptions & ViewOptFlags1::FieldHidden); }
     inline void SetShowHiddenField( bool b )
-        { b ? (m_nCoreOptions |= VIEWOPT_1_FLD_HIDDEN ) : ( m_nCoreOptions &= ~VIEWOPT_1_FLD_HIDDEN); }
+        { b ? (m_nCoreOptions |= ViewOptFlags1::FieldHidden ) : ( m_nCoreOptions &= ~ViewOptFlags1::FieldHidden); }
 
     inline bool IsGraphic() const
-        { return (m_nCoreOptions & VIEWOPT_1_GRAPHIC) != 0; }
+        { return bool(m_nCoreOptions & ViewOptFlags1::Graphic); }
     inline void SetGraphic( bool b )
-        { b ? (m_nCoreOptions |= VIEWOPT_1_GRAPHIC ) : ( m_nCoreOptions &= ~VIEWOPT_1_GRAPHIC); }
+        { b ? (m_nCoreOptions |= ViewOptFlags1::Graphic ) : ( m_nCoreOptions &= ~ViewOptFlags1::Graphic); }
 
     inline bool IsPageBack() const
-        { return (m_nCoreOptions & VIEWOPT_1_PAGEBACK) != 0; }
+        { return bool(m_nCoreOptions & ViewOptFlags1::Pageback); }
     inline void SetPageBack( bool b )
-        { b ? (m_nCoreOptions |= VIEWOPT_1_PAGEBACK) : ( m_nCoreOptions &= ~VIEWOPT_1_PAGEBACK); }
+        { b ? (m_nCoreOptions |= ViewOptFlags1::Pageback) : ( m_nCoreOptions &= ~ViewOptFlags1::Pageback); }
 
     inline bool IsTable() const
-        { return (m_nCoreOptions & VIEWOPT_1_TABLE) != 0; }
+        { return bool(m_nCoreOptions & ViewOptFlags1::Table); }
     inline void SetTable( bool b )
-        { b ? (m_nCoreOptions |= VIEWOPT_1_TABLE ) : ( m_nCoreOptions &= ~VIEWOPT_1_TABLE); }
+        { b ? (m_nCoreOptions |= ViewOptFlags1::Table ) : ( m_nCoreOptions &= ~ViewOptFlags1::Table); }
 
     inline bool IsDraw() const
-        { return (m_nCoreOptions & VIEWOPT_1_DRAW) != 0; }
+        { return bool(m_nCoreOptions & ViewOptFlags1::Draw); }
     inline void SetDraw( bool b )
-        { b ? (m_nCoreOptions |= VIEWOPT_1_DRAW ) : ( m_nCoreOptions &= ~VIEWOPT_1_DRAW); }
+        { b ? (m_nCoreOptions |= ViewOptFlags1::Draw ) : ( m_nCoreOptions &= ~ViewOptFlags1::Draw); }
 
     inline bool IsControl() const
-        { return (m_nCoreOptions & VIEWOPT_1_CONTROL) != 0; }
+        { return bool(m_nCoreOptions & ViewOptFlags1::Control); }
     inline void SetControl( bool b )
-        { b ? (m_nCoreOptions |= VIEWOPT_1_CONTROL ) : ( m_nCoreOptions &= ~VIEWOPT_1_CONTROL); }
+        { b ? (m_nCoreOptions |= ViewOptFlags1::Control ) : ( m_nCoreOptions &= ~ViewOptFlags1::Control); }
 
     inline bool IsSnap() const
-        { return (m_nCoreOptions & VIEWOPT_1_SNAP) != 0; }
+        { return bool(m_nCoreOptions & ViewOptFlags1::Snap); }
     inline void SetSnap( bool b )
-        { b ? (m_nCoreOptions |= VIEWOPT_1_SNAP ) : ( m_nCoreOptions &= ~VIEWOPT_1_SNAP); }
+        { b ? (m_nCoreOptions |= ViewOptFlags1::Snap ) : ( m_nCoreOptions &= ~ViewOptFlags1::Snap); }
 
     inline void SetSnapSize( Size &rSz ){ m_aSnapSize = rSz; }
     inline const Size &GetSnapSize() const { return m_aSnapSize; }
 
     inline bool IsGridVisible() const
-        { return !m_bReadonly && (m_nCoreOptions & VIEWOPT_1_GRIDVISIBLE) != 0; }
+        { return !m_bReadonly && (m_nCoreOptions & ViewOptFlags1::GridVisible); }
     inline void SetGridVisible( bool b )
-        { b ? (m_nCoreOptions |= VIEWOPT_1_GRIDVISIBLE ) : ( m_nCoreOptions &= ~VIEWOPT_1_GRIDVISIBLE); }
+        { b ? (m_nCoreOptions |= ViewOptFlags1::GridVisible ) : ( m_nCoreOptions &= ~ViewOptFlags1::GridVisible); }
 
     inline bool IsOnlineSpell() const
-        { return !m_bReadonly && (m_nCoreOptions & VIEWOPT_1_ONLINESPELL) != 0; }
+        { return !m_bReadonly && (m_nCoreOptions & ViewOptFlags1::OnlineSpell); }
     void SetOnlineSpell( bool b );
 
     inline bool IsViewMetaChars() const
-        { return !m_bReadonly && (m_nCoreOptions & VIEWOPT_1_VIEWMETACHARS) != 0; }
+        { return !m_bReadonly && (m_nCoreOptions & ViewOptFlags1::ViewMetachars); }
     inline void SetViewMetaChars( bool b)
-        { b ? (m_nCoreOptions |= VIEWOPT_1_VIEWMETACHARS ) : ( m_nCoreOptions &= ~VIEWOPT_1_VIEWMETACHARS); }
+        { b ? (m_nCoreOptions |= ViewOptFlags1::ViewMetachars ) : ( m_nCoreOptions &= ~ViewOptFlags1::ViewMetachars); }
 
     inline bool IsSynchronize() const
-        {  return (m_nCoreOptions & VIEWOPT_1_SYNCHRONIZE) != 0; }
+        {  return bool(m_nCoreOptions & ViewOptFlags1::Synchronize); }
     inline void SetSynchronize( bool b )
-        { b ? (m_nCoreOptions |= VIEWOPT_1_SYNCHRONIZE ) : ( m_nCoreOptions &= ~VIEWOPT_1_SYNCHRONIZE); }
+        { b ? (m_nCoreOptions |= ViewOptFlags1::Synchronize ) : ( m_nCoreOptions &= ~ViewOptFlags1::Synchronize); }
 
     inline bool IsCrossHair() const
-        { return (m_nCoreOptions & VIEWOPT_1_CROSSHAIR) != 0; }
+        { return bool(m_nCoreOptions & ViewOptFlags1::Crosshair); }
     inline void SetCrossHair( bool b )
-        { b ? (m_nCoreOptions |= VIEWOPT_1_CROSSHAIR ) : ( m_nCoreOptions &= ~VIEWOPT_1_CROSSHAIR); }
+        { b ? (m_nCoreOptions |= ViewOptFlags1::Crosshair ) : ( m_nCoreOptions &= ~ViewOptFlags1::Crosshair); }
 
     // Options from nCore2Options
     inline bool IsBlackFont() const
