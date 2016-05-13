@@ -891,12 +891,15 @@ void SwSidebarWin::SetPosAndSize()
         {
             const SwTextAnnotationField* pTextAnnotationField =
                 dynamic_cast< const SwTextAnnotationField* >( mrSidebarItem.GetFormatField().GetTextField() );
-            if ( pTextAnnotationField != nullptr
-                 && pTextAnnotationField->GetpTextNode() != nullptr )
+            SwTextNode* pTextNode = pTextAnnotationField ? pTextAnnotationField->GetpTextNode() : nullptr;
+            SwContentNode* pContentNd = nullptr;
+            if (pTextNode)
             {
-                SwTextNode* pTextNode = pTextAnnotationField->GetpTextNode();
                 SwNodes& rNds = pTextNode->GetDoc()->GetNodes();
-                SwContentNode* const pContentNd = rNds[mrSidebarItem.maLayoutInfo.mnStartNodeIdx]->GetContentNode();
+                pContentNd = rNds[mrSidebarItem.maLayoutInfo.mnStartNodeIdx]->GetContentNode();
+            }
+            if (pContentNd)
+            {
                 SwPosition aStartPos( *pContentNd, mrSidebarItem.maLayoutInfo.mnStartContent );
                 SwShellCursor* pTmpCursor = nullptr;
                 const bool bTableCursorNeeded = pTextNode->FindTableBoxStartNode() != pContentNd->FindTableBoxStartNode();
