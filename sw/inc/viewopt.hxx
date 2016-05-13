@@ -91,15 +91,21 @@ namespace svtools{ class ColorConfig;}
 #define TBL_DEST_TBL    2
 
 // Appearance flags.
-#define VIEWOPT_DOC_BOUNDARIES      0x0001
-#define VIEWOPT_OBJECT_BOUNDARIES   0x0002
-#define VIEWOPT_TABLE_BOUNDARIES    0x0004
-#define VIEWOPT_INDEX_SHADINGS      0x0008
-#define VIEWOPT_LINKS               0x0010
-#define VIEWOPT_VISITED_LINKS       0x0020
-#define VIEWOPT_FIELD_SHADINGS      0x0040
-#define VIEWOPT_SECTION_BOUNDARIES  0x0080
-#define VIEWOPT_SHADOW              0x0100
+enum class ViewOptFlags {
+    NONE               = 0x0000,
+    DocBoundaries      = 0x0001,
+    ObjectBoundaries   = 0x0002,
+    TableBoundaries    = 0x0004,
+    IndexShadings      = 0x0008,
+    Links              = 0x0010,
+    VisitedLinks       = 0x0020,
+    FieldShadings      = 0x0040,
+    SectionBoundaries  = 0x0080,
+    Shadow             = 0x0100,
+};
+namespace o3tl {
+    template<> struct typed_flags<ViewOptFlags> : is_typed_flags<ViewOptFlags, 0x01ff> {};
+}
 
 class SW_DLLPUBLIC SwViewOption
 {
@@ -123,7 +129,7 @@ class SW_DLLPUBLIC SwViewOption
     static Color    m_aShadowColor;
     static Color    m_aHeaderFooterMarkColor;
 
-    static sal_Int32 m_nAppearanceFlags;
+    static ViewOptFlags m_nAppearanceFlags;
 protected:
     static sal_uInt16   m_nPixelTwips;// 1 Pixel == ? Twips
 
@@ -574,21 +580,21 @@ public:
     static Color&   GetPageBreakColor();
     static Color&   GetHeaderFooterMarkColor();
 
-    static bool     IsAppearanceFlag(sal_Int32 nFlag);
+    static bool     IsAppearanceFlag(ViewOptFlags nFlag);
 
-    static bool     IsDocBoundaries()   {return IsAppearanceFlag(VIEWOPT_DOC_BOUNDARIES);}
-    static bool     IsObjectBoundaries(){return IsAppearanceFlag(VIEWOPT_OBJECT_BOUNDARIES);}
-    static bool     IsTableBoundaries() {return IsAppearanceFlag(VIEWOPT_TABLE_BOUNDARIES );}
-    static bool     IsIndexShadings()   {return IsAppearanceFlag(VIEWOPT_INDEX_SHADINGS   );}
-    static bool     IsLinks()           {return IsAppearanceFlag(VIEWOPT_LINKS            );}
-    static bool     IsVisitedLinks()    {return IsAppearanceFlag(VIEWOPT_VISITED_LINKS    );}
-    static bool     IsFieldShadings()   {return IsAppearanceFlag(VIEWOPT_FIELD_SHADINGS);}
-    static bool     IsSectionBoundaries() {return IsAppearanceFlag(VIEWOPT_SECTION_BOUNDARIES);}
-    static bool     IsShadow()          {return IsAppearanceFlag(VIEWOPT_SHADOW           );}
+    static bool     IsDocBoundaries()     {return IsAppearanceFlag(ViewOptFlags::DocBoundaries);}
+    static bool     IsObjectBoundaries()  {return IsAppearanceFlag(ViewOptFlags::ObjectBoundaries);}
+    static bool     IsTableBoundaries()   {return IsAppearanceFlag(ViewOptFlags::TableBoundaries );}
+    static bool     IsIndexShadings()     {return IsAppearanceFlag(ViewOptFlags::IndexShadings   );}
+    static bool     IsLinks()             {return IsAppearanceFlag(ViewOptFlags::Links            );}
+    static bool     IsVisitedLinks()      {return IsAppearanceFlag(ViewOptFlags::VisitedLinks    );}
+    static bool     IsFieldShadings()     {return IsAppearanceFlag(ViewOptFlags::FieldShadings);}
+    static bool     IsSectionBoundaries() {return IsAppearanceFlag(ViewOptFlags::SectionBoundaries);}
+    static bool     IsShadow()            {return IsAppearanceFlag(ViewOptFlags::Shadow           );}
 
-    static void     SetAppearanceFlag(sal_Int32 nFlag, bool bSet, bool bSaveInConfig = false);
+    static void     SetAppearanceFlag(ViewOptFlags nFlag, bool bSet, bool bSaveInConfig = false);
 
-    static void     SetDocBoundaries(bool bSet)   {SetAppearanceFlag(VIEWOPT_DOC_BOUNDARIES, bSet);}
+    static void     SetDocBoundaries(bool bSet)   {SetAppearanceFlag(ViewOptFlags::DocBoundaries, bSet);}
 
     static void     ApplyColorConfigValues(const svtools::ColorConfig& rConfig);
 };
