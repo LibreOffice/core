@@ -187,8 +187,8 @@ SwViewOption::SwViewOption() :
         VIEWOPT_1_POSTITS;
 
     m_nCore2Options =
-        VIEWOPT_CORE2_BLACKFONT |
-        VIEWOPT_CORE2_HIDDENPARA;
+        ViewOptCoreFlags2::BlackFont |
+        ViewOptCoreFlags2::HiddenPara;
 
     m_nUIOptions =
         VIEWOPT_2_MODIFIED |
