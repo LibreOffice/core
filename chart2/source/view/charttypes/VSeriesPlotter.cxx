@@ -1847,11 +1847,13 @@ void VDataSeriesGroup::calculateYMinAndMaxForCategory( sal_Int32 nCategoryIndex
         , bool bSeparateStackingForDifferentSigns
         , double& rfMinimumY, double& rfMaximumY, sal_Int32 nAxisIndex )
 {
+    assert(nCategoryIndex >= 0);
+    assert(nCategoryIndex < getPointCount());
+
     ::rtl::math::setInf(&rfMinimumY, false);
     ::rtl::math::setInf(&rfMaximumY, true);
 
-    sal_Int32 nPointCount = getPointCount();//necessary to create m_aListOfCachedYValues
-    if(nCategoryIndex<0 || nCategoryIndex>=nPointCount || m_aSeriesVector.empty())
+    if(m_aSeriesVector.empty())
         return;
 
     CachedYValues aCachedYValues = m_aListOfCachedYValues[nCategoryIndex][nAxisIndex];
@@ -1945,6 +1947,11 @@ void VDataSeriesGroup::calculateYMinAndMaxForCategoryRange(
     //iterate through the given categories
     if(nStartCategoryIndex<0)
         nStartCategoryIndex=0;
+    const sal_Int32 nPointCount = getPointCount();//necessary to create m_aListOfCachedYValues
+    if(nPointCount <= 0)
+        return;
+    if (nEndCategoryIndex >= nPointCount)
+        nEndCategoryIndex = nPointCount - 1;
     if(nEndCategoryIndex<0)
         nEndCategoryIndex=0;
     for( sal_Int32 nCatIndex = nStartCategoryIndex; nCatIndex <= nEndCategoryIndex; nCatIndex++ )
