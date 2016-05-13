@@ -93,9 +93,9 @@ void SwRenderData::ViewOptionAdjustStart(
             new SwViewOptionAdjust_Impl( rSh, rViewOptions ));
 }
 
-void SwRenderData::ViewOptionAdjust(SwPrintData const*const pPrtOptions)
+void SwRenderData::ViewOptionAdjust(SwPrintData const*const pPrtOptions, bool setShowPlaceHoldersInPDF)
 {
-    m_pViewOptionAdjust->AdjustViewOptions( pPrtOptions );
+    m_pViewOptionAdjust->AdjustViewOptions( pPrtOptions, setShowPlaceHoldersInPDF );
 }
 
 void SwRenderData::ViewOptionAdjustStop()
