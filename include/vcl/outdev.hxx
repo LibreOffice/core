@@ -1376,7 +1376,7 @@ public:
                                                          vcl::TextLayoutCache const* = nullptr) const;
     SAL_DLLPRIVATE SalLayout*   ImplGlyphFallbackLayout( SalLayout*, ImplLayoutArgs& ) const;
     // tells whether this output device is RTL in an LTR UI or LTR in a RTL UI
-    SAL_DLLPRIVATE SalLayout*   getFallbackFont(ImplFontEntry &rFallbackFont,
+    SAL_DLLPRIVATE SalLayout*   getFallbackFont(
                                     FontSelectPattern &rFontSelData, int nFallbackLevel,
                                     ImplLayoutArgs& rLayoutArgs) const;
 

@@ -389,7 +389,7 @@ void SvpSalFrame::SetInputContext( SalInputContext* )
 {
 }
 
-void SvpSalFrame::EndExtTextInput( EndExtTextInputFlags )
+void SvpSalFrame::EndExtTextInput( sal_uInt16 )
 {
 }
 

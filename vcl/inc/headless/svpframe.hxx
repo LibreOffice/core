@@ -97,7 +97,7 @@ public:
     using SalFrame::Flush;
     virtual void                Flush() override;
     virtual void                SetInputContext( SalInputContext* pContext ) override;
-    virtual void                EndExtTextInput( EndExtTextInputFlags nFlags ) override;
+    virtual void                EndExtTextInput( sal_uInt16 nFlags ) override;
     virtual OUString            GetKeyName( sal_uInt16 nKeyCode ) override;
     virtual bool                MapUnicodeToKeyCode( sal_Unicode aUnicode, LanguageType aLangType, vcl::KeyCode& rKeyCode ) override;
     virtual LanguageType        GetInputLanguage() override;

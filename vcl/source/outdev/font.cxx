@@ -2143,7 +2143,7 @@ SalLayout* OutputDevice::ImplGlyphFallbackLayout( SalLayout* pSalLayout, ImplLay
         }
 
         // create and add glyph fallback layout to multilayout
-        SalLayout* pFallback = getFallbackFont(*pFallbackFont, aFontSelData,
+        SalLayout* pFallback = getFallbackFont(aFontSelData,
             nFallbackLevel, rLayoutArgs);
         if (pFallback)
         {

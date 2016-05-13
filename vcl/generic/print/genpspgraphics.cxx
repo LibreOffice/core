@@ -798,7 +798,7 @@ bool GenPspGraphics::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilitie
     return m_pServerFont[0]->GetFontCapabilities(rFontCapabilities);
 }
 
-sal_uInt16 GenPspGraphics::SetFont( FontSelectPattern *pEntry, int nFallbackLevel )
+void GenPspGraphics::SetFont( FontSelectPattern *pEntry, int nFallbackLevel )
 {
     // release all fonts that are to be overridden
     for( int i = nFallbackLevel; i < MAX_FALLBACK; ++i )
@@ -813,7 +813,7 @@ sal_uInt16 GenPspGraphics::SetFont( FontSelectPattern *pEntry, int nFallbackLeve
 
     // return early if there is no new font
     if( !pEntry )
-        return 0;
+        return;
 
     sal_IntPtr nID = pEntry->mpFontData ? pEntry->mpFontData->GetFontId() : 0;
 
@@ -849,7 +849,7 @@ sal_uInt16 GenPspGraphics::SetFont( FontSelectPattern *pEntry, int nFallbackLeve
     }
 
     // set the printer font
-    return m_pPrinterGfx->SetFont( nID,
+    m_pPrinterGfx->SetFont( nID,
                                    pEntry->mnHeight,
                                    pEntry->mnWidth,
                                    pEntry->mnOrientation,
