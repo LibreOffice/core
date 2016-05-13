@@ -427,7 +427,11 @@ void View::DragFinished( sal_Int8 nDropAction )
     if( pDragTransferable )
         pDragTransferable->SetInternalMove( false );
 
-    if( bUndo )
+    //This Undo appears to matches with the STR_UNDO_DRAGDROP Undo Start of
+    //View::StartDrag But this DragFinished can be called without a matching
+    //StartDrag. So use the existence of mpDragSrcMarkList as a flag that
+    //this EndUndo has a matching BegUndo
+    if (bUndo && mpDragSrcMarkList)
         EndUndo();
     mnDragSrcPgNum = SDRPAGE_NOTFOUND;
     delete mpDragSrcMarkList;
