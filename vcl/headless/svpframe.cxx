@@ -306,8 +306,8 @@ SalFrame* SvpSalFrame::GetParent() const
 }
 
 #define FRAMESTATE_MASK_GEOMETRY \
-     (WindowStateMask::X     | WindowStateMask::Y |   \
-      WindowStateMask::Width | WindowStateMask::Height)
+     (WINDOWSTATE_MASK_X     | WINDOWSTATE_MASK_Y |   \
+      WINDOWSTATE_MASK_WIDTH | WINDOWSTATE_MASK_HEIGHT)
 
 void SvpSalFrame::SetWindowState( const SalFrameState *pState )
 {
@@ -323,13 +323,13 @@ void SvpSalFrame::SetWindowState( const SalFrameState *pState )
         long nHeight = maGeometry.nHeight;
 
         // change requested properties
-        if (pState->mnMask & WindowStateMask::X)
+        if (pState->mnMask & WINDOWSTATE_MASK_X)
             nX = pState->mnX;
-        if (pState->mnMask & WindowStateMask::Y)
+        if (pState->mnMask & WINDOWSTATE_MASK_Y)
             nY = pState->mnY;
-        if (pState->mnMask & WindowStateMask::Width)
+        if (pState->mnMask & WINDOWSTATE_MASK_WIDTH)
             nWidth = pState->mnWidth;
-        if (pState->mnMask & WindowStateMask::Height)
+        if (pState->mnMask & WINDOWSTATE_MASK_HEIGHT)
             nHeight = pState->mnHeight;
 
         SetPosSize( nX, nY, nWidth, nHeight,
@@ -345,7 +345,7 @@ bool SvpSalFrame::GetWindowState( SalFrameState* pState )
     pState->mnY      = maGeometry.nY;
     pState->mnWidth  = maGeometry.nWidth;
     pState->mnHeight = maGeometry.nHeight;
-    pState->mnMask   = FRAMESTATE_MASK_GEOMETRY | WindowStateMask::State;
+    pState->mnMask   = FRAMESTATE_MASK_GEOMETRY | WINDOWSTATE_MASK_STATE;
 
     return true;
 }
