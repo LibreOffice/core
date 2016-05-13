@@ -25,7 +25,8 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
-#include <boost/bind.hpp>
+
+#include <comphelper/stl_types.hxx>
 
 using namespace com::sun::star;
 
@@ -87,12 +88,8 @@ void OdfEmitter::beginTag( const char* pTag, const PropertyMap& rProperties )
     // platforms, and even between different compile-time settings),
     // sort the attributes.
     std::sort(aAttributes.begin(), aAttributes.end());
-    std::for_each(aAttributes.begin(),
-                  aAttributes.end(),
-                  boost::bind( (OUStringBuffer& (OUStringBuffer::*)(const OUString&))
-                               (&OUStringBuffer::append),
-                               boost::ref(aElement),
-                               _1 ));
+    std::copy(aAttributes.begin(), aAttributes.end(),
+              comphelper::OUStringBufferAppender(aElement));
     aElement.append(">");
 
     write(aElement.makeStringAndClear());

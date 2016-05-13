@@ -162,6 +162,10 @@ public:
 
     OUStringBufferAppender(OUStringBuffer & i_rBuffer)
         : m_rBuffer(i_rBuffer) { }
+    Self & operator=(Self const &)
+    {   // MSVC 2013 with non-debug runtime requires this in xutility.hpp:289
+        return *this;
+    }
     Self & operator=(OUString const & i_rStr)
     {
         m_rBuffer.append( i_rStr );
