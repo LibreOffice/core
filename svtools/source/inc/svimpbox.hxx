@@ -62,21 +62,24 @@ public:
 };
 
 // Flags fuer nFlag
-#define F_VER_SBARSIZE_WITH_HBAR        0x0001
-#define F_HOR_SBARSIZE_WITH_VBAR        0x0002
-#define F_IGNORE_NEXT_MOUSEMOVE         0x0004  // OS/2 only
-#define F_IN_SCROLLING                  0x0008
-#define F_DESEL_ALL                     0x0010
-#define F_START_EDITTIMER               0x0020  // MAC only
-#define F_IGNORE_SELECT                 0x0040
-#define F_IN_RESIZE                     0x0080
-#define F_REMOVED_ENTRY_INVISIBLE       0x0100
-#define F_REMOVED_RECALC_MOST_RIGHT     0x0200
-#define F_IGNORE_CHANGED_TABS           0x0400
-#define F_PAINTED                       0x0800
-#define F_IN_PAINT                      0x1000
-#define F_ENDSCROLL_SET_VIS_SIZE        0x2000
-#define F_FILLING                       0x4000
+enum class LBoxFlags {
+    NONE                        = 0x0000,
+    InScrolling                 = 0x0008,
+    DeselectAll                 = 0x0010,
+    StartEditTimer              = 0x0020,  // MAC only
+    IgnoreSelect                = 0x0040,
+    InResize                    = 0x0080,
+    RemovedEntryInvisible       = 0x0100,
+    RemovedRecalcMostRight      = 0x0200,
+    IgnoreChangedTabs           = 0x0400,
+    InPaint                     = 0x1000,
+    EndScrollSetVisSize         = 0x2000,
+    Filling                     = 0x4000,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<LBoxFlags> : is_typed_flags<LBoxFlags, 0x7ffb> {};
+}
 
 #define NODE_BMP_TABDIST_NOTVALID   -2000000
 #define FIRST_ENTRY_TAB             1
@@ -209,7 +212,7 @@ protected:
     SvTreeListEntry*        pStartEntry;
     ImplSVEvent*            nCurUserEvent;
     Size                    aOutputSize;
-    sal_uInt16              nFlags;
+    LBoxFlags               nFlags;
     WinBits                 m_nStyle;
     ExtendedWinBits         nExtendedWinBits;
     SelectionEngine         aSelEng;
