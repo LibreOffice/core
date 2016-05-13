@@ -77,7 +77,7 @@ bool CairoTextRender::setFont( const FontSelectPattern *pEntry, int nFallbackLev
         return false;
 
     // handle the request for a non-native X11-font => use the GlyphCache
-    ServerFont* pServerFont = GlyphCache::GetInstance().CacheFont( *pEntry );
+    ImplServerFontEntry* pServerFont = GlyphCache::GetInstance().CacheFont( *pEntry );
     if( pServerFont != nullptr )
     {
         // ignore fonts with e.g. corrupted font files
@@ -91,7 +91,7 @@ bool CairoTextRender::setFont( const FontSelectPattern *pEntry, int nFallbackLev
         mpServerFont[ nFallbackLevel ] = pServerFont;
 
         // apply font specific-hint settings
-        ServerFont* pSFE = static_cast<ServerFont*>( pEntry->mpFontEntry );
+        ImplServerFontEntry* pSFE = static_cast<ImplServerFontEntry*>( pEntry->mpFontEntry );
         pSFE->HandleFontOptions();
 
         return true;
@@ -201,7 +201,7 @@ void CairoTextRender::DrawServerFontLayout( const ServerFontLayout& rLayout )
     if (cairo_glyphs.empty())
         return;
 
-    ServerFont& rFont = rLayout.GetServerFont();
+    ImplServerFontEntry& rFont = rLayout.GetServerFont();
     const FontSelectPattern& rFSD = rFont.GetFontSelData();
     int nHeight = rFSD.mnHeight;
     int nWidth = rFSD.mnWidth ? rFSD.mnWidth : nHeight;
@@ -465,7 +465,7 @@ bool CairoTextRender::GetGlyphBoundRect( sal_GlyphId aGlyphId, Rectangle& rRect 
     if( nLevel >= MAX_FALLBACK )
         return false;
 
-    ServerFont* pSF = mpServerFont[ nLevel ];
+    ImplServerFontEntry* pSF = mpServerFont[ nLevel ];
     if( !pSF )
         return false;
 
@@ -496,7 +496,7 @@ bool CairoTextRender::GetGlyphOutline( sal_GlyphId aGlyphId,
     if( nLevel >= MAX_FALLBACK )
         return false;
 
-    ServerFont* pSF = mpServerFont[ nLevel ];
+    ImplServerFontEntry* pSF = mpServerFont[ nLevel ];
     if( !pSF )
         return false;
 
@@ -539,7 +539,7 @@ SystemFontData CairoTextRender::GetSysFontData( int nFallbackLevel ) const
 
     if (mpServerFont[nFallbackLevel] != nullptr)
     {
-        ServerFont* rFont = mpServerFont[nFallbackLevel];
+        ImplServerFontEntry* rFont = mpServerFont[nFallbackLevel];
         aSysFontData.nFontId = rFont->GetFtFace();
         aSysFontData.nFontFlags = rFont->GetLoadFlags();
         aSysFontData.bFakeBold = rFont->NeedsArtificialBold();

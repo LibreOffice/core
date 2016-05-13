@@ -146,8 +146,6 @@ public:
     virtual void                ReleaseBuffer( BitmapBuffer* pBuffer, BitmapAccessMode nMode ) SAL_OVERRIDE;
     virtual bool                GetSystemData( BitmapSystemData& rData ) SAL_OVERRIDE;
 
-    virtual bool                Crop( const Rectangle& rRectPixel ) SAL_OVERRIDE;
-    virtual bool                Erase( const Color& rFillColor ) SAL_OVERRIDE;
     virtual bool                Scale( const double& rScaleX, const double& rScaleY, BmpScaleFlag nScaleFlag ) SAL_OVERRIDE;
     virtual bool                Replace( const Color& rSearchColor, const Color& rReplaceColor, sal_uLong nTol ) SAL_OVERRIDE;
 };

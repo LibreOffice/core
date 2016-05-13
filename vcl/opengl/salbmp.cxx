@@ -827,16 +827,6 @@ bool OpenGLSalBitmap::GetSystemData( BitmapSystemData& /*rData*/ )
 #endif
 }
 
-bool OpenGLSalBitmap::Crop( const Rectangle& /*rRectPixel*/ )
-{
-    return false;
-}
-
-bool OpenGLSalBitmap::Erase( const ::Color& /*rFillColor*/ )
-{
-    return false;
-}
-
 bool OpenGLSalBitmap::Replace( const Color& rSearchColor, const Color& rReplaceColor, sal_uLong nTol )
 {
     OpenGLZone aZone;

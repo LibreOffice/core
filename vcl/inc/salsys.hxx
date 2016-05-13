@@ -85,7 +85,7 @@ public:
 
        @returns the name of the screen
     */
-    virtual OUString GetDisplayScreenName( unsigned int nScreen ) = 0;
+    virtual OUString GetDisplayScreenName( unsigned int /*nScreen*/ ) { return OUString(); }
 
     /*  Shows a native message box with the specified title, message and button
         combination.
