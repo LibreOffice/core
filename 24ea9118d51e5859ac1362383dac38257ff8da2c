@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_74516962",
+        "filename": "sw/source/uibase/docvw/SidebarWin.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 901,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-05-13T15:57:39Z",
+      "side": 1,
+      "message": "if we don\u0027t get a ContentNode here, then the maLayoutInfo.mnStartNodeIdx simply contains an invalid value - this just makes it not crash in that case.\n\nperhaps the real problem is that after these sidebar-items are created the redline mode is changed and stuff moves around?\n\nmnStartNodeIdx is a plain integer in any case so nothing will adjust it.",
+      "revId": "24ea9118d51e5859ac1362383dac38257ff8da2c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
