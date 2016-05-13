@@ -134,7 +134,7 @@ public:
     virtual void                SetTextColor( SalColor nSalColor ) = 0;
 
     // set the font
-    virtual sal_uInt16          SetFont( FontSelectPattern*, int nFallbackLevel ) = 0;
+    virtual void                SetFont( FontSelectPattern*, int nFallbackLevel ) = 0;
 
     // release the fonts
     void                        ReleaseFonts() { SetFont( NULL, 0 ); }

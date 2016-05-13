@@ -122,7 +122,7 @@ public:
     virtual void            SetROPFillColor( SalROPColor nROPColor ) override;
 
     virtual void            SetTextColor( SalColor nSalColor ) override;
-    virtual sal_uInt16      SetFont( FontSelectPattern*, int nFallbackLevel ) override;
+    virtual void            SetFont( FontSelectPattern*, int nFallbackLevel ) override;
     virtual void            GetFontMetric( ImplFontMetricData *, int nFallbackLevel ) override;
     virtual const FontCharMapPtr GetFontCharMap() const override;
     virtual bool GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const override;
@@ -163,8 +163,8 @@ public:
                                           double fTransparency,
                                           const basegfx::B2DVector& rLineWidths,
                                           basegfx::B2DLineJoin,
-                                          css::drawing::LineCap,
-                                          double fMiterMinimumAngle) override;
+                                          css::drawing::LineCap/*,
+                                          double fMiterMinimumAngle*/) override;
     virtual void            drawPolyLine( sal_uInt32 nPoints, const SalPoint* pPtAry ) override;
     virtual void            drawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry ) override;
     virtual void            drawPolyPolygon( sal_uInt32 nPoly,

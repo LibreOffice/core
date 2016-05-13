@@ -978,7 +978,6 @@ ImplFontEntry::ImplFontEntry( const FontSelectPattern& rFontSelData )
     , mpConversion( NULL )
     , mnLineHeight( 0 )
     , mnRefCount( 1 )
-    , mnSetFontFlags( 0 )
     , mnOwnOrientation( 0 )
     , mnOrientation( 0 )
     , mbInit( false )
@@ -1512,7 +1511,7 @@ void OutputDevice::InitFont() const
         mpFontEntry->maFontSelData.mbNonAntialiased = bNonAntialiased;
 
         // select font in the device layers
-        mpFontEntry->mnSetFontFlags = mpGraphics->SetFont( &(mpFontEntry->maFontSelData), 0 );
+        mpGraphics->SetFont( &(mpFontEntry->maFontSelData), 0 );
         mbInitFont = false;
     }
 }
@@ -2056,7 +2055,7 @@ void OutputDevice::ImplDrawEmphasisMarks( SalLayout& rSalLayout )
     mpMetaFile = pOldMetaFile;
 }
 
-SalLayout* OutputDevice::getFallbackFont(ImplFontEntry &rFallbackFont,
+SalLayout* OutputDevice::getFallbackFont(
     FontSelectPattern &rFontSelData, int nFallbackLevel,
     ImplLayoutArgs& rLayoutArgs) const
 {
@@ -2065,7 +2064,7 @@ SalLayout* OutputDevice::getFallbackFont(ImplFontEntry &rFallbackFont,
         return nullptr;
 
     assert(mpGraphics != nullptr);
-    rFallbackFont.mnSetFontFlags = mpGraphics->SetFont( &rFontSelData, nFallbackLevel );
+    mpGraphics->SetFont( &rFontSelData, nFallbackLevel );
 
     rLayoutArgs.ResetPos();
     SalLayout* pFallback = mpGraphics->GetTextLayout( rLayoutArgs, nFallbackLevel );
