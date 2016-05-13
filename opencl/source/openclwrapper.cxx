@@ -703,6 +703,8 @@ bool switchOpenCLDevice(const OUString* pDevice, bool bAutoSelect, bool bForceEv
         OUString path;
         osl::FileBase::getSystemPathFromFileURL(url,path);
         ds_device aSelectedDevice = getDeviceSelection(path, bForceEvaluation);
+        if ( aSelectedDevice.eType != DeviceType::OpenCLDevice)
+            return false;
         pDeviceId = aSelectedDevice.aDeviceID;
 
     }

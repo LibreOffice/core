@@ -636,10 +636,15 @@ ds_device getDeviceSelection(
         }
 
         /* Final device selection */
-        selectedDevice = aProfile->devices[bestDeviceIdx];
-        bIsDeviceSelected = true;
+        if (bestDeviceIdx >=0 && bestDeviceIdx <= aProfile->devices.size() )
+        {
+            selectedDevice = aProfile->devices[bestDeviceIdx];
+            bIsDeviceSelected = true;
 
-        writeDevicesLog(aProfile, sProfilePath, bestDeviceIdx);
+            writeDevicesLog(aProfile, sProfilePath, bestDeviceIdx);
+        } else {
+            selectedDevice.eType = DeviceType::NativeCPU;
+        }
     }
     return selectedDevice;
 }
