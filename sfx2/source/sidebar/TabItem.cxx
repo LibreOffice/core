@@ -103,9 +103,12 @@ void TabItem::MouseButtonUp(const MouseEvent& rMouseEvent)
         {
             Check();
             Click();
-            GetParent()->Invalidate();
+            vcl::Window* pParent = GetParent();
+            if (pParent)
+                pParent->Invalidate();
         }
     }
+
     if (mbIsLeftButtonDown)
     {
         mbIsLeftButtonDown = false;
