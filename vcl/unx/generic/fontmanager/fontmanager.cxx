@@ -1088,7 +1088,9 @@ OUString PrintFontManager::convertTrueTypeName( void* pRecord )
                 eEncoding = RTL_TEXTENCODING_UTF8;
                 break;
             default:
-                SAL_WARN("vcl", "Unimplemented mac encoding " << pNameRecord->encodingID << " to unicode conversion");
+                if (aName.startsWith("Khmer OS"))
+                    eEncoding = RTL_TEXTENCODING_UTF8;
+                SAL_WARN_IF(eEncoding == RTL_TEXTENCODING_DONTKNOW, "vcl", "Unimplemented mac encoding " << pNameRecord->encodingID << " to unicode conversion for fontname " << aName);
                 break;
         }
         if (eEncoding != RTL_TEXTENCODING_DONTKNOW)
