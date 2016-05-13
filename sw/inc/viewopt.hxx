@@ -76,19 +76,24 @@ namespace o3tl {
     template<> struct typed_flags<ViewOptCoreFlags2> : is_typed_flags<ViewOptCoreFlags2, 0x007f> {};
 };
 
-#define VIEWOPT_2_H_RULER           0x00000400L
-#define VIEWOPT_2_VSCROLLBAR        0x00000800L
-#define VIEWOPT_2_HSCROLLBAR        0x00001000L
-#define VIEWOPT_2_V_RULER           0x00004000L
-#define VIEWOPT_2_ANY_RULER         0x00008000L
-#define VIEWOPT_2_MODIFIED          0x00010000L
-#define VIEWOPT_2_KEEPASPECTRATIO   0x00020000L
-#define VIEWOPT_2_GRFKEEPZOOM       0x00040000L
-#define VIEWOPT_2_CONTENT_TIPS      0x00100000L
-#define VIEWOPT_2_SCROLLBAR_TIPS    0x00400000L
-#define VIEWOPT_2_PRTFORMAT         0x00800000L
-#define VIEWOPT_2_SHADOWCRSR        0x01000000L
-#define VIEWOPT_2_V_RULER_RIGHT     0x02000000L
+enum class ViewOptFlags2 {
+    HRuler          = 0x00000400,
+    VScrollbar      = 0x00000800,
+    HScrollbar      = 0x00001000,
+    VRuler          = 0x00004000,
+    AnyRuler        = 0x00008000,
+    Modified        = 0x00010000,
+    KeepAspectRatio = 0x00020000,
+    GrfKeepZoom     = 0x00040000,
+    ContentTips     = 0x00100000,
+    ScrollbarTips   = 0x00400000,
+    PrintFormat     = 0x00800000,
+    ShadowCursor    = 0x01000000,
+    VRulerRight     = 0x02000000
+};
+namespace o3tl {
+    template<> struct typed_flags<ViewOptFlags2> : is_typed_flags<ViewOptFlags2, 0x03d7dc00> {};
+};
 
 // Table background.
 #define TBL_DEST_CELL   0
@@ -141,7 +146,7 @@ protected:
     OUString        m_sSymbolFont;        // Symbolfont.
     sal_uInt32      m_nCoreOptions;       // Bits for SwViewShell.
     ViewOptCoreFlags2 m_nCore2Options;      // Bits for SwViewShell.
-    sal_uInt32      m_nUIOptions;         // UI-Bits
+    ViewOptFlags2   m_nUIOptions;         // UI-Bits
     Color           m_aRetouchColor;     // DefaultBackground for BrowseView
     Size            m_aSnapSize;          // Describes horizontal and vertical snap.
     sal_uInt16      mnViewLayoutColumns;// # columns for edit view
@@ -451,7 +456,7 @@ public:
     bool    IsViewVScrollBar() const
         {
 #if HAVE_FEATURE_DESKTOP
-            return (m_nUIOptions & VIEWOPT_2_VSCROLLBAR) != 0;
+            return bool(m_nUIOptions & ViewOptFlags2::VScrollbar);
 #else
             return false;
 #endif
@@ -459,40 +464,40 @@ public:
     bool    IsViewHScrollBar() const
         {
 #if HAVE_FEATURE_DESKTOP
-            return (m_nUIOptions & VIEWOPT_2_HSCROLLBAR) != 0;
+            return bool(m_nUIOptions & ViewOptFlags2::HScrollbar);
 #else
             return false;
 #endif
         }
     bool    IsKeepRatio()      const
-        { return (m_nUIOptions & VIEWOPT_2_KEEPASPECTRATIO) != 0; }
+        { return bool(m_nUIOptions & ViewOptFlags2::KeepAspectRatio); }
     bool    IsGrfKeepZoom()    const
-        { return (m_nUIOptions & VIEWOPT_2_GRFKEEPZOOM) != 0; }
+        { return bool(m_nUIOptions & ViewOptFlags2::GrfKeepZoom); }
     bool    IsShowContentTips() const
-        { return (m_nUIOptions & VIEWOPT_2_CONTENT_TIPS) != 0; }
+        { return bool(m_nUIOptions & ViewOptFlags2::ContentTips); }
     bool    IsPrtFormat() const
-        { return (m_nUIOptions & VIEWOPT_2_PRTFORMAT) != 0; }
+        { return bool(m_nUIOptions & ViewOptFlags2::PrintFormat); }
     bool    IsShowScrollBarTips() const
-        { return (m_nUIOptions & VIEWOPT_2_SCROLLBAR_TIPS) != 0; }
+        { return bool(m_nUIOptions & ViewOptFlags2::ScrollbarTips); }
 
     SvxZoomType    GetZoomType()      const { return m_eZoom; }
 
     sal_uInt8   GetTableDest() const    { return m_nTableDestination; }
 
     void   SetViewVScrollBar(bool b)
-        { b ? (m_nUIOptions |= VIEWOPT_2_VSCROLLBAR ) : ( m_nUIOptions &= ~VIEWOPT_2_VSCROLLBAR); }
+        { b ? (m_nUIOptions |= ViewOptFlags2::VScrollbar ) : ( m_nUIOptions &= ~ViewOptFlags2::VScrollbar); }
     void   SetViewHScrollBar(bool b)
-        { b ? (m_nUIOptions |= VIEWOPT_2_HSCROLLBAR ) : ( m_nUIOptions &= ~VIEWOPT_2_HSCROLLBAR); }
+        { b ? (m_nUIOptions |= ViewOptFlags2::HScrollbar ) : ( m_nUIOptions &= ~ViewOptFlags2::HScrollbar); }
     void   SetKeepRatio     (bool b)
-        { b ? (m_nUIOptions |= VIEWOPT_2_KEEPASPECTRATIO ) : ( m_nUIOptions &= ~VIEWOPT_2_KEEPASPECTRATIO); }
+        { b ? (m_nUIOptions |= ViewOptFlags2::KeepAspectRatio ) : ( m_nUIOptions &= ~ViewOptFlags2::KeepAspectRatio); }
     void   SetGrfKeepZoom   (bool b)
-        { b ? (m_nUIOptions |= VIEWOPT_2_GRFKEEPZOOM ) : ( m_nUIOptions &= ~VIEWOPT_2_GRFKEEPZOOM); }
+        { b ? (m_nUIOptions |= ViewOptFlags2::GrfKeepZoom ) : ( m_nUIOptions &= ~ViewOptFlags2::GrfKeepZoom); }
     void SetShowContentTips( bool b)
-        { b ? (m_nUIOptions |= VIEWOPT_2_CONTENT_TIPS) : (m_nUIOptions &= ~VIEWOPT_2_CONTENT_TIPS); }
+        { b ? (m_nUIOptions |= ViewOptFlags2::ContentTips) : (m_nUIOptions &= ~ViewOptFlags2::ContentTips); }
     void SetPrtFormat( bool b)
-        { b ? (m_nUIOptions |= VIEWOPT_2_PRTFORMAT) : (m_nUIOptions &= ~VIEWOPT_2_PRTFORMAT); }
+        { b ? (m_nUIOptions |= ViewOptFlags2::PrintFormat) : (m_nUIOptions &= ~ViewOptFlags2::PrintFormat); }
     void SetShowScrollBarTips( bool b)
-        { b ? (m_nUIOptions |= VIEWOPT_2_SCROLLBAR_TIPS) : (m_nUIOptions &= ~VIEWOPT_2_SCROLLBAR_TIPS); }
+        { b ? (m_nUIOptions |= ViewOptFlags2::ScrollbarTips) : (m_nUIOptions &= ~ViewOptFlags2::ScrollbarTips); }
 
     void            SetZoomType     (SvxZoomType eZoom_){ m_eZoom = eZoom_;  }
     void            SetTableDest( sal_uInt8 nNew )    { m_nTableDestination = nNew;  }
@@ -506,53 +511,53 @@ public:
     bool        IsViewAnyRuler() const
         {
 #if HAVE_FEATURE_DESKTOP
-            return 0 != (m_nUIOptions & VIEWOPT_2_ANY_RULER);
+            return bool(m_nUIOptions & ViewOptFlags2::AnyRuler);
 #else
             return false;
 #endif
         }
     void            SetViewAnyRuler(bool bSet)
-                        { bSet ? (m_nUIOptions |= VIEWOPT_2_ANY_RULER) : (m_nUIOptions &= ~VIEWOPT_2_ANY_RULER);}
+                        { bSet ? (m_nUIOptions |= ViewOptFlags2::AnyRuler) : (m_nUIOptions &= ~ViewOptFlags2::AnyRuler);}
 
     bool        IsViewHRuler(bool bDirect = false)     const
                         {
 #if HAVE_FEATURE_DESKTOP
                             return bDirect
-                                   ? 0 != (m_nUIOptions & VIEWOPT_2_H_RULER)
-                                   : !m_bReadonly && (m_nUIOptions & (VIEWOPT_2_ANY_RULER|VIEWOPT_2_H_RULER)) == (VIEWOPT_2_ANY_RULER|VIEWOPT_2_H_RULER);
+                                   ? bool(m_nUIOptions & ViewOptFlags2::HRuler)
+                                   : !m_bReadonly && (m_nUIOptions & (ViewOptFlags2::AnyRuler|ViewOptFlags2::HRuler));
 #else
                             (void) bDirect;
                             return false;
 #endif
                         }
     void            SetViewHRuler   (bool b)
-                        {    b ? (m_nUIOptions |= VIEWOPT_2_H_RULER ) : ( m_nUIOptions &= ~VIEWOPT_2_H_RULER);}
+                        {    b ? (m_nUIOptions |= ViewOptFlags2::HRuler ) : ( m_nUIOptions &= ~ViewOptFlags2::HRuler);}
 
     bool            IsViewVRuler(bool bDirect = false) const
                         {
 #if HAVE_FEATURE_DESKTOP
                             return bDirect
-                                   ? 0 != (m_nUIOptions & VIEWOPT_2_V_RULER)
-                                   : !m_bReadonly && (m_nUIOptions & (VIEWOPT_2_ANY_RULER|VIEWOPT_2_V_RULER)) == (VIEWOPT_2_ANY_RULER|VIEWOPT_2_V_RULER);
+                                   ? bool(m_nUIOptions & ViewOptFlags2::VRuler)
+                                   : !m_bReadonly && (m_nUIOptions & (ViewOptFlags2::AnyRuler|ViewOptFlags2::VRuler));
 #else
                             (void) bDirect;
                             return false;
 #endif
                         }
     void            SetViewVRuler     (bool b)
-                        { b ? (m_nUIOptions |= VIEWOPT_2_V_RULER ) : ( m_nUIOptions &= ~VIEWOPT_2_V_RULER);}
+                        { b ? (m_nUIOptions |= ViewOptFlags2::VRuler ) : ( m_nUIOptions &= ~ViewOptFlags2::VRuler);}
 
     // ShadowCursor, switch on/off, get/set color/mode.
     bool    IsShadowCursor()    const
-        { return (m_nUIOptions & VIEWOPT_2_SHADOWCRSR) != 0; }
+        { return bool(m_nUIOptions & ViewOptFlags2::ShadowCursor); }
     void   SetShadowCursor(bool b)
-        { b ? (m_nUIOptions |= VIEWOPT_2_SHADOWCRSR ) : ( m_nUIOptions &= ~VIEWOPT_2_SHADOWCRSR); }
+        { b ? (m_nUIOptions |= ViewOptFlags2::ShadowCursor ) : ( m_nUIOptions &= ~ViewOptFlags2::ShadowCursor); }
 
     //move vertical ruler to the right
     bool    IsVRulerRight()    const
-        { return (m_nUIOptions & VIEWOPT_2_V_RULER_RIGHT) != 0; }
+        { return bool(m_nUIOptions & ViewOptFlags2::VRulerRight); }
     void   SetVRulerRight(bool b)
-        { b ? (m_nUIOptions |= VIEWOPT_2_V_RULER_RIGHT ) : ( m_nUIOptions &= ~VIEWOPT_2_V_RULER_RIGHT); }
+        { b ? (m_nUIOptions |= ViewOptFlags2::VRulerRight ) : ( m_nUIOptions &= ~ViewOptFlags2::VRulerRight); }
 
     bool            IsStarOneSetting() const {return m_bStarOneSetting; }
     void            SetStarOneSetting(bool bSet) {m_bStarOneSetting = bSet; }
