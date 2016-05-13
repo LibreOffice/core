@@ -263,7 +263,11 @@ int ImplIsPaletteEntry( BYTE nRed, BYTE nGreen, BYTE nBlue )
 WinSalGraphicsImpl::WinSalGraphicsImpl(WinSalGraphics& rParent):
     mrParent(rParent),
     mbXORMode(false),
+    mbPen(false),
     mhPen(0),
+    mbStockPen(false),
+    mbBrush(false),
+    mbStockBrush(false),
     mhBrush(0)
 {
 }
