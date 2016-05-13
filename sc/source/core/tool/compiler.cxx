@@ -644,7 +644,7 @@ static bool lcl_parseExternalName(
     if (aTmpName[nNameLen-1] == '!')
     {
         // Check against #REF!.
-        if (aTmpName == "#REF!")
+        if (aTmpName.equalsIgnoreAsciiCase("#REF!"))
             return false;
     }
 
@@ -1920,6 +1920,28 @@ static sal_Unicode* lcl_UnicodeStrNCpy( sal_Unicode* pDst, const sal_Unicode* pS
     return pDst;
 }
 
+// p1 MUST contain at least n characters, or terminate with NIL.
+// p2 MUST pass upper case letters, if any.
+// n  MUST not be greater than length of p2
+static bool lcl_isUnicodeIgnoreAscii( const sal_Unicode* p1, const char* p2, size_t n )
+{
+    for (size_t i=0; i<n; ++i)
+    {
+        if (!p1[i])
+            return false;
+        if (p1[i] != p2[i])
+        {
+            if (p1[i] < 'a' || 'z' < p1[i])
+                return false;   // not a lower case letter
+            if (p2[i] < 'A' || 'Z' < p2[i])
+                return false;   // not a letter to match
+            if (p1[i] != p2[i] + 0x20)
+                return false;   // lower case doesn't match either
+        }
+    }
+    return true;
+}
+
 // NextSymbol
 
 // Parses the formula into separate symbols for further processing.
@@ -2142,6 +2164,33 @@ Label_MaskStateMachine:
                     else
                         *pSym++ = c;
                 }
+                else if (c == '#' && lcl_isUnicodeIgnoreAscii( pSrc, "REF!", 4))
+                {
+                    // Completely ugly means to catch broken
+                    // [$]#REF!.[$]#REF![$]#REF! (one or multiple parts)
+                    // references that were written in ODF named ranges
+                    // (without embracing [] hence no predetected reference)
+                    // and to OOXML and handle them as one symbol.
+                    // Also catches these in UI, so we can process them
+                    // further.
+                    int i = 0;
+                    for ( ; i<5; ++i)
+                    {
+                        if( pSym == &cSymbol[ MAXSTRLEN-1 ] )
+                        {
+                            SetError(errStringOverflow);
+                            eState = ssStop;
+                            break;  // for
+                        }
+                        else
+                        {
+                            *pSym++ = c;
+                            c = *pSrc++;
+                        }
+                    }
+                    if (i == 5)
+                        c = *((--pSrc)-1);  // position last/next character correctly
+                }
                 else if (c == ':' && mnRangeOpPosInSymbol < 0)
                 {
                     // One range operator may form Sheet1.A:A, which we need to
@@ -2282,8 +2331,18 @@ Label_MaskStateMachine:
                      * as opcode symbols will be recognized and others result
                      * in ocBad, so the result is actually conformant. */
                     bool bAdd = true;
-                    if ('!' == c || '?' == c)
+                    if ('?' == c)
                         eState = ssStop;
+                    else if ('!' == c)
+                    {
+                        // Check if this is #REF! that starts an invalid reference.
+                        // Note we have an implicit '!' here at the end.
+                        if (pSym - &cSymbol[0] == 4 && lcl_isUnicodeIgnoreAscii( cSymbol, "#REF", 4) &&
+                                ((GetCharTableFlags( *pSrc, c) & SC_COMPILER_C_IDENT) != 0))
+                            eState = ssGetIdent;
+                        else
+                            eState = ssStop;
+                    }
                     else if ('/' == c)
                     {
                         if (!bErrorConstantHadSlash)
@@ -2811,10 +2870,27 @@ bool ScCompiler::IsString()
     return false;
 }
 
-bool ScCompiler::IsPredetectedReference(const OUString& rName)
+bool ScCompiler::IsPredetectedErrRefReference( const OUString& rName, const OUString* pErrRef )
+{
+    switch (mnPredetectedReference)
+    {
+        case 1:
+            return IsSingleReference( rName, pErrRef);
+        case 2:
+            return IsDoubleReference( rName, pErrRef);
+        default:
+            return false;
+    }
+}
+
+bool ScCompiler::IsPredetectedReference( const OUString& rName )
 {
     // Speedup documents with lots of broken references, e.g. sheet deleted.
-    sal_Int32 nPos = rName.indexOf("#REF!");
+    // It could also be a broken invalidated reference that contains #REF!
+    // (but is not equal to), which we wrote prior to ODFF and also to ODFF
+    // between 2013 and 2016 until 5.1.4
+    const OUString aErrRef("#REF!");    // not localized in ODFF
+    sal_Int32 nPos = rName.indexOf( aErrRef);
     if (nPos != -1)
     {
         /* TODO: this may be enhanced by reusing scan information from
@@ -2830,13 +2906,17 @@ bool ScCompiler::IsPredetectedReference(const OUString& rName)
             // so pass it on.
             if (rName.getLength() == 5)
                 return IsErrorConstant( rName);
-            return false;           // #REF!.AB42 or #REF!42 or #REF!#REF!
+            // #REF!.AB42 or #REF!42 or #REF!#REF!
+            return IsPredetectedErrRefReference( rName, &aErrRef);
         }
         sal_Unicode c = rName[nPos-1];      // before #REF!
         if ('$' == c)
         {
             if (nPos == 1)
-                return false;       // $#REF!.AB42 or $#REF!42 or $#REF!#REF!
+            {
+                // $#REF!.AB42 or $#REF!42 or $#REF!#REF!
+                return IsPredetectedErrRefReference( rName, &aErrRef);
+            }
             c = rName[nPos-2];              // before $#REF!
         }
         sal_Unicode c2 = nPos+5 < rName.getLength() ? rName[nPos+5] : 0;     // after #REF!
@@ -2844,18 +2924,27 @@ bool ScCompiler::IsPredetectedReference(const OUString& rName)
         {
             case '.':
                 if ('$' == c2 || '#' == c2 || ('0' <= c2 && c2 <= '9'))
-                    return false;   // sheet.#REF!42 or sheet.#REF!#REF!
+                {
+                    // sheet.#REF!42 or sheet.#REF!#REF!
+                    return IsPredetectedErrRefReference( rName, &aErrRef);
+                }
                 break;
             case ':':
                 if (mnPredetectedReference > 1 &&
                         ('.' == c2 || '$' == c2 || '#' == c2 ||
                          ('0' <= c2 && c2 <= '9')))
-                    return false;   // :#REF!.AB42 or :#REF!42 or :#REF!#REF!
+                {
+                    // :#REF!.AB42 or :#REF!42 or :#REF!#REF!
+                    return IsPredetectedErrRefReference( rName, &aErrRef);
+                }
                 break;
             default:
                 if (rtl::isAsciiAlpha(c) &&
                         ((mnPredetectedReference > 1 && ':' == c2) || 0 == c2))
-                    return false;   // AB#REF!: or AB#REF!
+                {
+                    // AB#REF!: or AB#REF!
+                    return IsPredetectedErrRefReference( rName, &aErrRef);
+                }
         }
     }
     switch (mnPredetectedReference)
@@ -2868,12 +2957,12 @@ bool ScCompiler::IsPredetectedReference(const OUString& rName)
     return false;
 }
 
-bool ScCompiler::IsDoubleReference( const OUString& rName )
+bool ScCompiler::IsDoubleReference( const OUString& rName, const OUString* pErrRef )
 {
     ScRange aRange( aPos, aPos );
     const ScAddress::Details aDetails( pConv->meConv, aPos );
     ScAddress::ExternalInfo aExtInfo;
-    ScRefFlags nFlags = aRange.Parse( rName, pDoc, aDetails, &aExtInfo, &maExternalLinks );
+    ScRefFlags nFlags = aRange.Parse( rName, pDoc, aDetails, &aExtInfo, &maExternalLinks, pErrRef );
     if( nFlags & ScRefFlags::VALID )
     {
         ScComplexRefData aRef;
@@ -2908,14 +2997,15 @@ bool ScCompiler::IsDoubleReference( const OUString& rName )
     return ( nFlags & ScRefFlags::VALID ) != ScRefFlags::ZERO;
 }
 
-bool ScCompiler::IsSingleReference( const OUString& rName )
+bool ScCompiler::IsSingleReference( const OUString& rName, const OUString* pErrRef )
 {
     mnCurrentSheetEndPos = 0;
     mnCurrentSheetTab = -1;
     ScAddress aAddr( aPos );
     const ScAddress::Details aDetails( pConv->meConv, aPos );
     ScAddress::ExternalInfo aExtInfo;
-    ScRefFlags nFlags = aAddr.Parse( rName, pDoc, aDetails, &aExtInfo, &maExternalLinks, &mnCurrentSheetEndPos);
+    ScRefFlags nFlags = aAddr.Parse( rName, pDoc, aDetails,
+            &aExtInfo, &maExternalLinks, &mnCurrentSheetEndPos, pErrRef);
     // Something must be valid in order to recognize Sheet1.blah or blah.a1
     // as a (wrong) reference.
     if( nFlags & ( ScRefFlags::COL_VALID|ScRefFlags::ROW_VALID|ScRefFlags::TAB_VALID ) )
@@ -2972,7 +3062,7 @@ bool ScCompiler::IsSingleReference( const OUString& rName )
     return ( nFlags & ScRefFlags::VALID ) != ScRefFlags::ZERO;
 }
 
-bool ScCompiler::IsReference( const OUString& rName )
+bool ScCompiler::IsReference( const OUString& rName, const OUString* pErrRef )
 {
     // Has to be called before IsValue
     sal_Unicode ch1 = rName[0];
@@ -3023,7 +3113,7 @@ bool ScCompiler::IsReference( const OUString& rName )
         } while(false);
     }
 
-    if (IsSingleReference( rName))
+    if (IsSingleReference( rName, pErrRef))
         return true;
 
     // Though the range operator is handled explicitly, when encountering
@@ -3031,7 +3121,7 @@ bool ScCompiler::IsReference( const OUString& rName )
     // doesn't pass as single cell reference.
     if (mnRangeOpPosInSymbol > 0)   // ":foo" would be nonsense
     {
-        if (IsDoubleReference( rName))
+        if (IsDoubleReference( rName, pErrRef))
             return true;
         // Now try with a symbol up to the range operator, rewind source
         // position.
@@ -3058,7 +3148,7 @@ bool ScCompiler::IsReference( const OUString& rName )
                 SAL_FALLTHROUGH;
             case FormulaGrammar::CONV_XL_R1C1:
                 // C2 or C[1] are valid entire column references.
-                if (IsDoubleReference( rName))
+                if (IsDoubleReference( rName, pErrRef))
                     return true;
                 break;
             default:
@@ -3887,12 +3977,6 @@ bool ScCompiler::NextNewToken( bool bInArray )
         bool bInvalidExternalNameRange;
         if (!IsPredetectedReference( aStr) && !IsExternalNamedRange( aStr, bInvalidExternalNameRange ))
         {
-            /* TODO: it would be nice to generate a #REF! error here, which
-             * would need an ocBad token with additional error value.
-             * FormulaErrorToken wouldn't do because we want to preserve the
-             * original string containing partial valid address
-             * information if not ODFF (in that case it was already handled).
-             * */
             svl::SharedString aSS = pDoc->GetSharedStringPool().intern(aStr);
             maRawToken.SetString(aSS.getData(), aSS.getDataIgnoreCase());
             maRawToken.NewOpCode( ocBad );
@@ -3986,9 +4070,12 @@ bool ScCompiler::NextNewToken( bool bInArray )
                         return true;
                 }
 
-                // This can be only an error constant, if any.
+                // This can be either an error constant ...
                 if (IsErrorConstant( aUpper))
                     return true;
+
+                // ... or some invalidated reference starting with #REF!
+                // which is handled after the do loop.
 
                 break;  // do; create ocBad token or set error.
             }
@@ -4065,6 +4152,13 @@ bool ScCompiler::NextNewToken( bool bInArray )
             return true;
 
     } while (mbRewind);
+
+    // Last chance: it could be a broken invalidated reference that contains
+    // #REF! (but is not equal to), which we also wrote to ODFF between 2013
+    // and 2016 until 5.1.4
+    OUString aErrRef( mxSymbols->getSymbol( ocErrRef));
+    if (aUpper.indexOf( aErrRef) >= 0 && IsReference( aUpper, &aErrRef))
+        return true;
 
     if ( meExtendedErrorDetection != EXTENDED_ERROR_DETECTION_NONE )
     {

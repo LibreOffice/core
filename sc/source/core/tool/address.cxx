@@ -1056,6 +1056,38 @@ static ScRefFlags lcl_ScRange_Parse_XL_A1( ScRange& r,
     return nFlags;
 }
 
+// Compare ignore case ASCII.
+static bool lcl_isString( const sal_Unicode* p1, const OUString& rStr )
+{
+    const size_t n = rStr.getLength();
+    if (!n)
+        return false;
+    const sal_Unicode* p2 = rStr.getStr();
+    for (size_t i=0; i<n; ++i)
+    {
+        if (!p1[i])
+            return false;
+        if (p1[i] != p2[i])
+        {
+            sal_Unicode c1 = p1[i];
+            if ('A' <= c1 && c1 <= 'Z')
+                c1 += 0x20;
+            if (c1 < 'a' || 'z' < c1)
+                return false;   // not a letter
+
+            sal_Unicode c2 = p2[i];
+            if ('A' <= c2 && c2 <= 'Z')
+                c2 += 0x20;
+            if (c2 < 'a' || 'z' < c2)
+                return false;   // not a letter to match
+
+            if (c1 != c2)
+                return false;   // lower case doesn't match either
+        }
+    }
+    return true;
+}
+
 /**
     @param p        pointer to null-terminated sal_Unicode string
     @param rRawRes  returns ScRefFlags::... flags without the final check for full
@@ -1071,7 +1103,8 @@ static ScRefFlags lcl_ScAddress_Parse_OOo( const sal_Unicode* p, ScDocument* pDo
                                            ScRefFlags& rRawRes,
                                            ScAddress::ExternalInfo* pExtInfo,
                                            ScRange* pRange,
-                                           sal_Int32* pSheetEndPos )
+                                           sal_Int32* pSheetEndPos,
+                                           const OUString* pErrRef )
 {
     const sal_Unicode* const pStart = p;
     if (pSheetEndPos)
@@ -1121,53 +1154,63 @@ static ScRefFlags lcl_ScAddress_Parse_OOo( const sal_Unicode* p, ScDocument* pDo
             p++;
         }
 
-        if (*p == '\'')
+        if (pErrRef && lcl_isString( p, *pErrRef) && p[pErrRef->getLength()] == '.')
         {
-            // Tokens that start at ' can have anything in them until a final
-            // ' but '' marks an escaped '.  We've earlier guaranteed that a
-            // string containing '' will be surrounded by '.
-            p = parseQuotedName(p, aTab);
+            // #REF! particle of an invalidated reference plus sheet separator.
+            p += pErrRef->getLength() + 1;
+            nRes &= ~ScRefFlags::TAB_VALID;
+            nTab = -1;
         }
         else
         {
-            OUStringBuffer aTabAcc;
-            while (*p)
+            if (*p == '\'')
             {
-                if( *p == '.')
-                    break;
-
-                if( *p == '\'' )
-                {
-                    p++; break;
-                }
-                aTabAcc.append(*p);
-                p++;
+                // Tokens that start at ' can have anything in them until a final
+                // ' but '' marks an escaped '.  We've earlier guaranteed that a
+                // string containing '' will be surrounded by '.
+                p = parseQuotedName(p, aTab);
             }
-            aTab = aTabAcc.makeStringAndClear();
+            else
+            {
+                OUStringBuffer aTabAcc;
+                while (*p)
+                {
+                    if( *p == '.')
+                        break;
+
+                    if( *p == '\'' )
+                    {
+                        p++; break;
+                    }
+                    aTabAcc.append(*p);
+                    p++;
+                }
+                aTab = aTabAcc.makeStringAndClear();
+            }
+            if( *p++ != '.' )
+                nBits = ScRefFlags::ZERO;
+
+            if (!bExtDoc && (!pDoc || !pDoc->GetTable( aTab, nTab )))
+            {
+                // Specified table name is not found in this document.  Assume this is an external document.
+                aDocName = aTab;
+                sal_Int32 n = aDocName.lastIndexOf('.');
+                if (n > 0)
+                {
+                    // Extension found.  Strip it.
+                    aTab = aTab.replaceAt(n, 1, "");
+                    bExtDoc = true;
+                }
+                else
+                    // No extension found.  This is probably not an external document.
+                    nBits = ScRefFlags::ZERO;
+            }
         }
-        if( *p++ != '.' )
-            nBits = ScRefFlags::ZERO;
 
         if (pSheetEndPos && (nBits & ScRefFlags::TAB_VALID))
         {
             *pSheetEndPos = p - pStart;
             nBailOutFlags = ScRefFlags::TAB_VALID | ScRefFlags::TAB_3D;
-        }
-
-        if (!bExtDoc && (!pDoc || !pDoc->GetTable( aTab, nTab )))
-        {
-            // Specified table name is not found in this document.  Assume this is an external document.
-            aDocName = aTab;
-            sal_Int32 n = aDocName.lastIndexOf('.');
-            if (n > 0)
-            {
-                // Extension found.  Strip it.
-                aTab = aTab.replaceAt(n, 1, "");
-                bExtDoc = true;
-            }
-            else
-                // No extension found.  This is probably not an external document.
-                nBits = ScRefFlags::ZERO;
         }
     }
     else
@@ -1188,20 +1231,31 @@ static ScRefFlags lcl_ScAddress_Parse_OOo( const sal_Unicode* p, ScDocument* pDo
             p++;
         }
 
-        if (rtl::isAsciiAlpha( *p ))
+        if (pErrRef && lcl_isString( p, *pErrRef))
         {
-            nCol = sal::static_int_cast<SCCOL>( rtl::toAsciiUpperCase( *p++ ) - 'A' );
-            while (nCol < MAXCOL && rtl::isAsciiAlpha(*p))
-                nCol = sal::static_int_cast<SCCOL>( ((nCol + 1) * 26) + rtl::toAsciiUpperCase( *p++ ) - 'A' );
+            // #REF! particle of an invalidated reference.
+            p += pErrRef->getLength();
+            nBits &= ~ScRefFlags::COL_VALID;
+            nCol = -1;
         }
         else
-            nBits = ScRefFlags::ZERO;
+        {
+            if (rtl::isAsciiAlpha( *p ))
+            {
+                nCol = sal::static_int_cast<SCCOL>( rtl::toAsciiUpperCase( *p++ ) - 'A' );
+                while (nCol < MAXCOL && rtl::isAsciiAlpha(*p))
+                    nCol = sal::static_int_cast<SCCOL>( ((nCol + 1) * 26) + rtl::toAsciiUpperCase( *p++ ) - 'A' );
+            }
+            else
+                nBits = ScRefFlags::ZERO;
 
-        if (nCol > MAXCOL || (*p && *p != '$' && !rtl::isAsciiDigit( *p )))
-            nBits = ScRefFlags::ZERO;
+            if (nCol > MAXCOL || (*p && *p != '$' && !rtl::isAsciiDigit( *p ) &&
+                        (!pErrRef || !lcl_isString( p, *pErrRef))))
+                nBits = ScRefFlags::ZERO;
+            if( nBits == ScRefFlags::ZERO )
+                p = q;
+        }
         nRes |= nBits;
-        if( nBits == ScRefFlags::ZERO )
-            p = q;
     }
 
     q = p;
@@ -1213,23 +1267,40 @@ static ScRefFlags lcl_ScAddress_Parse_OOo( const sal_Unicode* p, ScDocument* pDo
             nBits |= ScRefFlags::ROW_ABS;
             p++;
         }
-        if( !rtl::isAsciiDigit( *p ) )
+
+        if (pErrRef && lcl_isString( p, *pErrRef))
         {
-            nBits = ScRefFlags::ZERO;
-            nRow = SCROW(-1);
+            // #REF! particle of an invalidated reference.
+            p += pErrRef->getLength();
+            // Clearing the ROW_VALID bit here is not possible because of the
+            // check at the end whether only a valid column was detected in
+            // which case all bits are cleared because it could be any other
+            // name. Instead, set to an absolute invalid row value. This will
+            // display a $#REF! instead of #REF! if the error value was
+            // relative, but live with it.
+            nBits |= ScRefFlags::ROW_ABS;
+            nRow = -1;
         }
         else
         {
-            long n = rtl_ustr_toInt32( p, 10 ) - 1;
-            while (rtl::isAsciiDigit( *p ))
-                p++;
-            if( n < 0 || n > MAXROW )
+            if( !rtl::isAsciiDigit( *p ) )
+            {
                 nBits = ScRefFlags::ZERO;
-            nRow = static_cast<SCROW>(n);
+                nRow = SCROW(-1);
+            }
+            else
+            {
+                long n = rtl_ustr_toInt32( p, 10 ) - 1;
+                while (rtl::isAsciiDigit( *p ))
+                    p++;
+                if( n < 0 || n > MAXROW )
+                    nBits = ScRefFlags::ZERO;
+                nRow = static_cast<SCROW>(n);
+            }
+            if( nBits == ScRefFlags::ZERO )
+                p = q;
         }
         nRes |= nBits;
-        if( nBits == ScRefFlags::ZERO )
-            p = q;
     }
 
     rAddr.Set( nCol, nRow, nTab );
@@ -1346,7 +1417,8 @@ static ScRefFlags lcl_ScAddress_Parse ( const sal_Unicode* p, ScDocument* pDoc, 
                                         const ScAddress::Details& rDetails,
                                         ScAddress::ExternalInfo* pExtInfo = nullptr,
                                         const uno::Sequence<sheet::ExternalLinkInfo>* pExternalLinks = nullptr,
-                                        sal_Int32* pSheetEndPos = nullptr )
+                                        sal_Int32* pSheetEndPos = nullptr,
+                                        const OUString* pErrRef = nullptr )
 {
     if( !*p )
         return ScRefFlags::ZERO;
@@ -1375,7 +1447,7 @@ static ScRefFlags lcl_ScAddress_Parse ( const sal_Unicode* p, ScDocument* pDoc, 
         case formula::FormulaGrammar::CONV_OOO:
         {
             ScRefFlags nRawRes = ScRefFlags::ZERO;
-            return lcl_ScAddress_Parse_OOo( p, pDoc, rAddr, nRawRes, pExtInfo, nullptr, pSheetEndPos);
+            return lcl_ScAddress_Parse_OOo( p, pDoc, rAddr, nRawRes, pExtInfo, nullptr, pSheetEndPos, pErrRef);
         }
     }
 }
@@ -1432,9 +1504,10 @@ ScRefFlags ScAddress::Parse( const OUString& r, ScDocument* pDoc,
                              const Details& rDetails,
                              ExternalInfo* pExtInfo,
                              const uno::Sequence<sheet::ExternalLinkInfo>* pExternalLinks,
-                             sal_Int32* pSheetEndPos )
+                             sal_Int32* pSheetEndPos,
+                             const OUString* pErrRef )
 {
-    return lcl_ScAddress_Parse( r.getStr(), pDoc, *this, rDetails, pExtInfo, pExternalLinks, pSheetEndPos );
+    return lcl_ScAddress_Parse( r.getStr(), pDoc, *this, rDetails, pExtInfo, pExternalLinks, pSheetEndPos, pErrRef);
 }
 
 bool ScRange::Intersects( const ScRange& rRange ) const
@@ -1502,7 +1575,8 @@ void ScRange::ExtendTo( const ScRange& rRange )
 static ScRefFlags lcl_ScRange_Parse_OOo( ScRange& rRange,
                                          const OUString& r,
                                          ScDocument* pDoc,
-                                         ScAddress::ExternalInfo* pExtInfo = nullptr )
+                                         ScAddress::ExternalInfo* pExtInfo,
+                                         const OUString* pErrRef )
 {
     ScRefFlags nRes1 = ScRefFlags::ZERO, nRes2 = ScRefFlags::ZERO;
     sal_Int32 nPos = ScGlobal::FindUnquoted( r, ':');
@@ -1512,14 +1586,15 @@ static ScRefFlags lcl_ScRange_Parse_OOo( ScRange& rRange,
         aTmp[nPos] = 0;
         const sal_Unicode* p = aTmp.getStr();
         ScRefFlags nRawRes1 = ScRefFlags::ZERO;
-        nRes1 = lcl_ScAddress_Parse_OOo( p, pDoc, rRange.aStart, nRawRes1, pExtInfo, nullptr, nullptr);
+        nRes1 = lcl_ScAddress_Parse_OOo( p, pDoc, rRange.aStart, nRawRes1, pExtInfo, nullptr, nullptr, pErrRef);
         if ((nRes1 != ScRefFlags::ZERO) ||
                 ((nRawRes1 & (ScRefFlags::COL_VALID | ScRefFlags::ROW_VALID)) &&
                  (nRawRes1 & ScRefFlags::TAB_VALID)))
         {
             rRange.aEnd = rRange.aStart;  // sheet must be initialized identical to first sheet
             ScRefFlags nRawRes2 = ScRefFlags::ZERO;
-            nRes2 = lcl_ScAddress_Parse_OOo( p + nPos+ 1, pDoc, rRange.aEnd, nRawRes2, pExtInfo, &rRange, nullptr);
+            nRes2 = lcl_ScAddress_Parse_OOo( p + nPos+ 1, pDoc, rRange.aEnd, nRawRes2,
+                    pExtInfo, &rRange, nullptr, pErrRef);
             if (!((nRes1 & ScRefFlags::VALID) && (nRes2 & ScRefFlags::VALID)) &&
                     // If not fully valid addresses, check if both have a valid
                     // column or row, and both have valid (or omitted) sheet references.
@@ -1622,7 +1697,8 @@ static ScRefFlags lcl_ScRange_Parse_OOo( ScRange& rRange,
 ScRefFlags ScRange::Parse( const OUString& rString, ScDocument* pDoc,
                            const ScAddress::Details& rDetails,
                            ScAddress::ExternalInfo* pExtInfo,
-                           const uno::Sequence<sheet::ExternalLinkInfo>* pExternalLinks )
+                           const uno::Sequence<sheet::ExternalLinkInfo>* pExternalLinks,
+                           const OUString* pErrRef )
 {
     if (rString.isEmpty())
         return ScRefFlags::ZERO;
@@ -1644,7 +1720,7 @@ ScRefFlags ScRange::Parse( const OUString& rString, ScDocument* pDoc,
         default:
         case formula::FormulaGrammar::CONV_OOO:
         {
-            return lcl_ScRange_Parse_OOo( *this, rString, pDoc, pExtInfo );
+            return lcl_ScRange_Parse_OOo( *this, rString, pDoc, pExtInfo, pErrRef );
         }
     }
 }

@@ -312,10 +312,11 @@ private:
     bool IsOpCode( const OUString&, bool bInArray );
     bool IsOpCode2( const OUString& );
     bool IsString();
-    bool IsReference( const OUString& );
-    bool IsSingleReference( const OUString& );
-    bool IsPredetectedReference(const OUString&);
-    bool IsDoubleReference( const OUString& );
+    bool IsReference( const OUString& rSymbol, const OUString* pErrRef = nullptr );
+    bool IsSingleReference( const OUString& rSymbol, const OUString* pErrRef = nullptr );
+    bool IsDoubleReference( const OUString& rSymbol, const OUString* pErrRef = nullptr );
+    bool IsPredetectedReference( const OUString& rSymbol );
+    bool IsPredetectedErrRefReference( const OUString& rName, const OUString* pErrRef );
     bool IsMacro( const OUString& );
     bool IsNamedRange( const OUString& );
     bool IsExternalNamedRange( const OUString& rSymbol, bool& rbInvalidExternalNameRange );

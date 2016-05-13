@@ -320,7 +320,8 @@ public:
                     const Details& rDetails = detailsOOOa1,
                     ExternalInfo* pExtInfo = nullptr,
                     const css::uno::Sequence<css::sheet::ExternalLinkInfo>* pExternalLinks = nullptr,
-                    sal_Int32* pSheetEndPos = nullptr );
+                    sal_Int32* pSheetEndPos = nullptr,
+                    const OUString* pErrRef = nullptr );
 
     SC_DLLPUBLIC void Format( OStringBuffer& r, ScRefFlags nFlags = ScRefFlags::ZERO,
                                   const ScDocument* pDocument = nullptr,
@@ -504,7 +505,8 @@ public:
     SC_DLLPUBLIC ScRefFlags Parse( const OUString&, ScDocument* = nullptr,
                                    const ScAddress::Details& rDetails = ScAddress::detailsOOOa1,
                                    ScAddress::ExternalInfo* pExtInfo = nullptr,
-                                   const css::uno::Sequence<css::sheet::ExternalLinkInfo>* pExternalLinks = nullptr );
+                                   const css::uno::Sequence<css::sheet::ExternalLinkInfo>* pExternalLinks = nullptr,
+                                   const OUString* pErrRef = nullptr );
 
     SC_DLLPUBLIC ScRefFlags ParseAny( const OUString&, ScDocument* = nullptr,
                                       const ScAddress::Details& rDetails = ScAddress::detailsOOOa1 );
