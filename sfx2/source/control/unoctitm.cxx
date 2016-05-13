@@ -702,7 +702,14 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const css::util::URL& aURL,
                         {
                             // execute with arguments - call directly
                             pItem = pDispatcher->Execute(GetId(), nCall, xSet.get(), &aInternalSet, nModifier);
-                            bSuccess = (pItem != nullptr);
+                            if ( pItem != nullptr )
+                            {
+                                if ( dynamic_cast< const SfxBoolItem *>( pItem ) !=  nullptr )
+                                    bSuccess = dynamic_cast< const SfxBoolItem *>( pItem )->GetValue();
+                                else   // all other types are true
+                                    bSuccess = true;
+                            }
+                            // else bSuccess = false look to line 664 it is false
                         }
                         else
                         {
