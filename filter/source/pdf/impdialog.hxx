@@ -106,6 +106,7 @@ protected:
     bool                    mbExportNotesPages;
     bool                    mbUseTransitionEffects;
     bool                    mbIsSkipEmptyPages;
+    bool                    mbIsExportPlaceholders;
     bool                    mbAddStream;
     sal_Int32               mnFormsType;
     bool                    mbExportFormFields;
@@ -220,6 +221,7 @@ class ImpPDFTabGeneralPage : public SfxTabPage
     VclPtr<CheckBox>     mpCbExportNotesPages;
 
     VclPtr<CheckBox>     mpCbExportEmptyPages;
+    VclPtr<CheckBox>     mpCbExportPlaceholders;
     VclPtr<CheckBox>     mpCbAddStream;
 
     VclPtr<CheckBox>     mpCbWatermark;

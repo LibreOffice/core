@@ -261,7 +261,7 @@ public:
     bool IsViewOptionAdjust() const  { return m_pViewOptionAdjust != nullptr; }
     bool NeedNewViewOptionAdjust( const SwViewShell& ) const;
     void ViewOptionAdjustStart( SwViewShell &rSh, const SwViewOption &rViewOptions);
-    void ViewOptionAdjust( SwPrintData const* const pPrtOptions );
+    void ViewOptionAdjust( SwPrintData const* const pPrtOptions, bool setShowPlaceHoldersInPDF );
     void ViewOptionAdjustStop();
     void ViewOptionAdjustCrashPreventionKludge();
 

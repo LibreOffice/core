@@ -5121,6 +5121,12 @@
             </info>
             <value>true</value>
           </prop>
+          <prop oor:name="ExportPlaceholders" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Specifies if placeholder fields are exported to PDF.</desc>
+            </info>
+            <value>true</value>
+          </prop>
           <prop oor:name="OpenBookmarkLevels" oor:type="xs:int" oor:nillable="false">
             <info>
               <desc>Specifies how many bookmark levels should be opened in the
