@@ -53,6 +53,141 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 
+//const sal_uInt32 TimeOutSec = 90;   // time out is 1,5 min
+
+// class is copy from framework/source/services/dispatchhelper.cxx  class DispatchHelper
+class HelpDispatch :  public ::cppu::WeakImplHelper< ::com::sun::star::frame::XDispatchResultListener >
+{
+    //-------------------------------------------
+    // member
+    private:
+        /** used to wait for asynchronous listener callbacks. */
+        ::osl::Condition m_aBlock;
+        css::uno::Any m_aResult;
+        css::uno::Reference< css::uno::XInterface > m_xBroadcaster;
+        css::uno::Reference< css::frame::XDispatch >  m_xDispatch;
+        osl::Mutex m_mutex;
+
+    //-------------------------------------------
+    // interface
+    public:
+        //---------------------------------------
+        // ctor/dtor
+                 HelpDispatch(const css::uno::Reference< css::frame::XDispatch >&  xDispatch) : m_xDispatch(xDispatch) {}
+        virtual ~HelpDispatch() {}
+
+        css::uno::Any SAL_CALL executeDispatch(
+                                        const  css::util::URL&                                  aURL        ,
+                                        sal_Bool                                                SyncronFlag ,
+                                        const css::uno::Sequence< css::beans::PropertyValue >& lArguments   )
+        throw(css::uno::RuntimeException);
+
+        //---------------------------------------
+        // XDispatchResultListener
+        virtual void SAL_CALL dispatchFinished(
+                                const css::frame::DispatchResultEvent& aResult )
+        throw(css::uno::RuntimeException);
+
+        virtual void SAL_CALL disposing(
+                                const css::lang::EventObject& aEvent )
+        throw(css::uno::RuntimeException);
+};
+
+css::uno::Any SAL_CALL HelpDispatch::executeDispatch(
+                                const  css::util::URL&                                  aURL        ,
+                                sal_Bool                                                SyncronFlag ,
+                                const css::uno::Sequence< css::beans::PropertyValue >& lArguments   )
+    throw(css::uno::RuntimeException)
+{
+    css::uno::Reference< css::uno::XInterface > xTHIS(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY);
+    m_aResult.clear();
+
+    // check for valid parameters
+    if (m_xDispatch.is() )
+    {
+        css::uno::Reference< css::frame::XNotifyingDispatch > xNotifyDispatch (m_xDispatch, css::uno::UNO_QUERY);
+
+        // make sure that synchronous execution is used (if possible)
+        css::uno::Sequence< css::beans::PropertyValue > aArguments( lArguments );
+        sal_Int32 nLength = lArguments.getLength();
+        aArguments.realloc( nLength + 1 );
+        aArguments[ nLength ].Name = OUString("SynchronMode");
+        aArguments[ nLength ].Value <<= (sal_Bool) SyncronFlag;
+
+        if (xNotifyDispatch.is())
+        {
+            // Time out for a notification,  time out is 1,5 min
+            //TimeValue tv = {TimeOutSec, 0};
+            // dispatch it with guaranteed notification
+            // Here we can hope for a result ... instead of the normal dispatch.
+            css::uno::Reference< css::frame::XDispatchResultListener > xListener(xTHIS, css::uno::UNO_QUERY);
+            /* SAFE { */
+            osl::ClearableMutexGuard aWriteLock(m_mutex);
+            m_xBroadcaster = css::uno::Reference< css::uno::XInterface >(xNotifyDispatch, css::uno::UNO_QUERY);
+            m_aBlock.reset();
+            aWriteLock.clear();
+            /* } SAFE */
+            // dispatch it, and should be wait for the right return result
+            xNotifyDispatch->dispatchWithNotification(aURL, aArguments, xListener);
+            // wait here but this is the main thread and then it blocks
+            // if(m_aBlock.wait(&tv) != ::osl::Condition::result_ok)
+            if(!m_aBlock.check())   // is the result here
+                m_aResult.clear();  // no, okay then no result
+        }
+        else
+        {
+            // dispatch it without any chance to get a result
+            m_xDispatch->dispatch( aURL, aArguments );
+        }
+    }
+
+    return m_aResult;
+}
+
+
+
+//_______________________________________________
+
+/** callback for started dispatch with guaranteed notifications.
+
+    We must save the result, so the method executeDispatch() can return it.
+    Further we must release the broadcaster (otherwise it can't die)
+    and unblock the waiting executeDispatch() request.
+
+    @param  aResult
+                describes the result of the dispatch operation
+ */
+void SAL_CALL HelpDispatch::dispatchFinished( const css::frame::DispatchResultEvent& aResult )
+    throw(css::uno::RuntimeException)
+{
+    /* SAFE { */
+    osl::MutexGuard aWriteLock(m_mutex);
+
+    m_aResult <<= aResult;
+    m_aBlock.set();
+    m_xBroadcaster.clear();
+
+    /* } SAFE */
+}
+
+/** we has to realease our broadcaster reference.
+
+    @param aEvent
+                describe the source of this event and MUST be our save broadcaster!
+ */
+void SAL_CALL HelpDispatch::disposing( const css::lang::EventObject& )
+    throw(css::uno::RuntimeException)
+{
+    /* SAFE { */
+    osl::MutexGuard aWriteLock(m_mutex);
+
+    m_aResult.clear();
+    m_aBlock.set();
+    m_xBroadcaster.clear();
+
+    /* } SAFE */
+}
+
 BindDispatch_Impl::BindDispatch_Impl( const css::uno::Reference< css::frame::XDispatch > & rDisp, const css::util::URL& rURL, SfxStateCache *pStateCache, const SfxSlot* pS )
     : xDisp( rDisp )
     , aURL( rURL )
@@ -162,17 +297,22 @@ void BindDispatch_Impl::Release()
 }
 
 
-void BindDispatch_Impl::Dispatch( const uno::Sequence < beans::PropertyValue >& aProps, bool bForceSynchron )
+DispatchState BindDispatch_Impl::Dispatch( const uno::Sequence < beans::PropertyValue >& aProps, bool bForceSynchron )
 {
+    DispatchState eRet = DispatchState::NONE;
+
     if ( xDisp.is() && aStatus.IsEnabled )
     {
-        sal_Int32 nLength = aProps.getLength();
-        uno::Sequence < beans::PropertyValue > aProps2 = aProps;
-        aProps2.realloc(nLength+1);
-        aProps2[nLength].Name = "SynchronMode";
-        aProps2[nLength].Value <<= bForceSynchron ;
-        xDisp->dispatch( aURL, aProps2 );
+        css::uno::Reference< HelpDispatch > xHelper(new HelpDispatch(xDisp));
+        ::com::sun::star::uno::Any aResult = xHelper->executeDispatch(aURL, bForceSynchron, aProps);
+        frame::DispatchResultEvent aEvent;
+        aResult >>= aEvent;
+
+        eRet = aEvent.State == ::com::sun::star::frame::DispatchResultState::SUCCESS ? DispatchState::TRUE : DispatchState::FALSE;
+
     }
+
+    return eRet;
 }
 
 
@@ -479,17 +619,22 @@ css::uno::Reference< css::frame::XDispatch >  SfxStateCache::GetDispatch() const
     return css::uno::Reference< css::frame::XDispatch > ();
 }
 
-void SfxStateCache::Dispatch( const SfxItemSet* pSet, bool bForceSynchron )
+DispatchState SfxStateCache::Dispatch( const SfxItemSet* pSet, bool bForceSynchron )
 {
     // protect pDispatch against destruction in the call
     css::uno::Reference < css::frame::XStatusListener > xKeepAlive( pDispatch );
+    DispatchState eRet = DispatchState::NONE;
+
     if ( pDispatch )
     {
         uno::Sequence < beans::PropertyValue > aArgs;
         if (pSet)
             TransformItems( nId, *pSet, aArgs );
-        pDispatch->Dispatch( aArgs, bForceSynchron );
+
+        eRet = pDispatch->Dispatch( aArgs, bForceSynchron );
     }
+
+    return eRet;
 }
 
 

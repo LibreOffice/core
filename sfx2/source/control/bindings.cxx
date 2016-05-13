@@ -1101,10 +1101,15 @@ const SfxPoolItem* SfxBindings::Execute_Impl( sal_uInt16 nId, const SfxPoolItem*
                 aReq.AppendItem( **ppItems++ );
 
         // cache binds to an external dispatch provider
-        pCache->Dispatch( aReq.GetArgs(), nCallMode == SfxCallMode::SYNCHRON );
-        SfxPoolItem *pVoid = new SfxVoidItem( nId );
-        DeleteItemOnIdle( pVoid );
-        return pVoid;
+        DispatchState eRet = pCache->Dispatch( aReq.GetArgs(), nCallMode == SfxCallMode::SYNCHRON );
+        SfxPoolItem *pPool;
+        if ( eRet == DispatchState::NONE )
+            pPool = new SfxVoidItem( nId );
+        else
+            pPool = new SfxBoolItem( nId, eRet == DispatchState::TRUE);
+
+        DeleteItemOnIdle( pPool );
+        return pPool;
     }
 
     // slot is handled internally by SfxDispatcher
