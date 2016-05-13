@@ -53,10 +53,15 @@ enum GalleryBrowserTravel
     GALLERYBROWSERTRAVEL_NEXT = 4
 };
 
-
-#define GALLERY_ITEM_THEMENAME  0x00000001
-#define GALLERY_ITEM_TITLE      0x00000002
-#define GALLERY_ITEM_PATH       0x00000004
+enum class GalleryItemFlags {
+    ThemeName  = 0x0001,
+    Title      = 0x0002,
+    Path       = 0x0004
+};
+namespace o3tl
+{
+    template<> struct typed_flags<GalleryItemFlags> : is_typed_flags<GalleryItemFlags, 0x0007> {};
+}
 
 
 class GalleryToolBox : public ToolBox
@@ -132,7 +137,7 @@ private:
 
 public:
 
-    static OUString     GetItemText( const GalleryTheme& rTheme, const SgaObject& rObj, sal_uIntPtr nItemTextFlags );
+    static OUString     GetItemText( const GalleryTheme& rTheme, const SgaObject& rObj, GalleryItemFlags nItemTextFlags );
 
 public:
 

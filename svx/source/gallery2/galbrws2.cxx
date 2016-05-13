@@ -1173,7 +1173,7 @@ void GalleryBrowser2::Execute( sal_uInt16 nId )
 
                 if( pObj )
                 {
-                    const OUString  aOldTitle( GetItemText( *mpCurTheme, *pObj, GALLERY_ITEM_TITLE ) );
+                    const OUString  aOldTitle( GetItemText( *mpCurTheme, *pObj, GalleryItemFlags::Title ) );
 
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                     if(pFact)
@@ -1235,19 +1235,19 @@ void GalleryBrowser2::Execute( sal_uInt16 nId )
     }
 }
 
-OUString GalleryBrowser2::GetItemText( const GalleryTheme& rTheme, const SgaObject& rObj, sal_uIntPtr nItemTextFlags )
+OUString GalleryBrowser2::GetItemText( const GalleryTheme& rTheme, const SgaObject& rObj, GalleryItemFlags nItemTextFlags )
 {
     OUString          aRet;
 
     const INetURLObject& aURL(rObj.GetURL());
 
-    if( nItemTextFlags & GALLERY_ITEM_THEMENAME )
+    if( nItemTextFlags & GalleryItemFlags::ThemeName )
     {
         aRet += rTheme.GetName();
         aRet += " - ";
     }
 
-    if( nItemTextFlags & GALLERY_ITEM_TITLE )
+    if( nItemTextFlags & GalleryItemFlags::Title )
     {
         OUString aTitle( rObj.GetTitle() );
 
@@ -1263,16 +1263,16 @@ OUString GalleryBrowser2::GetItemText( const GalleryTheme& rTheme, const SgaObje
         aRet += aTitle;
     }
 
-    if( nItemTextFlags & GALLERY_ITEM_PATH )
+    if( nItemTextFlags & GalleryItemFlags::Path )
     {
         const OUString aPath( aURL.getFSysPath( INetURLObject::FSYS_DETECT ) );
 
-        if( !aPath.isEmpty() && ( nItemTextFlags & GALLERY_ITEM_TITLE ) )
+        if( !aPath.isEmpty() && ( nItemTextFlags & GalleryItemFlags::Title ) )
             aRet += " (";
 
         aRet += aURL.getFSysPath( INetURLObject::FSYS_DETECT );
 
-        if( !aPath.isEmpty() && ( nItemTextFlags & GALLERY_ITEM_TITLE ) )
+        if( !aPath.isEmpty() && ( nItemTextFlags & GalleryItemFlags::Title ) )
             aRet += ")";
     }
 
