@@ -25,32 +25,34 @@
 #include <list>
 
 class SvpSalGraphics;
+typedef struct _cairo_surface cairo_surface_t;
 
 class VCL_DLLPUBLIC SvpSalVirtualDevice : public SalVirtualDevice
 {
-    sal_uInt16                          m_nBitCount;
-    basebmp::BitmapDeviceSharedPtr      m_aDevice;
+    DeviceFormat                        m_eFormat;
+    cairo_surface_t*                    m_pSurface;
     std::list< SvpSalGraphics* >        m_aGraphics;
 
 public:
-    SvpSalVirtualDevice( sal_uInt16 nBitCount ) : m_nBitCount(nBitCount) {}
+    SvpSalVirtualDevice(DeviceFormat eFormat)
+        : m_eFormat(eFormat)
+        , m_pSurface(nullptr)
+    {
+    }
     virtual ~SvpSalVirtualDevice();
 
     // SalVirtualDevice
-    virtual SalGraphics*    AcquireGraphics() SAL_OVERRIDE;
-    virtual void            ReleaseGraphics( SalGraphics* pGraphics ) SAL_OVERRIDE;
+    virtual SalGraphics*    AcquireGraphics() override;
+    virtual void            ReleaseGraphics( SalGraphics* pGraphics ) override;
 
-    virtual bool        SetSize( long nNewDX, long nNewDY ) SAL_OVERRIDE;
+    virtual bool        SetSize( long nNewDX, long nNewDY ) override;
     virtual bool        SetSizeUsingBuffer( long nNewDX, long nNewDY,
-                                            const basebmp::RawMemorySharedArray &pBuffer,
-                                            const bool bTopDown
-                                          ) SAL_OVERRIDE;
-
-    basebmp::BitmapDeviceSharedPtr getBitmapDevice() { return m_aDevice; }
+                                            sal_uInt8 * pBuffer
+                                          ) override;
 
     // SalGeometryProvider
-    virtual long GetWidth() const SAL_OVERRIDE { return m_aDevice.get() ? m_aDevice->getSize().getX() : 0; }
-    virtual long GetHeight() const SAL_OVERRIDE { return m_aDevice.get() ? m_aDevice->getSize().getY() : 0; }
+    virtual long GetWidth() const override;
+    virtual long GetHeight() const override;
 };
 
 #endif // INCLUDED_VCL_INC_HEADLESS_SVPVD_HXX

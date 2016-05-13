@@ -17,28 +17,46 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_HEADLESS_SVPPRN_HXX
-#define INCLUDED_VCL_INC_HEADLESS_SVPPRN_HXX
+#include <sal/types.h>
 
-#include <vcl/jobdata.hxx>
-#include "generic/printergfx.hxx"
-#include "generic/printerjob.hxx"
-#include "generic/genprn.h"
+#include <cassert>
 
-#include "vclpluginapi.h"
+#include <rtl/instance.hxx>
+#include <tools/debug.hxx>
 
-class SvpSalInfoPrinter : public PspSalInfoPrinter
+#include "unx/geninst.h"
+#include "unx/glyphcache.hxx"
+#include "headless/svpgdi.hxx"
+
+namespace
 {
-public:
-    virtual bool Setup( SalFrame* pFrame, ImplJobSetup* pSetupData ) override;
-};
+    struct GlyphCacheHolder
+    {
+    private:
+        GlyphCache* m_pSvpGlyphCache;
+    public:
+        GlyphCacheHolder()
+        {
+            m_pSvpGlyphCache = new GlyphCache;
+        }
+        GlyphCache& getGlyphCache()
+        {
+            return *m_pSvpGlyphCache;
+        }
+        ~GlyphCacheHolder()
+        {
+            delete m_pSvpGlyphCache;
+        }
+    };
 
-class SvpSalPrinter : public PspSalPrinter
+    struct theGlyphCacheHolder :
+        public rtl::Static<GlyphCacheHolder, theGlyphCacheHolder>
+    {};
+}
+
+GlyphCache& SvpSalGraphics::getPlatformGlyphCache()
 {
-public:
-    SvpSalPrinter( SalInfoPrinter* pInfoPrinter );
-};
-
-#endif // INCLUDED_VCL_INC_HEADLESS_SVPPRN_HXX
+    return theGlyphCacheHolder::get().getGlyphCache();
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

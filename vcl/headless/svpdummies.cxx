@@ -26,7 +26,7 @@
 SvpSalObject::SvpSalObject()
 {
     // fast and easy cross-platform wiping of the data
-    memset( (void *)&m_aSystemChildData, 0, sizeof( SystemEnvData ) );
+    memset( static_cast<void *>(&m_aSystemChildData), 0, sizeof( SystemEnvData ) );
     m_aSystemChildData.nSize = sizeof( SystemEnvData );
 }
 
@@ -35,7 +35,6 @@ SvpSalObject::~SvpSalObject()
 }
 
 void SvpSalObject::ResetClipRegion() {}
-sal_uInt16 SvpSalObject::GetClipRegionType() { return 0; }
 void SvpSalObject::BeginSetClipRegion( sal_uLong ) {}
 void SvpSalObject::UnionClipRegion( long, long, long, long ) {}
 void SvpSalObject::EndSetClipRegion() {}
@@ -62,11 +61,6 @@ Rectangle SvpSalSystem::GetDisplayScreenPosSizePixel( unsigned int nScreen )
     if( nScreen == 0 )
         aRect = Rectangle( Point(0,0), Size(VIRTUAL_DESKTOP_WIDTH,VIRTUAL_DESKTOP_HEIGHT) );
     return aRect;
-}
-
-OUString SvpSalSystem::GetDisplayScreenName( unsigned int nScreen )
-{
-   return "VirtualScreen " + OUString::number(nScreen);
 }
 
 int SvpSalSystem::ShowNativeDialog( const OUString&, const OUString&,
