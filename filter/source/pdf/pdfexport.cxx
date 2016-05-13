@@ -553,6 +553,8 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                     rFilterData[ nData ].Value >>= maSignCertificate;
                 else if ( rFilterData[ nData ].Name == "SignatureTSA" )
                     rFilterData[ nData ].Value >>= msSignTSA;
+                else if ( rFilterData[ nData ].Name == "ExportPlaceholders" )
+                    rFilterData[ nData ].Value >>= mbExportPlaceholders;
             }
             aContext.URL        = aURL.GetMainURL(INetURLObject::DECODE_TO_IURI);
 
@@ -820,7 +822,7 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                 pPDFExtOutDevData->SetIsReduceImageResolution( mbReduceImageResolution );
                 pPDFExtOutDevData->SetIsExportNamedDestinations( mbExportBmkToDest );
 
-                Sequence< PropertyValue > aRenderOptions( 6 );
+                Sequence< PropertyValue > aRenderOptions( 7 );
                 aRenderOptions[ 0 ].Name = "RenderDevice";
                 aRenderOptions[ 0 ].Value <<= Reference< awt::XDevice >( pXDevice );
                 aRenderOptions[ 1 ].Name = "ExportNotesPages";
@@ -834,6 +836,8 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                 aRenderOptions[ 4 ].Value <<= mbSkipEmptyPages;
                 aRenderOptions[ 5 ].Name = "PageRange";
                 aRenderOptions[ 5 ].Value <<= aPageRange;
+                aRenderOptions[ 6 ].Name = "ExportPlaceholders";
+                aRenderOptions[ 6 ].Value <<= mbExportPlaceholders;
 
                 if( !aPageRange.isEmpty() || !aSelection.hasValue() )
                 {
