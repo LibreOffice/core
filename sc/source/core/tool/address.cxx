@@ -168,6 +168,38 @@ static const sal_Unicode* lcl_eatWhiteSpace( const sal_Unicode* p )
     return p;
 }
 
+// Compare ignore case ASCII.
+static bool lcl_isString( const sal_Unicode* p1, const OUString& rStr )
+{
+    const size_t n = rStr.getLength();
+    if (!n)
+        return false;
+    const sal_Unicode* p2 = rStr.getStr();
+    for (size_t i=0; i<n; ++i)
+    {
+        if (!p1[i])
+            return false;
+        if (p1[i] != p2[i])
+        {
+            sal_Unicode c1 = p1[i];
+            if ('A' <= c1 && c1 <= 'Z')
+                c1 += 0x20;
+            if (c1 < 'a' || 'z' < c1)
+                return false;   // not a letter
+
+            sal_Unicode c2 = p2[i];
+            if ('A' <= c2 && c2 <= 'Z')
+                c2 += 0x20;
+            if (c2 < 'a' || 'z' < c2)
+                return false;   // not a letter to match
+
+            if (c1 != c2)
+                return false;   // lower case doesn't match either
+        }
+    }
+    return true;
+}
+
 /** Determines the number of sheets an external reference spans and sets
     rRange.aEnd.nTab accordingly. If a sheet is not found, the corresponding
     bits in rFlags are cleared. pExtInfo is filled if it wasn't already. If in
@@ -258,7 +290,8 @@ static bool lcl_ScRange_External_TabSpan(
 static const sal_Unicode * lcl_XL_ParseSheetRef( const sal_Unicode* start,
                                                  OUString& rExternTabName,
                                                  bool bAllow3D,
-                                                 const sal_Unicode* pMsoxlQuoteStop )
+                                                 const sal_Unicode* pMsoxlQuoteStop,
+                                                 const OUString* pErrRef )
 {
     OUString aTabName;
     const sal_Unicode *p = start;
@@ -300,6 +333,12 @@ static const sal_Unicode * lcl_XL_ParseSheetRef( const sal_Unicode* start,
         p = parseQuotedName(p, aTabName);
         if (aTabName.isEmpty())
             return nullptr;
+    }
+    else if (pErrRef && lcl_isString( p, *pErrRef) && p[pErrRef->getLength()] == '!')
+    {
+        p += pErrRef->getLength();  // position after "#REF!" on '!'
+        // XXX NOTE: caller has to check the name and that it wasn't quoted.
+        aTabName = *pErrRef;
     }
     else
     {
@@ -435,7 +474,8 @@ const sal_Unicode* ScRange::Parse_XL_Header(
                                 OUString& rEndTabName,
                                 ScRefFlags& nFlags,
                                 bool bOnlyAcceptSingle,
-                                const uno::Sequence<sheet::ExternalLinkInfo>* pExternalLinks )
+                                const uno::Sequence<sheet::ExternalLinkInfo>* pExternalLinks,
+                                const OUString* pErrRef )
 {
     const sal_Unicode* startTabs, *start = p;
     ScRefFlags nSaveFlags = nFlags;
@@ -528,17 +568,19 @@ const sal_Unicode* ScRange::Parse_XL_Header(
     }
 
     startTabs = p;
-    p = lcl_XL_ParseSheetRef( p, rStartTabName, !bOnlyAcceptSingle, pMsoxlQuoteStop);
+    p = lcl_XL_ParseSheetRef( p, rStartTabName, !bOnlyAcceptSingle, pMsoxlQuoteStop, pErrRef);
     if( nullptr == p )
         return start;       // invalid tab
     if (bOnlyAcceptSingle && *p == ':')
         return nullptr;        // 3D
+    const sal_Unicode* startEndTabs = nullptr;
     if( p != startTabs )
     {
         nFlags |= ScRefFlags::TAB_VALID | ScRefFlags::TAB_3D | ScRefFlags::TAB_ABS;
         if( *p == ':' ) // 3d ref
         {
-            p = lcl_XL_ParseSheetRef( p+1, rEndTabName, false, pMsoxlQuoteStop);
+            startEndTabs = p + 1;
+            p = lcl_XL_ParseSheetRef( startEndTabs, rEndTabName, false, pMsoxlQuoteStop, pErrRef);
             if( p == nullptr )
             {
                 nFlags = nSaveFlags;
@@ -583,7 +625,7 @@ const sal_Unicode* ScRange::Parse_XL_Header(
         }
 
         SCTAB nTab;
-        if (!pDoc->GetTable(rStartTabName, nTab))
+        if ((pErrRef && *startTabs != '\'' && rStartTabName == *pErrRef) || !pDoc->GetTable(rStartTabName, nTab))
         {
             // invalid table name.
             nFlags &= ~ScRefFlags::TAB_VALID;
@@ -595,7 +637,8 @@ const sal_Unicode* ScRange::Parse_XL_Header(
 
         if (!rEndTabName.isEmpty())
         {
-            if (!pDoc->GetTable(rEndTabName, nTab))
+            if ((pErrRef && startEndTabs && *startEndTabs != '\'' && rEndTabName == *pErrRef) ||
+                    !pDoc->GetTable(rEndTabName, nTab))
             {
                 // invalid table name.
                 nFlags &= ~ScRefFlags::TAB2_VALID;
@@ -847,7 +890,8 @@ static ScRefFlags lcl_ScRange_Parse_XL_R1C1( ScRange& r,
 
 static inline const sal_Unicode* lcl_a1_get_col( const sal_Unicode* p,
                                                  ScAddress* pAddr,
-                                                 ScRefFlags* nFlags )
+                                                 ScRefFlags* nFlags,
+                                                 const OUString* pErrRef )
 {
     SCCOL nCol;
 
@@ -855,6 +899,14 @@ static inline const sal_Unicode* lcl_a1_get_col( const sal_Unicode* p,
     {
         *nFlags |= ScRefFlags::COL_ABS;
         p++;
+    }
+
+    if (pErrRef && lcl_isString( p, *pErrRef))
+    {
+        p += pErrRef->getLength();
+        *nFlags &= ~ScRefFlags::COL_VALID;
+        pAddr->SetCol(-1);
+        return p;
     }
 
     if( !rtl::isAsciiAlpha( *p ) )
@@ -874,7 +926,8 @@ static inline const sal_Unicode* lcl_a1_get_col( const sal_Unicode* p,
 
 static inline const sal_Unicode* lcl_a1_get_row( const sal_Unicode* p,
                                                  ScAddress* pAddr,
-                                                 ScRefFlags* nFlags )
+                                                 ScRefFlags* nFlags,
+                                                 const OUString* pErrRef )
 {
     const sal_Unicode *pEnd;
     long int n;
@@ -883,6 +936,14 @@ static inline const sal_Unicode* lcl_a1_get_row( const sal_Unicode* p,
     {
         *nFlags |= ScRefFlags::ROW_ABS;
         p++;
+    }
+
+    if (pErrRef && lcl_isString( p, *pErrRef))
+    {
+        p += pErrRef->getLength();
+        *nFlags &= ~ScRefFlags::ROW_VALID;
+        pAddr->SetRow(-1);
+        return p;
     }
 
     n = sal_Unicode_strtol( p, &pEnd ) - 1;
@@ -909,7 +970,8 @@ static ScRefFlags lcl_ScRange_Parse_XL_A1( ScRange& r,
                                            bool bOnlyAcceptSingle,
                                            ScAddress::ExternalInfo* pExtInfo,
                                            const uno::Sequence<sheet::ExternalLinkInfo>* pExternalLinks,
-                                           sal_Int32* pSheetEndPos )
+                                           sal_Int32* pSheetEndPos,
+                                           const OUString* pErrRef )
 {
     const sal_Unicode* const pStart = p;
     if (pSheetEndPos)
@@ -919,7 +981,7 @@ static ScRefFlags lcl_ScRange_Parse_XL_A1( ScRange& r,
     ScRefFlags nFlags = ScRefFlags::VALID | ScRefFlags::TAB_VALID, nFlags2 = ScRefFlags::TAB_VALID;
 
     p = r.Parse_XL_Header( p, pDoc, aExternDocName, aStartTabName,
-            aEndTabName, nFlags, bOnlyAcceptSingle, pExternalLinks );
+            aEndTabName, nFlags, bOnlyAcceptSingle, pExternalLinks, pErrRef );
 
     ScRefFlags nBailOutFlags = ScRefFlags::ZERO;
     if (pSheetEndPos && pStart < p && (nFlags & ScRefFlags::TAB_VALID) && (nFlags & ScRefFlags::TAB_3D))
@@ -935,20 +997,20 @@ static ScRefFlags lcl_ScRange_Parse_XL_A1( ScRange& r,
     if( nullptr == p )
         return nBailOutFlags;
 
-    tmp1 = lcl_a1_get_col( p, &r.aStart, &nFlags );
+    tmp1 = lcl_a1_get_col( p, &r.aStart, &nFlags, pErrRef);
     if( tmp1 == nullptr )          // Is it a row only reference 3:5
     {
         if( bOnlyAcceptSingle ) // by definition full row refs are ranges
             return nBailOutFlags;
 
-        tmp1 = lcl_a1_get_row( p, &r.aStart, &nFlags );
+        tmp1 = lcl_a1_get_row( p, &r.aStart, &nFlags, pErrRef);
 
         tmp1 = lcl_eatWhiteSpace( tmp1 );
         if( !tmp1 || *tmp1++ != ':' ) // Even a singleton requires ':' (eg 2:2)
             return nBailOutFlags;
 
         tmp1 = lcl_eatWhiteSpace( tmp1 );
-        tmp2 = lcl_a1_get_row( tmp1, &r.aEnd, &nFlags2 );
+        tmp2 = lcl_a1_get_row( tmp1, &r.aEnd, &nFlags2, pErrRef);
         if( !tmp2 || *tmp2 != 0 )   // Must have fully parsed a singleton.
             return nBailOutFlags;
 
@@ -960,7 +1022,7 @@ static ScRefFlags lcl_ScRange_Parse_XL_A1( ScRange& r,
         return nFlags;
     }
 
-    tmp2 = lcl_a1_get_row( tmp1, &r.aStart, &nFlags );
+    tmp2 = lcl_a1_get_row( tmp1, &r.aStart, &nFlags, pErrRef);
     if( tmp2 == nullptr )          // check for col only reference F:H
     {
         if( bOnlyAcceptSingle ) // by definition full col refs are ranges
@@ -971,7 +1033,7 @@ static ScRefFlags lcl_ScRange_Parse_XL_A1( ScRange& r,
             return nBailOutFlags;
 
         tmp1 = lcl_eatWhiteSpace( tmp1 );
-        tmp2 = lcl_a1_get_col( tmp1, &r.aEnd, &nFlags2 );
+        tmp2 = lcl_a1_get_col( tmp1, &r.aEnd, &nFlags2, pErrRef);
         if( !tmp2 || *tmp2 != 0 )   // Must have fully parsed a singleton.
             return nBailOutFlags;
 
@@ -1020,10 +1082,10 @@ static ScRefFlags lcl_ScRange_Parse_XL_A1( ScRange& r,
 
     p = tmp2;
     p = lcl_eatWhiteSpace( p+1 );   // after ':'
-    tmp1 = lcl_a1_get_col( p, &r.aEnd, &nFlags2 );
+    tmp1 = lcl_a1_get_col( p, &r.aEnd, &nFlags2, pErrRef);
     if( !tmp1 && aEndTabName.isEmpty() )     // Probably the aEndTabName was specified after the first range
     {
-        p = lcl_XL_ParseSheetRef( p, aEndTabName, false, nullptr );
+        p = lcl_XL_ParseSheetRef( p, aEndTabName, false, nullptr, pErrRef);
         if( p )
         {
             SCTAB nTab = 0;
@@ -1034,13 +1096,13 @@ static ScRefFlags lcl_ScRange_Parse_XL_A1( ScRange& r,
             }
             if (*p == '!' || *p == ':')
                 p = lcl_eatWhiteSpace( p+1 );
-            tmp1 = lcl_a1_get_col( p, &r.aEnd, &nFlags2 );
+            tmp1 = lcl_a1_get_col( p, &r.aEnd, &nFlags2, pErrRef);
         }
     }
     if( !tmp1 ) // strange, but maybe valid singleton
         return isValidSingleton( nFlags, nFlags2) ? nFlags : (nFlags & ~ScRefFlags::VALID);
 
-    tmp2 = lcl_a1_get_row( tmp1, &r.aEnd, &nFlags2 );
+    tmp2 = lcl_a1_get_row( tmp1, &r.aEnd, &nFlags2, pErrRef);
     if( !tmp2 ) // strange, but maybe valid singleton
         return isValidSingleton( nFlags, nFlags2) ? nFlags : (nFlags & ~ScRefFlags::VALID);
 
@@ -1054,38 +1116,6 @@ static ScRefFlags lcl_ScRange_Parse_XL_A1( ScRange& r,
 
     applyStartToEndFlags(nFlags, nFlags2);
     return nFlags;
-}
-
-// Compare ignore case ASCII.
-static bool lcl_isString( const sal_Unicode* p1, const OUString& rStr )
-{
-    const size_t n = rStr.getLength();
-    if (!n)
-        return false;
-    const sal_Unicode* p2 = rStr.getStr();
-    for (size_t i=0; i<n; ++i)
-    {
-        if (!p1[i])
-            return false;
-        if (p1[i] != p2[i])
-        {
-            sal_Unicode c1 = p1[i];
-            if ('A' <= c1 && c1 <= 'Z')
-                c1 += 0x20;
-            if (c1 < 'a' || 'z' < c1)
-                return false;   // not a letter
-
-            sal_Unicode c2 = p2[i];
-            if ('A' <= c2 && c2 <= 'Z')
-                c2 += 0x20;
-            if (c2 < 'a' || 'z' < c2)
-                return false;   // not a letter to match
-
-            if (c1 != c2)
-                return false;   // lower case doesn't match either
-        }
-    }
-    return true;
 }
 
 /**
@@ -1432,7 +1462,7 @@ static ScRefFlags lcl_ScAddress_Parse ( const sal_Unicode* p, ScDocument* pDoc, 
             ScRefFlags nFlags = lcl_ScRange_Parse_XL_A1(
                     rRange, p, pDoc, true, pExtInfo,
                     (rDetails.eConv == formula::FormulaGrammar::CONV_XL_OOX ? pExternalLinks : nullptr),
-                    pSheetEndPos);
+                    pSheetEndPos, pErrRef);
             rAddr = rRange.aStart;
             return nFlags;
         }
@@ -1709,7 +1739,8 @@ ScRefFlags ScRange::Parse( const OUString& rString, ScDocument* pDoc,
         case formula::FormulaGrammar::CONV_XL_OOX:
         {
             return lcl_ScRange_Parse_XL_A1( *this, rString.getStr(), pDoc, false, pExtInfo,
-                    (rDetails.eConv == formula::FormulaGrammar::CONV_XL_OOX ? pExternalLinks : nullptr), nullptr );
+                    (rDetails.eConv == formula::FormulaGrammar::CONV_XL_OOX ? pExternalLinks : nullptr),
+                    nullptr, pErrRef );
         }
 
         case formula::FormulaGrammar::CONV_XL_R1C1:
@@ -1761,11 +1792,11 @@ ScRefFlags ScRange::ParseCols( const OUString& rStr, ScDocument* pDoc,
     case formula::FormulaGrammar::CONV_OOO: // No full col refs in OOO yet, assume XL notation
     case formula::FormulaGrammar::CONV_XL_A1:
     case formula::FormulaGrammar::CONV_XL_OOX:
-        if (nullptr != (p = lcl_a1_get_col( p, &aStart, &ignored ) ) )
+        if (nullptr != (p = lcl_a1_get_col( p, &aStart, &ignored, nullptr) ) )
         {
             if( p[0] == ':')
             {
-                if( nullptr != (p = lcl_a1_get_col( p+1, &aEnd, &ignored )))
+                if( nullptr != (p = lcl_a1_get_col( p+1, &aEnd, &ignored, nullptr)))
                 {
                     nRes = ScRefFlags::COL_VALID;
                 }
@@ -1820,11 +1851,11 @@ void ScRange::ParseRows( const OUString& rStr, ScDocument* pDoc,
     case formula::FormulaGrammar::CONV_OOO: // No full row refs in OOO yet, assume XL notation
     case formula::FormulaGrammar::CONV_XL_A1:
     case formula::FormulaGrammar::CONV_XL_OOX:
-        if (nullptr != (p = lcl_a1_get_row( p, &aStart, &ignored ) ) )
+        if (nullptr != (p = lcl_a1_get_row( p, &aStart, &ignored, nullptr) ) )
         {
             if( p[0] == ':')
             {
-                if( nullptr != (p = lcl_a1_get_row( p+1, &aEnd, &ignored )))
+                if( nullptr != (p = lcl_a1_get_row( p+1, &aEnd, &ignored, nullptr)))
                 {
                 }
             }

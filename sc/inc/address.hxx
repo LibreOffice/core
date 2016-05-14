@@ -526,6 +526,7 @@ public:
         @param pExternalLinks  pointer to ExternalLinkInfo sequence, may be
             NULL for non-filter usage, in which case indices such as [1] are
             not resolved.
+        @param pErrRef  pointer to "#REF!" string if to be accepted.
         @returns
             Pointer to the position after '!' if successfully parsed, and
             rExternDocName, rStartTabName and/or rEndTabName filled if
@@ -539,7 +540,8 @@ public:
                                         OUString& rExternDocName, OUString& rStartTabName,
                                         OUString& rEndTabName, ScRefFlags& nFlags,
                                         bool bOnlyAcceptSingle,
-                                        const css::uno::Sequence<css::sheet::ExternalLinkInfo>* pExternalLinks = nullptr );
+                                        const css::uno::Sequence<css::sheet::ExternalLinkInfo>* pExternalLinks = nullptr,
+                                        const OUString* pErrRef = nullptr );
 
     SC_DLLPUBLIC OUString Format(ScRefFlags nFlags = ScRefFlags::ZERO, const ScDocument* pDocument = nullptr,
                                  const ScAddress::Details& rDetails = ScAddress::detailsOOOa1) const;
