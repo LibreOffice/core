@@ -53,6 +53,7 @@ namespace o3tl {
 #define WINDOW_HELPID                   0x4000
 
 // For "WorkWindow" resources:
+
 #define WORKWIN_SHOWNORMAL              0
 #define WORKWIN_SHOWMINIMIZED           1
 #define WORKWIN_SHOWMAXIMIZED           2
@@ -61,9 +62,14 @@ namespace o3tl {
 #define RSC_FIXEDIMAGE_IMAGE            0x0001
 
 // For all menu resources:
-#define RSC_MENU_ITEMS                  0x01
-#define RSC_MENU_TEXT                   0x02
-#define RSC_MENU_DEFAULTITEMID          0x04
+enum class RscMenu {
+    Items                  = 0x01,
+    Text                   = 0x02,
+    DefaultItemId          = 0x04
+};
+namespace o3tl {
+    template<> struct typed_flags<RscMenu> : is_typed_flags<RscMenu, 0x07> {};
+}
 
 // "MenuItem" resource options:
 #define RSC_MENUITEM_SEPARATOR          0x001

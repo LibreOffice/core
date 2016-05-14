@@ -899,13 +899,13 @@ RscTop * RscTypCont::InitClassMenu( RscTop * pSuper,
         aBaseLst.push_back( pCont = new RscCont( pHS->getID( "ContMenuItem" ), RSC_NOTYPE ) );
         pCont->SetTypeClass( pClassMenuItem );
         nId = aNmTb.Put( "ItemList", VARNAME );
-        pClassMenu->SetVariable( nId, pCont, nullptr, 0, RSC_MENU_ITEMS );
+        pClassMenu->SetVariable( nId, pCont, nullptr, 0, (sal_uInt32)RscMenu::Items );
     }
     nId = aNmTb.Put( "Text", VARNAME );
-    pClassMenu->SetVariable( nId, &aLangString, nullptr, 0, RSC_MENU_TEXT );
+    pClassMenu->SetVariable( nId, &aLangString, nullptr, 0, (sal_uInt32)RscMenu::Text );
     nId = aNmTb.Put( "DefaultItemId", VARNAME );
     pClassMenu->SetVariable( nId, &aIdUShort, nullptr, 0,
-                                 RSC_MENU_DEFAULTITEMID );
+                                 (sal_uInt32)RscMenu::DefaultItemId );
 
     return pClassMenu;
 }

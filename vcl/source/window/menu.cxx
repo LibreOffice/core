@@ -2805,9 +2805,9 @@ PopupMenu::PopupMenu( const ResId& rResId )
     rResId.SetRT( RSC_MENU );
     GetRes( rResId );
 
-    sal_uLong nObjMask = ReadLongRes();
+    RscMenu nObjMask = (RscMenu)ReadLongRes();
 
-    if( nObjMask & RSC_MENU_ITEMS )
+    if( nObjMask & RscMenu::Items )
     {
         sal_uLong nObjFollows = ReadLongRes();
         // insert menu items
@@ -2818,11 +2818,11 @@ PopupMenu::PopupMenu( const ResId& rResId )
         }
     }
 
-    if( nObjMask & RSC_MENU_TEXT )
+    if( nObjMask & RscMenu::Text )
     {
         aTitleText = ReadStringRes();
     }
-    if( nObjMask & RSC_MENU_DEFAULTITEMID )
+    if( nObjMask & RscMenu::DefaultItemId )
         SetDefaultItem( sal::static_int_cast<sal_uInt16>(ReadLongRes()) );
 }
 
