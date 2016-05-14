@@ -465,12 +465,13 @@ class MenuFloatingWindow;
 class LifecycleTest;
 
 namespace svt { class PopupWindowControllerImpl; }
+enum class RSWND;
 
 struct WindowResHeader
 {
     sal_uLong nObjMask;
-    OString aHelpId;
-    sal_uLong nRSStyle;
+    OString   aHelpId;
+    RSWND     nRSStyle;
 };
 
 namespace vcl {

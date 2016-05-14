@@ -59,7 +59,7 @@ WindowResHeader Window::ImplLoadResHeader( const ResId& rResId )
     aHeader.aHelpId = ImplAutoHelpID( rResId.GetResMgr() );
 
     // ResourceStyle
-    aHeader.nRSStyle = ReadLongRes();
+    aHeader.nRSStyle = (RSWND)ReadLongRes();
     // WinBits
     ReadLongRes();
 
@@ -112,10 +112,10 @@ void Window::ImplLoadRes( const ResId& rResId )
             aSize.Height() = ImplLogicUnitToPixelY( ReadLongRes(), eSizeMap );
     }
 
-    sal_uLong nRSStyle = aHeader.nRSStyle;
+    RSWND nRSStyle = aHeader.nRSStyle;
 
     // looks bad due to optimization
-    if ( nRSStyle & RSWND_CLIENTSIZE )
+    if ( nRSStyle & RSWND::CLIENTSIZE )
     {
         if ( bPos )
             SetPosPixel( aPos );
@@ -129,7 +129,7 @@ void Window::ImplLoadRes( const ResId& rResId )
     else if ( bSize )
         SetSizePixel( aSize );
 
-    if ( nRSStyle & RSWND_DISABLED )
+    if ( nRSStyle & RSWND::DISABLED )
         Enable( false );
 
     if ( nObjMask & WINDOW_TEXT )
