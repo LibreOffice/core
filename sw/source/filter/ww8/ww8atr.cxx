@@ -852,9 +852,10 @@ bool MSWordExportBase::HasRefToObject( sal_uInt16 nTyp, const OUString* pName, s
     SwIterator<SwFormatField, SwFieldType> aFormatFields( *pType );
     for ( SwFormatField* pFormatField = aFormatFields.First(); pFormatField; pFormatField = aFormatFields.Next() )
     {
-        const SwTextNode* pNd = pFormatField->GetTextField()->GetpTextNode();
+        const SwTextNode* pNd;
         if ( pFormatField->GetTextField() && nTyp == pFormatField->GetField()->GetSubType() &&
-             nullptr != pNd && pNd->GetNodes().IsDocNodes() )
+             nullptr != ( pNd  = pFormatField->GetTextField()->GetpTextNode() ) &&
+             pNd->GetNodes().IsDocNodes() )
         {
             const SwGetRefField& rRField = *static_cast< SwGetRefField* >( pFormatField->GetField() );
             switch ( nTyp )
