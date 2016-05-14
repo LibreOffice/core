@@ -427,29 +427,29 @@ void Menu::InsertItem( const ResId& rResId )
     if( ! pMgr )
         return;
 
-    sal_uLong              nObjMask;
+    RscMenuItem              nObjMask;
 
     GetRes( rResId.SetRT( RSC_MENUITEM ) );
-    nObjMask    = ReadLongRes();
+    nObjMask    = (RscMenuItem)ReadLongRes();
 
     bool bSep = false;
-    if ( nObjMask & RSC_MENUITEM_SEPARATOR )
+    if ( nObjMask & RscMenuItem::Separator )
         bSep = ReadShortRes() != 0;
 
     sal_uInt16 nItemId = 1;
-    if ( nObjMask & RSC_MENUITEM_ID )
+    if ( nObjMask & RscMenuItem::Id )
         nItemId = sal::static_int_cast<sal_uInt16>(ReadLongRes());
 
     MenuItemBits nStatus = MenuItemBits::NONE;
-    if ( nObjMask & RSC_MENUITEM_STATUS )
+    if ( nObjMask & RscMenuItem::Status )
         nStatus = sal::static_int_cast<MenuItemBits>(ReadLongRes());
 
     OUString aText;
-    if ( nObjMask & RSC_MENUITEM_TEXT )
+    if ( nObjMask & RscMenuItem::Text )
         aText = ReadStringRes();
 
     // create item
-    if ( nObjMask & RSC_MENUITEM_BITMAP )
+    if ( nObjMask & RscMenuItem::Bitmap )
     {
         if ( !bSep )
         {
@@ -468,14 +468,14 @@ void Menu::InsertItem( const ResId& rResId )
         InsertSeparator();
 
     OUString aHelpText;
-    if ( nObjMask & RSC_MENUITEM_HELPTEXT )
+    if ( nObjMask & RscMenuItem::HelpText )
     {
         aHelpText = ReadStringRes();
         if( !bSep )
             SetHelpText( nItemId, aHelpText );
     }
 
-    if ( nObjMask & RSC_MENUITEM_HELPID )
+    if ( nObjMask & RscMenuItem::HelpId )
     {
         OString aHelpId( ReadByteStringRes() );
         if ( !bSep )
@@ -485,29 +485,18 @@ void Menu::InsertItem( const ResId& rResId )
     if( !bSep )
         SetHelpText( nItemId, aHelpText );
 
-    if ( nObjMask & RSC_MENUITEM_KEYCODE )
-    {
-        if ( !bSep )
-            SetAccelKey( nItemId, KeyCode( ResId( static_cast<RSHEADER_TYPE*>(GetClassRes()), *pMgr ) ) );
-        IncrementRes( GetObjSizeRes( static_cast<RSHEADER_TYPE*>(GetClassRes()) ) );
-    }
-    if( nObjMask & RSC_MENUITEM_CHECKED )
-    {
-        if ( !bSep )
-            CheckItem( nItemId, ReadShortRes() != 0 );
-    }
-    if ( nObjMask & RSC_MENUITEM_DISABLE )
+    if ( nObjMask & RscMenuItem::Disable )
     {
         if ( !bSep )
             EnableItem( nItemId, ReadShortRes() == 0 );
     }
-    if ( nObjMask & RSC_MENUITEM_COMMAND )
+    if ( nObjMask & RscMenuItem::Command )
     {
         OUString aCommandStr = ReadStringRes();
         if ( !bSep )
             SetItemCommand( nItemId, aCommandStr );
     }
-    if ( nObjMask & RSC_MENUITEM_MENU )
+    if ( nObjMask & RscMenuItem::Menu )
     {
         if ( !bSep )
         {

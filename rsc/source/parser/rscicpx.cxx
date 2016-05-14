@@ -771,8 +771,7 @@ RscTop * RscTypCont::InitClassAccel( RscTop * pSuper, RscTop * pClassAccelItem )
 }
 
 RscTop * RscTypCont::InitClassMenuItem( RscTop * pSuper,
-                                        RscTop * pClassBitmap,
-                                                                                RscTop * pClassKeyCode )
+                                        RscTop * pClassBitmap )
 {
     Atom        nId;
     RscTop *    pClassMenuItem;
@@ -785,10 +784,10 @@ RscTop * RscTypCont::InitClassMenuItem( RscTop * pSuper,
     // initialize variables
     nId = aNmTb.Put( "Separator", VARNAME );
     pClassMenuItem->SetVariable( nId, &aBool, nullptr, 0,
-                                 RSC_MENUITEM_SEPARATOR );
+                                 (sal_uInt32)RscMenuItem::Separator );
     nId = aNmTb.Put( "Identifier", VARNAME );
     pClassMenuItem->SetVariable( nId, &aIdNoZeroUShort, nullptr, 0,
-                                 RSC_MENUITEM_ID );
+                                 (sal_uInt32)RscMenuItem::Id );
     {
         RscFlag *   pFlag;
         RscClient * pClient;
@@ -813,7 +812,7 @@ RscTop * RscTypCont::InitClassMenuItem( RscTop * pSuper,
         nVarId = aNmTb.Put( "_MenuItemFlags", VARNAME );
         pClassMenuItem->SetVariable( nVarId, pFlag, nullptr,
                                      VAR_HIDDEN | VAR_NOENUM,
-                                     RSC_MENUITEM_STATUS );
+                                     (sal_uInt32)RscMenuItem::Status );
 
         // add client variables
         aBaseLst.push_back(
@@ -854,28 +853,22 @@ RscTop * RscTypCont::InitClassMenuItem( RscTop * pSuper,
     }
     nId = aNmTb.Put( "Text", VARNAME );
     pClassMenuItem->SetVariable( nId, &aLangString, nullptr, 0,
-                                 RSC_MENUITEM_TEXT );
+                                 (sal_uInt32)RscMenuItem::Text );
     nId = aNmTb.Put( "ItemBitmap", VARNAME );
     pClassMenuItem->SetVariable( nId, pClassBitmap, nullptr, 0,
-                                 RSC_MENUITEM_BITMAP );
+                                 (sal_uInt32)RscMenuItem::Bitmap );
     nId = aNmTb.Put( "HelpText", VARNAME );
     pClassMenuItem->SetVariable( nId, &aLangString, nullptr, 0,
-                                 RSC_MENUITEM_HELPTEXT );
+                                 (sal_uInt32)RscMenuItem::HelpText );
     nId = aNmTb.Put( "HelpID", VARNAME );
     pClassMenuItem->SetVariable( nId, &aStringLiteral, nullptr, 0,
-                                 RSC_MENUITEM_HELPID );
-    nId = aNmTb.Put( "AccelKey", VARNAME );
-    pClassMenuItem->SetVariable( nId, pClassKeyCode, nullptr, 0,
-                                 RSC_MENUITEM_KEYCODE );
-    nId = aNmTb.Put( "Check", VARNAME );
-    pClassMenuItem->SetVariable( nId, &aBool, nullptr, 0,
-                                 RSC_MENUITEM_CHECKED );
+                                 (sal_uInt32)RscMenuItem::HelpId );
     nId = aNmTb.Put( "Disable", VARNAME );
     pClassMenuItem->SetVariable( nId, &aBool, nullptr, 0,
-                                 RSC_MENUITEM_DISABLE );
+                                 (sal_uInt32)RscMenuItem::Disable );
     nId = aNmTb.Put( "Command", VARNAME );
     pClassMenuItem->SetVariable( nId, &aString, nullptr, 0,
-                                    RSC_MENUITEM_COMMAND );
+                                    (sal_uInt32)RscMenuItem::Command );
 
     return pClassMenuItem;
 }
