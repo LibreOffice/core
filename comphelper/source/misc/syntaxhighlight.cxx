@@ -24,18 +24,24 @@
 #include <rtl/character.hxx>
 #include <unicode/uchar.h>
 #include <comphelper/syntaxhighlight.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
 // Flags for character properties
-#define CHAR_START_IDENTIFIER   0x0001
-#define CHAR_IN_IDENTIFIER      0x0002
-#define CHAR_START_NUMBER       0x0004
-#define CHAR_IN_NUMBER          0x0008
-#define CHAR_IN_HEX_NUMBER      0x0010
-#define CHAR_IN_OCT_NUMBER      0x0020
-#define CHAR_START_STRING       0x0040
-#define CHAR_OPERATOR           0x0080
-#define CHAR_SPACE              0x0100
-#define CHAR_EOL                0x0200
+enum class CharFlags {
+    StartIdentifier   = 0x0001,
+    InIdentifier      = 0x0002,
+    StartNumber       = 0x0004,
+    InNumber          = 0x0008,
+    InHexNumber       = 0x0010,
+    InOctNumber       = 0x0020,
+    StartString       = 0x0040,
+    Operator          = 0x0080,
+    Space             = 0x0100,
+    EOL               = 0x0200
+};
+namespace o3tl {
+    template<> struct typed_flags<CharFlags> : is_typed_flags<CharFlags, 0x03ff> {};
+}
 
 // ##########################################################################
 // ATTENTION: all these words need to be in lower case
@@ -259,10 +265,10 @@ namespace
 class SyntaxHighlighter::Tokenizer
 {
     // Character information tables
-    sal_uInt16 aCharTypeTab[256];
+    CharFlags aCharTypeTab[256];
 
     // Auxiliary function: testing of the character flags
-    bool testCharFlags(sal_Unicode c, sal_uInt16 nTestFlags) const;
+    bool testCharFlags(sal_Unicode c, CharFlags nTestFlags) const;
 
     // Get new token, EmptyString == nothing more over there
     bool getNextToken(const sal_Unicode*& pos, /*out*/TokenType& reType,
@@ -283,16 +289,16 @@ public:
 };
 
 // Helper function: test character flag
-bool SyntaxHighlighter::Tokenizer::testCharFlags(sal_Unicode c, sal_uInt16 nTestFlags) const
+bool SyntaxHighlighter::Tokenizer::testCharFlags(sal_Unicode c, CharFlags nTestFlags) const
 {
     bool bRet = false;
     if( c != 0 && c <= 255 )
     {
-        bRet = ( (aCharTypeTab[c] & nTestFlags) != 0 );
+        bRet = bool(aCharTypeTab[c] & nTestFlags);
     }
     else if( c > 255 )
     {
-        bRet = (( CHAR_START_IDENTIFIER | CHAR_IN_IDENTIFIER ) & nTestFlags) != 0
+        bRet = (( CharFlags::StartIdentifier | CharFlags::InIdentifier ) & nTestFlags)
             && isAlpha(c);
     }
     return bRet;
@@ -319,23 +325,23 @@ bool SyntaxHighlighter::Tokenizer::getNextToken(const sal_Unicode*& pos, /*out*/
 
     //*** Go through all possibilities ***
     // Space?
-    if ( testCharFlags( c, CHAR_SPACE ) )
+    if ( testCharFlags( c, CharFlags::Space ) )
     {
-        while( testCharFlags( *pos, CHAR_SPACE ) )
+        while( testCharFlags( *pos, CharFlags::Space ) )
             ++pos;
 
         reType = TokenType::Whitespace;
     }
 
     // Identifier?
-    else if ( testCharFlags( c, CHAR_START_IDENTIFIER ) )
+    else if ( testCharFlags( c, CharFlags::StartIdentifier ) )
     {
         bool bIdentifierChar;
         do
         {
             // Naechstes Zeichen holen
             c = *pos;
-            bIdentifierChar = testCharFlags( c, CHAR_IN_IDENTIFIER );
+            bIdentifierChar = testCharFlags( c, CharFlags::InIdentifier );
             if( bIdentifierChar )
                 ++pos;
         }
@@ -373,7 +379,7 @@ bool SyntaxHighlighter::Tokenizer::getNextToken(const sal_Unicode*& pos, /*out*/
                     {
                         // Remove all characters until end of line or EOF
                         sal_Unicode cPeek = *pos;
-                        while( cPeek != 0 && !testCharFlags( cPeek, CHAR_EOL ) )
+                        while( cPeek != 0 && !testCharFlags( cPeek, CharFlags::EOL ) )
                         {
                             cPeek = *++pos;
                         }
@@ -387,7 +393,7 @@ bool SyntaxHighlighter::Tokenizer::getNextToken(const sal_Unicode*& pos, /*out*/
 
     // Operator?
     // only for BASIC '\'' should be a comment, otherwise it is a normal string and handled there
-    else if ( testCharFlags( c, CHAR_OPERATOR ) || ( (c == '\'') && (aLanguage==HighlighterLanguage::Basic)) )
+    else if ( testCharFlags( c, CharFlags::Operator ) || ( (c == '\'') && (aLanguage==HighlighterLanguage::Basic)) )
     {
         // parameters for SQL view
         if ( (c==':') || (c=='?'))
@@ -413,7 +419,7 @@ bool SyntaxHighlighter::Tokenizer::getNextToken(const sal_Unicode*& pos, /*out*/
             if (cPeekNext=='-')
             {
                 // Remove all characters until end of line or EOF
-                while( cPeekNext != 0 && !testCharFlags( cPeekNext, CHAR_EOL ) )
+                while( cPeekNext != 0 && !testCharFlags( cPeekNext, CharFlags::EOL ) )
                 {
                     ++pos;
                     cPeekNext = *pos;
@@ -427,7 +433,7 @@ bool SyntaxHighlighter::Tokenizer::getNextToken(const sal_Unicode*& pos, /*out*/
            if (cPeekNext=='/')
            {
                // Remove all characters until end of line or EOF
-               while( cPeekNext != 0 && !testCharFlags( cPeekNext, CHAR_EOL ) )
+               while( cPeekNext != 0 && !testCharFlags( cPeekNext, CharFlags::EOL ) )
                {
                    ++pos;
                    cPeekNext = *pos;
@@ -443,7 +449,7 @@ bool SyntaxHighlighter::Tokenizer::getNextToken(const sal_Unicode*& pos, /*out*/
                 // Skip all characters until end of input or end of line:
                 for (;;) {
                     c = *pos;
-                    if (c == 0 || testCharFlags(c, CHAR_EOL)) {
+                    if (c == 0 || testCharFlags(c, CharFlags::EOL)) {
                         break;
                     }
                     ++pos;
@@ -469,7 +475,7 @@ bool SyntaxHighlighter::Tokenizer::getNextToken(const sal_Unicode*& pos, /*out*/
     }
 
     // Number?
-    else if( testCharFlags( c, CHAR_START_NUMBER ) )
+    else if( testCharFlags( c, CharFlags::StartNumber ) )
     {
         reType = TokenType::Number;
 
@@ -487,7 +493,7 @@ bool SyntaxHighlighter::Tokenizer::getNextToken(const sal_Unicode*& pos, /*out*/
                 nRadix = 8;     // Octal base
 
                 // Read all numbers
-                while( testCharFlags( *pos, CHAR_IN_OCT_NUMBER ) )
+                while( testCharFlags( *pos, CharFlags::InOctNumber ) )
                     ++pos;
             }
             // Hexadecimal?
@@ -498,7 +504,7 @@ bool SyntaxHighlighter::Tokenizer::getNextToken(const sal_Unicode*& pos, /*out*/
                 nRadix = 16;     // Hexadecimal base
 
                 // Read all numbers
-                while( testCharFlags( *pos, CHAR_IN_HEX_NUMBER ) )
+                while( testCharFlags( *pos, CharFlags::InHexNumber ) )
                     ++pos;
             }
             else
@@ -514,7 +520,7 @@ bool SyntaxHighlighter::Tokenizer::getNextToken(const sal_Unicode*& pos, /*out*/
             bool bAfterExpChar = false;
 
             // Read all numbers
-            while( testCharFlags( *pos, CHAR_IN_NUMBER ) ||
+            while( testCharFlags( *pos, CharFlags::InNumber ) ||
                     (bAfterExpChar && *pos == '+' ) ||
                     (bAfterExpChar && *pos == '-' ) )
                     // After exponent +/- are OK, too
@@ -526,7 +532,7 @@ bool SyntaxHighlighter::Tokenizer::getNextToken(const sal_Unicode*& pos, /*out*/
     }
 
     // String?
-    else if( testCharFlags( c, CHAR_START_STRING ) )
+    else if( testCharFlags( c, CharFlags::StartString ) )
     {
         // Remember which character has opened the string
         sal_Unicode cEndString = c;
@@ -544,7 +550,7 @@ bool SyntaxHighlighter::Tokenizer::getNextToken(const sal_Unicode*& pos, /*out*/
                 break;
             }
             c = *pos++;
-            if( testCharFlags( c, CHAR_EOL ) )
+            if( testCharFlags( c, CharFlags::EOL ) )
             {
                 // ERROR: unterminated string literal
                 reType = TokenType::Error;
@@ -563,11 +569,11 @@ bool SyntaxHighlighter::Tokenizer::getNextToken(const sal_Unicode*& pos, /*out*/
     }
 
     // End of line?
-    else if( testCharFlags( c, CHAR_EOL ) )
+    else if( testCharFlags( c, CharFlags::EOL ) )
     {
         // If another EOL character comes, read it
         sal_Unicode cNext = *pos;
-        if( cNext != c && testCharFlags( cNext, CHAR_EOL ) )
+        if( cNext != c && testCharFlags( cNext, CharFlags::EOL ) )
             ++pos;
 
         reType = TokenType::EOL;
@@ -588,7 +594,7 @@ SyntaxHighlighter::Tokenizer::Tokenizer( HighlighterLanguage aLang ): aLanguage(
     sal_uInt16 i;
 
     // Allowed characters for identifiers
-    sal_uInt16 nHelpMask = (sal_uInt16)( CHAR_START_IDENTIFIER | CHAR_IN_IDENTIFIER );
+    CharFlags nHelpMask = CharFlags::StartIdentifier | CharFlags::InIdentifier;
     for( i = 'a' ; i <= 'z' ; i++ )
         aCharTypeTab[i] |= nHelpMask;
     for( i = 'A' ; i <= 'Z' ; i++ )
@@ -597,65 +603,65 @@ SyntaxHighlighter::Tokenizer::Tokenizer( HighlighterLanguage aLang ): aLanguage(
     aCharTypeTab[(int)'$'] |= nHelpMask;
 
     // Digit (can be identifier and number)
-    nHelpMask = (sal_uInt16)( CHAR_IN_IDENTIFIER | CHAR_START_NUMBER |
-                         CHAR_IN_NUMBER | CHAR_IN_HEX_NUMBER );
+    nHelpMask = CharFlags::InIdentifier | CharFlags::StartNumber |
+                         CharFlags::InNumber | CharFlags::InHexNumber;
     for( i = '0' ; i <= '9' ; i++ )
         aCharTypeTab[i] |= nHelpMask;
 
     // Add e, E, . and & here manually
-    aCharTypeTab[(int)'e'] |= CHAR_IN_NUMBER;
-    aCharTypeTab[(int)'E'] |= CHAR_IN_NUMBER;
-    aCharTypeTab[(int)'.'] |= (sal_uInt16)( CHAR_IN_NUMBER | CHAR_START_NUMBER );
-    aCharTypeTab[(int)'&'] |= CHAR_START_NUMBER;
+    aCharTypeTab[(int)'e'] |= CharFlags::InNumber;
+    aCharTypeTab[(int)'E'] |= CharFlags::InNumber;
+    aCharTypeTab[(int)'.'] |= CharFlags::InNumber | CharFlags::StartNumber;
+    aCharTypeTab[(int)'&'] |= CharFlags::StartNumber;
 
     // Hexadecimal digit
     for( i = 'a' ; i <= 'f' ; i++ )
-        aCharTypeTab[i] |= CHAR_IN_HEX_NUMBER;
+        aCharTypeTab[i] |= CharFlags::InHexNumber;
     for( i = 'A' ; i <= 'F' ; i++ )
-        aCharTypeTab[i] |= CHAR_IN_HEX_NUMBER;
+        aCharTypeTab[i] |= CharFlags::InHexNumber;
 
     // Octal digit
     for( i = '0' ; i <= '7' ; i++ )
-        aCharTypeTab[i] |= CHAR_IN_OCT_NUMBER;
+        aCharTypeTab[i] |= CharFlags::InOctNumber;
 
     // String literal start/end characters
-    aCharTypeTab[(int)'\''] |= CHAR_START_STRING;
-    aCharTypeTab[(int)'\"'] |= CHAR_START_STRING;
-    aCharTypeTab[(int)'[']  |= CHAR_START_STRING;
-    aCharTypeTab[(int)'`']  |= CHAR_START_STRING;
+    aCharTypeTab[(int)'\''] |= CharFlags::StartString;
+    aCharTypeTab[(int)'\"'] |= CharFlags::StartString;
+    aCharTypeTab[(int)'[']  |= CharFlags::StartString;
+    aCharTypeTab[(int)'`']  |= CharFlags::StartString;
 
     // Operator characters
-    aCharTypeTab[(int)'!'] |= CHAR_OPERATOR;
-    aCharTypeTab[(int)'%'] |= CHAR_OPERATOR;
-    // aCharTypeTab[(int)'&'] |= CHAR_OPERATOR;     Removed because of #i14140
-    aCharTypeTab[(int)'('] |= CHAR_OPERATOR;
-    aCharTypeTab[(int)')'] |= CHAR_OPERATOR;
-    aCharTypeTab[(int)'*'] |= CHAR_OPERATOR;
-    aCharTypeTab[(int)'+'] |= CHAR_OPERATOR;
-    aCharTypeTab[(int)','] |= CHAR_OPERATOR;
-    aCharTypeTab[(int)'-'] |= CHAR_OPERATOR;
-    aCharTypeTab[(int)'/'] |= CHAR_OPERATOR;
-    aCharTypeTab[(int)':'] |= CHAR_OPERATOR;
-    aCharTypeTab[(int)'<'] |= CHAR_OPERATOR;
-    aCharTypeTab[(int)'='] |= CHAR_OPERATOR;
-    aCharTypeTab[(int)'>'] |= CHAR_OPERATOR;
-    aCharTypeTab[(int)'?'] |= CHAR_OPERATOR;
-    aCharTypeTab[(int)'^'] |= CHAR_OPERATOR;
-    aCharTypeTab[(int)'|'] |= CHAR_OPERATOR;
-    aCharTypeTab[(int)'~'] |= CHAR_OPERATOR;
-    aCharTypeTab[(int)'{'] |= CHAR_OPERATOR;
-    aCharTypeTab[(int)'}'] |= CHAR_OPERATOR;
-    // aCharTypeTab[(int)'['] |= CHAR_OPERATOR;     Removed because of #i17826
-    aCharTypeTab[(int)']'] |= CHAR_OPERATOR;
-    aCharTypeTab[(int)';'] |= CHAR_OPERATOR;
+    aCharTypeTab[(int)'!'] |= CharFlags::Operator;
+    aCharTypeTab[(int)'%'] |= CharFlags::Operator;
+    // aCharTypeTab[(int)'&'] |= CharFlags::Operator;     Removed because of #i14140
+    aCharTypeTab[(int)'('] |= CharFlags::Operator;
+    aCharTypeTab[(int)')'] |= CharFlags::Operator;
+    aCharTypeTab[(int)'*'] |= CharFlags::Operator;
+    aCharTypeTab[(int)'+'] |= CharFlags::Operator;
+    aCharTypeTab[(int)','] |= CharFlags::Operator;
+    aCharTypeTab[(int)'-'] |= CharFlags::Operator;
+    aCharTypeTab[(int)'/'] |= CharFlags::Operator;
+    aCharTypeTab[(int)':'] |= CharFlags::Operator;
+    aCharTypeTab[(int)'<'] |= CharFlags::Operator;
+    aCharTypeTab[(int)'='] |= CharFlags::Operator;
+    aCharTypeTab[(int)'>'] |= CharFlags::Operator;
+    aCharTypeTab[(int)'?'] |= CharFlags::Operator;
+    aCharTypeTab[(int)'^'] |= CharFlags::Operator;
+    aCharTypeTab[(int)'|'] |= CharFlags::Operator;
+    aCharTypeTab[(int)'~'] |= CharFlags::Operator;
+    aCharTypeTab[(int)'{'] |= CharFlags::Operator;
+    aCharTypeTab[(int)'}'] |= CharFlags::Operator;
+    // aCharTypeTab[(int)'['] |= CharFlags::Operator;     Removed because of #i17826
+    aCharTypeTab[(int)']'] |= CharFlags::Operator;
+    aCharTypeTab[(int)';'] |= CharFlags::Operator;
 
     // Space
-    aCharTypeTab[(int)' ' ] |= CHAR_SPACE;
-    aCharTypeTab[(int)'\t'] |= CHAR_SPACE;
+    aCharTypeTab[(int)' ' ] |= CharFlags::Space;
+    aCharTypeTab[(int)'\t'] |= CharFlags::Space;
 
     // End of line characters
-    aCharTypeTab[(int)'\r'] |= CHAR_EOL;
-    aCharTypeTab[(int)'\n'] |= CHAR_EOL;
+    aCharTypeTab[(int)'\r'] |= CharFlags::EOL;
+    aCharTypeTab[(int)'\n'] |= CharFlags::EOL;
 
     ppListKeyWords = nullptr;
     nKeyWordCount = 0;
