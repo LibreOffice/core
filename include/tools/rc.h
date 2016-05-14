@@ -72,18 +72,21 @@ namespace o3tl {
 }
 
 // "MenuItem" resource options:
-#define RSC_MENUITEM_SEPARATOR          0x001
-#define RSC_MENUITEM_ID                 0x002
-#define RSC_MENUITEM_STATUS             0x004
-#define RSC_MENUITEM_TEXT               0x008
-#define RSC_MENUITEM_BITMAP             0x010
-#define RSC_MENUITEM_HELPTEXT           0x020
-#define RSC_MENUITEM_HELPID             0x040
-#define RSC_MENUITEM_KEYCODE            0x080
-#define RSC_MENUITEM_MENU               0x100
-#define RSC_MENUITEM_CHECKED            0x200
-#define RSC_MENUITEM_DISABLE            0x400
-#define RSC_MENUITEM_COMMAND            0x800
+enum class RscMenuItem {
+    Separator          = 0x001,
+    Id                 = 0x002,
+    Status             = 0x004,
+    Text               = 0x008,
+    Bitmap             = 0x010,
+    HelpText           = 0x020,
+    HelpId             = 0x040,
+    Menu               = 0x100,
+    Disable            = 0x400,
+    Command            = 0x800
+};
+namespace o3tl {
+    template<> struct typed_flags<RscMenuItem> : is_typed_flags<RscMenuItem, 0xd7f> {};
+}
 
 // "AccelKey" resource options:
 #define ACCELITEM_ACCEL                 0x01

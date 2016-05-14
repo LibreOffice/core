@@ -380,8 +380,7 @@ void RscTypCont::Init()
     pClassAccelItem->SetVariable( nId, pClassAccel, nullptr, VAR_SVDYNAMIC,
                                ACCELITEM_ACCEL );
 
-    RscTop* pClassMenuItem = InitClassMenuItem( pClassMgr, pClassBitmap,
-                                        pLangClassKeyCode );
+    RscTop* pClassMenuItem = InitClassMenuItem( pClassMgr, pClassBitmap);
     pRoot->Insert( pClassMenuItem );
 
     RscTop* pClassMenu = InitClassMenu( pClassMgr, pClassMenuItem );
@@ -390,7 +389,7 @@ void RscTypCont::Init()
     // pClassMenu is only completely defined here
     nId = aNmTb.Put( "SubMenu", VARNAME );
     pClassMenuItem->SetVariable( nId, pClassMenu, nullptr, VAR_SVDYNAMIC,
-                                 RSC_MENUITEM_MENU );
+                                 (sal_uInt32)RscMenuItem::Menu );
 }
 {
     // initialize class

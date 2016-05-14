@@ -198,8 +198,7 @@ class RscTypCont
     RscTop *    InitClassKeyCode( RscTop * pSuper, RscEnum * pKey );
     RscTop *    InitClassAccelItem( RscTop * pSuper, RscTop * pKeyCode );
     RscTop *    InitClassAccel( RscTop * pSuper, RscTop * pClassAccelItem );
-    RscTop *    InitClassMenuItem( RscTop * pSuper, RscTop * pClassBitmap,
-                                   RscTop * pClassKeyCode );
+    RscTop *    InitClassMenuItem( RscTop * pSuper, RscTop * pClassBitmap );
     RscTop *    InitClassMenu( RscTop * pSuper, RscTop * pMenuItem );
 
     RscTop *    InitClassNumericFormatter( RscTop * pSuper );
