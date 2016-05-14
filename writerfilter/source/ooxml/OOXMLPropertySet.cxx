@@ -354,8 +354,10 @@ void OOXMLPropertySet::resolve(Properties & rHandler)
     // be appended to mProperties. I don't think it can cause elements
     // to be deleted. But let's check with < here just to be safe that
     // the indexing below works.
-    for (OOXMLProperty::Pointer_t& pProp : mProperties)
+    for (size_t nIt = 0; nIt < mProperties.size(); ++nIt)
     {
+        OOXMLProperty::Pointer_t pProp = mProperties[nIt];
+
         if (pProp.get() != nullptr)
             pProp->resolve(rHandler);
     }
