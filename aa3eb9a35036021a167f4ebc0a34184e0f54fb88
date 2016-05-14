@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_9406ed1e",
+        "filename": "starmath/inc/token.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2016-05-14T10:44:16Z",
+      "side": 1,
+      "message": "Subtle and a matter of taste, but how about renaming TGUNOPER, TGRBRACES and TGLBRACES to UnOper, RBrace and LBrace (instead of Unoper, RBraces and LBraces) respectively?",
+      "revId": "aa3eb9a35036021a167f4ebc0a34184e0f54fb88",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_74096931",
+        "filename": "starmath/source/mathmlimport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2490,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2016-05-14T10:44:16Z",
+      "side": 1,
+      "message": "This was fixed at 1dbdc947fcc9d843764731e6dae7ce60082576e0.",
+      "revId": "aa3eb9a35036021a167f4ebc0a34184e0f54fb88",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
