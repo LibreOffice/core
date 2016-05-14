@@ -313,47 +313,47 @@ void SvxTabulatorTabPage::Reset(const SfxItemSet* rSet)
     InitTabPos_Impl(nTabPos);
 }
 
-void SvxTabulatorTabPage::DisableControls(const sal_uInt16 nFlag)
+void SvxTabulatorTabPage::DisableControls(const TabulatorDisableFlags nFlag)
 {
-    if ((TABTYPE_LEFT & nFlag) == TABTYPE_LEFT)
+    if (TabulatorDisableFlags::TypeLeft & nFlag)
     {
         m_pLeftTab->Disable();
         m_pLeftWin->Disable();
     }
-    if ( ( TABTYPE_RIGHT & nFlag ) == TABTYPE_RIGHT )
+    if (TabulatorDisableFlags::TypeRight & nFlag)
     {
         m_pRightTab->Disable();
         m_pRightWin->Disable();
     }
-    if ( ( TABTYPE_CENTER & nFlag ) == TABTYPE_CENTER )
+    if (TabulatorDisableFlags::TypeCenter & nFlag)
     {
         m_pCenterTab->Disable();
         m_pCenterWin->Disable();
     }
-    if ( ( TABTYPE_DEZIMAL & nFlag ) == TABTYPE_DEZIMAL )
+    if (TabulatorDisableFlags::TypeDecimal & nFlag)
     {
         m_pDezTab->Disable();
         m_pDezWin->Disable();
         m_pDezCharLabel->Disable();
         m_pDezChar->Disable();
     }
-    if ( ( TABTYPE_ALL & nFlag ) == TABTYPE_ALL )
+    if (TabulatorDisableFlags::TypeMask & nFlag)
          m_pTypeFrame->Disable();
-    if ( ( TABFILL_NONE & nFlag ) == TABFILL_NONE )
+    if (TabulatorDisableFlags::FillNone & nFlag)
         m_pNoFillChar->Disable();
-    if ( ( TABFILL_POINT & nFlag ) == TABFILL_POINT )
+    if (TabulatorDisableFlags::FillPoint & nFlag)
         m_pFillPoints->Disable();
-    if ( ( TABFILL_DASHLINE & nFlag ) == TABFILL_DASHLINE )
+    if (TabulatorDisableFlags::FillDashLine & nFlag)
         m_pFillDashLine->Disable();
-    if ( ( TABFILL_SOLIDLINE & nFlag ) == TABFILL_SOLIDLINE )
+    if (TabulatorDisableFlags::FillSolidLine & nFlag)
         m_pFillSolidLine->Disable();
-    if ( ( TABFILL_SPECIAL & nFlag ) == TABFILL_SPECIAL )
+    if (TabulatorDisableFlags::FillSpecial & nFlag)
     {
         m_pFillSpecial->Disable();
         m_pFillChar->Disable();
     }
-     if ( ( TABFILL_ALL & nFlag ) == TABFILL_ALL )
-         m_pFillFrame->Disable();
+    if (TabulatorDisableFlags::FillMask & nFlag)
+        m_pFillFrame->Disable();
 }
 
 SfxTabPage::sfxpg SvxTabulatorTabPage::DeactivatePage( SfxItemSet* _pSet )
@@ -689,9 +689,9 @@ IMPL_LINK_NOARG_TYPED(SvxTabulatorTabPage, ModifyHdl_Impl, Edit&, void)
 
 void SvxTabulatorTabPage::PageCreated(const SfxAllItemSet& aSet)
 {
-    const SfxUInt16Item* pControlItem = aSet.GetItem<SfxUInt16Item>(SID_SVXTABULATORTABPAGE_CONTROLFLAGS, false);
+    const SfxUInt16Item* pControlItem = aSet.GetItem<SfxUInt16Item>(SID_SVXTABULATORTABPAGE_DISABLEFLAGS, false);
     if (pControlItem)
-        DisableControls(pControlItem->GetValue());
+        DisableControls((TabulatorDisableFlags)pControlItem->GetValue());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
