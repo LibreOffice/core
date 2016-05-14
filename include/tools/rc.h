@@ -21,14 +21,22 @@
 #define INCLUDED_TOOLS_RC_H
 
 #include <tools/rcid.h>
+#include <o3tl/typed_flags_set.hxx>
 
 // Defines for all "Window" resources.
 // (Here are all window styles that are not in WinBits)
 #define RSC_EXTRAMAPUNIT                0xFFFF // do not change that value!
 
 
-#define RSWND_DISABLED                  0x01
-#define RSWND_CLIENTSIZE                0x02
+// Attributes in *.src files
+enum class RSWND {
+    NONE         = 0x00,
+    DISABLED     = 0x01, // "Disable" attribute
+    CLIENTSIZE   = 0x02  // "OutputSize" attribute
+};
+namespace o3tl {
+    template<> struct typed_flags<RSWND> : is_typed_flags<RSWND, 0x03> {};
+}
 
 #define WINDOW_XYMAPMODE                0x0001
 #define WINDOW_X                        0x0002

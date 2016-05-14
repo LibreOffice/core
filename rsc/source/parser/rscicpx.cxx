@@ -219,9 +219,9 @@ RscTop * RscTypCont::InitClassWindow( RscTop * pSuper, RscEnum * pMapUnit,
 
         // set the constants in table
         nDisableId = pHS->getID( "RSWND_DISABLE" );
-        SETCONST( pFlag, nDisableId, RSWND_DISABLED );
+        SETCONST( pFlag, nDisableId, RSWND::DISABLED );
         nOutputSizeId = pHS->getID( "RSWND_OUTPUTSIZE" );
-        SETCONST( pFlag, nOutputSizeId, RSWND_CLIENTSIZE );
+        SETCONST( pFlag, nOutputSizeId, RSWND::CLIENTSIZE );
 
         // add variable
         nVarId = aNmTb.Put( "_RscExtraFlags", VARNAME );
