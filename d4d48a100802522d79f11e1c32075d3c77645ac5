@@ -16,6 +16,24 @@
       "revId": "d4d48a100802522d79f11e1c32075d3c77645ac5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_cffe1c05",
+        "filename": "starmath/source/parse.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 481,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2016-05-14T10:46:27Z",
+      "side": 1,
+      "message": "Do you mean I should put the aTokenTable with same case as before? (\u0027Im\u0027 and not \u0027im\u0027, \u0027Re\u0027 and not \u0027re\u0027, etc.)?\nIf you don\u0027t mean this, I must recognize I don\u0027t understand.",
+      "parentUuid": "da7fb54a_f41c9979",
+      "revId": "d4d48a100802522d79f11e1c32075d3c77645ac5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
