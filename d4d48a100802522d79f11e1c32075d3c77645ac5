@@ -52,6 +52,24 @@
       "revId": "d4d48a100802522d79f11e1c32075d3c77645ac5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_af1ab86c",
+        "filename": "starmath/source/parse.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 481,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2016-05-14T12:32:59Z",
+      "side": 1,
+      "message": "But if I do this, how can it work with \"find(aName.toAsciiLowerCase());\" ?\n\nIf I remove toAsciiLowerCase, it means if the macro contains \"IM(...\"), it won\u0027t be recognized as \"Im\", no?",
+      "parentUuid": "da7fb54a_0f09e42c",
+      "revId": "d4d48a100802522d79f11e1c32075d3c77645ac5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
