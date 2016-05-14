@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_f41c9979",
+        "filename": "starmath/source/parse.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 481,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2016-05-14T10:26:00Z",
+      "side": 1,
+      "message": "Please maintain m_aCurToken.aText the canonical form defined in the original aTokenTable, not as case-insensitive as written by user.",
+      "revId": "d4d48a100802522d79f11e1c32075d3c77645ac5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
