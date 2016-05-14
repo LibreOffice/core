@@ -534,7 +534,7 @@ bool HbLayoutEngine::Layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
                 // apply vertical flags and glyph substitution
                 // XXX: Use HB_DIRECTION_TTB above and apply whatever flags magic
                 // FixupGlyphIndex() is doing, minus the GSUB part.
-                sal_UCS4 aChar = rArgs.mrStr[nCharPos];
+                sal_UCS4 aChar = rArgs.mrStr.iterateCodePoints(&nCharPos, 0);
                 nGlyphIndex = rFont.FixupGlyphIndex(nGlyphIndex, aChar);
 
                 bool bInCluster = false;
