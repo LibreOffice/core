@@ -29,7 +29,10 @@ AuthFallbackDlg::AuthFallbackDlg(Window* pParent, const OUString& instructions,
     m_pBTOk->Enable();
 
     m_pTVInstructions->SetText( instructions );
-    m_pEDUrl->SetText( url );
+    if( url.isEmpty() )
+        m_pEDUrl->Hide();
+    else
+        m_pEDUrl->SetText( url );
 }
 
 AuthFallbackDlg::~AuthFallbackDlg()
