@@ -58,6 +58,7 @@ $(eval $(call gb_Module_add_slowcheck_targets,sc, \
 	CppunitTest_sc_html_export_test \
 	CppunitTest_sc_opencl_test \
 	CppunitTest_sc_copypaste \
+	CppunitTest_sc_functions_test \
 ))
 
 # Disabled to allow the check tinderbox execute the sd tests
