@@ -37,21 +37,24 @@
 #include <svx/dialogs.hrc>
 
 using namespace ::com::sun::star::text;
+
 #define SwFPos SvxSwFramePosString
+
+enum class LB;
 
 struct FrmMap
 {
     SvxSwFramePosString::StringId   eStrId;
     SvxSwFramePosString::StringId   eMirrorStrId;
     short                           nAlign;
-    sal_uLong                           nLBRelations;
+    LB                              nLBRelations;
 };
 
 struct RelationMap
 {
     SvxSwFramePosString::StringId   eStrId;
     SvxSwFramePosString::StringId   eMirrorStrId;
-    sal_uLong  nLBRelation;
+    LB                              nLBRelation;
     short nRelation;
 };
 struct StringIdPair_Impl
@@ -60,75 +63,83 @@ struct StringIdPair_Impl
     SvxSwFramePosString::StringId eVert;
 };
 
-#define LB_FRAME                0x00000001L // paragraph text area
-#define LB_PRTAREA              0x00000002L // paragraph text area + indents
-#define LB_VERT_FRAME           0x00000004L // vertical paragraph text area
-#define LB_VERT_PRTAREA         0x00000008L // vertical paragraph text area + indents
-#define LB_REL_FRM_LEFT         0x00000010L // left paragraph margin
-#define LB_REL_FRM_RIGHT        0x00000020L // right paragraph margin
+enum class LB {
+    NONE                = 0x000000,
+    Frame               = 0x000001, // paragraph text area
+    PrintArea           = 0x000002, // paragraph text area + indents
+    VertFrame           = 0x000004, // vertical paragraph text area
+    VertPrintArea       = 0x000008, // vertical paragraph text area + indents
+    RelFrameLeft        = 0x000010, // left paragraph margin
+    RelFrameRight       = 0x000020, // right paragraph margin
 
-#define LB_REL_PG_LEFT          0x00000040L // left page margin
-#define LB_REL_PG_RIGHT         0x00000080L // right page margin
-#define LB_REL_PG_FRAME         0x00000100L // complete page
-#define LB_REL_PG_PRTAREA       0x00000200L // text area of page
+    RelPageLeft         = 0x000040, // left page margin
+    RelPageRight        = 0x000080, // right page margin
+    RelPageFrame        = 0x000100, // complete page
+    RelPagePrintArea    = 0x000200, // text area of page
 
-#define LB_FLY_REL_PG_LEFT      0x00000400L // left frame margin
-#define LB_FLY_REL_PG_RIGHT     0x00000800L // right frame margin
-#define LB_FLY_REL_PG_FRAME     0x00001000L // complete frame
-#define LB_FLY_REL_PG_PRTAREA   0x00002000L // frame interior
+    FlyRelPageLeft      = 0x000400, // left frame margin
+    FlyRelPageRight     = 0x000800, // right frame margin
+    FlyRelPageFrame     = 0x001000, // complete frame
+    FlyRelPagePrintArea = 0x002000, // frame interior
 
-#define LB_REL_BASE             0x00010000L // as char, relative to baseline
-#define LB_REL_CHAR             0x00020000L // as char, relative to character
-#define LB_REL_ROW              0x00040000L // as char, relative to line
+    RelBase             = 0x004000, // as char, relative to baseline
+    RelChar             = 0x008000, // as char, relative to character
+    RelRow              = 0x010000, // as char, relative to line
 
 // #i22305#
-#define LB_FLY_VERT_FRAME       0x00100000L // vertical entire frame
-#define LB_FLY_VERT_PRTAREA     0x00200000L // vertical frame text area
+    FlyVertFrame        = 0x020000, // vertical entire frame
+    FlyVertPrintArea    = 0x040000, // vertical frame text area
 
 // #i22341#
-#define LB_VERT_LINE            0x00400000L // vertical text line
+    VertLine            = 0x080000, // vertical text line
+
+    LAST = VertLine
+};
+namespace o3tl {
+    template<> struct typed_flags<LB> : is_typed_flags<LB, 0x0fffff> {};
+}
 
 static RelationMap aRelationMap[] =
 {
-    {SwFPos::FRAME,         SwFPos::FRAME,             LB_FRAME,           RelOrientation::FRAME},
-    {SwFPos::PRTAREA,       SwFPos::PRTAREA,           LB_PRTAREA,         RelOrientation::PRINT_AREA},
-    {SwFPos::REL_PG_LEFT,   SwFPos::MIR_REL_PG_LEFT,   LB_REL_PG_LEFT,     RelOrientation::PAGE_LEFT},
-    {SwFPos::REL_PG_RIGHT,  SwFPos::MIR_REL_PG_RIGHT,  LB_REL_PG_RIGHT,    RelOrientation::PAGE_RIGHT},
-    {SwFPos::REL_FRM_LEFT,  SwFPos::MIR_REL_FRM_LEFT,  LB_REL_FRM_LEFT,    RelOrientation::FRAME_LEFT},
-    {SwFPos::REL_FRM_RIGHT, SwFPos::MIR_REL_FRM_RIGHT, LB_REL_FRM_RIGHT,   RelOrientation::FRAME_RIGHT},
-    {SwFPos::REL_PG_FRAME,  SwFPos::REL_PG_FRAME,      LB_REL_PG_FRAME,    RelOrientation::PAGE_FRAME},
-    {SwFPos::REL_PG_PRTAREA,SwFPos::REL_PG_PRTAREA,    LB_REL_PG_PRTAREA,  RelOrientation::PAGE_PRINT_AREA},
-    {SwFPos::REL_CHAR,      SwFPos::REL_CHAR,          LB_REL_CHAR,        RelOrientation::CHAR},
+    {SwFPos::FRAME,         SwFPos::FRAME,             LB::Frame,           RelOrientation::FRAME},
+    {SwFPos::PRTAREA,       SwFPos::PRTAREA,           LB::PrintArea,         RelOrientation::PRINT_AREA},
+    {SwFPos::REL_PG_LEFT,   SwFPos::MIR_REL_PG_LEFT,   LB::RelPageLeft,     RelOrientation::PAGE_LEFT},
+    {SwFPos::REL_PG_RIGHT,  SwFPos::MIR_REL_PG_RIGHT,  LB::RelPageRight,    RelOrientation::PAGE_RIGHT},
+    {SwFPos::REL_FRM_LEFT,  SwFPos::MIR_REL_FRM_LEFT,  LB::RelFrameLeft,    RelOrientation::FRAME_LEFT},
+    {SwFPos::REL_FRM_RIGHT, SwFPos::MIR_REL_FRM_RIGHT, LB::RelFrameRight,   RelOrientation::FRAME_RIGHT},
+    {SwFPos::REL_PG_FRAME,  SwFPos::REL_PG_FRAME,      LB::RelPageFrame,    RelOrientation::PAGE_FRAME},
+    {SwFPos::REL_PG_PRTAREA,SwFPos::REL_PG_PRTAREA,    LB::RelPagePrintArea,  RelOrientation::PAGE_PRINT_AREA},
+    {SwFPos::REL_CHAR,      SwFPos::REL_CHAR,          LB::RelChar,        RelOrientation::CHAR},
 
-    {SwFPos::FLY_REL_PG_LEFT,       SwFPos::FLY_MIR_REL_PG_LEFT,    LB_FLY_REL_PG_LEFT,     RelOrientation::PAGE_LEFT},
-    {SwFPos::FLY_REL_PG_RIGHT,      SwFPos::FLY_MIR_REL_PG_RIGHT,   LB_FLY_REL_PG_RIGHT,    RelOrientation::PAGE_RIGHT},
-    {SwFPos::FLY_REL_PG_FRAME,      SwFPos::FLY_REL_PG_FRAME,       LB_FLY_REL_PG_FRAME,    RelOrientation::PAGE_FRAME},
-    {SwFPos::FLY_REL_PG_PRTAREA,    SwFPos::FLY_REL_PG_PRTAREA,     LB_FLY_REL_PG_PRTAREA,  RelOrientation::PAGE_PRINT_AREA},
+    {SwFPos::FLY_REL_PG_LEFT,       SwFPos::FLY_MIR_REL_PG_LEFT,    LB::FlyRelPageLeft,     RelOrientation::PAGE_LEFT},
+    {SwFPos::FLY_REL_PG_RIGHT,      SwFPos::FLY_MIR_REL_PG_RIGHT,   LB::FlyRelPageRight,    RelOrientation::PAGE_RIGHT},
+    {SwFPos::FLY_REL_PG_FRAME,      SwFPos::FLY_REL_PG_FRAME,       LB::FlyRelPageFrame,    RelOrientation::PAGE_FRAME},
+    {SwFPos::FLY_REL_PG_PRTAREA,    SwFPos::FLY_REL_PG_PRTAREA,     LB::FlyRelPagePrintArea,  RelOrientation::PAGE_PRINT_AREA},
 
-    {SwFPos::REL_BORDER,        SwFPos::REL_BORDER,             LB_VERT_FRAME,          RelOrientation::FRAME},
-    {SwFPos::REL_PRTAREA,       SwFPos::REL_PRTAREA,            LB_VERT_PRTAREA,        RelOrientation::PRINT_AREA},
+    {SwFPos::REL_BORDER,        SwFPos::REL_BORDER,             LB::VertFrame,          RelOrientation::FRAME},
+    {SwFPos::REL_PRTAREA,       SwFPos::REL_PRTAREA,            LB::VertPrintArea,        RelOrientation::PRINT_AREA},
 
     // #i22305#
-    {SwFPos::FLY_REL_PG_FRAME,      SwFPos::FLY_REL_PG_FRAME,       LB_FLY_VERT_FRAME,      RelOrientation::FRAME},
-    {SwFPos::FLY_REL_PG_PRTAREA,    SwFPos::FLY_REL_PG_PRTAREA,     LB_FLY_VERT_PRTAREA,    RelOrientation::PRINT_AREA},
+    {SwFPos::FLY_REL_PG_FRAME,      SwFPos::FLY_REL_PG_FRAME,       LB::FlyVertFrame,      RelOrientation::FRAME},
+    {SwFPos::FLY_REL_PG_PRTAREA,    SwFPos::FLY_REL_PG_PRTAREA,     LB::FlyVertPrintArea,    RelOrientation::PRINT_AREA},
 
     // #i22341#
-    {SwFPos::REL_LINE,  SwFPos::REL_LINE,   LB_VERT_LINE,   RelOrientation::TEXT_LINE}
+    {SwFPos::REL_LINE,  SwFPos::REL_LINE,   LB::VertLine,   RelOrientation::TEXT_LINE}
 };
 
 static RelationMap aAsCharRelationMap[] =
 {
-    {SwFPos::REL_BASE,  SwFPos::REL_BASE,   LB_REL_BASE,   RelOrientation::FRAME},
-    {SwFPos::REL_CHAR,  SwFPos::REL_CHAR,   LB_REL_CHAR,   RelOrientation::FRAME},
-    {SwFPos::REL_ROW,   SwFPos::REL_ROW,   LB_REL_ROW,     RelOrientation::FRAME}
+    {SwFPos::REL_BASE,  SwFPos::REL_BASE,   LB::RelBase,   RelOrientation::FRAME},
+    {SwFPos::REL_CHAR,  SwFPos::REL_CHAR,   LB::RelChar,   RelOrientation::FRAME},
+    {SwFPos::REL_ROW,   SwFPos::REL_ROW,   LB::RelRow,     RelOrientation::FRAME}
 };
 
 /*--------------------------------------------------------------------
     Anchored at page
  --------------------------------------------------------------------*/
 
-#define HORI_PAGE_REL   (LB_REL_PG_FRAME|LB_REL_PG_PRTAREA|LB_REL_PG_LEFT| \
-                        LB_REL_PG_RIGHT)
+#define HORI_PAGE_REL   (LB::RelPageFrame|LB::RelPagePrintArea|LB::RelPageLeft| \
+                        LB::RelPageRight)
 
 static FrmMap aHPageMap[] =
 {
@@ -140,10 +151,10 @@ static FrmMap aHPageMap[] =
 
 static FrmMap aHPageHtmlMap[] =
 {
-    {SwFPos::FROMLEFT,      SwFPos::MIR_FROMLEFT,   HoriOrientation::NONE,      LB_REL_PG_FRAME}
+    {SwFPos::FROMLEFT,      SwFPos::MIR_FROMLEFT,   HoriOrientation::NONE,      LB::RelPageFrame}
 };
 
-#define VERT_PAGE_REL   (LB_REL_PG_FRAME|LB_REL_PG_PRTAREA)
+#define VERT_PAGE_REL   (LB::RelPageFrame|LB::RelPagePrintArea)
 
 static FrmMap aVPageMap[] =
 {
@@ -155,15 +166,15 @@ static FrmMap aVPageMap[] =
 
 static FrmMap aVPageHtmlMap[] =
 {
-    {SwFPos::FROMTOP, SwFPos::FROMTOP,        VertOrientation::NONE,      LB_REL_PG_FRAME}
+    {SwFPos::FROMTOP, SwFPos::FROMTOP,        VertOrientation::NONE,      LB::RelPageFrame}
 };
 
 /*--------------------------------------------------------------------
     Anchored at frame
  --------------------------------------------------------------------*/
 
-#define HORI_FRAME_REL  (LB_FLY_REL_PG_FRAME|LB_FLY_REL_PG_PRTAREA| \
-                        LB_FLY_REL_PG_LEFT|LB_FLY_REL_PG_RIGHT)
+#define HORI_FRAME_REL  (LB::FlyRelPageFrame|LB::FlyRelPagePrintArea| \
+                        LB::FlyRelPageLeft|LB::FlyRelPageRight)
 
 static FrmMap aHFrameMap[] =
 {
@@ -175,13 +186,13 @@ static FrmMap aHFrameMap[] =
 
 static FrmMap aHFlyHtmlMap[] =
 {
-    {SwFPos::LEFT,          SwFPos::MIR_LEFT,       HoriOrientation::LEFT,      LB_FLY_REL_PG_FRAME},
-    {SwFPos::FROMLEFT,      SwFPos::MIR_FROMLEFT,   HoriOrientation::NONE,      LB_FLY_REL_PG_FRAME}
+    {SwFPos::LEFT,          SwFPos::MIR_LEFT,       HoriOrientation::LEFT,      LB::FlyRelPageFrame},
+    {SwFPos::FROMLEFT,      SwFPos::MIR_FROMLEFT,   HoriOrientation::NONE,      LB::FlyRelPageFrame}
 };
 
 // #i18732# - own vertical alignment map for to frame anchored objects
 // #i22305#
-#define VERT_FRAME_REL   (LB_VERT_FRAME|LB_FLY_VERT_PRTAREA)
+#define VERT_FRAME_REL   (LB::VertFrame|LB::FlyVertPrintArea)
 
 static FrmMap aVFrameMap[] =
 {
@@ -193,26 +204,26 @@ static FrmMap aVFrameMap[] =
 
 static FrmMap aVFlyHtmlMap[] =
 {
-    {SwFPos::TOP,           SwFPos::TOP,            VertOrientation::TOP,       LB_FLY_VERT_FRAME},
-    {SwFPos::FROMTOP,       SwFPos::FROMTOP,        VertOrientation::NONE,      LB_FLY_VERT_FRAME}
+    {SwFPos::TOP,           SwFPos::TOP,            VertOrientation::TOP,       LB::FlyVertFrame},
+    {SwFPos::FROMTOP,       SwFPos::FROMTOP,        VertOrientation::NONE,      LB::FlyVertFrame}
 };
 
 static FrmMap aVMultiSelectionMap[] =
 {
-    {SwFPos::FROMTOP,       SwFPos::FROMTOP,        VertOrientation::NONE,      0}
+    {SwFPos::FROMTOP,       SwFPos::FROMTOP,        VertOrientation::NONE,      LB::NONE}
 };
 static FrmMap aHMultiSelectionMap[] =
 {
-    {SwFPos::FROMLEFT,      SwFPos::FROMLEFT,       HoriOrientation::NONE,      0}
+    {SwFPos::FROMLEFT,      SwFPos::FROMLEFT,       HoriOrientation::NONE,      LB::NONE}
 };
 
 /*--------------------------------------------------------------------
     Anchored at paragraph
  --------------------------------------------------------------------*/
 
-#define HORI_PARA_REL   (LB_FRAME|LB_PRTAREA|LB_REL_PG_LEFT|LB_REL_PG_RIGHT| \
-                        LB_REL_PG_FRAME|LB_REL_PG_PRTAREA|LB_REL_FRM_LEFT| \
-                        LB_REL_FRM_RIGHT)
+#define HORI_PARA_REL   (LB::Frame|LB::PrintArea|LB::RelPageLeft|LB::RelPageRight| \
+                        LB::RelPageFrame|LB::RelPagePrintArea|LB::RelFrameLeft| \
+                        LB::RelFrameRight)
 
 static FrmMap aHParaMap[] =
 {
@@ -222,7 +233,7 @@ static FrmMap aHParaMap[] =
     {SwFPos::FROMLEFT,      SwFPos::MIR_FROMLEFT,   HoriOrientation::NONE,      HORI_PARA_REL}
 };
 
-#define HTML_HORI_PARA_REL  (LB_FRAME|LB_PRTAREA)
+#define HTML_HORI_PARA_REL  (LB::Frame|LB::PrintArea)
 
 static FrmMap aHParaHtmlMap[] =
 {
@@ -237,8 +248,8 @@ static FrmMap aHParaHtmlAbsMap[] =
 };
 
 
-#define VERT_PARA_REL   (LB_VERT_FRAME|LB_VERT_PRTAREA| \
-                         LB_REL_PG_FRAME|LB_REL_PG_PRTAREA)
+#define VERT_PARA_REL   (LB::VertFrame|LB::VertPrintArea| \
+                         LB::RelPageFrame|LB::RelPagePrintArea)
 
 static FrmMap aVParaMap[] =
 {
@@ -250,16 +261,16 @@ static FrmMap aVParaMap[] =
 
 static FrmMap aVParaHtmlMap[] =
 {
-    {SwFPos::TOP,           SwFPos::TOP,            VertOrientation::TOP,       LB_VERT_PRTAREA}
+    {SwFPos::TOP,           SwFPos::TOP,            VertOrientation::TOP,       LB::VertPrintArea}
 };
 
 /*--------------------------------------------------------------------
     Anchored at character
  --------------------------------------------------------------------*/
 
-#define HORI_CHAR_REL   (LB_FRAME|LB_PRTAREA|LB_REL_PG_LEFT|LB_REL_PG_RIGHT| \
-                        LB_REL_PG_FRAME|LB_REL_PG_PRTAREA|LB_REL_FRM_LEFT| \
-                        LB_REL_FRM_RIGHT|LB_REL_CHAR)
+#define HORI_CHAR_REL   (LB::Frame|LB::PrintArea|LB::RelPageLeft|LB::RelPageRight| \
+                        LB::RelPageFrame|LB::RelPagePrintArea|LB::RelFrameLeft| \
+                        LB::RelFrameRight|LB::RelChar)
 
 static FrmMap aHCharMap[] =
 {
@@ -269,7 +280,7 @@ static FrmMap aHCharMap[] =
     {SwFPos::FROMLEFT,      SwFPos::MIR_FROMLEFT,   HoriOrientation::NONE,      HORI_CHAR_REL}
 };
 
-#define HTML_HORI_CHAR_REL  (LB_FRAME|LB_PRTAREA|LB_REL_CHAR)
+#define HTML_HORI_CHAR_REL  (LB::Frame|LB::PrintArea|LB::RelChar)
 
 static FrmMap aHCharHtmlMap[] =
 {
@@ -279,46 +290,46 @@ static FrmMap aHCharHtmlMap[] =
 
 static FrmMap aHCharHtmlAbsMap[] =
 {
-    {SwFPos::LEFT,          SwFPos::MIR_LEFT,       HoriOrientation::LEFT,          LB_PRTAREA|LB_REL_CHAR},
-    {SwFPos::RIGHT,         SwFPos::MIR_RIGHT,      HoriOrientation::RIGHT,     LB_PRTAREA},
-    {SwFPos::FROMLEFT,      SwFPos::MIR_FROMLEFT,   HoriOrientation::NONE,      LB_REL_PG_FRAME}
+    {SwFPos::LEFT,          SwFPos::MIR_LEFT,       HoriOrientation::LEFT,          LB::PrintArea|LB::RelChar},
+    {SwFPos::RIGHT,         SwFPos::MIR_RIGHT,      HoriOrientation::RIGHT,     LB::PrintArea},
+    {SwFPos::FROMLEFT,      SwFPos::MIR_FROMLEFT,   HoriOrientation::NONE,      LB::RelPageFrame}
 };
 
 // #i18732# - allow vertical alignment at page areas
-// #i22341# - handle <LB_REL_CHAR> on its own
-#define VERT_CHAR_REL   (LB_VERT_FRAME|LB_VERT_PRTAREA| \
-                         LB_REL_PG_FRAME|LB_REL_PG_PRTAREA)
+// #i22341# - handle <LB::RelChar> on its own
+#define VERT_CHAR_REL   (LB::VertFrame|LB::VertPrintArea| \
+                         LB::RelPageFrame|LB::RelPagePrintArea)
 
 static FrmMap aVCharMap[] =
 {
     // #i22341#
-    // introduce mappings for new vertical alignment at top of line <LB_VERT_LINE>
+    // introduce mappings for new vertical alignment at top of line <LB::VertLine>
     // and correct mapping for vertical alignment at character for position <FROM_BOTTOM>
     // Note: Because of these adjustments the map becomes ambigous in its values
     //       <eStrId>/<eMirrorStrId> and <nAlign>. These ambiguities are considered
     //       in the methods <SwFrmPage::FillRelLB(..)>, <SwFrmPage::GetAlignment(..)>
     //       and <SwFrmPage::FillPosLB(..)>
-    {SwFPos::TOP,           SwFPos::TOP,            VertOrientation::TOP,           VERT_CHAR_REL|LB_REL_CHAR},
-    {SwFPos::BOTTOM,        SwFPos::BOTTOM,         VertOrientation::BOTTOM,        VERT_CHAR_REL|LB_REL_CHAR},
-    {SwFPos::BELOW,         SwFPos::BELOW,          VertOrientation::CHAR_BOTTOM,   LB_REL_CHAR},
-    {SwFPos::CENTER_VERT,   SwFPos::CENTER_VERT,    VertOrientation::CENTER,        VERT_CHAR_REL|LB_REL_CHAR},
+    {SwFPos::TOP,           SwFPos::TOP,            VertOrientation::TOP,           VERT_CHAR_REL|LB::RelChar},
+    {SwFPos::BOTTOM,        SwFPos::BOTTOM,         VertOrientation::BOTTOM,        VERT_CHAR_REL|LB::RelChar},
+    {SwFPos::BELOW,         SwFPos::BELOW,          VertOrientation::CHAR_BOTTOM,   LB::RelChar},
+    {SwFPos::CENTER_VERT,   SwFPos::CENTER_VERT,    VertOrientation::CENTER,        VERT_CHAR_REL|LB::RelChar},
     {SwFPos::FROMTOP,       SwFPos::FROMTOP,        VertOrientation::NONE,          VERT_CHAR_REL},
-    {SwFPos::FROMBOTTOM,    SwFPos::FROMBOTTOM,     VertOrientation::NONE,          LB_REL_CHAR|LB_VERT_LINE},
-    {SwFPos::TOP,           SwFPos::TOP,            VertOrientation::LINE_TOP,      LB_VERT_LINE},
-    {SwFPos::BOTTOM,        SwFPos::BOTTOM,         VertOrientation::LINE_BOTTOM,   LB_VERT_LINE},
-    {SwFPos::CENTER_VERT,   SwFPos::CENTER_VERT,    VertOrientation::LINE_CENTER,   LB_VERT_LINE}
+    {SwFPos::FROMBOTTOM,    SwFPos::FROMBOTTOM,     VertOrientation::NONE,          LB::RelChar|LB::VertLine},
+    {SwFPos::TOP,           SwFPos::TOP,            VertOrientation::LINE_TOP,      LB::VertLine},
+    {SwFPos::BOTTOM,        SwFPos::BOTTOM,         VertOrientation::LINE_BOTTOM,   LB::VertLine},
+    {SwFPos::CENTER_VERT,   SwFPos::CENTER_VERT,    VertOrientation::LINE_CENTER,   LB::VertLine}
 };
 
 
 static FrmMap aVCharHtmlMap[] =
 {
-    {SwFPos::BELOW,         SwFPos::BELOW,          VertOrientation::CHAR_BOTTOM,   LB_REL_CHAR}
+    {SwFPos::BELOW,         SwFPos::BELOW,          VertOrientation::CHAR_BOTTOM,   LB::RelChar}
 };
 
 static FrmMap aVCharHtmlAbsMap[] =
 {
-    {SwFPos::TOP,    SwFPos::TOP,            VertOrientation::TOP,           LB_REL_CHAR},
-    {SwFPos::BELOW,  SwFPos::BELOW,          VertOrientation::CHAR_BOTTOM,   LB_REL_CHAR}
+    {SwFPos::TOP,    SwFPos::TOP,            VertOrientation::TOP,           LB::RelChar},
+    {SwFPos::BELOW,  SwFPos::BELOW,          VertOrientation::CHAR_BOTTOM,   LB::RelChar}
 };
 /*--------------------------------------------------------------------
     anchored as character
@@ -326,31 +337,31 @@ static FrmMap aVCharHtmlAbsMap[] =
 
 static FrmMap aVAsCharMap[] =
 {
-    {SwFPos::TOP,           SwFPos::TOP,            VertOrientation::TOP,           LB_REL_BASE},
-    {SwFPos::BOTTOM,        SwFPos::BOTTOM,         VertOrientation::BOTTOM,        LB_REL_BASE},
-    {SwFPos::CENTER_VERT,   SwFPos::CENTER_VERT,    VertOrientation::CENTER,        LB_REL_BASE},
+    {SwFPos::TOP,           SwFPos::TOP,            VertOrientation::TOP,           LB::RelBase},
+    {SwFPos::BOTTOM,        SwFPos::BOTTOM,         VertOrientation::BOTTOM,        LB::RelBase},
+    {SwFPos::CENTER_VERT,   SwFPos::CENTER_VERT,    VertOrientation::CENTER,        LB::RelBase},
 
-    {SwFPos::TOP,           SwFPos::TOP,            VertOrientation::CHAR_TOP,      LB_REL_CHAR},
-    {SwFPos::BOTTOM,        SwFPos::BOTTOM,         VertOrientation::CHAR_BOTTOM,   LB_REL_CHAR},
-    {SwFPos::CENTER_VERT,   SwFPos::CENTER_VERT,    VertOrientation::CHAR_CENTER,   LB_REL_CHAR},
+    {SwFPos::TOP,           SwFPos::TOP,            VertOrientation::CHAR_TOP,      LB::RelChar},
+    {SwFPos::BOTTOM,        SwFPos::BOTTOM,         VertOrientation::CHAR_BOTTOM,   LB::RelChar},
+    {SwFPos::CENTER_VERT,   SwFPos::CENTER_VERT,    VertOrientation::CHAR_CENTER,   LB::RelChar},
 
-    {SwFPos::TOP,           SwFPos::TOP,            VertOrientation::LINE_TOP,      LB_REL_ROW},
-    {SwFPos::BOTTOM,        SwFPos::BOTTOM,         VertOrientation::LINE_BOTTOM,   LB_REL_ROW},
-    {SwFPos::CENTER_VERT,   SwFPos::CENTER_VERT,    VertOrientation::LINE_CENTER,   LB_REL_ROW},
+    {SwFPos::TOP,           SwFPos::TOP,            VertOrientation::LINE_TOP,      LB::RelRow},
+    {SwFPos::BOTTOM,        SwFPos::BOTTOM,         VertOrientation::LINE_BOTTOM,   LB::RelRow},
+    {SwFPos::CENTER_VERT,   SwFPos::CENTER_VERT,    VertOrientation::LINE_CENTER,   LB::RelRow},
 
-    {SwFPos::FROMBOTTOM,    SwFPos::FROMBOTTOM,     VertOrientation::NONE,          LB_REL_BASE}
+    {SwFPos::FROMBOTTOM,    SwFPos::FROMBOTTOM,     VertOrientation::NONE,          LB::RelBase}
 };
 
 static FrmMap aVAsCharHtmlMap[] =
 {
-    {SwFPos::TOP,           SwFPos::TOP,            VertOrientation::TOP,           LB_REL_BASE},
-    {SwFPos::CENTER_VERT,   SwFPos::CENTER_VERT,    VertOrientation::CENTER,        LB_REL_BASE},
+    {SwFPos::TOP,           SwFPos::TOP,            VertOrientation::TOP,           LB::RelBase},
+    {SwFPos::CENTER_VERT,   SwFPos::CENTER_VERT,    VertOrientation::CENTER,        LB::RelBase},
 
-    {SwFPos::TOP,           SwFPos::TOP,            VertOrientation::CHAR_TOP,      LB_REL_CHAR},
+    {SwFPos::TOP,           SwFPos::TOP,            VertOrientation::CHAR_TOP,      LB::RelChar},
 
-    {SwFPos::TOP,           SwFPos::TOP,            VertOrientation::LINE_TOP,      LB_REL_ROW},
-    {SwFPos::BOTTOM,        SwFPos::BOTTOM,         VertOrientation::LINE_BOTTOM,   LB_REL_ROW},
-    {SwFPos::CENTER_VERT,   SwFPos::CENTER_VERT,    VertOrientation::LINE_CENTER,   LB_REL_ROW}
+    {SwFPos::TOP,           SwFPos::TOP,            VertOrientation::LINE_TOP,      LB::RelRow},
+    {SwFPos::BOTTOM,        SwFPos::BOTTOM,         VertOrientation::LINE_BOTTOM,   LB::RelRow},
+    {SwFPos::CENTER_VERT,   SwFPos::CENTER_VERT,    VertOrientation::LINE_CENTER,   LB::RelRow}
 };
 
 static std::size_t lcl_GetFrmMapCount(const FrmMap* pMap)
@@ -464,9 +475,9 @@ static SvxSwFramePosString::StringId lcl_ChangeResIdToVerticalOrRTL(
 }
 // #i22341# - helper method in order to determine all possible
 // listbox relations in a relation map for a given relation
-static sal_uLong lcl_GetLBRelationsForRelations( const sal_uInt16 _nRel )
+static LB lcl_GetLBRelationsForRelations( const sal_uInt16 _nRel )
 {
-    sal_uLong nLBRelations = 0L;
+    LB nLBRelations = LB::NONE;
 
     for (RelationMap & nRelMapPos : aRelationMap)
     {
@@ -481,11 +492,11 @@ static sal_uLong lcl_GetLBRelationsForRelations( const sal_uInt16 _nRel )
 
 // #i22341# - helper method on order to determine all possible
 // listbox relations in a relation map for a given string ID
-static sal_uLong lcl_GetLBRelationsForStrID( const FrmMap* _pMap,
+static LB lcl_GetLBRelationsForStrID( const FrmMap* _pMap,
                                   const SvxSwFramePosString::StringId _eStrId,
                                   const bool _bUseMirrorStr )
 {
-    sal_uLong nLBRelations = 0L;
+    LB nLBRelations = LB::NONE;
 
     std::size_t nRelMapSize = lcl_GetFrmMapCount( _pMap );
     for ( std::size_t nRelMapPos = 0; nRelMapPos < nRelMapSize; ++nRelMapPos )
@@ -1425,7 +1436,7 @@ short SvxSwPosSizeTabPage::GetAlignment(FrmMap *pMap, sal_uInt16 nMapPos, ListBo
     {
         if (rRelationLB.GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND)
         {
-            sal_uLong  nRel = static_cast<RelationMap *>(rRelationLB.GetSelectEntryData())->nLBRelation;
+            LB  nRel = static_cast<RelationMap *>(rRelationLB.GetSelectEntryData())->nLBRelation;
             std::size_t nMapCount = ::lcl_GetFrmMapCount(pMap);
             SvxSwFramePosString::StringId eStrId = pMap[nMapPos].eStrId;
 
@@ -1433,7 +1444,7 @@ short SvxSwPosSizeTabPage::GetAlignment(FrmMap *pMap, sal_uInt16 nMapPos, ListBo
             {
                 if (pMap[i].eStrId == eStrId)
                 {
-                    sal_uLong nLBRelations = pMap[i].nLBRelations;
+                    LB nLBRelations = pMap[i].nLBRelations;
                     if (nLBRelations & nRel)
                     {
                         nAlign = pMap[i].nAlign;
@@ -1668,7 +1679,7 @@ void SvxSwPosSizeTabPage::FillRelLB(FrmMap *pMap, sal_uInt16 nMapPos, sal_uInt16
         sal_uInt16 nRel, ListBox &rLB, FixedText &rFT)
 {
     OUString sSelEntry;
-    sal_uLong  nLBRelations = 0;
+    LB  nLBRelations = LB::NONE;
     std::size_t nMapCount = ::lcl_GetFrmMapCount(pMap);
 
     rLB.Clear();
@@ -1714,7 +1725,7 @@ void SvxSwPosSizeTabPage::FillRelLB(FrmMap *pMap, sal_uInt16 nMapPos, sal_uInt16
                     for (sal_Int32 i = 0; i < rLB.GetEntryCount(); i++)
                     {
                         RelationMap *pEntry = static_cast<RelationMap *>(rLB.GetEntryData(i));
-                        if (pEntry->nLBRelation == LB_REL_CHAR) // Default
+                        if (pEntry->nLBRelation == LB::RelChar) // Default
                         {
                             rLB.SelectEntryPos(i);
                             break;
@@ -1742,13 +1753,13 @@ void SvxSwPosSizeTabPage::FillRelLB(FrmMap *pMap, sal_uInt16 nMapPos, sal_uInt16
                 nLBRelations = pMap[nMapPos].nLBRelations;
             }
 
-            for (sal_uLong nBit = 1; nBit < 0x80000000; nBit <<= 1)
+            for (sal_uLong nBit = 1; nBit < (sal_uLong)LB::LAST; nBit <<= 1)
             {
-                if (nLBRelations & nBit)
+                if (nLBRelations & (LB)nBit)
                 {
                     for (sal_uInt16 nRelPos = 0; nRelPos < nRelCount; nRelPos++)
                     {
-                        if (aRelationMap[nRelPos].nLBRelation == nBit)
+                        if (aRelationMap[nRelPos].nLBRelation == (LB)nBit)
                         {
                             SvxSwFramePosString::StringId sStrId1 = m_pHoriMirrorCB->IsChecked() ? aRelationMap[nRelPos].eMirrorStrId : aRelationMap[nRelPos].eStrId;
                             sStrId1 = lcl_ChangeResIdToVerticalOrRTL(sStrId1, m_bIsVerticalFrame, m_bIsInRightToLeft);
@@ -1820,8 +1831,8 @@ sal_uInt16 SvxSwPosSizeTabPage::FillPosLB(FrmMap *_pMap,
 
     // #i22341# - determine all possible listbox relations for
     // given relation for map <aVCharMap>
-    const sal_uLong nLBRelations = (_pMap != aVCharMap)
-                               ? 0L
+    const LB nLBRelations = (_pMap != aVCharMap)
+                               ? LB::NONE
                                : ::lcl_GetLBRelationsForRelations( _nRel );
 
     // fill listbox
