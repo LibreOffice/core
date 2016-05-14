@@ -1,0 +1,1249 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:presentation="urn:oasis:names:tc:opendocument:xmlns:presentation:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:rpt="http://openoffice.org/2005/report" xmlns:of="urn:oasis:names:tc:opendocument:xmlns:of:1.2" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:grddl="http://www.w3.org/2003/g/data-view#" xmlns:tableooo="http://openoffice.org/2009/table" xmlns:drawooo="http://openoffice.org/2010/draw" xmlns:calcext="urn:org:documentfoundation:names:experimental:calc:xmlns:calcext:1.0" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" xmlns:field="urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0" xmlns:formx="urn:openoffice:names:experimental:ooxml-odf-interop:xmlns:form:1.0" xmlns:css3t="http://www.w3.org/TR/css3-text/" office:version="1.2" office:mimetype="application/vnd.oasis.opendocument.spreadsheet">
+ <office:meta><meta:creation-date>2016-05-11T11:31:25.267000000</meta:creation-date><meta:editing-duration>P0D</meta:editing-duration><meta:editing-cycles>1</meta:editing-cycles><meta:generator>LibreOffice/5.1.1.3$Windows_x86 LibreOffice_project/89f508ef3ecebd2cfb8e1def0f0ba9a803b88a6d</meta:generator><meta:document-statistic meta:table-count="2" meta:cell-count="217" meta:object-count="0"/></office:meta>
+ <office:settings>
+  <config:config-item-set config:name="ooo:view-settings">
+   <config:config-item config:name="VisibleAreaTop" config:type="int">0</config:config-item>
+   <config:config-item config:name="VisibleAreaLeft" config:type="int">0</config:config-item>
+   <config:config-item config:name="VisibleAreaWidth" config:type="int">34127</config:config-item>
+   <config:config-item config:name="VisibleAreaHeight" config:type="int">15017</config:config-item>
+   <config:config-item-map-indexed config:name="Views">
+    <config:config-item-map-entry>
+     <config:config-item config:name="ViewId" config:type="string">view1</config:config-item>
+     <config:config-item-map-named config:name="Tables">
+      <config:config-item-map-entry config:name="Sheet1">
+       <config:config-item config:name="CursorPositionX" config:type="int">0</config:config-item>
+       <config:config-item config:name="CursorPositionY" config:type="int">7</config:config-item>
+       <config:config-item config:name="HorizontalSplitMode" config:type="short">0</config:config-item>
+       <config:config-item config:name="VerticalSplitMode" config:type="short">0</config:config-item>
+       <config:config-item config:name="HorizontalSplitPosition" config:type="int">0</config:config-item>
+       <config:config-item config:name="VerticalSplitPosition" config:type="int">0</config:config-item>
+       <config:config-item config:name="ActiveSplitRange" config:type="short">2</config:config-item>
+       <config:config-item config:name="PositionLeft" config:type="int">0</config:config-item>
+       <config:config-item config:name="PositionRight" config:type="int">0</config:config-item>
+       <config:config-item config:name="PositionTop" config:type="int">0</config:config-item>
+       <config:config-item config:name="PositionBottom" config:type="int">0</config:config-item>
+       <config:config-item config:name="ZoomType" config:type="short">0</config:config-item>
+       <config:config-item config:name="ZoomValue" config:type="int">100</config:config-item>
+       <config:config-item config:name="PageViewZoomValue" config:type="int">60</config:config-item>
+       <config:config-item config:name="ShowGrid" config:type="boolean">true</config:config-item>
+      </config:config-item-map-entry>
+      <config:config-item-map-entry config:name="Sheet2">
+       <config:config-item config:name="CursorPositionX" config:type="int">6</config:config-item>
+       <config:config-item config:name="CursorPositionY" config:type="int">33</config:config-item>
+       <config:config-item config:name="HorizontalSplitMode" config:type="short">0</config:config-item>
+       <config:config-item config:name="VerticalSplitMode" config:type="short">0</config:config-item>
+       <config:config-item config:name="HorizontalSplitPosition" config:type="int">0</config:config-item>
+       <config:config-item config:name="VerticalSplitPosition" config:type="int">0</config:config-item>
+       <config:config-item config:name="ActiveSplitRange" config:type="short">2</config:config-item>
+       <config:config-item config:name="PositionLeft" config:type="int">0</config:config-item>
+       <config:config-item config:name="PositionRight" config:type="int">0</config:config-item>
+       <config:config-item config:name="PositionTop" config:type="int">0</config:config-item>
+       <config:config-item config:name="PositionBottom" config:type="int">0</config:config-item>
+       <config:config-item config:name="ZoomType" config:type="short">0</config:config-item>
+       <config:config-item config:name="ZoomValue" config:type="int">100</config:config-item>
+       <config:config-item config:name="PageViewZoomValue" config:type="int">60</config:config-item>
+       <config:config-item config:name="ShowGrid" config:type="boolean">true</config:config-item>
+      </config:config-item-map-entry>
+     </config:config-item-map-named>
+     <config:config-item config:name="ActiveTable" config:type="string">Sheet2</config:config-item>
+     <config:config-item config:name="HorizontalScrollbarWidth" config:type="int">1168</config:config-item>
+     <config:config-item config:name="ZoomType" config:type="short">0</config:config-item>
+     <config:config-item config:name="ZoomValue" config:type="int">100</config:config-item>
+     <config:config-item config:name="PageViewZoomValue" config:type="int">60</config:config-item>
+     <config:config-item config:name="ShowPageBreakPreview" config:type="boolean">false</config:config-item>
+     <config:config-item config:name="ShowZeroValues" config:type="boolean">true</config:config-item>
+     <config:config-item config:name="ShowNotes" config:type="boolean">true</config:config-item>
+     <config:config-item config:name="ShowGrid" config:type="boolean">true</config:config-item>
+     <config:config-item config:name="GridColor" config:type="long">12632256</config:config-item>
+     <config:config-item config:name="ShowPageBreaks" config:type="boolean">true</config:config-item>
+     <config:config-item config:name="HasColumnRowHeaders" config:type="boolean">true</config:config-item>
+     <config:config-item config:name="HasSheetTabs" config:type="boolean">true</config:config-item>
+     <config:config-item config:name="IsOutlineSymbolsSet" config:type="boolean">true</config:config-item>
+     <config:config-item config:name="IsValueHighlightingEnabled" config:type="boolean">false</config:config-item>
+     <config:config-item config:name="IsSnapToRaster" config:type="boolean">false</config:config-item>
+     <config:config-item config:name="RasterIsVisible" config:type="boolean">false</config:config-item>
+     <config:config-item config:name="RasterResolutionX" config:type="int">1270</config:config-item>
+     <config:config-item config:name="RasterResolutionY" config:type="int">1270</config:config-item>
+     <config:config-item config:name="RasterSubdivisionX" config:type="int">1</config:config-item>
+     <config:config-item config:name="RasterSubdivisionY" config:type="int">1</config:config-item>
+     <config:config-item config:name="IsRasterAxisSynchronized" config:type="boolean">true</config:config-item>
+    </config:config-item-map-entry>
+   </config:config-item-map-indexed>
+  </config:config-item-set>
+  <config:config-item-set config:name="ooo:configuration-settings">
+   <config:config-item config:name="HasSheetTabs" config:type="boolean">true</config:config-item>
+   <config:config-item config:name="ShowNotes" config:type="boolean">true</config:config-item>
+   <config:config-item config:name="ShowZeroValues" config:type="boolean">true</config:config-item>
+   <config:config-item config:name="ShowGrid" config:type="boolean">true</config:config-item>
+   <config:config-item config:name="GridColor" config:type="long">12632256</config:config-item>
+   <config:config-item config:name="ShowPageBreaks" config:type="boolean">true</config:config-item>
+   <config:config-item config:name="IsKernAsianPunctuation" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="IsOutlineSymbolsSet" config:type="boolean">true</config:config-item>
+   <config:config-item config:name="LinkUpdateMode" config:type="short">3</config:config-item>
+   <config:config-item config:name="HasColumnRowHeaders" config:type="boolean">true</config:config-item>
+   <config:config-item config:name="IsSnapToRaster" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="RasterIsVisible" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="RasterResolutionX" config:type="int">1270</config:config-item>
+   <config:config-item config:name="RasterResolutionY" config:type="int">1270</config:config-item>
+   <config:config-item config:name="RasterSubdivisionX" config:type="int">1</config:config-item>
+   <config:config-item config:name="RasterSubdivisionY" config:type="int">1</config:config-item>
+   <config:config-item config:name="IsRasterAxisSynchronized" config:type="boolean">true</config:config-item>
+   <config:config-item config:name="AutoCalculate" config:type="boolean">true</config:config-item>
+   <config:config-item config:name="ApplyUserData" config:type="boolean">true</config:config-item>
+   <config:config-item config:name="PrinterName" config:type="string">PDF-XChange 4.0</config:config-item>
+   <config:config-item config:name="PrinterSetup" config:type="base64Binary">+AX+/1BERi1YQ2hhbmdlIDQuMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAUERGLVhDaGFuZ2UgNC4wAAAAAAAAAAAAAAAAAAAAAAAWAAEAGgUAAAAAAAAEAAhSAAAEdAAAM1ROVwYAUABEAEYALQBYAEMAaABhAG4AZwBlACAANAAuADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEEAATcADgEEwwBAAEACQCaCzQIZAABAAAALAECAAEALAEAAAAAQQA0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGAAAADQIAACaCwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAERDWFAEAAAAAQAAAAAAAAA0CAAAmgsAAAAAAAAsAQAAZAAAAAEAAABDAHUAcgByAGUAbgB0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQwA6AFwAcABvAHIAdABhAGIAbABlAFwAUABvAHIAdABhAGIAbABlAEEAcABwAHMAXABMAGkAYgByAGUATwBmAGYAaQBjAGUAUABvAHIAdABhAGIAbABlAFwAQQBwAHAAXABsAGkAYgByAGUAbwBmAGYAaQBjAGUAXABwAHIAbwBnAHIAYQBtAFwAcwBvAGYAZgBpAGMAZQAuAGIAaQBuAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABIAQ09NUEFUX0RVUExFWF9NT0RFDgBEVVBMRVhfVU5LTk9XTg==</config:config-item>
+   <config:config-item-map-indexed config:name="ForbiddenCharacters">
+    <config:config-item-map-entry>
+     <config:config-item config:name="Language" config:type="string">en</config:config-item>
+     <config:config-item config:name="Country" config:type="string">US</config:config-item>
+     <config:config-item config:name="Variant" config:type="string"/>
+     <config:config-item config:name="BeginLine" config:type="string"/>
+     <config:config-item config:name="EndLine" config:type="string"/>
+    </config:config-item-map-entry>
+   </config:config-item-map-indexed>
+   <config:config-item config:name="CharacterCompressionType" config:type="short">0</config:config-item>
+   <config:config-item config:name="SaveVersionOnClose" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="UpdateFromTemplate" config:type="boolean">true</config:config-item>
+   <config:config-item config:name="AllowPrintJobCancel" config:type="boolean">true</config:config-item>
+   <config:config-item config:name="LoadReadonly" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="IsDocumentShared" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="EmbedFonts" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="SyntaxStringRef" config:type="short">7</config:config-item>
+  </config:config-item-set>
+ </office:settings>
+ <office:scripts>
+  <office:script script:language="ooo:Basic">
+   <ooo:libraries xmlns:ooo="http://openoffice.org/2004/office" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <ooo:library-embedded ooo:name="Standard"/>
+   </ooo:libraries>
+  </office:script>
+ </office:scripts>
+ <office:font-face-decls>
+  <style:font-face style:name="Arial" svg:font-family="Arial" style:font-family-generic="swiss" style:font-pitch="variable"/>
+  <style:font-face style:name="Liberation Sans" svg:font-family="&apos;Liberation Sans&apos;" style:font-family-generic="swiss" style:font-pitch="variable"/>
+  <style:font-face style:name="Lucida Sans Unicode" svg:font-family="&apos;Lucida Sans Unicode&apos;" style:font-family-generic="system" style:font-pitch="variable"/>
+  <style:font-face style:name="Segoe UI" svg:font-family="&apos;Segoe UI&apos;" style:font-family-generic="system" style:font-pitch="variable"/>
+  <style:font-face style:name="SimSun" svg:font-family="SimSun" style:font-family-generic="system" style:font-pitch="variable"/>
+  <style:font-face style:name="Tahoma" svg:font-family="Tahoma" style:font-family-generic="system" style:font-pitch="variable"/>
+ </office:font-face-decls>
+ <office:styles>
+  <style:default-style style:family="table-cell">
+   <style:table-cell-properties style:decimal-places="2"/>
+   <style:paragraph-properties style:tab-stop-distance="36pt"/>
+   <style:text-properties style:font-name="Arial" fo:language="en" fo:country="US" style:font-name-asian="Lucida Sans Unicode" style:language-asian="zh" style:country-asian="CN" style:font-name-complex="Tahoma" style:language-complex="hi" style:country-complex="IN"/>
+  </style:default-style>
+  <number:number-style style:name="N0">
+   <number:number number:min-integer-digits="1"/>
+  </number:number-style>
+  <number:currency-style style:name="N108P0" style:volatile="true">
+   <number:currency-symbol number:language="en" number:country="US">$</number:currency-symbol>
+   <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
+  </number:currency-style>
+  <number:currency-style style:name="N108">
+   <style:text-properties fo:color="#ff0000"/>
+   <number:text>-</number:text>
+   <number:currency-symbol number:language="en" number:country="US">$</number:currency-symbol>
+   <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
+   <style:map style:condition="value()&gt;=0" style:apply-style-name="N108P0"/>
+  </number:currency-style>
+  <number:number-style style:name="N109">
+   <number:number number:decimal-places="1" loext:min-decimal-places="1" number:min-integer-digits="1"/>
+  </number:number-style>
+  <number:number-style style:name="N110">
+   <number:number number:decimal-places="3" loext:min-decimal-places="3" number:min-integer-digits="1"/>
+  </number:number-style>
+  <number:number-style style:name="N111">
+   <number:number number:decimal-places="4" loext:min-decimal-places="4" number:min-integer-digits="1"/>
+  </number:number-style>
+  <number:number-style style:name="N112">
+   <number:number number:decimal-places="5" loext:min-decimal-places="5" number:min-integer-digits="1"/>
+  </number:number-style>
+  <number:number-style style:name="N113">
+   <number:number number:decimal-places="6" loext:min-decimal-places="6" number:min-integer-digits="1"/>
+  </number:number-style>
+  <number:number-style style:name="N114">
+   <number:number number:decimal-places="7" loext:min-decimal-places="7" number:min-integer-digits="1"/>
+  </number:number-style>
+  <number:number-style style:name="N115">
+   <number:number number:decimal-places="8" loext:min-decimal-places="8" number:min-integer-digits="1"/>
+  </number:number-style>
+  <number:currency-style style:name="N117P0" style:volatile="true">
+   <number:currency-symbol number:language="nl" number:country="NL">€</number:currency-symbol>
+   <number:text> </number:text>
+   <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
+  </number:currency-style>
+  <number:currency-style style:name="N117">
+   <style:text-properties fo:color="#ff0000"/>
+   <number:currency-symbol number:language="nl" number:country="NL">€</number:currency-symbol>
+   <number:text> </number:text>
+   <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
+   <number:text>-</number:text>
+   <style:map style:condition="value()&gt;=0" style:apply-style-name="N117P0"/>
+  </number:currency-style>
+  <number:currency-style style:name="N119P0" style:volatile="true">
+   <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
+   <number:text> </number:text>
+   <number:currency-symbol number:language="cs" number:country="CZ">Kč</number:currency-symbol>
+  </number:currency-style>
+  <number:currency-style style:name="N119">
+   <style:text-properties fo:color="#ff0000"/>
+   <number:text>-</number:text>
+   <number:number number:decimal-places="2" loext:min-decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
+   <number:text> </number:text>
+   <number:currency-symbol number:language="cs" number:country="CZ">Kč</number:currency-symbol>
+   <style:map style:condition="value()&gt;=0" style:apply-style-name="N119P0"/>
+  </number:currency-style>
+  <style:style style:name="Default" style:family="table-cell">
+   <style:text-properties style:font-name-asian="SimSun" style:font-family-asian="SimSun" style:font-family-generic-asian="system" style:font-pitch-asian="variable"/>
+  </style:style>
+  <style:style style:name="Result" style:family="table-cell" style:parent-style-name="Default">
+   <style:text-properties fo:font-style="italic" style:text-underline-style="solid" style:text-underline-width="auto" style:text-underline-color="font-color" fo:font-weight="bold"/>
+  </style:style>
+  <style:style style:name="Result2" style:family="table-cell" style:parent-style-name="Result" style:data-style-name="N108"/>
+  <style:style style:name="Heading" style:family="table-cell" style:parent-style-name="Default">
+   <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
+   <style:paragraph-properties fo:text-align="center"/>
+   <style:text-properties fo:font-size="16pt" fo:font-style="italic" fo:font-weight="bold"/>
+  </style:style>
+  <style:style style:name="Heading1" style:family="table-cell" style:parent-style-name="Heading">
+   <style:table-cell-properties style:rotation-angle="90"/>
+  </style:style>
+  <style:style style:name="Bez_20_názvu1" style:display-name="Bez názvu1" style:family="table-cell" style:parent-style-name="Default">
+   <style:table-cell-properties fo:background-color="#ff3333"/>
+  </style:style>
+  <style:style style:name="Bez_20_názvu2" style:display-name="Bez názvu2" style:family="table-cell" style:parent-style-name="Default">
+   <style:table-cell-properties fo:background-color="#99ff66"/>
+  </style:style>
+  <style:style style:name="Untitled1" style:family="table-cell" style:parent-style-name="Default">
+   <style:table-cell-properties fo:background-color="#ff3333"/>
+  </style:style>
+  <style:style style:name="Untitled2" style:family="table-cell" style:parent-style-name="Default">
+   <style:table-cell-properties fo:background-color="#99ff66"/>
+  </style:style>
+ </office:styles>
+ <office:automatic-styles>
+  <style:style style:name="co1" style:family="table-column">
+   <style:table-column-properties fo:break-before="auto" style:column-width="207.81pt"/>
+  </style:style>
+  <style:style style:name="co2" style:family="table-column">
+   <style:table-column-properties fo:break-before="auto" style:column-width="143.21pt"/>
+  </style:style>
+  <style:style style:name="co3" style:family="table-column">
+   <style:table-column-properties fo:break-before="auto" style:column-width="190.46pt"/>
+  </style:style>
+  <style:style style:name="co4" style:family="table-column">
+   <style:table-column-properties fo:break-before="auto" style:column-width="64.01pt"/>
+  </style:style>
+  <style:style style:name="co5" style:family="table-column">
+   <style:table-column-properties fo:break-before="auto" style:column-width="135.24pt"/>
+  </style:style>
+  <style:style style:name="co6" style:family="table-column">
+   <style:table-column-properties fo:break-before="auto" style:column-width="129.74pt"/>
+  </style:style>
+  <style:style style:name="co7" style:family="table-column">
+   <style:table-column-properties fo:break-before="auto" style:column-width="118.46pt"/>
+  </style:style>
+  <style:style style:name="co8" style:family="table-column">
+   <style:table-column-properties fo:break-before="auto" style:column-width="64.26pt"/>
+  </style:style>
+  <style:style style:name="co9" style:family="table-column">
+   <style:table-column-properties fo:break-before="auto" style:column-width="90.45pt"/>
+  </style:style>
+  <style:style style:name="co10" style:family="table-column">
+   <style:table-column-properties fo:break-before="auto" style:column-width="51.7pt"/>
+  </style:style>
+  <style:style style:name="co11" style:family="table-column">
+   <style:table-column-properties fo:break-before="auto" style:column-width="377.55pt"/>
+  </style:style>
+  <style:style style:name="ro1" style:family="table-row">
+   <style:table-row-properties style:row-height="24.46pt" fo:break-before="auto" style:use-optimal-row-height="true"/>
+  </style:style>
+  <style:style style:name="ro2" style:family="table-row">
+   <style:table-row-properties style:row-height="12.81pt" fo:break-before="auto" style:use-optimal-row-height="true"/>
+  </style:style>
+  <style:style style:name="ro3" style:family="table-row">
+   <style:table-row-properties style:row-height="17.35pt" fo:break-before="auto" style:use-optimal-row-height="true"/>
+  </style:style>
+  <style:style style:name="ro4" style:family="table-row">
+   <style:table-row-properties style:row-height="15pt" fo:break-before="auto" style:use-optimal-row-height="true"/>
+  </style:style>
+  <style:style style:name="ro5" style:family="table-row">
+   <style:table-row-properties style:row-height="13.21pt" fo:break-before="auto" style:use-optimal-row-height="true"/>
+  </style:style>
+  <style:style style:name="ro6" style:family="table-row">
+   <style:table-row-properties style:row-height="13.44pt" fo:break-before="auto" style:use-optimal-row-height="true"/>
+  </style:style>
+  <style:style style:name="ta1" style:family="table" style:master-page-name="Default">
+   <style:table-properties table:display="true" style:writing-mode="lr-tb"/>
+  </style:style>
+  <number:number-style style:name="N1">
+   <number:number number:decimal-places="0" loext:min-decimal-places="0" number:min-integer-digits="1"/>
+  </number:number-style>
+  <number:date-style style:name="N36" number:automatic-order="true">
+   <number:day number:style="long"/>
+   <number:text>.</number:text>
+   <number:month number:style="long"/>
+   <number:text>.</number:text>
+   <number:year number:style="long"/>
+  </number:date-style>
+  <number:date-style style:name="N51" number:automatic-order="true">
+   <number:day number:style="long"/>
+   <number:text>.</number:text>
+   <number:month number:style="long"/>
+   <number:text>.</number:text>
+   <number:year number:style="long"/>
+   <number:text> </number:text>
+   <number:hours number:style="long"/>
+   <number:text>:</number:text>
+   <number:minutes number:style="long"/>
+   <number:text>:</number:text>
+   <number:seconds number:style="long"/>
+  </number:date-style>
+  <number:boolean-style style:name="N99">
+   <number:boolean/>
+  </number:boolean-style>
+  <number:number-style style:name="N10001" number:language="cs" number:country="CZ">
+   <number:number number:decimal-places="0" loext:min-decimal-places="0" number:min-integer-digits="1"/>
+  </number:number-style>
+  <style:style style:name="ce1" style:family="table-cell" style:parent-style-name="Default">
+   <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
+   <style:paragraph-properties fo:text-align="center" fo:margin-left="0pt"/>
+   <style:text-properties style:text-position="" fo:font-size="20pt" fo:font-weight="bold" style:font-size-asian="20pt" style:font-weight-asian="bold" style:font-size-complex="20pt" style:font-weight-complex="bold"/>
+  </style:style>
+  <style:style style:name="ce2" style:family="table-cell" style:parent-style-name="Default">
+   <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
+   <style:paragraph-properties fo:text-align="center" fo:margin-left="0pt"/>
+   <style:text-properties style:text-position="" fo:font-size="14pt" fo:font-weight="bold" style:font-size-asian="14pt" style:font-weight-asian="bold" style:font-size-complex="14pt" style:font-weight-complex="bold"/>
+  </style:style>
+  <style:style style:name="ce3" style:family="table-cell" style:parent-style-name="Default">
+   <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
+   <style:paragraph-properties fo:text-align="center" fo:margin-left="0pt"/>
+   <style:text-properties style:text-position="" fo:font-size="12pt" fo:font-weight="bold" style:font-size-asian="12pt" style:font-weight-asian="bold" style:font-size-complex="12pt" style:font-weight-complex="bold"/>
+  </style:style>
+  <style:style style:name="ce4" style:family="table-cell" style:parent-style-name="Default">
+   <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
+   <style:paragraph-properties fo:text-align="center" fo:margin-left="0pt"/>
+   <style:text-properties style:text-position=""/>
+  </style:style>
+  <style:style style:name="ce5" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N99">
+   <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
+   <style:paragraph-properties fo:text-align="center" fo:margin-left="0pt"/>
+   <style:text-properties style:text-position=""/>
+   <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet1.B3"/>
+   <style:map style:condition="cell-content()=0" style:apply-style-name="Untitled1" style:base-cell-address="Sheet1.B3"/>
+   <style:map style:condition="cell-content()=1" style:apply-style-name="Untitled2" style:base-cell-address="Sheet1.B3"/>
+  </style:style>
+  <style:style style:name="ce6" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N99">
+   <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
+   <style:paragraph-properties fo:text-align="center" fo:margin-left="0pt"/>
+   <style:text-properties style:text-position=""/>
+   <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet1.B8"/>
+   <style:map style:condition="cell-content()=0" style:apply-style-name="Untitled1" style:base-cell-address="Sheet1.B8"/>
+   <style:map style:condition="cell-content()=1" style:apply-style-name="Untitled2" style:base-cell-address="Sheet1.B8"/>
+  </style:style>
+  <style:style style:name="ce7" style:family="table-cell" style:parent-style-name="Default">
+   <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
+   <style:paragraph-properties fo:text-align="center" fo:margin-left="0pt"/>
+   <style:text-properties style:text-position=""/>
+   <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet1.B8"/>
+   <style:map style:condition="cell-content()=0" style:apply-style-name="Untitled1" style:base-cell-address="Sheet1.B8"/>
+   <style:map style:condition="cell-content()=1" style:apply-style-name="Untitled2" style:base-cell-address="Sheet1.B8"/>
+  </style:style>
+  <style:style style:name="ce8" style:family="table-cell" style:parent-style-name="Default">
+   <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
+   <style:paragraph-properties fo:text-align="center" fo:margin-left="0pt"/>
+   <style:text-properties fo:font-size="20pt" fo:font-weight="bold" style:font-size-asian="20pt" style:font-weight-asian="bold" style:font-size-complex="20pt" style:font-weight-complex="bold"/>
+  </style:style>
+  <style:style style:name="ce9" style:family="table-cell" style:parent-style-name="Default">
+   <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
+   <style:paragraph-properties fo:text-align="center" fo:margin-left="0pt"/>
+   <style:text-properties fo:font-size="14pt" fo:font-weight="bold" style:font-size-asian="14pt" style:font-weight-asian="bold" style:font-size-complex="14pt" style:font-weight-complex="bold"/>
+  </style:style>
+  <style:style style:name="ce10" style:family="table-cell" style:parent-style-name="Default">
+   <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
+   <style:paragraph-properties fo:text-align="center" fo:margin-left="0pt"/>
+   <style:text-properties fo:font-size="12pt" fo:font-weight="bold" style:font-size-asian="12pt" style:font-weight-asian="bold" style:font-size-complex="12pt" style:font-weight-complex="bold"/>
+  </style:style>
+  <style:style style:name="ce11" style:family="table-cell" style:parent-style-name="Default">
+   <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
+   <style:paragraph-properties fo:text-align="center" fo:margin-left="0pt"/>
+  </style:style>
+  <style:style style:name="ce12" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N99">
+   <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
+   <style:paragraph-properties fo:text-align="center" fo:margin-left="0pt"/>
+   <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet1.B3"/>
+   <style:map style:condition="cell-content()=0" style:apply-style-name="Untitled1" style:base-cell-address="Sheet1.B3"/>
+   <style:map style:condition="cell-content()=1" style:apply-style-name="Untitled2" style:base-cell-address="Sheet1.B3"/>
+  </style:style>
+  <style:style style:name="ce13" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N99">
+   <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
+   <style:paragraph-properties fo:text-align="center" fo:margin-left="0pt"/>
+   <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet1.B8"/>
+   <style:map style:condition="cell-content()=0" style:apply-style-name="Untitled1" style:base-cell-address="Sheet1.B8"/>
+   <style:map style:condition="cell-content()=1" style:apply-style-name="Untitled2" style:base-cell-address="Sheet1.B8"/>
+  </style:style>
+  <style:style style:name="ce14" style:family="table-cell" style:parent-style-name="Default">
+   <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false"/>
+   <style:paragraph-properties fo:text-align="center" fo:margin-left="0pt"/>
+   <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet1.B8"/>
+   <style:map style:condition="cell-content()=0" style:apply-style-name="Untitled1" style:base-cell-address="Sheet1.B8"/>
+   <style:map style:condition="cell-content()=1" style:apply-style-name="Untitled2" style:base-cell-address="Sheet1.B8"/>
+  </style:style>
+  <style:style style:name="ce15" style:family="table-cell" style:parent-style-name="Default">
+   <style:text-properties fo:font-weight="bold" style:font-weight-asian="bold" style:font-weight-complex="bold"/>
+  </style:style>
+  <style:style style:name="ce16" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N51"/>
+  <style:style style:name="ce17" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N36"/>
+  <style:style style:name="ce18" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N113"/>
+  <style:style style:name="ce19" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N1">
+   <style:table-cell-properties fo:background-color="#ffff00"/>
+   <style:text-properties fo:font-weight="bold" style:font-weight-asian="bold" style:font-weight-complex="bold"/>
+   <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet2.F2"/>
+   <style:map style:condition="cell-content()=0" style:apply-style-name="Bez_20_názvu1" style:base-cell-address="Sheet2.F2"/>
+   <style:map style:condition="cell-content()=1" style:apply-style-name="Bez_20_názvu2" style:base-cell-address="Sheet2.F2"/>
+  </style:style>
+  <style:style style:name="ce20" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N10001">
+   <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet2.F2"/>
+   <style:map style:condition="cell-content()=0" style:apply-style-name="Bez_20_názvu1" style:base-cell-address="Sheet2.F2"/>
+   <style:map style:condition="cell-content()=1" style:apply-style-name="Bez_20_názvu2" style:base-cell-address="Sheet2.F2"/>
+  </style:style>
+  <style:style style:name="ce21" style:family="table-cell" style:parent-style-name="Default">
+   <style:map style:condition="cell-content()=&quot;&quot;" style:apply-style-name="Default" style:base-cell-address="Sheet2.F2"/>
+   <style:map style:condition="cell-content()=0" style:apply-style-name="Bez_20_názvu1" style:base-cell-address="Sheet2.F2"/>
+   <style:map style:condition="cell-content()=1" style:apply-style-name="Bez_20_názvu2" style:base-cell-address="Sheet2.F2"/>
+  </style:style>
+  <style:style style:name="ce22" style:family="table-cell" style:parent-style-name="Default">
+   <style:table-cell-properties fo:wrap-option="wrap"/>
+  </style:style>
+  <style:style style:name="ce23" style:family="table-cell" style:parent-style-name="Default">
+   <style:table-cell-properties style:text-align-source="fix" style:repeat-content="false" style:vertical-align="middle"/>
+   <style:paragraph-properties fo:text-align="start" fo:margin-left="0pt"/>
+  </style:style>
+  <style:page-layout style:name="pm1">
+   <style:page-layout-properties style:writing-mode="lr-tb"/>
+   <style:header-style>
+    <style:header-footer-properties fo:min-height="21.29pt" fo:margin-left="0pt" fo:margin-right="0pt" fo:margin-bottom="7.09pt"/>
+   </style:header-style>
+   <style:footer-style>
+    <style:header-footer-properties fo:min-height="21.29pt" fo:margin-left="0pt" fo:margin-right="0pt" fo:margin-top="7.09pt"/>
+   </style:footer-style>
+  </style:page-layout>
+  <style:page-layout style:name="pm2">
+   <style:page-layout-properties style:writing-mode="lr-tb"/>
+   <style:header-style>
+    <style:header-footer-properties fo:min-height="21.29pt" fo:margin-left="0pt" fo:margin-right="0pt" fo:margin-bottom="7.09pt" fo:border="2.49pt solid #000000" fo:padding="0.51pt" fo:background-color="#c0c0c0">
+     <style:background-image/>
+    </style:header-footer-properties>
+   </style:header-style>
+   <style:footer-style>
+    <style:header-footer-properties fo:min-height="21.29pt" fo:margin-left="0pt" fo:margin-right="0pt" fo:margin-top="7.09pt" fo:border="2.49pt solid #000000" fo:padding="0.51pt" fo:background-color="#c0c0c0">
+     <style:background-image/>
+    </style:header-footer-properties>
+   </style:footer-style>
+  </style:page-layout>
+  <style:style style:name="T1" style:family="text">
+   <style:text-properties fo:color="#0000ff"/>
+  </style:style>
+  <style:style style:name="T2" style:family="text">
+   <style:text-properties fo:color="#ff0000"/>
+  </style:style>
+  <style:style style:name="T3" style:family="text">
+   <style:text-properties style:text-position="super"/>
+  </style:style>
+ </office:automatic-styles>
+ <office:master-styles>
+  <style:master-page style:name="Default" style:page-layout-name="pm1">
+   <style:header>
+    <text:p><text:sheet-name>???</text:sheet-name></text:p>
+   </style:header>
+   <style:header-left style:display="false"/>
+   <style:footer>
+    <text:p>Page <text:page-number>1</text:page-number></text:p>
+   </style:footer>
+   <style:footer-left style:display="false"/>
+  </style:master-page>
+  <style:master-page style:name="Report" style:page-layout-name="pm2">
+   <style:header>
+    <style:region-left>
+     <text:p><text:sheet-name>???</text:sheet-name> (<text:title>???</text:title>)</text:p>
+    </style:region-left>
+    <style:region-right>
+     <text:p><text:date style:data-style-name="N2" text:date-value="2016-05-11">00.00.0000</text:date>, <text:time style:data-style-name="N2" text:time-value="11:31:17.322000000">00:00:00</text:time></text:p>
+    </style:region-right>
+   </style:header>
+   <style:header-left style:display="false"/>
+   <style:footer>
+    <text:p>Page <text:page-number>1</text:page-number> / <text:page-count>99</text:page-count></text:p>
+   </style:footer>
+   <style:footer-left style:display="false"/>
+  </style:master-page>
+ </office:master-styles>
+ <office:body>
+  <office:spreadsheet>
+   <table:table table:name="Sheet1" table:style-name="ta1">
+    <table:table-column table:style-name="co1" table:default-cell-style-name="Default"/>
+    <table:table-column table:style-name="co2" table:default-cell-style-name="ce11"/>
+    <table:table-column table:style-name="co3" table:default-cell-style-name="Default"/>
+    <table:table-row table:style-name="ro1">
+     <table:table-cell table:style-name="ce8" office:value-type="string" calcext:value-type="string">
+      <text:p>YEARFRAC Function</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="2"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:number-columns-repeated="3"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro3">
+     <table:table-cell table:style-name="ce9" office:value-type="string" calcext:value-type="string">
+      <text:p>Result</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce12" table:formula="of:=AND([.B8:.B95])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2" table:number-rows-repeated="3">
+     <table:table-cell table:number-columns-repeated="3"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro4">
+     <table:table-cell table:style-name="ce10" office:value-type="string" calcext:value-type="string">
+      <text:p>Sheet</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce10" office:value-type="string" calcext:value-type="string">
+      <text:p>Result</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce10" office:value-type="string" calcext:value-type="string">
+      <text:p>Description</text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce13" table:formula="of:=AND([Sheet2.F2:.F100])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Yearfrac formulas </text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="ro2" table:number-rows-repeated="2">
+     <table:table-cell/>
+     <table:table-cell table:style-name="ce14"/>
+     <table:table-cell/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell/>
+     <table:table-cell table:style-name="ce14"/>
+     <table:table-cell/>
+    </table:table-row>
+    <calcext:conditional-formats>
+     <calcext:conditional-format calcext:target-range-address="Sheet1.B8:Sheet1.B11">
+      <calcext:condition calcext:apply-style-name="Default" calcext:value="=&quot;&quot;" calcext:base-cell-address="Sheet1.B8"/>
+      <calcext:condition calcext:apply-style-name="Untitled1" calcext:value="=0" calcext:base-cell-address="Sheet1.B8"/>
+      <calcext:condition calcext:apply-style-name="Untitled2" calcext:value="=1" calcext:base-cell-address="Sheet1.B8"/>
+     </calcext:conditional-format>
+     <calcext:conditional-format calcext:target-range-address="Sheet1.B3:Sheet1.B3">
+      <calcext:condition calcext:apply-style-name="Default" calcext:value="=&quot;&quot;" calcext:base-cell-address="Sheet1.B3"/>
+      <calcext:condition calcext:apply-style-name="Untitled1" calcext:value="=0" calcext:base-cell-address="Sheet1.B3"/>
+      <calcext:condition calcext:apply-style-name="Untitled2" calcext:value="=1" calcext:base-cell-address="Sheet1.B3"/>
+     </calcext:conditional-format>
+    </calcext:conditional-formats>
+   </table:table>
+   <table:table table:name="Sheet2" table:style-name="ta1" table:print="false">
+    <table:table-column table:style-name="co5" table:default-cell-style-name="Default"/>
+    <table:table-column table:style-name="co6" table:default-cell-style-name="Default"/>
+    <table:table-column table:style-name="co7" table:default-cell-style-name="Default"/>
+    <table:table-column table:style-name="co8" table:default-cell-style-name="Default"/>
+    <table:table-column table:style-name="co9" table:default-cell-style-name="Default"/>
+    <table:table-column table:style-name="co10" table:default-cell-style-name="ce21"/>
+    <table:table-column table:style-name="co11" table:default-cell-style-name="Default"/>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:style-name="ce15" office:value-type="string" calcext:value-type="string">
+      <text:p>Date 1</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce15" office:value-type="string" calcext:value-type="string">
+      <text:p>Date 2</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce15" office:value-type="string" calcext:value-type="string">
+      <text:p>Function</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce15" office:value-type="string" calcext:value-type="string">
+      <text:p>Formula</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce15" office:value-type="string" calcext:value-type="string">
+      <text:p>Expected Value</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce15" office:value-type="string" calcext:value-type="string">
+      <text:p>Correct?</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce15" office:value-type="string" calcext:value-type="string">
+      <text:p>Test purpose</text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:style-name="ce15" table:number-columns-repeated="5"/>
+     <table:table-cell table:style-name="ce19" table:formula="of:=AND([.F3:.F24])" office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce15" office:value-type="string" calcext:value-type="string">
+      <text:p>total of tests</text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:style-name="ce16" office:value-type="date" office:date-value="2001-01-01T19:27:41" calcext:value-type="date">
+      <text:p>01.01.2001 19:27:41</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce16" office:value-type="date" office:date-value="2002-01-01T12:10:30" calcext:value-type="date">
+      <text:p>01.01.2002 12:10:30</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce16" office:value-type="string" calcext:value-type="string"><text:p>YEARFRAC(<text:span text:style-name="T1">A3</text:span>;<text:span text:style-name="T2">B3</text:span>;0)</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" table:formula="of:=YEARFRAC([.A3];[.B3];0)" office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1,000000</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1,000000</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce20" table:formula="of:=[.D3]=[.E3]" office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce22" office:value-type="string" calcext:value-type="string">
+      <text:p>YEARFRAC ignores the time portion of the date, truncating it</text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:style-name="ce17" office:value-type="date" office:date-value="2002-01-01" calcext:value-type="date">
+      <text:p>01.01.2002</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce17" office:value-type="date" office:date-value="2001-01-01" calcext:value-type="date">
+      <text:p>01.01.2001</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce17" office:value-type="string" calcext:value-type="string"><text:p>YEARFRAC(<text:span text:style-name="T1">A4</text:span>;<text:span text:style-name="T2">B4</text:span>;0)</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" table:formula="of:=YEARFRAC([.A4];[.B4];0)" office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1,000000</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1,000000</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce20" table:formula="of:=[.D4]=[.E4]" office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>The order of the dates does not matter. <text:s/>Date 1 can be before or after Date 2</text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:number-columns-repeated="2" table:style-name="ce17" office:value-type="date" office:date-value="2000-01-01" calcext:value-type="date">
+      <text:p>01.01.2000</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce17" office:value-type="string" calcext:value-type="string"><text:p>YEARFRAC(<text:span text:style-name="T1">A5</text:span>;<text:span text:style-name="T2">B5</text:span>;0)</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" table:formula="of:=YEARFRAC([.A5];[.B5];0)" office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0,000000</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0,000000</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce20" table:formula="of:=[.D5]=[.E5]" office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>If the dates are equal, the result is 0</text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:style-name="ce16" office:value-type="date" office:date-value="2002-01-01T19:27:41" calcext:value-type="date">
+      <text:p>01.01.2002 19:27:41</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce16" office:value-type="date" office:date-value="2002-01-01T12:10:30" calcext:value-type="date">
+      <text:p>01.01.2002 12:10:30</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce16" office:value-type="string" calcext:value-type="string"><text:p>YEARFRAC(<text:span text:style-name="T1">A6</text:span>;<text:span text:style-name="T2">B6</text:span>;0)</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" table:formula="of:=YEARFRAC([.A6];[.B6];0)" office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0,000000</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0,000000</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce20" table:formula="of:=[.D6]=[.E6]" office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Again, ignore the time portion. <text:s/>If the dates are equal, the result is 0</text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:style-name="ce17" office:value-type="date" office:date-value="2010-01-31" calcext:value-type="date">
+      <text:p>31.01.2010</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce17" office:value-type="date" office:date-value="2010-07-31" calcext:value-type="date">
+      <text:p>31.07.2010</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce17" office:value-type="string" calcext:value-type="string"><text:p>YEARFRAC(<text:span text:style-name="T1">A7</text:span>;<text:span text:style-name="T2">B7</text:span>;0)</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" table:formula="of:=YEARFRAC([.A7];[.B7];0)" office:value-type="float" office:value="0.5" calcext:value-type="float">
+      <text:p>0,500000</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" office:value-type="float" office:value="0.5" calcext:value-type="float">
+      <text:p>0,500000</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce20" table:formula="of:=[.D7]=[.E7]" office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>both days-of-month are 31 → 180/360</text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:style-name="ce17" office:value-type="date" office:date-value="2010-01-31" calcext:value-type="date">
+      <text:p>31.01.2010</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce17" office:value-type="date" office:date-value="2010-08-01" calcext:value-type="date">
+      <text:p>01.08.2010</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce17" office:value-type="string" calcext:value-type="string"><text:p>YEARFRAC(<text:span text:style-name="T1">A8</text:span>;<text:span text:style-name="T2">B8</text:span>;0)</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" table:formula="of:=YEARFRAC([.A8];[.B8];0)" office:value-type="float" office:value="0.502777777777778" calcext:value-type="float">
+      <text:p>0,502778</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" office:value-type="float" office:value="0.502777777777778" calcext:value-type="float">
+      <text:p>0,502778</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce20" table:formula="of:=[.D8]=[.E8]" office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>date1&apos;s day-of-month is 31, but date2 is not → 181/360</text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:style-name="ce17" office:value-type="date" office:date-value="2010-01-30" calcext:value-type="date">
+      <text:p>30.01.2010</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce17" office:value-type="date" office:date-value="2010-07-31" calcext:value-type="date">
+      <text:p>31.07.2010</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce17" office:value-type="string" calcext:value-type="string"><text:p>YEARFRAC(<text:span text:style-name="T1">A9</text:span>;<text:span text:style-name="T2">B9</text:span>;0)</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" table:formula="of:=YEARFRAC([.A9];[.B9];0)" office:value-type="float" office:value="0.5" calcext:value-type="float">
+      <text:p>0,500000</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" office:value-type="float" office:value="0.5" calcext:value-type="float">
+      <text:p>0,500000</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce20" table:formula="of:=[.D9]=[.E9]" office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>date1&apos;s day-of-month is 30 and date2&apos;s is 31 → 180/360</text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:style-name="ce17" office:value-type="date" office:date-value="2010-02-28" calcext:value-type="date">
+      <text:p>28.02.2010</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce17" office:value-type="date" office:date-value="2011-02-28" calcext:value-type="date">
+      <text:p>28.02.2011</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce17" office:value-type="string" calcext:value-type="string"><text:p>YEARFRAC(<text:span text:style-name="T1">A10</text:span>;<text:span text:style-name="T2">B10</text:span>;0)</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" table:formula="of:=YEARFRAC([.A10];[.B10];0)" office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1,000000</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1,000000</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce20" table:formula="of:=[.D10]=[.E10]" office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>both days are last day of February (non leap year) → 360/360</text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:style-name="ce17" office:value-type="date" office:date-value="2000-02-29" calcext:value-type="date">
+      <text:p>29.02.2000</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce17" office:value-type="date" office:date-value="2008-02-29" calcext:value-type="date">
+      <text:p>29.02.2008</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce17" office:value-type="string" calcext:value-type="string"><text:p>YEARFRAC(<text:span text:style-name="T1">A11</text:span>;<text:span text:style-name="T2">B11</text:span>;0)</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" table:formula="of:=YEARFRAC([.A11];[.B11];0)" office:value-type="float" office:value="8" calcext:value-type="float">
+      <text:p>8,000000</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" office:value-type="float" office:value="8" calcext:value-type="float">
+      <text:p>8,000000</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce20" table:formula="of:=[.D11]=[.E11]" office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>both days are last day of February (leap year) → 8 full years</text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:style-name="ce17" office:value-type="date" office:date-value="2010-02-28" calcext:value-type="date">
+      <text:p>28.02.2010</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce17" office:value-type="date" office:date-value="2010-08-30" calcext:value-type="date">
+      <text:p>30.08.2010</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce17" office:value-type="string" calcext:value-type="string"><text:p>YEARFRAC(<text:span text:style-name="T1">A12</text:span>;<text:span text:style-name="T2">B12</text:span>;0)</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" table:formula="of:=YEARFRAC([.A12];[.B12];0)" office:value-type="float" office:value="0.5" calcext:value-type="float">
+      <text:p>0,500000</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" office:value-type="float" office:value="0.5" calcext:value-type="float">
+      <text:p>0,500000</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce20" table:formula="of:=[.D12]=[.E12]" office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>date1 is last date of February (non leap year) → 180/360</text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:style-name="ce17" office:value-type="date" office:date-value="2008-02-29" calcext:value-type="date">
+      <text:p>29.02.2008</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce17" office:value-type="date" office:date-value="2008-08-30" calcext:value-type="date">
+      <text:p>30.08.2008</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce17" office:value-type="string" calcext:value-type="string"><text:p>YEARFRAC(<text:span text:style-name="T1">A13</text:span>;<text:span text:style-name="T2">B13</text:span>;0)</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" table:formula="of:=YEARFRAC([.A13];[.B13];0)" office:value-type="float" office:value="0.5" calcext:value-type="float">
+      <text:p>0,500000</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" office:value-type="float" office:value="0.5" calcext:value-type="float">
+      <text:p>0,500000</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce20" table:formula="of:=[.D13]=[.E13]" office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>date1 is last date of February (leap year) → 180/360</text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:style-name="ce16" office:value-type="date" office:date-value="2001-01-01T19:27:41" calcext:value-type="date">
+      <text:p>01.01.2001 19:27:41</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce16" office:value-type="date" office:date-value="2002-01-01T12:10:30" calcext:value-type="date">
+      <text:p>01.01.2002 12:10:30</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce16" office:value-type="string" calcext:value-type="string"><text:p>YEARFRAC(<text:span text:style-name="T1">A14</text:span>;<text:span text:style-name="T2">B14</text:span>;1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" table:formula="of:=YEARFRAC([.A14];[.B14];1)" office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1,000000</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1,000000</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce20" table:formula="of:=[.D14]=[.E14]" office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce22" office:value-type="string" calcext:value-type="string">
+      <text:p>YEARFRAC ignores the time portion of the date, truncating it</text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:style-name="ce17" office:value-type="date" office:date-value="2002-01-01" calcext:value-type="date">
+      <text:p>01.01.2002</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce17" office:value-type="date" office:date-value="2001-01-01" calcext:value-type="date">
+      <text:p>01.01.2001</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce17" office:value-type="string" calcext:value-type="string"><text:p>YEARFRAC(<text:span text:style-name="T1">A15</text:span>;<text:span text:style-name="T2">B15</text:span>;1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" table:formula="of:=YEARFRAC([.A15];[.B15];1)" office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1,000000</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1,000000</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce20" table:formula="of:=[.D15]=[.E15]" office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>The order of the dates does not matter. <text:s/>Date 1 can be before or after Date 2</text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:number-columns-repeated="2" table:style-name="ce17" office:value-type="date" office:date-value="2000-01-01" calcext:value-type="date">
+      <text:p>01.01.2000</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce17" office:value-type="string" calcext:value-type="string"><text:p>YEARFRAC(<text:span text:style-name="T1">A16</text:span>;<text:span text:style-name="T2">B16</text:span>;1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" table:formula="of:=YEARFRAC([.A16];[.B16];1)" office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0,000000</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0,000000</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce20" table:formula="of:=[.D16]=[.E16]" office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>If the dates are equal, the result is 0</text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:style-name="ce16" office:value-type="date" office:date-value="2002-01-01T19:27:41" calcext:value-type="date">
+      <text:p>01.01.2002 19:27:41</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce16" office:value-type="date" office:date-value="2002-01-01T12:10:30" calcext:value-type="date">
+      <text:p>01.01.2002 12:10:30</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce16" office:value-type="string" calcext:value-type="string"><text:p>YEARFRAC(<text:span text:style-name="T1">A17</text:span>;<text:span text:style-name="T2">B17</text:span>;1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" table:formula="of:=YEARFRAC([.A17];[.B17];1)" office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0,000000</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0,000000</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce20" table:formula="of:=[.D17]=[.E17]" office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Again, ignore the time portion. <text:s/>If the dates are equal, the result is 0</text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:style-name="ce17" office:value-type="date" office:date-value="2002-01-31" calcext:value-type="date">
+      <text:p>31.01.2002</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce17" office:value-type="date" office:date-value="2003-05-01" calcext:value-type="date">
+      <text:p>01.05.2003</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce17" office:value-type="string" calcext:value-type="string"><text:p>YEARFRAC(<text:span text:style-name="T1">A18</text:span>;<text:span text:style-name="T2">B18</text:span>;1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" table:formula="of:=YEARFRAC([.A18];[.B18];1)" office:value-type="float" office:value="1.24657534246575" calcext:value-type="float">
+      <text:p>1,246575</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" office:value-type="float" office:value="1.24657534246575" calcext:value-type="float">
+      <text:p>1,246575</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce20" table:formula="of:=[.D18]=[.E18]" office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>More than a year apart, no leap years → (365+90)/365</text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:style-name="ce17" office:value-type="date" office:date-value="2008-01-31" calcext:value-type="date">
+      <text:p>31.01.2008</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce17" office:value-type="date" office:date-value="2009-05-01" calcext:value-type="date">
+      <text:p>01.05.2009</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce17" office:value-type="string" calcext:value-type="string"><text:p>YEARFRAC(<text:span text:style-name="T1">A19</text:span>;<text:span text:style-name="T2">B19</text:span>;1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" table:formula="of:=YEARFRAC([.A19];[.B19];1)" office:value-type="float" office:value="1.24760601915185" calcext:value-type="float">
+      <text:p>1,247606</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" office:value-type="float" office:value="1.24760601915185" calcext:value-type="float">
+      <text:p>1,247606</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce20" table:formula="of:=[.D19]=[.E19]" office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>More than a year apart, with leap year → (366 + 90)( (366+365)/2)</text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:style-name="ce17" office:value-type="date" office:date-value="2007-01-31" calcext:value-type="date">
+      <text:p>31.01.2007</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce17" office:value-type="date" office:date-value="2009-05-01" calcext:value-type="date">
+      <text:p>01.05.2009</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce17" office:value-type="string" calcext:value-type="string"><text:p>YEARFRAC(<text:span text:style-name="T1">A20</text:span>;<text:span text:style-name="T2">B20</text:span>;1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" table:formula="of:=YEARFRAC([.A20];[.B20];1)" office:value-type="float" office:value="2.24726277372263" calcext:value-type="float">
+      <text:p>2,247263</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" office:value-type="float" office:value="2.24726277372263" calcext:value-type="float">
+      <text:p>2,247263</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce20" table:formula="of:=[.D20]=[.E20]" office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Several years apart, with leap year → (365 + 366 + 90)( (365 + 366 + 365)/3)</text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:style-name="ce17" office:value-type="date" office:date-value="2007-01-31" calcext:value-type="date">
+      <text:p>31.01.2007</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce17" office:value-type="date" office:date-value="2007-05-01" calcext:value-type="date">
+      <text:p>01.05.2007</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce17" office:value-type="string" calcext:value-type="string"><text:p>YEARFRAC(<text:span text:style-name="T1">A21</text:span>;<text:span text:style-name="T2">B21</text:span>;1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" table:formula="of:=YEARFRAC([.A21];[.B21];1)" office:value-type="float" office:value="0.246575342465753" calcext:value-type="float">
+      <text:p>0,246575</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" office:value-type="float" office:value="0.246575342465753" calcext:value-type="float">
+      <text:p>0,246575</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce20" table:formula="of:=[.D21]=[.E21]" office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>In same year (not leap year) → 90/365</text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:style-name="ce17" office:value-type="date" office:date-value="2008-01-31" calcext:value-type="date">
+      <text:p>31.01.2008</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce17" office:value-type="date" office:date-value="2008-05-01" calcext:value-type="date">
+      <text:p>01.05.2008</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce17" office:value-type="string" calcext:value-type="string"><text:p>YEARFRAC(<text:span text:style-name="T1">A22</text:span>;<text:span text:style-name="T2">B22</text:span>;1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" table:formula="of:=YEARFRAC([.A22];[.B22];1)" office:value-type="float" office:value="0.248633879781421" calcext:value-type="float">
+      <text:p>0,248634</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" office:value-type="float" office:value="0.248633879781421" calcext:value-type="float">
+      <text:p>0,248634</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce20" table:formula="of:=[.D22]=[.E22]" office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>in same year (leap year) → 91/366</text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:style-name="ce17" office:value-type="date" office:date-value="2007-12-15" calcext:value-type="date">
+      <text:p>15.12.2007</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce17" office:value-type="date" office:date-value="2008-03-14" calcext:value-type="date">
+      <text:p>14.03.2008</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce17" office:value-type="string" calcext:value-type="string"><text:p>YEARFRAC(<text:span text:style-name="T1">A23</text:span>;<text:span text:style-name="T2">B23</text:span>;1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" table:formula="of:=YEARFRAC([.A23];[.B23];1)" office:value-type="float" office:value="0.245901639344262" calcext:value-type="float">
+      <text:p>0,245902</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" office:value-type="float" office:value="0.245901639344262" calcext:value-type="float">
+      <text:p>0,245902</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce20" table:formula="of:=[.D23]=[.E23]" office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Less than a year, but February 29 is in range</text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="ro6">
+     <table:table-cell table:style-name="ce17" office:value-type="date" office:date-value="2007-12-01" calcext:value-type="date">
+      <text:p>01.12.2007</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce17" office:value-type="date" office:date-value="2008-02-29" calcext:value-type="date">
+      <text:p>29.02.2008</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce17" office:value-type="string" calcext:value-type="string"><text:p>YEARFRAC(<text:span text:style-name="T1">A24</text:span>;<text:span text:style-name="T2">B24</text:span>;1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" table:formula="of:=YEARFRAC([.A24];[.B24];1)" office:value-type="float" office:value="0.245901639344262" calcext:value-type="float">
+      <text:p>0,245902</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" office:value-type="float" office:value="0.245901639344262" calcext:value-type="float">
+      <text:p>0,245902</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce20" table:formula="of:=[.D24]=[.E24]" office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string"><text:p>Less than a year, but date 2 is February 29<text:span text:style-name="T3">th</text:span></text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:number-columns-repeated="2"/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>YEARFRAC(A13;B13;3)</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" table:formula="of:=YEARFRAC([.A11];[.B11];3)" office:value-type="float" office:value="8.0054794520548" calcext:value-type="float">
+      <text:p>8,005479</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" office:value-type="float" office:value="8.0054794520548" calcext:value-type="float">
+      <text:p>8,005479</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce20" table:formula="of:=[.D25]=[.E25]" office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Base 3</text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:style-name="ce15"/>
+     <table:table-cell/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>YEARFRAC(A24;B24;4)</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" table:formula="of:=YEARFRAC([.A22];[.B22];4)" office:value-type="float" office:value="0.252777777777778" calcext:value-type="float">
+      <text:p>0,252778</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" office:value-type="float" office:value="0.252777777777778" calcext:value-type="float">
+      <text:p>0,252778</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce20" table:formula="of:=[.D26]=[.E26]" office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Base 4</text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:number-columns-repeated="2"/>
+     <table:table-cell office:value-type="string" calcext:value-type="string"><text:p>YEARFRAC(&quot;2008-01-31&quot;;<text:span text:style-name="T1">B24</text:span>;0)</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" table:formula="of:=YEARFRAC(&quot;2008-01-31&quot;;[.B22];0)" office:value-type="float" office:value="0.252777777777778" calcext:value-type="float">
+      <text:p>0,252778</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" office:value-type="float" office:value="0.252777777777778" calcext:value-type="float">
+      <text:p>0,252778</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce20" table:formula="of:=[.D27]=[.E27]" office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>date in “ “</text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:number-columns-repeated="2"/>
+     <table:table-cell office:value-type="string" calcext:value-type="string"><text:p>YEARFRAC(DATE(2008;1;31);<text:span text:style-name="T1">B24</text:span>;0)</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" table:formula="of:=YEARFRAC(DATE(2008;1;31);[.B22];0)" office:value-type="float" office:value="0.252777777777778" calcext:value-type="float">
+      <text:p>0,252778</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" office:value-type="float" office:value="0.252777777777778" calcext:value-type="float">
+      <text:p>0,252778</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce20" table:formula="of:=[.D28]=[.E28]" office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>date as function DATE</text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:number-columns-repeated="2"/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>YEARFRAC(DATE(1958;3;1);DATE(1996;1;1);1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" table:formula="of:=YEARFRAC(DATE(1958;3;1);DATE(1996;1;1);1)" office:value-type="float" office:value="37.8364338364338" calcext:value-type="float">
+      <text:p>37,836434</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" office:value-type="float" office:value="37.8364338364338" calcext:value-type="float">
+      <text:p>37,836434</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce20" table:formula="of:=[.D29]=[.E29]" office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce23" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="1" table:number-rows-spanned="2">
+      <text:p>Bug 40100</text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:number-columns-repeated="2"/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>YEARFRAC(DATE(1958;3;1);DATE(1995;12;31);1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" table:formula="of:=YEARFRAC(DATE(1958;3;1);DATE(1995;12;31);1)" office:value-type="float" office:value="37.8357230348008" calcext:value-type="float">
+      <text:p>37,835723</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" office:value-type="float" office:value="37.8357230348008" calcext:value-type="float">
+      <text:p>37,835723</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce20" table:formula="of:=[.D30]=[.E30]" office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:covered-table-cell/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell/>
+     <table:table-cell table:style-name="ce17" table:formula="of:=DATE(2008;2;29)" office:value-type="date" office:date-value="2008-02-29" calcext:value-type="date">
+      <text:p>29.02.2008</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string"><text:p>YEARFRAC(<text:span text:style-name="T1">A33</text:span>;<text:span text:style-name="T2">B26</text:span>;1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" table:formula="of:=YEARFRAC([.A31];[.B24];1)" office:value-type="float" office:value="108.165617144137" calcext:value-type="float">
+      <text:p>108,165617</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" office:value-type="float" office:value="108.165617144137" calcext:value-type="float">
+      <text:p>108,165617</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce20" table:formula="of:=[.D31]=[.E31]" office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>AOO bug 122543</text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:number-columns-repeated="2"/>
+     <table:table-cell office:value-type="string" calcext:value-type="string"><text:p>YEARFRAC(<text:span text:style-name="T1">A33</text:span>;yearFracDate;1)</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" table:formula="of:=YEARFRAC([.A31];yearFracDate;1)" office:value-type="float" office:value="108.165617144137" calcext:value-type="float">
+      <text:p>108,165617</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce18" office:value-type="float" office:value="108.165617144137" calcext:value-type="float">
+      <text:p>108,165617</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce20" table:formula="of:=[.D32]=[.E32]" office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>yearFracDate name</text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="ro6">
+     <table:table-cell table:number-columns-repeated="2"/>
+     <table:table-cell office:value-type="string" calcext:value-type="string"><text:p>YEARFRAC(<text:span text:style-name="T1">A5</text:span>;<text:span text:style-name="T2">B5</text:span>)</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=YEARFRAC([.A3];[.B3])" office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce20" table:formula="of:=[.D33]=[.E33]" office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string"><text:p>without 3<text:span text:style-name="T3">rd</text:span> argument</text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="ro2" table:number-rows-repeated="167">
+     <table:table-cell table:number-columns-repeated="7"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:number-columns-repeated="7"/>
+    </table:table-row>
+    <calcext:conditional-formats>
+     <calcext:conditional-format calcext:target-range-address="Sheet2.F2:Sheet2.F201">
+      <calcext:condition calcext:apply-style-name="Default" calcext:value="=&quot;&quot;" calcext:base-cell-address="Sheet2.F2"/>
+      <calcext:condition calcext:apply-style-name="Bez názvu1" calcext:value="=0" calcext:base-cell-address="Sheet2.F2"/>
+      <calcext:condition calcext:apply-style-name="Bez názvu2" calcext:value="=1" calcext:base-cell-address="Sheet2.F2"/>
+     </calcext:conditional-format>
+    </calcext:conditional-formats>
+   </table:table>
+   <table:named-expressions>
+    <table:named-range table:name="yearFracDate" table:base-cell-address="$Sheet2.$B$33" table:cell-range-address="$Sheet2.$B$31"/>
+   </table:named-expressions>
+  </office:spreadsheet>
+ </office:body>
+</office:document>
