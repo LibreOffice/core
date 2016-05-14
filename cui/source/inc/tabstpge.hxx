@@ -58,7 +58,7 @@ public:
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;
 
-    void                DisableControls( const sal_uInt16 nFlag );
+    void                DisableControls( const TabulatorDisableFlags nFlag );
 
 protected:
     virtual sfxpg       DeactivatePage( SfxItemSet* pSet = nullptr ) override;

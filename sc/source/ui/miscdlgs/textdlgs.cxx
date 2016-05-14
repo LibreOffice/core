@@ -82,8 +82,9 @@ void ScParagraphDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
     if (nId == m_nTabPageId)
     {
         SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
-        aSet.Put(SfxUInt16Item(SID_SVXTABULATORTABPAGE_CONTROLFLAGS,
-            (TABTYPE_ALL &~TABTYPE_LEFT) | (TABFILL_ALL &~TABFILL_NONE)));
+        TabulatorDisableFlags nFlags((TabulatorDisableFlags::TypeMask &~TabulatorDisableFlags::TypeLeft) |
+                                     (TabulatorDisableFlags::FillMask &~TabulatorDisableFlags::FillNone));
+        aSet.Put(SfxUInt16Item(SID_SVXTABULATORTABPAGE_DISABLEFLAGS, (sal_uInt16)nFlags);
         rPage.PageCreated(aSet);
     }
 }

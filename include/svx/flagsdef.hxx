@@ -94,18 +94,23 @@ enum SvxModeType
 #define MM50   283  //from original svx/inc/paragrph.hxx
 
 //--------------from original svx/inc/tabstpge.hxx
-#define TABTYPE_LEFT        0x0001
-#define TABTYPE_RIGHT       0x0002
-#define TABTYPE_CENTER      0x0004
-#define TABTYPE_DEZIMAL     0x0008
-#define TABTYPE_ALL         0x000F
+enum class TabulatorDisableFlags {
+    TypeLeft      = 0x0001,
+    TypeRight     = 0x0002,
+    TypeCenter    = 0x0004,
+    TypeDecimal   = 0x0008,
+    TypeMask      = 0x000F,
 
-#define TABFILL_NONE        0x0010
-#define TABFILL_POINT       0x0020
-#define TABFILL_DASHLINE    0x0040
-#define TABFILL_SOLIDLINE   0x0080
-#define TABFILL_SPECIAL     0x0100
-#define TABFILL_ALL         0x01F0
+    FillNone      = 0x0010,
+    FillPoint     = 0x0020,
+    FillDashLine  = 0x0040,
+    FillSolidLine = 0x0080,
+    FillSpecial   = 0x0100,
+    FillMask      = 0x01F0
+};
+namespace o3tl {
+    template<> struct typed_flags<TabulatorDisableFlags> : is_typed_flags<TabulatorDisableFlags, 0x1ff> {};
+}
 
 
 #endif
