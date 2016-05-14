@@ -34,6 +34,10 @@ namespace cmis
                     const char* /*username*/,
                     const char* /*password*/ );
 
+            static char* gdriveAuthCodeFallback( const char* /*url*/,
+                    const char* /*username*/,
+                    const char* /*password*/ );
+
             static void setXEnv( const css::uno::Reference< css::ucb::XCommandEnvironment>& xEnv ) { sm_xEnv = xEnv; }
 
             static const css::uno::Reference< css::ucb::XCommandEnvironment>& getXEnv( ) { return sm_xEnv; }
