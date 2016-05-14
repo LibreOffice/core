@@ -376,10 +376,13 @@ namespace cmis
                     // Initiate a CMIS session and register it as we found nothing
                     libcmis::OAuth2DataPtr oauth2Data;
                     if ( m_aURL.getBindingUrl( ) == GDRIVE_BASE_URL )
+                    {
+                        libcmis::SessionFactory::setOAuth2AuthCodeProvider( authProvider.gdriveAuthCodeFallback );
                         oauth2Data.reset( new libcmis::OAuth2Data(
                             GDRIVE_AUTH_URL, GDRIVE_TOKEN_URL,
                             GDRIVE_SCOPE, GDRIVE_REDIRECT_URI,
                             GDRIVE_CLIENT_ID, GDRIVE_CLIENT_SECRET ) );
+                    }
                     if ( m_aURL.getBindingUrl().startsWith( ALFRESCO_CLOUD_BASE_URL ) )
                         oauth2Data.reset( new libcmis::OAuth2Data(
                             ALFRESCO_CLOUD_AUTH_URL, ALFRESCO_CLOUD_TOKEN_URL,
