@@ -1471,6 +1471,7 @@ short SvNumberformat::ImpNextSymbol(OUStringBuffer& rString,
                     sal_Unicode cUpper = rChrCls().uppercase( aBufStr, nPos-1, 1)[0];
                     if (    cUpper == rKeywords[NF_KEY_H][0] ||     // H
                             cUpper == rKeywords[NF_KEY_MI][0] ||    // M
+                            cUpper == rKeywords[NF_KEY_MI2][0] ||   // MI
                             cUpper == rKeywords[NF_KEY_S][0] )      // S
                     {
                         sBuffSymbol.append(cToken);
@@ -1526,6 +1527,7 @@ short SvNumberformat::ImpNextSymbol(OUStringBuffer& rString,
                 sal_Unicode cUpper = rChrCls().uppercase(rString.toString(), nPos-1, 1)[0];
                 if (cUpper == rKeywords[NF_KEY_H][0] ||   // H
                     cUpper == rKeywords[NF_KEY_MI][0] ||  // M
+                    cUpper == rKeywords[NF_KEY_MI2][0] || // MI
                     cUpper == rKeywords[NF_KEY_S][0] )    // S
                 {
                     if (cLetter == cToken)
@@ -2926,9 +2928,11 @@ bool SvNumberformat::ImpGetTimeOutput(double fNumber,
             }
             break;
         case NF_KEY_MI:                 // M
+        case NF_KEY_MI2:                // MI
             sBuff.append(ImpIntToString( nIx, nMin ));
             break;
         case NF_KEY_MMI:                // MM
+        case NF_KEY_MIMI:               // MIMI
             sBuff.append(ImpIntToString( nIx, nMin, 2 ));
             break;
         case NF_KEY_H:                  // H
@@ -3708,9 +3712,11 @@ bool SvNumberformat::ImpGetDateTimeOutput(double fNumber,
             }
             break;
         case NF_KEY_MI:                 // M
+        case NF_KEY_MI2:                // MI
             sBuff.append(ImpIntToString( nIx, nMin ));
             break;
         case NF_KEY_MMI:                // MM
+        case NF_KEY_MIMI:               // MIMI
             sBuff.append(ImpIntToString( nIx, nMin, 2 ));
             break;
         case NF_KEY_H:                  // H

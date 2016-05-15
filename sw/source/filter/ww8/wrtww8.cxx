@@ -4057,6 +4057,8 @@ const NfKeywordTable & MSWordExportBase::GetNfKeywordTable()
         rKeywordTable[NF_KEY_HH] = "HH";
         rKeywordTable[NF_KEY_MI] = "m";
         rKeywordTable[NF_KEY_MMI] = "mm";
+        rKeywordTable[NF_KEY_MI2] = "m";
+        rKeywordTable[NF_KEY_MIMI] = "mm";
         rKeywordTable[NF_KEY_S] = "s";
         rKeywordTable[NF_KEY_SS] = "ss";
         rKeywordTable[NF_KEY_AMPM] = "AM/PM";

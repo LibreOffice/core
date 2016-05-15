@@ -3255,6 +3255,7 @@ namespace xmloff { namespace token {
         TOKEN( "exponent-interval",               XML_EXPONENT_INTERVAL ),
         TOKEN( "forced-exponent-sign",            XML_FORCED_EXPONENT_SIGN ),
         TOKEN( "min-decimal-places",              XML_MIN_DECIMAL_PLACES ),
+        TOKEN( "minutes-unambiguous",             XML_MINUTES_UNAMBIGUOUS ),
 
 #if OSL_DEBUG_LEVEL > 0
         { 0, nullptr, nullptr,                       XML_TOKEN_END }

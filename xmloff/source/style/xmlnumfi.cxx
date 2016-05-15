@@ -221,6 +221,7 @@ enum SvXMLStyleTokens
     XML_TOK_STYLE_HOURS,
     XML_TOK_STYLE_AM_PM,
     XML_TOK_STYLE_MINUTES,
+    XML_TOK_STYLE_MINUTES_UNAMBIGUOUS,
     XML_TOK_STYLE_SECONDS,
     XML_TOK_STYLE_BOOLEAN,
     XML_TOK_STYLE_TEXT_CONTENT,
@@ -496,6 +497,7 @@ const SvXMLTokenMap& SvXMLNumImpData::GetStyleElemTokenMap()
             { XML_NAMESPACE_NUMBER, XML_HOURS,              XML_TOK_STYLE_HOURS             },
             { XML_NAMESPACE_NUMBER, XML_AM_PM,              XML_TOK_STYLE_AM_PM             },
             { XML_NAMESPACE_NUMBER, XML_MINUTES,            XML_TOK_STYLE_MINUTES           },
+            { XML_NAMESPACE_LO_EXT, XML_MINUTES_UNAMBIGUOUS,XML_TOK_STYLE_MINUTES_UNAMBIGUOUS },
             { XML_NAMESPACE_NUMBER, XML_SECONDS,            XML_TOK_STYLE_SECONDS           },
             { XML_NAMESPACE_NUMBER, XML_BOOLEAN,            XML_TOK_STYLE_BOOLEAN           },
             { XML_NAMESPACE_NUMBER, XML_TEXT_CONTENT,       XML_TOK_STYLE_TEXT_CONTENT      },
@@ -1176,6 +1178,11 @@ void SvXMLNumFmtElementContext::EndElement()
                 sal::static_int_cast< sal_uInt16 >(
                     bEffLong ? NF_KEY_MMI : NF_KEY_MI ) );
             break;
+        case XML_TOK_STYLE_MINUTES_UNAMBIGUOUS:
+            rParent.AddNfKeyword(
+                sal::static_int_cast< sal_uInt16 >(
+                    bEffLong ? NF_KEY_MIMI : NF_KEY_MI2 ) );
+            break;
         case XML_TOK_STYLE_SECONDS:
             rParent.AddNfKeyword(
                 sal::static_int_cast< sal_uInt16 >(
@@ -1482,6 +1489,7 @@ SvXMLImportContext* SvXMLNumFormatContext::CreateChildContext(
         case XML_TOK_STYLE_HOURS:
         case XML_TOK_STYLE_AM_PM:
         case XML_TOK_STYLE_MINUTES:
+        case XML_TOK_STYLE_MINUTES_UNAMBIGUOUS:
         case XML_TOK_STYLE_SECONDS:
         case XML_TOK_STYLE_BOOLEAN:
         case XML_TOK_STYLE_TEXT_CONTENT:
@@ -1991,9 +1999,10 @@ void SvXMLNumFormatContext::AddNfKeyword( sal_uInt16 nIndex )
 
     OUString sKeyword = pFormatter->GetKeyword( nFormatLang, nIndex );
 
-    if ( nIndex == NF_KEY_H  || nIndex == NF_KEY_HH  ||
-         nIndex == NF_KEY_MI || nIndex == NF_KEY_MMI ||
-         nIndex == NF_KEY_S  || nIndex == NF_KEY_SS )
+    if ( nIndex == NF_KEY_H   || nIndex == NF_KEY_HH  ||
+         nIndex == NF_KEY_MI  || nIndex == NF_KEY_MMI ||
+         nIndex == NF_KEY_MI2 || nIndex == NF_KEY_MIMI ||
+         nIndex == NF_KEY_S   || nIndex == NF_KEY_SS )
     {
         if ( !bTruncate && !bHasDateTime )
         {
@@ -2028,6 +2037,8 @@ void SvXMLNumFormatContext::AddNfKeyword( sal_uInt16 nIndex )
         case NF_KEY_HH:     eDateHours = XML_DEA_LONG;      break;
         case NF_KEY_MI:     eDateMins = XML_DEA_SHORT;      break;
         case NF_KEY_MMI:    eDateMins = XML_DEA_LONG;       break;
+        case NF_KEY_MI2:    eDateMins = XML_DEA_SHORT;      break;
+        case NF_KEY_MIMI:   eDateMins = XML_DEA_LONG;       break;
         case NF_KEY_S:      eDateSecs = XML_DEA_SHORT;      break;
         case NF_KEY_SS:     eDateSecs = XML_DEA_LONG;       break;
         case NF_KEY_AP:

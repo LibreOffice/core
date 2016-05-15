@@ -82,7 +82,7 @@ private:
     SAL_DLLPRIVATE void WriteWeekElement_Impl( const OUString& rCalendar );
     SAL_DLLPRIVATE void WriteQuarterElement_Impl( const OUString& rCalendar, bool bLong );
     SAL_DLLPRIVATE void WriteHoursElement_Impl( bool bLong );
-    SAL_DLLPRIVATE void WriteMinutesElement_Impl( bool bLong );
+    SAL_DLLPRIVATE void WriteMinutesElement_Impl( bool bLong, bool bIsUnambiguous );
     SAL_DLLPRIVATE void WriteSecondsElement_Impl( bool bLong, sal_uInt16 nDecimals );
     SAL_DLLPRIVATE void WriteAMPMElement_Impl();
     SAL_DLLPRIVATE void WriteMapElement_Impl( sal_Int32 nOp, double fLimit,

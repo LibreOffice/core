@@ -68,6 +68,8 @@ enum NfKeywordIndex
     NF_KEY_LASTOLDKEYWORD = NF_KEY_GENERAL,
     NF_KEY_NNN,         // day of week long without separator, as of version 6, 10.10.97
     NF_KEY_WW,          // week of year, as of version 8, 19.06.98
+    NF_KEY_MI2,         // unambigous minute
+    NF_KEY_MIMI,        // unambigous minute 02
     NF_KEY_MMMMM,       // first letter of month name
     NF_KEY_LASTKEYWORD = NF_KEY_MMMMM,
     NF_KEY_UNUSED4,

@@ -82,6 +82,8 @@ ImpSvNumberformatScan::ImpSvNumberformatScan( SvNumberFormatter* pFormatterP )
     sKeyword[NF_KEY_AP] =    "A/P";      // AM/PM short
     sKeyword[NF_KEY_MI] =    "M";        // Minute
     sKeyword[NF_KEY_MMI] =   "MM";       // Minute 02
+    sKeyword[NF_KEY_MI2] =   "MI";       // Unambiguous Minute
+    sKeyword[NF_KEY_MIMI] =  "MIMI";     // Unambiguous Minute 02
     sKeyword[NF_KEY_S] =     "S";        // Second
     sKeyword[NF_KEY_SS] =    "SS";       // Second 02
     sKeyword[NF_KEY_Q] =     "Q";        // Quarter short 'Q'
@@ -1140,6 +1142,8 @@ sal_Int32 ImpSvNumberformatScan::ScanType()
             case NF_KEY_AP:
             case NF_KEY_H:                          // H
             case NF_KEY_HH:                         // HH
+            case NF_KEY_MI2:                        // MI unambiguous minute
+            case NF_KEY_MIMI:                       // MIMI
             case NF_KEY_S:                          // S
             case NF_KEY_SS:                         // SS
                 eNewType = css::util::NumberFormat::TIME;
@@ -1254,8 +1258,10 @@ sal_Int32 ImpSvNumberformatScan::ScanType()
                     sal_uInt16 nIndexNex = NextKeyword(i);
                     if (nIndexNex == NF_KEY_H   ||  // H
                         nIndexNex == NF_KEY_HH  ||  // HH
-                        nIndexNex == NF_KEY_M   ||  // M
+                        nIndexNex == NF_KEY_M   ||  // M month or minute?
                         nIndexNex == NF_KEY_MM  ||  // MM
+                        nIndexNex == NF_KEY_MI2 ||  // MI unambiguous minute
+                        nIndexNex == NF_KEY_MIMI||  // MIMI
                         nIndexNex == NF_KEY_S   ||  // S
                         nIndexNex == NF_KEY_SS   )  // SS
                         eNewType = css::util::NumberFormat::TIME;
@@ -2423,6 +2429,8 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                 SAL_FALLTHROUGH;
             case NF_KEY_MI:                         // M
             case NF_KEY_MMI:                        // MM
+            case NF_KEY_MI2:                        // MI
+            case NF_KEY_MIMI:                       // MIMI
             case NF_KEY_H:                          // H
             case NF_KEY_HH:                         // HH
             case NF_KEY_S:                          // S
@@ -2550,6 +2558,8 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                 break;
             case NF_KEY_MI:                         // M
             case NF_KEY_MMI:                        // MM
+            case NF_KEY_MI2:                        // MI
+            case NF_KEY_MIMI:                       // MIMI
             case NF_KEY_H:                          // H
             case NF_KEY_HH:                         // HH
             case NF_KEY_S:                          // S

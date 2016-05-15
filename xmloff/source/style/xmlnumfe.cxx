@@ -509,14 +509,18 @@ void SvXMLNumFmtExport::WriteHoursElement_Impl( bool bLong )
                               true, false );
 }
 
-void SvXMLNumFmtExport::WriteMinutesElement_Impl( bool bLong )
+void SvXMLNumFmtExport::WriteMinutesElement_Impl( bool bLong, bool bIsUnambiguous )
 {
     FinishTextElement_Impl();
 
     AddStyleAttr_Impl( bLong );     // adds to pAttrList
 
-    SvXMLElementExport aElem( rExport, XML_NAMESPACE_NUMBER, XML_MINUTES,
+    if ( bIsUnambiguous )
+        SvXMLElementExport aElem( rExport, XML_NAMESPACE_LO_EXT, XML_MINUTES_UNAMBIGUOUS,
                               true, false );
+    else
+        SvXMLElementExport aElem( rExport, XML_NAMESPACE_NUMBER, XML_MINUTES,
+                                  true, false );
 }
 
 void SvXMLNumFmtExport::WriteRepeatedElement_Impl( sal_Unicode nChar )
@@ -953,6 +957,8 @@ static bool lcl_IsDefaultDateFormat( const SvNumberformat& rFormat, bool bSystem
             case NF_KEY_HH:     eDateHours = XML_DEA_LONG;      break;
             case NF_KEY_MI:     eDateMins = XML_DEA_SHORT;      break;
             case NF_KEY_MMI:    eDateMins = XML_DEA_LONG;       break;
+            case NF_KEY_MI2:    eDateMins = XML_DEA_SHORT;      break;
+            case NF_KEY_MIMI:   eDateMins = XML_DEA_LONG;       break;
             case NF_KEY_S:      eDateSecs = XML_DEA_SHORT;      break;
             case NF_KEY_SS:     eDateSecs = XML_DEA_LONG;       break;
             case NF_KEY_AP:
@@ -1609,7 +1615,9 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                     break;
                 case NF_KEY_MI:
                 case NF_KEY_MMI:
-                    WriteMinutesElement_Impl( nElemType == NF_KEY_MMI );
+                case NF_KEY_MI2:
+                case NF_KEY_MIMI:
+                    WriteMinutesElement_Impl( nElemType == NF_KEY_MMI || nElemType == NF_KEY_MIMI, nElemType == NF_KEY_MI2 || nElemType == NF_KEY_MIMI );
                     bAnyContent = true;
                     break;
                 case NF_KEY_S:
