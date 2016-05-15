@@ -4128,7 +4128,7 @@ PPTStyleSheet::PPTStyleSheet( const DffRecordHeader& rSlideHd, SvStream& rIn, Sd
     while ( ( aTxMasterStyleHd.nRecType == PPT_PST_TxMasterStyleAtom ) && ( rIn.Tell() < nEndRecPos ) ) //TODO: aTxMasterStyleHd may be used without having been properly initialized
     {
         TSS_Type nInstance = (TSS_Type)aTxMasterStyleHd.nRecInstance;
-        if ( ( nInstance < TSS_Type::LAST ) &&
+        if ( ( nInstance <= TSS_Type::LAST ) &&
             ( ( nInstance != TSS_Type::TextInShape ) || !bFoundTxMasterStyleAtom04 ) )
         {
             if ( nInstance > TSS_Type::TextInShape )
