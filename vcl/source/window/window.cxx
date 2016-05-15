@@ -745,13 +745,16 @@ ImplWinData::ImplWinData() :
     mpExtOldText(nullptr),
     mpExtOldAttrAry(nullptr),
     mpCursorRect(nullptr),
-    mnCursorExtWidth(),
+    mnCursorExtWidth(0),
+    mbVertical(false),
     mpCompositionCharRects(nullptr),
+    mnCompositionCharRects(0),
     mpFocusRect(nullptr),
     mpTrackRect(nullptr),
     mnTrackFlags(ShowTrackFlags::NONE),
     mnIsTopWindow((sal_uInt16) ~0), // not initialized yet, 0/1 will indicate TopWindow (see IsTopWindow())
-    mbMouseOver(false)
+    mbMouseOver(false),
+    mbEnableNativeWidget(false)
 {
 }
 
