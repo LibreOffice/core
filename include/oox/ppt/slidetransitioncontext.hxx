@@ -20,10 +20,15 @@
 #ifndef INCLUDED_OOX_PPT_SLIDETRANSITIONCONTEXT_HXX
 #define INCLUDED_OOX_PPT_SLIDETRANSITIONCONTEXT_HXX
 
+#include <oox/core/contexthandler.hxx>
 #include <oox/core/fragmenthandler2.hxx>
 #include <oox/ppt/slidetransition.hxx>
+#include <sal/types.h>
 
-namespace oox { class PropertyMap; }
+namespace oox {
+    class AttributeList;
+    class PropertyMap;
+}
 
 namespace oox { namespace ppt {
 

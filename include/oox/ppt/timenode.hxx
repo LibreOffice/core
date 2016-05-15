@@ -21,22 +21,27 @@
 #ifndef INCLUDED_OOX_PPT_TIMENODE_HXX
 #define INCLUDED_OOX_PPT_TIMENODE_HXX
 
-#include <memory>
-#include <vector>
 #include <list>
-#include <rtl/ustring.hxx>
+#include <map>
+#include <memory>
 
-#include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/animations/XAnimationNode.hpp>
-#include <oox/helper/propertymap.hxx>
+#include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/Reference.hxx>
 #include <oox/ppt/slidetransition.hxx>
 #include <oox/ppt/slidepersist.hxx>
 #include <oox/ppt/animationspersist.hxx>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
+
+namespace com { namespace sun { namespace star {
+    namespace animations { class XAnimationNode; }
+} } }
+
+namespace oox { namespace core { class XmlFilterBase; } }
 
 namespace oox { namespace ppt {
 
     class TimeNode;
-    class SlideTransition;
 
     typedef std::shared_ptr< TimeNode > TimeNodePtr;
     typedef std::list< TimeNodePtr > TimeNodePtrList;

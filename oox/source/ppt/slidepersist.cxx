@@ -18,6 +18,7 @@
  */
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <com/sun/star/drawing/XShapes.hpp>
 #include "oox/ppt/timenode.hxx"
 #include "oox/ppt/pptshape.hxx"
 #include "oox/ppt/slidepersist.hxx"

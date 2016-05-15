@@ -12,7 +12,10 @@
 #define INCLUDED_OOX_PPT_COMMENTS_HXX
 
 #include <vector>
+
 #include <com/sun/star/util/DateTime.hpp>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
 
 namespace oox { namespace ppt {
 

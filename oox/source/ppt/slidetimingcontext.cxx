@@ -22,6 +22,7 @@
 #include "comphelper/anytostring.hxx"
 #include "cppuhelper/exc_hlp.hxx"
 
+#include <com/sun/star/drawing/XShapes.hpp>
 #include "oox/ppt/backgroundproperties.hxx"
 #include "oox/ppt/slidefragmenthandler.hxx"
 #include "oox/drawingml/shapegroupcontext.hxx"
@@ -38,7 +39,6 @@ using namespace ::oox::drawingml;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::xml::sax;
-using namespace ::com::sun::star::container;
 
 namespace oox { namespace ppt {
 

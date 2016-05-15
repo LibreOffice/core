@@ -20,12 +20,12 @@
 #ifndef INCLUDED_OOX_PPT_SLIDETIMINGCONTEXT_HXX
 #define INCLUDED_OOX_PPT_SLIDETIMINGCONTEXT_HXX
 
-#include <com/sun/star/animations/XTimeContainer.hpp>
-#include <oox/ppt/timenode.hxx>
+#include <oox/core/contexthandler.hxx>
 #include <oox/core/fragmenthandler2.hxx>
+#include <oox/ppt/timenode.hxx>
+#include <sal/types.h>
 
-#include <stack>
-#include <vector>
+namespace oox { class AttributeList; }
 
 namespace oox { namespace ppt {
 

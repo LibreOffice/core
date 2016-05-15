@@ -20,8 +20,14 @@
 #ifndef INCLUDED_OOX_PPT_PPTSHAPECONTEXT_HXX
 #define INCLUDED_OOX_PPT_PPTSHAPECONTEXT_HXX
 
+#include <oox/core/contexthandler.hxx>
+#include <oox/drawingml/drawingmltypes.hxx>
 #include <oox/drawingml/shapecontext.hxx>
 #include <oox/ppt/slidepersist.hxx>
+#include <sal/types.h>
+
+namespace oox { class AttributeList; }
+namespace oox { namespace core { class ContextHandler2Helper; } }
 
 namespace oox { namespace ppt {
 

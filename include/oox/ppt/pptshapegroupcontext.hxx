@@ -20,9 +20,17 @@
 #ifndef INCLUDED_OOX_PPT_PPTSHAPEGROUPCONTEXT_HXX
 #define INCLUDED_OOX_PPT_PPTSHAPEGROUPCONTEXT_HXX
 
+#include <oox/core/contexthandler.hxx>
+#include <oox/drawingml/drawingmltypes.hxx>
 #include <oox/drawingml/shapegroupcontext.hxx>
-#include <oox/drawingml/color.hxx>
 #include <oox/ppt/slidepersist.hxx>
+#include <sal/types.h>
+
+namespace oox {
+    class AttributeList;
+    namespace core { class ContextHandler2Helper; }
+    namespace drawingml { class Color; }
+}
 
 namespace oox { namespace ppt {
 
