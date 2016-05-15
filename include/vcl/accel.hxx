@@ -58,20 +58,15 @@ private:
     SAL_DLLPRIVATE  ImplAccelEntry*
                             ImplGetAccelData( const vcl::KeyCode& rKeyCode ) const;
 
-protected:
-    SAL_DLLPRIVATE  void    ImplLoadRes( const ResId& rResId );
-
 public:
                             Accelerator();
                             Accelerator( const Accelerator& rAccel );
-                            Accelerator( const ResId& rResId );
     virtual                 ~Accelerator();
 
     void                    Activate();
     void                    Select();
 
     void                    InsertItem( sal_uInt16 nItemId, const vcl::KeyCode& rKeyCode );
-    void                    InsertItem( const ResId& rResId );
 
     sal_uInt16              GetCurItemId() const { return mnCurId; }
     const vcl::KeyCode&     GetCurKeyCode() const { return maCurKeyCode; }

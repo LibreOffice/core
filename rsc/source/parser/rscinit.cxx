@@ -79,9 +79,7 @@ void RscTypCont::Init()
     RscTop   *  pClassFixedImage;
     RscTop   *  pClassKeyCode;
     RscTop   *  pLangClassKeyCode;
-    RscTop   *  pClassAccelItem;
     RscTop   *  pClassSpinField;
-    RscTop   *  pClassAccel;
 
     Atom        nId;
 
@@ -356,19 +354,8 @@ void RscTypCont::Init()
     aBaseLst.push_back( pLangClassKeyCode );
     }
 
-    pClassAccelItem = InitClassAccelItem( pClassMgr, pLangClassKeyCode );
-    pRoot->Insert( pClassAccelItem );
 }
 {
-    pClassAccel = InitClassAccel( pClassMgr, pClassAccelItem );
-    pRoot->Insert( pClassAccel );
-    nAcceleratorType = pClassAccel->GetId();
-
-    // pClassAccel is only completely defined here
-    nId = aNmTb.Put( "SubAccelerator", VARNAME );
-    pClassAccelItem->SetVariable( nId, pClassAccel, nullptr, VAR_SVDYNAMIC,
-                               ACCELITEM_ACCEL );
-
     RscTop* pClassMenuItem = InitClassMenuItem( pClassMgr, pClassBitmap);
     pRoot->Insert( pClassMenuItem );
 
