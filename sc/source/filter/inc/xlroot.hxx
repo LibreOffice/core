@@ -109,6 +109,7 @@ struct XclRootData
     double              mfScreenPixelY;     /// Height of a screen pixel (1/100 mm).
     long                mnCharWidth;        /// Width of '0' in default font (twips).
     SCTAB               mnScTab;            /// Current Calc sheet index.
+    bool                mbForcedTextEnc;    /// Whether text encoding is allowed to be changed.
     const bool          mbExport;           /// false = Import, true = Export.
 
     explicit            XclRootData( XclBiff eBiff, SfxMedium& rMedium,

@@ -269,7 +269,7 @@ public:
     // various import filters
     virtual FltError ScImportLotus123( SfxMedium&, ScDocument*, rtl_TextEncoding eSrc = RTL_TEXTENCODING_DONTKNOW ) override;
     virtual FltError ScImportQuattroPro( SfxMedium &rMedium, ScDocument *pDoc ) override;
-    virtual FltError ScImportExcel( SfxMedium&, ScDocument*, const EXCIMPFORMAT ) override;
+    virtual FltError ScImportExcel( SfxMedium&, ScDocument*, const EXCIMPFORMAT, rtl_TextEncoding eSrc = RTL_TEXTENCODING_DONTKNOW ) override;
         // eFormat == EIF_AUTO  -> passender Filter wird automatisch verwendet
         // eFormat == EIF_BIFF5 -> nur Biff5-Stream fuehrt zum Erfolg (auch wenn in einem Excel97-Doc)
         // eFormat == EIF_BIFF8 -> nur Biff8-Stream fuehrt zum Erfolg (nur in Excel97-Docs)

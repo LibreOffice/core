@@ -153,6 +153,7 @@ static const sal_Char pFilterExcel95[]  = "MS Excel 95";
 static const sal_Char pFilterEx95Temp[] = "MS Excel 95 Vorlage/Template";
 static const sal_Char pFilterExcel97[]  = "MS Excel 97";
 static const sal_Char pFilterEx97Temp[] = "MS Excel 97 Vorlage/Template";
+static const sal_Char pFilterExcelEnc[] = "MS Excel (encoded)";
 static const sal_Char pFilterDBase[]        = "dBase";
 static const sal_Char pFilterDif[]      = "DIF";
 static const sal_Char pFilterSylk[]     = "SYLK";
@@ -1110,7 +1111,8 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
             bSetColWidths = true;
             bSetRowHeights = true;
         }
-        else if ( aFltName == pFilterExcel4 || aFltName == pFilterExcel5 ||
+        else if (  aFltName == pFilterExcelEnc ||
+                   aFltName == pFilterExcel4 || aFltName == pFilterExcel5 ||
                    aFltName == pFilterExcel95 || aFltName == pFilterExcel97 ||
                    aFltName == pFilterEx4Temp || aFltName == pFilterEx5Temp ||
                    aFltName == pFilterEx95Temp || aFltName == pFilterEx97Temp )
@@ -1124,9 +1126,24 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
             else if ( aFltName == pFilterExcel97 || aFltName == pFilterEx97Temp )
                 eFormat = EIF_BIFF8;
 
+            rtl_TextEncoding eTextEnc = RTL_TEXTENCODING_DONTKNOW;
+            if ( eFormat != EIF_BIFF8 )
+            {
+                OUString sItStr;
+                SfxItemSet* pSet = rMedium.GetItemSet();
+                const SfxPoolItem* pItem;
+                if ( pSet && SfxItemState::SET ==
+                     pSet->GetItemState( SID_FILE_FILTEROPTIONS, true, &pItem ) )
+                {
+                    sItStr = static_cast<const SfxStringItem*>(pItem)->GetValue();
+                    if ( !sItStr.isEmpty() )
+                        eTextEnc = ScGlobal::GetCharsetValue( sItStr );
+                }
+            }
+
             MakeDrawLayer(); //! In the filter
             CalcOutputFactor(); // prepare update of row height
-            FltError eError = ScFormatFilter::Get().ScImportExcel( rMedium, &aDocument, eFormat );
+            FltError eError = ScFormatFilter::Get().ScImportExcel( rMedium, &aDocument, eFormat, eTextEnc );
             aDocument.UpdateFontCharSet();
             if ( aDocument.IsChartListenerCollectionNeedsUpdate() )
                 aDocument.UpdateChartListenerCollection(); //! For all imports?
@@ -2596,6 +2613,11 @@ OUString ScDocShell::GetDBaseFilterName()
 OUString ScDocShell::GetDifFilterName()
 {
     return OUString(pFilterDif);
+}
+
+OUString ScDocShell::GetExcelEncodingFilterName()
+{
+    return OUString(pFilterExcelEnc);
 }
 
 bool ScDocShell::HasAutomaticTableName( const OUString& rFilter )
