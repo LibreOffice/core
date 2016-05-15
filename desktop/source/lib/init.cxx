@@ -1463,7 +1463,8 @@ public:
 
         std::stringstream aStream;
         boost::property_tree::write_json(aStream, aTree);
-        mpCallback->queue(LOK_CALLBACK_UNO_COMMAND_RESULT, strdup(aStream.str().c_str()));
+        OString aPayload = aStream.str().c_str();
+        mpCallback->queue(LOK_CALLBACK_UNO_COMMAND_RESULT, aPayload.getStr());
     }
 
     virtual void SAL_CALL disposing(const css::lang::EventObject&) throw (css::uno::RuntimeException, std::exception) override {}
