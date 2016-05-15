@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_0f83a4cd",
+        "filename": "sw/source/core/unocore/unostyle.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 959,
+      "author": {
+        "id": 1001243
+      },
+      "writtenOn": "2016-05-15T23:50:37Z",
+      "side": 1,
+      "message": "Instead of nullptrs I would use ptr to a function with an assertion, If this approach is accepted.",
+      "revId": "df51a2a85abc67552ba9565db545dcc6bdf1bbea",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
