@@ -2287,6 +2287,7 @@ void ScInputHandler::InvalidateAttribs()
         rBindings.Invalidate( SID_ATTR_CHAR_WEIGHT );
         rBindings.Invalidate( SID_ATTR_CHAR_POSTURE );
         rBindings.Invalidate( SID_ATTR_CHAR_UNDERLINE );
+        rBindings.Invalidate( SID_ATTR_CHAR_OVERLINE );
         rBindings.Invalidate( SID_ULINE_VAL_NONE );
         rBindings.Invalidate( SID_ULINE_VAL_SINGLE );
         rBindings.Invalidate( SID_ULINE_VAL_DOUBLE );
