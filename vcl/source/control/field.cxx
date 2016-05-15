@@ -531,28 +531,25 @@ void NumericFormatter::ImplLoadRes( const ResId& rResId )
 
     if( pMgr )
     {
-        sal_uLong nMask = pMgr->ReadLong();
+        RscNumFormatterFlags nMask = (RscNumFormatterFlags)pMgr->ReadLong();
 
-        if ( NUMERICFORMATTER_MIN & nMask )
+        if ( RscNumFormatterFlags::Min & nMask )
             mnMin = pMgr->ReadLong();
 
-        if ( NUMERICFORMATTER_MAX & nMask )
+        if ( RscNumFormatterFlags::Max & nMask )
             mnMax = pMgr->ReadLong();
 
-        if ( NUMERICFORMATTER_STRICTFORMAT & nMask )
+        if ( RscNumFormatterFlags::StrictFormat & nMask )
             SetStrictFormat( pMgr->ReadShort() != 0 );
 
-        if ( NUMERICFORMATTER_DECIMALDIGITS & nMask )
+        if ( RscNumFormatterFlags::DecimalDigits & nMask )
             SetDecimalDigits( pMgr->ReadShort() );
 
-        if ( NUMERICFORMATTER_VALUE & nMask )
+        if ( RscNumFormatterFlags::Value & nMask )
         {
             mnFieldValue = ClipAgainstMinMax(pMgr->ReadLong());
             mnLastValue = mnFieldValue;
         }
-
-        if ( NUMERICFORMATTER_NOTHOUSANDSEP & nMask )
-            SetUseThousandSep( pMgr->ReadShort() == 0 );
     }
 }
 

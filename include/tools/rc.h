@@ -21,6 +21,7 @@
 #define INCLUDED_TOOLS_RC_H
 
 #include <tools/rcid.h>
+#include <o3tl/typed_flags_set.hxx>
 
 // Defines for all "Window" resources.
 // (Here are all window styles that are not in WinBits)
@@ -77,13 +78,16 @@
 
 // For "Field" resources:
 
-#define NUMERICFORMATTER_MIN            0x01
-#define NUMERICFORMATTER_MAX            0x02
-#define NUMERICFORMATTER_STRICTFORMAT   0x04
-//#define NUMERICFORMATTER_I12          0x08 // removed (2005-06-17)
-#define NUMERICFORMATTER_DECIMALDIGITS  0x10
-#define NUMERICFORMATTER_VALUE          0x20
-#define NUMERICFORMATTER_NOTHOUSANDSEP  0x40
+enum class RscNumFormatterFlags {
+    Min            = 0x01,
+    Max            = 0x02,
+    StrictFormat   = 0x04,
+    DecimalDigits  = 0x10,
+    Value          = 0x20,
+};
+namespace o3tl {
+    template<> struct typed_flags<RscNumFormatterFlags> : is_typed_flags<RscNumFormatterFlags, 0x37> {};
+}
 
 #define METRICFORMATTER_UNIT            0x01
 #define METRICFORMATTER_CUSTOMUNITTEXT  0x02

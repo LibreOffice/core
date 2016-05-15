@@ -923,22 +923,19 @@ RscTop * RscTypCont::InitClassNumericFormatter( RscTop * pSuper )
     // initialize variables
     nId = aNmTb.Put( "Minimum", VARNAME );
     pClassNumeric->SetVariable( nId, &aIdLong, nullptr,
-                                0, NUMERICFORMATTER_MIN );
+                                0, (sal_uInt32)RscNumFormatterFlags::Min );
     nId = aNmTb.Put( "Maximum", VARNAME );
     pClassNumeric->SetVariable( nId, &aIdLong, nullptr,
-                                0, NUMERICFORMATTER_MAX );
+                                0, (sal_uInt32)RscNumFormatterFlags::Max );
     nId = aNmTb.Put( "StrictFormat", VARNAME );
     pClassNumeric->SetVariable( nId, &aBool, nullptr,
-                                0, NUMERICFORMATTER_STRICTFORMAT );
+                                0, (sal_uInt32)RscNumFormatterFlags::StrictFormat );
     nId = aNmTb.Put( "DecimalDigits", VARNAME );
     pClassNumeric->SetVariable( nId, &aUShort, nullptr,
-                                0, NUMERICFORMATTER_DECIMALDIGITS );
+                                0, (sal_uInt32)RscNumFormatterFlags::DecimalDigits );
     nId = aNmTb.Put( "Value", VARNAME );
     pClassNumeric->SetVariable( nId, &aIdLong, nullptr,
-                                0, NUMERICFORMATTER_VALUE );
-    nId = aNmTb.Put( "NoThousandSep", VARNAME );
-    pClassNumeric->SetVariable( nId, &aBool, nullptr,
-                                0, NUMERICFORMATTER_NOTHOUSANDSEP );
+                                0, (sal_uInt32)RscNumFormatterFlags::Value );
 
     return pClassNumeric;
 }
