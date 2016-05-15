@@ -21,9 +21,15 @@
 #ifndef INCLUDED_OOX_PPT_SOUNDACTIONCONTEXT_HXX
 #define INCLUDED_OOX_PPT_SOUNDACTIONCONTEXT_HXX
 
+#include <oox/core/contexthandler.hxx>
 #include <oox/core/fragmenthandler2.hxx>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
 
-namespace oox { class PropertyMap; }
+namespace oox {
+    class AttributeList;
+    class PropertyMap;
+}
 
 namespace oox { namespace ppt {
 

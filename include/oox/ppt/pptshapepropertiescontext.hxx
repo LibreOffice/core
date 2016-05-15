@@ -21,6 +21,14 @@
 #define INCLUDED_OOX_PPT_PPTSHAPEPROPERTIESCONTEXT_HXX
 
 #include <drawingml/shapepropertiescontext.hxx>
+#include <oox/core/contexthandler.hxx>
+#include <sal/types.h>
+
+namespace oox {
+    class AttributeList;
+    namespace core { class ContextHandler2Helper; }
+    namespace drawingml { class Shape; }
+}
 
 namespace oox { namespace ppt {
 

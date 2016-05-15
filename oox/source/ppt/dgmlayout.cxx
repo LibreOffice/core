@@ -24,6 +24,7 @@
 #include "drawingml/diagram/diagram.hxx"
 #include "oox/dump/pptxdumper.hxx"
 
+#include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/XMasterPageTarget.hpp>

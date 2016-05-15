@@ -28,6 +28,7 @@
 #include "drawingml/table/tablestylelistfragmenthandler.hxx"
 #include "oox/helper/graphichelper.hxx"
 #include "oox/ole/vbaproject.hxx"
+#include <oox/ppt/presentationfragmenthandler.hxx>
 #include <oox/token/tokens.hxx>
 
 #include <services.hxx>

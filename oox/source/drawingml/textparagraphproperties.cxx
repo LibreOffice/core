@@ -29,6 +29,7 @@
 #include <com/sun/star/style/TabStop.hpp>
 #include <com/sun/star/text/PositionAndSpaceMode.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
+#include <com/sun/star/drawing/XDrawPage.hpp>
 
 #include <osl/diagnose.h>
 

@@ -20,8 +20,27 @@
 #ifndef INCLUDED_OOX_PPT_PPTSHAPE_HXX
 #define INCLUDED_OOX_PPT_PPTSHAPE_HXX
 
+#include <vector>
+
+#include <com/sun/star/uno/Reference.hxx>
 #include <oox/drawingml/shape.hxx>
+#include <oox/drawingml/drawingmltypes.hxx>
 #include <oox/ppt/slidepersist.hxx>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
+
+namespace basegfx { class B2DHomMatrix; }
+
+namespace com { namespace sun { namespace star {
+    namespace awt { struct Rectangle; }
+    namespace drawing { class XShapes; }
+} } }
+
+namespace oox {
+    namespace core { class XmlFilterBase; }
+    namespace drawingml { class Theme; }
+    template <typename Type> class OptValue;
+}
 
 namespace oox { namespace ppt {
 

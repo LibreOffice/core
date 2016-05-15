@@ -20,14 +20,33 @@
 #ifndef INCLUDED_OOX_PPT_PPTIMPORT_HXX
 #define INCLUDED_OOX_PPT_PPTIMPORT_HXX
 
-#include <oox/core/xmlfilterbase.hxx>
-
-#include <com/sun/star/animations/XAnimationNode.hpp>
-#include <oox/drawingml/theme.hxx>
-#include <oox/ppt/presentationfragmenthandler.hxx>
-#include <oox/ppt/slidepersist.hxx>
-#include <vector>
+#include <exception>
 #include <map>
+#include <memory>
+#include <vector>
+
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/RuntimeException.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
+#include <oox/core/filterbase.hxx>
+#include <oox/core/xmlfilterbase.hxx>
+#include <oox/drawingml/drawingmltypes.hxx>
+#include <oox/drawingml/theme.hxx>
+#include <oox/ppt/slidepersist.hxx>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
+
+namespace com { namespace sun { namespace star {
+    namespace beans { struct PropertyValue; }
+    namespace uno { class XComponentContext; }
+} } }
+
+namespace oox {
+    class GraphicHelper;
+    namespace drawingml { namespace chart { class ChartConverter; } }
+    namespace ole { class VbaProject; }
+    namespace vml { class Drawing; }
+}
 
 namespace oox { namespace ppt {
 

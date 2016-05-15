@@ -20,14 +20,17 @@
 #ifndef INCLUDED_OOX_PPT_SLIDEFRAGMENTHANDLER_HXX
 #define INCLUDED_OOX_PPT_SLIDEFRAGMENTHANDLER_HXX
 
-#include <com/sun/star/drawing/XDrawPage.hpp>
-#include <oox/helper/propertymap.hxx>
-#include <oox/core/fragmenthandler2.hxx>
-#include <oox/ppt/slidepersist.hxx>
-
-#include <stack>
 #include <vector>
-#include <map>
+
+#include <oox/core/contexthandler.hxx>
+#include <oox/core/fragmenthandler2.hxx>
+#include <oox/helper/propertymap.hxx>
+#include <oox/ppt/slidepersist.hxx>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
+
+namespace oox { class AttributeList; }
+namespace oox { namespace core { class XmlFilterBase; } }
 
 namespace oox { namespace ppt {
 

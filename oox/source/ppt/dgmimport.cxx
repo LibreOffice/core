@@ -24,6 +24,7 @@
 #include "oox/dump/pptxdumper.hxx"
 
 #include <com/sun/star/drawing/XShape.hpp>
+#include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <services.hxx>

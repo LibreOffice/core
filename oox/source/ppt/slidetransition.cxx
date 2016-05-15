@@ -23,6 +23,7 @@
 #include <com/sun/star/presentation/AnimationSpeed.hpp>
 #include <com/sun/star/animations/TransitionType.hpp>
 #include <com/sun/star/animations/TransitionSubType.hpp>
+#include <com/sun/star/animations/XTransitionFilter.hpp>
 
 #include <osl/diagnose.h>
 

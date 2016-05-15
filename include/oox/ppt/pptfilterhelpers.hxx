@@ -21,10 +21,13 @@
 #define INCLUDED_OOX_PPT_PPTFILTERHELPERS_HXX
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/animations/XAnimationNode.hpp>
 #include <oox/dllapi.h>
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
+
+namespace com { namespace sun { namespace star {
+    namespace animations { class XAnimationNode; }
+} } }
 
 namespace oox { namespace ppt {
 

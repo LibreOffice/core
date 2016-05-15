@@ -21,9 +21,13 @@
 #ifndef INCLUDED_OOX_PPT_SLIDETRANSITION_HXX
 #define INCLUDED_OOX_PPT_SLIDETRANSITION_HXX
 
+#include <com/sun/star/uno/Reference.hxx>
 #include <rtl/ustring.hxx>
+#include <sal/types.h>
 
-#include <com/sun/star/animations/XTransitionFilter.hpp>
+namespace com { namespace sun { namespace star {
+    namespace animations { class XTransitionFilter; }
+} } }
 
 namespace oox { class PropertyMap; }
 
