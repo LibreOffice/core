@@ -50,6 +50,7 @@
 #include <editeng/editview.hxx>
 #include <editeng/flditem.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <comphelper/lok.hxx>
 
 #include <uitool.hxx>
 #include <view.hxx>
@@ -251,8 +252,12 @@ void SidebarTextControl::KeyInput( const KeyEvent& rKeyEvt )
     }
     else
     {
+        // MakeVisible can lose our MapMode, save it.
+        auto oldMapMode = GetMapMode();
         //let's make sure we see our note
         mrPostItMgr.MakeVisible(&mrSidebarWin);
+        if (comphelper::LibreOfficeKit::isActive())
+            SetMapMode(oldMapMode);
 
         long aOldHeight = mrSidebarWin.GetPostItTextHeight();
         bool bDone = false;
