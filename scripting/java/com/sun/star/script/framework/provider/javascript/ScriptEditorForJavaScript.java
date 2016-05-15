@@ -55,24 +55,25 @@ public class ScriptEditorForJavaScript implements ScriptEditor {
     HashMap<String, ScriptEditorForJavaScript>();
 
     static {
+        JSTEMPLATE = "// JavaScript script";
         try {
             URL url = ScriptEditorForJavaScript.class.getResource("template.js");
-            InputStream in = url.openStream();
-            StringBuilder buf = new StringBuilder();
-            byte[] b = new byte[1024];
-            int len;
+            if (url != null) {
+                InputStream in = url.openStream();
+                StringBuilder buf = new StringBuilder();
+                byte[] b = new byte[1024];
+                int len;
 
-            while ((len = in.read(b)) != -1) {
-                buf.append(new String(b, 0, len));
+                while ((len = in.read(b)) != -1) {
+                    buf.append(new String(b, 0, len));
+                }
+
+                in.close();
+
+                JSTEMPLATE = buf.toString();
             }
-
-            in.close();
-
-            JSTEMPLATE = buf.toString();
         } catch (IOException ioe) {
-            JSTEMPLATE = "// JavaScript script";
         } catch (Exception e) {
-            JSTEMPLATE = "// JavaScript script";
         }
     }
 

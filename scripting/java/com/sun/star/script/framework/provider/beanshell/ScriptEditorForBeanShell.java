@@ -69,24 +69,25 @@ public class ScriptEditorForBeanShell implements ScriptEditor, ActionListener {
 
     // try to load the template for BeanShell scripts
     static {
+        BSHTEMPLATE = "// BeanShell script";
         try {
             URL url = ScriptEditorForBeanShell.class.getResource("template.bsh");
-            InputStream in = url.openStream();
-            StringBuilder buf = new StringBuilder();
-            byte[] b = new byte[1024];
-            int len;
+            if (url != null) {
+                InputStream in = url.openStream();
+                StringBuilder buf = new StringBuilder();
+                byte[] b = new byte[1024];
+                int len;
 
-            while ((len = in.read(b)) != -1) {
-                buf.append(new String(b, 0, len));
+                while ((len = in.read(b)) != -1) {
+                    buf.append(new String(b, 0, len));
+                }
+
+                in.close();
+
+                BSHTEMPLATE = buf.toString();
             }
-
-            in.close();
-
-            BSHTEMPLATE = buf.toString();
         } catch (IOException ioe) {
-            BSHTEMPLATE = "// BeanShell script";
         } catch (Exception e) {
-            BSHTEMPLATE = "// BeanShell script";
         }
     }
 
