@@ -44,6 +44,7 @@
 
 #define ODS_FORMAT_TYPE      (SfxFilterFlags::IMPORT | SfxFilterFlags::EXPORT | SfxFilterFlags::TEMPLATE | SfxFilterFlags::OWN | SfxFilterFlags::DEFAULT | SfxFilterFlags::ENCRYPTION | SfxFilterFlags::PASSWORDTOMODIFY)
 #define XLS_FORMAT_TYPE      (SfxFilterFlags::IMPORT | SfxFilterFlags::EXPORT | SfxFilterFlags::ALIEN | SfxFilterFlags::ENCRYPTION | SfxFilterFlags::PASSWORDTOMODIFY | SfxFilterFlags::PREFERED)
+#define XLS_50_FORMAT_TYPE   (SfxFilterFlags::IMPORT | SfxFilterFlags::ALIEN)
 #define XLSX_FORMAT_TYPE     (SfxFilterFlags::IMPORT | SfxFilterFlags::EXPORT | SfxFilterFlags::ALIEN | SfxFilterFlags::STARONEFILTER | SfxFilterFlags::PREFERED)
 #define LOTUS123_FORMAT_TYPE (SfxFilterFlags::IMPORT |                          SfxFilterFlags::ALIEN | SfxFilterFlags::PREFERED)
 #define CSV_FORMAT_TYPE      (SfxFilterFlags::IMPORT | SfxFilterFlags::EXPORT | SfxFilterFlags::ALIEN )
@@ -64,6 +65,7 @@
 #define FORMAT_XLS_XML  8
 #define FORMAT_XLSB     9
 #define FORMAT_FODS     10
+#define FORMAT_XLS_50   11
 
 enum StringType { PureString, FormulaValue, StringValue };
 

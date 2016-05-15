@@ -67,6 +67,7 @@ public:
     //ods, xls, xlsx filter tests
     void testRangeNameODS(); // only test ods here, xls and xlsx in subsequent_filters-test
     void testContentODS();
+    void testEncodedXLS();
     void testContentXLS();
     void testContentXLSX();
     void testContentXLSXStrict(); // strict OOXML
@@ -87,6 +88,7 @@ public:
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testCVEs);
+    CPPUNIT_TEST(testEncodedXLS);
     CPPUNIT_TEST(testRangeNameODS);
     CPPUNIT_TEST(testContentODS);
     CPPUNIT_TEST(testContentXLS);
@@ -430,6 +432,17 @@ void ScFiltersTest::testSheetNamesXLSX()
     CPPUNIT_ASSERT_EQUAL(OUString("\"The Sheet\""), aTabNames[2]);
     CPPUNIT_ASSERT_EQUAL(OUString("A<B"), aTabNames[3]);
     CPPUNIT_ASSERT_EQUAL(OUString("C>D"), aTabNames[4]);
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testEncodedXLS()
+{
+    ScDocShellRef xDocSh = loadDoc("biff5enc.", FORMAT_XLS_50);
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    OUString aText = rDoc.GetString(0, 0, 0);
+    CPPUNIT_ASSERT_EQUAL(OUString(sal_Unicode(0x43F)), aText);
 
     xDocSh->DoClose();
 }
