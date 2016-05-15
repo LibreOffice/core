@@ -45,8 +45,6 @@
 #define RSC_IMAGELIST           (RSC_NOTYPE + 0x24)
 
 #define RSC_WINDOW              (RSC_NOTYPE + 0x35)
-#define RSC_SYSWINDOW           (RSC_NOTYPE + 0x36)
-#define RSC_WORKWIN             (RSC_NOTYPE + 0x37)
 
 #define RSC_CONTROL             (RSC_NOTYPE + 0x44)
 #define RSC_BUTTON              (RSC_NOTYPE + 0x45)

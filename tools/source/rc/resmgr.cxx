@@ -1411,7 +1411,6 @@ OString ResMgr::GetAutoHelpId()
         // auto help ids for top level windows
         switch( pRC->pResource->GetRT() ) {
             case RSC_DOCKINGWINDOW:     aHID.append( "DockingWindow" );    break;
-            case RSC_WORKWIN:           aHID.append( "WorkWindow" );       break;
             default: return OString();
         }
     }
@@ -1421,7 +1420,6 @@ OString ResMgr::GetAutoHelpId()
         const ImpRCStack *pRC1 = StackTop(1);
         switch( pRC1->pResource->GetRT() ) {
             case RSC_DOCKINGWINDOW:
-            case RSC_WORKWIN:
                 // intentionally no breaks!
                 // auto help ids for controls
                 switch( pRC->pResource->GetRT() ) {
