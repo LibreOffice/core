@@ -100,6 +100,11 @@ OutlineView::OutlineView( DrawDocShell& rDocSh, vcl::Window* pWindow, OutlineVie
         mnPaperWidth = (mrOutlineViewShell.GetActiveWindow()->GetViewSize().Width() - 4000);
         mrOutliner.SetPaperSize(Size(mnPaperWidth, 400000000));
     }
+    else
+    {
+        // width: DIN A4, two margins at 1 cm each
+        mnPaperWidth = 19000;
+    }
 
     // insert View into Outliner
     for (OutlinerView* & rp : mpOutlinerView)
