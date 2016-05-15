@@ -80,13 +80,36 @@ namespace desktop {
 
         void queue(const int type, const char* data)
         {
+            const std::string payload(data ? data : "(nil)");
             if (m_bPartTilePainting)
             {
-                // We drop notifications when this is set.
+                // We drop notifications when this is set, except for important ones.
+                // When we issue a complex command (such as .uno:InsertAnnotation)
+                // there will be multiple notifications. On the first invalidation
+                // we will start painting, but other events will get fired
+                // while the complex command in question executes.
+                // We don't want to supress everything here on the wrong assumption
+                // that no new events are fired during painting.
+                if (type != LOK_CALLBACK_STATE_CHANGED &&
+                    type != LOK_CALLBACK_INVALIDATE_TILES)
+                {
+                    //SAL_WARN("lokevt", "Skipping while painting [" + std::to_string(type) + "]: [" + payload + "].");
+                    return;
+                }
+            }
+
+            // Supress invalid payloads.
+            if (type == LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR &&
+                payload.find(", 0, 0, ") != std::string::npos)
+            {
+                // The cursor position is often the relative coordinates of the widget
+                // issueing it, instead of the absolute one that we expect.
+                // This is temporary however, and, once the control is created and initialized
+                // correctly, it eventually emits the correct absolute coordinates.
+                //SAL_WARN("lokevt", "Skipping invalid event [" + std::to_string(type) + "]: [" + payload + "].");
                 return;
             }
 
-            const std::string payload(data ? data : "(nil)");
             std::unique_lock<std::mutex> lock(m_mutex);
 
             const auto stateIt = m_states.find(type);
@@ -95,17 +118,11 @@ namespace desktop {
                 // If the state didn't change, it's safe to ignore.
                 if (stateIt->second == payload)
                 {
+                    //SAL_WARN("lokevt", "Skipping duplicate [" + std::to_string(type) + "]: [" + payload + "].");
                     return;
                 }
 
                 stateIt->second = payload;
-            }
-
-            if (type == LOK_CALLBACK_INVALIDATE_TILES &&
-                !m_queue.empty() && m_queue.back().first == type && m_queue.back().second == payload)
-            {
-                // Supress duplicate invalidation only when they are in sequence.
-                return;
             }
 
             if (type == LOK_CALLBACK_TEXT_SELECTION && payload.empty())
@@ -185,7 +202,7 @@ namespace desktop {
                 if (m_queue[i].first == type)
                 {
                     payload = m_queue[i].second;
-                    //SAL_WARN("idle", "Found [" + std::to_string(type) + "] at " + std::to_string(i) + ": [" + payload + "].");
+                    //SAL_WARN("lokevt", "Found [" + std::to_string(type) + "] at " + std::to_string(i) + ": [" + payload + "].");
                     break;
                 }
             }
@@ -195,7 +212,7 @@ namespace desktop {
                 if (m_queue[i].first == type &&
                     (!identical || m_queue[i].second == payload))
                 {
-                    //SAL_WARN("idle", "Removing [" + std::to_string(type) + "] at " + std::to_string(i) + ": " + m_queue[i].second + "].");
+                    //SAL_WARN("lokevt", "Removing [" + std::to_string(type) + "] at " + std::to_string(i) + ": " + m_queue[i].second + "].");
                     m_queue.erase(m_queue.begin() + i);
                 }
             }
