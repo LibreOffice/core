@@ -1217,6 +1217,12 @@ void SwSidebarWin::ShowNote()
         mpShadow->setVisible(true);
     if (mpAnchor && !mpAnchor->isVisible())
         mpAnchor->setVisible(true);
+
+    // Invalidate.
+    mpSidebarTextControl->Push(PushFlags::MAPMODE);
+    lcl_translateTwips(*EditWin(), *mpSidebarTextControl, nullptr);
+    mpSidebarTextControl->Invalidate();
+    mpSidebarTextControl->Pop();
 }
 
 void SwSidebarWin::HideNote()
