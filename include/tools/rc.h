@@ -71,10 +71,6 @@
 #define RSC_MENUITEM_DISABLE            0x400
 #define RSC_MENUITEM_COMMAND            0x800
 
-// "AccelKey" resource options:
-#define ACCELITEM_ACCEL                 0x01
-#define ACCELITEM_KEY                   0x02
-
 // For "Field" resources:
 
 #define NUMERICFORMATTER_MIN            0x01

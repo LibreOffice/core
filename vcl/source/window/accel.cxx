@@ -263,29 +263,6 @@ Accelerator::Accelerator( const Accelerator& rAccel ) :
     ImplCopyData(*rAccel.mpData);
 }
 
-Accelerator::Accelerator( const ResId& rResId )
-{
-
-    ImplInit();
-    mpData = new ImplAccelData;
-    rResId.SetRT( RSC_ACCEL );
-    ImplLoadRes( rResId );
-}
-
-void Accelerator::ImplLoadRes( const ResId& rResId )
-{
-    GetRes( rResId );
-
-    maHelpStr = ReadStringRes();
-    sal_uLong nObjFollows = ReadLongRes();
-
-    for( sal_uLong i = 0; i < nObjFollows; i++ )
-    {
-        InsertItem( ResId( static_cast<RSHEADER_TYPE *>(GetClassRes()), *rResId.GetResMgr() ) );
-        IncrementRes( GetObjSizeRes( static_cast<RSHEADER_TYPE *>(GetClassRes()) ) );
-    }
-}
-
 Accelerator::~Accelerator()
 {
 
@@ -310,38 +287,6 @@ void Accelerator::Select()
 void Accelerator::InsertItem( sal_uInt16 nItemId, const vcl::KeyCode& rKeyCode )
 {
     ImplInsertAccel( nItemId, rKeyCode, true, nullptr );
-}
-
-void Accelerator::InsertItem( const ResId& rResId )
-{
-
-    sal_uLong               nObjMask;
-    sal_uInt16              nAccelKeyId;
-    sal_uInt16              bDisable;
-    vcl::KeyCode            aKeyCode;
-    Accelerator*        pAutoAccel  = nullptr;
-
-    GetRes( rResId.SetRT( RSC_ACCELITEM ) );
-    nObjMask        = ReadLongRes();
-    nAccelKeyId     = sal::static_int_cast<sal_uInt16>(ReadLongRes());
-    bDisable        = ReadShortRes();
-
-    if ( nObjMask & ACCELITEM_KEY )
-    {
-        // new context was created
-        RSHEADER_TYPE * pKeyCodeRes = static_cast<RSHEADER_TYPE *>(GetClassRes());
-        ResId aResId( pKeyCodeRes, *rResId.GetResMgr());
-        aKeyCode = vcl::KeyCode( aResId );
-        IncrementRes( GetObjSizeRes( static_cast<RSHEADER_TYPE *>(GetClassRes()) ) );
-    }
-
-    if ( nObjMask & ACCELITEM_ACCEL )
-    {
-        pAutoAccel = new Accelerator( ResId( static_cast<RSHEADER_TYPE *>(GetClassRes()), *rResId.GetResMgr() ) );
-        IncrementRes( GetObjSizeRes( static_cast<RSHEADER_TYPE *>(GetClassRes()) ) );
-    }
-
-    ImplInsertAccel( nAccelKeyId, aKeyCode, !bDisable, pAutoAccel );
 }
 
 sal_uInt16 Accelerator::GetItemCount() const
