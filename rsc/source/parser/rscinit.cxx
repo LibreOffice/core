@@ -66,8 +66,6 @@ void RscTypCont::Init()
     RscTop   *  pClassImage;
     RscTop   *  pClassImageList;
     RscTop   *  pClassWindow;
-    RscTop   *  pClassSystemWindow;
-    RscTop   *  pClassWorkWindow;
     RscTop   *  pClassControl;
     RscTop   *  pClassButton;
     RscTop   *  pClassCheckBox;
@@ -307,15 +305,6 @@ void RscTypCont::Init()
     pClassWindow = InitClassWindow( pClassMgr, pMapUnit,
                                     pLangGeometry );
     pRoot->Insert( pClassWindow );
-}
-{
-
-    pClassSystemWindow = InitClassSystemWindow( pClassWindow );
-    //aBaseLst.Insert( pClassSystemWindow, LIST_APPEND );
-    pRoot->Insert( pClassSystemWindow );
-
-    pClassWorkWindow = InitClassWorkWindow( pClassSystemWindow );
-    pRoot->Insert( pClassWorkWindow );
 }
 {
     pClassControl = InitClassControl( pClassWindow );

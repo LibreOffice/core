@@ -180,8 +180,6 @@ class RscTypCont
                                     RscTop * pClassColor, RscCont * pStrLst );
     RscTop *    InitClassWindow( RscTop * pSuper, RscEnum * pMapUnit,
                                  RscArray * pLangGeo );
-    RscTop *    InitClassSystemWindow( RscTop * pSuper );
-    RscTop *    InitClassWorkWindow( RscTop * pSuper );
     RscTop *    InitClassControl( RscTop * pSuper );
     RscTop *    InitClassCheckBox( RscTop * pSuper );
     RscTop *    InitClassPushButton( RscTop * pSuper );

@@ -302,60 +302,6 @@ RscTop * RscTypCont::InitClassWindow( RscTop * pSuper, RscEnum * pMapUnit,
     return pClassWindow;
 }
 
-RscTop * RscTypCont::InitClassSystemWindow( RscTop * pSuper )
-{
-    Atom        nId;
-    RscTop *    pClassSystemWindow;
-
-    // initialize class
-    nId = pHS->getID( "SystemWindow" );
-    pClassSystemWindow = new RscClass( nId, RSC_SYSWINDOW, pSuper );
-    pClassSystemWindow->SetCallPar( *pWinPar1, *pWinPar2, *pWinParType );
-    aNmTb.Put( nId, CLASSNAME, pClassSystemWindow );
-
-    INS_WINBIT(pClassSystemWindow,Sizeable)
-    INS_WINBIT(pClassSystemWindow,Moveable)
-    InsWinBit( pClassSystemWindow, "Minable", nMinimizeId );
-    InsWinBit( pClassSystemWindow, "Maxable", nMaximizeId );
-    INS_WINBIT(pClassSystemWindow,Closeable)
-    INS_WINBIT(pClassSystemWindow,App)
-    INS_WINBIT(pClassSystemWindow,SysWin)
-
-    return pClassSystemWindow ;
-}
-
-RscTop * RscTypCont::InitClassWorkWindow( RscTop * pSuper )
-{
-    Atom        nId;
-    RscTop *    pClassWorkWindow;
-
-    // initialize class
-    nId = pHS->getID( "WorkWindow" );
-    pClassWorkWindow = new RscClass( nId, RSC_WORKWIN, pSuper );
-    pClassWorkWindow->SetCallPar( *pWinPar1, *pWinPar2, *pWinParType );
-
-    aNmTb.Put( nId, CLASSNAME, pClassWorkWindow );
-
-    // initialize variables
-    {
-        Atom        nVarId;
-        RscEnum   * pShow;
-
-        aBaseLst.push_back( pShow = new RscEnum( pHS->getID( "EnumShowState" ), RSC_NOTYPE ) );
-
-        SETCONST( pShow, "SHOW_NORMAL",        WORKWIN_SHOWNORMAL    );
-        SETCONST( pShow, "SHOW_MINIMIZED",     WORKWIN_SHOWMINIMIZED );
-        SETCONST( pShow, "SHOW_MAXIMIZED",     WORKWIN_SHOWMAXIMIZED );
-
-
-        // add variable
-        nVarId = aNmTb.Put( "Show", VARNAME );
-        pClassWorkWindow->SetVariable( nVarId, pShow );
-    }
-
-    return pClassWorkWindow;
-}
-
 RscTop * RscTypCont::InitClassControl( RscTop * pSuper )
 {
     Atom        nId;
