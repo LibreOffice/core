@@ -88,10 +88,6 @@ namespace o3tl {
     template<> struct typed_flags<RscMenuItem> : is_typed_flags<RscMenuItem, 0xd7f> {};
 }
 
-// "AccelKey" resource options:
-#define ACCELITEM_ACCEL                 0x01
-#define ACCELITEM_KEY                   0x02
-
 // For "Field" resources:
 
 enum class RscNumFormatterFlags {

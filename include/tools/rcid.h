@@ -37,7 +37,6 @@
 #define RSC_STRING              (RSC_NOTYPE + 0x11)
 #define RSC_BITMAP              (RSC_NOTYPE + 0x13)
 #define RSC_ACCEL               (RSC_NOTYPE + 0x1a)
-#define RSC_ACCELITEM           (RSC_NOTYPE + 0x1b) // only used internally
 #define RSC_MENU                (RSC_NOTYPE + 0x1c)
 #define RSC_MENUITEM            (RSC_NOTYPE + 0x1d) // only used internally
 #define RSC_KEYCODE             (RSC_NOTYPE + 0x1f)

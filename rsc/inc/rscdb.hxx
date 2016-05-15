@@ -194,7 +194,6 @@ class RscTypCont
     RscTop *    InitClassFixedImage( RscTop * pSuper, RscTop * pClassImage );
     RscTop *    InitClassRadioButton( RscTop * pSuper );
     RscTop *    InitClassKeyCode( RscTop * pSuper, RscEnum * pKey );
-    RscTop *    InitClassAccelItem( RscTop * pSuper, RscTop * pKeyCode );
     RscTop *    InitClassAccel( RscTop * pSuper, RscTop * pClassAccelItem );
     RscTop *    InitClassMenuItem( RscTop * pSuper, RscTop * pClassBitmap );
     RscTop *    InitClassMenu( RscTop * pSuper, RscTop * pMenuItem );

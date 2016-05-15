@@ -665,29 +665,6 @@ RscTop * RscTypCont::InitClassKeyCode( RscTop * pSuper, RscEnum * pKey )
     return pClassKeyCode;
 }
 
-RscTop * RscTypCont::InitClassAccelItem( RscTop * pSuper,
-                                         RscTop * pClassKeyCode )
-{
-    Atom        nId;
-    RscTop *    pClassAccelItem;
-
-    // initialize class
-    nId = pHS->getID( "AcceleratorItem" );
-    pClassAccelItem = new RscClass( nId, RSC_ACCELITEM, pSuper );
-    aNmTb.Put( nId, CLASSNAME, pClassAccelItem );
-
-    // initialize variables
-    nId = aNmTb.Put( "Identifier", VARNAME );
-    pClassAccelItem->SetVariable( nId, &aIdNoZeroUShort );
-    nId = aNmTb.Put( "Disable", VARNAME );
-    pClassAccelItem->SetVariable( nId, &aBool );
-    nId = aNmTb.Put( "Key", VARNAME );
-    pClassAccelItem->SetVariable( nId, pClassKeyCode, nullptr, 0,
-                                  ACCELITEM_KEY );
-
-    return pClassAccelItem;
-}
-
 RscTop * RscTypCont::InitClassAccel( RscTop * pSuper, RscTop * pClassAccelItem )
 {
     Atom        nId;
