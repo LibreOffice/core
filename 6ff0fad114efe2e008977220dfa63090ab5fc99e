@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_afee38ea",
+        "filename": "include/vcl/outdev.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-05-15T12:54:51Z",
+      "side": 1,
+      "message": "should be outside the namespace, or you need to put it into the vcl namespace in it\u0027s header file and adjust everywhere",
+      "revId": "6ff0fad114efe2e008977220dfa63090ab5fc99e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_cfb9bcee",
+        "filename": "vcl/Library_vcl.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-05-15T12:54:51Z",
+      "side": 1,
+      "message": "use lowercase for filename to match everything else",
+      "revId": "6ff0fad114efe2e008977220dfa63090ab5fc99e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
