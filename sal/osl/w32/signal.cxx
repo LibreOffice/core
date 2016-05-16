@@ -18,6 +18,7 @@
  */
 
 #include <sal/config.h>
+#include <config_features.h>
 
 #include <internal/signalshared.hxx>
 
@@ -42,11 +43,13 @@
 namespace
 {
 long WINAPI signalHandlerFunction(LPEXCEPTION_POINTERS lpEP);
+
+LPTOP_LEVEL_EXCEPTION_FILTER pPreviousHandler = nullptr;
 }
 
 bool onInitSignal()
 {
-    SetUnhandledExceptionFilter(signalHandlerFunction);
+    pPreviousHandler = SetUnhandledExceptionFilter(signalHandlerFunction);
 
     HMODULE hFaultRep = LoadLibrary( "faultrep.dll" );
     if ( hFaultRep )
@@ -62,7 +65,7 @@ bool onInitSignal()
 
 bool onDeInitSignal()
 {
-    SetUnhandledExceptionFilter(nullptr);
+    SetUnhandledExceptionFilter(pPreviousHandler);
 
     return false;
 }
@@ -74,6 +77,13 @@ namespace
 
 long WINAPI signalHandlerFunction(LPEXCEPTION_POINTERS lpEP)
 {
+#if HAVE_FEATURE_BREAKPAD
+    // we should make sure to call the breakpad handler as
+    // first step when we hit a problem
+    if (pPreviousHandler)
+        pPreviousHandler(lpEP);
+#endif
+
     static bool bNested = false;
 
     oslSignalInfo info;
