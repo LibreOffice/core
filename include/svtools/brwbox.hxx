@@ -131,7 +131,6 @@ class BrowseEvent
     sal_uInt16              nColId;
 
 public:
-                        BrowseEvent();
                         BrowseEvent( vcl::Window* pWindow,
                                      long nAbsRow,
                                      sal_uInt16 nColumn, sal_uInt16 nColumnId,
@@ -148,7 +147,6 @@ public:
 class BrowserMouseEvent: public MouseEvent, public BrowseEvent
 {
 public:
-    BrowserMouseEvent();
     BrowserMouseEvent( BrowserDataWin* pWin, const MouseEvent& rEvt );
     BrowserMouseEvent( vcl::Window* pWin, const MouseEvent& rEvt,
                        long nAbsRow, sal_uInt16 nColumn, sal_uInt16 nColumnId,
@@ -159,7 +157,6 @@ public:
 class BrowserAcceptDropEvent : public AcceptDropEvent, public BrowseEvent
 {
 public:
-    BrowserAcceptDropEvent();
     BrowserAcceptDropEvent( BrowserDataWin* pWin, const AcceptDropEvent& rEvt );
 };
 
@@ -167,7 +164,6 @@ public:
 class BrowserExecuteDropEvent : public ExecuteDropEvent, public BrowseEvent
 {
 public:
-    BrowserExecuteDropEvent();
     BrowserExecuteDropEvent( BrowserDataWin* pWin, const ExecuteDropEvent& rEvt );
 };
 

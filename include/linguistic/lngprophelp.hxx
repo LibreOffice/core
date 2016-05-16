@@ -157,8 +157,8 @@ class LNG_DLLPUBLIC PropertyHelper_Thesaurus
     css::uno::Reference< css::beans::XPropertyChangeListener >    xPropHelper;
 
     // disallow use of copy-constructor and assignment-operator
-    PropertyHelper_Thesaurus( const PropertyHelper_Thes & );
-    PropertyHelper_Thesaurus & operator = ( const PropertyHelper_Thes & );
+    PropertyHelper_Thesaurus( const PropertyHelper_Thes & ) = delete;
+    PropertyHelper_Thesaurus & operator = ( const PropertyHelper_Thes & ) = delete;
 
 public:
     PropertyHelper_Thesaurus(
@@ -222,8 +222,8 @@ class LNG_DLLPUBLIC PropertyHelper_Spelling
     css::uno::Reference< css::beans::XPropertyChangeListener >    xPropHelper;
 
     // disallow use of copy-constructor and assignment-operator
-    PropertyHelper_Spelling( const PropertyHelper_Spell & );
-    PropertyHelper_Spelling & operator = ( const PropertyHelper_Spell & );
+    PropertyHelper_Spelling( const PropertyHelper_Spell & ) = delete;
+    PropertyHelper_Spelling & operator = ( const PropertyHelper_Spell & ) = delete;
 
 public:
     PropertyHelper_Spelling(
@@ -293,8 +293,8 @@ class LNG_DLLPUBLIC PropertyHelper_Hyphenation
     css::uno::Reference< css::beans::XPropertyChangeListener >    xPropHelper;
 
     // disallow use of copy-constructor and assignment-operator
-    PropertyHelper_Hyphenation( const PropertyHelper_Hyphen & );
-    PropertyHelper_Hyphenation & operator = ( const PropertyHelper_Hyphen & );
+    PropertyHelper_Hyphenation( const PropertyHelper_Hyphen & ) = delete;
+    PropertyHelper_Hyphenation & operator = ( const PropertyHelper_Hyphen & ) = delete;
 
 public:
     PropertyHelper_Hyphenation(

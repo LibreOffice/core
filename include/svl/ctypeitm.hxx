@@ -31,7 +31,6 @@ private:
 
 public:
 
-    CntContentTypeItem();
     CntContentTypeItem( sal_uInt16 nWhich, const OUString& rType );
     CntContentTypeItem( const CntContentTypeItem& rOrig );
 

@@ -47,7 +47,6 @@ public:
                         SotStorageStream( const OUString &,
                                           StreamMode = STREAM_STD_READWRITE );
                         SotStorageStream( BaseStorageStream *pStm );
-                        SotStorageStream();
 
     virtual void        ResetError() override;
 
@@ -85,7 +84,6 @@ public:
                         SotStorage( SvStream & rStm );
                         SotStorage( bool bUCBStorage, SvStream & rStm );
                         SotStorage( SvStream * pStm, bool bDelete );
-                        SotStorage();
 
     SvMemoryStream *    CreateMemoryStream();
 

@@ -118,10 +118,6 @@ protected:
     virtual void            ExportContent_() override {}
     virtual void            ExportMasterStyles_() override {}
     virtual sal_uInt32        exportDoc( enum ::xmloff::token::XMLTokenEnum /* eClass */ ) override { return 0; }
-
-private:
-
-    SVGExport();
 };
 
 class ObjectRepresentation

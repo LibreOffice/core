@@ -30,14 +30,6 @@ struct ini_NameValue
 {
     OUString sName;
     OUString sValue;
-
-    inline ini_NameValue()
-        {}
-    inline ini_NameValue(
-        OUString const & name, OUString const & value )
-        : sName( name ),
-          sValue( value )
-        {}
 };
 
 typedef std::list<

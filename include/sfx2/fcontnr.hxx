@@ -41,18 +41,6 @@ class SfxFilterContainer_Impl;
 class SfxFrame;
 
 
-class SfxRefItem : public SfxPoolItem
-{
-    tools::SvRef<SvRefBase> maRef;
-public:
-    SfxRefItem( sal_uInt16 nWhichId, const tools::SvRef<SvRefBase>& rValue ) : SfxPoolItem( nWhichId )
-    {   maRef = rValue; }
-    virtual SfxPoolItem*     Clone( SfxItemPool* = nullptr ) const override
-    {   return new SfxRefItem( *this ); }
-    virtual bool             operator==( const SfxPoolItem& rL) const override
-    {   return static_cast<const SfxRefItem&>(rL).maRef == maRef; }
-};
-
 typedef sal_uIntPtr (*SfxDetectFilter)( SfxMedium& rMedium, const SfxFilter **, SfxFilterFlags nMust, SfxFilterFlags nDont );
 
 class SFX2_DLLPUBLIC SfxFilterContainer

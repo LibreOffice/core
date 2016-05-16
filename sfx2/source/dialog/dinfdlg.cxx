@@ -52,7 +52,6 @@
 #include <sfx2/dinfdlg.hxx>
 #include <sfx2/securitypage.hxx>
 #include <sfx2/sfxresid.hxx>
-#include <sfx2/dinfedt.hxx>
 #include <sfx2/frame.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/request.hxx>

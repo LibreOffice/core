@@ -77,10 +77,6 @@ public:
                         SfxDockingWindow( SfxBindings *pBindings,
                                           SfxChildWindow *pCW,
                                           vcl::Window* pParent,
-                                          const ResId& rResId);
-                        SfxDockingWindow( SfxBindings *pBindings,
-                                          SfxChildWindow *pCW,
-                                          vcl::Window* pParent,
                                           const OString& rID, const OUString& rUIXMLDescription );
                         virtual ~SfxDockingWindow();
     virtual void        dispose() override;

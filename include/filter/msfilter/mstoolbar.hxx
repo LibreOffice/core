@@ -206,7 +206,6 @@ class TBCComboDropdownSpecific : public TBBase
     std::shared_ptr< TBCCDData > data;
 public:
     TBCComboDropdownSpecific( const TBCHeader& header );
-    TBCComboDropdownSpecific(){}
     bool Read(SvStream &rS) override;
 #if OSL_DEBUG_LEVEL > 1
     virtual void Print( FILE* ) override;

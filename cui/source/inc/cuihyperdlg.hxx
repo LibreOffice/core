@@ -88,7 +88,6 @@ public:
     void                    SetReadOnlyMode( bool bReadOnly );
     inline bool             IsHTMLDoc() const { return mbIsHTMLDoc; }
 
-    inline SfxBindings*     GetBindings() const { return mpBindings; };
     inline SfxDispatcher*   GetDispatcher() const { return mpBindings->GetDispatcher(); }
 };
 

@@ -35,7 +35,6 @@ class SvBOOL
           bSet:1;
 public:
                 SvBOOL() { bSet = bVal = false; }
-                SvBOOL( bool b ) : bVal( b ), bSet( true ) {}
                 SvBOOL( bool b, bool bSetP ) : bVal( b ), bSet( bSetP ) {}
     SvBOOL &    operator = ( bool n ) { bVal = n; bSet = true; return *this; }
 

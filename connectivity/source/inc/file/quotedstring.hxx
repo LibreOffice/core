@@ -34,7 +34,6 @@ namespace connectivity
         OUString m_sString;
     public:
         QuotedTokenizedString() {}
-        QuotedTokenizedString(const OUString& _sString) : m_sString(_sString){}
 
         sal_Int32  GetTokenCount( sal_Unicode cTok , sal_Unicode cStrDel ) const;
         OUString   GetTokenSpecial(sal_Int32& nStartPos, sal_Unicode cTok = ';', sal_Unicode cStrDel = '\0') const;

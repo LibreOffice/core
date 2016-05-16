@@ -54,16 +54,11 @@ namespace drawinglayer
                 const basegfx::BColor& rColor,
                 const basegfx::B3DVector& rDirection,
                 bool bSpecular);
-            explicit Sdr3DLightAttribute(const basegfx::BColor& rColor);
             Sdr3DLightAttribute(const Sdr3DLightAttribute& rCandidate);
-            Sdr3DLightAttribute();
             ~Sdr3DLightAttribute();
 
             // assignment operator
             Sdr3DLightAttribute& operator=(const Sdr3DLightAttribute& rCandidate);
-
-            // checks if the incarnation is default constructed
-            bool isDefault() const;
 
             // compare operator
             bool operator==(const Sdr3DLightAttribute& rCandidate) const;

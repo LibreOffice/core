@@ -867,52 +867,6 @@ SfxDockingWindow::SfxDockingWindow( SfxBindings *pBindinx, SfxChildWindow *pCW,
     required because the docking is implemented in Sfx through SfxChildWindows.
 */
 SfxDockingWindow::SfxDockingWindow( SfxBindings *pBindinx, SfxChildWindow *pCW,
-    vcl::Window* pParent, const ResId& rResId) :
-    DockingWindow(pParent, rResId),
-    pBindings(pBindinx),
-    pMgr(pCW),
-    pImp(nullptr)
-{
-    if ( !GetHelpId().isEmpty() )
-    {
-        SetUniqueId( GetHelpId() );
-        SetHelpId("");
-    }
-    else
-    {
-        SfxViewFrame* pViewFrame = pBindings->GetDispatcher()->GetFrame();
-        SfxSlotPool* pSlotPool = pViewFrame->GetObjectShell()->GetModule()->GetSlotPool();
-        const SfxSlot* pSlot = pCW ? pSlotPool->GetSlot( pCW->GetType() ) : nullptr;
-        if ( pSlot )
-        {
-            OString aCmd("SFXDOCKINGWINDOW_");
-            aCmd += pSlot->GetUnoName();
-            SetUniqueId( aCmd );
-        }
-    }
-
-    pImp = new SfxDockingWindow_Impl;
-    pImp->bConstructed = false;
-    pImp->pSplitWin = nullptr;
-    pImp->bEndDocked = false;
-    pImp->bDockingPrevented = false;
-
-    pImp->bSplitable = true;
-
-    // Initially set to default, the alignment is set in the subclass
-    pImp->nLine = pImp->nDockLine = 0;
-    pImp->nPos  = pImp->nDockPos = 0;
-    pImp->bNewLine = false;
-    pImp->SetDockAlignment(SfxChildAlignment::NOALIGNMENT);
-    pImp->SetLastAlignment(SfxChildAlignment::NOALIGNMENT);
-    pImp->aMoveIdle.SetPriority(SchedulerPriority::RESIZE);
-    pImp->aMoveIdle.SetIdleHdl(LINK(this,SfxDockingWindow,TimerHdl));
-}
-
-/** Constructor for the SfxDockingWindow class. A SfxChildWindow will be
-    required because the docking is implemented in Sfx through SfxChildWindows.
-*/
-SfxDockingWindow::SfxDockingWindow( SfxBindings *pBindinx, SfxChildWindow *pCW,
     vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription)
     : DockingWindow(pParent, rID, rUIXMLDescription)
     , pBindings(pBindinx)

@@ -79,9 +79,7 @@ public:
     sal_uInt32              GetChildWindowFeature( sal_uInt16 nNo ) const;
     sal_uInt32              GetChildWindowId( sal_uInt16 nNo ) const;
     sal_uInt16              GetChildWindowCount() const;
-    void                    RegisterPopupMenu( const ResId& );
     void                    RegisterPopupMenu( const OUString& );
-    const ResId&            GetPopupMenuResId() const;
     const OUString&         GetPopupMenuName() const;
     sal_uInt32              GetStatusBarId() const;
 

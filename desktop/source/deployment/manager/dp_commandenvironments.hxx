@@ -87,7 +87,6 @@ private:
     OUString m_repository;
     bool m_bSuppressLicense;
 public:
-    LicenseCommandEnv() : m_bSuppressLicense(false) {};
     LicenseCommandEnv(
         css::uno::Reference< css::task::XInteractionHandler> const & handler,
         bool bSuppressLicense,
@@ -108,7 +107,6 @@ class NoLicenseCommandEnv : public BaseCommandEnv
 {
 
 public:
-    NoLicenseCommandEnv(){};
     explicit NoLicenseCommandEnv(css::uno::Reference< css::task::XInteractionHandler> const & handler);
 
 // XInteractionHandler

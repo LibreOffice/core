@@ -50,7 +50,7 @@ class PropertyInfoService
     static PropertyMap      s_AllKnownProperties;
 
 public:
-    PropertyInfoService() { }
+    PropertyInfoService() = delete;
 
     static sal_Int32            getPropertyId(const OUString& _rName);
 

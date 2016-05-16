@@ -42,9 +42,6 @@ namespace pcr
         );
 
         inline operator const css::util::URL& () const { return m_aURL; }
-
-    private:
-        UnoURL();   // never implemented
     };
 
 
