@@ -170,35 +170,5 @@ bool SfxFrameProperties::operator ==( const SfxFrameProperties& rProp ) const
 }
 
 
-SfxFrameDescriptorItem::~SfxFrameDescriptorItem()
-{}
-
-bool SfxFrameDescriptorItem::operator==( const SfxPoolItem& rAttr ) const
-{
-    DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unequal types" );
-
-    return aProperties == static_cast<const SfxFrameDescriptorItem&>(rAttr).aProperties;
-}
-
-
-SfxPoolItem* SfxFrameDescriptorItem::Clone( SfxItemPool* ) const
-{
-    return new SfxFrameDescriptorItem( *this );
-}
-
-
-bool SfxFrameDescriptorItem::GetPresentation
-(
-    SfxItemPresentation /*ePres*/,
-    SfxMapUnit          /*eCoreUnit*/,
-    SfxMapUnit          /*ePresUnit*/,
-    OUString&           rText,
-    const IntlWrapper *
-)   const
-{
-    rText.clear();
-    return false;
-}
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

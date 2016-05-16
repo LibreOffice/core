@@ -38,7 +38,6 @@ $(eval $(call gb_Library_use_libraries,xmlfa,\
 $(eval $(call gb_Library_add_exception_objects,xmlfa,\
 	filter/source/xmlfilteradaptor/XmlFilterAdaptor \
 	filter/source/xmlfilteradaptor/genericfilter \
-	filter/source/xmlfilteradaptor/streamwrap \
 ))
 
 # vim: set noet sw=4 ts=4:

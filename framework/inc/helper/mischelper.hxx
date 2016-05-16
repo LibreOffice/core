@@ -234,33 +234,6 @@ class WeakChangesListener : public ::cppu::WeakImplHelper<css::util::XChangesLis
         }
 };
 
-class WeakEventListener : public ::cppu::WeakImplHelper<css::lang::XEventListener>
-{
-    private:
-        css::uno::WeakReference<css::lang::XEventListener> mxOwner;
-
-    public:
-        WeakEventListener(css::uno::Reference<css::lang::XEventListener> xOwner)
-            : mxOwner(xOwner)
-        {
-        }
-
-        virtual ~WeakEventListener()
-        {
-        }
-
-        // lang.XEventListener
-        virtual void SAL_CALL disposing(const css::lang::EventObject& rEvent)
-            throw(css::uno::RuntimeException, std::exception) override
-        {
-            css::uno::Reference<css::lang::XEventListener> xOwner(mxOwner.get(),
-                css::uno::UNO_QUERY);
-            if (xOwner.is())
-                xOwner->disposing(rEvent);
-
-        }
-};
-
 class WeakDocumentEventListener : public ::cppu::WeakImplHelper<css::document::XDocumentEventListener>
 {
     private:

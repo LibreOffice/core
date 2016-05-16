@@ -25,7 +25,6 @@ struct FloatPoint
         double          X;
         double          Y;
         FloatPoint():X(0), Y(0){};
-        FloatPoint( const double& rX, const double& rY ) { X = rX; Y = rY; };
 };
 
 struct FloatRect
@@ -35,13 +34,6 @@ struct FloatRect
         double          Right;
         double          Bottom;
         FloatRect():Left(0), Top(0), Right(0), Bottom(0){};
-        FloatRect( const FloatPoint& rTopLeft, const FloatPoint& rBottomRight )
-        {
-            Left = rTopLeft.X;
-            Top = rTopLeft.Y;
-            Right = rBottomRight.X;
-            Bottom = rBottomRight.Y;
-        }
         void Justify()
         {
             double fTemp;

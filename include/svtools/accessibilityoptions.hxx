@@ -43,14 +43,6 @@ public:
     bool        GetIsAllowAnimatedText() const;
     bool        GetIsAutomaticFontColor() const;
     bool        IsSelectionInReadonly() const;
-    bool        GetAutoDetectSystemHC() const;
-
-    void        SetIsForPagePreviews(bool bSet);
-    void        SetIsAllowAnimatedGraphics(bool bSet);
-    void        SetIsAllowAnimatedText(bool bSet);
-    void        SetIsAutomaticFontColor(bool bSet);
-    void        SetSelectionInReadonly(bool bSet);
-    void        SetAutoDetectSystemHC(bool bSet);
 
     //SfxListener:
     virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;

@@ -70,21 +70,6 @@ namespace drawinglayer
             {
             }
 
-            ImpSdr3DObjectAttribute()
-            :   maNormalsKind(css::drawing::NormalsKind_SPECIFIC),
-                maTextureProjectionX(css::drawing::TextureProjectionMode_OBJECTSPECIFIC),
-                maTextureProjectionY(css::drawing::TextureProjectionMode_OBJECTSPECIFIC),
-                maTextureKind(css::drawing::TextureKind2_LUMINANCE),
-                maTextureMode(css::drawing::TextureMode_REPLACE),
-                maMaterial(),
-                mbNormalsInvert(false),
-                mbDoubleSided(false),
-                mbShadow3D(false),
-                mbTextureFilter(false),
-                mbReducedLineGeometry(false)
-            {
-            }
-
             // data read access
             css::drawing::NormalsKind getNormalsKind() const { return maNormalsKind; }
             css::drawing::TextureProjectionMode getTextureProjectionX() const { return maTextureProjectionX; }
@@ -143,18 +128,8 @@ namespace drawinglayer
         {
         }
 
-        Sdr3DObjectAttribute::Sdr3DObjectAttribute()
-        :   mpSdr3DObjectAttribute(theGlobalDefault::get())
-        {
-        }
-
         Sdr3DObjectAttribute::~Sdr3DObjectAttribute()
         {
-        }
-
-        bool Sdr3DObjectAttribute::isDefault() const
-        {
-            return mpSdr3DObjectAttribute.same_object(theGlobalDefault::get());
         }
 
         Sdr3DObjectAttribute& Sdr3DObjectAttribute::operator=(const Sdr3DObjectAttribute& rCandidate)

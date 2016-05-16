@@ -89,8 +89,6 @@ private:
     SVGFontExport&             mrFontExport;
     SvXMLElementExport*        mpElemFont;
 
-                             SVGAttributeWriter();
-
     static double            ImplRound( double fVal );
 
 public:
@@ -349,7 +347,6 @@ class SVGWriter : public cppu::WeakImplHelper< XSVGWriter >
 private:
     Reference< XComponentContext >                      mxContext;
     Sequence< css::beans::PropertyValue >    maFilterData;
-    SVGWriter();
 
 public:
     explicit SVGWriter( const Sequence<Any>& args,

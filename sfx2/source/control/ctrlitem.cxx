@@ -26,26 +26,6 @@
 #include "statcach.hxx"
 #include <sfx2/viewfrm.hxx>
 
-#ifdef DBG_UTIL
-
-void SfxControllerItem::CheckConfigure_Impl( SfxSlotMode nType )
-{
-    // Real Slot? (i.e. no Separator etc.)
-    if ( !nId )
-        return;
-
-    // is the ID configurable at all in 'nType'?
-    const SfxSlot *pSlot = SFX_SLOTPOOL().GetSlot(nId);
-    SAL_WARN_IF( !pSlot, "sfx.control", "SfxControllerItem: binding not existing slot" );
-    SAL_WARN_IF(
-        pSlot && !pSlot->IsMode(nType), "sfx.control",
-        "SfxControllerItem: slot without ...Config-flag at SID "
-            << pSlot->GetSlotId());
-}
-
-#endif
-
-
 // returns the next registered SfxControllerItem with the same id
 
 SfxControllerItem* SfxControllerItem::GetItemLink()

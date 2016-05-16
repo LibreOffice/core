@@ -31,7 +31,6 @@ class SfxUShortRanges
     sal_uInt16*                 _pRanges; // 0-terminated array of sal_uInt16-pairs
 
 public:
-                                SfxUShortRanges() : _pRanges( nullptr ) {}
                                 SfxUShortRanges( const SfxUShortRanges &rOrig );
                                 SfxUShortRanges( sal_uInt16 nWhich1, sal_uInt16 nWhich2 );
                                 SfxUShortRanges( const sal_uInt16* nNumTable );
@@ -42,7 +41,6 @@ public:
 
     SfxUShortRanges&            operator += ( const SfxUShortRanges & );
 
-    sal_uInt16                  Count() const;
     bool                        IsEmpty() const
                                 { return !_pRanges || 0 == *_pRanges; }
 

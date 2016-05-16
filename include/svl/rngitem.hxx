@@ -32,7 +32,6 @@ private:
     sal_uInt16                  nFrom;
     sal_uInt16                  nTo;
 public:
-                                SfxRangeItem();
                                 SfxRangeItem( sal_uInt16 nWID, sal_uInt16 nFrom, sal_uInt16 nTo );
                                 SfxRangeItem( const SfxRangeItem& rItem );
     virtual bool                operator==( const SfxPoolItem& ) const override;
@@ -54,7 +53,6 @@ private:
     sal_uInt16*                 _pRanges;
 
 public:
-                                SfxUShortRangesItem();
                                 SfxUShortRangesItem( sal_uInt16 nWID, SvStream &rStream );
                                 SfxUShortRangesItem( const SfxUShortRangesItem& rItem );
     virtual                     ~SfxUShortRangesItem();

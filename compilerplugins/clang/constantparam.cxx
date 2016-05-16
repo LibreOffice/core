@@ -38,15 +38,8 @@ struct MyCallSiteInfo
 };
 bool operator < (const MyCallSiteInfo &lhs, const MyCallSiteInfo &rhs)
 {
-    if (lhs.sourceLocation < rhs.sourceLocation)
-        return true;
-    else if (lhs.sourceLocation > rhs.sourceLocation)
-        return false;
-    else if (lhs.paramIndex < rhs.paramIndex)
-        return true;
-    else if (lhs.paramIndex > rhs.paramIndex)
-        return false;
-    else return lhs.callValue < rhs.callValue;
+    return std::tie(lhs.sourceLocation, lhs.paramIndex, lhs.callValue)
+         < std::tie(rhs.sourceLocation, rhs.paramIndex, rhs.callValue);
 }
 
 

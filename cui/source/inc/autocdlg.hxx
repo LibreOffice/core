@@ -191,13 +191,6 @@ class AutoCorrEdit : public Edit
     void dispose() override;
 
 public:
-    AutoCorrEdit(vcl::Window* pParent, const ResId& rResId)
-        : Edit(pParent, rResId)
-        , m_nCol(0)
-        , bSpaces(false)
-    {
-    }
-
     AutoCorrEdit(vcl::Window* pParent)
         : Edit(pParent)
         , m_nCol(0)

@@ -228,7 +228,6 @@ namespace dbaui
             css::util::URL                                        aURL;
             css::uno::Reference< css::frame::XStatusListener >    xListener;
 
-            DispatchTarget() { }
             DispatchTarget(const css::util::URL& rURL, const css::uno::Reference< css::frame::XStatusListener >& rRef) : aURL(rURL), xListener(rRef) { }
         };
 

@@ -117,9 +117,7 @@ private:
     bool            loaded;
         css::uno::Reference< css::script::browse::XBrowseNode > nodes;
         css::uno::Reference< css::frame::XModel > model;
-    SFEntry(){}
 public:
-                    SFEntry( sal_uInt8 nT )             { nType = nT; loaded=false; }
                     SFEntry( sal_uInt8 nT,
                             const css::uno::Reference< css::script::browse::XBrowseNode >& entryNodes ,
                             const css::uno::Reference< css::frame::XModel >& entryModel) { nType = nT; nodes = entryNodes; loaded=false; model = entryModel; }

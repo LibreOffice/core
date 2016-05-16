@@ -72,15 +72,6 @@ public:
         return *this;
     }
 
-    /** Construction from Stream Handle.
-     */
-    inline explicit OStoreStream (storeStreamHandle Handle)
-        : m_hImpl (Handle)
-    {
-        if (m_hImpl)
-            (void) store_acquireHandle (m_hImpl);
-    }
-
     /** Open the stream.
         @see store_openStream()
      */
@@ -177,15 +168,6 @@ public:
         return *this;
     }
 
-    /** Construction from Directory Handle.
-     */
-    inline explicit OStoreDirectory (storeDirectoryHandle Handle)
-        : m_hImpl (Handle)
-    {
-        if (m_hImpl)
-            (void) store_acquireHandle (m_hImpl);
-    }
-
     /** Open the directory.
         @see store_openDirectory()
      */
@@ -278,15 +260,6 @@ public:
             (void) store_releaseHandle (m_hImpl);
         m_hImpl = rhs.m_hImpl;
         return *this;
-    }
-
-    /** Construction from File Handle.
-     */
-    inline explicit OStoreFile (storeFileHandle Handle)
-        : m_hImpl (Handle)
-    {
-        if (m_hImpl)
-            (void) store_acquireHandle (m_hImpl);
     }
 
     /** Conversion into File Handle.

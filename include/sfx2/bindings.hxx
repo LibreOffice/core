@@ -202,7 +202,6 @@ public:
     SAL_DLLPRIVATE void InvalidateUnoControllers_Impl();
     SAL_DLLPRIVATE void RegisterUnoController_Impl( SfxUnoControllerItem* );
     SAL_DLLPRIVATE void ReleaseUnoController_Impl( SfxUnoControllerItem* );
-    SAL_DLLPRIVATE bool ExecuteCommand_Impl( const OUString& rCommand );
     SAL_DLLPRIVATE void SetRecorder_Impl( css::uno::Reference< css::frame::XDispatchRecorder >& );
     SAL_DLLPRIVATE void InvalidateSlotsInMap_Impl();
     SAL_DLLPRIVATE void AddSlotToInvalidateSlotsMap_Impl( sal_uInt16 nId );

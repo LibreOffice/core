@@ -124,9 +124,6 @@ private:
 public:
     EditUndoRemoveChars(EditEngine* pEE, const EPaM& rEPaM, const OUString& rStr);
 
-    const EPaM&     GetEPaM() { return aEPaM; }
-    OUString &      GetStr() { return aText; }
-
     virtual void    Undo() override;
     virtual void    Redo() override;
 };

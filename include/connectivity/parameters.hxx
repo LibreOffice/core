@@ -80,12 +80,6 @@ namespace dbtools
             /// the indices of inner parameters which need to be filled when this concrete parameter is set
             ::std::vector< sal_Int32 >  aInnerIndexes;
 
-            /// default ctor
-            ParameterMetaData()
-                :eType( ParameterClassification::FilledExternally )
-            {
-            }
-
             /// ctor with composer column
             ParameterMetaData( const css::uno::Reference< css::beans::XPropertySet >& _rxColumn )
                 :eType           ( ParameterClassification::FilledExternally )

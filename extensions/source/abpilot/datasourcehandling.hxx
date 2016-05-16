@@ -178,9 +178,6 @@ namespace abp
             ,const OUString& _sName
             ,PackageAccessControl
         );
-
-    private:
-        ODataSource( ); // never implemented
     };
 
 

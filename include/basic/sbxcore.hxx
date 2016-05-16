@@ -80,7 +80,6 @@ public:
     virtual void    Clear();
 
     static SbxBase* Load( SvStream& );
-    static void     Skip( SvStream& );
     bool            Store( SvStream& );
     virtual bool    LoadCompleted();
 

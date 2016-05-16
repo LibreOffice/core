@@ -76,11 +76,6 @@ void DetailsContainer::notifyChange( )
     m_aChangeHdl.Call( this );
 }
 
-void DetailsContainer::setActive( bool bActive )
-{
-    m_bIsActive = bActive;
-}
-
 IMPL_LINK_NOARG_TYPED( DetailsContainer, ValueChangeHdl, Edit&, void )
 {
     notifyChange( );

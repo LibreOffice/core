@@ -59,9 +59,6 @@ namespace drawinglayer
             MaterialAttribute3D(const MaterialAttribute3D& rCandidate);
             ~MaterialAttribute3D();
 
-            // checks if the incarnation is default constructed
-            bool isDefault() const;
-
             // assignment operator
             MaterialAttribute3D& operator=(const MaterialAttribute3D& rCandidate);
 
