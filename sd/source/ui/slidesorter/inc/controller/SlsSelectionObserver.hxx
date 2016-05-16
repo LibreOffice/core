@@ -68,7 +68,6 @@ private:
     bool mbIsOvservationActive;
 
     ::std::vector<const SdPage*> maInsertedPages;
-    ::std::vector<sal_Int32> maDeletedPages;
 };
 
 } } } // end of namespace ::sd::slidesorter::controller

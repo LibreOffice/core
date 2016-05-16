@@ -533,10 +533,12 @@ bool SlideSorterModel::NotifyPageEvent (const SdrPage* pSdrPage)
     if (pPage->IsMasterPage() != (meEditMode==EM_MASTERPAGE))
         return false;
 
+    //NotifyPageEvent is called for add, remove, *and* change position so for
+    //the change position case we must ensure we don't end up with the slide
+    //duplicated in our list
+    DeleteSlide(pPage);
     if (pPage->IsInserted())
         InsertSlide(pPage);
-    else
-        DeleteSlide(pPage);
     CheckModel(*this);
 
     return true;

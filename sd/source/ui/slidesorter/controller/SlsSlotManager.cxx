@@ -409,10 +409,6 @@ void SlotManager::FuSupport (SfxRequest& rRequest)
                 = dynamic_cast<SlideSorterViewShell*>(mrSlideSorter.GetViewShell());
             if (pViewShell != nullptr)
             {
-                view::SlideSorterView::DrawLock aDrawLock (mrSlideSorter);
-                SlideSorterController::ModelChangeLock aModelLock (mrSlideSorter.GetController());
-                PageSelector::UpdateLock aUpdateLock (mrSlideSorter);
-                SelectionObserver::Context aContext (mrSlideSorter);
                 pViewShell->ImpSidUndo (false, rRequest);
             }
             break;
@@ -424,10 +420,6 @@ void SlotManager::FuSupport (SfxRequest& rRequest)
                 = dynamic_cast<SlideSorterViewShell*>(mrSlideSorter.GetViewShell());
             if (pViewShell != nullptr)
             {
-                view::SlideSorterView::DrawLock aDrawLock (mrSlideSorter);
-                SlideSorterController::ModelChangeLock aModelLock (mrSlideSorter.GetController());
-                PageSelector::UpdateLock aUpdateLock (mrSlideSorter);
-                SelectionObserver::Context aContext (mrSlideSorter);
                 pViewShell->ImpSidRedo (false, rRequest);
             }
             break;
