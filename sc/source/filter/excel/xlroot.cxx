@@ -95,6 +95,7 @@ XclRootData::XclRootData( XclBiff eBiff, SfxMedium& rMedium,
     mfScreenPixelY( 50.0 ),
     mnCharWidth( 110 ),
     mnScTab( 0 ),
+    mbForcedTextEnc( false ),
     mbExport( bExport )
 {
  maUserName = SvtUserOptions().GetLastName();
@@ -191,7 +192,7 @@ XclRoot& XclRoot::operator=( const XclRoot& rRoot )
 
 void XclRoot::SetTextEncoding( rtl_TextEncoding eTextEnc )
 {
-    if( eTextEnc != RTL_TEXTENCODING_DONTKNOW )
+    if( eTextEnc != RTL_TEXTENCODING_DONTKNOW && !mrData.mbForcedTextEnc )
         mrData.meTextEnc = eTextEnc;
 }
 

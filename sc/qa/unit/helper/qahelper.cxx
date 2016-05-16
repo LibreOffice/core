@@ -86,7 +86,8 @@ const FileFormat ScBootstrapFixture::aFileFormats[] = {
     { "dif", "DIF", "calc_DIF", DIF_FORMAT_TYPE },
     { "xml", "MS Excel 2003 XML", "calc_MS_Excel_2003_XML", XLS_XML_FORMAT_TYPE },
     { "xlsb", "Calc MS Excel 2007 Binary", "MS Excel 2007 Binary", XLSB_XML_FORMAT_TYPE },
-    { "fods", "OpenDocument Spreadsheet Flat XML", "calc_ODS_FlatXML", FODS_FORMAT_TYPE }
+    { "fods", "OpenDocument Spreadsheet Flat XML", "calc_ODS_FlatXML", FODS_FORMAT_TYPE },
+    { "xls" , "MS Excel (encoded)", "calc_MS_Excel_40", XLS_ENC_FORMAT_TYPE }
 };
 
 bool testEqualsWithTolerance( long nVal1, long nVal2, long nTol )
@@ -555,6 +556,10 @@ ScDocShellRef ScBootstrapFixture::load( bool bReadWrite,
     if (pPassword)
     {
         pSet->Put(SfxStringItem(SID_PASSWORD, *pPassword));
+    }
+    if (rFilter == "MS Excel (encoded)")
+    {
+        pSet->Put(SfxStringItem(SID_FILE_FILTEROPTIONS, "34"));
     }
     pSet->Put(SfxUInt16Item(SID_MACROEXECMODE,css::document::MacroExecMode::ALWAYS_EXECUTE_NO_WARN));
     SAL_INFO( "sc.qa", "about to load " << rURL );

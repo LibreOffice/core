@@ -101,6 +101,7 @@ public:
     virtual void tearDown() override;
 
     //ods, xls, xlsx filter tests
+    void testEncodedXLS();
     void testBooleanFormatXLSX();
     void testBasicCellContentODS();
     void testRangeNameXLS();
@@ -216,6 +217,7 @@ public:
     void testBnc762542();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
+    CPPUNIT_TEST(testEncodedXLS);
     CPPUNIT_TEST(testBooleanFormatXLSX);
     CPPUNIT_TEST(testBasicCellContentODS);
     CPPUNIT_TEST(testRangeNameXLS);
@@ -395,6 +397,17 @@ void ScFiltersTest::testBasicCellContentODS()
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
         "This cell must be numeric.", CELLTYPE_VALUE, aCell.meType);
     CPPUNIT_ASSERT_EQUAL(0.0, aCell.mfValue);
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testEncodedXLS()
+{
+    ScDocShellRef xDocSh = loadDoc("biff5enc.", FORMAT_XLS_ENC);
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    OUString aText = rDoc.GetString(0, 0, 0);
+    CPPUNIT_ASSERT_EQUAL(OUString(sal_Unicode(0x43F)), aText);
 
     xDocSh->DoClose();
 }
