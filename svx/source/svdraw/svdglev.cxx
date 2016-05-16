@@ -19,7 +19,7 @@
 
 
 #include <svx/svdglev.hxx>
-#include <math.h>
+#include <cmath>
 
 #include <svx/svdundo.hxx>
 #include "svx/svdstr.hrc"

@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <stdio.h>
+#include <cstdio>
 #include <dispatch/dispatchprovider.hxx>
 #include <loadenv/loadenv.hxx>
 #include <dispatch/loaddispatcher.hxx>

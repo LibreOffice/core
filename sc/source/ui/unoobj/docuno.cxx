@@ -46,8 +46,8 @@
 #include <toolkit/awt/vclxdevice.hxx>
 #include <unotools/saveopt.hxx>
 
-#include <ctype.h>
-#include <float.h>
+#include <cctype>
+#include <cfloat>
 
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/sheet/XNamedRanges.hpp>

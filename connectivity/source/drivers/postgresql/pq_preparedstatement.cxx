@@ -52,7 +52,7 @@
 #include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
 #include <com/sun/star/sdbc/ResultSetType.hpp>
 
-#include <string.h>
+#include <cstring>
 
 #include <connectivity/dbconversion.hxx>
 

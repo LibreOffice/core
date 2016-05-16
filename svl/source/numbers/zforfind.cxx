@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <ctype.h>
+#include <cctype>
 #include <cstdlib>
-#include <float.h>
-#include <errno.h>
+#include <cfloat>
+#include <cerrno>
 #include <comphelper/string.hxx>
 #include <sal/log.hxx>
 #include <tools/date.hxx>

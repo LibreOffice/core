@@ -18,9 +18,9 @@
  */
 
 
-#include <stdlib.h>
+#include <cstdlib>
 #ifdef UNX
-#include <stdio.h>
+#include <cstdio>
 #endif
 #include <comphelper/string.hxx>
 #include <sal/types.h>

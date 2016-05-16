@@ -27,7 +27,7 @@
 #include <osl/file.h>
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
-#include <assert.h>
+#include <cassert>
 #include "system.hxx"
 #include "file_url.hxx"
 

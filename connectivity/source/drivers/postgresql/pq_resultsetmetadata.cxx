@@ -45,7 +45,7 @@
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 
-#include <string.h>
+#include <cstring>
 
 using osl::MutexGuard;
 

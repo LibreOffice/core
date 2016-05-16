@@ -29,7 +29,7 @@
 
 #include <vector>
 #include <list>
-#include <limits.h>
+#include <climits>
 #include <algorithm>
 
 using ::com::sun::star::uno::Exception;

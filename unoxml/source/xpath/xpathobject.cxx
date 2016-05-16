@@ -19,7 +19,7 @@
 
 #include <xpathobject.hxx>
 
-#include <string.h>
+#include <cstring>
 
 #include "../dom/document.hxx"
 #include <nodelist.hxx>

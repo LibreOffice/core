@@ -19,7 +19,7 @@
 
 
 #include <svx/svdtrans.hxx>
-#include <math.h>
+#include <cmath>
 #include <svx/xpoly.hxx>
 
 #include <vcl/virdev.hxx>

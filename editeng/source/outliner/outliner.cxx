@@ -26,7 +26,7 @@
 #include <editeng/lrspitem.hxx>
 #include <editeng/fhgtitem.hxx>
 
-#include <math.h>
+#include <cmath>
 #include <svl/style.hxx>
 #include <vcl/wrkwin.hxx>
 #include <editeng/outliner.hxx>

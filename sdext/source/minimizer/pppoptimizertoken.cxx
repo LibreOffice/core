@@ -21,7 +21,7 @@
 #include "pppoptimizertoken.hxx"
 #include <osl/mutex.hxx>
 #include <sal/macros.h>
-#include <string.h>
+#include <cstring>
 #include <unordered_map>
 #include <memory>
 

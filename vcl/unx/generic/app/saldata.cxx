@@ -23,9 +23,9 @@
 #include <cstdio>
 #include <cstring>
 #include <cstdlib>
-#include <stdio.h>
-#include <limits.h>
-#include <errno.h>
+#include <cstdio>
+#include <climits>
+#include <cerrno>
 #include <pthread.h>
 #include <sys/resource.h>
 #ifdef SUN

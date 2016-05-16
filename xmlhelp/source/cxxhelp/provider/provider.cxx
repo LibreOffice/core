@@ -19,7 +19,7 @@
 
 #include <config_folders.h>
 
-#include <stdio.h>
+#include <cstdio>
 #include <officecfg/Office/Common.hxx>
 #include <officecfg/Setup.hxx>
 #include <osl/file.hxx>

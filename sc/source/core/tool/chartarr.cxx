@@ -20,7 +20,7 @@
 #include "scitems.hxx"
 #include <svl/intitem.hxx>
 #include <svl/zforlist.hxx>
-#include <float.h>
+#include <cfloat>
 
 #include "chartarr.hxx"
 #include "cellvalue.hxx"

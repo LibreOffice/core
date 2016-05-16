@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <limits.h>
+#include <climits>
 #include <tools/time.hxx>
 #include <tools/debug.hxx>
 
@@ -28,7 +28,7 @@
 #include <vcl/timer.hxx>
 #include <vcl/event.hxx>
 
-#include <math.h>
+#include <cmath>
 
 #define WHEEL_WIDTH     25
 #define WHEEL_RADIUS    ((WHEEL_WIDTH) >> 1 )

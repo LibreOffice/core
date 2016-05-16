@@ -19,8 +19,8 @@
 
 #include <sal/config.h>
 
-#include <stdio.h>
-#include <wchar.h>
+#include <cstdio>
+#include <cwchar>
 
 #include "uielement/spinfieldtoolbarcontroller.hxx"
 

@@ -19,7 +19,7 @@
 
 #include "GraphicObjectBar.hxx"
 
-#include <limits.h>
+#include <climits>
 #include <vcl/msgbox.hxx>
 #include <svl/whiter.hxx>
 #include <svl/itempool.hxx>

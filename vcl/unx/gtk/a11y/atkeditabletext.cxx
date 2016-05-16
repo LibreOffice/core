@@ -23,7 +23,7 @@
 #include <com/sun/star/accessibility/XAccessibleEditableText.hpp>
 #include <com/sun/star/accessibility/TextSegment.hpp>
 
-#include <string.h>
+#include <cstring>
 
 using namespace ::com::sun::star;
 

@@ -22,7 +22,7 @@
 #include "itemdel.hxx"
 #include <vcl/svapp.hxx>
 #include <tools/errcode.hxx>
-#include <limits.h>
+#include <climits>
 #include <vector>
 
 #include <svl/itempool.hxx>

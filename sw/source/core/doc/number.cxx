@@ -19,7 +19,7 @@
 
 #include <hintids.hxx>
 
-#include <string.h>
+#include <cstring>
 #include <vcl/font.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/lrspitem.hxx>

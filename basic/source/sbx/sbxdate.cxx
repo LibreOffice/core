@@ -25,7 +25,7 @@
 #include <i18nlangtag/lang.h>
 #include <basic/sbx.hxx>
 #include "sbxconv.hxx"
-#include "math.h"
+#include <cmath>
 #include <comphelper/processfactory.hxx>
 #include <memory>
 

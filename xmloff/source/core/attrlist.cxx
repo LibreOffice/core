@@ -18,7 +18,7 @@
  */
 
 
-#include <string.h>
+#include <cstring>
 #include <vector>
 #include <osl/mutex.hxx>
 #include <osl/diagnose.h>

@@ -65,7 +65,7 @@
 #include "scresid.hxx"
 #include "colorscale.hxx"
 
-#include <math.h>
+#include <cmath>
 #include <iostream>
 #include <map>
 #include <memory>

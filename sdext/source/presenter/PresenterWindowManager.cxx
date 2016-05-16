@@ -52,7 +52,7 @@
 #include <com/sun/star/rendering/Texture.hpp>
 #include <com/sun/star/rendering/TexturingMode.hpp>
 #include <com/sun/star/rendering/XSpriteCanvas.hpp>
-#include <math.h>
+#include <cmath>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

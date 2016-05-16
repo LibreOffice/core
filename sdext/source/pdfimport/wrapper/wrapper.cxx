@@ -63,9 +63,9 @@
 
 #include <memory>
 #include <unordered_map>
-#include <string.h>
-#include <stdlib.h>
-#include <ctype.h>
+#include <cstring>
+#include <cstdlib>
+#include <cctype>
 
 #include "rtl/bootstrap.h"
 

@@ -25,7 +25,7 @@
 
 #include <osl/diagnose.h>
 
-#include <string.h>
+#include <cstring>
 
 BitmapInfoAccess::BitmapInfoAccess( Bitmap& rBitmap, BitmapAccessMode nMode ) :
             mpBuffer        ( nullptr ),

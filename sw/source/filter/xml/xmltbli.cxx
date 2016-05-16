@@ -61,7 +61,7 @@
 #include <vector>
 #include <memory>
 
-#include <limits.h>
+#include <climits>
 
 
 using namespace ::com::sun::star;

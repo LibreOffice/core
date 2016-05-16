@@ -31,8 +31,8 @@
 #include <svtools/imaprect.hxx>
 #include <svtools/imappoly.hxx>
 
-#include <string.h>
-#include <math.h>
+#include <cstring>
+#include <cmath>
 #include <memory>
 
 

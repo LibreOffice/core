@@ -30,9 +30,9 @@
 #ifdef _WIN32
 #include <cmath>
 #else
-#include <math.h>
+#include <cmath>
 #endif
-#include <float.h>
+#include <cfloat>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>

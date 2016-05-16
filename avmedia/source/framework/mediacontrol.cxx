@@ -30,7 +30,7 @@
 #include <vcl/lstbox.hxx>
 #include <unotools/syslocale.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <math.h>
+#include <cmath>
 #include <algorithm>
 
 #define AVMEDIA_TIME_RANGE          2048

@@ -70,8 +70,8 @@ OUString NetworkDomain::GetNTDomainName()
 #elif defined( UNIX )
 
 #include <rtl/ustring.h>
-#include <stdlib.h>
-#include <errno.h>
+#include <cstdlib>
+#include <cerrno>
 #include <osl/thread.h>
 
 //  Unix
@@ -125,7 +125,7 @@ static rtl_uString *getDomainName()
 //  Linux
 
 #include <unistd.h>
-#include <string.h>
+#include <cstring>
 
 static rtl_uString *getDomainName()
 {

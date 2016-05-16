@@ -24,7 +24,7 @@
 #include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 
-#include <stdio.h>
+#include <cstdio>
 
 
 namespace connectivity { namespace java { namespace sql {

@@ -46,7 +46,7 @@
 
 #include <algorithm>
 #include <set>
-#include <string.h>
+#include <cstring>
 
 #include "gtk/fpicker/SalGtkFilePicker.hxx"
 

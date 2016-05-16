@@ -27,7 +27,7 @@
   * - Not init h when implicit constructor is launched
   */
 
-#include <string.h>
+#include <cstring>
 #include <sstream>
 #include <iostream>
 

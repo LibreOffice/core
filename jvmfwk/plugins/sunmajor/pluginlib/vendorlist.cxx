@@ -23,7 +23,7 @@
 #include "sunjre.hxx"
 #include "otherjre.hxx"
 #include "osl/thread.h"
-#include <stdio.h>
+#include <cstdio>
 
 
 namespace jfw_plugin

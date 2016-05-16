@@ -28,7 +28,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/math.hxx>
 #include <sal/macros.h>
-#include <string.h>
+#include <cstring>
 #include <tools/resmgr.hxx>
 #include <tools/rcid.h>
 #include <algorithm>

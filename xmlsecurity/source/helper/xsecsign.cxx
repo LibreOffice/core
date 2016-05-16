@@ -31,7 +31,7 @@
 #include <com/sun/star/embed/StorageFormats.hpp>
 #include <rtl/uuid.h>
 
-#include <stdio.h>
+#include <cstdio>
 
 using namespace com::sun::star;
 namespace cssu = com::sun::star::uno;

@@ -21,8 +21,8 @@
 #include "regimpl.hxx"
 
 #include <memory>
-#include <string.h>
-#include <stdio.h>
+#include <cstring>
+#include <cstdio>
 
 #if defined(UNX)
 #include <unistd.h>

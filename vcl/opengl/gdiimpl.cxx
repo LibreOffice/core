@@ -41,7 +41,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtx/norm.hpp>
 
-#include <stdlib.h>
+#include <cstdlib>
 
 class OpenGLFlushIdle : public Idle
 {

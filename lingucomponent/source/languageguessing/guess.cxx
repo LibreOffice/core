@@ -18,7 +18,7 @@
  */
 
 #include <iostream>
-#include <string.h>
+#include <cstring>
 
 #ifdef SYSTEM_LIBEXTTEXTCAT
 #include <libexttextcat/textcat.h>

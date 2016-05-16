@@ -45,7 +45,7 @@
 #include <com/sun/star/accessibility/XAccessibleTable.hpp>
 #include <editeng/brushitem.hxx>
 #include <comphelper/sequence.hxx>
-#include <float.h>
+#include <cfloat>
 #include <vcl/svapp.hxx>
 
 #include "AccessibleSpreadsheet.hxx"

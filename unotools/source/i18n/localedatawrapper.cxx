@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <string.h>
-#include <stdio.h>
+#include <cstring>
+#include <cstdio>
 #include <string>
 
 #include <sal/log.hxx>

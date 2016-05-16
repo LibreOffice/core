@@ -19,7 +19,7 @@
 
 #include "precompile.h"
 
-#include <ctype.h>
+#include <cctype>
 #include "hwpfile.h"
 #include "hbox.h"
 #include "hutil.h"

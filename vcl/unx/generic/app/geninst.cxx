@@ -20,11 +20,11 @@
 #include <sal/config.h>
 
 #include <cassert>
-#include <string.h>
-#include <stdlib.h>
+#include <cstring>
+#include <cstdlib>
 
 #if defined(LINUX)
-#  include <stdio.h>
+#  include <cstdio>
 #endif
 
 #include <osl/module.hxx>

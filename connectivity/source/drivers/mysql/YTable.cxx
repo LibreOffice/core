@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <string.h>
+#include <cstring>
 #include "mysql/YTable.hxx"
 #include "mysql/YTables.hxx"
 #include <com/sun/star/sdbc/XRow.hpp>

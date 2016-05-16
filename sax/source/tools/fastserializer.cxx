@@ -25,7 +25,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 
-#include <string.h>
+#include <cstring>
 
 #if OSL_DEBUG_LEVEL > 0
 #include <iostream>

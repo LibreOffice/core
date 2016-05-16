@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <limits.h>
+#include <climits>
 #include <tools/errinf.hxx>
 #include <rtl/strbuf.hxx>
 #include <osl/diagnose.h>

@@ -18,7 +18,7 @@
  */
 
 
-#include <stdio.h>
+#include <cstdio>
 
 #include <sal/log.hxx>
 

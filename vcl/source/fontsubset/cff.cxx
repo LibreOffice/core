@@ -19,7 +19,7 @@
 
 #include <cstdio>
 #include <cstring>
-#include <assert.h>
+#include <cassert>
 
 #include "fontsubset.hxx"
 

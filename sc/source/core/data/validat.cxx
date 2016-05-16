@@ -50,7 +50,7 @@
 #include "tokenarray.hxx"
 #include "scmatrix.hxx"
 
-#include <math.h>
+#include <cmath>
 #include <memory>
 
 using namespace formula;

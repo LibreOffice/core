@@ -71,7 +71,7 @@
 #include <xepivotxml.hxx>
 #include "xedbdata.hxx"
 
-#include <math.h>
+#include <cmath>
 
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>

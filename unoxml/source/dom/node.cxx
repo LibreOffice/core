@@ -19,8 +19,8 @@
 
 #include <node.hxx>
 
-#include <stdio.h>
-#include <string.h>
+#include <cstdio>
+#include <cstring>
 
 #include <libxml/xmlstring.h>
 

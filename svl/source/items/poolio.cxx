@@ -18,7 +18,7 @@
  */
 
 
-#include <string.h>
+#include <cstring>
 
 #include <sal/log.hxx>
 #include <tools/solar.h>

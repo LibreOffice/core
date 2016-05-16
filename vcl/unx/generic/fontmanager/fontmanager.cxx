@@ -20,7 +20,7 @@
 #include <unistd.h>
 #include <sys/stat.h>
 #include <dirent.h>
-#include <stdlib.h>
+#include <cstdlib>
 #include <osl/thread.h>
 
 #include "unotools/atom.hxx"

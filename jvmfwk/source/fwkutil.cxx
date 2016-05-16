@@ -29,7 +29,7 @@
 #endif
 
 #include <string>
-#include <string.h>
+#include <cstring>
 #include "osl/mutex.hxx"
 #include "osl/module.hxx"
 #include "osl/thread.hxx"

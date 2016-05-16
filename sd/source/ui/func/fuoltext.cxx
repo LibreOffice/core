@@ -37,7 +37,7 @@
 
 #include <memory>
 
-#include <stdio.h>
+#include <cstdio>
 
 namespace sd {
 

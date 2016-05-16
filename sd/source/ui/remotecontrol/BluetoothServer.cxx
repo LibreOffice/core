@@ -19,7 +19,7 @@
 #ifdef LINUX_BLUETOOTH
   #include <glib.h>
   #include <dbus/dbus.h>
-  #include <errno.h>
+  #include <cerrno>
   #include <fcntl.h>
   #include <sys/unistd.h>
   #include <sys/socket.h>

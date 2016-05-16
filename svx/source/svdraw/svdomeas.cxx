@@ -33,7 +33,7 @@
 #include <editeng/measfld.hxx>
 #include <editeng/outliner.hxx>
 #include <editeng/outlobj.hxx>
-#include <math.h>
+#include <cmath>
 #include <svl/smplhint.hxx>
 #include <svl/style.hxx>
 

@@ -28,7 +28,7 @@
 #include "xltools.hxx"
 #include "xiroot.hxx"
 
-#include <string.h>
+#include <cstring>
 
 sal_uInt32 StringHashEntry::MakeHashCode( const OUString& r )
 {

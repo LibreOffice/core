@@ -21,8 +21,8 @@
 
 #include "bitset.hxx"
 
-#include <string.h>
-#include <limits.h>
+#include <cstring>
+#include <climits>
 
 // creates the asymmetric difference with another bitset
 

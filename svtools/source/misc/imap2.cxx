@@ -19,7 +19,7 @@
 
 
 #include <comphelper/string.hxx>
-#include <string.h>
+#include <cstring>
 #include <rtl/strbuf.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/urlobj.hxx>
@@ -33,7 +33,7 @@
 #include <svtools/imapcirc.hxx>
 #include <svtools/imappoly.hxx>
 
-#include <math.h>
+#include <cmath>
 
 #define NOTEOL(c) ((c)!='\0')
 

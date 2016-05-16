@@ -166,7 +166,7 @@ namespace connectivity
 #endif
 }
 
-#include <ctype.h>
+#include <cctype>
 namespace dbtools
 {
 

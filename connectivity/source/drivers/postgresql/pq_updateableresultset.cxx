@@ -47,7 +47,7 @@
 #include "pq_tools.hxx"
 #include "pq_statics.hxx"
 
-#include <string.h>
+#include <cstring>
 
 #include <connectivity/dbconversion.hxx>
 

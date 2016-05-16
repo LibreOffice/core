@@ -20,7 +20,7 @@
 #include <tools/bigint.hxx>
 #include <tools/helpers.hxx>
 #include <svx/svdopath.hxx>
-#include <math.h>
+#include <cmath>
 #include <svx/xpool.hxx>
 #include <svx/xpoly.hxx>
 #include <svx/svdattr.hxx>

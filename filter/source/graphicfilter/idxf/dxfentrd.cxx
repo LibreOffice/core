@@ -18,7 +18,7 @@
  */
 
 
-#include <string.h>
+#include <cstring>
 #include <dxfentrd.hxx>
 
 //--------------------------DXFBasicEntity--------------------------------------

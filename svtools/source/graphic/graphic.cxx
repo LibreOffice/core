@@ -27,7 +27,7 @@
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/queryinterface.hxx>
-#include <string.h>
+#include <cstring>
 
 using namespace com::sun::star;
 

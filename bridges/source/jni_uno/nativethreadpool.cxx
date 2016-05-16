@@ -18,7 +18,7 @@
  */
 
 
-#include <string.h>
+#include <cstring>
 #include "jvmaccess/virtualmachine.hxx"
 #include "rtl/byteseq.h"
 #include "rtl/byteseq.hxx"

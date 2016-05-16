@@ -20,7 +20,7 @@
 
 #include "bufferedinputstream.hxx"
 
-#include <string.h>
+#include <cstring>
 #include <osl/diagnose.hxx>
 #include <osl/thread.h>
 #include <osl/file.hxx>

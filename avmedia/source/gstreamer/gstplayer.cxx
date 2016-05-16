@@ -27,7 +27,7 @@
 #include <map>
 #include <set>
 #include <vector>
-#include <math.h>
+#include <cmath>
 
 #include <cppuhelper/supportsservice.hxx>
 

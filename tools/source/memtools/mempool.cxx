@@ -21,7 +21,7 @@
 #include <sal/log.hxx>
 #include <rtl/alloc.h>
 
-#include <stdio.h>
+#include <cstdio>
 
 FixedMemPool::FixedMemPool(char const * pTypeName, sal_uInt16 nTypeSize)
   : m_pTypeName (pTypeName)

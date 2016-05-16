@@ -29,7 +29,7 @@
 #include <sfx2/sfxmodelfactory.hxx>
 #include <vcl/svapp.hxx>
 
-#include <string.h>
+#include <cstring>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;

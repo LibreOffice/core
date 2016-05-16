@@ -48,7 +48,7 @@
 #include <rtl/instance.hxx>
 #include <rtl/strbuf.hxx>
 
-#include <math.h>
+#include <cmath>
 #include <limits>
 #include <memory>
 

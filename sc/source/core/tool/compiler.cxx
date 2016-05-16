@@ -42,10 +42,10 @@
 #include <rtl/math.hxx>
 #include <rtl/ustring.hxx>
 #include <svtools/miscopt.hxx>
-#include <ctype.h>
-#include <stdlib.h>
-#include <string.h>
-#include <math.h>
+#include <cctype>
+#include <cstdlib>
+#include <cstring>
+#include <cmath>
 #include "rangenam.hxx"
 #include "dbdata.hxx"
 #include "document.hxx"

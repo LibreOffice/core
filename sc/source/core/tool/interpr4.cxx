@@ -34,9 +34,9 @@
 #include <basic/sbuno.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/sharedstringpool.hxx>
-#include <stdlib.h>
-#include <string.h>
-#include <signal.h>
+#include <cstdlib>
+#include <cstring>
+#include <csignal>
 
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/sheet/XSheetCellRange.hpp>
@@ -66,8 +66,8 @@
 #include "queryparam.hxx"
 #include "tokenarray.hxx"
 
-#include <math.h>
-#include <float.h>
+#include <cmath>
+#include <cfloat>
 #include <map>
 #include <algorithm>
 #include <functional>

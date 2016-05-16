@@ -35,7 +35,7 @@
 #include "tokenarray.hxx"
 #include "lotfilter.hxx"
 
-#include <math.h>
+#include <cmath>
 
 void PutFormString(LotusContext& rContext, SCCOL nCol, SCROW nRow, SCTAB nTab, sal_Char* pString)
 {

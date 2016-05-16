@@ -18,8 +18,8 @@
  */
 
 #include <rtl/math.hxx>
-#include <string.h>
-#include <math.h>
+#include <cstring>
+#include <cmath>
 
 #ifdef DEBUG_SC_LUP_DECOMPOSITION
 #include <stdio.h>

@@ -40,8 +40,8 @@
 
 #if defined SAL_UNX
 #include <unistd.h>
-#include <string.h>
-#include <errno.h>
+#include <cstring>
+#include <cerrno>
 #include <sys/mman.h>
 #elif defined SAL_W32
 #define WIN32_LEAN_AND_MEAN

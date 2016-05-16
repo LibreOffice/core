@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 #include "Receiver.hxx"
-#include <string.h>
+#include <cstring>
 #include <com/sun/star/presentation/XSlideShowController.hpp>
 #include <com/sun/star/presentation/XPresentationSupplier.hpp>
 #include <com/sun/star/presentation/XPresentation2.hpp>

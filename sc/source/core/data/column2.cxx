@@ -70,7 +70,7 @@
 #include <algorithm>
 #include <memory>
 
-#include <math.h>
+#include <cmath>
 
 // factor from font size to optimal cell height (text width)
 #define SC_ROT_BREAK_FACTOR     6

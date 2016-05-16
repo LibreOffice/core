@@ -32,7 +32,7 @@
 #include <osl/file.hxx>
 #include <tools/time.hxx>
 #include <tools/debug.hxx>
-#include <stdio.h>
+#include <cstdio>
 
 #ifdef UNX
 #include <sys/stat.h>

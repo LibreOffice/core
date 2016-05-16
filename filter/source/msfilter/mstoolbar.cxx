@@ -8,7 +8,7 @@
  */
 #include <filter/msfilter/mstoolbar.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <stdarg.h>
+#include <cstdarg>
 #include <com/sun/star/ui/XUIConfigurationPersistence.hpp>
 #include <com/sun/star/ui/XImageManager.hpp>
 #include <com/sun/star/ui/ItemType.hpp>

@@ -78,7 +78,7 @@
 #include <vcl/timer.hxx>
 #include <osl/mutex.hxx>
 
-#include <ctype.h>
+#include <cctype>
 #include <unordered_map>
 
 // compatibility: DatabaseCursorType is dead, but for compatibility reasons we still have to write it ...

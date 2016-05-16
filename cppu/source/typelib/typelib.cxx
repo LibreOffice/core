@@ -24,9 +24,9 @@
 #include <set>
 #include <vector>
 
-#include <stdarg.h>
-#include <stdlib.h>
-#include <string.h>
+#include <cstdarg>
+#include <cstdlib>
+#include <cstring>
 #include <new>
 #include <osl/interlck.h>
 #include <osl/mutex.hxx>

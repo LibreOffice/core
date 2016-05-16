@@ -30,7 +30,7 @@
     defined(DRAGONFLY)
 #include <pthread.h>
 #if !defined(MACOSX) && !defined(IOS)
-#include <locale.h>
+#include <clocale>
 #include <langinfo.h>
 #else
 #include <osl/module.h>
@@ -38,7 +38,7 @@
 #endif  /* !MACOSX && !IOS */
 #endif  /* LINUX || SOLARIS || NETBSD || MACOSX || IOS */
 
-#include <string.h>
+#include <cstring>
 
 namespace {
 

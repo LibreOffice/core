@@ -80,7 +80,7 @@
 #include <sbintern.hxx>
 #include <runtime.hxx>
 
-#include <math.h>
+#include <cmath>
 #include <memory>
 #include <unordered_map>
 #include <com/sun/star/reflection/XTypeDescriptionEnumerationAccess.hpp>

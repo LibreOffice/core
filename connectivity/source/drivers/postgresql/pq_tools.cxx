@@ -52,7 +52,7 @@
 #include "pq_statics.hxx"
 
 #include <libpq-fe.h>
-#include <string.h>
+#include <cstring>
 
 using com::sun::star::beans::XPropertySet;
 

@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <string.h>
+#include <cstring>
 #include <vcl/dialog.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/button.hxx>
@@ -29,7 +29,7 @@
 
 #include "runtime.hxx"
 
-#include <ctype.h>
+#include <cctype>
 #include <rtl/byteseq.hxx>
 #include <rtl/textenc.h>
 #include <rtl/strbuf.hxx>

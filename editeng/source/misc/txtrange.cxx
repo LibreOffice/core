@@ -19,7 +19,7 @@
 
 
 #include <editeng/txtrange.hxx>
-#include <math.h>
+#include <cmath>
 #include <tools/poly.hxx>
 #include <tools/debug.hxx>
 #include <tools/solar.h>

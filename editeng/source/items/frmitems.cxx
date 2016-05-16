@@ -46,7 +46,7 @@
 #include <i18nutil/unicode.hxx>
 #include <unotools/securityoptions.hxx>
 #include <unotools/ucbstreamhelper.hxx>
-#include <limits.h>
+#include <climits>
 #include <comphelper/processfactory.hxx>
 #include <svtools/grfmgr.hxx>
 #include <tools/urlobj.hxx>

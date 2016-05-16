@@ -63,7 +63,7 @@
 #include <columnspanset.hxx>
 #include <listenercontext.hxx>
 
-#include <math.h>
+#include <cmath>
 #include <memory>
 
 #define D_MAX_LONG_  (double) 0x7fffffff

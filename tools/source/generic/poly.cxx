@@ -40,7 +40,7 @@
 #include <iterator>
 #include <algorithm>
 #include <cstring>
-#include <limits.h>
+#include <climits>
 #include <cmath>
 
 #define EDGE_LEFT       1

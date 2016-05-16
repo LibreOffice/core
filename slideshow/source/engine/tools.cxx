@@ -21,7 +21,7 @@
 #include <tools/diagnose_ex.h>
 #include <canvas/canvastools.hxx>
 
-#include <math.h>
+#include <cmath>
 
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>

@@ -18,7 +18,7 @@
  */
 
 #include "unxsplash.hxx"
-#include <stdio.h>
+#include <cstdio>
 #include <osl/process.h>
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/supportsservice.hxx>

@@ -26,10 +26,10 @@
 #include "precompile.h"
 #include <sal/types.h>
 #include <sal/macros.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <math.h>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <cmath>
 #ifdef _MSC_VER
 #include <float.h>
 #define isnan _isnan

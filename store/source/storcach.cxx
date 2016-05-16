@@ -31,7 +31,7 @@
 #include "object.hxx"
 #include "storbase.hxx"
 
-#include <stddef.h>
+#include <cstddef>
 
 using namespace store;
 

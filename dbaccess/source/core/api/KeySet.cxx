@@ -40,7 +40,7 @@
 #include <connectivity/dbexception.hxx>
 #include <list>
 #include <algorithm>
-#include <string.h>
+#include <cstring>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include "querycomposer.hxx"

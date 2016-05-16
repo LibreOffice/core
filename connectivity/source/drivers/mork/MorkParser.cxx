@@ -34,10 +34,10 @@
 
 #include "MorkParser.hxx"
 #include <boost/io/ios_state.hpp>
-#include <stdlib.h>
+#include <cstdlib>
 #include <sstream>
 #include <string>
-#include <string.h>
+#include <cstring>
 #include <stdexcept>
 #include <fstream>
 #include <iostream>

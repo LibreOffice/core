@@ -18,7 +18,7 @@
  */
 
 
-#include <assert.h>
+#include <cassert>
 #include <vector>
 #include "attributes.hxx"
 

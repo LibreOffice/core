@@ -35,11 +35,11 @@
 #include "readwrite_helper.hxx"
 
 #include <sys/types.h>
-#include <errno.h>
+#include <cerrno>
 #include <dirent.h>
-#include <limits.h>
-#include <stdio.h>
-#include <string.h>
+#include <climits>
+#include <cstdio>
+#include <cstring>
 #include <unistd.h>
 #include <sys/stat.h>
 #include <sys/mman.h>

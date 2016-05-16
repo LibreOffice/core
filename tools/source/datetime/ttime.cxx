@@ -25,12 +25,12 @@
 #include <windows.h>
 #elif defined UNX
 #include <unistd.h>
-#include <limits.h>
-#include <math.h>
+#include <climits>
+#include <cmath>
 #include <sys/time.h>
 #endif
 
-#include <time.h>
+#include <ctime>
 #ifdef __MACH__
 #include <mach/clock.h>
 #include <mach/mach.h>

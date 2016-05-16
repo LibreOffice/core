@@ -23,8 +23,8 @@
 #include <sal/macros.h>
 
 #include <cassert>
-#include <string.h>
-#include <stdio.h>
+#include <cstring>
+#include <cstdio>
 
 #include "rtllifecycle.h"
 #include <oslmemory.h>

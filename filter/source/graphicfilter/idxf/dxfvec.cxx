@@ -18,7 +18,7 @@
  */
 
 
-#include <math.h>
+#include <cmath>
 #include <dxfvec.hxx>
 #include <tools/gen.hxx>
 

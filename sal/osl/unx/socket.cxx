@@ -24,8 +24,8 @@
 #include <osl/signal.h>
 
 #include <rtl/alloc.h>
-#include <assert.h>
-#include <ctype.h>
+#include <cassert>
+#include <cctype>
 #include <sal/types.h>
 #include <sal/log.hxx>
 

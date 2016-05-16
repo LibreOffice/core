@@ -45,7 +45,7 @@
 #include "resource/sharedresources.hxx"
 #include "java/LocalRef.hxx"
 
-#include <string.h>
+#include <cstring>
 #include <memory>
 
 using namespace ::comphelper;

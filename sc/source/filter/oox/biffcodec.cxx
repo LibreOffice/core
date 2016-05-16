@@ -21,7 +21,7 @@
 
 #include <osl/thread.h>
 #include <oox/helper/attributelist.hxx>
-#include <string.h>
+#include <cstring>
 #include "biffinputstream.hxx"
 
 namespace oox {

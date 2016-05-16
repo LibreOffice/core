@@ -22,8 +22,8 @@
 
 #include <map>
 
-#include <string.h>
-#include <limits.h>
+#include <cstring>
+#include <climits>
 
 #include <libxslt/xslt.h>
 #include <libxslt/xsltutils.h>

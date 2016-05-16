@@ -20,7 +20,7 @@
 #include <rtl/alloc.h>
 
 #include <limits>
-#include <string.h>
+#include <cstring>
 
 #include <com/sun/star/uno/Sequence.hxx>
 

@@ -25,7 +25,7 @@
 #include <unotools/charclass.hxx>
 #include <unotools/collatorwrapper.hxx>
 #include <com/sun/star/i18n/CollatorOptions.hpp>
-#include <stdlib.h>
+#include <cstdlib>
 #include <unotools/transliterationwrapper.hxx>
 
 #include "table.hxx"

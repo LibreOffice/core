@@ -18,7 +18,7 @@
  */
 
 
-#include <stdio.h>
+#include <cstdio>
 
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>

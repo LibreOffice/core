@@ -63,7 +63,7 @@
 #include "gdimtftools.hxx"
 #include "drawinglayeranimation.hxx"
 
-#include <math.h>
+#include <cmath>
 
 using namespace ::com::sun::star;
 

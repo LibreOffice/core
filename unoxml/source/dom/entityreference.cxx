@@ -19,7 +19,7 @@
 
 #include <entityreference.hxx>
 
-#include <string.h>
+#include <cstring>
 
 using namespace css::uno;
 using namespace css::xml::dom;

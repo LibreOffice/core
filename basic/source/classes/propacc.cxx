@@ -28,7 +28,7 @@
 #include <comphelper/sequence.hxx>
 
 #include <algorithm>
-#include <limits.h>
+#include <climits>
 
 using com::sun::star::uno::Reference;
 using namespace com::sun::star;

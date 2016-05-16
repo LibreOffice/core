@@ -20,9 +20,9 @@
 
 #include <HelpCompiler.hxx>
 #include <BasCodeTagger.hxx>
-#include <limits.h>
-#include <stdlib.h>
-#include <string.h>
+#include <climits>
+#include <cstdlib>
+#include <cstring>
 #include <libxslt/xslt.h>
 #include <libxslt/xsltInternals.h>
 #include <libxslt/transform.h>

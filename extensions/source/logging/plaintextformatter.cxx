@@ -29,7 +29,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <osl/thread.h>
 
-#include <stdio.h>
+#include <cstdio>
 
 namespace logging
 {

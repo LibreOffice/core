@@ -20,7 +20,7 @@
 #include <sal/config.h>
 #include <osl/thread.h>
 #include <cstdio>
-#include <math.h>
+#include <cmath>
 #include <boost/math/special_functions/expm1.hpp>
 
 #include <cmath>

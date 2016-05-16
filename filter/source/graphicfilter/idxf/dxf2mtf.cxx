@@ -18,13 +18,13 @@
  */
 
 
-#include <string.h>
+#include <cstring>
 #include <vcl/gdimtf.hxx>
 #include <vcl/virdev.hxx>
 #include <tools/poly.hxx>
 #include "dxf2mtf.hxx"
 
-#include <math.h>
+#include <cmath>
 
 
 sal_uLong DXF2GDIMetaFile::CountEntities(const DXFEntities & rEntities)

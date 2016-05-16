@@ -20,8 +20,8 @@
 #include "sal/config.h"
 
 #include <cassert>
-#include <stdlib.h>
-#include <time.h>
+#include <cstdlib>
+#include <ctime>
 
 #include <vcl/help.hxx>
 #include <vcl/layout.hxx>

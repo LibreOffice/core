@@ -17,8 +17,8 @@
 #include <cstring>
 #include <sstream>
 
-#include <stdio.h>
-#include <string.h>
+#include <cstdio>
+#include <cstring>
 
 #include "osl/thread.hxx"
 #include "rtl/string.h"

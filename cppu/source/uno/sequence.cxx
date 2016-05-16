@@ -20,7 +20,7 @@
 #include "sal/config.h"
 
 #include <cassert>
-#include <string.h>
+#include <cstring>
 
 #include <rtl/alloc.h>
 #include <osl/diagnose.h>

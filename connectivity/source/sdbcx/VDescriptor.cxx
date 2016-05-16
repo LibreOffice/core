@@ -22,7 +22,7 @@
 
 #include <functional>
 #include <algorithm>
-#include <string.h>
+#include <cstring>
 
 namespace connectivity
 {

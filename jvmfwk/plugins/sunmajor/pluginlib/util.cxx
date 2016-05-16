@@ -47,7 +47,7 @@
 #pragma warning(pop)
 #endif
 #endif
-#include <string.h>
+#include <cstring>
 
 #include "sunjre.hxx"
 #include "vendorlist.hxx"

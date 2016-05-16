@@ -21,7 +21,7 @@
 #include <zlib.h>
 #include <com/sun/star/packages/zip/ZipConstants.hpp>
 #include <osl/diagnose.h>
-#include <string.h>
+#include <cstring>
 
 using namespace com::sun::star::packages::zip::ZipConstants;
 using namespace com::sun::star;

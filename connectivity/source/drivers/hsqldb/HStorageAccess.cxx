@@ -26,7 +26,7 @@
 #include "accesslog.hxx"
 #include <osl/diagnose.h>
 
-#include <string.h>
+#include <cstring>
 
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::uno;

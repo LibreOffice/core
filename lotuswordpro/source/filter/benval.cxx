@@ -54,7 +54,7 @@
  *
  ************************************************************************/
 #include "first.hxx"
-#include "assert.h"
+#include <cassert>
 namespace OpenStormBento
 {
 

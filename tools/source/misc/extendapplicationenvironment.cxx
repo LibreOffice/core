@@ -22,7 +22,7 @@
 
 #include <sal/config.h>
 
-#include <stdlib.h>
+#include <cstdlib>
 
 #if defined UNX
 #include <sys/resource.h>

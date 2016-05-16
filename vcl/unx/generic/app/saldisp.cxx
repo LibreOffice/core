@@ -17,14 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <string.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
+#include <cstring>
+#include <cstdio>
+#include <cstdlib>
+#include <cmath>
 #include <sys/time.h>
 #include <pthread.h>
 #include <unistd.h>
-#include <ctype.h>
+#include <cctype>
 
 #if defined(SOLARIS) || defined(AIX)
 #include <osl/module.h>

@@ -49,7 +49,7 @@
 #include <tools/diagnose_ex.h>
 #include <unotools/sharedunocomponent.hxx>
 
-#include <limits.h>
+#include <climits>
 
 using namespace dbtools;
 

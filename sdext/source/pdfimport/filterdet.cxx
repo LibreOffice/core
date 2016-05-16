@@ -35,7 +35,7 @@
 #include <comphelper/fileurl.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <memory>
-#include <string.h>
+#include <cstring>
 
 using namespace com::sun::star;
 

@@ -19,8 +19,8 @@
 
 #include <fldbas.hxx>
 
-#include <float.h>
-#include <math.h>
+#include <cfloat>
+#include <cmath>
 
 #include <libxml/xmlwriter.h>
 

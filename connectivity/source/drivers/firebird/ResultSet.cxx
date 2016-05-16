@@ -28,7 +28,7 @@
 #include <propertyids.hxx>
 #include <rtl/string.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <time.h>
+#include <ctime>
 #include <TConnection.hxx>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>

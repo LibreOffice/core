@@ -18,7 +18,7 @@
  */
 
 
-#include <string.h>
+#include <cstring>
 
 #include "sot/stg.hxx"
 #include "stgelem.hxx"

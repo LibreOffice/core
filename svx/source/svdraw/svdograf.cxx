@@ -20,7 +20,7 @@
 #include <unotools/streamwrap.hxx>
 
 #include <sfx2/lnkbase.hxx>
-#include <math.h>
+#include <cmath>
 #include <tools/helpers.hxx>
 #include <sot/formats.hxx>
 #include <sot/storage.hxx>

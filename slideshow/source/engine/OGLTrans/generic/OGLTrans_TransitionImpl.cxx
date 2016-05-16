@@ -39,7 +39,7 @@
 
 #include "OGLTrans_TransitionImpl.hxx"
 #include "OGLTrans_Operation.hxx"
-#include <math.h>
+#include <cmath>
 
 TransitionScene::TransitionScene(TransitionScene const& rOther)
     : maLeavingSlidePrimitives(rOther.maLeavingSlidePrimitives)

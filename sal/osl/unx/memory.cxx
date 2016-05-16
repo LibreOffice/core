@@ -9,7 +9,7 @@
 
 #include <oslmemory.h>
 
-#include <stdlib.h>
+#include <cstdlib>
 #ifdef __ANDROID__
 #include <malloc.h>
 #endif

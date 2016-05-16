@@ -19,7 +19,7 @@
 
 #include <attr.hxx>
 
-#include <string.h>
+#include <cstring>
 
 #include <memory>
 

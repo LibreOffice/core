@@ -28,7 +28,7 @@
 #include <unicode/udata.h>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustring.hxx>
-#include <string.h>
+#include <cstring>
 
 U_CDECL_BEGIN
 extern const char OpenOffice_dat[];

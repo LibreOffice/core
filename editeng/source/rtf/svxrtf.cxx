@@ -18,7 +18,7 @@
  */
 
 
-#include <ctype.h>
+#include <cctype>
 #include <tools/diagnose_ex.h>
 #include <rtl/tencinfo.h>
 #include <svl/itemiter.hxx>

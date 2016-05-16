@@ -8,7 +8,7 @@
  */
 
 #include "SvXMLAttrCollection.hxx"
-#include <limits.h>
+#include <climits>
 #include <osl/diagnose.h>
 
 bool SvXMLAttrCollection::operator ==( const SvXMLAttrCollection& rCmp ) const

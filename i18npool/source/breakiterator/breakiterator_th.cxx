@@ -20,7 +20,7 @@
 #include <breakiterator_th.hxx>
 #include <wtt.h>
 
-#include <string.h>
+#include <cstring>
 #include <algorithm>
 
 using namespace ::com::sun::star::uno;

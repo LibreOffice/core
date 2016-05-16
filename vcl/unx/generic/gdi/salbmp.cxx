@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <string.h>
-#include <errno.h>
+#include <cstring>
+#include <cerrno>
 
 #ifdef FREEBSD
 #include <sys/types.h>

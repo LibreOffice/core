@@ -27,8 +27,8 @@
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/typeprovider.hxx>
 
-#include <math.h>
-#include <limits.h>
+#include <cmath>
+#include <climits>
 
 using namespace ::cppu;
 using namespace ::osl;

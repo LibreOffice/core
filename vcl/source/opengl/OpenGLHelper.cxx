@@ -26,7 +26,7 @@
 #include <com/sun/star/util/XFlushable.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 
-#include <stdarg.h>
+#include <cstdarg>
 #include <vector>
 #include <deque>
 #include <unordered_map>

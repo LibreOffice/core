@@ -19,7 +19,7 @@
 
 #include <processinginstruction.hxx>
 
-#include <string.h>
+#include <cstring>
 
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
 

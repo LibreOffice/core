@@ -29,7 +29,7 @@
 #include <osl/mutex.h>
 
 #include <pthread.h>
-#include <stdlib.h>
+#include <cstdlib>
 
 
 typedef struct _oslMutexImpl

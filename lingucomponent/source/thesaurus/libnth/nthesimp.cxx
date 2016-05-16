@@ -41,7 +41,7 @@
 
 #include <list>
 #include <set>
-#include <string.h>
+#include <cstring>
 
 // XML-header to query SPELLML support
 #define SPELLML_SUPPORT "<?xml?>"

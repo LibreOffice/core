@@ -32,7 +32,7 @@
 #include "vclpluginapi.h"
 
 #include <unistd.h>
-#include <string.h>
+#include <cstring>
 
 static bool is_gnome_desktop( Display* pDisplay )
 {

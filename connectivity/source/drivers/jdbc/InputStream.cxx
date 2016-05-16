@@ -20,7 +20,7 @@
 #include "java/io/InputStream.hxx"
 #include "java/tools.hxx"
 
-#include <string.h>
+#include <cstring>
 
 using namespace connectivity;
 

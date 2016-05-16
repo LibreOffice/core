@@ -32,7 +32,7 @@
 #include <svl/urlbmk.hxx>
 #include <svtools/svlbitm.hxx>
 #include <svtools/treelistentry.hxx>
-#include <stdlib.h>
+#include <cstdlib>
 
 #include "content.hxx"
 #include "navipi.hxx"

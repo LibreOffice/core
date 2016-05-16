@@ -57,7 +57,7 @@
  * @file
  * Base64 tool.
  ************************************************************************/
-#include <string.h>
+#include <cstring>
 #include "xfbase64.hxx"
 
 const  sal_Char aBase64EncodeTable[] =

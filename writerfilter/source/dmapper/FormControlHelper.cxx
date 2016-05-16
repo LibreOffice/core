@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <math.h>
+#include <cmath>
 
 #include <com/sun/star/awt/XControlModel.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

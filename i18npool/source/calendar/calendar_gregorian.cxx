@@ -31,8 +31,8 @@
 #include <rtl/math.hxx>
 #include <sal/log.hxx>
 
-#include <stdio.h>
-#include <string.h>
+#include <cstdio>
+#include <cstring>
 
 #define erDUMP_ICU_CALENDAR 0
 #define erDUMP_I18N_CALENDAR 0

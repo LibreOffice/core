@@ -19,7 +19,7 @@
 
 #include <config_folders.h>
 
-#include <stdio.h>
+#include <cstdio>
 
 #include <unotools/bootstrap.hxx>
 

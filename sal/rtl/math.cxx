@@ -32,10 +32,10 @@
 
 #include <algorithm>
 #include <cassert>
-#include <float.h>
-#include <limits.h>
-#include <math.h>
-#include <stdlib.h>
+#include <cfloat>
+#include <climits>
+#include <cmath>
+#include <cstdlib>
 
 static int const n10Count = 16;
 static double const n10s[2][n10Count] = {

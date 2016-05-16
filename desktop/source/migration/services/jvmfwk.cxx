@@ -38,7 +38,7 @@
 #include <jvmfwk/framework.hxx>
 #include "jvmfwk.hxx"
 #include <stack>
-#include <stdio.h>
+#include <cstdio>
 
 #include <osl/thread.hxx>
 #include <osl/diagnose.h>

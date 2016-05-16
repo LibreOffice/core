@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <string.h>
+#include <cstring>
 
 #include "xmlelementwrapper_xmlsecimpl.hxx"
 #include <com/sun/star/uno/XComponentContext.hpp>

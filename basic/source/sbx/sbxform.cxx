@@ -18,7 +18,7 @@
  */
 
 
-#include <stdlib.h>
+#include <cstdlib>
 
 #include <basic/sbxform.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -36,9 +36,9 @@ COMMENT: Visual-Basic treats the following (invalid) format-strings
       (this class behaves the same way)
 */
 
-#include <stdio.h>
-#include <float.h>
-#include <math.h>
+#include <cstdio>
+#include <cfloat>
+#include <cmath>
 
 #define NO_DIGIT_                   -1
 

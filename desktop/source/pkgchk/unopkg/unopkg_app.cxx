@@ -41,7 +41,7 @@
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/ui/dialogs/XDialogClosedListener.hpp>
 #include <com/sun/star/bridge/BridgeFactory.hpp>
-#include <stdio.h>
+#include <cstdio>
 #if defined(UNX)
   #include <unistd.h>
 #endif

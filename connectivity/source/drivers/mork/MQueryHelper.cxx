@@ -23,12 +23,12 @@
 #include "MConnection.hxx"
 
 #include "MorkParser.hxx"
-#include <stdlib.h>
+#include <cstdlib>
 #include <sstream>
 #include <string>
 #include <vector>
 #include <algorithm>
-#include <string.h>
+#include <cstring>
 
 #include "resource/mork_res.hrc"
 

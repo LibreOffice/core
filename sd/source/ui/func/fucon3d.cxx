@@ -27,7 +27,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <tools/poly.hxx>
 
-#include <math.h>
+#include <cmath>
 #include <svx/globl3d.hxx>
 #include <svx/scene3d.hxx>
 #include <svx/sphere3d.hxx>

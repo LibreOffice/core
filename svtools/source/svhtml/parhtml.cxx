@@ -18,7 +18,7 @@
  */
 
 
-#include <ctype.h>
+#include <cctype>
 #include <comphelper/string.hxx>
 #include <tools/stream.hxx>
 #include <tools/debug.hxx>

@@ -9,7 +9,7 @@
 
 #include "oox/mathml/importutils.hxx"
 
-#include <assert.h>
+#include <cassert>
 
 #include <com/sun/star/xml/FastAttribute.hpp>
 #include <com/sun/star/xml/sax/XFastAttributeList.hpp>

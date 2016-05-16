@@ -46,7 +46,7 @@
 #pragma warning( disable: 4786 )
 #endif
 
-#include <string.h>
+#include <cstring>
 
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::uno;

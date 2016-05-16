@@ -21,7 +21,7 @@
 
 #include <cassert>
 #include "system.hxx"
-#include <string.h>
+#include <cstring>
 #if defined(OPENBSD)
 #include <sched.h>
 #endif

@@ -29,7 +29,7 @@
 
 #include <svx/dialogs.hrc>
 
-#include <math.h>
+#include <cmath>
 #include <hintids.hxx>
 #include <sot/exchange.hxx>
 #include <svx/hdft.hxx>

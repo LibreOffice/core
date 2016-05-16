@@ -21,7 +21,7 @@
 #include <vcl/virdev.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
-#include <math.h>
+#include <cmath>
 
 using namespace ::swf;
 using namespace ::std;

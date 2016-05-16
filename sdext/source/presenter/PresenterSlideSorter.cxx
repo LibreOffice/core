@@ -43,7 +43,7 @@
 #include <com/sun/star/rendering/XPolyPolygon2D.hpp>
 #include <com/sun/star/util/Color.hpp>
 #include <algorithm>
-#include <math.h>
+#include <cmath>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

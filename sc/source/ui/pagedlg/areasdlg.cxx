@@ -24,7 +24,7 @@
 #include <svl/stritem.hxx>
 #include <vcl/msgbox.hxx>
 #include <unotools/charclass.hxx>
-#include <stdlib.h>
+#include <cstdlib>
 
 #include "areasdlg.hxx"
 #include "scresid.hxx"

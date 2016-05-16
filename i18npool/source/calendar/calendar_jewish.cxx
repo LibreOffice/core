@@ -18,8 +18,8 @@
  */
 
 
-#include <math.h>
-#include <stdio.h>
+#include <cmath>
+#include <cstdio>
 
 #include "calendar_jewish.hxx"
 

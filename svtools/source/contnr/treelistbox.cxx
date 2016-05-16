@@ -42,7 +42,7 @@
 #include "svimpbox.hxx"
 
 #include <set>
-#include <string.h>
+#include <cstring>
 #include <vector>
 #include <o3tl/make_unique.hxx>
 using namespace css::accessibility;

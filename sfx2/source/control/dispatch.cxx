@@ -23,8 +23,8 @@
 #include <deque>
 #include <vector>
 
-#include <stdarg.h>
-#include <stdlib.h>
+#include <cstdarg>
+#include <cstdlib>
 
 #include <boost/property_tree/json_parser.hpp>
 

@@ -19,7 +19,7 @@
 
 //  Discover WKS, WK1 und WK3; s.a op.cpp
 
-#include <string.h>
+#include <cstring>
 #include <map>
 
 #include "filter.hxx"

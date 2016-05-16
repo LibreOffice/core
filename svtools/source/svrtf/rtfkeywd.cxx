@@ -21,9 +21,9 @@
 #include <svtools/rtfkeywd.hxx>
 #include <svtools/rtftoken.h>
 
-#include <string.h>
-#include <ctype.h>
-#include <stdlib.h>
+#include <cstring>
+#include <cctype>
+#include <cstdlib>
 
 // the table is still to be sorted
 struct RTF_TokenEntry

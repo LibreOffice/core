@@ -43,7 +43,7 @@
 #include <sfx2/msg.hxx>
 #include "sfxslots.hxx"
 #include "sfxbasecontroller_internal.hxx"
-#include <time.h>
+#include <ctime>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;

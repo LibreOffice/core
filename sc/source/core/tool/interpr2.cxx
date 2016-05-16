@@ -49,8 +49,8 @@
 
 #include <com/sun/star/sheet/DataPilotFieldFilter.hpp>
 
-#include <string.h>
-#include <math.h>
+#include <cstring>
+#include <cmath>
 
 using ::std::vector;
 using namespace com::sun::star;

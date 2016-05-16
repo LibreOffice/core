@@ -49,7 +49,7 @@
 #include <svl/zformat.hxx>
 #include <svtools/ctrltool.hxx>
 
-#include <string.h>
+#include <cstring>
 
 #include "global.hxx"
 #include "globstr.hrc"

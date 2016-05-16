@@ -60,7 +60,7 @@
 #include <basic/sbuno.hxx>
 #include <rtl/math.hxx>
 #include <sfx2/viewsh.hxx>
-#include <math.h>
+#include <cmath>
 #include <osl/file.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
 #include <toolkit/helper/vclunohelper.hxx>

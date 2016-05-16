@@ -18,7 +18,7 @@
  */
 
 
-#include <string.h>
+#include <cstring>
 #include <dxfreprd.hxx>
 #include "osl/nlsupport.h"
 

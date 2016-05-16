@@ -19,8 +19,8 @@
 
 #include <com/sun/star/embed/Aspects.hpp>
 
-#include <math.h>
-#include <limits.h>
+#include <cmath>
+#include <climits>
 #include <vector>
 #include <osl/endian.h>
 #include <osl/file.hxx>

@@ -23,7 +23,7 @@
 #include <unotools/intlwrapper.hxx>
 #include <com/sun/star/chart/ChartAxisArrangeOrderType.hpp>
 
-#include <float.h>
+#include <cfloat>
 
 #include "svx/chrtitem.hxx"
 

@@ -23,7 +23,7 @@
 
 #include <svx/framelink.hxx>
 
-#include <math.h>
+#include <cmath>
 #include <vcl/outdev.hxx>
 #include <tools/gen.hxx>
 #include <editeng/borderline.hxx>

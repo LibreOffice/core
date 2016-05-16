@@ -18,8 +18,8 @@
  */
 
 #include <tools/solar.h>
-#include <stdlib.h>
-#include <string.h>
+#include <cstdlib>
+#include <cstring>
 
 #include "interpre.hxx"
 #include "global.hxx"
@@ -31,7 +31,7 @@
 #include "scmatrix.hxx"
 #include "globstr.hrc"
 
-#include <math.h>
+#include <cmath>
 #include <vector>
 #include <algorithm>
 #include <boost/math/special_functions/log1p.hpp>

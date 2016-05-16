@@ -21,7 +21,7 @@
 // Global header
 
 
-#include <limits.h>
+#include <climits>
 #include <utility>
 #include <vector>
 #include <algorithm>

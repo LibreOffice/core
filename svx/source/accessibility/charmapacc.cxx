@@ -19,7 +19,7 @@
 
 #include <unotools/accessiblestatesethelper.hxx>
 #include <vcl/svapp.hxx>
-#include <stdio.h>
+#include <cstdio>
 #include <svx/charmap.hxx>
 #include "charmapacc.hxx"
 #include <com/sun/star/accessibility/AccessibleRole.hpp>

@@ -24,7 +24,7 @@
 #include "odbc/OConnection.hxx"
 #include <rtl/ustrbuf.hxx>
 
-#include <string.h>
+#include <cstring>
 #include <string>
 #include <algorithm>
 

@@ -64,9 +64,9 @@
 #include <comphelper/string.hxx>
 #include <svl/sharedstringpool.hxx>
 
-#include <stdlib.h>
-#include <string.h>
-#include <math.h>
+#include <cstdlib>
+#include <cstring>
+#include <cmath>
 #include <vector>
 #include <memory>
 #include <limits>

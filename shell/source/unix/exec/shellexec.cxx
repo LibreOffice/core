@@ -37,8 +37,8 @@
 
 #include "uno/current_context.hxx"
 
-#include <string.h>
-#include <errno.h>
+#include <cstring>
+#include <cerrno>
 #include <unistd.h>
 
 

@@ -28,7 +28,7 @@
 #include <com/sun/star/frame/XNotifyingDispatch.hpp>
 #include <cppuhelper/interfacecontainer.h>
 #include <vcl/window.hxx>
-#include <limits.h>
+#include <climits>
 
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;

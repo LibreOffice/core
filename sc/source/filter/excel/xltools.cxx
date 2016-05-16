@@ -18,7 +18,7 @@
  */
 
 #include <algorithm>
-#include <math.h>
+#include <cmath>
 #include <sal/mathconf.h>
 #include <unotools/fontcvt.hxx>
 #include <sfx2/objsh.hxx>

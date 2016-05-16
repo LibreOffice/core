@@ -20,7 +20,7 @@
 #if defined(_WIN32)
 #include <windows.h>
 #else
-#include <time.h>
+#include <ctime>
 #endif
 
 #include <tools/date.hxx>

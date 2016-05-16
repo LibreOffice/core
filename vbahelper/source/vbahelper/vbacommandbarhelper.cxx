@@ -29,7 +29,7 @@
 #include <comphelper/random.hxx>
 #include <vbahelper/vbahelper.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <time.h>
+#include <ctime>
 #include <map>
 
 using namespace com::sun::star;

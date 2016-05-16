@@ -17,15 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 #include <tools/config.hxx>
 #include <vcl/dibtools.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/builderfactory.hxx>
 #include <sanedlg.hxx>
 #include <grid.hxx>
-#include <math.h>
+#include <cmath>
 #include <sal/macros.h>
 #include <rtl/strbuf.hxx>
 #include <memory>

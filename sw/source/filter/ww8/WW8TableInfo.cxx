@@ -19,7 +19,7 @@
 
 #include <iostream>
 #include <set>
-#include <stdio.h>
+#include <cstdio>
 #include "WW8TableInfo.hxx"
 #include "fmtfsize.hxx"
 #include "attributeoutputbase.hxx"

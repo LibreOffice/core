@@ -21,10 +21,10 @@
 
 #include <cstddef>
 
-#include <string.h>
-#include <stdio.h>
-#include <ctype.h>
-#include <stdlib.h>
+#include <cstring>
+#include <cstdio>
+#include <cctype>
+#include <cstdlib>
 
 #include <osl/endian.h>
 #include <osl/diagnose.h>

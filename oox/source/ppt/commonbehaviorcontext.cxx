@@ -35,7 +35,7 @@
 #include "commontimenodecontext.hxx"
 #include "timetargetelementcontext.hxx"
 
-#include <string.h>
+#include <cstring>
 
 using namespace ::oox::core;
 using namespace ::com::sun::star::uno;

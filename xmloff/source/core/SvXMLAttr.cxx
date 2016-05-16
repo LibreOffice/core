@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <limits.h>
+#include <climits>
 #include "SvXMLAttr.hxx"
 
 SvXMLAttr::SvXMLAttr( const OUString& rLName,

@@ -31,7 +31,7 @@
 #include <com/sun/star/xml/crypto/DigestID.hpp>
 #include <com/sun/star/xml/crypto/CipherID.hpp>
 
-#include <string.h>
+#include <cstring>
 
 #include <CRC32.hxx>
 #include <ZipOutputEntry.hxx>

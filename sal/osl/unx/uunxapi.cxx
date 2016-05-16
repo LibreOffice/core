@@ -21,7 +21,7 @@
 
 #include "uunxapi.hxx"
 #include "system.hxx"
-#include <limits.h>
+#include <climits>
 #include <rtl/ustring.hxx>
 #include <osl/thread.h>
 

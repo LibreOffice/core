@@ -28,7 +28,7 @@
 #include <svl/urlbmk.hxx>
 #include <vcl/settings.hxx>
 #include <unotools/charclass.hxx>
-#include <stdlib.h>
+#include <cstdlib>
 
 #include "viewdata.hxx"
 #include "tabvwsh.hxx"

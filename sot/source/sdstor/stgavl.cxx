@@ -19,7 +19,7 @@
 
 #include <osl/diagnose.h>
 #include "stgavl.hxx"
-#include <assert.h>
+#include <cassert>
 
 StgAvlNode::StgAvlNode()
 {

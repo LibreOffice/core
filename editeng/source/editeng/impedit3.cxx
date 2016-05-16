@@ -61,7 +61,7 @@
 #include <editeng/unolingu.hxx>
 
 #include <set>
-#include <math.h>
+#include <cmath>
 #include <vcl/metric.hxx>
 #include <com/sun/star/i18n/BreakIterator.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>

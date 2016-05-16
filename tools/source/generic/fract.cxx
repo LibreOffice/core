@@ -25,7 +25,7 @@
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 
-#include <limits.h>
+#include <climits>
 #include <algorithm>
 #include <cmath>
 

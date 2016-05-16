@@ -21,8 +21,8 @@
 
 #include <hintids.hxx>
 
-#include <string.h>
-#include <float.h>
+#include <cstring>
+#include <cfloat>
 #include <comphelper/string.hxx>
 #include <tools/datetime.hxx>
 #include <vcl/svapp.hxx>

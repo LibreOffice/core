@@ -37,7 +37,7 @@
 #include <comphelper/sequence.hxx>
 #include <unotools/docinfohelper.hxx>
 
-#include <string.h>
+#include <cstring>
 
 using namespace com::sun::star;
 using namespace ::xmloff::token;

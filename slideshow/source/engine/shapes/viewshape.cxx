@@ -20,7 +20,7 @@
 
 #include <tools/diagnose_ex.h>
 
-#include <math.h>
+#include <cmath>
 
 #include <rtl/math.hxx>
 

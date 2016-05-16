@@ -40,7 +40,7 @@
 #include <vcl/lstbox.hxx>
 
 #include <algorithm>
-#include <stdlib.h>
+#include <cstdlib>
 
 namespace dbaui
 {

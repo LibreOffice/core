@@ -35,7 +35,7 @@
 #include <saltime.hxx>
 
 #if HAVE_SYSLOG_H
-#include <string.h>
+#include <cstring>
 #include <syslog.h>
 // from sal/osl/all/log.cxx:
 extern bool sal_use_syslog;

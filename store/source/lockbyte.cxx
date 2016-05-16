@@ -30,7 +30,7 @@
 #include "object.hxx"
 #include "storbase.hxx"
 
-#include <string.h>
+#include <cstring>
 
 using namespace store;
 

@@ -95,7 +95,7 @@
 #include <comphelper/sequence.hxx>
 
 #ifdef UNX
-#include <errno.h>
+#include <cerrno>
 #include <sys/stat.h>
 #endif
 

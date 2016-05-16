@@ -20,7 +20,7 @@
 #include <osl/endian.h>
 #include <vcl/svapp.hxx>
 #include <unotools/tempfile.hxx>
-#include <math.h>
+#include <cmath>
 #include <editeng/eeitem.hxx>
 #include <editeng/editdata.hxx>
 #include <sot/storage.hxx>

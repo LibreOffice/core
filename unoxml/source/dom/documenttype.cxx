@@ -19,7 +19,7 @@
 
 #include <documenttype.hxx>
 
-#include <string.h>
+#include <cstring>
 
 #include <osl/diagnose.h>
 

@@ -50,7 +50,7 @@
 #include <com/sun/star/util/XStringSubstitution.hpp>
 
 #include <unordered_map>
-#include <string.h>
+#include <cstring>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;

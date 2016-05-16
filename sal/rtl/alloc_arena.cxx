@@ -25,8 +25,8 @@
 #include "osl/diagnose.h"
 
 #include <cassert>
-#include <string.h>
-#include <stdio.h>
+#include <cstring>
+#include <cstdio>
 
 /* ================================================================= *
  *

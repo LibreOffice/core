@@ -21,7 +21,7 @@
 #include <toolkit/helper/macros.hxx>
 #include <osl/mutex.hxx>
 
-#include <stdlib.h>
+#include <cstdlib>
 #include <tools/debug.hxx>
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/awt/FontSlant.hpp>

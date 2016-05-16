@@ -34,7 +34,7 @@
 #include <osl/mutex.hxx>
 
 #include <limits>
-#include <string.h>
+#include <cstring>
 
 using namespace ::osl;
 using namespace ::cppu;

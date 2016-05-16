@@ -29,7 +29,7 @@
 #include <cppuhelper/queryinterface.hxx>
 #include <comphelper/sequence.hxx>
 
-#include <string.h>
+#include <cstring>
 
 using namespace connectivity;
 using namespace ::com::sun::star::uno;

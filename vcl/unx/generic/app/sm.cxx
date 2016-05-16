@@ -21,7 +21,7 @@
 
 #include <cassert>
 
-#include <string.h>
+#include <cstring>
 #include <unistd.h>
 #include <sys/poll.h>
 #include <fcntl.h>

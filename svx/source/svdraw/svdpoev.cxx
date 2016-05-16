@@ -19,7 +19,7 @@
 
 
 #include <svx/svdpoev.hxx>
-#include <math.h>
+#include <cmath>
 #include <svx/svdpagv.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdopath.hxx>

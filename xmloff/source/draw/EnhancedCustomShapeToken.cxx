@@ -21,7 +21,7 @@
 #include <osl/mutex.hxx>
 #include <unordered_map>
 #include <memory>
-#include <string.h>
+#include <cstring>
 
 namespace xmloff { namespace EnhancedCustomShapeToken {
 

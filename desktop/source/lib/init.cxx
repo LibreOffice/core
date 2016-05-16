@@ -9,9 +9,9 @@
 
 #include <config_folders.h>
 
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstring>
+#include <cstdlib>
 
 #include <memory>
 #include <boost/property_tree/json_parser.hpp>

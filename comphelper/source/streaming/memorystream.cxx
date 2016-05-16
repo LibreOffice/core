@@ -29,7 +29,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <osl/diagnose.h>
 
-#include <string.h>
+#include <cstring>
 #include <vector>
 
 using ::cppu::OWeakObject;

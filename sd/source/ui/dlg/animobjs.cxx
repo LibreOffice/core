@@ -20,7 +20,7 @@
 #include <com/sun/star/presentation/AnimationEffect.hpp>
 #include <com/sun/star/presentation/AnimationSpeed.hpp>
 #include <svx/xoutbmp.hxx>
-#include <time.h>
+#include <ctime>
 #include <svl/eitem.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdogrp.hxx>

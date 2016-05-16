@@ -19,7 +19,7 @@
 
 #include "precompile.h"
 
-#include <ctype.h>
+#include <cctype>
 
 #include <osl/diagnose.h>
 

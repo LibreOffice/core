@@ -18,8 +18,8 @@
  */
 
 #include <algorithm>
-#include <stdio.h>
-#include <string.h>
+#include <cstdio>
+#include <cstring>
 #include <osl/thread.h>
 #include <tools/stream.hxx>
 #include <tools/vcompat.hxx>

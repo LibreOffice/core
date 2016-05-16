@@ -46,9 +46,9 @@
 #endif
 
 #include <cstdlib>
-#include <string.h>
+#include <cstring>
 #include <vector>
-#include <math.h>
+#include <cmath>
 
 
 #define SMALLBUTTON_HSIZE           7

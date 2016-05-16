@@ -100,7 +100,7 @@
 #include <iterator>
 #include <string>
 #include <algorithm>
-#include <stdio.h>
+#include <cstdio>
 #include <iostream>
 
 using namespace com::sun::star;

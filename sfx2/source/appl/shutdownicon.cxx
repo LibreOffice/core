@@ -62,7 +62,7 @@
 #include <rtl/ustrbuf.hxx>
 #ifdef UNX // need symlink
 #include <unistd.h>
-#include <errno.h>
+#include <cerrno>
 #endif
 
 #include <sfx2/sfxresid.hxx>

@@ -19,7 +19,7 @@
 
 #include "dbinsdlg.hxx"
 
-#include <float.h>
+#include <cfloat>
 
 #include <hintids.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>

@@ -19,8 +19,8 @@
 
 #include <xpathapi.hxx>
 
-#include <stdarg.h>
-#include <string.h>
+#include <cstdarg>
+#include <cstring>
 
 #include <libxml/tree.h>
 #include <libxml/xmlerror.h>

@@ -47,7 +47,7 @@
 #include <svtools/htmlout.hxx>
 #include <svtools/parhtml.hxx>
 #include <vcl/outdev.hxx>
-#include <stdio.h>
+#include <cstdio>
 
 #include "htmlexp.hxx"
 #include "filter.hxx"

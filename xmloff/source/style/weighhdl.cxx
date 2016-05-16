@@ -24,7 +24,7 @@
 #include <xmloff/xmltoken.hxx>
 #include <tools/fontenum.hxx>
 
-#include <limits.h>
+#include <climits>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
 

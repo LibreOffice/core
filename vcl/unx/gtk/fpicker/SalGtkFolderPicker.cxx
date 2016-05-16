@@ -38,7 +38,7 @@
 #include "unx/gtk/gtkinst.hxx"
 #include "gtk/fpicker/SalGtkFolderPicker.hxx"
 
-#include <string.h>
+#include <cstring>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::ui::dialogs;

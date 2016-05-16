@@ -27,7 +27,7 @@
 #include <rtl/instance.hxx>
 #include <comphelper/string.hxx>
 
-#include <stdio.h>
+#include <cstdio>
 #include <map>
 
 inline bool ascii_isDigit( sal_Unicode ch )

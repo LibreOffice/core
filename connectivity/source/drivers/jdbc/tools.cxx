@@ -18,7 +18,7 @@
  */
 
 
-#include <string.h>
+#include <cstring>
 #include <cstdarg>
 #include "java/tools.hxx"
 #include "java/lang/String.hxx"

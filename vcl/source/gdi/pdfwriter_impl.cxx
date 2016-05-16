@@ -19,7 +19,7 @@
 
 #include <sal/types.h>
 
-#include <math.h>
+#include <cmath>
 #include <algorithm>
 #include <lcms2.h>
 

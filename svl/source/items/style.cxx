@@ -36,7 +36,7 @@
 #include <algorithm>
 #include <comphelper/servicehelper.hxx>
 
-#include <string.h>
+#include <cstring>
 
 #ifdef DBG_UTIL
 class DbgStyleSheetReferences

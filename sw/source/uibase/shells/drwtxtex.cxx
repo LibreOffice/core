@@ -86,7 +86,7 @@
 #include <chrdlgmodes.hxx>
 #include <pardlg.hxx>
 #include <shells.hrc>
-#include <string.h>
+#include <cstring>
 #include <swdtflvr.hxx>
 #include <swmodule.hxx>
 #include <swwait.hxx>

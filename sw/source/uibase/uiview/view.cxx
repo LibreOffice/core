@@ -20,7 +20,7 @@
 #include <config_features.h>
 
 #include <string>
-#include <stdlib.h>
+#include <cstdlib>
 #include <hintids.hxx>
 #include <comphelper/string.hxx>
 #include <officecfg/Office/Common.hxx>

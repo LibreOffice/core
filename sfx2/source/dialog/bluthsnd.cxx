@@ -13,7 +13,7 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
-#include <stdio.h>
+#include <cstdio>
 
 #include "bluthsndapi.hxx"
 

@@ -26,7 +26,7 @@
 #include <com/sun/star/i18n/WordType.hpp>
 #include <xdictionary.hxx>
 #include <unicode/uchar.h>
-#include <string.h>
+#include <cstring>
 #include <breakiteratorImpl.hxx>
 
 namespace com { namespace sun { namespace star { namespace i18n {

@@ -56,7 +56,7 @@
 #include <osl/mutex.hxx>
 #include <list>
 #include <algorithm>
-#include <string.h>
+#include <cstring>
 
 using ::osl::Mutex;
 using ::osl::Guard;

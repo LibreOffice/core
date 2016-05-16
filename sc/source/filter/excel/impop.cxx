@@ -80,7 +80,7 @@
 #if defined(_WIN32)
 #include <math.h>
 #else
-#include <stdlib.h>
+#include <cstdlib>
 #endif
 
 using namespace ::com::sun::star;

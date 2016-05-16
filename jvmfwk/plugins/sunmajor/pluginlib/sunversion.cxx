@@ -23,8 +23,8 @@
 #include "osl/thread.h"
 #include "osl/process.h"
 #include "osl/security.hxx"
-#include <string.h>
-#include <ctype.h>
+#include <cstring>
+#include <cctype>
 #include "diagnostics.h"
 using namespace osl;
 

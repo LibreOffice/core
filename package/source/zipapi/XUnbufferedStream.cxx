@@ -27,7 +27,7 @@
 #include <ZipFile.hxx>
 #include <EncryptedDataHeader.hxx>
 #include <algorithm>
-#include <string.h>
+#include <cstring>
 
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>

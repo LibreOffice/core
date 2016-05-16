@@ -25,7 +25,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/lineinfo.hxx>
 
-#include <math.h>
+#include <cmath>
 #include <memory>
 
 class FilterConfigItem;

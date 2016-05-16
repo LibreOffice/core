@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <ctype.h>
+#include <cctype>
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/lang/Locale.hpp>

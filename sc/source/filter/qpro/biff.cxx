@@ -18,7 +18,7 @@
  */
 
 #include <sal/config.h>
-#include <stdio.h>
+#include <cstdio>
 #include <sfx2/docfile.hxx>
 
 #include "global.hxx"

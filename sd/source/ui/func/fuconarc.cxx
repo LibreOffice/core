@@ -28,7 +28,7 @@
 #include <sfx2/viewfrm.hxx>
 
 #include <svx/svxids.hrc>
-#include <math.h>
+#include <cmath>
 
 #include "app.hrc"
 #include "Window.hxx"

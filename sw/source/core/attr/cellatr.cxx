@@ -20,7 +20,7 @@
 #include <calc.hxx>
 #include <cellatr.hxx>
 #include <doc.hxx>
-#include <float.h>
+#include <cfloat>
 #include <format.hxx>
 #include <hintids.hxx>
 #include <hints.hxx>

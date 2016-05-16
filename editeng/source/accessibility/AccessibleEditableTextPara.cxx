@@ -21,7 +21,7 @@
 // Global header
 
 
-#include <limits.h>
+#include <climits>
 #include <vector>
 #include <algorithm>
 #include <osl/mutex.hxx>

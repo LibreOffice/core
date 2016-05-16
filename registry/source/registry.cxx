@@ -31,9 +31,9 @@
 #include <io.h>
 #endif
 
-#include <string.h>
+#include <cstring>
 #if defined(UNX)
-#include <stdlib.h>
+#include <cstdlib>
 #include <unistd.h>
 #endif
 

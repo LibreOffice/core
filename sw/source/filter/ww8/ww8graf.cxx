@@ -88,7 +88,7 @@
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <editeng/editobj.hxx>
-#include <math.h>
+#include <cmath>
 #include <fmturl.hxx>
 #include <svx/hlnkitem.hxx>
 #include <svl/whiter.hxx>

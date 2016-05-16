@@ -36,8 +36,8 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/supportsservice.hxx>
 
-#include <string.h>
-#include <errno.h>
+#include <cstring>
+#include <cerrno>
 #include <unistd.h>
 
 

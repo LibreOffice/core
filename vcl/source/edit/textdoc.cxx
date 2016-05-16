@@ -18,7 +18,7 @@
  */
 
 #include <textdoc.hxx>
-#include <stdlib.h>
+#include <cstdlib>
 #include <osl/diagnose.h>
 
 // compare function called by QuickSort

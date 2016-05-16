@@ -19,7 +19,7 @@
 
 #include <characterdata.hxx>
 
-#include <string.h>
+#include <cstring>
 
 #include <memory>
 

@@ -16,9 +16,9 @@
 #include <sys/time.h>
 #endif
 
-#include <time.h>
-#include <math.h>
-#include <float.h>
+#include <ctime>
+#include <cmath>
+#include <cfloat>
 #include <iostream>
 #include <sstream>
 #include <memory>

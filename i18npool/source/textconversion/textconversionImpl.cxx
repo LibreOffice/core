@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <assert.h>
+#include <cassert>
 #include <cppuhelper/supportsservice.hxx>
 #include <textconversionImpl.hxx>
 #include <localedata.hxx>

@@ -70,7 +70,7 @@
 #include <memory>
 #include <vector>
 
-#include <math.h>
+#include <cmath>
 
 using namespace com::sun::star;
 

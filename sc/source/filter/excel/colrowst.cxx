@@ -19,7 +19,7 @@
 
 #include "colrowst.hxx"
 
-#include <string.h>
+#include <cstring>
 
 #include "document.hxx"
 #include "root.hxx"

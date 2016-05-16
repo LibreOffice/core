@@ -20,7 +20,7 @@
 #include <cstddef>
 #include <cstdio>
 
-#include <string.h>
+#include <cstring>
 #include <tools/mempool.hxx>
 #include <osl/diagnose.h>
 #include <sfx2/docfile.hxx>

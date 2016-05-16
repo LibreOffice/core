@@ -40,7 +40,7 @@
 #include <cassert>
 #include <limits>
 
-#include <string.h>
+#include <cstring>
 #include <pthread.h>
 #include <sys/mman.h>
 

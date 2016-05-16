@@ -57,8 +57,8 @@
  * @file
  * Color object to serial to xml filter.
  ************************************************************************/
-#include <string.h>
-#include <stdio.h>
+#include <cstring>
+#include <cstdio>
 #include "xfcolor.hxx"
 
 OUString XFColor::ToString() const

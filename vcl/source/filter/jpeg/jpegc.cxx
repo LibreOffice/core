@@ -19,9 +19,9 @@
 
 #include <sal/config.h>
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <setjmp.h>
+#include <cstdio>
+#include <cstdlib>
+#include <csetjmp>
 #include <jpeglib.h>
 #include <jerror.h>
 

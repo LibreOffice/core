@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <math.h>
+#include <cmath>
 
 #include "psputil.hxx"
 #include "glyphset.hxx"

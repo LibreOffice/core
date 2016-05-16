@@ -21,7 +21,7 @@
 #include <svx/svdmodel.hxx>
 
 #include <cassert>
-#include <math.h>
+#include <cmath>
 
 #include <osl/endian.h>
 #include <rtl/strbuf.hxx>

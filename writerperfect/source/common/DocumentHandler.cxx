@@ -9,7 +9,7 @@
 
 #include <DocumentHandler.hxx>
 
-#include <string.h>
+#include <cstring>
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>

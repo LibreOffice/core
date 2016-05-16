@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <string.h>
+#include <cstring>
 #include <com/sun/star/xml/AttributeData.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <limits.h>
+#include <climits>
 
 #include <xmloff/xmlcnimp.hxx>
 

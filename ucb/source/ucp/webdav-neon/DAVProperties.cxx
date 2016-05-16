@@ -27,7 +27,7 @@
  ************************************************************************/
 
 
-#include <string.h>
+#include <cstring>
 #include "DAVProperties.hxx"
 
 using namespace webdav_ucp;

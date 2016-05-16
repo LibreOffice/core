@@ -19,7 +19,7 @@
 
 #include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
 #include <ucbhelper/cancelcommandexecution.hxx>
-#include <string.h>
+#include <cstring>
 
 #include "gio_seekable.hxx"
 #include "gio_content.hxx"

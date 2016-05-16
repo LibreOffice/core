@@ -74,8 +74,8 @@
 #include "jni.h"
 
 #include <stack>
-#include <string.h>
-#include <time.h>
+#include <cstring>
+#include <ctime>
 #include <memory>
 #include <vector>
 

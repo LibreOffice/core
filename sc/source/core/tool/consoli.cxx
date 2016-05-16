@@ -27,8 +27,8 @@
 #include "tokenarray.hxx"
 #include <osl/diagnose.h>
 
-#include <math.h>
-#include <string.h>
+#include <cmath>
+#include <cstring>
 #include <memory>
 
 #define SC_CONS_NOTFOUND    -1

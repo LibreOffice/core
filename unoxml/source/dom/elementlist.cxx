@@ -19,7 +19,7 @@
 
 #include "elementlist.hxx"
 
-#include <string.h>
+#include <cstring>
 
 #include <cppuhelper/implbase.hxx>
 #include <osl/diagnose.h>

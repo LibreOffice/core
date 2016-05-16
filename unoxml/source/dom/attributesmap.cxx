@@ -19,7 +19,7 @@
 
 #include <attributesmap.hxx>
 
-#include <string.h>
+#include <cstring>
 
 #include <element.hxx>
 #include <document.hxx>

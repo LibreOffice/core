@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <errno.h>
+#include <cerrno>
 #include "file_error_transl.hxx"
 #include <osl/diagnose.h>
 

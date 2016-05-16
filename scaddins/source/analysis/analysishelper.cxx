@@ -20,8 +20,8 @@
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
 #include <com/sun/star/util/NumberFormatter.hpp>
 
-#include <string.h>
-#include <stdio.h>
+#include <cstring>
+#include <cstdio>
 #include <tools/resary.hxx>
 #include <rtl/math.hxx>
 #include <sal/macros.h>

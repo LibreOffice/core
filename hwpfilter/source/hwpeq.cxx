@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <assert.h>
-#include <stdio.h>
-#include <string.h>
-#include <ctype.h>
+#include <cassert>
+#include <cstdio>
+#include <cstring>
+#include <cctype>
 
 // DVO: always use standard headers:
 #include <istream>

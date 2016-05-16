@@ -23,7 +23,7 @@
 #include <algorithm>
 #include <limits>
 #include <set>
-#include <string.h>
+#include <cstring>
 
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>

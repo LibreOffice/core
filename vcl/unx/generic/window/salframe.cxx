@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <signal.h>
-#include <string.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include <csignal>
+#include <cstring>
+#include <cstdio>
+#include <cstdlib>
 #include <unistd.h>
 
 #include "tools/debug.hxx"

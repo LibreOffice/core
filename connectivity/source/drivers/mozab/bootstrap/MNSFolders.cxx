@@ -22,7 +22,7 @@
 #ifdef UNIX
 #include <sys/types.h>
 #include <strings.h>
-#include <string.h>
+#include <cstring>
 #endif // End UNIX
 
 #ifdef _WIN32

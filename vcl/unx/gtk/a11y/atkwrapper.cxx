@@ -64,7 +64,7 @@
 #include "atklistener.hxx"
 #include "atktextattributes.hxx"
 
-#include <string.h>
+#include <cstring>
 #include <vector>
 
 using namespace ::com::sun::star;

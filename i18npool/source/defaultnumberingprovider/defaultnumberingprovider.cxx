@@ -25,8 +25,8 @@
 #include <osl/diagnose.h>
 #include <localedata.hxx>
 #include <nativenumbersupplier.hxx>
-#include <stdio.h>
-#include <string.h>
+#include <cstdio>
+#include <cstring>
 #include <cppuhelper/supportsservice.hxx>
 
 // Cyrillic upper case
@@ -43,7 +43,7 @@
 #define S_GR_A "\xCE\xB1"
 #define S_GR_B "\xCE\xB2"
 
-#include <math.h>
+#include <cmath>
 #include <sal/macros.h>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>

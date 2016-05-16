@@ -22,7 +22,7 @@
 #include <tools/debug.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 
-#include <string.h>
+#include <cstring>
 
 namespace cssu = com::sun::star::uno;
 namespace cssxs = com::sun::star::xml::sax;

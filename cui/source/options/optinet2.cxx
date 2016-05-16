@@ -63,7 +63,7 @@
 #include <fcntl.h>
 #include <pwd.h>
 #include <sys/types.h>
-#include <string.h>
+#include <cstring>
 #include <rtl/textenc.h>
 #include <rtl/locale.h>
 #include <osl/nlsupport.h>

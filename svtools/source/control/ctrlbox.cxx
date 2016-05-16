@@ -47,7 +47,7 @@
 
 #include <rtl/bootstrap.hxx>
 
-#include <stdio.h>
+#include <cstdio>
 
 #define IMGOUTERTEXTSPACE 5
 #define EXTRAFONTSIZE 5

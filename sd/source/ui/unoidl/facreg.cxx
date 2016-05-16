@@ -27,7 +27,7 @@
 #include "osl/diagnose.h"
 #include "sal/types.h"
 
-#include <string.h>
+#include <cstring>
 #include <memory>
 #include <unordered_map>
 

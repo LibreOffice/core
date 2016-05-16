@@ -19,7 +19,7 @@
 
 #include "gio_mount.hxx"
 #include <ucbhelper/simpleauthenticationrequest.hxx>
-#include <string.h>
+#include <cstring>
 
 #ifdef __GNUC__
 #pragma GCC diagnostic push

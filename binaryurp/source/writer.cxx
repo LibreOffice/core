@@ -21,7 +21,7 @@
 
 #include <exception>
 #include <vector>
-#include <string.h>
+#include <cstring>
 
 #include "com/sun/star/connection/XConnection.hpp"
 #include "com/sun/star/lang/WrappedTargetRuntimeException.hpp"

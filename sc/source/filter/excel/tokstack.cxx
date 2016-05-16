@@ -25,7 +25,7 @@
 #include <svl/sharedstringpool.hxx>
 
 #include <algorithm>
-#include <string.h>
+#include <cstring>
 
 const sal_uInt16    TokenPool::nScTokenOff = 8192;
 

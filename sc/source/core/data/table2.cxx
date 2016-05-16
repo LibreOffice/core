@@ -60,7 +60,7 @@
 #include <editeng/editobj.hxx>
 #include <svl/poolcach.hxx>
 #include <unotools/charclass.hxx>
-#include <math.h>
+#include <cmath>
 #include <svl/PasswordHelper.hxx>
 #include <unotools/transliterationwrapper.hxx>
 

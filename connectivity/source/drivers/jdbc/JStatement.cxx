@@ -39,7 +39,7 @@
 #include "resource/jdbc_log.hrc"
 
 #include <algorithm>
-#include <string.h>
+#include <cstring>
 
 using namespace ::comphelper;
 using namespace connectivity;

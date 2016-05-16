@@ -18,7 +18,7 @@
  */
 
 
-#include <string.h>
+#include <cstring>
 #include <connectivity/FValue.hxx>
 #include <connectivity/CommonTools.hxx>
 #include <connectivity/dbconversion.hxx>

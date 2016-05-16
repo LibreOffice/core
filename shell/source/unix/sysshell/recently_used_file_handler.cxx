@@ -35,8 +35,8 @@
 #include <vector>
 #include <algorithm>
 #include <functional>
-#include <string.h>
-#include <time.h>
+#include <cstring>
+#include <ctime>
 
 namespace /* private */ {
     typedef std::vector<string_t> string_container_t;

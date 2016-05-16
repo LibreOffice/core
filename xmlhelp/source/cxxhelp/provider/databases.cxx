@@ -30,7 +30,7 @@
 #include "inputstream.hxx"
 #include <algorithm>
 #include <cassert>
-#include <string.h>
+#include <cstring>
 
 #include <helpcompiler/HelpIndexer.hxx>
 

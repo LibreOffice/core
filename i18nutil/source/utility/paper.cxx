@@ -33,9 +33,9 @@
 #include <unotools/configmgr.hxx>
 
 #ifdef UNX
-#include <stdio.h>
-#include <string.h>
-#include <locale.h>
+#include <cstdio>
+#include <cstring>
+#include <clocale>
 #if defined(LC_PAPER) && defined(_GNU_SOURCE)
 #include <langinfo.h>
 #endif

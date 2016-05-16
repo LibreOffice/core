@@ -23,8 +23,8 @@
 #include <tools/stream.hxx>
 #endif
 
-#include <math.h>
-#include <stdlib.h>
+#include <cmath>
+#include <cstdlib>
 
 SwRect::SwRect( const Rectangle &rRect ) :
     m_Point( rRect.Left(), rRect.Top() )

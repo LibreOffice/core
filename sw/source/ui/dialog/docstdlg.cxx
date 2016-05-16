@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <ctype.h>
+#include <cctype>
 #include <swwait.hxx>
 #include <wrtsh.hxx>
 #include <view.hxx>

@@ -39,7 +39,7 @@
 #include <editeng/editeng.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/outlobj.hxx>
-#include <math.h>
+#include <cmath>
 #include <sfx2/objface.hxx>
 #include <sfx2/objsh.hxx>
 #include <svl/whiter.hxx>

@@ -21,7 +21,7 @@
 
 #include <com/sun/star/io/XTextInputStream2.hpp>
 #include <map>
-#include <string.h>
+#include <cstring>
 #include <rtl/strbuf.hxx>
 #include <osl/diagnose.h>
 #include "oox/helper/helper.hxx"

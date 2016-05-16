@@ -18,7 +18,7 @@
  */
 
 #include <stack>
-#include <string.h>
+#include <cstring>
 #include <osl/process.h>
 #include <unx/gtk/gtkdata.hxx>
 #include <unx/gtk/gtkinst.hxx>

@@ -54,8 +54,8 @@
  *
  ************************************************************************/
 #include "first.hxx"
-#include "assert.h"
-#include <stdio.h>
+#include <cassert>
+#include <cstdio>
 #include <osl/diagnose.h>
 #include <sot/storinfo.hxx>
 namespace OpenStormBento

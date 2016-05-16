@@ -35,8 +35,8 @@
 #include <vcl/outdev.hxx>
 
 #include <cassert>
-#include <math.h>
-#include <float.h>
+#include <cmath>
+#include <cfloat>
 #include <vector>
 #include <boost/checked_delete.hpp>
 

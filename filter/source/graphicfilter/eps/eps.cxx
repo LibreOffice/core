@@ -40,7 +40,7 @@
 #include <vcl/graphictools.hxx>
 #include "strings.hrc"
 
-#include <math.h>
+#include <cmath>
 #include <memory>
 
 using namespace ::com::sun::star::uno;

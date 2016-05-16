@@ -19,7 +19,7 @@
 
 #include "pyuno_impl.hxx"
 
-#include <time.h>
+#include <ctime>
 #include <osl/thread.h>
 #include <osl/thread.hxx>
 

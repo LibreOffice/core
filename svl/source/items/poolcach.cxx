@@ -18,7 +18,7 @@
  */
 
 
-#include <limits.h>
+#include <climits>
 
 #include <svl/itempool.hxx>
 #include <svl/itemset.hxx>

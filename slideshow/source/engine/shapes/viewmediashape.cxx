@@ -21,7 +21,7 @@
 
 #include <tools/diagnose_ex.h>
 
-#include <math.h>
+#include <cmath>
 
 #include <comphelper/anytostring.hxx>
 #include <cppuhelper/exc_hlp.hxx>

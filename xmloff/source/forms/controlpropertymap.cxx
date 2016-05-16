@@ -26,7 +26,7 @@
 #include <xmloff/contextid.hxx>
 #include "controlpropertymap.hxx"
 
-#include <string.h>
+#include <cstring>
 
 using namespace ::xmloff::token;
 

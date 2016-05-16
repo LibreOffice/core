@@ -21,7 +21,7 @@
 
 #ifdef DBG_UTIL
 
-#include <limits.h>
+#include <climits>
 
 #include <tools/debug.hxx>
 #include <tools/lineend.hxx>

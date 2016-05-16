@@ -27,7 +27,7 @@
 #include <osl/diagnose.h>
 #include <rtl/digest.h>
 #include <rtl/random.h>
-#include <string.h>
+#include <cstring>
 
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Exception;

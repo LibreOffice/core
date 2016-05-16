@@ -18,7 +18,7 @@
  */
 
 #include "svddrgm1.hxx"
-#include <math.h>
+#include <cmath>
 
 #include <tools/bigint.hxx>
 #include <o3tl/numeric.hxx>

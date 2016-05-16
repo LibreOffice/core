@@ -30,7 +30,7 @@
 
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/ucb/OpenMode.hpp>
-#include <string.h>
+#include <cstring>
 #include <rtl/uri.hxx>
 
 #include "ftpstrcont.hxx"

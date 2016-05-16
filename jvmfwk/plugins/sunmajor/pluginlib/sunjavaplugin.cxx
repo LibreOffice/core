@@ -28,7 +28,7 @@
 # include <dlfcn.h>
 #endif
 
-#include <string.h>
+#include <cstring>
 
 #include <memory>
 #include "config_options.h"
@@ -42,8 +42,8 @@
 #include "osl/file.hxx"
 #include "rtl/instance.hxx"
 #include "osl/getglobalmutex.hxx"
-#include <setjmp.h>
-#include <signal.h>
+#include <csetjmp>
+#include <csignal>
 #include <stack>
 
 #include "jni.h"

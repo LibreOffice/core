@@ -10,7 +10,7 @@
 #include "ww8toolbar.hxx"
 #include "ww8scan.hxx"
 #include <rtl/ustrbuf.hxx>
-#include <stdarg.h>
+#include <cstdarg>
 #include <com/sun/star/document/IndexedPropertyValues.hpp>
 #include <com/sun/star/ui/XUIConfigurationPersistence.hpp>
 #include <com/sun/star/ui/theModuleUIConfigurationManagerSupplier.hpp>

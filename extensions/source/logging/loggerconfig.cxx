@@ -19,7 +19,7 @@
 
 
 #include "loggerconfig.hxx"
-#include <stdio.h>
+#include <cstdio>
 
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>

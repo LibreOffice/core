@@ -27,10 +27,10 @@
 #include "file_url.hxx"
 #include "system.hxx"
 
-#include <errno.h>
-#include <limits.h>
-#include <stdio.h>
-#include <string.h>
+#include <cerrno>
+#include <climits>
+#include <cstdio>
+#include <cstring>
 #include <unistd.h>
 #include <sys/wait.h>
 #include <sal/macros.h>

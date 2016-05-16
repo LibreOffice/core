@@ -40,7 +40,7 @@
 #include "../events/mouseevent.hxx"
 #include "../events/eventdispatcher.hxx"
 
-#include <string.h>
+#include <cstring>
 
 #include <osl/diagnose.h>
 

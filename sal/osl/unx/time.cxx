@@ -24,7 +24,7 @@
 
 #include <osl/diagnose.h>
 #include <osl/time.h>
-#include <time.h>
+#include <ctime>
 #include <unistd.h>
 
 #ifdef __MACH__

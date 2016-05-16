@@ -29,10 +29,10 @@
 
 #include <zlib.h>
 
-#include <math.h>
+#include <cmath>
 #include <map>
 
-#include <string.h>
+#include <cstring>
 
 
 namespace pdfparse

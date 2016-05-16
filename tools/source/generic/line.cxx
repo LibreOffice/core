@@ -22,7 +22,7 @@
 #include <tools/helpers.hxx>
 
 #include <cstdlib>
-#include <math.h>
+#include <cmath>
 
 namespace tools
 {

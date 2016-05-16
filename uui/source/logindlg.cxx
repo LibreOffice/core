@@ -26,7 +26,7 @@
 #include <osl/file.hxx>
 
 #ifdef UNX
-#include <limits.h>
+#include <climits>
 #define _MAX_PATH PATH_MAX
 #endif
 

@@ -38,7 +38,7 @@
 #include <com/sun/star/i18n/Collator.hpp>
 #include <com/sun/star/i18n/CollatorOptions.hpp>
 
-#include <stdio.h>
+#include <cstdio>
 #include "deployment.hrc"
 #include "dp_version.hxx"
 

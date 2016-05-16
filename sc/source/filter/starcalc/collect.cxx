@@ -19,7 +19,7 @@
 
 #include "collect.hxx"
 
-#include <string.h>
+#include <cstring>
 
 #define MAXCOLLECTIONSIZE       16384
 #define MAXDELTA                1024

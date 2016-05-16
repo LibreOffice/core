@@ -22,7 +22,7 @@
 #include <map>
 #include <utility>
 
-#include <string.h>
+#include <cstring>
 #include "RowSet.hxx"
 #include "dbastrings.hrc"
 #include "sdbcoretools.hxx"

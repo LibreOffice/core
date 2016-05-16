@@ -26,7 +26,7 @@
 #include <unotools/charclass.hxx>
 #include <osl/diagnose.h>
 #include <sal/macros.h>
-#include <string.h>
+#include <cstring>
 
 #if DEBUG_SC_PARCLASSDOC
 // the documentation thingy

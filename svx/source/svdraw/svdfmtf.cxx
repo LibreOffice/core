@@ -19,7 +19,7 @@
 
 #include "svdfmtf.hxx"
 #include <editeng/editdata.hxx>
-#include <math.h>
+#include <cmath>
 #include <svx/xpoly.hxx>
 #include <vcl/svapp.hxx>
 #include <editeng/eeitem.hxx>

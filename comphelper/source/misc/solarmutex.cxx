@@ -18,7 +18,7 @@
  */
 
 #include <sal/config.h>
-#include <assert.h>
+#include <cassert>
 #include <comphelper/solarmutex.hxx>
 
 namespace comphelper {

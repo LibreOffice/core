@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <limits.h>
+#include <climits>
 #include <tools/debug.hxx>
 #include <tools/poly.hxx>
 

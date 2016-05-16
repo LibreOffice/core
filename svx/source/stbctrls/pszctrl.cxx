@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <limits.h>
+#include <climits>
 #include <vcl/status.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/image.hxx>

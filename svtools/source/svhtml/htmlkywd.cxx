@@ -18,10 +18,10 @@
  */
 
 
-#include <limits.h>
+#include <climits>
 #include <sal/types.h>
-#include <stdlib.h>
-#include <string.h>
+#include <cstdlib>
+#include <cstring>
 #include <rtl/ustring.hxx>
 #include <svtools/htmltokn.h>
 #include <svtools/htmlkywd.hxx>

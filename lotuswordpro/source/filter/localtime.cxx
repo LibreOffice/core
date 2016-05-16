@@ -54,7 +54,7 @@
  *
  ************************************************************************/
 #include "localtime.hxx"
-#include <limits.h>
+#include <climits>
 #include <unicode/timezone.h>
 
 const long DAY_SEC =24 * 60 * 60;

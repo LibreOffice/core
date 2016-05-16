@@ -18,8 +18,8 @@
  */
 
 #include <svx/svdorect.hxx>
-#include <math.h>
-#include <stdlib.h>
+#include <cmath>
+#include <cstdlib>
 #include <svx/xpool.hxx>
 #include <svx/xpoly.hxx>
 #include <svx/svdattr.hxx>

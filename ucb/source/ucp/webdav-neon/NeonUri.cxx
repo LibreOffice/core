@@ -28,7 +28,7 @@
 
 #include "sal/config.h"
 
-#include <string.h>
+#include <cstring>
 #include <rtl/uri.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>

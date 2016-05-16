@@ -24,10 +24,10 @@
  *
  */
 
-#include <assert.h>
+#include <cassert>
 
-#include <stdlib.h>
-#include <string.h>
+#include <cstdlib>
+#include <cstring>
 #include <fcntl.h>
 #ifdef UNX
 #include <sys/mman.h>

@@ -24,7 +24,7 @@
 
 #include <iostream>
 #if defined UNX
-#include <signal.h>
+#include <csignal>
 #endif
 
 #include "app.hxx"

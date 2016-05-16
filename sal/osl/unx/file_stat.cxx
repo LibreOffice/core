@@ -22,8 +22,8 @@
 #include "system.hxx"
 #include <sys/types.h>
 #include <dirent.h>
-#include <errno.h>
-#include <limits.h>
+#include <cerrno>
+#include <climits>
 #include <unistd.h>
 
 #include <osl/diagnose.h>

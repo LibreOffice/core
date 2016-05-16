@@ -21,7 +21,7 @@
 
 #include <osl/diagnose.h>
 #include <algorithm>
-#include <string.h>
+#include <cstring>
 #include <tools/solar.h>
 
 #include <comphelper/sequenceashashmap.hxx>

@@ -41,7 +41,7 @@
 #include <algorithm>
 #include <stack>
 
-#include <math.h>
+#include <cmath>
 using namespace EnhancedCustomShape;
 using namespace com::sun::star;
 using namespace com::sun::star::drawing;

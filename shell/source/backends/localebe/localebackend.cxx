@@ -23,7 +23,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/time.h>
 
-#include <stdio.h>
+#include <cstdio>
 
 #ifdef _WIN32
 #if defined _MSC_VER
@@ -154,8 +154,8 @@ namespace /* private */
 #else
 
 #include <rtl/ustrbuf.hxx>
-#include <locale.h>
-#include <string.h>
+#include <clocale>
+#include <cstring>
 
 /*
  * Note: setlocale is not at all thread safe, so is this code. It could

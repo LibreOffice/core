@@ -19,7 +19,7 @@
 
 
 #include "splash.hxx"
-#include <stdio.h>
+#include <cstdio>
 #include <sal/log.hxx>
 #include <unotools/bootstrap.hxx>
 #include <tools/stream.hxx>

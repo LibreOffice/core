@@ -19,7 +19,7 @@
 
 #include "precompile.h"
 
-#include <string.h>
+#include <cstring>
 
 #include "hwplib.h"
 #include "hwpfile.h"

@@ -19,7 +19,7 @@
 
 #include "librdf_repository.hxx"
 
-#include <string.h>
+#include <cstring>
 
 #include <map>
 #include <memory>

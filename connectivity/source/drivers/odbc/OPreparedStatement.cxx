@@ -18,7 +18,7 @@
  */
 
 
-#include <string.h>
+#include <cstring>
 #include <osl/diagnose.h>
 #include "odbc/OPreparedStatement.hxx"
 #include "odbc/OBoundParam.hxx"

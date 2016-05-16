@@ -19,10 +19,10 @@
 
 #include <rtl/math.hxx>
 
-#include <string.h>
-#include <math.h>
-#include <ctype.h>
-#include <stdlib.h>
+#include <cstring>
+#include <cmath>
+#include <cctype>
+#include <cstdlib>
 
 #include "scitems.hxx"
 #include "patattr.hxx"

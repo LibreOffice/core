@@ -18,7 +18,7 @@
  */
 
 #include "tokenmap.hxx"
-#include <string.h>
+#include <cstring>
 
 namespace svgi
 {

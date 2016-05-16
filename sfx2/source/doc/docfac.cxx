@@ -50,7 +50,7 @@
 #include <rtl/strbuf.hxx>
 #include <tools/globname.hxx>
 
-#include <assert.h>
+#include <cassert>
 #include <memory>
 
 using namespace ::com::sun::star;

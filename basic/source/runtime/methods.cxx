@@ -79,11 +79,11 @@ using namespace com::sun::star::uno;
 #include <basic/vbahelper.hxx>
 
 #include <list>
-#include <math.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <ctype.h>
-#include <errno.h>
+#include <cmath>
+#include <cstdio>
+#include <cstdlib>
+#include <cctype>
+#include <cerrno>
 
 #include "sbobjmod.hxx"
 #include "sbxmod.hxx"

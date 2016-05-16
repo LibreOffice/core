@@ -23,9 +23,9 @@
 
 #include <cassert>
 
-#include <string.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstring>
+#include <cstdio>
+#include <cstdlib>
 
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>

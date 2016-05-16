@@ -57,7 +57,7 @@
 
 #include <unotools/localedatawrapper.hxx>
 
-#include <stdio.h>
+#include <cstdio>
 
 #include "document.hxx"
 #include "conditio.hxx"

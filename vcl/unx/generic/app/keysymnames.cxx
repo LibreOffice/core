@@ -34,7 +34,7 @@
 #define SunXK_Cut       0x1005FF75
 #endif
 
-#include <string.h>
+#include <cstring>
 #include <rtl/ustring.hxx>
 
 namespace vcl_sal {

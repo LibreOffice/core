@@ -21,7 +21,7 @@
 
 #include <algorithm>
 #include <cassert>
-#include <stdarg.h>
+#include <cstdarg>
 
 #include <osl/mutex.hxx>
 #include <osl/interlck.h>

@@ -24,7 +24,7 @@
 
 #include <cstdio>
 
-#include <math.h>
+#include <cmath>
 
 #include <salgdi.hxx>
 #include <sallayout.hxx>
@@ -37,7 +37,7 @@
 #include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
 
-#include <limits.h>
+#include <climits>
 
 #if defined _MSC_VER
 #pragma warning(push, 1)

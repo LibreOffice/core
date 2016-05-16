@@ -13,8 +13,8 @@
 #include <comphelper/random.hxx>
 #include <rtl/instance.hxx>
 #include <sal/log.hxx>
-#include <assert.h>
-#include <time.h>
+#include <cassert>
+#include <ctime>
 #include <random>
 #include <stdexcept>
 

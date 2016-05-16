@@ -27,7 +27,7 @@
 #include <sfx2/sfx.hrc>
 #include <svx/svxids.hrc>
 #if OSL_DEBUG_LEVEL > 0
-#include <stdlib.h>
+#include <cstdlib>
 #endif
 #include <hintids.hxx>
 

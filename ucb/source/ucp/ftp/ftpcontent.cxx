@@ -38,7 +38,7 @@
 
 #include <memory>
 #include <vector>
-#include <string.h>
+#include <cstring>
 #include "curl.hxx"
 #include <curl/easy.h>
 #include <comphelper/processfactory.hxx>

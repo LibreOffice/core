@@ -22,7 +22,7 @@
 #include "svdglob.hxx"
 #include "svx/svditer.hxx"
 
-#include <stdlib.h>
+#include <cstdlib>
 #include <svx/globl3d.hxx>
 #include <svx/svdpage.hxx>
 #include <svl/style.hxx>

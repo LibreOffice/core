@@ -18,7 +18,7 @@
  */
 
 
-#include <limits.h>
+#include <climits>
 #include <tools/debug.hxx>
 #include <vcl/wall.hxx>
 #include <vcl/help.hxx>

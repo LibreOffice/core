@@ -34,7 +34,7 @@
 #include <tools/stream.hxx>
 #include <rtl/math.hxx>
 
-#include <math.h>
+#include <cmath>
 
 #include <vector>
 #include <limits>

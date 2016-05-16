@@ -32,7 +32,7 @@
 #include <osl/diagnose.h>
 #include <sal/macros.h>
 
-#include <string.h>
+#include <cstring>
 #include <list>
 #include <algorithm>
 

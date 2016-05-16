@@ -26,7 +26,7 @@
 /*[]---------------------------------------------------[]*/
 
 #include <rtl/alloc.h>
-#include <assert.h>
+#include <cassert>
 
 #include "list.h"
 

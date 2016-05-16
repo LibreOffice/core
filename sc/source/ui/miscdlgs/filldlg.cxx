@@ -21,7 +21,7 @@
 
 #include <svl/zforlist.hxx>
 #include <vcl/layout.hxx>
-#include <limits.h>
+#include <climits>
 
 #include "scresid.hxx"
 #include "document.hxx"

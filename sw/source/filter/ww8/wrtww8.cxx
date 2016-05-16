@@ -26,7 +26,7 @@
 #include <map>
 #include <set>
 #include <hintids.hxx>
-#include <string.h>
+#include <cstring>
 #include <osl/endian.h>
 #include <o3tl/make_unique.hxx>
 #include <docsh.hxx>

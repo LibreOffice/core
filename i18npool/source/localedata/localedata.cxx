@@ -24,8 +24,8 @@
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
-#include <string.h>
-#include <stdio.h>
+#include <cstring>
+#include <cstdio>
 #include "rtl/instance.hxx"
 #include <sal/macros.h>
 

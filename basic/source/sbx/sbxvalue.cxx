@@ -19,7 +19,7 @@
 
 #include <config_features.h>
 
-#include <math.h>
+#include <cmath>
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
 

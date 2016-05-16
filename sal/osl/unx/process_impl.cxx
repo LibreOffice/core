@@ -19,10 +19,10 @@
 
 #include "osl/process.h"
 
-#include <limits.h>
+#include <climits>
 #include <pthread.h>
-#include <stdlib.h>
-#include <string.h>
+#include <cstdlib>
+#include <cstring>
 
 #include "osl/diagnose.h"
 #include "osl/file.h"

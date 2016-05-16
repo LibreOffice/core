@@ -28,7 +28,7 @@
 #include <com/sun/star/reflection/ProxyFactory.hpp>
 #include <rtl/digest.h>
 #include <algorithm>
-#include <string.h>
+#include <cstring>
 
 using namespace connectivity;
 

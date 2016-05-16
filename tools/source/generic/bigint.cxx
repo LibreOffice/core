@@ -18,15 +18,15 @@
  */
 
 #include <limits>
-#include <math.h>
+#include <cmath>
 
 #include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
 #include <tools/bigint.hxx>
 
 
-#include <string.h>
-#include <ctype.h>
+#include <cstring>
+#include <cctype>
 
 static const long MY_MAXLONG  = 0x3fffffff;
 static const long MY_MINLONG  = -MY_MAXLONG;

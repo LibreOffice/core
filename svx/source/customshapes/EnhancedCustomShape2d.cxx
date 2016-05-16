@@ -53,7 +53,7 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <rtl/strbuf.hxx>
-#include <math.h>
+#include <cmath>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

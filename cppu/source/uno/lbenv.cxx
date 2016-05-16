@@ -42,7 +42,7 @@
 
 #include <unordered_map>
 #include <vector>
-#include <stdio.h>
+#include <cstdio>
 
 
 using ::rtl::OUString;

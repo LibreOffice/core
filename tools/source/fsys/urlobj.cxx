@@ -40,7 +40,7 @@
 #include <limits>
 #include <memory>
 
-#include <string.h>
+#include <cstring>
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <sax/tools/converter.hxx>

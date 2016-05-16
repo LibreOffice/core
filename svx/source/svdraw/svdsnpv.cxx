@@ -19,7 +19,7 @@
 
 
 #include <svx/svdsnpv.hxx>
-#include <math.h>
+#include <cmath>
 
 #include <svx/svdetc.hxx>
 #include <svx/svdobj.hxx>

@@ -37,7 +37,7 @@
 #include "com/sun/star/i18n/ScriptType.hpp"
 #include "com/sun/star/i18n/DirectionProperty.hpp"
 
-#include <string.h>
+#include <cstring>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;

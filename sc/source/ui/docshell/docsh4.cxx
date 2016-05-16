@@ -25,7 +25,7 @@
 
 using namespace ::com::sun::star;
 
-#include <math.h>
+#include <cmath>
 
 #include "scitems.hxx"
 #include <editeng/flstitem.hxx>

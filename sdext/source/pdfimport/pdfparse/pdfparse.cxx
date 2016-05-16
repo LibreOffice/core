@@ -30,7 +30,7 @@
 #include <boost/spirit/include/classic_error_handling.hpp>
 #include <boost/spirit/include/classic_file_iterator.hpp>
 #include <boost/bind.hpp>
-#include <string.h>
+#include <cstring>
 
 #include <rtl/strbuf.hxx>
 #include <rtl/alloc.h>

@@ -21,7 +21,7 @@
 #include <main.hxx>
 #include <chart.hxx>
 #include <outact.hxx>
-#include <math.h>
+#include <cmath>
 #include <memory>
 
 using namespace ::com::sun::star;

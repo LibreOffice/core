@@ -26,8 +26,8 @@
 #include <osl/thread.hxx>
 
 #include <cassert>
-#include <string.h>
-#include <stdio.h>
+#include <cstring>
+#include <cstdio>
 
 /* ================================================================= *
  *

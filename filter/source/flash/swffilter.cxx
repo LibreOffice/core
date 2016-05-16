@@ -42,7 +42,7 @@
 #include "swfexporter.hxx"
 #include "swfuno.hxx"
 
-#include <string.h>
+#include <cstring>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;

@@ -23,7 +23,7 @@
 #include "TableWindowListBox.hxx"
 #include "TableConnection.hxx"
 #include <vcl/svapp.hxx>
-#include <math.h>
+#include <cmath>
 #include <osl/diagnose.h>
 #include <vcl/lineinfo.hxx>
 #include <vcl/settings.hxx>

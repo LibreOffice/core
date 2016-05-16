@@ -19,9 +19,9 @@
 
 #include <documentbuilder.hxx>
 
-#include <string.h>
-#include <stdio.h>
-#include <stdarg.h>
+#include <cstring>
+#include <cstdio>
+#include <cstdarg>
 
 #include <libxml/xmlerror.h>
 #include <libxml/tree.h>

@@ -16,7 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include <string.h>
+#include <cstring>
 
 #include <accessibility/standard/vclxaccessibletoolbox.hxx>
 #include <accessibility/standard/vclxaccessibletoolboxitem.hxx>

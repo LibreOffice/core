@@ -18,8 +18,8 @@
  */
 
 
-#include <limits.h>
-#include <stdlib.h>
+#include <climits>
+#include <cstdlib>
 #include <algorithm>
 #include <vcl/builder.hxx>
 #include <vcl/msgbox.hxx>

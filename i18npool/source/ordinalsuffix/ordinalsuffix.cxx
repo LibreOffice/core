@@ -22,7 +22,7 @@
 #include <i18nlangtag/languagetagicu.hxx>
 #include <sal/log.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <string.h>
+#include <cstring>
 #include "ordinalsuffix.hxx"
 
 #include <unicode/rbnf.h>

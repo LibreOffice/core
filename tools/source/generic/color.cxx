@@ -21,7 +21,7 @@
 
 #include <iomanip>
 #include <sstream>
-#include <stdlib.h>
+#include <cstdlib>
 
 #include <tools/color.hxx>
 #include <tools/debug.hxx>

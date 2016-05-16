@@ -44,7 +44,7 @@
 #include <sfx2/objsh.hxx>
 #include <vcl/svapp.hxx>
 
-#include <float.h>
+#include <cfloat>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;

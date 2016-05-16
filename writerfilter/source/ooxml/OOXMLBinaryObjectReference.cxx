@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include "OOXMLBinaryObjectReference.hxx"
-#include <string.h>
+#include <cstring>
 
 namespace writerfilter {
 namespace ooxml

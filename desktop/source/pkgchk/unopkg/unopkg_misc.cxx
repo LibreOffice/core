@@ -39,7 +39,7 @@
 #include <com/sun/star/ucb/UniversalContentBroker.hpp>
 #include <cppuhelper/bootstrap.hxx>
 #include <comphelper/sequence.hxx>
-#include <stdio.h>
+#include <cstdio>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

@@ -39,8 +39,8 @@
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
 
-#include <stdio.h>
-#include <string.h>
+#include <cstdio>
+#include <cstring>
 
 using namespace ::com::sun::star;
 

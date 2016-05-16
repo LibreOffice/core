@@ -21,7 +21,7 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <editeng/editdata.hxx>
 #include <editeng/eeitem.hxx>
-#include <math.h>
+#include <cmath>
 #include <svl/aeitem.hxx>
 #include <svl/itemiter.hxx>
 #include <svl/whiter.hxx>

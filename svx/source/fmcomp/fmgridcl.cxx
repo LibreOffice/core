@@ -70,7 +70,7 @@
 #include <vcl/menu.hxx>
 #include <vcl/settings.hxx>
 
-#include <math.h>
+#include <cmath>
 #include <memory>
 
 using namespace ::com::sun::star::uno;

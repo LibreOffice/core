@@ -20,7 +20,7 @@
 #include <sal/config.h>
 
 #include <stack>
-#include <string.h>
+#include <cstring>
 
 #include <officecfg/Office/Common.hxx>
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>

@@ -10,7 +10,7 @@
 #include <rtflistener.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
-#include <string.h>
+#include <cstring>
 
 namespace writerfilter
 {

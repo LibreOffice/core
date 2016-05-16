@@ -18,12 +18,12 @@
  */
 
 
-#include <string.h>
+#include <cstring>
 #include <vcl/gdimtf.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/virdev.hxx>
 #include "dxf2mtf.hxx"
-#include <math.h>
+#include <cmath>
 
 class FilterConfigItem;
 

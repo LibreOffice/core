@@ -29,8 +29,8 @@
 #endif
 
 #include <list>
-#include <stdlib.h>
-#include <string.h>
+#include <cstdlib>
+#include <cstring>
 
 #include "grammar.hxx"
 #include "lexer.hxx"
@@ -56,7 +56,7 @@ typedef union {
     char *str;
     Node *ptr;
 } YYSTYPE;
-#include <stdio.h>
+#include <cstdio>
 
 #ifndef __cplusplus
 #ifndef __STDC__

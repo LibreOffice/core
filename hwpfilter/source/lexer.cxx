@@ -34,7 +34,7 @@
 #define YY_MAIN 0
 #endif
 
-#include <stdio.h>
+#include <cstdio>
 
 
 /* cfront 1.2 defines "c_plusplus" instead of "__cplusplus" */
@@ -47,7 +47,7 @@
 
 #ifdef __cplusplus
 
-#include <stdlib.h>
+#include <cstdlib>
 #ifndef _WIN32
 #include <unistd.h>
 #else
@@ -956,8 +956,8 @@ static char *yy_last_accepting_cpos;
 #define YY_RESTORE_YY_MORE_OFFSET
 char *yytext;
 #define INITIAL 0
-#include <stdlib.h>
-#include <string.h>
+#include <cstdlib>
+#include <cstring>
 #include "nodes.h"
 
 #ifdef _WIN32

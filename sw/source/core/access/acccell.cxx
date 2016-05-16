@@ -38,7 +38,7 @@
 #include <acccell.hxx>
 
 #include <cfloat>
-#include <limits.h>
+#include <climits>
 
 #include <ndtxt.hxx>
 #include <editeng/brushitem.hxx>

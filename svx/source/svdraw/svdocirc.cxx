@@ -23,7 +23,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <editeng/eeitem.hxx>
-#include <math.h>
+#include <cmath>
 #include <svl/style.hxx>
 
 #include "svdglob.hxx"

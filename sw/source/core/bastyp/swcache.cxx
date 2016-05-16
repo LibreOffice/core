@@ -22,7 +22,7 @@
 #include <rtl/strbuf.hxx>
 #include <osl/diagnose.h>
 
-#include <limits.h>
+#include <climits>
 
 #ifdef DBG_UTIL
 void SwCache::Check()

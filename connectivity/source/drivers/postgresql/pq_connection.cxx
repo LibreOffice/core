@@ -35,8 +35,8 @@
  ************************************************************************/
 
 #include <list>
-#include <time.h>
-#include <string.h>
+#include <ctime>
+#include <cstring>
 
 #include <memory>
 

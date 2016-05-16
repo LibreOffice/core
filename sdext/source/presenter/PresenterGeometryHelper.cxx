@@ -19,7 +19,7 @@
 
 #include "PresenterGeometryHelper.hxx"
 
-#include <math.h>
+#include <cmath>
 #include <algorithm>
 
 using namespace ::com::sun::star;

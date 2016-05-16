@@ -34,8 +34,8 @@
 #include <rtl/math.hxx>
 #include <rtl/strbuf.hxx>
 
-#include <math.h>
-#include <float.h>
+#include <cmath>
+#include <cfloat>
 #include <algorithm>
 #include <memory>
 #include <unordered_map>

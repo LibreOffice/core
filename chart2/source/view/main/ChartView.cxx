@@ -74,7 +74,7 @@
 #endif
 #include <drawinglayer/XShapeDumper.hxx>
 
-#include <time.h>
+#include <ctime>
 
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/awt/Point.hpp>

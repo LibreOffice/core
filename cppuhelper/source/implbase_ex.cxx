@@ -19,7 +19,7 @@
 
 #include <sal/alloca.h>
 
-#include <string.h>
+#include <cstring>
 #include <osl/diagnose.h>
 #include <rtl/byteseq.hxx>
 #include <rtl/ustrbuf.hxx>

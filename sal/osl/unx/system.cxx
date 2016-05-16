@@ -18,7 +18,7 @@
  */
 
 #include <unistd.h>
-#include <string.h>
+#include <cstring>
 
 #include <config_features.h>
 

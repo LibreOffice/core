@@ -30,7 +30,7 @@
 #include <com/sun/star/i18n/NativeNumberSupplier.hpp>
 #include <comphelper/processfactory.hxx>
 
-#include <string.h>
+#include <cstring>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;

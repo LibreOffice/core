@@ -19,7 +19,7 @@
 
 #include <svx/framelinkarray.hxx>
 
-#include <math.h>
+#include <cmath>
 #include <vector>
 #include <algorithm>
 #include <vcl/outdev.hxx>

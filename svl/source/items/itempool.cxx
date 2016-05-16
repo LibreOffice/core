@@ -19,7 +19,7 @@
 
 #include <svl/itempool.hxx>
 
-#include <string.h>
+#include <cstring>
 
 #include <osl/diagnose.h>
 #include <sal/log.hxx>

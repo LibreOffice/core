@@ -40,9 +40,9 @@
 #include <tools/rcid.h>
 #include <unotools/charclass.hxx>
 #include <unotools/securityoptions.hxx>
-#include <stdlib.h>
-#include <time.h>
-#include <ctype.h>
+#include <cstdlib>
+#include <ctime>
+#include <cctype>
 #include <numeric>
 #include <svx/svdmodel.hxx>
 

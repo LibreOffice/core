@@ -43,7 +43,7 @@
 #include <svtools/ehdl.hxx>
 #include <tools/datetime.hxx>
 #include <rtl/uri.hxx>
-#include <math.h>
+#include <cmath>
 
 #include <unotools/saveopt.hxx>
 #include <unotools/useroptions.hxx>

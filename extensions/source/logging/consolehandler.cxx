@@ -32,7 +32,7 @@
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
-#include <stdio.h>
+#include <cstdio>
 
 namespace logging
 {

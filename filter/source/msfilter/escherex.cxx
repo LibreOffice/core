@@ -37,7 +37,7 @@
 #include <tools/stream.hxx>
 #include <tools/zcodec.hxx>
 #include <svx/svdopath.hxx>
-#include <stdlib.h>
+#include <cstdlib>
 #include <vcl/graphicfilter.hxx>
 #include "svx/EnhancedCustomShapeTypeNames.hxx"
 #include "svx/EnhancedCustomShapeGeometry.hxx"

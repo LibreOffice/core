@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <stdio.h>
+#include <cstdio>
 
 #include <X11/Xlib.h>
 #include <X11/XKBlib.h>

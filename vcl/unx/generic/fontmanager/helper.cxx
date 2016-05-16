@@ -22,7 +22,7 @@
 #include <cstring>
 #include <sys/stat.h>
 #include <unistd.h>
-#include <limits.h>
+#include <climits>
 #include <osl/file.hxx>
 #include <osl/process.h>
 #include <osl/thread.h>

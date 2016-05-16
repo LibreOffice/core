@@ -72,8 +72,8 @@
  *    - changed (width == 250) to (width = 250) in initializeArray
  */
 
-#include <string.h>
-#include <stdlib.h>
+#include <cstring>
+#include <cstdlib>
 #include <sys/stat.h>
 
 #include "parseAFM.hxx"

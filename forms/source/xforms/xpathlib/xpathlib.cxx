@@ -18,7 +18,7 @@
  */
 
 
-#include <string.h>
+#include <cstring>
 #include <sal/types.h>
 #include <rtl/alloc.h>
 #include <rtl/ustring.hxx>

@@ -25,7 +25,7 @@
 #include <sot/storage.hxx>
 #include <comphelper/classids.hxx>
 #include <svx/svdview.hxx>
-#include <string.h>
+#include <cstring>
 #include <vcl/svapp.hxx>
 
 #include <tools/diagnose_ex.h>

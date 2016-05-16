@@ -17,14 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <string.h>
+#include <cstring>
 #include <osl/thread.h>
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/graph.hxx>
 #include <tools/poly.hxx>
 #include <tools/fract.hxx>
 #include <vcl/virdev.hxx>
-#include <math.h>
+#include <cmath>
 
 #include "ipict.hxx"
 #include "shape.hxx"

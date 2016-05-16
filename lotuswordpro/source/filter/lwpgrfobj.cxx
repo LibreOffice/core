@@ -58,7 +58,7 @@
  * @file
  *  For LWP filter architecture prototype
 */
-#include <stdio.h>
+#include <cstdio>
 
 #include <memory>
 
@@ -76,7 +76,7 @@
 #include "xfilter/xfannotation.hxx"
 
 //For chart
-#include "string.h"
+#include <cstring>
 
 #include <osl/thread.h>
 

@@ -19,7 +19,7 @@
 
 #include <unistd.h>
 #include <sys/wait.h>
-#include <signal.h>
+#include <csignal>
 
 #include "unx/cupsmgr.hxx"
 #include <vcl/strhelper.hxx>

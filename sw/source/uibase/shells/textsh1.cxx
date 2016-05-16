@@ -30,7 +30,7 @@
 #include <svtools/langtab.hxx>
 #include <svl/slstitm.hxx>
 #include <svl/grabbagitem.hxx>
-#include <string.h>
+#include <cstring>
 #include <svl/stritem.hxx>
 #include <sfx2/htmlmode.hxx>
 #include <svl/whiter.hxx>

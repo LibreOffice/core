@@ -19,7 +19,7 @@
 
 #include "sal/config.h"
 
-#include <assert.h>
+#include <cassert>
 
 #include "system.hxx"
 #include <sal/log.hxx>

@@ -18,7 +18,7 @@
  */
 
 
-#include <assert.h>
+#include <cassert>
 #include <textconversion.hxx>
 #include <com/sun/star/i18n/TextConversionType.hpp>
 #include <com/sun/star/i18n/TextConversionOption.hpp>

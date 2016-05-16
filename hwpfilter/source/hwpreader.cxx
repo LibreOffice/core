@@ -21,7 +21,7 @@
 #include <memory>
 
 #include "hwpreader.hxx"
-#include <math.h>
+#include <cmath>
 
 #include <osl/diagnose.h>
 #include <tools/stream.hxx>
@@ -32,7 +32,7 @@
 #include "cspline.h"
 
 #include <iostream>
-#include <locale.h>
+#include <clocale>
 #include <sal/types.h>
 
 // To be shorten source code by realking

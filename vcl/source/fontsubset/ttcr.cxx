@@ -29,11 +29,11 @@
 #    define NDEBUG
 #  endif
 #endif
-#include <assert.h>
+#include <cassert>
 
 #include "ttcr.hxx"
 #include "list.h"
-#include "string.h"
+#include <cstring>
 
 namespace vcl
 {

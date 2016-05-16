@@ -19,7 +19,7 @@
 
 #include <sal/config.h>
 
-#include <math.h>
+#include <cmath>
 #include <memory>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>

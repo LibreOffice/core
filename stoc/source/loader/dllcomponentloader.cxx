@@ -18,7 +18,7 @@
  */
 
 
-#include <stdlib.h>
+#include <cstdlib>
 #include <osl/file.h>
 #include <vector>
 #include <osl/mutex.hxx>

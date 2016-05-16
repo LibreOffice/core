@@ -15,7 +15,7 @@
 #include <com/sun/star/geometry/AffineMatrix2D.hpp>
 #include <osl/diagnose.h>
 
-#include <limits.h>
+#include <climits>
 #include <boost/bind.hpp>
 #include <boost/spirit/include/classic.hpp>
 #include <boost/spirit/include/classic_while.hpp>

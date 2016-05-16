@@ -19,7 +19,7 @@
 
 #include "index.hxx"
 
-#include <assert.h>
+#include <cassert>
 #include <sal/log.hxx>
 
 #include <crossrefbookmark.hxx>

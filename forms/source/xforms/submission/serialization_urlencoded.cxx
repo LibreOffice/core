@@ -29,7 +29,7 @@
 #include <rtl/strbuf.hxx>
 #include <comphelper/processfactory.hxx>
 
-#include <stdio.h>
+#include <cstdio>
 
 #include "serialization_urlencoded.hxx"
 

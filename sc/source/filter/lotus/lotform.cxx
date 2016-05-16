@@ -27,7 +27,7 @@
 #include "ftools.hxx"
 #include "tool.h"
 
-#include <math.h>
+#include <cmath>
 #include <comphelper/string.hxx>
 #include <memory>
 

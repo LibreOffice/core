@@ -26,9 +26,9 @@
 #ifdef _WIN32
 # include <windows.h>
 #endif
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
 
 #ifndef _WIN32
 # define wsprintf sprintf

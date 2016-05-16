@@ -18,8 +18,8 @@
  */
 
 
-#include <stdlib.h>
-#include <math.h>
+#include <cstdlib>
+#include <cmath>
 
 #include "calendar_hijri.hxx"
 

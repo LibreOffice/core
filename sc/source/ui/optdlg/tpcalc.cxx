@@ -33,7 +33,7 @@
 
 #include "tpcalc.hxx"
 
-#include <math.h>
+#include <cmath>
 
 ScTpCalcOptions::ScTpCalcOptions(vcl::Window* pParent, const SfxItemSet& rCoreAttrs)
     : SfxTabPage(pParent, "OptCalculatePage",

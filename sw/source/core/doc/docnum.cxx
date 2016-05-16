@@ -84,7 +84,7 @@ namespace {
     }
 }
 
-#include <stdlib.h>
+#include <cstdlib>
 
 inline sal_uInt8 GetUpperLvlChg( sal_uInt8 nCurLvl, sal_uInt8 nLevel, sal_uInt16 nMask )
 {

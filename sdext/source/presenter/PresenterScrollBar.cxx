@@ -34,7 +34,7 @@
 
 #include <algorithm>
 #include <memory>
-#include <math.h>
+#include <cmath>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

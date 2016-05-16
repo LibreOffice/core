@@ -20,7 +20,7 @@
 #include <svl/inethist.hxx>
 
 #include <algorithm>
-#include <string.h>
+#include <cstring>
 
 #include <rtl/instance.hxx>
 #include <rtl/crc.h>

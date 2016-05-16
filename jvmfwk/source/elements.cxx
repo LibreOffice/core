@@ -31,7 +31,7 @@
 #include "libxml/xpathInternals.h"
 #include "rtl/bootstrap.hxx"
 #include "boost/optional.hpp"
-#include <string.h>
+#include <cstring>
 
 // For backwards compatibility, the nFeatures and nRequirements flag words are
 // read/written as potentially signed hexadecimal numbers (though that has no

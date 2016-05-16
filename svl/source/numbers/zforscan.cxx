@@ -18,7 +18,7 @@
  */
 
 
-#include <stdlib.h>
+#include <cstdlib>
 #include <comphelper/string.hxx>
 #include <sal/log.hxx>
 #include <tools/debug.hxx>

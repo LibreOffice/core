@@ -23,7 +23,7 @@
 #include <osl/diagnose.h>
 
 #include <set>
-#include <string.h>
+#include <cstring>
 
 
 namespace comphelper

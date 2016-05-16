@@ -28,7 +28,7 @@
 #include <svl/poolitem.hxx>
 #include <sot/storage.hxx>
 
-#include <math.h>
+#include <cmath>
 #include "global.hxx"
 #include "document.hxx"
 #include "stlpool.hxx"

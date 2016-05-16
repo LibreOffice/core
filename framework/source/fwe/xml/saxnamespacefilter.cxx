@@ -22,7 +22,7 @@
 */
 #include <vector>
 
-#include <stdio.h>
+#include <cstdio>
 
 #include <xml/saxnamespacefilter.hxx>
 

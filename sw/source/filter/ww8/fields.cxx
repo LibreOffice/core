@@ -19,7 +19,7 @@
 
 #include "fields.hxx"
 #include <osl/diagnose.h>
-#include <stddef.h>
+#include <cstddef>
 
 namespace ww
 {

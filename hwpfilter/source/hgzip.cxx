@@ -19,10 +19,10 @@
 
 #include "precompile.h"
 
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <errno.h>
+#include <cstdio>
+#include <cstring>
+#include <cstdlib>
+#include <cerrno>
 #include "hgzip.h"
 #include "hstream.hxx"
 

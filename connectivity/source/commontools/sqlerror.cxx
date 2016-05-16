@@ -27,7 +27,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
 
-#include <string.h>
+#include <cstring>
 
 
 namespace connectivity

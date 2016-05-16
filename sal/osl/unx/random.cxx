@@ -10,7 +10,7 @@
 #include "system.hxx"
 #include "oslrandom.h"
 
-#include <assert.h>
+#include <cassert>
 
 int osl_get_system_random_data(char* buffer, size_t desired_len)
 {

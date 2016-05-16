@@ -46,7 +46,7 @@
 
 #include <list>
 #include <set>
-#include <string.h>
+#include <cstring>
 
 using namespace utl;
 using namespace osl;

@@ -23,7 +23,7 @@
 
 #define FAST_ARGB_BGRA
 
-#include <stdlib.h>
+#include <cstdlib>
 
 typedef unsigned char PIXBYTE;
 

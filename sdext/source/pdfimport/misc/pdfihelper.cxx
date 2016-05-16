@@ -23,7 +23,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <basegfx/numeric/ftools.hxx>
 
-#include <math.h>
+#include <cmath>
 
 using namespace pdfi;
 using namespace com::sun::star;

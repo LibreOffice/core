@@ -22,7 +22,7 @@
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <osl/diagnose.h>
-#include <string.h>
+#include <cstring>
 
 namespace oox {
 

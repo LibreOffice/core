@@ -27,7 +27,7 @@
  ************************************************************************/
 
 #include <config_lgpl.h>
-#include <string.h>
+#include <cstring>
 #include <ne_xml.h>
 #include <osl/diagnose.h>
 #include "LockSequence.hxx"

@@ -18,7 +18,7 @@
  */
 
 
-#include <string.h>
+#include <cstring>
 
 #include "iprcache.hxx"
 #include "linguistic/misc.hxx"

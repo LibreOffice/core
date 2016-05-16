@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <ctype.h>
-#include <stdlib.h>
-#include <limits.h>
+#include <cctype>
+#include <cstdlib>
+#include <climits>
 #include <rtl/ustrbuf.hxx>
 #include <vcl/svapp.hxx>
 #include <svtools/htmltokn.h>

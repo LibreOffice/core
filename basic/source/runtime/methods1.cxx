@@ -24,7 +24,7 @@
 
 #include <cstddef>
 
-#include <stdlib.h>
+#include <cstdlib>
 #include <vcl/svapp.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/wrkwin.hxx>

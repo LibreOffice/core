@@ -21,7 +21,7 @@
 #include <cstdlib>
 #include <limits>
 #include <new>
-#include <string.h>
+#include <cstring>
 
 #ifdef _WIN32
 #include "stdlib.h"

@@ -25,14 +25,14 @@
 
 #include <unotools/syslocale.hxx>
 
-#include <stdlib.h>
+#include <cstdlib>
 
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
-#include <math.h>
-#include <string.h>
-#include <ctype.h>
+#include <cmath>
+#include <cstring>
+#include <cctype>
 
 #include "sbxres.hxx"
 #include "sbxbase.hxx"

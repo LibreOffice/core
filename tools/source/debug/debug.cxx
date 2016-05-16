@@ -21,12 +21,12 @@
 #include <unistd.h>
 #endif
 
-#include <errno.h>
-#include <time.h>
+#include <cerrno>
+#include <ctime>
 #include <cstdarg>
-#include <stdlib.h>
-#include <string.h>
-#include <stdio.h>
+#include <cstdlib>
+#include <cstring>
+#include <cstdio>
 
 #include <com/sun/star/configuration/CorruptedConfigurationException.hpp>
 #include <com/sun/star/task/ErrorCodeIOException.hpp>

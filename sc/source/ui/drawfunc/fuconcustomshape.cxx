@@ -33,7 +33,7 @@
 #include "drawview.hxx"
 #include <editeng/adjustitem.hxx>
 
-#include <math.h>
+#include <cmath>
 
 using namespace com::sun::star;
 

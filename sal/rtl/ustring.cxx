@@ -36,7 +36,7 @@
 #include <osl/doublecheckedlocking.h>
 #include <rtl/tencinfo.h>
 
-#include <string.h>
+#include <cstring>
 #include <sal/alloca.h>
 #include <sal/log.hxx>
 

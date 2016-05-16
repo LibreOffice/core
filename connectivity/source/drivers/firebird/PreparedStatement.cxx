@@ -28,7 +28,7 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <osl/diagnose.h>
 #include <propertyids.hxx>
-#include <time.h>
+#include <ctime>
 
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>

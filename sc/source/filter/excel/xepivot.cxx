@@ -25,7 +25,7 @@
 #include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
 
 #include <algorithm>
-#include <math.h>
+#include <cmath>
 
 #include <rtl/math.hxx>
 #include <tools/date.hxx>

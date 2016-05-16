@@ -18,14 +18,14 @@
  */
 
 #include <cstdarg>
-#include <math.h>
+#include <cmath>
 #include <osl/file.h>
 #include <sal/log.hxx>
 #include <tools/stream.hxx>
 #include <unotools/tempfile.hxx>
 #include <sane.hxx>
 #include <dlfcn.h>
-#include <stdio.h>
+#include <cstdio>
 #include <unistd.h>
 #include <sys/time.h>
 #include <sys/types.h>
@@ -34,7 +34,7 @@
 #include <memory>
 
 #if (OSL_DEBUG_LEVEL > 0) || defined DBG_UTIL
-#include <stdarg.h>
+#include <cstdarg>
 #define dump_state( a, b, c, d ) fprintf( stderr, a, b, c, d );
 #else
 #define dump_state( a, b, c, d ) ;

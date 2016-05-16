@@ -47,8 +47,8 @@
 #include <unotools/lingucfg.hxx>
 #include <osl/file.hxx>
 
-#include <stdio.h>
-#include <string.h>
+#include <cstdio>
+#include <cstring>
 
 #include <list>
 #include <set>

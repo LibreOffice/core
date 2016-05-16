@@ -23,8 +23,8 @@
 
 #include <cassert>
 #include <stdexcept>
-#include <limits.h>
-#include <errno.h>
+#include <climits>
+#include <cerrno>
 #include <strings.h>
 #include <unistd.h>
 

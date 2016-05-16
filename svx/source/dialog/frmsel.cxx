@@ -21,7 +21,7 @@
 #include <vcl/builderfactory.hxx>
 
 #include <algorithm>
-#include <math.h>
+#include <cmath>
 #include <frmselimpl.hxx>
 #include <AccessibleFrameSelector.hxx>
 #include <svx/dialmgr.hxx>

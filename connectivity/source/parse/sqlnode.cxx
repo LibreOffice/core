@@ -52,7 +52,7 @@
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbmetadata.hxx>
 #include <tools/diagnose_ex.h>
-#include <string.h>
+#include <cstring>
 #include <algorithm>
 #include <functional>
 #include <memory>

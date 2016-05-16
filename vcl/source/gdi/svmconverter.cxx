@@ -18,7 +18,7 @@
  */
 
 #include <algorithm>
-#include <string.h>
+#include <cstring>
 #include <osl/thread.h>
 #include <tools/debug.hxx>
 #include <tools/fract.hxx>

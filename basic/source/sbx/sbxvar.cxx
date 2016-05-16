@@ -28,8 +28,8 @@
 #include "sbxres.hxx"
 #include "sbxconv.hxx"
 #include "sbunoobj.hxx"
-#include <math.h>
-#include <ctype.h>
+#include <cmath>
+#include <cctype>
 
 #include <com/sun/star/uno/XInterface.hpp>
 using namespace com::sun::star::uno;

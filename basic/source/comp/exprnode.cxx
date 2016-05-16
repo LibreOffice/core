@@ -18,7 +18,7 @@
  */
 
 
-#include <math.h>
+#include <cmath>
 #include <algorithm>
 
 #include <rtl/math.hxx>

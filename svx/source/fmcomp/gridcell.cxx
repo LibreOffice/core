@@ -67,7 +67,7 @@
 #include <connectivity/dbconversion.hxx>
 #include <connectivity/sqlnode.hxx>
 
-#include <math.h>
+#include <cmath>
 
 using namespace ::connectivity;
 using namespace ::svxform;

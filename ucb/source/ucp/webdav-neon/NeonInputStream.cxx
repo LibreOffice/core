@@ -30,7 +30,7 @@
 
 #include <cppuhelper/queryinterface.hxx>
 
-#include <string.h>
+#include <cstring>
 
 using namespace cppu;
 using namespace com::sun::star::io;

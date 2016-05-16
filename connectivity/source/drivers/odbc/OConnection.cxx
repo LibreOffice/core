@@ -32,7 +32,7 @@
 #include <comphelper/extract.hxx>
 #include <connectivity/dbexception.hxx>
 
-#include <string.h>
+#include <cstring>
 
 using namespace connectivity::odbc;
 using namespace connectivity;

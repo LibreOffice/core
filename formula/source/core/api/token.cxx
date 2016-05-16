@@ -22,8 +22,8 @@
 #include <cstdio>
 #include <algorithm>
 
-#include <string.h>
-#include <limits.h>
+#include <cstring>
+#include <climits>
 #include <tools/debug.hxx>
 #include <osl/diagnose.h>
 

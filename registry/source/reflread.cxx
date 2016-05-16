@@ -23,7 +23,7 @@
 #include <memory>
 #include <new>
 
-#include <string.h>
+#include <cstring>
 #include <sal/types.h>
 #include <osl/endian.h>
 #include <osl/diagnose.h>

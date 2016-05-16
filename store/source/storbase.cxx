@@ -27,7 +27,7 @@
 #include "store/types.h"
 #include "object.hxx"
 
-#include <stdio.h>
+#include <cstdio>
 
 using namespace store;
 

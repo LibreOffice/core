@@ -30,7 +30,7 @@
 #include <com/sun/star/ucb/XProgressHandler.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
-#include <stdio.h>
+#include <cstdio>
 
 
 using namespace ::com::sun::star;
