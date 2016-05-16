@@ -2127,14 +2127,26 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     gint min_slider_length = 21;
 
     // Grab some button style attributes
-    gtk_style_context_get_style( mpVScrollbarStyle,
-                                 "slider-width", &slider_width,
-                                 "trough-border", &trough_border,
-                                 "min-slider-length", &min_slider_length,
-                                 nullptr );
-    gint magic = trough_border ? 1 : 0;
-    aStyleSet.SetScrollBarSize( slider_width + 2*trough_border );
-    aStyleSet.SetMinThumbSize( min_slider_length - magic );
+    gtk_style_context_get_style(mpVScrollbarStyle,
+                                "slider-width", &slider_width,
+                                "trough-border", &trough_border,
+                                nullptr);
+    aStyleSet.SetScrollBarSize(slider_width + 2*trough_border);
+    if (gtk_check_version(3, 20, 0) == nullptr)
+    {
+        gtk_style_context_get(mpVScrollbarSliderStyle, gtk_style_context_get_state(mpVScrollbarSliderStyle),
+                              "min-height", &min_slider_length,
+                              nullptr);
+        aStyleSet.SetMinThumbSize(min_slider_length);
+    }
+    else
+    {
+        gtk_style_context_get_style(mpVScrollbarStyle,
+                                    "min-slider-length", &min_slider_length,
+                                    nullptr);
+        gint magic = trough_border ? 1 : 0;
+        aStyleSet.SetMinThumbSize(min_slider_length - magic);
+    }
 
     // preferred icon style
     gchar* pIconThemeName = nullptr;
