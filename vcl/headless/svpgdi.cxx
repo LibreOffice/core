@@ -725,6 +725,7 @@ bool SvpSalGraphics::drawPolyLine(
             eCairoLineJoin = CAIRO_LINE_JOIN_ROUND;
             break;
         case basegfx::B2DLINEJOIN_NONE:
+        case basegfx::B2DLINEJOIN_MIDDLE:
         case basegfx::B2DLINEJOIN_MITER:
             eCairoLineJoin = CAIRO_LINE_JOIN_MITER;
             break;
@@ -1164,7 +1165,7 @@ void SvpSalGraphics::invert(const basegfx::B2DPolygon &rPoly, SalInvert nFlags)
         SAL_WARN("vcl.gdi", "SvpSalGraphics::invert, archaic cairo");
     }
 
-    if (nFlags & SalInvert::TrackFrame)
+    if (nFlags & SAL_INVERT_TrackFrame)
     {
         cairo_set_line_width(cr, 2.0);
         const double dashLengths[2] = { 4.0, 4.0 };
@@ -1180,7 +1181,7 @@ void SvpSalGraphics::invert(const basegfx::B2DPolygon &rPoly, SalInvert nFlags)
 
         cairo_clip(cr);
 
-        if (nFlags & SalInvert::N50)
+        if (nFlags & SAL_INVERT_N50)
         {
             cairo_pattern_t *pattern = create_stipple();
             cairo_mask(cr, pattern);
@@ -1401,6 +1402,8 @@ bool SvpSalGraphics::supportsOperation(OutDevSupportType eType) const
         case OutDevSupport_TransparentRect:
         case OutDevSupport_B2DDraw:
             return true;
+        case OutDevSupport_B2DClip: //what's this one ?
+            return false;
     }
     return false;
 }

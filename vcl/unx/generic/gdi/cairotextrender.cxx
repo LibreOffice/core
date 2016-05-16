@@ -261,7 +261,7 @@ void CairoTextRender::DrawServerFontLayout( const ServerFontLayout& rLayout )
         if (!font_face)
         {
             const ImplFontOptions *pOptions = rFont.GetFontOptions().get();
-            void *pPattern = pOptions ? pOptions->GetPattern(aFace, aId.mbEmbolden) : nullptr;
+            void *pPattern = pOptions ? pOptions->GetPattern(aFace, aId.mbEmbolden, aId.mbVerticalMetrics) : nullptr;
             if (pPattern)
                 font_face = cairo_ft_font_face_create_for_pattern(static_cast<FcPattern*>(pPattern));
             if (!font_face)
