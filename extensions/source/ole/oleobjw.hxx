@@ -30,7 +30,7 @@
 
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/bridge/oleautomation/XAutomationObject.hpp>
-#include <com/sun/star/script//XAutomationInvocation.hpp>
+#include <com/sun/star/script/XAutomationInvocation.hpp>
 #include <rtl/ustring.hxx>
 
 #include <com/sun/star/script/XDefaultProperty.hpp>

@@ -94,7 +94,7 @@ public:
     /**
      * Load a new DB of fingerprints
      * @param const char* thePathOfConfFile self explaining
-     * @param const char* prefix is the path where the directory witch contains fingerprint files is stored
+     * @param const char* prefix is the path where the directory which contains fingerprint files is stored
     */
     void SetDBPath(const char* thePathOfConfFile, const char* prefix);
 

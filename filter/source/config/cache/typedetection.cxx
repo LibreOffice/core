@@ -632,7 +632,7 @@ bool TypeDetection::impl_getPreselectionForType(
     // Can be used to suppress execution of some parts of this method
     // if its already clear that detected type is valid or not.
     // Its necessary to use shared code at the end, which update
-    // all return parameters constistency!
+    // all return parameters consistency!
     bool bBreakDetection = false;
 
     // Further we must know if it matches by pattern

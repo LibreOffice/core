@@ -4082,7 +4082,7 @@ void SwWW8ImplReader::Read_LR( sal_uInt16 nId, const sal_uInt8* pData, short nLe
 // Sprm 20
 void SwWW8ImplReader::Read_LineSpace( sal_uInt16, const sal_uInt8* pData, short nLen )
 {
-// commment see Read_UL()
+// comment see Read_UL()
     if (m_bStyNormal && m_bWWBugNormal)
         return;
 
