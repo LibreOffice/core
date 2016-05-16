@@ -330,7 +330,7 @@ void callSystemHandler(int signal)
                     _exit(255);
                     break;
 
-                case ACT_ABORT:     /* terminate witch core dump */
+                case ACT_ABORT:     /* terminate with core dump */
                     struct sigaction act;
                     act.sa_handler = SIG_DFL;
                     act.sa_flags   = 0;
