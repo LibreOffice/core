@@ -144,7 +144,7 @@ foreach $template (keys %templates) {
         print OUTFILE $keyline;
         if (/$key/) {
             my $translations = $templates{$template}->{'translations'};
-            foreach my $locale (keys %{$translations}) {
+            foreach my $locale (sort (keys %{$translations})) {
                 my $value = $translations->{$locale};
                 # print "locale is $locale\n";
                 # print "value is $value\n";
