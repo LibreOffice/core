@@ -103,12 +103,6 @@ public:
     */
     Image GetIcon() const;
 
-    /** Convenience method for setting all relevant properties for the
-        slot/command represented by the called object at the given tool
-        box.
-    */
-    void SetupToolBoxItem (ToolBox& rToolBox, const sal_uInt16 nIndex);
-
     /** Do not call.  Used by local class only.  Should be a member of
         a local and hidden interface.
     */

@@ -366,7 +366,6 @@
 #include <svtools/imap.hxx>
 #include <svtools/imapobj.hxx>
 #include <svtools/miscopt.hxx>
-#include <svtools/stdmenu.hxx>
 #include <svtools/svlbitm.hxx>
 #include <svtools/svtdllapi.h>
 #include <svtools/toolbarmenu.hxx>

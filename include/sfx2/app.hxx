@@ -192,7 +192,6 @@ public:
     SAL_DLLPRIVATE void         RegisterToolBoxControl_Impl( SfxModule*, const SfxTbxCtrlFactory&);
     SAL_DLLPRIVATE SfxTbxCtrlFactArr_Impl& GetTbxCtrlFactories_Impl() const;
     SAL_DLLPRIVATE SfxStbCtrlFactArr_Impl& GetStbCtrlFactories_Impl() const;
-    SAL_DLLPRIVATE SfxMenuCtrlFactArr_Impl& GetMenuCtrlFactories_Impl() const;
     SAL_DLLPRIVATE SfxChildWinFactArr_Impl& GetChildWinFactories_Impl() const;
     SAL_DLLPRIVATE SfxViewFrameArr_Impl& GetViewFrames_Impl() const;
     SAL_DLLPRIVATE SfxViewShellArr_Impl& GetViewShells_Impl() const;

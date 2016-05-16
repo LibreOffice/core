@@ -100,7 +100,6 @@ public:
     SAL_DLLPRIVATE static void DestroyModules_Impl();
     SAL_DLLPRIVATE SfxTbxCtrlFactArr_Impl* GetTbxCtrlFactories_Impl() const;
     SAL_DLLPRIVATE SfxStbCtrlFactArr_Impl* GetStbCtrlFactories_Impl() const;
-    SAL_DLLPRIVATE SfxMenuCtrlFactArr_Impl* GetMenuCtrlFactories_Impl() const;
     SAL_DLLPRIVATE SfxChildWinFactArr_Impl* GetChildWinFactories_Impl() const;
     SAL_DLLPRIVATE ImageList* GetImageList_Impl( bool bBig );
 };

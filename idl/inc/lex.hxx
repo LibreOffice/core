@@ -59,7 +59,6 @@ public:
     void        SetColumn( sal_uLong nColumnP ) { nColumn = nColumnP;   }
     sal_uLong   GetColumn() const           { return nColumn;       }
 
-    bool        IsEmpty() const     { return nType == SVTOKENTYPE::Empty; }
     bool        IsComment() const   { return nType == SVTOKENTYPE::Comment; }
     bool        IsInteger() const   { return nType == SVTOKENTYPE::Integer; }
     bool        IsString() const    { return nType == SVTOKENTYPE::String; }
@@ -86,8 +85,6 @@ public:
 
     void        SetHash( SvStringHashEntry * pHashP )
                 { pHash = pHashP; nType = SVTOKENTYPE::HashId; }
-    bool        HasHash() const
-                { return nType == SVTOKENTYPE::HashId; }
     bool        Is( SvStringHashEntry * pEntry ) const
                 { return IsIdentifierHash() && pHash == pEntry; }
 };
@@ -182,17 +179,6 @@ public:
     bool     ReadIf( char cChar )
     {
         if( GetToken().IsChar() && cChar == GetToken().GetChar() )
-        {
-            GetToken_Next();
-            return true;
-        }
-        else
-            return false;
-    }
-
-    bool     ReadIf( SvStringHashEntry* pEntry )
-    {
-        if( GetToken().Is( pEntry ) )
         {
             GetToken_Next();
             return true;

@@ -126,14 +126,6 @@ SfxUnoControllerItem::~SfxUnoControllerItem()
         pBindings->ReleaseUnoController_Impl( this );
 }
 
-void SfxUnoControllerItem::UnBind()
-{
-    // connection to SfxControllerItem is lost
-    pCtrlItem = nullptr;
-    css::uno::Reference< css::frame::XStatusListener >  aRef( static_cast<cppu::OWeakObject*>(this), css::uno::UNO_QUERY );
-    ReleaseDispatch();
-}
-
 void SAL_CALL SfxUnoControllerItem::statusChanged(const css::frame::FeatureStateEvent& rEvent) throw ( css::uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;

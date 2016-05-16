@@ -148,9 +148,6 @@ private:
                                     m_pAssignedList->GetSelectEntryPos()
                                     != LISTBOX_ENTRY_NOTFOUND ); }
 
-    inline void             EnableAssignButton()
-                                { m_pAssignBtn->Enable(); }
-
     inline void             DisableAssignButton()
                                 { m_pAssignBtn->Disable(); }
 

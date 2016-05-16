@@ -60,7 +60,6 @@ namespace drawinglayer { namespace primitive3d {
         explicit Primitive3DContainer( size_type count ) : vector(count) {}
         Primitive3DContainer( const Primitive3DContainer& other ) : vector(other) {}
         Primitive3DContainer( const Primitive3DContainer&& other ) : vector(other) {}
-        Primitive3DContainer( const vector< Primitive3DReference >& other ) : vector(other) {}
         Primitive3DContainer( std::initializer_list<Primitive3DReference> init ) : vector(init) {}
 
         void append(const Primitive3DContainer& rSource);

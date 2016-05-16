@@ -32,8 +32,7 @@ class NodeMap
 {
     NodeMapImpl maImpl;
 
-    NodeMap(const NodeMap &rMap) :
-        maImpl(rMap.maImpl) { clearCache(); }
+    NodeMap(const NodeMap &rMap) = delete;
 
   public:
     typedef NodeMapImpl::iterator iterator;

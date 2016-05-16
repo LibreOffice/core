@@ -31,13 +31,6 @@ static inline sal_uInt16 Count_Impl(const sal_uInt16 * pRanges)
 }
 
 
-SfxRangeItem::SfxRangeItem()
-{
-    nFrom = 0;
-    nTo = 0;
-}
-
-
 SfxRangeItem::SfxRangeItem( sal_uInt16 which, sal_uInt16 from, sal_uInt16 to ):
     SfxPoolItem( which ),
     nFrom( from ),
@@ -96,11 +89,6 @@ SvStream& SfxRangeItem::Store(SvStream &rStream, sal_uInt16) const
     rStream.WriteUInt16( nFrom );
     rStream.WriteUInt16( nTo );
     return rStream;
-}
-
-SfxUShortRangesItem::SfxUShortRangesItem()
-:   _pRanges(nullptr)
-{
 }
 
 SfxUShortRangesItem::SfxUShortRangesItem( sal_uInt16 nWID, SvStream &rStream )

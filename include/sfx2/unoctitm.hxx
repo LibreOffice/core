@@ -61,7 +61,6 @@ public:
 
     // Something else
     virtual void    SAL_CALL    disposing(const css::lang::EventObject& Source) throw( css::uno::RuntimeException, std::exception ) override;
-    void                        UnBind();
     void                        GetNewDispatch();
     void                        ReleaseDispatch();
     void                        ReleaseBindings();

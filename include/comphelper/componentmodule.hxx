@@ -60,14 +60,6 @@ namespace comphelper
         /// the function to create a factory for the component (usually <code>::cppu::createSingleComponentFactory</code>)
         FactoryInstantiation                         pFactoryCreationFunc;
 
-        ComponentDescription()
-            :sImplementationName()
-            ,aSupportedServices()
-            ,pComponentCreationFunc( nullptr )
-            ,pFactoryCreationFunc( nullptr )
-        {
-        }
-
         ComponentDescription(
                 const OUString& _rImplementationName,
                 const css::uno::Sequence< OUString >& _rSupportedServices,

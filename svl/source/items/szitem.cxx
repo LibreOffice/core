@@ -28,11 +28,6 @@
 #include <svl/memberid.hrc>
 
 
-SfxSizeItem::SfxSizeItem()
-{
-}
-
-
 SfxSizeItem::SfxSizeItem( sal_uInt16 nW, const Size& rVal ) :
     SfxPoolItem( nW ),
     aVal( rVal )

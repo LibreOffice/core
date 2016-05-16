@@ -94,19 +94,6 @@ public:
     css::uno::Reference< css::io::XInputStream > GetIconIfIconified( OUString* pGraphicMediaType ) override;
 };
 
-class SvInsertPlugInDialog : public InsertObjectDialog_Impl
-{
-private:
-    DECL_LINK_TYPED(BrowseHdl, Button*, void);
-
-public:
-    SvInsertPlugInDialog(vcl::Window* pParent,
-        const css::uno::Reference < css::embed::XStorage >& xStorage);
-    virtual ~SvInsertPlugInDialog();
-    virtual void dispose() override;
-    virtual short Execute() override;
-};
-
 class SfxInsertFloatingFrameDialog : public InsertObjectDialog_Impl
 {
 private:

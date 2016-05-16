@@ -87,7 +87,6 @@ public:
     bool IsLastParaInterrupted() const;
 
 private:
-    NonOverflowingText(const EditTextObject *pTObj, bool bLastParaInterrupted);
     NonOverflowingText(const ESelection &aSel, bool bLastParaInterrupted);
 
     friend class Outliner;

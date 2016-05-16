@@ -50,12 +50,8 @@ struct MyFieldInfo
 };
 bool operator < (const MyFieldInfo &lhs, const MyFieldInfo &rhs)
 {
-    if (lhs.parentClass < rhs.parentClass)
-        return true;
-    else if (lhs.parentClass == rhs.parentClass)
-         return lhs.fieldName < rhs.fieldName;
-    else
-        return false;
+    return std::tie(lhs.parentClass, lhs.fieldName)
+         < std::tie(rhs.parentClass, rhs.fieldName);
 }
 
 

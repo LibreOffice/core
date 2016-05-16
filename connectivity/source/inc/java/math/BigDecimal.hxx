@@ -32,8 +32,6 @@ namespace connectivity
     public:
         virtual jclass getMyClass() const override;
         virtual ~java_math_BigDecimal();
-        // a Constructor, that is needed for when Returning the Object is needed:
-        java_math_BigDecimal( JNIEnv * pEnv, jobject myObj ) : java_lang_Object( pEnv, myObj ){}
 
         java_math_BigDecimal( const OUString& _par0 );
         java_math_BigDecimal( const double& _par0 );

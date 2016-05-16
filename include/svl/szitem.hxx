@@ -31,7 +31,6 @@ private:
     Size                     aVal;
 
 public:
-                             SfxSizeItem();
                              SfxSizeItem( sal_uInt16 nWhich, const Size& rVal );
                              SfxSizeItem( const SfxSizeItem& );
                              virtual ~SfxSizeItem() {}
