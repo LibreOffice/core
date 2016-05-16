@@ -127,7 +127,6 @@ $(eval $(call gb_Library_add_exception_objects,svt,\
     svtools/source/control/scriptedtext \
     svtools/source/control/scrwin \
     svtools/source/control/stdctrl \
-    svtools/source/control/stdmenu \
     svtools/source/control/tabbar \
     svtools/source/control/toolbarmenu \
     svtools/source/control/toolbarmenuacc \

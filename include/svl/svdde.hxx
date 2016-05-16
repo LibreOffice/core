@@ -32,7 +32,6 @@ class DdeConnection;
 class DdeTransaction;
 class DdeLink;
 class DdeRequest;
-class DdeWarmLink;
 class DdeHotLink;
 class DdePoke;
 class DdeExecute;
@@ -141,13 +140,6 @@ public:
 };
 
 
-class SVL_DLLPUBLIC DdeWarmLink : public DdeLink
-{
-public:
-            DdeWarmLink( DdeConnection&, const OUString&, long = 0 );
-};
-
-
 class SVL_DLLPUBLIC DdeHotLink : public DdeLink
 {
 public:
@@ -165,10 +157,7 @@ public:
 class SVL_DLLPUBLIC DdePoke : public DdeTransaction
 {
 public:
-            DdePoke( DdeConnection&, const OUString&, const char*, long,
-                     SotClipboardFormatId = SotClipboardFormatId::STRING, long = 0 );
             DdePoke( DdeConnection&, const OUString&, SAL_UNUSED_PARAMETER const DdeData&, long = 0 );
-            DdePoke( DdeConnection&, const OUString&, const OUString&, long = 0 );
 };
 
 

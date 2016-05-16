@@ -186,34 +186,6 @@ public:
     SfxFrameProperties&                 operator =( const SfxFrameProperties &rProp );
 };
 
-class SfxFrameDescriptorItem : public SfxPoolItem
-{
-    SfxFrameProperties                  aProperties;
-public:
-
-                                        SfxFrameDescriptorItem ( const sal_uInt16 nId = SID_FRAMEDESCRIPTOR )
-                                            : SfxPoolItem( nId )
-                                        {}
-
-                                        SfxFrameDescriptorItem( const SfxFrameDescriptorItem& rCpy )
-                                            : SfxPoolItem( rCpy )
-                                        {
-                                            aProperties = rCpy.aProperties;
-                                        }
-
-    virtual                             ~SfxFrameDescriptorItem();
-
-    virtual bool                        operator ==( const SfxPoolItem& ) const override;
-    SfxFrameDescriptorItem&             operator =( const SfxFrameDescriptorItem & );
-
-    virtual bool GetPresentation( SfxItemPresentation ePres,
-                                            SfxMapUnit eCoreMetric,
-                                            SfxMapUnit ePresMetric,
-                                            OUString &rText, const IntlWrapper * = nullptr ) const override;
-
-    virtual SfxPoolItem*                Clone( SfxItemPool *pPool = nullptr ) const override;
-};
-
 #endif // INCLUDED_SFX2_FRMDESCR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

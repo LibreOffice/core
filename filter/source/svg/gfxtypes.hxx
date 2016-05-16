@@ -28,20 +28,8 @@ struct ARGBColor
     {}
     explicit ARGBColor(double fGrey) : a(1.0), r(fGrey), g(fGrey), b(fGrey)
     {}
-    ARGBColor( double r_, double g_, double b_ ) :
-        a(1.0), r(r_), g(g_), b(b_)
-    {}
-    ARGBColor( double a_, double r_, double g_, double b_ ) :
-        a(a_), r(r_), g(g_), b(b_)
-    {}
     ARGBColor( int r_, int g_, int b_ ) :
         a(1.0),
-        r(toDoubleColor(sal::static_int_cast<sal_uInt8>(r_))),
-        g(toDoubleColor(sal::static_int_cast<sal_uInt8>(g_))),
-        b(toDoubleColor(sal::static_int_cast<sal_uInt8>(b_)))
-    {}
-    ARGBColor( int a_, int r_, int g_, int b_ ) :
-        a(toDoubleColor(sal::static_int_cast<sal_uInt8>(a_))),
         r(toDoubleColor(sal::static_int_cast<sal_uInt8>(r_))),
         g(toDoubleColor(sal::static_int_cast<sal_uInt8>(g_))),
         b(toDoubleColor(sal::static_int_cast<sal_uInt8>(b_)))

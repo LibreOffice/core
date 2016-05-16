@@ -351,13 +351,4 @@ copy_rest:
     return *this;
 }
 
-/**
- * Determines the number of USHORTs in the set described by the ranges
- * of USHORTs in '*this'.
- */
-sal_uInt16 SfxUShortRanges::Count() const
-{
-    return Capacity_Impl( _pRanges );
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -29,55 +29,6 @@
 
 namespace dbaui
 {
-    class ORowUpdateHelper : public IUpdateHelper
-    {
-        css::uno::Reference< css::sdbc::XRowUpdate >          m_xRowUpdate;
-        css::uno::Reference< css::sdbc::XResultSetUpdate >    m_xResultSetUpdate;
-    public:
-        explicit ORowUpdateHelper(const css::uno::Reference< css::sdbc::XRowSet>& _xRowSet)
-            :m_xRowUpdate(_xRowSet,css::uno::UNO_QUERY)
-            ,m_xResultSetUpdate(_xRowSet,css::uno::UNO_QUERY)
-        {
-        }
-        virtual ~ORowUpdateHelper() {}
-        virtual void updateString(sal_Int32 _nPos, const OUString& _sValue) override
-        {
-            m_xRowUpdate->updateString(_nPos, _sValue);
-        }
-        virtual void updateDouble(sal_Int32 _nPos,const double& _nValue) override
-        {
-            m_xRowUpdate->updateDouble(_nPos, _nValue);
-        }
-        virtual void updateDate(sal_Int32 _nPos,const css::util::Date& _nValue) override
-        {
-            m_xRowUpdate->updateDate(_nPos, _nValue);
-        }
-        virtual void updateTime(sal_Int32 _nPos,const css::util::Time& _nValue) override
-        {
-            m_xRowUpdate->updateTime(_nPos, _nValue);
-        }
-        virtual void updateTimestamp(sal_Int32 _nPos,const css::util::DateTime& _nValue) override
-        {
-            m_xRowUpdate->updateTimestamp(_nPos, _nValue);
-        }
-        virtual void updateInt(sal_Int32 _nPos, sal_Int32 _nValue) override
-        {
-            m_xRowUpdate->updateInt(_nPos, _nValue);
-        }
-        virtual void updateNull(sal_Int32 _nPos, ::sal_Int32) override
-        {
-            m_xRowUpdate->updateNull(_nPos);
-        }
-        virtual void moveToInsertRow() override
-        {
-            m_xResultSetUpdate->moveToInsertRow();
-        }
-        virtual void insertRow() override
-        {
-            m_xResultSetUpdate->insertRow();
-        }
-    };
-
     class OParameterUpdateHelper : public IUpdateHelper
     {
         css::uno::Reference< css::sdbc::XPreparedStatement >  m_xPrepared;

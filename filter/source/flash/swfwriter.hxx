@@ -188,7 +188,6 @@ public:
     void addRGB( const Color& rColor );
     void addRect( const Rectangle& rRect );
     void addMatrix( const ::basegfx::B2DHomMatrix& rMatrix ); // #i73264#
-    void addString( const char* pString );
     void addStream( SvStream& rIn );
 
     static void writeMatrix( SvStream& rOut, const ::basegfx::B2DHomMatrix& rMatrix ); // #i73264#

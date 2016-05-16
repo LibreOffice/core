@@ -98,19 +98,6 @@ public:
     virtual void        Reset( const SfxItemSet* rSet ) override;
 };
 
-// #98647# class SvxScriptExecListBox ------------------------------------
-class SvxScriptExecListBox : public ListBox
-{ // for adding tooltips to ListBox
-public:
-    SvxScriptExecListBox( vcl::Window* pParent, WinBits nStyle = WB_BORDER )
-            :ListBox(pParent, nStyle) {}
-    SvxScriptExecListBox( vcl::Window* pParent, const ResId& rResId )
-            :ListBox(pParent, rResId) {}
-
-protected:
-    virtual void RequestHelp( const HelpEvent& rHEvt ) override;
-};
-
 // class SvxSecurityTabPage ---------------------------------------------
 
 class SvtSecurityOptions;

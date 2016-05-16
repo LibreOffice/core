@@ -1104,18 +1104,6 @@ oslInterlockedCount OControlModel::unlockInstance( LockAccess )
     return lockCount;
 }
 
-void OControlModel::firePropertyChanges( const Sequence< sal_Int32 >& _rHandles, const Sequence< Any >& _rOldValues,
-                                        const Sequence< Any >& _rNewValues, LockAccess )
-{
-    OPropertySetHelper::fire(
-        const_cast< Sequence< sal_Int32 >& >( _rHandles ).getArray(),
-        _rNewValues.getConstArray(),
-        _rOldValues.getConstArray(),
-        _rHandles.getLength(),
-        false
-    );
-}
-
 void OControlModel::firePropertyChanges( const std::vector< sal_Int32 >& _rHandles, const std::vector< Any >& _rOldValues,
                                         const std::vector< Any >& _rNewValues, LockAccess )
 {

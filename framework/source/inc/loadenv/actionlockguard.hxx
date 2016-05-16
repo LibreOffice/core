@@ -61,17 +61,6 @@ class ActionLockGuard
         {
         }
 
-        /** @short  initialize new guard instance and lock the given resource immediately.
-
-            @param  xLock
-                    points to the outside resource, which should be locked.
-         */
-        ActionLockGuard(const css::uno::Reference< css::document::XActionLockable >& xLock)
-            : m_bActionLocked(false)
-        {
-            setResource(xLock);
-        }
-
         /** @short  release this guard instance and make sure, that no lock
                     will exist afterwards on the internal wrapped resource.
          */

@@ -73,9 +73,6 @@ namespace dbaui
         bool    isNew() const { return getOriginalName().isEmpty(); }
         void        flagAsNew(const GrantIndexAccess&) { sOriginalName.clear(); }
         void        flagAsCommitted(const GrantIndexAccess&) { sOriginalName = sName; }
-
-    private:
-        OIndex();   // not implemented
     };
 
     typedef std::vector<OIndex> Indexes;

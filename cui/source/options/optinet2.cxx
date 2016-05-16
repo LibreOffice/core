@@ -551,40 +551,6 @@ IMPL_STATIC_LINK_TYPED( SvxProxyTabPage, LoseFocusHdl_Impl, Control&, rControl, 
 }
 
 
-void SvxScriptExecListBox::RequestHelp( const HelpEvent& rHEvt )
-{   // try to show tips just like as on toolbars
-    sal_Int32 nPos=LISTBOX_ENTRY_NOTFOUND;
-    sal_Int32 nTop = GetTopEntry();
-    sal_uInt16 nCount = GetDisplayLineCount(); // Attention: Not GetLineCount()
-    Point aPt = ScreenToOutputPixel( rHEvt.GetMousePosPixel() );
-    Rectangle aItemRect;
-    if( nCount > 0 ) // if there're some entries, find it.
-         for( nPos = nTop ; nPos <= nTop+nCount-1 ; nPos++ ) {
-            aItemRect = GetBoundingRectangle(nPos);
-            if( aPt.Y() < aItemRect.Top() || aPt.Y() > aItemRect.Bottom() )
-                continue;
-            else
-                break;
-        }
-     else // if not, nothing happens.
-         return;
-     OUString aHelpText;
-     if( nPos <= nTop+nCount-1 ) // if find the matching entry, get its content.
-         aHelpText = GetEntry(nPos);
-    if( aHelpText.getLength() && GetTextWidth(aHelpText)<GetOutputSizePixel().Width() )
-        aHelpText.clear(); // if the entry is quite short, clear the helping tip content.
-    aItemRect = Rectangle(Point(0,0),GetSizePixel());
-    aPt = Point(OutputToScreenPixel( aItemRect.TopLeft() ));
-    aItemRect.Left()   = aPt.X();
-    aItemRect.Top()    = aPt.Y();
-    aPt = OutputToScreenPixel( aItemRect.BottomRight() );
-    aItemRect.Right()  = aPt.X();
-    aItemRect.Bottom() = aPt.Y();
-    if( rHEvt.GetMode() == HelpEventMode::BALLOON )
-        Help::ShowBalloon( this, aItemRect.Center(), aItemRect, aHelpText);
-    else
-        Help::ShowQuickHelp( this, aItemRect, aHelpText );
-}
 
 /********************************************************************/
 /*                                                                  */

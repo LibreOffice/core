@@ -157,37 +157,6 @@ public:
     }
 };
 
-class SfxAsyncExec_Impl
-{
-    css::util::URL aCommand;
-    css::uno::Reference< css::frame::XDispatch > xDisp;
-    Timer           aTimer;
-
-public:
-
-    SfxAsyncExec_Impl( const css::util::URL& rCmd, const css::uno::Reference< css::frame::XDispatch >& rDisp )
-        : aCommand( rCmd )
-        , xDisp( rDisp )
-    {
-        aTimer.SetTimeoutHdl( LINK(this, SfxAsyncExec_Impl, TimerHdl) );
-        aTimer.SetTimeout( 0 );
-        aTimer.Start();
-    }
-
-    DECL_LINK_TYPED( TimerHdl, Timer*, void);
-};
-
-IMPL_LINK_TYPED(SfxAsyncExec_Impl, TimerHdl, Timer*, pTimer, void)
-{
-    (void)pTimer; // unused
-    aTimer.Stop();
-
-    Sequence<beans::PropertyValue> aSeq;
-    xDisp->dispatch( aCommand, aSeq );
-
-    delete this;
-}
-
 enum class SfxPopupAction
 {
     DELETE,
@@ -2065,22 +2034,6 @@ void SfxBindings::SetDispatchProvider_Impl( const css::uno::Reference< css::fram
 
     if ( pImp->pSubBindings )
         pImp->pSubBindings->SetDispatchProvider_Impl( pImp->xProv );
-}
-
-bool SfxBindings::ExecuteCommand_Impl( const OUString& rCommand )
-{
-    css::util::URL aURL;
-    aURL.Complete = rCommand;
-    Reference< util::XURLTransformer > xTrans( util::URLTransformer::create( ::comphelper::getProcessComponentContext() ) );
-    xTrans->parseStrict( aURL );
-    css::uno::Reference< css::frame::XDispatch >  xDisp = pImp->xProv->queryDispatch( aURL, OUString(), 0 );
-    if ( xDisp.is() )
-    {
-        new SfxAsyncExec_Impl( aURL, xDisp );
-        return true;
-    }
-
-    return false;
 }
 
 const css::uno::Reference< css::frame::XDispatchRecorder >& SfxBindings::GetRecorder() const

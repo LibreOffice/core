@@ -25,12 +25,12 @@ This plugin performs 3 different analyses:
 It does so, by dumping various call/definition/use info to a log file.
 Then we will post-process the various lists and find the set of unused methods.
 
-Be warned that it produces around 5G of log file.
+Be warned that it produces around 15G of log file.
 
 The process goes something like this:
   $ make check
   $ make FORCE_COMPILE_ALL=1 COMPILER_PLUGIN_TOOL='unusedmethods' check
-  $ ./compilerplugins/clang/unusedmethods.py unusedmethods.log > result.txt
+  $ ./compilerplugins/clang/unusedmethods.py unusedmethods.log
 
 and then
   $ for dir in *; do make FORCE_COMPILE_ALL=1 UPDATE_FILES=$dir COMPILER_PLUGIN_TOOL='unusedmethodsremove' $dir; done
@@ -55,7 +55,8 @@ struct MyFuncInfo
 };
 bool operator < (const MyFuncInfo &lhs, const MyFuncInfo &rhs)
 {
-    return lhs.sourceLocation < rhs.sourceLocation;
+    return std::tie(lhs.returnType, lhs.nameAndParams)
+         < std::tie(rhs.returnType, rhs.nameAndParams);
 }
 
 // try to limit the voluminous output a little
@@ -102,10 +103,12 @@ public:
     }
 
     bool shouldVisitTemplateInstantiations () const { return true; }
+    bool shouldVisitImplicitCode() const { return true; }
 
     bool VisitCallExpr(CallExpr* );
     bool VisitFunctionDecl( const FunctionDecl* decl );
     bool VisitDeclRefExpr( const DeclRefExpr* );
+    bool VisitCXXConstructExpr( const CXXConstructExpr* );
 private:
     void logCallToRootMethods(const FunctionDecl* functionDecl, std::set<MyFuncInfo>& funcSet);
     MyFuncInfo niceName(const FunctionDecl* functionDecl);
@@ -132,7 +135,11 @@ MyFuncInfo UnusedMethods::niceName(const FunctionDecl* functionDecl)
     case AS_protected: aInfo.access = "protected"; break;
     default: aInfo.access = "unknown"; break;
     }
-    aInfo.returnType = compat::getReturnType(*functionDecl).getCanonicalType().getAsString();
+    if (!isa<CXXConstructorDecl>(functionDecl)) {
+        aInfo.returnType = compat::getReturnType(*functionDecl).getCanonicalType().getAsString();
+    } else {
+        aInfo.returnType = "";
+    }
 
     if (isa<CXXMethodDecl>(functionDecl)) {
         const CXXRecordDecl* recordDecl = dyn_cast<CXXMethodDecl>(functionDecl)->getParent();
@@ -308,6 +315,19 @@ gotfunc:
     return true;
 }
 
+bool UnusedMethods::VisitCXXConstructExpr( const CXXConstructExpr* constructExpr )
+{
+    // Note that I don't ignore ANYTHING here, because I want to get calls to my code that result
+    // from template instantiation deep inside the STL and other external code
+
+    const CXXConstructorDecl* constructorDecl = constructExpr->getConstructor();
+    constructorDecl = constructorDecl->getCanonicalDecl();
+
+    logCallToRootMethods(constructorDecl, callSet);
+
+    return true;
+}
+
 bool UnusedMethods::VisitFunctionDecl( const FunctionDecl* functionDecl )
 {
     functionDecl = functionDecl->getCanonicalDecl();
@@ -325,10 +345,7 @@ bool UnusedMethods::VisitFunctionDecl( const FunctionDecl* functionDecl )
     if (isa<CXXDestructorDecl>(functionDecl)) {
         return true;
     }
-    if (isa<CXXConstructorDecl>(functionDecl)) {
-        return true;
-    }
-    if (functionDecl && functionDecl->isDeleted()) {
+    if (functionDecl->isDeleted() || functionDecl->isDefaulted()) {
         return true;
     }
 

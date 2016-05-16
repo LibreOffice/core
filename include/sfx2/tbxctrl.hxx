@@ -239,53 +239,6 @@ public:
                     Class::CreateImpl, typeid(nItemClass), nSlotId ) ); }
 
 
-class SfxDragButton_Impl : public FixedImage
-{
-public:
-
-                    SfxDragButton_Impl( vcl::Window *pParent );
-    virtual void    Command ( const CommandEvent& rCEvt ) override;
-    virtual void    MouseMove( const MouseEvent& rMEvt ) override;
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
-};
-
-class SfxDragToolBoxControl_Impl : public SfxToolBoxControl
-{
-public:
-                            SfxDragToolBoxControl_Impl( sal_uInt16 nId, ToolBox& rBox );
-    virtual VclPtr<vcl::Window> CreateItemWindow( vcl::Window *pParent ) override;
-    virtual void            Select(sal_uInt16 nSelectModifier) override;
-};
-
-
-class SfxReloadToolBoxControl_Impl : public SfxToolBoxControl
-{
-protected:
-        virtual void Select(sal_uInt16 nSelectModifier ) override;
-
-public:
-        SfxReloadToolBoxControl_Impl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rBox );
-};
-
-class SfxPopupMenuManager;
-class SfxAddonsToolBoxControl_Impl : public SfxToolBoxControl
-
-/*  [Description]
-
-    Internal helper class to provide the addons popup menu through the addons
-    toolbox button.
-*/
-
-{
-protected:
-    virtual void            Click() override;
-    virtual void            Select(sal_uInt16 nSelectModifier) override;
-    virtual void            StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState ) override;
-public:
-                            SfxAddonsToolBoxControl_Impl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rBox );
-                            virtual ~SfxAddonsToolBoxControl_Impl();
-};
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

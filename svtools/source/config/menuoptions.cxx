@@ -69,7 +69,6 @@ class SvtMenuOptions_Impl : public ConfigItem
 
 
     private:
-        ::std::list<Link<LinkParamNone*,void>> aList;
         bool        m_bDontHideDisabledEntries          ;   /// cache "DontHideDisabledEntries" of Menu section
         bool        m_bFollowMouse                      ;   /// cache "FollowMouse" of Menu section
         TriState    m_eMenuIcons                        ;   /// cache "MenuIcons" of Menu section
@@ -86,10 +85,6 @@ class SvtMenuOptions_Impl : public ConfigItem
 
          SvtMenuOptions_Impl();
         virtual ~SvtMenuOptions_Impl();
-
-        void AddListenerLink( const Link<LinkParamNone*,void>& rLink );
-        void RemoveListenerLink( const Link<LinkParamNone*,void>& rLink );
-
 
         //  override methods of baseclass
 
@@ -126,8 +121,6 @@ class SvtMenuOptions_Impl : public ConfigItem
                     {
                         m_eMenuIcons = eState;
                         SetModified();
-                        for ( ::std::list<Link<LinkParamNone*,void>>::const_iterator iter = aList.begin(); iter != aList.end(); ++iter )
-                            iter->Call( nullptr );
                         // tdf#93451: don't Commit() here, it's too early
                     }
 
@@ -281,9 +274,6 @@ void SvtMenuOptions_Impl::Notify( const Sequence< OUString >& seqPropertyNames )
 
     if ( bMenuSettingsChanged )
         m_eMenuIcons = bSystemMenuIcons ? TRISTATE_INDET : static_cast<TriState>(bMenuIcons);
-
-    for ( ::std::list<Link<LinkParamNone*,void>>::const_iterator iter = aList.begin(); iter != aList.end(); ++iter )
-        iter->Call( nullptr );
 }
 
 
@@ -343,17 +333,6 @@ Sequence< OUString > SvtMenuOptions_Impl::impl_GetPropertyNames()
     // ... and return it.
     return seqPropertyNames;
 }
-
-void SvtMenuOptions_Impl::AddListenerLink( const Link<LinkParamNone*,void>& rLink )
-{
-    aList.push_back( rLink );
-}
-
-void SvtMenuOptions_Impl::RemoveListenerLink( const Link<LinkParamNone*,void>& rLink )
-{
-    aList.erase(std::remove(aList.begin(), aList.end(), rLink), aList.end());
-}
-
 
 //  initialize static member
 //  DON'T DO IT IN YOUR HEADER!
@@ -448,16 +427,6 @@ Mutex& SvtMenuOptions::GetOwnStaticMutex()
     }
     // Return new created or already existing mutex object.
     return *pMutex;
-}
-
-void SvtMenuOptions::AddListenerLink( const Link<LinkParamNone*,void>& rLink )
-{
-    m_pDataContainer->AddListenerLink( rLink );
-}
-
-void SvtMenuOptions::RemoveListenerLink( const Link<LinkParamNone*,void>& rLink )
-{
-    m_pDataContainer->RemoveListenerLink( rLink );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

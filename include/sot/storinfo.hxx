@@ -35,7 +35,6 @@ friend class SotStorage;
     bool            bStream;
     bool            bStorage;
 
-                            SvStorageInfo(){}; // Fuer SotStorage
 public:
                             SvStorageInfo( const StgDirEntry& );
                             SvStorageInfo( const OUString& rName, sal_uLong nSz, bool bIsStorage )

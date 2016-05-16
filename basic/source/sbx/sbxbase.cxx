@@ -242,19 +242,6 @@ SbxBase* SbxBase::Load( SvStream& rStrm )
     return p;
 }
 
-// Skip the Sbx-Object inside the stream
-void SbxBase::Skip( SvStream& rStrm )
-{
-    sal_uInt16 nSbxId, nFlags, nVer;
-    sal_uInt32 nCreator, nSize;
-    rStrm.ReadUInt32( nCreator ).ReadUInt16( nSbxId ).ReadUInt16( nFlags ).ReadUInt16( nVer );
-
-    sal_Size nStartPos = rStrm.Tell();
-    rStrm.ReadUInt32( nSize );
-
-    rStrm.Seek( nStartPos + nSize );
-}
-
 bool SbxBase::Store( SvStream& rStrm )
 {
     if( ( nFlags & SbxFlagBits::DontStore ) == SbxFlagBits::NONE )

@@ -82,7 +82,6 @@ class FWI_DLLPUBLIC ItemContainer :   public ::cppu::WeakImplHelper< css::contai
             throw (css::uno::RuntimeException, std::exception) override;
 
     private:
-        ItemContainer();
         void copyItemContainer( const std::vector< css::uno::Sequence< css::beans::PropertyValue > >& rSourceVector, const ShareableMutex& rMutex );
         css::uno::Reference< css::container::XIndexAccess > deepCopyContainer( const css::uno::Reference< css::container::XIndexAccess >& rSubContainer, const ShareableMutex& rMutex );
 

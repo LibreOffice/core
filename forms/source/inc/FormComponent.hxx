@@ -501,12 +501,6 @@ public:
                             const std::vector< css::uno::Any >& _rNewValues,
                             LockAccess
                         );
-    void                firePropertyChanges(
-                            const css::uno::Sequence< sal_Int32 >& _rHandles,
-                            const css::uno::Sequence< css::uno::Any >& _rOldValues,
-                            const css::uno::Sequence< css::uno::Any >& _rNewValues,
-                            LockAccess
-                        );
 
     inline ::osl::Mutex&
                         getInstanceMutex() { return m_aMutex; }

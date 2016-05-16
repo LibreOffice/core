@@ -56,11 +56,6 @@ namespace dbaui
             ,OSQLNameChecker(_rAllowedChars)
         {
         }
-        OSQLNameEdit(vcl::Window* _pParent,const ResId& _rRes,const OUString& _rAllowedChars = OUString())
-            : Edit(_pParent,_rRes)
-            ,OSQLNameChecker(_rAllowedChars)
-        {
-        }
 
         // Window overrides
         //  virtual bool PreNotify( NotifyEvent& rNEvt );
@@ -74,11 +69,6 @@ namespace dbaui
     public:
         OSQLNameComboBox(vcl::Window* _pParent,WinBits nStyle = WB_BORDER, const OUString& _rAllowedChars = OUString())
             : ComboBox(_pParent,nStyle)
-            , OSQLNameChecker(_rAllowedChars)
-        {
-        }
-        OSQLNameComboBox(vcl::Window* _pParent,const ResId& _rRes,const OUString& _rAllowedChars = OUString())
-            : ComboBox(_pParent,_rRes)
             , OSQLNameChecker(_rAllowedChars)
         {
         }

@@ -52,11 +52,6 @@ namespace accessibility
         typedef CppType InterfaceType;
 
         WeakCppRef() : maWeakRef(), maUnsafeRef( nullptr ) {}
-        WeakCppRef( InterfaceType& rImpl ) :
-            maWeakRef( css::uno::Reference< UnoInterfaceType >( rImpl, css::uno::UNO_QUERY ) ),
-            maUnsafeRef( &rImpl )
-        {
-        }
 
         WeakCppRef(rtl::Reference<InterfaceType> const & rImpl):
             maWeakRef(rImpl.get()),
