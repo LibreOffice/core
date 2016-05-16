@@ -539,7 +539,7 @@ void SvpSalGraphics::drawPolyLine(sal_uInt32 nPoints, const SalPoint* pPtAry)
     aPoly.setClosed(false);
 
     drawPolyLine(aPoly, 0.0, basegfx::B2DVector(1.0, 1.0), basegfx::B2DLineJoin::B2DLINEJOIN_MITER,
-                 css::drawing::LineCap_BUTT/*, 15.0 * F_PI180 default*/);
+                 css::drawing::LineCap_BUTT);
 }
 
 void SvpSalGraphics::drawPolygon(sal_uInt32 nPoints, const SalPoint* pPtAry)
@@ -700,8 +700,7 @@ bool SvpSalGraphics::drawPolyLine(
     double fTransparency,
     const basegfx::B2DVector& rLineWidths,
     basegfx::B2DLineJoin eLineJoin,
-    css::drawing::LineCap eLineCap,
-    double fMiterMinimumAngle)
+    css::drawing::LineCap eLineCap)
 {
     // short circuit if there is nothing to do
     const int nPointCount = rPolyLine.count();
@@ -710,7 +709,7 @@ bool SvpSalGraphics::drawPolyLine(
         return true;
     }
 
-    const bool bNoJoin = (basegfx::B2DLineJoin::NONE == eLineJoin && basegfx::fTools::more(rLineWidths.getX(), 0.0));
+    const bool bNoJoin = (basegfx::B2DLINEJOIN_NONE == eLineJoin && basegfx::fTools::more(rLineWidths.getX(), 0.0));
 
     cairo_t* cr = getCairoContext(false);
     clipRegion(cr);
@@ -719,20 +718,17 @@ bool SvpSalGraphics::drawPolyLine(
     cairo_line_join_t eCairoLineJoin = CAIRO_LINE_JOIN_MITER;
     switch (eLineJoin)
     {
-        case basegfx::B2DLineJoin::Bevel:
+        case basegfx::B2DLINEJOIN_BEVEL:
             eCairoLineJoin = CAIRO_LINE_JOIN_BEVEL;
             break;
-        case basegfx::B2DLineJoin::Round:
+        case basegfx::B2DLINEJOIN_ROUND:
             eCairoLineJoin = CAIRO_LINE_JOIN_ROUND;
             break;
-        case basegfx::B2DLineJoin::NONE:
-        case basegfx::B2DLineJoin::Miter:
+        case basegfx::B2DLINEJOIN_NONE:
+        case basegfx::B2DLINEJOIN_MITER:
             eCairoLineJoin = CAIRO_LINE_JOIN_MITER;
             break;
     }
-
-    // convert miter minimum angle to miter limit
-    double fMiterLimit = 1.0 / sin( fMiterMinimumAngle / 2.0);
 
     // setup cap attribute
     cairo_line_cap_t eCairoLineCap(CAIRO_LINE_CAP_BUTT);
@@ -764,7 +760,7 @@ bool SvpSalGraphics::drawPolyLine(
     cairo_set_line_join(cr, eCairoLineJoin);
     cairo_set_line_cap(cr, eCairoLineCap);
     cairo_set_line_width(cr, rLineWidths.getX());
-    cairo_set_miter_limit(cr, fMiterLimit);
+    cairo_set_miter_limit(cr, 15.0);
 
 
     basegfx::B2DRange extents(0, 0, 0, 0);

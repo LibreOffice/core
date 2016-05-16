@@ -39,10 +39,6 @@ public:
         return ClipRectangleList;   }
     void        ResetClipRegion()   {
         numClipRectangles = 0;      }
-    sal_uInt16      GetClipRegionType() {
-        return nClipRegionType;     }
-    void        SetClipRegionType( sal_uInt16 nType ) {
-        nClipRegionType = nType;    }
     int         GetRectangleCount() {
         return numClipRectangles;   }
 
@@ -51,7 +47,6 @@ private:
     XRectangle* ClipRectangleList;
     int         numClipRectangles;
     int         maxClipRectangles;
-    sal_uInt16      nClipRegionType;
 };
 
 class VCLPLUG_GEN_PUBLIC X11SalObject : public SalObject

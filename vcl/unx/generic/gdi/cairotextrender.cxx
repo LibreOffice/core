@@ -77,7 +77,7 @@ bool CairoTextRender::setFont( const FontSelectPattern *pEntry, int nFallbackLev
         return false;
 
     // handle the request for a non-native X11-font => use the GlyphCache
-    ImplServerFontEntry* pServerFont = GlyphCache::GetInstance().CacheFont( *pEntry );
+    ServerFont* pServerFont = GlyphCache::GetInstance().CacheFont( *pEntry );
     if( pServerFont != nullptr )
     {
         // ignore fonts with e.g. corrupted font files
@@ -100,7 +100,7 @@ bool CairoTextRender::setFont( const FontSelectPattern *pEntry, int nFallbackLev
     return false;
 }
 
-ImplFontOptions* GetFCFontOptions( const FontAttributes& rFontAttributes, int nSize);
+ImplFontOptions* GetFCFontOptions( const ImplFontAttributes& rFontAttributes, int nSize);
 
 void ImplServerFontEntry::HandleFontOptions()
 {
@@ -201,7 +201,7 @@ void CairoTextRender::DrawServerFontLayout( const ServerFontLayout& rLayout )
     if (cairo_glyphs.empty())
         return;
 
-    ImplServerFontEntry& rFont = rLayout.GetServerFont();
+    ServerFont& rFont = rLayout.GetServerFont();
     const FontSelectPattern& rFSD = rFont.GetFontSelData();
     int nHeight = rFSD.mnHeight;
     int nWidth = rFSD.mnWidth ? rFSD.mnWidth : nHeight;
@@ -434,7 +434,7 @@ void cairosubcallback(void* pPattern)
     cairo_ft_font_options_substitute(pFontOptions, static_cast<FcPattern*>(pPattern));
 }
 
-FontConfigFontOptions* GetFCFontOptions( const FontAttributes& rFontAttributes, int nSize)
+FontConfigFontOptions* GetFCFontOptions( const ImplFontAttributes& rFontAttributes, int nSize)
 {
     psp::FastPrintFontInfo aInfo;
 
@@ -465,7 +465,7 @@ bool CairoTextRender::GetGlyphBoundRect( sal_GlyphId aGlyphId, Rectangle& rRect 
     if( nLevel >= MAX_FALLBACK )
         return false;
 
-    ImplServerFontEntry* pSF = mpServerFont[ nLevel ];
+    ServerFont* pSF = mpServerFont[ nLevel ];
     if( !pSF )
         return false;
 
@@ -496,7 +496,7 @@ bool CairoTextRender::GetGlyphOutline( sal_GlyphId aGlyphId,
     if( nLevel >= MAX_FALLBACK )
         return false;
 
-    ImplServerFontEntry* pSF = mpServerFont[ nLevel ];
+    ServerFont* pSF = mpServerFont[ nLevel ];
     if( !pSF )
         return false;
 
@@ -539,7 +539,7 @@ SystemFontData CairoTextRender::GetSysFontData( int nFallbackLevel ) const
 
     if (mpServerFont[nFallbackLevel] != nullptr)
     {
-        ImplServerFontEntry* rFont = mpServerFont[nFallbackLevel];
+        ServerFont* rFont = mpServerFont[nFallbackLevel];
         aSysFontData.nFontId = rFont->GetFtFace();
         aSysFontData.nFontFlags = rFont->GetLoadFlags();
         aSysFontData.bFakeBold = rFont->NeedsArtificialBold();

@@ -106,9 +106,9 @@ bool X11SalGraphics::GetFontCapabilities(vcl::FontCapabilities &rGetImplFontCapa
 
 // SalGraphics
 
-sal_uInt16 X11SalGraphics::SetFont( FontSelectPattern *pEntry, int nFallbackLevel )
+void X11SalGraphics::SetFont( FontSelectPattern *pEntry, int nFallbackLevel )
 {
-    return mxTextRenderImpl->SetFont(pEntry, nFallbackLevel);
+    mxTextRenderImpl->SetFont(pEntry, nFallbackLevel);
 }
 
 void
