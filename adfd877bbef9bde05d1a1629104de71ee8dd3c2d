@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_4fb04bf5",
+        "filename": "sw/source/core/unocore/unomap.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 1491,
+      "author": {
+        "id": 1001243
+      },
+      "writtenOn": "2016-05-16T20:38:11Z",
+      "side": 1,
+      "message": "dummy property set ...",
+      "revId": "adfd877bbef9bde05d1a1629104de71ee8dd3c2d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
