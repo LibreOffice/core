@@ -3262,7 +3262,7 @@ bool ScFormulaCell::UpdateReferenceOnMove(
 
     if (bNeedDirty)
     {   // Cut off references, invalid or similar?
-        sc::AutoCalcSwitch(*pDocument, false);
+        sc::AutoCalcSwitch aACSwitch(*pDocument, false);
         SetDirty();
     }
 
@@ -3322,7 +3322,7 @@ bool ScFormulaCell::UpdateReferenceOnCopy(
 
     if (bNeedDirty)
     {   // Cut off references, invalid or similar?
-        sc::AutoCalcSwitch(*pDocument, false);
+        sc::AutoCalcSwitch aACSwitch(*pDocument, false);
         SetDirty();
     }
 
