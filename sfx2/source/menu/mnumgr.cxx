@@ -383,6 +383,8 @@ namespace {
                         continue;
 
                     aItemTree.put("type", "menu");
+                    if (!aCommandURL.isEmpty())
+                        aItemTree.put("command", aCommandURL.toUtf8().getStr());
                     aItemTree.push_back(std::make_pair("menu", aSubmenu));
                 }
                 else
