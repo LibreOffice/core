@@ -33,6 +33,24 @@
       "revId": "df51a2a85abc67552ba9565db545dcc6bdf1bbea",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_8fc17383",
+        "filename": "sw/source/core/unocore/unostyle.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 959,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2016-05-16T11:20:16Z",
+      "side": 1,
+      "message": "When you teach SwStyleNameMapper::getNameFromId()  to handle a range of id for table styles, you could use the existing index translate functions to map things here.\nhttp://opengrok.libreoffice.org/xref/core/sw/source/core/doc/SwStyleNameMapper.cxx#586",
+      "parentUuid": "da7fb54a_0f83a4cd",
+      "revId": "df51a2a85abc67552ba9565db545dcc6bdf1bbea",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
