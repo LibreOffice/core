@@ -992,16 +992,15 @@ void GtkSalMenu::DispatchCommand(const gchar *pCommand)
 void GtkSalMenu::ActivateAllSubmenus(Menu* pMenuBar)
 {
     pMenuBar->HandleMenuActivateEvent(mpVCLMenu);
-    pMenuBar->HandleMenuDeActivateEvent(mpVCLMenu);
     for (GtkSalMenuItem* pSalItem : maItems)
     {
         if ( pSalItem->mpSubMenu != nullptr )
         {
             pSalItem->mpSubMenu->ActivateAllSubmenus(pMenuBar);
-            pSalItem->mpSubMenu->Update();
         }
     }
     Update();
+    pMenuBar->HandleMenuDeActivateEvent(mpVCLMenu);
 }
 
 void GtkSalMenu::Activate(const gchar* pCommand)
