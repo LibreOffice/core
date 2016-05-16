@@ -700,8 +700,22 @@ void SlideSorterViewShell::RemoveSelectionChangeListener (
     mpSlideSorter->GetController().GetSelectionManager()->RemoveSelectionChangeListener(rCallback);
 }
 
+void SlideSorterViewShell::MainViewEndEditAndUnmarkAll()
+{
+    std::shared_ptr<ViewShell> pMainViewShell = GetViewShellBase().GetMainViewShell();
+    DrawViewShell* pDrawViewShell = dynamic_cast<DrawViewShell*>(pMainViewShell.get());
+    SdrView* pView = pDrawViewShell ? pDrawViewShell->GetDrawView() : nullptr;
+    if (pView)
+    {
+        pView->SdrEndTextEdit();
+        pView->UnmarkAll();
+    }
+}
+
 void SlideSorterViewShell::ExecMovePageFirst (SfxRequest& /*rReq*/)
 {
+    MainViewEndEditAndUnmarkAll();
+
     // SdDrawDocument MovePages is based on SdPage IsSelected, so
     // transfer the SlideSorter selection to SdPages (*it)
     std::shared_ptr<SlideSorterViewShell::PageSelection> pSelection ( GetPageSelection() );
@@ -749,6 +763,8 @@ void SlideSorterViewShell::GetStateMovePageFirst (SfxItemSet& rSet)
 
 void SlideSorterViewShell::ExecMovePageUp (SfxRequest& /*rReq*/)
 {
+    MainViewEndEditAndUnmarkAll();
+
     sal_uInt16 firstSelectedPageNo = SAL_MAX_UINT16;
     sal_uInt16 pageNo;
     // SdDrawDocument MovePages is based on SdPage IsSelected, so
@@ -781,6 +797,8 @@ void SlideSorterViewShell::GetStateMovePageUp (SfxItemSet& rSet)
 
 void SlideSorterViewShell::ExecMovePageDown (SfxRequest& /*rReq*/)
 {
+    MainViewEndEditAndUnmarkAll();
+
     sal_uInt16 lastSelectedPageNo = 0;
     sal_uInt16 pageNo;
     // SdDrawDocument MovePages is based on SdPage IsSelected, so
@@ -815,6 +833,8 @@ void SlideSorterViewShell::GetStateMovePageDown (SfxItemSet& rSet)
 
 void SlideSorterViewShell::ExecMovePageLast (SfxRequest& /*rReq*/)
 {
+    MainViewEndEditAndUnmarkAll();
+
     // SdDrawDocument MovePages is based on SdPage IsSelected, so
     // transfer the SlideSorter selection to SdPages (*it)
     std::shared_ptr<SlideSorterViewShell::PageSelection> pSelection ( GetPageSelection() );

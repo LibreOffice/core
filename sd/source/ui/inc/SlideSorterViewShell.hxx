@@ -220,6 +220,8 @@ private:
     virtual void UpdateScrollBars() override;
 
     void PostMoveSlidesActions(const std::shared_ptr<SlideSorterViewShell::PageSelection> &rpSelection);
+
+    void MainViewEndEditAndUnmarkAll();
 };
 
 typedef std::shared_ptr<SlideSorterViewShell::PageSelection> SharedPageSelection;
