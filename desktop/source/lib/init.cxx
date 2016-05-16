@@ -994,27 +994,13 @@ void doc_paintTile(LibreOfficeKitDocument* pThis,
 
     pDoc->paintTile(*pDevice.get(), nCanvasWidth, nCanvasHeight,
                     nTilePosX, nTilePosY, nTileWidth, nTileHeight);
-#elif defined(ANDROID)
-    InitSvpForLibreOfficeKit();
-
-    ScopedVclPtrInstance< VirtualDevice > pDevice(nullptr, Size(1, 1), DeviceFormat::FULLCOLOR) ;
-
-    boost::shared_array<sal_uInt8> aBuffer(pBuffer, NoDelete< sal_uInt8 >());
-
-    pDevice->SetOutputSizePixelScaleOffsetAndBuffer(
-                Size(nCanvasWidth, nCanvasHeight), Fraction(1.0), Point(),
-                aBuffer);
-
-    pDoc->paintTile(*pDevice.get(), nCanvasWidth, nCanvasHeight,
-                    nTilePosX, nTilePosY, nTileWidth, nTileHeight);
 #else
-    InitSvpForLibreOfficeKit();
-
     ScopedVclPtrInstance< VirtualDevice > pDevice(nullptr, Size(1, 1), DeviceFormat::FULLCOLOR) ;
 
+#if !defined(ANDROID)
     // Set background to transparent by default.
-    memset(pBuffer, 0, nCanvasWidth * nCanvasHeight * 4);
     pDevice->SetBackground(Wallpaper(Color(COL_TRANSPARENT)));
+#endif
 
     pDevice->SetOutputSizePixelScaleOffsetAndBuffer(
                 Size(nCanvasWidth, nCanvasHeight), Fraction(1.0), Point(),
@@ -1023,19 +1009,7 @@ void doc_paintTile(LibreOfficeKitDocument* pThis,
     pDoc->paintTile(*pDevice.get(), nCanvasWidth, nCanvasHeight,
                     nTilePosX, nTilePosY, nTileWidth, nTileHeight);
 
-    // Overwrite pBuffer's alpha channel with the separate alpha buffer.
-    for (int nRow = 0; nRow < nCanvasHeight; ++nRow)
-    {
-        for (int nCol = 0; nCol < nCanvasWidth; ++nCol)
-        {
-            const int nOffset = (nCanvasWidth * nRow) + nCol;
-            // VCL's transparent is 0, RGBA's transparent is 0xff.
-            pBuffer[nOffset * 4 +3] = 0xff - aAlpha[nOffset];
-        }
-    }
-#endif
-
-    static bool bDebug = getenv("LOK_DEBUG") != 0;
+    static bool bDebug = getenv("LOK_DEBUG") != nullptr;
     if (bDebug)
     {
         // Draw a small red rectangle in the top left corner so that it's easy to see where a new tile begins.
@@ -1047,6 +1021,7 @@ void doc_paintTile(LibreOfficeKitDocument* pThis,
         pDevice->DrawRect(aRect);
         pDevice->Pop();
     }
+#endif
 
 #else
     (void) pBuffer;
@@ -1719,12 +1694,14 @@ unsigned char* doc_renderFont(LibreOfficeKitDocument* /*pThis*/,
             if (!aSearchedFontName.equals(aFontName.toUtf8().getStr()))
                 continue;
 
-            VirtualDevice aDevice(nullptr, Size(1, 1), 0);
+            auto aDevice(
+                VclPtr<VirtualDevice>::Create(
+                    nullptr, Size(1, 1), DeviceFormat::FULLCOLOR));
             ::Rectangle aRect;
             vcl::Font aFont(rInfo);
             aFont.SetSize(Size(0, 25));
-            aDevice.SetFont(aFont);
-            aDevice.GetTextBoundRect(aRect, aFontName);
+            aDevice->SetFont(aFont);
+            aDevice->GetTextBoundRect(aRect, aFontName);
             int nFontWidth = aRect.BottomRight().X() + 1;
             *pFontWidth = nFontWidth;
             int nFontHeight = aRect.BottomRight().Y() + 1;
@@ -1733,8 +1710,8 @@ unsigned char* doc_renderFont(LibreOfficeKitDocument* /*pThis*/,
             unsigned char* pBuffer = static_cast<unsigned char*>(malloc(4 * nFontWidth * nFontHeight));
             memset(pBuffer, 0, nFontWidth * nFontHeight * 4);
 
-            aDevice.SetBackground(Wallpaper(COL_TRANSPARENT));
-            aDevice.SetOutputSizePixelScaleOffsetAndBuffer(
+            aDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
+            aDevice->SetOutputSizePixelScaleOffsetAndBuffer(
                         Size(nFontWidth, nFontHeight), Fraction(1.0), Point(),
                         pBuffer);
             aDevice->DrawText(Point(0,0), aFontName);
