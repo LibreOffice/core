@@ -44,19 +44,21 @@ bool CommaOperator::VisitBinaryOperator(const BinaryOperator* binaryOp)
         return true;
     }
     const Stmt* parent = parentStmt(binaryOp);
-    if (isa<ParenExpr>(parent)) {
-        return true;
-    }
-    if (isa<BinaryOperator>(parent)) {
-        return true;
-    }
-    if (isa<ForStmt>(parent)) {
-        return true;
-    }
-    if (isa<ExprWithCleanups>(parent)) {
-        const Stmt* parent2 = parentStmt(parent);
-        if (isa<ForStmt>(parent2)) {
+    if (parent != nullptr) {
+        if (isa<ParenExpr>(parent)) {
             return true;
+        }
+        if (isa<BinaryOperator>(parent)) {
+            return true;
+        }
+        if (isa<ForStmt>(parent)) {
+            return true;
+        }
+        if (isa<ExprWithCleanups>(parent)) {
+            const Stmt* parent2 = parentStmt(parent);
+            if (isa<ForStmt>(parent2)) {
+                return true;
+            }
         }
     }
 //    parent->dump();
