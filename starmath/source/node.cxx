@@ -1252,7 +1252,8 @@ void SmSubSupNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     // iterate over all possible sub-/supscripts
     SmRect  aTmpRect (rBodyRect);
     for (int i = 0;  i < SUBSUP_NUM_ENTRIES;  i++)
-    {   SmSubSup  eSubSup = (SmSubSup) i;   // cast
+    {
+        SmSubSup eSubSup = static_cast<SmSubSup>(i);
         SmNode *pSubSup = GetSubSup(eSubSup);
 
         if (!pSubSup)
