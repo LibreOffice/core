@@ -55,7 +55,6 @@ namespace sd { namespace slidesorter { namespace view {
 class LayeredDevice;
 class Layouter;
 class PageObjectPainter;
-class SelectionPainter;
 class ToolTip;
 
 class SlideSorterView
@@ -227,7 +226,6 @@ private:
     Layouter::Orientation meOrientation;
     model::SharedPageDescriptor mpPageUnderMouse;
     std::shared_ptr<PageObjectPainter> mpPageObjectPainter;
-    std::shared_ptr<SelectionPainter> mpSelectionPainter;
     vcl::Region maRedrawRegion;
     SharedILayerPainter mpBackgroundPainter;
     std::unique_ptr<ToolTip> mpToolTip;

@@ -146,7 +146,6 @@ SlideSorterView::SlideSorterView (SlideSorter& rSlideSorter)
       meOrientation(Layouter::GRID),
       mpPageUnderMouse(),
       mpPageObjectPainter(),
-      mpSelectionPainter(),
       mpBackgroundPainter(
           new BackgroundPainter(mrSlideSorter.GetTheme()->GetColor(Theme::Color_Background))),
       mpToolTip(new ToolTip(mrSlideSorter)),
@@ -189,8 +188,6 @@ void SlideSorterView::Init()
 
 void SlideSorterView::Dispose()
 {
-    mpSelectionPainter.reset();
-
     mpLayeredDevice->Dispose();
     mpPreviewCache.reset();
 
