@@ -76,7 +76,7 @@ private:
 class VDataSeriesGroup final
 {
 public:
-    VDataSeriesGroup();
+    VDataSeriesGroup() = delete;
     VDataSeriesGroup( VDataSeries* pSeries );
     ~VDataSeriesGroup();
 

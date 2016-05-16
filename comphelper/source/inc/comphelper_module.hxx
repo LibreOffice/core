@@ -40,18 +40,6 @@ namespace comphelper { namespace module
     };
 
     /* -------------------------------------------------------------------- */
-    class ComphelperModuleClient : public ::comphelper::OModuleClient
-    {
-    private:
-        typedef ::comphelper::OModuleClient BaseClass;
-
-    public:
-        ComphelperModuleClient() : BaseClass( ComphelperModule::getInstance() )
-        {
-        }
-    };
-
-    /* -------------------------------------------------------------------- */
     template < class TYPE >
     class OAutoRegistration : public ::comphelper::OAutoRegistration< TYPE >
     {

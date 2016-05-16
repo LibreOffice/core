@@ -323,18 +323,6 @@ void Tag::writeMatrix( SvStream& rOut, const ::basegfx::B2DHomMatrix& rMatrix ) 
 }
 
 
-void Tag::addString( const char* pString )
-{
-    if( pString )
-    {
-        while( *pString )
-            addUI8( *pString++ );
-    }
-
-    addUI8( 0 );
-}
-
-
 void Tag::addStream( SvStream& rIn )
 {
     (*this).WriteStream( rIn );

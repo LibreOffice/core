@@ -80,7 +80,6 @@ namespace sax
         {
             m_handler->setDocumentLocator(xLocator);
         }
-        DocumentHandlerAdapter(const css::uno::Reference< css::xml::sax::XDocumentHandler >& delegate);
         DocumentHandlerAdapter() :
             m_handler(css::uno::Reference< css::xml::sax::XDocumentHandler > (nullptr, css::uno::UNO_QUERY))
         {
@@ -202,11 +201,6 @@ namespace sax
     protected:
         ExtendedDocumentHandlerAdapter() :
             m_handler(css::uno::Reference< css::xml::sax::XExtendedDocumentHandler > (nullptr, css::uno::UNO_QUERY))
-        {
-        }
-        ExtendedDocumentHandlerAdapter(
-                const css::uno::Reference< css::xml::sax::XExtendedDocumentHandler >& delegate) :
-            m_handler(delegate)
         {
         }
 

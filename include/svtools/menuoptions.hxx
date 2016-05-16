@@ -58,9 +58,6 @@ class SAL_WARN_UNUSED SVT_DLLPUBLIC SvtMenuOptions: public utl::detail::Options
          SvtMenuOptions();
         virtual ~SvtMenuOptions();
 
-        void AddListenerLink( const Link<LinkParamNone*,void>& rLink );
-        void RemoveListenerLink( const Link<LinkParamNone*,void>& rLink );
-
         /*-****************************************************************************************************
             @short      interface methods to get and set value of config key "org.openoffice.Office.Common/View/Menu/..."
             @descr      These options describe internal states to enable/disable features of installed office.

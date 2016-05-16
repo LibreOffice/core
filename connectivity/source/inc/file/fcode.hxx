@@ -141,8 +141,6 @@ namespace connectivity
         class OOperandResult : public OOperandValue
         {
         protected:
-            OOperandResult(const ORowSetValue& _rVar, sal_Int32 eDbType)
-                            :OOperandValue(_rVar, eDbType) {}
             OOperandResult(sal_Int32 eDbType)
                             :OOperandValue(eDbType) {}
         public:

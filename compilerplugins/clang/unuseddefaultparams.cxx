@@ -36,7 +36,8 @@ struct MyFuncInfo
 };
 bool operator < (const MyFuncInfo &lhs, const MyFuncInfo &rhs)
 {
-    return lhs.sourceLocation < rhs.sourceLocation;
+    return std::tie(lhs.returnType, lhs.nameAndParams)
+         < std::tie(rhs.returnType, rhs.nameAndParams);
 }
 
 

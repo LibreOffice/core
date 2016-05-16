@@ -44,7 +44,7 @@ namespace dbaccess
 
     private:
         // no instantiation allowed
-        ResourceManager() { }
+        ResourceManager() = delete;
         ~ResourceManager() { }
 
     protected:

@@ -38,11 +38,6 @@ private:
     SfxControllerItem*  pNext; // to notify next ControllerItem
     SfxBindings*        pBindings;
 
-protected:
-#if defined( DBG_UTIL )
-    SAL_DLLPRIVATE void CheckConfigure_Impl( SfxSlotMode nType );
-#endif
-
 public:
     SfxBindings &       GetBindings() {
                             DBG_ASSERT(pBindings, "no Bindings");
@@ -63,7 +58,6 @@ public:
     void                ReBind();
     bool                IsBound() const;
     void                ClearCache();
-    void                SetBindings(SfxBindings &rBindings) { pBindings = &rBindings; }
 
     SfxControllerItem*  GetItemLink();
     SfxControllerItem*  ChangeItemLink( SfxControllerItem* pNewLink );
@@ -78,8 +72,6 @@ public:
 
     static SfxItemState GetItemState( const SfxPoolItem* pState );
 
-    SAL_DLLPRIVATE bool IsBindable_Impl() const
-                        { return pBindings != nullptr; }
     SAL_DLLPRIVATE void BindInternal_Impl( sal_uInt16 nNewId, SfxBindings* );
 };
 

@@ -381,16 +381,6 @@ private:
     sal_Unicode         nExtraValue;
 
 
-                TextPortion()
-                : pExtraInfos( nullptr )
-                , nLen( 0 )
-                , aOutSz()
-                , nKind( PortionKind::TEXT )
-                , nRightToLeftLevel( 0 )
-                , nExtraValue( 0 )
-                {
-                }
-
 public:
                 TextPortion( sal_Int32 nL )
                 : pExtraInfos( nullptr )

@@ -1234,7 +1234,6 @@ class MSFILTER_DLLPUBLIC PPTTextObj
     ImplPPTTextObj*         mpImplTextObj;
     void                    ImplClear();
 
-                            PPTTextObj(){};
 public:
                             PPTTextObj(
                                 SvStream& rSt,
