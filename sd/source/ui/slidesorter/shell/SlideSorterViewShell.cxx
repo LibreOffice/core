@@ -720,15 +720,12 @@ void SlideSorterViewShell::GetStateMovePageFirst (SfxItemSet& rSet)
     if ( ! IsMainViewShell())
     {
         std::shared_ptr<ViewShell> pMainViewShell = GetViewShellBase().GetMainViewShell();
-        if (pMainViewShell.get() != nullptr && nullptr != dynamic_cast< const DrawViewShell *>( pMainViewShell.get() ))
+        DrawViewShell* pDrawViewShell = dynamic_cast<DrawViewShell*>(pMainViewShell.get());
+        if (pDrawViewShell != nullptr && pDrawViewShell->GetPageKind() == PK_HANDOUT)
         {
-            DrawViewShell* pDrawViewShell = dynamic_cast<DrawViewShell*>(pMainViewShell.get());
-            if (pDrawViewShell != nullptr && pDrawViewShell->GetPageKind() == PK_HANDOUT)
-            {
-                rSet.DisableItem( SID_MOVE_PAGE_FIRST );
-                rSet.DisableItem( SID_MOVE_PAGE_UP );
-                return;
-            }
+            rSet.DisableItem( SID_MOVE_PAGE_FIRST );
+            rSet.DisableItem( SID_MOVE_PAGE_UP );
+            return;
         }
     }
 
@@ -837,15 +834,12 @@ void SlideSorterViewShell::ExecMovePageLast (SfxRequest& /*rReq*/)
 void SlideSorterViewShell::GetStateMovePageLast (SfxItemSet& rSet)
 {
     std::shared_ptr<ViewShell> pMainViewShell = GetViewShellBase().GetMainViewShell();
-    if (pMainViewShell.get() != nullptr && nullptr != dynamic_cast< const DrawViewShell *>( pMainViewShell.get() ))
+    DrawViewShell* pDrawViewShell = dynamic_cast<DrawViewShell*>(pMainViewShell.get());
+    if (pDrawViewShell != nullptr && pDrawViewShell->GetPageKind() == PK_HANDOUT)
     {
-       DrawViewShell* pDrawViewShell = dynamic_cast<DrawViewShell*>(pMainViewShell.get());
-        if (pDrawViewShell != nullptr && pDrawViewShell->GetPageKind() == PK_HANDOUT)
-        {
-            rSet.DisableItem( SID_MOVE_PAGE_LAST );
-            rSet.DisableItem( SID_MOVE_PAGE_DOWN );
-            return;
-        }
+        rSet.DisableItem( SID_MOVE_PAGE_LAST );
+        rSet.DisableItem( SID_MOVE_PAGE_DOWN );
+        return;
     }
 
     sal_uInt16 lastSelectedPageNo = 0;
