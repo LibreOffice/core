@@ -58,6 +58,8 @@
 #include "TextObjectBar.hxx"
 #include "GraphicObjectBar.hxx"
 #include "MediaObjectBar.hxx"
+#include "SlideSorter.hxx"
+#include "SlideSorterViewShell.hxx"
 #include "ViewShellManager.hxx"
 #include "FormShellManager.hxx"
 #include <svx/dialogs.hrc>
@@ -69,6 +71,10 @@
 #include <svl/slstitm.hxx>
 #include <sfx2/request.hxx>
 #include "SpellDialogChildWindow.hxx"
+#include "controller/SlideSorterController.hxx"
+#include "controller/SlsPageSelector.hxx"
+#include "controller/SlsSelectionObserver.hxx"
+#include "view/SlideSorterView.hxx"
 
 #include <basegfx/tools/zoomtools.hxx>
 
@@ -1226,8 +1232,33 @@ void ViewShell::ImpGetRedoStrings(SfxItemSet &rSet) const
     }
 }
 
+class KeepSlideSorterInSyncWithPageChanges
+{
+    sd::slidesorter::view::SlideSorterView::DrawLock m_aDrawLock;
+    sd::slidesorter::controller::SlideSorterController::ModelChangeLock m_aModelLock;
+    sd::slidesorter::controller::PageSelector::UpdateLock m_aUpdateLock;
+    sd::slidesorter::controller::SelectionObserver::Context m_aContext;
+
+public:
+    KeepSlideSorterInSyncWithPageChanges(sd::slidesorter::SlideSorter& rSlideSorter)
+        : m_aDrawLock(rSlideSorter)
+        , m_aModelLock(rSlideSorter.GetController())
+        , m_aUpdateLock(rSlideSorter)
+        , m_aContext(rSlideSorter)
+    {
+    }
+};
+
 void ViewShell::ImpSidUndo(bool, SfxRequest& rReq)
 {
+    //The xWatcher keeps the SlideSorter selection in sync
+    //with the page insertions/deletions that Undo may introduce
+    std::unique_ptr<KeepSlideSorterInSyncWithPageChanges> xWatcher;
+    slidesorter::SlideSorterViewShell* pSlideSorterViewShell
+        = slidesorter::SlideSorterViewShell::GetSlideSorter(GetViewShellBase());
+    if (pSlideSorterViewShell)
+        xWatcher.reset(new KeepSlideSorterInSyncWithPageChanges(pSlideSorterViewShell->GetSlideSorter()));
+
     ::svl::IUndoManager* pUndoManager = ImpGetUndoManager();
     sal_uInt16 nNumber(1);
     const SfxItemSet* pReqArgs = rReq.GetArgs();
@@ -1271,6 +1302,14 @@ void ViewShell::ImpSidUndo(bool, SfxRequest& rReq)
 
 void ViewShell::ImpSidRedo(bool, SfxRequest& rReq)
 {
+    //The xWatcher keeps the SlideSorter selection in sync
+    //with the page insertions/deletions that Undo may introduce
+    std::unique_ptr<KeepSlideSorterInSyncWithPageChanges> xWatcher;
+    slidesorter::SlideSorterViewShell* pSlideSorterViewShell
+        = slidesorter::SlideSorterViewShell::GetSlideSorter(GetViewShellBase());
+    if (pSlideSorterViewShell)
+        xWatcher.reset(new KeepSlideSorterInSyncWithPageChanges(pSlideSorterViewShell->GetSlideSorter()));
+
     ::svl::IUndoManager* pUndoManager = ImpGetUndoManager();
     sal_uInt16 nNumber(1);
     const SfxItemSet* pReqArgs = rReq.GetArgs();

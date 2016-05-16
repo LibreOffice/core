@@ -58,8 +58,7 @@ void SelectionObserver::Context::Abort()
 SelectionObserver::SelectionObserver (SlideSorter& rSlideSorter)
     : mrSlideSorter(rSlideSorter),
       mbIsOvservationActive(false),
-      maInsertedPages(),
-      maDeletedPages()
+      maInsertedPages()
 {
 }
 
@@ -76,24 +75,22 @@ void SelectionObserver::NotifyPageEvent (const SdrPage* pSdrPage)
     if (pPage == nullptr)
         return;
 
+    //NotifyPageEvent is called for add, remove, *and* change position so for
+    //the change position case we must ensure we don't end up with the slide
+    //duplicated in our list
+    std::vector<const SdPage*>::iterator iPage(
+        std::find(maInsertedPages.begin(), maInsertedPages.end(), pPage));
+    if (iPage != maInsertedPages.end())
+        maInsertedPages.erase(iPage);
+
     if (pPage->IsInserted())
         maInsertedPages.push_back(pPage);
-    else
-    {
-        ::std::vector<const SdPage*>::iterator iPage(
-            ::std::find(maInsertedPages.begin(), maInsertedPages.end(), pPage));
-        if (iPage != maInsertedPages.end())
-            maInsertedPages.erase(iPage);
-
-        maDeletedPages.push_back(pPage->GetPageNum());
-    }
 }
 
 void SelectionObserver::StartObservation()
 {
     OSL_ASSERT(!mbIsOvservationActive);
     maInsertedPages.clear();
-    maDeletedPages.clear();
     mbIsOvservationActive = true;
 }
 
@@ -102,7 +99,6 @@ void SelectionObserver::AbortObservation()
     OSL_ASSERT(mbIsOvservationActive);
     mbIsOvservationActive = false;
     maInsertedPages.clear();
-    maDeletedPages.clear();
 }
 
 void SelectionObserver::EndObservation()
@@ -126,7 +122,6 @@ void SelectionObserver::EndObservation()
         }
         maInsertedPages.clear();
     }
-    maDeletedPages.clear();
 
     aUpdateLock.Release();
     mrSlideSorter.GetController().GetFocusManager().SetFocusedPageToCurrentPage();
