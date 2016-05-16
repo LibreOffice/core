@@ -410,8 +410,8 @@ void CairoTextRender::GetDevFontList( PhysicalFontCollection* pFontCollection )
         int nFaceNum = rMgr.getFontFaceNumber( aInfo.m_nID );
 
         // inform GlyphCache about this font provided by the PsPrint subsystem
-        ImplFontAttributes aDFA = GenPspGraphics::Info2FontAttributes( aInfo );
-        aDFA.IncreaseQualityBy( 4096 );
+        ImplDevFontAttributes aDFA = GenPspGraphics::Info2DevFontAttributes( aInfo );
+        aDFA.mnQuality += 4096;
         const OString& rFileName = rMgr.getFontFileSysPath( aInfo.m_nID );
         rGC.AddFontFile( rFileName, nFaceNum, aInfo.m_nID, aDFA );
    }
@@ -434,12 +434,12 @@ void cairosubcallback(void* pPattern)
     cairo_ft_font_options_substitute(pFontOptions, static_cast<FcPattern*>(pPattern));
 }
 
-FontConfigFontOptions* GetFCFontOptions( const ImplFontAttributes& rFontAttributes, int nSize)
+ImplFontOptions* GetFCFontOptions( const ImplFontAttributes& rFontAttributes, int nSize)
 {
     psp::FastPrintFontInfo aInfo;
 
     aInfo.m_aFamilyName = rFontAttributes.GetFamilyName();
-    aInfo.m_eItalic = rFontAttributes.GetItalic();
+    aInfo.m_eItalic = rFontAttributes.GetSlant();
     aInfo.m_eWeight = rFontAttributes.GetWeight();
     aInfo.m_eWidth = rFontAttributes.GetWidthType();
 
@@ -447,7 +447,7 @@ FontConfigFontOptions* GetFCFontOptions( const ImplFontAttributes& rFontAttribut
 }
 
 void
-CairoTextRender::GetFontMetric( ImplFontMetricDataPtr& rxFontMetric, int nFallbackLevel )
+CairoTextRender::GetFontMetric( ImplFontMetricData* rxFontMetric, int nFallbackLevel )
 {
     if( nFallbackLevel >= MAX_FALLBACK )
         return;
@@ -455,7 +455,7 @@ CairoTextRender::GetFontMetric( ImplFontMetricDataPtr& rxFontMetric, int nFallba
     if( mpServerFont[nFallbackLevel] != nullptr )
     {
         long rDummyFactor;
-        mpServerFont[nFallbackLevel]->GetFontMetric( rxFontMetric, rDummyFactor );
+        mpServerFont[nFallbackLevel]->FetchFontMetric( *rxFontMetric, rDummyFactor );
     }
 }
 

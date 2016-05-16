@@ -24,20 +24,28 @@
 #include <rtl/instance.hxx>
 #include <tools/debug.hxx>
 
-#include "unx/geninst.h"
-#include "unx/glyphcache.hxx"
+#include "generic/geninst.h"
+#include "generic/glyphcache.hxx"
 #include "headless/svpgdi.hxx"
+
+class SvpGlyphPeer : public GlyphCachePeer
+{
+public:
+    SvpGlyphPeer() {}
+};
 
 namespace
 {
     struct GlyphCacheHolder
     {
     private:
+        SvpGlyphPeer* m_pSvpGlyphPeer;
         GlyphCache* m_pSvpGlyphCache;
     public:
         GlyphCacheHolder()
         {
-            m_pSvpGlyphCache = new GlyphCache;
+            m_pSvpGlyphPeer = new SvpGlyphPeer();
+            m_pSvpGlyphCache = new GlyphCache( *m_pSvpGlyphPeer );
         }
         GlyphCache& getGlyphCache()
         {
@@ -46,6 +54,7 @@ namespace
         ~GlyphCacheHolder()
         {
             delete m_pSvpGlyphCache;
+            delete m_pSvpGlyphPeer;
         }
     };
 
