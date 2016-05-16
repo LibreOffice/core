@@ -2171,7 +2171,7 @@ class UpdateRefOnNonCopy : std::unary_function<sc::FormulaGroupEntry, void>
 
         if (aRes.mbReferenceModified || aRes.mbNameModified || bRecalcOnMove)
         {
-            sc::AutoCalcSwitch(mpCxt->mrDoc, false);
+            sc::AutoCalcSwitch aACSwitch(mpCxt->mrDoc, false);
 
             if (aRes.mbNameModified)
                 recompileTokenArray(*pTop);
