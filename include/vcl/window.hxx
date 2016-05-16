@@ -1359,9 +1359,9 @@ public:
     virtual void queue_resize(StateChangedType eReason = StateChangedType::Layout);
 
     /*
-     * Sets the "width-request" property
+     * Sets the "height-request" property
      *
-     * Override for width request of the widget, or -1 if natural request
+     * Override for height request of the widget, or -1 if natural request
      * should be used.
      *
      * @see get_preferred_size, set_width_request
@@ -1370,9 +1370,9 @@ public:
     sal_Int32 get_height_request() const;
 
     /*
-     * Sets the "height-request" property
+     * Sets the "width-request" property
      *
-     * Override for height request of the widget, or -1 if natural request
+     * Override for width request of the widget, or -1 if natural request
      * should be used.
      *
      * @see get_preferred_size, set_height_request
