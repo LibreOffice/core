@@ -232,7 +232,7 @@ namespace accessibility
 
     void SAL_CALL AccessibleListBoxEntry::disposing()
     {
-        SolarMutexGuard();
+        SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
 
         Reference< XAccessible > xKeepAlive( this );
