@@ -217,7 +217,7 @@
       </node>
       <node oor:name=".uno:SelectTables" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Go to Sheet...</value>
+          <value xml:lang="en-US">~Select Sheets...</value>
         </prop>
       </node>
       <node oor:name=".uno:TableEvents" oor:op="replace">
