@@ -1112,7 +1112,7 @@ Public Function OpenDatabase ( _
 				
 &apos;	Return a database object based on input arguments:
 &apos;	Call template:
-&apos;		Call OpenConnection(&quot;... databaseURL ...&quot;[, &quot;&quot;, &quot;&quot;, True/False])
+&apos;		Call OpenDatabase(&quot;... databaseURL ...&quot;[, &quot;&quot;, &quot;&quot;, True/False])
 &apos;	pvDatabaseURL maby be the name of a registered database or the URL of the targeted .odb file
 &apos;	Might be called from any AOO/LibO application, independently from OpenConnection
 
@@ -1120,7 +1120,10 @@ Dim odbDatabase As Variant, oBaseContext As Object, sDbNames() As String, oBaseS
 Dim i As Integer, bFound As Boolean
 Dim sDatabaseURL As String
 
-	If IsEmpty(_A2B_) Then Call Application._RootInit()	&apos;	First use of Access2Base in current AOO/LibO session
+	If IsEmpty(_A2B_) Then					&apos;	First use of Access2Base in current AOO/LibO session
+		Call Application._RootInit()
+		TraceLog(TRACEANY, Utils._GetProductName() &amp; &quot; - &quot; &amp; Application.ProductCode(), False)
+	End If
 	Set OpenDatabase = Nothing
 	
 	If _ErrorHandler() Then On Local Error Goto Error_Function
@@ -1173,7 +1176,6 @@ Const cstThisSub = &quot;OpenDatabase&quot;
 
 	Set OpenDatabase = odbDatabase
 	
-	TraceLog(TRACEANY, Utils._GetProductName() &amp; &quot; - &quot; &amp; Application.ProductCode(), False)
 	TraceLog(TRACEANY, odbDatabase.MetaData.getDatabaseProductName() &amp; &quot; &quot; &amp; odbDatabase.MetaData.getDatabaseProductVersion, False)
 	TraceLog(TRACEANY, UCase(cstThisSub) &amp; &quot; &quot; &amp; odbDatabase.URL, False)
 	

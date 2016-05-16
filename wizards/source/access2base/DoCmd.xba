@@ -181,7 +181,7 @@ Error_NotApplicable:
 End Function	&apos;	(m)Close	V1.1.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
-Public Function CopyObject(ByVal Optional pvDestinationDatabase As Variant _
+Public Function CopyObject(ByVal Optional pvSourceDatabase As Variant _
 							, ByVal Optional pvNewName As Variant _
 							, ByVal Optional pvSourceType As Variant _
 							, ByVal Optional pvSourceName As Variant _
@@ -192,8 +192,8 @@ Const cstThisSub = &quot;CopyObject&quot;
 	Utils._SetCalledSub(cstThisSub)
 	CopyObject = False
 
-	If IsMissing(pvDestinationDatabase) Then pvDestinationDatabase = &quot;&quot;
-	If Not Utils._CheckArgument(pvDestinationDatabase, 1, vbString, &quot;&quot;) Then Goto Exit_Function
+	If IsMissing(pvSourceDatabase) Then pvSourceDatabase = &quot;&quot;
+	If Not Utils._CheckArgument(pvSourceDatabase, 1, vbString, &quot;&quot;) Then Goto Exit_Function
 	If IsMissing(pvNewName) Then Call _TraceArguments()
 	If Not Utils._CheckArgument(pvNewName, 2, vbString) Then Goto Exit_Function
 	If IsMissing(pvSourceType) Then Call _TraceArguments()
@@ -202,19 +202,26 @@ Const cstThisSub = &quot;CopyObject&quot;
 	If IsMissing(pvSourceName) Then Call _TraceArguments()
 	If Not Utils._CheckArgument(pvSourceName, 2, vbString) Then Goto Exit_Function
 	
-Dim oSource As Object, oTarget As Object, oDatabase As Object
+Dim oSource As Object, oSourceDatabase As Object, oTarget As Object, oDatabase As Object
 Dim oSourceTable As Object, oSourceColumns As Object, oSourceCol As Object, oTargetCol As Object
 Dim oSourceKeys As Object, oSourceKey As Object, oTargetKey As Object
 Dim i As Integer, j As Integer, sSql As String, vPrimaryKeys() As Variant
+Dim vNameComponents() As Variant, iNames As Integer, sSurround As String
 
 	Set oDatabase = Application._CurrentDb()
+	If pvSourceDatabase = &quot;&quot; Then
+		Set oSourceDatabase = oDatabase
+	Else
+		Set oSourceDatabase = Application.OpenDatabase(ConvertToUrl(pvSourceDatabase), &quot;&quot;, &quot;&quot;, True)
+		If IsNull(oSourceDatabase) Then Goto Exit_Function
+	End If
 	
 	With oDatabase
 		If ._DbConnect &lt;&gt; DBCONNECTBASE Then Goto Error_NotApplicable
 		Select Case pvSourceType
 
 			Case acQuery
-				Set oSource = .QueryDefs(pvSourceName, True)
+				Set oSource = oSourceDatabase.QueryDefs(pvSourceName, True)
 				If IsNull(oSource) Then Goto Error_NotFound
 				Set oTarget = .QueryDefs(pvNewName, True)
 				If Not IsNull(oTarget) Then .Connection.getQueries.dropByName(oTarget.Name)		&apos;	a query with same name exists already ... drop it
@@ -227,7 +234,7 @@ Dim i As Integer, j As Integer, sSql As String, vPrimaryKeys() As Variant
 				.Document.store()
 
 			Case acTable
-				Set oSource = .TableDefs(pvSourceName, True)
+				Set oSource = oSourceDatabase.TableDefs(pvSourceName, True)
 				If IsNull(oSource) Then Goto Error_NotFound
 				Set oTarget = .TableDefs(pvNewName, True)
 				If Not IsNull(oTarget) Then .Connection.getTables.dropByName(oTarget.Name)		&apos;	a table with same name exists already ... drop it
@@ -235,7 +242,11 @@ Dim i As Integer, j As Integer, sSql As String, vPrimaryKeys() As Variant
 				Set oSourceTable = oSource.Table
 				Set oTarget = .Connection.getTables.createDataDescriptor
 				oTarget.Description = oSourceTable.Description
-				oTarget.Name = pvNewName
+				vNameComponents = Split(pvNewName, &quot;.&quot;)
+				iNames = UBound(vNameComponents)
+				If iNames &gt;= 2 Then oTarget.CatalogName = vNameComponents(iNames - 2) Else oTarget.CatalogName = &quot;&quot;
+				If iNames &gt;= 1 Then oTarget.SchemaName = vNameComponents(iNames - 1) Else oTarget.SchemaName = &quot;&quot;
+				oTarget.Name = vNameComponents(iNames)
 				oTarget.Type = oSourceTable.Type
 				Set oSourceColumns = oSourceTable.Columns
 				Set oTargetCol = oTarget.Columns.createDataDescriptor
@@ -286,7 +297,8 @@ Dim i As Integer, j As Integer, sSql As String, vPrimaryKeys() As Variant
 				&apos;	Duplicate table whole design
 				.Connection.getTables.appendByDescriptor(oTarget)
 				&apos;	Copy data
-				sSql = &quot;INSERT INTO [&quot; &amp; pvNewName &amp; &quot;] SELECT [&quot; &amp; oSource.Name &amp; &quot;].* FROM [&quot; &amp; oSource.Name &amp; &quot;]&quot;
+				sSurround = Utils._Surround(oSource.Name)
+				sSql = &quot;INSERT INTO &quot; &amp; Utils._Surround(pvNewName) &amp; &quot; SELECT &quot; &amp; sSurround &amp; &quot;.* FROM &quot; &amp; sSurround
 				DoCmd.RunSQL(sSql, dbSQLPassthrough)
 				
 			Case Else
@@ -296,6 +308,9 @@ Dim i As Integer, j As Integer, sSql As String, vPrimaryKeys() As Variant
 	CopyObject = True
 	
 Exit_Function:
+	If pvSourceDatabase &lt;&gt; &quot;&quot; Then			&apos;	Avoid closing the current database
+		If Not IsNull(oSourceDatabase) Then oSourceDatabase.mClose()
+	End If
 	Utils._ResetCalledSub(cstThisSub)
 	Set oSourceCol = Nothing
 	Set oSourceKey = Nothing
@@ -390,26 +405,30 @@ Dim vFindValue As Variant, oFindrecord As Object
 						Case vbDate, vbInteger, vbLong, vbSingle, vbDouble, vbCurrency, vbBigint, vbDecimal
 							bFound = ( .FindWhat = vFindValue )
 						Case vbString
-							Select Case .Match
-								Case acStart
-									If .MatchCase Then
-										bFound = ( Left(.FindWhat, Len(.FindWhat)) = vFindValue )
-									Else
-										bFound = ( UCase(Left(.FindWhat, Len(.FindWhat))) = UCase(vFindValue) )
-									End If
-								Case acAnyWhere
-									If .MatchCase Then
-										bFound = ( InStr(1, vFindValue, .FindWhat, 0) &gt; 0 )
-									Else
-										bFound = ( InStr(vFindValue, .FindWhat) &gt; 0 )
-									End If	
-								Case acEntire
-									If .MatchCase Then
-										bFound = ( .FindWhat = vFindValue )
-									Else
-										bFound = ( UCase(.FindWhat) = UCase(vFindValue) )
-									End If
-							End Select
+							If VarType(vFindValue) = vbString Then
+								Select Case .Match
+									Case acStart
+										If .MatchCase Then
+											bFound = ( Left(.FindWhat, Len(.FindWhat)) = vFindValue )
+										Else
+											bFound = ( UCase(Left(.FindWhat, Len(.FindWhat))) = UCase(vFindValue) )
+										End If
+									Case acAnyWhere
+										If .MatchCase Then
+											bFound = ( InStr(1, vFindValue, .FindWhat, 0) &gt; 0 )
+										Else
+											bFound = ( InStr(vFindValue, .FindWhat) &gt; 0 )
+										End If	
+									Case acEntire
+										If .MatchCase Then
+											bFound = ( .FindWhat = vFindValue )
+										Else
+											bFound = ( UCase(.FindWhat) = UCase(vFindValue) )
+										End If
+								End Select
+							Else
+								bFound = False
+							End If
 					End Select
 					If bFound Then
 						.LastColumn = i

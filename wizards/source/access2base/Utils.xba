@@ -615,7 +615,7 @@ Dim lChar As Long, sByte1 As String, sByte2 As String, sByte3 As String
 			_PercentEncode = psChar
 		Case Asc(&quot;-&quot;), Asc(&quot;.&quot;), Asc(&quot;_&quot;), Asc(&quot;~&quot;)
 			_PercentEncode = psChar
-		Case Asc(&quot;!&quot;), Asc(&quot;$&quot;), Asc(&quot;&amp;&quot;), Asc(&quot;&apos;&quot;), Asc(&quot;(&quot;), Asc(&quot;)&quot;), Asc(&quot;*&quot;), Asc(&quot;+&quot;), Asc(&quot;,&quot;), Asc(&quot;;&quot;), Asc(&quot;=&quot;)	&apos;	Reserved characters used as delimiters in query strings
+		Case Asc(&quot;!&quot;), Asc(&quot;$&quot;), Asc(&quot;&amp;&quot;), Asc(&quot;&apos;&quot;), Asc(&quot;(&quot;), Asc(&quot;)&quot;), Asc(&quot;*&quot;), Asc(&quot;+&quot;), Asc(&quot;,&quot;), Asc(&quot;;&quot;), Asc(&quot;=&quot;)	&apos;	Reserved characters used as delimitors in query strings
 			_PercentEncode = psChar
 		Case Asc(&quot; &quot;), Asc(&quot;%&quot;)
 			_PercentEncode = &quot;%&quot; &amp; Right(&quot;00&quot; &amp; Hex(lChar), 2)
@@ -722,13 +722,22 @@ End Sub			&apos;	SetCalledSub
 REM -----------------------------------------------------------------------------------------------------------------------
 Public Function _Surround(ByVal psName As String) As String
 &apos; Return [Name] if Name contains spaces
+&apos; Return [Name1].[Name2].[Name3] if Name1.Name2.Name3 contains dots
+
 Const cstSquareOpen = &quot;[&quot;
 Const cstSquareClose = &quot;]&quot;
-	If InStr(psName, &quot; &quot;) &gt; 0 Then
+Const cstDot = &quot;.&quot;
+Dim sName As String
+
+	If InStr(psName, &quot;.&quot;) &gt; 0 Then
+		sName = Join(Split(psName, cstDot), cstSquareClose &amp; cstDot &amp; cstSquareOpen
+		_Surround = cstSquareOpen &amp; sName &amp; cstSquareClose
+	ElseIf InStr(psName, &quot; &quot;) &gt; 0 Then
 		_Surround = cstSquareOpen &amp; psName &amp; cstSquareClose
 	Else
 		_Surround = psName
 	End If
+
 End Function	&apos;	Surround
 
 REM -----------------------------------------------------------------------------------------------------------------------
