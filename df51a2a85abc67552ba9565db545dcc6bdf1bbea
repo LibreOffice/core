@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "da7fb54a_2fca27a2",
+        "filename": "sw/source/core/unocore/unostyle.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 451,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2016-05-16T11:05:44Z",
+      "side": 1,
+      "message": "You shouldnt need a special case here: If you have the entry in our_pStyleFamilyEntries, SwXStyleFamilies::getByIndex in line 507- 509:\n\n auto\u0026 rxFamily \u003d m_vFamilies[eFamily];\n ...\n rxFamily \u003d new XStyleFamily(m_pDocShell, eFamily);\n\ncreates the entry as a new XStyleFamily. Inserting a XTableStyleFamily instead of a XStyleFamily here likely will cause trouble down the road anyway.\n\nXStyleFamily finds Styles with the help of the SwStyleNameMapper (see e.g. XStyleFamily::getByIndex()). It does so for _all_ existing styles (char, para, page, frame, num), and it should do the same for the new table stuff.\n\nSo instead of creating a new XTableStyleFamily, AFAICS you should extend the SwStyleNameMapper able to find table styles, at which point the existing XStyleFamily should need much of a change at all to expose this via UNO.",
+      "revId": "df51a2a85abc67552ba9565db545dcc6bdf1bbea",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da7fb54a_0f83a4cd",
         "filename": "sw/source/core/unocore/unostyle.cxx",
         "patchSetId": 8
