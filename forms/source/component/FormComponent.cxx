@@ -296,7 +296,7 @@ Reference<XWindowPeer> SAL_CALL OControl::getPeer() throw ( RuntimeException, st
 sal_Bool SAL_CALL OControl::setModel(const Reference<XControlModel>& Model) throw ( RuntimeException, std::exception)
 {
     if ( !m_xControl.is() )
-        return sal_False;
+        return false;
 
     bool bSuccess = m_xControl->setModel( Model );
     impl_resetStateGuard_nothrow();
@@ -1120,7 +1120,7 @@ void OControlModel::firePropertyChanges( const Sequence< sal_Int32 >& _rHandles,
         _rNewValues.getConstArray(),
         _rOldValues.getConstArray(),
         _rHandles.getLength(),
-        sal_False
+        false
     );
 }
 
@@ -1878,13 +1878,13 @@ sal_Bool SAL_CALL OBoundControlModel::commit() throw(RuntimeException, std::exce
             // but for those derivees which did not use this feature, we need an
             // explicit transfer
             transferControlValueToExternal( aLock );
-        return sal_True;
+        return true;
     }
 
     OSL_ENSURE( !hasExternalValueBinding(), "OBoundControlModel::commit: control flow broken!" );
         // we reach this only if we're not working with an external binding
     if ( !hasField() )
-        return sal_True;
+        return true;
     ::cppu::OInterfaceIteratorHelper aIter( m_aUpdateListeners );
     EventObject aEvent;
     aEvent.Source = static_cast< XWeak* >( this );
@@ -2334,7 +2334,7 @@ void OBoundControlModel::reset() throw (RuntimeException, std::exception)
         {
             if ( bIsNewRecord )
             {
-                // reset the control to it's default
+                // reset the control to its default
                 resetNoBroadcast();
                 // and immediately commit the changes to the DB column, to keep consistency
                 commitControlValueToDbColumn( true );

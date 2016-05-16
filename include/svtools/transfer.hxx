@@ -116,10 +116,6 @@ struct ExecuteDropEvent
     const css::datatransfer::dnd::DropTargetDropEvent               maDropEvent;
     bool                                                            mbDefault;
 
-    ExecuteDropEvent() :
-        mnAction( DND_ACTION_NONE ),
-        mbDefault( false ) {}
-
     ExecuteDropEvent( sal_Int8 nAction,
                       const Point& rPosPixel,
                       const css::datatransfer::dnd::DropTargetDropEvent& rDropEvent ) :

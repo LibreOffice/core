@@ -36,12 +36,6 @@
 
 #define CONTENT_TYPE_NOT_INIT ( (INetContentType)-1 )
 
-CntContentTypeItem::CntContentTypeItem()
-: CntUnencodedStringItem(),
-  _eType( CONTENT_TYPE_NOT_INIT )
-{
-}
-
 CntContentTypeItem::CntContentTypeItem( sal_uInt16 which, const OUString& rType )
 : CntUnencodedStringItem( which, rType ),
   _eType( CONTENT_TYPE_NOT_INIT )

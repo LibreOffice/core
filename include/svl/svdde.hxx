@@ -32,7 +32,6 @@ class DdeConnection;
 class DdeTransaction;
 class DdeLink;
 class DdeRequest;
-class DdeWarmLink;
 class DdeHotLink;
 class DdePoke;
 class DdeExecute;
@@ -47,9 +46,6 @@ struct Conversation;
 typedef ::std::vector< DdeService* > DdeServices;
 typedef ::std::vector< long > DdeFormats;
 typedef ::std::vector< Conversation* > ConvList;
-
-
-// - DdeData -
 
 
 class SVL_DLLPUBLIC DdeData
@@ -81,9 +77,6 @@ public:
     static sal_uLong GetExternalFormat(SotClipboardFormatId nFmt);
     static SotClipboardFormatId GetInternalFormat(sal_uLong nFmt);
 };
-
-
-// - DdeTransaction -
 
 
 class SVL_DLLPUBLIC DdeTransaction
@@ -133,9 +126,6 @@ private:
 };
 
 
-// - DdeLink -
-
-
 class SVL_DLLPUBLIC DdeLink : public DdeTransaction
 {
     Link<void*,void> aNotify;
@@ -150,17 +140,11 @@ public:
 };
 
 
-// - DdeWarmLink -
-
-
 class SVL_DLLPUBLIC DdeWarmLink : public DdeLink
 {
 public:
             DdeWarmLink( DdeConnection&, const OUString&, long = 0 );
 };
-
-
-// - DdeHotLink -
 
 
 class SVL_DLLPUBLIC DdeHotLink : public DdeLink
@@ -170,9 +154,6 @@ public:
 };
 
 
-// - DdeRequest -
-
-
 class SVL_DLLPUBLIC DdeRequest : public DdeTransaction
 {
 public:
@@ -180,20 +161,11 @@ public:
 };
 
 
-// - DdePoke -
-
-
 class SVL_DLLPUBLIC DdePoke : public DdeTransaction
 {
 public:
-            DdePoke( DdeConnection&, const OUString&, const char*, long,
-                     SotClipboardFormatId = SotClipboardFormatId::STRING, long = 0 );
             DdePoke( DdeConnection&, const OUString&, SAL_UNUSED_PARAMETER const DdeData&, long = 0 );
-            DdePoke( DdeConnection&, const OUString&, const OUString&, long = 0 );
 };
-
-
-// - DdeExecute -
 
 
 class SVL_DLLPUBLIC DdeExecute : public DdeTransaction
@@ -201,9 +173,6 @@ class SVL_DLLPUBLIC DdeExecute : public DdeTransaction
 public:
             DdeExecute( DdeConnection&, const OUString&, long = 0 );
 };
-
-
-// - DdeConnection -
 
 
 class SVL_DLLPUBLIC DdeConnection
@@ -235,9 +204,6 @@ private:
 };
 
 
-// - DdeItem -
-
-
 class SVL_DLLPUBLIC DdeItem
 {
     friend class    DdeInternal;
@@ -264,9 +230,6 @@ public:
 };
 
 
-// - DdeItem -
-
-
 class SVL_DLLPUBLIC DdeGetPutItem : public DdeItem
 {
 public:
@@ -278,9 +241,6 @@ public:
     virtual bool    Put( const DdeData* );
     virtual void    AdviseLoop( bool );     // Start / Stop AdviseLoop
 };
-
-
-// - DdeTopic -
 
 
 class SVL_DLLPUBLIC DdeTopic
@@ -328,9 +288,6 @@ private:
                     DdeTopic( const DdeTopic& ) = delete;
     const DdeTopic& operator= ( const DdeTopic& ) = delete;
 };
-
-
-// - DdeService -
 
 
 class SVL_DLLPUBLIC DdeService
@@ -383,9 +340,6 @@ private:
       //              DdeService( const DdeService& );
     //int             operator= ( const DdeService& );
 };
-
-
-// - DdeTransaction -
 
 
 inline long DdeTransaction::GetError()

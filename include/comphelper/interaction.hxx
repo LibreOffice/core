@@ -90,10 +90,6 @@ namespace comphelper
     class COMPHELPER_DLLPUBLIC OInteractionPassword : public OInteraction< css::task::XInteractionPassword >
     {
     public:
-        OInteractionPassword()
-        {
-        }
-
         OInteractionPassword( const OUString& _rInitialPassword )
             :m_sPassword( _rInitialPassword )
         {

@@ -63,7 +63,7 @@ namespace basctl
         SignatureState getScriptingSignatureState() const;
 
     private:
-        DocumentSignature();        // not implemented
+        DocumentSignature() = delete;
 
     private:
         struct Impl;

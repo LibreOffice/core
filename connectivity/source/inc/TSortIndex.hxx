@@ -108,9 +108,6 @@ namespace connectivity
         OKeySet()
             : ORefVector<sal_Int32>()
             , m_bFrozen(false){}
-        OKeySet(Vector::size_type _nSize)
-            : ORefVector<sal_Int32>(_nSize)
-            , m_bFrozen(false){}
 
         bool    isFrozen() const                        { return m_bFrozen; }
         void        setFrozen(bool _bFrozen=true)   { m_bFrozen = _bFrozen; }

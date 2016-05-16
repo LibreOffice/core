@@ -61,7 +61,6 @@ protected:
 public:
                                     SvtURLBox( vcl::Window* pParent, INetProtocol eSmart = INetProtocol::NotValid, bool bSetDefaultHelpID = true );
                                     SvtURLBox( vcl::Window* pParent, WinBits _nStyle, INetProtocol eSmart = INetProtocol::NotValid, bool bSetDefaultHelpID = true );
-                                    SvtURLBox( vcl::Window* pParent, const ResId& _rResId, INetProtocol eSmart = INetProtocol::NotValid, bool bSetDefaultHelpID = true );
                                     virtual ~SvtURLBox();
     virtual void                    dispose() override;
 

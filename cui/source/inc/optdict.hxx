@@ -82,8 +82,6 @@ class SvxDictEdit : public Edit
     bool                     bSpaces;
 
     public:
-                    SvxDictEdit(vcl::Window* pParent, const ResId& rResId) :
-                        Edit(pParent, rResId), bSpaces(false){}
                     SvxDictEdit(vcl::Window* pParent, WinBits aWB) :
                         Edit(pParent, aWB), bSpaces(false){}
 

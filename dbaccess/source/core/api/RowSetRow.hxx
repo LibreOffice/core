@@ -38,7 +38,6 @@ namespace dbaccess
         ORowSetOldRowHelper& operator=(const ORowSetOldRowHelper& _rRH) = delete;
         ORowSetOldRowHelper(const ORowSetOldRowHelper& _rRh) = delete;
     public:
-        ORowSetOldRowHelper(){}
         explicit ORowSetOldRowHelper(const ORowSetRow& _rRow)
             : m_aRow(_rRow)
         {}

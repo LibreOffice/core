@@ -207,10 +207,6 @@ public:
         css::uno::Sequence<css::uno::Any> const& args,
         css::uno::Reference<css::uno::XComponentContext> const& xContext )
         : ServiceImpl_BASE(rServiceDecl, args, xContext) {}
-    InheritingServiceImpl(
-        ServiceDecl const& rServiceDecl,
-        css::uno::Reference<css::uno::XComponentContext> const& xContext )
-        : ServiceImpl_BASE(rServiceDecl, xContext) {}
 };
 
 template <typename ServiceImplT>

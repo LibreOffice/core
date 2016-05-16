@@ -52,6 +52,23 @@ namespace drawinglayer { namespace primitive3d {
     typedef cppu::WeakComponentImplHelper1< css::graphic::XPrimitive3D > BasePrimitive3DImplBase;
     typedef css::uno::Reference< css::graphic::XPrimitive3D > Primitive3DReference;
     typedef css::uno::Sequence< Primitive3DReference > Primitive3DSequence;
+
+    class SAL_WARN_UNUSED DRAWINGLAYER_DLLPUBLIC Primitive3DContainer : public std::vector< Primitive3DReference >
+    {
+    public:
+        explicit Primitive3DContainer() {}
+        explicit Primitive3DContainer( size_type count ) : vector(count) {}
+        Primitive3DContainer( const Primitive3DContainer& other ) : vector(other) {}
+        Primitive3DContainer( const Primitive3DContainer&& other ) : vector(other) {}
+        Primitive3DContainer( std::initializer_list<Primitive3DReference> init ) : vector(init) {}
+
+        void append(const Primitive3DContainer& rSource);
+        Primitive3DContainer& operator=(const Primitive3DContainer& r) { vector::operator=(r); return *this; }
+        Primitive3DContainer& operator=(const Primitive3DContainer&& r) { vector::operator=(r); return *this; }
+        bool operator==(const Primitive3DContainer& rB) const;
+        bool operator!=(const Primitive3DContainer& rB) const { return !operator==(rB); }
+        basegfx::B3DRange getB3DRange(const geometry::ViewInformation3D& aViewInformation) const;
+    };
 }}
 
 

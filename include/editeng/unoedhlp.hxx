@@ -57,8 +57,6 @@ class SvxEditSourceHintEndPara :public SvxEditSourceHint
 public:
     SvxEditSourceHintEndPara( sal_uInt32 nId )
         :SvxEditSourceHint(nId) {}
-    SvxEditSourceHintEndPara( sal_uInt32 nId, sal_uInt32 nValue, sal_uInt32 nStart=0, sal_uInt32 nEnd=0 )
-        :SvxEditSourceHint(nId,nValue,nStart){ (void)nEnd; }
 };
 /** Helper class for common functionality in edit sources
  */

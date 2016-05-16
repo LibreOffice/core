@@ -60,7 +60,6 @@ private:
     TableIndexList aIndexList;
 
 public:
-    OTableInfo() { }
     explicit OTableInfo( const OUString& rName ) : aTableName(rName) { }
 
     void WriteInfFile( const OUString& rDSN ) const;

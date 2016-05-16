@@ -62,9 +62,6 @@ namespace comphelper
 
     private:
         IKeyPredicateLess const &   m_predicate;
-
-    private:
-        LessPredicateAdapter(); // never implemented
     };
 
 

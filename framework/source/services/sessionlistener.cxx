@@ -20,7 +20,6 @@
 #include <sal/types.h>
 
 #include <services/desktop.hxx>
-#include <classes/filtercache.hxx>
 #include <protocols.h>
 #include <general.h>
 

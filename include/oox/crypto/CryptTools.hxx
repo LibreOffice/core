@@ -88,7 +88,6 @@ public:
 class Decrypt : public Crypto
 {
 public:
-    Decrypt(std::vector<sal_uInt8>& key, CryptoType type);
     Decrypt(std::vector<sal_uInt8>& key, std::vector<sal_uInt8>& iv, CryptoType type);
 
     virtual sal_uInt32 update(
@@ -107,7 +106,6 @@ public:
 class Encrypt : public Crypto
 {
 public:
-    Encrypt(std::vector<sal_uInt8>& key, CryptoType type);
     Encrypt(std::vector<sal_uInt8>& key, std::vector<sal_uInt8>& iv, CryptoType type);
 
     virtual sal_uInt32 update(

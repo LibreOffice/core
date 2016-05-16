@@ -127,8 +127,7 @@ class IMapCompat
     sal_uLong       nTotalSize;
     StreamMode      nStmMode;
 
-                    IMapCompat() {}
-                    IMapCompat( const IMapCompat& ) {}
+                    IMapCompat( const IMapCompat& ) = delete;
     IMapCompat&     operator=( const IMapCompat& ) { return *this; }
     bool            operator==( const IMapCompat& ) { return false; }
 

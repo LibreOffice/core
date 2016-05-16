@@ -57,7 +57,6 @@ namespace drawinglayer
                 bool bTiling = false,
                 double fOffsetX = 0.0,
                 double fOffsetY = 0.0);
-            FillGraphicAttribute();
             FillGraphicAttribute(const FillGraphicAttribute& rCandidate);
             FillGraphicAttribute& operator=(const FillGraphicAttribute& rCandidate);
             ~FillGraphicAttribute();

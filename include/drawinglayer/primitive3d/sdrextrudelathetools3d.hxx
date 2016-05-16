@@ -65,14 +65,6 @@ namespace drawinglayer
                 maPolyPolygon.transform(aTransform);
             }
 
-            explicit Slice3D(
-                const basegfx::B3DPolyPolygon& rPolyPolygon,
-                SliceType3D aSliceType = SLICETYPE3D_REGULAR)
-            :   maPolyPolygon(rPolyPolygon),
-                maSliceType(aSliceType)
-            {
-            }
-
             // data access
             const basegfx::B3DPolyPolygon& getB3DPolyPolygon() const { return maPolyPolygon; }
             SliceType3D getSliceType() const { return maSliceType; }

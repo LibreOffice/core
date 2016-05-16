@@ -65,12 +65,6 @@ namespace dbmm
         ::std::vector< OUString >    aErrorDetails;
         const css::uno::Any          aCaughtException;
 
-        explicit MigrationError(
-                const MigrationErrorType _eType )
-            :eType( _eType )
-        {
-        }
-
         MigrationError(
                 const MigrationErrorType _eType,
                 const css::uno::Any& _rCaughtException )

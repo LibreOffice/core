@@ -41,7 +41,6 @@ class SvCommand
     OUString aCommand;
     OUString aArgument;
 public:
-                    SvCommand() {}
     SvCommand( const OUString & rCommand, const OUString & rArg )
                     {
                         aCommand = rCommand;

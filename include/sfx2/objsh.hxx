@@ -816,10 +816,6 @@ public:
                                 SfxPoolItem( 0 ),
                                 pObjSh( nullptr )
                             {}
-                            SfxObjectShellItem( SfxObjectShell *pObjShell ):
-                                SfxPoolItem( 0 ),
-                                pObjSh( pObjShell )
-                            {}
                             SfxObjectShellItem( sal_uInt16 nWhichId,
                                                 SfxObjectShell *pObjShell ):
                                 SfxPoolItem( nWhichId ),

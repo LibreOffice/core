@@ -155,7 +155,7 @@ SfxUShortRanges::SfxUShortRanges( sal_uInt16 nWhich1, sal_uInt16 nWhich2 )
 }
 
 /**
- * Constcurts an SfxUShortRanges-instance from an sorted ranges of sal_uInt16s,
+ * Constructs an SfxUShortRanges-instance from an sorted ranges of sal_uInt16s,
  * terminates with on 0.
  *
  * Precondition: for each n >= 0 && n < (sizeof(pArr)-1)

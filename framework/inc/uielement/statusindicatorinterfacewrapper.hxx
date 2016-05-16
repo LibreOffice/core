@@ -51,8 +51,6 @@ class StatusIndicatorInterfaceWrapper :   public ::cppu::WeakImplHelper< css::ta
         virtual void SAL_CALL setValue(       sal_Int32        nValue ) throw( css::uno::RuntimeException, std::exception ) override;
 
     private:
-        StatusIndicatorInterfaceWrapper();
-
         css::uno::WeakReference< css::lang::XComponent > m_xStatusIndicatorImpl;
 };
 

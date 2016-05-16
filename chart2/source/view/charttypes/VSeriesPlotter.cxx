@@ -100,14 +100,6 @@ VDataSeriesGroup::CachedYValues::CachedYValues()
 {
 }
 
-VDataSeriesGroup::VDataSeriesGroup()
-        : m_aSeriesVector()
-        , m_bMaxPointCountDirty(true)
-        , m_nMaxPointCount(0)
-        , m_aListOfCachedYValues()
-{
-}
-
 VDataSeriesGroup::VDataSeriesGroup( VDataSeries* pSeries )
         : m_aSeriesVector(1,pSeries)
         , m_bMaxPointCountDirty(true)

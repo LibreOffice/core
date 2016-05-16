@@ -863,20 +863,6 @@ VCL_BUILDER_DECL_FACTORY(SvtURLBox)
 }
 
 
-SvtURLBox::SvtURLBox( vcl::Window* pParent, const ResId& _rResId, INetProtocol eSmart,
-    bool bSetDefaultHelpID )
-    :   ComboBox( pParent , _rResId ),
-        eSmartProtocol( eSmart ),
-        bAutoCompleteMode( false ),
-        bOnlyDirectories( false ),
-        bCtrlClick( false ),
-        bHistoryDisabled( false ),
-        bNoSelection( false ),
-        bIsAutoCompleteEnabled( true )
-{
-    Init(bSetDefaultHelpID);
-}
-
 void SvtURLBox::Init(bool bSetDefaultHelpID)
 {
     pImp = new SvtURLBox_Impl();

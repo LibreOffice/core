@@ -43,11 +43,6 @@ namespace typereg {
 class Reader {
 public:
     /**
-       Creates an invalid type reader.
-     */
-    Reader(): m_handle(nullptr) {}
-
-    /**
        Creates a type reader.
 
        <p>If the given binary blob is malformed, or of a version larger than

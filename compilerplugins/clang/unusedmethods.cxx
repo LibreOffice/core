@@ -16,15 +16,21 @@
 #include "compat.hxx"
 
 /**
-Dump a list of calls to methods, and a list of method definitions.
-Then we will post-process the 2 lists and find the set of unused methods.
+This plugin performs 3 different analyses:
 
-Be warned that it produces around 5G of log file.
+(1) Find unused methods
+(2) Find methods whose return types are never evaluated
+(3) Find methods which are public, but are never called from outside the class i.e. they can be private
+
+It does so, by dumping various call/definition/use info to a log file.
+Then we will post-process the various lists and find the set of unused methods.
+
+Be warned that it produces around 15G of log file.
 
 The process goes something like this:
   $ make check
   $ make FORCE_COMPILE_ALL=1 COMPILER_PLUGIN_TOOL='unusedmethods' check
-  $ ./compilerplugins/clang/unusedmethods.py unusedmethods.log > result.txt
+  $ ./compilerplugins/clang/unusedmethods.py unusedmethods.log
 
 and then
   $ for dir in *; do make FORCE_COMPILE_ALL=1 UPDATE_FILES=$dir COMPILER_PLUGIN_TOOL='unusedmethodsremove' $dir; done
@@ -41,31 +47,29 @@ namespace {
 
 struct MyFuncInfo
 {
+    std::string access;
     std::string returnType;
     std::string nameAndParams;
     std::string sourceLocation;
 
-    bool operator < (const MyFuncInfo &other) const
-    {
-        if (returnType < other.returnType)
-            return true;
-        else if (returnType == other.returnType)
-            return nameAndParams < other.nameAndParams;
-        else
-            return false;
-    }
 };
-
+bool operator < (const MyFuncInfo &lhs, const MyFuncInfo &rhs)
+{
+    return std::tie(lhs.returnType, lhs.nameAndParams)
+         < std::tie(rhs.returnType, rhs.nameAndParams);
+}
 
 // try to limit the voluminous output a little
+
+// for the "unused method" analysis
 static std::set<MyFuncInfo> callSet;
 static std::set<MyFuncInfo> definitionSet;
+// for the "unused return type" analysis
+static std::set<MyFuncInfo> usedReturnSet;
+// for the "unnecessary public" analysis
+static std::set<MyFuncInfo> publicDefinitionSet;
+static std::set<MyFuncInfo> calledFromOutsideSet;
 
-
-static bool startswith(const std::string& s, const std::string& prefix)
-{
-    return s.rfind(prefix,0) == 0;
-}
 
 class UnusedMethods:
     public RecursiveASTVisitor<UnusedMethods>, public loplugin::Plugin
@@ -79,15 +83,19 @@ public:
 
         // dump all our output in one write call - this is to try and limit IO "crosstalk" between multiple processes
         // writing to the same logfile
+
         std::string output;
+        for (const MyFuncInfo & s : definitionSet)
+            output += "definition:\t" + s.access + "\t" + s.returnType + "\t" + s.nameAndParams + "\t" + s.sourceLocation + "\n";
+        // for the "unused method" analysis
         for (const MyFuncInfo & s : callSet)
             output += "call:\t" + s.returnType + "\t" + s.nameAndParams + "\n";
-        for (const MyFuncInfo & s : definitionSet)
-        {
-            //treat all UNO interfaces as having been called, since they are part of our external ABI
-            if (!startswith(s.nameAndParams, "com::sun::star::"))
-                output += "definition:\t" + s.returnType + "\t" + s.nameAndParams + "\t" + s.sourceLocation + "\n";
-        }
+        // for the "unused return type" analysis
+        for (const MyFuncInfo & s : usedReturnSet)
+            output += "usedReturn:\t" + s.returnType + "\t" + s.nameAndParams + "\n";
+        // for the "unnecessary public" analysis
+        for (const MyFuncInfo & s : calledFromOutsideSet)
+            output += "outside:\t" + s.returnType + "\t" + s.nameAndParams + "\n";
         ofstream myfile;
         myfile.open( SRCDIR "/unusedmethods.log", ios::app | ios::out);
         myfile << output;
@@ -95,12 +103,14 @@ public:
     }
 
     bool shouldVisitTemplateInstantiations () const { return true; }
+    bool shouldVisitImplicitCode() const { return true; }
 
     bool VisitCallExpr(CallExpr* );
     bool VisitFunctionDecl( const FunctionDecl* decl );
     bool VisitDeclRefExpr( const DeclRefExpr* );
+    bool VisitCXXConstructExpr( const CXXConstructExpr* );
 private:
-    void logCallToRootMethods(const FunctionDecl* functionDecl);
+    void logCallToRootMethods(const FunctionDecl* functionDecl, std::set<MyFuncInfo>& funcSet);
     MyFuncInfo niceName(const FunctionDecl* functionDecl);
     std::string fullyQualifiedName(const FunctionDecl* functionDecl);
 };
@@ -112,13 +122,24 @@ MyFuncInfo UnusedMethods::niceName(const FunctionDecl* functionDecl)
     else if (functionDecl->getClassScopeSpecializationPattern())
         functionDecl = functionDecl->getClassScopeSpecializationPattern();
 // workaround clang-3.5 issue
-#if __clang_major__ > 3 || ( __clang_major__ == 3 && __clang_minor__ >= 6 )
+#if CLANG_VERSION >= 30600
     else if (functionDecl->getTemplateInstantiationPattern())
         functionDecl = functionDecl->getTemplateInstantiationPattern();
 #endif
 
     MyFuncInfo aInfo;
-    aInfo.returnType = compat::getReturnType(*functionDecl).getCanonicalType().getAsString();
+    switch (functionDecl->getAccess())
+    {
+    case AS_public: aInfo.access = "public"; break;
+    case AS_private: aInfo.access = "private"; break;
+    case AS_protected: aInfo.access = "protected"; break;
+    default: aInfo.access = "unknown"; break;
+    }
+    if (!isa<CXXConstructorDecl>(functionDecl)) {
+        aInfo.returnType = compat::getReturnType(*functionDecl).getCanonicalType().getAsString();
+    } else {
+        aInfo.returnType = "";
+    }
 
     if (isa<CXXMethodDecl>(functionDecl)) {
         const CXXRecordDecl* recordDecl = dyn_cast<CXXMethodDecl>(functionDecl)->getParent();
@@ -172,7 +193,7 @@ std::string UnusedMethods::fullyQualifiedName(const FunctionDecl* functionDecl)
     return ret;
 }
 
-void UnusedMethods::logCallToRootMethods(const FunctionDecl* functionDecl)
+void UnusedMethods::logCallToRootMethods(const FunctionDecl* functionDecl, std::set<MyFuncInfo>& funcSet)
 {
     functionDecl = functionDecl->getCanonicalDecl();
     bool bCalledSuperMethod = false;
@@ -183,7 +204,7 @@ void UnusedMethods::logCallToRootMethods(const FunctionDecl* functionDecl)
         for(CXXMethodDecl::method_iterator it = methodDecl->begin_overridden_methods();
             it != methodDecl->end_overridden_methods(); ++it)
         {
-            logCallToRootMethods(*it);
+            logCallToRootMethods(*it, funcSet);
             bCalledSuperMethod = true;
         }
     }
@@ -191,12 +212,39 @@ void UnusedMethods::logCallToRootMethods(const FunctionDecl* functionDecl)
     {
         while (functionDecl->getTemplateInstantiationPattern())
             functionDecl = functionDecl->getTemplateInstantiationPattern();
-        callSet.insert(niceName(functionDecl));
+        funcSet.insert(niceName(functionDecl));
     }
 }
 
 // prevent recursive templates from blowing up the stack
 static std::set<std::string> traversedFunctionSet;
+
+const Decl* get_DeclContext_from_Stmt(ASTContext& context, const Stmt& stmt)
+{
+  auto it = context.getParents(stmt).begin();
+
+  if (it == context.getParents(stmt).end())
+      return nullptr;
+
+  const Decl *aDecl = it->get<Decl>();
+  if (aDecl)
+      return aDecl;
+
+  const Stmt *aStmt = it->get<Stmt>();
+  if (aStmt)
+      return get_DeclContext_from_Stmt(context, *aStmt);
+
+  return nullptr;
+}
+
+static const FunctionDecl* get_top_FunctionDecl_from_Stmt(ASTContext& context, const Stmt& stmt)
+{
+  const Decl *decl = get_DeclContext_from_Stmt(context, stmt);
+  if (decl)
+      return static_cast<const FunctionDecl*>(decl->getNonClosureContext());
+
+  return nullptr;
+}
 
 bool UnusedMethods::VisitCallExpr(CallExpr* expr)
 {
@@ -214,7 +262,7 @@ bool UnusedMethods::VisitCallExpr(CallExpr* expr)
         }
         /*
         expr->dump();
-        throw "Cant touch this";
+        throw "Can't touch this";
         */
         return true;
     }
@@ -227,7 +275,56 @@ gotfunc:
     if (traversedFunctionSet.insert(fullyQualifiedName(calleeFunctionDecl)).second)
         TraverseFunctionDecl(calleeFunctionDecl);
 
-    logCallToRootMethods(calleeFunctionDecl);
+    logCallToRootMethods(calleeFunctionDecl, callSet);
+
+    const Stmt* parent = parentStmt(expr);
+
+    // Now do the checks necessary for the "unnecessary public" analysis
+    CXXMethodDecl* calleeMethodDecl = dyn_cast<CXXMethodDecl>(calleeFunctionDecl);
+    if (calleeMethodDecl && calleeMethodDecl->getAccess() == AS_public)
+    {
+        const FunctionDecl* parentFunctionDecl = get_top_FunctionDecl_from_Stmt(compiler.getASTContext(), *expr);
+        if (parentFunctionDecl && parentFunctionDecl != calleeFunctionDecl) {
+            calledFromOutsideSet.insert(niceName(parentFunctionDecl));
+        }
+    }
+
+    // Now do the checks necessary for the "unused return value" analysis
+    if (calleeFunctionDecl->getReturnType()->isVoidType()) {
+        return true;
+    }
+    if (!parent) {
+        // we will get null parent if it's under a CXXConstructExpr node
+        logCallToRootMethods(calleeFunctionDecl, usedReturnSet);
+        return true;
+    }
+    if (isa<Expr>(parent) || isa<ReturnStmt>(parent) || isa<DeclStmt>(parent)
+        || isa<IfStmt>(parent) || isa<SwitchStmt>(parent) || isa<ForStmt>(parent)
+        || isa<WhileStmt>(parent) || isa<DoStmt>(parent)
+        || isa<CXXForRangeStmt>(parent))
+    {
+        logCallToRootMethods(calleeFunctionDecl, usedReturnSet);
+        return true;
+    }
+    if (isa<CompoundStmt>(parent) || isa<DefaultStmt>(parent) || isa<CaseStmt>(parent)
+        || isa<LabelStmt>(parent))
+    {
+        return true;
+    }
+    parent->dump();
+    return true;
+}
+
+bool UnusedMethods::VisitCXXConstructExpr( const CXXConstructExpr* constructExpr )
+{
+    // Note that I don't ignore ANYTHING here, because I want to get calls to my code that result
+    // from template instantiation deep inside the STL and other external code
+
+    const CXXConstructorDecl* constructorDecl = constructExpr->getConstructor();
+    constructorDecl = constructorDecl->getCanonicalDecl();
+
+    logCallToRootMethods(constructorDecl, callSet);
+
     return true;
 }
 
@@ -248,15 +345,18 @@ bool UnusedMethods::VisitFunctionDecl( const FunctionDecl* functionDecl )
     if (isa<CXXDestructorDecl>(functionDecl)) {
         return true;
     }
-    if (isa<CXXConstructorDecl>(functionDecl)) {
-        return true;
-    }
-    if (functionDecl && functionDecl->isDeleted()) {
+    if (functionDecl->isDeleted() || functionDecl->isDefaulted()) {
         return true;
     }
 
-    if( !ignoreLocation( functionDecl ))
-        definitionSet.insert(niceName(functionDecl));
+    if( functionDecl->getLocation().isValid() && !ignoreLocation( functionDecl ))
+    {
+        MyFuncInfo funcInfo = niceName(functionDecl);
+        definitionSet.insert(funcInfo);
+        if (functionDecl->getAccess() == AS_public) {
+            publicDefinitionSet.insert(funcInfo);
+        }
+    }
     return true;
 }
 
@@ -267,7 +367,8 @@ bool UnusedMethods::VisitDeclRefExpr( const DeclRefExpr* declRefExpr )
     if (!isa<FunctionDecl>(functionDecl)) {
         return true;
     }
-    logCallToRootMethods(dyn_cast<FunctionDecl>(functionDecl)->getCanonicalDecl());
+    logCallToRootMethods(dyn_cast<FunctionDecl>(functionDecl)->getCanonicalDecl(), callSet);
+    logCallToRootMethods(dyn_cast<FunctionDecl>(functionDecl)->getCanonicalDecl(), usedReturnSet);
     return true;
 }
 

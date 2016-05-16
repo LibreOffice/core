@@ -119,13 +119,6 @@ SotStorageStream::SotStorageStream( BaseStorageStream * pStm )
     }
 }
 
-SotStorageStream::SotStorageStream()
-    : pOwnStm( nullptr )
-{
-    // ??? wenn Init virtuell ist, entsprechen setzen
-    m_isWritable = true;
-}
-
 SotStorageStream::~SotStorageStream()
 {
     Flush(); //SetBufferSize(0);
@@ -349,12 +342,6 @@ void * SotStorage::Cast( const SotFactory * pFact )
     , m_bIsRoot( false )                      \
     , m_bDelStm( false )                      \
     , m_nVersion( SOFFICE_FILEFORMAT_CURRENT )
-
-SotStorage::SotStorage()
-    INIT_SotStorage()
-{
-    // ??? What's this ???
-}
 
 #define ERASEMASK  ( StreamMode::TRUNC | StreamMode::WRITE | StreamMode::SHARE_DENYALL )
 #include <com/sun/star/uno/Reference.h>

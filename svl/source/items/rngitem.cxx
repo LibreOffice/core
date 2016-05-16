@@ -31,14 +31,11 @@ static inline sal_uInt16 Count_Impl(const sal_uInt16 * pRanges)
 }
 
 
-
-
 SfxRangeItem::SfxRangeItem()
 {
     nFrom = 0;
     nTo = 0;
 }
-
 
 
 SfxRangeItem::SfxRangeItem( sal_uInt16 which, sal_uInt16 from, sal_uInt16 to ):
@@ -49,14 +46,12 @@ SfxRangeItem::SfxRangeItem( sal_uInt16 which, sal_uInt16 from, sal_uInt16 to ):
 }
 
 
-
 SfxRangeItem::SfxRangeItem( const SfxRangeItem& rItem ) :
     SfxPoolItem( rItem )
 {
     nFrom = rItem.nFrom;
     nTo = rItem.nTo;
 }
-
 
 
 bool SfxRangeItem::GetPresentation
@@ -73,7 +68,6 @@ bool SfxRangeItem::GetPresentation
 }
 
 
-
 bool SfxRangeItem::operator==( const SfxPoolItem& rItem ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal type" );
@@ -82,12 +76,10 @@ bool SfxRangeItem::operator==( const SfxPoolItem& rItem ) const
 }
 
 
-
 SfxPoolItem* SfxRangeItem::Clone(SfxItemPool *) const
 {
     return new SfxRangeItem( Which(), nFrom, nTo );
 }
-
 
 
 SfxPoolItem* SfxRangeItem::Create(SvStream &rStream, sal_uInt16) const
@@ -97,7 +89,6 @@ SfxPoolItem* SfxRangeItem::Create(SvStream &rStream, sal_uInt16) const
     rStream.ReadUInt16( nBis );
     return new SfxRangeItem( Which(), nVon, nBis );
 }
-
 
 
 SvStream& SfxRangeItem::Store(SvStream &rStream, sal_uInt16) const

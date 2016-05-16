@@ -279,8 +279,6 @@ struct SvxMSDffImportData
     Rectangle           aParentRect;///< Rectangle of the surrounding groups,
                                     ///< which might have been provided externally
 
-    SvxMSDffImportData()
-        {}
     explicit SvxMSDffImportData( const Rectangle& rParentRect ) : aParentRect( rParentRect ) {}
     bool empty() const { return m_Records.empty(); }
     size_t size() const { return m_Records.size(); }

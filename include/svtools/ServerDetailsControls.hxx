@@ -59,8 +59,6 @@ class DetailsContainer
 
         virtual bool enableUserCredentials( ) { return true; };
 
-        void setActive( bool bActive = true );
-
     protected:
         void notifyChange( );
         DECL_LINK_TYPED ( ValueChangeHdl, Edit&, void );

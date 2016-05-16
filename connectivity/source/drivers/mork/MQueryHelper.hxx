@@ -63,7 +63,6 @@ namespace connectivity
         protected:
             node_type   m_eNodeType;
 
-            MQueryExpressionBase() : m_eNodeType( Unknown ) {}
             explicit MQueryExpressionBase( node_type _eNodeType ) : m_eNodeType( _eNodeType ) {}
 
         public:

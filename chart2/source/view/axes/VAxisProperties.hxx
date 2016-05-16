@@ -156,7 +156,7 @@ struct AxisProperties final
     TickmarkProperties makeTickmarkPropertiesForComplexCategories( sal_Int32 nTickLength, sal_Int32 nTickStartDistanceToAxis, sal_Int32 nTextLevel ) const;
 
 private:
-    AxisProperties();
+    AxisProperties() = delete;
 
     TickmarkProperties  makeTickmarkProperties( sal_Int32 nDepth ) const;
     //@todo get this from somewhere; maybe for each subincrement

@@ -42,8 +42,6 @@ namespace dbaui
     // OTextConnectionPage
     class OTextConnectionHelper : public TabPage
     {
-        OTextConnectionHelper();
-
     public:
         OTextConnectionHelper( vcl::Window* pParent, const short _nAvailableSections );
         virtual ~OTextConnectionHelper();

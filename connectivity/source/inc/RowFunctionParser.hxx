@@ -73,7 +73,6 @@ typedef std::shared_ptr< ExpressionNode > ExpressionNodeSharedPtr;
     */
 struct OOO_DLLPUBLIC_DBTOOLS ParseError
 {
-    ParseError() {}
     ParseError( const char* ) {}
 };
 
@@ -119,8 +118,7 @@ public:
 private:
     // disabled constructor/destructor, since this is
     // supposed to be a singleton
-    FunctionParser();
-
+    FunctionParser() = delete;
     FunctionParser(const FunctionParser&) = delete;
     FunctionParser& operator=( const FunctionParser& ) = delete;
 };

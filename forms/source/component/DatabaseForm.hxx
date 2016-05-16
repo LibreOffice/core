@@ -108,10 +108,6 @@ public:
         ,nRepresentation( _nRepresent )
     {
     }
-
-    HtmlSuccessfulObj()
-    {
-    }
 };
 
 typedef std::vector<HtmlSuccessfulObj> HtmlSuccessfulObjList;

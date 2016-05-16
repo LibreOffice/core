@@ -38,7 +38,7 @@ class TkResMgr
 
 private:
     // no instantiation allowed
-    TkResMgr() { }
+    TkResMgr() = delete;
     ~TkResMgr() { }
 
     // we'll instantiate one static member of the following class,

@@ -54,7 +54,6 @@ public:
                         SotStorageStream( const OUString &,
                                           StreamMode = STREAM_STD_READWRITE );
                         SotStorageStream( BaseStorageStream *pStm );
-                        SotStorageStream();
 
 private:
     static SotFactory **       GetFactoryAdress()
@@ -106,7 +105,6 @@ public:
                         SotStorage( SvStream & rStm );
                         SotStorage( bool bUCBStorage, SvStream & rStm );
                         SotStorage( SvStream * pStm, bool bDelete );
-                        SotStorage();
 
 private:
     static SotFactory **       GetFactoryAdress()

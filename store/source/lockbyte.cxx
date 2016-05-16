@@ -823,10 +823,6 @@ template< class T > struct ResourceHolder
         return tmp;
     }
 
-    ResourceHolder (ResourceHolder & rhs)
-    {
-        set (rhs.release());
-    }
     ResourceHolder & operator= (ResourceHolder & rhs)
     {
         reset (rhs.release());

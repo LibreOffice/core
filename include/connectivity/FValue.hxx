@@ -519,7 +519,6 @@ namespace connectivity
     {
         ::std::vector<sal_Int32> m_nParameterIndexes;
     public:
-        OAssignValues() : m_nParameterIndexes(1,SQL_NO_PARAMETER){}
         OAssignValues(Vector::size_type n) : OValueRefVector(n),m_nParameterIndexes(n+1,SQL_NO_PARAMETER){}
 
         void setParameterIndex(sal_Int32 _nId,sal_Int32 _nParameterIndex) { m_nParameterIndexes[_nId] = _nParameterIndex;}

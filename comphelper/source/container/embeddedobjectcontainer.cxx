@@ -203,7 +203,7 @@ void EmbeddedObjectContainer::CloseEmbeddedObjects()
         {
             try
             {
-                xClose->close( sal_True );
+                xClose->close( true );
             }
             catch (const uno::Exception&)
             {
@@ -502,7 +502,7 @@ bool EmbeddedObjectContainer::StoreEmbeddedObject(
                 //TODO/LATER: possible optimization, don't store immediately
                 //xPersist->setPersistentEntry( pImpl->mxStorage, rName, embed::EntryInitModes::ENTRY_NO_INIT, aSeq, aSeq );
                 xPersist->storeAsEntry( pImpl->mxStorage, rName, aSeq, aSeq );
-                xPersist->saveCompleted( sal_True );
+                xPersist->saveCompleted( true );
             }
         }
     }
@@ -791,7 +791,7 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::CopyAndGetEmb
                 {
                     try
                     {
-                        xResult->close( sal_True );
+                        xResult->close( true );
                     }
                     catch (const uno::Exception&)
                     {
@@ -949,7 +949,6 @@ bool EmbeddedObjectContainer::MoveEmbeddedObject( const OUString& rName, Embedde
     return false;
 }
 
-//sal_Bool EmbeddedObjectContainer::RemoveEmbeddedObject( const uno::Reference < embed::XEmbeddedObject >& xObj, sal_Bool bClose )
 // #i119941, bKeepToTempStorage: use to specify whether store the removed object to temporary storage+
 bool EmbeddedObjectContainer::RemoveEmbeddedObject( const uno::Reference < embed::XEmbeddedObject >& xObj, bool bClose, bool bKeepToTempStorage )
 {
@@ -1116,7 +1115,7 @@ bool EmbeddedObjectContainer::CloseEmbeddedObject( const uno::Reference < embed:
         uno::Reference < ::util::XCloseable > xClose( xObj, uno::UNO_QUERY );
         try
         {
-            xClose->close( sal_True );
+            xClose->close( true );
         }
         catch (const uno::Exception&)
         {
@@ -1221,9 +1220,7 @@ bool EmbeddedObjectContainer::InsertGraphicStream( const css::uno::Reference < c
 
         xPropSet->setPropertyValue("UseCommonStoragePasswordEncryption",
                                     uno::makeAny( true ) );
-        uno::Any aAny;
-        aAny <<= rMediaType;
-        xPropSet->setPropertyValue("MediaType", aAny );
+        xPropSet->setPropertyValue("MediaType", uno::Any(rMediaType) );
 
         xPropSet->setPropertyValue("Compressed",
                                     uno::makeAny( true ) );
@@ -1621,7 +1618,7 @@ bool EmbeddedObjectContainer::SetPersistentEntries(const uno::Reference< embed::
                 {
                     uno::Reference< util::XModifiable > xModif( xObj->getComponent(), uno::UNO_QUERY_THROW );
                     if ( xModif->isModified() )
-                        xModif->setModified( sal_False );
+                        xModif->setModified( false );
                 }
                 catch (const uno::Exception&)
                 {

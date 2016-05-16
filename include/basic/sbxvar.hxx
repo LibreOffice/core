@@ -69,21 +69,7 @@ struct SbxValues
 
     SbxValues(): pData( nullptr ), eType(SbxEMPTY) {}
     SbxValues( SbxDataType e ): eType(e) {}
-    SbxValues( char _nChar ): nChar( _nChar ), eType(SbxCHAR) {}
-    SbxValues( sal_uInt8 _nByte ): nByte( _nByte ), eType(SbxBYTE) {}
-    SbxValues( short _nInteger ): nInteger( _nInteger ), eType(SbxINTEGER ) {}
-    SbxValues( long _nLong ): nLong( _nLong ), eType(SbxLONG) {}
-    SbxValues( sal_uInt16 _nUShort ): nUShort( _nUShort ), eType(SbxUSHORT) {}
-    SbxValues( sal_uIntPtr _nULong ): nULong( _nULong ), eType(SbxULONG) {}
-    SbxValues( int _nInt ): nInt( _nInt ), eType(SbxINT) {}
-    SbxValues( unsigned int _nUInt ): nUInt( _nUInt ), eType(SbxUINT) {}
-    SbxValues( float _nSingle ): nSingle( _nSingle ), eType(SbxSINGLE) {}
     SbxValues( double _nDouble ): nDouble( _nDouble ), eType(SbxDOUBLE) {}
-    SbxValues( const OUString* _pString ): pOUString( const_cast<OUString*>(_pString) ), eType(SbxSTRING) {}
-    SbxValues( SbxBase* _pObj ): pObj( _pObj ), eType(SbxOBJECT) {}
-    SbxValues( sal_Unicode* _pChar ): pChar( _pChar ), eType(SbxLPSTR) {}
-    SbxValues( void* _pData ): pData( _pData ), eType(SbxPOINTER) {}
-
 };
 
 class BASIC_DLLPUBLIC SbxValue : public SbxBase

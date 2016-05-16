@@ -44,9 +44,6 @@ struct SpellErrorDescription
     css::uno::Sequence< OUString >  aSuggestions;
     OUString                                     sRuleId;
 
-    SpellErrorDescription() :
-        bIsGrammarError( false ){}
-
     SpellErrorDescription( bool bGrammar,
                       const OUString& rText,
                       const css::lang::Locale& rLocale,
@@ -99,8 +96,7 @@ public:
 private:
     SpellErrorDescription        m_aSpellErrorDescription;
 
-                            //not accessible
-                            SpellErrorAttrib();
+                            SpellErrorAttrib() = delete;
 public:
                             SpellErrorAttrib( const SpellErrorDescription& );
                             SpellErrorAttrib( const SpellErrorAttrib& rAttr );
@@ -119,8 +115,7 @@ class SpellLanguageAttrib : public TextAttrib
 {
     LanguageType m_eLanguage;
 
-                            //not accessible
-                            SpellLanguageAttrib();
+                            SpellLanguageAttrib() = delete;
 
 public:
                             SpellLanguageAttrib(LanguageType eLanguage);
@@ -139,8 +134,7 @@ class SpellBackgroundAttrib : public TextAttrib
 {
     Color   m_aBackgroundColor;
 
-                            //not accessible
-                            SpellBackgroundAttrib();
+                            SpellBackgroundAttrib() = delete;
 
 public:
                             SpellBackgroundAttrib(const Color& rCol);

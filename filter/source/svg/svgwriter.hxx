@@ -61,7 +61,6 @@
 #include <stack>
 #include <unordered_map>
 
-
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
@@ -70,8 +69,6 @@ using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::svg;
 using namespace ::com::sun::star::xml::sax;
-
-
 
 #define SVG_DTD_STRING          "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">"
 
@@ -151,6 +148,7 @@ class SVGActionWriter;
 class SVGExport;
 class SVGFontExport;
 
+
 class SVGAttributeWriter
 {
 private:
@@ -206,14 +204,10 @@ struct SVGShapeDescriptor
 };
 
 
-
 class SVGAttributeWriter;
 class SVGExport;
 class GDIMetaFile;
 
-
-
-// - BulletListItemInfo -
 
 struct BulletListItemInfo
 {
@@ -223,9 +217,6 @@ struct BulletListItemInfo
     sal_Unicode cBulletChar;
 };
 
-
-
-// - SVGTextWriter -
 
 class SVGTextWriter
 {
@@ -323,10 +314,9 @@ class SVGTextWriter
 
     void implRegisterInterface( const Reference< XInterface >& rxIf );
     const OUString & implGetValidIDFromInterface( const Reference< XInterface >& rxIf );
+
+
 };
-
-
-// - SVGActionWriter -
 
 
 class SVGActionWriter
@@ -411,6 +401,7 @@ public:
                                            const GDIMetaFile* pTextEmbeddedBitmapMtf = nullptr );
 };
 
+
 class SVGWriter : public cppu::WeakImplHelper< XSVGWriter >
 {
 private:
@@ -429,6 +420,6 @@ public:
                                throw( RuntimeException, std::exception ) override;
 };
 
-#endif
+#endif // INCLUDED_FILTER_SOURCE_SVG_SVGWRITER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -74,18 +74,6 @@ public:
                                         pCurrent = pSystem = aSysLocale.GetLocaleDataPtr();
                                         eCurrentLanguage = LANGUAGE_SYSTEM;
                                     }
-                                OnDemandLocaleDataWrapper(
-                                    const css::uno::Reference< css::uno::XComponentContext >& rxContext,
-                                    const LanguageTag& rLanguageTag
-                                    )
-                                    : pEnglish(nullptr)
-                                    , pAny(nullptr)
-                                    , pCurrent(nullptr)
-                                    , bInitialized(false)
-                                    {
-                                        pSystem = aSysLocale.GetLocaleDataPtr();
-                                        init( rxContext, rLanguageTag );
-                                    }
                                 ~OnDemandLocaleDataWrapper()
                                     {
                                         delete pEnglish;
@@ -160,15 +148,6 @@ public:
                                     , bValid(false)
                                     , bInitialized(false)
                                     {}
-                                OnDemandCalendarWrapper(
-                                    const css::uno::Reference< css::uno::XComponentContext >& rxContext,
-                                    css::lang::Locale& rLocale
-                                    )
-                                    : bValid(false)
-                                    , bInitialized(false)
-                                    {
-                                        init( rxContext, rLocale );
-                                    }
                                 ~OnDemandCalendarWrapper()
                                     {
                                         delete pPtr;
@@ -233,16 +212,6 @@ public:
                                     , bValid(false)
                                     , bInitialized(false)
                                     {}
-                                OnDemandTransliterationWrapper(
-                                    const css::uno::Reference< css::uno::XComponentContext >& rxContext,
-                                    LanguageType eLang,
-                                    css::i18n::TransliterationModules nTypeP
-                                    )
-                                    : bValid(false)
-                                    , bInitialized(false)
-                                    {
-                                        init( rxContext, eLang, nTypeP );
-                                    }
                                 ~OnDemandTransliterationWrapper()
                                     {
                                         delete pPtr;
@@ -307,14 +276,6 @@ public:
                                     : pPtr(nullptr)
                                     , bInitialized(false)
                                     {}
-                                OnDemandNativeNumberWrapper(
-                                    const css::uno::Reference< css::uno::XComponentContext >& rxContext
-                                    )
-                                    : pPtr(nullptr)
-                                    , bInitialized(false)
-                                    {
-                                        init( rxContext );
-                                    }
                                 ~OnDemandNativeNumberWrapper()
                                     {
                                         delete pPtr;

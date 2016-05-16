@@ -155,8 +155,7 @@ class ODBExport : public SvXMLExport
 
     rtl::Reference < XMLPropertySetMapper > GetTableStylesPropertySetMapper() const;
 
-private:
-                            ODBExport();
+                            ODBExport() = delete;
 protected:
 
     virtual void                    _ExportStyles( bool bUsed ) override;

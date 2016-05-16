@@ -1024,7 +1024,6 @@ class InteractionInfo
 {
     bool mbHasInteraction;
     std::unique_ptr<SvMemoryStream>       mpHyperlinkRecord;
-    InteractionInfo();
 
 public:
     InteractionInfo( SvMemoryStream* pStream, bool bInteraction ) : mbHasInteraction( bInteraction )

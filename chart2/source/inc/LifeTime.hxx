@@ -214,11 +214,6 @@ protected:
     T * m_pT;
 public:
 
-    NegativeGuard(T * pT) : m_pT(pT)
-    {
-        m_pT->release();
-    }
-
     NegativeGuard(T & t) : m_pT(&t)
     {
         m_pT->release();

@@ -367,32 +367,10 @@ DdeRequest::DdeRequest( DdeConnection& d, const OUString& i, long n )
     nType = XTYP_REQUEST;
 }
 
-DdeWarmLink::DdeWarmLink( DdeConnection& d, const OUString& i, long n )
-    : DdeLink( d, i, n )
-{
-    nType = XTYP_ADVSTART | XTYPF_NODATA;
-}
-
 DdeHotLink::DdeHotLink( DdeConnection& d, const OUString& i, long n )
     : DdeLink( d, i, n )
 {
     nType = XTYP_ADVSTART;
-}
-
-DdePoke::DdePoke( DdeConnection& d, const OUString& i, const char* p,
-                  long l, SotClipboardFormatId f, long n )
-    : DdeTransaction( d, i, n )
-{
-    aDdeData = DdeData( p, l, f );
-    nType = XTYP_POKE;
-}
-
-DdePoke::DdePoke( DdeConnection& d, const OUString& i, const OUString& rData,
-                  long n )
-    : DdeTransaction( d, i, n )
-{
-    aDdeData = DdeData( (void*) rData.getStr(), sizeof(sal_Unicode) * (rData.getLength()), SotClipboardFormatId::STRING );
-    nType = XTYP_POKE;
 }
 
 DdePoke::DdePoke( DdeConnection& d, const OUString& i, const DdeData& rData,

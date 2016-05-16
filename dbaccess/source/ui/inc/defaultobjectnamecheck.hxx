@@ -65,9 +65,6 @@ namespace dbaui
             const OUString& _rObjectName,
             ::dbtools::SQLExceptionInfo& _out_rErrorToDisplay
         ) const override;
-
-    private:
-        HierarchicalNameCheck();                                            // never implemented
     };
 
     // DynamicTableOrQueryNameCheck
@@ -115,9 +112,6 @@ namespace dbaui
             const OUString& _rObjectName,
             ::dbtools::SQLExceptionInfo& _out_rErrorToDisplay
         ) const override;
-
-    private:
-        DynamicTableOrQueryNameCheck();                                                // never implemented
     };
 
 } // namespace dbaui

@@ -1818,23 +1818,6 @@ bool FormulaMissingToken::operator==( const FormulaToken& r ) const
 }
 
 
-FormulaSubroutineToken::FormulaSubroutineToken( const FormulaSubroutineToken& r ) :
-    FormulaToken( r ),
-    mpArray( r.mpArray->Clone())
-{
-}
-FormulaSubroutineToken::~FormulaSubroutineToken()
-{
-    delete mpArray;
-}
-bool FormulaSubroutineToken::operator==( const FormulaToken& r ) const
-{
-    // Arrays don't equal..
-    return FormulaToken::operator==( r ) &&
-        (mpArray == static_cast<const FormulaSubroutineToken&>(r).mpArray);
-}
-
-
 bool FormulaUnknownToken::operator==( const FormulaToken& r ) const
 {
     return FormulaToken::operator==( r );

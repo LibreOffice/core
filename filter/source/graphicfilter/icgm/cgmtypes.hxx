@@ -25,7 +25,7 @@ struct FloatPoint
         double          X;
         double          Y;
         FloatPoint():X(0), Y(0){};
-        FloatPoint( const double& rX, const double& rY ) { X = rX, Y = rY; };
+        FloatPoint( const double& rX, const double& rY ) { X = rX; Y = rY; };
 };
 
 struct FloatRect
@@ -35,13 +35,6 @@ struct FloatRect
         double          Right;
         double          Bottom;
         FloatRect():Left(0), Top(0), Right(0), Bottom(0){};
-        FloatRect( const FloatPoint& rTopLeft, const FloatPoint& rBottomRight )
-        {
-            Left = rTopLeft.X;
-            Top = rTopLeft.Y;
-            Right = rBottomRight.X;
-            Bottom = rBottomRight.Y;
-        }
         void Justify()
         {
             double fTemp;
@@ -130,8 +123,6 @@ enum Transparency       { T_OFF = 0, T_ON = 1 };
 
 enum FillInteriorStyle  { FIS_HOLLOW = 0, FIS_SOLID = 1, FIS_PATTERN = 2, FIS_HATCH = 3, FIS_EMPTY = 4, FIS_GEOPATTERN = 5,
                             FIS_INTERPOLATED = 6, FIS_GRADIENT = 7 };
-
-
 
 
 #endif

@@ -393,22 +393,6 @@ public:
 };
 
 
-class FORMULA_DLLPUBLIC FormulaSubroutineToken : public FormulaToken
-{
-public:
-    /** Takes ownership of pArray and deletes it upon destruction! */
-                                FormulaSubroutineToken( const FormulaTokenArray* pArray ) :
-                                    FormulaToken( svSubroutine, ocCall ), mpArray( pArray) {}
-                                FormulaSubroutineToken( const FormulaSubroutineToken& r );
-    virtual                     ~FormulaSubroutineToken();
-    virtual FormulaToken*       Clone() const override { return new FormulaSubroutineToken(*this); }
-    virtual bool                operator==( const FormulaToken& rToken ) const override;
-
-private:
-    const FormulaTokenArray*    mpArray;
-};
-
-
 class FORMULA_DLLPUBLIC FormulaUnknownToken : public FormulaToken
 {
 public:

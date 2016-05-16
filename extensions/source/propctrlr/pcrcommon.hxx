@@ -83,7 +83,6 @@ namespace pcr
     public:
         inline StlSyntaxSequence() : UnoBase() { }
         explicit inline StlSyntaxSequence( const UnoBase& rSeq ) : UnoBase( rSeq ) { }
-        inline StlSyntaxSequence( const ELEMENT* pElements, sal_Int32 len ) : UnoBase( pElements, len ) { }
         explicit inline StlSyntaxSequence( sal_Int32 len ) : UnoBase( len ) { }
 
         operator const UnoBase&() const { return *this; }

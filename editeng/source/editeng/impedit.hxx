@@ -691,7 +691,6 @@ private:
 
     SpellInfo *     CreateSpellInfo( bool bMultipleDocs );
 
-    ImpEditEngine(); // disabled
     ImpEditEngine(EditEngine* pEditEngine, SfxItemPool* pPool);
     void InitDoc(bool bKeepParaAttribs);
     EditDoc&                GetEditDoc()            { return aEditDoc; }

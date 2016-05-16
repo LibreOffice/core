@@ -35,7 +35,7 @@ namespace frm
         static SimpleResMgr*    m_pImpl;
     private:
         // no instantiation allowed
-        ResourceManager() { }
+        ResourceManager() = delete;
         ~ResourceManager() { }
 
         // we'll instantiate one static member of the following class, which, in it's dtor,

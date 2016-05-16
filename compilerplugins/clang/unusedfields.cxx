@@ -16,7 +16,11 @@
 #include "compat.hxx"
 
 /**
-Dump a list of calls to methods, and a list of field definitions.
+This performs two analyses:
+ (1) look for unused fields
+ (2) look for fields that are write-only
+
+We dmp a list of calls to methods, and a list of field definitions.
 Then we will post-process the 2 lists and find the set of unused methods.
 
 Be warned that it produces around 5G of log file.
@@ -24,7 +28,7 @@ Be warned that it produces around 5G of log file.
 The process goes something like this:
   $ make check
   $ make FORCE_COMPILE_ALL=1 COMPILER_PLUGIN_TOOL='unusedfields' check
-  $ ./compilerplugins/clang/unusedfields.py unusedfields.log > result.txt
+  $ ./compilerplugins/clang/unusedfields.py unusedfields.log
 
 and then
   $ for dir in *; do make FORCE_COMPILE_ALL=1 UPDATE_FILES=$dir COMPILER_PLUGIN_TOOL='unusedfieldsremove' $dir; done
@@ -43,21 +47,17 @@ struct MyFieldInfo
     std::string fieldName;
     std::string fieldType;
     std::string sourceLocation;
-
-    bool operator < (const MyFieldInfo &other) const
-    {
-        if (parentClass < other.parentClass)
-            return true;
-        else if (parentClass == other.parentClass)
-            return fieldName < other.fieldName;
-        else
-            return false;
-    }
 };
+bool operator < (const MyFieldInfo &lhs, const MyFieldInfo &rhs)
+{
+    return std::tie(lhs.parentClass, lhs.fieldName)
+         < std::tie(rhs.parentClass, rhs.fieldName);
+}
 
 
 // try to limit the voluminous output a little
 static std::set<MyFieldInfo> touchedSet;
+static std::set<MyFieldInfo> readFromSet;
 static std::set<MyFieldInfo> definitionSet;
 
 
@@ -76,6 +76,8 @@ public:
         std::string output;
         for (const MyFieldInfo & s : touchedSet)
             output += "touch:\t" + s.parentClass + "\t" + s.fieldName + "\n";
+        for (const MyFieldInfo & s : readFromSet)
+            output += "read:\t" + s.parentClass + "\t" + s.fieldName + "\n";
         for (const MyFieldInfo & s : definitionSet)
         {
             output += "definition:\t" + s.parentClass + "\t" + s.fieldName + "\t" + s.fieldType + "\t" + s.sourceLocation + "\n";
@@ -180,7 +182,7 @@ bool UnusedFields::VisitFieldDecl( const FieldDecl* fieldDecl )
     // unwrap array types
     while (type->isArrayType())
         type = type->getAsArrayTypeUnsafe()->getElementType();
-
+/*
     if( CXXRecordDecl* recordDecl = type->getAsCXXRecordDecl() )
     {
         bool warn_unused = recordDecl->hasAttr<WarnUnusedAttr>();
@@ -196,7 +198,7 @@ bool UnusedFields::VisitFieldDecl( const FieldDecl* fieldDecl )
         if (!warn_unused)
             return true;
     }
-
+*/
     definitionSet.insert(niceName(canonicalDecl));
     return true;
 }
@@ -204,10 +206,84 @@ bool UnusedFields::VisitFieldDecl( const FieldDecl* fieldDecl )
 bool UnusedFields::VisitMemberExpr( const MemberExpr* memberExpr )
 {
     const ValueDecl* decl = memberExpr->getMemberDecl();
-    if (!isa<FieldDecl>(decl)) {
+    const FieldDecl* fieldDecl = dyn_cast<FieldDecl>(decl);
+    if (!fieldDecl) {
         return true;
     }
-    touchedSet.insert(niceName(dyn_cast<FieldDecl>(decl)));
+    MyFieldInfo fieldInfo = niceName(fieldDecl);
+    touchedSet.insert(fieldInfo);
+
+  // for the write-only analysis
+
+    if (ignoreLocation(memberExpr))
+        return true;
+
+    const Stmt* child = memberExpr;
+    const Stmt* parent = parentStmt(memberExpr);
+    // walk up the tree until we find something interesting
+    bool bPotentiallyReadFrom = false;
+    bool bDump = false;
+    do {
+        if (!parent) {
+            return true;
+        }
+        if (isa<CastExpr>(parent) || isa<MemberExpr>(parent) || isa<ParenExpr>(parent) || isa<ParenListExpr>(parent)
+             || isa<ExprWithCleanups>(parent) || isa<UnaryOperator>(parent))
+        {
+            child = parent;
+            parent = parentStmt(parent);
+        }
+        else if (isa<CaseStmt>(parent))
+        {
+            bPotentiallyReadFrom = dyn_cast<CaseStmt>(parent)->getLHS() == child
+                                  || dyn_cast<CaseStmt>(parent)->getRHS() == child;
+            break;
+        }
+        else if (isa<IfStmt>(parent))
+        {
+            bPotentiallyReadFrom = dyn_cast<IfStmt>(parent)->getCond() == child;
+            break;
+        }
+        else if (isa<DoStmt>(parent))
+        {
+            bPotentiallyReadFrom = dyn_cast<DoStmt>(parent)->getCond() == child;
+            break;
+        }
+        else if (isa<ReturnStmt>(parent) || isa<CXXConstructExpr>(parent) || isa<CallExpr>(parent)
+                 || isa<ConditionalOperator>(parent) || isa<SwitchStmt>(parent) || isa<ArraySubscriptExpr>(parent)
+                 || isa<DeclStmt>(parent) || isa<WhileStmt>(parent) || isa<CXXNewExpr>(parent)
+                 || isa<ForStmt>(parent) || isa<InitListExpr>(parent)
+                 || isa<BinaryOperator>(parent) || isa<CXXDependentScopeMemberExpr>(parent)
+                 || isa<UnresolvedMemberExpr>(parent)
+                 || isa<MaterializeTemporaryExpr>(parent))  //???
+        {
+            bPotentiallyReadFrom = true;
+            break;
+        }
+        else if (isa<CXXDeleteExpr>(parent)
+                  || isa<UnaryExprOrTypeTraitExpr>(parent)
+                 || isa<CXXUnresolvedConstructExpr>(parent) || isa<CompoundStmt>(parent)
+                 || isa<CXXTypeidExpr>(parent) || isa<DefaultStmt>(parent))
+        {
+            break;
+        }
+        else {
+            bPotentiallyReadFrom = true;
+            bDump = true;
+            break;
+        }
+    } while (true);
+    if (bDump)
+    {
+        report(
+             DiagnosticsEngine::Warning,
+             "oh dear, what can the matter be?",
+              memberExpr->getLocStart())
+              << memberExpr->getSourceRange();
+        parent->dump();
+    }
+    if (bPotentiallyReadFrom)
+        readFromSet.insert(fieldInfo);
     return true;
 }
 

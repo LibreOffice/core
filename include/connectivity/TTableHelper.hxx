@@ -49,7 +49,6 @@ namespace connectivity
 
         OrdinalPosition nOrdinalPosition;
 
-        ColumnDesc() {}
         ColumnDesc( const OUString& _rName
             , sal_Int32     _nField5
             , const OUString& _aField6

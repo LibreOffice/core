@@ -240,13 +240,6 @@ namespace dbaui
         DECL_LINK_TYPED( OnCheckBoxClick, Button*, void );
     };
 
-    // OMozillaDetailsPage Detail page for Mozilla and Thunderbird addressbook
-    class OMozillaDetailsPage : public OCommonBehaviourTabPage
-    {
-    public:
-        OMozillaDetailsPage( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs );
-    };
-
     // OTextDetailsPage
     class OTextDetailsPage : public OCommonBehaviourTabPage
     {

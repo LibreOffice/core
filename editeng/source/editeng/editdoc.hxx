@@ -35,8 +35,6 @@
 #include <memory>
 #include <vector>
 
-#include <boost/noncopyable.hpp>
-
 class ImpEditEngine;
 class SvxTabStop;
 
@@ -82,10 +80,10 @@ struct ScriptTypePosInfo
     sal_Int32  nStartPos;
     sal_Int32  nEndPos;
 
-    ScriptTypePosInfo( short _Type, sal_Int32 _Start, sal_Int32 _End )
-    : nScriptType(_Type)
-    , nStartPos(_Start)
-    , nEndPos(_End)
+    ScriptTypePosInfo( short Type, sal_Int32 Start, sal_Int32 End )
+    : nScriptType(Type)
+    , nStartPos(Start)
+    , nEndPos(End)
     {
     }
 };
@@ -98,10 +96,10 @@ struct WritingDirectionInfo
     sal_Int32  nStartPos;
     sal_Int32  nEndPos;
 
-    WritingDirectionInfo( sal_uInt8 _Type, sal_Int32 _Start, sal_Int32 _End )
-    : nType(_Type)
-    , nStartPos(_Start)
-    , nEndPos(_End)
+    WritingDirectionInfo( sal_uInt8 Type, sal_Int32 Start, sal_Int32 End )
+    : nType(Type)
+    , nStartPos(Start)
+    , nEndPos(End)
     {
     }
 };
@@ -235,7 +233,7 @@ public:
 
 // class ContentNode
 
-class ContentNode : boost::noncopyable
+class ContentNode
 {
 private:
     OUString maString;
@@ -249,6 +247,8 @@ public:
                     ContentNode( SfxItemPool& rItemPool );
                     ContentNode( const OUString& rStr, const ContentAttribs& rContentAttribs );
                     ~ContentNode();
+                    ContentNode(const ContentNode&) = delete;
+    ContentNode&    operator=(const ContentNode&) = delete;
 
     ContentAttribs& GetContentAttribs()     { return aContentAttribs; }
     const ContentAttribs& GetContentAttribs() const { return aContentAttribs; }
@@ -371,7 +371,6 @@ struct ExtraPortionInfo
 };
 
 
-
 // class TextPortion
 
 class TextPortion
@@ -390,7 +389,7 @@ private:
                 , nLen( 0 )
                 , aOutSz()
                 , nKind( PortionKind::TEXT )
-                , nRightToLeft( sal_False )
+                , nRightToLeft( 0 )
                 , nExtraValue( 0 )
                 {
                 }
@@ -401,7 +400,7 @@ public:
                 , nLen( nL )
                 , aOutSz( -1, -1 )
                 , nKind( PortionKind::TEXT )
-                , nRightToLeft( sal_False )
+                , nRightToLeft( 0 )
                 , nExtraValue( 0 )
                 {
                 }
@@ -552,7 +551,6 @@ public:
     EditLine&   operator = ( const EditLine& rLine );
     friend bool operator == ( const EditLine& r1,  const EditLine& r2  );
 };
-
 
 
 // class LineList

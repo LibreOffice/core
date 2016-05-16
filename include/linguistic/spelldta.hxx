@@ -48,10 +48,6 @@ void    SeqRemoveNegEntries(
                 css::uno::Reference< css::linguistic2::XSearchableDictionaryList > &rxDicList,
                 sal_Int16 nLanguage );
 
-bool    SeqHasEntry(
-                const css::uno::Sequence< OUString > &rSeq,
-                const OUString &rTxt);
-
 void SearchSimilarText( const OUString &rText, sal_Int16 nLanguage,
         css::uno::Reference< css::linguistic2::XSearchableDictionaryList > &xDicList,
         std::vector< OUString > & rDicListProps );

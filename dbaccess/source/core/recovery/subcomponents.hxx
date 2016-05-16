@@ -54,12 +54,6 @@ namespace dbaccess
             ,bForEditing( false )
         {
         }
-
-        SubComponentDescriptor( const OUString& i_rName, const bool i_bForEditing )
-            :sName( i_rName )
-            ,bForEditing( i_bForEditing )
-        {
-        }
     };
 
     typedef std::unordered_map< OUString, SubComponentDescriptor, OUStringHash > MapStringToCompDesc;

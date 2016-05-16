@@ -50,11 +50,6 @@ namespace svt { namespace table
         {
         }
 
-        ColumnSort( ColPos const i_columnPos, ColumnSortDirection const i_sortDirection )
-            :nColumnPos( i_columnPos )
-            ,eSortDirection( i_sortDirection )
-        {
-        }
     };
 
 

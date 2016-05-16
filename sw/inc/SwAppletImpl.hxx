@@ -22,6 +22,13 @@
 
 #include <config_features.h>
 
+#include <com/sun/star/embed/XEmbeddedObject.hpp>
+#include <sfx2/frmhtmlw.hxx>
+#include <vcl/wrkwin.hxx>
+#include <sot/storage.hxx>
+#include <svl/itemset.hxx>
+#include <svl/ownlist.hxx>
+
 enum class SwHtmlOptType {
     IGNORE = 0,
     TAG = 1,
@@ -29,15 +36,6 @@ enum class SwHtmlOptType {
     SIZE = 3
 };
 
-#include <com/sun/star/embed/XEmbeddedObject.hpp>
-
-#include <sfx2/frmhtml.hxx>
-#include <sfx2/frmhtmlw.hxx>
-#include <vcl/wrkwin.hxx>
-#include <sot/storage.hxx>
-#include <svl/itemset.hxx>
-
-#include <svl/ownlist.hxx>
 
 class SfxItemSet;
 
