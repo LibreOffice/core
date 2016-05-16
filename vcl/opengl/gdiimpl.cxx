@@ -2045,9 +2045,7 @@ bool OpenGLSalGraphicsImpl::drawPolyLine(
         basegfx::B2DPolygon aPolygon(rPolygon);
 
         if (aPolygon.areControlPointsUsed())
-            aPolygon = basegfx::tools::polygonSubdivide(aPolygon, 7.5 * F_PI180);
-        else
-            aPolygon.removeDoublePoints();
+            aPolygon = aPolygon.getDefaultAdaptiveSubdivision();
 
         DrawPolyLine(aPolygon, fLineWidth, eLineJoin, eLineCap);
     }

@@ -483,7 +483,7 @@ public:
     {
         if(!mpDefaultSubdivision)
         {
-            const_cast< ImplBufferedData* >(this)->mpDefaultSubdivision.reset(new basegfx::B2DPolygon(basegfx::tools::adaptiveSubdivideByCount(rSource, 9)));
+            const_cast< ImplBufferedData* >(this)->mpDefaultSubdivision.reset(new basegfx::B2DPolygon(basegfx::tools::adaptiveSubdivideByAngle(rSource)));
         }
 
         return *mpDefaultSubdivision;
