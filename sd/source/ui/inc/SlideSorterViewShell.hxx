@@ -220,6 +220,15 @@ private:
     virtual void UpdateScrollBars() override;
 
     void PostMoveSlidesActions(const std::shared_ptr<SlideSorterViewShell::PageSelection> &rpSelection);
+
+    void MainViewEndEditAndUnmarkAll();
+
+    /** Select the same pages in the document as are selected in the
+        SlideSorterViewShell
+
+        return the page numbers of the first and last selected pages
+    */
+    std::pair<sal_uInt16, sal_uInt16> SyncPageSelectionToDocument(const std::shared_ptr<SlideSorterViewShell::PageSelection> &rpSelection);
 };
 
 typedef std::shared_ptr<SlideSorterViewShell::PageSelection> SharedPageSelection;
