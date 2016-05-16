@@ -1953,6 +1953,8 @@ void VDataSeriesGroup::calculateYMinAndMaxForCategoryRange(
     if(nStartCategoryIndex<0)
         nStartCategoryIndex=0;
     const sal_Int32 nPointCount = getPointCount();//necessary to create m_aListOfCachedYValues
+    if(nPointCount <= 0)
+        return;
     if (nEndCategoryIndex >= nPointCount)
         nEndCategoryIndex = nPointCount - 1;
     if(nEndCategoryIndex<0)
