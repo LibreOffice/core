@@ -5,3 +5,8 @@ Each method should contain a short description on how to hit the performance pro
 
 * ScColumn::GetRangeScriptType
 ** Import tdf80853.csv and select the whole content with the keyboard
+
+* XclExpRowBuffer::GetOrCreateRow
+** Look at the profile of chart2export
+** The repeated calls to ScDocument::GetRowHeight seem strange
+*** There should be a more efficient way to handle that loop
