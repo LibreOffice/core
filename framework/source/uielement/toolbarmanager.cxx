@@ -1332,19 +1332,11 @@ void ToolBarManager::ImplClearPopupMenu( ToolBox *pToolBar )
     }
 }
 
-IMPL_LINK_TYPED( ToolBarManager, MenuDeactivate, Menu*, pMenu, bool )
+void ToolBarManager::MenuDeactivated()
 {
-    SolarMutexGuard g;
-
-    if ( m_bDisposed )
-        return true;
-
-    if( pMenu != m_pToolBar->GetMenu() )
-        return true;
-
-    ImplClearPopupMenu( m_pToolBar );
-
-    return false;
+    if (m_bDisposed)
+        return;
+    ImplClearPopupMenu(m_pToolBar);
 }
 
 Reference< XModel > ToolBarManager::GetModelFromFrame() const
@@ -1539,7 +1531,6 @@ IMPL_LINK_TYPED( ToolBarManager, Command, CommandEvent const *, pCmdEvt, void )
         // when the menu is being used as an overflow menu.
         Menu *pManagerMenu = m_pToolBar->GetMenu();
         pManagerMenu->SetSelectHdl( LINK( this, ToolBarManager, MenuSelect ) );
-        pManagerMenu->SetDeactivateHdl( LINK( this, ToolBarManager, MenuDeactivate ) );
 
         // make sure all disabled entries will be shown
         pMenu->SetMenuFlags( pMenu->GetMenuFlags() | MenuFlags::AlwaysShowDisabledEntries );
@@ -1553,7 +1544,7 @@ IMPL_LINK_TYPED( ToolBarManager, Command, CommandEvent const *, pCmdEvt, void )
         {
             // Unlink our listeners again -- see above for why.
             pManagerMenu->SetSelectHdl( Link<Menu*, bool>() );
-            pManagerMenu->SetDeactivateHdl( Link<Menu *, bool>() );
+            MenuDeactivated();
         }
     }
 }
