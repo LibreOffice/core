@@ -71,6 +71,7 @@ class ChartTest : public test::BootstrapFixture, public unotest::MacrosTest
 public:
     ChartTest():mbSkipValidation(false) {}
     void load( const OUString& rDir, const OUString& rFileName );
+    std::shared_ptr<utl::TempFile> save( const OUString& rFileName );
     std::shared_ptr<utl::TempFile> reload( const OUString& rFileName );
     uno::Sequence < OUString > getImpressChartColumnDescriptions( const char* pDir, const char* pName );
     OUString getFileExtension( const OUString& rFileName );
@@ -117,7 +118,7 @@ void ChartTest::load( const OUString& aDir, const OUString& aName )
     CPPUNIT_ASSERT(mxComponent.is());
 }
 
-std::shared_ptr<utl::TempFile> ChartTest::reload(const OUString& rFilterName)
+std::shared_ptr<utl::TempFile> ChartTest::save(const OUString& rFilterName)
 {
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     auto aArgs(::comphelper::InitPropertySequence({
@@ -126,6 +127,13 @@ std::shared_ptr<utl::TempFile> ChartTest::reload(const OUString& rFilterName)
     std::shared_ptr<utl::TempFile> pTempFile = std::make_shared<utl::TempFile>();
     pTempFile->EnableKillingFile();
     xStorable->storeToURL(pTempFile->GetURL(), aArgs);
+
+    return pTempFile;
+}
+
+std::shared_ptr<utl::TempFile> ChartTest::reload(const OUString& rFilterName)
+{
+    std::shared_ptr<utl::TempFile> pTempFile = save(rFilterName);
     mxComponent->dispose();
     mxComponent = loadFromDesktop(pTempFile->GetURL(), maServiceName);
     std::cout << pTempFile->GetURL();

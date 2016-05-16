@@ -214,7 +214,7 @@ OUString findChartFile(const OUString& rDir, uno::Reference< container::XNameAcc
 
 xmlDocPtr Chart2ExportTest::parseExport(const OUString& rDir, const OUString& rFilterFormat)
 {
-    std::shared_ptr<utl::TempFile> pTempFile = reload(rFilterFormat);
+    std::shared_ptr<utl::TempFile> pTempFile = save(rFilterFormat);
 
     // Read the XML stream we're interested in.
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), pTempFile->GetURL());
