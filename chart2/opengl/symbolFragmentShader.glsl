@@ -18,7 +18,7 @@ void main()
     if(shape == 0)
     {
     }
-    else if(shape == 1) //diamon
+    else if(shape == 1) //diamond
     {
         if (abs(p.x) + abs(p.y) > 1)
             discard;

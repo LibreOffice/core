@@ -166,7 +166,7 @@ ZipPackage::~ZipPackage()
 {
     delete m_pZipFile;
 
-    // All folders and streams contain pointers to their parents, when a parent diappeares
+    // All folders and streams contain pointers to their parents, when a parent disappeares
     // it should disconnect all the children from itself during destruction automatically.
     // So there is no need in explicit m_pRootFolder->releaseUpwardRef() call here any more
     // since m_pRootFolder has no parent and cleaning of its children will be done automatically

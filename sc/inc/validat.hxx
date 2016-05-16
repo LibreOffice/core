@@ -165,7 +165,7 @@ private:
     bool IsListValid( ScRefCellValue& rCell, const ScAddress& rPos ) const;
 };
 
-//  list of contitions:
+//  list of conditions:
 
 struct CompareScValidationDataPtr
 {

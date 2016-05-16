@@ -220,7 +220,7 @@ private:
     */
     void    impl_loadConnectionTools_throw();
 
-    /** reads the table filter and table type filter from the datasourfce
+    /** reads the table filter and table type filter from the datasource
     */
     void    impl_fillTableFilter();
 };

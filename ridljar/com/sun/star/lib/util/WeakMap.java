@@ -158,7 +158,7 @@ public final class WeakMap<K,V> implements Map {
      *
      * <p>This is a modifying operation.</p>
      *
-     * @param key the key with witch the specified value is to be associated
+     * @param key the key with which the specified value is to be associated
      * @param value the value to be associated with the specified key.  This
      * must be a plain object, which is then wrapped in a
      * <code>WeakReference</code>.

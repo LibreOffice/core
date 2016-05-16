@@ -53,7 +53,7 @@ OString Win_AddLongPathPrefix( const OString &rPathName )
 }
 #endif //defined(WNT)
 
-// build list of old style diuctionaries (not as extensions) to use.
+// build list of old style dictionaries (not as extensions) to use.
 // User installed dictionaries (the ones residing in the user paths)
 // will get precedence over system installed ones for the same language.
 std::vector< SvtLinguConfigDictionaryEntry > GetOldStyleDics( const char *pDicType )

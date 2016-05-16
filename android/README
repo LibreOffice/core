@@ -252,7 +252,7 @@ useful info, try with the ndk-gdb method and the other way round.
 Then you can select your new configuration and use Run | Debug to launch it.
 Note that lldb doesn't initially stop execution, so if you want to add
 breakpoints using lldb prompt, you manually have to pause execution, then you
-can witch to the lldb tab and add your breakpoints. However making use of the
+can switch to the lldb tab and add your breakpoints. However making use of the
 editor just using File|Open .. to open the desired file in Android Studio and
 then toggling the breakpoint by clicking on the margin is more comfortable.
 

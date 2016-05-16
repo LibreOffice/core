@@ -80,7 +80,7 @@ public class _XDocumentInsertable extends MultiMethodTest {
         /**
          * Can be overridden to specify different than default
          * document name. This document must be situated in
-         * the test document disrectory, and its name must
+         * the test document directory, and its name must
          * be specified relational to this directory. By
          * default 'XDocumentInsertable.swx' file name returned.
          * @return File name of the document to be inserted.

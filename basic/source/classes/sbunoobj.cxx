@@ -2678,7 +2678,7 @@ SbxVariable* SbUnoObject::Find( const OUString& rName, SbxClassType t )
                         // won't be stored anywhere.
                         // If this leads to problems, it has to be created
                         // synthetically or a class SbUnoNameAccessProperty,
-                        // witch checks the existence on access and which
+                        // which checks the existence on access and which
                         // is disposed if the name is not found anymore.
                         pRes = new SbxVariable( SbxVARIANT );
                         unoToSbxValue( pRes, aAny );
