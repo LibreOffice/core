@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_4f176b51",
+        "filename": "sc/source/core/data/column.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1213,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-05-17T10:59:27Z",
+      "side": 1,
+      "message": "Likely the original intent was to also clear an existing note if one existed at the position where the cell is copied to, so here we should have\n\n else\n {\n     rDestCol.maCellNotes.set_empty(nDestRow, nDestRow);\n }\n\nas is done also below for the (!bSet) case.",
+      "revId": "7a1eaaf18be71f52be18011fb001292bc2fb9952",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
