@@ -326,6 +326,7 @@ private:
     hb_script_t             maHbScript;
     hb_face_t*              mpHbFace;
     int                     mnUnitsPerEM;
+    css::uno::Reference<css::i18n::XBreakIterator> mxBreak;
 
 public:
     explicit                HbLayoutEngine(ServerFont&);
@@ -514,7 +515,8 @@ bool HbLayoutEngine::Layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
 
             sal_Int32 nGraphemeStartPos = std::numeric_limits<sal_Int32>::max();
             sal_Int32 nGraphemeEndPos = std::numeric_limits<sal_Int32>::min();
-            css::uno::Reference<css::i18n::XBreakIterator> xBreak = vcl::unohelper::CreateBreakIterator();
+            if (!mxBreak.is())
+                mxBreak = vcl::unohelper::CreateBreakIterator();
             com::sun::star::lang::Locale aLocale(rArgs.maLanguageTag.getLocale());
 
             for (int i = 0; i < nRunGlyphCount; ++i) {
@@ -539,13 +541,13 @@ bool HbLayoutEngine::Layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
                 if(bRightToLeft && (nCharPos < nGraphemeStartPos))
                 {
                     sal_Int32 nDone;
-                    nGraphemeStartPos = xBreak->previousCharacters(rArgs.mrStr, nCharPos+1, aLocale,
+                    nGraphemeStartPos = mxBreak->previousCharacters(rArgs.mrStr, nCharPos+1, aLocale,
                                                   com::sun::star::i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
                 }
                 else if(!bRightToLeft && (nCharPos >= nGraphemeEndPos))
                 {
                     sal_Int32 nDone;
-                    nGraphemeEndPos = xBreak->nextCharacters(rArgs.mrStr, nCharPos, aLocale,
+                    nGraphemeEndPos = mxBreak->nextCharacters(rArgs.mrStr, nCharPos, aLocale,
                                                   com::sun::star::i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
                 }
                 else
