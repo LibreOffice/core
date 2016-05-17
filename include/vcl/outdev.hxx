@@ -429,7 +429,7 @@ protected:
 public:
     virtual                     ~OutputDevice();
 protected:
-      virtual void                dispose();
+    virtual void                dispose() override;
 
 public:
     void                        disposeOnce();
