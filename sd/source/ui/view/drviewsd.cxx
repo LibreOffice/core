@@ -152,13 +152,13 @@ void DrawViewShell::ExecNavigatorWin( SfxRequest& rReq )
 
 void DrawViewShell::GetNavigatorWinState( SfxItemSet& rSet )
 {
-    sal_uInt32 nState = NAVSTATE_NONE;
+    NavState nState = NavState::NONE;
     sal_uInt16 nCurrentPage = 0;
     sal_uInt16 nFirstPage = 0;
     sal_uInt16 nLastPage;
     OUString aPageName;
 
-    nState |= NAVTLB_UPDATE;
+    nState |= NavState::TableUpdate;
 
     if (mpActualPage != nullptr)
     {
@@ -171,24 +171,24 @@ void DrawViewShell::GetNavigatorWinState( SfxItemSet& rSet )
     // first page / previous page
     if( nCurrentPage == nFirstPage )
     {
-        nState |= NAVBTN_FIRST_DISABLED | NAVBTN_PREV_DISABLED;
+        nState |= NavState::BtnFirstDisabled | NavState::BtnPrevDisabled;
     }
     else
     {
-        nState |= NAVBTN_FIRST_ENABLED | NAVBTN_PREV_ENABLED;
+        nState |= NavState::BtnFirstEnabled | NavState::BtnPrevEnabled;
     }
 
     // last page / next page
     if( nCurrentPage == nLastPage )
     {
-        nState |= NAVBTN_LAST_DISABLED | NAVBTN_NEXT_DISABLED;
+        nState |= NavState::BtnLastDisabled | NavState::BtnNextDisabled;
     }
     else
     {
-        nState |= NAVBTN_LAST_ENABLED | NAVBTN_NEXT_ENABLED;
+        nState |= NavState::BtnLastEnabled | NavState::BtnNextEnabled;
     }
 
-    rSet.Put( SfxUInt32Item( SID_NAVIGATOR_STATE, nState ) );
+    rSet.Put( SfxUInt32Item( SID_NAVIGATOR_STATE, (sal_uInt32)nState ) );
     rSet.Put( SfxStringItem( SID_NAVIGATOR_PAGENAME, aPageName ) );
 }
 

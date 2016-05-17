@@ -843,45 +843,45 @@ void SdNavigatorControllerItem::StateChanged( sal_uInt16 nSId,
     if( eState >= SfxItemState::DEFAULT && nSId == SID_NAVIGATOR_STATE )
     {
         const SfxUInt32Item& rStateItem = dynamic_cast<const SfxUInt32Item&>(*pItem);
-        sal_uInt32 nState = rStateItem.GetValue();
+        NavState nState = (NavState)rStateItem.GetValue();
 
         // only if doc in LB is the active
         NavDocInfo* pInfo = pNavigatorWin->GetDocInfo();
         if( pInfo && pInfo->IsActive() )
         {
             // First
-            if( nState & NAVBTN_FIRST_ENABLED &&
+            if( nState & NavState::BtnFirstEnabled &&
                 !pNavigatorWin->maToolbox->IsItemEnabled( TBI_FIRST ) )
                 pNavigatorWin->maToolbox->EnableItem( TBI_FIRST );
-            if( nState & NAVBTN_FIRST_DISABLED &&
+            if( nState & NavState::BtnFirstDisabled &&
                 pNavigatorWin->maToolbox->IsItemEnabled( TBI_FIRST ) )
                 pNavigatorWin->maToolbox->EnableItem( TBI_FIRST, false );
 
             // Prev
-            if( nState & NAVBTN_PREV_ENABLED &&
+            if( nState & NavState::BtnPrevEnabled &&
                 !pNavigatorWin->maToolbox->IsItemEnabled( TBI_PREVIOUS ) )
                 pNavigatorWin->maToolbox->EnableItem( TBI_PREVIOUS );
-            if( nState & NAVBTN_PREV_DISABLED &&
+            if( nState & NavState::BtnPrevDisabled &&
                 pNavigatorWin->maToolbox->IsItemEnabled( TBI_PREVIOUS ) )
                 pNavigatorWin->maToolbox->EnableItem( TBI_PREVIOUS, false );
 
             // Last
-            if( nState & NAVBTN_LAST_ENABLED &&
+            if( nState & NavState::BtnLastEnabled &&
                 !pNavigatorWin->maToolbox->IsItemEnabled( TBI_LAST ) )
                 pNavigatorWin->maToolbox->EnableItem( TBI_LAST );
-            if( nState & NAVBTN_LAST_DISABLED &&
+            if( nState & NavState::BtnLastDisabled &&
                 pNavigatorWin->maToolbox->IsItemEnabled( TBI_LAST ) )
                 pNavigatorWin->maToolbox->EnableItem( TBI_LAST, false );
 
             // Next
-            if( nState & NAVBTN_NEXT_ENABLED &&
+            if( nState & NavState::BtnNextEnabled &&
                 !pNavigatorWin->maToolbox->IsItemEnabled( TBI_NEXT ) )
                 pNavigatorWin->maToolbox->EnableItem( TBI_NEXT );
-            if( nState & NAVBTN_NEXT_DISABLED &&
+            if( nState & NavState::BtnNextDisabled &&
                 pNavigatorWin->maToolbox->IsItemEnabled( TBI_NEXT ) )
                 pNavigatorWin->maToolbox->EnableItem( TBI_NEXT, false );
 
-            if( nState & NAVTLB_UPDATE )
+            if( nState & NavState::TableUpdate )
             {
                 // InitTlb; is initiated by Slot
                 if (maUpdateRequest)

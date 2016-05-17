@@ -27,20 +27,6 @@
 #include "sdtreelb.hxx"
 #include "pres.hxx"
 
-#define NAVSTATE_NONE           0x00000000
-
-#define NAVTLB_UPDATE           0x00000100
-
-#define NAVBTN_FIRST_ENABLED    0x00001000
-#define NAVBTN_FIRST_DISABLED   0x00002000
-#define NAVBTN_PREV_ENABLED     0x00004000
-#define NAVBTN_PREV_DISABLED    0x00008000
-
-#define NAVBTN_LAST_ENABLED     0x00010000
-#define NAVBTN_LAST_DISABLED    0x00020000
-#define NAVBTN_NEXT_ENABLED     0x00040000
-#define NAVBTN_NEXT_DISABLED    0x00080000
-
 // forward
 namespace sd {
 class DrawDocShell;
@@ -49,6 +35,22 @@ class NavigatorChildWindow;
 class Menu;
 class SdNavigatorControllerItem;
 class SdPageNameControllerItem;
+
+enum class NavState {
+    NONE               = 0x000000,
+    TableUpdate        = 0x000100,
+    BtnFirstEnabled    = 0x001000,
+    BtnFirstDisabled   = 0x002000,
+    BtnPrevEnabled     = 0x004000,
+    BtnPrevDisabled    = 0x008000,
+    BtnLastEnabled     = 0x010000,
+    BtnLastDisabled    = 0x020000,
+    BtnNextEnabled     = 0x040000,
+    BtnNextDisabled    = 0x080000,
+};
+namespace o3tl {
+    template<> struct typed_flags<NavState> : is_typed_flags<NavState, 0x0ff100> {};
+}
 
 class NavDocInfo
 {
