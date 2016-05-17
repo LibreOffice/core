@@ -468,6 +468,10 @@ void BarChart::createShapes()
                 if( aLogicYSumMap.find(nAttachedAxisIndex)==aLogicYSumMap.end() )
                     aLogicYSumMap[nAttachedAxisIndex]=0.0;
 
+                const sal_Int32 nSlotPoints = aXSlotIter->getPointCount();
+                if( nPointIndex >= nSlotPoints )
+                    continue;
+
                 double fMinimumY = 0.0, fMaximumY = 0.0;
                 aXSlotIter->calculateYMinAndMaxForCategory( nPointIndex
                     , isSeparateStackingForDifferentSigns( 1 ), fMinimumY, fMaximumY, nAttachedAxisIndex );
@@ -510,8 +514,9 @@ void BarChart::createShapes()
                 // get distance from base value to maximum and minimum
 
                 double fMinimumY = 0.0, fMaximumY = 0.0;
-                aXSlotIter->calculateYMinAndMaxForCategory( nPointIndex
-                    , isSeparateStackingForDifferentSigns( 1 ), fMinimumY, fMaximumY, nAttachedAxisIndex );
+                if( nPointIndex < aXSlotIter->getPointCount())
+                    aXSlotIter->calculateYMinAndMaxForCategory( nPointIndex
+                        , isSeparateStackingForDifferentSigns( 1 ), fMinimumY, fMaximumY, nAttachedAxisIndex );
 
                 double fLogicPositiveYSum = 0.0;
                 if( !::rtl::math::isNan( fMaximumY ) )
