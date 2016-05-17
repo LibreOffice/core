@@ -1179,11 +1179,8 @@ bool NormalModeHandler::ProcessMotionEvent (
     bool bIsProcessed (true);
     switch (rDescriptor.mnEventCode)
     {
-        case ANY_MODIFIER(MOUSE_MOTION | LEFT_BUTTON | SINGLE_CLICK | OVER_UNSELECTED_PAGE):
-            //            SetCurrentPage(rDescriptor.mpHitDescriptor);
-            // Fallthrough
-
         // A mouse motion without visible substitution starts that.
+        case ANY_MODIFIER(MOUSE_MOTION | LEFT_BUTTON | SINGLE_CLICK | OVER_UNSELECTED_PAGE):
         case ANY_MODIFIER(MOUSE_MOTION | LEFT_BUTTON | SINGLE_CLICK | OVER_SELECTED_PAGE):
         {
             if (maButtonDownLocation)
@@ -1200,10 +1197,10 @@ bool NormalModeHandler::ProcessMotionEvent (
                             ? InsertionIndicatorHandler::CopyMode
                             : InsertionIndicatorHandler::MoveMode);
             }
+            break;
         }
-        break;
 
-            // A mouse motion not over a page starts a rectangle selection.
+        // A mouse motion not over a page starts a rectangle selection.
         case ANY_MODIFIER(MOUSE_MOTION | LEFT_BUTTON | SINGLE_CLICK | NOT_OVER_PAGE):
             mrSelectionFunction.SwitchToMultiSelectionMode(
                 rDescriptor.maMouseModelPosition,
