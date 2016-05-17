@@ -42,7 +42,7 @@
       <LongDateYearSeparator> </LongDateYearSeparator>
     </Separators>
     <Markers>
-      <QuotationStart>‘</QuotationStart>
+      <QuotationStart>’</QuotationStart>
       <QuotationEnd>’</QuotationEnd>
       <DoubleQuotationStart>“</DoubleQuotationStart>
       <DoubleQuotationEnd>”</DoubleQuotationEnd>
