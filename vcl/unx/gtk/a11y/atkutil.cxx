@@ -199,8 +199,9 @@ void DocumentFocusListener::notifyEvent( const accessibility::AccessibleEventObj
 
                 if( accessibility::AccessibleStateType::FOCUSED == nState )
                     atk_wrapper_focus_tracker_notify_when_idle( getAccessible(aEvent) );
+
+                break;
             }
-            break;
 
             case accessibility::AccessibleEventId::CHILD:
             {
@@ -210,12 +211,13 @@ void DocumentFocusListener::notifyEvent( const accessibility::AccessibleEventObj
 
                 if( (aEvent.NewValue >>= xChild) && xChild.is() )
                     attachRecursive(xChild);
+
+                break;
             }
-            break;
 
             case accessibility::AccessibleEventId::INVALIDATE_ALL_CHILDREN:
-            g_warning( "Invalidate all children called\n" );
-            break;
+                OSL_TRACE( "Invalidate all children called\n" );
+                break;
 
             default:
                 break;
