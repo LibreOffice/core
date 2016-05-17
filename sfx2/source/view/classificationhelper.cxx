@@ -70,6 +70,36 @@ const OUString& PROP_IMPACTLEVEL()
     return sProp;
 }
 
+const OUString& PROP_PREFIX_EXPORTCONTROL()
+{
+    static OUString sProp("urn:bails:ExportControl:");
+    return sProp;
+}
+
+const OUString& PROP_PREFIX_NATIONALSECURITY()
+{
+    static OUString sProp("urn:bails:NationalSecurity:");
+    return sProp;
+}
+
+/// Converts a SfxClassificationPolicyType to a TSCP_BAILSv1 string value.
+const OUString& policyTypeToString(SfxClassificationPolicyType eType)
+{
+    switch (eType)
+    {
+    case SfxClassificationPolicyType::ExportControl:
+        return PROP_PREFIX_EXPORTCONTROL();
+        break;
+    case SfxClassificationPolicyType::NationalSecurity:
+        return PROP_PREFIX_NATIONALSECURITY();
+        break;
+    default:
+        break;
+    }
+
+    return SfxClassificationHelper::PROP_PREFIX_INTELLECTUALPROPERTY();
+}
+
 /// Represents one category of a classification policy.
 class SfxClassificationCategory
 {
@@ -669,7 +699,7 @@ std::vector<OUString> SfxClassificationHelper::GetBACNames()
     return aRet;
 }
 
-void SfxClassificationHelper::SetBACName(const OUString& rName)
+void SfxClassificationHelper::SetBACName(const OUString& rName, SfxClassificationPolicyType eType)
 {
     if (m_pImpl->m_aCategories.empty())
         m_pImpl->parsePolicy();
@@ -686,8 +716,9 @@ void SfxClassificationHelper::SetBACName(const OUString& rName)
 
     m_pImpl->m_aCategory.m_aName = it->m_aName;
     m_pImpl->m_aCategory.m_aLabels.clear();
+    const OUString& rPrefix = policyTypeToString(eType);
     for (const auto& rLabel : it->m_aLabels)
-        m_pImpl->m_aCategory.m_aLabels[PROP_PREFIX_INTELLECTUALPROPERTY() + rLabel.first] = rLabel.second;
+        m_pImpl->m_aCategory.m_aLabels[rPrefix + rLabel.first] = rLabel.second;
 
     m_pImpl->setStartValidity();
     m_pImpl->pushToDocumentProperties();
