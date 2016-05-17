@@ -837,8 +837,8 @@ XmlIdRegistryDocument::CreateUndo(Metadatable const& i_rObject)
 {
     OSL_TRACE("CreateUndo: %p", &i_rObject);
 
-    return std::shared_ptr<MetadatableUndo>(
-                new MetadatableUndo(i_rObject.IsInContent()) );
+    return std::make_shared<MetadatableUndo>(
+                i_rObject.IsInContent() );
 }
 
 /*
@@ -1216,8 +1216,8 @@ XmlIdRegistryClipboard::CreateClipboard(const bool i_isInContent)
 {
     OSL_TRACE("CreateClipboard:");
 
-    return std::shared_ptr<MetadatableClipboard>(
-        new MetadatableClipboard(i_isInContent) );
+    return std::make_shared<MetadatableClipboard>(
+        i_isInContent );
 }
 
 MetadatableClipboard &

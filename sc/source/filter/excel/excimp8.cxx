@@ -838,7 +838,7 @@ void XclImpAutoFilterData::EnableRemoveFilter()
 void XclImpAutoFilterBuffer::Insert( RootData* pRoot, const ScRange& rRange)
 {
     if( !GetByTab( rRange.aStart.Tab() ) )
-        maFilters.push_back( XclImpAutoFilterSharePtr(new XclImpAutoFilterData( pRoot, rRange) ));
+        maFilters.push_back( std::make_shared<XclImpAutoFilterData>( pRoot, rRange ));
 }
 
 void XclImpAutoFilterBuffer::AddAdvancedRange( const ScRange& rRange )

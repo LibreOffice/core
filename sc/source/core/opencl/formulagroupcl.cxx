@@ -4010,8 +4010,7 @@ DynamicKernel* DynamicKernel::create( const ScCalcConfig& rConfig, ScTokenArray&
                 else
                 {
                     FormulaTreeNodeRef pChildTreeNode =
-                        FormulaTreeNodeRef(
-                        new FormulaTreeNode(pTempFormula));
+                        std::make_shared<FormulaTreeNode>(pTempFormula);
                     pCurNode->Children.push_back(pChildTreeNode);
                 }
             }
@@ -4021,7 +4020,7 @@ DynamicKernel* DynamicKernel::create( const ScCalcConfig& rConfig, ScTokenArray&
         aTokenList.push_back(pCur);
     }
 
-    FormulaTreeNodeRef Root = FormulaTreeNodeRef(new FormulaTreeNode(nullptr));
+    FormulaTreeNodeRef Root = std::make_shared<FormulaTreeNode>(nullptr);
     Root->Children.push_back(aHashMap[aTokenList.back()]);
 
     DynamicKernel* pDynamicKernel = new DynamicKernel(rConfig, Root, nResultSize);

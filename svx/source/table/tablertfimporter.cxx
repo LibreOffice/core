@@ -300,7 +300,7 @@ void SdrTableRTFParser::NewCellRow()
     {
         mbNewDef = false;
 
-        maRows.push_back( RTFColumnVectorPtr( new RTFColumnVector() ) );
+        maRows.push_back( std::make_shared<std::vector<std::shared_ptr<RTFCellInfo>>>( ) );
     }
     mpDefMerge = nullptr;
     maDefaultIterator = maDefaultList.begin();

@@ -690,7 +690,7 @@ void SbaGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupM
                     break;
                 ::std::vector< std::shared_ptr<OTableRow> > vClipboardList;
                 // send it to the clipboard
-                vClipboardList.push_back(std::shared_ptr<OTableRow>(new OTableRow(xField)));
+                vClipboardList.push_back(std::make_shared<OTableRow>(xField));
                 OTableRowExchange* pData = new OTableRowExchange(vClipboardList);
                 Reference< css::datatransfer::XTransferable> xRef = pData;
                 pData->CopyToClipboard(GetParent());

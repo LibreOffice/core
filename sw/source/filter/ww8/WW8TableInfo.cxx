@@ -265,7 +265,7 @@ WidthsPtr WW8TableNodeInfoInner::getColumnWidthsBasedOnAllRows()
 
         // Calculate the widths based on the position of the unique & sorted
         // column separators
-        pWidths = WidthsPtr(new Widths);
+        pWidths = std::make_shared<Widths>();
         sal_uInt32 nPreviousWidth = 0;
         Widths::const_iterator aItEnd2 = pSeparators->end();
         for (Widths::const_iterator aIt2 = pSeparators->begin(); aIt2 != aItEnd2; ++aIt2)
@@ -296,7 +296,7 @@ WidthsPtr WW8TableNodeInfoInner::getWidthsOfRow()
         const SwTableLine * pTabLine = pTabBox->GetUpper();
         const SwTableBoxes & rTabBoxes = pTabLine->GetTabBoxes();
 
-        pWidths = WidthsPtr(new Widths);
+        pWidths = std::make_shared<Widths>();
         // number of cell written
         sal_uInt32 nBoxes = rTabBoxes.size();
         if (nBoxes > MAXTABLECELLS)
@@ -417,7 +417,7 @@ void WW8TableNodeInfo::setDepth(sal_uInt32 nDepth)
     Inners_t::iterator aIt = mInners.find(mnDepth);
 
     if (aIt == mInners.end())
-        mInners[mnDepth] = WW8TableNodeInfoInner::Pointer_t(new WW8TableNodeInfoInner(this));
+        mInners[mnDepth] = std::make_shared<ww8::WW8TableNodeInfoInner>(this);
 
     mInners[mnDepth]->setDepth(mnDepth);
 }
@@ -856,7 +856,7 @@ WW8TableNodeInfo::Pointer_t WW8TableInfo::insertTableNodeInfo
     if (pNodeInfo.get() == nullptr)
     {
         pNodeInfo =
-            WW8TableNodeInfo::Pointer_t(new WW8TableNodeInfo(this, pNode));
+            std::make_shared<ww8::WW8TableNodeInfo>(this, pNode);
         mMap.insert(Map_t::value_type(pNode, pNodeInfo));
     }
 
@@ -902,7 +902,7 @@ WW8TableCellGrid::Pointer_t WW8TableInfo::getCellGridForTable
     {
         if (bCreate)
         {
-            pResult = WW8TableCellGrid::Pointer_t(new WW8TableCellGrid);
+            pResult = std::make_shared<ww8::WW8TableCellGrid>();
             mCellGridMap[pTable] = pResult;
         }
     }
@@ -1056,7 +1056,7 @@ WW8TableCellGridRow::Pointer_t WW8TableCellGrid::getRow(long nTop, bool bCreate)
     {
         if (bCreate)
         {
-            pResult = WW8TableCellGridRow::Pointer_t(new WW8TableCellGridRow);
+            pResult = std::make_shared<ww8::WW8TableCellGridRow>();
             m_aRows[nTop] = pResult;
             m_aRowTops.insert(nTop);
         }

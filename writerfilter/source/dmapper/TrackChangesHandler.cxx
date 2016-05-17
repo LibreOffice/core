@@ -23,7 +23,7 @@ using namespace oox;
 TrackChangesHandler::TrackChangesHandler( sal_Int32 nToken ) :
 LoggedProperties("TrackChangesHandler")
 {
-    m_pRedlineParams = RedlineParamsPtr( new RedlineParams() );
+    m_pRedlineParams = std::make_shared<RedlineParams>( );
     m_pRedlineParams->m_nToken = nToken;
 }
 

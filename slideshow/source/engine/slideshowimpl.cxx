@@ -1856,8 +1856,8 @@ void SlideShowImpl::addShapeEventListener(
         aIter = maShapeEventListeners.insert(
             ShapeEventListenerMap::value_type(
                 xShape,
-                std::shared_ptr<comphelper::OInterfaceContainerHelper2>(
-                    new comphelper::OInterfaceContainerHelper2(m_aMutex)))).first;
+                std::make_shared<comphelper::OInterfaceContainerHelper2>(
+                    m_aMutex))).first;
     }
 
     // add new listener to broadcaster

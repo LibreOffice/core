@@ -796,7 +796,7 @@ void OTableEditorCtrl::InsertRows( long nRow )
                 pRow->GetActFieldDescr()->SetName( GenerateName( pRow->GetActFieldDescr()->GetName() ) );
                 pRow->SetPos(nInsertRow);
                 m_pRowList->insert( m_pRowList->begin()+nInsertRow,pRow );
-                vInsertedUndoRedoRows.push_back(std::shared_ptr<OTableRow>(new OTableRow(*pRow)));
+                vInsertedUndoRedoRows.push_back(std::make_shared<OTableRow>(*pRow));
                 nInsertRow++;
             }
         }
@@ -831,7 +831,7 @@ void OTableEditorCtrl::DeleteRows()
         RowRemoved( nIndex );
 
         // Insert the empty row at the end
-        m_pRowList->push_back( std::shared_ptr<OTableRow>(new OTableRow()));
+        m_pRowList->push_back( std::make_shared<OTableRow>());
         RowInserted( GetRowCount()-1 );
 
         nIndex = FirstSelectedRow();
@@ -860,7 +860,7 @@ void OTableEditorCtrl::InsertNewRows( long nRow )
     GetUndoManager().AddUndoAction( new OTableEditorInsNewUndoAct(this, nRow, nInsertRows) );
     // Insert the number of selected rows
     for( long i=nRow; i<(nRow+nInsertRows); i++ )
-        m_pRowList->insert( m_pRowList->begin()+i ,std::shared_ptr<OTableRow>(new OTableRow()));
+        m_pRowList->insert( m_pRowList->begin()+i ,std::make_shared<OTableRow>());
     RowInserted( nRow, nInsertRows );
 
     GetView()->getController().setModified( true );

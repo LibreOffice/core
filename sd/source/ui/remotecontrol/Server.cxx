@@ -264,7 +264,7 @@ std::vector< std::shared_ptr< ClientInfo > > RemoteServer::getClients()
     Sequence< OUString > aNames = xConfig->getElementNames();
     for ( int i = 0; i < aNames.getLength(); i++ )
     {
-        aClients.push_back( std::shared_ptr< ClientInfo > ( new ClientInfo( aNames[i], true ) ) );
+        aClients.push_back( std::make_shared< ClientInfo > ( aNames[i], true ) );
     }
 
     return aClients;

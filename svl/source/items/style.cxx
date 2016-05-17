@@ -636,7 +636,7 @@ SfxStyleSheetIteratorPtr SfxStyleSheetBasePool::CreateIterator
  sal_uInt16 mask
 )
 {
-    return SfxStyleSheetIteratorPtr(new SfxStyleSheetIterator(this,eFam,mask));
+    return std::make_shared<SfxStyleSheetIterator>(this,eFam,mask);
 }
 
 SfxStyleSheetBase* SfxStyleSheetBasePool::Create

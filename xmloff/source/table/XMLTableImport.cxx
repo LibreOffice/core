@@ -467,7 +467,7 @@ SvXMLImportContext * XMLTableImportContext::ImportCell( sal_uInt16 nPrefix, cons
         const sal_Int32 nColumnSpan = pCellContext->getColumnSpan();
         const sal_Int32 nRowSpan = pCellContext->getRowSpan();
         if( (nColumnSpan > 1) || (nRowSpan > 1) )
-            maMergeInfos.push_back( std::shared_ptr< MergeInfo >( new MergeInfo( mnCurrentColumn, mnCurrentRow, nColumnSpan, nRowSpan ) ) );
+            maMergeInfos.push_back( std::make_shared< MergeInfo >( mnCurrentColumn, mnCurrentRow, nColumnSpan, nRowSpan ) );
 
         const sal_Int32 nRepeated = pCellContext->getRepeated();
         if( nRepeated > 1 )

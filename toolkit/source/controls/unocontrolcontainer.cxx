@@ -267,7 +267,7 @@ UnoControlHolderList::ControlIdentifier UnoControlHolderList::impl_addControl( c
     OUString sName = _pName ? *_pName : impl_getFreeName_throw();
     sal_Int32 nId = impl_getFreeIdentifier_throw();
 
-    maControls[ nId ] = ControlInfo( new UnoControlHolder( sName, _rxControl ) );
+    maControls[ nId ] = std::make_shared<UnoControlHolder>( sName, _rxControl );
     return nId;
 }
 
