@@ -75,15 +75,16 @@ void SelectionObserver::NotifyPageEvent (const SdrPage* pSdrPage)
     if (pPage == nullptr)
         return;
 
+    //NotifyPageEvent is called for add, remove, *and* change position so for
+    //the change position case we must ensure we don't end up with the slide
+    //duplicated in our list
+    std::vector<const SdPage*>::iterator iPage(
+        std::find(maInsertedPages.begin(), maInsertedPages.end(), pPage));
+    if (iPage != maInsertedPages.end())
+        maInsertedPages.erase(iPage);
+
     if (pPage->IsInserted())
         maInsertedPages.push_back(pPage);
-    else
-    {
-        ::std::vector<const SdPage*>::iterator iPage(
-            ::std::find(maInsertedPages.begin(), maInsertedPages.end(), pPage));
-        if (iPage != maInsertedPages.end())
-            maInsertedPages.erase(iPage);
-    }
 }
 
 void SelectionObserver::StartObservation()
