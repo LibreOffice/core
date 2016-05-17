@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_723a58cf",
+        "filename": "xmloff/source/style/xmlnumfe.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1342,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2016-05-17T11:39:48Z",
+      "side": 1,
+      "message": "Replace with SAL_FALLTHROUGH",
+      "range": {
+        "startLine": 1342,
+        "startChar": 20,
+        "endLine": 1342,
+        "endChar": 22
+      },
+      "revId": "d904e792bc8e96705d50ef03c14cd959a6f74b26",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
