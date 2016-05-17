@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+
 #include "parserfragments.hxx"
 #include "spirit_supplements.hxx"
 #include "gfxtypes.hxx"
@@ -134,32 +135,23 @@ namespace
                 colorExpression =
                     (
                         // the #rrggbb form
-                        ('#' >> (xdigit_p >> xdigit_p)[boost::bind(&setEightBitColor,
-                                                                   boost::ref(self.m_rColor.r),_1,_2)]
-                             >> (xdigit_p >> xdigit_p)[boost::bind(&setEightBitColor,
-                                                                   boost::ref(self.m_rColor.g),_1,_2)]
-                             >> (xdigit_p >> xdigit_p)[boost::bind(&setEightBitColor,
-                                                                   boost::ref(self.m_rColor.b),_1,_2)])
+                        ('#' >> (xdigit_p >> xdigit_p)[ ([self](const char* pStart, const char* nChar){ setEightBitColor(self.m_rColor.r, pStart, nChar); }) ]                          
+                             >> (xdigit_p >> xdigit_p)[ ([self](const char* pStart, const char* nChar){ setEightBitColor(self.m_rColor.g, pStart, nChar); }) ]                          
+                             >> (xdigit_p >> xdigit_p)[ ([self](const char* pStart, const char* nChar){ setEightBitColor(self.m_rColor.b, pStart, nChar); }) ]   )                      
                         |
                         // the #rgb form
-                        ('#' >> xdigit_p[boost::bind(&setFourBitColor,
-                                                     boost::ref(self.m_rColor.r),_1)]
-                             >> xdigit_p[boost::bind(&setFourBitColor,
-                                                     boost::ref(self.m_rColor.g),_1)]
-                             >> xdigit_p[boost::bind(&setFourBitColor,
-                                                     boost::ref(self.m_rColor.b),_1)])
+                        ('#' >> xdigit_p[ ([self](char nChar){ setFourBitColor(self.m_rColor.r, nChar); }) ]                             
+                             >> xdigit_p[ ([self](char nChar){ setFourBitColor(self.m_rColor.g, nChar); }) ]   
+                             >> xdigit_p[ ([self](char nChar){ setFourBitColor(self.m_rColor.b, nChar); }) ]   )
                         |
                         // rgb() form
                         (str_p("rgb")
                             >> '(' >>
                             (
                                 // rgb(int,int,int)
-                                (byte_p[boost::bind(&setIntColor,
-                                                    boost::ref(self.m_rColor.r),_1)] >> ',' >>
-                                 byte_p[boost::bind(&setIntColor,
-                                                    boost::ref(self.m_rColor.g),_1)] >> ',' >>
-                                 byte_p[boost::bind(&setIntColor,
-                                                    boost::ref(self.m_rColor.b),_1)])
+                                (byte_p[ ([self](sal_uInt8 nVal){ setIntColor(self.m_rColor.r, nVal); }) ] >> ',' >>                   
+                                 byte_p[ ([self](sal_uInt8 nVal){ setIntColor(self.m_rColor.g, nVal); }) ] >> ',' >>
+                                 byte_p[ ([self](sal_uInt8 nVal){ setIntColor(self.m_rColor.b, nVal); }) ] )
                              |
                                 // rgb(double,double,double)
                                 (real_p[assign_a(self.m_rColor.r)] >> ',' >>
@@ -167,12 +159,9 @@ namespace
                                  real_p[assign_a(self.m_rColor.b)])
                              |
                                 // rgb(percent,percent,percent)
-                                (real_p[boost::bind(&setPercentColor,
-                                                    boost::ref(self.m_rColor.r),_1)] >> "%," >>
-                                 real_p[boost::bind(&setPercentColor,
-                                                    boost::ref(self.m_rColor.g),_1)] >> "%," >>
-                                 real_p[boost::bind(&setPercentColor,
-                                                    boost::ref(self.m_rColor.b),_1)] >> "%")
+                                (real_p[ ([self](double nVal){ setPercentColor(self.m_rColor.r, nVal); }) ] >> "%," >>
+                                 real_p[ ([self](double nVal){ setPercentColor(self.m_rColor.g, nVal); }) ] >> "%," >>
+                                 real_p[ ([self](double nVal){ setPercentColor(self.m_rColor.b	, nVal); }) ] >> "%")
                              )
                          >> ')')
                      );
