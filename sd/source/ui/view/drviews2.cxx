@@ -1156,7 +1156,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     if (SfxObjectShell* pObjectShell = pViewFrame->GetObjectShell())
                     {
                         SfxClassificationHelper aHelper(pObjectShell->getDocProperties());
-                        aHelper.SetBACName(rName);
+                        aHelper.SetBACName(rName, SfxClassificationPolicyType::IntellectualProperty);
                     }
                 }
             }

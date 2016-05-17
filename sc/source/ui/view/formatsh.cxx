@@ -974,7 +974,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
         {
             const OUString& rName = static_cast<const SfxStringItem*>(pItem)->GetValue();
             SfxClassificationHelper aHelper(pDocSh->getDocProperties());
-            aHelper.SetBACName(rName);
+            aHelper.SetBACName(rName, SfxClassificationPolicyType::IntellectualProperty);
         }
         else
             SAL_WARN("sc.ui", "missing parameter for SID_CLASSIFICATION_APPLY");
