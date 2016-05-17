@@ -75,6 +75,8 @@ public:
     static const OUString& PROP_DOCFOOTER();
     /// Brief text formatted as a watermark on each document's page.
     static const OUString& PROP_DOCWATERMARK();
+    /// Get the property prefix for the IntellectualProperty policy type.
+    static const OUString& PROP_PREFIX_INTELLECTUALPROPERTY();
 };
 
 #endif
