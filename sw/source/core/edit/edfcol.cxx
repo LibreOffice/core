@@ -218,11 +218,11 @@ void SwEditShell::SetClassification(const OUString& rName)
 
             if (bHeaderIsNeeded)
             {
-                if (!lcl_hasField(xHeaderText, aServiceName, SfxClassificationHelper::PROP_DOCHEADER()))
+                if (!lcl_hasField(xHeaderText, aServiceName, SfxClassificationHelper::PROP_PREFIX_INTELLECTUALPROPERTY() + SfxClassificationHelper::PROP_DOCHEADER()))
                 {
                     // Append a field to the end of the header text.
                     uno::Reference<beans::XPropertySet> xField(xMultiServiceFactory->createInstance(aServiceName), uno::UNO_QUERY);
-                    xField->setPropertyValue(UNO_NAME_NAME, uno::makeAny(SfxClassificationHelper::PROP_DOCHEADER()));
+                    xField->setPropertyValue(UNO_NAME_NAME, uno::makeAny(SfxClassificationHelper::PROP_PREFIX_INTELLECTUALPROPERTY() + SfxClassificationHelper::PROP_DOCHEADER()));
                     uno::Reference<text::XTextContent> xTextContent(xField, uno::UNO_QUERY);
                     xHeaderText->insertTextContent(xHeaderText->getEnd(), xTextContent, /*bAbsorb=*/false);
                 }
@@ -231,7 +231,8 @@ void SwEditShell::SetClassification(const OUString& rName)
             if (bWatermarkIsNeeded || bHadWatermark)
             {
                 OUString aShapeServiceName = "com.sun.star.drawing.CustomShape";
-                uno::Reference<drawing::XShape> xWatermark = lcl_getWatermark(xHeaderText, aShapeServiceName, SfxClassificationHelper::PROP_DOCWATERMARK());
+                static const OUString sWatermark = SfxClassificationHelper::PROP_PREFIX_INTELLECTUALPROPERTY() + SfxClassificationHelper::PROP_DOCWATERMARK();
+                uno::Reference<drawing::XShape> xWatermark = lcl_getWatermark(xHeaderText, aShapeServiceName, sWatermark);
 
                 bool bDeleteWatermark = bHadWatermark && !bWatermarkIsNeeded;
                 if (xWatermark.is())
@@ -344,7 +345,7 @@ void SwEditShell::SetClassification(const OUString& rName)
                     xPropertySet->setPropertyValue("CustomShapeGeometry", uno::makeAny(comphelper::containerToSequence(aGeomPropVec)));
 
                     uno::Reference<container::XNamed> xNamed(xShape, uno::UNO_QUERY);
-                    xNamed->setName(SfxClassificationHelper::PROP_DOCWATERMARK());
+                    xNamed->setName(SfxClassificationHelper::PROP_PREFIX_INTELLECTUALPROPERTY() + SfxClassificationHelper::PROP_DOCWATERMARK());
                     xLockable->removeActionLock();
                 }
             }
@@ -361,11 +362,12 @@ void SwEditShell::SetClassification(const OUString& rName)
             // If the footer already contains a document header field, no need to do anything.
             uno::Reference<text::XText> xFooterText;
             xPageStyle->getPropertyValue(UNO_NAME_FOOTER_TEXT) >>= xFooterText;
-            if (!lcl_hasField(xFooterText, aServiceName, SfxClassificationHelper::PROP_DOCFOOTER()))
+            static OUString sFooter = SfxClassificationHelper::PROP_PREFIX_INTELLECTUALPROPERTY() + SfxClassificationHelper::PROP_DOCFOOTER();
+            if (!lcl_hasField(xFooterText, aServiceName, sFooter))
             {
                 // Append a field to the end of the footer text.
                 uno::Reference<beans::XPropertySet> xField(xMultiServiceFactory->createInstance(aServiceName), uno::UNO_QUERY);
-                xField->setPropertyValue(UNO_NAME_NAME, uno::makeAny(SfxClassificationHelper::PROP_DOCFOOTER()));
+                xField->setPropertyValue(UNO_NAME_NAME, uno::makeAny(sFooter));
                 uno::Reference<text::XTextContent> xTextContent(xField, uno::UNO_QUERY);
                 xFooterText->insertTextContent(xFooterText->getEnd(), xTextContent, /*bAbsorb=*/false);
             }

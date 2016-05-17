@@ -42,13 +42,13 @@ namespace
 
 const OUString& PROP_BACNAME()
 {
-    static OUString sProp("urn:bails:IntellectualProperty:BusinessAuthorizationCategory:Name");
+    static OUString sProp("BusinessAuthorizationCategory:Name");
     return sProp;
 }
 
 const OUString& PROP_STARTVALIDITY()
 {
-    static OUString sProp("urn:bails:IntellectualProperty:Authorization:StartValidity");
+    static OUString sProp("Authorization:StartValidity");
     return sProp;
 }
 
@@ -60,13 +60,13 @@ const OUString& PROP_NONE()
 
 const OUString& PROP_IMPACTSCALE()
 {
-    static OUString sProp("urn:bails:IntellectualProperty:Impact:Scale");
+    static OUString sProp("Impact:Scale");
     return sProp;
 }
 
 const OUString& PROP_IMPACTLEVEL()
 {
-    static OUString sProp("urn:bails:IntellectualProperty:Impact:Level:Confidentiality");
+    static OUString sProp("Impact:Level:Confidentiality");
     return sProp;
 }
 
@@ -178,39 +178,39 @@ throw (xml::sax::SAXException, uno::RuntimeException, std::exception)
             m_aCategories.push_back(SfxClassificationCategory());
             SfxClassificationCategory& rCategory = m_aCategories.back();
             rCategory.m_aName = aName;
-            rCategory.m_aLabels["urn:bails:IntellectualProperty:PolicyAuthority:Name"] = m_aPolicyAuthorityName;
-            rCategory.m_aLabels["urn:bails:IntellectualProperty:Policy:Name"] = m_aPolicyName;
-            rCategory.m_aLabels["urn:bails:IntellectualProperty:BusinessAuthorization:Identifier"] = m_aProgramID;
-            rCategory.m_aLabels["urn:bails:IntellectualProperty:BusinessAuthorizationCategory:Identifier"] = aIdentifier;
+            rCategory.m_aLabels["PolicyAuthority:Name"] = m_aPolicyAuthorityName;
+            rCategory.m_aLabels["Policy:Name"] = m_aPolicyName;
+            rCategory.m_aLabels["BusinessAuthorization:Identifier"] = m_aProgramID;
+            rCategory.m_aLabels["BusinessAuthorizationCategory:Identifier"] = aIdentifier;
 
             // Also initialize defaults.
-            rCategory.m_aLabels["urn:bails:IntellectualProperty:PolicyAuthority:Identifier"] = PROP_NONE();
-            rCategory.m_aLabels["urn:bails:IntellectualProperty:PolicyAuthority:Country"] = PROP_NONE();
-            rCategory.m_aLabels["urn:bails:IntellectualProperty:Policy:Identifier"] = PROP_NONE();
-            rCategory.m_aLabels["urn:bails:IntellectualProperty:BusinessAuthorization:Name"] = PROP_NONE();
-            rCategory.m_aLabels["urn:bails:IntellectualProperty:BusinessAuthorization:Locator"] = PROP_NONE();
-            rCategory.m_aLabels["urn:bails:IntellectualProperty:BusinessAuthorizationCategory:Identifier:OID"] = PROP_NONE();
-            rCategory.m_aLabels["urn:bails:IntellectualProperty:BusinessAuthorizationCategory:Locator"] = PROP_NONE();
-            rCategory.m_aLabels["urn:bails:IntellectualProperty:BusinessAuthorization:Locator"] = PROP_NONE();
-            rCategory.m_aLabels["urn:bails:IntellectualProperty:MarkingPrecedence"] = PROP_NONE();
-            rCategory.m_aLabels["urn:bails:IntellectualProperty:Marking:general-summary"].clear();
-            rCategory.m_aLabels["urn:bails:IntellectualProperty:Marking:general-warning-statement"].clear();
-            rCategory.m_aLabels["urn:bails:IntellectualProperty:Marking:general-warning-statement:ext:2"].clear();
-            rCategory.m_aLabels["urn:bails:IntellectualProperty:Marking:general-warning-statement:ext:3"].clear();
-            rCategory.m_aLabels["urn:bails:IntellectualProperty:Marking:general-warning-statement:ext:4"].clear();
-            rCategory.m_aLabels["urn:bails:IntellectualProperty:Marking:general-distribution-statement"].clear();
-            rCategory.m_aLabels["urn:bails:IntellectualProperty:Marking:general-distribution-statement:ext:2"].clear();
-            rCategory.m_aLabels["urn:bails:IntellectualProperty:Marking:general-distribution-statement:ext:3"].clear();
-            rCategory.m_aLabels["urn:bails:IntellectualProperty:Marking:general-distribution-statement:ext:4"].clear();
+            rCategory.m_aLabels["PolicyAuthority:Identifier"] = PROP_NONE();
+            rCategory.m_aLabels["PolicyAuthority:Country"] = PROP_NONE();
+            rCategory.m_aLabels["Policy:Identifier"] = PROP_NONE();
+            rCategory.m_aLabels["BusinessAuthorization:Name"] = PROP_NONE();
+            rCategory.m_aLabels["BusinessAuthorization:Locator"] = PROP_NONE();
+            rCategory.m_aLabels["BusinessAuthorizationCategory:Identifier:OID"] = PROP_NONE();
+            rCategory.m_aLabels["BusinessAuthorizationCategory:Locator"] = PROP_NONE();
+            rCategory.m_aLabels["BusinessAuthorization:Locator"] = PROP_NONE();
+            rCategory.m_aLabels["MarkingPrecedence"] = PROP_NONE();
+            rCategory.m_aLabels["Marking:general-summary"].clear();
+            rCategory.m_aLabels["Marking:general-warning-statement"].clear();
+            rCategory.m_aLabels["Marking:general-warning-statement:ext:2"].clear();
+            rCategory.m_aLabels["Marking:general-warning-statement:ext:3"].clear();
+            rCategory.m_aLabels["Marking:general-warning-statement:ext:4"].clear();
+            rCategory.m_aLabels["Marking:general-distribution-statement"].clear();
+            rCategory.m_aLabels["Marking:general-distribution-statement:ext:2"].clear();
+            rCategory.m_aLabels["Marking:general-distribution-statement:ext:3"].clear();
+            rCategory.m_aLabels["Marking:general-distribution-statement:ext:4"].clear();
             rCategory.m_aLabels[SfxClassificationHelper::PROP_DOCHEADER()].clear();
             rCategory.m_aLabels[SfxClassificationHelper::PROP_DOCFOOTER()].clear();
             rCategory.m_aLabels[SfxClassificationHelper::PROP_DOCWATERMARK()].clear();
-            rCategory.m_aLabels["urn:bails:IntellectualProperty:Marking:email-first-line-of-text"].clear();
-            rCategory.m_aLabels["urn:bails:IntellectualProperty:Marking:email-last-line-of-text"].clear();
-            rCategory.m_aLabels["urn:bails:IntellectualProperty:Marking:email-subject-prefix"].clear();
-            rCategory.m_aLabels["urn:bails:IntellectualProperty:Marking:email-subject-suffix"].clear();
+            rCategory.m_aLabels["Marking:email-first-line-of-text"].clear();
+            rCategory.m_aLabels["Marking:email-last-line-of-text"].clear();
+            rCategory.m_aLabels["Marking:email-subject-prefix"].clear();
+            rCategory.m_aLabels["Marking:email-subject-suffix"].clear();
             rCategory.m_aLabels[PROP_STARTVALIDITY()] = PROP_NONE();
-            rCategory.m_aLabels["urn:bails:IntellectualProperty:Authorization:StopValidity"] = PROP_NONE();
+            rCategory.m_aLabels["Authorization:StopValidity"] = PROP_NONE();
             m_pCategory = &rCategory;
         }
     }
@@ -261,10 +261,10 @@ void SAL_CALL SfxClassificationParser::endElement(const OUString& rName) throw (
             rLabels[PROP_IMPACTLEVEL()] = m_aConfidentalityValue;
             // Set the two other type of levels as well, if they're not set
             // yet: they're optional in BAF, but not in BAILS.
-            if (rLabels.find("urn:bails:IntellectualProperty:Impact:Level:Integrity") == rLabels.end())
-                rLabels["urn:bails:IntellectualProperty:Impact:Level:Integrity"] = m_aConfidentalityValue;
-            if (rLabels.find("urn:bails:IntellectualProperty:Impact:Level:Availability") == rLabels.end())
-                rLabels["urn:bails:IntellectualProperty:Impact:Level:Availability"] = m_aConfidentalityValue;
+            if (rLabels.find("Impact:Level:Integrity") == rLabels.end())
+                rLabels["Impact:Level:Integrity"] = m_aConfidentalityValue;
+            if (rLabels.find("Impact:Level:Availability") == rLabels.end())
+                rLabels["Impact:Level:Availability"] = m_aConfidentalityValue;
         }
     }
     else if (rName == "baf:Identifier")
@@ -359,7 +359,15 @@ void SfxClassificationHelper::Impl::parsePolicy()
     {
         SAL_WARN("sfx.view", "parsePolicy() failed: " << rException.Message);
     }
-    m_aCategories = xClassificationParser->m_aCategories;
+    m_aCategories.clear();
+    for (const SfxClassificationCategory& rCategory : xClassificationParser->m_aCategories)
+    {
+        SfxClassificationCategory aCategory;
+        aCategory.m_aName = rCategory.m_aName;
+        for (const auto& rLabel : rCategory.m_aLabels)
+            aCategory.m_aLabels[PROP_PREFIX_INTELLECTUALPROPERTY() + rLabel.first] = rLabel.second;
+        m_aCategories.push_back(aCategory);
+    }
 }
 
 bool lcl_containsProperty(const uno::Sequence<beans::Property>& rProperties, const OUString& rName)
@@ -391,7 +399,7 @@ void SfxClassificationHelper::Impl::pushToDocumentProperties()
     uno::Reference<beans::XPropertySet> xPropertySet(xPropertyContainer, uno::UNO_QUERY);
     uno::Sequence<beans::Property> aProperties = xPropertySet->getPropertySetInfo()->getProperties();
     std::map<OUString, OUString> aLabels = m_aCategory.m_aLabels;
-    aLabels[PROP_BACNAME()] = m_aCategory.m_aName;
+    aLabels[PROP_PREFIX_INTELLECTUALPROPERTY() + PROP_BACNAME()] = m_aCategory.m_aName;
     for (const auto& rLabel : aLabels)
     {
         try
@@ -501,7 +509,7 @@ SfxClassificationHelper::SfxClassificationHelper(const uno::Reference<document::
         OUString aValue;
         if (aAny >>= aValue)
         {
-            if (rProperty.Name == PROP_BACNAME())
+            if (rProperty.Name == (PROP_PREFIX_INTELLECTUALPROPERTY() + PROP_BACNAME()))
                 m_pImpl->m_aCategory.m_aName = aValue;
             else
                 m_pImpl->m_aCategory.m_aLabels[rProperty.Name] = aValue;
@@ -520,11 +528,11 @@ const OUString& SfxClassificationHelper::GetBACName()
 
 bool SfxClassificationHelper::HasImpactLevel()
 {
-    std::map<OUString, OUString>::iterator it = m_pImpl->m_aCategory.m_aLabels.find(PROP_IMPACTSCALE());
+    std::map<OUString, OUString>::iterator it = m_pImpl->m_aCategory.m_aLabels.find(PROP_PREFIX_INTELLECTUALPROPERTY() + PROP_IMPACTSCALE());
     if (it == m_pImpl->m_aCategory.m_aLabels.end())
         return false;
 
-    it = m_pImpl->m_aCategory.m_aLabels.find(PROP_IMPACTLEVEL());
+    it = m_pImpl->m_aCategory.m_aLabels.find(PROP_PREFIX_INTELLECTUALPROPERTY() + PROP_IMPACTLEVEL());
     if (it == m_pImpl->m_aCategory.m_aLabels.end())
         return false;
 
@@ -533,7 +541,7 @@ bool SfxClassificationHelper::HasImpactLevel()
 
 bool SfxClassificationHelper::HasDocumentHeader()
 {
-    std::map<OUString, OUString>::iterator it = m_pImpl->m_aCategory.m_aLabels.find(SfxClassificationHelper::PROP_DOCHEADER());
+    std::map<OUString, OUString>::iterator it = m_pImpl->m_aCategory.m_aLabels.find(PROP_PREFIX_INTELLECTUALPROPERTY() + PROP_DOCHEADER());
     if (it == m_pImpl->m_aCategory.m_aLabels.end() || it->second.isEmpty())
         return false;
 
@@ -542,7 +550,7 @@ bool SfxClassificationHelper::HasDocumentHeader()
 
 bool SfxClassificationHelper::HasDocumentFooter()
 {
-    std::map<OUString, OUString>::iterator it = m_pImpl->m_aCategory.m_aLabels.find(SfxClassificationHelper::PROP_DOCFOOTER());
+    std::map<OUString, OUString>::iterator it = m_pImpl->m_aCategory.m_aLabels.find(PROP_PREFIX_INTELLECTUALPROPERTY() + PROP_DOCFOOTER());
     if (it == m_pImpl->m_aCategory.m_aLabels.end() || it->second.isEmpty())
         return false;
 
@@ -553,12 +561,12 @@ basegfx::BColor SfxClassificationHelper::GetImpactLevelColor()
 {
     basegfx::BColor aRet;
 
-    std::map<OUString, OUString>::iterator it = m_pImpl->m_aCategory.m_aLabels.find(PROP_IMPACTSCALE());
+    std::map<OUString, OUString>::iterator it = m_pImpl->m_aCategory.m_aLabels.find(PROP_PREFIX_INTELLECTUALPROPERTY() + PROP_IMPACTSCALE());
     if (it == m_pImpl->m_aCategory.m_aLabels.end())
         return aRet;
     OUString aScale = it->second;
 
-    it = m_pImpl->m_aCategory.m_aLabels.find(PROP_IMPACTLEVEL());
+    it = m_pImpl->m_aCategory.m_aLabels.find(PROP_PREFIX_INTELLECTUALPROPERTY() + PROP_IMPACTLEVEL());
     if (it == m_pImpl->m_aCategory.m_aLabels.end())
         return aRet;
     OUString aLevel = it->second;
@@ -603,12 +611,12 @@ sal_Int32 SfxClassificationHelper::GetImpactLevel()
 {
     sal_Int32 nRet = -1;
 
-    std::map<OUString, OUString>::iterator it = m_pImpl->m_aCategory.m_aLabels.find(PROP_IMPACTSCALE());
+    std::map<OUString, OUString>::iterator it = m_pImpl->m_aCategory.m_aLabels.find(PROP_PREFIX_INTELLECTUALPROPERTY() + PROP_IMPACTSCALE());
     if (it == m_pImpl->m_aCategory.m_aLabels.end())
         return nRet;
     OUString aScale = it->second;
 
-    it = m_pImpl->m_aCategory.m_aLabels.find(PROP_IMPACTLEVEL());
+    it = m_pImpl->m_aCategory.m_aLabels.find(PROP_PREFIX_INTELLECTUALPROPERTY() + PROP_IMPACTLEVEL());
     if (it == m_pImpl->m_aCategory.m_aLabels.end())
         return nRet;
     OUString aLevel = it->second;
@@ -640,7 +648,7 @@ sal_Int32 SfxClassificationHelper::GetImpactLevel()
 
 OUString SfxClassificationHelper::GetImpactScale()
 {
-    std::map<OUString, OUString>::iterator it = m_pImpl->m_aCategory.m_aLabels.find(PROP_IMPACTSCALE());
+    std::map<OUString, OUString>::iterator it = m_pImpl->m_aCategory.m_aLabels.find(PROP_PREFIX_INTELLECTUALPROPERTY() + PROP_IMPACTSCALE());
     if (it != m_pImpl->m_aCategory.m_aLabels.end())
         return it->second;
 
@@ -649,7 +657,7 @@ OUString SfxClassificationHelper::GetImpactScale()
 
 OUString SfxClassificationHelper::GetDocumentWatermark()
 {
-    std::map<OUString, OUString>::iterator it = m_pImpl->m_aCategory.m_aLabels.find(SfxClassificationHelper::PROP_DOCWATERMARK());
+    std::map<OUString, OUString>::iterator it = m_pImpl->m_aCategory.m_aLabels.find(PROP_PREFIX_INTELLECTUALPROPERTY() + PROP_DOCWATERMARK());
     if (it != m_pImpl->m_aCategory.m_aLabels.end())
         return it->second;
 
@@ -713,19 +721,25 @@ void SfxClassificationHelper::UpdateInfobar(SfxViewFrame& rViewFrame)
 
 const OUString& SfxClassificationHelper::PROP_DOCHEADER()
 {
-    static OUString sProp("urn:bails:IntellectualProperty:Marking:document-header");
+    static OUString sProp("Marking:document-header");
     return sProp;
 }
 
 const OUString& SfxClassificationHelper::PROP_DOCFOOTER()
 {
-    static OUString sProp("urn:bails:IntellectualProperty:Marking:document-footer");
+    static OUString sProp("Marking:document-footer");
     return sProp;
 }
 
 const OUString& SfxClassificationHelper::PROP_DOCWATERMARK()
 {
-    static OUString sProp("urn:bails:IntellectualProperty:Marking:document-watermark");
+    static OUString sProp("Marking:document-watermark");
+    return sProp;
+}
+
+const OUString& SfxClassificationHelper::PROP_PREFIX_INTELLECTUALPROPERTY()
+{
+    static OUString sProp("urn:bails:IntellectualProperty:");
     return sProp;
 }
 
