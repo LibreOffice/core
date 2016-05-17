@@ -36,12 +36,12 @@ FragmentBaseData::FragmentBaseData( XmlFilterBase& rFilter, const OUString& rFra
 }
 
 FragmentHandler::FragmentHandler( XmlFilterBase& rFilter, const OUString& rFragmentPath ) :
-    FragmentHandler_BASE( FragmentBaseDataRef( new FragmentBaseData( rFilter, rFragmentPath, rFilter.importRelations( rFragmentPath ) ) ) )
+    FragmentHandler_BASE( std::make_shared<oox::core::FragmentBaseData>( rFilter, rFragmentPath, rFilter.importRelations( rFragmentPath ) ) )
 {
 }
 
 FragmentHandler::FragmentHandler( XmlFilterBase& rFilter, const OUString& rFragmentPath, RelationsRef xRelations ) :
-    FragmentHandler_BASE( FragmentBaseDataRef( new FragmentBaseData( rFilter, rFragmentPath, xRelations ) ) )
+    FragmentHandler_BASE( std::make_shared<oox::core::FragmentBaseData>( rFilter, rFragmentPath, xRelations ) )
 {
 }
 

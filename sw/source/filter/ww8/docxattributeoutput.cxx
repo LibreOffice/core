@@ -494,7 +494,7 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
                 */
                 ww8::WW8TableInfo::Pointer_t pOldTableInfo = m_rExport.m_pTableInfo;
                 //Reset the table infos after saving.
-                m_rExport.m_pTableInfo = ww8::WW8TableInfo::Pointer_t(new ww8::WW8TableInfo());
+                m_rExport.m_pTableInfo = std::make_shared<ww8::WW8TableInfo>();
 
                 /** FDO#71834 :
                        Save the table reference attributes before calling WriteDMLTextFrame,
@@ -511,7 +511,7 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
                 // Reset table infos, otherwise the depth of the cells will be incorrect,
                 // in case the text frame had table(s) and we try to export the
                 // same table second time.
-                m_rExport.m_pTableInfo = ww8::WW8TableInfo::Pointer_t(new ww8::WW8TableInfo());
+                m_rExport.m_pTableInfo = std::make_shared<ww8::WW8TableInfo>();
                 //reset the tableReference.
 
                 m_pSerializer->startElementNS(XML_mc, XML_Fallback, FSEND);
@@ -5117,7 +5117,7 @@ void DocxAttributeOutput::WriteOutliner(const OutlinerParaObject& rParaObj)
 void DocxAttributeOutput::pushToTableExportContext(DocxTableExportContext& rContext)
 {
     rContext.m_pTableInfo = m_rExport.m_pTableInfo;
-    m_rExport.m_pTableInfo = ww8::WW8TableInfo::Pointer_t(new ww8::WW8TableInfo());
+    m_rExport.m_pTableInfo = std::make_shared<ww8::WW8TableInfo>();
 
     rContext.m_bTableCellOpen = m_tableReference->m_bTableCellOpen;
     m_tableReference->m_bTableCellOpen = false;

@@ -32,7 +32,7 @@
 using namespace css;
 
 RtfSdrExport::RtfSdrExport(RtfExport& rExport)
-    : EscherEx(EscherExGlobalRef(new EscherExGlobal), nullptr),
+    : EscherEx(std::make_shared<EscherExGlobal>(), nullptr),
       m_rExport(rExport),
       m_rAttrOutput(static_cast<RtfAttributeOutput&>(m_rExport.AttrOutput())),
       m_pSdrObject(nullptr),

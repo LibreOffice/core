@@ -454,7 +454,7 @@ FSHelperPtr XmlFilterBase::openFragmentStreamWithSerializer( const OUString& rSt
 {
     bool bWriteHeader
         = rMediaType.indexOf( "vml" ) < 0 || rMediaType.indexOf( "+xml" ) >= 0;
-    return FSHelperPtr( new FastSerializerHelper( openFragmentStream( rStreamName, rMediaType ), bWriteHeader ) );
+    return std::make_shared<sax_fastparser::FastSerializerHelper>( openFragmentStream( rStreamName, rMediaType ), bWriteHeader );
 }
 
 TextFieldStack& XmlFilterBase::getTextFieldStack() const

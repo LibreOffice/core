@@ -753,8 +753,8 @@ bool SwFEShell::Paste( SwDoc* pClpDoc )
             OSL_ENSURE( aIdx.GetNode().GetContentNode(), "Who filled the clipboard?!" );
             if( aIdx.GetNode().GetContentNode() ) // robust
             {
-                Insertion aInsertion( PaMPtr( new SwPaM( aIdx ) ),
-                    PositionPtr( new SwPosition( aInsertPos ) ) );
+                Insertion aInsertion( std::make_shared<SwPaM>( aIdx ),
+                    std::make_shared<SwPosition>( aInsertPos ) );
                 ++aIdx;
                 aInsertion.first->SetMark();
                 if( pStartCursor == pCurrCursor->GetNext() )

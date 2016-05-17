@@ -148,12 +148,12 @@ namespace slideshow
             try
             {
                 maViewAppletShapes.push_back(
-                    ViewAppletShapeSharedPtr( new ViewAppletShape( rNewLayer,
+                    std::make_shared<slideshow::internal::ViewAppletShape>( rNewLayer,
                                                                    getXShape(),
                                                                    maServiceName,
                                                                    mpPropCopyTable,
                                                                    mnNumPropEntries,
-                                                                   mxComponentContext )));
+                                                                   mxComponentContext ));
 
                 // push new size to view shape
                 maViewAppletShapes.back()->resize( getBounds() );

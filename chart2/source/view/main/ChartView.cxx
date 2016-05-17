@@ -1199,7 +1199,7 @@ void ChartView::init()
     if( !m_pDrawModelWrapper.get() )
     {
         SolarMutexGuard aSolarGuard;
-        m_pDrawModelWrapper = std::shared_ptr< DrawModelWrapper >( new DrawModelWrapper( m_xCC ) );
+        m_pDrawModelWrapper = std::make_shared< DrawModelWrapper >( m_xCC );
         m_xShapeFactory = m_pDrawModelWrapper->getShapeFactory();
         m_xDrawPage = m_pDrawModelWrapper->getMainDrawPage();
         StartListening( m_pDrawModelWrapper->getSdrModel() );

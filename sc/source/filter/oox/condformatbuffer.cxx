@@ -1077,7 +1077,7 @@ void CondFormat::finalizeImport()
 
 CondFormatRuleRef CondFormat::createRule()
 {
-    return CondFormatRuleRef( new CondFormatRule( *this, mpFormat ) );
+    return std::make_shared<oox::xls::CondFormatRule>( *this, mpFormat );
 }
 
 void CondFormat::insertRule( CondFormatRuleRef xRule )

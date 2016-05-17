@@ -239,7 +239,7 @@ namespace slideshow
                 }
             }
 
-            return EndUpdater(new LayerEndUpdate(shared_from_this()));
+            return std::make_shared<slideshow::internal::LayerEndUpdate>(shared_from_this());
         }
 
         void Layer::endUpdate()
@@ -263,12 +263,12 @@ namespace slideshow
 
         LayerSharedPtr Layer::createBackgroundLayer()
         {
-            return LayerSharedPtr(new Layer( BackgroundLayer ));
+            return std::make_shared<slideshow::internal::Layer>( BackgroundLayer );
         }
 
         LayerSharedPtr Layer::createLayer( )
         {
-            return LayerSharedPtr( new Layer );
+            return std::make_shared<slideshow::internal::Layer>( );
         }
 
     }

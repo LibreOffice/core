@@ -248,7 +248,7 @@ sdbcx::ObjectType OKeysHelper::appendObject( const OUString& _rForName, const Re
     {
     }
 
-    m_pTable->addKey(sNewName,sdbcx::TKeyProperties(new sdbcx::KeyProperties(sReferencedName,nKeyType,nUpdateRule,nDeleteRule)));
+    m_pTable->addKey(sNewName,std::make_shared<connectivity::sdbcx::KeyProperties>(sReferencedName,nKeyType,nUpdateRule,nDeleteRule));
 
     return createObject( sNewName );
 }

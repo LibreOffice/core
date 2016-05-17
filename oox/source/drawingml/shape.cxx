@@ -298,16 +298,16 @@ void Shape::applyShapeReference( const Shape& rReferencedShape, bool bUseText )
     SAL_INFO("oox", OSL_THIS_FUNC << "apply shape reference: " << rReferencedShape.msId << " to shape id: " << msId);
 
     if ( rReferencedShape.mpTextBody.get() && bUseText )
-        mpTextBody = TextBodyPtr( new TextBody( *rReferencedShape.mpTextBody.get() ) );
+        mpTextBody = std::make_shared<oox::drawingml::TextBody>( *rReferencedShape.mpTextBody.get() );
     else
         mpTextBody.reset();
     maShapeProperties = rReferencedShape.maShapeProperties;
-    mpShapeRefLinePropPtr = LinePropertiesPtr( new LineProperties( *rReferencedShape.mpLinePropertiesPtr.get() ) );
-    mpShapeRefFillPropPtr = FillPropertiesPtr( new FillProperties( *rReferencedShape.mpFillPropertiesPtr.get() ) );
-    mpCustomShapePropertiesPtr = CustomShapePropertiesPtr( new CustomShapeProperties( *rReferencedShape.mpCustomShapePropertiesPtr.get() ) );
+    mpShapeRefLinePropPtr = std::make_shared<oox::drawingml::LineProperties>( *rReferencedShape.mpLinePropertiesPtr.get() );
+    mpShapeRefFillPropPtr = std::make_shared<oox::drawingml::FillProperties>( *rReferencedShape.mpFillPropertiesPtr.get() );
+    mpCustomShapePropertiesPtr = std::make_shared<oox::drawingml::CustomShapeProperties>( *rReferencedShape.mpCustomShapePropertiesPtr.get() );
     mpTablePropertiesPtr = table::TablePropertiesPtr( rReferencedShape.mpTablePropertiesPtr.get() ? new table::TableProperties( *rReferencedShape.mpTablePropertiesPtr.get() ) : nullptr );
-    mpShapeRefEffectPropPtr = EffectPropertiesPtr( new EffectProperties( *rReferencedShape.mpEffectPropertiesPtr.get() ) );
-    mpMasterTextListStyle = TextListStylePtr( new TextListStyle( *rReferencedShape.mpMasterTextListStyle.get() ) );
+    mpShapeRefEffectPropPtr = std::make_shared<oox::drawingml::EffectProperties>( *rReferencedShape.mpEffectPropertiesPtr.get() );
+    mpMasterTextListStyle = std::make_shared<oox::drawingml::TextListStyle>( *rReferencedShape.mpMasterTextListStyle.get() );
     maSize = rReferencedShape.maSize;
     maPosition = rReferencedShape.maPosition;
     mnRotation = rReferencedShape.mnRotation;

@@ -1661,7 +1661,7 @@ SwXParaFrameEnumerationImpl::SwXParaFrameEnumerationImpl(
     }
     else if (pFormat)
     {
-        m_vFrames.push_back(std::shared_ptr<sw::FrameClient>(new sw::FrameClient(pFormat)));
+        m_vFrames.push_back(std::make_shared<sw::FrameClient>(pFormat));
     }
     else if ((PARAFRAME_PORTION_CHAR == eParaFrameMode) ||
              (PARAFRAME_PORTION_TEXTRANGE == eParaFrameMode))
@@ -1672,7 +1672,7 @@ SwXParaFrameEnumerationImpl::SwXParaFrameEnumerationImpl(
             for(const auto& pFlyFrame : rPaM.GetDoc()->GetAllFlyFormats(&GetCursor(), false, true))
             {
                 const auto pFrameFormat = const_cast<SwFrameFormat*>(&pFlyFrame->GetFormat());
-                m_vFrames.push_back(std::shared_ptr<sw::FrameClient>(new sw::FrameClient(pFrameFormat)));
+                m_vFrames.push_back(std::make_shared<sw::FrameClient>(pFrameFormat));
             }
         }
         FillFrame();
@@ -1692,7 +1692,7 @@ void SwXParaFrameEnumerationImpl::FillFrame()
         return;
     const SwFormatFlyCnt& rFlyCnt = pTextAttr->GetFlyCnt();
     SwFrameFormat* const pFrameFormat = rFlyCnt.GetFrameFormat();
-    m_vFrames.push_back(std::shared_ptr<sw::FrameClient>(new sw::FrameClient(pFrameFormat)));
+    m_vFrames.push_back(std::make_shared<sw::FrameClient>(pFrameFormat));
 }
 
 bool SwXParaFrameEnumerationImpl::CreateNextObject()

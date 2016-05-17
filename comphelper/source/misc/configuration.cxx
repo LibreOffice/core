@@ -206,8 +206,8 @@ comphelper::detail::ConfigurationWrapper::getSetReadWrite(
 
 std::shared_ptr< comphelper::ConfigurationChanges >
 comphelper::detail::ConfigurationWrapper::createChanges() const {
-    return std::shared_ptr< ConfigurationChanges >(
-        new ConfigurationChanges(context_));
+    return std::make_shared< ConfigurationChanges >(
+        context_);
 }
 
 void comphelper::ConfigurationListener::addListener(ConfigurationListenerPropertyBase *pListener)

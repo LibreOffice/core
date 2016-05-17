@@ -306,7 +306,7 @@ void OTableEditorInsNewUndoAct::Redo()
     ::std::vector< std::shared_ptr<OTableRow> >* pRowList = pTabEdCtrl->GetRowList();
 
     for( long i=m_nInsPos; i<(m_nInsPos+m_nInsRows); i++ )
-        pRowList->insert( pRowList->begin()+i,std::shared_ptr<OTableRow>(new OTableRow()) );
+        pRowList->insert( pRowList->begin()+i,std::make_shared<OTableRow>() );
 
     pTabEdCtrl->RowInserted( m_nInsPos, m_nInsRows );
     pTabEdCtrl->InvalidateHandleColumn();

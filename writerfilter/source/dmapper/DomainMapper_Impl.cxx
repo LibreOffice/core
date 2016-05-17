@@ -2644,7 +2644,7 @@ void DomainMapper_Impl::PushFieldContext()
         uno::Reference< text::XTextCursor > xCrsr = xTextAppend->createTextCursorByRange( xTextAppend->getEnd() );
         xStart = xCrsr->getStart();
     }
-    m_aFieldStack.push( FieldContextPtr( new FieldContext( xStart ) ) );
+    m_aFieldStack.push( std::make_shared<writerfilter::dmapper::FieldContext>( xStart ) );
 }
 /*-------------------------------------------------------------------------
 //the current field context waits for the completion of the command

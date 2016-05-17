@@ -86,10 +86,10 @@ std::shared_ptr< FunctionDescription > FunctionManager::get(const uno::Reference
             TCategoriesMap::iterator aCategoryFind = m_aCategories.find(sCategoryName);
             if ( aCategoryFind == m_aCategories.end() )
             {
-                aCategoryFind = m_aCategories.insert(TCategoriesMap::value_type(sCategoryName,std::shared_ptr< FunctionCategory > (new FunctionCategory(this,xCategory->getNumber() + 1,xCategory)))).first;
+                aCategoryFind = m_aCategories.insert(TCategoriesMap::value_type(sCategoryName,std::make_shared< FunctionCategory > (this,xCategory->getNumber() + 1,xCategory))).first;
                 m_aCategoryIndex.push_back( aCategoryFind );
             }
-            aFunctionFind = m_aFunctions.insert(TFunctionsMap::value_type(sFunctionName,std::shared_ptr<FunctionDescription>(new FunctionDescription(aCategoryFind->second.get(),_xFunctionDescription)))).first;
+            aFunctionFind = m_aFunctions.insert(TFunctionsMap::value_type(sFunctionName,std::make_shared<FunctionDescription>(aCategoryFind->second.get(),_xFunctionDescription))).first;
         }
         pDesc = aFunctionFind->second;
     }

@@ -70,7 +70,7 @@ namespace dbaccess
 OQuery::OQuery( const Reference< XPropertySet >& _rxCommandDefinition
                ,const Reference< XConnection >& _rxConn
                ,const Reference< XComponentContext >& _xORB)
-    :OContentHelper(_xORB,nullptr,TContentPtr(new OContentHelper_Impl))
+    :OContentHelper(_xORB,nullptr,std::make_shared<dbaccess::OContentHelper_Impl>())
     ,OQueryDescriptor_Base(m_aMutex,*this)
     ,ODataSettings(OContentHelper::rBHelper,true)
     ,m_xCommandDefinition(_rxCommandDefinition)

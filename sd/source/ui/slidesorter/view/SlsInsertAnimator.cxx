@@ -216,11 +216,11 @@ SharedPageObjectRun InsertAnimator::Implementation::GetRun (
     {
         // There is only one run that contains all slides.
         if (maRuns.empty())
-            maRuns.insert(SharedPageObjectRun(new PageObjectRun(
+            maRuns.insert(std::make_shared<sd::slidesorter::view::(anonymous namespace)::PageObjectRun>(
                 *this,
                 0,
                 0,
-                mrModel.GetPageCount()-1)));
+                mrModel.GetPageCount()-1));
         iRun = maRuns.begin();
     }
     else
@@ -233,11 +233,11 @@ SharedPageObjectRun InsertAnimator::Implementation::GetRun (
             const sal_Int32 nEndIndex (rLayouter.GetIndex(nRow, rLayouter.GetColumnCount()-1));
             if (nStartIndex <= nEndIndex)
             {
-                iRun = maRuns.insert(SharedPageObjectRun(new PageObjectRun(
+                iRun = maRuns.insert(std::make_shared<sd::slidesorter::view::(anonymous namespace)::PageObjectRun>(
                     *this,
                     nRow,
                     nStartIndex,
-                    nEndIndex))).first;
+                    nEndIndex)).first;
                 OSL_ASSERT(iRun != maRuns.end());
             }
         }

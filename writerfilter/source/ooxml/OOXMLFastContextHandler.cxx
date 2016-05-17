@@ -694,8 +694,7 @@ void OOXMLFastContextHandler::sendTableProperties()
 
 void OOXMLFastContextHandler::clearTableProps()
 {
-    mpParserState->setTableProperties(OOXMLPropertySet::Pointer_t
-                                     (new OOXMLPropertySet));
+    mpParserState->setTableProperties(std::make_shared<writerfilter::ooxml::OOXMLPropertySet>());
 }
 
 void OOXMLFastContextHandler::sendPropertiesWithId(Id nId)
@@ -711,7 +710,7 @@ void OOXMLFastContextHandler::sendPropertiesWithId(Id nId)
 
 void OOXMLFastContextHandler::clearProps()
 {
-    setPropertySet(OOXMLPropertySet::Pointer_t(new OOXMLPropertySet));
+    setPropertySet(std::make_shared<writerfilter::ooxml::OOXMLPropertySet>());
 }
 
 void OOXMLFastContextHandler::setDefaultBooleanValue()

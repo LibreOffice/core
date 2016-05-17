@@ -20,7 +20,7 @@
 #include "escherex.hxx"
 
 PptEscherEx::PptEscherEx( SvStream& rOutStrm, const OUString& rBaseURI ) :
-    EscherEx( EscherExGlobalRef( new EscherExGlobal ), &rOutStrm )
+    EscherEx( std::make_shared<EscherExGlobal>( ), &rOutStrm )
 {
     mxGlobal->SetBaseURI( rBaseURI );
     mnCurrentDg = 0;

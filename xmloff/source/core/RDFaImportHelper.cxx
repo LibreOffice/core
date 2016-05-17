@@ -390,8 +390,8 @@ RDFaImportHelper::ParseRDFa(
     const OUString datatype( !i_rDatatype.isEmpty()
         ?   reader.ReadCURIE(i_rDatatype)
         :   OUString() );
-    return std::shared_ptr<ParsedRDFaAttributes>(
-            new ParsedRDFaAttributes(about, properties, i_rContent, datatype));
+    return std::make_shared<ParsedRDFaAttributes>(
+            about, properties, i_rContent, datatype);
 }
 
 void

@@ -345,7 +345,7 @@ void TypeGroupConverter::convertFromModel( const Reference< XDiagram >& rxDiagra
         typedef RefVector< SeriesConverter > SeriesConvVector;
         SeriesConvVector aSeries;
         for( TypeGroupModel::SeriesVector::iterator aIt = mrModel.maSeries.begin(), aEnd = mrModel.maSeries.end(); aIt != aEnd; ++aIt )
-            aSeries.push_back( SeriesConvVector::value_type( new SeriesConverter( *this, **aIt ) ) );
+            aSeries.push_back( std::make_shared<oox::drawingml::chart::SeriesConverter>( *this, **aIt ) );
 
         // reverse series order for some unstacked 2D chart types
         if( isReverseSeries() )

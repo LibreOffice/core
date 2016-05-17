@@ -201,8 +201,8 @@ void PresentationFragmentHandler::importSlide(sal_uInt32 nSlide, bool bFirstPage
                         else
                             xMasterPage = xMasterPages->insertNewByIndex( xMasterPages->getCount() );
 
-                        pMasterPersistPtr = SlidePersistPtr( new SlidePersist( rFilter, true, false, xMasterPage,
-                            ShapePtr( new PPTShape( Master, "com.sun.star.drawing.GroupShape" ) ), mpTextListStyle ) );
+                        pMasterPersistPtr = std::make_shared<oox::ppt::SlidePersist>( rFilter, true, false, xMasterPage,
+                            ShapePtr( new PPTShape( Master, "com.sun.star.drawing.GroupShape" ) ), mpTextListStyle );
                         pMasterPersistPtr->setLayoutPath( aLayoutFragmentPath );
                         rFilter.getMasterPages().push_back( pMasterPersistPtr );
                         rFilter.setActualSlidePersist( pMasterPersistPtr );

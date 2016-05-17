@@ -548,8 +548,8 @@ void ColorConfigWindow_Impl::CreateEntries()
     for (unsigned i = 0; i != nGroupCount; ++i)
     {
         aModulesInstalled[i] = IsGroupVisible(vGroupInfo[i].eGroup);
-        vChapters.push_back(std::shared_ptr<Chapter>(
-            new Chapter(get<FixedText>(vGroupInfo[i].pGroup), aModulesInstalled[i])));
+        vChapters.push_back(std::make_shared<Chapter>(
+            get<FixedText>(vGroupInfo[i].pGroup), aModulesInstalled[i]));
     }
 
     //Here we want to get the amount to add to the position
@@ -574,8 +574,8 @@ void ColorConfigWindow_Impl::CreateEntries()
     vEntries.reserve(ColorConfigEntryCount);
     for (unsigned i = 0; i < SAL_N_ELEMENTS(vEntryInfo); ++i)
     {
-        vEntries.push_back(std::shared_ptr<Entry>(new Entry(*this, i, nCheckBoxLabelOffset,
-            aModulesInstalled[vEntryInfo[i].eGroup])));
+        vEntries.push_back(std::make_shared<Entry>(*this, i, nCheckBoxLabelOffset,
+            aModulesInstalled[vEntryInfo[i].eGroup]));
     }
 
     // extended entries
@@ -586,19 +586,19 @@ void ColorConfigWindow_Impl::CreateEntries()
         for (unsigned j = 0; j != nExtGroupCount; ++j)
         {
             OUString const sComponentName = aExtConfig.GetComponentName(j);
-            vChapters.push_back(std::shared_ptr<Chapter>(new Chapter(
+            vChapters.push_back(std::make_shared<Chapter>(
                 m_pGrid, nLineNum,
                 aExtConfig.GetComponentDisplayName(sComponentName)
-            )));
+            ));
             ++nLineNum;
             unsigned nColorCount = aExtConfig.GetComponentColorCount(sComponentName);
             for (unsigned i = 0; i != nColorCount; ++i)
             {
                 ExtendedColorConfigValue const aColorEntry =
                     aExtConfig.GetComponentColorConfigValue(sComponentName, i);
-                vEntries.push_back(std::shared_ptr<Entry>( new Entry (
+                vEntries.push_back(std::make_shared<Entry>(
                     m_pGrid, nLineNum, aColorEntry, nCheckBoxLabelOffset
-                )));
+                ));
                 ++nLineNum;
             }
         }

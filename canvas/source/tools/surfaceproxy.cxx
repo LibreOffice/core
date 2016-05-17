@@ -69,12 +69,11 @@ namespace canvas
                                                       aPageSize.getY() ) );
 
                 maSurfaceList.push_back(
-                    SurfaceSharedPtr(
-                        new Surface(
+                    std::make_shared<canvas::Surface>(
                             mpPageManager,
                             mpBuffer,
                             aOffset,
-                            aSize)));
+                            aSize));
             }
         }
     }

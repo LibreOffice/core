@@ -165,7 +165,7 @@ std::shared_ptr<XMLTextImportHelper::BackpatcherImpl>
 XMLTextImportHelper::MakeBackpatcherImpl()
 {
     // n.b.: the shared_ptr stores the dtor!
-    return std::shared_ptr<BackpatcherImpl>(new BackpatcherImpl);
+    return std::make_shared<BackpatcherImpl>();
 }
 
 static OUString GetSequenceNumber()

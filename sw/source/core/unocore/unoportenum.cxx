@@ -142,10 +142,9 @@ namespace
             ::sw::mark::CrossRefBookmark *const pCrossRefMark(dynamic_cast< ::sw::mark::CrossRefBookmark*>(pBkmk));
             sal_uInt8 const nType = (hasOther || pCrossRefMark)
                 ? BKM_TYPE_START : BKM_TYPE_START_END;
-            rBkmArr.insert(SwXBookmarkPortion_ImplSharedPtr(
-                new SwXBookmarkPortion_Impl(
+            rBkmArr.insert(std::make_shared<(anonymous namespace)::SwXBookmarkPortion_Impl>(
                         SwXBookmark::CreateXBookmark(rDoc, pBkmk),
-                        nType, rStartPos)));
+                        nType, rStartPos));
         }
 
         const SwPosition& rEndPos = pBkmk->GetMarkEnd();
@@ -167,10 +166,9 @@ namespace
             }
             if(pEndPos)
             {
-                rBkmArr.insert(SwXBookmarkPortion_ImplSharedPtr(
-                    new SwXBookmarkPortion_Impl(
+                rBkmArr.insert(std::make_shared<(anonymous namespace)::SwXBookmarkPortion_Impl>(
                             SwXBookmark::CreateXBookmark(rDoc, pBkmk),
-                            BKM_TYPE_END, *pEndPos)));
+                            BKM_TYPE_END, *pEndPos));
             }
         }
     }
@@ -302,11 +300,10 @@ namespace
                 if ( pAnnotationFormatField != nullptr )
                 {
                     rAnnotationStartArr.insert(
-                        SwAnnotationStartPortion_ImplSharedPtr(
-                            new SwAnnotationStartPortion_Impl(
+                        std::make_shared<(anonymous namespace)::(anonymous namespace)::SwAnnotationStartPortion_Impl>(
                                 SwXTextField::CreateXTextField(&rDoc,
                                     pAnnotationFormatField),
-                                rStartPos)));
+                                rStartPos));
                 }
             }
         }
@@ -1073,11 +1070,11 @@ static void lcl_FillRedlineArray(
             const SwPosition* pRedStart = pRedline->Start();
             const SwNodeIndex nRedNode = pRedStart->nNode;
             if ( nOwnNode == nRedNode )
-                rRedArr.insert( SwXRedlinePortion_ImplSharedPtr (
-                    new SwXRedlinePortion_Impl ( pRedline, true ) ) );
+                rRedArr.insert( std::make_shared<SwXRedlinePortion_Impl>(
+                    pRedline, true ) );
             if( pRedline->HasMark() && pRedline->End()->nNode == nOwnNode )
-                rRedArr.insert( SwXRedlinePortion_ImplSharedPtr (
-                    new SwXRedlinePortion_Impl ( pRedline, false) ) );
+                rRedArr.insert( std::make_shared<SwXRedlinePortion_Impl>(
+                    pRedline, false ) );
        }
     }
 }

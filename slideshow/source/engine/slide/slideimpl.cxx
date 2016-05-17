@@ -697,7 +697,7 @@ SlideBitmapSharedPtr SlideImpl::createCurrentSlideBitmap( const UnoViewSharedPtr
     initSlideBackground( pBitmapCanvas, rBmpSize );
     mpLayerManager->renderTo( pBitmapCanvas );
 
-    return SlideBitmapSharedPtr( new SlideBitmap( pBitmap ) );
+    return std::make_shared<slideshow::internal::SlideBitmap>( pBitmap );
 }
 
 namespace

@@ -356,7 +356,7 @@ void ConfigurationUpdater::UnlockUpdates()
 
 std::shared_ptr<ConfigurationUpdaterLock> ConfigurationUpdater::GetLock()
 {
-    return std::shared_ptr<ConfigurationUpdaterLock>(new ConfigurationUpdaterLock(*this));
+    return std::make_shared<ConfigurationUpdaterLock>(*this);
 }
 
 void ConfigurationUpdater::SetUpdateBeingProcessed (bool bValue)

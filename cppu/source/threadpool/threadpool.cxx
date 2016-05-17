@@ -49,7 +49,7 @@ namespace cppu_threadpool
         public rtl::StaticWithInit< DisposedCallerAdminHolder, theDisposedCallerAdmin >
     {
         DisposedCallerAdminHolder operator () () {
-            return DisposedCallerAdminHolder(new DisposedCallerAdmin());
+            return std::make_shared<cppu_threadpool::DisposedCallerAdmin>();
         }
     };
 

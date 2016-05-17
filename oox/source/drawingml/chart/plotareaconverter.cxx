@@ -118,7 +118,7 @@ void AxesSetConverter::convertFromModel( const Reference< XDiagram >& rxDiagram,
     typedef RefVector< TypeGroupConverter > TypeGroupConvVector;
     TypeGroupConvVector aTypeGroups;
     for( AxesSetModel::TypeGroupVector::iterator aIt = mrModel.maTypeGroups.begin(), aEnd = mrModel.maTypeGroups.end(); aIt != aEnd; ++aIt )
-        aTypeGroups.push_back( TypeGroupConvVector::value_type( new TypeGroupConverter( *this, **aIt ) ) );
+        aTypeGroups.push_back( std::make_shared<oox::drawingml::chart::TypeGroupConverter>( *this, **aIt ) );
 
     OSL_ENSURE( !aTypeGroups.empty(), "AxesSetConverter::convertFromModel - no type groups in axes set" );
     if( !aTypeGroups.empty() ) try

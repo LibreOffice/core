@@ -177,7 +177,7 @@ void ButtonSetImpl::scanForButtonSets( const OUString& rPath )
             {
                 OUString sFileName( aStatus.getFileName() );
                 if( sFileName.endsWithIgnoreAsciiCase( ".zip" ) )
-                    maButtons.push_back( std::shared_ptr< ButtonsImpl >( new ButtonsImpl( aStatus.getFileURL() ) ) );
+                    maButtons.push_back( std::make_shared< ButtonsImpl >( aStatus.getFileURL() ) );
             }
         }
     }

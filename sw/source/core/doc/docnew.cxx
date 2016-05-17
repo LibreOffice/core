@@ -211,7 +211,7 @@ SwDoc::SwDoc()
     m_pDocumentRedlineManager( new ::sw::DocumentRedlineManager( *this ) ),
     m_pDocumentStateManager( new ::sw::DocumentStateManager( *this ) ),
     m_pUndoManager(new ::sw::UndoManager(
-            std::shared_ptr<SwNodes>(new SwNodes(this)), *m_pDocumentDrawModelManager, *m_pDocumentRedlineManager, *m_pDocumentStateManager)),
+            std::make_shared<SwNodes>(this), *m_pDocumentDrawModelManager, *m_pDocumentRedlineManager, *m_pDocumentStateManager)),
     m_pDocumentSettingManager(new ::sw::DocumentSettingManager(*this)),
     m_pDocumentChartDataProviderManager( new sw::DocumentChartDataProviderManager( *this ) ),
     m_pDeviceAccess( new ::sw::DocumentDeviceManager( *this ) ),

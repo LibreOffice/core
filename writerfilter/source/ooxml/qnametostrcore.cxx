@@ -27,7 +27,7 @@ QNameToString::Pointer_t QNameToString::pInstance;
 QNameToString::Pointer_t QNameToString::Instance()
 {
     if (pInstance.get() == nullptr)
-        pInstance = QNameToString::Pointer_t(new QNameToString());
+        pInstance = std::make_shared<writerfilter::QNameToString>();
 
     return pInstance;
 }

@@ -26,8 +26,8 @@ TextListStyle::TextListStyle()
 {
     for ( int i = 0; i < 9; i++ )
     {
-        maListStyle.push_back( TextParagraphPropertiesPtr( new TextParagraphProperties() ) );
-        maAggregationListStyle.push_back( TextParagraphPropertiesPtr( new TextParagraphProperties() ) );
+        maListStyle.push_back( std::make_shared<oox::drawingml::TextParagraphProperties>( ) );
+        maAggregationListStyle.push_back( std::make_shared<oox::drawingml::TextParagraphProperties>( ) );
     }
 }
 
@@ -41,8 +41,8 @@ TextListStyle::TextListStyle(const TextListStyle& rStyle)
     assert(rStyle.maAggregationListStyle.size() == 9);
     for ( size_t i = 0; i < 9; i++ )
     {
-        maListStyle.push_back( TextParagraphPropertiesPtr( new TextParagraphProperties(*rStyle.maListStyle[i]) ) );
-        maAggregationListStyle.push_back( TextParagraphPropertiesPtr( new TextParagraphProperties(*rStyle.maAggregationListStyle[i]) ) );
+        maListStyle.push_back( std::make_shared<oox::drawingml::TextParagraphProperties>( *rStyle.maListStyle[i] ) );
+        maAggregationListStyle.push_back( std::make_shared<oox::drawingml::TextParagraphProperties>( *rStyle.maAggregationListStyle[i] ) );
     }
 }
 
@@ -75,7 +75,7 @@ void applyStyleList( const TextParagraphPropertiesVector& rSourceListStyle, Text
             ++aDestListStyleIter;
         }
         else
-            rDestListStyle.push_back( TextParagraphPropertiesPtr( new TextParagraphProperties( **aSourceListStyleIter ) ) );
+            rDestListStyle.push_back( std::make_shared<oox::drawingml::TextParagraphProperties>( **aSourceListStyleIter ) );
         ++aSourceListStyleIter;
     }
 }

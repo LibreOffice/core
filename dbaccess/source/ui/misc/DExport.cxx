@@ -216,7 +216,7 @@ ODatabaseExport::ODatabaseExport(const SharedConnection& _rxConnection,
 
             if( nType == DataType::VARCHAR )
             {
-                m_pTypeInfo                 = TOTypeInfoSP(new OTypeInfo());
+                m_pTypeInfo                 = std::make_shared<dbaui::OTypeInfo>();
 
                 m_pTypeInfo->aTypeName      = sTypeName;
                 m_pTypeInfo->nType          = nType;
@@ -278,7 +278,7 @@ ODatabaseExport::ODatabaseExport(const SharedConnection& _rxConnection,
         }
     }
     if ( !m_pTypeInfo )
-        m_pTypeInfo = TOTypeInfoSP(new OTypeInfo());
+        m_pTypeInfo = std::make_shared<dbaui::OTypeInfo>();
     SetColumnTypes(pList,_pInfoMap);
 }
 
