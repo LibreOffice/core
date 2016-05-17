@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_8f86d3b7",
+        "filename": "cui/source/options/personalization.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 707,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-05-17T08:01:59Z",
+      "side": 1,
+      "message": "With this change in place, \u0027sProgress\u0027 is now a misleading name for an error string. So maybe check the places where \u0027sProgress\u0027 is used in the code and make a new string variable (sError?) where appropriate",
+      "revId": "0186f208b70d6d137c1eb946614f3ee712af31aa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_4fa4cb56",
+        "filename": "cui/source/options/personalization.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 710,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-05-17T08:01:59Z",
+      "side": 1,
+      "message": "You can achieve the same by \u0027foo-\u003eSetProgress( OUString() )\u0027 and then you won\u0027t need a temporary sBlank variable",
+      "revId": "0186f208b70d6d137c1eb946614f3ee712af31aa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_6f898fca",
+        "filename": "cui/source/options/personalization.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 723,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-05-17T08:01:59Z",
+      "side": 1,
+      "message": "... and of course do it like that everywhere ...",
+      "revId": "0186f208b70d6d137c1eb946614f3ee712af31aa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
