@@ -2572,7 +2572,7 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
                     const beans::PropertyValue *pProps = rxOptions.getConstArray();
                     for (sal_Int32 i = 0;  i < nLen;  ++i)
                     {
-                        if (pProps[i].Name.equalsAscii( "ExportPlaceholders" ))
+                        if (pProps[i].Name == "ExportPlaceholders")
                         {
                             pProps[i].Value >>= setShowPlaceHoldersInPDF;
                             break;
