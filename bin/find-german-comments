@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 ########################################################################
 #
 #  Copyright (c) 2010 Jonas Jensen, Miklos Vajna
@@ -177,7 +177,7 @@ class Parser:
                     sys.stderr.write("%s ... %s positives\n" % (path, str(len(path_linenums))))
                     return
                 if len(path) + (len(path_linenums)*4) > 75:
-                    print "%s:\n" % path
+                    print("%s:\n" % path)
                     while(path_linenums):
                         i = 0
                         numline = []
@@ -189,16 +189,16 @@ class Parser:
                                 i = 10
                             i += 1
                         numline = [str(i) for i in numline]
-                        print "%s%s" % (TABS, ",".join(numline))
+                        print("%s%s" % (TABS, ",".join(numline)))
                 else:
                     if self.options.line_numbers:
                         path_linenums = [str(i) for i in path_linenums]
-                        print "%s:%s%s" % (path, "\t"*tab_calc(path), ",".join(path_linenums))
+                        print("%s:%s%s" % (path, "\t"*tab_calc(path), ",".join(path_linenums)))
 
         elif not self.options.filenames_only:
             for linenum, s in self.get_comments(path):
                 if self.is_german(s):
-                    print "%s:%s: %s" % (path, linenum, s)
+                    print("%s:%s: %s" % (path, linenum, s))
         else:
             fnames = set([])
             for linenum, s in self.get_comments(path):
@@ -207,7 +207,7 @@ class Parser:
                     fnames.add(path)
             # Print the filenames
             for f in fnames:
-                print f
+                print(f)
 
     def first_elem(self, path):
         lastElem = os.path.dirname(path)
@@ -377,7 +377,7 @@ class Parser:
 try:
     Parser()
 except KeyboardInterrupt:
-    print "Interrupted!"
+    print("Interrupted!")
     sys.exit(0)
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:
