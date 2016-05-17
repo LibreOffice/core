@@ -671,6 +671,12 @@ void ORoadmap::DataChanged(const DataChangedEvent& rDCEvt)
     }
 }
 
+void ORoadmap::ApplySettings(vcl::RenderContext& rRenderContext)
+{
+    const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
+    rRenderContext.SetBackground(rStyleSettings.GetFieldColor());
+}
+
 RoadmapItem::RoadmapItem(ORoadmap& _rParent, const Size& _rItemPlayground)
     : m_aItemPlayground(_rItemPlayground)
 {

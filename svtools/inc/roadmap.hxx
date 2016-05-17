@@ -80,6 +80,7 @@ public:
     Link<LinkParamNone*,void> GetItemSelectHdl( ) const;
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
     virtual void    GetFocus() override;
+    virtual void    ApplySettings( vcl::RenderContext& rRenderContext ) override;
 
 protected:
     bool            PreNotify( NotifyEvent& rNEvt ) override;
