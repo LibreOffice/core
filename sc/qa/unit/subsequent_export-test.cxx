@@ -167,6 +167,8 @@ public:
     void testRefStringUnspecified();
     void testHeaderImage();
 
+    void testTdf88657();
+
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
 #if !defined(MACOSX) && !defined(DRAGONFLY)
@@ -239,6 +241,8 @@ public:
     CPPUNIT_TEST(testRefStringUnspecified);
     CPPUNIT_TEST(testHeaderImage);
 
+    CPPUNIT_TEST(testTdf88657);
+
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -267,7 +271,8 @@ void ScExportTest::registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx)
         { BAD_CAST("xlink"), BAD_CAST("http://www.w3c.org/1999/xlink") },
         { BAD_CAST("xdr"), BAD_CAST("http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing") },
         { BAD_CAST("x"), BAD_CAST("http://schemas.openxmlformats.org/spreadsheetml/2006/main") },
-        { BAD_CAST("r"), BAD_CAST("http://schemas.openxmlformats.org/package/2006/relationships") }
+        { BAD_CAST("r"), BAD_CAST("http://schemas.openxmlformats.org/package/2006/relationships") },
+        { BAD_CAST("number"), BAD_CAST("urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0") }
     };
     for(size_t i = 0; i < SAL_N_ELEMENTS(aNamespaces); ++i)
     {
@@ -3273,6 +3278,17 @@ void ScExportTest::testTextDirection()
 
     assertXPath(pDoc, "/x:styleSheet/x:cellXfs/x:xf[2]/x:alignment", "readingOrder", "1");//LTR
     assertXPath(pDoc, "/x:styleSheet/x:cellXfs/x:xf[3]/x:alignment", "readingOrder", "2");//RTL
+}
+
+void ScExportTest::testTdf88657()
+{
+    ScDocShellRef xDocSh = loadDoc("tdf88657.", FORMAT_ODS);
+    CPPUNIT_ASSERT(xDocSh.Is());
+
+    xmlDocPtr pDoc = XPathHelper::parseExport(*xDocSh, m_xSFactory, "styles.xml", FORMAT_ODS);
+    CPPUNIT_ASSERT(pDoc);
+
+    assertXPath(pDoc, "//number:fraction", "min-denominator-digits", "3");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest);
