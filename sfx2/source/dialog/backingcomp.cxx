@@ -48,7 +48,6 @@
 #include <vcl/keycod.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/syswin.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
 
@@ -429,14 +428,6 @@ void SAL_CALL BackingComp::attachFrame( /*IN*/ const css::uno::Reference< css::f
     if( pBack )
         pBack->setOwningFrame( m_xFrame );
 
-    // set NotebookBar
-    SystemWindow* pSysWindow = static_cast<SystemWindow*>(pParent);
-    if (pSysWindow)
-    {
-        pSysWindow->SetNotebookBar("sfx/ui/notebookbar.ui", m_xFrame);
-        pSysWindow->GetNotebookBar()->Show();
-    }
-
     // Set a minimum size for Start Center
     if( pParent && pBack )
     {
@@ -594,17 +585,6 @@ void SAL_CALL BackingComp::disposing( /*IN*/ const css::lang::EventObject& aEven
 void SAL_CALL BackingComp::dispose()
     throw(css::uno::RuntimeException, std::exception)
 {
-    if (m_xFrame.is())
-    {
-        css::uno::Reference< css::awt::XWindow > xParentWindow = m_xFrame->getContainerWindow();
-        VclPtr< WorkWindow > pParent = static_cast<WorkWindow*>(VCLUnoHelper::GetWindow(xParentWindow).get());
-
-        // hide NotebookBar
-        SystemWindow* pSysWindow = static_cast<SystemWindow*>(pParent);
-        if (pSysWindow && pSysWindow->GetNotebookBar())
-            pSysWindow->GetNotebookBar()->Hide();
-    }
-
     /* SAFE { */
     SolarMutexGuard aGuard;
 

@@ -67,7 +67,6 @@
 #include "undo/undofactory.hxx"
 #include "OutlineView.hxx"
 #include "ViewShellBase.hxx"
-#include <sfx2/notebookbar/SfxNotebookBar.hxx>
 
 using namespace sd;
 #define DrawDocShell
@@ -269,12 +268,6 @@ void DrawDocShell::GetState(SfxItemSet &rSet)
             {
                 // Keeping this enabled for the time being
                 rSet.Put(SfxVisibilityItem(nWhich, true));
-            }
-            break;
-
-            case SID_NOTEBOOKBAR:
-            {
-                sfx2::SfxNotebookBar::StateMethod(mpViewShell->GetFrame()->GetBindings(), "modules/simpress/ui/notebookbar.ui");
             }
             break;
 

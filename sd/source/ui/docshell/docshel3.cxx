@@ -42,7 +42,6 @@
 #include <editeng/langitem.hxx>
 #include <editeng/eeitem.hxx>
 #include <com/sun/star/i18n/TextConversionOption.hpp>
-#include <sfx2/notebookbar/SfxNotebookBar.hxx>
 
 #include "strings.hrc"
 #include "glob.hrc"
@@ -315,12 +314,6 @@ void DrawDocShell::Execute( SfxRequest& rReq )
                     }
                 }
             }
-        }
-        break;
-
-        case SID_NOTEBOOKBAR:
-        {
-            sfx2::SfxNotebookBar::ExecMethod(mpViewShell->GetFrame()->GetBindings());
         }
         break;
 
