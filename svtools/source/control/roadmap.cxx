@@ -204,14 +204,6 @@ ORoadmap::ORoadmap(vcl::Window* _pParent, WinBits _nWinStyle)
 
 void ORoadmap::implInit(vcl::RenderContext& rRenderContext)
 {
-    const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
-    Color aTextColor = rStyleSettings.GetFieldTextColor();
-    vcl::Font aFont = rRenderContext.GetFont();
-    aFont.SetColor(aTextColor);
-    aFont.SetWeight(WEIGHT_BOLD);
-    aFont.SetUnderline(LINESTYLE_SINGLE);
-    rRenderContext.SetFont(aFont);
-    rRenderContext.SetBackground(Wallpaper(rStyleSettings.GetFieldColor()));
     m_pImpl->InCompleteHyperLabel = nullptr;
     m_pImpl->setCurItemID(-1);
     m_pImpl->setComplete(true);
@@ -669,6 +661,18 @@ void ORoadmap::DataChanged(const DataChangedEvent& rDCEvt)
         }
         Invalidate();
     }
+}
+
+void ORoadmap::ApplySettings(vcl::RenderContext& rRenderContext)
+{
+    const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
+    Color aTextColor = rStyleSettings.GetFieldTextColor();
+    vcl::Font aFont = rRenderContext.GetFont();
+    aFont.SetColor(aTextColor);
+    aFont.SetWeight(WEIGHT_BOLD);
+    aFont.SetUnderline(LINESTYLE_SINGLE);
+    rRenderContext.SetFont(aFont);
+    rRenderContext.SetBackground(rStyleSettings.GetFieldColor());
 }
 
 RoadmapItem::RoadmapItem(ORoadmap& _rParent, const Size& _rItemPlayground)
