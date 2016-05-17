@@ -133,8 +133,10 @@ void Tables::refresh()
 
             {
                 m_values.push_back( makeAny( prop ) );
-                OUStringBuffer buf( name.getLength() + schema.getLength() + 1);
-                buf.append( schema + "." + name );
+                OUString EscapedName = /* ::dbtools::composeTableNameForSelect(); */ name.replaceAll("\"","\"\"");
+                OUString EscapedSchema = schema.replaceAll("\"","\"\"");
+                OUStringBuffer buf( EscapedName.getLength() + EscapedSchema.getLength() + 1);
+                buf.append("\"" + EscapedSchema + "\".\"" + EscapedName + "\"");
                 map[ buf.makeStringAndClear() ] = tableIndex;
                 ++tableIndex;
             }
