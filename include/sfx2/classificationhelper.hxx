@@ -33,6 +33,14 @@ enum class SfxClassificationCheckPasteResult
     DocClassificationTooLow = 3
 };
 
+/// Specifies a policy type, to be used with SetBACName(). Getters always use IntellectualProperty for now.
+enum class SfxClassificationPolicyType
+{
+    ExportControl,
+    NationalSecurity,
+    IntellectualProperty
+};
+
 /// Shared code to handle Business Authorization Identification and Labeling Scheme (BAILS) properties.
 class SFX2_DLLPUBLIC SfxClassificationHelper
 {
@@ -54,7 +62,7 @@ public:
     /// Return all possible valid category names, based on the policy.
     std::vector<OUString> GetBACNames();
     /// Setting this sets all the other properties, based on the policy.
-    void SetBACName(const OUString& rName);
+    void SetBACName(const OUString& rName, SfxClassificationPolicyType eType);
     /// If GetImpactScale() and GetImpactLevel*() will return something meaningful.
     bool HasImpactLevel();
     basegfx::BColor GetImpactLevelColor();
