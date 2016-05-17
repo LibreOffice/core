@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_1263ccb2",
+        "filename": "sc/source/ui/unoobj/textuno.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2016-05-17T14:11:09Z",
+      "side": 1,
+      "message": "should we clear these references afterwards and do this conditionally ? \u003d)",
+      "revId": "11042522e8ef4113fb3dff454f6851f6c7f4d190",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
