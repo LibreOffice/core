@@ -61,7 +61,7 @@ SmNode::SmNode(SmNodeType eNodeType, const SmToken &rNodeToken)
     , meScaleMode( SCALE_NONE )
     , meRectHorAlign( RectHorAlign::Left )
     , mnFlags( FontChangeMask::None )
-    , mnAttributes( 0 )
+    , mnAttributes( FontAttribute::None )
     , mbIsPhantom( false )
     , mbIsSelected( false )
     , mnAccIndex( -1 )
@@ -124,11 +124,11 @@ void SmNode::SetColor(const Color& rColor)
 }
 
 
-void SmNode::SetAttribut(sal_uInt16 nAttrib)
+void SmNode::SetAttribut(FontAttribute nAttrib)
 {
     if (
-        (nAttrib == ATTR_BOLD && !(Flags() & FontChangeMask::Bold)) ||
-        (nAttrib == ATTR_ITALIC && !(Flags() & FontChangeMask::Italic))
+        (nAttrib == FontAttribute::Bold && !(Flags() & FontChangeMask::Bold)) ||
+        (nAttrib == FontAttribute::Italic && !(Flags() & FontChangeMask::Italic))
        )
     {
         mnAttributes |= nAttrib;
@@ -138,11 +138,11 @@ void SmNode::SetAttribut(sal_uInt16 nAttrib)
 }
 
 
-void SmNode::ClearAttribut(sal_uInt16 nAttrib)
+void SmNode::ClearAttribut(FontAttribute nAttrib)
 {
     if (
-        (nAttrib == ATTR_BOLD && !(Flags() & FontChangeMask::Bold)) ||
-        (nAttrib == ATTR_ITALIC && !(Flags() & FontChangeMask::Italic))
+        (nAttrib == FontAttribute::Bold && !(Flags() & FontChangeMask::Bold)) ||
+        (nAttrib == FontAttribute::Italic && !(Flags() & FontChangeMask::Italic))
        )
     {
         mnAttributes &= ~nAttrib;
@@ -232,8 +232,8 @@ void SmNode::SetRectHorAlign(RectHorAlign eHorAlign, bool bApplyToSubTree )
 
 void SmNode::PrepareAttributes()
 {
-    GetFont().SetWeight((Attributes() & ATTR_BOLD)   ? WEIGHT_BOLD   : WEIGHT_NORMAL);
-    GetFont().SetItalic((Attributes() & ATTR_ITALIC) ? ITALIC_NORMAL : ITALIC_NONE);
+    GetFont().SetWeight((Attributes() & FontAttribute::Bold)   ? WEIGHT_BOLD   : WEIGHT_NORMAL);
+    GetFont().SetItalic((Attributes() & FontAttribute::Italic) ? ITALIC_NORMAL : ITALIC_NONE);
 }
 
 
@@ -241,7 +241,7 @@ void SmNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell)
 {
     mbIsPhantom  = false;
     mnFlags      = FontChangeMask::None;
-    mnAttributes = 0;
+    mnAttributes = FontAttribute::None;
 
     switch (rFormat.GetHorAlign())
     {   case AlignLeft:     meRectHorAlign = RectHorAlign::Left;   break;
@@ -1954,10 +1954,10 @@ void SmFontNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
         case TUNKNOWN : break;  // no assertion on "font <?> <?>"
 
         case TPHANTOM : SetPhantom(true);               break;
-        case TBOLD :    SetAttribut(ATTR_BOLD);         break;
-        case TITALIC :  SetAttribut(ATTR_ITALIC);       break;
-        case TNBOLD :   ClearAttribut(ATTR_BOLD);       break;
-        case TNITALIC : ClearAttribut(ATTR_ITALIC);     break;
+        case TBOLD :    SetAttribut(FontAttribute::Bold);     break;
+        case TITALIC :  SetAttribut(FontAttribute::Italic);   break;
+        case TNBOLD :   ClearAttribut(FontAttribute::Bold);   break;
+        case TNITALIC : ClearAttribut(FontAttribute::Italic); break;
 
         case TBLACK :   SetColor(Color(COL_BLACK));     break;
         case TWHITE :   SetColor(Color(COL_WHITE));     break;
@@ -2163,15 +2163,15 @@ void SmTextNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell)
     GetFont() = rFormat.GetFont(GetFontDesc());
 
     if (IsItalic( GetFont() ))
-        Attributes() |= ATTR_ITALIC;
+        Attributes() |= FontAttribute::Italic;
     if (IsBold( GetFont() ))
-        Attributes() |= ATTR_BOLD;
+        Attributes() |= FontAttribute::Bold;
 
     // special handling for ':' where it is a token on it's own and is likely
     // to be used for mathematical notations. (E.g. a:b = 2:3)
     // In that case it should not be displayed in italic.
     if (GetToken().aText.getLength() == 1 && GetToken().aText[0] == ':')
-        Attributes() &= ~ATTR_ITALIC;
+        Attributes() &= ~FontAttribute::Italic;
 };
 
 
@@ -2720,9 +2720,9 @@ void SmSpecialNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell
 
     //! see also SmFontStyles::GetStyleName
     if (IsItalic( GetFont() ))
-        SetAttribut(ATTR_ITALIC);
+        SetAttribut(FontAttribute::Italic);
     if (IsBold( GetFont() ))
-        SetAttribut(ATTR_BOLD);
+        SetAttribut(FontAttribute::Bold);
 
     Flags() |= FontChangeMask::Face;
 
@@ -2748,9 +2748,9 @@ void SmSpecialNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell
         }
 
         if (bItalic)
-            Attributes() |= ATTR_ITALIC;
+            Attributes() |= FontAttribute::Italic;
         else
-            Attributes() &= ~ATTR_ITALIC;
+            Attributes() &= ~FontAttribute::Italic;
     }
 };
 

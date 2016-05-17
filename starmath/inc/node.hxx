@@ -33,8 +33,16 @@
 #include <vector>
 #include <deque>
 
-#define ATTR_BOLD       0x0001
-#define ATTR_ITALIC     0x0002
+enum class FontAttribute {
+    None   = 0x0000,
+    Bold   = 0x0001,
+    Italic = 0x0002
+};
+
+namespace o3tl
+{
+    template<> struct typed_flags<FontAttribute> : is_typed_flags<FontAttribute, 0x0003> {};
+}
 
 
 enum class FontSizeType {
@@ -104,7 +112,7 @@ class SmNode : public SmRect
     SmScaleMode     meScaleMode;
     RectHorAlign    meRectHorAlign;
     FontChangeMask  mnFlags;
-    sal_uInt16      mnAttributes;
+    FontAttribute   mnAttributes;
     bool            mbIsPhantom;
     bool            mbIsSelected;
 
@@ -132,14 +140,14 @@ public:
     virtual const SmNode * GetLeftMost() const;
 
             FontChangeMask &Flags() { return mnFlags; }
-            sal_uInt16 &    Attributes() { return mnAttributes; }
+            FontAttribute  &Attributes() { return mnAttributes; }
 
             bool IsPhantom() const { return mbIsPhantom; }
             void SetPhantom(bool bIsPhantom);
             void SetColor(const Color &rColor);
 
-            void SetAttribut(sal_uInt16 nAttrib);
-            void ClearAttribut(sal_uInt16 nAttrib);
+            void SetAttribut(FontAttribute nAttrib);
+            void ClearAttribut(FontAttribute nAttrib);
 
             const SmFace & GetFont() const { return maFace; };
                   SmFace & GetFont()       { return maFace; };
