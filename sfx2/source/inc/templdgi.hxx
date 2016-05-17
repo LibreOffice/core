@@ -152,6 +152,13 @@ public:
     void Recalc();
 };
 
+enum class StyleFlags {
+    NONE=0, UpdateFamilyList=1, UpdateFamily=2
+};
+namespace o3tl {
+    template<> struct typed_flags<StyleFlags> : is_typed_flags<StyleFlags, 3> {};
+}
+
 class SfxCommonTemplateDialog_Impl : public SfxListener
 {
 private:
@@ -166,9 +173,6 @@ private:
 protected:
 #define MAX_FAMILIES            5
 #define COUNT_BOUND_FUNC        13
-
-#define UPDATE_FAMILY_LIST      0x0001
-#define UPDATE_FAMILY           0x0002
 
     friend class DropListBox_Impl;
     friend class SfxTemplateControllerItem;
@@ -247,7 +251,7 @@ protected:
                       sal_uInt16 nFamily, sal_uInt16 nMask = 0,
                       sal_uInt16* pIdx = nullptr, const sal_uInt16* pModifier = nullptr );
 
-    void UpdateStyles_Impl(sal_uInt16 nFlags);
+    void UpdateStyles_Impl(StyleFlags nFlags);
     const SfxStyleFamilyItem* GetFamilyItem_Impl() const;
     bool IsInitialized() const
     {

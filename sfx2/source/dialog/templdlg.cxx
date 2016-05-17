@@ -1125,9 +1125,9 @@ bool SfxCommonTemplateDialog_Impl::HasSelectedStyle() const
 
 // internal: Refresh the display
 // nFlags: what we should update.
-void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(sal_uInt16 nFlags)
+void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(StyleFlags nFlags)
 {
-    OSL_ENSURE(nFlags, "nothing to do");
+    OSL_ENSURE(nFlags != StyleFlags::NONE, "nothing to do");
     const SfxStyleFamilyItem *pItem = GetFamilyItem_Impl();
     if (!pItem)
     {
@@ -1158,7 +1158,7 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(sal_uInt16 nFlags)
     {
         pStyleSheetPool->SetSearchMask(eFam, nFilter);
         pItem = GetFamilyItem_Impl();
-        if((nFlags & UPDATE_FAMILY) == UPDATE_FAMILY)   // Update view type list (Hierarchical, All, etc.
+        if(nFlags & StyleFlags::UpdateFamily)   // Update view type list (Hierarchical, All, etc.
         {
             CheckItem(nActFamily);    // check Button in Toolbox
             aFilterLb->SetUpdateMode(false);
@@ -1206,7 +1206,7 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(sal_uInt16 nFlags)
             }
         }
 
-        if(nFlags & UPDATE_FAMILY_LIST)
+        if(nFlags & StyleFlags::UpdateFamilyList)
         {
             EnableItem(SID_STYLE_WATERCAN,false);
 
@@ -1401,7 +1401,7 @@ void SfxCommonTemplateDialog_Impl::Update_Impl()
          nAppFilter = pItem->GetValue();
          if(!pTreeBox)
          {
-             UpdateStyles_Impl(UPDATE_FAMILY_LIST);
+             UpdateStyles_Impl(StyleFlags::UpdateFamilyList);
          }
          else
              FillTreeBox();
@@ -1416,7 +1416,7 @@ void SfxCommonTemplateDialog_Impl::Update_Impl()
          {
              nAppFilter = pItem->GetValue();
              if(!pTreeBox)
-                 UpdateStyles_Impl(UPDATE_FAMILY_LIST);
+                 UpdateStyles_Impl(StyleFlags::UpdateFamilyList);
              else
                  FillTreeBox();
          }
@@ -1435,7 +1435,7 @@ IMPL_LINK_NOARG_TYPED( SfxCommonTemplateDialog_Impl, TimeOut, Idle *, void )
     {
         bDontUpdate=true;
         if(!pTreeBox)
-            UpdateStyles_Impl(UPDATE_FAMILY_LIST);
+            UpdateStyles_Impl(StyleFlags::UpdateFamilyList);
         else
         {
             FillTreeBox();
@@ -1567,7 +1567,7 @@ void SfxCommonTemplateDialog_Impl::FilterSelect(
                 StartListening(*pStyleSheetPool);
         }
 
-        UpdateStyles_Impl(UPDATE_FAMILY_LIST);
+        UpdateStyles_Impl(StyleFlags::UpdateFamilyList);
     }
 }
 
@@ -1964,7 +1964,7 @@ void SfxCommonTemplateDialog_Impl::DeleteHdl()
                 }
             }
             bDontUpdate = false; //if everything is deleted set bDontUpdate back to false
-            UpdateStyles_Impl(UPDATE_FAMILY_LIST); //and force-update the list
+            UpdateStyles_Impl(StyleFlags::UpdateFamilyList);; //and force-update the list
         }
     }
 }
@@ -2563,10 +2563,10 @@ void SfxCommonTemplateDialog_Impl::UpdateFamily_Impl()
     if (pStyleSheetPool)
     {
         if (!pTreeBox)
-            UpdateStyles_Impl(UPDATE_FAMILY | UPDATE_FAMILY_LIST);
+            UpdateStyles_Impl(StyleFlags::UpdateFamily | StyleFlags::UpdateFamilyList);
         else
         {
-            UpdateStyles_Impl(UPDATE_FAMILY);
+            UpdateStyles_Impl(StyleFlags::UpdateFamily);
             FillTreeBox();
         }
     }
