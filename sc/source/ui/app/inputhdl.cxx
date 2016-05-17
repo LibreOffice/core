@@ -3202,8 +3202,6 @@ bool ScInputHandler::KeyInput( const KeyEvent& rKEvt, bool bStartEdit /* = false
         return true;
     }
 
-    bool bInputLine = ( eMode==SC_INPUT_TOP );
-
     bool bUsed = false;
     bool bSkip = false;
     bool bDoEnter = false;
@@ -3211,9 +3209,8 @@ bool ScInputHandler::KeyInput( const KeyEvent& rKEvt, bool bStartEdit /* = false
     switch ( nCode )
     {
         case KEY_RETURN:
-            // New line when in the input line and Shift/Ctrl-Enter is pressed,
-            // or when in a cell and Ctrl-Enter is pressed.
-            if ((pInputWin && bInputLine && bControl != bShift) || (!bInputLine && bControl && !bShift))
+            // New line when Alt/Ctrl-Enter is pressed.
+            if (pInputWin && bControl != bAlt)
             {
                 bDoEnter = true;
             }
