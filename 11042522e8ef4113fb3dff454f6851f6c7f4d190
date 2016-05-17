@@ -2,6 +2,40 @@
   "comments": [
     {
       "key": {
+        "uuid": "da7fb54a_7272587e",
+        "filename": "sc/inc/textuno.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-05-17T14:42:31Z",
+      "side": 1,
+      "message": "I see no reason why this needs to be virtual.",
+      "revId": "11042522e8ef4113fb3dff454f6851f6c7f4d190",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_525d54e8",
+        "filename": "sc/inc/textuno.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-05-17T14:42:31Z",
+      "side": 1,
+      "message": "I think this method does not need to be virtual.",
+      "revId": "11042522e8ef4113fb3dff454f6851f6c7f4d190",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da7fb54a_1263ccb2",
         "filename": "sc/source/ui/unoobj/textuno.cxx",
         "patchSetId": 3
