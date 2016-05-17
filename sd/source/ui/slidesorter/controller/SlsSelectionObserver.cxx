@@ -58,8 +58,7 @@ void SelectionObserver::Context::Abort()
 SelectionObserver::SelectionObserver (SlideSorter& rSlideSorter)
     : mrSlideSorter(rSlideSorter),
       mbIsOvservationActive(false),
-      maInsertedPages(),
-      maDeletedPages()
+      maInsertedPages()
 {
 }
 
@@ -84,8 +83,6 @@ void SelectionObserver::NotifyPageEvent (const SdrPage* pSdrPage)
             ::std::find(maInsertedPages.begin(), maInsertedPages.end(), pPage));
         if (iPage != maInsertedPages.end())
             maInsertedPages.erase(iPage);
-
-        maDeletedPages.push_back(pPage->GetPageNum());
     }
 }
 
@@ -93,7 +90,6 @@ void SelectionObserver::StartObservation()
 {
     OSL_ASSERT(!mbIsOvservationActive);
     maInsertedPages.clear();
-    maDeletedPages.clear();
     mbIsOvservationActive = true;
 }
 
@@ -102,7 +98,6 @@ void SelectionObserver::AbortObservation()
     OSL_ASSERT(mbIsOvservationActive);
     mbIsOvservationActive = false;
     maInsertedPages.clear();
-    maDeletedPages.clear();
 }
 
 void SelectionObserver::EndObservation()
@@ -126,7 +121,6 @@ void SelectionObserver::EndObservation()
         }
         maInsertedPages.clear();
     }
-    maDeletedPages.clear();
 
     aUpdateLock.Release();
     mrSlideSorter.GetController().GetFocusManager().SetFocusedPageToCurrentPage();
