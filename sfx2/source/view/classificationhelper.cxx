@@ -359,15 +359,7 @@ void SfxClassificationHelper::Impl::parsePolicy()
     {
         SAL_WARN("sfx.view", "parsePolicy() failed: " << rException.Message);
     }
-    m_aCategories.clear();
-    for (const SfxClassificationCategory& rCategory : xClassificationParser->m_aCategories)
-    {
-        SfxClassificationCategory aCategory;
-        aCategory.m_aName = rCategory.m_aName;
-        for (const auto& rLabel : rCategory.m_aLabels)
-            aCategory.m_aLabels[PROP_PREFIX_INTELLECTUALPROPERTY() + rLabel.first] = rLabel.second;
-        m_aCategories.push_back(aCategory);
-    }
+    m_aCategories = xClassificationParser->m_aCategories;
 }
 
 bool lcl_containsProperty(const uno::Sequence<beans::Property>& rProperties, const OUString& rName)
@@ -692,7 +684,10 @@ void SfxClassificationHelper::SetBACName(const OUString& rName)
         return;
     }
 
-    m_pImpl->m_aCategory = *it;
+    m_pImpl->m_aCategory.m_aName = it->m_aName;
+    m_pImpl->m_aCategory.m_aLabels.clear();
+    for (const auto& rLabel : it->m_aLabels)
+        m_pImpl->m_aCategory.m_aLabels[PROP_PREFIX_INTELLECTUALPROPERTY() + rLabel.first] = rLabel.second;
 
     m_pImpl->setStartValidity();
     m_pImpl->pushToDocumentProperties();
