@@ -71,7 +71,7 @@ sal_Bool readCntTypesFromFileIntoVector( char* fname, vector< string >& vecData 
     fseek( fstream, 0L, SEEK_SET );
 
     char line[1024];
-    while ( fscanf( fstream, "%[^\n]s", line ) != EOF )
+    while ( fscanf( fstream, "%1023[^\n]s", line ) != EOF )
     {
         vecData.push_back( line );
         fgetc( fstream );

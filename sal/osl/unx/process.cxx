@@ -899,7 +899,7 @@ bool osl_getProcStat(pid_t pid, struct osl_procStat* procstat)
                "%lu %li %li %li"
                "%lu %lu %li %lu"
                "%lu %lu %lu %lu %lu"
-               "%s %s %s %s"
+               "%23s %23s %23s %23s"
                "%lu %lu %lu",
                &procstat->state,
                &procstat->ppid,      &procstat->pgrp,    &procstat->session,    &procstat->tty,         &procstat->tpgid,
@@ -975,7 +975,7 @@ bool osl_getProcStatus(pid_t pid, struct osl_procStat* procstat)
         tmp = strstr(prstatusbuf,"SigPnd:");
         if(tmp)
         {
-            sscanf(tmp, "SigPnd: %s SigBlk: %s SigIgn: %s %*s %s",
+            sscanf(tmp, "SigPnd: %23s SigBlk: %23s SigIgn: %23s %*s %23s",
                    procstat->signal, procstat->blocked, procstat->sigignore, procstat->sigcatch
                 );
         }
