@@ -239,7 +239,7 @@ namespace slideshow
                 }
             }
 
-            return EndUpdater(new LayerEndUpdate(shared_from_this()));
+            return std::make_shared<LayerEndUpdate>(shared_from_this());
         }
 
         void Layer::endUpdate()

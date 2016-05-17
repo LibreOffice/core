@@ -247,7 +247,7 @@ SfxItemPool::SfxItemPool
     // Copy Version map
     for (std::shared_ptr<SfxPoolVersion_Impl>& pOld : rPool.pImp->aVersions)
     {
-        SfxPoolVersion_ImplPtr pNew = SfxPoolVersion_ImplPtr( new SfxPoolVersion_Impl( *pOld ) );
+        SfxPoolVersion_ImplPtr pNew = std::make_shared<SfxPoolVersion_Impl>( *pOld );
         pImp->aVersions.push_back( pNew );
     }
 

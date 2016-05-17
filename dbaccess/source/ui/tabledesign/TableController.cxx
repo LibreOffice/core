@@ -142,7 +142,7 @@ OTableController::OTableController(const Reference< XComponentContext >& _rM) : 
 {
 
     InvalidateAll();
-    m_pTypeInfo = TOTypeInfoSP(new OTypeInfo());
+    m_pTypeInfo = std::make_shared<OTypeInfo>();
     m_pTypeInfo->aUIName = m_sTypeNames.getToken(TYPE_OTHER, ';');
 }
 

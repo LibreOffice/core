@@ -988,8 +988,8 @@ void SfxItemPool::SetVersionMap
 )
 {
     // Create new map entry to insert
-    const SfxPoolVersion_ImplPtr pVerMap = SfxPoolVersion_ImplPtr( new SfxPoolVersion_Impl(
-                nVer, nOldStart, nOldEnd, pOldWhichIdTab ) );
+    const SfxPoolVersion_ImplPtr pVerMap = std::make_shared<SfxPoolVersion_Impl>(
+                nVer, nOldStart, nOldEnd, pOldWhichIdTab );
     pImp->aVersions.push_back( pVerMap );
 
     DBG_ASSERT( nVer > pImp->nVersion, "Versions not sorted" );

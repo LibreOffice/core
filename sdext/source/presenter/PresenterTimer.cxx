@@ -174,7 +174,7 @@ SharedTimerTask TimerScheduler::CreateTimerTask (
     const TimeValue& rDueTime,
     const sal_Int64 nRepeatIntervall)
 {
-    return SharedTimerTask(new TimerTask(rTask, rDueTime, nRepeatIntervall, ++mnTaskId));
+    return std::make_shared<TimerTask>(rTask, rDueTime, nRepeatIntervall, ++mnTaskId);
 }
 
 void TimerScheduler::ScheduleTask (const SharedTimerTask& rpTask)

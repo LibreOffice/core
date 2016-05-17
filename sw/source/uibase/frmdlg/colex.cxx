@@ -135,9 +135,8 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
 
                 setSvxBrushItemAsFillAttributesToTargetSet(rItem, aTempSet);
                 setHeaderFillAttributes(
-                    drawinglayer::attribute::SdrAllFillAttributesHelperPtr(
-                        new drawinglayer::attribute::SdrAllFillAttributesHelper(
-                            aTempSet)));
+                    std::make_shared<drawinglayer::attribute::SdrAllFillAttributesHelper>(
+                            aTempSet));
             }
 
             if ( rHeaderSet.GetItemState( RES_BOX ) == SfxItemState::SET )
@@ -182,9 +181,8 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
 
                 setSvxBrushItemAsFillAttributesToTargetSet(rItem, aTempSet);
                 setFooterFillAttributes(
-                    drawinglayer::attribute::SdrAllFillAttributesHelperPtr(
-                        new drawinglayer::attribute::SdrAllFillAttributesHelper(
-                            aTempSet)));
+                    std::make_shared<drawinglayer::attribute::SdrAllFillAttributesHelper>(
+                            aTempSet));
             }
 
             if( rFooterSet.GetItemState( RES_BOX ) == SfxItemState::SET )
@@ -206,9 +204,8 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
 
         setSvxBrushItemAsFillAttributesToTargetSet(rItem, aTempSet);
         setPageFillAttributes(
-            drawinglayer::attribute::SdrAllFillAttributesHelperPtr(
-                new drawinglayer::attribute::SdrAllFillAttributesHelper(
-                    aTempSet)));
+            std::make_shared<drawinglayer::attribute::SdrAllFillAttributesHelper>(
+                    aTempSet));
     }
 
     Invalidate();
@@ -255,8 +252,8 @@ void SwColExample::DrawPage(vcl::RenderContext& rRenderContext, const Point& rOr
         const Color& rFieldColor = rStyleSettings.GetFieldColor();
 
         setPageFillAttributes(
-            drawinglayer::attribute::SdrAllFillAttributesHelperPtr(
-                new drawinglayer::attribute::SdrAllFillAttributesHelper(rFieldColor)));
+            std::make_shared<drawinglayer::attribute::SdrAllFillAttributesHelper>(
+                rFieldColor));
     }
 
     // #97495# make sure that the automatic column width's are always equal

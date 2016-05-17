@@ -230,8 +230,7 @@ namespace cairo
             aSysData.pRenderFormat = pFormat;
             return SurfaceSharedPtr(
                 new X11Surface( aSysData,
-                                X11PixmapSharedPtr(
-                                    new X11Pixmap(hPixmap, maSysData.pDisplay)),
+                                std::make_shared<X11Pixmap>(hPixmap, maSysData.pDisplay),
                                 CairoSurfaceSharedPtr(
                                     cairo_xlib_surface_create_with_xrender_format(
                                         static_cast<Display*>(maSysData.pDisplay),

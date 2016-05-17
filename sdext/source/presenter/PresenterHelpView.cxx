@@ -382,8 +382,8 @@ void PresenterHelpView::ProcessString (
     OUString sRightText;
     PresenterConfigurationAccess::GetProperty(rsProperties, "Right") >>= sRightText;
     mpTextContainer->push_back(
-        std::shared_ptr<Block>(
-            new Block(sLeftText, sRightText, mpFont->mxFont, mnMaximalWidth)));
+        std::make_shared<Block>(
+            sLeftText, sRightText, mpFont->mxFont, mnMaximalWidth));
 }
 
 void PresenterHelpView::CheckFontSize()

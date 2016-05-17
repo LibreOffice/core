@@ -109,8 +109,8 @@ SlideFragmentHandler::~SlideFragmentHandler()
         if( aIter == rMasterPages.end() && !mpSlidePersistPtr->getMasterPersist() )
         {
             TextListStylePtr pTextListStyle(new TextListStyle);
-            SlidePersistPtr pMasterPersistPtr = SlidePersistPtr( new SlidePersist( rFilter, true, true, mpSlidePersistPtr->getPage(),
-                                ShapePtr( new PPTShape( Master, "com.sun.star.drawing.GroupShape" ) ), mpSlidePersistPtr->getNotesTextStyle() ) );
+            SlidePersistPtr pMasterPersistPtr = std::make_shared<SlidePersist>( rFilter, true, true, mpSlidePersistPtr->getPage(),
+                                ShapePtr( new PPTShape( Master, "com.sun.star.drawing.GroupShape" ) ), mpSlidePersistPtr->getNotesTextStyle() );
             pMasterPersistPtr->setPath( aNotesFragmentPath );
             rFilter.getMasterPages().push_back( pMasterPersistPtr );
             FragmentHandlerRef xMasterFragmentHandler( new SlideFragmentHandler( rFilter, aNotesFragmentPath, pMasterPersistPtr, Master ) );

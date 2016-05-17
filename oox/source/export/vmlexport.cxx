@@ -50,7 +50,7 @@ static const sal_Int32 Tag_Container = 44444;
 static const sal_Int32 Tag_Commit = 44445;
 
 VMLExport::VMLExport( ::sax_fastparser::FSHelperPtr pSerializer, VMLTextExport* pTextExport )
-    : EscherEx( EscherExGlobalRef(new EscherExGlobal(0)), nullptr, /*bOOXML=*/true )
+    : EscherEx( std::make_shared<EscherExGlobal>(0), nullptr, /*bOOXML=*/true )
     , m_pSerializer( pSerializer )
     , m_pTextExport( pTextExport )
     , m_eHOri( 0 )

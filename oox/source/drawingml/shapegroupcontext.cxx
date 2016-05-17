@@ -93,17 +93,17 @@ ContextHandlerRef ShapeGroupContext::onCreateContext( sal_Int32 aElementToken, c
             return new ConnectorShapeContext( *this, mpGroupShapePtr, pShape );
         }
     case XML_grpSp:         // group shape
-        return new ShapeGroupContext( *this, mpGroupShapePtr, ShapePtr( new Shape( "com.sun.star.drawing.GroupShape" ) ) );
+        return new ShapeGroupContext( *this, mpGroupShapePtr, std::make_shared<Shape>( "com.sun.star.drawing.GroupShape" ) );
     case XML_sp:            // shape
     case XML_wsp:
         // Don't set default character height for WPS shapes, Writer has its
         // own way to set the default, and if we don't set it here, editing
         // properly inherits it.
-        return new ShapeContext( *this, mpGroupShapePtr, ShapePtr( new Shape( "com.sun.star.drawing.CustomShape", getBaseToken(aElementToken) == XML_sp ) ) );
+        return new ShapeContext( *this, mpGroupShapePtr, std::make_shared<Shape>( "com.sun.star.drawing.CustomShape", getBaseToken(aElementToken) == XML_sp ) );
     case XML_pic:           // CT_Picture
-        return new GraphicShapeContext( *this, mpGroupShapePtr, ShapePtr( new Shape( "com.sun.star.drawing.GraphicObjectShape" ) ) );
+        return new GraphicShapeContext( *this, mpGroupShapePtr, std::make_shared<Shape>( "com.sun.star.drawing.GraphicObjectShape" ) );
     case XML_graphicFrame:  // CT_GraphicalObjectFrame
-        return new GraphicalObjectFrameContext( *this, mpGroupShapePtr, ShapePtr( new Shape( "com.sun.star.drawing.GraphicObjectShape" ) ), true );
+        return new GraphicalObjectFrameContext( *this, mpGroupShapePtr, std::make_shared<Shape>( "com.sun.star.drawing.GraphicObjectShape" ), true );
     case XML_cNvGrpSpPr:
         break;
     case XML_grpSpLocks:

@@ -116,7 +116,7 @@ struct ThreadPoolStatic : public rtl::StaticWithInit< std::shared_ptr< ThreadPoo
 {
     std::shared_ptr< ThreadPool > operator () () {
         sal_Int32 nThreads = std::max( std::thread::hardware_concurrency(), 1U );
-        return std::shared_ptr< ThreadPool >( new ThreadPool( nThreads ) );
+        return std::make_shared< ThreadPool >( nThreads );
     };
 };
 

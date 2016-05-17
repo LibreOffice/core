@@ -64,7 +64,7 @@ ContextHandlerRef FillStyleListContext::onCreateContext( sal_Int32 nElement, con
         case A_TOKEN( blipFill ):
         case A_TOKEN( pattFill ):
         case A_TOKEN( grpFill ):
-            mrFillStyleList.push_back( FillPropertiesPtr( new FillProperties ) );
+            mrFillStyleList.push_back( std::make_shared<FillProperties>( ) );
             return FillPropertiesContext::createFillContext( *this, nElement, rAttribs, *mrFillStyleList.back() );
     }
     return nullptr;
@@ -91,7 +91,7 @@ ContextHandlerRef LineStyleListContext::onCreateContext( sal_Int32 nElement, con
     switch( nElement )
     {
         case A_TOKEN( ln ):
-            mrLineStyleList.push_back( LinePropertiesPtr( new LineProperties ) );
+            mrLineStyleList.push_back( std::make_shared<LineProperties>( ) );
             return new LinePropertiesContext( *this, rAttribs, *mrLineStyleList.back() );
     }
     return nullptr;
@@ -118,7 +118,7 @@ ContextHandlerRef EffectStyleListContext::onCreateContext( sal_Int32 nElement, c
     switch( nElement )
     {
         case A_TOKEN( effectStyle ):
-            mrEffectStyleList.push_back( EffectPropertiesPtr( new EffectProperties ) );
+            mrEffectStyleList.push_back( std::make_shared<EffectProperties>( ) );
             return this;
 
         case A_TOKEN( effectLst ):  // CT_EffectList

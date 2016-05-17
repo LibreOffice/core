@@ -1259,7 +1259,7 @@ XclExpCondfmt::XclExpCondfmt( const XclExpRoot& rRoot, const ScConditionalFormat
                 pParent = xExtLst->GetItem( XclExpExtDataBarType );
             }
             static_cast<XclExpExtCondFormat*>(xExtLst->GetItem( XclExpExtDataBarType ).get())->AddRecord(
-                    XclExpExtConditionalFormattingRef(new XclExpExtConditionalFormatting( *pParent, aExtEntries, aScRanges)));
+                    std::make_shared<XclExpExtConditionalFormatting>( *pParent, aExtEntries, aScRanges));
         }
     }
 }

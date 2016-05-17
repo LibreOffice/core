@@ -678,7 +678,7 @@ void OCopyTableWizard::construct()
     else
         m_pbFinish->SetStyle(m_pbFinish->GetStyle() | WB_DEFBUTTON);
 
-    m_pTypeInfo = TOTypeInfoSP(new OTypeInfo());
+    m_pTypeInfo = std::make_shared<OTypeInfo>();
     m_pTypeInfo->aUIName = m_sTypeNames.getToken(TYPE_OTHER, ';');
     m_bAddPKFirstTime = true;
 }

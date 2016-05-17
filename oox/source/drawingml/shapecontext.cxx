@@ -95,7 +95,7 @@ ContextHandlerRef ShapeContext::onCreateContext( sal_Int32 aElementToken, const 
     case XML_txbxContent:
     {
         if (!mpShapePtr->getTextBody())
-            mpShapePtr->setTextBody( TextBodyPtr(new TextBody) );
+            mpShapePtr->setTextBody( std::make_shared<TextBody>() );
         return new TextBodyContext( *this, *mpShapePtr->getTextBody() );
     }
     case XML_txXfrm:
@@ -109,7 +109,7 @@ ContextHandlerRef ShapeContext::onCreateContext( sal_Int32 aElementToken, const 
         break;
     case XML_bodyPr:
         if (!mpShapePtr->getTextBody())
-            mpShapePtr->setTextBody( TextBodyPtr(new TextBody) );
+            mpShapePtr->setTextBody( std::make_shared<TextBody>() );
         return new TextBodyPropertiesContext( *this, rAttribs, mpShapePtr->getTextBody()->getTextProperties() );
         break;
     case XML_txbx:

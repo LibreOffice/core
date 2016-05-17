@@ -123,9 +123,9 @@ namespace slideshow
                                        bool                      bRedrawLayer )
         {
             maViewMediaShapes.push_back(
-                ViewMediaShapeSharedPtr( new ViewMediaShape( rNewLayer,
-                                                             getXShape(),
-                                                             mxComponentContext )));
+                std::make_shared<ViewMediaShape>( rNewLayer,
+                                                  getXShape(),
+                                                  mxComponentContext ));
 
             // push new size to view shape
             maViewMediaShapes.back()->resize( getBounds() );

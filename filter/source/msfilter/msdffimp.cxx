@@ -6184,8 +6184,8 @@ bool SvxMSDffManager::GetShapeContainerData( SvStream& rSt,
         {
             aInfo.bReplaceByFly = true;
         }
-        m_xShapeInfosByTxBxComp->insert(std::shared_ptr<SvxMSDffShapeInfo>(
-                    new SvxMSDffShapeInfo(aInfo)));
+        m_xShapeInfosByTxBxComp->insert(std::make_shared<SvxMSDffShapeInfo>(
+                    aInfo));
         m_pShapeOrders->push_back(std::unique_ptr<SvxMSDffShapeOrder>(
                     new SvxMSDffShapeOrder( aInfo.nShapeId )));
     }

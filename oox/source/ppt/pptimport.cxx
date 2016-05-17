@@ -175,7 +175,7 @@ const oox::drawingml::table::TableStyleListPtr PowerPointImport::getTableStyles(
 {
     if ( !mpTableStyleList && !maTableStyleListPath.isEmpty() )
     {
-        mpTableStyleList = oox::drawingml::table::TableStyleListPtr( new oox::drawingml::table::TableStyleList() );
+        mpTableStyleList = std::make_shared<oox::drawingml::table::TableStyleList>( );
         importFragment( new oox::drawingml::table::TableStyleListFragmentHandler(
             *this, maTableStyleListPath, *mpTableStyleList ) );
     }

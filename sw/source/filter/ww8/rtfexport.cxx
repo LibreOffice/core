@@ -565,7 +565,7 @@ void RtfExport::WritePageDescTable()
 
     // reset table infos, otherwise the depth of the cells will be incorrect,
     // in case the page style (header or footer) had tables
-    m_pTableInfo = ww8::WW8TableInfo::Pointer_t(new ww8::WW8TableInfo());
+    m_pTableInfo = std::make_shared<ww8::WW8TableInfo>();
 }
 
 void RtfExport::ExportDocument_Impl()

@@ -1736,8 +1736,8 @@ static void lcl_CalcNewWidths(const FndLines_t& rFndLines, CpyPara& rPara)
     const size_t nLineCount = rFndLines.size();
     if( nLineCount )
     {
-        rPara.pWidths = std::shared_ptr< std::vector< std::vector< sal_uLong > > >
-                        ( new std::vector< std::vector< sal_uLong > >( nLineCount ));
+        rPara.pWidths = std::make_shared< std::vector< std::vector< sal_uLong > > >
+                        ( nLineCount );
         // First we collect information about the left/right borders of all
         // selected cells
         for( size_t nLine = 0; nLine < nLineCount; ++nLine )

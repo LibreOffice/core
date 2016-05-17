@@ -189,7 +189,7 @@ namespace extensions { namespace resource
 
         // supported resource types so far: strings
         m_aResourceTypes[ OUString( "string" ) ] =
-            ResourceTypePtr( new StringResourceAccess );
+            std::make_shared<StringResourceAccess>( );
     }
 
     OpenOfficeResourceBundle::~OpenOfficeResourceBundle()

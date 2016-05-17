@@ -170,9 +170,8 @@ namespace slideshow
             }
 
             maViewShapes.push_back(
-                ViewBackgroundShapeSharedPtr(
-                    new ViewBackgroundShape( rNewLayer,
-                                             maBounds ) ) );
+                std::make_shared<ViewBackgroundShape>(
+                    rNewLayer, maBounds ) );
 
             // render the Shape on the newly added ViewLayer
             if( bRedrawLayer )

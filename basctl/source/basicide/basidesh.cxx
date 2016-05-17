@@ -912,7 +912,7 @@ void Shell::SetCurLibForLocalization( const ScriptDocument& rDocument, const OUS
     catch (const container::NoSuchElementException& )
     {}
 
-    m_pCurLocalizationMgr = std::shared_ptr<LocalizationMgr>(new LocalizationMgr(this, rDocument, aLibName, xStringResourceManager));
+    m_pCurLocalizationMgr = std::make_shared<LocalizationMgr>(this, rDocument, aLibName, xStringResourceManager);
     m_pCurLocalizationMgr->handleTranslationbar();
 }
 

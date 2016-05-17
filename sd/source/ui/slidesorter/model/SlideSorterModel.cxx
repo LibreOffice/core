@@ -562,11 +562,10 @@ void SlideSorterModel::InsertSlide (SdPage* pPage)
     // Insert the given page at index nIndex
     maPageDescriptors.insert(
         maPageDescriptors.begin()+nIndex,
-        SharedPageDescriptor(
-            new PageDescriptor (
+        std::make_shared<PageDescriptor>(
                 Reference<drawing::XDrawPage>(mxSlides->getByIndex(nIndex),UNO_QUERY),
                 pPage,
-                nIndex)));
+                nIndex));
 
     // Update page indices.
     UpdateIndices(nIndex+1);

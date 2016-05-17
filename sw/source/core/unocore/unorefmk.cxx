@@ -1031,7 +1031,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
         : SetAttrMode::DONTEXPAND );
 
     const std::shared_ptr< ::sw::Meta> pMeta( (RES_TXTATR_META == i_nWhich)
-        ? std::shared_ptr< ::sw::Meta>( new ::sw::Meta() )
+        ? std::make_shared< ::sw::Meta>( )
         : std::shared_ptr< ::sw::Meta>(
             pDoc->GetMetaFieldManager().makeMetaField()) );
     SwFormatMeta meta(pMeta, i_nWhich); // this is cloned by Insert!

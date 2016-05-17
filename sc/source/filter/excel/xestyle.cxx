@@ -2802,7 +2802,7 @@ sal_uInt32 XclExpXFBuffer::InsertStyleXF( const SfxStyleSheetBase& rStyleSheet )
             if( rbPredefined )
             {
                 // replace predefined built-in style (ReplaceRecord() deletes old record)
-                maXFList.ReplaceRecord( XclExpXFRef( new XclExpXF( GetRoot(), rStyleSheet ) ), nXFId );
+                maXFList.ReplaceRecord( std::make_shared<XclExpXF>( GetRoot(), rStyleSheet ), nXFId );
                 rbPredefined = false;
             }
         }
