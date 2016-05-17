@@ -334,6 +334,23 @@ void SlotManager::FuPermanent (SfxRequest& rRequest)
     //  Invalidate( SID_OBJECT_SELECT );
 }
 
+class KeepSlideSorterInSyncWithPageChanges
+{
+    view::SlideSorterView::DrawLock m_aDrawLock;
+    SlideSorterController::ModelChangeLock m_aModelLock;
+    PageSelector::UpdateLock m_aUpdateLock;
+    SelectionObserver::Context m_aContext;
+
+public:
+    KeepSlideSorterInSyncWithPageChanges(SlideSorter& rSlideSorter)
+        : m_aDrawLock(rSlideSorter)
+        , m_aModelLock(rSlideSorter.GetController())
+        , m_aUpdateLock(rSlideSorter)
+        , m_aContext(rSlideSorter)
+    {
+    }
+};
+
 void SlotManager::FuSupport (SfxRequest& rRequest)
 {
     switch (rRequest.GetSlot())
@@ -406,10 +423,7 @@ void SlotManager::FuSupport (SfxRequest& rRequest)
                 = dynamic_cast<SlideSorterViewShell*>(mrSlideSorter.GetViewShell());
             if (pViewShell != nullptr)
             {
-                view::SlideSorterView::DrawLock aDrawLock (mrSlideSorter);
-                SlideSorterController::ModelChangeLock aModelLock (mrSlideSorter.GetController());
-                PageSelector::UpdateLock aUpdateLock (mrSlideSorter);
-                SelectionObserver::Context aContext (mrSlideSorter);
+                KeepSlideSorterInSyncWithPageChanges aWatcher(mrSlideSorter);
                 pViewShell->ImpSidUndo (false, rRequest);
             }
             break;
@@ -421,10 +435,7 @@ void SlotManager::FuSupport (SfxRequest& rRequest)
                 = dynamic_cast<SlideSorterViewShell*>(mrSlideSorter.GetViewShell());
             if (pViewShell != nullptr)
             {
-                view::SlideSorterView::DrawLock aDrawLock (mrSlideSorter);
-                SlideSorterController::ModelChangeLock aModelLock (mrSlideSorter.GetController());
-                PageSelector::UpdateLock aUpdateLock (mrSlideSorter);
-                SelectionObserver::Context aContext (mrSlideSorter);
+                KeepSlideSorterInSyncWithPageChanges aWatcher(mrSlideSorter);
                 pViewShell->ImpSidRedo (false, rRequest);
             }
             break;
