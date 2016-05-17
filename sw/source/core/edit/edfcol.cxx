@@ -182,7 +182,7 @@ void SwEditShell::SetClassification(const OUString& rName)
     bool bHadWatermark = !aHelper.GetDocumentWatermark().isEmpty();
 
     // This updates the infobar as well.
-    aHelper.SetBACName(rName);
+    aHelper.SetBACName(rName, SfxClassificationPolicyType::IntellectualProperty);
 
     bool bHeaderIsNeeded = aHelper.HasDocumentHeader();
     bool bFooterIsNeeded = aHelper.HasDocumentFooter();
