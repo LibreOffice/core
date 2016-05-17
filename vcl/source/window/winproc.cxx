@@ -289,7 +289,8 @@ bool ImplHandleMouseEvent( const VclPtr<vcl::Window>& xWindow, MouseNotifyEvent 
         if ( (pWinFrameData->mnLastMouseX != nX) ||
              (pWinFrameData->mnLastMouseY != nY) )
         {
-            ImplHandleMouseEvent( xWindow, MouseNotifyEvent::MOUSEMOVE, false, nX, nY, nMsgTime, nCode, nMode );
+            sal_uInt16 nMoveCode = nCode & ~(MOUSE_LEFT | MOUSE_RIGHT | MOUSE_MIDDLE);
+            ImplHandleMouseEvent(xWindow, MouseNotifyEvent::MOUSEMOVE, false, nX, nY, nMsgTime, nMoveCode, nMode);
         }
     }
 
