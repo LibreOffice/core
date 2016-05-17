@@ -29,7 +29,7 @@ awt::Size lcl_getOptimalWidth(const StyleSheetTablePtr& pStyleSheet, OUString& r
 {
     OUString aLongest = rDefault;
     sal_Int32 nHeight = 0;
-    for (const OUString & rItem : rItems)
+    for (const OUString& rItem : rItems)
         if (rItem.getLength() > aLongest.getLength())
             aLongest = rItem;
 
@@ -190,7 +190,7 @@ sal_Int32 SdtHelper::getInteropGrabBagSize()
 
 bool SdtHelper::containedInInteropGrabBag(const OUString& rValueName)
 {
-    for (beans::PropertyValue & i : m_aGrabBag)
+    for (beans::PropertyValue& i : m_aGrabBag)
         if (i.Name == rValueName)
             return true;
 

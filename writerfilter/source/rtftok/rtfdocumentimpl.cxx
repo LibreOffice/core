@@ -1458,7 +1458,7 @@ void RTFDocumentImpl::replayRowBuffer(
         rCellsSrpms.pop_front();
         rCellsAttributes.pop_front();
     }
-    for (Buf_t & i : rBuffer)
+    for (Buf_t& i : rBuffer)
     {
         SAL_WARN_IF(BUFFER_CELLEND == std::get<0>(i),
                     "writerfilter.rtf", "dropping table cell!");
