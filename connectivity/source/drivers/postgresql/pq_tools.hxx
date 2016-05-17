@@ -111,6 +111,7 @@ OUString array2String( const com::sun::star::uno::Sequence< com::sun::star::uno:
 com::sun::star::uno::Reference< com::sun::star::sdbc::XConnection > extractConnectionFromStatement(
     const com::sun::star::uno::Reference< com::sun::star::uno::XInterface > & stmt );
 
+void splitDoubleQuoteEscapedIdentifiers( const OUString & source, OUString *first, OUString *second);
 void splitConcatenatedIdentifier( const OUString & source, OUString *first, OUString *second);
 
 
