@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_923efcb6",
+        "filename": "svx/source/tbxctrls/tbcontrl.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1941,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2016-05-17T12:30:43Z",
+      "side": 1,
+      "message": "Could we put some \u0027;\u0027 delimiters in there ? it may help ?",
+      "revId": "06cffd89d59a3ca245d59763af1cdc83304155b1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
