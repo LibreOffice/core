@@ -637,7 +637,6 @@ bool HbLayoutEngine::Layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
 
 ServerFontLayoutEngine* ServerFont::GetLayoutEngine()
 {
-    // find best layout engine for font, platform, script and language
     if (!mpLayoutEngine) {
         mpLayoutEngine = new HbLayoutEngine(*this);
     }
