@@ -594,6 +594,9 @@ void SAL_CALL BackingComp::disposing( /*IN*/ const css::lang::EventObject& aEven
 void SAL_CALL BackingComp::dispose()
     throw(css::uno::RuntimeException, std::exception)
 {
+    /* SAFE { */
+    SolarMutexGuard aGuard;
+
     if (m_xFrame.is())
     {
         css::uno::Reference< css::awt::XWindow > xParentWindow = m_xFrame->getContainerWindow();
@@ -604,9 +607,6 @@ void SAL_CALL BackingComp::dispose()
         if (pSysWindow && pSysWindow->GetNotebookBar())
             pSysWindow->GetNotebookBar()->Hide();
     }
-
-    /* SAFE { */
-    SolarMutexGuard aGuard;
 
     // stop listening at the window
     if (m_xWindow.is())
