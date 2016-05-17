@@ -1,3 +1,4 @@
+/* -*- Mode: Java; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  *  The Contents of this file are made available subject to the terms of
@@ -58,3 +59,5 @@ class MyUnoObject implements com.sun.star.uno.XInterface
         // It is java VM dependent, whether the finalizer was called or not
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

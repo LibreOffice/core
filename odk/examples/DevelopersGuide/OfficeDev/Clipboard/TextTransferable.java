@@ -1,3 +1,4 @@
+/* -*- Mode: Java; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  *  The Contents of this file are made available subject to the terms of
@@ -83,3 +84,5 @@ public class TextTransferable implements XTransferable
     private final String text;
     private static final String UNICODE_CONTENT_TYPE = "text/plain;charset=utf-16";
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
