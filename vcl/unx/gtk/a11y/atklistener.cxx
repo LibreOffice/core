@@ -293,8 +293,8 @@ void AtkListener::notifyEvent( const accessibility::AccessibleEventObject& aEven
 
             if( aEvent.NewValue >>= xChild )
                 handleChildAdded(xParent, xChild);
-        }
             break;
+        }
 
         case accessibility::AccessibleEventId::INVALIDATE_ALL_CHILDREN:
         {
@@ -304,8 +304,8 @@ void AtkListener::notifyEvent( const accessibility::AccessibleEventObject& aEven
             g_return_if_fail( xParent.is() );
 
             handleInvalidateChildren(xParent);
-        }
             break;
+        }
 
         case accessibility::AccessibleEventId::NAME_CHANGED:
         {
@@ -315,8 +315,8 @@ void AtkListener::notifyEvent( const accessibility::AccessibleEventObject& aEven
                 atk_object_set_name(atk_obj,
                     OUStringToOString(aName, RTL_TEXTENCODING_UTF8).getStr());
             }
-        }
             break;
+        }
 
         case accessibility::AccessibleEventId::DESCRIPTION_CHANGED:
         {
@@ -326,8 +326,8 @@ void AtkListener::notifyEvent( const accessibility::AccessibleEventObject& aEven
                 atk_object_set_description(atk_obj,
                     OUStringToOString(aDescription, RTL_TEXTENCODING_UTF8).getStr());
             }
-        }
             break;
+        }
 
         case accessibility::AccessibleEventId::STATE_CHANGED:
         {
@@ -495,24 +495,24 @@ void AtkListener::notifyEvent( const accessibility::AccessibleEventObject& aEven
             };
             switch( aChange.Type )
             {
-            case accessibility::AccessibleTableModelChangeType::INSERT:
-            case accessibility::AccessibleTableModelChangeType::DELETE:
-                if( nRowsChanged > 0 )
-                    g_signal_emit_by_name( G_OBJECT( atk_obj ),
-                                           aSignalNames[aChange.Type].row,
-                                           aChange.FirstRow, nRowsChanged );
-                if( nColumnsChanged > 0 )
-                    g_signal_emit_by_name( G_OBJECT( atk_obj ),
-                                           aSignalNames[aChange.Type].col,
-                                           aChange.FirstColumn, nColumnsChanged );
-                break;
+                case accessibility::AccessibleTableModelChangeType::INSERT:
+                case accessibility::AccessibleTableModelChangeType::DELETE:
+                    if( nRowsChanged > 0 )
+                        g_signal_emit_by_name( G_OBJECT( atk_obj ),
+                                               aSignalNames[aChange.Type].row,
+                                               aChange.FirstRow, nRowsChanged );
+                    if( nColumnsChanged > 0 )
+                        g_signal_emit_by_name( G_OBJECT( atk_obj ),
+                                               aSignalNames[aChange.Type].col,
+                                               aChange.FirstColumn, nColumnsChanged );
+                    break;
 
-            case accessibility::AccessibleTableModelChangeType::UPDATE:
-                // This is not really a model change, is it ?
-                break;
-            default:
-                g_warning( "TESTME: unusual table model change %d\n", aChange.Type );
-                break;
+                case accessibility::AccessibleTableModelChangeType::UPDATE:
+                    // This is not really a model change, is it ?
+                    break;
+                default:
+                    g_warning( "TESTME: unusual table model change %d\n", aChange.Type );
+                    break;
             }
             g_signal_emit_by_name( G_OBJECT( atk_obj ), "model-changed" );
             break;
@@ -558,7 +558,7 @@ void AtkListener::notifyEvent( const accessibility::AccessibleEventObject& aEven
             break;
         }
 
-    default:
+        default:
             g_warning( "Unknown event notification %d", aEvent.EventId );
             break;
     }
