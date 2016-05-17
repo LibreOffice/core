@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "da7fb54a_2f3b07ed",
+        "filename": "sfx2/source/control/statcach.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2016-05-17T10:28:55Z",
+      "side": 1,
+      "message": "No problem",
+      "parentUuid": "da7fb54a_ef62ff15",
+      "revId": "a83b766a93e04cde097c29d600b98017f4b5b2b6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da7fb54a_0f6803f5",
         "filename": "sfx2/source/control/statcach.cxx",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2016-05-17T09:26:58Z",
       "side": 1,
       "message": "same here, and below. ctor/dtor really just adds noise ;)",
+      "revId": "a83b766a93e04cde097c29d600b98017f4b5b2b6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_4f404b57",
+        "filename": "sfx2/source/control/statcach.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2016-05-17T10:28:55Z",
+      "side": 1,
+      "message": "No problem",
+      "parentUuid": "da7fb54a_0f6803f5",
       "revId": "a83b766a93e04cde097c29d600b98017f4b5b2b6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -70,6 +106,24 @@
     },
     {
       "key": {
+        "uuid": "da7fb54a_0f364303",
+        "filename": "sfx2/source/control/statcach.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2016-05-17T10:28:55Z",
+      "side": 1,
+      "message": "In line 133, i want wait of the result and that was the timeout. But the problem is it ran in the timeout, the other thread was block (SolarIdleMutex). \nI have descript the problem in the Bug ticket, without this the extentions must be synchron too.",
+      "parentUuid": "da7fb54a_4f720be7",
+      "revId": "a83b766a93e04cde097c29d600b98017f4b5b2b6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da7fb54a_6f77cfd4",
         "filename": "sfx2/source/control/unoctitm.cxx",
         "patchSetId": 1
@@ -87,6 +141,24 @@
     },
     {
       "key": {
+        "uuid": "da7fb54a_6f5eef46",
+        "filename": "sfx2/source/control/unoctitm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 861,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2016-05-17T10:28:55Z",
+      "side": 1,
+      "message": "I have only saw SfxBoolItem or SfxVoidItem, when SfxVoidItem came, in this case the return is false and bSuccess is false Line 820)",
+      "parentUuid": "da7fb54a_6f77cfd4",
+      "revId": "a83b766a93e04cde097c29d600b98017f4b5b2b6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da7fb54a_8f7413d0",
         "filename": "sfx2/source/inc/statcach.hxx",
         "patchSetId": 1
@@ -98,6 +170,24 @@
       "writtenOn": "2016-05-17T09:26:58Z",
       "side": 1,
       "message": "I\u0027m sure there must be something to reuse here in the code base already. if not, please use boost as a fallback.",
+      "revId": "a83b766a93e04cde097c29d600b98017f4b5b2b6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_ef303f0a",
+        "filename": "sfx2/source/inc/statcach.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2016-05-17T10:28:55Z",
+      "side": 1,
+      "message": "Okay, i replace that with ::com::sun::star::frame::DispatchResultState",
+      "parentUuid": "da7fb54a_8f7413d0",
       "revId": "a83b766a93e04cde097c29d600b98017f4b5b2b6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
