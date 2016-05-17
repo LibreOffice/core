@@ -114,8 +114,10 @@ void Views::refresh()
 
             {
                 m_values.push_back( makeAny( prop ) );
-                OUStringBuffer buf( table.getLength() + schema.getLength() + 1);
-                buf.append( schema + "." + table );
+                OUString EscapedTable = table.replaceAll("\"","\"\"");
+                OUString EscapedSchema = schema.replaceAll("\"","\"\"");
+                OUStringBuffer buf( EscapedTable.getLength() + EscapedSchema.getLength() + 1);
+                buf.append("\"" + EscapedSchema + "\".\"" + EscapedTable + "\"");
                 map[ buf.makeStringAndClear() ] = viewIndex;
                 ++viewIndex;
             }
