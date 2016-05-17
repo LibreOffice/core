@@ -1,3 +1,4 @@
+/* -*- Mode: Java; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  *  The Contents of this file are made available subject to the terms of
@@ -1369,3 +1370,5 @@ public class UnoDialogSample implements XTextListener, XSpinListener, XActionLis
     }
 
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: Java; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -254,3 +255,4 @@ public class HideableTreeModel implements TreeModel {
             return index;
     }
 }
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

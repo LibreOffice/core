@@ -1,3 +1,4 @@
+/* -*- Mode: Java; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 import com.sun.star.uno.AnyConverter;
 
 /*************************************************************************
@@ -79,3 +80,5 @@ public class BooleanValidator extends ControlValidator
         return false;
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

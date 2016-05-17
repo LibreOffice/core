@@ -1,3 +1,4 @@
+/* -*- Mode: Java; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -78,3 +79,5 @@ public class TimeValidator extends ControlValidator
         return ( timeValue.Minutes == 0 ) && ( timeValue.Seconds == 0 ) && ( timeValue.NanoSeconds == 0 );
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,3 +1,4 @@
+/* -*- Mode: Java; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -214,3 +215,5 @@ public abstract class DocumentBasedExample implements com.sun.star.lang.XEventLi
         }
     }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
