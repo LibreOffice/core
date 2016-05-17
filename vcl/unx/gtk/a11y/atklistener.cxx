@@ -558,6 +558,17 @@ void AtkListener::notifyEvent( const accessibility::AccessibleEventObject& aEven
             break;
         }
 
+        case accessibility::AccessibleEventId::PAGE_CHANGED:
+        {
+            /* // If we implemented AtkDocument then I imagine this is what this
+               // handler should look like
+               sal_Int32 nPos=0;
+               aEvent.NewValue >>= nPos;
+               g_signal_emit_by_name( G_OBJECT( atk_obj ), "page_changed", nPos );
+            */
+            break;
+        }
+
         default:
             g_warning( "Unknown event notification %d", aEvent.EventId );
             break;
