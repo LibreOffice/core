@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_d2f9644f",
+        "filename": "sd/source/ui/sidebar/SlideBackground.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 321,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-05-18T09:08:26Z",
+      "side": 1,
+      "message": "default: \nbreak;\n\n(to make the compiler happy)",
+      "revId": "d873ade853f0388e03731c61bef62b85f7813c84",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_d29084ef",
+        "filename": "sd/source/ui/sidebar/SlideBackground.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 422,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-05-18T09:08:26Z",
+      "side": 1,
+      "message": "Oh noes :( 95% of this switch-case is identical with SlideBackground::Update method. Please don\u0027t duplicate code in this way. Never. It is a maintenance nightmare.",
+      "revId": "d873ade853f0388e03731c61bef62b85f7813c84",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_326d3005",
+        "filename": "sd/source/ui/sidebar/SlideBackground.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 423,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-05-18T09:08:26Z",
+      "side": 1,
+      "message": "And actually, there is a more simple (although not so straightforward) way to solve the issue of refreshing the control state - SfxBindings::Invalidate. \n\nThis one will make sure that StateMethods of a given slot is called and our sidebar will get notified about that in SlideBackground::NotifyItemUpdate. This method will then do all the necessary refreshing of controls and items (it calls Update method too).\n\nThe bindings for current frame are already available in the sidebar ( GetBindings() ), so either create static array of slot ids (look e.g. at FuLine::DoExecute how\u0027s that done) and then do GetBindings()-\u003eInvalidate([slotArray]). \n\nOr invalidate the relevant slots one by one (use overloaded Invalidate method that takes a single slot as an argument). When trying either of the methods, please put the breakpoint into SlideBackground::NotifyItemUpdate and use the approach that leads to less refreshing of the controls to avoid screen flickering",
+      "revId": "d873ade853f0388e03731c61bef62b85f7813c84",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
