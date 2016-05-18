@@ -42,12 +42,11 @@ enum class TG {
     Color         = 0x001000,
     Font          = 0x002000,
     Standalone    = 0x004000,
-    Discarded     = 0x008000,
     Limit         = 0x010000,
     FontAttr      = 0x020000
 };
 namespace o3tl {
-    template<> struct typed_flags<TG> : is_typed_flags<TG, 0x03ffff> {};
+    template<> struct typed_flags<TG> : is_typed_flags<TG, 0x037fff> {};
 }
 
 enum SmTokenType
