@@ -541,7 +541,6 @@ public:
                                                 const OUString& rTabName );
     SC_DLLPUBLIC static sal_uInt32 GetStandardFormat( SvNumberFormatter&, sal_uInt32 nFormat, short nType );
 
-    SC_DLLPUBLIC static sal_uInt16 GetStandardRowHeight();
     SC_DLLPUBLIC static double              nScreenPPTX;
     SC_DLLPUBLIC static double              nScreenPPTY;
 

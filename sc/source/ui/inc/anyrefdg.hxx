@@ -257,12 +257,6 @@ struct ScRefHdlrImpl: ScRefHdlrImplBase< TBase, bBindRef >
 
 struct ScAnyRefDlg : ::ScRefHdlrImpl< ScAnyRefDlg, SfxModelessDialog>
 {
-    template<class T1, class T2, class T3, class T4>
-    ScAnyRefDlg( const T1 & rt1, const T2 & rt2, const T3& rt3, const T4& rt4 )
-        : ScRefHdlrImpl< ScAnyRefDlg, SfxModelessDialog>(rt1, rt2, rt3, rt4)
-    {
-    }
-
     template<class T1, class T2, class T3, class T4, class T5>
     ScAnyRefDlg( const T1 & rt1, const T2 & rt2, const T3& rt3, const T4& rt4, const T5& rt5 )
         : ScRefHdlrImpl< ScAnyRefDlg, SfxModelessDialog>(rt1, rt2, rt3, rt4, rt5)

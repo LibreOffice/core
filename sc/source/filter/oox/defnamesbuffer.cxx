@@ -145,17 +145,6 @@ void lclConvertRefFlags( sal_Int32& ornFlags, sal_Int32& ornAbsPos, sal_Int32& o
     }
 }
 
-void lclConvertSingleRefFlags( SingleReference& orApiRef, const CellAddress& rBaseAddr, bool bColRel, bool bRowRel )
-{
-    using namespace ::com::sun::star::sheet::ReferenceFlags;
-    lclConvertRefFlags(
-        orApiRef.Flags, orApiRef.Column, orApiRef.RelativeColumn,
-        rBaseAddr.Column, COLUMN_RELATIVE, bColRel );
-    lclConvertRefFlags(
-        orApiRef.Flags, orApiRef.Row, orApiRef.RelativeRow,
-        rBaseAddr.Row, ROW_RELATIVE, bRowRel );
-}
-
 void lclConvertSingleRefFlags( SingleReference& orApiRef, const ScAddress& rBaseAddr, bool bColRel, bool bRowRel )
 {
     using namespace ::com::sun::star::sheet::ReferenceFlags;
@@ -165,26 +154,6 @@ void lclConvertSingleRefFlags( SingleReference& orApiRef, const ScAddress& rBase
     lclConvertRefFlags(
         orApiRef.Flags, orApiRef.Row, orApiRef.RelativeRow,
         rBaseAddr.Row(), ROW_RELATIVE, bRowRel );
-}
-
-Any lclConvertReference( const Any& rRefAny, const CellAddress& rBaseAddr, sal_uInt16 nRelFlags )
-{
-    if( rRefAny.has< SingleReference >() && !getFlag( nRelFlags, BIFF_REFFLAG_COL2REL ) && !getFlag( nRelFlags, BIFF_REFFLAG_ROW2REL ) )
-    {
-        SingleReference aApiRef;
-        rRefAny >>= aApiRef;
-        lclConvertSingleRefFlags( aApiRef, rBaseAddr, getFlag( nRelFlags, BIFF_REFFLAG_COL1REL ), getFlag( nRelFlags, BIFF_REFFLAG_ROW1REL ) );
-        return Any( aApiRef );
-    }
-    if( rRefAny.has< ComplexReference >() )
-    {
-        ComplexReference aApiRef;
-        rRefAny >>= aApiRef;
-        lclConvertSingleRefFlags( aApiRef.Reference1, rBaseAddr, getFlag( nRelFlags, BIFF_REFFLAG_COL1REL ), getFlag( nRelFlags, BIFF_REFFLAG_ROW1REL ) );
-        lclConvertSingleRefFlags( aApiRef.Reference2, rBaseAddr, getFlag( nRelFlags, BIFF_REFFLAG_COL2REL ), getFlag( nRelFlags, BIFF_REFFLAG_ROW2REL ) );
-        return Any( aApiRef );
-    }
-    return Any();
 }
 
 Any lclConvertReference( const Any& rRefAny, const ScAddress& rBaseAddr, sal_uInt16 nRelFlags )
@@ -229,34 +198,6 @@ const OUString& DefinedNameBase::getUpcaseModelName() const
     if( maUpModelName.isEmpty() )
         maUpModelName = lclGetUpcaseModelName( maModel.maName );
     return maUpModelName;
-}
-
-Any DefinedNameBase::getReference( const CellAddress& rBaseAddr ) const
-{
-    if( maRefAny.hasValue() && (maModel.maName.getLength() >= 2) && (maModel.maName[ 0 ] == '\x01') )
-    {
-        sal_Unicode cFlagsChar = getUpcaseModelName()[ 1 ];
-        if( ('A' <= cFlagsChar) && (cFlagsChar <= 'P') )
-        {
-            sal_uInt16 nRelFlags = static_cast< sal_uInt16 >( cFlagsChar - 'A' );
-            if( maRefAny.has< ExternalReference >() )
-            {
-                ExternalReference aApiExtRef;
-                maRefAny >>= aApiExtRef;
-                Any aRefAny = lclConvertReference( aApiExtRef.Reference, rBaseAddr, nRelFlags );
-                if( aRefAny.hasValue() )
-                {
-                    aApiExtRef.Reference <<= aRefAny;
-                    return Any( aApiExtRef );
-                }
-            }
-            else
-            {
-                return lclConvertReference( maRefAny, rBaseAddr, nRelFlags );
-            }
-        }
-    }
-    return Any();
 }
 
 Any DefinedNameBase::getReference( const ScAddress& rBaseAddr ) const

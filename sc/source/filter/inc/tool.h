@@ -62,12 +62,6 @@ public:
                         pAttr = &rAttr;
                     }
 
-                    FormIdent( sal_uInt8 nFormat, sal_uInt8 nSt )
-                    {
-                        nStamp = MAKE_STAMP( nFormat, nSt );
-                        pAttr = NULL;
-                    }
-
     StampTyp        GetStamp( void ) const
                     {
                         return nStamp;

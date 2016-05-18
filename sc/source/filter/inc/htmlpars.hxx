@@ -263,7 +263,6 @@ struct ScHTMLSize
     SCCOL               mnCols;
     SCROW               mnRows;
 
-    inline explicit     ScHTMLSize() : mnCols( 0 ), mnRows( 0 ) {}
     inline explicit     ScHTMLSize( SCCOL nCols, SCROW nRows ) :
                             mnCols( nCols ), mnRows( nRows ) {}
     inline void         Set( SCCOL nCols, SCROW nRows )
