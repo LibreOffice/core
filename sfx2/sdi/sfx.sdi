@@ -4388,7 +4388,7 @@ SfxBoolItem StyleWatercanMode SID_STYLE_WATERCAN
 ]
 
 SfxVoidItem ClassificationApply SID_CLASSIFICATION_APPLY
-(SfxStringItem Name SID_CLASSIFICATION_APPLY)
+(SfxStringItem Name SID_CLASSIFICATION_APPLY, SfxStringItem Type SID_TYPE_NAME)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,

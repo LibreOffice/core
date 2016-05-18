@@ -745,6 +745,16 @@ void SfxClassificationHelper::UpdateInfobar(SfxViewFrame& rViewFrame)
     }
 }
 
+SfxClassificationPolicyType SfxClassificationHelper::stringToPolicyType(const OUString& rType)
+{
+    if (rType == PROP_PREFIX_EXPORTCONTROL())
+        return SfxClassificationPolicyType::ExportControl;
+    else if (rType == PROP_PREFIX_NATIONALSECURITY())
+        return SfxClassificationPolicyType::NationalSecurity;
+    else
+        return SfxClassificationPolicyType::IntellectualProperty;
+}
+
 const OUString& SfxClassificationHelper::PROP_DOCHEADER()
 {
     static OUString sProp("Marking:document-header");
