@@ -360,7 +360,6 @@ void SvxSearchDialog::dispose()
     rBindings.LeaveRegistrations();
 
     delete pSearchItem;
-    delete pImpl;
     delete pSearchList;
     delete pReplaceList;
     mpDocWin.clear();
@@ -414,7 +413,7 @@ void SvxSearchDialog::dispose()
 void SvxSearchDialog::Construct_Impl()
 {
     // temporary to avoid incompatibility
-    pImpl = new SearchDlg_Impl();
+    pImpl.reset( new SearchDlg_Impl() );
     pImpl->aSelectionTimer.SetTimeout( 500 );
     pImpl->aSelectionTimer.SetTimeoutHdl(
         LINK( this, SvxSearchDialog, TimeoutHdl_Impl ) );

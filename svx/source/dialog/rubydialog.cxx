@@ -207,8 +207,9 @@ SvxRubyDialog::SvxRubyDialog(SfxBindings* pBind, SfxChildWindow* pCW, vcl::Windo
     , nCurrentEdit(0)
     , bModified(false)
     , pBindings(pBind)
+    , pImpl( new SvxRubyData_Impl )
 {
-    xImpl = pImpl = new SvxRubyData_Impl;
+    xImpl = pImpl.get();
     get(m_pLeftFT, "basetextft");
     get(m_pRightFT, "rubytextft");
     get(m_pAdjustLB, "adjustlb");
