@@ -1,0 +1,191 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_75cec284",
+        "filename": "include/sfx2/templatedlg.hxx",
+        "patchSetId": 22
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-05-18T15:53:05Z",
+      "side": 1,
+      "message": "Please remove commented out code.",
+      "revId": "9f931f10597da638d140512d00f8acbca92ce804",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_95cb4672",
+        "filename": "include/sfx2/templatedlg.hxx",
+        "patchSetId": 22
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-05-18T15:53:05Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "9f931f10597da638d140512d00f8acbca92ce804",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_b5c84a76",
+        "filename": "sfx2/source/control/templatedefaultview.cxx",
+        "patchSetId": 22
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-05-18T15:53:05Z",
+      "side": 1,
+      "message": "Why don\u0027t you just change it?",
+      "revId": "9f931f10597da638d140512d00f8acbca92ce804",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_d5c5ce5b",
+        "filename": "sfx2/source/control/templatelocalview.cxx",
+        "patchSetId": 22
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-05-18T15:53:05Z",
+      "side": 1,
+      "message": "Is this still needed? If not, please remove",
+      "revId": "9f931f10597da638d140512d00f8acbca92ce804",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_f5a012a8",
+        "filename": "sfx2/source/control/templatelocalview.cxx",
+        "patchSetId": 22
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-05-18T15:53:05Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "9f931f10597da638d140512d00f8acbca92ce804",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_15a656c1",
+        "filename": "sfx2/source/control/templatelocalview.cxx",
+        "patchSetId": 22
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-05-18T15:53:05Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "9f931f10597da638d140512d00f8acbca92ce804",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_35ab5a8b",
+        "filename": "sfx2/source/doc/objserv.cxx",
+        "patchSetId": 22
+      },
+      "lineNbr": 852,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-05-18T15:53:05Z",
+      "side": 1,
+      "message": "Are you going to implement this in a follow-up patch?\nI\u0027d prefer not to merge this patch until you have this ready.",
+      "revId": "9f931f10597da638d140512d00f8acbca92ce804",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_55b0def4",
+        "filename": "sfx2/source/doc/templatedlg.cxx",
+        "patchSetId": 22
+      },
+      "lineNbr": 654,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-05-18T15:53:05Z",
+      "side": 1,
+      "message": "Looks like a TODO?",
+      "revId": "9f931f10597da638d140512d00f8acbca92ce804",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_7595e23e",
+        "filename": "sfx2/source/doc/templatedlg.cxx",
+        "patchSetId": 22
+      },
+      "lineNbr": 1177,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-05-18T15:53:05Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "9f931f10597da638d140512d00f8acbca92ce804",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_95926656",
+        "filename": "sfx2/source/doc/templatedlg.cxx",
+        "patchSetId": 22
+      },
+      "lineNbr": 1183,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-05-18T15:53:05Z",
+      "side": 1,
+      "message": "Why is this commented out? If it\u0027s unused, please remove it.",
+      "revId": "9f931f10597da638d140512d00f8acbca92ce804",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_b59f6a5e",
+        "filename": "sfx2/source/doc/templatedlg.cxx",
+        "patchSetId": 22
+      },
+      "lineNbr": 1229,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-05-18T15:53:05Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "9f931f10597da638d140512d00f8acbca92ce804",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
