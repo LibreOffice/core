@@ -34,7 +34,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::io;
 
 namespace container = com::sun::star::container;
-namespace lang = com::sun::star::lang;
 namespace packages = com::sun::star::packages;
 
 namespace

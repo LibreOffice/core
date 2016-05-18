@@ -49,7 +49,6 @@
 namespace beans      = com::sun::star::beans ;
 namespace deployment = com::sun::star::deployment ;
 namespace lang       = com::sun::star::lang ;
-namespace registry   = com::sun::star::registry ;
 namespace task       = com::sun::star::task ;
 namespace css_ucb    = com::sun::star::ucb ;
 namespace uno        = com::sun::star::uno ;

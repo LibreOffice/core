@@ -44,8 +44,6 @@ namespace comphelper
     using ::com::sun::star::resource::XResourceBundle;
     using ::com::sun::star::resource::XResourceBundleLoader;
 
-    namespace LogLevel = ::com::sun::star::logging::LogLevel;
-
     class EventLogger_Impl
     {
     private:
