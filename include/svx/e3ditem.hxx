@@ -31,7 +31,6 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxB3DVectorItem : public SfxPoolItem
     basegfx::B3DVector  aVal;
 
 public:
-                            SvxB3DVectorItem();
                             SvxB3DVectorItem( sal_uInt16 nWhich, const basegfx::B3DVector& rVal );
                             SvxB3DVectorItem( const SvxB3DVectorItem& );
                             virtual ~SvxB3DVectorItem();

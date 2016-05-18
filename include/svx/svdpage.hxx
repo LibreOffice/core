@@ -64,7 +64,6 @@ enum SdrInsertReasonKind {
 class SdrInsertReason {
     SdrInsertReasonKind eReason;
 public:
-    SdrInsertReason(): eReason(SDRREASON_UNKNOWN) {}
     SdrInsertReason(SdrInsertReasonKind eR): eReason(eR) {}
 
     SdrInsertReasonKind GetReason() const         { return eReason; }
@@ -302,7 +301,6 @@ class SdrPageGridFrame
     Rectangle aPaper;
     Rectangle aUserArea;
 public:
-    SdrPageGridFrame(const Rectangle& rPaper): aPaper(rPaper), aUserArea(rPaper) {}
     SdrPageGridFrame(const Rectangle& rPaper, const Rectangle& rUser): aPaper(rPaper), aUserArea(rUser) {}
     const Rectangle& GetPaperRect() const                  { return aPaper; }
     const Rectangle& GetUserArea() const                   { return aUserArea; }

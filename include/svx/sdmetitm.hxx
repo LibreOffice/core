@@ -29,7 +29,6 @@
 
 class SVX_DLLPUBLIC SdrMetricItem: public SfxInt32Item {
 public:
-    SdrMetricItem(): SfxInt32Item() {}
     SdrMetricItem(sal_uInt16 nId, sal_Int32 nVal):  SfxInt32Item(nId,nVal) {}
     SdrMetricItem(sal_uInt16 nId, SvStream& rIn): SfxInt32Item(nId,rIn) {}
     virtual SfxPoolItem* Clone(SfxItemPool* pPool=nullptr) const override;

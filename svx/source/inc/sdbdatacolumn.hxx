@@ -41,7 +41,6 @@ namespace svxform
         css::uno::Reference< css::sdb::XColumnUpdate>     m_xColumnUpdate;
 
     public:
-        DataColumn() { };
         DataColumn(const css::uno::Reference< css::beans::XPropertySet>& _rxIFace);
         // if the object behind _rxIFace doesn't fully support the DataColumn service,
         // (which is checked via the supported interfaces) _all_ members will be set to

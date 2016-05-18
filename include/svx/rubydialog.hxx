@@ -74,10 +74,6 @@ class RubyEdit  : public Edit
     virtual void        GetFocus() override;
     virtual bool        PreNotify( NotifyEvent& rNEvt ) override;
 public:
-    RubyEdit(vcl::Window* pParent, const ResId& rResId)
-        : Edit(pParent, rResId)
-    {
-    }
     RubyEdit(vcl::Window* pParent)
         : Edit(pParent, WB_BORDER)
     {

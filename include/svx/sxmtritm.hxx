@@ -26,7 +26,6 @@
 class SVX_DLLPUBLIC SdrMeasureTextRota90Item: public SdrYesNoItem {
 public:
     SdrMeasureTextRota90Item(bool bOn=false): SdrYesNoItem(SDRATTR_MEASURETEXTROTA90,bOn) {}
-    SdrMeasureTextRota90Item(SvStream& rIn): SdrYesNoItem(SDRATTR_MEASURETEXTROTA90,rIn) {}
     virtual ~SdrMeasureTextRota90Item();
     virtual SfxPoolItem* Clone(SfxItemPool* pPool=nullptr) const override;
 };
@@ -36,7 +35,6 @@ public:
 class SVX_DLLPUBLIC SdrMeasureTextUpsideDownItem: public SdrYesNoItem {
 public:
     SdrMeasureTextUpsideDownItem(bool bOn=false): SdrYesNoItem(SDRATTR_MEASURETEXTUPSIDEDOWN,bOn) {}
-    SdrMeasureTextUpsideDownItem(SvStream& rIn): SdrYesNoItem(SDRATTR_MEASURETEXTUPSIDEDOWN,rIn) {}
     virtual ~SdrMeasureTextUpsideDownItem();
     virtual SfxPoolItem* Clone(SfxItemPool* pPool=nullptr) const override;
 };

@@ -25,7 +25,6 @@
 class SVX_DLLPUBLIC SdrTextAniStartInsideItem: public SdrYesNoItem {
 public:
     SdrTextAniStartInsideItem(bool bOn=false): SdrYesNoItem(SDRATTR_TEXT_ANISTARTINSIDE,bOn) {}
-    SdrTextAniStartInsideItem(SvStream& rIn) : SdrYesNoItem(SDRATTR_TEXT_ANISTARTINSIDE,rIn) {}
     virtual ~SdrTextAniStartInsideItem();
     virtual SfxPoolItem* Clone(SfxItemPool* pPool=nullptr) const override;
 };
@@ -33,7 +32,6 @@ public:
 class SVX_DLLPUBLIC SdrTextAniStopInsideItem: public SdrYesNoItem {
 public:
     SdrTextAniStopInsideItem(bool bOn=false): SdrYesNoItem(SDRATTR_TEXT_ANISTOPINSIDE,bOn) {}
-    SdrTextAniStopInsideItem(SvStream& rIn) : SdrYesNoItem(SDRATTR_TEXT_ANISTOPINSIDE,rIn) {}
     virtual ~SdrTextAniStopInsideItem();
     virtual SfxPoolItem* Clone(SfxItemPool* pPool=nullptr) const override;
 };

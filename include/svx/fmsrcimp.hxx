@@ -297,12 +297,6 @@ public:
         const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
         const css::uno::Reference< css::sdbc::XResultSet >& xCursor,
         const OUString& strVisibleFields,
-        const css::uno::Reference< css::util::XNumberFormatsSupplier >& xFormat,
-        FMSEARCH_MODE eMode);
-    FmSearchEngine(
-        const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
-        const css::uno::Reference< css::sdbc::XResultSet >& xCursor,
-        const OUString& strVisibleFields,
         const InterfaceArray& arrFields,
         FMSEARCH_MODE eMode);
 

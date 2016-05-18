@@ -660,43 +660,6 @@ FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchRegularApprox(const OUString
 
 
 FmSearchEngine::FmSearchEngine(const Reference< XComponentContext >& _rxContext,
-            const Reference< XResultSet > & xCursor, const OUString& sVisibleFields,
-            const Reference< XNumberFormatsSupplier > & xFormatSupplier, FMSEARCH_MODE eMode)
-
-    :m_xSearchCursor(xCursor)
-    ,m_xFormatSupplier(xFormatSupplier)
-    ,m_aCharacterClassficator( _rxContext, SvtSysLocale().GetLanguageTag() )
-    ,m_aStringCompare( _rxContext )
-    ,m_nCurrentFieldIndex(-2)   // -1 hat schon eine Bedeutung, also nehme ich -2 fuer 'ungueltig'
-    ,m_bUsingTextComponents(false)
-    ,m_eSearchForType(SEARCHFOR_STRING)
-    ,m_srResult(SR_FOUND)
-    ,m_bSearchingCurrently(false)
-    ,m_bCancelAsynchRequest(false)
-    ,m_eMode(eMode)
-    ,m_bFormatter(false)
-    ,m_bForward(false)
-    ,m_bWildcard(false)
-    ,m_bRegular(false)
-    ,m_bLevenshtein(false)
-    ,m_bTransliteration(false)
-    ,m_bLevRelaxed(false)
-    ,m_nLevOther(0)
-    ,m_nLevShorter(0)
-    ,m_nLevLonger(0)
-    ,m_nPosition(MATCHING_ANYWHERE)
-    ,m_nTransliterationFlags(0)
-{
-
-    m_xFormatter.set( css::util::NumberFormatter::create( ::comphelper::getProcessComponentContext() ),
-                      UNO_QUERY_THROW);
-    m_xFormatter->attachNumberFormatsSupplier(m_xFormatSupplier);
-
-    Init(sVisibleFields);
-}
-
-
-FmSearchEngine::FmSearchEngine(const Reference< XComponentContext >& _rxContext,
         const Reference< XResultSet > & xCursor, const OUString& sVisibleFields,
         const InterfaceArray& arrFields, FMSEARCH_MODE eMode)
     :m_xSearchCursor(xCursor)

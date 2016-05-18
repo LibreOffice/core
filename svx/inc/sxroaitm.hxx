@@ -25,7 +25,6 @@
 class SdrRotateAllItem: public SdrAngleItem {
 public:
     SdrRotateAllItem(long nAngle=0): SdrAngleItem(SDRATTR_ROTATEALL,nAngle) {}
-    SdrRotateAllItem(SvStream& rIn): SdrAngleItem(SDRATTR_ROTATEALL,rIn)    {}
     virtual SfxPoolItem* Clone(SfxItemPool*) const override
     {
         return new SdrRotateAllItem(*this);

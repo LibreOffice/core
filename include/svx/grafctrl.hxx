@@ -26,16 +26,6 @@
 #include <svx/svxdllapi.h>
 
 
-class SVX_DLLPUBLIC TbxImageItem : public SfxUInt16Item
-{
-public:
-                            TbxImageItem( sal_uInt16 nWhich = 0, sal_uInt16 nImage = 0 );
-
-    virtual SfxPoolItem*    Clone( SfxItemPool* pPool = nullptr ) const override;
-    virtual bool            operator==( const SfxPoolItem& ) const override;
-};
-
-
 class SvxGrafToolBoxControl : public SfxToolBoxControl
 {
 public:

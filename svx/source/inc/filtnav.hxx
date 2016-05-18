@@ -121,7 +121,6 @@ public:
 class FmFilterItems : public FmParentData
 {
 public:
-    FmFilterItems() : FmParentData(nullptr, OUString()) {}
     FmFilterItems(FmFormItem* pParent, const OUString& rText ) : FmParentData(pParent, rText) {}
 
     FmFilterItem* Find( const ::sal_Int32 _nFilterComponentIndex ) const;

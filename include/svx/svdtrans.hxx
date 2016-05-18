@@ -252,7 +252,6 @@ class FrPair {
     Fraction aX;
     Fraction aY;
 public:
-    FrPair()                                          : aX(0,1),aY(0,1)             {}
     FrPair(const Fraction& rBoth)                     : aX(rBoth),aY(rBoth)         {}
     FrPair(const Fraction& rX, const Fraction& rY)    : aX(rX),aY(rY)               {}
     FrPair(long nMul, long nDiv)                      : aX(nMul,nDiv),aY(nMul,nDiv) {}
@@ -313,9 +312,6 @@ public:
         , eDstFU(FUNIT_NONE)
     {
     }
-    SdrFormatter(MapUnit eSrc, FieldUnit eDst)   { eSrcMU=eSrc; bSrcFU=false; eDstFU=eDst; bDstFU=true;  bDirty=true; }
-    SdrFormatter(FieldUnit eSrc, MapUnit eDst)   { eSrcFU=eSrc; bSrcFU=true;  eDstMU=eDst; bDstFU=false; bDirty=true; }
-    SdrFormatter(FieldUnit eSrc, FieldUnit eDst) { eSrcFU=eSrc; bSrcFU=true;  eDstFU=eDst; bDstFU=true;  bDirty=true; }
     void TakeStr(long nVal, OUString& rStr) const;
     static void TakeUnitStr(MapUnit eUnit, OUString& rStr);
     static void TakeUnitStr(FieldUnit eUnit, OUString& rStr);

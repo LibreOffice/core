@@ -60,10 +60,6 @@ class IMapUserData : public SdrObjUserData
 
 public:
 
-                            IMapUserData() :
-                                SdrObjUserData  ( IMapInventor, SVD_IMAP_USERDATA ),
-                                mpObj           ( ) {}
-
                    explicit IMapUserData( const IMapObjectPtr& rIMapObj ) :
                                 SdrObjUserData  ( IMapInventor, SVD_IMAP_USERDATA ),
                                 mpObj           ( rIMapObj ) {}

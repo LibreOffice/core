@@ -70,11 +70,6 @@ public:
     */
     void Hide();
 
-    /** If you want to be informed when the popup closes then add a
-        callback that is called after that.
-    */
-    void SetPopupModeEndHandler (const ::std::function<void()>& rCallback);
-
     void dispose();
 
 protected:
