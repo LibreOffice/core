@@ -467,6 +467,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     }
     break;
     case RTF_CLCBPAT:
+    case RTF_CLCBPATRAW:
     {
         auto pValue = std::make_shared<RTFValue>(getColorTable(nParam));
         putNestedAttribute(m_aStates.top().aTableCellSprms, NS_ooxml::LN_CT_TcPrBase_shd, NS_ooxml::LN_CT_Shd_fill, pValue);
