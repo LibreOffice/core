@@ -29,6 +29,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <cppuhelper/implbase.hxx>
+#include <cppuhelper/weakref.hxx>
 
 #include <rtl/ref.hxx>
 #include "scdllapi.h"
@@ -65,17 +66,17 @@ private:
     rtl::Reference<ScHeaderFooterTextObj> mxRightText;
 
 public:
-    ScHeaderFooterContentObj( const EditTextObject* pLeft,
-                              const EditTextObject* pCenter,
-                              const EditTextObject* pRight );
-
-                            ScHeaderFooterContentObj() = delete;
+                            ScHeaderFooterContentObj();
     virtual                 ~ScHeaderFooterContentObj();
 
                             // for ScPageHFItem (using getImplementation)
     const EditTextObject* GetLeftEditObject() const;
     const EditTextObject* GetCenterEditObject() const;
     const EditTextObject* GetRightEditObject() const;
+
+    void Init( const EditTextObject* pLeft,
+                              const EditTextObject* pCenter,
+                              const EditTextObject* pRight);
 
                             // XHeaderFooterContent
     virtual css::uno::Reference< css::text::XText > SAL_CALL
@@ -101,7 +102,6 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
                                 throw(css::uno::RuntimeException, std::exception) override;
 
-    virtual void dispose();
 };
 
 //  ScHeaderFooterTextData: shared data between sub objects of a ScHeaderFooterTextObj
@@ -110,7 +110,7 @@ class ScHeaderFooterTextData
 {
 private:
     std::unique_ptr<EditTextObject> mpTextObj;
-    rtl::Reference<ScHeaderFooterContentObj> rContentObj;
+    css::uno::WeakReference<css::sheet::XHeaderFooterContent> xContentObj;
     ScHeaderFooterPart          nPart;
     ScEditEngineDefaulter*      pEditEngine;
     SvxEditEngineForwarder*     pForwarder;
@@ -120,7 +120,7 @@ public:
     ScHeaderFooterTextData(const ScHeaderFooterTextData&) = delete;
     const ScHeaderFooterTextData& operator=(const ScHeaderFooterTextData&) = delete;
     ScHeaderFooterTextData(
-        rtl::Reference<ScHeaderFooterContentObj> const & rContent, ScHeaderFooterPart nP, const EditTextObject* pTextObj);
+        css::uno::WeakReference<css::sheet::XHeaderFooterContent> xContent, ScHeaderFooterPart nP, const EditTextObject* pTextObj);
     ~ScHeaderFooterTextData();
 
                             // helper functions
@@ -130,11 +130,9 @@ public:
     ScEditEngineDefaulter*  GetEditEngine() { GetTextForwarder(); return pEditEngine; }
 
     ScHeaderFooterPart      GetPart() const         { return nPart; }
-    const rtl::Reference<ScHeaderFooterContentObj>& GetContentObj() const { return rContentObj; }
+    const css::uno::Reference<css::sheet::XHeaderFooterContent> GetContentObj() const { return xContentObj; }
 
     const EditTextObject* GetTextObject() const { return mpTextObj.get(); }
-
-    void dispose() { rContentObj.clear(); }
 };
 
 /**
@@ -158,7 +156,7 @@ private:
 
 public:
     ScHeaderFooterTextObj(
-        rtl::Reference<ScHeaderFooterContentObj> const & rContent, ScHeaderFooterPart nP, const EditTextObject* pTextObj);
+        css::uno::WeakReference<css::sheet::XHeaderFooterContent> xContent, ScHeaderFooterPart nP, const EditTextObject* pTextObj);
     virtual ~ScHeaderFooterTextObj();
 
     const EditTextObject* GetTextObject() const;
@@ -229,7 +227,6 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
                                 throw(css::uno::RuntimeException, std::exception) override;
 
-    virtual void dispose() { aTextData.dispose(); }
 };
 
 //  derived cursor objects for getImplementation and getText/getStart/getEnd
