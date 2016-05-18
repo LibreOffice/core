@@ -23,22 +23,28 @@
 #include <svl/poolitem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/eitem.hxx>
+#include <o3tl/typed_flags_set.hxx>
 #include "scdllapi.h"
 #include "global.hxx"
 #include "address.hxx"
 
-                                        // flags for cells hidden by merge
-                                        // and control for auto filter
-#define SC_MF_HOR               0x0001
-#define SC_MF_VER               0x0002
-#define SC_MF_AUTO              0x0004  /// autofilter arrow
-#define SC_MF_BUTTON            0x0008  /// field button for datapilot
-#define SC_MF_SCENARIO          0x0010
-#define SC_MF_BUTTON_POPUP      0x0020  /// dp button with popup arrow
-#define SC_MF_HIDDEN_MEMBER     0x0040  /// dp field button with presence of hidden member
-#define SC_MF_DP_TABLE          0x0080  /// dp table output
-
-#define SC_MF_ALL               0x00FF
+// flags for cells hidden by merge
+// and control for auto filter
+enum class ScMF {
+    NONE           = 0x0000,
+    Hor            = 0x0001,
+    Ver            = 0x0002,
+    Auto           = 0x0004,  /// autofilter arrow
+    Button         = 0x0008,  /// field button for datapilot
+    Scenario       = 0x0010,
+    ButtonPopup    = 0x0020,  /// dp button with popup arrow
+    HiddenMember   = 0x0040,  /// dp field button with presence of hidden member
+    DpTable        = 0x0080,  /// dp table output
+    All            = 0x00FF
+};
+namespace o3tl {
+    template<> struct typed_flags<ScMF> : is_typed_flags<ScMF, 0xff> {};
+}
 
 class EditTextObject;
 namespace editeng { class SvxBorderLine; }
@@ -77,21 +83,23 @@ class SC_DLLPUBLIC ScMergeFlagAttr: public SfxInt16Item
 {
 public:
             ScMergeFlagAttr();
-            ScMergeFlagAttr(sal_Int16 nFlags);
+            ScMergeFlagAttr(ScMF nFlags);
             virtual ~ScMergeFlagAttr();
 
     SfxPoolItem * Clone(SfxItemPool * pPool) const override;
 
-    bool    IsHorOverlapped() const     { return ( GetValue() & SC_MF_HOR ) != 0;  }
-    bool    IsVerOverlapped() const     { return ( GetValue() & SC_MF_VER ) != 0;  }
-    bool    IsOverlapped() const        { return ( GetValue() & ( SC_MF_HOR | SC_MF_VER ) ) != 0; }
+    ScMF    GetValue() const { return (ScMF) SfxInt16Item::GetValue(); }
 
-    bool    HasAutoFilter() const       { return ( GetValue() & SC_MF_AUTO ) != 0; }
+    bool    IsHorOverlapped() const     { return bool( GetValue() & ScMF::Hor );  }
+    bool    IsVerOverlapped() const     { return bool( GetValue() & ScMF::Ver );  }
+    bool    IsOverlapped() const        { return bool( GetValue() & ( ScMF::Hor | ScMF::Ver ) ); }
 
-    bool    IsScenario() const          { return ( GetValue() & SC_MF_SCENARIO ) != 0; }
+    bool    HasAutoFilter() const       { return bool( GetValue() & ScMF::Auto ); }
 
-    bool HasPivotButton() const;
-    bool HasPivotPopupButton() const;
+    bool    IsScenario() const          { return bool( GetValue() & ScMF::Scenario ); }
+
+    bool    HasPivotButton() const;
+    bool    HasPivotPopupButton() const;
 };
 
 class SC_DLLPUBLIC ScProtectionAttr: public SfxPoolItem
