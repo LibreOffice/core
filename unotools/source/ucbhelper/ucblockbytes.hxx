@@ -67,13 +67,6 @@ namespace utl
 class UcbLockBytes;
 typedef tools::SvRef<UcbLockBytes> UcbLockBytesRef;
 
-class UcbLockBytesHandler : public SvRefBase
-{
-public:
-                    UcbLockBytesHandler()
-                    {}
-};
-
 class UcbLockBytes : public virtual SvLockBytes
 {
     osl::Condition          m_aInitialized;
@@ -103,8 +96,7 @@ public:
     static UcbLockBytesRef  CreateLockBytes( const css::uno::Reference < css::ucb::XContent >& xContent,
                                             const css::uno::Sequence < css::beans::PropertyValue >& rProps,
                                             StreamMode eMode,
-                                            const css::uno::Reference < css::task::XInteractionHandler >& xInter,
-                                            UcbLockBytesHandler* pHandler=nullptr );
+                                            const css::uno::Reference < css::task::XInteractionHandler >& xInter );
 
     static UcbLockBytesRef  CreateInputLockBytes( const css::uno::Reference < css::io::XInputStream >& xContent );
     static UcbLockBytesRef  CreateLockBytes( const css::uno::Reference < css::io::XStream >& xContent );

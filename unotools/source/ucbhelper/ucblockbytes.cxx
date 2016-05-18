@@ -1392,13 +1392,13 @@ UcbLockBytesRef UcbLockBytes::CreateLockBytes( const Reference< XStream >& xStre
 }
 
 UcbLockBytesRef UcbLockBytes::CreateLockBytes( const Reference < XContent >& xContent, const Sequence < PropertyValue >& rProps,
-        StreamMode eOpenMode, const Reference < XInteractionHandler >& xInteractionHandler, UcbLockBytesHandler* pHandler )
+        StreamMode eOpenMode, const Reference < XInteractionHandler >& xInteractionHandler )
 {
     if( !xContent.is() )
         return nullptr;
 
     UcbLockBytesRef xLockBytes = new UcbLockBytes;
-    xLockBytes->SetSynchronMode( !pHandler );
+    xLockBytes->SetSynchronMode( true );
     Reference< XActiveDataControl > xSink;
     if ( eOpenMode & StreamMode::WRITE )
         xSink = static_cast<XActiveDataControl*>(new UcbStreamer_Impl( xLockBytes ));

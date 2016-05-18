@@ -274,7 +274,6 @@ class SvtCompatibilityOptions_Impl : public ConfigItem
         inline bool IsUseOurTextWrapping() const { return m_aDefOptions.bUseOurTextWrapping; }
         inline bool IsConsiderWrappingStyle() const { return m_aDefOptions.bConsiderWrappingStyle; }
         inline bool IsExpandWordSpace() const { return m_aDefOptions.bExpandWordSpace; }
-        inline bool IsProtectForm() const { return m_aDefOptions.bProtectForm; }
 
     //  private methods
 
@@ -723,12 +722,6 @@ bool SvtCompatibilityOptions::IsExpandWordSpace() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->IsExpandWordSpace();
-}
-
-bool SvtCompatibilityOptions::IsProtectForm() const
-{
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pDataContainer->IsProtectForm();
 }
 
 Sequence< Sequence< PropertyValue > > SvtCompatibilityOptions::GetList() const

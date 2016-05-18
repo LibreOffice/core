@@ -152,7 +152,6 @@ class SvtPathOptions_Impl
         void            SetTemplatePath( const OUString& rPath ) { SetPath( SvtPathOptions::PATH_TEMPLATE, rPath ); }
         void            SetUserConfigPath( const OUString& rPath ) { SetPath( SvtPathOptions::PATH_USERCONFIG, rPath ); }
         void            SetWorkPath( const OUString& rPath ) { SetPath( SvtPathOptions::PATH_WORK, rPath ); }
-        void            SetClassificationPath( const OUString& rPath ) { SetPath( SvtPathOptions::PATH_CLASSIFICATION, rPath ); }
 
         OUString   SubstVar( const OUString& rVar ) const;
         OUString   ExpandMacros( const OUString& rPath ) const;
@@ -700,11 +699,6 @@ void SvtPathOptions::SetUserConfigPath( const OUString& rPath )
 void SvtPathOptions::SetWorkPath( const OUString& rPath )
 {
     pImp->SetWorkPath( rPath );
-}
-
-void SvtPathOptions::SetClassificationPath( const OUString& rPath )
-{
-    pImp->SetClassificationPath( rPath );
 }
 
 OUString SvtPathOptions::SubstituteVariable( const OUString& rVar ) const

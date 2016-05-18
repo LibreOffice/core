@@ -120,7 +120,6 @@ public:
     void            SetTemplatePath( const OUString& rPath );
     void            SetUserConfigPath( const OUString& rPath );
     void            SetWorkPath( const OUString& rPath );
-    void            SetClassificationPath( const OUString& rPath );
 
     OUString        SubstituteVariable( const OUString& rVar ) const;
     OUString        ExpandMacros( const OUString& rPath ) const;

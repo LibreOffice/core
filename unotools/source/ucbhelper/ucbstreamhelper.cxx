@@ -42,7 +42,7 @@ namespace utl
 
 static SvStream* lcl_CreateStream( const OUString& rFileName, StreamMode eOpenMode,
                                    const Reference < XInteractionHandler >& xInteractionHandler,
-                                   UcbLockBytesHandler* pHandler, bool bEnsureFileExists )
+                                   bool bEnsureFileExists )
 {
     SvStream* pStream = nullptr;
     Reference< XUniversalContentBroker > ucb(
@@ -117,7 +117,7 @@ static SvStream* lcl_CreateStream( const OUString& rFileName, StreamMode eOpenMo
             rFileName, Reference < XCommandEnvironment >(),
             comphelper::getProcessComponentContext() );
         xLockBytes = UcbLockBytes::CreateLockBytes( aContent.get(), Sequence < PropertyValue >(),
-                                                    eOpenMode, xInteractionHandler, pHandler );
+                                                    eOpenMode, xInteractionHandler );
         if ( xLockBytes.Is() )
         {
             pStream = new SvStream( xLockBytes );
@@ -140,19 +140,19 @@ static SvStream* lcl_CreateStream( const OUString& rFileName, StreamMode eOpenMo
 
 SvStream* UcbStreamHelper::CreateStream( const OUString& rFileName, StreamMode eOpenMode )
 {
-    return lcl_CreateStream( rFileName, eOpenMode, Reference < XInteractionHandler >(), nullptr, true /* bEnsureFileExists */ );
+    return lcl_CreateStream( rFileName, eOpenMode, Reference < XInteractionHandler >(), true /* bEnsureFileExists */ );
 }
 
 SvStream* UcbStreamHelper::CreateStream( const OUString& rFileName, StreamMode eOpenMode,
                                          const Reference < XInteractionHandler >& xInteractionHandler )
 {
-    return lcl_CreateStream( rFileName, eOpenMode, xInteractionHandler, nullptr, true /* bEnsureFileExists */ );
+    return lcl_CreateStream( rFileName, eOpenMode, xInteractionHandler, true /* bEnsureFileExists */ );
 }
 
 SvStream* UcbStreamHelper::CreateStream( const OUString& rFileName, StreamMode eOpenMode,
                                          bool bFileExists )
 {
-    return lcl_CreateStream( rFileName, eOpenMode, Reference < XInteractionHandler >(), nullptr, !bFileExists );
+    return lcl_CreateStream( rFileName, eOpenMode, Reference < XInteractionHandler >(), !bFileExists );
 }
 
 SvStream* UcbStreamHelper::CreateStream( const Reference < XInputStream >& xStream )

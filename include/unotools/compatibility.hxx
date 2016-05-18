@@ -163,7 +163,6 @@ class UNOTOOLS_DLLPUBLIC SvtCompatibilityOptions: public utl::detail::Options
         bool        IsUseOurTextWrapping() const;
         bool        IsConsiderWrappingStyle() const;
         bool        IsExpandWordSpace() const;
-        bool        IsProtectForm() const;
 
     //  private methods
 
