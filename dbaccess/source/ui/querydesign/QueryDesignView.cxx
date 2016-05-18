@@ -1296,7 +1296,7 @@ namespace
     {
         bool bRet = true;
         ::connectivity::OSQLParseNode* pFirstColumnRef = _pFirstColumnRef;
-        for (size_t i = 0; bRet && i < _pCondition->count() && bRet; ++i)
+        for (size_t i = 0; bRet && i < _pCondition->count(); ++i)
         {
             const  ::connectivity::OSQLParseNode* pChild = _pCondition->getChild(i);
             if ( pChild->isToken() )
