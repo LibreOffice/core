@@ -89,7 +89,13 @@ SdDocPreviewWin::~SdDocPreviewWin()
 
 void SdDocPreviewWin::dispose()
 {
+    if (mxSlideShow.is())
+    {
+        mxSlideShow->end();
+        mxSlideShow.clear();
+    }
     delete pMetaFile;
+    pMetaFile = nullptr;
     Control::dispose();
 }
 
