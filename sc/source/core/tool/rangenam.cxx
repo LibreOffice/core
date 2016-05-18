@@ -437,20 +437,20 @@ void ScRangeData::MakeValidName( OUString& rName )
     // strip leading invalid characters
     sal_Int32 nPos = 0;
     sal_Int32 nLen = rName.getLength();
-    while ( nPos < nLen && !ScCompiler::IsCharFlagAllConventions( rName, nPos, SC_COMPILER_C_NAME) )
+    while ( nPos < nLen && !ScCompiler::IsCharFlagAllConventions( rName, nPos, ScCompilerC::Name) )
         ++nPos;
     if ( nPos>0 )
         rName = rName.copy(nPos);
 
     // if the first character is an invalid start character, precede with '_'
-    if ( !rName.isEmpty() && !ScCompiler::IsCharFlagAllConventions( rName, 0, SC_COMPILER_C_CHAR_NAME ) )
+    if ( !rName.isEmpty() && !ScCompiler::IsCharFlagAllConventions( rName, 0, ScCompilerC::CharName ) )
         rName = "_" + rName;
 
     // replace invalid with '_'
     nLen = rName.getLength();
     for (nPos=0; nPos<nLen; nPos++)
     {
-        if ( !ScCompiler::IsCharFlagAllConventions( rName, nPos, SC_COMPILER_C_NAME) )
+        if ( !ScCompiler::IsCharFlagAllConventions( rName, nPos, ScCompilerC::Name) )
             rName = rName.replaceAt( nPos, 1, "_" );
     }
 
@@ -485,11 +485,11 @@ bool ScRangeData::IsNameValid( const OUString& rName, ScDocument* pDoc )
         return false;
     sal_Int32 nPos = 0;
     sal_Int32 nLen = rName.getLength();
-    if ( !nLen || !ScCompiler::IsCharFlagAllConventions( rName, nPos++, SC_COMPILER_C_CHAR_NAME ) )
+    if ( !nLen || !ScCompiler::IsCharFlagAllConventions( rName, nPos++, ScCompilerC::CharName ) )
         return false;
     while ( nPos < nLen )
     {
-        if ( !ScCompiler::IsCharFlagAllConventions( rName, nPos++, SC_COMPILER_C_NAME ) )
+        if ( !ScCompiler::IsCharFlagAllConventions( rName, nPos++, ScCompilerC::Name ) )
             return false;
     }
     ScAddress aAddr;

@@ -35,38 +35,45 @@
 #include <vector>
 
 #include <formula/FormulaCompiler.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
 // constants and data types also for external modules (ScInterpreter et al)
 
 #define MAXSTRLEN    1024   /* maximum length of input string of one symbol */
 
 // flag values of CharTable
-#define SC_COMPILER_C_ILLEGAL         0x00000000
-#define SC_COMPILER_C_CHAR            0x00000001
-#define SC_COMPILER_C_CHAR_BOOL       0x00000002
-#define SC_COMPILER_C_CHAR_WORD       0x00000004
-#define SC_COMPILER_C_CHAR_VALUE      0x00000008
-#define SC_COMPILER_C_CHAR_STRING     0x00000010
-#define SC_COMPILER_C_CHAR_DONTCARE   0x00000020
-#define SC_COMPILER_C_BOOL            0x00000040
-#define SC_COMPILER_C_WORD            0x00000080
-#define SC_COMPILER_C_WORD_SEP        0x00000100
-#define SC_COMPILER_C_VALUE           0x00000200
-#define SC_COMPILER_C_VALUE_SEP       0x00000400
-#define SC_COMPILER_C_VALUE_EXP       0x00000800
-#define SC_COMPILER_C_VALUE_SIGN      0x00001000
-#define SC_COMPILER_C_VALUE_VALUE     0x00002000
-#define SC_COMPILER_C_STRING_SEP      0x00004000
-#define SC_COMPILER_C_NAME_SEP        0x00008000  // there can be only one! '\''
-#define SC_COMPILER_C_CHAR_IDENT      0x00010000  // identifier (built-in function) or reference start
-#define SC_COMPILER_C_IDENT           0x00020000  // identifier or reference continuation
-#define SC_COMPILER_C_ODF_LBRACKET    0x00040000  // ODF '[' reference bracket
-#define SC_COMPILER_C_ODF_RBRACKET    0x00080000  // ODF ']' reference bracket
-#define SC_COMPILER_C_ODF_LABEL_OP    0x00100000  // ODF '!!' automatic intersection of labels
-#define SC_COMPILER_C_ODF_NAME_MARKER 0x00200000  // ODF '$$' marker that starts a defined (range) name
-#define SC_COMPILER_C_CHAR_NAME       0x00400000  // start character of a defined name
-#define SC_COMPILER_C_NAME            0x00800000  // continuation character of a defined name
-#define SC_COMPILER_C_CHAR_ERRCONST   0x01000000  // start character of an error constant ('#')
+enum class ScCompilerC {
+    NONE            = 0x00000000,
+    Illegal         = 0x00000000,
+    Char            = 0x00000001,
+    CharBool        = 0x00000002,
+    CharWord        = 0x00000004,
+    CharValue       = 0x00000008,
+    CharString      = 0x00000010,
+    CharDontCare    = 0x00000020,
+    Bool            = 0x00000040,
+    Word            = 0x00000080,
+    WordSep         = 0x00000100,
+    Value           = 0x00000200,
+    ValueSep        = 0x00000400,
+    ValueExp        = 0x00000800,
+    ValueSign       = 0x00001000,
+    ValueValue      = 0x00002000,
+    StringSep       = 0x00004000,
+    NameSep         = 0x00008000,  // there can be only one! '\''
+    CharIdent       = 0x00010000,  // identifier (built-in function) or reference start
+    Ident           = 0x00020000,  // identifier or reference continuation
+    OdfLBracket     = 0x00040000,  // ODF '[' reference bracket
+    OdfRBracket     = 0x00080000,  // ODF ']' reference bracket
+    OdfLabelOp      = 0x00100000,  // ODF '!!' automatic intersection of labels
+    OdfNameMarker   = 0x00200000,  // ODF '$$' marker that starts a defined (range) name
+    CharName        = 0x00400000,  // start character of a defined name
+    Name            = 0x00800000,  // continuation character of a defined name
+    CharErrConst    = 0x01000000,  // start character of an error constant ('#')
+};
+namespace o3tl {
+    template<> struct typed_flags<ScCompilerC> : is_typed_flags<ScCompilerC, 0x01ffffff> {};
+}
 
 #define SC_COMPILER_FILE_TAB_SEP      '#'         // 'Doc'#Tab
 
@@ -245,10 +252,10 @@ public:
         };
         virtual sal_Unicode getSpecialSymbol( SpecialSymbolType eSymType ) const = 0;
 
-        virtual sal_uLong getCharTableFlags( sal_Unicode c, sal_Unicode cLast ) const = 0;
+        virtual ScCompilerC getCharTableFlags( sal_Unicode c, sal_Unicode cLast ) const = 0;
 
     protected:
-        const sal_uLong* mpCharTable;
+        const ScCompilerC* mpCharTable;
     };
     friend struct Convention;
 
@@ -441,7 +448,7 @@ public:
         bits) for all known address conventions. If more than one bit is given
         in nFlags, all bits must match. */
     static bool IsCharFlagAllConventions(
-        OUString const & rStr, sal_Int32 nPos, sal_uLong nFlags );
+        OUString const & rStr, sal_Int32 nPos, ScCompilerC nFlags );
 
 private:
     // FormulaCompiler
@@ -468,8 +475,8 @@ private:
     virtual bool IsForceArrayParameter( const formula::FormulaToken* pToken, sal_uInt16 nParam ) const override;
 
     /// Access the CharTable flags
-    inline sal_uLong GetCharTableFlags( sal_Unicode c, sal_Unicode cLast )
-        { return c < 128 ? pConv->getCharTableFlags(c, cLast) : 0; }
+    inline ScCompilerC GetCharTableFlags( sal_Unicode c, sal_Unicode cLast )
+        { return c < 128 ? pConv->getCharTableFlags(c, cLast) : ScCompilerC::NONE; }
 };
 
 #endif

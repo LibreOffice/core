@@ -305,87 +305,87 @@ ScCompiler::Convention::Convention( FormulaGrammar::AddressConvention eConv )
     meConv( eConv )
 {
     int i;
-    sal_uLong *t= new sal_uLong [128];
+    ScCompilerC *t= new ScCompilerC [128];
 
     ScCompiler::pConventions[ meConv ] = this;
     mpCharTable = t;
 
     for (i = 0; i < 128; i++)
-        t[i] = SC_COMPILER_C_ILLEGAL;
+        t[i] = ScCompilerC::Illegal;
 
 // tdf#56036: Allow tabs/newlines in imported formulas (for now simply treat them as (and convert to) space)
 // TODO: tdf#76310: allow saving newlines as is (as per OpenFormula specification v.1.2, clause 5.14 "Whitespace")
 // This is compliant with the OASIS decision (see https://issues.oasis-open.org/browse/OFFICE-701)
 // Also, this would enable correct roundtrip from/to OOXML without losing tabs/newlines
 // This requires saving actual space characters in ocSpaces token, using them in UI and saving
-/* tab */   t[ 9] = SC_COMPILER_C_CHAR_DONTCARE | SC_COMPILER_C_WORD_SEP | SC_COMPILER_C_VALUE_SEP;
-/* lf  */   t[10] = SC_COMPILER_C_CHAR_DONTCARE | SC_COMPILER_C_WORD_SEP | SC_COMPILER_C_VALUE_SEP;
-/* cr  */   t[13] = SC_COMPILER_C_CHAR_DONTCARE | SC_COMPILER_C_WORD_SEP | SC_COMPILER_C_VALUE_SEP;
+/* tab */   t[ 9] = ScCompilerC::CharDontCare | ScCompilerC::WordSep | ScCompilerC::ValueSep;
+/* lf  */   t[10] = ScCompilerC::CharDontCare | ScCompilerC::WordSep | ScCompilerC::ValueSep;
+/* cr  */   t[13] = ScCompilerC::CharDontCare | ScCompilerC::WordSep | ScCompilerC::ValueSep;
 
-/*   */     t[32] = SC_COMPILER_C_CHAR_DONTCARE | SC_COMPILER_C_WORD_SEP | SC_COMPILER_C_VALUE_SEP;
-/* ! */     t[33] = SC_COMPILER_C_CHAR | SC_COMPILER_C_WORD_SEP | SC_COMPILER_C_VALUE_SEP;
+/*   */     t[32] = ScCompilerC::CharDontCare | ScCompilerC::WordSep | ScCompilerC::ValueSep;
+/* ! */     t[33] = ScCompilerC::Char | ScCompilerC::WordSep | ScCompilerC::ValueSep;
             if (FormulaGrammar::CONV_ODF == meConv)
-/* ! */         t[33] |= SC_COMPILER_C_ODF_LABEL_OP;
-/* " */     t[34] = SC_COMPILER_C_CHAR_STRING | SC_COMPILER_C_STRING_SEP;
-/* # */     t[35] = SC_COMPILER_C_WORD_SEP | SC_COMPILER_C_CHAR_ERRCONST;
-/* $ */     t[36] = SC_COMPILER_C_CHAR_WORD | SC_COMPILER_C_WORD | SC_COMPILER_C_CHAR_IDENT | SC_COMPILER_C_IDENT;
+/* ! */         t[33] |= ScCompilerC::OdfLabelOp;
+/* " */     t[34] = ScCompilerC::CharString | ScCompilerC::StringSep;
+/* # */     t[35] = ScCompilerC::WordSep | ScCompilerC::CharErrConst;
+/* $ */     t[36] = ScCompilerC::CharWord | ScCompilerC::Word | ScCompilerC::CharIdent | ScCompilerC::Ident;
             if (FormulaGrammar::CONV_ODF == meConv)
-/* $ */         t[36] |= SC_COMPILER_C_ODF_NAME_MARKER;
-/* % */     t[37] = SC_COMPILER_C_VALUE;
-/* & */     t[38] = SC_COMPILER_C_CHAR | SC_COMPILER_C_WORD_SEP | SC_COMPILER_C_VALUE_SEP;
-/* ' */     t[39] = SC_COMPILER_C_NAME_SEP;
-/* ( */     t[40] = SC_COMPILER_C_CHAR | SC_COMPILER_C_WORD_SEP | SC_COMPILER_C_VALUE_SEP;
-/* ) */     t[41] = SC_COMPILER_C_CHAR | SC_COMPILER_C_WORD_SEP | SC_COMPILER_C_VALUE_SEP;
-/* * */     t[42] = SC_COMPILER_C_CHAR | SC_COMPILER_C_WORD_SEP | SC_COMPILER_C_VALUE_SEP;
-/* + */     t[43] = SC_COMPILER_C_CHAR | SC_COMPILER_C_WORD_SEP | SC_COMPILER_C_VALUE_EXP | SC_COMPILER_C_VALUE_SIGN;
-/* , */     t[44] = SC_COMPILER_C_CHAR_VALUE | SC_COMPILER_C_VALUE;
-/* - */     t[45] = SC_COMPILER_C_CHAR | SC_COMPILER_C_WORD_SEP | SC_COMPILER_C_VALUE_EXP | SC_COMPILER_C_VALUE_SIGN;
-/* . */     t[46] = SC_COMPILER_C_WORD | SC_COMPILER_C_CHAR_VALUE | SC_COMPILER_C_VALUE | SC_COMPILER_C_IDENT | SC_COMPILER_C_NAME;
-/* / */     t[47] = SC_COMPILER_C_CHAR | SC_COMPILER_C_WORD_SEP | SC_COMPILER_C_VALUE_SEP;
+/* $ */         t[36] |= ScCompilerC::OdfNameMarker;
+/* % */     t[37] = ScCompilerC::Value;
+/* & */     t[38] = ScCompilerC::Char | ScCompilerC::WordSep | ScCompilerC::ValueSep;
+/* ' */     t[39] = ScCompilerC::NameSep;
+/* ( */     t[40] = ScCompilerC::Char | ScCompilerC::WordSep | ScCompilerC::ValueSep;
+/* ) */     t[41] = ScCompilerC::Char | ScCompilerC::WordSep | ScCompilerC::ValueSep;
+/* * */     t[42] = ScCompilerC::Char | ScCompilerC::WordSep | ScCompilerC::ValueSep;
+/* + */     t[43] = ScCompilerC::Char | ScCompilerC::WordSep | ScCompilerC::ValueExp | ScCompilerC::ValueSign;
+/* , */     t[44] = ScCompilerC::CharValue | ScCompilerC::Value;
+/* - */     t[45] = ScCompilerC::Char | ScCompilerC::WordSep | ScCompilerC::ValueExp | ScCompilerC::ValueSign;
+/* . */     t[46] = ScCompilerC::Word | ScCompilerC::CharValue | ScCompilerC::Value | ScCompilerC::Ident | ScCompilerC::Name;
+/* / */     t[47] = ScCompilerC::Char | ScCompilerC::WordSep | ScCompilerC::ValueSep;
 
             for (i = 48; i < 58; i++)
-/* 0-9 */       t[i] = SC_COMPILER_C_CHAR_VALUE | SC_COMPILER_C_WORD | SC_COMPILER_C_VALUE | SC_COMPILER_C_VALUE_EXP | SC_COMPILER_C_VALUE_VALUE | SC_COMPILER_C_IDENT | SC_COMPILER_C_NAME;
+/* 0-9 */       t[i] = ScCompilerC::CharValue | ScCompilerC::Word | ScCompilerC::Value | ScCompilerC::ValueExp | ScCompilerC::ValueValue | ScCompilerC::Ident | ScCompilerC::Name;
 
-/* : */     t[58] = SC_COMPILER_C_CHAR | SC_COMPILER_C_WORD;
-/* ; */     t[59] = SC_COMPILER_C_CHAR | SC_COMPILER_C_WORD_SEP | SC_COMPILER_C_VALUE_SEP;
-/* < */     t[60] = SC_COMPILER_C_CHAR_BOOL | SC_COMPILER_C_WORD_SEP | SC_COMPILER_C_VALUE_SEP;
-/* = */     t[61] = SC_COMPILER_C_CHAR | SC_COMPILER_C_BOOL | SC_COMPILER_C_WORD_SEP | SC_COMPILER_C_VALUE_SEP;
-/* > */     t[62] = SC_COMPILER_C_CHAR_BOOL | SC_COMPILER_C_BOOL | SC_COMPILER_C_WORD_SEP | SC_COMPILER_C_VALUE_SEP;
-/* ? */     t[63] = SC_COMPILER_C_CHAR_WORD | SC_COMPILER_C_WORD | SC_COMPILER_C_NAME;
+/* : */     t[58] = ScCompilerC::Char | ScCompilerC::Word;
+/* ; */     t[59] = ScCompilerC::Char | ScCompilerC::WordSep | ScCompilerC::ValueSep;
+/* < */     t[60] = ScCompilerC::CharBool | ScCompilerC::WordSep | ScCompilerC::ValueSep;
+/* = */     t[61] = ScCompilerC::Char | ScCompilerC::Bool | ScCompilerC::WordSep | ScCompilerC::ValueSep;
+/* > */     t[62] = ScCompilerC::CharBool | ScCompilerC::Bool | ScCompilerC::WordSep | ScCompilerC::ValueSep;
+/* ? */     t[63] = ScCompilerC::CharWord | ScCompilerC::Word | ScCompilerC::Name;
 /* @ */     // FREE
 
     for (i = 65; i < 91; i++)
-/* A-Z */   t[i] = SC_COMPILER_C_CHAR_WORD | SC_COMPILER_C_WORD | SC_COMPILER_C_CHAR_IDENT | SC_COMPILER_C_IDENT | SC_COMPILER_C_CHAR_NAME | SC_COMPILER_C_NAME;
+/* A-Z */   t[i] = ScCompilerC::CharWord | ScCompilerC::Word | ScCompilerC::CharIdent | ScCompilerC::Ident | ScCompilerC::CharName | ScCompilerC::Name;
 
     if (FormulaGrammar::CONV_ODF == meConv)
     {
-/* [ */     t[91] = SC_COMPILER_C_ODF_LBRACKET;
+/* [ */     t[91] = ScCompilerC::OdfLBracket;
 /* \ */     // FREE
-/* ] */     t[93] = SC_COMPILER_C_ODF_RBRACKET;
+/* ] */     t[93] = ScCompilerC::OdfRBracket;
     }
     else if (FormulaGrammar::CONV_OOO == meConv)
     {
-/* [ */     t[91] = SC_COMPILER_C_CHAR;
+/* [ */     t[91] = ScCompilerC::Char;
 /* \ */     // FREE
-/* ] */     t[93] = SC_COMPILER_C_CHAR;
+/* ] */     t[93] = ScCompilerC::Char;
     }
     else if (FormulaGrammar::CONV_XL_OOX == meConv)
     {
-/* [ */     t[91] = SC_COMPILER_C_CHAR | SC_COMPILER_C_CHAR_IDENT;
+/* [ */     t[91] = ScCompilerC::Char | ScCompilerC::CharIdent;
 /* \ */     // FREE
-/* ] */     t[93] = SC_COMPILER_C_CHAR | SC_COMPILER_C_IDENT;
+/* ] */     t[93] = ScCompilerC::Char | ScCompilerC::Ident;
     }
     else if (FormulaGrammar::CONV_XL_A1 == meConv)
     {
-/* [ */     t[91] = SC_COMPILER_C_CHAR;
+/* [ */     t[91] = ScCompilerC::Char;
 /* \ */     // FREE
-/* ] */     t[93] = SC_COMPILER_C_CHAR;
+/* ] */     t[93] = ScCompilerC::Char;
     }
     else if( FormulaGrammar::CONV_XL_R1C1 == meConv )
     {
-/* [ */     t[91] = SC_COMPILER_C_IDENT;
+/* [ */     t[91] = ScCompilerC::Ident;
 /* \ */     // FREE
-/* ] */     t[93] = SC_COMPILER_C_IDENT;
+/* ] */     t[93] = ScCompilerC::Ident;
     }
     else
     {
@@ -394,55 +394,55 @@ ScCompiler::Convention::Convention( FormulaGrammar::AddressConvention eConv )
 /* ] */     // FREE
     }
 
-/* ^ */     t[94] = SC_COMPILER_C_CHAR | SC_COMPILER_C_WORD_SEP | SC_COMPILER_C_VALUE_SEP;
-/* _ */     t[95] = SC_COMPILER_C_CHAR_WORD | SC_COMPILER_C_WORD | SC_COMPILER_C_CHAR_IDENT | SC_COMPILER_C_IDENT | SC_COMPILER_C_CHAR_NAME | SC_COMPILER_C_NAME;
+/* ^ */     t[94] = ScCompilerC::Char | ScCompilerC::WordSep | ScCompilerC::ValueSep;
+/* _ */     t[95] = ScCompilerC::CharWord | ScCompilerC::Word | ScCompilerC::CharIdent | ScCompilerC::Ident | ScCompilerC::CharName | ScCompilerC::Name;
 /* ` */     // FREE
 
             for (i = 97; i < 123; i++)
-/* a-z */       t[i] = SC_COMPILER_C_CHAR_WORD | SC_COMPILER_C_WORD | SC_COMPILER_C_CHAR_IDENT | SC_COMPILER_C_IDENT | SC_COMPILER_C_CHAR_NAME | SC_COMPILER_C_NAME;
+/* a-z */       t[i] = ScCompilerC::CharWord | ScCompilerC::Word | ScCompilerC::CharIdent | ScCompilerC::Ident | ScCompilerC::CharName | ScCompilerC::Name;
 
-/* { */     t[123] = SC_COMPILER_C_CHAR | SC_COMPILER_C_WORD_SEP | SC_COMPILER_C_VALUE_SEP; // array open
-/* | */     t[124] = SC_COMPILER_C_CHAR | SC_COMPILER_C_WORD_SEP | SC_COMPILER_C_VALUE_SEP; // array row sep (Should be OOo specific)
-/* } */     t[125] = SC_COMPILER_C_CHAR | SC_COMPILER_C_WORD_SEP | SC_COMPILER_C_VALUE_SEP; // array close
-/* ~ */     t[126] = SC_COMPILER_C_CHAR;        // OOo specific
+/* { */     t[123] = ScCompilerC::Char | ScCompilerC::WordSep | ScCompilerC::ValueSep; // array open
+/* | */     t[124] = ScCompilerC::Char | ScCompilerC::WordSep | ScCompilerC::ValueSep; // array row sep (Should be OOo specific)
+/* } */     t[125] = ScCompilerC::Char | ScCompilerC::WordSep | ScCompilerC::ValueSep; // array close
+/* ~ */     t[126] = ScCompilerC::Char;        // OOo specific
 /* 127 */   // FREE
 
     if( FormulaGrammar::CONV_XL_A1 == meConv || FormulaGrammar::CONV_XL_R1C1 == meConv || FormulaGrammar::CONV_XL_OOX == meConv )
     {
-/*   */     t[32] |=   SC_COMPILER_C_WORD;
-/* ! */     t[33] |=   SC_COMPILER_C_IDENT | SC_COMPILER_C_WORD;
-/* " */     t[34] |=   SC_COMPILER_C_WORD;
-/* # */     t[35] &= (~SC_COMPILER_C_WORD_SEP);
-/* # */     t[35] |=   SC_COMPILER_C_WORD;
-/* % */     t[37] |=   SC_COMPILER_C_WORD;
-/* ' */     t[39] |=   SC_COMPILER_C_WORD;
+/*   */     t[32] |=   ScCompilerC::Word;
+/* ! */     t[33] |=   ScCompilerC::Ident | ScCompilerC::Word;
+/* " */     t[34] |=   ScCompilerC::Word;
+/* # */     t[35] &= (~ScCompilerC::WordSep);
+/* # */     t[35] |=   ScCompilerC::Word;
+/* % */     t[37] |=   ScCompilerC::Word;
+/* ' */     t[39] |=   ScCompilerC::Word;
 
-/* % */     t[37] |=   SC_COMPILER_C_WORD;
-/* & */     t[38] |=   SC_COMPILER_C_WORD;
-/* ' */     t[39] |=   SC_COMPILER_C_WORD;
-/* ( */     t[40] |=   SC_COMPILER_C_WORD;
-/* ) */     t[41] |=   SC_COMPILER_C_WORD;
-/* * */     t[42] |=   SC_COMPILER_C_WORD;
-/* + */     t[43] |=   SC_COMPILER_C_WORD;
+/* % */     t[37] |=   ScCompilerC::Word;
+/* & */     t[38] |=   ScCompilerC::Word;
+/* ' */     t[39] |=   ScCompilerC::Word;
+/* ( */     t[40] |=   ScCompilerC::Word;
+/* ) */     t[41] |=   ScCompilerC::Word;
+/* * */     t[42] |=   ScCompilerC::Word;
+/* + */     t[43] |=   ScCompilerC::Word;
 #if 0 /* this really needs to be locale specific. */
-/* , */     t[44]  =   SC_COMPILER_C_CHAR | SC_COMPILER_C_WORD_SEP | SC_COMPILER_C_VALUE_SEP;
+/* , */     t[44]  =   ScCompilerC::Char | ScCompilerC::WordSep | ScCompilerC::ValueSep;
 #else
-/* , */     t[44] |=   SC_COMPILER_C_WORD;
+/* , */     t[44] |=   ScCompilerC::Word;
 #endif
-/* - */     t[45] |=   SC_COMPILER_C_WORD;
+/* - */     t[45] |=   ScCompilerC::Word;
 
-/* ; */     t[59] |=   SC_COMPILER_C_WORD;
-/* < */     t[60] |=   SC_COMPILER_C_WORD;
-/* = */     t[61] |=   SC_COMPILER_C_WORD;
-/* > */     t[62] |=   SC_COMPILER_C_WORD;
+/* ; */     t[59] |=   ScCompilerC::Word;
+/* < */     t[60] |=   ScCompilerC::Word;
+/* = */     t[61] |=   ScCompilerC::Word;
+/* > */     t[62] |=   ScCompilerC::Word;
 /* ? */     // question really is not permitted in sheet name
-/* @ */     t[64] |=   SC_COMPILER_C_WORD;
-/* [ */     t[91] |=   SC_COMPILER_C_WORD;
-/* ] */     t[93] |=   SC_COMPILER_C_WORD;
-/* { */     t[123]|=   SC_COMPILER_C_WORD;
-/* | */     t[124]|=   SC_COMPILER_C_WORD;
-/* } */     t[125]|=   SC_COMPILER_C_WORD;
-/* ~ */     t[126]|=   SC_COMPILER_C_WORD;
+/* @ */     t[64] |=   ScCompilerC::Word;
+/* [ */     t[91] |=   ScCompilerC::Word;
+/* ] */     t[93] |=   ScCompilerC::Word;
+/* { */     t[123]|=   ScCompilerC::Word;
+/* | */     t[124]|=   ScCompilerC::Word;
+/* } */     t[125]|=   ScCompilerC::Word;
+/* ~ */     t[126]|=   ScCompilerC::Word;
     }
 }
 
@@ -726,7 +726,7 @@ struct Convention_A1 : public ScCompiler::Convention
                 nSrcPos, nStartFlags, aAddAllowed, nContFlags, aAddAllowed );
     }
 
-    virtual sal_uLong getCharTableFlags( sal_Unicode c, sal_Unicode /*cLast*/ ) const override
+    virtual ScCompilerC getCharTableFlags( sal_Unicode c, sal_Unicode /*cLast*/ ) const override
     {
         return mpCharTable[static_cast<sal_uInt8>(c)];
     }
@@ -1706,12 +1706,12 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
         r1c1_add_col(rBuffer, rRef.Ref2, aAbsRef.aEnd);
     }
 
-    virtual sal_uLong getCharTableFlags( sal_Unicode c, sal_Unicode cLast ) const override
+    virtual ScCompilerC getCharTableFlags( sal_Unicode c, sal_Unicode cLast ) const override
     {
-        sal_uLong nFlags = mpCharTable[static_cast<sal_uInt8>(c)];
+        ScCompilerC nFlags = mpCharTable[static_cast<sal_uInt8>(c)];
         if (c == '-' && cLast == '[')
             // '-' can occur within a reference string only after '[' e.g. R[-1]C.
-            nFlags |= SC_COMPILER_C_IDENT;
+            nFlags |= ScCompilerC::Ident;
         return nFlags;
     }
 };
@@ -2011,7 +2011,7 @@ sal_Int32 ScCompiler::NextSymbol(bool bInArray)
     while ((c != 0) && (eState != ssStop) )
     {
         pSrc++;
-        sal_uLong nMask = GetCharTableFlags( c, cLast );
+        ScCompilerC nMask = GetCharTableFlags( c, cLast );
 
         // The parameter separator and the array column and row separators end
         // things unconditionally if not in string or reference.
@@ -2044,10 +2044,10 @@ Label_MaskStateMachine:
                     *pSym++ = c;
                     eState = ssGetTableRefColumn;
                 }
-                else if( nMask & SC_COMPILER_C_ODF_LABEL_OP )
+                else if( nMask & ScCompilerC::OdfLabelOp )
                 {
                     // '!!' automatic intersection
-                    if (GetCharTableFlags( pSrc[0], 0 ) & SC_COMPILER_C_ODF_LABEL_OP)
+                    if (GetCharTableFlags( pSrc[0], 0 ) & ScCompilerC::OdfLabelOp)
                     {
                         /* TODO: For now the UI "space operator" is used, this
                          * could be enhanced using a specialized OpCode to get
@@ -2071,25 +2071,25 @@ Label_MaskStateMachine:
                     }
                     else
                     {
-                        nMask &= ~SC_COMPILER_C_ODF_LABEL_OP;
+                        nMask &= ~ScCompilerC::OdfLabelOp;
                         goto Label_MaskStateMachine;
                     }
                 }
-                else if( nMask & SC_COMPILER_C_ODF_NAME_MARKER )
+                else if( nMask & ScCompilerC::OdfNameMarker )
                 {
                     // '$$' defined name marker
-                    if (GetCharTableFlags( pSrc[0], 0 ) & SC_COMPILER_C_ODF_NAME_MARKER)
+                    if (GetCharTableFlags( pSrc[0], 0 ) & ScCompilerC::OdfNameMarker)
                     {
                         // both eaten, not added to pSym
                         ++pSrc;
                     }
                     else
                     {
-                        nMask &= ~SC_COMPILER_C_ODF_NAME_MARKER;
+                        nMask &= ~ScCompilerC::OdfNameMarker;
                         goto Label_MaskStateMachine;
                     }
                 }
-                else if( nMask & SC_COMPILER_C_CHAR )
+                else if( nMask & ScCompilerC::Char )
                 {
                     // '[' is a special case in OOXML, it can start an external
                     // reference ID like [1]Sheet1!A1 that needs to be scanned
@@ -2097,7 +2097,7 @@ Label_MaskStateMachine:
                     // transforms an ocDBArea into an ocTableRef.
                     if (c == '[' && FormulaGrammar::isOOXML( meGrammar) && eLastOp != ocDBArea && maTableRefs.empty())
                     {
-                        nMask &= ~SC_COMPILER_C_CHAR;
+                        nMask &= ~ScCompilerC::Char;
                         goto Label_MaskStateMachine;
                     }
                     else
@@ -2106,28 +2106,28 @@ Label_MaskStateMachine:
                         eState = ssStop;
                     }
                 }
-                else if( nMask & SC_COMPILER_C_ODF_LBRACKET )
+                else if( nMask & ScCompilerC::OdfLBracket )
                 {
                     // eaten, not added to pSym
                     eState = ssGetReference;
                     mnPredetectedReference = 1;
                 }
-                else if( nMask & SC_COMPILER_C_CHAR_BOOL )
+                else if( nMask & ScCompilerC::CharBool )
                 {
                     *pSym++ = c;
                     eState = ssGetBool;
                 }
-                else if( nMask & SC_COMPILER_C_CHAR_VALUE )
+                else if( nMask & ScCompilerC::CharValue )
                 {
                     *pSym++ = c;
                     eState = ssGetValue;
                 }
-                else if( nMask & SC_COMPILER_C_CHAR_STRING )
+                else if( nMask & ScCompilerC::CharString )
                 {
                     *pSym++ = c;
                     eState = ssGetString;
                 }
-                else if( nMask & SC_COMPILER_C_CHAR_ERRCONST )
+                else if( nMask & ScCompilerC::CharErrConst )
                 {
                     *pSym++ = c;
                     if (!maTableRefs.empty() && maTableRefs.back().mnLevel == 2)
@@ -2135,11 +2135,11 @@ Label_MaskStateMachine:
                     else
                         eState = ssGetErrorConstant;
                 }
-                else if( nMask & SC_COMPILER_C_CHAR_DONTCARE )
+                else if( nMask & ScCompilerC::CharDontCare )
                 {
                     nSpaces++;
                 }
-                else if( nMask & SC_COMPILER_C_CHAR_IDENT )
+                else if( nMask & ScCompilerC::CharIdent )
                 {   // try to get a simple ASCII identifier before calling
                     // i18n, to gain performance during import
                     *pSym++ = c;
@@ -2154,7 +2154,7 @@ Label_MaskStateMachine:
             break;
             case ssGetIdent:
             {
-                if ( nMask & SC_COMPILER_C_IDENT )
+                if ( nMask & ScCompilerC::Ident )
                 {   // This catches also $Sheet1.A$1, for example.
                     if( pSym == &cSymbol[ MAXSTRLEN-1 ] )
                     {
@@ -2220,7 +2220,7 @@ Label_MaskStateMachine:
             break;
             case ssGetBool :
             {
-                if( nMask & SC_COMPILER_C_BOOL )
+                if( nMask & ScCompilerC::Bool )
                 {
                     *pSym++ = c;
                     eState = ssStop;
@@ -2250,16 +2250,16 @@ Label_MaskStateMachine:
                     else
                         *pSym++ = c;
                 }
-                else if( nMask & SC_COMPILER_C_VALUE )
+                else if( nMask & ScCompilerC::Value )
                     *pSym++ = c;
-                else if( nMask & SC_COMPILER_C_VALUE_SEP )
+                else if( nMask & ScCompilerC::ValueSep )
                 {
                     pSrc--;
                     eState = ssStop;
                 }
                 else if (c == 'E' || c == 'e')
                 {
-                    if (GetCharTableFlags( pSrc[0], 0 ) & SC_COMPILER_C_VALUE_EXP)
+                    if (GetCharTableFlags( pSrc[0], 0 ) & ScCompilerC::ValueExp)
                         *pSym++ = c;
                     else
                     {
@@ -2268,10 +2268,10 @@ Label_MaskStateMachine:
                         eState = ssStop;
                     }
                 }
-                else if( nMask & SC_COMPILER_C_VALUE_SIGN )
+                else if( nMask & ScCompilerC::ValueSign )
                 {
                     if (((cLast == 'E') || (cLast == 'e')) &&
-                            (GetCharTableFlags( pSrc[0], 0 ) & SC_COMPILER_C_VALUE_VALUE))
+                            (GetCharTableFlags( pSrc[0], 0 ) & ScCompilerC::ValueValue))
                     {
                         *pSym++ = c;
                     }
@@ -2291,7 +2291,7 @@ Label_MaskStateMachine:
             break;
             case ssGetString :
             {
-                if( nMask & SC_COMPILER_C_STRING_SEP )
+                if( nMask & ScCompilerC::StringSep )
                 {
                     if ( !bQuote )
                     {
@@ -2316,7 +2316,7 @@ Label_MaskStateMachine:
             }
             break;
             case ssSkipString:
-                if( nMask & SC_COMPILER_C_STRING_SEP )
+                if( nMask & ScCompilerC::StringSep )
                     eState = ssStop;
                 break;
             case ssGetErrorConstant:
@@ -2338,7 +2338,7 @@ Label_MaskStateMachine:
                         // Check if this is #REF! that starts an invalid reference.
                         // Note we have an implicit '!' here at the end.
                         if (pSym - &cSymbol[0] == 4 && lcl_isUnicodeIgnoreAscii( cSymbol, "#REF", 4) &&
-                                ((GetCharTableFlags( *pSrc, c) & SC_COMPILER_C_IDENT) != 0))
+                                (GetCharTableFlags( *pSrc, c) & ScCompilerC::Ident))
                             eState = ssGetIdent;
                         else
                             eState = ssStop;
@@ -2353,7 +2353,7 @@ Label_MaskStateMachine:
                             eState = ssStop;
                         }
                     }
-                    else if ((nMask & SC_COMPILER_C_WORD_SEP) ||
+                    else if ((nMask & ScCompilerC::WordSep) ||
                             (c < 128 && !rtl::isAsciiAlphanumeric( c)))
                     {
                         bAdd = false;
@@ -2465,7 +2465,7 @@ Label_MaskStateMachine:
                     static const int kRefErr    = (1 << 10);
 
                     bool bAddToSymbol = true;
-                    if ((nMask & SC_COMPILER_C_ODF_RBRACKET) && !(nRefInName & kOpen))
+                    if ((nMask & ScCompilerC::OdfRBracket) && !(nRefInName & kOpen))
                     {
                         OSL_ENSURE( nRefInName & (kPast | kDefName | kRefErr),
                                 "ScCompiler::NextSymbol: reference: "
@@ -3091,7 +3091,7 @@ bool ScCompiler::IsReference( const OUString& rName, const OUString* pErrRef )
             if ( !(ch2 == '$' || rtl::isAsciiAlpha( ch2 )) )
                 return false;
             if ( cDecSep == '.' && (ch2 == 'E' || ch2 == 'e')   // E + - digit
-                    && (GetCharTableFlags( pTabSep[2], pTabSep[1] ) & SC_COMPILER_C_VALUE_EXP) )
+                    && (GetCharTableFlags( pTabSep[2], pTabSep[1] ) & ScCompilerC::ValueExp) )
             {
                 // If it is an 1.E2 expression check if "1" is an existent sheet
                 // name. If so, a desired value 1.E2 would have to be entered as
@@ -3769,7 +3769,7 @@ void ScCompiler::AutoCorrectParsedSymbol()
             // Don't be pedantic: c < 128 should be sufficient here.
             while ( nPos && ((aCorrectedSymbol[nPos] < 128) &&
                     ((GetCharTableFlags(aCorrectedSymbol[nPos], aCorrectedSymbol[nPos-1]) &
-                    (SC_COMPILER_C_WORD | SC_COMPILER_C_CHAR_DONTCARE)) == 0)) )
+                    (ScCompilerC::Word | ScCompilerC::CharDontCare)) == ScCompilerC::NONE)) )
                 nPos--;
             if ( nPos == MAXSTRLEN - 2 )
                 aCorrectedSymbol = aCorrectedSymbol.replaceAt( nPos, 1, OUString(cQuote) );   // '"' the 255th character
@@ -3787,8 +3787,8 @@ void ScCompiler::AutoCorrectParsedSymbol()
             aCorrectedSymbol = mxSymbols->getSymbol(ocMul);
             bCorrected = true;
         }
-        else if ( (GetCharTableFlags( c1, 0 ) & SC_COMPILER_C_CHAR_VALUE)
-               && (GetCharTableFlags( c2, c2p ) & SC_COMPILER_C_CHAR_VALUE) )
+        else if ( (GetCharTableFlags( c1, 0 ) & ScCompilerC::CharValue)
+               && (GetCharTableFlags( c2, c2p ) & ScCompilerC::CharValue) )
         {
             if ( comphelper::string::getTokenCount(aCorrectedSymbol, cx) > 1 )
             {   // x => *
@@ -4719,7 +4719,7 @@ void ScCompiler::MoveRelWrap( ScTokenArray& rArr, ScDocument* pDoc, const ScAddr
 }
 
 bool ScCompiler::IsCharFlagAllConventions(
-    OUString const & rStr, sal_Int32 nPos, sal_uLong nFlags )
+    OUString const & rStr, sal_Int32 nPos, ScCompilerC nFlags )
 {
     sal_Unicode c = rStr[ nPos ];
     sal_Unicode cLast = nPos > 0 ? rStr[ nPos-1 ] : 0;
