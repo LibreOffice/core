@@ -215,7 +215,6 @@ public:
     void AddTabStop( vcl::Window* pWin );
     void SetTabStop( vcl::Window* pWin );
     void CycleFocus( bool bReverse = false );
-    vcl::Window* GetCurrentControl();
     void clear();
 };
 
@@ -377,7 +376,6 @@ private:
     void packWindow();
     void setAllMemberState(bool bSet);
     void selectCurrentMemberOnly(bool bSet);
-    void cycleFocus(bool bReverse = false);
 
     DECL_LINK_TYPED( ButtonHdl, Button*, void );
     DECL_LINK_TYPED( TriStateHdl, Button*, void );

@@ -56,10 +56,8 @@ struct CellFormulaModel
     explicit            CellFormulaModel();
 
     /** Returns true, if the passed cell address is valid for an array formula. */
-    bool                isValidArrayRef( const css::table::CellAddress& rCellAddr );
     bool                isValidArrayRef( const ScAddress& rCellAddr );
     /** Returns true, if the passed cell address is valid for a shared formula. */
-    bool                isValidSharedRef( const css::table::CellAddress& rCellAddr );
     bool                isValidSharedRef( const ScAddress& rCellAddr );
 };
 
@@ -126,9 +124,6 @@ public:
     void                setDateCell( const CellModel& rModel, const OUString& rDateString );
 
     void                createSharedFormula(
-            const css::table::CellAddress& rRange,
-            const ApiTokenSequence& rTokens);
-    void                createSharedFormula(
             const ScAddress& rRange,
             const ApiTokenSequence& rTokens);
 
@@ -147,10 +142,6 @@ public:
     void                setMergedRange( const css::table::CellRangeAddress& rRange );
     /** Sets a standard number format (constant from com.sun.star.util.NumberFormat) to the specified cell. */
     void                setStandardNumFmt(
-                            const css::table::CellAddress& rCellAddr,
-                            sal_Int16 nStdNumFmt );
-
-    void                setStandardNumFmt(
                             const ScAddress& rCellAddr,
                             sal_Int16 nStdNumFmt );
 
@@ -162,10 +153,6 @@ public:
 
     /** Sets the passed formula token array into a cell. */
     void                setCellFormula(
-                            const css::table::CellAddress& rCellAddr,
-                            const ApiTokenSequence& rTokens );
-
-    void                setCellFormula(
                             const ScAddress& rCellAddr,
                             const ApiTokenSequence& rTokens );
 private:
@@ -173,7 +160,6 @@ private:
 
     /** Creates a formula token array representing the shared formula with the
         passed identifier. */
-    ApiTokenSequence    resolveSharedFormula( const css::table::CellAddress& rMapKey ) const;
     ApiTokenSequence    resolveSharedFormula( const ScAddress& rMapKey ) const;
 
     /** Inserts the passed array formula into the sheet. */
@@ -234,9 +220,7 @@ private:
         sal_Int32           mnHorAlign;         /// Horizontal alignment in the range.
 
         explicit            MergedRange( const css::table::CellRangeAddress& rRange );
-        explicit            MergedRange( const css::table::CellAddress& rAddress, sal_Int32 nHorAlign );
         explicit            MergedRange( const ScAddress& rAddress, sal_Int32 nHorAlign );
-        bool                tryExpand( const css::table::CellAddress& rAddress, sal_Int32 nHorAlign );
         bool                tryExpand( const ScAddress& rAddress, sal_Int32 nHorAlign );
     };
     typedef ::std::list< MergedRange > MergedRangeList;
