@@ -56,12 +56,6 @@ struct ContentProviderData
     /** The arguments to use to instanciate the content provider.
      */
     OUString Arguments;
-
-    ContentProviderData() {};
-    ContentProviderData( const OUString & rService,
-                         const OUString & rTemplate,
-                         const OUString & rArgs )
-    : ServiceName( rService ), URLTemplate( rTemplate ), Arguments( rArgs ) {}
 };
 
 typedef std::vector< ContentProviderData > ContentProviderDataList;

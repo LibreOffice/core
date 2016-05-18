@@ -42,7 +42,6 @@ private:
     void init() const;
 
 public:
-    HierarchyUri() : m_bValid( false ) {}
     explicit HierarchyUri( const OUString & rUri )
     : m_aUri( rUri ), m_bValid( false ) {}
 

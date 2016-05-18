@@ -33,7 +33,6 @@
 #include "ftpdirp.hxx"
 #include "ftpcontentidentifier.hxx"
 #include "ftpcfunc.hxx"
-#include "ftpstrcont.hxx"
 #include "ftpintreq.hxx"
 
 #include <memory>

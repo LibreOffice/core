@@ -46,7 +46,6 @@ private:
     void init() const;
 
 public:
-    Uri() : m_eState( UNKNOWN ) {}
     explicit Uri( const OUString & rUri )
     : m_aUri( rUri ), m_eState( UNKNOWN ) {}
 

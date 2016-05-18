@@ -87,7 +87,6 @@ namespace fileaccess {
             css::beans::PropertyState   State;
             sal_Int16                   Attributes;
         public:
-            MyProperty();
             explicit MyProperty( const OUString&  thePropertyName );
             MyProperty( bool                              theIsNative,
                         const OUString&                   thePropertyName,

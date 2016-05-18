@@ -57,11 +57,6 @@ protected:
         osl::Mutex* pT;
     public:
 
-        ReacquireableGuard(osl::Mutex * t) : pT(t)
-        {
-            pT->acquire();
-        }
-
         ReacquireableGuard(osl::Mutex& t) : pT(&t)
         {
             pT->acquire();
