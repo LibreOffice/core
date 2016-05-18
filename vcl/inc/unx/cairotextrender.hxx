@@ -51,12 +51,10 @@ public:
     };
 
 private:
-    static int      mnRefCount;
     typedef         std::deque< std::pair<void *, CacheId> > LRUFonts;
     static LRUFonts maLRUFonts;
 public:
-                                CairoFontsCache();
-                                ~CairoFontsCache();
+                                CairoFontsCache() = delete;
 
     static void                 CacheFont(void *pFont, const CacheId &rId);
     static void*                FindCachedFont(const CacheId &rId);

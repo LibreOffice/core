@@ -45,8 +45,6 @@ class BitmapReadAccess;
 class VCL_PLUGIN_PUBLIC Octree
 {
 private:
-                                Octree() {}
-
     void                        CreatePalette( NODE* pNode );
     void                        GetPalIndex( NODE* pNode );
 

@@ -119,23 +119,6 @@ void ServerFontInstance::HandleFontOptions()
 }
 
 CairoFontsCache::LRUFonts CairoFontsCache::maLRUFonts;
-int CairoFontsCache::mnRefCount = 0;
-
-CairoFontsCache::CairoFontsCache()
-{
-    ++mnRefCount;
-}
-
-CairoFontsCache::~CairoFontsCache()
-{
-    --mnRefCount;
-    if (!mnRefCount && !maLRUFonts.empty())
-    {
-        LRUFonts::iterator aEnd = maLRUFonts.end();
-        for (LRUFonts::iterator aI = maLRUFonts.begin(); aI != aEnd; ++aI)
-            cairo_font_face_destroy(static_cast<cairo_font_face_t*>(aI->first));
-    }
-}
 
 void CairoFontsCache::CacheFont(void *pFont, const CairoFontsCache::CacheId &rId)
 {

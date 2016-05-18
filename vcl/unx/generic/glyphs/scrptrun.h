@@ -60,11 +60,8 @@ struct ParenStackEntry
 
 class ScriptRun : public UObject {
 public:
-    ScriptRun();
 
     ScriptRun(const UChar chars[], int32_t length);
-
-    ScriptRun(const UChar chars[], int32_t start, int32_t length);
 
     void reset();
 
@@ -114,19 +111,9 @@ private:
     static const char fgClassID;
 };
 
-inline ScriptRun::ScriptRun()
-{
-    reset(NULL, 0, 0);
-}
-
 inline ScriptRun::ScriptRun(const UChar chars[], int32_t length)
 {
     reset(chars, 0, length);
-}
-
-inline ScriptRun::ScriptRun(const UChar chars[], int32_t start, int32_t length)
-{
-    reset(chars, start, length);
 }
 
 inline int32_t ScriptRun::getScriptStart()

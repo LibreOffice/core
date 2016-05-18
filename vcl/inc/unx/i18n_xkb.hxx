@@ -46,10 +46,6 @@ public:
     void                Dispatch( XEvent *pEvent ); // keep track of group changes
 
     inline int          GetEventBase() const ;
-
-protected:
-
-                        SalI18N_KeyboardExtension(); // disabled
 };
 
 inline

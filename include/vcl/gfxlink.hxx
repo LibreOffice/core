@@ -34,12 +34,6 @@ struct ImpBuffer
     sal_uLong       mnRefCount;
     sal_uInt8*      mpBuffer;
 
-                ImpBuffer( sal_uLong nSize )
-                {
-                    mnRefCount = 1UL;
-                    mpBuffer = nSize ? new sal_uInt8[ nSize ] : nullptr;
-                }
-
                 ImpBuffer( sal_uInt8* pBuf ) { mnRefCount = 1UL; mpBuffer = pBuf; }
 
                 ~ImpBuffer() { delete[] mpBuffer; }
@@ -124,7 +118,6 @@ private:
 public:
                         GfxLink();
                         GfxLink( const GfxLink& );
-                        GfxLink( const OUString& rPath, GfxLinkType nType );
                         GfxLink( sal_uInt8* pBuf, sal_uInt32 nBufSize, GfxLinkType nType );
                         ~GfxLink();
 

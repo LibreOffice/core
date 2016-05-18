@@ -69,15 +69,6 @@ struct ImplEntryType
         mbIsSelected = false;
         mpUserData = nullptr;
     }
-
-    ImplEntryType( const Image& rImage ) :
-        maImage( rImage ),
-        mnFlags( ListBoxEntryFlags::NONE ),
-        mnHeight( 0 )
-    {
-        mbIsSelected = false;
-        mpUserData = nullptr;
-    }
 };
 
 class ImplEntryList

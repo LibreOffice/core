@@ -138,10 +138,8 @@ public:
     bool        GetIsLosslessCompression() const { return mbUseLosslessCompression;}
     void        SetIsLosslessCompression( const bool bLosslessCompression );
 
-    sal_Int32   GetCompressionQuality() const { return mnCompressionQuality; }
     void        SetCompressionQuality( const sal_Int32 nQuality );
 
-    sal_Int32   GetMaxImageResolution() const { return mnMaxImageResolution; }
     void        SetMaxImageResolution( const sal_Int32 nQuality );
 
     bool        GetIsReduceImageResolution() const { return mbReduceImageResolution;}

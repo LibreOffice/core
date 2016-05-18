@@ -65,8 +65,6 @@ public:
 
     void                SetSymbolFlag( const bool bSymbolFlag )         { mbSymbolFlag = bSymbolFlag; }
 
-    bool                CompareDeviceIndependentFontAttributes(const ImplFont& rOther) const;
-
     // straight properties, no getting them from AskConfig()
     FontFamily          GetFamilyTypeNoAsk() const                      { return meFamily; }
     FontWeight          GetWeightNoAsk() const                          { return meWeight; }

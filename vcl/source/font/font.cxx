@@ -694,7 +694,6 @@ void Font::SetQuality( int nQuality ) { mpImplFont->SetQuality( nQuality ); }
 void Font::IncreaseQualityBy( int nQualityAmount ) { mpImplFont->IncreaseQualityBy( nQualityAmount ); }
 void Font::DecreaseQualityBy( int nQualityAmount ) { mpImplFont->DecreaseQualityBy( nQualityAmount ); }
 
-OUString Font::GetMapNames() const { return mpImplFont->GetMapNames(); }
 void Font::SetMapNames( OUString const & aMapNames ) { mpImplFont->SetMapNames(aMapNames); }
 
 bool Font::IsBuiltInFont() const { return mpImplFont->IsBuiltInFont(); }
@@ -825,35 +824,6 @@ bool ImplFont::operator==( const ImplFont& rOther ) const
     ||  (mbShadow       != rOther.mbShadow)
     ||  (meKerning      != rOther.meKerning)
     ||  (mbTransparent  != rOther.mbTransparent) )
-        return false;
-
-    return true;
-}
-
-bool ImplFont::CompareDeviceIndependentFontAttributes(const ImplFont& rOther) const
-{
-    if (maFamilyName != rOther.maFamilyName)
-        return false;
-
-    if (maStyleName != rOther.maStyleName)
-        return false;
-
-    if (meWeight != rOther.meWeight)
-        return false;
-
-    if (meItalic != rOther.meItalic)
-        return false;
-
-    if (meFamily != rOther.meFamily)
-        return false;
-
-    if (mePitch != rOther.mePitch)
-        return false;
-
-    if (meWidthType != rOther.meWidthType)
-        return false;
-
-    if (mbSymbolFlag != rOther.mbSymbolFlag)
         return false;
 
     return true;

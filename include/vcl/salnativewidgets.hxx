@@ -447,7 +447,6 @@ class VCL_DLLPUBLIC TabitemValue : public ImplControlValue
         bool isBothAligned() const  { return isLeftAligned() && isRightAligned(); }
         bool isNotAligned() const   { return !(mnAlignment & (TabitemFlags::LeftAligned | TabitemFlags::RightAligned)); }
         bool isFirst() const        { return bool(mnAlignment & TabitemFlags::FirstInGroup); }
-        bool isLast() const         { return bool(mnAlignment & TabitemFlags::LastInGroup); }
         const Rectangle& getContentRect() const { return maContentRect; }
 };
 
@@ -518,8 +517,6 @@ public:
 class VCL_DLLPUBLIC MenupopupValue : public ImplControlValue
 {
 public:
-    MenupopupValue() : ImplControlValue( CTRL_MENU_POPUP, 0 )
-    {}
     MenupopupValue( long i_nGutterWidth, const Rectangle& i_rItemRect )
     : ImplControlValue( CTRL_MENU_POPUP, i_nGutterWidth )
     , maItemRect( i_rItemRect )

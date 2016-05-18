@@ -18,7 +18,7 @@
 #include <gio/gio.h>
 #endif
 
-#include <unx/salmenu.h>
+#include <salmenu.hxx>
 #include <unx/gtk/gtkframe.hxx>
 #include <vcl/idle.hxx>
 
