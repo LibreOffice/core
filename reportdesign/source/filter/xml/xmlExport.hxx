@@ -140,9 +140,8 @@ private:
 
     static OUString         implConvertNumber(sal_Int32 _nValue);
 
-private:
-                                    ORptExport();
     virtual void                    SetBodyAttributes() override;
+
 protected:
 
     virtual void                    ExportStyles_( bool bUsed ) override;

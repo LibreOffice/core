@@ -82,7 +82,6 @@ protected:
     OString m_aName;
 
 public:
-    StringNode() {}
     StringNode(const OString& rStr) { m_aName = rStr; }
 
     StringNode*     Search( const char * ) const;

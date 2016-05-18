@@ -287,47 +287,6 @@ sal_uInt32 RscTypCont::PutSysName( sal_uInt32 nRscTyp, char * pFileName )
     return pSysEntry->nKey;
 }
 
-void RscTypCont::WriteInc( FILE * fOutput, RscFileTab::Index lFileKey )
-{
-
-    if( lFileKey == RscFileTab::IndexNotFound )
-    {
-        RscFileTab::Index aIndex = aFileTab.FirstIndex();
-        while( aIndex != RscFileTab::IndexNotFound )
-        {
-            RscFile   * pFName = aFileTab.Get( aIndex );
-            if( pFName->IsIncFile() )
-            {
-                fprintf( fOutput, "#include " );
-                fprintf( fOutput, "\"%s\"\n",
-                                  pFName->aFileName.getStr() );
-            }
-            aIndex = aFileTab.NextIndex( aIndex );
-        }
-    }
-    else
-    {
-        RscFile   *     pFName = aFileTab.Get( lFileKey );
-        if( pFName )
-        {
-            for ( size_t i = 0, n = pFName->aDepLst.size(); i < n; ++i )
-            {
-                RscDepend* pDep = pFName->aDepLst[ i ];
-                if( pDep->GetFileKey() != lFileKey )
-                {
-                    RscFile* pFile = aFileTab.GetFile( pDep->GetFileKey() );
-                    if( pFile )
-                    {
-                        fprintf( fOutput, "#include " );
-                        fprintf( fOutput, "\"%s\"\n",
-                                 pFile->aFileName.getStr() );
-                    }
-                }
-            }
-        }
-    }
-}
-
 
 class RscEnumerateObj
 {

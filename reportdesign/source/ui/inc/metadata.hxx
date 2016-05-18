@@ -39,14 +39,13 @@ namespace rptui
     {
         OPropertyInfoService(const OPropertyInfoService&) = delete;
         void operator =(const OPropertyInfoService&) = delete;
+        OPropertyInfoService() = delete;
     protected:
         static sal_uInt16               s_nCount;
         static OPropertyInfoImpl*       s_pPropertyInfos;
         // TODO: a real structure which allows quick access by name as well as by id
 
     public:
-        OPropertyInfoService(){}
-        virtual ~OPropertyInfoService(){}
         // IPropertyInfoService
         static sal_Int32                    getPropertyId(const OUString& _rName);
         static OUString                     getPropertyTranslation(sal_Int32 _nId);
