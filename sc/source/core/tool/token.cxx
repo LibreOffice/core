@@ -4218,18 +4218,18 @@ namespace {
 
 void checkBounds(
     const ScAddress& rPos, SCROW nGroupLen, const ScRange& rCheckRange,
-    const ScSingleRefData& rRef, std::vector<SCROW>& rBounds )
+    const ScSingleRefData& rRef, std::vector<SCROW>& rBounds, const ScRange* pDeletedRange )
 {
     if (!rRef.IsRowRel())
         return;
 
     ScRange aAbs(rRef.toAbs(rPos));
     aAbs.aEnd.IncRow(nGroupLen-1);
-    if (!rCheckRange.Intersects(aAbs))
+    if (!rCheckRange.Intersects(aAbs) && (!pDeletedRange || !pDeletedRange->Intersects(aAbs)))
         return;
 
     // Get the boundary row positions.
-    if (aAbs.aEnd.Row() < rCheckRange.aStart.Row())
+    if (aAbs.aEnd.Row() < rCheckRange.aStart.Row() && (!pDeletedRange || aAbs.aEnd.Row() < pDeletedRange->aStart.Row()))
         // No intersections.
         return;
 
@@ -4244,6 +4244,12 @@ void checkBounds(
 
         // Add offset from the reference top to the cell position.
         SCROW nOffset = rCheckRange.aStart.Row() - aAbs.aStart.Row();
+        rBounds.push_back(rPos.Row()+nOffset);
+    }
+    // Same for deleted range.
+    if (pDeletedRange && aAbs.aStart.Row() <= pDeletedRange->aStart.Row())
+    {
+        SCROW nOffset = pDeletedRange->aStart.Row() - aAbs.aStart.Row();
         rBounds.push_back(rPos.Row()+nOffset);
     }
 
@@ -4262,6 +4268,12 @@ void checkBounds(
         SCROW nOffset = rCheckRange.aEnd.Row() + 1 - aAbs.aStart.Row();
         rBounds.push_back(rPos.Row()+nOffset);
     }
+    // Same for deleted range.
+    if (pDeletedRange && aAbs.aEnd.Row() >= pDeletedRange->aEnd.Row())
+    {
+        SCROW nOffset = pDeletedRange->aEnd.Row() + 1 - aAbs.aStart.Row();
+        rBounds.push_back(rPos.Row()+nOffset);
+    }
 }
 
 void checkBounds(
@@ -4270,6 +4282,9 @@ void checkBounds(
 {
     if (!rRef.IsRowRel())
         return;
+
+    ScRange aDeletedRange( ScAddress::UNINITIALIZED );
+    const ScRange* pDeletedRange = nullptr;
 
     ScRange aCheckRange = rCxt.maRange;
     if (rCxt.meMode == URM_MOVE)
@@ -4281,8 +4296,17 @@ void checkBounds(
             assert(!"can't move");
         }
     }
+    else if (rCxt.meMode == URM_INSDEL &&
+            ((rCxt.mnColDelta < 0 && rCxt.maRange.aStart.Col() > 0) ||
+             (rCxt.mnRowDelta < 0 && rCxt.maRange.aStart.Row() > 0)))
+    {
+        // Check bounds also against deleted range where cells are shifted
+        // into and references need to be invalidated.
+        aDeletedRange = getSelectedRange( rCxt);
+        pDeletedRange = &aDeletedRange;
+    }
 
-    checkBounds(rPos, nGroupLen, aCheckRange, rRef, rBounds);
+    checkBounds(rPos, nGroupLen, aCheckRange, rRef, rBounds, pDeletedRange);
 }
 
 }
@@ -4341,14 +4365,14 @@ void ScTokenArray::CheckRelativeReferenceBounds(
                 case svSingleRef:
                     {
                         const ScSingleRefData& rRef = *p->GetSingleRef();
-                        checkBounds(rPos, nGroupLen, rRange, rRef, rBounds);
+                        checkBounds(rPos, nGroupLen, rRange, rRef, rBounds, nullptr);
                     }
                     break;
                 case svDoubleRef:
                     {
                         const ScComplexRefData& rRef = *p->GetDoubleRef();
-                        checkBounds(rPos, nGroupLen, rRange, rRef.Ref1, rBounds);
-                        checkBounds(rPos, nGroupLen, rRange, rRef.Ref2, rBounds);
+                        checkBounds(rPos, nGroupLen, rRange, rRef.Ref1, rBounds, nullptr);
+                        checkBounds(rPos, nGroupLen, rRange, rRef.Ref2, rBounds, nullptr);
                     }
                     break;
                 default:
