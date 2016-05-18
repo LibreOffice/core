@@ -718,6 +718,7 @@ void SlideSorterViewShell::ExecMovePageFirst (SfxRequest& /*rReq*/)
 
     // SdDrawDocument MovePages is based on SdPage IsSelected, so
     // transfer the SlideSorter selection to SdPages (*it)
+    GetDoc()->UnselectAllPages();
     std::shared_ptr<SlideSorterViewShell::PageSelection> pSelection ( GetPageSelection() );
     for (auto it = pSelection->begin(); it != pSelection->end() ; ++it ) {
         GetDoc()->SetSelected(*it, true);
@@ -769,6 +770,7 @@ void SlideSorterViewShell::ExecMovePageUp (SfxRequest& /*rReq*/)
     sal_uInt16 pageNo;
     // SdDrawDocument MovePages is based on SdPage IsSelected, so
     // transfer the SlideSorter selection to SdPages (*it)
+    GetDoc()->UnselectAllPages();
     std::shared_ptr<SlideSorterViewShell::PageSelection> pSelection ( GetPageSelection() );
     for (auto it = pSelection->begin(); it != pSelection->end() ; ++it ) {
         // Check page number
@@ -803,6 +805,7 @@ void SlideSorterViewShell::ExecMovePageDown (SfxRequest& /*rReq*/)
     sal_uInt16 pageNo;
     // SdDrawDocument MovePages is based on SdPage IsSelected, so
     // transfer the SlideSorter selection to SdPages (*it)
+    GetDoc()->UnselectAllPages();
     std::shared_ptr<SlideSorterViewShell::PageSelection> pSelection ( GetPageSelection() );
     for (auto it = pSelection->begin(); it != pSelection->end() ; ++it )
     {
@@ -837,6 +840,7 @@ void SlideSorterViewShell::ExecMovePageLast (SfxRequest& /*rReq*/)
 
     // SdDrawDocument MovePages is based on SdPage IsSelected, so
     // transfer the SlideSorter selection to SdPages (*it)
+    GetDoc()->UnselectAllPages();
     std::shared_ptr<SlideSorterViewShell::PageSelection> pSelection ( GetPageSelection() );
     for (auto it = pSelection->begin(); it != pSelection->end() ; ++it ) {
         GetDoc()->SetSelected(*it, true);
@@ -866,6 +870,7 @@ void SlideSorterViewShell::GetStateMovePageLast (SfxItemSet& rSet)
     sal_uInt16 pageNo;
     // SdDrawDocument MovePages is based on SdPage IsSelected, so
     // transfer the SlideSorter selection to SdPages (*it)
+    GetDoc()->UnselectAllPages();
     std::shared_ptr<SlideSorterViewShell::PageSelection> pSelection ( GetPageSelection() );
     for (auto it = pSelection->begin(); it != pSelection->end() ; ++it )
     {

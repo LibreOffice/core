@@ -696,6 +696,16 @@ bool SdDrawDocument::CreateMissingNotesAndHandoutPages()
     return bOK;
 }
 
+void SdDrawDocument::UnselectAllPages()
+{
+    sal_uInt16 nNoOfPages = GetSdPageCount(PK_STANDARD);
+    for (sal_uInt16 nPage = 0; nPage < nNoOfPages; ++nPage)
+    {
+        SdPage* pPage = GetSdPage(nPage, PK_STANDARD);
+        pPage->SetSelected(false);
+    }
+}
+
 // + Move selected pages after said page
 //   (nTargetPage = (sal_uInt16)-1  --> move before first page)
 // + Returns sal_True when the page has been moved
