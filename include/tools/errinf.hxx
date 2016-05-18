@@ -97,21 +97,6 @@ public:
     const OUString& GetArg2() const { return aArg2; }
 };
 
-class TOOLS_DLLPUBLIC MessageInfo : public DynamicErrorInfo
-{
-public:
-
-    MessageInfo(sal_uIntPtr UserId, sal_uInt16 nMask = 0) :
-        DynamicErrorInfo(UserId, nMask) {}
-    MessageInfo(sal_uIntPtr UserId, const OUString &rArg, sal_uInt16 nMask = 0 ) :
-        DynamicErrorInfo(UserId, nMask), aArg(rArg) {}
-
-    const OUString&         GetMessageArg() const { return aArg; }
-
-private:
-    OUString           aArg;
-};
-
 struct ErrorContextImpl;
 class TOOLS_DLLPUBLIC ErrorContext
 {

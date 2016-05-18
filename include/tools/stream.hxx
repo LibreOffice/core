@@ -153,28 +153,6 @@ public:
 };
 
 
-// SvAsyncLockBytes
-
-class SvAsyncLockBytes: public SvOpenLockBytes
-{
-    sal_uInt64 m_nSize;
-    bool m_bTerminated;
-
-public:
-
-    SvAsyncLockBytes(SvStream * pStream, bool bOwner):
-        SvOpenLockBytes(pStream, bOwner), m_nSize(0), m_bTerminated(false) {}
-
-    virtual ErrCode ReadAt(sal_uInt64 nPos, void * pBuffer, sal_Size nCount,
-                           sal_Size * pRead) const override;
-    virtual ErrCode WriteAt(sal_uInt64 nPos, const void * pBuffer, sal_Size nCount,
-                            sal_Size * pWritten) override;
-
-    virtual ErrCode FillAppend(const void * pBuffer, sal_Size nCount,
-                               sal_Size * pWritten) override;
-};
-
-
 // SvStream
 
 class TOOLS_DLLPUBLIC SvStream
@@ -674,8 +652,6 @@ protected:
     /// Is called when this stream allocated the buffer or the buffer is
     /// resized. FreeMemory may need to NULLify handles in derived classes.
     void    FreeMemory();
-
-                    SvMemoryStream(void*) { } // for sub-classes
 
 public:
                     SvMemoryStream( void* pBuf, sal_Size nSize, StreamMode eMode);

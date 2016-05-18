@@ -38,12 +38,10 @@ class TOOLS_DLLPUBLIC VersionCompat
     StreamMode   mnStmMode;
     sal_uInt16      mnVersion;
 
-                    VersionCompat() {}
-                    VersionCompat( const VersionCompat& ) {}
+                    VersionCompat( const VersionCompat& ) = delete;
     VersionCompat&  operator=( const VersionCompat& ) { return *this; }
 
 public:
-
                     VersionCompat( SvStream& rStm, StreamMode nStreamMode, sal_uInt16 nVersion = 1 );
                     ~VersionCompat();
 

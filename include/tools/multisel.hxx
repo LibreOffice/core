@@ -114,7 +114,6 @@ public:
         , nRangeIndex( i_nRange ), nCurrent( i_nCurrent ) {}
 
     public:
-        Iterator() : pEnumerator( nullptr ), pPossibleValues( nullptr ), nRangeIndex( -1 ), nCurrent( -1 ) {}
         Iterator& operator++();
         sal_Int32 operator*() const { return nCurrent;}
         bool operator==(const Iterator&) const;
