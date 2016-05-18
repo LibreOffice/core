@@ -85,7 +85,6 @@ public:
 
     // Device dependent functions
     int                 GetQuality() const;
-    OUString            GetMapNames() const;
 
     bool                IsBuiltInFont() const;
     bool                CanEmbed() const;

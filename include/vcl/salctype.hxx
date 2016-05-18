@@ -44,10 +44,6 @@ class SvStream;
 
 struct ConvertData
 {
-private:
-
-                        ConvertData();
-
 public:
 
     Graphic             maGraphic;

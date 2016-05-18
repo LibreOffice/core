@@ -103,18 +103,6 @@ public:
     virtual OUString GetComment () const override;
 };
 
-class TextUndoSetAttribs: public TextUndo
-{
-public:
-                        TextUndoSetAttribs( TextEngine* pTextEngine, const TextSelection& rESel );
-                        virtual ~TextUndoSetAttribs();
-
-    virtual void        Undo() override;
-    virtual void        Redo() override;
-
-    virtual OUString GetComment () const override;
-};
-
 #endif // INCLUDED_VCL_SOURCE_EDIT_TEXTUND2_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

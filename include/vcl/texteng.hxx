@@ -88,7 +88,6 @@ class VCL_DLLPUBLIC TextEngine : public SfxBroadcaster
     friend class        TextUndoSplitPara;
     friend class        TextUndoInsertChars;
     friend class        TextUndoRemoveChars;
-    friend class        TextUndoSetAttribs;
 
 private:
     TextDoc*            mpDoc;

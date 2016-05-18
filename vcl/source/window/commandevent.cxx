@@ -64,11 +64,6 @@ CommandExtTextInputData::~CommandExtTextInputData()
     delete [] mpTextAttr;
 }
 
-CommandInputContextData::CommandInputContextData()
-{
-    meLanguage = LANGUAGE_DONTKNOW;
-}
-
 CommandInputContextData::CommandInputContextData( LanguageType eLang )
 {
     meLanguage = eLang;
@@ -99,31 +94,15 @@ CommandWheelData::CommandWheelData( long nWheelDelta, long nWheelNotchDelta,
     mbDeltaIsPixel  = bDeltaIsPixel;
 }
 
-CommandScrollData::CommandScrollData()
-{
-    mnDeltaX    = 0;
-    mnDeltaY    = 0;
-}
-
 CommandScrollData::CommandScrollData( long nDeltaX, long nDeltaY )
 {
     mnDeltaX    = nDeltaX;
     mnDeltaY    = nDeltaY;
 }
 
-CommandModKeyData::CommandModKeyData()
-{
-    mnCode = 0L;
-}
-
 CommandModKeyData::CommandModKeyData( sal_uInt16 nCode )
 {
     mnCode = nCode;
-}
-
-CommandSelectionChangeData::CommandSelectionChangeData()
-{
-    mnStart = mnEnd = 0;
 }
 
 CommandSelectionChangeData::CommandSelectionChangeData( sal_uLong nStart, sal_uLong nEnd )

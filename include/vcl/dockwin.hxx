@@ -35,7 +35,6 @@ struct DockingData
     bool        mbLivemode;     // in
     bool        mbInteractive;  // in
 
-    DockingData() {};
     DockingData( const Point& rPt, const Rectangle& rRect, bool b) :
         maMousePos( rPt ), maTrackRect( rRect ), mbFloating( b ), mbLivemode( false ), mbInteractive( true )
         {};
@@ -47,7 +46,6 @@ struct EndDockingData
     bool        mbFloating;      // in
     bool        mbCancelled;     // in
 
-    EndDockingData() {};
     EndDockingData( const Rectangle& rRect, bool b, bool bCancelled ) :
         maWindowRect( rRect ), mbFloating( b ), mbCancelled( bCancelled )
         {};
@@ -58,7 +56,6 @@ struct EndPopupModeData
     Point       maFloatingPos;    // in
     bool        mbTearoff;        // in
 
-    EndPopupModeData() {};
     EndPopupModeData( const Point& rPos, bool bTearoff ) :
         maFloatingPos( rPos ), mbTearoff( bTearoff )
         {};

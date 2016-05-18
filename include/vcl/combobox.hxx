@@ -124,7 +124,6 @@ public:
 
     void            EnableMultiSelection( bool bMulti );
     bool            IsMultiSelectionEnabled() const;
-    sal_Unicode     GetMultiSelectionSeparator() const;
 
     void            SetSelectHdl(const Link<ComboBox&,void>& rLink);
     const Link<ComboBox&,void>&   GetSelectHdl() const;
