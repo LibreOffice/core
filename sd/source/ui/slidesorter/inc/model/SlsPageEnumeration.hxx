@@ -97,8 +97,6 @@ private:
     */
     PageEnumeration (::std::unique_ptr<Enumeration<SharedPageDescriptor> > && pImpl);
 
-    // Default constructor not implemented.
-    PageEnumeration();
 };
 
 } } } // end of namespace ::sd::slidesorter::model

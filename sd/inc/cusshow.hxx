@@ -40,8 +40,7 @@ private:
     // this is a weak reference to a possible living api wrapper for this custom show
     css::uno::WeakReference< css::uno::XInterface > mxUnoCustomShow;
 
-    // forbidden and not implemented
-    SdCustomShow();
+    SdCustomShow() = delete;
 
 public:
     // single argument ctors shall be explicit

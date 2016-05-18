@@ -286,8 +286,7 @@ namespace pdfi
     class ElementFactory
     {
     public:
-        ElementFactory() {}
-        virtual ~ElementFactory();
+        ElementFactory() = delete;
 
         static HyperlinkElement* createHyperlinkElement( Element* pParent, const OUString& rURI )
         { return new HyperlinkElement( pParent, rURI ); }

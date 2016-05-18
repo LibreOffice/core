@@ -47,7 +47,6 @@ namespace pdfi
         std::unordered_map< OUString, size_t, OUStringHash >   m_aIndexMap;
 
     public:
-        SaxAttrList() {}
         explicit SaxAttrList( const std::unordered_map< OUString, OUString, OUStringHash >& );
         SaxAttrList( const SaxAttrList& );
         virtual ~SaxAttrList();

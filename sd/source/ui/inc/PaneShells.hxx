@@ -62,19 +62,6 @@ public:
     virtual ~LeftDrawPaneShell();
 };
 
-/** Shell that displays the right pane for both Impress and Draw.  The shell
-    does not do anything else and has especially no slots.
-*/
-class ToolPanelPaneShell : public SfxShell
-{
-public:
-    SFX_DECL_INTERFACE( SD_IF_SDTOOLPANELPANESHELL )
-
-public:
-    ToolPanelPaneShell();
-    virtual ~ToolPanelPaneShell();
-};
-
 } // end of namespace sd
 
 #endif

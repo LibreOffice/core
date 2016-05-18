@@ -164,7 +164,6 @@ class SdInsertPagesObjsDlg;
 class AbstractSdInsertPagesObjsDlg_Impl : public AbstractSdInsertPagesObjsDlg
 {
     DECL_ABSTDLG_BASE(AbstractSdInsertPagesObjsDlg_Impl,SdInsertPagesObjsDlg)
-    virtual vcl::Window *  GetWindow() override;
     virtual std::vector<OUString> GetList ( const sal_uInt16 nType ) override;
     virtual bool        IsLink() override;
     virtual bool        IsRemoveUnnessesaryMasterPages() const override;
