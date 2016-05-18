@@ -111,9 +111,6 @@ protected:
 public:
     SvxLineEndWindow( sal_uInt16 nId,
                       const css::uno::Reference< css::frame::XFrame >& rFrame,
-                      const OUString& rWndTitle );
-    SvxLineEndWindow( sal_uInt16 nId,
-                      const css::uno::Reference< css::frame::XFrame >& rFrame,
                       vcl::Window* pParentWindow,
                       const OUString& rWndTitle );
     virtual ~SvxLineEndWindow();

@@ -245,25 +245,6 @@ VclPtr<vcl::Window> SvxLineWidthToolBoxControl::CreateItemWindow( vcl::Window *p
 SvxLineEndWindow::SvxLineEndWindow(
     sal_uInt16 nSlotId,
     const Reference< XFrame >& rFrame,
-    const OUString& rWndTitle ) :
-    SfxPopupWindow( nSlotId,
-                    rFrame,
-                    WinBits( WB_STDPOPUP | WB_OWNERDRAWDECORATION ) ),
-    aLineEndSet     ( VclPtr<ValueSet>::Create(this, WinBits( WB_ITEMBORDER | WB_3DLOOK | WB_NO_DIRECTSELECT )) ),
-    nCols           ( 2 ),
-    nLines          ( 12 ),
-    nLineEndWidth   ( 400 ),
-    bPopupMode      ( true ),
-    mbInResize      ( false ),
-    mxFrame         ( rFrame )
-{
-    SetText( rWndTitle );
-    implInit();
-}
-
-SvxLineEndWindow::SvxLineEndWindow(
-    sal_uInt16 nSlotId,
-    const Reference< XFrame >& rFrame,
     vcl::Window* pParentWindow,
     const OUString& rWndTitle ) :
     SfxPopupWindow( nSlotId,

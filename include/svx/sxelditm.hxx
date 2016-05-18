@@ -26,7 +26,6 @@
 class SdrEdgeLineDeltaCountItem: public SfxUInt16Item {
 public:
     SdrEdgeLineDeltaCountItem(sal_uInt16 nVal=0): SfxUInt16Item(SDRATTR_EDGELINEDELTAANZ,nVal) {}
-    SdrEdgeLineDeltaCountItem(SvStream& rIn): SfxUInt16Item(SDRATTR_EDGELINEDELTAANZ,rIn)  {}
     virtual SfxPoolItem* Clone(SfxItemPool*) const override
     {
         return new SdrEdgeLineDeltaCountItem(*this);

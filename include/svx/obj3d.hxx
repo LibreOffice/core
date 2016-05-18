@@ -138,7 +138,6 @@ protected:
     // and no instances should be created from anyone, so i move the constructors
     // to protected area
     E3dObject();
-    E3dObject(bool bIsFromChart);
 
 public:
     virtual void RecalcSnapRect() override;

@@ -189,13 +189,6 @@ public:
             mxBroadcaster->lockBroadcasts();
     }
 
-    explicit TableModelNotifyGuard( css::uno::XInterface* pInterface )
-    : mxBroadcaster( pInterface, css::uno::UNO_QUERY )
-    {
-        if( mxBroadcaster.is() )
-            mxBroadcaster->lockBroadcasts();
-    }
-
     ~TableModelNotifyGuard()
     {
         if( mxBroadcaster.is() )

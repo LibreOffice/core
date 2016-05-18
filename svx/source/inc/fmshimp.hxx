@@ -115,7 +115,6 @@ struct FmLoadAction
     ImplSVEvent * nEventId;
     LoadFormsFlags  nFlags;
 
-    FmLoadAction( ) : pPage( nullptr ), nEventId( nullptr ), nFlags( LoadFormsFlags::Load ) { }
     FmLoadAction( FmFormPage* _pPage, LoadFormsFlags _nFlags, ImplSVEvent * _nEventId )
         :pPage( _pPage ), nEventId( _nEventId ), nFlags( _nFlags )
     {

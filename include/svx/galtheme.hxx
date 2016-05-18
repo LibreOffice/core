@@ -109,7 +109,6 @@ private:
     SAL_DLLPRIVATE void         ImplSetModified( bool bModified );
     SAL_DLLPRIVATE void         ImplBroadcast( sal_uIntPtr nUpdatePos );
 
-    SAL_DLLPRIVATE              GalleryTheme();
     SAL_DLLPRIVATE              GalleryTheme( Gallery* pGallery, GalleryThemeEntry* pThemeEntry );
     SAL_DLLPRIVATE              virtual ~GalleryTheme();
 

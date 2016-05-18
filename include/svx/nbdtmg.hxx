@@ -199,13 +199,6 @@ class SVX_DLLPUBLIC NBOTypeMgrBase
             , aNumCharFmtName(OUString())
             , bIsLoading(false)
         {}
-        NBOTypeMgrBase(const NBOType aType,const SfxItemSet* pArg)
-            : eType(aType)
-            , pSet(pArg)
-            , eCoreUnit(SFX_MAPUNIT_TWIP)
-            , aNumCharFmtName(OUString())
-            , bIsLoading(false)
-        {}
         NBOTypeMgrBase(const NBOTypeMgrBase& aTypeMgr)
         {
             eType = aTypeMgr.eType;
