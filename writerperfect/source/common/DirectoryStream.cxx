@@ -39,7 +39,6 @@
 #include <DirectoryStream.hxx>
 #include <WPXSvInputStream.hxx>
 
-namespace container = com::sun::star::container;
 namespace io = com::sun::star::io;
 namespace sdbc = com::sun::star::sdbc;
 namespace ucb = com::sun::star::ucb;

@@ -47,7 +47,6 @@
 #include <nssckbi.h>
 
 
-namespace cssl = css::lang;
 namespace cssxc = css::xml::crypto;
 
 using namespace com::sun::star;

@@ -675,7 +675,6 @@ void OAppDetailPageHelper::setDetailPage(vcl::Window* _pWindow)
 
 namespace
 {
-    namespace DatabaseObject = ::com::sun::star::sdb::application::DatabaseObject;
     namespace DatabaseObjectContainer = ::com::sun::star::sdb::application::DatabaseObjectContainer;
 
     sal_Int32 lcl_getFolderIndicatorForType( const ElementType _eType )

@@ -21,8 +21,6 @@
 #include "securityengine.hxx"
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
-namespace cssu = com::sun::star::uno;
-namespace cssl = com::sun::star::lang;
 
 SecurityEngine::SecurityEngine()
     :m_nIdOfTemplateEC(-1),

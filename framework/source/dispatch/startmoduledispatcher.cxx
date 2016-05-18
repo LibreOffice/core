@@ -46,7 +46,6 @@ namespace framework{
 #ifdef fpf
     #error "Who uses \"fpf\" as define. It will overwrite my namespace alias ..."
 #endif
-namespace fpf = ::framework::pattern::frame;
 
 StartModuleDispatcher::StartModuleDispatcher(const css::uno::Reference< css::uno::XComponentContext >&     rxContext)
     : m_xContext         (rxContext                         )

@@ -857,7 +857,6 @@ void XclChPropSetHelper::ReadMarkerProperties(
         XclChMarkerFormat& rMarkerFmt, const ScfPropertySet& rPropSet, sal_uInt16 nFormatIdx )
 {
     namespace cssc = ::com::sun::star::chart2;
-    namespace cssa = ::com::sun::star::awt;
     cssc::Symbol aApiSymbol;
     if( rPropSet.GetProperty( aApiSymbol, EXC_CHPROP_SYMBOL ) )
     {

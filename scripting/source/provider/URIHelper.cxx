@@ -33,7 +33,6 @@ namespace uno = ::com::sun::star::uno;
 namespace ucb = ::com::sun::star::ucb;
 namespace lang = ::com::sun::star::lang;
 namespace uri = ::com::sun::star::uri;
-namespace script = ::com::sun::star::script;
 
 static const char SHARE[] = "share";
 static const char SHARE_URI[] = "vnd.sun.star.expand:$BRAND_BASE_DIR";

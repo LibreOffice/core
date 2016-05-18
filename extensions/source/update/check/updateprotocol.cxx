@@ -38,7 +38,6 @@
 
 namespace container = css::container ;
 namespace deployment = css::deployment ;
-namespace lang = css::lang ;
 namespace uno = css::uno ;
 namespace task = css::task ;
 namespace xml = css::xml ;

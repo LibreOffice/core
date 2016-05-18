@@ -57,7 +57,6 @@
 #include <set>
 
 namespace lang  = com::sun::star::lang;
-namespace registry = com::sun::star::registry;
 namespace task = com::sun::star::task;
 namespace ucb = com::sun::star::ucb;
 namespace uno = com::sun::star::uno;
