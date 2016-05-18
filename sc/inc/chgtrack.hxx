@@ -802,13 +802,6 @@ class ScChangeActionReject : public ScChangeAction
     friend class ScChangeTrack;
     friend class ScChangeActionContent;
 
-    ScChangeActionReject( sal_uLong nReject ) :
-        ScChangeAction( SC_CAT_REJECT, ScRange() )
-    {
-        SetRejectAction( nReject );
-        SetState( SC_CAS_ACCEPTED );
-    }
-
     virtual void AddContent( ScChangeActionContent* ) override {}
     virtual void DeleteCellEntries() override {}
 

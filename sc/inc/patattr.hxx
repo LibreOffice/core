@@ -134,37 +134,6 @@ public:
     sal_uInt8                   GetRotateDir( const SfxItemSet* pCondSet ) const;
 };
 
-class ScFontToSubsFontConverter_AutoPtr
-{
-            FontToSubsFontConverter h;
-
-            void                    release()
-                                    {
-                                        if ( h )
-                                            DestroyFontToSubsFontConverter( h );
-                                    }
-
-                                ScFontToSubsFontConverter_AutoPtr( const ScFontToSubsFontConverter_AutoPtr& ) = delete;
-    ScFontToSubsFontConverter_AutoPtr& operator=( const ScFontToSubsFontConverter_AutoPtr& ) = delete;
-
-public:
-                                ScFontToSubsFontConverter_AutoPtr()
-                                    : h(nullptr)
-                                    {}
-                                ~ScFontToSubsFontConverter_AutoPtr()
-                                    {
-                                        release();
-                                    }
-
-    ScFontToSubsFontConverter_AutoPtr& operator=( FontToSubsFontConverter hN )
-                                    {
-                                        release();
-                                        h = hN;
-                                        return *this;
-                                    }
-
-};
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

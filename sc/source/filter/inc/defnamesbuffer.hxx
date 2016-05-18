@@ -81,7 +81,6 @@ public:
     /** Returns the original name as imported from or exported to the file. */
     const OUString& getUpcaseModelName() const;
     /** Returns an Any with a SingleReference or ComplexReference, or an empty Any. */
-    css::uno::Any getReference( const css::table::CellAddress& rBaseAddr ) const;
     css::uno::Any getReference( const ScAddress& rBaseAddr ) const;
 
 protected:

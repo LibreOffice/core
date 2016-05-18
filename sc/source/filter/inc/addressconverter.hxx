@@ -120,15 +120,6 @@ struct BinRange
     BinAddress          maFirst;
     BinAddress          maLast;
 
-    inline explicit     BinRange() {}
-    inline explicit     BinRange( const BinAddress& rAddr ) : maFirst( rAddr ), maLast( rAddr ) {}
-    inline explicit     BinRange( const BinAddress& rFirst, const BinAddress& rLast ) : maFirst( rFirst ), maLast( rLast ) {}
-    inline explicit     BinRange( sal_Int32 nCol1, sal_Int32 nRow1, sal_Int32 nCol2, sal_Int32 nRow2 ) :
-                            maFirst( nCol1, nRow1 ), maLast( nCol2, nRow2 ) {}
-    inline explicit     BinRange( const css::table::CellAddress& rAddr ) : maFirst( rAddr ), maLast( rAddr ) {}
-    inline explicit     BinRange( const css::table::CellAddress& rFirst, const css::table::CellAddress& rLast ) : maFirst( rFirst ), maLast( rLast ) {}
-    inline explicit     BinRange( const css::table::CellRangeAddress& rRange ) : maFirst( rRange.StartColumn, rRange.StartRow ), maLast( rRange.EndColumn, rRange.EndRow ) {}
-
     void                read( SequenceInputStream& rStrm );
     void                read( BiffInputStream& rStrm );
 };
@@ -339,29 +330,10 @@ public:
         @return  true = Converted address is valid (no index overflow).
      */
     bool                convertToCellAddress(
-                            css::table::CellAddress& orAddress,
-                            const OUString& rString,
-                            sal_Int16 nSheet,
-                            bool bTrackOverflow );
-
-    /** Tries to convert the passed string to a single cell address.
-
-        @param orAddress  (out-parameter) Returns the converted cell address.
-        @param rString  Cell address string in A1 notation.
-        @param nSheet  Sheet index to be inserted into orAddress (will be checked).
-        @param bTrackOverflow  true = Update the internal overflow flags, if
-            the address is outside of the supported sheet limits.
-        @return  true = Converted address is valid (no index overflow).
-     */
-    bool                convertToCellAddress(
                             ScAddress& orAddress,
                             const OUString& rString,
                             sal_Int16 nSheet,
                             bool bTrackOverflow );
-
-    bool convertToCellAddress(
-        css::table::CellAddress& rAddress,
-        const char* pStr, sal_Int16 nSheet, bool bTrackOverflow );
 
     bool convertToCellAddress(
         ScAddress& rAddress,
@@ -402,21 +374,6 @@ public:
                             ScAddress& orAddress,
                             const BinAddress& rBinAddress,
                             sal_Int16 nSheet );
-
-    /** Tries to convert the passed address to a single cell address.
-
-        @param orAddress  (out-parameter) Returns the converted cell address.
-        @param rBinAddress  Binary cell address struct.
-        @param nSheet  Sheet index to be inserted into orAddress (will be checked).
-        @param bTrackOverflow  true = Update the internal overflow flags, if
-            the address is outside of the supported sheet limits.
-        @return  true = Converted address is valid (no index overflow).
-     */
-    bool                convertToCellAddress(
-                            css::table::CellAddress& orAddress,
-                            const BinAddress& rBinAddress,
-                            sal_Int16 nSheet,
-                            bool bTrackOverflow );
 
     /** Tries to convert the passed address to a single cell address.
 

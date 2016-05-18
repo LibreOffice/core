@@ -901,10 +901,8 @@ public:
     void                writeFillToPropertyMap( PropertyMap& rPropMap, sal_Int32 nFillId ) const;
 
     /** Writes the cell formatting attributes of the specified XF to the passed property set. */
-    void                writeCellXfToPropertySet( PropertySet& rPropSet, sal_Int32 nXfId ) const;
-    void writeCellXfToDoc( ScDocumentImport& rDoc, const css::table::CellRangeAddress& rRange, sal_Int32 nXfId ) const;
+    void                writeCellXfToDoc( ScDocumentImport& rDoc, const css::table::CellRangeAddress& rRange, sal_Int32 nXfId ) const;
 
-    bool                hasBorder( sal_Int32 nBorderId ) const;
 private:
     typedef RefVector< Font >                           FontVector;
     typedef RefVector< Border >                         BorderVector;

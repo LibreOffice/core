@@ -35,7 +35,6 @@
 class ScMyAddress : public ScAddress
 {
 public:
-    ScMyAddress() : ScAddress() {}
     ScMyAddress(SCCOL nColP, SCROW nRowP, SCTAB nTabP) : ScAddress(nColP, nRowP, nTabP) {}
     ScMyAddress(const ScAddress& rAddress) : ScAddress(rAddress) {}
 

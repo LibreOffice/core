@@ -222,8 +222,6 @@ public:
     virtual void startRendering() override;
     virtual void endRendering() override;
 
-    virtual bool NeedsRepaint() const = 0;
-
 protected:
     std::vector<double>& getValues() const;
 
@@ -267,8 +265,6 @@ public:
     virtual void UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt ) override;
     virtual void UpdateMoveTab( sc::RefUpdateMoveTabContext& rCxt ) override;
 
-    virtual bool NeedsRepaint() const override;
-
     virtual condformat::ScFormatEntryType GetType() const override;
     ScColorScaleEntries::iterator begin();
     ScColorScaleEntries::const_iterator begin() const;
@@ -304,8 +300,6 @@ public:
     virtual void UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt ) override;
     virtual void UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt ) override;
     virtual void UpdateMoveTab( sc::RefUpdateMoveTabContext& rCxt ) override;
-
-    virtual bool NeedsRepaint() const override;
 
     virtual condformat::ScFormatEntryType GetType() const override;
 
@@ -366,8 +360,6 @@ public:
     virtual void UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt ) override;
     virtual void UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt ) override;
     virtual void UpdateMoveTab( sc::RefUpdateMoveTabContext& rCxt ) override;
-
-    virtual bool NeedsRepaint() const override;
 
     virtual condformat::ScFormatEntryType GetType() const override;
 

@@ -1557,11 +1557,6 @@ void WorksheetHelper::setVmlDrawingPath( const OUString& rVmlDrawingPath )
     mrSheetGlob.setVmlDrawingPath( rVmlDrawingPath );
 }
 
-void WorksheetHelper::extendUsedArea( const CellAddress& rAddress )
-{
-    mrSheetGlob.extendUsedArea( rAddress );
-}
-
 void WorksheetHelper::extendUsedArea( const ScAddress& rAddress )
 {
     mrSheetGlob.extendUsedArea( rAddress );
@@ -1602,22 +1597,9 @@ void WorksheetHelper::setRowModel( const RowModel& rModel )
     mrSheetGlob.setRowModel( rModel );
 }
 
-void WorksheetHelper::putValue( const CellAddress& rAddress, double fValue )
-{
-    ScAddress aAddress;
-    ScUnoConversion::FillScAddress( aAddress, rAddress );
-    getDocImport().setNumericCell(aAddress, fValue);
-}
-
 void WorksheetHelper::putValue( const ScAddress& rAddress, double fValue )
 {
     getDocImport().setNumericCell(rAddress, fValue);
-}
-
-void WorksheetHelper::setCellFormulaValue(
-    const css::table::CellAddress& rAddress, const OUString& rValueStr, sal_Int32 nCellType )
-{
-    getFormulaBuffer().setCellFormulaValue(rAddress, rValueStr, nCellType);
 }
 
 void WorksheetHelper::setCellFormulaValue(
@@ -1626,28 +1608,10 @@ void WorksheetHelper::setCellFormulaValue(
     getFormulaBuffer().setCellFormulaValue(rAddress, rValueStr, nCellType);
 }
 
-void WorksheetHelper::putString( const CellAddress& rAddress, const OUString& rText )
-{
-    ScAddress aAddress;
-    ScUnoConversion::FillScAddress( aAddress, rAddress );
-    if ( !rText.isEmpty() )
-        getDocImport().setStringCell(aAddress, rText);
-}
-
 void WorksheetHelper::putString( const ScAddress& rAddress, const OUString& rText )
 {
     if ( !rText.isEmpty() )
         getDocImport().setStringCell(rAddress, rText);
-}
-
-void WorksheetHelper::putRichString( const CellAddress& rAddress, const RichString& rString, const oox::xls::Font* pFirstPortionFont )
-{
-    ScEditEngineDefaulter& rEE = getEditEngine();
-
-    // The cell will own the text object instance returned from convert().
-    ScAddress aAddress;
-    ScUnoConversion::FillScAddress( aAddress, rAddress );
-    getDocImport().setEditCell(aAddress, rString.convert(rEE, pFirstPortionFont));
 }
 
 void WorksheetHelper::putRichString( const ScAddress& rAddress, const RichString& rString, const oox::xls::Font* pFirstPortionFont )
@@ -1691,21 +1655,9 @@ void WorksheetHelper::finalizeDrawingImport()
     mrSheetGlob.finalizeDrawingImport();
 }
 
-void WorksheetHelper::setCellFormula( const css::table::CellAddress& rTokenAddress, const OUString& rTokenStr )
-{
-    getFormulaBuffer().setCellFormula( rTokenAddress,  rTokenStr );
-}
-
 void WorksheetHelper::setCellFormula( const ScAddress& rTokenAddress, const OUString& rTokenStr )
 {
     getFormulaBuffer().setCellFormula( rTokenAddress,  rTokenStr );
-}
-
-void WorksheetHelper::setCellFormula(
-    const css::table::CellAddress& rAddr, sal_Int32 nSharedId,
-    const OUString& rCellValue, sal_Int32 nValueType )
-{
-    getFormulaBuffer().setCellFormula(rAddr, nSharedId, rCellValue, nValueType);
 }
 
 void WorksheetHelper::setCellFormula(
@@ -1715,20 +1667,9 @@ void WorksheetHelper::setCellFormula(
     getFormulaBuffer().setCellFormula(rAddr, nSharedId, rCellValue, nValueType);
 }
 
-void WorksheetHelper::setCellArrayFormula( const css::table::CellRangeAddress& rRangeAddress, const css::table::CellAddress& rTokenAddress, const OUString& rTokenStr )
-{
-    getFormulaBuffer().setCellArrayFormula( rRangeAddress,  rTokenAddress, rTokenStr );
-}
-
 void WorksheetHelper::setCellArrayFormula( const css::table::CellRangeAddress& rRangeAddress, const ScAddress& rTokenAddress, const OUString& rTokenStr )
 {
     getFormulaBuffer().setCellArrayFormula( rRangeAddress,  rTokenAddress, rTokenStr );
-}
-
-void WorksheetHelper::createSharedFormulaMapEntry(
-    const table::CellAddress& rAddress, sal_Int32 nSharedId, const OUString& rTokens )
-{
-    getFormulaBuffer().createSharedFormulaMapEntry(rAddress, nSharedId, rTokens);
 }
 
 void WorksheetHelper::createSharedFormulaMapEntry(

@@ -91,8 +91,6 @@ public:
     virtual SvxViewForwarder* GetViewForwarder() override;
     virtual SvxEditViewForwarder* GetEditViewForwarder( bool bCreate ) override;
 
-protected:
-    virtual void            GetCellText(const ScAddress& rCellPos, OUString& rText) override;
 private:
     ScViewForwarder* mpViewForwarder;
     ScEditViewForwarder* mpEditViewForwarder;
