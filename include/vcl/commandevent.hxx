@@ -120,7 +120,6 @@ private:
     LanguageType    meLanguage;
 
 public:
-                    CommandInputContextData();
                     CommandInputContextData( LanguageType eLang );
 };
 
@@ -179,7 +178,6 @@ private:
     long            mnDeltaY;
 
 public:
-                    CommandScrollData();
                     CommandScrollData( long nDeltaX, long nDeltaY );
 
     long            GetDeltaX() const { return mnDeltaX; }
@@ -192,7 +190,6 @@ private:
     sal_uInt16          mnCode;
 
 public:
-                    CommandModKeyData();
                     CommandModKeyData( sal_uInt16 nCode );
 
     bool            IsMod1()    const { return (mnCode & MODKEY_MOD1) != 0; }
@@ -267,7 +264,6 @@ private:
     sal_uLong          mnEnd;
 
 public:
-    CommandSelectionChangeData();
     CommandSelectionChangeData( sal_uLong nStart, sal_uLong nEnd );
 
     sal_uLong          GetStart() const { return mnStart; }

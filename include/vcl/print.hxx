@@ -583,8 +583,6 @@ public:
 
                          /// Create without ui properties
                          PrinterOptionsHelper() {}
-                         PrinterOptionsHelper( const std::vector< css::beans::PropertyValue >& i_rUIProperties )
-                             : m_aUIProperties( i_rUIProperties )  {}
                          ~PrinterOptionsHelper() {}
 
     /** Process a new set of properties

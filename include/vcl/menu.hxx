@@ -315,8 +315,6 @@ public:
 
     void SetItemImage( sal_uInt16 nItemId, const Image& rImage );
     Image GetItemImage( sal_uInt16 nItemId ) const;
-    void SetItemImageAngle( sal_uInt16 nItemId, long nAngle10 );
-    void SetItemImageMirrorMode( sal_uInt16 nItemId, bool bMirror );
 
     void SetItemCommand( sal_uInt16 nItemId, const OUString& rCommand );
     OUString GetItemCommand( sal_uInt16 nItemId ) const;

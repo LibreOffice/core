@@ -52,13 +52,6 @@ private:
     sal_uInt8       nKind;
     bool            bRightToLeft;
 
-                TETextPortion()
-                    : nLen {0}
-                    , nWidth {-1}
-                    , nKind {PORTIONKIND_TEXT}
-                    , bRightToLeft {false}
-                {}
-
 public:
                 TETextPortion( sal_Int32 nL )
                     : nLen {nL}

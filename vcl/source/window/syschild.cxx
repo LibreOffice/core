@@ -162,39 +162,6 @@ void SystemChildWindow::EnableEraseBackground( bool bEnable )
         mpWindowImpl->mpSysObj->EnableEraseBackground( bEnable );
 }
 
-void SystemChildWindow::ImplTestJavaException( void* pEnv )
-{
-#if HAVE_FEATURE_JAVA
-    JNIEnv*     pJavaEnv = static_cast< JNIEnv* >( pEnv );
-    jthrowable  jtThrowable = pJavaEnv->ExceptionOccurred();
-
-    if( jtThrowable )
-    { // is it a java exception ?
-#if OSL_DEBUG_LEVEL > 1
-        pJavaEnv->ExceptionDescribe();
-#endif // OSL_DEBUG_LEVEL > 1
-        pJavaEnv->ExceptionClear();
-
-        jclass          jcThrowable = pJavaEnv->FindClass("java/lang/Throwable");
-        jmethodID       jmThrowable_getMessage = pJavaEnv->GetMethodID(jcThrowable, "getMessage", "()Ljava/lang/String;");
-        jstring         jsMessage = static_cast<jstring>( pJavaEnv->CallObjectMethod(jtThrowable, jmThrowable_getMessage) );
-        OUString        ouMessage;
-
-        if(jsMessage)
-        {
-            const jchar * jcMessage = pJavaEnv->GetStringChars(jsMessage, nullptr);
-            ouMessage = OUString(
-                reinterpret_cast<sal_Unicode const *>(jcMessage));
-            pJavaEnv->ReleaseStringChars(jsMessage, jcMessage);
-        }
-
-        throw uno::RuntimeException(ouMessage);
-    }
-#else
-    (void)pEnv;
-#endif // HAVE_FEATURE_JAVA
-}
-
 void SystemChildWindow::SetForwardKey( bool bEnable )
 {
     if ( mpWindowImpl->mpSysObj )
