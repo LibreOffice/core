@@ -203,7 +203,6 @@ namespace svxform
     namespace FocusChangeReason = ::com::sun::star::awt::FocusChangeReason;
     namespace RowChangeAction = ::com::sun::star::sdb::RowChangeAction;
     namespace FormFeature = ::com::sun::star::form::runtime::FormFeature;
-    namespace DataType = ::com::sun::star::sdbc::DataType;
 
 struct ColumnInfo
 {
