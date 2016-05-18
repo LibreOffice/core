@@ -35,8 +35,6 @@
 class SdAttrLayerName : public SfxStringItem
 {
 public:
-    SdAttrLayerName() :
-        SfxStringItem( ATTR_LAYER_NAME, OUString("neue Ebene") ) {}
     SdAttrLayerName( const OUString& aStr ) :
         SfxStringItem( ATTR_LAYER_NAME, aStr ) {}
 };
@@ -86,7 +84,6 @@ public:
 class DiaEffectItem : public SfxEnumItem
 {
 public:
-            DiaEffectItem( css::presentation::FadeEffect eFade = css::presentation::FadeEffect_NONE );
             DiaEffectItem( SvStream& rIn );
 
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = nullptr ) const override;
@@ -97,7 +94,6 @@ public:
 class DiaSpeedItem : public SfxEnumItem
 {
 public:
-            DiaSpeedItem( FadeSpeed = FADE_SPEED_MEDIUM );
             DiaSpeedItem( SvStream& rIn );
 
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = nullptr ) const override;
@@ -108,21 +104,11 @@ public:
 class DiaAutoItem : public SfxEnumItem
 {
 public:
-            DiaAutoItem( PresChange = PRESCHANGE_MANUAL );
             DiaAutoItem( SvStream& rIn );
 
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = nullptr ) const override;
     virtual SfxPoolItem*    Create( SvStream& rIn, sal_uInt16 nVer ) const override;
             sal_uInt16          GetValueCount() const override { return PRESCHANGE_COUNT; }
-};
-
-class DiaTimeItem : public SfxUInt32Item
-{
-public:
-            DiaTimeItem( sal_uInt32 nValue = 0L );
-
-    virtual SfxPoolItem* Clone( SfxItemPool* pPool = nullptr ) const override;
-    virtual bool         operator==( const SfxPoolItem& ) const override;
 };
 
 #endif // INCLUDED_SD_INC_SDATTR_HXX

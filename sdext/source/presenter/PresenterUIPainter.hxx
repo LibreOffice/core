@@ -32,8 +32,7 @@ namespace sdext { namespace presenter {
 class PresenterUIPainter
 {
 public:
-    PresenterUIPainter();
-    ~PresenterUIPainter();
+    PresenterUIPainter() = delete;
     PresenterUIPainter(const PresenterUIPainter&) = delete;
     PresenterUIPainter& operator=(const PresenterUIPainter&) = delete;
 

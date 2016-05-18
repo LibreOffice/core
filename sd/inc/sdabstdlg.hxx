@@ -118,7 +118,6 @@ class AbstractSdInsertPasteDlg : public VclAbstractDialog
 class AbstractSdInsertPagesObjsDlg : public VclAbstractDialog
 {
 public:
-    virtual vcl::Window*   GetWindow() = 0;  //this method is added for return a vcl::Window type pointer
     virtual std::vector<OUString> GetList ( const sal_uInt16 nType ) = 0;
     virtual bool        IsLink() = 0;
     virtual bool        IsRemoveUnnessesaryMasterPages() const = 0;

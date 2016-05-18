@@ -43,7 +43,6 @@ namespace pdfi
             Element*                 ContainedElement;
             std::vector< Style* >    SubStyles;
 
-            Style() : ContainedElement( nullptr )  {}
             Style( const OString& rName, const PropertyMap& rProps ) :
                 Name( rName ),
                 Properties( rProps ),

@@ -1670,48 +1670,6 @@ sal_Int32 SlideshowImpl::getCurrentSlideNumber()
     return mpSlideController.get() ? mpSlideController->getCurrentSlideNumber() : -1;
 }
 
-sal_Int32 SlideshowImpl::getFirstSlideNumber()
-{
-    sal_Int32 nRet = 0;
-    if( mpSlideController.get() )
-    {
-        sal_Int32 nSlideIndexCount = mpSlideController->getSlideIndexCount() - 1;
-        if( nSlideIndexCount >= 0 )
-        {
-            nRet = mpSlideController->getSlideNumber( nSlideIndexCount );
-            while( nSlideIndexCount-- )
-            {
-                sal_Int32 nTemp = mpSlideController->getSlideNumber( nSlideIndexCount );
-                if( nRet > nTemp )
-                    nRet = nTemp;
-            }
-        }
-    }
-
-    return nRet;
-}
-
-sal_Int32 SlideshowImpl::getLastSlideNumber()
-{
-    sal_Int32 nRet = 0;
-    if( mpSlideController.get() )
-    {
-        sal_Int32 nSlideIndexCount = mpSlideController->getSlideIndexCount() - 1;
-        if( nSlideIndexCount >= 0 )
-        {
-            nRet = mpSlideController->getSlideNumber( nSlideIndexCount );
-            while( nSlideIndexCount-- )
-            {
-                sal_Int32 nTemp = mpSlideController->getSlideNumber( nSlideIndexCount );
-                if( nRet < nTemp )
-                    nRet = nTemp;
-            }
-        }
-    }
-
-    return nRet;
-}
-
 sal_Bool SAL_CALL SlideshowImpl::isEndless() throw( RuntimeException, std::exception )
 {
     SolarMutexGuard aSolarGuard;

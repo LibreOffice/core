@@ -27,11 +27,6 @@ using namespace ::com::sun::star;
 |*
 *************************************************************************/
 
-DiaEffectItem::DiaEffectItem( presentation::FadeEffect eFE ) :
-    SfxEnumItem( ATTR_DIA_EFFECT, (sal_uInt16)eFE )
-{
-}
-
 DiaEffectItem::DiaEffectItem( SvStream& rIn ) :
     SfxEnumItem( ATTR_DIA_EFFECT, rIn )
 {
@@ -52,11 +47,6 @@ SfxPoolItem* DiaEffectItem::Create( SvStream& rIn, sal_uInt16 ) const
 |*  DiaSpeedItem
 |*
 *************************************************************************/
-
-DiaSpeedItem::DiaSpeedItem( FadeSpeed eFS ) :
-    SfxEnumItem( ATTR_DIA_SPEED, (sal_uInt16)eFS )
-{
-}
 
 DiaSpeedItem::DiaSpeedItem( SvStream& rIn ) :
     SfxEnumItem( ATTR_DIA_SPEED, rIn )
@@ -79,11 +69,6 @@ SfxPoolItem* DiaSpeedItem::Create( SvStream& rIn, sal_uInt16 ) const
 |*
 *************************************************************************/
 
-DiaAutoItem::DiaAutoItem( PresChange eChange ) :
-    SfxEnumItem( ATTR_DIA_AUTO, (sal_uInt16)eChange )
-{
-}
-
 DiaAutoItem::DiaAutoItem( SvStream& rIn ) :
     SfxEnumItem( ATTR_DIA_AUTO, rIn )
 {
@@ -97,27 +82,6 @@ SfxPoolItem* DiaAutoItem::Clone( SfxItemPool* ) const
 SfxPoolItem* DiaAutoItem::Create( SvStream& rIn, sal_uInt16 ) const
 {
     return new DiaAutoItem( rIn );
-}
-
-/*************************************************************************
-|*
-|*  DiaTimeItem
-|*
-*************************************************************************/
-
-DiaTimeItem::DiaTimeItem( sal_uInt32 nValue ) :
-        SfxUInt32Item( ATTR_DIA_TIME, nValue )
-{
-}
-
-SfxPoolItem* DiaTimeItem::Clone( SfxItemPool* ) const
-{
-    return new DiaTimeItem( *this );
-}
-
-bool DiaTimeItem::operator==( const SfxPoolItem& rItem ) const
-{
-    return static_cast<const DiaTimeItem&>( rItem ).GetValue() == GetValue();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

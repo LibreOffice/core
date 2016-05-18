@@ -32,10 +32,6 @@
 namespace pdfi
 {
 
-ElementFactory::~ElementFactory()
-{
-}
-
 Element::~Element()
 {
     while( !Children.empty() )

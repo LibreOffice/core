@@ -69,22 +69,6 @@ namespace pdfi
 {
     struct FontAttributes
     {
-        FontAttributes( const GooString& familyName_,
-                        bool           isEmbedded_,
-                        bool           isBold_,
-                        bool           isItalic_,
-                        bool           isUnderline_,
-                        double         size_ ) :
-            familyName(),
-            isEmbedded(isEmbedded_),
-            isBold(isBold_),
-            isItalic(isItalic_),
-            isUnderline(isUnderline_),
-            size(size_)
-        {
-            familyName.append(const_cast<GooString*>(&familyName_));
-        }
-
         FontAttributes() :
             familyName(),
             isEmbedded(false),

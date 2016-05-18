@@ -274,11 +274,6 @@ void AbstractSdInsertLayerDlg_Impl::SetHelpId( const OString& rHelpId )
     pDlg->SetHelpId( rHelpId );
 }
 
-vcl::Window* AbstractSdInsertPagesObjsDlg_Impl::GetWindow()
-{
-    return static_cast<vcl::Window*>(pDlg);
-}
-
 std::vector<OUString> AbstractSdInsertPagesObjsDlg_Impl::GetList(const sal_uInt16 nType)
 {
     return pDlg->GetList(nType);

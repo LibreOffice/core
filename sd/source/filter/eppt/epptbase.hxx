@@ -98,10 +98,6 @@ class PropValue
 
         PropValue() {}
 
-        explicit PropValue( css::uno::Reference< css::beans::XPropertySet > rXPropSet )
-            : mXPropSet( rXPropSet )
-        {}
-
         static bool GetPropertyValue(
             css::uno::Any& rAny,
             const css::uno::Reference< css::beans::XPropertySet > &,
@@ -167,8 +163,6 @@ struct FontCollectionEntry
         ~FontCollectionEntry();
 
     private:
-
-        FontCollectionEntry() {}
 
         void ImplInit( const OUString& rName );
 };

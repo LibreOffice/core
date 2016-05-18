@@ -280,8 +280,7 @@ private:
         IteratorLocation aLocation);
 
     // Do not allow default constructor and copying of outliner containers.
-    OutlinerContainer (const OutlinerContainer&) {};
-    OutlinerContainer() {};
+    OutlinerContainer (const OutlinerContainer&) = delete;
     OutlinerContainer& operator= (const OutlinerContainer&) {return *this;};
 };
 
