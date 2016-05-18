@@ -102,35 +102,6 @@ class UCBHELPER_DLLPUBLIC InterceptedInteraction : public ::cppu::WeakImplHelper
                 Handle     = INVALID_HANDLE;
             }
 
-
-            /** @short  initialize this instance.
-
-                @param  nHandle
-                        used to identify every intercepted request
-
-                @param  aRequest
-                        must contain an exception object, which can be checked
-                        in its uno-type against the later handled interaction.
-
-                @param  aContinuation
-                        must contain a continuation object, which is used
-                        in its uno-type to locate the same continuation
-                        inside the list of possible ones.
-
-                @param  bMatchExact
-                        influence the type check of the interception request.
-                        Its not used to check the continuation!
-             */
-            InterceptedRequest(      sal_Int32                nHandle      ,
-                               const css::uno::Any&           aRequest     ,
-                               const css::uno::Type&          aContinuation,
-                                     bool                     bMatchExact  )
-            {
-                Handle       = nHandle;
-                Request      = aRequest;
-                Continuation = aContinuation;
-                MatchExact   = bMatchExact;
-            }
         };
 
 
@@ -178,19 +149,6 @@ class UCBHELPER_DLLPUBLIC InterceptedInteraction : public ::cppu::WeakImplHelper
         /** @short  initialize a new instance with default values.
          */
         InterceptedInteraction();
-
-
-        /** @short  initialize a new instance with real values.
-
-            @param  xInterceptedHandler
-                    the outside interaction handler, which should
-                    be intercepted here.
-
-            @param  lInterceptions
-                    the list of intercepted requests.
-         */
-        InterceptedInteraction(const css::uno::Reference< css::task::XInteractionHandler >& xInterceptedHandler,
-                               const ::std::vector< InterceptedRequest >&                                             lInterceptions     );
 
 
         /** @short  initialize a new instance with the interaction handler,

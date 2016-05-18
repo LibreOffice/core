@@ -269,8 +269,6 @@ public:
                 css::uno::RuntimeException, std::exception ) override;
 
 private:
-    explicit Storage( const rtl::Reference< Storage > & rFactory ); // n.i.
-
     rtl::Reference< StorageElementFactory >         m_xFactory;
     css::uno::Reference< css::uno::XAggregation >         m_xAggProxy;
     css::uno::Reference< css::embed::XStorage >           m_xWrappedStorage;

@@ -45,7 +45,6 @@ private:
     void init() const;
 
 public:
-    PackageUri() : m_bValid( false ) {}
     explicit PackageUri( const OUString & rPackageUri )
     : m_aUri( rPackageUri ), m_bValid( false ) {}
 

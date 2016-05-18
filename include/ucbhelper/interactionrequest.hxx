@@ -353,27 +353,6 @@ public:
     /**
       * Constructor.
       *
-      * @param rxRequest is the interaction request that owns this continuation.
-      * @param bCanSetRealm indicates, whether the realm given with the
-      *        authentication request is read-only.
-      * @param bCanSetUserName indicates, whether the username given with the
-      *        authentication request is read-only.
-      * @param bCanSetPassword indicates, whether the password given with the
-      *        authentication request is read-only.
-      * @param bCanSetAccount indicates, whether the account given with the
-      *        authentication request is read-only.
-      *
-      * @see css::ucb::AuthenticationRequest
-      */
-    inline InteractionSupplyAuthentication(
-                    InteractionRequest * pRequest,
-                    bool bCanSetRealm,
-                    bool bCanSetUserName,
-                    bool bCanSetPassword,
-                    bool bCanSetAccount);
-    /**
-      * Constructor.
-      *
       * Note: The remember-authentication stuff is interesting only for
       *       clients implementing own password storage functionality.
       *
@@ -526,33 +505,6 @@ public:
     bool getUseSystemCredentials() const { return m_bUseSystemCredentials; }
 };
 
-
-inline InteractionSupplyAuthentication::InteractionSupplyAuthentication(
-                    InteractionRequest * pRequest,
-                    bool bCanSetRealm,
-                    bool bCanSetUserName,
-                    bool bCanSetPassword,
-                    bool bCanSetAccount )
-: InteractionContinuation( pRequest ),
-  m_aRememberPasswordModes( css::uno::Sequence< css::ucb::RememberAuthentication >( 1 ) ),
-  m_aRememberAccountModes( css::uno::Sequence< css::ucb::RememberAuthentication >( 1 ) ),
-  m_eRememberPasswordMode( css::ucb::RememberAuthentication_NO ),
-  m_eDefaultRememberPasswordMode( css::ucb::RememberAuthentication_NO ),
-  m_eRememberAccountMode( css::ucb::RememberAuthentication_NO ),
-  m_eDefaultRememberAccountMode( css::ucb::RememberAuthentication_NO ),
-  m_bCanSetRealm( bCanSetRealm ),
-  m_bCanSetUserName( bCanSetUserName ),
-  m_bCanSetPassword( bCanSetPassword ),
-  m_bCanSetAccount( bCanSetAccount ),
-  m_bCanUseSystemCredentials( false ),
-  m_bDefaultUseSystemCredentials( false ),
-  m_bUseSystemCredentials( false )
-{
-    m_aRememberPasswordModes[ 0 ]
-        = css::ucb::RememberAuthentication_NO;
-    m_aRememberAccountModes [ 0 ]
-        = css::ucb::RememberAuthentication_NO;
-}
 
 
 inline InteractionSupplyAuthentication::InteractionSupplyAuthentication(

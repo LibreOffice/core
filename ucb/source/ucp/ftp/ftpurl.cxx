@@ -33,7 +33,6 @@
 #include <string.h>
 #include <rtl/uri.hxx>
 
-#include "ftpstrcont.hxx"
 #include "ftpurl.hxx"
 #include "ftpcontentprovider.hxx"
 #include "ftpcfunc.hxx"
