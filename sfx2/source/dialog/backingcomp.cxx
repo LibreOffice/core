@@ -429,14 +429,6 @@ void SAL_CALL BackingComp::attachFrame( /*IN*/ const css::uno::Reference< css::f
     if( pBack )
         pBack->setOwningFrame( m_xFrame );
 
-    // set NotebookBar
-    SystemWindow* pSysWindow = static_cast<SystemWindow*>(pParent);
-    if (pSysWindow)
-    {
-        pSysWindow->SetNotebookBar("sfx/ui/notebookbar.ui", m_xFrame);
-        pSysWindow->GetNotebookBar()->Show();
-    }
-
     // Set a minimum size for Start Center
     if( pParent && pBack )
     {
