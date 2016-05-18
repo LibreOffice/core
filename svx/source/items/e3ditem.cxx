@@ -26,10 +26,6 @@
 using namespace ::com::sun::star;
 
 
-SvxB3DVectorItem::SvxB3DVectorItem()
-{
-}
-
 SvxB3DVectorItem::~SvxB3DVectorItem()
 {
 }

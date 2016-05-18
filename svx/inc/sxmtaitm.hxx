@@ -28,7 +28,6 @@
 class SdrMeasureTextAutoAngleItem: public SdrYesNoItem {
 public:
     SdrMeasureTextAutoAngleItem(bool bOn=true): SdrYesNoItem(SDRATTR_MEASURETEXTAUTOANGLE,bOn) {}
-    SdrMeasureTextAutoAngleItem(SvStream& rIn): SdrYesNoItem(SDRATTR_MEASURETEXTAUTOANGLE,rIn) {}
     virtual SfxPoolItem* Clone(SfxItemPool*) const override
     {
         return new SdrMeasureTextAutoAngleItem(*this);
@@ -40,7 +39,6 @@ public:
 class SdrMeasureTextAutoAngleViewItem: public SdrAngleItem {
 public:
     SdrMeasureTextAutoAngleViewItem(long nVal=31500): SdrAngleItem(SDRATTR_MEASURETEXTAUTOANGLEVIEW,nVal)  {}
-    SdrMeasureTextAutoAngleViewItem(SvStream& rIn): SdrAngleItem(SDRATTR_MEASURETEXTAUTOANGLEVIEW,rIn) {}
     virtual SfxPoolItem* Clone(SfxItemPool*) const override
     {
         return new SdrMeasureTextAutoAngleViewItem(*this);

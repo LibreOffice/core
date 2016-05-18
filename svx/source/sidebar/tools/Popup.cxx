@@ -90,13 +90,6 @@ void Popup::Hide()
             mxContainer->EndPopupMode();
 }
 
-void Popup::SetPopupModeEndHandler (const ::std::function<void ()>& rCallback)
-{
-    maPopupModeEndCallback = rCallback;
-    if (mxContainer)
-        mxContainer->SetPopupModeEndHdl(LINK(this, Popup, PopupModeEndHandler));
-}
-
 void Popup::ProvideContainerAndControl()
 {
     if ( ! (mxContainer && mxControl)

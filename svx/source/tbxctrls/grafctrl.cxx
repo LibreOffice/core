@@ -65,22 +65,6 @@ using namespace ::com::sun::star::lang;
 #define TOOLBOX_NAME                "colorbar"
 
 
-TbxImageItem::TbxImageItem( sal_uInt16 _nWhich, sal_uInt16 nImage ) :
-    SfxUInt16Item( _nWhich, nImage )
-{
-}
-
-
-SfxPoolItem* TbxImageItem::Clone( SfxItemPool* ) const
-{
-    return new TbxImageItem( *this );
-}
-
-bool TbxImageItem::operator==( const SfxPoolItem& rItem ) const
-{
-    return static_cast<const TbxImageItem&>(rItem).GetValue() == GetValue();
-}
-
 class ImplGrafMetricField : public MetricField
 {
     using Window::Update;

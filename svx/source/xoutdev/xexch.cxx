@@ -30,13 +30,6 @@
 #include <memory>
 
 
-/// default CTOR, for Assign()
-XFillExchangeData::XFillExchangeData() :
-    pXFillAttrSetItem( nullptr ),
-    pPool( nullptr )
-{
-}
-
 XFillExchangeData::XFillExchangeData( const XFillAttrSetItem& rXFillAttrSetItem ) :
     pXFillAttrSetItem( static_cast<XFillAttrSetItem*>( rXFillAttrSetItem.Clone( rXFillAttrSetItem.GetItemSet().GetPool() ) ) ),
     pPool( rXFillAttrSetItem.GetItemSet().GetPool() )

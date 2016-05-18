@@ -236,7 +236,6 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC ColorLB : public ColorListBox
 {
 
 public:
-         ColorLB( vcl::Window* pParent, ResId Id ) : ColorListBox( pParent, Id ) {}
          ColorLB( vcl::Window* pParent, WinBits aWB ) : ColorListBox( pParent, aWB ) {}
 
     void Fill( const XColorListRef &pTab );
@@ -314,7 +313,6 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC FillTypeLB : public ListBox
 {
 
 public:
-         FillTypeLB( vcl::Window* pParent, ResId Id ) : ListBox( pParent, Id ) {}
          FillTypeLB( vcl::Window* pParent, WinBits aWB ) : ListBox( pParent, aWB ) {}
 
     void Fill();

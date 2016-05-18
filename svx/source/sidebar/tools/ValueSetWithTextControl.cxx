@@ -104,45 +104,6 @@ void ValueSetWithTextControl::AddItem(
 }
 
 
-void ValueSetWithTextControl::ReplaceItemImages(
-    const sal_uInt16 nItemId,
-    const Image& rItemImage,
-    const Image* pSelectedItemImage )
-{
-    if ( meControlType != IMAGE_TEXT )
-    {
-        return;
-    }
-
-    if ( nItemId == 0 ||
-         nItemId > maItems.size() )
-    {
-        return;
-    }
-
-    maItems[nItemId-1].maItemImage = rItemImage;
-    maItems[nItemId-1].maSelectedItemImage = (pSelectedItemImage != nullptr)
-                                             ? *pSelectedItemImage
-                                             : rItemImage;
-
-//#ifndef MACOSX
-    if ( GetDPIScaleFactor() > 1 )
-    {
-        BitmapEx b = maItems[nItemId-1].maItemImage.GetBitmapEx();
-        b.Scale(GetDPIScaleFactor(), GetDPIScaleFactor());
-        maItems[nItemId-1].maItemImage = Image(b);
-
-        if ( pSelectedItemImage != nullptr )
-        {
-            b = maItems[nItemId-1].maSelectedItemImage.GetBitmapEx();
-            b.Scale(GetDPIScaleFactor(), GetDPIScaleFactor());
-            maItems[nItemId-1].maSelectedItemImage = Image(b);
-        }
-    }
-//#endif
-}
-
-
 void ValueSetWithTextControl::UserDraw( const UserDrawEvent& rUDEvt )
 {
     const Rectangle aRect = rUDEvt.GetRect();

@@ -126,7 +126,6 @@ typedef std::shared_ptr< ExpressionNode > ExpressionNodeSharedPtr;
     */
 struct ParseError
 {
-    ParseError() {}
     ParseError( const char* ) {}
 };
 

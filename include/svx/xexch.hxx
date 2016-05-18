@@ -39,7 +39,6 @@ private:
     SfxItemPool*        pPool;
 
 public:
-                        XFillExchangeData();
                         XFillExchangeData(const XFillAttrSetItem& rXFillAttrSetItem);
                         virtual ~XFillExchangeData();
 

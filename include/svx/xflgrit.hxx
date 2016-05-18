@@ -36,7 +36,6 @@ class SVX_DLLPUBLIC XFillGradientItem : public NameOrIndex
 public:
             static SfxPoolItem* CreateDefault();
             XFillGradientItem() : NameOrIndex(XATTR_FILLGRADIENT, -1) {}
-            XFillGradientItem(sal_uInt16 nWhich_) : NameOrIndex(nWhich_, -1) {}
             XFillGradientItem(sal_Int32 nIndex, const XGradient& rTheGradient);
             XFillGradientItem(const OUString& rName, const XGradient& rTheGradient, sal_uInt16 nWhich = XATTR_FILLGRADIENT);
             XFillGradientItem(const XGradient& rTheGradient);

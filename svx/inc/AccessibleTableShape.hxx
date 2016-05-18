@@ -226,7 +226,6 @@ public:
     virtual sal_Bool SAL_CALL unselectColumn( sal_Int32 column )
         throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override ;
 private:
-    SVX_DLLPRIVATE explicit AccessibleTableHeaderShape( const css::uno::Reference<css::accessibility::XAccessible>& rxParent );
     bool mbRow;
     rtl::Reference< AccessibleTableShape > mpTable;
 };

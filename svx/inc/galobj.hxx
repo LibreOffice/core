@@ -152,10 +152,6 @@ public:
 
 class SgaObjectAnim : public SgaObjectBmp
 {
-private:
-
-                        SgaObjectAnim( const INetURLObject& ) {};
-
 public:
 
                         SgaObjectAnim();
@@ -168,10 +164,6 @@ public:
 
 class SgaObjectINet : public SgaObjectAnim
 {
-private:
-
-                        SgaObjectINet( const INetURLObject& ) {};
-
 public:
 
                         SgaObjectINet();

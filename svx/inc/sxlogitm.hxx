@@ -25,7 +25,6 @@
 class SdrLogicSizeWidthItem: public SdrMetricItem {
 public:
     SdrLogicSizeWidthItem(long nWdt=0): SdrMetricItem(SDRATTR_LOGICSIZEWIDTH,nWdt)  {}
-    SdrLogicSizeWidthItem(SvStream& rIn): SdrMetricItem(SDRATTR_LOGICSIZEWIDTH,rIn) {}
     virtual SfxPoolItem* Clone(SfxItemPool*) const override
     {
         return new SdrLogicSizeWidthItem(*this);
@@ -38,7 +37,6 @@ public:
 class SdrLogicSizeHeightItem: public SdrMetricItem {
 public:
     SdrLogicSizeHeightItem(long nHgt=0): SdrMetricItem(SDRATTR_LOGICSIZEHEIGHT,nHgt)  {}
-    SdrLogicSizeHeightItem(SvStream& rIn): SdrMetricItem(SDRATTR_LOGICSIZEHEIGHT,rIn) {}
     virtual SfxPoolItem* Clone(SfxItemPool*) const override
     {
         return new SdrLogicSizeHeightItem(*this);

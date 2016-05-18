@@ -35,7 +35,7 @@ class SfxItemPool;
 #define UHASHMAP_NOTFOUND sal::static_int_cast< sal_uInt32 >(~0)
 class UHashMap
 {
-    UHashMap() {}
+    UHashMap() = delete;
 public:
     static sal_uInt32 getId( const OUString& rCompareString );
     static OUString getNameFromId (sal_uInt32 nId);

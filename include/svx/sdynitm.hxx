@@ -29,7 +29,6 @@
 //-------------------------------------------------- ----------
 class SVX_DLLPUBLIC SdrYesNoItem: public SfxBoolItem {
 public:
-    SdrYesNoItem(): SfxBoolItem() {}
     SdrYesNoItem(sal_uInt16 nId, bool bOn=false): SfxBoolItem(nId,bOn) {}
     SdrYesNoItem(sal_uInt16 nId, SvStream& rIn):  SfxBoolItem(nId,rIn) {}
     virtual SfxPoolItem* Clone(SfxItemPool* pPool=nullptr) const override;
