@@ -231,18 +231,6 @@ bool RscDefineList::Remove()
     return true;
 }
 
-void RscDefineList::WriteAll( FILE * fOutput )
-{
-    for ( size_t i = 0, n = maList.size(); i < n; ++i )
-    {
-        RscDefine* pDefEle = maList[ i ];
-        fprintf( fOutput, "#define %s %s\n",
-                 pDefEle->GetName().getStr(),
-                 pDefEle->GetMacro().getStr()
-        );
-    }
-}
-
 bool RscExpType::Evaluate( sal_Int32 * plValue ) const
 {
     if( IsDefinition() )

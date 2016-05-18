@@ -37,9 +37,6 @@ public:
     , mnEnd ( rBuffer.getLength() )
     {
     }
-    MemoryByteGrabber()
-    {
-    }
     const sal_Int8 * getCurrentPos () { return mpBuffer + mnCurrent; }
 
     // XInputStream chained

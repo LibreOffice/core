@@ -169,8 +169,6 @@ private:
                                 return i;
                         return size_t(-1);
                     }
-public:
-    void        WriteAll( FILE * fOutput );
 };
 
 /*********** R s c E x p r e s s i o n ***********************************/

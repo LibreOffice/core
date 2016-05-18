@@ -38,10 +38,8 @@ namespace reportdesign
     {
         static SimpleResMgr*    m_pImpl;
 
-    private:
         // no instantiation allowed
-        ResourceManager() { }
-        ~ResourceManager() { }
+        ResourceManager() = delete;
 
         // we'll instantiate one static member of the following class, which, in its dtor,
         // ensures that m_pImpl will be deleted

@@ -223,7 +223,6 @@ class RscTypCont
 
     void        InsWinBit( RscTop * pClass, const OString& rName,
                            Atom nVal );
-    void        WriteInc( FILE * fOutput, RscFileTab::Index lKey );
 
 public:
     RscBool             aBool;

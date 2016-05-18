@@ -71,35 +71,6 @@ namespace rptui
         }
     };
 
-    class OWindowPositionCorrector
-    {
-        ::std::vector< ::std::pair<VclPtr<vcl::Window>,Point> > m_aChildren;
-        long m_nDeltaX;
-        long m_nDeltaY;
-    public:
-        OWindowPositionCorrector(vcl::Window* _pWindow,long _nDeltaX, long _nDeltaY) :m_nDeltaX(_nDeltaX), m_nDeltaY(_nDeltaY)
-        {
-            sal_uInt16 nCount = _pWindow->GetChildCount();
-            m_aChildren.reserve(nCount);
-            while( nCount )
-            {
-                vcl::Window* pChild = _pWindow->GetChild(--nCount);
-                m_aChildren.push_back(::std::pair<vcl::Window*,Point>(pChild,pChild->GetPosPixel()));
-            }
-        }
-        ~OWindowPositionCorrector()
-        {
-            auto aIter = m_aChildren.begin();
-            auto aEnd = m_aChildren.end();
-            for (; aIter != aEnd; ++aIter)
-            {
-                const Point aPos = aIter->first->GetPosPixel();
-                if ( aPos == aIter->second )
-                    aIter->first->SetPosPixel(Point(m_nDeltaX,m_nDeltaY) + aPos);
-            }
-        }
-    };
-
     class OViewsWindow :    public vcl::Window
                         ,   public utl::ConfigurationListener
                         ,   public IMarkedSection
