@@ -529,6 +529,10 @@ public:
     /// specifies if auto-correction should capitalize the first word or not (default is on)
     void            SetFirstWordCapitalization( bool bCapitalize );
 
+    /** specifies if auto-correction should replace a leading single quotation
+        mark (apostrophe) or not (default is on) */
+    void            SetReplaceLeadingSingleQuotationMark( bool bReplace );
+
     EditDoc& GetEditDoc();
     const EditDoc& GetEditDoc() const;
 

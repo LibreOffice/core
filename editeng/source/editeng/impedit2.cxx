@@ -102,7 +102,8 @@ ImpEditEngine::ImpEditEngine( EditEngine* pEE, SfxItemPool* pItemPool ) :
     bCallParaInsertedOrDeleted(false),
     bImpConvertFirstCall(false),
     bFirstWordCapitalization(true),
-    mbLastTryMerge(false)
+    mbLastTryMerge(false),
+    mbReplaceLeadingSingleQuotationMark(true)
 {
     pEditEngine         = pEE;
     pRefDev             = nullptr;
@@ -2469,6 +2470,14 @@ void ImpEditEngine::ImpRemoveParagraph( sal_Int32 nPara )
 EditPaM ImpEditEngine::AutoCorrect( const EditSelection& rCurSel, sal_Unicode c,
                                     bool bOverwrite, vcl::Window* pFrameWin )
 {
+    // i.e. Calc has special needs regarding a leading single quotation mark
+    // when starting cell input.
+    if (c == '\'' && !IsReplaceLeadingSingleQuotationMark() &&
+            rCurSel.Min() == rCurSel.Max() && rCurSel.Max().GetIndex() == 0)
+    {
+        return InsertText( rCurSel, c, bOverwrite );
+    }
+
     EditSelection aSel( rCurSel );
     SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
     if ( pAutoCorrect )

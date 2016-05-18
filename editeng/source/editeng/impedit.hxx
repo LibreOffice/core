@@ -516,6 +516,7 @@ private:
     bool            bImpConvertFirstCall:1;   // specifies if ImpConvert is called the very first time after Convert was called
     bool            bFirstWordCapitalization:1;   // specifies if auto-correction should capitalize the first word or not
     bool            mbLastTryMerge:1;
+    bool            mbReplaceLeadingSingleQuotationMark:1;
 
 
     // Methods...
@@ -1026,6 +1027,11 @@ public:
     /// specifies if auto-correction should capitalize the first word or not (default is on)
     void            SetFirstWordCapitalization( bool bCapitalize )  { bFirstWordCapitalization = bCapitalize; }
     bool            IsFirstWordCapitalization() const   { return bFirstWordCapitalization; }
+
+    /** specifies if auto-correction should replace a leading single quotation
+        mark (apostrophe) or not (default is on) */
+    void            SetReplaceLeadingSingleQuotationMark( bool bReplace ) { mbReplaceLeadingSingleQuotationMark = bReplace; }
+    bool            IsReplaceLeadingSingleQuotationMark() const { return mbReplaceLeadingSingleQuotationMark; }
 };
 
 inline EPaM ImpEditEngine::CreateEPaM( const EditPaM& rPaM )

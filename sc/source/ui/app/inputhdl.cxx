@@ -631,6 +631,7 @@ void ScInputHandler::ImplCreateEditEngine()
         pEditDefaults = new SfxItemSet( pEngine->GetEmptyItemSet() );
 
         pEngine->SetControlWord( pEngine->GetControlWord() | EEControlBits::AUTOCORRECT );
+        pEngine->SetReplaceLeadingSingleQuotationMark( false );
         pEngine->SetModifyHdl( LINK( this, ScInputHandler, ModifyHdl ) );
     }
 }

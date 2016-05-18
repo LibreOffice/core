@@ -1190,6 +1190,7 @@ void ScMultiTextWnd::InitEditEngine()
     pEditEngine->SetPaperSize( PixelToLogic(Size(barSize.Width(),10000)) );
     pEditEngine->SetWordDelimiters(
                     ScEditUtil::ModifyDelimiters( pEditEngine->GetWordDelimiters() ) );
+    pEditEngine->SetReplaceLeadingSingleQuotationMark( false );
 
     UpdateAutoCorrFlag();
 
