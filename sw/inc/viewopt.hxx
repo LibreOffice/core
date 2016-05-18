@@ -528,7 +528,7 @@ public:
 #if HAVE_FEATURE_DESKTOP
                             return bDirect
                                    ? bool(m_nUIOptions & ViewOptFlags2::HRuler)
-                                   : !m_bReadonly && (m_nUIOptions & (ViewOptFlags2::AnyRuler|ViewOptFlags2::HRuler));
+                                   : !m_bReadonly && (m_nUIOptions & (ViewOptFlags2::AnyRuler|ViewOptFlags2::HRuler)) == (ViewOptFlags2::AnyRuler|ViewOptFlags2::HRuler);
 #else
                             (void) bDirect;
                             return false;
@@ -542,7 +542,7 @@ public:
 #if HAVE_FEATURE_DESKTOP
                             return bDirect
                                    ? bool(m_nUIOptions & ViewOptFlags2::VRuler)
-                                   : !m_bReadonly && (m_nUIOptions & (ViewOptFlags2::AnyRuler|ViewOptFlags2::VRuler));
+                                   : !m_bReadonly && (m_nUIOptions & (ViewOptFlags2::AnyRuler|ViewOptFlags2::VRuler)) == (ViewOptFlags2::AnyRuler|ViewOptFlags2::VRuler);
 #else
                             (void) bDirect;
                             return false;
