@@ -226,6 +226,8 @@ void OutputDevice::dispose()
     }
 
     mpAlphaVDev.disposeAndClear();
+
+    VclReferenceBase::dispose();
 }
 
 SalGraphics* OutputDevice::GetGraphics()
