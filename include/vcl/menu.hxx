@@ -315,8 +315,6 @@ public:
 
     void SetItemImage( sal_uInt16 nItemId, const Image& rImage );
     Image GetItemImage( sal_uInt16 nItemId ) const;
-    void SetItemImageAngle( sal_uInt16 nItemId, long nAngle10 );
-    void SetItemImageMirrorMode( sal_uInt16 nItemId, bool bMirror );
 
     void SetItemCommand( sal_uInt16 nItemId, const OUString& rCommand );
     OUString GetItemCommand( sal_uInt16 nItemId ) const;
@@ -472,19 +470,6 @@ public:
         bool bHighlight;   // highlight on/off
         MenuBar* pMenuBar; // menubar the button belongs to
     };
-    // add an arbitrary button to the menubar (will appear next to closer)
-    // passed link will be call with a MenuBarButtonCallbackArg on press
-    // passed string will be set as tooltip
-    sal_uInt16 AddMenuBarButton( const Image&, const Link<MenuBar::MenuBarButtonCallbackArg&,bool>&, const OUString& );
-    // set the highlight link for additional button with ID nId
-    // highlight link will be called with a MenuBarButtonHighlightArg
-    // the bHighlight member of that struct shall contain the new state
-    void SetMenuBarButtonHighlightHdl( sal_uInt16 nId, const Link<MenuBar::MenuBarButtonCallbackArg&,bool>& );
-    // returns the rectangle occupied by the additional button named nId
-    // coordinates are relative to the systemwindiow the menubar is attached to
-    // if the menubar is unattached an empty rectangle is returned
-    Rectangle GetMenuBarButtonRectPixel( sal_uInt16 nId );
-    void RemoveMenuBarButton( sal_uInt16 nId );
 };
 
 inline MenuBar& MenuBar::operator=( const MenuBar& rMenu )

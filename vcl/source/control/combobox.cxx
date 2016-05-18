@@ -1028,8 +1028,6 @@ bool ComboBox::IsInDropDown() const
     return m_pImpl->m_pFloatWin && m_pImpl->m_pFloatWin->IsInPopupMode();
 }
 
-sal_Unicode ComboBox::GetMultiSelectionSeparator() const { return m_pImpl->m_cMultiSep; }
-
 void ComboBox::EnableMultiSelection( bool bMulti )
 {
     m_pImpl->m_pImplLB->EnableMultiSelection( bMulti, false );

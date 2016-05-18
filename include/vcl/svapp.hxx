@@ -160,19 +160,6 @@ public:
         aData.push_back(data);
     }
 
-    /** Constructor for ApplicationEvent, accepts an array of strings for
-     the data associated with the event.
-
-     @attention TYPE_OPEN and TYPE_PRINT can apply to multiple documents,
-        and are the \em only events that accept an array of strings. No other
-        events should use this constructor.
-    */
-    ApplicationEvent(Type type, std::vector<OUString> const & data):
-        aEvent(type), aData(data)
-    {
-        assert(type == TYPE_OPEN || type == TYPE_PRINT);
-    }
-
     /** Get the type of event.
 
      @returns The type of event.

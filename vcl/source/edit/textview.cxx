@@ -475,16 +475,6 @@ void TextView::ImpShowHideSelection(bool /*bShow*/, const TextSelection* pRange)
     }
 }
 
-VirtualDevice* TextView::GetVirtualDevice()
-{
-    if ( !mpImpl->mpVirtDev )
-    {
-        mpImpl->mpVirtDev = VclPtr<VirtualDevice>::Create();
-        mpImpl->mpVirtDev->SetLineColor();
-    }
-    return mpImpl->mpVirtDev;
-}
-
 void TextView::EraseVirtualDevice()
 {
     mpImpl->mpVirtDev.disposeAndClear();

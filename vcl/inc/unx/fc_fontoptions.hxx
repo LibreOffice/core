@@ -37,13 +37,6 @@ public:
     FontHinting        meHinting;        // whether the font should be hinted
     FontHintStyle      meHintStyle;      // type of font hinting to be used
 
-                        FontConfigFontOptions() :
-                            meEmbeddedBitmap(EMBEDDEDBITMAP_DONTKNOW),
-                            meAntiAlias(ANTIALIAS_DONTKNOW),
-                            meAutoHint(AUTOHINT_DONTKNOW),
-                            meHinting(HINTING_DONTKNOW),
-                            meHintStyle(HINT_SLIGHT),
-                            mpPattern(nullptr) {}
                         FontConfigFontOptions(FcPattern* pPattern) :
                             meEmbeddedBitmap(EMBEDDEDBITMAP_DONTKNOW),
                             meAntiAlias(ANTIALIAS_DONTKNOW),

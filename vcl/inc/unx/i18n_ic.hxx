@@ -75,11 +75,6 @@ public:
 
     SalI18N_InputContext( SalFrame *aFrame );
     ~SalI18N_InputContext();
-
-private:
-
-    SalI18N_InputContext(); // do not use this
-
 };
 
 #endif // INCLUDED_VCL_INC_UNX_I18N_IC_HXX

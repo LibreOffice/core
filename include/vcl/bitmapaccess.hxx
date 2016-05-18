@@ -219,17 +219,9 @@ private:
     std::unique_ptr<BitmapColor> mpLineColor;
     std::unique_ptr<BitmapColor> mpFillColor;
 
-    BitmapWriteAccess()
-    {}
-
-    BitmapWriteAccess(const BitmapWriteAccess&)
-        : BitmapReadAccess()
-    {}
-
-    BitmapWriteAccess& operator=(const BitmapWriteAccess&)
-    {
-        return *this;
-    }
+    BitmapWriteAccess() = delete;
+    BitmapWriteAccess(const BitmapWriteAccess&) = delete;
+    BitmapWriteAccess& operator=(const BitmapWriteAccess&) = delete;
 };
 
 

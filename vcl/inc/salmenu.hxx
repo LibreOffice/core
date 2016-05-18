@@ -43,7 +43,6 @@ struct SalMenuButtonItem
     Image               maImage;
     OUString       maToolTipText;
 
-    SalMenuButtonItem() : mnId( 0 ) {}
     SalMenuButtonItem( sal_uInt16 i_nId, const Image& rImg, const OUString& i_rTTText = OUString() )
     : mnId( i_nId ), maImage( rImg ), maToolTipText( i_rTTText ) {}
 };

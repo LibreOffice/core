@@ -1077,61 +1077,6 @@ void Menu::SetItemImage( sal_uInt16 nItemId, const Image& rImage )
         ImplGetSalMenu()->SetItemImage( nPos, pData->pSalMenuItem, rImage );
 }
 
-static inline Image ImplRotImage( const Image& rImage, long nAngle10 )
-{
-    Image       aRet;
-    BitmapEx    aBmpEx( rImage.GetBitmapEx() );
-
-    aBmpEx.Rotate( nAngle10, COL_WHITE );
-
-    return Image( aBmpEx );
-}
-
-void Menu::SetItemImageAngle( sal_uInt16 nItemId, long nAngle10 )
-{
-    size_t          nPos;
-    MenuItemData*   pData = pItemList->GetData( nItemId, nPos );
-
-    if ( pData )
-    {
-        long nDeltaAngle = (nAngle10 - pData->nItemImageAngle) % 3600;
-        while( nDeltaAngle < 0 )
-            nDeltaAngle += 3600;
-
-        pData->nItemImageAngle = nAngle10;
-        if( nDeltaAngle && !!pData->aImage )
-            pData->aImage = ImplRotImage( pData->aImage, nDeltaAngle );
-    }
-}
-
-static inline Image ImplMirrorImage( const Image& rImage )
-{
-    Image       aRet;
-    BitmapEx    aBmpEx( rImage.GetBitmapEx() );
-
-    aBmpEx.Mirror( BmpMirrorFlags::Horizontal );
-
-    return Image( aBmpEx );
-}
-
-void Menu::SetItemImageMirrorMode( sal_uInt16 nItemId, bool bMirror )
-{
-    size_t          nPos;
-    MenuItemData*   pData = pItemList->GetData( nItemId, nPos );
-
-    if ( pData )
-    {
-        if( ( pData->bMirrorMode && ! bMirror ) ||
-            ( ! pData->bMirrorMode && bMirror )
-            )
-        {
-            pData->bMirrorMode = bMirror;
-            if( !!pData->aImage )
-                pData->aImage = ImplMirrorImage( pData->aImage );
-        }
-    }
-}
-
 Image Menu::GetItemImage( sal_uInt16 nItemId ) const
 {
     MenuItemData* pData = pItemList->GetData( nItemId );
@@ -2734,34 +2679,6 @@ bool Menu::HandleMenuCommandEvent( Menu *pMenu, sal_uInt16 nCommandEventId ) con
     }
     else
         return false;
-}
-
-sal_uInt16 MenuBar::AddMenuBarButton( const Image& i_rImage, const Link<MenuBar::MenuBarButtonCallbackArg&,bool>& i_rLink, const OUString& i_rToolTip )
-{
-    MenuBarWindow* pMenuWin = getMenuBarWindow();
-    return pMenuWin ? pMenuWin->AddMenuBarButton(i_rImage, i_rLink, i_rToolTip) : 0;
-}
-
-void MenuBar::SetMenuBarButtonHighlightHdl( sal_uInt16 nId, const Link<MenuBar::MenuBarButtonCallbackArg&,bool>& rLink )
-{
-    MenuBarWindow* pMenuWin = getMenuBarWindow();
-    if (!pMenuWin)
-        return;
-    pMenuWin->SetMenuBarButtonHighlightHdl(nId, rLink);
-}
-
-Rectangle MenuBar::GetMenuBarButtonRectPixel( sal_uInt16 nId )
-{
-    MenuBarWindow* pMenuWin = getMenuBarWindow();
-    return pMenuWin ? pMenuWin->GetMenuBarButtonRectPixel(nId) : Rectangle();
-}
-
-void MenuBar::RemoveMenuBarButton( sal_uInt16 nId )
-{
-    MenuBarWindow* pMenuWin = getMenuBarWindow();
-    if (!pMenuWin)
-        return;
-    pMenuWin->RemoveMenuBarButton(nId);
 }
 
 bool MenuBar::HandleMenuButtonEvent( Menu *, sal_uInt16 i_nButtonId )

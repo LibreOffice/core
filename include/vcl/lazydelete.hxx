@@ -102,11 +102,6 @@ namespace vcl
             VclPtr<vcl::Window> m_pObject;
             bool      m_bDeleted;
 
-            DeleteObjectEntry() :
-                m_pObject( nullptr ),
-                m_bDeleted( false )
-            {}
-
             DeleteObjectEntry( vcl::Window* i_pObject ) :
                 m_pObject( i_pObject ),
                 m_bDeleted( false )

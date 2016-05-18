@@ -259,8 +259,6 @@ private:
     bool            mbKeyboardActivated;
 
 public:
-    explicit        HelpEvent();
-    explicit        HelpEvent( HelpEventMode nHelpMode );
     explicit        HelpEvent( const Point& rMousePos, HelpEventMode nHelpMode );
 
     const Point&    GetMousePosPixel() const { return maPos; }
@@ -269,23 +267,11 @@ public:
     void            SetKeyboardActivated( bool bKeyboard ) { mbKeyboardActivated = bKeyboard; }
 };
 
-inline HelpEvent::HelpEvent()
-{
-    mnMode  = HelpEventMode::CONTEXT;
-    mbKeyboardActivated = true;
-}
-
 inline HelpEvent::HelpEvent( const Point& rMousePos, HelpEventMode nHelpMode ) :
             maPos( rMousePos )
 {
     mnMode  = nHelpMode;
     mbKeyboardActivated = false;
-}
-
-inline HelpEvent::HelpEvent( HelpEventMode nHelpMode )
-{
-    mnMode  = nHelpMode;
-    mbKeyboardActivated = true;
 }
 
 /// Event to pass information for UserDraw() handling eg. in comboboxes.
@@ -303,7 +289,6 @@ private:
     sal_uInt16          mnStyle;
 
 public:
-    UserDrawEvent();
     UserDrawEvent(vcl::Window* pWindow, vcl::RenderContext* pRenderContext,
             const Rectangle& rOutRect, sal_uInt16 nId, sal_uInt16 nStyle = 0);
 
@@ -313,14 +298,6 @@ public:
     sal_uInt16          GetItemId() const { return mnItemId; }
     sal_uInt16          GetStyle() const { return mnStyle; }
 };
-
-inline UserDrawEvent::UserDrawEvent()
-    : mpWindow(nullptr)
-    , mpRenderContext(nullptr)
-    , mnItemId(0)
-    , mnStyle(0)
-{
-}
 
 inline UserDrawEvent::UserDrawEvent(vcl::Window* pWindow, vcl::RenderContext* pRenderContext,
         const Rectangle& rOutRect, sal_uInt16 nId, sal_uInt16 nStyle)
@@ -340,7 +317,6 @@ private:
     TrackingEventFlags  mnFlags;
 
 public:
-    explicit            TrackingEvent();
     explicit            TrackingEvent( const MouseEvent&,
                                        TrackingEventFlags nTrackFlags = TrackingEventFlags::NONE );
 
@@ -353,11 +329,6 @@ public:
     bool                IsTrackingCanceled() const
                             { return bool(mnFlags & TrackingEventFlags::Cancel); }
 };
-
-inline TrackingEvent::TrackingEvent()
-{
-    mnFlags = TrackingEventFlags::NONE;
-}
 
 inline TrackingEvent::TrackingEvent( const MouseEvent& rMEvt,
                                      TrackingEventFlags nTrackFlags ) :
@@ -449,7 +420,6 @@ private:
     DataChangedEventType    mnType;
 
 public:
-    explicit                DataChangedEvent();
     explicit                DataChangedEvent( DataChangedEventType nType,
                                               const void* pData = nullptr,
                                               AllSettingsFlags nFlags = AllSettingsFlags::NONE );
@@ -459,13 +429,6 @@ public:
 
     const AllSettings*      GetOldSettings() const;
 };
-
-inline DataChangedEvent::DataChangedEvent()
-{
-    mpData  = nullptr;
-    mnFlags = AllSettingsFlags::NONE;
-    mnType  = DataChangedEventType::NONE;
-}
 
 inline DataChangedEvent::DataChangedEvent( DataChangedEventType nType,
                                            const void* pData,

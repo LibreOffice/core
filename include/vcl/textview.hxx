@@ -82,8 +82,6 @@ protected:
     bool                ImplTruncateNewText( OUString& rNewText ) const;
     bool                ImplCheckTextLen( const OUString& rNewText );
 
-    VirtualDevice*      GetVirtualDevice();
-
     // DragAndDropClient
     virtual void        dragGestureRecognized( const css::datatransfer::dnd::DragGestureEvent& dge ) throw (css::uno::RuntimeException, std::exception) override;
     virtual void        dragDropEnd( const css::datatransfer::dnd::DragSourceDropEvent& dsde ) throw (css::uno::RuntimeException, std::exception) override;
