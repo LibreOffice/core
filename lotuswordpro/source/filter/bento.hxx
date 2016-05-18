@@ -162,9 +162,6 @@ public: // Methods
         cpNamedObject = pObj;
     }
 
-    CBenNamedObjectListElmt(pCBenNamedObject pNamedObject,
-      pCBenNamedObjectListElmt pPrev) : CUtListElmt(pPrev)
-      { cpNamedObject = pNamedObject; }
     pCBenNamedObject GetNamedObject() { return cpNamedObject; }
 
 private: // Data
@@ -276,12 +273,6 @@ public: // Internal methods
         cpProperty = pProperty;
     }
 
-    CBenValue(pCBenProperty pProperty, BenObjectID TypeID) :
-      CBenIDListElmt(TypeID)
-    {
-        cpProperty = pProperty;
-        cpReferencedList = nullptr;
-    }
     inline pCBenValueSegment GetNextValueSegment(pCBenValueSegment
       pCurrValueSegment);
     inline pLtcBenContainer GetContainer();
@@ -328,12 +319,6 @@ public: // Internal methods
     CBenValueSegment(pCBenValue pValue, const void  * pImmData,
       unsigned short Size) : CUtListElmt(&pValue->GetValueSegments())
       { cpValue = pValue; cImmediate = true;
-      UtHugeMemcpy(cImmData, pImmData, Size); cSize = Size; }
-    CBenValueSegment(BenContainerPos Pos, unsigned long Size)
-      { cpValue = nullptr; cImmediate = false; cPos = Pos;
-      cSize = Size; }
-    CBenValueSegment(const void  * pImmData, unsigned short Size)
-      { cpValue = nullptr; cImmediate = true;
       UtHugeMemcpy(cImmData, pImmData, Size); cSize = Size; }
     bool IsImmediate() { return cImmediate; }
     BenContainerPos GetPosition() { return cPos; }

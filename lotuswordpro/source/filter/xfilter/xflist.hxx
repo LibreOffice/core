@@ -99,24 +99,6 @@ private:
 
 };
 
-class XFUnorderedList : public XFList
-{
-public:
-    XFUnorderedList()
-    {
-        SetOrdered(false);
-    }
-};
-
-class XFOrderedList : public XFList
-{
-public:
-    XFOrderedList()
-    {
-        SetOrdered(true);
-    }
-};
-
 inline void XFList::SetOrdered(bool ordered)
 {
     m_bOrdered = ordered;

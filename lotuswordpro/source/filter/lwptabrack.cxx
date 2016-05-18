@@ -59,7 +59,6 @@
  ************************************************************************/
 #include "lwptabrack.hxx"
 #include "lwpobjstrm.hxx"
-#include "lwpslvlist.hxx"
 
 #include <stdexcept>
 

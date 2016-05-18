@@ -118,19 +118,6 @@ void XFChangeDelete::ToXml(IXFStream *pStrm)
     pStrm->EndElement( "text:changed-region" );
 }
 
-void XFChange::ToXml(IXFStream *pStrm)
-{
-    IXFAttrList *pAttrList = pStrm->GetAttrList();
-
-    pAttrList->Clear();
-    if(m_sID.isEmpty())
-        return;
-    pAttrList->AddAttribute( "text:change-id",m_sID);
-
-    pStrm->StartElement( "text:change" );
-    pStrm->EndElement( "text:change" );
-}
-
 void XFChangeStart::ToXml(IXFStream *pStrm)
 {
     IXFAttrList *pAttrList = pStrm->GetAttrList();

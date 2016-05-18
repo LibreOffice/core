@@ -216,7 +216,6 @@ protected:
     void Print(XMLNode *pCur, OStringBuffer& rBuffer, bool bRootelement) const;
 public:
     /// create an element node
-    XMLElement(){}
     XMLElement(
         const OString &rName,    // the element name
         XMLParentNode *pParent   // parent node of this element
