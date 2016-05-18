@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_f5cf32b1",
+        "filename": "vcl/unx/generic/glyphs/gcach_layout.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 535,
+      "author": {
+        "id": 1000381
+      },
+      "writtenOn": "2016-05-18T12:25:06Z",
+      "side": 1,
+      "message": "What are these brackets for? I also thinks the second parameter is unneeded, check the documentation of iterateCodePoints.",
+      "revId": "b7c3be34b0cb3daa8481cc4567a109476f93e4c7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
