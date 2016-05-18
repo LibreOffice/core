@@ -100,8 +100,6 @@ XMLTableHeaderFooterContext::XMLTableHeaderFooterContext( SvXMLImport& rImport, 
 
 XMLTableHeaderFooterContext::~XMLTableHeaderFooterContext()
 {
-    rtl::Reference<ScHeaderFooterContentObj> pImp = ScHeaderFooterContentObj::getImplementation( xHeaderFooterContent );
-    pImp->dispose();
 }
 
 SvXMLImportContext *XMLTableHeaderFooterContext::CreateChildContext(
