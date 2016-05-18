@@ -25,6 +25,7 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
+#include <com/sun/star/embed/XEmbeddedOleObject.hpp>
 #include <com/sun/star/embed/XInplaceObject.hpp>
 #include <com/sun/star/embed/XVisualObject.hpp>
 #include <com/sun/star/embed/XEmbedPersist.hpp>
@@ -105,6 +106,7 @@ class OleComponent;
 class OwnView_Impl;
 class OleEmbeddedObject : public ::cppu::WeakImplHelper
                         < css::embed::XEmbeddedObject
+                        , css::embed::XEmbeddedOleObject
                         , css::embed::XEmbedPersist
                         , css::embed::XLinkageSupport
                         , css::embed::XInplaceObject
