@@ -150,8 +150,6 @@ public:
             static SfxPoolItem* CreateDefault();
 
             inline  ScRangeItem( const sal_uInt16 nWhich );
-            inline  ScRangeItem( const sal_uInt16   nWhich,
-                                 const ScRange& rRange );
             inline  ScRangeItem( const ScRangeItem& rCpy );
 
     inline ScRangeItem& operator=( const ScRangeItem &rCpy );
@@ -171,12 +169,6 @@ private:
 
 inline ScRangeItem::ScRangeItem( const sal_uInt16 nWhichP )
     :   SfxPoolItem( nWhichP )
-{
-}
-
-inline ScRangeItem::ScRangeItem( const sal_uInt16   nWhichP,
-                                 const ScRange& rRange )
-    : SfxPoolItem( nWhichP ), aRange( rRange )
 {
 }
 

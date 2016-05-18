@@ -37,8 +37,7 @@ class DateTime;
 class ScXMLConverter
 {
 public:
-    inline              ScXMLConverter()    {}
-    inline              ~ScXMLConverter()   {}
+                        ScXMLConverter() = delete;
 
 // helper methods
     static ScDocument*  GetScDocument(

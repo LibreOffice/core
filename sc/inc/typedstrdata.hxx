@@ -31,7 +31,6 @@ public:
 
     ScTypedStrData( const ScTypedStrData& rCpy );
 
-    bool IsStrData() const;
     bool IsDate() const { return mbIsDate;}
     const OUString& GetString() const { return maStrValue;}
     StringType GetStringType() const { return meStrType;}

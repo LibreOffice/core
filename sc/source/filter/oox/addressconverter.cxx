@@ -389,24 +389,6 @@ bool AddressConverter::convertToCellAddressUnchecked(
     return bRes;
 }
 
-bool AddressConverter::convertToCellAddress( CellAddress& orAddress,
-        const OUString& rString, sal_Int16 nSheet, bool bTrackOverflow )
-{
-    return
-        convertToCellAddressUnchecked( orAddress, rString, nSheet ) &&
-        checkCellAddress( orAddress, bTrackOverflow );
-}
-
-bool AddressConverter::convertToCellAddress(
-    css::table::CellAddress& rAddress,
-    const char* pStr, sal_Int16 nSheet, bool bTrackOverflow )
-{
-    if (!convertToCellAddressUnchecked(rAddress, pStr, nSheet))
-        return false;
-
-    return checkCellAddress(rAddress, bTrackOverflow);
-}
-
 bool AddressConverter::convertToCellAddress( ScAddress& orAddress,
         const OUString& rString, sal_Int16 nSheet, bool bTrackOverflow )
 {
@@ -452,13 +434,6 @@ void AddressConverter::convertToCellAddressUnchecked( ScAddress& orAddress,
     orAddress.SetTab(nSheet);
     orAddress.SetCol(rBinAddress.mnCol);
     orAddress.SetRow(rBinAddress.mnRow);
-}
-
-bool AddressConverter::convertToCellAddress( CellAddress& orAddress,
-        const BinAddress& rBinAddress, sal_Int16 nSheet, bool bTrackOverflow )
-{
-    convertToCellAddressUnchecked( orAddress, rBinAddress, nSheet );
-    return checkCellAddress( orAddress, bTrackOverflow );
 }
 
 bool AddressConverter::convertToCellAddress( ScAddress& orAddress,

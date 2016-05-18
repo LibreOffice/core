@@ -45,16 +45,11 @@ private:
     static sal_uInt32   MakeHashCode( const OUString& );
 public:
     inline          StringHashEntry( const OUString& );
-    inline          StringHashEntry();
     inline void     operator =( const sal_Char* );
     inline void     operator =( const OUString& );
     inline void     operator =( const StringHashEntry& );
     inline bool     operator ==( const StringHashEntry& ) const;
 };
-
-inline StringHashEntry::StringHashEntry()
-{
-}
 
 inline StringHashEntry::StringHashEntry( const OUString& r ) : aString( r )
 {
@@ -197,13 +192,6 @@ private:
                                 // 0xFFFD -> should be in the same workbook, but not found
         bool          bSWB;
         bool          bLink;
-                    Cont( const OUString& rFilePathAndName, const OUString& rTabName ) :
-                        aFile( rFilePathAndName ),
-                        aTab( rTabName )
-                    {
-                        nTabNum = 0xFFFF;   // -> table not created yet
-                        bSWB = bLink = false;
-                    }
                     Cont( const OUString& rFilePathAndName, const OUString& rTabName,
                         const bool bSameWB ) :
                         aFile( rFilePathAndName ),
