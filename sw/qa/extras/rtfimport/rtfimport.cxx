@@ -2599,6 +2599,14 @@ DECLARE_RTFIMPORT_TEST(testTdf96275, "tdf96275.rtf")
     CPPUNIT_ASSERT_EQUAL(OUString("Frame"), getProperty<OUString>(getRun(xParagraph, 1), "TextPortionType"));
 }
 
+DECLARE_RTFIMPORT_TEST(testTdf82073, "tdf82073.rtf")
+{
+    uno::Reference<text::XTextTable> xTable(getParagraphOrTable(2), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A1"), uno::UNO_QUERY);
+    // This was -1: the background color was automatic, not black.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), getProperty<sal_Int32>(xCell, "BackColor"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
