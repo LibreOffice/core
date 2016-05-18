@@ -26,6 +26,7 @@
 #include <com/sun/star/embed/XWindowSupplier.hpp>
 #include <com/sun/star/embed/XEmbedPersist.hpp>
 #include <com/sun/star/embed/EmbedVerbs.hpp>
+#include <com/sun/star/embed/XEmbeddedOleObject.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -911,7 +912,13 @@ ErrCode SfxInPlaceClient::DoVerb( long nVerb )
         {
             if ( m_pImp->m_nAspect == embed::Aspects::MSOLE_ICON )
             {
-                if ( nVerb == embed::EmbedVerbs::MS_OLEVERB_PRIMARY || nVerb == embed::EmbedVerbs::MS_OLEVERB_SHOW )
+                // the common persistence is supported by objects and links
+
+                uno::Reference< embed::XEmbeddedOleObject > xEmbeddedOleObject( m_pImp->m_xObject, uno::UNO_QUERY );
+
+                if ( xEmbeddedOleObject.is() && (nVerb == embed::EmbedVerbs::MS_OLEVERB_PRIMARY || nVerb == embed::EmbedVerbs::MS_OLEVERB_OPEN || nVerb == embed::EmbedVerbs::MS_OLEVERB_SHOW ))
+                    nVerb = embed::EmbedVerbs::MS_OLEVERB_SHOW;
+                else if ( nVerb == embed::EmbedVerbs::MS_OLEVERB_PRIMARY || nVerb == embed::EmbedVerbs::MS_OLEVERB_SHOW )
                     nVerb = embed::EmbedVerbs::MS_OLEVERB_OPEN; // outplace activation
                 else if ( nVerb == embed::EmbedVerbs::MS_OLEVERB_UIACTIVATE
                        || nVerb == embed::EmbedVerbs::MS_OLEVERB_IPACTIVATE )

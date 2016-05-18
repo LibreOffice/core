@@ -6267,6 +6267,9 @@ module com {
      hyper getStatus([in] hyper nAspect) raises (::com::sun::star::embed::WrongStateException);
      void setContainerName([in] string sName);
     };
+    published interface XEmbeddedOleObject {
+     interface ::com::sun::star::embed::XComponentSupplier;
+    };
     published interface XExtendedStorageStream {
      interface ::com::sun::star::io::XStream;
      interface ::com::sun::star::lang::XComponent;
