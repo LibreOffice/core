@@ -212,7 +212,9 @@ void UnusedMethods::logCallToRootMethods(const FunctionDecl* functionDecl, std::
     {
         while (functionDecl->getTemplateInstantiationPattern())
             functionDecl = functionDecl->getTemplateInstantiationPattern();
-        funcSet.insert(niceName(functionDecl));
+        if (functionDecl->getLocation().isValid() && !ignoreLocation( functionDecl )
+             && !functionDecl->isExternC())
+            funcSet.insert(niceName(functionDecl));
     }
 }
 
@@ -348,8 +350,12 @@ bool UnusedMethods::VisitFunctionDecl( const FunctionDecl* functionDecl )
     if (functionDecl->isDeleted() || functionDecl->isDefaulted()) {
         return true;
     }
+    if (isa<CXXConstructorDecl>(functionDecl) && dyn_cast<CXXConstructorDecl>(functionDecl)->isCopyConstructor()) {
+        return true;
+    }
 
-    if( functionDecl->getLocation().isValid() && !ignoreLocation( functionDecl ))
+    if( functionDecl->getLocation().isValid() && !ignoreLocation( functionDecl )
+        && !functionDecl->isExternC())
     {
         MyFuncInfo funcInfo = niceName(functionDecl);
         definitionSet.insert(funcInfo);
