@@ -134,8 +134,8 @@ ScMergeFlagAttr::ScMergeFlagAttr():
 {
 }
 
-ScMergeFlagAttr::ScMergeFlagAttr(sal_Int16 nFlags):
-    SfxInt16Item(ATTR_MERGE_FLAG, nFlags)
+ScMergeFlagAttr::ScMergeFlagAttr(ScMF nFlags):
+    SfxInt16Item(ATTR_MERGE_FLAG, static_cast<sal_Int16>(nFlags))
 {
 }
 
@@ -150,12 +150,12 @@ SfxPoolItem * ScMergeFlagAttr::Clone(SfxItemPool *) const
 
 bool ScMergeFlagAttr::HasPivotButton() const
 {
-    return (GetValue() & SC_MF_BUTTON) != 0;
+    return bool(static_cast<ScMF>(GetValue()) & ScMF::Button);
 }
 
 bool ScMergeFlagAttr::HasPivotPopupButton() const
 {
-    return (GetValue() & SC_MF_BUTTON_POPUP) != 0;
+    return bool(static_cast<ScMF>(GetValue()) & ScMF::ButtonPopup);
 }
 
 /**

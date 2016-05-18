@@ -375,16 +375,16 @@ void ScXMLDataPilotTableContext::SetButtons()
                 {
                     // Page dimension needs 2 buttons.
 
-                    pDoc->ApplyFlagsTab(aScAddress.Col(), aScAddress.Row(), aScAddress.Col(), aScAddress.Row(), aScAddress.Tab(), SC_MF_BUTTON);
+                    pDoc->ApplyFlagsTab(aScAddress.Col(), aScAddress.Row(), aScAddress.Col(), aScAddress.Row(), aScAddress.Tab(), ScMF::Button);
 
-                    sal_Int16 nMFlag = SC_MF_BUTTON_POPUP;
+                    ScMF nMFlag = ScMF::ButtonPopup;
                     if (bHasHidden)
-                        nMFlag |= SC_MF_HIDDEN_MEMBER;
+                        nMFlag |= ScMF::HiddenMember;
                     pDoc->ApplyFlagsTab(aScAddress.Col()+1, aScAddress.Row(), aScAddress.Col()+1, aScAddress.Row(), aScAddress.Tab(), nMFlag);
                 }
                 else
                 {
-                    sal_Int16 nMFlag = SC_MF_BUTTON;
+                    ScMF nMFlag = ScMF::Button;
                     if (bDataLayout)
                     {
                         // Data layout dimension only has a plain button with no popup.
@@ -393,9 +393,9 @@ void ScXMLDataPilotTableContext::SetButtons()
                     {
                         // Normal dimension has a popup arrow button.
                         if (bHasHidden)
-                            nMFlag |= SC_MF_HIDDEN_MEMBER;
+                            nMFlag |= ScMF::HiddenMember;
 
-                        nMFlag |= SC_MF_BUTTON_POPUP;
+                        nMFlag |= ScMF::ButtonPopup;
                     }
 
                     pDoc->ApplyFlagsTab(aScAddress.Col(), aScAddress.Row(), aScAddress.Col(), aScAddress.Row(), aScAddress.Tab(), nMFlag);

@@ -295,10 +295,10 @@ void ScDBFunc::ToggleAutoFilter()
     SCCOL  nCol;
     SCROW  nRow = aParam.nRow1;
     SCTAB  nTab = GetViewData().GetTabNo();
-    sal_Int16   nFlag;
-    bool    bHasAuto = true;
-    bool    bHeader  = pDBData->HasHeader();
-    bool    bPaint   = false;
+    ScMF   nFlag;
+    bool   bHasAuto = true;
+    bool   bHeader  = pDBData->HasHeader();
+    bool   bPaint   = false;
 
     //!     instead retrieve from DB-range?
 
@@ -307,7 +307,7 @@ void ScDBFunc::ToggleAutoFilter()
         nFlag = static_cast<const ScMergeFlagAttr*>( pDoc->
                 GetAttr( nCol, nRow, nTab, ATTR_MERGE_FLAG ))->GetValue();
 
-        if ( (nFlag & SC_MF_AUTO) == 0 )
+        if ( !(nFlag & ScMF::Auto) )
             bHasAuto = false;
     }
 
@@ -319,7 +319,7 @@ void ScDBFunc::ToggleAutoFilter()
         {
             nFlag = static_cast<const ScMergeFlagAttr*>( pDoc->
                     GetAttr( nCol, nRow, nTab, ATTR_MERGE_FLAG ))->GetValue();
-            pDoc->ApplyAttr( nCol, nRow, nTab, ScMergeFlagAttr( nFlag & ~SC_MF_AUTO ) );
+            pDoc->ApplyAttr( nCol, nRow, nTab, ScMergeFlagAttr( nFlag & ~ScMF::Auto ) );
         }
 
         // use a list action for the AutoFilter buttons (ScUndoAutoFilter) and the filter operation
@@ -374,7 +374,7 @@ void ScDBFunc::ToggleAutoFilter()
             {
                 nFlag = static_cast<const ScMergeFlagAttr*>( pDoc->
                         GetAttr( nCol, nRow, nTab, ATTR_MERGE_FLAG ))->GetValue();
-                pDoc->ApplyAttr( nCol, nRow, nTab, ScMergeFlagAttr( nFlag | SC_MF_AUTO ) );
+                pDoc->ApplyAttr( nCol, nRow, nTab, ScMergeFlagAttr( nFlag | ScMF::Auto ) );
             }
             pDocSh->PostPaint(ScRange(aParam.nCol1, nRow, nTab, aParam.nCol2, nRow, nTab),
                               PAINT_GRID);
@@ -417,9 +417,9 @@ void ScDBFunc::HideAutoFilter()
 
     for (SCCOL nCol=nCol1; nCol<=nCol2; nCol++)
     {
-        sal_Int16 nFlag = static_cast<const ScMergeFlagAttr*>( rDoc.
+        ScMF nFlag = static_cast<const ScMergeFlagAttr*>( rDoc.
                                 GetAttr( nCol, nRow1, nTab, ATTR_MERGE_FLAG ))->GetValue();
-        rDoc.ApplyAttr( nCol, nRow1, nTab, ScMergeFlagAttr( nFlag & ~SC_MF_AUTO ) );
+        rDoc.ApplyAttr( nCol, nRow1, nTab, ScMergeFlagAttr( nFlag & ~ScMF::Auto ) );
     }
 
     ScRange aRange;
