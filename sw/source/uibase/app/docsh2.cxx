@@ -56,6 +56,7 @@
 #include <editeng/langitem.hxx>
 #include <svx/fmshell.hxx>
 #include <sfx2/linkmgr.hxx>
+#include <sfx2/classificationhelper.hxx>
 
 #include <svtools/htmlcfg.hxx>
 #include <svx/ofaitem.hxx>
@@ -1145,7 +1146,13 @@ void SwDocShell::Execute(SfxRequest& rReq)
             {
                 SwWrtShell* pSh = GetWrtShell();
                 const OUString& rValue = static_cast<const SfxStringItem*>(pItem)->GetValue();
-                pSh->SetClassification(rValue);
+                auto eType = SfxClassificationPolicyType::IntellectualProperty;
+                if (pArgs->GetItemState(SID_TYPE_NAME, false, &pItem) == SfxItemState::SET)
+                {
+                    const OUString& rType = static_cast<const SfxStringItem*>(pItem)->GetValue();
+                    eType = SfxClassificationHelper::stringToPolicyType(rType);
+                }
+                pSh->SetClassification(rValue, eType);
             }
             else
                 SAL_WARN("sw.ui", "missing parameter for SID_CLASSIFICATION_APPLY");

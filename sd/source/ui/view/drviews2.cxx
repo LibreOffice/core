@@ -1151,12 +1151,18 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             if (pArgs && pArgs->GetItemState(nSId, false, &pItem) == SfxItemState::SET)
             {
                 const OUString& rName = static_cast<const SfxStringItem*>(pItem)->GetValue();
+                auto eType = SfxClassificationPolicyType::IntellectualProperty;
+                if (pArgs->GetItemState(SID_TYPE_NAME, false, &pItem) == SfxItemState::SET)
+                {
+                    const OUString& rType = static_cast<const SfxStringItem*>(pItem)->GetValue();
+                    eType = SfxClassificationHelper::stringToPolicyType(rType);
+                }
                 if (SfxViewFrame* pViewFrame = GetViewFrame())
                 {
                     if (SfxObjectShell* pObjectShell = pViewFrame->GetObjectShell())
                     {
                         SfxClassificationHelper aHelper(pObjectShell->getDocProperties());
-                        aHelper.SetBACName(rName, SfxClassificationPolicyType::IntellectualProperty);
+                        aHelper.SetBACName(rName, eType);
                     }
                 }
             }
