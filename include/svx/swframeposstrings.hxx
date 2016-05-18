@@ -21,6 +21,7 @@
 
 #include <rtl/ustring.hxx>
 #include <svx/svxdllapi.h>
+#include <memory>
 
 /*
     contains strings needed for positioning dialogs
@@ -29,7 +30,6 @@
 class SvxSwFramePosString_Impl;
 class SVX_DLLPUBLIC SvxSwFramePosString
 {
-    SvxSwFramePosString_Impl* pImpl;
 public:
     SvxSwFramePosString();
     ~SvxSwFramePosString();
@@ -81,6 +81,9 @@ public:
         STR_MAX
     };
     const OUString& GetString(StringId eId);
+
+private:
+    std::unique_ptr<SvxSwFramePosString_Impl> pImpl;
 };
 #endif
 

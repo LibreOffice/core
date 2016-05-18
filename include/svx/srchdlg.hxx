@@ -221,7 +221,7 @@ private:
     std::vector<OUString> aSearchStrings;
     std::vector<OUString> aReplaceStrings;
 
-    SearchDlg_Impl*         pImpl;
+    std::unique_ptr<SearchDlg_Impl>         pImpl;
     SearchAttrItemList*     pSearchList;
     SearchAttrItemList*     pReplaceList;
     SvxSearchItem*          pSearchItem;
