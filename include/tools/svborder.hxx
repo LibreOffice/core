@@ -32,11 +32,6 @@ public:
     {
         nTop = nRight = nBottom = nLeft = 0;
     }
-    SvBorder( const Size & rSz )
-    {
-        nTop = nBottom = rSz.Height();
-        nRight = nLeft = rSz.Width();
-    }
     SvBorder( long nLeftP, long nTopP, long nRightP, long nBottomP )
     {
         nLeft = nLeftP;

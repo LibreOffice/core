@@ -250,60 +250,6 @@ ErrCode SvLockBytes::Stat(SvLockBytesStat * pStat, SvLockBytesStatFlag) const
     return ERRCODE_NONE;
 }
 
-//  class SvOpenLockBytes
-
-
-//  class SvAsyncLockBytes
-
-
-// virtual
-ErrCode SvAsyncLockBytes::ReadAt(sal_uInt64 const nPos, void * pBuffer, sal_Size nCount,
-                                 sal_Size * pRead) const
-{
-    if (m_bTerminated)
-        return SvOpenLockBytes::ReadAt(nPos, pBuffer, nCount, pRead);
-    else
-    {
-        sal_Size nTheCount =
-            std::min<sal_Size>(nPos < m_nSize ? m_nSize - nPos : 0, nCount);
-        ErrCode nError = SvOpenLockBytes::ReadAt(nPos, pBuffer, nTheCount,
-                                                 pRead);
-        return !nCount || nTheCount == nCount || nError ? nError :
-                                                          ERRCODE_IO_PENDING;
-    }
-}
-
-// virtual
-ErrCode SvAsyncLockBytes::WriteAt(sal_uInt64 const nPos, const void * pBuffer,
-                                  sal_Size nCount, sal_Size * pWritten)
-{
-    if (m_bTerminated)
-        return SvOpenLockBytes::WriteAt(nPos, pBuffer, nCount, pWritten);
-    else
-    {
-        sal_Size nTheCount =
-            std::min<sal_Size>(nPos < m_nSize ? m_nSize - nPos : 0, nCount);
-        ErrCode nError = SvOpenLockBytes::WriteAt(nPos, pBuffer, nTheCount,
-                                                  pWritten);
-        return !nCount || nTheCount == nCount || nError ? nError :
-                                                          ERRCODE_IO_PENDING;
-    }
-}
-
-// virtual
-ErrCode SvAsyncLockBytes::FillAppend(const void * pBuffer, sal_Size nCount,
-                                     sal_Size * pWritten)
-{
-    sal_Size nTheWritten(0);
-    ErrCode nError = SvOpenLockBytes::WriteAt(m_nSize, pBuffer, nCount,
-                                              &nTheWritten);
-    if (!nError)
-        m_nSize += nTheWritten;
-    if (pWritten)
-        *pWritten = nTheWritten;
-    return nError;
-}
-
 //  class SvStream
 
 sal_Size SvStream::GetData( void* pData, sal_Size nSize )

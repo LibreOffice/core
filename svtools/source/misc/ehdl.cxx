@@ -173,16 +173,7 @@ bool SfxErrorHandler::CreateString(
     sal_uLong nErrCode = pErr->GetErrorCode() & ERRCODE_ERROR_MASK;
     if( nErrCode>=lEnd || nErrCode<=lStart )
         return false;
-    const MessageInfo *pMsgInfo = dynamic_cast<const MessageInfo*>( pErr );
-    if(pMsgInfo)
-    {
-        if(GetMessageString(nErrCode, rStr, nFlags))
-        {
-            rStr = rStr.replaceAll("$(ARG1)", pMsgInfo->GetMessageArg());
-            return true;
-        }
-    }
-    else if(GetErrorString(nErrCode, rStr, nFlags))
+    if(GetErrorString(nErrCode, rStr, nFlags))
     {
         const StringErrorInfo *pStringInfo = dynamic_cast<const StringErrorInfo *>(pErr);
         if(pStringInfo)
