@@ -102,6 +102,7 @@ struct ScRefCellValue;
 struct ScCellValue;
 class ScDocumentImport;
 class ScHint;
+enum class ScMF;
 
 struct ScNeededSizeOptions
 {
@@ -479,8 +480,8 @@ public:
         SCsROW& rRow, SCsROW& rEndRow, const ScStyleSheet* pSearchStyle, bool bUp,
         bool bInSelection, const ScMarkData& rMark) const;
 
-    bool    ApplyFlags( SCROW nStartRow, SCROW nEndRow, sal_Int16 nFlags );
-    bool    RemoveFlags( SCROW nStartRow, SCROW nEndRow, sal_Int16 nFlags );
+    bool        ApplyFlags( SCROW nStartRow, SCROW nEndRow, ScMF nFlags );
+    bool        RemoveFlags( SCROW nStartRow, SCROW nEndRow, ScMF nFlags );
     void        ClearItems( SCROW nStartRow, SCROW nEndRow, const sal_uInt16* pWhich );
 
     void        RemoveProtected( SCROW nStartRow, SCROW nEndRow );

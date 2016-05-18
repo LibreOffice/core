@@ -150,7 +150,7 @@ void ScXMLTableScenarioContext::EndElement()
             ScRange* pRange(aScenarioRanges[ i ]);
             if( pRange )
                 pDoc->ApplyFlagsTab( pRange->aStart.Col(), pRange->aStart.Row(),
-                    pRange->aEnd.Col(), pRange->aEnd.Row(), nCurrTable, SC_MF_SCENARIO );
+                    pRange->aEnd.Col(), pRange->aEnd.Row(), nCurrTable, ScMF::Scenario );
         }
         pDoc->SetActiveScenario( nCurrTable, bIsActive );
     }
