@@ -80,8 +80,6 @@ class LwpFoundry;
 */
 class LwpObject: public salhelper::SimpleReferenceObject
 {
-private:
-    LwpObject();//Don't permit to create an object without header
 public:
     LwpObject(LwpObjectHeader objHdr, LwpSvStream* pStrm);
 protected:

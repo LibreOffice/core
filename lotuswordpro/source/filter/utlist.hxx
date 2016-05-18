@@ -95,17 +95,6 @@ private: // Data
     pCUtListElmt cpPrev;
 };
 
-class CUtComparableListElmt : public CUtListElmt
-{
-public: // Methods
-    CUtComparableListElmt() { ; }
-    explicit CUtComparableListElmt(pCUtComparableListElmt pPrev) :
-      CUtListElmt(pPrev) { ; }
-    explicit CUtComparableListElmt(pCUtList pList) : CUtListElmt(pList) { ; }
-
-public: // Pure virtual methods
-};
-
 class CUtList
 {
 public: // Methods

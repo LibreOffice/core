@@ -104,16 +104,6 @@ public:
     void ToXml(IXFStream *pStrm) override;
 };
 
-class XFChange : public XFContent
-{
-public:
-    XFChange(){}
-    virtual ~XFChange(){}
-    void ToXml(IXFStream *pStrm) override;
-private:
-    OUString m_sID;
-};
-
 class XFChangeStart : public XFContent
 {
 public:

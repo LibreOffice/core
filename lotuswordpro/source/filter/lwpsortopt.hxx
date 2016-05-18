@@ -83,7 +83,6 @@ public:
 class LwpSortOption
 {
 public:
-    LwpSortOption(){}
     explicit LwpSortOption(LwpObjectStream* pStrm);
     ~LwpSortOption(){}
 public:

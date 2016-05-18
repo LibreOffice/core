@@ -70,9 +70,6 @@ class XFBreaks
 public:
     XFBreaks();
 
-    explicit XFBreaks(enumXFBreaks breaks);
-
-public:
     /**
      * @descr   Set break type, pls refer to enumXFBreaks.
      */
@@ -91,9 +88,6 @@ private:
 };
 
 inline XFBreaks::XFBreaks() : m_eBreaks(enumXFBreakAuto)
-{}
-
-inline XFBreaks::XFBreaks(enumXFBreaks breaks) : m_eBreaks(breaks)
 {}
 
 inline void XFBreaks::SetBreakType(enumXFBreaks breaks)

@@ -67,21 +67,13 @@ struct LangSvcEntries_Spell : public LangSvcEntries
 {
     css::uno::Sequence< css::uno::Reference< css::linguistic2::XSpellChecker > >  aSvcRefs;
 
-    LangSvcEntries_Spell() : LangSvcEntries() {}
     explicit LangSvcEntries_Spell( const css::uno::Sequence< OUString > &rSvcImplNames ) : LangSvcEntries( rSvcImplNames ) {}
-};
-
-struct LangSvcEntries_Grammar : public LangSvcEntries
-{
-    LangSvcEntries_Grammar() : LangSvcEntries() {}
-    explicit LangSvcEntries_Grammar( const OUString &rSvcImplName ) : LangSvcEntries( rSvcImplName ) {}
 };
 
 struct LangSvcEntries_Hyph : public LangSvcEntries
 {
     css::uno::Sequence< css::uno::Reference< css::linguistic2::XHyphenator > >  aSvcRefs;
 
-    LangSvcEntries_Hyph() : LangSvcEntries() {}
     explicit LangSvcEntries_Hyph( const OUString &rSvcImplName ) : LangSvcEntries( rSvcImplName ) {}
 };
 
@@ -89,7 +81,6 @@ struct LangSvcEntries_Thes : public LangSvcEntries
 {
     css::uno::Sequence< css::uno::Reference< css::linguistic2::XThesaurus > >  aSvcRefs;
 
-    LangSvcEntries_Thes() : LangSvcEntries() {}
     explicit LangSvcEntries_Thes( const css::uno::Sequence< OUString > &rSvcImplNames ) : LangSvcEntries( rSvcImplNames ) {}
 };
 
