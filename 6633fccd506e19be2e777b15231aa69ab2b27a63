@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_72db38ee",
+        "filename": "bin/find-german-comments",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-05-18T08:08:00Z",
+      "side": 1,
+      "message": "You want to run it on python 2 but using python 3 print() functions?",
+      "revId": "6633fccd506e19be2e777b15231aa69ab2b27a63",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
