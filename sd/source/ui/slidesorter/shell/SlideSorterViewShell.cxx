@@ -712,22 +712,40 @@ void SlideSorterViewShell::MainViewEndEditAndUnmarkAll()
     }
 }
 
+std::pair<sal_uInt16, sal_uInt16> SlideSorterViewShell::SyncPageSelectionToDocument(const std::shared_ptr<SlideSorterViewShell::PageSelection> &rpSelection)
+{
+    sal_uInt16 firstSelectedPageNo = SAL_MAX_UINT16;
+    sal_uInt16 lastSelectedPageNo = 0;
+
+    GetDoc()->UnselectAllPages();
+    for (auto it = rpSelection->begin(); it != rpSelection->end(); ++it)
+    {
+        // Check page number
+        sal_uInt16 pageNo = (*it)->GetPageNum();
+        if (pageNo > lastSelectedPageNo)
+            lastSelectedPageNo = pageNo;
+        if (pageNo < firstSelectedPageNo)
+            firstSelectedPageNo = pageNo;
+        GetDoc()->SetSelected(*it, true);
+    }
+
+    return std::make_pair(firstSelectedPageNo, lastSelectedPageNo);
+}
+
 void SlideSorterViewShell::ExecMovePageFirst (SfxRequest& /*rReq*/)
 {
     MainViewEndEditAndUnmarkAll();
 
+    std::shared_ptr<SlideSorterViewShell::PageSelection> xSelection(GetPageSelection());
+
     // SdDrawDocument MovePages is based on SdPage IsSelected, so
-    // transfer the SlideSorter selection to SdPages (*it)
-    GetDoc()->UnselectAllPages();
-    std::shared_ptr<SlideSorterViewShell::PageSelection> pSelection ( GetPageSelection() );
-    for (auto it = pSelection->begin(); it != pSelection->end() ; ++it ) {
-        GetDoc()->SetSelected(*it, true);
-    }
+    // transfer the SlideSorter selection to SdPages
+    SyncPageSelectionToDocument(xSelection);
 
     // Moves selected pages after page -1
     GetDoc()->MovePages( (sal_uInt16) -1 );
 
-    PostMoveSlidesActions(pSelection);
+    PostMoveSlidesActions(xSelection);
 }
 
 void SlideSorterViewShell::GetStateMovePageFirst (SfxItemSet& rSet)
@@ -744,14 +762,11 @@ void SlideSorterViewShell::GetStateMovePageFirst (SfxItemSet& rSet)
         }
     }
 
-    sal_uInt16 firstSelectedPageNo = SAL_MAX_UINT16;
-    sal_uInt16 pageNo;
-    std::shared_ptr<SlideSorterViewShell::PageSelection> pSelection ( GetPageSelection() );
-    for (auto it = pSelection->begin(); it != pSelection->end() ; ++it ) {
-        // Check page number
-        pageNo = (*it)->GetPageNum();
-        if (pageNo < firstSelectedPageNo) firstSelectedPageNo = pageNo;
-    }
+    std::shared_ptr<SlideSorterViewShell::PageSelection> xSelection(GetPageSelection());
+
+    // SdDrawDocument MovePages is based on SdPage IsSelected, so
+    // transfer the SlideSorter selection to SdPages
+    sal_uInt16 firstSelectedPageNo = SyncPageSelectionToDocument(xSelection).first;
     // Now compute human page number from internal page number
     firstSelectedPageNo = (firstSelectedPageNo - 1) / 2;
 
@@ -766,19 +781,11 @@ void SlideSorterViewShell::ExecMovePageUp (SfxRequest& /*rReq*/)
 {
     MainViewEndEditAndUnmarkAll();
 
-    sal_uInt16 firstSelectedPageNo = SAL_MAX_UINT16;
-    sal_uInt16 pageNo;
-    // SdDrawDocument MovePages is based on SdPage IsSelected, so
-    // transfer the SlideSorter selection to SdPages (*it)
-    GetDoc()->UnselectAllPages();
-    std::shared_ptr<SlideSorterViewShell::PageSelection> pSelection ( GetPageSelection() );
-    for (auto it = pSelection->begin(); it != pSelection->end() ; ++it ) {
-        // Check page number
-        pageNo = (*it)->GetPageNum();
-        if (pageNo < firstSelectedPageNo) firstSelectedPageNo = pageNo;
-        GetDoc()->SetSelected(*it, true);
+    std::shared_ptr<SlideSorterViewShell::PageSelection> xSelection(GetPageSelection());
 
-    }
+    // SdDrawDocument MovePages is based on SdPage IsSelected, so
+    // transfer the SlideSorter selection to SdPages
+    sal_uInt16 firstSelectedPageNo = SyncPageSelectionToDocument(xSelection).first;
     // Now compute human page number from internal page number
     firstSelectedPageNo = (firstSelectedPageNo - 1) / 2;
 
@@ -789,7 +796,7 @@ void SlideSorterViewShell::ExecMovePageUp (SfxRequest& /*rReq*/)
     // remembering that -1 means at first, which is good.
     GetDoc()->MovePages( firstSelectedPageNo - 2 );
 
-    PostMoveSlidesActions(pSelection);
+    PostMoveSlidesActions(xSelection);
 }
 
 void SlideSorterViewShell::GetStateMovePageUp (SfxItemSet& rSet)
@@ -801,19 +808,11 @@ void SlideSorterViewShell::ExecMovePageDown (SfxRequest& /*rReq*/)
 {
     MainViewEndEditAndUnmarkAll();
 
-    sal_uInt16 lastSelectedPageNo = 0;
-    sal_uInt16 pageNo;
+    std::shared_ptr<SlideSorterViewShell::PageSelection> xSelection(GetPageSelection());
+
     // SdDrawDocument MovePages is based on SdPage IsSelected, so
-    // transfer the SlideSorter selection to SdPages (*it)
-    GetDoc()->UnselectAllPages();
-    std::shared_ptr<SlideSorterViewShell::PageSelection> pSelection ( GetPageSelection() );
-    for (auto it = pSelection->begin(); it != pSelection->end() ; ++it )
-    {
-        // Check page number
-        pageNo = (*it)->GetPageNum();
-        if (pageNo > lastSelectedPageNo) lastSelectedPageNo = pageNo;
-        GetDoc()->SetSelected(*it, true);
-    }
+    // transfer the SlideSorter selection to SdPages
+    sal_uInt16 lastSelectedPageNo = SyncPageSelectionToDocument(xSelection).second;
 
     // Get page number of the last page
     sal_uInt16 nNoOfPages = GetDoc()->GetSdPageCount(PK_STANDARD);
@@ -826,7 +825,7 @@ void SlideSorterViewShell::ExecMovePageDown (SfxRequest& /*rReq*/)
     // Move to position after lastSelectedPageNo
     GetDoc()->MovePages( lastSelectedPageNo + 1 );
 
-    PostMoveSlidesActions(pSelection);
+    PostMoveSlidesActions(xSelection);
 }
 
 void SlideSorterViewShell::GetStateMovePageDown (SfxItemSet& rSet)
@@ -838,13 +837,11 @@ void SlideSorterViewShell::ExecMovePageLast (SfxRequest& /*rReq*/)
 {
     MainViewEndEditAndUnmarkAll();
 
+    std::shared_ptr<SlideSorterViewShell::PageSelection> xSelection(GetPageSelection());
+
     // SdDrawDocument MovePages is based on SdPage IsSelected, so
-    // transfer the SlideSorter selection to SdPages (*it)
-    GetDoc()->UnselectAllPages();
-    std::shared_ptr<SlideSorterViewShell::PageSelection> pSelection ( GetPageSelection() );
-    for (auto it = pSelection->begin(); it != pSelection->end() ; ++it ) {
-        GetDoc()->SetSelected(*it, true);
-    }
+    // transfer the SlideSorter selection to SdPages
+    SyncPageSelectionToDocument(xSelection);
 
     // Get page number of the last page
     sal_uInt16 nNoOfPages = GetDoc()->GetSdPageCount(PK_STANDARD);
@@ -852,7 +849,7 @@ void SlideSorterViewShell::ExecMovePageLast (SfxRequest& /*rReq*/)
     // Move to position after last page No (=Number of pages - 1)
     GetDoc()->MovePages( nNoOfPages - 1 );
 
-    PostMoveSlidesActions(pSelection);
+    PostMoveSlidesActions(xSelection);
 }
 
 void SlideSorterViewShell::GetStateMovePageLast (SfxItemSet& rSet)
@@ -866,19 +863,11 @@ void SlideSorterViewShell::GetStateMovePageLast (SfxItemSet& rSet)
         return;
     }
 
-    sal_uInt16 lastSelectedPageNo = 0;
-    sal_uInt16 pageNo;
+    std::shared_ptr<SlideSorterViewShell::PageSelection> xSelection(GetPageSelection());
+
     // SdDrawDocument MovePages is based on SdPage IsSelected, so
-    // transfer the SlideSorter selection to SdPages (*it)
-    GetDoc()->UnselectAllPages();
-    std::shared_ptr<SlideSorterViewShell::PageSelection> pSelection ( GetPageSelection() );
-    for (auto it = pSelection->begin(); it != pSelection->end() ; ++it )
-    {
-        // Check page number
-        pageNo = (*it)->GetPageNum();
-        if (pageNo > lastSelectedPageNo) lastSelectedPageNo = pageNo;
-        GetDoc()->SetSelected(*it, true);
-    }
+    // transfer the SlideSorter selection to SdPages
+    sal_uInt16 lastSelectedPageNo = SyncPageSelectionToDocument(xSelection).second;
 
     // Get page number of the last page
     sal_uInt16 nNoOfPages = GetDoc()->GetSdPageCount(PK_STANDARD);
