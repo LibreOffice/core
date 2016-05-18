@@ -1120,15 +1120,6 @@ void OpenGLSalGraphicsImpl::ImplDrawLineAA( double nX1, double nY1, double nX2, 
     CHECK_GL_ERROR();
 }
 
-
-void OpenGLSalGraphicsImpl::DrawLinesAA( sal_uInt32 nPoints, const SalPoint* pPtAry, bool bClose )
-{
-    for( int i = 0; i < int(nPoints) - 1; ++i )
-        DrawLineAA( pPtAry[ i ].mnX, pPtAry[ i ].mnY, pPtAry[ i + 1 ].mnX, pPtAry[ i + 1 ].mnY );
-    if( bClose )
-        DrawLineAA( pPtAry[ nPoints - 1 ].mnX, pPtAry[ nPoints - 1 ].mnY, pPtAry[ 0 ].mnX, pPtAry[ 0 ].mnY );
-}
-
 void OpenGLSalGraphicsImpl::DrawEdgeAA( double nX1, double nY1, double nX2, double nY2 )
 {
     assert( mrParent.getAntiAliasB2DDraw());
@@ -1925,80 +1916,45 @@ void OpenGLSalGraphicsImpl::drawRect( long nX, long nY, long nWidth, long nHeigh
 
 void OpenGLSalGraphicsImpl::drawPolyLine( sal_uInt32 nPoints, const SalPoint* pPtAry )
 {
-    VCL_GL_INFO( "::drawPolyLine" );
+    basegfx::B2DPolygon aPoly;
+    aPoly.append(basegfx::B2DPoint(pPtAry->mnX, pPtAry->mnY), nPoints);
+    for (sal_uInt32 i = 1; i < nPoints; ++i)
+        aPoly.setB2DPoint(i, basegfx::B2DPoint(pPtAry[i].mnX, pPtAry[i].mnY));
+    aPoly.setClosed(false);
 
-    if( mnLineColor != SALCOLOR_NONE && nPoints > 1 )
-    {
-        PreDraw( XOROption::IMPLEMENT_XOR );
-        if( UseSolidAA( mnLineColor ) )
-            DrawLinesAA( nPoints, pPtAry, false );
-        PostDraw();
-    }
+    drawPolyLine(aPoly, 0.0, basegfx::B2DVector(1.0, 1.0), basegfx::B2DLineJoin::Miter,
+                 css::drawing::LineCap_BUTT, 15.0 * F_PI180 /*default*/);
 }
 
 void OpenGLSalGraphicsImpl::drawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry )
 {
-    VCL_GL_INFO( "::drawPolygon" );
-    if( nPoints == 0 )
-        return;
-    if( nPoints == 1 )
-    {
-        drawPixel( pPtAry[0].mnX, pPtAry[0].mnY );
-        return;
-    }
-    if( nPoints == 2 )
-    {
-        drawLine( pPtAry[0].mnX, pPtAry[0].mnY,
-                  pPtAry[1].mnX, pPtAry[1].mnY );
-        return;
-    }
+    basegfx::B2DPolygon aPoly;
+    aPoly.append(basegfx::B2DPoint(pPtAry->mnX, pPtAry->mnY), nPoints);
+    for (sal_uInt32 i = 1; i < nPoints; ++i)
+        aPoly.setB2DPoint(i, basegfx::B2DPoint(pPtAry[i].mnX, pPtAry[i].mnY));
 
-    PreDraw( XOROption::IMPLEMENT_XOR );
-
-    if( UseSolid( mnFillColor ) )
-        DrawPolygon( nPoints, pPtAry );
-
-    if( UseSolidAA( mnLineColor ) )
-        DrawLinesAA( nPoints, pPtAry, true );
-
-    PostDraw();
+    drawPolyPolygon(basegfx::B2DPolyPolygon(aPoly), 0.0);
 }
 
-void OpenGLSalGraphicsImpl::drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pPoints, PCONSTSALPOINT* pPtAry )
+void OpenGLSalGraphicsImpl::drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pPointCounts, PCONSTSALPOINT* pPtAry )
 {
-    VCL_GL_INFO( "::drawPolyPolygon" );
-    if( nPoly <= 0 )
-        return;
-
-    PreDraw( XOROption::IMPLEMENT_XOR );
-
-    if( UseSolid( mnFillColor ) )
+    basegfx::B2DPolyPolygon aPolyPoly;
+    for(sal_uInt32 nPolygon = 0; nPolygon < nPoly; ++nPolygon)
     {
-        if( nPoly == 1 )
-            DrawPolygon( pPoints[ 0 ], pPtAry[ 0 ] );
-        else
+        sal_uInt32 nPoints = pPointCounts[nPolygon];
+        if (nPoints)
         {
-            basegfx::B2DPolyPolygon polyPolygon;
-            for( sal_uInt32 i = 0; i < nPoly; ++i )
-            {
-                basegfx::B2DPolygon polygon;
-                for( sal_uInt32 j = 0; j < pPoints[ i ]; ++j )
-                    polygon.append( basegfx::B2DPoint( pPtAry[i][j].mnX, pPtAry[i][j].mnY ) );
-                polygon.setClosed( true );
-                polyPolygon.append( polygon );
-            }
-            DrawPolyPolygon( polyPolygon );
+            PCONSTSALPOINT pPoints = pPtAry[nPolygon];
+            basegfx::B2DPolygon aPoly;
+            aPoly.append( basegfx::B2DPoint(pPoints->mnX, pPoints->mnY), nPoints);
+            for (sal_uInt32 i = 1; i < nPoints; ++i)
+                aPoly.setB2DPoint(i, basegfx::B2DPoint( pPoints[i].mnX, pPoints[i].mnY));
+
+            aPolyPoly.append(aPoly);
         }
     }
 
-    if( mnLineColor != mnFillColor && UseSolidAA( mnLineColor ) )
-    {
-        // TODO Use glMultiDrawElements or primitive restart
-        for( sal_uInt32 i = 0; i < nPoly; i++ )
-            DrawLinesAA( pPoints[i], pPtAry[i], true );
-    }
-
-    PostDraw();
+    drawPolyPolygon(aPolyPoly, 0.0);
 }
 
 bool OpenGLSalGraphicsImpl::drawPolyPolygon( const basegfx::B2DPolyPolygon& rPolyPolygon, double fTransparency )
