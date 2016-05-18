@@ -72,7 +72,6 @@ using ::com::sun::star::sdbc::XRow;
 using ::com::sun::star::sdb::application::XDatabaseDocumentUI;
 using ::com::sun::star::beans::PropertyValue;
 
-namespace GraphicColorMode = ::com::sun::star::graphic::GraphicColorMode;
 
 namespace connectivity { namespace hsqldb
 {

@@ -25,7 +25,6 @@
 
 using namespace com::sun::star::uno;
 namespace cssu = com::sun::star::uno;
-namespace cssl = com::sun::star::lang;
 namespace cssxc = com::sun::star::xml::crypto;
 namespace cssxw = com::sun::star::xml::wrapper;
 

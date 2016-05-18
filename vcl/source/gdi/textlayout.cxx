@@ -38,8 +38,6 @@
 namespace vcl
 {
 
-    namespace ScriptDirection = ::com::sun::star::i18n::ScriptDirection;
-
     DefaultTextLayout::~DefaultTextLayout()
     {
     }
