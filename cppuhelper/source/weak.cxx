@@ -501,17 +501,20 @@ Reference< XInterface > WeakReferenceHelper::get() const
 {
     try
     {
-    Reference< XAdapter > xAdp;
-    {
-        MutexGuard guard(cppu::getWeakMutex());
-        if( m_pImpl && m_pImpl->m_XWeakConnectionPoint.is() )
-            xAdp = m_pImpl->m_XWeakConnectionPoint;
-    }
+        Reference< XAdapter > xAdp;
+        {
+            MutexGuard guard(cppu::getWeakMutex());
+            if( m_pImpl && m_pImpl->m_XWeakConnectionPoint.is() )
+                xAdp = m_pImpl->m_XWeakConnectionPoint;
+        }
 
-    if (xAdp.is())
-        return xAdp->queryAdapted();
+        if (xAdp.is())
+            return xAdp->queryAdapted();
     }
-    catch (RuntimeException &) { OSL_ASSERT( false ); } // assert here, but no unexpected()
+    catch (RuntimeException &)
+    {
+        OSL_ASSERT( false );
+    } // assert here, but no unexpected()
 
     return Reference< XInterface >();
 }

@@ -56,12 +56,14 @@ public:
         @param rWeakRef another weak ref
     */
     WeakReferenceHelper( const WeakReferenceHelper & rWeakRef );
+
     /** Initialize this reference with the hard interface reference xInt. If the implementation
         behind xInt does not support XWeak or XInt is null then this reference will be null.
 
         @param xInt another hard interface reference
     */
     WeakReferenceHelper( const css::uno::Reference< css::uno::XInterface > & xInt );
+
     /** Releases this reference.
     */
     ~WeakReferenceHelper();
@@ -94,6 +96,7 @@ public:
          @return hard reference or null, if the weakly referenced interface has gone
     */
     css::uno::Reference< css::uno::XInterface > SAL_CALL get() const;
+
     /**  Gets a hard reference to the object.
 
          @return hard reference or null, if the weakly referenced interface has gone
