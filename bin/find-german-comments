@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python
 ########################################################################
 #
 #  Copyright (c) 2010 Jonas Jensen, Miklos Vajna
@@ -131,8 +131,13 @@ class Parser:
         unsure, just don't warn, there are strings where you just can't
         teremine the results reliably, like '#110680#' """
 
-        self.text_cat.stdin.write(s)
-        self.text_cat.stdin.write("\n")
+        try:
+            self.text_cat.stdin.write(bytes(s, 'utf-8'))
+            self.text_cat.stdin.write(bytes("\n", 'utf-8'))
+        except TypeError:
+            self.text_cat.stdin.write(s)
+            self.text_cat.stdin.write("\n")
+
         self.text_cat.stdin.flush()
         lang = self.text_cat.stdout.readline().strip()
         return lang
@@ -146,7 +151,11 @@ class Parser:
         s = s.replace('\n', ' ')
         if len(s) < 32 or len(s.split()) < 4:
             return False
-        return "german" == self.get_lang(s)
+
+        if type(self.get_lang(s)) is bytes:
+            return b"german" == self.get_lang(s)
+        elif type(self.get_lang(s)) is str:
+            return "german" == self.get_lang(s)
 
     def check_file(self, path):
         """
