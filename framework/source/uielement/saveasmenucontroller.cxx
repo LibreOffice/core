@@ -59,6 +59,7 @@ public:
 
 private:
     virtual void impl_setPopupMenu() override;
+    bool isCommandAvailable(const OUString & sCommand);
 };
 
 SaveAsMenuController::SaveAsMenuController( const uno::Reference< uno::XComponentContext >& xContext ) :
@@ -80,23 +81,31 @@ void SaveAsMenuController::impl_setPopupMenu()
     if ( pPopupMenu )
         pVCLPopupMenu = pPopupMenu->GetMenu();
 
-    if ( pVCLPopupMenu )
-    {
-        pVCLPopupMenu->InsertItem( ".uno:SaveAs", m_xFrame );
+    if ( !pVCLPopupMenu )
+        return;
 
-        // Add Save Remote File command only where it's supported.
+    pVCLPopupMenu->InsertItem( ".uno:SaveAs", m_xFrame );
+
+    // Add Save As Template/Save Remote File commands only where they are supported.
+    OUString sSaveAsTemplate(".uno:SaveAsTemplate");
+    if (isCommandAvailable(sSaveAsTemplate))
+        pVCLPopupMenu->InsertItem( sSaveAsTemplate, m_xFrame );
+    OUString sSaveRemote(".uno:SaveAsRemote");
+    if (isCommandAvailable(sSaveRemote))
+        pVCLPopupMenu->InsertItem( sSaveRemote, m_xFrame );
+}
+
+bool SaveAsMenuController::isCommandAvailable(const OUString & sCommand) {
         css::uno::Reference< css::frame::XDispatchProvider > xDispatchProvider( m_xFrame, css::uno::UNO_QUERY );
-        if ( xDispatchProvider.is() )
-        {
-            css::util::URL aTargetURL;
-            aTargetURL.Complete = ".uno:SaveAsRemote";
-            m_xURLTransformer->parseStrict( aTargetURL );
+        if ( !xDispatchProvider.is() )
+            return false;
 
-            css::uno::Reference< css::frame::XDispatch > xDispatch( xDispatchProvider->queryDispatch( aTargetURL, OUString(), 0 ) );
-            if ( xDispatch.is() )
-                pVCLPopupMenu->InsertItem( aTargetURL.Complete, m_xFrame );
-        }
-    }
+        css::util::URL aTargetURL;
+        aTargetURL.Complete = sCommand;
+        m_xURLTransformer->parseStrict( aTargetURL );
+
+        css::uno::Reference< css::frame::XDispatch > xDispatch( xDispatchProvider->queryDispatch( aTargetURL, OUString(), 0 ) );
+        return xDispatch.is();
 }
 
 // XStatusListener
