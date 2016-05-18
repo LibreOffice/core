@@ -347,7 +347,8 @@ void SAL_CALL SfxClassificationParser::setDocumentLocator(const uno::Reference<x
 class SfxClassificationHelper::Impl
 {
 public:
-    SfxClassificationCategory m_aCategory;
+    /// Selected categories, one category for each policy type.
+    std::map<SfxClassificationPolicyType, SfxClassificationCategory> m_aCategory;
     /// Possible categories of a policy to choose from.
     std::vector<SfxClassificationCategory> m_aCategories;
     const uno::Reference<document::XDocumentProperties>& m_xDocumentProperties;
@@ -357,7 +358,7 @@ public:
     /// Synchronize m_aLabels back to the document properties.
     void pushToDocumentProperties();
     /// Set the classification start date to the system time.
-    void setStartValidity();
+    void setStartValidity(SfxClassificationPolicyType eType);
 };
 
 SfxClassificationHelper::Impl::Impl(const uno::Reference<document::XDocumentProperties>& xDocumentProperties)
@@ -398,10 +399,15 @@ bool lcl_containsProperty(const uno::Sequence<beans::Property>& rProperties, con
     }) != rProperties.end();
 }
 
-void SfxClassificationHelper::Impl::setStartValidity()
+void SfxClassificationHelper::Impl::setStartValidity(SfxClassificationPolicyType eType)
 {
-    std::map<OUString, OUString>::iterator it = m_aCategory.m_aLabels.find(PROP_STARTVALIDITY());
-    if (it != m_aCategory.m_aLabels.end())
+    auto itCategory = m_aCategory.find(eType);
+    if (itCategory == m_aCategory.end())
+        return;
+
+    SfxClassificationCategory& rCategory = itCategory->second;
+    std::map<OUString, OUString>::iterator it = rCategory.m_aLabels.find(policyTypeToString(eType) + PROP_STARTVALIDITY());
+    if (it != rCategory.m_aLabels.end())
     {
         if (it->second == PROP_NONE())
         {
@@ -418,20 +424,25 @@ void SfxClassificationHelper::Impl::pushToDocumentProperties()
     uno::Reference<beans::XPropertyContainer> xPropertyContainer = m_xDocumentProperties->getUserDefinedProperties();
     uno::Reference<beans::XPropertySet> xPropertySet(xPropertyContainer, uno::UNO_QUERY);
     uno::Sequence<beans::Property> aProperties = xPropertySet->getPropertySetInfo()->getProperties();
-    std::map<OUString, OUString> aLabels = m_aCategory.m_aLabels;
-    aLabels[PROP_PREFIX_INTELLECTUALPROPERTY() + PROP_BACNAME()] = m_aCategory.m_aName;
-    for (const auto& rLabel : aLabels)
+    for (auto& rPair : m_aCategory)
     {
-        try
+        SfxClassificationPolicyType eType = rPair.first;
+        SfxClassificationCategory& rCategory = rPair.second;
+        std::map<OUString, OUString> aLabels = rCategory.m_aLabels;
+        aLabels[policyTypeToString(eType) + PROP_BACNAME()] = rCategory.m_aName;
+        for (const auto& rLabel : aLabels)
         {
-            if (lcl_containsProperty(aProperties, rLabel.first))
-                xPropertySet->setPropertyValue(rLabel.first, uno::makeAny(rLabel.second));
-            else
-                xPropertyContainer->addProperty(rLabel.first, beans::PropertyAttribute::REMOVABLE, uno::makeAny(rLabel.second));
-        }
-        catch (const uno::Exception& rException)
-        {
-            SAL_WARN("sfx.view", "pushDocumentProperties() failed for property " << rLabel.first << ": " << rException.Message);
+            try
+            {
+                if (lcl_containsProperty(aProperties, rLabel.first))
+                    xPropertySet->setPropertyValue(rLabel.first, uno::makeAny(rLabel.second));
+                else
+                    xPropertyContainer->addProperty(rLabel.first, beans::PropertyAttribute::REMOVABLE, uno::makeAny(rLabel.second));
+            }
+            catch (const uno::Exception& rException)
+            {
+                SAL_WARN("sfx.view", "pushDocumentProperties() failed for property " << rLabel.first << ": " << rException.Message);
+            }
         }
     }
 }
@@ -529,10 +540,16 @@ SfxClassificationHelper::SfxClassificationHelper(const uno::Reference<document::
         OUString aValue;
         if (aAny >>= aValue)
         {
-            if (rProperty.Name == (PROP_PREFIX_INTELLECTUALPROPERTY() + PROP_BACNAME()))
-                m_pImpl->m_aCategory.m_aName = aValue;
+            SfxClassificationPolicyType eType = stringToPolicyType(rProperty.Name);
+            OUString aPrefix = policyTypeToString(eType);
+            if (!rProperty.Name.startsWith(aPrefix))
+                // It's a prefix we did not recognize, ignore.
+                continue;
+
+            if (rProperty.Name == (aPrefix + PROP_BACNAME()))
+                m_pImpl->m_aCategory[eType].m_aName = aValue;
             else
-                m_pImpl->m_aCategory.m_aLabels[rProperty.Name] = aValue;
+                m_pImpl->m_aCategory[eType].m_aLabels[rProperty.Name] = aValue;
         }
     }
 }
@@ -543,17 +560,22 @@ SfxClassificationHelper::~SfxClassificationHelper()
 
 const OUString& SfxClassificationHelper::GetBACName()
 {
-    return m_pImpl->m_aCategory.m_aName;
+    return m_pImpl->m_aCategory[SfxClassificationPolicyType::IntellectualProperty].m_aName;
 }
 
 bool SfxClassificationHelper::HasImpactLevel()
 {
-    std::map<OUString, OUString>::iterator it = m_pImpl->m_aCategory.m_aLabels.find(PROP_PREFIX_INTELLECTUALPROPERTY() + PROP_IMPACTSCALE());
-    if (it == m_pImpl->m_aCategory.m_aLabels.end())
+    auto itCategory = m_pImpl->m_aCategory.find(SfxClassificationPolicyType::IntellectualProperty);
+    if (itCategory == m_pImpl->m_aCategory.end())
         return false;
 
-    it = m_pImpl->m_aCategory.m_aLabels.find(PROP_PREFIX_INTELLECTUALPROPERTY() + PROP_IMPACTLEVEL());
-    if (it == m_pImpl->m_aCategory.m_aLabels.end())
+    SfxClassificationCategory& rCategory = itCategory->second;
+    std::map<OUString, OUString>::iterator it = rCategory.m_aLabels.find(PROP_PREFIX_INTELLECTUALPROPERTY() + PROP_IMPACTSCALE());
+    if (it == rCategory.m_aLabels.end())
+        return false;
+
+    it = rCategory.m_aLabels.find(PROP_PREFIX_INTELLECTUALPROPERTY() + PROP_IMPACTLEVEL());
+    if (it == rCategory.m_aLabels.end())
         return false;
 
     return true;
@@ -561,8 +583,13 @@ bool SfxClassificationHelper::HasImpactLevel()
 
 bool SfxClassificationHelper::HasDocumentHeader()
 {
-    std::map<OUString, OUString>::iterator it = m_pImpl->m_aCategory.m_aLabels.find(PROP_PREFIX_INTELLECTUALPROPERTY() + PROP_DOCHEADER());
-    if (it == m_pImpl->m_aCategory.m_aLabels.end() || it->second.isEmpty())
+    auto itCategory = m_pImpl->m_aCategory.find(SfxClassificationPolicyType::IntellectualProperty);
+    if (itCategory == m_pImpl->m_aCategory.end())
+        return false;
+
+    SfxClassificationCategory& rCategory = itCategory->second;
+    std::map<OUString, OUString>::iterator it = rCategory.m_aLabels.find(PROP_PREFIX_INTELLECTUALPROPERTY() + PROP_DOCHEADER());
+    if (it == rCategory.m_aLabels.end() || it->second.isEmpty())
         return false;
 
     return true;
@@ -570,8 +597,13 @@ bool SfxClassificationHelper::HasDocumentHeader()
 
 bool SfxClassificationHelper::HasDocumentFooter()
 {
-    std::map<OUString, OUString>::iterator it = m_pImpl->m_aCategory.m_aLabels.find(PROP_PREFIX_INTELLECTUALPROPERTY() + PROP_DOCFOOTER());
-    if (it == m_pImpl->m_aCategory.m_aLabels.end() || it->second.isEmpty())
+    auto itCategory = m_pImpl->m_aCategory.find(SfxClassificationPolicyType::IntellectualProperty);
+    if (itCategory == m_pImpl->m_aCategory.end())
+        return false;
+
+    SfxClassificationCategory& rCategory = itCategory->second;
+    std::map<OUString, OUString>::iterator it = rCategory.m_aLabels.find(PROP_PREFIX_INTELLECTUALPROPERTY() + PROP_DOCFOOTER());
+    if (it == rCategory.m_aLabels.end() || it->second.isEmpty())
         return false;
 
     return true;
@@ -581,13 +613,18 @@ basegfx::BColor SfxClassificationHelper::GetImpactLevelColor()
 {
     basegfx::BColor aRet;
 
-    std::map<OUString, OUString>::iterator it = m_pImpl->m_aCategory.m_aLabels.find(PROP_PREFIX_INTELLECTUALPROPERTY() + PROP_IMPACTSCALE());
-    if (it == m_pImpl->m_aCategory.m_aLabels.end())
+    auto itCategory = m_pImpl->m_aCategory.find(SfxClassificationPolicyType::IntellectualProperty);
+    if (itCategory == m_pImpl->m_aCategory.end())
+        return aRet;
+
+    SfxClassificationCategory& rCategory = itCategory->second;
+    std::map<OUString, OUString>::iterator it = rCategory.m_aLabels.find(PROP_PREFIX_INTELLECTUALPROPERTY() + PROP_IMPACTSCALE());
+    if (it == rCategory.m_aLabels.end())
         return aRet;
     OUString aScale = it->second;
 
-    it = m_pImpl->m_aCategory.m_aLabels.find(PROP_PREFIX_INTELLECTUALPROPERTY() + PROP_IMPACTLEVEL());
-    if (it == m_pImpl->m_aCategory.m_aLabels.end())
+    it = rCategory.m_aLabels.find(PROP_PREFIX_INTELLECTUALPROPERTY() + PROP_IMPACTLEVEL());
+    if (it == rCategory.m_aLabels.end())
         return aRet;
     OUString aLevel = it->second;
 
@@ -631,13 +668,18 @@ sal_Int32 SfxClassificationHelper::GetImpactLevel()
 {
     sal_Int32 nRet = -1;
 
-    std::map<OUString, OUString>::iterator it = m_pImpl->m_aCategory.m_aLabels.find(PROP_PREFIX_INTELLECTUALPROPERTY() + PROP_IMPACTSCALE());
-    if (it == m_pImpl->m_aCategory.m_aLabels.end())
+    auto itCategory = m_pImpl->m_aCategory.find(SfxClassificationPolicyType::IntellectualProperty);
+    if (itCategory == m_pImpl->m_aCategory.end())
+        return nRet;
+
+    SfxClassificationCategory& rCategory = itCategory->second;
+    std::map<OUString, OUString>::iterator it = rCategory.m_aLabels.find(PROP_PREFIX_INTELLECTUALPROPERTY() + PROP_IMPACTSCALE());
+    if (it == rCategory.m_aLabels.end())
         return nRet;
     OUString aScale = it->second;
 
-    it = m_pImpl->m_aCategory.m_aLabels.find(PROP_PREFIX_INTELLECTUALPROPERTY() + PROP_IMPACTLEVEL());
-    if (it == m_pImpl->m_aCategory.m_aLabels.end())
+    it = rCategory.m_aLabels.find(PROP_PREFIX_INTELLECTUALPROPERTY() + PROP_IMPACTLEVEL());
+    if (it == rCategory.m_aLabels.end())
         return nRet;
     OUString aLevel = it->second;
 
@@ -668,8 +710,13 @@ sal_Int32 SfxClassificationHelper::GetImpactLevel()
 
 OUString SfxClassificationHelper::GetImpactScale()
 {
-    std::map<OUString, OUString>::iterator it = m_pImpl->m_aCategory.m_aLabels.find(PROP_PREFIX_INTELLECTUALPROPERTY() + PROP_IMPACTSCALE());
-    if (it != m_pImpl->m_aCategory.m_aLabels.end())
+    auto itCategory = m_pImpl->m_aCategory.find(SfxClassificationPolicyType::IntellectualProperty);
+    if (itCategory == m_pImpl->m_aCategory.end())
+        return OUString();
+
+    SfxClassificationCategory& rCategory = itCategory->second;
+    std::map<OUString, OUString>::iterator it = rCategory.m_aLabels.find(PROP_PREFIX_INTELLECTUALPROPERTY() + PROP_IMPACTSCALE());
+    if (it != rCategory.m_aLabels.end())
         return it->second;
 
     return OUString();
@@ -677,8 +724,13 @@ OUString SfxClassificationHelper::GetImpactScale()
 
 OUString SfxClassificationHelper::GetDocumentWatermark()
 {
-    std::map<OUString, OUString>::iterator it = m_pImpl->m_aCategory.m_aLabels.find(PROP_PREFIX_INTELLECTUALPROPERTY() + PROP_DOCWATERMARK());
-    if (it != m_pImpl->m_aCategory.m_aLabels.end())
+    auto itCategory = m_pImpl->m_aCategory.find(SfxClassificationPolicyType::IntellectualProperty);
+    if (itCategory == m_pImpl->m_aCategory.end())
+        return OUString();
+
+    SfxClassificationCategory& rCategory = itCategory->second;
+    std::map<OUString, OUString>::iterator it = rCategory.m_aLabels.find(PROP_PREFIX_INTELLECTUALPROPERTY() + PROP_DOCWATERMARK());
+    if (it != rCategory.m_aLabels.end())
         return it->second;
 
     return OUString();
@@ -712,13 +764,13 @@ void SfxClassificationHelper::SetBACName(const OUString& rName, SfxClassificatio
         return;
     }
 
-    m_pImpl->m_aCategory.m_aName = it->m_aName;
-    m_pImpl->m_aCategory.m_aLabels.clear();
+    m_pImpl->m_aCategory[eType].m_aName = it->m_aName;
+    m_pImpl->m_aCategory[eType].m_aLabels.clear();
     const OUString& rPrefix = policyTypeToString(eType);
     for (const auto& rLabel : it->m_aLabels)
-        m_pImpl->m_aCategory.m_aLabels[rPrefix + rLabel.first] = rLabel.second;
+        m_pImpl->m_aCategory[eType].m_aLabels[rPrefix + rLabel.first] = rLabel.second;
 
-    m_pImpl->setStartValidity();
+    m_pImpl->setStartValidity(eType);
     m_pImpl->pushToDocumentProperties();
     SfxViewFrame* pViewFrame = SfxViewFrame::Current();
     if (!pViewFrame)
@@ -745,9 +797,9 @@ void SfxClassificationHelper::UpdateInfobar(SfxViewFrame& rViewFrame)
 
 SfxClassificationPolicyType SfxClassificationHelper::stringToPolicyType(const OUString& rType)
 {
-    if (rType == PROP_PREFIX_EXPORTCONTROL())
+    if (rType.startsWith(PROP_PREFIX_EXPORTCONTROL()))
         return SfxClassificationPolicyType::ExportControl;
-    else if (rType == PROP_PREFIX_NATIONALSECURITY())
+    else if (rType.startsWith(PROP_PREFIX_NATIONALSECURITY()))
         return SfxClassificationPolicyType::NationalSecurity;
     else
         return SfxClassificationPolicyType::IntellectualProperty;
