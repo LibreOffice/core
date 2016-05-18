@@ -126,7 +126,6 @@ class SvxRubyDialog : public SfxModelessDialog
 
     css::uno::Reference<css::view::XSelectionChangeListener> xImpl;
     SfxBindings*    pBindings;
-    SvxRubyData_Impl* pImpl;
 
     DECL_LINK_TYPED(ApplyHdl_Impl, Button*, void);
     DECL_LINK_TYPED(CloseHdl_Impl, Button*, void);
@@ -158,10 +157,11 @@ class SvxRubyDialog : public SfxModelessDialog
     void                GetCurrentText(OUString& rBase, OUString& rRuby);
 
     void                UpdateColors();
+
 protected:
     virtual void        DataChanged( const DataChangedEvent& rDCEvt ) override;
-public:
 
+public:
                         SvxRubyDialog(SfxBindings *pBindings, SfxChildWindow *pCW,
                                     vcl::Window* pParent);
     virtual             ~SvxRubyDialog();
@@ -169,6 +169,9 @@ public:
 
     virtual void        Activate() override;
     virtual void        Deactivate() override;
+
+private:
+    std::unique_ptr<SvxRubyData_Impl> pImpl;
 };
 
 #endif // INCLUDED_SVX_RUBYDIALOG_HXX

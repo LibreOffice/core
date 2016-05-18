@@ -28,9 +28,7 @@ struct SvxClipboardFormatItem_Impl;
 
 class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxClipboardFormatItem : public SfxPoolItem
 {
-    SvxClipboardFormatItem_Impl* pImpl;
 protected:
-
     virtual bool             operator==( const SfxPoolItem& ) const override;
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const override;
 
@@ -50,6 +48,9 @@ public:
 
     SotClipboardFormatId GetClipbrdFormatId( sal_uInt16 nPos ) const;
     const OUString GetClipbrdFormatName( sal_uInt16 nPos ) const;
+
+private:
+    std::unique_ptr<SvxClipboardFormatItem_Impl> pImpl;
 };
 
 #endif

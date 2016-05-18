@@ -257,7 +257,6 @@ SvxSearchDialog::SvxSearchDialog( vcl::Window* pParent, SfxChildWindow* pChildWi
     , bSet(false)
     , bConstruct(true)
     , nModifyFlag(0)
-    , pImpl(nullptr)
     , pSearchList(nullptr)
     , pReplaceList(new SearchAttrItemList)
     , pSearchItem(nullptr)
@@ -360,7 +359,6 @@ void SvxSearchDialog::dispose()
     rBindings.LeaveRegistrations();
 
     delete pSearchItem;
-    delete pImpl;
     delete pSearchList;
     delete pReplaceList;
     mpDocWin.clear();
@@ -414,7 +412,7 @@ void SvxSearchDialog::dispose()
 void SvxSearchDialog::Construct_Impl()
 {
     // temporary to avoid incompatibility
-    pImpl = new SearchDlg_Impl();
+    pImpl.reset( new SearchDlg_Impl() );
     pImpl->aSelectionTimer.SetTimeout( 500 );
     pImpl->aSelectionTimer.SetTimeoutHdl(
         LINK( this, SvxSearchDialog, TimeoutHdl_Impl ) );
