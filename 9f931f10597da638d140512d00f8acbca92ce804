@@ -53,6 +53,24 @@
     },
     {
       "key": {
+        "uuid": "da7fb54a_95c7c644",
+        "filename": "sfx2/source/control/templatedefaultview.cxx",
+        "patchSetId": 22
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1001193
+      },
+      "writtenOn": "2016-05-18T19:23:12Z",
+      "side": 1,
+      "message": "I\u0027ll change it or removie it after Jay approves or discards the idea.",
+      "parentUuid": "da7fb54a_b5c84a76",
+      "revId": "9f931f10597da638d140512d00f8acbca92ce804",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da7fb54a_d5c5ce5b",
         "filename": "sfx2/source/control/templatelocalview.cxx",
         "patchSetId": 22
