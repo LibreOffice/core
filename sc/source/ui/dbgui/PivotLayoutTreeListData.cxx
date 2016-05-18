@@ -26,28 +26,28 @@ VCL_BUILDER_FACTORY_ARGS(ScPivotLayoutTreeListData,
 namespace
 {
 
-OUString lclGetFunctionMaskName(const sal_uInt16 nFunctionMask)
+OUString lclGetFunctionMaskName(const PivotFunc nFunctionMask)
 {
     switch (nFunctionMask)
     {
-        case PIVOT_FUNC_SUM:       return OUString("Sum");
-        case PIVOT_FUNC_COUNT:     return OUString("Count");
-        case PIVOT_FUNC_AVERAGE:   return OUString("Mean");
-        case PIVOT_FUNC_MAX:       return OUString("Max");
-        case PIVOT_FUNC_MIN:       return OUString("Min");
-        case PIVOT_FUNC_PRODUCT:   return OUString("Product");
-        case PIVOT_FUNC_COUNT_NUM: return OUString("Count");
-        case PIVOT_FUNC_STD_DEV:   return OUString("StDev");
-        case PIVOT_FUNC_STD_DEVP:  return OUString("StDevP");
-        case PIVOT_FUNC_STD_VAR:   return OUString("Var");
-        case PIVOT_FUNC_STD_VARP:  return OUString("VarP");
+        case PivotFunc::Sum:       return OUString("Sum");
+        case PivotFunc::Count:     return OUString("Count");
+        case PivotFunc::Average:   return OUString("Mean");
+        case PivotFunc::Max:       return OUString("Max");
+        case PivotFunc::Min:       return OUString("Min");
+        case PivotFunc::Product:   return OUString("Product");
+        case PivotFunc::CountNum: return OUString("Count");
+        case PivotFunc::StdDev:   return OUString("StDev");
+        case PivotFunc::StdDevP:  return OUString("StDevP");
+        case PivotFunc::StdVar:   return OUString("Var");
+        case PivotFunc::StdVarP:  return OUString("VarP");
         default:
             break;
     }
     return OUString();
 }
 
-OUString lclCreateDataItemName(const sal_uInt16 nFunctionMask, const OUString& rName, const sal_uInt8 nDuplicationCount)
+OUString lclCreateDataItemName(const PivotFunc nFunctionMask, const OUString& rName, const sal_uInt8 nDuplicationCount)
 {
     OUString aBuffer = lclGetFunctionMaskName(nFunctionMask) + " - " + rName;
     if(nDuplicationCount > 0)
@@ -192,10 +192,10 @@ void ScPivotLayoutTreeListData::InsertEntryForItem(ScItemValue* pItemValue, sal_
 
     ScPivotFuncData& rFunctionData = pDataItemValue->maFunctionData;
 
-    if (rFunctionData.mnFuncMask == PIVOT_FUNC_NONE ||
-        rFunctionData.mnFuncMask == PIVOT_FUNC_AUTO)
+    if (rFunctionData.mnFuncMask == PivotFunc::NONE ||
+        rFunctionData.mnFuncMask == PivotFunc::Auto)
     {
-        rFunctionData.mnFuncMask = PIVOT_FUNC_SUM;
+        rFunctionData.mnFuncMask = PivotFunc::Sum;
     }
 
     AdjustDuplicateCount(pDataItemValue);

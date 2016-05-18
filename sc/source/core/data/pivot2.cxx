@@ -73,7 +73,7 @@ OUString ScDPLabelData::Member::getDisplayName() const
 ScDPLabelData::ScDPLabelData() :
     mnCol(-1),
     mnOriginalDim(-1),
-    mnFuncMask(PIVOT_FUNC_NONE),
+    mnFuncMask(PivotFunc::NONE),
     mnUsedHier(0),
     mnFlags(0),
     mnDupCount(0),
@@ -96,7 +96,7 @@ OUString ScDPLabelData::getDisplayName() const
 ScPivotField::ScPivotField(SCCOL nNewCol) :
     nCol(nNewCol),
     mnOriginalDim(-1),
-    nFuncMask(0),
+    nFuncMask(PivotFunc::NONE),
     mnDupCount(0)
 {}
 
@@ -171,7 +171,7 @@ ScPivotParam& ScPivotParam::operator=( const ScPivotParam& rPivotParam )
 
 // ScPivotFuncData
 
-ScPivotFuncData::ScPivotFuncData( SCCOL nCol, sal_uInt16 nFuncMask ) :
+ScPivotFuncData::ScPivotFuncData( SCCOL nCol, PivotFunc nFuncMask ) :
     mnCol( nCol ),
     mnOriginalDim(-1),
     mnFuncMask(nFuncMask),

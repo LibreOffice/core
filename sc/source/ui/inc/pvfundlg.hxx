@@ -47,8 +47,8 @@ class ScDPFunctionListBox : public ListBox
 public:
     ScDPFunctionListBox(vcl::Window* pParent, WinBits nStyle);
 
-    void                SetSelection( sal_uInt16 nFuncMask );
-    sal_uInt16          GetSelection() const;
+    void                SetSelection( PivotFunc nFuncMask );
+    PivotFunc           GetSelection() const;
 
 private:
     void                FillFunctionNames();
@@ -62,7 +62,7 @@ public:
                             const ScDPLabelData& rLabelData, const ScPivotFuncData& rFuncData );
     virtual ~ScDPFunctionDlg();
     virtual void            dispose() override;
-    sal_uInt16              GetFuncMask() const;
+    PivotFunc               GetFuncMask() const;
     css::sheet::DataPilotFieldReference GetFieldRef() const;
 
 private:
@@ -104,7 +104,7 @@ public:
                             const ScDPNameVec& rDataFields, bool bEnableLayout );
     virtual             ~ScDPSubtotalDlg();
     virtual void        dispose() override;
-    sal_uInt16          GetFuncMask() const;
+    PivotFunc           GetFuncMask() const;
 
     void                FillLabelData( ScDPLabelData& rLabelData ) const;
 

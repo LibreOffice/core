@@ -292,14 +292,14 @@ class AbstractScPivotFilterDlg_Impl : public AbstractScPivotFilterDlg
 class AbstractScDPFunctionDlg_Impl : public AbstractScDPFunctionDlg
 {
     DECL_ABSTDLG_BASE( AbstractScDPFunctionDlg_Impl, ScDPFunctionDlg)
-    virtual sal_uInt16 GetFuncMask() const override;
+    virtual PivotFunc GetFuncMask() const override;
     virtual css::sheet::DataPilotFieldReference GetFieldRef() const override;
 };
 
 class AbstractScDPSubtotalDlg_Impl : public AbstractScDPSubtotalDlg
 {
     DECL_ABSTDLG_BASE( AbstractScDPSubtotalDlg_Impl, ScDPSubtotalDlg)
-    virtual sal_uInt16 GetFuncMask() const override;
+    virtual PivotFunc GetFuncMask() const override;
     virtual void FillLabelData( ScDPLabelData& rLabelData ) const override;
 };
 

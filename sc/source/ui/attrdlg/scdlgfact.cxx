@@ -488,7 +488,7 @@ const ScQueryItem&   AbstractScPivotFilterDlg_Impl::GetOutputItem()
     return pDlg->GetOutputItem();
 }
 
-sal_uInt16 AbstractScDPFunctionDlg_Impl::GetFuncMask() const
+PivotFunc AbstractScDPFunctionDlg_Impl::GetFuncMask() const
 {
      return pDlg->GetFuncMask();
 }
@@ -498,7 +498,7 @@ css::sheet::DataPilotFieldReference AbstractScDPFunctionDlg_Impl::GetFieldRef() 
     return pDlg->GetFieldRef();
 }
 
-sal_uInt16 AbstractScDPSubtotalDlg_Impl::GetFuncMask() const
+PivotFunc AbstractScDPSubtotalDlg_Impl::GetFuncMask() const
 {
      return pDlg->GetFuncMask();
 }

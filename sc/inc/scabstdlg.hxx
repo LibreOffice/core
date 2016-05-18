@@ -240,14 +240,14 @@ public:
 class AbstractScDPFunctionDlg : public VclAbstractDialog
 {
 public:
-    virtual sal_uInt16  GetFuncMask() const = 0;
+    virtual PivotFunc  GetFuncMask() const = 0;
     virtual css::sheet::DataPilotFieldReference GetFieldRef() const = 0;
 };
 
 class AbstractScDPSubtotalDlg : public VclAbstractDialog
 {
 public:
-    virtual sal_uInt16  GetFuncMask() const = 0;
+    virtual PivotFunc  GetFuncMask() const = 0;
     virtual void    FillLabelData( ScDPLabelData& rLabelData ) const = 0;
 };
 

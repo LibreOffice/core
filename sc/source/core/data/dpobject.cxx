@@ -1991,7 +1991,7 @@ void ScDPObject::ToggleDetails(const DataPilotTableHeaderData& rElemDesc, ScDPOb
     }
 }
 
-static sal_uInt16 lcl_FirstSubTotal( const uno::Reference<beans::XPropertySet>& xDimProp )     // PIVOT_FUNC mask
+static PivotFunc lcl_FirstSubTotal( const uno::Reference<beans::XPropertySet>& xDimProp )     // PIVOT_FUNC mask
 {
     uno::Reference<sheet::XHierarchiesSupplier> xDimSupp( xDimProp, uno::UNO_QUERY );
     if ( xDimProp.is() && xDimSupp.is() )
@@ -2024,7 +2024,7 @@ static sal_uInt16 lcl_FirstSubTotal( const uno::Reference<beans::XPropertySet>& 
                 uno::Sequence<sheet::GeneralFunction> aSeq;
                 if ( aSubAny >>= aSeq )
                 {
-                    sal_uInt16 nMask = 0;
+                    PivotFunc nMask = PivotFunc::NONE;
                     const sheet::GeneralFunction* pArray = aSeq.getConstArray();
                     long nCount = aSeq.getLength();
                     for (long i=0; i<nCount; i++)
@@ -2036,7 +2036,7 @@ static sal_uInt16 lcl_FirstSubTotal( const uno::Reference<beans::XPropertySet>& 
     }
 
     OSL_FAIL("FirstSubTotal: NULL");
-    return 0;
+    return PivotFunc::NONE;
 }
 
 namespace {
@@ -2044,9 +2044,9 @@ namespace {
 class FindByColumn : public std::unary_function<ScPivotField, bool>
 {
     SCsCOL mnCol;
-    sal_uInt16 mnMask;
+    PivotFunc mnMask;
 public:
-    FindByColumn(SCsCOL nCol, sal_uInt16 nMask) : mnCol(nCol), mnMask(nMask) {}
+    FindByColumn(SCsCOL nCol, PivotFunc nMask) : mnCol(nCol), mnMask(nMask) {}
     bool operator() (const ScPivotField& r) const
     {
         return r.nCol == mnCol && r.nFuncMask == mnMask;
@@ -2090,7 +2090,7 @@ void lcl_FillOldFields( ScPivotFieldVector& rFields,
             // Let's take this dimension.
 
             // function mask.
-            sal_uInt16 nMask = 0;
+            PivotFunc nMask = PivotFunc::NONE;
             if ( nOrient == sheet::DataPilotFieldOrientation_DATA )
             {
                 sheet::GeneralFunction eFunc = (sheet::GeneralFunction)ScUnoHelpFunctions::GetEnumProperty(
@@ -2540,7 +2540,7 @@ void ScDPObject::ConvertOrientation(
         const ScPivotField& rField = *itr;
 
         long nCol = rField.getOriginalDim();
-        sal_uInt16 nFuncs = rField.nFuncMask;
+        PivotFunc nFuncs = rField.nFuncMask;
         const sheet::DataPilotFieldReference& rFieldRef = rField.maFieldRef;
 
         ScDPSaveDimension* pDim = nullptr;
@@ -2601,8 +2601,8 @@ void ScDPObject::ConvertOrientation(
             sal_uInt16 nMask = 1;
             for (sal_uInt16 nBit=0; nBit<16; nBit++)
             {
-                if ( nFuncs & nMask )
-                    nFuncArray[nFuncCount++] = sal::static_int_cast<sal_uInt16>(ScDataPilotConversion::FirstFunc( nMask ));
+                if ( nFuncs & (PivotFunc)nMask )
+                    nFuncArray[nFuncCount++] = sal::static_int_cast<sal_uInt16>(ScDataPilotConversion::FirstFunc( (PivotFunc)nMask ));
                 nMask *= 2;
             }
             pDim->SetSubTotals( nFuncCount, nFuncArray );

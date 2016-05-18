@@ -20,20 +20,28 @@
 #ifndef INCLUDED_SC_INC_DPGLOBAL_HXX
 #define INCLUDED_SC_INC_DPGLOBAL_HXX
 
+#include <o3tl/typed_flags_set.hxx>
+
 #define     PIVOT_MAXFUNC           11
-#define     PIVOT_FUNC_NONE         0x0000
-#define     PIVOT_FUNC_SUM          0x0001
-#define     PIVOT_FUNC_COUNT        0x0002
-#define     PIVOT_FUNC_AVERAGE      0x0004
-#define     PIVOT_FUNC_MAX          0x0008
-#define     PIVOT_FUNC_MIN          0x0010
-#define     PIVOT_FUNC_PRODUCT      0x0020
-#define     PIVOT_FUNC_COUNT_NUM    0x0040
-#define     PIVOT_FUNC_STD_DEV      0x0080
-#define     PIVOT_FUNC_STD_DEVP     0x0100
-#define     PIVOT_FUNC_STD_VAR      0x0200
-#define     PIVOT_FUNC_STD_VARP     0x0400
-#define     PIVOT_FUNC_AUTO         0x1000
+
+enum class PivotFunc {
+    NONE         = 0x0000,
+    Sum          = 0x0001,
+    Count        = 0x0002,
+    Average      = 0x0004,
+    Max          = 0x0008,
+    Min          = 0x0010,
+    Product      = 0x0020,
+    CountNum     = 0x0040,
+    StdDev       = 0x0080,
+    StdDevP      = 0x0100,
+    StdVar       = 0x0200,
+    StdVarP      = 0x0400,
+    Auto         = 0x1000
+};
+namespace o3tl {
+    template<> struct typed_flags<PivotFunc> : is_typed_flags<PivotFunc, 0x17ff> {};
+}
 
 struct ScDPValue
 {

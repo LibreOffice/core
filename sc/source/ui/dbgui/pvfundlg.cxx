@@ -95,19 +95,19 @@ bool lclFillListBox( ListBoxType& rLBox, const vector<ScDPLabelData::Member>& rM
 }
 
 /** This table represents the order of the strings in the resource string array. */
-static const sal_uInt16 spnFunctions[] =
+static const PivotFunc spnFunctions[] =
 {
-    PIVOT_FUNC_SUM,
-    PIVOT_FUNC_COUNT,
-    PIVOT_FUNC_AVERAGE,
-    PIVOT_FUNC_MAX,
-    PIVOT_FUNC_MIN,
-    PIVOT_FUNC_PRODUCT,
-    PIVOT_FUNC_COUNT_NUM,
-    PIVOT_FUNC_STD_DEV,
-    PIVOT_FUNC_STD_DEVP,
-    PIVOT_FUNC_STD_VAR,
-    PIVOT_FUNC_STD_VARP
+    PivotFunc::Sum,
+    PivotFunc::Count,
+    PivotFunc::Average,
+    PivotFunc::Max,
+    PivotFunc::Min,
+    PivotFunc::Product,
+    PivotFunc::CountNum,
+    PivotFunc::StdDev,
+    PivotFunc::StdDevP,
+    PivotFunc::StdVar,
+    PivotFunc::StdVarP
 };
 
 const sal_uInt16 SC_BASEITEM_PREV_POS = 0;
@@ -165,18 +165,18 @@ VCL_BUILDER_DECL_FACTORY(ScDPFunctionListBox)
     rRet = VclPtr<ScDPFunctionListBox>::Create(pParent, nWinStyle);
 }
 
-void ScDPFunctionListBox::SetSelection( sal_uInt16 nFuncMask )
+void ScDPFunctionListBox::SetSelection( PivotFunc nFuncMask )
 {
-    if( (nFuncMask == PIVOT_FUNC_NONE) || (nFuncMask == PIVOT_FUNC_AUTO) )
+    if( (nFuncMask == PivotFunc::NONE) || (nFuncMask == PivotFunc::Auto) )
         SetNoSelection();
     else
         for( sal_Int32 nEntry = 0, nCount = GetEntryCount(); nEntry < nCount; ++nEntry )
-            SelectEntryPos( nEntry, (nFuncMask & spnFunctions[ nEntry ]) != 0 );
+            SelectEntryPos( nEntry, bool(nFuncMask & spnFunctions[ nEntry ]) );
 }
 
-sal_uInt16 ScDPFunctionListBox::GetSelection() const
+PivotFunc ScDPFunctionListBox::GetSelection() const
 {
-    sal_uInt16 nFuncMask = PIVOT_FUNC_NONE;
+    PivotFunc nFuncMask = PivotFunc::NONE;
     for( sal_Int32 nSel = 0, nCount = GetSelectEntryCount(); nSel < nCount; ++nSel )
         nFuncMask |= spnFunctions[ GetSelectEntryPos( nSel ) ];
     return nFuncMask;
@@ -232,7 +232,7 @@ void ScDPFunctionDlg::dispose()
 }
 
 
-sal_uInt16 ScDPFunctionDlg::GetFuncMask() const
+PivotFunc ScDPFunctionDlg::GetFuncMask() const
 {
     return mpLbFunc->GetSelection();
 }
@@ -267,7 +267,7 @@ DataPilotFieldReference ScDPFunctionDlg::GetFieldRef() const
 void ScDPFunctionDlg::Init( const ScDPLabelData& rLabelData, const ScPivotFuncData& rFuncData )
 {
     // list box
-    sal_uInt16 nFuncMask = (rFuncData.mnFuncMask == PIVOT_FUNC_NONE) ? PIVOT_FUNC_SUM : rFuncData.mnFuncMask;
+    PivotFunc nFuncMask = (rFuncData.mnFuncMask == PivotFunc::NONE) ? PivotFunc::Sum : rFuncData.mnFuncMask;
     mpLbFunc->SetSelection( nFuncMask );
 
     // field name
@@ -465,12 +465,12 @@ void ScDPSubtotalDlg::dispose()
     ModalDialog::dispose();
 }
 
-sal_uInt16 ScDPSubtotalDlg::GetFuncMask() const
+PivotFunc ScDPSubtotalDlg::GetFuncMask() const
 {
-    sal_uInt16 nFuncMask = PIVOT_FUNC_NONE;
+    PivotFunc nFuncMask = PivotFunc::NONE;
 
     if( mpRbAuto->IsChecked() )
-        nFuncMask = PIVOT_FUNC_AUTO;
+        nFuncMask = PivotFunc::Auto;
     else if( mpRbUser->IsChecked() )
         nFuncMask = mpLbFunc->GetSelection();
 
@@ -502,8 +502,8 @@ void ScDPSubtotalDlg::Init( const ScDPLabelData& rLabelData, const ScPivotFuncDa
     RadioButton* pRBtn = nullptr;
     switch( rFuncData.mnFuncMask )
     {
-        case PIVOT_FUNC_NONE:   pRBtn = mpRbNone;  break;
-        case PIVOT_FUNC_AUTO:   pRBtn = mpRbAuto;  break;
+        case PivotFunc::NONE:   pRBtn = mpRbNone;  break;
+        case PivotFunc::Auto:   pRBtn = mpRbAuto;  break;
         default:                pRBtn = mpRbUser;
     }
     pRBtn->Check();
