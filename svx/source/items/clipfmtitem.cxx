@@ -55,7 +55,6 @@ SvxClipboardFormatItem::SvxClipboardFormatItem( const SvxClipboardFormatItem& rC
 
 SvxClipboardFormatItem::~SvxClipboardFormatItem()
 {
-    delete pImpl;
 }
 
 bool SvxClipboardFormatItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
