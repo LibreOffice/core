@@ -2719,6 +2719,11 @@ void EditEngine::SetFirstWordCapitalization( bool bCapitalize )
     pImpEditEngine->SetFirstWordCapitalization( bCapitalize );
 }
 
+void EditEngine::SetReplaceLeadingSingleQuotationMark( bool bReplace )
+{
+    pImpEditEngine->SetReplaceLeadingSingleQuotationMark( bReplace );
+}
+
 bool EditEngine::IsImportHandlerSet() const
 {
     return pImpEditEngine->aImportHdl.IsSet();
