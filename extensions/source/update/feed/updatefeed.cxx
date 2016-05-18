@@ -66,7 +66,6 @@ namespace task = com::sun::star::task ;
 namespace ucb = com::sun::star::ucb ;
 namespace uno = com::sun::star::uno ;
 namespace xml = com::sun::star::xml ;
-namespace sdbc = com::sun::star::sdbc ;
 
 
 namespace

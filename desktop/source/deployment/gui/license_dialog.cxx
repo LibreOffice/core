@@ -42,7 +42,6 @@
 #include <functional>
 
 using namespace ::dp_misc;
-namespace cssu = ::com::sun::star::uno;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 

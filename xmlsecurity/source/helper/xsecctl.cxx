@@ -45,7 +45,6 @@ namespace cssu = com::sun::star::uno;
 namespace cssl = com::sun::star::lang;
 namespace cssxc = com::sun::star::xml::crypto;
 namespace cssxs = com::sun::star::xml::sax;
-namespace cssxw = com::sun::star::xml::wrapper;
 using namespace com::sun::star;
 
 /* bridge component names */
