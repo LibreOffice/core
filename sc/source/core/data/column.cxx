@@ -668,12 +668,12 @@ bool ScColumn::IsStyleSheetUsed( const ScStyleSheet& rStyle, bool bGatherAllStyl
     return pAttrArray->IsStyleSheetUsed( rStyle, bGatherAllStyles );
 }
 
-bool ScColumn::ApplyFlags( SCROW nStartRow, SCROW nEndRow, sal_Int16 nFlags )
+bool ScColumn::ApplyFlags( SCROW nStartRow, SCROW nEndRow, ScMF nFlags )
 {
     return pAttrArray->ApplyFlags( nStartRow, nEndRow, nFlags );
 }
 
-bool ScColumn::RemoveFlags( SCROW nStartRow, SCROW nEndRow, sal_Int16 nFlags )
+bool ScColumn::RemoveFlags( SCROW nStartRow, SCROW nEndRow, ScMF nFlags )
 {
     return pAttrArray->RemoveFlags( nStartRow, nEndRow, nFlags );
 }
@@ -1022,7 +1022,7 @@ void ScColumn::CopyToClip(
     sc::CopyToClipContext& rCxt, SCROW nRow1, SCROW nRow2, ScColumn& rColumn ) const
 {
     pAttrArray->CopyArea( nRow1, nRow2, 0, *rColumn.pAttrArray,
-                          rCxt.isKeepScenarioFlags() ? (SC_MF_ALL & ~SC_MF_SCENARIO) : SC_MF_ALL );
+                          rCxt.isKeepScenarioFlags() ? (ScMF::All & ~ScMF::Scenario) : ScMF::All );
 
     {
         CopyToClipHandler aFunc(*this, rColumn, rCxt.getBlockPosition(rColumn.nTab, rColumn.nCol), rCxt.isCloneNotes());

@@ -1472,12 +1472,12 @@ void XclImpPivotTable::ApplyMergeFlags(const ScRange& rOutRange, const ScDPSaveD
     vector<ScAddress>::const_iterator itr = aFieldBtns.begin(), itrEnd = aFieldBtns.end();
     for (; itr != itrEnd; ++itr)
     {
-        rDoc.ApplyFlagsTab(itr->Col(), itr->Row(), itr->Col(), itr->Row(), itr->Tab(), SC_MF_BUTTON);
+        rDoc.ApplyFlagsTab(itr->Col(), itr->Row(), itr->Col(), itr->Row(), itr->Tab(), ScMF::Button);
 
-        sal_uInt16 nMFlag = SC_MF_BUTTON_POPUP;
+        ScMF nMFlag = ScMF::ButtonPopup;
         OUString aName = rDoc.GetString(itr->Col(), itr->Row(), itr->Tab());
         if (rSaveData.HasInvisibleMember(aName))
-            nMFlag |= SC_MF_HIDDEN_MEMBER;
+            nMFlag |= ScMF::HiddenMember;
 
         rDoc.ApplyFlagsTab(itr->Col()+1, itr->Row(), itr->Col()+1, itr->Row(), itr->Tab(), nMFlag);
     }
@@ -1491,12 +1491,12 @@ void XclImpPivotTable::ApplyMergeFlags(const ScRange& rOutRange, const ScDPSaveD
         vector<const ScDPSaveDimension*>::const_iterator itDim = aFieldDims.begin();
         for (; itr != itrEnd; ++itr, ++itDim)
         {
-            sal_Int16 nMFlag = SC_MF_BUTTON;
+            ScMF nMFlag = ScMF::Button;
             const ScDPSaveDimension* pDim = *itDim;
             if (pDim->HasInvisibleMember())
-                nMFlag |= SC_MF_HIDDEN_MEMBER;
+                nMFlag |= ScMF::HiddenMember;
             if (!pDim->IsDataLayout())
-                nMFlag |= SC_MF_BUTTON_POPUP;
+                nMFlag |= ScMF::ButtonPopup;
             rDoc.ApplyFlagsTab(itr->Col(), itr->Row(), itr->Col(), itr->Row(), itr->Tab(), nMFlag);
         }
     }
@@ -1510,12 +1510,12 @@ void XclImpPivotTable::ApplyMergeFlags(const ScRange& rOutRange, const ScDPSaveD
         vector<const ScDPSaveDimension*>::const_iterator itDim = aFieldDims.begin();
         for (; itr != itrEnd; ++itr, ++itDim)
         {
-            sal_Int16 nMFlag = SC_MF_BUTTON;
+            ScMF nMFlag = ScMF::Button;
             const ScDPSaveDimension* pDim = *itDim;
             if (pDim->HasInvisibleMember())
-                nMFlag |= SC_MF_HIDDEN_MEMBER;
+                nMFlag |= ScMF::HiddenMember;
             if (!pDim->IsDataLayout())
-                nMFlag |= SC_MF_BUTTON_POPUP;
+                nMFlag |= ScMF::ButtonPopup;
             rDoc.ApplyFlagsTab(itr->Col(), itr->Row(), itr->Col(), itr->Row(), itr->Tab(), nMFlag);
         }
     }

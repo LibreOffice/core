@@ -4975,7 +4975,7 @@ bool ScDocument::IsStyleSheetUsed( const ScStyleSheet& rStyle, bool bGatherAllSt
 }
 
 bool ScDocument::ApplyFlagsTab( SCCOL nStartCol, SCROW nStartRow,
-                        SCCOL nEndCol, SCROW nEndRow, SCTAB nTab, sal_Int16 nFlags )
+                        SCCOL nEndCol, SCROW nEndRow, SCTAB nTab, ScMF nFlags )
 {
     if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()))
         if (maTabs[nTab])
@@ -4986,7 +4986,7 @@ bool ScDocument::ApplyFlagsTab( SCCOL nStartCol, SCROW nStartRow,
 }
 
 bool ScDocument::RemoveFlagsTab( SCCOL nStartCol, SCROW nStartRow,
-                        SCCOL nEndCol, SCROW nEndRow, SCTAB nTab, sal_Int16 nFlags )
+                        SCCOL nEndCol, SCROW nEndRow, SCTAB nTab, ScMF nFlags )
 {
     if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()))
         if (maTabs[nTab])
@@ -5622,7 +5622,7 @@ bool ScDocument::RefreshAutoFilter( SCCOL nStartCol, SCROW nStartRow,
 
     //      Delete Autofilter
 
-    bool bChange = RemoveFlagsTab( nStartCol,nStartRow, nEndCol,nEndRow, nTab, SC_MF_AUTO );
+    bool bChange = RemoveFlagsTab( nStartCol,nStartRow, nEndCol,nEndRow, nTab, ScMF::Auto );
 
     //      Set Autofilter
 
@@ -5638,7 +5638,7 @@ bool ScDocument::RefreshAutoFilter( SCCOL nStartCol, SCROW nStartRow,
                                     nDBStartCol<=nEndCol && nDBEndCol>=nStartCol )
             {
                 if (ApplyFlagsTab( nDBStartCol,nDBStartRow, nDBEndCol,nDBStartRow,
-                                    nDBTab, SC_MF_AUTO ))
+                                    nDBTab, ScMF::Auto ))
                     bChange = true;
             }
         }
@@ -5656,7 +5656,7 @@ bool ScDocument::RefreshAutoFilter( SCCOL nStartCol, SCROW nStartRow,
                                     nDBStartCol<=nEndCol && nDBEndCol>=nStartCol )
             {
                 if (ApplyFlagsTab( nDBStartCol,nDBStartRow, nDBEndCol,nDBStartRow,
-                                    nDBTab, SC_MF_AUTO ))
+                                    nDBTab, ScMF::Auto ))
                     bChange = true;
             }
         }

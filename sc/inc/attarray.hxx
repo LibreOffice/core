@@ -148,8 +148,8 @@ public:
         SCsROW& rRow, SCsROW& rEndRow, const ScStyleSheet* pSearchStyle, bool bUp,
         const ScMarkArray* pMarkArray = nullptr) const;
 
-    bool    ApplyFlags( SCROW nStartRow, SCROW nEndRow, sal_Int16 nFlags );
-    bool    RemoveFlags( SCROW nStartRow, SCROW nEndRow, sal_Int16 nFlags );
+    bool    ApplyFlags( SCROW nStartRow, SCROW nEndRow, ScMF nFlags );
+    bool    RemoveFlags( SCROW nStartRow, SCROW nEndRow, ScMF nFlags );
 
     bool    Search( SCROW nRow, SCSIZE& nIndex ) const;
 
@@ -185,7 +185,7 @@ public:
     void    DeleteArea( SCROW nStartRow, SCROW nEndRow );
     void    MoveTo( SCROW nStartRow, SCROW nEndRow, ScAttrArray& rAttrArray );
     void    CopyArea(
-        SCROW nStartRow, SCROW nEndRow, long nDy, ScAttrArray& rAttrArray, sal_Int16 nStripFlags = 0) const;
+        SCROW nStartRow, SCROW nEndRow, long nDy, ScAttrArray& rAttrArray, ScMF nStripFlags = ScMF::NONE) const;
 
     void    DeleteHardAttr( SCROW nStartRow, SCROW nEndRow );
 

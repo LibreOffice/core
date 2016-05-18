@@ -1689,7 +1689,7 @@ void ScViewFunc::DeleteMulti( bool bRows, bool bRecord )
         SCCOL nEndCol = MAXCOL;
         SCROW nEndRow = MAXROW;
 
-        rDoc.RemoveFlagsTab( nStartCol, nStartRow, nEndCol, nEndRow, nTab, SC_MF_HOR | SC_MF_VER );
+        rDoc.RemoveFlagsTab( nStartCol, nStartRow, nEndCol, nEndRow, nTab, ScMF::Hor | ScMF::Ver );
         rDoc.ExtendMerge( nStartCol, nStartRow, nEndCol, nEndRow, nTab, true );
     }
 

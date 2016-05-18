@@ -1389,13 +1389,13 @@ bool ScAttrArray::ExtendMerge( SCCOL nThisCol, SCROW nStartRow, SCROW nEndRow,
             {
                 if ( nMergeEndCol > nThisCol )
                     pDocument->ApplyFlagsTab( nThisCol+1, nThisRow, nMergeEndCol, pData[i].nRow,
-                                nTab, SC_MF_HOR );
+                                nTab, ScMF::Hor );
                 if ( nMergeEndRow > nThisRow )
                     pDocument->ApplyFlagsTab( nThisCol, nThisRow+1, nThisCol, nMergeEndRow,
-                                nTab, SC_MF_VER );
+                                nTab, ScMF::Ver );
                 if ( nMergeEndCol > nThisCol && nMergeEndRow > nThisRow )
                     pDocument->ApplyFlagsTab( nThisCol+1, nThisRow+1, nMergeEndCol, nMergeEndRow,
-                                nTab, SC_MF_HOR | SC_MF_VER );
+                                nTab, ScMF::Hor | ScMF::Ver );
 
                 Search( nThisRow, i );    // Data changed
                 Search( nStartRow, nStartIndex );
@@ -1529,11 +1529,11 @@ void ScAttrArray::SetPatternAreaSafe( SCROW nStartRow, SCROW nEndRow,
     }
 }
 
-bool ScAttrArray::ApplyFlags( SCROW nStartRow, SCROW nEndRow, sal_Int16 nFlags )
+bool ScAttrArray::ApplyFlags( SCROW nStartRow, SCROW nEndRow, ScMF nFlags )
 {
     const ScPatternAttr* pOldPattern;
 
-    sal_Int16   nOldValue;
+    ScMF    nOldValue;
     SCSIZE  nIndex;
     SCROW   nRow;
     SCROW   nThisRow;
@@ -1565,11 +1565,11 @@ bool ScAttrArray::ApplyFlags( SCROW nStartRow, SCROW nEndRow, sal_Int16 nFlags )
     return bChanged;
 }
 
-bool ScAttrArray::RemoveFlags( SCROW nStartRow, SCROW nEndRow, sal_Int16 nFlags )
+bool ScAttrArray::RemoveFlags( SCROW nStartRow, SCROW nEndRow, ScMF nFlags )
 {
     const ScPatternAttr* pOldPattern;
 
-    sal_Int16   nOldValue;
+    ScMF    nOldValue;
     SCSIZE  nIndex;
     SCROW   nRow;
     SCROW   nThisRow;
@@ -2068,8 +2068,8 @@ void ScAttrArray::InsertRow( SCROW nStartRow, SCSIZE nSize )
     }
 
     // Don't duplicate the merge flags in the inserted row.
-    // #i108488# SC_MF_SCENARIO has to be allowed.
-    RemoveFlags( nStartRow, nStartRow+nSize-1, SC_MF_HOR | SC_MF_VER | SC_MF_AUTO | SC_MF_BUTTON );
+    // #i108488# ScMF::Scenario has to be allowed.
+    RemoveFlags( nStartRow, nStartRow+nSize-1, ScMF::Hor | ScMF::Ver | ScMF::Auto | ScMF::Button );
 }
 
 void ScAttrArray::DeleteRow( SCROW nStartRow, SCSIZE nSize )
@@ -2116,7 +2116,7 @@ void ScAttrArray::DeleteRow( SCROW nStartRow, SCSIZE nSize )
 
     // Below does not follow the pattern to detect pressure ranges;
     // instead, only remove merge flags.
-    RemoveFlags( MAXROW-nSize+1, MAXROW, SC_MF_HOR | SC_MF_VER | SC_MF_AUTO );
+    RemoveFlags( MAXROW-nSize+1, MAXROW, ScMF::Hor | ScMF::Ver | ScMF::Auto );
 }
 
 void ScAttrArray::DeleteRange( SCSIZE nStartIndex, SCSIZE nEndIndex )
@@ -2202,7 +2202,7 @@ void ScAttrArray::MoveTo(SCROW nStartRow, SCROW nEndRow, ScAttrArray& rAttrArray
  * Copy between documents (Clipboard)
  */
 void ScAttrArray::CopyArea(
-    SCROW nStartRow, SCROW nEndRow, long nDy, ScAttrArray& rAttrArray, sal_Int16 nStripFlags) const
+    SCROW nStartRow, SCROW nEndRow, long nDy, ScAttrArray& rAttrArray, ScMF nStripFlags) const
 {
     nStartRow -= nDy;   // Source
     nEndRow -= nDy;
@@ -2228,15 +2228,15 @@ void ScAttrArray::CopyArea(
                 pNewPattern = static_cast<const ScPatternAttr*>(
                                 &pDestDocPool->GetDefaultItem( ATTR_PATTERN ));
             }
-            else if ( nStripFlags )
+            else if ( nStripFlags != ScMF::NONE )
             {
                 std::unique_ptr<ScPatternAttr> pTmpPattern(new ScPatternAttr( *pOldPattern ));
-                sal_Int16 nNewFlags = 0;
-                if ( nStripFlags != SC_MF_ALL )
+                ScMF nNewFlags = ScMF::NONE;
+                if ( nStripFlags != ScMF::All )
                     nNewFlags = static_cast<const ScMergeFlagAttr&>(pTmpPattern->GetItem(ATTR_MERGE_FLAG)).
                                 GetValue() & ~nStripFlags;
 
-                if ( nNewFlags )
+                if ( nNewFlags != ScMF::NONE )
                     pTmpPattern->GetItemSet().Put( ScMergeFlagAttr( nNewFlags ) );
                 else
                     pTmpPattern->GetItemSet().ClearItem( ATTR_MERGE_FLAG );

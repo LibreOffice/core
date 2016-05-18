@@ -274,7 +274,7 @@ void ScDocument::SetDBCollection( ScDBCollection* pNewDBCollection, bool bRemove
                 aOldRange.aEnd.SetRow(aOldRange.aStart.Row());
                 RemoveFlagsTab( aOldRange.aStart.Col(), aOldRange.aStart.Row(),
                                 aOldRange.aEnd.Col(),   aOldRange.aEnd.Row(),
-                                aOldRange.aStart.Tab(), SC_MF_AUTO );
+                                aOldRange.aStart.Tab(), ScMF::Auto );
                 RepaintRange( aOldRange );
             }
         }
@@ -1444,7 +1444,7 @@ bool ScDocument::HasAutoFilter( SCCOL nCurCol, SCROW nCurRow, SCTAB nCurTab )
         {
             SCCOL nCol;
             SCROW nRow;
-            sal_Int16  nFlag;
+            ScMF  nFlag;
 
             ScQueryParam aParam;
             pDBData->GetQueryParam( aParam );
@@ -1456,7 +1456,7 @@ bool ScDocument::HasAutoFilter( SCCOL nCurCol, SCROW nCurRow, SCTAB nCurTab )
                             GetAttr( nCol, nRow, nCurTab, ATTR_MERGE_FLAG ))->
                                 GetValue();
 
-                if ( (nFlag & SC_MF_AUTO) == 0 )
+                if ( !(nFlag & ScMF::Auto) )
                     bHasAutoFilter = false;
             }
         }
@@ -2002,11 +2002,11 @@ void ScDocument::DoMerge( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
     ApplyAttr( nStartCol, nStartRow, nTab, aAttr );
 
     if ( nEndCol > nStartCol )
-        ApplyFlagsTab( nStartCol+1, nStartRow, nEndCol, nStartRow, nTab, SC_MF_HOR );
+        ApplyFlagsTab( nStartCol+1, nStartRow, nEndCol, nStartRow, nTab, ScMF::Hor );
     if ( nEndRow > nStartRow )
-        ApplyFlagsTab( nStartCol, nStartRow+1, nStartCol, nEndRow, nTab, SC_MF_VER );
+        ApplyFlagsTab( nStartCol, nStartRow+1, nStartCol, nEndRow, nTab, ScMF::Ver );
     if ( nEndCol > nStartCol && nEndRow > nStartRow )
-        ApplyFlagsTab( nStartCol+1, nStartRow+1, nEndCol, nEndRow, nTab, SC_MF_HOR | SC_MF_VER );
+        ApplyFlagsTab( nStartCol+1, nStartRow+1, nEndCol, nEndRow, nTab, ScMF::Hor | ScMF::Ver );
 
     // Remove all covered notes (removed captions are collected by drawing undo if active)
     InsertDeleteFlags nDelFlag = InsertDeleteFlags::NOTE | (bDeleteCaptions ? InsertDeleteFlags::NONE : InsertDeleteFlags::NOCAPTIONS);
@@ -2027,7 +2027,7 @@ void ScDocument::RemoveMerge( SCCOL nCol, SCROW nRow, SCTAB nTab )
     SCCOL nEndCol = nCol + pAttr->GetColMerge() - 1;
     SCROW nEndRow = nRow + pAttr->GetRowMerge() - 1;
 
-    RemoveFlagsTab( nCol, nRow, nEndCol, nEndRow, nTab, SC_MF_HOR | SC_MF_VER );
+    RemoveFlagsTab( nCol, nRow, nEndCol, nEndRow, nTab, ScMF::Hor | ScMF::Ver );
 
     const ScMergeAttr* pDefAttr = static_cast<const ScMergeAttr*>(
                                         &xPoolHelper->GetDocPool()->GetDefaultItem( ATTR_MERGE ));

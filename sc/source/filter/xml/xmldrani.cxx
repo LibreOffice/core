@@ -425,7 +425,7 @@ bool setAutoFilterFlags(ScDocument& rDoc, const ScDBData& rData)
     rData.GetArea(aRange);
     rDoc.ApplyFlagsTab(
         aRange.aStart.Col(), aRange.aStart.Row(), aRange.aEnd.Col(), aRange.aStart.Row(),
-        aRange.aStart.Tab(), SC_MF_AUTO);
+        aRange.aStart.Tab(), ScMF::Auto);
     return false;
 }
 

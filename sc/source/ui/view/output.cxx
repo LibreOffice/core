@@ -2532,14 +2532,14 @@ void ScOutputData::DrawClipMarks()
                         long nStartPosY = nPosY;
 
                         while ( nOverX > 0 && ( static_cast<const ScMergeFlagAttr*>(mpDoc->GetAttr(
-                                nOverX, nOverY, nTab, ATTR_MERGE_FLAG ))->GetValue() & SC_MF_HOR ) )
+                                nOverX, nOverY, nTab, ATTR_MERGE_FLAG ))->GetValue() & ScMF::Hor ) )
                         {
                             --nOverX;
                             nStartPosX -= nLayoutSign * (long) ( mpDoc->GetColWidth(nOverX,nTab) * mnPPTX );
                         }
 
                         while ( nOverY > 0 && ( static_cast<const ScMergeFlagAttr*>(mpDoc->GetAttr(
-                                nOverX, nOverY, nTab, ATTR_MERGE_FLAG ))->GetValue() & SC_MF_VER ) )
+                                nOverX, nOverY, nTab, ATTR_MERGE_FLAG ))->GetValue() & ScMF::Ver ) )
                         {
                             --nOverY;
                             nStartPosY -= nLayoutSign * (long) ( mpDoc->GetRowHeight(nOverY,nTab) * mnPPTY );

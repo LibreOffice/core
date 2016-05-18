@@ -3165,7 +3165,7 @@ void Test::testAutofilter()
     pDBData->GetArea(aRange);
     m_pDoc->ApplyFlagsTab( aRange.aStart.Col(), aRange.aStart.Row(),
                            aRange.aEnd.Col(), aRange.aStart.Row(),
-                           aRange.aStart.Tab(), SC_MF_AUTO);
+                           aRange.aStart.Tab(), ScMF::Auto);
 
     //create the query param
     ScQueryParam aParam;

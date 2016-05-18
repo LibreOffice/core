@@ -912,7 +912,7 @@ void ScDPObject::Output( const ScAddress& rPos )
                          aOutRange.aStart.Tab(), InsertDeleteFlags::ALL );
     pDoc->RemoveFlagsTab( aOutRange.aStart.Col(), aOutRange.aStart.Row(),
                           aOutRange.aEnd.Col(),   aOutRange.aEnd.Row(),
-                          aOutRange.aStart.Tab(), SC_MF_AUTO );
+                          aOutRange.aStart.Tab(), ScMF::Auto );
 
     CreateOutput();             // create xSource and pOutput if not already done
 
@@ -924,7 +924,7 @@ void ScDPObject::Output( const ScAddress& rPos )
     aOutRange = pOutput->GetOutputRange();
     const ScAddress& s = aOutRange.aStart;
     const ScAddress& e = aOutRange.aEnd;
-    pDoc->ApplyFlagsTab(s.Col(), s.Row(), e.Col(), e.Row(), s.Tab(), SC_MF_DP_TABLE);
+    pDoc->ApplyFlagsTab(s.Col(), s.Row(), e.Col(), e.Row(), s.Tab(), ScMF::DpTable);
 }
 
 ScRange ScDPObject::GetOutputRangeByType( sal_Int32 nType )
@@ -3486,7 +3486,7 @@ void ScDPCollection::CopyToTab( SCTAB nOld, SCTAB nNew )
         e.SetTab(nNew);
         ScDPObject* pNew = new ScDPObject(rObj);
         pNew->SetOutRange(aOutRange);
-        mpDoc->ApplyFlagsTab(s.Col(), s.Row(), e.Col(), e.Row(), s.Tab(), SC_MF_DP_TABLE);
+        mpDoc->ApplyFlagsTab(s.Col(), s.Row(), e.Col(), e.Row(), s.Tab(), ScMF::DpTable);
         aAdded.push_back(std::unique_ptr<ScDPObject>(pNew));
     }
 
@@ -3608,7 +3608,7 @@ void ScDPCollection::FreeTable(ScDPObject* pDPObj)
     const ScRange& rOutRange = pDPObj->GetOutRange();
     const ScAddress& s = rOutRange.aStart;
     const ScAddress& e = rOutRange.aEnd;
-    mpDoc->RemoveFlagsTab(s.Col(), s.Row(), e.Col(), e.Row(), s.Tab(), SC_MF_DP_TABLE);
+    mpDoc->RemoveFlagsTab(s.Col(), s.Row(), e.Col(), e.Row(), s.Tab(), ScMF::DpTable);
     TablesType::iterator itr = maTables.begin(), itrEnd = maTables.end();
     for (; itr != itrEnd; ++itr)
     {
@@ -3626,7 +3626,7 @@ bool ScDPCollection::InsertNewTable(ScDPObject* pDPObj)
     const ScRange& rOutRange = pDPObj->GetOutRange();
     const ScAddress& s = rOutRange.aStart;
     const ScAddress& e = rOutRange.aEnd;
-    mpDoc->ApplyFlagsTab(s.Col(), s.Row(), e.Col(), e.Row(), s.Tab(), SC_MF_DP_TABLE);
+    mpDoc->ApplyFlagsTab(s.Col(), s.Row(), e.Col(), e.Row(), s.Tab(), ScMF::DpTable);
 
     maTables.push_back(std::unique_ptr<ScDPObject>(pDPObj));
     return true;

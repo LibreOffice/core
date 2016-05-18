@@ -80,10 +80,10 @@ static void lcl_GetMergeRange( SCsCOL nX, SCsROW nY, SCSIZE nArrY,
         }
         else
         {
-            sal_uInt16 nOverlap = static_cast<const ScMergeFlagAttr*>(pDoc->GetAttr(
+            ScMF nOverlap = static_cast<const ScMergeFlagAttr*>(pDoc->GetAttr(
                                 rStartX, rStartY, nTab, ATTR_MERGE_FLAG ))->GetValue();
-            bHOver = ((nOverlap & SC_MF_HOR) != 0);
-            bVOver = ((nOverlap & SC_MF_VER) != 0);
+            bHOver = bool(nOverlap & ScMF::Hor);
+            bVOver = bool(nOverlap & ScMF::Ver);
         }
     }
 
@@ -103,9 +103,9 @@ static void lcl_GetMergeRange( SCsCOL nX, SCsROW nY, SCSIZE nArrY,
         }
         else
         {
-            sal_uInt16 nOverlap = static_cast<const ScMergeFlagAttr*>(pDoc->GetAttr(
+            ScMF nOverlap = static_cast<const ScMergeFlagAttr*>(pDoc->GetAttr(
                                 rStartX, rStartY, nTab, ATTR_MERGE_FLAG ))->GetValue();
-            bVOver = ((nOverlap & SC_MF_VER) != 0);
+            bVOver = bool(nOverlap & ScMF::Ver);
         }
     }
 
@@ -532,15 +532,15 @@ void ScDocument::FillInfo(
                         const ScMergeAttr* pMergeAttr = static_cast<const ScMergeAttr*>(
                                                 &pPattern->GetItem(ATTR_MERGE));
                         bool bMerged = ( pMergeAttr != pDefMerge && *pMergeAttr != *pDefMerge );
-                        sal_uInt16 nOverlap = static_cast<const ScMergeFlagAttr*>( &pPattern->GetItemSet().
+                        ScMF nOverlap = static_cast<const ScMergeFlagAttr*>( &pPattern->GetItemSet().
                                                         Get(ATTR_MERGE_FLAG))->GetValue();
-                        bool bHOverlapped = ((nOverlap & SC_MF_HOR) != 0);
-                        bool bVOverlapped = ((nOverlap & SC_MF_VER) != 0);
-                        bool bAutoFilter  = ((nOverlap & SC_MF_AUTO) != 0);
-                        bool bPivotButton  = ((nOverlap & SC_MF_BUTTON) != 0);
-                        bool bScenario    = ((nOverlap & SC_MF_SCENARIO) != 0);
-                        bool bPivotPopupButton = ((nOverlap & SC_MF_BUTTON_POPUP) != 0);
-                        bool bFilterActive = ((nOverlap & SC_MF_HIDDEN_MEMBER) != 0);
+                        bool bHOverlapped(nOverlap & ScMF::Hor);
+                        bool bVOverlapped(nOverlap & ScMF::Ver);
+                        bool bAutoFilter(nOverlap & ScMF::Auto);
+                        bool bPivotButton(nOverlap & ScMF::Button);
+                        bool bScenario(nOverlap & ScMF::Scenario);
+                        bool bPivotPopupButton(nOverlap & ScMF::ButtonPopup);
+                        bool bFilterActive(nOverlap & ScMF::HiddenMember);
                         if (bMerged||bHOverlapped||bVOverlapped)
                             bAnyMerged = true;                              // internal
 

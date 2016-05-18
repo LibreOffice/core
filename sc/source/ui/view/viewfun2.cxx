@@ -2055,7 +2055,7 @@ void ScViewFunc::ExtendScenario()
 
     ScDocument* pDoc = GetViewData().GetDocument();
     ScPatternAttr aPattern( pDoc->GetPool() );
-    aPattern.GetItemSet().Put( ScMergeFlagAttr( SC_MF_SCENARIO ) );
+    aPattern.GetItemSet().Put( ScMergeFlagAttr( ScMF::Scenario ) );
     aPattern.GetItemSet().Put( ScProtectionAttr( true ) );
     ApplySelectionPattern(aPattern);
 }

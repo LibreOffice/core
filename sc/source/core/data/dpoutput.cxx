@@ -840,21 +840,21 @@ void ScDPOutput::FieldCell(
         lcl_SetFrame( pDoc,nTab, nCol,nRow, nCol,nRow, 20 );
 
     // For field button drawing
-    sal_uInt16 nMergeFlag = 0;
+    ScMF nMergeFlag = ScMF::NONE;
     if (rData.mbHasHiddenMember)
-        nMergeFlag |= SC_MF_HIDDEN_MEMBER;
+        nMergeFlag |= ScMF::HiddenMember;
 
     if (rData.mbPageDim)
     {
-        nMergeFlag |= SC_MF_BUTTON_POPUP;
-        pDoc->ApplyFlagsTab(nCol, nRow, nCol, nRow, nTab, SC_MF_BUTTON);
+        nMergeFlag |= ScMF::ButtonPopup;
+        pDoc->ApplyFlagsTab(nCol, nRow, nCol, nRow, nTab, ScMF::Button);
         pDoc->ApplyFlagsTab(nCol+1, nRow, nCol+1, nRow, nTab, nMergeFlag);
     }
     else
     {
-        nMergeFlag |= SC_MF_BUTTON;
+        nMergeFlag |= ScMF::Button;
         if (!rData.mbDataLayout)
-            nMergeFlag |= SC_MF_BUTTON_POPUP;
+            nMergeFlag |= ScMF::ButtonPopup;
         pDoc->ApplyFlagsTab(nCol, nRow, nCol, nRow, nTab, nMergeFlag);
     }
 
@@ -864,7 +864,7 @@ void ScDPOutput::FieldCell(
 static void lcl_DoFilterButton( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab )
 {
     pDoc->SetString( nCol, nRow, nTab, ScGlobal::GetRscString(STR_CELL_FILTER) );
-    pDoc->ApplyFlagsTab(nCol, nRow, nCol, nRow, nTab, SC_MF_BUTTON);
+    pDoc->ApplyFlagsTab(nCol, nRow, nCol, nRow, nTab, ScMF::Button);
 }
 
 void ScDPOutput::CalcSizes()

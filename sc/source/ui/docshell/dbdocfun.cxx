@@ -1343,7 +1343,7 @@ bool ScDBDocFunc::RemovePivotTable(ScDPObject& rDPObj, bool bRecord, bool bApi)
                          nTab, InsertDeleteFlags::ALL );
     rDoc.RemoveFlagsTab( aRange.aStart.Col(), aRange.aStart.Row(),
                           aRange.aEnd.Col(),   aRange.aEnd.Row(),
-                          nTab, SC_MF_AUTO );
+                          nTab, ScMF::Auto );
 
     rDoc.GetDPCollection()->FreeTable(&rDPObj);  // object is deleted here
 

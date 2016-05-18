@@ -338,7 +338,7 @@ void ScTable::InsertCol(
             aCol[nStartCol-1].CopyToColumn(aCxt, nStartRow, nEndRow, InsertDeleteFlags::ATTRIB,
                                                 false, aCol[nStartCol+i] );
             aCol[nStartCol+i].RemoveFlags( nStartRow, nEndRow,
-                                                SC_MF_HOR | SC_MF_VER | SC_MF_AUTO );
+                                                ScMF::Hor | ScMF::Ver | ScMF::Auto );
             aCol[nStartCol+i].ClearItems( nStartRow, nEndRow, nWhichArray );
         }
     }
@@ -910,8 +910,8 @@ void ScTable::TransposeClip( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                     const ScMergeFlagAttr& rOldFlag = static_cast<const ScMergeFlagAttr&>(rSet.Get(ATTR_MERGE_FLAG));
                     if (rOldFlag.IsOverlapped())
                     {
-                        sal_Int16 nNewFlags = rOldFlag.GetValue() & ~( SC_MF_HOR | SC_MF_VER );
-                        if ( nNewFlags )
+                        ScMF nNewFlags = rOldFlag.GetValue() & ~ScMF( ScMF::Hor | ScMF::Ver );
+                        if ( nNewFlags != ScMF::NONE )
                             rNewSet.Put( ScMergeFlagAttr( nNewFlags ) );
                         else
                             rNewSet.ClearItem( ATTR_MERGE_FLAG );
@@ -2624,7 +2624,7 @@ void ScTable::StyleSheetChanged( const SfxStyleSheetBase* pStyleSheet, bool bRem
 }
 
 bool ScTable::ApplyFlags( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
-                          sal_Int16 nFlags )
+                          ScMF nFlags )
 {
     bool bChanged = false;
     if (ValidColRow(nStartCol, nStartRow) && ValidColRow(nEndCol, nEndRow))
@@ -2634,7 +2634,7 @@ bool ScTable::ApplyFlags( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW
 }
 
 bool ScTable::RemoveFlags( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
-                           sal_Int16 nFlags )
+                           ScMF nFlags )
 {
     bool bChanged = false;
     if (ValidColRow(nStartCol, nStartRow) && ValidColRow(nEndCol, nEndRow))

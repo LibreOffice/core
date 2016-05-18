@@ -240,7 +240,7 @@ void ExcScenario::Apply( const XclImpRoot& rRoot, const bool bLast )
         sal_uInt16 nRow = iter->nRow;
         OUString aVal = iter->GetValue();
 
-        r.ApplyFlagsTab( nCol, nRow, nCol, nRow, nNewTab, SC_MF_SCENARIO );
+        r.ApplyFlagsTab( nCol, nRow, nCol, nRow, nNewTab, ScMF::Scenario );
 
         r.SetString( nCol, nRow, nNewTab, aVal );
     }

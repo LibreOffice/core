@@ -591,7 +591,7 @@ void ScUndoDeleteMulti::DoChange() const
         ScDocument& rDoc = pDocShell->GetDocument();
         SCCOL nEndCol = MAXCOL;
         SCROW nEndRow = MAXROW;
-        rDoc.RemoveFlagsTab( nStartCol, nStartRow, nEndCol, nEndRow, nTab, SC_MF_HOR | SC_MF_VER );
+        rDoc.RemoveFlagsTab( nStartCol, nStartRow, nEndCol, nEndRow, nTab, ScMF::Hor | ScMF::Ver );
         rDoc.ExtendMerge( nStartCol, nStartRow, nEndCol, nEndRow, nTab, true );
     }
 
@@ -2181,7 +2181,7 @@ void ScUndoRemoveMerge::Redo()
 
         rDoc.RemoveFlagsTab( maOption.mnStartCol, maOption.mnStartRow,
                               maOption.mnEndCol, maOption.mnEndRow, nTab,
-                              SC_MF_HOR | SC_MF_VER );
+                              ScMF::Hor | ScMF::Ver );
 
         rDoc.ExtendMerge(aRange, true);
 

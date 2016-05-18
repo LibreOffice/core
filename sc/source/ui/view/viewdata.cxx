@@ -1843,7 +1843,7 @@ bool ScViewData::GetPosFromPixel( long nClickX, long nClickY, ScSplitPos eWhich,
             {
                 OSL_FAIL("merge error found");
 
-                pDoc->RemoveFlagsTab( 0,0, MAXCOL,MAXROW, nTabNo, SC_MF_HOR | SC_MF_VER );
+                pDoc->RemoveFlagsTab( 0,0, MAXCOL,MAXROW, nTabNo, ScMF::Hor | ScMF::Ver );
                 SCCOL nEndCol = MAXCOL;
                 SCROW nEndRow = MAXROW;
                 pDoc->ExtendMerge( 0,0, nEndCol,nEndRow, nTabNo, true );

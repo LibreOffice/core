@@ -560,8 +560,8 @@ long ScColumn::GetNeededSize(
         //      20 * nZoom/100
         //      Conditional formatting is not interesting here
 
-        sal_Int16 nFlags = static_cast<const ScMergeFlagAttr&>(pPattern->GetItem(ATTR_MERGE_FLAG)).GetValue();
-        if (nFlags & SC_MF_AUTO)
+        ScMF nFlags = static_cast<const ScMergeFlagAttr&>(pPattern->GetItem(ATTR_MERGE_FLAG)).GetValue();
+        if (nFlags & ScMF::Auto)
             nValue += (rZoomX.GetNumerator()*20)/rZoomX.GetDenominator();
     }
     return nValue;

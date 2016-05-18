@@ -543,8 +543,8 @@ void XclImpAutoFilterData::SetCellAttribs()
     ScDocument& rDoc = pExcRoot->pIR->GetDoc();
     for ( SCCOL nCol = StartCol(); nCol <= EndCol(); nCol++ )
     {
-        sal_Int16 nFlag = static_cast<const ScMergeFlagAttr*>( rDoc.GetAttr( nCol, StartRow(), Tab(), ATTR_MERGE_FLAG ))->GetValue();
-        rDoc.ApplyAttr( nCol, StartRow(), Tab(), ScMergeFlagAttr( nFlag | SC_MF_AUTO) );
+        ScMF nFlag = static_cast<const ScMergeFlagAttr*>( rDoc.GetAttr( nCol, StartRow(), Tab(), ATTR_MERGE_FLAG ))->GetValue();
+        rDoc.ApplyAttr( nCol, StartRow(), Tab(), ScMergeFlagAttr( nFlag | ScMF::Auto) );
     }
 }
 

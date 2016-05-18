@@ -48,6 +48,7 @@
 #include "markdata.hxx"
 
 enum class SvtScriptType;
+enum class ScMF;
 namespace editeng { class SvxBorderLine; }
 namespace formula { struct VectorRefArray; }
 namespace svl {
@@ -1516,10 +1517,10 @@ public:
 
     SC_DLLPUBLIC bool           ApplyFlagsTab( SCCOL nStartCol, SCROW nStartRow,
                                             SCCOL nEndCol, SCROW nEndRow,
-                                            SCTAB nTab, sal_Int16 nFlags );
+                                            SCTAB nTab, ScMF nFlags );
     SC_DLLPUBLIC bool           RemoveFlagsTab( SCCOL nStartCol, SCROW nStartRow,
                                             SCCOL nEndCol, SCROW nEndRow,
-                                            SCTAB nTab, sal_Int16 nFlags );
+                                            SCTAB nTab, ScMF nFlags );
 
     SC_DLLPUBLIC void           SetPattern( const ScAddress&, const ScPatternAttr& rAttr,
                                     bool bPutToPool = false );

@@ -936,10 +936,10 @@ bool ScOutputData::GetMergeOrigin( SCCOL nX, SCROW nY, SCSIZE nArrY,
         }
         else
         {
-            sal_uInt16 nOverlap = static_cast<const ScMergeFlagAttr*>(mpDoc->GetAttr(
+            ScMF nOverlap = static_cast<const ScMergeFlagAttr*>(mpDoc->GetAttr(
                                 rOverX, rOverY, nTab, ATTR_MERGE_FLAG ))->GetValue();
-            bHOver = ((nOverlap & SC_MF_HOR) != 0);
-            bVOver = ((nOverlap & SC_MF_VER) != 0);
+            bHOver = bool(nOverlap & ScMF::Hor);
+            bVOver = bool(nOverlap & ScMF::Ver);
         }
     }
 
@@ -962,9 +962,9 @@ bool ScOutputData::GetMergeOrigin( SCCOL nX, SCROW nY, SCSIZE nArrY,
         }
         else
         {
-            sal_uInt16 nOverlap = static_cast<const ScMergeFlagAttr*>(mpDoc->GetAttr(
+            ScMF nOverlap = static_cast<const ScMergeFlagAttr*>(mpDoc->GetAttr(
                                 rOverX, rOverY, nTab, ATTR_MERGE_FLAG ))->GetValue();
-            bVOver = ((nOverlap & SC_MF_VER) != 0);
+            bVOver = bool(nOverlap & ScMF::Ver);
         }
     }
 
@@ -1331,7 +1331,7 @@ void ScOutputData::GetOutputArea( SCCOL nX, SCSIZE nArrY, long nPosX, long nPosY
         // (for automatic line break: only if not formatting for printer, as in ScColumn::GetNeededSize)
 
         if ( eType==OUTTYPE_WINDOW &&
-             ( static_cast<const ScMergeFlagAttr&>(rPattern.GetItem(ATTR_MERGE_FLAG)).GetValue() & (SC_MF_AUTO|SC_MF_BUTTON|SC_MF_BUTTON_POPUP) ) &&
+             ( static_cast<const ScMergeFlagAttr&>(rPattern.GetItem(ATTR_MERGE_FLAG)).GetValue() & (ScMF::Auto|ScMF::Button|ScMF::ButtonPopup) ) &&
              ( !bBreak || mpRefDevice == pFmtDevice ) )
         {
             // filter drop-down width is now independent from row height

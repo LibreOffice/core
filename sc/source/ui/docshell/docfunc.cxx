@@ -1840,14 +1840,14 @@ bool ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, 
             {
                 const ScMergeAttr* pMergeFlag = static_cast<const ScMergeAttr*>( &pPattern->GetItem(ATTR_MERGE) );
                 pMergeFlagAttr = static_cast<const ScMergeFlagAttr*>( &pPattern->GetItem(ATTR_MERGE_FLAG) );
-                sal_Int16 nNewFlags = pMergeFlagAttr->GetValue() & ( SC_MF_HOR | SC_MF_VER );
-                if( ( pMergeFlag && pMergeFlag->IsMerged() ) || nNewFlags == SC_MF_HOR || nNewFlags == SC_MF_VER )
+                ScMF nNewFlags = pMergeFlagAttr->GetValue() & ( ScMF::Hor | ScMF::Ver );
+                if( ( pMergeFlag && pMergeFlag->IsMerged() ) || nNewFlags == ScMF::Hor || nNewFlags == ScMF::Ver )
                 {
                     ScRange aRange( nTestCol, nTestRow1, i );
                     rDoc.ExtendOverlapped(aRange);
                     rDoc.ExtendMerge(aRange, true);
 
-                    if( nTestRow1 < nTestRow2 && nNewFlags == SC_MF_HOR )
+                    if( nTestRow1 < nTestRow2 && nNewFlags == ScMF::Hor )
                     {
                         for( SCROW nTestRow = nTestRow1; nTestRow <= nTestRow2; nTestRow++ )
                         {
@@ -2264,14 +2264,14 @@ bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
             {
                 const ScMergeAttr* pMergeFlag = static_cast<const ScMergeAttr*>( &pPattern->GetItem( ATTR_MERGE ) );
                 pMergeFlagAttr = static_cast<const ScMergeFlagAttr*>( &pPattern->GetItem( ATTR_MERGE_FLAG ) );
-                sal_Int16 nNewFlags = pMergeFlagAttr->GetValue() & ( SC_MF_HOR | SC_MF_VER );
-                if( ( pMergeFlag && pMergeFlag->IsMerged() ) || nNewFlags == SC_MF_HOR || nNewFlags == SC_MF_VER )
+                ScMF nNewFlags = pMergeFlagAttr->GetValue() & ( ScMF::Hor | ScMF::Ver );
+                if( ( pMergeFlag && pMergeFlag->IsMerged() ) || nNewFlags == ScMF::Hor || nNewFlags == ScMF::Ver )
                 {
                     ScRange aRange( nTestCol, nTestRow1, i );
                     rDoc.ExtendOverlapped( aRange );
                     rDoc.ExtendMerge( aRange, true );
 
-                    if( nTestRow1 < nTestRow2 && nNewFlags == SC_MF_HOR )
+                    if( nTestRow1 < nTestRow2 && nNewFlags == ScMF::Hor )
                     {
                         for( SCROW nTestRow = nTestRow1; nTestRow <= nTestRow2; nTestRow++ )
                         {
@@ -4831,7 +4831,7 @@ bool ScDocFunc::UnmergeCells( const ScCellMergeOption& rOption, bool bRecord )
 
         rDoc.RemoveFlagsTab( aExtended.aStart.Col(), aExtended.aStart.Row(),
                               aExtended.aEnd.Col(), aExtended.aEnd.Row(), nTab,
-                              SC_MF_HOR | SC_MF_VER );
+                              ScMF::Hor | ScMF::Ver );
 
         rDoc.ExtendMerge( aRefresh, true );
 

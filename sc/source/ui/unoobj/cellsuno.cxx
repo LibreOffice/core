@@ -8015,7 +8015,7 @@ void SAL_CALL ScTableSheetObj::addRanges( const uno::Sequence<table::CellRangeAd
 
             //  Szenario-Ranges sind durch Attribut gekennzeichnet
             ScPatternAttr aPattern( rDoc.GetPool() );
-            aPattern.GetItemSet().Put( ScMergeFlagAttr( SC_MF_SCENARIO ) );
+            aPattern.GetItemSet().Put( ScMergeFlagAttr( ScMF::Scenario ) );
             aPattern.GetItemSet().Put( ScProtectionAttr( true ) );
             pDocSh->GetDocFunc().ApplyAttributes( aMarkData, aPattern, true, true );
         }
