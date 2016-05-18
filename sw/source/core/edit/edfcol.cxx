@@ -171,7 +171,7 @@ SwTextFormatColl& SwEditShell::GetTextFormatColl( sal_uInt16 nFormatColl) const
     return *((*(GetDoc()->GetTextFormatColls()))[nFormatColl]);
 }
 
-void SwEditShell::SetClassification(const OUString& rName)
+void SwEditShell::SetClassification(const OUString& rName, SfxClassificationPolicyType eType)
 {
     SwDocShell* pDocShell = GetDoc()->GetDocShell();
     if (!pDocShell)
@@ -182,7 +182,7 @@ void SwEditShell::SetClassification(const OUString& rName)
     bool bHadWatermark = !aHelper.GetDocumentWatermark().isEmpty();
 
     // This updates the infobar as well.
-    aHelper.SetBACName(rName, SfxClassificationPolicyType::IntellectualProperty);
+    aHelper.SetBACName(rName, eType);
 
     bool bHeaderIsNeeded = aHelper.HasDocumentHeader();
     bool bFooterIsNeeded = aHelper.HasDocumentFooter();

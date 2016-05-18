@@ -99,6 +99,7 @@ class SwAuthEntry;
 class SwRewriter;
 struct SwConversionArgs;
 enum class SvtScriptType;
+enum class SfxClassificationPolicyType;
 namespace com { namespace sun { namespace star { namespace uno {
     template < class > class Sequence;
 }}}}
@@ -359,7 +360,7 @@ public:
     SwCharFormat* GetCharFormatFromPool( sal_uInt16 nId )
         { return static_cast<SwCharFormat*>(SwEditShell::GetFormatFromPool( nId )); }
 
-    void SetClassification(const OUString& rName);
+    void SetClassification(const OUString& rName, SfxClassificationPolicyType eType);
 
     void Insert2(SwField&, const bool bForceExpandHints = false);
 
