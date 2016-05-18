@@ -48,7 +48,6 @@ SvxSwFramePosString::SvxSwFramePosString() :
 
 SvxSwFramePosString::~SvxSwFramePosString()
 {
-    delete pImpl;
 }
 
 const OUString& SvxSwFramePosString::GetString(StringId eId)
