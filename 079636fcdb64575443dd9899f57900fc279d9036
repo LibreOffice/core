@@ -22,6 +22,30 @@
       "revId": "079636fcdb64575443dd9899f57900fc279d9036",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_b5e76a3f",
+        "filename": "sd/source/ui/view/drviews7.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1334,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2016-05-18T12:24:48Z",
+      "side": 1,
+      "message": "The call is\n\nstatic Size LogicToLogic( const Size\u0026 rSzSource, const MapMode\u0026 rMapModeSource, const MapMode\u0026 rMapModeDest);\n\nwhere for yor case rMapModeSource is the mode the data is currently in, so use pSdrGrafObj-\u003eGetGrafPrefMapMode() and rMapModeDest is MapMode(MAP_100TH_MM). Just source and dest are mixed.",
+      "parentUuid": "da7fb54a_6f7c2f21",
+      "range": {
+        "startLine": 1334,
+        "startChar": 81,
+        "endLine": 1334,
+        "endChar": 171
+      },
+      "revId": "079636fcdb64575443dd9899f57900fc279d9036",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
