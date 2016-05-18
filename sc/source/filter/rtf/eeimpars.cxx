@@ -291,20 +291,20 @@ void ScEEImport::WriteToDocument( bool bSizeColsRows, double nOutputFactor, SvNu
                 if ( pE->nColOverlap > 1 )
                     mpDoc->ApplyFlagsTab( nCol+1, nRow,
                         nCol + pE->nColOverlap - 1, nRow, nTab,
-                        SC_MF_HOR );
+                        ScMF::Hor );
                 if ( pE->nRowOverlap > 1 )
                 {
                     nRO = nRow + pE->nRowOverlap - 1;
                     mpDoc->ApplyFlagsTab( nCol, nRow+1,
                         nCol, nRO , nTab,
-                        SC_MF_VER );
+                        ScMF::Ver );
                     if ( nRO > nOverlapRowMax )
                         nOverlapRowMax = nRO;
                 }
                 if ( pE->nColOverlap > 1 && pE->nRowOverlap > 1 )
                     mpDoc->ApplyFlagsTab( nCol+1, nRow+1,
                         nCol + pE->nColOverlap - 1, nRO, nTab,
-                        SC_MF_HOR | SC_MF_VER );
+                        ScMF::Hor | ScMF::Ver );
             }
             const ScStyleSheet* pStyleSheet =
                 mpDoc->GetPattern( nCol, nRow, nTab )->GetStyleSheet();

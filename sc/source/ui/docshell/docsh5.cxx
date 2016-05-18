@@ -98,7 +98,7 @@ bool ScDocShell::IsEditable() const
 void ScDocShell::DBAreaDeleted( SCTAB nTab, SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW /* nY2 */ )
 {
     ScDocShellModificator aModificator( *this );
-    aDocument.RemoveFlagsTab( nX1, nY1, nX2, nY1, nTab, SC_MF_AUTO );
+    aDocument.RemoveFlagsTab( nX1, nY1, nX2, nY1, nTab, ScMF::Auto );
     PostPaint( nX1, nY1, nTab, nX2, nY1, nTab, PAINT_GRID );
     // No SetDocumentModified, as the unnamed database range might have to be restored later.
     // The UNO hint is broadcast directly instead, to keep UNO objects in valid state.
@@ -378,7 +378,7 @@ void ScDocShell::CancelAutoDBRange()
             {
                 // restore AutoFilter buttons
                 pOldAutoDBRange->GetArea( nRangeTab, nRangeX1, nRangeY1, nRangeX2, nRangeY2 );
-                aDocument.ApplyFlagsTab( nRangeX1, nRangeY1, nRangeX2, nRangeY1, nRangeTab, SC_MF_AUTO );
+                aDocument.ApplyFlagsTab( nRangeX1, nRangeY1, nRangeX2, nRangeY1, nRangeTab, ScMF::Auto );
                 PostPaint( nRangeX1, nRangeY1, nRangeTab, nRangeX2, nRangeY1, nRangeTab, PAINT_GRID );
             }
         }
@@ -813,7 +813,7 @@ SCTAB ScDocShell::MakeScenario( SCTAB nTab, const OUString& rName, const OUStrin
             aDocument.ApplyPatternAreaTab( 0,0, MAXCOL,MAXROW, nNewTab, aProtPattern );
 
             ScPatternAttr aPattern( aDocument.GetPool() );
-            aPattern.GetItemSet().Put( ScMergeFlagAttr( SC_MF_SCENARIO ) );
+            aPattern.GetItemSet().Put( ScMergeFlagAttr( ScMF::Scenario ) );
             aPattern.GetItemSet().Put( ScProtectionAttr( true ) );
             aDocument.ApplySelectionPattern( aPattern, aDestMark );
 
