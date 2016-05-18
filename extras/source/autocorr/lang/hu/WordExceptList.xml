@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <block-list:block-list xmlns:block-list="http://openoffice.org/2001/block-list">
+  <block-list:block block-list:abbreviated-name="BSc"/>
   <block-list:block block-list:abbreviated-name="DNy"/>
   <block-list:block block-list:abbreviated-name="DNy-ba"/>
   <block-list:block block-list:abbreviated-name="DNy-ban"/>
@@ -225,6 +226,7 @@
   <block-list:block block-list:abbreviated-name="MPa-tól"/>
   <block-list:block block-list:abbreviated-name="MPa-ul"/>
   <block-list:block block-list:abbreviated-name="MPa-ért"/>
+  <block-list:block block-list:abbreviated-name="MSc"/>
   <block-list:block block-list:abbreviated-name="MSv"/>
   <block-list:block block-list:abbreviated-name="MWb"/>
   <block-list:block block-list:abbreviated-name="OOo"/>
