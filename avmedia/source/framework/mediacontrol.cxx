@@ -68,7 +68,7 @@ MediaControl::MediaControl( vcl::Window* pParent, MediaControlStyle eControlStyl
     maVolumeSlider( VclPtr<Slider>::Create(this, WB_HORZ | WB_DRAG | WB_SLIDERSET) ),
     maZoomToolBox( VclPtr<ToolBox>::Create(this, WB_3DLOOK) ),
     mpZoomListBox( VclPtr<ListBox>::Create( maZoomToolBox.get(), WB_BORDER | WB_DROPDOWN | WB_AUTOHSCROLL | WB_3DLOOK ) ),
-    maTimeEdit( VclPtr<Edit>::Create(this, WB_CENTER | WB_READONLY | WB_BORDER | WB_3DLOOK | WB_READONLY) ),
+    maTimeEdit( VclPtr<Edit>::Create(this, WB_CENTER | WB_READONLY | WB_BORDER | WB_3DLOOK ) ),
     meControlStyle( eControlStyle ),
     mbLocked( false )
 {

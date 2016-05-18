@@ -1082,8 +1082,7 @@ void SwFrame::CheckPageDescs( SwPageFrame *pStart, bool bNotifyFields, SwPageFra
             else if ( !pFormatWish )                                       //6.
             {
                 // get format with inverted logic
-                if (!pFormatWish)
-                    pFormatWish = bOdd ? pDesc->GetLeftFormat() : pDesc->GetRightFormat();
+                pFormatWish = bOdd ? pDesc->GetLeftFormat() : pDesc->GetRightFormat();
                 if ( pPage->GetFormat() != pFormatWish )
                     pPage->SetFrameFormat( pFormatWish );
             }

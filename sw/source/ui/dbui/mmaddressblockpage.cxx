@@ -836,7 +836,7 @@ public:
 VCL_BUILDER_FACTORY_ARGS(SwAssignFieldsControl, WB_BORDER)
 
 SwAssignFieldsControl::SwAssignFieldsControl(vcl::Window* pParent, WinBits nBits) :
-    Control(pParent, nBits | WB_DIALOGCONTROL | WB_TABSTOP | WB_DIALOGCONTROL),
+    Control(pParent, nBits | WB_DIALOGCONTROL | WB_TABSTOP),
     m_aVScroll(VclPtr<ScrollBar>::Create(this)),
     m_aHeaderHB(VclPtr<HeaderBar>::Create(this, WB_BUTTONSTYLE | WB_BOTTOMBORDER)),
     m_aWindow(VclPtr<vcl::Window>::Create(this, WB_BORDER | WB_DIALOGCONTROL)),

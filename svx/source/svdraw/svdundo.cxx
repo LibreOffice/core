@@ -648,7 +648,7 @@ void SdrUndoGeoObj::Undo()
         if (pTableObj && mbSkipChangeLayout)
             pTableObj->SetSkipChangeLayout(true);
         pObj->SetGeoData(*pUndoGeo);
-        if (pTableObj && mbSkipChangeLayout && pTableObj)
+        if (pTableObj && mbSkipChangeLayout)
             pTableObj->SetSkipChangeLayout(false);
     }
 }

@@ -1377,12 +1377,6 @@ void TreeControlPeer::onChangeRootDisplayed( bool bIsRootDisplayed )
 
     // todo
     fillTree( rTree, mxDataModel );
-    if( mbIsRootDisplayed )
-    {
-    }
-    else
-    {
-    }
 }
 
 bool TreeControlPeer::loadImage( const OUString& rURL, Image& rImage )
