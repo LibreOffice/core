@@ -91,12 +91,6 @@ void ScFormulaListener::startListening(ScTokenArray* pArr, const ScRange& rRange
     }
 }
 
-void ScFormulaListener::resetTokenArray(ScTokenArray* pArray, const ScRange& rRange)
-{
-    stopListening();
-    startListening(pArray, rRange);
-}
-
 void ScFormulaListener::addTokenArray(ScTokenArray* pArray, const ScRange& rRange)
 {
     startListening(pArray, rRange);
@@ -595,18 +589,6 @@ void ScColorScaleFormat::UpdateMoveTab( sc::RefUpdateMoveTabContext& rCxt )
         (*it)->UpdateMoveTab(rCxt);
 }
 
-bool ScColorScaleFormat::NeedsRepaint() const
-{
-    for(ScColorScaleEntries::const_iterator itr = begin(), itrEnd = end();
-            itr != itrEnd; ++itr)
-    {
-        if((*itr)->NeedsRepaint())
-            return true;
-    }
-    return false;
-}
-
-
 condformat::ScFormatEntryType ScColorScaleFormat::GetType() const
 {
     return condformat::COLORSCALE;
@@ -719,12 +701,6 @@ void ScDataBarFormat::UpdateMoveTab( sc::RefUpdateMoveTabContext& rCxt )
 {
     mpFormatData->mpUpperLimit->UpdateMoveTab(rCxt);
     mpFormatData->mpLowerLimit->UpdateMoveTab(rCxt);
-}
-
-bool ScDataBarFormat::NeedsRepaint() const
-{
-    return mpFormatData->mpUpperLimit->NeedsRepaint() ||
-        mpFormatData->mpLowerLimit->NeedsRepaint();
 }
 
 double ScDataBarFormat::getMin(double nMin, double nMax) const
@@ -1057,17 +1033,6 @@ void ScIconSetFormat::UpdateMoveTab( sc::RefUpdateMoveTabContext& rCxt )
     {
         (*itr)->UpdateMoveTab(rCxt);
     }
-}
-
-bool ScIconSetFormat::NeedsRepaint() const
-{
-    for(const_iterator itr = begin(); itr != end(); ++itr)
-    {
-        if ((*itr)->NeedsRepaint())
-            return true;
-    }
-
-    return false;
 }
 
 ScIconSetFormat::iterator ScIconSetFormat::begin()

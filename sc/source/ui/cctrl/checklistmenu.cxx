@@ -1528,13 +1528,6 @@ void ScTabStops::CycleFocus( bool bReverse )
     // else : all controls are disabled, so can't do anything
 }
 
-vcl::Window* ScTabStops::GetCurrentControl()
-{
-    if ( mnCurTabStop >= maControls.size() )
-        return nullptr;
-    return maControls[mnCurTabStop];
-}
-
 void ScTabStops::clear()
 {
     mnCurTabStop = 0;

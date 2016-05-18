@@ -92,11 +92,6 @@ ScTypedStrData::ScTypedStrData( const ScTypedStrData& rCpy ) :
     meStrType(rCpy.meStrType),
     mbIsDate( rCpy.mbIsDate ) {}
 
-bool ScTypedStrData::IsStrData() const
-{
-    return meStrType != Value;
-}
-
 FindTypedStrData::FindTypedStrData(const ScTypedStrData& rVal, bool bCaseSens) :
     maVal(rVal), mbCaseSens(bCaseSens) {}
 

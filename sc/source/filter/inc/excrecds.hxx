@@ -100,8 +100,6 @@ protected:
     inline                  ExcBoolRecord() : bVal( false ) {}
 
 public:
-    inline                  ExcBoolRecord( const bool bDefault ) : bVal( bDefault ) {}
-
     virtual sal_Size        GetLen() const override;
 };
 

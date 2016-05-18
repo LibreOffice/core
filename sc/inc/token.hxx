@@ -89,12 +89,6 @@ private:
 public:
                                 ScDoubleRefToken( const ScComplexRefData& r, OpCode e = ocPush  ) :
                                     FormulaToken( formula::svDoubleRef, e ), aDoubleRef( r ) {}
-                                ScDoubleRefToken( const ScSingleRefData& r, OpCode e = ocPush  ) :
-                                    FormulaToken( formula::svDoubleRef, e )
-                                {
-                                    aDoubleRef.Ref1 = r;
-                                    aDoubleRef.Ref2 = r;
-                                }
                                 ScDoubleRefToken( const ScDoubleRefToken& r ) :
                                     FormulaToken( r ), aDoubleRef( r.aDoubleRef ) {}
     virtual const ScSingleRefData*    GetSingleRef() const override;
@@ -461,12 +455,6 @@ public:
                         Ref2( (r.GetType() == formula::svDoubleRef ||
                                     r.GetType() == formula::svExternalDoubleRef) ?
                                 r.GetDoubleRef()->Ref2 : Ref1 )
-                    {}
-                SingleDoubleRefProvider( const ScSingleRefData& r )
-                        : Ref1( r ), Ref2( r )
-                    {}
-                SingleDoubleRefProvider( const ScComplexRefData& r )
-                        : Ref1( r.Ref1 ), Ref2( r.Ref2 )
                     {}
                 ~SingleDoubleRefProvider()
                     {}

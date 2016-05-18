@@ -479,48 +479,5 @@ public:
     void setStatusIndicator(const css::uno::Reference<css::task::XStatusIndicator>& rIndicator);
 };
 
-class ScOrcusTable : public orcus::spreadsheet::iface::import_table
-{
-private:
-    SCTAB mnTab;
-    ScDocument& mrDoc;
-    ScOrcusAutoFilter maAutoFilter;
-
-    ScRange maRange;
-    OUString maName;
-
-public:
-    ScOrcusTable(SCTAB nTab, ScDocument& rDoc);
-    virtual ~ScOrcusTable();
-
-    virtual orcus::spreadsheet::iface::import_auto_filter* get_auto_filter() override;
-
-    virtual void set_identifier(size_t id) override;
-
-    virtual void set_range(const char* p_ref, size_t n_ref) override;
-
-    virtual void set_totals_row_count(size_t row_count) override;
-
-    virtual void set_name(const char* p, size_t n) override;
-
-    virtual void set_display_name(const char* p, size_t n) override;
-
-    virtual void set_column_count(size_t n) override;
-
-    virtual void set_column_identifier(size_t id) override;
-    virtual void set_column_name(const char* p, size_t n) override;
-    virtual void set_column_totals_row_label(const char* p, size_t n) override;
-    virtual void set_column_totals_row_function(orcus::spreadsheet::totals_row_function_t func) override;
-    virtual void commit_column() override;
-
-    virtual void set_style_name(const char* p, size_t n) override;
-    virtual void set_style_show_first_column(bool b) override;
-    virtual void set_style_show_last_column(bool b) override;
-    virtual void set_style_show_row_stripes(bool b) override;
-    virtual void set_style_show_column_stripes(bool b) override;
-
-    virtual void commit() override;
-};
-
 #endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

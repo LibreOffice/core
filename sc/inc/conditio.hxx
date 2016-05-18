@@ -104,7 +104,6 @@ public:
 
     bool NeedsRepaint() const;
 
-    void resetTokenArray(ScTokenArray* pTokens, const ScRange& rRange);
     void addTokenArray(ScTokenArray* pTokens, const ScRange& rRange);
     void stopListening();
     void setCallback(const std::function<void()>& aCallbackFunction);
@@ -518,7 +517,6 @@ public:
     const_iterator end() const;
 
     size_t size() const;
-    bool empty() const;
 
     void erase(sal_uLong nIndex);
     void clear();

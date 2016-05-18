@@ -737,29 +737,6 @@ ScAccessibleTextData* ScAccessibleCellTextData::Clone() const
     return new ScAccessibleCellTextData( mpViewShell, aCellPos, meSplitPos, mpAccessibleCell );
 }
 
-void ScAccessibleCellTextData::GetCellText(const ScAddress& rCellPos, OUString& rText)
-{
-//  #104893#; don't use the input string
-//    ScCellTextData::GetCellText(rCellPos, rText);
-    ScDocument& rDoc = pDocShell->GetDocument();
-    //  #104893#; use the displayed string
-    rText = rDoc.GetString(rCellPos.Col(), rCellPos.Row(), rCellPos.Tab());
-    if (mpViewShell)
-    {
-        const ScViewOptions& aOptions = mpViewShell->GetViewData().GetOptions();
-        ScRefCellValue aCell(rDoc, ScAddress(rCellPos.Col(), rCellPos.Row(), rCellPos.Tab()));
-        if (aCell.meType == CELLTYPE_FORMULA && aOptions.GetOption( VOPT_FORMULAS ))
-        {
-            aCell.mpFormula->GetFormula(rText);
-        }
-        else if (!aOptions.GetOption( VOPT_NULLVALS ))
-        {
-            if ((aCell.meType == CELLTYPE_VALUE || aCell.meType == CELLTYPE_FORMULA) && aCell.getValue() == 0.0)
-                rText.clear();
-        }
-    }
-}
-
 SvxTextForwarder* ScAccessibleCellTextData::GetTextForwarder()
 {
     ScCellTextData::GetTextForwarder(); // creates Forwarder and EditEngine

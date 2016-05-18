@@ -36,7 +36,6 @@ struct ScMyStyleNumberFormat
     OUString       sStyleName;
     sal_Int32           nNumberFormat;
 
-    ScMyStyleNumberFormat() : nNumberFormat(-1) {}
     explicit ScMyStyleNumberFormat(const OUString& rStyleName) :
         sStyleName(rStyleName), nNumberFormat(-1) {}
     ScMyStyleNumberFormat(const OUString& rStyleName, const sal_Int32 nFormat) :

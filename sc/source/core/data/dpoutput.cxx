@@ -1173,17 +1173,6 @@ ScRange ScDPOutput::GetOutputRange( sal_Int32 nRegionType )
     return ScRange(aStartPos.Col(), aStartPos.Row(), nTab, nTabEndCol, nTabEndRow, nTab);
 }
 
-ScRange ScDPOutput::GetOutputRange() const
-{
-    using namespace ::com::sun::star::sheet;
-
-    if (!bSizesValid)
-        return ScRange(ScAddress::INITIALIZE_INVALID);
-
-    SCTAB nTab = aStartPos.Tab();
-    return ScRange(aStartPos.Col(), aStartPos.Row(), nTab, nTabEndCol, nTabEndRow, nTab);
-}
-
 bool ScDPOutput::HasError()
 {
     CalcSizes();

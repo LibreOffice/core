@@ -123,8 +123,6 @@ class LinkSheetRange
 {
 public:
     inline explicit     LinkSheetRange() { setDeleted(); }
-    inline explicit     LinkSheetRange( sal_Int32 nFirst, sal_Int32 nLast ) { setRange( nFirst, nLast ); }
-    inline explicit     LinkSheetRange( sal_Int32 nDocLink, sal_Int32 nFirst, sal_Int32 nLast ) { setExternalRange( nDocLink, nFirst, nLast ); }
 
     /** Sets this struct to deleted state. */
     void                setDeleted();

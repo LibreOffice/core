@@ -71,8 +71,6 @@ public:
         virtual std::vector<ScDPItemData> getMatchValues() const override;
 
     private:
-        explicit SingleFilter();
-
         ScDPItemData maItem;
     };
 

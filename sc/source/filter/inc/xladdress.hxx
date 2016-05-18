@@ -63,7 +63,6 @@ struct XclRange
     inline explicit     XclRange( ScAddress::Uninitialized e ) : maFirst( e ), maLast( e ) {}
     inline explicit     XclRange() {}
     inline explicit     XclRange( const XclAddress& rPos ) : maFirst( rPos ), maLast( rPos ) {}
-    inline explicit     XclRange( const XclAddress& rFirst, const XclAddress& rLast ) : maFirst( rFirst ), maLast( rLast ) {}
     inline explicit     XclRange( sal_uInt16 nCol1, sal_uInt32 nRow1, sal_uInt16 nCol2, sal_uInt32 nRow2 ) :
                             maFirst( nCol1, nRow1 ), maLast( nCol2, nRow2 ) {}
 

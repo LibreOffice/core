@@ -180,11 +180,6 @@ sal_uInt32 ScGlobal::GetStandardFormat( SvNumberFormatter& rFormatter,
     return rFormatter.GetStandardFormat( nType, eLnge );
 }
 
-sal_uInt16 ScGlobal::GetStandardRowHeight()
-{
-    return nStdRowHeight;
-}
-
 SvNumberFormatter* ScGlobal::GetEnglishFormatter()
 {
     if ( !pEnglishFormatter )

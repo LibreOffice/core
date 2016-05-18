@@ -32,33 +32,12 @@
 class SC_DLLPUBLIC ScImportOptions
 {
 public:
-        ScImportOptions()
-            : nFieldSepCode(0), nTextSepCode(0),
-            eCharSet(RTL_TEXTENCODING_DONTKNOW), bFixedWidth(false),
-            bSaveAsShown(false), bQuoteAllText(false), bSaveFormulas(false)
-        {}
         ScImportOptions( const OUString& rStr );
-
-        ScImportOptions( sal_Unicode nFieldSep, sal_Unicode nTextSep, const OUString& rStr )
-            : nFieldSepCode(nFieldSep), nTextSepCode(nTextSep), aStrFont(rStr),
-            bFixedWidth(false), bSaveAsShown(false), bQuoteAllText(false), bSaveFormulas(false)
-        { eCharSet = ScGlobal::GetCharsetValue(aStrFont); }
 
         ScImportOptions( sal_Unicode nFieldSep, sal_Unicode nTextSep, rtl_TextEncoding nEnc )
             : nFieldSepCode(nFieldSep), nTextSepCode(nTextSep),
             bFixedWidth(false), bSaveAsShown(false), bQuoteAllText(false), bSaveFormulas(false)
         { SetTextEncoding( nEnc ); }
-
-        ScImportOptions( const ScImportOptions& rCpy )
-            : nFieldSepCode     (rCpy.nFieldSepCode),
-              nTextSepCode      (rCpy.nTextSepCode),
-              aStrFont          (rCpy.aStrFont),
-              eCharSet          (rCpy.eCharSet),
-              bFixedWidth       (rCpy.bFixedWidth),
-              bSaveAsShown      (rCpy.bSaveAsShown),
-              bQuoteAllText     (rCpy.bQuoteAllText),
-              bSaveFormulas     (rCpy.bSaveFormulas)
-        {}
 
     ScImportOptions& operator=( const ScImportOptions& rCpy )
                         {

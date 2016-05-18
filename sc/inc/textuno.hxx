@@ -360,9 +360,6 @@ protected:
     bool                    bDirty;
     bool                    bDoUpdate;
 
-protected:
-    virtual void            GetCellText(const ScAddress& rCellPos, OUString& rText);
-
 public:
                             ScCellTextData(ScDocShell* pDocSh, const ScAddress& rP);
     virtual                 ~ScCellTextData();

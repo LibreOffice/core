@@ -80,28 +80,12 @@ CellFormulaModel::CellFormulaModel() :
 {
 }
 
-bool CellFormulaModel::isValidArrayRef( const CellAddress& rCellAddr )
-{
-    return
-        (maFormulaRef.Sheet == rCellAddr.Sheet) &&
-        (maFormulaRef.StartColumn == rCellAddr.Column) &&
-        (maFormulaRef.StartRow == rCellAddr.Row);
-}
-
 bool CellFormulaModel::isValidArrayRef( const ScAddress& rCellAddr )
 {
     return
         (maFormulaRef.Sheet == rCellAddr.Tab() ) &&
         (maFormulaRef.StartColumn == rCellAddr.Col() ) &&
         (maFormulaRef.StartRow == rCellAddr.Row() );
-}
-
-bool CellFormulaModel::isValidSharedRef( const CellAddress& rCellAddr )
-{
-    return
-        (maFormulaRef.Sheet == rCellAddr.Sheet) &&
-        (maFormulaRef.StartColumn <= rCellAddr.Column) && (rCellAddr.Column <= maFormulaRef.EndColumn) &&
-        (maFormulaRef.StartRow <= rCellAddr.Row) && (rCellAddr.Row <= maFormulaRef.EndRow);
 }
 
 bool CellFormulaModel::isValidSharedRef( const ScAddress& rCellAddr )
@@ -233,14 +217,6 @@ void SheetDataBuffer::setDateCell( const CellModel& rModel, const OUString& rDat
         setValueCell( rModel, fValue );
 }
 
-void SheetDataBuffer::createSharedFormula(const CellAddress& rAddr, const ApiTokenSequence& rTokens)
-{
-    BinAddress aAddr(rAddr);
-    maSharedFormulas[aAddr] = rTokens;
-    if( mbPendingSharedFmla )
-        setCellFormula( maSharedFmlaAddr, resolveSharedFormula( maSharedBaseAddr ) );
-}
-
 void SheetDataBuffer::createSharedFormula(const ScAddress& rAddr, const ApiTokenSequence& rTokens)
 {
     BinAddress aAddr(rAddr);
@@ -338,21 +314,6 @@ void SheetDataBuffer::setRowFormat( sal_Int32 nRow, sal_Int32 nXfId, bool bCusto
 void SheetDataBuffer::setMergedRange( const CellRangeAddress& rRange )
 {
     maMergedRanges.push_back( MergedRange( rRange ) );
-}
-
-void SheetDataBuffer::setStandardNumFmt( const CellAddress& rCellAddr, sal_Int16 nStdNumFmt )
-{
-    try
-    {
-        Reference< XNumberFormatsSupplier > xNumFmtsSupp( getDocument(), UNO_QUERY_THROW );
-        Reference< XNumberFormatTypes > xNumFmtTypes( xNumFmtsSupp->getNumberFormats(), UNO_QUERY_THROW );
-        sal_Int32 nIndex = xNumFmtTypes->getStandardFormat( nStdNumFmt, Locale() );
-        PropertySet aPropSet( getCell( rCellAddr ) );
-        aPropSet.setProperty( PROP_NumberFormat, nIndex );
-    }
-    catch( Exception& )
-    {
-    }
 }
 
 void SheetDataBuffer::setStandardNumFmt( const ScAddress& rCellAddr, sal_Int16 nStdNumFmt )
@@ -580,27 +541,10 @@ SheetDataBuffer::MergedRange::MergedRange( const CellRangeAddress& rRange ) :
 {
 }
 
-SheetDataBuffer::MergedRange::MergedRange( const CellAddress& rAddress, sal_Int32 nHorAlign ) :
-    maRange( rAddress.Sheet, rAddress.Column, rAddress.Row, rAddress.Column, rAddress.Row ),
-    mnHorAlign( nHorAlign )
-{
-}
-
 SheetDataBuffer::MergedRange::MergedRange( const ScAddress& rAddress, sal_Int32 nHorAlign ) :
     maRange( rAddress.Tab(), rAddress.Col(), rAddress.Row(), rAddress.Col(), rAddress.Row() ),
     mnHorAlign( nHorAlign )
 {
-}
-
-bool SheetDataBuffer::MergedRange::tryExpand( const CellAddress& rAddress, sal_Int32 nHorAlign )
-{
-    if( (mnHorAlign == nHorAlign) && (maRange.StartRow == rAddress.Row) &&
-        (maRange.EndRow == rAddress.Row) && (maRange.EndColumn + 1 == rAddress.Column) )
-    {
-        ++maRange.EndColumn;
-        return true;
-    }
-    return false;
 }
 
 bool SheetDataBuffer::MergedRange::tryExpand( const ScAddress& rAddress, sal_Int32 nHorAlign )
@@ -614,14 +558,6 @@ bool SheetDataBuffer::MergedRange::tryExpand( const ScAddress& rAddress, sal_Int
     return false;
 }
 
-void SheetDataBuffer::setCellFormula( const CellAddress& rCellAddr, const ApiTokenSequence& rTokens )
-{
-    if( rTokens.hasElements() )
-    {
-        putFormulaTokens( rCellAddr, rTokens );
-    }
-}
-
 void SheetDataBuffer::setCellFormula( const ScAddress& rCellAddr, const ApiTokenSequence& rTokens )
 {
     if( rTokens.hasElements() )
@@ -630,13 +566,6 @@ void SheetDataBuffer::setCellFormula( const ScAddress& rCellAddr, const ApiToken
     }
 }
 
-
-ApiTokenSequence SheetDataBuffer::resolveSharedFormula( const CellAddress& rAddr ) const
-{
-    BinAddress aAddr(rAddr);
-    ApiTokenSequence aTokens = ContainerHelper::getMapElement( maSharedFormulas, aAddr, ApiTokenSequence() );
-    return aTokens;
-}
 
 ApiTokenSequence SheetDataBuffer::resolveSharedFormula( const ScAddress& rAddr ) const
 {

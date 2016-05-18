@@ -37,7 +37,6 @@ private:
     ScColumnVector    aCols;
     ScDocument*       pDocument;
 public:
-    ScColContainer( ScDocument* pDoc );
     ScColContainer( ScDocument* pDoc, const size_t nSize );
     ~ScColContainer();
 
@@ -56,8 +55,6 @@ public:
         return static_cast<SCCOL>( aCols.size() );
     }
 
-    void CreateCol( SCCOL nColIdx, SCTAB nTab );
-    void DeleteLastCols( SCSIZE nCols );
     bool ColumnExists( SCCOL nColIdx ) const;
     void Clear();
 };

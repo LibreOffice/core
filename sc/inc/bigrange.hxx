@@ -134,18 +134,10 @@ public:
     ScBigAddress    aEnd;
 
                     ScBigRange() : aStart(), aEnd() {}
-                    ScBigRange( const ScBigAddress& s, const ScBigAddress& e )
-                        : aStart( s ), aEnd( e ) { aStart.PutInOrder( aEnd ); }
                     ScBigRange( const ScBigRange& r )
                         : aStart( r.aStart ), aEnd( r.aEnd ) {}
                     ScBigRange( const ScRange& r )
                         : aStart( r.aStart ), aEnd( r.aEnd ) {}
-                    ScBigRange( const ScBigAddress& r )
-                        : aStart( r ), aEnd( r ) {}
-                    ScBigRange( const ScAddress& r )
-                        : aStart( r ), aEnd( r ) {}
-                    ScBigRange( sal_Int32 nCol, sal_Int32 nRow, sal_Int32 nTab )
-                        : aStart( nCol, nRow, nTab ), aEnd( aStart ) {}
                     ScBigRange( sal_Int32 nCol1, sal_Int32 nRow1, sal_Int32 nTab1,
                             sal_Int32 nCol2, sal_Int32 nRow2, sal_Int32 nTab2 )
                         : aStart( nCol1, nRow1, nTab1 ),

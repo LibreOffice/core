@@ -690,8 +690,6 @@ private:
     ScRange aRange[2];
 
 public:
-    ScRangePair()
-    {}
     ScRangePair( const ScRangePair& r )
     {
         aRange[0] = r.aRange[0];
@@ -736,11 +734,6 @@ public:
     inline ScRefAddress( SCCOL nCol, SCROW nRow, SCTAB nTab,
                          bool bRelColP, bool bRelRowP, bool bRelTabP ) :
         aAdr(nCol, nRow, nTab),
-        bRelCol(bRelColP), bRelRow(bRelRowP), bRelTab(bRelTabP)
-    {}
-    inline ScRefAddress( const ScAddress& rAdr,
-                         bool bRelColP, bool bRelRowP, bool bRelTabP ) :
-        aAdr(rAdr),
         bRelCol(bRelColP), bRelRow(bRelRowP), bRelTab(bRelTabP)
     {}
     inline ScRefAddress( const ScRefAddress& rRef ) :

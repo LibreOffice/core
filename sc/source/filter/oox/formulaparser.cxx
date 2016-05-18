@@ -2557,16 +2557,6 @@ FormulaParser::~FormulaParser()
 {
 }
 
-ApiTokenSequence FormulaParser::importFormula( const CellAddress& rBaseAddress, const OUString& rFormulaString ) const
-{
-    return mxImpl->importOoxFormula( rBaseAddress, rFormulaString );
-}
-
-ApiTokenSequence FormulaParser::importFormula( const CellAddress& rBaseAddress, FormulaType eType, SequenceInputStream& rStrm ) const
-{
-    return mxImpl->importBiff12Formula( rBaseAddress, eType, rStrm );
-}
-
 ApiTokenSequence FormulaParser::importFormula( const ScAddress& rBaseAddress, const OUString& rFormulaString ) const
 {
     return mxImpl->importOoxFormulaSc( rBaseAddress, rFormulaString );

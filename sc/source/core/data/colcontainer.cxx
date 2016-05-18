@@ -22,11 +22,6 @@
 #include "column.hxx"
 #include "document.hxx"
 
-ScColContainer::ScColContainer( ScDocument* pDoc ):
-    aCols( ScColumnVector() ),
-    pDocument( pDoc )
-{}
-
 ScColContainer::ScColContainer( ScDocument* pDoc, const size_t nSize )
 {
     pDocument = pDoc;
@@ -40,40 +35,6 @@ ScColContainer::~ScColContainer()
     Clear();
 }
 
-void ScColContainer::CreateCol( SCCOL nColIdx, SCTAB nTab )
-{
-    assert( nColIdx >= 0 );
-    SCCOL nSize = size();
-    if ( nColIdx < nSize )
-        return;
-    else
-    {
-        aCols.resize( nColIdx + 1, nullptr );
-        for ( SCCOL nNewColIdx = nSize; nNewColIdx <= nColIdx; ++nNewColIdx )
-        {
-            aCols[nNewColIdx] = new ScColumn;
-            aCols[nNewColIdx]->Init( nNewColIdx, nTab, pDocument );
-            // TODO: Apply any full row formatting / document formatting
-        }
-    }
-}
-
-void ScColContainer::DeleteLastCols( SCSIZE nCols )
-{
-    SCCOL nSize = size();
-    SCCOL nFirstColToDelete = nSize - nCols;
-    if ( !ColumnExists( nFirstColToDelete ) )
-        return;
-
-    for ( SCCOL nColToDelete = nFirstColToDelete; nColToDelete < nSize; ++nColToDelete )
-    {
-        if ( !pDocument->IsInDtorClear() )
-            aCols[nColToDelete]->FreeNotes();
-        aCols[nColToDelete]->PrepareBroadcastersForDestruction();
-        delete aCols[nColToDelete];
-        aCols.resize( static_cast<size_t>( nFirstColToDelete ) );
-    }
-}
 
 bool ScColContainer::ColumnExists( SCCOL nColIdx ) const
 {

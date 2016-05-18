@@ -29,8 +29,6 @@ class DocumentStreamAccess
 {
     std::unique_ptr<DocumentStreamAccessImpl> mpImpl;
 
-    DocumentStreamAccess();
-
 public:
     DocumentStreamAccess( ScDocument& rDoc );
     ~DocumentStreamAccess();

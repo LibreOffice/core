@@ -3180,12 +3180,6 @@ bool operator==( const Xf& rXf1, const Xf& rXf2 )
     return false;
 }
 
-void StylesBuffer::writeCellXfToPropertySet( PropertySet& rPropSet, sal_Int32 nXfId ) const
-{
-    if( Xf* pXf = maCellXfs.get( nXfId ).get() )
-        pXf->writeToPropertySet( rPropSet );
-}
-
 void StylesBuffer::writeCellXfToDoc(
     ScDocumentImport& rDoc, const table::CellRangeAddress& rRange, sal_Int32 nXfId ) const
 {
@@ -3194,12 +3188,6 @@ void StylesBuffer::writeCellXfToDoc(
         return;
 
     pXf->writeToDoc(rDoc, rRange);
-}
-
-bool StylesBuffer::hasBorder( sal_Int32 nBorderId ) const
-{
-    Border* pBorder = maBorders.get( nBorderId ).get();
-    return pBorder && pBorder->hasBorder();
 }
 
 } // namespace xls

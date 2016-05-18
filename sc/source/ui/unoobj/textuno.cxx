@@ -933,15 +933,6 @@ ScCellEditSource* ScCellTextData::GetOriginalSource()
     return pOriginalSource;
 }
 
-void ScCellTextData::GetCellText(const ScAddress& rCellPos, OUString& rText)
-{
-    if (pDocShell)
-    {
-        ScDocument& rDoc = pDocShell->GetDocument();
-        rDoc.GetInputString( rCellPos.Col(), rCellPos.Row(), rCellPos.Tab(), rText );
-    }
-}
-
 SvxTextForwarder* ScCellTextData::GetTextForwarder()
 {
     if (!pEditEngine)
