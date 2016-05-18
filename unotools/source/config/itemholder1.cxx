@@ -44,7 +44,6 @@
 #include <unotools/searchopt.hxx>
 #include <unotools/securityoptions.hxx>
 #include <unotools/viewoptions.hxx>
-#include <unotools/xmlaccelcfg.hxx>
 #include <unotools/options.hxx>
 #include <unotools/syslocaleoptions.hxx>
 

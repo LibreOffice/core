@@ -67,10 +67,6 @@ struct InteractionHandlerData
     /** The UNO service name to use to instanciate the content provider.
      */
     OUString ServiceName;
-
-    InteractionHandlerData() {};
-    explicit InteractionHandlerData(const OUString & rService)
-        : ServiceName( rService ){}
 };
 
 typedef std::vector< InteractionHandlerData > InteractionHandlerDataList;

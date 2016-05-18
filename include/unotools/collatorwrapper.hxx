@@ -55,10 +55,6 @@ class UNOTOOLS_DLLPUBLIC CollatorWrapper
         loadCollatorAlgorithm (
                 const OUString& rAlgorithm,
                 const css::lang::Locale& rLocale, sal_Int32 nOption);
-
-    protected:
-
-        CollatorWrapper();
 };
 
 #endif // INCLUDED_UNOTOOLS_COLLATORWRAPPER_HXX

@@ -160,24 +160,9 @@ namespace utl
             reset( _rxComponent, eMode );
         }
 
-        inline SharedUNOComponent( const css::uno::XInterface* _pInterface, css::uno::UnoReference_QueryThrow _queryThrow )
-        {
-            set( _pInterface, _queryThrow );
-        }
-
         inline SharedUNOComponent( const css::uno::BaseReference & _rRef, css::uno::UnoReference_QueryThrow _queryThrow )
         {
             set( _rRef, _queryThrow );
-        }
-
-        inline SharedUNOComponent( const css::uno::Any& _rAny, css::uno::UnoReference_QueryThrow _queryThrow )
-        {
-            set( _rAny, _queryThrow );
-        }
-
-        inline  SharedUNOComponent( const SharedUNOComponent& _rxComponent, css::uno::UnoReference_SetThrow _setThrow )
-        {
-            set( _rxComponent, _setThrow );
         }
 
 //        SharedUNOComponent& operator=( const css::uno::Reference< INTERFACE >& _rxComponent );
