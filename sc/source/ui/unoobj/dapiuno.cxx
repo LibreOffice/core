@@ -178,40 +178,40 @@ SC_SIMPLE_SERVICE_INFO( ScDataPilotFieldGroupItemObj, "ScDataPilotFieldGroupItem
 // name that is used in the API for the data layout field
 #define SC_DATALAYOUT_NAME  "Data"
 
-GeneralFunction ScDataPilotConversion::FirstFunc( sal_uInt16 nBits )
+GeneralFunction ScDataPilotConversion::FirstFunc( PivotFunc nBits )
 {
-    if ( nBits & PIVOT_FUNC_SUM )       return GeneralFunction_SUM;
-    if ( nBits & PIVOT_FUNC_COUNT )     return GeneralFunction_COUNT;
-    if ( nBits & PIVOT_FUNC_AVERAGE )   return GeneralFunction_AVERAGE;
-    if ( nBits & PIVOT_FUNC_MAX )       return GeneralFunction_MAX;
-    if ( nBits & PIVOT_FUNC_MIN )       return GeneralFunction_MIN;
-    if ( nBits & PIVOT_FUNC_PRODUCT )   return GeneralFunction_PRODUCT;
-    if ( nBits & PIVOT_FUNC_COUNT_NUM ) return GeneralFunction_COUNTNUMS;
-    if ( nBits & PIVOT_FUNC_STD_DEV )   return GeneralFunction_STDEV;
-    if ( nBits & PIVOT_FUNC_STD_DEVP )  return GeneralFunction_STDEVP;
-    if ( nBits & PIVOT_FUNC_STD_VAR )   return GeneralFunction_VAR;
-    if ( nBits & PIVOT_FUNC_STD_VARP )  return GeneralFunction_VARP;
-    if ( nBits & PIVOT_FUNC_AUTO )      return GeneralFunction_AUTO;
+    if ( nBits & PivotFunc::Sum )       return GeneralFunction_SUM;
+    if ( nBits & PivotFunc::Count )     return GeneralFunction_COUNT;
+    if ( nBits & PivotFunc::Average )   return GeneralFunction_AVERAGE;
+    if ( nBits & PivotFunc::Max )       return GeneralFunction_MAX;
+    if ( nBits & PivotFunc::Min )       return GeneralFunction_MIN;
+    if ( nBits & PivotFunc::Product )   return GeneralFunction_PRODUCT;
+    if ( nBits & PivotFunc::CountNum ) return GeneralFunction_COUNTNUMS;
+    if ( nBits & PivotFunc::StdDev )   return GeneralFunction_STDEV;
+    if ( nBits & PivotFunc::StdDevP )  return GeneralFunction_STDEVP;
+    if ( nBits & PivotFunc::StdVar )   return GeneralFunction_VAR;
+    if ( nBits & PivotFunc::StdVarP )  return GeneralFunction_VARP;
+    if ( nBits & PivotFunc::Auto )      return GeneralFunction_AUTO;
     return GeneralFunction_NONE;
 }
 
-sal_uInt16 ScDataPilotConversion::FunctionBit( GeneralFunction eFunc )
+PivotFunc ScDataPilotConversion::FunctionBit( GeneralFunction eFunc )
 {
-    sal_uInt16 nRet = PIVOT_FUNC_NONE;  // 0
+    PivotFunc nRet = PivotFunc::NONE;  // 0
     switch (eFunc)
     {
-        case GeneralFunction_SUM:       nRet = PIVOT_FUNC_SUM;       break;
-        case GeneralFunction_COUNT:     nRet = PIVOT_FUNC_COUNT;     break;
-        case GeneralFunction_AVERAGE:   nRet = PIVOT_FUNC_AVERAGE;   break;
-        case GeneralFunction_MAX:       nRet = PIVOT_FUNC_MAX;       break;
-        case GeneralFunction_MIN:       nRet = PIVOT_FUNC_MIN;       break;
-        case GeneralFunction_PRODUCT:   nRet = PIVOT_FUNC_PRODUCT;   break;
-        case GeneralFunction_COUNTNUMS: nRet = PIVOT_FUNC_COUNT_NUM; break;
-        case GeneralFunction_STDEV:     nRet = PIVOT_FUNC_STD_DEV;   break;
-        case GeneralFunction_STDEVP:    nRet = PIVOT_FUNC_STD_DEVP;  break;
-        case GeneralFunction_VAR:       nRet = PIVOT_FUNC_STD_VAR;   break;
-        case GeneralFunction_VARP:      nRet = PIVOT_FUNC_STD_VARP;  break;
-        case GeneralFunction_AUTO:      nRet = PIVOT_FUNC_AUTO;      break;
+        case GeneralFunction_SUM:       nRet = PivotFunc::Sum;       break;
+        case GeneralFunction_COUNT:     nRet = PivotFunc::Count;     break;
+        case GeneralFunction_AVERAGE:   nRet = PivotFunc::Average;   break;
+        case GeneralFunction_MAX:       nRet = PivotFunc::Max;       break;
+        case GeneralFunction_MIN:       nRet = PivotFunc::Min;       break;
+        case GeneralFunction_PRODUCT:   nRet = PivotFunc::Product;   break;
+        case GeneralFunction_COUNTNUMS: nRet = PivotFunc::CountNum; break;
+        case GeneralFunction_STDEV:     nRet = PivotFunc::StdDev;   break;
+        case GeneralFunction_STDEVP:    nRet = PivotFunc::StdDevP;  break;
+        case GeneralFunction_VAR:       nRet = PivotFunc::StdVar;   break;
+        case GeneralFunction_VARP:      nRet = PivotFunc::StdVarP;  break;
+        case GeneralFunction_AUTO:      nRet = PivotFunc::Auto;      break;
         default:
         {
             // added to avoid warnings

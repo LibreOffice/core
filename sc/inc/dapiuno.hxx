@@ -70,8 +70,8 @@ class ScDataPilotItemObj;
 class ScDataPilotConversion
 {
 public:
-    static css::sheet::GeneralFunction   FirstFunc( sal_uInt16 nBits );
-    static sal_uInt16           FunctionBit( css::sheet::GeneralFunction eFunc );
+    static css::sheet::GeneralFunction   FirstFunc( PivotFunc nBits );
+    static PivotFunc           FunctionBit( css::sheet::GeneralFunction eFunc );
 
     static void         FillGroupInfo(
                             css::sheet::DataPilotFieldGroupInfo& rInfo,

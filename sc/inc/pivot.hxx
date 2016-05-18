@@ -69,7 +69,7 @@ struct ScDPLabelData
     OUString   maSubtotalName;
     SCCOL      mnCol;          ///< 0-based field index (not the source column index)
     long       mnOriginalDim;  ///< original dimension index (>= 0 for duplicated dimension)
-    sal_uInt16 mnFuncMask;     ///< Page/Column/Row subtotal function.
+    PivotFunc  mnFuncMask;     ///< Page/Column/Row subtotal function.
     sal_Int32  mnUsedHier;     ///< Used hierarchy.
     sal_Int32  mnFlags;        ///< Flags from the DataPilotSource dimension
     sal_uInt8  mnDupCount;
@@ -115,7 +115,7 @@ struct ScPivotField
 {
     SCCOL       nCol;          ///< 0-based dimension index (not source column index)
     long        mnOriginalDim; ///< >= 0 for duplicated field.
-    sal_uInt16  nFuncMask;
+    PivotFunc   nFuncMask;
     sal_uInt8   mnDupCount;
 
     css::sheet::DataPilotFieldReference maFieldRef;
@@ -157,12 +157,12 @@ struct ScPivotFuncData
 {
     SCCOL      mnCol;
     long       mnOriginalDim;
-    sal_uInt16 mnFuncMask;
+    PivotFunc  mnFuncMask;
     sal_uInt8  mnDupCount;
 
     css::sheet::DataPilotFieldReference maFieldRef;
 
-    explicit ScPivotFuncData( SCCOL nCol, sal_uInt16 nFuncMask );
+    explicit ScPivotFuncData( SCCOL nCol, PivotFunc nFuncMask );
 
 #if DEBUG_PIVOT_TABLE
     void Dump() const;

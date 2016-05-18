@@ -27,7 +27,7 @@
 using namespace css::uno;
 using namespace css::sheet;
 
-ScItemValue::ScItemValue(OUString const & aName, SCCOL nColumn, sal_uInt16 nFunctionMask) :
+ScItemValue::ScItemValue(OUString const & aName, SCCOL nColumn, PivotFunc nFunctionMask) :
     maName(aName),
     maFunctionData(nColumn, nFunctionMask),
     mpOriginalItemValue(this)
