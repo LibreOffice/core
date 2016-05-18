@@ -236,6 +236,12 @@ SwMMResultSaveDialog::SwMMResultSaveDialog(vcl::Window* pParent)
     m_pFromRB->SetClickHdl(aLink);
     // m_pSaveAsOneRB is the default, so disable m_pFromNF and m_pToNF initially.
     aLink.Call(m_pSaveAsOneRB);
+    SwView* pView = ::GetActiveView();
+    SwMailMergeConfigItem* pConfigItem = pView->GetMailMergeConfigItem();
+    assert(pConfigItem);
+    sal_Int32 nCount = pConfigItem->GetMergedDocumentCount();;
+    m_pToNF->SetMax(nCount);
+    m_pToNF->SetValue(nCount);
 
     m_pOKButton->SetClickHdl(LINK(this, SwMMResultSaveDialog, SaveOutputHdl_Impl));
 }
@@ -372,30 +378,37 @@ void SwMMResultEmailDialog::dispose()
 void SwMMResultPrintDialog::FillInPrinterSettings()
 {
     //fill printer ListBox
+    SwView* pView = ::GetActiveView();
+    SwMailMergeConfigItem* pConfigItem = pView->GetMailMergeConfigItem();
     const std::vector<OUString>& rPrinters = Printer::GetPrinterQueues();
     unsigned int nCount = rPrinters.size();
+    bool bMergePrinterExists = false;
     if ( nCount )
     {
         for( unsigned int i = 0; i < nCount; i++ )
         {
             m_pPrinterLB->InsertEntry( rPrinters[i] );
+            if( !bMergePrinterExists && rPrinters[i] == pConfigItem->GetSelectedPrinter() )
+                bMergePrinterExists = true;
         }
 
     }
 
-    SwView* pView = ::GetActiveView();
-    SwMailMergeConfigItem* pConfigItem = pView->GetMailMergeConfigItem();
     assert(pConfigItem);
-
-    SwView* pTargetView = pConfigItem->GetTargetView();
-    OSL_ENSURE(pTargetView, "no target view exists");
-    if(pTargetView)
+    if(!bMergePrinterExists)
     {
-        SfxPrinter* pPrinter = pTargetView->GetWrtShell().getIDocumentDeviceAccess().getPrinter( true );
+        SfxPrinter* pPrinter = pView->GetWrtShell().getIDocumentDeviceAccess().getPrinter( true );
         m_pPrinterLB->SelectEntry(pPrinter->GetName());
-        m_pToNF->SetValue(pConfigItem->GetMergedDocumentCount());
-        m_pToNF->SetMax(pConfigItem->GetMergedDocumentCount());
     }
+    else
+    {
+        m_pPrinterLB->SelectEntry(pConfigItem->GetSelectedPrinter());
+    }
+
+    sal_Int32 count = pConfigItem->GetMergedDocumentCount();;
+    m_pToNF->SetValue(count);
+    m_pToNF->SetMax(count);
+
     m_pPrinterLB->SelectEntry(pConfigItem->GetSelectedPrinter());
 }
 
@@ -558,6 +571,8 @@ IMPL_LINK_TYPED(SwMMResultSaveDialog, SaveOutputHdl_Impl, Button*, pButton, void
     SwView* pView = ::GetActiveView();
     SwMailMergeConfigItem* pConfigItem = pView->GetMailMergeConfigItem();
     assert(pConfigItem);
+    if(!pConfigItem->GetTargetView())
+        SwDBManager::PerformMailMerge(pView);
 
     SwView* pTargetView = pConfigItem->GetTargetView();
     assert(pTargetView);
@@ -600,17 +615,19 @@ IMPL_LINK_TYPED(SwMMResultSaveDialog, SaveOutputHdl_Impl, Button*, pButton, void
     {
         sal_uInt32 nBegin = 0;
         sal_uInt32 nEnd = 0;
+        sal_uInt32 documentCount = pConfigItem->GetMergedDocumentCount();
+
         if(m_pSaveIndividualRB->IsChecked())
         {
             nBegin = 0;
-            nEnd = pConfigItem->GetMergedDocumentCount();
+            nEnd = documentCount;
         }
         else
         {
             nBegin  = static_cast< sal_Int32 >(m_pFromNF->GetValue() - 1);
             nEnd    = static_cast< sal_Int32 >(m_pToNF->GetValue());
-            if(nEnd > pConfigItem->GetMergedDocumentCount())
-                nEnd = pConfigItem->GetMergedDocumentCount();
+            if(nEnd > documentCount)
+                nEnd = documentCount;
         }
         OUString sFilter;
         OUString sPath = SwMailMergeHelper::CallSaveAsDialog(sFilter);
@@ -746,11 +763,7 @@ IMPL_LINK_TYPED(SwMMResultPrintDialog, PrinterChangeHdl_Impl, ListBox&, rBox, vo
     SwView* pView = ::GetActiveView();
     SwMailMergeConfigItem* pConfigItem = pView->GetMailMergeConfigItem();
     assert(pConfigItem);
-
-    SwView *const pTargetView = pConfigItem->GetTargetView();
-    SfxPrinter *const pDocumentPrinter = pTargetView->GetWrtShell()
-        .getIDocumentDeviceAccess().getPrinter(true);
-    if (pDocumentPrinter && rBox.GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND)
+    if (rBox.GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND)
     {
         const QueueInfo* pInfo = Printer::GetQueueInfo( rBox.GetSelectEntry(), false );
 
@@ -758,13 +771,7 @@ IMPL_LINK_TYPED(SwMMResultPrintDialog, PrinterChangeHdl_Impl, ListBox&, rBox, vo
         {
             if ( !m_pTempPrinter )
             {
-                if ((pDocumentPrinter->GetName() == pInfo->GetPrinterName()) &&
-                    (pDocumentPrinter->GetDriverName() == pInfo->GetDriver()))
-                {
-                    m_pTempPrinter = VclPtr<Printer>::Create(pDocumentPrinter->GetJobSetup());
-                }
-                else
-                    m_pTempPrinter = VclPtr<Printer>::Create( *pInfo );
+                m_pTempPrinter = VclPtr<Printer>::Create( *pInfo );
             }
             else
             {
@@ -792,23 +799,27 @@ IMPL_LINK_TYPED(SwMMResultPrintDialog, PrintHdl_Impl, Button*, pButton, void)
     SwView* pView = ::GetActiveView();
     SwMailMergeConfigItem* pConfigItem = pView->GetMailMergeConfigItem();
     assert(pConfigItem);
+    if(!pConfigItem->GetTargetView())
+        SwDBManager::PerformMailMerge(pView);
 
     SwView* pTargetView = pConfigItem->GetTargetView();
     assert(pTargetView);
 
     sal_uInt32 nBegin = 0;
     sal_uInt32 nEnd = 0;
+    sal_uInt32 documentCount = pConfigItem->GetMergedDocumentCount();
+
     if(m_pPrintAllRB->IsChecked())
     {
         nBegin = 0;
-        nEnd = pConfigItem->GetMergedDocumentCount();
+        nEnd = documentCount;
     }
     else
     {
         nBegin  = static_cast< sal_Int32 >(m_pFromNF->GetValue() - 1);
         nEnd    = static_cast< sal_Int32 >(m_pToNF->GetValue());
-        if(nEnd > pConfigItem->GetMergedDocumentCount())
-            nEnd = pConfigItem->GetMergedDocumentCount();
+        if(nEnd > documentCount)
+            nEnd = documentCount;
     }
     pConfigItem->SetPrintRange((sal_uInt16)nBegin, (sal_uInt16)nEnd);
 
@@ -891,6 +902,8 @@ IMPL_LINK_TYPED(SwMMResultEmailDialog, SendDocumentsHdl_Impl, Button*, pButton, 
     SwView* pView = ::GetActiveView();
     SwMailMergeConfigItem* pConfigItem = pView->GetMailMergeConfigItem();
     assert(pConfigItem);
+    if(!pConfigItem->GetTargetView())
+        SwDBManager::PerformMailMerge(pView);
 
     //get the composed document
     SwView* pTargetView = pConfigItem->GetTargetView();

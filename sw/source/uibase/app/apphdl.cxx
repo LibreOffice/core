@@ -615,34 +615,6 @@ IMPL_LINK_NOARG_TYPED(SwMailMergeWizardExecutor, CloseFrameHdl, void*, void)
         m_pView2Close = nullptr;
     }
 }
-
-SwMailMergeConfigItem* PerformMailMerge(SwView* pView)
-{
-    SwMailMergeConfigItem* pConfigItem = pView->GetMailMergeConfigItem();
-    if (!pConfigItem)
-        return nullptr;
-
-    svx::ODataAccessDescriptor aDescriptor;
-    aDescriptor.setDataSource(pConfigItem->GetCurrentDBData().sDataSource);
-    aDescriptor[ svx::daConnection ]  <<= pConfigItem->GetConnection().getTyped();
-    aDescriptor[ svx::daCursor ]      <<= pConfigItem->GetResultSet();
-    aDescriptor[ svx::daCommand ]     <<= pConfigItem->GetCurrentDBData().sCommand;
-    aDescriptor[ svx::daCommandType ] <<= pConfigItem->GetCurrentDBData().nCommandType;
-    aDescriptor[ svx::daSelection ]   <<= pConfigItem->GetSelection();
-
-    SwWrtShell& rSh = pView->GetWrtShell();
-    pConfigItem->SetTargetView(nullptr);
-
-    SwMergeDescriptor aMergeDesc(DBMGR_MERGE_SHELL, rSh, aDescriptor);
-    aMergeDesc.pMailMergeConfigItem = pConfigItem;
-    aMergeDesc.bCreateSingleFile = true;
-    rSh.GetDBManager()->Merge(aMergeDesc);
-
-    pConfigItem->SetMergeDone();
-
-    return pConfigItem;
-}
-
 } // namespace
 
 #endif // HAVE_FEATURE_DBCONNECTIVITY
@@ -789,7 +761,7 @@ void SwModule::ExecOther(SfxRequest& rReq)
         break;
         case FN_MAILMERGE_CREATE_DOCUMENTS:
         {
-            SwMailMergeConfigItem* pConfigItem = PerformMailMerge(GetActiveView());
+            SwMailMergeConfigItem* pConfigItem = SwDBManager::PerformMailMerge(GetActiveView());
 
             if (pConfigItem && pConfigItem->GetTargetView())
                 pConfigItem->GetTargetView()->GetViewFrame()->GetFrame().Appear();
@@ -799,10 +771,10 @@ void SwModule::ExecOther(SfxRequest& rReq)
         case FN_MAILMERGE_PRINT_DOCUMENTS:
         case FN_MAILMERGE_EMAIL_DOCUMENTS:
         {
-            SwMailMergeConfigItem* pConfigItem = PerformMailMerge(GetActiveView());
-            if (!pConfigItem)
+            SwMailMergeConfigItem* pConfigItem = GetActiveView()->GetMailMergeConfigItem();
+            if(!pConfigItem)
                 return;
-
+            pConfigItem->SetTargetView(nullptr);
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             switch (nWhich)
             {
