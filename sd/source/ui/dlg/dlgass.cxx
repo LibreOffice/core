@@ -656,6 +656,12 @@ AssistentDlgImpl::AssistentDlgImpl( vcl::Window* pWindow, const Link<ListBox&,vo
 
 AssistentDlgImpl::~AssistentDlgImpl()
 {
+    //tdf#95620 we need to have mpPreview disposed before the DocShell is
+    //destroyed, and not after. Because if the preview's slideshow is active
+    //then the slideshow accesses the medium belonging to this DocShell in
+    //its disposing.
+    mpPreview.disposeAndClear();
+
     CloseDocShell();
 
     DeletePasswords();
