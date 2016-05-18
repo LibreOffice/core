@@ -97,7 +97,8 @@ SwView_Impl::~SwView_Impl()
         pClipEvtLstnr->ViewDestroyed();
     }
 #if HAVE_FEATURE_DBCONNECTIVITY
-    delete pConfigItem;
+    if(bMailMergeSourceView)
+        delete pConfigItem;
 #endif
     delete m_pDocInserter;
     delete m_pRequest;

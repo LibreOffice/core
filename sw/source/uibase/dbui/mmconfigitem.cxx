@@ -1576,9 +1576,20 @@ SwDocMergeInfo& SwMailMergeConfigItem::GetDocumentMergeInfo(sal_uInt32 nDocument
     return m_pImpl->m_aMergeInfos[nDocument];
 }
 
-sal_uInt32 SwMailMergeConfigItem::GetMergedDocumentCount() const
+
+sal_uInt32 SwMailMergeConfigItem::GetMergedDocumentCount()
 {
-    return m_pImpl->m_aMergeInfos.size();
+    if(m_pTargetView)
+        return m_pImpl->m_aMergeInfos.size();
+    else
+    {
+        sal_Int32 nRestore = GetResultSetPosition();
+        MoveResultSet(-1);
+        sal_Int32 nRet = GetResultSetPosition();
+        MoveResultSet( nRestore );
+        nRet -= m_aExcludedRecords.size();
+        return nRet >= 0 ? nRet : 0;
+    }
 }
 
 static SwView* lcl_ExistsView(SwView* pView)
@@ -1611,6 +1622,7 @@ void  SwMailMergeConfigItem::SetTargetView(SwView* pView)
     if(!m_pTargetView)
     {
         m_pImpl->m_aMergeInfos.clear();
+        m_bMergeDone = false;
     }
 }
 

@@ -3086,5 +3086,31 @@ void SwConnectionDisposedListener_Impl::disposing( const lang::EventObject& rSou
         }
     }
 }
+SwMailMergeConfigItem* SwDBManager::PerformMailMerge(SwView* pView)
+{
+    SwMailMergeConfigItem* pConfigItem = pView->GetMailMergeConfigItem();
+    if (!pConfigItem)
+        return nullptr;
+
+    svx::ODataAccessDescriptor aDescriptor;
+    aDescriptor.setDataSource(pConfigItem->GetCurrentDBData().sDataSource);
+    aDescriptor[ svx::daConnection ]  <<= pConfigItem->GetConnection().getTyped();
+    aDescriptor[ svx::daCursor ]      <<= pConfigItem->GetResultSet();
+    aDescriptor[ svx::daCommand ]     <<= pConfigItem->GetCurrentDBData().sCommand;
+    aDescriptor[ svx::daCommandType ] <<= pConfigItem->GetCurrentDBData().nCommandType;
+    aDescriptor[ svx::daSelection ]   <<= pConfigItem->GetSelection();
+
+    SwWrtShell& rSh = pView->GetWrtShell();
+    pConfigItem->SetTargetView(nullptr);
+
+    SwMergeDescriptor aMergeDesc(DBMGR_MERGE_SHELL, rSh, aDescriptor);
+    aMergeDesc.pMailMergeConfigItem = pConfigItem;
+    aMergeDesc.bCreateSingleFile = true;
+    rSh.GetDBManager()->Merge(aMergeDesc);
+
+    pConfigItem->SetMergeDone();
+
+    return pConfigItem;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

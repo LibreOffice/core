@@ -296,6 +296,8 @@ public:
     inline bool     IsMergeCancel() { return MergeStatus::CANCEL <= m_aMergeStatus; };
     inline bool     IsMergeError()  { return MergeStatus::ERROR  <= m_aMergeStatus; };
 
+    static SwMailMergeConfigItem* PerformMailMerge(SwView* pView);
+
     /// Initialize data fields that lack name of database.
     inline bool     IsInitDBFields() const  { return bInitDBFields; }
     inline void     SetInitDBFields(bool b) { bInitDBFields = b;    }

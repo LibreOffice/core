@@ -239,7 +239,7 @@ public:
     void AddMergedDocument(SwDocMergeInfo& rInfo);
     //returns the page and database cursor information of each merged document
     SwDocMergeInfo& GetDocumentMergeInfo(sal_uInt32 nDocument);
-    sal_uInt32 GetMergedDocumentCount() const;
+    sal_uInt32 GetMergedDocumentCount();
 
     void SetPrintRange( sal_uInt16 nStartDocument, sal_uInt16 nEndDocument)
         { m_nStartPrint = nStartDocument; m_nEndPrint = nEndDocument; }
