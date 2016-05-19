@@ -85,19 +85,19 @@ void Test::testAddPage()
 {
     SdrPage* pPage = m_pDoc->AllocPage(false);
     m_pDoc->InsertPage(pPage);
-    CPPUNIT_ASSERT_MESSAGE("added one page to model",
-                           m_pDoc->GetPageCount()==1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("added one page to model",
+                                 static_cast<sal_uInt16>(1), m_pDoc->GetPageCount());
     m_pDoc->DeletePage(0);
-    CPPUNIT_ASSERT_MESSAGE("removed one page to model",
-                           m_pDoc->GetPageCount()==0);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("removed one page to model",
+                                 static_cast<sal_uInt16>(0), m_pDoc->GetPageCount());
 
     SdrPage* pMasterPage = m_pDoc->AllocPage(true);
     m_pDoc->InsertMasterPage(pMasterPage);
-    CPPUNIT_ASSERT_MESSAGE("added one master page to model",
-                           m_pDoc->GetMasterPageCount()==1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("added one master page to model",
+                                 static_cast<sal_uInt16>(1), m_pDoc->GetMasterPageCount());
     m_pDoc->DeleteMasterPage(0);
-    CPPUNIT_ASSERT_MESSAGE("removed one master page to model",
-                           m_pDoc->GetMasterPageCount()==0);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("removed one master page to model",
+                                 static_cast<sal_uInt16>(0), m_pDoc->GetMasterPageCount());
 }
 
 void Test::testCustomShow()
