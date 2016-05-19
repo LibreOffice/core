@@ -114,7 +114,10 @@ interface XCertificate : com::sun::star::uno::XInterface
     XCertificateExtension findCertificateExtension( [in]sequence< byte > oid ) ;
 
     /**
-     * get the certificate usage
+     * get the certificate usage. The return value is a set of bits, as defined in RFC3280 for the
+     * KeyUsage BIT STRING. Note the bit and byte order used in ASN.1, so for instance the bit
+     * dataEncipherment in KeyUsage, "bit 3", corresponds to CERT_DATA_ENCIPHERMENT_KEY_USAGE in
+     * Win32 and KU_DATA_ENCIPHERMENT in NSS, both with value 0x10.
      */
     long getCertificateUsage();
 } ;
