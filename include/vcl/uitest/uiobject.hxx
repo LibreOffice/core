@@ -199,6 +199,27 @@ protected:
     virtual OUString get_name() const override;
 };
 
+class UITEST_DLLPUBLIC RadioButtonUIObject : public WindowUIObject
+{
+private:
+    VclPtr<RadioButton> mxRadioButton;
+
+public:
+    RadioButtonUIObject(VclPtr<RadioButton> xCheckbox);
+    virtual ~RadioButtonUIObject();
+
+    virtual void execute(const OUString& rAction,
+            const StringMap& rParameters) override;
+
+    virtual StringMap get_state() override;
+
+    static std::unique_ptr<UIObject> create(vcl::Window* pWindow);
+
+protected:
+
+    virtual OUString get_name() const override;
+};
+
 class UITEST_DLLPUBLIC TabPageUIObject : public WindowUIObject
 {
 private:
