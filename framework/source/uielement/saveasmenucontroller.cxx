@@ -90,22 +90,24 @@ void SaveAsMenuController::impl_setPopupMenu()
     OUString sSaveAsTemplate(".uno:SaveAsTemplate");
     if (isCommandAvailable(sSaveAsTemplate))
         pVCLPopupMenu->InsertItem( sSaveAsTemplate, m_xFrame );
+
     OUString sSaveRemote(".uno:SaveAsRemote");
     if (isCommandAvailable(sSaveRemote))
         pVCLPopupMenu->InsertItem( sSaveRemote, m_xFrame );
 }
 
-bool SaveAsMenuController::isCommandAvailable(const OUString & sCommand) {
-        css::uno::Reference< css::frame::XDispatchProvider > xDispatchProvider( m_xFrame, css::uno::UNO_QUERY );
-        if ( !xDispatchProvider.is() )
-            return false;
+bool SaveAsMenuController::isCommandAvailable(const OUString & sCommand)
+{
+    uno::Reference<frame::XDispatchProvider> xDispatchProvider(m_xFrame, uno::UNO_QUERY);
+    if (!xDispatchProvider.is())
+        return false;
 
-        css::util::URL aTargetURL;
-        aTargetURL.Complete = sCommand;
-        m_xURLTransformer->parseStrict( aTargetURL );
+    util::URL aTargetURL;
+    aTargetURL.Complete = sCommand;
+    m_xURLTransformer->parseStrict(aTargetURL);
 
-        css::uno::Reference< css::frame::XDispatch > xDispatch( xDispatchProvider->queryDispatch( aTargetURL, OUString(), 0 ) );
-        return xDispatch.is();
+    uno::Reference<frame::XDispatch> xDispatch(xDispatchProvider->queryDispatch(aTargetURL, OUString(), 0));
+    return xDispatch.is();
 }
 
 // XStatusListener
