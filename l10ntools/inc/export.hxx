@@ -59,9 +59,7 @@ typedef std::unordered_map<OString, bool, OStringHash>
 // class ResData
 
 
-#define ID_LEVEL_NULL       0x0000
-#define ID_LEVEL_TEXT       0x0002
-#define ID_LEVEL_IDENTIFIER 0x0005
+enum class IdLevel { Null=0, Text=2, Identifier=5 };
 
 typedef std::vector< OString > ExportList;
 
@@ -71,9 +69,9 @@ class ResData
 public:
     ResData( const OString &rGId );
     ResData( const OString &rGId , const OString &rFilename );
-    bool SetId(const OString &rId, sal_uInt16 nLevel);
+    bool SetId(const OString &rId, IdLevel nLevel);
 
-    sal_uInt16 nIdLevel;
+    IdLevel nIdLevel;
     bool bChild;
     bool bChildWithText;
 
