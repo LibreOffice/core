@@ -532,7 +532,7 @@ OUString SAL_CALL ScAccessibleCellBase::getBorderAttrs()
     //bottom border
     if ( aBottomBorder.InnerLineWidth == 0 && aBottomBorder.OuterLineWidth == 0 )
     {
-        sBorderAttrs += "BottomBorde:;";
+        sBorderAttrs += "BottomBorder:;";
     }
     else
     {
