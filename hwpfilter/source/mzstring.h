@@ -82,7 +82,6 @@ class MzString
 {
     public:
         MzString();                               // Create an empty string
-// if len = 0, len becomes s.length)
         ~MzString();
 
         int       length() const;
