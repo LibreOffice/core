@@ -1088,6 +1088,18 @@ void GtkSalFrame::InitCommon()
     m_aSystemData.pAppContext   = nullptr;
     m_aSystemData.pShellWidget  = m_aSystemData.pWidget;
     m_aSystemData.pToolkit      = "gtk3";
+    GdkScreen* pScreen = gtk_window_get_screen(GTK_WINDOW(m_pWindow));
+    GdkVisual* pVisual = gdk_screen_get_system_visual(pScreen);
+    m_aSystemData.nDepth = gdk_visual_get_depth(pVisual);
+
+#if defined(GDK_WINDOWING_X11)
+    GdkDisplay *pDisplay = getGdkDisplay();
+    if (GDK_IS_X11_DISPLAY(pDisplay))
+    {
+        m_aSystemData.pDisplay = gdk_x11_display_get_xdisplay(pDisplay);
+        m_aSystemData.pVisual = gdk_x11_visual_get_xvisual(pVisual);
+    }
+#endif
 
     m_bGraphics = false;
     m_pGraphics = nullptr;

@@ -55,6 +55,18 @@ GtkSalObject::GtkSalObject( GtkSalFrame* pParent, bool bShow )
         m_aSystemData.pAppContext   = nullptr;
         m_aSystemData.pShellWidget  = GTK_WIDGET(pParent->getWindow());
         m_aSystemData.pToolkit      = "gtk3";
+        GdkScreen* pScreen = gtk_window_get_screen(GTK_WINDOW(pParent->getWindow()));
+        GdkVisual* pVisual = gdk_screen_get_system_visual(pScreen);
+        m_aSystemData.nDepth = gdk_visual_get_depth(pVisual);
+
+#if defined(GDK_WINDOWING_X11)
+        GdkDisplay *pDisplay = pParent->getGdkDisplay();
+        if (GDK_IS_X11_DISPLAY(pDisplay))
+        {
+            m_aSystemData.pDisplay = gdk_x11_display_get_xdisplay(pDisplay);
+            m_aSystemData.pVisual = gdk_x11_visual_get_xvisual(pVisual);
+        }
+#endif
 
         g_signal_connect( G_OBJECT(m_pSocket), "button-press-event", G_CALLBACK(signalButton), this );
         g_signal_connect( G_OBJECT(m_pSocket), "button-release-event", G_CALLBACK(signalButton), this );
