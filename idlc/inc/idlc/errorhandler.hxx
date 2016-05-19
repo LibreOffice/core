@@ -124,7 +124,7 @@ public:
 
     static void evalError(AstExpression* pExpr);
 
-    static bool checkPublished(AstDeclaration const * decl, bool bOptiional=false);
+    static bool checkPublished(AstDeclaration const * decl, bool bOptional=false);
 };
 
 #endif // INCLUDED_IDLC_INC_IDLC_ERRORHANDLER_HXX
