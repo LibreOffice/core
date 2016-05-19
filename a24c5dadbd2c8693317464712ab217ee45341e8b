@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_589e5357",
+        "filename": "sc/inc/compiler.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-05-19T12:29:46Z",
+      "side": 1,
+      "message": "Just a nitpick, personally I find ScCompilerC an odd name, I\u0027d rather see it named ScCharFlag.\n\nAlso, I\u0027d explicitly derive the enum from sal_uInt32 instead of the default int, so we could use all bits (which I hope we don\u0027t have to, but.. ;-)   Actually the code so far assumed the flags to be sal_uLong, though sal_uInt32 would be better.",
+      "revId": "a24c5dadbd2c8693317464712ab217ee45341e8b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
