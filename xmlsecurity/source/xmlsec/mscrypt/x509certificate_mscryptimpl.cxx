@@ -21,6 +21,7 @@
 
 #include <sal/config.h>
 #include <comphelper/servicehelper.hxx>
+#include <comphelper/windowserrorstring.hxx>
 #include "x509certificate_mscryptimpl.hxx"
 #include "certificateextension_xmlsecimpl.hxx"
 #include "sanextension_mscryptimpl.hxx"
@@ -31,6 +32,7 @@
 #include <osl/nlsupport.h>
 #include <osl/process.h>
 #include <utility>
+#include <vector>
 #include <tools/time.hxx>
 
 // Needed only for Windows XP.
@@ -622,21 +624,38 @@ sal_Int32 SAL_CALL X509Certificate_MSCryptImpl::getCertificateUsage(  )
 
         if (pExtn != NULL)
         {
-            CERT_KEY_USAGE_RESTRICTION_INFO keyUsage;
-            DWORD length = sizeof(CERT_KEY_USAGE_RESTRICTION_INFO);
-
+            DWORD length = 0;
             bool rc = CryptDecodeObject(
                 X509_ASN_ENCODING,
                 X509_KEY_USAGE,
                 pExtn->Value.pbData,
                 pExtn->Value.cbData,
-                CRYPT_DECODE_NOCOPY_FLAG,
-                (void *)&keyUsage,
+                0,
+                NULL,
                 &length);
 
-            if (rc && keyUsage.RestrictedKeyUsage.cbData!=0)
+            if (!rc)
+                SAL_WARN("xmlsecurity.xmlsec", "CryptDecodeObject failed: " << WindowsErrorString(GetLastError()));
+            else
             {
-                usage = (sal_Int32)keyUsage.RestrictedKeyUsage.pbData;
+                std::vector<char>buffer(length);
+
+                rc = CryptDecodeObject(
+                    X509_ASN_ENCODING,
+                    X509_KEY_USAGE,
+                    pExtn->Value.pbData,
+                    pExtn->Value.cbData,
+                    0,
+                    (void *)buffer.data(),
+                    &length);
+
+                CRYPT_BIT_BLOB *blob = (CRYPT_BIT_BLOB*)buffer.data();
+                if (!rc)
+                    SAL_WARN("xmlsecurity.xmlsec", "CryptDecodeObject failed: " << WindowsErrorString(GetLastError()));
+                else if (blob->cbData == 1)
+                    usage = blob->pbData[0];
+                else
+                    SAL_WARN("xmlsecurity.xmlsec", "CryptDecodeObject(X509_KEY_USAGE) returned unexpected amount of data: " << blob->cbData);
             }
         }
     }
