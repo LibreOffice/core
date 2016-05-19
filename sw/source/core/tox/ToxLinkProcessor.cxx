@@ -11,6 +11,7 @@
 
 #include "SwStyleNameMapper.hxx"
 #include "ndtxt.hxx"
+#include <o3tl/make_unique.hxx>
 #include <poolfmt.hrc>
 
 #include <stdexcept>
@@ -20,8 +21,8 @@ namespace sw {
 void
 ToxLinkProcessor::StartNewLink(sal_Int32 startPosition, const OUString& characterStyle)
 {
-    m_StartedLinks.push_back(std::unique_ptr<StartedLink>(
-                new StartedLink(startPosition, characterStyle)));
+    m_StartedLinks.push_back(o3tl::make_unique<StartedLink>(
+                startPosition, characterStyle));
 }
 
 void

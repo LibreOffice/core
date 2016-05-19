@@ -18,6 +18,7 @@
  */
 
 #include "svx/fontlb.hxx"
+#include <o3tl/make_unique.hxx>
 #include <vcl/builderfactory.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
@@ -133,12 +134,12 @@ void SvxFontListBox::InitEntry(
     if( mbUseFont )
     {
         if( nTreeFlags & SvTreeFlags::CHKBTN )
-            pEntry->AddItem(std::unique_ptr<SvLBoxButton>(new SvLBoxButton(
-                        eButtonKind, pCheckButtonData)));
-        pEntry->AddItem(std::unique_ptr<SvLBoxContextBmp>(new SvLBoxContextBmp(
-                        rCollImg, rExpImg, true)));
-        pEntry->AddItem(std::unique_ptr<SvLBoxFontString>(new SvLBoxFontString(
-                        rEntryText, maEntryFont, mpEntryColor)));
+            pEntry->AddItem(o3tl::make_unique<SvLBoxButton>(
+                        eButtonKind, pCheckButtonData));
+        pEntry->AddItem(o3tl::make_unique<SvLBoxContextBmp>(
+                        rCollImg, rExpImg, true));
+        pEntry->AddItem(o3tl::make_unique<SvLBoxFontString>(
+                        rEntryText, maEntryFont, mpEntryColor));
     }
     else
         SvTreeListBox::InitEntry( pEntry, rEntryText, rCollImg, rExpImg,

@@ -19,6 +19,7 @@
 
 #include <hintids.hxx>
 
+#include <o3tl/make_unique.hxx>
 #include <vcl/msgbox.hxx>
 #include <svl/whiter.hxx>
 #include <svl/stritem.hxx>
@@ -231,7 +232,7 @@ void SwTextShell::ExecCharAttrArgs(SfxRequest &rReq)
             {
                 // must create new one, otherwise document is without pam
                 SwPaM* pPaM = rWrtSh.GetCursor();
-                vItems.push_back( std::make_pair( pSize, std::unique_ptr<SwPaM>(new SwPaM( *(pPaM->GetMark()), *(pPaM->GetPoint()))) ) );
+                vItems.push_back( std::make_pair( pSize, o3tl::make_unique<SwPaM>( *(pPaM->GetMark()), *(pPaM->GetPoint())) ) );
             }
             else
                 vItems = rWrtSh.GetItemWithPaM( RES_CHRATR_FONTSIZE );

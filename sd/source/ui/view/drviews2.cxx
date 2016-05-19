@@ -38,6 +38,7 @@
 #include <editeng/eeitem.hxx>
 #include <editeng/flditem.hxx>
 #include <editeng/editeng.hxx>
+#include <o3tl/make_unique.hxx>
 
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
@@ -970,8 +971,8 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 {
                     GraphicObject aGraphicObject( static_cast<SdrGrafObj*>(pObj)->GetGraphicObject() );
                     m_ExternalEdits.push_back(
-                        std::unique_ptr<SdrExternalToolEdit>(
-                            new SdrExternalToolEdit(mpDrawView, pObj)));
+                        o3tl::make_unique<SdrExternalToolEdit>(
+                            mpDrawView, pObj));
                     m_ExternalEdits.back()->Edit( &aGraphicObject );
                 }
             }

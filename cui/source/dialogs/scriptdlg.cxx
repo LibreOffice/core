@@ -24,6 +24,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/builderfactory.hxx>
+#include <o3tl/make_unique.hxx>
 #include <osl/mutex.hxx>
 
 #include <cuires.hrc>
@@ -242,7 +243,7 @@ void SFTreeListBox::Init( const OUString& language  )
             getLangNodeFromRootNode( children[ n ], lang );
 
         insertEntry( uiName, app ? RID_CUIIMG_HARDDISK : RID_CUIIMG_DOC,
-            nullptr, true, std::unique_ptr< SFEntry >(new SFEntry( OBJTYPE_SFROOT, langEntries, xDocumentModel )), factoryURL );
+            nullptr, true, o3tl::make_unique< SFEntry >( OBJTYPE_SFROOT, langEntries, xDocumentModel ), factoryURL );
     }
 
     SetUpdateMode( true );
@@ -323,11 +324,11 @@ void SFTreeListBox:: RequestSubEntries( SvTreeListEntry* pRootEntry, Reference< 
         OUString name( children[ n ]->getName() );
         if (  children[ n ]->getType() !=  browse::BrowseNodeTypes::SCRIPT)
         {
-            insertEntry( name, RID_CUIIMG_LIB, pRootEntry, true, std::unique_ptr< SFEntry >(new SFEntry( OBJTYPE_SCRIPTCONTAINER, children[ n ],model )));
+            insertEntry( name, RID_CUIIMG_LIB, pRootEntry, true, o3tl::make_unique< SFEntry >( OBJTYPE_SCRIPTCONTAINER, children[ n ],model ));
         }
         else
         {
-            insertEntry( name, RID_CUIIMG_MACRO, pRootEntry, false, std::unique_ptr< SFEntry >(new SFEntry( OBJTYPE_METHOD, children[ n ],model )));
+            insertEntry( name, RID_CUIIMG_MACRO, pRootEntry, false, o3tl::make_unique< SFEntry >( OBJTYPE_METHOD, children[ n ],model ));
         }
     }
 }
@@ -964,12 +965,12 @@ void SvxScriptOrgDialog::createEntry( SvTreeListEntry* pEntry )
         if ( aChildNode->getType() == browse::BrowseNodeTypes::SCRIPT )
         {
             pNewEntry = m_pScriptsBox->insertEntry( aChildName,
-                    RID_CUIIMG_MACRO, pEntry, false, std::unique_ptr< SFEntry >(new SFEntry( OBJTYPE_METHOD, aChildNode,xDocumentModel ) ) );
+                    RID_CUIIMG_MACRO, pEntry, false, o3tl::make_unique< SFEntry >( OBJTYPE_METHOD, aChildNode,xDocumentModel ) );
         }
         else
         {
             pNewEntry = m_pScriptsBox->insertEntry( aChildName,
-                RID_CUIIMG_LIB, pEntry, false, std::unique_ptr< SFEntry >(new SFEntry( OBJTYPE_SCRIPTCONTAINER, aChildNode,xDocumentModel ) ) );
+                RID_CUIIMG_LIB, pEntry, false, o3tl::make_unique< SFEntry >( OBJTYPE_SCRIPTCONTAINER, aChildNode,xDocumentModel ) );
 
             // If the Parent is not loaded then set to
             // loaded, this will prevent RequestingChildren ( called

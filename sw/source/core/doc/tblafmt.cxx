@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <o3tl/make_unique.hxx>
 #include <tools/resid.hxx>
 #include <tools/stream.hxx>
 #include <vcl/svapp.hxx>
@@ -1032,7 +1033,7 @@ void SwTableAutoFormatTable::AddAutoFormat(const SwTableAutoFormat& rTableStyle)
     if (FindAutoFormat(rTableStyle.GetName()))
         return;
 
-    InsertAutoFormat(size(), std::unique_ptr<SwTableAutoFormat>(new SwTableAutoFormat(rTableStyle)));
+    InsertAutoFormat(size(), o3tl::make_unique<SwTableAutoFormat>(rTableStyle));
 }
 
 void SwTableAutoFormatTable::InsertAutoFormat(size_t const i, std::unique_ptr<SwTableAutoFormat> pFormat)

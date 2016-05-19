@@ -20,6 +20,7 @@
 #include <editeng/unoedhlp.hxx>
 #include <editeng/editdata.hxx>
 #include <editeng/editeng.hxx>
+#include <o3tl/make_unique.hxx>
 #include <svl/itemset.hxx>
 
 #include <osl/diagnose.h>
@@ -91,7 +92,7 @@ sal_uLong SvxEditSourceHint::GetValue() const
         }
     }
 
-    return ::std::unique_ptr<SfxHint>( new SfxHint() );
+    return o3tl::make_unique<SfxHint>( );
 }
 
 bool SvxEditSourceHelper::GetAttributeRun( sal_Int32& nStartIndex, sal_Int32& nEndIndex, const EditEngine& rEE, sal_Int32 nPara, sal_Int32 nIndex, bool bInCell )

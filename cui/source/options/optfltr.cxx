@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <o3tl/make_unique.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <unotools/fltrcfg.hxx>
 #include "optfltr.hxx"
@@ -336,16 +337,16 @@ void OfaMSFilterTabPage2::InsertEntry( const OUString& _rTxt, sal_IntPtr _nType,
     if( !pCheckButtonData )
         pCheckButtonData = new SvLBoxButtonData( m_pCheckLB );
 
-    pEntry->AddItem(std::unique_ptr<SvLBoxContextBmp>(
-        new SvLBoxContextBmp(Image(), Image(), false)));
-    pEntry->AddItem(std::unique_ptr<SvLBoxButton>(
-        new SvLBoxButton(SvLBoxButtonKind::EnabledCheckbox,
-               pCheckButtonData)));
-    pEntry->AddItem(std::unique_ptr<SvLBoxButton>(
-        new SvLBoxButton(saveEnabled ? SvLBoxButtonKind::EnabledCheckbox
+    pEntry->AddItem(o3tl::make_unique<SvLBoxContextBmp>(
+        Image(), Image(), false));
+    pEntry->AddItem(o3tl::make_unique<SvLBoxButton>(
+        SvLBoxButtonKind::EnabledCheckbox,
+               pCheckButtonData));
+    pEntry->AddItem(o3tl::make_unique<SvLBoxButton>(
+        saveEnabled ? SvLBoxButtonKind::EnabledCheckbox
                                      : SvLBoxButtonKind::DisabledCheckbox,
-               pCheckButtonData)));
-    pEntry->AddItem(std::unique_ptr<SvLBoxString>(new SvLBoxString(_rTxt)));
+               pCheckButtonData));
+    pEntry->AddItem(o3tl::make_unique<SvLBoxString>(_rTxt));
 
     pEntry->SetUserData( reinterpret_cast<void*>(_nType) );
     m_pCheckLB->Insert( pEntry );

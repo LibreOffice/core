@@ -19,6 +19,7 @@
 
 #include <hintids.hxx>
 
+#include <o3tl/make_unique.hxx>
 #include <tools/errinf.hxx>
 #include <vcl/svapp.hxx>
 #include <basegfx/vector/b2dvector.hxx>
@@ -91,7 +92,7 @@ class TableWait
         { return our_kLineLimit < nCnt || our_kLineLimit < nCnt2 || (pFrame && our_kLineLimit < pFrame->ImplFindTabFrame()->GetTable()->GetTabLines().size()); }
 public:
     TableWait(size_t nCnt, SwFrame *pFrame, SwDocShell &rDocShell, size_t nCnt2 = 0)
-        : m_pWait( ShouldWait(nCnt, pFrame, nCnt2) ? ::std::unique_ptr<SwWait>(new SwWait( rDocShell, true )) : nullptr )
+        : m_pWait( ShouldWait(nCnt, pFrame, nCnt2) ? o3tl::make_unique<SwWait>( rDocShell, true ) : nullptr )
     { }
 };
 

@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <o3tl/make_unique.hxx>
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
 #include <vcl/svapp.hxx>
@@ -305,7 +306,7 @@ SbxInfo::~SbxInfo()
 
 void SbxInfo::AddParam(const OUString& rName, SbxDataType eType, SbxFlagBits nFlags)
 {
-    m_Params.push_back(std::unique_ptr<SbxParamInfo>(new SbxParamInfo(rName, eType, nFlags)));
+    m_Params.push_back(o3tl::make_unique<SbxParamInfo>(rName, eType, nFlags));
 }
 
 const SbxParamInfo* SbxInfo::GetParam( sal_uInt16 n ) const

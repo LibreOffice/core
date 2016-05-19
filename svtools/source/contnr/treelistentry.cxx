@@ -19,7 +19,7 @@
 
 #include <svtools/treelistentry.hxx>
 #include <svtools/treelist.hxx>
-
+#include <o3tl/make_unique.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
@@ -70,7 +70,7 @@ SvTreeListEntry::SvTreeListEntry(const SvTreeListEntry& r)
     , maBackColor(Application::GetSettings().GetStyleSettings().GetWindowColor())
 {
     for (auto const& it : r.m_Children)
-        m_Children.push_back(std::unique_ptr<SvTreeListEntry>(new SvTreeListEntry(*it)));
+        m_Children.push_back(o3tl::make_unique<SvTreeListEntry>(*it));
 }
 
 SvTreeListEntry::~SvTreeListEntry()
