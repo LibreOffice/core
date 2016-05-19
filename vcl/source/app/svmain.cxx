@@ -95,6 +95,8 @@
 
 using namespace ::com::sun::star;
 
+static bool g_bIsLeanException;
+
 static bool isInitVCL();
 
 oslSignalAction SAL_CALL VCLExceptionSignal_impl( void* /*pData*/, oslSignalInfo* pInfo)
@@ -102,7 +104,7 @@ oslSignalAction SAL_CALL VCLExceptionSignal_impl( void* /*pData*/, oslSignalInfo
     static volatile bool bIn = false;
 
     // if we crash again, bail out immediately
-    if ( bIn )
+    if ( bIn  || g_bIsLeanException)
         return osl_Signal_ActCallNextHdl;
 
     ExceptionCategory nVCLException = ExceptionCategory::NONE;
@@ -302,6 +304,7 @@ bool InitVCL()
     pSVData->maGDIData.mpScreenFontCache    = new ImplFontCache;
     pSVData->maGDIData.mpGrfConverter       = new GraphicConverter;
 
+    g_bIsLeanException = getenv("VCL_HIDE_WINDOWS") ? true : false;
     // Set exception handler
     pExceptionHandler = osl_addSignalHandler(VCLExceptionSignal_impl, nullptr);
 
