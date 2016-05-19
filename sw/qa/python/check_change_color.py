@@ -1,6 +1,7 @@
 import unittest
 from org.libreoffice.unotest import UnoInProcess
-
+from com.sun.star.text.ControlCharacter import PARAGRAPH_BREAK
+from com.sun.star.awt.FontUnderline import SINGLE
 
 class CheckChangeColor(unittest.TestCase):
 
@@ -9,6 +10,9 @@ class CheckChangeColor(unittest.TestCase):
         cls._uno = UnoInProcess()
         cls._uno.setUp()
         cls._xEmptyDoc = cls._uno.openEmptyWriterDoc()
+        cls.RED = 0xFF0000
+        cls.BLUE = 0x0000FF
+        cls.GREEN = 0x008000
 
     @classmethod
     def tearDownClass(cls):
@@ -18,19 +22,62 @@ class CheckChangeColor(unittest.TestCase):
         xDoc = CheckChangeColor._uno.openEmptyWriterDoc()
         xPageStyles = xDoc.StyleFamilies["PageStyles"]
         xPageStyle = xPageStyles["Standard"]
+
         self.assertEqual(xPageStyle.BackColor, -1)
         self.assertEqual(xPageStyle.IsLandscape, False)
 
-        xPageStyle.setPropertyValue("BackColor", 0x000000FF)
-        xPageStyle.setPropertyValue("IsLandscape", True)
-        self.assertEqual(xPageStyle.BackColor, 0x000000FF)
+        xPageStyle.BackColor = self.RED
+        xPageStyle.IsLandscape = True
+        self.assertEqual(xPageStyle.BackColor, self.RED)
         self.assertEqual(xPageStyle.IsLandscape, True)
 
-        xPageStyle.setPropertyValue("GridColor", 0x000000FF)
-        self.assertEqual(xPageStyle.GridColor, 0x000000FF)
+        xPageStyle.GridColor = self.GREEN
+        self.assertEqual(xPageStyle.GridColor, self.GREEN)
 
-        xPageStyle.setPropertyValue("FootnoteLineColor", 0x000000FF)
-        self.assertEqual(xPageStyle.FootnoteLineColor, 0x000000FF)
+        xPageStyle.FootnoteLineColor = self.BLUE
+        self.assertEqual(xPageStyle.FootnoteLineColor, self.BLUE)
+
+        xDoc.dispose()
+
+    def test_change_text_color(self):
+        xDoc = CheckChangeColor._uno.openEmptyWriterDoc()
+        cursor = xDoc.Text.createTextCursor()
+
+        cursor.CharColor = self.RED
+        self.assertEqual(cursor.CharColor, self.RED)
+
+        cursor.CharBackColor = self.BLUE
+        self.assertEqual(cursor.CharBackColor, self.BLUE)
+
+        self.assertEqual(cursor.CharUnderlineHasColor, False)
+        cursor.CharUnderlineHasColor = True
+        cursor.CharUnderline = SINGLE
+        cursor.CharUnderlineColor = self.GREEN
+        self.assertEqual(cursor.CharUnderlineColor, self.GREEN)
+        self.assertEqual(cursor.CharUnderline, SINGLE)
+        self.assertEqual(cursor.CharUnderlineHasColor, True)
+
+        xDoc.Text.insertString(cursor, "One foo to rule them all", 0)
+
+        self.assertEqual(xDoc.getText().createTextCursor().CharColor, self.RED)
+        self.assertEqual(xDoc.getText().createTextCursor().CharBackColor, self.BLUE)
+        self.assertEqual(xDoc.getText().createTextCursor().CharUnderlineColor, self.GREEN)
+
+        xDoc.dispose()
+
+    def test_change_paragraph_color(self):
+        xDoc = CheckChangeColor._uno.openEmptyWriterDoc()
+        cursor = xDoc.Text.createTextCursor()
+
+        cursor.ParaBackColor = self.RED
+        self.assertEqual(cursor.ParaBackColor, self.RED)
+
+        xDoc.Text.insertControlCharacter(cursor, PARAGRAPH_BREAK, False)
+        xDoc.Text.insertString(cursor, "One foo to find them all", 0)
+
+        self.assertEqual(xDoc.getText().createTextCursor().ParaBackColor, self.RED)
+
+        xDoc.dispose()
 
 if __name__ == '__main__':
     unittest.main()
