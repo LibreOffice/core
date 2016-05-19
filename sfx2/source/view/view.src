@@ -111,6 +111,17 @@ String STR_CLASSIFIED_INTELLECTUAL_PROPERTY
     Text [ en-US ] = "Intellectual Property:" ;
 };
 
+String STR_CLASSIFIED_NATIONAL_SECURITY
+{
+    Text [ en-US ] = "National Security:" ;
+}
+
+;
+String STR_CLASSIFIED_EXPORT_CONTROL
+{
+    Text [ en-US ] = "Export Control:" ;
+};
+
 PushButton BT_CHECKOUT
 {
     Pos = MAP_APPFONT( 0 , 0 );
