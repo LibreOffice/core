@@ -91,9 +91,7 @@ sal_Int32 SwVbaTableHelper::getTabColIndex( const OUString& rCellName ) throw (u
     const SwTableBox* pBox = pTable->GetTableBox( rCellName );
     if( !pBox )
         throw uno::RuntimeException();
-    const SwTableBoxes* pBoxes = &pBox->GetUpper()->GetTabBoxes();
-    nRet = pBoxes->GetPos( pBox );
-    return nRet;
+    return pBox->GetUpper()->GetBoxPos( pBox );
 }
 
 OUString SwVbaTableHelper::getColumnStr( sal_Int32 nCol )

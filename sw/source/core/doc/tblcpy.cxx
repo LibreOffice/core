@@ -857,7 +857,7 @@ bool SwTable::InsTable( const SwTable& rCpyTable, const SwSelBoxes& rSelBoxes,
                 SwTableLine* pLastLn = GetTabLines().back();
 
                 SwTableBox* pSttBox = pFLine->GetBoxes()[0]->GetBox();
-                const SwTableBoxes::size_type nSttBox = pFLine->GetLine()->GetTabBoxes().GetPos( pSttBox );
+                const SwTableBoxes::size_type nSttBox = pFLine->GetLine()->GetBoxPos( pSttBox );
                 for( SwTableLines::size_type n = rCpyTable.GetTabLines().size() - nNewLns;
                         n < rCpyTable.GetTabLines().size(); ++n )
                 {
@@ -901,7 +901,7 @@ bool SwTable::InsTable( const SwTable& rCpyTable, const SwSelBoxes& rSelBoxes,
             pFLine = aFndBox.GetLines()[ nLn % nFndCnt ].get();
             SwTableLine* pLine = pFLine->GetLine();
             SwTableBox* pSttBox = pFLine->GetBoxes()[0]->GetBox();
-            const SwTableBoxes::size_type nSttBox = pLine->GetTabBoxes().GetPos( pSttBox );
+            const SwTableBoxes::size_type nSttBox = pLine->GetBoxPos( pSttBox );
             if( nLn >= nFndCnt )
             {
                 // We have more rows in the ClipBoard than we have selected

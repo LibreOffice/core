@@ -616,7 +616,7 @@ static long lcl_InsertPosition( SwTable &rTable, std::vector<sal_uInt16>& rInsPo
         SwTableLine* pLine = pBox->GetUpper();
         long nWidth = rBoxes[j]->GetFrameFormat()->GetFrameSize().GetWidth();
         nAddWidth += nWidth;
-        sal_uInt16 nCurrBox = pLine->GetTabBoxes().GetPos( pBox );
+        sal_uInt16 nCurrBox = pLine->GetBoxPos( pBox );
         sal_uInt16 nCurrLine = rTable.GetTabLines().GetPos( pLine );
         OSL_ENSURE( nCurrLine != USHRT_MAX, "Time to say Good-Bye.." );
         if( rInsPos[ nCurrLine ] == USHRT_MAX )

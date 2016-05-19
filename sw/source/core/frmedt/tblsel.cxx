@@ -968,8 +968,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
                         {
                             if( ( rUnion.Right() + COLFUZZY ) < pCell->Frame().Right() )
                             {
-                                sal_uInt16 nInsPos = pBox->GetUpper()->
-                                                    GetTabBoxes().GetPos( pBox )+1;
+                                sal_uInt16 nInsPos = pBox->GetUpper()->GetBoxPos( pBox )+1;
                                 lcl_InsTableBox( pTableNd, pDoc, pBox, nInsPos );
                                 pBox->ClaimFrameFormat();
                                 SwFormatFrameSize aNew(
@@ -1009,8 +1008,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
                         else if( ( rUnion.Left() - COLFUZZY ) >= pCell->Frame().Left() &&
                                 ( rUnion.Right() + COLFUZZY ) < pCell->Frame().Right() )
                         {
-                            sal_uInt16 nInsPos = pBox->GetUpper()->GetTabBoxes().GetPos(
-                                            pBox )+1;
+                            sal_uInt16 nInsPos = pBox->GetUpper()->GetBoxPos( pBox )+1;
                             lcl_InsTableBox( pTableNd, pDoc, pBox, nInsPos, 2 );
                             pBox->ClaimFrameFormat();
                             SwFormatFrameSize aNew(
@@ -1066,8 +1064,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
                                  ( pCell->Frame().Left() + COLFUZZY ) < rUnion.Left() )
                         {
                             // then we should insert a new box and adjust the widths
-                            sal_uInt16 nInsPos = pBox->GetUpper()->GetTabBoxes().GetPos(
-                                            pBox )+1;
+                            sal_uInt16 nInsPos = pBox->GetUpper()->GetBoxPos( pBox )+1;
                             lcl_InsTableBox( pTableNd, pDoc, pBox, nInsPos );
 
                             SwFormatFrameSize aNew(pBox->GetFrameFormat()->GetFrameSize() );
@@ -1301,7 +1298,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
     {
         SwTableBox* pTmpBox = rBoxes[0];
         SwTableLine* pInsLine = pTmpBox->GetUpper();
-        sal_uInt16 nInsPos = pInsLine->GetTabBoxes().GetPos( pTmpBox );
+        sal_uInt16 nInsPos = pInsLine->GetBoxPos( pTmpBox );
 
         lcl_InsTableBox( pTableNd, pDoc, pTmpBox, nInsPos );
         (*ppMergeBox) = pInsLine->GetTabBoxes()[ nInsPos ];

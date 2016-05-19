@@ -75,15 +75,7 @@ public:
     }
 };
 
-class SwTableBoxes : public std::vector<SwTableBox*> {
-public:
-    // return USHRT_MAX if not found, else index of position
-    sal_uInt16 GetPos(const SwTableBox* pBox) const
-    {
-        const_iterator it = std::find(begin(), end(), pBox);
-        return it == end() ? USHRT_MAX : it - begin();
-    }
-};
+using SwTableBoxes = std::vector<SwTableBox*>;
 
 // Save content-bearing box-pointers additionally in a sorted array
 // (for calculation in table).
@@ -355,6 +347,11 @@ public:
 
           SwTableBoxes &GetTabBoxes() { return m_aBoxes; }
     const SwTableBoxes &GetTabBoxes() const { return m_aBoxes; }
+    sal_uInt16 GetBoxPos(const SwTableBox* pBox) const
+    {
+        SwTableBoxes::const_iterator it = std::find(m_aBoxes.begin(), m_aBoxes.end(), pBox);
+        return it == m_aBoxes.end() ? USHRT_MAX : it - m_aBoxes.begin();
+    }
 
           SwTableBox *GetUpper() { return m_pUpper; }
     const SwTableBox *GetUpper() const { return m_pUpper; }
