@@ -2217,7 +2217,7 @@ class ScFormatFilterMissing : public ScFormatFilterPlugin {
     virtual ~ScFormatFilterMissing() {}
     virtual FltError ScImportLotus123( SfxMedium&, ScDocument*, rtl_TextEncoding ) override { return eERR_INTERN; }
     virtual FltError ScImportQuattroPro( SfxMedium &, ScDocument * ) override { return eERR_INTERN; }
-    virtual FltError ScImportExcel( SfxMedium&, ScDocument*, const EXCIMPFORMAT, rtl_TextEncoding ) override { return eERR_INTERN; }
+    virtual FltError ScImportExcel( SfxMedium&, ScDocument*, const EXCIMPFORMAT ) override { return eERR_INTERN; }
     virtual FltError ScImportStarCalc10( SvStream&, ScDocument* ) override { return eERR_INTERN; }
     virtual FltError ScImportDif( SvStream&, ScDocument*, const ScAddress&,
                  const rtl_TextEncoding, sal_uInt32 ) override { return eERR_INTERN; }

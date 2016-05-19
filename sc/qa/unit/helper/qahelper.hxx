@@ -52,7 +52,6 @@
 #define XLS_XML_FORMAT_TYPE  (SfxFilterFlags::IMPORT | SfxFilterFlags::EXPORT | SfxFilterFlags::ALIEN)
 #define XLSB_XML_FORMAT_TYPE (SfxFilterFlags::IMPORT |                          SfxFilterFlags::ALIEN | SfxFilterFlags::STARONEFILTER | SfxFilterFlags::PREFERED)
 #define FODS_FORMAT_TYPE     (SfxFilterFlags::IMPORT | SfxFilterFlags::EXPORT | SfxFilterFlags::OWN | SfxFilterFlags::STARONEFILTER )
-#define XLS_ENC_FORMAT_TYPE  (SfxFilterFlags::IMPORT |                          SfxFilterFlags::ALIEN)
 
 #define FORMAT_ODS      0
 #define FORMAT_XLS      1
@@ -65,7 +64,6 @@
 #define FORMAT_XLS_XML  8
 #define FORMAT_XLSB     9
 #define FORMAT_FODS     10
-#define FORMAT_XLS_ENC  11
 
 enum StringType { PureString, FormulaValue, StringValue };
 
