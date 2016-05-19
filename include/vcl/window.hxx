@@ -32,6 +32,7 @@
 #include <vcl/inputctx.hxx>
 #include <vcl/keycodes.hxx>
 #include <vcl/region.hxx>
+#include <vcl/sysdata.hxx>
 #include <vcl/salnativewidgets.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ref.hxx>
@@ -1217,6 +1218,7 @@ public:
 
     virtual const SystemEnvData*        GetSystemData() const;
     css::uno::Any                       GetSystemDataAny() const;
+    SystemWindowData                    GenerateOpenGLWinData(bool bRequestLegacyContext);
 
     // API to set/query the component interfaces
     virtual css::uno::Reference< css::awt::XWindowPeer >

@@ -41,6 +41,7 @@
 
 #include <config_gio.h>
 
+#include <unx/salframe.h>
 #include <unx/x11/xlimits.hxx>
 #if ENABLE_DBUS && ENABLE_GIO
 #  include <unx/gtk/gtksalmenu.hxx>
@@ -2528,6 +2529,13 @@ void GtkSalFrame::Beep()
 const SystemEnvData* GtkSalFrame::GetSystemData() const
 {
     return &m_aSystemData;
+}
+
+SystemWindowData GtkSalFrame::GenerateOpenGLWinData(const SystemEnvData* pEnvData, bool /*bRequestLegacyContext*/) const
+{
+    Display *dpy = static_cast<Display*>(pEnvData->pDisplay);
+    Window win = pEnvData->aWindow;
+    return X11SalFrame::GenerateOpenGLWinData(dpy, win);
 }
 
 void GtkSalFrame::SetParent( SalFrame* pNewParent )

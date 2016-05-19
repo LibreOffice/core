@@ -35,6 +35,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/opengl/OpenGLContext.hxx>
+#include <vcl/opengl/OpenGLHelper.hxx>
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
@@ -938,6 +939,117 @@ const SystemEnvData* X11SalFrame::GetSystemData() const
     pFrame->maSystemChildData.aShellWindow  = pFrame->GetShellWindow();
     pFrame->maSystemChildData.pShellWidget  = nullptr;
     return &maSystemChildData;
+}
+
+namespace
+{
+    GLXFBConfig* getFBConfig(Display* dpy, Window win, int& nBestFBC, bool bUseDoubleBufferedRendering, bool bWithSameVisualID)
+    {
+        if( dpy == nullptr || !glXQueryExtension( dpy, nullptr, nullptr ) )
+            return nullptr;
+
+        VCL_GL_INFO("window: " << win);
+
+        XWindowAttributes xattr;
+        if( !XGetWindowAttributes( dpy, win, &xattr ) )
+        {
+            SAL_WARN("vcl.opengl", "Failed to get window attributes for fbconfig " << win);
+            xattr.screen = nullptr;
+            xattr.visual = nullptr;
+        }
+
+        int screen = XScreenNumberOfScreen( xattr.screen );
+
+        // TODO: moggi: Select colour channel depth based on visual attributes, not hardcoded */
+        static int visual_attribs[] =
+        {
+            GLX_DOUBLEBUFFER,       True,
+            GLX_X_RENDERABLE,       True,
+            GLX_RED_SIZE,           8,
+            GLX_GREEN_SIZE,         8,
+            GLX_BLUE_SIZE,          8,
+            GLX_ALPHA_SIZE,         8,
+            GLX_DEPTH_SIZE,         24,
+            GLX_X_VISUAL_TYPE,      GLX_TRUE_COLOR,
+            None
+        };
+
+        if (!bUseDoubleBufferedRendering)
+            visual_attribs[1] = False;
+
+        int fbCount = 0;
+        GLXFBConfig* pFBC = glXChooseFBConfig( dpy,
+                screen,
+                visual_attribs, &fbCount );
+
+        if(!pFBC)
+        {
+            SAL_WARN("vcl.opengl", "no suitable fb format found");
+            return nullptr;
+        }
+
+        int best_num_samp = -1;
+        for(int i = 0; i < fbCount; ++i)
+        {
+            XVisualInfo* pVi = glXGetVisualFromFBConfig( dpy, pFBC[i] );
+            if(pVi && (!bWithSameVisualID || (xattr.visual && pVi->visualid == xattr.visual->visualid)) )
+            {
+                // pick the one with the most samples per pixel
+                int nSampleBuf = 0;
+                int nSamples = 0;
+                glXGetFBConfigAttrib( dpy, pFBC[i], GLX_SAMPLE_BUFFERS, &nSampleBuf );
+                glXGetFBConfigAttrib( dpy, pFBC[i], GLX_SAMPLES       , &nSamples  );
+
+                if ( nBestFBC < 0 || (nSampleBuf && ( nSamples > best_num_samp )) )
+                {
+                    nBestFBC = i;
+                    best_num_samp = nSamples;
+                }
+            }
+            XFree( pVi );
+        }
+
+        return pFBC;
+    }
+}
+
+SystemWindowData X11SalFrame::GenerateOpenGLWinData(Display* dpy, Window win)
+{
+    SystemWindowData aWinData;
+    aWinData.nSize = sizeof(aWinData);
+    aWinData.pVisual = nullptr;
+
+    if (dpy == nullptr || !glXQueryExtension(dpy, nullptr, nullptr))
+        return aWinData;
+
+    OpenGLContext::initOpenGLFunctionPointers();
+
+    int best_fbc = -1;
+    GLXFBConfig* pFBC = getFBConfig(dpy, win, best_fbc, true, false);
+
+    if (!pFBC)
+        return aWinData;
+
+    XVisualInfo* vi = nullptr;
+    if( best_fbc != -1 )
+        vi = glXGetVisualFromFBConfig( dpy, pFBC[best_fbc] );
+
+    XFree(pFBC);
+
+    if( vi )
+    {
+        VCL_GL_INFO("using VisualID " << vi->visualid);
+        aWinData.pVisual = static_cast<void*>(vi->visual);
+    }
+
+    return aWinData;
+}
+
+SystemWindowData X11SalFrame::GenerateOpenGLWinData(const SystemEnvData* pEnvData, bool /*bRequestLegacyContext*/) const
+{
+    Display *dpy = static_cast<Display*>(pEnvData->pDisplay);
+    Window win = pEnvData->aWindow;
+    return X11SalFrame::GenerateOpenGLWinData(dpy, win);
 }
 
 SalGraphics *X11SalFrame::AcquireGraphics()

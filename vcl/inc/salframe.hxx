@@ -201,6 +201,15 @@ public:
     virtual const SystemEnvData*
                             GetSystemData() const = 0;
 
+    // returns a description of the best format window to create for OpenGL
+    virtual SystemWindowData GenerateOpenGLWinData(const SystemEnvData* /*pEnvData*/, bool /*bRequestLegacyContext*/) const
+    {
+        SystemWindowData aRet;
+        memset(&aRet, 0, sizeof(aRet));
+        aRet.nSize = sizeof(aRet);
+        return aRet;
+    }
+
     // get current modifier, button mask and mouse position
     struct SalPointerState
     {

@@ -1232,6 +1232,15 @@ const SystemEnvData* AquaSalFrame::GetSystemData() const
     return &maSysData;
 }
 
+SystemWindowData AquaSalFrame::GenerateOpenGLWinData(const SystemEnvData* pEnvData, bool bRequestLegacyContext) const
+{
+    SystemWindowData aWinData;
+    aWinData.bOpenGL = true;
+    aWinData.bLegacy = bRequestLegacyContext;
+    aWinData.nSize = sizeof(aWinData);
+    return aWinData;
+}
+
 void AquaSalFrame::Beep()
 {
     NSBeep();

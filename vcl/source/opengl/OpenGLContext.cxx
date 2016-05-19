@@ -587,22 +587,11 @@ GLXFBConfig* getFBConfig(Display* dpy, Window win, int& nBestFBC, bool bUseDoubl
     return pFBC;
 }
 
-// we need them before glew can initialize them
-// glew needs an OpenGL context so we need to get the address manually
-void initOpenGLFunctionPointers()
-{
-    glXChooseFBConfig = reinterpret_cast<GLXFBConfig*(*)(Display *dpy, int screen, const int *attrib_list, int *nelements)>(glXGetProcAddressARB(reinterpret_cast<GLubyte const *>("glXChooseFBConfig")));
-    glXGetVisualFromFBConfig = reinterpret_cast<XVisualInfo*(*)(Display *dpy, GLXFBConfig config)>(glXGetProcAddressARB(reinterpret_cast<GLubyte const *>("glXGetVisualFromFBConfig")));    // try to find a visual for the current set of attributes
-    glXGetFBConfigAttrib = reinterpret_cast<int(*)(Display *dpy, GLXFBConfig config, int attribute, int* value)>(glXGetProcAddressARB(reinterpret_cast<GLubyte const *>("glXGetFBConfigAttrib")));
-    glXCreateContextAttribsARB = reinterpret_cast<GLXContext(*)(Display*, GLXFBConfig, GLXContext, Bool, const int*)>(glXGetProcAddressARB(reinterpret_cast<const GLubyte *>("glXCreateContextAttribsARB")));
-    glXCreatePixmap = reinterpret_cast<GLXPixmap(*)(Display*, GLXFBConfig, Pixmap, const int*)>(glXGetProcAddressARB(reinterpret_cast<const GLubyte *>("glXCreatePixmap")));
-}
-
 Visual* getVisual(Display* dpy, Window win)
 {
     OpenGLZone aZone;
 
-    initOpenGLFunctionPointers();
+    OpenGLContext::initOpenGLFunctionPointers();
 
     XWindowAttributes xattr;
     if( !XGetWindowAttributes( dpy, win, &xattr ) )
@@ -614,6 +603,17 @@ Visual* getVisual(Display* dpy, Window win)
     return xattr.visual;
 }
 
+}
+
+// we need them before glew can initialize them
+// glew needs an OpenGL context so we need to get the address manually
+void OpenGLContext::initOpenGLFunctionPointers()
+{
+    glXChooseFBConfig = reinterpret_cast<GLXFBConfig*(*)(Display *dpy, int screen, const int *attrib_list, int *nelements)>(glXGetProcAddressARB(reinterpret_cast<GLubyte const *>("glXChooseFBConfig")));
+    glXGetVisualFromFBConfig = reinterpret_cast<XVisualInfo*(*)(Display *dpy, GLXFBConfig config)>(glXGetProcAddressARB(reinterpret_cast<GLubyte const *>("glXGetVisualFromFBConfig")));    // try to find a visual for the current set of attributes
+    glXGetFBConfigAttrib = reinterpret_cast<int(*)(Display *dpy, GLXFBConfig config, int attribute, int* value)>(glXGetProcAddressARB(reinterpret_cast<GLubyte const *>("glXGetFBConfigAttrib")));
+    glXCreateContextAttribsARB = reinterpret_cast<GLXContext(*)(Display*, GLXFBConfig, GLXContext, Bool, const int*)>(glXGetProcAddressARB(reinterpret_cast<const GLubyte *>("glXCreateContextAttribsARB")));
+    glXCreatePixmap = reinterpret_cast<GLXPixmap(*)(Display*, GLXFBConfig, Pixmap, const int*)>(glXGetProcAddressARB(reinterpret_cast<const GLubyte *>("glXCreatePixmap")));
 }
 
 #endif
@@ -1284,64 +1284,11 @@ void OpenGLContext::reset()
 #endif
 }
 
-#if defined(_WIN32) || defined( MACOSX ) || defined( IOS ) || defined( ANDROID )
-
-SystemWindowData OpenGLContext::generateWinData(vcl::Window* /*pParent*/, bool bRequestLegacyContext)
-{
-    (void) bRequestLegacyContext;
-    SystemWindowData aWinData;
-#if defined(MACOSX)
-    aWinData.bOpenGL = true;
-    aWinData.bLegacy = bRequestLegacyContext;
-#endif
-    aWinData.nSize = sizeof(aWinData);
-    return aWinData;
-}
-
-#elif defined( UNX )
-
-SystemWindowData OpenGLContext::generateWinData(vcl::Window* pParent, bool)
+SystemWindowData OpenGLContext::generateWinData(vcl::Window* pParent, bool bRequestLegacyContext)
 {
     OpenGLZone aZone;
-
-    SystemWindowData aWinData;
-    aWinData.nSize = sizeof(aWinData);
-    aWinData.pVisual = nullptr;
-
-#if !defined(LIBO_HEADLESS)
-    const SystemEnvData* sysData(pParent->GetSystemData());
-
-    Display *dpy = static_cast<Display*>(sysData->pDisplay);
-    Window win = sysData->aWindow;
-
-    if( dpy == nullptr || !glXQueryExtension( dpy, nullptr, nullptr ) )
-        return aWinData;
-
-    initOpenGLFunctionPointers();
-
-    int best_fbc = -1;
-    GLXFBConfig* pFBC = getFBConfig(dpy, win, best_fbc, true, false);
-
-    if (!pFBC)
-        return aWinData;
-
-    XVisualInfo* vi = nullptr;
-    if( best_fbc != -1 )
-        vi = glXGetVisualFromFBConfig( dpy, pFBC[best_fbc] );
-
-    XFree(pFBC);
-
-    if( vi )
-    {
-        VCL_GL_INFO("using VisualID " << vi->visualid);
-        aWinData.pVisual = static_cast<void*>(vi->visual);
-    }
-#endif
-
-    return aWinData;
+    return pParent->GenerateOpenGLWinData(bRequestLegacyContext);
 }
-
-#endif
 
 bool OpenGLContext::isCurrent()
 {

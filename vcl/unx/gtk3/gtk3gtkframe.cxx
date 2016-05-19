@@ -2347,6 +2347,14 @@ const SystemEnvData* GtkSalFrame::GetSystemData() const
     return &m_aSystemData;
 }
 
+SystemWindowData GtkSalFrame::GenerateOpenGLWinData(const SystemEnvData* /*pEnvData*/, bool /*bRequestLegacyContext*/) const
+{
+    SystemWindowData aRet;
+    memset(&aRet, 0, sizeof(aRet));
+    aRet.nSize = sizeof(aRet);
+    return aRet;
+}
+
 void GtkSalFrame::SetParent( SalFrame* pNewParent )
 {
     if( m_pParent )

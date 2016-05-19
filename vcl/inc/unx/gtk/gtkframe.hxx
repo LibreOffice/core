@@ -492,6 +492,8 @@ public:
     // returns system data (most prominent: window handle)
     virtual const SystemEnvData*    GetSystemData() const override;
 
+    virtual SystemWindowData    GenerateOpenGLWinData(const SystemEnvData* pEnvData, bool bRequestLegacyContext) const override;
+
     // get current modifier and button mask
     virtual SalPointerState     GetPointerState() override;
 

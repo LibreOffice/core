@@ -215,6 +215,8 @@ public:
 
     static SystemWindowData generateWinData(vcl::Window* pParent, bool bRequestLegacyContext);
 
+    static void initOpenGLFunctionPointers();
+
 private:
     SAL_DLLPRIVATE bool InitGLEW();
     SAL_DLLPRIVATE void InitGLEWDebugging();

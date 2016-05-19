@@ -3686,8 +3686,20 @@ void Window::ApplySettings(vcl::RenderContext& /*rRenderContext*/)
 
 const SystemEnvData* Window::GetSystemData() const
 {
-
     return mpWindowImpl->mpFrame ? mpWindowImpl->mpFrame->GetSystemData() : nullptr;
+}
+
+SystemWindowData Window::GenerateOpenGLWinData(bool bRequestLegacyContext)
+{
+    const SystemEnvData* pSystemData = GetSystemData();
+    if (!mpWindowImpl->mpFrame)
+    {
+        SystemWindowData aRet;
+        memset(&aRet, 0, sizeof(aRet));
+        aRet.nSize = sizeof(aRet);
+        return aRet;
+    }
+    return mpWindowImpl->mpFrame->GenerateOpenGLWinData(pSystemData, bRequestLegacyContext);
 }
 
 Any Window::GetSystemDataAny() const
