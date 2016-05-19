@@ -48,21 +48,21 @@ std::unique_ptr< Export > exporter;
 
 }
 
-OString lcl_GetListTyp( const sal_uInt16 nTyp, const bool bUpperCamelCase )
+OString lcl_GetListTyp( const ExportListType nTyp, const bool bUpperCamelCase )
 {
     OString sType;
     switch (nTyp)
     {
-        case LIST_STRING:
+        case ExportListType::String:
             sType = bUpperCamelCase ? "StringList" : "stringlist";
             break;
-        case LIST_FILTER:
+        case ExportListType::Filter:
             sType = bUpperCamelCase ? "FilterList" : "filterlist";
             break;
-        case LIST_ITEM:
+        case ExportListType::Item:
             sType = bUpperCamelCase ? "ItemList" : "itemlist";
             break;
-        case LIST_PAIRED:
+        case ExportListType::Paired:
             sType = bUpperCamelCase ? "PairedList" : "pairedlist";
             break;
         default: break;
@@ -196,7 +196,7 @@ Export::Export(const OString &rOutput)
                 bDefine( false ),
                 bNextMustBeDefineEOL( false ),
                 nLevel( 0 ),
-                nList( LIST_NON ),
+                nList( ExportListType::NONE ),
                 nListIndex( 0 ),
                 nListLevel( 0 ),
                 bMergeMode( false ),
@@ -220,7 +220,7 @@ Export::Export(
                 bDefine( false ),
                 bNextMustBeDefineEOL( false ),
                 nLevel( 0 ),
-                nList( LIST_NON ),
+                nList( ExportListType::NONE ),
                 nListIndex( 0 ),
                 nListLevel( 0 ),
                 bMergeMode( true ),
@@ -247,7 +247,7 @@ void Export::Init()
     bDefine = false;
     bNextMustBeDefineEOL = false;
     nLevel = 0;
-    nList = LIST_NON;
+    nList = ExportListType::NONE;
     nListIndex = 0;
     for ( size_t i = 0, n = aResStack.size(); i < n;  ++i )
         delete aResStack[ i ];
@@ -442,7 +442,7 @@ void Export::Execute( int nToken, const char * pToken )
         break;
         case LEVELUP: {
             // push
-            if ( nList )
+            if ( nList != ExportListType::NONE )
             {
                 nListLevel++;
                 break;
@@ -463,7 +463,7 @@ void Export::Execute( int nToken, const char * pToken )
         break;
         case LEVELDOWN: {
             // pop
-            if ( !nList || !nListLevel ) {
+            if ( nList == ExportListType::NONE || !nListLevel ) {
                 if ( nLevel ) {
                     if ( bDefine && (nLevel == 1 )) {
                         bDefine = false;
@@ -476,9 +476,9 @@ void Export::Execute( int nToken, const char * pToken )
                     aResStack.erase( it );
                     nLevel--;
                 }
-                if( nList )
+                if( nList != ExportListType::NONE )
                 {
-                    nList = LIST_NON;
+                    nList = ExportListType::NONE;
                     nListLevel = 1;
                 }
             }
@@ -509,13 +509,13 @@ void Export::Execute( int nToken, const char * pToken )
             }
             else if (sKey =="STRINGLIST")
             {
-                nList = LIST_STRING;
+                nList = ExportListType::String;
                 nListIndex = 0;
                 nListLevel = 1;
             }
             else if (sKey == "FILTERLIST")
             {
-                nList = LIST_FILTER;
+                nList = ExportListType::Filter;
                 nListIndex = 0;
                 nListLevel = 1;
             }
@@ -541,21 +541,21 @@ void Export::Execute( int nToken, const char * pToken )
                 sKey = sKey.toAsciiUpperCase();
                 if (sKey == "STRINGLIST")
                 {
-                    nList = LIST_STRING;
+                    nList = ExportListType::String;
                 }
                 else if (sKey == "FILTERLIST")
                 {
-                    nList = LIST_FILTER;
+                    nList = ExportListType::Filter;
                 }
                 else if (sKey == "PAIREDLIST")
                 {
-                    nList = LIST_PAIRED;
+                    nList = ExportListType::Paired;
                 }
                 else if (sKey == "ITEMLIST")
                 {
-                    nList = LIST_ITEM;
+                    nList = ExportListType::Item;
                 }
-                if( nList )
+                if( nList != ExportListType::NONE )
                 {
                     nListIndex = 0;
                     nListLevel = 1;
@@ -567,7 +567,7 @@ void Export::Execute( int nToken, const char * pToken )
         case LISTTEXT_:
         case LISTTEXT: {
             // this is an entry for a List
-            if ( nList )
+            if ( nList != ExportListType::NONE )
             {
                 SetChildWithText();
                 InsertListEntry( sOrig );
@@ -747,7 +747,7 @@ void Export::WriteData( ResData *pResData, bool bCreateNew )
         }
     }
 
-    if( nList )
+    if( nList != ExportListType::NONE )
     {
         WriteExportList( pResData, pResData->m_aList, nList );
         if ( bCreateNew )
@@ -778,7 +778,7 @@ OString Export::StripList(const OString & rText)
 }
 
 void Export::WriteExportList(ResData *pResData, ExportList& rExportList,
-    const sal_uInt16 nTyp)
+    const ExportListType nTyp)
 {
     OString sGID(pResData->sGId);
     if (sGID.isEmpty())
@@ -797,7 +797,7 @@ void Export::WriteExportList(ResData *pResData, ExportList& rExportList,
         OString sText(rExportList[ i ]);
 
         // Strip PairList Line String
-        if (nTyp == LIST_PAIRED)
+        if (nTyp == ExportListType::Paired)
         {
             sLID = GetPairedListID( sText );
             sText = GetPairedListString( sText );
@@ -810,7 +810,7 @@ void Export::WriteExportList(ResData *pResData, ExportList& rExportList,
         }
         ConvertExportContent(sText);
 
-        if (nTyp != LIST_PAIRED)
+        if (nTyp != ExportListType::Paired)
             sLID = sText;
 
         OString sType = lcl_GetListTyp( nList, false );
@@ -1077,7 +1077,7 @@ void Export::MergeRest( ResData *pResData )
     }
 
     // Merge Lists
-    if ( nList )
+    if ( nList != ExportListType::NONE )
     {
         OString sOldId = pResData->sId;
         OString sOldGId = pResData->sGId;
@@ -1134,7 +1134,7 @@ void Export::MergeRest( ResData *pResData )
                 }
 
                 // Set matching identifier
-                if ( nList == LIST_PAIRED )
+                if ( nList == ExportListType::Paired )
                 {
                     pResData->sId = GetPairedListID ( sLine );
                 }

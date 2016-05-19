@@ -99,11 +99,10 @@ public:
 // class Export
 
 
-#define LIST_NON                    0x0000
-#define LIST_STRING                 0x0001
-#define LIST_FILTER                 0x0002
-#define LIST_ITEM                   0x0004
-#define LIST_PAIRED                 0x0005
+enum class ExportListType {
+    NONE, String, Filter, Item, Paired
+};
+
 #define STRING_TYP_TEXT             0x0010
 #define STRING_TYP_QUICKHELPTEXT    0x0040
 #define STRING_TYP_TITLE            0x0080
@@ -127,8 +126,8 @@ private:
 
     bool bDefine;                       // cur. res. in a define?
     bool bNextMustBeDefineEOL;          ///< define but no \ at lineend
-    std::size_t nLevel; // res. recursiv? how deep?
-    sal_uInt16 nList;                       ///< cur. res. is List
+    std::size_t nLevel; // res. recursive? how deep?
+    ExportListType nList;                       ///< cur. res. is List
     std::size_t nListIndex;
     std::size_t nListLevel;
     bool bMergeMode;
@@ -142,7 +141,7 @@ private:
     ParserQueue* pParseQueue;
 
     void WriteData( ResData *pResData, bool bCreateNew = false ); ///< called before dest. cur ResData
-    void WriteExportList( ResData *pResData, ExportList& rExportList, const sal_uInt16 nTyp );
+    void WriteExportList( ResData *pResData, ExportList& rExportList, const ExportListType nTyp );
 
     OString FullId();                    ///< creates cur. GID
 
