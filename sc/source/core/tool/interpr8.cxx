@@ -1957,7 +1957,6 @@ void ScInterpreter::ScSwitch_MS()
             return;
     }
     nParamCount--;
-    sal_uInt16 nFirstMatchError = 0;
     bool bFinished = false;
     while ( nParamCount > 1 && !bFinished && !nGlobalError )
     {
@@ -1967,10 +1966,8 @@ void ScInterpreter::ScSwitch_MS()
             fVal = GetDouble();
         else
             aStr = GetString();
-        if (!nFirstMatchError)
-            nFirstMatchError = nGlobalError;
         nParamCount--;
-        if ( !nGlobalError && (( isValue && rtl::math::approxEqual( fRefVal, fVal ) ) ||
+        if ( nGlobalError || (( isValue && rtl::math::approxEqual( fRefVal, fVal ) ) ||
              ( !isValue && aRefStr.getDataIgnoreCase() == aStr.getDataIgnoreCase() )) )
         {
             // TRUE
@@ -1999,11 +1996,10 @@ void ScInterpreter::ScSwitch_MS()
 
     if ( nGlobalError || !bFinished  )
     {
-        nGlobalError = nFirstMatchError;
         if ( !bFinished )
             PushNA(); // no true expression found
-        if ( nGlobalError )
-            PushNoValue(); // expression returned something other than true or false
+        else
+            PushError( nGlobalError );
         return;
     }
 
