@@ -388,6 +388,8 @@ public:
      */
     void group(RadioButton &rOther);
     virtual void ShowFocus(const Rectangle& rRect) override;
+
+    virtual FactoryFunction GetUITestFactory() const override;
 };
 
 class VCL_DLLPUBLIC CheckBox : public Button
