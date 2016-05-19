@@ -18,6 +18,7 @@
  */
 
 #include "quickstarter.hxx"
+
 #include <systools/win32/qswin32.h>
 
 static BOOL CALLBACK EnumWindowsProc( HWND hWnd, LPARAM lParam )
@@ -25,7 +26,7 @@ static BOOL CALLBACK EnumWindowsProc( HWND hWnd, LPARAM lParam )
     MSIHANDLE   hMSI = static_cast< MSIHANDLE >( lParam );
     CHAR    szClassName[sizeof(QUICKSTART_CLASSNAMEA) + 1];
 
-    int nCharsCopied = GetClassName( hWnd, szClassName, sizeof( szClassName ) );
+    int nCharsCopied = GetClassNameA( hWnd, szClassName, sizeof( szClassName ) );
 
     if ( nCharsCopied && !_stricmp( QUICKSTART_CLASSNAMEA, szClassName ) )
     {
@@ -33,10 +34,10 @@ static BOOL CALLBACK EnumWindowsProc( HWND hWnd, LPARAM lParam )
 
         if ( GetWindowThreadProcessId( hWnd, &dwProcessId ) )
         {
-            std::string sImagePath = GetProcessImagePath( dwProcessId );
-            std::string sOfficeImageDir = GetOfficeInstallationPath( hMSI ) + "program\\";
+            std::wstring sImagePath = GetProcessImagePathW( dwProcessId );
+            std::wstring sOfficeImageDir = GetOfficeInstallationPathW( hMSI ) + L"program\\";
 
-            if ( !_strnicmp( sImagePath.c_str(), sOfficeImageDir.c_str(), sOfficeImageDir.length() ) )
+            if ( !_wcsnicmp( sImagePath.c_str(), sOfficeImageDir.c_str(), sOfficeImageDir.length() ) )
             {
                 UINT    uMsgShutdownQuickstart = RegisterWindowMessageA( SHUTDOWN_QUICKSTART_MESSAGEA );
 

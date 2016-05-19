@@ -32,10 +32,10 @@
 
 #include <string>
 
-std::string GetOfficeInstallationPath(MSIHANDLE handle);
-std::string GetOfficeProductName(MSIHANDLE handle);
-std::string GetQuickstarterLinkName(MSIHANDLE handle);
-std::string GetProcessImagePath( DWORD dwProcessId );
+std::wstring GetOfficeInstallationPathW(MSIHANDLE handle);
+std::wstring GetOfficeProductNameW(MSIHANDLE handle);
+std::wstring GetQuickstarterLinkNameW(MSIHANDLE handle);
+std::wstring GetProcessImagePathW(DWORD dwProcessId);
 
 #endif // INCLUDED_SETUP_NATIVE_SOURCE_WIN32_CUSTOMACTIONS_QUICKSTARTER_QUICKSTARTER_HXX
 
