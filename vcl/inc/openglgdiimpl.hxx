@@ -114,16 +114,12 @@ public:
     bool UseSolid( SalColor nColor, sal_uInt8 nTransparency );
     bool UseSolid( SalColor nColor, double fTransparency );
     bool UseSolid( SalColor nColor );
-    bool UseSolidAA( SalColor nColor, double fTransparency );
-    bool UseSolidAA( SalColor nColor );
-    bool UseLine(SalColor nColor, double fTransparency, GLfloat fLineWidth);
+    bool UseLine(SalColor nColor, double fTransparency, GLfloat fLineWidth, bool bUseAA);
     bool UseInvert50();
     bool UseInvert(SalInvert nFlags);
 
     void DrawPoint( long nX, long nY );
     void DrawLine( double nX1, double nY1, double nX2, double nY2 );
-    void DrawLineAA( double nX1, double nY1, double nX2, double nY2 );
-    void DrawEdgeAA( double nX1, double nY1, double nX2, double nY2 );
     void DrawConvexPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry, bool blockAA = false );
     void DrawConvexPolygon( const tools::Polygon& rPolygon, bool blockAA = false );
     void DrawTrapezoid( const basegfx::B2DTrapezoid& trapezoid, bool blockAA = false );
