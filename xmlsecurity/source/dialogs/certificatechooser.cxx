@@ -148,7 +148,7 @@ OUString CertificateChooser::UsageInClearText(int bits)
     {
         if (!result.isEmpty())
             result += ", ";
-        result += OUString("0x") + OUString::number(bits, 16);
+        result += "0x" + OUString::number(bits, 16);
     }
 
     return result;
