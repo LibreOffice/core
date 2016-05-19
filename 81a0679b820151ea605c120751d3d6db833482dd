@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_58cf33b0",
+        "filename": "include/vcl/button.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-05-19T08:57:39Z",
+      "side": 1,
+      "message": "This method can be const, as it doesn\u0027t modify Button object",
+      "revId": "81a0679b820151ea605c120751d3d6db833482dd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_b8559fc7",
+        "filename": "svx/source/sidebar/possize/PosSizePropertyPanel.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 344,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-05-19T08:57:39Z",
+      "side": 1,
+      "message": "Nice reduction of duplicated code, btw :)",
+      "revId": "81a0679b820151ea605c120751d3d6db833482dd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_d85263dd",
+        "filename": "svx/source/sidebar/possize/PosSizePropertyPanel.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1032,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-05-19T08:57:39Z",
+      "side": 1,
+      "message": "Imo it looks better if \u0027Size\u0027 as well as \u0027Position\u0027 labels stay enabled when size/position is protected ... just disable the controls underneath ...",
+      "revId": "81a0679b820151ea605c120751d3d6db833482dd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_784b172c",
+        "filename": "svx/uiconfig/ui/sidebarpossize.ui",
+        "patchSetId": 6
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-05-19T08:57:39Z",
+      "side": 1,
+      "message": "What\u0027s wrong with full-lenght \u0027Width\u0027 except for it takes more space? \n\nI\u0027m afraid just 1-letter acronym will not work in some languages (and there\u0027s certainly at least 1 language that has the same initial letter for width and height)",
+      "revId": "81a0679b820151ea605c120751d3d6db833482dd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_9848db2f",
+        "filename": "svx/uiconfig/ui/sidebarpossize.ui",
+        "patchSetId": 6
+      },
+      "lineNbr": 337,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-05-19T08:57:39Z",
+      "side": 1,
+      "message": "Please align this checkbox w/ width and height controls, not with X+Y controls, as it is unrelated to them",
+      "revId": "81a0679b820151ea605c120751d3d6db833482dd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

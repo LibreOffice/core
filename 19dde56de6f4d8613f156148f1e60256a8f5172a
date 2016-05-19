@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_b8be7ffd",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/Sidebar.xcu",
+        "patchSetId": 6
+      },
+      "lineNbr": 522,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-05-19T08:57:39Z",
+      "side": 0,
+      "message": "Mhm ... do we really want to remove the panel from Writer completely, even when the replacement Writer-only panel doesn\u0027t exist yet?",
+      "revId": "19dde56de6f4d8613f156148f1e60256a8f5172a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
