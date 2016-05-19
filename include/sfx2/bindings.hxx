@@ -20,6 +20,9 @@
 #define INCLUDED_SFX2_BINDINGS_HXX
 
 #include <sal/config.h>
+
+#include <memory>
+
 #include <sfx2/dllapi.h>
 #include <sal/types.h>
 #include <rtl/strbuf.hxx>
@@ -220,11 +223,6 @@ public:
 #define DENTERREGISTRATIONS() EnterRegistrations()
 #define DLEAVEREGISTRATIONS() LeaveRegistrations()
 #endif
-
-
-
-
-
 
 
 #endif

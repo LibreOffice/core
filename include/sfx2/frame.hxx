@@ -71,7 +71,6 @@ class SfxFrameSetDescriptor;
 class SfxDispatcher;
 class Rectangle;
 class SfxRequest;
-class SfxUnoControllerItem;
 class SystemWindow;
 class SfxFrameArr_Impl;
 
