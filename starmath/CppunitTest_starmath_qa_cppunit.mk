@@ -12,6 +12,7 @@ $(eval $(call gb_CppunitTest_CppunitTest,starmath_qa_cppunit))
 $(eval $(call gb_CppunitTest_set_include,starmath_qa_cppunit,\
     $$(INCLUDE) \
     -I$(SRCDIR)/starmath/inc \
+    -I$(SRCDIR)/starmath/qa/inc \
 ))
 
 $(eval $(call gb_CppunitTest_use_external,starmath_qa_cppunit,boost_headers))

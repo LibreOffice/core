@@ -17,6 +17,8 @@
 #include <document.hxx>
 #include <smdll.hxx>
 
+#include "mock-visitor.hxx"
+
 namespace {
 
 using namespace ::com::sun::star;
@@ -67,6 +69,9 @@ private:
         bool bLoaded = mxDocShell->DoLoad(pSrcMed);
         CPPUNIT_ASSERT_MESSAGE(OUStringToOString("failed to load " + rURL, RTL_TEXTENCODING_UTF8).getStr(),
                                bLoaded);
+        // check the resuling tree by the mock visitor
+        std::unique_ptr<MockVisitor> xV(new MockVisitor);
+        const_cast<SmNode *>(mxDocShell->GetFormulaTree())->Accept(xV.get());
     }
 
     SmDocShellRef mxDocShell;
