@@ -44,7 +44,6 @@ public:
 
     enum ResourceEnum_t { UNKNOWN, STREAM, PROPERTIES, TABLE, SHAPE };
 
-    OOXMLFastContextHandler();
     explicit OOXMLFastContextHandler(css::uno::Reference< css::uno::XComponentContext > const & context);
 
     explicit OOXMLFastContextHandler(OOXMLFastContextHandler * pContext);

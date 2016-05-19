@@ -1339,25 +1339,6 @@ public:
         const css::uno::Reference<css::beans::XPropertySet> & xPropertySet) override;
 };
 
-class XMLCustomPropertyFieldImportContext : public XMLTextFieldImportContext
-{
-public:
-
-    XMLCustomPropertyFieldImportContext (SvXMLImport& rImport,
-                                    XMLTextImportHelper& rHlp,
-                                    sal_uInt16 nPrfx,
-                                    const OUString& sLocalName);
-
-protected:
-    /// process attribute values
-    virtual void ProcessAttribute( sal_uInt16 nAttrToken,
-                                   const OUString& sAttrValue ) override;
-
-    /// prepare XTextField for insertion into document
-    virtual void PrepareField(
-        const css::uno::Reference<css::beans::XPropertySet> & xPropertySet) override;
-};
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

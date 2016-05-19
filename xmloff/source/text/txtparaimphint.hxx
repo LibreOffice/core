@@ -51,13 +51,6 @@ public:
     {
     }
 
-    XMLHint_Impl( sal_uInt8 nTyp,
-                  const css::uno::Reference < css::text::XTextRange > & rS ) :
-        xStart( rS ),
-        nType( nTyp )
-    {
-    }
-
     virtual ~XMLHint_Impl() {}
 
     const css::uno::Reference < css::text::XTextRange > & GetStart() const { return xStart; }

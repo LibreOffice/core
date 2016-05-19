@@ -18,8 +18,6 @@
  */
 
 
-#include "bufferedinputstream.hxx"
-
 #include <string.h>
 #include <osl/diagnose.hxx>
 #include <osl/thread.h>
