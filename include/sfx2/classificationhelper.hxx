@@ -36,9 +36,9 @@ enum class SfxClassificationCheckPasteResult
 /// Specifies a policy type, to be used with SetBACName(). Getters always use IntellectualProperty for now.
 enum class SfxClassificationPolicyType
 {
-    ExportControl,
-    NationalSecurity,
-    IntellectualProperty
+    ExportControl = 1,
+    NationalSecurity = 2,
+    IntellectualProperty = 3
 };
 
 /// Shared code to handle Business Authorization Identification and Labeling Scheme (BAILS) properties.
