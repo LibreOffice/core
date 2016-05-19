@@ -2949,6 +2949,11 @@ void RadioButton::ShowFocus(const Rectangle& rRect)
     Button::ShowFocus(rRect);
 }
 
+FactoryFunction RadioButton::GetUITestFactory() const
+{
+    return RadioButtonUIObject::create;
+}
+
 void CheckBox::ImplInitCheckBoxData()
 {
     meState         = TRISTATE_FALSE;
