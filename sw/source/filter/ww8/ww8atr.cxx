@@ -464,7 +464,7 @@ void MSWordExportBase::OutputSectionBreaks( const SfxItemSet *pSet, const SwNode
                     if ( pLine && !pLine->GetUpper() )
                     {
                         // check if box is not first in that line:
-                        if ( 0 < pLine->GetTabBoxes().GetPos( pBox ) && pBox->GetSttNd() )
+                        if ( 0 < pLine->GetBoxPos( pBox ) && pBox->GetSttNd() )
                         {
                             bRemoveHardBreakInsideTable = true;
                         }

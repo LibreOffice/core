@@ -736,8 +736,8 @@ static void lcl_ProcessBoxSet( SwTableBox *pBox, Parm &rParm )
 
         if( pBox->getRowSpan() == 1 )
         {
+            const sal_uInt16 nPos = pBox->GetUpper()->GetBoxPos( pBox );
             SwTableBoxes& rTableBoxes = pBox->GetUpper()->GetTabBoxes();
-            const sal_uInt16 nPos = rTableBoxes.GetPos( pBox );
             if( nPos && rTableBoxes[ nPos - 1 ]->getRowSpan() != 1 )
                 nLeftDiff = 0;
             if( nPos + 1 < (sal_uInt16)rTableBoxes.size() &&
@@ -1827,14 +1827,13 @@ Point SwTableBox::GetCoordinates() const
     sal_uInt16 nX, nY;
     const SwTableBox* pBox = this;
     do {
-        const SwTableBoxes* pBoxes = &pBox->GetUpper()->GetTabBoxes();
         const SwTableLine* pLine = pBox->GetUpper();
         // at the first level?
         const SwTableLines* pLines = pLine->GetUpper()
                 ? &pLine->GetUpper()->GetTabLines() : &rTable.GetTabLines();
 
         nY = pLines->GetPos( pLine ) + 1 ;
-        nX = pBoxes->GetPos( pBox ) + 1 ;
+        nX = pBox->GetUpper()->GetBoxPos( pBox ) + 1;
         pBox = pLine->GetUpper();
     } while( pBox );
     return Point( nX, nY );
@@ -1853,7 +1852,6 @@ OUString SwTableBox::GetName() const
     OUString sNm, sTmp;
     const SwTableBox* pBox = this;
     do {
-        const SwTableBoxes* pBoxes = &pBox->GetUpper()->GetTabBoxes();
         const SwTableLine* pLine = pBox->GetUpper();
         // at the first level?
         const SwTableLines* pLines = pLine->GetUpper()
@@ -1865,7 +1863,7 @@ OUString SwTableBox::GetName() const
         else
             sNm = sTmp;
 
-        sTmp = OUString::number(( nPos = pBoxes->GetPos( pBox )) + 1 );
+        sTmp = OUString::number(( nPos = pBox->GetUpper()->GetBoxPos( pBox )) + 1 );
         if( nullptr != ( pBox = pLine->GetUpper()) )
             sNm = sTmp + "." + sNm;
         else

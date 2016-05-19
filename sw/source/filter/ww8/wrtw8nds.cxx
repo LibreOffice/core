@@ -2698,7 +2698,7 @@ void MSWordExportBase::OutputTextNode( const SwTextNode& rNode )
                     if ( pLine && !pLine->GetUpper() )
                     {
                         // check if box is first in that line:
-                        if ( 0 == pLine->GetTabBoxes().GetPos( pBox ) && pBox->GetSttNd() )
+                        if ( 0 == pLine->GetBoxPos( pBox ) && pBox->GetSttNd() )
                         {
                             // check if paragraph is first in that line:
                             if ( 1 == ( rNode.GetIndex() - pBox->GetSttNd()->GetIndex() ) )

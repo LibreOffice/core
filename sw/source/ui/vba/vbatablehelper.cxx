@@ -87,13 +87,10 @@ sal_Int32 SwVbaTableHelper::getTabRowIndex( const OUString& rCellName ) throw (u
 
 sal_Int32 SwVbaTableHelper::getTabColIndex( const OUString& rCellName ) throw (uno::RuntimeException)
 {
-    sal_Int32 nRet = 0;
     const SwTableBox* pBox = pTable->GetTableBox( rCellName );
     if( !pBox )
         throw uno::RuntimeException();
-    const SwTableBoxes* pBoxes = &pBox->GetUpper()->GetTabBoxes();
-    nRet = pBoxes->GetPos( pBox );
-    return nRet;
+    return pBox->GetUpper()->GetBoxPos( pBox );
 }
 
 OUString SwVbaTableHelper::getColumnStr( sal_Int32 nCol )
