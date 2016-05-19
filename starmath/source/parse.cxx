@@ -2156,6 +2156,7 @@ void SmParser::DoBinom()
 
 void SmParser::DoStack()
 {
+    std::unique_ptr<SmStructureNode> pSNode(new SmTableNode(m_aCurToken));
     NextToken();
     if (m_aCurToken.eType == TLGROUP)
     {
@@ -2178,15 +2179,10 @@ void SmParser::DoStack()
         if (m_aCurToken.eType != TRGROUP)
             Error(PE_RGROUP_EXPECTED);
 
-        NextToken();
-
-        //We need to let the table node know it context
-        //it's used in SmNodeToTextVisitor
-        SmToken aTok = m_aCurToken;
-        aTok.eType = TSTACK;
-        std::unique_ptr<SmStructureNode> pSNode(new SmTableNode(aTok));
         pSNode->SetSubNodes(ExpressionArray);
         m_aNodeStack.push_front(std::move(pSNode));
+
+        NextToken();
     }
     else
         Error(PE_LGROUP_EXPECTED);

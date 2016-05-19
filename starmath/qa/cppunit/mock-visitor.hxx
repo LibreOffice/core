@@ -22,6 +22,9 @@ public:
     void Visit( SmTableNode* pNode ) override {
         CPPUNIT_ASSERT_EQUAL_MESSAGE("SmTableNode should have type NTABLE",
                                      NTABLE, pNode->GetType());
+        auto eTT = pNode->GetToken().eType;
+        CPPUNIT_ASSERT_MESSAGE("The type of SmTableNode's token should be either TEND, TBINOM, or TSTACK",
+                               eTT == TEND || eTT == TBINOM || eTT == TSTACK);
         VisitChildren( pNode );
     }
 
