@@ -55,8 +55,7 @@ namespace xmloff
         typedef std::map<OUString, ElementType> MapString2Element;
         static MapString2Element    s_sElementTranslations;
 
-    protected:
-        OElementNameMap() { }
+        OElementNameMap() = delete;
 
     public:
         static ElementType getElementType(const OUString& _rName);

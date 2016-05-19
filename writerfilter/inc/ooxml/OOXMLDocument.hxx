@@ -216,7 +216,6 @@ public:
     virtual css::uno::Reference<css::frame::XModel> getModel() = 0;
     virtual void setDrawPage(css::uno::Reference<css::drawing::XDrawPage> xDrawPage) = 0;
     virtual css::uno::Reference<css::drawing::XDrawPage> getDrawPage() = 0;
-    virtual css::uno::Reference<css::io::XInputStream> getStorageStream() = 0;
     virtual css::uno::Reference<css::io::XInputStream> getInputStreamForId(const OUString & rId) = 0;
     virtual void setXNoteId(const sal_Int32 nId) = 0;
     virtual sal_Int32 getXNoteId() const = 0;

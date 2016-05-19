@@ -49,9 +49,6 @@ public:
     virtual ~SchXML3DSceneAttributesHelper();
 
     void getCameraDefaultFromDiagram( const css::uno::Reference< css::chart::XDiagram >& xDiagram );
-
-private:
-    SchXML3DSceneAttributesHelper();
 };
 
 class SchXMLPositionAttributesHelper

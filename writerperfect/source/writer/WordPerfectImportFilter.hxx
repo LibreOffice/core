@@ -89,47 +89,6 @@ SAL_CALL WordPerfectImportFilter_createInstance(const css::uno::Reference< css::
 throw (css::uno::Exception);
 
 
-class WordPerfectImportFilterDialog : public cppu::WeakImplHelper <
-    css::ui::dialogs::XExecutableDialog,
-    css::lang::XServiceInfo,
-    css::beans::XPropertyAccess
-    >
-{
-    OUString msPassword;
-    css::uno::Reference< css::io::XInputStream > mxInputStream;
-
-    virtual ~WordPerfectImportFilterDialog();
-
-    // XExecutableDialog
-    virtual void SAL_CALL setTitle(const OUString &aTitle)
-    throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Int16 SAL_CALL execute()
-    throw (css::uno::RuntimeException, std::exception) override;
-
-    // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName()
-    throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL supportsService(const OUString &ServiceName)
-    throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-    throw (css::uno::RuntimeException, std::exception) override;
-
-    // XPropertyAccess
-    virtual css::uno::Sequence< css::beans::PropertyValue >
-    SAL_CALL getPropertyValues() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL    setPropertyValues(const css::uno::Sequence<
-                                               css::beans::PropertyValue >& aProps)
-    throw (css::beans::UnknownPropertyException,
-           css::beans::PropertyVetoException,
-           css::lang::IllegalArgumentException,
-           css::lang::WrappedTargetException,
-           css::uno::RuntimeException, std::exception) override;
-
-public:
-    explicit WordPerfectImportFilterDialog();
-
-};
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

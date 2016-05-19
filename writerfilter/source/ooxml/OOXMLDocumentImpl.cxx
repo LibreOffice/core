@@ -883,11 +883,6 @@ uno::Reference<drawing::XDrawPage> OOXMLDocumentImpl::getDrawPage()
     return mxDrawPage;
 }
 
-uno::Reference<io::XInputStream> OOXMLDocumentImpl::getStorageStream()
-{
-    return mpStream->getStorageStream();
-}
-
 const uno::Sequence<beans::PropertyValue>& OOXMLDocumentImpl::getMediaDescriptor()
 {
     return maMediaDescriptor;

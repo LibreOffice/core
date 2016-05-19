@@ -35,11 +35,6 @@ struct StyleNameKey_Impl
         m_aName( rName )
     {
     }
-
-    inline StyleNameKey_Impl() :
-        m_nFamily( 0 )
-    {
-    }
 };
 
 struct StyleNameHash_Impl

@@ -43,7 +43,6 @@ $(eval $(call gb_Library_use_libraries,ucpchelp1,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,ucpchelp1,\
-    xmlhelp/source/cxxhelp/provider/bufferedinputstream \
     xmlhelp/source/cxxhelp/provider/content \
     xmlhelp/source/cxxhelp/provider/contentcaps \
     xmlhelp/source/cxxhelp/provider/databases \

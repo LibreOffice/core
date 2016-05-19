@@ -98,7 +98,7 @@ public:
     static void endAction(OOXMLFastContextHandler * pHandler, Token_t nToken);
 
 private:
-    OOXMLFactory() {}
+    OOXMLFactory() = delete;
     static OOXMLFactory_ns::Pointer_t getFactoryForNamespace(Id id);
 
     static css::uno::Reference< css::xml::sax::XFastContextHandler> createFastChildContextFromFactory(OOXMLFastContextHandler * pHandler, OOXMLFactory_ns::Pointer_t pFactory, Token_t Element);
