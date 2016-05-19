@@ -397,7 +397,6 @@ public:
     void CtorInitTextPaintInfo( OutputDevice* pRenderContext, SwTextFrame *pFrame, const SwRect &rPaint );
 
     const SvxBrushItem *GetBrushItem() const { return pBrushItem; }
-    const SwRect       &GetBrushRect() const { return aItemRect;  }
 
     SwTextPaintInfo( SwTextFrame *pFrame, const SwRect &rPaint );
 

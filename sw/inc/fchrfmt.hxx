@@ -33,8 +33,6 @@ class SW_DLLPUBLIC SwFormatCharFormat: public SfxPoolItem, public SwClient
     SwTextCharFormat* pTextAttr;     ///< My text attribute.
 
 public:
-    SwFormatCharFormat() : pTextAttr(nullptr) {}
-
     /// single argument ctors shall be explicit.
     explicit SwFormatCharFormat( SwCharFormat *pFormat );
     virtual ~SwFormatCharFormat();

@@ -1604,15 +1604,6 @@ SwTwips SwTableLine::GetTableLineHeight( bool& bLayoutAvailable ) const
     return nRet;
 }
 
-SwTableBox::SwTableBox()
-    : m_pStartNode(nullptr)
-    , m_pUpper(nullptr)
-    , mnRowSpan(1)
-    , mbDummyFlag(false)
-    , mbDirectFormatting(false)
-{
-}
-
 SwTableBox::SwTableBox( SwTableBoxFormat* pFormat, sal_uInt16 nLines, SwTableLine *pUp )
     : SwClient(nullptr)
     , m_aLines()

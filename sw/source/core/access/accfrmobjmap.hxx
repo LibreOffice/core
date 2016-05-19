@@ -47,12 +47,6 @@ public:
         , nPosNum( 0, 0 )
     {}
 
-    SwAccessibleChildMapKey( LayerId eId, sal_uInt32 nOrd, Point nPos )
-        : eLayerId( eId )
-        , nOrdNum( nOrd )
-        , nPosNum( nPos )
-    {}
-
     bool operator()( const SwAccessibleChildMapKey& r1,
                             const SwAccessibleChildMapKey& r2 ) const
     {

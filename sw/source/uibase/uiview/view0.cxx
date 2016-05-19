@@ -151,16 +151,6 @@ SwMailMergeConfigItem* SwView::GetMailMergeConfigItem()
     return m_pViewImpl->GetMailMergeConfigItem();
 }
 
-sal_uInt16 SwView::GetMailMergeRestartPage() const
-{
-    return m_pViewImpl->GetMailMergeRestartPage();
-}
-
-bool SwView::IsMailMergeSourceView() const
-{
-    return m_pViewImpl->IsMailMergeSourceView();
-}
-
 #endif
 
 static bool lcl_IsViewMarks( const SwViewOption& rVOpt )

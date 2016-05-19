@@ -52,7 +52,6 @@
 #include <outline.hxx>
 #include <cnttab.hxx>
 #include <swuicnttab.hxx>
-#include <formedt.hxx>
 #include <poolfmt.hxx>
 #include <poolfmt.hrc>
 #include <uitool.hxx>

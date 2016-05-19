@@ -233,28 +233,6 @@ void SwMailMergeWizard::UpdateRoadmap()
     }
 }
 
-// enables/disables pages in the roadmap depending on the current page and state
-void SwMailMergeWizard::CreateTargetDocument()
-{
-    svx::ODataAccessDescriptor aDescriptor;
-    aDescriptor.setDataSource( m_rConfigItem.GetCurrentDBData().sDataSource );
-    aDescriptor[ svx::daConnection ]  <<= m_rConfigItem.GetConnection().getTyped();
-    aDescriptor[ svx::daCursor ]      <<= m_rConfigItem.GetResultSet();
-    aDescriptor[ svx::daCommand ]     <<= m_rConfigItem.GetCurrentDBData().sCommand;
-    aDescriptor[ svx::daCommandType ] <<= m_rConfigItem.GetCurrentDBData().nCommandType;
-    aDescriptor[ svx::daSelection ]   <<= m_rConfigItem.GetSelection();
-
-    SwMergeDescriptor aMergeDesc( DBMGR_MERGE_SHELL, GetSwView()->GetWrtShell(),
-        aDescriptor);
-    aMergeDesc.pMailMergeConfigItem = &m_rConfigItem;
-    aMergeDesc.bCreateSingleFile = true;
-
-    GetSwView()->GetWrtShell().GetDBManager()->Merge( aMergeDesc, this );
-    m_rConfigItem.SetMergeDone();
-    if( m_rConfigItem.GetTargetView() )
-        m_rConfigItem.GetTargetView()->GetViewFrame()->GetFrame().Appear();
-}
-
 void SwMailMergeWizard::updateRoadmapItemLabel( WizardState _nState )
 {
     svt::RoadmapWizard::updateRoadmapItemLabel( _nState );

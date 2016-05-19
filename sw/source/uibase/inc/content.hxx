@@ -102,15 +102,6 @@ public:
         , pRedline(nullptr)
         , mbPostIt(true)
     {}
-    SwPostItContent( const SwContentType* pCnt,
-                            const OUString& rName,
-                            SwRangeRedline* pRed,
-                            long nYPos )
-        : SwContent(pCnt, rName, nYPos)
-        , pField(nullptr)
-        , pRedline(pRed)
-        , mbPostIt(false)
-    {}
 
     const SwFormatField* GetPostIt() const  { return pField; }
     SwRangeRedline* GetRedline() { return pRedline; }

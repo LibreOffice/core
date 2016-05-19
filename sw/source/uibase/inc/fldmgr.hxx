@@ -89,11 +89,6 @@ struct SwInsertField_Data
         m_cSeparator(cSep),
         m_bIsAutomaticLanguage(bIsAutoLanguage),
         m_pParent(nullptr) {}
-
-    SwInsertField_Data() :
-        m_pSh(nullptr),
-        m_cSeparator(' '),
-        m_bIsAutomaticLanguage(true){}
 };
 
 class SW_DLLPUBLIC SwFieldMgr

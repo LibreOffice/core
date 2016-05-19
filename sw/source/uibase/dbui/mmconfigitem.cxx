@@ -1037,25 +1037,6 @@ const uno::Sequence< OUString>&
     return m_pImpl->m_aSavedDocuments;
 }
 
-void SwMailMergeConfigItem::AddSavedDocument(const OUString& rName)
-{
-    const OUString* pDocs = m_pImpl->m_aSavedDocuments.getConstArray();
-    bool bFound = false;
-    for(sal_Int32 nDoc = 0; nDoc < m_pImpl->m_aSavedDocuments.getLength(); ++nDoc)
-    {
-        if(pDocs[nDoc] == rName)
-        {
-            bFound = true;
-            break;
-        }
-    }
-    if(!bFound)
-    {
-        m_pImpl->m_aSavedDocuments.realloc(m_pImpl->m_aSavedDocuments.getLength() + 1);
-        m_pImpl->m_aSavedDocuments[m_pImpl->m_aSavedDocuments.getLength() - 1] = rName;
-    }
-}
-
 bool SwMailMergeConfigItem::IsOutputToLetter()const
 {
     return m_pImpl->m_bIsOutputToLetter || !IsMailAvailable();

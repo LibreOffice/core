@@ -75,8 +75,6 @@ public:
                  SwWrongList* pSubList);
 private:
 
-    SwWrongArea() : mnPos(0), mnLen(0), mpSubList(nullptr), mColor(0,0,0), mLineType(WRONGAREA_WAVE) {}
-
     static Color getSmartColor ( css::uno::Reference< css::container::XStringKeyMap > xPropertyBag)
     {
         try

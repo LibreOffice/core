@@ -29,7 +29,6 @@
 #include <com/sun/star/form/XFormComponent.hpp>
 
 #include "calbck.hxx"
-#include "htmlvsh.hxx"
 
 #include <memory>
 #include <vector>

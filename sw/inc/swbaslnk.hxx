@@ -31,9 +31,6 @@ class SwBaseLink : public ::sfx2::SvBaseLink
     bool bNoDataFlag : 1;
     bool bIgnoreDataChanged : 1;
 
-protected:
-    SwBaseLink() {}
-
 public:
 
     SwBaseLink( SfxLinkUpdateMode nMode, SotClipboardFormatId nFormat, SwContentNode* pNode = nullptr )

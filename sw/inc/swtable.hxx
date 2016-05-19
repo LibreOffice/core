@@ -137,8 +137,6 @@ public:
 private:
     // @@@ public copy ctor, but no copy assignment?
     SwTable & operator= (const SwTable &) = delete;
-    // no default ctor.
-    SwTable();
     bool OldMerge( SwDoc*, const SwSelBoxes&, SwTableBox*, SwUndoTableMerge* );
     bool OldSplitRow( SwDoc*, const SwSelBoxes&, sal_uInt16, bool );
     bool NewMerge( SwDoc*, const SwSelBoxes&, const SwSelBoxes& rMerged,
@@ -340,8 +338,6 @@ class SW_DLLPUBLIC SwTableLine: public SwClient     // Client of FrameFormat.
 
 public:
 
-    SwTableLine() : m_pUpper(nullptr) {}
-
     SwTableLine( SwTableLineFormat*, sal_uInt16 nBoxes, SwTableBox *pUp );
     virtual ~SwTableLine();
 
@@ -403,8 +399,6 @@ class SW_DLLPUBLIC SwTableBox: public SwClient      //Client of FrameFormat.
     static SwTableBoxFormat* CheckBoxFormat( SwTableBoxFormat* );
 
 public:
-
-    SwTableBox();
 
     SwTableBox( SwTableBoxFormat*, sal_uInt16 nLines, SwTableLine *pUp = nullptr );
     SwTableBox( SwTableBoxFormat*, const SwStartNode&, SwTableLine *pUp = nullptr );

@@ -254,12 +254,6 @@ public:
                 css::uno::RuntimeException, std::exception) override;
 };
 
-class SwXODFCheckboxField : public SwXFieldmark
-{
-public:
-    SwXODFCheckboxField( ::sw::mark::IMark* pBkm = nullptr, SwDoc* pDoc = nullptr) : SwXFieldmark(true,
-            pBkm, pDoc) {}
-};
 #endif // INCLUDED_SW_SOURCE_CORE_INC_UNOBOOKMARK_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

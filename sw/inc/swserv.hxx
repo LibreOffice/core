@@ -40,8 +40,6 @@ protected:
         SwSectionNode* pSectNd;
     } CNTNT_TYPE;
 
-    SwServerObject();
-
 public:
     SwServerObject( ::sw::mark::IMark& rBookmark )
         : eType( BOOKMARK_SERVER )

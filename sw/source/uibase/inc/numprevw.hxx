@@ -38,13 +38,6 @@ class NumberingPreview : public vcl::Window
         virtual void        Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect ) override;
 
     public:
-        NumberingPreview(vcl::Window* pParent, const ResId& rResId)
-        : Window(pParent, rResId),
-            pActNum(nullptr),nPageWidth(0), pOutlineNames(nullptr),
-            bPosition(false), nActLevel(USHRT_MAX)
-        {
-        }
-
         NumberingPreview(vcl::Window* pParent)
             : Window(pParent)
             , pActNum(nullptr),nPageWidth(0), pOutlineNames(nullptr),

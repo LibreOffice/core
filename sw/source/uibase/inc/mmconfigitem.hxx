@@ -113,7 +113,6 @@ public:
     css::uno::Sequence< css::uno::Any> GetSelection() const;
 
     const css::uno::Sequence<OUString>& GetSavedDocuments() const;
-    void AddSavedDocument(const OUString& rName);
 
     bool IsOutputToLetter()const;
     void SetOutputToLetter(bool bSet);
@@ -225,8 +224,6 @@ public:
     void MoveGreeting( sal_Int32 nMove) { m_nGreetingMoves += nMove;}
     sal_Int32 GetGreetingMoves() const { return m_nGreetingMoves;}
 
-    bool IsMergeDone() const
-        { return m_bMergeDone; }
     void SetMergeDone(  )
         { m_bMergeDone = true; }
 

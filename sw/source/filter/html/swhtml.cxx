@@ -98,7 +98,6 @@
 #include <editsh.hxx>
 #include <docufld.hxx>
 #include <swcss1.hxx>
-#include <htmlvsh.hxx>
 #include <fltini.hxx>
 #include <htmltbl.hxx>
 #include <htmlnum.hxx>

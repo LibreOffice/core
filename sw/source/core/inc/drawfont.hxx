@@ -84,7 +84,6 @@ class SW_DLLPUBLIC SwDrawTextInfo
     // inside second half of bound rect, used for Accessibility
     bool m_bPosMatchesBounds :1;
 
-    SwDrawTextInfo();          // prohibited
 public:
 
 #ifdef DBG_UTIL

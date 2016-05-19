@@ -430,20 +430,6 @@ private:
     SwWW8FltAnchorStack& operator=(const SwWW8FltAnchorStack&) = delete;
 };
 
-//For fields whose handling cannot be fully resolved until we hit the end of
-//the document.
-class Position
-{
-public:
-    SwNodeIndex maMkNode;
-    SwNodeIndex maPtNode;
-    sal_Int32 mnMkContent;
-    sal_Int32 mnPtContent;
-    explicit Position(const SwPaM &rPaM);
-    Position(const Position &rEntry);
-private:
-    Position& operator=(const Position&) = delete;
-};
 
 namespace SwWW8
 {
