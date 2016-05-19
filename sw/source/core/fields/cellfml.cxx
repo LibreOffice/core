@@ -776,7 +776,7 @@ static const SwTableBox* lcl_RelToBox( const SwTable& rTable,
             pBox = pLine->GetUpper();
             pLine = pBox->GetUpper();
         }
-        sal_uInt16 nSttBox = pLine->GetTabBoxes().GetPos( pBox );
+        sal_uInt16 nSttBox = pLine->GetBoxPos( pBox );
         sal_uInt16 nSttLine = rTable.GetTabLines().GetPos( pLine );
 
         const sal_Int32 nBoxOffset = lcl_GetLongBoxNum( sGetName ) + nSttBox;

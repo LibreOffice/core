@@ -468,7 +468,7 @@ static void lcl_InsCol( FndLine_* pFndLn, CpyPara& rCpyPara, sal_uInt16 nCpyCnt,
         rCpyPara.pInsLine = pFndLn->GetLine();
         SwTableBox* pBox = pFndLn->GetBoxes()[ bBehind ?
                     pFndLn->GetBoxes().size()-1 : 0 ]->GetBox();
-        rCpyPara.nInsPos = pFndLn->GetLine()->GetTabBoxes().GetPos( pBox );
+        rCpyPara.nInsPos = pFndLn->GetLine()->GetBoxPos( pBox );
         if( bBehind )
             ++rCpyPara.nInsPos;
 
@@ -702,7 +702,7 @@ void DeleteBox_( SwTable& rTable, SwTableBox* pBox, SwUndo* pUndo,
                 pBox->GetFrameFormat()->GetFrameSize().GetWidth() : 0;
         SwTableLine* pLine = pBox->GetUpper();
         SwTableBoxes& rTableBoxes = pLine->GetTabBoxes();
-        sal_uInt16 nDelPos = rTableBoxes.GetPos( pBox );
+        sal_uInt16 nDelPos = pLine->GetBoxPos( pBox );
         SwTableBox* pUpperBox = pBox->GetUpper()->GetUpper();
 
         // Special treatment for the border:
@@ -912,7 +912,7 @@ lcl_SaveUpperLowerBorder( SwTable& rTable, const SwTableBox& rBox,
     const SwTableLine* pLine = rBox.GetUpper();
     const SwTableBoxes& rTableBoxes = pLine->GetTabBoxes();
     const SwTableBox* pUpperBox = &rBox;
-    sal_uInt16 nDelPos = rTableBoxes.GetPos( pUpperBox );
+    sal_uInt16 nDelPos = pLine->GetBoxPos( pUpperBox );
     pUpperBox = rBox.GetUpper()->GetUpper();
     const SvxBoxItem& rBoxItem = rBox.GetFrameFormat()->GetBox();
 
@@ -1105,7 +1105,7 @@ bool SwTable::OldSplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCn
                              (nCnt + 1) );
 
         SwTableBox* pNewBox = new SwTableBox( pFrameFormat, nCnt, pInsLine );
-        sal_uInt16 nBoxPos = pInsLine->GetTabBoxes().GetPos( pSelBox );
+        sal_uInt16 nBoxPos = pInsLine->GetBoxPos( pSelBox );
         pInsLine->GetTabBoxes()[nBoxPos] = pNewBox; // overwrite old one
 
         // Delete background/border attribute
@@ -1226,7 +1226,7 @@ bool SwTable::SplitCol( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCnt )
 
         // Then split the nCnt Box up into nCnt Boxes
         SwTableLine* pInsLine = pSelBox->GetUpper();
-        sal_uInt16 nBoxPos = pInsLine->GetTabBoxes().GetPos( pSelBox );
+        sal_uInt16 nBoxPos = pInsLine->GetBoxPos( pSelBox );
 
         // Find the Frame Format in the Frame Format Array
         SwTableBoxFormat* pLastBoxFormat;
@@ -1402,12 +1402,12 @@ static void lcl_Merge_MoveBox(FndBox_ & rFndBox, InsULPara *const pULPara)
         if( pULPara->bUL )  // Left ?
         {
             // if there are Boxes before it, move them
-            if( 0 != ( nPos = pBoxes->GetPos( pFndTableBox ) ) )
+            if( 0 != ( nPos = pFndTableBox->GetUpper()->GetBoxPos( pFndTableBox ) ) )
                 lcl_CpyBoxes( 0, nPos, *pBoxes, pULPara->pInsLine );
         }
         else                // Right
             // if there are Boxes behind it, move them
-            if( (nPos = pBoxes->GetPos( pFndTableBox )) +1 < (sal_uInt16)pBoxes->size() )
+            if( (nPos = pFndTableBox->GetUpper()->GetBoxPos( pFndTableBox )) +1 < (sal_uInt16)pBoxes->size() )
             {
                 nInsPos = pULPara->pInsLine->GetTabBoxes().size();
                 lcl_CpyBoxes( nPos+1, pBoxes->size(),
@@ -1465,8 +1465,8 @@ static void lcl_Merge_MoveLine(FndLine_& rFndLine, InsULPara *const pULPara)
 
         SwTableBox* pLBx = rFndLine.GetBoxes().front()->GetBox();
         SwTableBox* pRBx = rFndLine.GetBoxes().back()->GetBox();
-        sal_uInt16 nLeft = pFndLn->GetTabBoxes().GetPos( pLBx );
-        sal_uInt16 nRight = pFndLn->GetTabBoxes().GetPos( pRBx );
+        sal_uInt16 nLeft = pFndLn->GetBoxPos( pLBx );
+        sal_uInt16 nRight = pFndLn->GetBoxPos( pRBx );
 
         if( !nLeft || nRight == pFndLn->GetTabBoxes().size() )
         {
@@ -2216,7 +2216,7 @@ SwTableBox* SwTableLine::FindNextBox( const SwTable& rTable,
     SwTableBox* pBox;
     sal_uInt16 nFndPos;
     if( !GetTabBoxes().empty() && pSrchBox &&
-        USHRT_MAX != ( nFndPos = GetTabBoxes().GetPos( pSrchBox )) &&
+        USHRT_MAX != ( nFndPos = GetBoxPos( pSrchBox )) &&
         nFndPos + 1 != (sal_uInt16)GetTabBoxes().size() )
     {
         pBox = GetTabBoxes()[ nFndPos + 1 ];
@@ -2264,7 +2264,7 @@ SwTableBox* SwTableLine::FindPreviousBox( const SwTable& rTable,
     SwTableBox* pBox;
     sal_uInt16 nFndPos;
     if( !GetTabBoxes().empty() && pSrchBox &&
-        USHRT_MAX != ( nFndPos = GetTabBoxes().GetPos( pSrchBox )) &&
+        USHRT_MAX != ( nFndPos = GetBoxPos( pSrchBox )) &&
         nFndPos )
     {
         pBox = GetTabBoxes()[ nFndPos - 1 ];
@@ -2354,7 +2354,7 @@ static SwTwips lcl_GetDistance( SwTableBox* pBox, bool bLeft )
     SwTableLine* pLine;
     while( pBox && nullptr != ( pLine = pBox->GetUpper() ) )
     {
-        sal_uInt16 nStt = 0, nPos = pLine->GetTabBoxes().GetPos( pBox );
+        sal_uInt16 nStt = 0, nPos = pLine->GetBoxPos( pBox );
 
         if( bFirst && !bLeft )
             ++nPos;
@@ -2767,7 +2767,7 @@ static bool lcl_InsOtherBox( SwTableLine* pLine, CR_SetBoxWidth& rParam,
                         while( !nBoxPos && pTmpBox->GetUpper()->GetUpper() )
                         {
                             pTmpBox = pTmpBox->GetUpper()->GetUpper();
-                            nBoxPos = pTmpBox->GetUpper()->GetTabBoxes().GetPos( pTmpBox );
+                            nBoxPos = pTmpBox->GetUpper()->GetBoxPos( pTmpBox );
                         }
                         nTmpWidth = pTmpBox->GetFrameFormat()->GetFrameSize().GetWidth();
                     }
@@ -3760,7 +3760,7 @@ bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
             SwTableLine* pLine = rAktBox.GetUpper();
             while( pLine->GetUpper() )
             {
-                const SwTableBoxes::size_type nPos = pLine->GetTabBoxes().GetPos( pBox );
+                const SwTableBoxes::size_type nPos = pLine->GetBoxPos( pBox );
                 if( bLeft ? nPos != 0 : nPos + 1 != pLine->GetTabBoxes().size() )
                     break;
 
