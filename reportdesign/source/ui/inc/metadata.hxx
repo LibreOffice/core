@@ -23,6 +23,24 @@
 
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/inspection/XPropertyHandler.hpp>
+#include <o3tl/typed_flags_set.hxx>
+
+    //= UI flags (for all browseable properties)
+enum class PropUIFlags {
+    NONE          = 0x0001,  // no special flag
+    Enum          = 0x0002,  // the property is some kind of enum property, i.e. its                                                // value is chosen from a fixed list of possible values
+    EnumOne       = 0x0004,  // the property is an enum property starting with 1
+                             //  (note that this includes PropUIFlags::Enum)
+    Composeable   = 0x0008,  // the property is "composeable", i.e. an intersection of property
+                             //  sets should expose it, if all elements do
+    Experimental  = 0x0010,  // the property is experimental, i.e. should not appear in the
+                             // UI, unless experimental properties are enabled by a configuraiton
+                             // option
+    DataProperty  = 0x0020   // the property is to appear on the "Data" page
+};
+namespace o3tl {
+    template<> struct typed_flags<PropUIFlags> : is_typed_flags<PropUIFlags, 0x003f> {};
+}
 
 
 namespace rptui
@@ -50,7 +68,7 @@ namespace rptui
         static sal_Int32                    getPropertyId(const OUString& _rName);
         static OUString                     getPropertyTranslation(sal_Int32 _nId);
         static OString                      getPropertyHelpId(sal_Int32 _nId);
-        static sal_uInt32                   getPropertyUIFlags(sal_Int32 _nId);
+        static PropUIFlags                  getPropertyUIFlags(sal_Int32 _nId);
         static void                         getExcludeProperties(::std::vector< css::beans::Property >& _rExcludeProperties,const css::uno::Reference< css::inspection::XPropertyHandler >& _xFormComponentHandler);
 
         static bool                         isComposable(
@@ -74,22 +92,6 @@ namespace rptui
     public:
         static OUString getHelpURL( const OString& _sHelpId );
     };
-
-
-    //= UI flags (for all browseable properties)
-
-
-#define PROP_FLAG_NONE              0x00000001  // no special flag
-#define PROP_FLAG_ENUM              0x00000002  // the property is some kind of enum property, i.e. its
-                                                // value is chosen from a fixed list of possible values
-#define PROP_FLAG_ENUM_ONE          0x00000004  // the property is an enum property starting with 1
-                                                //  (note that this includes PROP_FLAG_ENUM)
-#define PROP_FLAG_COMPOSEABLE       0x00000008  // the property is "composeable", i.e. an intersection of property
-                                                //  sets should expose it, if all elements do
-#define PROP_FLAG_EXPERIMENTAL      0x00000010  // the property is experimental, i.e. should not appear in the
-                                                // UI, unless experimental properties are enabled by a configuraiton
-                                                // option
-#define PROP_FLAG_DATA_PROPERTY     0x00000020  // the property is to appear on the "Data" page
 
 
     //= property ids (for all browseable properties)

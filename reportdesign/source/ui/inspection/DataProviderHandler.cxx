@@ -280,7 +280,7 @@ inspection::LineDescriptor SAL_CALL DataProviderHandler::describePropertyLine(co
     }
     if ( nId != -1 )
     {
-        aOut.Category = ((OPropertyInfoService::getPropertyUIFlags(nId ) & PROP_FLAG_DATA_PROPERTY) != 0) ?
+        aOut.Category = (OPropertyInfoService::getPropertyUIFlags(nId ) & PropUIFlags::DataProperty) ?
                                     OUString("Data")
                                                         :
                                     OUString("General");

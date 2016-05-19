@@ -844,7 +844,7 @@ inspection::LineDescriptor SAL_CALL GeometryHandler::describePropertyLine(const 
 
     if ( nId != -1 )
     {
-        aOut.Category = ((OPropertyInfoService::getPropertyUIFlags(nId ) & PROP_FLAG_DATA_PROPERTY) != 0) ?
+        aOut.Category = (OPropertyInfoService::getPropertyUIFlags(nId ) & PropUIFlags::DataProperty) ?
                                     OUString("Data")
                                                         :
                                     OUString("General");

@@ -44,19 +44,19 @@ namespace rptui
         OUString        sTranslation;
         OString         sHelpId;
         sal_Int32       nId;
-        sal_uInt32      nUIFlags;
+        PropUIFlags     nUIFlags;
 
         OPropertyInfoImpl(
                         const OUString&        rName,
                         sal_Int32              _nId,
                         const OUString&        aTranslation,
                         const OString&         _sHelpId,
-                        sal_uInt32             _nUIFlags);
+                        PropUIFlags            _nUIFlags);
     };
 
 
     OPropertyInfoImpl::OPropertyInfoImpl(const OUString& _rName, sal_Int32 _nId,
-                                   const OUString& aString, const OString& sHid, sal_uInt32 _nUIFlags)
+                                   const OUString& aString, const OString& sHid, PropUIFlags _nUIFlags)
        :sName(_rName)
        ,sTranslation(aString)
        ,sHelpId(sHid)
@@ -83,10 +83,10 @@ namespace rptui
             OUString( ModuleRes( RID_STR_##uinameres ) ), HID_RPT_PROP_##helpid, flags )
 
 #define DEF_INFO_1( ident, uinameres, helpid, flag1 ) \
-    DEF_INFO( ident, uinameres, helpid, PROP_FLAG_##flag1 )
+    DEF_INFO( ident, uinameres, helpid, PropUIFlags::flag1 )
 
 #define DEF_INFO_2( ident, uinameres, helpid, flag1, flag2 ) \
-    DEF_INFO( ident, uinameres, helpid, PROP_FLAG_##flag1 | PROP_FLAG_##flag2 )
+    DEF_INFO( ident, uinameres, helpid, PropUIFlags::flag1 | PropUIFlags::flag2 )
 
     sal_uInt16              OPropertyInfoService::s_nCount = 0;
     OPropertyInfoImpl*      OPropertyInfoService::s_pPropertyInfos = nullptr;
@@ -104,48 +104,48 @@ namespace rptui
         /*
         DEF_INFO_?( propname and id,   resoure id,         help id,           flags ),
         */
-             DEF_INFO_1( FORCENEWPAGE,                  FORCENEWPAGE,               FORCENEWPAGE,               COMPOSEABLE )
-            ,DEF_INFO_1( NEWROWORCOL,                   NEWROWORCOL,                NEWROWORCOL,                COMPOSEABLE )
-            ,DEF_INFO_1( KEEPTOGETHER,                  KEEPTOGETHER,               KEEPTOGETHER,               COMPOSEABLE )
-            ,DEF_INFO_1( CANGROW,                       CANGROW,                    CANGROW,                    COMPOSEABLE )
-            ,DEF_INFO_1( CANSHRINK,                     CANSHRINK,                  CANSHRINK,                  COMPOSEABLE )
-            ,DEF_INFO_1( REPEATSECTION,                 REPEATSECTION,              REPEATSECTION,              COMPOSEABLE )
-            ,DEF_INFO_1( PRINTREPEATEDVALUES,           PRINTREPEATEDVALUES,        PRINTREPEATEDVALUES,        COMPOSEABLE )
-            ,DEF_INFO_1( CONDITIONALPRINTEXPRESSION,    CONDITIONALPRINTEXPRESSION, CONDITIONALPRINTEXPRESSION, COMPOSEABLE )
-            ,DEF_INFO_1( STARTNEWCOLUMN,                STARTNEWCOLUMN,             STARTNEWCOLUMN,             COMPOSEABLE )
-            ,DEF_INFO_1( RESETPAGENUMBER,               RESETPAGENUMBER,            RESETPAGENUMBER,            COMPOSEABLE )
-            ,DEF_INFO_1( PRINTWHENGROUPCHANGE,          PRINTWHENGROUPCHANGE,       PRINTWHENGROUPCHANGE,       COMPOSEABLE )
-            ,DEF_INFO_1( VISIBLE,                       VISIBLE,                    VISIBLE,                    COMPOSEABLE )
-            ,DEF_INFO_1( GROUPKEEPTOGETHER,             GROUPKEEPTOGETHER,          GROUPKEEPTOGETHER,          COMPOSEABLE )
-            ,DEF_INFO_1( PAGEHEADEROPTION,              PAGEHEADEROPTION,           PAGEHEADEROPTION,           COMPOSEABLE )
-            ,DEF_INFO_1( PAGEFOOTEROPTION,              PAGEFOOTEROPTION,           PAGEFOOTEROPTION,           COMPOSEABLE )
-            ,DEF_INFO_1( POSITIONX,                     POSITIONX,                  RPT_POSITIONX,              COMPOSEABLE )
-            ,DEF_INFO_1( POSITIONY,                     POSITIONY,                  RPT_POSITIONY,              COMPOSEABLE )
-            ,DEF_INFO_1( WIDTH,                         WIDTH,                      RPT_WIDTH,                  COMPOSEABLE )
-            ,DEF_INFO_1( HEIGHT,                        HEIGHT,                     RPT_HEIGHT,                 COMPOSEABLE )
-            ,DEF_INFO_1( FONT,                          FONT,                       RPT_FONT,                   COMPOSEABLE )
-            ,DEF_INFO_1( PREEVALUATED,                  PREEVALUATED,               PREEVALUATED,               COMPOSEABLE )
-            ,DEF_INFO_1( DEEPTRAVERSING,                DEEPTRAVERSING,             DEEPTRAVERSING,             COMPOSEABLE )
-            ,DEF_INFO_1( FORMULA,                       FORMULA,                    FORMULA,                    COMPOSEABLE )
-            ,DEF_INFO_1( INITIALFORMULA,                INITIALFORMULA,             INITIALFORMULA,             COMPOSEABLE )
-            ,DEF_INFO_2( TYPE,                          TYPE,                       TYPE,                       COMPOSEABLE,DATA_PROPERTY )
-            ,DEF_INFO_2( DATAFIELD,                     DATAFIELD,                  DATAFIELD,                  COMPOSEABLE,DATA_PROPERTY )
-            ,DEF_INFO_2( FORMULALIST,                   FORMULALIST,                FORMULALIST,                COMPOSEABLE,DATA_PROPERTY )
-            ,DEF_INFO_2( SCOPE,                         SCOPE,                      SCOPE,                      COMPOSEABLE,DATA_PROPERTY )
-            ,DEF_INFO_1( PRESERVEIRI,                   PRESERVEIRI,                PRESERVEIRI,                COMPOSEABLE )
-            ,DEF_INFO_1( BACKCOLOR,                     BACKCOLOR,                  BACKCOLOR,                  COMPOSEABLE )
-            ,DEF_INFO_1( CONTROLBACKGROUND,             BACKCOLOR,                  BACKCOLOR,                  COMPOSEABLE )
-            ,DEF_INFO_1( BACKTRANSPARENT,               BACKTRANSPARENT,            BACKTRANSPARENT,            COMPOSEABLE )
+             DEF_INFO_1( FORCENEWPAGE,                  FORCENEWPAGE,               FORCENEWPAGE,               Composeable )
+            ,DEF_INFO_1( NEWROWORCOL,                   NEWROWORCOL,                NEWROWORCOL,                Composeable )
+            ,DEF_INFO_1( KEEPTOGETHER,                  KEEPTOGETHER,               KEEPTOGETHER,               Composeable )
+            ,DEF_INFO_1( CANGROW,                       CANGROW,                    CANGROW,                    Composeable )
+            ,DEF_INFO_1( CANSHRINK,                     CANSHRINK,                  CANSHRINK,                  Composeable )
+            ,DEF_INFO_1( REPEATSECTION,                 REPEATSECTION,              REPEATSECTION,              Composeable )
+            ,DEF_INFO_1( PRINTREPEATEDVALUES,           PRINTREPEATEDVALUES,        PRINTREPEATEDVALUES,        Composeable )
+            ,DEF_INFO_1( CONDITIONALPRINTEXPRESSION,    CONDITIONALPRINTEXPRESSION, CONDITIONALPRINTEXPRESSION, Composeable )
+            ,DEF_INFO_1( STARTNEWCOLUMN,                STARTNEWCOLUMN,             STARTNEWCOLUMN,             Composeable )
+            ,DEF_INFO_1( RESETPAGENUMBER,               RESETPAGENUMBER,            RESETPAGENUMBER,            Composeable )
+            ,DEF_INFO_1( PRINTWHENGROUPCHANGE,          PRINTWHENGROUPCHANGE,       PRINTWHENGROUPCHANGE,       Composeable )
+            ,DEF_INFO_1( VISIBLE,                       VISIBLE,                    VISIBLE,                    Composeable )
+            ,DEF_INFO_1( GROUPKEEPTOGETHER,             GROUPKEEPTOGETHER,          GROUPKEEPTOGETHER,          Composeable )
+            ,DEF_INFO_1( PAGEHEADEROPTION,              PAGEHEADEROPTION,           PAGEHEADEROPTION,           Composeable )
+            ,DEF_INFO_1( PAGEFOOTEROPTION,              PAGEFOOTEROPTION,           PAGEFOOTEROPTION,           Composeable )
+            ,DEF_INFO_1( POSITIONX,                     POSITIONX,                  RPT_POSITIONX,              Composeable )
+            ,DEF_INFO_1( POSITIONY,                     POSITIONY,                  RPT_POSITIONY,              Composeable )
+            ,DEF_INFO_1( WIDTH,                         WIDTH,                      RPT_WIDTH,                  Composeable )
+            ,DEF_INFO_1( HEIGHT,                        HEIGHT,                     RPT_HEIGHT,                 Composeable )
+            ,DEF_INFO_1( FONT,                          FONT,                       RPT_FONT,                   Composeable )
+            ,DEF_INFO_1( PREEVALUATED,                  PREEVALUATED,               PREEVALUATED,               Composeable )
+            ,DEF_INFO_1( DEEPTRAVERSING,                DEEPTRAVERSING,             DEEPTRAVERSING,             Composeable )
+            ,DEF_INFO_1( FORMULA,                       FORMULA,                    FORMULA,                    Composeable )
+            ,DEF_INFO_1( INITIALFORMULA,                INITIALFORMULA,             INITIALFORMULA,             Composeable )
+            ,DEF_INFO_2( TYPE,                          TYPE,                       TYPE,                       Composeable,DataProperty )
+            ,DEF_INFO_2( DATAFIELD,                     DATAFIELD,                  DATAFIELD,                  Composeable,DataProperty )
+            ,DEF_INFO_2( FORMULALIST,                   FORMULALIST,                FORMULALIST,                Composeable,DataProperty )
+            ,DEF_INFO_2( SCOPE,                         SCOPE,                      SCOPE,                      Composeable,DataProperty )
+            ,DEF_INFO_1( PRESERVEIRI,                   PRESERVEIRI,                PRESERVEIRI,                Composeable )
+            ,DEF_INFO_1( BACKCOLOR,                     BACKCOLOR,                  BACKCOLOR,                  Composeable )
+            ,DEF_INFO_1( CONTROLBACKGROUND,             BACKCOLOR,                  BACKCOLOR,                  Composeable )
+            ,DEF_INFO_1( BACKTRANSPARENT,               BACKTRANSPARENT,            BACKTRANSPARENT,            Composeable )
             ,DEF_INFO_1( CONTROLBACKGROUNDTRANSPARENT,  CONTROLBACKGROUNDTRANSPARENT,
-                                                                                    CONTROLBACKGROUNDTRANSPARENT, COMPOSEABLE )
-            ,DEF_INFO_1( CHARTTYPE,                     CHARTTYPE,                  CHARTTYPE,                  COMPOSEABLE )
-            ,DEF_INFO_1( PREVIEW_COUNT,                 PREVIEW_COUNT,              PREVIEW_COUNT,              COMPOSEABLE )
-            ,DEF_INFO_2( MASTERFIELDS,                  MASTERFIELDS,               MASTERFIELDS,               COMPOSEABLE,DATA_PROPERTY )
-            ,DEF_INFO_2( DETAILFIELDS,                  DETAILFIELDS,               DETAILFIELDS,               COMPOSEABLE,DATA_PROPERTY)
-            ,DEF_INFO_1( AREA,                          AREA,                       AREA,                       COMPOSEABLE )
-            ,DEF_INFO_2( MIMETYPE,                      MIMETYPE,                   MIMETYPE,                   COMPOSEABLE,DATA_PROPERTY )
-            ,DEF_INFO_1( PARAADJUST,                    PARAADJUST,                 PARAADJUST,                 COMPOSEABLE )
-            ,DEF_INFO_1( VERTICALALIGN,                 VERTICALALIGN,              VERTICALALIGN,              COMPOSEABLE )
+                                                                                    CONTROLBACKGROUNDTRANSPARENT, Composeable )
+            ,DEF_INFO_1( CHARTTYPE,                     CHARTTYPE,                  CHARTTYPE,                  Composeable )
+            ,DEF_INFO_1( PREVIEW_COUNT,                 PREVIEW_COUNT,              PREVIEW_COUNT,              Composeable )
+            ,DEF_INFO_2( MASTERFIELDS,                  MASTERFIELDS,               MASTERFIELDS,               Composeable,DataProperty )
+            ,DEF_INFO_2( DETAILFIELDS,                  DETAILFIELDS,               DETAILFIELDS,               Composeable,DataProperty)
+            ,DEF_INFO_1( AREA,                          AREA,                       AREA,                       Composeable )
+            ,DEF_INFO_2( MIMETYPE,                      MIMETYPE,                   MIMETYPE,                   Composeable,DataProperty )
+            ,DEF_INFO_1( PARAADJUST,                    PARAADJUST,                 PARAADJUST,                 Composeable )
+            ,DEF_INFO_1( VERTICALALIGN,                 VERTICALALIGN,              VERTICALALIGN,              Composeable )
         };
 
         s_pPropertyInfos = aPropertyInfos;
@@ -177,10 +177,10 @@ namespace rptui
     }
 
 
-    sal_uInt32 OPropertyInfoService::getPropertyUIFlags(sal_Int32 _nId)
+    PropUIFlags OPropertyInfoService::getPropertyUIFlags(sal_Int32 _nId)
     {
         const OPropertyInfoImpl* pInfo = getPropertyInfo(_nId);
-        return (pInfo) ? pInfo->nUIFlags : 0;
+        return (pInfo) ? pInfo->nUIFlags : PropUIFlags::NONE;
     }
 
 
@@ -189,7 +189,7 @@ namespace rptui
         // intialisierung
         if(!s_pPropertyInfos)
             getPropertyInfo();
-        OPropertyInfoImpl  aSearch(_rName, 0L, OUString(), "", 0);
+        OPropertyInfoImpl  aSearch(_rName, 0L, OUString(), "", PropUIFlags::NONE);
 
         const OPropertyInfoImpl* pPropInfo = ::std::lower_bound(
             s_pPropertyInfos, s_pPropertyInfos + s_nCount, aSearch, PropertyInfoLessByName() );
@@ -221,8 +221,8 @@ namespace rptui
         sal_Int32 nId = getPropertyId( _rPropertyName );
         if ( nId != -1 )
         {
-            sal_uInt32 nFlags = getPropertyUIFlags( nId );
-            return ( nFlags & PROP_FLAG_COMPOSEABLE ) != 0;
+            PropUIFlags nFlags = getPropertyUIFlags( nId );
+            return bool( nFlags & PropUIFlags::Composeable );
         }
 
         return _rxFormComponentHandler->isComposable( _rPropertyName );
