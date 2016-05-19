@@ -565,6 +565,40 @@ std::unique_ptr<UIObject> CheckBoxUIObject::create(vcl::Window* pWindow)
     return std::unique_ptr<UIObject>(new CheckBoxUIObject(pCheckBox));
 }
 
+RadioButtonUIObject::RadioButtonUIObject(VclPtr<RadioButton> xRadioButton):
+    WindowUIObject(xRadioButton),
+    mxRadioButton(xRadioButton)
+{
+}
+
+void RadioButtonUIObject::execute(const OUString& rAction,
+        const StringMap& /*rParameters*/)
+{
+    if (rAction == "CLICK")
+    {
+        mxRadioButton->ImplCallClick();
+    }
+}
+
+StringMap RadioButtonUIObject::get_state()
+{
+    StringMap aMap = WindowUIObject::get_state();
+
+    return aMap;
+}
+
+OUString RadioButtonUIObject::get_name() const
+{
+    return OUString("RadioButtonUIObject");
+}
+
+std::unique_ptr<UIObject> RadioButtonUIObject::create(vcl::Window* pWindow)
+{
+    RadioButton* pRadioButton = dynamic_cast<RadioButton*>(pWindow);
+    assert(pRadioButton);
+    return std::unique_ptr<UIObject>(new RadioButtonUIObject(pRadioButton));
+}
+
 TabPageUIObject::TabPageUIObject(VclPtr<TabPage> xTabPage):
     WindowUIObject(xTabPage),
     mxTabPage(xTabPage)

@@ -87,6 +87,7 @@ class Dialog;
 class Button;
 class CheckBox;
 class ListBox;
+class RadioButton;
 
 class UITEST_DLLPUBLIC WindowUIObject : public UIObject
 {
@@ -184,6 +185,26 @@ private:
 
 public:
     CheckBoxUIObject(VclPtr<CheckBox> xCheckbox);
+
+    virtual void execute(const OUString& rAction,
+            const StringMap& rParameters) override;
+
+    virtual StringMap get_state() override;
+
+    static std::unique_ptr<UIObject> create(vcl::Window* pWindow);
+
+protected:
+
+    virtual OUString get_name() const override;
+};
+
+class UITEST_DLLPUBLIC RadioButtonUIObject : public WindowUIObject
+{
+private:
+    VclPtr<RadioButton> mxRadioButton;
+
+public:
+    RadioButtonUIObject(VclPtr<RadioButton> xCheckbox);
 
     virtual void execute(const OUString& rAction,
             const StringMap& rParameters) override;
