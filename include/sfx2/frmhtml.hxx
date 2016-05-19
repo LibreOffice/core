@@ -31,9 +31,7 @@ class SfxMedium;
 
 class SFX2_DLLPUBLIC SfxFrameHTMLParser : public SfxHTMLParser
 {
-protected:
-   SfxFrameHTMLParser( SvStream& rStream, bool bIsNewDoc=true, SfxMedium *pMediumPtr=nullptr ):
-   SfxHTMLParser( rStream, bIsNewDoc, pMediumPtr ) {};
+   SfxFrameHTMLParser() = delete;
 
 public:
     // These methods can also be used by other parsers.
