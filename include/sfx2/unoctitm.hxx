@@ -42,30 +42,6 @@ class SfxBindings;
 class SfxFrame;
 class SfxDispatcher;
 
-class SfxUnoControllerItem :    public ::cppu::WeakImplHelper1< css::frame::XStatusListener >
-{
-    css::util::URL              aCommand;
-    css::uno::Reference< css::frame::XDispatch >    xDispatch;
-    SfxControllerItem*          pCtrlItem;
-    SfxBindings*                pBindings;
-
-    css::uno::Reference< css::frame::XDispatch >    TryGetDispatch( SfxFrame* pFrame );
-
-public:
-
-                                SfxUnoControllerItem( SfxControllerItem*, SfxBindings&, const OUString& );
-                                virtual ~SfxUnoControllerItem();
-
-    // XStatusListener
-    virtual void SAL_CALL       statusChanged(const css::frame::FeatureStateEvent& Event) throw( css::uno::RuntimeException, std::exception ) override;
-
-    // Something else
-    virtual void    SAL_CALL    disposing(const css::lang::EventObject& Source) throw( css::uno::RuntimeException, std::exception ) override;
-    void                        GetNewDispatch();
-    void                        ReleaseDispatch();
-    void                        ReleaseBindings();
-};
-
 typedef cppu::OMultiTypeInterfaceContainerHelperVar<OUString>
     SfxStatusDispatcher_Impl_ListenerContainer;
 

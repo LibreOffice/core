@@ -49,10 +49,8 @@ class SfxBindings;
 class SfxBindings_Impl;
 class Timer;
 class SfxWorkWindow;
-class SfxUnoControllerItem;
 struct SfxFoundCache_Impl;
 class SfxFoundCacheArr_Impl;
-class SfxUnoControllerArr_Impl;
 
 enum class SfxCallMode : sal_uInt16
 {
@@ -199,9 +197,6 @@ public:
     SAL_DLLPRIVATE SfxWorkWindow* GetWorkWindow_Impl() const;
     SAL_DLLPRIVATE void SetWorkWindow_Impl( SfxWorkWindow* );
     SAL_DLLPRIVATE SfxBindings* GetSubBindings_Impl() const;
-    SAL_DLLPRIVATE void InvalidateUnoControllers_Impl();
-    SAL_DLLPRIVATE void RegisterUnoController_Impl( SfxUnoControllerItem* );
-    SAL_DLLPRIVATE void ReleaseUnoController_Impl( SfxUnoControllerItem* );
     SAL_DLLPRIVATE void SetRecorder_Impl( css::uno::Reference< css::frame::XDispatchRecorder >& );
     SAL_DLLPRIVATE void InvalidateSlotsInMap_Impl();
     SAL_DLLPRIVATE void AddSlotToInvalidateSlotsMap_Impl( sal_uInt16 nId );

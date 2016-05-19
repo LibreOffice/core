@@ -117,46 +117,6 @@ public:
     }
 };
 
-class SfxUnoControllerArr_Impl
-{
-    typedef std::vector<SfxUnoControllerItem*> DataType;
-    DataType maData;
-
-public:
-
-    typedef DataType::iterator iterator;
-
-    iterator begin()
-    {
-        return maData.begin();
-    }
-
-    iterator end()
-    {
-        return maData.end();
-    }
-
-    void erase( const iterator& it )
-    {
-        maData.erase(it);
-    }
-
-    SfxUnoControllerItem* operator[] ( size_t i )
-    {
-        return maData[i];
-    }
-
-    size_t size() const
-    {
-        return maData.size();
-    }
-
-    void push_back( SfxUnoControllerItem* p )
-    {
-        maData.push_back(p);
-    }
-};
-
 enum class SfxPopupAction
 {
     DELETE,
@@ -170,8 +130,6 @@ class SfxBindings_Impl
 public:
     css::uno::Reference< css::frame::XDispatchRecorder > xRecorder;
     css::uno::Reference< css::frame::XDispatchProvider >  xProv;
-    SfxUnoControllerArr_Impl*
-                            pUnoCtrlArr;
     SfxWorkWindow*          pWorkWin;
     SfxBindings*            pSubBindings;
     SfxBindings*            pSuperBindings;
@@ -214,7 +172,6 @@ SfxBindings::SfxBindings()
     pImp->pSubBindings = nullptr;
     pImp->pSuperBindings = nullptr;
     pImp->pWorkWin = nullptr;
-    pImp->pUnoCtrlArr = nullptr;
     pImp->nOwnRegLevel = nRegLevel;
 
     // all caches are valid (no pending invalidate-job)
@@ -303,19 +260,6 @@ void SfxBindings::DeleteControllers_Impl()
         if( nCache-1 < (sal_uInt16) pImp->pCaches->size() )
             delete (*pImp->pCaches)[nCache-1];
         pImp->pCaches->erase(pImp->pCaches->begin()+ nCache - 1);
-    }
-
-    if( pImp->pUnoCtrlArr )
-    {
-        sal_uInt16 nCtrlCount = pImp->pUnoCtrlArr->size();
-        for ( sal_uInt16 n=nCtrlCount; n>0; n-- )
-        {
-            SfxUnoControllerItem *pCtrl = (*pImp->pUnoCtrlArr)[n-1];
-            pCtrl->ReleaseBindings();
-        }
-
-        DBG_ASSERT( !pImp->pUnoCtrlArr->size(), "Do not remove UnoControllerItems!" );
-        DELETEZ( pImp->pUnoCtrlArr );
     }
 }
 
@@ -1738,7 +1682,6 @@ void SfxBindings::SetDispatcher( SfxDispatcher *pDisp )
 
         SetDispatchProvider_Impl( xProv );
         InvalidateAll( true );
-        InvalidateUnoControllers_Impl();
 
         if ( pDispatcher && !pOldDispat )
         {
@@ -1946,48 +1889,6 @@ SfxWorkWindow* SfxBindings::GetWorkWindow_Impl() const
     return pImp->pWorkWin;
 }
 
-void SfxBindings::RegisterUnoController_Impl( SfxUnoControllerItem* pControl )
-{
-    if ( !pImp->pUnoCtrlArr )
-        pImp->pUnoCtrlArr = new SfxUnoControllerArr_Impl;
-    pImp->pUnoCtrlArr->push_back( pControl );
-}
-
-void SfxBindings::ReleaseUnoController_Impl( SfxUnoControllerItem* pControl )
-{
-    if ( pImp->pUnoCtrlArr )
-    {
-        SfxUnoControllerArr_Impl::iterator it = std::find(
-            pImp->pUnoCtrlArr->begin(), pImp->pUnoCtrlArr->end(), pControl );
-        if ( it != pImp->pUnoCtrlArr->end() )
-        {
-            pImp->pUnoCtrlArr->erase( it );
-            return;
-        }
-    }
-
-    if ( pImp->pSubBindings )
-        pImp->pSubBindings->ReleaseUnoController_Impl( pControl );
-}
-
-void SfxBindings::InvalidateUnoControllers_Impl()
-{
-    if ( pImp->pUnoCtrlArr )
-    {
-        sal_uInt16 nCount = pImp->pUnoCtrlArr->size();
-        for ( sal_uInt16 n=nCount; n>0; n-- )
-        {
-            SfxUnoControllerItem *pCtrl = (*pImp->pUnoCtrlArr)[n-1];
-            css::uno::Reference< css::frame::XStatusListener >  xRef( static_cast<cppu::OWeakObject*>(pCtrl), css::uno::UNO_QUERY );
-            pCtrl->ReleaseDispatch();
-            pCtrl->GetNewDispatch();
-        }
-    }
-
-    if ( pImp->pSubBindings )
-        pImp->pSubBindings->InvalidateUnoControllers_Impl();
-}
-
 bool SfxBindings::IsInUpdate() const
 {
     bool bInUpdate = pImp->bInUpdate;
@@ -2029,7 +1930,6 @@ void SfxBindings::SetDispatchProvider_Impl( const css::uno::Reference< css::fram
     {
         pImp->xProv = rProv;
         InvalidateAll( true );
-        InvalidateUnoControllers_Impl();
     }
 
     if ( pImp->pSubBindings )

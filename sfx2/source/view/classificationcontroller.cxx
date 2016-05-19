@@ -94,7 +94,7 @@ public:
     virtual ~ClassificationControl();
     virtual void dispose() override;
     virtual void Resize() override;
-    VclPtr<ListBox> getCategories(SfxClassificationPolicyType eType);
+    const VclPtr<ListBox>& getCategories(SfxClassificationPolicyType eType);
     std::size_t getLabelsSize();
     OUString getCategoryType(ListBox& rCategory);
 };
@@ -311,7 +311,7 @@ void ClassificationControl::Resize()
     }
 }
 
-VclPtr<ListBox> ClassificationControl::getCategories(SfxClassificationPolicyType eType)
+const VclPtr<ListBox>& ClassificationControl::getCategories(SfxClassificationPolicyType eType)
 {
     return m_pCategories[eType];
 }

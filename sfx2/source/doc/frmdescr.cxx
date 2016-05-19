@@ -135,40 +135,4 @@ void SfxFrameDescriptor::SetWallpaper( const Wallpaper& rWallpaper )
         pImp->pWallpaper = new Wallpaper( rWallpaper );
 }
 
-SfxFrameProperties& SfxFrameProperties::operator =(
-    const SfxFrameProperties &rProp )
-{
-    aURL = rProp.aURL;
-    aName = rProp.aName;
-    lMarginWidth = rProp.lMarginWidth;
-    lMarginHeight = rProp.lMarginHeight;
-    lSize = rProp.lSize;
-    lSetSize = rProp.lSetSize;
-    lFrameSpacing = rProp.lFrameSpacing;
-    lInheritedFrameSpacing = rProp.lInheritedFrameSpacing;
-    eScroll = rProp.eScroll;
-    eSizeSelector = rProp.eSizeSelector;
-    eSetSizeSelector = rProp.eSetSizeSelector;
-    bHasBorder = rProp.bHasBorder;
-    bBorderSet = rProp.bBorderSet;
-    bResizable = rProp.bResizable;
-    bSetResizable = rProp.bSetResizable;
-    bIsRootSet = rProp.bIsRootSet;
-    bIsInColSet = rProp.bIsInColSet;
-    bHasBorderInherited = rProp.bHasBorderInherited;
-    pFrame = rProp.pFrame->Clone();
-    return *this;
-}
-
-bool SfxFrameProperties::operator ==( const SfxFrameProperties& rProp ) const
-{
-    return aURL == rProp.aURL && aName == rProp.aName && lMarginWidth == rProp.lMarginWidth && lMarginHeight == rProp.lMarginHeight &&
-            lSize == rProp.lSize && eScroll == rProp.eScroll && eSizeSelector == rProp.eSizeSelector &&
-            lSetSize == rProp.lSetSize && lFrameSpacing == rProp.lFrameSpacing && eSetSizeSelector == rProp.eSetSizeSelector &&
-            bHasBorder == rProp.bHasBorder && bBorderSet == rProp.bBorderSet &&
-            bResizable == rProp.bResizable && bSetResizable == rProp.bSetResizable;
-}
-
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

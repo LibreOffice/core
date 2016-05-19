@@ -293,23 +293,6 @@ private:
 typedef ItemControlConnection< BoolItemWrapper, CheckBoxWrapper > CheckBoxConnection;
 
 
-/** Connection between an item and the VCL NumericField. */
-template< typename ItemWrpT >
-class NumericConnection : public ItemControlConnection< ItemWrpT,
-        NumericFieldWrapper< typename ItemWrpT::ItemValueType > >
-{
-    typedef ItemControlConnection< ItemWrpT,
-        NumericFieldWrapper< typename ItemWrpT::ItemValueType > >
-    ItemControlConnectionType;
-
-public:
-    typedef typename ItemControlConnectionType::ControlWrapperType NumericFieldWrapperType;
-
-    explicit            NumericConnection( sal_uInt16 nSlot, NumericField& rField,
-                            ItemConnFlags nFlags = ITEMCONN_DEFAULT );
-};
-
-
 /** Connection between an item and the VCL MetricField.
 
     Adds support of different field units during control value <-> item value
@@ -491,14 +474,6 @@ bool ItemControlConnection< ItemWrpT, ControlWrpT >::FillItemSet(
 
 
 // Standard connections
-
-
-template< typename ItemWrpT >
-NumericConnection< ItemWrpT >::NumericConnection(
-        sal_uInt16 nSlot, NumericField& rField, ItemConnFlags nFlags ) :
-    ItemControlConnectionType( nSlot, rField, nFlags )
-{
-}
 
 
 template< typename ItemWrpT >
