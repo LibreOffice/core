@@ -440,14 +440,20 @@ void SfxTabDialog::Init_Impl(bool bFmtFlag)
     m_pResetBtn = m_pUIBuilder->get<PushButton>("reset");
     m_bOwnsResetBtn = m_pResetBtn == nullptr;
     if (m_bOwnsResetBtn)
+    {
         m_pResetBtn = VclPtr<PushButton>::Create(m_pActionArea.get());
+        m_pResetBtn->set_id("reset");
+    }
     else
         m_pImpl->bHideResetBtn = !m_pResetBtn->IsVisible();
 
     m_pBaseFmtBtn = m_pUIBuilder->get<PushButton>("standard");
     m_bOwnsBaseFmtBtn = m_pBaseFmtBtn == nullptr;
     if (m_bOwnsBaseFmtBtn)
+    {
         m_pBaseFmtBtn = VclPtr<PushButton>::Create(m_pActionArea.get());
+        m_pBaseFmtBtn->set_id("standard");
+    }
 
     m_pOKBtn->SetClickHdl( LINK( this, SfxTabDialog, OkHdl ) );
     m_pCancelBtn->SetClickHdl( LINK( this, SfxTabDialog, CancelHdl ) );
