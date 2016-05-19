@@ -184,7 +184,7 @@ namespace
 
         SystemChildWindow *pParentWindow = reinterpret_cast< SystemChildWindow* >( pIntPtr );
 
-        const SystemEnvData* pEnvData = pParentWindow ? pParentWindow->GetSystemChildSystemData() : nullptr;
+        const SystemEnvData* pEnvData = pParentWindow ? pParentWindow->GetSystemData() : nullptr;
 
         if (pEnvData == nullptr)
             return -1;

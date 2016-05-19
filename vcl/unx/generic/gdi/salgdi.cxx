@@ -63,7 +63,6 @@
 
 #include "unx/printergfx.hxx"
 #include "xrender_peer.hxx"
-#include "cairo_cairo.hxx"
 #include "cairo_xlib_cairo.hxx"
 #include <cairo-xlib.h>
 
@@ -497,7 +496,7 @@ namespace
 {
     cairo::X11SysData getSysData( const vcl::Window& rWindow )
     {
-        const SystemEnvData* pSysData = cairo::GetSysData(&rWindow);
+        const SystemEnvData* pSysData = rWindow.GetSystemData();
 
         if( !pSysData )
             return cairo::X11SysData();

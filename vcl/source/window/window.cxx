@@ -3593,53 +3593,13 @@ Reference< css::rendering::XCanvas > Window::ImplGetCanvas( bool bSpriteCanvas )
 
     // common: first any is VCL pointer to window (for VCL canvas)
     aArg[ 0 ] = makeAny( reinterpret_cast<sal_Int64>(this) );
-
-    // TODO(Q1): Make GetSystemData method virtual
-
-    // check whether we're a SysChild: have to fetch system data
-    // directly from SystemChildWindow, because the GetSystemData
-    // method is unfortunately not virtual
-    const SystemChildWindow* pSysChild = dynamic_cast< const SystemChildWindow* >( this );
-    if( pSysChild )
-    {
-        /*
-          Note the comment expresses the desire to call the GetSystemChildSystemData variant
-          which it did initially on
-
-          commit 807c11075f63801f5b29a665c01b946bd7554785
-          Author: Rüdiger Timm <rt@openoffice.org>
-          Date:   Fri Nov 26 19:44:05 2004 +0000
-
-            INTEGRATION: CWS presentationengine01 (1.195.30); FILE MERGED
-            2004/11/17 19:52:23 thb 1.195.30.9: RESYNC: (1.199-1.200); FILE MERGED
-
-          but on
-
-          commit d551190e8311242eadda4a3e82efff160175cb04
-          Author: Kurt Zenker <kz@openoffice.org>
-          Date:   Tue Jun 24 10:41:50 2008 +0000
-
-            INTEGRATION: CWS canvas05 (1.264.12); FILE MERGED
-            2008/04/21 07:47:51 thb 1.264.12.5: RESYNC: (1.277-1.278); FILE MERGED
-
-            GetSystemData was changed to GetSystemDataAny which does not
-            have a shadowed call in SystemChildWindow, so that turned this from
-            using the GetSystemChildSystemData variant to the GetWindowSystemData variant
-        */
-        aArg[ 1 ] = pSysChild->GetWindowSystemDataAny();
-        aArg[ 5 ] = pSysChild->GetSystemGfxDataAny();
-    }
-    else
-    {
-        aArg[ 1 ] = GetWindowSystemDataAny();
-        aArg[ 5 ] = GetSystemGfxDataAny();
-    }
-
+    aArg[ 1 ] = GetSystemDataAny();
     aArg[ 2 ] = makeAny( css::awt::Rectangle( mnOutOffX, mnOutOffY, mnOutWidth, mnOutHeight ) );
     aArg[ 3 ] = makeAny( mpWindowImpl->mbAlwaysOnTop );
     aArg[ 4 ] = makeAny( Reference< css::awt::XWindow >(
                              const_cast<vcl::Window*>(this)->GetComponentInterface(),
                              UNO_QUERY ));
+    aArg[ 5 ] = GetSystemGfxDataAny();
 
     Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
 
@@ -3724,16 +3684,16 @@ void Window::ApplySettings(vcl::RenderContext& /*rRenderContext*/)
 {
 }
 
-const SystemEnvData* Window::GetWindowSystemData() const
+const SystemEnvData* Window::GetSystemData() const
 {
 
     return mpWindowImpl->mpFrame ? mpWindowImpl->mpFrame->GetSystemData() : nullptr;
 }
 
-Any Window::GetWindowSystemDataAny() const
+Any Window::GetSystemDataAny() const
 {
     Any aRet;
-    const SystemEnvData* pSysData = GetWindowSystemData();
+    const SystemEnvData* pSysData = GetSystemData();
     if( pSysData )
     {
         Sequence< sal_Int8 > aSeq( reinterpret_cast<sal_Int8 const *>(pSysData), pSysData->nSize );

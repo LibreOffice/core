@@ -9,7 +9,6 @@
 
 #include <utility>
 
-#include "cairo_cairo.hxx"
 #include "cairo_gtk3_cairo.hxx"
 
 #include <vcl/sysdata.hxx>

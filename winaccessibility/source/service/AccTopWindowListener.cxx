@@ -57,7 +57,7 @@ void AccTopWindowListener::HandleWindowOpened( css::accessibility::XAccessible* 
     const SystemEnvData* systemdata = NULL;
     try
     {
-        systemdata = window->GetWindowSystemData();
+        systemdata = window->GetSystemData();
     }
     catch(...)
     {

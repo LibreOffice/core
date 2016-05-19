@@ -64,7 +64,7 @@ namespace dxcanvas
                 VCLUnoHelper::GetInterface(&rWindow),
                 uno::UNO_QUERY_THROW) );
 
-        const SystemEnvData *pData = rWindow.GetWindowSystemData();
+        const SystemEnvData *pData = rWindow.GetSystemData();
         const HWND hWnd = reinterpret_cast<HWND>(pData->hWnd);
         if( !IsWindow( hWnd ) )
             throw lang::NoSupportException( "Passed window has invalid system window, or canvas out-of-process!" );

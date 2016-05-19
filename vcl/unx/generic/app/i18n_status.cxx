@@ -157,7 +157,7 @@ void XIMStatusWindow::layout()
 
     if (m_bAnchoredAtRight && IsVisible())
     {
-        SalFrame* pFrame = static_cast<SalFrame*>(GetWindowSystemData()->pSalFrame);
+        SalFrame* pFrame = static_cast<SalFrame*>(GetSystemData()->pSalFrame);
         long nDelta = pFrame->maGeometry.nWidth - m_aWindowSize.Width();
         pFrame->SetPosSize( pFrame->maGeometry.nX + nDelta,
                             pFrame->maGeometry.nY,
@@ -249,7 +249,7 @@ void XIMStatusWindow::setPosition( SalFrame* pParent )
         }
         if( IsVisible() )
         {
-            const SystemEnvData* pEnvData = GetWindowSystemData();
+            const SystemEnvData* pEnvData = GetSystemData();
             SalFrame* pStatusFrame = static_cast<SalFrame*>(pEnvData->pSalFrame);
             Point aPoint = updatePosition();
             pStatusFrame->SetPosSize( aPoint.X(), aPoint.Y(), m_aWindowSize.Width(), m_aWindowSize.Height(), SAL_FRAME_POSSIZE_X | SAL_FRAME_POSSIZE_Y | SAL_FRAME_POSSIZE_WIDTH | SAL_FRAME_POSSIZE_HEIGHT );
@@ -260,7 +260,7 @@ void XIMStatusWindow::setPosition( SalFrame* pParent )
 IMPL_LINK_NOARG_TYPED(XIMStatusWindow, DelayedShowHdl, void*, void)
 {
     m_nDelayedEvent = nullptr;
-    const SystemEnvData* pData = GetWindowSystemData();
+    const SystemEnvData* pData = GetSystemData();
     SalFrame* pStatusFrame = static_cast<SalFrame*>(pData->pSalFrame);
     if( m_bDelayedShow )
     {
@@ -348,7 +348,7 @@ IIIMPStatusWindow::IIIMPStatusWindow( SalFrame* pParent, bool bOn ) :
 
     if( pParent )
     {
-        const SystemEnvData* pEnvData = GetWindowSystemData();
+        const SystemEnvData* pEnvData = GetSystemData();
 
         const SalFrameGeometry& rGeom( pParent->GetUnmirroredGeometry() );
         int nDistance = rGeom.nTopDecoration;
@@ -593,7 +593,7 @@ SalFrame* I18NStatus::getStatusFrame() const
     SalFrame* pRet = nullptr;
     if( m_pStatusWindow )
     {
-        const SystemEnvData* pData = m_pStatusWindow->GetWindowSystemData();
+        const SystemEnvData* pData = m_pStatusWindow->GetSystemData();
         pRet = static_cast<SalFrame*>(pData->pSalFrame);
     }
     return pRet;
