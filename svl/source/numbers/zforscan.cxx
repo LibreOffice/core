@@ -1152,6 +1152,10 @@ sal_Int32 ImpSvNumberformatScan::ScanType()
                 cChar = PreviousChar(i);
                 if (nIndexPre == NF_KEY_H   ||      // H
                     nIndexPre == NF_KEY_HH  ||      // HH
+                    nIndexPre == NF_KEY_S   ||      // S before M tdf#95339
+                    nIndexPre == NF_KEY_SS  ||      // SS
+                    nIndexNex == NF_KEY_H   ||      // H after M tdf#95339
+                    nIndexNex == NF_KEY_HH  ||      // HH
                     nIndexNex == NF_KEY_S   ||      // S
                     nIndexNex == NF_KEY_SS  ||      // SS
                     cChar == '['  )                 // [M
