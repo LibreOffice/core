@@ -62,14 +62,6 @@ protected:
     sal_uInt16 nModifier;
 
 public:
-    DropListBox_Impl(vcl::Window* pParent, const ResId& rId, SfxCommonTemplateDialog_Impl* pD)
-        : SvTreeListBox(pParent, rId)
-        , pDialog(pD)
-        , nModifier(0)
-    {
-        SetHighlightRange();
-    }
-
     DropListBox_Impl(vcl::Window* pParent, WinBits nWinBits, SfxCommonTemplateDialog_Impl* pD)
         : SvTreeListBox(pParent, nWinBits)
         , pDialog(pD)

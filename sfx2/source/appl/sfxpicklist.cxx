@@ -305,41 +305,6 @@ void SfxPickList::CreatePickListEntries()
     }
 }
 
-void SfxPickList::CreateMenuEntries( Menu* pMenu )
-{
-    ::osl::MutexGuard aGuard( thePickListMutex::get() );
-
-    static bool bPickListMenuInitializing = false;
-
-    if ( bPickListMenuInitializing ) // method is not reentrant!
-        return;
-
-    bPickListMenuInitializing = true;
-    CreatePickListEntries();
-
-    for ( sal_uInt16 nId = START_ITEMID_PICKLIST; nId <= END_ITEMID_PICKLIST; ++nId )
-        pMenu->RemoveItem( pMenu->GetItemPos( nId ) );
-
-    if ( pMenu->GetItemType( pMenu->GetItemCount()-1 ) == MenuItemType::SEPARATOR )
-        pMenu->RemoveItem( pMenu->GetItemCount()-1 );
-
-    if ( m_aPicklistVector.size() > 0 &&
-         pMenu->GetItemType( pMenu->GetItemCount()-1 )
-            != MenuItemType::SEPARATOR && m_nAllowedMenuSize )
-        pMenu->InsertSeparator();
-
-    OUString aEmptyString;
-    for ( size_t i = 0; i < m_aPicklistVector.size(); i++ )
-    {
-        PickListEntry* pEntry = GetPickListEntry( i );
-
-        pMenu->InsertItem( (sal_uInt16)(START_ITEMID_PICKLIST + i), aEmptyString );
-        CreatePicklistMenuTitle( pMenu, (sal_uInt16)(START_ITEMID_PICKLIST + i), pEntry->aName, i );
-    }
-
-    bPickListMenuInitializing = false;
-}
-
 void SfxPickList::ExecuteEntry( sal_uInt32 nIndex )
 {
     ::osl::ClearableMutexGuard aGuard( thePickListMutex::get() );
@@ -367,11 +332,6 @@ void SfxPickList::ExecuteEntry( sal_uInt32 nIndex )
         aReq.AppendItem( SfxBoolItem( SID_TEMPLATE, false ) );
         SfxGetpApp()->ExecuteSlot( aReq );
     }
-}
-
-void SfxPickList::ExecuteMenuEntry( sal_uInt16 nId )
-{
-    ExecuteEntry( (sal_uInt32)( nId - START_ITEMID_PICKLIST ) );
 }
 
 void SfxPickList::Notify( SfxBroadcaster&, const SfxHint& rHint )
