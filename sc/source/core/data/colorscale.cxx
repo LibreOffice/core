@@ -320,7 +320,7 @@ ScColorScaleFormat::ScColorScaleFormat(ScDocument* pDoc, const ScColorScaleForma
 {
     for(ScColorScaleEntries::const_iterator itr = rFormat.begin(); itr != rFormat.end(); ++itr)
     {
-        maColorScales.push_back(std::unique_ptr<ScColorScaleEntry>(new ScColorScaleEntry(pDoc, **itr)));
+        maColorScales.push_back(o3tl::make_unique<ScColorScaleEntry>(pDoc, **itr));
     }
 }
 

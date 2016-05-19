@@ -44,6 +44,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/namedvaluecollection.hxx>
+#include <o3tl/make_unique.hxx>
 
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -117,7 +118,7 @@ SidebarController::SidebarController (
       mpResourceManager()
 {
     // Decks and panel collections for this sidebar
-    mpResourceManager = std::unique_ptr<ResourceManager>(new ResourceManager());
+    mpResourceManager = o3tl::make_unique<ResourceManager>();
 
     registerSidebarForFrame(this, mxFrame->getController());
     // Listen for window events.

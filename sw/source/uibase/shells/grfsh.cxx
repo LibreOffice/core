@@ -19,6 +19,7 @@
 
 #include <cmdid.h>
 #include <hintids.hxx>
+#include <o3tl/make_unique.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/msgbox.hxx>
 #include <svl/stritem.hxx>
@@ -195,8 +196,8 @@ void SwGrfShell::Execute(SfxRequest &rReq)
             GraphicObject const*const pGraphicObject(rSh.GetGraphicObj());
             if(nullptr != pGraphicObject)
             {
-                m_ExternalEdits.push_back(std::unique_ptr<SwExternalToolEdit>(
-                            new SwExternalToolEdit(&rSh)));
+                m_ExternalEdits.push_back(o3tl::make_unique<SwExternalToolEdit>(
+                            &rSh));
                 m_ExternalEdits.back()->Edit(pGraphicObject);
             }
         }

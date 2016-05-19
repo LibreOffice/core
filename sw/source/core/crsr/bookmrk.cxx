@@ -32,6 +32,7 @@
 #include <UndoBookmark.hxx>
 #include <unobookmark.hxx>
 #include <rtl/random.h>
+#include <o3tl/make_unique.hxx>
 #include <xmloff/odffields.hxx>
 #include <libxml/xmlwriter.h>
 #include <comphelper/anytostring.hxx>
@@ -167,13 +168,13 @@ namespace sw { namespace mark
 
     void MarkBase::SetMarkPos(const SwPosition& rNewPos)
     {
-        std::unique_ptr<SwPosition>(new SwPosition(rNewPos)).swap(m_pPos1);
+        o3tl::make_unique<SwPosition>(rNewPos).swap(m_pPos1);
         m_pPos1->nContent.SetMark(this);
     }
 
     void MarkBase::SetOtherMarkPos(const SwPosition& rNewPos)
     {
-        std::unique_ptr<SwPosition>(new SwPosition(rNewPos)).swap(m_pPos2);
+        o3tl::make_unique<SwPosition>(rNewPos).swap(m_pPos2);
         m_pPos2->nContent.SetMark(this);
     }
 

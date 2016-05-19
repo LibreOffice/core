@@ -21,6 +21,7 @@
 #include <comphelper/string.hxx>
 #include <editeng/unolingu.hxx>
 #include <editeng/langitem.hxx>
+#include <o3tl/make_unique.hxx>
 #include <swtypes.hxx>
 #include <tools/resid.hxx>
 #include <comcore.hrc>
@@ -217,7 +218,7 @@ sal_uInt16  SwAuthorityFieldType::AppendField( const SwAuthEntry& rInsert )
     }
 
     //if it is a new Entry - insert
-    m_DataArr.push_back(std::unique_ptr<SwAuthEntry>(new SwAuthEntry(rInsert)));
+    m_DataArr.push_back(o3tl::make_unique<SwAuthEntry>(rInsert));
     return m_DataArr.size()-1;
 }
 

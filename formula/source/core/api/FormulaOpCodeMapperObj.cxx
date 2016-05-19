@@ -25,6 +25,7 @@
 #include "formula/opcode.hxx"
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <o3tl/make_unique.hxx>
 
 namespace formula
 {
@@ -107,7 +108,7 @@ uno::Sequence< OUString > SAL_CALL FormulaOpCodeMapperObj::getSupportedServiceNa
 uno::Reference< uno::XInterface > SAL_CALL FormulaOpCodeMapperObj::create(
                 uno::Reference< uno::XComponentContext > const & /*_xContext*/)
 {
-    return static_cast<sheet::XFormulaOpCodeMapper*>(new FormulaOpCodeMapperObj(::std::unique_ptr<FormulaCompiler>(new FormulaCompiler())));
+    return static_cast<sheet::XFormulaOpCodeMapper*>(new FormulaOpCodeMapperObj(o3tl::make_unique<FormulaCompiler>()));
 }
 
 } // formula

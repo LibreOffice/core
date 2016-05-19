@@ -508,8 +508,8 @@ bool SvXMLAutoStylePoolP_Impl::Add(
     if (it2 == rFamily.m_ParentSet.end())
     {
         std::pair<XMLAutoStyleFamily::ParentSetType::iterator,bool> r =
-            rFamily.m_ParentSet.insert(std::unique_ptr<XMLAutoStylePoolParent>(
-                        new XMLAutoStylePoolParent(rParentName)));
+            rFamily.m_ParentSet.insert(o3tl::make_unique<XMLAutoStylePoolParent>(
+                        rParentName));
         it2 = r.first;
     }
 
@@ -542,8 +542,8 @@ bool SvXMLAutoStylePoolP_Impl::AddNamed(
     if (it2 == rFamily.m_ParentSet.end())
     {
         std::pair<XMLAutoStyleFamily::ParentSetType::iterator,bool> r =
-            rFamily.m_ParentSet.insert(std::unique_ptr<XMLAutoStylePoolParent>(
-                        new XMLAutoStylePoolParent(rParentName)));
+            rFamily.m_ParentSet.insert(o3tl::make_unique<XMLAutoStylePoolParent>(
+                        rParentName));
         it2 = r.first;
     }
 

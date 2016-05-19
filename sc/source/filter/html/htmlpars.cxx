@@ -2356,7 +2356,7 @@ bool ScHTMLTable::IsSpaceCharInfo( const ImportInfo& rInfo )
 
 ScHTMLTable::ScHTMLEntryPtr ScHTMLTable::CreateEntry() const
 {
-    return ScHTMLEntryPtr( new ScHTMLEntry( GetCurrItemSet() ) );
+    return o3tl::make_unique<ScHTMLEntry>( GetCurrItemSet() );
 }
 
 void ScHTMLTable::CreateNewEntry( const ImportInfo& rInfo )

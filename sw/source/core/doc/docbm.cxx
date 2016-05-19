@@ -40,6 +40,7 @@
 #include <pam.hxx>
 #include <redline.hxx>
 #include <rolbck.hxx>
+#include <o3tl/make_unique.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
@@ -135,7 +136,7 @@ namespace
             return lcl_PositionFromContentNode( pNode, bPosAtEndOfNode );
         }
 
-        return ::std::unique_ptr<SwPosition>(new SwPosition(rOtherPosition));
+        return o3tl::make_unique<SwPosition>(rOtherPosition);
     }
 
     IMark* lcl_getMarkAfter(const IDocumentMarkAccess::container_t& rMarks, const SwPosition& rPos)
@@ -756,7 +757,7 @@ namespace sw { namespace mark
                 {
                     if ( pEndIdx != nullptr )
                     {
-                        pNewPos = ::std::unique_ptr< SwPosition >( new SwPosition( rEnd, *pEndIdx ) );
+                        pNewPos = o3tl::make_unique< SwPosition >( rEnd, *pEndIdx );
                     }
                     else
                     {

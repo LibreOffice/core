@@ -35,6 +35,7 @@
 #include "brdcst.hxx"
 
 #include <comphelper/stl_types.hxx>
+#include <o3tl/make_unique.hxx>
 
 #include <memory>
 #include <utility>
@@ -1279,7 +1280,7 @@ ScDBCollection::AnonDBs::AnonDBs(AnonDBs const& r)
     m_DBs.reserve(r.m_DBs.size());
     for (auto const& it : r.m_DBs)
     {
-        m_DBs.push_back(std::unique_ptr<ScDBData>(new ScDBData(*it)));
+        m_DBs.push_back(o3tl::make_unique<ScDBData>(*it));
     }
 }
 

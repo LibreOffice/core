@@ -204,12 +204,12 @@ void CuiAboutConfigTabPage::InsertEntry(const OUString& rPropertyPath, const OUS
                                         bool bInsertToPrefBox)
 {
     SvTreeListEntry* pEntry = new SvTreeListEntry;
-    pEntry->AddItem(std::unique_ptr<SvLBoxContextBmp>(
-        new SvLBoxContextBmp( Image(), Image(), false))); //It is needed, otherwise causes crash
-    pEntry->AddItem(std::unique_ptr<SvLBoxString>(new SvLBoxString(rProp)));
-    pEntry->AddItem(std::unique_ptr<SvLBoxString>(new SvLBoxString(rStatus)));
-    pEntry->AddItem(std::unique_ptr<SvLBoxString>(new SvLBoxString(rType)));
-    pEntry->AddItem(std::unique_ptr<SvLBoxString>(new SvLBoxString(rValue)));
+    pEntry->AddItem(o3tl::make_unique<SvLBoxContextBmp>(
+        Image(), Image(), false)); //It is needed, otherwise causes crash
+    pEntry->AddItem(o3tl::make_unique<SvLBoxString>(rProp));
+    pEntry->AddItem(o3tl::make_unique<SvLBoxString>(rStatus));
+    pEntry->AddItem(o3tl::make_unique<SvLBoxString>(rType));
+    pEntry->AddItem(o3tl::make_unique<SvLBoxString>(rValue));
     pEntry->SetUserData( new UserData(rPropertyPath) );
 
     if(bInsertToPrefBox)

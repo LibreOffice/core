@@ -62,6 +62,7 @@
 #include <comphelper/string.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <o3tl/make_unique.hxx>
 #include <algorithm>
 #include <memory>
 #include <set>
@@ -160,7 +161,7 @@ namespace
             else if (pCrossRefMark)
             {
                 // Crossrefbookmarks only remember the start position but have to span the whole paragraph
-                pCrossRefEndPos = unique_ptr<SwPosition>(new SwPosition(rEndPos));
+                pCrossRefEndPos = o3tl::make_unique<SwPosition>(rEndPos);
                 pCrossRefEndPos->nContent = pCrossRefEndPos->nNode.GetNode().GetTextNode()->Len();
                 pEndPos = pCrossRefEndPos.get();
             }

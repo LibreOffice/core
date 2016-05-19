@@ -119,6 +119,7 @@
 #include <vcl/virdev.hxx>
 #include <svtools/embedhlp.hxx>
 #include <o3tl/enumrange.hxx>
+#include <o3tl/make_unique.hxx>
 
 #include <algorithm>
 #include <cassert>
@@ -5886,7 +5887,7 @@ PPTParagraphObj::~PPTParagraphObj()
 void PPTParagraphObj::AppendPortion( PPTPortionObj& rPPTPortion )
 {
     m_PortionList.push_back(
-            std::unique_ptr<PPTPortionObj>(new PPTPortionObj(rPPTPortion)));
+            o3tl::make_unique<PPTPortionObj>(rPPTPortion));
     if ( !mbTab )
     {
         mbTab = m_PortionList.back()->HasTabulator();
