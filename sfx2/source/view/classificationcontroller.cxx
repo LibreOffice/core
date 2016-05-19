@@ -94,7 +94,7 @@ public:
     virtual ~ClassificationControl();
     virtual void dispose() override;
     virtual void Resize() override;
-    VclPtr<ListBox> getCategories();
+    const VclPtr<ListBox>& getCategories();
 };
 
 ClassificationPropertyListener::ClassificationPropertyListener(const rtl::Reference<comphelper::ConfigurationListener>& xListener, ClassificationCategoriesController& rController)
@@ -254,7 +254,7 @@ void ClassificationControl::Resize()
     m_pCategories->SetPosSizePixel(Point(nWLabel, nOffset), Size(nW - nWLabel, nPrefHeight));
 }
 
-VclPtr<ListBox> ClassificationControl::getCategories()
+const VclPtr<ListBox>& ClassificationControl::getCategories()
 {
     return m_pCategories;
 }

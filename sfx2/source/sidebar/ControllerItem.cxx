@@ -179,20 +179,6 @@ void ControllerItem::ResetFrame()
     mxFrame = nullptr;
 }
 
-::rtl::OUString ControllerItem::GetHelpText() const
-{
-    Help* pHelp = Application::GetHelp();
-    if (pHelp != nullptr)
-    {
-        if (msCommandName.getLength() > 0)
-        {
-            const ::rtl::OUString sHelp (pHelp->GetHelpText(".uno:" + msCommandName, nullptr));
-            return sHelp;
-        }
-    }
-    return ::rtl::OUString();
-}
-
 Image ControllerItem::GetIcon() const
 {
     return GetImage(mxFrame, ".uno:" + msCommandName, false);
