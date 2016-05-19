@@ -1092,6 +1092,14 @@ void OpenGLContext::setWinSize(const Size& rSize)
     m_aGLWin.Height = rSize.Height();
 }
 
+void OpenGLContext::InitChildWindow(SystemChildWindow *pChildWindow)
+{
+    pChildWindow->SetMouseTransparent(true);
+    pChildWindow->SetParentClipMode(ParentClipMode::Clip);
+    pChildWindow->EnableEraseBackground(false);
+    pChildWindow->SetControlForeground();
+    pChildWindow->SetControlBackground();
+}
 
 #if defined(_WIN32)
 
@@ -1103,15 +1111,9 @@ bool OpenGLContext::initWindow()
         m_pChildWindow = VclPtr<SystemChildWindow>::Create(mpWindow, 0, &winData, false);
     }
 
-    if( m_pChildWindow )
+    if (m_pChildWindow)
     {
-        m_pChildWindow->SetMouseTransparent( true );
-        m_pChildWindow->SetParentClipMode(ParentClipMode::Clip);
-        m_pChildWindow->EnableEraseBackground( false );
-        m_pChildWindow->SetControlForeground();
-        m_pChildWindow->SetControlBackground();
-        //m_pChildWindow->EnablePaint(false);
-
+        InitChildWindow(m_pChildWindow.get());
         const SystemEnvData* sysData(m_pChildWindow->GetSystemData());
         m_aGLWin.hWnd = sysData->hWnd;
     }
@@ -1130,15 +1132,9 @@ bool OpenGLContext::initWindow()
         m_pChildWindow = VclPtr<SystemChildWindow>::Create(mpWindow, 0, &winData, false);
     }
 
-    if( m_pChildWindow )
+    if (m_pChildWindow)
     {
-        m_pChildWindow->SetMouseTransparent( true );
-        m_pChildWindow->SetParentClipMode(ParentClipMode::Clip);
-        m_pChildWindow->EnableEraseBackground( false );
-        m_pChildWindow->SetControlForeground();
-        m_pChildWindow->SetControlBackground();
-        //m_pChildWindow->EnablePaint(false);
-
+        InitChildWindow(m_pChildWindow.get());
     }
 
     return true;
@@ -1169,11 +1165,7 @@ bool OpenGLContext::initWindow()
     if (!m_pChildWindow || !pChildSysData)
         return false;
 
-    m_pChildWindow->SetMouseTransparent( true );
-    m_pChildWindow->SetParentClipMode( ParentClipMode::NoClip );
-    m_pChildWindow->EnableEraseBackground( false );
-    m_pChildWindow->SetControlForeground();
-    m_pChildWindow->SetControlBackground();
+    InitChildWindow(m_pChildWindow.get());
 
     m_aGLWin.dpy = static_cast<Display*>(pChildSysData->pDisplay);
     m_aGLWin.win = pChildSysData->aWindow;

@@ -220,6 +220,7 @@ private:
     SAL_DLLPRIVATE void InitGLEWDebugging();
     SAL_DLLPRIVATE bool initWindow();
     SAL_DLLPRIVATE bool ImplInit();
+    SAL_DLLPRIVATE void InitChildWindow(SystemChildWindow *pChildWindow);
 #if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID && !defined(LIBO_HEADLESS)
     SAL_DLLPRIVATE void initGLWindow(Visual* pVisual);
 #endif
