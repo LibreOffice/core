@@ -82,13 +82,14 @@ void SdrHelpLineList::Clear()
     aList.clear();
 }
 
-void SdrHelpLineList::operator=(const SdrHelpLineList& rSrcList)
+SdrHelpLineList& SdrHelpLineList::operator=(const SdrHelpLineList& rSrcList)
 {
     Clear();
     sal_uInt16 nCount=rSrcList.GetCount();
     for (sal_uInt16 i=0; i<nCount; i++) {
         Insert(rSrcList[i]);
     }
+    return *this;
 }
 
 bool SdrHelpLineList::operator==(const SdrHelpLineList& rSrcList) const

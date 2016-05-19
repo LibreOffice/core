@@ -468,7 +468,7 @@ SfxPoolItem* SvxColumnItem::Clone(SfxItemPool* /*pPool*/) const
     return new SvxColumnItem(*this);
 }
 
-const SvxColumnItem& SvxColumnItem::operator=(const SvxColumnItem& rCopy)
+SvxColumnItem& SvxColumnItem::operator=(const SvxColumnItem& rCopy)
 {
     nLeft = rCopy.nLeft;
     nRight = rCopy.nRight;

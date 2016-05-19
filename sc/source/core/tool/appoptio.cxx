@@ -89,7 +89,7 @@ void ScAppOptions::SetDefaults()
     meKeyBindingType     = ScOptionsUtil::KEY_DEFAULT;
 }
 
-const ScAppOptions& ScAppOptions::operator=( const ScAppOptions& rCpy )
+ScAppOptions& ScAppOptions::operator=( const ScAppOptions& rCpy )
 {
     eMetric         = rCpy.eMetric;
     eZoomType       = rCpy.eZoomType;

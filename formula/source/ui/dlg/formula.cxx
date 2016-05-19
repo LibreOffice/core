@@ -1971,7 +1971,7 @@ void FormEditData::Reset()
     aUndoStr.clear();
 }
 
-const FormEditData& FormEditData::operator=( const FormEditData& r )
+FormEditData& FormEditData::operator=( const FormEditData& r )
 {
     pParent         = r.pParent;
     nMode           = r.nMode;

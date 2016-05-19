@@ -57,10 +57,11 @@ SvXMLNamespaceMap::SvXMLNamespaceMap( const SvXMLNamespaceMap& rMap )
     aNameMap  = rMap.aNameMap;
 }
 
-void SvXMLNamespaceMap::operator=( const SvXMLNamespaceMap& rMap )
+SvXMLNamespaceMap& SvXMLNamespaceMap::operator=( const SvXMLNamespaceMap& rMap )
 {
     aNameHash = rMap.aNameHash;
     aNameMap = rMap.aNameMap;
+    return *this;
 }
 
 SvXMLNamespaceMap::~SvXMLNamespaceMap()

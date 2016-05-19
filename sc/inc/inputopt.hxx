@@ -71,7 +71,7 @@ public:
     void        SetLegacyCellSelection(bool bSet)   { bLegacyCellSelection = bSet; }
     bool        GetLegacyCellSelection() const      { return bLegacyCellSelection; }
 
-    const ScInputOptions&   operator=   ( const ScInputOptions& rOpt );
+    ScInputOptions&   operator=   ( const ScInputOptions& rOpt );
 };
 
 // CfgItem for input options

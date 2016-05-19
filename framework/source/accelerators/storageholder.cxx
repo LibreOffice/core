@@ -393,11 +393,12 @@ css::uno::Reference< css::embed::XStorage > StorageHolder::getParentStorage(cons
     return css::uno::Reference< css::embed::XStorage >();
 }
 
-void StorageHolder::operator=(const StorageHolder& rCopy)
+StorageHolder& StorageHolder::operator=(const StorageHolder& rCopy)
 {
     osl::MutexGuard g(m_mutex);
     m_xRoot     = rCopy.m_xRoot;
     m_lStorages = rCopy.m_lStorages;
+    return *this;
 }
 
 css::uno::Reference< css::embed::XStorage > StorageHolder::openSubStorageWithFallback(const css::uno::Reference< css::embed::XStorage >& xBaseStorage  ,

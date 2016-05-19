@@ -78,7 +78,7 @@ public:
     ScOptionsUtil::KeyBindingType GetKeyBindingType() const { return meKeyBindingType; }
     void        SetKeyBindingType( ScOptionsUtil::KeyBindingType e ) { meKeyBindingType = e; }
 
-    const ScAppOptions& operator=   ( const ScAppOptions& rOpt );
+    ScAppOptions& operator=   ( const ScAppOptions& rOpt );
 
 private:
     FieldUnit       eMetric;

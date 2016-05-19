@@ -89,7 +89,7 @@ ScSheetEvents::ScSheetEvents(const ScSheetEvents& rOther) :
     *this = rOther;
 }
 
-const ScSheetEvents& ScSheetEvents::operator=(const ScSheetEvents& rOther)
+ScSheetEvents& ScSheetEvents::operator=(const ScSheetEvents& rOther)
 {
     Clear();
     if (rOther.mpScriptNames)

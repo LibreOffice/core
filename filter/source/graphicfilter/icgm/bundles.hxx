@@ -44,7 +44,7 @@ public:
         {};
 
     virtual Bundle*     Clone() { return new Bundle( *this ); };
-            Bundle&     operator=( Bundle& rBundle );
+            Bundle&     operator=(const Bundle& rBundle );
 
     virtual            ~Bundle() {} ;
 };
@@ -63,7 +63,7 @@ public:
     {}
 
     virtual Bundle* Clone() override { return new LineBundle( *this ); }
-    LineBundle& operator=( LineBundle& rLineBundle );
+    LineBundle& operator=( const LineBundle& rLineBundle );
 };
 
 
@@ -80,7 +80,7 @@ public:
         {};
 
     virtual Bundle*     Clone() override { return new MarkerBundle( *this ); } ;
-            MarkerBundle&   operator=( MarkerBundle& rMarkerBundle );
+            MarkerBundle&   operator=( const MarkerBundle& rMarkerBundle );
     virtual             ~MarkerBundle() {};
 };
 
@@ -97,7 +97,7 @@ public:
         , nEdgeWidth(0)
     {}
     virtual Bundle*     Clone() override { return new EdgeBundle( *this ); }
-    EdgeBundle& operator=( EdgeBundle& rEdgeBundle );
+    EdgeBundle& operator=( const EdgeBundle& rEdgeBundle );
 };
 
 
@@ -118,7 +118,7 @@ public:
         {};
 
     virtual Bundle*     Clone() override { return new TextBundle( *this ); } ;
-            TextBundle& operator=( TextBundle& rTextBundle );
+            TextBundle& operator=( const TextBundle& rTextBundle );
     virtual             ~TextBundle() {};
 };
 
@@ -137,7 +137,7 @@ public:
         , nFillHatchIndex(0)
     {}
     virtual Bundle*     Clone() override { return new FillBundle( *this ); }
-    FillBundle& operator=( FillBundle& rFillBundle );
+    FillBundle& operator=( const FillBundle& rFillBundle );
 };
 
 
@@ -170,7 +170,7 @@ public:
     FontEntry*      GetFontEntry( sal_uInt32 );
     void            InsertName( sal_uInt8* pSource, sal_uInt32 nSize );
     void            InsertCharSet( CharSetType, sal_uInt8* pSource, sal_uInt32 nSize );
-    CGMFList&       operator=( CGMFList& rFontList );
+    CGMFList&       operator=( const CGMFList& rFontList );
 };
 
 #endif

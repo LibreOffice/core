@@ -110,7 +110,7 @@ public:
             ~ScPageRowEntry()   { delete[] pHidden; }
 
             ScPageRowEntry(const ScPageRowEntry& r);
-    const ScPageRowEntry& operator=(const ScPageRowEntry& r);
+    ScPageRowEntry& operator=(const ScPageRowEntry& r);
 
     SCROW   GetStartRow() const     { return nStartRow; }
     SCROW   GetEndRow() const       { return nEndRow; }

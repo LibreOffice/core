@@ -66,10 +66,10 @@ public:
     SdrHelpLineList(const SdrHelpLineList& rSrcList): aList()      { *this=rSrcList; }
     ~SdrHelpLineList()                                                     { Clear(); }
     void               Clear();
-    void               operator=(const SdrHelpLineList& rSrcList);
+    SdrHelpLineList&   operator=(const SdrHelpLineList& rSrcList);
     bool operator==(const SdrHelpLineList& rCmp) const;
     bool operator!=(const SdrHelpLineList& rCmp) const                 { return !operator==(rCmp); }
-    sal_uInt16             GetCount() const                                    { return sal_uInt16(aList.size()); }
+    sal_uInt16         GetCount() const                                    { return sal_uInt16(aList.size()); }
     void               Insert(const SdrHelpLine& rHL)                          { aList.push_back(new SdrHelpLine(rHL)); }
     void               Insert(const SdrHelpLine& rHL, sal_uInt16 nPos)
     {

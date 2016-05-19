@@ -93,7 +93,7 @@ class MzString
         bool      resize(int len);
 
 // Assignment
-        MzString  &operator = (MzString &s);
+        MzString  &operator = (const MzString &s);
         MzString  &operator = (const char *s);
 
 // Appending

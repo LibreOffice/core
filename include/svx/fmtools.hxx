@@ -119,7 +119,7 @@ public:
     operator const css::uno::Reference< css::uno::XInterface>& () const{ return m_xGeneric; }
 
     // 'Conversions'
-    const CursorWrapper& operator=(const css::uno::Reference< css::sdbc::XRowSet>& xCursor);
+    CursorWrapper& operator=(const css::uno::Reference< css::sdbc::XRowSet>& xCursor);
     operator const css::uno::Reference< css::sdbc::XResultSet>& () const          { return m_xMoveOperations; }
 
     const css::uno::Reference< css::beans::XPropertySet >&        getPropertySet() const      { return m_xPropertyAccess; }

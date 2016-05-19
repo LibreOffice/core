@@ -127,13 +127,13 @@ class CGMElements
         bool                bSegmentCount;
         explicit CGMElements();
         ~CGMElements();
-        CGMElements&        operator=( CGMElements& );
+        CGMElements&        operator=( const CGMElements& );
         void                Init();
         static Bundle*      GetBundleIndex( long nIndex, BundleList&, Bundle& );
         static Bundle*      GetBundle( BundleList& rList, long nIndex );
         static Bundle*      InsertBundle( BundleList&, Bundle& );
         static void         DeleteAllBundles( BundleList& );
-        static void         CopyAllBundles( BundleList& Source, BundleList& Dest );
+        static void         CopyAllBundles( const BundleList& Source, BundleList& Dest );
 };
 
 #endif

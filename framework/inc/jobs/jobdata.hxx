@@ -182,7 +182,7 @@ class JobData
                  JobData( const JobData&                                                rCopy );
         virtual ~JobData(                                                                     );
 
-        void operator=( const JobData& rCopy );
+        JobData& operator=( const JobData& rCopy );
 
         EMode                                        getMode                 () const;
         EEnvironment                                 getEnvironment          () const;

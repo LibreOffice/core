@@ -82,7 +82,7 @@ SQLExceptionInfo::SQLExceptionInfo(const SQLExceptionInfo& _rCopySource)
 }
 
 
-const SQLExceptionInfo& SQLExceptionInfo::operator=(const ::com::sun::star::sdbc::SQLException& _rError)
+SQLExceptionInfo& SQLExceptionInfo::operator=(const ::com::sun::star::sdbc::SQLException& _rError)
 {
     m_aContent <<= _rError;
     implDetermineType();
@@ -90,7 +90,7 @@ const SQLExceptionInfo& SQLExceptionInfo::operator=(const ::com::sun::star::sdbc
 }
 
 
-const SQLExceptionInfo& SQLExceptionInfo::operator=(const ::com::sun::star::sdbc::SQLWarning& _rError)
+SQLExceptionInfo& SQLExceptionInfo::operator=(const ::com::sun::star::sdbc::SQLWarning& _rError)
 {
     m_aContent <<= _rError;
     implDetermineType();
@@ -98,7 +98,7 @@ const SQLExceptionInfo& SQLExceptionInfo::operator=(const ::com::sun::star::sdbc
 }
 
 
-const SQLExceptionInfo& SQLExceptionInfo::operator=(const ::com::sun::star::sdb::SQLContext& _rError)
+SQLExceptionInfo& SQLExceptionInfo::operator=(const ::com::sun::star::sdb::SQLContext& _rError)
 {
     m_aContent <<= _rError;
     implDetermineType();
@@ -106,7 +106,7 @@ const SQLExceptionInfo& SQLExceptionInfo::operator=(const ::com::sun::star::sdb:
 }
 
 
-const SQLExceptionInfo& SQLExceptionInfo::operator=(const ::com::sun::star::sdb::SQLErrorEvent& _rErrorEvent)
+SQLExceptionInfo& SQLExceptionInfo::operator=(const ::com::sun::star::sdb::SQLErrorEvent& _rErrorEvent)
 {
     m_aContent = _rErrorEvent.Reason;
     implDetermineType();
@@ -114,7 +114,7 @@ const SQLExceptionInfo& SQLExceptionInfo::operator=(const ::com::sun::star::sdb:
 }
 
 
-const SQLExceptionInfo& SQLExceptionInfo::operator=(const ::com::sun::star::uno::Any& _rCaughtSQLException)
+SQLExceptionInfo& SQLExceptionInfo::operator=(const ::com::sun::star::uno::Any& _rCaughtSQLException)
 {
     m_aContent = _rCaughtSQLException;
     implDetermineType();

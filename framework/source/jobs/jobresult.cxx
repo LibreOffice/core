@@ -157,7 +157,7 @@ JobResult::~JobResult()
     @param      rCopy
                     reference to the other instance, which should be used for copying.
 */
-void JobResult::operator=( const JobResult& rCopy )
+JobResult& JobResult::operator=( const JobResult& rCopy )
 {
     SolarMutexGuard g;
     m_aPureResult     = rCopy.m_aPureResult;
@@ -165,6 +165,7 @@ void JobResult::operator=( const JobResult& rCopy )
     m_lArguments      = rCopy.m_lArguments;
     m_bDeactivate     = rCopy.m_bDeactivate;
     m_aDispatchResult = rCopy.m_aDispatchResult;
+    return *this;
 }
 
 /**

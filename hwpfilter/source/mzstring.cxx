@@ -57,7 +57,7 @@ MzString::~MzString()
 }
 
 
-MzString &MzString::operator = (MzString &s)
+MzString &MzString::operator=(const MzString &s)
 {
     int n = s.length();
     if (allocate(n))

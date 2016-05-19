@@ -904,7 +904,7 @@ struct PPTParaPropSet
                         PPTParaPropSet( PPTParaPropSet& rParaPropSet );
                         ~PPTParaPropSet();
 
-    PPTParaPropSet&     operator=( PPTParaPropSet& rParaPropSet );
+    PPTParaPropSet&     operator=( const PPTParaPropSet& rParaPropSet );
 };
 
 struct ImplPPTCharPropSet

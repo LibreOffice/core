@@ -46,7 +46,7 @@ namespace dbaui
         *this = _rSource;
     }
 
-    const OIndexCollection& OIndexCollection::operator=(const OIndexCollection& _rSource)
+    OIndexCollection& OIndexCollection::operator=(const OIndexCollection& _rSource)
     {
         detach();
         m_xIndexes = _rSource.m_xIndexes;

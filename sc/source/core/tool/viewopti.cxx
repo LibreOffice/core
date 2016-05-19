@@ -62,7 +62,7 @@ void ScGridOptions::SetDefaults()
     nFldDivisionY = 1;
 }
 
-const ScGridOptions& ScGridOptions::operator=( const ScGridOptions& rCpy )
+ScGridOptions& ScGridOptions::operator=( const ScGridOptions& rCpy )
 {
     nFldDrawX       = rCpy.nFldDrawX;       // UINT32
     nFldDivisionX   = rCpy.nFldDivisionX;
@@ -144,7 +144,7 @@ Color ScViewOptions::GetGridColor( OUString* pStrName ) const
     return aGridCol;
 }
 
-const ScViewOptions& ScViewOptions::operator=( const ScViewOptions& rCpy )
+ScViewOptions& ScViewOptions::operator=( const ScViewOptions& rCpy )
 {
     sal_uInt16 i;
 

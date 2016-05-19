@@ -34,7 +34,7 @@ ShareableMutex::ShareableMutex( const ShareableMutex& rShareableMutex )
     m_pMutexRef->acquire();
 }
 
-const ShareableMutex& ShareableMutex::operator=( const ShareableMutex& rShareableMutex )
+ShareableMutex& ShareableMutex::operator=( const ShareableMutex& rShareableMutex )
 {
     rShareableMutex.m_pMutexRef->acquire();
     m_pMutexRef->release();

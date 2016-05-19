@@ -57,7 +57,7 @@ public:
 protected:
     void                Reset();
     FormEditData( const FormEditData& );
-    const FormEditData& operator=( const FormEditData& r );
+    FormEditData& operator=( const FormEditData& r );
 
     FormEditData*   pParent;            // fuer Verschachtelung
 private:

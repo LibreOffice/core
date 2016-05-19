@@ -260,7 +260,7 @@ void CursorWrapper::ImplConstruct(const Reference< css::sdbc::XResultSet>& _rxCu
 }
 
 
-const CursorWrapper& CursorWrapper::operator=(const Reference< css::sdbc::XRowSet>& _rxCursor)
+CursorWrapper& CursorWrapper::operator=(const Reference< css::sdbc::XRowSet>& _rxCursor)
 {
     m_xMoveOperations.set(_rxCursor, UNO_QUERY);
     m_xBookmarkOperations.set(_rxCursor, UNO_QUERY);

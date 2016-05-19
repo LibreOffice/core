@@ -187,7 +187,7 @@ public:
     SvxColumnItem(const SvxColumnItem& aItem);
     virtual ~SvxColumnItem();
 
-    const SvxColumnItem &operator=(const SvxColumnItem &);
+    SvxColumnItem &operator=(const SvxColumnItem &);
 
     SvxColumnDescription&       operator[](sal_uInt16 index);
     const SvxColumnDescription& operator[](sal_uInt16 index) const;

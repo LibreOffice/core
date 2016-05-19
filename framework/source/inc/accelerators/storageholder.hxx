@@ -139,7 +139,7 @@ class StorageHolder
 
         /** @short  TODO
          */
-        void operator=(const StorageHolder& rCopy);
+        StorageHolder& operator=(const StorageHolder& rCopy);
 
         /** @short  opens a sub element of the specified base storage.
 
