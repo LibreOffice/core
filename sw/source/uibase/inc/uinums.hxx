@@ -70,7 +70,7 @@ public:
     SwNumRulesWithName( const SwNumRulesWithName & );
     ~SwNumRulesWithName();
 
-    const SwNumRulesWithName &operator=(const SwNumRulesWithName &);
+    SwNumRulesWithName &operator=(const SwNumRulesWithName &);
 
     const OUString& GetName() const               { return maName; }
     void MakeNumRule( SwWrtShell& rSh, SwNumRule& rChg ) const;

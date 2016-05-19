@@ -140,7 +140,7 @@ SwNumRulesWithName::~SwNumRulesWithName()
         delete p;
 }
 
-const SwNumRulesWithName& SwNumRulesWithName::operator=(const SwNumRulesWithName &rCopy)
+SwNumRulesWithName& SwNumRulesWithName::operator=(const SwNumRulesWithName &rCopy)
 {
     if( this != &rCopy )
     {

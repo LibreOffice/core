@@ -91,7 +91,7 @@ namespace utl
             startComponentListening(xConfigNodeComp);
     }
 
-    const OConfigurationNode& OConfigurationNode::operator=(const OConfigurationNode& _rSource)
+    OConfigurationNode& OConfigurationNode::operator=(const OConfigurationNode& _rSource)
     {
         stopAllComponentListening();
 

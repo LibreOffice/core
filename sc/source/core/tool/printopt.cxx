@@ -51,7 +51,7 @@ void ScPrintOptions::SetDefaults()
     bForceBreaks = false;
 }
 
-const ScPrintOptions& ScPrintOptions::operator=( const ScPrintOptions& rCpy )
+ScPrintOptions& ScPrintOptions::operator=( const ScPrintOptions& rCpy )
 {
     bSkipEmpty = rCpy.bSkipEmpty;
     bAllSheets = rCpy.bAllSheets;

@@ -123,7 +123,7 @@ public:
     SdrGluePointList(const SdrGluePointList& rSrcList): aList()     { *this=rSrcList; }
     ~SdrGluePointList()                                                     { Clear(); }
     void                Clear();
-    void                operator=(const SdrGluePointList& rSrcList);
+    SdrGluePointList&   operator=(const SdrGluePointList& rSrcList);
     sal_uInt16          GetCount() const                                    { return sal_uInt16(aList.size()); }
     // At insert, the object (GluePoint) automatically gets an ID assigned.
     // Return value is the index of the new GluePoint in the list.

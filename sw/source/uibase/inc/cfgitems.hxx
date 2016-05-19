@@ -63,7 +63,7 @@ public:
 
     virtual SfxPoolItem*        Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual bool                operator==( const SfxPoolItem& ) const override;
-    void                        operator=( const SwDocDisplayItem& );
+    SwDocDisplayItem&           operator=( const SwDocDisplayItem& );
     void                        FillViewOptions( SwViewOption& rVOpt) const;
 };
 
@@ -93,7 +93,7 @@ public:
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual bool            operator==( const SfxPoolItem& ) const override;
-    void                    operator=( const SwElemItem& );
+    SwElemItem&             operator=( const SwElemItem& );
 
     void                    FillViewOptions( SwViewOption& rVOpt) const;
 
@@ -131,7 +131,7 @@ public:
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual bool            operator==( const SfxPoolItem& ) const override;
-    void                    operator=( const SwShadowCursorItem& );
+    SwShadowCursorItem&     operator=( const SwShadowCursorItem& );
 
     void FillViewOptions( SwViewOption& rVOpt) const;
 

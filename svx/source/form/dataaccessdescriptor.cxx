@@ -281,7 +281,7 @@ namespace svx
     }
 
 
-    const ODataAccessDescriptor& ODataAccessDescriptor::operator=(const ODataAccessDescriptor& _rSource)
+    ODataAccessDescriptor& ODataAccessDescriptor::operator=(const ODataAccessDescriptor& _rSource)
     {
         delete m_pImpl;
         m_pImpl = new ODADescriptorImpl(*_rSource.m_pImpl);

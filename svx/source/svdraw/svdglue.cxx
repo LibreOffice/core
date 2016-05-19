@@ -285,13 +285,14 @@ void SdrGluePointList::Clear()
     aList.clear();
 }
 
-void SdrGluePointList::operator=(const SdrGluePointList& rSrcList)
+SdrGluePointList& SdrGluePointList::operator=(const SdrGluePointList& rSrcList)
 {
     if (GetCount()!=0) Clear();
     sal_uInt16 nCount=rSrcList.GetCount();
     for (sal_uInt16 i=0; i<nCount; i++) {
         Insert(rSrcList[i]);
     }
+    return *this;
 }
 
 // The ID's of the glue points always increase monotonously!

@@ -35,7 +35,7 @@ class FWI_DLLPUBLIC ShareableMutex
     public:
         ShareableMutex();
         ShareableMutex( const ShareableMutex& rShareableMutex );
-        const ShareableMutex& operator=( const ShareableMutex& rShareableMutex );
+        ShareableMutex& operator=( const ShareableMutex& rShareableMutex );
 
         ~ShareableMutex() { m_pMutexRef->release(); }
 

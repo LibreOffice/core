@@ -37,7 +37,7 @@ CGMElements::~CGMElements()
 }
 
 
-CGMElements& CGMElements::operator=( CGMElements& rSource )
+CGMElements& CGMElements::operator=( const CGMElements& rSource )
 {
     sal_uInt32 nIndex;
 
@@ -299,7 +299,7 @@ void CGMElements::DeleteAllBundles( BundleList& rList )
 };
 
 
-void CGMElements::CopyAllBundles( BundleList& rSource, BundleList& rDest )
+void CGMElements::CopyAllBundles( const BundleList& rSource, BundleList& rDest )
 {
     DeleteAllBundles( rDest );
 

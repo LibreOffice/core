@@ -109,7 +109,7 @@ ScPageRowEntry::ScPageRowEntry(const ScPageRowEntry& r)
         pHidden = nullptr;
 }
 
-const ScPageRowEntry& ScPageRowEntry::operator=(const ScPageRowEntry& r)
+ScPageRowEntry& ScPageRowEntry::operator=(const ScPageRowEntry& r)
 {
     delete[] pHidden;
 

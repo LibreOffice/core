@@ -23,7 +23,7 @@
 #include <tools/stream.hxx>
 #include <memory>
 
-Bundle& Bundle::operator=( Bundle& rSource )
+Bundle& Bundle::operator=( const Bundle& rSource )
 {
     mnColor = rSource.mnColor;
     mnBundleIndex = rSource.mnBundleIndex;
@@ -37,7 +37,7 @@ void Bundle::SetColor( sal_uInt32 nColor )
 }
 
 
-LineBundle& LineBundle::operator=( LineBundle& rSource )
+LineBundle& LineBundle::operator=( const LineBundle& rSource )
 {
     SetIndex( rSource.GetIndex() );
     eLineType = rSource.eLineType;
@@ -45,7 +45,7 @@ LineBundle& LineBundle::operator=( LineBundle& rSource )
     return *this;
 };
 
-MarkerBundle& MarkerBundle::operator=( MarkerBundle& rSource )
+MarkerBundle& MarkerBundle::operator=( const MarkerBundle& rSource )
 {
     SetIndex( rSource.GetIndex() );
     eMarkerType = rSource.eMarkerType;
@@ -53,7 +53,7 @@ MarkerBundle& MarkerBundle::operator=( MarkerBundle& rSource )
     return *this;
 };
 
-EdgeBundle& EdgeBundle::operator=( EdgeBundle& rSource )
+EdgeBundle& EdgeBundle::operator=( const EdgeBundle& rSource )
 {
     SetIndex( rSource.GetIndex() );
     eEdgeType = rSource.eEdgeType;
@@ -61,7 +61,7 @@ EdgeBundle& EdgeBundle::operator=( EdgeBundle& rSource )
     return *this;
 };
 
-TextBundle& TextBundle::operator=( TextBundle& rSource )
+TextBundle& TextBundle::operator=( const TextBundle& rSource )
 {
     SetIndex( rSource.GetIndex() );
     nTextFontIndex = rSource.nTextFontIndex;
@@ -71,7 +71,7 @@ TextBundle& TextBundle::operator=( TextBundle& rSource )
     return *this;
 };
 
-FillBundle& FillBundle::operator=( FillBundle& rSource )
+FillBundle& FillBundle::operator=( const FillBundle& rSource )
 {
     SetIndex( rSource.GetIndex() );
     eFillInteriorStyle = rSource.eFillInteriorStyle;
@@ -108,7 +108,7 @@ CGMFList::~CGMFList()
 }
 
 
-CGMFList& CGMFList::operator=( CGMFList& rSource )
+CGMFList& CGMFList::operator=( const CGMFList& rSource )
 {
     ImplDeleteList();
     nFontsAvailable = rSource.nFontsAvailable;

@@ -4394,7 +4394,7 @@ PPTParaPropSet::~PPTParaPropSet()
         delete pParaSet;
 }
 
-PPTParaPropSet& PPTParaPropSet::operator=( PPTParaPropSet& rParaPropSet )
+PPTParaPropSet& PPTParaPropSet::operator=( const PPTParaPropSet& rParaPropSet )
 {
     if ( this != &rParaPropSet )
     {

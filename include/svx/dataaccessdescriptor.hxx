@@ -75,7 +75,7 @@ namespace svx
         // allows to construct a descriptor from an Any containing either an XPropertySet or a property value sequence
         ODataAccessDescriptor( const css::uno::Any& _rValues );
 
-        const ODataAccessDescriptor& operator=(const ODataAccessDescriptor& _rSource);
+        ODataAccessDescriptor& operator=(const ODataAccessDescriptor& _rSource);
 
         ~ODataAccessDescriptor();
 

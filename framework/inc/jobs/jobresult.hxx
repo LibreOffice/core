@@ -109,7 +109,7 @@ class JobResult
                  JobResult( const JobResult&                rCopy   );
         virtual ~JobResult(                                         );
 
-        void operator=( const JobResult& rCopy );
+        JobResult& operator=( const JobResult& rCopy );
 
         bool                                     existPart        ( sal_uInt32 eParts ) const;
         std::vector< css::beans::NamedValue >    getArguments     (                   ) const;

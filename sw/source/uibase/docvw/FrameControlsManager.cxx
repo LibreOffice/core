@@ -39,7 +39,7 @@ void SwFrameControlsManager::dispose()
     m_aControls.clear();
 }
 
-const SwFrameControlsManager& SwFrameControlsManager::operator=( const SwFrameControlsManager& rCopy )
+SwFrameControlsManager& SwFrameControlsManager::operator=( const SwFrameControlsManager& rCopy )
 {
     m_pEditWin = rCopy.m_pEditWin;
     m_aControls = rCopy.m_aControls;

@@ -116,11 +116,11 @@ public:
     */
     void    doThrow();
 
-    const SQLExceptionInfo& operator=(const css::sdbc::SQLException& _rError);
-    const SQLExceptionInfo& operator=(const css::sdbc::SQLWarning& _rError);
-    const SQLExceptionInfo& operator=(const css::sdb::SQLContext& _rError);
-    const SQLExceptionInfo& operator=(const css::sdb::SQLErrorEvent& _rErrorEvent);
-    const SQLExceptionInfo& operator=(const css::uno::Any& _rCaughtSQLException);
+    SQLExceptionInfo& operator=(const css::sdbc::SQLException& _rError);
+    SQLExceptionInfo& operator=(const css::sdbc::SQLWarning& _rError);
+    SQLExceptionInfo& operator=(const css::sdb::SQLContext& _rError);
+    SQLExceptionInfo& operator=(const css::sdb::SQLErrorEvent& _rErrorEvent);
+    SQLExceptionInfo& operator=(const css::uno::Any& _rCaughtSQLException);
 
     bool        isKindOf(TYPE _eType) const;
         // not just a simple comparisation ! e.g. getType() == SQL_CONTEXT implies isKindOf(SQL_EXCEPTION) == sal_True !

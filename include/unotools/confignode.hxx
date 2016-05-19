@@ -76,7 +76,7 @@ namespace utl
         OConfigurationNode(const OConfigurationNode& _rSource);
 
         /// assigment
-        const OConfigurationNode& operator=(const OConfigurationNode& _rSource);
+        OConfigurationNode& operator=(const OConfigurationNode& _rSource);
 
         /// dtor
         virtual ~OConfigurationNode() {}

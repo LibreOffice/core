@@ -63,7 +63,7 @@ void ScInputOptions::SetDefaults()
     bLegacyCellSelection = false;
 }
 
-const ScInputOptions& ScInputOptions::operator=( const ScInputOptions& rCpy )
+ScInputOptions& ScInputOptions::operator=( const ScInputOptions& rCpy )
 {
     nMoveDir        = rCpy.nMoveDir;
     bMoveSelection  = rCpy.bMoveSelection;

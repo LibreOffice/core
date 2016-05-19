@@ -71,7 +71,7 @@ JobData::JobData( const JobData& rCopy )
     @param  rCopy
                 the original instance, from which we must copy all data
 */
-void JobData::operator=( const JobData& rCopy )
+JobData& JobData::operator=( const JobData& rCopy )
 {
     SolarMutexGuard g;
     // Please don't copy the uno service manager reference.
@@ -84,6 +84,7 @@ void JobData::operator=( const JobData& rCopy )
     m_sEvent               = rCopy.m_sEvent;
     m_lArguments           = rCopy.m_lArguments;
     m_aLastExecutionResult = rCopy.m_aLastExecutionResult;
+    return *this;
 }
 
 /**

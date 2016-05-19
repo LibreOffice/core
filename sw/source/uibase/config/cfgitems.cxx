@@ -88,7 +88,7 @@ bool SwDocDisplayItem::operator==( const SfxPoolItem& rAttr ) const
               bShowHiddenPara       == rItem.bShowHiddenPara );
 }
 
-void  SwDocDisplayItem::operator=( const SwDocDisplayItem& rDocDisplayItem)
+SwDocDisplayItem& SwDocDisplayItem::operator=( const SwDocDisplayItem& rDocDisplayItem)
 {
     bParagraphEnd       = rDocDisplayItem.bParagraphEnd         ;
     bTab                = rDocDisplayItem.bTab                  ;
@@ -99,6 +99,7 @@ void  SwDocDisplayItem::operator=( const SwDocDisplayItem& rDocDisplayItem)
     bFieldHiddenText      = rDocDisplayItem.bFieldHiddenText           ;
     bManualBreak        = rDocDisplayItem.bManualBreak          ;
     bShowHiddenPara     = rDocDisplayItem.bShowHiddenPara       ;
+    return *this;
 }
 
 void SwDocDisplayItem::FillViewOptions( SwViewOption& rVOpt) const
@@ -171,7 +172,7 @@ bool SwElemItem::operator==( const SfxPoolItem& rAttr ) const
                 bNotes                == rItem.bNotes             );
 }
 
-void  SwElemItem::operator=( const SwElemItem& rElemItem)
+SwElemItem& SwElemItem::operator=( const SwElemItem& rElemItem)
 {
     bVertRuler      = rElemItem.  bVertRuler        ;
     bVertRulerRight = rElemItem.  bVertRulerRight   ;
@@ -182,6 +183,7 @@ void  SwElemItem::operator=( const SwElemItem& rElemItem)
     bDrawing            = rElemItem.bDrawing              ;
     bFieldName          = rElemItem.bFieldName            ;
     bNotes              = rElemItem.bNotes                ;
+    return *this;
 }
 
 void SwElemItem::FillViewOptions( SwViewOption& rVOpt) const
@@ -267,10 +269,11 @@ bool SwShadowCursorItem::operator==( const SfxPoolItem& rCmp ) const
             GetMode() == static_cast<const SwShadowCursorItem&>(rCmp).GetMode();
 }
 
-void SwShadowCursorItem::operator=( const SwShadowCursorItem& rCpy )
+SwShadowCursorItem& SwShadowCursorItem::operator=( const SwShadowCursorItem& rCpy )
 {
     SetOn( rCpy.IsOn() );
     SetMode( rCpy.GetMode() );
+    return *this;
 }
 
 void SwShadowCursorItem::FillViewOptions( SwViewOption& rVOpt ) const

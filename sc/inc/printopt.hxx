@@ -45,7 +45,7 @@ public:
 
     void    SetDefaults();
 
-    const ScPrintOptions&   operator=  ( const ScPrintOptions& rCpy );
+    ScPrintOptions&         operator=  ( const ScPrintOptions& rCpy );
     bool                    operator== ( const ScPrintOptions& rOpt ) const;
 };
 

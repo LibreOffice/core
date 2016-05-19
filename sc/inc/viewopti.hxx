@@ -69,7 +69,7 @@ public:
                 ScGridOptions( const SvxOptionsGrid& rOpt ) : SvxOptionsGrid( rOpt ) {}
 
     void                    SetDefaults();
-    const ScGridOptions&    operator=  ( const ScGridOptions& rCpy );
+    ScGridOptions&          operator=  ( const ScGridOptions& rCpy );
     bool                    operator== ( const ScGridOptions& rOpt ) const;
     bool                    operator!= ( const ScGridOptions& rOpt ) const { return !(operator==(rOpt)); }
 };
@@ -98,7 +98,7 @@ public:
     void                    SetGridOptions( const ScGridOptions& rNew ) { aGridOpt = rNew; }
     SvxGridItem*            CreateGridItem() const;
 
-    const ScViewOptions&    operator=  ( const ScViewOptions& rCpy );
+    ScViewOptions&          operator=  ( const ScViewOptions& rCpy );
     bool                    operator== ( const ScViewOptions& rOpt ) const;
     bool                    operator!= ( const ScViewOptions& rOpt ) const { return !(operator==(rOpt)); }
 

@@ -60,7 +60,7 @@ SdrObjPlusData* SdrObjPlusData::Clone(SdrObject* pObj1) const
 
 void SdrObjPlusData::SetGluePoints(const SdrGluePointList& rPts)
 {
-    return *pGluePoints = rPts;
+    *pGluePoints = rPts;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

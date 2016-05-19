@@ -160,7 +160,7 @@ void SdrLayerAdmin::ClearLayer()
     aLayer.clear();
 }
 
-const SdrLayerAdmin& SdrLayerAdmin::operator=(const SdrLayerAdmin& rSrcLayerAdmin)
+SdrLayerAdmin& SdrLayerAdmin::operator=(const SdrLayerAdmin& rSrcLayerAdmin)
 {
     ClearLayer();
     pParent=rSrcLayerAdmin.pParent;

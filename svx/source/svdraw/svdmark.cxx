@@ -297,7 +297,7 @@ void SdrMarkList::Clear()
     SetNameDirty();
 }
 
-void SdrMarkList::operator=(const SdrMarkList& rLst)
+SdrMarkList& SdrMarkList::operator=(const SdrMarkList& rLst)
 {
     Clear();
 
@@ -315,6 +315,7 @@ void SdrMarkList::operator=(const SdrMarkList& rLst)
     maGluePointName = rLst.maGluePointName;
     mbGluePointNameOk = rLst.mbGluePointNameOk;
     mbSorted = rLst.mbSorted;
+    return *this;
 }
 
 SdrMark* SdrMarkList::GetMark(size_t nNum) const

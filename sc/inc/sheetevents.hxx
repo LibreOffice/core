@@ -38,7 +38,7 @@ public:
                 ScSheetEvents(const ScSheetEvents& rOther);
                 ~ScSheetEvents();
 
-    const ScSheetEvents&    operator= (const ScSheetEvents& rOther);
+    ScSheetEvents&          operator= (const ScSheetEvents& rOther);
 
     const OUString*         GetScript(ScSheetEventId nEvent) const;
     void                    SetScript(ScSheetEventId nEvent, const OUString* pNew);

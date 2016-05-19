@@ -238,7 +238,7 @@ public:
     bool TakeSnapRect(SdrPageView* pPageView, Rectangle& rRect) const;
 
     // All Entries are copied!
-    void operator=(const SdrMarkList& rLst);
+    SdrMarkList& operator=(const SdrMarkList& rLst);
 };
 
 

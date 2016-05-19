@@ -44,7 +44,7 @@ namespace dbaui
         OIndexCollection(const OIndexCollection& _rSource);
         //  OIndexCollection(const css::uno::Reference< css::container::XNameAccess >& _rxIndexes);
 
-        const OIndexCollection& operator=(const OIndexCollection& _rSource);
+        OIndexCollection& operator=(const OIndexCollection& _rSource);
 
         // iterating through the collection
         typedef OIndex* iterator;
