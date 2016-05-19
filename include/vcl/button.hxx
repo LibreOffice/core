@@ -96,7 +96,7 @@ public:
     /// Sets the button state according to the FeatureStateEvent emitted by an Uno state change.
     virtual void        statusChanged(const css::frame::FeatureStateEvent& rEvent);
 
-    virtual FactoryFunction GetUITestFactory() const;
+    virtual FactoryFunction GetUITestFactory() const override;
 
 protected:
 
