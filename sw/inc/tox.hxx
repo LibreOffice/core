@@ -262,13 +262,6 @@ public:
     /**
        constructor
 
-       @param rTokens       vector of tokens
-    */
-    SwFormTokensHelper(const SwFormTokens & rTokens) : m_Tokens(rTokens) {}
-
-    /**
-       constructor
-
        @param rStr   string representation of the tokens
     */
     SwFormTokensHelper(const OUString & rStr);

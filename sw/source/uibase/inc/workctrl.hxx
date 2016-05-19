@@ -116,19 +116,6 @@ public:
     void                GrabFocus() { m_pToolBox->GrabFocus(); }
 };
 
-//  ImageButtons have to set the HelpText themselves if needed
-
-class SwHlpImageButton : public ImageButton
-{
-    bool        bUp;
-    public:
-        SwHlpImageButton(vcl::Window* pParent, const ResId& rResId, bool bUpBtn) :
-            ImageButton(pParent, rResId), bUp(bUpBtn){}
-
-    virtual void    RequestHelp( const HelpEvent& rHEvt ) override;
-
-};
-
 class SwPreviewZoomControl : public SfxToolBoxControl
 {
 public:

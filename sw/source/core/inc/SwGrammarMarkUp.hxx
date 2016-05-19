@@ -39,7 +39,6 @@ class SwGrammarMarkUp : public SwWrongList
 
 public:
     SwGrammarMarkUp() : SwWrongList( WRONGLIST_GRAMMAR ) {}
-    SwGrammarMarkUp( const SwGrammarMarkUp* );
 
     virtual ~SwGrammarMarkUp();
     virtual SwWrongList* Clone() override;

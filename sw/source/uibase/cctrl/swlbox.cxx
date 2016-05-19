@@ -94,28 +94,10 @@ void SwComboBox::RemoveEntryAt(sal_Int32 const nPos)
     }
 }
 
-sal_Int32 SwComboBox::GetSwEntryPos(const SwBoxEntry& rEntry) const
-{
-    return ComboBox::GetEntryPos(rEntry.aName);
-}
-
 const SwBoxEntry& SwComboBox::GetSwEntry(sal_Int32 const nPos) const
 {
     if (0 <= nPos && static_cast<size_t>(nPos) < m_EntryList.size())
         return m_EntryList[nPos];
-
-    return aDefault;
-}
-
-sal_Int32 SwComboBox::GetRemovedCount() const
-{
-    return static_cast<sal_Int32>(m_DelEntryList.size());
-}
-
-const SwBoxEntry& SwComboBox::GetRemovedEntry(sal_Int32 nPos) const
-{
-    if (0 <= nPos && static_cast<size_t>(nPos) < m_DelEntryList.size())
-        return m_DelEntryList[nPos];
 
     return aDefault;
 }

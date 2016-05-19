@@ -293,7 +293,6 @@ public:
     void            MergeCancel();
 
     inline bool     IsMergeOk()     { return MergeStatus::OK     == m_aMergeStatus; };
-    inline bool     IsMergeCancel() { return MergeStatus::CANCEL <= m_aMergeStatus; };
     inline bool     IsMergeError()  { return MergeStatus::ERROR  <= m_aMergeStatus; };
 
     static SwMailMergeConfigItem* PerformMailMerge(SwView* pView);

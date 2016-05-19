@@ -36,7 +36,6 @@
 #include <swtable.hxx>
 #include <tblsel.hxx>
 #include <unochart.hxx>
-#include <autoedit.hxx>
 #include <doc.hxx>
 
 #include <edtwin.hxx>
@@ -243,12 +242,6 @@ void SwInsertChart(vcl::Window* pParent, SfxBindings* pBindings )
                 xComponent->dispose();
         }
     }
-}
-
-void AutoEdit::KeyInput( const KeyEvent& rEvt )
-{
-    if( rEvt.GetKeyCode().GetCode() != KEY_SPACE )
-        Edit::KeyInput( rEvt );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

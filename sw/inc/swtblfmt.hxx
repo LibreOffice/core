@@ -28,10 +28,6 @@ class SW_DLLPUBLIC SwTableFormat : public SwFrameFormat
     friend class SwDoc;
 
 protected:
-    SwTableFormat( SwAttrPool& rPool, const sal_Char* pFormatNm,
-                    SwFrameFormat *pDrvdFrame )
-        : SwFrameFormat( rPool, pFormatNm, pDrvdFrame, RES_FRMFMT, aTableSetRange )
-    {}
     SwTableFormat( SwAttrPool& rPool, const OUString &rFormatNm,
                     SwFrameFormat *pDrvdFrame )
         : SwFrameFormat( rPool, rFormatNm, pDrvdFrame, RES_FRMFMT, aTableSetRange )
@@ -70,10 +66,6 @@ class SW_DLLPUBLIC SwTableBoxFormat : public SwFrameFormat
     friend class SwDoc;
 
 protected:
-    SwTableBoxFormat( SwAttrPool& rPool, const sal_Char* pFormatNm,
-                    SwFrameFormat *pDrvdFrame )
-        : SwFrameFormat( rPool, pFormatNm, pDrvdFrame, RES_FRMFMT, aTableBoxSetRange )
-    {}
     SwTableBoxFormat( SwAttrPool& rPool, const OUString &rFormatNm,
                     SwFrameFormat *pDrvdFrame )
         : SwFrameFormat( rPool, rFormatNm, pDrvdFrame, RES_FRMFMT, aTableBoxSetRange )

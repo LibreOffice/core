@@ -30,7 +30,6 @@ struct SwPamRange
 {
     sal_uLong nStart, nEnd;
 
-    SwPamRange() : nStart( 0 ), nEnd( 0 )   {}
     SwPamRange( sal_uLong nS, sal_uLong nE ) : nStart( nS ), nEnd( nE ) {}
 
     bool operator==( const SwPamRange& rRg ) const

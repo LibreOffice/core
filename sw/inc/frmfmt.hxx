@@ -157,10 +157,6 @@ class SW_DLLPUBLIC SwFlyFrameFormat: public SwFrameFormat
     SwFlyFrameFormat &operator=( const SwFlyFrameFormat &rCpy ) = delete;
 
 protected:
-    SwFlyFrameFormat( SwAttrPool& rPool, const sal_Char* pFormatNm,
-                    SwFrameFormat *pDrvdFrame )
-        : SwFrameFormat( rPool, pFormatNm, pDrvdFrame, RES_FLYFRMFMT )
-    {}
     SwFlyFrameFormat( SwAttrPool& rPool, const OUString &rFormatNm,
                     SwFrameFormat *pDrvdFrame )
         : SwFrameFormat( rPool, rFormatNm, pDrvdFrame, RES_FLYFRMFMT )
@@ -236,18 +232,6 @@ class SW_DLLPUBLIC SwDrawFrameFormat: public SwFrameFormat
     bool mbPosAttrSet;
 
 protected:
-    SwDrawFrameFormat( SwAttrPool& rPool, const sal_Char* pFormatNm,
-                    SwFrameFormat *pDrvdFrame )
-        : SwFrameFormat( rPool, pFormatNm, pDrvdFrame, RES_DRAWFRMFMT ),
-          m_pSdrObjectCached(nullptr),
-
-          meLayoutDir( SwFrameFormat::HORI_L2R ),
-
-          mnPositionLayoutDir( css::text::PositionLayoutDir::PositionInLayoutDirOfAnchor ),
-
-          mbPosAttrSet( false )
-
-    {}
     SwDrawFrameFormat( SwAttrPool& rPool, const OUString &rFormatNm,
                     SwFrameFormat *pDrvdFrame )
         : SwFrameFormat( rPool, rFormatNm, pDrvdFrame, RES_DRAWFRMFMT ),

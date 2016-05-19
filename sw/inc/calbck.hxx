@@ -210,7 +210,6 @@ class SW_DLLPUBLIC SwDepend final : public SwClient
     SwClient *m_pToTell;
 
 public:
-    SwDepend() : m_pToTell(nullptr) {}
     SwDepend(SwClient *pTellHim, SwModify *pDepend) : SwClient(pDepend), m_pToTell(pTellHim) {}
 
     SwClient* GetToTell() { return m_pToTell; }

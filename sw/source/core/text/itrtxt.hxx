@@ -242,10 +242,8 @@ protected:
     void CalcNewBlock( SwLineLayout *pCurr, const SwLinePortion *pStopAt,
         SwTwips nReal = 0, bool bSkipKashida = false );
     SwTwips CalcKanaAdj( SwLineLayout *pCurr );
-public:
-    inline SwTextAdjuster( SwTextFrame *pTextFrame, SwTextSizeInfo *pTextSizeInf ) : SwTextMargin(pTextFrame!=nullptr?pTextFrame->GetTextNode():nullptr)
-           { CtorInitTextMargin( pTextFrame, pTextSizeInf ); }
 
+public:
     // Is overloaded by SwTextFormatter due to UpdatePos
     void CalcAdjLine( SwLineLayout *pCurr );
 

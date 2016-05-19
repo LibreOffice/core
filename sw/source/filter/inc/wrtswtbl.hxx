@@ -101,9 +101,6 @@ class SW_DLLPUBLIC SwWriteTableRow
     long nPos;                  // End-Position (twips) der Zeile
     bool mbUseLayoutHeights;
 
-    // Forbidden and not implemented.
-    SwWriteTableRow();
-
     SwWriteTableRow & operator= (const SwWriteTableRow &) = delete;
 
 protected:

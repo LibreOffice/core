@@ -73,10 +73,6 @@ public:
 class ColumnValueSet : public ValueSet
 {
 public:
-    ColumnValueSet(vcl::Window* pParent, const ResId& rResId)
-        : ValueSet(pParent, rResId)
-    {
-    }
     ColumnValueSet(vcl::Window* pParent)
         : ValueSet(pParent, WB_TABSTOP | WB_ITEMBORDER | WB_DOUBLEBORDER)
     {

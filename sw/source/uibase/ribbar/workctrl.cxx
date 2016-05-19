@@ -369,14 +369,6 @@ OUString SwScrollNaviPopup::GetQuickHelpText(bool bNext)
     return SW_RESSTR(nResId);
 }
 
-void SwHlpImageButton::RequestHelp( const HelpEvent& rHEvt )
-{
-
-    SetQuickHelpText(SwScrollNaviPopup::GetQuickHelpText(!bUp));
-
-    ImageButton::RequestHelp(rHEvt);
-}
-
 class SwZoomBox_Impl : public ComboBox
 {
     sal_uInt16          nSlotId;

@@ -73,7 +73,6 @@ public:
     void                    SetDocumentLoad(bool bSet) {m_bDocumentLoad = bSet;}
 
     void                    UpdateRoadmap();
-    void                    CreateTargetDocument();
 
     sal_uInt16              GetRestartPage() const {return m_nRestartPage;}
     void                    SetRestartPage(sal_uInt16 nPage) { m_nRestartPage = nPage;}

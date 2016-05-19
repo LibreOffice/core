@@ -216,10 +216,6 @@ class SW_DLLPUBLIC SwConditionTextFormatColl : public SwTextFormatColl
 protected:
     SwFormatCollConditions m_CondColls;
 
-    SwConditionTextFormatColl( SwAttrPool& rPool, const sal_Char* pFormatCollName,
-                            SwTextFormatColl* pDerFrom = nullptr )
-        : SwTextFormatColl( rPool, pFormatCollName, pDerFrom, RES_CONDTXTFMTCOLL )
-    {}
     SwConditionTextFormatColl( SwAttrPool& rPool, const OUString &rFormatCollName,
                             SwTextFormatColl* pDerFrom = nullptr )
         : SwTextFormatColl( rPool, rFormatCollName, pDerFrom, RES_CONDTXTFMTCOLL )

@@ -615,8 +615,6 @@ public:
     // or to support printing
     void   SetMailMergeConfigItem(SwMailMergeConfigItem*  pConfigItem, sal_uInt16 nRestart, bool bIsSource);
     SwMailMergeConfigItem*  GetMailMergeConfigItem();
-    sal_uInt16              GetMailMergeRestartPage() const;
-    bool                IsMailMergeSourceView() const;
 
     void ExecFormatPaintbrush(SfxRequest &);
     void StateFormatPaintbrush(SfxItemSet &);

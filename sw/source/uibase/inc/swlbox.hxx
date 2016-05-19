@@ -65,11 +65,7 @@ public:
 
     virtual void            RemoveEntryAt(sal_Int32 nPos) override;
 
-    sal_Int32               GetSwEntryPos(const SwBoxEntry& rEntry) const;
     const SwBoxEntry&       GetSwEntry(sal_Int32) const;
-
-    sal_Int32               GetRemovedCount() const;
-    const SwBoxEntry&       GetRemovedEntry(sal_Int32 nPos) const;
 };
 
 #endif // INCLUDED_SW_SOURCE_UIBASE_INC_SWLBOX_HXX

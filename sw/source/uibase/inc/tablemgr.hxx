@@ -50,7 +50,6 @@ private:
     SAL_DLLPRIVATE int GetRightSeparator(int nNum) const;
 
 public:
-    inline SwTableFUNC(SwFrameFormat &);
            SwTableFUNC(SwWrtShell *pShell);
            ~SwTableFUNC();
 
@@ -71,13 +70,6 @@ public:
     css::uno::Reference< css::frame::XModel >
         InsertChart( css::uno::Reference< css::chart2::data::XDataProvider > &rxDataProvider, bool bFillWithData, const OUString &rCellRange, SwFlyFrameFormat** ppFlyFrameFormat = nullptr );
 };
-
-inline SwTableFUNC::SwTableFUNC(SwFrameFormat &rFormat) :
-    pFormat(&rFormat),
-    pSh(nullptr),
-    bCopy(false)
-{
-}
 
 #endif
 

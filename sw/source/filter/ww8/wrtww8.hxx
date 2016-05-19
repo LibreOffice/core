@@ -170,11 +170,6 @@ struct WW8_SepInfo
     ::boost::optional<sal_uInt16> oPgRestartNo;
     bool bIsFirstParagraph;
 
-    WW8_SepInfo()
-        : pPageDesc(nullptr), pSectionFormat(nullptr), pPDNd(nullptr), nLnNumRestartNo(0), bIsFirstParagraph(false)
-
-    {}
-
     WW8_SepInfo( const SwPageDesc* pPD, const SwSectionFormat* pFormat,
                  sal_uLong nLnRestart, ::boost::optional<sal_uInt16> oPgRestart = boost::none,
                  const SwNode* pNd = nullptr, bool bIsFirstPara = false )

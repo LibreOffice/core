@@ -32,8 +32,6 @@ class RTFSurround
         sal_uInt8 nVal;
     } Value;
 public:
-    RTFSurround( sal_uInt8 nValue ) { Value.nVal = nValue; }
-
     RTFSurround( bool bGoldCut, sal_uInt8 nOrder ) {
         Value.Flags.nGoldCut = sal_uInt8(bGoldCut);
         Value.Flags.nOrder = nOrder;
