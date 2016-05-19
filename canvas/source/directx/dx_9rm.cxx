@@ -608,7 +608,7 @@ namespace dxcanvas
             mpWindow->SetControlForeground();
             mpWindow->SetControlBackground();
 
-            const SystemEnvData *pData = mpWindow->GetSystemData();
+            const SystemEnvData *pData = mpWindow->GetSystemChildSystemData();
             const HWND hwnd(reinterpret_cast<HWND>(pData->hWnd));
             mhWnd = const_cast<HWND>(hwnd);
 

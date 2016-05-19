@@ -72,7 +72,7 @@ css::uno::Any VCLXSystemDependentWindow::getWindowHandle( const css::uno::Sequen
     vcl::Window* pWindow = GetWindow();
     if ( pWindow )
     {
-        const SystemEnvData* pSysData = static_cast<SystemChildWindow *>(pWindow)->GetSystemData();
+        const SystemEnvData* pSysData = static_cast<SystemChildWindow *>(pWindow)->GetSystemChildSystemData();
         if( pSysData )
         {
 #if defined(_WIN32)

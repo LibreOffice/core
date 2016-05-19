@@ -322,7 +322,7 @@ namespace oglcanvas
         /*
          * TODO: moggi: fix it!
         // switch buffer, sync etc.
-        const unx::Window aXWindow=pChildWindow->GetSystemData()->aWindow;
+        const unx::Window aXWindow=pChildWindow->GetSystemChildSystemData()->aWindow;
         unx::glXSwapBuffers(reinterpret_cast<unx::Display*>(mpDisplay),
                             aXWindow);
         pChildWindow->Show();

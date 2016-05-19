@@ -271,7 +271,7 @@ namespace dbaui
             {
                 OUString sOldDataSource=getURLNoPrefix();
                 OUString sNewDataSource;
-                HWND hWnd = GetParent()->GetSystemData()->hWnd;
+                HWND hWnd = GetParent()->GetWindowSystemData()->hWnd;
                 sNewDataSource = getAdoDatalink((LONG_PTR)hWnd,sOldDataSource);
                 if ( !sNewDataSource.isEmpty() )
                 {

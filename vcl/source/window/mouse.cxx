@@ -725,7 +725,7 @@ Reference< css::datatransfer::dnd::XDragSource > Window::GetDragSource()
             try
             {
                 Reference< XComponentContext > xContext( comphelper::getProcessComponentContext() );
-                const SystemEnvData * pEnvData = GetSystemData();
+                const SystemEnvData * pEnvData = GetWindowSystemData();
 
                 if( pEnvData )
                 {

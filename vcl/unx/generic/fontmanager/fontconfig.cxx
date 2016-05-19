@@ -881,7 +881,7 @@ namespace
     guint get_xid_for_dbus()
     {
         const vcl::Window *pTopWindow = Application::IsHeadlessModeEnabled() ? nullptr : Application::GetActiveTopWindow();
-        const SystemEnvData* pEnvData = pTopWindow ? pTopWindow->GetSystemData() : nullptr;
+        const SystemEnvData* pEnvData = pTopWindow ? pTopWindow->GetWindowSystemData() : nullptr;
         return pEnvData ? pEnvData->aWindow : 0;
     }
 #endif

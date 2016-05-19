@@ -1215,8 +1215,8 @@ public:
     void                                SaveBackground( const Point& rPos, const Size& rSize,
                                                         const Point& rDestOff, VirtualDevice& rSaveDevice );
 
-    const SystemEnvData*                GetSystemData() const;
-    css::uno::Any          GetSystemDataAny() const;
+    const SystemEnvData*                GetWindowSystemData() const;
+    css::uno::Any                       GetWindowSystemDataAny() const;
 
     // API to set/query the component interfaces
     virtual css::uno::Reference< css::awt::XWindowPeer >

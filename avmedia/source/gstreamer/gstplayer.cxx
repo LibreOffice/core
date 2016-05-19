@@ -923,7 +923,7 @@ uno::Reference< ::media::XPlayerWindow > SAL_CALL Player::createPlayerWindow( co
             sal_IntPtr pIntPtr = 0;
             rArguments[ 2 ] >>= pIntPtr;
             SystemChildWindow *pParentWindow = reinterpret_cast< SystemChildWindow* >( pIntPtr );
-            const SystemEnvData* pEnvData = pParentWindow ? pParentWindow->GetSystemData() : nullptr;
+            const SystemEnvData* pEnvData = pParentWindow ? pParentWindow->GetSystemChildSystemData() : nullptr;
             OSL_ASSERT(pEnvData);
             if (pEnvData)
             {

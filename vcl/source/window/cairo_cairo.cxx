@@ -41,9 +41,9 @@ namespace cairo
         // method is unfortunately not virtual
         const SystemChildWindow* pSysChild = dynamic_cast< const SystemChildWindow* >( pOutputWindow );
         if( pSysChild )
-            pSysData = pSysChild->GetSystemData();
+            pSysData = pSysChild->GetSystemChildSystemData();
         else
-            pSysData = pOutputWindow->GetSystemData();
+            pSysData = pOutputWindow->GetWindowSystemData();
         return pSysData;
     }
 }
