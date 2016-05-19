@@ -962,7 +962,7 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor, sal_uInt16
 
         GetCursor()->SetSize( aCursorSz );
 
-        if (bGotoCursor && isTiledRendering())
+        if (isTiledRendering())
         {
             const Point& rPos = GetCursor()->GetPos();
             Rectangle aRect(rPos.getX(), rPos.getY(), rPos.getX() + GetCursor()->GetWidth(), rPos.getY() + GetCursor()->GetHeight());
