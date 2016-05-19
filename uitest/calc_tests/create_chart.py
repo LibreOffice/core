@@ -150,4 +150,37 @@ def deselect_chart(xContext):
 
     ui_test.close_doc()
 
+def activate_chart(xContext):
+    xUITest = xContext.ServiceManager.createInstanceWithContext(
+            "org.libreoffice.uitest.UITest", xContext)
+
+    ui_test = UITest(xUITest, xContext)
+
+    ui_test.create_doc_in_start_center("calc")
+
+    fill_spreadsheet(xUITest)
+
+    xCalcDoc = xUITest.getTopFocusWindow()
+    xGridWindow = xCalcDoc.getChild("grid_window")
+
+    ui_test.execute_dialog_through_command(".uno:InsertObjectChart")
+
+    xChartDlg = xUITest.getTopFocusWindow()
+
+    xNextBtn = xChartDlg.getChild("finish")
+    xNextBtn.executeAction("CLICK", tuple())
+
+    xGridWindow.executeAction("DESELECT", mkPropertyValues({"OBJECT": ""}))
+
+    time.sleep(2)
+
+    xGridWindow.executeAction("SELECT", mkPropertyValues({"OBJECT": "Object 1"}))
+    xGridWindow.executeAction("ACTIVATE", tuple())
+
+    time.sleep(2)
+
+    xGridWindow.executeAction("DESELECT", mkPropertyValues({"OBJECT": ""}))
+
+    ui_test.close_doc()
+
 # vim:set shiftwidth=4 softtabstop=4 expandtab: */
