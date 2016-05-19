@@ -43,19 +43,6 @@ struct EmptyBase
 class MutexBase
 {
 public:
-    struct Guard : public osl::MutexGuard
-    {
-        explicit Guard(MutexBase const& rBase) :
-            osl::MutexGuard(rBase.maMutex)
-        {}
-    };
-    struct ClearableGuard : public osl::ClearableMutexGuard
-    {
-        explicit ClearableGuard(MutexBase const& rBase) :
-            osl::ClearableMutexGuard(rBase.maMutex)
-        {}
-    };
-
     mutable osl::Mutex maMutex;
 };
 

@@ -58,11 +58,6 @@ public:
     /** Default Ctor.  Does not cache.
     */
     inline lru_cache();
-    /** Ctor.
-
-        @param size number of elements to be cached; default param set to 128
-    */
-    explicit inline lru_cache( ::std::size_t size );
 
     /** Destructor: releases all cached elements and keys.
     */
@@ -109,16 +104,6 @@ inline void lru_cache< t_key, t_val, t_hashKey, t_equalKey >::setSize(
             m_block[ nPos ].m_succ = m_block + nPos +1;
         }
     }
-}
-
-template< typename t_key, typename t_val, typename t_hashKey, typename t_equalKey >
-inline lru_cache< t_key, t_val, t_hashKey, t_equalKey >::lru_cache(
-    ::std::size_t size )
-    : m_size( 0 )
-    , m_block( nullptr )
-    , m_tail( nullptr )
-{
-    setSize( size );
 }
 
 template< typename t_key, typename t_val, typename t_hashKey, typename t_equalKey >

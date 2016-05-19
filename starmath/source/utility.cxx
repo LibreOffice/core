@@ -104,16 +104,6 @@ void SmFontPickList::Insert(const vcl::Font &rFont)
     }
 }
 
-void SmFontPickList::Update(const vcl::Font &rFont, const vcl::Font &rNewFont)
-{
-    for (vcl::Font & rPos : aFontVec)
-        if (CompareItem( rPos, rFont ))
-        {
-            rPos = rNewFont;
-            break;
-        }
-}
-
 void SmFontPickList::Remove(const vcl::Font &rFont)
 {
     for (size_t nPos = 0; nPos < aFontVec.size(); nPos++)

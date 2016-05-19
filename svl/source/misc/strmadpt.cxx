@@ -26,6 +26,7 @@
 #include <string.h>
 
 #include <com/sun/star/io/XInputStream.hpp>
+#include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 
 #include <osl/diagnose.h>
@@ -33,8 +34,6 @@
 #include <cppuhelper/queryinterface.hxx>
 #include <svl/instrm.hxx>
 #include <svl/outstrm.hxx>
-
-#include <strmadpt.hxx>
 
 using namespace com::sun::star;
 
@@ -126,88 +125,9 @@ inline bool SvDataPipe_Impl::isEOF() const
            && (!m_pReadPage || m_pReadPage->m_pRead == m_pReadPage->m_pEnd);
 }
 
-//  SvOutputStreamOpenLockBytes
 
-
-// virtual
-ErrCode SvOutputStreamOpenLockBytes::ReadAt(sal_uInt64, void *, sal_uLong, sal_uLong*)
-    const
-{
-    return ERRCODE_IO_CANTREAD;
-}
-
-// virtual
-ErrCode SvOutputStreamOpenLockBytes::WriteAt(sal_uInt64 const nPos, void const * pBuffer,
-                                             sal_uLong nCount, sal_uLong * pWritten)
-{
-    if (nPos != m_nPosition)
-        return ERRCODE_IO_CANTWRITE;
-    return FillAppend(pBuffer, nCount, pWritten);
-}
-
-// virtual
-ErrCode SvOutputStreamOpenLockBytes::Flush() const
-{
-    if (!m_xOutputStream.is())
-        return ERRCODE_IO_CANTWRITE;
-    try
-    {
-        m_xOutputStream->flush();
-    }
-    catch (const io::IOException&)
-    {
-        return ERRCODE_IO_CANTWRITE;
-    }
-    return ERRCODE_NONE;
-}
-
-// virtual
-ErrCode SvOutputStreamOpenLockBytes::SetSize(sal_uInt64)
-{
-    return ERRCODE_IO_NOTSUPPORTED;
-}
-
-// virtual
-ErrCode SvOutputStreamOpenLockBytes::Stat(SvLockBytesStat * pStat,
-                                          SvLockBytesStatFlag) const
-{
-    if (pStat)
-        pStat->nSize = m_nPosition;
-    return ERRCODE_NONE;
-}
-
-// virtual
-ErrCode SvOutputStreamOpenLockBytes::FillAppend(void const * pBuffer,
-                                                sal_uLong nCount,
-                                                sal_uLong * pWritten)
-{
-    if (!m_xOutputStream.is())
-        return ERRCODE_IO_CANTWRITE;
-    if (nCount > 0
-        && nCount > std::numeric_limits< sal_uLong >::max() - m_nPosition)
-    {
-        nCount = std::numeric_limits< sal_uLong >::max() - m_nPosition;
-        if (nCount == 0)
-            return ERRCODE_IO_CANTWRITE;
-    }
-    try
-    {
-        m_xOutputStream->
-            writeBytes(uno::Sequence< sal_Int8 >(
-                           static_cast< sal_Int8 const * >(pBuffer), nCount));
-    }
-    catch (const io::IOException&)
-    {
-        return ERRCODE_IO_CANTWRITE;
-    }
-    m_nPosition += nCount;
-    if (pWritten)
-        *pWritten = nCount;
-    return ERRCODE_NONE;
-}
 
 //  SvInputStream
-
 
 bool SvInputStream::open()
 {

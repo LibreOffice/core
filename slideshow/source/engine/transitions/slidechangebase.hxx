@@ -88,8 +88,6 @@ protected:
     /// Info on a per-view basis
     struct ViewEntry
     {
-        ViewEntry() {}
-
         explicit ViewEntry( const UnoViewSharedPtr& rView ) :
             mpView( rView )
         {
