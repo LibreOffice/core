@@ -82,24 +82,6 @@ const OUString& PROP_PREFIX_NATIONALSECURITY()
     return sProp;
 }
 
-/// Converts a SfxClassificationPolicyType to a TSCP_BAILSv1 string value.
-const OUString& policyTypeToString(SfxClassificationPolicyType eType)
-{
-    switch (eType)
-    {
-    case SfxClassificationPolicyType::ExportControl:
-        return PROP_PREFIX_EXPORTCONTROL();
-        break;
-    case SfxClassificationPolicyType::NationalSecurity:
-        return PROP_PREFIX_NATIONALSECURITY();
-        break;
-    default:
-        break;
-    }
-
-    return SfxClassificationHelper::PROP_PREFIX_INTELLECTUALPROPERTY();
-}
-
 /// Represents one category of a classification policy.
 class SfxClassificationCategory
 {
@@ -805,6 +787,23 @@ SfxClassificationPolicyType SfxClassificationHelper::stringToPolicyType(const OU
         return SfxClassificationPolicyType::NationalSecurity;
     else
         return SfxClassificationPolicyType::IntellectualProperty;
+}
+
+const OUString& SfxClassificationHelper::policyTypeToString(SfxClassificationPolicyType eType)
+{
+    switch (eType)
+    {
+    case SfxClassificationPolicyType::ExportControl:
+        return PROP_PREFIX_EXPORTCONTROL();
+        break;
+    case SfxClassificationPolicyType::NationalSecurity:
+        return PROP_PREFIX_NATIONALSECURITY();
+        break;
+    case SfxClassificationPolicyType::IntellectualProperty:
+        break;
+    }
+
+    return PROP_PREFIX_INTELLECTUALPROPERTY();
 }
 
 const OUString& SfxClassificationHelper::PROP_DOCHEADER()
