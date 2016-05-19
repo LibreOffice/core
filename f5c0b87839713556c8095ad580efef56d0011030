@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_b5812a92",
+        "filename": "svx/source/dialog/srchdlg.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 362,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-05-19T06:36:25Z",
+      "side": 1,
+      "message": "you need to free it here, or we run the risk of not disposing correctly",
+      "revId": "f5c0b87839713556c8095ad580efef56d0011030",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
