@@ -95,6 +95,8 @@ public:
     virtual void dispose() override;
     virtual void Resize() override;
     VclPtr<ListBox> getCategories(SfxClassificationPolicyType eType);
+    std::size_t getLabelsSize();
+    OUString getCategoryType(ListBox& rCategory);
 };
 
 ClassificationPropertyListener::ClassificationPropertyListener(const rtl::Reference<comphelper::ConfigurationListener>& xListener, ClassificationCategoriesController& rController)
@@ -158,7 +160,11 @@ uno::Reference<awt::XWindow> ClassificationCategoriesController::createItemWindo
     if (pToolbar)
     {
         m_pClassification = VclPtr<ClassificationControl>::Create(pToolbar);
-        m_pClassification->getCategories(SfxClassificationPolicyType::IntellectualProperty)->SetSelectHdl(LINK(this, ClassificationCategoriesController, SelectHdl));
+        for (size_t i = m_pClassification->getLabelsSize(); i > 0; --i)
+        {
+            auto eType = static_cast<SfxClassificationPolicyType>(i);
+            m_pClassification->getCategories(eType)->SetSelectHdl(LINK(this, ClassificationCategoriesController, SelectHdl));
+        }
     }
 
     return uno::Reference<awt::XWindow>(VCLUnoHelper::GetInterface(m_pClassification));
@@ -167,9 +173,12 @@ uno::Reference<awt::XWindow> ClassificationCategoriesController::createItemWindo
 IMPL_LINK_TYPED(ClassificationCategoriesController, SelectHdl, ListBox&, rCategory, void)
 {
     OUString aEntry = rCategory.GetSelectEntry();
+
+    OUString aType = m_pClassification->getCategoryType(rCategory);
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
     {
         {"Name", uno::makeAny(aEntry)},
+        {"Type", uno::makeAny(aType)},
     }));
     comphelper::dispatchCommand(".uno:ClassificationApply", aPropertyValues);
 }
@@ -184,17 +193,22 @@ void ClassificationCategoriesController::statusChanged(const frame::FeatureState
         return;
 
     SfxClassificationHelper aHelper(pObjectShell->getDocProperties());
-    VclPtr<ListBox> pCategories = m_pClassification->getCategories(SfxClassificationPolicyType::IntellectualProperty);
-    if (pCategories->GetEntryCount() == 0)
+    for (size_t i = m_pClassification->getLabelsSize(); i > 0; --i)
     {
-        std::vector<OUString> aNames = aHelper.GetBACNames();
-        for (const OUString& rName : aNames)
-            pCategories->InsertEntry(rName);
-        // Normally VclBuilder::makeObject() does this.
-        pCategories->EnableAutoSize(true);
+        auto eType = static_cast<SfxClassificationPolicyType>(i);
+        VclPtr<ListBox> pCategories = m_pClassification->getCategories(eType);
+        if (pCategories->GetEntryCount() == 0)
+        {
+            std::vector<OUString> aNames = aHelper.GetBACNames();
+            for (const OUString& rName : aNames)
+                pCategories->InsertEntry(rName);
+            // Normally VclBuilder::makeObject() does this.
+            pCategories->EnableAutoSize(true);
+        }
     }
 
     // Restore state based on the doc. model.
+    VclPtr<ListBox> pCategories = m_pClassification->getCategories(SfxClassificationPolicyType::IntellectualProperty);
     const OUString& rCategoryName = aHelper.GetBACName();
     if (!rCategoryName.isEmpty())
         pCategories->SelectEntry(rCategoryName);
@@ -287,6 +301,25 @@ void ClassificationControl::Resize()
 VclPtr<ListBox> ClassificationControl::getCategories(SfxClassificationPolicyType eType)
 {
     return m_pCategories[eType];
+}
+
+std::size_t ClassificationControl::getLabelsSize()
+{
+    return m_pLabels.size();
+}
+
+OUString ClassificationControl::getCategoryType(ListBox& rCategory)
+{
+    OUString aRet;
+
+    auto it = std::find_if(m_pCategories.begin(), m_pCategories.end(), [&rCategory](const std::pair<SfxClassificationPolicyType, VclPtr<ListBox>>& rPair)
+    {
+        return rPair.second.get() == &rCategory;
+    });
+    if (it != m_pCategories.end())
+        aRet = SfxClassificationHelper::policyTypeToString(it->first);
+
+    return aRet;
 }
 
 void ClassificationControl::SetOptimalSize()

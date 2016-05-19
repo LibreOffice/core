@@ -807,6 +807,23 @@ SfxClassificationPolicyType SfxClassificationHelper::stringToPolicyType(const OU
         return SfxClassificationPolicyType::IntellectualProperty;
 }
 
+const OUString& SfxClassificationHelper::policyTypeToString(SfxClassificationPolicyType eType)
+{
+    switch (eType)
+    {
+    case SfxClassificationPolicyType::ExportControl:
+        return PROP_PREFIX_EXPORTCONTROL();
+        break;
+    case SfxClassificationPolicyType::NationalSecurity:
+        return PROP_PREFIX_NATIONALSECURITY();
+        break;
+    case SfxClassificationPolicyType::IntellectualProperty:
+        break;
+    }
+
+    return PROP_PREFIX_INTELLECTUALPROPERTY();
+}
+
 const OUString& SfxClassificationHelper::PROP_DOCHEADER()
 {
     static OUString sProp("Marking:document-header");
