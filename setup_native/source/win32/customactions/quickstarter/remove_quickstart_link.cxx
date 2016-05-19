@@ -17,35 +17,30 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "quickstarter.hxx"
+
 #ifdef _MSC_VER
 #pragma warning(push, 1) /* disable warnings within system headers */
 #pragma warning(disable: 4917)
 #endif
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
 #include <shlobj.h>
-#include <msiquery.h>
 #ifdef _MSC_VER
 #pragma warning(pop)
 #endif
 
-#include <string>
-#include "quickstarter.hxx"
-
-
 extern "C" UINT __stdcall RemoveQuickstarterLink( MSIHANDLE hMSI )
 {
-    CHAR    szStartupPath[MAX_PATH];
+    WCHAR    szStartupPath[MAX_PATH];
 
-    if ( SHGetSpecialFolderPathA( NULL, szStartupPath, CSIDL_STARTUP, FALSE ) )
+    if ( SHGetSpecialFolderPathW( NULL, szStartupPath, CSIDL_STARTUP, FALSE ) )
     {
-        std::string sQuickstartLinkPath = szStartupPath;
+        std::wstring sQuickstartLinkPath = szStartupPath;
 
-        sQuickstartLinkPath += "\\";
-        sQuickstartLinkPath += GetQuickstarterLinkName( hMSI );
-        sQuickstartLinkPath += ".lnk";
+        sQuickstartLinkPath += L"\\";
+        sQuickstartLinkPath += GetQuickstarterLinkNameW( hMSI );
+        sQuickstartLinkPath += L".lnk";
 
-        DeleteFileA( sQuickstartLinkPath.c_str() );
+        DeleteFileW( sQuickstartLinkPath.c_str() );
     }
 
     return ERROR_SUCCESS;
