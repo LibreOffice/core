@@ -11,6 +11,7 @@
 
 class ScGridWindow;
 class ScDBFunc;
+class ScDrawView;
 
 class ScGridWinUIObject : public WindowUIObject
 {
@@ -38,6 +39,7 @@ protected:
 private:
 
     ScDBFunc* getDBFunc();
+    ScDrawView* getDrawView();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
