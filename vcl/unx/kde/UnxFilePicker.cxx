@@ -819,7 +819,7 @@ void UnxFilePicker::initFilePicker()
         vcl::Window *pParentWin = Application::GetDefDialogParent();
         if ( pParentWin )
         {
-            const SystemEnvData* pSysData = static_cast<SystemWindow *>(pParentWin)->GetSystemData();
+            const SystemEnvData* pSysData = pParentWin->GetSystemData();
             if ( pSysData )
             {
                 snprintf( pWinId, nIdLen, "%ld", pSysData->aWindow ); // unx only
