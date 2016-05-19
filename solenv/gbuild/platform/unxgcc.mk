@@ -17,6 +17,9 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
+# to block heavy exception handling that try to acquire the solarmutex
+export VCL_HIDE_WINDOWS=1
+
 include $(GBUILDDIR)/platform/com_GCC_defs.mk
 
 gb_MKTEMP := mktemp -t gbuild.XXXXXX
