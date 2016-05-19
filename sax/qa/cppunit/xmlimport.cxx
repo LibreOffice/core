@@ -46,7 +46,7 @@ Reference< XInputStream > createStreamFromFile (
     OUString aInStr;
     osl::FileBase::getFileURLFromSystemPath(filePath, aInStr);
     SvStream* pStream = utl::UcbStreamHelper::CreateStream(aInStr, StreamMode::READ);
-    if(pStream == NULL)
+    if(pStream == nullptr)
         CPPUNIT_ASSERT(false);
     uno::Reference<io::XStream> xStream(new utl::OStreamWrapper(*pStream));
     xInputStream.set(xStream, uno::UNO_QUERY);
@@ -60,7 +60,7 @@ private:
 
 public:
     TestDocumentHandler() {}
-    OUString getString() { return m_aStr; }
+    //const OUString& getString() { return m_aStr; }
     // XDocumentHandler
     virtual void SAL_CALL startDocument() throw (xml::sax::SAXException, RuntimeException, std::exception) override;
     virtual void SAL_CALL endDocument() throw (xml::sax::SAXException, RuntimeException, std::exception) override;
