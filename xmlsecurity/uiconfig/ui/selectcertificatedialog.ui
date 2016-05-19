@@ -108,15 +108,69 @@
                   </packing>
                 </child>
                 <child>
+                  <object class="GtkLabel" id="usage">
+                    <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
+                    <property name="label" translatable="yes">Certificate usage</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">2</property>
+                    <property name="top_attach">0</property>
+                  </packing>
+                </child>
+                <child>
                   <object class="GtkLabel" id="expiration">
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
                     <property name="label" translatable="yes">Expiration date</property>
                   </object>
                   <packing>
-                    <property name="left_attach">2</property>
+                    <property name="left_attach">3</property>
                     <property name="top_attach">0</property>
                   </packing>
+                </child>
+                <!-- Just for localisation -->
+                <child>
+                  <object class="GtkLabel" id="STR_DIGITAL_SIGNATURE">
+                    <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
+                    <property name="label" translatable="yes">Digital signature</property>
+                  </object>
+                  <object class="GtkLabel" id="STR_NON_REPUDIATION">
+                    <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
+                    <property name="label" translatable="yes">Non-repudiation</property>
+                  </object>
+                  <object class="GtkLabel" id="STR_KEY_ENCIPHERMENT">
+                    <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
+                    <property name="label" translatable="yes">Key encipherment</property>
+                  </object>
+                  <object class="GtkLabel" id="STR_DATA_ENCIPHERMENT">
+                    <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
+                    <property name="label" translatable="yes">Data encipherment</property>
+                  </object>
+                  <object class="GtkLabel" id="STR_KEY_AGREEMENT">
+                    <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
+                    <property name="label" translatable="yes">Key Agreement</property>
+                  </object>
+                  <object class="GtkLabel" id="STR_KEY_CERT_SIGN">
+                    <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
+                    <property name="label" translatable="yes">Certificate signature verification</property>
+                  </object>
+                  <object class="GtkLabel" id="STR_CRL_SIGN">
+                    <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
+                    <property name="label" translatable="yes">CRL signature verification</property>
+                  </object>
+                  <object class="GtkLabel" id="STR_ENCIPHER_ONLY">
+                    <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
+                    <property name="label" translatable="yes">Only for encipherment</property>
+                  </object>
                 </child>
               </object>
               <packing>

@@ -63,6 +63,9 @@ private:
     void ImplShowCertificateDetails();
     void ImplInitialize();
 
+    void HandleOneUsageBit(OUString& string, int& bits, int bit, const char *name);
+    OUString UsageInClearText(int bits);
+
 public:
     CertificateChooser(vcl::Window* pParent, css::uno::Reference< css::uno::XComponentContext>& rxCtx, css::uno::Reference< css::xml::crypto::XSecurityEnvironment >& rxSecurityEnvironment);
     virtual ~CertificateChooser();

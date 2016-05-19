@@ -55,7 +55,7 @@ CertificateChooser::CertificateChooser(vcl::Window* _pParent, uno::Reference<uno
     get(m_pViewBtn, "viewcert");
     get(m_pDescriptionED, "description");
 
-    Size aControlSize(275, 122);
+    Size aControlSize(475, 122);
     const long nControlWidth = aControlSize.Width();
     aControlSize = LogicToPixel(aControlSize, MAP_APPFONT);
     SvSimpleTableContainer *pSignatures = get<SvSimpleTableContainer>("signatures");
@@ -63,10 +63,10 @@ CertificateChooser::CertificateChooser(vcl::Window* _pParent, uno::Reference<uno
     pSignatures->set_height_request(aControlSize.Height());
 
     m_pCertLB = VclPtr<SvSimpleTable>::Create(*pSignatures);
-    static long nTabs[] = { 3, 0, 30*nControlWidth/100, 60*nControlWidth/100 };
+    static long nTabs[] = { 4, 0, 20*nControlWidth/100, 40*nControlWidth/100, 80*nControlWidth/100 };
     m_pCertLB->SetTabs( &nTabs[0] );
     m_pCertLB->InsertHeaderEntry(get<FixedText>("issuedto")->GetText() + "\t" + get<FixedText>("issuedby")->GetText()
-        + "\t" + get<FixedText>("expiration")->GetText());
+        + "\t" + get<FixedText>("usage")->GetText() + "\t" + get<FixedText>("expiration")->GetText());
     m_pCertLB->SetSelectHdl( LINK( this, CertificateChooser, CertificateHighlightHdl ) );
     m_pCertLB->SetDoubleClickHdl( LINK( this, CertificateChooser, CertificateSelectHdl ) );
     m_pViewBtn->SetClickHdl( LINK( this, CertificateChooser, ViewButtonHdl ) );
@@ -119,6 +119,41 @@ short CertificateChooser::Execute()
     return ModalDialog::Execute();
 }
 
+void CertificateChooser::HandleOneUsageBit(OUString& string, int& bits, int bit, const char *name)
+{
+    if (bits & bit)
+    {
+        if (!string.isEmpty())
+            string += ", ";
+        string += get<FixedText>(OString("STR_") + name)->GetText();
+        bits &= ~bit;
+    }
+}
+
+OUString CertificateChooser::UsageInClearText(int bits)
+{
+    OUString result;
+
+    HandleOneUsageBit(result, bits, 0x80, "DIGITAL_SIGNATURE");
+    HandleOneUsageBit(result, bits, 0x40, "NON_REPUDIATION");
+    HandleOneUsageBit(result, bits, 0x20, "KEY_ENCIPHERMENT");
+    HandleOneUsageBit(result, bits, 0x10, "DATA_ENCIPHERMENT");
+    HandleOneUsageBit(result, bits, 0x08, "KEY_AGREEMENT");
+    HandleOneUsageBit(result, bits, 0x04, "KEY_CERT_SIGN");
+    HandleOneUsageBit(result, bits, 0x02, "CRL_SIGN");
+    HandleOneUsageBit(result, bits, 0x01, "ENCIPHER_ONLY");
+
+    // Check for mystery leftover bits
+    if (bits != 0)
+    {
+        if (!result.isEmpty())
+            result += ", ";
+        result += OUString("0x") + OUString::number(bits, 16);
+    }
+
+    return result;
+}
+
 void CertificateChooser::ImplInitialize()
 {
     if ( !mbInitialized )
@@ -153,6 +188,7 @@ void CertificateChooser::ImplInitialize()
         {
             SvTreeListEntry* pEntry = m_pCertLB->InsertEntry( XmlSec::GetContentPart( maCerts[ nC ]->getSubjectName() )
                 + "\t" + XmlSec::GetContentPart( maCerts[ nC ]->getIssuerName() )
+                + "\t" + UsageInClearText( maCerts[ nC ]->getCertificateUsage() )
                 + "\t" + XmlSec::GetDateString( maCerts[ nC ]->getNotValidAfter() ) );
             pEntry->SetUserData( reinterpret_cast<void*>(nC) ); // missuse user data as index
         }
