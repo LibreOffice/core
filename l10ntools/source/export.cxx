@@ -143,7 +143,7 @@ int GetError()
 // class ResData
 
 
-bool ResData::SetId( const OString& rId, sal_uInt16 nLevel )
+bool ResData::SetId( const OString& rId, IdLevel nLevel )
 {
     if ( nLevel > nIdLevel )
     {
@@ -412,7 +412,7 @@ void Export::Execute( int nToken, const char * pToken )
             sId = sId.getToken(0, '/');
             CleanValue( sId );
             sId = sId.replaceAll("\t", OString());
-            pResData->SetId( sId, ID_LEVEL_IDENTIFIER );
+            pResData->SetId( sId, IdLevel::Identifier );
             if (!sCondition.isEmpty())
             {
                 Execute( CONDITION, "");  // execute the precomp. condition
@@ -505,7 +505,7 @@ void Export::Execute( int nToken, const char * pToken )
                 OString sId(
                     sValue.replaceAll("\t", OString()).
                     replaceAll(" ", OString()));
-                pResData->SetId(sId, ID_LEVEL_IDENTIFIER);
+                pResData->SetId(sId, IdLevel::Identifier);
             }
             else if (sKey =="STRINGLIST")
             {
@@ -602,7 +602,7 @@ void Export::Execute( int nToken, const char * pToken )
                     {
                         SetChildWithText();
                         if ( sLangIndex.equalsIgnoreAsciiCase("en-US") )
-                            pResData->SetId( sText, ID_LEVEL_TEXT );
+                            pResData->SetId( sText, IdLevel::Text );
 
                         pResData->bText = true;
                         pResData->sTextTyp = sOrigKey;

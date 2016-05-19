@@ -60,7 +60,7 @@ namespace
 
 ResData::ResData( const OString &rGId )
     :
-    nIdLevel( ID_LEVEL_NULL ),
+    nIdLevel( IdLevel::Null ),
     bChild( false ),
     bChildWithText( false ),
     bText( false ),
@@ -74,7 +74,7 @@ ResData::ResData( const OString &rGId )
 
 ResData::ResData( const OString &rGId, const OString &rFilename)
     :
-    nIdLevel( ID_LEVEL_NULL ),
+    nIdLevel( IdLevel::Null ),
     bChild( false ),
     bChildWithText( false ),
     bText( false ),
