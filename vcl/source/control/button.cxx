@@ -1703,6 +1703,7 @@ void PushButton::ShowFocus(const Rectangle& rRect)
 
 void OKButton::ImplInit( vcl::Window* pParent, WinBits nStyle )
 {
+    set_id("ok");
     PushButton::ImplInit( pParent, nStyle );
 
     SetText( Button::GetStandardText( StandardButtonType::OK ) );
@@ -1748,6 +1749,7 @@ void OKButton::Click()
 
 void CancelButton::ImplInit( vcl::Window* pParent, WinBits nStyle )
 {
+    set_id("cancel");
     PushButton::ImplInit( pParent, nStyle );
 
     SetText( Button::GetStandardText( StandardButtonType::Cancel ) );
@@ -1799,6 +1801,7 @@ CloseButton::CloseButton( vcl::Window* pParent, WinBits nStyle )
 
 void HelpButton::ImplInit( vcl::Window* pParent, WinBits nStyle )
 {
+    set_id("help");
     PushButton::ImplInit( pParent, nStyle | WB_NOPOINTERFOCUS );
 
     SetText( Button::GetStandardText( StandardButtonType::Help ) );

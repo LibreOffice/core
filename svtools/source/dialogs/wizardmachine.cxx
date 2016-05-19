@@ -143,6 +143,7 @@ namespace svt
             m_pPrevPage->SetSizePixel( LogicToPixel( Size( 50, 14 ), MAP_APPFONT ) );
             m_pPrevPage->SetText(SVT_RESSTR(STR_WIZDLG_PREVIOUS));
             m_pPrevPage->Show();
+            m_pPrevPage->set_id("previous");
 
             if (_nButtonFlags & WizardButtonFlags::NEXT)
                 AddButton( m_pPrevPage, ( WIZARDDIALOG_BUTTON_SMALLSTDOFFSET_X) );      // half x-offset to the next button
@@ -160,6 +161,7 @@ namespace svt
             m_pNextPage->SetSizePixel( LogicToPixel( Size( 50, 14 ), MAP_APPFONT ) );
             m_pNextPage->SetText(OUString(SVT_RESSTR(STR_WIZDLG_NEXT)));
             m_pNextPage->Show();
+            m_pNextPage->set_id("next");
 
             AddButton( m_pNextPage, WIZARDDIALOG_BUTTON_STDOFFSET_X );
             SetNextButton( m_pNextPage );
@@ -173,6 +175,7 @@ namespace svt
             m_pFinish->SetSizePixel( LogicToPixel( Size( 50, 14 ), MAP_APPFONT ) );
             m_pFinish->SetText(SVT_RESSTR(STR_WIZDLG_FINISH));
             m_pFinish->Show();
+            m_pFinish->set_id("finish");
 
             AddButton( m_pFinish, WIZARDDIALOG_BUTTON_STDOFFSET_X );
             m_pFinish->SetClickHdl( LINK( this, OWizardMachine, OnFinish ) );
