@@ -13,6 +13,9 @@ import importlib
 from connection import PersistentConnection, OfficeConnection
 
 def load_test(name):
+    if name.startswith("#"):
+        return None
+
     module_name, obj_name = name.rsplit(".", 1)
     module = importlib.import_module(module_name)
     obj = getattr(module, obj_name)
@@ -20,10 +23,13 @@ def load_test(name):
 
 def generic_test(opts, test_name):
     print("executing: " + test_name)
+    func = load_test(test_name)
+    if func is None:
+        return
+
     connection = PersistentConnection(opts)
     connection.setUp()
     xContext = connection.getContext()
-    func = load_test(test_name)
     func(xContext)
     connection.tearDown()
 
