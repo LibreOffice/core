@@ -37,15 +37,15 @@
 
 #include "spellchecker_selection.hxx"
 
-BOOL GetMsiProp( MSIHANDLE hMSI, const char* pPropName, char** ppValue )
+BOOL GetMsiPropA( MSIHANDLE hMSI, const char* pPropName, char** ppValue )
 {
     DWORD sz = 0;
-    if ( MsiGetProperty( hMSI, pPropName, const_cast<char *>(""), &sz ) == ERROR_MORE_DATA ) {
+    if ( MsiGetPropertyA( hMSI, pPropName, const_cast<char *>(""), &sz ) == ERROR_MORE_DATA ) {
         sz++;
         DWORD nbytes = sz * sizeof( char );
         char* buff = reinterpret_cast<char*>( malloc( nbytes ) );
         ZeroMemory( buff, nbytes );
-        MsiGetProperty( hMSI, pPropName, buff, &sz );
+        MsiGetPropertyA( hMSI, pPropName, buff, &sz );
         *ppValue = buff;
         return ( strlen(buff) > 0 );
     }
@@ -309,7 +309,7 @@ extern "C" UINT __stdcall SelectLanguage( MSIHANDLE handle )
      * requested with the UI_LANGS property, or all available on the system:
      */
     char* pVal = NULL;
-    if ( (GetMsiProp( handle, "UI_LANGS", &pVal )) && pVal ) {
+    if ( (GetMsiPropA( handle, "UI_LANGS", &pVal )) && pVal ) {
         char *str_ptr;
         str_ptr = strtok(pVal, ",");
         for(; str_ptr != NULL ;) {
