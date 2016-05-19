@@ -4805,9 +4805,40 @@ namespace {
 void wrapAddress( ScAddress& rPos, SCCOL nMaxCol, SCROW nMaxRow )
 {
     if (rPos.Col() > nMaxCol)
-        rPos.SetCol(rPos.Col() - nMaxCol - 1);
+        rPos.SetCol((rPos.Col() % (nMaxCol+1)));
     if (rPos.Row() > nMaxRow)
-        rPos.SetRow(rPos.Row() - nMaxRow - 1);
+        rPos.SetRow((rPos.Row() % (nMaxRow+1)));
+}
+
+template<typename T> void wrapRange( T& n1, T& n2, T nMax )
+{
+    if (n2 > nMax)
+    {
+        if (n1 == 0)
+            n2 = nMax;  // Truncate to full range instead of wrapping to a weird range.
+        else
+            n2 = n2 % (nMax+1);
+    }
+    if (n1 > nMax)
+        n1 = n1 % (nMax+1);
+}
+
+void wrapColRange( ScRange& rRange, SCCOL nMaxCol )
+{
+    SCCOL nCol1 = rRange.aStart.Col();
+    SCCOL nCol2 = rRange.aEnd.Col();
+    wrapRange( nCol1, nCol2, nMaxCol);
+    rRange.aStart.SetCol( nCol1);
+    rRange.aEnd.SetCol( nCol2);
+}
+
+void wrapRowRange( ScRange& rRange, SCROW nMaxRow )
+{
+    SCROW nRow1 = rRange.aStart.Row();
+    SCROW nRow2 = rRange.aEnd.Row();
+    wrapRange( nRow1, nRow2, nMaxRow);
+    rRange.aStart.SetRow( nRow1);
+    rRange.aEnd.SetRow( nRow2);
 }
 
 }
@@ -4834,8 +4865,17 @@ void ScTokenArray::WrapReference( const ScAddress& rPos, SCCOL nMaxCol, SCROW nM
                 formula::FormulaToken* pToken = *p;
                 ScComplexRefData& rRef = *pToken->GetDoubleRef();
                 ScRange aAbs = rRef.toAbs(rPos);
-                wrapAddress(aAbs.aStart, nMaxCol, nMaxRow);
-                wrapAddress(aAbs.aEnd, nMaxCol, nMaxRow);
+                // Entire columns/rows are sticky.
+                if (!rRef.IsEntireCol() && !rRef.IsEntireRow())
+                {
+                    wrapColRange( aAbs, nMaxCol);
+                    wrapRowRange( aAbs, nMaxRow);
+                }
+                else if (rRef.IsEntireCol() && !rRef.IsEntireRow())
+                    wrapColRange( aAbs, nMaxCol);
+                else if (!rRef.IsEntireCol() && rRef.IsEntireRow())
+                    wrapRowRange( aAbs, nMaxRow);
+                // else nothing if both, column and row, are entire.
                 aAbs.PutInOrder();
                 rRef.SetRange(aAbs, rPos);
             }
@@ -4868,8 +4908,9 @@ bool ScTokenArray::NeedsWrapReference( const ScAddress& rPos, SCCOL nMaxCol, SCR
                 formula::FormulaToken* pToken = *p;
                 ScComplexRefData& rRef = *pToken->GetDoubleRef();
                 ScRange aAbs = rRef.toAbs(rPos);
-                if (aAbs.aStart.Col() > nMaxCol || aAbs.aStart.Row() > nMaxRow ||
-                    aAbs.aEnd.Col() > nMaxCol || aAbs.aEnd.Row() > nMaxRow)
+                // Entire columns/rows are sticky.
+                if (    (!rRef.IsEntireCol() && (aAbs.aStart.Row() > nMaxRow || aAbs.aEnd.Row() > nMaxRow)) ||
+                        (!rRef.IsEntireRow() && (aAbs.aStart.Col() > nMaxCol || aAbs.aEnd.Col() > nMaxCol)))
                     return true;
             }
             break;
