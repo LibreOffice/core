@@ -74,6 +74,14 @@ ScDrawView* ScGridWinUIObject::getDrawView()
     return pDrawView;
 }
 
+ScTabViewShell* ScGridWinUIObject::getViewShell()
+{
+    ScViewData* pViewData = mxGridWindow->getViewData();
+    ScTabViewShell* pViewShell = pViewData->GetViewShell();
+
+    return pViewShell;
+}
+
 void ScGridWinUIObject::execute(const OUString& rAction,
         const StringMap& rParameters)
 {
@@ -124,6 +132,28 @@ void ScGridWinUIObject::execute(const OUString& rAction,
         {
             SAL_WARN("sc.uitest", "unknown selection method");
         }
+    }
+    else if (rAction == "ACTIVATE")
+    {
+        ScDrawView* pDrawView = getDrawView();
+        const SdrMarkList& rMarkList = pDrawView->GetMarkedObjectList();
+        if (rMarkList.GetMarkCount() == 1)
+        {
+            SdrMark* pMark = rMarkList.GetMark(0);
+            SdrObject* pObj = pMark->GetMarkedSdrObj();
+            sal_uInt16 nSdrObjKind = pObj->GetObjIdentifier();
+            if (nSdrObjKind == OBJ_OLE2)
+            {
+                ScTabViewShell* pViewShell = getViewShell();
+                pViewShell->ActivateObject( static_cast<SdrOle2Obj*>(pObj), 0 );
+            }
+            else
+            {
+                SAL_WARN("sc.uitest", "can't activate non-ole objects");
+            }
+        }
+        else
+            SAL_WARN("sc.uitest", "can't activate the current selection");
     }
     else
     {
