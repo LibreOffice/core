@@ -19,8 +19,11 @@
 #include <vcl/svapp.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/toolbox.hxx>
+#include <vcl/fixed.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/classificationhelper.hxx>
+#include <sfx2/sfx.hrc>
+#include <sfx2/sfxresid.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/dispatchcommand.hxx>
@@ -46,10 +49,12 @@ public:
 
 using ClassificationCategoriesControllerBase = cppu::ImplInheritanceHelper<svt::ToolboxController, lang::XServiceInfo>;
 
+class ClassificationControl;
+
 /// Controller for .uno:ClassificationApply.
 class ClassificationCategoriesController : public ClassificationCategoriesControllerBase
 {
-    VclPtr<ListBox> m_pCategories;
+    VclPtr<ClassificationControl> m_pClassification;
     rtl::Reference<comphelper::ConfigurationListener> m_xListener;
     ClassificationPropertyListener m_aPropertyListener;
 
@@ -76,6 +81,22 @@ public:
     void removeEntries();
 };
 
+/// Classification control is the parent of all widgets that belongs to ClassificationCategoriesController.
+class SAL_WARN_UNUSED ClassificationControl : public vcl::Window
+{
+    VclPtr<FixedText> m_pLabel;
+    VclPtr<ListBox> m_pCategories;
+    void SetOptimalSize();
+    virtual void DataChanged(const DataChangedEvent& rEvent) override;
+
+public:
+    ClassificationControl(vcl::Window* pParent);
+    virtual ~ClassificationControl();
+    virtual void dispose() override;
+    virtual void Resize() override;
+    VclPtr<ListBox> getCategories();
+};
+
 ClassificationPropertyListener::ClassificationPropertyListener(const rtl::Reference<comphelper::ConfigurationListener>& xListener, ClassificationCategoriesController& rController)
     : ClassificationPropertyListenerBase(xListener, "WritePath")
     , m_rController(rController)
@@ -90,7 +111,7 @@ void ClassificationPropertyListener::setProperty(const uno::Any& /*rProperty*/)
 
 ClassificationCategoriesController::ClassificationCategoriesController(const uno::Reference<uno::XComponentContext>& rContext)
     : ClassificationCategoriesControllerBase(rContext, uno::Reference<frame::XFrame>(), OUString(".uno:ClassificationApply"))
-    , m_pCategories(nullptr)
+    , m_pClassification(nullptr)
     , m_xListener(new comphelper::ConfigurationListener("/org.openoffice.Office.Paths/Paths/Classification"))
     , m_aPropertyListener(m_xListener, *this)
 {
@@ -125,7 +146,7 @@ void ClassificationCategoriesController::dispose() throw (uno::RuntimeException,
     SolarMutexGuard aSolarMutexGuard;
 
     svt::ToolboxController::dispose();
-    m_pCategories.disposeAndClear();
+    m_pClassification.disposeAndClear();
     m_aPropertyListener.dispose();
     m_xListener->dispose();
 }
@@ -136,18 +157,16 @@ uno::Reference<awt::XWindow> ClassificationCategoriesController::createItemWindo
     ToolBox* pToolbar = dynamic_cast<ToolBox*>(pParent);
     if (pToolbar)
     {
-        m_pCategories = VclPtr<ListBox>::Create(pToolbar, WB_CLIPCHILDREN|WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_DROPDOWN|WB_SIMPLEMODE);
-        m_pCategories->SetSelectHdl(LINK(this, ClassificationCategoriesController, SelectHdl));
-        // Same as SvxFontNameBox_Impl.
-        m_pCategories->SetSizePixel(m_pCategories->LogicToPixel(Size(60, 160), MAP_APPFONT));
+        m_pClassification = VclPtr<ClassificationControl>::Create(pToolbar);
+        m_pClassification->getCategories()->SetSelectHdl(LINK(this, ClassificationCategoriesController, SelectHdl));
     }
 
-    return uno::Reference<awt::XWindow>(VCLUnoHelper::GetInterface(m_pCategories));
+    return uno::Reference<awt::XWindow>(VCLUnoHelper::GetInterface(m_pClassification));
 }
 
 IMPL_LINK_NOARG_TYPED(ClassificationCategoriesController, SelectHdl, ListBox&, void)
 {
-    OUString aEntry = m_pCategories->GetSelectEntry();
+    OUString aEntry = m_pClassification->getCategories()->GetSelectEntry();
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
     {
         {"Name", uno::makeAny(aEntry)},
@@ -157,7 +176,7 @@ IMPL_LINK_NOARG_TYPED(ClassificationCategoriesController, SelectHdl, ListBox&, v
 
 void ClassificationCategoriesController::statusChanged(const frame::FeatureStateEvent& /*rEvent*/) throw (uno::RuntimeException, std::exception)
 {
-    if (!m_pCategories)
+    if (!m_pClassification)
         return;
 
     SfxObjectShell* pObjectShell = SfxObjectShell::Current();
@@ -165,26 +184,103 @@ void ClassificationCategoriesController::statusChanged(const frame::FeatureState
         return;
 
     SfxClassificationHelper aHelper(pObjectShell->getDocProperties());
-    if (m_pCategories->GetEntryCount() == 0)
+    if (m_pClassification->getCategories()->GetEntryCount() == 0)
     {
         std::vector<OUString> aNames = aHelper.GetBACNames();
         for (const OUString& rName : aNames)
-            m_pCategories->InsertEntry(rName);
+            m_pClassification->getCategories()->InsertEntry(rName);
         // Normally VclBuilder::makeObject() does this.
-        m_pCategories->EnableAutoSize(true);
-        m_pCategories->SetSizePixel(m_pCategories->GetOptimalSize());
+        m_pClassification->getCategories()->EnableAutoSize(true);
     }
 
     // Restore state based on the doc. model.
     const OUString& rCategoryName = aHelper.GetBACName();
     if (!rCategoryName.isEmpty())
-        m_pCategories->SelectEntry(rCategoryName);
+        m_pClassification->getCategories()->SelectEntry(rCategoryName);
 }
 
 void ClassificationCategoriesController::removeEntries()
 {
-    if (m_pCategories)
-        m_pCategories->Clear();
+    if (m_pClassification)
+        m_pClassification->getCategories()->Clear();
+}
+
+ClassificationControl::ClassificationControl(vcl::Window* pParent)
+    : Window(pParent, WB_DIALOGCONTROL)
+    , m_pLabel(nullptr)
+    , m_pCategories(nullptr)
+{
+    OUString aText = SfxResId(STR_CLASSIFIED_INTELLECTUAL_PROPERTY);
+    m_pLabel = VclPtr<FixedText>::Create(this);
+    Size aTextSize(m_pLabel->GetTextWidth(aText), m_pLabel->GetTextHeight());
+    // Padding.
+    aTextSize.Width() += 6;
+    m_pLabel->SetText(aText);
+    m_pLabel->SetSizePixel(aTextSize);
+    m_pLabel->Show();
+
+    m_pCategories = VclPtr<ListBox>::Create(this, WB_CLIPCHILDREN|WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_DROPDOWN|WB_SIMPLEMODE);
+    m_pCategories->Show();
+
+    SetOptimalSize();
+}
+
+ClassificationControl::~ClassificationControl()
+{
+    disposeOnce();
+}
+
+void ClassificationControl::dispose()
+{
+    m_pLabel.disposeAndClear();
+    m_pCategories.disposeAndClear();
+    vcl::Window::dispose();
+}
+
+void ClassificationControl::Resize()
+{
+    // Give the label what it wants, and the remaining size to the listbox.
+    Size aSize(GetOutputSizePixel());
+    long nWLabel = m_pLabel->GetOutputSizePixel().Width();
+    long nW = aSize.Width();
+    long nH = aSize.Height();
+
+    long nPrefHeight = m_pLabel->get_preferred_size().Height();
+    long nOffset = (nH - nPrefHeight) / 2;
+    m_pLabel->SetPosSizePixel(Point(0, nOffset), Size(nWLabel, nPrefHeight));
+
+    nPrefHeight = m_pCategories->get_preferred_size().Height();
+    nOffset = (nH - nPrefHeight) / 2;
+    m_pCategories->SetPosSizePixel(Point(nWLabel, nOffset), Size(nW - nWLabel, nPrefHeight));
+}
+
+VclPtr<ListBox> ClassificationControl::getCategories()
+{
+    return m_pCategories;
+}
+
+void ClassificationControl::SetOptimalSize()
+{
+    // Same as SvxColorDockingWindow.
+    const Size aLogicalAttrSize(150, 0);
+    Size aSize(LogicToPixel(aLogicalAttrSize,MAP_APPFONT));
+
+    Point aPosition = m_pCategories->GetPosPixel();
+
+    aSize.Height() = std::max(aSize.Height(), m_pLabel->get_preferred_size().Height());
+    aSize.Height() = std::max(aSize.Height(), m_pCategories->get_preferred_size().Height());
+
+    aSize.Width() = aPosition.X() + aSize.Width();
+
+    SetSizePixel(aSize);
+}
+
+void ClassificationControl::DataChanged(const DataChangedEvent& rEvent)
+{
+    if ((rEvent.GetType() == DataChangedEventType::SETTINGS) && (rEvent.GetFlags() & AllSettingsFlags::STYLE))
+        SetOptimalSize();
+
+    Window::DataChanged(rEvent);
 }
 
 } // namespace sfx2
