@@ -79,30 +79,12 @@ public:
     {
     }
 
-    NamePassRecord( const OUString& aName, const ::std::vector< OUString >& aMemoryList )
-        : m_aName( aName )
-        , m_bHasMemPass( true )
-        , m_aMemPass( aMemoryList )
-        , m_bHasPersPass( false )
-    {
-    }
-
     NamePassRecord( const OUString& aName, const OUString& aPersistentList )
         : m_aName( aName )
         , m_bHasMemPass( false )
         , m_bHasPersPass( true )
         , m_aPersPass( aPersistentList )
     {
-    }
-
-    NamePassRecord( const OUString& aName,
-                    bool bHasMemoryList, const ::std::vector< OUString >& aMemoryList,
-                    bool bHasPersistentList, const OUString & aPersistentList )
-        : m_aName( aName )
-        , m_bHasMemPass( bHasMemoryList )
-        , m_bHasPersPass( bHasPersistentList )
-    {
-        InitArrays( bHasMemoryList, aMemoryList, bHasPersistentList, aPersistentList );
     }
 
     NamePassRecord( const NamePassRecord& aRecord )
@@ -391,16 +373,6 @@ public:
     const ::rtl::Reference< ucbhelper::InteractionSupplyAuthentication > &
     getAuthenticationSupplier() const { return m_xAuthSupplier; }
 
-};
-
-
-class RW_SvMemoryStream : public SvMemoryStream {
-public:
-    RW_SvMemoryStream( void* Buf, sal_uLong Size, StreamMode eMode ):
-            SvMemoryStream( Buf, Size, eMode){}
-
-    RW_SvMemoryStream( sal_uLong InitSize=512, sal_uLong Resize=64 ):
-            SvMemoryStream( InitSize, Resize ){}
 };
 
 

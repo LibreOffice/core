@@ -84,8 +84,6 @@ public:
         Font(rFont), nBorderWidth(-1) { Impl_Init(); }
     SmFace(const OUString& rName, const Size& rSize) :
         Font(rName, rSize), nBorderWidth(-1) { Impl_Init(); }
-    SmFace( FontFamily eFamily, const Size& rSize) :
-        Font(eFamily, rSize), nBorderWidth(-1) { Impl_Init(); }
 
     SmFace(const SmFace &rFace) :
         Font(rFace), nBorderWidth(-1) { Impl_Init(); }
@@ -124,7 +122,6 @@ public:
     virtual ~SmFontPickList() { Clear(); }
 
     virtual void    Insert(const vcl::Font &rFont);
-    void            Update(const vcl::Font &rFont, const vcl::Font &rNewFont);
     void            Remove(const vcl::Font &rFont);
 
     void            Clear();
@@ -152,7 +149,6 @@ public:
 
     virtual void    Insert(const vcl::Font &rFont) override;
     using   Window::Update;
-    using SmFontPickList::Update;
 };
 
 #endif

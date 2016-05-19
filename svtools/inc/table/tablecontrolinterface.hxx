@@ -95,13 +95,6 @@ namespace svt { namespace table
         RowPos          nRow;
         TableCellArea   eArea;
 
-        TableCell()
-            :nColumn( COL_INVALID )
-            ,nRow( ROW_INVALID )
-            ,eArea( CellContent )
-        {
-        }
-
         TableCell( ColPos const i_column, RowPos const i_row )
             :nColumn( i_column )
             ,nRow( i_row )
