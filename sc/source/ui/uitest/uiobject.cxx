@@ -15,6 +15,11 @@
 #include "viewdata.hxx"
 #include "dbfunc.hxx"
 
+#include <svx/svditer.hxx>
+#include <svx/svdobj.hxx>
+#include <svx/svdpage.hxx>
+#include <svx/svdoole2.hxx>
+
 namespace {
 
 ScAddress get_address_from_string(const OUString& rStr)
@@ -107,6 +112,54 @@ void ScGridWinUIObject::execute(const OUString& rAction,
     {
         WindowUIObject::execute(rAction, rParameters);
     }
+}
+
+namespace {
+
+ScDrawLayer* get_draw_layer(VclPtr<ScGridWindow> xGridWindow)
+{
+    return xGridWindow->getViewData()->GetDocument()->GetDrawLayer();
+}
+
+SdrPage* get_draw_page(VclPtr<ScGridWindow> xGridWindow, SCTAB nTab)
+{
+    ScDrawLayer* pDrawLayer = get_draw_layer(xGridWindow);
+
+    return pDrawLayer->GetPage(nTab);
+}
+
+std::set<OUString> collect_charts(VclPtr<ScGridWindow> xGridWindow)
+{
+    SCTAB nTab = xGridWindow->getViewData()->GetTabNo();
+    SdrPage* pPage = get_draw_page(xGridWindow, nTab);
+
+    std::set<OUString> aRet;
+
+    if (!pPage)
+        return aRet;
+
+    SdrObjListIter aIter( *pPage, IM_FLAT );
+    SdrObject* pObject = aIter.Next();
+    while (pObject)
+    {
+        if (pObject->GetObjIdentifier() == OBJ_OLE2)
+        {
+            aRet.insert(static_cast<SdrOle2Obj*>(pObject)->GetPersistName());
+        }
+        else
+            SAL_DEBUG(pObject->GetName());
+        pObject = aIter.Next();
+    }
+
+    return aRet;
+}
+
+}
+
+std::set<OUString> ScGridWinUIObject::get_children() const
+{
+    std::set<OUString> aChildren = collect_charts(mxGridWindow);
+    return aChildren;
 }
 
 std::unique_ptr<UIObject> ScGridWinUIObject::get_child(const OUString& /*rID*/)
