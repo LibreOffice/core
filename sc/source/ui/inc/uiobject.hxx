@@ -29,6 +29,8 @@ public:
 
     static std::unique_ptr<UIObject> create(vcl::Window* pWindow);
 
+    virtual std::set<OUString> get_children() const override;
+
 protected:
 
     virtual OUString get_name() const override;
