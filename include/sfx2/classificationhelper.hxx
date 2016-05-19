@@ -78,6 +78,8 @@ public:
     void UpdateInfobar(SfxViewFrame& rViewFrame);
     /// Does a best-effort conversion of rType to SfxClassificationPolicyType.
     static SfxClassificationPolicyType stringToPolicyType(const OUString& rType);
+    /// Returns the string representation of a SfxClassificationPolicyType element.
+    static const OUString& policyTypeToString(SfxClassificationPolicyType eType);
 
     /// Brief text located at the top of each document's pages.
     static const OUString& PROP_DOCHEADER();
