@@ -14,6 +14,7 @@
 
 #include "viewdata.hxx"
 #include "dbfunc.hxx"
+#include "tabvwsh.hxx"
 
 #include <svx/svditer.hxx>
 #include <svx/svdobj.hxx>
@@ -65,6 +66,14 @@ ScDBFunc* ScGridWinUIObject::getDBFunc()
     return pFunc;
 }
 
+ScDrawView* ScGridWinUIObject::getDrawView()
+{
+    ScViewData* pViewData = mxGridWindow->getViewData();
+    ScDrawView* pDrawView = pViewData->GetScDrawView();
+
+    return pDrawView;
+}
+
 void ScGridWinUIObject::execute(const OUString& rAction,
         const StringMap& rParameters)
 {
@@ -102,6 +111,14 @@ void ScGridWinUIObject::execute(const OUString& rAction,
             const OUString rStr = itr->second;
             sal_Int32 nTab = rStr.toUInt32();
             mxGridWindow->getViewData()->SetTabNo(nTab);
+        }
+        else if (rParameters.find("OBJECT") != rParameters.end())
+        {
+            auto itr = rParameters.find("OBJECT");
+            const OUString rStr = itr->second;
+
+            ScDrawView* pDrawView = getDrawView();
+            pDrawView->SelectObject(rStr);
         }
         else
         {
