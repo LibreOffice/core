@@ -1,0 +1,157 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_f55f3273",
+        "filename": "sfx2/source/control/bindings.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1104,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2016-05-19T01:42:05Z",
+      "side": 1,
+      "message": "please use sal_Int16 here. short has varying bitness across different platforms.",
+      "revId": "40200c619d569a37b12b4b1cca51cab74f041d38",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_15657644",
+        "filename": "sfx2/source/control/statcach.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2016-05-19T01:42:05Z",
+      "side": 1,
+      "message": "that line can go, too :)",
+      "revId": "40200c619d569a37b12b4b1cca51cab74f041d38",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_355a7a84",
+        "filename": "sfx2/source/control/statcach.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2016-05-19T01:42:05Z",
+      "side": 1,
+      "message": "better \u0027expect\u0027 than hope?",
+      "revId": "40200c619d569a37b12b4b1cca51cab74f041d38",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_555ffe71",
+        "filename": "sfx2/source/control/statcach.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2016-05-19T01:42:05Z",
+      "side": 1,
+      "message": "that comment is a bit unclear - either expand why it\u0027s not possible, or leave it, I suggest",
+      "revId": "40200c619d569a37b12b4b1cca51cab74f041d38",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_75540254",
+        "filename": "sfx2/source/control/statcach.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2016-05-19T01:42:05Z",
+      "side": 1,
+      "message": "that\u0027s a bit flowery language ;)\n\neither leave it out (it\u0027s pretty clear why you cannot get a result), or have something like:\n\n// notification interface not available, dispatch w/o result",
+      "revId": "40200c619d569a37b12b4b1cca51cab74f041d38",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_95518665",
+        "filename": "sfx2/source/control/unoctitm.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 862,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2016-05-19T01:42:05Z",
+      "side": 1,
+      "message": "I suggest you handle the generic case here, or leave a comment why it cannot happen, or assert that it cannot happen",
+      "revId": "40200c619d569a37b12b4b1cca51cab74f041d38",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_b54e8abf",
+        "filename": "sfx2/source/inc/statcach.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2016-05-19T01:42:05Z",
+      "side": 1,
+      "message": "unrelated whitespace change?",
+      "revId": "40200c619d569a37b12b4b1cca51cab74f041d38",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_d54b0eaf",
+        "filename": "sfx2/source/inc/statcach.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2016-05-19T01:42:05Z",
+      "side": 1,
+      "message": "sal_Int16 here, too",
+      "revId": "40200c619d569a37b12b4b1cca51cab74f041d38",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_f5c65215",
+        "filename": "sfx2/source/inc/statcach.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2016-05-19T01:42:05Z",
+      "side": 1,
+      "message": "and here",
+      "revId": "40200c619d569a37b12b4b1cca51cab74f041d38",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
