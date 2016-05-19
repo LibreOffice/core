@@ -45,7 +45,7 @@
 
 #include <memory>
 
-FltError ScFormatFilterPluginImpl::ScImportExcel( SfxMedium& rMedium, ScDocument* pDocument, const EXCIMPFORMAT eFormat, rtl_TextEncoding eSrc )
+FltError ScFormatFilterPluginImpl::ScImportExcel( SfxMedium& rMedium, ScDocument* pDocument, const EXCIMPFORMAT eFormat )
 {
     // check the passed Calc document
     OSL_ENSURE( pDocument, "::ScImportExcel - no document" );
@@ -129,11 +129,6 @@ FltError ScFormatFilterPluginImpl::ScImportExcel( SfxMedium& rMedium, ScDocument
             case EXC_BIFF3:
             case EXC_BIFF4:
             case EXC_BIFF5:
-                if ( eSrc != RTL_TEXTENCODING_DONTKNOW )
-                {
-                    aImpData.meTextEnc = eSrc;
-                    aImpData.mbForcedTextEnc = true;
-                }
                 xFilter.reset( new ImportExcel( aImpData, *pBookStrm ) );
             break;
             case EXC_BIFF8:
