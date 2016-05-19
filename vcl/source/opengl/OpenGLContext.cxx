@@ -1114,7 +1114,7 @@ bool OpenGLContext::initWindow()
     if (m_pChildWindow)
     {
         InitChildWindow(m_pChildWindow.get());
-        const SystemEnvData* sysData(m_pChildWindow->GetSystemData());
+        const SystemEnvData* sysData(m_pChildWindow->GetSystemChildSystemData());
         m_aGLWin.hWnd = sysData->hWnd;
     }
 
@@ -1159,7 +1159,7 @@ bool OpenGLContext::initWindow()
         {
             m_pChildWindow = VclPtr<SystemChildWindow>::Create(mpWindow, 0, &winData, false);
         }
-        pChildSysData = m_pChildWindow->GetSystemData();
+        pChildSysData = m_pChildWindow->GetSystemChildSystemData();
     }
 
     if (!m_pChildWindow || !pChildSysData)
@@ -1309,7 +1309,7 @@ SystemWindowData OpenGLContext::generateWinData(vcl::Window* pParent, bool)
     aWinData.pVisual = nullptr;
 
 #if !defined(LIBO_HEADLESS)
-    const SystemEnvData* sysData(pParent->GetSystemData());
+    const SystemEnvData* sysData(pParent->GetWindowSystemData());
 
     Display *dpy = static_cast<Display*>(sysData->pDisplay);
     Window win = sysData->aWindow;
@@ -1590,7 +1590,7 @@ bool OpenGLContext::supportMultiSampling() const
 #if defined(MACOSX)
 NSOpenGLView* OpenGLContext::getOpenGLView()
 {
-    return reinterpret_cast<NSOpenGLView*>(m_pChildWindow->GetSystemData()->mpNSView);
+    return reinterpret_cast<NSOpenGLView*>(m_pChildWindow->GetSystemChildSystemData()->mpNSView);
 }
 #endif
 

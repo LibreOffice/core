@@ -243,7 +243,7 @@ sal_Int16 SAL_CALL KDE4FilePicker::execute()
     vcl::Window *pParentWin = Application::GetDefDialogParent();
     if ( pParentWin )
     {
-        const SystemEnvData* pSysData = pParentWin->GetSystemData();
+        const SystemEnvData* pSysData = pParentWin->GetWindowSystemData();
         if ( pSysData )
         {
             KWindowSystem::setMainWindow( _dialog, pSysData->aWindow); // unx only

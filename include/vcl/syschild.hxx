@@ -44,7 +44,7 @@ public:
     virtual                 ~SystemChildWindow();
     virtual void            dispose() override;
 
-    const SystemEnvData*    GetSystemData() const;
+    const SystemEnvData*    GetSystemChildSystemData() const;
 
     //  per default systemchildwindows erase their background for better plugin support
     //  however, this might not always be required
