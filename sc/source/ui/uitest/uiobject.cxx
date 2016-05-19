@@ -133,6 +133,17 @@ void ScGridWinUIObject::execute(const OUString& rAction,
             SAL_WARN("sc.uitest", "unknown selection method");
         }
     }
+    else if (rAction == "DESELECT")
+    {
+        if (rParameters.find("OBJECT") != rParameters.end())
+        {
+            ScDrawView* pDrawView = getDrawView();
+            pDrawView->UnmarkAll();
+
+            ScTabViewShell* pViewShell = getViewShell();
+            pViewShell->SetDrawShell(false);
+        }
+    }
     else if (rAction == "ACTIVATE")
     {
         ScDrawView* pDrawView = getDrawView();
