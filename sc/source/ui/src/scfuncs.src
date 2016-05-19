@@ -4565,7 +4565,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
     {
         String 1 // Description
         {
-            Text [ en-US ] = "Rounds a number up to the nearest multiple of significance." ;
+            Text [ en-US ] = "Rounds a number up to the nearest multiple of significance.\nThis function exists for interoperability with Microsoft Excel 2007 or older versions." ;
         };
         ExtraData =
         {
@@ -4781,7 +4781,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
     {
         String 1 // Description
         {
-            Text [ en-US ] = "Rounds number towards zero to the nearest multiple of absolute value of significance." ;
+            Text [ en-US ] = "Rounds number towards zero to the nearest multiple of absolute value of significance.\nThis function exists for interoperability with Microsoft Excel 2007 or older versions." ;
         };
         ExtraData =
         {
