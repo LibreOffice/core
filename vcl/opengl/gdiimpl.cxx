@@ -2283,7 +2283,7 @@ bool OpenGLSalGraphicsImpl::blendBitmap(
 
     mpProgram->SetBlendMode(GL_ZERO, GL_SRC_COLOR);
     mpProgram->SetTexture("sampler", rTexture);
-    DrawTextureRect(rTexture, rPosAry, false);
+    DrawTextureRect(rTexture, rPosAry);
     mpProgram->Clean();
 
     PostDraw();
