@@ -104,8 +104,6 @@ public:
                             mxTextEnc( new rtl_TextEncoding( osl_getThreadTextEncoding() ) ) {}
     inline explicit     SfxOleTextEncoding( rtl_TextEncoding eTextEnc ) :
                             mxTextEnc( new rtl_TextEncoding( eTextEnc ) ) {}
-    inline explicit     SfxOleTextEncoding( sal_Int16 nCodePage ) :
-                            mxTextEnc( new rtl_TextEncoding ) { SetCodePage( nCodePage ); }
 
     /** Returns the current text encoding identifier. */
     inline rtl_TextEncoding GetTextEncoding() const { return *mxTextEnc; }

@@ -69,17 +69,6 @@ public:
 #endif
 
 
-struct StringList_Impl : private Resource
-{
-
-    ResId aResId;
-
-    StringList_Impl( const ResId& rErrIdP,  sal_uInt16 nId)
-        : Resource( rErrIdP ), aResId(nId, *rErrIdP.GetResMgr()) {}
-    ~StringList_Impl() { FreeResource(); }
-
-};
-
 #endif // INCLUDED_SFX2_SOURCE_INC_SFXTYPES_HXX
 
 

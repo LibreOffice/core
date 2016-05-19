@@ -62,8 +62,6 @@ class SfxPickList : public SfxListener
         static SfxPickList& Get();
         static void ensure() { Get(); }
 
-        void                CreateMenuEntries( Menu* pMenu );
-        static void         ExecuteMenuEntry( sal_uInt16 nId );
         static void         ExecuteEntry( sal_uInt32 nIndex );
 
         virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
