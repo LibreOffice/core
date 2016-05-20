@@ -222,7 +222,7 @@ bool JPEGWriter::Write( const Graphic& rGraphic )
         if( mpExpWasGrey )
             *mpExpWasGrey = mbGreys;
 
-        mbNative = ( mpReadAccess->GetScanlineFormat() == BMP_FORMAT_24BIT_TC_RGB );
+        mbNative = ( mpReadAccess->GetScanlineFormat() == ScanlineFormat::N24BitTcRgb );
 
         if( !mbNative )
             mpBuffer = new sal_uInt8[ AlignedWidth4Bytes( mbGreys ? mpReadAccess->Width() * 8L : mpReadAccess->Width() * 24L ) ];
