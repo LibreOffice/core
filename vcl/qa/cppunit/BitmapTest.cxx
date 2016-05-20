@@ -51,17 +51,13 @@ void BitmapTest::testConvert()
     {
         Bitmap::ScopedReadAccess pReadAccess(aBitmap);
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(8), pReadAccess->GetBitCount());
-#if defined WNT
+#if defined MACOSX || defined IOS
+        //it would be nice to find and change the stride for quartz to be the same as everyone else
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_uLong>(10), pReadAccess->GetScanlineSize());
+#else
         if (!OpenGLHelper::isVCLOpenGLEnabled())
-        {
-            // GDI Scanlines padded to DWORD multiples, it seems
             CPPUNIT_ASSERT_EQUAL(static_cast<sal_uLong>(12), pReadAccess->GetScanlineSize());
-        }
-        else
 #endif
-        {
-            CPPUNIT_ASSERT_EQUAL(static_cast<sal_uLong>(10), pReadAccess->GetScanlineSize());
-        }
         CPPUNIT_ASSERT(pReadAccess->HasPalette());
         const BitmapColor& rColor = pReadAccess->GetPaletteColor(pReadAccess->GetPixelIndex(1, 1));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(204), sal_Int32(rColor.GetRed()));
@@ -74,13 +70,13 @@ void BitmapTest::testConvert()
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(24), aBitmap.GetBitCount());
     {
         Bitmap::ScopedReadAccess pReadAccess(aBitmap);
-#if defined LINUX
-        // 24 bit Bitmap on SVP backend uses 32bit BGRX format
+#if defined LINUX || defined FREEBSD
+        // 24 bit Bitmap on SVP backend uses 32bit BGRA format
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(32), pReadAccess->GetBitCount());
         CPPUNIT_ASSERT_EQUAL(sal_uLong(40), pReadAccess->GetScanlineSize());
 #else
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(24), pReadAccess->GetBitCount());
-#if defined WNT
+#if defined(_WIN32)
         if (!OpenGLHelper::isVCLOpenGLEnabled())
         {
             // GDI Scanlines padded to DWORD multiples, it seems
@@ -178,7 +174,7 @@ void BitmapTest::testCRC()
 {
     CRCHash aCRCs;
 
-    Bitmap aBitmap(Size(1023,759), 24, 0);
+    Bitmap aBitmap(Size(1023,759), 24, nullptr);
     aBitmap.Erase(COL_BLACK);
     checkAndInsert(aCRCs, aBitmap, "black bitmap");
     aBitmap.Invert();
@@ -188,7 +184,7 @@ void BitmapTest::testCRC()
     aVDev->SetBackground(Wallpaper(COL_WHITE));
     aVDev->SetOutputSizePixel(Size(1023, 759));
 
-#if 0 // disabled for now - it breaks on OS/X and Windows
+#if 0 // disabled for now - oddly breaks on OS/X - but why ?
     Bitmap aWhiteCheck = getAsBitmap(aVDev);
     CPPUNIT_ASSERT(aCRCs.find(aWhiteCheck.GetChecksum()) != aCRCs.end());
 #endif

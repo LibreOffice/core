@@ -102,8 +102,8 @@ void BitmapFilterTest::testBlurCorrectness()
     }
 
     // Check blurred bitmap parameters
-    CPPUNIT_ASSERT_EQUAL(static_cast<long>(45), aBitmap24Bit.GetSizePixel().Width());
-    CPPUNIT_ASSERT_EQUAL(static_cast<long>(35), aBitmap24Bit.GetSizePixel().Height());
+    CPPUNIT_ASSERT_EQUAL(static_cast<long>(41), aBitmap24Bit.GetSizePixel().Width());
+    CPPUNIT_ASSERT_EQUAL(static_cast<long>(31), aBitmap24Bit.GetSizePixel().Height());
 
     CPPUNIT_ASSERT_EQUAL(nBPP, aBitmap24Bit.GetBitCount());
 
