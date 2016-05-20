@@ -25,7 +25,7 @@
 #include <vcl/svapp.hxx>
 #include <sal/macros.h>
 
-#define DEFAULT_DRAGMODE    2
+#define DEFAULT_DRAGMODE    DragMode::SystemDep
 #define DEFAULT_SNAPMODE    0
 #define DEFAULT_SCALEFACTOR 100
 #if defined UNX
@@ -64,7 +64,13 @@ SvtTabAppearanceCfg::SvtTabAppearanceCfg()
                 switch(nProp)
                 {
                     case  0: *pValues >>= nScaleFactor; break; //"FontScaling",
-                    case  1: *pValues >>= nDragMode; break;   //"Window/Drag",
+                    case  1:    //"Window/Drag"
+                    {
+                        short nTmp;
+                        if (*pValues >>= nTmp)
+                            nDragMode = (DragMode)nTmp;
+                        break;
+                    }
                     case  2: bMenuMouseFollow = *static_cast<sal_Bool const *>(pValues->getValue()); break; //"Menu/FollowMouse",
                     case  3: *pValues >>= nSnapMode; break; //"Dialog/MousePositioning",
                     case  4: { short nTmp = 0; *pValues >>= nTmp; nMiddleMouse = static_cast<MouseMiddleButtonAction>(nTmp); break; } //"Dialog/MiddleMouseButton",
@@ -121,7 +127,7 @@ void  SvtTabAppearanceCfg::ImplCommit()
         switch(nProp)
         {
             case  0: pValues[nProp] <<= nScaleFactor; break;            // "FontScaling",
-            case  1: pValues[nProp] <<= nDragMode; break;               //"Window/Drag",
+            case  1: pValues[nProp] <<= (short)nDragMode; break;               //"Window/Drag",
             case  2: pValues[nProp] <<= bMenuMouseFollow; break; //"Menu/FollowMouse",
             case  3: pValues[nProp] <<= nSnapMode; break;               //"Dialog/MousePositioning",
             case  4: pValues[nProp] <<= static_cast<short>(nMiddleMouse); break;               //"Dialog/MiddleMouseButton",
