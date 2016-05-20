@@ -135,6 +135,16 @@ void OpenGLProgram::SetExtrusionVectors(const GLvoid* pData)
     SetVertexAttrib(mnNormalAttrib, "extrusion_vectors", pData, 3);
 }
 
+void OpenGLProgram::SetShaderType(TextureShaderType eTextureShaderType)
+{
+    SetUniform1i("type", GLint(eTextureShaderType));
+}
+
+void OpenGLProgram::SetShaderType(DrawShaderType eDrawShaderType)
+{
+    SetUniform1i("type", GLint(eDrawShaderType));
+}
+
 GLuint OpenGLProgram::GetUniformLocation( const OString& rName )
 {
     auto it = maUniformLocations.find( rName );
@@ -283,6 +293,14 @@ void OpenGLProgram::SetTransform(
         (float) rNull.getX(),            (float) rNull.getY(),            0, 1 };
     glm::mat4 aMatrix = glm::make_mat4( aValues );
     glUniformMatrix4fv( nUniform, 1, GL_FALSE, glm::value_ptr( aMatrix ) );
+    CHECK_GL_ERROR();
+}
+
+void OpenGLProgram::SetIdentityTransform(const OString& rName)
+{
+    GLuint nUniform = GetUniformLocation(rName);
+    glm::mat4 aMatrix = glm::mat4();
+    glUniformMatrix4fv(nUniform, 1, GL_FALSE, glm::value_ptr( aMatrix ) );
     CHECK_GL_ERROR();
 }
 
