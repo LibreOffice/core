@@ -56,6 +56,16 @@ void SwEditWinUIObject::execute(const OUString& rAction,
             mxEditWin->GetView().SetZoom(SvxZoomType::PERCENT, nVal);
         }
     }
+    else if (rAction == "GOTO")
+    {
+        if (rParameters.find("PAGE") != rParameters.end())
+        {
+            auto itr = rParameters.find("PAGE");
+            OUString aVal = itr->second;
+            sal_Int32 nVal = aVal.toInt32();
+            getWrtShell(mxEditWin).GotoPage(nVal, false);
+        }
+    }
     else
         WindowUIObject::execute(rAction, rParameters);
 }
