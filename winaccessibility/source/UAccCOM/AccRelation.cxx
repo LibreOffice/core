@@ -31,6 +31,7 @@
 
 #include <vcl/svapp.hxx>
 
+#include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include "MAccessible.h"
@@ -194,27 +195,23 @@ STDMETHODIMP CAccRelation::put_XSubInterface(hyper pXSubInterface)
 */
 BSTR CAccRelation::getRelationTypeBSTR(int type)
 {
-    static struct TYPE_BSTR_MAP
-    {
-        LPCTSTR string;
-        int type;
-    }
-    map[] =
+    static LPCTSTR map[] =
         {
-            {_T("INVALID")              ,   0},
-            {IA2_RELATION_FLOWS_FROM    ,   1},
-            {IA2_RELATION_FLOWS_TO      ,   2},
-            {IA2_RELATION_CONTROLLED_BY ,   3},
-            {IA2_RELATION_CONTROLLER_FOR,   4},
-            {IA2_RELATION_LABEL_FOR     ,   5},
-            {IA2_RELATION_LABELED_BY    ,   6},
-            {IA2_RELATION_MEMBER_OF     ,   7},
-            {IA2_RELATION_SUBWINDOW_OF  ,   8},
-            {IA2_RELATION_NODE_CHILD_OF ,   9},
-            {IA2_RELATION_DESCRIBED_BY  ,  10},
+            _T("INVALID"),               // AccessibleRelationType::INVALID
+            IA2_RELATION_FLOWS_FROM,     // AccessibleRelationType::CONTENT_FLOWS_FROM
+            IA2_RELATION_FLOWS_TO,       // AccessibleRelationType::CONTENT_FLOWS_TO
+            IA2_RELATION_CONTROLLED_BY,  // AccessibleRelationType::CONTROLLED_BY
+            IA2_RELATION_CONTROLLER_FOR, // AccessibleRelationType::CONTROLLER_FOR
+            IA2_RELATION_LABEL_FOR,      // AccessibleRelationType::LABEL_FOR
+            IA2_RELATION_LABELED_BY,     // AccessibleRelationType::LABELED_BY
+            IA2_RELATION_MEMBER_OF,      // AccessibleRelationType::MEMBER_OF
+            IA2_RELATION_SUBWINDOW_OF,   // AccessibleRelationType::SUB_WINDOW_OF
+            IA2_RELATION_NODE_CHILD_OF,  // AccessibleRelationType::NODE_CHILD_OF
+            IA2_RELATION_DESCRIBED_BY    // AccessibleRelationType::DESCRIBED_BY
         };
 
-    return ::SysAllocString((type >= 0 && type <= 10) ? map[type].string : _T(""));
+    return ::SysAllocString( (type >= AccessibleRelationType::INVALID && type <= AccessibleRelationType::DESCRIBED_BY)
+                             ? map[type] : _T(""));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
