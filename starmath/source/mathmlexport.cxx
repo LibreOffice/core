@@ -80,6 +80,10 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
+namespace {
+
+inline bool IsInPrivateUseArea( sal_Unicode cChar ) { return 0xE000 <= cChar  &&  cChar <= 0xF8FF; }
+
 sal_Unicode ConvertMathToMathML( sal_Unicode cChar )
 {
     sal_Unicode cRes = cChar;
@@ -89,6 +93,8 @@ sal_Unicode ConvertMathToMathML( sal_Unicode cChar )
         cRes = sal_Unicode('@'); // just some character that should easily be notice as odd in the context
     }
     return cRes;
+}
+
 }
 
 bool SmXMLExportWrapper::Export(SfxMedium &rMedium)
