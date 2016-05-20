@@ -623,7 +623,7 @@ bool X11OpenGLSalGraphicsImpl::FillPixmapFromScreen( X11Pixmap* pPixmap, int nX,
 
     SAL_INFO( "vcl.opengl", "FillPixmapFromScreen" );
 
-    if( !OpenGLHelper::GetVisualInfo( pDisplay, nScreen.getXScreen(), aVisualInfo ) )
+    if (!SalDisplay::BestOpenGLVisual(pDisplay, nScreen.getXScreen(), aVisualInfo))
         return false;
 
     // make sure everything is synced up before reading back
@@ -655,6 +655,66 @@ typedef o3tl::lru_map<ControlCacheKey, std::unique_ptr<TextureCombo>, ControlCac
 
 vcl::DeleteOnDeinit<ControlCacheType> gTextureCache(new ControlCacheType(200));
 
+namespace
+{
+    GLXFBConfig GetPixmapFBConfig( Display* pDisplay, bool& bInverted )
+    {
+        OpenGLZone aZone;
+
+        int nScreen = DefaultScreen( pDisplay );
+        GLXFBConfig *aFbConfigs;
+        int i, nFbConfigs, nValue;
+
+        aFbConfigs = glXGetFBConfigs( pDisplay, nScreen, &nFbConfigs );
+        for( i = 0; i < nFbConfigs; i++ )
+        {
+            glXGetFBConfigAttrib( pDisplay, aFbConfigs[i], GLX_DRAWABLE_TYPE, &nValue );
+            if( !(nValue & GLX_PIXMAP_BIT) )
+                continue;
+
+            glXGetFBConfigAttrib( pDisplay, aFbConfigs[i], GLX_BIND_TO_TEXTURE_TARGETS_EXT, &nValue );
+            if( !(nValue & GLX_TEXTURE_2D_BIT_EXT) )
+                continue;
+
+            glXGetFBConfigAttrib( pDisplay, aFbConfigs[i], GLX_DEPTH_SIZE, &nValue );
+            if( nValue != 24 )
+                continue;
+
+            glXGetFBConfigAttrib( pDisplay, aFbConfigs[i], GLX_RED_SIZE, &nValue );
+            if( nValue != 8 )
+                continue;
+            SAL_INFO( "vcl.opengl", "Red is " << nValue );
+
+            // TODO: lfrb: Make it configurable wrt RGB/RGBA
+            glXGetFBConfigAttrib( pDisplay, aFbConfigs[i], GLX_BIND_TO_TEXTURE_RGB_EXT, &nValue );
+            if( nValue == False )
+            {
+                glXGetFBConfigAttrib( pDisplay, aFbConfigs[i], GLX_BIND_TO_TEXTURE_RGBA_EXT, &nValue );
+                if( nValue == False )
+                    continue;
+            }
+
+            glXGetFBConfigAttrib( pDisplay, aFbConfigs[i], GLX_Y_INVERTED_EXT, &nValue );
+
+            // Looks like that X sends GLX_DONT_CARE but this usually means "true" for most
+            // of the X implementations. Investigation on internet pointed that this could be
+            // safely "true" all the time (for example gnome-shell always assumes "true").
+            bInverted = nValue == True || nValue == int(GLX_DONT_CARE);
+
+            break;
+        }
+
+        if( i == nFbConfigs )
+        {
+            SAL_WARN( "vcl.opengl", "Unable to find FBconfig for pixmap texturing" );
+            return nullptr;
+        }
+
+        CHECK_GL_ERROR();
+        return aFbConfigs[i];
+    }
+}
+
 bool X11OpenGLSalGraphicsImpl::RenderPixmap(X11Pixmap* pPixmap, X11Pixmap* pMask, int nX, int nY, TextureCombo& rCombo)
 {
     const int aAttribs[] =
@@ -675,7 +735,7 @@ bool X11OpenGLSalGraphicsImpl::RenderPixmap(X11Pixmap* pPixmap, X11Pixmap* pMask
     //glClear( GL_COLOR_BUFFER_BIT );
 
     XSync( pDisplay, 0 );
-    GLXFBConfig pFbConfig = OpenGLHelper::GetPixmapFBConfig( pDisplay, bInverted );
+    GLXFBConfig pFbConfig = GetPixmapFBConfig( pDisplay, bInverted );
     GLXPixmap pGlxPixmap = glXCreatePixmap( pDisplay, pFbConfig, pPixmap->GetPixmap(), aAttribs);
     GLXPixmap pGlxMask;
     if( pMask != nullptr )

@@ -17,12 +17,6 @@
 
 #include <rtl/ustring.hxx>
 
-#if defined UNX && !defined MACOSX && !defined IOS && !defined ANDROID && !defined(LIBO_HEADLESS)
-#  include <X11/Xlib.h>
-#  include <X11/Xutil.h>
-#  include "GL/glxew.h"
-#endif
-
 /// Helper to do a SAL_INFO as well as a GL log.
 #define VCL_GL_INFO(stream) \
     do { \
@@ -100,11 +94,6 @@ public:
      * Returns true if VCL has OpenGL rendering enabled
      */
     static bool isVCLOpenGLEnabled();
-
-#if defined UNX && !defined MACOSX && !defined IOS && !defined ANDROID && !defined(LIBO_HEADLESS)
-    static bool GetVisualInfo(Display* pDisplay, int nScreen, XVisualInfo& rVI);
-    static GLXFBConfig GetPixmapFBConfig( Display* pDisplay, bool& bInverted );
-#endif
 };
 
 #ifdef SAL_LOG_WARN

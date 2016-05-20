@@ -279,9 +279,8 @@ protected:
     void            doDestruct();
     void            addXineramaScreenUnique( int i, long i_nX, long i_nY, long i_nWidth, long i_nHeight );
 public:
-    static bool BestVisual( Display     *pDisp,
-                                int          nScreen,
-                                XVisualInfo &rVI );
+    static bool BestOpenGLVisual(Display* pDisplay, int nScreen, XVisualInfo& rVI);
+    static bool BestVisual(Display *pDisp, int nScreen, XVisualInfo &rVI);
 
                     SalDisplay( Display* pDisp );
 

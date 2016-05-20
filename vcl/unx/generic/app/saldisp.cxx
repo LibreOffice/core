@@ -47,6 +47,9 @@
 #include <X11/extensions/Xinerama.h>
 #endif
 
+#include "GL/glxew.h"
+#include <opengl/zone.hxx>
+
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
@@ -183,6 +186,30 @@ sal_GetServerVendor( Display *p_display )
     return vendor_unknown;
 }
 
+bool SalDisplay::BestOpenGLVisual(Display* pDisplay, int nScreen, XVisualInfo& rVI)
+{
+    OpenGLZone aZone;
+
+    XVisualInfo* pVI;
+    int aAttrib[] = { GLX_RGBA,
+                      GLX_RED_SIZE, 8,
+                      GLX_GREEN_SIZE, 8,
+                      GLX_BLUE_SIZE, 8,
+                      GLX_DEPTH_SIZE, 24,
+                      GLX_STENCIL_SIZE, 8,
+                      None };
+
+    pVI = glXChooseVisual( pDisplay, nScreen, aAttrib );
+    if( !pVI )
+        return false;
+
+    rVI = *pVI;
+    XFree( pVI );
+
+    CHECK_GL_ERROR();
+    return true;
+}
+
 bool SalDisplay::BestVisual( Display     *pDisplay,
                              int          nScreen,
                              XVisualInfo &rVI )
@@ -198,7 +225,7 @@ bool SalDisplay::BestVisual( Display     *pDisplay,
 
     try {
         bool bUseOpenGL = OpenGLHelper::isVCLOpenGLEnabled();
-        if( bUseOpenGL && OpenGLHelper::GetVisualInfo( pDisplay, nScreen, rVI ) )
+        if (bUseOpenGL && BestOpenGLVisual(pDisplay, nScreen, rVI))
             return rVI.visualid == nDefVID;
     }
     catch (const css::uno::DeploymentException&)
