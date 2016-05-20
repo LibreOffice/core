@@ -447,6 +447,10 @@ void SvpSalInstance::AddToRecentDocumentList(const OUString&, const OUString&, c
 //obviously doesn't actually do anything, its just a nonfunctional stub
 class SvpOpenGLContext : public OpenGLContext
 {
+    GLWindow m_aGLWin;
+private:
+    virtual const GLWindow& getOpenGLWindow() const { return m_aGLWin; }
+    virtual GLWindow& getModifiableOpenGLWindow() { return m_aGLWin; }
 };
 
 OpenGLContext* SvpSalInstance::CreateOpenGLContext()

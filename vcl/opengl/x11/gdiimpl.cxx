@@ -39,6 +39,9 @@ public:
     bool init(Display* dpy, Window win, int screen);
     virtual bool initWindow() override;
 private:
+    GLX11Window m_aGLWin;
+    virtual const GLWindow& getOpenGLWindow() const { return m_aGLWin; }
+    virtual GLWindow& getModifiableOpenGLWindow() { return m_aGLWin; }
     virtual bool ImplInit() override;
     void initGLWindow(Visual* pVisual);
     virtual SystemWindowData generateWinData(vcl::Window* pParent, bool bRequestLegacyContext) override;
@@ -362,8 +365,7 @@ bool X11OpenGLContext::ImplInit()
       nGLXVersion = glxMajor + 0.1*glxMinor;
     SAL_INFO("vcl.opengl", "available GLX version: " << nGLXVersion);
 
-    m_aGLWin.GLExtensions = glGetString( GL_EXTENSIONS );
-    SAL_INFO("vcl.opengl", "available GL  extensions: " << m_aGLWin.GLExtensions);
+    SAL_INFO("vcl.opengl", "available GL  extensions: " << glGetString(GL_EXTENSIONS));
 
     XWindowAttributes aWinAttr;
     if( !XGetWindowAttributes( m_aGLWin.dpy, m_aGLWin.win, &aWinAttr ) )
@@ -565,9 +567,30 @@ static GLboolean checkExtension(const GLubyte* extName, const GLubyte* extString
   return flag;
 }
 
-bool GLWindow::HasGLXExtension( const char* name ) const
+GLX11Window::GLX11Window()
+    : dpy(nullptr)
+    , screen(0)
+    , win(0)
+    , vi(nullptr)
+    , ctx(nullptr)
+    , GLXExtensions(nullptr)
+{
+}
+
+bool GLX11Window::HasGLXExtension( const char* name ) const
 {
     return checkExtension( reinterpret_cast<const GLubyte*>(name), reinterpret_cast<const GLubyte*>(GLXExtensions) );
+}
+
+GLX11Window::~GLX11Window()
+{
+    XFree(vi);
+}
+
+bool GLX11Window::Synchronize(bool bOnoff) const
+{
+    XSynchronize(dpy, bOnoff);
+    return true;
 }
 
 OpenGLContext* X11SalInstance::CreateOpenGLContext()

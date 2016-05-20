@@ -14,37 +14,6 @@
 
 #include <GL/glew.h>
 
-#if defined( MACOSX )
-#elif defined( IOS )
-#elif defined( ANDROID )
-#elif defined( LIBO_HEADLESS )
-#elif defined( UNX )
-#  include <X11/Xlib.h>
-#  include <X11/Xutil.h>
-#  include "GL/glxew.h"
-#elif defined( _WIN32 )
-#ifndef INCLUDED_PRE_POST_WIN_H
-#define INCLUDED_PRE_POST_WIN_H
-#  include "prewin.h"
-#  include "postwin.h"
-#endif
-#endif
-
-#if defined( _WIN32 )
-#include <GL/wglew.h>
-#elif defined( MACOSX )
-#include <OpenGL/OpenGL.h>
-#ifdef __OBJC__
-@class NSOpenGLView;
-#else
-class NSOpenGLView;
-#endif
-#elif defined( IOS )
-#elif defined( ANDROID )
-#elif defined( LIBO_HEADLESS )
-#elif defined( UNX )
-#endif
-
 #include <vcl/dllapi.h>
 #include <vcl/window.hxx>
 #include <tools/gen.hxx>
@@ -67,57 +36,20 @@ class RenderState;
 /// Holds the information of our new child window
 struct VCL_DLLPUBLIC GLWindow
 {
-#if defined( _WIN32 )
-    HWND                    hWnd;
-    HDC                     hDC;
-    HGLRC                   hRC;
-#elif defined( MACOSX )
-#elif defined( IOS )
-#elif defined( ANDROID )
-#elif defined( LIBO_HEADLESS )
-#elif defined( UNX )
-    Display*            dpy;
-    int                 screen;
-    Window              win;
-    XVisualInfo*       vi;
-    GLXContext         ctx;
-
-    bool HasGLXExtension( const char* name ) const;
-    const char*             GLXExtensions;
-#endif
     unsigned int            Width;
     unsigned int            Height;
-    const GLubyte*          GLExtensions;
     bool bMultiSampleSupported;
 
     GLWindow()
-        :
-#if defined( _WIN32 )
-        hWnd(NULL),
-        hDC(NULL),
-        hRC(NULL),
-#elif defined( MACOSX )
-#elif defined( IOS )
-#elif defined( ANDROID )
-#elif defined( LIBO_HEADLESS )
-#elif defined( UNX )
-        dpy(nullptr),
-        screen(0),
-        win(0),
-        vi(nullptr),
-        ctx(nullptr),
-        GLXExtensions(nullptr),
-#endif
-        Width(0),
-        Height(0),
-        GLExtensions(nullptr),
-        bMultiSampleSupported(false)
+        : Width(0)
+        , Height(0)
+        , bMultiSampleSupported(false)
     {
     }
 
-    bool Synchronize(bool bOnoff) const;
+    virtual bool Synchronize(bool bOnoff) const;
 
-    ~GLWindow();
+    virtual ~GLWindow();
 };
 
 class VCL_DLLPUBLIC OpenGLContext
@@ -189,7 +121,7 @@ public:
 
     void setWinPosAndSize(const Point &rPos, const Size& rSize);
     void setWinSize(const Size& rSize);
-    const GLWindow& getOpenGLWindow() const;
+    virtual const GLWindow& getOpenGLWindow() const = 0;
 
     SystemChildWindow* getChildWindow();
     const SystemChildWindow* getChildWindow() const;
@@ -212,11 +144,11 @@ private:
     virtual void destroyCurrentContext();
 
 protected:
-    GLWindow m_aGLWin;
     bool InitGLEW();
     void InitGLEWDebugging();
     void InitChildWindow(SystemChildWindow *pChildWindow);
     void BuffersSwapped();
+    virtual GLWindow& getModifiableOpenGLWindow() = 0;
     virtual bool ImplInit();
 
     VclPtr<vcl::Window> m_xWindow;
