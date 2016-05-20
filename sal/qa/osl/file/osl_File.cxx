@@ -296,12 +296,12 @@ inline void deleteTestDirectory( const ::rtl::OUString& basename, const ::rtl::O
 
 /** Check for the file and directory access right.
 */
-typedef enum {
-    osl_Check_Mode_Exist,
-    osl_Check_Mode_OpenAccess,
-    osl_Check_Mode_ReadAccess,
-    osl_Check_Mode_WriteAccess
-} oslCheckMode;
+enum class oslCheckMode {
+    Exist,
+    OpenAccess,
+    ReadAccess,
+    WriteAccess
+};
 
 //check if the file exist
 inline bool ifFileExist( const ::rtl::OUString & str )
@@ -345,15 +345,15 @@ inline bool checkDirectory( const ::rtl::OUString & str, oslCheckMode nCheckMode
     if ( ( ::osl::FileBase::E_NOENT != rc ) && ( ::osl::FileBase::E_ACCES != rc ) ){
 
         switch ( nCheckMode ) {
-            case osl_Check_Mode_Exist:
+            case oslCheckMode::Exist:
                 if ( rc == ::osl::FileBase::E_None )
                     bCheckResult = true;
                 break;
-            case osl_Check_Mode_OpenAccess:
+            case oslCheckMode::OpenAccess:
                 if ( rc == ::osl::FileBase::E_None )
                     bCheckResult = true;
                 break;
-            case osl_Check_Mode_ReadAccess:
+            case oslCheckMode::ReadAccess:
                 //rc = pDir->getNextItem( rItem, 0 );
                 rc = aDir.getNextItem( rItem );
                 if ( ( rc == ::osl::FileBase::E_None ) || ( rc == ::osl::FileBase::E_NOENT ) )
@@ -361,7 +361,7 @@ inline bool checkDirectory( const ::rtl::OUString & str, oslCheckMode nCheckMode
                 else
                     bCheckResult = false;
                 break;
-            case osl_Check_Mode_WriteAccess:
+            case oslCheckMode::WriteAccess:
                 ( ( aUString += str ) += aSlashURL ) += aTmpName2;
                 //if ( ( rc = pDir->create( aUString ) ) == ::osl::FileBase::E_None )
                 if ( ( rc = Directory::create( aUString ) ) == ::osl::FileBase::E_None )
@@ -1104,9 +1104,9 @@ namespace osl_FileBase
         void getTempDirURL_002()
         {
             CPPUNIT_ASSERT_MESSAGE( "test for getTempDirURL function: test for open and write access rights",
-                                    checkDirectory( aUStr, osl_Check_Mode_OpenAccess ) &&
-                                    checkDirectory( aUStr, osl_Check_Mode_ReadAccess ) &&
-                                    checkDirectory( aUStr,osl_Check_Mode_WriteAccess ) );
+                                    checkDirectory( aUStr, oslCheckMode::OpenAccess ) &&
+                                    checkDirectory( aUStr, oslCheckMode::ReadAccess ) &&
+                                    checkDirectory( aUStr, oslCheckMode::WriteAccess ) );
         }
 
         CPPUNIT_TEST_SUITE( getTempDirURL );
