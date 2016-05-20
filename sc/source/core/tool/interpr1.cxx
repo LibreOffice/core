@@ -2771,6 +2771,14 @@ void ScInterpreter::ScIsError()
             }
         }
         break;
+        case svExternalSingleRef:
+        {
+            ScExternalRefCache::TokenRef pToken;
+            PopExternalSingleRef(pToken);
+            if (nGlobalError || !pToken || pToken->GetType() == svError)
+                bRes = true;
+        }
+        break;
         default:
             PopError();
             if ( nGlobalError )
