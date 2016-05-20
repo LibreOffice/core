@@ -43,6 +43,7 @@
 
 #include <xmlsecurity/biginteger.hxx>
 
+#include <comphelper/windowserrorstring.hxx>
 #include <sal/log.hxx>
 #include <rtl/locale.h>
 #include <osl/nlsupport.h>
@@ -366,6 +367,71 @@ HCRYPTKEY SecurityEnvironment_MSCryptImpl::getPriKey( unsigned int position ) th
     return prikey ;
 }
 
+#ifdef SAL_LOG_INFO
+
+// Based on sample code from MSDN
+
+static void get_system_name(const void *pvSystemStore,
+                            DWORD dwFlags,
+                            LPCWSTR *ppwszSystemName)
+{
+    *ppwszSystemName = NULL;
+
+    if (dwFlags & CERT_SYSTEM_STORE_RELOCATE_FLAG)
+    {
+        PCERT_SYSTEM_STORE_RELOCATE_PARA pRelocatePara;
+        pRelocatePara = (PCERT_SYSTEM_STORE_RELOCATE_PARA) pvSystemStore;
+        *ppwszSystemName = pRelocatePara->pwszSystemStore;
+    }
+    else
+    {
+        *ppwszSystemName = (LPCWSTR) pvSystemStore;
+    }
+}
+
+extern "C" BOOL WINAPI cert_enum_physical_store_callback(const void *,
+                                                         DWORD dwFlags,
+                                                         LPCWSTR pwszStoreName,
+                                                         PCERT_PHYSICAL_STORE_INFO,
+                                                         void *,
+                                                         void *)
+{
+    OUString name(pwszStoreName);
+    if (dwFlags & CERT_PHYSICAL_STORE_PREDEFINED_ENUM_FLAG)
+        name += " (implicitly created)";
+    SAL_INFO("xmlsecurity.xmlsec", "  Physical store: " << name);
+
+    return TRUE;
+}
+
+extern "C" BOOL WINAPI cert_enum_system_store_callback(const void *pvSystemStore,
+                                                       DWORD dwFlags,
+                                                       PCERT_SYSTEM_STORE_INFO,
+                                                       void *,
+                                                       void *)
+{
+    LPCWSTR pwszSystemStore;
+
+    get_system_name(pvSystemStore, dwFlags, &pwszSystemStore);
+    SAL_INFO("xmlsecurity.xmlsec", "System store: " << OUString(pwszSystemStore));
+
+    if (!CertEnumPhysicalStore(pvSystemStore,
+                               dwFlags,
+                               NULL,
+                               cert_enum_physical_store_callback))
+    {
+        DWORD dwErr = GetLastError();
+        if (!(ERROR_FILE_NOT_FOUND == dwErr ||
+              ERROR_NOT_SUPPORTED == dwErr))
+        {
+            SAL_WARN("xmlsecurity.xmlsec", "CertEnumPhysicalStore failed:" << WindowsErrorString(GetLastError()));
+        }
+    }
+    return TRUE;
+}
+
+#endif
+
 //Methods from XSecurityEnvironment
 Sequence< Reference < XCertificate > > SecurityEnvironment_MSCryptImpl::getPersonalCertificates() throw( SecurityException , RuntimeException )
 {
@@ -396,6 +462,10 @@ Sequence< Reference < XCertificate > > SecurityEnvironment_MSCryptImpl::getPerso
         HCERTSTORE hSystemKeyStore ;
         DWORD      dwKeySpec;
         HCRYPTPROV hCryptProv;
+
+#ifdef SAL_LOG_INFO
+        CertEnumSystemStore(CERT_SYSTEM_STORE_CURRENT_USER, NULL, NULL, cert_enum_system_store_callback);
+#endif
 
         hSystemKeyStore = CertOpenSystemStore( 0, "MY" ) ;
         if( hSystemKeyStore != NULL ) {
