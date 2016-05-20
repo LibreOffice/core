@@ -138,7 +138,7 @@ void ExternalToolEdit::Edit(GraphicObject const*const pGraphicObject)
     OUString aFilter(rGraphicFilter.GetExportFormatShortName(nFilter));
 
     // Write the Graphic to the file now
-    XOutBitmap::WriteGraphic(aGraphic, aTempFileName, aFilter, XOUTBMP_USE_NATIVE_IF_POSSIBLE | XOUTBMP_DONT_EXPAND_FILENAME);
+    XOutBitmap::WriteGraphic(aGraphic, aTempFileName, aFilter, XOutFlags::UseNativeIfPossible | XOutFlags::DontExpandFilename);
 
     // There is a possibility that sPath extension might have been changed if the
     // provided extension is not writable

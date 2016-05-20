@@ -137,7 +137,7 @@ class ScHTMLExport : public ScExportBase
     void WriteGraphEntry( ScHTMLGraphEntry* );
     void WriteImage( OUString& rLinkName,
                      const Graphic&, const OString& rImgOptions,
-                     sal_uLong nXOutFlags = 0 );
+                     XOutFlags nXOutFlags = XOutFlags::NONE );
             // nXOutFlags for XOutBitmap::WriteGraphic
 
     // write to stream if and only if URL fields in edit cell

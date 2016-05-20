@@ -106,7 +106,7 @@ tools::PolyPolygon SvxContourDlg::CreateAutoContour( const Graphic& rGraphic,
                                               const sal_uIntPtr nFlags )
 {
     Bitmap  aBmp;
-    sal_uIntPtr nContourFlags = XOUTBMP_CONTOUR_HORZ;
+    XOutFlags nContourFlags = XOutFlags::ContourHorz;
 
     if ( rGraphic.GetType() == GRAPHIC_BITMAP )
     {
@@ -145,7 +145,7 @@ tools::PolyPolygon SvxContourDlg::CreateAutoContour( const Graphic& rGraphic,
         else
         {
             aBmp = rGraphic.GetBitmap();
-            nContourFlags |= XOUTBMP_CONTOUR_EDGEDETECT;
+            nContourFlags |= XOutFlags::ContourEdgeDetect;
         }
     }
     else if( rGraphic.GetType() != GRAPHIC_NONE )
@@ -171,7 +171,7 @@ tools::PolyPolygon SvxContourDlg::CreateAutoContour( const Graphic& rGraphic,
             aBmp = pVDev->GetBitmap( aPt, aSizePix );
         }
 
-        nContourFlags |= XOUTBMP_CONTOUR_EDGEDETECT;
+        nContourFlags |= XOutFlags::ContourEdgeDetect;
     }
 
     aBmp.SetPrefSize( rGraphic.GetPrefSize() );

@@ -1734,8 +1734,8 @@ static Writer & OutHTML_FrameFormatAsImage( Writer& rWrt, const SwFrameFormat& r
         if( aGraphic.GetType() == GRAPHIC_NONE ||
             XOutBitmap::WriteGraphic( aGraphic, GraphicURL,
                                       "JPG",
-                                      (XOUTBMP_USE_GIF_IF_POSSIBLE|
-                                       XOUTBMP_USE_NATIVE_IF_POSSIBLE) ) != 0 )
+                                      (XOutFlags::UseGifIfPossible|
+                                       XOutFlags::UseNativeIfPossible) ) != 0 )
         {
             // leer oder fehlerhaft, da ist nichts auszugeben
             rHTMLWrt.m_nWarn = WARN_SWG_POOR_LOAD | WARN_SW_WRITE_BASE;
@@ -1786,14 +1786,14 @@ static Writer& OutHTML_FrameFormatGrfNode( Writer& rWrt, const SwFrameFormat& rF
                 aGraphicURL = *rHTMLWrt.GetOrigFileName();
             pGrfNd->GetGrf( true );
 
-            sal_uLong nFlags = XOUTBMP_USE_GIF_IF_SENSIBLE |
-                           XOUTBMP_USE_NATIVE_IF_POSSIBLE;
+            XOutFlags nFlags = XOutFlags::UseGifIfSensible |
+                           XOutFlags::UseNativeIfPossible;
             switch( rMirror.GetValue() )
             {
-            case RES_MIRROR_GRAPH_VERT: nFlags = XOUTBMP_MIRROR_HORZ; break;
-            case RES_MIRROR_GRAPH_HOR:    nFlags = XOUTBMP_MIRROR_VERT; break;
+            case RES_MIRROR_GRAPH_VERT: nFlags = XOutFlags::MirrorHorz; break;
+            case RES_MIRROR_GRAPH_HOR:    nFlags = XOutFlags::MirrorVert; break;
             case RES_MIRROR_GRAPH_BOTH:
-                nFlags = XOUTBMP_MIRROR_VERT | XOUTBMP_MIRROR_HORZ;
+                nFlags = XOutFlags::MirrorVert | XOutFlags::MirrorHorz;
                 break;
             }
 

@@ -116,7 +116,7 @@ Graphic XOutBitmap::MirrorGraphic( const Graphic& rGraphic, const BmpMirrorFlags
 }
 
 sal_uInt16 XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileName,
-                                 const OUString& rFilterName, const sal_uIntPtr nFlags,
+                                 const OUString& rFilterName, const XOutFlags nFlags,
                                  const Size* pMtfSize_100TH_MM )
 {
     if( rGraphic.GetType() != GRAPHIC_NONE )
@@ -131,7 +131,7 @@ sal_uInt16 XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileNam
         DBG_ASSERT( aURL.GetProtocol() != INetProtocol::NotValid, "XOutBitmap::WriteGraphic(...): invalid URL" );
 
         // calculate correct file name
-        if( !( nFlags & XOUTBMP_DONT_EXPAND_FILENAME ) )
+        if( !( nFlags & XOutFlags::DontExpandFilename ) )
         {
             OUString aName( aURL.getBase() );
             aName += "_";
@@ -151,7 +151,7 @@ sal_uInt16 XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileNam
             && aSvgDataPtr->getSvgDataArrayLength()
             && rFilterName.equalsIgnoreAsciiCase("svg"))
         {
-            if(!(nFlags & XOUTBMP_DONT_ADD_EXTENSION))
+            if(!(nFlags & XOutFlags::DontAddExtension))
             {
                 aURL.setExtension(rFilterName);
             }
@@ -174,9 +174,9 @@ sal_uInt16 XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileNam
 
         if( GRFILTER_OK != nErr )
         {
-            if( ( nFlags & XOUTBMP_USE_NATIVE_IF_POSSIBLE ) &&
-                !( nFlags & XOUTBMP_MIRROR_HORZ ) &&
-                !( nFlags & XOUTBMP_MIRROR_VERT ) &&
+            if( ( nFlags & XOutFlags::UseNativeIfPossible ) &&
+                !( nFlags & XOutFlags::MirrorHorz ) &&
+                !( nFlags & XOutFlags::MirrorVert ) &&
                 ( rGraphic.GetType() != GRAPHIC_GDIMETAFILE ) && rGraphic.IsLink() )
             {
                 // try to write native link
@@ -198,7 +198,7 @@ sal_uInt16 XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileNam
 
                 if( !aExt.isEmpty() )
                 {
-                    if( 0 == (nFlags & XOUTBMP_DONT_ADD_EXTENSION))
+                    if( !(nFlags & XOutFlags::DontAddExtension) )
                         aURL.setExtension( aExt );
                     rFileName = aURL.GetMainURL( INetURLObject::NO_DECODE );
 
@@ -222,8 +222,8 @@ sal_uInt16 XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileNam
             OUString  aFilter( rFilterName );
             bool    bWriteTransGrf = ( aFilter.equalsIgnoreAsciiCase( "transgrf" ) ) ||
                                      ( aFilter.equalsIgnoreAsciiCase( "gif" ) ) ||
-                                     ( nFlags & XOUTBMP_USE_GIF_IF_POSSIBLE ) ||
-                                     ( ( nFlags & XOUTBMP_USE_GIF_IF_SENSIBLE ) && ( bAnimated || bTransparent ) );
+                                     ( nFlags & XOutFlags::UseGifIfPossible ) ||
+                                     ( ( nFlags & XOutFlags::UseGifIfSensible ) && ( bAnimated || bTransparent ) );
 
             // get filter and extension
             if( bWriteTransGrf )
@@ -300,19 +300,19 @@ sal_uInt16 XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileNam
                 }
 
                 // mirror?
-                if( ( nFlags & XOUTBMP_MIRROR_HORZ ) || ( nFlags & XOUTBMP_MIRROR_VERT ) )
+                if( ( nFlags & XOutFlags::MirrorHorz ) || ( nFlags & XOutFlags::MirrorVert ) )
                 {
                     BmpMirrorFlags nBmpMirrorFlags = BmpMirrorFlags::NONE;
-                    if( nFlags & XOUTBMP_MIRROR_HORZ )
+                    if( nFlags & XOutFlags::MirrorHorz )
                       nBmpMirrorFlags |= BmpMirrorFlags::Horizontal;
-                    if( nFlags & XOUTBMP_MIRROR_VERT )
+                    if( nFlags & XOutFlags::MirrorVert )
                       nBmpMirrorFlags |= BmpMirrorFlags::Vertical;
                     aGraphic = MirrorGraphic( aGraphic, nBmpMirrorFlags );
                 }
 
                 if( ( GRFILTER_FORMAT_NOTFOUND != nFilter ) && ( aGraphic.GetType() != GRAPHIC_NONE ) )
                 {
-                    if( 0 == (nFlags & XOUTBMP_DONT_ADD_EXTENSION))
+                    if( !(nFlags & XOutFlags::DontAddExtension) )
                         aURL.setExtension( aExt );
                     rFileName = aURL.GetMainURL( INetURLObject::NO_DECODE );
                     nErr = ExportGraphic( aGraphic, aURL, rFilter, nFilter );
@@ -498,7 +498,7 @@ Bitmap XOutBitmap::DetectEdges( const Bitmap& rBmp, const sal_uInt8 cThreshold )
     return aRetBmp;
 }
 
-tools::Polygon XOutBitmap::GetCountour( const Bitmap& rBmp, const sal_uIntPtr nFlags,
+tools::Polygon XOutBitmap::GetCountour( const Bitmap& rBmp, const XOutFlags nFlags,
                                         const sal_uInt8 cEdgeDetectThreshold,
                                         const Rectangle* pWorkRectPixel )
 {
@@ -515,7 +515,7 @@ tools::Polygon XOutBitmap::GetCountour( const Bitmap& rBmp, const sal_uIntPtr nF
     if( ( aWorkRect.GetWidth() > 4 ) && ( aWorkRect.GetHeight() > 4 ) )
     {
         // if the flag is set, we need to detect edges
-        if( nFlags & XOUTBMP_CONTOUR_EDGEDETECT )
+        if( nFlags & XOutFlags::ContourEdgeDetect )
             aWorkBmp = DetectEdges( rBmp, cEdgeDetectThreshold );
         else
             aWorkBmp = rBmp;
@@ -542,7 +542,7 @@ tools::Polygon XOutBitmap::GetCountour( const Bitmap& rBmp, const sal_uIntPtr nF
             sal_uInt16              nPolyPos = 0;
             const BitmapColor   aBlack = pAcc->GetBestMatchingColor( Color( COL_BLACK ) );
 
-            if( nFlags & XOUTBMP_CONTOUR_VERT )
+            if( nFlags & XOutFlags::ContourVert )
             {
                 pPoints1.reset(new Point[ nWidth ]);
                 pPoints2.reset(new Point[ nWidth ]);

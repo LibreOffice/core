@@ -140,11 +140,11 @@ void ScHTMLExport::WriteGraphEntry( ScHTMLGraphEntry* pE )
                     ( pGeo->bMirrored ? 3 : 4 ) : ( pGeo->bMirrored ? 2 : 1 ));
             bool bHMirr = ( ( nMirrorCase == 2 ) || ( nMirrorCase == 4 ) );
             bool bVMirr = ( ( nMirrorCase == 3 ) || ( nMirrorCase == 4 ) );
-            sal_uLong nXOutFlags = 0;
+            XOutFlags nXOutFlags = XOutFlags::NONE;
             if ( bHMirr )
-                nXOutFlags |= XOUTBMP_MIRROR_HORZ;
+                nXOutFlags |= XOutFlags::MirrorHorz;
             if ( bVMirr )
-                nXOutFlags |= XOUTBMP_MIRROR_VERT;
+                nXOutFlags |= XOutFlags::MirrorVert;
             OUString aLinkName;
             if ( pSGO->IsLinkedGraphic() )
                 aLinkName = pSGO->GetFileName();
@@ -175,7 +175,7 @@ void ScHTMLExport::WriteGraphEntry( ScHTMLGraphEntry* pE )
 }
 
 void ScHTMLExport::WriteImage( OUString& rLinkName, const Graphic& rGrf,
-            const OString& rImgOptions, sal_uLong nXOutFlags )
+            const OString& rImgOptions, XOutFlags nXOutFlags )
 {
     // Embedded graphic -> create an image file
     if( rLinkName.isEmpty() )
@@ -184,7 +184,7 @@ void ScHTMLExport::WriteImage( OUString& rLinkName, const Graphic& rGrf,
         {
             // Save as a PNG
             OUString aGrfNm( aStreamPath );
-            nXOutFlags |= XOUTBMP_USE_NATIVE_IF_POSSIBLE;
+            nXOutFlags |= XOutFlags::UseNativeIfPossible;
             sal_uInt16 nErr = XOutBitmap::WriteGraphic( rGrf, aGrfNm,
                 "PNG", nXOutFlags );
 
