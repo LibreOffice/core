@@ -1322,7 +1322,13 @@
         <node oor:name="J_SHIFT_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:FullScreen</value>
+            <value xml:lang="en-US" install:module="unxwnt">.uno:FullScreen</value>
+          </prop>
+        </node>
+        <node oor:name="F_MOD1_MOD3" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US" install:module="macosx">.uno:FullScreen</value>
           </prop>
         </node>
         <node oor:name="N_MOD1" oor:op="replace">
@@ -2314,7 +2320,13 @@
         <node oor:name="J_SHIFT_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:FullScreen</value>
+            <value xml:lang="en-US" install:module="unxwnt">.uno:FullScreen</value>
+          </prop>
+        </node>
+        <node oor:name="F_MOD1_MOD3" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US" install:module="macosx">.uno:FullScreen</value>
           </prop>
         </node>
         <node oor:name="K_MOD1" oor:op="replace">
@@ -3201,7 +3213,13 @@
         <node oor:name="J_SHIFT_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:FullScreen</value>
+            <value xml:lang="en-US" install:module="unxwnt">.uno:FullScreen</value>
+          </prop>
+        </node>
+        <node oor:name="F_MOD1_MOD3" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US" install:module="macosx">.uno:FullScreen</value>
           </prop>
         </node>
         <node oor:name="Z_SHIFT_MOD1" oor:op="replace">
@@ -3695,7 +3713,13 @@
         <node oor:name="J_SHIFT_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:FullScreen</value>
+            <value xml:lang="en-US" install:module="unxwnt">.uno:FullScreen</value>
+          </prop>
+        </node>
+        <node oor:name="F_MOD1_MOD3" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US" install:module="macosx">.uno:FullScreen</value>
           </prop>
         </node>
         <node oor:name="K_MOD1" oor:op="replace">
@@ -4468,7 +4492,13 @@
         <node oor:name="J_SHIFT_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:FullScreen</value>
+            <value xml:lang="en-US" install:module="unxwnt">.uno:FullScreen</value>
+          </prop>
+        </node>
+        <node oor:name="F_MOD1_MOD3" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US" install:module="macosx">.uno:FullScreen</value>
           </prop>
         </node>
         <node oor:name="K_MOD1" oor:op="replace">
@@ -5229,7 +5259,13 @@
         <node oor:name="J_SHIFT_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:FullScreen</value>
+            <value xml:lang="en-US" install:module="unxwnt">.uno:FullScreen</value>
+          </prop>
+        </node>
+        <node oor:name="F_MOD1_MOD3" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US" install:module="macosx">.uno:FullScreen</value>
           </prop>
         </node>
         <node oor:name="K_MOD1" oor:op="replace">
@@ -6008,7 +6044,13 @@
         <node oor:name="J_SHIFT_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:FullScreen</value>
+            <value xml:lang="en-US" install:module="unxwnt">.uno:FullScreen</value>
+          </prop>
+        </node>
+        <node oor:name="F_MOD1_MOD3" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US" install:module="macosx">.uno:FullScreen</value>
           </prop>
         </node>
         <node oor:name="K_MOD1" oor:op="replace">
@@ -6793,7 +6835,13 @@
         <node oor:name="J_SHIFT_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:FullScreen</value>
+            <value xml:lang="en-US" install:module="unxwnt">.uno:FullScreen</value>
+          </prop>
+        </node>
+        <node oor:name="F_MOD1_MOD3" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US" install:module="macosx">.uno:FullScreen</value>
           </prop>
         </node>
         <node oor:name="K_MOD1" oor:op="replace">
