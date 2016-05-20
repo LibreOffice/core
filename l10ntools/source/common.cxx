@@ -10,11 +10,9 @@
 #include "common.hxx"
 
 //flags for handleArguments()
-#define STATE_NON       0x0001
-#define STATE_INPUT     0x0002
-#define STATE_OUTPUT    0x0003
-#define STATE_MERGESRC  0x0005
-#define STATE_LANGUAGES 0x0006
+enum class State {
+    NONE, Input, Output, MergeSrc, Languages
+};
 
 namespace common {
 
@@ -22,26 +20,26 @@ bool handleArguments(
     int argc, char * argv[], HandledArgs& o_aHandledArgs)
 {
     o_aHandledArgs = HandledArgs();
-    sal_uInt16 nState = STATE_NON;
+    State nState = State::NONE;
 
     for( int i = 1; i < argc; i++ )
     {
         if ( OString( argv[ i ] ).toAsciiUpperCase() == "-I" )
         {
-            nState = STATE_INPUT; // next token specifies source file
+            nState = State::Input; // next token specifies source file
         }
         else if ( OString( argv[ i ] ).toAsciiUpperCase() == "-O" )
         {
-            nState = STATE_OUTPUT; // next token specifies the dest file
+            nState = State::Output; // next token specifies the dest file
         }
         else if ( OString( argv[ i ] ).toAsciiUpperCase() == "-M" )
         {
-            nState = STATE_MERGESRC; // next token specifies the merge database
+            nState = State::MergeSrc; // next token specifies the merge database
             o_aHandledArgs.m_bMergeMode = true;
         }
         else if ( OString( argv[ i ] ).toAsciiUpperCase() == "-L" )
         {
-            nState = STATE_LANGUAGES;
+            nState = State::Languages;
         }
         else if ( OString( argv[ i ] ).toAsciiUpperCase() == "-B" )
         {
@@ -51,26 +49,26 @@ bool handleArguments(
         {
             switch ( nState )
             {
-                case STATE_NON:
+                case State::NONE:
                 {
                     return false;    // no valid command line
                 }
-                case STATE_INPUT:
+                case State::Input:
                 {
                     o_aHandledArgs.m_sInputFile = OString( argv[i] );
                 }
                 break;
-                case STATE_OUTPUT:
+                case State::Output:
                 {
                     o_aHandledArgs.m_sOutputFile = OString( argv[i] );
                 }
                 break;
-                case STATE_MERGESRC:
+                case State::MergeSrc:
                 {
                     o_aHandledArgs.m_sMergeSrc = OString( argv[i] );
                 }
                 break;
-                case STATE_LANGUAGES:
+                case State::Languages:
                 {
                     o_aHandledArgs.m_sLanguage = OString( argv[i] );
                 }
