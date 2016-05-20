@@ -120,8 +120,7 @@ class SvxRubyDialog : public SfxModelessDialog
 
     bool                bModified;
 
-    css::uno::Reference<css::view::XSelectionChangeListener> xImpl;
-    SfxBindings*    pBindings;
+    SfxBindings*        pBindings;
 
     DECL_LINK_TYPED(ApplyHdl_Impl, Button*, void);
     DECL_LINK_TYPED(CloseHdl_Impl, Button*, void);
@@ -167,7 +166,7 @@ public:
     virtual void        Deactivate() override;
 
 private:
-    std::unique_ptr<SvxRubyData_Impl> pImpl;
+    css::uno::Reference<SvxRubyData_Impl> pImpl;
 };
 
 #endif // INCLUDED_SVX_RUBYDIALOG_HXX

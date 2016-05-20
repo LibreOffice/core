@@ -209,7 +209,6 @@ SvxRubyDialog::SvxRubyDialog(SfxBindings* pBind, SfxChildWindow* pCW, vcl::Windo
     , pBindings(pBind)
     , pImpl( new SvxRubyData_Impl )
 {
-    xImpl = pImpl.get();
     get(m_pLeftFT, "basetextft");
     get(m_pRightFT, "rubytextft");
     get(m_pAdjustLB, "adjustlb");
@@ -280,7 +279,7 @@ void SvxRubyDialog::dispose()
 {
     ClearCharStyleList();
     EventObject aEvent;
-    xImpl->disposing(aEvent);
+    pImpl->disposing(aEvent);
     m_pLeftFT.clear();
     m_pRightFT.clear();
     m_pLeft1ED.clear();
