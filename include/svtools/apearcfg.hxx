@@ -31,16 +31,16 @@ typedef enum {
     NoSnap
 } SnapType;
 
-typedef enum {
-    DragFullWindow,
-    DragFrame,
-    DragSystemDep
-} DragMode;
+enum class DragMode {
+    FullWindow,
+    Frame,
+    SystemDep
+};
 
 
 class SVT_DLLPUBLIC SvtTabAppearanceCfg : public utl::ConfigItem
 {
-    short           nDragMode           ;
+    DragMode        nDragMode           ;
     short           nScaleFactor        ;
     short           nSnapMode           ;
     MouseMiddleButtonAction nMiddleMouse;
@@ -64,7 +64,7 @@ public:
 
     virtual void Notify( const css::uno::Sequence< OUString >& _rPropertyNames) override;
 
-    sal_uInt16  GetDragMode  () const { return nDragMode; }
+    DragMode  GetDragMode  () const { return nDragMode; }
 
     sal_uInt16      GetScaleFactor () const { return nScaleFactor; }
     void        SetScaleFactor ( sal_uInt16 nSet );

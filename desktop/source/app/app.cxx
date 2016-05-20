@@ -1881,16 +1881,16 @@ void Desktop::OverrideSystemSettings( AllSettings& rSettings )
     DragFullOptions nDragFullOptions = hStyleSettings.GetDragFullOptions();
 
     SvtTabAppearanceCfg aAppearanceCfg;
-    sal_uInt16 nDragMode = aAppearanceCfg.GetDragMode();
+    DragMode nDragMode = aAppearanceCfg.GetDragMode();
     switch ( nDragMode )
     {
-    case DragFullWindow:
+    case DragMode::FullWindow:
         nDragFullOptions |= DragFullOptions::All;
         break;
-    case DragFrame:
+    case DragMode::Frame:
         nDragFullOptions &= ~DragFullOptions::All;
         break;
-    case DragSystemDep:
+    case DragMode::SystemDep:
     default:
         break;
     }
