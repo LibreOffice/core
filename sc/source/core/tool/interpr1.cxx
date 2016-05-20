@@ -4435,10 +4435,6 @@ void ScInterpreter::ScMatch()
                 }
                 break;
                 case svExternalDoubleRef:
-                    // TODO: Implement this.
-                    PushIllegalParameter();
-                    return;
-                break;
                 case svMatrix :
                 {
                     svl::SharedString aStr;
