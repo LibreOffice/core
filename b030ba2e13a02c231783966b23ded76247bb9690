@@ -16,6 +16,24 @@
       "revId": "b030ba2e13a02c231783966b23ded76247bb9690",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_235a4084",
+        "filename": "svx/source/dialog/srchdlg.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-05-20T09:03:14Z",
+      "side": 0,
+      "message": "Yup, I can see that the pImpl(nullptr) line is present in both the old and the new version of this file",
+      "parentUuid": "da7fb54a_a3773001",
+      "revId": "b030ba2e13a02c231783966b23ded76247bb9690",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
