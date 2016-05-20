@@ -80,9 +80,7 @@ RtfFilter::RtfFilter(const uno::Reference< uno::XComponentContext >& rxContext)
 {
 }
 
-RtfFilter::~RtfFilter()
-{
-}
+RtfFilter::~RtfFilter() = default;
 
 sal_Bool RtfFilter::filter(const uno::Sequence< beans::PropertyValue >& aDescriptor) throw(uno::RuntimeException, std::exception)
 {

@@ -154,9 +154,7 @@ RTFValue::RTFValue(const RTFShape& aShape)
 {
 }
 
-RTFValue::~RTFValue()
-{
-}
+RTFValue::~RTFValue() = default;
 
 int RTFValue::getInt() const
 {

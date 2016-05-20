@@ -52,9 +52,7 @@ WriterFilterDetection::WriterFilterDetection()
 {
 }
 
-WriterFilterDetection::~WriterFilterDetection()
-{
-}
+WriterFilterDetection::~WriterFilterDetection() = default;
 
 OUString WriterFilterDetection::detect(uno::Sequence<beans::PropertyValue>& rDescriptor) throw (uno::RuntimeException, std::exception)
 {
