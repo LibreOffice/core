@@ -132,6 +132,22 @@ std::vector<KeyEvent> generate_key_events_from_keycode(const OUString& rStr)
 {
     std::vector<KeyEvent> aEvents;
 
+    std::map<OUString, sal_uInt16> aKeyMap = {
+        {"ESC", KEY_ESCAPE},
+        {"DOWN", KEY_DOWN},
+        {"UP", KEY_UP},
+        {"LEFT", KEY_LEFT},
+        {"RIGHT", KEY_RIGHT},
+        {"DELETE", KEY_DELETE},
+        {"INSERT", KEY_INSERT},
+        {"BACKSPACE", KEY_BACKSPACE},
+        {"RETURN", KEY_RETURN},
+        {"HOME", KEY_HOME},
+        {"END", KEY_END},
+        {"PAGEUP", KEY_PAGEUP},
+        {"PAGEDOWN", KEY_PAGEDOWN}
+    };
+
     // split string along '+'
     // then translate to keycodes
     bool bShift = false;
@@ -159,12 +175,21 @@ std::vector<KeyEvent> generate_key_events_from_keycode(const OUString& rStr)
             aRemainingText = aToken;
     }
 
-    for (sal_Int32 i = 0; i < aRemainingText.getLength(); ++i)
+    if (aKeyMap.find(aRemainingText) != aKeyMap.end())
     {
-        bool bShiftThroughKey = false;
-        sal_uInt16 nKey = get_key(aRemainingText[i], bShiftThroughKey);
-        vcl::KeyCode aCode(nKey, bShift || bShiftThroughKey, bMod1, bMod2, false);
-        aEvents.push_back(KeyEvent(aRemainingText[i], aCode));
+        sal_uInt16 nKey = aKeyMap[aRemainingText];
+        vcl::KeyCode aCode(nKey, bShift, bMod1, bMod2, false);
+        aEvents.push_back(KeyEvent( 'a', aCode));
+    }
+    else
+    {
+        for (sal_Int32 i = 0; i < aRemainingText.getLength(); ++i)
+        {
+            bool bShiftThroughKey = false;
+            sal_uInt16 nKey = get_key(aRemainingText[i], bShiftThroughKey);
+            vcl::KeyCode aCode(nKey, bShift || bShiftThroughKey, bMod1, bMod2, false);
+            aEvents.push_back(KeyEvent(aRemainingText[i], aCode));
+        }
     }
 
     return aEvents;
