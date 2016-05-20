@@ -2122,12 +2122,11 @@ svl::SharedString ScInterpreter::GetStringFromMatrix(const ScMatrixRef& pMat)
         SCSIZE nCols, nRows, nC, nR;
         pMat->GetDimensions( nCols, nRows);
         pJumpMatrix->GetPos( nC, nR);
-        if ( nC < nCols && nR < nRows )
-        {
+        // Use vector replication for single row/column arrays.
+        if ( (nC < nCols || nCols == 1) && (nR < nRows || nRows == 1) )
             return pMat->GetString( *pFormatter, nC, nR);
-        }
-        else
-            SetError( errNoValue);
+
+        SetError( errNoValue);
     }
     return svl::SharedString::getEmptyString();
 }
@@ -2168,7 +2167,8 @@ ScMatValType ScInterpreter::GetDoubleOrStringFromMatrix(
         SCSIZE nCols, nRows, nC, nR;
         pMat->GetDimensions( nCols, nRows);
         pJumpMatrix->GetPos( nC, nR);
-        if ( nC < nCols && nR < nRows )
+        // Use vector replication for single row/column arrays.
+        if ( (nC < nCols || nCols == 1) && (nR < nRows || nRows == 1) )
         {
             nMatVal = pMat->Get( nC, nR);
             nMatValType = nMatVal.nType;
