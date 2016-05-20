@@ -81,10 +81,10 @@ void convertToWinSalBitmap(SalBitmap& rSalBitmap, WinSalBitmap& rWinSalBitmap)
              aBitmapPalette = pGLSalBitmap->GetBitmapPalette();
          }
 
-        BitmapBuffer* pRead = rSalBitmap.AcquireBuffer(BITMAP_READ_ACCESS);
+        BitmapBuffer* pRead = rSalBitmap.AcquireBuffer(BitmapAccessMode::Read);
 
         rWinSalBitmap.Create(rSalBitmap.GetSize(), rSalBitmap.GetBitCount(), aBitmapPalette);
-        BitmapBuffer* pWrite = rWinSalBitmap.AcquireBuffer(BITMAP_WRITE_ACCESS);
+        BitmapBuffer* pWrite = rWinSalBitmap.AcquireBuffer(BitmapAccessMode::Write);
 
         sal_uInt8* pSource(pRead->mpBits);
         sal_uInt8* pDestination(pWrite->mpBits);
@@ -95,9 +95,9 @@ void convertToWinSalBitmap(SalBitmap& rSalBitmap, WinSalBitmap& rWinSalBitmap)
             pSource += pRead->mnScanlineSize;
             pDestination += pWrite->mnScanlineSize;
         }
-        rWinSalBitmap.ReleaseBuffer(pWrite, BITMAP_WRITE_ACCESS);
+        rWinSalBitmap.ReleaseBuffer(pWrite, BitmapAccessMode::Write);
 
-        rSalBitmap.ReleaseBuffer(pRead, BITMAP_READ_ACCESS);
+        rSalBitmap.ReleaseBuffer(pRead, BitmapAccessMode::Read);
 }
 
 } // end anonymous namespace

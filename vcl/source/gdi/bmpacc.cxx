@@ -36,7 +36,7 @@ BitmapInfoAccess::BitmapInfoAccess( Bitmap& rBitmap, BitmapAccessMode nMode ) :
 
 BitmapInfoAccess::BitmapInfoAccess( Bitmap& rBitmap ) :
             mpBuffer        ( nullptr ),
-            mnAccessMode    ( BITMAP_INFO_ACCESS )
+            mnAccessMode    ( BitmapAccessMode::Info )
 {
     ImplCreate( rBitmap );
 }
@@ -54,14 +54,14 @@ void BitmapInfoAccess::ImplCreate( Bitmap& rBitmap )
 
     if( xImpBmp )
     {
-        if( mnAccessMode == BITMAP_WRITE_ACCESS && !maBitmap.ImplGetImpBitmap() )
+        if( mnAccessMode == BitmapAccessMode::Write && !maBitmap.ImplGetImpBitmap() )
         {
             rBitmap.ImplMakeUnique();
             xImpBmp = rBitmap.ImplGetImpBitmap();
         }
         else
         {
-            DBG_ASSERT( mnAccessMode != BITMAP_WRITE_ACCESS ||
+            DBG_ASSERT( mnAccessMode != BitmapAccessMode::Write ||
                         xImpBmp.use_count() == 2,
                         "Unpredictable results: bitmap is referenced more than once!" );
         }
@@ -109,7 +109,7 @@ BitmapReadAccess::BitmapReadAccess( Bitmap& rBitmap, BitmapAccessMode nMode ) :
 }
 
 BitmapReadAccess::BitmapReadAccess( Bitmap& rBitmap ) :
-            BitmapInfoAccess( rBitmap, BITMAP_READ_ACCESS ),
+            BitmapInfoAccess( rBitmap, BitmapAccessMode::Read ),
             mpScanBuf       ( nullptr ),
             mFncGetPixel    ( nullptr ),
             mFncSetPixel    ( nullptr )
@@ -391,7 +391,7 @@ BitmapColor BitmapReadAccess::GetColorWithFallback( double fY, double fX, const 
 }
 
 BitmapWriteAccess::BitmapWriteAccess(Bitmap& rBitmap)
-    : BitmapReadAccess(rBitmap, BITMAP_WRITE_ACCESS)
+    : BitmapReadAccess(rBitmap, BitmapAccessMode::Write)
     , mpLineColor()
     , mpFillColor()
 {
