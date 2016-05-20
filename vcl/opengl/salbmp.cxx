@@ -727,7 +727,7 @@ BitmapBuffer* OpenGLSalBitmap::AcquireBuffer( BitmapAccessMode nMode )
 {
     OpenGLVCLContextZone aContextZone;
 
-    if( nMode != BITMAP_INFO_ACCESS )
+    if( nMode != BitmapAccessMode::Info )
     {
         if (!mpUserBuffer.get())
         {
@@ -746,7 +746,7 @@ BitmapBuffer* OpenGLSalBitmap::AcquireBuffer( BitmapAccessMode nMode )
     }
 
     // mpUserBuffer must be unique when we are doing the write access
-    if (nMode == BITMAP_WRITE_ACCESS && mpUserBuffer && !mpUserBuffer.unique())
+    if (nMode == BitmapAccessMode::Write && mpUserBuffer && !mpUserBuffer.unique())
     {
         std::shared_ptr<sal_uInt8> aBuffer(mpUserBuffer);
 
@@ -838,7 +838,7 @@ void OpenGLSalBitmap::ReleaseBuffer( BitmapBuffer* pBuffer, BitmapAccessMode nMo
 {
     OpenGLVCLContextZone aContextZone;
 
-    if( nMode == BITMAP_WRITE_ACCESS )
+    if( nMode == BitmapAccessMode::Write )
     {
         maTexture = OpenGLTexture();
         mbDirtyTexture = true;

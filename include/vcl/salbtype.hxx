@@ -266,13 +266,12 @@ struct VCL_DLLPUBLIC BitmapBuffer
     sal_uInt8*      mpBits;
 };
 
-typedef enum
+enum class BitmapAccessMode
 {
-    BITMAP_INFO_ACCESS,
-    BITMAP_READ_ACCESS,
-    BITMAP_WRITE_ACCESS
-}
-BitmapAccessMode;
+    Info,
+    Read,
+    Write
+};
 
 VCL_DLLPUBLIC BitmapBuffer* StretchAndConvert(
     const BitmapBuffer& rSrcBuffer, const SalTwoRect& rTwoRect,

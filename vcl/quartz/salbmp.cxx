@@ -816,7 +816,7 @@ BitmapBuffer* QuartzSalBitmap::AcquireBuffer( BitmapAccessMode /*nMode*/ )
 void QuartzSalBitmap::ReleaseBuffer( BitmapBuffer* pBuffer, BitmapAccessMode nMode )
 {
     // invalidate graphic context if we have different data
-    if( nMode == BITMAP_WRITE_ACCESS )
+    if( nMode == BitmapAccessMode::Write )
     {
         maPalette = pBuffer->maPalette;
         if( mxGraphicContext )

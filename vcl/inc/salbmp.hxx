@@ -100,11 +100,11 @@ protected:
 
         ChecksumType nCrc = 0;
         SalBitmap* pThis = const_cast<SalBitmap*>(this);
-        BitmapBuffer* pBuf = pThis->AcquireBuffer(BITMAP_READ_ACCESS);
+        BitmapBuffer* pBuf = pThis->AcquireBuffer(BitmapAccessMode::Read);
         if (pBuf)
         {
             nCrc = vcl_get_checksum(0, pBuf->mpBits, pBuf->mnScanlineSize * pBuf->mnHeight);
-            pThis->ReleaseBuffer(pBuf, BITMAP_READ_ACCESS);
+            pThis->ReleaseBuffer(pBuf, BitmapAccessMode::Read);
             pThis->mnChecksum = nCrc;
             pThis->mbChecksumValid = true;
         }
