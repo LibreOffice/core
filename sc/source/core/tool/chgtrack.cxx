@@ -1206,7 +1206,6 @@ void ScChangeActionMove::GetDescription(
     if (nPos >= 0)
     {
         aRsc = aRsc.replaceAt(nPos, 2, aTmpStr);
-        nPos += aTmpStr.getLength();
     }
 
     OUStringBuffer aBuf(rStr); // append to the original string.
@@ -1484,7 +1483,6 @@ void ScChangeActionContent::GetDescription(
     if (nPos >= 0)
     {
         aRsc = aRsc.replaceAt(nPos, 2, aTmpStr);
-        nPos += aTmpStr.getLength();
     }
 
     OUStringBuffer aBuf(rStr); // append to the original string.

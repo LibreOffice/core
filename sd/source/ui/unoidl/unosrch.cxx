@@ -569,7 +569,6 @@ uno::Reference< text::XTextRange >  SdUnoSearchReplaceShape::Search( const uno::
                 *pPos++ = nLastPos + 1;
                 *pPara++ = nLastPara;
 
-                ndbg += 1;
                 pText++;
             }
             else

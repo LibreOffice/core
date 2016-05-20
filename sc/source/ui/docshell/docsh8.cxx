@@ -741,13 +741,6 @@ void lcl_GetColumnTypes(
         pColLengths[nField] = nFieldLen;
         pColScales[nField] = nPrecision;
 
-        // undo change to field length, reflect reality
-        if ( bSdbLenAdjusted )
-        {
-            nFieldLen = SvDbaseConverter::ConvertPrecisionToDbase( nFieldLen, nPrecision );
-            if ( bSdbLenBad && nFieldLen == 1 )
-                nFieldLen = 2;      // THIS is reality
-        }
         ++nField;
     }
 }
