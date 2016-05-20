@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_43d664c6",
+        "filename": "svx/source/dialog/srchdlg.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 362,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-05-20T09:31:59Z",
+      "side": 1,
+      "message": "you need to call \n   pImpl.reset(nullptr)\nhere to free it\n\ncalling delete on a std::unique_ptr field does nothing",
+      "revId": "ffcab275fb5a5adb202aa46c98b96cf10f52574d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
