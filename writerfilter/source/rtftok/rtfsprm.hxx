@@ -63,7 +63,6 @@ public:
     RTFSprms();
     RTFSprms(const RTFSprms& rSprms);
     ~RTFSprms();
-    RTFSprms& operator=(const RTFSprms& rOther);
     RTFValue::Pointer_t find(Id nKeyword, bool bFirst = true, bool bForWrite = false);
     /// Does the same as ->push_back(), except that it can overwrite or ignore existing entries.
     void set(Id nKeyword, RTFValue::Pointer_t pValue, RTFOverwrite eOverwrite = RTFOverwrite::YES);

@@ -21,9 +21,7 @@ LatentStyleHandler::LatentStyleHandler() :
 {
 }
 
-LatentStyleHandler::~LatentStyleHandler()
-{
-}
+LatentStyleHandler::~LatentStyleHandler() = default;
 
 void LatentStyleHandler::lcl_attribute(Id rName, Value& rVal)
 {

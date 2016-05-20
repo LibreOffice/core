@@ -26,9 +26,7 @@ RTFReferenceProperties::RTFReferenceProperties(RTFSprms aAttributes)
 {
 }
 
-RTFReferenceProperties::~RTFReferenceProperties()
-{
-}
+RTFReferenceProperties::~RTFReferenceProperties() = default;
 
 void RTFReferenceProperties::resolve(Properties& rHandler)
 {

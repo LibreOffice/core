@@ -295,9 +295,7 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
     m_pSdrImport.reset(new RTFSdrImport(*this, m_xDstDoc));
 }
 
-RTFDocumentImpl::~RTFDocumentImpl()
-{
-}
+RTFDocumentImpl::~RTFDocumentImpl() = default;
 
 SvStream& RTFDocumentImpl::Strm()
 {

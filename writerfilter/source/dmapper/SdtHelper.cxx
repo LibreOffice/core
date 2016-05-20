@@ -69,9 +69,7 @@ SdtHelper::SdtHelper(DomainMapper_Impl& rDM_Impl)
 {
 }
 
-SdtHelper::~SdtHelper()
-{
-}
+SdtHelper::~SdtHelper() = default;
 
 void SdtHelper::createDropDownControl()
 {

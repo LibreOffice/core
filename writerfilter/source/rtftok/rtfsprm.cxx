@@ -230,19 +230,11 @@ RTFSprms::RTFSprms()
 {
 }
 
-RTFSprms::~RTFSprms()
-{
-}
+RTFSprms::~RTFSprms() = default;
 
 RTFSprms::RTFSprms(const RTFSprms& rSprms)
 {
     *this = rSprms;
-}
-
-RTFSprms& RTFSprms::operator=(const RTFSprms& rOther)
-{
-    m_pSprms = rOther.m_pSprms;
-    return *this;
 }
 
 void RTFSprms::clear()

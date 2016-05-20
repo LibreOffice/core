@@ -19,9 +19,7 @@ RTFReferenceTable::RTFReferenceTable(Entries_t const& rEntries)
 {
 }
 
-RTFReferenceTable::~RTFReferenceTable()
-{
-}
+RTFReferenceTable::~RTFReferenceTable() = default;
 
 void RTFReferenceTable::resolve(Table& rHandler)
 {
