@@ -529,8 +529,8 @@ bool Bitmap::ImplMakeGreyscales( sal_uInt16 nGreys )
                         }
                     }
                 }
-                else if( pReadAcc->GetScanlineFormat() == BMP_FORMAT_24BIT_TC_BGR &&
-                         pWriteAcc->GetScanlineFormat() == BMP_FORMAT_8BIT_PAL )
+                else if( pReadAcc->GetScanlineFormat() == ScanlineFormat::N24BitTcBgr &&
+                         pWriteAcc->GetScanlineFormat() == ScanlineFormat::N8BitPal )
                 {
                     nShift += 8;
 
@@ -549,8 +549,8 @@ bool Bitmap::ImplMakeGreyscales( sal_uInt16 nGreys )
                         }
                     }
                 }
-                else if( pReadAcc->GetScanlineFormat() == BMP_FORMAT_24BIT_TC_RGB &&
-                         pWriteAcc->GetScanlineFormat() == BMP_FORMAT_8BIT_PAL )
+                else if( pReadAcc->GetScanlineFormat() == ScanlineFormat::N24BitTcRgb &&
+                         pWriteAcc->GetScanlineFormat() == ScanlineFormat::N8BitPal )
                 {
                     nShift += 8;
 
@@ -2208,7 +2208,7 @@ bool Bitmap::Adjust( short nLuminancePercent, short nContrastPercent,
                     pAcc->SetPaletteColor( i, aNewCol );
                 }
             }
-            else if( pAcc->GetScanlineFormat() == BMP_FORMAT_24BIT_TC_BGR )
+            else if( pAcc->GetScanlineFormat() == ScanlineFormat::N24BitTcBgr )
             {
                 for( long nY = 0L; nY < nH; nY++ )
                 {
@@ -2222,7 +2222,7 @@ bool Bitmap::Adjust( short nLuminancePercent, short nContrastPercent,
                     }
                 }
             }
-            else if( pAcc->GetScanlineFormat() == BMP_FORMAT_24BIT_TC_RGB )
+            else if( pAcc->GetScanlineFormat() == ScanlineFormat::N24BitTcRgb )
             {
                 for( long nY = 0L; nY < nH; nY++ )
                 {
