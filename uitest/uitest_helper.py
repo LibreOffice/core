@@ -9,6 +9,8 @@ import time
 
 from helper import EventListener
 
+from helper import convert_property_values_to_dict
+
 class DialogNotExecutedException(Exception):
     def __init__(self, command):
         self.command = command
@@ -81,5 +83,8 @@ class UITest(object):
 
                 time_ += self.DEFAULT_SLEEP
                 time.sleep(self.DEFAULT_SLEEP)
+
+def get_state_as_dict(ui_object):
+    return convert_property_values_to_dict(ui_object.getState())
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab: */
