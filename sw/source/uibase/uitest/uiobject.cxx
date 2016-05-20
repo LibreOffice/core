@@ -79,6 +79,22 @@ void SwEditWinUIObject::execute(const OUString& rAction,
             getWrtShell(mxEditWin).GotoPage(nVal, false);
         }
     }
+    else if (rAction == "SELECT")
+    {
+        if (rParameters.find("START_POS") != rParameters.end())
+        {
+            auto itr = rParameters.find("START_POS");
+            OUString aStartPos = itr->second;
+            sal_Int32 nStartPos = aStartPos.toInt32();
+
+            itr = rParameters.find("END_POS");
+            assert(itr != rParameters.end());
+            OUString aEndPos = itr->second;
+            sal_Int32 nEndPos = aEndPos.toInt32();
+
+            getWrtShell(mxEditWin).SelectText(nStartPos, nEndPos);
+        }
+    }
     else
         WindowUIObject::execute(rAction, rParameters);
 }
