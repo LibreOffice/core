@@ -1200,6 +1200,9 @@ void ScInterpreter::PopExternalSingleRef(
         return;
     }
 
+    if (xNew->GetType() == svError)
+        SetError( xNew->GetError());
+
     rToken = xNew;
     if (pFmt)
         *pFmt = aFmt;
@@ -1298,6 +1301,11 @@ void ScInterpreter::GetExternalDoubleRef(
     }
 
     formula::FormulaToken* pToken = pArray->First();
+    if (pToken->GetType() == svError)
+    {
+        SetError( pToken->GetError());
+        return;
+    }
     if (pToken->GetType() != svMatrix)
     {
         SetError(errIllegalArgument);
