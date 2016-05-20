@@ -170,7 +170,7 @@ bool ODbaseResultSet::fillIndexValues(const Reference< XColumnsSupplier> &_xInde
                 sal_uInt32 nRec = pIter->First();
                 while (nRec != NODE_NOTFOUND)
                 {
-                    if (m_aOrderbyAscending[0])
+                    if (m_aOrderbyAscending[0] != TAscendingOrder::NONE)
                         m_pFileSet->get().push_back(nRec);
                     else
                         m_pFileSet->get().insert(m_pFileSet->get().begin(),nRec);

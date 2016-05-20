@@ -39,7 +39,7 @@ struct TKeyValueFunc : ::std::binary_function<OSortIndex::TIntValuePairVector::v
         ::std::vector<OKeyType>::const_iterator aIter = aKeyType.begin();
         for (::std::vector<sal_Int16>::size_type i=0;aIter != aKeyType.end(); ++aIter,++i)
         {
-            const bool bGreater = pIndex->getAscending(i) != SQL_ASC;
+            const bool bGreater = pIndex->getAscending(i) != TAscendingOrder::ASC;
             const bool bLess = !bGreater;
 
             // compare depending for type

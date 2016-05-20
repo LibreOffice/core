@@ -1148,7 +1148,7 @@ void SAL_CALL OResultSet::executeQuery() throw( ::com::sun::star::sdbc::SQLExcep
                     if(!IsSorted())
                     {
                         m_aOrderbyColumnNumber.push_back(m_aColMapping[1]);
-                        m_aOrderbyAscending.push_back(SQL_DESC);
+                        m_aOrderbyAscending.push_back(TAscendingOrder::DESC);
                     }
                     bDistinct = true;
                 }

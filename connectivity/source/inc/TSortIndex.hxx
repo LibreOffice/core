@@ -31,11 +31,12 @@ namespace connectivity
         SQL_ORDERBYKEY_STRING       // String Key
     } OKeyType;
 
-    typedef enum
+    enum class TAscendingOrder
     {
-        SQL_ASC     = 1,            // ascending
-        SQL_DESC    = -1            // otherwise
-    } TAscendingOrder;
+        ASC     = 1,            // ascending
+        NONE    = 0,
+        DESC    = -1            // otherwise
+    };
 
     class OKeySet;
     class OKeyValue;                // simple class which holds a sal_Int32 and a ::std::vector<ORowSetValueDecoratorRef>
