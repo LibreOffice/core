@@ -9,6 +9,8 @@ from uitest_helper import UITest
 
 from helper import mkPropertyValues
 
+from uihelper.calc import enter_text_to_cell
+
 import time
 
 try:
@@ -31,6 +33,11 @@ def input(xContext):
     xTopWindow = xUITest.getTopFocusWindow()
 
     xGridWindow = xTopWindow.getChild("grid_window")
+
+    enter_text_to_cell(xGridWindow, "C3", "=A1")
+    enter_text_to_cell(xGridWindow, "A1", "2")
+
+    time.sleep(2)
 
     ui_test.close_doc()
 
