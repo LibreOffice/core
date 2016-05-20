@@ -691,6 +691,7 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/uibase/table/chartins \
     sw/source/uibase/table/swtablerep \
     sw/source/uibase/table/tablemgr \
+    sw/source/uibase/uitest/uiobject \
     sw/source/uibase/uiview/formatclipboard \
     sw/source/uibase/uiview/pview \
     sw/source/uibase/uiview/scroll \

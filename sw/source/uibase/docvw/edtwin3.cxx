@@ -34,6 +34,7 @@
 #include "pagedesc.hxx"
 #include <frmatr.hxx>
 #include <editeng/frmdiritem.hxx>
+#include "uiobject.hxx"
 
 // Core-Notify
 void ScrollMDI( SwViewShell* pVwSh, const SwRect &rRect,
@@ -163,6 +164,11 @@ void SwEditWin::DataChanged( const DataChangedEvent& rDCEvt )
     pSh->LockView( bViewWasLocked );
     if( bUnlockPaint )
         pSh->UnlockPaint();
+}
+
+FactoryFunction SwEditWin::GetUITestFactory() const
+{
+    return SwEditWinUIObject::create;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
