@@ -92,7 +92,9 @@ namespace desktop {
                 // that no new events are fired during painting.
                 if (type != LOK_CALLBACK_STATE_CHANGED &&
                     type != LOK_CALLBACK_INVALIDATE_TILES &&
-                    type != LOK_CALLBACK_CURSOR_VISIBLE)
+                    type != LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR &&
+                    type != LOK_CALLBACK_CURSOR_VISIBLE &&
+                    type != LOK_CALLBACK_TEXT_SELECTION)
                 {
                     //SAL_WARN("lokevt", "Skipping while painting [" + std::to_string(type) + "]: [" + payload + "].");
                     return;
