@@ -29,13 +29,13 @@
 #include "rtllifecycle.h"
 #include <oslmemory.h>
 
-AllocMode alloc_mode = AMode_UNSET;
+AllocMode alloc_mode = AllocMode::UNSET;
 
 #if !defined(FORCE_SYSALLOC)
 static void determine_alloc_mode()
 {
-    assert(alloc_mode == AMode_UNSET);
-    alloc_mode = (getenv("G_SLICE") == nullptr ? AMode_CUSTOM : AMode_SYSTEM);
+    assert(alloc_mode == AllocMode::UNSET);
+    alloc_mode = (getenv("G_SLICE") == nullptr ? AllocMode::CUSTOM : AllocMode::SYSTEM);
 }
 
 /* ================================================================= *
@@ -296,11 +296,11 @@ void* SAL_CALL rtl_allocateMemory (sal_Size n) SAL_THROW_EXTERN_C()
 #if !defined(FORCE_SYSALLOC)
     while (true)
     {
-        if (alloc_mode == AMode_CUSTOM)
+        if (alloc_mode == AllocMode::CUSTOM)
         {
             return rtl_allocateMemory_CUSTOM(n);
         }
-        if (alloc_mode == AMode_SYSTEM)
+        if (alloc_mode == AllocMode::SYSTEM)
         {
             return rtl_allocateMemory_SYSTEM(n);
         }
@@ -319,11 +319,11 @@ void* SAL_CALL rtl_reallocateMemory (void * p, sal_Size n) SAL_THROW_EXTERN_C()
 #if !defined(FORCE_SYSALLOC)
     while (true)
     {
-        if (alloc_mode == AMode_CUSTOM)
+        if (alloc_mode == AllocMode::CUSTOM)
         {
             return rtl_reallocateMemory_CUSTOM(p,n);
         }
-        if (alloc_mode == AMode_SYSTEM)
+        if (alloc_mode == AllocMode::SYSTEM)
         {
             return rtl_reallocateMemory_SYSTEM(p,n);
         }
@@ -339,12 +339,12 @@ void SAL_CALL rtl_freeMemory (void * p) SAL_THROW_EXTERN_C()
 #if !defined(FORCE_SYSALLOC)
     while (true)
     {
-        if (alloc_mode == AMode_CUSTOM)
+        if (alloc_mode == AllocMode::CUSTOM)
         {
             rtl_freeMemory_CUSTOM(p);
             return;
         }
-        if (alloc_mode == AMode_SYSTEM)
+        if (alloc_mode == AllocMode::SYSTEM)
         {
             rtl_freeMemory_SYSTEM(p);
             return;
