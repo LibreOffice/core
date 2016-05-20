@@ -868,7 +868,7 @@ BitmapBuffer* X11SalBitmap::AcquireBuffer( BitmapAccessMode /*nMode*/ )
 
 void X11SalBitmap::ReleaseBuffer( BitmapBuffer*, BitmapAccessMode nMode )
 {
-    if( nMode == BITMAP_WRITE_ACCESS )
+    if( nMode == BitmapAccessMode::Write )
     {
         if( mpDDB )
         {
