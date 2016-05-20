@@ -228,7 +228,7 @@ typedef CRITICAL_SECTION rtl_memory_lock_type;
 #define RTL_CACHE_FLAG_NOMAGAZINE   (1 << 13) /* w/o magazine layer */
 #define RTL_CACHE_FLAG_QUANTUMCACHE (2 << 13) /* used as arena quantum cache */
 
-typedef enum { AMode_CUSTOM, AMode_SYSTEM, AMode_UNSET } AllocMode;
+enum class AllocMode { CUSTOM, SYSTEM, UNSET };
 
 extern AllocMode alloc_mode;
 

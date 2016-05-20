@@ -1133,7 +1133,7 @@ SAL_CALL rtl_cache_alloc (
     if (cache == nullptr)
         return nullptr;
 
-    if (alloc_mode == AMode_SYSTEM)
+    if (alloc_mode == AllocMode::SYSTEM)
     {
         obj = rtl_allocateMemory(cache->m_type_size);
         if ((obj != nullptr) && (cache->m_constructor != nullptr))
@@ -1216,7 +1216,7 @@ SAL_CALL rtl_cache_free (
 {
     if ((obj != nullptr) && (cache != nullptr))
     {
-        if (alloc_mode == AMode_SYSTEM)
+        if (alloc_mode == AllocMode::SYSTEM)
         {
             if (cache->m_destructor != nullptr)
             {
