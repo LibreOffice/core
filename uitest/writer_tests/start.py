@@ -41,4 +41,21 @@ def start_writer(xContext):
 
     ui_test.close_doc()
 
+def type_text(xContext):
+    xUITest = xContext.ServiceManager.createInstanceWithContext(
+            "org.libreoffice.uitest.UITest", xContext)
+
+    ui_test = UITest(xUITest, xContext)
+
+    ui_test.create_doc_in_start_center("writer")
+
+    xWriterDoc = xUITest.getTopFocusWindow()
+    xWriterEdit = xWriterDoc.getChild("writer_edit")
+
+    xWriterEdit.executeAction("TYPE", mkPropertyValues({"TEXT": "This is my first writer text written through the UI testing"}))
+
+    time.sleep(2)
+
+    ui_test.close_doc()
+
 # vim:set shiftwidth=4 softtabstop=4 expandtab: */
