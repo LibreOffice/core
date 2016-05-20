@@ -496,7 +496,7 @@ void OCommonStatement::setOrderbyColumn(    OSQLParseNode* pColumnRef,
     m_aOrderbyColumnNumber.push_back(xColLocate->findColumn(aColumnName));
 
     // Ascending or Descending?
-    m_aOrderbyAscending.push_back((SQL_ISTOKEN(pAscendingDescending,DESC)) ? SQL_DESC : SQL_ASC);
+    m_aOrderbyAscending.push_back((SQL_ISTOKEN(pAscendingDescending,DESC)) ? TAscendingOrder::DESC : TAscendingOrder::ASC);
 }
 
 

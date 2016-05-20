@@ -1274,7 +1274,7 @@ bool OResultSet::OpenImpl()
                         {
                             m_aOrderbyColumnNumber.push_back(i);
                             // ASC or DESC doesn't matter
-                            m_aOrderbyAscending.push_back(SQL_ASC);
+                            m_aOrderbyAscending.push_back(TAscendingOrder::ASC);
                         }
                     }
                     bDistinct = true;
