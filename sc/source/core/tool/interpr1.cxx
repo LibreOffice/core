@@ -1885,6 +1885,14 @@ bool ScInterpreter::IsString()
             }
         }
         break;
+        case svExternalSingleRef:
+        {
+            ScExternalRefCache::TokenRef pToken;
+            PopExternalSingleRef(pToken);
+            if (!nGlobalError && pToken->GetType() == svString)
+                bRes = true;
+        }
+        break;
         case svMatrix:
         {
             ScMatrixRef pMat = PopMatrix();
@@ -2460,6 +2468,14 @@ void ScInterpreter::ScIsRef()
                 bRes = !x.get()->GetRefList()->empty();
         }
         break;
+        case svExternalSingleRef:
+        {
+            ScExternalRefCache::TokenRef pToken;
+            PopExternalSingleRef(pToken);
+            if (!nGlobalError)
+                bRes = true;
+        }
+        break;
         default:
             Pop();
     }
@@ -2499,6 +2515,14 @@ void ScInterpreter::ScIsValue()
                         ; // nothing
                 }
             }
+        }
+        break;
+        case svExternalSingleRef:
+        {
+            ScExternalRefCache::TokenRef pToken;
+            PopExternalSingleRef(pToken);
+            if (!nGlobalError && pToken->GetType() == svDouble)
+                bRes = true;
         }
         break;
         case svMatrix:
@@ -2651,6 +2675,15 @@ void ScInterpreter::ScIsNV()
             }
         }
         break;
+        case svExternalSingleRef:
+        {
+            ScExternalRefCache::TokenRef pToken;
+            PopExternalSingleRef(pToken);
+            if (nGlobalError == NOTAVAILABLE ||
+                    (pToken && pToken->GetType() == svError && pToken->GetError() == NOTAVAILABLE))
+                bRes = true;
+        }
+        break;
         case svMatrix:
         {
             ScMatrixRef pMat = PopMatrix();
@@ -2696,6 +2729,15 @@ void ScInterpreter::ScIsErr()
                 sal_uInt16 nErr = GetCellErrCode(aCell);
                 bRes = (nErr && nErr != NOTAVAILABLE);
             }
+        }
+        break;
+        case svExternalSingleRef:
+        {
+            ScExternalRefCache::TokenRef pToken;
+            PopExternalSingleRef(pToken);
+            if ((nGlobalError && nGlobalError != NOTAVAILABLE) || !pToken ||
+                    (pToken->GetType() == svError && pToken->GetError() != NOTAVAILABLE))
+                bRes = true;
         }
         break;
         case svMatrix:
@@ -2754,6 +2796,14 @@ void ScInterpreter::ScIsError()
             }
         }
         break;
+        case svExternalSingleRef:
+        {
+            ScExternalRefCache::TokenRef pToken;
+            PopExternalSingleRef(pToken);
+            if (nGlobalError || !pToken || pToken->GetType() == svError)
+                bRes = true;
+        }
+        break;
         case svMatrix:
         {
             ScMatrixRef pMat = PopMatrix();
@@ -2769,14 +2819,6 @@ void ScInterpreter::ScIsError()
                 if ( nC < nCols && nR < nRows )
                     bRes = (pMat->GetErrorIfNotString( nC, nR) != 0);
             }
-        }
-        break;
-        case svExternalSingleRef:
-        {
-            ScExternalRefCache::TokenRef pToken;
-            PopExternalSingleRef(pToken);
-            if (nGlobalError || !pToken || pToken->GetType() == svError)
-                bRes = true;
         }
         break;
         default:
@@ -2831,6 +2873,17 @@ bool ScInterpreter::IsEven()
         {
             fVal = PopDouble();
             bRes = true;
+        }
+        break;
+        case svExternalSingleRef:
+        {
+            ScExternalRefCache::TokenRef pToken;
+            PopExternalSingleRef(pToken);
+            if (!nGlobalError && pToken->GetType() == svDouble)
+            {
+                fVal = pToken->GetDouble();
+                bRes = true;
+            }
         }
         break;
         case svMatrix:
