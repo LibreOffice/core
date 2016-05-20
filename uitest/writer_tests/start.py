@@ -75,6 +75,8 @@ def goto_first_page(xContext):
         xWriterEdit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RETURN"}))
         state = get_state_as_dict(xWriterEdit)
 
+    xWriterEdit.executeAction("GOTO", mkPropertyValues({"PAGE": "1"}))
+    print(state)
     time.sleep(2)
 
     ui_test.close_doc()
