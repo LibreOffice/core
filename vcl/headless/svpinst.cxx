@@ -27,6 +27,7 @@
 #include <sal/types.h>
 
 #include <vcl/inputtypes.hxx>
+#include <vcl/opengl/OpenGLContext.hxx>
 
 #include <headless/svpinst.hxx>
 #include <headless/svpframe.hxx>
@@ -441,6 +442,16 @@ void SvpSalInstance::StartTimer( sal_uLong nMS )
 
 void SvpSalInstance::AddToRecentDocumentList(const OUString&, const OUString&, const OUString&)
 {
+}
+
+//obviously doesn't actually do anything, its just a nonfunctional stub
+class SvpOpenGLContext : public OpenGLContext
+{
+};
+
+OpenGLContext* SvpSalInstance::CreateOpenGLContext()
+{
+    return new SvpOpenGLContext;
 }
 
 SvpSalTimer::~SvpSalTimer()

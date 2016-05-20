@@ -21,7 +21,7 @@ class OpenGLWatchdogThread;
  * We want to be able to detect if a given crash came
  * from the OpenGL code, so use this helper to track that.
  */
-class OpenGLZone {
+class VCL_DLLPUBLIC OpenGLZone {
     friend class OpenGLZoneTest;
     friend class OpenGLWatchdogThread;
     friend class OpenGLSalGraphicsImpl;
@@ -31,8 +31,8 @@ class OpenGLZone {
     /// how many times have we left a new GL zone
     static volatile sal_uInt64 gnLeaveCount;
 
-    static VCL_DLLPUBLIC void enter();
-    static VCL_DLLPUBLIC void leave();
+    static void enter();
+    static void leave();
 public:
      OpenGLZone() { gnEnterCount++; }
     ~OpenGLZone() { gnLeaveCount++; }
