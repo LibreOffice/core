@@ -299,11 +299,10 @@ struct WinMtfFontStyle : GDIObj
 };
 
 
-typedef enum
+enum class WinMtfFillStyleType
 {
-    FillStyleSolid,
-    FillStylePattern
-} WinMtfFillStyleType;
+    Solid, Pattern
+};
 
 struct WinMtfFillStyle : GDIObj
 {
@@ -315,18 +314,18 @@ struct WinMtfFillStyle : GDIObj
     WinMtfFillStyle()
         : aFillColor(Color(COL_BLACK))
         , bTransparent(false)
-        , aType(FillStyleSolid)
+        , aType(WinMtfFillStyleType::Solid)
     {}
 
     WinMtfFillStyle(const Color& rColor, bool bTrans = false)
         : aFillColor(rColor)
         , bTransparent(bTrans)
-        , aType(FillStyleSolid)
+        , aType(WinMtfFillStyleType::Solid)
     {}
 
     explicit WinMtfFillStyle(Bitmap& rBmp)
         : bTransparent(false)
-        , aType(FillStylePattern)
+        , aType(WinMtfFillStyleType::Pattern)
         , aBmp(rBmp)
     {}
 

@@ -912,7 +912,7 @@ void WinMtfOutput::UpdateFillStyle()
     if (!( maLatestFillStyle == maFillStyle ) )
     {
         maLatestFillStyle = maFillStyle;
-        if (maFillStyle.aType == FillStyleSolid)
+        if (maFillStyle.aType == WinMtfFillStyleType::Solid)
             mpGDIMetaFile->AddAction( new MetaFillColorAction( maFillStyle.aFillColor, !maFillStyle.bTransparent ) );
     }
 }
@@ -1211,7 +1211,7 @@ void WinMtfOutput::DrawPolygon( tools::Polygon& rPolygon, bool bRecordPath )
             {
                 UpdateLineStyle();
 
-                if (maLatestFillStyle.aType != FillStylePattern)
+                if (maLatestFillStyle.aType != WinMtfFillStyleType::Pattern)
                     mpGDIMetaFile->AddAction( new MetaPolygonAction( rPolygon ) );
                 else {
                     SvtGraphicFill aFill = SvtGraphicFill( tools::PolyPolygon( rPolygon ),
