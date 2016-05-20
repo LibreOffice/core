@@ -935,6 +935,8 @@ sc::RangeMatrix ScInterpreter::CompareMat( ScQueryOp eOp, sc::CompareOptions* pO
                 }
             }
             break;
+            case svExternalSingleRef:
+            case svExternalDoubleRef:
             case svDoubleRef:
             case svMatrix:
                 aMat[i] = GetRangeMatrix();
