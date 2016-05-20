@@ -36,7 +36,7 @@ def input(xContext):
     xGridWindow.executeAction("SELECT", selectProps)
 
     # TODO: how to handle the enter
-    typeProps = mkPropertyValues({"TEXT": "=2"})
+    typeProps = mkPropertyValues({"KEYCODE": "CTRL+DOWN"})
     xGridWindow.executeAction("TYPE", typeProps)
 
     ui_test.close_doc()
