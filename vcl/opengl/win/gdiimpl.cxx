@@ -13,8 +13,25 @@
 #include <win/saldata.hxx>
 #include <win/salframe.h>
 #include <win/salinst.h>
+#include <GL/wglew.h>
 
 static std::vector<HGLRC> g_vShareList;
+
+class GLWinWindow : public GLWindow
+{
+public:
+    HWND                    hWnd;
+    HDC                     hDC;
+    HGLRC                   hRC;
+    GLWinWindow();
+};
+
+GLWinWindow::GLWinWindow()
+    : hWnd(NULL)
+    , hDC(NULL)
+    , hRC(NULL)
+{
+}
 
 class WinOpenGLContext : public OpenGLContext
 {
@@ -22,6 +39,9 @@ public:
     bool init( HDC hDC, HWND hWnd );
     virtual bool initWindow() override;
 private:
+    GLWinWindow m_aGLWin;
+    virtual const GLWindow& getOpenGLWindow() const { return m_aGLWin; }
+    virtual GLWindow& getModifiableOpenGLWindow() { return m_aGLWin; }
     virtual bool ImplInit() override;
     virtual void makeCurrent() override;
     virtual void destroyCurrentContext() override;
@@ -150,7 +170,7 @@ static LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM l
     }
 }
 
-int InitTempWindow(HWND *hwnd, int width, int height, const PIXELFORMATDESCRIPTOR& inPfd, GLWindow& glWin)
+int InitTempWindow(HWND *hwnd, int width, int height, const PIXELFORMATDESCRIPTOR& inPfd, GLWinWindow& glWin)
 {
     OpenGLZone aZone;
 
@@ -239,7 +259,7 @@ bool InitMultisample(const PIXELFORMATDESCRIPTOR& pfd, int& rPixelFormat,
     OpenGLZone aZone;
 
     HWND hWnd = NULL;
-    GLWindow glWin;
+    GLWinWindow glWin;
     // Create a temp window to check whether support multi-sample, if support, get the format
     if (InitTempWindow(&hWnd, 1, 1, pfd, glWin) < 0)
     {
@@ -507,15 +527,17 @@ rtl::Reference<OpenGLContext> WinOpenGLSalGraphicsImpl::CreateWinContext()
 
 void WinOpenGLSalGraphicsImpl::Init()
 {
-    if ( !IsOffscreen() && mpContext.is() && mpContext->isInitialized() &&
-         ( mpContext->getOpenGLWindow().hWnd != mrParent.mhWnd ||
-           mpContext->getOpenGLWindow().hDC == mrParent.mhLocalDC ) )
+    if (!IsOffscreen() && mpContext.is() && mpContext->isInitialized())
     {
-        // This can legitimately happen, SalFrame keeps 2x
-        // SalGraphics which share the same hWnd and hDC.
-        // The shape 'Area' dialog does reparenting to trigger this.
-        SAL_WARN("vcl.opengl", "Unusual: Windows handle / DC changed without DeInit");
-        DeInit();
+        const GLWinWindow& rGLWindow = static_cast<const GLWinWindow&>(mpContext->getOpenGLWindow());
+        if (rGLWindow.hWnd != mrParent.mhWnd || rGLWindow.hDC == mrParent.mhLocalDC)
+        {
+            // This can legitimately happen, SalFrame keeps 2x
+            // SalGraphics which share the same hWnd and hDC.
+            // The shape 'Area' dialog does reparenting to trigger this.
+            SAL_WARN("vcl.opengl", "Unusual: Windows handle / DC changed without DeInit");
+            DeInit();
+        }
     }
 
     OpenGLSalGraphicsImpl::Init();
