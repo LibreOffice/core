@@ -13381,7 +13381,7 @@ function ElapsedTime( aTimeBase )
 {
     this.aTimeBase = aTimeBase;
     this.nLastQueriedTime = 0.0;
-    this.nStartTime = this.getSystemTime();
+    this.nStartTime = this.getCurrentTime();
     this.nFrozenTime = 0.0;
     this.bInPauseMode = false;
     this.bInHoldMode = false;
@@ -13396,7 +13396,7 @@ ElapsedTime.prototype.getTimeBase = function()
 ElapsedTime.prototype.reset = function()
 {
     this.nLastQueriedTime = 0.0;
-    this.nStartTime = this.getSystemTime();
+    this.nStartTime = this.getCurrentTime();
     this.nFrozenTime = 0.0;
     this.bInPauseMode = false;
     this.bInHoldMode = false;
