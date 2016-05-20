@@ -1676,7 +1676,10 @@ bool SwWrtShell::Pop( bool bOldCursor )
     bool bRet = SwCursorShell::Pop( bOldCursor );
     if( bRet && IsSelection() )
     {
-        m_fnSetCursor = &SwWrtShell::SetCursorKillSel;
+        if( !HasMark() )
+        {
+            m_fnSetCursor = &SwWrtShell::SetCursorKillSel;
+        }
         m_fnKillSel = &SwWrtShell::ResetSelect;
     }
     return bRet;
