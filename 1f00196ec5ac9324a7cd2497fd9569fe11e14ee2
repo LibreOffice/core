@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_c3eef4eb",
+        "filename": "sfx2/source/doc/doc.src",
+        "patchSetId": 27
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-05-20T06:39:08Z",
+      "side": 1,
+      "message": "Can you use the word \"category\" instead of \"region\" here too please?",
+      "revId": "1f00196ec5ac9324a7cd2497fd9569fe11e14ee2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
