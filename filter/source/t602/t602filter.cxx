@@ -135,14 +135,14 @@ inistruct ini;
 T602ImportFilter::T602ImportFilter(const css::uno::Reference<css::lang::XMultiServiceFactory > &r )
     : mxMSF(r)
     , mpAttrList(nullptr)
-    , node(START)
+    , node(tnode::START)
 {
 }
 
 T602ImportFilter::T602ImportFilter(css::uno::Reference<css::io::XInputStream> xInputStream)
     : mxInputStream(xInputStream)
     , mpAttrList(nullptr)
-    , node(START)
+    , node(tnode::START)
 {
 }
 
@@ -467,7 +467,7 @@ bool SAL_CALL T602ImportFilter::test()
 
 void T602ImportFilter::Reset602()
 {
-    node = START;
+    node = tnode::START;
 
     format602.mt = 0;
     format602.mb = 0;
@@ -681,9 +681,9 @@ tnode T602ImportFilter::PointCmd602(unsigned char *ch)
     // warning: uChar -> char
     pcmd[0] = (char) toupper(*ch); inschr(*ch);
     *ch = Readchar602();
-    if (!*ch) return EEND;
-    if (*ch=='\n') return EOL;
-    if (!isalpha(*ch)) return (*ch<32) ? SETCH : WRITE;
+    if (!*ch) return tnode::EEND;
+    if (*ch=='\n') return tnode::EOL;
+    if (!isalpha(*ch)) return (*ch<32) ? tnode::SETCH : tnode::WRITE;
 
     // warning: uChar -> char
     pcmd[1] = (char) toupper(*ch); inschr(*ch);
@@ -693,18 +693,18 @@ tnode T602ImportFilter::PointCmd602(unsigned char *ch)
     else if (pcmd[0]=='P' && pcmd[1]=='I') {
         while (*ch && (*ch != '\n') && (*ch != ','))
             { *ch = Readchar602(); inschr(*ch); }
-        if (!*ch) return EEND;
-        if (*ch=='\n') return EOL;
+        if (!*ch) return tnode::EEND;
+        if (*ch=='\n') return tnode::EOL;
         if (*ch==',') { *ch = Readchar602(); inschr(*ch); }
         pst.pars += (readnum(ch,true)*2);
-        if (!*ch) return EEND;
-        if (*ch=='\n') return EOL;
+        if (!*ch) return tnode::EEND;
+        if (*ch=='\n') return tnode::EOL;
     }
     // else if(pcmd[0]=='K'&&pcmd[1]=='P') {}
     // else if(pcmd[0]=='H'&&pcmd[1]=='E') {}
     // else if(pcmd[0]=='F'&&pcmd[1]=='O') {}
 
-    return READCH;
+    return tnode::READCH;
 }
 
 
@@ -715,7 +715,7 @@ void T602ImportFilter::Read602()
 
     Reference < XAttributeList > xAttrList ( mpAttrList );
 
-    if (node==QUIT) return;
+    if (node==tnode::QUIT) return;
 
     if (mpAttrList)
         mpAttrList->AddAttribute("text:style-name", "P1");
@@ -724,70 +724,70 @@ void T602ImportFilter::Read602()
         mpAttrList->AddAttribute("text:style-name", "T1");
     Start_("text:span");
 
-    if (node==START) { node = EOL; }
+    if (node==tnode::START) { node = tnode::EOL; }
 
-    while (node != EEND) {
+    while (node != tnode::EEND) {
         switch (node) {
-        case READCH:
+        case tnode::READCH:
             ch = Readchar602();
-            if (ch == 0) node = EEND;
+            if (ch == 0) node = tnode::EEND;
             else if (ch == '\n') {
                 if(!pst.willbeeop) par602(false);
-                node = EOL;
-            } else if (ch < 32) node = SETCH;
-            else node = WRITE;
+                node = tnode::EOL;
+            } else if (ch < 32) node = tnode::SETCH;
+            else node = tnode::WRITE;
             break;
-        case EOL:
+        case tnode::EOL:
             ch = Readchar602();
             pst.comment = false;
             if (pst.willbeeop) par602(true);
             pst.willbeeop = false;
-            if(ch == 0) node = EEND;
-            else if (ch == '@') node = EXPCMD;
-            else if (ch == '\n') { par602(false); node = EOL; }
-            else if (ch < 32) {pst.ccafterln = true; node = SETCH; break;}
-            else node = WRITE;
-            if (ch == '.') { pst.comment = true; node = POCMD; }
+            if(ch == 0) node = tnode::EEND;
+            else if (ch == '@') node = tnode::EXPCMD;
+            else if (ch == '\n') { par602(false); node = tnode::EOL; }
+            else if (ch < 32) {pst.ccafterln = true; node = tnode::SETCH; break;}
+            else node = tnode::WRITE;
+            if (ch == '.') { pst.comment = true; node = tnode::POCMD; }
             pst.ccafterln = false;
             break;
 
-        case POCMD: inschr('.');
+        case tnode::POCMD: inschr('.');
             ch = Readchar602();
-            if(ch == 0) node = EEND;
+            if(ch == 0) node = tnode::EEND;
             else if(isalpha(ch)) node = PointCmd602(&ch);
-            else if(ch <32) node=SETCH;
-            else node = WRITE;
+            else if(ch <32) node=tnode::SETCH;
+            else node = tnode::WRITE;
             break;
 
-        case EXPCMD: ch = Readchar602();
-            if(ch == 0) {inschr('@'); node = EEND; }
+        case tnode::EXPCMD: ch = Readchar602();
+            if(ch == 0) {inschr('@'); node = tnode::EEND; }
             else if(isupper(ch)) {
                 cmd602[0] = ch;
                 ch = Readchar602();
                 cmd602[1] = ch;
                 cmd602[2] = '\0';
                 if(isupper(ch))
-                    node = SETCMD;   //nedodelano
+                    node = tnode::SETCMD;   //nedodelano
                 else {
                     inschr('@');
                     if (mxHandler.is())
                         mxHandler->characters(OUString::createFromAscii(cmd602));
-                    node = READCH;
+                    node = tnode::READCH;
                 }
             } else {
                 inschr('@');
-                if(ch<32) node = SETCH;
-                else node = WRITE;}
+                if(ch<32) node = tnode::SETCH;
+                else node = tnode::WRITE;}
             break;
 
-        case SETCMD:
+        case tnode::SETCMD:
             ch = Setformat602(cmd602);
-            if(ch == 0) node = EEND;
-            else if(ch == '\n') node = EOL;
-            else node = READCH;
+            if(ch == 0) node = tnode::EEND;
+            else if(ch == '\n') node = tnode::EOL;
+            else node = tnode::READCH;
             break;
 
-        case SETCH :
+        case tnode::SETCH :
             // warning: potentially uninitialized
             switch(ch) {
             case '\t' : Start_("text:tab-stop");
@@ -811,28 +811,28 @@ void T602ImportFilter::Read602()
             case 0x16 : setfnt(lindex,false);  break;
             default   : break;
             }
-            if(pst.ccafterln) node = EOL;
-            else node = READCH;
+            if(pst.ccafterln) node = tnode::EOL;
+            else node = tnode::READCH;
             break;
 
-        case WRITE :
+        case tnode::WRITE :
             switch(ch) {
             case 0x8d:
                 ch = Readchar602();
                 if( ch == 0x0a) {
                     if(ini.reformatpars) inschr(' ');
                     else par602(false); //formatovaci radek
-                    node = EOL;
+                    node = tnode::EOL;
                 } else {
                     inschr(0x8d);//inschr(' ');
-                    if(ch == 0) node = EEND;
-                    else if(ch < 32) node = SETCH;
-                    else node = WRITE;
+                    if(ch == 0) node = tnode::EEND;
+                    else if(ch < 32) node = tnode::SETCH;
+                    else node = tnode::WRITE;
                 }
                 break;
             case 0xfe:
                 if (ini.showcomm||!pst.comment) inschr(' ');
-                node = READCH;
+                node = tnode::READCH;
                 break;
             case 0xad:
                 ch = Readchar602();
@@ -845,20 +845,20 @@ void T602ImportFilter::Read602()
                             pst.wasfdash = true;
                         }
                     }
-                    node=WRITE;
+                    node=tnode::WRITE;
                 } else {
                     inschr(0xad);
-                    if(ch == 0) node = EEND;
+                    if(ch == 0) node = tnode::EEND;
                     else if(ch == '\n') {
                         if(!pst.willbeeop) par602(false);
-                        node = EOL; }
-                    else if(ch < 32) node = SETCH;
-                    else node = WRITE;
+                        node = tnode::EOL; }
+                    else if(ch < 32) node = tnode::SETCH;
+                    else node = tnode::WRITE;
                 }
                 break;
             default:
                 inschr(ch);
-                node = READCH;
+                node = tnode::READCH;
                 break;
             }
             break;
@@ -868,7 +868,7 @@ void T602ImportFilter::Read602()
 
     End_("text:span");
     End_("text:p");
-    node = QUIT;
+    node = tnode::QUIT;
 }
 
 // XServiceInfo

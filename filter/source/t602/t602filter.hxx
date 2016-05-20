@@ -51,7 +51,7 @@ typedef enum {
         chngul      // change underline
 } fonts;
 
-typedef enum {START,READCH,EOL,POCMD,EXPCMD,SETCMD,SETCH,WRITE,EEND,QUIT} tnode;
+enum class tnode {START,READCH,EOL,POCMD,EXPCMD,SETCMD,SETCH,WRITE,EEND,QUIT};
 
 OUString getImplementationName()
     throw ( css::uno::RuntimeException );
