@@ -307,6 +307,8 @@ public:
     void SetCursorTwipPosition(const Point& rPosition, bool bPoint, bool bClearMark);
     /// Allows starting or ending a graphic move or resize action.
     void SetGraphicTwipPosition(bool bStart, const Point& rPosition);
+
+    virtual FactoryFunction GetUITestFactory() const override;
 };
 
 #endif
