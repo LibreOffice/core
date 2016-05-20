@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_c3c19430",
+        "filename": "sd/source/ui/view/drviews7.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1337,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2016-05-20T08:02:20Z",
+      "side": 1,
+      "message": "Not urgently necessary, but better style and prevents later errors when doing changes: all these can be const local variables, e.g. \u0027const Rectangle ...\u0027",
+      "range": {
+        "startLine": 1333,
+        "startChar": 0,
+        "endLine": 1337,
+        "endChar": 81
+      },
+      "revId": "efbc34d2cefa67960e702fe09f5ac903a23b8cb0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_e3dcd81a",
+        "filename": "sd/source/ui/view/sdview.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 888,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2016-05-20T08:02:20Z",
+      "side": 1,
+      "message": "const Size ...",
+      "range": {
+        "startLine": 888,
+        "startChar": 16,
+        "endLine": 888,
+        "endChar": 20
+      },
+      "revId": "efbc34d2cefa67960e702fe09f5ac903a23b8cb0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_23e7a0e5",
+        "filename": "svx/source/svdraw/svdograf.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 566,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2016-05-20T08:02:20Z",
+      "side": 1,
+      "message": "C++ automatically uses this inside member methods. Is okay to explicitely add it (seen that e.g. in chart2 a lot), but most leave it out. A question of taste a little bit.",
+      "range": {
+        "startLine": 566,
+        "startChar": 9,
+        "endLine": 566,
+        "endChar": 15
+      },
+      "revId": "efbc34d2cefa67960e702fe09f5ac903a23b8cb0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
