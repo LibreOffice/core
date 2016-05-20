@@ -150,20 +150,19 @@ void SAL_CALL InterceptionHelper::registerDispatchProviderInterceptor(const css:
 
     // b) OK - there is at least one interceptor already registered.
     //    It's slave and it's master must be valid references ...
-    //    because we created it. But we have to look for the static bool which
-    //    regulate direction of using of interceptor objects!
+    //    because we created it.
 
-    //     insert it behind any other existing interceptor - means at the end of our list.
+    // insert it before any other existing interceptor - means at the beginning of our list.
     else
     {
-        css::uno::Reference< css::frame::XDispatchProvider >            xMasterD = m_lInterceptionRegs.rbegin()->xInterceptor;
-        css::uno::Reference< css::frame::XDispatchProviderInterceptor > xMasterI (xMasterD, css::uno::UNO_QUERY);
+        css::uno::Reference< css::frame::XDispatchProvider >            xSlaveD = m_lInterceptionRegs.begin()->xInterceptor;
+        css::uno::Reference< css::frame::XDispatchProviderInterceptor > xSlaveI (xSlaveD , css::uno::UNO_QUERY);
 
-        xInterceptor->setMasterDispatchProvider(xMasterD          );
-        xInterceptor->setSlaveDispatchProvider (m_xSlave          );
-        xMasterI->setSlaveDispatchProvider     (aInfo.xInterceptor);
+        xInterceptor->setMasterDispatchProvider(xThis             );
+        xInterceptor->setSlaveDispatchProvider (xSlaveD           );
+        xSlaveI->setMasterDispatchProvider     (aInfo.xInterceptor);
 
-        m_lInterceptionRegs.push_back(aInfo);
+        m_lInterceptionRegs.push_front(aInfo);
     }
 
     css::uno::Reference< css::frame::XFrame > xOwner(m_xOwnerWeak.get(), css::uno::UNO_QUERY);
