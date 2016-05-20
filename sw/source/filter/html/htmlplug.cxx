@@ -1322,8 +1322,8 @@ Writer& OutHTML_FrameFormatOLENodeGrf( Writer& rWrt, const SwFrameFormat& rFrame
 
         sal_uInt16 nErr = XOutBitmap::WriteGraphic( aGraphic, aGraphicURL,
                                     "JPG",
-                                    (XOUTBMP_USE_GIF_IF_POSSIBLE |
-                                     XOUTBMP_USE_NATIVE_IF_POSSIBLE) );
+                                    (XOutFlags::UseGifIfPossible |
+                                     XOutFlags::UseNativeIfPossible) );
         if( nErr )              // fehlerhaft, da ist nichts auszugeben
         {
             rHTMLWrt.m_nWarn = WARN_SWG_POOR_LOAD | WARN_SW_WRITE_BASE;

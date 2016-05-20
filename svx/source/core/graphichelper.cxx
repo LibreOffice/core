@@ -192,9 +192,9 @@ OUString GraphicHelper::ExportGraphic( const Graphic& rGraphic, const OUString& 
             OUString aFilter( rGraphicFilter.GetExportFormatShortName( nFilter ) );
 
             XOutBitmap::WriteGraphic( rGraphic, sPath, aFilter,
-                                        XOUTBMP_DONT_EXPAND_FILENAME |
-                                        XOUTBMP_DONT_ADD_EXTENSION |
-                                        XOUTBMP_USE_NATIVE_IF_POSSIBLE );
+                                        XOutFlags::DontExpandFilename |
+                                        XOutFlags::DontAddExtension |
+                                        XOutFlags::UseNativeIfPossible );
             return sPath;
         }
     }
