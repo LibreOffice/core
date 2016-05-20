@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_a3773001",
+        "filename": "svx/source/dialog/srchdlg.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2016-05-20T08:57:59Z",
+      "side": 0,
+      "message": "Hello Noel,\nSorry for the noise but I\u0027ve tried to open the webpage with chrome incognito and I see that pImpl(nullptr) isn\u0027t deleted. Do you see it here?",
+      "revId": "b030ba2e13a02c231783966b23ded76247bb9690",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
