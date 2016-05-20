@@ -32,6 +32,19 @@ def input(xContext):
 
     xGridWindow = xTopWindow.getChild("grid_window")
 
+    ui_test.close_doc()
+
+def special_keys(xContext):
+    xUITest = xContext.ServiceManager.createInstanceWithContext(
+            "org.libreoffice.uitest.UITest", xContext)
+
+    ui_test = UITest(xUITest, xContext)
+
+    ui_test.create_doc_in_start_center("calc")
+    xTopWindow = xUITest.getTopFocusWindow()
+
+    xGridWindow = xTopWindow.getChild("grid_window")
+
     selectProps = mkPropertyValues({"CELL": "C3"})
     xGridWindow.executeAction("SELECT", selectProps)
 
