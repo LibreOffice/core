@@ -67,11 +67,6 @@
 
 #include "OGLTrans_TransitionImpl.hxx"
 
-#if defined( UNX ) && !defined( MACOSX )
-    #include <X11/keysym.h>
-    #include <X11/X.h>
-#endif
-
 #include <vcl/sysdata.hxx>
 
 #if OSL_DEBUG_LEVEL > 0
@@ -257,9 +252,7 @@ private:
     bool mbFreeLeavingPixmap;
     bool mbFreeEnteringPixmap;
 #endif
-#if defined( UNX ) && !defined( MACOSX )
     bool mbRestoreSync;
-#endif
     bool mbUseLeavingPixmap;
     bool mbUseEnteringPixmap;
 
@@ -437,10 +430,9 @@ void OGLTransitionerImpl::impl_prepareSlides()
     mbUseLeavingPixmap = false;
     mbUseEnteringPixmap = false;
 
-#if defined( GLX_EXT_texture_from_pixmap )
-
     const GLWindow& rGLWindow(mpContext->getOpenGLWindow());
 
+#if defined( GLX_EXT_texture_from_pixmap )
     if( GLXEW_EXT_texture_from_pixmap && xLeavingSet.is() && xEnteringSet.is() && mbHasTFPVisual ) {
         Sequence< Any > leaveArgs;
         Sequence< Any > enterArgs;
@@ -509,8 +501,8 @@ void OGLTransitionerImpl::impl_prepareSlides()
             XSetErrorHandler( oldHandler );
         }
     }
-
 #endif
+
     if( !mbUseLeavingPixmap )
         maLeavingBytes = mxLeavingBitmap->getData(maSlideBitmapLayout, aSlideRect);
     if( !mbUseEnteringPixmap )
@@ -524,13 +516,11 @@ void OGLTransitionerImpl::impl_prepareSlides()
     mpContext->sync();
 
     CHECK_GL_ERROR();
-#if defined( UNX ) && !defined( MACOSX )
+
     // synchronized X still gives us much smoother play
     // I suspect some issues in above code in slideshow
     // synchronize whole transition for now
-    XSynchronize( rGLWindow.dpy, true );
-    mbRestoreSync = true;
-#endif
+    mbRestoreSync = rGLWindow.Synchronize(true);
 }
 
 bool OGLTransitionerImpl::impl_prepareTransition()
@@ -1326,13 +1316,11 @@ void OGLTransitionerImpl::disposing()
     }
 #endif
 
-#if defined( UNX ) && !defined( MACOSX )
-    if( mbRestoreSync && bool(mpContext.is()) ) {
+    if (mbRestoreSync && bool(mpContext.is())) {
         // try to reestablish synchronize state
-        char* sal_synchronize = getenv("SAL_SYNCHRONIZE");
-        XSynchronize( mpContext->getOpenGLWindow().dpy, sal_synchronize && *sal_synchronize == '1' );
+        const char* sal_synchronize = getenv("SAL_SYNCHRONIZE");
+        mpContext->getOpenGLWindow().Synchronize(sal_synchronize && *sal_synchronize == '1' );
     }
-#endif
 
     impl_dispose();
 
@@ -1359,9 +1347,7 @@ OGLTransitionerImpl::OGLTransitionerImpl()
     , mbFreeLeavingPixmap(false)
     , mbFreeEnteringPixmap(false)
 #endif
-#if defined( UNX ) && !defined( MACOSX )
     , mbRestoreSync(false)
-#endif
     , mbUseLeavingPixmap(false)
     , mbUseEnteringPixmap(false)
     , maSlideBitmapLayout()
