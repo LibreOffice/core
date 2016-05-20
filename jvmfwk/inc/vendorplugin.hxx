@@ -46,17 +46,17 @@
    of this API may support multiple vendors. </p>
  */
 
-typedef enum
+enum class javaPluginError
 {
-    JFW_PLUGIN_E_NONE,
-    JFW_PLUGIN_E_ERROR,
-    JFW_PLUGIN_E_INVALID_ARG,
-    JFW_PLUGIN_E_WRONG_VERSION_FORMAT,
-    JFW_PLUGIN_E_FAILED_VERSION,
-    JFW_PLUGIN_E_NO_JRE,
-    JFW_PLUGIN_E_WRONG_VENDOR,
-    JFW_PLUGIN_E_VM_CREATION_FAILED
-} javaPluginError;
+    NONE,
+    Error,
+    InvalidArg,
+    WrongVersionFormat,
+    FailedVersion,
+    NoJre,
+    WrongVendor,
+    VmCreationFailed
+};
 
 
 /** obtains information about installations of Java Runtime Environments (JREs).
@@ -98,12 +98,12 @@ typedef enum
        <code>parJavaInfo</code>.
 
     @return
-    JFW_PLUGIN_E_NONE the function ran successfully.</br>
-    JFW_PLUGIN_E_ERROR an error occurred during execution.</br>
-    JFW_PLUGIN_E_INVALID_ARG an argument was not valid. For example
+    javaPluginError::NONE the function ran successfully.</br>
+    javaPluginError::Error an error occurred during execution.</br>
+    javaPluginError::InvalidArg an argument was not valid. For example
     <code>nSizeExcludeList</code> is greater null but <code>arExcludeList</code>
     is NULL or NULL pointer were passed for at least on of the strings.</br>
-    JFW_PLUGIN_E_WRONG_VERSION_FORMAT the version strings in
+    javaPluginError::WrongVersionFormat the version strings in
     <code>sMinVersion,sMaxVersion,arExcludeList</code> are not recognized as valid
     version strings.
  */
@@ -145,18 +145,18 @@ javaPluginError jfw_plugin_getAllJavaInfos(
         on return a pointer to a <code>JavaInfo</code> object.
 
    @return
-   JFW_PLUGIN_E_NONE the function ran successfully.</br>
-   JFW_PLUGIN_E_ERROR an error occurred during execution.</br>
-   JFW_PLUGIN_E_INVALID_ARG an argument was not valid. For example
+   javaPluginError::NONE the function ran successfully.</br>
+   javaPluginError::Error an error occurred during execution.</br>
+   javaPluginError::InvalidArg an argument was not valid. For example
     <code>nSizeExcludeList</code> is greater null but <code>arExcludeList</code>
     is NULL, NULL pointer were passed for at least on of the strings, sLocation
     is an empty string.</br>
-   JFW_PLUGIN_E_WRONG_VERSION_FORMAT the version strings in
+   javaPluginError::WrongVersionFormat the version strings in
     <code>sMinVersion,sMaxVersion,arExcludeList</code> are not recognized as valid
     version strings.
-   JFW_PLUGIN_E_FAILED_VERSION there is a JRE at the given location but it does not
+   javaPluginError::FailedVersion there is a JRE at the given location but it does not
    meet the version requirements.
-   JFW_PLUGIN_E_NO_JRE no JRE could be detected at the given location. However, that
+   javaPluginError::NoJre no JRE could be detected at the given location. However, that
    does not mean necessarily that there is no JRE. There could be a JRE but it has
    a vendor which is not supported by this API implementation.
  */
@@ -189,10 +189,10 @@ javaPluginError jfw_plugin_getJavaInfoByPath(
         on return a pointer to its <code>JavaInfo</code> object.
 
    @return
-   JFW_PLUGIN_E_NONE the function ran successfully.</br>
-   JFW_PLUGIN_E_INVALID_ARG an argument was not valid, for example
+   javaPluginError::NONE the function ran successfully.</br>
+   javaPluginError::InvalidArg an argument was not valid, for example
     <code>ppInfo</code> is an invalid pointer.
-   JFW_PLUGIN_E_NO_JRE no suitable JRE could be detected at the given location. However, that
+   javaPluginError::NoJre no suitable JRE could be detected at the given location. However, that
    does not mean necessarily that there is no JRE. There could be a JRE but it has
    a vendor which is not supported by this API implementation or it does not
    meet the version requirements.
@@ -233,9 +233,9 @@ javaPluginError jfw_plugin_getJavaInfoFromJavaHome(
         the <code>JavaInfo</code> objects inserted into the existing vector.
 
     @return
-    JFW_PLUGIN_E_NONE the function ran successfully and at least one JRE
+    javaPluginError::NONE the function ran successfully and at least one JRE
     that meets the requirements was found.</br>
-    JFW_PLUGIN_E_NO_JRE no JavaInfo that meets the version criteria was found
+    javaPluginError::NoJre no JavaInfo that meets the version criteria was found
     when inspecting the PATH
  */
 
@@ -278,11 +278,11 @@ javaPluginError jfw_plugin_getJavaInfosFromPath(
         [out] the JNIEnv pointer of the created VM.
 
     @return
-    JFW_PLUGIN_E_NONE the function ran successfully.</br>
-    JFW_PLUGIN_E_ERROR an error occurred during execution.</br>
-    JFW_PLUGIN_E_WRONG_VENDOR the <code>JavaInfo</code> object was not created
+    javaPluginError::NONE the function ran successfully.</br>
+    javaPluginError::Error an error occurred during execution.</br>
+    javaPluginError::WrongVendor the <code>JavaInfo</code> object was not created
     in by this library and the VM cannot be started.</br>
-    JFW_PLUGIN_E_INVALID_ARG an argument was not valid. For example
+    javaPluginError::InvalidArg an argument was not valid. For example
     <code>pInfo</code> or , <code>ppVM</code> or <code>ppEnv</code> are NULL.
     </br>
     JFW_PLUGIN_E_VM_CREATION_FAILED a VM could not be created. The error was caused
@@ -309,9 +309,9 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
         only valid if the function returns JFW_E_NONE.
 
    @return
-    JFW_PLUGIN_E_NONE the function ran successfully.</br>
-    JFW_PLUGIN_E_ERROR an error occurred during execution.</br>
-    JFW_PLUGIN_E_INVALID_ARG pInfo contains invalid data</br>
+    javaPluginError::NONE the function ran successfully.</br>
+    javaPluginError::Error an error occurred during execution.</br>
+    javaPluginError::InvalidArg pInfo contains invalid data</br>
  */
 javaPluginError jfw_plugin_existJRE(const JavaInfo *pInfo, sal_Bool *exist);
 
