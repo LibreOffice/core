@@ -501,7 +501,6 @@ void CustomAnimationPane::updateControls()
     {
         mpFTAnimation->Enable();
         mpLBAnimation->Enable();
-        fillAnimationLB();
     }
     else
     {
@@ -602,7 +601,7 @@ void CustomAnimationPane::updateControls()
             break;
         }
         mpLBCategory->SelectEntryPos(nCategoryPos);
-        fillAnimationLB();
+        fillAnimationLB( pEffect->hasText() );
         OUString rsPresetId = pEffect->getPresetId();
         sal_Int32 nAnimationPos = mpLBAnimation->GetEntryCount();
         while( nAnimationPos-- )
@@ -1810,7 +1809,7 @@ void CustomAnimationPane::onAdd()
     mpLBAnimation->Enable();
     mpLBCategory->SelectEntryPos(0);
 
-    sal_uInt32 nFirstEffect = fillAnimationLB();
+    sal_uInt32 nFirstEffect = fillAnimationLB( bHasText );
     if(nFirstEffect == LISTBOX_ENTRY_NOTFOUND)
         return;
 
@@ -2031,7 +2030,9 @@ IMPL_LINK_NOARG_TYPED(CustomAnimationPane, AnimationSelectHdl, ListBox&, void)
 
 IMPL_LINK_NOARG_TYPED(CustomAnimationPane, UpdateAnimationLB, ListBox&, void)
 {
-    fillAnimationLB();
+    //FIXME: first effect only? what if there is more?
+    CustomAnimationEffectPtr pEffect = maListSelection.front();
+    fillAnimationLB( pEffect->hasText() );
 }
 
 IMPL_LINK_NOARG_TYPED(CustomAnimationPane, DurationModifiedHdl, Edit&, void)
@@ -2047,7 +2048,7 @@ IMPL_LINK_NOARG_TYPED(CustomAnimationPane, DurationModifiedHdl, Edit&, void)
     }
 }
 
-sal_uInt32 CustomAnimationPane::fillAnimationLB()
+sal_uInt32 CustomAnimationPane::fillAnimationLB( bool bHasText )
 {
     PresetCategoryList rCategoryList;
     sal_uInt16 nPosition = mpLBCategory->GetSelectEntryPos();
@@ -2090,7 +2091,8 @@ sal_uInt32 CustomAnimationPane::fillAnimationLB()
             while( aIter != aEnd )
             {
                 CustomAnimationPresetPtr pDescriptor = (*aIter++);
-                if( pDescriptor.get() && !pDescriptor->isTextOnly() )
+                // ( !isTextOnly || ( isTextOnly && bHasText ) ) <=> !isTextOnly || bHasText
+                if( pDescriptor.get() && ( !pDescriptor->isTextOnly() || bHasText ) )
                 {
                     sal_Int32 nPos = mpLBAnimation->InsertEntry( pDescriptor->getLabel() );
                     mpLBAnimation->SetEntryData( nPos, static_cast<void*>( new CustomAnimationPresetPtr( pDescriptor ) ) );

@@ -118,7 +118,7 @@ private:
     static css::uno::Any getProperty1Value( sal_Int32 nType, const CustomAnimationEffectPtr& pEffect );
     bool setProperty1Value( sal_Int32 nType, const CustomAnimationEffectPtr& pEffect, const css::uno::Any& rValue );
     void UpdateLook();
-    sal_uInt32 fillAnimationLB();
+    sal_uInt32 fillAnimationLB( bool bHasText );
 
     DECL_LINK_TYPED( implControlListBoxHdl, ListBox&, void );
     DECL_LINK_TYPED( implClickHdl, Button*, void );
