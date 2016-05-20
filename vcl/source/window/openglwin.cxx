@@ -26,7 +26,7 @@ private:
 OpenGLWindowImpl::OpenGLWindowImpl(vcl::Window* pWindow)
     : mxContext(OpenGLContext::Create())
 {
-    SystemWindowData aData = OpenGLContext::generateWinData(pWindow, false);
+    SystemWindowData aData = mxContext->generateWinData(pWindow, false);
     mxChildWindow.reset(VclPtr<SystemChildWindow>::Create(pWindow, 0, &aData));
     mxChildWindow->Show();
     mxContext->init(mxChildWindow.get());

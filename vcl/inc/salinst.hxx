@@ -36,6 +36,7 @@ namespace comphelper { class SolarMutex; }
 struct SystemParentData;
 struct SalPrinterQueueInfo;
 struct ImplJobSetup;
+class OpenGLContext;
 class SalGraphics;
 class SalFrame;
 class SalObject;
@@ -144,6 +145,8 @@ public:
 
     // may return NULL to disable session management
     virtual SalSession*     CreateSalSession() = 0;
+
+    virtual OpenGLContext*  CreateOpenGLContext() = 0;
 
     // methods for XDisplayConnection
 
