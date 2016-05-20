@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_0317fca3",
+        "filename": "sfx2/source/doc/templatedlg.cxx",
+        "patchSetId": 28
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-05-20T09:02:17Z",
+      "side": 1,
+      "message": "Strings like this are not translatable (so they\u0027ll be English in all locales). There are two ways how to fix it (none of them is very nice, but since LO doesn\u0027t use gettext, what can we do) \n\n1. Add an invisible GtkLabel to .ui file read by this class and get the text from there\n2. Create a .src file with couple of resources (or reuse one, if there is/was any in this folder and/or all of sfx2)",
+      "revId": "6feb72b2e8c42ada8f01d6ca4a4a13bc6b8f97f8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_438824e8",
+        "filename": "sfx2/source/doc/templatedlg.cxx",
+        "patchSetId": 28
+      },
+      "lineNbr": 344,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-05-20T09:02:17Z",
+      "side": 1,
+      "message": "I\u0027d rather see matching using positions, not strings (since they\u0027ll be locale-dependent)",
+      "revId": "6feb72b2e8c42ada8f01d6ca4a4a13bc6b8f97f8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_e37858fb",
+        "filename": "sfx2/source/doc/templatedlg.cxx",
+        "patchSetId": 28
+      },
+      "lineNbr": 360,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-05-20T09:02:17Z",
+      "side": 1,
+      "message": "Ah, but now I see that you\u0027re actually using the strings in a combo box. In that case, you can include predefined items in .ui file already and they\u0027ll be automatically translatable",
+      "revId": "6feb72b2e8c42ada8f01d6ca4a4a13bc6b8f97f8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_636d2832",
+        "filename": "sfx2/source/doc/templatedlg.cxx",
+        "patchSetId": 28
+      },
+      "lineNbr": 395,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-05-20T09:02:17Z",
+      "side": 1,
+      "message": "And the same story here -- why not just do SelectEntryPos(MNI_WRITER)?",
+      "revId": "6feb72b2e8c42ada8f01d6ca4a4a13bc6b8f97f8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_836a2c19",
+        "filename": "sfx2/source/doc/templatedlg.cxx",
+        "patchSetId": 28
+      },
+      "lineNbr": 413,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-05-20T09:02:17Z",
+      "side": 1,
+      "message": "Better: !aLastFolder.isEmpty()",
+      "revId": "6feb72b2e8c42ada8f01d6ca4a4a13bc6b8f97f8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_e35f7873",
+        "filename": "sfx2/source/doc/templatedlg.cxx",
+        "patchSetId": 28
+      },
+      "lineNbr": 672,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-05-20T09:02:17Z",
+      "side": 1,
+      "message": "I think by the time aDlg-\u003eExecute has returned something, the dialog itself is closed already so no need to explicitely close it again, but I might be wrong ...",
+      "revId": "6feb72b2e8c42ada8f01d6ca4a4a13bc6b8f97f8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
