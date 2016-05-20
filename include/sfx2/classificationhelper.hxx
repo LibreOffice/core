@@ -58,7 +58,8 @@ public:
 
     SfxClassificationHelper(const css::uno::Reference<css::document::XDocumentProperties>& xDocumentProperties);
     ~SfxClassificationHelper();
-    const OUString& GetBACName();
+    /// Get the currently selected category for eType.
+    const OUString& GetBACName(SfxClassificationPolicyType eType);
     /// Return all possible valid category names, based on the policy.
     std::vector<OUString> GetBACNames();
     /// Setting this sets all the other properties, based on the policy.
