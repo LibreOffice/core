@@ -342,7 +342,10 @@ class GtkSalFrame : public SalFrame
     void TriggerPaintEvent();
 
     void updateWMClass();
-    void SetScreen( unsigned int nNewScreen, int eType, Rectangle *pSize = nullptr );
+
+    enum class SetType { RetainSize, Fullscreen, UnFullscreen };
+
+    void SetScreen( unsigned int nNewScreen, SetType eType, Rectangle *pSize = nullptr );
 
 public:
 #if GTK_CHECK_VERSION(3,0,0)
