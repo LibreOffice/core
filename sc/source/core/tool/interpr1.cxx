@@ -878,6 +878,12 @@ double ScInterpreter::Compare( ScQueryOp eOp )
             break;
             case svExternalDoubleRef:
                 // TODO: Find out how to handle this...
+                // Xcl generates a position dependent intersection using
+                // col/row, as it seems to do for all range references, not
+                // only in compare context. We'd need a general implementation
+                // for that behavior similar to svDoubleRef in scalar and array
+                // mode. Which also means we'd have to change all places where
+                // it currently is handled along with svMatrix.
             default:
                 SetError( errIllegalParameter);
             break;
