@@ -2025,7 +2025,6 @@ void SwAutoFormat::AutoCorrect( sal_Int32 nPos )
 
         if( bCallACorr )
         {
-            bCallACorr = false;
             m_aDelPam.GetPoint()->nContent = nPos;
             SetRedlineText( STR_AUTOFMTREDL_USE_REPLACE );
             if( m_aFlags.bAutoCorrect &&

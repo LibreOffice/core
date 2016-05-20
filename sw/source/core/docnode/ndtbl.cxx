@@ -1657,7 +1657,6 @@ bool SwNodes::TableToText( const SwNodeRange& rRange, sal_Unicode cCh,
                 if( !pSNd->GetSection().IsHidden() && !pSNd->IsContentHidden() )
                 {
                     pSNd->MakeFrames( &aFrameIdx, &aDelRg.aEnd );
-                    pFrameNd = pSNd;
                     break;
                 }
                 aDelRg.aStart = *pSNd->EndOfSectionNode();

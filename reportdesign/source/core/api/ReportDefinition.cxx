@@ -1317,8 +1317,8 @@ void SAL_CALL OReportDefinition::storeToStorage( const uno::Reference< embed::XS
     uno::Sequence < beans::PropertyValue > aProps;
 
     // export sub streams for package, else full stream into a file
-    bool bWarn = false, bErr = false;
-    OUString sWarnFile, sErrFile;
+    bool bErr = false;
+    OUString sErrFile;
 
     uno::Reference< beans::XPropertySet> xProp(_xStorageToSaveTo,uno::UNO_QUERY);
     if ( xProp.is() )
@@ -1373,49 +1373,28 @@ void SAL_CALL OReportDefinition::storeToStorage( const uno::Reference< embed::XS
     if( !bErr )
     {
         xInfoSet->setPropertyValue("StreamName", uno::makeAny(OUString("settings.xml")));
-        if( !WriteThroughComponent(
+        WriteThroughComponent(
             xCom, "settings.xml",
             "com.sun.star.comp.report.XMLSettingsExporter",
-            aDelegatorArguments, aProps, _xStorageToSaveTo ) )
-        {
-            if( !bWarn )
-            {
-                bWarn = true;
-                sWarnFile = "settings.xml";
-            }
-        }
+            aDelegatorArguments, aProps, _xStorageToSaveTo );
     }
 
     if( !bErr )
     {
         xInfoSet->setPropertyValue("StreamName", uno::makeAny(OUString("meta.xml")));
-        if( !WriteThroughComponent(
+        WriteThroughComponent(
             xCom, "meta.xml",
             "com.sun.star.comp.report.XMLMetaExporter",
-            aDelegatorArguments, aProps, _xStorageToSaveTo ) )
-        {
-            if( !bWarn )
-            {
-                bWarn = true;
-                sWarnFile = "meta.xml";
-            }
-        }
+            aDelegatorArguments, aProps, _xStorageToSaveTo );
     }
 
     if( !bErr )
     {
         xInfoSet->setPropertyValue("StreamName", uno::makeAny(OUString("styles.xml")));
-        if( !WriteThroughComponent(
+        WriteThroughComponent(
             xCom, "styles.xml",
             "com.sun.star.comp.report.XMLStylesExporter",
-            aDelegatorArguments, aProps, _xStorageToSaveTo ) )
-        {
-            if( !bWarn )
-            {
-                bWarn = true;
-                sWarnFile = "styles.xml";
-            }
-        }
+            aDelegatorArguments, aProps, _xStorageToSaveTo );
     }
 
     if ( !bErr )

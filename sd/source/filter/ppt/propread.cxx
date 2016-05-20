@@ -454,7 +454,6 @@ void Section::Read( SotStorageStream *pStrm )
             {
                 if ( nPropSize > nStrmSize )
                 {
-                    nPropCount = 0;
                     break;
                 }
                 pStrm->Seek( nPropOfs + nSecOfs );
@@ -520,7 +519,6 @@ void Section::Read( SotStorageStream *pStrm )
             nSize -= pStrm->Tell();
             if ( nSize > nStrmSize )
             {
-                nPropCount = 0;
                 break;
             }
             sal_uInt8* pBuf = new sal_uInt8[ nSize ];

@@ -507,7 +507,7 @@ void ScDocument::FillInfo(
                     else
                         nArrRow = 1;
 
-                    SCROW nThisRow = nCurRow;                   // end of range
+                    SCROW nThisRow;
                     SCSIZE nIndex;
                     (void) pThisAttrArr->Search( nCurRow, nIndex );
 
@@ -630,7 +630,6 @@ void ScDocument::FillInfo(
                         ScMarkArray aThisMarkArr(pMarkData->GetMarkArray( nX ));
                         nArrRow = 1;
                         nCurRow = nRow1;                                      // single rows
-                        nThisRow = nRow1;                                     // End of range
 
                         if ( aThisMarkArr.Search( nRow1, nIndex ) )
                         {

@@ -923,7 +923,7 @@ void SwWrtShell::SelectNextPrevHyperlink( bool bNext )
             SttEndDoc(true);
         else
             SttEndDoc(false);
-        bRet = SwCursorShell::SelectNxtPrvHyperlink( bNext );
+        SwCursorShell::SelectNxtPrvHyperlink( bNext );
     }
     EndAction();
 

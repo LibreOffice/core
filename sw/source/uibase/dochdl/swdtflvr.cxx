@@ -678,7 +678,7 @@ bool SwTransferable::WriteObject( tools::SvRef<SotStorageStream>& xStream,
                 pEmbObj->SetupStorage( xWorkStore, SOFFICE_FILEFORMAT_CURRENT, false );
                 // mba: no BaseURL for clipboard
                 SfxMedium aMedium( xWorkStore, OUString() );
-                bRet = pEmbObj->DoSaveObjectAs( aMedium, false );
+                pEmbObj->DoSaveObjectAs( aMedium, false );
                 pEmbObj->DoSaveCompleted();
 
                 uno::Reference< embed::XTransactedObject > xTransact( xWorkStore, uno::UNO_QUERY );
@@ -692,8 +692,6 @@ bool SwTransferable::WriteObject( tools::SvRef<SotStorageStream>& xStream,
                     xStream->WriteStream( *pSrcStm );
                     pSrcStm.reset();
                 }
-
-                bRet = true;
 
                 xWorkStore->dispose();
                 xWorkStore.clear();

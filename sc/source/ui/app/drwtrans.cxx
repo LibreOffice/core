@@ -556,7 +556,7 @@ bool ScDrawTransferObj::WriteObject( tools::SvRef<SotStorageStream>& rxOStm, voi
 
                     // mba: no relative URLs for clipboard!
                     SfxMedium aMedium( xWorkStore, OUString() );
-                    bRet = pEmbObj->DoSaveObjectAs( aMedium, false );
+                    pEmbObj->DoSaveObjectAs( aMedium, false );
                     pEmbObj->DoSaveCompleted();
 
                     uno::Reference< embed::XTransactedObject > xTransact( xWorkStore, uno::UNO_QUERY );
@@ -570,8 +570,6 @@ bool ScDrawTransferObj::WriteObject( tools::SvRef<SotStorageStream>& rxOStm, voi
                         rxOStm->WriteStream( *pSrcStm );
                         delete pSrcStm;
                     }
-
-                    bRet = true;
 
                     xWorkStore->dispose();
                     xWorkStore.clear();

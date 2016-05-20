@@ -195,7 +195,7 @@ static OString lcl_makeHTMLColorTriplet(const Color& rColor)
     sal_Char*   p = buf;
     p += sprintf( p, "%02X", rColor.GetRed() );
     p += sprintf( p, "%02X", rColor.GetGreen() );
-    p += sprintf( p, "%02X", rColor.GetBlue() );
+    sprintf( p, "%02X", rColor.GetBlue() );
     aStr.append(buf);
     aStr.append('\"');
     return aStr.makeStringAndClear();

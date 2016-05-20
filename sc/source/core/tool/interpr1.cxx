@@ -4243,7 +4243,6 @@ void ScInterpreter::ScMatch()
         SCTAB nTab1 = 0;
         SCCOL nCol2 = 0;
         SCROW nRow2 = 0;
-        SCTAB nTab2 = 0;
         ScMatrixRef pMatSrc = nullptr;
 
         switch (GetStackType())
@@ -4252,10 +4251,10 @@ void ScInterpreter::ScMatch()
                 PopSingleRef( nCol1, nRow1, nTab1);
                 nCol2 = nCol1;
                 nRow2 = nRow1;
-                nTab2 = nTab1;
             break;
             case svDoubleRef:
             {
+                SCTAB nTab2 = 0;
                 PopDoubleRef(nCol1, nRow1, nTab1, nCol2, nRow2, nTab2);
                 if (nTab1 != nTab2 || (nCol1 != nCol2 && nRow1 != nRow2))
                 {

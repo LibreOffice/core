@@ -359,7 +359,6 @@ void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc )
             {
                 rPageDesc.ChgFirstShare(static_cast<const SfxBoolItem&>(
                             rFooterSet.Get(SID_ATTR_PAGE_SHARED_FIRST)).GetValue());
-                nFirstShare = rPageDesc.IsFirstShared() ? 1 : 0;
             }
         }
         else

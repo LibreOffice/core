@@ -4295,7 +4295,6 @@ void WW8RStyle::ImportOldFormatStyles()
         {
             //more data than style slots, skip remainder
             rSt.SeekRel(cbChpx-nByteCount);
-            nByteCount += cbChpx-nByteCount;
             break;
         }
 
@@ -4341,7 +4340,6 @@ void WW8RStyle::ImportOldFormatStyles()
         if (stcp == aPAPXOffsets.size())
         {
             rSt.SeekRel(cbPapx-nByteCount);
-            nByteCount += cbPapx-nByteCount;
             break;
         }
 

@@ -1723,7 +1723,6 @@ bool ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
         if (rDoc.SearchAndReplace(*pSearchItem, nCol, nRow, nTab, rMark, aMatchedRanges, aUndoStr, pUndoDoc.get()))
         {
             bFound = true;
-            bFirst = true;
             if (bAddUndo)
             {
                 GetViewData().GetDocShell()->GetUndoManager()->AddUndoAction(

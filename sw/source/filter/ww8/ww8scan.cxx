@@ -6584,7 +6584,6 @@ WW8_STD* WW8Style::Read1STDFixed( short& rSkip, short* pcbStd )
             pStd->istdNext = ( a16Bit & 0xfff0 ) >> 4;
 
             if( 8 > nRead ) break;
-            a16Bit = 0;
             rSt.ReadUInt16( pStd->bchUpe );
 
             // from Ver8 this two fields should be added:

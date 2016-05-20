@@ -150,7 +150,6 @@ FltError ImportExcel::Read()
                 break;
                 default:;
             }
-            eAkt = Z_Ende;
             break;
         }
 

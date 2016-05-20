@@ -1613,8 +1613,7 @@ void ScStyleObj::SetOnePropertyValue( const OUString& rPropertyName, const SfxIt
                                             rSet.Get( ATTR_VALUE_FORMAT )).GetValue();
                                     LanguageType eOldLang = static_cast<const SvxLanguageItem&>(
                                             rSet.Get( ATTR_LANGUAGE_FORMAT )).GetLanguage();
-                                    nOldFormat = pFormatter->
-                                            GetFormatForLanguageIfBuiltIn( nOldFormat, eOldLang );
+                                    pFormatter->GetFormatForLanguageIfBuiltIn( nOldFormat, eOldLang );
 
                                     sal_uInt32 nNewFormat = 0;
                                     *pValue >>= nNewFormat;
