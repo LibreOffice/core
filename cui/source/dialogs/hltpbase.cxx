@@ -295,7 +295,7 @@ void SvxHyperlinkTabPageBase::FillStandardDlgFields ( const SvxHyperlinkItem* pH
     mpEdText->SetText ( pHyperlinkItem->GetIntName() );
 
     // Script-button
-    if ( !pHyperlinkItem->GetMacroEvents() )
+    if ( pHyperlinkItem->GetMacroEvents() == HyperDialogEvent::NONE )
         mpBtScript->Disable();
     else
         mpBtScript->Enable();
@@ -344,7 +344,7 @@ IMPL_LINK_NOARG_TYPED(SvxHyperlinkTabPageBase, ClickScriptHdl_Impl, Button*, voi
     SvxHyperlinkItem *pHyperlinkItem = const_cast<SvxHyperlinkItem*>(static_cast<const SvxHyperlinkItem *>(
                                        GetItemSet().GetItem (SID_HYPERLINK_GETLINK)));
 
-    if ( pHyperlinkItem->GetMacroEvents() )
+    if ( pHyperlinkItem->GetMacroEvents() != HyperDialogEvent::NONE )
     {
         // get macros from itemset
         const SvxMacroTableDtor* pMacroTbl = pHyperlinkItem->GetMacroTable();
@@ -370,13 +370,13 @@ IMPL_LINK_NOARG_TYPED(SvxHyperlinkTabPageBase, ClickScriptHdl_Impl, Button*, voi
         // add events
         SfxMacroTabPage *pMacroPage = static_cast<SfxMacroTabPage*>( aDlg->GetTabPage() );
 
-        if ( pHyperlinkItem->GetMacroEvents() & HYPERDLG_EVENT_MOUSEOVER_OBJECT )
+        if ( pHyperlinkItem->GetMacroEvents() & HyperDialogEvent::MouseOverObject )
             pMacroPage->AddEvent( OUString( CUI_RESSTR(RID_SVXSTR_HYPDLG_MACROACT1) ),
                                   SFX_EVENT_MOUSEOVER_OBJECT );
-        if ( pHyperlinkItem->GetMacroEvents() & HYPERDLG_EVENT_MOUSECLICK_OBJECT )
+        if ( pHyperlinkItem->GetMacroEvents() & HyperDialogEvent::MouseClickObject )
             pMacroPage->AddEvent( OUString( CUI_RESSTR(RID_SVXSTR_HYPDLG_MACROACT2) ),
                                   SFX_EVENT_MOUSECLICK_OBJECT);
-        if ( pHyperlinkItem->GetMacroEvents() & HYPERDLG_EVENT_MOUSEOUT_OBJECT )
+        if ( pHyperlinkItem->GetMacroEvents() & HyperDialogEvent::MouseOutObject )
             pMacroPage->AddEvent( OUString( CUI_RESSTR(RID_SVXSTR_HYPDLG_MACROACT3) ),
                                   SFX_EVENT_MOUSEOUT_OBJECT);
 
@@ -400,7 +400,7 @@ IMPL_LINK_NOARG_TYPED(SvxHyperlinkTabPageBase, ClickScriptHdl_Impl, Button*, voi
 }
 
 // Get Macro-Infos
-sal_uInt16 SvxHyperlinkTabPageBase::GetMacroEvents()
+HyperDialogEvent SvxHyperlinkTabPageBase::GetMacroEvents()
 {
     const SvxHyperlinkItem *pHyperlinkItem = static_cast<const SvxHyperlinkItem *>(
                                        GetItemSet().GetItem (SID_HYPERLINK_GETLINK));
@@ -496,7 +496,7 @@ bool SvxHyperlinkTabPageBase::FillItemSet( SfxItemSet* rOut)
     if ( aStrName.isEmpty() ) //automatically create a visible name if the link is created without name
         aStrName = CreateUiNameFromURL(aStrURL);
 
-    sal_uInt16 nEvents = GetMacroEvents();
+    HyperDialogEvent nEvents = GetMacroEvents();
     SvxMacroTableDtor* pTable = GetMacroTable();
 
     SvxHyperlinkItem aItem( SID_HYPERLINK_SETLINK, aStrName, aStrURL, aStrFrame,
@@ -537,7 +537,7 @@ int SvxHyperlinkTabPageBase::DeactivatePage( SfxItemSet* _pSet)
 
     GetCurentItemData ( aStrURL, aStrName, aStrIntName, aStrFrame, eMode);
 
-    sal_uInt16 nEvents = GetMacroEvents();
+    HyperDialogEvent nEvents = GetMacroEvents();
     SvxMacroTableDtor* pTable = GetMacroTable();
 
     if( _pSet )

@@ -24,10 +24,17 @@
 #include <sfx2/sfxsids.hrc>
 #include <svl/macitem.hxx>
 #include <svx/svxdllapi.h>
+#include <o3tl/typed_flags_set.hxx>
 
-#define HYPERDLG_EVENT_MOUSEOVER_OBJECT     0x0001
-#define HYPERDLG_EVENT_MOUSECLICK_OBJECT    0x0002
-#define HYPERDLG_EVENT_MOUSEOUT_OBJECT      0x0004
+enum class HyperDialogEvent {
+    NONE                = 0x0000,
+    MouseOverObject     = 0x0001,
+    MouseClickObject    = 0x0002,
+    MouseOutObject      = 0x0004,
+};
+namespace o3tl {
+    template<> struct typed_flags<HyperDialogEvent> : is_typed_flags<HyperDialogEvent, 0x07> {};
+}
 
 enum SvxLinkInsertMode
 {
@@ -47,18 +54,18 @@ class SVX_DLLPUBLIC SvxHyperlinkItem : public SfxPoolItem
     OUString sIntName;
     SvxMacroTableDtor*  pMacroTable;
 
-    sal_uInt16 nMacroEvents;
+    HyperDialogEvent nMacroEvents;
 
 public:
     static SfxPoolItem* CreateDefault();
 
     SvxHyperlinkItem( sal_uInt16 _nWhich = SID_HYPERLINK_GETLINK ):
-                SfxPoolItem(_nWhich), pMacroTable(nullptr) { eType = HLINK_DEFAULT; nMacroEvents=0; };
+                SfxPoolItem(_nWhich), pMacroTable(nullptr) { eType = HLINK_DEFAULT; nMacroEvents=HyperDialogEvent::NONE; };
     SvxHyperlinkItem( const SvxHyperlinkItem& rHyperlinkItem );
     SvxHyperlinkItem( sal_uInt16 nWhich, const OUString& rName, const OUString& rURL,
                                     const OUString& rTarget, const OUString& rIntName,
                                     SvxLinkInsertMode eTyp = HLINK_FIELD,
-                                    sal_uInt16 nEvents = 0,
+                                    HyperDialogEvent nEvents = HyperDialogEvent::NONE,
                                     SvxMacroTableDtor *pMacroTbl =nullptr );
     virtual ~SvxHyperlinkItem () { delete pMacroTable; }
 
@@ -84,13 +91,13 @@ public:
     SvxLinkInsertMode GetInsertMode() const { return eType; }
     void    SetInsertMode( SvxLinkInsertMode eNew ) { eType = eNew; }
 
-    void SetMacro( sal_uInt16 nEvent, const SvxMacro& rMacro );
+    void SetMacro( HyperDialogEvent nEvent, const SvxMacro& rMacro );
 
     void SetMacroTable( const SvxMacroTableDtor& rTbl );
     const SvxMacroTableDtor* GetMacroTable() const    { return pMacroTable; }
 
-    void SetMacroEvents (const sal_uInt16 nEvents) { nMacroEvents = nEvents; }
-    sal_uInt16 GetMacroEvents() const { return nMacroEvents; }
+    void SetMacroEvents (const HyperDialogEvent nEvents) { nMacroEvents = nEvents; }
+    HyperDialogEvent GetMacroEvents() const { return nMacroEvents; }
 
     virtual SvStream&           Store( SvStream &, sal_uInt16 nItemVersion ) const override;
     virtual SfxPoolItem*        Create( SvStream &, sal_uInt16 nVer ) const override;

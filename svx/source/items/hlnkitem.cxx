@@ -51,7 +51,7 @@ SvStream& SvxHyperlinkItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ 
     rStrm.WriteUniOrByteString(sIntName, rStrm.GetStreamCharSet());
 
     // macro-events
-    rStrm.WriteUInt16( nMacroEvents );
+    rStrm.WriteUInt16( (sal_uInt16)nMacroEvents );
 
     // store macros
     sal_uInt16 nCnt = pMacroTable ? (sal_uInt16)pMacroTable->size() : 0;
@@ -141,7 +141,9 @@ SfxPoolItem*    SvxHyperlinkItem::Create( SvStream &rStrm, sal_uInt16 /*nItemVer
         pNew->sIntName = rStrm.ReadUniOrByteString(rStrm.GetStreamCharSet());
 
         // macro-events
-        rStrm.ReadUInt16( pNew->nMacroEvents );
+        sal_uInt16 nTmp;
+        rStrm.ReadUInt16(nTmp);
+        pNew->nMacroEvents = (HyperDialogEvent)nTmp;
 
         // macros
         sal_uInt16 nCnt;
@@ -158,7 +160,7 @@ SfxPoolItem*    SvxHyperlinkItem::Create( SvStream &rStrm, sal_uInt16 /*nItemVer
             // UNICODE: rStrm >> aMacName;
             aMacName = rStrm.ReadUniOrByteString(rStrm.GetStreamCharSet());
 
-            pNew->SetMacro( nCurKey, SvxMacro( aMacName, aLibName, STARBASIC ) );
+            pNew->SetMacro( (HyperDialogEvent)nCurKey, SvxMacro( aMacName, aLibName, STARBASIC ) );
         }
 
         rStrm.ReadUInt16( nCnt );
@@ -177,7 +179,7 @@ SfxPoolItem*    SvxHyperlinkItem::Create( SvStream &rStrm, sal_uInt16 /*nItemVer
 
             rStrm.ReadUInt16( nScriptType );
 
-            pNew->SetMacro( nCurKey, SvxMacro( aMacName, aLibName,
+            pNew->SetMacro( (HyperDialogEvent)nCurKey, SvxMacro( aMacName, aLibName,
                                         (ScriptType)nScriptType ) );
         }
     }
@@ -206,7 +208,7 @@ SvxHyperlinkItem::SvxHyperlinkItem( const SvxHyperlinkItem& rHyperlinkItem ):
 
 SvxHyperlinkItem::SvxHyperlinkItem( sal_uInt16 _nWhich, const OUString& rName, const OUString& rURL,
                                     const OUString& rTarget, const OUString& rIntName, SvxLinkInsertMode eTyp,
-                                    sal_uInt16 nEvents, SvxMacroTableDtor *pMacroTbl ):
+                                    HyperDialogEvent nEvents, SvxMacroTableDtor *pMacroTbl ):
     SfxPoolItem (_nWhich),
     sName       (rName),
     sURL        (rURL),
@@ -253,28 +255,27 @@ bool SvxHyperlinkItem::operator==( const SfxPoolItem& rAttr ) const
     return rOwn == rOther;
 }
 
-void SvxHyperlinkItem::SetMacro( sal_uInt16 nEvent, const SvxMacro& rMacro )
+void SvxHyperlinkItem::SetMacro( HyperDialogEvent nEvent, const SvxMacro& rMacro )
 {
-    if( nEvent < EVENT_SFX_START )
+    sal_uInt16 nSfxEvent = 0;
+    switch( nEvent )
     {
-        switch( nEvent )
-        {
-            case HYPERDLG_EVENT_MOUSEOVER_OBJECT:
-                nEvent = SFX_EVENT_MOUSEOVER_OBJECT;
-                break;
-            case HYPERDLG_EVENT_MOUSECLICK_OBJECT:
-                nEvent = SFX_EVENT_MOUSECLICK_OBJECT;
-                break;
-            case HYPERDLG_EVENT_MOUSEOUT_OBJECT:
-                nEvent = SFX_EVENT_MOUSEOUT_OBJECT;
-                break;
-        }
+        case HyperDialogEvent::MouseOverObject:
+            nSfxEvent = SFX_EVENT_MOUSEOVER_OBJECT;
+            break;
+        case HyperDialogEvent::MouseClickObject:
+            nSfxEvent = SFX_EVENT_MOUSECLICK_OBJECT;
+            break;
+        case HyperDialogEvent::MouseOutObject:
+            nSfxEvent = SFX_EVENT_MOUSEOUT_OBJECT;
+            break;
+        default: break;
     }
 
     if( !pMacroTable )
         pMacroTable = new SvxMacroTableDtor;
 
-    pMacroTable->Insert( nEvent, rMacro);
+    pMacroTable->Insert( nSfxEvent, rMacro);
 }
 
 void SvxHyperlinkItem::SetMacroTable( const SvxMacroTableDtor& rTbl )
