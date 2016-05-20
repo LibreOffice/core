@@ -10,6 +10,7 @@
 #include "uiobject.hxx"
 #include "edtwin.hxx"
 #include "view.hxx"
+#include "wrtsh.hxx"
 
 SwEditWinUIObject::SwEditWinUIObject(VclPtr<SwEditWin> xEditWin):
     WindowUIObject(xEditWin),
@@ -17,11 +18,28 @@ SwEditWinUIObject::SwEditWinUIObject(VclPtr<SwEditWin> xEditWin):
 {
 }
 
+namespace {
+
+SwWrtShell& getWrtShell(VclPtr<SwEditWin> xEditWin)
+{
+    return xEditWin->GetView().GetWrtShell();
+}
+
+}
+
 StringMap SwEditWinUIObject::get_state()
 {
     StringMap aMap = WindowUIObject::get_state();
 
-    // aMap["SelectedText"] = mxEditWin
+    aMap["SelectedText"] = mxEditWin->GetView().GetSelectionText();
+
+    sal_uInt16 nPageNum = 0;
+    sal_uInt16 nVirtPageNum = 0;
+    getWrtShell(mxEditWin).GetPageNum(nPageNum, nVirtPageNum);
+    aMap["CurrentPage"] = OUString::number(nPageNum);
+    getWrtShell(mxEditWin).GetPageNum(nPageNum, nVirtPageNum, false);
+    aMap["TopVisiblePage"] = OUString::number(nPageNum);
+
     return aMap;
 }
 
