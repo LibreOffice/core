@@ -11730,7 +11730,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 5 // Description of Parameter 2
         {
-            Text [ en-US ] = "The range from which the minimum value is to be taken." ;
+            Text [ en-US ] = "The range from which the maximum value is to be taken." ;
         };
         String 6 // Name of Parameter 3
         {
