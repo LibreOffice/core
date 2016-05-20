@@ -136,42 +136,42 @@ VclCanvasBitmap::VclCanvasBitmap( const BitmapEx& rBitmap ) :
 
         switch( m_pBmpAcc->GetScanlineFormat() )
         {
-            case BMP_FORMAT_1BIT_MSB_PAL:
+            case ScanlineFormat::N1BitMsbPal:
                 m_bPalette           = true;
                 m_nBitsPerInputPixel = 1;
                 m_nEndianness        = util::Endianness::LITTLE; // doesn't matter
                 m_aLayout.IsMsbFirst = true;
                 break;
 
-            case BMP_FORMAT_1BIT_LSB_PAL:
+            case ScanlineFormat::N1BitLsbPal:
                 m_bPalette           = true;
                 m_nBitsPerInputPixel = 1;
                 m_nEndianness        = util::Endianness::LITTLE; // doesn't matter
                 m_aLayout.IsMsbFirst = false;
                 break;
 
-            case BMP_FORMAT_4BIT_MSN_PAL:
+            case ScanlineFormat::N4BitMsnPal:
                 m_bPalette           = true;
                 m_nBitsPerInputPixel = 4;
                 m_nEndianness        = util::Endianness::LITTLE; // doesn't matter
                 m_aLayout.IsMsbFirst = true;
                 break;
 
-            case BMP_FORMAT_4BIT_LSN_PAL:
+            case ScanlineFormat::N4BitLsnPal:
                 m_bPalette           = true;
                 m_nBitsPerInputPixel = 4;
                 m_nEndianness        = util::Endianness::LITTLE; // doesn't matter
                 m_aLayout.IsMsbFirst = false;
                 break;
 
-            case BMP_FORMAT_8BIT_PAL:
+            case ScanlineFormat::N8BitPal:
                 m_bPalette           = true;
                 m_nBitsPerInputPixel = 8;
                 m_nEndianness        = util::Endianness::LITTLE; // doesn't matter
                 m_aLayout.IsMsbFirst = false; // doesn't matter
                 break;
 
-            case BMP_FORMAT_8BIT_TC_MASK:
+            case ScanlineFormat::N8BitTcMask:
                 m_bPalette           = false;
                 m_nBitsPerInputPixel = 8;
                 m_nEndianness        = util::Endianness::LITTLE; // doesn't matter
@@ -181,7 +181,7 @@ VclCanvasBitmap::VclCanvasBitmap( const BitmapEx& rBitmap ) :
                                   m_pBmpAcc->GetColorMask().GetBlueMask() );
                 break;
 
-            case BMP_FORMAT_16BIT_TC_MSB_MASK:
+            case ScanlineFormat::N16BitTcMsbMask:
                 m_bPalette           = false;
                 m_nBitsPerInputPixel = 16;
                 m_nEndianness        = util::Endianness::BIG;
@@ -191,7 +191,7 @@ VclCanvasBitmap::VclCanvasBitmap( const BitmapEx& rBitmap ) :
                                   m_pBmpAcc->GetColorMask().GetBlueMask() );
                 break;
 
-            case BMP_FORMAT_16BIT_TC_LSB_MASK:
+            case ScanlineFormat::N16BitTcLsbMask:
                 m_bPalette           = false;
                 m_nBitsPerInputPixel = 16;
                 m_nEndianness        = util::Endianness::LITTLE;
@@ -201,7 +201,7 @@ VclCanvasBitmap::VclCanvasBitmap( const BitmapEx& rBitmap ) :
                                   m_pBmpAcc->GetColorMask().GetBlueMask() );
                 break;
 
-            case BMP_FORMAT_24BIT_TC_BGR:
+            case ScanlineFormat::N24BitTcBgr:
                 m_bPalette           = false;
                 m_nBitsPerInputPixel = 24;
                 m_nEndianness        = util::Endianness::LITTLE;
@@ -211,7 +211,7 @@ VclCanvasBitmap::VclCanvasBitmap( const BitmapEx& rBitmap ) :
                                   static_cast<sal_uInt32>(0x0000ffUL) );
                 break;
 
-            case BMP_FORMAT_24BIT_TC_RGB:
+            case ScanlineFormat::N24BitTcRgb:
                 m_bPalette           = false;
                 m_nBitsPerInputPixel = 24;
                 m_nEndianness        = util::Endianness::LITTLE;
@@ -221,7 +221,7 @@ VclCanvasBitmap::VclCanvasBitmap( const BitmapEx& rBitmap ) :
                                   static_cast<sal_uInt32>(0xff0000UL) );
                 break;
 
-            case BMP_FORMAT_24BIT_TC_MASK:
+            case ScanlineFormat::N24BitTcMask:
                 m_bPalette           = false;
                 m_nBitsPerInputPixel = 24;
                 m_nEndianness        = util::Endianness::LITTLE;
@@ -231,7 +231,7 @@ VclCanvasBitmap::VclCanvasBitmap( const BitmapEx& rBitmap ) :
                                   m_pBmpAcc->GetColorMask().GetBlueMask() );
                 break;
 
-            case BMP_FORMAT_32BIT_TC_ABGR:
+            case ScanlineFormat::N32BitTcAbgr:
             {
                 m_bPalette           = false;
                 m_nBitsPerInputPixel = 32;
@@ -259,7 +259,7 @@ VclCanvasBitmap::VclCanvasBitmap( const BitmapEx& rBitmap ) :
             }
             break;
 
-            case BMP_FORMAT_32BIT_TC_ARGB:
+            case ScanlineFormat::N32BitTcArgb:
             {
                 m_bPalette           = false;
                 m_nBitsPerInputPixel = 32;
@@ -287,7 +287,7 @@ VclCanvasBitmap::VclCanvasBitmap( const BitmapEx& rBitmap ) :
             }
             break;
 
-            case BMP_FORMAT_32BIT_TC_BGRA:
+            case ScanlineFormat::N32BitTcBgra:
             {
                 m_bPalette           = false;
                 m_nBitsPerInputPixel = 32;
@@ -315,7 +315,7 @@ VclCanvasBitmap::VclCanvasBitmap( const BitmapEx& rBitmap ) :
             }
             break;
 
-            case BMP_FORMAT_32BIT_TC_RGBA:
+            case ScanlineFormat::N32BitTcRgba:
             {
                 m_bPalette           = false;
                 m_nBitsPerInputPixel = 32;
@@ -343,7 +343,7 @@ VclCanvasBitmap::VclCanvasBitmap( const BitmapEx& rBitmap ) :
             }
             break;
 
-            case BMP_FORMAT_32BIT_TC_MASK:
+            case ScanlineFormat::N32BitTcMask:
                 m_bPalette           = false;
                 m_nBitsPerInputPixel = 32;
                 m_nEndianness        = util::Endianness::LITTLE;
@@ -495,7 +495,7 @@ uno::Sequence< sal_Int8 > SAL_CALL VclCanvasBitmap::getData( rendering::IntegerB
     bitmapLayout.ScanLineStride= aRequestedBytes.getWidth();
 
     sal_Int32 nScanlineStride=bitmapLayout.ScanLineStride;
-    if( !(m_pBmpAcc->GetScanlineFormat() & BMP_FORMAT_TOP_DOWN) )
+    if( !(m_pBmpAcc->GetScanlineFormat() & ScanlineFormat::TopDown) )
     {
         pOutBuf += bitmapLayout.ScanLineStride*(aRequestedBytes.getHeight()-1);
         nScanlineStride *= -1;

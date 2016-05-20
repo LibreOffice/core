@@ -604,12 +604,12 @@ void QuartzSalBitmap::ConvertBitmapData( sal_uInt32 nWidth, sal_uInt32 nHeight,
     {
         // TODO: extend bmpfast.cxx with a method that can be directly used here
         BitmapBuffer aSrcBuf;
-        aSrcBuf.mnFormat = BMP_FORMAT_24BIT_TC_BGR;
+        aSrcBuf.mnFormat = ScanlineFormat::N24BitTcBgr;
         aSrcBuf.mpBits = pSrcData;
         aSrcBuf.mnBitCount = nSrcBits;
         aSrcBuf.mnScanlineSize = nSrcBytesPerRow;
         BitmapBuffer aDstBuf;
-        aDstBuf.mnFormat = BMP_FORMAT_32BIT_TC_ARGB;
+        aDstBuf.mnFormat = ScanlineFormat::N32BitTcArgb;
         aDstBuf.mpBits = pDestData;
         aDstBuf.mnBitCount = nDestBits;
         aDstBuf.mnScanlineSize = nDestBytesPerRow;
@@ -768,17 +768,17 @@ BitmapBuffer* QuartzSalBitmap::AcquireBuffer( BitmapAccessMode /*nMode*/ )
     switch( mnBits )
     {
         case 1:
-            pBuffer->mnFormat = BMP_FORMAT_1BIT_MSB_PAL;
+            pBuffer->mnFormat = ScanlineFormat::N1BitMsbPal;
             break;
         case 4:
-            pBuffer->mnFormat = BMP_FORMAT_4BIT_MSN_PAL;
+            pBuffer->mnFormat = ScanlineFormat::N4BitMsnPal;
             break;
         case 8:
-            pBuffer->mnFormat = BMP_FORMAT_8BIT_PAL;
+            pBuffer->mnFormat = ScanlineFormat::N8BitPal;
             break;
         case 16:
         {
-            pBuffer->mnFormat = BMP_FORMAT_16BIT_TC_MSB_MASK;
+            pBuffer->mnFormat = ScanlineFormat::N16BitTcMsbMask;
             ColorMaskElement aRedMask(k16BitRedColorMask);
             aRedMask.CalcMaskShift();
             ColorMaskElement aGreenMask(k16BitGreenColorMask);
@@ -789,11 +789,11 @@ BitmapBuffer* QuartzSalBitmap::AcquireBuffer( BitmapAccessMode /*nMode*/ )
             break;
         }
         case 24:
-            pBuffer->mnFormat = BMP_FORMAT_24BIT_TC_BGR;
+            pBuffer->mnFormat = ScanlineFormat::N24BitTcBgr;
             break;
         case 32:
         {
-            pBuffer->mnFormat = BMP_FORMAT_32BIT_TC_ARGB;
+            pBuffer->mnFormat = ScanlineFormat::N32BitTcArgb;
             ColorMaskElement aRedMask(k32BitRedColorMask);
             aRedMask.CalcMaskShift();
             ColorMaskElement aGreenMask(k32BitGreenColorMask);
@@ -804,7 +804,7 @@ BitmapBuffer* QuartzSalBitmap::AcquireBuffer( BitmapAccessMode /*nMode*/ )
             break;
         }
     }
-    pBuffer->mnFormat |= BMP_FORMAT_BOTTOM_UP;
+    pBuffer->mnFormat |= ScanlineFormat::BottomUp;
 
     // some BitmapBuffer users depend on a complete palette
     if( (mnBits <= 8) && !maPalette )

@@ -468,7 +468,7 @@ void GIFWriter::WriteAccess()
     const long          nHeight = m_pAcc->Height();
     std::unique_ptr<sal_uInt8[]> pBuffer;
     const sal_uLong         nFormat = m_pAcc->GetScanlineFormat();
-    bool                bNative = ( BMP_FORMAT_8BIT_PAL == nFormat );
+    bool                bNative = ( ScanlineFormat::N8BitPal == nFormat );
 
     if( !bNative )
         pBuffer.reset(new sal_uInt8[ nWidth ]);

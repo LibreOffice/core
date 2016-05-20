@@ -273,14 +273,14 @@ Gdiplus::Bitmap* WinSalBitmap::ImplCreateGdiPlusBitmap()
     BitmapBuffer* pRGB = pSalRGB->AcquireBuffer(BITMAP_READ_ACCESS);
     BitmapBuffer* pExtraRGB = 0;
 
-    if(pRGB && BMP_FORMAT_24BIT_TC_BGR != (pRGB->mnFormat & ~BMP_FORMAT_TOP_DOWN))
+    if(pRGB && ScanlineFormat::N24BitTcBgr != (pRGB->mnFormat & ~ScanlineFormat::TopDown))
     {
-        // convert source bitmap to BMP_FORMAT_24BIT_TC_BGR format if not yet in that format
+        // convert source bitmap to ScanlineFormat::N24BitTcBgr format if not yet in that format
         SalTwoRect aSalTwoRect(0, 0, pRGB->mnWidth, pRGB->mnHeight, 0, 0, pRGB->mnWidth, pRGB->mnHeight);
         pExtraRGB = StretchAndConvert(
             *pRGB,
             aSalTwoRect,
-            BMP_FORMAT_24BIT_TC_BGR,
+            ScanlineFormat::N24BitTcBgr,
             0);
 
         pSalRGB->ReleaseBuffer(pRGB, BITMAP_WRITE_ACCESS);
@@ -290,7 +290,7 @@ Gdiplus::Bitmap* WinSalBitmap::ImplCreateGdiPlusBitmap()
     if(pRGB
         && pRGB->mnWidth > 0
         && pRGB->mnHeight > 0
-        && BMP_FORMAT_24BIT_TC_BGR == (pRGB->mnFormat & ~BMP_FORMAT_TOP_DOWN))
+        && ScanlineFormat::N24BitTcBgr == (pRGB->mnFormat & ~ScanlineFormat::TopDown))
     {
         const sal_uInt32 nW(pRGB->mnWidth);
         const sal_uInt32 nH(pRGB->mnHeight);
@@ -301,7 +301,7 @@ Gdiplus::Bitmap* WinSalBitmap::ImplCreateGdiPlusBitmap()
         {
             sal_uInt8* pSrcRGB(pRGB->mpBits);
             const sal_uInt32 nExtraRGB(pRGB->mnScanlineSize - (nW * 3));
-            const bool bTopDown(pRGB->mnFormat & BMP_FORMAT_TOP_DOWN);
+            const bool bTopDown(pRGB->mnFormat & ScanlineFormat::TopDown);
             const Gdiplus::Rect aAllRect(0, 0, nW, nH);
             Gdiplus::BitmapData aGdiPlusBitmapData;
             pRetval->LockBits(&aAllRect, Gdiplus::ImageLockModeWrite, PixelFormat24bppRGB, &aGdiPlusBitmapData);
@@ -362,14 +362,14 @@ Gdiplus::Bitmap* WinSalBitmap::ImplCreateGdiPlusBitmap(const WinSalBitmap& rAlph
     BitmapBuffer* pRGB = pSalRGB->AcquireBuffer(BITMAP_READ_ACCESS);
     BitmapBuffer* pExtraRGB = 0;
 
-    if(pRGB && BMP_FORMAT_24BIT_TC_BGR != (pRGB->mnFormat & ~BMP_FORMAT_TOP_DOWN))
+    if(pRGB && ScanlineFormat::N24BitTcBgr != (pRGB->mnFormat & ~ScanlineFormat::TopDown))
     {
-        // convert source bitmap to BMP_FORMAT_24BIT_TC_BGR format if not yet in that format
+        // convert source bitmap to ScanlineFormat::N24BitTcBgr format if not yet in that format
         SalTwoRect aSalTwoRect(0, 0, pRGB->mnWidth, pRGB->mnHeight, 0, 0, pRGB->mnWidth, pRGB->mnHeight);
         pExtraRGB = StretchAndConvert(
             *pRGB,
             aSalTwoRect,
-            BMP_FORMAT_24BIT_TC_BGR,
+            ScanlineFormat::N24BitTcBgr,
             0);
 
         pSalRGB->ReleaseBuffer(pRGB, BITMAP_READ_ACCESS);
@@ -390,16 +390,16 @@ Gdiplus::Bitmap* WinSalBitmap::ImplCreateGdiPlusBitmap(const WinSalBitmap& rAlph
     BitmapBuffer* pA = pSalA->AcquireBuffer(BITMAP_READ_ACCESS);
     BitmapBuffer* pExtraA = 0;
 
-    if(pA && BMP_FORMAT_8BIT_PAL != (pA->mnFormat & ~BMP_FORMAT_TOP_DOWN))
+    if(pA && ScanlineFormat::N8BitPal != (pA->mnFormat & ~ScanlineFormat::TopDown))
     {
-        // convert alpha bitmap to BMP_FORMAT_8BIT_PAL format if not yet in that format
+        // convert alpha bitmap to ScanlineFormat::N8BitPal format if not yet in that format
         SalTwoRect aSalTwoRect(0, 0, pA->mnWidth, pA->mnHeight, 0, 0, pA->mnWidth, pA->mnHeight);
         const BitmapPalette& rTargetPalette = Bitmap::GetGreyPalette(256);
 
         pExtraA = StretchAndConvert(
             *pA,
             aSalTwoRect,
-            BMP_FORMAT_8BIT_PAL,
+            ScanlineFormat::N8BitPal,
             &rTargetPalette);
 
         pSalA->ReleaseBuffer(pA, BITMAP_READ_ACCESS);
@@ -412,8 +412,8 @@ Gdiplus::Bitmap* WinSalBitmap::ImplCreateGdiPlusBitmap(const WinSalBitmap& rAlph
         && pRGB->mnHeight > 0
         && pRGB->mnWidth == pA->mnWidth
         && pRGB->mnHeight == pA->mnHeight
-        && BMP_FORMAT_24BIT_TC_BGR == (pRGB->mnFormat & ~BMP_FORMAT_TOP_DOWN)
-        && BMP_FORMAT_8BIT_PAL == (pA->mnFormat & ~BMP_FORMAT_TOP_DOWN))
+        && ScanlineFormat::N24BitTcBgr == (pRGB->mnFormat & ~ScanlineFormat::TopDown)
+        && ScanlineFormat::N8BitPal == (pA->mnFormat & ~ScanlineFormat::TopDown))
     {
         // we have alpha and bitmap in known formats, create GdiPlus Bitmap as 32bit ARGB
         const sal_uInt32 nW(pRGB->mnWidth);
@@ -427,7 +427,7 @@ Gdiplus::Bitmap* WinSalBitmap::ImplCreateGdiPlusBitmap(const WinSalBitmap& rAlph
             sal_uInt8* pSrcA(pA->mpBits);
             const sal_uInt32 nExtraRGB(pRGB->mnScanlineSize - (nW * 3));
             const sal_uInt32 nExtraA(pA->mnScanlineSize - nW);
-            const bool bTopDown(pRGB->mnFormat & BMP_FORMAT_TOP_DOWN);
+            const bool bTopDown(pRGB->mnFormat & ScanlineFormat::TopDown);
             const Gdiplus::Rect aAllRect(0, 0, nW, nH);
             Gdiplus::BitmapData aGdiPlusBitmapData;
             pRetval->LockBits(&aAllRect, Gdiplus::ImageLockModeWrite, PixelFormat32bppARGB, &aGdiPlusBitmapData);
@@ -868,15 +868,15 @@ BitmapBuffer* WinSalBitmap::AcquireBuffer( BitmapAccessMode /*nMode*/ )
         {
             pBuffer = new BitmapBuffer;
 
-            pBuffer->mnFormat = BMP_FORMAT_BOTTOM_UP |
-                                ( pBIH->biBitCount == 1 ? BMP_FORMAT_1BIT_MSB_PAL :
-                                  pBIH->biBitCount == 4 ? BMP_FORMAT_4BIT_MSN_PAL :
-                                  pBIH->biBitCount == 8 ? BMP_FORMAT_8BIT_PAL :
-                                  pBIH->biBitCount == 16 ? BMP_FORMAT_16BIT_TC_LSB_MASK :
-                                  pBIH->biBitCount == 24 ? BMP_FORMAT_24BIT_TC_BGR :
-                                  pBIH->biBitCount == 32 ? BMP_FORMAT_32BIT_TC_MASK : 0UL );
+            pBuffer->mnFormat = ScanlineFormat::BottomUp |
+                                ( pBIH->biBitCount == 1 ? ScanlineFormat::N1BitMsbPal :
+                                  pBIH->biBitCount == 4 ? ScanlineFormat::N4BitMsnPal :
+                                  pBIH->biBitCount == 8 ? ScanlineFormat::N8BitPal :
+                                  pBIH->biBitCount == 16 ? ScanlineFormat::N16BitTcLsbMask :
+                                  pBIH->biBitCount == 24 ? ScanlineFormat::N24BitTcBgr :
+                                  pBIH->biBitCount == 32 ? ScanlineFormat::N32BitTcMask : 0UL );
 
-            if( BMP_SCANLINE_FORMAT( pBuffer->mnFormat ) )
+            if( RemoveScanline( pBuffer->mnFormat ) )
             {
                 pBuffer->mnWidth = maSize.Width();
                 pBuffer->mnHeight = maSize.Height();

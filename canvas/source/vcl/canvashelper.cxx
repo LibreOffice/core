@@ -1049,7 +1049,7 @@ namespace vclcanvas
             {
                 switch( pWriteAccess->GetScanlineFormat() )
                 {
-                    case BMP_FORMAT_8BIT_PAL:
+                    case ScanlineFormat::N8BitPal:
                     {
                         Scanline pScan = pWriteAccess->GetScanline( y );
 
@@ -1065,7 +1065,7 @@ namespace vclcanvas
                     }
                     break;
 
-                    case BMP_FORMAT_24BIT_TC_BGR:
+                    case ScanlineFormat::N24BitTcBgr:
                     {
                         Scanline pScan = pWriteAccess->GetScanline( y );
 
@@ -1080,7 +1080,7 @@ namespace vclcanvas
                     }
                     break;
 
-                    case BMP_FORMAT_24BIT_TC_RGB:
+                    case ScanlineFormat::N24BitTcRgb:
                     {
                         Scanline pScan = pWriteAccess->GetScanline( y );
 

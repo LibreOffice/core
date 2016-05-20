@@ -766,18 +766,18 @@ BitmapBuffer* OpenGLSalBitmap::AcquireBuffer( BitmapAccessMode nMode )
     switch (mnBits)
     {
         case 1:
-            pBuffer->mnFormat = BMP_FORMAT_1BIT_MSB_PAL;
+            pBuffer->mnFormat = ScanlineFormat::N1BitMsbPal;
             break;
         case 4:
-            pBuffer->mnFormat = BMP_FORMAT_4BIT_MSN_PAL;
+            pBuffer->mnFormat = ScanlineFormat::N4BitMsnPal;
             break;
         case 8:
-            pBuffer->mnFormat = BMP_FORMAT_8BIT_PAL;
+            pBuffer->mnFormat = ScanlineFormat::N8BitPal;
             break;
         case 16:
         {
 #ifdef _WIN32
-            pBuffer->mnFormat = BMP_FORMAT_16BIT_TC_LSB_MASK;
+            pBuffer->mnFormat = ScanlineFormat::N16BitTcLsbMask;
             ColorMaskElement aRedMask(0x00007c00);
             aRedMask.CalcMaskShift();
             ColorMaskElement aGreenMask(0x000003e0);
@@ -786,7 +786,7 @@ BitmapBuffer* OpenGLSalBitmap::AcquireBuffer( BitmapAccessMode nMode )
             aBlueMask.CalcMaskShift();
             pBuffer->maColorMask = ColorMask(aRedMask, aGreenMask, aBlueMask);
 #else
-            pBuffer->mnFormat = BMP_FORMAT_16BIT_TC_MSB_MASK;
+            pBuffer->mnFormat = ScanlineFormat::N16BitTcMsbMask;
             ColorMaskElement aRedMask(0x0000f800);
             aRedMask.CalcMaskShift();
             ColorMaskElement aGreenMask(0x000007e0);
@@ -800,16 +800,16 @@ BitmapBuffer* OpenGLSalBitmap::AcquireBuffer( BitmapAccessMode nMode )
         case 24:
         {
 #ifdef _WIN32
-            pBuffer->mnFormat = BMP_FORMAT_24BIT_TC_BGR;
+            pBuffer->mnFormat = ScanlineFormat::N24BitTcBgr;
 #else
-            pBuffer->mnFormat = BMP_FORMAT_24BIT_TC_RGB;
+            pBuffer->mnFormat = ScanlineFormat::N24BitTcRgb;
 #endif
             break;
         }
         case 32:
         {
 #ifdef _WIN32
-            pBuffer->mnFormat = BMP_FORMAT_32BIT_TC_BGRA;
+            pBuffer->mnFormat = ScanlineFormat::N32BitTcBgra;
             ColorMaskElement aRedMask(0x00ff0000);
             aRedMask.CalcMaskShift();
             ColorMaskElement aGreenMask(0x0000ff00);
@@ -818,7 +818,7 @@ BitmapBuffer* OpenGLSalBitmap::AcquireBuffer( BitmapAccessMode nMode )
             aBlueMask.CalcMaskShift();
             pBuffer->maColorMask = ColorMask(aRedMask, aGreenMask, aBlueMask);
 #else
-            pBuffer->mnFormat = BMP_FORMAT_32BIT_TC_RGBA;
+            pBuffer->mnFormat = ScanlineFormat::N32BitTcRgba;
             ColorMaskElement aRedMask(0xff000000);
             aRedMask.CalcMaskShift();
             ColorMaskElement aGreenMask(0x00ff0000);

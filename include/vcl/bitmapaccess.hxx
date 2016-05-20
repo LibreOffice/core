@@ -45,7 +45,7 @@ public:
     inline bool  IsTopDown() const;
     inline bool  IsBottomUp() const;
 
-    inline sal_uLong GetScanlineFormat() const;
+    inline ScanlineFormat GetScanlineFormat() const;
     inline sal_uLong GetScanlineSize() const;
 
     inline sal_uInt16 GetBitCount() const;
@@ -133,7 +133,7 @@ protected:
 
     SAL_DLLPRIVATE void ImplInitScanBuffer( Bitmap& rBitmap );
     SAL_DLLPRIVATE void ImplClearScanBuffer();
-    SAL_DLLPRIVATE bool ImplSetAccessPointers( sal_uLong nFormat );
+    SAL_DLLPRIVATE bool ImplSetAccessPointers( ScanlineFormat nFormat );
 
 public:
 
@@ -142,39 +142,39 @@ public:
         return mpBuffer;
     }
 
-    static BitmapColor GetPixelFor_1BIT_MSB_PAL(ConstScanline pScanline, long nX, const ColorMask& rMask);
-    static BitmapColor GetPixelFor_1BIT_LSB_PAL(ConstScanline pScanline, long nX, const ColorMask& rMask);
-    static BitmapColor GetPixelFor_4BIT_MSN_PAL(ConstScanline pScanline, long nX, const ColorMask& rMask);
-    static BitmapColor GetPixelFor_4BIT_LSN_PAL(ConstScanline pScanline, long nX, const ColorMask& rMask);
-    static BitmapColor GetPixelFor_8BIT_PAL(ConstScanline pScanline, long nX, const ColorMask& rMask);
-    static BitmapColor GetPixelFor_8BIT_TC_MASK(ConstScanline pScanline, long nX, const ColorMask& rMask);
-    static BitmapColor GetPixelFor_16BIT_TC_MSB_MASK(ConstScanline pScanline, long nX, const ColorMask& rMask);
-    static BitmapColor GetPixelFor_16BIT_TC_LSB_MASK(ConstScanline pScanline, long nX, const ColorMask& rMask);
-    static BitmapColor GetPixelFor_24BIT_TC_BGR(ConstScanline pScanline, long nX, const ColorMask& rMask);
-    static BitmapColor GetPixelFor_24BIT_TC_RGB(ConstScanline pScanline, long nX, const ColorMask& rMask);
-    static BitmapColor GetPixelFor_24BIT_TC_MASK(ConstScanline pScanline, long nX, const ColorMask& rMask);
-    static BitmapColor GetPixelFor_32BIT_TC_ABGR(ConstScanline pScanline, long nX, const ColorMask& rMask);
-    static BitmapColor GetPixelFor_32BIT_TC_ARGB(ConstScanline pScanline, long nX, const ColorMask& rMask);
-    static BitmapColor GetPixelFor_32BIT_TC_BGRA(ConstScanline pScanline, long nX, const ColorMask& rMask);
-    static BitmapColor GetPixelFor_32BIT_TC_RGBA(ConstScanline pScanline, long nX, const ColorMask& rMask);
-    static BitmapColor GetPixelFor_32BIT_TC_MASK(ConstScanline pScanline, long nX, const ColorMask& rMask);
+    static BitmapColor GetPixelForN1BitMsbPal(ConstScanline pScanline, long nX, const ColorMask& rMask);
+    static BitmapColor GetPixelForN1BitLsbPal(ConstScanline pScanline, long nX, const ColorMask& rMask);
+    static BitmapColor GetPixelForN4BitMsnPal(ConstScanline pScanline, long nX, const ColorMask& rMask);
+    static BitmapColor GetPixelForN4BitLsnPal(ConstScanline pScanline, long nX, const ColorMask& rMask);
+    static BitmapColor GetPixelForN8BitPal(ConstScanline pScanline, long nX, const ColorMask& rMask);
+    static BitmapColor GetPixelForN8BitTcMask(ConstScanline pScanline, long nX, const ColorMask& rMask);
+    static BitmapColor GetPixelForN16BitTcMsbMask(ConstScanline pScanline, long nX, const ColorMask& rMask);
+    static BitmapColor GetPixelForN16BitTcLsbMask(ConstScanline pScanline, long nX, const ColorMask& rMask);
+    static BitmapColor GetPixelForN24BitTcBgr(ConstScanline pScanline, long nX, const ColorMask& rMask);
+    static BitmapColor GetPixelForN24BitTcRgb(ConstScanline pScanline, long nX, const ColorMask& rMask);
+    static BitmapColor GetPixelForN24BitTcMask(ConstScanline pScanline, long nX, const ColorMask& rMask);
+    static BitmapColor GetPixelForN32BitTcAbgr(ConstScanline pScanline, long nX, const ColorMask& rMask);
+    static BitmapColor GetPixelForN32BitTcArgb(ConstScanline pScanline, long nX, const ColorMask& rMask);
+    static BitmapColor GetPixelForN32BitTcBgra(ConstScanline pScanline, long nX, const ColorMask& rMask);
+    static BitmapColor GetPixelForN32BitTcRgba(ConstScanline pScanline, long nX, const ColorMask& rMask);
+    static BitmapColor GetPixelForN32BitTcMask(ConstScanline pScanline, long nX, const ColorMask& rMask);
 
-    static void SetPixelFor_1BIT_MSB_PAL(Scanline pScanline, long nX, const BitmapColor& rBitmapColor, const ColorMask& rMask);
-    static void SetPixelFor_1BIT_LSB_PAL(Scanline pScanline, long nX, const BitmapColor& rBitmapColor, const ColorMask& rMask);
-    static void SetPixelFor_4BIT_MSN_PAL(Scanline pScanline, long nX, const BitmapColor& rBitmapColor, const ColorMask& rMask);
-    static void SetPixelFor_4BIT_LSN_PAL(Scanline pScanline, long nX, const BitmapColor& rBitmapColor, const ColorMask& rMask);
-    static void SetPixelFor_8BIT_PAL(Scanline pScanline, long nX, const BitmapColor& rBitmapColor, const ColorMask& rMask);
-    static void SetPixelFor_8BIT_TC_MASK(Scanline pScanline, long nX, const BitmapColor& rBitmapColor, const ColorMask& rMask);
-    static void SetPixelFor_16BIT_TC_MSB_MASK(Scanline pScanline, long nX, const BitmapColor& rBitmapColor, const ColorMask& rMask);
-    static void SetPixelFor_16BIT_TC_LSB_MASK(Scanline pScanline, long nX, const BitmapColor& rBitmapColor, const ColorMask& rMask);
-    static void SetPixelFor_24BIT_TC_BGR(Scanline pScanline, long nX, const BitmapColor& rBitmapColor, const ColorMask& rMask);
-    static void SetPixelFor_24BIT_TC_RGB(Scanline pScanline, long nX, const BitmapColor& rBitmapColor, const ColorMask& rMask);
-    static void SetPixelFor_24BIT_TC_MASK(Scanline pScanline, long nX, const BitmapColor& rBitmapColor, const ColorMask& rMask);
-    static void SetPixelFor_32BIT_TC_ABGR(Scanline pScanline, long nX, const BitmapColor& rBitmapColor, const ColorMask& rMask);
-    static void SetPixelFor_32BIT_TC_ARGB(Scanline pScanline, long nX, const BitmapColor& rBitmapColor, const ColorMask& rMask);
-    static void SetPixelFor_32BIT_TC_BGRA(Scanline pScanline, long nX, const BitmapColor& rBitmapColor, const ColorMask& rMask);
-    static void SetPixelFor_32BIT_TC_RGBA(Scanline pScanline, long nX, const BitmapColor& rBitmapColor, const ColorMask& rMask);
-    static void SetPixelFor_32BIT_TC_MASK(Scanline pScanline, long nX, const BitmapColor& rBitmapColor, const ColorMask& rMask);
+    static void SetPixelForN1BitMsbPal(Scanline pScanline, long nX, const BitmapColor& rBitmapColor, const ColorMask& rMask);
+    static void SetPixelForN1BitLsbPal(Scanline pScanline, long nX, const BitmapColor& rBitmapColor, const ColorMask& rMask);
+    static void SetPixelForN4BitMsnPal(Scanline pScanline, long nX, const BitmapColor& rBitmapColor, const ColorMask& rMask);
+    static void SetPixelForN4BitLsnPal(Scanline pScanline, long nX, const BitmapColor& rBitmapColor, const ColorMask& rMask);
+    static void SetPixelForN8BitPal(Scanline pScanline, long nX, const BitmapColor& rBitmapColor, const ColorMask& rMask);
+    static void SetPixelForN8BitTcMask(Scanline pScanline, long nX, const BitmapColor& rBitmapColor, const ColorMask& rMask);
+    static void SetPixelForN16BitTcMsbMask(Scanline pScanline, long nX, const BitmapColor& rBitmapColor, const ColorMask& rMask);
+    static void SetPixelForN16BitTcLsbMask(Scanline pScanline, long nX, const BitmapColor& rBitmapColor, const ColorMask& rMask);
+    static void SetPixelForN24BitTcBgr(Scanline pScanline, long nX, const BitmapColor& rBitmapColor, const ColorMask& rMask);
+    static void SetPixelForN24BitTcRgb(Scanline pScanline, long nX, const BitmapColor& rBitmapColor, const ColorMask& rMask);
+    static void SetPixelForN24BitTcMask(Scanline pScanline, long nX, const BitmapColor& rBitmapColor, const ColorMask& rMask);
+    static void SetPixelForN32BitTcAbgr(Scanline pScanline, long nX, const BitmapColor& rBitmapColor, const ColorMask& rMask);
+    static void SetPixelForN32BitTcArgb(Scanline pScanline, long nX, const BitmapColor& rBitmapColor, const ColorMask& rMask);
+    static void SetPixelForN32BitTcBgra(Scanline pScanline, long nX, const BitmapColor& rBitmapColor, const ColorMask& rMask);
+    static void SetPixelForN32BitTcRgba(Scanline pScanline, long nX, const BitmapColor& rBitmapColor, const ColorMask& rMask);
+    static void SetPixelForN32BitTcMask(Scanline pScanline, long nX, const BitmapColor& rBitmapColor, const ColorMask& rMask);
 
 protected:
     BitmapReadAccess(Bitmap& rBitmap, BitmapAccessMode nMode);
@@ -190,7 +190,7 @@ public:
     void CopyScanline(long nY, const BitmapReadAccess& rReadAcc);
     void CopyScanline(long nY,
                       ConstScanline aSrcScanline,
-                      sal_uLong nSrcScanlineFormat,
+                      ScanlineFormat nSrcScanlineFormat,
                       sal_uLong nSrcScanlineSize);
 
     void CopyBuffer( const BitmapReadAccess& rReadAcc );
@@ -255,7 +255,7 @@ inline bool BitmapInfoAccess::IsTopDown() const
 {
     assert(mpBuffer && "Access is not valid!");
 
-    return mpBuffer && (BMP_SCANLINE_ADJUSTMENT(mpBuffer->mnFormat) == BMP_FORMAT_TOP_DOWN);
+    return mpBuffer && (mpBuffer->mnFormat & ScanlineFormat::TopDown);
 }
 
 
@@ -265,11 +265,11 @@ inline bool BitmapInfoAccess::IsBottomUp() const
 }
 
 
-inline sal_uLong BitmapInfoAccess::GetScanlineFormat() const
+inline ScanlineFormat BitmapInfoAccess::GetScanlineFormat() const
 {
     assert(mpBuffer && "Access is not valid!");
 
-    return mpBuffer ? BMP_SCANLINE_FORMAT(mpBuffer->mnFormat) : 0UL;
+    return mpBuffer ? RemoveScanline(mpBuffer->mnFormat) : ScanlineFormat::NONE;
 }
 
 

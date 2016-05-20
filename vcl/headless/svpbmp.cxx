@@ -75,20 +75,20 @@ BitmapBuffer* ImplCreateDIB(
             switch (nBitCount)
             {
                 case 1:
-                    pDIB->mnFormat = BMP_FORMAT_1BIT_MSB_PAL;
+                    pDIB->mnFormat = ScanlineFormat::N1BitMsbPal;
                     break;
                 case 4:
-                    pDIB->mnFormat = BMP_FORMAT_4BIT_MSN_PAL;
+                    pDIB->mnFormat = ScanlineFormat::N4BitMsnPal;
                     break;
                 case 8:
-                    pDIB->mnFormat = BMP_FORMAT_8BIT_PAL;
+                    pDIB->mnFormat = ScanlineFormat::N8BitPal;
                     break;
                 case 16:
                 {
 #ifdef OSL_BIGENDIAN
-                    pDIB->mnFormat= BMP_FORMAT_16BIT_TC_MSB_MASK;
+                    pDIB->mnFormat= ScanlineFormat::N16BitTcMsbMask;
 #else
-                    pDIB->mnFormat= BMP_FORMAT_16BIT_TC_LSB_MASK;
+                    pDIB->mnFormat= ScanlineFormat::N16BitTcLsbMask;
 #endif
                     ColorMaskElement aRedMask(0xf800);
                     aRedMask.CalcMaskShift();
@@ -109,7 +109,7 @@ BitmapBuffer* ImplCreateDIB(
                 }
             }
 
-            pDIB->mnFormat |= BMP_FORMAT_TOP_DOWN;
+            pDIB->mnFormat |= ScanlineFormat::TopDown;
             pDIB->mnWidth = rSize.Width();
             pDIB->mnHeight = rSize.Height();
             pDIB->mnScanlineSize = AlignedWidth4Bytes( pDIB->mnWidth * nBitCount );

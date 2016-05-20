@@ -676,9 +676,9 @@ void X11SalGraphicsImpl::drawBitmap( const SalTwoRect& rPosAry,
     BitmapBuffer* pAlphaBuffer = const_cast<SalBitmap&>(rMaskBitmap).AcquireBuffer( BITMAP_READ_ACCESS );
     if( pAlphaBuffer != nullptr )
     {
-        int nMaskFormat = pAlphaBuffer->mnFormat;
+        ScanlineFormat nMaskFormat = pAlphaBuffer->mnFormat;
         const_cast<SalBitmap&>(rMaskBitmap).ReleaseBuffer( pAlphaBuffer, BITMAP_READ_ACCESS );
-        if( nMaskFormat == BMP_FORMAT_8BIT_PAL )
+        if( nMaskFormat == ScanlineFormat::N8BitPal )
             drawAlphaBitmap( rPosAry, rSrcBitmap, rMaskBitmap );
     }
 
@@ -864,7 +864,7 @@ bool X11SalGraphicsImpl::drawAlphaBitmap( const SalTwoRect& rTR,
     const int nImageSize = pAlphaBuffer->mnHeight * pAlphaBuffer->mnScanlineSize;
     const char* pSrcBits = reinterpret_cast<char*>(pAlphaBuffer->mpBits);
     char* pAlphaBits = new char[ nImageSize ];
-    if( BMP_SCANLINE_ADJUSTMENT( pAlphaBuffer->mnFormat ) == BMP_FORMAT_TOP_DOWN )
+    if( pAlphaBuffer->mnFormat & ScanlineFormat::TopDown )
         memcpy( pAlphaBits, pSrcBits, nImageSize );
     else
     {

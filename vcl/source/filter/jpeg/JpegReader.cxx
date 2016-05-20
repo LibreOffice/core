@@ -271,11 +271,11 @@ unsigned char * JPEGReader::CreateBitmap(JPEGCreateBitmapParam& rParam)
 
     if( mpAcc )
     {
-        const sal_uLong nFormat = mpAcc->GetScanlineFormat();
+        const ScanlineFormat nFormat = mpAcc->GetScanlineFormat();
 
         if(
-            ( bGray && ( BMP_FORMAT_8BIT_PAL == nFormat ) ) ||
-            ( !bGray && ( BMP_FORMAT_24BIT_TC_RGB == nFormat ) )
+            ( bGray && ( ScanlineFormat::N8BitPal == nFormat ) ) ||
+            ( !bGray && ( ScanlineFormat::N24BitTcRgb == nFormat ) )
           )
         {
             pBmpBuf = mpAcc->GetBuffer();
@@ -347,7 +347,7 @@ void JPEGReader::FillBitmap()
                     // #i122985# Trying to copy the RGB data from jpeg import to make things faster. Unfortunately
                     // it has no GBR format, so RGB three-byte groups need to be 'flipped' to GBR first,
                     // then CopyScanline can use a memcpy to do the data transport. CopyScanline can also
-                    // do the needed conversion from BMP_FORMAT_24BIT_TC_RGB (and it works well), but this
+                    // do the needed conversion from ScanlineFormat::N24BitTcRgb (and it works well), but this
                     // is not faster that the old loop below using SetPixel.
                     sal_uInt8* aSource(mpBuffer + nY * nAlignedWidth);
                     sal_uInt8* aEnd(aSource + (nWidth * 3));
@@ -357,7 +357,7 @@ void JPEGReader::FillBitmap()
                         ::std::swap(*aTmp, *(aTmp + 2));
                     }
 
-                    mpAcc->CopyScanline(nY, aSource, BMP_FORMAT_24BIT_TC_BGR, nWidth * 3);
+                    mpAcc->CopyScanline(nY, aSource, ScanlineFormat::N24BitTcBgr, nWidth * 3);
                 }
                 else
                 {

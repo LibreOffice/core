@@ -494,8 +494,8 @@ void OutputDevice::EmulateDrawTransparent ( const tools::PolyPolygon& rPolyPoly,
                                 pMap[ i ] = BitmapColor( (sal_uInt8) rPal.GetBestIndex( aCol.Merge( aFillCol, cTrans ) ) );
                             }
 
-                            if( pR->GetScanlineFormat() == BMP_FORMAT_1BIT_MSB_PAL &&
-                                pW->GetScanlineFormat() == BMP_FORMAT_8BIT_PAL )
+                            if( pR->GetScanlineFormat() == ScanlineFormat::N1BitMsbPal &&
+                                pW->GetScanlineFormat() == ScanlineFormat::N8BitPal )
                             {
                                 const sal_uInt8 cBlack = aBlack.GetIndex();
 
@@ -536,8 +536,8 @@ void OutputDevice::EmulateDrawTransparent ( const tools::PolyPolygon& rPolyPoly,
                         }
                         else
                         {
-                            if( pR->GetScanlineFormat() == BMP_FORMAT_1BIT_MSB_PAL &&
-                                pW->GetScanlineFormat() == BMP_FORMAT_24BIT_TC_BGR )
+                            if( pR->GetScanlineFormat() == ScanlineFormat::N1BitMsbPal &&
+                                pW->GetScanlineFormat() == ScanlineFormat::N24BitTcBgr )
                             {
                                 const sal_uInt8 cBlack = aBlack.GetIndex();
 

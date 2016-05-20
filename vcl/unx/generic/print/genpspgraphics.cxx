@@ -98,7 +98,7 @@ SalPrinterBmp::SalPrinterBmp (BitmapBuffer* pBuffer)
     assert(mpBmpBuffer && "SalPrinterBmp::SalPrinterBmp () can't acquire Bitmap");
 
     // calibrate scanline buffer
-    if( BMP_SCANLINE_ADJUSTMENT( mpBmpBuffer->mnFormat ) == BMP_FORMAT_TOP_DOWN )
+    if( mpBmpBuffer->mnFormat & ScanlineFormat::TopDown )
     {
         mpScanAccess = mpBmpBuffer->mpBits;
         mnScanOffset = mpBmpBuffer->mnScanlineSize;
@@ -111,40 +111,40 @@ SalPrinterBmp::SalPrinterBmp (BitmapBuffer* pBuffer)
     }
 
     // request read access to the pixels
-    switch( BMP_SCANLINE_FORMAT( mpBmpBuffer->mnFormat ) )
+    switch( RemoveScanline( mpBmpBuffer->mnFormat ) )
     {
-        case BMP_FORMAT_1BIT_MSB_PAL:
-            mpFncGetPixel = BitmapReadAccess::GetPixelFor_1BIT_MSB_PAL;  break;
-        case BMP_FORMAT_1BIT_LSB_PAL:
-            mpFncGetPixel = BitmapReadAccess::GetPixelFor_1BIT_LSB_PAL;  break;
-        case BMP_FORMAT_4BIT_MSN_PAL:
-            mpFncGetPixel = BitmapReadAccess::GetPixelFor_4BIT_MSN_PAL;  break;
-        case BMP_FORMAT_4BIT_LSN_PAL:
-            mpFncGetPixel = BitmapReadAccess::GetPixelFor_4BIT_LSN_PAL;  break;
-        case BMP_FORMAT_8BIT_PAL:
-            mpFncGetPixel = BitmapReadAccess::GetPixelFor_8BIT_PAL;      break;
-        case BMP_FORMAT_8BIT_TC_MASK:
-            mpFncGetPixel = BitmapReadAccess::GetPixelFor_8BIT_TC_MASK;  break;
-        case BMP_FORMAT_16BIT_TC_MSB_MASK:
-            mpFncGetPixel = BitmapReadAccess::GetPixelFor_16BIT_TC_MSB_MASK; break;
-        case BMP_FORMAT_16BIT_TC_LSB_MASK:
-            mpFncGetPixel = BitmapReadAccess::GetPixelFor_16BIT_TC_LSB_MASK; break;
-        case BMP_FORMAT_24BIT_TC_BGR:
-            mpFncGetPixel = BitmapReadAccess::GetPixelFor_24BIT_TC_BGR;  break;
-        case BMP_FORMAT_24BIT_TC_RGB:
-            mpFncGetPixel = BitmapReadAccess::GetPixelFor_24BIT_TC_RGB;  break;
-        case BMP_FORMAT_24BIT_TC_MASK:
-            mpFncGetPixel = BitmapReadAccess::GetPixelFor_24BIT_TC_MASK; break;
-        case BMP_FORMAT_32BIT_TC_ABGR:
-            mpFncGetPixel = BitmapReadAccess::GetPixelFor_32BIT_TC_ABGR; break;
-        case BMP_FORMAT_32BIT_TC_ARGB:
-            mpFncGetPixel = BitmapReadAccess::GetPixelFor_32BIT_TC_ARGB; break;
-        case BMP_FORMAT_32BIT_TC_BGRA:
-            mpFncGetPixel = BitmapReadAccess::GetPixelFor_32BIT_TC_BGRA; break;
-        case BMP_FORMAT_32BIT_TC_RGBA:
-            mpFncGetPixel = BitmapReadAccess::GetPixelFor_32BIT_TC_RGBA; break;
-        case BMP_FORMAT_32BIT_TC_MASK:
-            mpFncGetPixel = BitmapReadAccess::GetPixelFor_32BIT_TC_MASK; break;
+        case ScanlineFormat::N1BitMsbPal:
+            mpFncGetPixel = BitmapReadAccess::GetPixelForN1BitMsbPal;  break;
+        case ScanlineFormat::N1BitLsbPal:
+            mpFncGetPixel = BitmapReadAccess::GetPixelForN1BitLsbPal;  break;
+        case ScanlineFormat::N4BitMsnPal:
+            mpFncGetPixel = BitmapReadAccess::GetPixelForN4BitMsnPal;  break;
+        case ScanlineFormat::N4BitLsnPal:
+            mpFncGetPixel = BitmapReadAccess::GetPixelForN4BitLsnPal;  break;
+        case ScanlineFormat::N8BitPal:
+            mpFncGetPixel = BitmapReadAccess::GetPixelForN8BitPal;      break;
+        case ScanlineFormat::N8BitTcMask:
+            mpFncGetPixel = BitmapReadAccess::GetPixelForN8BitTcMask;  break;
+        case ScanlineFormat::N16BitTcMsbMask:
+            mpFncGetPixel = BitmapReadAccess::GetPixelForN16BitTcMsbMask; break;
+        case ScanlineFormat::N16BitTcLsbMask:
+            mpFncGetPixel = BitmapReadAccess::GetPixelForN16BitTcLsbMask; break;
+        case ScanlineFormat::N24BitTcBgr:
+            mpFncGetPixel = BitmapReadAccess::GetPixelForN24BitTcBgr;  break;
+        case ScanlineFormat::N24BitTcRgb:
+            mpFncGetPixel = BitmapReadAccess::GetPixelForN24BitTcRgb;  break;
+        case ScanlineFormat::N24BitTcMask:
+            mpFncGetPixel = BitmapReadAccess::GetPixelForN24BitTcMask; break;
+        case ScanlineFormat::N32BitTcAbgr:
+            mpFncGetPixel = BitmapReadAccess::GetPixelForN32BitTcAbgr; break;
+        case ScanlineFormat::N32BitTcArgb:
+            mpFncGetPixel = BitmapReadAccess::GetPixelForN32BitTcArgb; break;
+        case ScanlineFormat::N32BitTcBgra:
+            mpFncGetPixel = BitmapReadAccess::GetPixelForN32BitTcBgra; break;
+        case ScanlineFormat::N32BitTcRgba:
+            mpFncGetPixel = BitmapReadAccess::GetPixelForN32BitTcRgba; break;
+        case ScanlineFormat::N32BitTcMask:
+            mpFncGetPixel = BitmapReadAccess::GetPixelForN32BitTcMask; break;
 
         default:
             OSL_FAIL("Error: SalPrinterBmp::SalPrinterBmp() unknown bitmap format");

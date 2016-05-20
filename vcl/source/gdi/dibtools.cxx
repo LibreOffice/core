@@ -153,9 +153,9 @@ namespace
                ( nInputCount <= 8 ) ? 8 : 24;
     }
 
-    inline bool isBitfieldCompression( sal_uLong nScanlineFormat )
+    inline bool isBitfieldCompression( ScanlineFormat nScanlineFormat )
     {
-        return (BMP_FORMAT_16BIT_TC_LSB_MASK == nScanlineFormat) || (BMP_FORMAT_32BIT_TC_MASK == nScanlineFormat);
+        return (ScanlineFormat::N16BitTcLsbMask == nScanlineFormat) || (ScanlineFormat::N32BitTcMask == nScanlineFormat);
     }
 }
 
@@ -480,10 +480,10 @@ bool ImplReadDIBBits(SvStream& rIStm, DIBV5Header& rHeader, BitmapWriteAccess& r
     // Is native format?
     switch(rAcc.GetScanlineFormat())
     {
-        case BMP_FORMAT_1BIT_MSB_PAL:
-        case BMP_FORMAT_4BIT_MSN_PAL:
-        case BMP_FORMAT_8BIT_PAL:
-        case BMP_FORMAT_24BIT_TC_BGR:
+        case ScanlineFormat::N1BitMsbPal:
+        case ScanlineFormat::N4BitMsnPal:
+        case ScanlineFormat::N8BitPal:
+        case ScanlineFormat::N24BitTcBgr:
         {
             bNative = ( ( static_cast< bool >(rAcc.IsBottomUp()) != bTopDown ) && !bRLE && !bTCMask && ( rAcc.GetScanlineSize() == nAlignedWidth ) );
             break;
@@ -1180,10 +1180,10 @@ bool ImplWriteDIBBits(SvStream& rOStm, BitmapReadAccess& rAcc, BitmapReadAccess*
 
         switch(rAcc.GetScanlineFormat())
         {
-            case BMP_FORMAT_1BIT_MSB_PAL:
-            case BMP_FORMAT_4BIT_MSN_PAL:
-            case BMP_FORMAT_8BIT_PAL:
-            case BMP_FORMAT_24BIT_TC_BGR:
+            case ScanlineFormat::N1BitMsbPal:
+            case ScanlineFormat::N4BitMsnPal:
+            case ScanlineFormat::N8BitPal:
+            case ScanlineFormat::N24BitTcBgr:
             {
                 if(!pAccAlpha && rAcc.IsBottomUp() && (rAcc.GetScanlineSize() == nAlignedWidth))
                 {
@@ -1340,7 +1340,7 @@ bool ImplWriteDIBBody(const Bitmap& rBitmap, SvStream& rOStm, BitmapReadAccess& 
 
     if(!pAccAlpha && isBitfieldCompression(rAcc.GetScanlineFormat()))
     {
-        aHeader.nBitCount = (BMP_FORMAT_16BIT_TC_LSB_MASK == rAcc.GetScanlineFormat()) ? 16 : 32;
+        aHeader.nBitCount = (ScanlineFormat::N16BitTcLsbMask == rAcc.GetScanlineFormat()) ? 16 : 32;
         aHeader.nSizeImage = rAcc.Height() * rAcc.GetScanlineSize();
         nCompression = BITFIELDS;
     }

@@ -1068,7 +1068,7 @@ BitmapEx BitmapEx::ModifyBitmapEx(const basegfx::BColorModifierStack& rBColorMod
                         xContent->SetPaletteColor(b, BitmapColor(Color(aBDest)));
                     }
                 }
-                else if(BMP_FORMAT_24BIT_TC_BGR == xContent->GetScanlineFormat())
+                else if(ScanlineFormat::N24BitTcBgr == xContent->GetScanlineFormat())
                 {
                     for(sal_uInt32 y(0L); y < (sal_uInt32)xContent->Height(); y++)
                     {
@@ -1087,7 +1087,7 @@ BitmapEx BitmapEx::ModifyBitmapEx(const basegfx::BColorModifierStack& rBColorMod
                         }
                     }
                 }
-                else if(BMP_FORMAT_24BIT_TC_RGB == xContent->GetScanlineFormat())
+                else if(ScanlineFormat::N24BitTcRgb == xContent->GetScanlineFormat())
                 {
                     for(sal_uInt32 y(0L); y < (sal_uInt32)xContent->Height(); y++)
                     {

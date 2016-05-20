@@ -150,17 +150,17 @@ BitmapBuffer* X11SalBitmap::ImplCreateDIB(
         {
             const sal_uInt16 nColors = ( nBitCount <= 8 ) ? ( 1 << nBitCount ) : 0;
 
-            pDIB->mnFormat = BMP_FORMAT_BOTTOM_UP;
+            pDIB->mnFormat = ScanlineFormat::NONE;
 
             switch( nBitCount )
             {
-                case 1: pDIB->mnFormat |= BMP_FORMAT_1BIT_MSB_PAL; break;
-                case 4: pDIB->mnFormat |= BMP_FORMAT_4BIT_MSN_PAL; break;
-                case 8: pDIB->mnFormat |= BMP_FORMAT_8BIT_PAL; break;
+                case 1: pDIB->mnFormat |= ScanlineFormat::N1BitMsbPal; break;
+                case 4: pDIB->mnFormat |= ScanlineFormat::N4BitMsnPal; break;
+                case 8: pDIB->mnFormat |= ScanlineFormat::N8BitPal; break;
 #ifdef OSL_BIGENDIAN
                 case 16:
                 {
-                    pDIB->mnFormat|= BMP_FORMAT_16BIT_TC_MSB_MASK;
+                    pDIB->mnFormat|= ScanlineFormat::N16BitTcMsbMask;
                     ColorMaskElement aRedMask(0xf800);
                     aRedMask.CalcMaskShift();
                     ColorMaskElement aGreenMask(0x07e0);
@@ -173,7 +173,7 @@ BitmapBuffer* X11SalBitmap::ImplCreateDIB(
 #else
                 case 16:
                 {
-                    pDIB->mnFormat|= BMP_FORMAT_16BIT_TC_LSB_MASK;
+                    pDIB->mnFormat|= ScanlineFormat::N16BitTcLsbMask;
                     ColorMaskElement aRedMask(0xf800);
                     aRedMask.CalcMaskShift();
                     ColorMaskElement aGreenMask(0x07e0);
@@ -188,7 +188,7 @@ BitmapBuffer* X11SalBitmap::ImplCreateDIB(
                     nBitCount = 24;
                     SAL_FALLTHROUGH;
                 case 24:
-                    pDIB->mnFormat |= BMP_FORMAT_24BIT_TC_BGR;
+                    pDIB->mnFormat |= ScanlineFormat::N24BitTcBgr;
                 break;
             }
 
@@ -256,7 +256,7 @@ BitmapBuffer* X11SalBitmap::ImplCreateDIB(
             BitmapBuffer            aSrcBuf;
             const BitmapPalette*    pDstPal = nullptr;
 
-            aSrcBuf.mnFormat = BMP_FORMAT_TOP_DOWN;
+            aSrcBuf.mnFormat = ScanlineFormat::TopDown;
             aSrcBuf.mnWidth = nWidth;
             aSrcBuf.mnHeight = nHeight;
             aSrcBuf.mnBitCount = pImage->bits_per_pixel;
@@ -272,8 +272,8 @@ BitmapBuffer* X11SalBitmap::ImplCreateDIB(
                 case 1:
                 {
                     aSrcBuf.mnFormat |= ( LSBFirst == pImage->bitmap_bit_order
-                                            ? BMP_FORMAT_1BIT_LSB_PAL
-                                            : BMP_FORMAT_1BIT_MSB_PAL
+                                            ? ScanlineFormat::N1BitLsbPal
+                                            : ScanlineFormat::N1BitMsbPal
                                         );
                 }
                 break;
@@ -281,15 +281,15 @@ BitmapBuffer* X11SalBitmap::ImplCreateDIB(
                 case 4:
                 {
                     aSrcBuf.mnFormat |= ( LSBFirst == pImage->bitmap_bit_order
-                                            ? BMP_FORMAT_4BIT_LSN_PAL
-                                            : BMP_FORMAT_4BIT_MSN_PAL
+                                            ? ScanlineFormat::N4BitLsnPal
+                                            : ScanlineFormat::N4BitMsnPal
                                         );
                 }
                 break;
 
                 case 8:
                 {
-                    aSrcBuf.mnFormat |= BMP_FORMAT_8BIT_PAL;
+                    aSrcBuf.mnFormat |= ScanlineFormat::N8BitPal;
                 }
                 break;
 
@@ -305,11 +305,11 @@ BitmapBuffer* X11SalBitmap::ImplCreateDIB(
 
                     if( LSBFirst == pImage->byte_order )
                     {
-                        aSrcBuf.mnFormat |= BMP_FORMAT_16BIT_TC_LSB_MASK;
+                        aSrcBuf.mnFormat |= ScanlineFormat::N16BitTcLsbMask;
                     }
                     else
                     {
-                        aSrcBuf.mnFormat |= BMP_FORMAT_16BIT_TC_MSB_MASK;
+                        aSrcBuf.mnFormat |= ScanlineFormat::N16BitTcMsbMask;
                     }
                 }
                 break;
@@ -317,9 +317,9 @@ BitmapBuffer* X11SalBitmap::ImplCreateDIB(
                 case 24:
                 {
                     if( ( LSBFirst == pImage->byte_order ) && ( pImage->red_mask == 0xFF ) )
-                        aSrcBuf.mnFormat |= BMP_FORMAT_24BIT_TC_RGB;
+                        aSrcBuf.mnFormat |= ScanlineFormat::N24BitTcRgb;
                     else
-                        aSrcBuf.mnFormat |= BMP_FORMAT_24BIT_TC_BGR;
+                        aSrcBuf.mnFormat |= ScanlineFormat::N24BitTcBgr;
                 }
                 break;
 
@@ -327,13 +327,13 @@ BitmapBuffer* X11SalBitmap::ImplCreateDIB(
                 {
                     if( LSBFirst == pImage->byte_order )
                         aSrcBuf.mnFormat |= (  pSalDisp->GetVisual(nScreen).red_mask == 0xFF
-                                                ? BMP_FORMAT_32BIT_TC_RGBA
-                                                : BMP_FORMAT_32BIT_TC_BGRA
+                                                ? ScanlineFormat::N32BitTcRgba
+                                                : ScanlineFormat::N32BitTcBgra
                                             );
                     else
                         aSrcBuf.mnFormat |= (  pSalDisp->GetVisual(nScreen).red_mask == 0xFF
-                                                ? BMP_FORMAT_32BIT_TC_ABGR
-                                                : BMP_FORMAT_32BIT_TC_ARGB
+                                                ? ScanlineFormat::N32BitTcAbgr
+                                                : ScanlineFormat::N32BitTcArgb
                                             );
                 }
                 break;
@@ -430,7 +430,7 @@ XImage* X11SalBitmap::ImplCreateXImage(
         if( pImage )
         {
             BitmapBuffer*   pDstBuf;
-            sal_uLong           nDstFormat = BMP_FORMAT_TOP_DOWN;
+            ScanlineFormat       nDstFormat = ScanlineFormat::TopDown;
             std::unique_ptr<BitmapPalette> xPal;
             std::unique_ptr<ColorMask> xMask;
 
@@ -438,20 +438,20 @@ XImage* X11SalBitmap::ImplCreateXImage(
             {
                 case 1:
                     nDstFormat |=   ( LSBFirst == pImage->bitmap_bit_order
-                                        ? BMP_FORMAT_1BIT_LSB_PAL
-                                        : BMP_FORMAT_1BIT_MSB_PAL
+                                        ? ScanlineFormat::N1BitLsbPal
+                                        : ScanlineFormat::N1BitMsbPal
                                     );
                 break;
 
                 case 4:
                     nDstFormat |=   ( LSBFirst == pImage->bitmap_bit_order
-                                        ? BMP_FORMAT_4BIT_LSN_PAL
-                                        : BMP_FORMAT_4BIT_MSN_PAL
+                                        ? ScanlineFormat::N4BitLsnPal
+                                        : ScanlineFormat::N4BitMsnPal
                                     );
                 break;
 
                 case 8:
-                    nDstFormat |= BMP_FORMAT_8BIT_PAL;
+                    nDstFormat |= ScanlineFormat::N8BitPal;
                 break;
 
                 case 16:
@@ -459,13 +459,13 @@ XImage* X11SalBitmap::ImplCreateXImage(
                     #ifdef OSL_BIGENDIAN
 
                     if( MSBFirst == pImage->byte_order )
-                        nDstFormat |= BMP_FORMAT_16BIT_TC_MSB_MASK;
+                        nDstFormat |= ScanlineFormat::N16BitTcMsbMask;
                     else
-                        nDstFormat |= BMP_FORMAT_16BIT_TC_LSB_MASK;
+                        nDstFormat |= ScanlineFormat::N16BitTcLsbMask;
 
                     #else /* OSL_LITENDIAN */
 
-                    nDstFormat |= BMP_FORMAT_16BIT_TC_LSB_MASK;
+                    nDstFormat |= ScanlineFormat::N16BitTcLsbMask;
                     if( MSBFirst == pImage->byte_order )
                         pImage->byte_order = LSBFirst;
 
@@ -484,9 +484,9 @@ XImage* X11SalBitmap::ImplCreateXImage(
                 case 24:
                 {
                     if( ( LSBFirst == pImage->byte_order ) && ( pImage->red_mask == 0xFF ) )
-                        nDstFormat |= BMP_FORMAT_24BIT_TC_RGB;
+                        nDstFormat |= ScanlineFormat::N24BitTcRgb;
                     else
-                        nDstFormat |= BMP_FORMAT_24BIT_TC_BGR;
+                        nDstFormat |= ScanlineFormat::N24BitTcBgr;
                 }
                 break;
 
@@ -494,13 +494,13 @@ XImage* X11SalBitmap::ImplCreateXImage(
                 {
                     if( LSBFirst == pImage->byte_order )
                         nDstFormat |=   ( pImage->red_mask == 0xFF
-                                            ? BMP_FORMAT_32BIT_TC_RGBA
-                                            : BMP_FORMAT_32BIT_TC_BGRA
+                                            ? ScanlineFormat::N32BitTcRgba
+                                            : ScanlineFormat::N32BitTcBgra
                                         );
                     else
                         nDstFormat |=   ( pImage->red_mask == 0xFF
-                                            ? BMP_FORMAT_32BIT_TC_ABGR
-                                            : BMP_FORMAT_32BIT_TC_ARGB
+                                            ? ScanlineFormat::N32BitTcAbgr
+                                            : ScanlineFormat::N32BitTcArgb
                                         );
                 }
                 break;

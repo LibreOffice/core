@@ -19,6 +19,7 @@
 
 #ifndef INCLUDED_VCL_SALBTYPE_HXX
 #define INCLUDED_VCL_SALBTYPE_HXX
+
 #include <string.h>
 #include <stdlib.h>
 #include <tools/debug.hxx>
@@ -27,39 +28,42 @@
 #include <tools/helpers.hxx>
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
-
+#include <o3tl/typed_flags_set.hxx>
 
 typedef sal_uInt8*        Scanline;
 typedef const sal_uInt8*  ConstScanline;
 
+enum class ScanlineFormat {
+    NONE              = 0x00000000,
 
-#define BMP_FORMAT_BOTTOM_UP                        0x00000000UL
-#define BMP_FORMAT_TOP_DOWN                         0x80000000UL
+    N1BitMsbPal       = 0x00000001,
+    N1BitLsbPal       = 0x00000002,
 
-#define BMP_FORMAT_1BIT_MSB_PAL                     0x00000001UL
-#define BMP_FORMAT_1BIT_LSB_PAL                     0x00000002UL
+    N4BitMsnPal       = 0x00000004,
+    N4BitLsnPal       = 0x00000008,
 
-#define BMP_FORMAT_4BIT_MSN_PAL                     0x00000004UL
-#define BMP_FORMAT_4BIT_LSN_PAL                     0x00000008UL
+    N8BitPal          = 0x00000010,
+    N8BitTcMask       = 0x00000020,
 
-#define BMP_FORMAT_8BIT_PAL                         0x00000010UL
-#define BMP_FORMAT_8BIT_TC_MASK                     0x00000020UL
+    N16BitTcMsbMask   = 0x00000040,
+    N16BitTcLsbMask   = 0x00000080,
 
-#define BMP_FORMAT_24BIT_TC_BGR                     0x00000080UL
-#define BMP_FORMAT_24BIT_TC_RGB                     0x00000100UL
-#define BMP_FORMAT_24BIT_TC_MASK                    0x00000200UL
+    N24BitTcBgr       = 0x00000100,
+    N24BitTcRgb       = 0x00000200,
+    N24BitTcMask      = 0x00000400,
 
-#define BMP_FORMAT_32BIT_TC_ABGR                    0x00000400UL
-#define BMP_FORMAT_32BIT_TC_ARGB                    0x00000800UL
-#define BMP_FORMAT_32BIT_TC_BGRA                    0x00001000UL
-#define BMP_FORMAT_32BIT_TC_RGBA                    0x00002000UL
-#define BMP_FORMAT_32BIT_TC_MASK                    0x00004000UL
+    N32BitTcAbgr      = 0x00000800,
+    N32BitTcArgb      = 0x00001000,
+    N32BitTcBgra      = 0x00002000,
+    N32BitTcRgba      = 0x00004000,
+    N32BitTcMask      = 0x00008000,
 
-#define BMP_FORMAT_16BIT_TC_MSB_MASK                0x00008000UL
-#define BMP_FORMAT_16BIT_TC_LSB_MASK                0x00010000UL
-
-#define BMP_SCANLINE_ADJUSTMENT( Mac_nBmpFormat )   ( (Mac_nBmpFormat) & 0x80000000UL )
-#define BMP_SCANLINE_FORMAT( Mac_nBmpFormat )       ( (Mac_nBmpFormat) & 0x7FFFFFFFUL )
+    TopDown           = 0x00010000 // scanline adjustment
+};
+namespace o3tl {
+    template<> struct typed_flags<ScanlineFormat> : is_typed_flags<ScanlineFormat, 0x0001ffff> {};
+}
+inline ScanlineFormat RemoveScanline(ScanlineFormat nFormat) { return nFormat & ~ScanlineFormat::TopDown; }
 
 
 #define MASK_TO_COLOR( d_nVal, d_RM, d_GM, d_BM, d_RS, d_GS, d_BS, d_Col )                          \
@@ -256,7 +260,7 @@ public:
 
 struct VCL_DLLPUBLIC BitmapBuffer
 {
-    sal_uLong       mnFormat;
+    ScanlineFormat       mnFormat;
     long            mnWidth;
     long            mnHeight;
     long            mnScanlineSize;
@@ -276,7 +280,7 @@ BitmapAccessMode;
 
 VCL_DLLPUBLIC BitmapBuffer* StretchAndConvert(
     const BitmapBuffer& rSrcBuffer, const SalTwoRect& rTwoRect,
-    sal_uLong nDstBitmapFormat, const BitmapPalette* pDstPal = nullptr, const ColorMask* pDstMask = nullptr );
+    ScanlineFormat nDstBitmapFormat, const BitmapPalette* pDstPal = nullptr, const ColorMask* pDstMask = nullptr );
 
 inline BitmapColor::BitmapColor() :
             mcBlueOrIndex   ( 0 ),
