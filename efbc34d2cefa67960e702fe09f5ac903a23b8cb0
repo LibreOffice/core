@@ -48,6 +48,23 @@
     },
     {
       "key": {
+        "uuid": "da7fb54a_e38e9826",
+        "filename": "svx/source/svdraw/svdograf.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 564,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-05-20T08:03:10Z",
+      "side": 1,
+      "message": "Less spage here please :)",
+      "revId": "efbc34d2cefa67960e702fe09f5ac903a23b8cb0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da7fb54a_23e7a0e5",
         "filename": "svx/source/svdraw/svdograf.cxx",
         "patchSetId": 4
@@ -65,6 +82,23 @@
         "endLine": 566,
         "endChar": 15
       },
+      "revId": "efbc34d2cefa67960e702fe09f5ac903a23b8cb0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_03e29cd5",
+        "filename": "svx/source/svdraw/svdograf.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 567,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-05-20T08:03:10Z",
+      "side": 1,
+      "message": "You can leave out \u0027this-\u003e\u0027. \n\nthis-\u003eFoo() is the same as Foo()",
       "revId": "efbc34d2cefa67960e702fe09f5ac903a23b8cb0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
