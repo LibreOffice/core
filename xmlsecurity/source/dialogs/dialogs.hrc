@@ -38,6 +38,7 @@
 #define STR_SIGNATURE_ALGO              266
 #define STR_THUMBPRINT_SHA1             267
 #define STR_THUMBPRINT_MD5              268
+#define STR_USE                         271
 
 // --------- general metrics ---------
 #define DLGS_WIDTH                      287

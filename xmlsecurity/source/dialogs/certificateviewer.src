@@ -86,6 +86,11 @@ String STR_SIGNATURE_ALGO
     Text [ en-US ] = "Signature Algorithm";
 };
 
+String STR_USE
+{
+    Text [ en-US ] = "Certificate Use";
+};
+
 String STR_THUMBPRINT_SHA1
 {
     Text [ en-US ] = "Thumbprint SHA1";

@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <xmlsecurity/certificatechooser.hxx>
 #include <xmlsecurity/certificateviewer.hxx>
 #include <com/sun/star/security/XCertificate.hpp>
 
@@ -277,6 +278,11 @@ CertificateViewerDetailsTP::CertificateViewerDetailsTP( vcl::Window* _pParent, C
 
     aLBEntry = aDetails = xCert->getSignatureAlgorithm();
     InsertElement( XMLSEC_RES( STR_SIGNATURE_ALGO ), aLBEntry, aDetails );
+
+    CertificateChooser* pChooser = dynamic_cast<CertificateChooser*>(mpDlg->GetParent());
+    assert(pChooser);
+    aLBEntry = pChooser->UsageInClearText( mpDlg->mxCert->getCertificateUsage() );
+    InsertElement( XMLSEC_RES( STR_USE ), aLBEntry, aLBEntry );
 
     aSeq = xCert->getSHA1Thumbprint();
     aLBEntry = XmlSec::GetHexString( aSeq, pHexSep );

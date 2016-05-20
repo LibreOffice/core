@@ -64,7 +64,6 @@ private:
     void ImplInitialize();
 
     void HandleOneUsageBit(OUString& string, int& bits, int bit, const char *name);
-    OUString UsageInClearText(int bits);
 
 public:
     CertificateChooser(vcl::Window* pParent, css::uno::Reference< css::uno::XComponentContext>& rxCtx, css::uno::Reference< css::xml::crypto::XSecurityEnvironment >& rxSecurityEnvironment);
@@ -77,6 +76,7 @@ public:
     /// Gets the description string provided when selecting the certificate.
     OUString GetDescription();
 
+    OUString UsageInClearText(int bits);
 };
 
 #endif // INCLUDED_XMLSECURITY_INC_XMLSECURITY_CERTIFICATECHOOSER_HXX
