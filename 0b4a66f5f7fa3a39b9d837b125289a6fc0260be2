@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_63028840",
+        "filename": "connectivity/source/drivers/postgresql/pq_tools.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 472,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2016-05-20T09:55:13Z",
+      "side": 1,
+      "message": "MacOs Gerrit review indicates unused result when calling replaceAll.",
+      "range": {
+        "startLine": 472,
+        "startChar": 8,
+        "endLine": 472,
+        "endChar": 39
+      },
+      "revId": "0b4a66f5f7fa3a39b9d837b125289a6fc0260be2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_83ff8c33",
+        "filename": "connectivity/source/drivers/postgresql/pq_tools.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 474,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2016-05-20T09:55:13Z",
+      "side": 1,
+      "message": "Idem previous comment",
+      "range": {
+        "startLine": 474,
+        "startChar": 8,
+        "endLine": 474,
+        "endChar": 40
+      },
+      "revId": "0b4a66f5f7fa3a39b9d837b125289a6fc0260be2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
