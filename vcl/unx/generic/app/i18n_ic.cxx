@@ -179,7 +179,7 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
 
         // for status callbacks and commit string callbacks
 #define PREEDIT_BUFSZ 16
-        maClientData.eState                 = ePreeditStatusStartPending;
+        maClientData.eState                 = PreeditStatus::StartPending;
         maClientData.pFrame                 = pFrame;
         maClientData.aText.pUnicodeBuffer   =
             static_cast<sal_Unicode*>(malloc(PREEDIT_BUFSZ * sizeof(sal_Unicode)));

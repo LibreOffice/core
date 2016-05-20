@@ -42,9 +42,9 @@ int
 PreeditStartCallback ( XIC, XPointer client_data, XPointer )
 {
       preedit_data_t* pPreeditData = reinterpret_cast<preedit_data_t*>(client_data);
-    if ( pPreeditData->eState == ePreeditStatusActivationRequired )
+    if ( pPreeditData->eState == PreeditStatus::ActivationRequired )
     {
-        pPreeditData->eState = ePreeditStatusActive;
+        pPreeditData->eState = PreeditStatus::Active;
         pPreeditData->aText.nCursorPos = 0;
         pPreeditData->aText.nLength    = 0;
     }
@@ -57,13 +57,13 @@ PreeditStartCallback ( XIC, XPointer client_data, XPointer )
 void
 PreeditDoneCallback ( XIC, XPointer client_data, XPointer )
 {
-      preedit_data_t* pPreeditData = reinterpret_cast<preedit_data_t*>(client_data);
-     if (pPreeditData->eState == ePreeditStatusActive )
+    preedit_data_t* pPreeditData = reinterpret_cast<preedit_data_t*>(client_data);
+    if (pPreeditData->eState == PreeditStatus::Active )
     {
         if( pPreeditData->pFrame )
             pPreeditData->pFrame->CallCallback( SalEvent::EndExtTextInput, nullptr );
     }
-    pPreeditData->eState = ePreeditStatusStartPending;
+    pPreeditData->eState = PreeditStatus::StartPending;
 }
 
 // iii. preedit draw callback
@@ -314,8 +314,8 @@ PreeditDrawCallback(XIC ic, XPointer client_data,
     // if (pPreeditData->eState == ePreeditStatusStartPending && call_data->text == NULL)
     //    return;
 
-    if ( pPreeditData->eState == ePreeditStatusStartPending )
-        pPreeditData->eState = ePreeditStatusActivationRequired;
+    if ( pPreeditData->eState == PreeditStatus::StartPending )
+        pPreeditData->eState = PreeditStatus::ActivationRequired;
     PreeditStartCallback( ic, client_data, nullptr );
 
       // Edit the internal textbuffer as indicated by the call_data,
@@ -368,13 +368,13 @@ PreeditDrawCallback(XIC ic, XPointer client_data,
     pPreeditData->aInputEv.mnCursorFlags    = 0; // default: make cursor visible
     pPreeditData->aInputEv.mbOnlyCursor = False;
 
-    if ( pPreeditData->eState == ePreeditStatusActive && pPreeditData->pFrame )
+    if ( pPreeditData->eState == PreeditStatus::Active && pPreeditData->pFrame )
         pPreeditData->pFrame->CallCallback(SalEvent::ExtTextInput, static_cast<void*>(&pPreeditData->aInputEv));
     if (pPreeditData->aText.nLength == 0 && pPreeditData->pFrame )
         pPreeditData->pFrame->CallCallback( SalEvent::EndExtTextInput, nullptr );
 
     if (pPreeditData->aText.nLength == 0)
-        pPreeditData->eState = ePreeditStatusStartPending;
+        pPreeditData->eState = PreeditStatus::StartPending;
 
     GetPreeditSpotLocation(ic, reinterpret_cast<XPointer>(pPreeditData));
 }
