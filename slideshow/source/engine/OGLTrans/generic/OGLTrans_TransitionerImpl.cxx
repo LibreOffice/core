@@ -147,19 +147,6 @@ int calcComponentOrderIndex(const uno::Sequence<sal_Int8>& rTags)
     return -1;
 }
 
-#if defined( UNX ) && !defined( MACOSX )
-
-// not thread safe
-static bool errorTriggered;
-int oglErrorHandler( Display* /*dpy*/, XErrorEvent* /*evnt*/ )
-{
-    errorTriggered = true;
-
-    return 0;
-}
-
-#endif
-
 /** This is the Transitioner class for OpenGL 3D transitions in
  * slideshow. This class is implicitly
  * constructed from XTransitionFactory.
@@ -195,10 +182,6 @@ protected:
     }
 
     void createTexture( GLuint* texID,
-#if defined( GLX_EXT_texture_from_pixmap )
-            GLXPixmap pixmap,
-            bool usePixmap,
-#endif
             bool useMipmap,
             uno::Sequence<sal_Int8>& data,
             const OGLFormat* pFormat );
@@ -244,17 +227,7 @@ private:
     */
     uno::Sequence<sal_Int8> maLeavingBytes;
 
-#if defined( GLX_EXT_texture_from_pixmap )
-    GLXPixmap maLeavingPixmapGL;
-    GLXPixmap maEnteringPixmapGL;
-    Pixmap maLeavingPixmap;
-    Pixmap maEnteringPixmap;
-    bool mbFreeLeavingPixmap;
-    bool mbFreeEnteringPixmap;
-#endif
     bool mbRestoreSync;
-    bool mbUseLeavingPixmap;
-    bool mbUseEnteringPixmap;
 
     /** the form the raw bytes are in for the bitmaps
     */
@@ -281,16 +254,6 @@ public:
        Whether the display has GLX extension on X11, always true otherwise (?)
      */
     bool mbValidOpenGLContext;
-
-    /**
-       whether to generate mipmaped textures
-    */
-    bool mbGenerateMipmap;
-
-    /**
-       whether we have visual which can be used for texture_from_pixmap extension
-    */
-    bool mbHasTFPVisual;
 
 #if OSL_DEBUG_LEVEL > 0
     ptime maUpdateStartTime;
@@ -374,8 +337,6 @@ bool OGLTransitionerImpl::initWindowFromSlideShowView( const Reference< presenta
     mpContext->setWinPosAndSize(Point(aCanvasArea.X, aCanvasArea.Y), Size(aCanvasArea.Width, aCanvasArea.Height));
     SAL_INFO("slideshow.opengl", "canvas area: " << aCanvasArea.X << "," << aCanvasArea.Y << " - " << aCanvasArea.Width << "x" << aCanvasArea.Height);
 
-    mbGenerateMipmap = GLEW_SGIS_generate_mipmap;
-
     CHECK_GL_ERROR();
     glEnable(GL_CULL_FACE);
     CHECK_GL_ERROR();
@@ -427,86 +388,8 @@ void OGLTransitionerImpl::impl_prepareSlides()
     mpContext->sync();
     CHECK_GL_ERROR();
 
-    mbUseLeavingPixmap = false;
-    mbUseEnteringPixmap = false;
-
-    const GLWindow& rGLWindow(mpContext->getOpenGLWindow());
-
-#if defined( GLX_EXT_texture_from_pixmap )
-    if( GLXEW_EXT_texture_from_pixmap && xLeavingSet.is() && xEnteringSet.is() && mbHasTFPVisual ) {
-        Sequence< Any > leaveArgs;
-        Sequence< Any > enterArgs;
-        if( (xLeavingSet->getFastPropertyValue( 1 ) >>= leaveArgs) &&
-            (xEnteringSet->getFastPropertyValue( 1 ) >>= enterArgs) ) {
-            SAL_INFO("slideshow.opengl", "pixmaps available");
-
-            sal_Int32 depth(0);
-
-            leaveArgs[0] >>= mbFreeLeavingPixmap;
-            enterArgs[0] >>= mbFreeEnteringPixmap;
-            leaveArgs[1] >>= maLeavingPixmap;
-            enterArgs[1] >>= maEnteringPixmap;
-            leaveArgs[2] >>= depth;
-
-            int pixmapAttribs[] = { GLX_TEXTURE_TARGET_EXT, GLX_TEXTURE_2D_EXT,
-                        GLX_TEXTURE_FORMAT_EXT, GLX_TEXTURE_FORMAT_RGB_EXT,
-                        GLX_MIPMAP_TEXTURE_EXT, True,
-                        None };
-
-
-            // sync so that we possibly get an pending XError, before we set our handler.
-            // this way we will not miss any error from other code
-            mpContext->sync();
-
-            int (*oldHandler)(Display* /*dpy*/, XErrorEvent* /*evnt*/);
-
-            // replace error handler temporarily
-            oldHandler = XSetErrorHandler( oglErrorHandler );
-
-            errorTriggered = false;
-            maLeavingPixmapGL = glXCreatePixmap( rGLWindow.dpy, rGLWindow.fbc, maLeavingPixmap, pixmapAttribs );
-
-            // sync so that we possibly get an XError
-            mpContext->sync();
-
-            if( !errorTriggered )
-                mbUseLeavingPixmap = true;
-            else {
-                SAL_INFO("slideshow.opengl", "XError triggered");
-                OSL_TRACE("XError triggered");
-                if( mbFreeLeavingPixmap ) {
-                    XFreePixmap( rGLWindow.dpy, maLeavingPixmap );
-                    mbFreeLeavingPixmap = false;
-                }
-                errorTriggered = false;
-            }
-
-            maEnteringPixmapGL = glXCreatePixmap( rGLWindow.dpy, rGLWindow.fbc, maEnteringPixmap, pixmapAttribs );
-
-            // sync so that we possibly get an XError
-            mpContext->sync();
-
-            SAL_INFO("slideshow.opengl", "created glx pixmap " << maLeavingPixmapGL << " and " << maEnteringPixmapGL << " depth: " << depth);
-            if( !errorTriggered )
-                mbUseEnteringPixmap = true;
-            else {
-                SAL_INFO("slideshow.opengl", "XError triggered");
-                if( mbFreeEnteringPixmap ) {
-                    XFreePixmap( rGLWindow.dpy, maEnteringPixmap );
-                    mbFreeEnteringPixmap = false;
-                }
-            }
-
-            // restore the error handler
-            XSetErrorHandler( oldHandler );
-        }
-    }
-#endif
-
-    if( !mbUseLeavingPixmap )
-        maLeavingBytes = mxLeavingBitmap->getData(maSlideBitmapLayout, aSlideRect);
-    if( !mbUseEnteringPixmap )
-        maEnteringBytes = mxEnteringBitmap->getData(maSlideBitmapLayout, aSlideRect);
+    maLeavingBytes = mxLeavingBitmap->getData(maSlideBitmapLayout, aSlideRect);
+    maEnteringBytes = mxEnteringBitmap->getData(maSlideBitmapLayout, aSlideRect);
 
     CHECK_GL_ERROR();
     GLInitSlides();
@@ -520,6 +403,7 @@ void OGLTransitionerImpl::impl_prepareSlides()
     // synchronized X still gives us much smoother play
     // I suspect some issues in above code in slideshow
     // synchronize whole transition for now
+    const GLWindow& rGLWindow(mpContext->getOpenGLWindow());
     mbRestoreSync = rGLWindow.Synchronize(true);
 }
 
@@ -557,10 +441,6 @@ bool OGLTransitionerImpl::setTransition( const std::shared_ptr<OGLTransitionImpl
 }
 
 void OGLTransitionerImpl::createTexture( GLuint* texID,
-#if defined( GLX_EXT_texture_from_pixmap )
-                     GLXPixmap pixmap,
-                     bool usePixmap,
-#endif
                      bool useMipmap,
                      uno::Sequence<sal_Int8>& data,
                      const OGLFormat* pFormat )
@@ -573,25 +453,8 @@ void OGLTransitionerImpl::createTexture( GLuint* texID,
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER );
     CHECK_GL_ERROR();
 
-#if defined( GLX_EXT_texture_from_pixmap )
-    if( usePixmap ) {
-        if( mbGenerateMipmap )
-            glTexParameteri( GL_TEXTURE_2D, GL_GENERATE_MIPMAP_SGIS, True);
-        glXBindTexImageEXT (mpContext->getOpenGLWindow().dpy, pixmap, GLX_FRONT_LEFT_EXT, nullptr);
-        if( mbGenerateMipmap && useMipmap ) {
-            SAL_INFO("slideshow.opengl", "use mipmaps");
-            glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
-            glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR_MIPMAP_LINEAR); //TRILINEAR FILTERING
-        } else {
-            glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
-            glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
-        }
-    } else {
-        impl_createTexture( useMipmap, data, pFormat );
-    }
-#else
     impl_createTexture( useMipmap, data, pFormat );
-#endif
+
     SAL_WARN_IF(!glIsTexture(*texID), "slideshow.opengl", "Can't generate Leaving slide textures in OpenGL");
     CHECK_GL_ERROR();
 }
@@ -1151,25 +1014,15 @@ void OGLTransitionerImpl::GLInitSlides()
 
     mpContext->makeCurrent();
 
-    const OGLFormat* pFormat = nullptr;
-    if( !mbUseLeavingPixmap || !mbUseEnteringPixmap )
-        pFormat = chooseFormats();
+    const OGLFormat* pFormat = chooseFormats();
 
     CHECK_GL_ERROR();
     createTexture( &maLeavingSlideGL,
-#if defined( GLX_EXT_texture_from_pixmap )
-           maLeavingPixmapGL,
-           mbUseLeavingPixmap,
-#endif
            mpTransition->getSettings().mbUseMipMapLeaving,
            maLeavingBytes,
            pFormat );
 
     createTexture( &maEnteringSlideGL,
-#if defined( GLX_EXT_texture_from_pixmap )
-           maEnteringPixmapGL,
-           mbUseEnteringPixmap,
-#endif
            mpTransition->getSettings().mbUseMipMapEntering,
            maEnteringBytes,
            pFormat );
@@ -1242,42 +1095,11 @@ void OGLTransitionerImpl::disposeTextures()
     mpContext->makeCurrent();
     CHECK_GL_ERROR();
 
-#if defined( GLX_EXT_texture_from_pixmap )
-    const GLWindow& rGLWindow(mpContext->getOpenGLWindow());
+    glDeleteTextures(1,&maLeavingSlideGL);
+    maLeavingSlideGL = 0;
+    glDeleteTextures(1,&maEnteringSlideGL);
+    maEnteringSlideGL = 0;
 
-    if( mbUseLeavingPixmap ) {
-        glXReleaseTexImageEXT( rGLWindow.dpy, maLeavingPixmapGL, GLX_FRONT_LEFT_EXT );
-        glXDestroyGLXPixmap( rGLWindow.dpy, maLeavingPixmapGL );
-        maLeavingPixmapGL = 0;
-        if( mbFreeLeavingPixmap ) {
-            XFreePixmap( rGLWindow.dpy, maLeavingPixmap );
-            mbFreeLeavingPixmap = false;
-            maLeavingPixmap = 0;
-        }
-    }
-    if( mbUseEnteringPixmap ) {
-        glXReleaseTexImageEXT( rGLWindow.dpy, maEnteringPixmapGL, GLX_FRONT_LEFT_EXT );
-        glXDestroyGLXPixmap( rGLWindow.dpy, maEnteringPixmapGL );
-        maEnteringPixmapGL = 0;
-        if( mbFreeEnteringPixmap ) {
-            XFreePixmap( rGLWindow.dpy, maEnteringPixmap );
-            mbFreeEnteringPixmap = false;
-            maEnteringPixmap = 0;
-        }
-    }
-#endif
-
-    if( !mbUseLeavingPixmap ) {
-        glDeleteTextures(1,&maLeavingSlideGL);
-        maLeavingSlideGL = 0;
-    }
-    if( !mbUseEnteringPixmap ) {
-        glDeleteTextures(1,&maEnteringSlideGL);
-        maEnteringSlideGL = 0;
-    }
-
-    mbUseLeavingPixmap = false;
-    mbUseEnteringPixmap = false;
     CHECK_GL_ERROR();
 }
 
@@ -1339,24 +1161,12 @@ OGLTransitionerImpl::OGLTransitionerImpl()
     , mxView()
     , maEnteringBytes()
     , maLeavingBytes()
-#if defined( GLX_EXT_texture_from_pixmap )
-    , maLeavingPixmapGL(0)
-    , maEnteringPixmapGL(0)
-    , maLeavingPixmap(0)
-    , maEnteringPixmap(0)
-    , mbFreeLeavingPixmap(false)
-    , mbFreeEnteringPixmap(false)
-#endif
     , mbRestoreSync(false)
-    , mbUseLeavingPixmap(false)
-    , mbUseEnteringPixmap(false)
     , maSlideBitmapLayout()
     , maSlideSize()
     , mbBrokenTexturesATI(false)
     , mnGLVersion(0)
     , mbValidOpenGLContext(false)
-    , mbGenerateMipmap(false)
-    , mbHasTFPVisual(false)
 {
 }
 

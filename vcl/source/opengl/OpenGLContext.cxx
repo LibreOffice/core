@@ -836,4 +836,9 @@ void OpenGLContext::UseNoProgram()
     CHECK_GL_ERROR();
 }
 
+const GLWindow& OpenGLContext::getOpenGLWindow() const
+{
+    return m_aGLWin;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

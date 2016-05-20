@@ -79,9 +79,6 @@ struct VCL_DLLPUBLIC GLWindow
     Display*            dpy;
     int                 screen;
     Window              win;
-#if defined( GLX_EXT_texture_from_pixmap )
-    GLXFBConfig        fbc;
-#endif
     XVisualInfo*       vi;
     GLXContext         ctx;
 
@@ -107,9 +104,6 @@ struct VCL_DLLPUBLIC GLWindow
         dpy(nullptr),
         screen(0),
         win(0),
-#if defined( GLX_EXT_texture_from_pixmap )
-        fbc(nullptr),
-#endif
         vi(nullptr),
         ctx(nullptr),
         GLXExtensions(nullptr),
@@ -195,7 +189,7 @@ public:
 
     void setWinPosAndSize(const Point &rPos, const Size& rSize);
     void setWinSize(const Size& rSize);
-    const GLWindow& getOpenGLWindow() const { return m_aGLWin;}
+    const GLWindow& getOpenGLWindow() const;
 
     SystemChildWindow* getChildWindow();
     const SystemChildWindow* getChildWindow() const;
