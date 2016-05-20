@@ -236,6 +236,9 @@ class AquaOpenGLContext : public OpenGLContext
 public:
     virtual bool initWindow() override;
 private:
+    GLWindow m_aGLWin;
+    virtual const GLWindow& getOpenGLWindow() const { return m_aGLWin; }
+    virtual GLWindow& getModifiableOpenGLWindow() { return m_aGLWin; }
     NSOpenGLView* getOpenGLView();
     virtual bool ImplInit() override;
     virtual SystemWindowData generateWinData(vcl::Window* pParent, bool bRequestLegacyContext) override;

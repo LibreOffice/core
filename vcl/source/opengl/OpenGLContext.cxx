@@ -41,20 +41,11 @@ static sal_Int64 nBufferSwapCounter = 0;
 
 GLWindow::~GLWindow()
 {
-#if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID && !defined(LIBO_HEADLESS)
-    XFree(vi);
-#endif
 }
 
-bool GLWindow::Synchronize(bool bOnoff) const
+bool GLWindow::Synchronize(bool /*bOnoff*/) const
 {
-#if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID && !defined(LIBO_HEADLESS)
-    XSynchronize(dpy, bOnoff);
-    return true;
-#else
-    (void)bOnoff;
     return false;
-#endif
 }
 
 OpenGLContext::OpenGLContext():
@@ -335,8 +326,9 @@ void OpenGLContext::setWinPosAndSize(const Point &rPos, const Size& rSize)
     if( m_pChildWindow )
         m_pChildWindow->SetPosSizePixel(rPos, rSize);
 
-    m_aGLWin.Width = rSize.Width();
-    m_aGLWin.Height = rSize.Height();
+    GLWindow& rGLWin = getModifiableOpenGLWindow();
+    rGLWin.Width = rSize.Width();
+    rGLWin.Height = rSize.Height();
 }
 
 void OpenGLContext::setWinSize(const Size& rSize)
@@ -346,8 +338,9 @@ void OpenGLContext::setWinSize(const Size& rSize)
     if( m_pChildWindow )
         m_pChildWindow->SetSizePixel(rSize);
 
-    m_aGLWin.Width = rSize.Width();
-    m_aGLWin.Height = rSize.Height();
+    GLWindow& rGLWin = getModifiableOpenGLWindow();
+    rGLWin.Width = rSize.Width();
+    rGLWin.Height = rSize.Height();
 }
 
 void OpenGLContext::InitChildWindow(SystemChildWindow *pChildWindow)
@@ -599,7 +592,7 @@ const SystemChildWindow* OpenGLContext::getChildWindow() const
 
 bool OpenGLContext::supportMultiSampling() const
 {
-    return m_aGLWin.bMultiSampleSupported;
+    return getOpenGLWindow().bMultiSampleSupported;
 }
 
 bool OpenGLContext::BindFramebuffer( OpenGLFramebuffer* pFramebuffer )
@@ -834,11 +827,6 @@ void OpenGLContext::UseNoProgram()
     mpCurrentProgram = nullptr;
     glUseProgram( 0 );
     CHECK_GL_ERROR();
-}
-
-const GLWindow& OpenGLContext::getOpenGLWindow() const
-{
-    return m_aGLWin;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

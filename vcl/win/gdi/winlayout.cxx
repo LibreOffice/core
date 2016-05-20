@@ -2768,19 +2768,6 @@ bool UniscribeLayout::DrawCachedGlyphsUsingGLyphy(SalGraphics& rGraphics) const
 
     rGraphics.GetOpenGLContext()->UseNoProgram();
 
-#if 0
-    HDC hDC = rGraphics.GetOpenGLContext()->getOpenGLWindow().hDC;
-    HBITMAP hbitmap = (HBITMAP)GetCurrentObject(hDC, OBJ_BITMAP);
-
-    SAL_ DEBUG("hdc=" << hDC << " hbitmap=" << hbitmap);
-    if (hbitmap != NULL) {
-        BITMAP bm;
-        GetObjectW(hbitmap, sizeof(bm), &bm);
-        SAL_ DEBUG(" size=" << bm.bmWidth << "x" << bm.bmHeight <<
-                  " bpp=" << bm.bmBitsPixel);
-    }
-#endif
-
     glUseProgram( mrWinFontEntry.mnGLyphyProgram );
     CHECK_GL_ERROR();
     demo_atlas_set_uniforms( mrWinFontEntry.mpGLyphyAtlas );
