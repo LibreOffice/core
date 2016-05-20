@@ -36,10 +36,7 @@ TablePositionHandler::TablePositionHandler() :
 {
 }
 
-TablePositionHandler::~TablePositionHandler()
-{
-}
-
+TablePositionHandler::~TablePositionHandler() = default;
 
 void TablePositionHandler::lcl_attribute(Id rName, Value& rVal)
 {

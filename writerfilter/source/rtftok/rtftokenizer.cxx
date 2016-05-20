@@ -49,10 +49,7 @@ RTFTokenizer::RTFTokenizer(RTFListener& rImport, SvStream* pInStream, uno::Refer
     }
 }
 
-RTFTokenizer::~RTFTokenizer()
-{
-}
-
+RTFTokenizer::~RTFTokenizer() = default;
 
 RTFError RTFTokenizer::resolveParse()
 {

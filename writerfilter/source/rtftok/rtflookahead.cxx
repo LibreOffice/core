@@ -29,9 +29,7 @@ RTFLookahead::RTFLookahead(SvStream& rStream, sal_Size nGroupStart)
     m_rStream.Seek(nPos);
 }
 
-RTFLookahead::~RTFLookahead()
-{
-}
+RTFLookahead::~RTFLookahead() = default;
 
 RTFError RTFLookahead::dispatchDestination(RTFKeyword /*nKeyword*/)
 {

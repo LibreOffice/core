@@ -42,9 +42,7 @@ SmartTagHandler::SmartTagHandler(const uno::Reference<uno::XComponentContext>& x
 {
 }
 
-SmartTagHandler::~SmartTagHandler()
-{
-}
+SmartTagHandler::~SmartTagHandler() = default;
 
 void SmartTagHandler::lcl_attribute(Id nName, Value& rValue)
 {
