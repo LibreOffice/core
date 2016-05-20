@@ -355,7 +355,7 @@ namespace cairocanvas
 
         switch( pAlphaReadAcc->GetScanlineFormat() )
         {
-            case BMP_FORMAT_8BIT_TC_MASK:
+            case ScanlineFormat::N8BitTcMask:
                 pReadScan = pAlphaReadAcc->GetScanline( nY );
                 for( nX = 0; nX < nWidth; nX++ )
                 {
@@ -365,7 +365,7 @@ namespace cairocanvas
                     nOff += 4;
                 }
                 break;
-            case BMP_FORMAT_8BIT_PAL:
+            case ScanlineFormat::N8BitPal:
                 pReadScan = pAlphaReadAcc->GetScanline( nY );
                 for( nX = 0; nX < nWidth; nX++ )
                 {
@@ -379,7 +379,7 @@ namespace cairocanvas
                 }
                 break;
             default:
-                SAL_INFO( "canvas.cairo", "fallback to GetColor for alpha - slow, format: " << pAlphaReadAcc->GetScanlineFormat() );
+                SAL_INFO( "canvas.cairo", "fallback to GetColor for alpha - slow, format: " << (int)pAlphaReadAcc->GetScanlineFormat() );
                 for( nX = 0; nX < nWidth; nX++ )
                 {
                     nAlpha = data[ nOff ] = 255 - pAlphaReadAcc->GetColor( nY, nX ).GetIndex();
@@ -451,7 +451,7 @@ namespace cairocanvas
 
                     switch( pBitmapReadAcc->GetScanlineFormat() )
                     {
-                    case BMP_FORMAT_8BIT_PAL:
+                    case ScanlineFormat::N8BitPal:
                         pReadScan = pBitmapReadAcc->GetScanline( nY );
                         if( pAlphaReadAcc )
                             if( readAlpha( pAlphaReadAcc, nY, nWidth, data, nOff ) )
@@ -484,7 +484,7 @@ namespace cairocanvas
 #endif
                         }
                         break;
-                    case BMP_FORMAT_24BIT_TC_BGR:
+                    case ScanlineFormat::N24BitTcBgr:
                         pReadScan = pBitmapReadAcc->GetScanline( nY );
                         if( pAlphaReadAcc )
                             if( readAlpha( pAlphaReadAcc, nY, nWidth, data, nOff ) )
@@ -513,7 +513,7 @@ namespace cairocanvas
 #endif
                         }
                         break;
-                    case BMP_FORMAT_24BIT_TC_RGB:
+                    case ScanlineFormat::N24BitTcRgb:
                         pReadScan = pBitmapReadAcc->GetScanline( nY );
                         if( pAlphaReadAcc )
                             if( readAlpha( pAlphaReadAcc, nY, nWidth, data, nOff ) )
@@ -542,7 +542,7 @@ namespace cairocanvas
 #endif
                         }
                         break;
-                    case BMP_FORMAT_32BIT_TC_BGRA:
+                    case ScanlineFormat::N32BitTcBgra:
                         pReadScan = pBitmapReadAcc->GetScanline( nY );
                         if( pAlphaReadAcc )
                             if( readAlpha( pAlphaReadAcc, nY, nWidth, data, nOff ) )
@@ -572,7 +572,7 @@ namespace cairocanvas
 #endif
                         }
                         break;
-                    case BMP_FORMAT_32BIT_TC_RGBA:
+                    case ScanlineFormat::N32BitTcRgba:
                         pReadScan = pBitmapReadAcc->GetScanline( nY );
                         if( pAlphaReadAcc )
                             if( readAlpha( pAlphaReadAcc, nY, nWidth, data, nOff ) )
@@ -603,7 +603,7 @@ namespace cairocanvas
                         }
                         break;
                     default:
-                        SAL_INFO( "canvas.cairo", "fallback to GetColor - slow, format: " << pBitmapReadAcc->GetScanlineFormat() );
+                        SAL_INFO( "canvas.cairo", "fallback to GetColor - slow, format: " << (int)pBitmapReadAcc->GetScanlineFormat() );
 
                         if( pAlphaReadAcc )
                             if( readAlpha( pAlphaReadAcc, nY, nWidth, data, nOff ) )

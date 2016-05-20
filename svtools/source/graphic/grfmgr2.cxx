@@ -638,8 +638,8 @@ bool ImplCreateRotatedScaled( const BitmapEx& rBmpEx, const GraphicAttr& rAttrib
 
                 if( pWriteAccess )
                 {
-                    if( pReadAccess->GetScanlineFormat() == BMP_FORMAT_8BIT_PAL &&
-                        pWriteAccess->GetScanlineFormat() == BMP_FORMAT_8BIT_PAL )
+                    if( pReadAccess->GetScanlineFormat() == ScanlineFormat::N8BitPal &&
+                        pWriteAccess->GetScanlineFormat() == ScanlineFormat::N8BitPal )
                     {
                         if ( !scaleByAveraging )
                         {
@@ -1468,7 +1468,7 @@ void GraphicManager::ImplAdjust( BitmapEx& rBmpEx, const GraphicAttr& rAttr, Gra
                 sal_uLong       nTrans = cTrans, nNewTrans;
                 const long  nWidth = pA->Width(), nHeight = pA->Height();
 
-                if( pA->GetScanlineFormat() == BMP_FORMAT_8BIT_PAL )
+                if( pA->GetScanlineFormat() == ScanlineFormat::N8BitPal )
                 {
                     for( long nY = 0; nY < nHeight; nY++ )
                     {

@@ -218,8 +218,8 @@ namespace vclcanvas
 
             if( pAlphaWriteAccess.get() )
             {
-                DBG_ASSERT( pAlphaWriteAccess->GetScanlineFormat() == BMP_FORMAT_8BIT_PAL ||
-                            pAlphaWriteAccess->GetScanlineFormat() == BMP_FORMAT_8BIT_TC_MASK,
+                DBG_ASSERT( pAlphaWriteAccess->GetScanlineFormat() == ScanlineFormat::N8BitPal ||
+                            pAlphaWriteAccess->GetScanlineFormat() == ScanlineFormat::N8BitTcMask,
                             "non-8bit alpha not supported!" );
             }
 
@@ -239,7 +239,7 @@ namespace vclcanvas
                 {
                     switch( pWriteAccess->GetScanlineFormat() )
                     {
-                        case BMP_FORMAT_8BIT_PAL:
+                        case ScanlineFormat::N8BitPal:
                         {
                             Scanline pScan  = pWriteAccess->GetScanline( y );
                             Scanline pAScan = pAlphaWriteAccess->GetScanline( y );
@@ -262,7 +262,7 @@ namespace vclcanvas
                         }
                         break;
 
-                        case BMP_FORMAT_24BIT_TC_BGR:
+                        case ScanlineFormat::N24BitTcBgr:
                         {
                             Scanline pScan  = pWriteAccess->GetScanline( y );
                             Scanline pAScan = pAlphaWriteAccess->GetScanline( y );
@@ -284,7 +284,7 @@ namespace vclcanvas
                         }
                         break;
 
-                        case BMP_FORMAT_24BIT_TC_RGB:
+                        case ScanlineFormat::N24BitTcRgb:
                         {
                             Scanline pScan  = pWriteAccess->GetScanline( y );
                             Scanline pAScan = pAlphaWriteAccess->GetScanline( y );
@@ -333,7 +333,7 @@ namespace vclcanvas
                     // canvashelper.cxx, unify!
                     switch( pWriteAccess->GetScanlineFormat() )
                     {
-                        case BMP_FORMAT_8BIT_PAL:
+                        case ScanlineFormat::N8BitPal:
                         {
                             Scanline pScan = pWriteAccess->GetScanline( y );
 
@@ -351,7 +351,7 @@ namespace vclcanvas
                         }
                         break;
 
-                        case BMP_FORMAT_24BIT_TC_BGR:
+                        case ScanlineFormat::N24BitTcBgr:
                         {
                             Scanline pScan = pWriteAccess->GetScanline( y );
 
@@ -368,7 +368,7 @@ namespace vclcanvas
                         }
                         break;
 
-                        case BMP_FORMAT_24BIT_TC_RGB:
+                        case ScanlineFormat::N24BitTcRgb:
                         {
                             Scanline pScan = pWriteAccess->GetScanline( y );
 
