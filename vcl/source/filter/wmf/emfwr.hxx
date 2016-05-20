@@ -28,6 +28,7 @@
 
 class LineInfo;
 namespace basegfx { class B2DPolygon; }
+enum class EmfPlusRecordType;
 
 class EMFWriter
 {
@@ -53,9 +54,9 @@ private:
 
     void                ImplBeginRecord( sal_uInt32 nType );
     void                ImplEndRecord();
-    void                ImplBeginPlusRecord( sal_uInt16 nType, sal_uInt16 nFlags );
+    void                ImplBeginPlusRecord( EmfPlusRecordType nType, sal_uInt16 nFlags );
     void                ImplEndPlusRecord();
-    void                ImplPlusRecord( sal_uInt16 nType, sal_uInt16 nFlags );
+    void                ImplPlusRecord( EmfPlusRecordType nType, sal_uInt16 nFlags );
     void                ImplBeginCommentRecord( sal_Int32 nCommentType );
     void                ImplEndCommentRecord();
 
