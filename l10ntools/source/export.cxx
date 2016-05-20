@@ -879,8 +879,7 @@ void Export::CleanValue( OString &rValue )
     }
 }
 
-#define TXT_STATE_TEXT  0x001
-#define TXT_STATE_MACRO 0x002
+enum class TextState { Text=1, Macro };
 
 OString Export::GetText(const OString &rSource, int nToken)
 {
@@ -899,14 +898,14 @@ OString Export::GetText(const OString &rSource, int nToken)
                 replaceAll("\\", "-=<[0x7F]>=-").
                 replaceAll("\\0x7F", "-=<[0x7F]>=-");
 
-            sal_uInt16 nState = TXT_STATE_TEXT;
+            TextState nState = TextState::Text;
             for (sal_Int32 i = 1; i <= lcl_countOccurrences(sTmp, '"'); ++i)
             {
                 OString sToken(sTmp.getToken(i, '"'));
                 if (!sToken.isEmpty()) {
-                    if ( nState == TXT_STATE_TEXT ) {
+                    if ( nState == TextState::Text ) {
                         sReturn += sToken;
-                        nState = TXT_STATE_MACRO;
+                        nState = TextState::Macro;
                     }
                     else {
                         sToken = sToken.replace('\t', ' ');
@@ -923,7 +922,7 @@ OString Export::GetText(const OString &rSource, int nToken)
                             sReturn += sToken;
                             sReturn += " \\\"";
                         }
-                        nState = TXT_STATE_TEXT;
+                        nState = TextState::Text;
                     }
                 }
             }
