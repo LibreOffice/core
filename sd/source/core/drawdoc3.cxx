@@ -334,7 +334,7 @@ void SdDrawDocument::InsertBookmark(
     if ( bOK && !rBookmarkList.empty() )
     {
         // Insert all object bookmarks
-        bOK = InsertBookmarkAsObject(rBookmarkList, rExchangeList, bLink,
+        InsertBookmarkAsObject(rBookmarkList, rExchangeList, bLink,
                                      pBookmarkDocSh, pObjPos, bCalcObjCount);
     }
 }

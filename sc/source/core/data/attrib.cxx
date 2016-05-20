@@ -835,29 +835,27 @@ bool ScViewObjectModeItem::GetPresentation
     switch ( ePres )
     {
         case SFX_ITEM_PRESENTATION_COMPLETE:
-        switch( Which() )
-        {
-            case SID_SCATTR_PAGE_CHARTS:
-            rText = ScGlobal::GetRscString(STR_VOBJ_CHART) + aDel;
-            break;
+            switch( Which() )
+            {
+                case SID_SCATTR_PAGE_CHARTS:
+                rText = ScGlobal::GetRscString(STR_VOBJ_CHART) + aDel;
+                break;
 
-            case SID_SCATTR_PAGE_OBJECTS:
-            rText = ScGlobal::GetRscString(STR_VOBJ_OBJECT) + aDel;
-            break;
+                case SID_SCATTR_PAGE_OBJECTS:
+                rText = ScGlobal::GetRscString(STR_VOBJ_OBJECT) + aDel;
+                break;
 
-            case SID_SCATTR_PAGE_DRAWINGS:
-            rText = ScGlobal::GetRscString(STR_VOBJ_DRAWINGS) + aDel;
-            break;
+                case SID_SCATTR_PAGE_DRAWINGS:
+                rText = ScGlobal::GetRscString(STR_VOBJ_DRAWINGS) + aDel;
+                break;
 
-            default:
-            ePres = SFX_ITEM_PRESENTATION_NAMELESS; // Default setting!
-            break;
-        }
-        SAL_FALLTHROUGH;
+                default: break;
+            }
+            SAL_FALLTHROUGH;
         case SFX_ITEM_PRESENTATION_NAMELESS:
-        rText += ScGlobal::GetRscString(STR_VOBJ_MODE_SHOW+GetValue());
-        return true;
-        break;
+            rText += ScGlobal::GetRscString(STR_VOBJ_MODE_SHOW+GetValue());
+            return true;
+            break;
 
         default: break;
             // added to avoid warnings

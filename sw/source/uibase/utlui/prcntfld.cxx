@@ -173,11 +173,6 @@ void PercentField::SetMax(sal_Int64 nNewMax, FieldUnit eInUnit)
 {
     if (m_pField->GetUnit() != FUNIT_CUSTOM)
         m_pField->SetMax(nNewMax, eInUnit);
-    else
-    {
-        if (eInUnit == FUNIT_NONE)
-            eInUnit = eOldUnit;
-    }
 }
 
 sal_Int64 PercentField::NormalizePercent(sal_Int64 nValue)

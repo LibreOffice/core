@@ -2528,7 +2528,6 @@ KEYINPUT_CHECKTABLE_INSDEL:
             case KS_NumOff:
                 // shell change - so record in advance
                 rSh.DelNumRules();
-                eKeyState = eNextKeyState;
                 break;
             case KS_OutlineLvOff: // delete autofmt outlinelevel later
                 break;

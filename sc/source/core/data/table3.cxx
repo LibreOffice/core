@@ -2041,7 +2041,6 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
                     bSpaceLeft = pDocument->InsertRow( 0, nTab, MAXCOL, nTab,
                             aRowEntry.nDestRow, 1 );
                     DBShowRow( aRowEntry.nDestRow, bBlockVis );
-                    bBlockVis = false;
                     if ( rParam.bPagebreak && nRow < MAXROW &&
                             aRowEntry.nSubStartRow != nStartRow && nLevel == 0)
                         SetRowBreak(aRowEntry.nSubStartRow, false, true);
