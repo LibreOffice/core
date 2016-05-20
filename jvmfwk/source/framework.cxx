@@ -98,7 +98,7 @@ javaFrameworkError jfw_findAllJREs(JavaInfo ***pparInfo, sal_Int32 *pSize)
                 & cInfos,
                 infos);
 
-            if (plerr != JFW_PLUGIN_E_NONE)
+            if (plerr != javaPluginError::NONE)
                 return JFW_E_ERROR;
 
             for (int j = 0; j < cInfos; j++)
@@ -123,11 +123,11 @@ javaFrameworkError jfw_findAllJREs(JavaInfo ***pparInfo, sal_Int32 *pSize)
                     versionInfo.getExcludeVersions(),
                     versionInfo.getExcludeVersionSize(),
                     & aInfo.pInfo);
-                if (plerr == JFW_PLUGIN_E_NO_JRE)
+                if (plerr == javaPluginError::NoJre)
                     continue;
-                if (plerr == JFW_PLUGIN_E_FAILED_VERSION)
+                if (plerr == javaPluginError::FailedVersion)
                     continue;
-                else if (plerr !=JFW_PLUGIN_E_NONE)
+                else if (plerr != javaPluginError::NONE)
                     return JFW_E_ERROR;
 
                 if (aInfo)
@@ -341,11 +341,11 @@ javaFrameworkError jfw_startVM(
         JavaVM *pVm = nullptr;
         SAL_INFO("jfw", "Starting Java");
         javaPluginError plerr = jfw_plugin_startJavaVirtualMachine(pInfo, arOpt, index, & pVm, ppEnv);
-        if (plerr == JFW_PLUGIN_E_VM_CREATION_FAILED)
+        if (plerr == javaPluginError::VmCreationFailed)
         {
             errcode = JFW_E_VM_CREATION_FAILED;
         }
-        else if (plerr != JFW_PLUGIN_E_NONE )
+        else if (plerr != javaPluginError::NONE )
         {
             errcode = JFW_E_ERROR;
         }
@@ -354,7 +354,7 @@ javaFrameworkError jfw_startVM(
             g_pJavaVM = pVm;
             *ppVM = pVm;
         }
-        OSL_ASSERT(plerr != JFW_PLUGIN_E_WRONG_VENDOR);
+        OSL_ASSERT(plerr != javaPluginError::WrongVendor);
     }
     catch (const jfw::FrameworkException& e)
     {
@@ -416,7 +416,7 @@ javaFrameworkError jfw_findAndSelectJRE(JavaInfo **pInfo)
         // environment variable points to (if it is set)
         JavaInfo* pHomeInfo = nullptr;
         if (jfw_plugin_getJavaInfoFromJavaHome(versionInfos, &pHomeInfo, infos)
-            == JFW_PLUGIN_E_NONE)
+            == javaPluginError::NONE)
         {
             aCurrentInfo = pHomeInfo;
 
@@ -437,7 +437,7 @@ javaFrameworkError jfw_findAndSelectJRE(JavaInfo **pInfo)
             std::vector<JavaInfo*> vecJavaInfosFromPath;
             if (jfw_plugin_getJavaInfosFromPath(
                     versionInfos, vecJavaInfosFromPath, infos)
-                == JFW_PLUGIN_E_NONE)
+                == javaPluginError::NONE)
             {
                 std::vector<JavaInfo*>::const_iterator it = vecJavaInfosFromPath.begin();
                 while(it != vecJavaInfosFromPath.end() && !bInfoFound)
@@ -497,7 +497,7 @@ javaFrameworkError jfw_findAndSelectJRE(JavaInfo **pInfo)
                     & cInfos,
                     infos);
 
-                if (plerr != JFW_PLUGIN_E_NONE)
+                if (plerr != javaPluginError::NONE)
                     continue;
                 //iterate over all installations to find the best which has
                 //all features
@@ -565,11 +565,11 @@ javaFrameworkError jfw_findAndSelectJRE(JavaInfo **pInfo)
                             versionInfo.getExcludeVersions(),
                             versionInfo.getExcludeVersionSize(),
                             & aInfo.pInfo);
-                        if (err == JFW_PLUGIN_E_NO_JRE)
+                        if (err == javaPluginError::NoJre)
                             continue;
-                        if (err == JFW_PLUGIN_E_FAILED_VERSION)
+                        if (err == javaPluginError::FailedVersion)
                             continue;
-                        else if (err !=JFW_PLUGIN_E_NONE)
+                        else if (err !=javaPluginError::NONE)
                             return JFW_E_ERROR;
 
                         if (aInfo)
@@ -745,18 +745,18 @@ javaFrameworkError jfw_getJavaInfoByPath(rtl_uString *pPath, JavaInfo **ppInfo)
                 versionInfo.getExcludeVersionSize(),
                 & pInfo);
 
-            if (plerr == JFW_PLUGIN_E_NONE)
+            if (plerr == javaPluginError::NONE)
             {
                 *ppInfo = pInfo;
                 break;
             }
-            else if(plerr == JFW_PLUGIN_E_FAILED_VERSION)
+            else if(plerr == javaPluginError::FailedVersion)
             {//found JRE but it has the wrong version
                 *ppInfo = nullptr;
                 errcode = JFW_E_FAILED_VERSION;
                 break;
             }
-            else if (plerr == JFW_PLUGIN_E_NO_JRE)
+            else if (plerr == javaPluginError::NoJre)
             {// plugin does not recognize this path as belonging to JRE
                 continue;
             }
@@ -998,13 +998,13 @@ javaFrameworkError jfw_existJRE(const JavaInfo *pInfo, sal_Bool *exist)
     javaFrameworkError ret = JFW_E_NONE;
     switch (plerr)
     {
-    case JFW_PLUGIN_E_NONE:
+    case javaPluginError::NONE:
         ret = JFW_E_NONE;
         break;
-    case JFW_PLUGIN_E_INVALID_ARG:
+    case javaPluginError::InvalidArg:
         ret = JFW_E_INVALID_ARG;
         break;
-    case JFW_PLUGIN_E_ERROR:
+    case javaPluginError::Error:
         ret = JFW_E_ERROR;
         break;
     default:
