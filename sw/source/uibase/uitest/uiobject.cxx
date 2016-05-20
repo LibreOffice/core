@@ -38,6 +38,8 @@ void SwEditWinUIObject::execute(const OUString& rAction,
             mxEditWin->GetView().SetZoom(SvxZoomType::PERCENT, nVal);
         }
     }
+    else
+        WindowUIObject::execute(rAction, rParameters);
 }
 
 OUString SwEditWinUIObject::get_name() const
