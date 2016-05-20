@@ -163,6 +163,8 @@ public:
     // may return NULL to disable session management
     virtual SalSession*     CreateSalSession() override;
 
+    virtual OpenGLContext*  CreateOpenGLContext() override { return nullptr; }
+
     virtual void*           GetConnectionIdentifier( ConnectionIdentifierType& rReturnedType, int& rReturnedBytes ) override;
 
     virtual void            AddToRecentDocumentList(const OUString& rFileUrl, const OUString& rMimeType, const OUString& rDocumentService) override;

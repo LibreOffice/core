@@ -127,10 +127,11 @@ struct GLWindow
 class VCL_DLLPUBLIC OpenGLContext
 {
     friend class OpenGLTests;
+protected:
     OpenGLContext();
 public:
     static rtl::Reference<OpenGLContext> Create();
-    ~OpenGLContext();
+    virtual ~OpenGLContext();
     void acquire() { mnRefCount++; }
     void release() { if ( --mnRefCount == 0 ) delete this; }
     void dispose();
@@ -141,13 +142,6 @@ public:
     bool init(vcl::Window* pParent = nullptr);
     bool init(SystemChildWindow* pChildWindow);
 
-// these methods are for the deep platform layer, don't use them in normal code
-// only in vcl's platform code
-#if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID && !defined(LIBO_HEADLESS)
-    bool init(Display* dpy, Window win, int screen);
-#elif defined( _WIN32 )
-    bool init( HDC hDC, HWND hWnd );
-#endif
     void reset();
 
     // use these methods right after setting a context to make sure drawing happens
@@ -173,7 +167,9 @@ public:
     }
 
     /// Is this GL context the current context ?
-    bool isCurrent();
+    virtual bool isCurrent();
+    /// Is any GL context the current context ?
+    virtual bool isAnyCurrent();
     /// release bound resources from the current context
     static void clearCurrent();
     /// release contexts etc. before (potentially) allowing another thread run.
@@ -186,13 +182,13 @@ public:
     /// fetch any VCL context, creating one if bMakeIfNecessary is set.
     static rtl::Reference<OpenGLContext> getVCLContext(bool bMakeIfNecessary = true);
     /// make this GL context current - so it is implicit in subsequent GL calls
-    void makeCurrent();
+    virtual void makeCurrent();
     /// Put this GL context to the end of the context list.
     void registerAsCurrent();
     /// reset the GL context so this context is not implicit in subsequent GL calls.
-    void resetCurrent();
-    void swapBuffers();
-    void sync();
+    virtual void resetCurrent();
+    virtual void swapBuffers();
+    virtual void sync();
     void show();
 
     void setWinPosAndSize(const Point &rPos, const Size& rSize);
@@ -213,23 +209,20 @@ public:
 
     bool supportMultiSampling() const;
 
-    static SystemWindowData generateWinData(vcl::Window* pParent, bool bRequestLegacyContext);
+    virtual SystemWindowData generateWinData(vcl::Window* pParent, bool bRequestLegacyContext);
 
 private:
-    SAL_DLLPRIVATE bool InitGLEW();
-    SAL_DLLPRIVATE void InitGLEWDebugging();
-    SAL_DLLPRIVATE bool initWindow();
-    SAL_DLLPRIVATE bool ImplInit();
-    SAL_DLLPRIVATE void InitChildWindow(SystemChildWindow *pChildWindow);
-#if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID && !defined(LIBO_HEADLESS)
-    SAL_DLLPRIVATE void initGLWindow(Visual* pVisual);
-#endif
+    virtual bool initWindow();
+    virtual void destroyCurrentContext();
 
-#if defined(MACOSX)
-    NSOpenGLView* getOpenGLView();
-#endif
-
+protected:
     GLWindow m_aGLWin;
+    bool InitGLEW();
+    void InitGLEWDebugging();
+    void InitChildWindow(SystemChildWindow *pChildWindow);
+    void BuffersSwapped();
+    virtual bool ImplInit();
+
     VclPtr<vcl::Window> m_xWindow;
     VclPtr<vcl::Window> mpWindow; //points to m_pWindow or the parent window, don't delete it
     VclPtr<SystemChildWindow> m_pChildWindow;
@@ -244,6 +237,7 @@ private:
     OpenGLFramebuffer* mpFirstFramebuffer;
     OpenGLFramebuffer* mpLastFramebuffer;
 
+private:
     struct ProgramHash
     {
         size_t operator()( const rtl::OString& aDigest ) const
