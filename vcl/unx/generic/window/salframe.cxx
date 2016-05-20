@@ -891,7 +891,7 @@ X11SalFrame::~X11SalFrame()
     rtl::Reference<OpenGLContext> pContext = ImplGetSVData()->maGDIData.mpLastContext;
     while( pContext.is() )
     {
-        if( pContext->getOpenGLWindow().win == mhWindow )
+        if (static_cast<const GLX11Window&>(pContext->getOpenGLWindow()).win == mhWindow)
             pContext->reset();
         pContext = pContext->mpPrevContext;
     }
