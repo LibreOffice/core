@@ -1885,9 +1885,18 @@ bool ScInterpreter::IsString()
             }
         }
         break;
+        case svExternalSingleRef:
+        {
+            ScExternalRefCache::TokenRef pToken;
+            PopExternalSingleRef(pToken);
+            if (!nGlobalError && pToken->GetType() == svString)
+                bRes = true;
+        }
+        break;
+        case svExternalDoubleRef:
         case svMatrix:
         {
-            ScMatrixRef pMat = PopMatrix();
+            ScMatrixRef pMat = GetMatrix();
             if ( !pMat )
                 ;   // nothing
             else if ( !pJumpMatrix )
@@ -2452,6 +2461,22 @@ void ScInterpreter::ScIsRef()
                 bRes = !x.get()->GetRefList()->empty();
         }
         break;
+        case svExternalSingleRef:
+        {
+            ScExternalRefCache::TokenRef pToken;
+            PopExternalSingleRef(pToken);
+            if (!nGlobalError)
+                bRes = true;
+        }
+        break;
+        case svExternalDoubleRef:
+        {
+            ScExternalRefCache::TokenArrayRef pArray;
+            PopExternalDoubleRef(pArray);
+            if (!nGlobalError)
+                bRes = true;
+        }
+        break;
         default:
             Pop();
     }
@@ -2493,9 +2518,18 @@ void ScInterpreter::ScIsValue()
             }
         }
         break;
+        case svExternalSingleRef:
+        {
+            ScExternalRefCache::TokenRef pToken;
+            PopExternalSingleRef(pToken);
+            if (!nGlobalError && pToken->GetType() == svDouble)
+                bRes = true;
+        }
+        break;
+        case svExternalDoubleRef:
         case svMatrix:
         {
-            ScMatrixRef pMat = PopMatrix();
+            ScMatrixRef pMat = GetMatrix();
             if ( !pMat )
                 ;   // nothing
             else if ( !pJumpMatrix )
@@ -2643,9 +2677,19 @@ void ScInterpreter::ScIsNV()
             }
         }
         break;
+        case svExternalSingleRef:
+        {
+            ScExternalRefCache::TokenRef pToken;
+            PopExternalSingleRef(pToken);
+            if (nGlobalError == NOTAVAILABLE ||
+                    (pToken && pToken->GetType() == svError && pToken->GetError() == NOTAVAILABLE))
+                bRes = true;
+        }
+        break;
+        case svExternalDoubleRef:
         case svMatrix:
         {
-            ScMatrixRef pMat = PopMatrix();
+            ScMatrixRef pMat = GetMatrix();
             if ( !pMat )
                 ;   // nothing
             else if ( !pJumpMatrix )
@@ -2690,9 +2734,19 @@ void ScInterpreter::ScIsErr()
             }
         }
         break;
+        case svExternalSingleRef:
+        {
+            ScExternalRefCache::TokenRef pToken;
+            PopExternalSingleRef(pToken);
+            if ((nGlobalError && nGlobalError != NOTAVAILABLE) || !pToken ||
+                    (pToken->GetType() == svError && pToken->GetError() != NOTAVAILABLE))
+                bRes = true;
+        }
+        break;
+        case svExternalDoubleRef:
         case svMatrix:
         {
-            ScMatrixRef pMat = PopMatrix();
+            ScMatrixRef pMat = GetMatrix();
             if ( nGlobalError || !pMat )
                 bRes = ((nGlobalError && nGlobalError != NOTAVAILABLE) || !pMat);
             else if ( !pJumpMatrix )
@@ -2746,9 +2800,18 @@ void ScInterpreter::ScIsError()
             }
         }
         break;
+        case svExternalSingleRef:
+        {
+            ScExternalRefCache::TokenRef pToken;
+            PopExternalSingleRef(pToken);
+            if (nGlobalError || !pToken || pToken->GetType() == svError)
+                bRes = true;
+        }
+        break;
+        case svExternalDoubleRef:
         case svMatrix:
         {
-            ScMatrixRef pMat = PopMatrix();
+            ScMatrixRef pMat = GetMatrix();
             if ( nGlobalError || !pMat )
                 bRes = true;
             else if ( !pJumpMatrix )
@@ -2817,9 +2880,21 @@ bool ScInterpreter::IsEven()
             bRes = true;
         }
         break;
+        case svExternalSingleRef:
+        {
+            ScExternalRefCache::TokenRef pToken;
+            PopExternalSingleRef(pToken);
+            if (!nGlobalError && pToken->GetType() == svDouble)
+            {
+                fVal = pToken->GetDouble();
+                bRes = true;
+            }
+        }
+        break;
+        case svExternalDoubleRef:
         case svMatrix:
         {
-            ScMatrixRef pMat = PopMatrix();
+            ScMatrixRef pMat = GetMatrix();
             if ( !pMat )
                 ;   // nothing
             else if ( !pJumpMatrix )
