@@ -455,25 +455,38 @@ ScMatrixRef ScInterpreter::GetMatrix()
         {
             ScExternalRefCache::TokenRef pToken;
             PopExternalSingleRef(pToken);
-            if (!pToken)
+            pMat = GetNewMat( 1, 1, true);
+            if (!pMat)
             {
-                PopError();
                 SetError( errIllegalArgument);
                 break;
             }
-            if (pToken->GetType() == svDouble)
+            if (!pToken)
             {
-                pMat = new ScFullMatrix(1, 1, 0.0);
-                pMat->PutDouble(pToken->GetDouble(), 0, 0);
+                SetError( errIllegalArgument);
+                pMat->PutError( nGlobalError, 0, 0);
+                nGlobalError = 0;
+                break;
             }
-            else if (pToken->GetType() == svString)
+            if (nGlobalError)
             {
-                pMat = new ScFullMatrix(1, 1, 0.0);
-                pMat->PutString(pToken->GetString(), 0, 0);
+                pMat->PutError( nGlobalError, 0, 0);
+                nGlobalError = 0;
+                break;
             }
-            else
+            switch (pToken->GetType())
             {
-                pMat = new ScFullMatrix(1, 1);
+                case svError:
+                    pMat->PutError( pToken->GetError(), 0, 0);
+                break;
+                case svDouble:
+                    pMat->PutDouble( pToken->GetDouble(), 0, 0);
+                break;
+                case svString:
+                    pMat->PutString( pToken->GetString(), 0, 0);
+                break;
+                default:
+                    ;   // nothing, empty element matrix
             }
         }
         break;
