@@ -372,14 +372,14 @@ bool Bitmap::Erase(const Color& rFillColor)
 
     if (pWriteAcc)
     {
-        const sal_uLong nFormat = pWriteAcc->GetScanlineFormat();
+        const ScanlineFormat nFormat = pWriteAcc->GetScanlineFormat();
         sal_uInt8 cIndex = 0;
         bool bFast = false;
 
         switch (nFormat)
         {
-            case BMP_FORMAT_1BIT_MSB_PAL:
-            case BMP_FORMAT_1BIT_LSB_PAL:
+            case ScanlineFormat::N1BitMsbPal:
+            case ScanlineFormat::N1BitLsbPal:
             {
                 cIndex = static_cast<sal_uInt8>(pWriteAcc->GetBestPaletteIndex(rFillColor));
                 cIndex = (cIndex ? 255 : 0);
@@ -387,8 +387,8 @@ bool Bitmap::Erase(const Color& rFillColor)
             }
             break;
 
-            case BMP_FORMAT_4BIT_MSN_PAL:
-            case BMP_FORMAT_4BIT_LSN_PAL:
+            case ScanlineFormat::N4BitMsnPal:
+            case ScanlineFormat::N4BitLsnPal:
             {
                 cIndex = static_cast<sal_uInt8>(pWriteAcc->GetBestPaletteIndex(rFillColor));
                 cIndex = cIndex | ( cIndex << 4 );
@@ -396,15 +396,15 @@ bool Bitmap::Erase(const Color& rFillColor)
             }
             break;
 
-            case BMP_FORMAT_8BIT_PAL:
+            case ScanlineFormat::N8BitPal:
             {
                 cIndex = static_cast<sal_uInt8>(pWriteAcc->GetBestPaletteIndex(rFillColor));
                 bFast = true;
             }
             break;
 
-            case BMP_FORMAT_24BIT_TC_BGR:
-            case BMP_FORMAT_24BIT_TC_RGB:
+            case ScanlineFormat::N24BitTcBgr:
+            case ScanlineFormat::N24BitTcRgb:
             {
                 if (rFillColor.GetRed() == rFillColor.GetGreen() &&
                     rFillColor.GetRed() == rFillColor.GetBlue())
@@ -1124,14 +1124,14 @@ Bitmap Bitmap::CreateMask( const Color& rTransColor, sal_uLong nTol ) const
                 const BitmapColor   aTest( pReadAcc->GetBestMatchingColor( rTransColor ) );
                 long nX, nY;
 
-                if( pReadAcc->GetScanlineFormat() == BMP_FORMAT_4BIT_MSN_PAL ||
-                    pReadAcc->GetScanlineFormat() == BMP_FORMAT_4BIT_LSN_PAL )
+                if( pReadAcc->GetScanlineFormat() == ScanlineFormat::N4BitMsnPal ||
+                    pReadAcc->GetScanlineFormat() == ScanlineFormat::N4BitLsnPal )
                 {
                     // optimized for 4Bit-MSN/LSN source palette
                     const sal_uInt8 cTest = aTest.GetIndex();
-                    const long nShiftInit = ( ( pReadAcc->GetScanlineFormat() == BMP_FORMAT_4BIT_MSN_PAL ) ? 4 : 0 );
+                    const long nShiftInit = ( ( pReadAcc->GetScanlineFormat() == ScanlineFormat::N4BitMsnPal ) ? 4 : 0 );
 
-                    if( pWriteAcc->GetScanlineFormat() == BMP_FORMAT_1BIT_MSB_PAL &&
+                    if( pWriteAcc->GetScanlineFormat() == ScanlineFormat::N1BitMsbPal &&
                         aWhite.GetIndex() == 1 )
                     {
                         // optimized for 1Bit-MSB destination palette
@@ -1165,12 +1165,12 @@ Bitmap Bitmap::CreateMask( const Color& rTransColor, sal_uLong nTol ) const
                         }
                     }
                 }
-                else if( pReadAcc->GetScanlineFormat() == BMP_FORMAT_8BIT_PAL )
+                else if( pReadAcc->GetScanlineFormat() == ScanlineFormat::N8BitPal )
                 {
                     // optimized for 8Bit source palette
                     const sal_uInt8 cTest = aTest.GetIndex();
 
-                    if( pWriteAcc->GetScanlineFormat() == BMP_FORMAT_1BIT_MSB_PAL &&
+                    if( pWriteAcc->GetScanlineFormat() == ScanlineFormat::N1BitMsbPal &&
                         aWhite.GetIndex() == 1 )
                     {
                         // optimized for 1Bit-MSB destination palette

@@ -766,21 +766,23 @@ public:
     {
         if (pSource && pSourceAlpha && pDestination)
         {
-            unsigned long nSourceFormat = pSource->GetScanlineFormat();
-            unsigned long nDestinationFormat = pDestination->GetScanlineFormat();
+            ScanlineFormat nSourceFormat = pSource->GetScanlineFormat();
+            ScanlineFormat nDestinationFormat = pDestination->GetScanlineFormat();
 
             switch (nSourceFormat)
             {
-                case BMP_FORMAT_24BIT_TC_RGB:
-                case BMP_FORMAT_24BIT_TC_BGR:
+                case ScanlineFormat::N24BitTcRgb:
+                case ScanlineFormat::N24BitTcBgr:
                 {
-                    if ( (nSourceFormat == BMP_FORMAT_24BIT_TC_BGR && nDestinationFormat == BMP_FORMAT_32BIT_TC_BGRA)
-                      || (nSourceFormat == BMP_FORMAT_24BIT_TC_RGB && nDestinationFormat == BMP_FORMAT_32BIT_TC_RGBA))
+                    if ( (nSourceFormat == ScanlineFormat::N24BitTcBgr && nDestinationFormat == ScanlineFormat::N32BitTcBgra)
+                      || (nSourceFormat == ScanlineFormat::N24BitTcRgb && nDestinationFormat == ScanlineFormat::N32BitTcRgba))
                     {
                         blendBitmap24(pDestination, pSource, pSourceAlpha, nDstWidth, nDstHeight);
                         return true;
                     }
                 }
+                break;
+                default: break;
             }
         }
         return false;
@@ -971,8 +973,8 @@ void OutputDevice::DrawDeviceAlphaBitmapSlowPath(const Bitmap& rBitmap, const Al
     Bitmap::ScopedReadAccess pBitmapReadAccess(const_cast<Bitmap&>(rBitmap));
     AlphaMask::ScopedReadAccess pAlphaReadAccess(const_cast<AlphaMask&>(rAlpha));
 
-    DBG_ASSERT( pAlphaReadAccess->GetScanlineFormat() == BMP_FORMAT_8BIT_PAL ||
-                pAlphaReadAccess->GetScanlineFormat() == BMP_FORMAT_8BIT_TC_MASK,
+    DBG_ASSERT( pAlphaReadAccess->GetScanlineFormat() == ScanlineFormat::N8BitPal ||
+                pAlphaReadAccess->GetScanlineFormat() == ScanlineFormat::N8BitTcMask,
                 "OutputDevice::ImplDrawAlpha(): non-8bit alpha no longer supported!" );
 
     // #i38887# reading from screen may sometimes fail
@@ -1553,7 +1555,7 @@ Bitmap OutputDevice::BlendBitmap(
         {
             switch( pP->GetScanlineFormat() )
             {
-                case BMP_FORMAT_8BIT_PAL:
+                case ScanlineFormat::N8BitPal:
                     {
                         for( nY = 0; nY < nDstHeight; nY++ )
                         {

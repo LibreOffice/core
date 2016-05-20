@@ -1160,7 +1160,7 @@ void PNGReaderImpl::ImplDrawScanline( sal_uInt32 nXStart, sal_uInt32 nXAdd )
                     }
                 }
                 else
-                {   // BMP_FORMAT_1BIT_MSB_PAL
+                {   // ScanlineFormat::N1BitMsbPal
                     for ( sal_Int32 nX = nXStart, nShift = 0; nX < maOrigSize.Width(); nX += nXAdd )
                     {
                         nShift = (nShift - 1) & 7;
@@ -1232,7 +1232,7 @@ void PNGReaderImpl::ImplDrawScanline( sal_uInt32 nXStart, sal_uInt32 nXAdd )
                 else
                 {
                     if ( mnPngDepth == 4 )  // maybe the source is a two bitmap graphic
-                    {   // BMP_FORMAT_4BIT_LSN_PAL
+                    {   // ScanlineFormat::N4BitLsnPal
                         for ( sal_Int32 nX = nXStart, nXIndex = 0; nX < maOrigSize.Width(); nX += nXAdd, nXIndex++ )
                         {
                             if( nXIndex & 1 )
@@ -1304,7 +1304,7 @@ void PNGReaderImpl::ImplDrawScanline( sal_uInt32 nXStart, sal_uInt32 nXAdd )
                         if( nXAdd == 1 && mnPreviewShift == 0 )  // copy raw line data if possible
                         {
                             int nLineBytes = maOrigSize.Width();
-                            mpAcc->CopyScanline( nY, pTmp, BMP_FORMAT_8BIT_PAL, nLineBytes );
+                            mpAcc->CopyScanline( nY, pTmp, ScanlineFormat::N8BitPal, nLineBytes );
                         }
                         else
                         {
@@ -1336,7 +1336,7 @@ void PNGReaderImpl::ImplDrawScanline( sal_uInt32 nXStart, sal_uInt32 nXAdd )
             // has RGB + alpha
             if ( mnPngDepth == 8 )  // maybe the source has 16 bit per sample
             {
-                // BMP_FORMAT_32BIT_TC_RGBA
+                // ScanlineFormat::N32BitTcRgba
                 // only use DirectScanline when we have no preview shifting stuff and accesses to content and alpha
                 const bool bDoDirectScanline(
                     bCkeckDirectScanline && !nXStart && 1 == nXAdd && !mnPreviewShift && mpMaskAcc);
@@ -1395,8 +1395,8 @@ void PNGReaderImpl::ImplDrawScanline( sal_uInt32 nXStart, sal_uInt32 nXAdd )
 
                     // copy scanlines directly to bitmaps for content and alpha; use the formats which
                     // are able to copy directly to BitmapBuffer
-                    mpAcc->CopyScanline(nY, mpScanline, BMP_FORMAT_24BIT_TC_BGR, maOrigSize.Width() * 3);
-                    mpMaskAcc->CopyScanline(nY, mpScanlineAlpha, BMP_FORMAT_8BIT_PAL, maOrigSize.Width());
+                    mpAcc->CopyScanline(nY, mpScanline, ScanlineFormat::N24BitTcBgr, maOrigSize.Width() * 3);
+                    mpMaskAcc->CopyScanline(nY, mpScanlineAlpha, ScanlineFormat::N8BitPal, maOrigSize.Width());
                 }
                 else
                 {
@@ -1445,7 +1445,7 @@ void PNGReaderImpl::ImplDrawScanline( sal_uInt32 nXStart, sal_uInt32 nXAdd )
         }
         else if( mbTransparent ) // has RGB + transparency
         {
-            // BMP_FORMAT_24BIT_TC_RGB
+            // ScanlineFormat::N24BitTcRgb
             // no support currently for DirectScanline, found no real usages in current PNGs, may be added on demand
             if ( mnPngDepth == 8 )  // maybe the source has 16 bit per sample
             {
@@ -1483,7 +1483,7 @@ void PNGReaderImpl::ImplDrawScanline( sal_uInt32 nXStart, sal_uInt32 nXAdd )
         }
         else  // has RGB but neither alpha nor transparency
         {
-            // BMP_FORMAT_24BIT_TC_RGB
+            // ScanlineFormat::N24BitTcRgb
             // only use DirectScanline when we have no preview shifting stuff and access to content
             const bool bDoDirectScanline(
                 bCkeckDirectScanline && !nXStart && 1 == nXAdd && !mnPreviewShift);
@@ -1527,7 +1527,7 @@ void PNGReaderImpl::ImplDrawScanline( sal_uInt32 nXStart, sal_uInt32 nXAdd )
 
                     // copy scanline directly to bitmap for content; use the format which is able to
                     // copy directly to BitmapBuffer
-                    mpAcc->CopyScanline(nY, mpScanline, BMP_FORMAT_24BIT_TC_BGR, maOrigSize.Width() * 3);
+                    mpAcc->CopyScanline(nY, mpScanline, ScanlineFormat::N24BitTcBgr, maOrigSize.Width() * 3);
                 }
                 else
                 {
