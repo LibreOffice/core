@@ -1935,18 +1935,12 @@ bool GtkSalFrame::GetWindowState( SalFrameState* pState )
     return true;
 }
 
-typedef enum {
-    SET_RETAIN_SIZE,
-    SET_FULLSCREEN,
-    SET_UN_FULLSCREEN
-} SetType;
-
-void GtkSalFrame::SetScreen( unsigned int nNewScreen, int eType, Rectangle *pSize )
+void GtkSalFrame::SetScreen( unsigned int nNewScreen, SetType eType, Rectangle *pSize )
 {
     if( !m_pWindow )
         return;
 
-    if (maGeometry.nDisplayScreenNumber == nNewScreen && eType == SET_RETAIN_SIZE)
+    if (maGeometry.nDisplayScreenNumber == nNewScreen && eType == SetType::RetainSize)
         return;
 
     GdkScreen *pScreen = nullptr;
@@ -2011,7 +2005,7 @@ void GtkSalFrame::SetScreen( unsigned int nNewScreen, int eType, Rectangle *pSiz
     if( bVisible )
         Show( false );
 
-    if( eType == SET_FULLSCREEN )
+    if( eType == SetType::Fullscreen )
     {
         maGeometry.nX = aNewMonitor.x;
         maGeometry.nY = aNewMonitor.y;
@@ -2026,7 +2020,7 @@ void GtkSalFrame::SetScreen( unsigned int nNewScreen, int eType, Rectangle *pSiz
         m_aMaxSize.Height() = aNewMonitor.height;
     }
 
-    if( pSize && eType == SET_UN_FULLSCREEN )
+    if( pSize && eType == SetType::UnFullscreen )
     {
         maGeometry.nX = pSize->Left();
         maGeometry.nY = pSize->Top();
@@ -2053,13 +2047,13 @@ void GtkSalFrame::SetScreen( unsigned int nNewScreen, int eType, Rectangle *pSiz
     // _NET_WM_STATE_FULLSCREEN (Metacity <-> KWin)
     if( ! getDisplay()->getWMAdaptor()->isLegacyPartialFullscreen() )
     {
-        if( eType == SET_FULLSCREEN )
+        if( eType == SetType::Fullscreen )
             gtk_window_fullscreen( GTK_WINDOW( m_pWindow ) );
-        else if( eType == SET_UN_FULLSCREEN )
+        else if( eType == SetType::UnFullscreen )
             gtk_window_unfullscreen( GTK_WINDOW( m_pWindow ) );
     }
 
-    if( eType == SET_UN_FULLSCREEN &&
+    if( eType == SetType::UnFullscreen &&
         !(m_nStyle & SalFrameStyleFlags::SIZEABLE) )
         gtk_window_set_resizable( GTK_WINDOW( m_pWindow ), FALSE );
 
@@ -2068,7 +2062,7 @@ void GtkSalFrame::SetScreen( unsigned int nNewScreen, int eType, Rectangle *pSiz
         SetParent( nullptr );
     std::list< GtkSalFrame* > aChildren = m_aChildren;
     for( std::list< GtkSalFrame* >::iterator it = aChildren.begin(); it != aChildren.end(); ++it )
-        (*it)->SetScreen( nNewScreen, SET_RETAIN_SIZE );
+        (*it)->SetScreen( nNewScreen, SetType::RetainSize );
 
     m_bDefaultPos = m_bDefaultSize = false;
     updateScreenNumber();
@@ -2080,7 +2074,7 @@ void GtkSalFrame::SetScreen( unsigned int nNewScreen, int eType, Rectangle *pSiz
 
 void GtkSalFrame::SetScreenNumber( unsigned int nNewScreen )
 {
-    SetScreen( nNewScreen, SET_RETAIN_SIZE );
+    SetScreen( nNewScreen, SetType::RetainSize );
 }
 
 void GtkSalFrame::updateWMClass()
@@ -2131,11 +2125,11 @@ void GtkSalFrame::ShowFullScreen( bool bFullScreen, sal_Int32 nScreen )
     {
         m_aRestorePosSize = Rectangle( Point( maGeometry.nX, maGeometry.nY ),
                                        Size( maGeometry.nWidth, maGeometry.nHeight ) );
-        SetScreen( nScreen, SET_FULLSCREEN );
+        SetScreen( nScreen, SetType::Fullscreen );
     }
     else
     {
-        SetScreen( nScreen, SET_UN_FULLSCREEN,
+        SetScreen( nScreen, SetType::UnFullscreen,
                    !m_aRestorePosSize.IsEmpty() ? &m_aRestorePosSize : nullptr );
         m_aRestorePosSize = Rectangle();
     }
