@@ -178,14 +178,14 @@ namespace dxcanvas
                     // By convention, the access buffer always has
                     // one of the following formats:
 
-                    //    BMP_FORMAT_1BIT_MSB_PAL
-                    //    BMP_FORMAT_4BIT_MSN_PAL
-                    //    BMP_FORMAT_8BIT_PAL
-                    //    BMP_FORMAT_16BIT_TC_LSB_MASK
-                    //    BMP_FORMAT_24BIT_TC_BGR
-                    //    BMP_FORMAT_32BIT_TC_MASK
+                    //    ScanlineFormat::N1BitMsbPal
+                    //    ScanlineFormat::N4BitMsnPal
+                    //    ScanlineFormat::N8BitPal
+                    //    ScanlineFormat::N16BitTcLsbMask
+                    //    ScanlineFormat::N24BitTcBgr
+                    //    ScanlineFormat::N32BitTcMask
 
-                    // and is always BMP_FORMAT_BOTTOM_UP
+                    // and is always ScanlineFormat::BottomUp
 
                     // This is the way
                     // WinSalBitmap::AcquireBuffer() sets up the
@@ -195,8 +195,8 @@ namespace dxcanvas
                                       "::dxcanvas::tools::bitmapFromVCLBitmapEx(): "
                                       "Unable to acquire read access to alpha" );
 
-                    ENSURE_OR_THROW( pAlphaReadAccess->GetScanlineFormat() == BMP_FORMAT_8BIT_PAL ||
-                                      pAlphaReadAccess->GetScanlineFormat() == BMP_FORMAT_8BIT_TC_MASK,
+                    ENSURE_OR_THROW( pAlphaReadAccess->GetScanlineFormat() == ScanlineFormat::N8BitPal ||
+                                      pAlphaReadAccess->GetScanlineFormat() == ScanlineFormat::N8BitTcMask,
                                       "::dxcanvas::tools::bitmapFromVCLBitmapEx(): "
                                       "Unsupported alpha scanline format" );
 
@@ -208,7 +208,7 @@ namespace dxcanvas
                     {
                         switch( pReadAccess->GetScanlineFormat() )
                         {
-                            case BMP_FORMAT_8BIT_PAL:
+                            case ScanlineFormat::N8BitPal:
                             {
                                 Scanline pScan  = pReadAccess->GetScanline( y );
                                 Scanline pAScan = pAlphaReadAccess->GetScanline( y );
@@ -229,7 +229,7 @@ namespace dxcanvas
                             }
                             break;
 
-                            case BMP_FORMAT_24BIT_TC_BGR:
+                            case ScanlineFormat::N24BitTcBgr:
                             {
                                 Scanline pScan  = pReadAccess->GetScanline( y );
                                 Scanline pAScan = pAlphaReadAccess->GetScanline( y );
@@ -252,13 +252,13 @@ namespace dxcanvas
                             // TODO(P2): Might be advantageous
                             // to hand-formulate the following
                             // formats, too.
-                            case BMP_FORMAT_1BIT_MSB_PAL:
+                            case ScanlineFormat::N1BitMsbPal:
                                 // FALLTHROUGH intended
-                            case BMP_FORMAT_4BIT_MSN_PAL:
+                            case ScanlineFormat::N4BitMsnPal:
                                 // FALLTHROUGH intended
-                            case BMP_FORMAT_16BIT_TC_LSB_MASK:
+                            case ScanlineFormat::N16BitTcLsbMask:
                                 // FALLTHROUGH intended
-                            case BMP_FORMAT_32BIT_TC_MASK:
+                            case ScanlineFormat::N32BitTcMask:
                             {
                                 Scanline pAScan = pAlphaReadAccess->GetScanline( y );
 
@@ -281,25 +281,25 @@ namespace dxcanvas
                             }
                             break;
 
-                            case BMP_FORMAT_1BIT_LSB_PAL:
+                            case ScanlineFormat::N1BitLsbPal:
                                 // FALLTHROUGH intended
-                            case BMP_FORMAT_4BIT_LSN_PAL:
+                            case ScanlineFormat::N4BitLsnPal:
                                 // FALLTHROUGH intended
-                            case BMP_FORMAT_8BIT_TC_MASK:
+                            case ScanlineFormat::N8BitTcMask:
                                 // FALLTHROUGH intended
-                            case BMP_FORMAT_24BIT_TC_RGB:
+                            case ScanlineFormat::N24BitTcRgb:
                                 // FALLTHROUGH intended
-                            case BMP_FORMAT_24BIT_TC_MASK:
+                            case ScanlineFormat::N24BitTcMask:
                                 // FALLTHROUGH intended
-                            case BMP_FORMAT_16BIT_TC_MSB_MASK:
+                            case ScanlineFormat::N16BitTcMsbMask:
                                 // FALLTHROUGH intended
-                            case BMP_FORMAT_32BIT_TC_ABGR:
+                            case ScanlineFormat::N32BitTcAbgr:
                                 // FALLTHROUGH intended
-                            case BMP_FORMAT_32BIT_TC_ARGB:
+                            case ScanlineFormat::N32BitTcArgb:
                                 // FALLTHROUGH intended
-                            case BMP_FORMAT_32BIT_TC_BGRA:
+                            case ScanlineFormat::N32BitTcBgra:
                                 // FALLTHROUGH intended
-                            case BMP_FORMAT_32BIT_TC_RGBA:
+                            case ScanlineFormat::N32BitTcRgba:
                                 // FALLTHROUGH intended
                             default:
                                 ENSURE_OR_THROW( false,
@@ -318,14 +318,14 @@ namespace dxcanvas
                     // By convention, the access buffer always has
                     // one of the following formats:
 
-                    //    BMP_FORMAT_1BIT_MSB_PAL
-                    //    BMP_FORMAT_4BIT_MSN_PAL
-                    //    BMP_FORMAT_8BIT_PAL
-                    //    BMP_FORMAT_16BIT_TC_LSB_MASK
-                    //    BMP_FORMAT_24BIT_TC_BGR
-                    //    BMP_FORMAT_32BIT_TC_MASK
+                    //    ScanlineFormat::N1BitMsbPal
+                    //    ScanlineFormat::N4BitMsnPal
+                    //    ScanlineFormat::N8BitPal
+                    //    ScanlineFormat::N16BitTcLsbMask
+                    //    ScanlineFormat::N24BitTcBgr
+                    //    ScanlineFormat::N32BitTcMask
 
-                    // and is always BMP_FORMAT_BOTTOM_UP
+                    // and is always ScanlineFormat::BottomUp
 
                     // This is the way
                     // WinSalBitmap::AcquireBuffer() sets up the
@@ -335,7 +335,7 @@ namespace dxcanvas
                                       "::dxcanvas::tools::bitmapFromVCLBitmapEx(): "
                                       "Unable to acquire read access to mask" );
 
-                    ENSURE_OR_THROW( pMaskReadAccess->GetScanlineFormat() == BMP_FORMAT_1BIT_MSB_PAL,
+                    ENSURE_OR_THROW( pMaskReadAccess->GetScanlineFormat() == ScanlineFormat::N1BitMsbPal,
                                       "::dxcanvas::tools::bitmapFromVCLBitmapEx(): "
                                       "Unsupported mask scanline format" );
 
@@ -365,7 +365,7 @@ namespace dxcanvas
                     {
                         switch( pReadAccess->GetScanlineFormat() )
                         {
-                            case BMP_FORMAT_8BIT_PAL:
+                            case ScanlineFormat::N8BitPal:
                             {
                                 Scanline pScan  = pReadAccess->GetScanline( y );
                                 Scanline pMScan = pMaskReadAccess->GetScanline( y );
@@ -384,7 +384,7 @@ namespace dxcanvas
                             }
                             break;
 
-                            case BMP_FORMAT_24BIT_TC_BGR:
+                            case ScanlineFormat::N24BitTcBgr:
                             {
                                 Scanline pScan  = pReadAccess->GetScanline( y );
                                 Scanline pMScan = pMaskReadAccess->GetScanline( y );
@@ -405,13 +405,13 @@ namespace dxcanvas
                             // TODO(P2): Might be advantageous
                             // to hand-formulate the following
                             // formats, too.
-                            case BMP_FORMAT_1BIT_MSB_PAL:
+                            case ScanlineFormat::N1BitMsbPal:
                                 // FALLTHROUGH intended
-                            case BMP_FORMAT_4BIT_MSN_PAL:
+                            case ScanlineFormat::N4BitMsnPal:
                                 // FALLTHROUGH intended
-                            case BMP_FORMAT_16BIT_TC_LSB_MASK:
+                            case ScanlineFormat::N16BitTcLsbMask:
                                 // FALLTHROUGH intended
-                            case BMP_FORMAT_32BIT_TC_MASK:
+                            case ScanlineFormat::N32BitTcMask:
                             {
                                 Scanline pMScan = pMaskReadAccess->GetScanline( y );
 
@@ -433,25 +433,25 @@ namespace dxcanvas
                             }
                             break;
 
-                            case BMP_FORMAT_1BIT_LSB_PAL:
+                            case ScanlineFormat::N1BitLsbPal:
                                 // FALLTHROUGH intended
-                            case BMP_FORMAT_4BIT_LSN_PAL:
+                            case ScanlineFormat::N4BitLsnPal:
                                 // FALLTHROUGH intended
-                            case BMP_FORMAT_8BIT_TC_MASK:
+                            case ScanlineFormat::N8BitTcMask:
                                 // FALLTHROUGH intended
-                            case BMP_FORMAT_24BIT_TC_RGB:
+                            case ScanlineFormat::N24BitTcRgb:
                                 // FALLTHROUGH intended
-                            case BMP_FORMAT_24BIT_TC_MASK:
+                            case ScanlineFormat::N24BitTcMask:
                                 // FALLTHROUGH intended
-                            case BMP_FORMAT_16BIT_TC_MSB_MASK:
+                            case ScanlineFormat::N16BitTcMsbMask:
                                 // FALLTHROUGH intended
-                            case BMP_FORMAT_32BIT_TC_ABGR:
+                            case ScanlineFormat::N32BitTcAbgr:
                                 // FALLTHROUGH intended
-                            case BMP_FORMAT_32BIT_TC_ARGB:
+                            case ScanlineFormat::N32BitTcArgb:
                                 // FALLTHROUGH intended
-                            case BMP_FORMAT_32BIT_TC_BGRA:
+                            case ScanlineFormat::N32BitTcBgra:
                                 // FALLTHROUGH intended
-                            case BMP_FORMAT_32BIT_TC_RGBA:
+                            case ScanlineFormat::N32BitTcRgba:
                                 // FALLTHROUGH intended
                             default:
                                 ENSURE_OR_THROW( false,

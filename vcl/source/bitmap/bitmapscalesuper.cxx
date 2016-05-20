@@ -958,7 +958,7 @@ bool BitmapScaleSuper::filter(Bitmap& rBitmap)
         {
             switch( pReadAccess->GetScanlineFormat() )
             {
-            case BMP_FORMAT_8BIT_PAL:
+            case ScanlineFormat::N8BitPal:
                 pScaleRangeFn = bScaleUp ? scalePallete8bit : scalePallete8bit2;
                 break;
             default:
@@ -971,10 +971,10 @@ bool BitmapScaleSuper::filter(Bitmap& rBitmap)
         {
             switch( pReadAccess->GetScanlineFormat() )
             {
-            case BMP_FORMAT_24BIT_TC_BGR:
+            case ScanlineFormat::N24BitTcBgr:
                 pScaleRangeFn = bScaleUp ? scale24bitBGR : scale24bitBGR2;
                 break;
-            case BMP_FORMAT_24BIT_TC_RGB:
+            case ScanlineFormat::N24BitTcRgb:
                 pScaleRangeFn = bScaleUp ? scale24bitRGB : scale24bitRGB2;
                 break;
             default:

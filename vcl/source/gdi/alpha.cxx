@@ -115,7 +115,7 @@ bool AlphaMask::Replace( sal_uInt8 cSearchTransparency, sal_uInt8 cReplaceTransp
     {
         const long nWidth = pAcc->Width(), nHeight = pAcc->Height();
 
-        if( pAcc->GetScanlineFormat() == BMP_FORMAT_8BIT_PAL )
+        if( pAcc->GetScanlineFormat() == ScanlineFormat::N8BitPal )
         {
             for( long nY = 0L; nY < nHeight; nY++ )
             {

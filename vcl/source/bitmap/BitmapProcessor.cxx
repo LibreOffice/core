@@ -165,7 +165,7 @@ void BitmapProcessor::colorizeImage(BitmapEx& rBitmapEx, Color aColor)
                 pWriteAccess->SetPaletteColor(i, aBitmapColor);
             }
         }
-        else if (pWriteAccess->GetScanlineFormat() == BMP_FORMAT_24BIT_TC_BGR)
+        else if (pWriteAccess->GetScanlineFormat() == ScanlineFormat::N24BitTcBgr)
         {
             for (nY = 0; nY < nH; ++nY)
             {

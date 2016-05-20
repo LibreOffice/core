@@ -24,12 +24,12 @@
 #include <memory>
 
 #define IMPL_CASE_GET_FORMAT( Format )                          \
-case( BMP_FORMAT##Format ):                                 \
+case( ScanlineFormat::Format ):                                 \
     pFncGetPixel = BitmapReadAccess::GetPixelFor##Format;       \
 break
 
 #define IMPL_CASE_SET_FORMAT( Format, BitCount )                \
-case( BMP_FORMAT##Format ):                                 \
+case( ScanlineFormat::Format ):                                 \
 {                                                               \
     pFncSetPixel = BitmapReadAccess::SetPixelFor##Format;       \
     pDstBuffer->mnBitCount = BitCount;                          \
@@ -104,7 +104,7 @@ static void ImplPALToTC( const BitmapBuffer& rSrcBuffer, BitmapBuffer& rDstBuffe
     const ColorMask&    rDstMask = rDstBuffer.maColorMask;
     const BitmapColor*  pColBuf = rSrcBuffer.maPalette.ImplGetColorBuffer();
 
-    if( BMP_SCANLINE_FORMAT( rSrcBuffer.mnFormat ) == BMP_FORMAT_1BIT_MSB_PAL )
+    if( RemoveScanline( rSrcBuffer.mnFormat ) == ScanlineFormat::N1BitMsbPal )
     {
         const BitmapColor   aCol0( pColBuf[ 0 ] );
         const BitmapColor   aCol1( pColBuf[ 1 ] );
@@ -126,7 +126,7 @@ static void ImplPALToTC( const BitmapBuffer& rSrcBuffer, BitmapBuffer& rDstBuffe
             DOUBLE_SCANLINES();
         }
     }
-    else if( BMP_SCANLINE_FORMAT( rSrcBuffer.mnFormat ) == BMP_FORMAT_4BIT_MSN_PAL )
+    else if( RemoveScanline( rSrcBuffer.mnFormat ) == ScanlineFormat::N4BitMsnPal )
     {
         long nMapX;
 
@@ -146,7 +146,7 @@ static void ImplPALToTC( const BitmapBuffer& rSrcBuffer, BitmapBuffer& rDstBuffe
             DOUBLE_SCANLINES();
         }
     }
-    else if( BMP_SCANLINE_FORMAT( rSrcBuffer.mnFormat ) == BMP_FORMAT_8BIT_PAL )
+    else if( RemoveScanline( rSrcBuffer.mnFormat ) == ScanlineFormat::N8BitPal )
     {
         for (long nActY = 0; nActY < rDstBuffer.mnHeight; ++nActY)
         {
@@ -182,7 +182,7 @@ static void ImplTCToTC( const BitmapBuffer& rSrcBuffer, BitmapBuffer& rDstBuffer
     const ColorMask&    rSrcMask = rSrcBuffer.maColorMask;
     const ColorMask&    rDstMask = rDstBuffer.maColorMask;
 
-    if( BMP_SCANLINE_FORMAT( rSrcBuffer.mnFormat ) == BMP_FORMAT_24BIT_TC_BGR )
+    if( RemoveScanline( rSrcBuffer.mnFormat ) == ScanlineFormat::N24BitTcBgr )
     {
         BitmapColor aCol;
         sal_uInt8* pPixel = nullptr;
@@ -260,67 +260,67 @@ static void ImplTCToPAL( const BitmapBuffer& rSrcBuffer, BitmapBuffer& rDstBuffe
 
 BitmapBuffer* StretchAndConvert(
     const BitmapBuffer& rSrcBuffer, const SalTwoRect& rTwoRect,
-    sal_uLong nDstBitmapFormat, const BitmapPalette* pDstPal, const ColorMask* pDstMask )
+    ScanlineFormat nDstBitmapFormat, const BitmapPalette* pDstPal, const ColorMask* pDstMask )
 {
     FncGetPixel     pFncGetPixel;
     FncSetPixel     pFncSetPixel;
     BitmapBuffer*   pDstBuffer = new BitmapBuffer;
 
     // set function for getting pixels
-    switch( BMP_SCANLINE_FORMAT( rSrcBuffer.mnFormat ) )
+    switch( RemoveScanline( rSrcBuffer.mnFormat ) )
     {
-        IMPL_CASE_GET_FORMAT( _1BIT_MSB_PAL );
-        IMPL_CASE_GET_FORMAT( _1BIT_LSB_PAL );
-        IMPL_CASE_GET_FORMAT( _4BIT_MSN_PAL );
-        IMPL_CASE_GET_FORMAT( _4BIT_LSN_PAL );
-        IMPL_CASE_GET_FORMAT( _8BIT_PAL );
-        IMPL_CASE_GET_FORMAT( _8BIT_TC_MASK );
-        IMPL_CASE_GET_FORMAT( _16BIT_TC_MSB_MASK );
-        IMPL_CASE_GET_FORMAT( _16BIT_TC_LSB_MASK );
-        IMPL_CASE_GET_FORMAT( _24BIT_TC_BGR );
-        IMPL_CASE_GET_FORMAT( _24BIT_TC_RGB );
-        IMPL_CASE_GET_FORMAT( _24BIT_TC_MASK );
-        IMPL_CASE_GET_FORMAT( _32BIT_TC_ABGR );
-        IMPL_CASE_GET_FORMAT( _32BIT_TC_ARGB );
-        IMPL_CASE_GET_FORMAT( _32BIT_TC_BGRA );
-        IMPL_CASE_GET_FORMAT( _32BIT_TC_RGBA );
-        IMPL_CASE_GET_FORMAT( _32BIT_TC_MASK );
+        IMPL_CASE_GET_FORMAT( N1BitMsbPal );
+        IMPL_CASE_GET_FORMAT( N1BitLsbPal );
+        IMPL_CASE_GET_FORMAT( N4BitMsnPal );
+        IMPL_CASE_GET_FORMAT( N4BitLsnPal );
+        IMPL_CASE_GET_FORMAT( N8BitPal );
+        IMPL_CASE_GET_FORMAT( N8BitTcMask );
+        IMPL_CASE_GET_FORMAT( N16BitTcMsbMask );
+        IMPL_CASE_GET_FORMAT( N16BitTcLsbMask );
+        IMPL_CASE_GET_FORMAT( N24BitTcBgr );
+        IMPL_CASE_GET_FORMAT( N24BitTcRgb );
+        IMPL_CASE_GET_FORMAT( N24BitTcMask );
+        IMPL_CASE_GET_FORMAT( N32BitTcAbgr );
+        IMPL_CASE_GET_FORMAT( N32BitTcArgb );
+        IMPL_CASE_GET_FORMAT( N32BitTcBgra );
+        IMPL_CASE_GET_FORMAT( N32BitTcRgba );
+        IMPL_CASE_GET_FORMAT( N32BitTcMask );
 
         default:
             // should never come here
             // initialize pFncGetPixel to something valid that is
             // least likely to crash
-            pFncGetPixel = BitmapReadAccess::GetPixelFor_1BIT_MSB_PAL;
+            pFncGetPixel = BitmapReadAccess::GetPixelForN1BitMsbPal;
             OSL_FAIL( "unknown read format" );
         break;
     }
 
     // set function for setting pixels
-    const sal_uLong nDstScanlineFormat = BMP_SCANLINE_FORMAT( nDstBitmapFormat );
+    const ScanlineFormat nDstScanlineFormat = RemoveScanline( nDstBitmapFormat );
     switch( nDstScanlineFormat )
     {
-        IMPL_CASE_SET_FORMAT( _1BIT_MSB_PAL, 1 );
-        IMPL_CASE_SET_FORMAT( _1BIT_LSB_PAL, 1 );
-        IMPL_CASE_SET_FORMAT( _4BIT_MSN_PAL, 1 );
-        IMPL_CASE_SET_FORMAT( _4BIT_LSN_PAL, 4 );
-        IMPL_CASE_SET_FORMAT( _8BIT_PAL, 8 );
-        IMPL_CASE_SET_FORMAT( _8BIT_TC_MASK, 8 );
-        IMPL_CASE_SET_FORMAT( _16BIT_TC_MSB_MASK, 16 );
-        IMPL_CASE_SET_FORMAT( _16BIT_TC_LSB_MASK, 16 );
-        IMPL_CASE_SET_FORMAT( _24BIT_TC_BGR, 24 );
-        IMPL_CASE_SET_FORMAT( _24BIT_TC_RGB, 24 );
-        IMPL_CASE_SET_FORMAT( _24BIT_TC_MASK, 24 );
-        IMPL_CASE_SET_FORMAT( _32BIT_TC_ABGR, 32 );
-        IMPL_CASE_SET_FORMAT( _32BIT_TC_ARGB, 32 );
-        IMPL_CASE_SET_FORMAT( _32BIT_TC_BGRA, 32 );
-        IMPL_CASE_SET_FORMAT( _32BIT_TC_RGBA, 32 );
-        IMPL_CASE_SET_FORMAT( _32BIT_TC_MASK, 32 );
+        IMPL_CASE_SET_FORMAT( N1BitMsbPal, 1 );
+        IMPL_CASE_SET_FORMAT( N1BitLsbPal, 1 );
+        IMPL_CASE_SET_FORMAT( N4BitMsnPal, 1 );
+        IMPL_CASE_SET_FORMAT( N4BitLsnPal, 4 );
+        IMPL_CASE_SET_FORMAT( N8BitPal, 8 );
+        IMPL_CASE_SET_FORMAT( N8BitTcMask, 8 );
+        IMPL_CASE_SET_FORMAT( N16BitTcMsbMask, 16 );
+        IMPL_CASE_SET_FORMAT( N16BitTcLsbMask, 16 );
+        IMPL_CASE_SET_FORMAT( N24BitTcBgr, 24 );
+        IMPL_CASE_SET_FORMAT( N24BitTcRgb, 24 );
+        IMPL_CASE_SET_FORMAT( N24BitTcMask, 24 );
+        IMPL_CASE_SET_FORMAT( N32BitTcAbgr, 32 );
+        IMPL_CASE_SET_FORMAT( N32BitTcArgb, 32 );
+        IMPL_CASE_SET_FORMAT( N32BitTcBgra, 32 );
+        IMPL_CASE_SET_FORMAT( N32BitTcRgba, 32 );
+        IMPL_CASE_SET_FORMAT( N32BitTcMask, 32 );
 
         default:
             // should never come here
             // initialize pFncSetPixel to something valid that is
             // least likely to crash
-            pFncSetPixel = BitmapReadAccess::SetPixelFor_1BIT_MSB_PAL;
+            pFncSetPixel = BitmapReadAccess::SetPixelForN1BitMsbPal;
             pDstBuffer->mnBitCount = 1;
             OSL_FAIL( "unknown write format" );
         break;
@@ -344,11 +344,11 @@ BitmapBuffer* StretchAndConvert(
     }
 
     // do we need a destination palette or color mask?
-    if( ( nDstScanlineFormat == BMP_FORMAT_1BIT_MSB_PAL ) ||
-        ( nDstScanlineFormat == BMP_FORMAT_1BIT_LSB_PAL ) ||
-        ( nDstScanlineFormat == BMP_FORMAT_4BIT_MSN_PAL ) ||
-        ( nDstScanlineFormat == BMP_FORMAT_4BIT_LSN_PAL ) ||
-        ( nDstScanlineFormat == BMP_FORMAT_8BIT_PAL ) )
+    if( ( nDstScanlineFormat == ScanlineFormat::N1BitMsbPal ) ||
+        ( nDstScanlineFormat == ScanlineFormat::N1BitLsbPal ) ||
+        ( nDstScanlineFormat == ScanlineFormat::N4BitMsnPal ) ||
+        ( nDstScanlineFormat == ScanlineFormat::N4BitLsnPal ) ||
+        ( nDstScanlineFormat == ScanlineFormat::N8BitPal ) )
     {
         assert(pDstPal && "destination buffer requires palette");
         if (!pDstPal)
@@ -358,11 +358,11 @@ BitmapBuffer* StretchAndConvert(
         }
         pDstBuffer->maPalette = *pDstPal;
     }
-    else if( ( nDstScanlineFormat == BMP_FORMAT_8BIT_TC_MASK ) ||
-             ( nDstScanlineFormat == BMP_FORMAT_16BIT_TC_MSB_MASK ) ||
-             ( nDstScanlineFormat == BMP_FORMAT_16BIT_TC_LSB_MASK ) ||
-             ( nDstScanlineFormat == BMP_FORMAT_24BIT_TC_MASK ) ||
-             ( nDstScanlineFormat == BMP_FORMAT_32BIT_TC_MASK ) )
+    else if( ( nDstScanlineFormat == ScanlineFormat::N8BitTcMask ) ||
+             ( nDstScanlineFormat == ScanlineFormat::N16BitTcMsbMask ) ||
+             ( nDstScanlineFormat == ScanlineFormat::N16BitTcLsbMask ) ||
+             ( nDstScanlineFormat == ScanlineFormat::N24BitTcMask ) ||
+             ( nDstScanlineFormat == ScanlineFormat::N32BitTcMask ) )
     {
         assert(pDstMask && "destination buffer requires color mask");
         if (!pDstMask)
@@ -430,7 +430,7 @@ BitmapBuffer* StretchAndConvert(
     // source scanline buffer
     Scanline pTmpScan;
     long nOffset;
-    if( BMP_SCANLINE_ADJUSTMENT( rSrcBuffer.mnFormat ) == BMP_FORMAT_TOP_DOWN )
+    if( rSrcBuffer.mnFormat & ScanlineFormat::TopDown )
     {
         pTmpScan = rSrcBuffer.mpBits;
         nOffset = rSrcBuffer.mnScanlineSize;
@@ -445,7 +445,7 @@ BitmapBuffer* StretchAndConvert(
         pSrcScan[ i ] = pTmpScan;
 
     // destination scanline buffer
-    if( BMP_SCANLINE_ADJUSTMENT( pDstBuffer->mnFormat ) == BMP_FORMAT_TOP_DOWN )
+    if( pDstBuffer->mnFormat & ScanlineFormat::TopDown )
     {
         pTmpScan = pDstBuffer->mpBits;
         nOffset = pDstBuffer->mnScanlineSize;
