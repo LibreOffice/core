@@ -35,10 +35,23 @@ StringMap SwEditWinUIObject::get_state()
 
     sal_uInt16 nPageNum = 0;
     sal_uInt16 nVirtPageNum = 0;
-    getWrtShell(mxEditWin).GetPageNum(nPageNum, nVirtPageNum);
+    SwWrtShell& rWrtShell = getWrtShell(mxEditWin);
+    rWrtShell.GetPageNum(nPageNum, nVirtPageNum);
     aMap["CurrentPage"] = OUString::number(nPageNum);
-    getWrtShell(mxEditWin).GetPageNum(nPageNum, nVirtPageNum, false);
+    rWrtShell.GetPageNum(nPageNum, nVirtPageNum, false);
     aMap["TopVisiblePage"] = OUString::number(nPageNum);
+
+    sal_uInt16 nPages = rWrtShell.GetPageCnt();
+    aMap["Pages"] = OUString::number(nPages);
+
+    aMap["StartWord"] = OUString::number(rWrtShell.IsStartWord());
+    aMap["EndWord"] = OUString::number(rWrtShell.IsEndWord());
+    aMap["StartSentence"] = OUString::number(rWrtShell.IsStartSentence());
+    aMap["EndSentence"] = OUString::number(rWrtShell.IsEndSentence());
+    aMap["StartPara"] = OUString::number(rWrtShell.IsSttPara());
+    aMap["EndPara"] = OUString::number(rWrtShell.IsEndPara());
+    aMap["StartDoc"] = OUString::number(rWrtShell.IsStartOfDoc());
+    aMap["EndDoc"] = OUString::number(rWrtShell.IsEndOfDoc());
 
     return aMap;
 }
