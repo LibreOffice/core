@@ -5089,6 +5089,7 @@ SwEditWin::SwEditWin(vcl::Window *pParent, SwView &rMyView):
     m_nKS_NUMINDENTINC_Count(0),
     m_pFrameControlsManager(new SwFrameControlsManager(this))
 {
+    set_id("writer_edit");
     SetHelpId(HID_EDIT_WIN);
     EnableChildTransparentMode();
     SetDialogControlFlags( DialogControlFlags::Return | DialogControlFlags::WantFocus );
