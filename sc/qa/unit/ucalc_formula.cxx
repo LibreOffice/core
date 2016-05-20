@@ -5619,6 +5619,86 @@ void Test::testExternalRefFunctions()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testExternalRefUnresolved()
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calc.
+    m_pDoc->InsertTab(0, "Test");
+
+    // Test error propagation of unresolved (not existing document) external
+    // references. Well, let's hope no build machine has such file with sheet..
+
+    const char* aData[][1] = {
+        { "='file:///NonExistingFilePath/AnyName.ods'#$NoSuchSheet.A1" },
+        { "='file:///NonExistingFilePath/AnyName.ods'#$NoSuchSheet.A1+23" },
+        { "='file:///NonExistingFilePath/AnyName.ods'#$NoSuchSheet.A1&\"W\"" },
+        { "=ISREF('file:///NonExistingFilePath/AnyName.ods'#$NoSuchSheet.A1)" },
+        { "=ISERROR('file:///NonExistingFilePath/AnyName.ods'#$NoSuchSheet.A1)" },
+        { "=ISERR('file:///NonExistingFilePath/AnyName.ods'#$NoSuchSheet.A1)" },
+        { "=ISBLANK('file:///NonExistingFilePath/AnyName.ods'#$NoSuchSheet.A1)" },
+        { "=ISNUMBER('file:///NonExistingFilePath/AnyName.ods'#$NoSuchSheet.A1)" },
+        { "=ISTEXT('file:///NonExistingFilePath/AnyName.ods'#$NoSuchSheet.A1)" },
+        { "=ISNUMBER('file:///NonExistingFilePath/AnyName.ods'#$NoSuchSheet.A1+23)" },
+        { "=ISTEXT('file:///NonExistingFilePath/AnyName.ods'#$NoSuchSheet.A1&\"W\")" },
+        { "='file:///NonExistingFilePath/AnyName.ods'#$NoSuchSheet.A1=0" },
+        { "='file:///NonExistingFilePath/AnyName.ods'#$NoSuchSheet.A1=\"\"" },
+        { "=INDIRECT(\"'file:///NonExistingFilePath/AnyName.ods'#$NoSuchSheet.A1\")" },
+        { "='file:///NonExistingFilePath/AnyName.ods'#$NoSuchSheet.A1:A2" },
+        { "='file:///NonExistingFilePath/AnyName.ods'#$NoSuchSheet.A1:A2+23" },
+        { "='file:///NonExistingFilePath/AnyName.ods'#$NoSuchSheet.A1:A2&\"W\"" },
+        { "=ISREF('file:///NonExistingFilePath/AnyName.ods'#$NoSuchSheet.A1:A2)" },
+        { "=ISERROR('file:///NonExistingFilePath/AnyName.ods'#$NoSuchSheet.A1:A2)" },
+        { "=ISERR('file:///NonExistingFilePath/AnyName.ods'#$NoSuchSheet.A1:A2)" },
+        { "=ISBLANK('file:///NonExistingFilePath/AnyName.ods'#$NoSuchSheet.A1:A2)" },
+        { "=ISNUMBER('file:///NonExistingFilePath/AnyName.ods'#$NoSuchSheet.A1:A2)" },
+        { "=ISTEXT('file:///NonExistingFilePath/AnyName.ods'#$NoSuchSheet.A1:A2)" },
+        { "=ISNUMBER('file:///NonExistingFilePath/AnyName.ods'#$NoSuchSheet.A1:A2+23)" },
+        { "=ISTEXT('file:///NonExistingFilePath/AnyName.ods'#$NoSuchSheet.A1:A2&\"W\")" },
+        // TODO: gives Err:504 FIXME { "='file:///NonExistingFilePath/AnyName.ods'#$NoSuchSheet.A1:A2=0" },
+        // TODO: gives Err:504 FIXME { "='file:///NonExistingFilePath/AnyName.ods'#$NoSuchSheet.A1:A2=\"\"" },
+        { "=INDIRECT(\"'file:///NonExistingFilePath/AnyName.ods'#$NoSuchSheet.A1:A2\")" },
+    };
+
+    ScAddress aPos(0,0,0);
+    ScRange aRange = insertRangeData(m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
+    CPPUNIT_ASSERT_EQUAL(aPos, aRange.aStart);
+
+    const char* aOutputCheck[][1] = {
+        { "#REF!" },    // plain single ref
+        { "#REF!" },    // +23
+        { "#REF!" },    // &"W"
+        { "FALSE" },    // ISREF
+        { "TRUE"  },    // ISERROR
+        { "TRUE"  },    // ISERR
+        { "FALSE" },    // ISBLANK
+        { "FALSE" },    // ISNUMBER
+        { "FALSE" },    // ISTEXT
+        { "FALSE" },    // ISNUMBER
+        { "FALSE" },    // ISTEXT
+        { "#REF!" },    // =0
+        { "#REF!" },    // =""
+        { "#REF!" },    // INDIRECT
+        { "#REF!" },    // A1:A2 range
+        { "#REF!" },    // +23
+        { "#REF!" },    // &"W"
+        { "FALSE" },    // ISREF
+        { "TRUE"  },    // ISERROR
+        { "TRUE"  },    // ISERR
+        { "FALSE" },    // ISBLANK
+        { "FALSE" },    // ISNUMBER
+        { "FALSE" },    // ISTEXT
+        { "FALSE" },    // ISNUMBER
+        { "FALSE" },    // ISTEXT
+        // TODO: gives Err:504 FIXME { "#REF!" },    // =0
+        // TODO: gives Err:504 FIXME { "#REF!" },    // =""
+        { "#REF!" },    // INDIRECT
+    };
+
+    bool bSuccess = checkOutput<1>(m_pDoc, aRange, aOutputCheck, "Check unresolved external reference.");
+    CPPUNIT_ASSERT_MESSAGE("Unresolved reference check failed", bSuccess);
+
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testMatrixOp()
 {
     m_pDoc->InsertTab(0, "Test");
