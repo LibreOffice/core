@@ -38,6 +38,11 @@
 #  include <graphite_static.hxx>
 #  include <graphite2/Font.h>
 #endif
+#ifndef INCLUDED_PRE_POST_WIN_H
+#define INCLUDED_PRE_POST_WIN_H
+#  include "prewin.h"
+#  include "postwin.h"
+#endif
 
 class FontSelectPattern;
 class WinFontInstance;

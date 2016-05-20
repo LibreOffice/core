@@ -28,9 +28,11 @@ class   SalXLib;
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <X11/extensions/Xrender.h>
+#include "GL/glxew.h"
 
 #include <unx/salunx.h>
 #include <unx/saltype.h>
+#include <vcl/opengl/OpenGLContext.hxx>
 #include <vcl/salgtype.hxx>
 #include <vcl/ptrstyle.hxx>
 #include <sal/types.h>
@@ -183,6 +185,23 @@ class AttributeProvider;
 extern "C" {
     typedef Bool(*X_if_predicate)(Display*,XEvent*,XPointer);
 }
+
+class VCLPLUG_GEN_PUBLIC GLX11Window : public GLWindow
+{
+public:
+    Display*           dpy;
+    int                screen;
+    Window             win;
+    XVisualInfo*       vi;
+    GLXContext         ctx;
+    const char*        GLXExtensions;
+
+    bool HasGLXExtension(const char* name) const;
+
+    GLX11Window();
+    virtual bool Synchronize(bool bOnoff) const override;
+    ~GLX11Window();
+};
 
 class VCLPLUG_GEN_PUBLIC SalDisplay : public SalGenericDisplay
 {
