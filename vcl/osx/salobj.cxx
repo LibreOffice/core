@@ -18,6 +18,8 @@
  */
 
 #include <string.h>
+#include <vcl/opengl/OpenGLContext.hxx>
+#include <opengl/zone.hxx>
 
 #include "osx/saldata.hxx"
 #include "osx/salobj.h"
@@ -224,6 +226,109 @@ void AquaSalObject::Show( bool bVisible )
 const SystemEnvData* AquaSalObject::GetSystemData() const
 {
     return &maSysData;
+}
+
+class AquaOpenGLContext : public OpenGLContext
+{
+public:
+    virtual bool initWindow() override;
+private:
+    NSOpenGLView* getOpenGLView();
+    virtual bool ImplInit() override;
+    virtual SystemWindowData generateWinData(vcl::Window* pParent, bool bRequestLegacyContext) override;
+    virtual void makeCurrent() override;
+    virtual void destroyCurrentContext() override;
+    virtual bool isCurrent() override;
+    virtual void resetCurrent() override;
+    virtual void swapBuffers() override;
+};
+
+void AquaOpenGLContext::resetCurrent()
+{
+    clearCurrent();
+
+    OpenGLZone aZone;
+
+    (void) this; // loplugin:staticmethods
+    [NSOpenGLContext clearCurrentContext];
+}
+
+void AquaOpenGLContext::makeCurrent()
+{
+    if (isCurrent())
+        return;
+
+    OpenGLZone aZone;
+
+    clearCurrent();
+
+    NSOpenGLView* pView = getOpenGLView();
+    [[pView openGLContext] makeCurrentContext];
+
+    registerAsCurrent();
+}
+
+void AquaOpenGLContext::swapBuffers()
+{
+    OpenGLZone aZone;
+
+    NSOpenGLView* pView = getOpenGLView();
+    [[pView openGLContext] flushBuffer];
+
+    BuffersSwapped();
+}
+
+SystemWindowData AquaOpenGLContext::generateWinData(vcl::Window* /*pParent*/, bool bRequestLegacyContext)
+{
+    SystemWindowData aWinData;
+    aWinData.bOpenGL = true;
+    aWinData.bLegacy = bRequestLegacyContext;
+    aWinData.nSize = sizeof(aWinData);
+    return aWinData;
+}
+
+void AquaOpenGLContext::destroyCurrentContext()
+{
+    [NSOpenGLContext clearCurrentContext];
+}
+
+bool AquaOpenGLContext::initWindow()
+{
+    if( !m_pChildWindow )
+    {
+        SystemWindowData winData = generateWinData(mpWindow, mbRequestLegacyContext);
+        m_pChildWindow = VclPtr<SystemChildWindow>::Create(mpWindow, 0, &winData, false);
+    }
+
+    if (m_pChildWindow)
+    {
+        InitChildWindow(m_pChildWindow.get());
+    }
+
+    return true;
+}
+
+bool AquaOpenGLContext::ImplInit()
+{
+    OpenGLZone aZone;
+
+    VCL_GL_INFO("OpenGLContext::ImplInit----start");
+    NSOpenGLView* pView = getOpenGLView();
+    [[pView openGLContext] makeCurrentContext];
+
+    bool bRet = InitGLEW();
+    InitGLEWDebugging();
+    return bRet;
+}
+
+NSOpenGLView* AquaOpenGLContext::getOpenGLView()
+{
+    return reinterpret_cast<NSOpenGLView*>(m_pChildWindow->GetSystemData()->mpNSView);
+}
+
+OpenGLContext* AquaSalInstance::CreateOpenGLContext()
+{
+    return new AquaOpenGLContext;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
