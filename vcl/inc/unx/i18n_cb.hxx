@@ -60,16 +60,16 @@ typedef struct {
 
 class SalFrame;
 
-typedef enum {
-    ePreeditStatusDontKnow = 0,
-    ePreeditStatusActive,
-    ePreeditStatusActivationRequired,
-    ePreeditStatusStartPending
-} preedit_status_t;
+enum class PreeditStatus {
+    DontKnow = 0,
+    Active,
+    ActivationRequired,
+    StartPending
+};
 
 typedef struct {
     SalFrame*               pFrame;
-    preedit_status_t        eState;
+    PreeditStatus           eState;
     preedit_text_t          aText;
     SalExtTextInputEvent    aInputEv;
     std::vector< ExtTextInputAttr >   aInputFlags;
