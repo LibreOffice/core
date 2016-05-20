@@ -1893,9 +1893,10 @@ bool ScInterpreter::IsString()
                 bRes = true;
         }
         break;
+        case svExternalDoubleRef:
         case svMatrix:
         {
-            ScMatrixRef pMat = PopMatrix();
+            ScMatrixRef pMat = GetMatrix();
             if ( !pMat )
                 ;   // nothing
             else if ( !pJumpMatrix )
@@ -2476,6 +2477,14 @@ void ScInterpreter::ScIsRef()
                 bRes = true;
         }
         break;
+        case svExternalDoubleRef:
+        {
+            ScExternalRefCache::TokenArrayRef pArray;
+            PopExternalDoubleRef(pArray);
+            if (!nGlobalError)
+                bRes = true;
+        }
+        break;
         default:
             Pop();
     }
@@ -2525,9 +2534,10 @@ void ScInterpreter::ScIsValue()
                 bRes = true;
         }
         break;
+        case svExternalDoubleRef:
         case svMatrix:
         {
-            ScMatrixRef pMat = PopMatrix();
+            ScMatrixRef pMat = GetMatrix();
             if ( !pMat )
                 ;   // nothing
             else if ( !pJumpMatrix )
@@ -2684,9 +2694,10 @@ void ScInterpreter::ScIsNV()
                 bRes = true;
         }
         break;
+        case svExternalDoubleRef:
         case svMatrix:
         {
-            ScMatrixRef pMat = PopMatrix();
+            ScMatrixRef pMat = GetMatrix();
             if ( !pMat )
                 ;   // nothing
             else if ( !pJumpMatrix )
@@ -2740,9 +2751,10 @@ void ScInterpreter::ScIsErr()
                 bRes = true;
         }
         break;
+        case svExternalDoubleRef:
         case svMatrix:
         {
-            ScMatrixRef pMat = PopMatrix();
+            ScMatrixRef pMat = GetMatrix();
             if ( nGlobalError || !pMat )
                 bRes = ((nGlobalError && nGlobalError != NOTAVAILABLE) || !pMat);
             else if ( !pJumpMatrix )
@@ -2804,9 +2816,10 @@ void ScInterpreter::ScIsError()
                 bRes = true;
         }
         break;
+        case svExternalDoubleRef:
         case svMatrix:
         {
-            ScMatrixRef pMat = PopMatrix();
+            ScMatrixRef pMat = GetMatrix();
             if ( nGlobalError || !pMat )
                 bRes = true;
             else if ( !pJumpMatrix )
@@ -2886,9 +2899,10 @@ bool ScInterpreter::IsEven()
             }
         }
         break;
+        case svExternalDoubleRef:
         case svMatrix:
         {
-            ScMatrixRef pMat = PopMatrix();
+            ScMatrixRef pMat = GetMatrix();
             if ( !pMat )
                 ;   // nothing
             else if ( !pJumpMatrix )
