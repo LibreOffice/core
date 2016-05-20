@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "da7fb54a_230c0094",
+        "filename": "sd/source/ui/view/drviews7.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1337,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2016-05-20T08:45:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da7fb54a_c3c19430",
+      "range": {
+        "startLine": 1333,
+        "startChar": 0,
+        "endLine": 1337,
+        "endChar": 81
+      },
+      "revId": "efbc34d2cefa67960e702fe09f5ac903a23b8cb0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da7fb54a_e3dcd81a",
         "filename": "sd/source/ui/view/sdview.cxx",
         "patchSetId": 4
@@ -36,6 +60,30 @@
       "writtenOn": "2016-05-20T08:02:20Z",
       "side": 1,
       "message": "const Size ...",
+      "range": {
+        "startLine": 888,
+        "startChar": 16,
+        "endLine": 888,
+        "endChar": 20
+      },
+      "revId": "efbc34d2cefa67960e702fe09f5ac903a23b8cb0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_431104ac",
+        "filename": "sd/source/ui/view/sdview.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 888,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2016-05-20T08:45:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da7fb54a_e3dcd81a",
       "range": {
         "startLine": 888,
         "startChar": 16,
@@ -65,6 +113,24 @@
     },
     {
       "key": {
+        "uuid": "da7fb54a_63260818",
+        "filename": "svx/source/svdraw/svdograf.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 564,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2016-05-20T08:45:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da7fb54a_e38e9826",
+      "revId": "efbc34d2cefa67960e702fe09f5ac903a23b8cb0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da7fb54a_23e7a0e5",
         "filename": "svx/source/svdraw/svdograf.cxx",
         "patchSetId": 4
@@ -88,6 +154,30 @@
     },
     {
       "key": {
+        "uuid": "da7fb54a_a32010f9",
+        "filename": "svx/source/svdraw/svdograf.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 566,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2016-05-20T08:45:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da7fb54a_23e7a0e5",
+      "range": {
+        "startLine": 566,
+        "startChar": 9,
+        "endLine": 566,
+        "endChar": 15
+      },
+      "revId": "efbc34d2cefa67960e702fe09f5ac903a23b8cb0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da7fb54a_03e29cd5",
         "filename": "svx/source/svdraw/svdograf.cxx",
         "patchSetId": 4
@@ -99,6 +189,24 @@
       "writtenOn": "2016-05-20T08:03:10Z",
       "side": 1,
       "message": "You can leave out \u0027this-\u003e\u0027. \n\nthis-\u003eFoo() is the same as Foo()",
+      "revId": "efbc34d2cefa67960e702fe09f5ac903a23b8cb0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_83230c05",
+        "filename": "svx/source/svdraw/svdograf.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 567,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2016-05-20T08:45:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da7fb54a_03e29cd5",
       "revId": "efbc34d2cefa67960e702fe09f5ac903a23b8cb0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
