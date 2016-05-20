@@ -27,6 +27,21 @@
 typedef std::unordered_map< OString, GLuint, OStringHash > UniformCache;
 typedef std::list< OpenGLTexture > TextureList;
 
+enum class TextureShaderType
+{
+    Normal = 0,
+    Blend,
+    Masked,
+    Diff,
+    MaskedColor
+};
+
+enum class DrawShaderType
+{
+    Normal = 0,
+    Line
+};
+
 class VCL_PLUGIN_PUBLIC OpenGLProgram
 {
 private:
@@ -78,6 +93,10 @@ public:
     void SetTransform( const OString& rName, const OpenGLTexture& rTexture,
                        const basegfx::B2DPoint& rNull, const basegfx::B2DPoint& rX,
                        const basegfx::B2DPoint& rY );
+    void SetIdentityTransform(const OString& rName);
+    void SetShaderType(TextureShaderType eTextureShaderType);
+    void SetShaderType(DrawShaderType eDrawShaderType);
+
     void SetBlendMode( GLenum nSFactor, GLenum nDFactor );
 
     void ApplyMatrix(float fWidth, float fHeight, float fPixelOffset = 0.0f);
