@@ -542,9 +542,9 @@ SfxClassificationHelper::~SfxClassificationHelper()
 {
 }
 
-const OUString& SfxClassificationHelper::GetBACName()
+const OUString& SfxClassificationHelper::GetBACName(SfxClassificationPolicyType eType)
 {
-    return m_pImpl->m_aCategory[SfxClassificationPolicyType::IntellectualProperty].m_aName;
+    return m_pImpl->m_aCategory[eType].m_aName;
 }
 
 bool SfxClassificationHelper::HasImpactLevel()
@@ -765,7 +765,7 @@ void SfxClassificationHelper::SetBACName(const OUString& rName, SfxClassificatio
 
 void SfxClassificationHelper::UpdateInfobar(SfxViewFrame& rViewFrame)
 {
-    OUString aBACName = GetBACName();
+    OUString aBACName = GetBACName(SfxClassificationPolicyType::IntellectualProperty);
     bool bImpactLevel = HasImpactLevel();
     if (!aBACName.isEmpty() && bImpactLevel)
     {
