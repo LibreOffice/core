@@ -2376,7 +2376,6 @@ XclExpCellTable::XclExpCellTable( const XclExpRoot& rRoot ) :
 
     ScRange aUsedRange( 0, 0, nScTab, nLastUsedScCol, nLastUsedScRow, nScTab );
     GetAddressConverter().ValidateRange( aUsedRange, true );
-    nLastUsedScCol = aUsedRange.aEnd.Col();
     nLastUsedScRow = aUsedRange.aEnd.Row();
 
     // first row without any set attributes (height/hidden/...)

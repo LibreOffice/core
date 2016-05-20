@@ -630,8 +630,6 @@ void lcl_GetColumnTypes(
                 }
             }
         }
-        bool bSdbLenAdjusted = false;
-        bool bSdbLenBad = false;
         // Field length.
         if ( nDbType == sdbc::DataType::VARCHAR && !nFieldLen )
         {   // Determine maximum field width.
@@ -719,10 +717,7 @@ void lcl_GetColumnTypes(
             // To give the user what he wants we must subtract it here.
              //! CAVEAT! There is no way to define a numeric field with a length
              //! of 1 and no decimals!
-            if ( nFieldLen == 1 && nPrecision == 0 )
-                bSdbLenBad = true;
             nFieldLen = SvDbaseConverter::ConvertPrecisionToOdbc( nFieldLen, nPrecision );
-            bSdbLenAdjusted = true;
         }
         if ( nFieldLen > 254 )
         {
@@ -741,13 +736,6 @@ void lcl_GetColumnTypes(
         pColLengths[nField] = nFieldLen;
         pColScales[nField] = nPrecision;
 
-        // undo change to field length, reflect reality
-        if ( bSdbLenAdjusted )
-        {
-            nFieldLen = SvDbaseConverter::ConvertPrecisionToDbase( nFieldLen, nPrecision );
-            if ( bSdbLenBad && nFieldLen == 1 )
-                nFieldLen = 2;      // THIS is reality
-        }
         ++nField;
     }
 }

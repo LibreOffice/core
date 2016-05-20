@@ -5086,7 +5086,6 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                                 {
                                     //! clipping is not needed when on the left side of the window
 
-                                    bClip = true;                   // only output the rest!
                                     if (nStartX<nScrX)
                                     {
                                         long nDif = nScrX - nStartX;
@@ -5101,7 +5100,6 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                                     if ( nClipStartY < nRowPosY )
                                     {
                                         long nDif = nRowPosY - nClipStartY;
-                                        bClip = true;
                                         nClipStartY = nRowPosY;
                                         aClipSize.Height() -= nDif;
                                     }

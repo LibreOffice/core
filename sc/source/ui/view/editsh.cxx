@@ -328,7 +328,6 @@ void ScEditShell::Execute( SfxRequest& rReq )
                     rBindings.Invalidate( SID_SET_SUPER_SCRIPT );
                     rBindings.Invalidate( SID_SET_SUB_SCRIPT );
                 }
-                bSetModified = false;
             }
             return;
         case SID_UNICODE_NOTATION_TOGGLE:

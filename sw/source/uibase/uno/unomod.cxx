@@ -283,9 +283,6 @@ void SwXPrintSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, 
            IllegalArgumentException, WrappedTargetException)
 {
     bool bVal;
-    if ( rInfo.mnHandle != HANDLE_PRINTSET_ANNOTATION_MODE &&
-         rInfo.mnHandle != HANDLE_PRINTSET_FAX_NAME )
-        bVal = *static_cast<sal_Bool const *>(rValue.getValue());
 
     switch( rInfo.mnHandle )
     {

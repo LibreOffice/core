@@ -764,7 +764,6 @@ void ORptExport::exportContainer(const Reference< XSection>& _xSection)
     TGrid::const_iterator aRowIter = aFind->second.begin();
     TGrid::const_iterator aRowEnd = aFind->second.end();
 
-    sal_Int32 nEmptyCellColSpan = 0;
     TGridStyleMap::const_iterator aRowFind = m_aRowStyleNames.find(_xSection.get());
     TStringVec::const_iterator aHeightIter = aRowFind->second.begin();
     OSL_ENSURE(aRowFind->second.size() == aFind->second.size(),"Different count for rows");
@@ -779,7 +778,7 @@ void ORptExport::exportContainer(const Reference< XSection>& _xSection)
         {
             ::std::vector< TCell >::const_iterator aColIter = aRowIter->second.begin();
             ::std::vector< TCell >::const_iterator aColEnd = aRowIter->second.end();
-            nEmptyCellColSpan = 0;
+            sal_Int32 nEmptyCellColSpan = 0;
             for (; aColIter != aColEnd; ++aColIter)
             {
                 bool bCoveredCell = false;
@@ -964,12 +963,11 @@ void ORptExport::exportContainer(const Reference< XSection>& _xSection)
                 {
                     SvXMLElementExport aCoveredCell(*this,XML_NAMESPACE_TABLE, XML_COVERED_TABLE_CELL, true, true);
                 }
-                nEmptyCellColSpan = 0;
             }
         }
         else
         { // empty rows
-            nEmptyCellColSpan = aRowIter->second.size();
+            sal_Int32 nEmptyCellColSpan = aRowIter->second.size();
             if ( nEmptyCellColSpan )
             {
                 {
@@ -985,7 +983,6 @@ void ORptExport::exportContainer(const Reference< XSection>& _xSection)
                 {
                     SvXMLElementExport aCoveredCell(*this,XML_NAMESPACE_TABLE, XML_COVERED_TABLE_CELL, true, true);
                 }
-                nEmptyCellColSpan = 0;
             }
         }
     }

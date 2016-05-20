@@ -444,12 +444,6 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
             pView->EndDragObj( rMEvt.IsMod1() );
             pView->ForceMarkedToAnotherPage();
 
-            const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
-            if (rMarkList.GetMarkCount() == 1)
-            {
-                  SdrMark* pMark = rMarkList.GetMark(0);
-                  pObj = pMark->GetMarkedSdrObj();
-            }
             bReturn = true;
         }
         else if (pView->IsAction() )

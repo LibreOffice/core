@@ -158,7 +158,7 @@ long SwWW8ImplReader::Read_Book(WW8PLCFManResult*)
             nLen = MAX_FIELDLEN;
 
         long nOldPos = m_pStrm->Tell();
-        nLen = m_pSBase->WW8ReadString( *m_pStrm, aVal, pB->GetStartPos(), nLen,
+        m_pSBase->WW8ReadString( *m_pStrm, aVal, pB->GetStartPos(), nLen,
                                         m_eStructCharSet );
         m_pStrm->Seek( nOldPos );
 
@@ -1113,7 +1113,7 @@ long SwWW8ImplReader::Read_F_Tag( WW8FieldDesc* pF )
         nL = MAX_FIELDLEN;                  // MaxLaenge, durch Quoten
                                             // max. 4* so gross
     OUString sFText;
-    nL = m_pSBase->WW8ReadString( *m_pStrm, sFText,
+    m_pSBase->WW8ReadString( *m_pStrm, sFText,
                                 m_pPlcxMan->GetCpOfs() + nStart, nL, m_eStructCharSet);
 
     OUString aTagText;
@@ -1177,7 +1177,7 @@ OUString SwWW8ImplReader::GetFieldResult( WW8FieldDesc* pF )
                                             // max. 4* as big
 
     OUString sRes;
-    nL = m_pSBase->WW8ReadString( *m_pStrm, sRes, m_pPlcxMan->GetCpOfs() + nStart,
+    m_pSBase->WW8ReadString( *m_pStrm, sRes, m_pPlcxMan->GetCpOfs() + nStart,
                                 nL, m_eStructCharSet );
 
     m_pStrm->Seek( nOldPos );
