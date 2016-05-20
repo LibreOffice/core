@@ -652,15 +652,15 @@ void SwTextShell::StateInsert( SfxItemSet &rSet )
                         aHLinkItem.SetIntName(pINetFormat->GetName());
                         const SvxMacro *pMacro = pINetFormat->GetMacro( SFX_EVENT_MOUSEOVER_OBJECT );
                         if( pMacro )
-                            aHLinkItem.SetMacro(HYPERDLG_EVENT_MOUSEOVER_OBJECT, *pMacro);
+                            aHLinkItem.SetMacro(HyperDialogEvent::MouseOverObject, *pMacro);
 
                         pMacro = pINetFormat->GetMacro( SFX_EVENT_MOUSECLICK_OBJECT );
                         if( pMacro )
-                            aHLinkItem.SetMacro(HYPERDLG_EVENT_MOUSECLICK_OBJECT, *pMacro);
+                            aHLinkItem.SetMacro(HyperDialogEvent::MouseClickObject, *pMacro);
 
                         pMacro = pINetFormat->GetMacro( SFX_EVENT_MOUSEOUT_OBJECT );
                         if( pMacro )
-                            aHLinkItem.SetMacro(HYPERDLG_EVENT_MOUSEOUT_OBJECT, *pMacro);
+                            aHLinkItem.SetMacro(HyperDialogEvent::MouseOutObject, *pMacro);
 
                         // Get the text of the Link.
                         rSh.StartAction();
@@ -681,8 +681,8 @@ void SwTextShell::StateInsert( SfxItemSet &rSet )
 
                     aHLinkItem.SetInsertMode((SvxLinkInsertMode)(aHLinkItem.GetInsertMode() |
                         (bHtmlModeOn ? HLINK_HTMLMODE : 0)));
-                    aHLinkItem.SetMacroEvents ( HYPERDLG_EVENT_MOUSEOVER_OBJECT|
-                        HYPERDLG_EVENT_MOUSECLICK_OBJECT | HYPERDLG_EVENT_MOUSEOUT_OBJECT );
+                    aHLinkItem.SetMacroEvents ( HyperDialogEvent::MouseOverObject|
+                        HyperDialogEvent::MouseClickObject | HyperDialogEvent::MouseOutObject );
 
                     rSet.Put(aHLinkItem);
                 }

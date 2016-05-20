@@ -149,7 +149,7 @@ protected:
 
     SfxDispatcher* GetDispatcher() const;
 
-    sal_uInt16             GetMacroEvents();
+    HyperDialogEvent   GetMacroEvents();
     SvxMacroTableDtor* GetMacroTable();
 
     bool IsHTMLDoc() const;
