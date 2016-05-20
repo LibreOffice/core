@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_be3107ef",
+        "filename": "framework/inc/services/dispatchhelper.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2016-05-20T13:12:58Z",
+      "side": 1,
+      "message": "why virtual here?",
+      "revId": "ffdc541baef72a650a949bf8828e7db1a79a7f48",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_de4c0b79",
+        "filename": "sfx2/Library_sfx.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2016-05-20T13:12:58Z",
+      "side": 1,
+      "message": "Urk. That\u0027s not a good idea. Instead, please move the dispatchhelper header into public include dir: $toplevel/include/framework/",
+      "revId": "ffdc541baef72a650a949bf8828e7db1a79a7f48",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_fe51cf0f",
+        "filename": "sfx2/source/control/statcach.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2016-05-20T13:12:58Z",
+      "side": 1,
+      "message": "why this whitespace change?",
+      "revId": "ffdc541baef72a650a949bf8828e7db1a79a7f48",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_9e3443df",
+        "filename": "sfx2/source/control/unoctitm.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 861,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2016-05-20T13:12:58Z",
+      "side": 1,
+      "message": "the case pItem !\u003d nullptr, and something else than bool item is not handled yet - that was bSuccess\u003dtrue before",
+      "revId": "ffdc541baef72a650a949bf8828e7db1a79a7f48",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
