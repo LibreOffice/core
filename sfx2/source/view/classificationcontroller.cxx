@@ -208,16 +208,29 @@ void ClassificationCategoriesController::statusChanged(const frame::FeatureState
     }
 
     // Restore state based on the doc. model.
-    VclPtr<ListBox> pCategories = m_pClassification->getCategories(SfxClassificationPolicyType::IntellectualProperty);
-    const OUString& rCategoryName = aHelper.GetBACName();
-    if (!rCategoryName.isEmpty())
-        pCategories->SelectEntry(rCategoryName);
+    for (size_t i = m_pClassification->getLabelsSize(); i > 0; --i)
+    {
+        auto eType = static_cast<SfxClassificationPolicyType>(i);
+        const OUString& rCategoryName = aHelper.GetBACName(eType);
+        if (!rCategoryName.isEmpty())
+        {
+            VclPtr<ListBox> pCategories = m_pClassification->getCategories(eType);
+            pCategories->SelectEntry(rCategoryName);
+        }
+    }
 }
 
 void ClassificationCategoriesController::removeEntries()
 {
     if (m_pClassification)
-        m_pClassification->getCategories(SfxClassificationPolicyType::IntellectualProperty)->Clear();
+    {
+        for (size_t i = m_pClassification->getLabelsSize(); i > 0; --i)
+        {
+            auto eType = static_cast<SfxClassificationPolicyType>(i);
+            VclPtr<ListBox> pCategories = m_pClassification->getCategories(eType);
+            pCategories->Clear();
+        }
+    }
 }
 
 ClassificationControl::ClassificationControl(vcl::Window* pParent)
