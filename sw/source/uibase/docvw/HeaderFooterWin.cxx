@@ -284,7 +284,7 @@ void SwHeaderFooterWin::Paint(vcl::RenderContext& rRenderContext, const Rectangl
         double nAngle = M_PI;
         if (m_bIsHeader)
             nAngle = 0;
-        FillGradientAttribute aFillAttrs(GRADIENTSTYLE_LINEAR, 0.0, 0.0, 0.0, nAngle, aLighterColor, aFillColor, 10);
+        FillGradientAttribute aFillAttrs(drawinglayer::attribute::GradientStyle::Linear, 0.0, 0.0, 0.0, nAngle, aLighterColor, aFillColor, 10);
         aSeq[0] = drawinglayer::primitive2d::Primitive2DReference(
                     new drawinglayer::primitive2d::FillGradientPrimitive2D(aGradientRect, aFillAttrs));
     }
