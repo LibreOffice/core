@@ -65,6 +65,8 @@
 #include "pagedesc.hxx"
 #include "calc.hxx"
 
+#include <unotbl.hxx>
+
 typedef tools::SvRef<SwDocShell> SwDocShellRef;
 
 using namespace ::com::sun::star;
@@ -113,6 +115,7 @@ public:
     void testClientModify();
     void test64kPageDescs();
     void testTdf92308();
+    void testTableCellComparison();
 
     CPPUNIT_TEST_SUITE(SwDocTest);
 
@@ -147,6 +150,7 @@ public:
     CPPUNIT_TEST(testClientModify);
     CPPUNIT_TEST(test64kPageDescs);
     CPPUNIT_TEST(testTdf92308);
+    CPPUNIT_TEST(testTableCellComparison);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -1622,6 +1626,39 @@ void SwDocTest::test64kPageDescs()
 void SwDocTest::testTdf92308()
 {
     CPPUNIT_ASSERT_EQUAL(m_pDoc->HasInvisibleContent(), false);
+}
+
+void SwDocTest::testTableCellComparison()
+{
+    CPPUNIT_ASSERT_EQUAL( -1, sw_CompareCellsByColFirst(OUString("A1"), OUString("Z1")) );
+    CPPUNIT_ASSERT_EQUAL( +1, sw_CompareCellsByColFirst(OUString("Z1"), OUString("A1")) );
+    CPPUNIT_ASSERT_EQUAL(  0, sw_CompareCellsByColFirst(OUString("A1"), OUString("A1")) );
+
+    CPPUNIT_ASSERT_EQUAL( +1, sw_CompareCellsByColFirst(OUString("A2"), OUString("A1")) );
+    CPPUNIT_ASSERT_EQUAL( +1, sw_CompareCellsByColFirst(OUString("Z3"), OUString("A2")) );
+    CPPUNIT_ASSERT_EQUAL( -1, sw_CompareCellsByColFirst(OUString("A3"), OUString("Z1")) );
+
+    CPPUNIT_ASSERT_EQUAL( -1, sw_CompareCellsByRowFirst(OUString("A1"), OUString("Z1")) );
+    CPPUNIT_ASSERT_EQUAL( +1, sw_CompareCellsByRowFirst(OUString("Z1"), OUString("A1")) );
+    CPPUNIT_ASSERT_EQUAL(  0, sw_CompareCellsByRowFirst(OUString("A1"), OUString("A1")) );
+
+    CPPUNIT_ASSERT_EQUAL( +1, sw_CompareCellsByRowFirst(OUString("A2"), OUString("A1")) );
+    CPPUNIT_ASSERT_EQUAL( +1, sw_CompareCellsByRowFirst(OUString("Z3"), OUString("A2")) );
+    CPPUNIT_ASSERT_EQUAL( +1, sw_CompareCellsByRowFirst(OUString("A3"), OUString("Z1")) );
+
+    CPPUNIT_ASSERT_EQUAL(  0, sw_CompareCellRanges(OUString("A1"), OUString("A1"), OUString("A1"), OUString("A1"), true) );
+    CPPUNIT_ASSERT_EQUAL(  0, sw_CompareCellRanges(OUString("A1"), OUString("Z1"), OUString("A1"), OUString("Z1"), true) );
+    CPPUNIT_ASSERT_EQUAL(  0, sw_CompareCellRanges(OUString("A1"), OUString("Z1"), OUString("A1"), OUString("Z1"), false) );
+
+    CPPUNIT_ASSERT_EQUAL( -1, sw_CompareCellRanges(OUString("A1"), OUString("Z1"), OUString("B1"), OUString("Z1"), true) );
+    CPPUNIT_ASSERT_EQUAL( -1, sw_CompareCellRanges(OUString("A1"), OUString("Z1"), OUString("A2"), OUString("Z2"), false) );
+    CPPUNIT_ASSERT_EQUAL( -1, sw_CompareCellRanges(OUString("A1"), OUString("Z1"), OUString("A2"), OUString("Z2"), true) );
+    CPPUNIT_ASSERT_EQUAL( -1, sw_CompareCellRanges(OUString("A1"), OUString("Z1"), OUString("A6"), OUString("Z2"), true) );
+
+    CPPUNIT_ASSERT_EQUAL( +1, sw_CompareCellRanges(OUString("B1"), OUString("Z1"), OUString("A1"), OUString("Z1"), true) );
+    CPPUNIT_ASSERT_EQUAL( +1, sw_CompareCellRanges(OUString("A2"), OUString("Z2"), OUString("A1"), OUString("Z1"), false) );
+    CPPUNIT_ASSERT_EQUAL( +1, sw_CompareCellRanges(OUString("A2"), OUString("Z2"), OUString("A1"), OUString("Z1"), true) );
+    CPPUNIT_ASSERT_EQUAL( +1, sw_CompareCellRanges(OUString("A6"), OUString("Z2"), OUString("A1"), OUString("Z1"), true) );
 }
 
 void SwDocTest::setUp()
