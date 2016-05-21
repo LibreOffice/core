@@ -378,7 +378,7 @@ RscTop * RscTypCont::InitClassImageButton( RscTop * pSuper,
     {
         nId = aNmTb.Put( "ButtonImage", VARNAME );
         pClassImageButton->SetVariable( nId, pClassImage, nullptr, 0,
-                                         RSC_IMAGEBUTTON_IMAGE );
+                                         (sal_uInt32)RscImageButtonFlags::Image );
     }
     // initialize variables
     {
@@ -415,11 +415,11 @@ RscTop * RscTypCont::InitClassImageButton( RscTop * pSuper,
         // add variable
         nVarId = aNmTb.Put( "Symbol", VARNAME );
         pClassImageButton->SetVariable( nVarId, pSymbol, nullptr, 0,
-                                        RSC_IMAGEBUTTON_SYMBOL );
+                                        (sal_uInt32)RscImageButtonFlags::Symbol );
     }
     nId = aNmTb.Put( "State", VARNAME );
     pClassImageButton->SetVariable( nId, pTriState, nullptr, 0,
-                                    RSC_IMAGEBUTTON_STATE );
+                                    (sal_uInt32)RscImageButtonFlags::State );
 
     INS_WINBIT(pClassImageButton,Repeat)
     INS_WINBIT(pClassImageButton,SmallStyle)
