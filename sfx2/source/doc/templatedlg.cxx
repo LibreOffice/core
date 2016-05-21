@@ -891,7 +891,7 @@ void SfxTemplateManagerDlg::OnTemplateState (const ThumbnailViewItem *pItem)
     }
 }
 
-void SfxTemplateManagerDlg::OnTemplateImportCategory(OUString sCategory)
+void SfxTemplateManagerDlg::OnTemplateImportCategory(const OUString& sCategory)
 {
     sal_Int16 nDialogType =
         css::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE;

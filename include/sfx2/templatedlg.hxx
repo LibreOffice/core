@@ -86,7 +86,7 @@ private:
 
     DECL_LINK_TYPED(SearchUpdateHdl, Edit&, void);
 
-    void OnTemplateImportCategory(OUString sCategory);
+    void OnTemplateImportCategory(const OUString& sCategory);
     static void OnTemplateLink ();
     void OnTemplateOpen ();
     void OnTemplateExport ();
@@ -191,7 +191,7 @@ public:
 
     void HideNewCategoryOption();
 
-    inline OUString GetSelectedCategory() const {
+    inline const OUString& GetSelectedCategory() const {
         return msSelectedCategory;
     };
 
