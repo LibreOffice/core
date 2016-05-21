@@ -11628,7 +11628,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
     {
         String 1 // Description
         {
-            Text [ en-US ] = "Checks 1 or more conditions and returns a value corresponding to the first true condition." ;
+            Text [ en-US ] = "Returns a result corresponding to the value that matches the given expression." ;
         };
         ExtraData =
         {
