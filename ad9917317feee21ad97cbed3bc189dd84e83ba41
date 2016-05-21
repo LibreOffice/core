@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_c99c536c",
+        "filename": "sd/source/ui/sidebar/SlideBackground.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 292,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-05-21T17:30:46Z",
+      "side": 1,
+      "message": "Since we\u0027re now responding to EID_SHAPE_CHANGED event, it\u0027d be good to add it here too",
+      "revId": "ad9917317feee21ad97cbed3bc189dd84e83ba41",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_29821f01",
+        "filename": "sd/source/ui/sidebar/SlideBackground.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-05-21T17:30:46Z",
+      "side": 1,
+      "message": "Please move this array further down, to the switch-case branch where it is really needed. It is of no use in all other cases, so no need to allocate storage for it.",
+      "revId": "ad9917317feee21ad97cbed3bc189dd84e83ba41",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_c973734c",
+        "filename": "sd/source/ui/sidebar/SlideBackground.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-05-21T17:30:46Z",
+      "side": 1,
+      "message": "I\u0027m yet to find out if this is the ideal approach. Sure, EID_SHAPE_CHANGED event might fire when master page changes, but it likely fires also in other cases (for example when, dunno, page format changes?) and in that case, it\u0027s pointless to refresh the list of master pages ... but for the time being, leave it at that. We might want to create a separate event for master page change in the future and use that one here",
+      "revId": "ad9917317feee21ad97cbed3bc189dd84e83ba41",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
