@@ -1,0 +1,4 @@
+writer_tests.start.start_writer
+writer_tests.start.type_text
+writer_tests.start.goto_first_page
+writer_tests.start.select_text
