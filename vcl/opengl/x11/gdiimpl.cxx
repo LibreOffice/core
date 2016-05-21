@@ -725,7 +725,7 @@ bool X11OpenGLSalGraphicsImpl::RenderPixmap(X11Pixmap* pPixmap, X11Pixmap* pMask
     };
 
     Display* pDisplay = mrParent.GetXDisplay();
-    bool bInverted;
+    bool bInverted = false;
 
     const long nWidth = pPixmap->GetWidth();
     const long nHeight = pPixmap->GetHeight();
