@@ -590,6 +590,8 @@ OUString sw_GetCellName( sal_Int32 nColumn, sal_Int32 nRow );
 
 int sw_CompareCellsByColFirst( const OUString &rCellName1, const OUString &rCellName2 );
 
+int sw_CompareCellsByRowFirst( const OUString &rCellName1, const OUString &rCellName2 );
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
