@@ -60,7 +60,7 @@ VCL_BUILDER_DECL_FACTORY(TemplateRemoteView)
     rRet = VclPtr<TemplateRemoteView>::Create(pParent, WB_VSCROLL, false);
 }
 
-void TemplateRemoteView::showRegion(ThumbnailViewItem * /*pItem*/)
+void TemplateRemoteView::showRegion(TemplateContainerItem * /*pItem*/)
 {
     //TODO:
 }

@@ -11,34 +11,19 @@
 #define INCLUDED_SFX2_TEMPLATECONTAINERITEM_HXX
 
 #include <sfx2/templateproperties.hxx>
-#include <sfx2/thumbnailviewitem.hxx>
 
-class TemplateContainerItem : public ThumbnailViewItem
+class TemplateContainerItem
 {
 public:
 
+    sal_uInt16 mnId;
     sal_uInt16 mnRegionId;
-    BitmapEx maPreview2;
-    BitmapEx maPreview3;
-    BitmapEx maPreview4;
+    OUString maTitle;
     std::vector<TemplateItemProperties> maTemplates;
 
-    TemplateContainerItem (ThumbnailView &rView, sal_uInt16 nId);
+    TemplateContainerItem (sal_uInt16 nId);
 
     virtual ~TemplateContainerItem ();
-
-    virtual void Paint (drawinglayer::processor2d::BaseProcessor2D *pProcessor,
-                        const ThumbnailItemAttributes *pAttrs) override;
-
-    virtual void calculateItemsPosition (const long nThumbnailHeight, const long nDisplayHeight,
-                                         const long nPadding, sal_uInt32 nMaxTextLength,
-                                         const ThumbnailItemAttributes *pAttrs) override;
-
-    bool HasMissingPreview( );
-
-private:
-
-    Rectangle maThumbnailArea;
 };
 
 #endif // INCLUDED_SFX2_TEMPLATECONTAINERITEM_HXX

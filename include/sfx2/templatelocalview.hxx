@@ -43,7 +43,7 @@ public:
 
     virtual void showAllTemplates () override;
 
-    virtual void showRegion (ThumbnailViewItem *pItem) override;
+    virtual void showRegion (TemplateContainerItem *pItem) override;
 
     void showRegion (const OUString &rName);
 
@@ -53,7 +53,7 @@ public:
 
     sal_uInt16 getCurRegionItemId () const;
 
-    ThumbnailViewItem* getRegion(OUString const & sStr);
+    TemplateContainerItem* getRegion(OUString const & sStr);
 
     sal_uInt16 getRegionId (size_t pos) const;
 
