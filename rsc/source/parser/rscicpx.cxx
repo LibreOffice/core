@@ -179,21 +179,21 @@ RscTop * RscTypCont::InitClassImageList( RscTop * pSuper,
 
     nId = aNmTb.Put( "MaskColor", VARNAME );
     pClassImageList->SetVariable( nId, pClassColor, nullptr,
-                                  VAR_SVDYNAMIC, RSC_IMAGELIST_MASKCOLOR );
+                                  VAR_SVDYNAMIC, (sal_uInt32)RscImageListFlags::MaskColor );
 
     RscCont * pCont = new RscCont( pHS->getID( "sal_uInt16 *" ), RSC_NOTYPE );
     pCont->SetTypeClass( &aIdUShort );
     aBaseLst.push_back( pCont );
     nId = aNmTb.Put( "IdList", VARNAME );
     pClassImageList->SetVariable( nId, pCont, nullptr, 0,
-                                      RSC_IMAGELIST_IDLIST );
+                                      (sal_uInt32)RscImageListFlags::IdList );
 
     nId = aNmTb.Put( "FileList", VARNAME );
     pClassImageList->SetVariable( nId, pStrLst );
 
     nId = aNmTb.Put( "IdCount", VARNAME );
     pClassImageList->SetVariable( nId, &aUShort, nullptr, 0,
-                                  RSC_IMAGELIST_IDCOUNT );
+                                  (sal_uInt32)RscImageListFlags::IdCount );
     return pClassImageList;
 }
 

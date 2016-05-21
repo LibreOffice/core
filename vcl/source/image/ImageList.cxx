@@ -55,16 +55,16 @@ ImageList::ImageList( const ResId& rResId ) :
     {
         pResMgr->Increment( sizeof( RSHEADER_TYPE ) );
 
-        sal_uLong                               nObjMask = pResMgr->ReadLong();
+        RscImageListFlags nObjMask = (RscImageListFlags)pResMgr->ReadLong();
         pResMgr->ReadString(); //skip string
         std::unique_ptr< Color >        xMaskColor;
 
-        if( nObjMask & RSC_IMAGE_MASKCOLOR )
+        if( nObjMask & RscImageListFlags::MaskColor )
             xMaskColor.reset( new Color( ResId( static_cast<RSHEADER_TYPE*>(pResMgr->GetClass()), *pResMgr ) ) );
 
         pResMgr->Increment( ResMgr::GetObjSize( static_cast<RSHEADER_TYPE*>(pResMgr->GetClass()) ) );
 
-        if( nObjMask & RSC_IMAGELIST_IDLIST )
+        if( nObjMask & RscImageListFlags::IdList )
         {
             for( sal_Int32 i = 0, nCount = pResMgr->ReadLong(); i < nCount; ++i )
                 pResMgr->ReadLong();
@@ -81,7 +81,7 @@ ImageList::ImageList( const ResId& rResId ) :
             mpImplData->AddImage( aName, nId, aEmpty );
         }
 
-        if( nObjMask & RSC_IMAGELIST_IDCOUNT )
+        if( nObjMask & RscImageListFlags::IdCount )
             pResMgr->ReadShort();
     }
 }
