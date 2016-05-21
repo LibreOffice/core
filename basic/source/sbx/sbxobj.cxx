@@ -113,7 +113,7 @@ SbxDataType SbxObject::GetType() const
 
 SbxClassType SbxObject::GetClass() const
 {
-    return SbxCLASS_OBJECT;
+    return SbxClassType::Object;
 }
 
 void SbxObject::Clear()
@@ -122,9 +122,9 @@ void SbxObject::Clear()
     pProps     = new SbxArray;
     pObjs      = new SbxArray( SbxOBJECT );
     SbxVariable* p;
-    p = Make( pNameProp, SbxCLASS_PROPERTY, SbxSTRING );
+    p = Make( pNameProp, SbxClassType::Property, SbxSTRING );
     p->SetFlag( SbxFlagBits::DontStore );
-    p = Make( pParentProp, SbxCLASS_PROPERTY, SbxOBJECT );
+    p = Make( pParentProp, SbxClassType::Property, SbxOBJECT );
     p->ResetFlag( SbxFlagBits::Write );
     p->SetFlag( SbxFlagBits::DontStore );
     pDfltProp  = nullptr;
@@ -213,20 +213,20 @@ SbxVariable* SbxObject::Find( const OUString& rName, SbxClassType t )
     SAL_INFO(
         "basic.sbx",
         "search" << std::setw(nLvl) << " "
-            << (t >= SbxCLASS_DONTCARE && t <= SbxCLASS_OBJECT
-                ? pCls[t - 1] : "Unknown class")
+            << (t >= SbxClassType::DontCare && t <= SbxClassType::Object
+                ? pCls[(int)t - 1] : "Unknown class")
             << " " << rName << " in " << SbxVariable::GetName());
     ++nLvl;
 #endif
 
     SbxVariable* pRes = nullptr;
     pObjs->SetFlag( SbxFlagBits::ExtSearch );
-    if( t == SbxCLASS_DONTCARE )
+    if( t == SbxClassType::DontCare )
     {
-        pRes = pMethods->Find( rName, SbxCLASS_METHOD );
+        pRes = pMethods->Find( rName, SbxClassType::Method );
         if( !pRes )
         {
-            pRes = pProps->Find( rName, SbxCLASS_PROPERTY );
+            pRes = pProps->Find( rName, SbxClassType::Property );
         }
         if( !pRes )
         {
@@ -238,10 +238,10 @@ SbxVariable* SbxObject::Find( const OUString& rName, SbxClassType t )
         SbxArray* pArray = nullptr;
         switch( t )
         {
-        case SbxCLASS_VARIABLE:
-        case SbxCLASS_PROPERTY: pArray = pProps;    break;
-        case SbxCLASS_METHOD:   pArray = pMethods;  break;
-        case SbxCLASS_OBJECT:   pArray = pObjs;     break;
+        case SbxClassType::Variable:
+        case SbxClassType::Property: pArray = pProps;    break;
+        case SbxClassType::Method:   pArray = pMethods;  break;
+        case SbxClassType::Object:   pArray = pObjs;     break;
         default: DBG_ASSERT( false, "Invalid SBX-Class" ); break;
         }
         if( pArray )
@@ -251,7 +251,7 @@ SbxVariable* SbxObject::Find( const OUString& rName, SbxClassType t )
     }
     // Extended Search in the Object-Array?
     // For objects and DontCare the array of objects has already been searched
-    if( !pRes && ( t == SbxCLASS_METHOD || t == SbxCLASS_PROPERTY ) )
+    if( !pRes && ( t == SbxClassType::Method || t == SbxClassType::Property ) )
         pRes = pObjs->Find( rName, t );
     // Search in the parents?
     if( !pRes && IsSet( SbxFlagBits::GlobalSearch ) )
@@ -287,7 +287,7 @@ SbxVariable* SbxObject::Find( const OUString& rName, SbxClassType t )
 
 bool SbxObject::Call( const OUString& rName, SbxArray* pParam )
 {
-    SbxVariable* pMeth = FindQualified( rName, SbxCLASS_DONTCARE);
+    SbxVariable* pMeth = FindQualified( rName, SbxClassType::DontCare);
     if( pMeth && nullptr != dynamic_cast<const SbxMethod*>( pMeth) )
     {
         // FindQualified() might have struck already!
@@ -307,10 +307,10 @@ SbxProperty* SbxObject::GetDfltProperty()
 {
     if ( !pDfltProp && !aDfltPropName.isEmpty() )
     {
-        pDfltProp = static_cast<SbxProperty*>( Find( aDfltPropName, SbxCLASS_PROPERTY ) );
+        pDfltProp = static_cast<SbxProperty*>( Find( aDfltPropName, SbxClassType::Property ) );
         if( !pDfltProp )
         {
-            pDfltProp = static_cast<SbxProperty*>( Make( aDfltPropName, SbxCLASS_PROPERTY, SbxVARIANT ) );
+            pDfltProp = static_cast<SbxProperty*>( Make( aDfltPropName, SbxClassType::Property, SbxVARIANT ) );
         }
     }
     return pDfltProp;
@@ -334,10 +334,10 @@ SbxArray* SbxObject::FindVar( SbxVariable* pVar, sal_uInt16& nArrayIdx )
     SbxArray* pArray = nullptr;
     if( pVar ) switch( pVar->GetClass() )
     {
-    case SbxCLASS_VARIABLE:
-    case SbxCLASS_PROPERTY: pArray = pProps;    break;
-    case SbxCLASS_METHOD:   pArray = pMethods;  break;
-    case SbxCLASS_OBJECT:   pArray = pObjs;     break;
+    case SbxClassType::Variable:
+    case SbxClassType::Property: pArray = pProps;    break;
+    case SbxClassType::Method:   pArray = pMethods;  break;
+    case SbxClassType::Object:   pArray = pObjs;     break;
     default: DBG_ASSERT( false, "Invalid SBX-Class" ); break;
     }
     if( pArray )
@@ -370,10 +370,10 @@ SbxVariable* SbxObject::Make( const OUString& rName, SbxClassType ct, SbxDataTyp
     SbxArray* pArray = nullptr;
     switch( ct )
     {
-    case SbxCLASS_VARIABLE:
-    case SbxCLASS_PROPERTY: pArray = pProps;    break;
-    case SbxCLASS_METHOD:   pArray = pMethods;  break;
-    case SbxCLASS_OBJECT:   pArray = pObjs;     break;
+    case SbxClassType::Variable:
+    case SbxClassType::Property: pArray = pProps;    break;
+    case SbxClassType::Method:   pArray = pMethods;  break;
+    case SbxClassType::Object:   pArray = pObjs;     break;
     default: DBG_ASSERT( false, "Invalid SBX-Class" ); break;
     }
     if( !pArray )
@@ -381,7 +381,7 @@ SbxVariable* SbxObject::Make( const OUString& rName, SbxClassType ct, SbxDataTyp
         return nullptr;
     }
     // Collections may contain objects of the same name
-    if( !( ct == SbxCLASS_OBJECT && nullptr != dynamic_cast<const SbxCollection*>( this ) ) )
+    if( !( ct == SbxClassType::Object && nullptr != dynamic_cast<const SbxCollection*>( this ) ) )
     {
         SbxVariable* pRes = pArray->Find( rName, ct );
         if( pRes )
@@ -392,14 +392,14 @@ SbxVariable* SbxObject::Make( const OUString& rName, SbxClassType ct, SbxDataTyp
     SbxVariable* pVar = nullptr;
     switch( ct )
     {
-    case SbxCLASS_VARIABLE:
-    case SbxCLASS_PROPERTY:
+    case SbxClassType::Variable:
+    case SbxClassType::Property:
         pVar = new SbxProperty( rName, dt );
         break;
-    case SbxCLASS_METHOD:
+    case SbxClassType::Method:
         pVar = new SbxMethod( rName, dt, bIsRuntimeFunction );
         break;
-    case SbxCLASS_OBJECT:
+    case SbxClassType::Object:
         pVar = CreateObject( rName );
         break;
     default:
@@ -438,7 +438,7 @@ void SbxObject::Insert( SbxVariable* pVar )
                     return;
                 }
                 EndListening( pOld->GetBroadcaster(), true );
-                if( pVar->GetClass() == SbxCLASS_PROPERTY )
+                if( pVar->GetClass() == SbxClassType::Property )
                 {
                     if( pOld == pDfltProp )
                     {
@@ -466,9 +466,9 @@ void SbxObject::Insert( SbxVariable* pVar )
         SAL_INFO(
             "basic.sbx",
             "insert "
-                << ((pVar->GetClass() >= SbxCLASS_DONTCARE
-                     && pVar->GetClass() <= SbxCLASS_OBJECT)
-                    ? pCls[pVar->GetClass() - 1] : "Unknown class")
+                << ((pVar->GetClass() >= SbxClassType::DontCare
+                     && pVar->GetClass() <= SbxClassType::Object)
+                    ? pCls[(int)pVar->GetClass() - 1] : "Unknown class")
                 << " " << aVarName << " in " << SbxVariable::GetName());
 #endif
     }
@@ -483,10 +483,10 @@ void SbxObject::QuickInsert( SbxVariable* pVar )
     {
         switch( pVar->GetClass() )
         {
-        case SbxCLASS_VARIABLE:
-        case SbxCLASS_PROPERTY: pArray = pProps;    break;
-        case SbxCLASS_METHOD:   pArray = pMethods;  break;
-        case SbxCLASS_OBJECT:   pArray = pObjs;     break;
+        case SbxClassType::Variable:
+        case SbxClassType::Property: pArray = pProps;    break;
+        case SbxClassType::Method:   pArray = pMethods;  break;
+        case SbxClassType::Object:   pArray = pObjs;     break;
         default: DBG_ASSERT( false, "Invalid SBX-Class" ); break;
         }
     }
@@ -510,9 +510,9 @@ void SbxObject::QuickInsert( SbxVariable* pVar )
         SAL_INFO(
             "basic.sbx",
             "insert "
-                << ((pVar->GetClass() >= SbxCLASS_DONTCARE
-                     && pVar->GetClass() <= SbxCLASS_OBJECT)
-                    ? pCls[pVar->GetClass() - 1] : "Unknown class")
+                << ((pVar->GetClass() >= SbxClassType::DontCare
+                     && pVar->GetClass() <= SbxClassType::Object)
+                    ? pCls[(int)pVar->GetClass() - 1] : "Unknown class")
                 << " " << aVarName << " in " << SbxVariable::GetName());
 #endif
     }
@@ -621,7 +621,7 @@ bool SbxObject::LoadData( SvStream& rStrm, sal_uInt16 nVer )
     // Set properties
     if( !aDfltProp.isEmpty() )
     {
-        pDfltProp = static_cast<SbxProperty*>( pProps->Find( aDfltProp, SbxCLASS_PROPERTY ) );
+        pDfltProp = static_cast<SbxProperty*>( pProps->Find( aDfltProp, SbxClassType::Property ) );
     }
     SetModified( false );
     return true;
@@ -881,7 +881,7 @@ SbxMethod::~SbxMethod()
 
 SbxClassType SbxMethod::GetClass() const
 {
-    return SbxCLASS_METHOD;
+    return SbxClassType::Method;
 }
 
 SbxProperty::SbxProperty( const OUString& r, SbxDataType t )
@@ -896,7 +896,7 @@ SbxProperty::~SbxProperty()
 
 SbxClassType SbxProperty::GetClass() const
 {
-    return SbxCLASS_PROPERTY;
+    return SbxClassType::Property;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -390,7 +390,7 @@ SbMethodRef DocObjectWrapper::getMethod( const OUString& aName ) throw (RuntimeE
         SbxFlagBits nSaveFlgs = m_pMod->GetFlags();
         // Limit search to this module
         m_pMod->ResetFlag( SbxFlagBits::GlobalSearch );
-        pMethod = dynamic_cast<SbMethod*>(m_pMod->SbModule::Find(aName,  SbxCLASS_METHOD));
+        pMethod = dynamic_cast<SbMethod*>(m_pMod->SbModule::Find(aName,  SbxClassType::Method));
         m_pMod->SetFlags( nSaveFlgs );
     }
 
@@ -405,7 +405,7 @@ SbPropertyRef DocObjectWrapper::getProperty( const OUString& aName ) throw (Runt
         SbxFlagBits nSaveFlgs = m_pMod->GetFlags();
         // Limit search to this module.
         m_pMod->ResetFlag( SbxFlagBits::GlobalSearch );
-        pProperty = dynamic_cast<SbProperty*>(m_pMod->SbModule::Find(aName,  SbxCLASS_PROPERTY));
+        pProperty = dynamic_cast<SbProperty*>(m_pMod->SbModule::Find(aName,  SbxClassType::Property));
         m_pMod->SetFlag( nSaveFlgs );
     }
 
@@ -483,7 +483,7 @@ SbModule::SbModule( const OUString& rName, bool bVBACompat )
     SetModuleType( script::ModuleType::NORMAL );
 
     // #i92642: Set name property to intitial name
-    SbxVariable* pNameProp = pProps->Find( "Name", SbxCLASS_PROPERTY );
+    SbxVariable* pNameProp = pProps->Find( "Name", SbxClassType::Property );
     if( pNameProp != nullptr )
     {
         pNameProp->PutString( GetName() );
@@ -551,7 +551,7 @@ void SbModule::StartDefinitions()
 
 SbMethod* SbModule::GetMethod( const OUString& rName, SbxDataType t )
 {
-    SbxVariable* p = pMethods->Find( rName, SbxCLASS_METHOD );
+    SbxVariable* p = pMethods->Find( rName, SbxClassType::Method );
     SbMethod* pMeth = p ? dynamic_cast<SbMethod*>( p ) : nullptr;
     if( p && !pMeth )
     {
@@ -583,7 +583,7 @@ SbMethod* SbModule::GetMethod( const OUString& rName, SbxDataType t )
 
 SbProperty* SbModule::GetProperty( const OUString& rName, SbxDataType t )
 {
-    SbxVariable* p = pProps->Find( rName, SbxCLASS_PROPERTY );
+    SbxVariable* p = pProps->Find( rName, SbxClassType::Property );
     SbProperty* pProp = p ? dynamic_cast<SbProperty*>( p ) : nullptr;
     if( p && !pProp )
     {
@@ -602,7 +602,7 @@ SbProperty* SbModule::GetProperty( const OUString& rName, SbxDataType t )
 
 void SbModule::GetProcedureProperty( const OUString& rName, SbxDataType t )
 {
-    SbxVariable* p = pProps->Find( rName, SbxCLASS_PROPERTY );
+    SbxVariable* p = pProps->Find( rName, SbxClassType::Property );
     SbProcedureProperty* pProp = p ? dynamic_cast<SbProcedureProperty*>( p ) : nullptr;
     if( p && !pProp )
     {
@@ -620,7 +620,7 @@ void SbModule::GetProcedureProperty( const OUString& rName, SbxDataType t )
 
 void SbModule::GetIfaceMapperMethod( const OUString& rName, SbMethod* pImplMeth )
 {
-    SbxVariable* p = pMethods->Find( rName, SbxCLASS_METHOD );
+    SbxVariable* p = pMethods->Find( rName, SbxClassType::Method );
     SbIfaceMapperMethod* pMapperMethod = p ? dynamic_cast<SbIfaceMapperMethod*>( p ) : nullptr;
     if( p && !pMapperMethod )
     {
@@ -693,7 +693,7 @@ SbxVariable* SbModule::Find( const OUString& rName, SbxClassType t )
             SbxArrayRef xArray = pImage->GetEnums();
             if( xArray.Is() )
             {
-                SbxVariable* pEnumVar = xArray->Find( rName, SbxCLASS_DONTCARE );
+                SbxVariable* pEnumVar = xArray->Find( rName, SbxClassType::DontCare );
                 SbxObject* pEnumObject = dynamic_cast<SbxObject*>( pEnumVar  );
                 if( pEnumObject )
                 {
@@ -746,7 +746,7 @@ void SbModule::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 OUString aProcName("Property Get ");
                 aProcName += pProcProperty->GetName();
 
-                SbxVariable* pMethVar = Find( aProcName, SbxCLASS_METHOD );
+                SbxVariable* pMethVar = Find( aProcName, SbxClassType::Method );
                 if( pMethVar )
                 {
                     SbxValues aVals;
@@ -787,13 +787,13 @@ void SbModule::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
                     OUString aProcName("Property Set ");
                     aProcName += pProcProperty->GetName();
-                    pMethVar = Find( aProcName, SbxCLASS_METHOD );
+                    pMethVar = Find( aProcName, SbxClassType::Method );
                 }
                 if( !pMethVar ) // Let
                 {
                     OUString aProcName("Property Let " );
                     aProcName += pProcProperty->GetName();
-                    pMethVar = Find( aProcName, SbxCLASS_METHOD );
+                    pMethVar = Find( aProcName, SbxClassType::Method );
                 }
 
                 if( pMethVar )
@@ -979,25 +979,25 @@ static void SendHint( SbxObject* pObj, sal_uInt32 nId, SbMethod* p )
 void ClearUnoObjectsInRTL_Impl_Rek( StarBASIC* pBasic )
 {
     // delete the return value of CreateUnoService
-    SbxVariable* pVar = pBasic->GetRtl()->Find( "CreateUnoService", SbxCLASS_METHOD );
+    SbxVariable* pVar = pBasic->GetRtl()->Find( "CreateUnoService", SbxClassType::Method );
     if( pVar )
     {
         pVar->SbxValue::Clear();
     }
     // delete the return value of CreateUnoDialog
-    pVar = pBasic->GetRtl()->Find( "CreateUnoDialog", SbxCLASS_METHOD );
+    pVar = pBasic->GetRtl()->Find( "CreateUnoDialog", SbxClassType::Method );
     if( pVar )
     {
         pVar->SbxValue::Clear();
     }
     // delete the return value of CDec
-    pVar = pBasic->GetRtl()->Find( "CDec", SbxCLASS_METHOD );
+    pVar = pBasic->GetRtl()->Find( "CDec", SbxClassType::Method );
     if( pVar )
     {
         pVar->SbxValue::Clear();
     }
     // delete return value of CreateObject
-    pVar = pBasic->GetRtl()->Find( "CreateObject", SbxCLASS_METHOD );
+    pVar = pBasic->GetRtl()->Find( "CreateObject", SbxClassType::Method );
     if( pVar )
     {
         pVar->SbxValue::Clear();
@@ -1090,7 +1090,7 @@ void SbModule::Run( SbMethod* pMeth )
         // Launcher problem
         // i80726 The Find below will generate an error in Testtool so we reset it unless there was one before already
         bool bWasError = SbxBase::GetError() != 0;
-        SbxVariable* pMSOMacroRuntimeLibVar = Find( "Launcher", SbxCLASS_OBJECT );
+        SbxVariable* pMSOMacroRuntimeLibVar = Find( "Launcher", SbxClassType::Object );
         if ( !bWasError && (SbxBase::GetError() == ERRCODE_SBX_PROC_UNDEFINED) )
             SbxBase::ResetError();
         if( pMSOMacroRuntimeLibVar )
@@ -1100,7 +1100,7 @@ void SbModule::Run( SbMethod* pMeth )
             {
                 SbxFlagBits nGblFlag = pMSOMacroRuntimeLib->GetFlags() & SbxFlagBits::GlobalSearch;
                 pMSOMacroRuntimeLib->ResetFlag( SbxFlagBits::GlobalSearch );
-                SbxVariable* pAppSymbol = pMSOMacroRuntimeLib->Find( "Application", SbxCLASS_METHOD );
+                SbxVariable* pAppSymbol = pMSOMacroRuntimeLib->Find( "Application", SbxClassType::Method );
                 pMSOMacroRuntimeLib->SetFlag( nGblFlag );
                 if( pAppSymbol )
                 {
@@ -1308,7 +1308,7 @@ void SbModule::RemoveVars()
     // We don't want a Find being called in a derived class ( e.g.
     // SbUserform because it could trigger say an initialise event
     // which would cause basic to be re-run in the middle of the init ( and remember RemoveVars is called from compile and we don't want code to run as part of the compile )
-    SbxVariableRef p = SbModule::Find( rModuleVariableName, SbxCLASS_PROPERTY );
+    SbxVariableRef p = SbModule::Find( rModuleVariableName, SbxClassType::Property );
     if( p.Is() )
         Remove (p);
     }
@@ -1875,7 +1875,7 @@ void SbModule::handleProcedureProperties( SfxBroadcaster& rBC, const SfxHint& rH
                 OUString aProcName("Property Get ");
                 aProcName += pProcProperty->GetName();
 
-                SbxVariable* pMeth = Find( aProcName, SbxCLASS_METHOD );
+                SbxVariable* pMeth = Find( aProcName, SbxClassType::Method );
                 if( pMeth )
                 {
                     SbxValues aVals;
@@ -1916,13 +1916,13 @@ void SbModule::handleProcedureProperties( SfxBroadcaster& rBC, const SfxHint& rH
 
                     OUString aProcName("Property Set " );
                     aProcName += pProcProperty->GetName();
-                    pMeth = Find( aProcName, SbxCLASS_METHOD );
+                    pMeth = Find( aProcName, SbxClassType::Method );
                 }
                 if( !pMeth )    // Let
                 {
                     OUString aProcName("Property Let " );
                     aProcName += pProcProperty->GetName();
-                    pMeth = Find( aProcName, SbxCLASS_METHOD );
+                    pMeth = Find( aProcName, SbxClassType::Method );
                 }
 
                 if( pMeth )
@@ -2479,7 +2479,7 @@ void SbUserFormModule::triggerMethod( const OUString& aMethodToRun, Sequence< An
 {
     SAL_INFO("basic", "*** trigger " << OUStringToOString( aMethodToRun, RTL_TEXTENCODING_UTF8 ).getStr() << " ***");
     // Search method
-    SbxVariable* pMeth = SbObjModule::Find( aMethodToRun, SbxCLASS_METHOD );
+    SbxVariable* pMeth = SbObjModule::Find( aMethodToRun, SbxClassType::Method );
     if( pMeth )
     {
         if ( aArguments.getLength() > 0 )   // Setup parameters
@@ -2619,7 +2619,7 @@ void SbUserFormModule::Unload()
         triggerTerminateEvent();
     }
     // Search method
-    SbxVariable* pMeth = SbObjModule::Find( "UnloadObject", SbxCLASS_METHOD );
+    SbxVariable* pMeth = SbObjModule::Find( "UnloadObject", SbxClassType::Method );
     if( pMeth )
     {
         SAL_INFO("basic", "Attempting too run the UnloadObjectMethod");
@@ -2647,7 +2647,7 @@ void SbUserFormModule::InitObject()
     try
     {
         OUString aHook("VBAGlobals");
-        SbUnoObject* pGlobs = static_cast<SbUnoObject*>(GetParent()->Find( aHook, SbxCLASS_DONTCARE ));
+        SbUnoObject* pGlobs = static_cast<SbUnoObject*>(GetParent()->Find( aHook, SbxClassType::DontCare ));
         if ( m_xModel.is() && pGlobs )
         {
             // broadcast INITIALIZE_USERFORM script event before the dialog is created

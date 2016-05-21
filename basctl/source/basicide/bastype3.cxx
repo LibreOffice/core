@@ -226,7 +226,7 @@ SbxVariable* TreeListBox::FindVariable( SvTreeListEntry* pEntry )
                 {
                     break;
                 }
-                pVar = static_cast<SbxObject*>(pVar)->GetMethods()->Find(aName, SbxCLASS_METHOD);
+                pVar = static_cast<SbxObject*>(pVar)->GetMethods()->Find(aName, SbxClassType::Method);
                 break;
             case OBJ_TYPE_DIALOG:
                 // sbx dialogs removed

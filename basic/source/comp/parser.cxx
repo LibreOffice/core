@@ -153,7 +153,7 @@ SbiParser::SbiParser( StarBASIC* pb, SbModule* pm )
 // part of the runtime-library?
 SbiSymDef* SbiParser::CheckRTLForSym(const OUString& rSym, SbxDataType eType)
 {
-    SbxVariable* pVar = GetBasic()->GetRtl()->Find(rSym, SbxCLASS_DONTCARE);
+    SbxVariable* pVar = GetBasic()->GetRtl()->Find(rSym, SbxClassType::DontCare);
     if (!pVar)
         return nullptr;
 

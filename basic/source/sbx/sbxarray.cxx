@@ -69,7 +69,7 @@ SbxArray& SbxArray::operator=( const SbxArray& rArray )
             if( eType != SbxVARIANT )
             {
                 // Convert no objects
-                if( eType != SbxOBJECT || pSrc_->GetClass() != SbxCLASS_OBJECT )
+                if( eType != SbxOBJECT || pSrc_->GetClass() != SbxClassType::Object )
                 {
                     pSrc_->Convert(eType);
                 }
@@ -92,7 +92,7 @@ SbxDataType SbxArray::GetType() const
 
 SbxClassType SbxArray::GetClass() const
 {
-    return SbxCLASS_ARRAY;
+    return SbxClassType::Array;
 }
 
 void SbxArray::Clear()
@@ -185,7 +185,7 @@ void SbxArray::Put32( SbxVariable* pVar, sal_uInt32 nIdx )
         if( pVar )
             if( eType != SbxVARIANT )
                 // Convert no objects
-                if( eType != SbxOBJECT || pVar->GetClass() != SbxCLASS_OBJECT )
+                if( eType != SbxOBJECT || pVar->GetClass() != SbxClassType::Object )
                     pVar->Convert( eType );
         SbxVariableRef& rRef = GetRef32( nIdx );
         if( static_cast<SbxVariable*>(rRef) != pVar )
@@ -205,7 +205,7 @@ void SbxArray::Put( SbxVariable* pVar, sal_uInt16 nIdx )
         if( pVar )
             if( eType != SbxVARIANT )
                 // Convert no objects
-                if( eType != SbxOBJECT || pVar->GetClass() != SbxCLASS_OBJECT )
+                if( eType != SbxOBJECT || pVar->GetClass() != SbxClassType::Object )
                     pVar->Convert( eType );
         SbxVariableRef& rRef = GetRef( nIdx );
         if( static_cast<SbxVariable*>(rRef) != pVar )
@@ -379,7 +379,7 @@ SbxVariable* SbxArray::FindUserData( sal_uInt32 nData )
         {
             switch (rEntry.mpVar->GetClass())
             {
-                case SbxCLASS_OBJECT:
+                case SbxClassType::Object:
                 {
                     // Objects are not allowed to scan their parent.
                     SbxFlagBits nOld = rEntry.mpVar->GetFlags();
@@ -388,7 +388,7 @@ SbxVariable* SbxArray::FindUserData( sal_uInt32 nData )
                     rEntry.mpVar->SetFlags(nOld);
                 }
                 break;
-                case SbxCLASS_ARRAY:
+                case SbxClassType::Array:
                     // Casting SbxVariable to SbxArray?  Really?
                     p = reinterpret_cast<SbxArray&>(*rEntry.mpVar).FindUserData(nData);
                 break;
@@ -424,7 +424,7 @@ SbxVariable* SbxArray::Find( const OUString& rName, SbxClassType t )
         // The very secure search works as well, if there is no hashcode!
         sal_uInt16 nVarHash = rEntry.mpVar->GetHashCode();
         if ( (!nVarHash || nVarHash == nHash)
-            && (t == SbxCLASS_DONTCARE || rEntry.mpVar->GetClass() == t)
+            && (t == SbxClassType::DontCare || rEntry.mpVar->GetClass() == t)
             && (rEntry.mpVar->GetName().equalsIgnoreAsciiCase(rName)))
         {
             p = &rEntry.mpVar;
@@ -437,7 +437,7 @@ SbxVariable* SbxArray::Find( const OUString& rName, SbxClassType t )
         {
             switch (rEntry.mpVar->GetClass())
             {
-                case SbxCLASS_OBJECT:
+                case SbxClassType::Object:
                 {
                     // Objects are not allowed to scan their parent.
                     SbxFlagBits nOld = rEntry.mpVar->GetFlags();
@@ -446,7 +446,7 @@ SbxVariable* SbxArray::Find( const OUString& rName, SbxClassType t )
                     rEntry.mpVar->SetFlags(nOld);
                 }
                 break;
-                case SbxCLASS_ARRAY:
+                case SbxClassType::Array:
                     // Casting SbxVariable to SbxArray?  Really?
                     p = reinterpret_cast<SbxArray&>(*rEntry.mpVar).Find(rName, t);
                 break;

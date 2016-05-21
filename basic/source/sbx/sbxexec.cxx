@@ -162,7 +162,7 @@ static SbxVariableRef Operand
     }
     else
     {
-        refVar = QualifiedName( pObj, pGbl, &p, SbxCLASS_DONTCARE );
+        refVar = QualifiedName( pObj, pGbl, &p, SbxClassType::DontCare );
     }
     *ppBuf = p;
     return refVar;
@@ -241,7 +241,7 @@ static SbxVariableRef Assign( SbxObject* pObj, SbxObject* pGbl, const sal_Unicod
         if( *p == '=' )
         {
             // Assign only onto properties!
-            if( refVar->GetClass() != SbxCLASS_PROPERTY )
+            if( refVar->GetClass() != SbxClassType::Property )
             {
                 SbxBase::SetError( ERRCODE_SBX_BAD_ACTION );
                 refVar.Clear();

@@ -299,7 +299,7 @@ bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
                                 // nested user defined types
                                 // declared before use, so it is ok to reference it by name on load
                                 OUString aNestedTypeName = r.ReadUniOrByteString(eCharSet);
-                                SbxObject* pNestedTypeObj = static_cast< SbxObject* >( rTypes->Find( aNestedTypeName, SbxCLASS_OBJECT ) );
+                                SbxObject* pNestedTypeObj = static_cast< SbxObject* >( rTypes->Find( aNestedTypeName, SbxClassType::Object ) );
                                 if (pNestedTypeObj)
                                 {
                                     SbxObject* pCloneObj = cloneTypeObjectImpl( *pNestedTypeObj );
@@ -334,8 +334,8 @@ bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
 
                     }
 
-                    pType->Remove( "Name", SbxCLASS_DONTCARE );
-                    pType->Remove( "Parent", SbxCLASS_DONTCARE );
+                    pType->Remove( "Name", SbxClassType::DontCare );
+                    pType->Remove( "Parent", SbxClassType::DontCare );
 
                     AddType(pType);
                 }
@@ -674,7 +674,7 @@ OUString SbiImage::GetString( short nId ) const
 
 const SbxObject* SbiImage::FindType (const OUString& aTypeName) const
 {
-    return rTypes.Is() ? static_cast<SbxObject*>(rTypes->Find(aTypeName,SbxCLASS_OBJECT)) : nullptr;
+    return rTypes.Is() ? static_cast<SbxObject*>(rTypes->Find(aTypeName,SbxClassType::Object)) : nullptr;
 }
 
 sal_uInt16 SbiImage::CalcLegacyOffset( sal_Int32 nOffset )
