@@ -311,32 +311,32 @@ namespace drawinglayer
 
             switch(rFiGrAtt.getStyle())
             {
-                default : // attribute::GRADIENTSTYLE_LINEAR :
+                default : // attribute::GradientStyle::Linear :
                 {
                     o_rVCLGradient.SetStyle(GradientStyle_LINEAR);
                     break;
                 }
-                case attribute::GRADIENTSTYLE_AXIAL :
+                case attribute::GradientStyle::Axial :
                 {
                     o_rVCLGradient.SetStyle(GradientStyle_AXIAL);
                     break;
                 }
-                case attribute::GRADIENTSTYLE_RADIAL :
+                case attribute::GradientStyle::Radial :
                 {
                     o_rVCLGradient.SetStyle(GradientStyle_RADIAL);
                     break;
                 }
-                case attribute::GRADIENTSTYLE_ELLIPTICAL :
+                case attribute::GradientStyle::Elliptical :
                 {
                     o_rVCLGradient.SetStyle(GradientStyle_ELLIPTICAL);
                     break;
                 }
-                case attribute::GRADIENTSTYLE_SQUARE :
+                case attribute::GradientStyle::Square :
                 {
                     o_rVCLGradient.SetStyle(GradientStyle_SQUARE);
                     break;
                 }
-                case attribute::GRADIENTSTYLE_RECT :
+                case attribute::GradientStyle::Rect :
                 {
                     o_rVCLGradient.SetStyle(GradientStyle_RECT);
                     break;
