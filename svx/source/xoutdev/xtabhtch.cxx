@@ -96,23 +96,23 @@ Bitmap XHatchList::CreateBitmapForUI( long nIndex )
                 basegfx::B2DRange(0.0, 0.0, rSize.Width(), rSize.Height())));
 
         const XHatch& rHatch = GetHatch(nIndex)->GetHatch();
-        drawinglayer::attribute::HatchStyle aHatchStyle(drawinglayer::attribute::HATCHSTYLE_TRIPLE);
+        drawinglayer::attribute::HatchStyle aHatchStyle(drawinglayer::attribute::HatchStyle::Triple);
 
         switch(rHatch.GetHatchStyle())
         {
             case css::drawing::HatchStyle_SINGLE :
             {
-                aHatchStyle = drawinglayer::attribute::HATCHSTYLE_SINGLE;
+                aHatchStyle = drawinglayer::attribute::HatchStyle::Single;
                 break;
             }
             case css::drawing::HatchStyle_DOUBLE :
             {
-                aHatchStyle = drawinglayer::attribute::HATCHSTYLE_DOUBLE;
+                aHatchStyle = drawinglayer::attribute::HatchStyle::Double;
                 break;
             }
             default :
             {
-                aHatchStyle = drawinglayer::attribute::HATCHSTYLE_TRIPLE; // css::drawing::HatchStyle_TRIPLE
+                aHatchStyle = drawinglayer::attribute::HatchStyle::Triple; // css::drawing::HatchStyle_TRIPLE
                 break;
             }
         }

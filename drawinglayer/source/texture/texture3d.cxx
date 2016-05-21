@@ -336,7 +336,7 @@ namespace drawinglayer
                 rHatch.getDistance(),
                 fAngleA);
 
-            if(attribute::HATCHSTYLE_DOUBLE == rHatch.getStyle() || attribute::HATCHSTYLE_TRIPLE == rHatch.getStyle())
+            if(attribute::HatchStyle::Double == rHatch.getStyle() || attribute::HatchStyle::Triple == rHatch.getStyle())
             {
                 mp1 = new GeoTexSvxHatch(
                     aOutlineRange,
@@ -345,7 +345,7 @@ namespace drawinglayer
                     fAngleA + F_PI2);
             }
 
-            if(attribute::HATCHSTYLE_TRIPLE == rHatch.getStyle())
+            if(attribute::HatchStyle::Triple == rHatch.getStyle())
             {
                 mp2 = new GeoTexSvxHatch(
                     aOutlineRange,

@@ -41,9 +41,9 @@ namespace drawinglayer
     {
         enum HatchStyle
         {
-            HATCHSTYLE_SINGLE,
-            HATCHSTYLE_DOUBLE,
-            HATCHSTYLE_TRIPLE
+            Single,
+            Double,
+            Triple
         };
     } // end of namespace attribute
 } // end of namespace drawinglayer

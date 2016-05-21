@@ -119,15 +119,15 @@ namespace drawinglayer
             {
                 case css::drawing::HatchStyle_SINGLE :
                 {
-                    return attribute::HATCHSTYLE_SINGLE;
+                    return attribute::HatchStyle::Single;
                 }
                 case css::drawing::HatchStyle_DOUBLE :
                 {
-                    return attribute::HATCHSTYLE_DOUBLE;
+                    return attribute::HatchStyle::Double;
                 }
                 default :
                 {
-                    return attribute::HATCHSTYLE_TRIPLE; // css::drawing::HatchStyle_TRIPLE
+                    return attribute::HatchStyle::Triple; // css::drawing::HatchStyle_TRIPLE
                 }
             }
         }

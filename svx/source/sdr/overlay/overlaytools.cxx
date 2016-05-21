@@ -355,7 +355,7 @@ namespace drawinglayer
                     const double fHatchRotation(45 * F_PI180);
                     const double fDiscreteHatchDistance(3.0);
                     const drawinglayer::attribute::FillHatchAttribute aFillHatchAttribute(
-                        drawinglayer::attribute::HATCHSTYLE_SINGLE,
+                        drawinglayer::attribute::HatchStyle::Single,
                         fDiscreteHatchDistance * getDiscreteUnit(),
                         fHatchRotation - getRotation(),
                         aHighContrastLineColor,

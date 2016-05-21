@@ -56,7 +56,7 @@ namespace drawinglayer
             }
 
             ImpFillHatchAttribute()
-            :   meStyle(HATCHSTYLE_SINGLE),
+            :   meStyle(HatchStyle::Single),
                 mfDistance(0.0),
                 mfAngle(0.0),
                 maColor(basegfx::BColor()),
