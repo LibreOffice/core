@@ -121,7 +121,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewObjectContactOfSdrOle2Obj::c
 
                 // Use a FillHatchPrimitive2D with necessary attributes
                 const drawinglayer::attribute::FillHatchAttribute aFillHatch(
-                    drawinglayer::attribute::HATCHSTYLE_SINGLE, // single hatch
+                    drawinglayer::attribute::HatchStyle::Single, // single hatch
                     125.0, // 1.25 mm
                     45.0 * F_PI180, // 45 degree diagonal
                     Color(COL_BLACK).getBColor(), // black color
