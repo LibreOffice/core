@@ -39,14 +39,14 @@ namespace drawinglayer
 {
     namespace attribute
     {
-        enum GradientStyle
+        enum class GradientStyle
         {
-            GRADIENTSTYLE_LINEAR,
-            GRADIENTSTYLE_AXIAL,
-            GRADIENTSTYLE_RADIAL,
-            GRADIENTSTYLE_ELLIPTICAL,
-            GRADIENTSTYLE_SQUARE,
-            GRADIENTSTYLE_RECT
+            Linear,
+            Axial,
+            Radial,
+            Elliptical,
+            Square,
+            Rect
         };
     } // end of namespace attribute
 } // end of namespace drawinglayer
