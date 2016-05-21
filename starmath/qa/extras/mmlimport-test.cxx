@@ -108,7 +108,7 @@ void Test::testMaction()
 void Test::testtdf99556()
 {
     loadURL(m_directories.getURLFromSrc("starmath/qa/extras/data/tdf99556-1.mml"));
-    OUString sExpected("sqrt");
+    OUString sExpected("sqrt { {} }");
     CPPUNIT_ASSERT_EQUAL_MESSAGE("loaded text", sExpected, mxDocShell->GetText());
 }
 

@@ -2249,14 +2249,25 @@ void SmXMLRowContext_Impl::EndElement()
             return;
         }
     }
-    else //Multiple newlines result in empty row elements
+    else
     {
-        aRelationArray.resize(1);
+        // The elements msqrt, mstyle, merror, menclose, mpadded, mphantom, mtd, and math
+        // treat their content as a single inferred mrow in case their content is empty.
+        // Here an empty group {} is used to catch those cases and transform them without error
+        // to StarMath.
+        aRelationArray.resize(2);
         SmToken aToken;
-        aToken.cMathChar = '\0';
+        aToken.cMathChar = MS_LBRACE;
         aToken.nLevel = 5;
-        aToken.eType = TNEWLINE;
+        aToken.eType = TLGROUP;
+        aToken.aText = "{";
         aRelationArray[0] = new SmLineNode(aToken);
+
+        aToken.cMathChar = MS_RBRACE;
+        aToken.nLevel = 0;
+        aToken.eType = TRGROUP;
+        aToken.aText = "}";
+        aRelationArray[1] = new SmLineNode(aToken);
     }
 
     SmToken aDummy;
