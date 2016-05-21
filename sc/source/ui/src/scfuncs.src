@@ -11648,7 +11648,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 4 // Name of Parameter 2
         {
-            Text [ en-US ] = "value " ;
+            Text [ en-US ] = "value" ;
         };
         String 5 // Description of Parameter 2
         {
@@ -13131,7 +13131,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 4 // Name of Parameter 2
         {
-            Text [ en-US ] = "subtrahend " ;
+            Text [ en-US ] = "subtrahend" ;
         };
         String 5 // Description of Parameter 2
         {
