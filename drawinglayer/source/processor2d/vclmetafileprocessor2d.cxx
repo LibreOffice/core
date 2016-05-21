@@ -1484,17 +1484,17 @@ namespace drawinglayer
 
                         switch(rFillHatchAttribute.getStyle())
                         {
-                            default: // attribute::HATCHSTYLE_SINGLE :
+                            default: // attribute::HatchStyle::Single :
                             {
                                 eHatch = SvtGraphicFill::hatchSingle;
                                 break;
                             }
-                            case attribute::HATCHSTYLE_DOUBLE :
+                            case attribute::HatchStyle::Double :
                             {
                                 eHatch = SvtGraphicFill::hatchDouble;
                                 break;
                             }
-                            case attribute::HATCHSTYLE_TRIPLE :
+                            case attribute::HatchStyle::Triple :
                             {
                                 eHatch = SvtGraphicFill::hatchTriple;
                                 break;
@@ -1537,8 +1537,8 @@ namespace drawinglayer
                     // process(rCandidate.get2DDecomposition(getViewInformation2D()));
                     const ::tools::PolyPolygon aToolsPolyPolygon(basegfx::tools::adaptiveSubdivideByAngle(aLocalPolyPolygon));
                     const HatchStyle aHatchStyle(
-                        attribute::HATCHSTYLE_SINGLE == rFillHatchAttribute.getStyle() ? HATCH_SINGLE :
-                        attribute::HATCHSTYLE_DOUBLE == rFillHatchAttribute.getStyle() ? HATCH_DOUBLE :
+                        attribute::HatchStyle::Single == rFillHatchAttribute.getStyle() ? HATCH_SINGLE :
+                        attribute::HatchStyle::Double == rFillHatchAttribute.getStyle() ? HATCH_DOUBLE :
                         HATCH_TRIPLE);
 
                     mpOutputDevice->DrawHatch(aToolsPolyPolygon,
