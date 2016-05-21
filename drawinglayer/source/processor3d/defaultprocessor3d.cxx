@@ -87,7 +87,7 @@ namespace drawinglayer
 
                     switch(aGradientStyle)
                     {
-                        case attribute::GRADIENTSTYLE_LINEAR:
+                        case attribute::GradientStyle::Linear:
                         {
                             pNewTex.reset(
                                 new texture::GeoTexSvxGradientLinear(
@@ -100,7 +100,7 @@ namespace drawinglayer
                                     rFillGradient.getAngle()));
                             break;
                         }
-                        case attribute::GRADIENTSTYLE_AXIAL:
+                        case attribute::GradientStyle::Axial:
                         {
                             pNewTex.reset(
                                 new texture::GeoTexSvxGradientAxial(
@@ -113,7 +113,7 @@ namespace drawinglayer
                                     rFillGradient.getAngle()));
                             break;
                         }
-                        case attribute::GRADIENTSTYLE_RADIAL:
+                        case attribute::GradientStyle::Radial:
                         {
                             pNewTex.reset(
                                 new texture::GeoTexSvxGradientRadial(
@@ -126,7 +126,7 @@ namespace drawinglayer
                                     rFillGradient.getOffsetY()));
                             break;
                         }
-                        case attribute::GRADIENTSTYLE_ELLIPTICAL:
+                        case attribute::GradientStyle::Elliptical:
                         {
                             pNewTex.reset(
                                 new texture::GeoTexSvxGradientElliptical(
@@ -140,7 +140,7 @@ namespace drawinglayer
                                     rFillGradient.getAngle()));
                             break;
                         }
-                        case attribute::GRADIENTSTYLE_SQUARE:
+                        case attribute::GradientStyle::Square:
                         {
                             pNewTex.reset(
                                 new texture::GeoTexSvxGradientSquare(
@@ -154,7 +154,7 @@ namespace drawinglayer
                                     rFillGradient.getAngle()));
                             break;
                         }
-                        case attribute::GRADIENTSTYLE_RECT:
+                        case attribute::GradientStyle::Rect:
                         {
                             pNewTex.reset(
                                 new texture::GeoTexSvxGradientRect(

@@ -848,38 +848,38 @@ namespace
             aEnd = interpolate(aBlack, aEnd, (double)nEndIntens * 0.01);
         }
 
-        drawinglayer::attribute::GradientStyle aGradientStyle(drawinglayer::attribute::GRADIENTSTYLE_RECT);
+        drawinglayer::attribute::GradientStyle aGradientStyle(drawinglayer::attribute::GradientStyle::Rect);
 
         switch(rGradient.GetStyle())
         {
             case GradientStyle_LINEAR :
             {
-                aGradientStyle = drawinglayer::attribute::GRADIENTSTYLE_LINEAR;
+                aGradientStyle = drawinglayer::attribute::GradientStyle::Linear;
                 break;
             }
             case GradientStyle_AXIAL :
             {
-                aGradientStyle = drawinglayer::attribute::GRADIENTSTYLE_AXIAL;
+                aGradientStyle = drawinglayer::attribute::GradientStyle::Axial;
                 break;
             }
             case GradientStyle_RADIAL :
             {
-                aGradientStyle = drawinglayer::attribute::GRADIENTSTYLE_RADIAL;
+                aGradientStyle = drawinglayer::attribute::GradientStyle::Radial;
                 break;
             }
             case GradientStyle_ELLIPTICAL :
             {
-                aGradientStyle = drawinglayer::attribute::GRADIENTSTYLE_ELLIPTICAL;
+                aGradientStyle = drawinglayer::attribute::GradientStyle::Elliptical;
                 break;
             }
             case GradientStyle_SQUARE :
             {
-                aGradientStyle = drawinglayer::attribute::GRADIENTSTYLE_SQUARE;
+                aGradientStyle = drawinglayer::attribute::GradientStyle::Square;
                 break;
             }
             default : // GradientStyle_RECT
             {
-                aGradientStyle = drawinglayer::attribute::GRADIENTSTYLE_RECT;
+                aGradientStyle = drawinglayer::attribute::GradientStyle::Rect;
                 break;
             }
         }
