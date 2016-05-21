@@ -43,8 +43,8 @@ struct rtl_cache_bufctl_type
 {
     rtl_cache_bufctl_type * m_next; /* linkage */
 
-    sal_uIntPtr             m_addr; /* buffer address  */
-    sal_uIntPtr             m_slab; /* parent slab address */
+    sal_uInt64             m_addr; /* buffer address  */
+    sal_uInt64             m_slab; /* parent slab address */
 };
 
 /** rtl_cache_slab_type
@@ -56,9 +56,9 @@ struct rtl_cache_slab_type
     rtl_cache_slab_type *   m_slab_prev; /* slab linkage */
 
     sal_Size                m_ntypes;    /* number of buffers used */
-    sal_uIntPtr             m_data;      /* buffer start addr */
+    sal_uInt64              m_data;      /* buffer start addr */
 
-    sal_uIntPtr             m_bp;        /* free buffer linkage 'base pointer'  */
+    sal_uInt64              m_bp;        /* free buffer linkage 'base pointer'  */
     rtl_cache_bufctl_type * m_sp;        /* free buffer linkage 'stack pointer' */
 };
 
