@@ -31,6 +31,7 @@
 
 class SfxDocumentTemplates;
 class TemplateViewItem;
+class TemplateContainerItem;
 
 enum class FILTER_APPLICATION
 {
@@ -86,7 +87,7 @@ public:
 
     virtual void showAllTemplates () = 0;
 
-    virtual void showRegion (ThumbnailViewItem *pItem) = 0;
+    virtual void showRegion (TemplateContainerItem *pItem) = 0;
 
     virtual sal_uInt16 createRegion (const OUString &rName) = 0;
 
