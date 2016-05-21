@@ -75,7 +75,7 @@ SbxDataType SbxBase::GetType() const
 
 SbxClassType SbxBase::GetClass() const
 {
-    return SbxCLASS_DONTCARE;
+    return SbxClassType::DontCare;
 }
 
 void SbxBase::Clear()

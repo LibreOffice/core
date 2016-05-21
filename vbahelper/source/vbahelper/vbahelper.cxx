@@ -209,7 +209,7 @@ getCurrentDoc( const OUString& sKey ) throw (uno::RuntimeException)
 
 
     uno::Any aModel;
-    SbxVariable *pCompVar = basicChosen->Find(  sKey, SbxCLASS_OBJECT );
+    SbxVariable *pCompVar = basicChosen->Find(  sKey, SbxClassType::Object );
 
     if ( pCompVar )
     {

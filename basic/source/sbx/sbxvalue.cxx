@@ -754,7 +754,7 @@ bool SbxValue::ImpIsNumeric( bool bOnlyIntntl ) const
 
 SbxClassType SbxValue::GetClass() const
 {
-    return SbxCLASS_VALUE;
+    return SbxClassType::Value;
 }
 
 SbxDataType SbxValue::GetType() const

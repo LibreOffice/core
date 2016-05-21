@@ -143,7 +143,7 @@ RTLFUNC(CallByName)
     sal_Int16 nCallType = rPar.Get(3)->GetInteger();
 
     //SbxObject* pFindObj = NULL;
-    SbxVariable* pFindVar = pObj->Find( aNameStr, SbxCLASS_DONTCARE );
+    SbxVariable* pFindVar = pObj->Find( aNameStr, SbxClassType::DontCare );
     if( pFindVar == nullptr )
     {
         StarBASIC::Error( ERRCODE_BASIC_PROC_UNDEFINED );
@@ -971,7 +971,7 @@ RTLFUNC(FindPropertyObject)
     SbxObject* pFindObj = nullptr;
     if( pObj )
     {
-        SbxVariable* pFindVar = pObj->Find( aNameStr, SbxCLASS_OBJECT );
+        SbxVariable* pFindVar = pObj->Find( aNameStr, SbxClassType::Object );
         pFindObj = dynamic_cast<SbxObject*>( pFindVar );
     }
     else

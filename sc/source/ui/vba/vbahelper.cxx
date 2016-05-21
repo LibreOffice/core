@@ -253,7 +253,7 @@ getCurrentDocument() throw (uno::RuntimeException)
     }
 
     uno::Any aModel;
-    SbxVariable *pCompVar = basicChosen->Find( "ThisComponent", SbxCLASS_OBJECT );
+    SbxVariable *pCompVar = basicChosen->Find( "ThisComponent", SbxClassType::Object );
 
     if ( pCompVar )
     {

@@ -111,13 +111,13 @@ SbStdPicture::SbStdPicture() :
     SbxObject( OUString("Picture"))
 {
     // Properties
-    SbxVariable* p = Make( "Type", SbxCLASS_PROPERTY, SbxVARIANT );
+    SbxVariable* p = Make( "Type", SbxClassType::Property, SbxVARIANT );
     p->SetFlags( SbxFlagBits::Read | SbxFlagBits::DontStore );
     p->SetUserData( ATTR_IMP_TYPE );
-    p = Make( "Width", SbxCLASS_PROPERTY, SbxVARIANT );
+    p = Make( "Width", SbxClassType::Property, SbxVARIANT );
     p->SetFlags( SbxFlagBits::Read | SbxFlagBits::DontStore );
     p->SetUserData( ATTR_IMP_WIDTH );
-    p = Make( "Height", SbxCLASS_PROPERTY, SbxVARIANT );
+    p = Make( "Height", SbxClassType::Property, SbxVARIANT );
     p->SetFlags( SbxFlagBits::Read | SbxFlagBits::DontStore );
     p->SetUserData( ATTR_IMP_HEIGHT );
 }
@@ -227,24 +227,24 @@ SbStdFont::SbStdFont()
     , nSize(0)
 {
     // Properties
-    SbxVariable* p = Make( "Bold", SbxCLASS_PROPERTY, SbxVARIANT );
+    SbxVariable* p = Make( "Bold", SbxClassType::Property, SbxVARIANT );
     p->SetFlags( SbxFlagBits::ReadWrite | SbxFlagBits::DontStore );
     p->SetUserData( ATTR_IMP_BOLD );
-    p = Make( "Italic", SbxCLASS_PROPERTY, SbxVARIANT );
+    p = Make( "Italic", SbxClassType::Property, SbxVARIANT );
     p->SetFlags( SbxFlagBits::ReadWrite | SbxFlagBits::DontStore );
     p->SetUserData( ATTR_IMP_ITALIC );
-    p = Make( "StrikeThrough", SbxCLASS_PROPERTY, SbxVARIANT );
+    p = Make( "StrikeThrough", SbxClassType::Property, SbxVARIANT );
     p->SetFlags( SbxFlagBits::ReadWrite | SbxFlagBits::DontStore );
     p->SetUserData( ATTR_IMP_STRIKETHROUGH );
-    p = Make( "Underline", SbxCLASS_PROPERTY, SbxVARIANT );
+    p = Make( "Underline", SbxClassType::Property, SbxVARIANT );
     p->SetFlags( SbxFlagBits::ReadWrite | SbxFlagBits::DontStore );
     p->SetUserData( ATTR_IMP_UNDERLINE );
-    p = Make( "Size", SbxCLASS_PROPERTY, SbxVARIANT );
+    p = Make( "Size", SbxClassType::Property, SbxVARIANT );
     p->SetFlags( SbxFlagBits::ReadWrite | SbxFlagBits::DontStore );
     p->SetUserData( ATTR_IMP_SIZE );
 
     // handle name property yourself
-    p = Find( "Name", SbxCLASS_PROPERTY );
+    p = Find( "Name", SbxClassType::Property );
     assert(p && "No Name Property");
     p->SetUserData( ATTR_IMP_NAME );
 }
@@ -384,27 +384,27 @@ void SbStdClipboard::MethSetText( SbxVariable* pVar, SbxArray* pPar_, bool )
 SbStdClipboard::SbStdClipboard() :
     SbxObject( OUString("Clipboard") )
 {
-    SbxVariable* p = Find( "Name", SbxCLASS_PROPERTY );
+    SbxVariable* p = Find( "Name", SbxClassType::Property );
     assert(p && "No Name Property");
     p->SetUserData( ATTR_IMP_NAME );
 
     // register methods
-    p = Make( "Clear", SbxCLASS_METHOD, SbxEMPTY );
+    p = Make( "Clear", SbxClassType::Method, SbxEMPTY );
     p->SetFlag( SbxFlagBits::DontStore );
     p->SetUserData( METH_CLEAR );
-    p = Make( "GetData", SbxCLASS_METHOD, SbxEMPTY );
+    p = Make( "GetData", SbxClassType::Method, SbxEMPTY );
     p->SetFlag( SbxFlagBits::DontStore );
     p->SetUserData( METH_GETDATA );
-    p = Make( "GetFormat", SbxCLASS_METHOD, SbxEMPTY );
+    p = Make( "GetFormat", SbxClassType::Method, SbxEMPTY );
     p->SetFlag( SbxFlagBits::DontStore );
     p->SetUserData( METH_GETFORMAT );
-    p = Make( "GetText", SbxCLASS_METHOD, SbxEMPTY );
+    p = Make( "GetText", SbxClassType::Method, SbxEMPTY );
     p->SetFlag( SbxFlagBits::DontStore );
     p->SetUserData( METH_GETTEXT );
-    p = Make( "SetData", SbxCLASS_METHOD, SbxEMPTY );
+    p = Make( "SetData", SbxClassType::Method, SbxEMPTY );
     p->SetFlag( SbxFlagBits::DontStore );
     p->SetUserData( METH_SETDATA );
-    p = Make( "SetText", SbxCLASS_METHOD, SbxEMPTY );
+    p = Make( "SetText", SbxClassType::Method, SbxEMPTY );
     p->SetFlag( SbxFlagBits::DontStore );
     p->SetUserData( METH_SETTEXT );
 }

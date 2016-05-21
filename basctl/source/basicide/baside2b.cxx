@@ -2240,7 +2240,7 @@ SbxBase* WatchTreeListBox::ImplGetSBXForEntry( SvTreeListEntry* pEntry, bool& rb
         SbxDimArray* pArray;
         if( pObj )
         {
-            pSBX = pObj->Find( aVName, SbxCLASS_DONTCARE );
+            pSBX = pObj->Find( aVName, SbxClassType::DontCare );
             if (SbxVariable const* pVar = IsSbxVariable(pSBX))
             {
                 // Force getting value

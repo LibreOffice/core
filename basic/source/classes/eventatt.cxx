@@ -275,7 +275,7 @@ void BasicScriptListener_Impl::firing_impl( const ScriptEvent& aScriptEvent, Any
                         // Search only in the lib, not automatically in application basic
                         SbxFlagBits nFlags = pBasic->GetFlags();
                         pBasic->ResetFlag( SbxFlagBits::GlobalSearch );
-                        pMethVar = pBasic->Find( aMacro, SbxCLASS_DONTCARE );
+                        pMethVar = pBasic->Find( aMacro, SbxClassType::DontCare );
                         pBasic->SetFlags( nFlags );
                         break;
                     }
@@ -286,7 +286,7 @@ void BasicScriptListener_Impl::firing_impl( const ScriptEvent& aScriptEvent, Any
         // Default: Be tolerant and search everywhere
         if( (!pMethVar || nullptr == dynamic_cast<const SbMethod*>( pMethVar)) && maBasicRef.Is() )
         {
-            pMethVar = maBasicRef->FindQualified( aMacro, SbxCLASS_DONTCARE );
+            pMethVar = maBasicRef->FindQualified( aMacro, SbxClassType::DontCare );
         }
         SbMethod* pMeth = dynamic_cast<SbMethod*>( pMethVar );
         if( !pMeth )
@@ -332,7 +332,7 @@ css::uno::Reference< css::container::XNameContainer > implFindDialogLibForDialog
 {
     css::uno::Reference< css::container::XNameContainer > aRetDlgLib;
 
-    SbxVariable* pDlgLibContVar = pBasic->Find("DialogLibraries", SbxCLASS_OBJECT);
+    SbxVariable* pDlgLibContVar = pBasic->Find("DialogLibraries", SbxClassType::Object);
     if( pDlgLibContVar && nullptr != dynamic_cast<const SbUnoObject*>( pDlgLibContVar) )
     {
         SbUnoObject* pDlgLibContUnoObj = static_cast<SbUnoObject*>(static_cast<SbxBase*>(pDlgLibContVar));

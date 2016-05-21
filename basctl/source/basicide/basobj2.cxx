@@ -439,7 +439,7 @@ bool HasMethod (
         SbxArray* pMethods = pMod->GetMethods();
         if ( pMethods )
         {
-            SbMethod* pMethod = static_cast<SbMethod*>(pMethods->Find( rMethName, SbxCLASS_METHOD ));
+            SbMethod* pMethod = static_cast<SbMethod*>(pMethods->Find( rMethName, SbxClassType::Method ));
             if ( pMethod && !pMethod->IsHidden() )
                 bHasMethod = true;
         }

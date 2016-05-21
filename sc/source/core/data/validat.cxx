@@ -288,7 +288,7 @@ bool ScValidationData::DoMacro( const ScAddress& rPos, const OUString& rInput,
     //  then assemble aBasicStr, aMacroStr for SfxObjectShell::CallBasic
 
     StarBASIC* pRoot = pDocSh->GetBasic();
-    SbxVariable* pVar = pRoot->Find( aErrorTitle, SbxCLASS_METHOD );
+    SbxVariable* pVar = pRoot->Find( aErrorTitle, SbxClassType::Method );
     if (SbMethod* pMethod = dynamic_cast<SbMethod*>(pVar))
     {
         SbModule* pModule = pMethod->GetModule();

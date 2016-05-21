@@ -1474,7 +1474,7 @@ uno::Any BasicManager::SetGlobalUNOConstant( const OUString& rName, const uno::A
         return aOldValue;
 
     // obtain the old value
-    SbxVariable* pVariable = pStandardLib->Find( rName, SbxCLASS_OBJECT );
+    SbxVariable* pVariable = pStandardLib->Find( rName, SbxClassType::Object );
     if ( pVariable )
         aOldValue = sbxToUnoValue( pVariable );
 
@@ -1574,7 +1574,7 @@ namespace
                     {
                         if ( rTransliteration.isEqual( pMod->GetName(), sModule ) )
                         {
-                            SbMethod* pMethod = static_cast<SbMethod*>(pMod->Find( sMacro, SbxCLASS_METHOD ));
+                            SbMethod* pMethod = static_cast<SbMethod*>(pMod->Find( sMacro, SbxClassType::Method ));
                             if( pMethod )
                             {
                                 return pMethod;
@@ -1951,7 +1951,7 @@ sal_Bool DialogContainer_Impl::hasElements()
 uno::Any DialogContainer_Impl::getByName( const OUString& aName )
     throw(container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
-    SbxVariable* pVar = mpLib->GetObjects()->Find( aName, SbxCLASS_DONTCARE );
+    SbxVariable* pVar = mpLib->GetObjects()->Find( aName, SbxClassType::DontCare );
     SbxObject* pObj = dynamic_cast<SbxObject*>(pVar);
     if( !( pObj && pObj->GetSbxId() == SBXID_DIALOG ) )
     {
@@ -1992,7 +1992,7 @@ sal_Bool DialogContainer_Impl::hasByName( const OUString& aName )
     throw(uno::RuntimeException, std::exception)
 {
     bool bRet = false;
-    SbxVariable* pVar = mpLib->GetObjects()->Find( aName, SbxCLASS_DONTCARE );
+    SbxVariable* pVar = mpLib->GetObjects()->Find( aName, SbxClassType::DontCare );
     SbxObject* pObj = dynamic_cast<SbxObject*>(pVar);
     if( pObj &&  ( pObj->GetSbxId() == SBXID_DIALOG ) )
     {
@@ -2032,7 +2032,7 @@ void DialogContainer_Impl::removeByName( const OUString& Name )
     throw(container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     (void)Name;
-    SbxVariable* pVar = mpLib->GetObjects()->Find( Name, SbxCLASS_DONTCARE );
+    SbxVariable* pVar = mpLib->GetObjects()->Find( Name, SbxClassType::DontCare );
     SbxObject* pObj = dynamic_cast<SbxObject*>(pVar);
     if( !( pObj && ( pObj->GetSbxId() == SBXID_DIALOG ) ) )
     {
