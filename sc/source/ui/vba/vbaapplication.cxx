@@ -459,7 +459,7 @@ ScVbaApplication::wait( double time ) throw (uno::RuntimeException, std::excepti
     SbxVariableRef aRef = new SbxVariable;
     aRef->PutDouble( time );
     aArgs->Put(  aRef, 1 );
-    SbMethod* pMeth = static_cast<SbMethod*>(pBasic->GetRtl()->Find( "WaitUntil", SbxCLASS_METHOD ));
+    SbMethod* pMeth = static_cast<SbMethod*>(pBasic->GetRtl()->Find( "WaitUntil", SbxClassType::Method ));
 
     if ( pMeth )
     {
@@ -1258,7 +1258,7 @@ uno::Any SAL_CALL
 ScVbaApplication::Caller( const uno::Any& /*aIndex*/ ) throw ( uno::RuntimeException, std::exception )
 {
     StarBASIC* pBasic = SfxApplication::GetBasic();
-    SbMethod* pMeth = static_cast<SbMethod*>(pBasic->GetRtl()->Find( "FuncCaller", SbxCLASS_METHOD ));
+    SbMethod* pMeth = static_cast<SbMethod*>(pBasic->GetRtl()->Find( "FuncCaller", SbxClassType::Method ));
     uno::Any aRet;
     if ( pMeth )
     {

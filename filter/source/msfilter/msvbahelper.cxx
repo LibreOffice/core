@@ -206,13 +206,13 @@ bool hasMacro( SfxObjectShell* pShell, const OUString& sLibrary, OUString& sMod,
                         SbxArray* pMethods = pModule->GetMethods();
                         if ( pMethods )
                         {
-                            SbMethod* pMethod = static_cast< SbMethod* >( pMethods->Find( sMacro, SbxCLASS_METHOD ) );
+                            SbMethod* pMethod = static_cast< SbMethod* >( pMethods->Find( sMacro, SbxClassType::Method ) );
                             if ( pMethod )
                               bFound = true;
                         }
                     }
                 }
-                else if( SbMethod* pMethod = dynamic_cast< SbMethod* >( pBasic->Find( sMacro, SbxCLASS_METHOD ) ) )
+                else if( SbMethod* pMethod = dynamic_cast< SbMethod* >( pBasic->Find( sMacro, SbxClassType::Method ) ) )
                 {
                     if( SbModule* pModule = pMethod->GetModule() )
                     {

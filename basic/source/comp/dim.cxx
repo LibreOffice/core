@@ -157,7 +157,7 @@ void SbiParser::TypeDecl( SbiSymDef& rDef, bool bAsNewAlreadyParsed )
                             }
                         }
                     }
-                    else if( rEnumArray->Find( aCompleteName, SbxCLASS_OBJECT ) || ( IsVBASupportOn() && VBAConstantHelper::instance().isVBAConstantType( aCompleteName ) ) )
+                    else if( rEnumArray->Find( aCompleteName, SbxClassType::Object ) || ( IsVBASupportOn() && VBAConstantHelper::instance().isVBAConstantType( aCompleteName ) ) )
                     {
                         eType = SbxLONG;
                         break;
@@ -406,7 +406,7 @@ void SbiParser::DefVar( SbiOpcode eOp, bool bStatic )
             if( !bCompatible && !pDef->IsNew() )
             {
                 OUString aTypeName( aGblStrings.Find( pDef->GetTypeId() ) );
-                if( rTypeArray->Find( aTypeName, SbxCLASS_OBJECT ) == nullptr )
+                if( rTypeArray->Find( aTypeName, SbxClassType::Object ) == nullptr )
                 {
                     if( CodeCompleteOptions::IsExtendedTypeDeclaration() )
                     {
@@ -581,7 +581,7 @@ void SbiParser::DefType( bool bPrivate )
     if (!TestSymbol())
         return;
 
-    if (rTypeArray->Find(aSym,SbxCLASS_OBJECT))
+    if (rTypeArray->Find(aSym,SbxClassType::Object))
     {
         Error( ERRCODE_BASIC_VAR_DEFINED, aSym );
         return;
@@ -616,7 +616,7 @@ void SbiParser::DefType( bool bPrivate )
         {
             SbxArray *pTypeMembers = pType->GetProperties();
             OUString aElemName = pElem->GetName();
-            if( pTypeMembers->Find( aElemName, SbxCLASS_DONTCARE) )
+            if( pTypeMembers->Find( aElemName, SbxClassType::DontCare) )
             {
                 Error (ERRCODE_BASIC_VAR_DEFINED);
             }
@@ -666,7 +666,7 @@ void SbiParser::DefType( bool bPrivate )
                     if( nElemTypeId != 0 )
                     {
                         OUString aTypeName( aGblStrings.Find( nElemTypeId ) );
-                        SbxObject* pTypeObj = static_cast< SbxObject* >( rTypeArray->Find( aTypeName, SbxCLASS_OBJECT ) );
+                        SbxObject* pTypeObj = static_cast< SbxObject* >( rTypeArray->Find( aTypeName, SbxClassType::Object ) );
                         if( pTypeObj != nullptr )
                         {
                             SbxObject* pCloneObj = cloneTypeObjectImpl( *pTypeObj );
@@ -679,8 +679,8 @@ void SbiParser::DefType( bool bPrivate )
         }
     }
 
-    pType->Remove( "Name", SbxCLASS_DONTCARE );
-    pType->Remove( "Parent", SbxCLASS_DONTCARE );
+    pType->Remove( "Name", SbxClassType::DontCare );
+    pType->Remove( "Parent", SbxClassType::DontCare );
 
     rTypeArray->Insert (pType,rTypeArray->Count());
 }
@@ -700,7 +700,7 @@ void SbiParser::DefEnum( bool bPrivate )
         return;
 
     OUString aEnumName = aSym;
-    if( rEnumArray->Find(aEnumName,SbxCLASS_OBJECT) )
+    if( rEnumArray->Find(aEnumName,SbxClassType::Object) )
     {
         Error( ERRCODE_BASIC_VAR_DEFINED, aSym );
         return;
@@ -811,8 +811,8 @@ void SbiParser::DefEnum( bool bPrivate )
         }
     }
 
-    pEnum->Remove( "Name", SbxCLASS_DONTCARE );
-    pEnum->Remove( "Parent", SbxCLASS_DONTCARE );
+    pEnum->Remove( "Name", SbxClassType::DontCare );
+    pEnum->Remove( "Parent", SbxClassType::DontCare );
 
     rEnumArray->Insert( pEnum, rEnumArray->Count() );
 }

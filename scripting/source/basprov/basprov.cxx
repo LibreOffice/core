@@ -364,7 +364,7 @@ namespace basprov
                         SbxArray* pMethods = pModule->GetMethods();
                         if ( pMethods )
                         {
-                            SbMethod* pMethod = static_cast< SbMethod* >( pMethods->Find( aMethod, SbxCLASS_METHOD ) );
+                            SbMethod* pMethod = static_cast< SbMethod* >( pMethods->Find( aMethod, SbxClassType::Method ) );
                             if ( pMethod && !pMethod->IsHidden() )
                             {
                                 if ( m_pDocBasicManager == pBasicMgr )

@@ -3178,7 +3178,7 @@ bool SbiRuntime::implIsClass( SbxObject* pObj, const OUString& aClass )
             SbClassData* pClassData;
             if( pClassMod && (pClassData=pClassMod->pClassData) != nullptr )
             {
-                SbxVariable* pClassVar = pClassData->mxIfaces->Find( aClass, SbxCLASS_DONTCARE );
+                SbxVariable* pClassVar = pClassData->mxIfaces->Find( aClass, SbxClassType::DontCare );
                 bRet = (pClassVar != nullptr);
             }
         }
@@ -3357,20 +3357,20 @@ SbxVariable* SbiRuntime::FindElement( SbxObject* pObj, sal_uInt32 nOp1, sal_uInt
             {
                 if ( pMeth )
                 {
-                    pElem = pMeth->GetStatics()->Find( aName, SbxCLASS_DONTCARE );
+                    pElem = pMeth->GetStatics()->Find( aName, SbxClassType::DontCare );
                 }
             }
 
             if ( !pElem )
             {
-                pElem = refLocals->Find( aName, SbxCLASS_DONTCARE );
+                pElem = refLocals->Find( aName, SbxClassType::DontCare );
             }
         }
         if( !pElem )
         {
             bool bSave = rBasic.bNoRtl;
             rBasic.bNoRtl = true;
-            pElem = pObj->Find( aName, SbxCLASS_DONTCARE );
+            pElem = pObj->Find( aName, SbxClassType::DontCare );
 
             // #110004, #112015: Make private really private
             if( bLocal && pElem )   // Local as flag for global search
@@ -3397,7 +3397,7 @@ SbxVariable* SbiRuntime::FindElement( SbxObject* pObj, sal_uInt32 nOp1, sal_uInt
                 if ( bVBAEnabled )
                 {
                     // Try Find in VBA symbols space
-                    pElem = rBasic.VBAFind( aName, SbxCLASS_DONTCARE );
+                    pElem = rBasic.VBAFind( aName, SbxClassType::DontCare );
                     if ( pElem )
                     {
                         bSetName = false; // don't overwrite uno name
@@ -3571,7 +3571,7 @@ SbxBase* SbiRuntime::FindElementExtern( const OUString& rName )
     }
     if( refLocals )
     {
-        pElem = refLocals->Find( rName, SbxCLASS_DONTCARE );
+        pElem = refLocals->Find( rName, SbxClassType::DontCare );
     }
     if ( !pElem && pMeth )
     {
@@ -3579,7 +3579,7 @@ SbxBase* SbiRuntime::FindElementExtern( const OUString& rName )
         OUString aMethName = pMeth->GetName();
         aMethName += ":";
         aMethName += rName;
-        pElem = pMod->Find(aMethName, SbxCLASS_DONTCARE);
+        pElem = pMod->Find(aMethName, SbxClassType::DontCare);
     }
 
     // search in parameter list
@@ -3617,7 +3617,7 @@ SbxBase* SbiRuntime::FindElementExtern( const OUString& rName )
     {
         bool bSave = rBasic.bNoRtl;
         rBasic.bNoRtl = true;
-        pElem = pMod->Find( rName, SbxCLASS_DONTCARE );
+        pElem = pMod->Find( rName, SbxClassType::DontCare );
         rBasic.bNoRtl = bSave;
     }
     return pElem;
@@ -3701,7 +3701,7 @@ void SbiRuntime::SetupArgs( SbxVariable* p, sal_uInt32 nOp1 )
                             }
                             if ( !sDefaultMethod.isEmpty() )
                             {
-                                SbxVariable* meth = pUnoObj->Find( sDefaultMethod, SbxCLASS_METHOD );
+                                SbxVariable* meth = pUnoObj->Find( sDefaultMethod, SbxClassType::Method );
                                 if( meth != nullptr )
                                 {
                                     pInfo = meth->GetInfo();
@@ -3909,7 +3909,7 @@ SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
                             }
                             if ( !sDefaultMethod.isEmpty() )
                             {
-                                SbxVariable* meth = pUnoObj->Find( sDefaultMethod, SbxCLASS_METHOD );
+                                SbxVariable* meth = pUnoObj->Find( sDefaultMethod, SbxClassType::Method );
                                 SbxVariableRef refTemp = meth;
                                 if ( refTemp )
                                 {
@@ -4488,7 +4488,7 @@ void SbiRuntime::StepLOCAL( sal_uInt32 nOp1, sal_uInt32 nOp2 )
         refLocals = new SbxArray;
     }
     OUString aName( pImg->GetString( static_cast<short>( nOp1 ) ) );
-    if( refLocals->Find( aName, SbxCLASS_DONTCARE ) == nullptr )
+    if( refLocals->Find( aName, SbxClassType::DontCare ) == nullptr )
     {
         SbxDataType t = (SbxDataType)(nOp2 & 0xffff);
         SbxVariable* p = new SbxVariable( t );
@@ -4506,7 +4506,7 @@ void SbiRuntime::StepPUBLIC_Impl( sal_uInt32 nOp1, sal_uInt32 nOp2, bool bUsedFo
     SbxDataType t = (SbxDataType)(SbxDataType)(nOp2 & 0xffff);
     bool bFlag = pMod->IsSet( SbxFlagBits::NoModify );
     pMod->SetFlag( SbxFlagBits::NoModify );
-    SbxVariableRef p = pMod->Find( aName, SbxCLASS_PROPERTY );
+    SbxVariableRef p = pMod->Find( aName, SbxClassType::Property );
     if( p.Is() )
     {
         pMod->Remove (p);
@@ -4569,12 +4569,12 @@ void SbiRuntime::StepGLOBAL( sal_uInt32 nOp1, sal_uInt32 nOp2 )
 
     bool bFlag = pStorage->IsSet( SbxFlagBits::NoModify );
     rBasic.SetFlag( SbxFlagBits::NoModify );
-    SbxVariableRef p = pStorage->Find( aName, SbxCLASS_PROPERTY );
+    SbxVariableRef p = pStorage->Find( aName, SbxClassType::Property );
     if( p.Is() )
     {
         pStorage->Remove (p);
     }
-    p = pStorage->Make( aName, SbxCLASS_PROPERTY, t );
+    p = pStorage->Make( aName, SbxClassType::Property, t );
     if( !bFlag )
     {
         pStorage->ResetFlag( SbxFlagBits::NoModify );
@@ -4629,7 +4629,7 @@ SbxVariable* SbiRuntime::StepSTATIC_Impl( OUString& aName, SbxDataType& t )
     if ( pMeth )
     {
         SbxArray* pStatics = pMeth->GetStatics();
-        if( pStatics && ( pStatics->Find( aName, SbxCLASS_DONTCARE ) == nullptr ) )
+        if( pStatics && ( pStatics->Find( aName, SbxClassType::DontCare ) == nullptr ) )
         {
             p = new SbxVariable( t );
             if( t != SbxVARIANT )

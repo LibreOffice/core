@@ -270,7 +270,7 @@ SbiExprNode* SbiExpression::Term( const KeywordSymbolInfo* pKeywordSymbolInfo )
         // #i109184: Check if symbol is or later will be defined inside module
         SbModule& rMod = pParser->aGen.GetModule();
         SbxArray* pModMethods = rMod.GetMethods();
-        if( pModMethods->Find( aSym, SbxCLASS_DONTCARE ) )
+        if( pModMethods->Find( aSym, SbxClassType::DontCare ) )
         {
             pDef = nullptr;
         }

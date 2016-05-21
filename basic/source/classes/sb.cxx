@@ -251,7 +251,7 @@ SbxObject* StarBASIC::getVBAGlobals( )
             }
         }
         const OUString aVBAHook("VBAGlobals");
-        pVBAGlobals = static_cast<SbUnoObject*>(Find( aVBAHook , SbxCLASS_DONTCARE ));
+        pVBAGlobals = static_cast<SbUnoObject*>(Find( aVBAHook , SbxClassType::DontCare ));
     }
     return pVBAGlobals;
 }
@@ -504,7 +504,7 @@ SbxObject* SbFormFactory::CreateObject( const OUString& rClassName )
 {
     if( SbModule* pMod = GetSbData()->pMod )
     {
-        if( SbxVariable* pVar = pMod->Find( rClassName, SbxCLASS_OBJECT ) )
+        if( SbxVariable* pVar = pMod->Find( rClassName, SbxClassType::Object ) )
         {
             if( SbUserFormModule* pFormModule = dynamic_cast<SbUserFormModule*>( pVar->GetObject() )  )
             {
@@ -685,7 +685,7 @@ SbClassModuleObject::SbClassModuleObject( SbModule* pClassModule )
             }
 
             // Search for own copy of ImplMethod
-            SbxVariable* p = pMethods->Find( pImplMethod->GetName(), SbxCLASS_METHOD );
+            SbxVariable* p = pMethods->Find( pImplMethod->GetName(), SbxClassType::Method );
             SbMethod* pImplMethodCopy = p ? dynamic_cast<SbMethod*>( p ) : nullptr;
             if( !pImplMethodCopy )
             {
@@ -815,7 +815,7 @@ void SbClassModuleObject::triggerInitializeEvent()
     mbInitializeEventDone = true;
 
     // Search method
-    SbxVariable* pMeth = SbxObject::Find("Class_Initialize", SbxCLASS_METHOD);
+    SbxVariable* pMeth = SbxObject::Find("Class_Initialize", SbxClassType::Method);
     if( pMeth )
     {
         SbxValues aVals;
@@ -830,7 +830,7 @@ void SbClassModuleObject::triggerTerminateEvent()
         return;
     }
     // Search method
-    SbxVariable* pMeth = SbxObject::Find("Class_Terminate", SbxCLASS_METHOD );
+    SbxVariable* pMeth = SbxObject::Find("Class_Terminate", SbxClassType::Method );
     if( pMeth )
     {
         SbxValues aVals;
@@ -897,7 +897,7 @@ SbxObject* SbClassFactory::CreateObject( const OUString& rClassName )
             }
         }
     }
-    SbxVariable* pVar = xToUseClassModules->Find( rClassName, SbxCLASS_OBJECT );
+    SbxVariable* pVar = xToUseClassModules->Find( rClassName, SbxClassType::Object );
     SbxObject* pRet = nullptr;
     if( pVar )
     {
@@ -909,7 +909,7 @@ SbxObject* SbClassFactory::CreateObject( const OUString& rClassName )
 
 SbModule* SbClassFactory::FindClass( const OUString& rClassName )
 {
-    SbxVariable* pVar = xClassModules->Find( rClassName, SbxCLASS_DONTCARE );
+    SbxVariable* pVar = xClassModules->Find( rClassName, SbxClassType::DontCare );
     SbModule* pMod = pVar ? static_cast<SbModule*>(pVar) : nullptr;
     return pMod;
 }
@@ -1286,7 +1286,7 @@ SbxVariable* StarBASIC::Find( const OUString& rName, SbxClassType t )
     // but only if SbiRuntime has not set the flag
     if( !bNoRtl )
     {
-        if( t == SbxCLASS_DONTCARE || t == SbxCLASS_OBJECT )
+        if( t == SbxClassType::DontCare || t == SbxClassType::Object )
         {
             if( rName.equalsIgnoreAsciiCase( RTLNAME ) )
             {
@@ -1313,7 +1313,7 @@ SbxVariable* StarBASIC::Find( const OUString& rName, SbxClassType t )
                 // or is the name equal?!?
                 if( pModule->GetName().equalsIgnoreAsciiCase( rName ) )
                 {
-                    if( t == SbxCLASS_OBJECT || t == SbxCLASS_DONTCARE )
+                    if( t == SbxClassType::Object || t == SbxClassType::DontCare )
                     {
                         pRes = pModule.get(); break;
                     }
@@ -1340,10 +1340,10 @@ SbxVariable* StarBASIC::Find( const OUString& rName, SbxClassType t )
         }
     }
     OUString aMainStr("Main");
-    if( !pRes && pNamed && ( t == SbxCLASS_METHOD || t == SbxCLASS_DONTCARE ) &&
+    if( !pRes && pNamed && ( t == SbxClassType::Method || t == SbxClassType::DontCare ) &&
         !pNamed->GetName().equalsIgnoreAsciiCase( aMainStr ) )
     {
-        pRes = pNamed->Find( aMainStr, SbxCLASS_METHOD );
+        pRes = pNamed->Find( aMainStr, SbxClassType::Method );
     }
     if( !pRes )
     {
@@ -1890,12 +1890,12 @@ bool StarBASIC::LoadData( SvStream& r, sal_uInt16 nVer )
         }
     }
     // HACK for SFX-Bullshit!
-    SbxVariable* p = Find( "FALSE", SbxCLASS_PROPERTY );
+    SbxVariable* p = Find( "FALSE", SbxClassType::Property );
     if( p )
     {
         Remove( p );
     }
-    p = Find( "TRUE", SbxCLASS_PROPERTY );
+    p = Find( "TRUE", SbxClassType::Property );
     if( p )
     {
         Remove( p );
@@ -1928,7 +1928,7 @@ bool StarBASIC::StoreData( SvStream& r ) const
 bool StarBASIC::GetUNOConstant( const OUString& rName, css::uno::Any& aOut )
 {
     bool bRes = false;
-    SbUnoObject* pGlobs = dynamic_cast<SbUnoObject*>( Find( rName, SbxCLASS_DONTCARE ) );
+    SbUnoObject* pGlobs = dynamic_cast<SbUnoObject*>( Find( rName, SbxClassType::DontCare ) );
     if ( pGlobs )
     {
         aOut = pGlobs->getUnoAny();
@@ -1953,7 +1953,7 @@ Reference< frame::XModel > StarBASIC::GetModelFromBasic( SbxObject* pBasic )
     SbxObject* pLookup = pBasic->GetParent();
     while ( pLookup && !pThisComponent )
     {
-        pThisComponent = pLookup->Find( sThisComponent, SbxCLASS_OBJECT );
+        pThisComponent = pLookup->Find( sThisComponent, SbxClassType::Object );
         pLookup = pLookup->GetParent();
     }
     if ( !pThisComponent )
@@ -2040,14 +2040,14 @@ void BasicCollection::Initialize()
     SetFlag( SbxFlagBits::Fixed );
     ResetFlag( SbxFlagBits::Write );
     SbxVariable* p;
-    p = Make( pCountStr, SbxCLASS_PROPERTY, SbxINTEGER );
+    p = Make( pCountStr, SbxClassType::Property, SbxINTEGER );
     p->ResetFlag( SbxFlagBits::Write );
     p->SetFlag( SbxFlagBits::DontStore );
-    p = Make( pAddStr, SbxCLASS_METHOD, SbxEMPTY );
+    p = Make( pAddStr, SbxClassType::Method, SbxEMPTY );
     p->SetFlag( SbxFlagBits::DontStore );
-    p = Make( pItemStr, SbxCLASS_METHOD, SbxVARIANT );
+    p = Make( pItemStr, SbxClassType::Method, SbxVARIANT );
     p->SetFlag( SbxFlagBits::DontStore );
-    p = Make( pRemoveStr, SbxCLASS_METHOD, SbxEMPTY );
+    p = Make( pRemoveStr, SbxClassType::Method, SbxEMPTY );
     p->SetFlag( SbxFlagBits::DontStore );
     if ( !xAddInfo.Is() )
     {

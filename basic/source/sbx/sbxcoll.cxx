@@ -75,14 +75,14 @@ void SbxCollection::Initialize()
     SetFlag( SbxFlagBits::Fixed );
     ResetFlag( SbxFlagBits::Write );
     SbxVariable* p;
-    p = Make( pCount , SbxCLASS_PROPERTY, SbxINTEGER );
+    p = Make( pCount , SbxClassType::Property, SbxINTEGER );
     p->ResetFlag( SbxFlagBits::Write );
     p->SetFlag( SbxFlagBits::DontStore );
-    p = Make( pAdd, SbxCLASS_METHOD, SbxEMPTY );
+    p = Make( pAdd, SbxClassType::Method, SbxEMPTY );
     p->SetFlag( SbxFlagBits::DontStore );
-    p = Make( pItem , SbxCLASS_METHOD, SbxOBJECT );
+    p = Make( pItem , SbxClassType::Method, SbxOBJECT );
     p->SetFlag( SbxFlagBits::DontStore );
-    p = Make( pRemove, SbxCLASS_METHOD, SbxEMPTY );
+    p = Make( pRemove, SbxClassType::Method, SbxEMPTY );
     p->SetFlag( SbxFlagBits::DontStore );
 }
 
@@ -195,7 +195,7 @@ void SbxCollection::CollItem( SbxArray* pPar_ )
         SbxVariable* p = pPar_->Get( 1 );
         if( p->GetType() == SbxSTRING )
         {
-            pRes = Find( p->GetOUString(), SbxCLASS_OBJECT );
+            pRes = Find( p->GetOUString(), SbxClassType::Object );
         }
         else
         {

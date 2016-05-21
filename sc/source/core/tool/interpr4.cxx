@@ -2934,7 +2934,7 @@ void ScInterpreter::ScMacro()
         pRoot = nullptr;
     }
 
-    SbxVariable* pVar = pRoot ? pRoot->Find(aMacro, SbxCLASS_METHOD) : nullptr;
+    SbxVariable* pVar = pRoot ? pRoot->Find(aMacro, SbxClassType::Method) : nullptr;
     if( !pVar || pVar->GetType() == SbxVOID || dynamic_cast<const SbMethod*>( pVar) ==  nullptr )
     {
         PushError( errNoMacro );

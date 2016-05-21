@@ -58,7 +58,7 @@ SbMethod* CreateMacro( SbModule* pModule, const OUString& rMacroName )
         pDispatcher->Execute( SID_BASICIDE_STOREALLMODULESOURCES );
     }
 
-    if ( pModule->GetMethods()->Find( rMacroName, SbxCLASS_METHOD ) )
+    if ( pModule->GetMethods()->Find( rMacroName, SbxClassType::Method ) )
         return nullptr;
 
     OUString aMacroName( rMacroName );
@@ -75,7 +75,7 @@ SbMethod* CreateMacro( SbModule* pModule, const OUString& rMacroName )
                 aMacroName = "Macro";
                 aMacroName += OUString::number( nMacro );
                 // test whether existing...
-                bValid = pModule->GetMethods()->Find( aMacroName, SbxCLASS_METHOD ) == nullptr;
+                bValid = pModule->GetMethods()->Find( aMacroName, SbxClassType::Method ) == nullptr;
                 nMacro++;
             }
         }
@@ -124,7 +124,7 @@ SbMethod* CreateMacro( SbModule* pModule, const OUString& rMacroName )
         }
     }
 
-    SbMethod* pMethod = static_cast<SbMethod*>(pModule->GetMethods()->Find( aMacroName, SbxCLASS_METHOD ));
+    SbMethod* pMethod = static_cast<SbMethod*>(pModule->GetMethods()->Find( aMacroName, SbxClassType::Method ));
 
     if( pDispatcher )
     {

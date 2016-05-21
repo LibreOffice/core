@@ -2313,8 +2313,8 @@ SbUnoObject::SbUnoObject( const OUString& aName_, const Any& aUnoObj_ )
     static Reference< XIntrospection > xIntrospection;
 
     // beat out again the default properties of Sbx
-    Remove( "Name", SbxCLASS_DONTCARE );
-    Remove( "Parent", SbxCLASS_DONTCARE );
+    Remove( "Name", SbxClassType::DontCare );
+    Remove( "Parent", SbxClassType::DontCare );
 
     // check the type of the objects
     TypeClass eType = aUnoObj_.getValueType().getTypeClass();
@@ -2760,7 +2760,7 @@ SbxVariable* SbUnoObject::Find( const OUString& rName, SbxClassType t )
             implCreateDbgProperties();
 
             // Now they have to be found regular
-            pRes = SbxObject::Find( rName, SbxCLASS_DONTCARE );
+            pRes = SbxObject::Find( rName, SbxClassType::DontCare );
         }
     }
     return pRes;
@@ -3375,7 +3375,7 @@ SbUnoClass* findUnoClass( const OUString& rName )
 
 SbxVariable* SbUnoClass::Find( const OUString& rName, SbxClassType )
 {
-    SbxVariable* pRes = SbxObject::Find( rName, SbxCLASS_VARIABLE );
+    SbxVariable* pRes = SbxObject::Find( rName, SbxClassType::Variable );
 
     // If nothing were located the submodule isn't known yet
     if( !pRes )
@@ -3529,7 +3529,7 @@ SbUnoService* findUnoService( const OUString& rName )
 
 SbxVariable* SbUnoService::Find( const OUString& rName, SbxClassType )
 {
-    SbxVariable* pRes = SbxObject::Find( rName, SbxCLASS_METHOD );
+    SbxVariable* pRes = SbxObject::Find( rName, SbxClassType::Method );
 
     if( !pRes )
     {
@@ -3561,7 +3561,7 @@ SbxVariable* SbUnoService::Find( const OUString& rName, SbxClassType )
                     QuickInsert( static_cast<SbxVariable*>(xSbCtorRef) );
                 }
             }
-            pRes = SbxObject::Find( rName, SbxCLASS_METHOD );
+            pRes = SbxObject::Find( rName, SbxClassType::Method );
         }
     }
 
@@ -4322,7 +4322,7 @@ void SAL_CALL ModuleInvocationProxy::setValue(const OUString& rProperty, const A
     aPropertyFunctionName += m_aPrefix;
     aPropertyFunctionName += rProperty;
 
-    SbxVariable* p = m_xScopeObj->Find( aPropertyFunctionName, SbxCLASS_METHOD );
+    SbxVariable* p = m_xScopeObj->Find( aPropertyFunctionName, SbxClassType::Method );
     SbMethod* pMeth = p != nullptr ? dynamic_cast<SbMethod*>( p ) : nullptr;
     if( pMeth == nullptr )
     {
@@ -4361,7 +4361,7 @@ Any SAL_CALL ModuleInvocationProxy::getValue(const OUString& rProperty)
     aPropertyFunctionName += m_aPrefix;
     aPropertyFunctionName += rProperty;
 
-    SbxVariable* p = m_xScopeObj->Find( aPropertyFunctionName, SbxCLASS_METHOD );
+    SbxVariable* p = m_xScopeObj->Find( aPropertyFunctionName, SbxClassType::Method );
     SbMethod* pMeth = p != nullptr ? dynamic_cast<SbMethod*>( p ) : nullptr;
     if( pMeth == nullptr )
     {
@@ -4418,7 +4418,7 @@ Any SAL_CALL ModuleInvocationProxy::invoke( const OUString& rFunction,
         }
     }
 
-    SbxVariable* p = xScopeObj->Find( aFunctionName, SbxCLASS_METHOD );
+    SbxVariable* p = xScopeObj->Find( aFunctionName, SbxClassType::Method );
     SbMethod* pMeth = p != nullptr ? dynamic_cast<SbMethod*>( p ) : nullptr;
     if( pMeth == nullptr )
     {
@@ -4696,7 +4696,7 @@ bool handleToStringForCOMObjects( SbxObject* pObj, SbxValue* pVal )
         // Only for native COM objects
         if( pUnoObj->isNativeCOMObject() )
         {
-            SbxVariableRef pMeth = pObj->Find( "toString", SbxCLASS_METHOD );
+            SbxVariableRef pMeth = pObj->Find( "toString", SbxClassType::Method );
             if ( pMeth.Is() )
             {
                 SbxValues aRes;
@@ -4821,7 +4821,7 @@ SbxVariable* SbUnoStructRefObject::Find( const OUString& rName, SbxClassType t )
             implCreateDbgProperties();
 
             // Now they have to be found regular
-            pRes = SbxObject::Find( rName, SbxCLASS_DONTCARE );
+            pRes = SbxObject::Find( rName, SbxClassType::DontCare );
         }
     }
 
