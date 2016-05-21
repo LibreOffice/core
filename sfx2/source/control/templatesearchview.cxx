@@ -9,7 +9,9 @@
 
 #include "templatesearchview.hxx"
 #include "templatesearchviewitem.hxx"
+#include <sfx2/templateabstractview.hxx>
 #include <sfx2/sfxresid.hxx>
+#include <tools/urlobj.hxx>
 
 #include "../doc/doc.hrc"
 
@@ -127,7 +129,12 @@ void TemplateSearchView::AppendItem(sal_uInt16 nAssocItemId, sal_uInt16 nRegionI
     pItem->mnAssocId = nAssocItemId;
     pItem->mnDocId = nIdx;
     pItem->mnRegionId = nRegionId;
-    pItem->maPreview1 = rImage;
+
+    if(!rImage.IsEmpty())
+        pItem->maPreview1 = rImage;
+    else
+        pItem->maPreview1 = getDefaultThumbnail(rPath);
+
     pItem->maTitle = rTitle;
     pItem->setSubTitle(rSubtitle);
     pItem->setPath(rPath);
@@ -135,6 +142,24 @@ void TemplateSearchView::AppendItem(sal_uInt16 nAssocItemId, sal_uInt16 nRegionI
     ThumbnailView::AppendItem(pItem);
 
     CalculateItemPositions();
+}
+
+BitmapEx TemplateSearchView::getDefaultThumbnail( const OUString& rPath )
+{
+    BitmapEx aImg;
+    INetURLObject aUrl(rPath);
+    OUString aExt = aUrl.getExtension();
+
+    if ( ViewFilter_Application::isFilteredExtension( FILTER_APPLICATION::WRITER, aExt) )
+        aImg = BitmapEx ( SfxResId( SFX_THUMBNAIL_TEXT ) );
+    else if ( ViewFilter_Application::isFilteredExtension( FILTER_APPLICATION::CALC, aExt) )
+        aImg = BitmapEx ( SfxResId( SFX_THUMBNAIL_SHEET ) );
+    else if ( ViewFilter_Application::isFilteredExtension( FILTER_APPLICATION::IMPRESS, aExt) )
+        aImg = BitmapEx ( SfxResId( SFX_THUMBNAIL_PRESENTATION ) );
+    else if ( ViewFilter_Application::isFilteredExtension( FILTER_APPLICATION::DRAW, aExt) )
+        aImg = BitmapEx ( SfxResId( SFX_THUMBNAIL_DRAWING ) );
+
+    return aImg;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
