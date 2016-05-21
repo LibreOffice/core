@@ -227,7 +227,7 @@ const OUString& SbxVariable::GetName( SbxNameType t ) const
     // Request parameter-information (not for objects)
     const_cast<SbxVariable*>(this)->GetInfo();
     // Append nothing, if it is a simple property (no empty brackets)
-    if (!pInfo || (pInfo->m_Params.empty() && GetClass() == SbxCLASS_PROPERTY))
+    if (!pInfo || (pInfo->m_Params.empty() && GetClass() == SbxClassType::Property))
     {
         return maName;
     }
@@ -387,7 +387,7 @@ SbxDataType SbxVariable::GetType() const
 
 SbxClassType SbxVariable::GetClass() const
 {
-    return SbxCLASS_VARIABLE;
+    return SbxClassType::Variable;
 }
 
 void SbxVariable::SetModified( bool b )
@@ -497,7 +497,7 @@ bool SbxVariable::LoadData( SvStream& rStrm, sal_uInt16 nVer )
         rStrm.ReadUInt32( nTemp );
         nUserData = nTemp;
         // correction: old methods have instead of SbxNULL now SbxEMPTY
-        if( nType == SbxNULL && GetClass() == SbxCLASS_METHOD )
+        if( nType == SbxNULL && GetClass() == SbxClassType::Method )
         {
             nType = SbxEMPTY;
         }

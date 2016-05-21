@@ -314,7 +314,7 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
                         pModule = pBasic->GetModules().front();
                 }
                 DBG_ASSERT( pModule, "Kein Modul!" );
-                if ( pModule && !pModule->GetMethods()->Find( rInfo.GetMethod(), SbxCLASS_METHOD ) )
+                if ( pModule && !pModule->GetMethods()->Find( rInfo.GetMethod(), SbxClassType::Method ) )
                     CreateMacro( pModule, rInfo.GetMethod() );
             }
             SfxViewFrame* pViewFrame = GetViewFrame();

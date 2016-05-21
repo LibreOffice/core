@@ -705,7 +705,7 @@ void ModulWindow::EditMacro( const OUString& rMacroName )
         if ( !m_aStatus.bError )
         {
             sal_uInt16 nStart, nEnd;
-            SbMethod* pMethod = static_cast<SbMethod*>(m_xModule->Find( rMacroName, SbxCLASS_METHOD ));
+            SbMethod* pMethod = static_cast<SbMethod*>(m_xModule->Find( rMacroName, SbxClassType::Method ));
             if ( pMethod )
             {
                 pMethod->GetLineRange( nStart, nEnd );

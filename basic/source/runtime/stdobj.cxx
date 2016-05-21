@@ -718,8 +718,8 @@ SbiStdObject::SbiStdObject( const OUString& r, StarBASIC* pb ) : SbxObject( r )
         }
 
     // #i92642: Remove default properties
-    Remove( "Name", SbxCLASS_DONTCARE );
-    Remove( "Parent", SbxCLASS_DONTCARE );
+    Remove( "Name", SbxClassType::DontCare );
+    Remove( "Parent", SbxClassType::DontCare );
 
     SetParent( pb );
 
@@ -757,9 +757,9 @@ SbxVariable* SbiStdObject::Find( const OUString& rName, SbxClassType t )
         sal_uInt16 nSrchMask = TYPEMASK_;
         switch( t )
         {
-            case SbxCLASS_METHOD:   nSrchMask = METHOD_; break;
-            case SbxCLASS_PROPERTY: nSrchMask = PROPERTY_; break;
-            case SbxCLASS_OBJECT:   nSrchMask = OBJECT_; break;
+            case SbxClassType::Method:   nSrchMask = METHOD_; break;
+            case SbxClassType::Property: nSrchMask = PROPERTY_; break;
+            case SbxClassType::Object:   nSrchMask = OBJECT_; break;
             default: break;
         }
         while( p->nArgs != -1 )
@@ -789,14 +789,14 @@ SbxVariable* SbiStdObject::Find( const OUString& rName, SbxClassType t )
             if( p->nArgs & CONST_ )
                 nAccess |= SbxFlagBits::Const;
             OUString aName_ = OUString::createFromAscii( p->pName );
-            SbxClassType eCT = SbxCLASS_OBJECT;
+            SbxClassType eCT = SbxClassType::Object;
             if( nType & PROPERTY_ )
             {
-                eCT = SbxCLASS_PROPERTY;
+                eCT = SbxClassType::Property;
             }
             else if( nType & METHOD_ )
             {
-                eCT = SbxCLASS_METHOD;
+                eCT = SbxClassType::Method;
             }
             pVar = Make( aName_, eCT, p->eType, ( p->nArgs & FUNCTION_ ) == FUNCTION_ );
             pVar->SetUserData( nIndex + 1 );

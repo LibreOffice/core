@@ -26,14 +26,14 @@
 #include <tools/errcode.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
-enum SbxClassType {         // SBX-class-IDs (order is important!)
-    SbxCLASS_DONTCARE = 1,  // don't care (search, not 0 due to StarBASIC)
-    SbxCLASS_ARRAY,         // Array of SbxVariables
-    SbxCLASS_VALUE,         // simple value
-    SbxCLASS_VARIABLE,      // Variable (from here there is Broadcaster)
-    SbxCLASS_METHOD,        // Method (Function or Sub)
-    SbxCLASS_PROPERTY,      // Property
-    SbxCLASS_OBJECT         // Object
+enum class SbxClassType {         // SBX-class-IDs (order is important!)
+    DontCare = 1,  // don't care (search, not 0 due to StarBASIC)
+    Array,         // Array of SbxVariables
+    Value,         // simple value
+    Variable,      // Variable (from here there is Broadcaster)
+    Method,        // Method (Function or Sub)
+    Property,      // Property
+    Object         // Object
 };
 
 enum SbxDataType {
