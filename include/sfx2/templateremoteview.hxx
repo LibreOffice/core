@@ -25,7 +25,7 @@ public:
 
     virtual void showAllTemplates () override;
 
-    virtual void showRegion (ThumbnailViewItem *pItem) override;
+    virtual void showRegion (TemplateContainerItem *pItem) override;
 
     bool loadRepository (TemplateRepository* pRepository);
 
