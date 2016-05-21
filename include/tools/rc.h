@@ -153,9 +153,14 @@ namespace o3tl {
 #define RSC_IMAGE_MASKCOLOR             0x04
 
 // For "ImageList":
-#define RSC_IMAGELIST_MASKCOLOR         0x04
-#define RSC_IMAGELIST_IDLIST            0x08
-#define RSC_IMAGELIST_IDCOUNT           0x10
+enum class RscImageListFlags {
+    MaskColor         = 0x04,
+    IdList            = 0x08,
+    IdCount           = 0x10
+};
+namespace o3tl {
+    template<> struct typed_flags<RscImageListFlags> : is_typed_flags<RscImageListFlags, 0x1c> {};
+}
 
 // FIXME obsolete, should be removed by MM
 #define RSC_COLOR                       (RSC_NOTYPE + 0x16)
