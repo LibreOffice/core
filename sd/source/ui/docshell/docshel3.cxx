@@ -320,7 +320,8 @@ void DrawDocShell::Execute( SfxRequest& rReq )
 
         case SID_NOTEBOOKBAR:
         {
-            sfx2::SfxNotebookBar::ExecMethod(mpViewShell->GetFrame()->GetBindings());
+            if (mpViewShell)
+                sfx2::SfxNotebookBar::ExecMethod(mpViewShell->GetFrame()->GetBindings());
         }
         break;
 
