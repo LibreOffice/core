@@ -127,7 +127,18 @@ public:
             bRet = aExt == "otg" || aExt == "std";
         }
 
-        return bRet && rItem.aName.matchIgnoreAsciiCase(maKeyword);
+        return bRet && MatchSubstring(rItem.aName);
+    }
+
+    bool MatchSubstring( OUString sItemName )
+    {
+        if(maKeyword.isEmpty())
+            return false;
+        sItemName = sItemName.toAsciiLowerCase();
+        maKeyword = maKeyword.toAsciiLowerCase();
+        if(sItemName.indexOf(maKeyword) >= 0)
+            return true;
+        return false;
     }
 
 private:
