@@ -2834,8 +2834,11 @@ const SvxAutocorrWord* SvxAutocorrWordList::WordMatches(const SvxAutocorrWord *p
                 SvxAutocorrWord* pNew = new SvxAutocorrWord(aShort, aLong);
                 if ( Insert( pNew ) )
                 {
-                    if ( IsWordDelim(rTxt[nEndPos]) ) return pNew;
-                } else delete pNew;
+                    if ( (rTxt.getLength() > nEndPos && IsWordDelim(rTxt[nEndPos])) || rTxt.getLength() == nEndPos )
+                        return pNew;
+                }
+                else
+                    delete pNew;
             }
         }
     }
