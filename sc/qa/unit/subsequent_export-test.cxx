@@ -98,6 +98,7 @@ public:
     void testColorScaleExportXLSX();
     void testDataBarExportODS();
     void testDataBarExportXLSX();
+    void testConditionalFormatRangeListXLSX();
     void testMiscRowHeightExport();
     void testNamedRangeBugfdo62729();
     void testRichTextExportODS();
@@ -180,6 +181,7 @@ public:
     CPPUNIT_TEST(testColorScaleExportXLSX);
     CPPUNIT_TEST(testDataBarExportODS);
     CPPUNIT_TEST(testDataBarExportXLSX);
+    CPPUNIT_TEST(testConditionalFormatRangeListXLSX);
     CPPUNIT_TEST(testMiscRowHeightExport);
     CPPUNIT_TEST(testNamedRangeBugfdo62729);
     CPPUNIT_TEST(testRichTextExportODS);
@@ -3289,6 +3291,17 @@ void ScExportTest::testTdf88657()
     CPPUNIT_ASSERT(pDoc);
 
     assertXPath(pDoc, "//number:fraction", "min-denominator-digits", "3");
+}
+
+void ScExportTest::testConditionalFormatRangeListXLSX()
+{
+    ScDocShellRef xDocSh = loadDoc("conditionalformat_rangelist.", FORMAT_ODS);
+    CPPUNIT_ASSERT(xDocSh.Is());
+
+    xmlDocPtr pDoc = XPathHelper::parseExport(*xDocSh, m_xSFactory, "xl/worksheets/sheet1.xml", FORMAT_XLSX);
+    CPPUNIT_ASSERT(pDoc);
+
+    assertXPath(pDoc, "//x:conditionalFormatting", "sqref", "F4 F10");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest);
