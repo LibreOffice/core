@@ -1034,7 +1034,7 @@ void SfxTemplateManagerDlg::OnTemplateImportCategory(const OUString& sCategory)
         if (aFiles.hasElements())
         {
             //Import to the selected regions
-            TemplateContainerItem* pContItem = const_cast<TemplateContainerItem*>(static_cast<const TemplateContainerItem*>(mpLocalView->getRegion(sCategory)));
+            TemplateContainerItem* pContItem = mpLocalView->getRegion(sCategory);
             if(pContItem)
             {
                 OUString aTemplateList;

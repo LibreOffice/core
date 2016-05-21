@@ -81,7 +81,7 @@ void TemplateLocalView::Populate ()
     {
         OUString aRegionName(mpDocTemplates->GetFullRegionName(i));
 
-        TemplateContainerItem* pItem = new TemplateContainerItem( *this, i+1 );
+        TemplateContainerItem* pItem = new TemplateContainerItem( i+1 );
         pItem->mnRegionId = i;
         pItem->maTitle = aRegionName;
 
@@ -147,12 +147,12 @@ void TemplateLocalView::showAllTemplates()
     maOpenRegionHdl.Call(nullptr);
 }
 
-void TemplateLocalView::showRegion(ThumbnailViewItem *pItem)
+void TemplateLocalView::showRegion(TemplateContainerItem *pItem)
 {
-    mnCurRegionId = static_cast<TemplateContainerItem*>(pItem)->mnRegionId+1;
+    mnCurRegionId = pItem->mnRegionId+1;
     maCurRegionName = pItem->maTitle;
 
-    insertItems(reinterpret_cast<TemplateContainerItem*>(pItem)->maTemplates);
+    insertItems((pItem)->maTemplates);
 
     maOpenRegionHdl.Call(nullptr);
 }
@@ -169,7 +169,7 @@ void TemplateLocalView::showRegion(const OUString &rName)
     }
 }
 
-ThumbnailViewItem* TemplateLocalView::getRegion(OUString const & rName)
+TemplateContainerItem* TemplateLocalView::getRegion(OUString const & rName)
 {
     for (TemplateContainerItem* pRegion : maRegions)
         if (pRegion->maTitle == rName)
@@ -333,20 +333,11 @@ sal_uInt16 TemplateLocalView::createRegion(const OUString &rName)
         return 0;
 
     // Insert to the region cache list and to the thumbnail item list
-    TemplateContainerItem* pItem = new TemplateContainerItem( *this, nItemId );
+    TemplateContainerItem* pItem = new TemplateContainerItem( nItemId );
     pItem->mnRegionId = nRegionId;
     pItem->maTitle = rName;
 
     maRegions.push_back(pItem);
-
-    pItem = new TemplateContainerItem(*this, nItemId);
-    pItem->mnRegionId = nRegionId;
-    pItem->maTitle = rName;
-
-    AppendItem(pItem);
-
-    CalculateItemPositions();
-    Invalidate();
 
     return pItem->mnId;
 }
@@ -383,14 +374,12 @@ bool TemplateLocalView::removeRegion(const sal_uInt16 nItemId)
         return false;
 
     // Synchronize view regions ids with SfxDocumentTemplates
-    std::vector<ThumbnailViewItem*>::iterator pViewIt = mItemList.begin();
-    for ( pViewIt = mItemList.begin(); pViewIt != mItemList.end(); ++pViewIt)
+    std::vector<TemplateContainerItem*>::iterator pRegionIter = maRegions.begin();
+    for ( ; pRegionIter != maRegions.end(); ++pRegionIter)
     {
-        if (static_cast<TemplateContainerItem*>(*pViewIt)->mnRegionId > nRegionId)
-            --static_cast<TemplateContainerItem*>(*pViewIt)->mnRegionId;
+        if ((*pRegionIter)->mnRegionId > nRegionId)
+            --(*pRegionIter)->mnRegionId;
     }
-
-    RemoveItem(nItemId);
 
     return true;
 }
@@ -401,7 +390,7 @@ bool TemplateLocalView::removeTemplate (const sal_uInt16 nItemId, const sal_uInt
     {
         if (pRegion->mnId == nSrcItemId)
         {
-            TemplateContainerItem *pItem = static_cast<TemplateContainerItem*>(pRegion);
+            TemplateContainerItem *pItem = pRegion;
             std::vector<TemplateItemProperties>::iterator pIter;
             for (pIter = pItem->maTemplates.begin(); pIter != pItem->maTemplates.end(); ++pIter)
             {
@@ -443,9 +432,9 @@ bool TemplateLocalView::moveTemplate (const ThumbnailViewItem *pItem, const sal_
     for (TemplateContainerItem* pRegion : maRegions)
     {
         if (pRegion->mnId == nTargetItem)
-            pTarget = static_cast<TemplateContainerItem*>(pRegion);
+            pTarget = pRegion;
         else if (pRegion->mnId == nSrcItem)
-            pSrc = static_cast<TemplateContainerItem*>(pRegion);
+            pSrc = pRegion;
     }
 
     if (pTarget && pSrc)
@@ -526,7 +515,7 @@ bool TemplateLocalView::moveTemplates(const std::set<const ThumbnailViewItem*, s
     for (TemplateContainerItem* pRegion : maRegions)
     {
         if (pRegion->mnId == nTargetItem)
-            pTarget = static_cast<TemplateContainerItem*>(pRegion);
+            pTarget = pRegion;
     }
 
     if (pTarget)
@@ -546,7 +535,7 @@ bool TemplateLocalView::moveTemplates(const std::set<const ThumbnailViewItem*, s
             for (TemplateContainerItem* pRegion : maRegions)
             {
                 if (pRegion->mnRegionId == nSrcRegionId)
-                    pSrc = static_cast<TemplateContainerItem*>(pRegion);
+                    pSrc = pRegion;
             }
 
             if(pSrc)
@@ -637,7 +626,7 @@ bool TemplateLocalView::copyFrom(const sal_uInt16 nRegionItemId, const BitmapEx 
             sal_uInt16 nDocId = 0;
 
             TemplateContainerItem *pRegionItem =
-                    static_cast<TemplateContainerItem*>(pRegion);
+                    pRegion;
 
             if (!pRegionItem->maTemplates.empty())
             {
@@ -659,8 +648,7 @@ bool TemplateLocalView::copyFrom(const sal_uInt16 nRegionItemId, const BitmapEx 
                 aTemplate.aThumbnail = rThumbnail;
                 aTemplate.aPath = mpDocTemplates->GetPath(nRegionId,nDocId);
 
-                TemplateContainerItem *pItem =
-                        static_cast<TemplateContainerItem*>(pRegion);
+                TemplateContainerItem *pItem = pRegion;
 
                 pItem->maTemplates.push_back(aTemplate);
 
@@ -776,16 +764,13 @@ bool TemplateLocalView::renameItem(ThumbnailViewItem* pItem, const OUString& sNe
     sal_uInt16 nRegionId = 0;
     sal_uInt16 nDocId = USHRT_MAX;
     TemplateViewItem* pDocItem = dynamic_cast<TemplateViewItem*>( pItem );
-    TemplateContainerItem* pContainerItem = dynamic_cast<TemplateContainerItem*>( pItem );
+
     if ( pDocItem )
     {
         nRegionId = pDocItem->mnRegionId;
         nDocId = pDocItem->mnDocId;
     }
-    else if ( pContainerItem )
-    {
-        nRegionId = pContainerItem->mnRegionId;
-    }
+
     return mpDocTemplates->SetName( sNewTitle, nRegionId, nDocId );
 }
 

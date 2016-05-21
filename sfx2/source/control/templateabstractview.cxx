@@ -260,20 +260,10 @@ BitmapEx TemplateAbstractView::fetchThumbnail (const OUString &msURL, long width
 
 void TemplateAbstractView::OnItemDblClicked (ThumbnailViewItem *pItem)
 {
-    //Check if the item is a TemplateContainerItem (Folder) or a TemplateViewItem (File)
+    TemplateViewItem* pViewItem = dynamic_cast<TemplateViewItem*>(pItem);
 
-    TemplateContainerItem* pContainerItem = dynamic_cast<TemplateContainerItem*>(pItem);
-    if ( pContainerItem )
-    {
-        // Fill templates
-        mnCurRegionId = pContainerItem->mnRegionId+1;
-        maCurRegionName = pContainerItem->maTitle;
-        showRegion(pItem);
-    }
-    else
-    {
-        maOpenTemplateHdl.Call(pItem);
-    }
+    if( pViewItem )
+        maOpenTemplateHdl.Call(pViewItem);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
