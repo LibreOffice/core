@@ -60,7 +60,7 @@ namespace drawinglayer
             }
 
             ImpFillGradientAttribute()
-            :   meStyle(GRADIENTSTYLE_LINEAR),
+            :   meStyle(GradientStyle::Linear),
                 mfBorder(0.0),
                 mfOffsetX(0.0),
                 mfOffsetY(0.0),

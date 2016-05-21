@@ -88,27 +88,27 @@ namespace drawinglayer
             {
                 case css::awt::GradientStyle_LINEAR :
                 {
-                    return attribute::GRADIENTSTYLE_LINEAR;
+                    return attribute::GradientStyle::Linear;
                 }
                 case css::awt::GradientStyle_AXIAL :
                 {
-                    return attribute::GRADIENTSTYLE_AXIAL;
+                    return attribute::GradientStyle::Axial;
                 }
                 case css::awt::GradientStyle_RADIAL :
                 {
-                    return attribute::GRADIENTSTYLE_RADIAL;
+                    return attribute::GradientStyle::Radial;
                 }
                 case css::awt::GradientStyle_ELLIPTICAL :
                 {
-                    return attribute::GRADIENTSTYLE_ELLIPTICAL;
+                    return attribute::GradientStyle::Elliptical;
                 }
                 case css::awt::GradientStyle_SQUARE :
                 {
-                    return attribute::GRADIENTSTYLE_SQUARE;
+                    return attribute::GradientStyle::Square;
                 }
                 default :
                 {
-                    return attribute::GRADIENTSTYLE_RECT; // css::awt::GradientStyle_RECT
+                    return attribute::GradientStyle::Rect; // css::awt::GradientStyle_RECT
                 }
             }
         }

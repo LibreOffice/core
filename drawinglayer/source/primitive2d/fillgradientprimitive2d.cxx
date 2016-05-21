@@ -64,7 +64,7 @@ namespace drawinglayer
 
             switch(getFillGradient().getStyle())
             {
-                case attribute::GRADIENTSTYLE_LINEAR:
+                case attribute::GradientStyle::Linear:
                 {
                     texture::GeoTexSvxGradientLinear aGradient(
                         getDefinitionRange(),
@@ -77,7 +77,7 @@ namespace drawinglayer
                     aGradient.appendTransformationsAndColors(rEntries, rOuterColor);
                     break;
                 }
-                case attribute::GRADIENTSTYLE_AXIAL:
+                case attribute::GradientStyle::Axial:
                 {
                     texture::GeoTexSvxGradientAxial aGradient(
                         getDefinitionRange(),
@@ -90,7 +90,7 @@ namespace drawinglayer
                     aGradient.appendTransformationsAndColors(rEntries, rOuterColor);
                     break;
                 }
-                case attribute::GRADIENTSTYLE_RADIAL:
+                case attribute::GradientStyle::Radial:
                 {
                     texture::GeoTexSvxGradientRadial aGradient(
                         getDefinitionRange(),
@@ -103,7 +103,7 @@ namespace drawinglayer
                     aGradient.appendTransformationsAndColors(rEntries, rOuterColor);
                     break;
                 }
-                case attribute::GRADIENTSTYLE_ELLIPTICAL:
+                case attribute::GradientStyle::Elliptical:
                 {
                     texture::GeoTexSvxGradientElliptical aGradient(
                         getDefinitionRange(),
@@ -117,7 +117,7 @@ namespace drawinglayer
                     aGradient.appendTransformationsAndColors(rEntries, rOuterColor);
                     break;
                 }
-                case attribute::GRADIENTSTYLE_SQUARE:
+                case attribute::GradientStyle::Square:
                 {
                     texture::GeoTexSvxGradientSquare aGradient(
                         getDefinitionRange(),
@@ -131,7 +131,7 @@ namespace drawinglayer
                     aGradient.appendTransformationsAndColors(rEntries, rOuterColor);
                     break;
                 }
-                case attribute::GRADIENTSTYLE_RECT:
+                case attribute::GradientStyle::Rect:
                 {
                     texture::GeoTexSvxGradientRect aGradient(
                         getDefinitionRange(),
@@ -252,13 +252,13 @@ namespace drawinglayer
 
             switch(getFillGradient().getStyle())
             {
-                case attribute::GRADIENTSTYLE_RADIAL:
-                case attribute::GRADIENTSTYLE_ELLIPTICAL:
+                case attribute::GradientStyle::Radial:
+                case attribute::GradientStyle::Elliptical:
                 {
                     aUnitPolygon = basegfx::tools::createPolygonFromCircle(basegfx::B2DPoint(0.0, 0.0), 1.0);
                     break;
                 }
-                default: // GRADIENTSTYLE_LINEAR, attribute::GRADIENTSTYLE_AXIAL, attribute::GRADIENTSTYLE_SQUARE, attribute::GRADIENTSTYLE_RECT
+                default: // GradientStyle::Linear, attribute::GradientStyle::Axial, attribute::GradientStyle::Square, attribute::GradientStyle::Rect
                 {
                     aUnitPolygon = basegfx::tools::createPolygonFromRect(basegfx::B2DRange(-1.0, -1.0, 1.0, 1.0));
                     break;
