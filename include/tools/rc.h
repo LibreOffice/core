@@ -143,9 +143,14 @@ namespace o3tl {
 #define RSC_DOCKINGWINDOW_FLOATING      0x08
 
 // For "ImageButtons":
-#define RSC_IMAGEBUTTON_IMAGE           0x01
-#define RSC_IMAGEBUTTON_SYMBOL          0x02
-#define RSC_IMAGEBUTTON_STATE           0x04
+enum class RscImageButtonFlags {
+    Image           = 0x01,
+    Symbol          = 0x02,
+    State           = 0x04
+};
+namespace o3tl {
+    template<> struct typed_flags<RscImageButtonFlags> : is_typed_flags<RscImageButtonFlags, 0x07> {};
+}
 
 // For "Image":
 #define RSC_IMAGE_IMAGEBITMAP           0x01
