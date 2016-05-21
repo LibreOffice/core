@@ -1073,12 +1073,8 @@ void SmCursor::InsertElement(SmFormulaElement element){
             token.aText = "\"%\"";
             pNewNode = new SmMathSymbolNode(token);
         }break;
-        default:
-            SAL_WARN("starmath", "Element unknown!");
     }
-    OSL_ENSURE(pNewNode != nullptr, "No new node was created!");
-    if(!pNewNode)
-        return;
+    assert(pNewNode);
 
     //Prepare the new node
     pNewNode->Prepare(mpDocShell->GetFormat(), *mpDocShell);
