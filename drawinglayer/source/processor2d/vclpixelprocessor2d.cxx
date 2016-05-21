@@ -1124,16 +1124,16 @@ namespace drawinglayer
 
                         switch(rFillHatchAttributes.getStyle())
                         {
-                            default : // HATCHSTYLE_SINGLE
+                            default : // HatchStyle::Single
                             {
                                 break;
                             }
-                            case attribute::HATCHSTYLE_DOUBLE :
+                            case attribute::HatchStyle::Double :
                             {
                                 eHatchStyle = HATCH_DOUBLE;
                                 break;
                             }
-                            case attribute::HATCHSTYLE_TRIPLE :
+                            case attribute::HatchStyle::Triple :
                             {
                                 eHatchStyle = HATCH_TRIPLE;
                                 break;

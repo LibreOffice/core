@@ -900,23 +900,23 @@ namespace
      */
     drawinglayer::attribute::FillHatchAttribute createFillHatchAttribute(const Hatch& rHatch)
     {
-        drawinglayer::attribute::HatchStyle aHatchStyle(drawinglayer::attribute::HATCHSTYLE_SINGLE);
+        drawinglayer::attribute::HatchStyle aHatchStyle(drawinglayer::attribute::HatchStyle::Single);
 
         switch(rHatch.GetStyle())
         {
             default : // case HATCH_SINGLE :
             {
-                aHatchStyle = drawinglayer::attribute::HATCHSTYLE_SINGLE;
+                aHatchStyle = drawinglayer::attribute::HatchStyle::Single;
                 break;
             }
             case HATCH_DOUBLE :
             {
-                aHatchStyle = drawinglayer::attribute::HATCHSTYLE_DOUBLE;
+                aHatchStyle = drawinglayer::attribute::HatchStyle::Double;
                 break;
             }
             case HATCH_TRIPLE :
             {
-                aHatchStyle = drawinglayer::attribute::HATCHSTYLE_TRIPLE;
+                aHatchStyle = drawinglayer::attribute::HatchStyle::Triple;
                 break;
             }
         }
