@@ -10,6 +10,13 @@
 #include <comphelper/processfactory.hxx>
 #include <unotools/syslocaleoptions.hxx>
 
+#ifdef WIN32
+#include <string.h>
+
+#include <windows.h>
+#include <odbcinst.h>
+#endif
+
 using namespace ::com::sun::star;
 
 namespace
@@ -96,12 +103,25 @@ void VBATest::testMiscOLEStuff()
     bool bOk = false;
     if( xOLEFactory.is() )
     {
-        uno::Reference< uno::XInterface > xExcel = xOLEFactory->createInstance( "Excel.Application" );
         uno::Reference< uno::XInterface > xADODB = xOLEFactory->createInstance( "ADODB.Connection" );
-       bOk = xExcel.is() && xADODB.is();
+        bOk = xADODB.is();
     }
     if ( !bOk )
         return; // can't do anything, skip test
+
+    sal_Unicode sBuf[1024*4];
+    SQLGetInstalledDriversW( sBuf, sizeof( sBuf ), nullptr );
+
+    const sal_Unicode *pODBCDriverName = sBuf;
+    bool bFound = false;
+    for (; wcslen( pODBCDriverName ) != 0; pODBCDriverName += wcslen( pODBCDriverName ) + 1 ) {
+        if ( wcsstr( pODBCDriverName, L"Microsoft Excel Driver" ) != nullptr ) {
+            bFound = true;
+            break;
+        }
+    }
+    if ( !bFound )
+        return; // can't find ODBC driver needed test, so skip test
 
     const char* macroSource[] = {
         "ole_ObjAssignNoDflt.vb",
