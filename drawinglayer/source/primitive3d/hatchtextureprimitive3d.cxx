@@ -140,7 +140,7 @@ namespace drawinglayer
                                             // get hatch transformations
                                             switch(getHatch().getStyle())
                                             {
-                                                case attribute::HATCHSTYLE_TRIPLE:
+                                                case attribute::HatchStyle::Triple:
                                                 {
                                                     // rotated 45 degrees
                                                     texture::GeoTexSvxHatch aHatch(
@@ -153,7 +153,7 @@ namespace drawinglayer
 
                                                     SAL_FALLTHROUGH;
                                                 }
-                                                case attribute::HATCHSTYLE_DOUBLE:
+                                                case attribute::HatchStyle::Double:
                                                 {
                                                     // rotated 90 degrees
                                                     texture::GeoTexSvxHatch aHatch(
@@ -166,7 +166,7 @@ namespace drawinglayer
 
                                                     SAL_FALLTHROUGH;
                                                 }
-                                                case attribute::HATCHSTYLE_SINGLE:
+                                                case attribute::HatchStyle::Single:
                                                 {
                                                     // angle as given
                                                     texture::GeoTexSvxHatch aHatch(
