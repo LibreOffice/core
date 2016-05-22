@@ -57,7 +57,7 @@ class DateTime;
 
 class SFX2_DLLPUBLIC SfxMedium : public SvRefBase
 {
-    SfxMedium_Impl* pImp;
+    std::unique_ptr< SfxMedium_Impl > pImpl;
 
     SAL_DLLPRIVATE void SetIsRemote_Impl();
     SAL_DLLPRIVATE void CloseInStream_Impl();
