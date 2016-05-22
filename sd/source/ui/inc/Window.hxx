@@ -49,6 +49,7 @@ public:
     virtual void dispose() override;
 
     void    SetViewShell (ViewShell* pViewSh);
+    ViewShell* GetViewShell();
 
     /** Set the zoom factor to the specified value and center the display
         area around the zoom center.
@@ -192,6 +193,8 @@ protected:
     Selection GetSurroundingTextSelection() const override;
     /// @see OutputDevice::LogicInvalidate().
     void LogicInvalidate(const Rectangle* pRectangle) override;
+
+    FactoryFunction GetUITestFactory() const override;
 };
 
 } // end of namespace sd
