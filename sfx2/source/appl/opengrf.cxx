@@ -91,9 +91,9 @@ SvxOpenGrf_Impl::SvxOpenGrf_Impl()
 
 
 SvxOpenGraphicDialog::SvxOpenGraphicDialog( const OUString& rTitle ) :
-    mpImpl( new SvxOpenGrf_Impl )
+    pImpl( new SvxOpenGrf_Impl )
 {
-    mpImpl->aFileDlg.SetTitle(rTitle);
+    pImpl->aFileDlg.SetTitle(rTitle);
 }
 
 
@@ -108,7 +108,7 @@ short SvxOpenGraphicDialog::Execute()
     bool    bQuitLoop(false);
 
     while( !bQuitLoop &&
-           mpImpl->aFileDlg.Execute() == ERRCODE_NONE )
+           pImpl->aFileDlg.Execute() == ERRCODE_NONE )
     {
         if( !GetPath().isEmpty() )
         {
@@ -178,7 +178,7 @@ short SvxOpenGraphicDialog::Execute()
 
 void SvxOpenGraphicDialog::SetPath( const OUString& rPath )
 {
-    mpImpl->aFileDlg.SetDisplayDirectory(rPath);
+    pImpl->aFileDlg.SetDisplayDirectory(rPath);
 }
 
 void SvxOpenGraphicDialog::SetPath( const OUString& rPath, bool bLinkState )
@@ -190,11 +190,11 @@ void SvxOpenGraphicDialog::SetPath( const OUString& rPath, bool bLinkState )
 
 void SvxOpenGraphicDialog::EnableLink( bool state )
 {
-    if( mpImpl->xCtrlAcc.is() )
+    if( pImpl->xCtrlAcc.is() )
     {
         try
         {
-            mpImpl->xCtrlAcc->enableControl( ExtendedFilePickerElementIds::CHECKBOX_LINK, state );
+            pImpl->xCtrlAcc->enableControl( ExtendedFilePickerElementIds::CHECKBOX_LINK, state );
         }
         catch(const IllegalArgumentException&)
         {
@@ -208,11 +208,11 @@ void SvxOpenGraphicDialog::EnableLink( bool state )
 
 void SvxOpenGraphicDialog::AsLink(bool bState)
 {
-    if( mpImpl->xCtrlAcc.is() )
+    if( pImpl->xCtrlAcc.is() )
     {
         try
         {
-            mpImpl->xCtrlAcc->setValue( ExtendedFilePickerElementIds::CHECKBOX_LINK, 0, Any(bState) );
+            pImpl->xCtrlAcc->setValue( ExtendedFilePickerElementIds::CHECKBOX_LINK, 0, Any(bState) );
         }
         catch(const IllegalArgumentException&)
         {
@@ -228,9 +228,9 @@ bool SvxOpenGraphicDialog::IsAsLink() const
 {
     try
     {
-        if( mpImpl->xCtrlAcc.is() )
+        if( pImpl->xCtrlAcc.is() )
         {
-            Any aVal = mpImpl->xCtrlAcc->getValue( ExtendedFilePickerElementIds::CHECKBOX_LINK, 0 );
+            Any aVal = pImpl->xCtrlAcc->getValue( ExtendedFilePickerElementIds::CHECKBOX_LINK, 0 );
             DBG_ASSERT(aVal.hasValue(), "Value CBX_INSERT_AS_LINK not found");
             return aVal.hasValue() && ( *static_cast<sal_Bool const *>(aVal.getValue()) );
         }
@@ -248,25 +248,25 @@ bool SvxOpenGraphicDialog::IsAsLink() const
 
 int SvxOpenGraphicDialog::GetGraphic(Graphic& rGraphic) const
 {
-    return mpImpl->aFileDlg.GetGraphic(rGraphic);
+    return pImpl->aFileDlg.GetGraphic(rGraphic);
 }
 
 
 OUString SvxOpenGraphicDialog::GetPath() const
 {
-    return mpImpl->aFileDlg.GetPath();
+    return pImpl->aFileDlg.GetPath();
 }
 
 
 OUString SvxOpenGraphicDialog::GetCurrentFilter() const
 {
-    return mpImpl->aFileDlg.GetCurrentFilter();
+    return pImpl->aFileDlg.GetCurrentFilter();
 }
 
 
 void SvxOpenGraphicDialog::SetCurrentFilter(const OUString& rStr)
 {
-    mpImpl->aFileDlg.SetCurrentFilter(rStr);
+    pImpl->aFileDlg.SetCurrentFilter(rStr);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
