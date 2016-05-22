@@ -392,6 +392,7 @@ OUString WindowUIObject::get_name() const
 void WindowUIObject::dumpState() const
 {
     DUMP_UITEST(get_name() << " " << mxWindow->get_id());
+    DUMP_UITEST("Implementation Name: " << typeid(*mxWindow.get()).name());
     StringMap aState = const_cast<WindowUIObject*>(this)->get_state();
     for (auto itr = aState.begin(), itrEnd = aState.end(); itr != itrEnd; ++itr)
     {
