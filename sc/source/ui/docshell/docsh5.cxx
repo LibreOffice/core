@@ -416,7 +416,7 @@ void ScDocShell::UpdateAllRowHeights( const ScMarkData* pTabMark )
 
 void ScDocShell::UpdatePendingRowHeights( SCTAB nUpdateTab, bool bBefore )
 {
-    bool bIsUndoEnabled = aDocument.IsUndoEnabled();
+    bool bIsUndoEnabled = GetUndoManager()->IsUndoEnabled();
     aDocument.EnableUndo( false );
     aDocument.LockStreamValid( true );      // ignore draw page size (but not formula results)
     if ( bBefore )          // check all sheets up to nUpdateTab
