@@ -133,31 +133,31 @@ SfxProgress::SfxProgress
     A progress-bar will be displayed in the status bar,
 */
 
-:       pImp( new SfxProgress_Impl( rText ) ),
+:   pImpl( new SfxProgress_Impl( rText ) ),
     nVal(0),
     bSuspended(true)
 {
-    pImp->bRunning = true;
-    pImp->bAllowRescheduling = Application::IsInExecute();
+    pImpl->bRunning = true;
+    pImpl->bAllowRescheduling = Application::IsInExecute();
 
-    pImp->xObjSh = pObjSh;
-    pImp->aText = rText;
-    pImp->nMax = nRange;
-    pImp->bLocked = false;
-    pImp->bWaitMode = bWait;
-    pImp->nCreate = Get10ThSec();
-    pImp->nNextReschedule = pImp->nCreate;
+    pImpl->xObjSh = pObjSh;
+    pImpl->aText = rText;
+    pImpl->nMax = nRange;
+    pImpl->bLocked = false;
+    pImpl->bWaitMode = bWait;
+    pImpl->nCreate = Get10ThSec();
+    pImpl->nNextReschedule = pImpl->nCreate;
     SAL_INFO(
         "sfx.bastyp",
-        "SfxProgress: created for '" << rText << "' at " << pImp->nCreate
+        "SfxProgress: created for '" << rText << "' at " << pImpl->nCreate
             << "ds");
-    pImp->pWorkWin = nullptr;
-    pImp->pView = nullptr;
+    pImpl->pWorkWin = nullptr;
+    pImpl->pView = nullptr;
 
-    pImp->pActiveProgress = GetActiveProgress( pObjSh );
+    pImpl->pActiveProgress = GetActiveProgress( pObjSh );
     if ( pObjSh )
         pObjSh->SetProgress_Impl(this);
-    else if( !pImp->pActiveProgress )
+    else if( !pImpl->pActiveProgress )
         SfxGetpApp()->SetProgress_Impl(this);
     Resume();
 }
@@ -173,9 +173,8 @@ SfxProgress::~SfxProgress()
 
 {
     Stop();
-    if ( pImp->xStatusInd.is() )
-        pImp->xStatusInd->end();
-    delete pImp;
+    if ( pImpl->xStatusInd.is() )
+        pImpl->xStatusInd->end();
 }
 
 
@@ -187,26 +186,26 @@ void SfxProgress::Stop()
 */
 
 {
-    if( pImp->pActiveProgress )
+    if( pImpl->pActiveProgress )
     {
-        if ( pImp->xObjSh.Is() && pImp->xObjSh->GetProgress() == this )
-            pImp->xObjSh->SetProgress_Impl(nullptr);
+        if ( pImpl->xObjSh.Is() && pImpl->xObjSh->GetProgress() == this )
+            pImpl->xObjSh->SetProgress_Impl(nullptr);
         return;
     }
 
-    if ( !pImp->bRunning )
+    if ( !pImpl->bRunning )
         return;
-    pImp->bRunning = false;
+    pImpl->bRunning = false;
     SAL_INFO(
         "sfx.bastyp", "SfxProgress: destroyed at " << Get10ThSec() << "ds");
 
     Suspend();
-    if ( pImp->xObjSh.Is() )
-        pImp->xObjSh->SetProgress_Impl(nullptr);
+    if ( pImpl->xObjSh.Is() )
+        pImpl->xObjSh->SetProgress_Impl(nullptr);
     else
         SfxGetpApp()->SetProgress_Impl(nullptr);
-    if ( pImp->bLocked )
-        pImp->Enable_Impl();
+    if ( pImpl->bLocked )
+        pImpl->Enable_Impl();
 }
 
 bool SfxProgress::SetStateText
@@ -216,7 +215,7 @@ bool SfxProgress::SetStateText
 )
 
 {
-    pImp->aStateText = rNewVal;
+    pImpl->aStateText = rNewVal;
     return SetState( nNewVal );
 }
 
@@ -240,33 +239,33 @@ bool SfxProgress::SetState
 */
 
 {
-    if( pImp->pActiveProgress ) return true;
+    if( pImpl->pActiveProgress ) return true;
 
     nVal = nNewVal;
 
     // new Range?
-    if ( nNewRange && nNewRange != pImp->nMax )
+    if ( nNewRange && nNewRange != pImpl->nMax )
     {
         SAL_INFO(
             "sfx.bastyp",
-            "SfxProgress: range changed from " << pImp->nMax << " to "
+            "SfxProgress: range changed from " << pImpl->nMax << " to "
                 << nNewRange);
-        pImp->nMax = nNewRange;
+        pImpl->nMax = nNewRange;
     }
 
-    if ( !pImp->xStatusInd.is() )
+    if ( !pImpl->xStatusInd.is() )
     {
         // get the active ViewFrame of the document this progress is working on
         // if it doesn't work on a document, take the current ViewFrame
-        SfxObjectShell* pObjSh = pImp->xObjSh;
-        pImp->pView = SfxViewFrame::Current();
-        DBG_ASSERT( pImp->pView || pObjSh, "Can't make progress bar!");
-        if ( pObjSh && ( !pImp->pView || pObjSh != pImp->pView->GetObjectShell() ) )
+        SfxObjectShell* pObjSh = pImpl->xObjSh;
+        pImpl->pView = SfxViewFrame::Current();
+        DBG_ASSERT( pImpl->pView || pObjSh, "Can't make progress bar!");
+        if ( pObjSh && ( !pImpl->pView || pObjSh != pImpl->pView->GetObjectShell() ) )
         {
             // current document does not belong to current ViewFrame; take it's first visible ViewFrame
             SfxViewFrame* pDocView = SfxViewFrame::GetFirst( pObjSh );
             if ( pDocView )
-                pImp->pView = pDocView;
+                pImpl->pView = pDocView;
             else
             {
                 // don't show status indicator for hidden documents (only valid while loading)
@@ -278,28 +277,28 @@ bool SfxProgress::SetState
                         const SfxUnoAnyItem* pIndicatorItem = SfxItemSet::GetItem<SfxUnoAnyItem>(pMedium->GetItemSet(), SID_PROGRESS_STATUSBAR_CONTROL, false);
                         Reference< XStatusIndicator > xInd;
                         if ( pIndicatorItem && (pIndicatorItem->GetValue()>>=xInd) )
-                            pImp->xStatusInd = xInd;
+                            pImpl->xStatusInd = xInd;
                     }
                 }
             }
         }
-        else if ( pImp->pView )
+        else if ( pImpl->pView )
         {
-            pImp->pWorkWin = SfxGetpApp()->GetWorkWindow_Impl( pImp->pView );
-            if ( pImp->pWorkWin )
-                pImp->xStatusInd = pImp->pWorkWin->GetStatusIndicator();
+            pImpl->pWorkWin = SfxGetpApp()->GetWorkWindow_Impl( pImpl->pView );
+            if ( pImpl->pWorkWin )
+                pImpl->xStatusInd = pImpl->pWorkWin->GetStatusIndicator();
         }
 
-        if ( pImp->xStatusInd.is() )
+        if ( pImpl->xStatusInd.is() )
         {
-            pImp->xStatusInd->start( pImp->aText, pImp->nMax );
-            pImp->pView = nullptr;
+            pImpl->xStatusInd->start( pImpl->aText, pImpl->nMax );
+            pImpl->pView = nullptr;
         }
     }
 
-    if ( pImp->xStatusInd.is() )
+    if ( pImpl->xStatusInd.is() )
     {
-        pImp->xStatusInd->setValue( nNewVal );
+        pImpl->xStatusInd->setValue( nNewVal );
     }
 
     return true;
@@ -318,30 +317,30 @@ void SfxProgress::Resume()
 */
 
 {
-    if( pImp->pActiveProgress ) return;
+    if( pImpl->pActiveProgress ) return;
     if ( bSuspended )
     {
         SAL_INFO("sfx.bastyp", "SfxProgress: resumed");
-        if ( pImp->xStatusInd.is() )
+        if ( pImpl->xStatusInd.is() )
         {
-            pImp->xStatusInd->start( pImp->aText, pImp->nMax );
-            pImp->xStatusInd->setValue( nVal );
+            pImpl->xStatusInd->start( pImpl->aText, pImpl->nMax );
+            pImpl->xStatusInd->setValue( nVal );
         }
 
-        if ( pImp->bWaitMode )
+        if ( pImpl->bWaitMode )
         {
-            if ( pImp->xObjSh.Is() )
+            if ( pImpl->xObjSh.Is() )
             {
-                for ( SfxViewFrame *pFrame = SfxViewFrame::GetFirst(pImp->xObjSh);
+                for ( SfxViewFrame *pFrame = SfxViewFrame::GetFirst(pImpl->xObjSh);
                         pFrame;
-                        pFrame = SfxViewFrame::GetNext( *pFrame, pImp->xObjSh ) )
+                        pFrame = SfxViewFrame::GetNext( *pFrame, pImpl->xObjSh ) )
                     pFrame->GetWindow().EnterWait();
             }
         }
 
-        if ( pImp->xObjSh )
+        if ( pImpl->xObjSh )
         {
-            SfxViewFrame *pFrame = SfxViewFrame::GetFirst(pImp->xObjSh);
+            SfxViewFrame *pFrame = SfxViewFrame::GetFirst(pImpl->xObjSh);
             if ( pFrame )
                 pFrame->GetBindings().ENTERREGISTRATIONS();
         }
@@ -363,28 +362,28 @@ void SfxProgress::Suspend()
 */
 
 {
-    if( pImp->pActiveProgress ) return;
+    if( pImpl->pActiveProgress ) return;
     if ( !bSuspended )
     {
         SAL_INFO("sfx.bastyp", "SfxProgress: suspended");
         bSuspended = true;
 
-        if ( pImp->xStatusInd.is() )
+        if ( pImpl->xStatusInd.is() )
         {
-            pImp->xStatusInd->reset();
+            pImpl->xStatusInd->reset();
         }
 
-        if ( pImp->xObjSh.Is() )
+        if ( pImpl->xObjSh.Is() )
         {
             for ( SfxViewFrame *pFrame =
-                    SfxViewFrame::GetFirst(pImp->xObjSh);
+                    SfxViewFrame::GetFirst(pImpl->xObjSh);
                     pFrame;
-                    pFrame = SfxViewFrame::GetNext( *pFrame, pImp->xObjSh ) )
+                    pFrame = SfxViewFrame::GetNext( *pFrame, pImpl->xObjSh ) )
                 pFrame->GetWindow().LeaveWait();
         }
-        if ( pImp->xObjSh.Is() )
+        if ( pImpl->xObjSh.Is() )
         {
-            SfxViewFrame *pFrame = SfxViewFrame::GetFirst(pImp->xObjSh);
+            SfxViewFrame *pFrame = SfxViewFrame::GetFirst(pImpl->xObjSh);
             if ( pFrame )
                 pFrame->GetBindings().LEAVEREGISTRATIONS();
         }
@@ -394,13 +393,13 @@ void SfxProgress::Suspend()
 
 void SfxProgress::UnLock()
 {
-    if( pImp->pActiveProgress ) return;
-    if ( !pImp->bLocked )
+    if( pImpl->pActiveProgress ) return;
+    if ( !pImpl->bLocked )
         return;
 
     SAL_INFO("sfx.bastyp", "SfxProgress: unlocked");
-    pImp->bLocked = false;
-    pImp->Enable_Impl();
+    pImpl->bLocked = false;
+    pImpl->Enable_Impl();
 }
 
 
@@ -414,9 +413,9 @@ void SfxProgress::Reschedule()
 {
     SFX_STACK(SfxProgress::Reschedule);
 
-    if( pImp->pActiveProgress ) return;
+    if( pImpl->pActiveProgress ) return;
     SfxApplication* pApp = SfxGetpApp();
-    if ( pImp->bLocked && 0 == pApp->Get_Impl()->nRescheduleLocks )
+    if ( pImpl->bLocked && 0 == pApp->Get_Impl()->nRescheduleLocks )
     {
         SfxAppData_Impl *pAppData = pApp->Get_Impl();
         ++pAppData->nInReschedule;
