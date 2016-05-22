@@ -182,6 +182,7 @@ SpellDialog::SpellDialog(SpellDialogChildWindow* pChildWindow,
     , bModified(false)
     , bFocusLocked(true)
     , rParent(*pChildWindow)
+    , pImpl( new SpellDialog_Impl )
 {
     m_sTitleSpellingGrammar = GetText();
     m_sTitleSpelling = get<FixedText>("alttitleft")->GetText();
@@ -224,7 +225,6 @@ SpellDialog::SpellDialog(SpellDialogChildWindow* pChildWindow,
     get(m_pToolbar, "toolbar");
     m_pSentenceED->Init(m_pToolbar);
     xSpell = LinguMgr::GetSpellChecker();
-    pImpl = new SpellDialog_Impl;
 
     const StyleSettings& rSettings = GetSettings().GetStyleSettings();
     Color aCol = rSettings.GetHelpColor();
@@ -251,15 +251,14 @@ SpellDialog::~SpellDialog()
 
 void SpellDialog::dispose()
 {
-    if (pImpl)
+    if (pImpl.get())
     {
         // save possibly modified user-dictionaries
         Reference< XSearchableDictionaryList >  xDicList( SvxGetDictionaryList() );
         if (xDicList.is())
             SaveDictionaries( xDicList );
 
-        delete pImpl;
-        pImpl = nullptr;
+        pImpl.reset();
     }
     m_pLanguageFT.clear();
     m_pLanguageLB.clear();
