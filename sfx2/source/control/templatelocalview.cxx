@@ -169,7 +169,7 @@ void TemplateLocalView::showRegion(const OUString &rName)
     }
 }
 
-ThumbnailViewItem* TemplateLocalView::getRegion(OUString rName)
+ThumbnailViewItem* TemplateLocalView::getRegion(OUString const & rName)
 {
     for (TemplateContainerItem* pRegion : maRegions)
         if (pRegion->maTitle == rName)
@@ -256,7 +256,7 @@ sal_uInt16 TemplateLocalView::getRegionId(size_t pos) const
     return maRegions[pos]->mnId;
 }
 
-sal_uInt16 TemplateLocalView::getRegionId(OUString sRegion) const
+sal_uInt16 TemplateLocalView::getRegionId(OUString const & sRegion) const
 {
     for (TemplateContainerItem* pRegion : maRegions)
     {

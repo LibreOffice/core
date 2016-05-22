@@ -53,11 +53,11 @@ public:
 
     sal_uInt16 getCurRegionItemId () const;
 
-    ThumbnailViewItem* getRegion(OUString sStr);
+    ThumbnailViewItem* getRegion(OUString const & sStr);
 
     sal_uInt16 getRegionId (size_t pos) const;
 
-    sal_uInt16 getRegionId (OUString sRegionName) const;
+    sal_uInt16 getRegionId (OUString const & sRegionName) const;
 
     OUString getRegionName(const sal_uInt16 nRegionId) const;
 
