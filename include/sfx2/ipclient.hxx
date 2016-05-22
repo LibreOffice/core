@@ -39,9 +39,8 @@ class Fraction;
 
 class SFX2_DLLPUBLIC SfxInPlaceClient
 {
-friend class SfxInPlaceClient_Impl;
+    friend class SfxInPlaceClient_Impl;
 
-    SfxInPlaceClient_Impl*  m_pImp;
     SfxViewShell*           m_pViewSh;
     VclPtr<vcl::Window>     m_pEditWin;
 
@@ -53,6 +52,9 @@ friend class SfxInPlaceClient_Impl;
 
     // notify the client that an active object has changed its VisualAreaSize
     SAL_DLLPRIVATE virtual void ViewChanged();
+
+private:
+    std::unique_ptr< SfxInPlaceClient_Impl >  pImpl;
 
 public:
                         SfxInPlaceClient( SfxViewShell* pViewShell, vcl::Window* pDraw, sal_Int64 nAspect = css::embed::Aspects::MSOLE_CONTENT );
