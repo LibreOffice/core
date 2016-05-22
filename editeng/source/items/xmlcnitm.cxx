@@ -30,28 +30,27 @@ using namespace ::com::sun::star::xml;
 
 
 SvXMLAttrContainerItem::SvXMLAttrContainerItem( sal_uInt16 _nWhich ) :
-    SfxPoolItem( _nWhich )
+    SfxPoolItem( _nWhich ),
+    pImpl( new SvXMLAttrContainerData )
 {
-    pImpl = new SvXMLAttrContainerData;
 }
 
 SvXMLAttrContainerItem::SvXMLAttrContainerItem(
                                         const SvXMLAttrContainerItem& rItem ) :
-    SfxPoolItem( rItem )
+    SfxPoolItem( rItem ),
+    pImpl( new SvXMLAttrContainerData( *rItem.pImpl ) )
 {
-    pImpl = new SvXMLAttrContainerData( *rItem.pImpl );
 }
 
 SvXMLAttrContainerItem::~SvXMLAttrContainerItem()
 {
-    delete pImpl;
 }
 
 bool SvXMLAttrContainerItem::operator==( const SfxPoolItem& rItem ) const
 {
     DBG_ASSERT( dynamic_cast< const SvXMLAttrContainerItem* >(&rItem) !=  nullptr,
                "SvXMLAttrContainerItem::operator ==(): Bad type");
-    return *pImpl == *static_cast<const SvXMLAttrContainerItem&>(rItem).pImpl;
+    return *pImpl.get() == *static_cast<const SvXMLAttrContainerItem&>(rItem).pImpl.get();
 }
 
 bool SvXMLAttrContainerItem::GetPresentation(
@@ -73,7 +72,7 @@ sal_uInt16 SvXMLAttrContainerItem::GetVersion( sal_uInt16 /*nFileFormatVersion*/
 bool SvXMLAttrContainerItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
     Reference<XNameContainer> xContainer =
-        new SvUnoAttributeContainer( new SvXMLAttrContainerData( *pImpl ) );
+        new SvUnoAttributeContainer( new SvXMLAttrContainerData( *pImpl.get() ) );
 
     rVal.setValue( &xContainer, cppu::UnoType<XNameContainer>::get());
     return true;
@@ -94,8 +93,7 @@ bool SvXMLAttrContainerItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nM
 
     if( pContainer )
     {
-        delete pImpl;
-        pImpl = new SvXMLAttrContainerData( * pContainer->GetContainerImpl() );
+        pImpl.reset( new SvXMLAttrContainerData( * pContainer->GetContainerImpl() ) );
     }
     else
     {
@@ -147,7 +145,7 @@ bool SvXMLAttrContainerItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nM
             }
 
             if( nAttr == nCount )
-                pImpl = pNewImpl.release();
+                pImpl.reset( pNewImpl.release() );
             else
                 return false;
         }
