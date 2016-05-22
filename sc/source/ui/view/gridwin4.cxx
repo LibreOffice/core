@@ -986,7 +986,7 @@ void ScGridWindow::PaintTile( VirtualDevice& rDevice,
     double fPPTX = pViewData->GetPPTX();
     double fPPTY = pViewData->GetPPTY();
 
-    ScTableInfo aTabInfo;
+    ScTableInfo aTabInfo(nEndRow + 2);
     pDoc->FillInfo(aTabInfo, nStartCol, nStartRow, nEndCol, nEndRow, nTab, fPPTX, fPPTY, false, false);
 
     ScOutputData aOutputData(&rDevice, OUTTYPE_WINDOW, aTabInfo, pDoc, nTab,
