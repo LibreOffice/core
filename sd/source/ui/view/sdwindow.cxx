@@ -38,6 +38,7 @@
 #include "AccessibleDrawDocumentView.hxx"
 #include "WindowUpdater.hxx"
 #include "ViewShellBase.hxx"
+#include "uiobject.hxx"
 
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
@@ -127,6 +128,11 @@ void Window::SetViewShell (ViewShell* pViewSh)
         if (pWindowUpdater != nullptr)
             pWindowUpdater->RegisterWindow (this);
     }
+}
+
+ViewShell* Window::GetViewShell()
+{
+    return mpViewShell;
 }
 
 void Window::CalcMinZoom()
@@ -1019,6 +1025,14 @@ void Window::LogicInvalidate(const Rectangle* pRectangle)
     }
     SfxViewShell& rSfxViewShell = mpViewShell->GetViewShellBase();
     rSfxViewShell.libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_TILES, sRectangle.getStr());
+}
+
+FactoryFunction Window::GetUITestFactory() const
+{
+    if (get_id() == "impress_win")
+        return ImpressWindowUIObject::create;
+
+    return WindowUIObject::create;
 }
 
 } // end of namespace sd
