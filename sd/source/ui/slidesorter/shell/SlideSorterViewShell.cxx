@@ -123,6 +123,7 @@ SlideSorterViewShell::SlideSorterViewShell (
       mpSlideSorter(),
       mbIsArrangeGUIElementsPending(true)
 {
+    GetContentWindow()->set_id("slidesorter");
     meShellType = ST_SLIDE_SORTER;
 
     if (pFrameViewArgument != nullptr)
