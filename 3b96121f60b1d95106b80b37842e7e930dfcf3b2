@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_24a5e603",
+        "filename": "include/sfx2/basedlgs.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-05-22T14:30:51Z",
+      "side": 1,
+      "message": "there is no need to use private: here, stuff in a class is private by default\n\nAlso, it\u0027s preferable to keep field declarations together",
+      "revId": "3b96121f60b1d95106b80b37842e7e930dfcf3b2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_44aaead5",
+        "filename": "include/sfx2/basedlgs.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-05-22T14:30:51Z",
+      "side": 1,
+      "message": "same here",
+      "revId": "3b96121f60b1d95106b80b37842e7e930dfcf3b2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
