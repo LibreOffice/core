@@ -191,11 +191,11 @@ bool IsMultiPath_Impl( const sal_uInt16 nIndex )
 // class SvxPathTabPage --------------------------------------------------
 
 SvxPathTabPage::SvxPathTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
-    :SfxTabPage( pParent, "OptPathsPage", "cui/ui/optpathspage.ui", &rSet)
+    : SfxTabPage( pParent, "OptPathsPage", "cui/ui/optpathspage.ui", &rSet)
+    , pImpl( new OptPath_Impl(get<FixedImage>("lock")->GetImage(),
+        get<FixedText>("editpaths")->GetText()) )
     , xDialogListener ( new ::svt::DialogClosedListener() )
 {
-    pImpl = new OptPath_Impl(get<FixedImage>("lock")->GetImage(),
-        get<FixedText>("editpaths")->GetText());
     get(m_pStandardBtn, "default");
     get(m_pPathBtn, "edit");
     get(m_pPathCtrl, "paths");
@@ -251,8 +251,7 @@ void SvxPathTabPage::dispose()
             delete static_cast<PathUserData_Impl*>(pPathBox->GetEntry(i)->GetUserData());
         pPathBox.disposeAndClear();
     }
-    delete pImpl;
-    pImpl = nullptr;
+    pImpl.reset();
     m_pPathCtrl.clear();
     m_pStandardBtn.clear();
     m_pPathBtn.clear();
