@@ -95,53 +95,50 @@ void SfxShell::EmptyStateStub(SfxShell *, SfxItemSet &)
 }
 
 SfxShell::SfxShell()
-:   pImp(nullptr),
+:   pImpl(new SfxShell_Impl),
     pPool(nullptr),
     pUndoMgr(nullptr)
 {
-    pImp = new SfxShell_Impl;
 }
 
 SfxShell::SfxShell( SfxViewShell *pViewSh )
-:   pImp(nullptr),
+:   pImpl(new SfxShell_Impl),
     pPool(nullptr),
     pUndoMgr(nullptr)
 {
-    pImp = new SfxShell_Impl;
-    pImp->pViewSh = pViewSh;
+    pImpl->pViewSh = pViewSh;
 }
 
 SfxShell::~SfxShell()
 {
-    delete pImp;
 }
 
 void SfxShell::SetName( const OUString &rName )
 {
-    pImp->aObjectName = rName;
+    pImpl->aObjectName = rName;
 }
 
 const OUString& SfxShell::GetName() const
 {
-    return pImp->aObjectName;
+    return pImpl->aObjectName;
 }
 
 SfxDispatcher* SfxShell::GetDispatcher() const
 {
-    return pImp->pFrame ? pImp->pFrame->GetDispatcher() : nullptr;
+    return pImpl->pFrame ? pImpl->pFrame->GetDispatcher() : nullptr;
 }
 
 SfxViewShell* SfxShell::GetViewShell() const
 {
-    return pImp->pViewSh;
+    return pImpl->pViewSh;
 }
 
 SfxViewFrame* SfxShell::GetFrame() const
 {
-    if ( pImp->pFrame )
-        return pImp->pFrame;
-    if ( pImp->pViewSh )
-        return pImp->pViewSh->GetViewFrame();
+    if ( pImpl->pFrame )
+        return pImpl->pFrame;
+    if ( pImpl->pViewSh )
+        return pImpl->pViewSh->GetViewFrame();
     return nullptr;
 }
 
@@ -150,8 +147,8 @@ const SfxPoolItem* SfxShell::GetItem
     sal_uInt16  nSlotId         // Slot-Id of the querying <SfxPoolItem>s
 )   const
 {
-    auto const it = pImp->m_Items.find( nSlotId );
-    if (it != pImp->m_Items.end())
+    auto const it = pImpl->m_Items.find( nSlotId );
+    if (it != pImpl->m_Items.end())
         return it->second.get();
     return nullptr;
 }
@@ -171,12 +168,12 @@ void SfxShell::PutItem
     SfxPoolItemHint aItemHint( pItem );
     sal_uInt16 nWhich = rItem.Which();
 
-    auto const it = pImp->m_Items.find(nWhich);
-    if (it != pImp->m_Items.end())
+    auto const it = pImpl->m_Items.find(nWhich);
+    if (it != pImpl->m_Items.end())
     {
         // Replace Item
-        pImp->m_Items.erase( it );
-        pImp->m_Items.insert(std::make_pair(nWhich, std::unique_ptr<SfxPoolItem>(pItem)));
+        pImpl->m_Items.erase( it );
+        pImpl->m_Items.insert(std::make_pair(nWhich, std::unique_ptr<SfxPoolItem>(pItem)));
 
         // if active, notify Bindings
         SfxDispatcher *pDispat = GetDispatcher();
@@ -197,7 +194,7 @@ void SfxShell::PutItem
     else
     {
         Broadcast( aItemHint );
-        pImp->m_Items.insert(std::make_pair(nWhich, std::unique_ptr<SfxPoolItem>(pItem)));
+        pImpl->m_Items.insert(std::make_pair(nWhich, std::unique_ptr<SfxPoolItem>(pItem)));
     }
 }
 
@@ -229,12 +226,12 @@ void SfxShell::SetUndoManager( ::svl::IUndoManager *pNewUndoMgr )
 
 SfxRepeatTarget* SfxShell::GetRepeatTarget() const
 {
-    return pImp->pRepeatTarget;
+    return pImpl->pRepeatTarget;
 }
 
 void SfxShell::SetRepeatTarget( SfxRepeatTarget *pTarget )
 {
-    pImp->pRepeatTarget = pTarget;
+    pImpl->pRepeatTarget = pTarget;
 }
 
 void SfxShell::Invalidate
@@ -320,8 +317,8 @@ void SfxShell::DoActivate_Impl( SfxViewFrame *pFrame, bool bMDI )
     if ( bMDI )
     {
         // Remember Frame, in which it was activated
-        pImp->pFrame = pFrame;
-        pImp->bActive = true;
+        pImpl->pFrame = pFrame;
+        pImpl->bActive = true;
     }
 
     // Notify Subclass
@@ -342,11 +339,11 @@ void SfxShell::DoDeactivate_Impl( SfxViewFrame *pFrame, bool bMDI )
 
     // Only when it comes from a Frame
     // (not when for instance by poping BASIC-IDE from AppDisp)
-    if ( bMDI && pImp->pFrame == pFrame )
+    if ( bMDI && pImpl->pFrame == pFrame )
     {
         // deliver
-        pImp->pFrame = nullptr;
-        pImp->bActive = false;
+        pImpl->pFrame = nullptr;
+        pImpl->bActive = false;
     }
 
     // Notify Subclass
@@ -355,7 +352,7 @@ void SfxShell::DoDeactivate_Impl( SfxViewFrame *pFrame, bool bMDI )
 
 bool SfxShell::IsActive() const
 {
-    return pImp->bActive;
+    return pImpl->bActive;
 }
 
 void SfxShell::Activate
@@ -414,10 +411,10 @@ void SfxShell::ExecuteSlot( SfxRequest& rReq, bool bAsync )
         ExecuteSlot( rReq );
     else
     {
-        if( !pImp->pExecuter )
-            pImp->pExecuter = new svtools::AsynchronLink(
+        if( !pImpl->pExecuter )
+            pImpl->pExecuter = new svtools::AsynchronLink(
                 Link<void*,void>( this, ShellCall_Impl ) );
-        pImp->pExecuter->Call( new SfxRequest( rReq ) );
+        pImpl->pExecuter->Call( new SfxRequest( rReq ) );
     }
 }
 
@@ -534,7 +531,7 @@ void SfxShell::SetVerbs(const css::uno::Sequence < css::embed::VerbDescriptor >&
     {
         SfxBindings *pBindings =
             pViewSh->GetViewFrame()->GetDispatcher()->GetBindings();
-        sal_uInt16 nCount = pImp->aSlotArr.size();
+        sal_uInt16 nCount = pImpl->aSlotArr.size();
         for (sal_uInt16 n1=0; n1<nCount ; n1++)
         {
             sal_uInt16 nId = SID_VERB_START + n1;
@@ -567,19 +564,19 @@ void SfxShell::SetVerbs(const css::uno::Sequence < css::embed::VerbDescriptor >&
         pNewSlot->pFirstArgDef = nullptr;
         pNewSlot->pUnoName = nullptr;
 
-        if (!pImp->aSlotArr.empty())
+        if (!pImpl->aSlotArr.empty())
         {
-            SfxSlot& rSlot = *pImp->aSlotArr[0].get();
+            SfxSlot& rSlot = *pImpl->aSlotArr[0].get();
             pNewSlot->pNextSlot = rSlot.pNextSlot;
             rSlot.pNextSlot = pNewSlot;
         }
         else
             pNewSlot->pNextSlot = pNewSlot;
 
-        pImp->aSlotArr.insert(pImp->aSlotArr.begin() + (sal_uInt16) n, std::unique_ptr<SfxSlot>(pNewSlot));
+        pImpl->aSlotArr.insert(pImpl->aSlotArr.begin() + (sal_uInt16) n, std::unique_ptr<SfxSlot>(pNewSlot));
     }
 
-    pImp->aVerbList = aVerbs;
+    pImpl->aVerbList = aVerbs;
 
     if (pViewSh)
     {
@@ -593,7 +590,7 @@ void SfxShell::SetVerbs(const css::uno::Sequence < css::embed::VerbDescriptor >&
 
 const css::uno::Sequence < css::embed::VerbDescriptor >& SfxShell::GetVerbs() const
 {
-    return pImp->aVerbList;
+    return pImpl->aVerbList;
 }
 
 void SfxShell::VerbExec(SfxRequest& rReq)
@@ -630,26 +627,26 @@ void SfxShell::VerbState(SfxItemSet& )
 
 const SfxSlot* SfxShell::GetVerbSlot_Impl(sal_uInt16 nId) const
 {
-    css::uno::Sequence < css::embed::VerbDescriptor > rList = pImp->aVerbList;
+    css::uno::Sequence < css::embed::VerbDescriptor > rList = pImpl->aVerbList;
 
     DBG_ASSERT(nId >= SID_VERB_START && nId <= SID_VERB_END,"Wrong VerbId!");
     sal_uInt16 nIndex = nId - SID_VERB_START;
     DBG_ASSERT(nIndex < rList.getLength(),"Wrong VerbId!");
 
     if (nIndex < rList.getLength())
-        return pImp->aSlotArr[nIndex].get();
+        return pImpl->aSlotArr[nIndex].get();
     else
         return nullptr;
 }
 
 void SfxShell::SetHelpId(sal_uIntPtr nId)
 {
-    pImp->nHelpId = nId;
+    pImpl->nHelpId = nId;
 }
 
 sal_uIntPtr SfxShell::GetHelpId() const
 {
-    return pImp->nHelpId;
+    return pImpl->nHelpId;
 }
 
 SfxObjectShell* SfxShell::GetObjectShell()
@@ -679,22 +676,22 @@ void SfxShell::UIFeatureChanged()
         // Also force an update, if dispatcher is already updated otherwise
         // something my get stuck in the bunkered tools. Asynchronous call to
         // prevent recursion.
-        if ( !pImp->pUpdater )
-            pImp->pUpdater = new svtools::AsynchronLink( Link<void*,void>( this, DispatcherUpdate_Impl ) );
+        if ( !pImpl->pUpdater )
+            pImpl->pUpdater = new svtools::AsynchronLink( Link<void*,void>( this, DispatcherUpdate_Impl ) );
 
         // Multiple views allowed
-        pImp->pUpdater->Call( pFrame->GetDispatcher(), true );
+        pImpl->pUpdater->Call( pFrame->GetDispatcher(), true );
     }
 }
 
 void SfxShell::SetDisableFlags( sal_uIntPtr nFlags )
 {
-    pImp->nDisableFlags = nFlags;
+    pImpl->nDisableFlags = nFlags;
 }
 
 sal_uIntPtr SfxShell::GetDisableFlags() const
 {
-    return pImp->nDisableFlags;
+    return pImpl->nDisableFlags;
 }
 
 SfxItemSet* SfxShell::CreateItemSet( sal_uInt16 )
@@ -708,12 +705,12 @@ void SfxShell::ApplyItemSet( sal_uInt16, const SfxItemSet& )
 
 void SfxShell::SetContextName (const ::rtl::OUString& rsContextName)
 {
-    pImp->maContextChangeBroadcaster.Initialize(rsContextName);
+    pImpl->maContextChangeBroadcaster.Initialize(rsContextName);
 }
 
 void SfxShell::SetViewShell_Impl( SfxViewShell* pView )
 {
-    pImp->pViewSh = pView;
+    pImpl->pViewSh = pView;
 }
 
 void SfxShell::BroadcastContextForActivation (const bool bIsActivated)
@@ -722,15 +719,15 @@ void SfxShell::BroadcastContextForActivation (const bool bIsActivated)
     if (pViewFrame != nullptr)
     {
         if (bIsActivated)
-            pImp->maContextChangeBroadcaster.Activate(pViewFrame->GetFrame().GetFrameInterface());
+            pImpl->maContextChangeBroadcaster.Activate(pViewFrame->GetFrame().GetFrameInterface());
         else
-            pImp->maContextChangeBroadcaster.Deactivate(pViewFrame->GetFrame().GetFrameInterface());
+            pImpl->maContextChangeBroadcaster.Deactivate(pViewFrame->GetFrame().GetFrameInterface());
    }
 }
 
 bool SfxShell::SetContextBroadcasterEnabled (const bool bIsEnabled)
 {
-    return pImp->maContextChangeBroadcaster.SetBroadcasterEnabled(bIsEnabled);
+    return pImpl->maContextChangeBroadcaster.SetBroadcasterEnabled(bIsEnabled);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
