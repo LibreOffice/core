@@ -174,8 +174,7 @@ SfxTabPage::~SfxTabPage()
 
 void SfxTabPage::dispose()
 {
-    delete pImpl;
-    pImpl = nullptr;
+    pImpl.reset();
     TabPage::dispose();
 }
 
@@ -370,8 +369,7 @@ void SfxTabDialog::dispose()
         pDataObject = nullptr;
     }
 
-    delete m_pImpl;
-    m_pImpl = nullptr;
+    m_pImpl.reset();
     delete m_pSet;
     m_pSet = nullptr;
     delete m_pOutSet;
@@ -415,7 +413,7 @@ void SfxTabDialog::Init_Impl(bool bFmtFlag)
     assert(m_pBox);
     m_pUIBuilder->get(m_pTabCtrl, "tabcontrol");
 
-    m_pImpl = new TabDlg_Impl(m_pTabCtrl->GetPageCount());
+    m_pImpl.reset( new TabDlg_Impl(m_pTabCtrl->GetPageCount()) );
 
     m_pActionArea = get_action_area();
     assert(m_pActionArea);

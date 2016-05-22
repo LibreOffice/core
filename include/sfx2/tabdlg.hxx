@@ -80,7 +80,7 @@ friend class SfxTabDialogController;
 
     SfxItemSet*         m_pSet;
     SfxItemSet*         m_pOutSet;
-    TabDlg_Impl*        m_pImpl;
+    std::unique_ptr< TabDlg_Impl >        m_pImpl;
     sal_uInt16*         m_pRanges;
     sal_uInt16          m_nAppPageId;
     bool                m_bItemsReset;
@@ -209,7 +209,7 @@ private:
     const SfxItemSet*   pSet;
     OUString            aUserString;
     bool                bHasExchangeSupport;
-    TabPageImpl*        pImpl;
+    std::unique_ptr< TabPageImpl >        pImpl;
 
 protected:
     SfxTabPage(vcl::Window *pParent, const OString& rID, const OUString& rUIXMLDescription, const SfxItemSet *rAttrSet);
