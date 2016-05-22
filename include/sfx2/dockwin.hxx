@@ -45,7 +45,7 @@ private:
     SfxBindings*            pBindings;
     Size                    aFloatSize;
     SfxChildWindow*         pMgr;
-    SfxDockingWindow_Impl*  pImp;
+    std::unique_ptr< SfxDockingWindow_Impl >  pImpl;
 
     SfxDockingWindow(SfxDockingWindow &) = delete;
     void operator =(SfxDockingWindow &) = delete;
