@@ -195,10 +195,11 @@ struct ScTableInfo
 {
     svx::frame::Array   maArray;
     RowInfo*            mpRowInfo;
-    sal_uInt16              mnArrCount;
+    SCSIZE              mnArrCount;
+    SCSIZE              mnArrCapacity;
     bool                mbPageMode;
 
-    explicit            ScTableInfo();
+    explicit            ScTableInfo(const SCSIZE capacity = 1024);
                         ~ScTableInfo();
     ScTableInfo(const ScTableInfo&) = delete;
     const ScTableInfo& operator=(const ScTableInfo&) = delete;
