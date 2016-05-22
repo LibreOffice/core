@@ -146,8 +146,8 @@ private:
 protected:
     bool InitGLEW();
     void InitGLEWDebugging();
-    void InitChildWindow(SystemChildWindow *pChildWindow);
-    void BuffersSwapped();
+    static void InitChildWindow(SystemChildWindow *pChildWindow);
+    static void BuffersSwapped();
     virtual GLWindow& getModifiableOpenGLWindow() = 0;
     virtual bool ImplInit();
 
