@@ -44,7 +44,7 @@ namespace drawinglayer
 
                 switch(getStyle())
                 {
-                    default : // HELPLINESTYLE2D_POINT
+                    default : // HelplineStyle2D::Point
                     {
                         const double fViewFixValue(15.0);
                         basegfx::B2DVector aNormalizedDirection(getDirection());
@@ -71,7 +71,7 @@ namespace drawinglayer
 
                         break;
                     }
-                    case HELPLINESTYLE2D_LINE :
+                    case HelplineStyle2D::Line :
                     {
                         basegfx::B2DPolygon aLine;
 
