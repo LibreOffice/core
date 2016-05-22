@@ -102,25 +102,21 @@ SfxPrinter::SfxPrinter( SfxItemSet* pTheOptions ) :
 
     This constructor creates a default printer.
 */
-
     pOptions( pTheOptions ),
-    bKnown(true)
-
+    pImpl( new SfxPrinter_Impl ),
+    bKnown( true )
 {
     assert(pOptions);
-    pImpl = new SfxPrinter_Impl;
 }
 
 
 SfxPrinter::SfxPrinter( SfxItemSet* pTheOptions,
                         const JobSetup& rTheOrigJobSetup ) :
-
-    Printer         ( rTheOrigJobSetup.GetPrinterName() ),
-    pOptions        ( pTheOptions )
-
+    Printer( rTheOrigJobSetup.GetPrinterName() ),
+    pOptions( pTheOptions ),
+    pImpl( new SfxPrinter_Impl )
 {
     assert(pOptions);
-    pImpl = new SfxPrinter_Impl;
     bKnown = GetName() == rTheOrigJobSetup.GetPrinterName();
 
     if ( bKnown )
@@ -130,29 +126,26 @@ SfxPrinter::SfxPrinter( SfxItemSet* pTheOptions,
 
 SfxPrinter::SfxPrinter( SfxItemSet* pTheOptions,
                         const OUString& rPrinterName ) :
-
-    Printer         ( rPrinterName ),
-    pOptions        ( pTheOptions ),
-    bKnown          ( GetName() == rPrinterName )
-
+    Printer( rPrinterName ),
+    pOptions( pTheOptions ),
+    pImpl( new SfxPrinter_Impl ),
+    bKnown( GetName() == rPrinterName )
 {
     assert(pOptions);
-    pImpl = new SfxPrinter_Impl;
 }
 
 
 SfxPrinter::SfxPrinter( const SfxPrinter& rPrinter ) :
-
-    Printer ( rPrinter.GetName() ),
+    Printer( rPrinter.GetName() ),
     pOptions( rPrinter.GetOptions().Clone() ),
-    bKnown  ( rPrinter.IsKnown() )
+    pImpl( new SfxPrinter_Impl ),
+    bKnown( rPrinter.IsKnown() )
 {
     assert(pOptions);
     SetJobSetup( rPrinter.GetJobSetup() );
     SetPrinterProps( &rPrinter );
     SetMapMode( rPrinter.GetMapMode() );
 
-    pImpl = new SfxPrinter_Impl;
     pImpl->mbAll = rPrinter.pImpl->mbAll;
     pImpl->mbSelection = rPrinter.pImpl->mbSelection;
     pImpl->mbFromTo = rPrinter.pImpl->mbFromTo;
@@ -187,7 +180,7 @@ SfxPrinter::~SfxPrinter()
 void SfxPrinter::dispose()
 {
     delete pOptions;
-    delete pImpl;
+    pImpl.reset();
     Printer::dispose();
 }
 
