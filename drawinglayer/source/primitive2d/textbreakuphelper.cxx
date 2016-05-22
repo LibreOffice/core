@@ -152,7 +152,7 @@ namespace drawinglayer
                                 pTextDecoratedPortionPrimitive2D->getUnderlineAbove(),
                                 pTextDecoratedPortionPrimitive2D->getTextStrikeout(),
 
-                                // reset WordLineMode when BreakupUnit_word is executed; else copy original
+                                // reset WordLineMode when BreakupUnit::Word is executed; else copy original
                                 !bWordLineMode && pTextDecoratedPortionPrimitive2D->getWordLineMode(),
 
                                 pTextDecoratedPortionPrimitive2D->getTextEmphasisMark(),
@@ -205,7 +205,7 @@ namespace drawinglayer
 
                 switch(aBreakupUnit)
                 {
-                    case BreakupUnit_character:
+                    case BreakupUnit::Character:
                     {
                         sal_Int32 nDone;
                         sal_Int32 nNextCellBreak(xBreakIterator->nextCharacters(rTxt, nTextPosition, rLocale, css::i18n::CharacterIteratorMode::SKIPCELL, 0, nDone));
@@ -224,7 +224,7 @@ namespace drawinglayer
                         breakupPortion(aTempResult, nCurrent, a - nCurrent, false);
                         break;
                     }
-                    case BreakupUnit_word:
+                    case BreakupUnit::Word:
                     {
                         css::i18n::Boundary nNextWordBoundary(xBreakIterator->getWordBoundary(rTxt, nTextPosition, rLocale, css::i18n::WordType::ANY_WORD, true));
                         sal_Int32 a(nTextPosition);
@@ -260,7 +260,7 @@ namespace drawinglayer
                         }
                         break;
                     }
-                    case BreakupUnit_sentence:
+                    case BreakupUnit::Sentence:
                     {
                         sal_Int32 nNextSentenceBreak(xBreakIterator->endOfSentence(rTxt, nTextPosition, rLocale));
                         sal_Int32 a(nTextPosition);
