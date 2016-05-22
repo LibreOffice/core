@@ -95,7 +95,7 @@ namespace dbaui
 
         virtual short Execute();
 
-        /** getTableMap gives acces to the table window map
+        /** getTableMap gives access to the table window map
             @retrun the table window from the join view
         */
         OJoinTableView::OTableWindowMap* getTableMap() const { return m_pTableMap; }

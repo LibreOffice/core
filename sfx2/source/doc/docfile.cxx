@@ -318,7 +318,7 @@ public:
     sal_Bool        m_bRemoveBackup;
     ::rtl::OUString m_aBackupURL;
 
-    // the following member is changed and makes sence only during saving
+    // the following member is changed and makes sense only during saving
     // TODO/LATER: in future the signature state should be controlled by the medium not by the document
     //             in this case the member will hold this information
     sal_uInt16      m_nSignatureState;
@@ -1203,7 +1203,7 @@ sal_Bool SfxMedium::LockOrigFileOnDemand( sal_Bool bLoading, sal_Bool bNoUI )
                             }
                             catch ( ucb::InteractiveIOException& e )
                             {
-                                // exception means that the lock file can not be successfuly accessed
+                                // exception means that the lock file can not be successfully accessed
                                 // in this case it should be ignored if system file locking is anyway active
                                 if ( bUseSystemLock || !IsOOoLockFileUsed() )
                                 {
@@ -1235,7 +1235,7 @@ sal_Bool SfxMedium::LockOrigFileOnDemand( sal_Bool bLoading, sal_Bool bNoUI )
                             }
                             catch ( uno::Exception& )
                             {
-                                // exception means that the lock file can not be successfuly accessed
+                                // exception means that the lock file can not be successfully accessed
                                 // in this case it should be ignored if system file locking is anyway active
                                 if ( bUseSystemLock || !IsOOoLockFileUsed() )
                                 {
@@ -1994,7 +1994,7 @@ void SfxMedium::Transfer_Impl()
         aNameURL = pImp->pTempFile->GetURL();
     else if ( aLogicName.Len() && pImp->m_bSalvageMode )
     {
-        // makes sence only in case logic name is set
+        // makes sense only in case logic name is set
         if ( !::utl::LocalFileHelper::ConvertPhysicalNameToURL( aName, aNameURL ) )
             OSL_ENSURE( sal_False, "The medium name is not convertable!\n" );
     }
@@ -2404,7 +2404,7 @@ void SfxMedium::GetLockingStream_Impl()
 
             if ( !pImp->pTempFile && !aName.Len() )
             {
-                // the medium is still based on the original file, it makes sence to initialize the streams
+                // the medium is still based on the original file, it makes sense to initialize the streams
                 if ( pImp->m_xLockingStream.is() )
                     pImp->xStream = pImp->m_xLockingStream;
 

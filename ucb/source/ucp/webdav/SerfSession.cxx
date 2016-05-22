@@ -1404,7 +1404,7 @@ bool containsLocktoken( const uno::Sequence< ucb::Lock > & rLocks,
 
 // -------------------------------------------------------------------
 // This method doesn't seem to be used.
-// In any case the default behavior is to ask a lock whith a life of 3 minutes
+// In any case the default behavior is to ask a lock with a life of 3 minutes
 // it will then be refreshed automatically (see SerfLockStore class)
 // In case of AOO crash the lock will expire by itself
 bool SerfSession::removeExpiredLocktoken( const rtl::OUString & /*inURL*/,

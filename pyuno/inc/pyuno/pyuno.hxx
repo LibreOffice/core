@@ -132,7 +132,7 @@ public:
     }
 
     /** clears the reference without decreasing the reference count
-        only seldomly needed ! */
+        only seldom needed ! */
     void scratch()
     {
         m = 0;

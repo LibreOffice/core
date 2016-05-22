@@ -317,7 +317,7 @@ public:
 
     SAL_DLLPRIVATE sal_Bool SignContents_Impl( sal_Bool bScriptingContent, const ::rtl::OUString& aODFVersion, sal_Bool bHasValidDocumentSignature );
 
-    // the following two methods must be used and make sence only during saving currently
+    // the following two methods must be used and make sense only during saving currently
     // TODO/LATER: in future the signature state should be controlled by the medium not by the document
     //             in this case the methods will be used generally, and might need to be renamed
     SAL_DLLPRIVATE sal_uInt16 GetCachedSignatureState_Impl();

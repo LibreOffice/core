@@ -147,7 +147,7 @@ namespace dbaui
                         sal_Int32 _nKeyType);
 
     /** fills a map and a vector with localized type names
-        @param  _rxConnection   the connection to acces the metadata
+        @param  _rxConnection   the connection to access the metadata
         @param  _rsTypeNames    a list of localized type names separated with ';'
         @param  _rTypeInfoMap   the filled map with the type names
         @param  _rTypeInfoIters the vector filled with map iterators

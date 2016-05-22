@@ -308,7 +308,7 @@ namespace comphelper
 
     void UiEventsLogger::disposing()
     {
-        // we dont want to create an instance just to dispose it
+        // we don't want to create an instance just to dispose it
         UiEventsLogger_Impl::prepareMutex();
         Guard<Mutex> singleton_guard(UiEventsLogger_Impl::singleton_mutex);
         if(UiEventsLogger_Impl::instance!=UiEventsLogger_Impl::ptr())

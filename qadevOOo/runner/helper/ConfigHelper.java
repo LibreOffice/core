@@ -346,7 +346,7 @@ public class ConfigHelper
     /**
      * Returns a <CODE>XNameContainer</CODE> of the <CODE>Set</CODE>
      * of the <CODE>Configuration</CODE>
-     * @param setName the name of the Set which sould be returned
+     * @param setName the name of the Set which should be returned
      * @throws com.sun.star.uno.Exception on any error
      * @return A XNameContainer of the Set
      */

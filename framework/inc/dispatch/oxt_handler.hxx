@@ -201,7 +201,7 @@ class Oxt_Handler  :   // interfaces
     private:
 
         css::uno::Reference< css::lang::XMultiServiceFactory >     m_xFactory          ;   /// global uno service factory to create new services
-        css::uno::Reference< css::uno::XInterface >                m_xSelfHold         ;   /// we must protect us against dieing during async(!) dispatch() call!
+        css::uno::Reference< css::uno::XInterface >                m_xSelfHold         ;   /// we must protect us against dying during async(!) dispatch() call!
         css::uno::Reference< css::frame::XDispatchResultListener > m_xListener         ;
 
 };      //  class Oxt_Handler

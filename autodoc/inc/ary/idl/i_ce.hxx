@@ -44,7 +44,7 @@ namespace idl
 
 /** @resp Base class for all IDL code entities.
 
-    A @->CodeEntity is a namespace, type, data or function, which occures in
+    A @->CodeEntity is a namespace, type, data or function, which occurs in
     the parsed UNO IDL code and is described and/or commented within the
     Autodoc repository.
 

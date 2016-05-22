@@ -62,7 +62,7 @@ public class SwXTextGraphicObjects extends TestCase {
             log.println( "creating a textdoc" );
             xTextDoc = SOF.createTextDoc( null );
         } catch ( Exception e ) {
-            // Some exception occures.FAILED
+            // Some exception occured.FAILED
             e.printStackTrace( log );
             throw new StatusException( "Couldn't create document", e );
         }

@@ -271,7 +271,7 @@ void SfxPrinterController::printPage( int i_nPage ) const
         }
         catch( lang::IllegalArgumentException& )
         {
-            // don't care enough about nonexistant page here
+            // don't care enough about nonexistent page here
             // to provoke a crash
         }
     }

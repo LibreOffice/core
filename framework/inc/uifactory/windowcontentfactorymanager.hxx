@@ -57,7 +57,7 @@ namespace framework
 {
 
 class ConfigurationAccess_FactoryManager;
-class WindowContentFactoryManager : private ThreadHelpBase                                        , // Struct for right initalization of mutex member! Must be first of baseclasses.
+class WindowContentFactoryManager : private ThreadHelpBase                                        , // Struct for right initialization of mutex member! Must be first of baseclasses.
                                     public ::cppu::WeakImplHelper2< com::sun::star::lang::XServiceInfo                    ,
                                                              com::sun::star::lang::XSingleComponentFactory>
 {

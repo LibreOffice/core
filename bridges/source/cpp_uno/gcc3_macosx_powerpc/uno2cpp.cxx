@@ -253,7 +253,7 @@ static void callVirtualMethod(
         case typelib_TypeClass_HYPER:
         case typelib_TypeClass_UNSIGNED_HYPER:
             ((long*)pRegisterReturn)[1] = iret2;
-                        // fall thru on purpose
+                        // fall through on purpose
         case typelib_TypeClass_LONG:
         case typelib_TypeClass_UNSIGNED_LONG:
         case typelib_TypeClass_ENUM:

@@ -63,7 +63,7 @@ namespace framework{
                     We never need a own mutex to safe our internal member access - because
                     a guard is used as function-local member only. There exist no multithreaded access to it really ...
 
-    @attention      a) To prevent us against wrong using, the default ctor, copy ctor and the =operator are maked private!
+    @attention      a) To prevent us against wrong using, the default ctor, copy ctor and the =operator are marked private!
                     b) Use interface "IRWLock" of set LockHelper only - because we must support a finer granularity of locking.
                        Interface "IMutex" should be used by easier guard implementations ... like "ResetableGuard"!
 

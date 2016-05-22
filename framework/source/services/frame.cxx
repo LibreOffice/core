@@ -584,7 +584,7 @@ void SAL_CALL Frame::initialize( const css::uno::Reference< css::awt::XWindow >&
     // This must be the first call of this method!
     // We should initialize our object and open it for working.
     // Set the new window.
-    LOG_ASSERT2( m_xContainerWindow.is()==sal_True, "Frame::initialize()", "Leak detected! This state should never occure ..." )
+    LOG_ASSERT2( m_xContainerWindow.is()==sal_True, "Frame::initialize()", "Leak detected! This state should never occur ..." )
     m_xContainerWindow = xWindow;
 
     // if window is initially visible, we will never get a windowShowing event
@@ -800,7 +800,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Frame::findFrame( const ::rtl
     //    We doesn't support search for following special targets.
     //    If we reject this requests - we mustnt check for such names
     //    in following code again and again. If we do not so -wrong
-    //    search results can occure!
+    //    search results can occur!
     //-----------------------------------------------------------------------------------------------------
     if (
         (sTargetFrameName==SPECIALTARGET_DEFAULT  )   ||    // valid for dispatches - not for findFrame()!
@@ -937,7 +937,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Frame::findFrame( const ::rtl
         //-------------------------------------------------------------------------------------------------
         // II.II) CHILDREN
         //  Search on all children for the given target name.
-        //  An empty name value can't occure here - because it must be already handled as "_self"
+        //  An empty name value can't occur here - because it must be already handled as "_self"
         //  before. Used helper function of container doesn't create any frame.
         //  It makes a deep search only.
         //-------------------------------------------------------------------------------------------------
@@ -1017,7 +1017,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Frame::findFrame( const ::rtl
             //-------------------------------------------------------------------------------------------------
             // II.III.II) PARENT
             //  Forward search to our parent (if he exists.)
-            //  To prevent us against recursive and superflous calls (which can occure if we allow him
+            //  To prevent us against recursive and superflous calls (which can occur if we allow him
             //  to search on his childrens too) we must change used search flags.
             //-------------------------------------------------------------------------------------------------
             if (
@@ -1070,7 +1070,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Frame::findFrame( const ::rtl
     @param      -
     @return     true, if is it a top frame ... false otherwise.
 
-    @onerror    No error should occure!
+    @onerror    No error should occur!
 *//*-*****************************************************************************************************/
 sal_Bool SAL_CALL Frame::isTop() throw( css::uno::RuntimeException )
 {
@@ -1286,7 +1286,7 @@ void SAL_CALL Frame::deactivate() throw( css::uno::RuntimeException )
     @param      -
     @return     true if active, false otherwise.
 
-    @onerror    No error should occure.
+    @onerror    No error should occur.
 *//*-*****************************************************************************************************/
 sal_Bool SAL_CALL Frame::isActive() throw( css::uno::RuntimeException )
 {
@@ -1947,7 +1947,7 @@ void SAL_CALL Frame::dispose() throw( css::uno::RuntimeException )
         remove himself at this instance ...
         Release m_xFramesHelper after that ... it's the same problem between parent and child!
         "m_xParent->getFrames()->remove( xThis );" needs this helper ...
-        Otherwise we get a null reference and could finish removing successfuly.
+        Otherwise we get a null reference and could finish removing successfully.
         => You see: Order of calling operations is important!!!
      */
     implts_forgetSubFrames();
@@ -2547,7 +2547,7 @@ void SAL_CALL Frame::setActionLocks( sal_Int16 nLock ) throw( css::uno::RuntimeE
     WriteGuard aWriteLock( m_aLock );
     // Attention: If somewhere called resetActionLocks() before and get e.g. 5 locks ...
     //            and tried to set these 5 ones here after his operations ...
-    //            we can't ignore setted requests during these two calls!
+    //            we can't ignore set requests during these two calls!
     //            So we must add(!) these 5 locks here.
     m_nExternalLockCount = m_nExternalLockCount + nLock;
 }

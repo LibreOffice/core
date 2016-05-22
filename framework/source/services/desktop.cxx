@@ -1034,7 +1034,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Desktop::findFrame( const ::r
     //    We doesn't support search for following special targets.
     //    If we reject this requests - we mustnt check for such names
     //    in following code again and again. If we do not so -wrong
-    //    search results can occure!
+    //    search results can occur!
     //-----------------------------------------------------------------------------------------------------
     if (
         (sTargetFrameName==SPECIALTARGET_DEFAULT  )   ||    // valid for dispatches - not for findFrame()!
@@ -1145,7 +1145,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Desktop::findFrame( const ::r
         //-------------------------------------------------------------------------------------------------
         // II.III) CHILDREN
         //  Search on all children for the given target name.
-        //  An empty name value can't occure here - because it must be already handled as "_self"
+        //  An empty name value can't occur here - because it must be already handled as "_self"
         //  before. Used helper function of container doesn't create any frame.
         //  It makes a deep search only.
         //-------------------------------------------------------------------------------------------------
@@ -1249,7 +1249,7 @@ void SAL_CALL Desktop::dispose()
     @interface  XComponent
     @short      add/remove listener for dispose events
     @descr      Add an event listener to this object, if you whish to get informations
-                about our dieing!
+                about our dying!
                 You must releas ethis listener reference during your own disposing() method.
 
     @attention  Our container is threadsafe himeslf. So we doesn't need any lock here.
@@ -1351,7 +1351,7 @@ void SAL_CALL Desktop::disposing( const css::lang::EventObject& ) throw( css::un
                 of our own called method.
 
     @attention  a)
-                Normal loop in loadComponentFromURL() breaks on setted member m_eLoadState during callback statusChanged().
+                Normal loop in loadComponentFromURL() breaks on set member m_eLoadState during callback statusChanged().
                 But these interaction feature implements second way to do so! So we must look on different callbacks
                 for same operation ... and live with it.
                 b)
@@ -1374,7 +1374,7 @@ void SAL_CALL Desktop::handle( const css::uno::Reference< css::task::XInteractio
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
     // Don't check incoming request!
-    // If somewhere starts interaction without right parameter - he maked something wrong.
+    // If somewhere starts interaction without right parameter - he made something wrong.
     // loadComponentFromURL() waits for thjese event - otherwise it yield for ever!
 
     // get packed request and work on it first

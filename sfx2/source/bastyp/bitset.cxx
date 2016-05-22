@@ -172,7 +172,7 @@ BitSet::BitSet( sal_uInt16* pArray, sal_uInt16 nSize ):
     }
     else
     {
-        // initalize emtpy set
+        // initialize emtpy set
         nBlocks = 0;
         pBitmap = 0;
     }

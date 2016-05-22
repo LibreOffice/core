@@ -875,7 +875,7 @@ namespace basegfx
 
                             if(ORIENTATION_NEUTRAL == aOrientation)
                             {
-                                   // they are parallell or empty; if they are both not zero and point
+                                   // they are parallel or empty; if they are both not zero and point
                                    // in opposite direction, a half-circle is needed
                                    if(!aTangentPrev.equalZero() && !aTangentEdge.equalZero())
                                    {

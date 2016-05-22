@@ -71,7 +71,7 @@ public abstract class ReportElement extends Element
      * element will only be printed, if there was at least one change.
      *
      * @return true, if repeated values should be printed, false if repeated
-     *         values should be surpressed.
+     *         values should be suppressed.
      */
     public boolean isPrintRepeatedValues()
     {

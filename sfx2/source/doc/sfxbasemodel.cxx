@@ -1637,7 +1637,7 @@ void SAL_CALL SfxBaseModel::storeSelf( const    uno::Sequence< beans::PropertyVa
             // stored in normal way.
             if ( !hasLocation() || getLocation().compareToAscii( "private:", 8 ) == 0 )
             {
-                // actually in this very rare case only UI parameters have sence
+                // actually in this very rare case only UI parameters have sense
                 // TODO/LATER: should be done later, after integration of sb19
                 bRet = m_pData->m_pObjectShell->DoSave()
                     && m_pData->m_pObjectShell->DoSaveCompleted();

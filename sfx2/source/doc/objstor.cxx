@@ -1890,7 +1890,7 @@ sal_Bool SfxObjectShell::DisconnectStorage_Impl( SfxMedium& rSrcMedium, SfxMediu
                 // contents, the storag will be broken
                 xOptStorage->attachToURL( aBackupURL, sal_True );
 
-                // the storage is successfuly attached to backup, thus it it owned by the document not by the medium
+                // the storage is successfully attached to backup, thus it it owned by the document not by the medium
                 rSrcMedium.CanDisposeStorage_Impl( sal_False );
                 bResult = sal_True;
             }
@@ -1932,7 +1932,7 @@ sal_Bool SfxObjectShell::ConnectTmpStorage_Impl(
             uno::Reference< embed::XOptimizedStorage > xOptStorage( xStorage, uno::UNO_QUERY_THROW );
             xOptStorage->writeAndAttachToStream( uno::Reference< io::XStream >() );
 
-            // the storage is successfuly disconnected from the original sources, thus the medium must not dispose it
+            // the storage is successfully disconnected from the original sources, thus the medium must not dispose it
             if ( pMediumArg )
                 pMediumArg->CanDisposeStorage_Impl( sal_False );
 
@@ -2672,7 +2672,7 @@ sal_Bool SfxObjectShell::DoSave_Impl( const SfxItemSet* pArgs )
         SetError( GetMedium()->Unpack_Impl( pRetrMedium->GetPhysicalName() ), ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
 */
 
-    // an interaction handler here can aquire only in case of GUI Saving
+    // an interaction handler here can acquire only in case of GUI Saving
     // and should be removed after the saving is done
     com::sun::star::uno::Reference< XInteractionHandler > xInteract;
     SFX_ITEMSET_ARG( pArgs, pxInteractionItem, SfxUnoAnyItem, SID_INTERACTIONHANDLER, sal_False );

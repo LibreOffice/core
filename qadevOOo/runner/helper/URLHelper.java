@@ -189,7 +189,7 @@ public class URLHelper
     // ____________________
 
     /**
-     * This convert an URL (formated as a string) to a struct com.sun.star.util.URL.
+     * This convert an URL (formatted as a string) to a struct com.sun.star.util.URL.
      * It use a special service to do that: the URLTransformer.
      * Because some API calls need it and it's not allowed to set "Complete"
      * part of the util struct only. The URL must be parsed.

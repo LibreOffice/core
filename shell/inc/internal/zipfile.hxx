@@ -135,7 +135,7 @@ public:
     */
     DirectoryPtr_t GetDirectory() const;
 
-    /** Convinience query function may even realized with
+    /** Convenience query function may even realized with
         iterating over a ZipFileDirectory returned by
         GetDirectory
     */

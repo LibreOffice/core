@@ -190,7 +190,7 @@ namespace connectivity
             ProductStruct &m_Product = m_ProductProfileList[index];
             if (m_Product.mCurrentProfileName.getLength() != 0)
             {
-                //default profile setted in mozilla registry
+                //default profile set in mozilla registry
                 return m_Product.mCurrentProfileName;
             }
             if (m_Product.mProfileList.size() == 0)

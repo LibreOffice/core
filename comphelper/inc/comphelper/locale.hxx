@@ -51,7 +51,7 @@ namespace comphelper{
 
     @descr  This Locale class can be used to:
             - provide the different parts of a Locale (Language, Country, Variant)
-            - converting it from/to ISO formated string values (like e.g. "en-US")
+            - converting it from/to ISO formatted string values (like e.g. "en-US")
             - provide some predefined (static) Locale objects
  */
 class COMPHELPER_DLLPUBLIC Locale
@@ -61,13 +61,13 @@ class COMPHELPER_DLLPUBLIC Locale
 
     public:
 
-        /** @short separates LANGUAGE and COUNTRY part of an ISO formated Locale. */
+        /** @short separates LANGUAGE and COUNTRY part of an ISO formatted Locale. */
         static const sal_Unicode SEPERATOR_LC;
 
-        /** @short separates COUNTRY and VARIANT part of an ISO formated Locale. */
+        /** @short separates COUNTRY and VARIANT part of an ISO formatted Locale. */
         static const sal_Unicode SEPERATOR_CV;
 
-        /** @short separates COUNTRY and VARIANT part of an ISO formated Locale.
+        /** @short separates COUNTRY and VARIANT part of an ISO formatted Locale.
             @descr Its true for some linux derivates only :-( */
         static const sal_Unicode SEPERATOR_CV_LINUX;
 
@@ -168,18 +168,18 @@ class COMPHELPER_DLLPUBLIC Locale
         //---------------------------------------
         /** @short  needed by outside users!
 
-            @descr  Otherwise it wouldnt be possible to use
+            @descr  Otherwise it wouldn't be possible to use
                     any instance of such Locale static ...
          */
         Locale();
 
         //---------------------------------------
-        /** @short      construct a Locale from an ISO formated string value.
+        /** @short      construct a Locale from an ISO formatted string value.
 
             @seealso    fromISO()
 
             @param      sISO
-                        an ISO formated string value, which can be parsed and
+                        an ISO formatted string value, which can be parsed and
                         tokenized into a Lamnguage, Country and Variant part.
 
             @throw      MalFormedLocaleException
@@ -282,7 +282,7 @@ class COMPHELPER_DLLPUBLIC Locale
             @seealso    Locale(const ::rtl::OUString& sISO)
 
             @param      sISO
-                        an ISO formated string value, which can be parsed and
+                        an ISO formatted string value, which can be parsed and
                         tokenized into a Lamnguage, Country and Variant part.
                         e.g. "en-US" or "en-US_WIN"
 
@@ -293,13 +293,13 @@ class COMPHELPER_DLLPUBLIC Locale
             throw(MalFormedLocaleException);
 
         //---------------------------------------
-        /** @short  converts this Locale to an ISO formated string value.
+        /** @short  converts this Locale to an ISO formatted string value.
 
             @descr  The different parts of this Locale will be assempled
                     e.g. to "en-US" or "en-US_WIN"
 
             @return [string]
-                    the ISO formated string.
+                    the ISO formatted string.
           */
         ::rtl::OUString toISO() const;
 
@@ -323,7 +323,7 @@ class COMPHELPER_DLLPUBLIC Locale
                     uses the same language.
 
             @descr  The Country and Variant parts of a Locale
-                    wont be checked here.
+                    won't be checked here.
 
             @return [boolean]
                     TRUE if both objects uses the same
@@ -363,7 +363,7 @@ class COMPHELPER_DLLPUBLIC Locale
 
             @param      lISOList
                         the list of possible Locales
-                        (as formated ISO strings).
+                        (as formatted ISO strings).
 
             @param      sReferenceISO
                         the reference Locale, which should be searched
@@ -376,7 +376,7 @@ class COMPHELPER_DLLPUBLIC Locale
                         to the end of the list.
 
             @throw      [MalFormedLocaleException]
-                        if at least one ISO formated string couldnt
+                        if at least one ISO formatted string couldnt
                         be converted to a valid Locale Object.
          */
         static ::std::vector< ::rtl::OUString >::const_iterator getFallback(const ::std::vector< ::rtl::OUString >& lISOList     ,

@@ -198,7 +198,7 @@ namespace osl_SocketAddr
 
         ASSERT_TRUE(saSocketAddr.is( ) == sal_True &&
                                 ( saSocketAddr.getPort( ) == IP_PORT_FTP )/*&&
-                                ( sal_True == compareUString( saSocketAddr.getHostname( ), aHostName1 ) ) */) << "test for SocketAddr tcpip specif constructor function: do a constructor using tcpip spec, check the result.";
+                                ( sal_True == compareUString( saSocketAddr.getHostname( ), aHostName1 ) ) */) << "test for SocketAddr tcpip specific constructor function: do a constructor using tcpip spec, check the result.";
     }
 
     //same as is_002
@@ -207,7 +207,7 @@ namespace osl_SocketAddr
         /// tcpip-specif constructor.
         ::osl::SocketAddr saSocketAddr( rtl::OUString::createFromAscii("123.345.67.89"), IP_PORT_MYPORT2 );
 
-        ASSERT_TRUE(sal_False == saSocketAddr.is( )) << "test for SocketAddr tcpip specif constructor function: using an invalid IP address, the socketaddr ctors should fail";
+        ASSERT_TRUE(sal_False == saSocketAddr.is( )) << "test for SocketAddr tcpip specific constructor function: using an invalid IP address, the socketaddr ctors should fail";
     }
 
 

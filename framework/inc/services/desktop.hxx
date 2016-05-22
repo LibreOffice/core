@@ -489,7 +489,7 @@ class Desktop   :   // interfaces
           * Because these desktop instance closes documents and informs listener
           * only ... it does not really shutdown the whole application.
           *
-          * Btw: That wouldnt be possible by design ... because Desktop.terminate()
+          * Btw: That wouldn't be possible by design ... because Desktop.terminate()
           * has to return a boolean value about success ... it can't really shutdown the
           * process .-)
           *

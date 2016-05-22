@@ -90,7 +90,7 @@ public class _XExtendedIndexEntrySupplier extends MultiMethodTest {
             for (int j = 0; j < algorithms.size(); j++) {
                 String[] algs = (String[])algorithms.get(new Integer(j));
                 for (int k=0;k<algs.length;k++) {
-                log.println("\t Algorythm :" +
+                log.println("\t Algorithm :" +
                             algs[k]);
                 oObj.loadAlgorithm(locales[i], algs[k], CollatorOptions.CollatorOptions_IGNORE_CASE);
                 log.println("\t\t Get: " +

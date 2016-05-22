@@ -878,7 +878,7 @@ const SfxFilter* SfxFilterMatcherIter::Next()
 }
 
 /*---------------------------------------------------------------
-    helper to build own formated string from given stringlist by
+    helper to build own formatted string from given stringlist by
     using given seperator
   ---------------------------------------------------------------*/
 ::rtl::OUString implc_convertStringlistToString( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& lList     ,

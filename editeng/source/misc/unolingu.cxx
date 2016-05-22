@@ -418,7 +418,7 @@ void SvxLinguConfigUpdate::UpdateAll( sal_Bool bForceCheck )
 
         aCfg.SetProperty( A2OU( "DataFilesChangedCheckValue" ), aAny );
 
-        //! Note 1: the new values are commited when the 'aCfg' object
+        //! Note 1: the new values are committed when the 'aCfg' object
         //!     gets destroyed.
         //! Note 2: the new settings in the configuration get applied
         //!     because the 'LngSvcMgr' (in linguistic/source/lngsvcmgr.hxx)

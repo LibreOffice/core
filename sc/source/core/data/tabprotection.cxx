@@ -194,7 +194,7 @@ bool ScTableProtectionImpl::hasPasswordHash(ScPasswordHash eHash) const
 Sequence<sal_Int8> ScTableProtectionImpl::getPasswordHash(ScPasswordHash eHash) const
 {
     if (mbEmptyPass)
-        // Flaged as empty.
+        // Flagged as empty.
         return Sequence<sal_Int8>();
 
     if (maPassText.Len())

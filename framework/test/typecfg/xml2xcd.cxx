@@ -80,7 +80,7 @@ using namespace ::framework ;
                         all values are 0
                     3)  decrease size of xml file
                         - don't write full localized values
-                        - use own formated string for all non localized values
+                        - use own formatted string for all non localized values
                         - separate "Installed" flag for filters
                     4)  set right values for "Order" property of filters
                     5)  support for ContentHandler
@@ -638,7 +638,7 @@ void XCDGenerator::impl_generateTypeTemplate()
         m_aData.sBufferStandard.appendAscii( "\t\t\t<schema:value cfg:name=\"Data\" cfg:type=\"string\" cfg:writable=\""                                                                                                                               );
         m_aData.sBufferStandard.appendAscii( m_aData.bWriteable==sal_True ? "true\">\n" : "false\">\n"                                                                                                                                                 );
         m_aData.sBufferStandard.appendAscii("\t\t\t\t<schema:documentation>\n"                                                                                                                                                                         );
-        m_aData.sBufferStandard.appendAscii( "\t\t\t\t\t<schema:description>Contains all data of a type as an own formated string.{Preferred, MediaType, ClipboardFormat, URLPattern, Extensions, DocumentIconID}</schema:description>\n"             );
+        m_aData.sBufferStandard.appendAscii( "\t\t\t\t\t<schema:description>Contains all data of a type as an own formatted string.{Preferred, MediaType, ClipboardFormat, URLPattern, Extensions, DocumentIconID}</schema:description>\n"             );
         m_aData.sBufferStandard.appendAscii( "\t\t\t\t</schema:documentation>\n"                                                                                                                                                                       );
         m_aData.sBufferStandard.appendAscii( "\t\t\t\t<default:data>false</default:data>\n"                                                                                                                                                            );
         m_aData.sBufferStandard.appendAscii( "\t\t\t</schema:value>\n"                                                                                                                                                                                 );

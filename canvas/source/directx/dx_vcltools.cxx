@@ -181,7 +181,7 @@ namespace dxcanvas
 
                 ENSURE_OR_THROW( pReadAccess.get() != NULL,
                                   "::dxcanvas::tools::bitmapFromVCLBitmapEx(): "
-                                  "Unable to acquire read acces to bitmap" );
+                                  "Unable to acquire read access to bitmap" );
 
                 if( rBmpEx.IsAlpha() )
                 {
@@ -208,7 +208,7 @@ namespace dxcanvas
 
                     ENSURE_OR_THROW( pAlphaReadAccess.get() != NULL,
                                       "::dxcanvas::tools::bitmapFromVCLBitmapEx(): "
-                                      "Unable to acquire read acces to alpha" );
+                                      "Unable to acquire read access to alpha" );
 
                     ENSURE_OR_THROW( pAlphaReadAccess->GetScanlineFormat() == BMP_FORMAT_8BIT_PAL ||
                                       pAlphaReadAccess->GetScanlineFormat() == BMP_FORMAT_8BIT_TC_MASK,
@@ -351,7 +351,7 @@ namespace dxcanvas
 
                     ENSURE_OR_THROW( pMaskReadAccess.get() != NULL,
                                       "::dxcanvas::tools::bitmapFromVCLBitmapEx(): "
-                                      "Unable to acquire read acces to mask" );
+                                      "Unable to acquire read access to mask" );
 
                     ENSURE_OR_THROW( pMaskReadAccess->GetScanlineFormat() == BMP_FORMAT_1BIT_MSB_PAL,
                                       "::dxcanvas::tools::bitmapFromVCLBitmapEx(): "

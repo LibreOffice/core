@@ -1643,7 +1643,7 @@ void ScXMLExport::_ExportContent()
         sal_Int32 nShapesCount(0);
         sal_Int32 nCellCount(pDoc ? pDoc->GetCellCount() : 0);
         CollectSharedData(nTableCount, nShapesCount, nCellCount);
-        DBG_ERROR("no shared data setted");
+        DBG_ERROR("no shared data set");
     }
     ScXMLExportDatabaseRanges aExportDatabaseRanges(*this);
     if (!GetModel().is())
@@ -1864,7 +1864,7 @@ void ScXMLExport::_ExportStyles( sal_Bool bUsed )
         sal_Int32 nShapesCount(0);
         sal_Int32 nCellCount(pDoc ? pDoc->GetCellCount() : 0);
         CollectSharedData(nTableCount, nShapesCount, nCellCount);
-        //DBG_ERROR("no shared data setted");
+        //DBG_ERROR("no shared data set");
     }
     ScXMLStyleExport aStylesExp(*this, rtl::OUString(), GetAutoStylePool().get());
     if (GetModel().is())
@@ -2445,7 +2445,7 @@ void ScXMLExport::_ExportAutoStyles()
             sal_Int32 nShapesCount(0);
             sal_Int32 nCellCount(pDoc ? pDoc->GetCellCount() : 0);
             CollectSharedData(nTableCount, nShapesCount, nCellCount);
-            //DBG_ERROR("no shared data setted");
+            //DBG_ERROR("no shared data set");
         }
         sal_Int32 nTableCount(xIndex->getCount());
         pCellStyles->AddNewTable(nTableCount - 1);

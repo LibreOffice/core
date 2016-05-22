@@ -123,7 +123,7 @@ public class ChXChartDocument extends TestCase {
             log.println("Waiting before opening second document");
             doc2 = SOF.createChartDoc(null);
         } catch (com.sun.star.uno.Exception e) {
-            // Some exception occures.FAILED
+            // Some exception occured.FAILED
             e.printStackTrace(log);
             throw new StatusException("Couldn't create document", e);
         }

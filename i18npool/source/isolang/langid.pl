@@ -55,7 +55,7 @@ sub Usage()
         "A language-country pair will lookup a xx-YY mapping from isolang.cxx,\n",
         "for example: 'en-US' or 'de-' or '-CH',\n",
         "xx and YY can be given case insensitive, will be lowered-uppered internally,\n",
-        "and xx and YY themselfs may be regular expressions.\n",
+        "and xx and YY themselves may be regular expressions.\n",
         "Also here a list of matches will be processed.\n\n",
 
         "If option --single is given, only the first match will be processed.\n\n";
@@ -260,7 +260,7 @@ sub main()
         }
     }
     # If the string given is of the form xx-yy lookup a language,country pair
-    # to obtain the define identifier. xx and yy themselfs may be regexps.
+    # to obtain the define identifier. xx and yy themselves may be regexps.
     # xx- is a short form for 'xx-.*' and -yy a short form for '.*-yy'
     if ($grepdef =~ /^(.*)-$/) {
         $grepdef = $1 . "-.*"; }

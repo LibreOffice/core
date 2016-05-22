@@ -231,7 +231,7 @@ struct ReSubstUserVarOrder
 typedef std::list< ReSubstFixedVarOrder > ReSubstFixedVarOrderVector;
 typedef std::list< ReSubstUserVarOrder > ReSubstUserVarOrderVector;
 
-class SubstitutePathVariables : private ThreadHelpBase, // Struct for right initalization of mutex member! Must be first of baseclasses.
+class SubstitutePathVariables : private ThreadHelpBase, // Struct for right initialization of mutex member! Must be first of baseclasses.
                                 public ::cppu::WeakImplHelper2< ::com::sun::star::util::XStringSubstitution, css::lang::XServiceInfo >
 {
     friend class SubstitutePathVariables_Impl;

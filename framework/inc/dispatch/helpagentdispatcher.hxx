@@ -140,7 +140,7 @@ class HelpAgentDispatcher : public  css::lang::XTypeProvider
         /** @short  ensures that the agent's window exists
             @descr  We create the agent window on demand. But afterwards we hold it alive till
                     this helpagent dispatcher dies. The agent window will be made visible/hidden
-                    in case a new dispatch occures or in case the timer expired.
+                    in case a new dispatch occurs or in case the timer expired.
 
             @return [sal_Bool]
                     sal_True in case the member m_xAgentWindow is a valid reference;

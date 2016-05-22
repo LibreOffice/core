@@ -64,7 +64,7 @@
 namespace framework
 {
 
-class PanelManager : private ThreadHelpBase // Struct for right initalization of mutex member! Must be first of baseclasses.
+class PanelManager : private ThreadHelpBase // Struct for right initialization of mutex member! Must be first of baseclasses.
 {
     public:
         PanelManager(

@@ -102,7 +102,7 @@ namespace framework
     class LayoutManager : public  LayoutManager_Base                    ,
                           // base classes
                           // Order is necessary for right initialization!
-                          private ThreadHelpBase                        ,   // Struct for right initalization of mutex member! Must be first of baseclasses.
+                          private ThreadHelpBase                        ,   // Struct for right initialization of mutex member! Must be first of baseclasses.
                           public  ::cppu::OBroadcastHelper              ,
                           public  ILayoutNotifications                  ,
                           public  LayoutManager_PBase

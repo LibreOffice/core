@@ -443,7 +443,7 @@ public class SOfficeFactory {
             oInterface = (XInterface) oDocMSF.createInstance("com.sun.star.chart." + kind);
             oDiagram = (XDiagram) UnoRuntime.queryInterface(XDiagram.class, oInterface);
         } catch (Exception e) {
-            // Some exception occures.FAILED
+            // Some exception occured.FAILED
             System.out.println("Couldn't create " + kind + "-Diagram " + e);
         }
         return oDiagram;
@@ -461,7 +461,7 @@ public class SOfficeFactory {
         try {
             oControl = (XInterface) oDocMSF.createInstance("com.sun.star.form.component." + kind);
         } catch (Exception e) {
-            // Some exception occures.FAILED
+            // Some exception occured.FAILED
             System.out.println("Couldn't create instance " + kind + ": " + e);
         }
         return oControl;
@@ -479,7 +479,7 @@ public class SOfficeFactory {
         try {
             oInstance = (Object) oDocMSF.createInstance(kind);
         } catch (Exception e) {
-            // Some exception occures.FAILED
+            // Some exception occured.FAILED
             System.out.println("Couldn't create instance " + kind + ": " + e);
         }
         return oInstance;
@@ -509,14 +509,14 @@ public class SOfficeFactory {
 
 
         } catch (Exception e) {
-            // Some exception occures.FAILED
+            // Some exception occured.FAILED
             System.out.println("Couldn't create instance " + e);
         }
 
         try {
             oCShape.setControl(aControl);
         } catch (Exception e) {
-            // Some exception occures.FAILED
+            // Some exception occured.FAILED
             System.out.println("Couldn't get Control " + e);
         }
 

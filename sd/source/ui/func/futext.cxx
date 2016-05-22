@@ -900,7 +900,7 @@ sal_Bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
 
                     // #107235#
                     // Analog to the else case below, for vertical simple click texts
-                    // one of the defaulted setted items from ImpSetAttributesForNewTextObject
+                    // one of the defaulted set items from ImpSetAttributesForNewTextObject
                     // needs to be adapted to non-block mode. This could have been done with the
                     // #104122#, but was obviously overseen.
                     const SfxItemSet& rSet = mpView->GetDefaultAttr();

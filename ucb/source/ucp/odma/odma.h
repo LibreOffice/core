@@ -1,4 +1,4 @@
-/* odma.h - Definitions, prototypes, etc. for Open Document Managment API
+/* odma.h - Definitions, prototypes, etc. for Open Document Management API
     (ODMA) version 2.0.
                OPEN DOCUMENT MANAGEMENT API LICENSE 1.0
 
@@ -119,7 +119,7 @@ typedef int ODMSTATUS;
 #define ODM_E_FAIL          1       /* Unspecified failure */
 #define ODM_E_CANCEL        2       /* Action was cancelled at user's request */
 #define ODM_E_NODMS         3       /* DMS not registered */
-#define ODM_E_CANTINIT      4       /* DMS failed to initalize */
+#define ODM_E_CANTINIT      4       /* DMS failed to initialize */
 #define ODM_E_VERSION       5       /* DMS doesn't support the requested
                                                version of ODMA */
 #define ODM_E_APPSELECT     6        /* User has indicated that he wants to use

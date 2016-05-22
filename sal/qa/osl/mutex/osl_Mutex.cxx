@@ -490,7 +490,7 @@ namespace osl_Mutex
         if ( bRes2 == sal_True )
             aMutex.release( );
 
-        ASSERT_TRUE(bRes1 == sal_False && bRes2 == sal_True && bRunning == sal_True) << "release Mutex: try to aquire before and after the mutex has been released";
+        ASSERT_TRUE(bRes1 == sal_False && bRes2 == sal_True && bRunning == sal_True) << "release Mutex: try to acquire before and after the mutex has been released";
 
     }
 
@@ -503,7 +503,7 @@ namespace osl_Mutex
         sal_Bool bRes1 = aMutex.release( );
         sal_Bool bRes2 = aMutex.release( );
 
-        ASSERT_TRUE(bRes1 == sal_False && bRes2 == sal_False) << "release Mutex: mutex should not be released without aquire, should not release twice. although the behaviour is still under discussion, this test is passed on (LINUX), not passed on (SOLARIS)&(WINDOWS)";
+        ASSERT_TRUE(bRes1 == sal_False && bRes2 == sal_False) << "release Mutex: mutex should not be released without acquire, should not release twice. although the behaviour is still under discussion, this test is passed on (LINUX), not passed on (SOLARIS)&(WINDOWS)";
 #endif
     }
 
@@ -625,7 +625,7 @@ namespace osl_Guard
         aMutex.release( );
         myThread.join( );
 
-        ASSERT_TRUE(bRes == sal_True) << "GuardThread constructor: reference initialization, aquire the mutex before running the thread, then check if it is blocking.";
+        ASSERT_TRUE(bRes == sal_True) << "GuardThread constructor: reference initialization, acquire the mutex before running the thread, then check if it is blocking.";
     }
 
 } // namespace osl_Guard
@@ -682,7 +682,7 @@ namespace osl_ClearableGuard
         /// it will return sal_False if the aMutex has not been Guarded.
         sal_Bool bRes = aMutex.release( );
 
-        ASSERT_TRUE(bRes == sal_True) << "ClearableMutexGuard constructor, test the aquire operation when initilized.";
+        ASSERT_TRUE(bRes == sal_True) << "ClearableMutexGuard constructor, test the acquire operation when initilized.";
     }
 
     TEST_F(ClearableGuardConstructor, ctor_002 )
@@ -695,7 +695,7 @@ namespace osl_ClearableGuard
         /// it will return sal_False if the aMutex has not been Guarded.
         sal_Bool bRes = aMutex.release( );
 
-        ASSERT_TRUE(bRes == sal_True) << "ClearableMutexGuard constructor, test the aquire operation when initilized, we use reference constructor this time.";
+        ASSERT_TRUE(bRes == sal_True) << "ClearableMutexGuard constructor, test the acquire operation when initilized, we use reference constructor this time.";
     }
 
     class clear : public ::testing::Test
@@ -806,7 +806,7 @@ namespace osl_ResettableGuard
         /// it will return sal_False if the aMutex has not been Guarded.
         sal_Bool bRes = aMutex.release( );
 
-        ASSERT_TRUE(bRes == sal_True) << "ResettableMutexGuard constructor, test the aquire operation when initilized.";
+        ASSERT_TRUE(bRes == sal_True) << "ResettableMutexGuard constructor, test the acquire operation when initilized.";
     }
 
     TEST_F(ctor, ctor_002 )
@@ -819,7 +819,7 @@ namespace osl_ResettableGuard
         /// it will return sal_False if the aMutex has not been Guarded.
         sal_Bool bRes = aMutex.release( );
 
-        ASSERT_TRUE(bRes == sal_True) << "ResettableMutexGuard constructor, test the aquire operation when initilized, we use reference constructor this time.";
+        ASSERT_TRUE(bRes == sal_True) << "ResettableMutexGuard constructor, test the acquire operation when initilized, we use reference constructor this time.";
     }
 
 
@@ -863,7 +863,7 @@ namespace osl_ResettableGuard
         myMutexGuard.reset( );
         sal_Bool bRes1 = aMutex.release( );
 
-        ASSERT_TRUE(( sal_False == bRes ) && ( sal_True == bRes1 )) << "ResettableMutexGuard method: reset, release after clear and reset, on Solaris, the mutex can be release without aquire, so it can not passed on (SOLARIS), but not the reason for reset_002";
+        ASSERT_TRUE(( sal_False == bRes ) && ( sal_True == bRes1 )) << "ResettableMutexGuard method: reset, release after clear and reset, on Solaris, the mutex can be release without acquire, so it can not passed on (SOLARIS), but not the reason for reset_002";
 #endif
     }
 

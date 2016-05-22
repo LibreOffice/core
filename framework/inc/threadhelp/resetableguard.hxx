@@ -65,7 +65,7 @@ namespace framework{
                     A set bool flag inside protect this implementation against multiple lock() calls
                     without any unlock()! So the increasing of guarded mutex couldn't be greater then 1 ...
 
-    @attention      a) To prevent us against wrong using, the default ctor, copy ctor and the =operator are maked private!
+    @attention      a) To prevent us against wrong using, the default ctor, copy ctor and the =operator are marked private!
                     b) Use interface "IMutex" of set LockHelper only - because we must support an exclusiv locking.
                        Interface "IRWLock" should be used by special guard implementations ... like "ReadGuard" or "WriteGuard"!
 

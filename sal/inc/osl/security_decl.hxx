@@ -71,28 +71,28 @@ public:
     /** get the ident of the logged in user.
         @param strName [out] is the buffer which returns the name
         @param max [in] is the size of this buffer
-        @return True, if any user is successfuly logged in, otherwise False
+        @return True, if any user is successfully logged in, otherwise False
     */
     inline sal_Bool  SAL_CALL getUserIdent( ::rtl::OUString& strIdent) const;
 
     /** get the name of the logged in user.
         @param strName [out] is the buffer which returns the name
         @param max [in] is the size of this buffer
-        @return True, if any user is successfuly logged in, otherwise False
+        @return True, if any user is successfully logged in, otherwise False
     */
     inline sal_Bool SAL_CALL getUserName( ::rtl::OUString& strName) const;
 
     /** get the home directory of the logged in user.
         @param strDirectory [out] is the buffer which returns the directory name
         @param max [in] is the size of this buffer
-        @return True, if any user is successfuly logged in, otherwise False
+        @return True, if any user is successfully logged in, otherwise False
     */
     inline sal_Bool SAL_CALL getHomeDir( ::rtl::OUString& strDirectory) const;
 
     /** get the directory for configuration data of the logged in user.
         @param strDirectory [out] is the buffer which returns the directory name
         @param max [in] is the size of this buffer
-        @return True, if any user is successfuly logged in, otherwise False
+        @return True, if any user is successfully logged in, otherwise False
     */
     inline sal_Bool SAL_CALL getConfigDir( ::rtl::OUString & strDirectory) const;
 

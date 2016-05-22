@@ -265,7 +265,7 @@ sub startup_check
     usage() if $i<2;
     usage() if "$outfile" eq "";
     if ( -f "$outfile" ) {
-        # changed script - run allways
+        # changed script - run always
         return if (stat($0))[9] > (stat("$outfile"))[9] ;
 
         open OLDFILE, "$outfile" or die "$0 - ERROR: $outfile exists but isn't readable.\n";

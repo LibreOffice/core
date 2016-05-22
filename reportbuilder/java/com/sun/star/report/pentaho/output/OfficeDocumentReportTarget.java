@@ -146,7 +146,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
     public static final String FAILED = "Failed";
     public static final String VERTICAL_POS = "vertical-pos";
     private static final String ZERO_CM = "0cm";
-    /** the verison of the ODF specification to which generated documents
+    /** the version of the ODF specification to which generated documents
      *  shall conform. */
     public static final String ODF_VERSION = "1.2";
 
@@ -345,7 +345,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
      *
      * @param report the report object.
      * @throws DataSourceException       if there was an error accessing the datasource
-     * @throws ReportProcessingException if some other error occured.
+     * @throws ReportProcessingException if some other error occurred.
      */
     public void startReport(final ReportStructureRoot report)
             throws DataSourceException, ReportProcessingException
@@ -509,7 +509,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
     }
 
     /**
-     * Starts the processing of an element and updates the processing state. This will select an apropriate handler method
+     * Starts the processing of an element and updates the processing state. This will select an appropriate handler method
      * for the call and will call one of the start* methods.
      *
      * @param roAttrs the attribute map for the current element

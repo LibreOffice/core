@@ -65,7 +65,7 @@ public:
             The typical action of the click handler is to expand the control.
         @param eType
             Type of the title bar.  This specifies how the title bar
-            will be formated.  For more information see TitleBar.
+            will be formatted.  For more information see TitleBar.
 
     */
     TitledControl (

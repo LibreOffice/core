@@ -67,7 +67,7 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::linguistic2;
 using namespace linguistic;
 
-// values asigned to capitalization types
+// values assigned to capitalization types
 #define CAPTYPE_UNKNOWN 0
 #define CAPTYPE_NOCAP   1
 #define CAPTYPE_INITCAP 2

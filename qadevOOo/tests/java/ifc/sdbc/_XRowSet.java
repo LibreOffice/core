@@ -99,7 +99,7 @@ public class _XRowSet extends MultiMethodTest {
 
     /**
     * Reexecutes the RowSet and checks that listener was called. <p>
-    * Has OK status if no exceptions were rised and listener was called.
+    * Has OK status if no exceptions were raised and listener was called.
     */
     public void _execute() {
         requiredMethod("addRowSetListener()");

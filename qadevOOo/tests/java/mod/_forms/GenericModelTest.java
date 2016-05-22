@@ -213,7 +213,7 @@ public class GenericModelTest extends TestCase {
 
     protected static String m_XPropertyContainer_propertyNotRemovable = "HelpText";
     /**
-     * If this variable is true some more debug info was logged. It was setted by the parameter variable
+     * If this variable is true some more debug info was logged. It was set by the parameter variable
      * <code>debug_is_active</code>
      */
     protected static boolean debug = false;

@@ -121,7 +121,7 @@ sal_Bool splitLastFromConfigurationPath(OUString const& _sInPath,
         {
             nPos =  _sInPath.lastIndexOf('/',nPos);
         }
-        else // defined behavior for invalid pathes
+        else // defined behavior for invalid paths
         {
             nStart = 0, nEnd = _sInPath.getLength();
             nPos = -1;
@@ -202,7 +202,7 @@ sal_Int32 lcl_findPrefixEnd(OUString const& _sNestedPath, OUString const& _sPref
     sal_Int32 nPrefixLength = _sPrefixPath.getLength();
 
     OSL_ENSURE(nPrefixLength == 0 || _sPrefixPath[nPrefixLength-1] != '/',
-                "Cannot handle slash-terminated prefix pathes");
+                "Cannot handle slash-terminated prefix paths");
 
     sal_Bool bIsPrefix;
     if (_sNestedPath.getLength() > nPrefixLength)

@@ -51,7 +51,7 @@
 namespace framework{
 
 //-----------------------------------------------
-/* Throws a SaxException in case a wrong formated XML
+/* Throws a SaxException in case a wrong formatted XML
    structure was detected.
 
    This macro combined the given comment with a generic
@@ -127,7 +127,7 @@ void SAL_CALL AcceleratorConfigurationReader::startElement(const ::rtl::OUString
     EXMLElement eElement = AcceleratorConfigurationReader::implst_classifyElement(sElement);
 
     // Note: We handle "accel:item" before "accel:acceleratorlist" to perform this operation.
-    // Because an item occures very often ... a list should occure one times only!
+    // Because an item occurs very often ... a list should occur one times only!
     if (eElement == E_ELEMENT_ITEM)
     {
         if (!m_bInsideAcceleratorList)
@@ -222,7 +222,7 @@ void SAL_CALL AcceleratorConfigurationReader::endElement(const ::rtl::OUString& 
     EXMLElement eElement = AcceleratorConfigurationReader::implst_classifyElement(sElement);
 
     // Note: We handle "accel:item" before "accel:acceleratorlist" to perform this operation.
-    // Because an item occures very often ... a list should occure one times only!
+    // Because an item occurs very often ... a list should occur one times only!
     if (eElement == E_ELEMENT_ITEM)
     {
         if (!m_bInsideAcceleratorItem)

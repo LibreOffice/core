@@ -220,7 +220,7 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
     {
         // create the master page for the report-header.
         // If there is a page-header or footer in the report that gets
-        // surpressed on the report-header, we have to insert a pagebreak
+        // suppressed on the report-header, we have to insert a pagebreak
         // afterwards.
 
         final String activePageFooter;
@@ -429,7 +429,7 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
      * @throws org.jfree.report.DataSourceException
      *          if there was an error accessing the datasource
      * @throws org.jfree.report.ReportProcessingException
-     *          if some other error occured.
+     *          if some other error occurred.
      */
     public void startReport(final ReportStructureRoot report)
             throws DataSourceException, ReportProcessingException

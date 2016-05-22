@@ -105,12 +105,12 @@ class AcceleratorConfigurationReader : public  css::xml::sax::XDocumentHandler
 
         //---------------------------------------
         /** @short  used to detect if an accelerator list
-                    occures recursive inside xml. */
+                    occurs recursive inside xml. */
         sal_Bool m_bInsideAcceleratorList;
 
         //---------------------------------------
         /** @short  used to detect if an accelerator item
-                    occures recursive inside xml. */
+                    occurs recursive inside xml. */
         sal_Bool m_bInsideAcceleratorItem;
 
         //---------------------------------------

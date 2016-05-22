@@ -143,7 +143,7 @@ class JobData : private ThreadHelpBase
         };
 
         /** Some jobs can be registered to "logical events", which are generated on demand if another document event
-            occures. E.g. "onDocumentOpened" in case "OnNew" or "OnLoad" was notified to the JobExecutor instance.
+            occurs. E.g. "onDocumentOpened" in case "OnNew" or "OnLoad" was notified to the JobExecutor instance.
             And normaly the original event is transported as parameter set to the executed job. But then such job
             can't differ between e.g. "OnNew" and "onDocumentOpened".
             That's why we must know, for which type of event the job was really triggered .-)

@@ -117,7 +117,7 @@ namespace connectivity
                     if creating the dialog instance fails
 
                 @throws ::com::sun::star::uno::RuntimeException
-                    if a serious error occures
+                    if a serious error occurs
 
                 @precond
                     Our mutex is locked.

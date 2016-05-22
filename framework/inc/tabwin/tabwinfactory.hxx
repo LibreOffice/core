@@ -55,7 +55,7 @@
 namespace framework
 {
 
-class TabWinFactory :  protected ThreadHelpBase                                 ,   // Struct for right initalization of mutex member! Must be first of baseclasses.
+class TabWinFactory :  protected ThreadHelpBase                                 ,   // Struct for right initialization of mutex member! Must be first of baseclasses.
                        public ::cppu::WeakImplHelper2< ::com::sun::star::lang::XSingleComponentFactory, com::sun::star::lang::XServiceInfo>
 {
     public:

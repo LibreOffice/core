@@ -42,7 +42,7 @@ class Treeconfig
         // read the config file, returns true in case a config file had been found
         bool parseConfig();
         // returns a string vector containing all active  repositories, returns true in case we are deep inside
-        // of a source tree. This could affect the behavour of the tool
+        // of a source tree. This could affect the behaviour of the tool
         bool getActiveRepositories( vector<string>& active_repos);
 };
 

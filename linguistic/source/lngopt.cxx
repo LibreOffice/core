@@ -58,7 +58,7 @@ using namespace com::sun::star::registry;
 ///////////////////////////////////////////////////////////////////////////
 
 
-// static member intialization
+// static member initialization
 SvtLinguOptions *   LinguOptions::pData = NULL;
 vos::ORefCount      LinguOptions::aRefCount;
 

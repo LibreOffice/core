@@ -86,7 +86,7 @@ namespace framework{
                 between these different "loading threads".
                 This is the reason to implement this dynamicly list.
 
-    @attention  I maked class LoaderThreads threadsafe! Using will be easier in a multithreaded environment.
+    @attention  I marked class LoaderThreads threadsafe! Using will be easier in a multithreaded environment.
                 struct DispatchBinding doesn't need that!
 *//*-*************************************************************************************************************/
 struct LoadBinding
@@ -180,7 +180,7 @@ class LoaderThreads : private ::std::vector< LoadBinding >
         }
 
         //---------------------------------------------------------------------------------------------------------
-        /// search for handler thread in list wich match given parameter and delete it
+        /// search for handler thread in list which match given parameter and delete it
         inline sal_Bool searchAndForget( const css::uno::Reference < css::frame::XDispatchResultListener >& rListener, LoadBinding& aBinding )
         {
             ResetableGuard aGuard( m_aLock );
@@ -199,7 +199,7 @@ class LoaderThreads : private ::std::vector< LoadBinding >
         }
 
         //---------------------------------------------------------------------------------------------------------
-        /// search for loader thread in list wich match given parameter and delete it
+        /// search for loader thread in list which match given parameter and delete it
         inline sal_Bool searchAndForget( const css::uno::Reference< css::frame::XFrameLoader > xLoader, LoadBinding& aBinding )
         {
             ResetableGuard aGuard( m_aLock );

@@ -98,7 +98,7 @@ class SbxBasicFormater {
     /* Basic command: Format$( number,format-string )
 
        Parameter:
-        dNumber     : number to be formated
+        dNumber     : number to be formatted
         sFormatStrg : the Format-String, e.g. ###0.0###
 
        Return value:

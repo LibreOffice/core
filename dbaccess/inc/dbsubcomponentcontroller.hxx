@@ -176,7 +176,7 @@ namespace dbaui
         virtual void        reconnect( sal_Bool _bUI );
                 sal_Bool    ensureConnected( sal_Bool _bUI )    { if ( !isConnected() ) reconnect( _bUI ); return isConnected(); }
 
-        /** called when our connection is beeing disposed
+        /** called when our connection is being disposed
             <p>The default implementation does a reconnect</p>
         */
         virtual void losingConnection( );

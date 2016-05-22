@@ -48,7 +48,7 @@ public class SwXTextRange extends TestCase {
             log.println( "creating a textdocument" );
             xTextDoc = SOF.createTextDoc( null );
         } catch ( com.sun.star.uno.Exception e ) {
-            // Some exception occures.FAILED
+            // Some exception occured.FAILED
             e.printStackTrace( log );
             throw new StatusException( "Couldn't create document", e );
         }

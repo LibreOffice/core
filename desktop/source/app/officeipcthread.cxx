@@ -676,7 +676,7 @@ void SAL_CALL OfficeIPCThread::run()
             // if we receive a request while the office is displaying some dialog or error during
             // bootstrap, that dialogs event loop might get events that are dispatched by this thread
             // we have to wait for cReady to be set by the real main loop.
-            // only reqests that dont dispatch events may be processed before cReady is set.
+            // only reqests that don't dispatch events may be processed before cReady is set.
             cReady.wait();
 
             // we might have decided to shutdown while we were sleeping

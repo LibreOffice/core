@@ -1649,7 +1649,7 @@ String SfxOrganizeDlg_Impl::GetPath_Impl( sal_Bool bOpen, const String& rFileNam
    [Return value]                 Empty sequence when users have clicked
                                   'Cancel', a sequence just containing one
                                   file name with path when they have
-                                  choosed one file or a sequence containing
+                                  chose one file or a sequence containing
                                   path and file names without path
 */
 

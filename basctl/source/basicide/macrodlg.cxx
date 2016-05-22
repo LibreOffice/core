@@ -648,7 +648,7 @@ IMPL_LINK( MacroChooser, EditModifyHdl, Edit *, pEdit )
             if ( !bFound )
             {
                 SvLBoxEntry* pEntry = aMacroBox.FirstSelected();
-                // Wenn es den Eintrag gibt ->Select ->Desription...
+                // If there is the entry ->Select ->Description...
                 if ( pEntry )
                     aMacroBox.Select( pEntry, sal_False );
             }

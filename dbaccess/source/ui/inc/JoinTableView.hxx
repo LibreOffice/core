@@ -205,7 +205,7 @@ namespace dbaui
         /** getConnectionCount returns how many connection belongs to single table
             @param  _pFromWin   the table for which connections should be found
 
-            @return the count of connections wich belongs to this table
+            @return the count of connections which belongs to this table
         */
         sal_Int32 getConnectionCount(const OTableWindow* _pFromWin) const;
 

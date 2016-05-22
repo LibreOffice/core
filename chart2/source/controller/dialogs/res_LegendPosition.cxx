@@ -245,7 +245,7 @@ void LegendPositionResources::writeToItemSet( SfxItemSet& rOutAttrs ) const
 
 IMPL_LINK( LegendPositionResources, PositionChangeHdl, RadioButton*, pRadio )
 {
-    //for each radio click ther are coming two change events
+    //for each radio click there are coming two change events
     //first uncheck of previous button -> ignore that call
     //the second call gives the check of the new button
     if( pRadio && pRadio->IsChecked() )

@@ -41,7 +41,7 @@ using ::rtl::OUString;
 
 namespace
 {
-    // dont show Invitation, when:
+    // don't show Invitation, when:
     // -nofirststartwizard commandline switch is present
     // [add additional conditions here]
     static bool lcl_IsInvitationAllowed()

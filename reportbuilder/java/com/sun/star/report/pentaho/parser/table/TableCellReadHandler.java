@@ -26,7 +26,7 @@ import com.sun.star.report.pentaho.model.TableCellElement;
 import com.sun.star.report.pentaho.parser.text.NoCDATATextContentReadHandler;
 
 /**
- * A read handler for table-cell contents. This is basicly a text-content
+ * A read handler for table-cell contents. This is basically a text-content
  * read handler; we may extend this implementation later.
  *
  * @author Thomas Morgner

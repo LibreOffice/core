@@ -79,7 +79,7 @@ namespace framework
 
 class GlobalSettings_Access : public ::com::sun::star::lang::XComponent      ,
                               public ::com::sun::star::lang::XEventListener  ,
-                              private ThreadHelpBase                         ,  // Struct for right initalization of mutex member! Must be first of baseclasses.
+                              private ThreadHelpBase                         ,  // Struct for right initialization of mutex member! Must be first of baseclasses.
                               public ::cppu::OWeakObject
 {
     public:

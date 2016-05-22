@@ -584,7 +584,7 @@ int msci_filterCppException(
 #if _MSC_VER < 1400 // msvcr80.dll cleans up, different from former msvcrs
                     // if (! rethrow):
                     // though this unknown exception leaks now, no user-defined
-                    // exception is ever thrown thru the binary C-UNO dispatcher
+                    // exception is ever thrown through the binary C-UNO dispatcher
                     // call stack.
 #endif
                 }
@@ -610,7 +610,7 @@ int msci_filterCppException(
         }
     }
     // though this unknown exception leaks now, no user-defined exception
-    // is ever thrown thru the binary C-UNO dispatcher call stack.
+    // is ever thrown through the binary C-UNO dispatcher call stack.
     RuntimeException exc(
         OUString( RTL_CONSTASCII_USTRINGPARAM(
                       "[msci_uno bridge error] unexpected "

@@ -30,7 +30,7 @@ import com.sun.star.uno.UnoRuntime;
      mode of automatic runtime Java classes to get rid of the need for
     queryInterface.
 
-    Because its not worth the efford to create a runtime generated wrapper
+    Because it's not worth the effort to create a runtime generated wrapper
     for this purpose, as it might be for OOo 2.0, you still have to use
     UnoRuntime.queryInterface() for interfaces which are optional or come
     from a subclass.  But for non optional interfaces you can already

@@ -36,7 +36,7 @@
     java -cp <your_path>/XMLValidator.jar org.unicode.cldr.util.XMLValidator your_data.xml
 
 
-    A second possiblity is:
+    A second possibility is:
 
     - temporarily (!) change the DOCTYPE of your file to read (all on one line)
       <!DOCTYPE Locale SYSTEM "http://hg.services.openoffice.org/DEV300/raw-file/tip/i18npool/source/localedata/data/locale.dtd">
@@ -143,7 +143,7 @@
 
 
 <!-- The LC_FORMAT element contains number format codes and may actually appear
-     twice (with the second ocurrence named LC_FORMAT_1). One section is
+     twice (with the second occurrence named LC_FORMAT_1). One section is
      mandatory and MUST contain at least all required format codes
      formatindex="0" to formatindex="47", MUST NOT contain formatindex 48 and
      49, and MAY contain other format codes. See below ATTLIST FormatElement
@@ -258,7 +258,7 @@
         Formatindex="44" uses no hour code but 100th seconds and the
         Time100SecSeparator.
         Formatindex="45" uses both [HH] hour code and 100th seconds to be able
-        to edit such time values without loosing information.
+        to edit such time values without losing information.
 
     Of usage="CURRENCY":
         formatindices 12, 13, 14, 15, 17 with [$xxx-yyy] notation must use the

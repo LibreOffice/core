@@ -121,7 +121,7 @@ namespace framework
             oslInterlockedCount                                                              m_nRefCount;
     };
 
-    class ImageManagerImpl : public ThreadHelpBase  // Struct for right initalization of mutex member! Must be first of baseclasses.
+    class ImageManagerImpl : public ThreadHelpBase  // Struct for right initialization of mutex member! Must be first of baseclasses.
     {
         public:
 

@@ -287,7 +287,7 @@
 Scenarios tabstops
 
 1) style:type of style:tab-stop is 'right' and earlier tabStop is not right
- -> Earlier text-nodes and following text-nodes, will be put into an inner table, with two TD first aligned left, with proceding textnodes, the latter aligned right.
+ -> Earlier text-nodes and following text-nodes, will be put into an inner table, with two TD first aligned left, with proceeding textnodes, the latter aligned right.
 
 2) style:type is 'right' and earlier tabStop is right
  -> following text-nodes, will be put into a right aligned TD

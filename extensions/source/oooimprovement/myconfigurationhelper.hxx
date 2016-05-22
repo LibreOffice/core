@@ -162,7 +162,7 @@ namespace oooimprovement
          *  The cached configuration access must be provided here.
          *
          *  @param  xCFG
-         *          the configuration root, where changes should be commited.
+         *          the configuration root, where changes should be committed.
          *
          *  @throw  css::uno::Any exceptions the underlying configuration can throw.
          *          E.g. uno::Exception if the provided configuration

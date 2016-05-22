@@ -267,7 +267,7 @@ private:
     try
     {
         // check the encryption data
-        // if the data correct is the stream will be opened successfuly
+        // if the data correct is the stream will be opened successfully
         // and immediately closed
         ::comphelper::OStorageHelper::SetCommonStorageEncryptionData( mxStorage, rEncryptionData );
 

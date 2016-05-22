@@ -419,7 +419,7 @@ $CM+;
 $AL_FOLLOW $CM+ / (
           [$BK $CR $LF $NL $ZW {eof}] |
           $SP+ $CM+ $SP |
-          $SP+ $CM* ([^$OP $CM $SP] | [$AL {eof}]));   # if LB 14 will match, need to surpress this break.
+          $SP+ $CM* ([^$OP $CM $SP] | [$AL {eof}]));   # if LB 14 will match, need to suppress this break.
                                                #  LB14 says    OP SP* x .        
                                                #    becomes    OP SP* x AL
                                                #    becomes    OP SP* x CM+ AL_FOLLOW

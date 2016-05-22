@@ -24,7 +24,7 @@
 #---------------------------------------------------------------------------
 # Description:
 # set_soenv generates a file that contains all necessary 
-# environment variables for the build proces of OpenOffice
+# environment variables for the build process of OpenOffice
 # on Linux, NetBSD, Solaris, Windows NT and Mac OS X/Darwin.
 #
 # Program steps.
@@ -954,7 +954,7 @@ if ($platform =~ m/cygwin/)
    {
       $JAVA_LIB             = $JAVA_HOME.$LIB;
    }
-   # Import SystemDrive enviroment variable
+   # Import SystemDrive environment variable
    use Env qw(SYSTEMDRIVE);
    # Change $SYSTEMDRIVE to lower case.
    $SYSTEMDRIVE          = lc $SYSTEMDRIVE;
@@ -1493,7 +1493,7 @@ elsif ($platform =~ m/darwin/)
     $GUIBASE  = "aqua";
 }
 else
-{  AddWarning( "set_soenv", "$platform not configured for system dependant include dir" );
+{  AddWarning( "set_soenv", "$platform not configured for system dependent include dir" );
 }
 
 #
@@ -2533,7 +2533,7 @@ sub WinFormat
 
 #----------------------------------------------------------
 # Function name: WinPath
-# Description:   Reformat a $sep seperated path using DOS paths.
+# Description:   Reformat a $sep separated path using DOS paths.
 # Arguments:     1. Variable (string)
 #                2. Separaror (string)
 # Return value:  Reformatted String

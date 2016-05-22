@@ -246,7 +246,7 @@ namespace comphelper
         // life time control
         /// checks whether the object is alive (returns <TRUE/> then) or disposed
         sal_Bool    isAlive() const;
-        /// checks for beeing alive. If the object is already disposed (i.e. not alive), an exception is thrown.
+        /// checks for being alive. If the object is already disposed (i.e. not alive), an exception is thrown.
         void        ensureAlive() const SAL_THROW( ( ::com::sun::star::lang::DisposedException ) );
 
         /** ensures that the object is disposed.

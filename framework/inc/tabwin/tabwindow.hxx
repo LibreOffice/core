@@ -73,7 +73,7 @@ class TabWindow :  public ::com::sun::star::lang::XTypeProvider             ,
                    public ::com::sun::star::awt::XWindowListener            ,
                    public ::com::sun::star::awt::XTopWindowListener         ,
                    public ::com::sun::star::awt::XSimpleTabController       ,
-                   protected ThreadHelpBase                                 ,   // Struct for right initalization of mutex member! Must be first of baseclasses.
+                   protected ThreadHelpBase                                 ,   // Struct for right initialization of mutex member! Must be first of baseclasses.
                    public ::cppu::OBroadcastHelper                          ,
                    public ::cppu::OPropertySetHelper                        ,   // => XPropertySet / XFastPropertySet / XMultiPropertySet
                    public ::cppu::OWeakObject

@@ -426,7 +426,7 @@ void LockHelper::downgradeWriteAccess()
     @param      -
     @return     A reference to a static mutex/lock member.
 
-    @onerror    No error should occure.
+    @onerror    No error should occur.
 *//*-*************************************************************************************************************/
 LockHelper& LockHelper::getGlobalLock( ::vos::IMutex* pSolarMutex )
 {
@@ -465,7 +465,7 @@ LockHelper& LockHelper::getGlobalLock( ::vos::IMutex* pSolarMutex )
     @param      -
     @return     A reference to a shared mutex.
 
-    @onerror    No error should occure.
+    @onerror    No error should occur.
 *//*-*************************************************************************************************************/
 ::osl::Mutex& LockHelper::getShareableOslMutex()
 {

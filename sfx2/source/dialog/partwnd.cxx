@@ -96,7 +96,7 @@ SfxPartChildWnd_Impl::~SfxPartChildWnd_Impl()
 //        pWin->ReleaseChildWindow_Impl();
 /*
     // Release frame and window.
-    // If frame reference is valid here ... start dieing from inside by calling dispose().
+    // If frame reference is valid here ... start dying from inside by calling dispose().
     SetFrame( NULL );
     pWindow = NULL;
 */

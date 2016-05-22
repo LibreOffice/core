@@ -74,8 +74,8 @@ namespace framework{
 #define PACKAGENAME_TYPEDETECTION_STANDARD          DECLARE_ASCII("Office.TypeDetection"                            )   /// Names of our configuration files.
 #define PACKAGENAME_TYPEDETECTION_ADDITIONAL        DECLARE_ASCII("Office.TypeDetectionAdditional"                  )
 #define CFG_PATH_SEPERATOR                          DECLARE_ASCII("/"                                               )   /// seperator for configuration paths
-#define PROPERTY_SEPERATOR                          sal_Unicode(',')                                                    /// seperator for own formated property strings of types and filters
-#define LIST_SEPERATOR                              sal_Unicode(';')                                                    /// seperator for own formated lists as part of our own formated type- or filter-string
+#define PROPERTY_SEPERATOR                          sal_Unicode(',')                                                    /// seperator for own formatted property strings of types and filters
+#define LIST_SEPERATOR                              sal_Unicode(';')                                                    /// seperator for own formatted lists as part of our own formatted type- or filter-string
 #define LOCALE_FALLBACK                             DECLARE_ASCII("en-US"                                           )   /// fallback, if configuration can't give us current set locale ...
 #define DEFAULT_FILTERCACHE_VERSION                 6                                                                   /// these implmentation of FilterCache support different version of TypeDetection.xml! This define the current set default one.
 
@@ -705,8 +705,8 @@ class DataContainer : private ThreadHelpBase
     @descr          We use the ConfigItem mechanism to read/write values from/to configuration.
                     This implementation could be used to handle standard AND additional filter configurations in the same way.
                     We set a data container pointer for filling or reading ... this class use it temp.
-                    After successfuly calling of read(), we can use filled container directly or merge it with an existing one.
-                    After successfuly calling of write() all values of given data container are flushed to our configuration.
+                    After successfully calling of read(), we can use filled container directly or merge it with an existing one.
+                    After successfully calling of write() all values of given data container are flushed to our configuration.
 
     @implements     -
     @base           ConfigItem
@@ -730,13 +730,13 @@ class FilterCFGAccess : public ::utl::ConfigItem
         void                        write           (       DataContainer&   rData                                  ,
                                                             DataContainer::ECFGType         eType                   ); // write values from given struct to configuration
 
-        static   ::rtl::OUString    encodeTypeData  ( const FileType&        aType                                  ); // build own formated string of type properties
+        static   ::rtl::OUString    encodeTypeData  ( const FileType&        aType                                  ); // build own formatted string of type properties
         static   void               decodeTypeData  ( const ::rtl::OUString& sData                                  ,
                                                             FileType&        aType                                  );
-        static   ::rtl::OUString    encodeFilterData( const Filter&          aFilter                                ); // build own formated string of filter properties
+        static   ::rtl::OUString    encodeFilterData( const Filter&          aFilter                                ); // build own formatted string of filter properties
         static   void               decodeFilterData( const ::rtl::OUString& sData                                  ,
                                                             Filter&          aFilter                                );
-        static   ::rtl::OUString    encodeStringList( const OUStringList&    lList                                  ); // build own formated string of OUStringList
+        static   ::rtl::OUString    encodeStringList( const OUStringList&    lList                                  ); // build own formatted string of OUStringList
         static   OUStringList       decodeStringList( const ::rtl::OUString& sValue                                 );
 
         void             setProductName                             (       OUStringHashMap&                                       lUINames        );

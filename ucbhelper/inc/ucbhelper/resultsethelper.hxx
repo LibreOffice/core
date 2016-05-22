@@ -123,7 +123,7 @@ private:
 
 public:
     /**
-      * Construtor.
+      * Constructor.
       *
       * @param rxSMgr is a Service Manager.
       */
@@ -132,7 +132,7 @@ public:
                 com::sun::star::lang::XMultiServiceFactory >& rxSMgr );
 
     /**
-      * Construtor.
+      * Constructor.
       *
       * @param rxSMgr is a Service Manager.
       * @param rCommand is the parameter for the open command that produces

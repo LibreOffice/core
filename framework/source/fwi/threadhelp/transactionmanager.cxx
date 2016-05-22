@@ -104,7 +104,7 @@ TransactionManager::~TransactionManager()
                 You can step during this ones only from the left to the right side and start at left side again!
                 (This is necessary e.g. for refcounted objects!)
                 This call will block till all current existing transactions was finished.
-                Follow results occure:
+                Following results occur:
                     E_INIT        :  All requests on this implementation are refused.
                                         It's your decision to react in a right way.
 
@@ -194,7 +194,7 @@ void  TransactionManager::setWorkingMode( EWorkingMode eMode )
     @param      -
     @return     Current set mode.
 
-    @onerror    No error should occure.
+    @onerror    No error should occur.
 *//*-*****************************************************************************************************/
 EWorkingMode TransactionManager::getWorkingMode() const
 {

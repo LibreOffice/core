@@ -66,7 +66,7 @@ public class UnoControlCheckBox extends TestCase {
             xTD2 = WriterTools.createTextDoc(
                            (XMultiServiceFactory) Param.getMSF());
         } catch (com.sun.star.uno.Exception e) {
-            // Some exception occures.FAILED
+            // Some exception occured.FAILED
             e.printStackTrace(log);
             throw new StatusException("Couldn't create document", e);
         }

@@ -182,10 +182,10 @@ static uno::Sequence< rtl::OUString > GetMultiPaths_Impl(
     }
     if (bSuccess)
     {
-        // build resulting sequence by adding the pathes in the following order:
+        // build resulting sequence by adding the paths in the following order:
         // 1. writable path
-        // 2. all user pathes
-        // 3. all internal pathes
+        // 2. all user paths
+        // 3. all internal paths
         sal_Int32 nMaxEntries = aInternalPaths.getLength() + aUserPaths.getLength();
         if (aWritablePath.getLength() > 0)
             ++nMaxEntries;

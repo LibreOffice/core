@@ -59,7 +59,7 @@ void * SAL_CALL component_getFactory( const sal_Char * pImplName, void * pServic
                                                 OleEmbeddedObjectFactory::impl_staticGetSupportedServiceNames() );
         }
 #ifdef WNT
-        // the following service makes sence only on windows
+        // the following service makes sense only on windows
         else if ( aImplName.equals( MSOLEDialogObjectCreator::impl_staticGetImplementationName() ) )
         {
             xFactory= ::cppu::createOneInstanceFactory( reinterpret_cast< lang::XMultiServiceFactory*>( pServiceManager ),
@@ -96,7 +96,7 @@ sal_Bool SAL_CALL component_writeInfo( void * /*pServiceManager*/, void * pRegis
                 xNewKey->createKey( rServices.getConstArray()[ind] );
 
 #ifdef WNT
-        // the following service makes sence only on windows
+        // the following service makes sense only on windows
             xNewKey = xKey->createKey( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/") ) +
                                         MSOLEDialogObjectCreator::impl_staticGetImplementationName() +
                                         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES") )  );

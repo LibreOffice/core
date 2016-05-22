@@ -137,7 +137,7 @@ public class SbaXGridControl extends TestCase {
             log.println("creating a textdocument");
             xTextDoc = SOF.createTextDoc(null);
         } catch (com.sun.star.uno.Exception e) {
-            // Some exception occures.FAILED
+            // Some exception occured.FAILED
             e.printStackTrace(log);
             throw new StatusException("Couldn't create document", e);
         }
@@ -273,19 +273,19 @@ public class SbaXGridControl extends TestCase {
             aControl4.setPropertyValue("DataField", "Title");
             aControl4.setPropertyValue("Label", "Title");
         } catch (com.sun.star.lang.IllegalArgumentException e) {
-            // Some exception occures.FAILED
+            // Some exception occured.FAILED
             log.println("!!! Couldn't create instance : " + e);
             throw new StatusException("Can't create column instances.", e);
         } catch (com.sun.star.lang.WrappedTargetException e) {
-            // Some exception occures.FAILED
+            // Some exception occured.FAILED
             log.println("!!! Couldn't create instance : " + e);
             throw new StatusException("Can't create column instances.", e);
         } catch (com.sun.star.beans.PropertyVetoException e) {
-            // Some exception occures.FAILED
+            // Some exception occured.FAILED
             log.println("!!! Couldn't create instance : " + e);
             throw new StatusException("Can't create column instances.", e);
         } catch (com.sun.star.beans.UnknownPropertyException e) {
-            // Some exception occures.FAILED
+            // Some exception occured.FAILED
             log.println("!!! Couldn't create instance : " + e);
             throw new StatusException("Can't create column instances.", e);
         }
@@ -469,7 +469,7 @@ public class SbaXGridControl extends TestCase {
             oCShape.setSize(size);
             oCShape.setPosition(position);
         } catch (com.sun.star.uno.Exception e) {
-            // Some exception occures.FAILED
+            // Some exception occured.FAILED
             System.out.println("Couldn't create Grid" + e);
             throw new StatusException("Couldn't create Grid", e);
         }

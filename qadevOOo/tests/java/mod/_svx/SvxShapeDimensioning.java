@@ -65,7 +65,7 @@ public class SvxShapeDimensioning extends TestCase {
             log.println( "creating a drawdoc" );
             xDrawDoc = DrawTools.createDrawDoc((XMultiServiceFactory)tParam.getMSF());
         } catch ( Exception e ) {
-            // Some exception occures.FAILED
+            // Some exception occured.FAILED
             e.printStackTrace( log );
             throw new StatusException( "Couldn't create document", e );
         }

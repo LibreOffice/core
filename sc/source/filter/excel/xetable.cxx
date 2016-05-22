@@ -1877,7 +1877,7 @@ void XclExpRow::Finalize( const ScfUInt16Vec& rColXFIndexes )
 
     // *** Fill gaps with BLANK/MULBLANK cell records *** ---------------------
 
-    /*  This is needed because nonexistant cells in Calc are not formatted at all,
+    /*  This is needed because nonexistent cells in Calc are not formatted at all,
         but in Excel they would have the column default format. Blank cells that
         are equal to the respective column default are removed later in this function. */
     if( !mbAlwaysEmpty )

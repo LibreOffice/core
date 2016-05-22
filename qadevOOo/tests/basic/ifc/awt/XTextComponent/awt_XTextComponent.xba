@@ -72,7 +72,7 @@ On Error Goto ErrHndl
     vInsertSelection.Min = 0
     vInsertSelection.Max = 3
     oObj.insertText(vInsertSelection,"new")
-    Out.Log("result of getText is: '" + oObj.getText() +"'. It sould be 'newSelection'")
+    Out.Log("result of getText is: '" + oObj.getText() +"'. It should be 'newSelection'")
     bOK = bOK AND (oObj.getText() = "newSelection")
     Test.MethodTested("insertText()", bOK)
 
@@ -95,7 +95,7 @@ On Error Goto ErrHndl
     vSelectionSelection.Min = 0
     vSelectionSelection.Max = 3
     oObj.setSelection(vSelectionSelection)
-    Out.Log("result of getSelectedText is: '" + oObj.getSelectedText() +"'. It sould be 'get'")
+    Out.Log("result of getSelectedText is: '" + oObj.getSelectedText() +"'. It should be 'get'")
     bOK = bOK AND (oObj.getSelectedText() = "get")
     Test.MethodTested("getSelectedText()", bOK)
 
@@ -121,7 +121,7 @@ On Error Goto ErrHndl
     oObj.setMaxTextLen(len2set)
     oObj.setText("0123456789ABCDE")
     cGetText = oObj.getText()
-    Out.Log("result of Len(cGetText) is: '" + Len(cGetText) + "'. It sould be >'" + len2set+"' ")
+    Out.Log("result of Len(cGetText) is: '" + Len(cGetText) + "'. It should be >'" + len2set+"' ")
     bOK = bOK AND (Len(cGetText) > len2set)
     Test.MethodTested("setMaxTextLen()", bOK)
 
@@ -133,7 +133,7 @@ On Error Goto ErrHndl
         len2set = 12
     endif
     oObj.setMaxTextLen(len2set)
-    Out.Log("result of getMaxTextLen is: '" + oObj.getMaxTextLen() +"'. It sould be '"+len2set+"'")
+    Out.Log("result of getMaxTextLen is: '" + oObj.getMaxTextLen() +"'. It should be '"+len2set+"'")
     bOK = bOK AND (oObj.getMaxTextLen() = len2set)
     Test.MethodTested("getMaxTextLen()", bOK)
 

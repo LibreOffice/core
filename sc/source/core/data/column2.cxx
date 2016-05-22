@@ -442,7 +442,7 @@ long ScColumn::GetNeededSize( SCROW nRow, OutputDevice* pDev,
             SfxItemSet* pSet = new SfxItemSet( pEngine->GetEmptyItemSet() );
             pPattern->FillEditItemSet( pSet, pCondSet );
 
-//          no longer needed, are setted with the text (is faster)
+//          no longer needed, are set with the text (is faster)
 //          pEngine->SetDefaults( pSet );
 
             if ( ((const SfxBoolItem&)pSet->Get(EE_PARA_HYPHENATE)).GetValue() ) {

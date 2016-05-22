@@ -182,7 +182,7 @@ class Job : public  css::lang::XTypeProvider
             indicates in which state the internal job currently exist.
 
             We can use this information to throw any suitable veto exception
-            to prevent the environment against dieing or suppress superflous dispose()
+            to prevent the environment against dying or suppress superflous dispose()
             calls at the job.
          */
         ERunState m_eRunState;

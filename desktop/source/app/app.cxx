@@ -3027,7 +3027,7 @@ void Desktop::OpenClients()
     // memory. May be this mechanism will be inconsistent if the configuration exists ...
     // but no document inside memory corrspond to this data.
     // Furter it's not acceptable to recover such documents without any UI. It can
-    // need some time, where the user wont see any results and wait for finishing the office startup ...
+    // need some time, where the user won't see any results and wait for finishing the office startup ...
     sal_Bool bAllowRecoveryAndSessionManagement = (
                                                     ( !pArgs->IsNoRestore() ) &&
                                                     ( !pArgs->IsHeadless()  ) &&
@@ -3290,7 +3290,7 @@ String GetURL_Impl(
         return rName;
     }
 
-    // dont touch file urls, those should already be in internal form
+    // don't touch file urls, those should already be in internal form
     // they won't get better here (#112849#)
     if (rName.CompareToAscii("file:" , 5) == COMPARE_EQUAL)
     {

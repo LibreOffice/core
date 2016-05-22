@@ -1379,7 +1379,7 @@ main/soltools/mkdepend/pr.c
 
 ##############################################################################
 #
-# Open Document Managment API, uses "OPEN DOCUMENT MANAGEMENT API LICENSE 1.0"
+# Open Document Management API, uses "OPEN DOCUMENT MANAGEMENT API LICENSE 1.0"
 # defined in the file. Text is equal to BSD license without advertising
 # A case for https://issues.apache.org/jira/browse/LEGAL-130
 #

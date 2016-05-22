@@ -1432,7 +1432,7 @@ public:
     SCROW           GetNextDifferentChangedRow( SCTAB nTab, SCROW nStart, bool bCareManualSize = true) const;
 
     // returns whether to export a Default style for this col/row or not
-    // nDefault is setted to one position in the current row/col where the Default style is
+    // nDefault is set to one position in the current row/col where the Default style is
     sal_Bool            GetColDefault( SCTAB nTab, SCCOL nCol, SCROW nLastRow, SCROW& nDefault);
     sal_Bool            GetRowDefault( SCTAB nTab, SCROW nRow, SCCOL nLastCol, SCCOL& nDefault);
 

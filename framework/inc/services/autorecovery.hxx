@@ -128,7 +128,7 @@ struct DispatchParams
 /**
     implements the functionality of AutoSave and AutoRecovery
     of documents - including features of an EmergencySave in
-    case a GPF occures.
+    case a GPF occurs.
  */
 class AutoRecovery  : public  css::lang::XTypeProvider
                     , public  css::lang::XServiceInfo
@@ -761,7 +761,7 @@ class AutoRecovery  : public  css::lang::XTypeProvider
                     only if removing oft he old file was successfully.
                     If this method returns without an exception - everything
                     was OK. Otherwhise the info struct can be analyzed to
-                    get more information, e.g. when the problem occures.
+                    get more information, e.g. when the problem occurs.
 
             @param  sBackupPath
                     the base path for saving such temp files.

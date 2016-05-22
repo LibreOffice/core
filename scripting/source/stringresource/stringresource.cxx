@@ -688,7 +688,7 @@ LocaleItem* StringResourceImpl::getItemForLocale
 }
 
 // Returns the LocalItem for a given locale, if it exists, otherwise NULL
-// This method performes a closest match search, at least the language must match
+// This method performs a closest match search, at least the language must match
 LocaleItem* StringResourceImpl::getClosestMatchItemForLocale( const Locale& locale )
 {
     LocaleItem* pRetItem = NULL;

@@ -183,7 +183,7 @@ void VPolarAngleAxis::createLabels()
         std::auto_ptr< TickFactory > apTickFactory( this->createTickFactory() );
 
         //create tick mark text shapes
-        //@todo: iterate through all tick depth wich should be labeled
+        //@todo: iterate through all tick depth which should be labeled
 
         EquidistantTickIter aTickIter( m_aAllTickInfos, m_aIncrement, 0, 0 );
         this->updateUnscaledValuesAtTicks( aTickIter );

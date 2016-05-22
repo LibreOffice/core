@@ -78,7 +78,7 @@ public class XMLMetaImporter extends TestCase {
             log.println( "creating an impress document" );
             xImpressDoc = SOF.createImpressDoc(null);
         } catch ( Exception e ) {
-            // Some exception occures.FAILED
+            // Some exception occured.FAILED
             e.printStackTrace( log );
             throw new StatusException( "Couldn't create document", e );
         }

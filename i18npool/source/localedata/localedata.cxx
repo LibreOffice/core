@@ -484,7 +484,7 @@ Sequence< CalendarItem > &LocaleData::getCalendarItemByName(const OUString& name
                     break;
                 }
             }
-            // Refered locale does not found, return name for en_US locale.
+            // Referred locale does not found, return name for en_US locale.
             if (index == cals.getLength()) {
                 cals = getAllCalendars(
                         Locale(OUString::createFromAscii("en"), OUString::createFromAscii("US"), OUString()));

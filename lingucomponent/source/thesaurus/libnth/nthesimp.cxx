@@ -48,7 +48,7 @@
 #include <set>
 #include <string.h>
 
-// values asigned to capitalization types
+// values assigned to capitalization types
 #define CAPTYPE_UNKNOWN 0
 #define CAPTYPE_NOCAP   1
 #define CAPTYPE_INITCAP 2

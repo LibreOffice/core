@@ -190,7 +190,7 @@ uno::Any SAL_CALL DataProviderHandler::getPropertyValue(const ::rtl::OUString & 
     switch(nId)
     {
         case PROPERTY_ID_CHARTTYPE:
-            // TODO: We need a possiblity to get the UI of the selected chart type
+            // TODO: We need a possibility to get the UI of the selected chart type
             //if( m_xChartModel.is() )
             //{
             //    uno::Reference< chart2::XDiagram > xDiagram( m_xChartModel->getFirstDiagram() );

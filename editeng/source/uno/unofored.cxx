@@ -222,7 +222,7 @@ sal_uInt16 GetSvxEditEngineItemState( EditEngine& rEditEngine, const ESelection&
             // if we already found an item
             if( pParaItem )
             {
-                // ... and its different to this one than the state is dont care
+                // ... and it's different to this one than the state is don't care
                 if( *pParaItem != *aAttrib.pAttr )
                     return SFX_ITEM_DONTCARE;
             }
@@ -272,7 +272,7 @@ sal_uInt16 GetSvxEditEngineItemState( EditEngine& rEditEngine, const ESelection&
             }
             else if( bGaps )
             {
-                // gaps and item not set in paragraph, thats a dont care
+                // gaps and item not set in paragraph, thats a don't care
                 return SFX_ITEM_DONTCARE;
             }
         }

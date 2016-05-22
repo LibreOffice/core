@@ -204,7 +204,7 @@ ZipPackage::~ZipPackage( void )
     // it should disconnect all the children from itself during destruction automatically.
     // So there is no need in explicit m_pRootFolder->releaseUpwardRef() call here any more
     // since m_pRootFolder has no parent and cleaning of it's children will be done automatically
-    // during m_pRootFolder dieing by refcount.
+    // during m_pRootFolder dying by refcount.
 }
 
 //--------------------------------------------------------
@@ -408,7 +408,7 @@ void ZipPackage::parseManifest()
 
             if ( !bManifestParsed )
             {
-                // the manifest.xml could not be successfuly parsed, this is an inconsistent package
+                // the manifest.xml could not be successfully parsed, this is an inconsistent package
                 if ( aPackageMediatype.compareToAscii( RTL_CONSTASCII_STRINGPARAM( "application/vnd." ) ) == 0 )
                 {
                     // accept only types that look similar to own mediatypes
@@ -1109,7 +1109,7 @@ void ZipPackage::WriteContentTypes( ZipOutputStream& aZipOut, const vector< uno:
         ( *aIter )[PKG_MNFST_MEDIATYPE].Value >>= aType;
         if ( aType.getLength() )
         {
-            // only nonempty type makes sence here
+            // only nonempty type makes sense here
             nSeqLength++;
             ( *aIter )[PKG_MNFST_FULLPATH].Value >>= aPath;
             aOverridesSequence[nSeqLength-1].First = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ) ) + aPath;

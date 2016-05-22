@@ -43,7 +43,7 @@ public class StarReportModule extends AbstractModule
      *
      * @param subSystem the subSystem.
      * @throws org.jfree.base.modules.ModuleInitializeException
-     *          if an error ocurred while initializing the module.
+     *          if an error occurred while initializing the module.
      */
     public void initialize(final SubSystem subSystem)
             throws ModuleInitializeException

@@ -87,7 +87,7 @@ public class ChXDataPoint extends TestCase {
             xChartDoc = (XChartDocument)
                 UnoRuntime.queryInterface(XChartDocument.class,xComp);
         } catch (com.sun.star.uno.Exception e) {
-            // Some exception occures.FAILED
+            // Some exception occured.FAILED
             e.printStackTrace( log );
             throw new StatusException( "Couldn't create document", e );
         }
@@ -134,7 +134,7 @@ public class ChXDataPoint extends TestCase {
             oDiagram = (XDiagram) xChartDoc.getDiagram();
             oObj = (XPropertySet) oDiagram.getDataPointProperties(1,1);
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            // Some exception occures.FAILED
+            // Some exception occured.FAILED
             e.printStackTrace( log );
             throw new StatusException( "Couldn't get ChXDataRowPoint_Point", e );
         }

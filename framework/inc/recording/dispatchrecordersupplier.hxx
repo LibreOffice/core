@@ -86,7 +86,7 @@ class DispatchRecorderSupplier  :   // interfaces
         //_______________________________________
         /** provided dispatch recorder of this supplier instance
 
-            @life   Is controlled from outside. Because this variable is setted
+            @life   Is controlled from outside. Because this variable is set
                     from there and not created internaly. But we release our
                     reference to it if we die.
          */

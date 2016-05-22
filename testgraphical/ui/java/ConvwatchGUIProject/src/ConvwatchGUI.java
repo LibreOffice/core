@@ -466,7 +466,7 @@ public class ConvwatchGUI extends javax.swing.JFrame
             h = _aLabel.getHeight();
         }
 
-        // dont access here anything to "Event Swing Thread"
+        // don't access here anything to "Event Swing Thread"
         @Override
         public ImageIcon doInBackground()
         {

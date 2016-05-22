@@ -982,7 +982,7 @@ void SvxRTFParser::AttrGroupEnd()   // den akt. Bearbeiten, vom Stack loeschen
                 // am Absatzanfang ? eine Position zurueck
                 sal_uLong nNd = pInsPos->GetNodeIdx();
                 MovePos( sal_False );
-                // if can not move backward then later dont move forward !
+                // if can not move backward then later don't move forward !
                 bCrsrBack = nNd != pInsPos->GetNodeIdx();
             }
 
@@ -991,7 +991,7 @@ void SvxRTFParser::AttrGroupEnd()   // den akt. Bearbeiten, vom Stack loeschen
                 ( pOld->pSttNd->GetIdx() == pInsPos->GetNodeIdx() &&
                 pOld->nSttCnt <= pInsPos->GetCntIdx() ))
 #if 0
-//BUG 68555 - dont test for empty paragraph or any range
+//BUG 68555 - don't test for empty paragraph or any range
                 && ( nOldSttNdIdx != pInsPos->GetNodeIdx() ||
                 pOld->nSttCnt != pInsPos->GetCntIdx() ||
                 !pOld->nSttCnt )
@@ -1005,7 +1005,7 @@ void SvxRTFParser::AttrGroupEnd()   // den akt. Bearbeiten, vom Stack loeschen
                     if( nOldSttNdIdx == pInsPos->GetNodeIdx() )
                     {
 #if 0
-//BUG 68555 - dont reset pard attrs, if the group not begins not at start of
+//BUG 68555 - don't reset pard attrs, if the group not begins not at start of
 //              paragraph
                         // Bereich innerhalb eines Absatzes:
                         // alle Absatz-Attribute und StyleNo loeschen

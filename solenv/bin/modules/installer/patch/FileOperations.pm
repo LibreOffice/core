@@ -184,7 +184,7 @@ sub Check ($)
             }
             if ( -f $destination_filename && ! -w $destination_filename)
             {
-                # Destination file aleady exists but can not be replaced.
+                # Destination file already exists but can not be replaced.
                 push @error_messages, sprintf("compress destination file %s exists but can not be replaced", $destination_filename);
             }
         }

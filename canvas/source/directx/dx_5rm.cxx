@@ -523,7 +523,7 @@ namespace dxcanvas
             virtual ::basegfx::B2IVector getSize();
 
         private:
-            /// Guard local methods against concurrent acces to RenderModule
+            /// Guard local methods against concurrent access to RenderModule
             class ImplRenderModuleGuard : private ::boost::noncopyable
             {
             public:

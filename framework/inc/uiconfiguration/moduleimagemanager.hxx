@@ -76,7 +76,7 @@ namespace framework
 {
     class ImageManagerImpl;
 
-    class ModuleImageManager :    private ThreadHelpBase                                          , // Struct for right initalization of mutex member! Must be first of baseclasses.
+    class ModuleImageManager :    private ThreadHelpBase                                          , // Struct for right initialization of mutex member! Must be first of baseclasses.
                                   public ::cppu::WeakImplHelper1< ::com::sun::star::ui::XImageManager>
     {
         public:

@@ -100,7 +100,7 @@ namespace comphelper
             return aStates;
 
 #ifdef _DEBUG
-        // precondition: property sequence is sorted (the algorythm below relies on this)
+        // precondition: property sequence is sorted (the algorithm below relies on this)
         {
             const ::rtl::OUString* pNames = _rPropertyNames.getConstArray();
             const ::rtl::OUString* pNamesCompare = pNames + 1;

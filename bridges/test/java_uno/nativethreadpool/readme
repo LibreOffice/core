@@ -24,7 +24,7 @@ pool as a C++ URP bridge.  This test currently only works on Linux Intel.
 
 There are two processes involved.  The client starts as a native process.  It
 first loads a Java component (Relay) via the in-process JNI bridge, which in
-turn starts to accept incomming URP connections.  The native part of the client
+turn starts to accept incoming URP connections.  The native part of the client
 then connects to the server, retrieves a thread-local token from it, and checks
 the token for correctness.  The server simply waits for a connection from the
 native part of the client, creates a connection to the Java part of the client,

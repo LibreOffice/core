@@ -249,7 +249,7 @@ void LoginApplication::impl_parseCommandline()
 {
     // Use vos::OStartupInfo for access to command line.
     // Step over all arguments, search for supported ones and try to get his values.
-    // Set it on our member. Caller of this method must control setted values.
+    // Set it on our member. Caller of this method must control set values.
     OStartupInfo aInfo;
 
     sal_uInt32  nCount      =   aInfo.getCommandArgCount()  ;

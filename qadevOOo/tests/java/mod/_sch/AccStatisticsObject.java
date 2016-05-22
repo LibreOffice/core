@@ -62,7 +62,7 @@ public class AccStatisticsObject extends TestCase {
                 UnoRuntime.queryInterface(XPropertySet.class, xChartDoc.getDiagram());
             diagProps.setPropertyValue("MeanValue",new Boolean(true));
         } catch (com.sun.star.uno.Exception e) {
-            // Some exception occures.FAILED
+            // Some exception occured.FAILED
             e.printStackTrace( log );
             throw new StatusException( "Couldn't create document", e );
         }

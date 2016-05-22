@@ -131,7 +131,7 @@ void OStorage_Impl::completeStorageStreamCopy_Impl(
         }
         else if ( nStorageType == embed::StorageFormats::OFOPXML )
         {
-            // TODO/LATER: in future it might make sence to provide the stream if there is one
+            // TODO/LATER: in future it might make sense to provide the stream if there is one
             uno::Reference< embed::XRelationshipAccess > xRelAccess( xDest, uno::UNO_QUERY_THROW );
             xRelAccess->clearRelationships();
             xRelAccess->insertRelationships( aRelInfo, sal_False );
@@ -458,7 +458,7 @@ void OStorage_Impl::RemoveReadOnlyWrap( OStorage& aStorage )
 //-----------------------------------------------
 void OStorage_Impl::OpenOwnPackage()
 {
-    OSL_ENSURE( m_bIsRoot, "Opening of the package has no sence!\n" );
+    OSL_ENSURE( m_bIsRoot, "Opening of the package has no sense!\n" );
 
     ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() );
 
@@ -786,7 +786,7 @@ void OStorage_Impl::CopyToStorage( const uno::Reference< embed::XStorage >& xDes
         xRels->insertRelationships( GetAllRelationshipsIfAny(), sal_False );
     }
 
-    // if possible the destination storage should be commited after successful copying
+    // if possible the destination storage should be committed after successful copying
     uno::Reference< embed::XTransactedObject > xObjToCommit( xDest, uno::UNO_QUERY );
     if ( xObjToCommit.is() )
         xObjToCommit->commit();
@@ -1021,7 +1021,7 @@ void OStorage_Impl::CopyLastCommitTo( const uno::Reference< embed::XStorage >& x
 {
     ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() );
 
-    OSL_ENSURE( m_xPackageFolder.is(), "A commited storage is incomplete!\n" );
+    OSL_ENSURE( m_xPackageFolder.is(), "A committed storage is incomplete!\n" );
     if ( !m_xPackageFolder.is() )
         throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
@@ -1062,10 +1062,10 @@ void OStorage_Impl::Commit()
 
     // in case of a new empty storage it is possible that the contents are still not read
     // ( the storage of course has no contents, but the initialization is postponed till the first use,
-    //   thus if a new storage was created and commited immediately it must be initialized here )
+    //   thus if a new storage was created and committed immediately it must be initialized here )
     ReadContents();
 
-    // if storage is commited it should have a valid Package representation
+    // if storage is committed it should have a valid Package representation
     OSL_ENSURE( m_xPackageFolder.is(), "The package representation should exist!\n" );
     if ( !m_xPackageFolder.is() )
         throw embed::InvalidStorageException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
@@ -1076,7 +1076,7 @@ void OStorage_Impl::Commit()
     uno::Reference< container::XNameContainer > xNewPackageFolder;
 
     // here the storage will switch to the temporary package folder
-    // if the storage was already commited and the parent was not commited after that
+    // if the storage was already committed and the parent was not committed after that
     // the switch should not be done since the package folder in use is a temporary one;
     // it can be detected by m_bCommited flag ( root storage doesn't need temporary representation )
     if ( !m_bCommited && !m_bIsRoot )
@@ -1144,7 +1144,7 @@ void OStorage_Impl::Commit()
         if ( !(*pElementIter)->m_bIsInserted )
         {
             // for now stream is opened in direct mode that means that in case
-            // storage is commited all the streams from it are commited in current state.
+            // storage is committed all the streams from it are committed in current state.
             // following two steps are separated to allow easily implement transacted mode
             // for streams if we need it in future.
             // Only hierarchical access uses transacted streams currently
@@ -1153,7 +1153,7 @@ void OStorage_Impl::Commit()
                 (*pElementIter)->m_pStream->Commit();
 
             // if the storage was not open, there is no need to commit it ???
-            // the storage should be checked that it is commited
+            // the storage should be checked that it is committed
             if ( (*pElementIter)->m_bIsStorage && (*pElementIter)->m_pStorage && (*pElementIter)->m_pStorage->m_bCommited )
             {
                 // it's temporary PackageFolder should be inserted instead of current one
@@ -1479,7 +1479,7 @@ SotElement_Impl* OStorage_Impl::InsertRawStream( ::rtl::OUString aName, const un
     // the mode is not needed for storage stream internal implementation
     SotElement_Impl* pNewElement = InsertElement( aName, sal_False );
     pNewElement->m_pStream = new OWriteStream_Impl( this, xPackageSubStream, m_xPackage, m_xFactory, sal_True, m_nStorageType, sal_False );
-    // the stream is inserted and must be treated as a commited one
+    // the stream is inserted and must be treated as a committed one
     pNewElement->m_pStream->SetToBeCommited();
 
     m_aChildrenList.push_back( pNewElement );
@@ -2141,7 +2141,7 @@ void OStorage::BroadcastModifiedIfNecessary()
 void OStorage::BroadcastTransaction( sal_Int8 nMessage )
 /*
     1 - preCommit
-    2 - commited
+    2 - committed
     3 - preRevert
     4 - reverted
 */
@@ -2623,7 +2623,7 @@ uno::Reference< embed::XStorage > SAL_CALL OStorage::openStorageElement(
       && !( nStorageMode & embed::ElementModes::WRITE ) )
         throw io::IOException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() ); // TODO: access denied
 
-    // it's allways possible to read written storage in this implementation
+    // it's always possible to read written storage in this implementation
     nStorageMode |= embed::ElementModes::READ;
 
     uno::Reference< embed::XStorage > xResult;
@@ -2937,7 +2937,7 @@ void SAL_CALL OStorage::copyStorageElementLastCommitTo(
       && aStorName.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "_rels" ) ) ) )
         throw lang::IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), 1 ); // unacceptable storage name
 
-    // it's allways possible to read written storage in this implementation
+    // it's always possible to read written storage in this implementation
     sal_Int32 nStorageMode = embed::ElementModes::READ;
 
     try
@@ -4127,7 +4127,7 @@ void SAL_CALL OStorage::commit()
 
         m_pImpl->Commit(); // the root storage initiates the storing to source
 
-        // when the storage is commited the parent is modified
+        // when the storage is committed the parent is modified
         if ( m_pImpl->m_pParent && m_pImpl->m_pParent->m_pAntiImpl )
             xParentModif = (util::XModifiable*)m_pImpl->m_pParent->m_pAntiImpl;
     }

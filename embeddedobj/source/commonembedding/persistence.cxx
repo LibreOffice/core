@@ -80,7 +80,7 @@ uno::Sequence< beans::PropertyValue > GetValuableArgs_Impl( const uno::Sequence<
           || aMedDescr[nInd].Name.equalsAscii( "DocumentTitle" )
           || aMedDescr[nInd].Name.equalsAscii( "InteractionHandler" )
           || aMedDescr[nInd].Name.equalsAscii( "JumpMark" )
-          // || aMedDescr[nInd].Name.equalsAscii( "Password" ) makes no sence for embedded objects
+          // || aMedDescr[nInd].Name.equalsAscii( "Password" ) makes no sense for embedded objects
           || aMedDescr[nInd].Name.equalsAscii( "Preview" )
           || aMedDescr[nInd].Name.equalsAscii( "ReadOnly" )
           || aMedDescr[nInd].Name.equalsAscii( "StartPresentation" )
@@ -812,7 +812,7 @@ void OCommonEmbeddedObject::StoreDocToStorage_Impl( const uno::Reference< embed:
         if ( !xTempStorage.is() )
             throw uno::RuntimeException(); // TODO:
 
-        // object storage must be commited automatically
+        // object storage must be committed automatically
         xTempStorage->copyToStorage( xStorage );
     }
 }
@@ -1221,7 +1221,7 @@ void SAL_CALL OCommonEmbeddedObject::storeToEntry( const uno::Reference< embed::
     sal_Bool bTryOptimization = sal_False;
     for ( sal_Int32 nInd = 0; nInd < lObjArgs.getLength(); nInd++ )
     {
-        // StoreVisualReplacement and VisualReplacement args have no sence here
+        // StoreVisualReplacement and VisualReplacement args have no sense here
         if ( lObjArgs[nInd].Name.equalsAscii( "CanTryOptimization" ) )
             lObjArgs[nInd].Value >>= bTryOptimization;
     }
@@ -1354,7 +1354,7 @@ void SAL_CALL OCommonEmbeddedObject::storeAsEntry( const uno::Reference< embed::
     sal_Bool bTryOptimization = sal_False;
     for ( sal_Int32 nInd = 0; nInd < lObjArgs.getLength(); nInd++ )
     {
-        // StoreVisualReplacement and VisualReplacement args have no sence here
+        // StoreVisualReplacement and VisualReplacement args have no sense here
         if ( lObjArgs[nInd].Name.equalsAscii( "CanTryOptimization" ) )
             lObjArgs[nInd].Value >>= bTryOptimization;
     }

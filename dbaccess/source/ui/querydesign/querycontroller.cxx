@@ -1160,7 +1160,7 @@ void SAL_CALL OQueryController::disposing( const EventObject& Source ) throw(Run
     if ( getContainer() && Source.Source.is() )
     {
         if ( Source.Source == m_aCurrentFrame.getFrame() )
-        {   // our frame is beeing disposed -> close the preview window (if we have one)
+        {   // our frame is being disposed -> close the preview window (if we have one)
             Reference< XFrame > xPreviewFrame( getContainer()->getPreviewFrame() );
             ::comphelper::disposeComponent( xPreviewFrame );
         }

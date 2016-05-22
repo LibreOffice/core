@@ -141,7 +141,7 @@ class QueryBuilder
         }
 
         //---------------------------------------------------------------------------------------------------------
-        // forget all setted params and start with empty ones
+        // forget all set params and start with empty ones
         // Attention: base of query isn't changed!
         //---------------------------------------------------------------------------------------------------------
         void resetParams()

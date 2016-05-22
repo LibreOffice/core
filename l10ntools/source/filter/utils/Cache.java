@@ -63,7 +63,7 @@ public class Cache
     public static final int FORMAT_UNSUPPORTED = -1;
 
     /** identify the configuration format of an office 6.0.
-     *  The own formated data string is used. */
+     *  The own formatted data string is used. */
     public static final int FORMAT_60 = 0;
 
     /** identify the configuration format of an office 6.y.
@@ -310,7 +310,7 @@ public class Cache
      *                      - ...
      *
      *  @return [java.lang.String]
-     *          a formated string, which contains al statistic data.
+     *          a formatted string, which contains al statistic data.
      */
     public synchronized java.lang.String getStatistics()
     {
@@ -1680,7 +1680,7 @@ public class Cache
      *          means the format of the generated xml source.
      *
      *  @return [java.lang.String]
-     *          a xml formated string, which contains all properties
+     *          a xml formatted string, which contains all properties
      *          for this container item.
      */
     public synchronized java.lang.String getItemAsXML(int              eItemType ,

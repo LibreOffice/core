@@ -572,7 +572,7 @@ void PropBrw::Update( OSectionView* pNewView )
     }
     catch ( Exception& )
     {
-        DBG_ERROR( "PropBrw::Update: Exception occured!" );
+        DBG_ERROR( "PropBrw::Update: Exception occurred!" );
     }
 }
 //----------------------------------------------------------------------------
@@ -594,7 +594,7 @@ void PropBrw::Update( const uno::Reference< uno::XInterface>& _xReportComponent)
         }
         catch ( Exception& )
         {
-            DBG_ERROR( "PropBrw::Update: Exception occured!" );
+            DBG_ERROR( "PropBrw::Update: Exception occurred!" );
         }
     }
 }

@@ -110,7 +110,7 @@ class TargetHelper
                     and the value must not a well known special target.
 
             @param  sName
-                    the new frame name, which sould be checked.
+                    the new frame name, which should be checked.
          */
         static sal_Bool isValidNameForFrame(const ::rtl::OUString& sName);
 };

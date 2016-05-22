@@ -949,7 +949,7 @@ void PathSettings::impl_setPathValue(      sal_Int32      nID ,
 
     // first we should try to store the changed (copied!) path ...
     // In case an error occure on saving time an exception is thrown ...
-    // If no exception occures we can update our internal cache (means
+    // If no exception occurs we can update our internal cache (means
     // we can overwrite pOrgPath !
     impl_storePath(aChangePath);
     pOrgPath->takeOver(aChangePath);

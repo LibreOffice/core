@@ -39,7 +39,7 @@ namespace framework
 {
 
 class FWE_DLLPUBLIC PropertySetContainer : public com::sun::star::container::XIndexContainer    ,
-                             public ThreadHelpBase                              ,   // Struct for right initalization of mutex member! Must be first of baseclasses.
+                             public ThreadHelpBase                              ,   // Struct for right initialization of mutex member! Must be first of baseclasses.
                              public ::cppu::OWeakObject
 {
     public:

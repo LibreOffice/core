@@ -334,7 +334,7 @@ void Outliner::SetNumberingStartValue( sal_uInt16 nPara, sal_Int16 nNumberingSta
 
         pPara->SetNumberingStartValue( nNumberingStartValue );
         // --> OD 2009-03-10 #i100014#
-        // It is not a good idea to substract 1 from a count and cast the result
+        // It is not a good idea to subtract 1 from a count and cast the result
         // to sal_uInt16 without check, if the count is 0.
         ImplCheckParagraphs( nPara, (sal_uInt16) (pParaList->GetParagraphCount()) );
         // <--
@@ -362,7 +362,7 @@ void Outliner::SetParaIsNumberingRestart( sal_uInt16 nPara, sal_Bool bParaIsNumb
 
         pPara->SetParaIsNumberingRestart( bParaIsNumberingRestart );
         // --> OD 2009-03-10 #i100014#
-        // It is not a good idea to substract 1 from a count and cast the result
+        // It is not a good idea to subtract 1 from a count and cast the result
         // to sal_uInt16 without check, if the count is 0.
         ImplCheckParagraphs( nPara, (sal_uInt16) (pParaList->GetParagraphCount()) );
         // <--
@@ -435,7 +435,7 @@ OutlinerParaObject* Outliner::CreateParaObject( sal_uInt16 nStartPara, sal_uInt1
         nCount = sal::static_int_cast< sal_uInt16 >(
             pParaList->GetParagraphCount() - nStartPara );
 
-    // When a new OutlinerParaObject is created because a paragraph is just beeing deleted,
+    // When a new OutlinerParaObject is created because a paragraph is just being deleted,
     // it can happen that the ParaList is not updated yet...
     if ( ( nStartPara + nCount ) > pEditEngine->GetParagraphCount() )
         nCount = pEditEngine->GetParagraphCount() - nStartPara;
@@ -662,7 +662,7 @@ void Outliner::SetText( const OutlinerParaObject& rPObj )
     }
 
     // --> OD 2009-03-10 #i100014#
-    // It is not a good idea to substract 1 from a count and cast the result
+    // It is not a good idea to subtract 1 from a count and cast the result
     // to sal_uInt16 without check, if the count is 0.
     ImplCheckParagraphs( 0, (sal_uInt16) (pParaList->GetParagraphCount()) );
     // <--
@@ -709,7 +709,7 @@ void Outliner::AddText( const OutlinerParaObject& rPObj )
     DBG_ASSERT( pEditEngine->GetParagraphCount()==pParaList->GetParagraphCount(), "SetText: OutOfSync" );
 
     // --> OD 2009-03-10 #i100014#
-    // It is not a good idea to substract 1 from a count and cast the result
+    // It is not a good idea to subtract 1 from a count and cast the result
     // to sal_uInt16 without check, if the count is 0.
     ImplCheckParagraphs( (sal_uInt16)nPara, (sal_uInt16) (pParaList->GetParagraphCount()) );
     // <--

@@ -56,7 +56,7 @@ namespace framework{
 //*****************************************************************************************************************
 // Hash code function for using in all hash maps of follow implementation.
 
-class FWE_DLLPUBLIC OReadEventsDocumentHandler :    private ThreadHelpBase, // Struct for right initalization of lock member! Must be first of baseclasses.
+class FWE_DLLPUBLIC OReadEventsDocumentHandler :    private ThreadHelpBase, // Struct for right initialization of lock member! Must be first of baseclasses.
                                     public ::cppu::WeakImplHelper1< ::com::sun::star::xml::sax::XDocumentHandler >
 {
     public:
@@ -146,7 +146,7 @@ class FWE_DLLPUBLIC OReadEventsDocumentHandler :    private ThreadHelpBase, // S
         ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XLocator >    m_xLocator;
 };
 
-class FWE_DLLPUBLIC OWriteEventsDocumentHandler : private ThreadHelpBase // Struct for right initalization of lock member! Must be first of baseclasses.
+class FWE_DLLPUBLIC OWriteEventsDocumentHandler : private ThreadHelpBase // Struct for right initialization of lock member! Must be first of baseclasses.
 {
     public:
         OWriteEventsDocumentHandler(

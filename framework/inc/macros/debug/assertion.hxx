@@ -48,7 +48,7 @@
 //
 //      active for "non product":
 //
-//      4)  LOG_ASSERT( BCONDITION, STEXT )                                 assert some critical errors wich depend from given condition
+//      4)  LOG_ASSERT( BCONDITION, STEXT )                                 assert some critical errors which depend from given condition
 //      4a) LOG_ASSERT2( BCONDITION, SMETHOD, STEXT )                       same like 4) + additional location of error
 //      5)  LOG_ERROR( SMETHOD, STEXT )                                     show errors without any condition
 //

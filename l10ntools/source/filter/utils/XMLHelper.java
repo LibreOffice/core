@@ -475,7 +475,7 @@ public class XMLHelper
 
         // step over all list items and add it to a string buffer
         // Every item will be separated by a default separator "\n" first.
-        // Because "\n" is not a valid separator at all and can`t occure inside
+        // Because "\n" is not a valid separator at all and can`t occur inside
         // our list items. During we step over all items, we check if our current separator
         // (we use a list of possible ones!) clash with an item.
         // If it clash - we step to the next possible separator.
@@ -574,7 +574,7 @@ public class XMLHelper
 
         for (int t=0; t<nPrettyTabs; ++t)
             sXML.append("\t");
-        // !Our localized values must be formated at a deeper coloum
+        // !Our localized values must be formatted at a deeper coloum
         // then its property name!
         ++nPrettyTabs;
 

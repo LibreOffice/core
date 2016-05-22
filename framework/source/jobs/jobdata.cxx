@@ -158,7 +158,7 @@ JobData::~JobData()
 
 //________________________________
 /**
-    @short      initalize this instance as a job with configuration
+    @short      initialize this instance as a job with configuration
     @descr      They given alias can be used to address some configuraton data.
                 We read it and fill our internal structures. Of course old informations
                 will be lost doing so.
@@ -230,7 +230,7 @@ void JobData::setAlias( const ::rtl::OUString& sAlias )
 
 //________________________________
 /**
-    @short      initalize this instance as a job without configuration
+    @short      initialize this instance as a job without configuration
     @descr      This job has no configuration data. We have to forget all old informations
                 and set only some of them new, so this instance can work.
 
@@ -589,7 +589,7 @@ sal_Bool isEnabled( const ::rtl::OUString& sAdminTime ,
     sal_Bool bValidUser  = aISOPattern.Matches(sUserTime );
 
     // We check for "isEnabled()" here only.
-    // Note further: ISO8601 formated strings can be compared as strings directly!
+    // Note further: ISO8601 formatted strings can be compared as strings directly!
     return (
             (!bValidAdmin && !bValidUser                         ) ||
             ( bValidAdmin &&  bValidUser && sAdminTime>=sUserTime)

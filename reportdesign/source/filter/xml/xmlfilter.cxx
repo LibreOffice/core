@@ -243,7 +243,7 @@ sal_Int32 ReadThroughComponent(
             if ( !xStorage->hasByName( sStreamName ) || !xStorage->isStreamElement( sStreamName ) )
             {
                 // stream name not found! Then try the compatibility name.
-                // if no stream can be opened, return immediatly with OK signal
+                // if no stream can be opened, return immediately with OK signal
 
                 // do we even have an alternative name?
                 if ( NULL == pCompatibilityStreamName )
@@ -655,7 +655,7 @@ sal_Bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
                         // TODO/LATER: no way to transport the error outside from the filter!
                         break;
                     }
-                    // fall through intented
+                    // fall through intended
                 default:
                     {
                         // TODO/LATER: this is completely wrong! Filter code should never call ErrorHandler directly! But for now this is the only way!

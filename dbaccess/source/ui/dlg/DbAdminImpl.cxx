@@ -414,7 +414,7 @@ Reference< XDriver > ODbDataSourceAdministrationHelper::getDriver(const ::rtl::O
     // get the global DriverManager
     Reference< XDriverAccess > xDriverManager;
     String sCurrentActionError = String(ModuleRes(STR_COULDNOTCREATE_DRIVERMANAGER));
-        // in case an error occures
+        // in case an error occurs
     sCurrentActionError.SearchAndReplaceAscii("#servicename#", (::rtl::OUString)SERVICE_SDBC_CONNECTIONPOOL);
     try
     {

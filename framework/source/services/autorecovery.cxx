@@ -2398,7 +2398,7 @@ void AutoRecovery::implts_saveOneDoc(const ::rtl::OUString&                     
                                            AutoRecovery::TDocumentInfo&                        rInfo            ,
                                      const css::uno::Reference< css::task::XStatusIndicator >& xExternalProgress)
 {
-    // no document? => can occure if we loaded our configuration with files,
+    // no document? => can occur if we loaded our configuration with files,
     // which couldnt be recovered successfully. In such case we have all needed informations
     // excepting the real document instance!
 
@@ -2436,7 +2436,7 @@ void AutoRecovery::implts_saveOneDoc(const ::rtl::OUString&                     
     Reference< XDocumentRecovery > xDocRecover(rInfo.Document, css::uno::UNO_QUERY_THROW);
 
     // safe the state about "trying to save"
-    // ... we need it for recovery if e.g. a crash occures inside next line!
+    // ... we need it for recovery if e.g. a crash occurs inside next line!
     rInfo.DocumentState |= AutoRecovery::E_TRY_SAVE;
     implts_flushConfigItem(rInfo);
 
@@ -3538,7 +3538,7 @@ sal_Bool AutoRecovery::impl_enoughDiscSpace(sal_Int32 nRequiredSpace)
     return sal_False;
     #endif
 
-    // In case an error occures and we are not able to retrieve the needed information
+    // In case an error occurs and we are not able to retrieve the needed information
     // it's better to "disable" the feature ShowErrorOnFullDisc !
     // Otherwhise we start a confusing process of error handling ...
 
@@ -3590,7 +3590,7 @@ void AutoRecovery::impl_establishProgress(const AutoRecovery::TDocumentInfo&    
     // for loading documents into this frame)!
     // But if no frame exists ... we can try to locate it using any frame bound to the provided
     // document. Of course we must live without any frame in case the document does not exists at this
-    // point. But this state shouldn't occure. In such case xNewFrame should be valid ... hopefully .-)
+    // point. But this state shouldn't occur. In such case xNewFrame should be valid ... hopefully .-)
     css::uno::Reference< css::frame::XFrame > xFrame = xNewFrame;
     if (
         (!xFrame.is()       ) &&
@@ -3656,7 +3656,7 @@ void AutoRecovery::impl_forgetProgress(const AutoRecovery::TDocumentInfo&       
     // for loading documents into this frame)!
     // But if no frame exists ... we can try to locate it using any frame bound to the provided
     // document. Of course we must live without any frame in case the document does not exists at this
-    // point. But this state shouldn't occure. In such case xNewFrame should be valid ... hopefully .-)
+    // point. But this state shouldn't occur. In such case xNewFrame should be valid ... hopefully .-)
     css::uno::Reference< css::frame::XFrame > xFrame = xNewFrame;
     if (
         (!xFrame.is()       ) &&

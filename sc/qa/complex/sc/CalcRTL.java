@@ -232,7 +232,7 @@ public class CalcRTL /* extends ComplexTestCase */
             System.out.println("creating a sheetdocument");
             xSheetDoc = SOF.createCalcDoc(null);
         } catch (com.sun.star.uno.Exception e) {
-            // Some exception occures.FAILED
+            // Some exception occured.FAILED
             worked = false;
             e.printStackTrace(/*(PrintWriter) log*/ System.out);
         }

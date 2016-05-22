@@ -81,7 +81,7 @@ struct tIMPLExtractedArguments
 /*-************************************************************************************************************//**
     @short      factory to create frameloader-objects
     @descr      These class can be used to create new loader for specified contents.
-                We use cached values of the registry to lay down, wich frameloader match
+                We use cached values of the registry to lay down, which frameloader match
                 a given URL or filtername. To do this, we use the XMultiServiceFactory-interface.
 
     @ATTENTION  In a specialmode of these implementation we support a simple filterdetection.
@@ -100,7 +100,7 @@ struct tIMPLExtractedArguments
     @devstatus  deprecated
 *//*-*************************************************************************************************************/
 
-class FrameLoaderFactory    :   public ThreadHelpBase                           ,       // Struct for right initalization of mutex member! Mst first of baseclasses
+class FrameLoaderFactory    :   public ThreadHelpBase                           ,       // Struct for right initialization of mutex member! Mst first of baseclasses
                                 public ::cppu::WeakImplHelper3< ::com::sun::star::lang::XServiceInfo,::com::sun::star::lang::XMultiServiceFactory,::com::sun::star::container::XNameAccess >
 {
     //-------------------------------------------------------------------------------------------------------------

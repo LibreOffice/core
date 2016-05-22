@@ -95,7 +95,7 @@ class SessionListener :   // interfaces
                         public css::frame::XStatusListener,
                         public css::lang::XServiceInfo,
                         // baseclasses (order important for initialization!)
-                        // Struct for right initalization of mutex member! Must be the first one of baseclasses!
+                        // Struct for right initialization of mutex member! Must be the first one of baseclasses!
                         private ThreadHelpBase,
                         public  ::cppu::OWeakObject
 {

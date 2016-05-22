@@ -783,7 +783,7 @@ void SAL_CALL Job::queryTermination( /*IN*/ const css::lang::EventObject& ) thro
     @short  inform us about office termination
     @descr  Instead of the method queryTermination(), here is no chance to disagree with that.
             We have to accept it and cancel all current processes inside.
-            It can occure only, if job was not already started if queryTermination() was called here ..
+            It can occur only if job was not already started if queryTermination() was called here ..
             Then we had not throwed a veto exception. But now we must agree with this situation and break
             all our internal processes. Its not a good idea to mark this instance as non startable any longer
             inside queryTermination() if no job was unning too. Because that would disable this job and may

@@ -190,7 +190,7 @@ namespace dbaui
         ::rtl::OUString getRealName() const;
         /// check if the datasource should is about to be renamed (which means the original name does not equal the real name
         sal_Bool        isRenamed() const { return !getRealName().equals(getOriginalName()); }
-        /// get the key used to acces the object in the data source map
+        /// get the key used to access the object in the data source map
         sal_Int32       getAccessKey() const { return m_nAccessKey; }
 
         /// return the datasource the object represents

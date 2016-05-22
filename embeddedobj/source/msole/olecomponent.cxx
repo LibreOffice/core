@@ -444,7 +444,7 @@ OleComponent::OleComponent( const uno::Reference< lang::XMultiServiceFactory >& 
     OSL_ENSURE( m_pUnoOleObject, "No owner object is provided!" );
 
     HRESULT hr = OleInitialize( NULL );
-    OSL_ENSURE( hr == S_OK || hr == S_FALSE, "The ole can not be successfuly initialized\n" );
+    OSL_ENSURE( hr == S_OK || hr == S_FALSE, "The ole can not be successfully initialized\n" );
     if ( hr == S_OK || hr == S_FALSE )
         m_bOleInitialized = sal_True;
 
@@ -1554,7 +1554,7 @@ uno::Any SAL_CALL OleComponent::getTransferData( const datatransfer::DataFlavor&
         if ( FAILED( hr ) || !pDataObject )
             throw io::IOException(); // TODO: transport error code
 
-        // The following optimization does not make much sence currently just because
+        // The following optimization does not make much sense currently just because
         // only one aspect is supported, and only three formats for the aspect are supported
         // and moreover it is not guarantied that the once returned format will be supported further
         // example - i52106

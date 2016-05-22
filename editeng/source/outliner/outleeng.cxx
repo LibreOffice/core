@@ -228,7 +228,7 @@ void OutlinerEditEng::SetParaAttribs( sal_uInt16 nPara, const SfxItemSet& rSet )
 
         pOwner->ImplCheckNumBulletItem( (sal_uInt16)nPara );
         // --> OD 2009-03-10 #i100014#
-        // It is not a good idea to substract 1 from a count and cast the result
+        // It is not a good idea to subtract 1 from a count and cast the result
         // to sal_uInt16 without check, if the count is 0.
         pOwner->ImplCheckParagraphs( (sal_uInt16)nPara, (sal_uInt16) (pOwner->pParaList->GetParagraphCount()) );
         // <--

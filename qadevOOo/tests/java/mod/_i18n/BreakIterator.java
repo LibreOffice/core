@@ -67,7 +67,7 @@ public class BreakIterator extends TestCase {
             log.println( "creating a drawdoc" );
             xTextDoc = SOF.loadDocument(utils.getFullTestURL("Iterator.sxw"));
         } catch ( com.sun.star.uno.Exception e ) {
-            // Some exception occures.FAILED
+            // Some exception occured.FAILED
             e.printStackTrace( log );
             throw new StatusException( "Couldn't load document", e );
         }

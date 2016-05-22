@@ -200,7 +200,7 @@ sub do_dos
         print "DOS: $command\n";
     }
     else {
-        # HACK: remove MACOSX stuff which is wrongly labled with dos
+        # HACK: remove MACOSX stuff which is wrongly labeled with dos
         # better: fix broken d.lst
         return if ( $command =~ /MACOSX/ );
         $command =~ s#/#\\#g if $^O eq 'MSWin32';

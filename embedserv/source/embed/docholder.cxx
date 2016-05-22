@@ -1170,7 +1170,7 @@ HRESULT DocumentHolder::SetVisArea( const RECTL *pRect )
         for ( sal_Int32 nInd = 0; nInd < aArgs.getLength(); nInd++ )
             if ( aArgs[nInd].Name.equalsAscii( "WinExtent" ) )
             {
-                // should allways be there
+                // should always be there
                 uno::Sequence< sal_Int32 > aRect(4);
 
                 aRect[0] = pRect->left;

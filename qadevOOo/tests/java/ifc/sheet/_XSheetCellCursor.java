@@ -251,7 +251,7 @@ public class _XSheetCellCursor extends MultiMethodTest {
         }
 
         mergeRange.merge(true);
-        log.println("DB: Successfuly merged.") ;
+        log.println("DB: Successfully merged.") ;
 
         oObj.collapseToMergedArea() ;
         log.println("DB: Successfully collapseToMergedArea() method called");

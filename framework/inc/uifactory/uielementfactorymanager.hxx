@@ -113,7 +113,7 @@ namespace framework
 };
 
 
-class UIElementFactoryManager :  private ThreadHelpBase                                             ,   // Struct for right initalization of mutex member! Must be first of baseclasses.
+class UIElementFactoryManager :  private ThreadHelpBase                                             ,   // Struct for right initialization of mutex member! Must be first of baseclasses.
                                  public ::cppu::WeakImplHelper3< ::com::sun::star::lang::XServiceInfo,
                                                                  ::com::sun::star::ui::XUIElementFactory,
                                                                  ::com::sun::star::ui::XUIElementFactoryRegistration>

@@ -91,7 +91,7 @@ public class SwXTextView extends TestCase {
             debug = tParam.getBool(util.PropertyName.DEBUG_IS_ACTIVE);
 
         } catch ( com.sun.star.uno.Exception e ) {
-            // Some exception occures.FAILED
+            // Some exception occured.FAILED
             e.printStackTrace( log );
             throw new StatusException( "Couldn't create document", e );
         }

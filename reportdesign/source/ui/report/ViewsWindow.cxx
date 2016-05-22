@@ -1108,7 +1108,7 @@ void OViewsWindow::BegDragObj(const Point& _aPnt, SdrHdl* _pHdl,const OSectionVi
     // Create drag lines over all viewable Views
     // Therefore we need to identify the marked objects
     // and create temporary objects on all other views at the same position
-    // relative to its occurance.
+    // relative to its occurrence.
 
     OSL_TRACE("BegDragObj createInvisible Objects\n" );
     int nViewCount = 0;
@@ -1331,7 +1331,7 @@ void OViewsWindow::EndDragObj(sal_Bool _bControlKeyPressed, const OSectionView* 
     {
         EndDragObj_removeInvisibleObjects();
 
-        // we need to manipulate the current clickpoint, we substract the old delta from BeginDrag
+        // we need to manipulate the current clickpoint, we subtract the old delta from BeginDrag
         // OSectionView* pInSection = getSectionRelativeToPosition(_pSection, aPnt);
         // aNewPos.X() -= m_aDragDelta.X();
         // aNewPos.Y() -= m_aDragDelta.Y();

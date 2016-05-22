@@ -48,7 +48,7 @@ public interface OutputRepository
      */
     OutputStream createOutputStream(final String name, final String mimeType) throws IOException;
 
-    /** allows to acces sub repositories inside this repository
+    /** allows to access sub repositories inside this repository
      *
      * @param name describes the path to the sub repository
      * @param mimeType

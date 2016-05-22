@@ -378,7 +378,7 @@ namespace dbaccess
             Reference< XStorage > xComponentsStor( xRecoveryStorage->openStorageElement(
                 SubComponentRecovery::getComponentsStorageName( eComponentType ), ElementModes::READ ), UNO_QUERY_THROW );
 
-            // loop thru all components of this type
+            // loop through all components of this type
             for (   MapStringToCompDesc::const_iterator stor = map->second.begin();
                     stor != map->second.end();
                     ++stor

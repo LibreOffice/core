@@ -333,7 +333,7 @@ class cIMPL_MainThreadExecutorRequest
     private:
 
         eIMPL_PluginCommand                             m_eCommand              ;   /// switch to specify forward function
-        PlugInFrame*                                    m_pPluginInstance       ;   /// instance wich has started this swicth mechanism and wish to called back from us
+        PlugInFrame*                                    m_pPluginInstance       ;   /// instance which has started this swicth mechanism and wish to called back from us
         css::uno::Reference< css::uno::XInterface >     m_xPluginInstance       ;   /// reference to our plugin frame to prevent that plugin frame dies before we call back
         css::uno::Any                                   m_aPlatformWindowHandle ;   /// parameter for XPluginInstance->createWindow()
         sal_Bool                                        m_bEmbedded             ;   /// parameter for XPluginInstance->createWindow()

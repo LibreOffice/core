@@ -55,7 +55,7 @@ void Uri::init() const
         // Check for proper length: must be at least length of <sheme>:/
         if ( ( m_aUri.getLength() < TDOC_URL_SCHEME_LENGTH + 2 ) )
         {
-            // Invaild length (to short).
+            // Invalid length (to short).
             return;
         }
 
@@ -65,7 +65,7 @@ void Uri::init() const
         if ( !aScheme.equalsAsciiL(
                 RTL_CONSTASCII_STRINGPARAM( TDOC_URL_SCHEME ) ) )
         {
-            // Invaild scheme.
+            // Invalid scheme.
             return;
         }
 
@@ -75,14 +75,14 @@ void Uri::init() const
         if ( m_aUri.getStr()[ TDOC_URL_SCHEME_LENGTH ]
                 != sal_Unicode( ':' ) )
         {
-            // Invaild (no ':' after <scheme>).
+            // Invalid (no ':' after <scheme>).
             return;
         }
 
         if ( m_aUri.getStr()[ TDOC_URL_SCHEME_LENGTH + 1 ]
                 != sal_Unicode( '/' ) )
         {
-            // Invaild (no '/' after <scheme>:).
+            // Invalid (no '/' after <scheme>:).
             return;
         }
 

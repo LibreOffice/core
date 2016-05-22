@@ -138,7 +138,7 @@ class SvtDynMenu
         //---------------------------------------------------------------------------------------------------------
         // append user specific menu entry
         // We must find unique name for it by using special prefix
-        // and next count of user setted entries!
+        // and next count of user set entries!
         // Look for double menu entries here too ... may be some seperator items are supeflous ...
         void AppendUserEntry( SvtDynMenuEntry& rEntry )
         {

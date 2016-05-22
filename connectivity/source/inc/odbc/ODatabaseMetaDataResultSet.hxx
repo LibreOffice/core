@@ -80,7 +80,7 @@ namespace connectivity
             rtl_TextEncoding                            m_nTextEncoding;
             sal_Int32                                   m_nRowPos;
             sal_Int32                                   m_nLastColumnPos;       // used for m_aRow just to know where we are
-            sal_Int32                                   m_nDriverColumnCount;   // column count of the driver wich can sometimes be less than the metadata count
+            sal_Int32                                   m_nDriverColumnCount;   // column count of the driver which can sometimes be less than the metadata count
             SQLRETURN                                   m_nCurrentFetchState;
             sal_Bool                                    m_bWasNull;
             sal_Bool                                    m_bEOF;                 // after last record

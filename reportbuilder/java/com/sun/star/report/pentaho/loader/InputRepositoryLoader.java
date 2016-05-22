@@ -109,7 +109,7 @@ public class InputRepositoryLoader implements ResourceLoader
     {
         if (!isSupportedKey(parent))
         {
-            throw new ResourceKeyCreationException("Assertation: Unsupported parent key type");
+            throw new ResourceKeyCreationException("Assertion: Unsupported parent key type");
         }
 
         final InputResourceKey parentKey = (InputResourceKey) parent.getIdentifier();
