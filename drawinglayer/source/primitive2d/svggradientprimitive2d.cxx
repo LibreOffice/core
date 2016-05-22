@@ -193,7 +193,7 @@ namespace drawinglayer
             if(nCount)
             {
                 const SvgGradientEntry& rStart = rEntries[0];
-                const bool bCreateStartPad(fPos < 0.0 && Spread_pad == getSpreadMethod());
+                const bool bCreateStartPad(fPos < 0.0 && SpreadMethod::Pad == getSpreadMethod());
                 const bool bCreateStartFill(rStart.getOffset() > 0.0);
                 sal_uInt32 nIndex(0);
 
@@ -215,7 +215,7 @@ namespace drawinglayer
                 }
 
                 const SvgGradientEntry& rEnd = rEntries[nCount - 1];
-                const bool bCreateEndPad(fPos < fMax && Spread_pad == getSpreadMethod());
+                const bool bCreateEndPad(fPos < fMax && SpreadMethod::Pad == getSpreadMethod());
                 const bool bCreateEndFill(rEnd.getOffset() < 1.0);
 
                 if(bCreateEndPad || bCreateEndFill)
@@ -463,12 +463,12 @@ namespace drawinglayer
                     aUnitGradientToObject = aUnitGradientToObject * aPreMultiply;
 
                     // create central run, may also already do all necessary when
-                    // Spread_pad is set as SpreadMethod and/or the range is smaller
+                    // SpreadMethod::Pad is set as SpreadMethod and/or the range is smaller
                     double fPos(createRun(aTargetColor, aTargetOpacity, aUnitRange.getMinX(), aUnitRange.getMaxX(), getGradientEntries(), 0));
 
                     if(fPos < aUnitRange.getMaxX())
                     {
-                        // can only happen when SpreadMethod is Spread_reflect or Spread_repeat,
+                        // can only happen when SpreadMethod is SpreadMethod::Reflect or SpreadMethod::Repeat,
                         // else the start and end pads are already created and fPos == aUnitRange.getMaxX().
                         // Its possible to express the repeated linear gradient by adding the
                         // transformed central run. Create it this way
@@ -497,7 +497,7 @@ namespace drawinglayer
                                 nOffset++;
 
                                 basegfx::B2DHomMatrix aTransform;
-                                const bool bMirror(Spread_reflect == getSpreadMethod() && (nOffset % 2));
+                                const bool bMirror(SpreadMethod::Reflect == getSpreadMethod() && (nOffset % 2));
 
                                 if(bMirror)
                                 {
@@ -524,7 +524,7 @@ namespace drawinglayer
                             while(fPos < aUnitRange.getMaxX())
                             {
                                 basegfx::B2DHomMatrix aTransform;
-                                const bool bMirror(Spread_reflect == getSpreadMethod() && (nOffset % 2));
+                                const bool bMirror(SpreadMethod::Reflect == getSpreadMethod() && (nOffset % 2));
 
                                 if(bMirror)
                                 {
@@ -807,12 +807,12 @@ namespace drawinglayer
                     }
 
                     // create central run, may also already do all necessary when
-                    // Spread_pad is set as SpreadMethod and/or the range is smaller
+                    // SpreadMethod::Pad is set as SpreadMethod and/or the range is smaller
                     double fPos(createRun(aTargetColor, aTargetOpacity, 0.0, fMax, getGradientEntries(), 0));
 
                     if(fPos < fMax)
                     {
-                        // can only happen when SpreadMethod is Spread_reflect or Spread_repeat,
+                        // can only happen when SpreadMethod is SpreadMethod::Reflect or SpreadMethod::Repeat,
                         // else the start and end pads are already created and fPos == fMax.
                         // For radial there is no way to transform the already created
                         // central run, it needs to be created from 1.0 to fMax
@@ -820,7 +820,7 @@ namespace drawinglayer
 
                         while(fPos < fMax)
                         {
-                            const bool bMirror(Spread_reflect == getSpreadMethod() && (nOffset % 2));
+                            const bool bMirror(SpreadMethod::Reflect == getSpreadMethod() && (nOffset % 2));
 
                             if(bMirror)
                             {

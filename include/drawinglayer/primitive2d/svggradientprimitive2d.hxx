@@ -80,11 +80,11 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        enum SpreadMethod
+        enum class SpreadMethod
         {
-            Spread_pad = 0,
-            Spread_reflect,
-            Spread_repeat
+            Pad,
+            Reflect,
+            Repeat
         };
 
         /*  helper for linear and radial gradient, both get derived from this
@@ -155,7 +155,7 @@ namespace drawinglayer
                 const SvgGradientEntryVector& rGradientEntries,
                 const basegfx::B2DPoint& rStart,
                 bool bUseUnitCoordinates,
-                SpreadMethod aSpreadMethod = Spread_pad);
+                SpreadMethod aSpreadMethod = SpreadMethod::Pad);
             virtual ~SvgGradientHelper();
 
             /// data read access
@@ -208,7 +208,7 @@ namespace drawinglayer
                 const basegfx::B2DPoint& rStart,
                 const basegfx::B2DPoint& rEnd,
                 bool bUseUnitCoordinates,
-                SpreadMethod aSpreadMethod = Spread_pad);
+                SpreadMethod aSpreadMethod = SpreadMethod::Pad);
             virtual ~SvgLinearGradientPrimitive2D();
 
             /// data read access
@@ -245,7 +245,7 @@ namespace drawinglayer
             basegfx::B2DVector                      maFocalVector;
             double                                  maFocalLength;
 
-            // internal helper for case Spread_reflect
+            // internal helper for case SpreadMethod::Reflect
             SvgGradientEntryVector                  maMirroredGradientEntries;
 
             /// bitfield
@@ -277,7 +277,7 @@ namespace drawinglayer
                 const basegfx::B2DPoint& rStart,
                 double fRadius,
                 bool bUseUnitCoordinates,
-                SpreadMethod aSpreadMethod = Spread_pad,
+                SpreadMethod aSpreadMethod = SpreadMethod::Pad,
                 const basegfx::B2DPoint* pFocal = nullptr);
             virtual ~SvgRadialGradientPrimitive2D();
 
