@@ -22,6 +22,7 @@
 
 #include <svl/poolitem.hxx>
 #include <editeng/editengdllapi.h>
+#include <memory>
 
 class SvXMLNamespaceMap;
 
@@ -30,7 +31,7 @@ class SvXMLAttrContainerData;
 
 class EDITENG_DLLPUBLIC SvXMLAttrContainerItem: public SfxPoolItem
 {
-    SvXMLAttrContainerData  *pImpl;
+    std::unique_ptr<SvXMLAttrContainerData> pImpl;
 
 public:
 
