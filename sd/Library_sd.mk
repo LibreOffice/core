@@ -411,6 +411,7 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
 	sd/source/ui/tools/SdGlobalResourceContainer \
 	sd/source/ui/tools/SlotStateListener \
 	sd/source/ui/tools/TimerBasedTaskExecution \
+	sd/source/ui/uitest/uiobject \
 	sd/source/ui/unoidl/DrawController \
 	sd/source/ui/unoidl/SdUnoDrawView \
 	sd/source/ui/unoidl/SdUnoOutlineView \
