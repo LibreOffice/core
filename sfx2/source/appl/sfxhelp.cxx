@@ -218,7 +218,7 @@ OUString SfxHelp_Impl::GetHelpText( const OUString& aCommandURL, const OUString&
 
 SfxHelp::SfxHelp() :
     bIsDebug( false ),
-    pImp    ( nullptr )
+    pImpl( new SfxHelp_Impl )
 {
     // read the environment variable "HELP_DEBUG"
     // if it's set, you will see debug output on active help
@@ -228,13 +228,10 @@ SfxHelp::SfxHelp() :
         osl_getEnvironment( sEnvVarName.pData, &sHelpDebug.pData );
         bIsDebug = !sHelpDebug.isEmpty();
     }
-
-    pImp = new SfxHelp_Impl();
 }
 
 SfxHelp::~SfxHelp()
 {
-    delete pImp;
 }
 
 OUString getDefaultModule_Impl()
