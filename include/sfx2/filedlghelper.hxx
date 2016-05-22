@@ -100,8 +100,7 @@ private:
     Link<FileDialogHelper*,void>  m_aDialogClosedLink;
     ErrCode m_nError;
 
-    css::uno::Reference < css::ui::dialogs::XFilePickerListener > mxImp;
-    FileDialogHelper_Impl   *mpImp;
+    css::uno::Reference< FileDialogHelper_Impl > mpImpl;
 
 
 public:
