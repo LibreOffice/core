@@ -69,7 +69,7 @@ private:
     DECL_LINK_TYPED(MoveClickHdl, Button*, void);
     DECL_LINK_TYPED(ExportClickHdl, Button*, void);
     DECL_LINK_TYPED(ImportClickHdl, Button*, void);
-    DECL_LINK_TYPED(LinkClickHdl, Button*, void);
+    DECL_STATIC_LINK_TYPED(SfxTemplateManagerDlg, LinkClickHdl, Button*, void);
 
     DECL_LINK_TYPED(TVItemStateHdl, const ThumbnailViewItem*, void);
 
