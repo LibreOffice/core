@@ -142,6 +142,8 @@ public:
     */
     inline vcl::Window* GetParentWindow() const { return mpParentWindow; }
 
+    sd::Window* GetContentWindow() const;
+
     inline ::sd::View* GetView() const { return mpView; }
     inline SdrView* GetDrawView() const;
     SD_DLLPUBLIC DrawDocShell* GetDocSh() const;
