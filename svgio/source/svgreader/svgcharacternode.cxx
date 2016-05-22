@@ -236,9 +236,10 @@ namespace svgio
             if(nLength)
             {
                 // prepare FontAttribute
-                OUString aFontFamily = rSvgStyleAttributes.getFontFamily().empty() ?
+                const SvgStringVector& rFontFamilyVector = rSvgStyleAttributes.getFontFamily();
+                OUString aFontFamily = rFontFamilyVector.empty() ?
                     OUString("Times New Roman") :
-                    rSvgStyleAttributes.getFontFamily()[0];
+                    rFontFamilyVector[0];
 
                 // #i122324# if the FontFamily name ends on ' embedded' it is probably a re-import
                 // of a SVG export with font embedding. Remove this to make font matching work. This
