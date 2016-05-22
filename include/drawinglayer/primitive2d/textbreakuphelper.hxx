@@ -30,11 +30,11 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        enum BreakupUnit
+        enum class BreakupUnit
         {
-            BreakupUnit_character,
-            BreakupUnit_word,
-            BreakupUnit_sentence
+            Character,
+            Word,
+            Sentence
         };
 
         class DRAWINGLAYER_DLLPUBLIC TextBreakupHelper
@@ -69,7 +69,7 @@ namespace drawinglayer
             virtual ~TextBreakupHelper();
 
             /// get result
-            const Primitive2DContainer& getResult(BreakupUnit aBreakupUnit = BreakupUnit_character) const;
+            const Primitive2DContainer& getResult(BreakupUnit aBreakupUnit = BreakupUnit::Character) const;
         };
 
     } // end of namespace primitive2d
