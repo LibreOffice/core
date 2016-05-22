@@ -29,6 +29,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/frame/XDispatchRecorder.hpp>
+#include <memory>
 
 class SfxPoolItem;
 class SfxAllItemSet;
@@ -46,7 +47,7 @@ friend struct SfxRequest_Impl;
 
     sal_uInt16          nSlot;
     SfxAllItemSet*      pArgs;
-    SfxRequest_Impl*    pImp;
+    std::unique_ptr< SfxRequest_Impl >    pImpl;
 
 public:
     SAL_DLLPRIVATE void Record_Impl( SfxShell &rSh, const SfxSlot &rSlot,
@@ -54,7 +55,6 @@ public:
                                      SfxViewFrame* );
 private:
     SAL_DLLPRIVATE void Done_Impl( const SfxItemSet *pSet );
-
 
 public:
                         SfxRequest( SfxViewFrame*, sal_uInt16 nSlotId );
