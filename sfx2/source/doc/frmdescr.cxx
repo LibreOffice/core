@@ -49,22 +49,20 @@ SfxFrameDescriptor::SfxFrameDescriptor() :
     bResizeHorizontal( true ),
     bResizeVertical( true ),
     bHasUI( true ),
-    bReadOnly( false )
+    bReadOnly( false ),
+    pImpl( new SfxFrameDescriptor_Impl )
 {
-
-    pImp = new SfxFrameDescriptor_Impl;
 }
 
 SfxFrameDescriptor::~SfxFrameDescriptor()
 {
-    delete pImp;
 }
 
 SfxItemSet* SfxFrameDescriptor::GetArgs()
 {
-    if( !pImp->pArgs )
-        pImp->pArgs = new SfxAllItemSet( SfxGetpApp()->GetPool() );
-    return pImp->pArgs;
+    if( !pImpl->pArgs )
+        pImpl->pArgs = new SfxAllItemSet( SfxGetpApp()->GetPool() );
+    return pImpl->pArgs;
 }
 
 void SfxFrameDescriptor::SetURL( const OUString& rURL )
@@ -76,8 +74,8 @@ void SfxFrameDescriptor::SetURL( const OUString& rURL )
 void SfxFrameDescriptor::SetActualURL( const OUString& rURL )
 {
     aActualURL = INetURLObject(rURL);
-    if ( pImp->pArgs )
-        pImp->pArgs->ClearItem();
+    if ( pImpl->pArgs )
+        pImpl->pArgs->ClearItem();
 }
 
 void SfxFrameDescriptor::SetActualURL( const INetURLObject& rURL )
@@ -87,12 +85,12 @@ void SfxFrameDescriptor::SetActualURL( const INetURLObject& rURL )
 
 void SfxFrameDescriptor::SetEditable( bool bSet )
 {
-    pImp->bEditable = bSet;
+    pImpl->bEditable = bSet;
 }
 
 bool SfxFrameDescriptor::IsEditable() const
 {
-    return pImp->bEditable;
+    return pImpl->bEditable;
 }
 
 SfxFrameDescriptor* SfxFrameDescriptor::Clone() const
@@ -113,13 +111,13 @@ SfxFrameDescriptor* SfxFrameDescriptor::Clone() const
     pFrame->bHasUI = bHasUI;
     pFrame->SetReadOnly( IsReadOnly() );
     pFrame->SetEditable( IsEditable() );
-    if ( pImp->pWallpaper )
-        pFrame->pImp->pWallpaper = new Wallpaper( *pImp->pWallpaper );
-    if( pImp->pArgs )
+    if ( pImpl->pWallpaper )
+        pFrame->pImpl->pWallpaper = new Wallpaper( *pImpl->pWallpaper );
+    if( pImpl->pArgs )
     {
         // Currently in the clone of SfxAllItemSets there is still a bug ...
-        pFrame->pImp->pArgs = new SfxAllItemSet( SfxGetpApp()->GetPool() );
-        pFrame->pImp->pArgs->Put(*pImp->pArgs);
+        pFrame->pImpl->pArgs = new SfxAllItemSet( SfxGetpApp()->GetPool() );
+        pFrame->pImpl->pArgs->Put(*pImpl->pArgs);
     }
 
     pFrame->nItemId = nItemId;
@@ -129,10 +127,10 @@ SfxFrameDescriptor* SfxFrameDescriptor::Clone() const
 
 void SfxFrameDescriptor::SetWallpaper( const Wallpaper& rWallpaper )
 {
-    DELETEZ( pImp->pWallpaper );
+    DELETEZ( pImpl->pWallpaper );
 
     if ( rWallpaper.GetStyle() != WallpaperStyle::NONE )
-        pImp->pWallpaper = new Wallpaper( rWallpaper );
+        pImpl->pWallpaper = new Wallpaper( rWallpaper );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
