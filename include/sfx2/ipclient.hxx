@@ -39,9 +39,9 @@ class Fraction;
 
 class SFX2_DLLPUBLIC SfxInPlaceClient
 {
-friend class SfxInPlaceClient_Impl;
+    friend class SfxInPlaceClient_Impl;
 
-    SfxInPlaceClient_Impl*  m_pImp;
+    std::unique_ptr< SfxInPlaceClient_Impl >  m_pImpl;
     SfxViewShell*           m_pViewSh;
     VclPtr<vcl::Window>     m_pEditWin;
 
