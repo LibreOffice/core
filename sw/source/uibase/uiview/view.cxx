@@ -1763,8 +1763,8 @@ void SwView::NotifyDBChanged()
 
 SfxObjectShellLock SwView::CreateTmpSelectionDoc()
 {
-    SwXTextView *const pImpl = GetViewImpl()->GetUNOObject_Impl();
-    return pImpl->BuildTmpSelectionDoc();
+    SwXTextView *const mpImpl = GetViewImpl()->GetUNOObject_Impl();
+    return mpImpl->BuildTmpSelectionDoc();
 }
 
 void SwView::AddTransferable(SwTransferable& rTransferable)

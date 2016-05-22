@@ -45,7 +45,7 @@ enum class SfxClassificationPolicyType
 class SFX2_DLLPUBLIC SfxClassificationHelper
 {
     class Impl;
-    std::unique_ptr<Impl> m_pImpl;
+    std::unique_ptr<Impl> pImpl;
 
 public:
     /// Does the document have any BAILS properties?

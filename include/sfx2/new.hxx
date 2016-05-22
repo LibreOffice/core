@@ -59,7 +59,7 @@ class SFX2_DLLPUBLIC SfxNewFileDialog : public SfxModalDialog
     friend class SfxNewFileDialog_Impl;
 
 private:
-    SfxNewFileDialog_Impl* pImpl;
+    std::unique_ptr< SfxNewFileDialog_Impl > pImpl;
 
 public:
 

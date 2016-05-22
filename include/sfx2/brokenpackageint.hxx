@@ -29,7 +29,9 @@
 class RequestPackageReparation_Impl;
 class SFX2_DLLPUBLIC RequestPackageReparation
 {
-    RequestPackageReparation_Impl* pImp;
+private:
+    std::unique_ptr< RequestPackageReparation_Impl > pImpl;
+
 public:
     RequestPackageReparation( const OUString& aName );
     ~RequestPackageReparation();
@@ -40,7 +42,9 @@ public:
 class NotifyBrokenPackage_Impl;
 class SFX2_DLLPUBLIC NotifyBrokenPackage
 {
-    NotifyBrokenPackage_Impl* pImp;
+private:
+    std::unique_ptr< NotifyBrokenPackage_Impl> pImpl;
+
 public:
     NotifyBrokenPackage( const OUString& aName );
     ~NotifyBrokenPackage();

@@ -178,7 +178,7 @@ public:
             css::lang::WrappedTargetException, std::exception) override;
 
 private:
-    std::unique_ptr<DocumentMetadataAccess_Impl> m_pImpl;
+    std::unique_ptr<DocumentMetadataAccess_Impl> pImpl;
 };
 
 } // namespace sfx2

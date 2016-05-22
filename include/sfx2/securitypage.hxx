@@ -29,7 +29,7 @@ struct SfxSecurityPage_Impl;
 
 class SfxSecurityPage : public SfxTabPage
 {
-    std::unique_ptr< SfxSecurityPage_Impl > m_pImpl;
+    std::unique_ptr< SfxSecurityPage_Impl > pImpl;
 
 protected:
     virtual bool            FillItemSet( SfxItemSet* ) override;
