@@ -151,7 +151,7 @@ friend class SfxToolbox;
 friend class SfxPopupWindow;
 friend struct SfxTbxCtrlFactory;
 
-    SfxToolBoxControl_Impl*    pImpl;
+    std::unique_ptr< SfxToolBoxControl_Impl>    pImpl;
 
 protected:
     DECL_LINK_TYPED( PopupModeEndHdl, FloatingWindow*, void );
