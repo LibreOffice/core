@@ -604,18 +604,18 @@ IMPL_LINK_NOARG_TYPED(SfxInPlaceClient_Impl, TimerHdl, Timer *, void)
 
 
 SfxInPlaceClient::SfxInPlaceClient( SfxViewShell* pViewShell, vcl::Window *pDraw, sal_Int64 nAspect ) :
-    m_pImp( new SfxInPlaceClient_Impl ),
     m_pViewSh( pViewShell ),
-    m_pEditWin( pDraw )
+    m_pEditWin( pDraw ),
+    m_pImpl( new SfxInPlaceClient_Impl )
 {
-    m_pImp->acquire();
-    m_pImp->m_pClient = this;
-    m_pImp->m_nAspect = nAspect;
-    m_pImp->m_aScaleWidth = m_pImp->m_aScaleHeight = Fraction(1,1);
-    m_pImp->m_xClient = static_cast< embed::XEmbeddedClient* >( m_pImp );
+    m_pImpl->acquire();
+    m_pImpl->m_pClient = this;
+    m_pImpl->m_nAspect = nAspect;
+    m_pImpl->m_aScaleWidth = m_pImpl->m_aScaleHeight = Fraction(1,1);
+    m_pImpl->m_xClient = static_cast< embed::XEmbeddedClient* >( m_pImpl.get() );
     pViewShell->NewIPClient_Impl(this);
-    m_pImp->m_aTimer.SetTimeout( SFX_CLIENTACTIVATE_TIMEOUT );
-    m_pImp->m_aTimer.SetTimeoutHdl( LINK( m_pImp, SfxInPlaceClient_Impl, TimerHdl ) );
+    m_pImpl->m_aTimer.SetTimeout( SFX_CLIENTACTIVATE_TIMEOUT );
+    m_pImpl->m_aTimer.SetTimeoutHdl( LINK( m_pImpl.get(), SfxInPlaceClient_Impl, TimerHdl ) );
 }
 
 
@@ -624,14 +624,14 @@ SfxInPlaceClient::~SfxInPlaceClient()
     m_pViewSh->IPClientGone_Impl(this);
 
     // deleting the client before storing the object means discarding all changes
-    m_pImp->m_bStoreObject = false;
+    m_pImpl->m_bStoreObject = false;
     SetObject(nullptr);
 
-    m_pImp->m_pClient = nullptr;
+    m_pImpl->m_pClient = nullptr;
 
-    // the next call will destroy m_pImp if no other reference to it exists
-    m_pImp->m_xClient.clear();
-    m_pImp->release();
+    // the next call will destroy m_pImpl if no other reference to it exists
+    m_pImpl->m_xClient.clear();
+    m_pImpl->release();
 
     // TODO/LATER:
     // the class is not intended to be used in multithreaded environment;
@@ -644,7 +644,7 @@ void SfxInPlaceClient::SetObjectState( sal_Int32 nState )
 {
     if ( GetObject().is() )
     {
-        if ( m_pImp->m_nAspect == embed::Aspects::MSOLE_ICON
+        if ( m_pImpl->m_nAspect == embed::Aspects::MSOLE_ICON
           && ( nState == embed::EmbedStates::UI_ACTIVE || nState == embed::EmbedStates::INPLACE_ACTIVE ) )
         {
             OSL_FAIL( "Iconified object should not be activated inplace!\n" );
@@ -664,31 +664,31 @@ void SfxInPlaceClient::SetObjectState( sal_Int32 nState )
 sal_Int64 SfxInPlaceClient::GetObjectMiscStatus() const
 {
     if ( GetObject().is() )
-        return GetObject()->getStatus( m_pImp->m_nAspect );
+        return GetObject()->getStatus( m_pImpl->m_nAspect );
     return 0;
 }
 
 
 const uno::Reference < embed::XEmbeddedObject >& SfxInPlaceClient::GetObject() const
 {
-    return m_pImp->m_xObject;
+    return m_pImpl->m_xObject;
 }
 
 
 void SfxInPlaceClient::SetObject( const uno::Reference < embed::XEmbeddedObject >& rObject )
 {
-    if ( m_pImp->m_xObject.is() && rObject != m_pImp->m_xObject )
+    if ( m_pImpl->m_xObject.is() && rObject != m_pImpl->m_xObject )
     {
-        DBG_ASSERT( GetObject()->getClientSite() == m_pImp->m_xClient, "Wrong ClientSite!" );
-        if ( GetObject()->getClientSite() == m_pImp->m_xClient )
+        DBG_ASSERT( GetObject()->getClientSite() == m_pImpl->m_xClient, "Wrong ClientSite!" );
+        if ( GetObject()->getClientSite() == m_pImpl->m_xClient )
         {
             if ( GetObject()->getCurrentState() != embed::EmbedStates::LOADED )
                 SetObjectState( embed::EmbedStates::RUNNING );
-            m_pImp->m_xObject->removeEventListener( uno::Reference < document::XEventListener >( m_pImp->m_xClient, uno::UNO_QUERY ) );
-            m_pImp->m_xObject->removeStateChangeListener( uno::Reference < embed::XStateChangeListener >( m_pImp->m_xClient, uno::UNO_QUERY ) );
+            m_pImpl->m_xObject->removeEventListener( uno::Reference < document::XEventListener >( m_pImpl->m_xClient, uno::UNO_QUERY ) );
+            m_pImpl->m_xObject->removeStateChangeListener( uno::Reference < embed::XStateChangeListener >( m_pImpl->m_xClient, uno::UNO_QUERY ) );
             try
             {
-                m_pImp->m_xObject->setClientSite( nullptr );
+                m_pImpl->m_xObject->setClientSite( nullptr );
             }
             catch( uno::Exception& )
             {
@@ -701,37 +701,37 @@ void SfxInPlaceClient::SetObject( const uno::Reference < embed::XEmbeddedObject 
         // sometimes applications reconnect clients on shutting down because it happens in their Paint methods
         return;
 
-    m_pImp->m_xObject = rObject;
+    m_pImpl->m_xObject = rObject;
 
     if ( rObject.is() )
     {
         // as soon as an object was connected to a client it has to be checked whether the object wants
         // to be activated
-        rObject->addStateChangeListener( uno::Reference < embed::XStateChangeListener >( m_pImp->m_xClient, uno::UNO_QUERY ) );
-        rObject->addEventListener( uno::Reference < document::XEventListener >( m_pImp->m_xClient, uno::UNO_QUERY ) );
+        rObject->addStateChangeListener( uno::Reference < embed::XStateChangeListener >( m_pImpl->m_xClient, uno::UNO_QUERY ) );
+        rObject->addEventListener( uno::Reference < document::XEventListener >( m_pImpl->m_xClient, uno::UNO_QUERY ) );
 
         try
         {
-            rObject->setClientSite( m_pImp->m_xClient );
+            rObject->setClientSite( m_pImpl->m_xClient );
         }
         catch( uno::Exception& )
         {
             OSL_FAIL( "Can not set the client site!\n" );
         }
 
-        m_pImp->m_aTimer.Start();
+        m_pImpl->m_aTimer.Start();
     }
     else
-        m_pImp->m_aTimer.Stop();
+        m_pImpl->m_aTimer.Stop();
 }
 
 
 bool SfxInPlaceClient::SetObjArea( const Rectangle& rArea )
 {
-    if( rArea != m_pImp->m_aObjArea )
+    if( rArea != m_pImpl->m_aObjArea )
     {
-        m_pImp->m_aObjArea = rArea;
-        m_pImp->SizeHasChanged();
+        m_pImpl->m_aObjArea = rArea;
+        m_pImpl->SizeHasChanged();
 
         Invalidate();
         return true;
@@ -743,26 +743,26 @@ bool SfxInPlaceClient::SetObjArea( const Rectangle& rArea )
 
 const Rectangle& SfxInPlaceClient::GetObjArea() const
 {
-    return m_pImp->m_aObjArea;
+    return m_pImpl->m_aObjArea;
 }
 
 Rectangle SfxInPlaceClient::GetScaledObjArea() const
 {
-    Rectangle aRealObjArea( m_pImp->m_aObjArea );
-    aRealObjArea.SetSize( Size( Fraction( aRealObjArea.GetWidth() ) * m_pImp->m_aScaleWidth,
-                                Fraction( aRealObjArea.GetHeight() ) * m_pImp->m_aScaleHeight ) );
+    Rectangle aRealObjArea( m_pImpl->m_aObjArea );
+    aRealObjArea.SetSize( Size( Fraction( aRealObjArea.GetWidth() ) * m_pImpl->m_aScaleWidth,
+                                Fraction( aRealObjArea.GetHeight() ) * m_pImpl->m_aScaleHeight ) );
     return aRealObjArea;
 }
 
 
 void SfxInPlaceClient::SetSizeScale( const Fraction & rScaleWidth, const Fraction & rScaleHeight )
 {
-    if ( m_pImp->m_aScaleWidth != rScaleWidth || m_pImp->m_aScaleHeight != rScaleHeight )
+    if ( m_pImpl->m_aScaleWidth != rScaleWidth || m_pImpl->m_aScaleHeight != rScaleHeight )
     {
-        m_pImp->m_aScaleWidth = rScaleWidth;
-        m_pImp->m_aScaleHeight = rScaleHeight;
+        m_pImpl->m_aScaleWidth = rScaleWidth;
+        m_pImpl->m_aScaleHeight = rScaleHeight;
 
-        m_pImp->SizeHasChanged();
+        m_pImpl->SizeHasChanged();
 
         // TODO/LATER: Invalidate seems to trigger (wrong) recalculations of the ObjArea, so it's better
         // not to call it here, but maybe it sounds reasonable to do so.
@@ -773,13 +773,13 @@ void SfxInPlaceClient::SetSizeScale( const Fraction & rScaleWidth, const Fractio
 
 void SfxInPlaceClient::SetObjAreaAndScale( const Rectangle& rArea, const Fraction& rScaleWidth, const Fraction& rScaleHeight )
 {
-    if( rArea != m_pImp->m_aObjArea || m_pImp->m_aScaleWidth != rScaleWidth || m_pImp->m_aScaleHeight != rScaleHeight )
+    if( rArea != m_pImpl->m_aObjArea || m_pImpl->m_aScaleWidth != rScaleWidth || m_pImpl->m_aScaleHeight != rScaleHeight )
     {
-        m_pImp->m_aObjArea = rArea;
-        m_pImp->m_aScaleWidth = rScaleWidth;
-        m_pImp->m_aScaleHeight = rScaleHeight;
+        m_pImpl->m_aObjArea = rArea;
+        m_pImpl->m_aScaleWidth = rScaleWidth;
+        m_pImpl->m_aScaleHeight = rScaleHeight;
 
-        m_pImp->SizeHasChanged();
+        m_pImpl->SizeHasChanged();
 
         Invalidate();
     }
@@ -788,13 +788,13 @@ void SfxInPlaceClient::SetObjAreaAndScale( const Rectangle& rArea, const Fractio
 
 const Fraction& SfxInPlaceClient::GetScaleWidth() const
 {
-    return m_pImp->m_aScaleWidth;
+    return m_pImpl->m_aScaleWidth;
 }
 
 
 const Fraction& SfxInPlaceClient::GetScaleHeight() const
 {
-    return m_pImp->m_aScaleHeight;
+    return m_pImpl->m_aScaleHeight;
 }
 
 
@@ -803,9 +803,9 @@ void SfxInPlaceClient::Invalidate()
     // TODO/LATER: do we need both?
 
     // the object area is provided in logical coordinates of the window but without scaling applied
-    Rectangle aRealObjArea( m_pImp->m_aObjArea );
-    aRealObjArea.SetSize( Size( Fraction( aRealObjArea.GetWidth() ) * m_pImp->m_aScaleWidth,
-                                Fraction( aRealObjArea.GetHeight() ) * m_pImp->m_aScaleHeight ) );
+    Rectangle aRealObjArea( m_pImpl->m_aObjArea );
+    aRealObjArea.SetSize( Size( Fraction( aRealObjArea.GetWidth() ) * m_pImpl->m_aScaleWidth,
+                                Fraction( aRealObjArea.GetHeight() ) * m_pImpl->m_aScaleHeight ) );
     m_pEditWin->Invalidate( aRealObjArea );
 
     ViewChanged();
@@ -815,7 +815,7 @@ void SfxInPlaceClient::Invalidate()
 bool SfxInPlaceClient::IsObjectUIActive() const
 {
     try {
-        return ( m_pImp->m_xObject.is() && ( m_pImp->m_xObject->getCurrentState() == embed::EmbedStates::UI_ACTIVE ) );
+        return ( m_pImpl->m_xObject.is() && ( m_pImpl->m_xObject->getCurrentState() == embed::EmbedStates::UI_ACTIVE ) );
     }
     catch( uno::Exception& )
     {}
@@ -829,12 +829,12 @@ bool SfxInPlaceClient::IsObjectInPlaceActive() const
     try {
         return(
                (
-                m_pImp->m_xObject.is() &&
-                (m_pImp->m_xObject->getCurrentState() == embed::EmbedStates::INPLACE_ACTIVE)
+                m_pImpl->m_xObject.is() &&
+                (m_pImpl->m_xObject->getCurrentState() == embed::EmbedStates::INPLACE_ACTIVE)
                ) ||
                (
-                m_pImp->m_xObject.is() &&
-                (m_pImp->m_xObject->getCurrentState() == embed::EmbedStates::UI_ACTIVE)
+                m_pImpl->m_xObject.is() &&
+                (m_pImpl->m_xObject->getCurrentState() == embed::EmbedStates::UI_ACTIVE)
                )
               );
     }
@@ -862,7 +862,7 @@ SfxInPlaceClient* SfxInPlaceClient::GetClient( SfxObjectShell* pDoc, const css::
 
 sal_Int64 SfxInPlaceClient::GetAspect() const
 {
-    return m_pImp->m_nAspect;
+    return m_pImpl->m_nAspect;
 }
 
 ErrCode SfxInPlaceClient::DoVerb( long nVerb )
@@ -870,14 +870,14 @@ ErrCode SfxInPlaceClient::DoVerb( long nVerb )
     SfxErrorContext aEc( ERRCTX_SO_DOVERB, m_pViewSh->GetWindow(), RID_SO_ERRCTX );
     ErrCode nError = ERRCODE_NONE;
 
-    if ( m_pImp->m_xObject.is() )
+    if ( m_pImpl->m_xObject.is() )
     {
         bool bSaveCopyAs = false;
         if ( nVerb == -8 ) // "Save Copy as..."
         {
-            svt::EmbeddedObjectRef::TryRunningState( m_pImp->m_xObject );
+            svt::EmbeddedObjectRef::TryRunningState( m_pImpl->m_xObject );
             // TODO/LATER: this special verb should disappear when outplace activation is completely available
-            uno::Reference< frame::XModel > xEmbModel( m_pImp->m_xObject->getComponent(), uno::UNO_QUERY );
+            uno::Reference< frame::XModel > xEmbModel( m_pImpl->m_xObject->getComponent(), uno::UNO_QUERY );
             if ( xEmbModel.is() )
             {
                 bSaveCopyAs = true;
@@ -909,7 +909,7 @@ ErrCode SfxInPlaceClient::DoVerb( long nVerb )
 
         if ( !bSaveCopyAs )
         {
-            if ( m_pImp->m_nAspect == embed::Aspects::MSOLE_ICON )
+            if ( m_pImpl->m_nAspect == embed::Aspects::MSOLE_ICON )
             {
                 if ( nVerb == embed::EmbedVerbs::MS_OLEVERB_PRIMARY || nVerb == embed::EmbedVerbs::MS_OLEVERB_SHOW )
                     nVerb = embed::EmbedVerbs::MS_OLEVERB_OPEN; // outplace activation
@@ -924,9 +924,9 @@ ErrCode SfxInPlaceClient::DoVerb( long nVerb )
                 m_pViewSh->GetViewFrame()->GetTopFrame().LockResize_Impl(true);
                 try
                 {
-                    m_pImp->m_xObject->setClientSite( m_pImp->m_xClient );
+                    m_pImpl->m_xObject->setClientSite( m_pImpl->m_xClient );
 
-                    m_pImp->m_xObject->doVerb( nVerb );
+                    m_pImpl->m_xObject->doVerb( nVerb );
                 }
                 catch ( embed::UnreachableStateException& )
                 {
@@ -935,20 +935,20 @@ ErrCode SfxInPlaceClient::DoVerb( long nVerb )
                         // a workaround for the default verb, usually makes sense for alien objects
                         try
                         {
-                            m_pImp->m_xObject->doVerb( -9 ); // open own view, a workaround verb that is not visible
+                            m_pImpl->m_xObject->doVerb( -9 ); // open own view, a workaround verb that is not visible
 
-                            if ( m_pImp->m_xObject->getCurrentState() == embed::EmbedStates::UI_ACTIVE )
+                            if ( m_pImpl->m_xObject->getCurrentState() == embed::EmbedStates::UI_ACTIVE )
                             {
                                 // the object was converted to OOo object
-                                awt::Size aSize = m_pImp->m_xObject->getVisualAreaSize( m_pImp->m_nAspect );
-                                MapMode aObjectMap( VCLUnoHelper::UnoEmbed2VCLMapUnit( m_pImp->m_xObject->getMapUnit( m_pImp->m_nAspect ) ) );
+                                awt::Size aSize = m_pImpl->m_xObject->getVisualAreaSize( m_pImpl->m_nAspect );
+                                MapMode aObjectMap( VCLUnoHelper::UnoEmbed2VCLMapUnit( m_pImpl->m_xObject->getMapUnit( m_pImpl->m_nAspect ) ) );
                                 MapMode aClientMap( GetEditWin()->GetMapMode().GetMapUnit() );
                                 Size aNewSize = GetEditWin()->LogicToLogic( Size( aSize.Width, aSize.Height ), &aObjectMap, &aClientMap );
 
                                 Rectangle aScaledArea = GetScaledObjArea();
-                                m_pImp->m_aObjArea.SetSize( aNewSize );
-                                m_pImp->m_aScaleWidth = Fraction( aScaledArea.GetWidth(), aNewSize.Width() );
-                                m_pImp->m_aScaleHeight = Fraction( aScaledArea.GetHeight(), aNewSize.Height() );
+                                m_pImpl->m_aObjArea.SetSize( aNewSize );
+                                m_pImpl->m_aScaleWidth = Fraction( aScaledArea.GetWidth(), aNewSize.Width() );
+                                m_pImpl->m_aScaleHeight = Fraction( aScaledArea.GetHeight(), aNewSize.Height() );
                             }
                         }
                         catch (uno::Exception const& e)
@@ -988,10 +988,10 @@ ErrCode SfxInPlaceClient::DoVerb( long nVerb )
 
 void SfxInPlaceClient::VisAreaChanged()
 {
-    uno::Reference < embed::XInplaceObject > xObj( m_pImp->m_xObject, uno::UNO_QUERY );
-    uno::Reference < embed::XInplaceClient > xClient( m_pImp->m_xClient, uno::UNO_QUERY );
+    uno::Reference < embed::XInplaceObject > xObj( m_pImpl->m_xObject, uno::UNO_QUERY );
+    uno::Reference < embed::XInplaceClient > xClient( m_pImpl->m_xClient, uno::UNO_QUERY );
     if ( xObj.is() && xClient.is() )
-        m_pImp->SizeHasChanged();
+        m_pImpl->SizeHasChanged();
 }
 
 void SfxInPlaceClient::ObjectAreaChanged()
@@ -1020,9 +1020,9 @@ void SfxInPlaceClient::DeactivateObject()
     {
         try
         {
-            m_pImp->m_bUIActive = false;
+            m_pImpl->m_bUIActive = false;
             bool bHasFocus = false;
-            uno::Reference< frame::XModel > xModel( m_pImp->m_xObject->getComponent(), uno::UNO_QUERY );
+            uno::Reference< frame::XModel > xModel( m_pImpl->m_xObject->getComponent(), uno::UNO_QUERY );
             if ( xModel.is() )
             {
                 uno::Reference< frame::XController > xController = xModel->getCurrentController();
@@ -1035,21 +1035,21 @@ void SfxInPlaceClient::DeactivateObject()
 
             m_pViewSh->GetViewFrame()->GetTopFrame().LockResize_Impl(true);
 
-            if ( (m_pImp->m_xObject->getStatus( m_pImp->m_nAspect ) & embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE) ||
-                 svt::EmbeddedObjectRef::IsGLChart(m_pImp->m_xObject) )
+            if ( (m_pImpl->m_xObject->getStatus( m_pImpl->m_nAspect ) & embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE) ||
+                 svt::EmbeddedObjectRef::IsGLChart(m_pImpl->m_xObject) )
             {
-                m_pImp->m_xObject->changeState( embed::EmbedStates::INPLACE_ACTIVE );
+                m_pImpl->m_xObject->changeState( embed::EmbedStates::INPLACE_ACTIVE );
                 if (bHasFocus)
                     m_pViewSh->GetWindow()->GrabFocus();
             }
             else
             {
                 // the links should not stay in running state for long time because of locking
-                uno::Reference< embed::XLinkageSupport > xLink( m_pImp->m_xObject, uno::UNO_QUERY );
+                uno::Reference< embed::XLinkageSupport > xLink( m_pImpl->m_xObject, uno::UNO_QUERY );
                 if ( xLink.is() && xLink->isLink() )
-                    m_pImp->m_xObject->changeState( embed::EmbedStates::LOADED );
+                    m_pImpl->m_xObject->changeState( embed::EmbedStates::LOADED );
                 else
-                    m_pImp->m_xObject->changeState( embed::EmbedStates::RUNNING );
+                    m_pImpl->m_xObject->changeState( embed::EmbedStates::RUNNING );
             }
 
             SfxViewFrame* pFrame = m_pViewSh->GetViewFrame();
@@ -1068,18 +1068,18 @@ void SfxInPlaceClient::ResetObject()
     {
         try
         {
-            m_pImp->m_bUIActive = false;
-            if ( (m_pImp->m_xObject->getStatus( m_pImp->m_nAspect ) & embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE) ||
-                svt::EmbeddedObjectRef::IsGLChart(m_pImp->m_xObject) )
-                m_pImp->m_xObject->changeState( embed::EmbedStates::INPLACE_ACTIVE );
+            m_pImpl->m_bUIActive = false;
+            if ( (m_pImpl->m_xObject->getStatus( m_pImpl->m_nAspect ) & embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE) ||
+                svt::EmbeddedObjectRef::IsGLChart(m_pImpl->m_xObject) )
+                m_pImpl->m_xObject->changeState( embed::EmbedStates::INPLACE_ACTIVE );
             else
             {
                 // the links should not stay in running state for long time because of locking
-                uno::Reference< embed::XLinkageSupport > xLink( m_pImp->m_xObject, uno::UNO_QUERY );
+                uno::Reference< embed::XLinkageSupport > xLink( m_pImpl->m_xObject, uno::UNO_QUERY );
                 if ( xLink.is() && xLink->isLink() )
-                    m_pImp->m_xObject->changeState( embed::EmbedStates::LOADED );
+                    m_pImpl->m_xObject->changeState( embed::EmbedStates::LOADED );
                 else
-                    m_pImp->m_xObject->changeState( embed::EmbedStates::RUNNING );
+                    m_pImpl->m_xObject->changeState( embed::EmbedStates::RUNNING );
             }
         }
         catch (css::uno::Exception& )
@@ -1089,7 +1089,7 @@ void SfxInPlaceClient::ResetObject()
 
 bool SfxInPlaceClient::IsUIActive()
 {
-    return m_pImp->m_bUIActive;
+    return m_pImpl->m_bUIActive;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
