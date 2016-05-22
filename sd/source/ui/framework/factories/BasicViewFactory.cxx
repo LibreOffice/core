@@ -36,6 +36,7 @@
 #include "SlideSorterViewShell.hxx"
 #include "FrameView.hxx"
 #include "facreg.hxx"
+#include "Window.hxx"
 
 #include <sfx2/viewfrm.hxx>
 #include <vcl/wrkwin.hxx>
@@ -341,6 +342,7 @@ std::shared_ptr<ViewShell> BasicViewFactory::CreateViewShell (
                 &rWindow,
                 PK_STANDARD,
                 pFrameView));
+        pViewShell->GetContentWindow()->set_id("impress_win");
     }
     else if (rsViewURL.equals(FrameworkHelper::msDrawViewURL))
     {
@@ -350,6 +352,7 @@ std::shared_ptr<ViewShell> BasicViewFactory::CreateViewShell (
                 *mpBase,
                 &rWindow,
                 pFrameView));
+        pViewShell->GetContentWindow()->set_id("draw_win");
     }
     else if (rsViewURL.equals(FrameworkHelper::msOutlineViewURL))
     {
@@ -359,6 +362,7 @@ std::shared_ptr<ViewShell> BasicViewFactory::CreateViewShell (
                 *mpBase,
                 &rWindow,
                 pFrameView));
+        pViewShell->GetContentWindow()->set_id("outline_win");
     }
     else if (rsViewURL.equals(FrameworkHelper::msNotesViewURL))
     {
@@ -369,6 +373,7 @@ std::shared_ptr<ViewShell> BasicViewFactory::CreateViewShell (
                 &rWindow,
                 PK_NOTES,
                 pFrameView));
+        pViewShell->GetContentWindow()->set_id("notes_win");
     }
     else if (rsViewURL.equals(FrameworkHelper::msHandoutViewURL))
     {
@@ -379,6 +384,7 @@ std::shared_ptr<ViewShell> BasicViewFactory::CreateViewShell (
                 &rWindow,
                 PK_HANDOUT,
                 pFrameView));
+        pViewShell->GetContentWindow()->set_id("handout_win");
     }
     else if (rsViewURL.equals(FrameworkHelper::msPresentationViewURL))
     {
@@ -388,6 +394,7 @@ std::shared_ptr<ViewShell> BasicViewFactory::CreateViewShell (
                 *mpBase,
                 &rWindow,
                 pFrameView));
+        pViewShell->GetContentWindow()->set_id("presentation_win");
     }
     else if (rsViewURL.equals(FrameworkHelper::msSlideSorterURL))
     {
