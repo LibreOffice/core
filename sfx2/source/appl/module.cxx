@@ -138,7 +138,7 @@ ResMgr* SfxModule::GetResMgr()
 
 SfxModule::SfxModule( ResMgr* pMgrP, bool bDummyP,
                       SfxObjectFactory* pFactoryP, ... )
-    : pResMgr( pMgrP ), bDummy( bDummyP ), pImpl(nullptr)
+    : pResMgr( pMgrP ), bDummy( bDummyP )
 {
     Construct_Impl();
     va_list pVarArgs;
@@ -157,7 +157,7 @@ void SfxModule::Construct_Impl()
         SfxModuleArr_Impl& rArr = GetModules_Impl();
         SfxModule* pPtr = this;
         rArr.push_back( pPtr );
-        pImpl = new SfxModule_Impl;
+        pImpl.reset( new SfxModule_Impl );
         pImpl->pSlotPool = new SfxSlotPool(&pApp->GetAppSlotPool_Impl());
 
         pImpl->pTbxCtrlFac=nullptr;
@@ -188,10 +188,8 @@ SfxModule::~SfxModule()
                     break;
                 }
             }
-
-            delete pImpl;
         }
-
+        pImpl.reset();
         delete pResMgr;
     }
 }
