@@ -24,13 +24,14 @@
 #include <sfx2/dllapi.h>
 #include <sal/types.h>
 #include <vcl/help.hxx>
+#include <memory>
 
 class SfxHelp_Impl;
 class SfxFrame;
 class SFX2_DLLPUBLIC SfxHelp : public Help
 {
     bool            bIsDebug;
-    SfxHelp_Impl*   pImp;
+    std::unique_ptr< SfxHelp_Impl >   pImpl;
 
 private:
     SAL_DLLPRIVATE bool Start_Impl( const OUString& rURL, const vcl::Window* pWindow, const OUString& rKeyword );
