@@ -24,6 +24,7 @@
 #include <sal/types.h>
 #include <sfx2/dllapi.h>
 #include <tools/link.hxx>
+#include <memory>
 
 namespace rtl {
     class OUString;
@@ -35,7 +36,7 @@ struct SvProgressArg;
 
 class SFX2_DLLPUBLIC SfxProgress
 {
-    SfxProgress_Impl*       pImp;
+    std::unique_ptr< SfxProgress_Impl >       pImpl;
     sal_uIntPtr             nVal;
     bool                    bSuspended;
 
