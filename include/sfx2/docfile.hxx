@@ -57,14 +57,15 @@ class DateTime;
 
 class SFX2_DLLPUBLIC SfxMedium : public SvRefBase
 {
-    SfxMedium_Impl* pImp;
-
     SAL_DLLPRIVATE void SetIsRemote_Impl();
     SAL_DLLPRIVATE void CloseInStream_Impl();
     SAL_DLLPRIVATE void CloseOutStream_Impl();
     SAL_DLLPRIVATE void CloseStreams_Impl();
 
     SAL_DLLPRIVATE void SetEncryptionDataToStorage_Impl();
+
+private:
+    std::unique_ptr< SfxMedium_Impl > pImpl;
 
 public:
 

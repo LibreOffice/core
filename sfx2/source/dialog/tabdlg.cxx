@@ -174,8 +174,7 @@ SfxTabPage::~SfxTabPage()
 
 void SfxTabPage::dispose()
 {
-    delete pImpl;
-    pImpl = nullptr;
+    pImpl.reset();
     TabPage::dispose();
 }
 
@@ -340,7 +339,7 @@ void SfxTabDialog::dispose()
 {
     SavePosAndId();
 
-    for ( SfxTabDlgData_Impl::const_iterator it = m_pImpl->aData.begin(); it != m_pImpl->aData.end(); ++it )
+    for ( SfxTabDlgData_Impl::const_iterator it = pImpl->aData.begin(); it != pImpl->aData.end(); ++it )
     {
         Data_Impl* pDataObject = *it;
 
@@ -370,8 +369,7 @@ void SfxTabDialog::dispose()
         pDataObject = nullptr;
     }
 
-    delete m_pImpl;
-    m_pImpl = nullptr;
+    pImpl.reset();
     delete m_pSet;
     m_pSet = nullptr;
     delete m_pOutSet;
@@ -415,7 +413,7 @@ void SfxTabDialog::Init_Impl(bool bFmtFlag)
     assert(m_pBox);
     m_pUIBuilder->get(m_pTabCtrl, "tabcontrol");
 
-    m_pImpl = new TabDlg_Impl(m_pTabCtrl->GetPageCount());
+    pImpl.reset( new TabDlg_Impl(m_pTabCtrl->GetPageCount()) );
 
     m_pActionArea = get_action_area();
     assert(m_pActionArea);
@@ -442,7 +440,7 @@ void SfxTabDialog::Init_Impl(bool bFmtFlag)
     if (m_bOwnsResetBtn)
         m_pResetBtn = VclPtr<PushButton>::Create(m_pActionArea.get());
     else
-        m_pImpl->bHideResetBtn = !m_pResetBtn->IsVisible();
+        pImpl->bHideResetBtn = !m_pResetBtn->IsVisible();
 
     m_pBaseFmtBtn = m_pUIBuilder->get<PushButton>("standard");
     m_bOwnsBaseFmtBtn = m_pBaseFmtBtn == nullptr;
@@ -490,7 +488,7 @@ void SfxTabDialog::Init_Impl(bool bFmtFlag)
 void SfxTabDialog::RemoveResetButton()
 {
     m_pResetBtn->Hide();
-    m_pImpl->bHideResetBtn = true;
+    pImpl->bHideResetBtn = true;
 }
 
 void SfxTabDialog::RemoveStandardButton()
@@ -518,7 +516,7 @@ void SfxTabDialog::StartExecuteModal( const Link<Dialog&,void>& rEndDialogHdl )
 
 void SfxTabDialog::Start()
 {
-    m_pImpl->bModal = false;
+    pImpl->bModal = false;
     Start_Impl();
 
     Show();
@@ -538,7 +536,7 @@ void SfxTabDialog::SetApplyHandler(const Link<Button*, void>& _rHdl)
 
 void SfxTabDialog::Start_Impl()
 {
-    assert(m_pImpl->aData.size() == m_pTabCtrl->GetPageCount()
+    assert(pImpl->aData.size() == m_pTabCtrl->GetPageCount()
             && "not all pages registered");
     sal_uInt16 nActPage = m_pTabCtrl->GetPageId( 0 );
 
@@ -588,7 +586,7 @@ sal_uInt16 SfxTabDialog::AddTabPage
 )
 {
     sal_uInt16 nId = m_pTabCtrl->GetPageId(rName);
-    m_pImpl->aData.push_back(
+    pImpl->aData.push_back(
         new Data_Impl( nId, pCreateFunc, pRangesFunc ) );
     return nId;
 }
@@ -609,7 +607,7 @@ sal_uInt16 SfxTabDialog::AddTabPage
     assert(pCreateFunc);
     GetTabPageRanges pRangesFunc = pFact->GetTabPageRangesFunc(nPageCreateId);
     sal_uInt16 nPageId = m_pTabCtrl->GetPageId(rName);
-    m_pImpl->aData.push_back(new Data_Impl(nPageId, pCreateFunc, pRangesFunc));
+    pImpl->aData.push_back(new Data_Impl(nPageId, pCreateFunc, pRangesFunc));
     return nPageId;
 }
 
@@ -633,7 +631,7 @@ void SfxTabDialog::AddTabPage
     DBG_ASSERT( TAB_PAGE_NOTFOUND == m_pTabCtrl->GetPagePos( nId ),
                 "Double Page-Ids in the Tabpage" );
     m_pTabCtrl->InsertPage( nId, rRiderText, nPos );
-    m_pImpl->aData.push_back( new Data_Impl( nId, pCreateFunc, pRangesFunc ) );
+    pImpl->aData.push_back( new Data_Impl( nId, pCreateFunc, pRangesFunc ) );
 }
 
 void SfxTabDialog::RemoveTabPage( sal_uInt16 nId )
@@ -646,7 +644,7 @@ void SfxTabDialog::RemoveTabPage( sal_uInt16 nId )
 {
     sal_uInt16 nPos = 0;
     m_pTabCtrl->RemovePage( nId );
-    Data_Impl* pDataObject = Find( m_pImpl->aData, nId, &nPos );
+    Data_Impl* pDataObject = Find( pImpl->aData, nId, &nPos );
 
     if ( pDataObject )
     {
@@ -673,7 +671,7 @@ void SfxTabDialog::RemoveTabPage( sal_uInt16 nId )
         }
 
         delete pDataObject;
-        m_pImpl->aData.erase( m_pImpl->aData.begin() + nPos );
+        pImpl->aData.erase( pImpl->aData.begin() + nPos );
     }
     else
     {
@@ -726,7 +724,7 @@ SfxTabPage* SfxTabDialog::GetTabPage( sal_uInt16 nPageId ) const
 
 {
     sal_uInt16 nPos = 0;
-    Data_Impl* pDataObject = Find( m_pImpl->aData, nPageId, &nPos );
+    Data_Impl* pDataObject = Find( pImpl->aData, nPageId, &nPos );
 
     if ( pDataObject )
         return pDataObject->pTabPage;
@@ -773,7 +771,7 @@ short SfxTabDialog::Ok()
     }
     bool bModified = false;
 
-    for ( SfxTabDlgData_Impl::const_iterator it = m_pImpl->aData.begin(); it != m_pImpl->aData.end(); ++it )
+    for ( SfxTabDlgData_Impl::const_iterator it = pImpl->aData.begin(); it != pImpl->aData.end(); ++it )
     {
         Data_Impl* pDataObject = *it;
         SfxTabPage* pTabPage = pDataObject->pTabPage;
@@ -795,7 +793,7 @@ short SfxTabDialog::Ok()
         }
     }
 
-    if ( m_pImpl->bModified || ( m_pOutSet && m_pOutSet->Count() > 0 ) )
+    if ( pImpl->bModified || ( m_pOutSet && m_pOutSet->Count() > 0 ) )
         bModified = true;
 
     if (m_bStandardPushed)
@@ -850,7 +848,7 @@ IMPL_LINK_NOARG_TYPED(SfxTabDialog, OkHdl, Button*, void)
 {
     if (PrepareLeaveCurrentPage())
     {
-        if ( m_pImpl->bModal )
+        if ( pImpl->bModal )
             EndDialog( Ok() );
         else
         {
@@ -949,7 +947,7 @@ IMPL_LINK_NOARG_TYPED(SfxTabDialog, ResetHdl, Button*, void)
 
 {
     const sal_uInt16 nId = m_pTabCtrl->GetCurPageId();
-    Data_Impl* pDataObject = Find( m_pImpl->aData, nId );
+    Data_Impl* pDataObject = Find( pImpl->aData, nId );
     DBG_ASSERT( pDataObject, "Id not known" );
 
     pDataObject->pTabPage->Reset( m_pSet );
@@ -969,7 +967,7 @@ IMPL_LINK_NOARG_TYPED(SfxTabDialog, BaseFmtHdl, Button*, void)
     m_bStandardPushed = true;
 
     const sal_uInt16 nId = m_pTabCtrl->GetCurPageId();
-    Data_Impl* pDataObject = Find( m_pImpl->aData, nId );
+    Data_Impl* pDataObject = Find( pImpl->aData, nId );
     DBG_ASSERT( pDataObject, "Id not known" );
 
     if ( pDataObject->fnGetRanges )
@@ -1046,12 +1044,12 @@ IMPL_LINK_TYPED( SfxTabDialog, ActivatePageHdl, TabControl *, pTabCtrl, void )
 {
     sal_uInt16 nId = pTabCtrl->GetCurPageId();
 
-    DBG_ASSERT( m_pImpl->aData.size(), "no Pages registered" );
+    DBG_ASSERT( pImpl->aData.size(), "no Pages registered" );
     SfxGetpApp();
 
     // Tab Page schon da?
     VclPtr<SfxTabPage> pTabPage = dynamic_cast<SfxTabPage*> (pTabCtrl->GetTabPage( nId ));
-    Data_Impl* pDataObject = Find( m_pImpl->aData, nId );
+    Data_Impl* pDataObject = Find( pImpl->aData, nId );
 
     //UUUU fallback to 1st page when requested one does not exist
     if(!pDataObject && pTabCtrl->GetPageCount())
@@ -1059,7 +1057,7 @@ IMPL_LINK_TYPED( SfxTabDialog, ActivatePageHdl, TabControl *, pTabCtrl, void )
         pTabCtrl->SetCurPageId(pTabCtrl->GetPageId(0));
         nId = pTabCtrl->GetCurPageId();
         pTabPage = dynamic_cast< SfxTabPage* >(pTabCtrl->GetTabPage(nId));
-        pDataObject = Find(m_pImpl->aData, nId);
+        pDataObject = Find(pImpl->aData, nId);
     }
 
     if (!pDataObject)
@@ -1125,7 +1123,7 @@ IMPL_LINK_TYPED( SfxTabDialog, ActivatePageHdl, TabControl *, pTabCtrl, void )
     if ( m_pExampleSet )
         pTabPage->ActivatePage( *m_pExampleSet );
 
-    if ( pTabPage->IsReadOnly() || m_pImpl->bHideResetBtn )
+    if ( pTabPage->IsReadOnly() || pImpl->bHideResetBtn )
         m_pResetBtn->Hide();
     else
         m_pResetBtn->Show();
@@ -1151,7 +1149,7 @@ IMPL_LINK_TYPED( SfxTabDialog, DeactivatePageHdl, TabControl *, pTabCtrl, bool )
     if (!pPage)
         return false;
 #ifdef DBG_UTIL
-    Data_Impl* pDataObject = Find( m_pImpl->aData, pTabCtrl->GetCurPageId() );
+    Data_Impl* pDataObject = Find( pImpl->aData, pTabCtrl->GetCurPageId() );
     DBG_ASSERT( pDataObject, "no Data structure for current page" );
 #endif
 
@@ -1196,7 +1194,7 @@ IMPL_LINK_TYPED( SfxTabDialog, DeactivatePageHdl, TabControl *, pTabCtrl, bool )
         RefreshInputSet();
         // Flag all Pages as to be initialized as new
 
-        for ( SfxTabDlgData_Impl::const_iterator it = m_pImpl->aData.begin(); it != m_pImpl->aData.end(); ++it )
+        for ( SfxTabDlgData_Impl::const_iterator it = pImpl->aData.begin(); it != pImpl->aData.end(); ++it )
         {
             Data_Impl* pObj = *it;
 
@@ -1257,7 +1255,7 @@ const sal_uInt16* SfxTabDialog::GetInputRanges( const SfxItemPool& rPool )
         return m_pRanges;
     std::vector<sal_uInt16> aUS;
 
-    for ( SfxTabDlgData_Impl::const_iterator it = m_pImpl->aData.begin(); it != m_pImpl->aData.end(); ++it )
+    for ( SfxTabDlgData_Impl::const_iterator it = pImpl->aData.begin(); it != pImpl->aData.end(); ++it )
     {
         Data_Impl* pDataObject = *it;
 

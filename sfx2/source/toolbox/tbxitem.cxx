@@ -212,9 +212,8 @@ SfxToolBoxControl::SfxToolBoxControl(
     sal_uInt16      nID,
     ToolBox&        rBox,
     bool            bShowStringItems     )
+    : pImpl( new SfxToolBoxControl_Impl )
 {
-    pImpl = new SfxToolBoxControl_Impl;
-
     pImpl->pBox = &rBox;
     pImpl->bShowString = bShowStringItems;
     pImpl->pFact = nullptr;
@@ -227,7 +226,6 @@ SfxToolBoxControl::SfxToolBoxControl(
 
 SfxToolBoxControl::~SfxToolBoxControl()
 {
-    delete pImpl;
 }
 
 
@@ -627,7 +625,7 @@ IMPL_LINK_NOARG_TYPED(SfxToolBoxControl, PopupModeEndHdl, FloatingWindow*, void)
         pImpl->mpPopupWindow.clear();
         // We also need to know when the user tries to use the
         // floating window.
-        pImpl->mpFloatingWindow->AddEventListener( LINK( pImpl, SfxToolBoxControl_Impl, WindowEventListener ));
+        pImpl->mpFloatingWindow->AddEventListener( LINK( pImpl.get(), SfxToolBoxControl_Impl, WindowEventListener ));
     }
     else
     {

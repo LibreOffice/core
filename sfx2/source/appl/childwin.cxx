@@ -158,15 +158,15 @@ SfxChildWindow::SfxChildWindow(vcl::Window *pParentWindow, sal_uInt16 nId)
     : pParent(pParentWindow)
     , nType(nId)
     , eChildAlignment(SfxChildAlignment::NOALIGNMENT)
+    , pImpl(new SfxChildWindow_Impl)
 {
-    pImp = new SfxChildWindow_Impl;
-    pImp->pFact = nullptr;
-    pImp->bHideNotDelete = false;
-    pImp->bHideAtToggle = false;
-    pImp->bWantsFocus = true;
-    pImp->bVisible = true;
-    pImp->pContextModule = nullptr;
-    pImp->pWorkWin = nullptr;
+    pImpl->pFact = nullptr;
+    pImpl->bHideNotDelete = false;
+    pImpl->bHideAtToggle = false;
+    pImpl->bWantsFocus = true;
+    pImpl->bVisible = true;
+    pImpl->pContextModule = nullptr;
+    pImpl->pWorkWin = nullptr;
 
     pContext = nullptr;
 }
@@ -194,11 +194,11 @@ void SfxChildWindow::Destroy()
 
 void SfxChildWindow::ClearWorkwin()
 {
-    if (pImp->pWorkWin)
+    if (pImpl->pWorkWin)
     {
-        if (pImp->pWorkWin->GetActiveChild_Impl() == pWindow)
-            pImp->pWorkWin->SetActiveChild_Impl(nullptr);
-        pImp->pWorkWin = nullptr;
+        if (pImpl->pWorkWin->GetActiveChild_Impl() == pWindow)
+            pImpl->pWorkWin->SetActiveChild_Impl(nullptr);
+        pImpl->pWorkWin = nullptr;
     }
 }
 
@@ -208,8 +208,6 @@ SfxChildWindow::~SfxChildWindow()
     pContext = nullptr;
     ClearWorkwin();
     pWindow.disposeAndClear();
-    delete pImp;
-    pImp = nullptr;
 }
 
 
@@ -322,7 +320,7 @@ void SfxChildWindow::SaveStatus(const SfxChildWinInfo& rInfo)
     aWinOpt.SetUserData( aSeq );
 
     // ... but save status at runtime!
-    pImp->pFact->aInfo = rInfo;
+    pImpl->pFact->aInfo = rInfo;
 }
 
 void SfxChildWindow::SetAlignment(SfxChildAlignment eAlign)
@@ -333,7 +331,7 @@ void SfxChildWindow::SetAlignment(SfxChildAlignment eAlign)
 SfxChildWinInfo SfxChildWindow::GetInfo() const
 {
 
-    SfxChildWinInfo aInfo(pImp->pFact->aInfo);
+    SfxChildWinInfo aInfo(pImpl->pFact->aInfo);
     aInfo.aPos  = pWindow->GetPosPixel();
     aInfo.aSize = pWindow->GetSizePixel();
     if ( pWindow->IsSystemWindow() )
@@ -355,14 +353,14 @@ SfxChildWinInfo SfxChildWindow::GetInfo() const
         }
     }
 
-    aInfo.bVisible = pImp->bVisible;
+    aInfo.bVisible = pImpl->bVisible;
     aInfo.nFlags = SfxChildWindowFlags::NONE;
     return aInfo;
 }
 
 sal_uInt16 SfxChildWindow::GetPosition()
 {
-    return pImp->pFact->nPos;
+    return pImpl->pFact->nPos;
 }
 
 void SfxChildWindow::InitializeChildWinFactory_Impl(sal_uInt16 nId, SfxChildWinInfo& rInfo)
@@ -460,7 +458,7 @@ void SfxChildWindow::CreateContext( sal_uInt16 nContextId, SfxBindings& rBinding
                             SfxChildWinInfo aInfo = pFact->aInfo;
                             pCon = pConFact->pCtor( GetWindow(), &rBindings, &aInfo );
                             pCon->nContextId = pConFact->nContextId;
-                            pImp->pContextModule = pMod;
+                            pImpl->pContextModule = pMod;
                         }
                         rBindings.LEAVEREGISTRATIONS();
                     }
@@ -491,7 +489,7 @@ void SfxChildWindow::CreateContext( sal_uInt16 nContextId, SfxBindings& rBinding
                         SfxChildWinInfo aInfo = pFact->aInfo;
                         pCon = pConFact->pCtor( GetWindow(), &rBindings, &aInfo );
                         pCon->nContextId = pConFact->nContextId;
-                        pImp->pContextModule = nullptr;
+                        pImpl->pContextModule = nullptr;
                     }
                     rBindings.LEAVEREGISTRATIONS();
                 }
@@ -547,32 +545,32 @@ void SfxChildWindowContext::Resizing( Size& )
 
 void SfxChildWindow::SetFactory_Impl( SfxChildWinFactory *pF )
 {
-    pImp->pFact = pF;
+    pImpl->pFact = pF;
 }
 
 void SfxChildWindow::SetHideNotDelete( bool bOn )
 {
-    pImp->bHideNotDelete = bOn;
+    pImpl->bHideNotDelete = bOn;
 }
 
 bool SfxChildWindow::IsHideNotDelete() const
 {
-    return pImp->bHideNotDelete;
+    return pImpl->bHideNotDelete;
 }
 
 bool SfxChildWindow::IsHideAtToggle() const
 {
-    return pImp->bHideAtToggle;
+    return pImpl->bHideAtToggle;
 }
 
 void SfxChildWindow::SetWantsFocus( bool bSet )
 {
-    pImp->bWantsFocus = bSet;
+    pImpl->bWantsFocus = bSet;
 }
 
 bool SfxChildWindow::WantsFocus() const
 {
-    return pImp->bWantsFocus;
+    return pImpl->bWantsFocus;
 }
 
 bool SfxChildWinInfo::GetExtraData_Impl
@@ -631,12 +629,12 @@ bool SfxChildWinInfo::GetExtraData_Impl
 
 bool SfxChildWindow::IsVisible() const
 {
-    return pImp->bVisible;
+    return pImpl->bVisible;
 }
 
 void SfxChildWindow::SetVisible_Impl( bool bVis )
 {
-    pImp->bVisible = bVis;
+    pImpl->bVisible = bVis;
 }
 
 void SfxChildWindow::Hide()
@@ -651,20 +649,20 @@ void SfxChildWindow::Show( ShowFlags nFlags )
 
 vcl::Window* SfxChildWindow::GetContextWindow( SfxModule *pModule ) const
 {
-    return pModule == pImp->pContextModule && pContext ? pContext->GetWindow(): nullptr;
+    return pModule == pImpl->pContextModule && pContext ? pContext->GetWindow(): nullptr;
 }
 
 void SfxChildWindow::SetWorkWindow_Impl( SfxWorkWindow* pWin )
 {
-    pImp->pWorkWin = pWin;
+    pImpl->pWorkWin = pWin;
     if ( pWin && pWindow->HasChildPathFocus() )
-        pImp->pWorkWin->SetActiveChild_Impl( pWindow );
+        pImpl->pWorkWin->SetActiveChild_Impl( pWindow );
 }
 
 void SfxChildWindow::Activate_Impl()
 {
-    if(pImp->pWorkWin!=nullptr)
-        pImp->pWorkWin->SetActiveChild_Impl( pWindow );
+    if(pImpl->pWorkWin!=nullptr)
+        pImpl->pWorkWin->SetActiveChild_Impl( pWindow );
 }
 
 void SfxChildWindow::Deactivate_Impl()
@@ -675,9 +673,9 @@ bool SfxChildWindow::QueryClose()
 {
     bool bAllow = true;
 
-    if ( pImp->xFrame.is() )
+    if ( pImpl->xFrame.is() )
     {
-        css::uno::Reference< css::frame::XController >  xCtrl = pImp->xFrame->getController();
+        css::uno::Reference< css::frame::XController >  xCtrl = pImpl->xFrame->getController();
         if ( xCtrl.is() )
             bAllow = xCtrl->suspend( true );
     }
@@ -690,35 +688,35 @@ bool SfxChildWindow::QueryClose()
 
 const css::uno::Reference< css::frame::XFrame >&  SfxChildWindow::GetFrame()
 {
-    return pImp->xFrame;
+    return pImpl->xFrame;
 }
 
 void SfxChildWindow::SetFrame( const css::uno::Reference< css::frame::XFrame > & rFrame )
 {
     // Do nothing if nothing will be changed ...
-    if( pImp->xFrame != rFrame )
+    if( pImpl->xFrame != rFrame )
     {
         // ... but stop listening on old frame, if connection exist!
-        if( pImp->xFrame.is() )
-            pImp->xFrame->removeEventListener( pImp->xListener );
+        if( pImpl->xFrame.is() )
+            pImpl->xFrame->removeEventListener( pImpl->xListener );
 
         // If new frame is not NULL -> we must guarantee valid listener for disposing events.
         // Use already existing or create new one.
         if( rFrame.is() )
-            if( !pImp->xListener.is() )
-                pImp->xListener.set( new DisposeListener( this, pImp ) );
+            if( !pImpl->xListener.is() )
+                pImpl->xListener.set( new DisposeListener( this, pImpl.get() ) );
 
         // Set new frame in data container
         // and build new listener connection, if necessary.
-        pImp->xFrame = rFrame;
-        if( pImp->xFrame.is() )
-            pImp->xFrame->addEventListener( pImp->xListener );
+        pImpl->xFrame = rFrame;
+        if( pImpl->xFrame.is() )
+            pImpl->xFrame->addEventListener( pImpl->xListener );
     }
 }
 
 bool SfxChildWindow::CanGetFocus() const
 {
-    return !(pImp->pFact->aInfo.nFlags & SfxChildWindowFlags::CANTGETFOCUS);
+    return !(pImpl->pFact->aInfo.nFlags & SfxChildWindowFlags::CANTGETFOCUS);
 }
 
 void SfxChildWindowContext::RegisterChildWindowContext(SfxModule* pMod, sal_uInt16 nId, SfxChildWinContextFactory* pFact)

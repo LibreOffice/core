@@ -423,9 +423,9 @@ SfxNewFileDialog_Impl::~SfxNewFileDialog_Impl()
 
 SfxNewFileDialog::SfxNewFileDialog(vcl::Window *pParent, sal_uInt16 nFlags)
     : SfxModalDialog(pParent, "LoadTemplateDialog",
-        "sfx/ui/loadtemplatedialog.ui")
+        "sfx/ui/loadtemplatedialog.ui"),
+      pImpl( new SfxNewFileDialog_Impl(this, nFlags) )
 {
-    pImpl = new SfxNewFileDialog_Impl(this, nFlags);
 }
 
 SfxNewFileDialog::~SfxNewFileDialog()
@@ -435,7 +435,7 @@ SfxNewFileDialog::~SfxNewFileDialog()
 
 void SfxNewFileDialog::dispose()
 {
-    delete pImpl;
+    pImpl.reset();
     SfxModalDialog::dispose();
 }
 

@@ -35,8 +35,8 @@ class SFX2_DLLPUBLIC SfxPrinter : public Printer
 {
 private:
     SfxItemSet*             pOptions;
-    SfxPrinter_Impl*        pImpl;
     bool                    bKnown;
+    std::unique_ptr< SfxPrinter_Impl >  pImpl;
 
     SAL_DLLPRIVATE void operator =(SfxPrinter &) = delete;
 

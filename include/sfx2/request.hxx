@@ -46,7 +46,6 @@ friend struct SfxRequest_Impl;
 
     sal_uInt16          nSlot;
     SfxAllItemSet*      pArgs;
-    SfxRequest_Impl*    pImp;
 
 public:
     SAL_DLLPRIVATE void Record_Impl( SfxShell &rSh, const SfxSlot &rSlot,
@@ -54,6 +53,8 @@ public:
                                      SfxViewFrame* );
 private:
     SAL_DLLPRIVATE void Done_Impl( const SfxItemSet *pSet );
+
+    std::unique_ptr< SfxRequest_Impl >    pImpl;
 
 
 public:

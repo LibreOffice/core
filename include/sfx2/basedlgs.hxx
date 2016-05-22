@@ -92,12 +92,14 @@ class SFX2_DLLPUBLIC SfxModelessDialog: public ModelessDialog
 {
     SfxBindings*            pBindings;
     Size                    aSize;
-    SfxModelessDialog_Impl* pImp;
 
     SfxModelessDialog(SfxModelessDialog &) = delete;
     void operator =(SfxModelessDialog &) = delete;
 
     void Init(SfxBindings *pBindinx, SfxChildWindow *pCW);
+
+private:
+    std::unique_ptr< SfxModelessDialog_Impl > pImpl;
 
 protected:
     SfxModelessDialog( SfxBindings*, SfxChildWindow*,
@@ -126,10 +128,12 @@ class SFX2_DLLPUBLIC SfxFloatingWindow: public FloatingWindow
 {
     SfxBindings*            pBindings;
     Size                    aSize;
-    SfxFloatingWindow_Impl* pImp;
 
     SfxFloatingWindow(SfxFloatingWindow &) = delete;
     void operator =(SfxFloatingWindow &) = delete;
+
+private:
+    std::unique_ptr< SfxFloatingWindow_Impl > pImpl;
 
 protected:
                             SfxFloatingWindow( SfxBindings *pBindings,
@@ -198,9 +202,10 @@ protected:
     VclPtr<CancelButton>  pCancelBtn;
     VclPtr<HelpButton>    pHelpBtn;
 
-    SingleTabDlgImpl*   pImpl;
-
     DECL_DLLPRIVATE_LINK_TYPED(OKHdl_Impl, Button*, void);
+
+private:
+    std::unique_ptr<SingleTabDlgImpl>   pImpl;
 };
 
 #endif

@@ -134,7 +134,7 @@ class SFX2_DLLPUBLIC SfxShell: public SfxBroadcaster
 {
     friend class SfxObjectItem;
 
-    SfxShell_Impl*              pImp;
+    std::unique_ptr< SfxShell_Impl >              pImpl;
     SfxItemPool*                pPool;
     ::svl::IUndoManager*        pUndoMgr;
 
