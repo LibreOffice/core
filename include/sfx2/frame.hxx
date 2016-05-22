@@ -97,7 +97,7 @@ class SFX2_DLLPUBLIC SfxFrame : public SvCompatWeakBase<SfxFrame>
 private:
     SfxFrame*           pParentFrame;
     SfxFrameArr_Impl*   pChildArr;
-    SfxFrame_Impl*      pImp;
+    std::unique_ptr< SfxFrame_Impl >     pImpl;
     VclPtr<vcl::Window> pWindow;
 
 protected:
