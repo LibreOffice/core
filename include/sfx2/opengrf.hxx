@@ -49,7 +49,7 @@ private:
     SvxOpenGraphicDialog    (const SvxOpenGraphicDialog&) = delete;
     SvxOpenGraphicDialog& operator = ( const SvxOpenGraphicDialog & ) = delete;
 
-    const std::unique_ptr< SvxOpenGrf_Impl >  mpImpl;
+    const std::unique_ptr< SvxOpenGrf_Impl >  pImpl;
 };
 
 #endif // _SVX_OPENGRF_HXX

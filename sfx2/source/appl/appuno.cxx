@@ -1753,24 +1753,24 @@ uno::Sequence< uno::Reference< task::XInteractionContinuation > >
 }
 
 RequestPackageReparation::RequestPackageReparation( const OUString& aName )
+    : pImpl( new RequestPackageReparation_Impl( aName ) )
 {
-    pImp = new RequestPackageReparation_Impl( aName );
-    pImp->acquire();
+    pImpl->acquire();
 }
 
 RequestPackageReparation::~RequestPackageReparation()
 {
-    pImp->release();
+    pImpl->release();
 }
 
 bool RequestPackageReparation::isApproved()
 {
-    return pImp->isApproved();
+    return pImpl->isApproved();
 }
 
 css::uno::Reference < task::XInteractionRequest > RequestPackageReparation::GetRequest()
 {
-    return css::uno::Reference < task::XInteractionRequest >(pImp);
+    return css::uno::Reference < task::XInteractionRequest >(pImpl.get());
 }
 
 
@@ -1812,19 +1812,19 @@ uno::Sequence< uno::Reference< task::XInteractionContinuation > >
 }
 
 NotifyBrokenPackage::NotifyBrokenPackage( const OUString& aName )
+    : pImpl( new NotifyBrokenPackage_Impl( aName ) )
 {
-    pImp = new NotifyBrokenPackage_Impl( aName );
-    pImp->acquire();
+    pImpl->acquire();
 }
 
 NotifyBrokenPackage::~NotifyBrokenPackage()
 {
-    pImp->release();
+    pImpl->release();
 }
 
 css::uno::Reference < task::XInteractionRequest > NotifyBrokenPackage::GetRequest()
 {
-    return css::uno::Reference < task::XInteractionRequest >(pImp);
+    return css::uno::Reference < task::XInteractionRequest >(pImpl.get());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

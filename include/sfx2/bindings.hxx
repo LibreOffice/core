@@ -111,7 +111,7 @@ friend class SfxApplication;
 friend class SfxShell;
 friend class SfxBindings_Impl;
 
-    SfxBindings_Impl*pImp;           // Data of the Bindings instance
+    std::unique_ptr< SfxBindings_Impl> pImpl;           // Data of the Bindings instance
     SfxDispatcher*   pDispatcher;    // Dispatcher, to be used
     sal_uInt16       nRegLevel;      // Lock-Level while Reconfig
 

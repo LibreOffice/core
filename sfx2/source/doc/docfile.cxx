@@ -295,53 +295,53 @@ SfxMedium_Impl::~SfxMedium_Impl()
 
 void SfxMedium::ResetError()
 {
-    pImp->m_eError = SVSTREAM_OK;
-    if( pImp->m_pInStream )
-        pImp->m_pInStream->ResetError();
-    if( pImp->m_pOutStream )
-        pImp->m_pOutStream->ResetError();
+    pImpl->m_eError = SVSTREAM_OK;
+    if( pImpl->m_pInStream )
+        pImpl->m_pInStream->ResetError();
+    if( pImpl->m_pOutStream )
+        pImpl->m_pOutStream->ResetError();
 }
 
 
 sal_uInt32 SfxMedium::GetLastStorageCreationState()
 {
-    return pImp->nLastStorageError;
+    return pImpl->nLastStorageError;
 }
 
 
 void SfxMedium::AddLog( const OUString& aMessage )
 {
-    if ( !pImp->m_xLogRing.is() )
+    if ( !pImpl->m_xLogRing.is() )
     {
         try
         {
             Reference<XComponentContext> xContext( ::comphelper::getProcessComponentContext() );
-            pImp->m_xLogRing.set( logging::DocumentIOLogRing::get(xContext) );
+            pImpl->m_xLogRing.set( logging::DocumentIOLogRing::get(xContext) );
         }
         catch( const uno::Exception& )
         {}
     }
 
-    if ( pImp->m_xLogRing.is() )
-        pImp->m_xLogRing->logString( aMessage );
+    if ( pImpl->m_xLogRing.is() )
+        pImpl->m_xLogRing->logString( aMessage );
 }
 
 
 void SfxMedium::SetError( sal_uInt32 nError, const OUString& aLogMessage )
 {
-    pImp->m_eError = nError;
-    if ( pImp->m_eError != ERRCODE_NONE && !aLogMessage.isEmpty() )
+    pImpl->m_eError = nError;
+    if ( pImpl->m_eError != ERRCODE_NONE && !aLogMessage.isEmpty() )
         AddLog( aLogMessage );
 }
 
 
 sal_uInt32 SfxMedium::GetErrorCode() const
 {
-    sal_uInt32 lError = pImp->m_eError;
-    if(!lError && pImp->m_pInStream)
-        lError = pImp->m_pInStream->GetErrorCode();
-    if(!lError && pImp->m_pOutStream)
-        lError = pImp->m_pOutStream->GetErrorCode();
+    sal_uInt32 lError = pImpl->m_eError;
+    if(!lError && pImpl->m_pInStream)
+        lError = pImpl->m_pInStream->GetErrorCode();
+    if(!lError && pImpl->m_pOutStream)
+        lError = pImpl->m_pOutStream->GetErrorCode();
     return lError;
 }
 
@@ -349,12 +349,12 @@ sal_uInt32 SfxMedium::GetErrorCode() const
 void SfxMedium::CheckFileDate( const util::DateTime& aInitDate )
 {
     GetInitFileDate( true );
-    if ( pImp->m_aDateTime.Seconds != aInitDate.Seconds
-      || pImp->m_aDateTime.Minutes != aInitDate.Minutes
-      || pImp->m_aDateTime.Hours != aInitDate.Hours
-      || pImp->m_aDateTime.Day != aInitDate.Day
-      || pImp->m_aDateTime.Month != aInitDate.Month
-      || pImp->m_aDateTime.Year != aInitDate.Year )
+    if ( pImpl->m_aDateTime.Seconds != aInitDate.Seconds
+      || pImpl->m_aDateTime.Minutes != aInitDate.Minutes
+      || pImpl->m_aDateTime.Hours != aInitDate.Hours
+      || pImpl->m_aDateTime.Day != aInitDate.Day
+      || pImpl->m_aDateTime.Month != aInitDate.Month
+      || pImpl->m_aDateTime.Year != aInitDate.Year )
     {
         uno::Reference< task::XInteractionHandler > xHandler = GetInteractionHandler();
 
@@ -391,33 +391,33 @@ bool SfxMedium::DocNeedsFileDateCheck() const
 
 util::DateTime SfxMedium::GetInitFileDate( bool bIgnoreOldValue )
 {
-    if ( ( bIgnoreOldValue || !pImp->m_bGotDateTime ) && !pImp->m_aLogicName.isEmpty() )
+    if ( ( bIgnoreOldValue || !pImpl->m_bGotDateTime ) && !pImpl->m_aLogicName.isEmpty() )
     {
         try
         {
             uno::Reference< css::ucb::XCommandEnvironment > xDummyEnv;
             ::ucbhelper::Content aContent( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ), xDummyEnv, comphelper::getProcessComponentContext() );
 
-            aContent.getPropertyValue("DateModified") >>= pImp->m_aDateTime;
-            pImp->m_bGotDateTime = true;
+            aContent.getPropertyValue("DateModified") >>= pImpl->m_aDateTime;
+            pImpl->m_bGotDateTime = true;
         }
         catch ( const css::uno::Exception& )
         {
         }
     }
 
-    return pImp->m_aDateTime;
+    return pImpl->m_aDateTime;
 }
 
 
 Reference < XContent > SfxMedium::GetContent() const
 {
-    if ( !pImp->aContent.get().is() )
+    if ( !pImpl->aContent.get().is() )
     {
         Reference < css::ucb::XContent > xContent;
         Reference < css::ucb::XCommandEnvironment > xEnv;
 
-        const SfxUnoAnyItem* pItem = SfxItemSet::GetItem<SfxUnoAnyItem>(pImp->m_pSet, SID_CONTENT, false);
+        const SfxUnoAnyItem* pItem = SfxItemSet::GetItem<SfxUnoAnyItem>(pImpl->m_pSet, SID_CONTENT, false);
         if ( pItem )
             pItem->GetValue() >>= xContent;
 
@@ -425,7 +425,7 @@ Reference < XContent > SfxMedium::GetContent() const
         {
             try
             {
-                pImp->aContent = ::ucbhelper::Content( xContent, xEnv, comphelper::getProcessComponentContext() );
+                pImpl->aContent = ::ucbhelper::Content( xContent, xEnv, comphelper::getProcessComponentContext() );
             }
             catch ( const Exception& )
             {
@@ -435,16 +435,16 @@ Reference < XContent > SfxMedium::GetContent() const
         {
             // TODO: SAL_WARN( "sfx.doc", "SfxMedium::GetContent()\nCreate Content? This code exists as fallback only. Please clarify, why its used.");
             OUString aURL;
-            if ( !pImp->m_aName.isEmpty() )
-                osl::FileBase::getFileURLFromSystemPath( pImp->m_aName, aURL );
-            else if ( !pImp->m_aLogicName.isEmpty() )
+            if ( !pImpl->m_aName.isEmpty() )
+                osl::FileBase::getFileURLFromSystemPath( pImpl->m_aName, aURL );
+            else if ( !pImpl->m_aLogicName.isEmpty() )
                 aURL = GetURLObject().GetMainURL( INetURLObject::NO_DECODE );
             if (!aURL.isEmpty() )
-                (void)::ucbhelper::Content::create( aURL, xEnv, comphelper::getProcessComponentContext(), pImp->aContent );
+                (void)::ucbhelper::Content::create( aURL, xEnv, comphelper::getProcessComponentContext(), pImpl->aContent );
         }
     }
 
-    return pImp->aContent.get();
+    return pImpl->aContent.get();
 }
 
 OUString SfxMedium::GetBaseURL( bool bForSaving )
@@ -457,7 +457,7 @@ OUString SfxMedium::GetBaseURL( bool bForSaving )
     {
         try
         {
-            Any aAny = pImp->aContent.getPropertyValue("BaseURI");
+            Any aAny = pImpl->aContent.getPropertyValue("BaseURI");
             aAny >>= aBaseURL;
         }
         catch ( const css::uno::Exception& )
@@ -472,7 +472,7 @@ OUString SfxMedium::GetBaseURL( bool bForSaving )
     {
         SvtSaveOptions aOpt;
         bool bIsRemote = IsRemote();
-        if( (bIsRemote && !aOpt.IsSaveRelINet()) || (!pImp->m_bRemote && !aOpt.IsSaveRelFSys()) )
+        if( (bIsRemote && !aOpt.IsSaveRelINet()) || (!pImpl->m_bRemote && !aOpt.IsSaveRelFSys()) )
             return OUString();
     }
 
@@ -487,24 +487,24 @@ bool SfxMedium::IsSkipImages()
 
 SvStream* SfxMedium::GetInStream()
 {
-    if ( pImp->m_pInStream )
-        return pImp->m_pInStream;
+    if ( pImpl->m_pInStream )
+        return pImpl->m_pInStream;
 
-    if ( pImp->pTempFile )
+    if ( pImpl->pTempFile )
     {
-        pImp->m_pInStream = new SvFileStream(pImp->m_aName, pImp->m_nStorOpenMode);
+        pImpl->m_pInStream = new SvFileStream(pImpl->m_aName, pImpl->m_nStorOpenMode);
 
-        pImp->m_eError = pImp->m_pInStream->GetError();
+        pImpl->m_eError = pImpl->m_pInStream->GetError();
 
-        if (!pImp->m_eError && (pImp->m_nStorOpenMode & StreamMode::WRITE)
-                    && ! pImp->m_pInStream->IsWritable() )
+        if (!pImpl->m_eError && (pImpl->m_nStorOpenMode & StreamMode::WRITE)
+                    && ! pImpl->m_pInStream->IsWritable() )
         {
-            pImp->m_eError = ERRCODE_IO_ACCESSDENIED;
-            delete pImp->m_pInStream;
-            pImp->m_pInStream = nullptr;
+            pImpl->m_eError = ERRCODE_IO_ACCESSDENIED;
+            delete pImpl->m_pInStream;
+            pImpl->m_pInStream = nullptr;
         }
         else
-            return pImp->m_pInStream;
+            return pImpl->m_pInStream;
     }
 
     GetMedium_Impl();
@@ -512,7 +512,7 @@ SvStream* SfxMedium::GetInStream()
     if ( GetError() )
         return nullptr;
 
-    return pImp->m_pInStream;
+    return pImpl->m_pInStream;
 }
 
 
@@ -526,68 +526,68 @@ void SfxMedium::CloseInStream_Impl()
     // if there is a storage based on the InStream, we have to
     // close the storage, too, because otherwise the storage
     // would use an invalid ( deleted ) stream.
-    if ( pImp->m_pInStream && pImp->xStorage.is() )
+    if ( pImpl->m_pInStream && pImpl->xStorage.is() )
     {
-        if ( pImp->bStorageBasedOnInStream )
+        if ( pImpl->bStorageBasedOnInStream )
             CloseStorage();
     }
 
-    if ( pImp->m_pInStream && !GetContent().is() )
+    if ( pImpl->m_pInStream && !GetContent().is() )
     {
         CreateTempFile();
         return;
     }
 
-    DELETEZ( pImp->m_pInStream );
-    if ( pImp->m_pSet )
-        pImp->m_pSet->ClearItem( SID_INPUTSTREAM );
+    DELETEZ( pImpl->m_pInStream );
+    if ( pImpl->m_pSet )
+        pImpl->m_pSet->ClearItem( SID_INPUTSTREAM );
 
     CloseZipStorage_Impl();
-    pImp->xInputStream.clear();
+    pImpl->xInputStream.clear();
 
-    if ( !pImp->m_pOutStream )
+    if ( !pImpl->m_pOutStream )
     {
         // output part of the stream is not used so the whole stream can be closed
         // TODO/LATER: is it correct?
-        pImp->xStream.clear();
-        if ( pImp->m_pSet )
-            pImp->m_pSet->ClearItem( SID_STREAM );
+        pImpl->xStream.clear();
+        if ( pImpl->m_pSet )
+            pImpl->m_pSet->ClearItem( SID_STREAM );
     }
 }
 
 
 SvStream* SfxMedium::GetOutStream()
 {
-    if ( !pImp->m_pOutStream )
+    if ( !pImpl->m_pOutStream )
     {
         // Create a temp. file if there is none because we always
         // need one.
         CreateTempFile( false );
 
-        if ( pImp->pTempFile )
+        if ( pImpl->pTempFile )
         {
             // On windows we try to re-use XOutStream from xStream if that exists;
             // because opening new SvFileStream in this situation may fail with ERROR_SHARING_VIOLATION
             // TODO: this is a horrible hack that should probably be removed,
             // somebody needs to investigate this more thoroughly...
-            if (getenv("SFX_MEDIUM_REUSE_STREAM") && pImp->xStream.is())
+            if (getenv("SFX_MEDIUM_REUSE_STREAM") && pImpl->xStream.is())
             {
-                assert(pImp->xStream->getOutputStream().is()); // need that...
-                pImp->m_pOutStream = utl::UcbStreamHelper::CreateStream(
-                        pImp->xStream, false);
+                assert(pImpl->xStream->getOutputStream().is()); // need that...
+                pImpl->m_pOutStream = utl::UcbStreamHelper::CreateStream(
+                        pImpl->xStream, false);
             }
             else
             {
             // On Unix don't try to re-use XOutStream from xStream if that exists;
             // it causes fdo#59022 (fails opening files via SMB on Linux)
-                pImp->m_pOutStream = new SvFileStream(
-                            pImp->m_aName, STREAM_STD_READWRITE);
+                pImpl->m_pOutStream = new SvFileStream(
+                            pImpl->m_aName, STREAM_STD_READWRITE);
             }
             CloseStorage();
         }
     }
 
-    return pImp->m_pOutStream;
+    return pImpl->m_pOutStream;
 }
 
 
@@ -599,40 +599,40 @@ bool SfxMedium::CloseOutStream()
 
 void SfxMedium::CloseOutStream_Impl()
 {
-    if ( pImp->m_pOutStream )
+    if ( pImpl->m_pOutStream )
     {
         // if there is a storage based on the OutStream, we have to
         // close the storage, too, because otherwise the storage
         // would use an invalid ( deleted ) stream.
         //TODO/MBA: how to deal with this?!
         //maybe we need a new flag when the storage was created from the outstream
-        if ( pImp->xStorage.is() )
+        if ( pImpl->xStorage.is() )
         {
                 CloseStorage();
         }
 
-        delete pImp->m_pOutStream;
-        pImp->m_pOutStream = nullptr;
+        delete pImpl->m_pOutStream;
+        pImpl->m_pOutStream = nullptr;
     }
 
-    if ( !pImp->m_pInStream )
+    if ( !pImpl->m_pInStream )
     {
         // input part of the stream is not used so the whole stream can be closed
         // TODO/LATER: is it correct?
-        pImp->xStream.clear();
-        if ( pImp->m_pSet )
-            pImp->m_pSet->ClearItem( SID_STREAM );
+        pImpl->xStream.clear();
+        if ( pImpl->m_pSet )
+            pImpl->m_pSet->ClearItem( SID_STREAM );
     }
 }
 
 
 const OUString& SfxMedium::GetPhysicalName() const
 {
-    if ( pImp->m_aName.isEmpty() && !pImp->m_aLogicName.isEmpty() )
+    if ( pImpl->m_aName.isEmpty() && !pImpl->m_aLogicName.isEmpty() )
         const_cast<SfxMedium*>(this)->CreateFileStream();
 
     // return the name then
-    return pImp->m_aName;
+    return pImpl->m_aName;
 }
 
 
@@ -640,10 +640,10 @@ void SfxMedium::CreateFileStream()
 {
     ForceSynchronStream_Impl();
     GetInStream();
-    if( pImp->m_pInStream )
+    if( pImpl->m_pInStream )
     {
         CreateTempFile( false );
-        pImp->bIsTemp = true;
+        pImpl->bIsTemp = true;
         CloseInStream_Impl();
     }
 }
@@ -651,12 +651,12 @@ void SfxMedium::CreateFileStream()
 
 bool SfxMedium::Commit()
 {
-    if( pImp->xStorage.is() )
+    if( pImpl->xStorage.is() )
         StorageCommit_Impl();
-    else if( pImp->m_pOutStream  )
-        pImp->m_pOutStream->Flush();
-    else if( pImp->m_pInStream  )
-        pImp->m_pInStream->Flush();
+    else if( pImpl->m_pOutStream  )
+        pImpl->m_pOutStream->Flush();
+    else if( pImpl->m_pInStream  )
+        pImpl->m_pInStream->Flush();
 
     if ( GetError() == SVSTREAM_OK )
     {
@@ -670,39 +670,39 @@ bool SfxMedium::Commit()
         GetInitFileDate( true );
 
     // remove truncation mode from the flags
-    pImp->m_nStorOpenMode &= (~StreamMode::TRUNC);
+    pImpl->m_nStorOpenMode &= (~StreamMode::TRUNC);
     return bResult;
 }
 
 
 bool SfxMedium::IsStorage()
 {
-    if ( pImp->xStorage.is() )
+    if ( pImpl->xStorage.is() )
         return true;
 
-    if ( pImp->m_bTriedStorage )
-        return pImp->bIsStorage;
+    if ( pImpl->m_bTriedStorage )
+        return pImpl->bIsStorage;
 
-    if ( pImp->pTempFile )
+    if ( pImpl->pTempFile )
     {
         OUString aURL;
-        if ( osl::FileBase::getFileURLFromSystemPath( pImp->m_aName, aURL )
+        if ( osl::FileBase::getFileURLFromSystemPath( pImpl->m_aName, aURL )
              == osl::FileBase::E_None )
         {
             SAL_WARN( "sfx.doc", "Physical name not convertible!");
         }
-        pImp->bIsStorage = SotStorage::IsStorageFile( aURL ) && !SotStorage::IsOLEStorage( aURL);
-        if ( !pImp->bIsStorage )
-            pImp->m_bTriedStorage = true;
+        pImpl->bIsStorage = SotStorage::IsStorageFile( aURL ) && !SotStorage::IsOLEStorage( aURL);
+        if ( !pImpl->bIsStorage )
+            pImpl->m_bTriedStorage = true;
     }
     else if ( GetInStream() )
     {
-        pImp->bIsStorage = SotStorage::IsStorageFile( pImp->m_pInStream ) && !SotStorage::IsOLEStorage( pImp->m_pInStream );
-        if ( !pImp->m_pInStream->GetError() && !pImp->bIsStorage )
-            pImp->m_bTriedStorage = true;
+        pImpl->bIsStorage = SotStorage::IsStorageFile( pImpl->m_pInStream ) && !SotStorage::IsOLEStorage( pImpl->m_pInStream );
+        if ( !pImpl->m_pInStream->GetError() && !pImpl->bIsStorage )
+            pImpl->m_bTriedStorage = true;
     }
 
-    return pImp->bIsStorage;
+    return pImpl->bIsStorage;
 }
 
 
@@ -733,16 +733,16 @@ void SfxMedium::StorageBackup_Impl()
     ::ucbhelper::Content aOriginalContent;
     Reference< css::ucb::XCommandEnvironment > xDummyEnv;
 
-    bool bBasedOnOriginalFile = ( !pImp->pTempFile && !( !pImp->m_aLogicName.isEmpty() && pImp->m_bSalvageMode )
+    bool bBasedOnOriginalFile = ( !pImpl->pTempFile && !( !pImpl->m_aLogicName.isEmpty() && pImpl->m_bSalvageMode )
         && !GetURLObject().GetMainURL( INetURLObject::NO_DECODE ).isEmpty()
         && GetURLObject().GetProtocol() == INetProtocol::File
         && ::utl::UCBContentHelper::IsDocument( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) ) );
 
-    if ( bBasedOnOriginalFile && pImp->m_aBackupURL.isEmpty()
+    if ( bBasedOnOriginalFile && pImpl->m_aBackupURL.isEmpty()
       && ::ucbhelper::Content::create( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ), xDummyEnv, comphelper::getProcessComponentContext(), aOriginalContent ) )
     {
         DoInternalBackup_Impl( aOriginalContent );
-        if( pImp->m_aBackupURL.isEmpty() )
+        if( pImpl->m_aBackupURL.isEmpty() )
             SetError( ERRCODE_SFX_CANTCREATEBACKUP, OSL_LOG_PREFIX );
     }
 }
@@ -750,10 +750,10 @@ void SfxMedium::StorageBackup_Impl()
 
 OUString SfxMedium::GetBackup_Impl()
 {
-    if ( pImp->m_aBackupURL.isEmpty() )
+    if ( pImpl->m_aBackupURL.isEmpty() )
         StorageBackup_Impl();
 
-    return pImp->m_aBackupURL;
+    return pImpl->m_aBackupURL;
 }
 
 
@@ -764,14 +764,14 @@ uno::Reference < embed::XStorage > SfxMedium::GetOutputStorage()
 
     // if the medium was constructed with a Storage: use this one, not a temp. storage
     // if a temporary storage already exists: use it
-    if ( pImp->xStorage.is() && ( pImp->m_aLogicName.isEmpty() || pImp->pTempFile ) )
-        return pImp->xStorage;
+    if ( pImpl->xStorage.is() && ( pImpl->m_aLogicName.isEmpty() || pImpl->pTempFile ) )
+        return pImpl->xStorage;
 
     // if necessary close stream that was used for reading
-    if ( pImp->m_pInStream && !pImp->m_pInStream->IsWritable() )
+    if ( pImpl->m_pInStream && !pImpl->m_pInStream->IsWritable() )
         CloseInStream();
 
-    DBG_ASSERT( !pImp->m_pOutStream, "OutStream in a readonly Medium?!" );
+    DBG_ASSERT( !pImpl->m_pOutStream, "OutStream in a readonly Medium?!" );
 
     // TODO/LATER: The current solution is to store the document temporary and then copy it to the target location;
     // in future it should be stored directly and then copied to the temporary location, since in this case no
@@ -785,18 +785,18 @@ uno::Reference < embed::XStorage > SfxMedium::GetOutputStorage()
 void SfxMedium::SetEncryptionDataToStorage_Impl()
 {
     // in case media-descriptor contains password it should be used on opening
-    if ( pImp->xStorage.is() && pImp->m_pSet )
+    if ( pImpl->xStorage.is() && pImpl->m_pSet )
     {
         uno::Sequence< beans::NamedValue > aEncryptionData;
-        if ( GetEncryptionData_Impl( pImp->m_pSet, aEncryptionData ) )
+        if ( GetEncryptionData_Impl( pImpl->m_pSet, aEncryptionData ) )
         {
             // replace the password with encryption data
-            pImp->m_pSet->ClearItem( SID_PASSWORD );
-            pImp->m_pSet->Put( SfxUnoAnyItem( SID_ENCRYPTIONDATA, uno::makeAny( aEncryptionData ) ) );
+            pImpl->m_pSet->ClearItem( SID_PASSWORD );
+            pImpl->m_pSet->Put( SfxUnoAnyItem( SID_ENCRYPTIONDATA, uno::makeAny( aEncryptionData ) ) );
 
             try
             {
-                ::comphelper::OStorageHelper::SetCommonStorageEncryptionData( pImp->xStorage, aEncryptionData );
+                ::comphelper::OStorageHelper::SetCommonStorageEncryptionData( pImpl->xStorage, aEncryptionData );
             }
             catch( const uno::Exception& )
             {
@@ -960,7 +960,7 @@ void SfxMedium::LockOrigFileOnDemand( bool bLoading, bool bNoUI )
     {
         try
         {
-            bool bResult = pImp->m_bLocked;
+            bool bResult = pImpl->m_bLocked;
             // so, this is webdav stuff...
             if ( !bResult )
             {
@@ -1033,13 +1033,13 @@ void SfxMedium::LockOrigFileOnDemand( bool bLoading, bool bNoUI )
                 } while( !bResult && bUIStatus == LOCK_UI_TRY );
             }
 
-            pImp->m_bLocked = bResult;
+            pImpl->m_bLocked = bResult;
 
             if ( !bResult && GetError() == ERRCODE_NONE )
             {
                 // the error should be set in case it is storing process
                 // or the document has been opened for editing explicitly
-                const SfxBoolItem* pReadOnlyItem = SfxItemSet::GetItem<SfxBoolItem>(pImp->m_pSet, SID_DOC_READONLY, false);
+                const SfxBoolItem* pReadOnlyItem = SfxItemSet::GetItem<SfxBoolItem>(pImpl->m_pSet, SID_DOC_READONLY, false);
 
                 if ( !bLoading || (pReadOnlyItem && !pReadOnlyItem->GetValue()) )
                     SetError( ERRCODE_IO_ACCESSDENIED, OSL_LOG_PREFIX );
@@ -1063,7 +1063,7 @@ void SfxMedium::LockOrigFileOnDemand( bool bLoading, bool bNoUI )
 
     try
     {
-        if ( pImp->m_bLocked && bLoading
+        if ( pImpl->m_bLocked && bLoading
              && GetURLObject().GetProtocol() == INetProtocol::File )
         {
             // if the document is already locked the system locking might be temporarely off after storing
@@ -1071,7 +1071,7 @@ void SfxMedium::LockOrigFileOnDemand( bool bLoading, bool bNoUI )
             GetLockingStream_Impl();
         }
 
-        bool bResult = pImp->m_bLocked;
+        bool bResult = pImpl->m_bLocked;
 
         if ( !bResult )
         {
@@ -1093,7 +1093,7 @@ void SfxMedium::LockOrigFileOnDemand( bool bLoading, bool bNoUI )
             // "IsReadOnly" property does not allow to detect whether the file is readonly always
             // so we try always to open the file for editing
             // the file is readonly only in case the read-write stream can not be opened
-            if ( bLoading && !pImp->m_xLockingStream.is() )
+            if ( bLoading && !pImpl->m_xLockingStream.is() )
             {
                 try
                 {
@@ -1125,7 +1125,7 @@ void SfxMedium::LockOrigFileOnDemand( bool bLoading, bool bNoUI )
             if ( !bContentReadonly )
             {
                 // the special file locking should be used only for suitable URLs
-                if ( isSuitableProtocolForLocking( pImp->m_aLogicName ) )
+                if ( isSuitableProtocolForLocking( pImpl->m_aLogicName ) )
                 {
 
                     // in case of storing the document should request the output before locking
@@ -1141,17 +1141,17 @@ void SfxMedium::LockOrigFileOnDemand( bool bLoading, bool bNoUI )
                     sal_Int8 bUIStatus = LOCK_UI_NOLOCK;
 
                     // check whether system file locking has been used, the default value is false
-                    bool bUseSystemLock = comphelper::isFileUrl( pImp->m_aLogicName ) && IsSystemFileLockingUsed();
+                    bool bUseSystemLock = comphelper::isFileUrl( pImpl->m_aLogicName ) && IsSystemFileLockingUsed();
 
                     // TODO/LATER: This implementation does not allow to detect the system lock on saving here, actually this is no big problem
                     // if system lock is used the writeable stream should be available
-                    bool bHandleSysLocked = ( bLoading && bUseSystemLock && !pImp->xStream.is() && !pImp->m_pOutStream );
+                    bool bHandleSysLocked = ( bLoading && bUseSystemLock && !pImpl->xStream.is() && !pImpl->m_pOutStream );
 
                     do
                     {
                         try
                         {
-                            ::svt::DocumentLockFile aLockFile( pImp->m_aLogicName );
+                            ::svt::DocumentLockFile aLockFile( pImpl->m_aLogicName );
                             if ( !bHandleSysLocked )
                             {
                                 try
@@ -1259,7 +1259,7 @@ void SfxMedium::LockOrigFileOnDemand( bool bLoading, bool bNoUI )
                         }
                     } while( !bResult && bUIStatus == LOCK_UI_TRY );
 
-                    pImp->m_bLocked = bResult;
+                    pImpl->m_bLocked = bResult;
                 }
                 else
                 {
@@ -1273,7 +1273,7 @@ void SfxMedium::LockOrigFileOnDemand( bool bLoading, bool bNoUI )
         {
             // the error should be set in case it is storing process
             // or the document has been opened for editing explicitly
-            const SfxBoolItem* pReadOnlyItem = SfxItemSet::GetItem<SfxBoolItem>(pImp->m_pSet, SID_DOC_READONLY, false);
+            const SfxBoolItem* pReadOnlyItem = SfxItemSet::GetItem<SfxBoolItem>(pImpl->m_pSet, SID_DOC_READONLY, false);
 
             if ( !bLoading || (pReadOnlyItem && !pReadOnlyItem->GetValue()) )
                 SetError( ERRCODE_IO_ACCESSDENIED, OSL_LOG_PREFIX );
@@ -1295,8 +1295,8 @@ void SfxMedium::LockOrigFileOnDemand( bool bLoading, bool bNoUI )
 
 uno::Reference < embed::XStorage > SfxMedium::GetStorage( bool bCreateTempIfNo )
 {
-    if ( pImp->xStorage.is() || pImp->m_bTriedStorage )
-        return pImp->xStorage;
+    if ( pImpl->xStorage.is() || pImpl->m_bTriedStorage )
+        return pImpl->xStorage;
 
     uno::Sequence< uno::Any > aArgs( 2 );
 
@@ -1310,7 +1310,7 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage( bool bCreateTempIfNo )
     GetMedium_Impl();
 
     if ( GetError() )
-        return pImp->xStorage;
+        return pImpl->xStorage;
 
     const SfxBoolItem* pRepairItem = SfxItemSet::GetItem<SfxBoolItem>(GetItemSet(), SID_REPAIRPACKAGE, false);
     if ( pRepairItem && pRepairItem->GetValue() )
@@ -1337,31 +1337,31 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage( bool bCreateTempIfNo )
         aArgs[2] <<= aAddProps;
     }
 
-    if ( pImp->xStream.is() )
+    if ( pImpl->xStream.is() )
     {
         // since the storage is based on temporary stream we open it always read-write
-        aArgs[0] <<= pImp->xStream;
+        aArgs[0] <<= pImpl->xStream;
         aArgs[1] <<= embed::ElementModes::READWRITE;
-        pImp->bStorageBasedOnInStream = true;
+        pImpl->bStorageBasedOnInStream = true;
     }
-    else if ( pImp->xInputStream.is() )
+    else if ( pImpl->xInputStream.is() )
     {
         // since the storage is based on temporary stream we open it always read-write
-        aArgs[0] <<= pImp->xInputStream;
+        aArgs[0] <<= pImpl->xInputStream;
         aArgs[1] <<= embed::ElementModes::READ;
-        pImp->bStorageBasedOnInStream = true;
+        pImpl->bStorageBasedOnInStream = true;
     }
     else
     {
         CloseStreams_Impl();
-        aArgs[0] <<= pImp->m_aName;
+        aArgs[0] <<= pImpl->m_aName;
         aArgs[1] <<= embed::ElementModes::READ;
-        pImp->bStorageBasedOnInStream = false;
+        pImpl->bStorageBasedOnInStream = false;
     }
 
     try
     {
-        pImp->xStorage.set( ::comphelper::OStorageHelper::GetStorageFactory()->createInstanceWithArguments( aArgs ),
+        pImpl->xStorage.set( ::comphelper::OStorageHelper::GetStorageFactory()->createInstanceWithArguments( aArgs ),
                             uno::UNO_QUERY );
     }
     catch( const uno::Exception& )
@@ -1369,30 +1369,30 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage( bool bCreateTempIfNo )
         // impossibility to create the storage is no error
     }
 
-    if( ( pImp->nLastStorageError = GetError() ) != SVSTREAM_OK )
+    if( ( pImpl->nLastStorageError = GetError() ) != SVSTREAM_OK )
     {
-        pImp->xStorage = nullptr;
-        if ( pImp->m_pInStream )
-            pImp->m_pInStream->Seek(0);
+        pImpl->xStorage = nullptr;
+        if ( pImpl->m_pInStream )
+            pImpl->m_pInStream->Seek(0);
         return uno::Reference< embed::XStorage >();
     }
 
-    pImp->m_bTriedStorage = true;
+    pImpl->m_bTriedStorage = true;
 
     // TODO/LATER: Get versionlist on demand
-    if ( pImp->xStorage.is() )
+    if ( pImpl->xStorage.is() )
     {
         SetEncryptionDataToStorage_Impl();
         GetVersionList();
     }
 
-    const SfxInt16Item* pVersion = SfxItemSet::GetItem<SfxInt16Item>(pImp->m_pSet, SID_VERSION, false);
+    const SfxInt16Item* pVersion = SfxItemSet::GetItem<SfxInt16Item>(pImpl->m_pSet, SID_VERSION, false);
 
     bool bResetStorage = false;
     if ( pVersion && pVersion->GetValue() )
     {
         // Read all available versions
-        if ( pImp->aVersions.getLength() )
+        if ( pImpl->aVersions.getLength() )
         {
             // Search for the version fits the comment
             // The versions are numbered starting with 1, versions with
@@ -1400,14 +1400,14 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage( bool bCreateTempIfNo )
             // current version
             short nVersion = pVersion ? pVersion->GetValue() : 0;
             if ( nVersion<0 )
-                nVersion = ( (short) pImp->aVersions.getLength() ) + nVersion;
+                nVersion = ( (short) pImpl->aVersions.getLength() ) + nVersion;
             else if ( nVersion )
                 nVersion--;
 
-            util::RevisionTag& rTag = pImp->aVersions[nVersion];
+            util::RevisionTag& rTag = pImpl->aVersions[nVersion];
             {
                 // Open SubStorage for all versions
-                uno::Reference < embed::XStorage > xSub = pImp->xStorage->openStorageElement( "Versions",
+                uno::Reference < embed::XStorage > xSub = pImpl->xStorage->openStorageElement( "Versions",
                         embed::ElementModes::READ );
 
                 DBG_ASSERT( xSub.is(), "Version list, but no Versions!" );
@@ -1426,17 +1426,17 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage( bool bCreateTempIfNo )
                     aTmpStream.Close();
 
                     // Open data as Storage
-                    pImp->m_nStorOpenMode = SFX_STREAM_READONLY;
-                    pImp->xStorage = comphelper::OStorageHelper::GetStorageFromURL( aTmpName, embed::ElementModes::READ );
-                    pImp->bStorageBasedOnInStream = false;
+                    pImpl->m_nStorOpenMode = SFX_STREAM_READONLY;
+                    pImpl->xStorage = comphelper::OStorageHelper::GetStorageFromURL( aTmpName, embed::ElementModes::READ );
+                    pImpl->bStorageBasedOnInStream = false;
                     OUString aTemp;
                     osl::FileBase::getSystemPathFromFileURL( aTmpName, aTemp );
                     SetPhysicalName_Impl( aTemp );
 
-                    pImp->bIsTemp = true;
+                    pImpl->bIsTemp = true;
                     GetItemSet()->Put( SfxBoolItem( SID_DOC_READONLY, true ) );
                     // TODO/MBA
-                    pImp->aVersions.realloc(0);
+                    pImpl->aVersions.realloc(0);
                 }
                 else
                     bResetStorage = true;
@@ -1448,19 +1448,19 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage( bool bCreateTempIfNo )
 
     if ( bResetStorage )
     {
-        pImp->xStorage.clear();
-        if ( pImp->m_pInStream )
-            pImp->m_pInStream->Seek( 0L );
+        pImpl->xStorage.clear();
+        if ( pImpl->m_pInStream )
+            pImpl->m_pInStream->Seek( 0L );
     }
 
-    pImp->bIsStorage = pImp->xStorage.is();
-    return pImp->xStorage;
+    pImpl->bIsStorage = pImpl->xStorage.is();
+    return pImpl->xStorage;
 }
 
 
 uno::Reference< embed::XStorage > SfxMedium::GetZipStorageToSign_Impl( bool bReadOnly )
 {
-    if ( !GetError() && !pImp->m_xZipStorage.is() )
+    if ( !GetError() && !pImpl->m_xZipStorage.is() )
     {
         GetMedium_Impl();
 
@@ -1468,13 +1468,13 @@ uno::Reference< embed::XStorage > SfxMedium::GetZipStorageToSign_Impl( bool bRea
         {
             // we can not sign document if there is no stream
             // should it be possible at all?
-            if ( !bReadOnly && pImp->xStream.is() )
+            if ( !bReadOnly && pImpl->xStream.is() )
             {
-                pImp->m_xZipStorage = ::comphelper::OStorageHelper::GetStorageOfFormatFromStream( ZIP_STORAGE_FORMAT_STRING, pImp->xStream );
+                pImpl->m_xZipStorage = ::comphelper::OStorageHelper::GetStorageOfFormatFromStream( ZIP_STORAGE_FORMAT_STRING, pImpl->xStream );
             }
-            else if ( pImp->xInputStream.is() )
+            else if ( pImpl->xInputStream.is() )
             {
-                pImp->m_xZipStorage = ::comphelper::OStorageHelper::GetStorageOfFormatFromInputStream( ZIP_STORAGE_FORMAT_STRING, pImp->xInputStream );
+                pImpl->m_xZipStorage = ::comphelper::OStorageHelper::GetStorageOfFormatFromInputStream( ZIP_STORAGE_FORMAT_STRING, pImpl->xInputStream );
             }
         }
         catch( const uno::Exception& )
@@ -1486,30 +1486,30 @@ uno::Reference< embed::XStorage > SfxMedium::GetZipStorageToSign_Impl( bool bRea
             ResetError();
     }
 
-    return pImp->m_xZipStorage;
+    return pImpl->m_xZipStorage;
 }
 
 
 void SfxMedium::CloseZipStorage_Impl()
 {
-    if ( pImp->m_xZipStorage.is() )
+    if ( pImpl->m_xZipStorage.is() )
     {
         try {
-            pImp->m_xZipStorage->dispose();
+            pImpl->m_xZipStorage->dispose();
         } catch( const uno::Exception& )
         {}
 
-        pImp->m_xZipStorage.clear();
+        pImpl->m_xZipStorage.clear();
     }
 }
 
 void SfxMedium::CloseStorage()
 {
-    if ( pImp->xStorage.is() )
+    if ( pImpl->xStorage.is() )
     {
-        uno::Reference < lang::XComponent > xComp( pImp->xStorage, uno::UNO_QUERY );
+        uno::Reference < lang::XComponent > xComp( pImpl->xStorage, uno::UNO_QUERY );
         // in the salvage mode the medium does not own the storage
-        if ( pImp->bDisposeStorage && !pImp->m_bSalvageMode )
+        if ( pImpl->bDisposeStorage && !pImpl->m_bSalvageMode )
         {
             try {
                 xComp->dispose();
@@ -1519,39 +1519,39 @@ void SfxMedium::CloseStorage()
             }
         }
 
-        pImp->xStorage.clear();
-        pImp->bStorageBasedOnInStream = false;
+        pImpl->xStorage.clear();
+        pImpl->bStorageBasedOnInStream = false;
     }
 
-    pImp->m_bTriedStorage = false;
-    pImp->bIsStorage = false;
+    pImpl->m_bTriedStorage = false;
+    pImpl->bIsStorage = false;
 }
 
 void SfxMedium::CanDisposeStorage_Impl( bool bDisposeStorage )
 {
-    pImp->bDisposeStorage = bDisposeStorage;
+    pImpl->bDisposeStorage = bDisposeStorage;
 }
 
 bool SfxMedium::WillDisposeStorageOnClose_Impl()
 {
-    return pImp->bDisposeStorage;
+    return pImpl->bDisposeStorage;
 }
 
 StreamMode SfxMedium::GetOpenMode() const
 {
-    return pImp->m_nStorOpenMode;
+    return pImpl->m_nStorOpenMode;
 }
 
 void SfxMedium::SetOpenMode( StreamMode nStorOpen,
                              bool bDontClose )
 {
-    if ( pImp->m_nStorOpenMode != nStorOpen )
+    if ( pImpl->m_nStorOpenMode != nStorOpen )
     {
-        pImp->m_nStorOpenMode = nStorOpen;
+        pImpl->m_nStorOpenMode = nStorOpen;
 
         if( !bDontClose )
         {
-            if ( pImp->xStorage.is() )
+            if ( pImpl->xStorage.is() )
                 CloseStorage();
 
             CloseStreams_Impl();
@@ -1565,7 +1565,7 @@ bool SfxMedium::UseBackupToRestore_Impl( ::ucbhelper::Content& aOriginalContent,
 {
     try
     {
-        ::ucbhelper::Content aTransactCont( pImp->m_aBackupURL, xComEnv, comphelper::getProcessComponentContext() );
+        ::ucbhelper::Content aTransactCont( pImpl->m_aBackupURL, xComEnv, comphelper::getProcessComponentContext() );
 
         Reference< XInputStream > aOrigInput = aTransactCont.openStream();
         aOriginalContent.writeStream( aOrigInput, true );
@@ -1575,9 +1575,9 @@ bool SfxMedium::UseBackupToRestore_Impl( ::ucbhelper::Content& aOriginalContent,
     {
         // in case of failure here the backup file should not be removed
         // TODO/LATER: a message should be used to let user know about the backup
-        pImp->m_bRemoveBackup = false;
+        pImpl->m_bRemoveBackup = false;
         // TODO/LATER: needs a specific error code
-        pImp->m_eError = ERRCODE_IO_GENERAL;
+        pImpl->m_eError = ERRCODE_IO_GENERAL;
     }
 
     return false;
@@ -1590,11 +1590,11 @@ bool SfxMedium::StorageCommit_Impl()
     Reference< css::ucb::XCommandEnvironment > xDummyEnv;
     ::ucbhelper::Content aOriginalContent;
 
-    if ( pImp->xStorage.is() )
+    if ( pImpl->xStorage.is() )
     {
         if ( !GetError() )
         {
-            uno::Reference < embed::XTransactedObject > xTrans( pImp->xStorage, uno::UNO_QUERY );
+            uno::Reference < embed::XTransactedObject > xTrans( pImpl->xStorage, uno::UNO_QUERY );
             if ( xTrans.is() )
             {
                 try
@@ -1606,10 +1606,10 @@ bool SfxMedium::StorageCommit_Impl()
                 catch ( const embed::UseBackupException& aBackupExc )
                 {
                     // since the temporary file is created always now, the scenario is close to be impossible
-                    if ( !pImp->pTempFile )
+                    if ( !pImpl->pTempFile )
                     {
-                        OSL_ENSURE( !pImp->m_aBackupURL.isEmpty(), "No backup on storage commit!\n" );
-                        if ( !pImp->m_aBackupURL.isEmpty()
+                        OSL_ENSURE( !pImpl->m_aBackupURL.isEmpty(), "No backup on storage commit!\n" );
+                        if ( !pImpl->m_aBackupURL.isEmpty()
                             && ::ucbhelper::Content::create( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ),
                                                         xDummyEnv, comphelper::getProcessComponentContext(),
                                                         aOriginalContent ) )
@@ -1620,9 +1620,9 @@ bool SfxMedium::StorageCommit_Impl()
                             if ( !UseBackupToRestore_Impl( aOriginalContent, xDummyEnv ) )
                             {
                                 // connect the medium to the temporary file of the storage
-                                pImp->aContent = ::ucbhelper::Content();
-                                pImp->m_aName = aBackupExc.TemporaryFileURL;
-                                OSL_ENSURE( !pImp->m_aName.isEmpty(), "The exception _must_ contain the temporary URL!\n" );
+                                pImpl->aContent = ::ucbhelper::Content();
+                                pImpl->m_aName = aBackupExc.TemporaryFileURL;
+                                OSL_ENSURE( !pImpl->m_aName.isEmpty(), "The exception _must_ contain the temporary URL!\n" );
                             }
                         }
 
@@ -1658,31 +1658,31 @@ void SfxMedium::TransactedTransferForFS_Impl( const INetURLObject& aSource,
     }
     catch ( const css::ucb::CommandAbortedException& )
     {
-        pImp->m_eError = ERRCODE_ABORT;
+        pImpl->m_eError = ERRCODE_ABORT;
     }
     catch ( const css::ucb::CommandFailedException& )
     {
-        pImp->m_eError = ERRCODE_ABORT;
+        pImpl->m_eError = ERRCODE_ABORT;
     }
     catch (const css::ucb::ContentCreationException& ex)
     {
-        pImp->m_eError = ERRCODE_IO_GENERAL;
+        pImpl->m_eError = ERRCODE_IO_GENERAL;
         if (
             (ex.eError == css::ucb::ContentCreationError_NO_CONTENT_PROVIDER    ) ||
             (ex.eError == css::ucb::ContentCreationError_CONTENT_CREATION_FAILED)
            )
         {
-            pImp->m_eError = ERRCODE_IO_NOTEXISTSPATH;
+            pImpl->m_eError = ERRCODE_IO_NOTEXISTSPATH;
         }
     }
     catch (const css::uno::Exception&)
     {
-       pImp->m_eError = ERRCODE_IO_GENERAL;
+       pImpl->m_eError = ERRCODE_IO_GENERAL;
     }
 
-    if( !pImp->m_eError || (pImp->m_eError & ERRCODE_WARNING_MASK) )
+    if( !pImpl->m_eError || (pImpl->m_eError & ERRCODE_WARNING_MASK) )
     {
-        if ( pImp->xStorage.is() )
+        if ( pImpl->xStorage.is() )
             CloseStorage();
 
         CloseStreams_Impl();
@@ -1700,10 +1700,10 @@ void SfxMedium::TransactedTransferForFS_Impl( const INetURLObject& aSource,
             {
                 if( bOverWrite && ::utl::UCBContentHelper::IsDocument( aDest.GetMainURL( INetURLObject::NO_DECODE ) ) )
                 {
-                    if( pImp->m_aBackupURL.isEmpty() )
+                    if( pImpl->m_aBackupURL.isEmpty() )
                         DoInternalBackup_Impl( aOriginalContent );
 
-                    if( !pImp->m_aBackupURL.isEmpty() )
+                    if( !pImpl->m_aBackupURL.isEmpty() )
                     {
                         Reference< XInputStream > aTempInput = aTempCont.openStream();
                         bTransactStarted = true;
@@ -1713,7 +1713,7 @@ void SfxMedium::TransactedTransferForFS_Impl( const INetURLObject& aSource,
                     }
                     else
                     {
-                        pImp->m_eError = ERRCODE_SFX_CANTCREATEBACKUP;
+                        pImpl->m_eError = ERRCODE_SFX_CANTCREATEBACKUP;
                     }
                 }
                 else
@@ -1725,35 +1725,35 @@ void SfxMedium::TransactedTransferForFS_Impl( const INetURLObject& aSource,
             }
             catch ( const css::ucb::CommandAbortedException& )
             {
-                pImp->m_eError = ERRCODE_ABORT;
+                pImpl->m_eError = ERRCODE_ABORT;
             }
             catch ( const css::ucb::CommandFailedException& )
             {
-                pImp->m_eError = ERRCODE_ABORT;
+                pImpl->m_eError = ERRCODE_ABORT;
             }
             catch ( const css::ucb::InteractiveIOException& r )
             {
                 if ( r.Code == IOErrorCode_ACCESS_DENIED )
-                    pImp->m_eError = ERRCODE_IO_ACCESSDENIED;
+                    pImpl->m_eError = ERRCODE_IO_ACCESSDENIED;
                 else if ( r.Code == IOErrorCode_NOT_EXISTING )
-                    pImp->m_eError = ERRCODE_IO_NOTEXISTS;
+                    pImpl->m_eError = ERRCODE_IO_NOTEXISTS;
                 else if ( r.Code == IOErrorCode_CANT_READ )
-                    pImp->m_eError = ERRCODE_IO_CANTREAD;
+                    pImpl->m_eError = ERRCODE_IO_CANTREAD;
                 else
-                    pImp->m_eError = ERRCODE_IO_GENERAL;
+                    pImpl->m_eError = ERRCODE_IO_GENERAL;
             }
             catch ( const css::uno::Exception& )
             {
-                pImp->m_eError = ERRCODE_IO_GENERAL;
+                pImpl->m_eError = ERRCODE_IO_GENERAL;
             }
 
                if ( bResult )
                {
-                if ( pImp->pTempFile )
+                if ( pImpl->pTempFile )
                 {
-                    pImp->pTempFile->EnableKillingFile();
-                       delete pImp->pTempFile;
-                       pImp->pTempFile = nullptr;
+                    pImpl->pTempFile->EnableKillingFile();
+                       delete pImpl->pTempFile;
+                       pImpl->pTempFile = nullptr;
                 }
                }
             else if ( bTransactStarted )
@@ -1762,7 +1762,7 @@ void SfxMedium::TransactedTransferForFS_Impl( const INetURLObject& aSource,
             }
         }
         else
-            pImp->m_eError = ERRCODE_IO_CANTREAD;
+            pImpl->m_eError = ERRCODE_IO_CANTREAD;
     }
 }
 
@@ -1839,17 +1839,17 @@ void SfxMedium::Transfer_Impl()
 {
     // The transfer is required only in two cases: either if there is a temporary file or if there is a salvage item
     OUString aNameURL;
-    if ( pImp->pTempFile )
-        aNameURL = pImp->pTempFile->GetURL();
-    else if ( !pImp->m_aLogicName.isEmpty() && pImp->m_bSalvageMode )
+    if ( pImpl->pTempFile )
+        aNameURL = pImpl->pTempFile->GetURL();
+    else if ( !pImpl->m_aLogicName.isEmpty() && pImpl->m_bSalvageMode )
     {
         // makes sense only in case logic name is set
-        if ( osl::FileBase::getFileURLFromSystemPath( pImp->m_aName, aNameURL )
+        if ( osl::FileBase::getFileURLFromSystemPath( pImpl->m_aName, aNameURL )
              != osl::FileBase::E_None )
             SAL_WARN( "sfx.doc", "The medium name is not convertible!" );
     }
 
-    if ( !aNameURL.isEmpty() && ( !pImp->m_eError || (pImp->m_eError & ERRCODE_WARNING_MASK) ) )
+    if ( !aNameURL.isEmpty() && ( !pImpl->m_eError || (pImpl->m_eError & ERRCODE_WARNING_MASK) ) )
     {
         SAL_INFO( "sfx.doc", "SfxMedium::Transfer_Impl, copying to target" );
 
@@ -1858,13 +1858,13 @@ void SfxMedium::Transfer_Impl()
 
         // in case an output stream is provided from outside and the URL is correct
         // commit to the stream
-        if (pImp->m_aLogicName.startsWith("private:stream"))
+        if (pImpl->m_aLogicName.startsWith("private:stream"))
         {
             // TODO/LATER: support storing to SID_STREAM
-            const SfxUnoAnyItem* pOutStreamItem = SfxItemSet::GetItem<SfxUnoAnyItem>(pImp->m_pSet, SID_OUTPUTSTREAM, false);
+            const SfxUnoAnyItem* pOutStreamItem = SfxItemSet::GetItem<SfxUnoAnyItem>(pImpl->m_pSet, SID_OUTPUTSTREAM, false);
             if( pOutStreamItem && ( pOutStreamItem->GetValue() >>= rOutStream ) )
             {
-                if ( pImp->xStorage.is() )
+                if ( pImpl->xStorage.is() )
                     CloseStorage();
 
                 CloseStreams_Impl();
@@ -1894,11 +1894,11 @@ void SfxMedium::Transfer_Impl()
                         while ( nRead == nBufferSize );
 
                         // remove temporary file
-                        if ( pImp->pTempFile )
+                        if ( pImpl->pTempFile )
                         {
-                            pImp->pTempFile->EnableKillingFile();
-                            delete pImp->pTempFile;
-                            pImp->pTempFile = nullptr;
+                            pImpl->pTempFile->EnableKillingFile();
+                            delete pImpl->pTempFile;
+                            pImpl->pTempFile = nullptr;
                         }
                     }
                     catch( const Exception& )
@@ -1912,16 +1912,16 @@ void SfxMedium::Transfer_Impl()
             }
 
             // free the reference
-            if ( pImp->m_pSet )
-                pImp->m_pSet->ClearItem( SID_OUTPUTSTREAM );
+            if ( pImpl->m_pSet )
+                pImpl->m_pSet->ClearItem( SID_OUTPUTSTREAM );
 
             return;
         }
 
         GetContent();
-        if ( !pImp->aContent.get().is() )
+        if ( !pImpl->aContent.get().is() )
         {
-            pImp->m_eError = ERRCODE_IO_NOTEXISTS;
+            pImpl->m_eError = ERRCODE_IO_NOTEXISTS;
             return;
         }
 
@@ -1937,12 +1937,12 @@ void SfxMedium::Transfer_Impl()
                 // set segment size property; package will automatically be divided in pieces fitting
                 // into this size
 
-                uno::Reference < beans::XPropertySet > xSet( pImp->xStorage, uno::UNO_QUERY );
+                uno::Reference < beans::XPropertySet > xSet( pImpl->xStorage, uno::UNO_QUERY );
                 xSet->setPropertyValue("SegmentSize", Any(pSegmentSize->GetValue()) );
 
                 // copy the temporary storage into the disk spanned package
                 GetStorage()->copyToStorage( xStor );
-                uno::Reference < embed::XTransactedObject > xTrans( pImp->xStorage, uno::UNO_QUERY );
+                uno::Reference < embed::XTransactedObject > xTrans( pImpl->xStorage, uno::UNO_QUERY );
                 if ( xTrans.is() )
                     xTrans->commit();
 
@@ -2031,24 +2031,24 @@ void SfxMedium::Transfer_Impl()
             }
             catch (const css::ucb::ContentCreationException& ex)
             {
-                pImp->m_eError = ERRCODE_IO_GENERAL;
+                pImpl->m_eError = ERRCODE_IO_GENERAL;
                 if (
                     (ex.eError == css::ucb::ContentCreationError_NO_CONTENT_PROVIDER    ) ||
                     (ex.eError == css::ucb::ContentCreationError_CONTENT_CREATION_FAILED)
                    )
                 {
-                    pImp->m_eError = ERRCODE_IO_NOTEXISTSPATH;
+                    pImpl->m_eError = ERRCODE_IO_NOTEXISTSPATH;
                 }
             }
             catch (const css::uno::Exception&)
             {
-                pImp->m_eError = ERRCODE_IO_GENERAL;
+                pImpl->m_eError = ERRCODE_IO_GENERAL;
             }
 
-            if ( !pImp->m_eError || (pImp->m_eError & ERRCODE_WARNING_MASK) )
+            if ( !pImpl->m_eError || (pImpl->m_eError & ERRCODE_WARNING_MASK) )
             {
                 // free resources, otherwise the transfer may fail
-                if ( pImp->xStorage.is() )
+                if ( pImpl->xStorage.is() )
                     CloseStorage();
 
                 CloseStreams_Impl();
@@ -2071,7 +2071,7 @@ void SfxMedium::Transfer_Impl()
 
                 try
                 {
-                    OUString aMimeType = pImp->getFilterMimeType();
+                    OUString aMimeType = pImpl->getFilterMimeType();
                     ::ucbhelper::InsertOperation eOperation = ::ucbhelper::InsertOperation_COPY;
                     bool bMajor = false;
                     OUString sComment;
@@ -2091,7 +2091,7 @@ void SfxMedium::Transfer_Impl()
                         &sResultURL, sObjectId );
 
                     if ( !isTransferOK )
-                        pImp->m_eError = ERRCODE_IO_GENERAL;
+                        pImpl->m_eError = ERRCODE_IO_GENERAL;
                     else if ( !sResultURL.isEmpty( ) )  // Likely to happen only for checkin
                         SwitchDocumentToFile( sResultURL );
                     try
@@ -2119,42 +2119,42 @@ void SfxMedium::Transfer_Impl()
                 }
                 catch ( const css::ucb::CommandAbortedException& )
                 {
-                    pImp->m_eError = ERRCODE_ABORT;
+                    pImpl->m_eError = ERRCODE_ABORT;
                 }
                 catch ( const css::ucb::CommandFailedException& )
                 {
-                    pImp->m_eError = ERRCODE_ABORT;
+                    pImpl->m_eError = ERRCODE_ABORT;
                 }
                 catch ( const css::ucb::InteractiveIOException& r )
                 {
                     if ( r.Code == IOErrorCode_ACCESS_DENIED )
-                        pImp->m_eError = ERRCODE_IO_ACCESSDENIED;
+                        pImpl->m_eError = ERRCODE_IO_ACCESSDENIED;
                     else if ( r.Code == IOErrorCode_NOT_EXISTING )
-                        pImp->m_eError = ERRCODE_IO_NOTEXISTS;
+                        pImpl->m_eError = ERRCODE_IO_NOTEXISTS;
                     else if ( r.Code == IOErrorCode_CANT_READ )
-                        pImp->m_eError = ERRCODE_IO_CANTREAD;
+                        pImpl->m_eError = ERRCODE_IO_CANTREAD;
                     else
-                        pImp->m_eError = ERRCODE_IO_GENERAL;
+                        pImpl->m_eError = ERRCODE_IO_GENERAL;
                 }
                 catch ( const css::uno::Exception& )
                 {
-                    pImp->m_eError = ERRCODE_IO_GENERAL;
+                    pImpl->m_eError = ERRCODE_IO_GENERAL;
                 }
 
                 // do not switch from temporary file in case of nonfile protocol
             }
         }
 
-        if ( ( !pImp->m_eError || (pImp->m_eError & ERRCODE_WARNING_MASK) ) && !pImp->pTempFile )
+        if ( ( !pImpl->m_eError || (pImpl->m_eError & ERRCODE_WARNING_MASK) ) && !pImpl->pTempFile )
         {
             // without a TempFile the physical and logical name should be the same after successful transfer
             if (osl::FileBase::getSystemPathFromFileURL(
-                  GetURLObject().GetMainURL( INetURLObject::NO_DECODE ), pImp->m_aName )
+                  GetURLObject().GetMainURL( INetURLObject::NO_DECODE ), pImpl->m_aName )
                 != osl::FileBase::E_None)
             {
-                pImp->m_aName.clear();
+                pImpl->m_aName.clear();
             }
-            pImp->m_bSalvageMode = false;
+            pImpl->m_bSalvageMode = false;
         }
     }
 }
@@ -2165,7 +2165,7 @@ void SfxMedium::DoInternalBackup_Impl( const ::ucbhelper::Content& aOriginalCont
                                        const OUString& aExtension,
                                        const OUString& aDestDir )
 {
-    if ( !pImp->m_aBackupURL.isEmpty() )
+    if ( !pImpl->m_aBackupURL.isEmpty() )
         return; // the backup was done already
 
     ::utl::TempFile aTransactTemp( aPrefix, true, &aExtension, &aDestDir );
@@ -2179,29 +2179,29 @@ void SfxMedium::DoInternalBackup_Impl( const ::ucbhelper::Content& aOriginalCont
     {
         try
         {
-            OUString sMimeType = pImp->getFilterMimeType();
+            OUString sMimeType = pImpl->getFilterMimeType();
             if( aBackupCont.transferContent( aOriginalContent,
                                             ::ucbhelper::InsertOperation_COPY,
                                             aBackupName,
                                             NameClash::OVERWRITE,
                                             sMimeType ) )
             {
-                pImp->m_aBackupURL = aBackObj.GetMainURL( INetURLObject::NO_DECODE );
-                pImp->m_bRemoveBackup = true;
+                pImpl->m_aBackupURL = aBackObj.GetMainURL( INetURLObject::NO_DECODE );
+                pImpl->m_bRemoveBackup = true;
             }
         }
         catch( const Exception& )
         {}
     }
 
-    if ( pImp->m_aBackupURL.isEmpty() )
+    if ( pImpl->m_aBackupURL.isEmpty() )
         aTransactTemp.EnableKillingFile();
 }
 
 
 void SfxMedium::DoInternalBackup_Impl( const ::ucbhelper::Content& aOriginalContent )
 {
-    if ( !pImp->m_aBackupURL.isEmpty() )
+    if ( !pImpl->m_aBackupURL.isEmpty() )
         return; // the backup was done already
 
     OUString aFileName =  GetURLObject().getName( INetURLObject::LAST_SEGMENT,
@@ -2219,7 +2219,7 @@ void SfxMedium::DoInternalBackup_Impl( const ::ucbhelper::Content& aOriginalCont
     if( ::utl::UCBContentHelper::ensureFolder(comphelper::getProcessComponentContext(), xEnv, aBakDir, aContent) )
         DoInternalBackup_Impl( aOriginalContent, aPrefix, aExtension, aBakDir );
 
-    if ( pImp->m_aBackupURL.isEmpty() )
+    if ( pImpl->m_aBackupURL.isEmpty() )
     {
         // the copiing to the backup catalog failed ( for example because
         // of using an encrypted partition as target catalog )
@@ -2268,7 +2268,7 @@ void SfxMedium::DoBackup_Impl()
                 try
                 {
                     // do the transfer ( copy source file to backup dir )
-                    OUString sMimeType = pImp->getFilterMimeType();
+                    OUString sMimeType = pImpl->getFilterMimeType();
                     bSuccess = aContent.transferContent( aSourceContent,
                                                         ::ucbhelper::InsertOperation_COPY,
                                                         aFileName,
@@ -2276,8 +2276,8 @@ void SfxMedium::DoBackup_Impl()
                                                         sMimeType );
                     if( bSuccess )
                     {
-                        pImp->m_aBackupURL = aDest.GetMainURL( INetURLObject::NO_DECODE );
-                        pImp->m_bRemoveBackup = false;
+                        pImpl->m_aBackupURL = aDest.GetMainURL( INetURLObject::NO_DECODE );
+                        pImpl->m_bRemoveBackup = false;
                     }
                 }
                 catch ( const css::uno::Exception& )
@@ -2289,23 +2289,23 @@ void SfxMedium::DoBackup_Impl()
 
     if ( !bSuccess )
     {
-        pImp->m_eError = ERRCODE_SFX_CANTCREATEBACKUP;
+        pImpl->m_eError = ERRCODE_SFX_CANTCREATEBACKUP;
     }
 }
 
 
 void SfxMedium::ClearBackup_Impl()
 {
-    if( pImp->m_bRemoveBackup )
+    if( pImpl->m_bRemoveBackup )
     {
         // currently a document is always stored in a new medium,
         // thus if a backup can not be removed the backup URL should not be cleaned
-        if ( !pImp->m_aBackupURL.isEmpty() )
+        if ( !pImpl->m_aBackupURL.isEmpty() )
         {
-            if ( ::utl::UCBContentHelper::Kill( pImp->m_aBackupURL ) )
+            if ( ::utl::UCBContentHelper::Kill( pImpl->m_aBackupURL ) )
             {
-                pImp->m_bRemoveBackup = false;
-                pImp->m_aBackupURL.clear();
+                pImpl->m_bRemoveBackup = false;
+                pImpl->m_aBackupURL.clear();
             }
             else
             {
@@ -2315,20 +2315,20 @@ void SfxMedium::ClearBackup_Impl()
         }
     }
     else
-        pImp->m_aBackupURL.clear();
+        pImpl->m_aBackupURL.clear();
 }
 
 
 void SfxMedium::GetLockingStream_Impl()
 {
     if ( GetURLObject().GetProtocol() == INetProtocol::File
-      && !pImp->m_xLockingStream.is() )
+      && !pImpl->m_xLockingStream.is() )
     {
-        const SfxUnoAnyItem* pWriteStreamItem = SfxItemSet::GetItem<SfxUnoAnyItem>(pImp->m_pSet, SID_STREAM, false);
+        const SfxUnoAnyItem* pWriteStreamItem = SfxItemSet::GetItem<SfxUnoAnyItem>(pImpl->m_pSet, SID_STREAM, false);
         if ( pWriteStreamItem )
-            pWriteStreamItem->GetValue() >>= pImp->m_xLockingStream;
+            pWriteStreamItem->GetValue() >>= pImpl->m_xLockingStream;
 
-        if ( !pImp->m_xLockingStream.is() )
+        if ( !pImpl->m_xLockingStream.is() )
         {
             // open the original document
             uno::Sequence< beans::PropertyValue > xProps;
@@ -2338,20 +2338,20 @@ void SfxMedium::GetLockingStream_Impl()
             aMedium.addInputStreamOwnLock();
 
             uno::Reference< io::XInputStream > xInputStream;
-            aMedium[utl::MediaDescriptor::PROP_STREAM()] >>= pImp->m_xLockingStream;
+            aMedium[utl::MediaDescriptor::PROP_STREAM()] >>= pImpl->m_xLockingStream;
             aMedium[utl::MediaDescriptor::PROP_INPUTSTREAM()] >>= xInputStream;
 
-            if ( !pImp->pTempFile && pImp->m_aName.isEmpty() )
+            if ( !pImpl->pTempFile && pImpl->m_aName.isEmpty() )
             {
                 // the medium is still based on the original file, it makes sense to initialize the streams
-                if ( pImp->m_xLockingStream.is() )
-                    pImp->xStream = pImp->m_xLockingStream;
+                if ( pImpl->m_xLockingStream.is() )
+                    pImpl->xStream = pImpl->m_xLockingStream;
 
                 if ( xInputStream.is() )
-                    pImp->xInputStream = xInputStream;
+                    pImpl->xInputStream = xInputStream;
 
-                if ( !pImp->xInputStream.is() && pImp->xStream.is() )
-                    pImp->xInputStream = pImp->xStream->getInputStream();
+                if ( !pImpl->xInputStream.is() && pImpl->xStream.is() )
+                    pImpl->xInputStream = pImpl->xStream->getInputStream();
             }
         }
     }
@@ -2360,35 +2360,35 @@ void SfxMedium::GetLockingStream_Impl()
 
 void SfxMedium::GetMedium_Impl()
 {
-    if ( !pImp->m_pInStream )
+    if ( !pImpl->m_pInStream )
     {
-        pImp->bDownloadDone = false;
+        pImpl->bDownloadDone = false;
         Reference< css::task::XInteractionHandler > xInteractionHandler = GetInteractionHandler();
 
         //TODO/MBA: need support for SID_STREAM
-        const SfxUnoAnyItem* pWriteStreamItem = SfxItemSet::GetItem<SfxUnoAnyItem>(pImp->m_pSet, SID_STREAM, false);
-        const SfxUnoAnyItem* pInStreamItem = SfxItemSet::GetItem<SfxUnoAnyItem>(pImp->m_pSet, SID_INPUTSTREAM, false);
+        const SfxUnoAnyItem* pWriteStreamItem = SfxItemSet::GetItem<SfxUnoAnyItem>(pImpl->m_pSet, SID_STREAM, false);
+        const SfxUnoAnyItem* pInStreamItem = SfxItemSet::GetItem<SfxUnoAnyItem>(pImpl->m_pSet, SID_INPUTSTREAM, false);
         if ( pWriteStreamItem )
         {
-            pWriteStreamItem->GetValue() >>= pImp->xStream;
+            pWriteStreamItem->GetValue() >>= pImpl->xStream;
 
             if ( pInStreamItem )
-                pInStreamItem->GetValue() >>= pImp->xInputStream;
+                pInStreamItem->GetValue() >>= pImpl->xInputStream;
 
-            if ( !pImp->xInputStream.is() && pImp->xStream.is() )
-                pImp->xInputStream = pImp->xStream->getInputStream();
+            if ( !pImpl->xInputStream.is() && pImpl->xStream.is() )
+                pImpl->xInputStream = pImpl->xStream->getInputStream();
         }
         else if ( pInStreamItem )
         {
-            pInStreamItem->GetValue() >>= pImp->xInputStream;
+            pInStreamItem->GetValue() >>= pImpl->xInputStream;
         }
         else
         {
             uno::Sequence < beans::PropertyValue > xProps;
             OUString aFileName;
-            if (!pImp->m_aName.isEmpty())
+            if (!pImpl->m_aName.isEmpty())
             {
-                if ( osl::FileBase::getFileURLFromSystemPath( pImp->m_aName, aFileName )
+                if ( osl::FileBase::getFileURLFromSystemPath( pImpl->m_aName, aFileName )
                      != osl::FileBase::E_None )
                 {
                     SAL_WARN( "sfx.doc", "Physical name not convertible!");
@@ -2399,21 +2399,21 @@ void SfxMedium::GetMedium_Impl()
 
             // in case the temporary file exists the streams should be initialized from it,
             // but the original MediaDescriptor should not be changed
-            bool bFromTempFile = ( pImp->pTempFile != nullptr );
+            bool bFromTempFile = ( pImpl->pTempFile != nullptr );
 
             if ( !bFromTempFile )
             {
                 GetItemSet()->Put( SfxStringItem( SID_FILE_NAME, aFileName ) );
-                if( !(pImp->m_nStorOpenMode & StreamMode::WRITE) )
+                if( !(pImpl->m_nStorOpenMode & StreamMode::WRITE) )
                     GetItemSet()->Put( SfxBoolItem( SID_DOC_READONLY, true ) );
                 if (xInteractionHandler.is())
                     GetItemSet()->Put( SfxUnoAnyItem( SID_INTERACTIONHANDLER, makeAny(xInteractionHandler) ) );
             }
 
-            if ( pImp->m_xInputStreamToLoadFrom.is() )
+            if ( pImpl->m_xInputStreamToLoadFrom.is() )
             {
-                pImp->xInputStream = pImp->m_xInputStreamToLoadFrom;
-                if (pImp->m_bInputStreamIsReadOnly)
+                pImpl->xInputStream = pImpl->m_xInputStreamToLoadFrom;
+                if (pImpl->m_bInputStreamIsReadOnly)
                     GetItemSet()->Put( SfxBoolItem( SID_DOC_READONLY, true ) );
             }
             else
@@ -2421,10 +2421,10 @@ void SfxMedium::GetMedium_Impl()
                 TransformItems( SID_OPENDOC, *GetItemSet(), xProps );
                 utl::MediaDescriptor aMedium( xProps );
 
-                if ( pImp->m_xLockingStream.is() && !bFromTempFile )
+                if ( pImpl->m_xLockingStream.is() && !bFromTempFile )
                 {
                     // the medium is not based on the temporary file, so the original stream can be used
-                    pImp->xStream = pImp->m_xLockingStream;
+                    pImpl->xStream = pImpl->m_xLockingStream;
                 }
                 else
                 {
@@ -2453,81 +2453,81 @@ void SfxMedium::GetMedium_Impl()
                     // the check is done in LockOrigFileOnDemand() for file and non-file URLs
 
                     //TODO/MBA: what happens if property is not there?!
-                    aMedium[utl::MediaDescriptor::PROP_STREAM()] >>= pImp->xStream;
-                    aMedium[utl::MediaDescriptor::PROP_INPUTSTREAM()] >>= pImp->xInputStream;
+                    aMedium[utl::MediaDescriptor::PROP_STREAM()] >>= pImpl->xStream;
+                    aMedium[utl::MediaDescriptor::PROP_INPUTSTREAM()] >>= pImpl->xInputStream;
                 }
 
                 GetContent();
-                if ( !pImp->xInputStream.is() && pImp->xStream.is() )
-                    pImp->xInputStream = pImp->xStream->getInputStream();
+                if ( !pImpl->xInputStream.is() && pImpl->xStream.is() )
+                    pImpl->xInputStream = pImpl->xStream->getInputStream();
             }
 
             if ( !bFromTempFile )
             {
                 //TODO/MBA: need support for SID_STREAM
-                if ( pImp->xStream.is() )
-                    GetItemSet()->Put( SfxUsrAnyItem( SID_STREAM, makeAny( pImp->xStream ) ) );
+                if ( pImpl->xStream.is() )
+                    GetItemSet()->Put( SfxUsrAnyItem( SID_STREAM, makeAny( pImpl->xStream ) ) );
 
-                GetItemSet()->Put( SfxUsrAnyItem( SID_INPUTSTREAM, makeAny( pImp->xInputStream ) ) );
+                GetItemSet()->Put( SfxUsrAnyItem( SID_INPUTSTREAM, makeAny( pImpl->xInputStream ) ) );
             }
         }
 
         //TODO/MBA: ErrorHandling - how to transport error from MediaDescriptor
-        if ( !GetError() && !pImp->xStream.is() && !pImp->xInputStream.is() )
+        if ( !GetError() && !pImpl->xStream.is() && !pImpl->xInputStream.is() )
             SetError( ERRCODE_IO_ACCESSDENIED, OSL_LOG_PREFIX );
 
         if ( !GetError() )
         {
-            if ( pImp->xStream.is() )
-                pImp->m_pInStream = utl::UcbStreamHelper::CreateStream( pImp->xStream );
-            else if ( pImp->xInputStream.is() )
-                pImp->m_pInStream = utl::UcbStreamHelper::CreateStream( pImp->xInputStream );
+            if ( pImpl->xStream.is() )
+                pImpl->m_pInStream = utl::UcbStreamHelper::CreateStream( pImpl->xStream );
+            else if ( pImpl->xInputStream.is() )
+                pImpl->m_pInStream = utl::UcbStreamHelper::CreateStream( pImpl->xInputStream );
         }
 
-        pImp->bDownloadDone = true;
-        pImp->aDoneLink.ClearPendingCall();
+        pImpl->bDownloadDone = true;
+        pImpl->aDoneLink.ClearPendingCall();
         sal_uIntPtr nError = GetError();
-        pImp->aDoneLink.Call( reinterpret_cast<void*>(nError) );
+        pImpl->aDoneLink.Call( reinterpret_cast<void*>(nError) );
     }
 }
 
 bool SfxMedium::IsRemote() const
 {
-    return pImp->m_bRemote;
+    return pImpl->m_bRemote;
 }
 
 void SfxMedium::SetUpdatePickList(bool bVal)
 {
-    pImp->bUpdatePickList = bVal;
+    pImpl->bUpdatePickList = bVal;
 }
 
 bool SfxMedium::IsUpdatePickList() const
 {
-    return pImp->bUpdatePickList;
+    return pImpl->bUpdatePickList;
 }
 
 void SfxMedium::SetLongName(const OUString &rName)
 {
-    pImp->m_aLongName = rName;
+    pImpl->m_aLongName = rName;
 }
 
 const OUString& SfxMedium::GetLongName() const
 {
-    return pImp->m_aLongName;
+    return pImpl->m_aLongName;
 }
 
 void SfxMedium::SetDoneLink( const Link<void*,void>& rLink )
 {
-    pImp->aDoneLink = rLink;
+    pImpl->aDoneLink = rLink;
 }
 
 void SfxMedium::Download( const Link<void*,void>& aLink )
 {
     SetDoneLink( aLink );
     GetInStream();
-    if ( pImp->m_pInStream && !aLink.IsSet() )
+    if ( pImpl->m_pInStream && !aLink.IsSet() )
     {
-        while( !pImp->bDownloadDone )
+        while( !pImpl->bDownloadDone )
             Application::Yield();
     }
 }
@@ -2544,18 +2544,18 @@ void SfxMedium::Init_Impl()
     Reference< XOutputStream > rOutStream;
 
     // TODO/LATER: handle lifetime of storages
-    pImp->bDisposeStorage = false;
+    pImpl->bDisposeStorage = false;
 
-    const SfxStringItem* pSalvageItem = SfxItemSet::GetItem<SfxStringItem>(pImp->m_pSet, SID_DOC_SALVAGE, false);
+    const SfxStringItem* pSalvageItem = SfxItemSet::GetItem<SfxStringItem>(pImpl->m_pSet, SID_DOC_SALVAGE, false);
     if ( pSalvageItem && pSalvageItem->GetValue().isEmpty() )
     {
         pSalvageItem = nullptr;
-        pImp->m_pSet->ClearItem( SID_DOC_SALVAGE );
+        pImpl->m_pSet->ClearItem( SID_DOC_SALVAGE );
     }
 
-    if (!pImp->m_aLogicName.isEmpty())
+    if (!pImpl->m_aLogicName.isEmpty())
     {
-        INetURLObject aUrl( pImp->m_aLogicName );
+        INetURLObject aUrl( pImpl->m_aLogicName );
         INetProtocol eProt = aUrl.GetProtocol();
         if ( eProt == INetProtocol::NotValid )
         {
@@ -2565,14 +2565,14 @@ void SfxMedium::Init_Impl()
         {
             if ( aUrl.HasMark() )
             {
-                pImp->m_aLogicName = aUrl.GetURLNoMark( INetURLObject::NO_DECODE );
+                pImpl->m_aLogicName = aUrl.GetURLNoMark( INetURLObject::NO_DECODE );
                 GetItemSet()->Put( SfxStringItem( SID_JUMPMARK, aUrl.GetMark() ) );
             }
 
             // try to convert the URL into a physical name - but never change a physical name
             // physical name may be set if the logical name is changed after construction
-            if ( pImp->m_aName.isEmpty() )
-                osl::FileBase::getSystemPathFromFileURL( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ), pImp->m_aName );
+            if ( pImpl->m_aName.isEmpty() )
+                osl::FileBase::getSystemPathFromFileURL( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ), pImpl->m_aName );
             else
             {
                 DBG_ASSERT( pSalvageItem, "Suspicious change of logical name!" );
@@ -2582,32 +2582,32 @@ void SfxMedium::Init_Impl()
 
     if ( pSalvageItem && !pSalvageItem->GetValue().isEmpty() )
     {
-        pImp->m_aLogicName = pSalvageItem->GetValue();
-        DELETEZ( pImp->m_pURLObj );
-        pImp->m_bSalvageMode = true;
+        pImpl->m_aLogicName = pSalvageItem->GetValue();
+        DELETEZ( pImpl->m_pURLObj );
+        pImpl->m_bSalvageMode = true;
     }
 
     // in case output stream is by mistake here
     // clear the reference
-    const SfxUnoAnyItem* pOutStreamItem = SfxItemSet::GetItem<SfxUnoAnyItem>(pImp->m_pSet, SID_OUTPUTSTREAM, false);
+    const SfxUnoAnyItem* pOutStreamItem = SfxItemSet::GetItem<SfxUnoAnyItem>(pImpl->m_pSet, SID_OUTPUTSTREAM, false);
     if( pOutStreamItem
      && ( !( pOutStreamItem->GetValue() >>= rOutStream )
-          || !pImp->m_aLogicName.startsWith("private:stream")) )
+          || !pImpl->m_aLogicName.startsWith("private:stream")) )
     {
-        pImp->m_pSet->ClearItem( SID_OUTPUTSTREAM );
+        pImpl->m_pSet->ClearItem( SID_OUTPUTSTREAM );
         SAL_WARN( "sfx.doc", "Unexpected Output stream parameter!\n" );
     }
 
-    if (!pImp->m_aLogicName.isEmpty())
+    if (!pImpl->m_aLogicName.isEmpty())
     {
         // if the logic name is set it should be set in MediaDescriptor as well
-        const SfxStringItem* pFileNameItem = SfxItemSet::GetItem<SfxStringItem>(pImp->m_pSet, SID_FILE_NAME, false);
+        const SfxStringItem* pFileNameItem = SfxItemSet::GetItem<SfxStringItem>(pImpl->m_pSet, SID_FILE_NAME, false);
         if ( !pFileNameItem )
         {
             // let the ItemSet be created if necessary
             GetItemSet()->Put(
                 SfxStringItem(
-                    SID_FILE_NAME, INetURLObject( pImp->m_aLogicName ).GetMainURL( INetURLObject::NO_DECODE ) ) );
+                    SID_FILE_NAME, INetURLObject( pImpl->m_aLogicName ).GetMainURL( INetURLObject::NO_DECODE ) ) );
         }
     }
 
@@ -2620,14 +2620,14 @@ void SfxMedium::Init_Impl()
             && stat.isValid(osl_FileStatus_Mask_Attributes))
         {
             if ((stat.getAttributes() & osl_File_Attribute_ReadOnly) != 0) {
-                pImp->m_bOriginallyReadOnly = true;
+                pImpl->m_bOriginallyReadOnly = true;
             }
         }
     }
 }
 
 
-SfxMedium::SfxMedium() : pImp(new SfxMedium_Impl)
+SfxMedium::SfxMedium() : pImpl(new SfxMedium_Impl)
 {
     Init_Impl();
 }
@@ -2635,7 +2635,7 @@ SfxMedium::SfxMedium() : pImp(new SfxMedium_Impl)
 
 void SfxMedium::UseInteractionHandler( bool bUse )
 {
-    pImp->bAllowDefaultIntHdl = bUse;
+    pImpl->bAllowDefaultIntHdl = bUse;
 }
 
 
@@ -2643,48 +2643,48 @@ css::uno::Reference< css::task::XInteractionHandler >
 SfxMedium::GetInteractionHandler( bool bGetAlways )
 {
     // if interaction isn't allowed explicitly ... return empty reference!
-    if ( !bGetAlways && !pImp->bUseInteractionHandler )
+    if ( !bGetAlways && !pImpl->bUseInteractionHandler )
         return css::uno::Reference< css::task::XInteractionHandler >();
 
     // search a possible existing handler inside cached item set
-    if ( pImp->m_pSet )
+    if ( pImpl->m_pSet )
     {
         css::uno::Reference< css::task::XInteractionHandler > xHandler;
-        const SfxUnoAnyItem* pHandler = SfxItemSet::GetItem<SfxUnoAnyItem>(pImp->m_pSet, SID_INTERACTIONHANDLER, false);
+        const SfxUnoAnyItem* pHandler = SfxItemSet::GetItem<SfxUnoAnyItem>(pImpl->m_pSet, SID_INTERACTIONHANDLER, false);
         if ( pHandler && (pHandler->GetValue() >>= xHandler) && xHandler.is() )
             return xHandler;
     }
 
     // if default interaction isn't allowed explicitly ... return empty reference!
-    if ( !bGetAlways && !pImp->bAllowDefaultIntHdl )
+    if ( !bGetAlways && !pImpl->bAllowDefaultIntHdl )
         return css::uno::Reference< css::task::XInteractionHandler >();
 
     // otherwise return cached default handler ... if it exist.
-    if ( pImp->xInteraction.is() )
-        return pImp->xInteraction;
+    if ( pImpl->xInteraction.is() )
+        return pImpl->xInteraction;
 
     // create default handler and cache it!
     Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
-    pImp->xInteraction.set(
+    pImpl->xInteraction.set(
         task::InteractionHandler::createWithParent(xContext, nullptr), UNO_QUERY_THROW );
-    return pImp->xInteraction;
+    return pImpl->xInteraction;
 }
 
 
 void SfxMedium::SetFilter( const std::shared_ptr<const SfxFilter>& pFilter )
 {
-    pImp->m_pFilter = pFilter;
+    pImpl->m_pFilter = pFilter;
 }
 
 const std::shared_ptr<const SfxFilter>& SfxMedium::GetFilter() const
 {
-    return pImp->m_pFilter;
+    return pImpl->m_pFilter;
 }
 
 
 std::shared_ptr<const SfxFilter> SfxMedium::GetOrigFilter() const
 {
-    return pImp->pOrigFilter ? pImp->pOrigFilter : pImp->m_pFilter;
+    return pImpl->pOrigFilter ? pImpl->pOrigFilter : pImpl->m_pFilter;
 }
 
 
@@ -2711,7 +2711,7 @@ sal_uInt32 SfxMedium::CreatePasswordToModifyHash( const OUString& aPasswd, bool 
 
 void SfxMedium::Close()
 {
-    if ( pImp->xStorage.is() )
+    if ( pImpl->xStorage.is() )
     {
         CloseStorage();
     }
@@ -2723,7 +2723,7 @@ void SfxMedium::Close()
 
 void SfxMedium::CloseAndRelease()
 {
-    if ( pImp->xStorage.is() )
+    if ( pImpl->xStorage.is() )
     {
         CloseStorage();
     }
@@ -2735,7 +2735,7 @@ void SfxMedium::CloseAndRelease()
 
 void SfxMedium::DisableUnlockWebDAV( bool bDisableUnlockWebDAV )
 {
-    pImp->m_bDisableUnlockWebDAV = bDisableUnlockWebDAV;
+    pImpl->m_bDisableUnlockWebDAV = bDisableUnlockWebDAV;
 }
 
 void SfxMedium::UnlockFile( bool bReleaseLockStream )
@@ -2746,7 +2746,7 @@ void SfxMedium::UnlockFile( bool bReleaseLockStream )
     // check if webdav
     if ( GetURLObject().isAnyKnownWebDAVScheme() )
     {
-        if ( pImp->m_bLocked )
+        if ( pImpl->m_bLocked )
         {
             // an interaction handler should be used for authentication, if needed
             try {
@@ -2754,9 +2754,9 @@ void SfxMedium::UnlockFile( bool bReleaseLockStream )
                 uno::Reference< css::ucb::XCommandEnvironment > xComEnv = new ::ucbhelper::CommandEnvironment( xHandler,
                                                                Reference< css::ucb::XProgressHandler >() );
                 ucbhelper::Content aContentToUnlock( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ), xComEnv, comphelper::getProcessComponentContext());
-                pImp->m_bLocked = false;
+                pImpl->m_bLocked = false;
                 //check if WebDAV unlock was explicitly disabled
-                if ( !pImp->m_bDisableUnlockWebDAV )
+                if ( !pImpl->m_bDisableUnlockWebDAV )
                     aContentToUnlock.unlock();
             }
             catch ( uno::Exception& )
@@ -2767,14 +2767,14 @@ void SfxMedium::UnlockFile( bool bReleaseLockStream )
         return;
     }
 
-    if ( pImp->m_xLockingStream.is() )
+    if ( pImpl->m_xLockingStream.is() )
     {
         if ( bReleaseLockStream )
         {
             try
             {
-                uno::Reference< io::XInputStream > xInStream = pImp->m_xLockingStream->getInputStream();
-                uno::Reference< io::XOutputStream > xOutStream = pImp->m_xLockingStream->getOutputStream();
+                uno::Reference< io::XInputStream > xInStream = pImpl->m_xLockingStream->getInputStream();
+                uno::Reference< io::XOutputStream > xOutStream = pImpl->m_xLockingStream->getOutputStream();
                 if ( xInStream.is() )
                     xInStream->closeInput();
                 if ( xOutStream.is() )
@@ -2784,15 +2784,15 @@ void SfxMedium::UnlockFile( bool bReleaseLockStream )
             {}
         }
 
-        pImp->m_xLockingStream.clear();
+        pImpl->m_xLockingStream.clear();
     }
 
-    if ( pImp->m_bLocked )
+    if ( pImpl->m_bLocked )
     {
         try
         {
-            pImp->m_bLocked = false;
-            ::svt::DocumentLockFile aLockFile( pImp->m_aLogicName );
+            pImpl->m_bLocked = false;
+            ::svt::DocumentLockFile aLockFile( pImpl->m_aLogicName );
             // TODO/LATER: A warning could be shown in case the file is not the own one
             aLockFile.RemoveFile();
         }
@@ -2806,22 +2806,22 @@ void SfxMedium::CloseAndReleaseStreams_Impl()
 {
     CloseZipStorage_Impl();
 
-    uno::Reference< io::XInputStream > xInToClose = pImp->xInputStream;
+    uno::Reference< io::XInputStream > xInToClose = pImpl->xInputStream;
     uno::Reference< io::XOutputStream > xOutToClose;
-    if ( pImp->xStream.is() )
+    if ( pImpl->xStream.is() )
     {
-        xOutToClose = pImp->xStream->getOutputStream();
+        xOutToClose = pImpl->xStream->getOutputStream();
 
         // if the locking stream is closed here the related member should be cleaned
-        if ( pImp->xStream == pImp->m_xLockingStream )
-            pImp->m_xLockingStream.clear();
+        if ( pImpl->xStream == pImpl->m_xLockingStream )
+            pImpl->m_xLockingStream.clear();
     }
 
     // The probably exsisting SvStream wrappers should be closed first
     CloseStreams_Impl();
 
     // in case of salvage mode the storage is based on the streams
-    if ( !pImp->m_bSalvageMode )
+    if ( !pImpl->m_bSalvageMode )
     {
         try
         {
@@ -2842,10 +2842,10 @@ void SfxMedium::CloseStreams_Impl()
     CloseInStream_Impl();
     CloseOutStream_Impl();
 
-    if ( pImp->m_pSet )
-        pImp->m_pSet->ClearItem( SID_CONTENT );
+    if ( pImpl->m_pSet )
+        pImpl->m_pSet->ClearItem( SID_CONTENT );
 
-    pImp->aContent = ::ucbhelper::Content();
+    pImpl->aContent = ::ucbhelper::Content();
 }
 
 
@@ -2857,94 +2857,94 @@ void SfxMedium::SetIsRemote_Impl()
         case INetProtocol::Ftp:
         case INetProtocol::Http:
         case INetProtocol::Https:
-            pImp->m_bRemote = true;
+            pImpl->m_bRemote = true;
         break;
         default:
-            pImp->m_bRemote = GetName().startsWith("private:msgid");
+            pImpl->m_bRemote = GetName().startsWith("private:msgid");
             break;
     }
 
     // As files that are written to the remote transmission must also be able
     // to be read.
-    if (pImp->m_bRemote)
-        pImp->m_nStorOpenMode |= StreamMode::READ;
+    if (pImpl->m_bRemote)
+        pImpl->m_nStorOpenMode |= StreamMode::READ;
 }
 
 
 void SfxMedium::SetName( const OUString& aNameP, bool bSetOrigURL )
 {
-    if (pImp->aOrigURL.isEmpty())
-        pImp->aOrigURL = pImp->m_aLogicName;
+    if (pImpl->aOrigURL.isEmpty())
+        pImpl->aOrigURL = pImpl->m_aLogicName;
     if( bSetOrigURL )
-        pImp->aOrigURL = aNameP;
-    pImp->m_aLogicName = aNameP;
-    DELETEZ( pImp->m_pURLObj );
-    pImp->aContent = ::ucbhelper::Content();
+        pImpl->aOrigURL = aNameP;
+    pImpl->m_aLogicName = aNameP;
+    DELETEZ( pImpl->m_pURLObj );
+    pImpl->aContent = ::ucbhelper::Content();
     Init_Impl();
 }
 
 
 const OUString& SfxMedium::GetOrigURL() const
 {
-    return pImp->aOrigURL.isEmpty() ? pImp->m_aLogicName : pImp->aOrigURL;
+    return pImpl->aOrigURL.isEmpty() ? pImpl->m_aLogicName : pImpl->aOrigURL;
 }
 
 
 void SfxMedium::SetPhysicalName_Impl( const OUString& rNameP )
 {
-    if ( rNameP != pImp->m_aName )
+    if ( rNameP != pImpl->m_aName )
     {
-        if( pImp->pTempFile )
+        if( pImpl->pTempFile )
         {
-            delete pImp->pTempFile;
-            pImp->pTempFile = nullptr;
+            delete pImpl->pTempFile;
+            pImpl->pTempFile = nullptr;
         }
 
-        if ( !pImp->m_aName.isEmpty() || !rNameP.isEmpty() )
-            pImp->aContent = ::ucbhelper::Content();
+        if ( !pImpl->m_aName.isEmpty() || !rNameP.isEmpty() )
+            pImpl->aContent = ::ucbhelper::Content();
 
-        pImp->m_aName = rNameP;
-        pImp->m_bTriedStorage = false;
-        pImp->bIsStorage = false;
+        pImpl->m_aName = rNameP;
+        pImpl->m_bTriedStorage = false;
+        pImpl->bIsStorage = false;
     }
 }
 
 
 void SfxMedium::ReOpen()
 {
-    bool bUseInteractionHandler = pImp->bUseInteractionHandler;
-    pImp->bUseInteractionHandler = false;
+    bool bUseInteractionHandler = pImpl->bUseInteractionHandler;
+    pImpl->bUseInteractionHandler = false;
     GetMedium_Impl();
-    pImp->bUseInteractionHandler = bUseInteractionHandler;
+    pImpl->bUseInteractionHandler = bUseInteractionHandler;
 }
 
 
 void SfxMedium::CompleteReOpen()
 {
     // do not use temporary file for reopen and in case of success throw the temporary file away
-    bool bUseInteractionHandler = pImp->bUseInteractionHandler;
-    pImp->bUseInteractionHandler = false;
+    bool bUseInteractionHandler = pImpl->bUseInteractionHandler;
+    pImpl->bUseInteractionHandler = false;
 
     ::utl::TempFile* pTmpFile = nullptr;
-    if ( pImp->pTempFile )
+    if ( pImpl->pTempFile )
     {
-        pTmpFile = pImp->pTempFile;
-        pImp->pTempFile = nullptr;
-        pImp->m_aName.clear();
+        pTmpFile = pImpl->pTempFile;
+        pImpl->pTempFile = nullptr;
+        pImpl->m_aName.clear();
     }
 
     GetMedium_Impl();
 
     if ( GetError() )
     {
-        if ( pImp->pTempFile )
+        if ( pImpl->pTempFile )
         {
-            pImp->pTempFile->EnableKillingFile();
-            delete pImp->pTempFile;
+            pImpl->pTempFile->EnableKillingFile();
+            delete pImpl->pTempFile;
         }
-        pImp->pTempFile = pTmpFile;
-        if ( pImp->pTempFile )
-            pImp->m_aName = pImp->pTempFile->GetFileName();
+        pImpl->pTempFile = pTmpFile;
+        if ( pImpl->pTempFile )
+            pImpl->m_aName = pImpl->pTempFile->GetFileName();
     }
     else if (pTmpFile)
     {
@@ -2953,63 +2953,63 @@ void SfxMedium::CompleteReOpen()
 
     }
 
-    pImp->bUseInteractionHandler = bUseInteractionHandler;
+    pImpl->bUseInteractionHandler = bUseInteractionHandler;
 }
 
 SfxMedium::SfxMedium(const OUString &rName, StreamMode nOpenMode, std::shared_ptr<const SfxFilter> pFilter, SfxItemSet *pInSet) :
-    pImp(new SfxMedium_Impl)
+    pImpl(new SfxMedium_Impl)
 {
-    pImp->m_pSet = pInSet;
-    pImp->m_pFilter = pFilter;
-    pImp->m_aLogicName = rName;
-    pImp->m_nStorOpenMode = nOpenMode;
+    pImpl->m_pSet = pInSet;
+    pImpl->m_pFilter = pFilter;
+    pImpl->m_aLogicName = rName;
+    pImpl->m_nStorOpenMode = nOpenMode;
     Init_Impl();
 }
 
 SfxMedium::SfxMedium(const OUString &rName, const OUString &rReferer, StreamMode nOpenMode, std::shared_ptr<const SfxFilter> pFilter, SfxItemSet *pInSet) :
-    pImp(new SfxMedium_Impl)
+    pImpl(new SfxMedium_Impl)
 {
-    pImp->m_pSet = pInSet;
+    pImpl->m_pSet = pInSet;
     SfxItemSet * s = GetItemSet();
     if (s->GetItem(SID_REFERER) == nullptr) {
         s->Put(SfxStringItem(SID_REFERER, rReferer));
     }
-    pImp->m_pFilter = pFilter;
-    pImp->m_aLogicName = rName;
-    pImp->m_nStorOpenMode = nOpenMode;
+    pImpl->m_pFilter = pFilter;
+    pImpl->m_aLogicName = rName;
+    pImpl->m_nStorOpenMode = nOpenMode;
     Init_Impl();
 }
 
 SfxMedium::SfxMedium( const uno::Sequence<beans::PropertyValue>& aArgs ) :
-    pImp(new SfxMedium_Impl)
+    pImpl(new SfxMedium_Impl)
 {
     SfxAllItemSet *pParams = new SfxAllItemSet( SfxGetpApp()->GetPool() );
-    pImp->m_pSet = pParams;
+    pImpl->m_pSet = pParams;
     TransformParameters( SID_OPENDOC, aArgs, *pParams );
 
     OUString aFilterProvider, aFilterName;
     {
         const SfxPoolItem* pItem = nullptr;
-        if (pImp->m_pSet->HasItem(SID_FILTER_PROVIDER, &pItem))
+        if (pImpl->m_pSet->HasItem(SID_FILTER_PROVIDER, &pItem))
             aFilterProvider = static_cast<const SfxStringItem*>(pItem)->GetValue();
 
-        if (pImp->m_pSet->HasItem(SID_FILTER_NAME, &pItem))
+        if (pImpl->m_pSet->HasItem(SID_FILTER_NAME, &pItem))
             aFilterName = static_cast<const SfxStringItem*>(pItem)->GetValue();
     }
 
     if (aFilterProvider.isEmpty())
     {
         // This is a conventional filter type.
-        pImp->m_pFilter = SfxGetpApp()->GetFilterMatcher().GetFilter4FilterName( aFilterName );
+        pImpl->m_pFilter = SfxGetpApp()->GetFilterMatcher().GetFilter4FilterName( aFilterName );
     }
     else
     {
         // This filter is from an external provider such as orcus.
-        pImp->m_pCustomFilter.reset(new SfxFilter(aFilterProvider, aFilterName));
-        pImp->m_pFilter = pImp->m_pCustomFilter;
+        pImpl->m_pCustomFilter.reset(new SfxFilter(aFilterProvider, aFilterName));
+        pImpl->m_pFilter = pImpl->m_pCustomFilter;
     }
 
-    const SfxStringItem* pSalvageItem = SfxItemSet::GetItem<SfxStringItem>(pImp->m_pSet, SID_DOC_SALVAGE, false);
+    const SfxStringItem* pSalvageItem = SfxItemSet::GetItem<SfxStringItem>(pImpl->m_pSet, SID_DOC_SALVAGE, false);
     if( pSalvageItem )
     {
         // QUESTION: there is some treatment of Salvage in Init_Impl; align!
@@ -3018,15 +3018,15 @@ SfxMedium::SfxMedium( const uno::Sequence<beans::PropertyValue>& aArgs ) :
             // if an URL is provided in SalvageItem that means that the FileName refers to a temporary file
             // that must be copied here
 
-            const SfxStringItem* pFileNameItem = SfxItemSet::GetItem<SfxStringItem>(pImp->m_pSet, SID_FILE_NAME, false);
+            const SfxStringItem* pFileNameItem = SfxItemSet::GetItem<SfxStringItem>(pImpl->m_pSet, SID_FILE_NAME, false);
             if (!pFileNameItem) throw uno::RuntimeException();
             OUString aNewTempFileURL = SfxMedium::CreateTempCopyWithExt( pFileNameItem->GetValue() );
             if ( !aNewTempFileURL.isEmpty() )
             {
-                pImp->m_pSet->Put( SfxStringItem( SID_FILE_NAME, aNewTempFileURL ) );
-                pImp->m_pSet->ClearItem( SID_INPUTSTREAM );
-                pImp->m_pSet->ClearItem( SID_STREAM );
-                pImp->m_pSet->ClearItem( SID_CONTENT );
+                pImpl->m_pSet->Put( SfxStringItem( SID_FILE_NAME, aNewTempFileURL ) );
+                pImpl->m_pSet->ClearItem( SID_INPUTSTREAM );
+                pImpl->m_pSet->ClearItem( SID_STREAM );
+                pImpl->m_pSet->ClearItem( SID_CONTENT );
             }
             else
             {
@@ -3036,28 +3036,28 @@ SfxMedium::SfxMedium( const uno::Sequence<beans::PropertyValue>& aArgs ) :
     }
 
     bool readOnly = false;
-    const SfxBoolItem* pReadOnlyItem = SfxItemSet::GetItem<SfxBoolItem>(pImp->m_pSet, SID_DOC_READONLY, false);
+    const SfxBoolItem* pReadOnlyItem = SfxItemSet::GetItem<SfxBoolItem>(pImpl->m_pSet, SID_DOC_READONLY, false);
     if ( pReadOnlyItem && pReadOnlyItem->GetValue() )
         readOnly = true;
 
-    const SfxStringItem* pFileNameItem = SfxItemSet::GetItem<SfxStringItem>(pImp->m_pSet, SID_FILE_NAME, false);
+    const SfxStringItem* pFileNameItem = SfxItemSet::GetItem<SfxStringItem>(pImpl->m_pSet, SID_FILE_NAME, false);
     if (!pFileNameItem) throw uno::RuntimeException();
-    pImp->m_aLogicName = pFileNameItem->GetValue();
-    pImp->m_nStorOpenMode = readOnly ? SFX_STREAM_READONLY : SFX_STREAM_READWRITE;
+    pImpl->m_aLogicName = pFileNameItem->GetValue();
+    pImpl->m_nStorOpenMode = readOnly ? SFX_STREAM_READONLY : SFX_STREAM_READWRITE;
     Init_Impl();
 }
 
 
 SfxMedium::SfxMedium( const uno::Reference < embed::XStorage >& rStor, const OUString& rBaseURL, const SfxItemSet* p ) :
-    pImp(new SfxMedium_Impl)
+    pImpl(new SfxMedium_Impl)
 {
     OUString aType = SfxFilter::GetTypeFromStorage(rStor);
-    pImp->m_pFilter = SfxGetpApp()->GetFilterMatcher().GetFilter4EA( aType );
-    DBG_ASSERT( pImp->m_pFilter, "No Filter for storage found!" );
+    pImpl->m_pFilter = SfxGetpApp()->GetFilterMatcher().GetFilter4EA( aType );
+    DBG_ASSERT( pImpl->m_pFilter, "No Filter for storage found!" );
 
     Init_Impl();
-    pImp->xStorage = rStor;
-    pImp->bDisposeStorage = false;
+    pImpl->xStorage = rStor;
+    pImpl->bDisposeStorage = false;
 
     // always take BaseURL first, could be overwritten by ItemSet
     GetItemSet()->Put( SfxStringItem( SID_DOC_BASEURL, rBaseURL ) );
@@ -3067,14 +3067,14 @@ SfxMedium::SfxMedium( const uno::Reference < embed::XStorage >& rStor, const OUS
 
 
 SfxMedium::SfxMedium( const uno::Reference < embed::XStorage >& rStor, const OUString& rBaseURL, const OUString &rTypeName, const SfxItemSet* p ) :
-    pImp(new SfxMedium_Impl)
+    pImpl(new SfxMedium_Impl)
 {
-    pImp->m_pFilter = SfxGetpApp()->GetFilterMatcher().GetFilter4EA( rTypeName );
-    DBG_ASSERT( pImp->m_pFilter, "No Filter for storage found!" );
+    pImpl->m_pFilter = SfxGetpApp()->GetFilterMatcher().GetFilter4EA( rTypeName );
+    DBG_ASSERT( pImpl->m_pFilter, "No Filter for storage found!" );
 
     Init_Impl();
-    pImp->xStorage = rStor;
-    pImp->bDisposeStorage = false;
+    pImpl->xStorage = rStor;
+    pImpl->bDisposeStorage = false;
 
     // always take BaseURL first, could be overwritten by ItemSet
     GetItemSet()->Put( SfxStringItem( SID_DOC_BASEURL, rBaseURL ) );
@@ -3090,10 +3090,10 @@ SfxMedium::~SfxMedium()
 
     Close();
 
-    if( pImp->bIsTemp && !pImp->m_aName.isEmpty() )
+    if( pImpl->bIsTemp && !pImpl->m_aName.isEmpty() )
     {
         OUString aTemp;
-        if ( osl::FileBase::getFileURLFromSystemPath( pImp->m_aName, aTemp )
+        if ( osl::FileBase::getFileURLFromSystemPath( pImpl->m_aName, aTemp )
              != osl::FileBase::E_None )
         {
             SAL_WARN( "sfx.doc", "Physical name not convertible!");
@@ -3104,43 +3104,41 @@ SfxMedium::~SfxMedium()
             SAL_WARN( "sfx.doc", "Couldn't remove temporary file!");
         }
     }
-
-    delete pImp;
 }
 
 const OUString& SfxMedium::GetName() const
 {
-    return pImp->m_aLogicName;
+    return pImpl->m_aLogicName;
 }
 
 const INetURLObject& SfxMedium::GetURLObject() const
 {
-    if (!pImp->m_pURLObj)
+    if (!pImpl->m_pURLObj)
     {
-        pImp->m_pURLObj = new INetURLObject( pImp->m_aLogicName );
-        pImp->m_pURLObj->SetMark("");
+        pImpl->m_pURLObj = new INetURLObject( pImpl->m_aLogicName );
+        pImpl->m_pURLObj->SetMark("");
     }
 
-    return *pImp->m_pURLObj;
+    return *pImpl->m_pURLObj;
 }
 
 void SfxMedium::SetExpired_Impl( const DateTime& rDateTime )
 {
-    pImp->aExpireTime = rDateTime;
+    pImpl->aExpireTime = rDateTime;
 }
 
 
 bool SfxMedium::IsExpired() const
 {
-    return pImp->aExpireTime.IsValidAndGregorian() && pImp->aExpireTime < DateTime( DateTime::SYSTEM );
+    return pImpl->aExpireTime.IsValidAndGregorian() && pImpl->aExpireTime < DateTime( DateTime::SYSTEM );
 }
 
 
 void SfxMedium::ForceSynchronStream_Impl()
 {
-    if( pImp->m_pInStream )
+    if( pImpl->m_pInStream )
     {
-        SvLockBytes* pBytes = pImp->m_pInStream->GetLockBytes();
+        SvLockBytes* pBytes = pImpl->m_pInStream->GetLockBytes();
         if( pBytes )
             pBytes->SetSynchronMode();
     }
@@ -3149,51 +3147,51 @@ void SfxMedium::ForceSynchronStream_Impl()
 
 SfxFrame* SfxMedium::GetLoadTargetFrame() const
 {
-    return pImp->wLoadTargetFrame;
+    return pImpl->wLoadTargetFrame;
 }
 
 void SfxMedium::setStreamToLoadFrom(const css::uno::Reference<css::io::XInputStream>& xInputStream, bool bIsReadOnly )
 {
-    pImp->m_xInputStreamToLoadFrom = xInputStream;
-    pImp->m_bInputStreamIsReadOnly = bIsReadOnly;
+    pImpl->m_xInputStreamToLoadFrom = xInputStream;
+    pImpl->m_bInputStreamIsReadOnly = bIsReadOnly;
 }
 
 void SfxMedium::SetLoadTargetFrame(SfxFrame* pFrame )
 {
-    pImp->wLoadTargetFrame = pFrame;
+    pImpl->wLoadTargetFrame = pFrame;
 }
 
 
 void SfxMedium::SetStorage_Impl( const uno::Reference < embed::XStorage >& rStor )
 {
-    pImp->xStorage = rStor;
+    pImpl->xStorage = rStor;
 }
 
 
 SfxItemSet* SfxMedium::GetItemSet() const
 {
     // this method *must* return an ItemSet, returning NULL can cause crashes
-    if (!pImp->m_pSet)
-        pImp->m_pSet = new SfxAllItemSet( SfxGetpApp()->GetPool() );
-    return pImp->m_pSet;
+    if (!pImpl->m_pSet)
+        pImpl->m_pSet = new SfxAllItemSet( SfxGetpApp()->GetPool() );
+    return pImpl->m_pSet;
 }
 
 
 SvKeyValueIterator* SfxMedium::GetHeaderAttributes_Impl()
 {
-    if( !pImp->xAttributes.Is() )
+    if( !pImpl->xAttributes.Is() )
     {
-        pImp->xAttributes = SvKeyValueIteratorRef( new SvKeyValueIterator );
+        pImpl->xAttributes = SvKeyValueIteratorRef( new SvKeyValueIterator );
 
         if ( GetContent().is() )
         {
             try
             {
-                Any aAny = pImp->aContent.getPropertyValue("MediaType");
+                Any aAny = pImpl->aContent.getPropertyValue("MediaType");
                 OUString aContentType;
                 aAny >>= aContentType;
 
-                pImp->xAttributes->Append( SvKeyValue( OUString("content-type"), aContentType ) );
+                pImpl->xAttributes->Append( SvKeyValue( OUString("content-type"), aContentType ) );
             }
             catch ( const css::uno::Exception& )
             {
@@ -3201,37 +3199,37 @@ SvKeyValueIterator* SfxMedium::GetHeaderAttributes_Impl()
         }
     }
 
-    return pImp->xAttributes;
+    return pImpl->xAttributes;
 }
 
 css::uno::Reference< css::io::XInputStream >  SfxMedium::GetInputStream()
 {
-    if ( !pImp->xInputStream.is() )
+    if ( !pImpl->xInputStream.is() )
         GetMedium_Impl();
-    return pImp->xInputStream;
+    return pImpl->xInputStream;
 }
 
 const uno::Sequence < util::RevisionTag >& SfxMedium::GetVersionList( bool _bNoReload )
 {
     // if the medium has no name, then this medium should represent a new document and can have no version info
-    if ( ( !_bNoReload || !pImp->m_bVersionsAlreadyLoaded ) && !pImp->aVersions.getLength() &&
-         ( !pImp->m_aName.isEmpty() || !pImp->m_aLogicName.isEmpty() ) && GetStorage().is() )
+    if ( ( !_bNoReload || !pImpl->m_bVersionsAlreadyLoaded ) && !pImpl->aVersions.getLength() &&
+         ( !pImpl->m_aName.isEmpty() || !pImpl->m_aLogicName.isEmpty() ) && GetStorage().is() )
     {
         uno::Reference < document::XDocumentRevisionListPersistence > xReader =
                 document::DocumentRevisionListPersistence::create( comphelper::getProcessComponentContext() );
         try
         {
-            pImp->aVersions = xReader->load( GetStorage() );
+            pImpl->aVersions = xReader->load( GetStorage() );
         }
         catch ( const uno::Exception& )
         {
         }
     }
 
-    if ( !pImp->m_bVersionsAlreadyLoaded )
-        pImp->m_bVersionsAlreadyLoaded = true;
+    if ( !pImpl->m_bVersionsAlreadyLoaded )
+        pImpl->m_bVersionsAlreadyLoaded = true;
 
-    return pImp->aVersions;
+    return pImpl->aVersions;
 }
 
 uno::Sequence < util::RevisionTag > SfxMedium::GetVersionList( const uno::Reference < embed::XStorage >& xStorage )
@@ -3255,10 +3253,10 @@ void SfxMedium::AddVersion_Impl( util::RevisionTag& rRevision )
     {
         // To determine a unique name for the stream
         std::vector<sal_uInt32> aLongs;
-        sal_Int32 nLength = pImp->aVersions.getLength();
+        sal_Int32 nLength = pImpl->aVersions.getLength();
         for ( sal_Int32 m=0; m<nLength; m++ )
         {
-            sal_uInt32 nVer = static_cast<sal_uInt32>( pImp->aVersions[m].Identifier.copy(7).toInt32());
+            sal_uInt32 nVer = static_cast<sal_uInt32>( pImpl->aVersions[m].Identifier.copy(7).toInt32());
             size_t n;
             for ( n=0; n<aLongs.size(); ++n )
                 if ( nVer<aLongs[n] )
@@ -3273,25 +3271,25 @@ void SfxMedium::AddVersion_Impl( util::RevisionTag& rRevision )
                 break;
 
         OUString aRevName = "Version" + OUString::number( nKey + 1 );
-        pImp->aVersions.realloc( nLength+1 );
+        pImpl->aVersions.realloc( nLength+1 );
         rRevision.Identifier = aRevName;
-        pImp->aVersions[nLength] = rRevision;
+        pImpl->aVersions[nLength] = rRevision;
     }
 }
 
 void SfxMedium::RemoveVersion_Impl( const OUString& rName )
 {
-    if ( !pImp->aVersions.getLength() )
+    if ( !pImpl->aVersions.getLength() )
         return;
 
-    sal_Int32 nLength = pImp->aVersions.getLength();
+    sal_Int32 nLength = pImpl->aVersions.getLength();
     for ( sal_Int32 n=0; n<nLength; n++ )
     {
-        if ( pImp->aVersions[n].Identifier == rName )
+        if ( pImpl->aVersions[n].Identifier == rName )
         {
             for ( sal_Int32 m=n; m<nLength-1; m++ )
-                pImp->aVersions[m] = pImp->aVersions[m+1];
-            pImp->aVersions.realloc(nLength-1);
+                pImpl->aVersions[m] = pImpl->aVersions[m+1];
+            pImpl->aVersions.realloc(nLength-1);
             return;
         }
     }
@@ -3299,9 +3297,9 @@ void SfxMedium::RemoveVersion_Impl( const OUString& rName )
 
 bool SfxMedium::TransferVersionList_Impl( SfxMedium& rMedium )
 {
-    if ( rMedium.pImp->aVersions.getLength() )
+    if ( rMedium.pImpl->aVersions.getLength() )
     {
-        pImp->aVersions = rMedium.pImp->aVersions;
+        pImpl->aVersions = rMedium.pImpl->aVersions;
         return true;
     }
 
@@ -3312,14 +3310,14 @@ void SfxMedium::SaveVersionList_Impl()
 {
     if ( GetStorage().is() )
     {
-        if ( !pImp->aVersions.getLength() )
+        if ( !pImpl->aVersions.getLength() )
             return;
 
         uno::Reference < document::XDocumentRevisionListPersistence > xWriter =
                  document::DocumentRevisionListPersistence::create( comphelper::getProcessComponentContext() );
         try
         {
-            xWriter->store( GetStorage(), pImp->aVersions );
+            xWriter->store( GetStorage(), pImpl->aVersions );
         }
         catch ( const uno::Exception& )
         {
@@ -3330,7 +3328,7 @@ void SfxMedium::SaveVersionList_Impl()
 bool SfxMedium::IsReadOnly() const
 {
     // a) ReadOnly filter can't produce read/write contents!
-    bool bReadOnly = pImp->m_pFilter && (pImp->m_pFilter->GetFilterFlags() & SfxFilterFlags::OPENREADONLY);
+    bool bReadOnly = pImpl->m_pFilter && (pImpl->m_pFilter->GetFilterFlags() & SfxFilterFlags::OPENREADONLY);
 
     // b) if filter allow read/write contents .. check open mode of the storage
     if (!bReadOnly)
@@ -3349,7 +3347,7 @@ bool SfxMedium::IsReadOnly() const
 
 bool SfxMedium::IsOriginallyReadOnly() const
 {
-    return pImp->m_bOriginallyReadOnly;
+    return pImpl->m_bOriginallyReadOnly;
 }
 
 
@@ -3385,26 +3383,26 @@ bool SfxMedium::SetWritableForUserOnly( const OUString& aURL )
 
 void SfxMedium::CreateTempFile( bool bReplace )
 {
-    if ( pImp->pTempFile )
+    if ( pImpl->pTempFile )
     {
         if ( !bReplace )
             return;
 
-        DELETEZ( pImp->pTempFile );
-        pImp->m_aName.clear();
+        DELETEZ( pImpl->pTempFile );
+        pImpl->m_aName.clear();
     }
 
-    pImp->pTempFile = new ::utl::TempFile();
-    pImp->pTempFile->EnableKillingFile();
-    pImp->m_aName = pImp->pTempFile->GetFileName();
-    OUString aTmpURL = pImp->pTempFile->GetURL();
-    if ( pImp->m_aName.isEmpty() || aTmpURL.isEmpty() )
+    pImpl->pTempFile = new ::utl::TempFile();
+    pImpl->pTempFile->EnableKillingFile();
+    pImpl->m_aName = pImpl->pTempFile->GetFileName();
+    OUString aTmpURL = pImpl->pTempFile->GetURL();
+    if ( pImpl->m_aName.isEmpty() || aTmpURL.isEmpty() )
     {
         SetError( ERRCODE_IO_CANTWRITE, OSL_LOG_PREFIX );
         return;
     }
 
-    if ( !(pImp->m_nStorOpenMode & StreamMode::TRUNC) )
+    if ( !(pImpl->m_nStorOpenMode & StreamMode::TRUNC) )
     {
         bool bTransferSuccess = false;
 
@@ -3424,8 +3422,8 @@ void SfxMedium::CreateTempFile( bool bReplace )
                 if ( !aFileName.isEmpty() && aTmpURLObj.removeSegment() )
                 {
                     ::ucbhelper::Content aTargetContent( aTmpURLObj.GetMainURL( INetURLObject::NO_DECODE ), xComEnv, comphelper::getProcessComponentContext() );
-                    OUString sMimeType = pImp->getFilterMimeType();
-                    if ( aTargetContent.transferContent( pImp->aContent, ::ucbhelper::InsertOperation_COPY, aFileName, NameClash::OVERWRITE, sMimeType ) )
+                    OUString sMimeType = pImpl->getFilterMimeType();
+                    if ( aTargetContent.transferContent( pImpl->aContent, ::ucbhelper::InsertOperation_COPY, aFileName, NameClash::OVERWRITE, sMimeType ) )
                     {
                         SetWritableForUserOnly( aTmpURL );
                         bTransferSuccess = true;
@@ -3442,24 +3440,24 @@ void SfxMedium::CreateTempFile( bool bReplace )
             }
         }
 
-        if ( !bTransferSuccess && pImp->m_pInStream )
+        if ( !bTransferSuccess && pImpl->m_pInStream )
         {
             // the case when there is no URL-access available or this is a remote protocol
             // but there is an input stream
             GetOutStream();
-            if ( pImp->m_pOutStream )
+            if ( pImpl->m_pOutStream )
             {
                 char        *pBuf = new char [8192];
                 sal_uInt32   nErr = ERRCODE_NONE;
 
-                pImp->m_pInStream->Seek(0);
-                pImp->m_pOutStream->Seek(0);
+                pImpl->m_pInStream->Seek(0);
+                pImpl->m_pOutStream->Seek(0);
 
-                while( !pImp->m_pInStream->IsEof() && nErr == ERRCODE_NONE )
+                while( !pImpl->m_pInStream->IsEof() && nErr == ERRCODE_NONE )
                 {
-                    sal_uInt32 nRead = pImp->m_pInStream->Read( pBuf, 8192 );
-                    nErr = pImp->m_pInStream->GetError();
-                    pImp->m_pOutStream->Write( pBuf, nRead );
+                    sal_uInt32 nRead = pImpl->m_pInStream->Read( pBuf, 8192 );
+                    nErr = pImpl->m_pInStream->GetError();
+                    pImpl->m_pOutStream->Write( pBuf, nRead );
                 }
 
                 bTransferSuccess = true;
@@ -3490,13 +3488,13 @@ void SfxMedium::CreateTempFile( bool bReplace )
 void SfxMedium::CreateTempFileNoCopy()
 {
     // this call always replaces the existing temporary file
-    if ( pImp->pTempFile )
-        delete pImp->pTempFile;
+    if ( pImpl->pTempFile )
+        delete pImpl->pTempFile;
 
-    pImp->pTempFile = new ::utl::TempFile();
-    pImp->pTempFile->EnableKillingFile();
-    pImp->m_aName = pImp->pTempFile->GetFileName();
-    if ( pImp->m_aName.isEmpty() )
+    pImpl->pTempFile = new ::utl::TempFile();
+    pImpl->pTempFile->EnableKillingFile();
+    pImpl->m_aName = pImpl->pTempFile->GetFileName();
+    if ( pImpl->m_aName.isEmpty() )
     {
         SetError( ERRCODE_IO_CANTWRITE, OSL_LOG_PREFIX );
         return;
@@ -3528,10 +3526,10 @@ bool SfxMedium::SignContents_Impl( bool bScriptingContent, const OUString& aODFV
 
             try
             {
-                if ( !pImp->xStream.is() )
+                if ( !pImpl->xStream.is() )
                     throw uno::RuntimeException();
 
-                xWriteableZipStor = ::comphelper::OStorageHelper::GetStorageOfFormatFromStream( ZIP_STORAGE_FORMAT_STRING, pImp->xStream );
+                xWriteableZipStor = ::comphelper::OStorageHelper::GetStorageOfFormatFromStream( ZIP_STORAGE_FORMAT_STRING, pImpl->xStream );
                 if ( !xWriteableZipStor.is() )
                     throw uno::RuntimeException();
 
@@ -3641,23 +3639,23 @@ bool SfxMedium::SignContents_Impl( bool bScriptingContent, const OUString& aODFV
 
 SignatureState SfxMedium::GetCachedSignatureState_Impl()
 {
-    return pImp->m_nSignatureState;
+    return pImpl->m_nSignatureState;
 }
 
 
 void SfxMedium::SetCachedSignatureState_Impl( SignatureState nState )
 {
-    pImp->m_nSignatureState = nState;
+    pImpl->m_nSignatureState = nState;
 }
 
 bool SfxMedium::HasStorage_Impl() const
 {
-    return pImp->xStorage.is();
+    return pImpl->xStorage.is();
 }
 
 bool SfxMedium::IsOpen() const
 {
-    return pImp->m_pInStream || pImp->m_pOutStream || pImp->xStorage.is();
+    return pImpl->m_pInStream || pImpl->m_pOutStream || pImpl->xStorage.is();
 }
 
 OUString SfxMedium::CreateTempCopyWithExt( const OUString& aURL )
@@ -3736,7 +3734,7 @@ OUString SfxMedium::SwitchDocumentToTempFile()
 {
     // the method returns empty string in case of failure
     OUString aResult;
-    OUString aOrigURL = pImp->m_aLogicName;
+    OUString aOrigURL = pImpl->m_aLogicName;
 
     if ( !aOrigURL.isEmpty() )
     {
@@ -3755,7 +3753,7 @@ OUString SfxMedium::SwitchDocumentToTempFile()
 
             if ( xOptStorage.is() )
             {
-                // TODO/LATER: reuse the pImp->pTempFile if it already exists
+                // TODO/LATER: reuse the pImpl->pTempFile if it already exists
                 CanDisposeStorage_Impl( false );
                 Close();
                 SetPhysicalName_Impl( OUString() );
@@ -3763,8 +3761,8 @@ OUString SfxMedium::SwitchDocumentToTempFile()
 
                 // remove the readonly state
                 bool bWasReadonly = false;
-                pImp->m_nStorOpenMode = SFX_STREAM_READWRITE;
-                const SfxBoolItem* pReadOnlyItem = SfxItemSet::GetItem<SfxBoolItem>(pImp->m_pSet, SID_DOC_READONLY, false);
+                pImpl->m_nStorOpenMode = SFX_STREAM_READWRITE;
+                const SfxBoolItem* pReadOnlyItem = SfxItemSet::GetItem<SfxBoolItem>(pImpl->m_pSet, SID_DOC_READONLY, false);
                 if ( pReadOnlyItem && pReadOnlyItem->GetValue() )
                     bWasReadonly = true;
                 GetItemSet()->ClearItem( SID_DOC_READONLY );
@@ -3774,12 +3772,12 @@ OUString SfxMedium::SwitchDocumentToTempFile()
                 CreateTempFile();
                 GetMedium_Impl();
 
-                if ( pImp->xStream.is() )
+                if ( pImpl->xStream.is() )
                 {
                     try
                     {
-                        xOptStorage->writeAndAttachToStream( pImp->xStream );
-                        pImp->xStorage = xStorage;
+                        xOptStorage->writeAndAttachToStream( pImpl->xStream );
+                        pImpl->xStorage = xStorage;
                         aResult = aNewURL;
                     }
                     catch( const uno::Exception& )
@@ -3794,11 +3792,11 @@ OUString SfxMedium::SwitchDocumentToTempFile()
                     if ( bWasReadonly )
                     {
                         // set the readonly state back
-                        pImp->m_nStorOpenMode = SFX_STREAM_READONLY;
+                        pImpl->m_nStorOpenMode = SFX_STREAM_READONLY;
                         GetItemSet()->Put( SfxBoolItem(SID_DOC_READONLY, true));
                     }
                     GetMedium_Impl();
-                    pImp->xStorage = xStorage;
+                    pImpl->xStorage = xStorage;
                 }
             }
         }
@@ -3811,14 +3809,14 @@ bool SfxMedium::SwitchDocumentToFile( const OUString& aURL )
 {
     // the method is only for storage based documents
     bool bResult = false;
-    OUString aOrigURL = pImp->m_aLogicName;
+    OUString aOrigURL = pImpl->m_aLogicName;
 
     if ( !aURL.isEmpty() && !aOrigURL.isEmpty() )
     {
         uno::Reference< embed::XStorage > xStorage = GetStorage();
         uno::Reference< embed::XOptimizedStorage > xOptStorage( xStorage, uno::UNO_QUERY );
 
-        // TODO/LATER: reuse the pImp->pTempFile if it already exists
+        // TODO/LATER: reuse the pImpl->pTempFile if it already exists
         CanDisposeStorage_Impl( false );
         Close();
         SetPhysicalName_Impl( OUString() );
@@ -3830,16 +3828,16 @@ bool SfxMedium::SwitchDocumentToFile( const OUString& aURL )
         CreateTempFile();
         GetMedium_Impl();
 
-        if ( pImp->xStream.is() )
+        if ( pImpl->xStream.is() )
         {
             try
             {
-                uno::Reference< io::XTruncate > xTruncate( pImp->xStream, uno::UNO_QUERY_THROW );
+                uno::Reference< io::XTruncate > xTruncate( pImpl->xStream, uno::UNO_QUERY_THROW );
                 if ( xTruncate.is() )
                     xTruncate->truncate();
                 if ( xOptStorage.is() )
-                    xOptStorage->writeAndAttachToStream( pImp->xStream );
-                pImp->xStorage = xStorage;
+                    xOptStorage->writeAndAttachToStream( pImpl->xStream );
+                pImpl->xStorage = xStorage;
                 bResult = true;
             }
             catch( const uno::Exception& )
@@ -3852,7 +3850,7 @@ bool SfxMedium::SwitchDocumentToFile( const OUString& aURL )
             SetPhysicalName_Impl( OUString() );
             SetName( aOrigURL );
             GetMedium_Impl();
-            pImp->xStorage = xStorage;
+            pImpl->xStorage = xStorage;
         }
     }
 
@@ -3861,12 +3859,12 @@ bool SfxMedium::SwitchDocumentToFile( const OUString& aURL )
 
 void SfxMedium::SetInCheckIn( bool bInCheckIn )
 {
-    pImp->m_bInCheckIn = bInCheckIn;
+    pImpl->m_bInCheckIn = bInCheckIn;
 }
 
 bool SfxMedium::IsInCheckIn( )
 {
-    return pImp->m_bInCheckIn;
+    return pImpl->m_bInCheckIn;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

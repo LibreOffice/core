@@ -147,15 +147,16 @@ class SFX2_DLLPUBLIC SfxChildWindow
     sal_uInt16                 nType;          // ChildWindow-Id
     VclPtr<vcl::Window>        pWindow;         // actual contents
     SfxChildAlignment          eChildAlignment; // Current css::drawing::Alignment
-    SfxChildWindow_Impl*       pImp;            // Implementation data
     SfxChildWindowContext*     pContext;        // With context-sensitive ChildWindows:
                                                  // Another window in pWindow
     SAL_DLLPRIVATE void ClearWorkwin();
 
 protected:
     void                SetWindow(const VclPtr<vcl::Window>& p) { pWindow = p; }
-
                         SfxChildWindow(vcl::Window *pParentWindow, sal_uInt16 nId);
+
+private:
+    std::unique_ptr< SfxChildWindow_Impl>       pImpl;            // Implementation data
 
 public:
     virtual             ~SfxChildWindow();

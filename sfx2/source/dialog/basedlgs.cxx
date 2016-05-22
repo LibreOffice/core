@@ -201,9 +201,9 @@ void SfxModelessDialog::StateChanged( StateChangedType nStateChange )
 {
     if ( nStateChange == StateChangedType::InitShow )
     {
-        if ( !pImp->aWinState.isEmpty() )
+        if ( !pImpl->aWinState.isEmpty() )
         {
-            SetWindowState( pImp->aWinState );
+            SetWindowState( pImpl->aWinState );
         }
         else
         {
@@ -236,7 +236,7 @@ void SfxModelessDialog::StateChanged( StateChangedType nStateChange )
             }
         }
 
-        pImp->bConstructed = true;
+        pImpl->bConstructed = true;
     }
 
     ModelessDialog::StateChanged( nStateChange );
@@ -254,7 +254,7 @@ void SfxModelessDialog::Initialize(SfxChildWinInfo *pInfo)
 
 {
     if (pInfo)
-        pImp->aWinState = pInfo->aWinState;
+        pImpl->aWinState = pInfo->aWinState;
 }
 
 void SfxModelessDialog::Resize()
@@ -268,20 +268,20 @@ void SfxModelessDialog::Resize()
 
 {
     ModelessDialog::Resize();
-    if ( pImp->bConstructed && pImp->pMgr )
+    if ( pImpl->bConstructed && pImpl->pMgr )
     {
         // start timer for saving window status information
-        pImp->aMoveIdle.Start();
+        pImpl->aMoveIdle.Start();
     }
 }
 
 void SfxModelessDialog::Move()
 {
     ModelessDialog::Move();
-    if ( pImp->bConstructed && pImp->pMgr && IsReallyVisible() )
+    if ( pImpl->bConstructed && pImpl->pMgr && IsReallyVisible() )
     {
         // start timer for saving window status information
-        pImp->aMoveIdle.Start();
+        pImpl->aMoveIdle.Start();
     }
 }
 
@@ -291,16 +291,16 @@ void SfxModelessDialog::Move()
 */
 IMPL_LINK_NOARG_TYPED(SfxModelessDialog, TimerHdl, Idle *, void)
 {
-    pImp->aMoveIdle.Stop();
-    if ( pImp->bConstructed && pImp->pMgr )
+    pImpl->aMoveIdle.Stop();
+    if ( pImpl->bConstructed && pImpl->pMgr )
     {
         if ( !IsRollUp() )
             aSize = GetSizePixel();
         WindowStateMask nMask = WindowStateMask::Pos | WindowStateMask::State;
         if ( GetStyle() & WB_SIZEABLE )
             nMask |= ( WindowStateMask::Width | WindowStateMask::Height );
-        pImp->aWinState = GetWindowState( nMask );
-        GetBindings().GetWorkWindow_Impl()->ConfigChild_Impl( SfxChildIdentifier::DOCKINGWINDOW, SfxDockingConfig::ALIGNDOCKINGWINDOW, pImp->pMgr->GetType() );
+        pImpl->aWinState = GetWindowState( nMask );
+        GetBindings().GetWorkWindow_Impl()->ConfigChild_Impl( SfxChildIdentifier::DOCKINGWINDOW, SfxDockingConfig::ALIGNDOCKINGWINDOW, pImpl->pMgr->GetType() );
     }
 }
 
@@ -315,14 +315,14 @@ SfxModelessDialog::SfxModelessDialog(SfxBindings* pBindinx,
 void SfxModelessDialog::Init(SfxBindings *pBindinx, SfxChildWindow *pCW)
 {
     pBindings = pBindinx;
-    pImp = new SfxModelessDialog_Impl;
-    pImp->pMgr = pCW;
-    pImp->bConstructed = false;
+    pImpl.reset(new SfxModelessDialog_Impl);
+    pImpl->pMgr = pCW;
+    pImpl->bConstructed = false;
     SetUniqueId( GetHelpId() );
     if ( pBindinx )
-        pImp->StartListening( *pBindinx );
-    pImp->aMoveIdle.SetPriority(SchedulerPriority::RESIZE);
-    pImp->aMoveIdle.SetIdleHdl(LINK(this,SfxModelessDialog,TimerHdl));
+        pImpl->StartListening( *pBindinx );
+    pImpl->aMoveIdle.SetPriority(SchedulerPriority::RESIZE);
+    pImpl->aMoveIdle.SetIdleHdl(LINK(this,SfxModelessDialog,TimerHdl));
 }
 
 /*  [Description]
@@ -332,17 +332,17 @@ void SfxModelessDialog::Init(SfxBindings *pBindinx, SfxChildWindow *pCW)
 */
 bool SfxModelessDialog::Notify( NotifyEvent& rEvt )
 {
-    if ( pImp )
+    if ( pImpl )
     {
         if ( rEvt.GetType() == MouseNotifyEvent::GETFOCUS )
         {
-            pBindings->SetActiveFrame( pImp->pMgr->GetFrame() );
-            pImp->pMgr->Activate_Impl();
+            pBindings->SetActiveFrame( pImpl->pMgr->GetFrame() );
+            pImpl->pMgr->Activate_Impl();
         }
         else if ( rEvt.GetType() == MouseNotifyEvent::LOSEFOCUS && !HasChildPathFocus() )
         {
             pBindings->SetActiveFrame( css::uno::Reference< css::frame::XFrame > () );
-            pImp->pMgr->Deactivate_Impl();
+            pImpl->pMgr->Deactivate_Impl();
         }
         else if( rEvt.GetType() == MouseNotifyEvent::KEYINPUT )
         {
@@ -364,10 +364,9 @@ SfxModelessDialog::~SfxModelessDialog()
 
 void SfxModelessDialog::dispose()
 {
-    if ( pImp->pMgr->GetFrame().is() && pImp->pMgr->GetFrame() == pBindings->GetActiveFrame() )
+    if ( pImpl->pMgr->GetFrame().is() && pImpl->pMgr->GetFrame() == pBindings->GetActiveFrame() )
         pBindings->SetActiveFrame( nullptr );
-    delete pImp;
-    pImp = nullptr;
+    pImpl.reset();
     ModelessDialog::dispose();
 }
 
@@ -384,9 +383,9 @@ bool SfxModelessDialog::Close()
 
 {
     // Execute with Parameters, since Toggle is ignored by some ChildWindows.
-    SfxBoolItem aValue( pImp->pMgr->GetType(), false);
+    SfxBoolItem aValue( pImpl->pMgr->GetType(), false);
     pBindings->GetDispatcher_Impl()->ExecuteList(
-        pImp->pMgr->GetType(),
+        pImpl->pMgr->GetType(),
         SfxCallMode::RECORD|SfxCallMode::SYNCHRON, { &aValue } );
     return true;
 }
@@ -419,19 +418,19 @@ bool SfxFloatingWindow::Notify( NotifyEvent& rEvt )
 */
 
 {
-    if ( pImp )
+    if ( pImpl )
     {
         if ( rEvt.GetType() == MouseNotifyEvent::GETFOCUS )
         {
-            pBindings->SetActiveFrame( pImp->pMgr->GetFrame() );
-            pImp->pMgr->Activate_Impl();
+            pBindings->SetActiveFrame( pImpl->pMgr->GetFrame() );
+            pImpl->pMgr->Activate_Impl();
         }
         else if ( rEvt.GetType() == MouseNotifyEvent::LOSEFOCUS )
         {
             if ( !HasChildPathFocus() )
             {
                 pBindings->SetActiveFrame( nullptr );
-                pImp->pMgr->Deactivate_Impl();
+                pImpl->pMgr->Deactivate_Impl();
             }
         }
         else if( rEvt.GetType() == MouseNotifyEvent::KEYINPUT )
@@ -452,16 +451,16 @@ SfxFloatingWindow::SfxFloatingWindow( SfxBindings *pBindinx,
                         vcl::Window* pParent, WinBits nWinBits) :
     FloatingWindow (pParent, nWinBits),
     pBindings(pBindinx),
-    pImp( new SfxFloatingWindow_Impl )
+    pImpl( new SfxFloatingWindow_Impl )
 {
-    pImp->pMgr = pCW;
-    pImp->bConstructed = false;
+    pImpl->pMgr = pCW;
+    pImpl->bConstructed = false;
     SetUniqueId( GetHelpId() );
     SetHelpId("");
     if ( pBindinx )
-        pImp->StartListening( *pBindinx );
-    pImp->aMoveIdle.SetPriority(SchedulerPriority::RESIZE);
-    pImp->aMoveIdle.SetIdleHdl(LINK(this,SfxFloatingWindow,TimerHdl));
+        pImpl->StartListening( *pBindinx );
+    pImpl->aMoveIdle.SetPriority(SchedulerPriority::RESIZE);
+    pImpl->aMoveIdle.SetIdleHdl(LINK(this,SfxFloatingWindow,TimerHdl));
 }
 
 SfxFloatingWindow::SfxFloatingWindow( SfxBindings *pBindinx,
@@ -470,19 +469,19 @@ SfxFloatingWindow::SfxFloatingWindow( SfxBindings *pBindinx,
                         const OString& rID, const OUString& rUIXMLDescription, const css::uno::Reference<css::frame::XFrame> &rFrame) :
     FloatingWindow(pParent, rID, rUIXMLDescription, rFrame),
     pBindings(pBindinx),
-    pImp( new SfxFloatingWindow_Impl )
+    pImpl( new SfxFloatingWindow_Impl )
 {
-    pImp->pMgr = pCW;
-    pImp->bConstructed = false;
+    pImpl->pMgr = pCW;
+    pImpl->bConstructed = false;
 
     //do we really need this odd helpid/uniqueid dance ?
     SetUniqueId( GetHelpId() );
     SetHelpId("");
 
     if ( pBindinx )
-        pImp->StartListening( *pBindinx );
-    pImp->aMoveIdle.SetPriority(SchedulerPriority::RESIZE);
-    pImp->aMoveIdle.SetIdleHdl(LINK(this,SfxFloatingWindow,TimerHdl));
+        pImpl->StartListening( *pBindinx );
+    pImpl->aMoveIdle.SetPriority(SchedulerPriority::RESIZE);
+    pImpl->aMoveIdle.SetIdleHdl(LINK(this,SfxFloatingWindow,TimerHdl));
 }
 
 bool SfxFloatingWindow::Close()
@@ -497,9 +496,9 @@ bool SfxFloatingWindow::Close()
 
 {
     // Execute with Parameters, since Toggle is ignored by some ChildWindows.
-    SfxBoolItem aValue( pImp->pMgr->GetType(), false);
+    SfxBoolItem aValue( pImpl->pMgr->GetType(), false);
     pBindings->GetDispatcher_Impl()->ExecuteList(
-            pImp->pMgr->GetType(),
+            pImpl->pMgr->GetType(),
             SfxCallMode::RECORD|SfxCallMode::SYNCHRON, { &aValue });
     return true;
 }
@@ -512,10 +511,9 @@ SfxFloatingWindow::~SfxFloatingWindow()
 
 void SfxFloatingWindow::dispose()
 {
-    if ( pImp && pImp->pMgr->GetFrame() == pBindings->GetActiveFrame() )
+    if ( pImpl && pImpl->pMgr->GetFrame() == pBindings->GetActiveFrame() )
         pBindings->SetActiveFrame( nullptr );
-    delete pImp;
-    pImp = nullptr;
+    pImpl.reset();
     FloatingWindow::dispose();
 }
 
@@ -530,20 +528,20 @@ void SfxFloatingWindow::Resize()
 
 {
     FloatingWindow::Resize();
-    if ( pImp->bConstructed && pImp->pMgr )
+    if ( pImpl->bConstructed && pImpl->pMgr )
     {
         // start timer for saving window status information
-        pImp->aMoveIdle.Start();
+        pImpl->aMoveIdle.Start();
     }
 }
 
 void SfxFloatingWindow::Move()
 {
     FloatingWindow::Move();
-    if ( pImp->bConstructed && pImp->pMgr )
+    if ( pImpl->bConstructed && pImpl->pMgr )
     {
         // start timer for saving window status information
-        pImp->aMoveIdle.Start();
+        pImpl->aMoveIdle.Start();
     }
 }
 
@@ -553,16 +551,16 @@ void SfxFloatingWindow::Move()
 */
 IMPL_LINK_NOARG_TYPED(SfxFloatingWindow, TimerHdl, Idle *, void)
 {
-    pImp->aMoveIdle.Stop();
-    if ( pImp->bConstructed && pImp->pMgr )
+    pImpl->aMoveIdle.Stop();
+    if ( pImpl->bConstructed && pImpl->pMgr )
     {
         if ( !IsRollUp() )
             aSize = GetSizePixel();
         WindowStateMask nMask = WindowStateMask::Pos | WindowStateMask::State;
         if ( GetStyle() & WB_SIZEABLE )
             nMask |= ( WindowStateMask::Width | WindowStateMask::Height );
-        pImp->aWinState = GetWindowState( nMask );
-        GetBindings().GetWorkWindow_Impl()->ConfigChild_Impl( SfxChildIdentifier::DOCKINGWINDOW, SfxDockingConfig::ALIGNDOCKINGWINDOW, pImp->pMgr->GetType() );
+        pImpl->aWinState = GetWindowState( nMask );
+        GetBindings().GetWorkWindow_Impl()->ConfigChild_Impl( SfxChildIdentifier::DOCKINGWINDOW, SfxDockingConfig::ALIGNDOCKINGWINDOW, pImpl->pMgr->GetType() );
     }
 }
 
@@ -572,9 +570,9 @@ void SfxFloatingWindow::StateChanged( StateChangedType nStateChange )
     if ( nStateChange == StateChangedType::InitShow )
     {
         // FloatingWindows are not centered by default
-        if ( !pImp->aWinState.isEmpty() )
-            SetWindowState( pImp->aWinState );
-        pImp->bConstructed = true;
+        if ( !pImpl->aWinState.isEmpty() )
+            SetWindowState( pImpl->aWinState );
+        pImpl->bConstructed = true;
     }
 
     FloatingWindow::StateChanged( nStateChange );
@@ -592,7 +590,7 @@ void SfxFloatingWindow::Initialize(SfxChildWinInfo *pInfo)
 */
 {
     if (pInfo)
-        pImp->aWinState = pInfo->aWinState;
+        pImpl->aWinState = pInfo->aWinState;
 }
 
 
@@ -706,7 +704,7 @@ void SfxSingleTabDialog::dispose()
 {
     pImpl->m_pSfxPage.disposeAndClear();
     pImpl->m_pLine.disposeAndClear();
-    delete pImpl;
+    pImpl.reset();
     pOKBtn.clear();
     pCancelBtn.clear();
     pHelpBtn.clear();

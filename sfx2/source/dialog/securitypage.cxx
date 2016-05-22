@@ -424,25 +424,25 @@ VclPtr<SfxTabPage> SfxSecurityPage::Create( vcl::Window * pParent, const SfxItem
 SfxSecurityPage::SfxSecurityPage( vcl::Window* pParent, const SfxItemSet& rItemSet )
     : SfxTabPage(pParent, "SecurityInfoPage", "sfx/ui/securityinfopage.ui", &rItemSet)
 {
-    m_pImpl.reset(new SfxSecurityPage_Impl( *this, rItemSet ));
+    pImpl.reset(new SfxSecurityPage_Impl( *this, rItemSet ));
 }
 
 
 bool SfxSecurityPage::FillItemSet( SfxItemSet * rItemSet )
 {
     bool bModified = false;
-    DBG_ASSERT( m_pImpl.get(), "implementation pointer is 0. Still in c-tor?" );
-    if (m_pImpl.get() != nullptr)
-        bModified =  m_pImpl->FillItemSet_Impl( *rItemSet );
+    DBG_ASSERT( pImpl.get(), "implementation pointer is 0. Still in c-tor?" );
+    if (pImpl.get() != nullptr)
+        bModified =  pImpl->FillItemSet_Impl( *rItemSet );
     return bModified;
 }
 
 
 void SfxSecurityPage::Reset( const SfxItemSet * rItemSet )
 {
-    DBG_ASSERT( m_pImpl.get(), "implementation pointer is 0. Still in c-tor?" );
-    if (m_pImpl.get() != nullptr)
-        m_pImpl->Reset_Impl( *rItemSet );
+    DBG_ASSERT( pImpl.get(), "implementation pointer is 0. Still in c-tor?" );
+    if (pImpl.get() != nullptr)
+        pImpl->Reset_Impl( *rItemSet );
 }
 
 
