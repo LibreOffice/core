@@ -167,25 +167,25 @@ SvxPosSizeStatusBarControl::SvxPosSizeStatusBarControl( sal_uInt16 _nSlotId,
                                                         sal_uInt16 _nId,
                                                         StatusBar& rStb ) :
     SfxStatusBarControl( _nSlotId, _nId, rStb ),
-    pImp( new SvxPosSizeStatusBarControl_Impl )
+    pImpl( new SvxPosSizeStatusBarControl_Impl )
 {
-    pImp->bPos = false;
-    pImp->bSize = false;
-    pImp->bTable = false;
-    pImp->bHasMenu = false;
-    pImp->nFunctionSet = 0;
-    pImp->aPosImage = Image( ResId( RID_SVXBMP_POSITION, DIALOG_MGR() ) );
-    pImp->aSizeImage = Image( ResId( RID_SVXBMP_SIZE, DIALOG_MGR() ) );
+    pImpl->bPos = false;
+    pImpl->bSize = false;
+    pImpl->bTable = false;
+    pImpl->bHasMenu = false;
+    pImpl->nFunctionSet = 0;
+    pImpl->aPosImage = Image( ResId( RID_SVXBMP_POSITION, DIALOG_MGR() ) );
+    pImpl->aSizeImage = Image( ResId( RID_SVXBMP_SIZE, DIALOG_MGR() ) );
 
     if ( rStb.GetDPIScaleFactor() > 1)
     {
-        BitmapEx b = pImp->aPosImage.GetBitmapEx();
+        BitmapEx b = pImpl->aPosImage.GetBitmapEx();
         b.Scale(rStb.GetDPIScaleFactor(), rStb.GetDPIScaleFactor(), BmpScaleFlag::Fast);
-        pImp->aPosImage = Image(b);
+        pImpl->aPosImage = Image(b);
 
-        b = pImp->aSizeImage.GetBitmapEx();
+        b = pImpl->aSizeImage.GetBitmapEx();
         b.Scale(rStb.GetDPIScaleFactor(), rStb.GetDPIScaleFactor(), BmpScaleFlag::Fast);
-        pImp->aSizeImage = Image(b);
+        pImpl->aSizeImage = Image(b);
     }
 
     addStatusListener( STR_POSITION);         // SID_ATTR_POSITION
@@ -203,7 +203,6 @@ SvxPosSizeStatusBarControl::SvxPosSizeStatusBarControl( sal_uInt16 _nSlotId,
 
 SvxPosSizeStatusBarControl::~SvxPosSizeStatusBarControl()
 {
-    delete pImp;
 }
 
 
@@ -241,12 +240,12 @@ void SvxPosSizeStatusBarControl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
     {
         if ( eState == SfxItemState::DEFAULT )
         {
-            pImp->bHasMenu = true;
+            pImpl->bHasMenu = true;
             if ( pState && dynamic_cast< const SfxUInt32Item* >(pState) !=  nullptr )
-                pImp->nFunctionSet = static_cast<const SfxUInt32Item*>(pState)->GetValue();
+                pImpl->nFunctionSet = static_cast<const SfxUInt32Item*>(pState)->GetValue();
         }
         else
-            pImp->bHasMenu = false;
+            pImpl->bHasMenu = false;
     }
     else if ( SfxItemState::DEFAULT != eState )
     {
@@ -254,11 +253,11 @@ void SvxPosSizeStatusBarControl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
         // notified for all display types
 
         if ( nSID == SID_TABLE_CELL )
-            pImp->bTable = false;
+            pImpl->bTable = false;
         else if ( nSID == SID_ATTR_POSITION )
-            pImp->bPos = false;
+            pImpl->bPos = false;
         else if ( nSID == GetSlotId() )     // controller is registered for SID_ATTR_SIZE
-            pImp->bSize = false;
+            pImpl->bSize = false;
         else
         {
             SAL_WARN( "svx.stbcrtls","unknown slot id");
@@ -267,31 +266,31 @@ void SvxPosSizeStatusBarControl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
     else if ( dynamic_cast<const SfxPointItem*>( pState) !=  nullptr )
     {
         // show position
-        pImp->aPos = static_cast<const SfxPointItem*>(pState)->GetValue();
-        pImp->bPos = true;
-        pImp->bTable = false;
+        pImpl->aPos = static_cast<const SfxPointItem*>(pState)->GetValue();
+        pImpl->bPos = true;
+        pImpl->bTable = false;
     }
     else if ( dynamic_cast<const SvxSizeItem*>( pState) !=  nullptr )
     {
         // show size
-        pImp->aSize = static_cast<const SvxSizeItem*>(pState)->GetSize();
-        pImp->bSize = true;
-        pImp->bTable = false;
+        pImpl->aSize = static_cast<const SvxSizeItem*>(pState)->GetSize();
+        pImpl->bSize = true;
+        pImpl->bTable = false;
     }
     else if ( dynamic_cast<const SfxStringItem*>( pState) !=  nullptr )
     {
         // show string (table cel or different)
-        pImp->aStr = static_cast<const SfxStringItem*>(pState)->GetValue();
-        pImp->bTable = true;
-        pImp->bPos = false;
-        pImp->bSize = false;
+        pImpl->aStr = static_cast<const SfxStringItem*>(pState)->GetValue();
+        pImpl->bTable = true;
+        pImpl->bPos = false;
+        pImpl->bSize = false;
     }
     else
     {
         SAL_WARN( "svx.stbcrtls", "invalid item type" );
-        pImp->bPos = false;
-        pImp->bSize = false;
-        pImp->bTable = false;
+        pImpl->bPos = false;
+        pImpl->bSize = false;
+        pImpl->bTable = false;
     }
 
     if ( GetStatusBar().AreItemsVisible() )
@@ -300,8 +299,8 @@ void SvxPosSizeStatusBarControl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
     //  set only strings as text at the statusBar, so that the Help-Tips
     //  can work with the text, when it is too long for the statusBar
     OUString aText;
-    if ( pImp->bTable )
-        aText = pImp->aStr;
+    if ( pImpl->bTable )
+        aText = pImpl->aStr;
     GetStatusBar().SetItemText( GetId(), aText );
 }
 
@@ -313,9 +312,9 @@ void SvxPosSizeStatusBarControl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
 
 void SvxPosSizeStatusBarControl::Command( const CommandEvent& rCEvt )
 {
-    if ( rCEvt.GetCommand() == CommandEventId::ContextMenu && pImp->bHasMenu )
+    if ( rCEvt.GetCommand() == CommandEventId::ContextMenu && pImpl->bHasMenu )
     {
-        sal_uInt32 nSelect = pImp->nFunctionSet;
+        sal_uInt32 nSelect = pImpl->nFunctionSet;
         if (!nSelect)
             nSelect = ( 1 << PSZ_FUNC_NONE );
         FunctionPopup_Impl aMenu( nSelect );
@@ -363,7 +362,7 @@ void SvxPosSizeStatusBarControl::Paint( const UserDrawEvent& rUsrEvt )
     pDev->SetLineColor();
     pDev->SetFillColor( pDev->GetBackground().GetColor() );
 
-    if ( pImp->bPos || pImp->bSize )
+    if ( pImpl->bPos || pImpl->bSize )
     {
         // count the position for showing the size
         long nSizePosX =
@@ -372,12 +371,12 @@ void SvxPosSizeStatusBarControl::Paint( const UserDrawEvent& rUsrEvt )
         Point aPnt = rRect.TopLeft();
         aPnt.Y() = aItemPos.Y();
         aPnt.X() += PAINT_OFFSET;
-        pDev->DrawImage( aPnt, pImp->aPosImage );
-        aPnt.X() += pImp->aPosImage.GetSizePixel().Width();
+        pDev->DrawImage( aPnt, pImpl->aPosImage );
+        aPnt.X() += pImpl->aPosImage.GetSizePixel().Width();
         aPnt.X() += PAINT_OFFSET;
-        OUString aStr = GetMetricStr_Impl( pImp->aPos.X());
+        OUString aStr = GetMetricStr_Impl( pImpl->aPos.X());
         aStr += " / ";
-        aStr += GetMetricStr_Impl( pImp->aPos.Y());
+        aStr += GetMetricStr_Impl( pImpl->aPos.Y());
         pDev->DrawRect(
             Rectangle( aPnt, Point( nSizePosX, rRect.Bottom() ) ) );
         pDev->DrawText( aPnt, aStr );
@@ -385,27 +384,27 @@ void SvxPosSizeStatusBarControl::Paint( const UserDrawEvent& rUsrEvt )
         // draw the size, when available
         aPnt.X() = nSizePosX;
 
-        if ( pImp->bSize )
+        if ( pImpl->bSize )
         {
-            pDev->DrawImage( aPnt, pImp->aSizeImage );
-            aPnt.X() += pImp->aSizeImage.GetSizePixel().Width();
+            pDev->DrawImage( aPnt, pImpl->aSizeImage );
+            aPnt.X() += pImpl->aSizeImage.GetSizePixel().Width();
             Point aDrwPnt = aPnt;
             aPnt.X() += PAINT_OFFSET;
-            aStr = GetMetricStr_Impl( pImp->aSize.Width() );
+            aStr = GetMetricStr_Impl( pImpl->aSize.Width() );
             aStr += " x ";
-            aStr += GetMetricStr_Impl( pImp->aSize.Height() );
+            aStr += GetMetricStr_Impl( pImpl->aSize.Height() );
             pDev->DrawRect( Rectangle( aDrwPnt, rRect.BottomRight() ) );
             pDev->DrawText( aPnt, aStr );
         }
         else
             pDev->DrawRect( Rectangle( aPnt, rRect.BottomRight() ) );
     }
-    else if ( pImp->bTable )
+    else if ( pImpl->bTable )
     {
         pDev->DrawRect( rRect );
         pDev->DrawText( Point(
-            rRect.Left() + rRect.GetWidth() / 2 - pDev->GetTextWidth( pImp->aStr ) / 2,
-            aItemPos.Y() ), pImp->aStr );
+            rRect.Left() + rRect.GetWidth() / 2 - pDev->GetTextWidth( pImpl->aStr ) / 2,
+            aItemPos.Y() ), pImpl->aStr );
     }
     else
     {
