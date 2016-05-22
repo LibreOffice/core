@@ -198,28 +198,48 @@ Dim oPip As Object, sLocation As String
 End Function	&apos;	ExtensionLocation
 
 REM -----------------------------------------------------------------------------------------------------------------------
-Private Function _getResultSetColumnValue(poResultSet As Object, Byval piColIndex As Integer) As Variant
+Private Function _getResultSetColumnValue(poResultSet As Object _
+											, ByVal piColIndex As Integer _
+											, Optional ByVal pbReturnBinary As Boolean _
+											) As Variant
 REM Modified from Roberto Benitez&apos;s BaseTools
 REM get the data for the column specified by ColIndex
+REM If pbReturnBinary = False (default) then return length of binary field
 REM get type name from metadata
 	
 Dim vValue As Variant, sType As String, vDateTime As Variant, oValue As Object
+Dim bNullable As Boolean, lSize As Long
+Const cstMaxTextLength = 65535
+Const cstMaxBinlength = 2 * 65535
 
 	On Local Error Goto 0			&apos;	Disable error handler
 	vValue = Null					&apos;	Default value if error
-	sType = poResultSet.MetaData.getColumnTypeName(piColIndex)
+	If IsMissing(pbReturnBinary) Then pbReturnBinary = False
 	With poResultSet
+		sType = .MetaData.getColumnTypeName(piColIndex)
+		bNullable = ( .MetaData.IsNullable(piColIndex) = com.sun.star.sdbc.ColumnValue.NULLABLE )
 		Select Case sType
 			Case &quot;ARRAY&quot;:							vValue = .getArray(piColIndex)
-			Case &quot;BINARY&quot;, &quot;VARBINARY&quot;, &quot;LONGVARBINARY&quot;
+			Case &quot;BINARY&quot;, &quot;VARBINARY&quot;, &quot;LONGVARBINARY&quot;, &quot;BLOB&quot;
 													Set oValue = .getBinaryStream(piColIndex)
-													If Not .wasNull() Then vValue = CLng(oValue.getLength())		&apos;	Return length, not content
+													If bNullable Then
+														If Not .wasNull() Then
+															If Not _hasUNOMethod(oValue, &quot;getLength&quot;) Then	&apos;	When no recordset
+																lSize = cstMaxBinLength
+															Else
+																lSize = CLng(oValue.getLength())
+															End If
+															If lSize &lt;= cstMaxBinLength And pbReturnBinary Then
+																vValue = Array()
+																oValue.readBytes(vValue, lSize)
+															Else	&apos;	Return length of field, not content
+															End If
+														End If
+													End If
 													oValue.closeInput()
-			Case &quot;BLOB&quot;:							vValue = .getBlob(piColIndex)
 			Case &quot;BIT&quot;, &quot;BOOLEAN&quot;:					vValue = .getBoolean(piColIndex)
 			Case &quot;BYTE&quot;:							vValue = .getByte(piColIndex)
 			Case &quot;BYTES&quot;:							vValue = .getBytes(piColIndex)
-			Case &quot;CLOB&quot;:							vValue = .getClob(piColIndex)
 			Case &quot;DATE&quot;:							vDateTime = .getDate(piColIndex)
 													If Not .wasNull() Then vValue = DateSerial(CInt(vDateTime.Year), CInt(vDateTime.Month), CInt(vDateTime.Day))
 			Case &quot;DOUBLE&quot;, &quot;REAL&quot;:					vValue = .getDouble(piColIndex)
@@ -231,7 +251,22 @@ Dim vValue As Variant, sType As String, vDateTime As Variant, oValue As Object
 			Case &quot;OBJECT&quot;:							vValue = Null	&apos;	.getObject(piColIndex)	does not work that well in Basic ...
 			Case &quot;REF&quot;:								vValue = .getRef(piColIndex)
 			Case &quot;SHORT&quot;, &quot;TINYINT&quot;:				vValue = .getShort(piColIndex)
-			Case &quot;CHAR&quot;, &quot;VARCHAR&quot;, &quot;LONGVARCHAR&quot;:	vValue = .getString(piColIndex)
+			Case &quot;CHAR&quot;, &quot;VARCHAR&quot;:					vValue = .getString(piColIndex)
+			Case &quot;LONGVARCHAR&quot;, &quot;CLOB&quot;
+													Set oValue = .getCharacterStream(piColIndex)
+													If bNullable Then
+														If Not .wasNull() Then
+															If Not _hasUNOMethod(oValue, &quot;getLength&quot;) Then	&apos;	When no recordset
+																lSize = cstMaxTextLength
+															Else
+																lSize = CLng(oValue.getLength())
+															End If
+															oValue.closeInput()
+															If lSize &lt;= cstMaxBinLength Then vValue = .getString(piColIndex) Else vValue = &quot;&quot;
+														End If
+													Else
+														oValue.closeInput()
+													End If
 			Case &quot;TIME&quot;:							vDateTime = .getTime(piColIndex)
 													If Not .wasNull() Then vValue = TimeSerial(vDateTime.Hours, vDateTime.Minutes, vDateTime.Seconds)&apos;, vDateTime.HundredthSeconds)
 			Case &quot;TIMESTAMP&quot;:						vDateTime = .getTimeStamp(piColIndex)
@@ -241,12 +276,14 @@ Dim vValue As Variant, sType As String, vDateTime As Variant, oValue As Object
 				vValue = .getString(piColIndex)						&apos;GIVE STRING A TRY
 				If IsNumeric(vValue) Then vValue = Val(vValue)		&apos;Required when type = &quot;&quot;, sometimes numeric fields are returned as strings (query/MSAccess)
 		End Select
-		If .wasNull() Then vValue = Null
+		If bNullable Then
+			If .wasNull() Then vValue = Null
+		End If
 	End With
 	
 	_getResultSetColumnValue = vValue
 	
-End Function	&apos;	getResultSetColumnValue		V 1.1.0
+End Function	&apos;	getResultSetColumnValue		V 1.5.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Public Function _FinalProperty(psShortcut As String) As String
