@@ -1604,6 +1604,11 @@ void ViewShell::NotifyAccUpdate( )
     GetViewShellBase().GetDrawController().NotifyAccUpdate();
 }
 
+sd::Window* ViewShell::GetContentWindow() const
+{
+    return mpContentWindow.get();
+}
+
 } // end of namespace sd
 
 //===== ViewShellObjectBarFactory =============================================
