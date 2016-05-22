@@ -49,7 +49,7 @@ namespace svgio
             maFx(),
             maFy(),
             maGradientUnits(objectBoundingBox),
-            maSpreadMethod(drawinglayer::primitive2d::Spread_pad),
+            maSpreadMethod(drawinglayer::primitive2d::SpreadMethod::Pad),
             mpaGradientTransform(nullptr),
             maXLink(),
             mpXLink(nullptr)
@@ -203,15 +203,15 @@ namespace svgio
                     {
                         if(aContent.startsWith("pad"))
                         {
-                            setSpreadMethod(drawinglayer::primitive2d::Spread_pad);
+                            setSpreadMethod(drawinglayer::primitive2d::SpreadMethod::Pad);
                         }
                         else if(aContent.startsWith("reflect"))
                         {
-                            setSpreadMethod(drawinglayer::primitive2d::Spread_reflect);
+                            setSpreadMethod(drawinglayer::primitive2d::SpreadMethod::Reflect);
                         }
                         else if(aContent.startsWith("repeat"))
                         {
-                            setSpreadMethod(drawinglayer::primitive2d::Spread_repeat);
+                            setSpreadMethod(drawinglayer::primitive2d::SpreadMethod::Repeat);
                         }
                     }
                     break;
