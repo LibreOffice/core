@@ -175,7 +175,7 @@ private:
     svx::SpellDialogChildWindow& rParent;
     svx::SpellPortions           m_aSavedSentence;
 
-    SpellDialog_Impl* pImpl;
+    std::unique_ptr<SpellDialog_Impl> pImpl;
     css::uno::Reference<
         css::linguistic2::XSpellChecker1 >     xSpell;
 
