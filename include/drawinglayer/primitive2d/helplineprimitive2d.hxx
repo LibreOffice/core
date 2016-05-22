@@ -37,10 +37,10 @@ namespace drawinglayer
 
             The available styles of Helplines
         */
-        enum HelplineStyle2D
+        enum class HelplineStyle2D
         {
-            HELPLINESTYLE2D_POINT,
-            HELPLINESTYLE2D_LINE
+            Point,
+            Line
         };
 
         /** HelplinePrimitive2D class

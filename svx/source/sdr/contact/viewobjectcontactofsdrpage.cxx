@@ -551,21 +551,21 @@ drawinglayer::primitive2d::Primitive2DContainer ViewObjectContactOfPageHelplines
                     default : // SDRHELPLINE_POINT
                     {
                         xRetval[a] = drawinglayer::primitive2d::Primitive2DReference(new drawinglayer::primitive2d::HelplinePrimitive2D(
-                            aPosition, basegfx::B2DVector(1.0, 0.0), drawinglayer::primitive2d::HELPLINESTYLE2D_POINT,
+                            aPosition, basegfx::B2DVector(1.0, 0.0), drawinglayer::primitive2d::HelplineStyle2D::Point,
                             aRGBColorA, aRGBColorB, fDiscreteDashLength));
                         break;
                     }
                     case SDRHELPLINE_VERTICAL :
                     {
                         xRetval[a] = drawinglayer::primitive2d::Primitive2DReference(new drawinglayer::primitive2d::HelplinePrimitive2D(
-                            aPosition, basegfx::B2DVector(0.0, 1.0), drawinglayer::primitive2d::HELPLINESTYLE2D_LINE,
+                            aPosition, basegfx::B2DVector(0.0, 1.0), drawinglayer::primitive2d::HelplineStyle2D::Line,
                             aRGBColorA, aRGBColorB, fDiscreteDashLength));
                         break;
                     }
                     case SDRHELPLINE_HORIZONTAL :
                     {
                         xRetval[a] = drawinglayer::primitive2d::Primitive2DReference(new drawinglayer::primitive2d::HelplinePrimitive2D(
-                            aPosition, basegfx::B2DVector(1.0, 0.0), drawinglayer::primitive2d::HELPLINESTYLE2D_LINE,
+                            aPosition, basegfx::B2DVector(1.0, 0.0), drawinglayer::primitive2d::HelplineStyle2D::Line,
                             aRGBColorA, aRGBColorB, fDiscreteDashLength));
                         break;
                     }
