@@ -200,7 +200,7 @@ public:
 
     GLX11Window();
     virtual bool Synchronize(bool bOnoff) const override;
-    ~GLX11Window();
+    virtual ~GLX11Window();
 };
 
 class VCLPLUG_GEN_PUBLIC SalDisplay : public SalGenericDisplay
