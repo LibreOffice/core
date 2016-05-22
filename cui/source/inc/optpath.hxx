@@ -46,7 +46,7 @@ private:
     VclPtr<PushButton>         m_pPathBtn;
 
     VclPtr<svx::OptHeaderTabListBox> pPathBox;
-    OptPath_Impl*               pImpl;
+    std::unique_ptr<OptPath_Impl>               pImpl;
 
     css::uno::Reference< ::svt::DialogClosedListener > xDialogListener;
     css::uno::Reference< css::ui::dialogs::XFolderPicker2 > xFolderPicker;
