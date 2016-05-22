@@ -56,7 +56,7 @@ Reference< XInputStream > createStreamFromFile (
 class TestDocumentHandler : public cppu::WeakImplHelper< xml::sax::XDocumentHandler >
 {
 private:
-    OUString m_aStr;
+    // OUString m_aStr;
 
 public:
     TestDocumentHandler() {}
