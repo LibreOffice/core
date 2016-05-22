@@ -79,7 +79,7 @@ class SFX2_DLLPUBLIC SfxFrameDescriptor
     bool                    bResizeVertical;
     bool                    bHasUI;
     bool                    bReadOnly;
-    SfxFrameDescriptor_Impl* pImp;
+    std::unique_ptr< SfxFrameDescriptor_Impl > pImpl;
 
 public:
                             SfxFrameDescriptor();
