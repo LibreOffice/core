@@ -788,10 +788,10 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet* )
     }
 
     // Mouse Snap Mode
-    short eOldSnap = pAppearanceCfg->GetSnapMode();
-    short eNewSnap = m_pMousePosLB->GetSelectEntryPos();
-    if(eNewSnap > 2)
-        eNewSnap = 2;
+    SnapType eOldSnap = pAppearanceCfg->GetSnapMode();
+    SnapType eNewSnap = (SnapType)m_pMousePosLB->GetSelectEntryPos();
+    if(eNewSnap > SnapType::NONE)
+        eNewSnap = SnapType::NONE;
 
     if ( eNewSnap != eOldSnap )
     {
@@ -921,7 +921,7 @@ void OfaViewTabPage::Reset( const SfxItemSet* )
     // Screen Scaling
     m_pWindowSizeMF->SetValue ( pAppearanceCfg->GetScaleFactor() );
     // Mouse Snap
-    m_pMousePosLB->SelectEntryPos(pAppearanceCfg->GetSnapMode());
+    m_pMousePosLB->SelectEntryPos((sal_Int32)pAppearanceCfg->GetSnapMode());
     m_pMousePosLB->SaveValue();
 
     // Mouse Snap
