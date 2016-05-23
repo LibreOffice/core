@@ -12,8 +12,8 @@ def main():
         print("Invalid number of parameters")
         sys.exit(1)
 
-    url = "http://localhost:8000/upload/"
-    files = {'symbols': open(sys.argv[1], 'rb'), 'comment':sys.argv[2]}
+    url = "http://vm171.documentfoundation.org/upload/"
+    files = {'symbols': open(sys.argv[1], 'rb'), 'comment': sys.argv[2]}
     comment = {'comment': sys.argv[2]}
     r = requests.post(url, files = files, data = {"comment":"whatever", "tempt":"tempt"})
     print(r)
