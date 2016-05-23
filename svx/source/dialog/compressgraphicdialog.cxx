@@ -417,4 +417,153 @@ SdrGrafObj* CompressGraphicsDialog::GetCompressedSdrGrafObj()
     return nullptr;
 }
 
+
+
+GraphicInfoDialog::GraphicInfoDialog( vcl::Window* pParent, SdrGrafObj* pGraphicObj, SfxBindings& rBindings ) :
+    ModalDialog       ( pParent, "GraphicInfoDialog", "svx/ui/graphicinfodialog.ui" ),
+    m_pGraphicObj     ( pGraphicObj ),
+    m_aGraphic        ( pGraphicObj->GetGraphicObject().GetGraphic() ),
+    m_aViewSize100mm  ( pGraphicObj->GetLogicRect().GetSize() ),
+    m_rBindings       ( rBindings ),
+    m_dResolution     ( 96.0 )
+{
+    const SdrGrafCropItem& rCrop = static_cast<const SdrGrafCropItem&>( m_pGraphicObj->GetMergedItem(SDRATTR_GRAFCROP) );
+    m_aCropRectangle = Rectangle(rCrop.GetLeft(), rCrop.GetTop(), rCrop.GetRight(), rCrop.GetBottom());
+
+    Initialize();
+}
+
+GraphicInfoDialog::GraphicInfoDialog( vcl::Window* pParent, Graphic& rGraphic, Size rViewSize100mm, Rectangle& rCropRectangle, SfxBindings& rBindings ) :
+    ModalDialog       ( pParent, "GraphicInfoDialog", "svx/ui/graphicinfodialog.ui" ),
+    m_pGraphicObj     ( nullptr ),
+    m_aGraphic        ( rGraphic ),
+    m_aViewSize100mm  ( rViewSize100mm ),
+    m_aCropRectangle  ( rCropRectangle ),
+    m_rBindings       ( rBindings ),
+    m_dResolution     ( 96.0 )
+{
+    Initialize();
+}
+
+GraphicInfoDialog::~GraphicInfoDialog()
+{
+    disposeOnce();
+}
+
+void GraphicInfoDialog::dispose()
+{
+    m_pLabelGraphicType.clear();
+    m_pFixedText2.clear();
+    m_pFixedText3.clear();
+    m_pFixedText5.clear();
+    ModalDialog::dispose();
+}
+
+void GraphicInfoDialog::Initialize()
+{
+    get(m_pLabelGraphicType,    "label-graphic-type");
+    get(m_pFixedText2,          "label-original-size");
+    get(m_pFixedText3,          "label-view-size");
+    get(m_pFixedText5,          "label-image-capacity");
+    Update();
+}
+
+void GraphicInfoDialog::Update()
+{
+    GfxLinkType aLinkType = m_aGraphic.GetLink().GetType();
+    OUString aGraphicTypeString;
+    switch(aLinkType)
+    {
+        case GFX_LINK_TYPE_NATIVE_GIF:
+            aGraphicTypeString = SVX_RESSTR(STR_IMAGE_GIF);
+            break;
+        case GFX_LINK_TYPE_NATIVE_JPG:
+            aGraphicTypeString = SVX_RESSTR(STR_IMAGE_JPEG);
+            break;
+        case GFX_LINK_TYPE_NATIVE_PNG:
+            aGraphicTypeString = SVX_RESSTR(STR_IMAGE_PNG);
+            break;
+        case GFX_LINK_TYPE_NATIVE_TIF:
+            aGraphicTypeString = SVX_RESSTR(STR_IMAGE_TIFF);
+            break;
+        case GFX_LINK_TYPE_NATIVE_WMF:
+            aGraphicTypeString = SVX_RESSTR(STR_IMAGE_WMF);
+            break;
+        case GFX_LINK_TYPE_NATIVE_MET:
+            aGraphicTypeString = SVX_RESSTR(STR_IMAGE_MET);
+            break;
+        case GFX_LINK_TYPE_NATIVE_PCT:
+            aGraphicTypeString = SVX_RESSTR(STR_IMAGE_PCT);
+            break;
+        case GFX_LINK_TYPE_NATIVE_SVG:
+            aGraphicTypeString = SVX_RESSTR(STR_IMAGE_SVG);
+            break;
+        case GFX_LINK_TYPE_NATIVE_BMP:
+            aGraphicTypeString = SVX_RESSTR(STR_IMAGE_BMP);
+            break;
+        default:
+            aGraphicTypeString = SVX_RESSTR(STR_IMAGE_UNKNOWN);
+            break;
+    }
+    m_pLabelGraphicType->SetText(aGraphicTypeString);
+
+    const FieldUnit eFieldUnit = m_rBindings.GetDispatcher()->GetModule()->GetFieldUnit();
+    const LocaleDataWrapper& rLocaleWrapper( Application::GetSettings().GetLocaleDataWrapper() );
+    sal_Unicode cSeparator = rLocaleWrapper.getNumDecimalSep()[0];
+
+    VclPtr<VirtualDevice> pDummyVDev = VclPtr<VirtualDevice>::Create();
+    pDummyVDev->EnableOutput( false );
+    pDummyVDev->SetMapMode( m_aGraphic.GetPrefMapMode() );
+
+    Size aPixelSize = m_aGraphic.GetSizePixel();
+    Size aOriginalSize100mm( pDummyVDev->PixelToLogic( m_aGraphic.GetSizePixel(), MAP_100TH_MM ) );
+
+    OUString aBitmapSizeString = SVX_RESSTR(STR_IMAGE_ORIGINAL_SIZE);
+    OUString aWidthString  = GetUnitString( aOriginalSize100mm.Width(),  eFieldUnit, cSeparator );
+    OUString aHeightString = GetUnitString( aOriginalSize100mm.Height(), eFieldUnit, cSeparator );
+    aBitmapSizeString = aBitmapSizeString.replaceAll("$(WIDTH)",  aWidthString);
+    aBitmapSizeString = aBitmapSizeString.replaceAll("$(HEIGHT)", aHeightString);
+    aBitmapSizeString = aBitmapSizeString.replaceAll("$(WIDTH_IN_PX)",  OUString::number(aPixelSize.Width()));
+    aBitmapSizeString = aBitmapSizeString.replaceAll("$(HEIGHT_IN_PX)", OUString::number(aPixelSize.Height()));
+    m_pFixedText2->SetText(aBitmapSizeString);
+
+    int aValX = (int) (aPixelSize.Width() / GetViewWidthInch());
+
+    OUString aViewSizeString = SVX_RESSTR(STR_IMAGE_VIEW_SIZE);
+
+    aWidthString  = GetUnitString( m_aViewSize100mm.Width(),  eFieldUnit, cSeparator );
+    aHeightString = GetUnitString( m_aViewSize100mm.Height(), eFieldUnit, cSeparator );
+    aViewSizeString = aViewSizeString.replaceAll("$(WIDTH)",  aWidthString);
+    aViewSizeString = aViewSizeString.replaceAll("$(HEIGHT)", aHeightString);
+    aViewSizeString = aViewSizeString.replaceAll("$(DPI)", OUString::number(aValX));
+    m_pFixedText3->SetText(aViewSizeString);
+
+    SvMemoryStream aMemStream;
+    aMemStream.SetVersion( SOFFICE_FILEFORMAT_CURRENT );
+    m_aGraphic.ExportNative(aMemStream);
+    aMemStream.Seek( STREAM_SEEK_TO_END );
+    sal_Int32 aNativeSize = aMemStream.Tell();
+
+    OUString aNativeSizeString = SVX_RESSTR(STR_IMAGE_CAPACITY);
+    aNativeSizeString = aNativeSizeString.replaceAll("$(CAPACITY)",  OUString::number(aNativeSize / 1024));
+    m_pFixedText5->SetText(aNativeSizeString);
+
+}
+
+
+double GraphicInfoDialog::GetViewWidthInch()
+{
+    return (double) MetricField::ConvertValue(m_aViewSize100mm.Width(),  2, MAP_100TH_MM, FUNIT_INCH) / 100.0;
+}
+
+double GraphicInfoDialog::GetViewHeightInch()
+{
+    return (double) MetricField::ConvertValue(m_aViewSize100mm.Height(),  2, MAP_100TH_MM, FUNIT_INCH) / 100.0;
+}
+
+
+
+
+
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

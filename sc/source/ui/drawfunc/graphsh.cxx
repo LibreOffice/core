@@ -218,6 +218,45 @@ void ScGraphicShell::ExecuteCompressGraphic( SfxRequest& )
     Invalidate();
 }
 
+void ScGraphicShell::GetGraphicInformationState( SfxItemSet& rSet )
+{
+    ScDrawView* pView = GetViewData()->GetScDrawView();
+    const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
+    bool bEnable = false;
+    if( rMarkList.GetMarkCount() == 1 )
+    {
+        SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
+
+        if( pObj && dynamic_cast<const SdrGrafObj*>( pObj) != nullptr && ( static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GRAPHIC_BITMAP ) )
+            bEnable = true;
+    }
+
+    if( !bEnable )
+        rSet.DisableItem( SID_GRAPHIC_INFO );
+}
+
+void ScGraphicShell::ExecuteGraphicInformation( SfxRequest& )
+{
+    ScDrawView* pView = GetViewData()->GetScDrawView();
+    const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
+
+    if( rMarkList.GetMarkCount() == 1 )
+    {
+        SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
+
+        if( pObj && dynamic_cast<const SdrGrafObj*>( pObj)  != nullptr && static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GRAPHIC_BITMAP )
+        {
+            SdrGrafObj* pGraphicObj = static_cast<SdrGrafObj*>(pObj);
+            ScopedVclPtrInstance< GraphicInfoDialog > dialog( GetViewData()->GetDialogParent(), pGraphicObj, GetViewData()->GetBindings() );
+            if ( dialog->Execute() == RET_OK )
+            {
+            }
+        }
+    }
+
+    Invalidate();
+}
+
 void ScGraphicShell::GetCropGraphicState( SfxItemSet& rSet )
 {
     ScDrawView* pView = GetViewData()->GetScDrawView();

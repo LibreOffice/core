@@ -1008,6 +1008,28 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         }
         break;
 
+        case SID_GRAPHIC_INFO:
+        {
+            const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
+            if( rMarkList.GetMarkCount() == 1 )
+            {
+                SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
+
+                if( pObj && dynamic_cast< const SdrGrafObj *>( pObj ) !=  nullptr && static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GRAPHIC_BITMAP )
+                {
+                    SdrGrafObj* pGraphicObj = static_cast<SdrGrafObj*>(pObj);
+                    ScopedVclPtrInstance< GraphicInfoDialog > dialog( GetParentWindow(), pGraphicObj, GetViewFrame()->GetBindings() );
+                    if ( dialog->Execute() == RET_OK )
+                    {
+                        break;
+                    }
+                }
+            }
+            Cancel();
+            rReq.Ignore();
+        }
+        break;
+
         case SID_ATTRIBUTES_LINE:  // BASIC
         {
             SetCurrentFunction( FuLine::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq ) );

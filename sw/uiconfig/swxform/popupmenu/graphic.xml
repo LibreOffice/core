@@ -17,6 +17,7 @@
   <menu:menuitem menu:id=".uno:ChangePicture"/>
   <menu:menuitem menu:id=".uno:CompressGraphic"/>
   <menu:menuitem menu:id=".uno:SaveGraphic"/>
+  <menu:menuitem menu:id=".uno:GraphicInfo"/>
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:AnchorMenu"/>
   <menu:menu menu:id=".uno:WrapMenu">

@@ -4506,6 +4506,22 @@ SfxVoidItem CompressGraphic SID_COMPRESS_GRAPHIC
     GroupId = GID_MODIFY;
 ]
 
+SfxVoidItem GraphicInfo SID_GRAPHIC_INFO
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_GRAPHIC;
+]
 
 SfxBoolItem Init3D SID_3D_INIT
 

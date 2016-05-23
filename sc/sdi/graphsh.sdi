@@ -147,6 +147,12 @@ interface GraphSelection
         StateMethod = GetCompressGraphicState;
     ]
 
+    SID_GRAPHIC_INFO
+    [
+        ExecMethod = ExecuteGraphicInformation;
+        StateMethod = GetGraphicInformationState;
+    ]
+
     SID_OBJECT_CROP
     [
         ExecMethod = ExecuteCropGraphic ;

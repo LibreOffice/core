@@ -95,6 +95,66 @@ public:
     Rectangle GetScaledCropRectangle();
 };
 
+class SAL_WARN_UNUSED SVX_DLLPUBLIC GraphicInfoDialog : public ModalDialog
+{
+private:
+    VclPtr<FixedText>       m_pLabelGraphicType;
+    VclPtr<FixedText>       m_pFixedText2;
+    VclPtr<FixedText>       m_pFixedText3;
+    VclPtr<FixedText>       m_pFixedText5;
+    VclPtr<FixedText>       m_pFixedText6;
+
+    VclPtr<CheckBox>        m_pReduceResolutionCB;
+    VclPtr<NumericField>    m_pMFNewWidth;
+    VclPtr<NumericField>    m_pMFNewHeight;
+    VclPtr<ComboBox>        m_pResolutionLB;
+    VclPtr<RadioButton>     m_pLosslessRB;
+    VclPtr<RadioButton>     m_pJpegCompRB;
+    VclPtr<NumericField>    m_pCompressionMF;
+    VclPtr<Slider>          m_pCompressionSlider;
+    VclPtr<NumericField>    m_pQualityMF;
+    VclPtr<Slider>          m_pQualitySlider;
+    VclPtr<PushButton>      m_pBtnCalculate;
+    VclPtr<ListBox>         m_pInterpolationCombo;
+
+    SdrGrafObj*     m_pGraphicObj;
+    Graphic         m_aGraphic;
+    Size            m_aViewSize100mm;
+    Rectangle       m_aCropRectangle;
+    SfxBindings&    m_rBindings;
+
+    double          m_dResolution;
+
+    void Initialize();
+
+    DECL_LINK_TYPED( NewWidthModifiedHdl, Edit&, void );
+    DECL_LINK_TYPED( NewHeightModifiedHdl, Edit&, void );
+    DECL_LINK_TYPED( ResolutionModifiedHdl, Edit&, void );
+    DECL_LINK_TYPED( ToggleCompressionRB, RadioButton&, void );
+    DECL_LINK_TYPED( ToggleReduceResolutionRB, CheckBox&, void );
+
+    DECL_LINK_TYPED( CalculateClickHdl, Button*, void );
+
+    void Update();
+    void UpdateNewWidthMF();
+    void UpdateNewHeightMF();
+    void UpdateResolutionLB();
+
+    void Compress(SvStream& aStream);
+
+    double GetViewWidthInch();
+    double GetViewHeightInch();
+
+    BmpScaleFlag GetSelectedInterpolationType();
+
+public:
+    GraphicInfoDialog( vcl::Window* pParent, SdrGrafObj* pGraphicObj, SfxBindings& rBindings );
+    GraphicInfoDialog( vcl::Window* pParent, Graphic& rGraphic, Size rViewSize100mm, Rectangle& rCropRectangle, SfxBindings& rBindings );
+    virtual ~GraphicInfoDialog();
+    virtual void dispose() override;
+
+};
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -65,6 +65,9 @@ public:
 
     void    ExecuteChangePicture(SfxRequest& rReq);
     void    GetChangePictureState(SfxItemSet &rSet);
+
+    void    ExecuteGraphicInformation(SfxRequest& rReq);
+    void    GetGraphicInformationState(SfxItemSet &rSet);
 };
 
 #endif
