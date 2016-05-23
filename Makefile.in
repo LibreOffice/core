@@ -321,6 +321,7 @@ findunusedheaders:
 	$(SRCDIR)/bin/find-unusedheaders.pl
 
 symbols:
+	rm -fr $(WORKDIR)/symbols/
 	mkdir -p $(WORKDIR)/symbols/
 	$(SRCDIR)/bin/symbolstore.py $(WORKDIR)/UnpackedTarball/breakpad/src/tools/linux/dump_syms/dump_syms $(WORKDIR)/symbols/ $(INSTDIR)/program/*
 
