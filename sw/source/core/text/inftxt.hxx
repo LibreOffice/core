@@ -361,7 +361,6 @@ class SwTextPaintInfo : public SwTextSizeInfo
     const SwWrongList *pSmartTags;
     std::vector<long>* pSpaceAdd;
     const SvxBrushItem *pBrushItem; // For the background
-    SwRect      aItemRect;          // Also for the background
     SwTextFly    aTextFly;    // Calculate the FlyFrame
     Point       aPos;       // Paint position
     SwRect      aPaintRect; // Original paint rect (from Layout paint)
