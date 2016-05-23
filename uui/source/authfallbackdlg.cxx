@@ -23,6 +23,7 @@ AuthFallbackDlg::AuthFallbackDlg(Window* pParent, const OUString& instructions,
     get( m_pEDCode, "code" );
     get( m_pBTOk, "ok" );
     get( m_pBTCancel, "cancel" );
+    get( m_pFTGooglePrefixLabel, "google_prefix_label" );
 
     m_pBTOk->SetClickHdl( LINK( this, AuthFallbackDlg, OKHdl) );
     m_pBTCancel->SetClickHdl( LINK( this, AuthFallbackDlg, CancelHdl) );
@@ -30,9 +31,17 @@ AuthFallbackDlg::AuthFallbackDlg(Window* pParent, const OUString& instructions,
 
     m_pTVInstructions->SetText( instructions );
     if( url.isEmpty() )
+    {
+        // Google 2FA
+        m_pFTGooglePrefixLabel->Show();
         m_pEDUrl->Hide();
+    }
     else
+    {
+        // OneDrive
+        m_pFTGooglePrefixLabel->Hide();
         m_pEDUrl->SetText( url );
+    }
 }
 
 AuthFallbackDlg::~AuthFallbackDlg()

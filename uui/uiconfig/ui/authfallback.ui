@@ -92,10 +92,32 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="code">
+              <object class="GtkBox" id="box1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="invisible_char">●</property>
+                <child>
+                  <object class="GtkLabel" id="google_prefix_label">
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes">G-</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkEntry" id="code">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="invisible_char">●</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>

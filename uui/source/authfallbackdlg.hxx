@@ -14,6 +14,7 @@
 #include <vcl/dialog.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/vclmedit.hxx>
+#include <vcl/fixed.hxx>
 
 
 class AuthFallbackDlg : public ModalDialog
@@ -24,6 +25,7 @@ private:
     VclPtr<Edit> m_pEDCode;
     VclPtr<PushButton> m_pBTOk;
     VclPtr<PushButton> m_pBTCancel;
+    VclPtr<FixedText> m_pFTGooglePrefixLabel;
 
 public:
     AuthFallbackDlg(Window* pParent, const OUString& instructions,
