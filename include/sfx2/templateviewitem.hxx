@@ -24,12 +24,6 @@ public:
 
     const OUString& getPath () const { return maPath; }
 
-    void setSubTitle (const OUString &rTitle) { maSubTitle = rTitle; }
-
-    virtual void calculateItemsPosition (const long nThumbnailHeight, const long nDisplayHeight,
-                                         const long nPadding, sal_uInt32 nMaxTextLength,
-                                         const ThumbnailItemAttributes *pAttrs) override;
-
     virtual void Paint (drawinglayer::processor2d::BaseProcessor2D *pProcessor,
                         const ThumbnailItemAttributes *pAttrs) override;
 
@@ -39,7 +33,6 @@ public:
 private:
 
     OUString maPath;
-    OUString maSubTitle;
 
     Point maSubTitlePos;
 };
