@@ -352,14 +352,14 @@ enum XMLTextContourAttrTokens
 };
 enum XMLTextType
 {
-    XML_TEXT_TYPE_BODY,
-    XML_TEXT_TYPE_CELL,
-    XML_TEXT_TYPE_SHAPE,
-    XML_TEXT_TYPE_TEXTBOX,
-    XML_TEXT_TYPE_HEADER_FOOTER,
-    XML_TEXT_TYPE_SECTION,
-    XML_TEXT_TYPE_FOOTNOTE,
-    XML_TEXT_TYPE_CHANGED_REGION
+    Body,
+    Cell,
+    Shape,
+    TextBox,
+    HeaderFooter,
+    Section,
+    Footnote,
+    ChangedRegion
 };
 
 /// variable type (for XMLSetVarFieldImportContext)
@@ -422,7 +422,7 @@ public:
             SvXMLImport& rImport,
             sal_uInt16 nPrefix, const OUString& rLocalName,
             const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
-            XMLTextType eType = XML_TEXT_TYPE_SHAPE );
+            XMLTextType eType = XMLTextType::Shape );
 
     SvXMLTokenMap const& GetTextElemTokenMap();
     SvXMLTokenMap const& GetTextPElemTokenMap();

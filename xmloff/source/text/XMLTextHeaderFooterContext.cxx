@@ -174,7 +174,7 @@ SvXMLImportContext *XMLTextHeaderFooterContext::CreateChildContext(
         pContext =
             GetImport().GetTextImport()->CreateTextChildContext(
                 GetImport(), nPrefix, rLocalName, xAttrList,
-                XML_TEXT_TYPE_HEADER_FOOTER );
+                XMLTextType::HeaderFooter );
     }
     if( !pContext )
         pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );

@@ -1180,7 +1180,7 @@ SvXMLImportContext *XMLTextFrameContext_Impl::CreateChildContext(
     if( !pContext && xOldTextCursor.is() )  // text-box
         pContext = GetImport().GetTextImport()->CreateTextChildContext(
                             GetImport(), nPrefix, rLocalName, xAttrList,
-                            XML_TEXT_TYPE_TEXTBOX );
+                            XMLTextType::TextBox );
 
     if( !pContext )
         pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );

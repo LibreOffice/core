@@ -237,7 +237,7 @@ SvXMLImportContext *SdXMLShapeContext::CreateChildContext( sal_uInt16 p_nPrefix,
         {
             pContext = GetImport().GetTextImport()->CreateTextChildContext(
                 GetImport(), p_nPrefix, rLocalName, xAttrList,
-                ( mbTextBox ? XML_TEXT_TYPE_TEXTBOX : XML_TEXT_TYPE_SHAPE ) );
+                ( mbTextBox ? XMLTextType::TextBox : XMLTextType::Shape ) );
         }
     }
 

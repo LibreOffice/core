@@ -49,7 +49,7 @@ SvXMLImportContext* XMLIndexBodyContext::CreateChildContext(
 
     // return text content (if possible)
     pContext = GetImport().GetTextImport()->CreateTextChildContext(
-        GetImport(), nPrefix, rLocalName, xAttrList, XML_TEXT_TYPE_SECTION );
+        GetImport(), nPrefix, rLocalName, xAttrList, XMLTextType::Section );
     if (nullptr == pContext)
     {
         pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
