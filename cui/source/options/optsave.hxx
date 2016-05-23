@@ -57,7 +57,7 @@ private:
     VclPtr<FixedImage>             aODFWarningFI;
     VclPtr<FixedText>              aODFWarningFT;
 
-    SvxSaveTabPage_Impl*    pImpl;
+    std::unique_ptr<SvxSaveTabPage_Impl>    pImpl;
 
     DECL_LINK_TYPED( AutoClickHdl_Impl, Button*, void );
     DECL_LINK_TYPED( FilterHdl_Impl, ListBox&, void );
