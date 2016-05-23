@@ -777,7 +777,24 @@ static void doc_iniUnoCommands ()
         OUString(".uno:Redo"),
         OUString(".uno:InsertPage"),
         OUString(".uno:DeletePage"),
-        OUString(".uno:DuplicatePage")
+        OUString(".uno:DuplicatePage"),
+        OUString(".uno:Cut"),
+        OUString(".uno:Copy"),
+        OUString(".uno:Paste"),
+        OUString(".uno:SelectAll"),
+        OUString(".uno:InsertAnnotation"),
+        OUString(".uno:InsertRowsBefore"),
+        OUString(".uno:InsertRowsAfter"),
+        OUString(".uno:InsertColumnsBefore"),
+        OUString(".uno:InsertColumnsAfter"),
+        OUString(".uno:DeleteRows"),
+        OUString(".uno:DeleteColumns"),
+        OUString(".uno:DeleteTable"),
+        OUString(".uno:SelectTable"),
+        OUString(".uno:EntireRow"),
+        OUString(".uno:EntireColumn"),
+        OUString(".uno:EntireCell"),
+        OUString(".uno:MergeCells")
     };
 
     util::URL aCommandURL;

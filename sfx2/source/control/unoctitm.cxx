@@ -1113,7 +1113,24 @@ void SfxDispatchController_Impl::InterceptLOKStateChangeEvent(const SfxObjectShe
         aBuffer.append(nColor);
     }
     else if (aEvent.FeatureURL.Path == "Undo" ||
-             aEvent.FeatureURL.Path == "Redo")
+             aEvent.FeatureURL.Path == "Redo" ||
+             aEvent.FeatureURL.Path == "Cut" ||
+             aEvent.FeatureURL.Path == "Copy" ||
+             aEvent.FeatureURL.Path == "Paste" ||
+             aEvent.FeatureURL.Path == "SelectAll" ||
+             aEvent.FeatureURL.Path == "InsertAnnotation" ||
+             aEvent.FeatureURL.Path == "InsertRowsBefore" ||
+             aEvent.FeatureURL.Path == "InsertRowsAfter" ||
+             aEvent.FeatureURL.Path == "InsertColumnsBefore" ||
+             aEvent.FeatureURL.Path == "InsertColumnsAfter" ||
+             aEvent.FeatureURL.Path == "DeleteRows" ||
+             aEvent.FeatureURL.Path == "DeleteColumns" ||
+             aEvent.FeatureURL.Path == "DeleteTable" ||
+             aEvent.FeatureURL.Path == "SelectTable" ||
+             aEvent.FeatureURL.Path == "EntireRow" ||
+             aEvent.FeatureURL.Path == "EntireColumn" ||
+             aEvent.FeatureURL.Path == "EntireCell" ||
+             aEvent.FeatureURL.Path == "MergeCells")
     {
         aBuffer.append(aEvent.IsEnabled ? OUString("enabled") : OUString("disabled"));
     }
