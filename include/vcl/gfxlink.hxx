@@ -80,8 +80,8 @@ private:
 public:
                         GfxLink();
 
-                        // pBuff = The Graphic data. This class takes ownership of this
-                        GfxLink( sal_uInt8* pBuf, sal_uInt32 nBufSize, GfxLinkType nType );
+                        // pBuff = The Graphic data.
+                        GfxLink( std::shared_ptr<sal_uInt8> pBuf, sal_uInt32 nBufSize, GfxLinkType nType );
                         ~GfxLink();
 
     bool                IsEqual( const GfxLink& ) const;

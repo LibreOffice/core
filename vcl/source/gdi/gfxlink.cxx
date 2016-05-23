@@ -34,14 +34,14 @@ GfxLink::GfxLink()
 {
 }
 
-GfxLink::GfxLink( sal_uInt8* pBuf, sal_uInt32 nSize, GfxLinkType nType )
+GfxLink::GfxLink( std::shared_ptr<sal_uInt8> pBuf, sal_uInt32 nSize, GfxLinkType nType )
 {
-    DBG_ASSERT( pBuf != nullptr && nSize,
+    DBG_ASSERT( pBuf && nSize,
                 "GfxLink::GfxLink(): empty/NULL buffer given" );
 
     meType = nType;
     mnSwapInDataSize = nSize;
-    mpSwapInData = std::shared_ptr<sal_uInt8>(pBuf);
+    mpSwapInData = pBuf;
 }
 
 GfxLink::~GfxLink()
@@ -235,10 +235,10 @@ SvStream& ReadGfxLink( SvStream& rIStream, GfxLink& rGfxLink)
 
     pCompat.reset(); // destructor writes stuff into the header
 
-    sal_uInt8* pBuf = new sal_uInt8[ nSize ];
-    rIStream.Read( pBuf, nSize );
+    std::unique_ptr<sal_uInt8> pBuf(new sal_uInt8[ nSize ]);
+    rIStream.Read( pBuf.get(), nSize );
 
-    rGfxLink = GfxLink( pBuf, nSize, (GfxLinkType) nType );
+    rGfxLink = GfxLink( std::move(pBuf), nSize, (GfxLinkType) nType );
     rGfxLink.SetUserId( nUserId );
 
     if( bMapAndSizeValid )
