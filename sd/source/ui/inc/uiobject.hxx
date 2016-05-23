@@ -16,6 +16,9 @@ class DrawViewShell;
 
 }
 
+class SdrObject;
+class SdrPageView;
+
 class ImpressWindowUIObject : public WindowUIObject
 {
 public:
@@ -27,6 +30,8 @@ public:
     virtual void execute(const OUString& rAction,
             const StringMap& rParameters) override;
 
+    virtual std::set<OUString> get_children() const override;
+
     static std::unique_ptr<UIObject> create(vcl::Window* pWindow);
 
 protected:
@@ -37,7 +42,11 @@ private:
 
     VclPtr<sd::Window> mxWindow;
 
-    sd::DrawViewShell* getViewShell();
+    sd::DrawViewShell* getViewShell() const;
+
+    SdrObject* getObject(const OUString& rName);
+
+    SdrPageView* getPageView();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
