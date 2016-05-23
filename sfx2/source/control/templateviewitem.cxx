@@ -21,8 +21,6 @@
 #include <vcl/button.hxx>
 #include <vcl/graph.hxx>
 
-#define SUBTITLE_SCALE_FACTOR 0.85
-
 using namespace basegfx;
 using namespace basegfx::tools;
 using namespace drawinglayer::attribute;
@@ -39,36 +37,12 @@ TemplateViewItem::~TemplateViewItem ()
 {
 }
 
-void TemplateViewItem::calculateItemsPosition(const long nThumbnailHeight, const long nDisplayHeight,
-                                              const long nPadding, sal_uInt32 nMaxTextLength,
-                                              const ThumbnailItemAttributes *pAttrs)
-{
-    ThumbnailViewItem::calculateItemsPosition(nThumbnailHeight,nDisplayHeight,nPadding,nMaxTextLength, pAttrs);
-
-    if (!maSubTitle.isEmpty())
-    {
-        Size aRectSize = maDrawArea.GetSize();
-
-        drawinglayer::primitive2d::TextLayouterDevice aTextDev;
-        aTextDev.setFontAttribute(pAttrs->aFontAttr,
-                                  pAttrs->aFontSize.getX(), pAttrs->aFontSize.getY(),
-                                  css::lang::Locale() );
-
-        long nSpace = (nDisplayHeight + nPadding - 2*aTextDev.getTextHeight()) / 3;
-
-        // Set subtitle position
-        maSubTitlePos.setY(maTextPos.getY() + nSpace + aTextDev.getTextHeight());
-        maSubTitlePos.setX(maDrawArea.Left() +
-                           (aRectSize.Width() - aTextDev.getTextWidth(maSubTitle,0,nMaxTextLength)*SUBTITLE_SCALE_FACTOR)/2);
-    }
-}
-
 void TemplateViewItem::Paint(drawinglayer::processor2d::BaseProcessor2D *pProcessor,
                                    const ThumbnailItemAttributes *pAttrs)
 {
     BColor aFillColor = pAttrs->aFillColor;
 
-    int nCount = maSubTitle.isEmpty() ? 5 : 6;
+    int nCount = 5;
     drawinglayer::primitive2d::Primitive2DContainer aSeq(nCount);
     double fTransparence = 0.0;
 
@@ -117,11 +91,6 @@ void TemplateViewItem::Paint(drawinglayer::processor2d::BaseProcessor2D *pProces
     aSeq[3] = drawinglayer::primitive2d::Primitive2DReference(createBorderLine(aBounds));
 
     addTextPrimitives(maTitle, pAttrs, maTextPos, aSeq);
-
-    if (!maSubTitle.isEmpty())
-    {
-        addTextPrimitives(maSubTitle, pAttrs, maSubTitlePos, aSeq);
-    }
 
     pProcessor->process(aSeq);
 }

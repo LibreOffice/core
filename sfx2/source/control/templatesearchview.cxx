@@ -129,7 +129,7 @@ void TemplateSearchView::AppendItem(sal_uInt16 nAssocItemId, sal_uInt16 nRegionI
     pItem->mnRegionId = nRegionId;
     pItem->maPreview1 = rImage;
     pItem->maTitle = rTitle;
-    pItem->setSubTitle(rSubtitle);
+    pItem->setHelpText(rSubtitle);
     pItem->setPath(rPath);
 
     ThumbnailView::AppendItem(pItem);

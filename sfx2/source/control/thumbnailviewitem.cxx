@@ -163,11 +163,6 @@ Rectangle ThumbnailViewItem::updateHighlight(bool bVisible, const Point& rPoint)
     return Rectangle();
 }
 
-OUString ThumbnailViewItem::getHelpText() const
-{
-    return maTitle;
-}
-
 void ThumbnailViewItem::setEditTitle (bool edit, bool bChangeFocus)
 {
     mbEditTitle = edit;

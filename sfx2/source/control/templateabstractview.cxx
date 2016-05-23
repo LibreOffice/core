@@ -139,6 +139,7 @@ void TemplateAbstractView::insertItems(const std::vector<TemplateItemProperties>
         pChild->mnRegionId = pCur->nRegionId;
         pChild->maTitle = pCur->aName;
         pChild->setPath(pCur->aPath);
+        pChild->setHelpText(pCur->aRegionName);
         pChild->maPreview1 = pCur->aThumbnail;
 
         if ( pCur->aThumbnail.IsEmpty() )
