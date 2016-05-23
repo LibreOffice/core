@@ -45,7 +45,7 @@ struct TKeyValueFunc : ::std::binary_function<OSortIndex::TIntValuePairVector::v
             // compare depending for type
             switch (*aIter)
             {
-                case SQL_ORDERBYKEY_STRING:
+                case OKeyType::String:
                 {
                     sal_Int32 nRes = lhs.second->getKeyString(i).compareTo(rhs.second->getKeyString(i));
                     if (nRes < 0)
@@ -54,7 +54,7 @@ struct TKeyValueFunc : ::std::binary_function<OSortIndex::TIntValuePairVector::v
                         return bGreater;
                 }
                 break;
-                case SQL_ORDERBYKEY_DOUBLE:
+                case OKeyType::Double:
                 {
                     double d1 = lhs.second->getKeyDouble(i);
                     double d2 = rhs.second->getKeyDouble(i);
@@ -65,7 +65,7 @@ struct TKeyValueFunc : ::std::binary_function<OSortIndex::TIntValuePairVector::v
                         return bGreater;
                 }
                 break;
-                case SQL_ORDERBYKEY_NONE:
+                case OKeyType::NONE:
                     break;
             }
         }
@@ -118,7 +118,7 @@ void OSortIndex::Freeze()
 {
     OSL_ENSURE(! m_bFrozen,"OSortIndex::Freeze: already frozen!");
     // Sortierung:
-    if (m_aKeyType[0] != SQL_ORDERBYKEY_NONE)
+    if (m_aKeyType[0] != OKeyType::NONE)
         // we will sort ourself when the first keyType say so
         ::std::sort(m_aKeyValues.begin(),m_aKeyValues.end(),TKeyValueFunc(this));
 
