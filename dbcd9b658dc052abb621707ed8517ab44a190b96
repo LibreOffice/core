@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_984b762b",
+        "filename": "sd/source/ui/sidebar/SlideBackground.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 360,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-05-23T07:45:12Z",
+      "side": 1,
+      "message": "And in all other cases, nothing will be selected \n\n\u003d\u003e add some else mpMasterSlide-\u003eSetNoSelection here, or sth along that line",
+      "revId": "dbcd9b658dc052abb621707ed8517ab44a190b96",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
