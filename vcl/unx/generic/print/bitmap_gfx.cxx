@@ -523,10 +523,10 @@ PrinterGfx::writePS2ImageHeader (const Rectangle& rArea, psp::ImageType nType)
     sal_Int32 nDictType = 0;
     switch (nType)
     {
-        case psp::TrueColorImage:  nDictType = 0; break;
-        case psp::PaletteImage:    nDictType = 1; break;
-        case psp::GrayScaleImage:  nDictType = 2; break;
-        case psp::MonochromeImage: nDictType = 3; break;
+        case psp::ImageType::TrueColorImage:  nDictType = 0; break;
+        case psp::ImageType::PaletteImage:    nDictType = 1; break;
+        case psp::ImageType::GrayScaleImage:  nDictType = 2; break;
+        case psp::ImageType::MonochromeImage: nDictType = 3; break;
         default: break;
     }
     sal_Int32 nCompressType = mbCompressBmp ? 1 : 0;
@@ -548,18 +548,18 @@ PrinterGfx::writePS2Colorspace(const PrinterBmp& rBitmap, psp::ImageType nType)
 {
     switch (nType)
     {
-        case psp::GrayScaleImage:
+        case psp::ImageType::GrayScaleImage:
 
             WritePS (mpPageBody, "/DeviceGray setcolorspace\n");
             break;
 
-        case psp::TrueColorImage:
+        case psp::ImageType::TrueColorImage:
 
             WritePS (mpPageBody, "/DeviceRGB setcolorspace\n");
             break;
 
-        case psp::MonochromeImage:
-        case psp::PaletteImage:
+        case psp::ImageType::MonochromeImage:
+        case psp::ImageType::PaletteImage:
         {
 
             sal_Int32 nChar = 0;
@@ -597,8 +597,8 @@ PrinterGfx::writePS2Colorspace(const PrinterBmp& rBitmap, psp::ImageType nType)
 void
 PrinterGfx::DrawPS2GrayImage (const PrinterBmp& rBitmap, const Rectangle& rArea)
 {
-    writePS2Colorspace(rBitmap, psp::GrayScaleImage);
-    writePS2ImageHeader(rArea, psp::GrayScaleImage);
+    writePS2Colorspace(rBitmap, psp::ImageType::GrayScaleImage);
+    writePS2ImageHeader(rArea, psp::ImageType::GrayScaleImage);
 
     std::unique_ptr<ByteEncoder> xEncoder(mbCompressBmp ? new LZWEncoder(mpPageBody)
                                             : new Ascii85Encoder(mpPageBody));
@@ -616,8 +616,8 @@ PrinterGfx::DrawPS2GrayImage (const PrinterBmp& rBitmap, const Rectangle& rArea)
 void
 PrinterGfx::DrawPS2MonoImage (const PrinterBmp& rBitmap, const Rectangle& rArea)
 {
-    writePS2Colorspace(rBitmap, psp::MonochromeImage);
-    writePS2ImageHeader(rArea, psp::MonochromeImage);
+    writePS2Colorspace(rBitmap, psp::ImageType::MonochromeImage);
+    writePS2ImageHeader(rArea, psp::ImageType::MonochromeImage);
 
     std::unique_ptr<ByteEncoder> xEncoder(mbCompressBmp ? new LZWEncoder(mpPageBody)
                                             : new Ascii85Encoder(mpPageBody));
@@ -648,8 +648,8 @@ PrinterGfx::DrawPS2MonoImage (const PrinterBmp& rBitmap, const Rectangle& rArea)
 void
 PrinterGfx::DrawPS2PaletteImage (const PrinterBmp& rBitmap, const Rectangle& rArea)
 {
-    writePS2Colorspace(rBitmap, psp::PaletteImage);
-    writePS2ImageHeader(rArea, psp::PaletteImage);
+    writePS2Colorspace(rBitmap, psp::ImageType::PaletteImage);
+    writePS2ImageHeader(rArea, psp::ImageType::PaletteImage);
 
     std::unique_ptr<ByteEncoder> xEncoder(mbCompressBmp ? new LZWEncoder(mpPageBody)
                                             : new Ascii85Encoder(mpPageBody));
@@ -667,8 +667,8 @@ PrinterGfx::DrawPS2PaletteImage (const PrinterBmp& rBitmap, const Rectangle& rAr
 void
 PrinterGfx::DrawPS2TrueColorImage (const PrinterBmp& rBitmap, const Rectangle& rArea)
 {
-    writePS2Colorspace(rBitmap, psp::TrueColorImage);
-    writePS2ImageHeader(rArea, psp::TrueColorImage);
+    writePS2Colorspace(rBitmap, psp::ImageType::TrueColorImage);
+    writePS2ImageHeader(rArea, psp::ImageType::TrueColorImage);
 
     std::unique_ptr<ByteEncoder> xEncoder(mbCompressBmp ? new LZWEncoder(mpPageBody)
                                             : new Ascii85Encoder(mpPageBody));

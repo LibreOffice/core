@@ -138,13 +138,13 @@ public:
     virtual sal_uInt32  GetDepth ()     const = 0;
 };
 
-typedef enum {
-    InvalidType = 0,
+enum class ImageType {
+    Invalid = 0,
     TrueColorImage,
     MonochromeImage,
     PaletteImage,
     GrayScaleImage
-} ImageType;
+};
 
 /*
  * printer raster operations
