@@ -29,9 +29,11 @@ $(eval $(call gb_Library_use_libraries,deployment,\
     deploymentmisc \
     sal \
     svl \
+    svt \
     tl \
     ucbhelper \
     utl \
+    vcl \
     xmlscript \
     i18nlangtag \
 	$(gb_UWINAPI) \
