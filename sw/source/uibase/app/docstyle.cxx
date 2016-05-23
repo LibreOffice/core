@@ -37,6 +37,7 @@
 #include <docsh.hxx>
 #include <frmfmt.hxx>
 #include <charfmt.hxx>
+#include <tblafmt.hxx>
 #include <poolfmt.hxx>
 #include <pagedesc.hxx>
 #include <docstyle.hxx>
@@ -75,6 +76,7 @@
 #define cFRAME      (sal_Unicode)'f'
 #define cPAGE       (sal_Unicode)'g'
 #define cNUMRULE    (sal_Unicode)'n'
+#define cTABSTYLE   (sal_Unicode)'t'
 
 using namespace com::sun::star;
 
@@ -2900,6 +2902,16 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
         if ( bAll )
             AppendStyleList(SwStyleNameMapper::GetNumRuleUINameArray(),
                             bIsSearchUsed, bSearchHidden, bOnlyHidden, nsSwGetPoolIdFromName::GET_POOLID_NUMRULE, cNUMRULE);
+    }
+
+    if( nSearchFamily == SfxStyleFamily::Table ||
+        nSearchFamily == SfxStyleFamily::All )
+    {
+        const SwTableAutoFormatTable& rTableStyles = rDoc.GetTableStyles();
+        for(size_t i = 0; i < rTableStyles.size(); ++i)
+        {
+            aLst.Append( cTABSTYLE, rTableStyles[i].GetName() );
+        }
     }
 
     if(!aLst.empty())
