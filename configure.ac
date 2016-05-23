@@ -2131,6 +2131,12 @@ AC_ARG_WITH(iwyu,
          Use only if you are hacking on it.]),
 ,)
 
+AC_ARG_WITH(harfbuzz,
+    AS_HELP_STRING([--with-harfbuzz],
+        [Enable HarfBuzz support regardless of the platform.
+         Experimental only. Use only if working on it.]),
+,)
+
 dnl ===================================================================
 dnl Branding
 dnl ===================================================================
@@ -9205,7 +9211,7 @@ dnl ===================================================================
 dnl HarfBuzz
 dnl ===================================================================
 AC_MSG_CHECKING([whether to enable HarfBuzz support])
-if test $_os != WINNT -a $_os != Darwin -a $_os != iOS; then
+if test "$with_harfbuzz" = "yes" -o \( $_os != WINNT -a $_os != Darwin -a $_os != iOS \); then
     AC_MSG_RESULT([yes])
     ENABLE_HARFBUZZ="TRUE"
     if $PKG_CONFIG --atleast-version 0.9.18 harfbuzz; then
