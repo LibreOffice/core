@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_98ce1682",
+        "filename": "cui/source/tabpages/tphatch.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-05-23T08:22:22Z",
+      "side": 1,
+      "message": "I wonder if we still need this variable (and PointChanged) handler below now that this fun rectangle control is no longer present ...",
+      "revId": "ae07e00c42ef224088e192703803cf2d445b4c86",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
