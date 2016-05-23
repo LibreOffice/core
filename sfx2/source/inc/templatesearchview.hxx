@@ -39,7 +39,7 @@ public:
                     const OUString &rTitle, const OUString &rSubtitle,
                     const OUString &rPath, const BitmapEx &rImage );
 
-    BitmapEx getDefaultThumbnail( const OUString& rPath );
+    static BitmapEx getDefaultThumbnail( const OUString& rPath );
 
 protected:
     virtual void OnItemDblClicked(ThumbnailViewItem *pItem) override;
