@@ -156,8 +156,7 @@ SvxAsianLayoutPage::~SvxAsianLayoutPage()
 
 void SvxAsianLayoutPage::dispose()
 {
-    delete pImpl;
-    pImpl = nullptr;
+    pImpl.reset();
     m_pCharKerningRB.clear();
     m_pCharPunctKerningRB.clear();
     m_pNoCompressionRB.clear();

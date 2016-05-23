@@ -46,7 +46,7 @@ class SvxAsianLayoutPage : public SfxTabPage
     VclPtr<Edit>        m_pEndED;
     VclPtr<FixedText>   m_pHintFT;
 
-    SvxAsianLayoutPage_Impl* pImpl;
+    std::unique_ptr<SvxAsianLayoutPage_Impl> pImpl;
 
     DECL_LINK_TYPED(LanguageHdl, ListBox&, void);
     DECL_LINK_TYPED(ChangeStandardHdl, Button*, void);
