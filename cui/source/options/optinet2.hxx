@@ -171,7 +171,7 @@ class SvxEMailTabPage : public SfxTabPage
 
     OUString      m_sDefaultFilterName;
 
-    SvxEMailTabPage_Impl* pImpl;
+    std::unique_ptr<SvxEMailTabPage_Impl> pImpl;
 
     DECL_LINK_TYPED(  FileDialogHdl_Impl, Button*, void );
 

@@ -960,8 +960,7 @@ SvxEMailTabPage::~SvxEMailTabPage()
 
 void SvxEMailTabPage::dispose()
 {
-    delete pImpl;
-    pImpl = nullptr;
+    pImpl.reset();
     m_pMailContainer.clear();
     m_pMailerURLFI.clear();
     m_pMailerURLED.clear();
