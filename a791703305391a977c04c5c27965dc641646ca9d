@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_d8e7be3e",
+        "filename": "sw/source/core/unocore/unomap.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1497,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-05-23T07:30:22Z",
+      "side": 1,
+      "message": "A dummy property set is fine for now, but then please let\u0027s just have it as an empty one, i.e. remove this and the above line.",
+      "revId": "a791703305391a977c04c5c27965dc641646ca9d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_f8e4823c",
+        "filename": "sw/source/core/unocore/unostyle.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 965,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-05-23T07:30:22Z",
+      "side": 1,
+      "message": "Please avoid these cosmetic changes.",
+      "revId": "a791703305391a977c04c5c27965dc641646ca9d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
