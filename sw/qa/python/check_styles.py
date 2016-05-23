@@ -38,11 +38,11 @@ class CheckStyle(unittest.TestCase):
         self.assertFalse(xStyleFamilies.supportsService("foobarbaz"))
         self.assertTrue(xStyleFamilies.hasElements())
         self.assertRegex(str(xStyleFamilies.ElementType), "com\.sun\.star\.container\.XNameContainer")
-        self.assertEqual(len(xStyleFamilies.ElementNames), 5)
+        self.assertEqual(len(xStyleFamilies.ElementNames), 6)
 
         for sFamilyname in xStyleFamilies.ElementNames:
             self.assertIn(sFamilyname,
-                          ["CharacterStyles", "ParagraphStyles", "PageStyles", "FrameStyles", "NumberingStyles"])
+                          ["CharacterStyles", "ParagraphStyles", "PageStyles", "FrameStyles", "NumberingStyles", "TableStyles"])
 
         with self.assertRaises(NoSuchElementException):
             xStyleFamilies.getByName("foobarbaz")

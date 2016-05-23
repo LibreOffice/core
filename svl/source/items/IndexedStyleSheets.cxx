@@ -19,7 +19,7 @@ using rtl::OUString;
 
 
 namespace {
-const size_t NUMBER_OF_FAMILIES = 6;
+const size_t NUMBER_OF_FAMILIES = 7;
 size_t family_to_index(SfxStyleFamily family)
 {
     switch (family) {
@@ -33,8 +33,10 @@ size_t family_to_index(SfxStyleFamily family)
         return 3;
     case SfxStyleFamily::Pseudo:
         return 4;
-    case SfxStyleFamily::All:
+    case SfxStyleFamily::Table:
         return 5;
+    case SfxStyleFamily::All:
+        return 6;
     default: break;
     }
     assert(false); // only for compiler warning. all cases are handled in the switch
