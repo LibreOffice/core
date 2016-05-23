@@ -2125,6 +2125,12 @@ AC_ARG_WITH(iwyu,
          Use only if you are hacking on it.]),
 ,)
 
+AC_ARG_WITH(harfbuzz,
+    AS_HELP_STRING([--with-harfbuzz],
+        [Enable HarfBuzz support regardless of the platform.
+         Experimental only. Use only if working on it.]),
+,)
+
 dnl ===================================================================
 dnl Branding
 dnl ===================================================================
@@ -9196,8 +9202,14 @@ if test $_os != WINNT -a $_os != Darwin -a $_os != iOS; then
     else
         libo_CHECK_SYSTEM_MODULE([harfbuzz],[HARFBUZZ],[harfbuzz >= 0.9.10],[-I${WORKDIR}/UnpackedTarball/harfbuzz/src],["-L${WORKDIR}/UnpackedTarball/harfbuzz/src/.libs -lharfbuzz -lharfbuzz-icu"])
     fi
-else
-    AC_MSG_RESULT([no])
+else 
+    if test "$with_harfbuzz" = "yes"; then
+        AC_MSG_RESULT([yes])
+        ENABLE_HARFBUZZ="TRUE"
+        libo_CHECK_SYSTEM_MODULE([harfbuzz],[HARFBUZZ],[harfbuzz-icu >= 0.9.18],["-I${WORKDIR}/UnpackedTarball/harfbuzz/src"],["-L${WORKDIR}/UnpackedTarball/harfbuzz/src/.libs -lharfbuzz -lharfbuzz-icu"])
+    else
+        AC_MSG_RESULT([no])
+    fi
 fi
 AC_SUBST(ENABLE_HARFBUZZ)
 
