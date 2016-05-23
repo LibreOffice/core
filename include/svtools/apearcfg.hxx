@@ -25,11 +25,11 @@
 class Application;
 enum class MouseMiddleButtonAction;
 
-typedef enum {
-    SnapToButton = 0,
-    SnapToMiddle,
-    NoSnap
-} SnapType;
+enum class SnapType {
+    ToButton = 0,
+    ToMiddle,
+    NONE
+};
 
 enum class DragMode {
     FullWindow,
@@ -42,7 +42,7 @@ class SVT_DLLPUBLIC SvtTabAppearanceCfg : public utl::ConfigItem
 {
     DragMode        nDragMode           ;
     short           nScaleFactor        ;
-    short           nSnapMode           ;
+    SnapType        nSnapMode           ;
     MouseMiddleButtonAction nMiddleMouse;
 #if defined( UNX )
     short           nAAMinPixelHeight   ;
@@ -69,8 +69,8 @@ public:
     sal_uInt16      GetScaleFactor () const { return nScaleFactor; }
     void        SetScaleFactor ( sal_uInt16 nSet );
 
-    sal_uInt16      GetSnapMode () const { return nSnapMode; }
-    void        SetSnapMode ( sal_uInt16 nSet );
+    SnapType    GetSnapMode () const { return nSnapMode; }
+    void        SetSnapMode ( SnapType nSet );
 
     MouseMiddleButtonAction GetMiddleMouseButton () const { return nMiddleMouse; }
     void        SetMiddleMouseButton ( MouseMiddleButtonAction nSet );

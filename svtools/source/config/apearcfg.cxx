@@ -26,7 +26,7 @@
 #include <sal/macros.h>
 
 #define DEFAULT_DRAGMODE    DragMode::SystemDep
-#define DEFAULT_SNAPMODE    0
+#define DEFAULT_SNAPMODE    SnapType::ToButton
 #define DEFAULT_SCALEFACTOR 100
 #if defined UNX
 #define DEFAULT_AAMINHEIGHT 8
@@ -72,7 +72,13 @@ SvtTabAppearanceCfg::SvtTabAppearanceCfg()
                         break;
                     }
                     case  2: bMenuMouseFollow = *static_cast<sal_Bool const *>(pValues->getValue()); break; //"Menu/FollowMouse",
-                    case  3: *pValues >>= nSnapMode; break; //"Dialog/MousePositioning",
+                    case  3:
+                    {
+                        short nTmp;
+                        if (*pValues >>= nTmp)
+                            nSnapMode = (SnapType)nTmp; //"Dialog/MousePositioning",
+                        break;
+                    }
                     case  4: { short nTmp = 0; *pValues >>= nTmp; nMiddleMouse = static_cast<MouseMiddleButtonAction>(nTmp); break; } //"Dialog/MiddleMouseButton",
 #if defined( UNX )
                     case  5: bFontAntialiasing = *static_cast<sal_Bool const *>(pValues->getValue()); break;    // "FontAntialising/Enabled",
@@ -127,9 +133,9 @@ void  SvtTabAppearanceCfg::ImplCommit()
         switch(nProp)
         {
             case  0: pValues[nProp] <<= nScaleFactor; break;            // "FontScaling",
-            case  1: pValues[nProp] <<= (short)nDragMode; break;               //"Window/Drag",
-            case  2: pValues[nProp] <<= bMenuMouseFollow; break; //"Menu/FollowMouse",
-            case  3: pValues[nProp] <<= nSnapMode; break;               //"Dialog/MousePositioning",
+            case  1: pValues[nProp] <<= (short)nDragMode; break;        //"Window/Drag",
+            case  2: pValues[nProp] <<= bMenuMouseFollow; break;        //"Menu/FollowMouse",
+            case  3: pValues[nProp] <<= (short)nSnapMode; break;        //"Dialog/MousePositioning",
             case  4: pValues[nProp] <<= static_cast<short>(nMiddleMouse); break;               //"Dialog/MiddleMouseButton",
 #if defined( UNX )
             case  5: pValues[nProp] <<= bFontAntialiasing; break; // "FontAntialising/Enabled",
@@ -150,7 +156,7 @@ void SvtTabAppearanceCfg::SetScaleFactor ( sal_uInt16 nSet )
     SetModified();
 }
 
-void SvtTabAppearanceCfg::SetSnapMode ( sal_uInt16 nSet )
+void SvtTabAppearanceCfg::SetSnapMode ( SnapType nSet )
 {
     nSnapMode = nSet;
     SetModified();
@@ -196,13 +202,13 @@ void SvtTabAppearanceCfg::SetApplicationDefaults ( Application* pApp )
 
     switch ( nSnapMode )
     {
-    case SnapToButton:
+    case SnapType::ToButton:
         nMouseOptions |= MouseSettingsOptions::AutoDefBtnPos;
         break;
-    case SnapToMiddle:
+    case SnapType::ToMiddle:
         nMouseOptions |= MouseSettingsOptions::AutoCenterPos;
         break;
-    case NoSnap:
+    case SnapType::NONE:
     default:
         break;
     }
