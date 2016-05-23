@@ -60,7 +60,7 @@ SvXMLImportContext *SwXMLBodyContentContext_Impl::CreateChildContext(
 
     pContext = GetSwImport().GetTextImport()->CreateTextChildContext(
             GetImport(), nPrefix, rLocalName, xAttrList,
-               XML_TEXT_TYPE_BODY );
+               XMLTextType::Body );
     if( !pContext )
         pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
 

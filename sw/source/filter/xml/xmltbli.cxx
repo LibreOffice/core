@@ -666,7 +666,7 @@ SvXMLImportContext *SwXMLTableCellContext_Impl::CreateChildContext(
         {
             pContext = GetImport().GetTextImport()->CreateTextChildContext(
                         GetImport(), nPrefix, rLocalName, xAttrList,
-                        XML_TEXT_TYPE_CELL  );
+                        XMLTextType::Cell  );
         }
     }
 

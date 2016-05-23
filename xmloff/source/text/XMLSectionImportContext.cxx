@@ -367,7 +367,7 @@ SvXMLImportContext* XMLSectionImportContext::CreateChildContext(
         // otherwise: text context
         pContext = GetImport().GetTextImport()->CreateTextChildContext(
             GetImport(), nPrefix, rLocalName, xAttrList,
-            XML_TEXT_TYPE_SECTION );
+            XMLTextType::Section );
 
         // if that fails, default context
         if (nullptr == pContext)

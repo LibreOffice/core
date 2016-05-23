@@ -64,7 +64,7 @@ SvXMLImportContext* XMLChangeElementImportContext::CreateChildContext(
 
         pContext = GetImport().GetTextImport()->CreateTextChildContext(
             GetImport(), nPrefix, rLocalName, xAttrList,
-            XML_TEXT_TYPE_CHANGED_REGION);
+            XMLTextType::ChangedRegion);
 
         if (nullptr == pContext)
         {
