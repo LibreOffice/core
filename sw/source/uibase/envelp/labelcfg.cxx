@@ -39,7 +39,7 @@ static inline void lcl_assertEndingItem(xmlreader::XmlReader& reader)
     xmlreader::Span name;
     xmlreader::XmlReader::Result res;
     res = reader.nextItem(xmlreader::XmlReader::Text::NONE, &name, &nsId);
-    assert(res == xmlreader::XmlReader::RESULT_END);
+    assert(res == xmlreader::XmlReader::Result::End);
     (void) res;
 }
 
@@ -50,9 +50,9 @@ static inline OUString lcl_getValue(xmlreader::XmlReader& reader,
     xmlreader::Span name;
     xmlreader::XmlReader::Result res;
     res = reader.nextItem(xmlreader::XmlReader::Text::NONE, &name, &nsId);
-    assert(res == xmlreader::XmlReader::RESULT_BEGIN && name.equals(span));
+    assert(res == xmlreader::XmlReader::Result::Begin && name.equals(span));
     res = reader.nextItem(xmlreader::XmlReader::Text::Raw, &name, &nsId);
-    assert(res == xmlreader::XmlReader::RESULT_TEXT);
+    assert(res == xmlreader::XmlReader::Result::Text);
     (void) res; (void) span;
     OUString sTmp = name.convertFromUtf8();
     lcl_assertEndingItem(reader);
@@ -88,15 +88,15 @@ SwLabelConfig::SwLabelConfig() :
     res = reader.nextItem(
             xmlreader::XmlReader::Text::NONE, &name, &nsId);
     assert(
-        res == xmlreader::XmlReader::RESULT_BEGIN
+        res == xmlreader::XmlReader::Result::Begin
         && name.equals("manufacturers"));
     res = reader.nextItem(
             xmlreader::XmlReader::Text::NONE, &name, &nsId);
-    while (res != xmlreader::XmlReader::RESULT_END)
+    while (res != xmlreader::XmlReader::Result::End)
     {
         // Opening manufacturer
         assert(
-            res == xmlreader::XmlReader::RESULT_BEGIN
+            res == xmlreader::XmlReader::Result::Begin
             && name.equals("manufacturer"));
         // Get the name
         (void)reader.nextAttribute(&nsId, &name);
@@ -109,10 +109,10 @@ SwLabelConfig::SwLabelConfig() :
             // Opening label or ending manufacturer
             res = reader.nextItem(
                     xmlreader::XmlReader::Text::NONE, &name, &nsId);
-            if (res == xmlreader::XmlReader::RESULT_END)
+            if (res == xmlreader::XmlReader::Result::End)
                 break;
             assert(
-                res == xmlreader::XmlReader::RESULT_BEGIN
+                res == xmlreader::XmlReader::Result::Begin
                 && name.equals("label"));
             // Get name value
             sName = lcl_getValue(reader, xmlreader::Span("name"));
@@ -131,7 +131,7 @@ SwLabelConfig::SwLabelConfig() :
     };
     res = reader.nextItem(
             xmlreader::XmlReader::Text::NONE, &name, &nsId);
-    assert(res == xmlreader::XmlReader::RESULT_DONE);
+    assert(res == xmlreader::XmlReader::Result::Done);
 
     // add to m_aLabels and m_aManufacturers the custom labels
     const Sequence<OUString>& rMan = GetNodeNames( OUString() );

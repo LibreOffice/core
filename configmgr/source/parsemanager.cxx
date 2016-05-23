@@ -60,11 +60,11 @@ bool ParseManager::parse(std::set< OUString > const * existingDependencies) {
     sal_uInt32 startTime( osl_getGlobalTimer() );
     for (;;) {
         switch (itemData_.is()
-                ? xmlreader::XmlReader::RESULT_BEGIN
+                ? xmlreader::XmlReader::Result::Begin
                 : reader_.nextItem(
                     parser_->getTextMode(), &itemData_, &itemNamespaceId_))
         {
-        case xmlreader::XmlReader::RESULT_BEGIN:
+        case xmlreader::XmlReader::Result::Begin:
             if (!parser_->startElement(
                     reader_, itemNamespaceId_, itemData_, existingDependencies))
             {
@@ -72,13 +72,13 @@ bool ParseManager::parse(std::set< OUString > const * existingDependencies) {
                 return false;
             }
             break;
-        case xmlreader::XmlReader::RESULT_END:
+        case xmlreader::XmlReader::Result::End:
             parser_->endElement(reader_);
             break;
-        case xmlreader::XmlReader::RESULT_TEXT:
+        case xmlreader::XmlReader::Result::Text:
             parser_->characters(itemData_);
             break;
-        case xmlreader::XmlReader::RESULT_DONE:
+        case xmlreader::XmlReader::Result::Done:
             SAL_INFO("configmgr", "parsing " << reader_.getUrl() << " took " << (osl_getGlobalTimer() - startTime) << " ms, success");
             return true;
         }

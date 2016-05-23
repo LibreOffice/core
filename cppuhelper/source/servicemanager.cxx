@@ -156,7 +156,7 @@ Parser::Parser(
             xmlreader::XmlReader::Text::NONE, &name, &nsId);
         switch (state) {
         case STATE_BEGIN:
-            if (res == xmlreader::XmlReader::RESULT_BEGIN && nsId == ucNsId
+            if (res == xmlreader::XmlReader::Result::Begin && nsId == ucNsId
                 && name.equals(RTL_CONSTASCII_STRINGPARAM("components")))
             {
                 state = STATE_COMPONENTS;
@@ -165,17 +165,17 @@ Parser::Parser(
             throw css::registry::InvalidRegistryException(
                 reader_.getUrl() + ": unexpected item in outer level");
         case STATE_END:
-            if (res == xmlreader::XmlReader::RESULT_DONE) {
+            if (res == xmlreader::XmlReader::Result::Done) {
                 return;
             }
             throw css::registry::InvalidRegistryException(
                 reader_.getUrl() + ": unexpected item in outer level");
         case STATE_COMPONENTS:
-            if (res == xmlreader::XmlReader::RESULT_END) {
+            if (res == xmlreader::XmlReader::Result::End) {
                 state = STATE_END;
                 break;
             }
-            if (res == xmlreader::XmlReader::RESULT_BEGIN && nsId == ucNsId
+            if (res == xmlreader::XmlReader::Result::Begin && nsId == ucNsId
                 && name.equals(RTL_CONSTASCII_STRINGPARAM("component")))
             {
                 handleComponent();
@@ -185,13 +185,13 @@ Parser::Parser(
             throw css::registry::InvalidRegistryException(
                 reader_.getUrl() + ": unexpected item in <components>");
         case STATE_COMPONENT:
-            if (res == xmlreader::XmlReader::RESULT_END) {
+            if (res == xmlreader::XmlReader::Result::End) {
                 state = STATE_COMPONENTS;
                 break;
             }
             SAL_FALLTHROUGH;
         case STATE_COMPONENT_INITIAL:
-            if (res == xmlreader::XmlReader::RESULT_BEGIN && nsId == ucNsId
+            if (res == xmlreader::XmlReader::Result::Begin && nsId == ucNsId
                 && name.equals(RTL_CONSTASCII_STRINGPARAM("implementation")))
             {
                 handleImplementation();
@@ -201,18 +201,18 @@ Parser::Parser(
             throw css::registry::InvalidRegistryException(
                 reader_.getUrl() + ": unexpected item in <component>");
         case STATE_IMPLEMENTATION:
-            if (res == xmlreader::XmlReader::RESULT_END) {
+            if (res == xmlreader::XmlReader::Result::End) {
                 state = STATE_COMPONENT;
                 break;
             }
-            if (res == xmlreader::XmlReader::RESULT_BEGIN && nsId == ucNsId
+            if (res == xmlreader::XmlReader::Result::Begin && nsId == ucNsId
                 && name.equals(RTL_CONSTASCII_STRINGPARAM("service")))
             {
                 handleService();
                 state = STATE_SERVICE;
                 break;
             }
-            if (res == xmlreader::XmlReader::RESULT_BEGIN && nsId == ucNsId
+            if (res == xmlreader::XmlReader::Result::Begin && nsId == ucNsId
                 && name.equals(RTL_CONSTASCII_STRINGPARAM("singleton")))
             {
                 handleSingleton();
@@ -222,14 +222,14 @@ Parser::Parser(
             throw css::registry::InvalidRegistryException(
                 reader_.getUrl() + ": unexpected item in <implementation>");
         case STATE_SERVICE:
-            if (res == xmlreader::XmlReader::RESULT_END) {
+            if (res == xmlreader::XmlReader::Result::End) {
                 state = STATE_IMPLEMENTATION;
                 break;
             }
             throw css::registry::InvalidRegistryException(
                 reader_.getUrl() + ": unexpected item in <service>");
         case STATE_SINGLETON:
-            if (res == xmlreader::XmlReader::RESULT_END) {
+            if (res == xmlreader::XmlReader::Result::End) {
                 state = STATE_IMPLEMENTATION;
                 break;
             }
