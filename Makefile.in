@@ -320,6 +320,9 @@ findunusedcode:
 findunusedheaders:
 	$(SRCDIR)/bin/find-unusedheaders.pl
 
+symbols:
+	mkdir -p $(WORKDIR)/symbols/
+	$(SRCDIR)/bin/symbolstore.py $(WORKDIR)/UnpackedTarball/breakpad/src/tools/linux/dump_syms/dump_syms $(WORKDIR)/symbols/ $(INSTDIR)/program/*
 
 dump-deps:
 	@$(SRCDIR)/bin/module-deps.pl $(GNUMAKE) $(SRCDIR)/Makefile.gbuild
