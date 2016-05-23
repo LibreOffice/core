@@ -634,7 +634,7 @@ void FloatingWindow::ImplCallPopupModeEnd()
 
     // call Handler asynchronously.
     if ( mpImplData && !mnPostId )
-        mnPostId = Application::PostUserEvent( LINK( this, FloatingWindow, ImplEndPopupModeHdl ), nullptr, true );
+        mnPostId = Application::PostUserEvent( LINK( this, FloatingWindow, ImplEndPopupModeHdl ), mxPrevFocusWin, true );
 }
 
 void FloatingWindow::PopupModeEnd()
@@ -711,10 +711,11 @@ void FloatingWindow::StartPopupMode( const Rectangle& rRect, FloatWinPopupFlags 
     ImplSVData* pSVData = ImplGetSVData();
     mpNextFloat = pSVData->maWinData.mpFirstFloat;
     pSVData->maWinData.mpFirstFloat = this;
-    if( nFlags & FloatWinPopupFlags::GrabFocus )
+    if (nFlags & FloatWinPopupFlags::GrabFocus)
     {
         // force key input even without focus (useful for menus)
         mbGrabFocus = true;
+        mxPrevFocusWin = Window::SaveFocus();
         mpWindowImpl->mpFrameData->mbHasFocus = true;
         GrabFocus();
     }
@@ -840,7 +841,7 @@ void FloatingWindow::ImplEndPopupMode( FloatWinPopupEndFlags nFlags, const VclPt
 
 void FloatingWindow::EndPopupMode( FloatWinPopupEndFlags nFlags )
 {
-    ImplEndPopupMode( nFlags );
+    ImplEndPopupMode(nFlags, mxPrevFocusWin);
 }
 
 void FloatingWindow::AddPopupModeWindow( vcl::Window* pWindow )

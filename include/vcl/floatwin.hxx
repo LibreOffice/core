@@ -91,6 +91,7 @@ class VCL_DLLPUBLIC FloatingWindow : public SystemWindow
 private:
     VclPtr<FloatingWindow>  mpNextFloat;
     VclPtr<vcl::Window>     mpFirstPopupModeWin;
+    VclPtr<vcl::Window>     mxPrevFocusWin;
     ImplData*       mpImplData;
     Rectangle       maFloatRect;
     ImplSVEvent *   mnPostId;
