@@ -48,7 +48,7 @@ public:
 
     enum class Text { NONE, Raw, Normalized };
 
-    enum Result { RESULT_BEGIN, RESULT_END, RESULT_TEXT, RESULT_DONE };
+    enum class Result { Begin, End, Text, Done };
 
     int registerNamespaceIri(Span const & iri);
 

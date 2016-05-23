@@ -549,7 +549,7 @@ void VclBuilder::handleTranslations(xmlreader::XmlReader &reader)
         xmlreader::XmlReader::Result res = reader.nextItem(
             xmlreader::XmlReader::Text::Raw, &name, &nsId);
 
-        if (res == xmlreader::XmlReader::RESULT_BEGIN)
+        if (res == xmlreader::XmlReader::Result::Begin)
         {
             if (name.equals("e"))
             {
@@ -572,16 +572,16 @@ void VclBuilder::handleTranslations(xmlreader::XmlReader &reader)
             }
         }
 
-        if (res == xmlreader::XmlReader::RESULT_TEXT && !sID.isEmpty())
+        if (res == xmlreader::XmlReader::Result::Text && !sID.isEmpty())
         {
             OString sTranslation(name.begin, name.length);
             m_pParserState->m_aTranslations[sID][sProperty] = sTranslation;
         }
 
-        if (res == xmlreader::XmlReader::RESULT_END)
+        if (res == xmlreader::XmlReader::Result::End)
             sID.clear();
 
-        if (res == xmlreader::XmlReader::RESULT_DONE)
+        if (res == xmlreader::XmlReader::Result::Done)
             break;
     }
 }
@@ -1903,7 +1903,7 @@ void VclBuilder::handleTabChild(vcl::Window *pParent, xmlreader::XmlReader &read
         xmlreader::XmlReader::Result res = reader.nextItem(
             xmlreader::XmlReader::Text::NONE, &name, &nsId);
 
-        if (res == xmlreader::XmlReader::RESULT_BEGIN)
+        if (res == xmlreader::XmlReader::Result::Begin)
         {
             ++nLevel;
             if (name.equals("object"))
@@ -1928,13 +1928,13 @@ void VclBuilder::handleTabChild(vcl::Window *pParent, xmlreader::XmlReader &read
                 collectProperty(reader, sID, aProperties);
         }
 
-        if (res == xmlreader::XmlReader::RESULT_END)
+        if (res == xmlreader::XmlReader::Result::End)
             --nLevel;
 
         if (!nLevel)
             break;
 
-        if (res == xmlreader::XmlReader::RESULT_DONE)
+        if (res == xmlreader::XmlReader::Result::Done)
             break;
     }
 
@@ -2055,7 +2055,7 @@ void VclBuilder::handleChild(vcl::Window *pParent, xmlreader::XmlReader &reader)
         xmlreader::XmlReader::Result res = reader.nextItem(
             xmlreader::XmlReader::Text::NONE, &name, &nsId);
 
-        if (res == xmlreader::XmlReader::RESULT_BEGIN)
+        if (res == xmlreader::XmlReader::Result::Begin)
         {
             if (name.equals("object") || name.equals("placeholder"))
             {
@@ -2128,13 +2128,13 @@ void VclBuilder::handleChild(vcl::Window *pParent, xmlreader::XmlReader &reader)
                 ++nLevel;
         }
 
-        if (res == xmlreader::XmlReader::RESULT_END)
+        if (res == xmlreader::XmlReader::Result::End)
             --nLevel;
 
         if (!nLevel)
             break;
 
-        if (res == xmlreader::XmlReader::RESULT_DONE)
+        if (res == xmlreader::XmlReader::Result::Done)
             break;
     }
 }
@@ -2237,10 +2237,10 @@ void VclBuilder::handleRow(xmlreader::XmlReader &reader, const OString &rID, sal
         xmlreader::XmlReader::Result res = reader.nextItem(
             xmlreader::XmlReader::Text::NONE, &name, &nsId);
 
-        if (res == xmlreader::XmlReader::RESULT_DONE)
+        if (res == xmlreader::XmlReader::Result::Done)
             break;
 
-        if (res == xmlreader::XmlReader::RESULT_BEGIN)
+        if (res == xmlreader::XmlReader::Result::Begin)
         {
             ++nLevel;
             if (name.equals("col"))
@@ -2275,7 +2275,7 @@ void VclBuilder::handleRow(xmlreader::XmlReader &reader, const OString &rID, sal
             }
         }
 
-        if (res == xmlreader::XmlReader::RESULT_END)
+        if (res == xmlreader::XmlReader::Result::End)
         {
             --nLevel;
         }
@@ -2300,10 +2300,10 @@ void VclBuilder::handleListStore(xmlreader::XmlReader &reader, const OString &rI
         xmlreader::XmlReader::Result res = reader.nextItem(
             xmlreader::XmlReader::Text::NONE, &name, &nsId);
 
-        if (res == xmlreader::XmlReader::RESULT_DONE)
+        if (res == xmlreader::XmlReader::Result::Done)
             break;
 
-        if (res == xmlreader::XmlReader::RESULT_BEGIN)
+        if (res == xmlreader::XmlReader::Result::Begin)
         {
             if (name.equals("row"))
                 handleRow(reader, rID, nRowIndex++);
@@ -2311,7 +2311,7 @@ void VclBuilder::handleListStore(xmlreader::XmlReader &reader, const OString &rI
                 ++nLevel;
         }
 
-        if (res == xmlreader::XmlReader::RESULT_END)
+        if (res == xmlreader::XmlReader::Result::End)
         {
             --nLevel;
         }
@@ -2337,17 +2337,17 @@ void VclBuilder::handleAtkObject(xmlreader::XmlReader &reader, const OString &rI
         xmlreader::XmlReader::Result res = reader.nextItem(
             xmlreader::XmlReader::Text::NONE, &name, &nsId);
 
-        if (res == xmlreader::XmlReader::RESULT_DONE)
+        if (res == xmlreader::XmlReader::Result::Done)
             break;
 
-        if (res == xmlreader::XmlReader::RESULT_BEGIN)
+        if (res == xmlreader::XmlReader::Result::Begin)
         {
             ++nLevel;
             if (name.equals("property"))
                 collectProperty(reader, rID, aProperties);
         }
 
-        if (res == xmlreader::XmlReader::RESULT_END)
+        if (res == xmlreader::XmlReader::Result::End)
         {
             --nLevel;
         }
@@ -2383,10 +2383,10 @@ std::vector<OString> VclBuilder::handleItems(xmlreader::XmlReader &reader, const
         xmlreader::XmlReader::Result res = reader.nextItem(
             xmlreader::XmlReader::Text::NONE, &name, &nsId);
 
-        if (res == xmlreader::XmlReader::RESULT_DONE)
+        if (res == xmlreader::XmlReader::Result::Done)
             break;
 
-        if (res == xmlreader::XmlReader::RESULT_BEGIN)
+        if (res == xmlreader::XmlReader::Result::Begin)
         {
             ++nLevel;
             if (name.equals("item"))
@@ -2420,7 +2420,7 @@ std::vector<OString> VclBuilder::handleItems(xmlreader::XmlReader &reader, const
             }
         }
 
-        if (res == xmlreader::XmlReader::RESULT_END)
+        if (res == xmlreader::XmlReader::Result::End)
         {
             --nLevel;
         }
@@ -2448,10 +2448,10 @@ void VclBuilder::handleMenu(xmlreader::XmlReader &reader, const OString &rID)
         xmlreader::XmlReader::Result res = reader.nextItem(
             xmlreader::XmlReader::Text::NONE, &name, &nsId);
 
-        if (res == xmlreader::XmlReader::RESULT_DONE)
+        if (res == xmlreader::XmlReader::Result::Done)
             break;
 
-        if (res == xmlreader::XmlReader::RESULT_BEGIN)
+        if (res == xmlreader::XmlReader::Result::Begin)
         {
             if (name.equals("child"))
             {
@@ -2465,7 +2465,7 @@ void VclBuilder::handleMenu(xmlreader::XmlReader &reader, const OString &rID)
             }
         }
 
-        if (res == xmlreader::XmlReader::RESULT_END)
+        if (res == xmlreader::XmlReader::Result::End)
         {
             --nLevel;
         }
@@ -2488,7 +2488,7 @@ void VclBuilder::handleMenuChild(PopupMenu *pParent, xmlreader::XmlReader &reade
         xmlreader::XmlReader::Result res = reader.nextItem(
             xmlreader::XmlReader::Text::NONE, &name, &nsId);
 
-        if (res == xmlreader::XmlReader::RESULT_BEGIN)
+        if (res == xmlreader::XmlReader::Result::Begin)
         {
             if (name.equals("object") || name.equals("placeholder"))
             {
@@ -2498,13 +2498,13 @@ void VclBuilder::handleMenuChild(PopupMenu *pParent, xmlreader::XmlReader &reade
                 ++nLevel;
         }
 
-        if (res == xmlreader::XmlReader::RESULT_END)
+        if (res == xmlreader::XmlReader::Result::End)
             --nLevel;
 
         if (!nLevel)
             break;
 
-        if (res == xmlreader::XmlReader::RESULT_DONE)
+        if (res == xmlreader::XmlReader::Result::Done)
             break;
     }
 }
@@ -2550,10 +2550,10 @@ void VclBuilder::handleMenuObject(PopupMenu *pParent, xmlreader::XmlReader &read
         xmlreader::XmlReader::Result res = reader.nextItem(
             xmlreader::XmlReader::Text::NONE, &name, &nsId);
 
-        if (res == xmlreader::XmlReader::RESULT_DONE)
+        if (res == xmlreader::XmlReader::Result::Done)
             break;
 
-        if (res == xmlreader::XmlReader::RESULT_BEGIN)
+        if (res == xmlreader::XmlReader::Result::Begin)
         {
             ++nLevel;
             if (name.equals("property"))
@@ -2562,7 +2562,7 @@ void VclBuilder::handleMenuObject(PopupMenu *pParent, xmlreader::XmlReader &read
                 collectAccelerator(reader, aAccelerators);
         }
 
-        if (res == xmlreader::XmlReader::RESULT_END)
+        if (res == xmlreader::XmlReader::Result::End)
         {
             --nLevel;
         }
@@ -2589,10 +2589,10 @@ void VclBuilder::handleSizeGroup(xmlreader::XmlReader &reader, const OString &rI
         xmlreader::XmlReader::Result res = reader.nextItem(
             xmlreader::XmlReader::Text::NONE, &name, &nsId);
 
-        if (res == xmlreader::XmlReader::RESULT_DONE)
+        if (res == xmlreader::XmlReader::Result::Done)
             break;
 
-        if (res == xmlreader::XmlReader::RESULT_BEGIN)
+        if (res == xmlreader::XmlReader::Result::Begin)
         {
             ++nLevel;
             if (name.equals("widget"))
@@ -2617,7 +2617,7 @@ void VclBuilder::handleSizeGroup(xmlreader::XmlReader &reader, const OString &rI
             }
         }
 
-        if (res == xmlreader::XmlReader::RESULT_END)
+        if (res == xmlreader::XmlReader::Result::End)
         {
             --nLevel;
         }
@@ -2802,10 +2802,10 @@ VclPtr<vcl::Window> VclBuilder::handleObject(vcl::Window *pParent, xmlreader::Xm
         xmlreader::XmlReader::Result res = reader.nextItem(
             xmlreader::XmlReader::Text::NONE, &name, &nsId);
 
-        if (res == xmlreader::XmlReader::RESULT_DONE)
+        if (res == xmlreader::XmlReader::Result::Done)
             break;
 
-        if (res == xmlreader::XmlReader::RESULT_BEGIN)
+        if (res == xmlreader::XmlReader::Result::Begin)
         {
             if (name.equals("child"))
             {
@@ -2832,7 +2832,7 @@ VclPtr<vcl::Window> VclBuilder::handleObject(vcl::Window *pParent, xmlreader::Xm
             }
         }
 
-        if (res == xmlreader::XmlReader::RESULT_END)
+        if (res == xmlreader::XmlReader::Result::End)
         {
             --nLevel;
         }
@@ -2880,17 +2880,17 @@ void VclBuilder::handlePacking(vcl::Window *pCurrent, vcl::Window *pParent, xmlr
         xmlreader::XmlReader::Result res = reader.nextItem(
             xmlreader::XmlReader::Text::NONE, &name, &nsId);
 
-        if (res == xmlreader::XmlReader::RESULT_DONE)
+        if (res == xmlreader::XmlReader::Result::Done)
             break;
 
-        if (res == xmlreader::XmlReader::RESULT_BEGIN)
+        if (res == xmlreader::XmlReader::Result::Begin)
         {
             ++nLevel;
             if (name.equals("property"))
                 applyPackingProperty(pCurrent, pParent, reader);
         }
 
-        if (res == xmlreader::XmlReader::RESULT_END)
+        if (res == xmlreader::XmlReader::Result::End)
         {
             --nLevel;
         }
