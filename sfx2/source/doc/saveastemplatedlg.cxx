@@ -122,7 +122,6 @@ void SfxSaveAsTemplateDialog::initialize()
 
 void SfxSaveAsTemplateDialog::SetCategoryLBEntries(std::vector<OUString> aFolderNames)
 {
-    mpLBCategory->InsertEntry(OUString("None"), 0);
     if (!aFolderNames.empty())
     {
         for (size_t i = 0, n = aFolderNames.size(); i < n; ++i)
