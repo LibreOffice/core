@@ -489,7 +489,7 @@ void VistaFilePickerImpl::impl_sta_CreateSaveDialog(const RequestRef& rRequest)
             css::uno::Sequence<sal_Int8> aProcessIdent(16);
             rtl_getGlobalProcessId((sal_uInt8*)aProcessIdent.getArray());
             css::uno::Any aAny = xSysDepWin->getWindowHandle(aProcessIdent,css::lang::SystemDependent::SYSTEM_WIN32);
-            sal_Int64 tmp;
+            sal_Int64 tmp = 0;
             aAny >>= tmp;
             if(tmp != 0)
                 m_hParentWindow = (HWND) tmp;
