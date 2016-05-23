@@ -71,6 +71,7 @@
 #define RC_IDXTXT                   (RC_BASE + 4350)
 #define RC_SIDEBAR                  (RC_BASE + 4450)
 #define RC_ATTR                     (RC_BASE + 4550)
+#define RC_POOLTABSTYLE             (RC_BASE + 4650)
 
 /*--------------------------------------------------------------------
     Description: areas unharness
@@ -256,6 +257,10 @@
 // Utilities UI-Attributes
 #define RC_ATTR_BEGIN               RC_ATTR
 #define RC_ATTR_END                 (RC_ATTR + 99)
+
+// Table styles
+#define RC_POOLTABSTYLE_BEGIN       RC_POOLTABSTYLE
+#define RC_POOLTABSTYLE_END         (RC_POOLTABSTYLE + 99)
 
 #endif
 

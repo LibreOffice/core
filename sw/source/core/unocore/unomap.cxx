@@ -1488,6 +1488,18 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                 m_aMapEntriesArr[nPropertyId] = aMetaFieldMap;
             }
             break;
+            // TODO: this a dummy property set
+            case PROPERTY_MAP_TABLE_STYLE:
+            {
+                static SfxItemPropertyMapEntry const aTableStyleMap[] =
+                {
+                    { OUString("Dummy Property One"), 0,
+                        cppu::UnoType<bool>::get(), PROPERTY_NONE, 0 },
+                    { OUString(), 0, css::uno::Type(), 0, 0 }
+                };
+                m_aMapEntriesArr[nPropertyId] = aTableStyleMap;
+            }
+            break;
 
             default:
                 OSL_FAIL( "unexpected property map ID" );
