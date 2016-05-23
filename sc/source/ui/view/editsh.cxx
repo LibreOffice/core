@@ -93,7 +93,6 @@ void ScEditShell::InitInterface_Impl()
 ScEditShell::ScEditShell(EditView* pView, ScViewData* pData) :
     pEditView       (pView),
     pViewData       (pData),
-    pClipEvtLstnr   (nullptr),
     bPastePossible  (false),
     bIsInsertMode   (true)
 {
@@ -105,15 +104,13 @@ ScEditShell::ScEditShell(EditView* pView, ScViewData* pData) :
 
 ScEditShell::~ScEditShell()
 {
-    if ( pClipEvtLstnr )
+    if ( mxClipEvtLstnr.is() )
     {
-        pClipEvtLstnr->AddRemoveListener( pViewData->GetActiveWin(), false );
+        mxClipEvtLstnr->AddRemoveListener( pViewData->GetActiveWin(), false );
 
         //  The listener may just now be waiting for the SolarMutex and call the link
         //  afterwards, in spite of RemoveListener. So the link has to be reset, too.
-        pClipEvtLstnr->ClearCallbackLink();
-
-        pClipEvtLstnr->release();
+        mxClipEvtLstnr->ClearCallbackLink();
     }
 }
 
@@ -809,13 +806,12 @@ IMPL_LINK_TYPED( ScEditShell, ClipboardChanged, TransferableDataHelper*, pDataHe
 
 void ScEditShell::GetClipState( SfxItemSet& rSet )
 {
-    if ( !pClipEvtLstnr )
+    if ( !mxClipEvtLstnr.is() )
     {
         // create listener
-        pClipEvtLstnr = new TransferableClipboardListener( LINK( this, ScEditShell, ClipboardChanged ) );
-        pClipEvtLstnr->acquire();
+        mxClipEvtLstnr = new TransferableClipboardListener( LINK( this, ScEditShell, ClipboardChanged ) );
         vcl::Window* pWin = pViewData->GetActiveWin();
-        pClipEvtLstnr->AddRemoveListener( pWin, true );
+        mxClipEvtLstnr->AddRemoveListener( pWin, true );
 
         // get initial state
         TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( pViewData->GetActiveWin() ) );

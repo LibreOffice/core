@@ -170,7 +170,7 @@ public:
 class SVTXFormattedField : public VCLXSpinField
 {
 protected:
-    SvNumberFormatsSupplierObj* m_pCurrentSupplier;
+    css::uno::Reference<SvNumberFormatsSupplierObj> m_xCurrentSupplier;
     bool                    bIsStandardSupplier;
 
     sal_Int32                   nKeyToSetDelayed;

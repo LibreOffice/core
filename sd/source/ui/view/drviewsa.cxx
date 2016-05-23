@@ -177,11 +177,11 @@ DrawViewShell::~DrawViewShell()
         }
     }
 
-    if ( mpClipEvtLstnr )
+    if ( mxClipEvtLstnr.is() )
     {
-        mpClipEvtLstnr->AddRemoveListener( GetActiveWindow(), false );
-        mpClipEvtLstnr->ClearCallbackLink();        // prevent callback if another thread is waiting
-        mpClipEvtLstnr->release();
+        mxClipEvtLstnr->AddRemoveListener( GetActiveWindow(), false );
+        mxClipEvtLstnr->ClearCallbackLink();        // prevent callback if another thread is waiting
+        mxClipEvtLstnr.clear();
     }
 
     delete mpDrawView;
@@ -201,7 +201,7 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
     mpActualPage = nullptr;
     mbMousePosFreezed = false;
     mbReadOnly = GetDocSh()->IsReadOnly();
-    mpClipEvtLstnr = nullptr;
+    mxClipEvtLstnr.clear();
     mbPastePossible = false;
     mbIsLayerModeActive = false;
 

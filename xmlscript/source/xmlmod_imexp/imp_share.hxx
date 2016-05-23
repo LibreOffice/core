@@ -85,8 +85,8 @@ class ModuleElement
     : public ::cppu::WeakImplHelper< css::xml::input::XElement >
 {
 protected:
-    ModuleImport * _pImport;
-    ModuleElement * _pParent;
+    css::uno::Reference<ModuleImport> mxImport;
+    css::uno::Reference<ModuleElement> mxParent;
 
     OUString _aLocalName;
     css::uno::Reference< css::xml::input::XAttributes > _xAttributes;

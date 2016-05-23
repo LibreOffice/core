@@ -60,7 +60,7 @@ namespace framework{
 class RequestFilterSelect_Impl;
 class FWE_DLLPUBLIC RequestFilterSelect
 {
-    RequestFilterSelect_Impl* pImp;
+    css::uno::Reference<RequestFilterSelect_Impl> mxImpl;
 
 public:
     RequestFilterSelect( const OUString& sURL );

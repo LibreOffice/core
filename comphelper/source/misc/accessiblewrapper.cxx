@@ -347,18 +347,15 @@ namespace comphelper
         ,m_xInnerContext( _rxInnerAccessibleContext )
         ,m_xOwningAccessible( _rxOwningAccessible )
         ,m_xParentAccessible( _rxParentAccessible )
-        ,m_pChildMapper( nullptr )
-    {
         // initialize the mapper for our children
-        m_pChildMapper = new OWrappedAccessibleChildrenManager( getComponentContext() );
-        m_pChildMapper->acquire();
-
+        ,m_xChildMapper( new OWrappedAccessibleChildrenManager( getComponentContext() ) )
+    {
         // determine if we're allowed to cache children
         Reference< XAccessibleStateSet > xStates( m_xInnerContext->getAccessibleStateSet( ) );
         OSL_ENSURE( xStates.is(), "OAccessibleContextWrapperHelper::OAccessibleContextWrapperHelper: no inner state set!" );
-        m_pChildMapper->setTransientChildren( !xStates.is() || xStates->contains( AccessibleStateType::MANAGES_DESCENDANTS) );
+        m_xChildMapper->setTransientChildren( !xStates.is() || xStates->contains( AccessibleStateType::MANAGES_DESCENDANTS) );
 
-        m_pChildMapper->setOwningAccessible( m_xOwningAccessible );
+        m_xChildMapper->setOwningAccessible( m_xOwningAccessible );
     }
 
 
@@ -383,9 +380,6 @@ namespace comphelper
     OAccessibleContextWrapperHelper::~OAccessibleContextWrapperHelper( )
     {
         OSL_ENSURE( m_rBHelper.bDisposed, "OAccessibleContextWrapperHelper::~OAccessibleContextWrapperHelper: you should ensure (in your dtor) that the object is disposed!" );
-
-        m_pChildMapper->release();
-        m_pChildMapper = nullptr;
     }
 
 
@@ -411,7 +405,7 @@ namespace comphelper
     {
         // get the child of the wrapped component
         Reference< XAccessible > xInnerChild = m_xInnerContext->getAccessibleChild( i );
-        return m_pChildMapper->getAccessibleWrapperFor( xInnerChild );
+        return m_xChildMapper->getAccessibleWrapperFor( xInnerChild );
     }
 
 
@@ -446,10 +440,10 @@ namespace comphelper
 
             // translate the event
             queryInterface( cppu::UnoType<XInterface>::get() ) >>= aTranslatedEvent.Source;
-            m_pChildMapper->translateAccessibleEvent( _rEvent, aTranslatedEvent );
+            m_xChildMapper->translateAccessibleEvent( _rEvent, aTranslatedEvent );
 
             // see if any of these notifications affect our child manager
-            m_pChildMapper->handleChildNotification( _rEvent );
+            m_xChildMapper->handleChildNotification( _rEvent );
 
             if ( aTranslatedEvent.NewValue == m_xInner )
                 aTranslatedEvent.NewValue = makeAny(aTranslatedEvent.Source);
@@ -472,7 +466,7 @@ namespace comphelper
             xBroadcaster->removeAccessibleEventListener( this );
 
         // dispose the child cache/map
-        m_pChildMapper->dispose();
+        m_xChildMapper->dispose();
 
         // let the base class dispose the inner component
         OComponentProxyAggregationHelper::dispose();

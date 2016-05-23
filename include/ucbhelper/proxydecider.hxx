@@ -127,7 +127,7 @@ public:
               sal_Int32 nPort ) const;
 
 private:
-    proxydecider_impl::InternetProxyDecider_Impl * m_pImpl;
+    css::uno::Reference<proxydecider_impl::InternetProxyDecider_Impl> m_xImpl;
 };
 
 } // namespace ucbhelper

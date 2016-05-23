@@ -40,10 +40,9 @@ static const int defaultScope = 0x80;
 
 OConnection::OConnection(MorkDriver* _pDriver)
     :OSubComponent<OConnection, OConnection_BASE>(static_cast<cppu::OWeakObject*>(_pDriver), this)
-    ,m_pDriver(_pDriver)
+    ,m_xDriver(_pDriver)
     ,m_aColumnAlias( _pDriver->getFactory() )
 {
-    m_pDriver->acquire();
     m_pBook = new MorkParser();
     m_pHistory = new MorkParser();
 }
@@ -52,8 +51,6 @@ OConnection::~OConnection()
 {
     if(!isClosed())
         close();
-    m_pDriver->release();
-    m_pDriver = nullptr;
     delete m_pBook;
     delete m_pHistory;
 }
@@ -112,7 +109,7 @@ void OConnection::construct(const OUString& url,const Sequence< PropertyValue >&
     // production?
     if (unittestIndex == -1)
     {
-        OUString path = m_pDriver->getProfilePath();
+        OUString path = m_xDriver->getProfilePath();
         SAL_INFO("connectivity.mork", "ProfilePath: " << path);
         abook = path + "/abook.mab";
         history = path + "/history.mab";
