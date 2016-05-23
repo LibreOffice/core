@@ -485,7 +485,7 @@ class Dumper_Win32(Dumper):
         or exe files with the same base name next to them."""
         if file.endswith(".pdb"):
             (path,ext) = os.path.splitext(file)
-            if os.path.isfile(path + ".exe") or os.path.isfile(path + ".dll"):
+            if os.path.isfile(path + ".exe") or os.path.isfile(path + ".dll") or os.path.isfile(path + ".bin"):
                 return True
         return False
 
