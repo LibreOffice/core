@@ -268,7 +268,7 @@ RTFError RTFTokenizer::resolveKeyword()
 
 bool RTFTokenizer::lookupMathKeyword(RTFMathSymbol& rSymbol)
 {
-    std::vector<RTFMathSymbol>::iterator low = std::lower_bound(s_aRTFMathControlWords.begin(), s_aRTFMathControlWords.end(), rSymbol);
+    auto low = std::lower_bound(s_aRTFMathControlWords.begin(), s_aRTFMathControlWords.end(), rSymbol);
     int i = low - s_aRTFMathControlWords.begin();
     if (low == s_aRTFMathControlWords.end() || rSymbol < *low)
         return false;
@@ -290,7 +290,7 @@ RTFError RTFTokenizer::dispatchKeyword(OString& rKeyword, bool bParam, int nPara
              "' with param? " << (bParam ? 1 : 0) <<" param val: '" << (bParam ? nParam : 0) << "'");
     RTFSymbol aSymbol;
     aSymbol.sKeyword = rKeyword.getStr();
-    std::vector<RTFSymbol>::iterator low = std::lower_bound(s_aRTFControlWords.begin(), s_aRTFControlWords.end(), aSymbol);
+    auto low = std::lower_bound(s_aRTFControlWords.begin(), s_aRTFControlWords.end(), aSymbol);
     int i = low - s_aRTFControlWords.begin();
     if (low == s_aRTFControlWords.end() || aSymbol < *low)
     {

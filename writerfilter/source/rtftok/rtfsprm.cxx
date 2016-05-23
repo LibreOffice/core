@@ -74,13 +74,13 @@ RTFValue::Pointer_t RTFSprms::find(Id nKeyword, bool bFirst, bool bForWrite)
     if (bForWrite)
         ensureCopyBeforeWrite();
 
-    for (RTFSprms::Iterator_t i = m_pSprms->begin(); i != m_pSprms->end(); ++i)
-        if (i->first == nKeyword)
+    for (auto& rSprm : *m_pSprms)
+        if (rSprm.first == nKeyword)
         {
             if (bFirst)
-                return i->second;
+                return rSprm.second;
             else
-                pValue = i->second;
+                pValue = rSprm.second;
         }
     return pValue;
 }
@@ -91,12 +91,12 @@ void RTFSprms::set(Id nKeyword, RTFValue::Pointer_t pValue, RTFOverwrite eOverwr
     bool bFound = false;
     if (eOverwrite == RTFOverwrite::YES || eOverwrite == RTFOverwrite::NO_IGNORE)
     {
-        for (RTFSprms::Iterator_t i = m_pSprms->begin(); i != m_pSprms->end(); ++i)
-            if (i->first == nKeyword)
+        for (auto& rSprm : *m_pSprms)
+            if (rSprm.first == nKeyword)
             {
                 if (eOverwrite == RTFOverwrite::YES)
                 {
-                    i->second = pValue;
+                    rSprm.second = pValue;
                     return;
                 }
                 else
@@ -113,7 +113,7 @@ void RTFSprms::set(Id nKeyword, RTFValue::Pointer_t pValue, RTFOverwrite eOverwr
 bool RTFSprms::erase(Id nKeyword)
 {
     ensureCopyBeforeWrite();
-    for (RTFSprms::Iterator_t i = m_pSprms->begin(); i != m_pSprms->end(); ++i)
+    for (auto i = m_pSprms->begin(); i != m_pSprms->end(); ++i)
     {
         if (i->first == nKeyword)
         {
@@ -127,7 +127,7 @@ bool RTFSprms::erase(Id nKeyword)
 void RTFSprms::eraseLast(Id nKeyword)
 {
     ensureCopyBeforeWrite();
-    for (RTFSprms::ReverseIterator_t i = m_pSprms->rbegin(); i != m_pSprms->rend(); ++i)
+    for (auto i = m_pSprms->rbegin(); i != m_pSprms->rend(); ++i)
     {
         if (i->first == nKeyword)
         {
@@ -158,42 +158,37 @@ RTFSprms RTFSprms::cloneAndDeduplicate(RTFSprms& rReference) const
 
     // Note: apparently some attributes are set with OVERWRITE_NO_APPEND;
     // it is probably a bad idea to mess with those in any way here?
-    for (RTFSprms::Iterator_t i = rReference.begin(); i != rReference.end(); ++i)
+    for (auto& rSprm : rReference)
     {
-        RTFValue::Pointer_t const pValue(ret.find(i->first));
+        RTFValue::Pointer_t const pValue(ret.find(rSprm.first));
         if (pValue)
         {
-            if (i->second->equals(*pValue))
+            if (rSprm.second->equals(*pValue))
             {
-                ret.erase(i->first); // duplicate to style
+                ret.erase(rSprm.first); // duplicate to style
             }
-            else if (!i->second->getSprms().empty() || !i->second->getAttributes().empty())
+            else if (!rSprm.second->getSprms().empty() || !rSprm.second->getAttributes().empty())
             {
-                RTFSprms const sprms(
-                    pValue->getSprms().cloneAndDeduplicate(i->second->getSprms()));
-                RTFSprms const attributes(
-                    pValue->getAttributes().cloneAndDeduplicate(i->second->getAttributes()));
-                ret.set(i->first, RTFValue::Pointer_t(
-                            pValue->CloneWithSprms(attributes, sprms)));
+                RTFSprms const sprms(pValue->getSprms().cloneAndDeduplicate(rSprm.second->getSprms()));
+                RTFSprms const attributes(pValue->getAttributes().cloneAndDeduplicate(rSprm.second->getAttributes()));
+                ret.set(rSprm.first, RTFValue::Pointer_t(pValue->CloneWithSprms(attributes, sprms)));
             }
         }
         else
         {
             // not found - try to override style with default
-            RTFValue::Pointer_t const pDefault(getDefaultSPRM(i->first));
+            RTFValue::Pointer_t const pDefault(getDefaultSPRM(rSprm.first));
             if (pDefault)
             {
-                ret.set(i->first, pDefault);
+                ret.set(rSprm.first, pDefault);
             }
-            else if (!i->second->getSprms().empty() || !i->second->getAttributes().empty())
+            else if (!rSprm.second->getSprms().empty() || !rSprm.second->getAttributes().empty())
             {
-                RTFSprms const sprms(
-                    RTFSprms().cloneAndDeduplicate(i->second->getSprms()));
-                RTFSprms const attributes(
-                    RTFSprms().cloneAndDeduplicate(i->second->getAttributes()));
+                RTFSprms const sprms(RTFSprms().cloneAndDeduplicate(rSprm.second->getSprms()));
+                RTFSprms const attributes(RTFSprms().cloneAndDeduplicate(rSprm.second->getAttributes()));
                 if (!sprms.empty() || !attributes.empty())
                 {
-                    ret.set(i->first, std::make_shared<RTFValue>(attributes, sprms));
+                    ret.set(rSprm.first, std::make_shared<RTFValue>(attributes, sprms));
                 }
             }
         }
@@ -203,9 +198,8 @@ RTFSprms RTFSprms::cloneAndDeduplicate(RTFSprms& rReference) const
 
 bool RTFSprms::equals(RTFValue& rOther)
 {
-    RTFSprms::Iterator_t i = m_pSprms->begin();
-    while (i != m_pSprms->end())
-        if (!i->second->equals(rOther))
+    for (auto& rSprm : *m_pSprms)
+        if (!rSprm.second->equals(rOther))
             return false;
     return true;
 }
@@ -215,8 +209,8 @@ void RTFSprms::ensureCopyBeforeWrite()
     if (m_pSprms->m_nRefCount > 1)
     {
         boost::intrusive_ptr<RTFSprmsImpl> pClone(new RTFSprmsImpl());
-        for (std::vector< std::pair<Id, RTFValue::Pointer_t> >::const_iterator i = m_pSprms->begin(); i != m_pSprms->end(); ++i)
-            pClone->push_back(std::make_pair(i->first, RTFValue::Pointer_t(i->second->Clone())));
+        for (auto& rSprm : *m_pSprms)
+            pClone->push_back(std::make_pair(rSprm.first, RTFValue::Pointer_t(rSprm.second->Clone())));
         m_pSprms = pClone;
     }
 }
