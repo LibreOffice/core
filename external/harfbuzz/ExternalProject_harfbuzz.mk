@@ -21,7 +21,8 @@ $(eval $(call gb_ExternalProject_use_externals,harfbuzz,\
 
 $(call gb_ExternalProject_get_state_target,harfbuzz,build) :
 	$(call gb_ExternalProject_run,build,\
-		$(if $(CROSS_COMPILING),PATH=$(SRCDIR)/external/icu/cross-bin:$$PATH) \
+		$(if $(CROSS_COMPILING),ICU_CONFIG=$(SRCDIR)/external/icu/cross-bin/icu-config) \
+		$(if $(SYSTEM_ICU),,ICU_CONFIG=$(SRCDIR)/external/icu/cross-bin/icu-config) \
 		./configure \
 			--enable-static \
 			--disable-shared \
