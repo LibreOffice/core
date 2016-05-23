@@ -449,8 +449,8 @@ class SvpOpenGLContext : public OpenGLContext
 {
     GLWindow m_aGLWin;
 private:
-    virtual const GLWindow& getOpenGLWindow() const { return m_aGLWin; }
-    virtual GLWindow& getModifiableOpenGLWindow() { return m_aGLWin; }
+    virtual const GLWindow& getOpenGLWindow() const override { return m_aGLWin; }
+    virtual GLWindow& getModifiableOpenGLWindow() override { return m_aGLWin; }
 };
 
 OpenGLContext* SvpSalInstance::CreateOpenGLContext()
