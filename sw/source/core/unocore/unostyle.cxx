@@ -68,6 +68,7 @@
 #include <GetMetricVal.hxx>
 #include <fmtfsize.hxx>
 #include <numrule.hxx>
+#include <tblafmt.hxx>
 
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -699,6 +700,12 @@ sal_Int32 lcl_GetCountOrName<SfxStyleFamily::Pseudo>(const SwDoc& rDoc, OUString
     return nCount + nPoolNumRange;
 }
 
+template<>
+sal_Int32 lcl_GetCountOrName<SfxStyleFamily::Table>(const SwDoc& rDoc, OUString* /*pString*/, sal_Int32 /*nIndex*/)
+{
+    return rDoc.GetDocShell()->GetDoc()->GetTableStyles().size();
+}
+
 template<SfxStyleFamily eFamily>
 static uno::Reference< css::style::XStyle> lcl_CreateStyle(SfxStyleSheetBasePool* pBasePool, SwDocShell* pDocShell, const OUString& sStyleName)
     { return pBasePool ? new SwXStyle(pBasePool, eFamily, pDocShell->GetDoc(), sStyleName) : new SwXStyle(pDocShell->GetDoc(), eFamily, false); };
@@ -757,6 +764,12 @@ sal_uInt16 lcl_TranslateIndex<SfxStyleFamily::Para>(const sal_uInt16 nIndex)
     else if(nIndex < nPoolCollHtmlStackedStart + nPoolCollTextRange)
         return nIndex + RES_POOLCOLL_HTML_BEGIN - nPoolCollHtmlStackedStart;
     throw lang::IndexOutOfBoundsException();
+}
+
+template<>
+sal_uInt16 lcl_TranslateIndex<SfxStyleFamily::Table>(const sal_uInt16 nIndex)
+{
+    return nIndex;
 }
 
 template<sal_uInt16 nRangeBegin, sal_uInt16 nRangeSize>
@@ -953,7 +966,8 @@ static const std::vector<StyleFamilyEntry>* lcl_GetStyleFamilyEntries()
             { SfxStyleFamily::Para,   PROPERTY_MAP_PARA_STYLE,  nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL,  "ParagraphStyles", STR_STYLE_FAMILY_PARAGRAPH, &lcl_GetCountOrName<SfxStyleFamily::Para>,   &lcl_CreateStyle<SfxStyleFamily::Para>,   &lcl_TranslateIndex<SfxStyleFamily::Para>                       },
             { SfxStyleFamily::Page,   PROPERTY_MAP_PAGE_STYLE,  nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC, "PageStyles",      STR_STYLE_FAMILY_PAGE,      &lcl_GetCountOrName<SfxStyleFamily::Page>,   &lcl_CreateStyle<SfxStyleFamily::Page>,   &lcl_TranslateIndexRange<RES_POOLPAGE_BEGIN,    nPoolPageRange>  },
             { SfxStyleFamily::Frame,  PROPERTY_MAP_FRAME_STYLE, nsSwGetPoolIdFromName::GET_POOLID_FRMFMT,   "FrameStyles",     STR_STYLE_FAMILY_FRAME,     &lcl_GetCountOrName<SfxStyleFamily::Frame>,  &lcl_CreateStyle<SfxStyleFamily::Frame>,  &lcl_TranslateIndexRange<RES_POOLFRM_BEGIN,     nPoolFrameRange> },
-            { SfxStyleFamily::Pseudo, PROPERTY_MAP_NUM_STYLE,   nsSwGetPoolIdFromName::GET_POOLID_NUMRULE,  "NumberingStyles", STR_STYLE_FAMILY_NUMBERING, &lcl_GetCountOrName<SfxStyleFamily::Pseudo>, &lcl_CreateStyle<SfxStyleFamily::Pseudo>, &lcl_TranslateIndexRange<RES_POOLNUMRULE_BEGIN, nPoolNumRange>   }
+            { SfxStyleFamily::Pseudo, PROPERTY_MAP_NUM_STYLE,   nsSwGetPoolIdFromName::GET_POOLID_NUMRULE,  "NumberingStyles", STR_STYLE_FAMILY_NUMBERING, &lcl_GetCountOrName<SfxStyleFamily::Pseudo>, &lcl_CreateStyle<SfxStyleFamily::Pseudo>, &lcl_TranslateIndexRange<RES_POOLNUMRULE_BEGIN, nPoolNumRange>   },
+            { SfxStyleFamily::Table,  PROPERTY_MAP_TABLE_STYLE, nsSwGetPoolIdFromName::GET_POOLID_TABSTYLE, "TableStyles",     STR_STYLE_FAMILY_TABLE,     &lcl_GetCountOrName<SfxStyleFamily::Table>,  &lcl_CreateStyle<SfxStyleFamily::Table>,  &lcl_TranslateIndex<SfxStyleFamily::Table>                       }
        };
     }
     return our_pStyleFamilyEntries;

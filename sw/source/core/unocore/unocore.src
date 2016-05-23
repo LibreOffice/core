@@ -54,4 +54,9 @@ String STR_STYLE_FAMILY_NUMBERING
     Text [ en-US ] = "Numbering" ;
 };
 
+String STR_STYLE_FAMILY_TABLE
+{
+    Text [ en-US ] = "Table" ;
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
