@@ -43,8 +43,8 @@ void CrashReporter::writeCommonInfo()
     std::string ini_path = CrashReporter::getIniFileName();
     std::ofstream minidump_file(ini_path, std::ios_base::trunc);
     minidump_file << "ProductName=LibreOffice\n";
-    minidump_file << "Version=" << LIBO_VERSION_DOTTED << "\n";
-    minidump_file << "URL=" << "http://127.0.0.1:8000/submit" << "\n";
+    minidump_file << "Version=" LIBO_VERSION_DOTTED "\n";
+    minidump_file << "URL=http://crashreport.libreoffice.org/submit\n";
     minidump_file.close();
 
     updateMinidumpLocation();
