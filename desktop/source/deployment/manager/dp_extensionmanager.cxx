@@ -40,9 +40,12 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <xmlscript/xml_helper.hxx>
 #include <osl/diagnose.h>
+#include <svtools/restartdialog.hxx>
+#include <vcl/svapp.hxx>
 #include "dp_interact.h"
 #include "dp_resource.h"
 #include "dp_ucb.h"
@@ -1493,6 +1496,9 @@ void ExtensionManager::fireModified()
             [this] (uno::Reference<util::XModifyListener> const& xListener)
                 { return xListener->modified(lang::EventObject(static_cast<OWeakObject *>(this))); });
     }
+
+    SolarMutexGuard aGuard;
+    ::svtools::executeRestartDialog(comphelper::getProcessComponentContext(), nullptr, svtools::RESTART_REASON_EXTENSION_INSTALL);
 }
 
 } // namespace dp_manager

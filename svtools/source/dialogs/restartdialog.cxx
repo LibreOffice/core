@@ -58,6 +58,9 @@ public:
         case svtools::RESTART_REASON_EXP_FEATURES:
             get(reason_,"reason_exp_features");
             break;
+        case svtools::RESTART_REASON_EXTENSION_INSTALL:
+            get(reason_, "reason_extension_install");
+            break;
         default:
             assert(false); // this cannot happen
         }
