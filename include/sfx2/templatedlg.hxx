@@ -49,10 +49,13 @@ public:
 
     virtual ~SfxTemplateManagerDlg();
     virtual void dispose() override;
+    virtual short Execute() override;
 
     void setDocumentModel (const css::uno::Reference<css::frame::XModel> &rModel);
 
 private:
+
+    void getApplicationSpecificSettings();
 
     void readSettings ();
 

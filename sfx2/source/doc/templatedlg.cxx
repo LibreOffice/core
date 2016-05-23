@@ -291,8 +291,6 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg(vcl::Window *parent)
     mpCBApp->SetSelectHdl(LINK(this, SfxTemplateManagerDlg, SelectApplicationHdl));
     mpCBFolder->SetSelectHdl(LINK(this, SfxTemplateManagerDlg, SelectRegionHdl));
 
-    readSettings();
-
     mpLocalView->Show();
 }
 
@@ -339,6 +337,15 @@ void SfxTemplateManagerDlg::dispose()
     ModalDialog::dispose();
 }
 
+short SfxTemplateManagerDlg::Execute()
+{
+    //use application specific settings if there's no previous setting
+    getApplicationSpecificSettings();
+    readSettings();
+
+    return ModalDialog::Execute();
+}
+
 void SfxTemplateManagerDlg::setDocumentModel(const uno::Reference<frame::XModel> &rModel)
 {
     m_xModel = rModel;
@@ -373,6 +380,45 @@ void SfxTemplateManagerDlg::fillFolderComboBox()
     mpLocalView->ShowTooltips(true);
 }
 
+void SfxTemplateManagerDlg::getApplicationSpecificSettings()
+{
+    if ( ! m_xModel.is() )
+    {
+        mpCBApp->SelectEntryPos(0);
+        mpCBFolder->SelectEntryPos(0);
+        mpCurView->filterItems(ViewFilter_Application(getCurrentApplicationFilter()));
+        mpLocalView->showAllTemplates();
+        return;
+    }
+
+    SvtModuleOptions::EFactory eFactory = SvtModuleOptions::ClassifyFactoryByModel(m_xModel);
+
+    switch(eFactory)
+    {
+        case SvtModuleOptions::EFactory::WRITER:
+        case SvtModuleOptions::EFactory::WRITERWEB:
+        case SvtModuleOptions::EFactory::WRITERGLOBAL:
+                            mpCBApp->SelectEntryPos(MNI_WRITER);
+                            break;
+        case SvtModuleOptions::EFactory::CALC:
+                            mpCBApp->SelectEntryPos(MNI_CALC);
+                            break;
+        case SvtModuleOptions::EFactory::IMPRESS:
+                            mpCBApp->SelectEntryPos(MNI_IMPRESS);
+                            break;
+        case SvtModuleOptions::EFactory::DRAW:
+                            mpCBApp->SelectEntryPos(MNI_DRAW);
+                            break;
+        default:
+                mpCBApp->SelectEntryPos(0);
+                break;
+    }
+
+    mpCurView->filterItems(ViewFilter_Application(getCurrentApplicationFilter()));
+    mpCBFolder->SelectEntryPos(0);
+    mpLocalView->showAllTemplates();
+}
+
 void SfxTemplateManagerDlg::readSettings ()
 {
     OUString aLastFolder;
@@ -383,22 +429,28 @@ void SfxTemplateManagerDlg::readSettings ()
         sal_uInt16 nTmp = 0;
         aViewSettings.GetUserItem(TM_SETTING_LASTFOLDER) >>= aLastFolder;
         aViewSettings.GetUserItem(TM_SETTING_LASTAPPLICATION) >>= nTmp;
-        switch (nTmp)
+
+        //open last remembered application only when application model is not set
+        if(!m_xModel.is())
         {
-            case MNI_WRITER:
-                mpCBApp->SelectEntryPos(MNI_WRITER);
-                break;
-            case MNI_CALC:
-                mpCBApp->SelectEntryPos(MNI_CALC);
-                break;
-            case MNI_IMPRESS:
-                mpCBApp->SelectEntryPos(MNI_IMPRESS);
-                break;
-            case MNI_DRAW:
-                mpCBApp->SelectEntryPos(MNI_DRAW);
-                break;
-            default:
-                mpCBApp->SelectEntryPos(0);
+            switch (nTmp)
+            {
+                case MNI_WRITER:
+                    mpCBApp->SelectEntryPos(MNI_WRITER);
+                    break;
+                case MNI_CALC:
+                    mpCBApp->SelectEntryPos(MNI_CALC);
+                    break;
+                case MNI_IMPRESS:
+                    mpCBApp->SelectEntryPos(MNI_IMPRESS);
+                    break;
+                case MNI_DRAW:
+                    mpCBApp->SelectEntryPos(MNI_DRAW);
+                    break;
+                default:
+                    mpCBApp->SelectEntryPos(0);
+                    break;
+            }
         }
     }
 
