@@ -60,7 +60,11 @@ OUString getCrashUserProfileDirectory()
     rtl::Bootstrap::expandMacros(url);
     osl::Directory::create(url);
 
-    return url;
++#if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID
++    return url.copy(7);
++#elif defined WNT
++    return url.copy(8);
++#endif
 }
 
 }
