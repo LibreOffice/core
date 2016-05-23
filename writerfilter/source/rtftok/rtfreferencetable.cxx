@@ -23,8 +23,8 @@ RTFReferenceTable::~RTFReferenceTable() = default;
 
 void RTFReferenceTable::resolve(Table& rHandler)
 {
-    for (Entries_t::const_iterator i = m_aEntries.begin(); i != m_aEntries.end(); ++i)
-        rHandler.entry(i->first, i->second);
+    for (auto& rEntry : m_aEntries)
+        rHandler.entry(rEntry.first, rEntry.second);
 }
 
 } // namespace rtftok
