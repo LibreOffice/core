@@ -1533,10 +1533,12 @@ IMPL_LINK_NOARG_TYPED(SfxTemplateCategoryDialog, SelectCategoryHdl, ListBox&, vo
     {
         msSelectedCategory = OUString();
         mpOKButton->Disable();
+        mpNewCategoryEdit->Enable();
     }
     else
     {
         msSelectedCategory = mpLBCategory->GetSelectEntry();
+        mpNewCategoryEdit->Disable();
         mpOKButton->Enable();
     }
 
