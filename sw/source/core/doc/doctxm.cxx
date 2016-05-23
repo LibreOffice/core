@@ -616,8 +616,7 @@ OUString SwDoc::GetUniqueTOXBaseName( const SwTOXType& rType,
 
     SwSectionFormats::size_type nNum = 0;
     const SwSectionFormats::size_type nFlagSize = ( mpSectionFormatTable->size() / 8 ) +2;
-    sal_uInt8* pSetFlags = new sal_uInt8[ nFlagSize ];
-    memset( pSetFlags, 0, nFlagSize );
+    sal_uInt8 pSetFlags[nFlagSize] = { };
 
     for( auto pSectionFormat : *mpSectionFormatTable )
     {
@@ -661,7 +660,6 @@ OUString SwDoc::GetUniqueTOXBaseName( const SwTOXType& rType,
             }
         }
     }
-    delete [] pSetFlags;
     if ( bUseChkStr )
         return sChkStr;
     return aName + OUString::number( ++nNum );
