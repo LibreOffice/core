@@ -1601,10 +1601,12 @@ IMPL_LINK_NOARG_TYPED(SfxTemplateCategoryDialog, SelectCategoryHdl, ListBox&, vo
     {
         msSelectedCategory = OUString();
         mpOKButton->Disable();
+        mpNewCategoryEdit->Enable();
     }
     else
     {
         msSelectedCategory = mpLBCategory->GetSelectEntry();
+        mpNewCategoryEdit->Disable();
         mpOKButton->Enable();
     }
 
@@ -1613,7 +1615,6 @@ IMPL_LINK_NOARG_TYPED(SfxTemplateCategoryDialog, SelectCategoryHdl, ListBox&, vo
 
 void SfxTemplateCategoryDialog::SetCategoryLBEntries(std::vector<OUString> aFolderNames)
 {
-    mpLBCategory->InsertEntry(OUString("None"), 0);
     if (!aFolderNames.empty())
     {
         for (size_t i = 0, n = aFolderNames.size(); i < n; ++i)
