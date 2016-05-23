@@ -263,6 +263,10 @@
 #define STR_COLUMN_VALUESET_ITEM3       (RC_POOLNUMRULE_BEGIN + 13 )
 #define STR_COLUMN_VALUESET_ITEM4       (RC_POOLNUMRULE_BEGIN + 14 )
 
+// Table styles
+
+#define STR_TABSTYLE_DEFAULT            (RC_POOLTABSTYLE_BEGIN+  0)
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
