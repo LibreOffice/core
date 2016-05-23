@@ -102,12 +102,12 @@ namespace connectivity
 
     namespace
     {
-        typedef enum
+        enum class T_DRIVERTYPE
         {
-            D_ODBC,
-            D_JDBC,
-            D_NATIVE
-        } T_DRIVERTYPE;
+            Odbc,
+            Jdbc,
+            Native
+        };
 
         bool isOdbcUrl(const OUString& _sUrl)
         {
@@ -121,11 +121,11 @@ namespace connectivity
 
         T_DRIVERTYPE lcl_getDriverType(const OUString& _sUrl)
         {
-            T_DRIVERTYPE eRet = D_JDBC;
+            T_DRIVERTYPE eRet = T_DRIVERTYPE::Jdbc;
             if ( isOdbcUrl(_sUrl ) )
-                eRet = D_ODBC;
+                eRet = T_DRIVERTYPE::Odbc;
             else if ( isNativeUrl(_sUrl ) )
-                eRet = D_NATIVE;
+                eRet = T_DRIVERTYPE::Native;
             return eRet;
         }
 
@@ -167,7 +167,7 @@ namespace connectivity
                 }
             }
 
-            if ( _eType == D_ODBC )
+            if ( _eType == T_DRIVERTYPE::Odbc )
             {
                 aProps.push_back( PropertyValue(
                                     OUString("Silent")
@@ -180,7 +180,7 @@ namespace connectivity
                                     ,makeAny(true)
                                     ,PropertyState_DIRECT_VALUE) );
             }
-            else if ( _eType == D_JDBC )
+            else if ( _eType == T_DRIVERTYPE::Jdbc )
             {
                 if (!jdc)
                 {
@@ -223,13 +223,13 @@ namespace connectivity
         Reference< XDriver > xDriver;
         const OUString sCuttedUrl = transformUrl(url);
         const T_DRIVERTYPE eType = lcl_getDriverType( url );
-        if ( eType == D_ODBC )
+        if ( eType == T_DRIVERTYPE::Odbc )
         {
             if ( !m_xODBCDriver.is() )
                 m_xODBCDriver = lcl_loadDriver(m_xContext,sCuttedUrl);
             xDriver = m_xODBCDriver;
         } // if ( bIsODBC )
-        else if ( eType == D_NATIVE )
+        else if ( eType == T_DRIVERTYPE::Native )
         {
             if ( !m_xNativeDriver.is() )
                 m_xNativeDriver = lcl_loadDriver(m_xContext,sCuttedUrl);
@@ -260,7 +260,7 @@ namespace connectivity
                 OUString sCuttedUrl = transformUrl(url);
                 const T_DRIVERTYPE eType = lcl_getDriverType( url );
                 Sequence< PropertyValue > aConvertedProperties = lcl_convertProperties(eType,info,url);
-                if ( eType == D_JDBC )
+                if ( eType == T_DRIVERTYPE::Jdbc )
                 {
                     ::comphelper::NamedValueCollection aSettings( info );
                     OUString sIanaName = aSettings.getOrDefault( "CharSet", OUString() );
@@ -349,7 +349,7 @@ namespace connectivity
                 ,aBoolean)
                 );
         const T_DRIVERTYPE eType = lcl_getDriverType( url );
-        if ( eType == D_JDBC )
+        if ( eType == T_DRIVERTYPE::Jdbc )
         {
             aDriverInfo.push_back(DriverPropertyInfo(
                     OUString("JavaDriverClass")
@@ -359,7 +359,7 @@ namespace connectivity
                     ,Sequence< OUString >())
                     );
         }
-        else if ( eType == D_NATIVE )
+        else if ( eType == T_DRIVERTYPE::Native )
         {
             aDriverInfo.push_back(DriverPropertyInfo(
                     OUString("LocalSocket")
