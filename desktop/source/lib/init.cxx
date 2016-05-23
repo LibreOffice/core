@@ -32,8 +32,8 @@
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
-#include <comphelper/scopeguard.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/scopeguard.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -897,7 +897,7 @@ static int doc_saveAs(LibreOfficeKitDocument* pThis, const char* sUrl, const cha
         if (aFilterOptions == "TakeOwnership")
         {
             bTakeOwnership = true;
-            aFilterOptions = "";
+            aFilterOptions.clear();
         }
         else if ((nIndex = aFilterOptions.indexOf(",TakeOwnership")) >= 0 || (nIndex = aFilterOptions.indexOf("TakeOwnership,")) >= 0)
         {
@@ -912,7 +912,7 @@ static int doc_saveAs(LibreOfficeKitDocument* pThis, const char* sUrl, const cha
         }
 
         MediaDescriptor aSaveMediaDescriptor;
-        aSaveMediaDescriptor["Overwrite"] <<= sal_True;
+        aSaveMediaDescriptor["Overwrite"] <<= true;
         aSaveMediaDescriptor["FilterName"] <<= aFilterName;
         aSaveMediaDescriptor[MediaDescriptor::PROP_FILTEROPTIONS()] <<= aFilterOptions;
 
@@ -1038,11 +1038,11 @@ static void doc_iniUnoCommands ()
     SfxSlotPool& rSlotPool = SfxSlotPool::GetSlotPool(pViewFrame);
     uno::Reference<util::XURLTransformer> xParser(util::URLTransformer::create(xContext));
 
-    for (sal_uInt32 nIterator = 0; nIterator < SAL_N_ELEMENTS(sUnoCommands); nIterator++)
+    for (const auto & sUnoCommand : sUnoCommands)
     {
         const SfxSlot* pSlot = nullptr;
 
-        aCommandURL.Complete = sUnoCommands[nIterator];
+        aCommandURL.Complete = sUnoCommand;
         xParser->parseStrict(aCommandURL);
         pSlot = rSlotPool.GetUnoSlot(aCommandURL.Path);
 
@@ -2340,7 +2340,7 @@ LibreOfficeKit *libreofficekit_hook(const char* install_path)
 SAL_JNI_EXPORT
 int lok_preinit(const char* install_path, const char* user_profile_path)
 {
-    return lo_initialize(NULL, install_path, user_profile_path);
+    return lo_initialize(nullptr, install_path, user_profile_path);
 }
 
 static void lo_destroy(LibreOfficeKit* pThis)
