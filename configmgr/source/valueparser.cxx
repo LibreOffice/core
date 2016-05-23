@@ -265,13 +265,13 @@ xmlreader::XmlReader::Text ValueParser::getTextMode() const {
             return
                 (type_ == TYPE_STRING || type_ == TYPE_STRING_LIST ||
                  !separator_.isEmpty())
-                ? xmlreader::XmlReader::TEXT_RAW
-                : xmlreader::XmlReader::TEXT_NORMALIZED;
+                ? xmlreader::XmlReader::Text::Raw
+                : xmlreader::XmlReader::Text::Normalized;
         default:
             break;
         }
     }
-    return xmlreader::XmlReader::TEXT_NONE;
+    return xmlreader::XmlReader::Text::NONE;
 }
 
 bool ValueParser::startElement(

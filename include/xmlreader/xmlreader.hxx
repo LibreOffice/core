@@ -46,7 +46,7 @@ public:
 
     enum { NAMESPACE_NONE = -2, NAMESPACE_UNKNOWN = -1, NAMESPACE_XML = 0 };
 
-    enum Text { TEXT_NONE, TEXT_RAW, TEXT_NORMALIZED };
+    enum class Text { NONE, Raw, Normalized };
 
     enum Result { RESULT_BEGIN, RESULT_END, RESULT_TEXT, RESULT_DONE };
 

@@ -38,7 +38,7 @@ static inline void lcl_assertEndingItem(xmlreader::XmlReader& reader)
     int nsId;
     xmlreader::Span name;
     xmlreader::XmlReader::Result res;
-    res = reader.nextItem(xmlreader::XmlReader::TEXT_NONE, &name, &nsId);
+    res = reader.nextItem(xmlreader::XmlReader::Text::NONE, &name, &nsId);
     assert(res == xmlreader::XmlReader::RESULT_END);
     (void) res;
 }
@@ -49,9 +49,9 @@ static inline OUString lcl_getValue(xmlreader::XmlReader& reader,
     int nsId;
     xmlreader::Span name;
     xmlreader::XmlReader::Result res;
-    res = reader.nextItem(xmlreader::XmlReader::TEXT_NONE, &name, &nsId);
+    res = reader.nextItem(xmlreader::XmlReader::Text::NONE, &name, &nsId);
     assert(res == xmlreader::XmlReader::RESULT_BEGIN && name.equals(span));
-    res = reader.nextItem(xmlreader::XmlReader::TEXT_RAW, &name, &nsId);
+    res = reader.nextItem(xmlreader::XmlReader::Text::Raw, &name, &nsId);
     assert(res == xmlreader::XmlReader::RESULT_TEXT);
     (void) res; (void) span;
     OUString sTmp = name.convertFromUtf8();
@@ -86,12 +86,12 @@ SwLabelConfig::SwLabelConfig() :
 
     // fill m_aLabels and m_aManufacturers with the predefined labels
     res = reader.nextItem(
-            xmlreader::XmlReader::TEXT_NONE, &name, &nsId);
+            xmlreader::XmlReader::Text::NONE, &name, &nsId);
     assert(
         res == xmlreader::XmlReader::RESULT_BEGIN
         && name.equals("manufacturers"));
     res = reader.nextItem(
-            xmlreader::XmlReader::TEXT_NONE, &name, &nsId);
+            xmlreader::XmlReader::Text::NONE, &name, &nsId);
     while (res != xmlreader::XmlReader::RESULT_END)
     {
         // Opening manufacturer
@@ -108,7 +108,7 @@ SwLabelConfig::SwLabelConfig() :
         for(;;) {
             // Opening label or ending manufacturer
             res = reader.nextItem(
-                    xmlreader::XmlReader::TEXT_NONE, &name, &nsId);
+                    xmlreader::XmlReader::Text::NONE, &name, &nsId);
             if (res == xmlreader::XmlReader::RESULT_END)
                 break;
             assert(
@@ -127,10 +127,10 @@ SwLabelConfig::SwLabelConfig() :
         }
         // Get next manufacturer or end
         res = reader.nextItem(
-                xmlreader::XmlReader::TEXT_NONE, &name, &nsId);
+                xmlreader::XmlReader::Text::NONE, &name, &nsId);
     };
     res = reader.nextItem(
-            xmlreader::XmlReader::TEXT_NONE, &name, &nsId);
+            xmlreader::XmlReader::Text::NONE, &name, &nsId);
     assert(res == xmlreader::XmlReader::RESULT_DONE);
 
     // add to m_aLabels and m_aManufacturers the custom labels

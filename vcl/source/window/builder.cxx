@@ -546,7 +546,7 @@ void VclBuilder::handleTranslations(xmlreader::XmlReader &reader)
     while(true)
     {
         xmlreader::XmlReader::Result res = reader.nextItem(
-            xmlreader::XmlReader::TEXT_RAW, &name, &nsId);
+            xmlreader::XmlReader::Text::Raw, &name, &nsId);
 
         if (res == xmlreader::XmlReader::RESULT_BEGIN)
         {
@@ -1900,7 +1900,7 @@ void VclBuilder::handleTabChild(vcl::Window *pParent, xmlreader::XmlReader &read
         int nsId;
 
         xmlreader::XmlReader::Result res = reader.nextItem(
-            xmlreader::XmlReader::TEXT_NONE, &name, &nsId);
+            xmlreader::XmlReader::Text::NONE, &name, &nsId);
 
         if (res == xmlreader::XmlReader::RESULT_BEGIN)
         {
@@ -2052,7 +2052,7 @@ void VclBuilder::handleChild(vcl::Window *pParent, xmlreader::XmlReader &reader)
     while(true)
     {
         xmlreader::XmlReader::Result res = reader.nextItem(
-            xmlreader::XmlReader::TEXT_NONE, &name, &nsId);
+            xmlreader::XmlReader::Text::NONE, &name, &nsId);
 
         if (res == xmlreader::XmlReader::RESULT_BEGIN)
         {
@@ -2234,7 +2234,7 @@ void VclBuilder::handleRow(xmlreader::XmlReader &reader, const OString &rID, sal
         int nsId;
 
         xmlreader::XmlReader::Result res = reader.nextItem(
-            xmlreader::XmlReader::TEXT_NONE, &name, &nsId);
+            xmlreader::XmlReader::Text::NONE, &name, &nsId);
 
         if (res == xmlreader::XmlReader::RESULT_DONE)
             break;
@@ -2263,7 +2263,7 @@ void VclBuilder::handleRow(xmlreader::XmlReader &reader, const OString &rID, sal
                 }
 
                 reader.nextItem(
-                    xmlreader::XmlReader::TEXT_RAW, &name, &nsId);
+                    xmlreader::XmlReader::Text::Raw, &name, &nsId);
 
                 if (!bTranslated)
                     sValue = OString(name.begin, name.length);
@@ -2297,7 +2297,7 @@ void VclBuilder::handleListStore(xmlreader::XmlReader &reader, const OString &rI
         int nsId;
 
         xmlreader::XmlReader::Result res = reader.nextItem(
-            xmlreader::XmlReader::TEXT_NONE, &name, &nsId);
+            xmlreader::XmlReader::Text::NONE, &name, &nsId);
 
         if (res == xmlreader::XmlReader::RESULT_DONE)
             break;
@@ -2334,7 +2334,7 @@ void VclBuilder::handleAtkObject(xmlreader::XmlReader &reader, const OString &rI
         int nsId;
 
         xmlreader::XmlReader::Result res = reader.nextItem(
-            xmlreader::XmlReader::TEXT_NONE, &name, &nsId);
+            xmlreader::XmlReader::Text::NONE, &name, &nsId);
 
         if (res == xmlreader::XmlReader::RESULT_DONE)
             break;
@@ -2380,7 +2380,7 @@ std::vector<OString> VclBuilder::handleItems(xmlreader::XmlReader &reader, const
         int nsId;
 
         xmlreader::XmlReader::Result res = reader.nextItem(
-            xmlreader::XmlReader::TEXT_NONE, &name, &nsId);
+            xmlreader::XmlReader::Text::NONE, &name, &nsId);
 
         if (res == xmlreader::XmlReader::RESULT_DONE)
             break;
@@ -2403,7 +2403,7 @@ std::vector<OString> VclBuilder::handleItems(xmlreader::XmlReader &reader, const
                 }
 
                 reader.nextItem(
-                    xmlreader::XmlReader::TEXT_RAW, &name, &nsId);
+                    xmlreader::XmlReader::Text::Raw, &name, &nsId);
 
                 if (!bTranslated)
                     sValue = OString(name.begin, name.length);
@@ -2445,7 +2445,7 @@ void VclBuilder::handleMenu(xmlreader::XmlReader &reader, const OString &rID)
         int nsId;
 
         xmlreader::XmlReader::Result res = reader.nextItem(
-            xmlreader::XmlReader::TEXT_NONE, &name, &nsId);
+            xmlreader::XmlReader::Text::NONE, &name, &nsId);
 
         if (res == xmlreader::XmlReader::RESULT_DONE)
             break;
@@ -2485,7 +2485,7 @@ void VclBuilder::handleMenuChild(PopupMenu *pParent, xmlreader::XmlReader &reade
     while(true)
     {
         xmlreader::XmlReader::Result res = reader.nextItem(
-            xmlreader::XmlReader::TEXT_NONE, &name, &nsId);
+            xmlreader::XmlReader::Text::NONE, &name, &nsId);
 
         if (res == xmlreader::XmlReader::RESULT_BEGIN)
         {
@@ -2547,7 +2547,7 @@ void VclBuilder::handleMenuObject(PopupMenu *pParent, xmlreader::XmlReader &read
     while(true)
     {
         xmlreader::XmlReader::Result res = reader.nextItem(
-            xmlreader::XmlReader::TEXT_NONE, &name, &nsId);
+            xmlreader::XmlReader::Text::NONE, &name, &nsId);
 
         if (res == xmlreader::XmlReader::RESULT_DONE)
             break;
@@ -2586,7 +2586,7 @@ void VclBuilder::handleSizeGroup(xmlreader::XmlReader &reader, const OString &rI
         int nsId;
 
         xmlreader::XmlReader::Result res = reader.nextItem(
-            xmlreader::XmlReader::TEXT_NONE, &name, &nsId);
+            xmlreader::XmlReader::Text::NONE, &name, &nsId);
 
         if (res == xmlreader::XmlReader::RESULT_DONE)
             break;
@@ -2799,7 +2799,7 @@ VclPtr<vcl::Window> VclBuilder::handleObject(vcl::Window *pParent, xmlreader::Xm
     while(true)
     {
         xmlreader::XmlReader::Result res = reader.nextItem(
-            xmlreader::XmlReader::TEXT_NONE, &name, &nsId);
+            xmlreader::XmlReader::Text::NONE, &name, &nsId);
 
         if (res == xmlreader::XmlReader::RESULT_DONE)
             break;
@@ -2877,7 +2877,7 @@ void VclBuilder::handlePacking(vcl::Window *pCurrent, vcl::Window *pParent, xmlr
     while(true)
     {
         xmlreader::XmlReader::Result res = reader.nextItem(
-            xmlreader::XmlReader::TEXT_NONE, &name, &nsId);
+            xmlreader::XmlReader::Text::NONE, &name, &nsId);
 
         if (res == xmlreader::XmlReader::RESULT_DONE)
             break;
@@ -2933,7 +2933,7 @@ void VclBuilder::applyPackingProperty(vcl::Window *pCurrent,
             OString sKey(name.begin, name.length);
             sKey = sKey.replace('_', '-');
             reader.nextItem(
-                xmlreader::XmlReader::TEXT_RAW, &name, &nsId);
+                xmlreader::XmlReader::Text::Raw, &name, &nsId);
             OString sValue(name.begin, name.length);
 
             if (sKey == "expand")
@@ -3041,7 +3041,7 @@ void VclBuilder::collectProperty(xmlreader::XmlReader &reader, const OString &rI
 
     }
 
-    reader.nextItem(xmlreader::XmlReader::TEXT_RAW, &name, &nsId);
+    reader.nextItem(xmlreader::XmlReader::Text::Raw, &name, &nsId);
     if (!bTranslated)
         sValue = OString(name.begin, name.length);
 
@@ -3076,7 +3076,7 @@ void VclBuilder::handleActionWidget(xmlreader::XmlReader &reader)
         }
     }
 
-    reader.nextItem(xmlreader::XmlReader::TEXT_RAW, &name, &nsId);
+    reader.nextItem(xmlreader::XmlReader::Text::Raw, &name, &nsId);
     OString sID = OString(name.begin, name.length);
     sal_Int32 nDelim = sID.indexOf(':');
     if (nDelim != -1)
