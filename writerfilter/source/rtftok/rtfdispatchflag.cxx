@@ -917,8 +917,8 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         }
         m_aStates.top().aDrawingObject.xPropertySet.set(m_aStates.top().aDrawingObject.xShape, uno::UNO_QUERY);
         std::vector<beans::PropertyValue>& rPendingProperties = m_aStates.top().aDrawingObject.aPendingProperties;
-        for (std::vector<beans::PropertyValue>::iterator i = rPendingProperties.begin(); i != rPendingProperties.end(); ++i)
-            m_aStates.top().aDrawingObject.xPropertySet->setPropertyValue(i->Name, i->Value);
+        for (auto& rPendingProperty : rPendingProperties)
+            m_aStates.top().aDrawingObject.xPropertySet->setPropertyValue(rPendingProperty.Name, rPendingProperty.Value);
         m_pSdrImport->resolveDhgt(m_aStates.top().aDrawingObject.xPropertySet, m_aStates.top().aDrawingObject.nDhgt, /*bOldStyle=*/true);
     }
     break;

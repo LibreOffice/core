@@ -30,11 +30,11 @@ RTFReferenceProperties::~RTFReferenceProperties() = default;
 
 void RTFReferenceProperties::resolve(Properties& rHandler)
 {
-    for (RTFSprms::Iterator_t i = m_aAttributes.begin(); i != m_aAttributes.end(); ++i)
-        rHandler.attribute(i->first, *i->second.get());
-    for (RTFSprms::Iterator_t i = m_aSprms.begin(); i != m_aSprms.end(); ++i)
+    for (auto& rAttribute : m_aAttributes)
+        rHandler.attribute(rAttribute.first, *rAttribute.second.get());
+    for (auto& rSprm : m_aSprms)
     {
-        RTFSprm aSprm(i->first, i->second);
+        RTFSprm aSprm(rSprm.first, rSprm.second);
         rHandler.sprm(aSprm);
     }
 }

@@ -419,27 +419,27 @@ void RTFDocumentImpl::setNeedSect(bool bNeedSect)
 /// Copy rProps to rStyleAttributes and rStyleSprms, but in case of nested sprms, copy their children as toplevel sprms/attributes.
 static void lcl_copyFlatten(RTFReferenceProperties& rProps, RTFSprms& rStyleAttributes, RTFSprms& rStyleSprms)
 {
-    for (RTFSprms::Iterator_t it = rProps.getSprms().begin(); it != rProps.getSprms().end(); ++it)
+    for (auto& rSprm : rProps.getSprms())
     {
         // createStyleProperties() puts properties to rPr, but here we need a flat list.
-        if (it->first == NS_ooxml::LN_CT_Style_rPr)
+        if (rSprm.first == NS_ooxml::LN_CT_Style_rPr)
         {
             // rPr can have both attributes and SPRMs, copy over both types.
-            RTFSprms& rRPrSprms = it->second->getSprms();
-            for (RTFSprms::Iterator_t itRPrSprm = rRPrSprms.begin(); itRPrSprm != rRPrSprms.end(); ++itRPrSprm)
-                rStyleSprms.set(itRPrSprm->first, itRPrSprm->second);
+            RTFSprms& rRPrSprms = rSprm.second->getSprms();
+            for (auto& rRPrSprm : rRPrSprms)
+                rStyleSprms.set(rRPrSprm.first, rRPrSprm.second);
 
-            RTFSprms& rRPrAttributes = it->second->getAttributes();
-            for (RTFSprms::Iterator_t itRPrAttribute = rRPrAttributes.begin(); itRPrAttribute != rRPrAttributes.end(); ++itRPrAttribute)
-                rStyleAttributes.set(itRPrAttribute->first, itRPrAttribute->second);
+            RTFSprms& rRPrAttributes = rSprm.second->getAttributes();
+            for (auto& rRPrAttribute : rRPrAttributes)
+                rStyleAttributes.set(rRPrAttribute.first, rRPrAttribute.second);
         }
         else
-            rStyleSprms.set(it->first, it->second);
+            rStyleSprms.set(rSprm.first, rSprm.second);
     }
 
     RTFSprms& rAttributes = rProps.getAttributes();
-    for (RTFSprms::Iterator_t itAttr = rAttributes.begin(); itAttr != rAttributes.end(); ++itAttr)
-        rStyleAttributes.set(itAttr->first, itAttr->second);
+    for (auto& rAttribute : rAttributes)
+        rStyleAttributes.set(rAttribute.first, rAttribute.second);
 }
 
 writerfilter::Reference<Properties>::Pointer_t RTFDocumentImpl::getProperties(RTFSprms& rAttributes, RTFSprms& rSprms)
@@ -447,14 +447,14 @@ writerfilter::Reference<Properties>::Pointer_t RTFDocumentImpl::getProperties(RT
     int nStyle = 0;
     if (!m_aStates.empty())
         nStyle = m_aStates.top().nCurrentStyleIndex;
-    RTFReferenceTable::Entries_t::iterator it = m_aStyleTableEntries.find(nStyle);
+    auto it = m_aStyleTableEntries.find(nStyle);
     if (it != m_aStyleTableEntries.end())
     {
         RTFReferenceProperties& rProps = *static_cast<RTFReferenceProperties*>(it->second.get());
 
         // cloneAndDeduplicate() wants to know about only a single "style", so
         // let's merge paragraph and character style properties here.
-        RTFReferenceTable::Entries_t::iterator itChar = m_aStyleTableEntries.end();
+        auto itChar = m_aStyleTableEntries.end();
         if (!m_aStates.empty())
         {
             int nCharStyle = m_aStates.top().nCurrentCharacterStyleIndex;
@@ -654,7 +654,7 @@ rtl_TextEncoding RTFDocumentImpl::getEncoding(int nFontIndex)
 {
     if (!m_pSuperstream)
     {
-        std::map<int, rtl_TextEncoding>::iterator it = m_aFontEncodings.find(nFontIndex);
+        auto it = m_aFontEncodings.find(nFontIndex);
         if (it != m_aFontEncodings.end())
             // We have a font encoding associated to this font.
             return it->second;
@@ -949,9 +949,9 @@ void RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XS
     auto pExtentValue = std::make_shared<RTFValue>(aExtentAttributes);
     // docpr sprm
     RTFSprms aDocprAttributes;
-    for (RTFSprms::Iterator_t i = m_aStates.top().aCharacterAttributes.begin(); i != m_aStates.top().aCharacterAttributes.end(); ++i)
-        if (i->first == NS_ooxml::LN_CT_NonVisualDrawingProps_name || i->first == NS_ooxml::LN_CT_NonVisualDrawingProps_descr)
-            aDocprAttributes.set(i->first, i->second);
+    for (auto& rCharacterAttribute : m_aStates.top().aCharacterAttributes)
+        if (rCharacterAttribute.first == NS_ooxml::LN_CT_NonVisualDrawingProps_name || rCharacterAttribute.first == NS_ooxml::LN_CT_NonVisualDrawingProps_descr)
+            aDocprAttributes.set(rCharacterAttribute.first, rCharacterAttribute.second);
     auto pDocprValue = std::make_shared<RTFValue>(aDocprAttributes);
     if (bInline)
     {
@@ -974,23 +974,23 @@ void RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XS
         RTFSprms aAnchorWrapAttributes;
         m_aStates.top().aShape.aAnchorAttributes.set(NS_ooxml::LN_CT_Anchor_behindDoc, std::make_shared<RTFValue>((m_aStates.top().aShape.bInBackground) ? 1 : 0));
         RTFSprms aAnchorSprms;
-        for (RTFSprms::Iterator_t i = m_aStates.top().aCharacterAttributes.begin(); i != m_aStates.top().aCharacterAttributes.end(); ++i)
+        for (auto& rCharacterAttribute : m_aStates.top().aCharacterAttributes)
         {
-            if (i->first == NS_ooxml::LN_CT_WrapSquare_wrapText)
-                aAnchorWrapAttributes.set(i->first, i->second);
+            if (rCharacterAttribute.first == NS_ooxml::LN_CT_WrapSquare_wrapText)
+                aAnchorWrapAttributes.set(rCharacterAttribute.first, rCharacterAttribute.second);
         }
         sal_Int32 nWrap = -1;
-        for (RTFSprms::Iterator_t i = m_aStates.top().aCharacterSprms.begin(); i != m_aStates.top().aCharacterSprms.end(); ++i)
+        for (auto& rCharacterSprm : m_aStates.top().aCharacterSprms)
         {
-            if (i->first == NS_ooxml::LN_EG_WrapType_wrapNone || i->first == NS_ooxml::LN_EG_WrapType_wrapTight)
+            if (rCharacterSprm.first == NS_ooxml::LN_EG_WrapType_wrapNone || rCharacterSprm.first == NS_ooxml::LN_EG_WrapType_wrapTight)
             {
-                nWrap = i->first;
+                nWrap = rCharacterSprm.first;
 
                 // If there is a wrap polygon prepared by RTFSdrImport, pick it up here.
-                if (i->first == NS_ooxml::LN_EG_WrapType_wrapTight && !m_aStates.top().aShape.aWrapPolygonSprms.empty())
-                    i->second->getSprms().set(NS_ooxml::LN_CT_WrapTight_wrapPolygon, std::make_shared<RTFValue>(RTFSprms(), m_aStates.top().aShape.aWrapPolygonSprms));
+                if (rCharacterSprm.first == NS_ooxml::LN_EG_WrapType_wrapTight && !m_aStates.top().aShape.aWrapPolygonSprms.empty())
+                    rCharacterSprm.second->getSprms().set(NS_ooxml::LN_CT_WrapTight_wrapPolygon, std::make_shared<RTFValue>(RTFSprms(), m_aStates.top().aShape.aWrapPolygonSprms));
 
-                aAnchorSprms.set(i->first, i->second);
+                aAnchorSprms.set(rCharacterSprm.first, rCharacterSprm.second);
             }
         }
         auto pAnchorWrapValue = std::make_shared<RTFValue>(aAnchorWrapAttributes);
@@ -1237,7 +1237,7 @@ void RTFDocumentImpl::text(OUString& rString)
                 //See fdo#47347 initial invalid font entry properties are inserted first,
                 //so when we attempt to insert the correct ones, there's already an
                 //entry in the map for them, so the new ones aren't inserted.
-                RTFReferenceTable::Entries_t::iterator lb = m_aFontTableEntries.lower_bound(m_nCurrentFontIndex);
+                auto lb = m_aFontTableEntries.lower_bound(m_nCurrentFontIndex);
                 if (lb != m_aFontTableEntries.end() && !(m_aFontTableEntries.key_comp()(m_nCurrentFontIndex, lb->first)))
                     lb->second = pProp;
                 else
@@ -1539,9 +1539,9 @@ void RTFDocumentImpl::replayBuffer(RTFBuffer_t& rBuffer,
 
 bool findPropertyName(const std::vector<beans::PropertyValue>& rProperties, const OUString& rName)
 {
-    for (std::vector<beans::PropertyValue>::const_iterator it = rProperties.begin(); it != rProperties.end(); ++it)
+    for (auto& rProperty : rProperties)
     {
-        if (it->Name == rName)
+        if (rProperty.Name == rName)
             return true;
     }
     return false;
@@ -1918,8 +1918,8 @@ RTFError RTFDocumentImpl::popState()
     }
     break;
     case Destination::LISTENTRY:
-        for (RTFSprms::Iterator_t i = aState.aListLevelEntries.begin(); i != aState.aListLevelEntries.end(); ++i)
-            aState.aTableSprms.set(i->first, i->second, RTFOverwrite::NO_APPEND);
+        for (auto& rListLevelEntry : aState.aListLevelEntries)
+            aState.aTableSprms.set(rListLevelEntry.first, rListLevelEntry.second, RTFOverwrite::NO_APPEND);
         break;
     case Destination::FIELDINSTRUCTION:
     {
@@ -2071,8 +2071,8 @@ RTFError RTFDocumentImpl::popState()
         else if (aState.bInShapeGroup && !aState.bInShape)
         {
             // End of a groupshape, as we're in shapegroup, but not in a real shape.
-            for (std::vector< std::pair<OUString, OUString> >::iterator i = aState.aShape.aGroupProperties.begin(); i != aState.aShape.aGroupProperties.end(); ++i)
-                m_pSdrImport->appendGroupProperty(i->first, i->second);
+            for (auto& rGroupProperty : aState.aShape.aGroupProperties)
+                m_pSdrImport->appendGroupProperty(rGroupProperty.first, rGroupProperty.second);
             aState.aShape.aGroupProperties.clear();
         }
         break;
