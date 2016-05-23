@@ -1253,6 +1253,7 @@ public:
 
     /// Return the available table styles.
     SwTableAutoFormatTable& GetTableStyles() { return *mpTableStyles.get(); }
+    const SwTableAutoFormatTable& GetTableStyles() const { return *mpTableStyles.get(); }
 
     void AppendUndoForInsertFromDB( const SwPaM& rPam, bool bIsTable );
 
