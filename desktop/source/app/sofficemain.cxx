@@ -51,6 +51,8 @@
 #include <client/linux/handler/exception_handler.h>
 #elif defined WNT
 #include <client/windows/handler/exception_handler.h>
+#include <locale>
+#include <codecvt>
 #endif
 
 #endif
@@ -78,16 +80,19 @@ static bool dumpCallback(const google_breakpad::MinidumpDescriptor& descriptor, 
     return succeeded;
 }
 #elif defined WNT
-static bool dumpCallback(const wchar_t* path, const wchar_t* /*id*/,
+static bool dumpCallback(const wchar_t* path, const wchar_t* id,
                             void* /*context*/, EXCEPTION_POINTERS* /*exinfo*/,
                             MDRawAssertionInfo* /*assertion*/,
                             bool succeeded)
 {
     std::string ini_path = CrashReporter::getIniFileName();
     std::ofstream minidump_file(ini_path, std::ios_base::app);
-    minidump_file << "DumpFile=" << path << "\n";;
+    // TODO: moggi: can we avoid this conversion
+    std::wstring_convert<std::codecvt_utf8<wchar_t>> conv1;
+    std::string aPath = conv1.to_bytes(std::wstring(path)) + conv1.to_bytes(std::wstring(id));
+    minidump_file << "DumpFile=" << aPath << "\n";;
     minidump_file.close();
-    SAL_WARN("desktop", "minidump generated: " << path);
+    SAL_WARN("desktop", "minidump generated: " << aPath);
     return succeeded;
 }
 #endif
