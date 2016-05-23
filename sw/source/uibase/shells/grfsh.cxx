@@ -43,6 +43,7 @@
 #include <editeng/brushitem.hxx>
 #include <svx/grfflt.hxx>
 #include <svx/compressgraphicdialog.hxx>
+#include <svx/graphicinfodialog.hxx>
 #include <vcl/GraphicNativeTransform.hxx>
 #include <svx/tbxcolor.hxx>
 #include <drawdoc.hxx>
@@ -185,6 +186,36 @@ void SwGrfShell::Execute(SfxRequest &rReq)
 
                     rSh.EndUndo(UNDO_END);
                     rSh.EndAllAction();
+                }
+            }
+        }
+        break;
+        case SID_GRAPHIC_INFO:
+        {
+            const Graphic* pGraphic = rSh.GetGraphic();
+            if( pGraphic )
+            {
+                Size aSize (
+                    convertTwipToMm100(rSh.GetAnyCurRect(RECT_FLY_EMBEDDED).Width()),
+                    convertTwipToMm100(rSh.GetAnyCurRect(RECT_FLY_EMBEDDED).Height()));
+
+                SfxItemSet aSet( rSh.GetAttrPool(), RES_GRFATR_MIRRORGRF, RES_GRFATR_CROPGRF );
+                rSh.GetCurAttr( aSet );
+                SwMirrorGrf aMirror( static_cast<const SwMirrorGrf&>( aSet.Get(RES_GRFATR_MIRRORGRF)) );
+                SwCropGrf aCrop( static_cast<const SwCropGrf&>( aSet.Get(RES_GRFATR_CROPGRF)) );
+
+                Rectangle aCropRectangle(
+                    convertTwipToMm100(aCrop.GetLeft()),
+                    convertTwipToMm100(aCrop.GetTop()),
+                    convertTwipToMm100(aCrop.GetRight()),
+                    convertTwipToMm100(aCrop.GetBottom()) );
+
+                Graphic aGraphic = Graphic( *pGraphic );
+
+                ScopedVclPtrInstance< GraphicInfoDialog > aDialog( GetView().GetWindow(), aGraphic, aSize, aCropRectangle, GetView().GetViewFrame()->GetBindings() );
+                if( aDialog->Execute() == RET_OK )
+                {
+                    break;
                 }
             }
         }

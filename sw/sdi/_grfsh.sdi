@@ -59,6 +59,13 @@ interface BaseTextGraphic
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
+    SID_GRAPHIC_INFO
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetAttrState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
     SID_CHANGE_PICTURE
     [
         ExecMethod = Execute ;

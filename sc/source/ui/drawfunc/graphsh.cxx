@@ -28,6 +28,7 @@
 #include <svx/grfflt.hxx>
 #include <svx/grafctrl.hxx>
 #include <svx/compressgraphicdialog.hxx>
+#include <svx/graphicinfodialog.hxx>
 #include <svx/graphichelper.hxx>
 #include <vcl/msgbox.hxx>
 
@@ -212,6 +213,45 @@ void ScGraphicShell::ExecuteCompressGraphic( SfxRequest& )
                 pView->BegUndo( aUndoString );
                 pView->ReplaceObjectAtView( pObj, *pPageView, pNewObject );
                 pView->EndUndo();
+            }
+        }
+    }
+
+    Invalidate();
+}
+
+void ScGraphicShell::GetGraphicInformationState( SfxItemSet& rSet )
+{
+    ScDrawView* pView = GetViewData()->GetScDrawView();
+    const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
+    bool bEnable = false;
+    if( rMarkList.GetMarkCount() == 1 )
+    {
+        SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
+
+        if( pObj && dynamic_cast<const SdrGrafObj*>( pObj) != nullptr && ( static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GraphicType::Bitmap ) )
+            bEnable = true;
+    }
+
+    if( !bEnable )
+        rSet.DisableItem( SID_GRAPHIC_INFO );
+}
+
+void ScGraphicShell::ExecuteGraphicInformation( SfxRequest& )
+{
+    ScDrawView* pView = GetViewData()->GetScDrawView();
+    const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
+
+    if( rMarkList.GetMarkCount() == 1 )
+    {
+        SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
+
+        if( pObj && dynamic_cast<const SdrGrafObj*>( pObj)  != nullptr && static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GraphicType::Bitmap )
+        {
+            SdrGrafObj* pGraphicObj = static_cast<SdrGrafObj*>(pObj);
+            ScopedVclPtrInstance< GraphicInfoDialog > dialog( GetViewData()->GetDialogParent(), pGraphicObj, GetViewData()->GetBindings() );
+            if ( dialog->Execute() == RET_OK )
+            {
             }
         }
     }

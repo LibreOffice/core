@@ -76,6 +76,11 @@ interface DrawView
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
     ]
+    SID_GRAPHIC_INFO
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
     SID_EXTERNAL_EDIT
     [
         ExecMethod = FuTemporary ;

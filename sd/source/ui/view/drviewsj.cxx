@@ -101,6 +101,7 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
             SfxItemState::DEFAULT == rSet.GetItemState( SID_ORIGINAL_SIZE ) ||
             SfxItemState::DEFAULT == rSet.GetItemState( SID_SAVE_GRAPHIC ) ||
             SfxItemState::DEFAULT == rSet.GetItemState( SID_COMPRESS_GRAPHIC ) ||
+            SfxItemState::DEFAULT == rSet.GetItemState( SID_GRAPHIC_INFO ) ||
             SfxItemState::DEFAULT == rSet.GetItemState( SID_TEXTATTR_DLG ) )
         {
             const SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
@@ -123,6 +124,7 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
             {
                 rSet.DisableItem(SID_SAVE_GRAPHIC);
                 rSet.DisableItem(SID_COMPRESS_GRAPHIC);
+                rSet.DisableItem(SID_GRAPHIC_INFO);
             }
 
             /* If it is not a group object or 3D object, we disable "enter

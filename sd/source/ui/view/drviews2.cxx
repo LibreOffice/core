@@ -52,6 +52,7 @@
 
 #include <svx/SpellDialogChildWindow.hxx>
 #include <svx/compressgraphicdialog.hxx>
+#include <svx/graphicinfodialog.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/bmpmask.hxx>
 #include <svx/colrctrl.hxx>
@@ -980,6 +981,28 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                         mpDrawView->BegUndo( aUndoString );
                         mpDrawView->ReplaceObjectAtView( pObj, *pPageView, pNewObject );
                         mpDrawView->EndUndo();
+                    }
+                }
+            }
+            Cancel();
+            rReq.Ignore();
+        }
+        break;
+
+        case SID_GRAPHIC_INFO:
+        {
+            const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
+            if( rMarkList.GetMarkCount() == 1 )
+            {
+                SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
+
+                if( pObj && dynamic_cast< const SdrGrafObj *>( pObj ) !=  nullptr && static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GraphicType::Bitmap )
+                {
+                    SdrGrafObj* pGraphicObj = static_cast<SdrGrafObj*>(pObj);
+                    ScopedVclPtrInstance< GraphicInfoDialog > dialog( GetParentWindow(), pGraphicObj, GetViewFrame()->GetBindings() );
+                    if ( dialog->Execute() == RET_OK )
+                    {
+                        break;
                     }
                 }
             }

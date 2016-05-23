@@ -112,6 +112,7 @@ $(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/dialog/_contdlg \
     svx/source/dialog/contwnd \
     svx/source/dialog/compressgraphicdialog \
+    svx/source/dialog/graphicinfodialog \
     $(call gb_Helper_optional,BREAKPAD, \
 		svx/source/dialog/crashreportdlg \
 		svx/source/dialog/crashreportui) \

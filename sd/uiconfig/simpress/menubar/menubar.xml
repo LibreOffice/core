@@ -372,6 +372,7 @@
                   <menu:menuitem menu:id=".uno:ExternalEdit"/>
                   <menu:menuitem menu:id=".uno:ChangePicture"/>
                   <menu:menuitem menu:id=".uno:CompressGraphic"/>
+                  <menu:menuitem menu:id=".uno:GraphicInfo"/>
                   <menu:menuitem menu:id=".uno:SaveGraphic"/>
                   <menu:menuseparator/>
                   <menu:menu menu:id=".uno:FormatImageFiltersMenu">
