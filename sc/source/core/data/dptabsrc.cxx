@@ -1333,7 +1333,6 @@ ScDPDimension* ScDPDimensions::getByIndex(long nIndex) const
 ScDPDimension::ScDPDimension( ScDPSource* pSrc, long nD ) :
     pSource( pSrc ),
     nDim( nD ),
-    pHierarchies( nullptr ),
     nUsedHier( 0 ),
     nFunction( SUBTOTAL_FUNC_SUM ),     // sum is default
     mpLayoutName(nullptr),
@@ -1350,20 +1349,16 @@ ScDPDimension::~ScDPDimension()
 {
     //TODO: release pSource
 
-    if ( pHierarchies )
-        pHierarchies->release();    // ref-counted
-
     delete pSelectedData;
 }
 
 ScDPHierarchies* ScDPDimension::GetHierarchiesObject()
 {
-    if (!pHierarchies)
+    if (!mxHierarchies.is())
     {
-        pHierarchies = new ScDPHierarchies( pSource, nDim );
-        pHierarchies->acquire();        // ref-counted
+        mxHierarchies = new ScDPHierarchies( pSource, nDim );
     }
-    return pHierarchies;
+    return mxHierarchies.get();
 }
 
 const OUString* ScDPDimension::GetLayoutName() const
@@ -1790,8 +1785,7 @@ ScDPHierarchy* ScDPHierarchies::getByIndex(long nIndex) const
 ScDPHierarchy::ScDPHierarchy( ScDPSource* pSrc, long nD, long nH ) :
     pSource( pSrc ),
     nDim( nD ),
-    nHier( nH ),
-    pLevels( nullptr )
+    nHier( nH )
 {
     //TODO: hold pSource
 }
@@ -1799,19 +1793,15 @@ ScDPHierarchy::ScDPHierarchy( ScDPSource* pSrc, long nD, long nH ) :
 ScDPHierarchy::~ScDPHierarchy()
 {
     //TODO: release pSource
-
-    if (pLevels)
-        pLevels->release();     // ref-counted
 }
 
 ScDPLevels* ScDPHierarchy::GetLevelsObject()
 {
-    if (!pLevels)
+    if (!mxLevels.is())
     {
-        pLevels = new ScDPLevels( pSource, nDim, nHier );
-        pLevels->acquire();     // ref-counted
+        mxLevels = new ScDPLevels( pSource, nDim, nHier );
     }
-    return pLevels;
+    return mxLevels.get();
 }
 
 uno::Reference<container::XNameAccess> SAL_CALL ScDPHierarchy::getLevels()
@@ -1997,7 +1987,6 @@ ScDPLevel::ScDPLevel( ScDPSource* pSrc, long nD, long nH, long nL ) :
     nDim( nD ),
     nHier( nH ),
     nLev( nL ),
-    pMembers( nullptr ),
     aSortInfo( EMPTY_OUSTRING, true, sheet::DataPilotFieldSortMode::NAME ),   // default: sort by name
     nSortMeasure( 0 ),
     nAutoMeasure( 0 ),
@@ -2012,9 +2001,6 @@ ScDPLevel::ScDPLevel( ScDPSource* pSrc, long nD, long nH, long nL ) :
 ScDPLevel::~ScDPLevel()
 {
     //TODO: release pSource
-
-    if ( pMembers )
-        pMembers->release();    // ref-counted
 }
 
 void ScDPLevel::EvaluateSortOrder()
@@ -2081,12 +2067,11 @@ void ScDPLevel::SetEnableLayout(bool bSet)
 
 ScDPMembers* ScDPLevel::GetMembersObject()
 {
-    if (!pMembers)
+    if (!mxMembers.is())
     {
-        pMembers = new ScDPMembers( pSource, nDim, nHier, nLev );
-        pMembers->acquire();    // ref-counted
+        mxMembers = new ScDPMembers( pSource, nDim, nHier, nLev );
     }
-    return pMembers;
+    return mxMembers.get();
 }
 
 uno::Reference<container::XNameAccess> SAL_CALL ScDPLevel::getMembers() throw(uno::RuntimeException, std::exception)

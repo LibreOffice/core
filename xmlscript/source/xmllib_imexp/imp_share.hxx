@@ -155,8 +155,8 @@ class LibElementBase
     : public ::cppu::WeakImplHelper< css::xml::input::XElement >
 {
 protected:
-    LibraryImport * _pImport;
-    LibElementBase * _pParent;
+    css::uno::Reference<LibraryImport>  mxImport;
+    css::uno::Reference<LibElementBase> mxParent;
 
     OUString _aLocalName;
     css::uno::Reference< css::xml::input::XAttributes > _xAttributes;

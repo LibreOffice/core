@@ -43,8 +43,8 @@ namespace xmlscript
     class BasicElementBase : public BasicElementBase_BASE
     {
     protected:
-        BasicImport* m_pImport;
-        BasicElementBase* m_pParent;
+        css::uno::Reference<BasicImport> m_xImport;
+        css::uno::Reference<BasicElementBase> m_xParent;
         OUString m_aLocalName;
         css::uno::Reference< css::xml::input::XAttributes > m_xAttributes;
 
