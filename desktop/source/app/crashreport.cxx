@@ -22,6 +22,8 @@ osl::Mutex CrashReporter::maMutex;
 #if HAVE_FEATURE_BREAKPAD
 #if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID
 #include <client/linux/handler/exception_handler.h>
+#elif defined WNT
+#include <client/windows/handler/exception_handler.h>
 #endif
 
 google_breakpad::ExceptionHandler* CrashReporter::mpExceptionHandler = nullptr;
@@ -71,7 +73,8 @@ void CrashReporter::updateMinidumpLocation()
 #if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID
     google_breakpad::MinidumpDescriptor descriptor(aOStringUrl.getStr());
     mpExceptionHandler->set_minidump_descriptor(descriptor);
-#else
+#elif defined WNT
+    mpExceptionHandler->set_dump_path(aURL.getStr());
 #endif
 }
 
