@@ -31,6 +31,7 @@ namespace nsSwGetPoolIdFromName
     const SwGetPoolIdFromName GET_POOLID_FRMFMT   = 0x04;
     const SwGetPoolIdFromName GET_POOLID_PAGEDESC = 0x08;
     const SwGetPoolIdFromName GET_POOLID_NUMRULE  = 0x10;
+    const SwGetPoolIdFromName GET_POOLID_TABSTYLE = 0x20;
 }
 
 #endif
