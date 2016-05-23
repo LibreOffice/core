@@ -157,9 +157,9 @@ XmlReader::Result XmlReader::nextItem(Text reportText, Span * data, int * nsId)
         return handleEndTag();
     case STATE_EMPTY_ELEMENT_TAG:
         handleElementEnd();
-        return RESULT_END;
+        return Result::End;
     default: // STATE_DONE
-        return RESULT_DONE;
+        return Result::Done;
     }
 }
 
@@ -697,7 +697,7 @@ XmlReader::Result XmlReader::handleStartTag(int * nsId, Span * localName) {
         *nsId = getNamespaceId(Span(nameBegin, nameColon - nameBegin));
         *localName = Span(nameColon + 1, nameEnd - (nameColon + 1));
     }
-    return RESULT_BEGIN;
+    return Result::Begin;
 }
 
 XmlReader::Result XmlReader::handleEndTag() {
@@ -720,7 +720,7 @@ XmlReader::Result XmlReader::handleEndTag() {
             "missing '>' in " + fileUrl_ );
     }
     ++pos_;
-    return RESULT_END;
+    return Result::End;
 }
 
 void XmlReader::handleElementEnd() {
@@ -798,7 +798,7 @@ XmlReader::Result XmlReader::handleRawText(Span * text) {
                 *text = pad_.get();
                 ++pos_;
                 state_ = STATE_END_TAG;
-                return RESULT_TEXT;
+                return Result::Text;
             case '?':
                 ++pos_;
                 skipProcessingInstruction();
@@ -807,7 +807,7 @@ XmlReader::Result XmlReader::handleRawText(Span * text) {
             default:
                 *text = pad_.get();
                 state_ = STATE_START_TAG;
-                return RESULT_TEXT;
+                return Result::Text;
             }
             break;
         default:
@@ -915,7 +915,7 @@ XmlReader::Result XmlReader::handleNormalizedText(Span * text) {
                 pad_.add(flowBegin, flowEnd - flowBegin);
                 *text = pad_.get();
                 state_ = STATE_END_TAG;
-                return RESULT_TEXT;
+                return Result::Text;
             case '?':
                 ++pos_;
                 skipProcessingInstruction();
@@ -925,7 +925,7 @@ XmlReader::Result XmlReader::handleNormalizedText(Span * text) {
                 pad_.add(flowBegin, flowEnd - flowBegin);
                 *text = pad_.get();
                 state_ = STATE_START_TAG;
-                return RESULT_TEXT;
+                return Result::Text;
             }
             break;
         default:
