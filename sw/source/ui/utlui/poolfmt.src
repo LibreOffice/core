@@ -759,4 +759,11 @@ String STR_POOLCHR_VERT_NUM
     Text [ en-US ] = "Vertical Numbering Symbols";
 };
 
+// Table styles
+
+String STR_TABSTYLE_DEFAULT
+{
+    Text [ en-US ] = "Default Style";
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
