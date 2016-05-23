@@ -1199,8 +1199,15 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
                     aDocument.StartAllListeners();
                     sc::SetFormulaDirtyContext aCxt;
                     aDocument.SetAllFormulasDirty(aCxt);
-                    INetURLObject aURLObjForDefaultNameSheetName(rMedium.GetName());
-                    aDocument.RenameTab(0,aURLObjForDefaultNameSheetName.GetBase());
+                    if (GetCreateMode() != SfxObjectCreateMode::INTERNAL)
+                    {
+                        // ScDocShell was not created with
+                        // SfxModelFlags::EXTERNAL_LINK for which we do not
+                        // want Sheet1 renamed in order to get predictable
+                        // sheet names for external references.
+                        INetURLObject aURLObjForDefaultNameSheetName(rMedium.GetName());
+                        aDocument.RenameTab(0,aURLObjForDefaultNameSheetName.GetBase());
+                    }
                     bOverflowRow = aImpEx.IsOverflowRow();
                     bOverflowCol = aImpEx.IsOverflowCol();
                     bOverflowCell = aImpEx.IsOverflowCell();
