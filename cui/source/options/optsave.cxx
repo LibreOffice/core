@@ -81,7 +81,7 @@ SvxSaveTabPage_Impl::~SvxSaveTabPage_Impl()
 
 SvxSaveTabPage::SvxSaveTabPage( vcl::Window* pParent, const SfxItemSet& rCoreSet ) :
     SfxTabPage( pParent, "OptSavePage", "cui/ui/optsavepage.ui", &rCoreSet ),
-    pImpl               ( new SvxSaveTabPage_Impl )
+    pImpl( new SvxSaveTabPage_Impl )
 {
     get(aLoadUserSettingsCB, "load_settings");
     get(aLoadDocPrinterCB,  "load_docprinter");
@@ -201,8 +201,7 @@ SvxSaveTabPage::~SvxSaveTabPage()
 
 void SvxSaveTabPage::dispose()
 {
-    delete pImpl;
-    pImpl = nullptr;
+    pImpl.reset();
     aLoadUserSettingsCB.clear();
     aLoadDocPrinterCB.clear();
     aDocInfoCB.clear();
@@ -586,7 +585,7 @@ IMPL_LINK_TYPED( SvxSaveTabPage, FilterHdl_Impl, ListBox&, rBox, void )
             {
                 const sal_Int32 nEntryPos = aSaveAsLB->InsertEntry(pUIFilters[i]);
                 if ( pImpl->aODFArr[nData][i] )
-                    aSaveAsLB->SetEntryData( nEntryPos, static_cast<void*>(pImpl) );
+                    aSaveAsLB->SetEntryData( nEntryPos, static_cast<void*>(pImpl.get()) );
                 if(pFilters[i] == pImpl->aDefaultArr[nData])
                     sSelect = pUIFilters[i];
             }
