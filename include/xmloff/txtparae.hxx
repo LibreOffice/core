@@ -105,7 +105,7 @@ class XMLOFF_DLLPUBLIC XMLTextParagraphExport : public XMLStyleExport
     XMLTextListsHelper* mpTextListsHelper;
     ::std::vector< XMLTextListsHelper* > maTextListsHelperStack;
 
-    enum FrameType { FT_TEXT, FT_GRAPHIC, FT_EMBEDDED, FT_SHAPE };
+    enum class FrameType { Text, Graphic, Embedded, Shape };
 public:
 
     enum FieldmarkType { NONE, TEXT, CHECK }; // Used for simulating fieldmarks in OpenDocument 1.n Strict (for n <= 2). CHECK currently ignored.
@@ -607,7 +607,7 @@ inline void XMLTextParagraphExport::exportTextFrame(
         bool bAutoStyles, bool bIsProgress, bool bExportContent,
         const css::uno::Reference< css::beans::XPropertySet > *pRangePropSet)
 {
-    exportAnyTextFrame( rTextContent, FT_TEXT, bAutoStyles, bIsProgress,
+    exportAnyTextFrame( rTextContent, FrameType::Text, bAutoStyles, bIsProgress,
                         bExportContent, pRangePropSet );
 }
 
@@ -616,7 +616,7 @@ inline void XMLTextParagraphExport::exportTextGraphic(
         bool bAutoStyles,
         const css::uno::Reference< css::beans::XPropertySet > *pRangePropSet )
 {
-    exportAnyTextFrame( rTextContent, FT_GRAPHIC, bAutoStyles, false,
+    exportAnyTextFrame( rTextContent, FrameType::Graphic, bAutoStyles, false,
                         true, pRangePropSet );
 }
 
@@ -625,7 +625,7 @@ inline void XMLTextParagraphExport::exportTextEmbedded(
         bool bAutoStyles,
         const css::uno::Reference< css::beans::XPropertySet > *pRangePropSet )
 {
-    exportAnyTextFrame( rTextContent, FT_EMBEDDED, bAutoStyles, false,
+    exportAnyTextFrame( rTextContent, FrameType::Embedded, bAutoStyles, false,
                         true, pRangePropSet );
 }
 
@@ -634,7 +634,7 @@ inline void XMLTextParagraphExport::exportShape(
         bool bAutoStyles,
         const css::uno::Reference< css::beans::XPropertySet > *pRangePropSet )
 {
-    exportAnyTextFrame( rTextContent, FT_SHAPE, bAutoStyles, false,
+    exportAnyTextFrame( rTextContent, FrameType::Shape, bAutoStyles, false,
                         true, pRangePropSet );
 }
 
