@@ -93,12 +93,12 @@ void TemplateLocalView::Populate ()
             OUString aURL = mpDocTemplates->GetPath(i,j);
 
             TemplateItemProperties aProperties;
-            aProperties.aIsFolder = false;          // Flat hierarchy for the local filesystem (no nested folders)
             aProperties.nId = j+1;
             aProperties.nDocId = j;
             aProperties.nRegionId = i;
             aProperties.aName = aName;
             aProperties.aPath = aURL;
+            aProperties.aRegionName = aRegionName;
             aProperties.aThumbnail = TemplateAbstractView::fetchThumbnail(aURL,
                                                                           getThumbnailWidth(),
                                                                           getThumbnailHeight());
@@ -471,6 +471,7 @@ bool TemplateLocalView::moveTemplate (const ThumbnailViewItem *pItem, const sal_
         aTemplateItem.nRegionId = nTargetRegion;
         aTemplateItem.aName = pViewItem->maTitle;
         aTemplateItem.aPath = mpDocTemplates->GetPath(nTargetRegion,nTargetIdx);
+        aTemplateItem.aRegionName = pViewItem->maHelpText;
         aTemplateItem.aThumbnail = pViewItem->maPreview1;
 
         pTarget->maTemplates.push_back(aTemplateItem);
@@ -569,6 +570,7 @@ bool TemplateLocalView::moveTemplates(const std::set<const ThumbnailViewItem*, s
                 aTemplateItem.nRegionId = nTargetRegion;
                 aTemplateItem.aName = pViewItem->maTitle;
                 aTemplateItem.aPath = mpDocTemplates->GetPath(nTargetRegion,nTargetIdx);
+                aTemplateItem.aRegionName = pViewItem->maHelpText;
                 aTemplateItem.aThumbnail = pViewItem->maPreview1;
 
                 pTarget->maTemplates.push_back(aTemplateItem);
@@ -653,6 +655,7 @@ bool TemplateLocalView::copyFrom(const sal_uInt16 nRegionItemId, const BitmapEx 
                 aTemplate.nDocId = nDocId;
                 aTemplate.nRegionId = nRegionId;
                 aTemplate.aName = aPath;
+                aTemplate.aRegionName = getRegionName(nRegionId);
                 aTemplate.aThumbnail = rThumbnail;
                 aTemplate.aPath = mpDocTemplates->GetPath(nRegionId,nDocId);
 
@@ -690,7 +693,6 @@ bool TemplateLocalView::copyFrom(const OUString &rPath)
         return false;
 
     TemplateItemProperties aTemplate;
-    aTemplate.aIsFolder = false;
     aTemplate.nId = nId;
     aTemplate.nDocId = nDocId;
     aTemplate.nRegionId = nRegionId;
@@ -699,6 +701,7 @@ bool TemplateLocalView::copyFrom(const OUString &rPath)
                                                                 TEMPLATE_THUMBNAIL_MAX_WIDTH,
                                                                 TEMPLATE_THUMBNAIL_MAX_HEIGHT);
     aTemplate.aPath = rPath;
+    aTemplate.aRegionName = getRegionName(nRegionId);
 
     pRegItem->maTemplates.push_back(aTemplate);
 
@@ -723,7 +726,6 @@ bool TemplateLocalView::copyFrom (TemplateContainerItem *pItem, const OUString &
     if (mpDocTemplates->CopyFrom(nRegionId,nDocId,aPath))
     {
         TemplateItemProperties aTemplate;
-        aTemplate.aIsFolder = false;
         aTemplate.nId = nId;
         aTemplate.nDocId = nDocId;
         aTemplate.nRegionId = nRegionId;
@@ -732,6 +734,7 @@ bool TemplateLocalView::copyFrom (TemplateContainerItem *pItem, const OUString &
                                                                     TEMPLATE_THUMBNAIL_MAX_WIDTH,
                                                                     TEMPLATE_THUMBNAIL_MAX_HEIGHT);
         aTemplate.aPath = rPath;
+        aTemplate.aRegionName = getRegionName(nRegionId);
 
         pItem->maTemplates.push_back(aTemplate);
 

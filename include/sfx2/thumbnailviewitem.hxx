@@ -76,6 +76,7 @@ public:
     bool mbHover;
     BitmapEx maPreview1;
     OUString maTitle;
+    OUString maHelpText;
     css::uno::Reference< css::accessibility::XAccessible > mxAcc;
 
     ThumbnailViewItem (ThumbnailView &rView, sal_uInt16 nId);
@@ -101,7 +102,10 @@ public:
     virtual Rectangle updateHighlight(bool bVisible, const Point& rPoint);
 
     /// Text to be used for the tooltip.
-    virtual OUString getHelpText() const;
+
+    void setHelpText (const OUString &sText) { maHelpText = sText; }
+
+    virtual OUString getHelpText() const { return maHelpText; };
 
     virtual void setEditTitle (bool edit, bool bChangeFocus = true);
     void updateTitleEditSize ();
