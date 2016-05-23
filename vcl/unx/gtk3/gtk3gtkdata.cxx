@@ -183,30 +183,34 @@ GdkCursor* GtkSalDisplay::getFromXBM( const unsigned char *pBitmap,
     int cairo_stride = cairo_format_stride_for_width(CAIRO_FORMAT_A1, nWidth);
 
     unsigned char *pPaddedXBM = ensurePaddedForCairo(pBitmap, nWidth, nHeight, cairo_stride);
-    cairo_surface_t *s = cairo_image_surface_create_for_data(
+    cairo_surface_t *source = cairo_image_surface_create_for_data(
         pPaddedXBM,
         CAIRO_FORMAT_A1, nWidth, nHeight,
         cairo_stride);
 
-    cairo_t *cr = cairo_create(s);
     unsigned char *pPaddedMaskXBM = ensurePaddedForCairo(pMask, nWidth, nHeight, cairo_stride);
     cairo_surface_t *mask = cairo_image_surface_create_for_data(
         pPaddedMaskXBM,
         CAIRO_FORMAT_A1, nWidth, nHeight,
         cairo_stride);
+
+    cairo_surface_t *s = cairo_surface_create_similar(source, CAIRO_CONTENT_ALPHA, nWidth, nHeight);
+    cairo_t *cr = cairo_create(s);
+    cairo_set_source_surface(cr, source, 0, 0);
     cairo_mask_surface(cr, mask, 0, 0);
     cairo_destroy(cr);
+
+    GdkCursor *cursor = gdk_cursor_new_from_surface(m_pGdkDisplay, s, nXHot, nYHot);
+
+    cairo_surface_destroy(s);
     cairo_surface_destroy(mask);
+    cairo_surface_destroy(source);
+
     if (pPaddedMaskXBM != pMask)
         delete [] pPaddedMaskXBM;
 
-    GdkPixbuf *pixbuf = gdk_pixbuf_get_from_surface(s, 0, 0, nWidth, nHeight);
-    cairo_surface_destroy(s);
     if (pPaddedXBM != pBitmap)
         delete [] pPaddedXBM;
-
-    GdkCursor *cursor = gdk_cursor_new_from_pixbuf(m_pGdkDisplay, pixbuf, nXHot, nYHot);
-    g_object_unref(pixbuf);
 
     return cursor;
 }
