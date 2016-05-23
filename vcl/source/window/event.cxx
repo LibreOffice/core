@@ -220,11 +220,14 @@ void Window::CallEventListeners( sal_uLong nEvent, void* pData )
         mpWindowImpl->mnEventListenersIteratingCount++;
         auto& rWindowImpl = *mpWindowImpl;
         comphelper::ScopeGuard aGuard(
-            [&rWindowImpl]()
+            [&rWindowImpl, &xWindow]()
             {
-                rWindowImpl.mnEventListenersIteratingCount--;
-                if (rWindowImpl.mnEventListenersIteratingCount == 0)
-                    rWindowImpl.maEventListenersDeleted.clear();
+                if (!xWindow->IsDisposed())
+                {
+                    rWindowImpl.mnEventListenersIteratingCount--;
+                    if (rWindowImpl.mnEventListenersIteratingCount == 0)
+                        rWindowImpl.maEventListenersDeleted.clear();
+                }
             }
         );
         for ( Link<VclWindowEvent&,void>& rLink : aCopy )
@@ -250,11 +253,14 @@ void Window::CallEventListeners( sal_uLong nEvent, void* pData )
             // we use an iterating counter/flag and a set of deleted Link's to avoid O(n^2) behaviour
             rWindowImpl.mnChildEventListenersIteratingCount++;
             comphelper::ScopeGuard aGuard(
-                [&rWindowImpl]()
+                [&rWindowImpl, &xWindow]()
                 {
-                    rWindowImpl.mnChildEventListenersIteratingCount--;
-                    if (rWindowImpl.mnChildEventListenersIteratingCount == 0)
-                        rWindowImpl.maChildEventListenersDeleted.clear();
+                    if (!xWindow->IsDisposed())
+                    {
+                        rWindowImpl.mnChildEventListenersIteratingCount--;
+                        if (rWindowImpl.mnChildEventListenersIteratingCount == 0)
+                            rWindowImpl.maChildEventListenersDeleted.clear();
+                    }
                 }
             );
             for ( Link<VclWindowEvent&,void>& rLink : aCopy )
