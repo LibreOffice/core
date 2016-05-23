@@ -11,6 +11,7 @@
 
 #include "Window.hxx"
 #include "DrawViewShell.hxx"
+#include "sdpage.hxx"
 
 ImpressWindowUIObject::ImpressWindowUIObject(VclPtr<sd::Window> xWindow):
     WindowUIObject(xWindow),
@@ -51,7 +52,53 @@ void ImpressWindowUIObject::execute(const OUString& rAction,
             getViewShell()->SwitchPage(nVal);
         }
     }
-    WindowUIObject::execute(rAction, rParameters);
+    else if (rAction == "SELECT")
+    {
+        if (rParameters.find("OBJECT") != rParameters.end())
+        {
+            auto itr = rParameters.find("OBJECT");
+            OUString aName = itr->second;
+            SdrObject* pObj = getObject(aName);
+            SdrPageView* pPageView = getPageView();
+            getViewShell()->GetView()->MarkObj(pObj, pPageView);
+        }
+    }
+    else if (rAction == "DESELECT")
+    {
+        getViewShell()->GetView()->UnMarkAll();
+    }
+    else
+        WindowUIObject::execute(rAction, rParameters);
+}
+
+namespace {
+
+OUString getObjectName(SdrObject* pObject)
+{
+    if (pObject->GetName().isEmpty())
+        return OUString("Unnamed Drawinglayer object ") + OUString::number(pObject->GetOrdNum());
+    else
+        return pObject->GetName();
+}
+
+}
+
+std::set<OUString> ImpressWindowUIObject::get_children() const
+{
+    SdrPage* pPage = getViewShell()->getCurrentPage();
+
+    std::set<OUString> aRet;
+    if (!pPage)
+        return aRet;
+
+    size_t nObjs = pPage->GetObjCount();
+    for (size_t i = 0; i < nObjs; ++i)
+    {
+        SdrObject* pObject = pPage->GetObj(i);
+        aRet.insert(getObjectName(pObject));
+    }
+
+    return aRet;
 }
 
 OUString ImpressWindowUIObject::get_name() const
@@ -66,12 +113,35 @@ std::unique_ptr<UIObject> ImpressWindowUIObject::create(vcl::Window* pWindow)
     return std::unique_ptr<UIObject>(new ImpressWindowUIObject(pWin));
 }
 
-sd::DrawViewShell* ImpressWindowUIObject::getViewShell()
+sd::DrawViewShell* ImpressWindowUIObject::getViewShell() const
 {
     sd::DrawViewShell* pViewShell = dynamic_cast<sd::DrawViewShell*>(mxWindow->GetViewShell());
     assert(pViewShell);
 
     return pViewShell;
+}
+
+SdrObject* ImpressWindowUIObject::getObject(const OUString& rName)
+{
+    SdrPage* pPage = getViewShell()->getCurrentPage();
+
+    if (!pPage)
+        return nullptr;
+
+    size_t nObjs = pPage->GetObjCount();
+    for (size_t i = 0; i < nObjs; ++i)
+    {
+        SdrObject* pObj = pPage->GetObj(i);
+        if (rName == getObjectName(pObj))
+            return pObj;
+    }
+
+    return nullptr;
+}
+
+SdrPageView* ImpressWindowUIObject::getPageView()
+{
+    return getViewShell()->GetView()->GetSdrPageView();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
