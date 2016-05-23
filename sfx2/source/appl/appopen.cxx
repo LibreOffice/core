@@ -448,7 +448,17 @@ void SfxApplication::NewDocExec_Impl( SfxRequest& rReq )
         bool bNewWin = false;
         vcl::Window* pTopWin = GetTopWindow();
 
+        SfxObjectShell* pCurrentShell = SfxObjectShell::Current();
+        Reference<XModel> xModel;
+
+        if(pCurrentShell)
+            xModel = pCurrentShell->GetModel();
+
         ScopedVclPtrInstance< SfxTemplateManagerDlg > aTemplDlg;
+
+        if(xModel.is())
+            aTemplDlg->setDocumentModel(pCurrentShell->GetModel());
+
         int nRet = aTemplDlg->Execute();
         if ( nRet == RET_OK )
         {
