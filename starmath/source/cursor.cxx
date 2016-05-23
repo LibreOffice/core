@@ -1160,10 +1160,12 @@ void SmCursor::Copy(){
     if(!HasSelection())
         return;
 
+    AnnotateSelection();
     //Find selected node
     SmNode* pSNode = FindSelectedNode(mpTree);
     //Find visual line
     SmNode* pLine = FindTopMostNodeInLine(pSNode, true);
+    assert(pLine);
 
     //Clone selected nodes
     SmNodeList* pList;
