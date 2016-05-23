@@ -164,7 +164,7 @@ void WinBlocklistParser::handleDevices(wgl::DriverInfo& rDriver, xmlreader::XmlR
         xmlreader::XmlReader::Result res = rReader.nextItem(
                 xmlreader::XmlReader::Text::Normalized, &name, &nsId);
 
-        if (res == xmlreader::XmlReader::RESULT_BEGIN)
+        if (res == xmlreader::XmlReader::Result::Begin)
         {
             ++nLevel;
             if (nLevel > 2)
@@ -190,14 +190,14 @@ void WinBlocklistParser::handleDevices(wgl::DriverInfo& rDriver, xmlreader::XmlR
             else
                 throw InvalidFileException();
         }
-        else if (res == xmlreader::XmlReader::RESULT_END)
+        else if (res == xmlreader::XmlReader::Result::End)
         {
             --nLevel;
             bInMsg = false;
             if (!nLevel)
                 break;
         }
-        else if (res == xmlreader::XmlReader::RESULT_TEXT)
+        else if (res == xmlreader::XmlReader::Result::Text)
         {
             if (bInMsg)
             {
@@ -284,7 +284,7 @@ void WinBlocklistParser::handleList(xmlreader::XmlReader& rReader)
         xmlreader::XmlReader::Result res = rReader.nextItem(
                 xmlreader::XmlReader::Text::NONE, &name, &nsId);
 
-        if (res == xmlreader::XmlReader::RESULT_BEGIN)
+        if (res == xmlreader::XmlReader::Result::Begin)
         {
             if (name.equals("entry"))
             {
@@ -303,7 +303,7 @@ void WinBlocklistParser::handleList(xmlreader::XmlReader& rReader)
                 throw InvalidFileException();
             }
         }
-        else if (res == xmlreader::XmlReader::RESULT_END)
+        else if (res == xmlreader::XmlReader::Result::End)
         {
             break;
         }
@@ -320,7 +320,7 @@ void WinBlocklistParser::handleContent(xmlreader::XmlReader& rReader)
         xmlreader::XmlReader::Result res = rReader.nextItem(
                 xmlreader::XmlReader::Text::NONE, &name, &nsId);
 
-        if (res == xmlreader::XmlReader::RESULT_BEGIN)
+        if (res == xmlreader::XmlReader::Result::Begin)
         {
             if (name.equals("whitelist"))
             {
@@ -340,7 +340,7 @@ void WinBlocklistParser::handleContent(xmlreader::XmlReader& rReader)
                 throw InvalidFileException();
             }
         }
-        else if (res == xmlreader::XmlReader::RESULT_END)
+        else if (res == xmlreader::XmlReader::Result::End)
         {
             if (name.equals("whitelist")
                     ||
@@ -349,7 +349,7 @@ void WinBlocklistParser::handleContent(xmlreader::XmlReader& rReader)
                 meBlockType = BlockType::UNKNOWN;
             }
         }
-        else if (res == xmlreader::XmlReader::RESULT_DONE)
+        else if (res == xmlreader::XmlReader::Result::Done)
         {
             break;
         }
