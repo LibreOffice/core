@@ -2770,10 +2770,10 @@ void XMLTextParagraphExport::exportAnyTextFrame(
 
     if( bAutoStyles )
     {
-        if( FT_EMBEDDED == eType )
+        if( FrameType::Embedded == eType )
             _collectTextEmbeddedAutoStyles( xPropSet );
         // No text frame style for shapes (#i28745#)
-        else if ( FT_SHAPE != eType )
+        else if ( FrameType::Shape != eType )
             Add( XML_STYLE_FAMILY_TEXT_FRAME, xPropSet );
 
         if( pRangePropSet && lcl_txtpara_isBoundAsChar( xPropSet,
@@ -2782,7 +2782,7 @@ void XMLTextParagraphExport::exportAnyTextFrame(
 
         switch( eType )
         {
-        case FT_TEXT:
+        case FrameType::Text:
             {
                 // frame bound frames
                 if ( bExportContent )
@@ -2794,7 +2794,7 @@ void XMLTextParagraphExport::exportAnyTextFrame(
                 }
             }
             break;
-        case FT_SHAPE:
+        case FrameType::Shape:
             {
                 Reference < XShape > xShape( rTxtCntnt, UNO_QUERY );
                 GetExport().GetShapeExport()->collectShapeAutoStyles( xShape );
@@ -2840,22 +2840,22 @@ void XMLTextParagraphExport::exportAnyTextFrame(
                     XML_NAMESPACE_TEXT, XML_SPAN, false, false );
                 {
                     SvXMLElementExport aElement( GetExport(),
-                        FT_SHAPE != eType &&
+                        FrameType::Shape != eType &&
                         addHyperlinkAttributes( xPropSet,
                                                 xPropState,xPropSetInfo ),
                         XML_NAMESPACE_DRAW, XML_A, false, false );
                     switch( eType )
                     {
-                    case FT_TEXT:
+                    case FrameType::Text:
                         _exportTextFrame( xPropSet, xPropSetInfo, bIsProgress );
                         break;
-                    case FT_GRAPHIC:
+                    case FrameType::Graphic:
                         _exportTextGraphic( xPropSet, xPropSetInfo );
                         break;
-                    case FT_EMBEDDED:
+                    case FrameType::Embedded:
                         _exportTextEmbedded( xPropSet, xPropSetInfo );
                         break;
-                    case FT_SHAPE:
+                    case FrameType::Shape:
                         {
                             Reference < XShape > xShape( rTxtCntnt, UNO_QUERY );
                             XMLShapeExportFlags nFeatures =
