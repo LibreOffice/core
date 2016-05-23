@@ -105,7 +105,6 @@ private:
     DECL_LINK_TYPED(FillBackgroundHdl, ListBox&, void);
     DECL_LINK_TYPED(FillStyleModifyHdl, ListBox&, void);
     DECL_LINK_TYPED(PaperSizeModifyHdl, ListBox&, void);
-    DECL_LINK_TYPED(PaperOrientationModifyHdl, ListBox&, void);
     DECL_LINK_TYPED(FillColorHdl, ListBox&, void);
     DECL_LINK_TYPED(AssignMasterPage, ListBox&, void);
     DECL_LINK_TYPED(DspBackground, Button*, void);
