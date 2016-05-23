@@ -24,12 +24,12 @@
 
 namespace connectivity
 {
-    typedef enum
+    enum class OKeyType
     {
-        SQL_ORDERBYKEY_NONE,        // do not sort
-        SQL_ORDERBYKEY_DOUBLE,      // numeric key
-        SQL_ORDERBYKEY_STRING       // String Key
-    } OKeyType;
+        NONE,        // do not sort
+        Double,      // numeric key
+        String       // String Key
+    };
 
     enum class TAscendingOrder
     {

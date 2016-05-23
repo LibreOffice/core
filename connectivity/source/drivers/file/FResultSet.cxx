@@ -1131,7 +1131,7 @@ void OResultSet::sortRows()
             case DataType::CHAR:
             case DataType::VARCHAR:
             case DataType::LONGVARCHAR:
-                eKeyType[i] = SQL_ORDERBYKEY_STRING;
+                eKeyType[i] = OKeyType::String;
                 break;
 
             case DataType::OTHER:
@@ -1146,12 +1146,12 @@ void OResultSet::sortRows()
             case DataType::TIME:
             case DataType::TIMESTAMP:
             case DataType::BIT:
-                eKeyType[i] = SQL_ORDERBYKEY_DOUBLE;
+                eKeyType[i] = OKeyType::Double;
                 break;
 
         // Other types aren't implemented (so they are always FALSE)
             default:
-                eKeyType[i] = SQL_ORDERBYKEY_NONE;
+                eKeyType[i] = OKeyType::NONE;
                 SAL_WARN( "connectivity.drivers","OFILECursor::Execute: Datentyp nicht implementiert");
                 break;
         }
