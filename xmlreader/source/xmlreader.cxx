@@ -144,11 +144,11 @@ XmlReader::Result XmlReader::nextItem(Text reportText, Span * data, int * nsId)
     switch (state_) {
     case STATE_CONTENT:
         switch (reportText) {
-        case TEXT_NONE:
+        case Text::NONE:
             return handleSkippedText(data, nsId);
-        case TEXT_RAW:
+        case Text::Raw:
             return handleRawText(data);
-        case TEXT_NORMALIZED:
+        case Text::Normalized:
             return handleNormalizedText(data);
         }
     case STATE_START_TAG:

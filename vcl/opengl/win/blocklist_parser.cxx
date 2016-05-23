@@ -162,7 +162,7 @@ void WinBlocklistParser::handleDevices(wgl::DriverInfo& rDriver, xmlreader::XmlR
         int nsId;
 
         xmlreader::XmlReader::Result res = rReader.nextItem(
-                xmlreader::XmlReader::TEXT_NORMALIZED, &name, &nsId);
+                xmlreader::XmlReader::Text::Normalized, &name, &nsId);
 
         if (res == xmlreader::XmlReader::RESULT_BEGIN)
         {
@@ -282,7 +282,7 @@ void WinBlocklistParser::handleList(xmlreader::XmlReader& rReader)
     while (true)
     {
         xmlreader::XmlReader::Result res = rReader.nextItem(
-                xmlreader::XmlReader::TEXT_NONE, &name, &nsId);
+                xmlreader::XmlReader::Text::NONE, &name, &nsId);
 
         if (res == xmlreader::XmlReader::RESULT_BEGIN)
         {
@@ -318,7 +318,7 @@ void WinBlocklistParser::handleContent(xmlreader::XmlReader& rReader)
         int nsId;
 
         xmlreader::XmlReader::Result res = rReader.nextItem(
-                xmlreader::XmlReader::TEXT_NONE, &name, &nsId);
+                xmlreader::XmlReader::Text::NONE, &name, &nsId);
 
         if (res == xmlreader::XmlReader::RESULT_BEGIN)
         {

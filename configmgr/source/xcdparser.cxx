@@ -47,7 +47,7 @@ XcdParser::~XcdParser() {}
 
 xmlreader::XmlReader::Text XcdParser::getTextMode() {
     return nestedParser_.is()
-        ? nestedParser_->getTextMode() : xmlreader::XmlReader::TEXT_NONE;
+        ? nestedParser_->getTextMode() : xmlreader::XmlReader::Text::NONE;
 }
 
 bool XcdParser::startElement(

@@ -153,7 +153,7 @@ Parser::Parser(
         xmlreader::Span name;
         int nsId;
         xmlreader::XmlReader::Result res = reader_.nextItem(
-            xmlreader::XmlReader::TEXT_NONE, &name, &nsId);
+            xmlreader::XmlReader::Text::NONE, &name, &nsId);
         switch (state) {
         case STATE_BEGIN:
             if (res == xmlreader::XmlReader::RESULT_BEGIN && nsId == ucNsId
