@@ -199,7 +199,7 @@ void Chart2TrendCalculators::testExponentialRegression2()
         xValues[i] = d;
         yValues[i] = -2.0 * exp ( 0.3 * d );
     }
-    checkCalculator( xValues, yValues, "f(x) = -2 exp( 0.3 x )");
+    checkCalculator( xValues, yValues, "f(x) = "+ aMinusSign + " 2 exp( 0.3 x )");
 }
 
 
