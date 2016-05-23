@@ -248,7 +248,7 @@ bool GIFReader::ReadGlobalHeader()
                 bGlobalPalette = ( nRF & 0x80 );
 
                 if( bGlobalPalette )
-                    ReadPaletteEntries( &aGPalette, 1UL << ( ( nRF & 7 ) + 1 ) );
+                    ReadPaletteEntries( &aGPalette, sal_uLong(1) << ( ( nRF & 7 ) + 1 ) );
                 else
                     nBackgroundColor = 0;
 
@@ -459,7 +459,7 @@ bool GIFReader::ReadLocalHeader()
         if( nFlags & 0x80 )
         {
             pPal = &aLPalette;
-            ReadPaletteEntries( pPal, 1UL << ( (nFlags & 7 ) + 1 ) );
+            ReadPaletteEntries( pPal, sal_uLong(1) << ( (nFlags & 7 ) + 1 ) );
         }
         else
             pPal = &aGPalette;
