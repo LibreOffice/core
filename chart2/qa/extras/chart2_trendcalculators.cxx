@@ -136,7 +136,7 @@ void Chart2TrendCalculators::testPotentialRegression2()
         xValues[i] = d;
         yValues[i] = -2.0 * pow ( d, 3 );
     }
-    checkCalculator( xValues, yValues, "f(x) = -2 x^3");
+    checkCalculator( xValues, yValues, "f(x) = "+ aMinusSign +" 2 x^3");
 }
 
 // test y = - 2 X - 5
