@@ -322,18 +322,18 @@ void SvXMLExport::InitCtor_()
         mpNamespaceMap->Add( GetXMLToken(XML_NP_CONFIG), GetXMLToken(XML_N_CONFIG), XML_NAMESPACE_CONFIG );
     }
 
-    if( getExportFlags() & (SvXMLExportFlags::META|SvXMLExportFlags::MASTERSTYLES|SvXMLExportFlags::CONTENT) )
+    if( getExportFlags() & (SvXMLExportFlags::META|SvXMLExportFlags::MASTERSTYLES|SvXMLExportFlags::CONTENT|SvXMLExportFlags::UNDO) )
     {
         mpNamespaceMap->Add( GetXMLToken(XML_NP_DC), GetXMLToken(XML_N_DC), XML_NAMESPACE_DC );
         mpNamespaceMap->Add( GetXMLToken(XML_NP_META), GetXMLToken(XML_N_META), XML_NAMESPACE_META );
     }
-    if( getExportFlags() & (SvXMLExportFlags::STYLES|SvXMLExportFlags::MASTERSTYLES|SvXMLExportFlags::AUTOSTYLES|SvXMLExportFlags::CONTENT|SvXMLExportFlags::FONTDECLS) )
+    if( getExportFlags() & (SvXMLExportFlags::STYLES|SvXMLExportFlags::MASTERSTYLES|SvXMLExportFlags::AUTOSTYLES|SvXMLExportFlags::CONTENT|SvXMLExportFlags::UNDO|SvXMLExportFlags::FONTDECLS) )
     {
         mpNamespaceMap->Add( GetXMLToken(XML_NP_STYLE), GetXMLToken(XML_N_STYLE), XML_NAMESPACE_STYLE );
     }
 
     // namespaces for documents
-    if( getExportFlags() & (SvXMLExportFlags::STYLES|SvXMLExportFlags::AUTOSTYLES|SvXMLExportFlags::MASTERSTYLES|SvXMLExportFlags::CONTENT) )
+    if( getExportFlags() & (SvXMLExportFlags::STYLES|SvXMLExportFlags::AUTOSTYLES|SvXMLExportFlags::MASTERSTYLES|SvXMLExportFlags::CONTENT|SvXMLExportFlags::UNDO) )
     {
         mpNamespaceMap->Add( GetXMLToken(XML_NP_DC),    GetXMLToken(XML_N_DC),      XML_NAMESPACE_DC );
         mpNamespaceMap->Add( GetXMLToken(XML_NP_TEXT),  GetXMLToken(XML_N_TEXT),    XML_NAMESPACE_TEXT );
@@ -362,17 +362,17 @@ void SvXMLExport::InitCtor_()
             mpNamespaceMap->Add( GetXMLToken(XML_NP_FIELD), GetXMLToken(XML_N_FIELD), XML_NAMESPACE_FIELD );
         }
     }
-    if( getExportFlags() & (SvXMLExportFlags::MASTERSTYLES|SvXMLExportFlags::CONTENT) )
+    if( getExportFlags() & (SvXMLExportFlags::MASTERSTYLES|SvXMLExportFlags::CONTENT|SvXMLExportFlags::UNDO) )
     {
         mpNamespaceMap->Add( GetXMLToken(XML_NP_MATH), GetXMLToken(XML_N_MATH), XML_NAMESPACE_MATH );
         mpNamespaceMap->Add( GetXMLToken(XML_NP_FORM), GetXMLToken(XML_N_FORM), XML_NAMESPACE_FORM );
     }
-    if( getExportFlags() & (SvXMLExportFlags::STYLES|SvXMLExportFlags::AUTOSTYLES|SvXMLExportFlags::MASTERSTYLES|SvXMLExportFlags::CONTENT|SvXMLExportFlags::SCRIPTS) )
+    if( getExportFlags() & (SvXMLExportFlags::STYLES|SvXMLExportFlags::AUTOSTYLES|SvXMLExportFlags::MASTERSTYLES|SvXMLExportFlags::CONTENT|SvXMLExportFlags::SCRIPTS|SvXMLExportFlags::UNDO) )
     {
         mpNamespaceMap->Add( GetXMLToken(XML_NP_SCRIPT), GetXMLToken(XML_N_SCRIPT), XML_NAMESPACE_SCRIPT );
         mpNamespaceMap->Add( GetXMLToken(XML_NP_DOM), GetXMLToken(XML_N_DOM), XML_NAMESPACE_DOM );
     }
-    if( getExportFlags() & SvXMLExportFlags::CONTENT )
+    if( getExportFlags() & (SvXMLExportFlags::CONTENT|SvXMLExportFlags::UNDO) )
     {
         mpNamespaceMap->Add( GetXMLToken(XML_NP_XFORMS_1_0), GetXMLToken(XML_N_XFORMS_1_0), XML_NAMESPACE_XFORMS );
         mpNamespaceMap->Add( GetXMLToken(XML_NP_XSD), GetXMLToken(XML_N_XSD), XML_NAMESPACE_XSD );
@@ -381,13 +381,13 @@ void SvXMLExport::InitCtor_()
     }
 
     // RDFa: needed for content and header/footer styles
-    if( getExportFlags() & (SvXMLExportFlags::STYLES|SvXMLExportFlags::AUTOSTYLES|SvXMLExportFlags::MASTERSTYLES|SvXMLExportFlags::CONTENT) )
+    if( getExportFlags() & (SvXMLExportFlags::STYLES|SvXMLExportFlags::AUTOSTYLES|SvXMLExportFlags::MASTERSTYLES|SvXMLExportFlags::CONTENT|SvXMLExportFlags::UNDO) )
     {
         mpNamespaceMap->Add( GetXMLToken(XML_NP_XHTML),
             GetXMLToken(XML_N_XHTML), XML_NAMESPACE_XHTML );
     }
     // GRDDL: to convert RDFa and meta.xml to RDF
-    if( getExportFlags() & (SvXMLExportFlags::META|SvXMLExportFlags::STYLES|SvXMLExportFlags::AUTOSTYLES|SvXMLExportFlags::MASTERSTYLES|SvXMLExportFlags::CONTENT) )
+    if( getExportFlags() & (SvXMLExportFlags::META|SvXMLExportFlags::STYLES|SvXMLExportFlags::AUTOSTYLES|SvXMLExportFlags::MASTERSTYLES|SvXMLExportFlags::CONTENT|SvXMLExportFlags::UNDO) )
     {
         mpNamespaceMap->Add( GetXMLToken(XML_NP_GRDDL),
             GetXMLToken(XML_N_GRDDL), XML_NAMESPACE_GRDDL );
@@ -799,7 +799,7 @@ sal_Bool SAL_CALL SvXMLExport::filter( const uno::Sequence< beans::PropertyValue
         const sal_Int32 nPropCount = aDescriptor.getLength();
 
         const SvXMLExportFlags nTest =
-            SvXMLExportFlags::META|SvXMLExportFlags::STYLES|SvXMLExportFlags::CONTENT|SvXMLExportFlags::SETTINGS;
+            SvXMLExportFlags::META|SvXMLExportFlags::STYLES|SvXMLExportFlags::CONTENT|SvXMLExportFlags::SETTINGS|SvXMLExportFlags::UNDO;
         if( (mnExportFlags & nTest) == nTest && msOrigFileName.isEmpty() )
         {
             // evaluate descriptor only for flat files and if a base URI
@@ -1237,6 +1237,13 @@ void SvXMLExport::SetBodyAttributes()
 {
 }
 
+void SvXMLExport::ImplExportUndo()
+{
+    CheckAttrList();
+
+    ExportUndo_();
+}
+
 static void
 lcl_AddGrddl(SvXMLExport & rExport, const SvXMLExportFlags /*nExportMode*/)
 {
@@ -1385,7 +1392,8 @@ sal_uInt32 SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
 
     {
         enum XMLTokenEnum eRootService = XML_TOKEN_INVALID;
-        const SvXMLExportFlags nExportMode = mnExportFlags & (SvXMLExportFlags::META|SvXMLExportFlags::STYLES|SvXMLExportFlags::CONTENT|SvXMLExportFlags::SETTINGS);
+        const SvXMLExportFlags nExportMode = mnExportFlags & (SvXMLExportFlags::META|SvXMLExportFlags::STYLES|
+                          SvXMLExportFlags::CONTENT|SvXMLExportFlags::SETTINGS|SvXMLExportFlags::UNDO);
 
         lcl_AddGrddl(*this, nExportMode);
 
@@ -1408,6 +1416,11 @@ sal_uInt32 SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
         {
             // export only content
             eRootService = XML_DOCUMENT_CONTENT;
+        }
+        else if( SvXMLExportFlags::UNDO == nExportMode )
+        {
+            // export only undo
+            eRootService = XML_DOCUMENT_UNDO;
         }
         else
         {
@@ -1455,6 +1468,10 @@ sal_uInt32 SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
         // content
         if( mnExportFlags & SvXMLExportFlags::CONTENT )
             ImplExportContent();
+
+        // undo
+        if( mnExportFlags & SvXMLExportFlags::UNDO )
+            ImplExportUndo();
     }
 
     mxHandler->endDocument();
@@ -1515,6 +1532,12 @@ void SvXMLExport::ExportMeta_()
             Characters(generator);
         }
     }
+}
+
+void SvXMLExport::ExportUndo_()
+{
+    SvXMLElementExport aElem( *this, XML_NAMESPACE_OFFICE, XML_UNDO,
+                                true, true );
 }
 
 void SvXMLExport::ExportScripts_()
