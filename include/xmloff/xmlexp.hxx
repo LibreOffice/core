@@ -100,12 +100,13 @@ enum class SvXMLExportFlags {
     NODOCTYPE                = 0x0200,
     PRETTY                   = 0x0400,
     SAVEBACKWARDCOMPATIBLE   = 0x0800,
+    UNDO                     = 0x1000,
     OASIS                    = 0x8000,
     ALL                      = 0x0fff
 };
 namespace o3tl
 {
-    template<> struct typed_flags<SvXMLExportFlags> : is_typed_flags<SvXMLExportFlags, 0x8fff> {};
+    template<> struct typed_flags<SvXMLExportFlags> : is_typed_flags<SvXMLExportFlags, 0x9fff> {};
 }
 
 class XMLOFF_DLLPUBLIC SvXMLExport : public ::cppu::WeakImplHelper6<
@@ -178,6 +179,7 @@ private:
     SAL_DLLPRIVATE void ImplExportMasterStyles();
         // <office:master-styles>
     SAL_DLLPRIVATE void ImplExportContent(); // <office:body>
+    SAL_DLLPRIVATE void ImplExportUndo(); // <office:undo>
     virtual void SetBodyAttributes();
     void GetViewSettingsAndViews(css::uno::Sequence<css::beans::PropertyValue>& rProps);
 
@@ -216,6 +218,9 @@ protected:
 
     /// Override this method to export the content of <office:body>.
     virtual void ExportContent_() = 0;
+
+    /// Export the content of <office:undo> in writer.
+    virtual void ExportUndo_();
 
     OUString GetSourceShellID() const;
     OUString GetDestinationShellID() const;

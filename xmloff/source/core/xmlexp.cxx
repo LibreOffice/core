@@ -1237,6 +1237,13 @@ void SvXMLExport::SetBodyAttributes()
 {
 }
 
+void SvXMLExport::ImplExportUndo()
+{
+    CheckAttrList();
+
+    ExportUndo_();
+}
+
 static void
 lcl_AddGrddl(SvXMLExport & rExport, const SvXMLExportFlags /*nExportMode*/)
 {
@@ -1385,7 +1392,8 @@ sal_uInt32 SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
 
     {
         enum XMLTokenEnum eRootService = XML_TOKEN_INVALID;
-        const SvXMLExportFlags nExportMode = mnExportFlags & (SvXMLExportFlags::META|SvXMLExportFlags::STYLES|SvXMLExportFlags::CONTENT|SvXMLExportFlags::SETTINGS);
+        const SvXMLExportFlags nExportMode = mnExportFlags & (SvXMLExportFlags::META|SvXMLExportFlags::STYLES|
+                          SvXMLExportFlags::CONTENT|SvXMLExportFlags::SETTINGS|SvXMLExportFlags::UNDO);
 
         lcl_AddGrddl(*this, nExportMode);
 
@@ -1408,6 +1416,11 @@ sal_uInt32 SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
         {
             // export only content
             eRootService = XML_DOCUMENT_CONTENT;
+        }
+        else if( SvXMLExportFlags::UNDO == nExportMode )
+        {
+            // export only undo
+            eRootService = XML_DOCUMENT_UNDO;
         }
         else
         {
@@ -1455,6 +1468,10 @@ sal_uInt32 SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
         // content
         if( mnExportFlags & SvXMLExportFlags::CONTENT )
             ImplExportContent();
+
+        // undo
+        if( mnExportFlags & SvXMLExportFlags::UNDO )
+            ImplExportUndo();
     }
 
     mxHandler->endDocument();
@@ -1515,6 +1532,12 @@ void SvXMLExport::ExportMeta_()
             Characters(generator);
         }
     }
+}
+
+void SvXMLExport::ExportUndo_()
+{
+    SvXMLElementExport aElem( *this, XML_NAMESPACE_OFFICE, XML_UNDO,
+                                true, true );
 }
 
 void SvXMLExport::ExportScripts_()

@@ -192,6 +192,7 @@ public:
     virtual void ExportAutoStyles_() override {}
     virtual void ExportMasterStyles_() override {}
     virtual void ExportContent_() override {}
+    virtual void ExportUndo_() override {}
 
     void ExportRule(SvxXMLNumRuleExport & rExport,
             uno::Reference<container::XIndexReplace> const& xRule)
