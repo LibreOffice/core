@@ -107,12 +107,14 @@ void SAL_CALL OWeakConnectionPoint::release() throw()
 
 void SAL_CALL OWeakConnectionPoint::dispose() throw(css::uno::RuntimeException)
 {
-    MutexGuard aGuard(getWeakMutex());
-    Any ex;
-    // other code is going to call removeReference while we are doing this, so we need a
-    // copy, but since we are disposing and going away, we can just take the original data
     std::vector<Reference<XReference>> aCopy;
-    aCopy.swap(m_aReferences);
+    { // only hold the mutex while we access the field
+        MutexGuard aGuard(getWeakMutex());
+        // other code is going to call removeReference while we are doing this, so we need a
+        // copy, but since we are disposing and going away, we can just take the original data
+        aCopy.swap(m_aReferences);
+    }
+    Any ex;
     for (const Reference<XReference> & i : aCopy )
     {
         try
@@ -172,8 +174,16 @@ void SAL_CALL OWeakConnectionPoint::removeReference(const Reference< XReference 
     throw(css::uno::RuntimeException, std::exception)
 {
     MutexGuard aGuard(getWeakMutex());
-    // search from end because the thing that last added a ref is most likely to be the
-    // first to remove a ref
+    // Search from end because the thing that last added a ref is most likely to be the
+    // first to remove a ref.
+    // It's not really valid to compare the pointer directly, but it's faster.
+    for (auto it = m_aReferences.rbegin(); it != m_aReferences.rend(); ++it) {
+        if (it->get() == rRef.get()) {
+            m_aReferences.erase( it.base()-1 );
+            return;
+        }
+    }
+    // interface not found, use the correct compare method
     auto it = std::find(m_aReferences.rbegin(), m_aReferences.rend(), rRef);
     if ( it != m_aReferences.rend() )
         m_aReferences.erase( it.base()-1 );
