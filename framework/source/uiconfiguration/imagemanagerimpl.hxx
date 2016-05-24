@@ -58,8 +58,8 @@ namespace framework
             CmdImageList(const css::uno::Reference< css::uno::XComponentContext >& rxContext, const OUString& aModuleIdentifier);
             virtual ~CmdImageList();
 
-            virtual Image getImageFromCommandURL(sal_Int16 nImageType, const OUString& rCommandURL);
-            virtual bool hasImage(sal_Int16 nImageType, const OUString& rCommandURL);
+            virtual Image getImageFromCommandURL(vcl::ImageType nImageType, const OUString& rCommandURL);
+            virtual bool hasImage(vcl::ImageType nImageType, const OUString& rCommandURL);
             virtual std::vector<OUString>& getImageCommandNames();
 
         protected:
@@ -79,8 +79,8 @@ namespace framework
             explicit GlobalImageList(const css::uno::Reference< css::uno::XComponentContext >& rxContext);
             virtual ~GlobalImageList();
 
-            virtual Image                           getImageFromCommandURL( sal_Int16 nImageType, const OUString& rCommandURL ) override;
-            virtual bool                            hasImage( sal_Int16 nImageType, const OUString& rCommandURL ) override;
+            virtual Image                           getImageFromCommandURL( vcl::ImageType nImageType, const OUString& rCommandURL ) override;
+            virtual bool                            hasImage( vcl::ImageType nImageType, const OUString& rCommandURL ) override;
             virtual ::std::vector< OUString >&      getImageCommandNames() override;
     };
 
@@ -147,11 +147,11 @@ namespace framework
 
             void                                      implts_initialize();
             void                                      implts_notifyContainerListener( const css::ui::ConfigurationEvent& aEvent, NotifyOp eOp );
-            ImageList*                                implts_getUserImageList( ImageType nImageType );
-            bool                                  implts_loadUserImages( ImageType nImageType,
+            ImageList*                                implts_getUserImageList( vcl::ImageType nImageType );
+            bool                                      implts_loadUserImages( vcl::ImageType nImageType,
                                                                              const css::uno::Reference< css::embed::XStorage >& xUserImageStorage,
                                                                              const css::uno::Reference< css::embed::XStorage >& xUserBitmapsStorage );
-            bool                                  implts_storeUserImages( ImageType nImageType,
+            bool                                      implts_storeUserImages( vcl::ImageType nImageType,
                                                                               const css::uno::Reference< css::embed::XStorage >& xUserImageStorage,
                                                                               const css::uno::Reference< css::embed::XStorage >& xUserBitmapsStorage );
             const rtl::Reference< GlobalImageList >&  implts_getGlobalImageList();
@@ -169,8 +169,8 @@ namespace framework
             OUString                                                                   m_aResourceString;
             osl::Mutex m_mutex;
             ::cppu::OMultiTypeInterfaceContainerHelper                                      m_aListenerContainer;   /// container for ALL Listener
-            ImageList*                                                                      m_pUserImageList[ImageType_COUNT];
-            bool                                                                            m_bUserImageListModified[ImageType_COUNT];
+            o3tl::enumarray<vcl::ImageType,ImageList*>                                      m_pUserImageList;
+            o3tl::enumarray<vcl::ImageType,bool>                                            m_bUserImageListModified;
             bool                                                                            m_bUseGlobal;
             bool                                                                            m_bReadOnly;
             bool                                                                            m_bInitialized;
