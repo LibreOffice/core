@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # -*- Mode: python; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #
 # This Source Code Form is subject to the terms of the Mozilla Public
@@ -6,17 +7,40 @@
 #
 
 import requests, sys
+import platform, configparser
+
+def detect_platform():
+    return platform.system()
 
 def main():
-    if len(sys.argv) != 3:
+    if len(sys.argv) != 4:
         print("Invalid number of parameters")
         sys.exit(1)
 
-    url = "http://vm171.documentfoundation.org/upload/"
-    files = {'symbols': open(sys.argv[1], 'rb'), 'comment': sys.argv[2]}
-    comment = {'comment': sys.argv[2]}
-    r = requests.post(url, files = files, data = {"comment":"whatever", "tempt":"tempt"})
-    print(r)
+    upload_url = "http://vm171.documentfoundation.org/upload/"
+    login_url = "http://vm171.documentfoundation.org/accounts/login/"
+
+    config = configparser.ConfigParser()
+    config.read(sys.argv[2])
+
+    user = config["CrashReport"]["User"]
+    password = config["CrashReport"]["Password"]
+
+    platform = detect_platform()
+    files = {'symbols': open(sys.argv[1], 'rb')}
+    data = {'version': sys.argv[3], 'platform': platform}
+
+    session = requests.session()
+    session.get(login_url)
+    csrftoken = session.cookies['csrftoken']
+
+    login_data = { 'username': user,'password': password,
+            'csrfmiddlewaretoken': csrftoken }
+    r1 = session.post(login_url,data=login_data)
+
+    data['csrfmiddlewaretoken'] = csrftoken
+
+    r = session.post(upload_url, files = files, data = data)
 
 if __name__ == "__main__":
     main()
