@@ -966,6 +966,8 @@ const char* LOKDocView_Impl::callbackTypeToString(int nType)
         return "LOK_CALLBACK_SET_PART";
     case LOK_CALLBACK_ERROR:
         return "LOK_CALLBACK_ERROR";
+    case LOK_CALLBACK_CONTEXT_MENU:
+        return "LOK_CALLBACK_CONTEXT_MENU";
     }
     return 0;
 }
@@ -1085,6 +1087,11 @@ gboolean LOKDocView_Impl::callbackImpl(CallbackData* pCallback)
     case LOK_CALLBACK_ERROR:
     {
         reportError(pCallback->m_aPayload);
+    }
+    break;
+    case LOK_CALLBACK_CONTEXT_MENU:
+    {
+        // TODO: Implement me
     }
     break;
     default:
