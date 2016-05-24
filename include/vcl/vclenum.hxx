@@ -77,7 +77,7 @@ enum FontAutoHint { AUTOHINT_DONTKNOW, AUTOHINT_FALSE, AUTOHINT_TRUE };
 
 enum FontHinting { HINTING_DONTKNOW, HINTING_FALSE, HINTING_TRUE };
 
-enum FontHintStyle { HINT_NONE, HINT_SLIGHT, HINT_MEDIUM, HINT_FULL };
+enum class FontHintStyle { NONE, Slight, Medium, Full };
 
 typedef sal_uInt32 sal_UCS4;    // TODO: this should be moved to rtl
 

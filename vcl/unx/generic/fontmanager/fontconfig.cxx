@@ -1215,11 +1215,11 @@ FontConfigFontOptions* PrintFontManager::getFontOptions(
             pOptions->meHinting = hinting ? HINTING_TRUE : HINTING_FALSE;
         switch (hintstyle)
         {
-            case FC_HINT_NONE:   pOptions->meHintStyle = HINT_NONE; break;
-            case FC_HINT_SLIGHT: pOptions->meHintStyle = HINT_SLIGHT; break;
-            case FC_HINT_MEDIUM: pOptions->meHintStyle = HINT_MEDIUM; break;
+            case FC_HINT_NONE:   pOptions->meHintStyle = FontHintStyle::NONE; break;
+            case FC_HINT_SLIGHT: pOptions->meHintStyle = FontHintStyle::Slight; break;
+            case FC_HINT_MEDIUM: pOptions->meHintStyle = FontHintStyle::Medium; break;
             default: // fall through
-            case FC_HINT_FULL:   pOptions->meHintStyle = HINT_FULL; break;
+            case FC_HINT_FULL:   pOptions->meHintStyle = FontHintStyle::Full; break;
         }
     }
 
