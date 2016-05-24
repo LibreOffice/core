@@ -37,7 +37,7 @@ namespace connectivity
 
             // Data attributes
 
-            css::uno::Reference<MorkDriver> m_xDriver;              //  Pointer to the owning
+            MorkDriver*                             m_pDriver;      //  Pointer to the owning
                                                                     //  driver object
             OColumnAlias    m_aColumnAlias;
             // Mork Parser (abook)
@@ -52,7 +52,7 @@ namespace connectivity
             explicit OConnection(MorkDriver* const driver);
             virtual ~OConnection();
 
-            const css::uno::Reference<MorkDriver>& getDriver() {return m_xDriver;};
+            MorkDriver* getDriver() {return m_pDriver;};
             MorkParser* getMorkParser(const OString& t) {return t == "CollectedAddressBook" ? m_pHistory : m_pBook;};
 
             // OComponentHelper

@@ -29,7 +29,7 @@
 class RequestPackageReparation_Impl;
 class SFX2_DLLPUBLIC RequestPackageReparation
 {
-    css::uno::Reference<RequestPackageReparation_Impl> mxImpl;
+    RequestPackageReparation_Impl* pImp;
 public:
     RequestPackageReparation( const OUString& aName );
     ~RequestPackageReparation();
@@ -40,7 +40,7 @@ public:
 class NotifyBrokenPackage_Impl;
 class SFX2_DLLPUBLIC NotifyBrokenPackage
 {
-    css::uno::Reference<NotifyBrokenPackage_Impl> mxImpl;
+    NotifyBrokenPackage_Impl* pImp;
 public:
     NotifyBrokenPackage( const OUString& aName );
     ~NotifyBrokenPackage();

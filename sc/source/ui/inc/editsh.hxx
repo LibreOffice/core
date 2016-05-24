@@ -39,7 +39,7 @@ class ScEditShell : public SfxShell
 private:
     EditView*   pEditView;
     ScViewData* pViewData;
-    css::uno::Reference<TransferableClipboardListener> mxClipEvtLstnr;
+    TransferableClipboardListener* pClipEvtLstnr;
     bool        bPastePossible;
     bool        bIsInsertMode;
 

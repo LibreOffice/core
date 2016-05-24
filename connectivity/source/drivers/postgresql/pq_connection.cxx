@@ -96,24 +96,28 @@ namespace pq_sdbc_driver
 // Helper class for statement lifetime management
 class ClosableReference : public cppu::WeakImplHelper< com::sun::star::uno::XReference >
 {
-    css::uno::Reference<Connection> m_conn;
+    Connection *m_conn;
     ::rtl::ByteSequence m_id;
 public:
     ClosableReference( const ::rtl::ByteSequence & id , Connection *that )
       :  m_conn( that ), m_id( id )
     {
+        that->acquire();
     }
 
     virtual ~ClosableReference()
     {
+        if( m_conn )
+            m_conn->release();
     }
 
     virtual void SAL_CALL dispose() throw (std::exception) override
     {
-        if( m_conn.is() )
+        if( m_conn )
         {
             m_conn->removeFromWeakMap(m_id);
-            m_conn.clear();
+            m_conn->release();
+            m_conn = nullptr;
         }
     }
 };

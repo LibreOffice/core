@@ -772,15 +772,19 @@ void InternetProxyDecider_Impl::setNoProxyList(
 
 InternetProxyDecider::InternetProxyDecider(
     const uno::Reference< uno::XComponentContext>& rxContext )
-: m_xImpl( new proxydecider_impl::InternetProxyDecider_Impl( rxContext ) )
+: m_pImpl( new proxydecider_impl::InternetProxyDecider_Impl( rxContext ) )
 {
+    m_pImpl->acquire();
 }
 
 
 InternetProxyDecider::~InternetProxyDecider()
 {
     // Break circular reference between config listener and notifier.
-    m_xImpl->dispose();
+    m_pImpl->dispose();
+
+    // Let him go...
+    m_pImpl->release();
 }
 
 
@@ -788,7 +792,7 @@ bool InternetProxyDecider::shouldUseProxy( const OUString & rProtocol,
                                            const OUString & rHost,
                                            sal_Int32 nPort ) const
 {
-    const InternetProxyServer & rData = m_xImpl->getProxy( rProtocol,
+    const InternetProxyServer & rData = m_pImpl->getProxy( rProtocol,
                                                            rHost,
                                                            nPort );
     return !rData.aName.isEmpty();
@@ -800,7 +804,7 @@ const InternetProxyServer & InternetProxyDecider::getProxy(
                                             const OUString & rHost,
                                             sal_Int32 nPort ) const
 {
-    return m_xImpl->getProxy( rProtocol, rHost, nPort );
+    return m_pImpl->getProxy( rProtocol, rHost, nPort );
 }
 
 } // namespace ucbhelper

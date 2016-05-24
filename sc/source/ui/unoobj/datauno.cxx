@@ -806,24 +806,28 @@ void ScSubTotalDescriptor::SetParam( const ScSubTotalParam& rNew )
 }
 
 ScRangeSubTotalDescriptor::ScRangeSubTotalDescriptor(ScDatabaseRangeObj* pPar) :
-    mxParent(pPar)
+    pParent(pPar)
 {
+    if (pParent)
+        pParent->acquire();
 }
 
 ScRangeSubTotalDescriptor::~ScRangeSubTotalDescriptor()
 {
+    if (pParent)
+        pParent->release();
 }
 
 void ScRangeSubTotalDescriptor::GetData( ScSubTotalParam& rParam ) const
 {
-    if (mxParent.is())
-        mxParent->GetSubTotalParam( rParam );
+    if (pParent)
+        pParent->GetSubTotalParam( rParam );
 }
 
 void ScRangeSubTotalDescriptor::PutData( const ScSubTotalParam& rParam )
 {
-    if (mxParent.is())
-        mxParent->SetSubTotalParam( rParam );
+    if (pParent)
+        pParent->SetSubTotalParam( rParam );
 }
 
 ScConsolidationDescriptor::ScConsolidationDescriptor()
@@ -1540,41 +1544,49 @@ void ScFilterDescriptor::SetParam( const ScQueryParam& rNew )
 
 ScRangeFilterDescriptor::ScRangeFilterDescriptor(ScDocShell* pDocShell, ScDatabaseRangeObj* pPar) :
     ScFilterDescriptorBase(pDocShell),
-    mxParent(pPar)
+    pParent(pPar)
 {
+    if (pParent)
+        pParent->acquire();
 }
 
 ScRangeFilterDescriptor::~ScRangeFilterDescriptor()
 {
+    if (pParent)
+        pParent->release();
 }
 
 void ScRangeFilterDescriptor::GetData( ScQueryParam& rParam ) const
 {
-    if (mxParent.is())
-        mxParent->GetQueryParam( rParam );
+    if (pParent)
+        pParent->GetQueryParam( rParam );
 }
 
 void ScRangeFilterDescriptor::PutData( const ScQueryParam& rParam )
 {
-    if (mxParent.is())
-        mxParent->SetQueryParam( rParam );
+    if (pParent)
+        pParent->SetQueryParam( rParam );
 }
 
 ScDataPilotFilterDescriptor::ScDataPilotFilterDescriptor(ScDocShell* pDocShell, ScDataPilotDescriptorBase* pPar) :
     ScFilterDescriptorBase(pDocShell),
-    mxParent(pPar)
+    pParent(pPar)
 {
+    if (pParent)
+        pParent->acquire();
 }
 
 ScDataPilotFilterDescriptor::~ScDataPilotFilterDescriptor()
 {
+    if (pParent)
+        pParent->release();
 }
 
 void ScDataPilotFilterDescriptor::GetData( ScQueryParam& rParam ) const
 {
-    if (mxParent.is())
+    if (pParent)
     {
-        ScDPObject* pDPObj = mxParent->GetDPObject();
+        ScDPObject* pDPObj = pParent->GetDPObject();
         if (pDPObj && pDPObj->IsSheetData())
             rParam = pDPObj->GetSheetDesc()->GetQueryParam();
     }
@@ -1582,17 +1594,17 @@ void ScDataPilotFilterDescriptor::GetData( ScQueryParam& rParam ) const
 
 void ScDataPilotFilterDescriptor::PutData( const ScQueryParam& rParam )
 {
-    if (mxParent.is())
+    if (pParent)
     {
-        ScDPObject* pDPObj = mxParent->GetDPObject();
+        ScDPObject* pDPObj = pParent->GetDPObject();
         if (pDPObj)
         {
-            ScSheetSourceDesc aSheetDesc(&mxParent->GetDocShell()->GetDocument());
+            ScSheetSourceDesc aSheetDesc(&pParent->GetDocShell()->GetDocument());
             if (pDPObj->IsSheetData())
                 aSheetDesc = *pDPObj->GetSheetDesc();
             aSheetDesc.SetQueryParam(rParam);
             pDPObj->SetSheetDesc(aSheetDesc);
-            mxParent->SetDPObject(pDPObj);
+            pParent->SetDPObject(pDPObj);
         }
     }
 }

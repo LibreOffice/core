@@ -152,7 +152,7 @@ private:
     void ShowSlideShow(SfxRequest& rReq);
     OutlineView* pOlView;
     SdPage*         pLastPage; // For efficient processing of the preview
-    css::uno::Reference<TransferableClipboardListener> mxClipEvtLstnr;
+    TransferableClipboardListener* pClipEvtLstnr;
     bool            bPastePossible;
     bool mbInitialized;
 

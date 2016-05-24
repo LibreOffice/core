@@ -156,8 +156,7 @@ namespace comphelper
         css::uno::Reference< css::accessibility::XAccessible >
                                                             m_xParentAccessible;
 
-        css::uno::Reference<OWrappedAccessibleChildrenManager>
-                                                            m_xChildMapper;     // for mapping children from our inner context to our callers
+        OWrappedAccessibleChildrenManager*                  m_pChildMapper;         // for mapping children from our inner context to our callers
 
     protected:
         /** ctor

@@ -608,7 +608,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         SfxItemState::DEFAULT == rSet.GetItemState( SID_PASTE_UNFORMATTED ) ||
         SfxItemState::DEFAULT == rSet.GetItemState( SID_CLIPBOARD_FORMAT_ITEMS ) )
     {
-        if ( !mxClipEvtLstnr.is() )
+        if ( !mpClipEvtLstnr )
         {
             // avoid clipboard initialization for
             // read-only presentation views (workaround for NT4.0
@@ -616,8 +616,9 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
             if( dynamic_cast< const PresentationViewShell *>( this ) ==  nullptr )
             {
                 // create listener
-                mxClipEvtLstnr = new TransferableClipboardListener( LINK( this, DrawViewShell, ClipboardChanged ) );
-                mxClipEvtLstnr->AddRemoveListener( GetActiveWindow(), true );
+                mpClipEvtLstnr = new TransferableClipboardListener( LINK( this, DrawViewShell, ClipboardChanged ) );
+                mpClipEvtLstnr->acquire();
+                mpClipEvtLstnr->AddRemoveListener( GetActiveWindow(), true );
 
                 // get initial state
                 TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( GetActiveWindow() ) );

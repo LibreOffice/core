@@ -30,6 +30,7 @@ using namespace connectivity::file;
 
 OIndexIterator::~OIndexIterator()
 {
+    m_pIndex->release();
 }
 
 
@@ -50,7 +51,7 @@ sal_uInt32 OIndexIterator::Find(bool bFirst)
 
     if (bFirst)
     {
-        m_aRoot = m_xIndex->getRoot();
+        m_aRoot = m_pIndex->getRoot();
         m_aCurLeaf.Clear();
     }
 
@@ -61,7 +62,7 @@ sal_uInt32 OIndexIterator::Find(bool bFirst)
         {
             ONDXPage* pPage = m_aRoot;
             while (pPage && !pPage->IsLeaf())
-                pPage = pPage->GetChild(m_xIndex.get());
+                pPage = pPage->GetChild(m_pIndex);
 
             m_aCurLeaf = pPage;
             m_nCurNode = NODE_NOTFOUND;
@@ -107,8 +108,8 @@ ONDXKey* OIndexIterator::GetFirstKey(ONDXPage* pPage, const OOperand& rKey)
     if (!pPage->IsLeaf())
     {
         // descend further
-        ONDXPagePtr aPage = (i==0) ? pPage->GetChild(m_xIndex.get())
-                                     : ((*pPage)[i-1]).GetChild(m_xIndex.get(), pPage);
+        ONDXPagePtr aPage = (i==0) ? pPage->GetChild(m_pIndex)
+                                     : ((*pPage)[i-1]).GetChild(m_pIndex, pPage);
         pFoundKey = aPage.Is() ? GetFirstKey(aPage, rKey) : nullptr;
     }
     else if (i == pPage->Count())
@@ -143,7 +144,7 @@ sal_uInt32 OIndexIterator::GetCompare(bool bFirst)
             case SQLFilterOperator::LESS:
             case SQLFilterOperator::LESS_EQUAL:
                 while (pPage && !pPage->IsLeaf())
-                    pPage = pPage->GetChild(m_xIndex.get());
+                    pPage = pPage->GetChild(m_pIndex);
 
                 m_aCurLeaf = pPage;
                 m_nCurNode = NODE_NOTFOUND;
@@ -205,7 +206,7 @@ sal_uInt32 OIndexIterator::GetLike(bool bFirst)
         ONDXPage* pPage = m_aRoot;
 
         while (pPage && !pPage->IsLeaf())
-            pPage = pPage->GetChild(m_xIndex.get());
+            pPage = pPage->GetChild(m_pIndex);
 
         m_aCurLeaf = pPage;
         m_nCurNode = NODE_NOTFOUND;
@@ -224,7 +225,7 @@ sal_uInt32 OIndexIterator::GetNull(bool bFirst)
     {
         ONDXPage* pPage = m_aRoot;
         while (pPage && !pPage->IsLeaf())
-            pPage = pPage->GetChild(m_xIndex.get());
+            pPage = pPage->GetChild(m_pIndex);
 
         m_aCurLeaf = pPage;
         m_nCurNode = NODE_NOTFOUND;
@@ -273,7 +274,7 @@ ONDXKey* OIndexIterator::GetNextKey()
                 sal_uInt16 nPos = pParentPage->Search(pPage);
                 if (nPos != pParentPage->Count() - 1)
                 {   // page found
-                    pPage = (*pParentPage)[nPos+1].GetChild(m_xIndex.get(),pParentPage);
+                    pPage = (*pParentPage)[nPos+1].GetChild(m_pIndex,pParentPage);
                     break;
                 }
             }
@@ -282,7 +283,7 @@ ONDXKey* OIndexIterator::GetNextKey()
 
         // now go on with leaf
         while (pPage && !pPage->IsLeaf())
-            pPage = pPage->GetChild(m_xIndex.get());
+            pPage = pPage->GetChild(m_pIndex);
 
         m_aCurLeaf = pPage;
         m_nCurNode = 0;

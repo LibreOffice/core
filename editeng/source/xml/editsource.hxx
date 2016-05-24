@@ -38,7 +38,7 @@ public:
 private:
     explicit SvxEditEngineSource( SvxEditEngineSourceImpl* pImpl );
 
-    rtl::Reference<SvxEditEngineSourceImpl> mxImpl;
+    SvxEditEngineSourceImpl*    mpImpl;
 };
 
 #endif

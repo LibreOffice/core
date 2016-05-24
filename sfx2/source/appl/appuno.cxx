@@ -1753,22 +1753,24 @@ uno::Sequence< uno::Reference< task::XInteractionContinuation > >
 }
 
 RequestPackageReparation::RequestPackageReparation( const OUString& aName )
-    : mxImpl(new RequestPackageReparation_Impl( aName ))
 {
+    pImp = new RequestPackageReparation_Impl( aName );
+    pImp->acquire();
 }
 
 RequestPackageReparation::~RequestPackageReparation()
 {
+    pImp->release();
 }
 
 bool RequestPackageReparation::isApproved()
 {
-    return mxImpl->isApproved();
+    return pImp->isApproved();
 }
 
 css::uno::Reference < task::XInteractionRequest > RequestPackageReparation::GetRequest()
 {
-    return mxImpl;
+    return css::uno::Reference < task::XInteractionRequest >(pImp);
 }
 
 
@@ -1810,17 +1812,19 @@ uno::Sequence< uno::Reference< task::XInteractionContinuation > >
 }
 
 NotifyBrokenPackage::NotifyBrokenPackage( const OUString& aName )
-    : mxImpl(new NotifyBrokenPackage_Impl( aName ))
 {
+    pImp = new NotifyBrokenPackage_Impl( aName );
+    pImp->acquire();
 }
 
 NotifyBrokenPackage::~NotifyBrokenPackage()
 {
+    pImp->release();
 }
 
 css::uno::Reference < task::XInteractionRequest > NotifyBrokenPackage::GetRequest()
 {
-    return mxImpl;
+    return css::uno::Reference < task::XInteractionRequest >(pImp);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

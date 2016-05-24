@@ -531,7 +531,7 @@ private:
     SvXMLExport& mrExport;
     Reference< XInterface > mxExport;
     Reference< XPropertySet > mxPageProps;
-    rtl::Reference<XMLSdPropHdlFactory> mxSdPropHdlFactory;
+    XMLSdPropHdlFactory* mpSdPropHdlFactory;
 };
 
 AnimationsExporterImpl::AnimationsExporterImpl( SvXMLExport& rExport, const Reference< XPropertySet >& xPageProps )
@@ -548,11 +548,19 @@ AnimationsExporterImpl::AnimationsExporterImpl( SvXMLExport& rExport, const Refe
         OSL_FAIL( "xmloff::AnimationsExporterImpl::AnimationsExporterImpl(), RuntimeException caught!" );
     }
 
-    mxSdPropHdlFactory = new XMLSdPropHdlFactory( mrExport.GetModel(), mrExport );
+    mpSdPropHdlFactory = new XMLSdPropHdlFactory( mrExport.GetModel(), mrExport );
+    // set lock to avoid deletion
+    mpSdPropHdlFactory->acquire();
 }
 
 AnimationsExporterImpl::~AnimationsExporterImpl()
 {
+    // cleanup factory, decrease refcount. Should lead to destruction.
+    if(mpSdPropHdlFactory)
+    {
+        mpSdPropHdlFactory->release();
+        mpSdPropHdlFactory = nullptr;
+    }
 }
 
 void AnimationsExporterImpl::exportTransitionNode()
@@ -1519,7 +1527,7 @@ void AnimationsExporterImpl::convertValue( XMLTokenEnum eAttributeName, OUString
         }
 
         //const XMLPropertyHandler* pHandler = static_cast<SdXMLExport*>(&mrExport)->GetSdPropHdlFactory()->GetPropertyHandler( nType );
-        const XMLPropertyHandler* pHandler = mxSdPropHdlFactory->GetPropertyHandler( nType );
+        const XMLPropertyHandler* pHandler = mpSdPropHdlFactory->GetPropertyHandler( nType );
         if( pHandler )
         {
             pHandler->exportXML( aString, rValue, mrExport.GetMM100UnitConverter() );

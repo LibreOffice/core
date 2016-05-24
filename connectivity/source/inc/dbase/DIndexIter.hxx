@@ -36,7 +36,7 @@ namespace connectivity
         protected:
             file::OBoolOperator*    m_pOperator;
             const file::OOperand*   m_pOperand;
-            css::uno::Reference<ODbaseIndex> m_xIndex;
+            ODbaseIndex*            m_pIndex;
             ONDXPagePtr             m_aRoot,
                                     m_aCurLeaf;
             sal_uInt16              m_nCurNode;
@@ -57,9 +57,10 @@ namespace connectivity
                             const file::OOperand* pOper)
                 :m_pOperator(pOp)
                 ,m_pOperand(pOper)
-                ,m_xIndex(pInd)
+                ,m_pIndex(pInd)
                 ,m_nCurNode(NODE_NOTFOUND)
             {
+                pInd->acquire();
             }
 
             virtual ~OIndexIterator();

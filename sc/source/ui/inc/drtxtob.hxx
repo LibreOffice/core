@@ -35,7 +35,7 @@ class TransferableClipboardListener;
 class ScDrawTextObjectBar : public SfxShell
 {
     ScViewData*         pViewData;
-    css::uno::Reference<TransferableClipboardListener> mxClipEvtLstnr;
+    TransferableClipboardListener* pClipEvtLstnr;
     bool                bPastePossible;
 
     DECL_LINK_TYPED( ClipboardChanged, TransferableDataHelper*, void );

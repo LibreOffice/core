@@ -222,7 +222,7 @@ public:
 class ScRangeSubTotalDescriptor : public ScSubTotalDescriptorBase
 {
 private:
-    css::uno::Reference<ScDatabaseRangeObj>  mxParent;
+    ScDatabaseRangeObj*     pParent;
 
 public:
                             ScRangeSubTotalDescriptor(ScDatabaseRangeObj* pPar);
@@ -435,7 +435,7 @@ public:
 class ScRangeFilterDescriptor : public ScFilterDescriptorBase
 {
 private:
-    css::uno::Reference<ScDatabaseRangeObj>  mxParent;
+    ScDatabaseRangeObj*     pParent;
 
 public:
                             ScRangeFilterDescriptor(ScDocShell* pDocSh, ScDatabaseRangeObj* pPar);
@@ -451,7 +451,7 @@ public:
 class ScDataPilotFilterDescriptor : public ScFilterDescriptorBase
 {
 private:
-    css::uno::Reference<ScDataPilotDescriptorBase>  mxParent;
+    ScDataPilotDescriptorBase*  pParent;
 
 public:
                             ScDataPilotFilterDescriptor(ScDocShell* pDocSh, ScDataPilotDescriptorBase* pPar);

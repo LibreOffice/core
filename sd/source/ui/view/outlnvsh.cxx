@@ -191,6 +191,7 @@ OutlineViewShell::OutlineViewShell (
     : ViewShell(pFrame, pParentWindow, rViewShellBase),
       pOlView(nullptr),
       pLastPage( nullptr ),
+      pClipEvtLstnr(nullptr),
       bPastePossible(false),
       mbInitialized(false)
 
@@ -219,10 +220,11 @@ OutlineViewShell::~OutlineViewShell()
 
     mpFrameView->Disconnect();
 
-    if ( mxClipEvtLstnr.is() )
+    if ( pClipEvtLstnr )
     {
-        mxClipEvtLstnr->AddRemoveListener( GetActiveWindow(), false );
-        mxClipEvtLstnr->ClearCallbackLink();     // prevent callback if another thread is waiting
+        pClipEvtLstnr->AddRemoveListener( GetActiveWindow(), false );
+        pClipEvtLstnr->ClearCallbackLink();     // prevent callback if another thread is waiting
+        pClipEvtLstnr->release();
     }
 }
 
@@ -881,11 +883,12 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
 
     if( SfxItemState::DEFAULT == rSet.GetItemState( SID_PASTE ) )
     {
-        if ( !mxClipEvtLstnr.is() )
+        if ( !pClipEvtLstnr )
         {
             // create listener
-            mxClipEvtLstnr = new TransferableClipboardListener( LINK( this, OutlineViewShell, ClipboardChanged ) );
-            mxClipEvtLstnr->AddRemoveListener( GetActiveWindow(), true );
+            pClipEvtLstnr = new TransferableClipboardListener( LINK( this, OutlineViewShell, ClipboardChanged ) );
+            pClipEvtLstnr->acquire();
+            pClipEvtLstnr->AddRemoveListener( GetActiveWindow(), true );
 
             // get initial state
             TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( GetActiveWindow() ) );

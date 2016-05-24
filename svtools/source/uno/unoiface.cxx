@@ -810,7 +810,8 @@ void VCLXFileControl::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 
 
 SVTXFormattedField::SVTXFormattedField()
-    :bIsStandardSupplier(true)
+    :m_pCurrentSupplier(nullptr)
+    ,bIsStandardSupplier(true)
     ,nKeyToSetDelayed(-1)
 {
 }
@@ -818,6 +819,11 @@ SVTXFormattedField::SVTXFormattedField()
 
 SVTXFormattedField::~SVTXFormattedField()
 {
+    if (m_pCurrentSupplier)
+    {
+        m_pCurrentSupplier->release();
+        m_pCurrentSupplier = nullptr;
+    }
 }
 
 
@@ -1023,7 +1029,7 @@ css::uno::Any SVTXFormattedField::getProperty( const OUString& PropertyName ) th
 
 css::uno::Reference< css::util::XNumberFormatsSupplier >  SVTXFormattedField::getFormatsSupplier() const
 {
-    return m_xCurrentSupplier;
+    return css::uno::Reference< css::util::XNumberFormatsSupplier > (m_pCurrentSupplier);
 }
 
 css::uno::Any SVTXFormattedField::convertEffectiveValue(const css::uno::Any& rValue)
@@ -1311,12 +1317,15 @@ void SVTXFormattedField::setFormatsSupplier(const css::uno::Reference< css::util
     if (!pNew)
         return;     // TODO : how to process ?
 
-    m_xCurrentSupplier = pNew;
+    if (m_pCurrentSupplier)
+        m_pCurrentSupplier->release();
+    m_pCurrentSupplier = pNew;
+    m_pCurrentSupplier->acquire();
     if (pField)
     {
         // save the actual value
         css::uno::Any aCurrent = GetValue();
-        pField->SetFormatter(m_xCurrentSupplier->GetNumberFormatter(), false);
+        pField->SetFormatter(m_pCurrentSupplier->GetNumberFormatter(), false);
         if (nKeyToSetDelayed != -1)
         {
             pField->SetFormatKey(nKeyToSetDelayed);

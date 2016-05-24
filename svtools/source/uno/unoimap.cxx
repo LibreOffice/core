@@ -79,7 +79,7 @@ public:
 
     IMapObject* createIMapObject() const;
 
-    css::uno::Reference<SvMacroTableEventDescriptor> mxEvents;
+    SvMacroTableEventDescriptor* mpEvents;
 
     // overriden helpers from PropertySetHelper
     virtual void _setPropertyValues( const PropertyMapEntry** ppEntries, const Any* pValues ) throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException ) override;
@@ -186,7 +186,8 @@ SvUnoImageMapObject::SvUnoImageMapObject( sal_uInt16 nType, const SvEventDescrip
 ,   mbIsActive( true )
 ,   mnRadius( 0 )
 {
-    mxEvents = new SvMacroTableEventDescriptor( pSupportedMacroItems );
+    mpEvents = new SvMacroTableEventDescriptor( pSupportedMacroItems );
+    mpEvents->acquire();
 }
 
 SvUnoImageMapObject::SvUnoImageMapObject( const IMapObject& rMapObject, const SvEventDescription* pSupportedMacroItems )
@@ -242,11 +243,13 @@ SvUnoImageMapObject::SvUnoImageMapObject( const IMapObject& rMapObject, const Sv
         }
     }
 
-    mxEvents = new SvMacroTableEventDescriptor( rMapObject.GetMacroTable(), pSupportedMacroItems );
+    mpEvents = new SvMacroTableEventDescriptor( rMapObject.GetMacroTable(), pSupportedMacroItems );
+    mpEvents->acquire();
 }
 
 SvUnoImageMapObject::~SvUnoImageMapObject() throw()
 {
+    mpEvents->release();
 }
 
 IMapObject* SvUnoImageMapObject::createIMapObject() const
@@ -294,7 +297,7 @@ IMapObject* SvUnoImageMapObject::createIMapObject() const
     }
 
     SvxMacroTableDtor aMacroTable;
-    mxEvents->copyMacrosIntoTable(aMacroTable);
+    mpEvents->copyMacrosIntoTable(aMacroTable);
     pNewIMapObject->SetMacroTable( aMacroTable );
 
     return pNewIMapObject;
@@ -509,7 +512,9 @@ void SvUnoImageMapObject::_getPropertyValues( const PropertyMapEntry** ppEntries
 Reference< XNameReplace > SAL_CALL SvUnoImageMapObject::getEvents()
     throw( RuntimeException, std::exception )
 {
-    return mxEvents;
+    // try weak reference first
+    Reference< XNameReplace > xEvents( mpEvents );
+    return xEvents;
 }
 
 
