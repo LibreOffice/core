@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_4e0cc494",
+        "filename": "vcl/source/app/svmain.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 307,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-05-24T19:54:55Z",
+      "side": 1,
+      "message": "in commit 1e9ecb2a2771ea6699e22b2693c96f4927d96ffb i\u0027ve added a getenv(\"LO_TESTNAME\") to detect cpp-unit tests, but don\u0027t remember why - is VCL_HIDE_WINDOWS more general than that?",
+      "revId": "974b0ffad2c6d8ede975f4a34e7eed1a18235dd9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
