@@ -106,14 +106,11 @@ private:
     Reference<XDropTargetDragContext> m_currentDragContext;
     Reference<XDropTargetDropContext> m_currentDropContext;
 
-private:
-    DropTarget();
-    DropTarget(DropTarget&);
-    DropTarget &operator= (DropTarget&);
-
 public:
     explicit DropTarget(const Reference<XComponentContext>& rxContext);
     virtual ~DropTarget();
+    DropTarget(DropTarget&) = delete;
+    DropTarget &operator= (DropTarget&) = delete;
 
     // Overrides WeakComponentImplHelper::disposing which is called by
     // WeakComponentImplHelper::dispose

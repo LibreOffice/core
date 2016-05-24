@@ -57,10 +57,6 @@ class DragSource:
     // The mouse button that set off the drag and drop operation
     short m_MouseButton;
 
-    DragSource();
-    DragSource(const DragSource&);
-    DragSource &operator= ( const DragSource&);
-
     // First starting a new drag and drop thread if
     // the last one has finished
     void StartDragImpl(
@@ -89,6 +85,8 @@ public:
 public:
     explicit DragSource(const Reference<XComponentContext>& rxContext);
     virtual ~DragSource();
+    DragSource(const DragSource&) = delete;
+    DragSource &operator= ( const DragSource&) = delete;
 
   // XInitialization
     virtual void SAL_CALL initialize( const Sequence< Any >& aArguments )

@@ -36,12 +36,11 @@ class TargetDropContext: public WeakImplHelper<XDropTargetDropContext>
     // to non-interface functions of m_pDropTarget
     DropTarget* m_pDropTarget;
 
-    TargetDropContext();
-    TargetDropContext( const TargetDropContext&);
-    TargetDropContext &operator= ( const TargetDropContext&);
 public:
     explicit TargetDropContext(DropTarget* pTarget);
     ~TargetDropContext();
+    TargetDropContext( const TargetDropContext&) = delete;
+    TargetDropContext &operator= ( const TargetDropContext&) = delete;
 
     // XDropTargetDragContext
     virtual void SAL_CALL acceptDrop( sal_Int8 dropOperation )
