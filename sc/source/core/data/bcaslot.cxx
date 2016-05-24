@@ -530,7 +530,11 @@ void ScBroadcastAreaSlot::EraseArea( ScBroadcastAreas::iterator& rIter )
         ScBroadcastArea* pArea = (*rIter).mpArea;
         aBroadcastAreaTbl.erase( rIter);
         if (!pArea->DecRef())
+        {
+            if (pBASM->IsInBulkBroadcast())
+                pBASM->RemoveBulkGroupArea(pArea);
             delete pArea;
+        }
     }
 }
 
@@ -1180,6 +1184,11 @@ void ScBroadcastAreaSlotMachine::BulkBroadcastGroupAreas()
 size_t ScBroadcastAreaSlotMachine::RemoveBulkArea( const ScBroadcastArea* pArea )
 {
     return aBulkBroadcastAreas.erase( pArea );
+}
+
+void ScBroadcastAreaSlotMachine::RemoveBulkGroupArea( ScBroadcastArea* pArea )
+{
+    maBulkGroupAreas.erase(pArea);
 }
 
 void ScBroadcastAreaSlotMachine::PushAreaToBeErased( ScBroadcastAreaSlot* pSlot,
