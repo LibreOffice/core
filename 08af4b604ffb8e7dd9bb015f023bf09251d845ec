@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_6eec28c8",
+        "filename": "sw/inc/unostyle.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 251,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-05-24T19:08:42Z",
+      "side": 1,
+      "message": "When you add a new class, please always add at least a one-liner mission statement for that class. It should following the doxygen format, so it should be like this:\n\n/// A text table style is ....",
+      "revId": "08af4b604ffb8e7dd9bb015f023bf09251d845ec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_cedb741a",
+        "filename": "sw/source/core/unocore/unostyle.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 816,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-05-24T19:08:42Z",
+      "side": 1,
+      "message": "This affects non-table style as well, are you sure the behavior is still correct?",
+      "revId": "08af4b604ffb8e7dd9bb015f023bf09251d845ec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_eed83820",
+        "filename": "sw/source/core/unocore/unostyle.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 4251,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-05-24T19:08:42Z",
+      "side": 1,
+      "message": "Please use SAL_WARN() in new code, OSL_FAIL() is legacy.",
+      "revId": "08af4b604ffb8e7dd9bb015f023bf09251d845ec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_0e047c7c",
+        "filename": "sw/source/core/unocore/unostyle.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 4285,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-05-24T19:08:42Z",
+      "side": 1,
+      "message": "Do you plan to implement this in a follow-up commit? Should be straightforward to do so, given existing SwTableAutoFormat::SetName().",
+      "revId": "08af4b604ffb8e7dd9bb015f023bf09251d845ec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
