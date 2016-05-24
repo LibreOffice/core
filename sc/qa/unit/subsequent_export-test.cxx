@@ -104,6 +104,7 @@ public:
     void testRichTextExportODS();
     void testRichTextCellFormat();
     void testFormulaRefSheetNameODS();
+    void testConditionalFormatInsertRowColumn();
 
     void testCellValuesExportODS();
     void testCellNoteExportODS();
@@ -194,6 +195,7 @@ public:
     CPPUNIT_TEST(testInlineArrayXLS);
     CPPUNIT_TEST(testEmbeddedChartXLS);
     CPPUNIT_TEST(testCellAnchoredGroupXLS);
+    CPPUNIT_TEST(testConditionalFormatInsertRowColumn);
 
     CPPUNIT_TEST(testFormulaReferenceXLS);
     CPPUNIT_TEST(testSheetProtectionXLSX);
@@ -3303,6 +3305,24 @@ void ScExportTest::testConditionalFormatRangeListXLSX()
 
     assertXPath(pDoc, "//x:conditionalFormatting", "sqref", "F4 F10");
 }
+
+
+void ScExportTest::testConditionalFormatInsertRowColumn()
+//tdf#99461
+{
+    ScDocShellRef xDocSh = loadDoc("conditional_formatting_not_updated_when_rows_or_columns_inserted.", FORMAT_ODS); //load file
+    CPPUNIT_ASSERT(xDocSh.Is());
+    //insert a row  void ScDocument::InsertRow(short, short, short, short, int, unsigned long, ScDocument*, ScMarkData const*)
+    ScDocument& rDoc = xDocSh->GetDocument(); //assign the document into rDoc
+
+    rDoc.InsertRow(0,0,0,0,0,1);  //insert one row at A1
+
+    xmlDocPtr pDoc = XPathHelper::parseExport(*xDocSh, m_xSFactory, "content.xml", FORMAT_ODS); //save as .ods
+   CPPUNIT_ASSERT(pDoc);
+    //formula in conditional format should be moved
+    assertXPath(pDoc, "//calcext:conditional-formats", "value", "formula-is(SUM([$List1.$A$2])<>[$List1.$A$3])");
+}
+
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest);
 
