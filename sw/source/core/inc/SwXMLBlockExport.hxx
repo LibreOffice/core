@@ -40,6 +40,7 @@ public:
     void ExportAutoStyles_() override {}
     void ExportMasterStyles_ () override {}
     void ExportContent_() override {}
+    void ExportUndo_() override {}
 };
 
 class SwXMLTextBlockExport : public SvXMLExport
@@ -59,6 +60,7 @@ public:
     void ExportAutoStyles_() override {}
     void ExportMasterStyles_ () override {}
     void ExportContent_() override {}
+    void ExportUndo_() override {}
 };
 
 #endif

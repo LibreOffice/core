@@ -575,6 +575,7 @@ document-meta
 document-settings
 document-statistic
 document-styles
+document-undo
 domain
 dot
 dots1
@@ -1853,6 +1854,7 @@ long-dash
 single
 small-wave
 wave
+undo
 unformatted-text
 union
 unit
