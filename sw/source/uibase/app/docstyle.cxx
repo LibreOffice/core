@@ -323,6 +323,9 @@ sal_uInt32 SwStyleSheetIterator::SwPoolFormatList::FindName(SfxStyleFamily eFam,
         case SfxStyleFamily::Pseudo:
             cStyle = cNUMRULE;
             break;
+        case SfxStyleFamily::Table:
+            cStyle = cTABSTYLE;
+            break;
         default:
             cStyle = ' ';
             break;
