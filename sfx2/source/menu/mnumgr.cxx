@@ -469,6 +469,8 @@ void SfxPopupMenuManager::ExecutePopup( const ResId& rResId, SfxViewFrame* pFram
             pSVMenu = static_cast<PopupMenu*>( pMenu );
         }
 
+        SfxPopupMenuManager aPop( pSVMenu, pFrame->GetBindings() );
+        aPop.RemoveDisabledEntries();
         if (comphelper::LibreOfficeKit::isActive())
         {
             boost::property_tree::ptree aMenu = fillPopupMenu(pSVMenu);
@@ -481,11 +483,7 @@ void SfxPopupMenuManager::ExecutePopup( const ResId& rResId, SfxViewFrame* pFram
             objSh->libreOfficeKitCallback(LOK_CALLBACK_CONTEXT_MENU, aStream.str().c_str());
         }
         else
-        {
-            SfxPopupMenuManager aPop( pSVMenu, pFrame->GetBindings() );
-            aPop.RemoveDisabledEntries();
             aPop.Execute( rPoint, pWindow );
-        }
 
         // #i112646 avoid crash when context menu is closed.
         // the (manually inserted) sub-menu needs to be destroyed before
