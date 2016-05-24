@@ -21,6 +21,7 @@
 #define INCLUDED_VCL_INC_WINDOW_H
 
 #include <sal/config.h>
+
 #include <tools/fract.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/rendersettings.hxx>
@@ -79,9 +80,6 @@ namespace dnd {
 }}}}}
 
 bool ImplWindowFrameProc( vcl::Window* pInst, SalEvent nEvent, const void* pEvent );
-
-#define WINDOW_HITTEST_INSIDE           ((sal_uInt16)0x0001)
-#define WINDOW_HITTEST_TRANSPARENT      ((sal_uInt16)0x0002)
 
 struct ImplWinData
 {
