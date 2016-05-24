@@ -492,6 +492,12 @@ void SwXMLExport::ExportContent_()
     GetTextParagraphExport()->exportText( xText, bShowProgress );
 }
 
+void SwXMLExport::ExportUndo_()
+{
+    SvXMLElementExport aElem( *this, XML_NAMESPACE_OFFICE, XML_UNDO,
+                                true, true );
+}
+
 namespace
 {
     class theSwXMLExportUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSwXMLExportUnoTunnelId > {};
@@ -562,6 +568,14 @@ com_sun_star_comp_Writer_XMLContentExporter_get_implementation(css::uno::XCompon
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
+com_sun_star_comp_Writer_XMLUndoExporter_get_implementation(css::uno::XComponentContext* context,
+        css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new SwXMLExport(context, OUString("com.sun.star.comp.Writer.XMLUndoExporter"),
+                SvXMLExportFlags::UNDO));
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
 com_sun_star_comp_Writer_XMLMetaExporter_get_implementation(css::uno::XComponentContext* context,
         css::uno::Sequence<css::uno::Any> const &)
 {
@@ -601,6 +615,14 @@ com_sun_star_comp_Writer_XMLOasisContentExporter_get_implementation(css::uno::XC
     return cppu::acquire(new SwXMLExport(context, OUString("com.sun.star.comp.Writer.XMLOasisContentExporter"),
                 SvXMLExportFlags::AUTOSTYLES | SvXMLExportFlags::CONTENT | SvXMLExportFlags::SCRIPTS |
                 SvXMLExportFlags::FONTDECLS | SvXMLExportFlags::OASIS));
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
+com_sun_star_comp_Writer_XMLOasisUndoExporter_get_implementation(css::uno::XComponentContext* context,
+        css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new SwXMLExport(context, OUString("com.sun.star.comp.Writer.XMLOasisUndoExporter"),
+                SvXMLExportFlags::UNDO | SvXMLExportFlags::OASIS));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
