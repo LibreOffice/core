@@ -270,7 +270,8 @@ void DesktopLOKTest::testGetStyles()
 
 void DesktopLOKTest::testGetFonts()
 {
-    LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
+    comphelper::LibreOfficeKit::setActive();
+    LibLODocument_Impl* pDocument = loadDoc("blank_presentation.odp");
     boost::property_tree::ptree aTree;
     char* pJSON = pDocument->m_pDocumentClass->getCommandValues(pDocument, ".uno:CharFontName");
     std::stringstream aStream(pJSON);
@@ -285,6 +286,8 @@ void DesktopLOKTest::testGetFonts()
         // check that we have font sizes available for each font
         CPPUNIT_ASSERT( rPair.second.size() > 0);
     }
+    free(pJSON);
+    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void DesktopLOKTest::testCreateView()
