@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_6e034874",
+        "filename": "configure.ac",
+        "patchSetId": 2
+      },
+      "lineNbr": 9205,
+      "author": {
+        "id": 1000381
+      },
+      "writtenOn": "2016-05-24T19:11:20Z",
+      "side": 1,
+      "message": "Please remove the extra trailing space here, AFAIK the commit will be rejected on master otherwise.",
+      "revId": "73208c3ca8b34580888f9338938ee52fdf92601e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
