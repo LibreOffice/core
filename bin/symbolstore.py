@@ -340,7 +340,7 @@ class Dumper:
     def __init__(self, dump_syms, symbol_path,
                  archs=None, srcdir=None, copy_debug=False, vcsinfo=False, srcsrv=False):
         # popen likes absolute paths, at least on windows
-        self.dump_syms = os.path.abspath(dump_syms)
+        self.dump_syms = dump_syms
         self.symbol_path = symbol_path
         if archs is None:
             # makes the loop logic simpler
