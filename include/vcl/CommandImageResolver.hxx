@@ -12,6 +12,7 @@
 
 #include <vcl/dllapi.h>
 #include <vcl/image.hxx>
+#include <o3tl/enumarray.hxx>
 
 #include <com/sun/star/uno/Sequence.hxx>
 
@@ -21,11 +22,11 @@
 namespace vcl
 {
 
-enum ImageType
+enum class ImageType
 {
-    ImageType_Color = 0,
-    ImageType_Color_Large,
-    ImageType_COUNT
+    Color = 0,
+    Color_Large,
+    LAST = Color_Large
 };
 
 class VCL_DLLPUBLIC CommandImageResolver
@@ -37,17 +38,17 @@ private:
     std::vector<OUString> m_aImageCommandNameVector;
     std::vector<OUString> m_aImageNameVector;
 
-    ImageList* m_pImageList[ImageType_COUNT];
+    o3tl::enumarray<ImageType, ImageList*> m_pImageList;
     OUString m_sIconTheme;
 
-    ImageList* getImageList(sal_Int16 nImageType);
+    ImageList* getImageList(ImageType nImageType);
 
 public:
     CommandImageResolver();
     virtual ~CommandImageResolver();
 
     bool registerCommands(css::uno::Sequence<OUString>& aCommandSequence);
-    Image getImageFromCommandURL(sal_Int16 nImageType, const OUString& rCommandURL);
+    Image getImageFromCommandURL(ImageType nImageType, const OUString& rCommandURL);
 
     std::vector<OUString>& getCommandNames()
     {
