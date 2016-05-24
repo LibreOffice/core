@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_ae10f04f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000381
+      },
+      "writtenOn": "2016-05-24T09:27:27Z",
+      "side": 1,
+      "message": "Try to start your sentences with capitals.",
+      "revId": "91ca343773120f083d1c52d40683a499154a2ed9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_4e09242c",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 9206,
+      "author": {
+        "id": 1000381
+      },
+      "writtenOn": "2016-05-24T09:27:27Z",
+      "side": 1,
+      "message": "I think it would better to merge this condition with the above one to avoid the duplication: test \"$with_harfbuzz\" \u003d \"yes\" -o \\( $_os stuff \\)",
+      "revId": "91ca343773120f083d1c52d40683a499154a2ed9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_8e132c5c",
+        "filename": "external/harfbuzz/ExternalProject_harfbuzz.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000381
+      },
+      "writtenOn": "2016-05-24T09:27:27Z",
+      "side": 1,
+      "message": "You can use $(if $(or )) here to avoid duplication.",
+      "revId": "91ca343773120f083d1c52d40683a499154a2ed9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
