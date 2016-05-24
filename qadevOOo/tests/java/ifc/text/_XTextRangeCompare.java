@@ -94,7 +94,7 @@ public class _XTextRangeCompare extends MultiMethodTest {
     /**
      * One cursor is created and to its position a paragraph
      * inserted, then the fist five characters was selected.
-     * A second cursor was created and the last 7 characteres
+     * A second cursor was created and the last 7 characters
      * was selected.<p>
      *
      * Has <b>OK</b> status if the compare returns 1, i.e.

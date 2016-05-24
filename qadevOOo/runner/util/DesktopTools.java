@@ -415,7 +415,7 @@ public class DesktopTools
      * This function docks the Navigator onto the right side of the window.</p>
      * Note:<P>
      * Since the svt.viewoptions cache the view configuration at start up
-     * the chage of the docking will be effective at a restart.
+     * the change of the docking will be effective at a restart.
      * @param xMSF the XMultiServiceFactory
      */
     public static void dockNavigator(XMultiServiceFactory xMSF)

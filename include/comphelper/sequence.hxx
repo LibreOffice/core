@@ -140,10 +140,10 @@ namespace comphelper
         const TYPE* m_pCurrent;
 
     public:
-        /** contrcuct a sequence iterator from a sequence
+        /** construct a sequence iterator from a sequence
         */
         OSequenceIterator(const css::uno::Sequence< TYPE >& _rSeq);
-        /** contrcuct a sequence iterator from a Any containing a sequence
+        /** construct a sequence iterator from a Any containing a sequence
         */
         OSequenceIterator(const css::uno::Any& _rSequenceAny);
 
