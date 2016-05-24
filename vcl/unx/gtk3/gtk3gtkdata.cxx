@@ -200,7 +200,13 @@ GdkCursor* GtkSalDisplay::getFromXBM( const unsigned char *pBitmap,
     cairo_mask_surface(cr, mask, 0, 0);
     cairo_destroy(cr);
 
+#if GTK_CHECK_VERSION(3,10,0)
     GdkCursor *cursor = gdk_cursor_new_from_surface(m_pGdkDisplay, s, nXHot, nYHot);
+#else
+    GdkPixbuf *pixbuf = gdk_pixbuf_get_from_surface(s, 0, 0, nWidth, nHeight);
+    GdkCursor *cursor = gdk_cursor_new_from_pixbuf(m_pGdkDisplay, pixbuf, nXHot, nYHot);
+    g_object_unref(pixbuf);
+#endif
 
     cairo_surface_destroy(s);
     cairo_surface_destroy(mask);
