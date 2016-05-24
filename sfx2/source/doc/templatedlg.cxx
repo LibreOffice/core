@@ -612,7 +612,11 @@ IMPL_LINK_NOARG_TYPED(SfxTemplateManagerDlg, MoveClickHdl, Button*, void)
         if(bIsNewCategory)
         {
             if (!sCategory.isEmpty())
+            {
                 nItemId = mpLocalView->createRegion(sCategory);
+                if(nItemId)
+                    mpCBFolder->InsertEntry(sCategory);
+            }
         }
         else
         {
