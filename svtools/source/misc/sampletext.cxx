@@ -745,336 +745,336 @@ namespace
     {
         if (rIn.none())
         {
-            fprintf(stderr, "<NONE>\n");
+            SAL_INFO("svtools", "<NONE>");
             return;
         }
         if (rIn[vcl::UnicodeCoverage::BASIC_LATIN])
-            fprintf(stderr, "BASIC_LATIN\n");
+            SAL_INFO("svtools", "BASIC_LATIN");
         if (rIn[vcl::UnicodeCoverage::LATIN_1_SUPPLEMENT])
-            fprintf(stderr, "LATIN_1_SUPPLEMENT\n");
+            SAL_INFO("svtools", "LATIN_1_SUPPLEMENT");
         if (rIn[vcl::UnicodeCoverage::LATIN_EXTENDED_A])
-            fprintf(stderr, "LATIN_EXTENDED_A\n");
+            SAL_INFO("svtools", "LATIN_EXTENDED_A");
         if (rIn[vcl::UnicodeCoverage::LATIN_EXTENDED_B])
-            fprintf(stderr, "LATIN_EXTENDED_B\n");
+            SAL_INFO("svtools", "LATIN_EXTENDED_B");
         if (rIn[vcl::UnicodeCoverage::IPA_EXTENSIONS])
-            fprintf(stderr, "IPA_EXTENSIONS\n");
+            SAL_INFO("svtools", "IPA_EXTENSIONS");
         if (rIn[vcl::UnicodeCoverage::SPACING_MODIFIER_LETTERS])
-            fprintf(stderr, "SPACING_MODIFIER_LETTERS\n");
+            SAL_INFO("svtools", "SPACING_MODIFIER_LETTERS");
         if (rIn[vcl::UnicodeCoverage::COMBINING_DIACRITICAL_MARKS])
-            fprintf(stderr, "COMBINING_DIACRITICAL_MARKS\n");
+            SAL_INFO("svtools", "COMBINING_DIACRITICAL_MARKS");
         if (rIn[vcl::UnicodeCoverage::GREEK_AND_COPTIC])
-            fprintf(stderr, "GREEK_AND_COPTIC\n");
+            SAL_INFO("svtools", "GREEK_AND_COPTIC");
         if (rIn[vcl::UnicodeCoverage::COPTIC])
-            fprintf(stderr, "COPTIC\n");
+            SAL_INFO("svtools", "COPTIC");
         if (rIn[vcl::UnicodeCoverage::CYRILLIC])
-            fprintf(stderr, "CYRILLIC\n");
+            SAL_INFO("svtools", "CYRILLIC");
         if (rIn[vcl::UnicodeCoverage::ARMENIAN])
-            fprintf(stderr, "ARMENIAN\n");
+            SAL_INFO("svtools", "ARMENIAN");
         if (rIn[vcl::UnicodeCoverage::HEBREW])
-            fprintf(stderr, "HEBREW\n");
+            SAL_INFO("svtools", "HEBREW");
         if (rIn[vcl::UnicodeCoverage::VAI])
-            fprintf(stderr, "VAI\n");
+            SAL_INFO("svtools", "VAI");
         if (rIn[vcl::UnicodeCoverage::ARABIC])
-            fprintf(stderr, "ARABIC\n");
+            SAL_INFO("svtools", "ARABIC");
         if (rIn[vcl::UnicodeCoverage::NKO])
-            fprintf(stderr, "NKO\n");
+            SAL_INFO("svtools", "NKO");
         if (rIn[vcl::UnicodeCoverage::DEVANAGARI])
-            fprintf(stderr, "DEVANAGARI\n");
+            SAL_INFO("svtools", "DEVANAGARI");
         if (rIn[vcl::UnicodeCoverage::BENGALI])
-            fprintf(stderr, "BENGALI\n");
+            SAL_INFO("svtools", "BENGALI");
         if (rIn[vcl::UnicodeCoverage::GURMUKHI])
-            fprintf(stderr, "GURMUKHI\n");
+            SAL_INFO("svtools", "GURMUKHI");
         if (rIn[vcl::UnicodeCoverage::GUJARATI])
-            fprintf(stderr, "GUJARATI\n");
+            SAL_INFO("svtools", "GUJARATI");
         if (rIn[vcl::UnicodeCoverage::ODIA])
-            fprintf(stderr, "ODIA\n");
+            SAL_INFO("svtools", "ODIA");
         if (rIn[vcl::UnicodeCoverage::TAMIL])
-            fprintf(stderr, "TAMIL\n");
+            SAL_INFO("svtools", "TAMIL");
         if (rIn[vcl::UnicodeCoverage::TELUGU])
-            fprintf(stderr, "TELUGU\n");
+            SAL_INFO("svtools", "TELUGU");
         if (rIn[vcl::UnicodeCoverage::KANNADA])
-            fprintf(stderr, "KANNADA\n");
+            SAL_INFO("svtools", "KANNADA");
         if (rIn[vcl::UnicodeCoverage::MALAYALAM])
-            fprintf(stderr, "MALAYALAM\n");
+            SAL_INFO("svtools", "MALAYALAM");
         if (rIn[vcl::UnicodeCoverage::THAI])
-            fprintf(stderr, "THAI\n");
+            SAL_INFO("svtools", "THAI");
         if (rIn[vcl::UnicodeCoverage::LAO])
-            fprintf(stderr, "LAO\n");
+            SAL_INFO("svtools", "LAO");
         if (rIn[vcl::UnicodeCoverage::GEORGIAN])
-            fprintf(stderr, "GEORGIAN\n");
+            SAL_INFO("svtools", "GEORGIAN");
         if (rIn[vcl::UnicodeCoverage::BALINESE])
-            fprintf(stderr, "BALINESE\n");
+            SAL_INFO("svtools", "BALINESE");
         if (rIn[vcl::UnicodeCoverage::HANGUL_JAMO])
-            fprintf(stderr, "HANGUL_JAMO\n");
+            SAL_INFO("svtools", "HANGUL_JAMO");
         if (rIn[vcl::UnicodeCoverage::LATIN_EXTENDED_ADDITIONAL])
-            fprintf(stderr, "LATIN_EXTENDED_ADDITIONAL\n");
+            SAL_INFO("svtools", "LATIN_EXTENDED_ADDITIONAL");
         if (rIn[vcl::UnicodeCoverage::GREEK_EXTENDED])
-            fprintf(stderr, "GREEK_EXTENDED\n");
+            SAL_INFO("svtools", "GREEK_EXTENDED");
         if (rIn[vcl::UnicodeCoverage::GENERAL_PUNCTUATION])
-            fprintf(stderr, "GENERAL_PUNCTUATION\n");
+            SAL_INFO("svtools", "GENERAL_PUNCTUATION");
         if (rIn[vcl::UnicodeCoverage::SUPERSCRIPTS_AND_SUBSCRIPTS])
-            fprintf(stderr, "SUPERSCRIPTS_AND_SUBSCRIPTS\n");
+            SAL_INFO("svtools", "SUPERSCRIPTS_AND_SUBSCRIPTS");
         if (rIn[vcl::UnicodeCoverage::CURRENCY_SYMBOLS])
-            fprintf(stderr, "CURRENCY_SYMBOLS\n");
+            SAL_INFO("svtools", "CURRENCY_SYMBOLS");
         if (rIn[vcl::UnicodeCoverage::COMBINING_DIACRITICAL_MARKS_FOR_SYMBOLS])
-            fprintf(stderr, "COMBINING_DIACRITICAL_MARKS_FOR_SYMBOLS\n");
+            SAL_INFO("svtools", "COMBINING_DIACRITICAL_MARKS_FOR_SYMBOLS");
         if (rIn[vcl::UnicodeCoverage::LETTERLIKE_SYMBOLS])
-            fprintf(stderr, "LETTERLIKE_SYMBOLS\n");
+            SAL_INFO("svtools", "LETTERLIKE_SYMBOLS");
         if (rIn[vcl::UnicodeCoverage::NUMBER_FORMS])
-            fprintf(stderr, "NUMBER_FORMS\n");
+            SAL_INFO("svtools", "NUMBER_FORMS");
         if (rIn[vcl::UnicodeCoverage::ARROWS])
-            fprintf(stderr, "ARROWS\n");
+            SAL_INFO("svtools", "ARROWS");
         if (rIn[vcl::UnicodeCoverage::MATHEMATICAL_OPERATORS])
-            fprintf(stderr, "MATHEMATICAL_OPERATORS\n");
+            SAL_INFO("svtools", "MATHEMATICAL_OPERATORS");
         if (rIn[vcl::UnicodeCoverage::MISCELLANEOUS_TECHNICAL])
-            fprintf(stderr, "MISCELLANEOUS_TECHNICAL\n");
+            SAL_INFO("svtools", "MISCELLANEOUS_TECHNICAL");
         if (rIn[vcl::UnicodeCoverage::CONTROL_PICTURES])
-            fprintf(stderr, "CONTROL_PICTURES\n");
+            SAL_INFO("svtools", "CONTROL_PICTURES");
         if (rIn[vcl::UnicodeCoverage::OPTICAL_CHARACTER_RECOGNITION])
-            fprintf(stderr, "OPTICAL_CHARACTER_RECOGNITION\n");
+            SAL_INFO("svtools", "OPTICAL_CHARACTER_RECOGNITION");
         if (rIn[vcl::UnicodeCoverage::ENCLOSED_ALPHANUMERICS])
-            fprintf(stderr, "ENCLOSED_ALPHANUMERICS\n");
+            SAL_INFO("svtools", "ENCLOSED_ALPHANUMERICS");
         if (rIn[vcl::UnicodeCoverage::BOX_DRAWING])
-            fprintf(stderr, "BOX_DRAWING\n");
+            SAL_INFO("svtools", "BOX_DRAWING");
         if (rIn[vcl::UnicodeCoverage::BLOCK_ELEMENTS])
-            fprintf(stderr, "BLOCK_ELEMENTS\n");
+            SAL_INFO("svtools", "BLOCK_ELEMENTS");
         if (rIn[vcl::UnicodeCoverage::GEOMETRIC_SHAPES])
-            fprintf(stderr, "GEOMETRIC_SHAPES\n");
+            SAL_INFO("svtools", "GEOMETRIC_SHAPES");
         if (rIn[vcl::UnicodeCoverage::MISCELLANEOUS_SYMBOLS])
-            fprintf(stderr, "MISCELLANEOUS_SYMBOLS\n");
+            SAL_INFO("svtools", "MISCELLANEOUS_SYMBOLS");
         if (rIn[vcl::UnicodeCoverage::DINGBATS])
-            fprintf(stderr, "DINGBATS\n");
+            SAL_INFO("svtools", "DINGBATS");
         if (rIn[vcl::UnicodeCoverage::CJK_SYMBOLS_AND_PUNCTUATION])
-            fprintf(stderr, "CJK_SYMBOLS_AND_PUNCTUATION\n");
+            SAL_INFO("svtools", "CJK_SYMBOLS_AND_PUNCTUATION");
         if (rIn[vcl::UnicodeCoverage::HIRAGANA])
-            fprintf(stderr, "HIRAGANA\n");
+            SAL_INFO("svtools", "HIRAGANA");
         if (rIn[vcl::UnicodeCoverage::KATAKANA])
-            fprintf(stderr, "KATAKANA\n");
+            SAL_INFO("svtools", "KATAKANA");
         if (rIn[vcl::UnicodeCoverage::BOPOMOFO])
-            fprintf(stderr, "BOPOMOFO\n");
+            SAL_INFO("svtools", "BOPOMOFO");
         if (rIn[vcl::UnicodeCoverage::HANGUL_COMPATIBILITY_JAMO])
-            fprintf(stderr, "HANGUL_COMPATIBILITY_JAMO\n");
+            SAL_INFO("svtools", "HANGUL_COMPATIBILITY_JAMO");
         if (rIn[vcl::UnicodeCoverage::PHAGS_PA])
-            fprintf(stderr, "PHAGS_PA\n");
+            SAL_INFO("svtools", "PHAGS_PA");
         if (rIn[vcl::UnicodeCoverage::ENCLOSED_CJK_LETTERS_AND_MONTHS])
-            fprintf(stderr, "ENCLOSED_CJK_LETTERS_AND_MONTHS\n");
+            SAL_INFO("svtools", "ENCLOSED_CJK_LETTERS_AND_MONTHS");
         if (rIn[vcl::UnicodeCoverage::CJK_COMPATIBILITY])
-            fprintf(stderr, "CJK_COMPATIBILITY\n");
+            SAL_INFO("svtools", "CJK_COMPATIBILITY");
         if (rIn[vcl::UnicodeCoverage::HANGUL_SYLLABLES])
-            fprintf(stderr, "HANGUL_SYLLABLES\n");
+            SAL_INFO("svtools", "HANGUL_SYLLABLES");
         if (rIn[vcl::UnicodeCoverage::NONPLANE_0])
-            fprintf(stderr, "NONPLANE_0\n");
+            SAL_INFO("svtools", "NONPLANE_0");
         if (rIn[vcl::UnicodeCoverage::PHOENICIAN])
-            fprintf(stderr, "PHOENICIAN\n");
+            SAL_INFO("svtools", "PHOENICIAN");
         if (rIn[vcl::UnicodeCoverage::CJK_UNIFIED_IDEOGRAPHS])
-            fprintf(stderr, "CJK_UNIFIED_IDEOGRAPHS\n");
+            SAL_INFO("svtools", "CJK_UNIFIED_IDEOGRAPHS");
         if (rIn[vcl::UnicodeCoverage::PRIVATE_USE_AREA_PLANE_0])
-            fprintf(stderr, "PRIVATE_USE_AREA_PLANE_0\n");
+            SAL_INFO("svtools", "PRIVATE_USE_AREA_PLANE_0");
         if (rIn[vcl::UnicodeCoverage::CJK_STROKES])
-            fprintf(stderr, "CJK_STROKES\n");
+            SAL_INFO("svtools", "CJK_STROKES");
         if (rIn[vcl::UnicodeCoverage::ALPHABETIC_PRESENTATION_FORMS])
-            fprintf(stderr, "ALPHABETIC_PRESENTATION_FORMS\n");
+            SAL_INFO("svtools", "ALPHABETIC_PRESENTATION_FORMS");
         if (rIn[vcl::UnicodeCoverage::ARABIC_PRESENTATION_FORMS_A])
-            fprintf(stderr, "ARABIC_PRESENTATION_FORMS_A\n");
+            SAL_INFO("svtools", "ARABIC_PRESENTATION_FORMS_A");
         if (rIn[vcl::UnicodeCoverage::COMBINING_HALF_MARKS])
-            fprintf(stderr, "COMBINING_HALF_MARKS\n");
+            SAL_INFO("svtools", "COMBINING_HALF_MARKS");
         if (rIn[vcl::UnicodeCoverage::VERTICAL_FORMS])
-            fprintf(stderr, "VERTICAL_FORMS\n");
+            SAL_INFO("svtools", "VERTICAL_FORMS");
         if (rIn[vcl::UnicodeCoverage::SMALL_FORM_VARIANTS])
-            fprintf(stderr, "SMALL_FORM_VARIANTS\n");
+            SAL_INFO("svtools", "SMALL_FORM_VARIANTS");
         if (rIn[vcl::UnicodeCoverage::ARABIC_PRESENTATION_FORMS_B])
-            fprintf(stderr, "ARABIC_PRESENTATION_FORMS_B\n");
+            SAL_INFO("svtools", "ARABIC_PRESENTATION_FORMS_B");
         if (rIn[vcl::UnicodeCoverage::HALFWIDTH_AND_FULLWIDTH_FORMS])
-            fprintf(stderr, "HALFWIDTH_AND_FULLWIDTH_FORMS\n");
+            SAL_INFO("svtools", "HALFWIDTH_AND_FULLWIDTH_FORMS");
         if (rIn[vcl::UnicodeCoverage::SPECIALS])
-            fprintf(stderr, "SPECIALS\n");
+            SAL_INFO("svtools", "SPECIALS");
         if (rIn[vcl::UnicodeCoverage::TIBETAN])
-            fprintf(stderr, "TIBETAN\n");
+            SAL_INFO("svtools", "TIBETAN");
         if (rIn[vcl::UnicodeCoverage::SYRIAC])
-            fprintf(stderr, "SYRIAC\n");
+            SAL_INFO("svtools", "SYRIAC");
         if (rIn[vcl::UnicodeCoverage::THAANA])
-            fprintf(stderr, "THAANA\n");
+            SAL_INFO("svtools", "THAANA");
         if (rIn[vcl::UnicodeCoverage::SINHALA])
-            fprintf(stderr, "SINHALA\n");
+            SAL_INFO("svtools", "SINHALA");
         if (rIn[vcl::UnicodeCoverage::MYANMAR])
-            fprintf(stderr, "MYANMAR\n");
+            SAL_INFO("svtools", "MYANMAR");
         if (rIn[vcl::UnicodeCoverage::ETHIOPIC])
-            fprintf(stderr, "ETHIOPIC\n");
+            SAL_INFO("svtools", "ETHIOPIC");
         if (rIn[vcl::UnicodeCoverage::CHEROKEE])
-            fprintf(stderr, "CHEROKEE\n");
+            SAL_INFO("svtools", "CHEROKEE");
         if (rIn[vcl::UnicodeCoverage::UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS])
-            fprintf(stderr, "UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS\n");
+            SAL_INFO("svtools", "UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS");
         if (rIn[vcl::UnicodeCoverage::OGHAM])
-            fprintf(stderr, "OGHAM\n");
+            SAL_INFO("svtools", "OGHAM");
         if (rIn[vcl::UnicodeCoverage::RUNIC])
-            fprintf(stderr, "RUNIC\n");
+            SAL_INFO("svtools", "RUNIC");
         if (rIn[vcl::UnicodeCoverage::KHMER])
-            fprintf(stderr, "KHMER\n");
+            SAL_INFO("svtools", "KHMER");
         if (rIn[vcl::UnicodeCoverage::MONGOLIAN])
-            fprintf(stderr, "MONGOLIAN\n");
+            SAL_INFO("svtools", "MONGOLIAN");
         if (rIn[vcl::UnicodeCoverage::BRAILLE_PATTERNS])
-            fprintf(stderr, "BRAILLE_PATTERNS\n");
+            SAL_INFO("svtools", "BRAILLE_PATTERNS");
         if (rIn[vcl::UnicodeCoverage::YI_SYLLABLES])
-            fprintf(stderr, "YI_SYLLABLES\n");
+            SAL_INFO("svtools", "YI_SYLLABLES");
         if (rIn[vcl::UnicodeCoverage::TAGALOG])
-            fprintf(stderr, "TAGALOG\n");
+            SAL_INFO("svtools", "TAGALOG");
         if (rIn[vcl::UnicodeCoverage::OLD_ITALIC])
-            fprintf(stderr, "OLD_ITALIC\n");
+            SAL_INFO("svtools", "OLD_ITALIC");
         if (rIn[vcl::UnicodeCoverage::GOTHIC])
-            fprintf(stderr, "GOTHIC\n");
+            SAL_INFO("svtools", "GOTHIC");
         if (rIn[vcl::UnicodeCoverage::DESERET])
-            fprintf(stderr, "DESERET\n");
+            SAL_INFO("svtools", "DESERET");
         if (rIn[vcl::UnicodeCoverage::BYZANTINE_MUSICAL_SYMBOLS])
-            fprintf(stderr, "BYZANTINE_MUSICAL_SYMBOLS\n");
+            SAL_INFO("svtools", "BYZANTINE_MUSICAL_SYMBOLS");
         if (rIn[vcl::UnicodeCoverage::MATHEMATICAL_ALPHANUMERIC_SYMBOLS])
-            fprintf(stderr, "MATHEMATICAL_ALPHANUMERIC_SYMBOLS\n");
+            SAL_INFO("svtools", "MATHEMATICAL_ALPHANUMERIC_SYMBOLS");
         if (rIn[vcl::UnicodeCoverage::PRIVATE_USE_PLANE_15])
-            fprintf(stderr, "PRIVATE_USE_PLANE_15\n");
+            SAL_INFO("svtools", "PRIVATE_USE_PLANE_15");
         if (rIn[vcl::UnicodeCoverage::VARIATION_SELECTORS])
-            fprintf(stderr, "VARIATION_SELECTORS\n");
+            SAL_INFO("svtools", "VARIATION_SELECTORS");
         if (rIn[vcl::UnicodeCoverage::TAGS])
-            fprintf(stderr, "TAGS\n");
+            SAL_INFO("svtools", "TAGS");
         if (rIn[vcl::UnicodeCoverage::LIMBU])
-            fprintf(stderr, "LIMBU\n");
+            SAL_INFO("svtools", "LIMBU");
         if (rIn[vcl::UnicodeCoverage::TAI_LE])
-            fprintf(stderr, "TAI_LE\n");
+            SAL_INFO("svtools", "TAI_LE");
         if (rIn[vcl::UnicodeCoverage::NEW_TAI_LUE])
-            fprintf(stderr, "NEW_TAI_LUE\n");
+            SAL_INFO("svtools", "NEW_TAI_LUE");
         if (rIn[vcl::UnicodeCoverage::BUGINESE])
-            fprintf(stderr, "BUGINESE\n");
+            SAL_INFO("svtools", "BUGINESE");
         if (rIn[vcl::UnicodeCoverage::GLAGOLITIC])
-            fprintf(stderr, "GLAGOLITIC\n");
+            SAL_INFO("svtools", "GLAGOLITIC");
         if (rIn[vcl::UnicodeCoverage::TIFINAGH])
-            fprintf(stderr, "TIFINAGH\n");
+            SAL_INFO("svtools", "TIFINAGH");
         if (rIn[vcl::UnicodeCoverage::YIJING_HEXAGRAM_SYMBOLS])
-            fprintf(stderr, "YIJING_HEXAGRAM_SYMBOLS\n");
+            SAL_INFO("svtools", "YIJING_HEXAGRAM_SYMBOLS");
         if (rIn[vcl::UnicodeCoverage::SYLOTI_NAGRI])
-            fprintf(stderr, "SYLOTI_NAGRI\n");
+            SAL_INFO("svtools", "SYLOTI_NAGRI");
         if (rIn[vcl::UnicodeCoverage::LINEAR_B_SYLLABARY])
-            fprintf(stderr, "LINEAR_B_SYLLABARY\n");
+            SAL_INFO("svtools", "LINEAR_B_SYLLABARY");
         if (rIn[vcl::UnicodeCoverage::ANCIENT_GREEK_NUMBERS])
-            fprintf(stderr, "ANCIENT_GREEK_NUMBERS\n");
+            SAL_INFO("svtools", "ANCIENT_GREEK_NUMBERS");
         if (rIn[vcl::UnicodeCoverage::UGARITIC])
-            fprintf(stderr, "UGARITIC\n");
+            SAL_INFO("svtools", "UGARITIC");
         if (rIn[vcl::UnicodeCoverage::OLD_PERSIAN])
-            fprintf(stderr, "OLD_PERSIAN\n");
+            SAL_INFO("svtools", "OLD_PERSIAN");
         if (rIn[vcl::UnicodeCoverage::SHAVIAN])
-            fprintf(stderr, "SHAVIAN\n");
+            SAL_INFO("svtools", "SHAVIAN");
         if (rIn[vcl::UnicodeCoverage::OSMANYA])
-            fprintf(stderr, "OSMANYA\n");
+            SAL_INFO("svtools", "OSMANYA");
         if (rIn[vcl::UnicodeCoverage::CYPRIOT_SYLLABARY])
-            fprintf(stderr, "CYPRIOT_SYLLABARY\n");
+            SAL_INFO("svtools", "CYPRIOT_SYLLABARY");
         if (rIn[vcl::UnicodeCoverage::KHAROSHTHI])
-            fprintf(stderr, "KHAROSHTHI\n");
+            SAL_INFO("svtools", "KHAROSHTHI");
         if (rIn[vcl::UnicodeCoverage::TAI_XUAN_JING_SYMBOLS])
-            fprintf(stderr, "TAI_XUAN_JING_SYMBOLS\n");
+            SAL_INFO("svtools", "TAI_XUAN_JING_SYMBOLS");
         if (rIn[vcl::UnicodeCoverage::CUNEIFORM])
-            fprintf(stderr, "CUNEIFORM\n");
+            SAL_INFO("svtools", "CUNEIFORM");
         if (rIn[vcl::UnicodeCoverage::COUNTING_ROD_NUMERALS])
-            fprintf(stderr, "COUNTING_ROD_NUMERALS\n");
+            SAL_INFO("svtools", "COUNTING_ROD_NUMERALS");
         if (rIn[vcl::UnicodeCoverage::SUNDANESE])
-            fprintf(stderr, "SUNDANESE\n");
+            SAL_INFO("svtools", "SUNDANESE");
         if (rIn[vcl::UnicodeCoverage::LEPCHA])
-            fprintf(stderr, "LEPCHA\n");
+            SAL_INFO("svtools", "LEPCHA");
         if (rIn[vcl::UnicodeCoverage::OL_CHIKI])
-            fprintf(stderr, "OL_CHIKI\n");
+            SAL_INFO("svtools", "OL_CHIKI");
         if (rIn[vcl::UnicodeCoverage::SAURASHTRA])
-            fprintf(stderr, "SAURASHTRA\n");
+            SAL_INFO("svtools", "SAURASHTRA");
         if (rIn[vcl::UnicodeCoverage::KAYAH_LI])
-            fprintf(stderr, "KAYAH_LI\n");
+            SAL_INFO("svtools", "KAYAH_LI");
         if (rIn[vcl::UnicodeCoverage::REJANG])
-            fprintf(stderr, "REJANG\n");
+            SAL_INFO("svtools", "REJANG");
         if (rIn[vcl::UnicodeCoverage::CHAM])
-            fprintf(stderr, "CHAM\n");
+            SAL_INFO("svtools", "CHAM");
         if (rIn[vcl::UnicodeCoverage::ANCIENT_SYMBOLS])
-            fprintf(stderr, "ANCIENT_SYMBOLS\n");
+            SAL_INFO("svtools", "ANCIENT_SYMBOLS");
         if (rIn[vcl::UnicodeCoverage::PHAISTOS_DISC])
-            fprintf(stderr, "PHAISTOS_DISC\n");
+            SAL_INFO("svtools", "PHAISTOS_DISC");
         if (rIn[vcl::UnicodeCoverage::CARIAN])
-            fprintf(stderr, "CARIAN\n");
+            SAL_INFO("svtools", "CARIAN");
         if (rIn[vcl::UnicodeCoverage::DOMINO_TILES])
-            fprintf(stderr, "DOMINO_TILES\n");
+            SAL_INFO("svtools", "DOMINO_TILES");
         if (rIn[vcl::UnicodeCoverage::RESERVED1])
-            fprintf(stderr, "RESERVED1\n");
+            SAL_INFO("svtools", "RESERVED1");
         if (rIn[vcl::UnicodeCoverage::RESERVED2])
-            fprintf(stderr, "RESERVED2\n");
+            SAL_INFO("svtools", "RESERVED2");
         if (rIn[vcl::UnicodeCoverage::RESERVED3])
-            fprintf(stderr, "RESERVED3\n");
+            SAL_INFO("svtools", "RESERVED3");
         if (rIn[vcl::UnicodeCoverage::RESERVED4])
-            fprintf(stderr, "RESERVED4\n");
+            SAL_INFO("svtools", "RESERVED4");
         if (rIn[vcl::UnicodeCoverage::RESERVED5])
-            fprintf(stderr, "RESERVED5\n");
+            SAL_INFO("svtools", "RESERVED5");
     }
 
     void lcl_dump_codepage_coverage(const boost::dynamic_bitset<sal_uInt32> &rIn)
     {
         if (rIn.none())
         {
-            fprintf(stderr, "<NONE>\n");
+            SAL_INFO("svtools", "<NONE>");
             return;
         }
         if (rIn[vcl::CodePageCoverage::CP1252])
-            fprintf(stderr, "CP1252\n");
+            SAL_INFO("svtools", "CP1252");
         if (rIn[vcl::CodePageCoverage::CP1250])
-            fprintf(stderr, "CP1250\n");
+            SAL_INFO("svtools", "CP1250");
         if (rIn[vcl::CodePageCoverage::CP1251])
-            fprintf(stderr, "CP1251\n");
+            SAL_INFO("svtools", "CP1251");
         if (rIn[vcl::CodePageCoverage::CP1253])
-            fprintf(stderr, "CP1253\n");
+            SAL_INFO("svtools", "CP1253");
         if (rIn[vcl::CodePageCoverage::CP1254])
-            fprintf(stderr, "CP1254\n");
+            SAL_INFO("svtools", "CP1254");
         if (rIn[vcl::CodePageCoverage::CP1255])
-            fprintf(stderr, "CP1255\n");
+            SAL_INFO("svtools", "CP1255");
         if (rIn[vcl::CodePageCoverage::CP1256])
-            fprintf(stderr, "CP1256\n");
+            SAL_INFO("svtools", "CP1256");
         if (rIn[vcl::CodePageCoverage::CP1257])
-            fprintf(stderr, "CP1257\n");
+            SAL_INFO("svtools", "CP1257");
         if (rIn[vcl::CodePageCoverage::CP1258])
-            fprintf(stderr, "CP1258\n");
+            SAL_INFO("svtools", "CP1258");
         if (rIn[vcl::CodePageCoverage::CP874])
-            fprintf(stderr, "CP874\n");
+            SAL_INFO("svtools", "CP874");
         if (rIn[vcl::CodePageCoverage::CP932])
-            fprintf(stderr, "CP932\n");
+            SAL_INFO("svtools", "CP932");
         if (rIn[vcl::CodePageCoverage::CP936])
-            fprintf(stderr, "CP936\n");
+            SAL_INFO("svtools", "CP936");
         if (rIn[vcl::CodePageCoverage::CP949])
-            fprintf(stderr, "CP949\n");
+            SAL_INFO("svtools", "CP949");
         if (rIn[vcl::CodePageCoverage::CP950])
-            fprintf(stderr, "CP950\n");
+            SAL_INFO("svtools", "CP950");
         if (rIn[vcl::CodePageCoverage::CP1361])
-            fprintf(stderr, "CP1361\n");
+            SAL_INFO("svtools", "CP1361");
         if (rIn[vcl::CodePageCoverage::CP869])
-            fprintf(stderr, "CP869\n");
+            SAL_INFO("svtools", "CP869");
         if (rIn[vcl::CodePageCoverage::CP866])
-            fprintf(stderr, "CP866\n");
+            SAL_INFO("svtools", "CP866");
         if (rIn[vcl::CodePageCoverage::CP865])
-            fprintf(stderr, "CP865\n");
+            SAL_INFO("svtools", "CP865");
         if (rIn[vcl::CodePageCoverage::CP864])
-            fprintf(stderr, "CP864\n");
+            SAL_INFO("svtools", "CP864");
         if (rIn[vcl::CodePageCoverage::CP863])
-            fprintf(stderr, "CP863\n");
+            SAL_INFO("svtools", "CP863");
         if (rIn[vcl::CodePageCoverage::CP862])
-            fprintf(stderr, "CP862\n");
+            SAL_INFO("svtools", "CP862");
         if (rIn[vcl::CodePageCoverage::CP861])
-            fprintf(stderr, "CP861\n");
+            SAL_INFO("svtools", "CP861");
         if (rIn[vcl::CodePageCoverage::CP860])
-            fprintf(stderr, "CP860\n");
+            SAL_INFO("svtools", "CP860");
         if (rIn[vcl::CodePageCoverage::CP857])
-            fprintf(stderr, "CP857\n");
+            SAL_INFO("svtools", "CP857");
         if (rIn[vcl::CodePageCoverage::CP855])
-            fprintf(stderr, "CP855\n");
+            SAL_INFO("svtools", "CP855");
         if (rIn[vcl::CodePageCoverage::CP852])
-            fprintf(stderr, "CP852\n");
+            SAL_INFO("svtools", "CP852");
         if (rIn[vcl::CodePageCoverage::CP775])
-            fprintf(stderr, "CP775\n");
+            SAL_INFO("svtools", "CP775");
         if (rIn[vcl::CodePageCoverage::CP737])
-            fprintf(stderr, "CP737\n");
+            SAL_INFO("svtools", "CP737");
         if (rIn[vcl::CodePageCoverage::CP780])
-            fprintf(stderr, "CP780\n");
+            SAL_INFO("svtools", "CP780");
         if (rIn[vcl::CodePageCoverage::CP850])
-            fprintf(stderr, "CP850\n");
+            SAL_INFO("svtools", "CP850");
         if (rIn[vcl::CodePageCoverage::CP437])
-            fprintf(stderr, "CP437\n");
+            SAL_INFO("svtools", "CP437");
     }
 #endif
 

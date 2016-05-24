@@ -374,11 +374,6 @@ Any SAL_CALL TransferableHelper::getTransferData2( const DataFlavor& rFlavor, co
             // if any is not yet filled, use standard format
             if( !maAny.hasValue() )
                 GetData(rFlavor, rDestDoc);
-
-#ifdef DEBUG
-            if( maAny.hasValue() && css::uno::TypeClass_STRING != maAny.getValueType().getTypeClass() )
-                fprintf( stderr, "TransferableHelper delivers sequence of data [ %s ]\n", OUStringToOString(rFlavor.MimeType, RTL_TEXTENCODING_ASCII_US).getStr() );
-#endif
         }
         catch( const css::uno::Exception& )
         {
@@ -559,11 +554,6 @@ void TransferableHelper::AddFormat( const DataFlavor& rFlavor )
                 SotExchange::GetFormatDataFlavor( SotClipboardFormatId::OBJECTDESCRIPTOR, aObjDescFlavor );
                 aIter->MimeType = aObjDescFlavor.MimeType;
                 aIter->MimeType += ::ImplGetParameterString( *mpObjDesc );
-
-#ifdef DEBUG
-                fprintf( stderr, "TransferableHelper exchanged objectdescriptor [ %s ]\n",
-                         OUStringToOString(aIter->MimeType, RTL_TEXTENCODING_ASCII_US).getStr() );
-#endif
             }
 
             bAdd = false;
@@ -2024,10 +2014,6 @@ Sequence<sal_Int8> TransferableDataHelper::GetSequence( SotClipboardFormatId nFo
 
 Sequence<sal_Int8> TransferableDataHelper::GetSequence( const DataFlavor& rFlavor, const OUString& rDestDoc )
 {
-#ifdef DEBUG
-    fprintf( stderr, "TransferableDataHelper requests sequence of data\n" );
-#endif
-
     const Any aAny = GetAny(rFlavor, rDestDoc);
     Sequence<sal_Int8> aSeq;
     if (aAny.hasValue())
