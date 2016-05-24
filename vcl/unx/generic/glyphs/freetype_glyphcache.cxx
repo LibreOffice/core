@@ -571,15 +571,15 @@ void ServerFont::SetFontOptions(const std::shared_ptr<FontConfigFontOptions>& xF
        mnLoadFlags |= FT_LOAD_TARGET_NORMAL;
        switch (mxFontOptions->GetHintStyle())
        {
-           case HINT_NONE:
+           case FontHintStyle::NONE:
                 mnLoadFlags |= FT_LOAD_NO_HINTING;
                 break;
-           case HINT_SLIGHT:
+           case FontHintStyle::Slight:
                 mnLoadFlags |= FT_LOAD_TARGET_LIGHT;
                 break;
-           case HINT_MEDIUM:
+           case FontHintStyle::Medium:
                 break;
-           case HINT_FULL:
+           case FontHintStyle::Full:
            default:
                 break;
        }
