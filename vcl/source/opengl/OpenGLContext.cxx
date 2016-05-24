@@ -84,10 +84,11 @@ OpenGLContext::OpenGLContext():
 
 OpenGLContext::~OpenGLContext()
 {
-    VCL_GL_INFO("delete context: " << this);
     assert (mnRefCount == 0);
 
     mnRefCount = 1; // guard the shutdown paths.
+    VCL_GL_INFO("delete context: " << this);
+
     reset();
 
     ImplSVData* pSVData = ImplGetSVData();
