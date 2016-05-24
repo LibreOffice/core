@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_6ef8a8e6",
+        "filename": "cppuhelper/source/weak.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-05-24T12:37:06Z",
+      "side": 1,
+      "message": "still holding the mutex while calling out into the other objects\u0027 dispose() is wrong",
+      "revId": "1e063e8b7ea070a5b6990b3d6740ecae05aea66d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
