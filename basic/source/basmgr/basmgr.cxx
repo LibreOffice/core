@@ -255,7 +255,8 @@ void SAL_CALL BasMgrContainerListenerImpl::elementInserted( const container::Con
     if( bLibContainer )
     {
         uno::Reference< script::XLibraryContainer > xScriptCont( Event.Source, uno::UNO_QUERY );
-        insertLibraryImpl( xScriptCont, mpMgr, Event.Element, aName );
+        if (xScriptCont.is())
+            insertLibraryImpl(xScriptCont, mpMgr, Event.Element, aName);
         StarBASIC* pLib = mpMgr->GetLib( aName );
         if ( pLib )
         {
@@ -274,8 +275,8 @@ void SAL_CALL BasMgrContainerListenerImpl::elementInserted( const container::Con
             SbModule* pMod = pLib->FindModule( aName );
             if( !pMod )
             {
-            OUString aMod;
-            Event.Element >>= aMod;
+                OUString aMod;
+                Event.Element >>= aMod;
                 uno::Reference< vba::XVBAModuleInfo > xVBAModuleInfo( Event.Source, uno::UNO_QUERY );
                 if ( xVBAModuleInfo.is() && xVBAModuleInfo->hasModuleInfo( aName ) )
                 {
