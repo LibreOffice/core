@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_3b9a6415",
+        "filename": "offapi/com/sun/star/embed/XEmbeddedOleObject.idl",
+        "patchSetId": 5
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-05-24T07:12:40Z",
+      "side": 1,
+      "message": "ach, failed to note the apparently wrong license header here before pushing; fixed now with \u003chttps://cgit.freedesktop.org/libreoffice/core/commit/?id\u003d8e44dbaadc60c4dd7d43627442088b1ad81b0143\u003e \"Fix license header of new file\"",
+      "revId": "2986e54412bbaf95ef768b9ffc18c9a465678337",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
