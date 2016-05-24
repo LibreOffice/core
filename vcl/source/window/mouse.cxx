@@ -50,7 +50,7 @@ using namespace ::com::sun::star::uno;
 
 namespace vcl {
 
-sal_uInt16 Window::ImplHitTest( const Point& rFramePos )
+WindowHitTest Window::ImplHitTest( const Point& rFramePos )
 {
     Point aFramePos( rFramePos );
     if( ImplIsAntiparallel() )
@@ -61,19 +61,19 @@ sal_uInt16 Window::ImplHitTest( const Point& rFramePos )
     }
     Rectangle aRect( Point( mnOutOffX, mnOutOffY ), Size( mnOutWidth, mnOutHeight ) );
     if ( !aRect.IsInside( aFramePos ) )
-        return 0;
+        return WindowHitTest::NONE;
     if ( mpWindowImpl->mbWinRegion )
     {
         Point aTempPos = aFramePos;
         aTempPos.X() -= mnOutOffX;
         aTempPos.Y() -= mnOutOffY;
         if ( !mpWindowImpl->maWinRegion.IsInside( aTempPos ) )
-            return 0;
+            return WindowHitTest::NONE;
     }
 
-    sal_uInt16 nHitTest = WINDOW_HITTEST_INSIDE;
+    WindowHitTest nHitTest = WindowHitTest::Inside;
     if ( mpWindowImpl->mbMouseTransparent )
-        nHitTest |= WINDOW_HITTEST_TRANSPARENT;
+        nHitTest |= WindowHitTest::Transparent;
     return nHitTest;
 }
 

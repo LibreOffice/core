@@ -661,8 +661,8 @@ vcl::Window* Window::ImplFindWindow( const Point& rFramePos )
     if ( !mpWindowImpl->mbVisible )
         return nullptr;
 
-    sal_uInt16 nHitTest = ImplHitTest( rFramePos );
-    if ( nHitTest & WINDOW_HITTEST_INSIDE )
+    WindowHitTest nHitTest = ImplHitTest( rFramePos );
+    if ( nHitTest & WindowHitTest::Inside )
     {
         // and then we check all child windows
         pTempWindow = mpWindowImpl->mpFirstChild;
@@ -674,7 +674,7 @@ vcl::Window* Window::ImplFindWindow( const Point& rFramePos )
             pTempWindow = pTempWindow->mpWindowImpl->mpNext;
         }
 
-        if ( nHitTest & WINDOW_HITTEST_TRANSPARENT )
+        if ( nHitTest & WindowHitTest::Transparent )
             return nullptr;
         else
             return this;

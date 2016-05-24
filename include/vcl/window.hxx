@@ -474,6 +474,16 @@ struct WindowResHeader
     RSWND     nRSStyle;
 };
 
+enum class WindowHitTest {
+    NONE        = 0x0000,
+    Inside      = 0x0001,
+    Transparent = 0x0002
+};
+namespace o3tl {
+    template<> struct typed_flags<WindowHitTest> : is_typed_flags<WindowHitTest, 0x0003> {};
+};
+
+
 namespace vcl {
 
 class VCL_DLLPUBLIC RenderTools
@@ -619,7 +629,7 @@ protected:
 
     SAL_DLLPRIVATE void                 ImplInvalidate( const vcl::Region* rRegion, InvalidateFlags nFlags );
 
-    SAL_DLLPRIVATE sal_uInt16           ImplHitTest( const Point& rFramePos );
+    SAL_DLLPRIVATE WindowHitTest        ImplHitTest( const Point& rFramePos );
 
     SAL_DLLPRIVATE void                 ImplSetMouseTransparent( bool bTransparent );
 
