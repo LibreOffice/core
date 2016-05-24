@@ -30,29 +30,67 @@
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
 #include <memory>
 
-GfxLink::GfxLink()
+GfxLink::GfxLink() :
+    meType      ( GFX_LINK_TYPE_NONE ),
+    mpBuf       ( nullptr ),
+    mpSwap      ( nullptr ),
+    mnBufSize   ( 0 ),
+    mnUserId    ( 0UL ),
+    mpImpData   ( new ImpGfxLink )
 {
 }
 
-GfxLink::GfxLink( sal_uInt8* pBuf, sal_uInt32 nSize, GfxLinkType nType )
+GfxLink::GfxLink( const GfxLink& rGfxLink ) :
+    mpImpData( new ImpGfxLink )
+{
+    ImplCopy( rGfxLink );
+}
+
+GfxLink::GfxLink( sal_uInt8* pBuf, sal_uInt32 nSize, GfxLinkType nType ) :
+    mpImpData( new ImpGfxLink )
 {
     DBG_ASSERT( pBuf != nullptr && nSize,
                 "GfxLink::GfxLink(): empty/NULL buffer given" );
 
     meType = nType;
-    mnSwapInDataSize = nSize;
-    mpSwapInData = std::shared_ptr<sal_uInt8>(pBuf);
+    mnBufSize = nSize;
+    mpSwap = nullptr;
+    mnUserId = 0UL;
+    mpBuf = new ImpBuffer( pBuf );
 }
 
 GfxLink::~GfxLink()
 {
+    if( mpBuf && !( --mpBuf->mnRefCount ) )
+        delete mpBuf;
+
+    if( mpSwap && !( --mpSwap->mnRefCount ) )
+        delete mpSwap;
+
+    delete mpImpData;
+}
+
+GfxLink& GfxLink::operator=( const GfxLink& rGfxLink )
+{
+    if( &rGfxLink != this )
+    {
+        if ( mpBuf && !( --mpBuf->mnRefCount ) )
+            delete mpBuf;
+
+        if( mpSwap && !( --mpSwap->mnRefCount ) )
+            delete mpSwap;
+
+        ImplCopy( rGfxLink );
+    }
+
+    return *this;
 }
 
 bool GfxLink::IsEqual( const GfxLink& rGfxLink ) const
 {
     bool bIsEqual = false;
 
-    if ( ( mnSwapInDataSize == rGfxLink.mnSwapInDataSize ) && ( meType == rGfxLink.meType ) )
+    if ( ( mnBufSize == rGfxLink.mnBufSize ) && ( meType == rGfxLink.meType ) )
     {
         const sal_uInt8* pSource = GetData();
         const sal_uInt8* pDest = rGfxLink.GetData();
@@ -68,6 +106,22 @@ bool GfxLink::IsEqual( const GfxLink& rGfxLink ) const
     return bIsEqual;
 }
 
+void GfxLink::ImplCopy( const GfxLink& rGfxLink )
+{
+    mnBufSize = rGfxLink.mnBufSize;
+    meType = rGfxLink.meType;
+    mpBuf = rGfxLink.mpBuf;
+    mpSwap = rGfxLink.mpSwap;
+    mnUserId = rGfxLink.mnUserId;
+    *mpImpData = *rGfxLink.mpImpData;
+
+    if( mpBuf )
+        mpBuf->mnRefCount++;
+
+    if( mpSwap )
+        mpSwap->mnRefCount++;
+}
+
 
 bool GfxLink::IsNative() const
 {
@@ -80,21 +134,21 @@ const sal_uInt8* GfxLink::GetData() const
     if( IsSwappedOut() )
         const_cast<GfxLink*>(this)->SwapIn();
 
-    return( mpSwapInData.get() );
+    return( mpBuf ? mpBuf->mpBuffer : nullptr );
 }
 
 
 void GfxLink::SetPrefSize( const Size& rPrefSize )
 {
-    maPrefSize = rPrefSize;
-    mbPrefSizeValid = true;
+    mpImpData->maPrefSize = rPrefSize;
+    mpImpData->mbPrefSizeValid = true;
 }
 
 
 void GfxLink::SetPrefMapMode( const MapMode& rPrefMapMode )
 {
-    maPrefMapMode = rPrefMapMode;
-    mbPrefMapModeValid = true;
+    mpImpData->maPrefMapMode = rPrefMapMode;
+    mpImpData->mbPrefMapModeValid = true;
 }
 
 
@@ -102,7 +156,7 @@ bool GfxLink::LoadNative( Graphic& rGraphic )
 {
     bool bRet = false;
 
-    if( IsNative() && mnSwapInDataSize )
+    if( IsNative() && mnBufSize )
     {
         const sal_uInt8* pData = GetData();
 
@@ -111,12 +165,15 @@ bool GfxLink::LoadNative( Graphic& rGraphic )
             SvMemoryStream    aMemStm;
             ConvertDataFormat nCvtType;
 
-            aMemStm.SetBuffer( const_cast<sal_uInt8*>(pData), mnSwapInDataSize, mnSwapInDataSize );
+            aMemStm.SetBuffer( const_cast<sal_uInt8*>(pData), mnBufSize, mnBufSize );
 
             switch( meType )
             {
                 case GFX_LINK_TYPE_NATIVE_GIF: nCvtType = ConvertDataFormat::GIF; break;
+
+                // #i15508# added BMP type for better exports (reload when swapped - checked, works)
                 case GFX_LINK_TYPE_NATIVE_BMP: nCvtType = ConvertDataFormat::BMP; break;
+
                 case GFX_LINK_TYPE_NATIVE_JPG: nCvtType = ConvertDataFormat::JPG; break;
                 case GFX_LINK_TYPE_NATIVE_PNG: nCvtType = ConvertDataFormat::PNG; break;
                 case GFX_LINK_TYPE_NATIVE_TIF: nCvtType = ConvertDataFormat::TIF; break;
@@ -138,29 +195,21 @@ bool GfxLink::LoadNative( Graphic& rGraphic )
 
 void GfxLink::SwapOut()
 {
-    if( !IsSwappedOut() && mpSwapInData && mnSwapInDataSize )
+    if( !IsSwappedOut() && mpBuf )
     {
-        ::utl::TempFile aTempFile;
+        mpSwap = new ImpSwap( mpBuf->mpBuffer, mnBufSize );
 
-        OUString aURL = aTempFile.GetURL();
-
-        if( !aURL.isEmpty() )
+        if( !mpSwap->IsSwapped() )
         {
-            std::shared_ptr<GfxLink::SwapOutData> pSwapOut;
-            pSwapOut = std::make_shared<SwapOutData>(aURL);    // aURL is removed in the destructor
-            std::unique_ptr<SvStream> xOStm(::utl::UcbStreamHelper::CreateStream( aURL, STREAM_READWRITE | StreamMode::SHARE_DENYWRITE ));
-            if( xOStm )
-            {
-                xOStm->Write( mpSwapInData.get(), mnSwapInDataSize );
-                bool bError = ( ERRCODE_NONE != xOStm->GetError() );
-                xOStm.reset();
+            delete mpSwap;
+            mpSwap = nullptr;
+        }
+        else
+        {
+            if( !( --mpBuf->mnRefCount ) )
+                delete mpBuf;
 
-                if( !bError )
-                {
-                    mpSwapOutData = pSwapOut;
-                    mpSwapInData.reset();
-                }
-            }
+            mpBuf = nullptr;
         }
     }
 }
@@ -169,12 +218,12 @@ void GfxLink::SwapIn()
 {
     if( IsSwappedOut() )
     {
-        auto pData = GetSwapInData();
-        if (pData)
-        {
-            mpSwapInData = pData;
-            mpSwapOutData.reset();
-        }
+        mpBuf = new ImpBuffer( mpSwap->GetData() );
+
+        if( !( --mpSwap->mnRefCount ) )
+            delete mpSwap;
+
+        mpSwap = nullptr;
     }
 }
 
@@ -182,9 +231,10 @@ bool GfxLink::ExportNative( SvStream& rOStream ) const
 {
     if( GetDataSize() )
     {
-        auto pData = GetSwapInData();
-        if (pData)
-            rOStream.Write( pData.get(), mnSwapInDataSize );
+        if( IsSwappedOut() )
+            mpSwap->WriteTo( rOStream );
+        else if( GetData() )
+            rOStream.Write( GetData(), GetDataSize() );
     }
 
     return ( rOStream.GetError() == ERRCODE_NONE );
@@ -205,9 +255,10 @@ SvStream& WriteGfxLink( SvStream& rOStream, const GfxLink& rGfxLink )
 
     if( rGfxLink.GetDataSize() )
     {
-        auto pData = rGfxLink.GetSwapInData();
-        if (pData)
-            rOStream.Write( pData.get(), rGfxLink.mnSwapInDataSize );
+        if( rGfxLink.IsSwappedOut() )
+            rGfxLink.mpSwap->WriteTo( rOStream );
+        else if( rGfxLink.GetData() )
+            rOStream.Write( rGfxLink.GetData(), rGfxLink.GetDataSize() );
     }
 
     return rOStream;
@@ -219,7 +270,8 @@ SvStream& ReadGfxLink( SvStream& rIStream, GfxLink& rGfxLink)
     MapMode         aMapMode;
     sal_uInt32      nSize;
     sal_uInt32      nUserId;
-    sal_uInt16      nType;
+    sal_uInt16          nType;
+    sal_uInt8*          pBuf;
     bool            bMapAndSizeValid( false );
     std::unique_ptr<VersionCompat>  pCompat(new VersionCompat( rIStream, StreamMode::READ ));
 
@@ -235,7 +287,7 @@ SvStream& ReadGfxLink( SvStream& rIStream, GfxLink& rGfxLink)
 
     pCompat.reset(); // destructor writes stuff into the header
 
-    sal_uInt8* pBuf = new sal_uInt8[ nSize ];
+    pBuf = new sal_uInt8[ nSize ];
     rIStream.Read( pBuf, nSize );
 
     rGfxLink = GfxLink( pBuf, nSize, (GfxLinkType) nType );
@@ -250,40 +302,83 @@ SvStream& ReadGfxLink( SvStream& rIStream, GfxLink& rGfxLink)
     return rIStream;
 }
 
-GfxLink::SwapOutData::SwapOutData(const OUString &aURL) : maURL(aURL)
+ImpSwap::ImpSwap( sal_uInt8* pData, sal_uLong nDataSize ) :
+            mnDataSize( nDataSize ),
+            mnRefCount( 1UL )
 {
+    if( pData && mnDataSize )
+    {
+        ::utl::TempFile aTempFile;
+
+        maURL = aTempFile.GetURL();
+        if( !maURL.isEmpty() )
+        {
+            std::unique_ptr<SvStream> xOStm(::utl::UcbStreamHelper::CreateStream( maURL, STREAM_READWRITE | StreamMode::SHARE_DENYWRITE ));
+            if( xOStm )
+            {
+                xOStm->Write( pData, mnDataSize );
+                bool bError = ( ERRCODE_NONE != xOStm->GetError() );
+                xOStm.reset();
+
+                if( bError )
+                {
+                    osl_removeFile( maURL.pData );
+                    maURL.clear();
+                }
+            }
+        }
+    }
 }
 
-GfxLink::SwapOutData::~SwapOutData()
+ImpSwap::~ImpSwap()
 {
-    if( maURL.getLength() > 0 )
+    if( IsSwapped() )
         osl_removeFile( maURL.pData );
 }
 
-std::shared_ptr<sal_uInt8> GfxLink::GetSwapInData() const
+sal_uInt8* ImpSwap::GetData() const
 {
-    if( !IsSwappedOut() )
-        return mpSwapInData;
+    sal_uInt8* pData;
 
-    std::shared_ptr<sal_uInt8> pData;
-
-    std::unique_ptr<SvStream> xIStm(::utl::UcbStreamHelper::CreateStream( mpSwapOutData->maURL, STREAM_READWRITE ));
-    if( xIStm )
+    if( IsSwapped() )
     {
-        pData = std::shared_ptr<sal_uInt8>(new sal_uInt8[ mnSwapInDataSize ]);
-        xIStm->Read( pData.get(), mnSwapInDataSize );
-        bool bError = ( ERRCODE_NONE != xIStm->GetError() );
-        sal_Size nActReadSize = xIStm->Tell();
-        if (nActReadSize != mnSwapInDataSize)
+        std::unique_ptr<SvStream> xIStm(::utl::UcbStreamHelper::CreateStream( maURL, STREAM_READWRITE ));
+        if( xIStm )
         {
-            bError = true;
-        }
-        xIStm.reset();
+            pData = new sal_uInt8[ mnDataSize ];
+            xIStm->Read( pData, mnDataSize );
+            bool bError = ( ERRCODE_NONE != xIStm->GetError() );
+            sal_Size nActReadSize = xIStm->Tell();
+            if (nActReadSize != mnDataSize)
+            {
+                bError = true;
+            }
+            xIStm.reset();
 
-        if( bError )
-            pData.reset();
+            if( bError )
+            {
+                delete[] pData;
+                pData = nullptr;
+            }
+        }
+        else
+            pData = nullptr;
     }
+    else
+        pData = nullptr;
+
     return pData;
+}
+
+void ImpSwap::WriteTo( SvStream& rOStm ) const
+{
+    sal_uInt8* pData = GetData();
+
+    if( pData )
+    {
+        rOStm.Write( pData, mnDataSize );
+        delete[] pData;
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
