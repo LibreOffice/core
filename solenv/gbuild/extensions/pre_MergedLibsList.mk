@@ -16,6 +16,7 @@ MERGE_LIBRARY_LIST := \
 	comphelper \
 	configmgr \
 	cppcanvas \
+	$(call gb_Helper_optional,BREAKPAD,crashreport) \
 	$(call gb_Helper_optional,DBCONNECTIVITY,dbtools) \
 	deployment \
 	deploymentmisc \
