@@ -31,28 +31,28 @@
 /// ColumnDescriptor
 class SwColumn
 {
-    sal_uInt16 nWish;   /**< Desired width, borders included.
+    sal_uInt16 m_nWish;   /**< Desired width, borders included.
                          It is inversely proportional to the ratio of
                          desired width environment / current width column. */
-    sal_uInt16 nUpper;  ///< Top border.
-    sal_uInt16 nLower;  ///< Bottom border.
-    sal_uInt16 nLeft;   ///< Left border.
-    sal_uInt16 nRight;  ///< Right border.
+    sal_uInt16 m_nUpper;  ///< Top border.
+    sal_uInt16 m_nLower;  ///< Bottom border.
+    sal_uInt16 m_nLeft;   ///< Left border.
+    sal_uInt16 m_nRight;  ///< Right border.
 
 public:
     SwColumn();
 
     bool operator==( const SwColumn & ) const;
 
-    void SetWishWidth( sal_uInt16 nNew ) { nWish  = nNew; }
-    void SetLeft ( sal_uInt16  nNew ) { nLeft  = nNew; }
-    void SetRight( sal_uInt16  nNew ) { nRight = nNew; }
+    void SetWishWidth( sal_uInt16 nNew ) { m_nWish  = nNew; }
+    void SetLeft ( sal_uInt16  nNew ) { m_nLeft  = nNew; }
+    void SetRight( sal_uInt16  nNew ) { m_nRight = nNew; }
 
-    sal_uInt16 GetWishWidth() const { return nWish;  }
-    sal_uInt16 GetUpper() const { return nUpper; }
-    sal_uInt16 GetLower() const { return nLower; }
-    sal_uInt16 GetLeft () const { return nLeft; }
-    sal_uInt16 GetRight() const { return nRight; }
+    sal_uInt16 GetWishWidth() const { return m_nWish;  }
+    sal_uInt16 GetUpper() const { return m_nUpper; }
+    sal_uInt16 GetLower() const { return m_nLower; }
+    sal_uInt16 GetLeft () const { return m_nLeft; }
+    sal_uInt16 GetRight() const { return m_nRight; }
 
     void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 };
