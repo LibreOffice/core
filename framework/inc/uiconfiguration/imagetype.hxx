@@ -26,13 +26,6 @@
 namespace framework
 {
 
-enum ImageType
-{
-    ImageType_Color = 0,
-    ImageType_Color_Large,
-    ImageType_COUNT
-};
-
 typedef std::unordered_map< OUString,
                             OUString,
                             OUStringHash > CommandToImageNameMap;

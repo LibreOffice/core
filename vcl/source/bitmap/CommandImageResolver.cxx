@@ -21,7 +21,7 @@ namespace vcl
 namespace
 {
 
-const char* ImageType_Prefixes[ImageType_COUNT] =
+static const o3tl::enumarray<ImageType, const char*> ImageType_Prefixes =
 {
     "cmd/sc_",
     "cmd/lc_"
@@ -121,7 +121,7 @@ bool CommandImageResolver::hasImage(const OUString& rCommandURL)
     return pIterator != m_aCommandToImageNameMap.end();
 }
 
-ImageList* CommandImageResolver::getImageList(sal_Int16 nImageType)
+ImageList* CommandImageResolver::getImageList(ImageType nImageType)
 {
     const OUString sIconTheme = Application::GetSettings().GetStyleSettings().DetermineIconTheme();
 
@@ -144,7 +144,7 @@ ImageList* CommandImageResolver::getImageList(sal_Int16 nImageType)
     return m_pImageList[nImageType];
 }
 
-Image CommandImageResolver::getImageFromCommandURL(sal_Int16 nImageType, const OUString& rCommandURL)
+Image CommandImageResolver::getImageFromCommandURL(ImageType nImageType, const OUString& rCommandURL)
 {
     CommandToImageNameMap::const_iterator pIterator = m_aCommandToImageNameMap.find(rCommandURL);
     if (pIterator != m_aCommandToImageNameMap.end())
