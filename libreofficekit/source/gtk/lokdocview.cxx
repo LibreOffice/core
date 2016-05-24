@@ -460,19 +460,45 @@ gboolean LOKDocView_Impl::signalButtonImpl(GdkEventButton* pEvent)
     case GDK_BUTTON_PRESS:
     {
         int nCount = 1;
+        int nButtons = MOUSE_LEFT;
+        switch(pEvent->button) {
+        case 1:
+            nButtons = MOUSE_LEFT;
+            break;
+        case 2:
+            nButtons = MOUSE_MIDDLE;
+            break;
+        case 3:
+            nButtons = MOUSE_RIGHT;
+            break;
+        }
+
         if ((pEvent->time - m_nLastButtonPressTime) < 250)
             nCount++;
         m_nLastButtonPressTime = pEvent->time;
-        m_pDocument->pClass->postMouseEvent(m_pDocument, LOK_MOUSEEVENT_MOUSEBUTTONDOWN, pixelToTwip(pEvent->x), pixelToTwip(pEvent->y), nCount, MOUSE_LEFT, 0);
+        m_pDocument->pClass->postMouseEvent(m_pDocument, LOK_MOUSEEVENT_MOUSEBUTTONDOWN, pixelToTwip(pEvent->x), pixelToTwip(pEvent->y), nCount, nButtons, 0);
         break;
     }
     case GDK_BUTTON_RELEASE:
     {
         int nCount = 1;
+        int nButtons = MOUSE_LEFT;
+        switch(pEvent->button) {
+        case 1:
+            nButtons = MOUSE_LEFT;
+            break;
+        case 2:
+            nButtons = MOUSE_MIDDLE;
+            break;
+        case 3:
+            nButtons = MOUSE_RIGHT;
+            break;
+        }
+
         if ((pEvent->time - m_nLastButtonReleaseTime) < 250)
             nCount++;
         m_nLastButtonReleaseTime = pEvent->time;
-        m_pDocument->pClass->postMouseEvent(m_pDocument, LOK_MOUSEEVENT_MOUSEBUTTONUP, pixelToTwip(pEvent->x), pixelToTwip(pEvent->y), nCount, MOUSE_LEFT, 0);
+        m_pDocument->pClass->postMouseEvent(m_pDocument, LOK_MOUSEEVENT_MOUSEBUTTONUP, pixelToTwip(pEvent->x), pixelToTwip(pEvent->y), nCount, nButtons, 0);
         break;
     }
     default:
