@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_0e5e3ce9",
+        "filename": "sc/source/core/data/attrib.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-05-24T13:26:31Z",
+      "side": 1,
+      "message": "I\u0027d rather prefer static_cast\u003csal_Int16\u003e instead of C-style cast.",
+      "revId": "dd87da17a5766f6bbb0d17863df9466346ee78b6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_ce5534c7",
+        "filename": "sc/source/core/data/attrib.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-05-24T13:26:31Z",
+      "side": 1,
+      "message": "I\u0027d rather prefer static_cast\u003cScMF\u003e instead of C-style cast.",
+      "revId": "dd87da17a5766f6bbb0d17863df9466346ee78b6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_ee52f8dc",
+        "filename": "sc/source/core/data/attrib.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-05-24T13:26:31Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "dd87da17a5766f6bbb0d17863df9466346ee78b6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
