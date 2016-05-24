@@ -107,10 +107,11 @@ enum VclAlign
     VCL_ALIGN_CENTER
 };
 
-enum VclPackType
+enum class VclPackType
 {
-    VCL_PACK_START = 0,
-    VCL_PACK_END = 1
+    Start = 0,
+    End = 1,
+    LAST = End
 };
 
 // Return Values from Dialog::Execute

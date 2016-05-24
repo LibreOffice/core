@@ -8,6 +8,8 @@
  */
 
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
+#include <o3tl/enumarray.hxx>
+#include <o3tl/enumrange.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/msgbox.hxx>
@@ -231,25 +233,25 @@ void VclBox::setAllocation(const Size &rAllocation)
     }
 
     //Split into those we pack from the start onwards, and those we pack from the end backwards
-    std::vector<vcl::Window*> aWindows[2];
+    o3tl::enumarray<VclPackType,std::vector<vcl::Window*>> aWindows;
     for (vcl::Window *pChild = GetWindow(GetWindowType::FirstChild); pChild; pChild = pChild->GetWindow(GetWindowType::Next))
     {
         if (!pChild->IsVisible())
             continue;
 
-        sal_Int32 ePacking = pChild->get_pack_type();
+        VclPackType ePacking = pChild->get_pack_type();
         aWindows[ePacking].push_back(pChild);
     }
 
     //See VclBuilder::sortIntoBestTabTraversalOrder for why they are in visual
     //order under the parent which requires us to reverse them here to
     //pack from the end back
-    std::reverse(aWindows[VCL_PACK_END].begin(),aWindows[VCL_PACK_END].end());
+    std::reverse(aWindows[VclPackType::End].begin(),aWindows[VclPackType::End].end());
 
-    for (sal_Int32 ePackType = VCL_PACK_START; ePackType <= VCL_PACK_END; ++ePackType)
+    for (VclPackType ePackType : o3tl::enumrange<VclPackType>())
     {
         Point aPos(0, 0);
-        if (ePackType == VCL_PACK_END)
+        if (ePackType == VclPackType::End)
         {
             long nPrimaryCoordinate = getPrimaryCoordinate(aPos);
             setPrimaryCoordinate(aPos, nPrimaryCoordinate + nAllocPrimaryDimension);
@@ -297,7 +299,7 @@ void VclBox::setAllocation(const Size &rAllocation)
             }
 
             long nDiff = getPrimaryDimension(aBoxSize) + m_nSpacing;
-            if (ePackType == VCL_PACK_START)
+            if (ePackType == VclPackType::Start)
                 setPrimaryCoordinate(aPos, nPrimaryCoordinate + nDiff);
             else
             {

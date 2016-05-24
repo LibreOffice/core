@@ -641,7 +641,7 @@ WindowImpl::WindowImpl( WindowType nType )
     meAlwaysInputMode                   = AlwaysInputNone;           // neither AlwaysEnableInput nor AlwaysDisableInput called
     meHalign                            = VCL_ALIGN_FILL;
     meValign                            = VCL_ALIGN_FILL;
-    mePackType                          = VCL_PACK_START;
+    mePackType                          = VclPackType::Start;
     mnPadding                           = 0;
     mnGridHeight                        = 1;
     mnGridLeftAttach                    = -1;

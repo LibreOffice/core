@@ -1997,14 +1997,14 @@ bool VclBuilder::sortIntoBestTabTraversalOrder::operator()(const vcl::Window *pA
             return false;
     }
     //honour relative box positions with pack group, (numerical order is reversed
-    //for VCL_PACK_END, they are packed from the end back, but here we need
+    //for VclPackType::End, they are packed from the end back, but here we need
     //them in visual layout order so that tabbing works as expected)
     sal_Int32 nPackA = m_pBuilder->get_window_packing_data(pA).m_nPosition;
     sal_Int32 nPackB = m_pBuilder->get_window_packing_data(pB).m_nPosition;
     if (nPackA < nPackB)
-        return ePackA == VCL_PACK_START;
+        return ePackA == VclPackType::Start;
     if (nPackA > nPackB)
-        return ePackA != VCL_PACK_START;
+        return ePackA != VclPackType::Start;
     //sort labels of Frames before body
     if (pA->GetParent() == pB->GetParent())
     {
@@ -2956,7 +2956,7 @@ void VclBuilder::applyPackingProperty(vcl::Window *pCurrent,
             }
             else if (sKey == "pack-type")
             {
-                VclPackType ePackType = (!sValue.isEmpty() && (sValue[0] == 'e' || sValue[0] == 'E')) ? VCL_PACK_END : VCL_PACK_START;
+                VclPackType ePackType = (!sValue.isEmpty() && (sValue[0] == 'e' || sValue[0] == 'E')) ? VclPackType::End : VclPackType::Start;
                 pCurrent->set_pack_type(ePackType);
             }
             else if (sKey == "left-attach")
