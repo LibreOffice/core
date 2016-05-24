@@ -557,7 +557,7 @@ void SlideSorterModel::InsertSlide (SdPage* pPage)
     if (nIndex>0)
         if (GetPage(nIndex-1) != GetPageDescriptor(nIndex-1)->GetPage())
             return;
-    if (size_t(nIndex)<maPageDescriptors.size()-1)
+    if (nIndex < static_cast<sal_Int32>(maPageDescriptors.size()) -1)
         if (GetPage(nIndex+1) != GetPageDescriptor(nIndex)->GetPage())
             return;
 
