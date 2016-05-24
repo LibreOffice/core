@@ -92,9 +92,19 @@ int OutputDevice::GetDevFontCount() const
     if( !mpGetDevFontList )
     {
         if (!mpFontCollection)
+        {
             return 0;
+        }
 
         mpGetDevFontList = mpFontCollection->GetDevFontList();
+
+        if (!mpGetDevFontList->Count())
+        {
+            delete mpGetDevFontList;
+            mpGetDevFontList = nullptr;
+
+            return 0;
+        }
     }
     return mpGetDevFontList->Count();
 }
