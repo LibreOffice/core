@@ -18,8 +18,8 @@ def main():
         print("Invalid number of parameters")
         sys.exit(1)
 
-    upload_url = "http://vm171.documentfoundation.org/upload/"
-    login_url = "http://vm171.documentfoundation.org/accounts/login/"
+    upload_url = "http://crashreport.libreoffice.org/upload/"
+    login_url = "http://crashreport.libreoffice.org/accounts/login/"
 
     config = configparser.ConfigParser()
     config.read(sys.argv[2])
