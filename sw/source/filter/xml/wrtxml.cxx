@@ -368,6 +368,19 @@ sal_uInt32 SwXMLWriter::Write_( const uno::Reference < task::XStatusIndicator >&
         }
     }
 
+    if( !bOrganizerMode && !bErr && !bBlock )
+    {
+        if( !WriteThroughComponent(
+                xModelComp, "undo.xml", xContext,
+                (bOASIS ? "com.sun.star.comp.Writer.XMLOasisUndoExporter"
+                        : "com.sun.star.comp.Writer.XMLUndoExporter"),
+                aEmptyArgs, aProps ) )
+        {
+            bErr = true;
+            sErrFile = "undo.xml";
+        }
+    }
+
     if( pDoc->getIDocumentLayoutAccess().GetCurrentViewShell() && pDoc->getIDocumentStatistics().GetDocStat().nPage > 1 &&
         !(bOrganizerMode || bBlock || bErr) )
     {
@@ -505,7 +518,6 @@ bool SwXMLWriter::WriteThroughComponent(
         {
             xInfoSet->setPropertyValue( "StreamName", makeAny( sStreamName ) );
         }
-
         // write the stuff
         bRet = WriteThroughComponent(
             xOutputStream, xComponent, rxContext,
