@@ -281,7 +281,6 @@ AnnotationWindow::AnnotationWindow( AnnotationManagerImpl& rManager, DrawDocShel
 , mbReadonly(pDocShell->IsReadOnly())
 , mbProtected(false)
 , mbMouseOverButton(false)
-, mbPopupMenuActive(false)
 , mpTextWindow(nullptr)
 , mpMeta(nullptr)
 {
@@ -610,6 +609,11 @@ void AnnotationWindow::SetColor()
 
 void AnnotationWindow::Deactivate()
 {
+    //tdf#99388 and tdf#99712, don't deactivate if we lose focus because of our
+    //own popup
+    if (mrManager.getPopupMenuActive())
+        return;
+
     Reference< XAnnotation > xAnnotation( mxAnnotation );
 
     // write changed text back to annotation

@@ -620,12 +620,10 @@ IMPL_LINK_TYPED(AnnotationTag, WindowEventHandler, VclWindowEvent&, rEvent, void
             {
                 if( rEvent.GetId() == VCLEVENT_WINDOW_DEACTIVATE )
                 {
-                    if(mpAnnotationWindow->getPopupMenuActive())
-                    {
-                        // tdf#99388 if PopupMenu is active, suppress deletion of the
-                        // AnnotationWindow which is triggeded by it losing focus
-                    }
-                    else
+                    // tdf#99388 and tdf#99712 if PopupMenu is active, suppress
+                    // deletion of the AnnotationWindow which is triggered by
+                    // it losing focus
+                    if (!mrManager.getPopupMenuActive())
                     {
                         if( mnClosePopupEvent )
                             Application::RemoveUserEvent( mnClosePopupEvent );

@@ -172,6 +172,7 @@ AnnotationManagerImpl::AnnotationManagerImpl( ViewShellBase& rViewShellBase )
 , mrBase( rViewShellBase )
 , mpDoc( rViewShellBase.GetDocument() )
 , mbShowAnnotations( true )
+, mbPopupMenuActive( false )
 , mnUpdateTagsEvent( nullptr )
 {
     SdOptions* pOptions = SD_MOD()->GetSdOptions(mpDoc->GetDocumentType());
@@ -996,23 +997,15 @@ void AnnotationManagerImpl::ExecuteAnnotationContextMenu( const Reference< XAnno
         }
     }
 
-    AnnotationWindow* pParentAnnotationWindow = dynamic_cast< AnnotationWindow* >( pParent );
-
-    if(pParentAnnotationWindow)
-    {
-        // tdf#99388 make known that PopupMenu is active at parent
-        // to allow suppressing closing of that window if needed
-        pParentAnnotationWindow->setPopupMenuActive(true);
-    }
+    // tdf#99388 and tdf#99712 make known that PopupMenu is active at parent to
+    // allow suppressing closing of that window if needed
+    setPopupMenuActive(true);
 
     nId = pMenu->Execute( pParent, rContextRect, PopupMenuFlags::ExecuteDown|PopupMenuFlags::NoMouseUpClose );
 
-    if(pParentAnnotationWindow)
-    {
-        // tdf#99388 reset flag, need to be done before reacting
-        // since closing it is one possible reaction
-        pParentAnnotationWindow->setPopupMenuActive(false);
-    }
+    // tdf#99388 and tdf#99712 reset flag, need to be done before reacting
+    // since closing it is one possible reaction
+    setPopupMenuActive(false);
 
     switch( nId )
     {

@@ -112,6 +112,10 @@ public:
 
     void ShowAnnotations(bool bShow);
 
+    // tdf#99388 and tdf#99712 flag to transport if the PopupMenu is active
+    bool getPopupMenuActive() const { return mbPopupMenuActive; }
+    void setPopupMenuActive(bool bNew) { mbPopupMenuActive = bNew; }
+
 private:
     ViewShellBase& mrBase;
     SdDrawDocument* mpDoc;
@@ -123,6 +127,7 @@ private:
     css::uno::Reference< css::office::XAnnotation > mxSelectedAnnotation;
 
     bool mbShowAnnotations;
+    bool mbPopupMenuActive;
     ImplSVEvent * mnUpdateTagsEvent;
     vcl::Font maFont;
 };
