@@ -1980,6 +1980,12 @@ AC_ARG_WITH(ant-home,
     ],
 ,)
 
+AC_ARG_WITH(symbol-config,
+    AS_HELP_STRING([--with-symbol-config],
+        [Configuration for the crashreport symbol upload]),
+        [],
+        [$with_symbol_config=no])
+
 AC_ARG_WITH(export-validation,
     AS_HELP_STRING([--with-export-validation],
         [If you want the exported files to be validated. Right now limited to OOXML files in calc export tests.
@@ -9038,6 +9044,17 @@ else
     AC_DEFINE(ENABLE_BREAKPAD)
     AC_DEFINE(HAVE_FEATURE_BREAKPAD, 1)
     BUILD_TYPE="$BUILD_TYPE BREAKPAD"
+
+    AC_MSG_CHECKING([for crashreport config])
+    if test "$with_symbol_config" = "no"; then
+        BREAKPAD_SYMBOL_CONFIG="invalid"
+        AC_MSG_RESULT([no])
+    else
+        BREAKPAD_SYMBOL_CONFIG="$with_symbol_config"
+        AC_DEFINE(BREAKPAD_SYMBOL_CONFIG)
+        AC_MSG_RESULT([yes])
+    fi
+    AC_SUBST(BREAKPAD_SYMBOL_CONFIG)
 fi
 AC_SUBST(ENABLE_BREAKPAD)
 
