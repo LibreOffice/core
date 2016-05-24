@@ -20,6 +20,7 @@
 #include "LogarithmicRegressionCurveCalculator.hxx"
 #include "macros.hxx"
 #include "RegressionCalculationHelper.hxx"
+#include <SpecialUnicodes.hxx>
 
 #include <rtl/math.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -130,41 +131,66 @@ uno::Sequence< geometry::RealPoint2D > SAL_CALL LogarithmicRegressionCurveCalcul
 
 OUString LogarithmicRegressionCurveCalculator::ImplGetRepresentation(
     const uno::Reference< util::XNumberFormatter >& xNumFormatter,
-    sal_Int32 nNumberFormatKey, sal_Int32* /* pFormulaLength = nullptr */ ) const
+    sal_Int32 nNumberFormatKey, sal_Int32* pFormulaMaxWidth /* = nullptr */ ) const
 {
-    OUStringBuffer aBuf( "f(x) = ");
-
-    if( m_fSlope != 0.0 )
+    bool bHasSlope = !rtl::math::approxEqual( fabs( m_fSlope ), 1.0 );
+    OUStringBuffer aBuf( "f(x) = " );
+    sal_Int32 nLineLength = aBuf.getLength();
+    sal_Int32 nValueLength=0;
+    if ( pFormulaMaxWidth && *pFormulaMaxWidth > 0 ) // count nValueLength
     {
-        if( ::rtl::math::approxEqual( fabs( m_fSlope ), 1.0 ))
+        sal_Int32 nCharMin = nLineLength + 7;  // 7 = "ln(x)" + 2 extra characters
+        if( m_fSlope < 0.0 )
+            nCharMin += 2;  // "- "
+        if( m_fSlope != 0.0 && m_fIntercept != 0.0 )
         {
-            if( m_fSlope < 0.0 )
+            nCharMin += 3; // " + "
+            if ( bHasSlope )
+                nValueLength = (*pFormulaMaxWidth - nCharMin) / 2;
+        }
+        if ( nValueLength == 0 ) // not yet calculated
+            nValueLength = *pFormulaMaxWidth - nCharMin;
+        if ( nValueLength <= 0 )
+            nValueLength = 1;
+    }
+
+    // temporary buffer
+    OUStringBuffer aTmpBuf("");
+    // if nValueLength not calculated then nullptr
+    sal_Int32* pValueLength = nValueLength ? &nValueLength : nullptr;
+    if( m_fSlope != 0.0 )  // add slope value
+    {
+        if( m_fSlope < 0.0 )
+        {
+            aTmpBuf.append( aMinusSign + " " );
+        }
+        if( bHasSlope )
+        {
+            OUString aValueString = getFormattedString( xNumFormatter, nNumberFormatKey, fabs(m_fSlope), pValueLength );
+            if ( aValueString != "1" )  // aValueString may be rounded to 1 if nValueLength is small
             {
-                aBuf.append( "-" );
+                aTmpBuf.append( aValueString + " " );
             }
         }
-        else
-        {
-            aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, m_fSlope ));
-            aBuf.append( " " );
-        }
-        aBuf.append( "ln(x)" );
+        aTmpBuf.append( "ln(x) " );
+        addStringToEquation( aBuf, nLineLength, aTmpBuf, pFormulaMaxWidth );
+        aTmpBuf.truncate();
 
-        if( m_fIntercept < 0.0 )
-        {
-            aBuf.append( " - " );
-            aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, fabs( m_fIntercept )));
-        }
-        else if( m_fIntercept > 0.0 )
-        {
-            aBuf.append( " + " );
-            aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, m_fIntercept ));
-        }
+        if( m_fIntercept > 0.0 )
+            aTmpBuf.append( "+ " );
     }
-    else
+             // add intercept value
+    if( m_fIntercept < 0.0 )
+        aTmpBuf.append( aMinusSign+" " );
+    OUString aValueString = getFormattedString( xNumFormatter, nNumberFormatKey, fabs(m_fIntercept), pValueLength );
+    if ( aValueString != "0" )  // aValueString may be rounded to 0 if nValueLength is small
     {
-        aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, m_fIntercept ));
+        aTmpBuf.append( aValueString );
+        addStringToEquation( aBuf, nLineLength, aTmpBuf, pFormulaMaxWidth );
     }
+
+    if ( aBuf.toString() == "f(x) = " )
+        aBuf.append( "0" );
 
     return aBuf.makeStringAndClear();
 }
