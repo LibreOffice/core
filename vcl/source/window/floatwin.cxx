@@ -569,7 +569,7 @@ bool FloatingWindow::ImplIsFloatPopupModeWindow( const vcl::Window* pWindow )
 
 IMPL_LINK_NOARG_TYPED(FloatingWindow, ImplEndPopupModeHdl, void*, void)
 {
-    VclPtr<FloatingWindow> pThis(this);
+    VclPtr<FloatingWindow> xThis(this);
     mnPostId            = nullptr;
     mnPopupModeFlags    = FloatWinPopupFlags::NONE;
     mbPopupMode         = false;
@@ -590,6 +590,7 @@ bool FloatingWindow::Notify( NotifyEvent& rNEvt )
 
             if ( (nKeyCode == KEY_ESCAPE) && (GetStyle() & WB_CLOSEABLE) )
             {
+                VclPtr<FloatingWindow> xThis(this);
                 Close();
                 return true;
             }
