@@ -21,6 +21,10 @@ $(eval $(call gb_Package_add_files,vcl_opengl_shader,$(LIBO_ETC_FOLDER)/opengl,\
     invert50FragmentShader.glsl \
 	convolutionFragmentShader.glsl \
 	linearGradientFragmentShader.glsl \
+	combinedTextureFragmentShader.glsl \
+	combinedTextureVertexShader.glsl \
+	combinedFragmentShader.glsl \
+	combinedVertexShader.glsl \
 	lineFragmentShader.glsl \
 	lineVertexShader.glsl \
 	maskFragmentShader.glsl \
