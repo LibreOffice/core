@@ -701,9 +701,14 @@ sal_Int32 lcl_GetCountOrName<SfxStyleFamily::Pseudo>(const SwDoc& rDoc, OUString
 }
 
 template<>
-sal_Int32 lcl_GetCountOrName<SfxStyleFamily::Table>(const SwDoc& rDoc, OUString* /*pString*/, sal_Int32 /*nIndex*/)
+sal_Int32 lcl_GetCountOrName<SfxStyleFamily::Table>(const SwDoc& rDoc, OUString* pString, sal_Int32 nIndex)
 {
-    return rDoc.GetDocShell()->GetDoc()->GetTableStyles().size();
+    const auto pAutoFormats = &rDoc.GetTableStyles();
+    const sal_Int32 nCount = pAutoFormats->size();
+    if (0 <= nIndex && nIndex < nCount)
+        *pString = pAutoFormats->operator[](nIndex).GetName();
+
+    return nCount;
 }
 
 template<SfxStyleFamily eFamily>
@@ -720,6 +725,10 @@ uno::Reference< css::style::XStyle> lcl_CreateStyle<SfxStyleFamily::Frame>(SfxSt
 template<>
 uno::Reference< css::style::XStyle> lcl_CreateStyle<SfxStyleFamily::Page>(SfxStyleSheetBasePool* pBasePool, SwDocShell* pDocShell, const OUString& sStyleName)
     { return pBasePool ? new SwXPageStyle(*pBasePool, pDocShell, SfxStyleFamily::Page, sStyleName) : new SwXPageStyle(pDocShell); };
+
+template<>
+uno::Reference< css::style::XStyle> lcl_CreateStyle<SfxStyleFamily::Table>(SfxStyleSheetBasePool* /*pBasePool*/, SwDocShell* pDocShell, const OUString& sStyleName)
+    { return SwXTextTableStyle::CreateXTextTableStyle(pDocShell, sStyleName); };
 
 uno::Reference<css::style::XStyle> SwXStyleFamilies::CreateStyle(SfxStyleFamily eFamily, SwDoc& rDoc)
 {
@@ -808,8 +817,8 @@ uno::Any XStyleFamily::getByName(const OUString& rName)
     SwStyleNameMapper::FillUIName(rName, sStyleName, m_rEntry.m_aPoolId, true);
     if(!m_pBasePool)
         throw uno::RuntimeException();
-    m_pBasePool->SetSearchMask(m_rEntry.m_eFamily);
-    SfxStyleSheetBase* pBase = m_pBasePool->Find(sStyleName);
+    SfxStyleSheetIteratorPtr pIt = m_pBasePool->CreateIterator(m_rEntry.m_eFamily, SFXSTYLEBIT_ALL);
+    SfxStyleSheetBase* pBase = pIt->Find(sStyleName);
     if(!pBase)
         throw container::NoSuchElementException();
     uno::Reference<style::XStyle> xStyle = FindStyle(sStyleName);
@@ -841,8 +850,8 @@ sal_Bool XStyleFamily::hasByName(const OUString& rName) throw( uno::RuntimeExcep
         throw uno::RuntimeException();
     OUString sStyleName;
     SwStyleNameMapper::FillUIName(rName, sStyleName, m_rEntry.m_aPoolId, true);
-    m_pBasePool->SetSearchMask(m_rEntry.m_eFamily);
-    SfxStyleSheetBase* pBase = m_pBasePool->Find(sStyleName);
+    SfxStyleSheetIteratorPtr pIt = m_pBasePool->CreateIterator(m_rEntry.m_eFamily, SFXSTYLEBIT_ALL);
+    SfxStyleSheetBase* pBase = pIt->Find(sStyleName);
     return nullptr != pBase;
 }
 
@@ -4229,4 +4238,112 @@ uno::Sequence< beans::PropertyValue > SwXAutoStyle::getProperties() throw (uno::
     return aRet;
 }
 
+SwXTextTableStyle::SwXTextTableStyle(SwDocShell* pDocShell, const OUString& rTableAutoFormatName)
+{
+    m_pDocShell = pDocShell;
+    m_sTableAutoFormatName = rTableAutoFormatName;
+}
+
+uno::Reference<css::style::XStyle> SwXTextTableStyle::CreateXTextTableStyle(SwDocShell* pDocShell, const OUString& rTableAutoFormatName)
+{
+    uno::Reference<css::style::XStyle> xTextTableStyle;
+    const size_t nStyles = pDocShell->GetDoc()->GetTableStyles().size();
+    for(size_t i=0; i < nStyles; ++i)
+    {
+        SwTableAutoFormat* pAutoFormat = &pDocShell->GetDoc()->GetTableStyles()[i];
+        if (pAutoFormat->GetName() == rTableAutoFormatName)
+        {
+            xTextTableStyle.set(pAutoFormat->GetXObject(), uno::UNO_QUERY);
+            if (!xTextTableStyle.is())
+            {
+                xTextTableStyle.set(new SwXTextTableStyle(pDocShell, rTableAutoFormatName));
+                pAutoFormat->SetXObject(xTextTableStyle);
+            }
+            break;
+        }
+    }
+
+    // If corresponding AutoFormat doesn't exist create a XStyle but don't register it.
+    if (!xTextTableStyle.is())
+    {
+        xTextTableStyle.set(new SwXTextTableStyle(pDocShell, rTableAutoFormatName));
+        SAL_INFO("sw.uno", "creating SwXTextTableStyle for non existing SwTableAutoFormat");
+    }
+
+    return xTextTableStyle;
+}
+
+SwTableAutoFormat* SwXTextTableStyle::GetTableAutoFormat()
+{
+    const size_t nStyles = m_pDocShell->GetDoc()->GetTableStyles().size();
+    for(size_t i=0; i < nStyles; ++i)
+    {
+        SwTableAutoFormat* pAutoFormat = &m_pDocShell->GetDoc()->GetTableStyles()[i];
+        if (pAutoFormat->GetName() == m_sTableAutoFormatName)
+            return pAutoFormat;
+    }
+    SAL_WARN("sw.uno", "lost SwTableAutoFormat and SwXTextTableStyle integrity");
+    return nullptr;
+}
+
+// XStyle
+sal_Bool SAL_CALL SwXTextTableStyle::isUserDefined() throw (css::uno::RuntimeException, std::exception)
+{
+    return false;
+}
+
+sal_Bool SAL_CALL SwXTextTableStyle::isInUse() throw (css::uno::RuntimeException, std::exception)
+{
+    return false;
+}
+
+OUString SAL_CALL SwXTextTableStyle::getParentStyle() throw (css::uno::RuntimeException, std::exception)
+{
+    return OUString();
+}
+
+void SAL_CALL SwXTextTableStyle::setParentStyle( const OUString& /*aParentStyle*/ ) throw (css::container::NoSuchElementException, css::uno::RuntimeException, std::exception)
+{ }
+
+//XNamed
+OUString SAL_CALL SwXTextTableStyle::getName() throw(css::uno::RuntimeException, std::exception)
+{
+    return m_sTableAutoFormatName;
+}
+
+void SAL_CALL SwXTextTableStyle::setName(const OUString& rName) throw(css::uno::RuntimeException, std::exception)
+{
+    const size_t nStyles = m_pDocShell->GetDoc()->GetTableStyles().size();
+    for(size_t i=0; i < nStyles; ++i)
+    {
+        SwTableAutoFormat* pAutoFormat = &m_pDocShell->GetDoc()->GetTableStyles()[i];
+        if (pAutoFormat->GetName() == rName)
+        {
+            SAL_INFO("sw.uno", "SwXTextTableStyle with given name already exists");
+            return;
+        }
+    }
+
+    SwTableAutoFormat* pAutoFormat = GetTableAutoFormat();
+    if (pAutoFormat)
+        pAutoFormat->SetName(rName);
+
+    m_sTableAutoFormatName = rName;
+}
+
+//XServiceInfo
+OUString SAL_CALL SwXTextTableStyle::getImplementationName() throw(css::uno::RuntimeException, std::exception)
+{
+    return {"SwXTextTableStyle"};
+}
+
+sal_Bool SAL_CALL SwXTextTableStyle::supportsService(const OUString& rServiceName) throw(css::uno::RuntimeException, std::exception)
+{
+    return cppu::supportsService(this, rServiceName);
+}
+
+css::uno::Sequence<OUString> SAL_CALL SwXTextTableStyle::getSupportedServiceNames() throw(css::uno::RuntimeException, std::exception)
+{
+    return {"com.sun.star.style.Style"};
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
