@@ -795,7 +795,9 @@ void Ruler::ImplDrawIndent(vcl::RenderContext& rRenderContext, const tools::Poly
 
     rRenderContext.SetLineColor(rStyleSettings.GetDarkShadowColor());
     rRenderContext.SetFillColor(bIsHit ? rStyleSettings.GetDarkShadowColor() : rStyleSettings.GetWorkspaceColor());
-    rRenderContext.DrawPolygon(rPoly);
+    tools::Polygon aPolygon(rPoly);
+    aPolygon.Optimize(PolyOptimizeFlags::CLOSE);
+    rRenderContext.DrawPolygon(aPolygon);
 }
 
 void Ruler::ImplDrawIndents(vcl::RenderContext& rRenderContext, long nMin, long nMax, long nVirTop, long nVirBottom)
