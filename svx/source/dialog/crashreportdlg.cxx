@@ -55,7 +55,11 @@ IMPL_LINK_TYPED(CrashReportDialog, BtnHdl, Button*, pBtn, void)
     if (pBtn == mpBtnSend.get())
     {
         std::string ini_path = CrashReporter::getIniFileName();
+#if defined WNT
+        OString aCommand = getLibDir().copy(8) + "/minidump_upload.exe " + ini_path.c_str();
+#else
         OString aCommand = getLibDir().copy(7) + "/minidump_upload " + ini_path.c_str();
+#endif
         int retVal = std::system(aCommand.getStr());
         SAL_WARN_IF(retVal != 0, "crashreport", "Failed to upload minidump. Error Code: " << retVal);
         Close();
