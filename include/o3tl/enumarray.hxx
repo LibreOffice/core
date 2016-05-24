@@ -22,6 +22,7 @@
 
 #include <iterator>
 #include <type_traits>
+#include <cassert>
 
 namespace o3tl {
 
