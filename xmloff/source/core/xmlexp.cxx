@@ -1237,6 +1237,13 @@ void SvXMLExport::SetBodyAttributes()
 {
 }
 
+void SvXMLExport::ImplExportUndo()
+{
+    CheckAttrList();
+
+    ExportUndo_();
+}
+
 static void
 lcl_AddGrddl(SvXMLExport & rExport, const SvXMLExportFlags /*nExportMode*/)
 {
@@ -1455,6 +1462,10 @@ sal_uInt32 SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
         // content
         if( mnExportFlags & SvXMLExportFlags::CONTENT )
             ImplExportContent();
+
+        // undo
+        if( mnExportFlags & SvXMLExportFlags::UNDO )
+            ImplExportUndo();
     }
 
     mxHandler->endDocument();
@@ -1515,6 +1526,10 @@ void SvXMLExport::ExportMeta_()
             Characters(generator);
         }
     }
+}
+
+void SvXMLExport::ExportUndo_()
+{
 }
 
 void SvXMLExport::ExportScripts_()
