@@ -779,17 +779,17 @@ void SwFormatPageDesc::dumpAsXml(xmlTextWriterPtr pWriter) const
 //  Partially implemented inline in hxx
 
 SwColumn::SwColumn() :
-    nWish ( 0 ),
-    nUpper( 0 ),
-    nLower( 0 ),
-    nLeft ( 0 ),
-    nRight( 0 )
+    m_nWish ( 0 ),
+    m_nUpper( 0 ),
+    m_nLower( 0 ),
+    m_nLeft ( 0 ),
+    m_nRight( 0 )
 {
 }
 
 bool SwColumn::operator==( const SwColumn &rCmp ) const
 {
-    return  nWish    == rCmp.GetWishWidth() &&
+    return  m_nWish    == rCmp.GetWishWidth() &&
             GetLeft()  == rCmp.GetLeft() &&
             GetRight() == rCmp.GetRight() &&
             GetUpper() == rCmp.GetUpper() &&
@@ -799,11 +799,11 @@ bool SwColumn::operator==( const SwColumn &rCmp ) const
 void SwColumn::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     xmlTextWriterStartElement(pWriter, BAD_CAST("swColumn"));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nWish"), BAD_CAST(OString::number(nWish).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nUpper"), BAD_CAST(OString::number(nUpper).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nLower"), BAD_CAST(OString::number(nLower).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nLeft"), BAD_CAST(OString::number(nLeft).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nRight"), BAD_CAST(OString::number(nRight).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nWish"), BAD_CAST(OString::number(m_nWish).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nUpper"), BAD_CAST(OString::number(m_nUpper).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nLower"), BAD_CAST(OString::number(m_nLower).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nLeft"), BAD_CAST(OString::number(m_nLeft).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nRight"), BAD_CAST(OString::number(m_nRight).getStr()));
     xmlTextWriterEndElement(pWriter);
 }
 
