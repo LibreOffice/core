@@ -44,13 +44,11 @@ class SourceContext: public MutexDummy,
     // the action ( copy, move etc)
     sal_Int8 m_currentAction;
 
-    SourceContext();
-    SourceContext( const SourceContext&);
-    SourceContext &operator= (const SourceContext& );
-
 public:
     SourceContext( DragSource* pSource, const Reference<XDragSourceListener>& listener);
     ~SourceContext();
+    SourceContext(const SourceContext&) = delete;
+    SourceContext &operator= (const SourceContext&) = delete;
 
     virtual void SAL_CALL addDragSourceListener( const Reference<XDragSourceListener >& dsl )
         throw( RuntimeException);
