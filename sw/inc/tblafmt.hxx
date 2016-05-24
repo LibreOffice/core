@@ -230,6 +230,8 @@ class SW_DLLPUBLIC SwTableAutoFormat
     friend void FinitCore();       // To destroy default pointer.
     static SwBoxAutoFormat* pDfltBoxAutoFormat;
 
+    css::uno::WeakReference<css::uno::XInterface> m_wXObject;
+
     OUString m_aName;
     sal_uInt16 nStrResId;
 
@@ -292,6 +294,11 @@ public:
 
     bool Load( SvStream& rStream, const SwAfVersions& );
     bool Save( SvStream& rStream, sal_uInt16 fileVersion ) const;
+
+    SAL_DLLPRIVATE css::uno::WeakReference<css::uno::XInterface> const& GetXObject() const
+        { return m_wXObject; }
+    SAL_DLLPRIVATE void SetXObject(css::uno::Reference<css::uno::XInterface> const& xObject)
+        { m_wXObject = xObject; }
 };
 
 class SW_DLLPUBLIC SwTableAutoFormatTable
