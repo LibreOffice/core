@@ -11117,6 +11117,7 @@ the root of your Qt installation by exporting QT4DIR before running "configure".
     if test "x$kde_incdir" = "xno"; then
         AC_MSG_ERROR([KDE4 headers not found.  Please specify the root of your KDE4 installation by exporting KDE4DIR before running "configure".])
     fi
+    if test "$kde_incdir" = "/usr/include"; then kde_incdir=; fi
 
     dnl Check for KDE4 libraries
     AC_MSG_CHECKING([for KDE4 libraries])
@@ -11134,7 +11135,12 @@ the root of your Qt installation by exporting QT4DIR before running "configure".
     fi
 
     PKG_CHECK_MODULES([QT4],[QtNetwork QtGui])
-    KDE4_CFLAGS="-I$kde_incdir $QT4_CFLAGS -DQT_CLEAN_NAMESPACE -DQT_THREAD_SUPPORT"
+    if ! test -z "$kde_incdir"; then
+    	KDE4_CFLAGS="-I$kde_incdir $QT4_CFLAGS -DQT_CLEAN_NAMESPACE -DQT_THREAD_SUPPORT"
+    else
+    	KDE4_CFLAGS="$QT4_CFLAGS -DQT_CLEAN_NAMESPACE -DQT_THREAD_SUPPORT"
+    fi
+
     KDE4_LIBS="-L$kde_libdir -lkio -lkfile -lkdeui -lkdecore -L$qt_lib_dir $QT4_LIBS"
     KDE4_CFLAGS=$(printf '%s' "$KDE4_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
     FilterLibs "$KDE4_LIBS"
