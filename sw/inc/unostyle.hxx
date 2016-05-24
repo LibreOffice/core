@@ -246,6 +246,30 @@ protected:
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
 
 };
+
+class SwTableAutoFormat;
+
+/// A text table style is a uno api wrapper for a SwTableAutoFormat
+class SwXTextTableStyle : public cppu::WeakImplHelper< css::style::XStyle >
+{
+    OUString m_sTableAutoFormatName;
+    SwDocShell* m_pDocShell;
+
+    SwTableAutoFormat* GetTableAutoFormat();
+public:
+    SwXTextTableStyle(SwDocShell* pDocShell, const OUString& rTableAutoFormatName);
+    // XStyle
+    virtual sal_Bool SAL_CALL isUserDefined() throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL isInUse() throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getParentStyle() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setParentStyle(const OUString& aParentStyle ) throw (css::container::NoSuchElementException, css::uno::RuntimeException, std::exception) override;
+
+    //XNamed
+    virtual OUString SAL_CALL getName() throw( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL setName(const OUString& Name_) throw( css::uno::RuntimeException, std::exception ) override;
+
+    static css::uno::Reference<css::style::XStyle> CreateXTextTableStyle(SwDocShell* pDocShell, const OUString& rTableAutoFormatName);
+};
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
