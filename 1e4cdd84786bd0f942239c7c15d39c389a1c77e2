@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_6ed6e8c6",
+        "filename": "sw/inc/unostyle.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1001243
+      },
+      "writtenOn": "2016-05-24T20:48:30Z",
+      "side": 1,
+      "message": "To avoid SfxStyleSheetBasePool will it be ok to create a GetInstance(...) method which will return a SwXTextTableStyle bound to a given SwTableAutoFormat name?\n\nWould be stored in a static map.",
+      "revId": "1e4cdd84786bd0f942239c7c15d39c389a1c77e2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_4e5a0485",
+        "filename": "sw/source/core/unocore/unostyle.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 820,
+      "author": {
+        "id": 1001243
+      },
+      "writtenOn": "2016-05-24T20:48:30Z",
+      "side": 1,
+      "message": "I\u0027m pretty sure its ok, because it\u0027s used to feed names in a getElementNames() method.",
+      "revId": "1e4cdd84786bd0f942239c7c15d39c389a1c77e2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_ae51d064",
+        "filename": "sw/source/core/unocore/unostyle.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 4289,
+      "author": {
+        "id": 1001243
+      },
+      "writtenOn": "2016-05-24T20:48:30Z",
+      "side": 1,
+      "message": "Will be tweaked to check if given Name can be used.",
+      "revId": "1e4cdd84786bd0f942239c7c15d39c389a1c77e2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
