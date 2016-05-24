@@ -74,9 +74,19 @@ int OutputDevice::GetDevFontCount() const
     if( !mpDeviceFontList )
     {
         if (!mpFontCollection)
+        {
             return 0;
+        }
 
-        mpDeviceFontList = mpFontCollection->GetDeviceFontList();
+        mpGetDevFontList = mpFontCollection->GetDevFontList();
+
+        if (!mpGetDevFontList->Count())
+        {
+            delete mpGetDevFontList;
+            mpGetDevFontList = nullptr;
+
+            return 0;
+        }
     }
     return mpDeviceFontList->Count();
 }
