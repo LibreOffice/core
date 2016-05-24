@@ -75,7 +75,7 @@ bool uploadContent(std::map<std::string, std::string>& parameters)
     getProperty("CAFile", ca_certificate_file, parameters);
 
     getProperty("DumpFile", file, parameters);
-    getProperty("URL", file, parameters);
+    getProperty("URL", url, parameters);
     if (url.empty())
         return false;
 
