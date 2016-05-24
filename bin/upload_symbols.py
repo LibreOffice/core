@@ -14,6 +14,7 @@ def detect_platform():
 
 def main():
     if len(sys.argv) != 4:
+        print(sys.argv)
         print("Invalid number of parameters")
         sys.exit(1)
 
