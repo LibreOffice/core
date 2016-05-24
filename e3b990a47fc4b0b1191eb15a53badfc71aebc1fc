@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_4efe846c",
+        "filename": "rsc/source/tools/rsctree.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-05-24T19:29:50Z",
+      "side": 0,
+      "message": "this is casting a pointer to an integer, so sal_uIntPtr is actually appropriate here (and other places in this file)\n\n(presumably it casts because comparing pointers that aren\u0027t part of the same allocation is UB, but don\u0027t quote me on that)",
+      "revId": "e3b990a47fc4b0b1191eb15a53badfc71aebc1fc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

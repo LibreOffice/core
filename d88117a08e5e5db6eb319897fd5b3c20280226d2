@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_aef55084",
+        "filename": "sal/qa/sal/test_types.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-05-24T19:29:50Z",
+      "side": 1,
+      "message": "this is a test for the printf function and the SAL_PRI* macros. this means that:\n\n1) if you change the sal_uIntPtr to something else you also have to change the SAL_PRIuUINTPTR to something else, because it implies that the following argument is of type sal_uIntPtr\n\n2) this actually *wants* to test printing sal_uIntPtr values, because the other sal_* types are already tested above",
+      "revId": "d88117a08e5e5db6eb319897fd5b3c20280226d2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_eeef58ae",
+        "filename": "sal/rtl/alloc_cache.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-05-24T19:29:50Z",
+      "side": 1,
+      "message": "this is the memory allocator.  therefore we can assume that 64-bit sizes on a 32-bit platform are undesirable.\n\nif you look at alloc_cache.cxx you can find a lot of uses of m_addr that are still typed as sal_uIntPtr, which would need to be adapted to match this change.\n\nhowever if you read more of alloc_cache.cxx you will find that m_addr is assigned from rtl_cache_slab_type::m_bp, which in turn is assigned from reinterpret_cast\u0027ed pointer.\n\nso these sal_uIntPtr actually store pointer values, hence sal_uIntPtr is the most appropriate type.",
+      "revId": "d88117a08e5e5db6eb319897fd5b3c20280226d2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
