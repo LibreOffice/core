@@ -79,7 +79,7 @@ protected:
     void            CancelFormula();
 
 public:
-                    SwInputWindow( vcl::Window* pParent );
+    SwInputWindow(vcl::Window* pParent, SfxDispatcher* pDispatcher);
     virtual         ~SwInputWindow();
     virtual void    dispose() override;
 
