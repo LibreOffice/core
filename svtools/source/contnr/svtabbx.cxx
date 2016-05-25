@@ -519,7 +519,7 @@ SvHeaderTabListBox::~SvHeaderTabListBox()
 
 void SvHeaderTabListBox::dispose()
 {
-    delete m_pImpl;
+    m_pImpl.reset();
     SvTabListBox::dispose();
 }
 
