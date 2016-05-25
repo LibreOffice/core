@@ -31,6 +31,7 @@
 
 #include <svx/pageitem.hxx>
 #include <svx/rulritem.hxx>
+#include <svx/papersizelistbox.hxx>
 #include <editeng/sizeitem.hxx>
 
 #include <vcl/ctrl.hxx>
@@ -43,6 +44,9 @@
 #include <tools/fldunit.hxx>
 #include <svl/poolitem.hxx>
 #include <svx/rulritem.hxx>
+#include <svx/relfld.hxx>
+
+#include <vector>
 
 namespace sw { namespace sidebar {
 
@@ -53,7 +57,8 @@ class PageFormatPanel:
 public:
     static VclPtr<vcl::Window> Create(
         vcl::Window* pParent,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame);
+        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame,
+        SfxBindings* pBindings);
 
     virtual void NotifyItemUpdate(
         const sal_uInt16 nSId,
@@ -63,16 +68,34 @@ public:
 
     PageFormatPanel(
         vcl::Window* pParent,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame);
+        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame,
+        SfxBindings* pBindings);
     virtual ~PageFormatPanel();
     virtual void dispose() override;
 
+    static FieldUnit GetCurrentUnit( SfxItemState eState, const SfxPoolItem* pState );
+
 private:
 
-    VclPtr<ListBox> mpPaperSizeLB;
-    VclPtr<MetricField> mpPaperWidth;
-    VclPtr<MetricField> mpPaperHeight;
+    SfxBindings* mpBindings;
+
+    VclPtr<PaperSizeListBox> mpPaperSizeBox;
+    VclPtr<SvxRelativeField> mpPaperWidth;
+    VclPtr<SvxRelativeField> mpPaperHeight;
     VclPtr<ListBox> mpPaperOrientation;
+
+    ::sfx2::sidebar::ControllerItem maPaperSizeController;
+    ::sfx2::sidebar::ControllerItem maPaperOrientationController;
+    ::sfx2::sidebar::ControllerItem maMetricController;
+
+    ::std::unique_ptr<SvxPageItem> mpPageItem;
+
+    FieldUnit meFUnit, meLastFUnit;
+    SfxMapUnit meUnit;
+
+    void Initialize();
+    DECL_LINK_TYPED(PaperFormatModifyHdl, ListBox&, void);
+    DECL_LINK_TYPED(PaperSizeModifyHdl, Edit&, void);
 };
 
 } } //end of namespace sw::sidebar
