@@ -364,8 +364,7 @@ void SwSelPaintRects::Show(std::vector<OString>* pSelectionRectangles)
         // being edited.
         if (comphelper::LibreOfficeKit::isActive() && !pView->GetTextEditObject())
         {
-            // If pSelectionRectangles is set, we're just collecting the text selections -> don't emit start/end.
-            if (!empty() && !pSelectionRectangles)
+            if (!empty())
             {
                 // The selection may be a complex polygon, emit the logical
                 // start/end cursor rectangle of the selection as separate
