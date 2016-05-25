@@ -38,14 +38,6 @@ namespace com { namespace sun { namespace star { namespace graphic { class XGrap
 #define IMAGE_STDBTN_COLOR          Color( 0xC0, 0xC0, 0xC0 )
 #define IMAGELIST_IMAGE_NOTFOUND    ((sal_uInt16)0xFFFF)
 
-enum ImageColorTransform
-{
-    IMAGECOLORTRANSFORM_NONE = 0,
-    IMAGECOLORTRANSFORM_HIGHCONTRAST = 1,
-    IMAGECOLORTRANSFORM_MONOCHROME_BLACK = 2,
-    IMAGECOLORTRANSFORM_MONOCHROME_WHITE = 3
-};
-
 class VCL_DLLPUBLIC Image
 {
     friend class ImageList;
