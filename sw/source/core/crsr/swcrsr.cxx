@@ -51,6 +51,8 @@
 #include <statstr.hrc>
 #include <redline.hxx>
 #include <txatbase.hxx>
+#include <memory>
+#include <comphelper/lok.hxx>
 
 using namespace ::com::sun::star::i18n;
 
@@ -1379,7 +1381,7 @@ bool SwCursor::SelectWordWT( SwViewShell* pViewShell, sal_Int16 nWordType, const
                                 nWordType,
                                 bForward ));
 
-            if (pViewShell->isTiledRendering() && aBndry.startPos == aBndry.endPos && nPtPos > 0)
+            if (comphelper::LibreOfficeKit::isActive() && aBndry.startPos == aBndry.endPos && nPtPos > 0)
             {
                 // nPtPos is the end of the paragraph, select the last word then.
                 --nPtPos;

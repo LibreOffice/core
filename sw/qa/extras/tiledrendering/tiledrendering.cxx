@@ -174,6 +174,7 @@ void SwTiledRenderingTest::callbackImpl(int nType, const char* pPayload)
 
 void SwTiledRenderingTest::testRegisterCallback()
 {
+    comphelper::LibreOfficeKit::setActive();
     SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
     pXTextDocument->registerCallback(&SwTiledRenderingTest::callback, this);
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
@@ -184,6 +185,7 @@ void SwTiledRenderingTest::testRegisterCallback()
     CPPUNIT_ASSERT(!m_aInvalidation.IsEmpty());
     Rectangle aTopLeft(0, 0, 256*15, 256*15); // 1 px = 15 twips, assuming 96 DPI.
     CPPUNIT_ASSERT(m_aInvalidation.IsOver(aTopLeft));
+    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void SwTiledRenderingTest::testPostKeyEvent()
@@ -203,6 +205,7 @@ void SwTiledRenderingTest::testPostKeyEvent()
 
 void SwTiledRenderingTest::testPostMouseEvent()
 {
+    comphelper::LibreOfficeKit::setActive();
     SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
     pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
@@ -216,6 +219,7 @@ void SwTiledRenderingTest::testPostMouseEvent()
     pXTextDocument->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONUP, aStart.getX(), aStart.getY(), 1);
     // The new cursor position must be before the first word.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), pShellCrsr->GetPoint()->nContent.GetIndex());
+    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void SwTiledRenderingTest::testSetTextSelection()
@@ -442,6 +446,7 @@ void SwTiledRenderingTest::testSearchTextFrameWrapAround()
 
 void SwTiledRenderingTest::testDocumentSizeChanged()
 {
+    comphelper::LibreOfficeKit::setActive();
     // Get the current document size.
     SwXTextDocument* pXTextDocument = createDoc("2-pages.odt");
     pXTextDocument->registerCallback(&SwTiledRenderingTest::callback, this);
@@ -455,6 +460,7 @@ void SwTiledRenderingTest::testDocumentSizeChanged()
     CPPUNIT_ASSERT_EQUAL(aSize.getWidth(), m_aDocumentSize.getWidth());
     // Document height should be smaller now.
     CPPUNIT_ASSERT(aSize.getHeight() > m_aDocumentSize.getHeight());
+    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void SwTiledRenderingTest::testSearchAll()
