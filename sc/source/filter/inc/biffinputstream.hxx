@@ -335,15 +335,6 @@ private:
     sal_Int64           mnRecPos;
 };
 
-/** Stores the current position of the passed stream on construction and
-    restores it automatically on destruction. */
-class BiffInputStreamPosGuard : private BiffInputStreamPos
-{
-public:
-    explicit            BiffInputStreamPosGuard( BiffInputStream& rStrm );
-                        ~BiffInputStreamPosGuard();
-};
-
 } // namespace xls
 } // namespace oox
 

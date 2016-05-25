@@ -338,11 +338,6 @@ void SfxTemplateManagerDlg::dispose()
     ModalDialog::dispose();
 }
 
-void SfxTemplateManagerDlg::setDocumentModel(const uno::Reference<frame::XModel> &rModel)
-{
-    m_xModel = rModel;
-}
-
 FILTER_APPLICATION SfxTemplateManagerDlg::getCurrentApplicationFilter()
 {
     const sal_Int16 nCurAppId = mpCBApp->GetSelectEntryPos();
@@ -1175,17 +1170,6 @@ void SfxTemplateManagerDlg::OnCategoryDelete()
     mpLocalView->showAllTemplates();
     mpCBApp->SelectEntryPos(0);
     mpCBFolder->SelectEntryPos(0);
-}
-
-void SfxTemplateManagerDlg::OnRepositoryDelete()
-{
-    if(deleteRepository(mpRemoteView->getCurRegionId()))
-    {
-        // switch to local view
-        switchMainView(true);
-
-        createRepositoryMenu();
-    }
 }
 
 void SfxTemplateManagerDlg::createRepositoryMenu()

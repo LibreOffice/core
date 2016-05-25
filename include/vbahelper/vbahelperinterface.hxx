@@ -58,8 +58,6 @@ protected:
     css::uno::WeakReference< ov::XHelperInterface > mxParent;
     css::uno::Reference< css::uno::XComponentContext > mxContext;
 public:
-    InheritedHelperInterfaceImpl() {}
-    InheritedHelperInterfaceImpl( const css::uno::Reference< css::uno::XComponentContext >& xContext ) : mxContext( xContext ) {}
     InheritedHelperInterfaceImpl( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext ) : mxParent( xParent ), mxContext( xContext ) {}
     virtual OUString getServiceImplName() = 0;
     virtual css::uno::Sequence<OUString> getServiceNames() = 0;
@@ -102,8 +100,6 @@ class SAL_DLLPUBLIC_TEMPLATE InheritedHelperInterfaceWeakImpl : public Inherited
 {
     typedef InheritedHelperInterfaceImpl< ::cppu::WeakImplHelper< Ifc... > > Base;
 public:
-    InheritedHelperInterfaceWeakImpl< Ifc... >() {}
-    InheritedHelperInterfaceWeakImpl< Ifc... >( const css::uno::Reference< css::uno::XComponentContext >& xContext ) : Base( xContext ) {}
     InheritedHelperInterfaceWeakImpl< Ifc... >( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext ) : Base( xParent, xContext ) {}
 };
 

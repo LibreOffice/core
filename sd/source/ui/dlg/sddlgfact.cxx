@@ -57,7 +57,6 @@ IMPL_ABSTDLG_BASE(AbstractAssistentDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractSdModifyFieldDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractSdSnapLineDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractSdInsertLayerDlg_Impl);
-IMPL_ABSTDLG_BASE(AbstractSdInsertPasteDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractSdInsertPagesObjsDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractMorphDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractSdStartPresDlg_Impl);

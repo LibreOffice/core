@@ -166,11 +166,6 @@ void TemplateContainerItem::Paint (drawinglayer::processor2d::BaseProcessor2D *p
     pProcessor->process(aSeq);
 }
 
-bool TemplateContainerItem::HasMissingPreview( )
-{
-    return maPreview1.IsEmpty() || maPreview2.IsEmpty() || maPreview3.IsEmpty() || maPreview4.IsEmpty();
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
 
 

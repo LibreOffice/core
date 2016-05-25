@@ -32,7 +32,6 @@ private:
     Point           maEnd;
 
 public:
-                    Line() {};
                     Line( const Point& rStartPt, const Point& rEndPt ) : maStart( rStartPt ), maEnd( rEndPt ) {}
 
     void            SetStart( const Point& rStartPt ) { maStart = rStartPt; }

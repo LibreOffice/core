@@ -81,10 +81,6 @@ class VBAHELPER_DLLPUBLIC SimpleEnumerationBase : public EnumerationHelper_BASE
 {
 public:
     explicit SimpleEnumerationBase(
-            const css::uno::Reference< css::container::XEnumeration >& rxEnumeration ) throw (css::uno::RuntimeException) :
-        mxEnumeration( rxEnumeration ) {}
-
-    explicit SimpleEnumerationBase(
             const css::uno::Reference< css::container::XIndexAccess >& rxIndexAccess ) throw (css::uno::RuntimeException) :
         mxEnumeration( new SimpleIndexAccessToEnumeration( rxIndexAccess ) ) {}
 

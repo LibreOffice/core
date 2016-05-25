@@ -69,15 +69,11 @@ class SFX2_DLLPUBLIC SfxFrameDescriptor
     INetURLObject           aActualURL;
     OUString                aName;
     Size                    aMargin;
-    long                    nWidth;
     ScrollingMode           eScroll;
-    SizeSelector            eSizeSelector;
     bool                    bHasBorder;
     bool                    bHasBorderSet;
-    sal_uInt16              nItemId;
     bool                    bResizeHorizontal;
     bool                    bResizeVertical;
-    bool                    bHasUI;
     bool                    bReadOnly;
     std::unique_ptr< SfxFrameDescriptor_Impl > pImpl;
 
@@ -130,9 +126,6 @@ public:
                             { return bHasBorderSet; }
     void                    ResetBorder()
                             { bHasBorder = false; bHasBorderSet = false; }
-
-                            // Copy for example for Views
-    SfxFrameDescriptor*     Clone() const;
 };
 
 #endif // INCLUDED_SFX2_FRMDESCR_HXX

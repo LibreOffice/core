@@ -492,16 +492,6 @@ void BiffInputStreamPos::restorePosition()
         mrStrm.seek( mnRecPos );
 }
 
-BiffInputStreamPosGuard::BiffInputStreamPosGuard( BiffInputStream& rStrm ) :
-    BiffInputStreamPos( rStrm )
-{
-}
-
-BiffInputStreamPosGuard::~BiffInputStreamPosGuard()
-{
-    restorePosition();
-}
-
 } // namespace xls
 } // namespace oox
 

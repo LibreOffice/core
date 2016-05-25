@@ -83,7 +83,6 @@ class TOOLS_DLLPUBLIC StringRangeEnumerator
         sal_Int32   nFirst;
         sal_Int32   nLast;
 
-        Range() : nFirst( -1 ), nLast( -1 ) {}
         Range( sal_Int32 i_nFirst, sal_Int32 i_nLast ) : nFirst( i_nFirst ), nLast( i_nLast ) {}
     };
     std::vector< StringRangeEnumerator::Range >            maSequence;

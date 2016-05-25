@@ -2226,14 +2226,6 @@ void ScTable::DeleteBroadcasters(
     aCol[nCol].DeleteBroadcasters(rBlockPos, nRow1, nRow2);
 }
 
-bool ScTable::HasBroadcaster( SCCOL nCol ) const
-{
-    if (!ValidCol(nCol))
-        return false;
-
-    return aCol[nCol].HasBroadcaster();
-}
-
 void ScTable::FillMatrix( ScMatrix& rMat, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, svl::SharedStringPool* pPool ) const
 {
     size_t nMatCol = 0;

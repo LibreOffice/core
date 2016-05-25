@@ -25,25 +25,16 @@ class SfxSlotServer
 {
 private:
     const SfxSlot*      _pSlot;
-    sal_uInt16              _nShellLevel;
+    sal_uInt16          _nShellLevel;
 
 public:
-                        SfxSlotServer( const SfxSlot &rSlot, sal_uInt16 nShell );
                         SfxSlotServer();
 
-    sal_uInt16              GetShellLevel() const;
+    sal_uInt16          GetShellLevel() const;
     void                SetShellLevel(sal_uInt16 nLevel) { _nShellLevel = nLevel; }
-    void                SetSlot(const SfxSlot* pSlot) {
-                            _pSlot = pSlot;
-                        }
+    void                SetSlot(const SfxSlot* pSlot) { _pSlot = pSlot; }
     const SfxSlot*      GetSlot() const;
 };
-
-inline SfxSlotServer::SfxSlotServer( const SfxSlot &rSlot, sal_uInt16 nShell ):
-    _pSlot( &rSlot),
-    _nShellLevel( nShell )
-{
-}
 
 inline SfxSlotServer::SfxSlotServer():
     _pSlot(nullptr),

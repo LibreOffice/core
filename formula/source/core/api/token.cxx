@@ -779,57 +779,6 @@ FormulaTokenArray& FormulaTokenArray::operator=( const FormulaTokenArray& rArr )
     return *this;
 }
 
-FormulaTokenArray* FormulaTokenArray::Clone() const
-{
-    FormulaTokenArray* p = new FormulaTokenArray;
-    p->nLen = nLen;
-    p->nRPN = nRPN;
-    p->nMode = nMode;
-    p->nError = nError;
-    p->bHyperLink = bHyperLink;
-    p->mbFromRangeName = mbFromRangeName;
-    FormulaToken** pp;
-    if( nLen )
-    {
-        pp = p->pCode = new FormulaToken*[ nLen ];
-        memcpy( pp, pCode, nLen * sizeof( FormulaToken* ) );
-        for( sal_uInt16 i = 0; i < nLen; i++, pp++ )
-        {
-            *pp = (*pp)->Clone();
-            (*pp)->IncRef();
-        }
-    }
-    if( nRPN )
-    {
-        pp = p->pRPN = new FormulaToken*[ nRPN ];
-        memcpy( pp, pRPN, nRPN * sizeof( FormulaToken* ) );
-        for( sal_uInt16 i = 0; i < nRPN; i++, pp++ )
-        {
-            FormulaToken* t = *pp;
-            if( t->GetRef() > 1 )
-            {
-                FormulaToken** p2 = pCode;
-                sal_uInt16 nIdx = 0xFFFF;
-                for( sal_uInt16 j = 0; j < nLen; j++, p2++ )
-                {
-                    if( *p2 == t )
-                    {
-                        nIdx = j; break;
-                    }
-                }
-                if( nIdx == 0xFFFF )
-                    *pp = t->Clone();
-                else
-                    *pp = p->pCode[ nIdx ];
-            }
-            else
-                *pp = t->Clone();
-            (*pp)->IncRef();
-        }
-    }
-    return p;
-}
-
 void FormulaTokenArray::Clear()
 {
     if( nRPN ) DelRPN();

@@ -271,34 +271,6 @@ void SfxErrorHandler::GetClassString(sal_uLong lClassId, OUString &rStr) const
 }
 
 
-bool SfxErrorHandler::GetMessageString(
-    sal_uLong lErrId, OUString &rStr, sal_uInt16 &nFlags) const
-
-/*  [Description]
-
-    Creates the string to output a message box
-
-    */
-
-{
-    bool bRet = false;
-    std::unique_ptr<ResId> pResId(new ResId(nId, *pMgr));
-
-    ErrorResource_Impl aEr(*pResId, (sal_uInt16)lErrId);
-    if(aEr)
-    {
-        ResString aErrorString(aEr);
-        sal_uInt16 nResFlags = aErrorString.GetFlags();
-        if( nResFlags )
-            nFlags=aErrorString.GetFlags();
-        rStr = aErrorString.GetString();
-        bRet = true;
-    }
-
-    return bRet;
-}
-
-
 bool SfxErrorHandler::GetErrorString(
     sal_uLong lErrId, OUString &rStr, sal_uInt16 &nFlags) const
 

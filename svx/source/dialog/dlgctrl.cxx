@@ -740,11 +740,6 @@ void SvxRectCtl::DoCompletelyDisable(bool bNew)
     Invalidate();
 }
 
-void SvxRectCtl::SetCS(CTL_STYLE eNew)
-{
-    eCS = eNew;
-}
-
 // Control for editing bitmaps
 
 css::uno::Reference< css::accessibility::XAccessible > SvxPixelCtl::CreateAccessible()

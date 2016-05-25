@@ -47,9 +47,7 @@ class SfxPickList : public SfxListener
                             SfxPickList( sal_uInt32 nMenuSize );
                             virtual ~SfxPickList();
 
-    void                    CreatePicklistMenuTitle( Menu* pMenu, sal_uInt16 nItemId, const OUString& aURL, sal_uInt32 nNo );
     PickListEntry*          GetPickListEntry( sal_uInt32 nIndex );
-    void                    CreatePickListEntries();
     void                    RemovePickListEntries();
     /**
      * Adds the given document to the pick list (recent documents) if it satisfies
@@ -61,8 +59,6 @@ class SfxPickList : public SfxListener
     public:
         static SfxPickList& Get();
         static void ensure() { Get(); }
-
-        static void         ExecuteEntry( sal_uInt32 nIndex );
 
         virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 };

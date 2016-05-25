@@ -34,8 +34,6 @@ public:
                                          const long nPadding, sal_uInt32 nMaxTextLength,
                                          const ThumbnailItemAttributes *pAttrs) override;
 
-    bool HasMissingPreview( );
-
 private:
 
     Rectangle maThumbnailArea;

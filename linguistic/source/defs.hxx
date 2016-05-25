@@ -39,8 +39,6 @@ struct LangSvcEntries
     bool        bAlreadyWarned;
     bool        bDoWarnAgain;
 
-    LangSvcEntries() : nLastTriedSvcIndex(-1), bAlreadyWarned(false), bDoWarnAgain(false) {}
-
     explicit LangSvcEntries( const css::uno::Sequence< OUString > &rSvcImplNames ) :
         aSvcImplNames(rSvcImplNames),
         nLastTriedSvcIndex(-1), bAlreadyWarned(false), bDoWarnAgain(false)

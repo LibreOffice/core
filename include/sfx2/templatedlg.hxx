@@ -50,8 +50,6 @@ public:
     virtual ~SfxTemplateManagerDlg();
     virtual void dispose() override;
 
-    void setDocumentModel (const css::uno::Reference<css::frame::XModel> &rModel);
-
 private:
 
     void readSettings ();
@@ -95,10 +93,6 @@ private:
 
     void OnCategoryNew ();
     void OnCategoryDelete();
-
-    void OnRegionState (const ThumbnailViewItem *pItem);
-
-    void OnRepositoryDelete ();
 
     void createRepositoryMenu ();
 

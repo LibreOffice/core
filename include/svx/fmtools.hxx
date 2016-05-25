@@ -102,7 +102,6 @@ private:
 
 public:
     // Construction/Destruction
-    CursorWrapper() { }
     CursorWrapper(const css::uno::Reference< css::sdbc::XRowSet>& _rxCursor, bool bUseCloned = false);
     SVX_DLLPUBLIC CursorWrapper(const css::uno::Reference< css::sdbc::XResultSet>& _rxCursor, bool bUseCloned = false);
         // if bUseCloned == sal_True, the cursor is first doubled over the XCloneable interface (which it must implement)
