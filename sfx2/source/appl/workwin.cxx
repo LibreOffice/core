@@ -1897,20 +1897,17 @@ void SfxWorkWindow::ToggleChildWindow_Impl(sal_uInt16 nId, bool bSetFocus)
             else
             {
                 pCW->bCreate = true;
-                if ( pCW->bCreate )
+                if ( pChild )
                 {
-                    if ( pChild )
-                    {
-                        ShowChildWindow_Impl( nId, true, bSetFocus );
-                    }
-                    else
-                    {
-                        // create actual Window
-                        CreateChildWin_Impl( pCW, bSetFocus );
-                        if ( !pCW->pWin )
-                            // no success
-                            pCW->bCreate = false;
-                    }
+                    ShowChildWindow_Impl( nId, true, bSetFocus );
+                }
+                else
+                {
+                    // create actual Window
+                    CreateChildWin_Impl( pCW, bSetFocus );
+                    if ( !pCW->pWin )
+                        // no success
+                        pCW->bCreate = false;
                 }
             }
         }
