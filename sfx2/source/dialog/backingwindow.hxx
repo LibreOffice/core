@@ -51,7 +51,6 @@ class ToolBox;
 
 class BackingWindow : public vcl::Window, public VclBuilderContainer
 {
-    typedef bool (*selection_cmp_fn)(const ThumbnailViewItem*, const ThumbnailViewItem*);
     css::uno::Reference<css::uno::XComponentContext> mxContext;
     css::uno::Reference<css::frame::XDispatchProvider> mxDesktopDispatchProvider;
     css::uno::Reference<css::frame::XFrame> mxFrame;
@@ -89,7 +88,6 @@ class BackingWindow : public vcl::Window, public VclBuilderContainer
     Color maButtonsTextColor;
     Rectangle maStartCentButtons;
 
-    bool mbIsSaveMode;
     bool mbInitControls;
     sal_Int32 mnHideExternalLinks;
     std::unique_ptr<svt::AcceleratorExecute> mpAccExec;
@@ -102,14 +100,12 @@ class BackingWindow : public vcl::Window, public VclBuilderContainer
                      const css::uno::Reference<css::frame::XDispatchProvider >& i_xProv = css::uno::Reference<css::frame::XDispatchProvider>(),
                      const css::uno::Sequence<css::beans::PropertyValue >& = css::uno::Sequence<css::beans::PropertyValue>());
 
-    std::set<const ThumbnailViewItem*, selection_cmp_fn> maSelTemplates;
-    std::set<const ThumbnailViewItem*, selection_cmp_fn> maSelFolders;
-
     DECL_LINK_TYPED(ClickHdl, Button*, void);
     DECL_LINK_TYPED(MenuSelectHdl, MenuButton*, void);
     DECL_LINK_TYPED(ExtLinkClickHdl, Button*, void);
-    DECL_LINK_TYPED(OpenRegionHdl, void*, void);
+    DECL_LINK_TYPED(RightClickHdl, ThumbnailViewItem*, void);
     DECL_LINK_TYPED(OpenTemplateHdl, ThumbnailViewItem*, void);
+    DECL_LINK_TYPED(EditTemplateHdl, ThumbnailViewItem*, void);
 
     void initControls();
 
