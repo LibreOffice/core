@@ -40,6 +40,7 @@ public:
     virtual void dispose() override;
 
     void GetImportOptions( ScImportOptions& rOptions ) const;
+    virtual OString GetScreenshotId() const override;
 
 private:
     VclPtr<VclFrame>           m_pFieldFrame;
@@ -59,6 +60,8 @@ private:
 
     ScDelimiterTable*   pFieldSepTab;
     ScDelimiterTable*   pTextSepTab;
+
+    bool m_bIsAsciiImport;
 
 private:
     sal_uInt16 GetCodeFromCombo( const ComboBox& rEd ) const;
