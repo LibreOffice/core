@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "da7fb54a_510c6994",
+        "filename": "sw/inc/unostyle.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-05-25T12:09:10Z",
+      "side": 1,
+      "message": "As discussed in email, perhaps a better approach would be to store a weak reference to the uno object in the core object. See SwFrameFormat\u0027s GetXObject(), SwXFrame::CreateXFrame() and SwXTextFrame::CreateXTextFrame(). (That\u0027s for text frames, but you get the idea: SwFrameFormat is the internal object and SwXTextFrame is the uno object.)",
+      "parentUuid": "da7fb54a_6ed6e8c6",
+      "revId": "1e4cdd84786bd0f942239c7c15d39c389a1c77e2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da7fb54a_4e5a0485",
         "filename": "sw/source/core/unocore/unostyle.cxx",
         "patchSetId": 3
