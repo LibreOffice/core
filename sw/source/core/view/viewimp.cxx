@@ -35,6 +35,7 @@
 #include <pagepreviewlayout.hxx>
 #include <comcore.hrc>
 #include <svx/svdundo.hxx>
+#include <comphelper/lok.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentDeviceAccess.hxx>
@@ -133,13 +134,13 @@ void SwViewShellImp::DelRegion()
 bool SwViewShellImp::AddPaintRect( const SwRect &rRect )
 {
     // In case of tiled rendering the visual area is the last painted tile -> not interesting.
-    if ( rRect.IsOver( pSh->VisArea() ) || pSh->isTiledRendering() )
+    if ( rRect.IsOver( pSh->VisArea() ) || comphelper::LibreOfficeKit::isActive() )
     {
         if ( !pRegion )
         {
             // In case of normal rendering, this makes sure only visible rectangles are painted.
             // Otherwise get the rectangle of the full document, so all paint rectangles are invalidated.
-            const SwRect& rArea = pSh->isTiledRendering() ? pSh->GetLayout()->Frm() : pSh->VisArea();
+            const SwRect& rArea = comphelper::LibreOfficeKit::isActive() ? pSh->GetLayout()->Frm() : pSh->VisArea();
             pRegion = new SwRegionRects( rArea );
         }
         (*pRegion) -= rRect;

@@ -47,6 +47,7 @@
 
 #include <cfloat>
 #include <swselectionlist.hxx>
+#include <comphelper/lok.hxx>
 
 namespace {
     bool lcl_GetCrsrOfst_Objects( const SwPageFrm* pPageFrm, bool bSearchBackground,
@@ -2021,7 +2022,7 @@ void SwRootFrm::CalcFrmRects(SwShellCrsr &rCrsr)
 
     bool bIgnoreVisArea = false;
     if (pSh)
-        bIgnoreVisArea = pSh->GetViewOptions()->IsPDFExport() || pSh->isTiledRendering();
+        bIgnoreVisArea = pSh->GetViewOptions()->IsPDFExport() || comphelper::LibreOfficeKit::isActive();
 
     // #i12836# enhanced pdf
     SwRegionRects aRegion( !bIgnoreVisArea ?

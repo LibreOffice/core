@@ -618,7 +618,7 @@ void SwSidebarWin::InitControls()
         LibreOfficeKitCallback pCallback = 0;
         void* pData = 0;
         pDrawModel->getLibreOfficeKitCallback(pCallback, pData);
-        mpOutlinerView->setTiledRendering(mrView.GetWrtShellPtr()->isTiledRendering());
+        mpOutlinerView->setTiledRendering(true);
         mpOutlinerView->registerLibreOfficeKitCallback(pCallback, pData, pDrawModel);
     }
 
