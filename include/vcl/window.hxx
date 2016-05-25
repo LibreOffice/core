@@ -1179,6 +1179,15 @@ public:
     void                                SetHelpId( const OString& );
     const OString&                      GetHelpId() const;
 
+    /** Returns string ID of this window for the purpose of creating a screenshot
+        In default implementation it is the same as HelpId. Override this method
+        in windows (dialogs) that need different IDs for different configurations
+        they can be in
+
+        @return screenshot ID of this window
+    */
+    virtual OString                     GetScreenshotId() const;
+
     vcl::Window*                        FindWindow( const Point& rPos ) const;
 
     sal_uInt16                          GetChildCount() const;
