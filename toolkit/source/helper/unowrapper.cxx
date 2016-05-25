@@ -90,7 +90,7 @@ using namespace ::com::sun::star;
         case WINDOW_WORKWINDOW:
         case WINDOW_DOCKINGWINDOW:
         case WINDOW_FLOATINGWINDOW:
-        case WINDOW_HELPTEXTWINDOW: return new VCLXTopWindow;
+        case WINDOW_HELPTEXTWINDOW: return new VCLXTopWindow(true);
 
         case WINDOW_WINDOW:
         case WINDOW_TABPAGE:        return new VCLXContainer;
