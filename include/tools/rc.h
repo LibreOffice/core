@@ -137,12 +137,6 @@ namespace o3tl {
 #define RSC_TOOLBOX_ITEMIMAGELIST       0x40
 #define RSC_TOOLBOX_ITEMLIST            0x80
 
-// For "DockingWindow" resources:
-#define RSC_DOCKINGWINDOW_XYMAPMODE     0x01
-#define RSC_DOCKINGWINDOW_X             0x02
-#define RSC_DOCKINGWINDOW_Y             0x04
-#define RSC_DOCKINGWINDOW_FLOATING      0x08
-
 // For "ImageButtons":
 enum class RscImageButtonFlags {
     Image           = 0x01,

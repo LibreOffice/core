@@ -205,8 +205,7 @@ class RscTypCont
     RscTop *    InitClassNumericField( RscTop * pSuper );
     RscTop *    InitClassMetricField( RscTop * pSuper );
 
-    RscTop *    InitClassDockingWindow( RscTop * pSuper,
-                                        RscEnum * pMapUnit );
+    RscTop *    InitClassDockingWindow( RscTop * pSuper );
     RscTop *    InitClassToolBoxItem( RscTop * pSuper, RscTop * pClassBitmap,
                                       RscTop * pClassImage,
                                       RscEnum * pTriState );
