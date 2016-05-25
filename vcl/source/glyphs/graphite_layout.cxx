@@ -24,7 +24,6 @@
 #if OSL_DEBUG_LEVEL > 1
 #include <cstdio>
 #define GRLAYOUT_DEBUG 1
-#undef NDEBUG
 #endif
 
 //#define GRLAYOUT_DEBUG 1

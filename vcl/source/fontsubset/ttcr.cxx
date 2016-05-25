@@ -24,11 +24,6 @@
  *
  */
 
-#if OSL_DEBUG_LEVEL == 0
-#  ifndef NDEBUG
-#    define NDEBUG
-#  endif
-#endif
 #include <assert.h>
 
 #include "ttcr.hxx"

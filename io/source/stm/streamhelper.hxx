@@ -22,15 +22,6 @@
 
 #include <com/sun/star/io/BufferSizeExceededException.hpp>
 
-// Save NDEBUG state
-#ifdef NDEBUG
-#define STREAMHELPER_HXX_HAD_NDEBUG
-#undef NDEBUG
-#endif
-
-#if OSL_DEBUG_LEVEL == 0
-#define NDEBUG
-#endif
 #include <assert.h>
 
 #define Max( a, b )     (((a)>(b)) ? (a) : (b) )
@@ -93,13 +84,6 @@ public:
                   { MemRingBuffer::shrink(); }
 
 };
-
-// Restore NDEBUG state
-#ifdef STREAMHELPER_HXX_HAD_NDEBUG
-#define NDEBUG
-#else
-#undef NDEBUG
-#endif
 
 }
 

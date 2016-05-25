@@ -911,7 +911,6 @@ static FILE * grLog()
     else fflush(grLogFile);
     return grLogFile;
 }
-#undef NDEBUG
 #endif
 
 const void * getGrTable(const void* appFaceHandle, unsigned int name, size_t *len)
@@ -962,9 +961,6 @@ GrFontData::~GrFontData()
 
 const void * GrFontData::getTable(unsigned int name, size_t *len) const
 {
-#ifdef DEBUG
-#undef NDEBUG
-#endif
     assert(mhDC);
     // swap the bytes
     union TtfTag {

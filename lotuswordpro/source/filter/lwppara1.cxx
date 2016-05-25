@@ -102,13 +102,7 @@
 #include "lwpcelllayout.hxx"
 
 // boost::polymorphic_downcast checks and reports (using assert), if the
-// cast is incorrect. We want this in debug builds.
-#if OSL_DEBUG_LEVEL > 0
-#   undef NDEBUG
-#elif !defined(NDEBUG)
-#   define NDEBUG 1
-#endif
-
+// cast is incorrect (in debug builds).
 using boost::polymorphic_downcast;
 
 /**
