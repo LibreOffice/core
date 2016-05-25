@@ -406,7 +406,6 @@ GLint OpenGLHelper::LoadShaders(const OUString& rVertexShaderName,
         OString aFileName =
                 createFileName(rVertexShaderName, rFragmentShaderName, rGeometryShaderName, rDigest);
         bBinaryResult = loadProgramBinary(ProgramID, aFileName);
-        VCL_GL_INFO("Load binary shader from '" << aFileName << "'" << bBinaryResult);
         CHECK_GL_ERROR();
     }
 
