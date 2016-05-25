@@ -356,7 +356,6 @@
 <block-list:block block-list:abbreviated-name=".*(TM)" block-list:name="™"/>
 <block-list:block block-list:abbreviated-name=".*&lt;-.*" block-list:name="←"/>
 <block-list:block block-list:abbreviated-name="ha" block-list:name="há"/>
-  <block-list:block block-list:abbreviated-name=":^C:" block-list:name="ᴰ"/>
   <block-list:block block-list:abbreviated-name=":_0:" block-list:name="₀"/>
   <block-list:block block-list:abbreviated-name=":^0:" block-list:name="⁰"/>
   <block-list:block block-list:abbreviated-name=":100:" block-list:name="💯"/>
@@ -754,6 +753,7 @@
   <block-list:block block-list:abbreviated-name=":dama:" block-list:name="🂭"/>
   <block-list:block block-list:abbreviated-name=":dançarino:" block-list:name="💃"/>
   <block-list:block block-list:abbreviated-name=":^d:" block-list:name="ᵈ"/>
+  <block-list:block block-list:abbreviated-name=":^D:" block-list:name="ᴰ"/>
   <block-list:block block-list:abbreviated-name=":delicioso:" block-list:name="😋"/>
   <block-list:block block-list:abbreviated-name=":^delta:" block-list:name="ᵟ"/>
   <block-list:block block-list:abbreviated-name=":delta:" block-list:name="δ"/>
