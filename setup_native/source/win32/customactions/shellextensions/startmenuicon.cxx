@@ -18,7 +18,6 @@
  */
 
 #define UNICODE
-#define _UNICODE
 
 #ifdef _MSC_VER
 #pragma warning(push, 1) /* disable warnings within system headers */
