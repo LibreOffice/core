@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_ee03d80d",
+        "filename": "sc/inc/fillinfo.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-05-25T03:25:38Z",
+      "side": 1,
+      "message": "SCROW instead of sal_uInt16. If not SCROW then at least a 32bit type.",
+      "revId": "a873ddb39138d9248e6c917d58c34f14d3f760fb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_ce061420",
+        "filename": "sc/inc/fillinfo.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-05-25T03:25:38Z",
+      "side": 1,
+      "message": "For anything that is supposed to be a row please use SCROW. You even introduced an overflow here as sal_uInt1 is never big enough for rows.\nSCROW is a sal_Int32.",
+      "revId": "a873ddb39138d9248e6c917d58c34f14d3f760fb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_11ff4102",
+        "filename": "sc/source/ui/view/gridwin4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 988,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2016-05-25T03:25:38Z",
+      "side": 1,
+      "message": "This will overflow at some point.",
+      "revId": "a873ddb39138d9248e6c917d58c34f14d3f760fb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
