@@ -60,7 +60,7 @@ inline void MovePoly(tools::Polygon& rPoly, const Size& S)      { rPoly.Move(S.W
 void MoveXPoly(XPolygon& rPoly, const Size& S);
 
 SVX_DLLPUBLIC void ResizeRect(Rectangle& rRect, const Point& rRef, const Fraction& xFact, const Fraction& yFact);
-inline void ResizePoint(Point& rPnt, const Point& rRef, Fraction xFact, Fraction yFact);
+inline void ResizePoint(Point& rPnt, const Point& rRef, const Fraction& xFract, const Fraction& yFract);
 void ResizePoly(tools::Polygon& rPoly, const Point& rRef, const Fraction& xFact, const Fraction& yFact);
 void ResizeXPoly(XPolygon& rPoly, const Point& rRef, const Fraction& xFact, const Fraction& yFact);
 
@@ -111,18 +111,12 @@ void CrookStretchPoly(XPolyPolygon& rPoly, const Point& rCenter, const Point& rR
 /*  Inline                                                                                        */
 /**************************************************************************************************/
 
-inline void ResizePoint(Point& rPnt, const Point& rRef, Fraction xFact, Fraction yFact)
+inline void ResizePoint(Point& rPnt, const Point& rRef, const Fraction& xFract, const Fraction& yFract)
 {
-    if (!xFact.IsValid()) {
-        SAL_WARN( "svx.svdraw", "invalid fraction xFact, using Fraction(1,1)" );
-        xFact = Fraction(1,1);
-    }
-    if (!yFact.IsValid()) {
-        SAL_WARN( "svx.svdraw", "invalid fraction yFact, using Fraction(1,1)" );
-        yFact = Fraction(1,1);
-    }
-    rPnt.X() = rRef.X() + svx::Round( (rPnt.X() - rRef.X()) * double(xFact) );
-    rPnt.Y() = rRef.Y() + svx::Round( (rPnt.Y() - rRef.Y()) * double(yFact) );
+    double nxFract = xFract.IsValid() ? static_cast<double>(xFract) : 1.0;
+    double nyFract = yFract.IsValid() ? static_cast<double>(yFract) : 1.0;
+    rPnt.X() = rRef.X() + svx::Round( (rPnt.X() - rRef.X()) * nxFract );
+    rPnt.Y() = rRef.Y() + svx::Round( (rPnt.Y() - rRef.Y()) * nyFract );
 }
 
 inline void RotatePoint(Point& rPnt, const Point& rRef, double sn, double cs)
