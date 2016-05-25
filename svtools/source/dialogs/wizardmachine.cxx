@@ -211,8 +211,7 @@ namespace svt
                 if (pPage)
                     pPage->disposeOnce();
             }
-            delete m_pImpl;
-            m_pImpl = nullptr;
+            m_pImpl.reset();
         }
 
         WizardDialog::dispose();
