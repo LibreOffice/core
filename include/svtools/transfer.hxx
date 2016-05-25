@@ -481,7 +481,7 @@ struct TransferDataContainer_Impl;
 
 class SVT_DLLPUBLIC TransferDataContainer : public TransferableHelper
 {
-    TransferDataContainer_Impl* pImpl;
+    std::unique_ptr<TransferDataContainer_Impl> pImpl;
 
 protected:
 
