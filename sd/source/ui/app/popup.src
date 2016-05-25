@@ -148,6 +148,16 @@ Menu RID_DRAW_TABLEOBJ_INSIDE_POPUP
                     };
                     MenuItem
                     {
+                        Identifier = SID_TABLE_INSERT_ROW_BEFORE ;
+                        Text [ en-US ] = "Rows Above" ;
+                    };
+                    MenuItem
+                    {
+                        Identifier = SID_TABLE_INSERT_ROW_AFTER ;
+                        Text [ en-US ] = "Rows Below" ;
+                    };
+                    MenuItem
+                    {
                         Identifier = SID_TABLE_INSERT_ROW_DLG;
                         HelpId = CMD_SID_TABLE_INSERT_ROW_DLG;
                         Text [ en-US ] = "~Insert...";
@@ -182,6 +192,16 @@ Menu RID_DRAW_TABLEOBJ_INSIDE_POPUP
                         Identifier = SID_TABLE_SELECT_COL;
                         HelpId = CMD_SID_TABLE_SELECT_COL;
                         Text [ en-US ] = "~Select";
+                    };
+                    MenuItem
+                    {
+                        Identifier = SID_TABLE_INSERT_COL_BEFORE ;
+                        Text [ en-US ] = "Columns Left" ;
+                    };
+                    MenuItem
+                    {
+                        Identifier = SID_TABLE_INSERT_COL_AFTER ;
+                        Text [ en-US ] = "Columns Right" ;
                     };
                     MenuItem
                     {
