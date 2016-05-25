@@ -43,6 +43,9 @@
 #include <tools/fldunit.hxx>
 #include <svl/poolitem.hxx>
 #include <svx/rulritem.hxx>
+#include <svx/relfld.hxx>
+
+#include <vector>
 
 namespace sw { namespace sidebar {
 
@@ -71,17 +74,29 @@ public:
     virtual ~PageFormatPanel();
     virtual void dispose();
 
+    static FieldUnit GetCurrentUnit( SfxItemState eState, const SfxPoolItem* pState );
+
 private:
 
     SfxBindings* mpBindings;
 
-    VclPtr<ListBox> mpPaperSizeLB;
-    VclPtr<MetricField> mpPaperWidth;
-    VclPtr<MetricField> mpPaperHeight;
+    VclPtr<ListBox> mpPaperSizeBox;
+    VclPtr<SvxRelativeField> mpPaperWidth;
+    VclPtr<SvxRelativeField> mpPaperHeight;
     VclPtr<ListBox> mpPaperOrientation;
 
-    void Initialize();
+    ::sfx2::sidebar::ControllerItem maPaperSizeController;
+    ::sfx2::sidebar::ControllerItem maPaperOrientationController;
+    ::sfx2::sidebar::ControllerItem maMetricController;
 
+    FieldUnit meFUnit, meLastFUnit;
+    SfxMapUnit meUnit;
+
+    ::std::vector< Paper > maPaperList;
+
+    void Initialize();
+    DECL_LINK_TYPED(PaperFormatModifyHdl, ListBox&, void);
+    DECL_LINK_TYPED(PaperSizeModifyHdl, Edit&, void);
 };
 
 } } //end of namespace sw::sidebar
