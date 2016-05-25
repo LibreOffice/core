@@ -57,7 +57,6 @@
 #include <boost/math/special_functions/sinc.hpp>
 #include <boost/multi_array.hpp>
 #include <boost/optional.hpp>
-#include <boost/shared_array.hpp>
 #include <osl/conditn.hxx>
 #include <osl/diagnose.h>
 #include <osl/diagnose.hxx>

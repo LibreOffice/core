@@ -30,7 +30,7 @@
 #include "salvd.hxx"
 #include "salbmp.hxx"
 
-#include <boost/shared_array.hpp>
+#include <memory>
 
 
 struct  BitmapBuffer;
@@ -42,8 +42,8 @@ public:
     CGContextRef                    mxGraphicContext;
     mutable CGImageRef              mxCachedImage;
     BitmapPalette                   maPalette;
-    boost::shared_array<sal_uInt8>  maUserBuffer;
-    boost::shared_array<sal_uInt8>  maContextBuffer;
+    std::shared_ptr<sal_uInt8> m_pUserBuffer;
+    std::shared_ptr<sal_uInt8> m_pContextBuffer;
     sal_uInt16                      mnBits;
     int                             mnWidth;
     int                             mnHeight;
