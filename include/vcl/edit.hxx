@@ -62,7 +62,7 @@ public:
     virtual ~TextFilter();
 };
 
-enum AutocompleteAction{ AUTOCOMPLETE_KEYINPUT, AUTOCOMPLETE_TABFORWARD, AUTOCOMPLETE_TABBACKWARD };
+enum class AutocompleteAction { KeyInput, TabForward, TabBackward };
 
 class Timer;
 

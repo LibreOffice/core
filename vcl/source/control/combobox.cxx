@@ -347,7 +347,7 @@ IMPL_LINK_TYPED(ComboBox::Impl, ImplAutocompleteHdl, Edit&, rEdit, void)
        Tab/Shift-Tab since then we would not cycle to the next field.
     */
     if ( aSel.Len() ||
-         ((eAction != AUTOCOMPLETE_TABFORWARD) && (eAction != AUTOCOMPLETE_TABBACKWARD)) )
+         ((eAction != AutocompleteAction::TabForward) && (eAction != AutocompleteAction::TabBackward)) )
     {
         OUString    aFullText = rEdit.GetText();
         OUString    aStartText = aFullText.copy( 0, (sal_Int32)aSel.Max() );
@@ -357,9 +357,9 @@ IMPL_LINK_TYPED(ComboBox::Impl, ImplAutocompleteHdl, Edit&, rEdit, void)
             nStart = 0;
 
         bool bForward = true;
-        if ( eAction == AUTOCOMPLETE_TABFORWARD )
+        if ( eAction == AutocompleteAction::TabForward )
             nStart++;
-        else if ( eAction == AUTOCOMPLETE_TABBACKWARD )
+        else if ( eAction == AutocompleteAction::TabBackward )
         {
             bForward = false;
             if (nStart)
