@@ -154,7 +154,7 @@ Reference<ui::XUIElement> SAL_CALL SwPanelFactory::createUIElement (
     }
     else if(rsResourceURL.endsWith("/PageFormatPanel"))
     {
-        VclPtr<vcl::Window> pPanel = sw::sidebar::PageFormatPanel::Create( pParentWindow, xFrame );
+        VclPtr<vcl::Window> pPanel = sw::sidebar::PageFormatPanel::Create( pParentWindow, xFrame, pBindings );
         xElement = sfx2::sidebar::SidebarPanelBase::Create(
             rsResourceURL,
             xFrame,
