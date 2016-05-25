@@ -129,7 +129,7 @@ private:
     ToolbarMenuEntry*   implGetEntry( int nEntry ) const;
     ToolbarMenuEntry*   implSearchEntry( int nEntryId ) const;
 
-    ToolbarMenu_Impl*   mpImpl;
+    std::unique_ptr<ToolbarMenu_Impl>   mpImpl;
 };
 
 } // namespace svtools

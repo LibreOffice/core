@@ -411,7 +411,7 @@ ToolbarMenu::ToolbarMenu( const Reference< XFrame >& rFrame, vcl::Window* pParen
 
 void ToolbarMenu::implInit(const Reference< XFrame >& rFrame)
 {
-    mpImpl = new ToolbarMenu_Impl( *this, rFrame );
+    mpImpl.reset( new ToolbarMenu_Impl( *this, rFrame ) );
 
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
     SetControlBackground( rStyleSettings.GetMenuColor() );
@@ -444,7 +444,7 @@ void ToolbarMenu::dispose()
     mpImpl->mxAccessible.clear();
 
     std::unique_ptr<ToolbarMenu_Impl> pImpl{mpImpl};
-    mpImpl = nullptr;
+    mpImpl.reset();
 
     pImpl->maEntryVector.clear();
 
