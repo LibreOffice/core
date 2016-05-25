@@ -230,7 +230,7 @@ class SVT_DLLPUBLIC SvTreeListBox
     friend class IconViewImpl;
     friend class TreeControlPeer;
 
-    SvTreeListBoxImpl* mpImpl;
+    std::unique_ptr<SvTreeListBoxImpl> mpImpl;
     Link<SvTreeListBox*,void>  aCheckButtonHdl;
     Link<SvTreeListBox*,void>  aScrolledHdl;
     Link<SvTreeListBox*,void>  aExpandedHdl;
@@ -267,7 +267,7 @@ class SVT_DLLPUBLIC SvTreeListBox
     SvLBoxItem*             pEdItem;
 
 protected:
-    SvImpLBox*              pImp;
+    std::unique_ptr<SvImpLBox>              pImpl;
     short                   nColumns;
     short                   nEntryHeight;
     short                   nEntryWidth;
