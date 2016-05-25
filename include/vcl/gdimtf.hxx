@@ -43,11 +43,11 @@ class Gradient;
 #define GDI_METAFILE_END                ((size_t)0xFFFFFFFF)
 #define GDI_METAFILE_LABEL_NOTFOUND     ((size_t)0xFFFFFFFF)
 
-enum MtfConversion
+enum class MtfConversion
 {
-    MTF_CONVERSION_NONE = 0,
-    MTF_CONVERSION_1BIT_THRESHOLD = 1,
-    MTF_CONVERSION_8BIT_GREYS = 2
+    NONE = 0,
+    N1BitThreshold = 1,
+    N8BitGreys = 2
 };
 
 

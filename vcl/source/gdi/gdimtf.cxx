@@ -1848,7 +1848,7 @@ Color GDIMetaFile::ImplColConvertFnc( const Color& rColor, const void* pColParam
 {
     sal_uInt8 cLum = rColor.GetLuminance();
 
-    if( MTF_CONVERSION_1BIT_THRESHOLD == static_cast<const ImplColConvertParam*>(pColParam)->eConversion )
+    if( MtfConversion::N1BitThreshold == static_cast<const ImplColConvertParam*>(pColParam)->eConversion )
         cLum = ( cLum < 128 ) ? 0 : 255;
 
     return Color( rColor.GetTransparency(), cLum, cLum, cLum );
@@ -2269,13 +2269,13 @@ void GDIMetaFile::Adjust( short nLuminancePercent, short nContrastPercent,
 void GDIMetaFile::Convert( MtfConversion eConversion )
 {
     // nothing to do? => return quickly
-    if( eConversion != MTF_CONVERSION_NONE )
+    if( eConversion != MtfConversion::NONE )
     {
         ImplColConvertParam aColParam;
         ImplBmpConvertParam aBmpParam;
 
         aColParam.eConversion = eConversion;
-        aBmpParam.eConversion = ( MTF_CONVERSION_1BIT_THRESHOLD == eConversion ) ? BMP_CONVERSION_1BIT_THRESHOLD : BMP_CONVERSION_8BIT_GREYS;
+        aBmpParam.eConversion = ( MtfConversion::N1BitThreshold == eConversion ) ? BMP_CONVERSION_1BIT_THRESHOLD : BMP_CONVERSION_8BIT_GREYS;
 
         ImplExchangeColors( ImplColConvertFnc, &aColParam, ImplBmpConvertFnc, &aBmpParam );
     }

@@ -3930,9 +3930,9 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, cons
                             if ( nBrightness || nContrast || ( nGamma != 0x10000 ) )
                                 aGdiMetaFile.Adjust( nBrightness, (sal_Int16)nContrast, 0, 0, 0, (double)nGamma / 0x10000, false, true );
                             if ( eDrawMode == GRAPHICDRAWMODE_GREYS )
-                                aGdiMetaFile.Convert( MTF_CONVERSION_8BIT_GREYS );
+                                aGdiMetaFile.Convert( MtfConversion::N8BitGreys );
                             else if ( eDrawMode == GRAPHICDRAWMODE_MONO )
-                                aGdiMetaFile.Convert( MTF_CONVERSION_1BIT_THRESHOLD );
+                                aGdiMetaFile.Convert( MtfConversion::N1BitThreshold );
                             aGraf = aGdiMetaFile;
                         }
                         break;
