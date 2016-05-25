@@ -152,12 +152,10 @@ RscTop * RscTypCont::InitClassImage( RscTop * pSuper, RscTop * pClassBitmap,
 
     // initialize variables
     nId = aNmTb.Put( "ImageBitmap", VARNAME );
-    pClassImage->SetVariable( nId, pClassBitmap, nullptr, 0, RSC_IMAGE_IMAGEBITMAP );
-    nId = aNmTb.Put( "MaskBitmap", VARNAME );
-    pClassImage->SetVariable( nId, pClassBitmap, nullptr, 0, RSC_IMAGE_MASKBITMAP );
+    pClassImage->SetVariable( nId, pClassBitmap, nullptr, 0, (sal_uInt32)RscImageFlags::ImageBitmap );
     nId = aNmTb.Put( "MaskColor", VARNAME );
     pClassImage->SetVariable( nId, pClassColor, nullptr,
-                              VAR_SVDYNAMIC, RSC_IMAGE_MASKCOLOR );
+                              VAR_SVDYNAMIC, (sal_uInt32)RscImageFlags::MaskColor );
 
     return pClassImage;
 }
