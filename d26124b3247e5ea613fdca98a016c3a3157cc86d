@@ -16,6 +16,24 @@
       "revId": "d26124b3247e5ea613fdca98a016c3a3157cc86d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_b1ff7533",
+        "filename": "sc/source/ui/src/scfuncs.src",
+        "patchSetId": 1
+      },
+      "lineNbr": 11631,
+      "author": {
+        "id": 1000223
+      },
+      "writtenOn": "2016-05-25T13:21:31Z",
+      "side": 1,
+      "message": "The original description is the same as for the IFS function, but the functions differ:\n- IFS tests if condition (testN) is TRUE, then resultN is returned,\n- SWITCH tests if condition (valueN) \u003d\u003d expression is TRUE, then resultN is returned.\n\nThe patch should correct that both functions have the same meaning; of course we can use better wording than I suggested (based on the IFS description it could be \"Checks 1 or more values and returns a result corresponding to the first value equal to the given expression.\" as well).",
+      "parentUuid": "da7fb54a_31944536",
+      "revId": "d26124b3247e5ea613fdca98a016c3a3157cc86d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
