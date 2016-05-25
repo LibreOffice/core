@@ -50,7 +50,14 @@
 #if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID
 #include <client/linux/handler/exception_handler.h>
 #elif defined WNT
+#if defined __clang__
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wmicrosoft-enum-value"
+#endif
 #include <client/windows/handler/exception_handler.h>
+#if defined __clang__
+#pragma clang diagnostic pop
+#endif
 #include <locale>
 #include <codecvt>
 #endif
