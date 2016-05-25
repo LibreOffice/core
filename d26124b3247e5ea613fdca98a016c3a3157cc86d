@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_31944536",
+        "filename": "sc/source/ui/src/scfuncs.src",
+        "patchSetId": 1
+      },
+      "lineNbr": 11631,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-05-25T10:17:22Z",
+      "side": 1,
+      "message": "How is this better than the current description that mentions that the first condition evaluating to true will be used to return the corresponding value? As is, I find this less descriptive than what we already have.",
+      "revId": "d26124b3247e5ea613fdca98a016c3a3157cc86d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
