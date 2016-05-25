@@ -64,6 +64,7 @@ throw (css::uno::RuntimeException)
         break;
     case AccessibleEventId::TEXT_CHANGED:
         HandleTextChangedEvent(aEvent.OldValue, aEvent.NewValue);
+        SAL_FALLTHROUGH; //TODO ???
     case AccessibleEventId::VISIBLE_DATA_CHANGED:
         HandleVisibleDataChangedEvent();
         break;

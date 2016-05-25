@@ -166,6 +166,7 @@ static LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM l
         case VK_SPACE:
             break;
         }
+        SAL_FALLTHROUGH; //TODO ???
     default:
         return DefWindowProc(hwnd, message, wParam, lParam);
     }
