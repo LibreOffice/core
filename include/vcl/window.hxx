@@ -1179,6 +1179,8 @@ public:
     void                                SetHelpId( const OString& );
     const OString&                      GetHelpId() const;
 
+    virtual const OString&              GetScreenshotId() const;
+
     vcl::Window*                        FindWindow( const Point& rPos ) const;
 
     sal_uInt16                          GetChildCount() const;

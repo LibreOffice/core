@@ -107,7 +107,8 @@ ScImportOptionsDlg::ScImportOptionsDlg(
         bool                    bOnlyDbtoolsEncodings,
         bool                    bImport )
     :   ModalDialog ( pParent, "ImOptDialog",
-            "modules/scalc/ui/imoptdialog.ui" )
+            "modules/scalc/ui/imoptdialog.ui" ),
+        mbIsAsciiImport( bAscii )
 {
     get(m_pFieldFrame, "fieldframe");
     get(m_pFtCharset, "charsetft");
@@ -303,6 +304,15 @@ sal_uInt16 ScImportOptionsDlg::GetCodeFromCombo( const ComboBox& rEd ) const
 
     return nCode;
 }
+
+const OString& ScImportOptionsDlg::GetScreenshotId() const
+{
+    const OString aConfigId = GetHelpId() + OString( "?config=" );
+    OString aScreenshotId = (mbIsAsciiImport) ? aConfigId + OString( "AsciiImport" ) : OString( "OtherImport" );
+
+    return aScreenshotId;
+}
+
 
 IMPL_LINK_TYPED( ScImportOptionsDlg, FixedWidthHdl, Button*, pCheckBox, void )
 {
