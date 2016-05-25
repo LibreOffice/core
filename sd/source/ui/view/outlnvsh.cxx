@@ -164,7 +164,6 @@ void OutlineViewShell::Construct(DrawDocShell* )
 
     SetHelpId( SD_IF_SDOUTLINEVIEWSHELL );
     GetActiveWindow()->SetHelpId( HID_SDOUTLINEVIEWSHELL );
-    GetActiveWindow()->SetUniqueId( HID_SDOUTLINEVIEWSHELL );
 }
 
 Reference<drawing::XDrawSubController> OutlineViewShell::CreateSubController()
