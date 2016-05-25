@@ -850,10 +850,10 @@ RscTop * RscTypCont::InitClassMetricFormatter( RscTop * pSuper,
     // initialize variables
     nId = aNmTb.Put( "Unit", VARNAME );
     pClassMetric->SetVariable( nId, pFieldUnits, nullptr,
-                               0, METRICFORMATTER_UNIT );
+                               0, (sal_uInt32)RscMetricFormatterFlags::Unit );
     nId = aNmTb.Put( "CustomUnitText", VARNAME );
     pClassMetric->SetVariable( nId, &aLangString, nullptr,
-                               0, METRICFORMATTER_CUSTOMUNITTEXT );
+                               0, (sal_uInt32)RscMetricFormatterFlags::CustomUnitText );
 
     return pClassMetric;
 }

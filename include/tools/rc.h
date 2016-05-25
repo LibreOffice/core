@@ -98,8 +98,13 @@ namespace o3tl {
     template<> struct typed_flags<RscNumFormatterFlags> : is_typed_flags<RscNumFormatterFlags, 0x37> {};
 }
 
-#define METRICFORMATTER_UNIT            0x01
-#define METRICFORMATTER_CUSTOMUNITTEXT  0x02
+enum class RscMetricFormatterFlags {
+    Unit            = 0x01,
+    CustomUnitText  = 0x02
+};
+namespace o3tl {
+    template<> struct typed_flags<RscMetricFormatterFlags> : is_typed_flags<RscMetricFormatterFlags, 0x03> {};
+}
 
 #define NUMERICFIELD_FIRST              0x01
 #define NUMERICFIELD_LAST               0x02
