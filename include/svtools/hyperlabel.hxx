@@ -29,14 +29,12 @@
 
 namespace svt
 {
-
-
     class HyperLabelImpl;
 
     class HyperLabel : public FixedText
     {
     protected:
-        HyperLabelImpl*     m_pImpl;
+        std::unique_ptr<HyperLabelImpl>     m_pImpl;
         Link<HyperLabel*,void>  maClickHdl;
 
         virtual void        MouseMove( const MouseEvent& rMEvt ) override;

@@ -159,7 +159,7 @@ namespace svt
 
     void HyperLabel::dispose()
     {
-        delete m_pImpl;
+        m_pImpl.reset();
         FixedText::dispose();
     }
 
