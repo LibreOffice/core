@@ -11312,7 +11312,45 @@ SfxVoidItem InsertColumnDialog SID_TABLE_INSERT_COL_DLG
     GroupId = GID_TABLE;
 ]
 
+SfxVoidItem InsertColumnsBefore SID_TABLE_INSERT_COL_BEFORE
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    FastCall = TRUE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Asynchron;
 
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_TABLE;
+]
+
+SfxVoidItem InsertColumnsAfter SID_TABLE_INSERT_COL_AFTER
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    FastCall = TRUE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Asynchron;
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_TABLE;
+]
 
 SfxVoidItem InsertRowDialog SID_TABLE_INSERT_ROW_DLG
 ()
@@ -11329,6 +11367,46 @@ SfxVoidItem InsertRowDialog SID_TABLE_INSERT_ROW_DLG
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
+    GroupId = GID_TABLE;
+]
+
+SfxVoidItem InsertRowsBefore SID_TABLE_INSERT_ROW_BEFORE
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    FastCall = TRUE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Asynchron;
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_TABLE;
+]
+
+SfxVoidItem InsertRowsAfter SID_TABLE_INSERT_ROW_AFTER
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    FastCall = TRUE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Asynchron;
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = TRUE,
     GroupId = GID_TABLE;
 ]
 

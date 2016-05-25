@@ -134,23 +134,45 @@ void TableObjectBar::Execute( SfxRequest& rReq )
             switch( nSlotId )
             {
             case SID_TABLE_INSERT_ROW_DLG:
+            case SID_TABLE_INSERT_ROW_BEFORE:
+            case SID_TABLE_INSERT_ROW_AFTER:
             case SID_TABLE_INSERT_COL_DLG:
+            case SID_TABLE_INSERT_COL_BEFORE:
+            case SID_TABLE_INSERT_COL_AFTER:
             {
-                SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                std::unique_ptr<SvxAbstractInsRowColDlg> pDlg( pFact ? pFact->CreateSvxInsRowColDlg( mpView->GetViewShell()->GetParentWindow(), nSlotId == SID_TABLE_INSERT_COL_DLG, SD_MOD()->GetSlotPool()->GetSlot(nSlotId)->GetCommand()) : nullptr);
-
-                if( pDlg.get() && (pDlg->Execute() == 1) )
+                std::unique_ptr<SvxAbstractInsRowColDlg> pDlg;
+                if (nSlotId == SID_TABLE_INSERT_ROW_DLG || nSlotId == SID_TABLE_INSERT_COL_DLG)
                 {
-                    if( nSlotId == SID_TABLE_INSERT_ROW_DLG )
-                        nSlotId = SID_TABLE_INSERT_ROW;
-                    else
-                        nSlotId = SID_TABLE_INSERT_COL;
+                    SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+                    pDlg.reset(pFact ? pFact->CreateSvxInsRowColDlg(mpView->GetViewShell()->GetParentWindow(), nSlotId == SID_TABLE_INSERT_COL_DLG, SD_MOD()->GetSlotPool()->GetSlot(nSlotId)->GetCommand()) : nullptr);
 
-                    rReq.AppendItem( SfxInt16Item( (sal_uInt16)nSlotId, (sal_uInt16)pDlg->getInsertCount() ) );
-                    rReq.AppendItem( SfxBoolItem( SID_TABLE_PARAM_INSERT_AFTER, !pDlg->isInsertBefore() ) );
-
-                     rReq.SetSlot( (sal_uInt16)nSlotId );
+                    if (!pDlg.get() || (pDlg->Execute() != 1))
+                        break;
                 }
+
+                sal_uInt16 nCount = 1;
+                bool bInsertAfter = (nSlotId == SID_TABLE_INSERT_ROW_AFTER) || (nSlotId == SID_TABLE_INSERT_COL_AFTER);
+
+                if (nSlotId == SID_TABLE_INSERT_ROW_DLG)
+                {
+                    nCount = pDlg->getInsertCount();
+                    bInsertAfter = !pDlg->isInsertBefore();
+                }
+                else if (nSlotId == SID_TABLE_INSERT_COL_DLG)
+                {
+                    nCount = pDlg->getInsertCount();
+                    bInsertAfter = !pDlg->isInsertBefore();
+                }
+
+                if (nSlotId == SID_TABLE_INSERT_ROW_DLG || nSlotId == SID_TABLE_INSERT_ROW_BEFORE || nSlotId == SID_TABLE_INSERT_ROW_AFTER)
+                    nSlotId = SID_TABLE_INSERT_ROW;
+                else
+                    nSlotId = SID_TABLE_INSERT_COL;
+
+                rReq.AppendItem(SfxInt16Item((sal_uInt16)nSlotId, nCount));
+                rReq.AppendItem(SfxBoolItem(SID_TABLE_PARAM_INSERT_AFTER, bInsertAfter));
+
+                rReq.SetSlot( (sal_uInt16)nSlotId );
             }
             }
 
