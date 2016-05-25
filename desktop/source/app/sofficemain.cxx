@@ -22,10 +22,10 @@
 #include "desktopdllapi.h"
 
 #include "app.hxx"
-#include "exithelper.h"
 #include "cmdlineargs.hxx"
 #include "cmdlinehelp.hxx"
 
+#include <desktop/exithelper.h>
 #include <osl/file.hxx>
 #include <rtl/bootstrap.hxx>
 #include <sal/log.hxx>
