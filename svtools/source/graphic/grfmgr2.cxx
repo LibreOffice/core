@@ -1513,11 +1513,11 @@ void GraphicManager::ImplAdjust( GDIMetaFile& rMtf, const GraphicAttr& rAttr, Gr
         switch( aAttr.GetDrawMode() )
         {
             case GRAPHICDRAWMODE_MONO:
-                rMtf.Convert( MTF_CONVERSION_1BIT_THRESHOLD );
+                rMtf.Convert( MtfConversion::N1BitThreshold );
             break;
 
             case GRAPHICDRAWMODE_GREYS:
-                rMtf.Convert( MTF_CONVERSION_8BIT_GREYS );
+                rMtf.Convert( MtfConversion::N8BitGreys );
             break;
 
             case GRAPHICDRAWMODE_WATERMARK:
