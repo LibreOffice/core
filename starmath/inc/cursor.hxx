@@ -69,6 +69,8 @@ enum SmBracketType {
 /** A list of nodes */
 typedef std::list<SmNode*> SmNodeList;
 
+typedef std::list<std::unique_ptr<SmNode>> SmClipboard;
+
 class SmDocShell;
 
 /** Formula cursor
@@ -84,7 +86,6 @@ public:
         , mpPosition(nullptr)
         , mpTree(tree)
         , mpDocShell(pShell)
-        , mpClipboard(nullptr)
         , mnEditSections(0)
         , mbIsEnabledSetModifiedSmDocShell(false)
     {
@@ -94,7 +95,6 @@ public:
 
     ~SmCursor()
     {
-        SetClipboard();
     }
 
     /** Get position */
@@ -231,7 +231,7 @@ private:
     /** Graph over caret position in the current tree */
     std::unique_ptr<SmCaretPosGraph> mpGraph;
     /** Clipboard holder */
-    SmNodeList* mpClipboard;
+    SmClipboard maClipboard;
 
     /** Returns a node that is selected, if any could be found */
     SmNode* FindSelectedNode(SmNode* pNode);
@@ -281,13 +281,12 @@ private:
         return pList;
     }
 
-    /** Clone a visual line to a list
+    /** Clone a visual line to a clipboard
      *
-     * Doesn't clone SmErrorNode's these are ignored, as they are context dependent metadata.
+     * ... but the selected part only.
+     * Doesn't clone SmErrorNodes, which are ignored as they are context dependent metadata.
      */
-    static SmNodeList* CloneLineToList(SmStructureNode* pLine,
-                                       bool bOnlyIfSelected = false,
-                                       SmNodeList* pList = new SmNodeList());
+    static void CloneLineToClipboard(SmStructureNode* pLine, SmClipboard* pClipboard);
 
     /** Build pGraph over caret positions */
     void BuildGraph();
@@ -304,15 +303,8 @@ private:
     /** Set selected on nodes of the tree */
     void AnnotateSelection();
 
-    /** Set the clipboard, and release current clipboard
-     *
-     * Call this method with NULL to reset the clipboard
-     * @remarks: This method takes ownership of pList.
-     */
-    void SetClipboard(SmNodeList* pList = nullptr);
-
-    /** Clone list of nodes (creates a deep clone) */
-    static SmNodeList* CloneList(SmNodeList* pList);
+    /** Clone list of nodes in a clipboard (creates a deep clone) */
+    static SmNodeList* CloneList(SmClipboard &rClipboard);
 
     /** Find an iterator pointing to the node in pLineList following aCaretPos
      *
