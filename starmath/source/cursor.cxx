@@ -1168,65 +1168,50 @@ void SmCursor::Copy(){
     assert(pLine);
 
     //Clone selected nodes
-    SmNodeList* pList;
+    SmClipboard aClipboard;
     if(IsLineCompositionNode(pLine))
-        pList = CloneLineToList(static_cast<SmStructureNode*>(pLine), true);
+        CloneLineToClipboard(static_cast<SmStructureNode*>(pLine), &aClipboard);
     else{
-        pList = new SmNodeList();
         //Special care to only clone selected text
         if(pLine->GetType() == NTEXT) {
             SmTextNode *pText = static_cast<SmTextNode*>(pLine);
-            SmTextNode *pClone = new SmTextNode( pText->GetToken(), pText->GetFontDesc() );
+            std::unique_ptr<SmTextNode> pClone(new SmTextNode( pText->GetToken(), pText->GetFontDesc() ));
             int start  = pText->GetSelectionStart(),
                 length = pText->GetSelectionEnd() - pText->GetSelectionStart();
             pClone->ChangeText(pText->GetText().copy(start, length));
             pClone->SetScaleMode(pText->GetScaleMode());
-            pList->push_front(pClone);
+            aClipboard.push_front(std::move(pClone));
         } else {
             SmCloningVisitor aCloneFactory;
-            pList->push_front(aCloneFactory.Clone(pLine));
+            aClipboard.push_front(std::unique_ptr<SmNode>(aCloneFactory.Clone(pLine)));
         }
     }
 
     //Set clipboard
-    if (pList->size() > 0)
-        SetClipboard(pList);
-    else
-        delete pList;
+    if (aClipboard.size() > 0)
+        maClipboard = std::move(aClipboard);
 }
 
 void SmCursor::Paste() {
     BeginEdit();
     Delete();
 
-    if(mpClipboard && mpClipboard->size() > 0)
-        InsertNodes(CloneList(mpClipboard));
+    if(maClipboard.size() > 0)
+        InsertNodes(CloneList(maClipboard));
 
     EndEdit();
 }
 
-SmNodeList* SmCursor::CloneList(SmNodeList* pList){
+SmNodeList* SmCursor::CloneList(SmClipboard &rClipboard){
     SmCloningVisitor aCloneFactory;
     SmNodeList* pClones = new SmNodeList();
 
-    SmNodeList::iterator it;
-    for(it = pList->begin(); it != pList->end(); ++it){
-        SmNode *pClone = aCloneFactory.Clone(*it);
+    for(auto &xNode : rClipboard){
+        SmNode *pClone = aCloneFactory.Clone(xNode.get());
         pClones->push_back(pClone);
     }
 
     return pClones;
-}
-
-void SmCursor::SetClipboard(SmNodeList* pList){
-    if(mpClipboard){
-        //Delete all nodes on the clipboard
-        SmNodeList::iterator it;
-        for(it = mpClipboard->begin(); it != mpClipboard->end(); ++it)
-            delete (*it);
-        delete mpClipboard;
-    }
-    mpClipboard = pList;
 }
 
 SmNode* SmCursor::FindTopMostNodeInLine(SmNode* pSNode, bool MoveUpIfSelected){
@@ -1288,27 +1273,26 @@ SmNodeList* SmCursor::LineToList(SmStructureNode* pLine, SmNodeList* list){
     return list;
 }
 
-SmNodeList* SmCursor::CloneLineToList(SmStructureNode* pLine, bool bOnlyIfSelected, SmNodeList* pList){
+void SmCursor::CloneLineToClipboard(SmStructureNode* pLine, SmClipboard* pClipboard){
     SmCloningVisitor aCloneFactory;
     SmNodeIterator it(pLine);
     while(it.Next()){
         if( IsLineCompositionNode( it.Current() ) )
-            CloneLineToList( static_cast<SmStructureNode*>(it.Current()), bOnlyIfSelected, pList );
-        else if( (!bOnlyIfSelected || it->IsSelected()) && it->GetType() != NERROR ) {
+            CloneLineToClipboard( static_cast<SmStructureNode*>(it.Current()), pClipboard );
+        else if( it->IsSelected() && it->GetType() != NERROR ) {
             //Only clone selected text from SmTextNode
             if(it->GetType() == NTEXT) {
                 SmTextNode *pText = static_cast<SmTextNode*>(it.Current());
-                SmTextNode *pClone = new SmTextNode( it->GetToken(), pText->GetFontDesc() );
+                std::unique_ptr<SmTextNode> pClone(new SmTextNode( it->GetToken(), pText->GetFontDesc() ));
                 int start = pText->GetSelectionStart(),
                     length = pText->GetSelectionEnd() - pText->GetSelectionStart();
                 pClone->ChangeText(pText->GetText().copy(start, length));
                 pClone->SetScaleMode(pText->GetScaleMode());
-                pList->push_back(pClone);
+                pClipboard->push_back(std::move(pClone));
             } else
-                pList->push_back(aCloneFactory.Clone(it.Current()));
+                pClipboard->push_back(std::unique_ptr<SmNode>(aCloneFactory.Clone(it.Current())));
         }
     }
-    return pList;
 }
 
 bool SmCursor::IsLineCompositionNode(SmNode* pNode){
