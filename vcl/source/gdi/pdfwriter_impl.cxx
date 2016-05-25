@@ -2248,7 +2248,7 @@ LogicalFontInstance* PdfBuiltinFontFace::CreateFontInstance( FontSelectPattern& 
 }
 
 
-sal_Int32 PDFWriterImpl::newPage( sal_Int32 nPageWidth, sal_Int32 nPageHeight, PDFWriter::Orientation eOrientation )
+void PDFWriterImpl::newPage( sal_Int32 nPageWidth, sal_Int32 nPageHeight, PDFWriter::Orientation eOrientation )
 {
     endPage();
     m_nCurrentPage = m_aPages.size();
@@ -2262,8 +2262,6 @@ sal_Int32 PDFWriterImpl::newPage( sal_Int32 nPageWidth, sal_Int32 nPageHeight, P
     appendDouble( 72.0/double(getReferenceDevice()->GetDPIX()), aBuf );
     aBuf.append( " w\n" );
     writeBuffer( aBuf.getStr(), aBuf.getLength() );
-
-    return m_nCurrentPage;
 }
 
 void PDFWriterImpl::endPage()
@@ -12204,22 +12202,20 @@ sal_Int32 PDFWriterImpl::registerDestReference( sal_Int32 nDestId, const Rectang
     return m_aDestinationIdTranslation[ nDestId ] = createDest( rRect, nPageNr, eType );
 }
 
-sal_Int32 PDFWriterImpl::setLinkDest( sal_Int32 nLinkId, sal_Int32 nDestId )
+void PDFWriterImpl::setLinkDest( sal_Int32 nLinkId, sal_Int32 nDestId )
 {
     if( nLinkId < 0 || nLinkId >= (sal_Int32)m_aLinks.size() )
-        return -1;
+        return;
     if( nDestId < 0 || nDestId >= (sal_Int32)m_aDests.size() )
-        return -2;
+        return;
 
     m_aLinks[ nLinkId ].m_nDest = nDestId;
-
-    return 0;
 }
 
-sal_Int32 PDFWriterImpl::setLinkURL( sal_Int32 nLinkId, const OUString& rURL )
+void PDFWriterImpl::setLinkURL( sal_Int32 nLinkId, const OUString& rURL )
 {
     if( nLinkId < 0 || nLinkId >= (sal_Int32)m_aLinks.size() )
-        return -1;
+        return;
 
     m_aLinks[ nLinkId ].m_nDest = -1;
 
@@ -12237,8 +12233,6 @@ sal_Int32 PDFWriterImpl::setLinkURL( sal_Int32 nLinkId, const OUString& rURL )
     m_xTrans->parseStrict( aURL );
 
     m_aLinks[ nLinkId ].m_aURL  = aURL.Complete;
-
-    return 0;
 }
 
 void PDFWriterImpl::setLinkPropertyId( sal_Int32 nLinkId, sal_Int32 nPropertyId )
@@ -12260,17 +12254,14 @@ sal_Int32 PDFWriterImpl::createOutlineItem( sal_Int32 nParent, const OUString& r
     return nNewItem;
 }
 
-sal_Int32 PDFWriterImpl::setOutlineItemParent( sal_Int32 nItem, sal_Int32 nNewParent )
+void PDFWriterImpl::setOutlineItemParent( sal_Int32 nItem, sal_Int32 nNewParent )
 {
     if( nItem < 1 || nItem >= (sal_Int32)m_aOutline.size() )
-        return -1;
-
-    int nRet = 0;
+        return;
 
     if( nNewParent < 0 || nNewParent >= (sal_Int32)m_aOutline.size() || nNewParent == nItem )
     {
         nNewParent = 0;
-        nRet = -2;
     }
     // remove item from previous parent
     sal_Int32 nParentID = m_aOutline[ nItem ].m_nParentID;
@@ -12291,27 +12282,23 @@ sal_Int32 PDFWriterImpl::setOutlineItemParent( sal_Int32 nItem, sal_Int32 nNewPa
 
     // insert item to new parent's list of children
     m_aOutline[ nNewParent ].m_aChildren.push_back( nItem );
-
-    return nRet;
 }
 
-sal_Int32 PDFWriterImpl::setOutlineItemText( sal_Int32 nItem, const OUString& rText )
+void PDFWriterImpl::setOutlineItemText( sal_Int32 nItem, const OUString& rText )
 {
     if( nItem < 1 || nItem >= (sal_Int32)m_aOutline.size() )
-        return -1;
+        return;
 
     m_aOutline[ nItem ].m_aTitle = psp::WhitespaceToSpace( rText );
-    return 0;
 }
 
-sal_Int32 PDFWriterImpl::setOutlineItemDest( sal_Int32 nItem, sal_Int32 nDestID )
+void PDFWriterImpl::setOutlineItemDest( sal_Int32 nItem, sal_Int32 nDestID )
 {
     if( nItem < 1 || nItem >= (sal_Int32)m_aOutline.size() ) // item does not exist
-        return -1;
+        return;
     if( nDestID < 0 || nDestID >= (sal_Int32)m_aDests.size() ) // dest does not exist
-        return -2;
+        return;
     m_aOutline[nItem].m_nDestID = nDestID;
-    return 0;
 }
 
 const sal_Char* PDFWriterImpl::getStructureTag( PDFWriter::StructElement eType )

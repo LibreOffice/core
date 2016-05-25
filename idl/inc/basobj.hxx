@@ -73,13 +73,12 @@ public:
         p->AddFirstRef();
     }
 
-    T pop_back()
+    void pop_back()
     {
         T p = base_t::back();
         base_t::pop_back();
         if( p )
             p->ReleaseRef();
-        return p;
     }
 };
 

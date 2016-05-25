@@ -451,7 +451,7 @@ public:
     void            ApplyAutoMark();
 
     /// Key for managing index.
-    sal_uInt16 GetTOIKeys( SwTOIKeyType eTyp, std::vector<OUString>& rArr ) const;
+    void GetTOIKeys( SwTOIKeyType eTyp, std::vector<OUString>& rArr ) const;
 
     void SetOutlineNumRule(const SwNumRule&);
     const SwNumRule* GetOutlineNumRule() const;

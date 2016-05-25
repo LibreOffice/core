@@ -1014,7 +1014,7 @@ public:
     OutputDevice* getReferenceDevice();
 
     /* document structure */
-    sal_Int32 newPage( sal_Int32 nPageWidth , sal_Int32 nPageHeight, PDFWriter::Orientation eOrientation );
+    void newPage( sal_Int32 nPageWidth , sal_Int32 nPageHeight, PDFWriter::Orientation eOrientation );
     bool emit();
     const std::set< PDFWriter::ErrorCode > & getErrors() const { return m_aErrors;}
     void insertError( PDFWriter::ErrorCode eErr ) { m_aErrors.insert( eErr ); }
@@ -1184,15 +1184,15 @@ public:
     sal_Int32 createLink( const Rectangle& rRect, sal_Int32 nPageNr = -1 );
     sal_Int32 createDest( const Rectangle& rRect, sal_Int32 nPageNr = -1, PDFWriter::DestAreaType eType = PDFWriter::XYZ );
     sal_Int32 registerDestReference( sal_Int32 nDestId, const Rectangle& rRect, sal_Int32 nPageNr = -1, PDFWriter::DestAreaType eType = PDFWriter::XYZ );
-    sal_Int32 setLinkDest( sal_Int32 nLinkId, sal_Int32 nDestId );
-    sal_Int32 setLinkURL( sal_Int32 nLinkId, const OUString& rURL );
-    void setLinkPropertyId( sal_Int32 nLinkId, sal_Int32 nPropertyId );
+    void      setLinkDest( sal_Int32 nLinkId, sal_Int32 nDestId );
+    void      setLinkURL( sal_Int32 nLinkId, const OUString& rURL );
+    void      setLinkPropertyId( sal_Int32 nLinkId, sal_Int32 nPropertyId );
 
     // outline
     sal_Int32 createOutlineItem( sal_Int32 nParent = 0, const OUString& rText = OUString(), sal_Int32 nDestID = -1 );
-    sal_Int32 setOutlineItemParent( sal_Int32 nItem, sal_Int32 nNewParent );
-    sal_Int32 setOutlineItemText( sal_Int32 nItem, const OUString& rText );
-    sal_Int32 setOutlineItemDest( sal_Int32 nItem, sal_Int32 nDestID );
+    void      setOutlineItemParent( sal_Int32 nItem, sal_Int32 nNewParent );
+    void      setOutlineItemText( sal_Int32 nItem, const OUString& rText );
+    void      setOutlineItemDest( sal_Int32 nItem, sal_Int32 nDestID );
 
     // notes
     void createNote( const Rectangle& rRect, const PDFNote& rNote, sal_Int32 nPageNr = -1 );

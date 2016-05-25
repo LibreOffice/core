@@ -147,7 +147,7 @@ public:
     void RecalcAll();
 
     void selectEntry( const long nPos );
-    long addEntry(const std::shared_ptr<ClientInfo>& pClientInfo);
+    void addEntry(const std::shared_ptr<ClientInfo>& pClientInfo);
     void clearEntries();
 
     OUString getPin();

@@ -79,7 +79,7 @@ namespace connectivity
             bool SAL_CALL getProfileExists( ::com::sun::star::mozilla::MozillaProductType product, const OUString& profileName ) throw (::com::sun::star::uno::RuntimeException);
         protected:
             ProductStruct m_ProductProfileList[4];
-            sal_Int32 LoadProductsInfo();
+            void      LoadProductsInfo();
             sal_Int32 LoadXPToolkitProfiles(MozillaProductType product);
         };
 

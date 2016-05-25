@@ -803,7 +803,7 @@ writeCustomProperties( XmlFilterBase& rSelf, const Reference< XDocumentPropertie
     pAppProps->endElement( XML_Properties );
 }
 
-XmlFilterBase& XmlFilterBase::exportDocumentProperties( const Reference< XDocumentProperties >& xProperties )
+void XmlFilterBase::exportDocumentProperties( const Reference< XDocumentProperties >& xProperties )
 {
     if( xProperties.is() )
     {
@@ -811,7 +811,6 @@ XmlFilterBase& XmlFilterBase::exportDocumentProperties( const Reference< XDocume
         writeAppProperties( *this, xProperties );
         writeCustomProperties( *this, xProperties );
     }
-    return *this;
 }
 
 // protected ------------------------------------------------------------------

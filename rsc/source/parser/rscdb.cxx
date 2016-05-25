@@ -307,11 +307,10 @@ private:
         if( pRoot )
             pRoot->EnumNodes( LINK( this, RscEnumerateObj, CallBackWriteRc ) );
     }
-    ERRTYPE WriteSrc( RscTop * pCl, ObjNode * pRoot ){
+    void WriteSrc( RscTop * pCl, ObjNode * pRoot ){
         pClass = pCl;
         if( pRoot )
             pRoot->EnumNodes( LINK( this, RscEnumerateObj, CallBackWriteSrc ) );
-        return aError;
     }
 public:
     void WriteRcFile( RscWriteRc & rMem, FILE * fOutput );

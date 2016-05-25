@@ -93,19 +93,14 @@ void SdrPaintView::AppendPaintWindow(SdrPaintWindow& rNew)
     maPaintWindows.push_back(&rNew);
 }
 
-SdrPaintWindow* SdrPaintView::RemovePaintWindow(SdrPaintWindow& rOld)
+void SdrPaintView::RemovePaintWindow(SdrPaintWindow& rOld)
 {
-    SdrPaintWindow* pRetval = nullptr;
     const SdrPaintWindowVector::iterator aFindResult = ::std::find(maPaintWindows.begin(), maPaintWindows.end(), &rOld);
 
     if(aFindResult != maPaintWindows.end())
     {
-        // remember return value, aFindResult is no longer valid after deletion
-        pRetval = *aFindResult;
         maPaintWindows.erase(aFindResult);
     }
-
-    return pRetval;
 }
 
 OutputDevice* SdrPaintView::GetFirstOutputDevice() const

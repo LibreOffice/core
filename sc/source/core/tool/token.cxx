@@ -2070,9 +2070,9 @@ FormulaToken* ScTokenArray::AddMatrix( const ScMatrixRef& p )
     return Add( new ScMatrixToken( p ) );
 }
 
-FormulaToken* ScTokenArray::AddRangeName( sal_uInt16 n, sal_Int16 nSheet )
+void ScTokenArray::AddRangeName( sal_uInt16 n, sal_Int16 nSheet )
 {
-    return Add( new FormulaIndexToken( ocName, n, nSheet));
+    Add( new FormulaIndexToken( ocName, n, nSheet));
 }
 
 FormulaToken* ScTokenArray::AddDBRange( sal_uInt16 n )

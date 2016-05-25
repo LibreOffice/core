@@ -34,13 +34,11 @@ CategoryListBox::~CategoryListBox()
 {
 }
 
-sal_Int32  CategoryListBox::InsertCategory( const OUString& rStr )
+void  CategoryListBox::InsertCategory( const OUString& rStr )
 {
     sal_Int32  n = ListBox::InsertEntry( rStr );
     if( n != LISTBOX_ENTRY_NOTFOUND )
         ListBox::SetEntryFlags( n, ListBox::GetEntryFlags(n) | ListBoxEntryFlags::DisableSelection );
-
-    return n;
 }
 
 void CategoryListBox::UserDraw( const UserDrawEvent& rUDEvt )

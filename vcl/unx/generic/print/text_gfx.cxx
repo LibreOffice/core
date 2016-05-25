@@ -100,8 +100,7 @@ PrinterGfx::PSUploadPS1Font (sal_Int32 nFontID)
  * implement text handling printer routines,
  */
 
-sal_uInt16
-PrinterGfx::SetFont(
+void PrinterGfx::SetFont(
                     sal_Int32 nFontID,
                     sal_Int32 nHeight,
                     sal_Int32 nWidth,
@@ -122,8 +121,6 @@ PrinterGfx::SetFont(
     maVirtualStatus.mbArtBold         = bArtBold;
     mnTextAngle                       = nAngle;
     mbTextVertical                    = bVertical;
-
-    return 0;
 }
 
 void PrinterGfx::drawGlyphs(

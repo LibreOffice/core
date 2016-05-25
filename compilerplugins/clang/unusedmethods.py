@@ -4,17 +4,27 @@ import sys
 import re
 import io
 
-definitionSet = set()
-publicDefinitionSet = set()
+# --------------------------------------------------------------------------------------------
+# globals
+# --------------------------------------------------------------------------------------------
+
+definitionSet = set() # set of tuple(return_type, name_and_params)
 definitionToSourceLocationMap = dict()
-callSet = set()
-usedReturnSet = set()
-sourceLocationSet = set()
-calledFromOutsideSet = set()
+
+# for the "unused methods" analysis
+callSet = set() # set of tuple(return_type, name_and_params)
+
+# for the "unnecessary public" analysis
+publicDefinitionSet = set() # set of tuple(return_type, name_and_params)
+calledFromOutsideSet = set() # set of tuple(return_type, name_and_params)
+
+# for the "unused return types" analysis
+usedReturnSet = set() # set of tuple(return_type, name_and_params)
+
 
 # things we need to exclude for reasons like :
 # - it's a weird template thingy that confuses the plugin
-exclusionSet = set([
+unusedMethodsExclusionSet = set([
     "double basegfx::DoubleTraits::maxVal()",
     "double basegfx::DoubleTraits::minVal()",
     "double basegfx::DoubleTraits::neutral()",
@@ -116,6 +126,10 @@ normalizeTypeParamsRegex = re.compile(r"type-parameter-\d+-\d+")
 def normalizeTypeParams( line ):
     return normalizeTypeParamsRegex.sub("type-parameter-?-?", line)
 
+# --------------------------------------------------------------------------------------------
+# primary input loop
+# --------------------------------------------------------------------------------------------
+
 # The parsing here is designed to avoid grabbing stuff which is mixed in from gbuild.
 # I have not yet found a way of suppressing the gbuild output.
 with io.open(sys.argv[1], "rb", buffering=1024*1024) as txt:
@@ -162,38 +176,46 @@ for k, definitions in sourceLocationToDefinitionMap.iteritems():
             definitionSet.remove(d)
 
 def isOtherConstness( d, callSet ):
-    clazz = d[0] + " " + d[1]
+    method = d[0] + " " + d[1]
     # if this method is const, and there is a non-const variant of it, and the non-const variant is in use, then leave it alone
     if d[0].startswith("const ") and d[1].endswith(" const"):
         if ((d[0][6:],d[1][:-6]) in callSet):
            return True
-    elif clazz.endswith(" const"):
-        clazz2 = clazz[:len(clazz)-6] # strip off " const"
-        if ((d[0],clazz2) in callSet):
+    elif method.endswith(" const"):
+        method2 = method[:len(method)-6] # strip off " const"
+        if ((d[0],method2) in callSet):
            return True
-    if clazz.endswith(" const") and ("::iterator" in clazz):
-        clazz2 = clazz[:len(clazz)-6] # strip off " const"
-        clazz2 = clazz2.replace("::const_iterator", "::iterator")
-        if ((d[0],clazz2) in callSet):
+    if method.endswith(" const") and ("::iterator" in method):
+        method2 = method[:len(method)-6] # strip off " const"
+        method2 = method2.replace("::const_iterator", "::iterator")
+        if ((d[0],method2) in callSet):
            return True
     # if this method is non-const, and there is a const variant of it, and the const variant is in use, then leave it alone
-    if (not clazz.endswith(" const")) and ((d[0],"const " + clazz + " const") in callSet):
+    if (not method.endswith(" const")) and ((d[0],"const " + method + " const") in callSet):
            return True
-    if (not clazz.endswith(" const")) and ("::iterator" in clazz):
-        clazz2 = clazz.replace("::iterator", "::const_iterator") + " const"
-        if ((d[0],clazz2) in callSet):
+    if (not method.endswith(" const")) and ("::iterator" in method):
+        method2 = method.replace("::iterator", "::const_iterator") + " const"
+        if ((d[0],method2) in callSet):
            return True
     return False
 
-    
-# -------------------------------------------
-# Do the "unused methods" part
-# -------------------------------------------
+# sort the results using a "natural order" so sequences like [item1,item2,item10] sort nicely
+def natural_sort_key(s, _nsre=re.compile('([0-9]+)')):
+    return [int(text) if text.isdigit() else text.lower()
+            for text in re.split(_nsre, s)]
+def sort_set_by_natural_key(s):
+    return sorted(s, key=lambda v: natural_sort_key(v[1]))
 
-tmp1set = set()
+    
+# --------------------------------------------------------------------------------------------
+#  "unused methods" analysis
+# --------------------------------------------------------------------------------------------
+
+tmp1set = set() # set of tuple(method, source_location)
+unusedSet = set() # set of tuple(return_type, name_and_params)
 for d in definitionSet:
-    clazz = d[0] + " " + d[1]
-    if clazz in exclusionSet:
+    method = d[0] + " " + d[1]
+    if method in unusedMethodsExclusionSet:
         continue
     if d in callSet:
         continue
@@ -249,34 +271,30 @@ for d in definitionSet:
     if d[1].endswith("::CreateDefault()"):
         continue
 
-    tmp1set.add((clazz, definitionToSourceLocationMap[d]))
+    unusedSet.add(d) # used by the "unused return types" analysis
+    tmp1set.add((method, definitionToSourceLocationMap[d]))
 
-# sort the results using a "natural order" so sequences like [item1,item2,item10] sort nicely
-def natural_sort_key(s, _nsre=re.compile('([0-9]+)')):
-    return [int(text) if text.isdigit() else text.lower()
-            for text in re.split(_nsre, s)]
-
-# sort results by name and line number
-tmp1list = sorted(tmp1set, key=lambda v: natural_sort_key(v[1]))
-
-# print out the results
+# print out the results, sorted by name and line number
 with open("unused.methods", "wt") as f:
-    for t in tmp1list:
+    for t in sort_set_by_natural_key(tmp1set):
         f.write(t[1] + "\n")
         f.write("    " + t[0] + "\n")
 
-# -------------------------------------------
-# Do the "unused return types" part
-# -------------------------------------------
+# --------------------------------------------------------------------------------------------
+# "unused return types" analysis
+# --------------------------------------------------------------------------------------------
 
 tmp2set = set()
 for d in definitionSet:
-    clazz = d[0] + " " + d[1]
+    method = d[0] + " " + d[1]
     if d in usedReturnSet:
+        continue
+    if d in unusedSet:
         continue
     if isOtherConstness(d, usedReturnSet):
         continue
-    if d[0] == "void":
+    # ignore methods with no return type, and constructors
+    if d[0] == "void" or d[0] == "":
         continue
     # ignore bool returns, provides important documentation in the code
     if d[0] == "_Bool":
@@ -299,24 +317,22 @@ for d in definitionSet:
     # ignore the SfxPoolItem CreateDefault methods for now
     if d[1].endswith("::CreateDefault()"):
         continue
-    tmp2set.add((clazz, definitionToSourceLocationMap[d]))
+    tmp2set.add((method, definitionToSourceLocationMap[d]))
 
-# sort results by name and line number
-tmp2list = sorted(tmp2set, key=lambda v: natural_sort_key(v[1]))
-    
+# print output, sorted by name and line number
 with open("unused.returns", "wt") as f:
-    for t in tmp2list:
-        f.write(t[1])
+    for t in sort_set_by_natural_key(tmp2set):
+        f.write(t[1] + "\n")
         f.write("    " +  t[0] + "\n")
 
 
-# -------------------------------------------
-# Do the "unnecessary public" part
-# -------------------------------------------
+# --------------------------------------------------------------------------------------------
+# "unnecessary public" analysis
+# --------------------------------------------------------------------------------------------
 
 tmp3set = set()
 for d in publicDefinitionSet:
-    clazz = d[0] + " " + d[1]
+    method = d[0] + " " + d[1]
     if d in calledFromOutsideSet:
         continue
     if isOtherConstness(d, calledFromOutsideSet):
@@ -324,13 +340,11 @@ for d in publicDefinitionSet:
     # ignore external code
     if definitionToSourceLocationMap[d].startswith("external/"):
        continue
-    tmp3set.add((clazz, definitionToSourceLocationMap[d]))
+    tmp3set.add((method, definitionToSourceLocationMap[d]))
 
-# sort results by name and line number
-tmp3list = sorted(tmp3set, key=lambda v: natural_sort_key(v[1]))
-    
+# print output, sorted by name and line number
 with open("unused.public", "wt") as f:
-    for t in tmp3list:
+    for t in sort_set_by_natural_key(tmp3set):
         f.write(t[1] + "\n")
         f.write("    " + t[0] + "\n")
 
