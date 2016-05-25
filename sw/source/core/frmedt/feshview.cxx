@@ -2587,9 +2587,9 @@ SwChainRet SwFEShell::Chainable( SwRect &rRect, const SwFrameFormat &rSource,
     return nRet;
 }
 
-SwChainRet SwFEShell::Chain( SwFrameFormat &rSource, const SwFrameFormat &rDest )
+void SwFEShell::Chain( SwFrameFormat &rSource, const SwFrameFormat &rDest )
 {
-    return GetDoc()->Chain(rSource, rDest);
+    GetDoc()->Chain(rSource, rDest);
 }
 
 SwChainRet SwFEShell::Chain( SwFrameFormat &rSource, const Point &rPt )

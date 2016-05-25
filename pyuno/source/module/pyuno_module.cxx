@@ -99,9 +99,9 @@ public:
     {
         Py_DECREF(used);
     }
-    int setUsed(PyObject *key)
+    void setUsed(PyObject *key)
     {
-        return PyDict_SetItem(used, key, Py_True);
+        PyDict_SetItem(used, key, Py_True);
     }
     void setInitialised(const OUString& key, sal_Int32 pos = -1)
     {

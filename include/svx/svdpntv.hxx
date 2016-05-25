@@ -222,7 +222,7 @@ protected:
     // Interface to SdrPaintWindow
 protected:
     void AppendPaintWindow(SdrPaintWindow& rNew);
-    SdrPaintWindow* RemovePaintWindow(SdrPaintWindow& rOld);
+    void RemovePaintWindow(SdrPaintWindow& rOld);
     void ConfigurationChanged( ::utl::ConfigurationBroadcaster*, sal_uInt32 ) override;
 
 public:

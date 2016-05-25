@@ -83,25 +83,25 @@ SwList* DocumentListsManager::getListByName( const OUString& sListId ) const
     return pList;
 }
 
-SwList* DocumentListsManager::createListForListStyle( const OUString& sListStyleName )
+void DocumentListsManager::createListForListStyle( const OUString& sListStyleName )
 {
     if ( sListStyleName.isEmpty() )
     {
         OSL_FAIL( "<DocumentListsManager::createListForListStyle(..)> - no list style name provided. Serious defect." );
-        return nullptr;
+        return;
     }
 
     if ( getListForListStyle( sListStyleName ) )
     {
         OSL_FAIL( "<DocumentListsManager::createListForListStyle(..)> - a list for the provided list style name already exists. Serious defect." );
-        return nullptr;
+        return;
     }
 
     SwNumRule* pNumRule = m_rDoc.FindNumRulePtr( sListStyleName );
     if ( !pNumRule )
     {
         OSL_FAIL( "<DocumentListsManager::createListForListStyle(..)> - for provided list style name no list style is found. Serious defect." );
-        return nullptr;
+        return;
     }
 
     OUString sListId( pNumRule->GetDefaultListId() ); // can be empty String
@@ -112,8 +112,6 @@ SwList* DocumentListsManager::createListForListStyle( const OUString& sListStyle
     SwList* pNewList = createList( sListId, sListStyleName );
     maListStyleLists[sListStyleName] = pNewList;
     pNumRule->SetDefaultListId( pNewList->GetListId() );
-
-    return pNewList;
 }
 
 SwList* DocumentListsManager::getListForListStyle( const OUString& sListStyleName ) const

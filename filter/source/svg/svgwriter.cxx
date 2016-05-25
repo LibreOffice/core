@@ -1737,12 +1737,12 @@ Size& SVGActionWriter::ImplMap( const Size& rSz, Size& rDstSz ) const
 }
 
 
-Rectangle& SVGActionWriter::ImplMap( const Rectangle& rRect, Rectangle& rDstRect ) const
+void SVGActionWriter::ImplMap( const Rectangle& rRect, Rectangle& rDstRect ) const
 {
     Point   aTL( rRect.TopLeft() );
     Size    aSz( rRect.GetSize() );
 
-    return( rDstRect = Rectangle( ImplMap( aTL, aTL ), ImplMap( aSz, aSz ) ) );
+    rDstRect = Rectangle( ImplMap( aTL, aTL ), ImplMap( aSz, aSz ) );
 }
 
 

@@ -292,7 +292,7 @@ private:
     long                    ImplMap( sal_Int32 nVal ) const;
     Point&                  ImplMap( const Point& rPt, Point& rDstPt ) const;
     Size&                   ImplMap( const Size& rSz, Size& rDstSz ) const;
-    Rectangle&              ImplMap( const Rectangle& rRect, Rectangle& rDstRect ) const;
+    void                    ImplMap( const Rectangle& rRect, Rectangle& rDstRect ) const;
     tools::Polygon&         ImplMap( const tools::Polygon& rPoly, tools::Polygon& rDstPoly ) const;
     tools::PolyPolygon&     ImplMap( const tools::PolyPolygon& rPolyPoly, tools::PolyPolygon& rDstPolyPoly ) const;
 

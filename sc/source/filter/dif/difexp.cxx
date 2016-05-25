@@ -46,7 +46,7 @@ void ScFormatFilterPluginImpl::ScExportDif( SvStream& rStream, ScDocument* pDoc,
     ScExportDif( rStream, pDoc, ScRange( aStart, aEnd ), eNach );
 }
 
-FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc,
+void ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc,
     const ScRange&rRange, const rtl_TextEncoding eCharSet )
 {
     OSL_ENSURE( rRange.aStart <= rRange.aEnd, "*ScExportDif(): Range not sorted!" );
@@ -90,7 +90,6 @@ FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc
     const sal_Char*     pNumData = "0,";
     const sal_Char*     pNumDataERROR = "0,0\nERROR\n";
 
-    FltError            eRet = eERR_OK;
     OUStringBuffer aOS;
     OUString       aString;
     SCCOL               nEndCol = rRange.aEnd.Col();
@@ -265,8 +264,6 @@ FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc
 
     // restore original value
     rOut.SetStreamCharSet( eStreamCharSet );
-
-    return eRet;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

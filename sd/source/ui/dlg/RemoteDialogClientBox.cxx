@@ -631,7 +631,7 @@ bool ClientBox::Notify( NotifyEvent& rNEvt )
         return true;
 }
 
-long ClientBox::addEntry( const std::shared_ptr<ClientInfo>& pClientInfo )
+void ClientBox::addEntry( const std::shared_ptr<ClientInfo>& pClientInfo )
 {
     long         nPos = 0;
 
@@ -664,8 +664,6 @@ long ClientBox::addEntry( const std::shared_ptr<ClientInfo>& pClientInfo )
         Invalidate();
 
     m_bNeedsRecalc = true;
-
-    return nPos;
 }
 
 void ClientBox::clearEntries()

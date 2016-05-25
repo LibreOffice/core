@@ -479,7 +479,7 @@ public:
      rRect contains rect of Fly (for its highlight). */
     SwChainRet Chainable( SwRect &rRect, const SwFrameFormat &rSource, const Point &rPt ) const;
     SwChainRet Chain( SwFrameFormat &rSource, const Point &rPt );
-    SwChainRet Chain( SwFrameFormat &rSource, const SwFrameFormat &rDest );
+    void       Chain( SwFrameFormat &rSource, const SwFrameFormat &rDest );
     void Unchain( SwFrameFormat &rFormat );
     void HideChainMarker();
     void SetChainMarker();

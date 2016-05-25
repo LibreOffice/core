@@ -353,7 +353,7 @@ public:
                                 const PrinterBmp& rBitmap);
 
     // font and text handling
-    sal_uInt16      SetFont (
+    void            SetFont (
                              sal_Int32 nFontID,
                              sal_Int32 nPointHeight,
                              sal_Int32 nPointWidth,
