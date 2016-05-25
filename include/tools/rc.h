@@ -105,9 +105,14 @@ namespace o3tl {
 #define NUMERICFIELD_LAST               0x02
 #define NUMERICFIELD_SPINSIZE           0x04
 
-#define METRICFIELD_FIRST               0x01
-#define METRICFIELD_LAST                0x02
-#define METRICFIELD_SPINSIZE            0x04
+enum class RscMetricFieldFlags {
+    First               = 0x01,
+    Last                = 0x02,
+    SpinSize            = 0x04
+};
+namespace o3tl {
+    template<> struct typed_flags<RscMetricFieldFlags> : is_typed_flags<RscMetricFieldFlags, 0x07> {};
+}
 
 // For "ToolBoxItem" resources:
 #define RSC_TOOLBOXITEM_ID              0x0001
