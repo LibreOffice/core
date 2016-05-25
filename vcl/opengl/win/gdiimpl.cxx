@@ -156,17 +156,6 @@ static LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM l
         return 0;
     case WM_DESTROY:
         return 0;
-    case WM_KEYDOWN:
-        switch(wParam)
-        {
-        case VK_ESCAPE:
-            PostQuitMessage(0);
-            return 0;
-
-        case VK_SPACE:
-            break;
-        }
-        SAL_FALLTHROUGH; //TODO ???
     default:
         return DefWindowProc(hwnd, message, wParam, lParam);
     }
