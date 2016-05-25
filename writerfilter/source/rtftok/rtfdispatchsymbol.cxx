@@ -283,6 +283,8 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                         m_aTopLevelTableCellsSprms, m_aTopLevelTableCellsAttributes,
                         m_nTopLevelCells);
 
+        // The scope of the table cell defaults is one row.
+        m_aDefaultState.aTableCellSprms.clear();
         m_aStates.top().aTableCellSprms = m_aDefaultState.aTableCellSprms;
         m_aStates.top().aTableCellAttributes = m_aDefaultState.aTableCellAttributes;
 

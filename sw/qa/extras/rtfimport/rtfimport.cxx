@@ -2607,6 +2607,18 @@ DECLARE_RTFIMPORT_TEST(testTdf82073, "tdf82073.rtf")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), getProperty<sal_Int32>(xCell, "BackColor"));
 }
 
+DECLARE_RTFIMPORT_TEST(testTdf74795, "tdf74795.rtf")
+{
+    uno::Reference<text::XTextTable> xTable(getParagraphOrTable(1), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A1"), uno::UNO_QUERY);
+    // This was 0, \trpaddl was ignored on import.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(635), getProperty<sal_Int32>(xCell, "LeftBorderDistance"));
+
+    xCell.set(xTable->getCellByName("A2"), uno::UNO_QUERY);
+    // Make sure that the scope of the default is only one row.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), getProperty<sal_Int32>(xCell, "LeftBorderDistance"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
