@@ -1382,7 +1382,13 @@ static bool lcl_HasListStyle( const OUString& sStyleName,
                 else
                 {
                     // search list style at parent
-                    xStyle.set( xPropState, UNO_QUERY );
+                    Reference<XStyle> xParentStyle(xPropState, UNO_QUERY);
+                    if (xStyle == xParentStyle)
+                    {
+                        // error case
+                        return true;
+                    }
+                    xStyle = xParentStyle;
                 }
             }
         }
