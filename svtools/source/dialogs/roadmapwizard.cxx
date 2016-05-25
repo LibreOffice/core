@@ -150,8 +150,7 @@ namespace svt
 
     void RoadmapWizard::dispose()
     {
-        delete m_pImpl;
-        m_pImpl = nullptr;
+        m_pImpl.reset();
         OWizardMachine::dispose();
     }
 
