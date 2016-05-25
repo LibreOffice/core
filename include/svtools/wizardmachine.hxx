@@ -166,7 +166,7 @@ namespace svt
 
     private:
         // hold members in this structure to allow keeping compatible when members are added
-        WizardMachineImplData*  m_pImpl;
+        std::unique_ptr<WizardMachineImplData>  m_pImpl;
 
     public:
         OWizardMachine(vcl::Window* _pParent, const WinBits i_nStyle, WizardButtonFlags _nButtonFlags );
