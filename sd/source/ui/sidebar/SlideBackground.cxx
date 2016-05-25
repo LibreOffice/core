@@ -33,7 +33,6 @@
 #include "DrawViewShell.hxx"
 #include "DrawController.hxx"
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <boost/concept_check.hpp>
 #include "sdresid.hxx"
 #include <svtools/controldims.hrc>
 #include <svx/gallery.hxx>

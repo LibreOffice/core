@@ -70,9 +70,7 @@
 #include <vcl/sysdata.hxx>
 
 #if OSL_DEBUG_LEVEL > 0
-#include <boost/date_time/posix_time/posix_time.hpp>
-using namespace ::boost::posix_time;
-
+#include <chrono>
 #endif
 
 using namespace ::com::sun::star;
@@ -94,17 +92,17 @@ class TimerContext
 public:
     explicit TimerContext(OUString const& rWhat)
         : m_aWhat(rWhat)
-        , m_aStartTime(microsec_clock::local_time())
+        , m_StartTime(std::chrono::steady_clock::now())
     {
     }
     ~TimerContext()
     {
-        time_duration const aDuration(microsec_clock::local_time() - m_aStartTime);
-        SAL_INFO("slideshow.opengl", m_aWhat << " took: " << aDuration);
+        auto const aDuration(std::chrono::steady_clock::now() - m_StartTime);
+        SAL_INFO("slideshow.opengl", m_aWhat << " took: " << std::chrono::duration_cast<std::chrono::microseconds>(aDuration).count());
     }
 private:
     OUString const m_aWhat;
-    ptime const m_aStartTime;
+    std::chrono::time_point<std::chrono::steady_clock> const m_StartTime;
 };
 #endif
 
@@ -256,11 +254,11 @@ public:
     bool mbValidOpenGLContext;
 
 #if OSL_DEBUG_LEVEL > 0
-    ptime maUpdateStartTime;
-    ptime maUpdateEndTime;
-    ptime maStartTime;
-    ptime maEndTime;
-    time_duration maTotalUpdateDuration;
+    std::chrono::time_point<std::chrono::steady_clock> m_UpdateStartTime;
+    std::chrono::time_point<std::chrono::steady_clock> m_UpdateEndTime;
+    std::chrono::time_point<std::chrono::steady_clock> m_StartTime;
+    std::chrono::time_point<std::chrono::steady_clock> m_EndTime;
+    std::chrono::steady_clock::duration m_TotalUpdateDuration;
     int mnFrameCount;
 #endif
 };
@@ -1036,10 +1034,10 @@ void SAL_CALL OGLTransitionerImpl::update( double nTime ) throw (uno::RuntimeExc
 {
 #if OSL_DEBUG_LEVEL > 0
     mnFrameCount ++;
-    maUpdateStartTime = microsec_clock::local_time();
+    m_UpdateStartTime = std::chrono::steady_clock::now();
     if( mnFrameCount == 1 ) {
-        maStartTime = maUpdateStartTime;
-        maTotalUpdateDuration = seconds (0);
+        m_StartTime = m_UpdateStartTime;
+        m_TotalUpdateDuration = std::chrono::seconds(0);
     }
 #endif
     osl::MutexGuard const guard( m_aMutex );
@@ -1067,11 +1065,11 @@ void SAL_CALL OGLTransitionerImpl::update( double nTime ) throw (uno::RuntimeExc
     CHECK_GL_ERROR();
 
 #if OSL_DEBUG_LEVEL > 0
-    maUpdateEndTime = microsec_clock::local_time();
+    m_UpdateEndTime = std::chrono::steady_clock::now();
 
     SAL_INFO("slideshow.opengl", "update time: " << nTime);
-    SAL_INFO("slideshow.opengl", "update took: " << ( maUpdateEndTime - maUpdateStartTime ));
-    maTotalUpdateDuration += (maUpdateEndTime - maUpdateStartTime);
+    SAL_INFO("slideshow.opengl", "update took: " << std::chrono::duration_cast<std::chrono::milliseconds>(m_UpdateEndTime - m_UpdateStartTime).count());
+    m_TotalUpdateDuration += (m_UpdateEndTime - m_UpdateStartTime);
 #endif
 }
 
@@ -1123,16 +1121,16 @@ void OGLTransitionerImpl::disposing()
 #if OSL_DEBUG_LEVEL > 0
     SAL_INFO("slideshow.opengl", "dispose " << this);
     if( mnFrameCount ) {
-        maEndTime = microsec_clock::local_time();
-        time_duration duration = maEndTime - maStartTime;
+        m_EndTime = std::chrono::steady_clock::now();
+        auto const duration = m_EndTime - m_StartTime;
         SAL_INFO("slideshow.opengl",
                 "whole transition (frames: " << mnFrameCount
-                << ") took: " << duration
+                << ") took: " << std::chrono::duration_cast<std::chrono::microseconds>(duration).count()
                 << " fps: "
-                << (((double)mnFrameCount*1000000000.0)/duration.total_nanoseconds())
-                << " time spent in updates: " << maTotalUpdateDuration
+                << (((double)mnFrameCount*1000000000.0)/std::chrono::duration_cast<std::chrono::nanoseconds>(duration).count())
+                << " time spent in updates: " << std::chrono::duration_cast<std::chrono::microseconds>(m_TotalUpdateDuration).count()
                 << " percentage of transition time: "
-                << (100*(((double)maTotalUpdateDuration.total_nanoseconds())/((double)duration.total_nanoseconds())))
+                << (100*(((double)std::chrono::duration_cast<std::chrono::nanoseconds>(m_TotalUpdateDuration).count())/((double)std::chrono::duration_cast<std::chrono::nanoseconds>(duration).count())))
                 << '%'
             );
     }
