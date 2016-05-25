@@ -26,8 +26,6 @@
 
 namespace svt
 {
-
-
     struct RoadmapWizardImpl;
     class RoadmapWizard;
 
@@ -64,7 +62,7 @@ namespace svt
     class SVT_DLLPUBLIC RoadmapWizard : public OWizardMachine, public RoadmapWizardTypes
     {
     private:
-        RoadmapWizardImpl*  m_pImpl;
+        std::unique_ptr<RoadmapWizardImpl>  m_pImpl;
 
     public:
         RoadmapWizard(
