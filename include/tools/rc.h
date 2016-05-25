@@ -154,9 +154,13 @@ namespace o3tl {
 }
 
 // For "Image":
-#define RSC_IMAGE_IMAGEBITMAP           0x01
-#define RSC_IMAGE_MASKBITMAP            0x02
-#define RSC_IMAGE_MASKCOLOR             0x04
+enum class RscImageFlags {
+    ImageBitmap       = 0x01,
+    MaskColor         = 0x04
+};
+namespace o3tl {
+    template<> struct typed_flags<RscImageFlags> : is_typed_flags<RscImageFlags, 0x05> {};
+}
 
 // For "ImageList":
 enum class RscImageListFlags {

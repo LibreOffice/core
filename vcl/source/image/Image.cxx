@@ -56,27 +56,16 @@ Image::Image( const ResId& rResId ) :
     {
         pResMgr->Increment( sizeof( RSHEADER_TYPE ) );
 
-        BitmapEx    aBmpEx;
-        sal_uLong       nObjMask = pResMgr->ReadLong();
+        BitmapEx      aBmpEx;
+        RscImageFlags nObjMask = (RscImageFlags)pResMgr->ReadLong();
 
-        if( nObjMask & RSC_IMAGE_IMAGEBITMAP )
+        if( nObjMask & RscImageFlags::ImageBitmap )
         {
             aBmpEx = BitmapEx( ResId( static_cast<RSHEADER_TYPE*>(pResMgr->GetClass()), *pResMgr ) );
             pResMgr->Increment( ResMgr::GetObjSize( static_cast<RSHEADER_TYPE*>(pResMgr->GetClass()) ) );
         }
 
-        if( nObjMask & RSC_IMAGE_MASKBITMAP )
-        {
-            if( !aBmpEx.IsEmpty() && aBmpEx.GetTransparentType() == TRANSPARENT_NONE )
-            {
-                const Bitmap aMaskBitmap( ResId( static_cast<RSHEADER_TYPE*>(pResMgr->GetClass()), *pResMgr ) );
-                aBmpEx = BitmapEx( aBmpEx.GetBitmap(), aMaskBitmap );
-            }
-
-            pResMgr->Increment( ResMgr::GetObjSize( static_cast<RSHEADER_TYPE*>(pResMgr->GetClass()) ) );
-        }
-
-        if( nObjMask & RSC_IMAGE_MASKCOLOR )
+        if( nObjMask & RscImageFlags::MaskColor )
         {
             if( !aBmpEx.IsEmpty() && aBmpEx.GetTransparentType() == TRANSPARENT_NONE )
             {
