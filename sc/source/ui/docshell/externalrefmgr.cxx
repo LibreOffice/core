@@ -32,6 +32,7 @@
 #include "sc.hrc"
 #include "globstr.hrc"
 #include "cellvalue.hxx"
+#include "defaultsoptions.hxx"
 
 #include <osl/file.hxx>
 #include <sfx2/app.hxx>
@@ -496,8 +497,7 @@ const OUString* ScExternalRefCache::getRealTableName(sal_uInt16 nFileId, const O
     }
 
     const DocItem& rDoc = itrDoc->second;
-    TableNameIndexMap::const_iterator itrTabId = rDoc.maTableNameIndex.find(
-        ScGlobal::pCharClass->uppercase(rTabName));
+    TableNameIndexMap::const_iterator itrTabId = rDoc.findTableNameIndex( rTabName);
     if (itrTabId == rDoc.maTableNameIndex.end())
     {
         // the specified table is not in cache.
@@ -541,8 +541,7 @@ ScExternalRefCache::TokenRef ScExternalRefCache::getCellData(
     }
 
     const DocItem& rDoc = itrDoc->second;
-    TableNameIndexMap::const_iterator itrTabId = rDoc.maTableNameIndex.find(
-        ScGlobal::pCharClass->uppercase(rTabName));
+    TableNameIndexMap::const_iterator itrTabId = rDoc.findTableNameIndex( rTabName);
     if (itrTabId == rDoc.maTableNameIndex.end())
     {
         // the specified table is not in cache.
@@ -571,8 +570,7 @@ ScExternalRefCache::TokenArrayRef ScExternalRefCache::getCellRangeData(
 
     DocItem& rDoc = itrDoc->second;
 
-    TableNameIndexMap::iterator itrTabId = rDoc.maTableNameIndex.find(
-        ScGlobal::pCharClass->uppercase(rTabName));
+    TableNameIndexMap::const_iterator itrTabId = rDoc.findTableNameIndex( rTabName);
     if (itrTabId == rDoc.maTableNameIndex.end())
         // the specified table is not in cache.
         return TokenArrayRef();
@@ -802,8 +800,7 @@ void ScExternalRefCache::setCellData(sal_uInt16 nFileId, const OUString& rTabNam
     DocItem& rDoc = *pDocItem;
 
     // See if the table by this name already exists.
-    TableNameIndexMap::iterator itrTabName = rDoc.maTableNameIndex.find(
-        ScGlobal::pCharClass->uppercase(rTabName));
+    TableNameIndexMap::const_iterator itrTabName = rDoc.findTableNameIndex( rTabName);
     if (itrTabName == rDoc.maTableNameIndex.end())
         // Table not found.  Maybe the table name or the file id is wrong ???
         return;
@@ -833,8 +830,7 @@ void ScExternalRefCache::setCellRangeData(sal_uInt16 nFileId, const ScRange& rRa
 
     // Now, find the table position of the first table to cache.
     const OUString& rFirstTabName = rData.front().maTableName;
-    TableNameIndexMap::iterator itrTabName = rDoc.maTableNameIndex.find(
-        ScGlobal::pCharClass->uppercase(rFirstTabName));
+    TableNameIndexMap::const_iterator itrTabName = rDoc.findTableNameIndex( rFirstTabName);
     if (itrTabName == rDoc.maTableNameIndex.end())
     {
         // table index not found.
@@ -906,7 +902,7 @@ bool ScExternalRefCache::isDocInitialized(sal_uInt16 nFileId)
     return pDoc->mbInitFromSource;
 }
 
-static bool lcl_getTableDataIndex(const ScExternalRefCache::TableNameIndexMap& rMap, const OUString& rName, size_t& rIndex)
+static bool lcl_getStrictTableDataIndex(const ScExternalRefCache::TableNameIndexMap& rMap, const OUString& rName, size_t& rIndex)
 {
     ScExternalRefCache::TableNameIndexMap::const_iterator itr = rMap.find(rName);
     if (itr == rMap.end())
@@ -916,7 +912,29 @@ static bool lcl_getTableDataIndex(const ScExternalRefCache::TableNameIndexMap& r
     return true;
 }
 
-void ScExternalRefCache::initializeDoc(sal_uInt16 nFileId, const vector<OUString>& rTabNames)
+bool ScExternalRefCache::DocItem::getTableDataIndex( const OUString& rTabName, size_t& rIndex ) const
+{
+    ScExternalRefCache::TableNameIndexMap::const_iterator itr = findTableNameIndex(rTabName);
+    if (itr == maTableNameIndex.end())
+        return false;
+
+    rIndex = itr->second;
+    return true;
+}
+
+namespace {
+OUString getFirstSheetName()
+{
+    // Get Custom prefix.
+    const ScDefaultsOptions& rOpt = SC_MOD()->GetDefaultsOptions();
+    // Form sheet name identical to the first generated sheet name when
+    // creating an internal document, e.g. 'Sheet1'.
+    return rOpt.GetInitTabPrefix() + "1";
+}
+}
+
+void ScExternalRefCache::initializeDoc(sal_uInt16 nFileId, const vector<OUString>& rTabNames,
+        const OUString& rBaseName)
 {
     DocItem* pDoc = getDocItem(nFileId);
     if (!pDoc)
@@ -943,7 +961,7 @@ void ScExternalRefCache::initializeDoc(sal_uInt16 nFileId, const vector<OUString
     for (size_t i = 0; i < n; ++i)
     {
         size_t nIndex;
-        if (lcl_getTableDataIndex(pDoc->maTableNameIndex, pDoc->maTableNames[i].maUpperName, nIndex))
+        if (lcl_getStrictTableDataIndex(pDoc->maTableNameIndex, pDoc->maTableNames[i].maUpperName, nIndex))
         {
             aNewTables[i] = pDoc->maTables[nIndex];
         }
@@ -956,7 +974,92 @@ void ScExternalRefCache::initializeDoc(sal_uInt16 nFileId, const vector<OUString
         aNewNameIndex.insert(TableNameIndexMap::value_type(pDoc->maTableNames[i].maUpperName, i));
     pDoc->maTableNameIndex.swap(aNewNameIndex);
 
+    // Setup name for Sheet1 vs base name to be able to load documents
+    // that store the base name as table name, or vice versa.
+    pDoc->maSingleTableNameAlias.clear();
+    if (!rBaseName.isEmpty() && pDoc->maTableNames.size() == 1)
+    {
+        OUString aSheetName = getFirstSheetName();
+        // If the one and only table name matches exactly, carry on the base
+        // file name for further alias use. If instead the table name matches
+        // the base name, carry on the sheet name as alias.
+        if (ScGlobal::GetpTransliteration()->isEqual( pDoc->maTableNames[0].maRealName, aSheetName))
+            pDoc->maSingleTableNameAlias = rBaseName;
+        else if (ScGlobal::GetpTransliteration()->isEqual( pDoc->maTableNames[0].maRealName, rBaseName))
+            pDoc->maSingleTableNameAlias = aSheetName;
+
+        /* TODO: future versions could swap the table name with the base name,
+         * so the base name gets stored instead of Sheet1, which can be
+         * localized and then will not match in another localized UI once the
+         * link was updated/refreshed. This never worked before
+         * a4f09f8c2ef3ae82b86d1b4f0c6c90d1a61614fa accidentally "fixed" it for
+         * fdo#73552 only for CSV files but broke older existing documents.
+         * Either that, or always store 'Sheet1' or something?
+         * However, do that only for imported files that do not store sheet
+         * names, e.g. CSV, HTML, ..., but not for spreadsheet documents. */
+
+    }
+
     pDoc->mbInitFromSource = true;
+}
+
+ScExternalRefCache::TableNameIndexMap::const_iterator ScExternalRefCache::DocItem::findTableNameIndex(
+        const OUString& rTabName ) const
+{
+    const OUString aTabNameUpper = ScGlobal::pCharClass->uppercase( rTabName);
+    TableNameIndexMap::const_iterator itrTabName = maTableNameIndex.find( aTabNameUpper);
+    if (itrTabName != maTableNameIndex.end())
+        return itrTabName;
+
+    // For some time for external references to .csv files the base name was
+    // used as sheet name instead of Sheet1, check if we can resolve that.
+    // Also helps users that got accustomed to give the base name instead of
+    // Sheet1.
+    if (maSingleTableNameAlias.isEmpty() || maTableNameIndex.size() != 1)
+        return itrTabName;
+
+    // maSingleTableNameAlias has been set up only if the original file loaded
+    // had exactly one sheet and internal sheet name was Sheet1 or localized or
+    // customized equivalent, or base name.
+    if (aTabNameUpper == ScGlobal::pCharClass->uppercase( maSingleTableNameAlias))
+        return maTableNameIndex.begin();
+
+    return itrTabName;
+}
+
+bool ScExternalRefCache::DocItem::getSingleTableNameAlternative( OUString& rTabName ) const
+{
+    if (maSingleTableNameAlias.isEmpty() || maTableNames.size() != 1)
+        return false;
+    if (ScGlobal::GetpTransliteration()->isEqual( rTabName, maTableNames[0].maRealName))
+    {
+        rTabName = maSingleTableNameAlias;
+        return true;
+    }
+    if (ScGlobal::GetpTransliteration()->isEqual( rTabName, maSingleTableNameAlias))
+    {
+        rTabName = maTableNames[0].maRealName;
+        return true;
+    }
+    return false;
+}
+
+bool ScExternalRefCache::getSrcDocTable( const ScDocument& rSrcDoc, const OUString& rTabName, SCTAB& rTab,
+        sal_uInt16 nFileId ) const
+{
+    bool bFound = rSrcDoc.GetTable( rTabName, rTab);
+    if (!bFound)
+    {
+        // Check the one table alias alternative.
+        const DocItem* pDoc = getDocItem( nFileId );
+        if (pDoc)
+        {
+            OUString aTabName( rTabName);
+            if (pDoc->getSingleTableNameAlternative( aTabName))
+                bFound = rSrcDoc.GetTable( aTabName, rTab);
+        }
+    }
+    return bFound;
 }
 
 OUString ScExternalRefCache::getTableName(sal_uInt16 nFileId, size_t nCacheId) const
@@ -1056,8 +1159,7 @@ bool ScExternalRefCache::setCacheTableReferenced( sal_uInt16 nFileId, const OUSt
     if (pDoc)
     {
         size_t nIndex = 0;
-        OUString aTabNameUpper = ScGlobal::pCharClass->uppercase( rTabName);
-        if (lcl_getTableDataIndex( pDoc->maTableNameIndex, aTabNameUpper, nIndex))
+        if (pDoc->getTableDataIndex( rTabName, nIndex))
         {
             size_t nStop = ::std::min( nIndex + nSheets, pDoc->maTables.size());
             for (size_t i = nIndex; i < nStop; ++i)
@@ -1250,7 +1352,8 @@ ScExternalRefCache::TableTypeRef ScExternalRefCache::getCacheTable(sal_uInt16 nF
     return pDoc->maTables[nTabIndex];
 }
 
-ScExternalRefCache::TableTypeRef ScExternalRefCache::getCacheTable(sal_uInt16 nFileId, const OUString& rTabName, bool bCreateNew, size_t* pnIndex)
+ScExternalRefCache::TableTypeRef ScExternalRefCache::getCacheTable(sal_uInt16 nFileId, const OUString& rTabName,
+        bool bCreateNew, size_t* pnIndex, const OUString* pExtUrl)
 {
     // In API, the index is transported as cached sheet ID of type sal_Int32 in
     // sheet::SingleReference.Sheet or sheet::ComplexReference.Reference1.Sheet
@@ -1268,8 +1371,7 @@ ScExternalRefCache::TableTypeRef ScExternalRefCache::getCacheTable(sal_uInt16 nF
     DocItem& rDoc = *pDoc;
 
     size_t nIndex;
-    OUString aTabNameUpper = ScGlobal::pCharClass->uppercase(rTabName);
-    if (lcl_getTableDataIndex(rDoc.maTableNameIndex, aTabNameUpper, nIndex))
+    if (rDoc.getTableDataIndex(rTabName, nIndex))
     {
         // specified table found.
         if( pnIndex ) *pnIndex = nIndex;
@@ -1285,7 +1387,27 @@ ScExternalRefCache::TableTypeRef ScExternalRefCache::getCacheTable(sal_uInt16 nF
         return TableTypeRef();
     }
 
+    // If this is the first table to be created propagate the base name or
+    // Sheet1 as an alias. For subsequent tables remove it again.
+    if (rDoc.maTableNames.empty())
+    {
+        if (pExtUrl)
+        {
+            const OUString aBaseName( INetURLObject( *pExtUrl).GetBase());
+            const OUString aSheetName( getFirstSheetName());
+            if (ScGlobal::GetpTransliteration()->isEqual( rTabName, aSheetName))
+                pDoc->maSingleTableNameAlias = aBaseName;
+            else if (ScGlobal::GetpTransliteration()->isEqual( rTabName, aBaseName))
+                pDoc->maSingleTableNameAlias = aSheetName;
+        }
+    }
+    else
+    {
+        rDoc.maSingleTableNameAlias.clear();
+    }
+
     // Specified table doesn't exist yet.  Create one.
+    OUString aTabNameUpper = ScGlobal::pCharClass->uppercase(rTabName);
     nIndex = rDoc.maTables.size();
     if( pnIndex ) *pnIndex = nIndex;
     TableTypeRef pTab(new Table);
@@ -1588,9 +1710,9 @@ ScExternalRefCache::TableTypeRef ScExternalRefManager::getCacheTable(sal_uInt16 
 }
 
 ScExternalRefCache::TableTypeRef ScExternalRefManager::getCacheTable(
-    sal_uInt16 nFileId, const OUString& rTabName, bool bCreateNew, size_t* pnIndex)
+    sal_uInt16 nFileId, const OUString& rTabName, bool bCreateNew, size_t* pnIndex, const OUString* pExtUrl)
 {
-    return maRefCache.getCacheTable(nFileId, rTabName, bCreateNew, pnIndex);
+    return maRefCache.getCacheTable(nFileId, rTabName, bCreateNew, pnIndex, pExtUrl);
 }
 
 ScExternalRefManager::LinkListener::LinkListener()
@@ -1734,7 +1856,7 @@ void putRangeDataIntoCache(
         // Make sure to set this range 'cached', to prevent unnecessarily
         // accessing the src document time and time again.
         ScExternalRefCache::TableTypeRef pCacheTab =
-            rRefCache.getCacheTable(nFileId, rTabName, true, nullptr);
+            rRefCache.getCacheTable(nFileId, rTabName, true, nullptr, nullptr);
         if (pCacheTab)
             pCacheTab->setCachedCellRange(
                 rCacheRange.aStart.Col(), rCacheRange.aStart.Row(), rCacheRange.aEnd.Col(), rCacheRange.aEnd.Row());
@@ -1772,10 +1894,29 @@ void initDocInCache(ScExternalRefCache& rRefCache, const ScDocument* pSrcDoc, sa
             pSrcDoc->GetName(i, aName);
             aTabNames.push_back(aName);
         }
-        rRefCache.initializeDoc(nFileId, aTabNames);
+
+        // Obtain the base name, don't bother if there are more than one sheets.
+        OUString aBaseName;
+        if (nTabCount == 1)
+        {
+            const SfxObjectShell* pShell = pSrcDoc->GetDocumentShell();
+            if (pShell && pShell->GetMedium())
+            {
+                OUString aName = pShell->GetMedium()->GetName();
+                aBaseName = INetURLObject( aName).GetBase();
+            }
+        }
+
+        rRefCache.initializeDoc(nFileId, aTabNames, aBaseName);
     }
 }
 
+}
+
+bool ScExternalRefManager::getSrcDocTable( const ScDocument& rSrcDoc, const OUString& rTabName, SCTAB& rTab,
+        sal_uInt16 nFileId ) const
+{
+    return maRefCache.getSrcDocTable( rSrcDoc, rTabName, rTab, nFileId);
 }
 
 ScExternalRefCache::TokenRef ScExternalRefManager::getSingleRefToken(
@@ -1798,7 +1939,7 @@ ScExternalRefCache::TokenRef ScExternalRefManager::getSingleRefToken(
     {
         // source document already loaded in memory.  Re-use this instance.
         SCTAB nTab;
-        if (!pSrcDoc->GetTable(rTabName, nTab))
+        if (!getSrcDocTable( *pSrcDoc, rTabName, nTab, nFileId))
         {
             // specified table name doesn't exist in the source document.
             ScExternalRefCache::TokenRef pToken(new FormulaErrorToken(errNoRef));
@@ -1837,7 +1978,7 @@ ScExternalRefCache::TokenRef ScExternalRefManager::getSingleRefToken(
     }
 
     SCTAB nTab;
-    if (!pSrcDoc->GetTable(rTabName, nTab))
+    if (!getSrcDocTable( *pSrcDoc, rTabName, nTab, nFileId))
     {
         // specified table name doesn't exist in the source document.
         pToken.reset(new FormulaErrorToken(errNoRef));
@@ -1856,7 +1997,7 @@ ScExternalRefCache::TokenRef ScExternalRefManager::getSingleRefToken(
         // this data, but add it to the cached range to prevent accessing the
         // source document time and time again.
         ScExternalRefCache::TableTypeRef pCacheTab =
-            maRefCache.getCacheTable(nFileId, rTabName, true, nullptr);
+            maRefCache.getCacheTable(nFileId, rTabName, true, nullptr, nullptr);
         if (pCacheTab)
             pCacheTab->setCachedCell(rCell.Col(), rCell.Row());
 

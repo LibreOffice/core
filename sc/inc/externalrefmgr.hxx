@@ -249,7 +249,7 @@ public:
                           const TokenArrayRef& pArray);
 
     bool isDocInitialized(sal_uInt16 nFileId);
-    void initializeDoc(sal_uInt16 nFileId, const ::std::vector<OUString>& rTabNames);
+    void initializeDoc(sal_uInt16 nFileId, const ::std::vector<OUString>& rTabNames, const OUString& rBaseName);
     OUString getTableName(sal_uInt16 nFileId, size_t nCacheId) const;
     void getAllTableNames(sal_uInt16 nFileId, ::std::vector<OUString>& rTabNames) const;
     SCsTAB getTabSpan( sal_uInt16 nFileId, const OUString& rStartTabName, const OUString& rEndTabName ) const;
@@ -277,6 +277,8 @@ public:
      */
     void getAllCachedDataSpans( sal_uInt16 nFileId, sc::ColumnSpanSet& rSet ) const;
 
+    bool getSrcDocTable( const ScDocument& rSrcDoc, const OUString& rTabName, SCTAB& rTab, sal_uInt16 nFileId ) const;
+
 private:
     struct ReferencedStatus
     {
@@ -302,7 +304,8 @@ private:
 public:
 
     ScExternalRefCache::TableTypeRef getCacheTable(sal_uInt16 nFileId, size_t nTabIndex) const;
-    ScExternalRefCache::TableTypeRef getCacheTable(sal_uInt16 nFileId, const OUString& rTabName, bool bCreateNew, size_t* pnIndex);
+    ScExternalRefCache::TableTypeRef getCacheTable(sal_uInt16 nFileId, const OUString& rTabName, bool bCreateNew,
+            size_t* pnIndex, const OUString* pExtUrl);
 
     /**
      * Clear all caches including the cache tables.
@@ -346,9 +349,18 @@ private:
         /** Upper- to real-case mapping for range names. */
         NamePairMap                 maRealRangeNameMap;
 
+        /** Either the base name that was stored as sheet name for CSV files if
+            sheet name is Sheet1, or Sheet1 name if sheet name is base name.
+         */
+        OUString                    maSingleTableNameAlias;
+
         bool mbInitFromSource;
 
         DocItem() : mbInitFromSource(false) {}
+
+        TableNameIndexMap::const_iterator findTableNameIndex( const OUString& rTabName ) const;
+        bool getTableDataIndex( const OUString& rTabName, size_t& rIndex ) const;
+        bool getSingleTableNameAlternative( OUString& rTabName ) const;
     };
     typedef std::unordered_map<sal_uInt16, DocItem>  DocDataType;
     DocItem* getDocItem(sal_uInt16 nFileId) const;
@@ -460,7 +472,8 @@ public:
      * table orders are critical.</I>
      *
      * Excel filter calls this method to populate the cache table from the
-     * XCT/CRN records.
+     * XCT/CRN records. ODF import calls it for cached tables for external
+     * references.
      *
      * @param nFileId file ID
      * @param rTabName table name
@@ -469,10 +482,14 @@ public:
      *                   specified table's cache doesn't exist.
      * @param pnIndex if non-NULL pointer is passed, it stores the internal
      *                index of a cache table instance.
+     * @param pExtUrl if non-NULL and bCreateNew==true, the base name will be
+     *                propagated as an alias for the first table (and removed
+     *                later if further tables are created).
      *
      * @return shared_ptr to the cache table instance
      */
-    ScExternalRefCache::TableTypeRef getCacheTable(sal_uInt16 nFileId, const OUString& rTabName, bool bCreateNew, size_t* pnIndex = nullptr);
+    ScExternalRefCache::TableTypeRef getCacheTable(sal_uInt16 nFileId, const OUString& rTabName, bool bCreateNew,
+            size_t* pnIndex = nullptr, const OUString* pExtUrl = nullptr);
 
     /** Returns a vector containing all (real) table names and cache tables of
         the specified file.
@@ -713,6 +730,8 @@ private:
     void refreshAllRefCells(sal_uInt16 nFileId);
 
     void fillCellFormat(sal_uLong nFmtIndex, ScExternalRefCache::CellFormat* pFmt) const;
+
+    bool getSrcDocTable( const ScDocument& rSrcDoc, const OUString& rTabName, SCTAB& rTab, sal_uInt16 nFileId ) const;
 
     ScExternalRefCache::TokenRef getSingleRefTokenFromSrcDoc(
         sal_uInt16 nFileId, ScDocument* pSrcDoc, const ScAddress& rPos,

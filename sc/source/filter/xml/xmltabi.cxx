@@ -202,7 +202,8 @@ ScXMLTableContext::ScXMLTableContext( ScXMLImport& rImport,
         {
             ScExternalRefManager* pRefMgr = pDoc->GetExternalRefManager();
             pExternalRefInfo->mnFileId = pRefMgr->getExternalFileId(aExtUrl);
-            pExternalRefInfo->mpCacheTable = pRefMgr->getCacheTable(pExternalRefInfo->mnFileId, aExtTabName, true);
+            pExternalRefInfo->mpCacheTable = pRefMgr->getCacheTable(pExternalRefInfo->mnFileId, aExtTabName, true,
+                    nullptr, &aExtUrl);
             pExternalRefInfo->mpCacheTable->setWholeTableCached();
         }
     }
