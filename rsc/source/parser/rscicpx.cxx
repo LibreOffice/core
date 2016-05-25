@@ -278,8 +278,6 @@ RscTop * RscTypCont::InitClassWindow( RscTop * pSuper, RscEnum * pMapUnit,
     pClassWindow->SetVariable( nId, &aLangString, nullptr, 0, WINDOW_HELPTEXT );
     nId = aNmTb.Put( "QuickHelpText", VARNAME );
     pClassWindow->SetVariable( nId, &aLangString, nullptr, 0, WINDOW_QUICKTEXT );
-    nId = aNmTb.Put( "ExtraLong", VARNAME );
-    pClassWindow->SetVariable( nId, &aLong, nullptr, 0, WINDOW_EXTRALONG );
 
     return pClassWindow;
 }

@@ -141,11 +141,6 @@ void Window::ImplLoadRes( const ResId& rResId )
     }
     if ( nObjMask & WINDOW_QUICKTEXT )
         SetQuickHelpText( ReadStringRes() );
-    if ( nObjMask & WINDOW_EXTRALONG )
-    {
-        sal_uIntPtr nRes = ReadLongRes();
-        SetData( reinterpret_cast<void*>(nRes) );
-    }
 }
 
 } /* namespace vcl */

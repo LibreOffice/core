@@ -44,11 +44,10 @@ namespace o3tl {
 #define WINDOW_WHMAPMODE                0x0008
 #define WINDOW_WIDTH                    0x0010
 #define WINDOW_HEIGHT                   0x0020
-#define WINDOW_TEXT                     0x0080
-#define WINDOW_HELPTEXT                 0x0100
-#define WINDOW_QUICKTEXT                0x0200
-#define WINDOW_EXTRALONG                0x0800
-#define WINDOW_HELPID                   0x1000
+#define WINDOW_TEXT                     0x0040
+#define WINDOW_HELPTEXT                 0x0080
+#define WINDOW_QUICKTEXT                0x0100
+#define WINDOW_HELPID                   0x0200
 
 // For "WorkWindow" resources:
 
