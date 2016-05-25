@@ -1416,9 +1416,9 @@ void MetricFormatter::ImplLoadRes( const ResId& rResId )
     ResMgr*     pMgr = rResId.GetResMgr();
     if( pMgr )
     {
-        sal_uLong       nMask = pMgr->ReadLong();
+        RscMetricFormatterFlags nMask = (RscMetricFormatterFlags)pMgr->ReadLong();
 
-        if ( METRICFORMATTER_UNIT & nMask )
+        if ( RscMetricFormatterFlags::Unit & nMask )
         {
             sal_uLong nUnit = pMgr->ReadLong();
             assert(nUnit <= FUNIT_MILLISECOND && "out of FieldUnit bounds");
@@ -1426,7 +1426,7 @@ void MetricFormatter::ImplLoadRes( const ResId& rResId )
                 meUnit = (FieldUnit)nUnit;
         }
 
-        if ( METRICFORMATTER_CUSTOMUNITTEXT & nMask )
+        if ( RscMetricFormatterFlags::CustomUnitText & nMask )
             maCustomUnitText = pMgr->ReadString();
     }
 }
