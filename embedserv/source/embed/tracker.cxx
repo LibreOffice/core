@@ -16,6 +16,11 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
+#include <sal/config.h>
+
+#include <sal/types.h>
+
 #ifdef _MSC_VER
 #pragma warning(disable : 4917 4555)
 #endif
@@ -442,6 +447,7 @@ BOOL Tracker::TrackHandle(int nHandle,HWND hWnd,POINT point,HWND hWndClipTo)
         case WM_KEYDOWN:
             if (msg.wParam != VK_ESCAPE)
                 break;
+            SAL_FALLTHROUGH;
         case WM_RBUTTONDOWN:
             if (bMoved)
             {

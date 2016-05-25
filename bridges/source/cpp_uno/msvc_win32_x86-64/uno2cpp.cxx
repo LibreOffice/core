@@ -423,7 +423,8 @@ void unoInterfaceProxyDispatch(
                 }
                 TYPELIB_DANGER_RELEASE( pTD );
             }
-        } // Else perform queryInterface()
+            SAL_FALLTHROUGH; // else perform queryInterface()
+        }
         default:
             if ( ! cpp_call(
                      pThis, aVtableSlot,

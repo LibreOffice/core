@@ -50,6 +50,7 @@ bool WinSalGraphics::supportsOperation( OutDevSupportType eType ) const
         break;
     case OutDevSupport_B2DDraw:
         bRet = bAllowForTest;
+        break;
     default: break;
     }
     return bRet;

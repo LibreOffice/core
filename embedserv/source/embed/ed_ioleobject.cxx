@@ -192,7 +192,7 @@ STDMETHODIMP EmbedDocument_Impl::DoVerb(
                         pActiveSite,TRUE)))
                     return NOERROR;
 
-                // intended fall through
+                SAL_FALLTHROUGH;
             case OLEIVERB_OPEN:
                 OSL_ENSURE(m_pDocHolder,"no document to open");
 

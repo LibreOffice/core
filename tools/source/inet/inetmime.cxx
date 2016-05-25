@@ -846,6 +846,7 @@ createPreferredCharsetList(rtl_TextEncoding eEncoding)
 #if defined(_WIN32)
             pList->prepend(Charset(RTL_TEXTENCODING_MS_1252,
                                    aWindows1252Ranges));
+            break;
 #endif // WNT
         case RTL_TEXTENCODING_ISO_8859_1:
         case RTL_TEXTENCODING_UTF7:
