@@ -2807,6 +2807,7 @@ void CMAccessible::get_OLECHARFromAny(Any& pAny, OLECHAR* pChar)
                 pAny >>= val;
                 swprintf( pChar, L"%d", val);
             }
+            break;
         }
     case TypeClass_STRUCT:
         {
