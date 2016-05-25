@@ -102,7 +102,7 @@ public:
     }
 private:
     OUString const m_aWhat;
-    std::chrono::time_point<std::chrono::steady_clock> const m_StartTime;
+    std::chrono::steady_clock::time_point const m_StartTime;
 };
 #endif
 
@@ -254,10 +254,10 @@ public:
     bool mbValidOpenGLContext;
 
 #if OSL_DEBUG_LEVEL > 0
-    std::chrono::time_point<std::chrono::steady_clock> m_UpdateStartTime;
-    std::chrono::time_point<std::chrono::steady_clock> m_UpdateEndTime;
-    std::chrono::time_point<std::chrono::steady_clock> m_StartTime;
-    std::chrono::time_point<std::chrono::steady_clock> m_EndTime;
+    std::chrono::steady_clock::time_point m_UpdateStartTime;
+    std::chrono::steady_clock::time_point m_UpdateEndTime;
+    std::chrono::steady_clock::time_point m_StartTime;
+    std::chrono::steady_clock::time_point m_EndTime;
     std::chrono::steady_clock::duration m_TotalUpdateDuration;
     int mnFrameCount;
 #endif
