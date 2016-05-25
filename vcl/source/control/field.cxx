@@ -1647,15 +1647,15 @@ void MetricField::ImplLoadRes( const ResId& rResId )
     SpinField::ImplLoadRes( rResId );
     MetricFormatter::ImplLoadRes( ResId( static_cast<RSHEADER_TYPE *>(GetClassRes()), *rResId.GetResMgr() ) );
 
-    sal_uLong      nMask = ReadLongRes();
+    RscMetricFieldFlags      nMask = (RscMetricFieldFlags)ReadLongRes();
 
-    if ( METRICFIELD_FIRST & nMask )
+    if ( RscMetricFieldFlags::First & nMask )
         mnFirst = ReadLongRes();
 
-    if ( METRICFIELD_LAST & nMask )
+    if ( RscMetricFieldFlags::Last & nMask )
         mnLast = ReadLongRes();
 
-    if ( METRICFIELD_SPINSIZE & nMask )
+    if ( RscMetricFieldFlags::SpinSize & nMask )
         mnSpinSize = ReadLongRes();
 
     Reformat();

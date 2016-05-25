@@ -916,13 +916,13 @@ RscTop * RscTypCont::InitClassMetricField( RscTop * pSuper )
     // initialize variables
     nId = aNmTb.Put( "First", VARNAME );
     pClassMetricField->SetVariable( nId, &aIdLong, nullptr,
-                                    0, METRICFIELD_FIRST );
+                                    0, (sal_uInt32)RscMetricFieldFlags::First );
     nId = aNmTb.Put( "Last", VARNAME );
     pClassMetricField->SetVariable( nId, &aIdLong, nullptr,
-                                    0, METRICFIELD_LAST );
+                                    0, (sal_uInt32)RscMetricFieldFlags::Last );
     nId = aNmTb.Put( "SpinSize", VARNAME );
     pClassMetricField->SetVariable( nId, &aIdLong, nullptr,
-                                    0, METRICFIELD_SPINSIZE  );
+                                    0, (sal_uInt32)RscMetricFieldFlags::SpinSize  );
 
     return pClassMetricField;
 }
