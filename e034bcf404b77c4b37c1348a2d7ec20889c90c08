@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_8cf974cb",
+        "filename": "vcl/quartz/salbmp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-05-25T21:26:03Z",
+      "side": 1,
+      "message": "m_pContextBuffer",
+      "range": {
+        "startLine": 249,
+        "startChar": 8,
+        "endLine": 249,
+        "endChar": 21
+      },
+      "revId": "e034bcf404b77c4b37c1348a2d7ec20889c90c08",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
