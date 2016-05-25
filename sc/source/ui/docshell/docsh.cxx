@@ -1199,15 +1199,19 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
                     aDocument.StartAllListeners();
                     sc::SetFormulaDirtyContext aCxt;
                     aDocument.SetAllFormulasDirty(aCxt);
-                    if (GetCreateMode() != SfxObjectCreateMode::INTERNAL)
-                    {
-                        // ScDocShell was not created with
-                        // SfxModelFlags::EXTERNAL_LINK for which we do not
-                        // want Sheet1 renamed in order to get predictable
-                        // sheet names for external references.
-                        INetURLObject aURLObjForDefaultNameSheetName(rMedium.GetName());
-                        aDocument.RenameTab(0,aURLObjForDefaultNameSheetName.GetBase());
-                    }
+
+                    // The same resulting name has to be handled in
+                    // ScExternalRefCache::initializeDoc() and related, hence
+                    // pass 'true' for RenameTab()'s bExternalDocument for a
+                    // composed name so ValidTabName() will not be checked,
+                    // which could veto the rename in case it contained
+                    // characters that Excel does not handle. If we wanted to
+                    // change that then it needed to be handled in all
+                    // corresponding places of the external references
+                    // manager/cache. Likely then we'd also need a method to
+                    // compose a name excluding such characters.
+                    aDocument.RenameTab( 0, INetURLObject( rMedium.GetName()).GetBase(), true, true);
+
                     bOverflowRow = aImpEx.IsOverflowRow();
                     bOverflowCol = aImpEx.IsOverflowCol();
                     bOverflowCell = aImpEx.IsOverflowCell();
