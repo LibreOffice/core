@@ -781,22 +781,22 @@
     </node>
     <node oor:name="te" oor:op="replace">
       <prop oor:name="UI_SANS" oor:op="replace" oor:type="xs:string">
-        <value>Lohit Telugu;Gautami;Lucidasans;Lucida Sans;Arial Unicode MS;Lucida Sans Unicode;clearlyU</value>
+        <value>Lohit Telugu;Gautami;Lucidasans;Lucida Sans;Nirmala UI;Arial Unicode MS;Lucida Sans Unicode;clearlyU</value>
       </prop>
       <prop oor:name="CTL_DISPLAY" oor:op="replace" oor:type="xs:string">
-        <value>Lohit Telugu;Gautami;Lucidasans;Lucida Sans;Arial Unicode MS</value>
+        <value>Lohit Telugu;Gautami;Lucidasans;Lucida Sans;Nirmala UI;Arial Unicode MS</value>
       </prop>
       <prop oor:name="CTL_HEADING" oor:op="replace" oor:type="xs:string">
-        <value>Lohit Telugu;Gautami;Lucidasans;Lucida Sans;Arial Unicode MS</value>
+        <value>Lohit Telugu;Gautami;Lucidasans;Lucida Sans;Nirmala UI;Arial Unicode MS</value>
       </prop>
       <prop oor:name="CTL_PRESENTATION" oor:op="replace" oor:type="xs:string">
-        <value>Lohit Telugu;Gautami;Lucidasans;Lucida Sans;Arial Unicode MS</value>
+        <value>Lohit Telugu;Gautami;Lucidasans;Lucida Sans;Nirmala UI;Arial Unicode MS</value>
       </prop>
       <prop oor:name="CTL_SPREADSHEET" oor:op="replace" oor:type="xs:string">
-        <value>Lohit Telugu;Gautami;Lucidasans;Lucida Sans;Arial Unicode MS</value>
+        <value>Lohit Telugu;Gautami;Lucidasans;Lucida Sans;Nirmala UI;Arial Unicode MS</value>
       </prop>
       <prop oor:name="CTL_TEXT" oor:op="replace" oor:type="xs:string">
-        <value>Lohit Telugu;Gautami;Lucidasans;Lucida Sans;Arial Unicode MS</value>
+        <value>Lohit Telugu;Gautami;Lucidasans;Lucida Sans;Nirmala UI;Arial Unicode MS</value>
       </prop>
     </node>
     <node oor:name="ur" oor:op="replace">
@@ -2993,6 +2993,29 @@
         </prop>
         <prop oor:name="FontType">
           <value>Normal,Serif</value>
+        </prop>
+      </node>
+      <node oor:name="gautami" oor:op="replace">
+        <prop oor:name="SubstFonts">
+          <value>nirmalaui;arialunicodems;lucidaunicode</value>
+        </prop>
+        <prop oor:name="SubstFontsMS">
+          <value/>
+        </prop>
+        <prop oor:name="SubstFontsPS">
+          <value/>
+        </prop>
+        <prop oor:name="SubstFontsHTML">
+          <value>sans-serif</value>
+        </prop>
+        <prop oor:name="FontWeight">
+          <value>Normal</value>
+        </prop>
+        <prop oor:name="FontWidth">
+          <value>Normal</value>
+        </prop>
+        <prop oor:name="FontType">
+          <value>Normal,SansSerif</value>
         </prop>
       </node>
       <node oor:name="geneva" oor:op="replace">
