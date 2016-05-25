@@ -2373,7 +2373,6 @@ int UniscribeLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphs, Point& rPos,
         if( mpGlyphs2Chars )  // unless explicitly requested+provided
         {
             nCharPos = mpGlyphs2Chars[ nStart ];
-            assert(-1 != nCharPos);
         }
 
         // inject kashida glyphs if needed
