@@ -48,8 +48,7 @@ namespace o3tl {
 #define WINDOW_HELPTEXT                 0x0100
 #define WINDOW_QUICKTEXT                0x0200
 #define WINDOW_EXTRALONG                0x0800
-#define WINDOW_BORDER_STYLE             0x1000
-#define WINDOW_HELPID                   0x2000
+#define WINDOW_HELPID                   0x1000
 
 // For "WorkWindow" resources:
 

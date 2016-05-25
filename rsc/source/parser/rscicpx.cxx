@@ -281,22 +281,6 @@ RscTop * RscTypCont::InitClassWindow( RscTop * pSuper, RscEnum * pMapUnit,
     nId = aNmTb.Put( "ExtraLong", VARNAME );
     pClassWindow->SetVariable( nId, &aLong, nullptr, 0, WINDOW_EXTRALONG );
 
-    // border style
-    RscEnum* pBorderStyleEnum = new RscEnum( pHS->getID( "WindowBorderStyle" ), RSC_NOTYPE );
-    aBaseLst.push_back( pBorderStyleEnum );
-
-    // set constants in table
-    SETCONST( pBorderStyleEnum, pHS->getID( "WINDOW_BORDER_NORMAL" ),    WindowBorderStyle::NORMAL );
-    SETCONST( pBorderStyleEnum, pHS->getID( "WINDOW_BORDER_MONO" ),      WindowBorderStyle::MONO );
-    SETCONST( pBorderStyleEnum, pHS->getID( "WINDOW_BORDER_MENU" ),      WindowBorderStyle::MENU );
-    SETCONST( pBorderStyleEnum, pHS->getID( "WINDOW_BORDER_NOBORDER" ),  WindowBorderStyle::NOBORDER );
-
-    // add variable
-    nId = aNmTb.Put( "BorderStyle", VARNAME );
-    pClassWindow->SetVariable( nId, pBorderStyleEnum, nullptr,
-                                    0,
-                                    WINDOW_BORDER_STYLE );
-
     return pClassWindow;
 }
 

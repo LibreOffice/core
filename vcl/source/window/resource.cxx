@@ -146,12 +146,6 @@ void Window::ImplLoadRes( const ResId& rResId )
         sal_uIntPtr nRes = ReadLongRes();
         SetData( reinterpret_cast<void*>(nRes) );
     }
-
-    if ( nObjMask & WINDOW_BORDER_STYLE )
-    {
-        sal_uInt16 nBorderStyle = (sal_uInt16)ReadLongRes();
-        SetBorderStyle( static_cast<WindowBorderStyle>(nBorderStyle) );
-    }
 }
 
 } /* namespace vcl */
