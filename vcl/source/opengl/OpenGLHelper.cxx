@@ -290,12 +290,12 @@ namespace
             sal_uInt64 nBytesRead = 0;
             aFile.read( rBinary.data(), nSize, nBytesRead );
             assert( nSize == nBytesRead );
-            SAL_INFO("vcl.opengl", "Loading file: '" << rBinaryFileName << "': success" );
+            VCL_GL_INFO("Loading file: '" << rBinaryFileName << "': success" );
             return true;
         }
         else
         {
-            SAL_WARN("vcl.opengl", "Loading file: '" << rBinaryFileName << "': FAIL");
+            VCL_GL_INFO("Loading file: '" << rBinaryFileName << "': FAIL");
         }
 
         return false;
