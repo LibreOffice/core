@@ -67,7 +67,6 @@ OString loadShader(const OUString& rFilename)
 {
     OUString aFileURL = getShaderFolder() + rFilename +".glsl";
     osl::File aFile(aFileURL);
-    SAL_INFO("vcl.opengl", "Reading " << aFileURL);
     if(aFile.open(osl_File_OpenFlag_Read) == osl::FileBase::E_None)
     {
         sal_uInt64 nSize = 0;
@@ -77,11 +76,12 @@ OString loadShader(const OUString& rFilename)
         aFile.read(content.get(), nSize, nBytesRead);
         assert(nSize == nBytesRead);
         content.get()[nBytesRead] = 0;
+        SAL_INFO("vcl.opengl", "Read " << nBytesRead << " bytes from " << aFileURL);
         return OString(content.get());
     }
     else
     {
-        SAL_WARN("vcl.opengl", "could not load the file: " << aFileURL);
+        SAL_WARN("vcl.opengl", "Could not open " << aFileURL);
     }
 
     return OString();
