@@ -83,12 +83,9 @@ BackingWindow::BackingWindow( vcl::Window* i_pParent ) :
     Window( i_pParent ),
     mbLocalViewInitialized(false),
     maButtonsTextColor(officecfg::Office::Common::Help::StartCenter::StartCenterTextColor::get()),
-    mbIsSaveMode( false ),
     mbInitControls( false ),
     mnHideExternalLinks( 0 ),
-    maSelTemplates(cmpSelectionItems),
-    maSelFolders(cmpSelectionItems)
-
+    maSelTemplates(cmpSelectionItems)
 {
     m_pUIBuilder = new VclBuilder(this, getUIRootDir(), "sfx/ui/startcenter.ui", "StartCenter" );
 
@@ -279,8 +276,9 @@ void BackingWindow::initControls()
     mpTemplateButton->SetMenuMode( MENUBUTTON_MENUMODE_TIMED );
 
     //set handlers
-    mpLocalView->setOpenRegionHdl(LINK(this, BackingWindow, OpenRegionHdl));
-    mpLocalView->setOpenTemplateHdl(LINK(this,BackingWindow,OpenTemplateHdl));
+    mpLocalView->setRightClickHdl(LINK(this, BackingWindow, RightClickHdl));
+    mpLocalView->setOpenTemplateHdl(LINK(this, BackingWindow, OpenTemplateHdl));
+    mpLocalView->setEditTemplateHdl(LINK(this, BackingWindow, EditTemplateHdl));
 
     setupButton( mpOpenButton );
     setupButton( mpRemoteButton );
@@ -628,38 +626,60 @@ IMPL_LINK_TYPED( BackingWindow, MenuSelectHdl, MenuButton*, pButton, void )
     mpLocalView->GrabFocus();
 }
 
-
-IMPL_LINK_NOARG_TYPED( BackingWindow, OpenRegionHdl, void*, void)
+IMPL_LINK_TYPED(BackingWindow, RightClickHdl, ThumbnailViewItem*, pItem, void)
 {
-    maSelFolders.clear();
-    maSelTemplates.clear();
+    const TemplateViewItem *pViewItem = dynamic_cast<TemplateViewItem*>(pItem);
+
+    if (pViewItem)
+        mpLocalView->createContextMenu();
 }
 
 IMPL_LINK_TYPED(BackingWindow, OpenTemplateHdl, ThumbnailViewItem*, pItem, void)
 {
-    if (!mbIsSaveMode)
+    uno::Sequence< PropertyValue > aArgs(4);
+    aArgs[0].Name = "AsTemplate";
+    aArgs[0].Value <<= true;
+    aArgs[1].Name = "MacroExecutionMode";
+    aArgs[1].Value <<= MacroExecMode::USE_CONFIG;
+    aArgs[2].Name = "UpdateDocMode";
+    aArgs[2].Value <<= UpdateDocMode::ACCORDING_TO_CONFIG;
+    aArgs[3].Name = "InteractionHandler";
+    aArgs[3].Value <<= task::InteractionHandler::createWithParent( ::comphelper::getProcessComponentContext(), nullptr );
+
+    TemplateViewItem *pTemplateItem = static_cast<TemplateViewItem*>(pItem);
+
+    Reference< XDispatchProvider > xFrame( mxFrame, UNO_QUERY );
+
+    try
     {
-        uno::Sequence< PropertyValue > aArgs(4);
-        aArgs[0].Name = "AsTemplate";
-        aArgs[0].Value <<= true;
-        aArgs[1].Name = "MacroExecutionMode";
-        aArgs[1].Value <<= MacroExecMode::USE_CONFIG;
-        aArgs[2].Name = "UpdateDocMode";
-        aArgs[2].Value <<= UpdateDocMode::ACCORDING_TO_CONFIG;
-        aArgs[3].Name = "InteractionHandler";
-        aArgs[3].Value <<= task::InteractionHandler::createWithParent( ::comphelper::getProcessComponentContext(), nullptr );
+        dispatchURL( pTemplateItem->getPath(), "_default", xFrame, aArgs );
+    }
+    catch( const uno::Exception& )
+    {
+    }
+}
 
-        TemplateViewItem *pTemplateItem = static_cast<TemplateViewItem*>(pItem);
+IMPL_LINK_TYPED(BackingWindow, EditTemplateHdl, ThumbnailViewItem*, pItem, void)
+{
+    uno::Sequence< PropertyValue > aArgs(3);
+    aArgs[0].Name = "AsTemplate";
+    aArgs[0].Value <<= false;
+    aArgs[1].Name = "MacroExecutionMode";
+    aArgs[1].Value <<= MacroExecMode::USE_CONFIG;
+    aArgs[2].Name = "UpdateDocMode";
+    aArgs[2].Value <<= UpdateDocMode::ACCORDING_TO_CONFIG;
 
-        Reference< XDispatchProvider > xFrame( mxFrame, UNO_QUERY );
+    //uno::Reference< XStorable > xStorable;
+    TemplateViewItem *pViewItem = static_cast<TemplateViewItem*>(pItem);
 
-        try
-        {
-            dispatchURL( pTemplateItem->getPath(), "_default", xFrame, aArgs );
-        }
-        catch( const uno::Exception& )
-        {
-        }
+    Reference< XDispatchProvider > xFrame( mxFrame, UNO_QUERY );
+
+    try
+    {
+        dispatchURL( pViewItem->getPath(), "_default", xFrame, aArgs );
+    }
+    catch( const uno::Exception& )
+    {
     }
 }
 
