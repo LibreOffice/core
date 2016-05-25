@@ -34,6 +34,53 @@
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/document/XUndoManagerSupplier.hpp>
+#include <svtools/unitconv.hxx>
+#include <svtools/optionsdrawinglayer.hxx>
+
+namespace {
+    void lcl_FillPaperSizeListbox ( ListBox &rListBox)
+    {
+        std::map< sal_Int32, Paper > aPaperSizeMap =
+        {
+            { 0, PAPER_A6 },
+            { 1, PAPER_A5 },
+            { 2, PAPER_A4 },
+            { 3, PAPER_A3 },
+            { 4, PAPER_B6_ISO },
+            { 5, PAPER_B5_ISO },
+            { 6, PAPER_B4_ISO },
+            { 7, PAPER_LETTER },
+            { 8, PAPER_LEGAL },
+            { 9, PAPER_FANFOLD_LEGAL_DE },
+            { 10, PAPER_TABLOID },
+            { 11, PAPER_B6_JIS },
+            { 12, PAPER_B5_JIS },
+            { 13, PAPER_B4_JIS },
+            { 14, PAPER_KAI16 },
+            { 15, PAPER_KAI32 },
+            { 16, PAPER_KAI32BIG },
+            { 17, PAPER_USER },
+            { 18, PAPER_ENV_DL },
+            { 19, PAPER_ENV_C6 },
+            { 20, PAPER_ENV_C65 },
+            { 21, PAPER_ENV_C5 },
+            { 22, PAPER_ENV_C4 },
+            { 23, PAPER_ENV_PERSONAL },
+            { 24, PAPER_ENV_MONARCH },
+            { 25, PAPER_ENV_9 },
+            { 26, PAPER_ENV_10 },
+            { 27, PAPER_ENV_11 },
+            { 28, PAPER_ENV_12 },
+            { 29, PAPER_POSTCARD_JP }
+        };
+
+        for ( sal_Int32 nIdx = 0; nIdx < rListBox.GetEntryCount(); nIdx++ )
+        {
+            Paper eSize = aPaperSizeMap[nIdx];
+            rListBox.SetEntryData( nIdx, reinterpret_cast<void*>( (sal_uLong)eSize ));
+        }
+    }
+}
 
 namespace sw { namespace sidebar{
 
@@ -53,12 +100,21 @@ PageFormatPanel::PageFormatPanel(
     vcl::Window* pParent,
     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame
     ) :
-    PanelLayout(pParent, "PageFormatPanel", "modules/swriter/ui/pageformatpanel.ui", rxFrame)
+    PanelLayout(pParent, "PageFormatPanel", "modules/swriter/ui/pageformatpanel.ui", rxFrame),
+    mpBindings( pBindings ),
+    maPaperSizeController(SID_ATTR_PAGE_SIZE, *pBindings, *this),
+    maPaperOrientationController(SID_ATTR_PAGE, *pBindings, *this),
+    maMetricController(SID_ATTR_METRIC, *pBindings,*this),
+    mpPageItem( new SvxPageItem(SID_ATTR_PAGE) ),
+    meFUnit(GetModuleFieldUnit()),
+    meLastFUnit(GetModuleFieldUnit()),
+    meUnit()
 {
-    get(mpPaperSizeLB, "papersize");
+    get(mpPaperSizeBox, "papersize");
     get(mpPaperWidth, "paperwidth");
     get(mpPaperHeight, "paperheight");
     get(mpPaperOrientation, "paperorientation");
+    Initialize();
 }
 
 PageFormatPanel::~PageFormatPanel()
@@ -68,21 +124,163 @@ PageFormatPanel::~PageFormatPanel()
 
 void PageFormatPanel::dispose()
 {
-    mpPaperSizeLB.disposeAndClear();
+    mpPaperSizeBox.disposeAndClear();
     mpPaperWidth.disposeAndClear();
     mpPaperHeight.disposeAndClear();
     mpPaperOrientation.disposeAndClear();
 
+    maMetricController.dispose();
+    maPaperOrientationController.dispose();
+    maPaperSizeController.dispose();
+    mpPageItem.reset();
+
     PanelLayout::dispose();
 }
 
-void PageFormatPanel::NotifyItemUpdate(
-    const sal_uInt16 /*nSid*/,
-    const SfxItemState /*eState*/,
-    const SfxPoolItem* /*pState*/,
-    const bool /*bIsEnabled*/)
+void PageFormatPanel::Initialize()
 {
+    lcl_FillPaperSizeListbox( *mpPaperSizeBox );
 
+    meUnit = maPaperSizeController.GetCoreMetric();
+    SetFieldUnit( *mpPaperWidth, meFUnit );
+    SetFieldUnit( *mpPaperHeight, meFUnit );
+
+    const SvtOptionsDrawinglayer aDrawinglayerOpt;
+    mpPaperWidth->SetMax(mpPaperWidth->Normalize(aDrawinglayerOpt.GetMaximumPaperWidth()), FUNIT_CM);
+    mpPaperWidth->SetLast(mpPaperWidth->Normalize(aDrawinglayerOpt.GetMaximumPaperWidth()), FUNIT_CM);
+    mpPaperHeight->SetMax(mpPaperHeight->Normalize(aDrawinglayerOpt.GetMaximumPaperHeight()), FUNIT_CM);
+    mpPaperHeight->SetLast(mpPaperHeight->Normalize(aDrawinglayerOpt.GetMaximumPaperHeight()), FUNIT_CM);
+
+    mpPaperSizeBox->SetSelectHdl( LINK(this, PageFormatPanel, PaperFormatModifyHdl ));
+    mpPaperOrientation->SetSelectHdl( LINK(this, PageFormatPanel, PaperFormatModifyHdl ));
+    mpPaperHeight->SetModifyHdl( LINK(this, PageFormatPanel, PaperSizeModifyHdl ));
+    mpPaperWidth->SetModifyHdl( LINK(this, PageFormatPanel, PaperSizeModifyHdl ));
+
+    mpBindings->Update(SID_ATTR_METRIC);
+    mpBindings->Update(SID_ATTR_PAGE);
+    mpBindings->Update(SID_ATTR_PAGE_SIZE);
+}
+
+void PageFormatPanel::NotifyItemUpdate(
+    const sal_uInt16 nSId,
+    const SfxItemState eState,
+    const SfxPoolItem* pState,
+    const bool bIsEnabled)
+{
+    (void)bIsEnabled;
+
+    switch(nSId)
+    {
+        case SID_ATTR_PAGE_SIZE:
+        {
+            const SvxSizeItem* pSizeItem = nullptr;
+            if (eState >= SfxItemState::DEFAULT)
+                pSizeItem = dynamic_cast< const SvxSizeItem* >(pState);
+            if (pSizeItem)
+            {
+                Size aPaperSize = pSizeItem->GetSize();
+
+                mpPaperWidth->SetValue( mpPaperWidth->Normalize( aPaperSize.Width() ), FUNIT_TWIP );
+                mpPaperHeight->SetValue( mpPaperHeight->Normalize( aPaperSize.Height() ), FUNIT_TWIP );
+
+                if(mpPaperOrientation->GetSelectEntryPos() == 1)
+                   Swap(aPaperSize);
+
+                Paper ePaper = SvxPaperInfo::GetSvxPaper(aPaperSize, static_cast<MapUnit>(meUnit),true);
+                sal_Int32 nEntryCount = mpPaperSizeBox->GetEntryCount();
+
+                for (sal_Int32 i = 0; i < nEntryCount; ++i )
+                {
+                    Paper eTmp = (Paper)reinterpret_cast<sal_uLong>(mpPaperSizeBox->GetEntryData(i));
+                    if ( eTmp == ePaper )
+                    {
+                        mpPaperSizeBox->SelectEntryPos(i);
+                        break;
+                    }
+                }
+            }
+        }
+        break;
+        case SID_ATTR_METRIC:
+        {
+            meUnit = maPaperSizeController.GetCoreMetric();
+            meFUnit = GetCurrentUnit(eState, pState);
+            if(meFUnit != meLastFUnit)
+            {
+                SetFieldUnit( *mpPaperHeight, meFUnit );
+                SetFieldUnit( *mpPaperWidth, meFUnit );
+            }
+            meLastFUnit = meFUnit;
+        }
+        break;
+        case SID_ATTR_PAGE:
+        {
+            if ( eState >= SfxItemState::DEFAULT &&
+                pState && dynamic_cast< const SvxPageItem *>( pState ) !=  nullptr )
+            {
+                mpPageItem.reset( static_cast<SvxPageItem*>(pState->Clone()) );
+                if ( mpPageItem->IsLandscape() )
+                    mpPaperOrientation->SelectEntryPos(1);
+                else
+                    mpPaperOrientation->SelectEntryPos(0);
+            }
+        }
+        break;
+        default:
+            break;
+    }
+}
+
+IMPL_LINK_NOARG_TYPED(PageFormatPanel, PaperFormatModifyHdl, ListBox&, void)
+{
+    sal_uInt32 nPos = mpPaperSizeBox->GetSelectEntryPos();
+    Paper ePaper = (Paper)reinterpret_cast<sal_uLong>( mpPaperSizeBox->GetEntryData( nPos ) );
+    Size  aSize(SvxPaperInfo::GetPaperSize(ePaper, (MapUnit)(meUnit)));
+
+    if(mpPaperOrientation->GetSelectEntryPos() == 1)
+        Swap(aSize);
+
+    mpPageItem->SetLandscape(mpPaperOrientation->GetSelectEntryPos());
+    SvxSizeItem aSizeItem(SID_ATTR_PAGE_SIZE, aSize);
+    mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_SIZE, SfxCallMode::RECORD, { &aSizeItem, mpPageItem.get() });
+}
+
+IMPL_LINK_NOARG_TYPED(PageFormatPanel, PaperSizeModifyHdl, Edit&, void)
+{
+    Size aSize( GetCoreValue( *mpPaperWidth, meUnit ), GetCoreValue( *mpPaperHeight, meUnit));
+    SvxSizeItem aSizeItem(SID_ATTR_PAGE_SIZE, aSize);
+    mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_SIZE, SfxCallMode::RECORD, { &aSizeItem });
+}
+
+FieldUnit PageFormatPanel::GetCurrentUnit( SfxItemState eState, const SfxPoolItem* pState )
+{
+    FieldUnit eUnit = FUNIT_NONE;
+
+    if ( pState && eState >= SfxItemState::DEFAULT )
+        eUnit = (FieldUnit) static_cast<const SfxUInt16Item*>(pState)->GetValue();
+    else
+    {
+        SfxViewFrame* pFrame = SfxViewFrame::Current();
+        SfxObjectShell* pSh = nullptr;
+        if ( pFrame )
+            pSh = pFrame->GetObjectShell();
+        if ( pSh )
+        {
+            SfxModule* pModule = pSh->GetModule();
+            if ( pModule )
+            {
+                const SfxPoolItem* pItem = pModule->GetItem( SID_ATTR_METRIC );
+                if ( pItem )
+                    eUnit = (FieldUnit) static_cast<const SfxUInt16Item*>(pItem)->GetValue();
+            }
+            else
+            {
+                SAL_WARN("sw.sidebar", "GetModuleFieldUnit(): no module found");
+            }
+        }
+    }
+
+    return eUnit;
 }
 
 } }
