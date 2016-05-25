@@ -1284,6 +1284,67 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         putNestedSprm(m_aStates.top().aTableCellSprms, NS_ooxml::LN_CT_TcPrBase_tcMar, nSprm, std::make_shared<RTFValue>(aAttributes));
     }
     break;
+    case RTF_TRPADDFB:
+    case RTF_TRPADDFL:
+    case RTF_TRPADDFR:
+    case RTF_TRPADDFT:
+    {
+        RTFSprms aAttributes;
+        switch (nParam)
+        {
+        case 3:
+            aAttributes.set(NS_ooxml::LN_CT_TblWidth_type, std::make_shared<RTFValue>(NS_ooxml::LN_Value_ST_TblWidth_dxa));
+            break;
+        }
+        switch (nKeyword)
+        {
+        case RTF_TRPADDFB:
+            nSprm = NS_ooxml::LN_CT_TcMar_bottom;
+            break;
+        case RTF_TRPADDFL:
+            nSprm = NS_ooxml::LN_CT_TcMar_left;
+            break;
+        case RTF_TRPADDFR:
+            nSprm = NS_ooxml::LN_CT_TcMar_right;
+            break;
+        case RTF_TRPADDFT:
+            nSprm = NS_ooxml::LN_CT_TcMar_top;
+            break;
+        default:
+            break;
+        }
+        putNestedSprm(m_aStates.top().aTableCellSprms, NS_ooxml::LN_CT_TcPrBase_tcMar, nSprm, std::make_shared<RTFValue>(aAttributes));
+        putNestedSprm(m_aDefaultState.aTableCellSprms, NS_ooxml::LN_CT_TcPrBase_tcMar, nSprm, std::make_shared<RTFValue>(aAttributes));
+    }
+    break;
+    case RTF_TRPADDB:
+    case RTF_TRPADDL:
+    case RTF_TRPADDR:
+    case RTF_TRPADDT:
+    {
+        RTFSprms aAttributes;
+        aAttributes.set(NS_ooxml::LN_CT_TblWidth_w, std::make_shared<RTFValue>(nParam));
+        switch (nKeyword)
+        {
+        case RTF_TRPADDB:
+            nSprm = NS_ooxml::LN_CT_TcMar_bottom;
+            break;
+        case RTF_TRPADDL:
+            nSprm = NS_ooxml::LN_CT_TcMar_left;
+            break;
+        case RTF_TRPADDR:
+            nSprm = NS_ooxml::LN_CT_TcMar_right;
+            break;
+        case RTF_TRPADDT:
+            nSprm = NS_ooxml::LN_CT_TcMar_top;
+            break;
+        default:
+            break;
+        }
+        putNestedSprm(m_aStates.top().aTableCellSprms, NS_ooxml::LN_CT_TcPrBase_tcMar, nSprm, std::make_shared<RTFValue>(aAttributes));
+        putNestedSprm(m_aDefaultState.aTableCellSprms, NS_ooxml::LN_CT_TcPrBase_tcMar, nSprm, std::make_shared<RTFValue>(aAttributes));
+    }
+    break;
     case RTF_FI:
         putNestedAttribute(m_aStates.top().aParagraphSprms, NS_ooxml::LN_CT_PPrBase_ind, NS_ooxml::LN_CT_Ind_firstLine, pIntValue);
         break;
