@@ -21,10 +21,8 @@
 #define INCLUDED_OOX_SOURCE_DRAWINGML_DIAGRAM_DIAGRAMLAYOUTATOMS_HXX
 
 #include <map>
-#include <string>
-
 #include <memory>
-#include <boost/array.hpp>
+#include <array>
 
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/xml/sax/XFastAttributeList.hpp>
@@ -239,7 +237,7 @@ public:
     };
     // we know that the array is of fixed size
     // the use of Any allow having empty values
-    typedef boost::array< css::uno::Any, 9 > VarMap;
+    typedef std::array<css::uno::Any, 9> VarMap;
 
     LayoutNode() : mnChildOrder(0) {}
     virtual ~LayoutNode() { }
