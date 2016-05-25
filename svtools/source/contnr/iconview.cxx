@@ -30,10 +30,7 @@ IconView::IconView( vcl::Window* pParent, WinBits nBits )
     SetEntryHeight( 100 );
     SetEntryWidth( 100 );
 
-    if(pImp)
-        delete pImp;
-
-    pImp = new IconViewImpl( this, GetModel(), GetStyle() );
+    pImpl.reset( new IconViewImpl( this, GetModel(), GetStyle() ) );
 }
 
 void IconView::Resize()
@@ -92,7 +89,7 @@ void IconView::PaintEntry(SvTreeListEntry& rEntry, long nX, long nY,
 
     PreparePaint(rRenderContext, rEntry);
 
-    pImp->UpdateContextBmpWidthMax(&rEntry);
+    pImpl->UpdateContextBmpWidthMax(&rEntry);
 
     short nTempEntryHeight = GetEntryHeight();
     short nTempEntryWidth = GetEntryWidth();
