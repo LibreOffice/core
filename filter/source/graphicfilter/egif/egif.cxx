@@ -59,7 +59,7 @@ class GIFWriter
 
     void                WriteAnimation( const Animation& rAnimation );
     void                WriteBitmapEx( const BitmapEx& rBmpEx, const Point& rPoint, bool bExtended,
-                                       long nTimer = 0, Disposal eDisposal = DISPOSE_NOT );
+                                       long nTimer = 0, Disposal eDisposal = Disposal::Not );
 
     css::uno::Reference< css::task::XStatusIndicator > xStatusIndicator;
 
@@ -385,9 +385,9 @@ void GIFWriter::WriteImageExtension( long nTimer, Disposal eDisposal )
             cFlags |= 1;
 
         // set Disposal-value
-        if( eDisposal == DISPOSE_BACK )
+        if( eDisposal == Disposal::Back )
             cFlags |= ( 2 << 2 );
-        else if( eDisposal == DISPOSE_PREVIOUS )
+        else if( eDisposal == Disposal::Previous )
             cFlags |= ( 3 << 2 );
 
         m_rGIF.WriteUChar( 0x21 );

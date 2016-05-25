@@ -117,7 +117,7 @@ namespace
 
                 switch(rAnimBitmap.eDisposal)
                 {
-                    case DISPOSE_NOT:
+                    case Disposal::Not:
                     {
                         aVirtualDevice->DrawBitmapEx(rAnimBitmap.aPosPix, rAnimBitmap.aBmpEx);
                         Bitmap aMask = rAnimBitmap.aBmpEx.GetMask();
@@ -137,7 +137,7 @@ namespace
 
                         break;
                     }
-                    case DISPOSE_BACK:
+                    case Disposal::Back:
                     {
                         // #i70772# react on no mask, for primitives, too.
                         const Bitmap aMask(rAnimBitmap.aBmpEx.GetMask());
@@ -160,12 +160,7 @@ namespace
 
                         break;
                     }
-                    case DISPOSE_FULL:
-                    {
-                        aVirtualDevice->DrawBitmapEx(rAnimBitmap.aPosPix, rAnimBitmap.aBmpEx);
-                        break;
-                    }
-                    case DISPOSE_PREVIOUS :
+                    case Disposal::Previous :
                     {
                         aVirtualDevice->DrawBitmapEx(rAnimBitmap.aPosPix, rAnimBitmap.aBmpEx);
                         aVirtualDeviceMask->DrawBitmap(rAnimBitmap.aPosPix, rAnimBitmap.aBmpEx.GetMask());

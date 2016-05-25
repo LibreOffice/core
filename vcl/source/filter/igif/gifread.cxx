@@ -643,11 +643,11 @@ void GIFReader::CreateNewBitmaps()
     aAnimBmp.bUserInput = false;
 
     if( nGCDisposalMethod == 2 )
-        aAnimBmp.eDisposal = DISPOSE_BACK;
+        aAnimBmp.eDisposal = Disposal::Back;
     else if( nGCDisposalMethod == 3 )
-        aAnimBmp.eDisposal = DISPOSE_PREVIOUS;
+        aAnimBmp.eDisposal = Disposal::Previous;
     else
-        aAnimBmp.eDisposal = DISPOSE_NOT;
+        aAnimBmp.eDisposal = Disposal::Not;
 
     aAnimation.Insert( aAnimBmp );
 

@@ -27,12 +27,11 @@
 
 #define ANIMATION_TIMEOUT_ON_CLICK 2147483647L
 
-enum Disposal
+enum class Disposal
 {
-    DISPOSE_NOT,
-    DISPOSE_BACK,
-    DISPOSE_FULL,
-    DISPOSE_PREVIOUS
+    Not,
+    Back,
+    Previous
 };
 
 enum CycleMode
@@ -55,7 +54,7 @@ struct VCL_DLLPUBLIC AnimationBitmap
 
                     AnimationBitmap()
                         : nWait(0)
-                        , eDisposal(DISPOSE_NOT)
+                        , eDisposal(Disposal::Not)
                         , bUserInput(false)
                     {}
 
@@ -64,7 +63,7 @@ struct VCL_DLLPUBLIC AnimationBitmap
                         const Point& rPosPix,
                         const Size& rSizePix,
                         long _nWait = 0L,
-                        Disposal _eDisposal = DISPOSE_NOT
+                        Disposal _eDisposal = Disposal::Not
                     ) :
                         aBmpEx      ( rBmpEx ),
                         aPosPix     ( rPosPix ),

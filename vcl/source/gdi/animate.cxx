@@ -177,7 +177,7 @@ bool Animation::IsTransparent() const
     // graphics due to performance reasons.
     for(const AnimationBitmap* pAnimBmp : maList)
     {
-        if(  DISPOSE_BACK == pAnimBmp->eDisposal
+        if(  Disposal::Back == pAnimBmp->eDisposal
           && Rectangle( pAnimBmp->aPosPix, pAnimBmp->aSizePix ) != aRect
           )
         {
@@ -713,7 +713,7 @@ SvStream& WriteAnimation( SvStream& rOStm, const Animation& rAnimation )
             WritePair( rOStm, rAnimBmp.aSizePix );
             WritePair( rOStm, rAnimation.maGlobalSize );
             rOStm.WriteUInt16( ( ANIMATION_TIMEOUT_ON_CLICK == rAnimBmp.nWait ) ? 65535 : rAnimBmp.nWait );
-            rOStm.WriteUInt16( rAnimBmp.eDisposal );
+            rOStm.WriteUInt16( (sal_uInt16)rAnimBmp.eDisposal );
             rOStm.WriteBool( rAnimBmp.bUserInput );
             rOStm.WriteUInt32( rAnimation.mnLoopCount );
             rOStm.WriteUInt32( nDummy32 ); // Unused

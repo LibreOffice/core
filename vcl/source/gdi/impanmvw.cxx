@@ -37,7 +37,7 @@ ImplAnimView::ImplAnimView( Animation* pParent, OutputDevice* pOut,
         maClip          ( mpOut->GetClipRegion() ),
         mpBackground    ( VclPtr<VirtualDevice>::Create() ),
         mpRestore       ( VclPtr<VirtualDevice>::Create() ),
-        meLastDisposal  ( DISPOSE_BACK ),
+        meLastDisposal  ( Disposal::Back ),
         mbPause         ( false ),
         mbMarked        ( false ),
         mbHMirr         ( maSz.Width() < 0L ),
@@ -251,15 +251,15 @@ void ImplAnimView::draw( sal_uLong nPos, VirtualDevice* pVDev )
         // restore background after each run
         if( !nPos )
         {
-            meLastDisposal = DISPOSE_BACK;
+            meLastDisposal = Disposal::Back;
             maRestPt = Point();
             maRestSz = maSzPix;
         }
 
         // restore
-        if( ( DISPOSE_NOT != meLastDisposal ) && maRestSz.Width() && maRestSz.Height() )
+        if( ( Disposal::Not != meLastDisposal ) && maRestSz.Width() && maRestSz.Height() )
         {
-            if( DISPOSE_BACK == meLastDisposal )
+            if( Disposal::Back == meLastDisposal )
                 pDev->DrawOutDev( maRestPt, maRestSz, maRestPt, maRestSz, *mpBackground );
             else
                 pDev->DrawOutDev( maRestPt, maRestSz, Point(), maRestSz, *mpRestore );
@@ -272,7 +272,7 @@ void ImplAnimView::draw( sal_uLong nPos, VirtualDevice* pVDev )
         // What do we need to restore the next time?
         // Put it into a bitmap if needed, else delete
         // SaveBitmap to conserve memory
-        if( ( meLastDisposal == DISPOSE_BACK ) || ( meLastDisposal == DISPOSE_NOT ) )
+        if( ( meLastDisposal == Disposal::Back ) || ( meLastDisposal == Disposal::Not ) )
             mpRestore->SetOutputSizePixel( Size( 1, 1 ), false );
         else
         {
