@@ -72,8 +72,8 @@ OUString getCrashUserProfileDirectory()
 
 void CrashReporter::updateMinidumpLocation()
 {
-#if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID
     OUString aURL = getCrashUserProfileDirectory();
+#if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID
     OString aOStringUrl = OUStringToOString(aURL, RTL_TEXTENCODING_UTF8);
     google_breakpad::MinidumpDescriptor descriptor(aOStringUrl.getStr());
     mpExceptionHandler->set_minidump_descriptor(descriptor);
