@@ -906,8 +906,8 @@ void LinePropertyPanelBase::ActivateControls()
 
     mpGridLineProps->Enable( bLineStyle );
     mpBoxArrowProps->Enable( bLineStyle );
-    mpLBStart->Enable( bLineStyle );
-    mpLBEnd->Enable( bLineStyle );
+    mpLBStart->Enable( bLineStyle && mbArrowSupported );
+    mpLBEnd->Enable( bLineStyle && mbArrowSupported );
 }
 
 void LinePropertyPanelBase::setMapUnit(SfxMapUnit eMapUnit)
@@ -918,8 +918,7 @@ void LinePropertyPanelBase::setMapUnit(SfxMapUnit eMapUnit)
 void LinePropertyPanelBase::disableArrowHead()
 {
     mbArrowSupported = false;
-    mpLBStart->Hide();
-    mpLBEnd->Hide();
+    ActivateControls();
 }
 
 }} // end of namespace svx::sidebar
