@@ -22,9 +22,6 @@
 #include <cctype>
 #include <memory>
 
-#include <boost/preprocessor/repetition.hpp>
-#include <boost/preprocessor/iteration/local.hpp>
-
 #include <cppuhelper/supportsservice.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/bitmapex.hxx>
@@ -64,6 +61,16 @@ namespace dxcanvas
     {
         BITMAPINFOHEADER bmiHeader;
         RGBQUAD          bmiColors[256];
+        AlphaDIB()
+            : bmiHeader({0,0,0,1,8,BI_RGB,0,0,0,0,0})
+        {
+            for (size_t i = 0; i < 256; ++i)
+            {
+                // this here fills palette with grey level colors, starting
+                // from 0,0,0 up to 255,255,255
+                bmiColors[i] = { i,i,i,i };
+            }
+        }
     };
 
     uno::Any SAL_CALL CanvasBitmap::getFastPropertyValue( sal_Int32 nHandle )  throw (uno::RuntimeException)
@@ -158,20 +165,7 @@ namespace dxcanvas
                 }
                 else
                 {
-                    static AlphaDIB aDIB=
-                        {
-                            {0,0,0,1,8,BI_RGB,0,0,0,0,0},
-                            {
-                                // this here fills palette with grey
-                                // level colors, starting from 0,0,0
-                                // up to 255,255,255
-#define BOOST_PP_LOCAL_MACRO(n_) \
-                    BOOST_PP_COMMA_IF(n_) \
-                    {n_,n_,n_,n_}
-#define BOOST_PP_LOCAL_LIMITS     (0, 255)
-#include BOOST_PP_LOCAL_ITERATE()
-                            }
-                        };
+                    static AlphaDIB aDIB;
 
                     // need to copy&convert the bitmap, since dx
                     // canvas uses inline alpha channel
