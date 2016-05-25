@@ -107,7 +107,8 @@ ScImportOptionsDlg::ScImportOptionsDlg(
         bool                    bOnlyDbtoolsEncodings,
         bool                    bImport )
     :   ModalDialog ( pParent, "ImOptDialog",
-            "modules/scalc/ui/imoptdialog.ui" )
+            "modules/scalc/ui/imoptdialog.ui" ),
+        m_bIsAsciiImport( bAscii )
 {
     get(m_pFieldFrame, "fieldframe");
     get(m_pFtCharset, "charsetft");
@@ -291,7 +292,7 @@ sal_uInt16 ScImportOptionsDlg::GetCodeFromCombo( const ComboBox& rEd ) const
 
     if ( aStr.isEmpty() )
     {
-        nCode = 0;          // kein Trennzeichen
+        nCode = 0;          // no separator
     }
     else
     {
@@ -302,6 +303,11 @@ sal_uInt16 ScImportOptionsDlg::GetCodeFromCombo( const ComboBox& rEd ) const
     }
 
     return nCode;
+}
+
+OString ScImportOptionsDlg::GetScreenshotId() const
+{
+    return (m_bIsAsciiImport) ? GetHelpId() : GetHelpId() + "?config=NonTextImport";
 }
 
 IMPL_LINK_TYPED( ScImportOptionsDlg, FixedWidthHdl, Button*, pCheckBox, void )
