@@ -23,7 +23,6 @@
 #include <uielement/constitemcontainer.hxx>
 #include <uielement/rootitemcontainer.hxx>
 #include <uielement/statusbar.hxx>
-#include <helpid.hrc>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -114,7 +113,6 @@ void SAL_CALL StatusBarWrapper::initialize( const Sequence< Any >& aArguments ) 
                     pStatusBarManager = new StatusBarManager( m_xContext, xFrame, pStatusBar );
                     static_cast<FrameworkStatusBar*>(pStatusBar)->SetStatusBarManager( pStatusBarManager );
                     m_xStatusBarManager.set( static_cast< OWeakObject *>( pStatusBarManager ), UNO_QUERY );
-                    pStatusBar->SetUniqueId( HID_STATUSBAR );
                 }
             }
 

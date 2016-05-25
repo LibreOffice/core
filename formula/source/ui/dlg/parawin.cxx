@@ -364,12 +364,6 @@ void ParaWin::SetFunctionDesc(const IFunctionDescription* pFDesc)
         m_pEdArg3->SetHelpId( sHelpId );
         m_pEdArg4->SetHelpId( sHelpId );
 
-        //  Unique-IDs muessen gleich bleiben fuer Automatisierung
-        SetUniqueId( HID_FORMULA_FAP_PAGE );
-        m_pEdArg1->SetUniqueId( HID_FORMULA_FAP_EDIT1 );
-        m_pEdArg2->SetUniqueId( HID_FORMULA_FAP_EDIT2 );
-        m_pEdArg3->SetUniqueId( HID_FORMULA_FAP_EDIT3 );
-        m_pEdArg4->SetUniqueId( HID_FORMULA_FAP_EDIT4 );
         SetActiveLine(0);
     }
     else

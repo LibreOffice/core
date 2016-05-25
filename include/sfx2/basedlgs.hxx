@@ -40,16 +40,6 @@ class HelpButton;
 class Button;
 class FixedLine;
 
-//There is a hack which hides the HelpId for a Dialog in SfxModelessDialog
-//and SfxDockingWindow, where it is changed into a UniqueId and cleared
-//This reverses the clear of the HelpId
-
-inline void reverseUniqueHelpIdHack(vcl::Window &rWindow)
-{
-    if (rWindow.GetHelpId().isEmpty())
-        rWindow.SetHelpId(rWindow.GetUniqueId());
-}
-
 // class SfxModalDialog --------------------------------------------------
 
 class SFX2_DLLPUBLIC SfxModalDialog: public ModalDialog

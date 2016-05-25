@@ -53,7 +53,6 @@ OSectionWindow::OSectionWindow( OViewsWindow* _pParent,const uno::Reference< rep
 ,m_aSplitter(VclPtr<Splitter>::Create(this))
 ,m_aEndMarker( VclPtr<rptui::OEndMarker>::Create(this,_sColorEntry))
 {
-    SetUniqueId(UID_RPT_SECTIONSWINDOW);
     const MapMode& rMapMode = _pParent->GetMapMode();
     SetMapMode( rMapMode );
     ImplInitSettings();

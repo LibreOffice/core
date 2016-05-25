@@ -1179,9 +1179,6 @@ public:
     void                                SetHelpId( const OString& );
     const OString&                      GetHelpId() const;
 
-    void                                SetUniqueId( const OString& );
-    const OString&                      GetUniqueId() const;
-
     vcl::Window*                        FindWindow( const Point& rPos ) const;
 
     sal_uInt16                          GetChildCount() const;

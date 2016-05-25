@@ -826,24 +826,6 @@ SfxDockingWindow::SfxDockingWindow( SfxBindings *pBindinx, SfxChildWindow *pCW,
     pBindings(pBindinx),
     pMgr(pCW)
 {
-    if ( !GetHelpId().isEmpty() )
-    {
-        SetUniqueId( GetHelpId() );
-        SetHelpId("");
-    }
-    else
-    {
-        SfxViewFrame* pViewFrame = pBindings->GetDispatcher()->GetFrame();
-        SfxSlotPool* pSlotPool = pViewFrame->GetObjectShell()->GetModule()->GetSlotPool();
-        const SfxSlot* pSlot = pCW ? pSlotPool->GetSlot( pCW->GetType() ) : nullptr;
-        if ( pSlot )
-        {
-            OString aCmd("SFXDOCKINGWINDOW_");
-            aCmd += pSlot->GetUnoName();
-            SetUniqueId( aCmd );
-        }
-    }
-
     pImpl.reset( new SfxDockingWindow_Impl );
     pImpl->bConstructed = false;
     pImpl->pSplitWin = nullptr;
@@ -871,24 +853,6 @@ SfxDockingWindow::SfxDockingWindow( SfxBindings *pBindinx, SfxChildWindow *pCW,
     , pBindings(pBindinx)
     , pMgr(pCW)
 {
-    if ( !GetHelpId().isEmpty() )
-    {
-        SetUniqueId( GetHelpId() );
-        SetHelpId("");
-    }
-    else
-    {
-        SfxViewFrame* pViewFrame = pBindings->GetDispatcher()->GetFrame();
-        SfxSlotPool* pSlotPool = pViewFrame->GetObjectShell()->GetModule()->GetSlotPool();
-        const SfxSlot* pSlot = pCW ? pSlotPool->GetSlot( pCW->GetType() ) : nullptr;
-        if ( pSlot )
-        {
-            OString aCmd("SFXDOCKINGWINDOW_");
-            aCmd += pSlot->GetUnoName();
-            SetUniqueId( aCmd );
-        }
-    }
-
     pImpl.reset( new SfxDockingWindow_Impl );
     pImpl->bConstructed = false;
     pImpl->pSplitWin = nullptr;

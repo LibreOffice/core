@@ -163,9 +163,6 @@ AnimationWindow::AnimationWindow(SfxBindings* pInBindings, SfxChildWindow *pCW, 
     m_pCtlDisplay->set_vexpand(true);
     m_pCtlDisplay->Show();
 
-    //undo SfxDockingWindow HelpId clear hack
-    reverseUniqueHelpIdHack(*this);
-
     // create new document with page
     pMyDoc = new SdDrawDocument(DOCUMENT_TYPE_IMPRESS, nullptr);
     SdPage* pPage = pMyDoc->AllocSdPage(false);

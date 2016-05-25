@@ -94,7 +94,6 @@ void TabControl::ImplInit( vcl::Window* pParent, WinBits nStyle )
     mnCurPageId                 = 0;
     mbFormat                    = true;
     mbRestoreHelpId             = false;
-    mbRestoreUnqId              = false;
     mbSmallInvalidate           = false;
     mpTabCtrlData               = new ImplTabCtrlData;
     mpTabCtrlData->mpListBox    = nullptr;
@@ -625,8 +624,6 @@ void TabControl::ImplChangeTabPage( sal_uInt16 nId, sal_uInt16 nOldId )
     {
         if ( mbRestoreHelpId )
             pCtrlParent->SetHelpId( OString() );
-        if ( mbRestoreUnqId )
-            pCtrlParent->SetUniqueId( OString() );
         pOldPage->DeactivatePage();
     }
 
@@ -646,11 +643,6 @@ void TabControl::ImplChangeTabPage( sal_uInt16 nId, sal_uInt16 nOldId )
         {
             mbRestoreHelpId = true;
             pCtrlParent->SetHelpId( pPage->GetHelpId() );
-        }
-        if ( pCtrlParent->GetUniqueId().isEmpty() )
-        {
-            mbRestoreUnqId = true;
-            pCtrlParent->SetUniqueId( pPage->GetUniqueId() );
         }
 
         pPage->ActivatePage();

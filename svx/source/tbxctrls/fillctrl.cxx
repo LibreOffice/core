@@ -548,10 +548,6 @@ VclPtr<vcl::Window> SvxFillToolBoxControl::CreateItemWindow(vcl::Window *pParent
         mpFillControl->Resize();
         mpToolBoxColor->InsertItem(".uno:FillColor", m_xFrame, ToolBoxItemBits::DROPDOWNONLY, Size(mpToolBoxColor->GetSizePixel().Width(), 0));
 
-        mpLbFillAttr->SetUniqueId(HID_FILL_ATTR_LISTBOX);
-        mpToolBoxColor->SetUniqueId(HID_FILL_ATTR_LISTBOX);
-        mpLbFillType->SetUniqueId(HID_FILL_TYPE_LISTBOX);
-
         mpLbFillType->SetSelectHdl(LINK(this,SvxFillToolBoxControl,SelectFillTypeHdl));
         mpLbFillAttr->SetSelectHdl(LINK(this,SvxFillToolBoxControl,SelectFillAttrHdl));
 

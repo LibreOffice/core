@@ -174,8 +174,6 @@ BibFrameController_Impl::BibFrameController_Impl( const uno::Reference< awt::XWi
     ,pDatMan( pDataManager )
     ,pBibMod(nullptr)
 {
-    vcl::Window* pParent = VCLUnoHelper::GetWindow( xWindow );
-    pParent->SetUniqueId(UID_BIB_FRAME_WINDOW);
     bDisposing=false;
     bHierarchical=true;
     pImp = new BibFrameCtrl_Impl;

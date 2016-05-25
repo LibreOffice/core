@@ -621,7 +621,6 @@ void OSQLMessageBox::impl_addDetailsButton()
         PushButton* pButton = GetPushButton( RET_MORE );
         OSL_ENSURE( pButton, "OSQLMessageBox::impl_addDetailsButton: just added this button, why isn't it there?" );
         pButton->SetClickHdl( LINK( this, OSQLMessageBox, ButtonClickHdl ) );
-        pButton->SetUniqueId( UID_SQLERROR_BUTTONMORE );
     }
 }
 

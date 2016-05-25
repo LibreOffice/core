@@ -349,7 +349,6 @@ OTasksWindow::OTasksWindow(vcl::Window* _pParent,OApplicationDetailView* _pDetai
     ,m_aFL(VclPtr<FixedLine>::Create(this,WB_VERT))
     ,m_pDetailView(_pDetailView)
 {
-    SetUniqueId(UID_APP_TASKS_WINDOW);
     m_aCreation->SetHelpId(HID_APP_CREATION_LIST);
     m_aCreation->SetSelectHdl(LINK(this, OTasksWindow, OnEntrySelectHdl));
     m_aHelpText->SetHelpId(HID_APP_HELP_TEXT);
@@ -529,7 +528,6 @@ OApplicationDetailView::OApplicationDetailView(OAppBorderWindow& _rParent,Previe
     ,m_aContainer(VclPtr<dbaui::OTitleWindow>::Create(this,0,WB_BORDER | WB_DIALOGCONTROL) )
     ,m_rBorderWin(_rParent)
 {
-    SetUniqueId(UID_APP_DETAIL_VIEW);
     ImplInitSettings();
 
     m_pControlHelper = VclPtr<OAppDetailPageHelper>::Create(m_aContainer.get(),m_rBorderWin,_ePreviewMode);
@@ -540,10 +538,8 @@ OApplicationDetailView::OApplicationDetailView(OAppBorderWindow& _rParent,Previe
     pTasks->Show();
     pTasks->Disable(m_rBorderWin.getView()->getCommandController().isDataSourceReadOnly());
     m_aTasks->setChildWindow(pTasks);
-    m_aTasks->SetUniqueId(UID_APP_TASKS_VIEW);
     m_aTasks->Show();
 
-    m_aContainer->SetUniqueId(UID_APP_CONTAINER_VIEW);
     m_aContainer->Show();
 
     const long  nFrameWidth = LogicToPixel( Size( 3, 0 ), MAP_APPFONT ).Width();
@@ -552,7 +548,6 @@ OApplicationDetailView::OApplicationDetailView(OAppBorderWindow& _rParent,Previe
     set(m_aContainer.get(),m_aTasks.get());
 
     m_aHorzSplitter->Show();
-    m_aHorzSplitter->SetUniqueId(UID_APP_VIEW_HORZ_SPLIT);
     setSplitter(m_aHorzSplitter.get());
 }
 

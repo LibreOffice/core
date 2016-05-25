@@ -131,7 +131,6 @@ ScPreview::ScPreview( vcl::Window* pParent, ScDocShell* pDocSh, ScPreviewShell* 
     SetBackground();
 
     SetHelpId( HID_SC_WIN_PREVIEW );
-    SetUniqueId( HID_SC_WIN_PREVIEW );
 
     SetDigitLanguage( SC_MOD()->GetOptDigitLanguage() );
 

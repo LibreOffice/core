@@ -87,7 +87,6 @@ namespace offapp
         OUString implGetCellText(const DriverPoolingSettings::const_iterator& _rPos, sal_uInt16 _nColId) const;
     };
 
-
     DriverListControl::DriverListControl(vcl::Window* _pParent)
         :EditBrowseBox(_pParent, EditBrowseBoxFlags::NO_HANDLE_COLUMN_CONTENT, WB_BORDER,
                        BrowserMode::AUTO_VSCROLL | BrowserMode::AUTO_HSCROLL | BrowserMode::HIDECURSOR | BrowserMode::AUTOSIZE_LASTCOL | BrowserMode::KEEPHIGHLIGHT)
@@ -96,8 +95,6 @@ namespace offapp
         ,m_sNo(CUI_RES(RID_SVXSTR_NO))
     {
         SetStyle((GetStyle() & ~WB_HSCROLL) | WB_AUTOHSCROLL);
-
-        SetUniqueId(UID_OFA_CONNPOOL_DRIVERLIST_BACK);
     }
 
     VCL_BUILDER_FACTORY(DriverListControl)
@@ -107,7 +104,6 @@ namespace offapp
         // no travelling within the fields via RETURN and TAB
         return false;
     }
-
 
     bool DriverListControl::isModified() const
     {

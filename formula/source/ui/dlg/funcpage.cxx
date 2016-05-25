@@ -69,7 +69,6 @@ FuncPage::FuncPage(vcl::Window* pParent,const IFunctionManager* _pFunctionManage
     m_pLbFunction->set_height_request(aSize.Height());
     m_pLbFunction->set_width_request(aSize.Width());
     m_aHelpId = m_pLbFunction->GetHelpId();
-    m_pLbFunction->SetUniqueId(m_aHelpId);
 
     InitLRUList();
 

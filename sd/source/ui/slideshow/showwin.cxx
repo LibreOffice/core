@@ -64,7 +64,6 @@ ShowWindow::ShowWindow( const ::rtl::Reference< SlideshowImpl >& xController, vc
 
     // set HelpId
     SetHelpId( HID_SD_WIN_PRESENTATION );
-    SetUniqueId( HID_SD_WIN_PRESENTATION );
 
     maPauseTimer.SetTimeoutHdl( LINK( this, ShowWindow, PauseTimeoutHdl ) );
     maPauseTimer.SetTimeout( 1000 );

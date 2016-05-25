@@ -376,9 +376,7 @@ bool SbaTableQueryBrowser::Construct(vcl::Window* pParent)
         m_pTreeView->setSelChangeHdl( LINK( this, SbaTableQueryBrowser, OnSelectionChange ) );
 
         // TODO
-        getBrowserView()->getVclControl()->GetDataWindow().SetUniqueId(UID_DATABROWSE_DATAWINDOW);
         getBrowserView()->getVclControl()->SetHelpId(HID_CTL_TABBROWSER);
-        getBrowserView()->SetUniqueId(UID_CTL_CONTENT);
         if (getBrowserView()->getVclControl()->GetHeaderBar())
             getBrowserView()->getVclControl()->GetHeaderBar()->SetHelpId(HID_DATABROWSE_HEADER);
         InvalidateFeature(ID_BROWSER_EXPLORER);

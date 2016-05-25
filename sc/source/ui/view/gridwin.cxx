@@ -518,7 +518,6 @@ ScGridWindow::ScGridWindow( vcl::Window* pParent, ScViewData* pData, ScSplitPos 
     SetDialogControlFlags( DialogControlFlags::Return | DialogControlFlags::WantFocus );
 
     SetHelpId( HID_SC_WIN_GRIDWIN );
-    SetUniqueId( HID_SC_WIN_GRIDWIN );
 
     SetDigitLanguage( SC_MOD()->GetOptDigitLanguage() );
     EnableRTL( false );

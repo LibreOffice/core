@@ -1165,9 +1165,7 @@ namespace pcr
 
             m_aOutOfDateLines.insert( nPos );
             rLine.pLine->SetComponentHelpIds(
-                HelpIdUrl::getHelpId( _rPropertyData.HelpURL ),
-                OUStringToOString( _rPropertyData.PrimaryButtonId, RTL_TEXTENCODING_UTF8 ),
-                OUStringToOString( _rPropertyData.SecondaryButtonId, RTL_TEXTENCODING_UTF8 )
+                HelpIdUrl::getHelpId( _rPropertyData.HelpURL )
             );
 
             if ( _rPropertyData.bReadOnly )

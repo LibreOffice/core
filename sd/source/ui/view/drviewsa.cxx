@@ -281,7 +281,6 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
     {
         SetHelpId( SD_IF_SDGRAPHICVIEWSHELL );
         GetActiveWindow()->SetHelpId( HID_SDGRAPHICVIEWSHELL );
-        GetActiveWindow()->SetUniqueId( HID_SDGRAPHICVIEWSHELL );
     }
     else
     {
@@ -289,7 +288,6 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
         {
             SetHelpId( SID_NOTES_MODE );
             GetActiveWindow()->SetHelpId( CMD_SID_NOTES_MODE );
-            GetActiveWindow()->SetUniqueId( CMD_SID_NOTES_MODE );
 
             // AutoLayouts have to be created
             GetDoc()->StopWorkStartupDelay();
@@ -298,7 +296,6 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
         {
             SetHelpId( SID_HANDOUT_MASTER_MODE );
             GetActiveWindow()->SetHelpId( CMD_SID_HANDOUT_MASTER_MODE );
-            GetActiveWindow()->SetUniqueId( CMD_SID_HANDOUT_MASTER_MODE );
 
             // AutoLayouts have to be created
             GetDoc()->StopWorkStartupDelay();
@@ -307,7 +304,6 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
         {
             SetHelpId( SD_IF_SDDRAWVIEWSHELL );
             GetActiveWindow()->SetHelpId( HID_SDDRAWVIEWSHELL );
-            GetActiveWindow()->SetUniqueId( HID_SDDRAWVIEWSHELL );
         }
     }
 

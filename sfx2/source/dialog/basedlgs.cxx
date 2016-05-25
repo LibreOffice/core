@@ -318,7 +318,6 @@ void SfxModelessDialog::Init(SfxBindings *pBindinx, SfxChildWindow *pCW)
     pImpl.reset(new SfxModelessDialog_Impl);
     pImpl->pMgr = pCW;
     pImpl->bConstructed = false;
-    SetUniqueId( GetHelpId() );
     if ( pBindinx )
         pImpl->StartListening( *pBindinx );
     pImpl->aMoveIdle.SetPriority(SchedulerPriority::RESIZE);
@@ -455,8 +454,6 @@ SfxFloatingWindow::SfxFloatingWindow( SfxBindings *pBindinx,
 {
     pImpl->pMgr = pCW;
     pImpl->bConstructed = false;
-    SetUniqueId( GetHelpId() );
-    SetHelpId("");
     if ( pBindinx )
         pImpl->StartListening( *pBindinx );
     pImpl->aMoveIdle.SetPriority(SchedulerPriority::RESIZE);
@@ -473,10 +470,6 @@ SfxFloatingWindow::SfxFloatingWindow( SfxBindings *pBindinx,
 {
     pImpl->pMgr = pCW;
     pImpl->bConstructed = false;
-
-    //do we really need this odd helpid/uniqueid dance ?
-    SetUniqueId( GetHelpId() );
-    SetHelpId("");
 
     if ( pBindinx )
         pImpl->StartListening( *pBindinx );
@@ -756,9 +749,6 @@ void SfxSingleTabDialog::SetTabPage(SfxTabPage* pTabPage,
         OString sHelpId(pImpl->m_pSfxPage->GetHelpId());
         if (!sHelpId.isEmpty())
             SetHelpId(sHelpId);
-        OString sUniqueId(pImpl->m_pSfxPage->GetUniqueId());
-        if (!sUniqueId.isEmpty())
-            SetUniqueId(sUniqueId);
     }
 }
 

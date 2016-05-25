@@ -55,7 +55,6 @@ private:
     sal_uInt16          mnCurPageId;
     bool                mbFormat;
     bool                mbRestoreHelpId;
-    bool                mbRestoreUnqId;
     bool                mbSmallInvalidate;
     bool                mbLayoutDirty;
     Link<TabControl*,void> maActivateHdl;

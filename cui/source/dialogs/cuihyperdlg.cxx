@@ -70,17 +70,9 @@ void SvxHlinkCtrl::StateChanged( sal_uInt16 nSID, SfxItemState eState,
     }
 }
 
-
 //#                                                                      #
 //# Hyperlink - Dialog                                                   #
 //#                                                                      #
-
-
-/*************************************************************************
-|*
-|* Constructor / Destructor
-|*
-|************************************************************************/
 
 SvxHpLinkDlg::SvxHpLinkDlg (vcl::Window* pParent, SfxBindings* pBindings)
 :   IconChoiceDialog( pParent, "HyperlinkDialog", "cui/ui/hyperlinkdialog.ui" ),
@@ -89,7 +81,6 @@ SvxHpLinkDlg::SvxHpLinkDlg (vcl::Window* pParent, SfxBindings* pBindings)
     mbReadOnly      ( false ),
     mbIsHTMLDoc     ( false )
 {
-    SetUniqueId( HID_HYPERLINK_DIALOG );
     mbGrabFocus = true;
     // insert pages
     std::vector<Image> imgVector;

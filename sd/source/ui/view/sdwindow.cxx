@@ -84,10 +84,6 @@ Window::Window(vcl::Window* pParent)
         ? sd::OUTPUT_DRAWMODE_CONTRAST
         : sd::OUTPUT_DRAWMODE_COLOR );
 
-    // set Help ID
-    // SetHelpId(HID_SD_WIN_DOCUMENT);
-    SetUniqueId(HID_SD_WIN_DOCUMENT);
-
     // #i78183# Added after discussed with AF
     EnableRTL(false);
 }

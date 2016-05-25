@@ -54,8 +54,6 @@ OStartMarker::OStartMarker(OSectionWindow* _pParent,const OUString& _sColorEntry
 ,m_pParent(_pParent)
 ,m_bShowRuler(true)
 {
-    SetUniqueId(HID_RPT_STARTMARKER);
-
     osl_atomic_increment(&s_nImageRefCount);
     initDefaultNodeImages();
     ImplInitSettings();

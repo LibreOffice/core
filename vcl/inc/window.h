@@ -233,7 +233,6 @@ public:
     long                mnAbsScreenX;
     Point               maPos;
     OString             maHelpId;
-    OString             maUniqId;
     OUString            maHelpText;
     OUString            maQuickHelpText;
     InputContext        maInputContext;

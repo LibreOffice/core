@@ -34,7 +34,6 @@
 #include <vcl/commandinfoprovider.hxx>
 #include <rtl/ustrbuf.hxx>
 #include "helper/mischelper.hxx"
-#include "helpid.hrc"
 #include <osl/mutex.hxx>
 
 using namespace com::sun::star::uno;

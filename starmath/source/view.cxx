@@ -109,7 +109,6 @@ SmGraphicWindow::SmGraphicWindow(SmViewShell* pShell)
     SetTotalSize();
 
     SetHelpId(HID_SMA_WIN_DOCUMENT);
-    SetUniqueId(HID_SMA_WIN_DOCUMENT);
 
     ShowLine(false);
     CaretBlinkInit();

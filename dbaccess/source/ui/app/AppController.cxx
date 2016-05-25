@@ -420,7 +420,6 @@ void SAL_CALL OApplicationController::disposing()
 bool OApplicationController::Construct(vcl::Window* _pParent)
 {
     setView( VclPtr<OApplicationView>::Create( _pParent, getORB(), *this, m_ePreviewMode ) );
-    getView()->SetUniqueId(UID_APP_VIEW);
 
     // late construction
     bool bSuccess = false;

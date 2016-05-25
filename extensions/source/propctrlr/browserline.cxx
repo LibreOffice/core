@@ -84,8 +84,7 @@ namespace pcr
         }
     }
 
-
-    void OBrowserLine::SetComponentHelpIds( const OString& _rHelpId, const OString& _sPrimaryButtonId, const OString& _sSecondaryButtonId )
+    void OBrowserLine::SetComponentHelpIds(const OString& _rHelpId)
     {
         if ( m_pControlWindow )
             m_pControlWindow->SetHelpId( _rHelpId );
@@ -93,16 +92,13 @@ namespace pcr
         if ( m_pBrowseButton )
         {
             m_pBrowseButton->SetHelpId( _rHelpId );
-            m_pBrowseButton->SetUniqueId( _sPrimaryButtonId );
 
             if ( m_pAdditionalBrowseButton )
             {
                 m_pAdditionalBrowseButton->SetHelpId( _rHelpId );
-                m_pAdditionalBrowseButton->SetUniqueId( _sSecondaryButtonId );
             }
         }
     }
-
 
     void OBrowserLine::setControl( const Reference< XPropertyControl >& _rxControl )
     {

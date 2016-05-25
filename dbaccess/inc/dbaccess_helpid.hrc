@@ -23,9 +23,7 @@
 
 #define HID_DATABROWSE_HEADER                             "DBACCESS_HID_DATABROWSE_HEADER"
 #define HID_CTL_TABBROWSER                                "DBACCESS_HID_CTL_TABBROWSER"
-#define UID_DATABROWSE_DATAWINDOW                         "DBACCESS_UID_DATABROWSE_DATAWINDOW"
 #define HID_CTL_TREEVIEW                                  "DBACCESS_HID_CTL_TREEVIEW"
-#define UID_CTL_CONTENT                                   "DBACCESS_UID_CTL_CONTENT"
 #define HID_TLB_TREELISTBOX                               "DBACCESS_HID_TLB_TREELISTBOX"
 
 #define HID_DSADMIN_BROWSECONN                            "DBACCESS_HID_DSADMIN_BROWSECONN"
@@ -40,9 +38,6 @@
 #define HID_CTL_QRYSQLEDIT                                "DBACCESS_HID_CTL_QRYSQLEDIT"
 
 #define HID_BROWSER_QUERY_CREATE_TEXT                     "DBACCESS_HID_BROWSER_QUERY_CREATE_TEXT"
-
-#define UID_SQLERROR_BUTTONMORE                           "DBACCESS_UID_SQLERROR_BUTTONMORE"
-
 
 #define HID_CTL_QRYDGNTAB                                 "DBACCESS_HID_CTL_QRYDGNTAB"
 #define HID_CTL_QRYDGNCRIT                                "DBACCESS_HID_CTL_QRYDGNCRIT"
@@ -97,8 +92,6 @@
 #define HID_DSADMIN_MOZILLA_PROFILE_NAME                  "DBACCESS_HID_DSADMIN_MOZILLA_PROFILE_NAME"
 #define HID_DSADMIN_THUNDERBIRD_PROFILE_NAME              "DBACCESS_HID_DSADMIN_THUNDERBIRD_PROFILE_NAME"
 
-#define UID_DLGINDEX_INDEXDETAILS_BACK                    "DBACCESS_UID_DLGINDEX_INDEXDETAILS_BACK"
-#define UID_DLGINDEX_INDEXDETAILS_MAIN                    "DBACCESS_UID_DLGINDEX_INDEXDETAILS_MAIN"
 #define HID_DLGINDEX_INDEXDETAILS_FIELD                   "DBACCESS_HID_DLGINDEX_INDEXDETAILS_FIELD"
 #define HID_DLGINDEX_INDEXDETAILS_SORTORDER               "DBACCESS_HID_DLGINDEX_INDEXDETAILS_SORTORDER"
 
@@ -116,31 +109,20 @@
 #define HID_DSADMIN_CALC_PATH                             "DBACCESS_HID_DSADMIN_CALC_PATH"
 #define HID_DSADMIN_ORACLE_DATABASE                       "DBACCESS_HID_DSADMIN_ORACLE_DATABASE"
 
-#define UID_APP_VIEW                                      "DBACCESS_UID_APP_VIEW"
 #define HID_APP_TABLE_TREE                                "DBACCESS_HID_APP_TABLE_TREE"
 #define HID_APP_FORM_TREE                                 "DBACCESS_HID_APP_FORM_TREE"
 #define HID_APP_QUERY_TREE                                "DBACCESS_HID_APP_QUERY_TREE"
 #define HID_APP_REPORT_TREE                               "DBACCESS_HID_APP_REPORT_TREE"
-#define UID_APP_DETAIL_VIEW                               "DBACCESS_UID_APP_DETAIL_VIEW"
-#define UID_APP_VIEW_BORDER_WIN                           "DBACCESS_UID_APP_VIEW_BORDER_WIN"
 #define HID_APP_CREATION_LIST                             "DBACCESS_HID_APP_CREATION_LIST"
-#define UID_APP_SWAP_VIEW                                 "DBACCESS_UID_APP_SWAP_VIEW"
 #define HID_APP_SWAP_ICONCONTROL                          "DBACCESS_HID_APP_SWAP_ICONCONTROL"
 
 
 #define HID_APP_HELP_TEXT                                 "DBACCESS_HID_APP_HELP_TEXT"
-#define UID_APP_DATABASE_VIEW                             "DBACCESS_UID_APP_DATABASE_VIEW"
-#define UID_APP_TASKS_VIEW                                "DBACCESS_UID_APP_TASKS_VIEW"
-#define UID_APP_CONTAINER_VIEW                            "DBACCESS_UID_APP_CONTAINER_VIEW"
-#define UID_APP_TASKS_WINDOW                              "DBACCESS_UID_APP_TASKS_WINDOW"
 #define HID_APP_DESCRIPTION_TEXT                          "DBACCESS_HID_APP_DESCRIPTION_TEXT"
-#define UID_APP_DETAILPAGE_HELPER                         "DBACCESS_UID_APP_DETAILPAGE_HELPER"
 #define HID_APP_VIEW_PREVIEW_CB                           "DBACCESS_HID_APP_VIEW_PREVIEW_CB"
 #define HID_APP_VIEW_PREVIEW_1                            "DBACCESS_HID_APP_VIEW_PREVIEW_1"
 #define HID_APP_VIEW_PREVIEW_2                            "DBACCESS_HID_APP_VIEW_PREVIEW_2"
 #define HID_TABDESIGN_HELPTEXT                            "DBACCESS_HID_TABDESIGN_HELPTEXT"
-#define UID_APP_VIEW_HORZ_SPLIT                           "DBACCESS_UID_APP_VIEW_HORZ_SPLIT"
-#define UID_APP_VIEW_PREVIEW_1                            "DBACCESS_UID_APP_VIEW_PREVIEW_1"
 #define HID_APP_VIEW_PREVIEW_3                            "DBACCESS_HID_APP_VIEW_PREVIEW_3"
 
 
@@ -148,7 +130,6 @@
 #define HID_DBWIZ_NEXT                                    "DBACCESS_HID_DBWIZ_NEXT"
 #define HID_DBWIZ_CANCEL                                  "DBACCESS_HID_DBWIZ_CANCEL"
 #define HID_DBWIZ_FINISH                                  "DBACCESS_HID_DBWIZ_FINISH"
-#define UID_DBWIZ_HELP                                    "DBACCESS_UID_DBWIZ_HELP"
 
 #define HID_BROWSER_ADMINISTRATE                          "DBACCESS_HID_BROWSER_ADMINISTRATE"
 

@@ -75,9 +75,6 @@ namespace dbaui
         , m_nMaxColumnsInIndex(0)
         , m_bAddIndexAppendix(false)
     {
-
-        SetUniqueId( UID_DLGINDEX_INDEXDETAILS_BACK );
-        GetDataWindow().SetUniqueId( UID_DLGINDEX_INDEXDETAILS_MAIN );
     }
 
     VCL_BUILDER_DECL_FACTORY(DbaIndexFieldsControl)

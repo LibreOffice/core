@@ -138,8 +138,6 @@ DigitalSignaturesDialog::DigitalSignaturesDialog(
     pSignatures->set_height_request(aControlSize.Height());
 
     m_pSignaturesLB = VclPtr<SvSimpleTable>::Create(*pSignatures);
-    // #i48253# the tablistbox needs its own unique id
-    m_pSignaturesLB->Window::SetUniqueId( HID_XMLSEC_TREE_SIGNATURESDLG );
     // Give the first column 6 percent, try to distribute the rest equally.
     static long aTabs[] = { 5, 0, 6*nControlWidth/100, 30*nControlWidth/100, 54*nControlWidth/100, 78*nControlWidth/100 };
     m_pSignaturesLB->SetTabs(aTabs);

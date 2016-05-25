@@ -87,7 +87,6 @@ ODbTypeWizDialog::ODbTypeWizDialog(vcl::Window* _pParent
     m_pNextPage->SetHelpId(HID_DBWIZ_NEXT);
     m_pCancel->SetHelpId(HID_DBWIZ_CANCEL);
     m_pFinish->SetHelpId(HID_DBWIZ_FINISH);
-    m_pHelp->SetUniqueId(UID_DBWIZ_HELP);
     // no local resources needed anymore
 
     const DbuTypeCollectionItem* pCollectionItem = dynamic_cast<const DbuTypeCollectionItem*>( _pItems->GetItem(DSID_TYPECOLLECTION) );

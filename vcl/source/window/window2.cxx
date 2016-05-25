@@ -909,16 +909,6 @@ const OString& Window::GetHelpId() const
     return mpWindowImpl->maHelpId;
 }
 
-void Window::SetUniqueId( const OString& rUniqueId )
-{
-    mpWindowImpl->maUniqId = rUniqueId;
-}
-
-const OString& Window::GetUniqueId() const
-{
-    return mpWindowImpl->maUniqId;
-}
-
 // --------- old inline methods ---------------
 
 vcl::Window* Window::ImplGetWindow()

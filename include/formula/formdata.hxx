@@ -23,7 +23,7 @@
 #include <formula/formuladllapi.h>
 #include <rtl/ustring.hxx>
 #include <tools/gen.hxx>
-
+#include <vcl/window.hxx>
 
 namespace formula
 {
@@ -43,7 +43,7 @@ public:
     inline sal_uInt16       GetEdFocus() const  { return nEdFocus; }
     inline const OUString&  GetUndoStr() const  { return aUndoStr; }
     inline bool             GetMatrixFlag()const{ return bMatrix;}
-    const OString&          GetUniqueId()const  { return aUniqueId;}
+    const VclPtr<vcl::Window>& GetFocusWindow()const  { return xFocusWin; }
     inline const Selection& GetSelection()const { return aSelection;}
 
     inline void             SetMode( sal_uInt16 nNew )                  { nMode = nNew; }
@@ -52,7 +52,7 @@ public:
     inline void             SetEdFocus( sal_uInt16 nNew )               { nEdFocus = nNew; }
     inline void             SetUndoStr( const OUString& rNew )          { aUndoStr = rNew; }
     inline void             SetMatrixFlag(bool bNew)                    { bMatrix=bNew;}
-    inline void             SetUniqueId(const OString& nNew)            { aUniqueId=nNew;}
+    inline void             SetFocusWindow(const VclPtr<vcl::Window>& rWin) { xFocusWin=rWin;}
     inline void             SetSelection(const Selection& aSel)         { aSelection=aSel;}
 protected:
     void                Reset();
@@ -69,7 +69,7 @@ private:
     sal_uInt16          nEdFocus;
     OUString            aUndoStr;
     bool                bMatrix;
-    OString             aUniqueId;
+    VclPtr<vcl::Window> xFocusWin;
     Selection           aSelection;
 };
 

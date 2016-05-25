@@ -167,14 +167,12 @@ bool lcl_getNewRectSize(const Rectangle& _aObjRect,long& _nXMov, long& _nYMov,Sd
     return bMoveAllowed;
 }
 
-
 OViewsWindow::OViewsWindow( OReportWindow* _pReportWindow)
     : Window( _pReportWindow,WB_DIALOGCONTROL)
     , m_pParent(_pReportWindow)
     , m_bInUnmark(false)
 {
     SetPaintTransparent(true);
-    SetUniqueId(UID_RPT_VIEWSWINDOW);
     SetMapMode(MapMode(MAP_100TH_MM));
     m_aColorConfig.AddListener(this);
     ImplInitSettings();

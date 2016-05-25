@@ -35,7 +35,6 @@
 #define HID_EDITENG_SPELLER_PARALANGUAGE                      "SVX_HID_EDITENG_SPELLER_PARALANGUAGE"
 #define HID_EDITENG_SPELLER_START                             "SVX_HID_EDITENG_SPELLER_START"
 #define HID_EDITENG_SPELLER_WORDLANGUAGE                      "SVX_HID_EDITENG_SPELLER_WORDLANGUAGE"
-#define HID_FILL_ATTR_LISTBOX                                "SVX_HID_FILL_ATTR_LISTBOX"
 #define HID_FILL_TYPE_LISTBOX                                 "SVX_HID_FILL_TYPE_LISTBOX"
 #define HID_GALLERY_ICONVIEW                                  "SVX_HID_GALLERY_ICONVIEW"
 #define HID_GALLERY_LISTVIEW                                  "SVX_HID_GALLERY_LISTVIEW"

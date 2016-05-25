@@ -92,7 +92,7 @@ namespace abp
         m_pNextPage->SetHelpId(HID_ABSPILOT_NEXT);
         m_pCancel->SetHelpId(HID_ABSPILOT_CANCEL);
         m_pFinish->SetHelpId(HID_ABSPILOT_FINISH);
-        m_pHelp->SetUniqueId(UID_ABSPILOT_HELP);
+        m_pHelp->SetHelpId(UID_ABSPILOT_HELP);
 
         m_pCancel->SetClickHdl( LINK( this, OAddressBookSourcePilot, OnCancelClicked) );
 

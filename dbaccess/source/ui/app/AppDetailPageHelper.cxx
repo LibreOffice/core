@@ -200,8 +200,6 @@ OAppDetailPageHelper::OAppDetailPageHelper(vcl::Window* _pParent,OAppBorderWindo
     m_aTBPreview->EnableMenuStrings();
     m_aTBPreview->Enable();
 
-    m_aBorder->SetUniqueId(UID_APP_VIEW_PREVIEW_1);
-
     m_aPreview->SetHelpId(HID_APP_VIEW_PREVIEW_1);
 
     m_pTablePreview.set( VclPtr<OTablePreviewWindow>::Create(m_aBorder.get(), WB_READONLY | WB_DIALOGCONTROL ) );
@@ -211,7 +209,6 @@ OAppDetailPageHelper::OAppDetailPageHelper(vcl::Window* _pParent,OAppBorderWindo
 
     m_xWindow = VCLUnoHelper::GetInterface( m_pTablePreview );
 
-    SetUniqueId(UID_APP_DETAILPAGE_HELPER);
     for (VclPtr<DBTreeListBox> & rpBox : m_pLists)
         rpBox = nullptr;
     ImplInitSettings();

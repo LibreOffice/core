@@ -136,12 +136,9 @@ void SvxFmTbxCtlAbsRec::StateChanged( sal_uInt16 nSID, SfxItemState eState, cons
     SfxToolBoxControl::StateChanged( nSID, eState,pState );
 }
 
-
 VclPtr<vcl::Window> SvxFmTbxCtlAbsRec::CreateItemWindow( vcl::Window* pParent )
 {
-    VclPtrInstance<SvxFmAbsRecWin> pWin( pParent, this );
-    pWin->SetUniqueId( UID_ABSOLUTE_RECORD_WINDOW );
-    return pWin.get();
+    return VclPtrInstance<SvxFmAbsRecWin>(pParent, this);
 }
 
 SFX_IMPL_TOOLBOX_CONTROL( SvxFmTbxCtlRecText, SfxBoolItem );
@@ -151,11 +148,9 @@ SvxFmTbxCtlRecText::SvxFmTbxCtlRecText( sal_uInt16 nSlotId, sal_uInt16 nId, Tool
 {
 }
 
-
 SvxFmTbxCtlRecText::~SvxFmTbxCtlRecText()
 {
 }
-
 
 VclPtr<vcl::Window> SvxFmTbxCtlRecText::CreateItemWindow( vcl::Window* pParent )
 {

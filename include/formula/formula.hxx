@@ -64,7 +64,6 @@ protected:
     ::std::pair<RefButton*,RefEdit*> RefInputStartBefore( RefEdit* pEdit, RefButton* pButton = nullptr );
     void            RefInputStartAfter( RefEdit* pEdit, RefButton* pButton = nullptr );
     void            RefInputDoneAfter();
-    void            SetFocusWin(vcl::Window *pWin,const OString& nUniqueId);
 
     void            SetMeText(const OUString& _sText);
     void            Update();
@@ -104,7 +103,6 @@ protected:
     ::std::pair<RefButton*,RefEdit*> RefInputStartBefore( RefEdit* pEdit, RefButton* pButton = nullptr );
     void            RefInputStartAfter( RefEdit* pEdit, RefButton* pButton = nullptr );
     void            RefInputDoneAfter( bool bForced = false );
-    void            SetFocusWin(vcl::Window *pWin,const OString& nUniqueId);
 
     void            SetMeText(const OUString& _sText);
     FormulaDlgMode SetMeText(const OUString& _sText, sal_Int32 PrivStart, sal_Int32 PrivEnd, bool bMatrix, bool _bSelect, bool _bUpdate);
