@@ -35,7 +35,6 @@
 #include "lockfile.hxx"
 #include "userinstall.hxx"
 #include "desktopcontext.hxx"
-#include "exithelper.h"
 #include "migration.hxx"
 
 #include <svl/languageoptions.hxx>
@@ -78,6 +77,7 @@
 #include <com/sun/star/frame/thePopupMenuControllerFactory.hpp>
 #include <com/sun/star/office/Quickstart.hpp>
 
+#include <desktop/exithelper.h>
 #include <sal/log.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/configuration.hxx>

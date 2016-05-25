@@ -25,6 +25,7 @@
 #include <string.h>
 #include <errno.h>
 
+#include <desktop/exithelper.h>
 #include <osl/process.h>
 #include <osl/thread.h>
 #include <rtl/bootstrap.h>
@@ -34,7 +35,6 @@
 #include <sal/main.h>
 
 #include "args.h"
-#include "../../source/inc/exithelper.h"
 #include "pagein.h"
 #include "splashx.h"
 
