@@ -49,12 +49,6 @@ namespace o3tl {
 #define WINDOW_QUICKTEXT                0x0100
 #define WINDOW_HELPID                   0x0200
 
-// For "WorkWindow" resources:
-
-#define WORKWIN_SHOWNORMAL              0
-#define WORKWIN_SHOWMINIMIZED           1
-#define WORKWIN_SHOWMAXIMIZED           2
-
 // For "FixedImage" resource:
 #define RSC_FIXEDIMAGE_IMAGE            0x0001
 
