@@ -140,6 +140,8 @@ void FontTable::lcl_sprm(Sprm& rSprm)
             break;
         case NS_ooxml::LN_CT_Font_sig:
             break;
+        case NS_ooxml::LN_CT_Font_notTrueType:
+            break;
         default:
             SAL_WARN("writerfilter", "FontTable::lcl_sprm: unhandled token: " << nSprmId);
             break;
