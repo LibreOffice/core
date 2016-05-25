@@ -987,17 +987,6 @@ void ScExternalRefCache::initializeDoc(sal_uInt16 nFileId, const vector<OUString
             pDoc->maSingleTableNameAlias = rBaseName;
         else if (ScGlobal::GetpTransliteration()->isEqual( pDoc->maTableNames[0].maRealName, rBaseName))
             pDoc->maSingleTableNameAlias = aSheetName;
-
-        /* TODO: future versions could swap the table name with the base name,
-         * so the base name gets stored instead of Sheet1, which can be
-         * localized and then will not match in another localized UI once the
-         * link was updated/refreshed. This never worked before
-         * a4f09f8c2ef3ae82b86d1b4f0c6c90d1a61614fa accidentally "fixed" it for
-         * fdo#73552 only for CSV files but broke older existing documents.
-         * Either that, or always store 'Sheet1' or something?
-         * However, do that only for imported files that do not store sheet
-         * names, e.g. CSV, HTML, ..., but not for spreadsheet documents. */
-
     }
 
     pDoc->mbInitFromSource = true;
@@ -1011,10 +1000,9 @@ ScExternalRefCache::TableNameIndexMap::const_iterator ScExternalRefCache::DocIte
     if (itrTabName != maTableNameIndex.end())
         return itrTabName;
 
-    // For some time for external references to .csv files the base name was
+    // Since some time for external references to CSV files the base name is
     // used as sheet name instead of Sheet1, check if we can resolve that.
-    // Also helps users that got accustomed to give the base name instead of
-    // Sheet1.
+    // Also helps users that got accustomed to one or the other way.
     if (maSingleTableNameAlias.isEmpty() || maTableNameIndex.size() != 1)
         return itrTabName;
 
