@@ -116,7 +116,7 @@ private:
     OUString            maStorageName;
     bool                mbDocMgr;
 
-    BasicManagerImpl*   mpImpl;
+    std::unique_ptr<BasicManagerImpl>   mpImpl;
 
     BASIC_DLLPRIVATE void Init();
 
