@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_d14eb9c0",
+        "filename": "sw/source/uibase/sidebar/PageFormatPanel.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-05-25T12:37:12Z",
+      "side": 1,
+      "message": "Uh ehm ... having a copy of this func in every sidebar panel or dialog that needs the list of paper formats is not sustainable in the long run. I have yet to find a place where such code can be put so that it\u0027s reusable from ~everywhere",
+      "revId": "59b11f783a7cf2dd2c7ead7d8339551d0f886a28",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_f14bbdae",
+        "filename": "sw/source/uibase/sidebar/PageFormatPanel.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-05-25T12:37:12Z",
+      "side": 1,
+      "message": "Do we really need this particular controller ( \u003d doesn\u0027t just SID_ATTR_PAGE_SIZE do the trick)? I don\u0027t see any special case for SID_ATTR_PAGE in NotifyItemUpdate method",
+      "revId": "59b11f783a7cf2dd2c7ead7d8339551d0f886a28",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
