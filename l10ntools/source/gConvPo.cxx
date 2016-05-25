@@ -22,14 +22,7 @@
 #include <vector>
 using namespace std;
 
-#ifdef _MSC_VER
-#pragma warning (push, 1)
-#pragma warning (disable: 4245)
-#endif
-#include <boost/crc.hpp>
-#ifdef _MSC_VER
-#pragma warning (pop)
-#endif
+#include <rtl/crc.h>
 
 #include "gL10nMem.hxx"
 #include "gConvPo.hxx"
@@ -250,7 +243,6 @@ void convert_po::endSave()
 string convert_po::genKeyId(const string& text)
 {
     string newText(text);
-    boost::crc_32_type aCRC32;
     int i;
 
     for (i = 0; (i = newText.find("\\\\", 0)) != (int)string::npos;) {
@@ -263,8 +255,7 @@ string convert_po::genKeyId(const string& text)
         newText.erase(i, 1);
         newText[i] = 0x0A;
     }
-    aCRC32.process_bytes(newText.c_str(), newText.length());
-    unsigned int nCRC = aCRC32.checksum();
+    sal_uInt32 const nCRC = rtl_crc32(0, newText.c_str(), newText.length());
     string key;
 
     // Use simple ASCII characters, exclude I, l, 1 and O, 0 to avoid confusing IDs

@@ -8,6 +8,7 @@
  */
 
 #include <rtl/ustring.hxx>
+#include <rtl/crc.h>
 
 #include <cstring>
 #include <ctime>
@@ -15,15 +16,6 @@
 
 #include <vector>
 #include <string>
-
-#ifdef _MSC_VER
-#pragma warning (push, 1)
-#pragma warning (disable: 4245)
-#endif
-#include <boost/crc.hpp>
-#ifdef _MSC_VER
-#pragma warning (pop)
-#endif
 
 #include "po.hxx"
 #include "helper.hxx"
@@ -376,9 +368,7 @@ bool PoEntry::IsInSameComp(const PoEntry& rPo1,const PoEntry& rPo2)
 
 OString PoEntry::genKeyId(const OString& rGenerator)
 {
-    boost::crc_32_type aCRC32;
-    aCRC32.process_bytes(rGenerator.getStr(), rGenerator.getLength());
-    sal_uInt32 nCRC = aCRC32.checksum();
+    sal_uInt32 nCRC = rtl_crc32(0, rGenerator.getStr(), rGenerator.getLength());
     // Use simple ASCII characters, exclude I, l, 1 and O, 0 to avoid confusing IDs
     static const char sSymbols[] =
         "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789";
