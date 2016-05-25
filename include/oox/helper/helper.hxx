@@ -20,6 +20,9 @@
 #ifndef INCLUDED_OOX_HELPER_HELPER_HXX
 #define INCLUDED_OOX_HELPER_HELPER_HXX
 
+#include <sal/config.h>
+
+#include <algorithm>
 #include <cstring>
 #include <limits>
 
