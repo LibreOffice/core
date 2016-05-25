@@ -494,9 +494,21 @@ IMPL_LINK_NOARG_TYPED(SfxTemplateManagerDlg, SelectApplicationHdl, ListBox&, voi
     if(mpCurView == mpLocalView && mpCurView->IsVisible())
     {
         mpCurView->filterItems(ViewFilter_Application(getCurrentApplicationFilter()));
-        mpCurView->showAllTemplates();
-        mpCBFolder->SelectEntryPos(0);
-        mpCurView->ShowTooltips(true);
+        sal_Int32 nPos = mpCBFolder->GetSelectEntryPos();
+
+        if(nPos != LISTBOX_ENTRY_NOTFOUND)
+        {
+            if(nPos == 0)
+            {
+                mpLocalView->showAllTemplates();
+                mpLocalView->ShowTooltips(true);
+            }
+            else
+            {
+                mpLocalView->showRegion(mpCBFolder->GetSelectEntry());
+                mpLocalView->ShowTooltips(false);
+            }
+        }
     }
 
     if(mpSearchView->IsVisible())
