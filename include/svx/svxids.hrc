@@ -529,6 +529,12 @@
 
 #define SID_RULER_PROTECT                               ( SID_SVX_START + 415 )
 #define SID_COLOR_CONTROL                               ( SID_SVX_START + 417 )
+
+#define SID_TABLE_INSERT_COL_BEFORE                     ( SID_SVX_START + 418 )
+#define SID_TABLE_INSERT_COL_AFTER                      ( SID_SVX_START + 419 )
+#define SID_TABLE_INSERT_ROW_BEFORE                     ( SID_SVX_START + 420 )
+#define SID_TABLE_INSERT_ROW_AFTER                      ( SID_SVX_START + 421 )
+
 #define SID_ATTR_3D_INTERN                              ( SID_SVX_START + 422 )
 #define SID_PSZ_FUNCTION                                ( SID_SVX_START + 423 )
 

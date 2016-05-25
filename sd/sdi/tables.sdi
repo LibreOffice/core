@@ -83,7 +83,27 @@ shell TableObjectBar
         ExecMethod = Execute;
         StateMethod = GetState;
     ]
+    SID_TABLE_INSERT_ROW_BEFORE
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+    ]
+    SID_TABLE_INSERT_ROW_AFTER
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+    ]
     SID_TABLE_INSERT_COL_DLG
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+    ]
+    SID_TABLE_INSERT_COL_BEFORE
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+    ]
+    SID_TABLE_INSERT_COL_AFTER
     [
         ExecMethod = Execute;
         StateMethod = GetState;
