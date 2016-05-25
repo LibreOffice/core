@@ -128,7 +128,7 @@ private:
     typedef ::std::vector< css::uno::Reference< css::accessibility::XAccessible > > AccessibleChildren;
 
     bool                            m_bFirstPaint;
-    ::svt::SvHeaderTabListBoxImpl*  m_pImpl;
+    std::unique_ptr<::svt::SvHeaderTabListBoxImpl>  m_pImpl;
     ::svt::IAccessibleTabListBox*   m_pAccessible;
     AccessibleChildren              m_aAccessibleChildren;
 
