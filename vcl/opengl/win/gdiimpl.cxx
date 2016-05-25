@@ -41,8 +41,8 @@ public:
     virtual bool initWindow() override;
 private:
     GLWinWindow m_aGLWin;
-    virtual const GLWindow& getOpenGLWindow() const { return m_aGLWin; }
-    virtual GLWindow& getModifiableOpenGLWindow() { return m_aGLWin; }
+    virtual const GLWindow& getOpenGLWindow() const override { return m_aGLWin; }
+    virtual GLWindow& getModifiableOpenGLWindow() override { return m_aGLWin; }
     virtual bool ImplInit() override;
     virtual void makeCurrent() override;
     virtual void destroyCurrentContext() override;
