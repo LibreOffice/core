@@ -8,6 +8,7 @@
  */
 
 #include "opengl/win/gdiimpl.hxx"
+#include <opengl/zone.hxx>
 #include <o3tl/lru_map.hxx>
 #include <win/wincomp.hxx>
 #include <win/saldata.hxx>
