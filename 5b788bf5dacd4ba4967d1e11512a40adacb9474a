@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_51f3890a",
+        "filename": "include/comphelper/docpasswordhelper.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-05-25T06:59:28Z",
+      "side": 1,
+      "message": "chosen",
+      "revId": "5b788bf5dacd4ba4967d1e11512a40adacb9474a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_71f88de6",
+        "filename": "include/unotools/mediadescriptor.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-05-25T06:59:28Z",
+      "side": 1,
+      "message": "chosen",
+      "revId": "5b788bf5dacd4ba4967d1e11512a40adacb9474a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_91dd1173",
+        "filename": "svx/source/dialog/fontwork.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 743,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-05-25T06:59:28Z",
+      "side": 1,
+      "message": "compatibility",
+      "revId": "5b788bf5dacd4ba4967d1e11512a40adacb9474a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
