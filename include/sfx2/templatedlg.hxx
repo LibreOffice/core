@@ -62,6 +62,7 @@ private:
     void writeSettings ();
 
     void fillFolderComboBox();
+    void ShowCategory();
 
     DECL_LINK_TYPED(TBXDropdownHdl, ToolBox*, void);
 

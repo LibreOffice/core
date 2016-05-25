@@ -494,9 +494,7 @@ IMPL_LINK_NOARG_TYPED(SfxTemplateManagerDlg, SelectApplicationHdl, ListBox&, voi
     if(mpCurView == mpLocalView && mpCurView->IsVisible())
     {
         mpCurView->filterItems(ViewFilter_Application(getCurrentApplicationFilter()));
-        mpCurView->showAllTemplates();
-        mpCBFolder->SelectEntryPos(0);
-        mpCurView->ShowTooltips(true);
+        ShowCategory();
     }
 
     if(mpSearchView->IsVisible())
@@ -506,22 +504,29 @@ IMPL_LINK_NOARG_TYPED(SfxTemplateManagerDlg, SelectApplicationHdl, ListBox&, voi
 IMPL_LINK_NOARG_TYPED(SfxTemplateManagerDlg, SelectRegionHdl, ListBox&, void)
 {
     if(mpCurView == mpLocalView)
+        ShowCategory();
+
+    if(mpSearchView->IsVisible())
+        SearchUpdateHdl(*mpSearchFilter);
+}
+
+void SfxTemplateManagerDlg::ShowCategory()
+{
+    sal_Int32 nPos = mpCBFolder->GetSelectEntryPos();
+
+    if(nPos != LISTBOX_ENTRY_NOTFOUND)
     {
-        const OUString sSelectedRegion = mpCBFolder->GetSelectEntry();
-        if(mpCBFolder->GetSelectEntryPos() == 0)
+        if(nPos == 0)
         {
             mpLocalView->showAllTemplates();
             mpLocalView->ShowTooltips(true);
         }
         else
         {
-            mpLocalView->showRegion(sSelectedRegion);
+            mpLocalView->showRegion(mpCBFolder->GetSelectEntry());
             mpLocalView->ShowTooltips(false);
         }
     }
-
-    if(mpSearchView->IsVisible())
-        SearchUpdateHdl(*mpSearchFilter);
 }
 
 IMPL_LINK_TYPED(SfxTemplateManagerDlg, TBXDropdownHdl, ToolBox*, pBox, void)
