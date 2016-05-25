@@ -3321,7 +3321,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                             {
                             case nsSelectionType::SEL_GRF:
                                 RstMBDownFlags();
-                                if (!rSh.isTiledRendering())
+                                if (!comphelper::LibreOfficeKit::isActive())
                                 {
                                     GetView().GetViewFrame()->GetBindings().Execute(
                                         FN_FORMAT_GRAFIC_DLG, nullptr, 0,
@@ -3340,7 +3340,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
 
                             case nsSelectionType::SEL_FRM:
                                 RstMBDownFlags();
-                                if (!rSh.isTiledRendering())
+                                if (!comphelper::LibreOfficeKit::isActive())
                                 {
                                     GetView().GetViewFrame()->GetBindings().Execute(
                                         FN_FORMAT_FRAME_DLG, nullptr, 0,
@@ -3359,7 +3359,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
 
                         // if the cursor position was corrected or if a Fly
                         // was selected in ReadOnlyMode, no word selection, except when tiled rendering.
-                        if ((!g_bValidCursorPos || rSh.IsFrameSelected()) && !rSh.isTiledRendering())
+                        if ((!g_bValidCursorPos || rSh.IsFrameSelected()) && !comphelper::LibreOfficeKit::isActive())
                             return;
 
                         SwField *pField;
@@ -3411,7 +3411,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                         }
                         else
                         {
-                            if (!rSh.SelWrd(&aDocPos) && rSh.isTiledRendering())
+                            if (!rSh.SelWrd(&aDocPos) && comphelper::LibreOfficeKit::isActive())
                                 // Double click did not select any word: try to
                                 // select the current cell in case we are in a
                                 // table.
@@ -3814,7 +3814,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
     }
 
     const Point aOldPt( rSh.VisArea().Pos() );
-    const bool bInsWin = rSh.VisArea().IsInside( aDocPt ) || rSh.isTiledRendering();
+    const bool bInsWin = rSh.VisArea().IsInside( aDocPt ) || comphelper::LibreOfficeKit::isActive();
 
     if( m_pShadCursor && !bInsWin )
         delete m_pShadCursor, m_pShadCursor = nullptr;
@@ -4918,7 +4918,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
     if (bCallBase)
         Window::MouseButtonUp(rMEvt);
 
-    if (pSdrView && rMEvt.GetClicks() == 1 && rSh.isTiledRendering())
+    if (pSdrView && rMEvt.GetClicks() == 1 && comphelper::LibreOfficeKit::isActive())
     {
         // When tiled rendering, single click on a shape text starts editing already.
         SdrViewEvent aViewEvent;
@@ -6328,7 +6328,7 @@ void SwEditWin::LogicInvalidate(const Rectangle* pRectangle)
 void SwEditWin::LogicMouseButtonDown(const MouseEvent& rMouseEvent)
 {
     // When we're not doing tiled rendering, then positions must be passed as pixels.
-    assert(m_rView.GetWrtShell().isTiledRendering());
+    assert(comphelper::LibreOfficeKit::isActive());
 
     Point aPoint = GetPointerPosPixel();
     SetLastMousePos(rMouseEvent.GetPosPixel());
@@ -6341,7 +6341,7 @@ void SwEditWin::LogicMouseButtonDown(const MouseEvent& rMouseEvent)
 void SwEditWin::LogicMouseButtonUp(const MouseEvent& rMouseEvent)
 {
     // When we're not doing tiled rendering, then positions must be passed as pixels.
-    assert(m_rView.GetWrtShell().isTiledRendering());
+    assert(comphelper::LibreOfficeKit::isActive());
 
     Point aPoint = GetPointerPosPixel();
     SetLastMousePos(rMouseEvent.GetPosPixel());
@@ -6354,7 +6354,7 @@ void SwEditWin::LogicMouseButtonUp(const MouseEvent& rMouseEvent)
 void SwEditWin::LogicMouseMove(const MouseEvent& rMouseEvent)
 {
     // When we're not doing tiled rendering, then positions must be passed as pixels.
-    assert(m_rView.GetWrtShell().isTiledRendering());
+    assert(comphelper::LibreOfficeKit::isActive());
 
     Point aPoint = GetPointerPosPixel();
     SetLastMousePos(rMouseEvent.GetPosPixel());

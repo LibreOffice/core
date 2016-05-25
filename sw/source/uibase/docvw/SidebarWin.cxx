@@ -618,7 +618,7 @@ void SwSidebarWin::InitControls()
         LibreOfficeKitCallback pCallback = nullptr;
         void* pData = nullptr;
         pDrawModel->getLibreOfficeKitCallback(pCallback, pData);
-        mpOutlinerView->setTiledRendering(comphelper::LibreOfficeKit::isActive());
+        mpOutlinerView->setTiledRendering(true);
         mpOutlinerView->registerLibreOfficeKitCallback(pCallback, pData, pDrawModel);
     }
 

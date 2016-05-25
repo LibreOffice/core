@@ -92,7 +92,7 @@ void SwVisibleCursor::Show()
         m_bIsVisible = true;
 
         // display at all?
-        if( m_pCursorShell->VisArea().IsOver( m_pCursorShell->m_aCharRect ) || m_pCursorShell->isTiledRendering() )
+        if( m_pCursorShell->VisArea().IsOver( m_pCursorShell->m_aCharRect ) || comphelper::LibreOfficeKit::isActive() )
             _SetPosAndShow();
     }
 }
@@ -757,7 +757,7 @@ void SwShellTableCursor::FillRects()
 
     bool bStart = true;
     SwRegionRects aReg( GetShell()->VisArea() );
-    if (GetShell()->isTiledRendering())
+    if (comphelper::LibreOfficeKit::isActive())
         aReg = GetShell()->getIDocumentLayoutAccess().GetCurrentLayout()->Frame();
     SwNodes& rNds = GetDoc()->GetNodes();
     SwFrame* pEndFrame = nullptr;
