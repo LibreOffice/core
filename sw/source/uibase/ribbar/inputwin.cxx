@@ -56,7 +56,7 @@
 
 SFX_IMPL_POS_CHILDWINDOW_WITHID( SwInputChild, FN_EDIT_FORMULA, SFX_OBJECTBAR_OBJECT )
 
-SwInputWindow::SwInputWindow( vcl::Window* pParent )
+SwInputWindow::SwInputWindow(vcl::Window* pParent, SfxDispatcher* pDispatcher)
     : ToolBox(  pParent ,   SW_RES( RID_TBX_FORMULA )),
     aPos(       VclPtr<Edit>::Create(this,       SW_RES(ED_POS))),
     aEdit(      VclPtr<InputEdit>::Create(this, WB_3DLOOK|WB_TABSTOP|WB_BORDER|WB_NOHIDESELECTION)),
@@ -79,7 +79,10 @@ SwInputWindow::SwInputWindow( vcl::Window* pParent )
     SfxImageManager* pManager = SfxImageManager::GetImageManager( *SW_MOD() );
     pManager->RegisterToolBox(this);
 
-    pView = ::GetActiveView();
+    SwView *pDispatcherView = dynamic_cast<SwView*>(pDispatcher ? pDispatcher->GetFrame()->GetViewShell() : nullptr);
+    SwView* pActiveView = ::GetActiveView();
+    if (pDispatcherView == pActiveView)
+        pView = pActiveView;
     pWrtShell = pView ? pView->GetWrtShellPtr() : nullptr;
 
     InsertWindow( ED_POS, aPos.get(), ToolBoxItemBits::NONE, 0);
@@ -620,7 +623,7 @@ SwInputChild::SwInputChild(vcl::Window* _pParent,
                                 SfxChildWindow( _pParent, nId )
 {
     pDispatch = pBindings->GetDispatcher();
-    SetWindow( VclPtr<SwInputWindow>::Create( _pParent ) );
+    SetWindow(VclPtr<SwInputWindow>::Create(_pParent, pDispatch));
     static_cast<SwInputWindow*>(GetWindow())->ShowWin();
     SetAlignment(SfxChildAlignment::LOWESTTOP);
 }
