@@ -9,8 +9,15 @@
 
 #include <sfx2/templatedefaultview.hxx>
 #include <sfx2/thumbnailview.hxx>
+#include <sfx2/templateviewitem.hxx>
+#include <sfx2/sfxresid.hxx>
 #include <vcl/builderfactory.hxx>
 #include <sfx2/app.hxx>
+
+#include "../doc/doc.hrc"
+
+#define MNI_OPEN               1
+#define MNI_EDIT               2
 
 #include <officecfg/Office/Common.hxx>
 
@@ -39,6 +46,35 @@ void TemplateDefaultView::reload()
     TemplateLocalView::reload();
     // Set preferred width
     set_width_request(mnTextHeight + mnItemMaxSize + 2*mnItemPadding);
-
 }
+
+void TemplateDefaultView::createContextMenu()
+{
+    std::unique_ptr<PopupMenu> pItemMenu(new PopupMenu);
+    pItemMenu->InsertItem(MNI_OPEN,SfxResId(STR_OPEN).toString());
+    pItemMenu->InsertItem(MNI_EDIT,SfxResId(STR_EDIT_TEMPLATE).toString());
+    deselectItems();
+    maSelectedItem->setSelection(true);
+    pItemMenu->SetSelectHdl(LINK(this, TemplateLocalView, ContextMenuSelectHdl));
+    pItemMenu->Execute(this, Rectangle(maPosition,Size(1,1)), PopupMenuFlags::ExecuteDown);
+    Invalidate();
+}
+
+IMPL_LINK_TYPED(TemplateDefaultView, ContextMenuSelectHdl, Menu*, pMenu, void)
+{
+    sal_uInt16 nMenuId = pMenu->GetCurItemId();
+
+    switch(nMenuId)
+    {
+    case MNI_OPEN:
+        maOpenTemplateHdl.Call(maSelectedItem);
+        break;
+    case MNI_EDIT:
+        maEditTemplateHdl.Call(maSelectedItem);
+        break;
+    default:
+        break;
+    }
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
