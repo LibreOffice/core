@@ -606,7 +606,6 @@ WindowImpl::WindowImpl( WindowType nType )
     mpDlgCtrlDownWindow                 = nullptr;                      // window for dialog control
     mnEventListenersIteratingCount = 0;
     mnChildEventListenersIteratingCount = 0;
-    mpUserData                          = nullptr;                      // user data
     mpCursor                            = nullptr;                      // cursor
     mpControlFont                       = nullptr;                      // font properties
     mpVCLXWindow                        = nullptr;

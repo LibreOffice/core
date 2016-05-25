@@ -53,12 +53,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star;
 
-enum AboutDialogButton
-{
-    CREDITS_BUTTON,
-    WEBSITE_BUTTON
-};
-
 AboutDialog::AboutDialog(vcl::Window* pParent)
     : SfxModalDialog(pParent, "AboutDialog", "cui/ui/aboutdialog.ui")
 {
@@ -86,10 +80,6 @@ AboutDialog::AboutDialog(vcl::Window* pParent)
     StyleControls();
 
     SetLogo();
-
-    // Allow the button to be identifiable once they are clicked
-    m_pCreditsButton->SetData( reinterpret_cast<void*>(CREDITS_BUTTON) );
-    m_pWebsiteButton->SetData( reinterpret_cast<void*>(WEBSITE_BUTTON) );
 
     // Connect all handlers
     m_pCreditsButton->SetClickHdl( LINK( this, AboutDialog, HandleClick ) );
@@ -120,10 +110,9 @@ IMPL_LINK_TYPED( AboutDialog, HandleClick, Button*, pButton, void )
     OUString sURL = "";
 
     // Find which button was pressed and from this, get the URL to be opened
-    AboutDialogButton aDialogButton = static_cast<AboutDialogButton>(reinterpret_cast<sal_Int64>(pButton->GetData()));
-    if ( aDialogButton == CREDITS_BUTTON )
+    if (pButton == m_pCreditsButton)
         sURL = m_aCreditsLinkStr;
-    else if ( aDialogButton == WEBSITE_BUTTON )
+    else if (pButton == m_pWebsiteButton)
     {
         sURL = officecfg::Office::Common::Help::StartCenter::InfoURL::get();
         localizeWebserviceURI(sURL);

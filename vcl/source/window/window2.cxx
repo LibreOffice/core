@@ -1304,16 +1304,6 @@ const OUString& Window::GetQuickHelpText() const
     return mpWindowImpl->maQuickHelpText;
 }
 
-void Window::SetData( void* pNewData )
-{
-    mpWindowImpl->mpUserData = pNewData;
-}
-
-void* Window::GetData() const
-{
-    return mpWindowImpl->mpUserData;
-}
-
 bool Window::IsCreatedWithToolkit() const
 {
     return mpWindowImpl->mbCreatedWithToolkit;

@@ -538,9 +538,6 @@ VclPtr<vcl::Window> SvxFillToolBoxControl::CreateItemWindow(vcl::Window *pParent
     if(GetSlotId() == SID_ATTR_FILL_STYLE)
     {
         mpFillControl.reset(VclPtr<FillControl>::Create(pParent));
-        // Thus the FillControl is known by SvxFillToolBoxControl
-        // (and in order to remain compatible)
-        mpFillControl->SetData(this);
 
         mpLbFillType = mpFillControl->mpLbFillType;
         mpLbFillAttr = mpFillControl->mpLbFillAttr;

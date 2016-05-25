@@ -49,8 +49,9 @@ class SwAddressControl_Impl : public Control
     VclPtr<ScrollBar>                       m_pScrollBar;
     VclPtr<Window>                          m_pWindow;
 
-    ::std::vector<VclPtr<FixedText> >       m_aFixedTexts;
-    ::std::vector<VclPtr<Edit> >            m_aEdits;
+    std::vector<VclPtr<FixedText> >       m_aFixedTexts;
+    std::vector<VclPtr<Edit> >            m_aEdits;
+    std::map<Edit*, sal_Int32>            m_aEditLines;
 
     SwCSVData*                      m_pData;
     Size                            m_aWinOutputSize;
@@ -68,8 +69,6 @@ class SwAddressControl_Impl : public Control
     virtual bool        PreNotify( NotifyEvent& rNEvt ) override;
     virtual void        Command( const CommandEvent& rCEvt ) override;
     virtual Size        GetOptimalSize() const override;
-
-    using Window::SetData;
 
 public:
     SwAddressControl_Impl(vcl::Window* pParent , WinBits nBits );
@@ -177,7 +176,7 @@ void SwAddressControl_Impl::SetData(SwCSVData& rDBData)
     Link<Edit&,void> aEditModifyLink = LINK(this, SwAddressControl_Impl, EditModifyHdl_Impl);
     Edit* pLastEdit = nullptr;
     sal_Int32 nVisibleLines = 0;
-    sal_uIntPtr nLines = 0;
+    sal_Int32 nLines = 0;
     for(aHeaderIter = m_pData->aDBColumnHeaders.begin();
                 aHeaderIter != m_pData->aDBColumnHeaders.end();
                 ++aHeaderIter, nEDYPos += m_nLineHeight, nFTYPos += m_nLineHeight, nLines++)
@@ -185,7 +184,7 @@ void SwAddressControl_Impl::SetData(SwCSVData& rDBData)
         VclPtr<FixedText> pNewFT = VclPtr<FixedText>::Create(m_pWindow, WB_RIGHT);
         VclPtr<Edit> pNewED = VclPtr<Edit>::Create(m_pWindow, WB_BORDER);
         //set nLines a position identifier - used in the ModifyHdl
-        pNewED->SetData(reinterpret_cast<void*>(nLines));
+        m_aEditLines[pNewED.get()] = nLines;
         pNewED->SetGetFocusHdl(aFocusLink);
         pNewED->SetModifyHdl(aEditModifyLink);
 
@@ -302,7 +301,7 @@ void SwAddressControl_Impl::MakeVisible(const Rectangle & rRect)
 IMPL_LINK_TYPED(SwAddressControl_Impl, EditModifyHdl_Impl, Edit&, rEdit, void)
 {
     //get the data element number of the current set
-    sal_Int32 nIndex = (sal_Int32)reinterpret_cast<sal_IntPtr>(rEdit.GetData());
+    sal_Int32 nIndex = m_aEditLines[&rEdit];
     //get the index of the set
     OSL_ENSURE(m_pData->aDBData.size() > m_nCurrentDataSet, "wrong data set index" );
     if(m_pData->aDBData.size() > m_nCurrentDataSet)

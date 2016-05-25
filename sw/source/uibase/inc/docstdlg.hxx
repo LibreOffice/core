@@ -60,7 +60,6 @@ private:
 
     void            Update();
 
-    using Window::SetData;
     void            SetData(const SwDocStat &rStat);
 };
 

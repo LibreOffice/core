@@ -1187,9 +1187,6 @@ public:
     bool                                IsChild( const vcl::Window* pWindow, bool bSystemWindow = false ) const;
     bool                                IsWindowOrChild( const vcl::Window* pWindow, bool bSystemWindow = false  ) const;
 
-    void                                SetData( void* pNewData );
-    void*                               GetData() const;
-
     /// Add all children to rAllChildren recursively.
     SAL_DLLPRIVATE void                 CollectChildren(::std::vector<vcl::Window *>& rAllChildren );
 

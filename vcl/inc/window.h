@@ -212,7 +212,6 @@ public:
     // The canvas interface for this VCL window. Is persistent after the first GetCanvas() call
     css::uno::WeakReference< css::rendering::XCanvas >    mxCanvas;
 
-    void*               mpUserData;
     vcl::Cursor*        mpCursor;
     Pointer             maPointer;
     Fraction            maZoom;
