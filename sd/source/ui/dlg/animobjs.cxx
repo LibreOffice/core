@@ -1003,7 +1003,7 @@ void AnimationWindow::CreateAnimObj (::sd::View& rView )
             aAnimBmp.aPosPix = aPt;
             aAnimBmp.aSizePix = aBitmapSize;
             aAnimBmp.nWait = nTime;
-            aAnimBmp.eDisposal = DISPOSE_BACK;
+            aAnimBmp.eDisposal = Disposal::Back;
             aAnimBmp.bUserInput = false;
 
             aAnimation.Insert( aAnimBmp );

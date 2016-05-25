@@ -323,7 +323,7 @@ bool getAnimationFromGraphic( VectorOfMtfAnimationFrames&   o_rFrames,
         const AnimationBitmap& rAnimBmp( aAnimation.Get(i) );
         switch(rAnimBmp.eDisposal)
         {
-            case DISPOSE_NOT:
+            case Disposal::Not:
             {
                 pVDev->DrawBitmapEx(rAnimBmp.aPosPix,
                                    rAnimBmp.aBmpEx);
@@ -347,7 +347,7 @@ bool getAnimationFromGraphic( VectorOfMtfAnimationFrames&   o_rFrames,
                 break;
             }
 
-            case DISPOSE_BACK:
+            case Disposal::Back:
             {
                 // #i70772# react on no mask
                 const Bitmap aMask(rAnimBmp.aBmpEx.GetMask());
@@ -370,14 +370,7 @@ bool getAnimationFromGraphic( VectorOfMtfAnimationFrames&   o_rFrames,
                 break;
             }
 
-            case DISPOSE_FULL:
-            {
-                pVDev->DrawBitmapEx(rAnimBmp.aPosPix,
-                                   rAnimBmp.aBmpEx);
-                break;
-            }
-
-            case DISPOSE_PREVIOUS :
+            case Disposal::Previous :
             {
                 pVDev->DrawBitmapEx(rAnimBmp.aPosPix,
                                    rAnimBmp.aBmpEx);

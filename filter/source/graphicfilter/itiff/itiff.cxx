@@ -1420,7 +1420,7 @@ bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
                                 aImage = aBitmap;
 
                             AnimationBitmap aAnimationBitmap( aImage, Point( 0, 0 ), aBitmap.GetSizePixel(),
-                                                              ANIMATION_TIMEOUT_ON_CLICK, DISPOSE_BACK );
+                                                              ANIMATION_TIMEOUT_ON_CLICK, Disposal::Back );
 
                             aAnimation.Insert( aAnimationBitmap );
                         }
