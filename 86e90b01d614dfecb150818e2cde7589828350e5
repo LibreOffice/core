@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "da7fb54a_51b0e9dd",
+        "filename": "sw/source/uibase/shells/basesh.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2122,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-05-25T10:39:32Z",
+      "side": 1,
+      "message": "Sorry, but I have no idea what the correct change would be?\nAny help appreciated.",
+      "parentUuid": "da7fb54a_d535dcf7",
+      "revId": "86e90b01d614dfecb150818e2cde7589828350e5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da7fb54a_f53ae0e6",
         "filename": "sw/source/uibase/shells/basesh.cxx",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2016-05-03T14:14:02Z",
       "side": 1,
       "message": "Why create a temporary BrushItem?",
+      "revId": "86e90b01d614dfecb150818e2cde7589828350e5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_31bb65c6",
+        "filename": "sw/source/uibase/shells/basesh.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2203,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-05-25T10:39:32Z",
+      "side": 1,
+      "message": "because Put takes a \u0026 to a SfxPoolItem, I don\u0027t see any other way of doing it?",
+      "parentUuid": "da7fb54a_f53ae0e6",
       "revId": "86e90b01d614dfecb150818e2cde7589828350e5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
