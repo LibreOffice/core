@@ -759,7 +759,7 @@ bool ZipPackageStream::saveChild(
     }
     else
     {
-        // This stream is defenitly not a raw stream
+        // This stream is definitely not a raw stream
 
         // If nonseekable access is used the stream should be at the beginning and
         // is useless after the storing. Thus if the storing fails the package should

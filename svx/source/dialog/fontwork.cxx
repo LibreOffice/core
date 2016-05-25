@@ -740,7 +740,7 @@ IMPL_LINK_NOARG_TYPED(SvxFontWorkDialog, ModifyInputHdl_Impl, Edit&, void)
 IMPL_LINK_NOARG_TYPED(SvxFontWorkDialog, InputTimoutHdl_Impl, Idle *, void)
 {
     // Possibly set the Metric system again. This should be done with a
-    // listen, this is however not possible at the moment due to compabillity
+    // listen, this is however not possible at the moment due to compatibility
     // issues.
     const FieldUnit eDlgUnit = rBindings.GetDispatcher()->GetModule()->GetFieldUnit();
     if( eDlgUnit != m_pMtrFldDistance->GetUnit() )

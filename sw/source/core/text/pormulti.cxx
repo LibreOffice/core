@@ -609,7 +609,7 @@ SwRubyPortion::SwRubyPortion( const SwMultiCreator& rCreate, const SwFont& rFnt,
 // In ruby portion there are different alignments for
 // the ruby text and the main text.
 // Left, right, centered and two possibilities of block adjustment
-// The block adjustment is realized by spacing between the characteres,
+// The block adjustment is realized by spacing between the characters,
 // either with a half space or no space in front of the first letter and
 // a half space at the end of the last letter.
 // Notice: the smaller line will be manipulated, normally it's the ruby line,

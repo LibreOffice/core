@@ -233,7 +233,7 @@ namespace svgio
                     }
                     else
                     {
-                        // take absolute value or cummulate percentage
+                        // take absolute value or cumulate percentage
                         if (pParentSvgSvgNode->getWidth().isSet())
                         {
                             if (Unit_percent == pParentSvgSvgNode->getWidth().getUnit())
@@ -275,7 +275,7 @@ namespace svgio
                     }
                     else
                     {
-                        // take absolute value or cummulate percentage
+                        // take absolute value or cumulate percentage
                         if (pParentSvgSvgNode->getHeight().isSet())
                         {
                             if (Unit_percent == pParentSvgSvgNode->getHeight().getUnit())
