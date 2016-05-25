@@ -344,7 +344,6 @@ TransferDataContainer::TransferDataContainer()
 
 TransferDataContainer::~TransferDataContainer()
 {
-    delete pImpl;
 }
 
 
