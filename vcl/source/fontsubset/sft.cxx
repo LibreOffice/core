@@ -2762,24 +2762,35 @@ void DisposeNameRecords(NameRecord* nr, int n)
     free(nr);
 }
 
+template<size_t N> void
+append(std::bitset<N> & rSet, size_t const nOffset, sal_uInt32 const nValue)
+{
+    for (size_t i = 0; i < 32; ++i)
+    {
+        rSet.set(nOffset + i, (nValue & (1 << i)) != 0);
+    }
+}
+
 bool getTTCoverage(
-    boost::dynamic_bitset<sal_uInt32> &rUnicodeRange,
-    boost::dynamic_bitset<sal_uInt32> &rCodePageRange,
+    boost::optional<std::bitset<UnicodeCoverage::MAX_UC_ENUM>> &rUnicodeRange,
+    boost::optional<std::bitset<CodePageCoverage::MAX_CP_ENUM>> &rCodePageRange,
     const unsigned char* pTable, size_t nLength)
 {
     bool bRet = false;
     // parse OS/2 header
     if (nLength >= 58)
     {
-        rUnicodeRange.append(GetUInt32(pTable, 42, 1));
-        rUnicodeRange.append(GetUInt32(pTable, 46, 1));
-        rUnicodeRange.append(GetUInt32(pTable, 50, 1));
-        rUnicodeRange.append(GetUInt32(pTable, 54, 1));
+        rUnicodeRange = std::bitset<UnicodeCoverage::MAX_UC_ENUM>();
+        append(rUnicodeRange.get(),  0, GetUInt32(pTable, 42, 1));
+        append(rUnicodeRange.get(), 32, GetUInt32(pTable, 46, 1));
+        append(rUnicodeRange.get(), 64, GetUInt32(pTable, 50, 1));
+        append(rUnicodeRange.get(), 96, GetUInt32(pTable, 54, 1));
         bRet = true;
         if (nLength >= 86)
         {
-            rCodePageRange.append(GetUInt32(pTable, 78, 1));
-            rCodePageRange.append(GetUInt32(pTable, 82, 1));
+            rCodePageRange = std::bitset<CodePageCoverage::MAX_CP_ENUM>();
+            append(rCodePageRange.get(),  0, GetUInt32(pTable, 78, 1));
+            append(rCodePageRange.get(), 32, GetUInt32(pTable, 82, 1));
         }
     }
     return bRet;

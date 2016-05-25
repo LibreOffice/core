@@ -741,8 +741,14 @@ OUString makeRepresentativeTextForLanguage(LanguageType eLang)
 namespace
 {
 #if OSL_DEBUG_LEVEL > 0
-    void lcl_dump_unicode_coverage(const boost::dynamic_bitset<sal_uInt32> &rIn)
+    void lcl_dump_unicode_coverage(const boost::optional<std::bitset<vcl::UnicodeCoverage::MAX_UC_ENUM>> &roIn)
     {
+        if (!roIn)
+        {
+            SAL_INFO("svtools", "<NOTHING>");
+            return;
+        }
+        auto & rIn(*roIn);
         if (rIn.none())
         {
             SAL_INFO("svtools", "<NONE>");
@@ -1006,8 +1012,14 @@ namespace
             SAL_INFO("svtools", "RESERVED5");
     }
 
-    void lcl_dump_codepage_coverage(const boost::dynamic_bitset<sal_uInt32> &rIn)
+    void lcl_dump_codepage_coverage(const boost::optional<std::bitset<vcl::CodePageCoverage::MAX_CP_ENUM>> &roIn)
     {
+        if (!roIn)
+        {
+            SAL_INFO("svtools", "<NOTHING>");
+            return;
+        }
+        auto & rIn(*roIn);
         if (rIn.none())
         {
             SAL_INFO("svtools", "<NONE>");
@@ -1078,9 +1090,9 @@ namespace
     }
 #endif
 
-    boost::dynamic_bitset<sal_uInt32> getMaskByScriptType(sal_Int16 nScriptType)
+    std::bitset<vcl::UnicodeCoverage::MAX_UC_ENUM> getMaskByScriptType(sal_Int16 nScriptType)
     {
-        boost::dynamic_bitset<sal_uInt32> aMask(vcl::UnicodeCoverage::MAX_UC_ENUM);
+        std::bitset<vcl::UnicodeCoverage::MAX_UC_ENUM> aMask;
         aMask.set();
 
         for (size_t i = 0; i < vcl::UnicodeCoverage::MAX_UC_ENUM; ++i)
@@ -1095,37 +1107,37 @@ namespace
     }
 
     //false for all bits considered "Latin" by LibreOffice
-    boost::dynamic_bitset<sal_uInt32> getLatinMask()
+    std::bitset<vcl::UnicodeCoverage::MAX_UC_ENUM> getLatinMask()
     {
-        static boost::dynamic_bitset<sal_uInt32> aMask(getMaskByScriptType(css::i18n::ScriptType::LATIN));
-        return aMask;
+        static std::bitset<vcl::UnicodeCoverage::MAX_UC_ENUM> s_Mask(getMaskByScriptType(css::i18n::ScriptType::LATIN));
+        return s_Mask;
     }
 
     //false for all bits considered "Asian" by LibreOffice
-    boost::dynamic_bitset<sal_uInt32> getCJKMask()
+    std::bitset<vcl::UnicodeCoverage::MAX_UC_ENUM> getCJKMask()
     {
-        static boost::dynamic_bitset<sal_uInt32> aMask(getMaskByScriptType(css::i18n::ScriptType::ASIAN));
-        return aMask;
+        static std::bitset<vcl::UnicodeCoverage::MAX_UC_ENUM> s_Mask(getMaskByScriptType(css::i18n::ScriptType::ASIAN));
+        return s_Mask;
     }
 
     //false for all bits considered "Complex" by LibreOffice
-    boost::dynamic_bitset<sal_uInt32> getCTLMask()
+    std::bitset<vcl::UnicodeCoverage::MAX_UC_ENUM> getCTLMask()
     {
-        static boost::dynamic_bitset<sal_uInt32> aMask(getMaskByScriptType(css::i18n::ScriptType::COMPLEX));
-        return aMask;
+        static std::bitset<vcl::UnicodeCoverage::MAX_UC_ENUM> s_Mask(getMaskByScriptType(css::i18n::ScriptType::COMPLEX));
+        return s_Mask;
     }
 
     //false for all bits considered "WEAK" by LibreOffice
-    boost::dynamic_bitset<sal_uInt32> getWeakMask()
+    std::bitset<vcl::UnicodeCoverage::MAX_UC_ENUM> getWeakMask()
     {
-        static boost::dynamic_bitset<sal_uInt32> aMask(getMaskByScriptType(css::i18n::ScriptType::WEAK));
-        return aMask;
+        static std::bitset<vcl::UnicodeCoverage::MAX_UC_ENUM> s_Mask(getMaskByScriptType(css::i18n::ScriptType::WEAK));
+        return s_Mask;
     }
 
     //Nearly every font supports some basic Latin
-    boost::dynamic_bitset<sal_uInt32> getCommonLatnSubsetMask()
+    std::bitset<vcl::UnicodeCoverage::MAX_UC_ENUM> getCommonLatnSubsetMask()
     {
-        boost::dynamic_bitset<sal_uInt32> aMask(vcl::UnicodeCoverage::MAX_UC_ENUM);
+        std::bitset<vcl::UnicodeCoverage::MAX_UC_ENUM> aMask;
         aMask.set();
         aMask.set(vcl::UnicodeCoverage::BASIC_LATIN, false);
         aMask.set(vcl::UnicodeCoverage::LATIN_1_SUPPLEMENT, false);
@@ -1135,14 +1147,30 @@ namespace
         return aMask;
     }
 
+    template<size_t N>
+    size_t find_first(std::bitset<N> const& rSet)
+    {
+        for (size_t i = 0; i < N; ++i)
+        {
+            if (rSet.test(i))
+                return i;
+        }
+        assert(false); // see current usage
+        return N;
+    }
+
     UScriptCode getScript(const vcl::FontCapabilities &rFontCapabilities)
     {
         using vcl::UnicodeCoverage::UnicodeCoverageEnum;
 
-        boost::dynamic_bitset<sal_uInt32> aMasked = rFontCapabilities.maUnicodeRange & getWeakMask();
+        std::bitset<vcl::UnicodeCoverage::MAX_UC_ENUM> aMasked;
+        if (rFontCapabilities.oUnicodeRange)
+        {
+            aMasked = *rFontCapabilities.oUnicodeRange & getWeakMask();
+        }
 
         if (aMasked.count() == 1)
-            return otCoverageToScript(static_cast<UnicodeCoverageEnum>(aMasked.find_first()));
+            return otCoverageToScript(static_cast<UnicodeCoverageEnum>(find_first(aMasked)));
 
         if (aMasked[vcl::UnicodeCoverage::ARABIC])
         {
@@ -1161,13 +1189,13 @@ namespace
             aMasked.set(vcl::UnicodeCoverage::DEVANAGARI, false);
             //Probably strongly tuned for a single Indic script
             if (aMasked.count() == 1)
-                return otCoverageToScript(static_cast<UnicodeCoverageEnum>(aMasked.find_first()));
+                return otCoverageToScript(static_cast<UnicodeCoverageEnum>(find_first(aMasked)));
         }
 
         aMasked.set(vcl::UnicodeCoverage::GREEK_EXTENDED, false);
         aMasked.set(vcl::UnicodeCoverage::GREEK_AND_COPTIC, false);
         if (aMasked.count() == 1)
-            return otCoverageToScript(static_cast<UnicodeCoverageEnum>(aMasked.find_first()));
+            return otCoverageToScript(static_cast<UnicodeCoverageEnum>(find_first(aMasked)));
 
         if (aMasked[vcl::UnicodeCoverage::CYRILLIC])
         {
@@ -1184,16 +1212,16 @@ namespace
         aMasked.set(vcl::UnicodeCoverage::PHAGS_PA, false);
 
         //So, possibly a CJK font
-        if (!aMasked.count() && !rFontCapabilities.maCodePageRange.empty())
+        if (!aMasked.count() && rFontCapabilities.oCodePageRange)
         {
-            boost::dynamic_bitset<sal_uInt32> aCJKCodePageMask(vcl::CodePageCoverage::MAX_CP_ENUM);
+            std::bitset<vcl::CodePageCoverage::MAX_CP_ENUM> aCJKCodePageMask;
             aCJKCodePageMask.set(vcl::CodePageCoverage::CP932);
             aCJKCodePageMask.set(vcl::CodePageCoverage::CP936);
             aCJKCodePageMask.set(vcl::CodePageCoverage::CP949);
             aCJKCodePageMask.set(vcl::CodePageCoverage::CP950);
             aCJKCodePageMask.set(vcl::CodePageCoverage::CP1361);
-            boost::dynamic_bitset<sal_uInt32> aMaskedCodePage =
-                rFontCapabilities.maCodePageRange & aCJKCodePageMask;
+            std::bitset<vcl::CodePageCoverage::MAX_CP_ENUM> aMaskedCodePage =
+                *rFontCapabilities.oCodePageRange & aCJKCodePageMask;
             //fold Korean
             if (aMaskedCodePage[vcl::CodePageCoverage::CP1361])
             {
@@ -1276,11 +1304,12 @@ OUString makeShortRepresentativeTextForSelectedFont(OutputDevice &rDevice)
             return OUString();
 
 #if OSL_DEBUG_LEVEL > 0
-        lcl_dump_unicode_coverage(aFontCapabilities.maUnicodeRange);
-        lcl_dump_codepage_coverage(aFontCapabilities.maCodePageRange);
+        lcl_dump_unicode_coverage(aFontCapabilities.oUnicodeRange);
+        lcl_dump_codepage_coverage(aFontCapabilities.oCodePageRange);
 #endif
 
-        aFontCapabilities.maUnicodeRange &= getCommonLatnSubsetMask();
+        if (aFontCapabilities.oUnicodeRange)
+            *aFontCapabilities.oUnicodeRange &= getCommonLatnSubsetMask();
 
         //If this font is probably tuned to display a single non-Latin
         //script and the font name is itself in Latin, then show a small
@@ -1630,25 +1659,28 @@ OUString makeRepresentativeTextForFont(sal_Int16 nScriptType, const vcl::Font &r
         if (aDevice->GetFontCapabilities(aFontCapabilities))
         {
 #if OSL_DEBUG_LEVEL > 0
-            lcl_dump_unicode_coverage(aFontCapabilities.maUnicodeRange);
+            lcl_dump_unicode_coverage(aFontCapabilities.oUnicodeRange);
 #endif
 
-            aFontCapabilities.maUnicodeRange &= getWeakMask();
-
-            if (nScriptType != css::i18n::ScriptType::ASIAN)
+            if (aFontCapabilities.oUnicodeRange)
             {
-                aFontCapabilities.maUnicodeRange &= getCJKMask();
-                aFontCapabilities.maCodePageRange.clear();
+                *aFontCapabilities.oUnicodeRange &= getWeakMask();
+
+                if (nScriptType != css::i18n::ScriptType::ASIAN)
+                {
+                    *aFontCapabilities.oUnicodeRange &= getCJKMask();
+                    aFontCapabilities.oCodePageRange.reset();
+                }
+                if (nScriptType != css::i18n::ScriptType::LATIN)
+                    *aFontCapabilities.oUnicodeRange &= getLatinMask();
+                if (nScriptType != css::i18n::ScriptType::COMPLEX)
+                    *aFontCapabilities.oUnicodeRange &= getCTLMask();
             }
-            if (nScriptType != css::i18n::ScriptType::LATIN)
-                aFontCapabilities.maUnicodeRange &= getLatinMask();
-            if (nScriptType != css::i18n::ScriptType::COMPLEX)
-                aFontCapabilities.maUnicodeRange &= getCTLMask();
 
 #if OSL_DEBUG_LEVEL > 0
             SAL_INFO("svtools", "minimal");
-            lcl_dump_unicode_coverage(aFontCapabilities.maUnicodeRange);
-            lcl_dump_codepage_coverage(aFontCapabilities.maCodePageRange);
+            lcl_dump_unicode_coverage(aFontCapabilities.oUnicodeRange);
+            lcl_dump_codepage_coverage(aFontCapabilities.oCodePageRange);
 #endif
 
             UScriptCode eScript = getScript(aFontCapabilities);

@@ -10,8 +10,9 @@
 #ifndef INCLUDED_VCL_FONTCAPABILITIES_HXX
 #define INCLUDED_VCL_FONTCAPABILITIES_HXX
 
-#include <boost/dynamic_bitset.hpp>
+#include <boost/optional.hpp>
 #include <vector>
+#include <bitset>
 
 #include <sal/types.h>
 
@@ -195,8 +196,8 @@ namespace vcl
 
     struct FontCapabilities
     {
-        boost::dynamic_bitset<sal_uInt32> maUnicodeRange;
-        boost::dynamic_bitset<sal_uInt32> maCodePageRange;
+        boost::optional<std::bitset<UnicodeCoverage::MAX_UC_ENUM>> oUnicodeRange;
+        boost::optional<std::bitset<CodePageCoverage::MAX_CP_ENUM>> oCodePageRange;
         std::vector< sal_uInt32 > maGSUBScriptTags;
     };
 }

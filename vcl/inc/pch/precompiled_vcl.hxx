@@ -52,7 +52,6 @@
 #include <utility>
 #include <vector>
 #include <window.h>
-#include <boost/dynamic_bitset.hpp>
 #include <boost/functional/hash.hpp>
 #include <boost/intrusive_ptr.hpp>
 #include <boost/math/special_functions/sinc.hpp>
