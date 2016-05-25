@@ -24,7 +24,6 @@
 #include <unordered_map>
 #include <vector>
 
-#include <boost/shared_array.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <osl/file.hxx>
@@ -272,17 +271,12 @@ public:
     class GlyphEmit
     {
         // performance: actually this should probably a vector;
-        sal_Ucs                         m_aBufferedUnicodes[3];
-        sal_Int32                       m_nUnicodes;
-        sal_Int32                       m_nMaxUnicodes;
-        boost::shared_array<sal_Ucs>    m_pUnicodes;
+        std::vector<sal_Ucs>            m_Unicodes;
         sal_uInt8                       m_nSubsetGlyphID;
 
     public:
-        GlyphEmit() : m_nUnicodes(0), m_nSubsetGlyphID(0)
+        GlyphEmit() : m_nSubsetGlyphID(0)
         {
-            memset( m_aBufferedUnicodes, 0, sizeof( m_aBufferedUnicodes ) );
-            m_nMaxUnicodes = SAL_N_ELEMENTS(m_aBufferedUnicodes);
         }
         ~GlyphEmit()
         {
@@ -293,27 +287,14 @@ public:
 
         void addCode( sal_Ucs i_cCode )
         {
-            if( m_nUnicodes == m_nMaxUnicodes )
-            {
-                sal_Ucs* pNew = new sal_Ucs[ 2 * m_nMaxUnicodes];
-                if( m_pUnicodes.get() )
-                    memcpy( pNew, m_pUnicodes.get(), m_nMaxUnicodes * sizeof(sal_Ucs) );
-                else
-                    memcpy( pNew, m_aBufferedUnicodes, m_nMaxUnicodes * sizeof(sal_Ucs) );
-                m_pUnicodes.reset( pNew );
-                m_nMaxUnicodes *= 2;
-            }
-            if( m_pUnicodes.get() )
-                m_pUnicodes[ m_nUnicodes++ ] = i_cCode;
-            else
-                m_aBufferedUnicodes[ m_nUnicodes++ ] = i_cCode;
+            m_Unicodes.push_back(i_cCode);
         }
-        sal_Int32 countCodes() const { return m_nUnicodes; }
+        sal_Int32 countCodes() const { return m_Unicodes.size(); }
         sal_Ucs getCode( sal_Int32 i_nIndex ) const
         {
             sal_Ucs nRet = 0;
-            if( i_nIndex < m_nUnicodes )
-                nRet = m_pUnicodes.get() ? m_pUnicodes[ i_nIndex ] : m_aBufferedUnicodes[ i_nIndex ];
+            if (static_cast<size_t>(i_nIndex) < m_Unicodes.size())
+                nRet = m_Unicodes[i_nIndex];
             return nRet;
         }
     };
