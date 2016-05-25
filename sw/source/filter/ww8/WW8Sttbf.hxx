@@ -22,7 +22,7 @@
 
 #include <memory>
 #include <vector>
-#include <boost/shared_array.hpp>
+
 #include <tools/solar.h>
 #include <rtl/ustring.hxx>
 #include <IDocumentExternalData.hxx>
@@ -34,7 +34,7 @@ namespace ww8
 
     class WW8Struct : public ::sw::ExternalData
     {
-        boost::shared_array<sal_uInt8> mp_data;
+        std::shared_ptr<sal_uInt8> m_pData;
         sal_uInt32 mn_offset;
         sal_uInt32 mn_size;
 

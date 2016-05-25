@@ -24,6 +24,7 @@
 #include <cstdio>
 #include <osl/endian.h>
 #include <rtl/ustrbuf.hxx>
+#include <o3tl/make_shared.hxx>
 #include <tools/stream.hxx>
 
 namespace ww8
@@ -35,14 +36,14 @@ namespace ww8
         {
             sal_Size nRemainingSize = rSt.remainingSize();
             nSize = std::min<sal_uInt32>(nRemainingSize, nSize);
-            mp_data.reset(new sal_uInt8[nSize]);
-            mn_size = rSt.Read(mp_data.get(), nSize);
+            m_pData = o3tl::make_shared_array<sal_uInt8>(nSize);
+            mn_size = rSt.Read(m_pData.get(), nSize);
         }
         OSL_ENSURE(mn_size == nSize, "short read in WW8Struct::WW8Struct");
     }
 
     WW8Struct::WW8Struct(WW8Struct * pStruct, sal_uInt32 nPos, sal_uInt32 nSize)
-        : mp_data(pStruct->mp_data), mn_offset(pStruct->mn_offset + nPos)
+        : m_pData(pStruct->m_pData), mn_offset(pStruct->mn_offset + nPos)
         , mn_size(nSize)
     {
     }
@@ -57,7 +58,7 @@ namespace ww8
 
         if (nOffset < mn_size)
         {
-            nResult = mp_data[mn_offset + nOffset];
+            nResult = m_pData.get()[mn_offset + nOffset];
         }
 
         return nResult;
@@ -79,7 +80,7 @@ namespace ww8
                 nCount = nAvailable;
 #if defined OSL_LITENDIAN
             aResult = OUString(reinterpret_cast<const sal_Unicode *>(
-                mp_data.get() + nStartOff), nCount);
+                m_pData.get() + nStartOff), nCount);
 #else
             OUStringBuffer aBuf;
             for (sal_uInt32 i = 0; i < nCount; ++i)

@@ -54,7 +54,6 @@
 #include <vector>
 #include <boost/intrusive_ptr.hpp>
 #include <boost/optional.hpp>
-#include <boost/shared_array.hpp>
 #include <osl/conditn.h>
 #include <osl/conditn.hxx>
 #include <osl/diagnose.h>
