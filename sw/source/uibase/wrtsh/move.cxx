@@ -127,7 +127,7 @@ bool SwWrtShell::Right( sal_uInt16 nMode, bool bSelect,
     }
 }
 
-bool SwWrtShell::Up( bool bSelect, bool bBasicCall )
+bool SwWrtShell::Up( bool bSelect, sal_uInt16 nCount, bool bBasicCall )
 {
     if ( !bSelect && !bBasicCall && IsCursorReadonly()  && !GetViewOptions()->IsSelectionInReadonly())
     {
@@ -138,10 +138,10 @@ bool SwWrtShell::Up( bool bSelect, bool bBasicCall )
     }
 
     ShellMoveCursor aTmp( this, bSelect );
-    return SwCursorShell::Up();
+    return SwCursorShell::Up(nCount);
 }
 
-bool SwWrtShell::Down( bool bSelect, bool bBasicCall )
+bool SwWrtShell::Down( bool bSelect, sal_uInt16 nCount, bool bBasicCall )
 {
     if ( !bSelect && !bBasicCall && IsCursorReadonly() && !GetViewOptions()->IsSelectionInReadonly())
     {
@@ -153,7 +153,7 @@ bool SwWrtShell::Down( bool bSelect, bool bBasicCall )
     }
 
     ShellMoveCursor aTmp( this, bSelect );
-    return SwCursorShell::Down();
+    return SwCursorShell::Down(nCount);
 }
 
 bool SwWrtShell::LeftMargin( bool bSelect, bool bBasicCall )
