@@ -729,7 +729,7 @@ void AssignmentPersistentData::ImplCommit()
 
     void AddressBookSourceDialog::dispose()
     {
-        delete m_pImpl;
+        m_pImpl.reset();
         m_pDatasource.clear();
         m_pAdministrateDatasources.clear();
         m_pTable.clear();

@@ -64,8 +64,7 @@ namespace svt
         css::uno::Reference< css::container::XNameAccess >
                                m_xCurrentDatasourceTables;
 
-        AddressBookSourceDialogData*
-                               m_pImpl;
+        std::unique_ptr<AddressBookSourceDialogData> m_pImpl;
 
     public:
         AddressBookSourceDialog( vcl::Window* _pParent,
