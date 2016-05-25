@@ -909,11 +909,11 @@ static void lcl_CopyProperties( beans::XPropertySet& rDest, beans::XPropertySet&
 
 static SCTAB lcl_FirstTab( const ScRangeList& rRanges )
 {
-    OSL_ENSURE(rRanges.size() >= 1, "was fuer Ranges ?!?!");
-    const ScRange* pFirst = rRanges[ 0 ];
+    if (rRanges.empty())
+        throw std::out_of_range("empty range");
+    const ScRange* pFirst = rRanges[0];
     if (pFirst)
         return pFirst->aStart.Tab();
-
     return 0;   // soll nicht sein
 }
 
