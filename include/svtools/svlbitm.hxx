@@ -241,7 +241,7 @@ struct SvLBoxContextBmp_Impl;
 
 class SVT_DLLPUBLIC SvLBoxContextBmp : public SvLBoxItem
 {
-    SvLBoxContextBmp_Impl*  m_pImpl;
+    std::unique_ptr<SvLBoxContextBmp_Impl>  m_pImpl;
 public:
     SvLBoxContextBmp(Image aBmp1,
                      Image aBmp2,

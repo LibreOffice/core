@@ -463,7 +463,6 @@ SvLBoxContextBmp::SvLBoxContextBmp()
 
 SvLBoxContextBmp::~SvLBoxContextBmp()
 {
-    delete m_pImpl;
 }
 
 sal_uInt16 SvLBoxContextBmp::GetType() const
