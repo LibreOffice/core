@@ -55,7 +55,6 @@ public:
         return static_cast<SCCOL>( aCols.size() );
     }
 
-    bool ColumnExists( SCCOL nColIdx ) const;
     void Clear();
 };
 

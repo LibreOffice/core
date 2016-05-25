@@ -36,13 +36,6 @@ ScColContainer::~ScColContainer()
 }
 
 
-bool ScColContainer::ColumnExists( SCCOL nColIdx ) const
-{
-    if ( nColIdx < 0 || nColIdx >= size() )
-        return false;
-    return true;
-}
-
 void ScColContainer::Clear()
 {
     SCCOL nSize = size();

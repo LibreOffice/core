@@ -146,8 +146,6 @@ public:
                                 bMailMergeSourceView = bIsSource;
                             }
     SwMailMergeConfigItem*  GetMailMergeConfigItem() {return pConfigItem;}
-    sal_uInt16              GetMailMergeRestartPage() const {return nMailMergeRestartPage;}
-    bool                IsMailMergeSourceView() const { return bMailMergeSourceView;  }
 #endif
 
     //#i33307# restore editing position

@@ -468,8 +468,6 @@ public:
     /** Writes all border attributes to the passed property map. */
     void                writeToPropertyMap( PropertyMap& rPropMap ) const;
 
-    bool                hasBorder() const;
-
 private:
     /** Returns the border line struct specified by the passed XML token identifier. */
     BorderLineModel*    getBorderLine( sal_Int32 nElement );
@@ -657,8 +655,6 @@ public:
 
     /** Writes all formatting attributes to the passed property map. */
     void                writeToPropertyMap( PropertyMap& rPropMap ) const;
-    /** Writes all formatting attributes to the passed property set. */
-    void                writeToPropertySet( PropertySet& rPropSet ) const;
 
     void writeToDoc( ScDocumentImport& rDoc, const css::table::CellRangeAddress& rRange );
 

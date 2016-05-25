@@ -69,7 +69,6 @@ public:
     {
         return m_xWindowState;
     }
-    void persistChanges() throw (css::uno::RuntimeException);
     css::uno::Reference< css::container::XIndexAccess > getSettings( const OUString& sResourceUrl ) throw (css::uno::RuntimeException);
     void removeSettings( const OUString& sResourceUrl ) throw (css::uno::RuntimeException);
     void ApplyTempChange( const OUString& sResourceUrl, const css::uno::Reference< css::container::XIndexAccess >& xSettings) throw (css::uno::RuntimeException);

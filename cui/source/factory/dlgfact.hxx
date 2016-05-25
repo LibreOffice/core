@@ -201,22 +201,6 @@ class AbstractSpellDialog_Impl : public AbstractSpellDialog
     virtual SfxBindings& GetBindings() override;
 };
 
-class SearchProgress;
-class AbstractSearchProgress_Impl : public AbstractSearchProgress
-{
-    DECL_ABSTDLG_BASE(AbstractSearchProgress_Impl,SearchProgress)
-    virtual void        Update() override ;
-
-};
-
-class TakeProgress;
-class AbstractTakeProgress_Impl : public AbstractTakeProgress
-{
-    DECL_ABSTDLG_BASE(AbstractTakeProgress_Impl,TakeProgress)
-    virtual void        Update() override ;
-
-};
-
 class TitleDialog;
 class AbstractTitleDialog_Impl : public AbstractTitleDialog
 {
@@ -253,13 +237,6 @@ class AbstractURLDlg_Impl :public AbstractURLDlg
     virtual OUString      GetDesc() const override;
     virtual OUString      GetTarget() const override;
     virtual OUString      GetName() const override;
-};
-
-class SvxHlinkDlgMarkWnd;
-class AbstractSvxHlinkDlgMarkWnd_Impl : public AbstractSvxHlinkDlgMarkWnd
-{
-    DECL_ABSTDLG_BASE(AbstractSvxHlinkDlgMarkWnd_Impl,SvxHlinkDlgMarkWnd)
-
 };
 
 class SvxSearchSimilarityDialog;
@@ -354,12 +331,6 @@ class AbstractSvxObjectTitleDescDialog_Impl :public AbstractSvxObjectTitleDescDi
     DECL_ABSTDLG_BASE(AbstractSvxObjectTitleDescDialog_Impl, SvxObjectTitleDescDialog)
     virtual void GetTitle(OUString& rName) override;
     virtual void GetDescription(OUString& rName) override;
-};
-
-class SvxMessDialog;
-class AbstractSvxMessDialog_Impl :public AbstractSvxMessDialog
-{
-    DECL_ABSTDLG_BASE(AbstractSvxMessDialog_Impl,SvxMessDialog)
 };
 
 class SvxMultiPathDialog;

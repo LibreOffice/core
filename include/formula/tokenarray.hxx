@@ -159,7 +159,6 @@ public:
     /// Assignment with references to FormulaToken entries (not copied!)
     FormulaTokenArray( const FormulaTokenArray& );
     virtual ~FormulaTokenArray();
-    FormulaTokenArray* Clone() const;    /// True copy!
 
     void SetFromRangeName( bool b ) { mbFromRangeName = b; }
     bool IsFromRangeName() const { return mbFromRangeName; }

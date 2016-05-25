@@ -74,8 +74,6 @@ public:
 
     ScColorScaleEntryType GetType() const { return meType;}
     void SetType( ScColorScaleEntryType eType );
-
-    bool NeedsRepaint() const;
 };
 
 namespace databar

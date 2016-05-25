@@ -511,11 +511,6 @@ ColorConfigValue ColorConfig::GetColorValue(ColorConfigEntry eEntry, bool bSmart
     return aRet;
 }
 
-void ColorConfig::Reload()
-{
-    m_pImpl->Load(OUString());
-}
-
 EditableColorConfig::EditableColorConfig() :
     m_pImpl(new ColorConfig_Impl),
     m_bModified(false)

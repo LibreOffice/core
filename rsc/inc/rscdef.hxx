@@ -145,7 +145,6 @@ public:
     sal_uLong   GetFileKey() const { return lFileKey; }
     void        Evaluate();
     sal_Int32   GetNumber() const  { return lId;      }
-    OString     GetMacro();
 };
 
 typedef ::std::vector< RscDefine* > RscSubDefList;

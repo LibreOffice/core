@@ -238,12 +238,6 @@ protected:
         ::xmloff::token::XMLTokenEnum                     eGroupName;
         css::uno::Sequence< css::beans::PropertyValue >   aSettings;
 
-        SettingsGroup()
-            :eGroupName( ::xmloff::token::XML_TOKEN_INVALID )
-            ,aSettings()
-        {
-        }
-
         SettingsGroup(
                 const ::xmloff::token::XMLTokenEnum _eGroupName,
                 const css::uno::Sequence< css::beans::PropertyValue >& _rSettings )

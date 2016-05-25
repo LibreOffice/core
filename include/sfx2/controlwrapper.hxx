@@ -117,10 +117,6 @@ private:
      |   +- EditWrapper   [1]
      |   +- ColorListBoxWrapper   [1]
      |   |
-     |   +- NumericFieldWrapper< ValueT >   [1]
-     |   |   |
-     |   |   +- [ValueType]NumericFieldWrapper   [1] [2]
-     |   |
      |   +- MetricFieldWrapper< ValueT >   [1]
      |   |   |
      |   |   +- [ValueType]MetricFieldWrapper   [1] [2]
@@ -262,22 +258,6 @@ public:
 
     virtual Color       GetControlValue() const override;
     virtual void        SetControlValue( Color aColor ) override;
-};
-
-
-/** A wrapper for the VCL NumericField. */
-template< typename ValueT >
-class NumericFieldWrapper : public SingleControlWrapper< NumericField, ValueT >
-{
-public:
-    inline explicit     NumericFieldWrapper( NumericField& rField ) :
-                            SingleControlWrapper< NumericField, ValueT >( rField ) {}
-
-    virtual bool        IsControlDontKnow() const SAL_OVERRIDE;
-    virtual void        SetControlDontKnow( bool bSet ) SAL_OVERRIDE;
-
-    virtual ValueT      GetControlValue() const SAL_OVERRIDE;
-    virtual void        SetControlValue( ValueT nValue ) SAL_OVERRIDE;
 };
 
 
@@ -495,32 +475,6 @@ inline void SingleControlWrapper< ControlT, ValueT >::ModifyControl( TriState eE
         mrControl.Enable( eEnable == TRISTATE_TRUE );
     if( eShow != TRISTATE_INDET )
         mrControl.Show( eShow == TRISTATE_TRUE );
-}
-
-
-template< typename ValueT >
-bool NumericFieldWrapper< ValueT >::IsControlDontKnow() const
-{
-    return this->GetControl().GetText().Len() == 0;
-}
-
-template< typename ValueT >
-void NumericFieldWrapper< ValueT >::SetControlDontKnow( bool bSet )
-{
-    if( bSet )
-        this->GetControl().SetText( OUString() );
-}
-
-template< typename ValueT >
-ValueT NumericFieldWrapper< ValueT >::GetControlValue() const
-{
-    return static_cast< ValueT >( this->GetControl().Denormalize( this->GetControl().GetValue() ) );
-}
-
-template< typename ValueT >
-void NumericFieldWrapper< ValueT >::SetControlValue( ValueT nValue )
-{
-    this->GetControl().SetValue( this->GetControl().Normalize( static_cast< sal_Int64 >( nValue ) ) );
 }
 
 

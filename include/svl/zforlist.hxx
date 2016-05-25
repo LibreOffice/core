@@ -231,9 +231,6 @@ public:
     NfCurrencyEntry( const css::i18n::Currency & rCurr,
                      const LocaleDataWrapper& rLocaleData,
                      LanguageType eLang );
-    inline NfCurrencyEntry(const OUString& rSymbol, const OUString& rBankSymbol,
-                           LanguageType eLang, sal_uInt16 nPositiveFmt,
-                           sal_uInt16 nNegativeFmt, sal_uInt16 nDig, sal_Unicode cZero);
     ~NfCurrencyEntry() {}
 
                         /// Symbols and language identical
@@ -281,19 +278,6 @@ public:
     /// General Unicode Euro symbol
     static inline sal_Unicode   GetEuroSymbol() { return sal_Unicode(0x20AC); }
 };
-
-/**
- * Necessary for ptr_vector on Windows. Please don't remove these, or at
- * least check it on Windows before attempting to remove them.
- */
-NfCurrencyEntry::NfCurrencyEntry(const OUString& rSymbol, const OUString& rBankSymbol,
-                                 LanguageType eLang, sal_uInt16 nPositiveFmt,
-                                 sal_uInt16 nNegativeFmt, sal_uInt16 nDig, sal_Unicode cZero)
-    : aSymbol(rSymbol), aBankSymbol(rBankSymbol), eLanguage(eLang)
-    , nPositiveFormat(nPositiveFmt), nNegativeFormat(nNegativeFmt)
-    , nDigits(nDig), cZeroChar(cZero)
-{
-}
 
 typedef std::vector< OUString > NfWSStringsDtor;
 

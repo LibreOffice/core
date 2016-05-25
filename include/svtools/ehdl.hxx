@@ -55,7 +55,6 @@ public:
 
 protected:
     bool     GetErrorString(sal_uLong lErrId, OUString &, sal_uInt16&) const;
-    bool     GetMessageString(sal_uLong lErrId, OUString &, sal_uInt16&) const;
 
 private:
 

@@ -263,7 +263,6 @@ private:
     DECL_LINK_TYPED( ModifyGradientHdl_Impl, ListBox&, void );
     DECL_LINK_TYPED( ModifyHatchingHdl_Impl, ListBox&, void );
     DECL_LINK_TYPED( ModifyBitmapHdl_Impl, ListBox&, void );
-    void ModifyStepCountHdl_Impl(void*);
 
     //UUUU
     DECL_LINK_TYPED( ClickImportHdl_Impl, Button*, void );

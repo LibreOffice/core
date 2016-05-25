@@ -138,21 +138,6 @@ public:
 
 typedef tools::SvRef<SvLockBytes> SvLockBytesRef;
 
-// SvOpenLockBytes
-
-class TOOLS_DLLPUBLIC SvOpenLockBytes: public SvLockBytes
-{
-public:
-
-    SvOpenLockBytes() : SvLockBytes(nullptr, false) {}
-    SvOpenLockBytes(SvStream * pStream, bool bOwner):
-        SvLockBytes(pStream, bOwner) {}
-
-    virtual ErrCode FillAppend(const void * pBuffer, sal_Size nCount,
-                               sal_Size * pWritten) = 0;
-};
-
-
 // SvStream
 
 class TOOLS_DLLPUBLIC SvStream

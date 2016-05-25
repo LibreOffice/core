@@ -117,7 +117,6 @@ private:
 protected:
     XMLParentNode( XMLParentNode *pPar )
         : XMLChildNode( pPar ) {}
-    XMLParentNode() {}
 
     XMLParentNode( const XMLParentNode& );
 

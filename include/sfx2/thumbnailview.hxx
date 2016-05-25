@@ -228,9 +228,6 @@ public:
 
     void filterItems (const std::function<bool (const ThumbnailViewItem*) > &func);
 
-    void sortItems (const std::function<bool (const ThumbnailViewItem*,
-                                                const ThumbnailViewItem*) > &func);
-
     void setItemStateHdl (const Link<const ThumbnailViewItem*,void> &aLink) { maItemStateHdl = aLink; }
 
     virtual void Resize() override;

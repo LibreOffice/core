@@ -123,30 +123,19 @@ private:
 public:
     explicit            FormulaBuffer( const WorkbookHelper& rHelper );
     void                finalizeImport();
-    void                setCellFormula( const css::table::CellAddress& rAddress, const OUString&  );
     void                setCellFormula( const ScAddress& rAddress, const OUString&  );
 
-    void setCellFormula(
-        const css::table::CellAddress& rAddress, sal_Int32 nSharedId,
-        const OUString& rCellValue, sal_Int32 nValueType );
     void setCellFormula(
         const ScAddress& rAddress, sal_Int32 nSharedId,
         const OUString& rCellValue, sal_Int32 nValueType );
 
     void setCellFormulaValue(
-        const css::table::CellAddress& rAddress, const OUString& rValueStr, sal_Int32 nCellType );
-    void setCellFormulaValue(
         const ScAddress& rAddress, const OUString& rValueStr, sal_Int32 nCellType );
 
-    void                setCellArrayFormula( const css::table::CellRangeAddress& rRangeAddress,
-                                             const css::table::CellAddress& rTokenAddress,
-                                             const OUString& );
     void                setCellArrayFormula( const css::table::CellRangeAddress& rRangeAddress,
                                              const ScAddress& rTokenAddress,
                                              const OUString& );
 
-    void                createSharedFormulaMapEntry( const css::table::CellAddress& rAddress,
-                                                     sal_Int32 nSharedId, const OUString& rTokens );
     void                createSharedFormulaMapEntry( const ScAddress& rAddress,
                                                      sal_Int32 nSharedId, const OUString& rTokens );
 

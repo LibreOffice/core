@@ -51,24 +51,6 @@ namespace ooo
             ReturnInteger( sal_Int32 nValue ) : ReturnInteger_BASE( nValue ){}
         };
 
-        typedef DefaultReturnHelper< sal_Bool, ov::msforms::XReturnBoolean > ReturnBoolean_BASE;
-        class ReturnBoolean : public ReturnBoolean_BASE
-        {
-            public:
-            ReturnBoolean( bool bValue ) : ReturnBoolean_BASE( bValue ){}
-        };
-        typedef DefaultReturnHelper< float, ov::msforms::XReturnSingle > ReturnSingle_BASE;
-        class ReturnSingle : public ReturnSingle_BASE
-        {
-            public:
-            ReturnSingle( float nValue ) : ReturnSingle_BASE( nValue ){}
-        };
-        typedef DefaultReturnHelper< short, ov::msforms::XReturnEffect > ReturnEffect_BASE;
-        class ReturnEffect : public ReturnEffect_BASE
-        {
-            public:
-            ReturnEffect( short nValue ) : ReturnEffect_BASE( nValue ){}
-        };
     } // vba
 } // ooo
 

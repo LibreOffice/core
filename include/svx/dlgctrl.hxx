@@ -139,7 +139,6 @@ public:
 
     bool IsCompletelyDisabled() const { return mbCompleteDisable; }
     void DoCompletelyDisable(bool bNew);
-    void SetCS(CTL_STYLE eNew);
 };
 
 /*************************************************************************
