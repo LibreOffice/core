@@ -3496,6 +3496,7 @@ bool SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
             set cursor to the drop position. */
         if( &rSh == &rSrcSh && ( bTableSel || rSh.IsBlockMode() ) )
         {
+            rSrcSh.CalcLayout();
             rSrcSh.SwCursorShell::SetCursor(rDragPt);
             rSrcSh.GetSwCursor()->SetMark();
         }
