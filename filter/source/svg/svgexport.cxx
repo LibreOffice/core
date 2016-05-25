@@ -49,7 +49,6 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/animationexport.hxx>
 
-#include <boost/preprocessor/repetition/repeat.hpp>
 #include <memory>
 
 using namespace ::com::sun::star::graphic;
@@ -1347,10 +1346,6 @@ void SVGFilter::implExportTextEmbeddedBitmaps()
     }
 }
 
-
-#define SVGFILTER_EXPORT_SVGSCRIPT( z, n, aFragment ) \
-        xExtDocHandler->unknown( aFragment ## n );
-
 void SVGFilter::implGenerateScript()
 {
     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "type", "text/ecmascript" );
@@ -1361,7 +1356,10 @@ void SVGFilter::implGenerateScript()
 
         if( xExtDocHandler.is() )
         {
-            BOOST_PP_REPEAT( N_SVGSCRIPT_FRAGMENTS, SVGFILTER_EXPORT_SVGSCRIPT, aSVGScript )
+            for (size_t i = 0; i < N_SVGSCRIPT_FRAGMENTS; ++i)
+            {
+                xExtDocHandler->unknown(OUString::createFromAscii(g_SVGScripts[i]));
+            }
         }
     }
 }
