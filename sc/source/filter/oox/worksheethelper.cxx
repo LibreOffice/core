@@ -1622,16 +1622,6 @@ void WorksheetHelper::putRichString( const ScAddress& rAddress, const RichString
     getDocImport().setEditCell(rAddress, rString.convert(rEE, pFirstPortionFont));
 }
 
-void WorksheetHelper::putFormulaTokens( const CellAddress& rAddress, const ApiTokenSequence& rTokens )
-{
-    ScDocumentImport& rDoc = getDocImport();
-    ScTokenArray aTokenArray;
-    ScAddress aCellPos;
-    ScUnoConversion::FillScAddress( aCellPos, rAddress );
-    ScTokenConversion::ConvertToTokenArray(rDoc.getDoc(), aTokenArray, rTokens);
-    rDoc.setFormulaCell(aCellPos, new ScTokenArray(aTokenArray));
-}
-
 void WorksheetHelper::putFormulaTokens( const ScAddress& rAddress, const ApiTokenSequence& rTokens )
 {
     ScDocumentImport& rDoc = getDocImport();

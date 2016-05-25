@@ -1143,35 +1143,6 @@ uno::Reference < io::XInputStream > EmbeddedObjectContainer::GetGraphicStream( c
     return GetGraphicStream( GetEmbeddedObjectName( xObj ), pMediaType );
 }
 
-uno::Reference < io::XInputStream > EmbeddedObjectContainer::GetObjectStream( const OUString& aName, OUString* pMediaType )
-{
-    uno::Reference < io::XInputStream > xInputStream;
-
-    SAL_WARN_IF( aName.isEmpty(), "comphelper.container", "Retrieving stream for unknown object!" );
-    if ( !aName.isEmpty() )
-    {
-        try
-        {
-            uno::Reference < io::XStream > xStream = pImpl->mxStorage->cloneStreamElement( aName );  //get a readonly clone
-            xInputStream = xStream->getInputStream();
-            if ( pMediaType )
-            {
-                uno::Reference < beans::XPropertySet > xSet( xInputStream, uno::UNO_QUERY );
-                if ( xSet.is() )
-                {
-                    uno::Any aAny = xSet->getPropertyValue("MediaType");
-                    aAny >>= *pMediaType;
-                }
-            }
-        }
-        catch (const uno::Exception&)
-        {
-        }
-    }
-
-    return xInputStream;
-}
-
 bool EmbeddedObjectContainer::InsertGraphicStream( const css::uno::Reference < css::io::XInputStream >& rStream, const OUString& rObjectName, const OUString& rMediaType )
 {
     try

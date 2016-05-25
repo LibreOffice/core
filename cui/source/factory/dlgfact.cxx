@@ -105,13 +105,10 @@ IMPL_ABSTDLG_BASE(AbstractFmShowColsDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractHyphenWordDialog_Impl)
 IMPL_ABSTDLG_BASE(AbstractThesaurusDialog_Impl)
 IMPL_ABSTDLG_BASE(AbstractSvxZoomDialog_Impl)
-IMPL_ABSTDLG_BASE(AbstractSearchProgress_Impl);
-IMPL_ABSTDLG_BASE(AbstractTakeProgress_Impl);
 IMPL_ABSTDLG_BASE(AbstractTitleDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractScriptSelectorDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractGalleryIdDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractURLDlg_Impl);
-IMPL_ABSTDLG_BASE(AbstractSvxHlinkDlgMarkWnd_Impl);
 IMPL_ABSTDLG_BASE(AbstractSvxSearchSimilarityDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractSvxTransformTabDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractSvxCaptionDialog_Impl);
@@ -124,7 +121,6 @@ IMPL_ABSTDLG_BASE(AbstractSvxNameDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractSvxObjectNameDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractSvxObjectTitleDescDialog_Impl);
 
-IMPL_ABSTDLG_BASE(AbstractSvxMessDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractSvxMultiPathDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractSvxPathSelectDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractSvxHpLinkDlg_Impl);
@@ -407,16 +403,6 @@ vcl::Window*     AbstractSpellDialog_Impl::GetWindow()
 SfxBindings& AbstractSpellDialog_Impl::GetBindings()
 {
     return pDlg->GetBindings();
-}
-
-void AbstractSearchProgress_Impl::Update()
-{
-     pDlg->Update();
-}
-
-void AbstractTakeProgress_Impl::Update()
-{
-     pDlg->Update();
 }
 
 OUString AbstractTitleDialog_Impl::GetTitle() const

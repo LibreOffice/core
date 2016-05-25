@@ -51,8 +51,6 @@ public:
 
     DECL_LINK_TYPED(ContextMenuSelectHdl, Menu*, bool);
 
-    sal_uInt16 getCurRegionItemId () const;
-
     TemplateContainerItem* getRegion(OUString const & sStr);
 
     sal_uInt16 getRegionId (size_t pos) const;
@@ -80,9 +78,6 @@ public:
     bool moveTemplates (const std::set<const ThumbnailViewItem*,selection_cmp_fn> &rItems, const sal_uInt16 nTargetItem);
 
     bool copyFrom (const sal_uInt16 nRegionItemId, const BitmapEx &rThumbnail, const OUString &rPath);
-
-    // Import a template to the current region
-    bool copyFrom (const OUString &rPath);
 
     bool copyFrom(TemplateContainerItem *pItem, const OUString &rPath);
 

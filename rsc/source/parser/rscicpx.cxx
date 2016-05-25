@@ -643,34 +643,6 @@ RscTop * RscTypCont::InitClassKeyCode( RscTop * pSuper, RscEnum * pKey )
     return pClassKeyCode;
 }
 
-RscTop * RscTypCont::InitClassAccel( RscTop * pSuper, RscTop * pClassAccelItem )
-{
-    Atom        nId;
-    RscTop *    pClassAccel;
-
-    // initialize class
-    nId = pHS->getID( "Accelerator" );
-    pClassAccel = new RscClass( nId, RSC_ACCEL, pSuper );
-    pClassAccel->SetCallPar( *pStdPar1, *pStdPar2, *pStdParType );
-    aNmTb.Put( nId, CLASSNAME, pClassAccel );
-
-    // initialize variables
-    nId = aNmTb.Put( "HelpText", VARNAME );
-    pClassAccel->SetVariable( nId, &aLangString );
-    {
-        RscCont * pCont;
-
-        aBaseLst.push_back(
-            pCont = new RscCont( pHS->getID( "ContAcceleratorKey" ), RSC_NOTYPE )
-        );
-        pCont->SetTypeClass( pClassAccelItem );
-        nId = aNmTb.Put( "ItemList", VARNAME );
-        pClassAccel->SetVariable( nId, pCont );
-    }
-
-    return pClassAccel;
-}
-
 RscTop * RscTypCont::InitClassMenuItem( RscTop * pSuper,
                                         RscTop * pClassBitmap )
 {

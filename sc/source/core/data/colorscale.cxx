@@ -276,14 +276,6 @@ void ScColorScaleEntry::UpdateMoveTab( sc::RefUpdateMoveTabContext& rCxt )
     mpListener.reset(new ScFormulaListener(mpCell.get()));
 }
 
-bool ScColorScaleEntry::NeedsRepaint() const
-{
-    if(mpListener)
-        return mpListener->NeedsRepaint();
-
-    return false;
-}
-
 void ScColorScaleEntry::SetColor(const Color& rColor)
 {
     maColor = rColor;

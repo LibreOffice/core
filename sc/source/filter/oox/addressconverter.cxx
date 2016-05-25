@@ -349,20 +349,6 @@ bool AddressConverter::checkCellAddress( const ScAddress& rAddress, bool bTrackO
         checkRow( rAddress.Row(), bTrackOverflow );
 }
 
-bool AddressConverter::convertToCellAddressUnchecked( CellAddress& orAddress,
-        const OUString& rString, sal_Int16 nSheet )
-{
-    orAddress.Sheet = nSheet;
-    return parseOoxAddress2d( orAddress.Column, orAddress.Row, rString );
-}
-
-bool AddressConverter::convertToCellAddressUnchecked(
-        css::table::CellAddress& orAddress, const char* pStr, sal_Int16 nSheet )
-{
-    orAddress.Sheet = nSheet;
-    return parseOoxAddress2d(orAddress.Column, orAddress.Row, pStr);
-}
-
 bool AddressConverter::convertToCellAddressUnchecked( ScAddress& orAddress,
         const OUString& rString, sal_Int16 nSheet )
 {
@@ -418,14 +404,6 @@ ScAddress AddressConverter::createValidCellAddress(
         aAddress.SetRow( ::std::min( aAddress.Row(), maMaxPos.Row() ) );
     }
     return aAddress;
-}
-
-void AddressConverter::convertToCellAddressUnchecked( CellAddress& orAddress,
-        const BinAddress& rBinAddress, sal_Int16 nSheet )
-{
-    orAddress.Sheet  = nSheet;
-    orAddress.Column = rBinAddress.mnCol;
-    orAddress.Row    = rBinAddress.mnRow;
 }
 
 void AddressConverter::convertToCellAddressUnchecked( ScAddress& orAddress,

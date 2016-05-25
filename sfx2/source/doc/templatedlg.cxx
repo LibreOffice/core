@@ -1245,17 +1245,6 @@ void SfxTemplateManagerDlg::OnCategoryDelete()
     mpCBFolder->SelectEntryPos(0);
 }
 
-void SfxTemplateManagerDlg::OnRepositoryDelete()
-{
-    if(deleteRepository(mpRemoteView->getCurRegionId()))
-    {
-        // switch to local view
-        switchMainView(true);
-
-        createRepositoryMenu();
-    }
-}
-
 void SfxTemplateManagerDlg::createRepositoryMenu()
 {
     mpRepositoryMenu->Clear();

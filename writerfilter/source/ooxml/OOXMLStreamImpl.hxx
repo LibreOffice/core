@@ -72,7 +72,6 @@ public:
 
     virtual css::uno::Reference<css::xml::sax::XFastParser> getFastParser() override;
     virtual css::uno::Reference<css::io::XInputStream> getDocumentStream() override;
-    virtual css::uno::Reference<css::io::XInputStream> getStorageStream() override;
     virtual css::uno::Reference<css::uno::XComponentContext> getContext() override;
     virtual OUString getTargetForId(const OUString & rId) override;
     virtual const OUString & getTarget() const override;

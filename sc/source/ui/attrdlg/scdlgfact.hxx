@@ -98,11 +98,6 @@ long Class::GetResult()                             \
     return pDlg->GetResult();                       \
 }
 
-class ScVclAbstractDialog_Impl : public VclAbstractDialog
-{
-    DECL_ABSTDLG_BASE(ScVclAbstractDialog_Impl,Dialog)
-};
-
 class AbstractScImportAsciiDlg_Impl : public AbstractScImportAsciiDlg
 {
     DECL_ABSTDLG_BASE(AbstractScImportAsciiDlg_Impl, ScImportAsciiDlg)

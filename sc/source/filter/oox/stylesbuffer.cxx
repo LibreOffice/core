@@ -1629,23 +1629,6 @@ void Border::writeToPropertyMap( PropertyMap& rPropMap ) const
     }
 }
 
-bool Border::hasBorder() const
-{
-    if (lcl_isBorder(maApiData.maBottom))
-        return true;
-
-    if (lcl_isBorder(maApiData.maTop))
-        return true;
-
-    if (lcl_isBorder(maApiData.maLeft))
-        return true;
-
-    if (lcl_isBorder(maApiData.maRight))
-        return true;
-
-    return false;
-}
-
 BorderLineModel* Border::getBorderLine( sal_Int32 nElement )
 {
     switch( nElement )
@@ -2226,13 +2209,6 @@ void Xf::writeToPropertyMap( PropertyMap& rPropMap ) const
         rStyles.writeBorderToPropertyMap( rPropMap, maModel.mnBorderId );
     if( maModel.mbAreaUsed )
         rStyles.writeFillToPropertyMap( rPropMap, maModel.mnFillId );
-}
-
-void Xf::writeToPropertySet( PropertySet& rPropSet ) const
-{
-    PropertyMap aPropMap;
-    writeToPropertyMap( aPropMap );
-    rPropSet.setProperties( aPropMap );
 }
 
 void Xf::writeToDoc( ScDocumentImport& rDoc, const table::CellRangeAddress& rRange )

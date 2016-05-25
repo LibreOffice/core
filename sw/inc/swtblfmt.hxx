@@ -45,10 +45,6 @@ class SwTableLineFormat : public SwFrameFormat
     friend class SwDoc;
 
 protected:
-    SwTableLineFormat( SwAttrPool& rPool, const sal_Char* pFormatNm,
-                    SwFrameFormat *pDrvdFrame )
-        : SwFrameFormat( rPool, pFormatNm, pDrvdFrame, RES_FRMFMT, aTableLineSetRange )
-    {}
     SwTableLineFormat( SwAttrPool& rPool, const OUString &rFormatNm,
                     SwFrameFormat *pDrvdFrame )
         : SwFrameFormat( rPool, rFormatNm, pDrvdFrame, RES_FRMFMT, aTableLineSetRange )

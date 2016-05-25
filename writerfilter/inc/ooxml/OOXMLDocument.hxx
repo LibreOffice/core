@@ -87,8 +87,6 @@ public:
 
     virtual css::uno::Reference<css::io::XInputStream> getDocumentStream() = 0;
 
-    virtual css::uno::Reference<css::io::XInputStream> getStorageStream() = 0;
-
     /**
        Returns component context for this stream.
      */

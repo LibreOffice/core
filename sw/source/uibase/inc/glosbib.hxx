@@ -37,11 +37,6 @@ class SwGlossaryHdl;
 class FEdit : public Edit
 {
 public:
-    FEdit(vcl::Window* pParent, const ResId& rResId)
-        : Edit(pParent, rResId)
-    {
-    }
-
     FEdit(vcl::Window* pParent)
         : Edit(pParent, WB_LEFT|WB_VCENTER|WB_BORDER|WB_3DLOOK)
     {

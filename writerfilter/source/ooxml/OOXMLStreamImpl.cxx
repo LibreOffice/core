@@ -391,11 +391,6 @@ uno::Reference<io::XInputStream> OOXMLStreamImpl::getDocumentStream()
     return xResult;
 }
 
-uno::Reference<io::XInputStream> OOXMLStreamImpl::getStorageStream()
-{
-    return mxStorageStream;
-}
-
 uno::Reference<uno::XComponentContext> OOXMLStreamImpl::getContext()
 {
     return mxContext;

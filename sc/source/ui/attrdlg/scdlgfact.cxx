@@ -73,7 +73,6 @@
 #include "xmlsourcedlg.hxx"
 #include "editutil.hxx"
 
-IMPL_ABSTDLG_BASE(ScVclAbstractDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractScImportAsciiDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScAutoFormatDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScColRowLabelDlg_Impl);

@@ -173,13 +173,6 @@ RscDefine * RscDefine::Search( const char * pStr )
     return static_cast<RscDefine *>(StringNode::Search( pStr ));
 }
 
-OString RscDefine::GetMacro()
-{
-    if( pExp )
-        return pExp->GetMacro();
-    return OString::number(lId);
-}
-
 RscDefine * RscDefineList::New( sal_uLong lFileKey, const OString& rDefName,
                                 sal_Int32 lDefId, size_t lPos )
 {

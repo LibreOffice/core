@@ -65,9 +65,6 @@ bool PlainTextFilterDetect_supportsService(const OUString& ServiceName);
 
 css::uno::Sequence<OUString> PlainTextFilterDetect_getSupportedServiceNames();
 
-css::uno::Reference<css::uno::XInterface>
-PlainTextFilterDetect_createInstance(const css::uno::Reference<css::uno::XComponentContext>& rCxt);
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

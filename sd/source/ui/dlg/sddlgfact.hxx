@@ -154,12 +154,6 @@ class AbstractSdInsertLayerDlg_Impl : public AbstractSdInsertLayerDlg
     virtual void    SetHelpId( const OString& rHelpId ) override ;
 };
 
-class SdInsertPasteDlg;
-class AbstractSdInsertPasteDlg_Impl : public AbstractSdInsertPasteDlg
-{
-    DECL_ABSTDLG_BASE(AbstractSdInsertPasteDlg_Impl,SdInsertPasteDlg)
-};
-
 class SdInsertPagesObjsDlg;
 class AbstractSdInsertPagesObjsDlg_Impl : public AbstractSdInsertPagesObjsDlg
 {

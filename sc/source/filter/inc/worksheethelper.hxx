@@ -289,8 +289,6 @@ public:
 
     /** Inserts a formula cell directly into the Calc sheet. */
     void putFormulaTokens(
-        const css::table::CellAddress& rAddress, const ApiTokenSequence& rTokens );
-    void putFormulaTokens(
         const ScAddress& rAddress, const ApiTokenSequence& rTokens );
 
     /** Initial conversion before importing the worksheet. */

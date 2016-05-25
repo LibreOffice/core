@@ -99,10 +99,6 @@ private:
     void OnCategoryNew ();
     void OnCategoryDelete();
 
-    void OnRegionState (const ThumbnailViewItem *pItem);
-
-    void OnRepositoryDelete ();
-
     void createRepositoryMenu ();
 
     void createDefaultTemplateMenu ();

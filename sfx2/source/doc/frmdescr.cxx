@@ -40,15 +40,11 @@ struct SfxFrameDescriptor_Impl
 
 SfxFrameDescriptor::SfxFrameDescriptor() :
     aMargin( -1, -1 ),
-    nWidth( 0L ),
     eScroll( ScrollingAuto ),
-    eSizeSelector( SIZE_ABS ),
     bHasBorder( true ),
     bHasBorderSet( false ),
-    nItemId( 0 ),
     bResizeHorizontal( true ),
     bResizeVertical( true ),
-    bHasUI( true ),
     bReadOnly( false ),
     pImpl( new SfxFrameDescriptor_Impl )
 {
@@ -91,38 +87,6 @@ void SfxFrameDescriptor::SetEditable( bool bSet )
 bool SfxFrameDescriptor::IsEditable() const
 {
     return pImpl->bEditable;
-}
-
-SfxFrameDescriptor* SfxFrameDescriptor::Clone() const
-{
-    SfxFrameDescriptor *pFrame = new SfxFrameDescriptor;
-
-    pFrame->aURL = aURL;
-    pFrame->aActualURL = aActualURL;
-    pFrame->aName = aName;
-    pFrame->aMargin = aMargin;
-    pFrame->nWidth = nWidth;
-    pFrame->eSizeSelector = eSizeSelector;
-    pFrame->eScroll = eScroll;
-    pFrame->bResizeHorizontal = bResizeHorizontal;
-    pFrame->bResizeVertical = bResizeVertical;
-    pFrame->bHasBorder = bHasBorder;
-    pFrame->bHasBorderSet = bHasBorderSet;
-    pFrame->bHasUI = bHasUI;
-    pFrame->SetReadOnly( IsReadOnly() );
-    pFrame->SetEditable( IsEditable() );
-    if ( pImpl->pWallpaper )
-        pFrame->pImpl->pWallpaper = new Wallpaper( *pImpl->pWallpaper );
-    if( pImpl->pArgs )
-    {
-        // Currently in the clone of SfxAllItemSets there is still a bug ...
-        pFrame->pImpl->pArgs = new SfxAllItemSet( SfxGetpApp()->GetPool() );
-        pFrame->pImpl->pArgs->Put(*pImpl->pArgs);
-    }
-
-    pFrame->nItemId = nItemId;
-
-    return pFrame;
 }
 
 void SfxFrameDescriptor::SetWallpaper( const Wallpaper& rWallpaper )

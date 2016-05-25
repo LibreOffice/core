@@ -1213,15 +1213,6 @@ void ThumbnailView::filterItems(const std::function<bool (const ThumbnailViewIte
     Invalidate();
 }
 
-void ThumbnailView::sortItems(const std::function<bool (const ThumbnailViewItem*, const ThumbnailViewItem*)> &func)
-{
-    std::sort(mItemList.begin(),mItemList.end(),func);
-
-    CalculateItemPositions();
-
-    Invalidate();
-}
-
 bool ThumbnailView::renameItem(ThumbnailViewItem*, const OUString&)
 {
     // Do nothing by default
