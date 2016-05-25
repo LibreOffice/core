@@ -555,7 +555,7 @@ public class Protocol extends JComponent
 
         ++m_nLine;
 
-        // it's necessary to open scopes before creatig the protocol line
+        // it's necessary to open scopes before creating the protocol line
         // to guarantee right tab handling for new scope value!
         if ((nType & TYPE_SCOPE_OPEN) == TYPE_SCOPE_OPEN)
             ++m_nScope;
@@ -565,7 +565,7 @@ public class Protocol extends JComponent
         String       sAsciiLog = aLine.toString();
         String       sHTMLLog  = aLine.toHTML();
 
-        // it's necessary to close scope after creatig the protocol line
+        // it's necessary to close scope after creating the protocol line
         // to guarantee right tab handling for old scope value!
         if (
             ( m_nScope                  >  0               ) &&

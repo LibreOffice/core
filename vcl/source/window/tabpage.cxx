@@ -40,7 +40,7 @@ void TabPage::ImplInit( vcl::Window* pParent, WinBits nStyle )
 
     ImplInitSettings();
 
-    // if the tabpage is drawn (ie filled) by a native widget, make sure all contols will have transparent background
+    // if the tabpage is drawn (ie filled) by a native widget, make sure all controls will have transparent background
     // otherwise they will paint with a wrong background
     if( IsNativeControlSupported(CTRL_TAB_BODY, PART_ENTIRE_CONTROL) && GetParent() && (GetParent()->GetType() == WINDOW_TABCONTROL) )
         EnableChildTransparentMode();

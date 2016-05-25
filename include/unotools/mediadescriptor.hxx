@@ -251,7 +251,7 @@ class UNOTOOLS_DLLPUBLIC MediaDescriptor : public comphelper::SequenceAsHashMap
             @return
             If not empty, contains the password that has been validated by the
             passed password verifier. If empty, no valid password has been
-            found, or the user has chossen to cancel password input.
+            found, or the user has chosen to cancel password input.
         */
         css::uno::Sequence< css::beans::NamedValue > requestAndVerifyDocPassword(
             comphelper::IDocPasswordVerifier& rVerifier,

@@ -279,7 +279,7 @@ protected:
 
     void implImportLibDescriptor( SfxLibrary* pLib, ::xmlscript::LibDescriptor& rLib );
 
-    // Methods to distinguish between deffirent library types
+    // Methods to distinguish between different library types
     virtual SfxLibrary* SAL_CALL implCreateLibrary( const OUString& aName ) = 0;
     virtual SfxLibrary* SAL_CALL implCreateLibraryLink
         ( const OUString& aName, const OUString& aLibInfoFileURL,

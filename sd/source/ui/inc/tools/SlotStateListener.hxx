@@ -87,7 +87,7 @@ public:
     //=====  frame::XStatusListener  ==========================================
 
     /** Called by slot state change broadcasters.  In turn the callback is
-        informed about the state chage.
+        informed about the state change.
         @throws DisposedException
     */
     virtual void SAL_CALL

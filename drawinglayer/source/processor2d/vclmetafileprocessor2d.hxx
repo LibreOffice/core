@@ -128,7 +128,7 @@ namespace drawinglayer
             vcl::PDFExtOutDevData*              mpPDFExtOutDevData;
 
         protected:
-            /*  the local processor for BasePrinitive2D-Implementation based primitives,
+            /*  the local processor for BasePrimitive2D-Implementation based primitives,
                 called from the common process()-implementation
              */
             virtual void processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate) override;

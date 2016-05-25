@@ -114,7 +114,7 @@ namespace pcr
 #define PROP_FLAG_COMPOSEABLE       0x00000080  // the property is "composeable", i.e. an intersection of property
                                                 //  sets should expose it, if all elements do
 #define PROP_FLAG_EXPERIMENTAL      0x00000100  // the property is experimental, i.e. should not appear in the
-                                                // UI, unless experimental properties are enabled by a configuraiton
+                                                // UI, unless experimental properties are enabled by a configuration
                                                 // option
 
 
