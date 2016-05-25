@@ -34,7 +34,7 @@ enum class PropUIFlags {
     Composeable   = 0x0008,  // the property is "composeable", i.e. an intersection of property
                              //  sets should expose it, if all elements do
     Experimental  = 0x0010,  // the property is experimental, i.e. should not appear in the
-                             // UI, unless experimental properties are enabled by a configuraiton
+                             // UI, unless experimental properties are enabled by a configuration
                              // option
     DataProperty  = 0x0020   // the property is to appear on the "Data" page
 };

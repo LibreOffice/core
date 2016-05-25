@@ -34,7 +34,7 @@ class SfxScriptLibraryContainer : public SfxLibraryContainer, public OldBasicPas
     OUString maScriptLanguage;
     css::uno::Reference< css::container::XNameAccess > mxCodeNameAccess;
 
-    // Methods to distinguish between deffirent library types
+    // Methods to distinguish between different library types
     virtual SfxLibrary* SAL_CALL implCreateLibrary( const OUString& aName ) override;
     virtual SfxLibrary* SAL_CALL implCreateLibraryLink
         ( const OUString& aName, const OUString& aLibInfoFileURL,

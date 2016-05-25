@@ -109,7 +109,7 @@ void TabControl::ImplInit( vcl::Window* pParent, WinBits nStyle )
         mpTabCtrlData->mpListBox->Show();
     }
 
-    // if the tabcontrol is drawn (ie filled) by a native widget, make sure all contols will have transparent background
+    // if the tabcontrol is drawn (ie filled) by a native widget, make sure all controls will have transparent background
     // otherwise they will paint with a wrong background
     if( IsNativeControlSupported(CTRL_TAB_PANE, PART_ENTIRE_CONTROL) )
         EnableChildTransparentMode();

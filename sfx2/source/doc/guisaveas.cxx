@@ -1628,7 +1628,7 @@ bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >& xMo
       && ( !aModelData.GetStorable()->hasLocation()
           || INetURLObject( aModelData.GetStorable()->getLocation() ) != aURL ) )
     {
-        // this is defenitly not a Save operation
+        // this is definitely not a Save operation
         // so the document info can be updated
 
         // on export document info must be preserved
