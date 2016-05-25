@@ -1128,7 +1128,7 @@ FontCharMapPtr WinFontFace::GetFontCharMap() const
 bool WinFontFace::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const
 {
     rFontCapabilities = maFontCapabilities;
-    return !rFontCapabilities.maUnicodeRange.empty() || !rFontCapabilities.maCodePageRange.empty();
+    return rFontCapabilities.oUnicodeRange || rFontCapabilities.oCodePageRange;
 }
 
 void WinFontFace::ReadGsubTable( HDC hDC ) const
@@ -1231,11 +1231,11 @@ void WinFontFace::GetFontCapabilities( HDC hDC ) const
         std::vector<unsigned char> aTable( nLength );
         unsigned char* pTable = &aTable[0];
         ::GetFontData( hDC, OS2Tag, 0, pTable, nLength );
-        if (vcl::getTTCoverage(maFontCapabilities.maUnicodeRange, maFontCapabilities.maCodePageRange, pTable, nLength))
+        if (vcl::getTTCoverage(maFontCapabilities.oUnicodeRange, maFontCapabilities.oCodePageRange, pTable, nLength))
         {
             // Check for CJK capabilities of the current font
             // TODO, we have this info already from getTT, decode bits to
-            // a readable dynamic_bitset
+            // a readable bitset
             sal_uInt32 ulUnicodeRange1 = GetUInt( pTable + 42 );
             sal_uInt32 ulUnicodeRange2 = GetUInt( pTable + 46 );
 

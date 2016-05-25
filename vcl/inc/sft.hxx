@@ -269,8 +269,8 @@ namespace vcl
 
     void getTTScripts(std::vector< sal_uInt32 > &rScriptTags, const unsigned char* pTable, size_t nLength);
     bool getTTCoverage(
-        boost::dynamic_bitset<sal_uInt32> &rUnicodeCoverage,
-        boost::dynamic_bitset<sal_uInt32> &rCodePageCoverage,
+        boost::optional<std::bitset<UnicodeCoverage::MAX_UC_ENUM>> & rUnicodeCoverage,
+        boost::optional<std::bitset<CodePageCoverage::MAX_CP_ENUM>> & rCodePageCoverage,
         const unsigned char* pTable, size_t nLength);
 
 /**

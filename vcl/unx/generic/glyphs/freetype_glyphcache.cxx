@@ -1065,8 +1065,8 @@ bool ServerFont::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) c
     if (pOS2)
     {
         bRet = vcl::getTTCoverage(
-            rFontCapabilities.maUnicodeRange,
-            rFontCapabilities.maCodePageRange,
+            rFontCapabilities.oUnicodeRange,
+            rFontCapabilities.oCodePageRange,
             pOS2, nLength);
     }
 

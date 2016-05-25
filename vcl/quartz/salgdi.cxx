@@ -134,7 +134,7 @@ bool CoreTextFontFace::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilit
     if( mbFontCapabilitiesRead )
     {
         rFontCapabilities = maFontCapabilities;
-        return !rFontCapabilities.maUnicodeRange.empty() || !rFontCapabilities.maCodePageRange.empty();
+        return rFontCapabilities.oUnicodeRange || rFontCapabilities.oCodePageRange;
     }
     mbFontCapabilitiesRead = true;
 
@@ -163,13 +163,13 @@ bool CoreTextFontFace::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilit
         if( nRawLength > 0 )
         {
             const unsigned char* pOS2Table = &aBuffer[0];
-            vcl::getTTCoverage( maFontCapabilities.maUnicodeRange,
-                                maFontCapabilities.maCodePageRange,
+            vcl::getTTCoverage( maFontCapabilities.oUnicodeRange,
+                                maFontCapabilities.oCodePageRange,
                                 pOS2Table, nRawLength);
         }
     }
     rFontCapabilities = maFontCapabilities;
-    return !rFontCapabilities.maUnicodeRange.empty() || !rFontCapabilities.maCodePageRange.empty();
+    return rFontCapabilities.oUnicodeRange || rFontCapabilities.oCodePageRange;
 }
 
 void CoreTextFontFace::ReadOs2Table() const
