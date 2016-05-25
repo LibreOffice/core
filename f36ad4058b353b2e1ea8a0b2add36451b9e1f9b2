@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_6c2b5031",
+        "filename": "sw/source/core/unocore/unostyle.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 706,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2016-05-25T21:46:41Z",
+      "side": 1,
+      "message": "This:\n\n rDoc.GetDocShell()-\u003eGetDoc()\n\nseems quite redundant to me: getting the shell of the doc, to get the doc of that shell (aka the place where you started)? why not simply have:\n\n const auto pAutoFormats \u003d \u0026rDoc.GetTableStyles();\n\ninstead?",
+      "revId": "f36ad4058b353b2e1ea8a0b2add36451b9e1f9b2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
