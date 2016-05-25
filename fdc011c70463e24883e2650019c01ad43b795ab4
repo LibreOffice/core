@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_91951142",
+        "filename": "include/comphelper/docpasswordhelper.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-05-25T09:41:14Z",
+      "side": 1,
+      "message": "ah, sorry, but \"chooses\" is correct in this context",
+      "revId": "fdc011c70463e24883e2650019c01ad43b795ab4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
