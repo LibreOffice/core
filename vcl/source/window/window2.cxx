@@ -919,6 +919,11 @@ const OString& Window::GetUniqueId() const
     return mpWindowImpl->maUniqId;
 }
 
+const OString& Window::GetScreenshotId() const
+{
+    return GetHelpId();
+}
+
 // --------- old inline methods ---------------
 
 vcl::Window* Window::ImplGetWindow()

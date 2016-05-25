@@ -1182,6 +1182,8 @@ public:
     void                                SetUniqueId( const OString& );
     const OString&                      GetUniqueId() const;
 
+    virtual const OString&              GetScreenshotId() const;
+
     vcl::Window*                        FindWindow( const Point& rPos ) const;
 
     sal_uInt16                          GetChildCount() const;
