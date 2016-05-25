@@ -1044,7 +1044,9 @@ gboolean LOKDocView_Impl::callbackImpl(CallbackData* pCallback)
         // on my system at least this is not true and many cursors are unsupported.
         // In this case pCursor = null, which results in the default cursor being set.
         GdkCursor* pCursor = gdk_cursor_new_from_name(gtk_widget_get_display(GTK_WIDGET(pCallback->m_pDocView)), pCallback->m_aPayload.c_str());
+#if GTK_CHECK_VERSION(2,14,0)
         gdk_window_set_cursor(gtk_widget_get_window(GTK_WIDGET(pCallback->m_pDocView)), pCursor);
+#endif
     }
     break;
     case LOK_CALLBACK_GRAPHIC_SELECTION:
