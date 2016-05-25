@@ -40,10 +40,10 @@
 #include <stdlib.h>
 #include <systools/win32/uwinapi.h>
 
+#include <desktop/exithelper.h>
 #include <rtl/string.h>
 #include <sal/macros.h>
 
-#include "../../../source/inc/exithelper.h"
 #include "../loader.hxx"
 
 #include <config_version.h>
