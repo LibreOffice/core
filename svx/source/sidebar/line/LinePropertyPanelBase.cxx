@@ -236,7 +236,6 @@ void LinePropertyPanelBase::Initialize()
     FillLineStyleList();
     SelectLineStyle();
     mpLBStyle->SetSelectHdl( LINK( this, LinePropertyPanelBase, ChangeLineStyleHdl ) );
-    mpLBStyle->SetAccessibleName("Style");
     mpLBStyle->AdaptDropDownLineCountToMaximum();
 
     const sal_uInt16 nIdWidth = mpTBWidth->GetItemId(UNO_SELECTWIDTH);
@@ -250,19 +249,15 @@ void LinePropertyPanelBase::Initialize()
     SelectEndStyle(true);
     SelectEndStyle(false);
     mpLBStart->SetSelectHdl( LINK( this, LinePropertyPanelBase, ChangeStartHdl ) );
-    mpLBStart->SetAccessibleName("Beginning Style"); //wj acc
     mpLBStart->AdaptDropDownLineCountToMaximum();
     mpLBEnd->SetSelectHdl( LINK( this, LinePropertyPanelBase, ChangeEndHdl ) );
-    mpLBEnd->SetAccessibleName("Ending Style");  //wj acc
     mpLBEnd->AdaptDropDownLineCountToMaximum();
 
     mpMFTransparent->SetModifyHdl(LINK(this, LinePropertyPanelBase, ChangeTransparentHdl));
 
     mpLBEdgeStyle->SetSelectHdl( LINK( this, LinePropertyPanelBase, ChangeEdgeStyleHdl ) );
-    mpLBEdgeStyle->SetAccessibleName("Corner Style");
 
     mpLBCapStyle->SetSelectHdl( LINK( this, LinePropertyPanelBase, ChangeCapStyleHdl ) );
-    mpLBCapStyle->SetAccessibleName("Cap Style");
 }
 
 void LinePropertyPanelBase::DataChanged(const DataChangedEvent& /*rEvent*/)

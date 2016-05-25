@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.16.1 -->
+<!-- Generated with glade 3.20.0 -->
 <interface>
   <requires lib="gtk+" version="3.0"/>
   <!-- interface-requires LibreOffice 1.0 -->
@@ -40,6 +40,11 @@
                     <property name="tooltip_markup" translatable="yes">Select the style of the beginning arrowhead.</property>
                     <property name="tooltip_text" translatable="yes">Select the style of the beginning arrowhead.</property>
                     <property name="hexpand">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="beginarrowstyle-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes">Beginning Style</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -56,6 +61,11 @@
                     <property name="tooltip_markup" translatable="yes">Select the style of the line.</property>
                     <property name="tooltip_text" translatable="yes">Select the style of the line.</property>
                     <property name="hexpand">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="linestyle-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes">Style</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -73,6 +83,11 @@
                     <property name="tooltip_text" translatable="yes">Select the style of the ending arrowhead.</property>
                     <property name="margin_right">6</property>
                     <property name="hexpand">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="endarrowstyle-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes">Ending Style</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -98,9 +113,9 @@
                   <object class="GtkLabel" id="widthlabel">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
                     <property name="label" translatable="yes">_Width:</property>
                     <property name="use_underline">True</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -145,9 +160,9 @@
                   <object class="GtkLabel" id="colorlabel">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
                     <property name="label" translatable="yes">_Color:</property>
                     <property name="use_underline">True</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -192,9 +207,9 @@
                   <object class="GtkLabel" id="translabel">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
                     <property name="label" translatable="yes">_Transparency:</property>
                     <property name="use_underline">True</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -219,7 +234,7 @@
                     </accessibility>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="linetransparency:0%-atkobject">
-                          <property name="AtkObject::accessible-name" translatable="yes">Transparency</property>
+                        <property name="AtkObject::accessible-name" translatable="yes">Transparency</property>
                       </object>
                     </child>
                   </object>
@@ -251,10 +266,10 @@
                       <object class="GtkLabel" id="cornerlabel">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">_Corner style:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">edgestyle</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -276,6 +291,11 @@
                           <item translatable="yes">Mitered</item>
                           <item translatable="yes">Beveled</item>
                         </items>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="edgestyle-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes">Corner Style</property>
+                          </object>
+                        </child>
                         <style>
                           <class name="Rounded"/>
                           <class name="- none -"/>
@@ -294,10 +314,10 @@
                       <object class="GtkLabel" id="caplabel">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">Ca_p style:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">linecapstyle</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -318,6 +338,11 @@
                           <item translatable="yes">Round</item>
                           <item translatable="yes">Square</item>
                         </items>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="linecapstyle-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes">Cap Style</property>
+                          </object>
+                        </child>
                         <style>
                           <class name="Flat"/>
                           <class name="Round"/>
