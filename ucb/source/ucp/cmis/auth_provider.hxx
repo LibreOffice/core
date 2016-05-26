@@ -12,13 +12,14 @@
 #include <libcmis/libcmis.hxx>
 
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
+#include <cppuhelper/weakref.hxx>
 
 namespace cmis
 {
     class AuthProvider : public libcmis::AuthProvider
     {
         const css::uno::Reference< css::ucb::XCommandEnvironment>& m_xEnv;
-        static css::uno::Reference< css::ucb::XCommandEnvironment> sm_xEnv;
+        static css::uno::WeakReference< css::ucb::XCommandEnvironment> sm_xEnv;
         OUString m_sUrl;
         OUString m_sBindingUrl;
 
@@ -38,9 +39,9 @@ namespace cmis
                     const char* /*username*/,
                     const char* /*password*/ );
 
-            static void setXEnv( const css::uno::Reference< css::ucb::XCommandEnvironment>& xEnv ) { sm_xEnv = xEnv; }
+            static void setXEnv( const css::uno::Reference< css::ucb::XCommandEnvironment>& xEnv );
+            static css::uno::Reference< css::ucb::XCommandEnvironment> getXEnv();
 
-            static const css::uno::Reference< css::ucb::XCommandEnvironment>& getXEnv( ) { return sm_xEnv; }
     };
 }
 
