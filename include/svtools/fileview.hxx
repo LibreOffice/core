@@ -70,7 +70,7 @@ struct FileViewAsyncAction
 class SVT_DLLPUBLIC SvtFileView : public Control
 {
 private:
-    SvtFileView_Impl*              mpImp;
+    std::unique_ptr<SvtFileView_Impl>              mpImpl;
     bool                           bSortColumn;
     css::uno::Sequence< OUString > mpBlackList;
 
