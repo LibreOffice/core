@@ -36,7 +36,7 @@ friend class SvtURLBox_Impl;
     OUString                        aBaseURL;
     OUString                        aPlaceHolder;
     rtl::Reference< SvtMatchContext_Impl > pCtx;
-    SvtURLBox_Impl*                 pImp;
+    std::unique_ptr<SvtURLBox_Impl> pImpl;
     INetProtocol                    eSmartProtocol;
     bool                            bAutoCompleteMode   : 1;
     bool                            bOnlyDirectories    : 1;
