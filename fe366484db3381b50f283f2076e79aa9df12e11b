@@ -16,6 +16,23 @@
       "revId": "fe366484db3381b50f283f2076e79aa9df12e11b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_87e78f11",
+        "filename": "filter/source/svg/parserfragments.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-05-26T09:57:45Z",
+      "side": 1,
+      "message": "oh, another problem: the indentation here is done with tabs - please don\u0027t use tabs, we consistently use 4 spaces everywhere in C++/Java code.",
+      "revId": "fe366484db3381b50f283f2076e79aa9df12e11b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
