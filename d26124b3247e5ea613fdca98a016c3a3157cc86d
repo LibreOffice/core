@@ -34,6 +34,24 @@
       "revId": "d26124b3247e5ea613fdca98a016c3a3157cc86d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_e7469bbe",
+        "filename": "sc/source/ui/src/scfuncs.src",
+        "patchSetId": 1
+      },
+      "lineNbr": 11631,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-05-26T13:36:10Z",
+      "side": 1,
+      "message": "I like that last wording much better than the current change.",
+      "parentUuid": "da7fb54a_b1ff7533",
+      "revId": "d26124b3247e5ea613fdca98a016c3a3157cc86d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
