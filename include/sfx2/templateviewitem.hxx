@@ -33,8 +33,6 @@ public:
 private:
 
     OUString maPath;
-
-    Point maSubTitlePos;
 };
 
 #endif // INCLUDED_SFX2_TEMPLATEVIEWITEM_HXX
