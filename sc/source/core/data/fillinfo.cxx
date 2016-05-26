@@ -1126,7 +1126,7 @@ void ScDocument::FillInfo(
         rArray.MirrorSelfX( true, false );
 }
 
-ScTableInfo::ScTableInfo(const sal_uInt16 capacity)
+ScTableInfo::ScTableInfo(const SCSIZE capacity)
     : mpRowInfo(new RowInfo[capacity])
     , mnArrCount(0)
     , mnArrCapacity(capacity)
@@ -1137,7 +1137,7 @@ ScTableInfo::ScTableInfo(const sal_uInt16 capacity)
 
 ScTableInfo::~ScTableInfo()
 {
-    for( sal_uInt16 nIdx = 0; nIdx < mnArrCapacity; ++nIdx )
+    for( SCSIZE nIdx = 0; nIdx < mnArrCapacity; ++nIdx )
         delete [] mpRowInfo[ nIdx ].pCellInfo;
     delete [] mpRowInfo;
 }
