@@ -526,6 +526,7 @@ public:
 
     void        ResetChanged( const ScRange& rRange );
 
+    void CheckVectorizationState();
     void SetAllFormulasDirty( const sc::SetFormulaDirtyContext& rCxt );
     void        SetDirty( const ScRange&, ScColumn::BroadcastMode );
     void        SetDirtyAfterLoad();

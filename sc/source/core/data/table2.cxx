@@ -1700,6 +1700,14 @@ void ScTable::SetDirtyVar()
         aCol[i].SetDirtyVar();
 }
 
+void ScTable::CheckVectorizationState()
+{
+    sc::AutoCalcSwitch aACSwitch(*pDocument, false);
+
+    for (SCCOL i = 0; i <= MAXCOL; i++)
+        aCol[i].CheckVectorizationState();
+}
+
 void ScTable::SetAllFormulasDirty( const sc::SetFormulaDirtyContext& rCxt )
 {
     sc::AutoCalcSwitch aACSwitch(*pDocument, false);

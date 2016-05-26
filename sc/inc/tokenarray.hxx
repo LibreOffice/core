@@ -65,6 +65,7 @@ public:
     size_t GetHash() const { return mnHashValue;}
 
     ScFormulaVectorState GetVectorState() const { return meVectorState;}
+    void ResetVectorState() { meVectorState = FormulaVectorEnabled; }
 
     /**
      * If the array contains at least one relative row reference or named
