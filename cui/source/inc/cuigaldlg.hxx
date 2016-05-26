@@ -265,7 +265,7 @@ class TPGalleryThemeProperties : public SfxTabPage
     bool                    bTakeAll;
     bool                    bSearchRecursive;
 
-    css::uno::Reference< ::svt::DialogClosedListener >      xDialogListener;
+    rtl::Reference< ::svt::DialogClosedListener >           xDialogListener;
     css::uno::Reference< css::media::XPlayer >              xMediaPlayer;
     css::uno::Reference< css::ui::dialogs::XFolderPicker2 > xFolderPicker;
 

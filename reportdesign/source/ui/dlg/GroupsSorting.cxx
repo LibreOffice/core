@@ -107,7 +107,7 @@ class OFieldExpressionControl : public ::svt::EditBrowseBox
     ImplSVEvent *                   m_nDeleteEvent;
     VclPtr<OGroupsSortingDialog>    m_pParent;
     bool                            m_bIgnoreEvent;
-    css::uno::Reference<OFieldExpressionControlContainerListener> aContainerListener;
+    rtl::Reference<OFieldExpressionControlContainerListener> aContainerListener;
 
     bool SaveModified(bool _bAppend);
 
