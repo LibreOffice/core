@@ -1036,6 +1036,7 @@ public:
 
     void            ResetChanged( const ScRange& rRange );
 
+    void CheckVectorizationState();
     void SetAllFormulasDirty( const sc::SetFormulaDirtyContext& rCxt );
     void            SetDirty( const ScRange&, bool bIncludeEmptyCells );
     void            SetTableOpDirty( const ScRange& );  // for Interpreter TableOp
