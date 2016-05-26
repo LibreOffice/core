@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_876dcf34",
+        "filename": "svtools/source/control/toolbarmenu.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 446,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-05-26T13:46:33Z",
+      "side": 1,
+      "message": "hmmm, it looks like the around destructing the Impl object was deliberately put there as part of commit 2f57b2280c453fd5e02b97fa63c67d3b796d492f",
+      "revId": "ea8b0c88d4f1bf17b50d613feb5c4e9ee5820b0c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
