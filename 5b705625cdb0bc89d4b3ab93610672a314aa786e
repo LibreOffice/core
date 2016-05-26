@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_272b2384",
+        "filename": "svtools/source/control/toolbarmenu.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 446,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-05-26T07:41:21Z",
+      "side": 1,
+      "message": "that won\u0027t work, you are accessing the mpImpl data after releasing it",
+      "revId": "5b705625cdb0bc89d4b3ab93610672a314aa786e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
