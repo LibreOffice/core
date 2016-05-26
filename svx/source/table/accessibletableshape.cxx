@@ -84,8 +84,8 @@ public:
     Reference< XAccessible> mxAccessible;
     sal_Int32 mRowCount, mColCount;
     //get the cached AccessibleCell from XCell
-    Reference< AccessibleCell > getAccessibleCell (const Reference< XCell >& xCell);
-    Reference< AccessibleCell > getAccessibleCell (sal_Int32 nRow, sal_Int32 nColumn) throw (IndexOutOfBoundsException, RuntimeException);
+    rtl::Reference< AccessibleCell > getAccessibleCell (const Reference< XCell >& xCell);
+    rtl::Reference< AccessibleCell > getAccessibleCell (sal_Int32 nRow, sal_Int32 nColumn) throw (IndexOutOfBoundsException, RuntimeException);
 };
 
 
@@ -136,23 +136,23 @@ void AccessibleTableShapeImpl::dispose()
 
 
 //get the cached AccessibleCell from XCell
-Reference< AccessibleCell > AccessibleTableShapeImpl::getAccessibleCell (const Reference< XCell >& xCell)
+rtl::Reference< AccessibleCell > AccessibleTableShapeImpl::getAccessibleCell (const Reference< XCell >& xCell)
 {
     AccessibleCellMap::iterator iter( maChildMap.find( xCell ) );
 
     if( iter != maChildMap.end() )
     {
-        Reference< AccessibleCell > xChild( (*iter).second.get() );
+        rtl::Reference< AccessibleCell > xChild( (*iter).second.get() );
         return xChild;
     }
-    return Reference< AccessibleCell >();
+    return rtl::Reference< AccessibleCell >();
 }
 
-Reference< AccessibleCell > AccessibleTableShapeImpl::getAccessibleCell (sal_Int32 nRow, sal_Int32 nColumn)
+rtl::Reference< AccessibleCell > AccessibleTableShapeImpl::getAccessibleCell (sal_Int32 nRow, sal_Int32 nColumn)
     throw (IndexOutOfBoundsException, RuntimeException)
 {
     Reference< XCell > xCell( mxTable->getCellByPosition( nColumn, nRow ) );
-    Reference< AccessibleCell > xChild = getAccessibleCell( xCell );
+    rtl::Reference< AccessibleCell > xChild = getAccessibleCell( xCell );
 
     if( !xChild.is() && mxTable.is() )
     {
@@ -164,7 +164,7 @@ Reference< AccessibleCell > AccessibleTableShapeImpl::getAccessibleCell (sal_Int
         xAccessibleCell->Init();
         maChildMap[xCell] = xAccessibleCell;
 
-        xChild = Reference< AccessibleCell >( xAccessibleCell.get() );
+        xChild = rtl::Reference< AccessibleCell >( xAccessibleCell.get() );
     }
     return xChild;
 }
@@ -918,7 +918,7 @@ void  SAL_CALL AccessibleTableShape::selectionChanged (const EventObject& rEvent
     Reference< XCell > xCell(rEvent.Source, UNO_QUERY);
     if (xCell.is())
     {
-        Reference< AccessibleCell > xAccCell = mxImpl->getAccessibleCell( xCell );
+        rtl::Reference< AccessibleCell > xAccCell = mxImpl->getAccessibleCell( xCell );
         if (xAccCell.is())
         {
             sal_Int32 nIndex = xAccCell->getAccessibleIndexInParent(),
@@ -946,7 +946,7 @@ void  SAL_CALL AccessibleTableShape::selectionChanged (const EventObject& rEvent
 // Get the currently active cell which is text editing
 AccessibleCell* AccessibleTableShape::GetActiveAccessibleCell()
 {
-    Reference< AccessibleCell > xAccCell;
+    rtl::Reference< AccessibleCell > xAccCell;
     AccessibleCell* pAccCell = nullptr;
     SvxTableController* pController = getTableController();
     if (pController)

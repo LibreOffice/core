@@ -18,6 +18,7 @@
  */
 
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <rtl/ref.hxx>
 
 #include <i18nutil/oneToOneMapping.hxx>
 #include <i18nutil/casefolding.hxx>
@@ -59,8 +60,8 @@ Transliteration_caseignore::transliterateRange( const OUString& str1, const OUSt
     if (str1.getLength() != 1 || str2.getLength() != 1)
         throw RuntimeException();
 
-    static Reference< Transliteration_u2l > u2l(new Transliteration_u2l);
-    static Reference< Transliteration_l2u > l2u(new Transliteration_l2u);
+    static rtl::Reference< Transliteration_u2l > u2l(new Transliteration_u2l);
+    static rtl::Reference< Transliteration_l2u > l2u(new Transliteration_l2u);
 
     u2l->loadModule((TransliterationModules)0, aLocale);
     l2u->loadModule((TransliterationModules)0, aLocale);

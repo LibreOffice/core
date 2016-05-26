@@ -42,6 +42,8 @@ OOXMLFastDocumentHandler::OOXMLFastDocumentHandler(
 {
 }
 
+OOXMLFastDocumentHandler::~OOXMLFastDocumentHandler() {}
+
 // css::xml::sax::XFastContextHandler:
 void SAL_CALL OOXMLFastDocumentHandler::startFastElement
 (::sal_Int32
@@ -115,7 +117,7 @@ throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 #endif
 }
 
-uno::Reference< OOXMLFastContextHandler >
+rtl::Reference< OOXMLFastContextHandler >
 OOXMLFastDocumentHandler::getContextHandler() const
 {
     if (!mxContextHandler.is())

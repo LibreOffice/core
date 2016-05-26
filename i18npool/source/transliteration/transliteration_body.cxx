@@ -18,6 +18,7 @@
  */
 
 #include <rtl/ustrbuf.hxx>
+#include <rtl/ref.hxx>
 #include <i18nutil/casefolding.hxx>
 #include <i18nutil/unicode.hxx>
 
@@ -269,7 +270,7 @@ static OUString transliterate_titlecase_Impl(
     if (!aText.isEmpty())
     {
         Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
-        Reference< CharacterClassificationImpl > xCharClassImpl( new CharacterClassificationImpl( xContext ) );
+        rtl::Reference< CharacterClassificationImpl > xCharClassImpl( new CharacterClassificationImpl( xContext ) );
 
         // because xCharClassImpl.toTitle does not handle ligatures or Beta but will raise
         // an exception we need to handle the first chara manually...

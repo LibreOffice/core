@@ -86,7 +86,7 @@ class OComponentDefinition  :public OContentHelper
                             ,public ::comphelper::OPropertyArrayUsageHelper< OComponentDefinition >
 {
 protected:
-    css::uno::Reference< OColumns >     m_xColumns;
+    rtl::Reference< OColumns >     m_xColumns;
     rtl::Reference<OColumnPropertyListener> m_xColumnPropertyListener;
     bool                        m_bTable;
 

@@ -49,7 +49,7 @@ bool ScWarnPassword::WarningOnPassword( SfxMedium& rMedium )
                 InteractionClassification_QUERY,
                  ERRCODE_SVX_EXPORT_FILTER_CRYPT)));
 
-        Reference< ucbhelper::SimpleInteractionRequest > xRequest
+        rtl::Reference< ucbhelper::SimpleInteractionRequest > xRequest
                     = new ucbhelper::SimpleInteractionRequest(
                         aException,
                         ucbhelper::CONTINUATION_APPROVE

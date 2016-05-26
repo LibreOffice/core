@@ -23,6 +23,7 @@
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <osl/diagnose.h>
+#include <rtl/ref.hxx>
 #include <localedata.hxx>
 #include <nativenumbersupplier.hxx>
 #include <stdio.h>
@@ -858,7 +859,7 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
       }
 
         if (natNum) {
-            uno::Reference<NativeNumberSupplierService> xNatNum(new NativeNumberSupplierService);
+            rtl::Reference<NativeNumberSupplierService> xNatNum(new NativeNumberSupplierService);
             result += xNatNum->getNativeNumberString(OUString::number( number ), locale, natNum);
         } else if (tableSize) {
             if ( number > tableSize && !bRecycleSymbol)
