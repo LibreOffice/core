@@ -200,6 +200,7 @@ RemoteFilesDialog::RemoteFilesDialog( vcl::Window* pParent, WinBits nBits )
 
     m_pFilter_lb->Enable( false );
     m_pName_ed->Enable( false );
+    m_pNewFolder->Enable( false );
 
     if( m_eMode == REMOTEDLG_MODE_OPEN )
     {
@@ -659,6 +660,7 @@ void RemoteFilesDialog::EnableControls()
         m_pFilter_lb->Enable();
         m_pName_ed->Enable();
         m_pContainer->Enable();
+        m_pNewFolder->Enable();
 
         if( !m_pName_ed->GetText().isEmpty() )
             m_pOk_btn->Enable();
@@ -670,6 +672,7 @@ void RemoteFilesDialog::EnableControls()
         m_pFilter_lb->Enable( false );
         m_pName_ed->Enable( false );
         m_pContainer->Enable( false );
+        m_pNewFolder->Enable( false );
         m_pOk_btn->Enable( false );
     }
 
