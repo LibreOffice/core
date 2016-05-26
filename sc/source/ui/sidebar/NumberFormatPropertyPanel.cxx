@@ -85,15 +85,12 @@ void NumberFormatPropertyPanel::Initialize()
 {
     mpLbCategory->SetSelectHdl ( LINK(this, NumberFormatPropertyPanel, NumFormatSelectHdl) );
     mpLbCategory->SelectEntryPos(0);
-    mpLbCategory->SetAccessibleName("Category");
     mpLbCategory->SetDropDownLineCount(mpLbCategory->GetEntryCount());
 
     Link<Edit&,void> aLink = LINK(this, NumberFormatPropertyPanel, NumFormatValueHdl);
 
     mpEdDecimals->SetModifyHdl( aLink );
     mpEdLeadZeroes->SetModifyHdl( aLink );
-    mpEdDecimals->SetAccessibleName("Decimal Places");
-    mpEdLeadZeroes->SetAccessibleName("Leading Zeroes");
 
     mpBtnNegRed->SetClickHdl( LINK(this, NumberFormatPropertyPanel, NumFormatValueClickHdl) );
     mpBtnThousand->SetClickHdl( LINK(this, NumberFormatPropertyPanel, NumFormatValueClickHdl) );

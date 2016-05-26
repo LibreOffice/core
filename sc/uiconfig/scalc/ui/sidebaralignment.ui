@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.20.0 -->
 <interface>
   <requires lib="gtk+" version="3.0"/>
+  <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkImage" id="image1">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -227,7 +228,7 @@
                           </object>
                           <packing>
                             <property name="expand">False</property>
-                            <property name="homogenous">True</property>
+                            <property name="homogeneous">True</property>
                           </packing>
                         </child>
                         <child>
@@ -240,7 +241,7 @@
                           </object>
                           <packing>
                             <property name="expand">False</property>
-                            <property name="homogenous">True</property>
+                            <property name="homogeneous">True</property>
                           </packing>
                         </child>
                       </object>
@@ -253,10 +254,10 @@
                       <object class="GtkLabel" id="leftindentlabel">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">_Indent:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">leftindent:0pt</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -278,6 +279,14 @@
                     <property name="tooltip_markup" translatable="yes">Indents from the left edge.</property>
                     <property name="tooltip_text" translatable="yes">Indents from the left edge.</property>
                     <property name="invisible_char">•</property>
+                    <accessibility>
+                      <relation type="labelled-by" target="leftindentlabel"/>
+                    </accessibility>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="leftindent:0pt-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes">Left Indent</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -361,9 +370,9 @@
               <object class="GtkLabel" id="orientationlabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">0</property>
                 <property name="label" translatable="yes">Text _orientation:</property>
                 <property name="use_underline">True</property>
+                <property name="xalign">0</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -373,12 +382,20 @@
             </child>
             <child>
               <object class="VclComboBoxNumeric" id="orientationdegrees:0degrees">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup" translatable="yes">Select the angle for rotation.</property>
-                    <property name="tooltip_text" translatable="yes">Select the angle for rotation.</property>
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="has_tooltip">True</property>
+                <property name="tooltip_markup" translatable="yes">Select the angle for rotation.</property>
+                <property name="tooltip_text" translatable="yes">Select the angle for rotation.</property>
+                <accessibility>
+                  <relation type="labelled-by" target="orientationlabel"/>
+                </accessibility>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="orientationdegrees:0degrees-atkobject">
+                    <property name="AtkObject::accessible-name" translatable="yes">Text Orientation</property>
                   </object>
+                </child>
+              </object>
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
@@ -394,10 +411,10 @@
                   <object class="GtkRadioButton" id="bottom">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="tooltip_text" translatable="yes">Text Extension From Lower Cell Border</property>
-                    <property name="receives_default">False</property>
-                    <property name="image">image3</property>
                     <property name="focus_on_click">False</property>
+                    <property name="receives_default">False</property>
+                    <property name="tooltip_text" translatable="yes">Text Extension From Lower Cell Border</property>
+                    <property name="image">image3</property>
                     <property name="xalign">0</property>
                     <property name="always_show_image">True</property>
                     <property name="draw_indicator">False</property>
@@ -412,10 +429,10 @@
                   <object class="GtkRadioButton" id="top">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="tooltip_text" translatable="yes">Text Extension From Upper Cell Border</property>
-                    <property name="receives_default">False</property>
-                    <property name="image">image2</property>
                     <property name="focus_on_click">False</property>
+                    <property name="receives_default">False</property>
+                    <property name="tooltip_text" translatable="yes">Text Extension From Upper Cell Border</property>
+                    <property name="image">image2</property>
                     <property name="xalign">0</property>
                     <property name="always_show_image">True</property>
                     <property name="draw_indicator">False</property>
@@ -430,10 +447,10 @@
                   <object class="GtkRadioButton" id="standard">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="tooltip_text" translatable="yes">Text Extension Inside Cell</property>
-                    <property name="receives_default">False</property>
-                    <property name="image">image1</property>
                     <property name="focus_on_click">False</property>
+                    <property name="receives_default">False</property>
+                    <property name="tooltip_text" translatable="yes">Text Extension Inside Cell</property>
+                    <property name="image">image1</property>
                     <property name="xalign">0</property>
                     <property name="always_show_image">True</property>
                     <property name="draw_indicator">False</property>
