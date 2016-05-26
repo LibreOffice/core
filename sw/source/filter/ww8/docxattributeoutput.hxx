@@ -704,9 +704,9 @@ private:
     void WritePostponedCustomShape();
 
     void WriteSdtBlock(sal_Int32& nSdtPrToken,
-                       css::uno::Reference<sax_fastparser::FastAttributeList>& pSdtPrTokenChildren,
-                       css::uno::Reference<sax_fastparser::FastAttributeList>& pSdtPrTokenAttributes,
-                       css::uno::Reference<sax_fastparser::FastAttributeList>& pSdtPrDataBindingAttrs,
+                       rtl::Reference<sax_fastparser::FastAttributeList>& pSdtPrTokenChildren,
+                       rtl::Reference<sax_fastparser::FastAttributeList>& pSdtPrTokenAttributes,
+                       rtl::Reference<sax_fastparser::FastAttributeList>& pSdtPrDataBindingAttrs,
                        OUString& rSdtPrAlias,
                        bool bPara);
     /// Closes a currently open SDT block.
@@ -717,15 +717,15 @@ private:
     void CmdField_Impl( FieldInfos& rInfos );
     void EndField_Impl( FieldInfos& rInfos );
 
-    static void AddToAttrList( css::uno::Reference<sax_fastparser::FastAttributeList>& pAttrList, sal_Int32 nAttrName, const sal_Char* sAttrValue );
-    static void AddToAttrList( css::uno::Reference<sax_fastparser::FastAttributeList>& pAttrList, sal_Int32 nArgs, ... );
+    static void AddToAttrList( rtl::Reference<sax_fastparser::FastAttributeList>& pAttrList, sal_Int32 nAttrName, const sal_Char* sAttrValue );
+    static void AddToAttrList( rtl::Reference<sax_fastparser::FastAttributeList>& pAttrList, sal_Int32 nArgs, ... );
 
-    css::uno::Reference<sax_fastparser::FastAttributeList> m_pFontsAttrList;
-    css::uno::Reference<sax_fastparser::FastAttributeList> m_pEastAsianLayoutAttrList;
-    css::uno::Reference<sax_fastparser::FastAttributeList> m_pCharLangAttrList;
-    css::uno::Reference<sax_fastparser::FastAttributeList> m_pSectionSpacingAttrList;
-    css::uno::Reference<sax_fastparser::FastAttributeList> m_pParagraphSpacingAttrList;
-    css::uno::Reference<sax_fastparser::FastAttributeList> m_pHyperlinkAttrList;
+    rtl::Reference<sax_fastparser::FastAttributeList> m_pFontsAttrList;
+    rtl::Reference<sax_fastparser::FastAttributeList> m_pEastAsianLayoutAttrList;
+    rtl::Reference<sax_fastparser::FastAttributeList> m_pCharLangAttrList;
+    rtl::Reference<sax_fastparser::FastAttributeList> m_pSectionSpacingAttrList;
+    rtl::Reference<sax_fastparser::FastAttributeList> m_pParagraphSpacingAttrList;
+    rtl::Reference<sax_fastparser::FastAttributeList> m_pHyperlinkAttrList;
     /// If the current SDT around runs should be ended before the current run.
     bool m_bEndCharSdt;
     /// If an SDT around runs is currently open.
@@ -733,9 +733,9 @@ private:
     /// If an SDT around paragraphs is currently open.
     bool m_bStartedParaSdt;
     /// Attributes of the run color
-    css::uno::Reference<sax_fastparser::FastAttributeList> m_pColorAttrList;
+    rtl::Reference<sax_fastparser::FastAttributeList> m_pColorAttrList;
     /// Attributes of the paragraph background
-    css::uno::Reference<sax_fastparser::FastAttributeList> m_pBackgroundAttrList;
+    rtl::Reference<sax_fastparser::FastAttributeList> m_pBackgroundAttrList;
     OUString m_sOriginalBackgroundColor;
     OUString m_hyperLinkAnchor;
     bool m_endPageRef;
@@ -917,15 +917,15 @@ private:
 
     /// members to control the existence of grabbagged SDT properties in the paragraph
     sal_Int32 m_nParagraphSdtPrToken;
-    css::uno::Reference<sax_fastparser::FastAttributeList> m_pParagraphSdtPrTokenChildren;
-    css::uno::Reference<sax_fastparser::FastAttributeList> m_pParagraphSdtPrTokenAttributes;
-    css::uno::Reference<sax_fastparser::FastAttributeList> m_pParagraphSdtPrDataBindingAttrs;
+    rtl::Reference<sax_fastparser::FastAttributeList> m_pParagraphSdtPrTokenChildren;
+    rtl::Reference<sax_fastparser::FastAttributeList> m_pParagraphSdtPrTokenAttributes;
+    rtl::Reference<sax_fastparser::FastAttributeList> m_pParagraphSdtPrDataBindingAttrs;
     /// members to control the existence of grabbagged SDT properties in the text run
     sal_Int32 m_nRunSdtPrToken;
     /// State of the Fly at current position
     FlyProcessingState m_nStateOfFlyFrame;
-    css::uno::Reference<sax_fastparser::FastAttributeList> m_pRunSdtPrTokenChildren;
-    css::uno::Reference<sax_fastparser::FastAttributeList> m_pRunSdtPrDataBindingAttrs;
+    rtl::Reference<sax_fastparser::FastAttributeList> m_pRunSdtPrTokenChildren;
+    rtl::Reference<sax_fastparser::FastAttributeList> m_pRunSdtPrDataBindingAttrs;
     /// Value of the <w:alias> paragraph SDT element.
     OUString m_aParagraphSdtPrAlias;
     /// Same as m_aParagraphSdtPrAlias, but its content is available till the SDT is closed.

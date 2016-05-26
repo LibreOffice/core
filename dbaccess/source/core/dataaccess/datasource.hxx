@@ -82,7 +82,7 @@ class ODatabaseSource   :public ModelDependentComponent // must be first
 
 private:
     using ODatabaseSource_Base::rBHelper;
-    css::uno::Reference<OBookmarkContainer> m_xBookmarks;
+    rtl::Reference<OBookmarkContainer> m_xBookmarks;
     ::comphelper::OInterfaceContainerHelper2       m_aFlushListeners;
 
 private:

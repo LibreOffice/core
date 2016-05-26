@@ -29,6 +29,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XConnectionPointContainer.hpp>
 #include <cppuhelper/propshlp.hxx>
+#include <rtl/ref.hxx>
 
 #include "basecontrol.hxx"
 #include "OConnectionPointContainerHelper.hxx"
@@ -213,7 +214,7 @@ private:
     css::uno::Reference< css::frame::XFrame2 >              m_xFrame;
     OUString                                                m_sComponentURL;
     css::uno::Sequence< css::beans::PropertyValue >         m_seqLoaderArguments;
-    css::uno::Reference<OConnectionPointContainerHelper>    m_aConnectionPointContainer;
+    rtl::Reference<OConnectionPointContainerHelper>         m_aConnectionPointContainer;
 
 };  // class FrameControl
 

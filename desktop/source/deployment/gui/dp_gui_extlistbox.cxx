@@ -256,7 +256,7 @@ void ExtensionBox_Impl::dispose()
     for ( ITER iIndex = m_vEntries.begin(); iIndex < m_vEntries.end(); ++iIndex )
     {
         (*iIndex)->m_pPublisher.disposeAndClear();
-        (*iIndex)->m_xPackage->removeEventListener( uno::Reference< lang::XEventListener > ( m_xRemoveListener, uno::UNO_QUERY ) );
+        (*iIndex)->m_xPackage->removeEventListener( m_xRemoveListener.get() );
     }
 
     m_vEntries.clear();
@@ -912,8 +912,7 @@ void ExtensionBox_Impl::addEventListenerOnce(
     if ( ::std::none_of(m_vListenerAdded.begin(), m_vListenerAdded.end(),
                         FindWeakRef(extension)) )
     {
-        extension->addEventListener( uno::Reference< lang::XEventListener > (
-                                         m_xRemoveListener, uno::UNO_QUERY ) );
+        extension->addEventListener( m_xRemoveListener.get() );
         m_vListenerAdded.push_back(extension);
     }
 }
@@ -1026,8 +1025,7 @@ void ExtensionBox_Impl::removeEntry( const uno::Reference< deployment::XPackage 
                 // the entry will be moved into the m_vRemovedEntries list which will be
                 // cleared on the next paint event
                 m_vRemovedEntries.push_back( *iIndex );
-                (*iIndex)->m_xPackage->removeEventListener(
-                    uno::Reference<lang::XEventListener>(m_xRemoveListener, uno::UNO_QUERY));
+                (*iIndex)->m_xPackage->removeEventListener(m_xRemoveListener.get());
                 m_vEntries.erase( iIndex );
 
                 m_bNeedsRecalc = true;

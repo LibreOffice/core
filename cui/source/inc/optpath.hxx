@@ -48,7 +48,7 @@ private:
     VclPtr<svx::OptHeaderTabListBox> pPathBox;
     std::unique_ptr<OptPath_Impl>               pImpl;
 
-    css::uno::Reference< ::svt::DialogClosedListener > xDialogListener;
+    rtl::Reference< ::svt::DialogClosedListener > xDialogListener;
     css::uno::Reference< css::ui::dialogs::XFolderPicker2 > xFolderPicker;
 
     void        ChangeCurrentEntry( const OUString& _rFolder );

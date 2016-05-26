@@ -92,8 +92,12 @@ private:
 
 struct Base1: public css::uno::XInterface {
     virtual ~Base1() = delete;
+    static ::css::uno::Type const & SAL_CALL static_type(void * = nullptr) // loplugin:refcounting
+    { return ::cppu::UnoType<Base1>::get(); }
 };
-struct Base2: public Base1 { virtual ~Base2() = delete; };
+struct Base2: public Base1 {
+    virtual ~Base2() = delete;
+};
 struct Base3: public Base1 { virtual ~Base3() = delete; };
 struct Derived: public Base2, public Base3 {
     virtual ~Derived() = delete;
@@ -102,7 +106,10 @@ struct Derived: public Base2, public Base3 {
 // The special case using the conversion operator instead:
 css::uno::Reference< css::uno::XInterface > testUpcast1(
     css::uno::Reference< Derived > const & ref)
-{ return ref; }
+{
+    Base1::static_type(); // prevent loplugin:unreffun firing
+    return ref;
+}
 
 // The normal up-cast case:
 css::uno::Reference< Base1 > testUpcast2(

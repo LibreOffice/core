@@ -34,6 +34,7 @@
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <rtl/ref.hxx>
 
 namespace
 {
@@ -247,7 +248,7 @@ struct Instance {
         instance(new DataAccessDescriptorFactory())
     {}
 
-    css::uno::Reference<cppu::OWeakObject> instance;
+    rtl::Reference<cppu::OWeakObject> instance;
 };
 
 struct Singleton:

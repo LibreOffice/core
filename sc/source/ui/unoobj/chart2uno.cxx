@@ -3292,9 +3292,9 @@ uno::Reference< util::XCloneable > SAL_CALL ScChart2DataSequence::createClone()
         aTokensNew.push_back(p);
     }
 
-    uno::Reference<ScChart2DataSequence> p(new ScChart2DataSequence(m_pDocument, m_xDataProvider, std::move(aTokensNew), m_bIncludeHiddenCells));
+    rtl::Reference<ScChart2DataSequence> p(new ScChart2DataSequence(m_pDocument, m_xDataProvider, std::move(aTokensNew), m_bIncludeHiddenCells));
     p->CopyData(*this);
-    Reference< util::XCloneable > xClone(p);
+    Reference< util::XCloneable > xClone(p.get());
 
     return xClone;
 }

@@ -53,13 +53,13 @@ typedef std::vector< ResultListEntry* > ResultList;
 class DataSupplier : public ucbhelper::ResultSetDataSupplier
 {
 private:
-    css::uno::Reference< ::gio::Content > mxContent;
+    rtl::Reference< ::gio::Content > mxContent;
     sal_Int32 mnOpenMode;
     bool mbCountFinal;
     bool getData();
     ResultList maResults;
 public:
-    DataSupplier( const css::uno::Reference< Content >& rContent, sal_Int32 nOpenMode );
+    DataSupplier( const rtl::Reference< Content >& rContent, sal_Int32 nOpenMode );
     virtual ~DataSupplier();
 
     virtual OUString queryContentIdentifierString( sal_uInt32 nIndex ) override;

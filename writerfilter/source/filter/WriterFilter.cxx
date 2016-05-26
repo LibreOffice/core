@@ -39,6 +39,7 @@
 #include <oox/ole/vbaproject.hxx>
 #include <ooxml/OOXMLDocument.hxx>
 #include <unotools/mediadescriptor.hxx>
+#include <rtl/ref.hxx>
 
 using namespace ::com::sun::star;
 
@@ -158,7 +159,7 @@ sal_Bool WriterFilter::filter(const uno::Sequence< beans::PropertyValue >& aDesc
         try
         {
             // use the oox.core.FilterDetect implementation to extract the decrypted ZIP package
-            uno::Reference<::oox::core::FilterDetect> xDetector(new ::oox::core::FilterDetect(m_xContext));
+            rtl::Reference<::oox::core::FilterDetect> xDetector(new ::oox::core::FilterDetect(m_xContext));
             xInputStream = xDetector->extractUnencryptedPackage(aMediaDesc);
         }
         catch (uno::Exception&)

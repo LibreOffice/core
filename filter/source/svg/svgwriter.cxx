@@ -3683,7 +3683,7 @@ void SAL_CALL SVGWriter::write( const Reference<XDocumentHandler>& rxDocHandler,
 
     ReadGDIMetaFile( aMemStm, aMtf );
 
-    Reference<SVGExport> pWriter(new SVGExport( mxContext, rxDocHandler, maFilterData ));
+    rtl::Reference<SVGExport> pWriter(new SVGExport( mxContext, rxDocHandler, maFilterData ));
     pWriter->writeMtf( aMtf );
 }
 

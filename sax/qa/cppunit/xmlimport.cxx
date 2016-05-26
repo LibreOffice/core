@@ -194,7 +194,7 @@ class XMLImportTest : public test::BootstrapFixture
 {
 private:
     OUString m_sDirPath;
-    Reference< TestDocumentHandler > m_xDocumentHandler;
+    rtl::Reference< TestDocumentHandler > m_xDocumentHandler;
     Reference< xml::sax::XParser > m_xParser;
     Reference< lang::XMultiServiceFactory > m_xSMgr;
 
@@ -217,7 +217,7 @@ void XMLImportTest::setUp()
     m_xSMgr = getMultiServiceFactory();
     m_xParser = xml::sax::Parser::create(
         ::comphelper::getProcessComponentContext() );
-    m_xParser->setDocumentHandler( m_xDocumentHandler );
+    m_xParser->setDocumentHandler( m_xDocumentHandler.get() );
     m_sDirPath = m_directories.getPathFromSrc( "/sax/qa/data/" );
 }
 

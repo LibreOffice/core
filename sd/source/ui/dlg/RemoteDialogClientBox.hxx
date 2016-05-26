@@ -105,7 +105,7 @@ class ClientBox : public Control
 
     VclPtr<ScrollBar> m_aScrollBar;
 
-    css::uno::Reference< ClientRemovedListener > m_xRemoveListener;
+    rtl::Reference< ClientRemovedListener > m_xRemoveListener;
 
     //This mutex is used for synchronizing access to m_vEntries.
     //Currently it is used to synchronize adding, removing entries and
