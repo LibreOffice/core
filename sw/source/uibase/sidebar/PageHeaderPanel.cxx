@@ -62,11 +62,11 @@ PageHeaderPanel::PageHeaderPanel(
     mpBindings( pBindings )
 {
     get(mpHeaderToggle, "headertoggle");
-    get(mpHeaderHeightField, "heightspinfield");
-    get(mpHeaderLMargin, "leftmargin");
-    get(mpHeaderRMargin, "rightmargin");
-    get(mpHeaderSpacing, "spacingspinfield");
-    get(mpSameContentLB, "samecontentLB");
+//     get(mpHeaderHeightField, "heightspinfield");
+//     get(mpHeaderLMargin, "leftmargin");
+//     get(mpHeaderRMargin, "rightmargin");
+//     get(mpHeaderSpacing, "spacingspinfield");
+//     get(mpSameContentLB, "samecontentLB");
 
     Initialize();
 }
@@ -79,11 +79,11 @@ PageHeaderPanel::~PageHeaderPanel()
 void PageHeaderPanel::dispose()
 {
     mpHeaderToggle.disposeAndClear();
-    mpHeaderHeightField.disposeAndClear();
-    mpHeaderLMargin.disposeAndClear();
-    mpHeaderRMargin.disposeAndClear();
-    mpHeaderSpacing.disposeAndClear();
-    mpSameContentLB.disposeAndClear();
+//     mpHeaderHeightField.disposeAndClear();
+//     mpHeaderLMargin.disposeAndClear();
+//     mpHeaderRMargin.disposeAndClear();
+//     mpHeaderSpacing.disposeAndClear();
+//     mpSameContentLB.disposeAndClear();
 
     PanelLayout::dispose();
 }
@@ -98,19 +98,19 @@ void PageHeaderPanel::UpdateControls()
     bool bIsEnabled = (bool)mpHeaderToggle->IsChecked();
     if(bIsEnabled)
     {
-        mpHeaderHeightField->Enable();
-        mpHeaderLMargin->Enable();
-        mpHeaderRMargin->Enable();
-        mpHeaderSpacing->Enable();
-        mpSameContentLB->Enable();
+//         mpHeaderHeightField->Enable();
+//         mpHeaderLMargin->Enable();
+//         mpHeaderRMargin->Enable();
+//         mpHeaderSpacing->Enable();
+//         mpSameContentLB->Enable();
     }
     else
     {
-        mpHeaderHeightField->Disable();
-        mpHeaderLMargin->Disable();
-        mpHeaderRMargin->Disable();
-        mpHeaderSpacing->Disable();
-        mpSameContentLB->Disable();
+//         mpHeaderHeightField->Disable();
+//         mpHeaderLMargin->Disable();
+//         mpHeaderRMargin->Disable();
+//         mpHeaderSpacing->Disable();
+//         mpSameContentLB->Disable();
     }
 }
 

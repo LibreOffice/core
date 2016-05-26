@@ -407,34 +407,6 @@
         </prop>
       </node>
 
-      <node oor:name="PageMarginPanel" oor:op="replace">
-        <prop oor:name="Title" oor:type="xs:string">
-          <value xml:lang="en-US">Margin</value>
-        </prop>
-        <prop oor:name="Id" oor:type="xs:string">
-          <value>PageMarginPanel</value>
-        </prop>
-        <prop oor:name="DeckId" oor:type="xs:string">
-          <value>WriterPageDeck</value>
-        </prop>
-        <prop oor:name="DefaultMenuCommand">
-          <value>.uno:PageDialog</value>
-        </prop>
-        <prop oor:name="ContextList">
-          <value oor:separator=";">
-            Writer, Table,    visible ;
-            Writer, Text,     visible ;
-            Writer, default,  visible ;
-          </value>
-        </prop>
-        <prop oor:name="ImplementationURL" oor:type="xs:string">
-          <value>private:resource/toolpanel/SwPanelFactory/PageMarginPanel</value>
-        </prop>
-        <prop oor:name="OrderIndex" oor:type="xs:int">
-          <value>300</value>
-        </prop>
-      </node>
-
       <node oor:name="PageFormatPanel" oor:op="replace">
         <prop oor:name="Title" oor:type="xs:string">
           <value xml:lang="en-US">Format</value>

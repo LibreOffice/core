@@ -75,11 +75,11 @@ private:
     SfxBindings* mpBindings;
 
     VclPtr<CheckBox> mpHeaderToggle;
-    VclPtr<MetricField> mpHeaderHeightField;
-    VclPtr<MetricField> mpHeaderLMargin;
-    VclPtr<MetricField> mpHeaderRMargin;
-    VclPtr<MetricField> mpHeaderSpacing;
-    VclPtr<ListBox> mpSameContentLB;
+//     VclPtr<MetricField> mpHeaderHeightField;
+//     VclPtr<MetricField> mpHeaderLMargin;
+//     VclPtr<MetricField> mpHeaderRMargin;
+//     VclPtr<MetricField> mpHeaderSpacing;
+//     VclPtr<ListBox> mpSameContentLB;
 
     void Initialize();
     void UpdateControls();
