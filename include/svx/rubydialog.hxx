@@ -29,14 +29,8 @@
 #include <vcl/button.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/scrbar.hxx>
-#include <com/sun/star/uno/Reference.h>
 #include <svx/svxdllapi.h>
-
-namespace com{namespace sun{namespace star{
-    namespace view{
-        class XSelectionChangeListener;
-    }
-}}}
+#include <rtl/ref.hxx>
 
 
 class SvxRubyDialog;
@@ -166,7 +160,7 @@ public:
     virtual void        Deactivate() override;
 
 private:
-    css::uno::Reference<SvxRubyData_Impl> pImpl;
+    rtl::Reference<SvxRubyData_Impl> m_pImpl;
 };
 
 #endif // INCLUDED_SVX_RUBYDIALOG_HXX
