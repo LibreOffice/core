@@ -34,6 +34,15 @@
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/document/XUndoManagerSupplier.hpp>
+#include <svtools/unitconv.hxx>
+#include <svtools/optionsdrawinglayer.hxx>
+#include <cstdlib>
+
+#define SWPAGE_NARROW_VALUE    720
+#define SWPAGE_NORMAL_VALUE    1136
+#define SWPAGE_WIDE_VALUE1     1440
+#define SWPAGE_WIDE_VALUE2     2880
+#define SWPAGE_WIDE_VALUE3     1800
 
 namespace sw { namespace sidebar{
 
@@ -42,12 +51,12 @@ VclPtr<vcl::Window> PageMarginPanel::Create(
     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame,
     SfxBindings* pBindings)
 {
-    if( !pParent )
-        throw ::com::sun::star::lang::IllegalArgumentException("no parent window given to PageMarginPanel::Create", nullptr, 0);
+    if( pParent == NULL )
+        throw ::com::sun::star::lang::IllegalArgumentException("no parent window given to PageMarginPanel::Create", NULL, 0);
     if( !rxFrame.is() )
-        throw ::com::sun::star::lang::IllegalArgumentException("no XFrame given to PageMarginPanel::Create", nullptr, 0);
-    if( !pBindings )
-        throw ::com::sun::star::lang::IllegalArgumentException("no SfxBindings given to PageMarginPanel::Create", nullptr, 0);
+        throw ::com::sun::star::lang::IllegalArgumentException("no XFrame given to PageMarginPanel::Create", NULL, 0);
+    if( pBindings == NULL )
+        throw ::com::sun::star::lang::IllegalArgumentException("no SfxBindings given to PageMarginPanel::Create", NULL, 0);
 
     return VclPtr<PageMarginPanel>::Create(pParent, rxFrame, pBindings);
 }
@@ -59,15 +68,17 @@ PageMarginPanel::PageMarginPanel(
     ) :
     PanelLayout(pParent, "PageMarginPanel" , "modules/swriter/ui/pagemarginpanel.ui", rxFrame),
     mpBindings(pBindings),
-    meFUnit(),
+    meFUnit(GetModuleFieldUnit()),
     meUnit(),
     mpPageLRMarginItem( new SvxLongLRSpaceItem( 0, 0, SID_ATTR_PAGE_LRSPACE ) ),
     mpPageULMarginItem( new SvxLongULSpaceItem( 0, 0, SID_ATTR_PAGE_ULSPACE ) ),
+    mpPageItem( new SvxPageItem( SID_ATTR_PAGE ) ),
     maSwPageLRControl(SID_ATTR_PAGE_LRSPACE, *pBindings, *this),
     maSwPageULControl(SID_ATTR_PAGE_ULSPACE, *pBindings, *this),
     maSwPageSizeControl(SID_ATTR_PAGE_SIZE, *pBindings, *this),
     maSwPageMetricControl(SID_ATTR_METRIC, *pBindings, *this)
 {
+    get(mpMarginSelectBox, "marginLB");
     get(mpLeftMarginEdit, "leftmargin");
     get(mpRightMarginEdit, "rightmargin");
     get(mpTopMarginEdit, "topmargin");
@@ -83,7 +94,7 @@ PageMarginPanel::~PageMarginPanel()
 
 void PageMarginPanel::dispose()
 {
-
+    mpMarginSelectBox.disposeAndClear();
     mpLeftMarginEdit.disposeAndClear();
     mpRightMarginEdit.disposeAndClear();
     mpTopMarginEdit.disposeAndClear();
@@ -91,6 +102,7 @@ void PageMarginPanel::dispose()
 
     mpPageLRMarginItem.reset();
     mpPageULMarginItem.reset();
+    mpPageItem.reset();
 
     maSwPageULControl.dispose();
     maSwPageLRControl.dispose();
@@ -103,10 +115,31 @@ void PageMarginPanel::dispose()
 void PageMarginPanel::Initialize()
 {
     meUnit = maSwPageSizeControl.GetCoreMetric();
+
+    SetFieldUnit(*mpLeftMarginEdit, meFUnit);
+    SetFieldUnit(*mpRightMarginEdit, meFUnit);
+    SetFieldUnit(*mpTopMarginEdit, meFUnit);
+    SetFieldUnit(*mpBottomMarginEdit, meFUnit);
+
+    const SvtOptionsDrawinglayer aDrawinglayerOpt;
+    mpLeftMarginEdit->SetMax(mpLeftMarginEdit->Normalize(aDrawinglayerOpt.GetMaximumPaperLeftMargin()), FUNIT_MM);
+    mpRightMarginEdit->SetMax(mpRightMarginEdit->Normalize(aDrawinglayerOpt.GetMaximumPaperRightMargin()), FUNIT_MM);
+    mpTopMarginEdit->SetMax(mpTopMarginEdit->Normalize(aDrawinglayerOpt.GetMaximumPaperTopMargin()), FUNIT_MM);
+    mpBottomMarginEdit->SetMax(mpBottomMarginEdit->Normalize(aDrawinglayerOpt.GetMaximumPaperBottomMargin()), FUNIT_MM);
+
     mpLeftMarginEdit->SetModifyHdl( LINK(this, PageMarginPanel, ModifyLRMarginHdl) );
     mpRightMarginEdit->SetModifyHdl( LINK(this, PageMarginPanel, ModifyLRMarginHdl) );
     mpTopMarginEdit->SetModifyHdl( LINK(this, PageMarginPanel, ModifyULMarginHdl) );
     mpBottomMarginEdit->SetModifyHdl( LINK(this, PageMarginPanel, ModifyULMarginHdl) );
+    mpMarginSelectBox->SetSelectHdl( LINK(this, PageMarginPanel, ModifyPresetMarginHdl));
+
+    mpBindings->Update( SID_ATTR_METRIC );
+    mpBindings->Update( SID_ATTR_PAGE );
+    mpBindings->Update( SID_ATTR_PAGE_LRSPACE );
+    mpBindings->Update( SID_ATTR_PAGE_ULSPACE );
+
+    SetMarginValues();
+    UpdateMarginBox();
 }
 
 void PageMarginPanel::MetricState( SfxItemState eState, const SfxPoolItem* pState )
@@ -119,7 +152,7 @@ void PageMarginPanel::MetricState( SfxItemState eState, const SfxPoolItem* pStat
     else
     {
         SfxViewFrame* pFrame = SfxViewFrame::Current();
-        SfxObjectShell* pSh = nullptr;
+        SfxObjectShell* pSh = NULL;
         if ( pFrame )
             pSh = pFrame->GetObjectShell();
         if ( pSh )
@@ -137,26 +170,22 @@ void PageMarginPanel::MetricState( SfxItemState eState, const SfxPoolItem* pStat
             }
         }
     }
-/*
+
     SetFieldUnit( *mpLeftMarginEdit.get(), meFUnit );
     SetFieldUnit( *mpRightMarginEdit.get(), meFUnit );
     SetFieldUnit( *mpTopMarginEdit.get(), meFUnit );
     SetFieldUnit( *mpBottomMarginEdit.get(), meFUnit );
-*/
+
 }
 
-void PageMarginPanel::ExecuteMarginLRChange(
-    const long nPageLeftMargin,
-    const long nPageRightMargin )
+void PageMarginPanel::ExecuteMarginLRChange( const long nPageLeftMargin, const long nPageRightMargin )
 {
     mpPageLRMarginItem->SetLeft( nPageLeftMargin );
     mpPageLRMarginItem->SetRight( nPageRightMargin );
     GetBindings()->GetDispatcher()->ExecuteList( SID_ATTR_PAGE_LRSPACE, SfxCallMode::RECORD, { mpPageLRMarginItem.get() });
 }
 
-void PageMarginPanel::ExecuteMarginULChange(
-    const long nPageTopMargin,
-    const long nPageBottomMargin )
+void PageMarginPanel::ExecuteMarginULChange( const long nPageTopMargin, const long nPageBottomMargin )
 {
     mpPageULMarginItem->SetUpper( nPageTopMargin );
     mpPageULMarginItem->SetLower( nPageBottomMargin );
@@ -174,19 +203,40 @@ void PageMarginPanel::NotifyItemUpdate(
     {
         case SID_ATTR_PAGE_LRSPACE:
         {
+            if ( eState >= SfxItemState::DEFAULT &&
+             pState && dynamic_cast< const SvxLongLRSpaceItem *>( pState ) !=  nullptr )
+            {
+                mpPageLRMarginItem.reset( static_cast<SvxLongLRSpaceItem*>(pState->Clone()) );
+                SetMarginValues();
+                UpdateMarginBox();
+            }
         }
         break;
         case SID_ATTR_PAGE_ULSPACE:
         {
+            if ( eState >= SfxItemState::DEFAULT &&
+                pState && dynamic_cast< const SvxLongULSpaceItem *>( pState ) !=  nullptr )
+            {
+                mpPageULMarginItem.reset( static_cast<SvxLongULSpaceItem*>(pState->Clone()) );
+                SetMarginValues();
+                UpdateMarginBox();
+            }
+        }
+        break;
+        case SID_ATTR_PAGE:
+        {
+            if ( eState >= SfxItemState::DEFAULT &&
+             pState && dynamic_cast< const SvxPageItem *>( pState ) !=  nullptr )
+                mpPageItem.reset( static_cast<SvxPageItem*>(pState->Clone()) );
         }
         break;
         case SID_ATTR_METRIC:
             MetricState(eState, pState);
         break;
+        default:
+            break;
     }
 }
-
-
 
 IMPL_LINK_NOARG_TYPED( PageMarginPanel, ModifyLRMarginHdl, Edit&, void )
 {
@@ -200,6 +250,113 @@ IMPL_LINK_NOARG_TYPED( PageMarginPanel, ModifyULMarginHdl, Edit&, void )
     mnPageTopMargin = GetCoreValue( *mpTopMarginEdit.get(), meUnit );
     mnPageBottomMargin = GetCoreValue( *mpBottomMarginEdit.get(), meUnit );
     ExecuteMarginULChange( mnPageTopMargin, mnPageBottomMargin );
+}
+
+IMPL_LINK_NOARG_TYPED( PageMarginPanel, ModifyPresetMarginHdl, ListBox&, void )
+{
+    bool bMirrored = false;
+    bool bApplyNewPageMargins = true;
+    switch ( mpMarginSelectBox->GetSelectEntryPos() )
+    {
+        case 0:
+            mnPageLeftMargin = SWPAGE_NARROW_VALUE;
+            mnPageRightMargin = SWPAGE_NARROW_VALUE;
+            mnPageTopMargin = SWPAGE_NARROW_VALUE;
+            mnPageBottomMargin = SWPAGE_NARROW_VALUE;
+            bMirrored = false;
+            break;
+        case 1:
+            mnPageLeftMargin = SWPAGE_NORMAL_VALUE;
+            mnPageRightMargin = SWPAGE_NORMAL_VALUE;
+            mnPageTopMargin = SWPAGE_NORMAL_VALUE;
+            mnPageBottomMargin = SWPAGE_NORMAL_VALUE;
+            bMirrored = false;
+            break;
+        case 2:
+            mnPageLeftMargin = SWPAGE_WIDE_VALUE2;
+            mnPageRightMargin = SWPAGE_WIDE_VALUE2;
+            mnPageTopMargin = SWPAGE_WIDE_VALUE1;
+            mnPageBottomMargin = SWPAGE_WIDE_VALUE1;
+            bMirrored = false;
+            break;
+        case 3:
+            mnPageLeftMargin = SWPAGE_WIDE_VALUE3;
+            mnPageRightMargin = SWPAGE_WIDE_VALUE1;
+            mnPageTopMargin = SWPAGE_WIDE_VALUE1;
+            mnPageBottomMargin = SWPAGE_WIDE_VALUE1;
+            bMirrored = true;
+            break;
+        default:
+            bApplyNewPageMargins = false;
+            break;
+    }
+
+    if(bApplyNewPageMargins)
+    {
+        ExecuteMarginLRChange( mnPageLeftMargin, mnPageRightMargin );
+        ExecuteMarginULChange( mnPageTopMargin, mnPageBottomMargin );
+        if(bMirrored != (mpPageItem->GetPageUsage() == SVX_PAGE_MIRROR))
+        {
+            mpPageItem->SetPageUsage( bMirrored ? SVX_PAGE_MIRROR : SVX_PAGE_ALL );
+            GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE,
+                                                        SfxCallMode::RECORD, { mpPageItem.get() });
+        }
+    }
+}
+
+void PageMarginPanel::SetMarginValues()
+{
+    mnPageLeftMargin = mpPageLRMarginItem->GetLeft();
+    mnPageRightMargin = mpPageLRMarginItem->GetRight();
+    mnPageTopMargin = mpPageULMarginItem->GetUpper();
+    mnPageBottomMargin = mpPageULMarginItem->GetLower();
+
+    SetMetricValue( *mpLeftMarginEdit.get(), mnPageLeftMargin, meUnit );
+    SetMetricValue( *mpRightMarginEdit.get(), mnPageRightMargin, meUnit );
+    SetMetricValue( *mpTopMarginEdit.get(), mnPageTopMargin, meUnit );
+    SetMetricValue( *mpBottomMarginEdit.get(), mnPageBottomMargin, meUnit );
+}
+
+void PageMarginPanel::UpdateMarginBox()
+{
+    const long cThreshold = 5;
+    bool bMirrored = (mpPageItem->GetPageUsage() == SVX_PAGE_MIRROR);
+    if( std::abs(mnPageLeftMargin - SWPAGE_NARROW_VALUE) <= cThreshold &&
+        std::abs(mnPageRightMargin - SWPAGE_NARROW_VALUE) <= cThreshold &&
+        std::abs(mnPageTopMargin - SWPAGE_NARROW_VALUE) <= cThreshold &&
+        std::abs(mnPageBottomMargin - SWPAGE_NARROW_VALUE) <= cThreshold &&
+        !bMirrored )
+    {
+        mpMarginSelectBox->SelectEntryPos(0);
+    }
+    else if( std::abs(mnPageLeftMargin - SWPAGE_NORMAL_VALUE) <= cThreshold &&
+        std::abs(mnPageRightMargin - SWPAGE_NORMAL_VALUE) <= cThreshold &&
+        std::abs(mnPageTopMargin - SWPAGE_NORMAL_VALUE) <= cThreshold &&
+        std::abs(mnPageBottomMargin - SWPAGE_NORMAL_VALUE) <= cThreshold &&
+        !bMirrored )
+    {
+        mpMarginSelectBox->SelectEntryPos(1);
+    }
+    else if( std::abs(mnPageLeftMargin - SWPAGE_WIDE_VALUE2) <= cThreshold &&
+        std::abs(mnPageRightMargin - SWPAGE_WIDE_VALUE2) <= cThreshold &&
+        std::abs(mnPageTopMargin - SWPAGE_WIDE_VALUE1) <= cThreshold &&
+        std::abs(mnPageBottomMargin - SWPAGE_WIDE_VALUE1) <= cThreshold &&
+        !bMirrored )
+    {
+        mpMarginSelectBox->SelectEntryPos(2);
+    }
+    else if( std::abs(mnPageLeftMargin - SWPAGE_WIDE_VALUE3) <= cThreshold &&
+        std::abs(mnPageRightMargin - SWPAGE_WIDE_VALUE1) <= cThreshold &&
+        std::abs(mnPageTopMargin - SWPAGE_WIDE_VALUE1) <= cThreshold &&
+        std::abs(mnPageBottomMargin - SWPAGE_WIDE_VALUE1) <= cThreshold &&
+        bMirrored )
+    {
+        mpMarginSelectBox->SelectEntryPos(3);
+    }
+    else
+    {
+        mpMarginSelectBox->SelectEntryPos(4);
+    }
 }
 
 } }

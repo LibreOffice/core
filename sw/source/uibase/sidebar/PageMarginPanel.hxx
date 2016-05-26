@@ -60,7 +60,7 @@ public:
         const sal_uInt16 nSID,
         const SfxItemState eState,
         const SfxPoolItem* pState,
-        const bool bIsEnabled) override;
+        const bool bIsEnabled);
 
     SfxBindings* GetBindings() const { return mpBindings; }
 
@@ -69,12 +69,13 @@ public:
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame,
         SfxBindings* pBindings);
     virtual ~PageMarginPanel();
-    virtual void dispose() override;
+    virtual void dispose();
 
 private:
 
     SfxBindings* mpBindings;
 
+    VclPtr<ListBox> mpMarginSelectBox;
     VclPtr<MetricField> mpLeftMarginEdit;
     VclPtr<MetricField> mpRightMarginEdit;
     VclPtr<MetricField> mpTopMarginEdit;
@@ -92,9 +93,12 @@ private:
     void ExecuteMarginLRChange( const long nPageLeftMargin, const long nPageRightMargin );
     void ExecuteMarginULChange( const long nPageTopMargin, const long  nPageBottomMargin);
     void MetricState( SfxItemState eState, const SfxPoolItem* pState );
+    void SetMarginValues();
+    void UpdateMarginBox();
 
     std::unique_ptr<SvxLongLRSpaceItem> mpPageLRMarginItem;
     std::unique_ptr<SvxLongULSpaceItem> mpPageULMarginItem;
+    std::unique_ptr<SvxPageItem> mpPageItem;
 
     ::sfx2::sidebar::ControllerItem maSwPageLRControl;
     ::sfx2::sidebar::ControllerItem maSwPageULControl;
@@ -103,7 +107,7 @@ private:
 
     DECL_LINK_TYPED( ModifyLRMarginHdl, Edit&, void );
     DECL_LINK_TYPED( ModifyULMarginHdl, Edit&, void );
-
+    DECL_LINK_TYPED( ModifyPresetMarginHdl, ListBox&, void );
 };
 
 } } // end of namespace sw::sidebar

@@ -21,6 +21,7 @@
               <item translatable="yes">Normal</item>
               <item translatable="yes">Wide</item>
               <item translatable="yes">Mirrored</item>
+              <item translatable="yes">Custom</item>
             </items>
           </object>
           <packing>
