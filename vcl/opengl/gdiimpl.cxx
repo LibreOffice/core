@@ -544,9 +544,8 @@ bool OpenGLSalGraphicsImpl::UseSolid( SalColor nColor, sal_uInt8 nTransparency )
 {
     if( nColor == SALCOLOR_NONE )
         return false;
-    if (!UseProgram("combinedVertexShader", "combinedFragmentShader"))
+    if( !UseProgram( "dumbVertexShader", "solidFragmentShader" ) )
         return false;
-    mpProgram->SetShaderType(DrawShaderType::Normal);
     mpProgram->SetColor( "color", nColor, nTransparency );
 #ifdef DBG_UTIL
     mProgramIsSolidColor = true;
@@ -561,9 +560,8 @@ bool OpenGLSalGraphicsImpl::UseSolid( SalColor nColor, double fTransparency )
 {
     if( nColor == SALCOLOR_NONE )
         return false;
-    if (!UseProgram("combinedVertexShader", "combinedFragmentShader"))
+    if( !UseProgram( "dumbVertexShader", "solidFragmentShader" ) )
         return false;
-    mpProgram->SetShaderType(DrawShaderType::Normal);
     mpProgram->SetColorf( "color", nColor, fTransparency );
 #ifdef DBG_UTIL
     mProgramIsSolidColor = true;
@@ -927,13 +925,12 @@ bool OpenGLSalGraphicsImpl::UseLine(SalColor nColor, double fTransparency, GLflo
 {
     if( nColor == SALCOLOR_NONE )
         return false;
-    if (!UseProgram("combinedVertexShader", "combinedFragmentShader"))
+    if( !UseProgram( "lineVertexShader", "lineFragmentShader" ) )
         return false;
-    mpProgram->SetShaderType(DrawShaderType::Line);
     mpProgram->SetColorf("color", nColor, fTransparency);
     mpProgram->SetUniform1f("line_width", fLineWidth);
     // The width of the feather - area we make lineary transparent in VS.
-    // Good AA value is 0.5f, no AA if feather 0.0f
+    // Good AA value is 0.5
     mpProgram->SetUniform1f("feather", bUseAA ? 0.5f : 0.0f);
     // We need blending or AA won't work correctly
     mpProgram->SetBlendMode( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
@@ -973,7 +970,7 @@ void OpenGLSalGraphicsImpl::DrawConvexPolygon( sal_uInt32 nPoints, const SalPoin
 #endif
         SalColor lastSolidColor = mProgramSolidColor;
         double lastSolidTransparency = mProgramSolidTransparency;
-        if (UseLine(lastSolidColor, lastSolidTransparency, 1.0f, true))
+        if (UseLine(lastSolidColor, lastSolidTransparency, 1.0f ,true))
         {
             for( i = 0; i < nPoints; ++i )
             {
@@ -1016,7 +1013,7 @@ void OpenGLSalGraphicsImpl::DrawConvexPolygon( const tools::Polygon& rPolygon, b
 #endif
         SalColor lastSolidColor = mProgramSolidColor;
         double lastSolidTransparency = mProgramSolidTransparency;
-        if (UseLine(lastSolidColor, lastSolidTransparency, 1.0f, true))
+        if (UseLine(lastSolidColor, lastSolidTransparency, 1.0f ,true))
         {
             for( i = 0; i < nPoints; ++i )
             {
@@ -1066,7 +1063,7 @@ void OpenGLSalGraphicsImpl::DrawTrapezoid( const basegfx::B2DTrapezoid& trapezoi
 #endif
         SalColor lastSolidColor = mProgramSolidColor;
         double lastSolidTransparency = mProgramSolidTransparency;
-        if (UseLine(lastSolidColor, lastSolidTransparency, 1.0f, true))
+        if (UseLine(lastSolidColor, lastSolidTransparency, 1.0f ,true))
         {
             for( i = 0; i < nPoints; ++i )
             {
@@ -1187,11 +1184,9 @@ void OpenGLSalGraphicsImpl::DrawTexture( OpenGLTexture& rTexture, const SalTwoRe
 
     SAL_INFO("vcl.opengl", "draw texture");
 
-    if (!UseProgram("combinedTextureVertexShader", "combinedTextureFragmentShader"))
+    if( !UseProgram( "textureVertexShader", "textureFragmentShader" ) )
         return;
-    mpProgram->SetShaderType(TextureShaderType::Normal);
-    mpProgram->SetIdentityTransform("transform");
-    mpProgram->SetTexture("texture", rTexture);
+    mpProgram->SetTexture( "sampler", rTexture );
     DrawTextureRect( rTexture, pPosAry, bInverted );
     mpProgram->Clean();
 }
@@ -1398,11 +1393,9 @@ void OpenGLSalGraphicsImpl::DrawAlphaTexture( OpenGLTexture& rTexture, const Sal
 {
     OpenGLZone aZone;
 
-    if (!UseProgram("combinedTextureVertexShader", "combinedTextureFragmentShader"))
+    if( !UseProgram( "textureVertexShader", "textureFragmentShader" ) )
         return;
-    mpProgram->SetShaderType(TextureShaderType::Normal);
-    mpProgram->SetIdentityTransform("transform");
-    mpProgram->SetTexture("texture", rTexture);
+    mpProgram->SetTexture( "sampler", rTexture );
     mpProgram->SetBlendMode( bPremultiplied ? GL_ONE : GL_SRC_ALPHA,
                              GL_ONE_MINUS_SRC_ALPHA );
     DrawTextureRect( rTexture, rPosAry, bInverted );
@@ -1413,10 +1406,8 @@ void OpenGLSalGraphicsImpl::DrawTextureDiff( OpenGLTexture& rTexture, OpenGLText
 {
     OpenGLZone aZone;
 
-    if (!UseProgram("combinedTextureVertexShader", "combinedTextureFragmentShader"))
+    if( !UseProgram( "maskedTextureVertexShader", "diffTextureFragmentShader" ) )
         return;
-    mpProgram->SetShaderType(TextureShaderType::Diff);
-    mpProgram->SetIdentityTransform("transform");
     mpProgram->SetTexture( "texture", rTexture );
     mpProgram->SetTexture( "mask", rMask );
     mpProgram->SetBlendMode( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
@@ -1433,11 +1424,9 @@ void OpenGLSalGraphicsImpl::DrawTextureWithMask( OpenGLTexture& rTexture, OpenGL
 {
     OpenGLZone aZone;
 
-    if (!UseProgram("combinedTextureVertexShader", "combinedTextureFragmentShader"))
+    if( !UseProgram( "maskedTextureVertexShader", "maskedTextureFragmentShader" ) )
         return;
-    mpProgram->SetShaderType(TextureShaderType::Masked);
-    mpProgram->SetIdentityTransform("transform");
-    mpProgram->SetTexture( "texture", rTexture );
+    mpProgram->SetTexture( "sampler", rTexture );
     mpProgram->SetTexture( "mask", rMask );
     mpProgram->SetBlendMode( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
 
@@ -1457,10 +1446,9 @@ void OpenGLSalGraphicsImpl::DrawBlendedTexture( OpenGLTexture& rTexture, OpenGLT
 {
     OpenGLZone aZone;
 
-    if (!UseProgram("combinedTextureVertexShader", "combinedTextureFragmentShader"))
+    if( !UseProgram( "blendedTextureVertexShader", "blendedTextureFragmentShader" ) )
         return;
-    mpProgram->SetShaderType(TextureShaderType::Blend);
-    mpProgram->SetTexture( "texture", rTexture );
+    mpProgram->SetTexture( "sampler", rTexture );
     mpProgram->SetTexture( "mask", rMask );
     mpProgram->SetTexture( "alpha", rAlpha );
 
@@ -1481,12 +1469,10 @@ void OpenGLSalGraphicsImpl::DrawMask( OpenGLTexture& rMask, SalColor nMaskColor,
 {
     OpenGLZone aZone;
 
-    if (!UseProgram("combinedTextureVertexShader", "combinedTextureFragmentShader"))
+    if( !UseProgram( "textureVertexShader", "maskFragmentShader" ) )
         return;
-    mpProgram->SetShaderType(TextureShaderType::MaskedColor);
-    mpProgram->SetIdentityTransform("transform");
     mpProgram->SetColor( "color", nMaskColor, 0 );
-    mpProgram->SetTexture("texture", rMask);
+    mpProgram->SetTexture( "sampler", rMask );
     mpProgram->SetBlendMode( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
     DrawTextureRect( rMask, pPosAry );
     mpProgram->Clean();
@@ -1544,16 +1530,15 @@ void OpenGLSalGraphicsImpl::FlushDeferredDrawing()
     }
 #endif
 
-    if (!UseProgram("combinedTextureVertexShader", "combinedTextureFragmentShader"))
+    if( !UseProgram( "textureVertexShader", "maskFragmentShader" ) )
         return;
-    mpProgram->SetShaderType(TextureShaderType::MaskedColor);
-    mpProgram->SetIdentityTransform("transform");
+
     mpProgram->SetBlendMode(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     for (auto& rPair : mpAccumulatedTextures->getAccumulatedTexturesMap())
     {
         OpenGLTexture& rTexture = rPair.second->maTexture;
-        mpProgram->SetTexture("texture", rTexture);
+        mpProgram->SetTexture("sampler", rTexture);
         for (auto& rColorTwoRectPair: rPair.second->maColorTextureDrawParametersMap)
         {
             mpProgram->SetColor("color", rColorTwoRectPair.first, 0);
@@ -2063,13 +2048,11 @@ bool OpenGLSalGraphicsImpl::blendBitmap(
     VCL_GL_INFO( "::blendBitmap" );
     PreDraw();
 
-    if (!UseProgram("combinedTextureVertexShader", "combinedTextureFragmentShader"))
+    if (!UseProgram("textureVertexShader", "textureFragmentShader"))
         return true;
 
-    mpProgram->SetShaderType(TextureShaderType::Normal);
-    mpProgram->SetIdentityTransform("transform");
-    mpProgram->SetTexture("texture", rTexture);
     mpProgram->SetBlendMode(GL_ZERO, GL_SRC_COLOR);
+    mpProgram->SetTexture("sampler", rTexture);
     DrawTextureRect(rTexture, rPosAry);
     mpProgram->Clean();
 
@@ -2349,14 +2332,12 @@ void OpenGLSalGraphicsImpl::doFlush()
     VCL_GL_INFO( "Texture height " << maOffscreenTex.GetHeight() << " vs. window height " << GetHeight() );
 
     OpenGLProgram *pProgram =
-        mpWindowContext->UseProgram("combinedTextureVertexShader", "combinedTextureFragmentShader", "// flush shader\n" ); // flush helps profiling
+        mpWindowContext->UseProgram( "textureVertexShader", "textureFragmentShader", "// flush shader\n" ); // flush helps profiling
     if( !pProgram )
         VCL_GL_INFO( "Can't compile simple copying shader !" );
     else
     {
-        pProgram->SetShaderType(TextureShaderType::Normal);
-        pProgram->SetIdentityTransform("transform");
-        pProgram->SetTexture("texture", maOffscreenTex);
+        pProgram->SetTexture( "sampler", maOffscreenTex );
 
         SalTwoRect aPosAry( 0, 0, maOffscreenTex.GetWidth(), maOffscreenTex.GetHeight(),
                             0, 0, maOffscreenTex.GetWidth(), maOffscreenTex.GetHeight() );
