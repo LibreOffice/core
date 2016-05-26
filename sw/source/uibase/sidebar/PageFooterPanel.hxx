@@ -60,7 +60,7 @@ public:
         const sal_uInt16 nSId,
         const SfxItemState eState,
         const SfxPoolItem* pState,
-        const bool bIsEnabled);
+        const bool bIsEnabled) override;
 
     SfxBindings* GetBindings() const { return mpBindings; }
     PageFooterPanel(
@@ -80,9 +80,6 @@ private:
     VclPtr<MetricField> mpFooterRMargin;
     VclPtr<MetricField> mpFooterSpacing;
     VclPtr<ListBox> mpSameContentLB;
-
-    void Initialize();
-
 };
 
 } } //end of namespace sw::sidebar

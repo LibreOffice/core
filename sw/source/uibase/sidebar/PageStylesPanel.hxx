@@ -60,7 +60,7 @@ public:
         const sal_uInt16 nSId,
         const SfxItemState eState,
         const SfxPoolItem* pState,
-        const bool bIsEnabled);
+        const bool bIsEnabled) override;
 
     SfxBindings* GetBindings() const { return mpBindings; }
     PageStylesPanel(
@@ -68,7 +68,7 @@ public:
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame,
         SfxBindings* pBindings);
     virtual ~PageStylesPanel();
-    virtual void dispose();
+    virtual void dispose() override;
 
 private:
 
@@ -80,9 +80,6 @@ private:
     VclPtr<MetricField> mpFooterRMargin;
     VclPtr<MetricField> mpFooterSpacing;
     VclPtr<ListBox> mpSameContentLB;
-
-    void Initialize();
-
 };
 
 } } //end of namespace sw::sidebar

@@ -60,7 +60,7 @@ public:
         const sal_uInt16 nSID,
         const SfxItemState eState,
         const SfxPoolItem* pState,
-        const bool bIsEnabled);
+        const bool bIsEnabled) override;
 
     SfxBindings* GetBindings() const { return mpBindings; }
 
@@ -69,7 +69,7 @@ public:
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame,
         SfxBindings* pBindings);
     virtual ~PageMarginPanel();
-    virtual void dispose();
+    virtual void dispose() override;
 
 private:
 

@@ -42,12 +42,12 @@ VclPtr<vcl::Window> PageFormatPanel::Create(
     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame,
     SfxBindings* pBindings)
 {
-    if( pParent == NULL )
-        throw ::com::sun::star::lang::IllegalArgumentException("no parent window given to PageFormatPanel::Create", NULL, 0);
+    if( pParent == nullptr )
+        throw ::com::sun::star::lang::IllegalArgumentException("no parent window given to PageFormatPanel::Create", nullptr, 0);
     if( !rxFrame.is() )
-        throw ::com::sun::star::lang::IllegalArgumentException("no XFrame given to PageFormatPanel::Create", NULL, 0);
-    if( pBindings == NULL )
-        throw ::com::sun::star::lang::IllegalArgumentException("no SfxBindings given to PageFormatPanel::Create", NULL, 0);
+        throw ::com::sun::star::lang::IllegalArgumentException("no XFrame given to PageFormatPanel::Create", nullptr, 0);
+    if( pBindings == nullptr )
+        throw ::com::sun::star::lang::IllegalArgumentException("no SfxBindings given to PageFormatPanel::Create", nullptr, 0);
 
     return VclPtr<PageFormatPanel>::Create(pParent, rxFrame, pBindings);
 }
@@ -64,8 +64,6 @@ PageFormatPanel::PageFormatPanel(
     get(mpPaperWidth, "paperwidth");
     get(mpPaperHeight, "paperheight");
     get(mpPaperOrientation, "paperorientation");
-
-    Initialize();
 }
 
 PageFormatPanel::~PageFormatPanel()
@@ -81,11 +79,6 @@ void PageFormatPanel::dispose()
     mpPaperOrientation.disposeAndClear();
 
     PanelLayout::dispose();
-}
-
-void PageFormatPanel::Initialize()
-{
-
 }
 
 void PageFormatPanel::NotifyItemUpdate(

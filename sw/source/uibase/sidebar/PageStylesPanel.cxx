@@ -42,12 +42,12 @@ VclPtr<vcl::Window> PageStylesPanel::Create(
     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame,
     SfxBindings* pBindings)
 {
-    if( pParent == NULL )
-        throw ::com::sun::star::lang::IllegalArgumentException("no parent window given to PageStylesPanel::Create", NULL, 0);
+    if( pParent == nullptr )
+        throw ::com::sun::star::lang::IllegalArgumentException("no parent window given to PageStylesPanel::Create", nullptr, 0);
     if( !rxFrame.is() )
-        throw ::com::sun::star::lang::IllegalArgumentException("no XFrame given to PageStylesPanel::Create", NULL, 0);
-    if( pBindings == NULL )
-        throw ::com::sun::star::lang::IllegalArgumentException("no SfxBindings given to PageStylesPanel::Create", NULL, 0);
+        throw ::com::sun::star::lang::IllegalArgumentException("no XFrame given to PageStylesPanel::Create", nullptr, 0);
+    if( pBindings == nullptr )
+        throw ::com::sun::star::lang::IllegalArgumentException("no SfxBindings given to PageStylesPanel::Create", nullptr, 0);
 
     return VclPtr<PageStylesPanel>::Create(pParent, rxFrame, pBindings);
 }
@@ -60,7 +60,6 @@ PageStylesPanel::PageStylesPanel(
     PanelLayout(pParent, "PageStylesPanel", "modules/swriter/ui/pagestylespanel.ui", rxFrame),
     mpBindings( pBindings )
 {
-    Initialize();
 }
 
 PageStylesPanel::~PageStylesPanel()
@@ -71,11 +70,6 @@ PageStylesPanel::~PageStylesPanel()
 void PageStylesPanel::dispose()
 {
     PanelLayout::dispose();
-}
-
-void PageStylesPanel::Initialize()
-{
-
 }
 
 void PageStylesPanel::NotifyItemUpdate(

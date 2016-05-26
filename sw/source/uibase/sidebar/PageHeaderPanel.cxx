@@ -43,12 +43,12 @@ VclPtr<vcl::Window> PageHeaderPanel::Create(
     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame,
     SfxBindings* pBindings)
 {
-    if( pParent == NULL )
-        throw ::com::sun::star::lang::IllegalArgumentException("no parent window given to PageHeaderPanel::Create", NULL, 0);
+    if( pParent == nullptr )
+        throw ::com::sun::star::lang::IllegalArgumentException("no parent window given to PageHeaderPanel::Create", nullptr, 0);
     if( !rxFrame.is() )
-        throw ::com::sun::star::lang::IllegalArgumentException("no XFrame given to PageHeaderPanel::Create", NULL, 0);
-    if( pBindings == NULL )
-        throw ::com::sun::star::lang::IllegalArgumentException("no SfxBindings given to PageHeaderPanel::Create", NULL, 0);
+        throw ::com::sun::star::lang::IllegalArgumentException("no XFrame given to PageHeaderPanel::Create", nullptr, 0);
+    if( pBindings == nullptr )
+        throw ::com::sun::star::lang::IllegalArgumentException("no SfxBindings given to PageHeaderPanel::Create", nullptr, 0);
 
     return VclPtr<PageHeaderPanel>::Create(pParent, rxFrame, pBindings);
 }

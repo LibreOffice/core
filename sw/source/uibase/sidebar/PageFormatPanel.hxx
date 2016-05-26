@@ -60,7 +60,7 @@ public:
         const sal_uInt16 nSId,
         const SfxItemState eState,
         const SfxPoolItem* pState,
-        const bool bIsEnabled);
+        const bool bIsEnabled) override;
 
     SfxBindings* GetBindings() const { return mpBindings; }
 
@@ -79,9 +79,6 @@ private:
     VclPtr<MetricField> mpPaperWidth;
     VclPtr<MetricField> mpPaperHeight;
     VclPtr<ListBox> mpPaperOrientation;
-
-    void Initialize();
-
 };
 
 } } //end of namespace sw::sidebar

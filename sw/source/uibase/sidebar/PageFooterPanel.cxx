@@ -42,12 +42,12 @@ VclPtr<vcl::Window> PageFooterPanel::Create(
     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame,
     SfxBindings* pBindings)
 {
-    if( pParent == NULL )
-        throw ::com::sun::star::lang::IllegalArgumentException("no parent window given to PageFooterPanel::Create", NULL, 0);
+    if( pParent == nullptr )
+        throw ::com::sun::star::lang::IllegalArgumentException("no parent window given to PageFooterPanel::Create", nullptr, 0);
     if( !rxFrame.is() )
-        throw ::com::sun::star::lang::IllegalArgumentException("no XFrame given to PageFooterPanel::Create", NULL, 0);
-    if( pBindings == NULL )
-        throw ::com::sun::star::lang::IllegalArgumentException("no SfxBindings given to PageFooterPanel::Create", NULL, 0);
+        throw ::com::sun::star::lang::IllegalArgumentException("no XFrame given to PageFooterPanel::Create", nullptr, 0);
+    if( pBindings == nullptr )
+        throw ::com::sun::star::lang::IllegalArgumentException("no SfxBindings given to PageFooterPanel::Create", nullptr, 0);
 
     return VclPtr<PageFooterPanel>::Create(pParent, rxFrame, pBindings);
 }
@@ -60,7 +60,6 @@ PageFooterPanel::PageFooterPanel(
     PanelLayout(pParent, "PageFooterPanel", "modules/swriter/ui/pagefooterpanel.ui", rxFrame),
     mpBindings( pBindings )
 {
-    Initialize();
 }
 
 PageFooterPanel::~PageFooterPanel()
@@ -71,11 +70,6 @@ PageFooterPanel::~PageFooterPanel()
 void PageFooterPanel::dispose()
 {
     PanelLayout::dispose();
-}
-
-void PageFooterPanel::Initialize()
-{
-
 }
 
 void PageFooterPanel::NotifyItemUpdate(
