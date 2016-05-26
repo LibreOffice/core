@@ -161,6 +161,7 @@ protected:
 
     DECL_LINK_TYPED(SelectFillTypeHdl, ListBox&, void );
     DECL_LINK_TYPED(SelectFillAttrHdl, ListBox&, void );
+    DECL_LINK_TYPED(ChangeGradientAngle, Edit&, void);
     DECL_LINK_TYPED(ChangeTrgrTypeHdl_Impl, ListBox&, void);
     DECL_LINK_TYPED(ModifyTransparentHdl_Impl, Edit&, void);
     DECL_LINK_TYPED(ModifyTransSliderHdl, Slider*, void);
@@ -173,6 +174,7 @@ protected:
     void Update();
     void ImpUpdateTransparencies();
     void SetTransparency(sal_uInt16 nVal);
+    void SelectFillAttrHdl_Impl();
 };
 
 } } // end of namespace svx::sidebar
