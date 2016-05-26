@@ -244,27 +244,24 @@ sal_uLong OJoinTableView::GetTabWinCount()
 
 bool OJoinTableView::RemoveConnection( OTableConnection* _pConn, bool _bDelete )
 {
-    DeselectConn(_pConn);
+    VclPtr<OTableConnection> xConn(_pConn);
+
+    DeselectConn(xConn);
 
     // to force a redraw
-    _pConn->InvalidateConnection();
+    xConn->InvalidateConnection();
 
-    m_pView->getController().removeConnectionData( _pConn->GetData() );
+    m_pView->getController().removeConnectionData(xConn->GetData());
 
-    auto it = ::std::find(m_vTableConnection.begin(),m_vTableConnection.end(),_pConn);
-    if (it != m_vTableConnection.end())
-    {
-        it->disposeAndClear();
-        m_vTableConnection.erase( it );
-    }
+    m_vTableConnection.erase(std::find(m_vTableConnection.begin(), m_vTableConnection.end(), xConn));
 
     modified();
     if ( m_pAccessible )
         m_pAccessible->notifyAccessibleEvent(   AccessibleEventId::CHILD,
-                                                makeAny(_pConn->GetAccessible()),
+                                                makeAny(xConn->GetAccessible()),
                                                 Any());
-    if ( _bDelete )
-        _pConn->disposeOnce();
+    if (_bDelete)
+        xConn->disposeOnce();
 
     return true;
 }
