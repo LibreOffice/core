@@ -148,12 +148,12 @@ namespace dbaui
 
             it implies that the same as addConnection
 
-            @param  _pConnection the connection which should be removed
-            @param  _bDelete     when true then the connection will be deleted
+            @param  rConnection the connection which should be removed
+            @param  bDelete     when true then the connection will be deleted
 
             @return an iterator to next valid connection, so it can be used in any loop
         */
-        virtual bool RemoveConnection(OTableConnection* _pConnection,bool _bDelete);
+        virtual bool RemoveConnection(VclPtr<OTableConnection>& rConnection, bool bDelete);
 
         /** allows to add new connections to join table view
 
@@ -172,7 +172,7 @@ namespace dbaui
         OJoinDesignView* getDesignView() const { return m_pView; }
         OTableWindow* GetTabWindow( const OUString& rName );
 
-        OTableConnection* GetSelectedConn() { return m_pSelectedConn; }
+        VclPtr<OTableConnection>& GetSelectedConn() { return m_pSelectedConn; }
         /** @note NULL is explicitly allowed (then no-op) */
         void DeselectConn(OTableConnection* pConn);
         void SelectConn(OTableConnection* pConn);
@@ -272,7 +272,7 @@ namespace dbaui
         virtual void MouseButtonDown( const MouseEvent& rEvt ) override;
         virtual void Tracking( const TrackingEvent& rTEvt ) override;
         virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) override;
-        virtual void ConnDoubleClicked( OTableConnection* pConnection );
+        virtual void ConnDoubleClicked(VclPtr<OTableConnection>& rConnection);
         void SetDefaultTabWinPosSize( OTableWindow* pTabWin );
         virtual void DataChanged( const DataChangedEvent& rDCEvt ) override;
 
@@ -313,7 +313,7 @@ namespace dbaui
             @param _aPos the position where the popup menu should appear
             @param _pSelConnection the connection which should be deleted
         */
-        void executePopup(const Point& _aPos,OTableConnection* _pSelConnection);
+        void executePopup(const Point& _aPos, VclPtr<OTableConnection>& rSelConnection);
 
         /** invalidates this window without children and set the controller
             modified

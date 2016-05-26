@@ -242,29 +242,26 @@ sal_uLong OJoinTableView::GetTabWinCount()
     return m_aTableMap.size();
 }
 
-bool OJoinTableView::RemoveConnection( OTableConnection* _pConn, bool _bDelete )
+bool OJoinTableView::RemoveConnection(VclPtr<OTableConnection>& rConn, bool _bDelete)
 {
-    DeselectConn(_pConn);
+    VclPtr<OTableConnection> xConn(rConn);
+
+    DeselectConn(xConn);
 
     // to force a redraw
-    _pConn->InvalidateConnection();
+    xConn->InvalidateConnection();
 
-    m_pView->getController().removeConnectionData( _pConn->GetData() );
+    m_pView->getController().removeConnectionData(xConn->GetData());
 
-    auto it = ::std::find(m_vTableConnection.begin(),m_vTableConnection.end(),_pConn);
-    if (it != m_vTableConnection.end())
-    {
-        it->disposeAndClear();
-        m_vTableConnection.erase( it );
-    }
+    m_vTableConnection.erase(std::find(m_vTableConnection.begin(), m_vTableConnection.end(), xConn));
 
     modified();
     if ( m_pAccessible )
         m_pAccessible->notifyAccessibleEvent(   AccessibleEventId::CHILD,
-                                                makeAny(_pConn->GetAccessible()),
+                                                makeAny(xConn->GetAccessible()),
                                                 Any());
-    if ( _bDelete )
-        _pConn->disposeOnce();
+    if (_bDelete)
+        xConn->disposeOnce();
 
     return true;
 }
@@ -359,14 +356,14 @@ void OJoinTableView::RemoveTabWin( OTableWindow* pTabWin )
     auto aIter = m_vTableConnection.rbegin();
     while(aIter != m_vTableConnection.rend() && bRemove)
     {
-        OTableConnection* pTabConn = (*aIter);
-        if(
-            ( pData == pTabConn->GetData()->getReferencingTable())      ||
-            ( pData == pTabConn->GetData()->getReferencedTable())
-        )
+        VclPtr<OTableConnection>& rTabConn = (*aIter);
+        if (
+             (pData == rTabConn->GetData()->getReferencingTable()) ||
+             (pData == rTabConn->GetData()->getReferencedTable())
+           )
         {
-          bRemove = RemoveConnection( pTabConn ,true);
-          aIter = m_vTableConnection.rbegin();
+            bRemove = RemoveConnection(rTabConn, true);
+            aIter = m_vTableConnection.rbegin();
         }
         else
             ++aIter;
@@ -812,7 +809,7 @@ void OJoinTableView::Tracking( const TrackingEvent& rTEvt )
     }
 }
 
-void OJoinTableView::ConnDoubleClicked( OTableConnection* /*pConnection*/ )
+void OJoinTableView::ConnDoubleClicked(VclPtr<OTableConnection>& /*rConnection*/)
 {
 }
 
@@ -857,7 +854,7 @@ void OJoinTableView::KeyInput( const KeyEvent& rEvt )
     if( !bCtrl && !bShift && (nCode==KEY_DELETE) )
     {
         if (GetSelectedConn())
-            RemoveConnection( GetSelectedConn() ,true);
+            RemoveConnection(GetSelectedConn(), true);
     }
     else
         Window::KeyInput( rEvt );
@@ -1131,16 +1128,16 @@ bool OJoinTableView::IsAddAllowed()
     return true;
 }
 
-void OJoinTableView::executePopup(const Point& _aPos,OTableConnection* _pSelConnection)
+void OJoinTableView::executePopup(const Point& _aPos, VclPtr<OTableConnection>& rSelConnection)
 {
     PopupMenu aContextMenu( ModuleRes( RID_MENU_JOINVIEW_CONNECTION ) );
     switch (aContextMenu.Execute(this, _aPos))
     {
         case SID_DELETE:
-            RemoveConnection( _pSelConnection ,true);
+            RemoveConnection(rSelConnection, true);
             break;
         case ID_QUERY_EDIT_JOINCONNECTION:
-            ConnDoubleClicked( _pSelConnection ); // is the same as double clicked
+            ConnDoubleClicked(rSelConnection); // is the same as double clicked
             break;
     }
 }
@@ -1157,21 +1154,21 @@ void OJoinTableView::Command(const CommandEvent& rEvt)
             if( m_vTableConnection.empty() )
                 return;
 
-            OTableConnection* pSelConnection = GetSelectedConn();
+            VclPtr<OTableConnection>& rSelConnection = GetSelectedConn();
             // when it wasn't a mouse event use the selected connection
             if (!rEvt.IsMouseEvent())
             {
-                if( pSelConnection )
+                if (rSelConnection)
                 {
-                    const ::std::vector<OConnectionLine*>& rLines = pSelConnection->GetConnLineList();
+                    const ::std::vector<OConnectionLine*>& rLines = rSelConnection->GetConnLineList();
                     ::std::vector<OConnectionLine*>::const_iterator aIter = ::std::find_if(rLines.begin(), rLines.end(),::std::mem_fun(&OConnectionLine::IsValid));
                     if( aIter != rLines.end() )
-                        executePopup((*aIter)->getMidPoint(),pSelConnection);
+                        executePopup((*aIter)->getMidPoint(), rSelConnection);
                 }
             }
             else
             {
-                DeselectConn(pSelConnection);
+                DeselectConn(rSelConnection);
 
                 const Point& aMousePos = rEvt.GetMousePosPixel();
                 auto aIter = m_vTableConnection.begin();

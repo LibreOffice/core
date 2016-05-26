@@ -221,21 +221,21 @@ void ORelationTableView::AddConnection(const OJoinExchangeData& jxdSource, const
     }
 }
 
-void ORelationTableView::ConnDoubleClicked( OTableConnection* pConnection )
+void ORelationTableView::ConnDoubleClicked(VclPtr<OTableConnection>& rConnection)
 {
-    ScopedVclPtrInstance< ORelationDialog > aRelDlg( this, pConnection->GetData() );
+    ScopedVclPtrInstance< ORelationDialog > aRelDlg( this, rConnection->GetData() );
     switch (aRelDlg->Execute())
     {
         case RET_OK:
             // successfully updated
-            pConnection->UpdateLineList();
+            rConnection->UpdateLineList();
             // The connection references 1 ConnData and n ConnLines, each ConnData references n LineDatas, each Line exactly 1 LineData
             // As the Dialog and the ConnData->Update may have changed the LineDatas we have to restore the consistent state
             break;
 
         case RET_NO:
             // tried at least one update, but did not succeed -> the original connection is lost
-            RemoveConnection( pConnection ,true);
+            RemoveConnection(rConnection ,true);
             break;
 
         case RET_CANCEL:
@@ -262,13 +262,13 @@ void ORelationTableView::AddNewRelation()
     }
 }
 
-bool ORelationTableView::RemoveConnection( OTableConnection* pConn ,bool /*_bDelete*/)
+bool ORelationTableView::RemoveConnection(VclPtr<OTableConnection>& rConn, bool /*_bDelete*/)
 {
-    ORelationTableConnectionData* pTabConnData = static_cast<ORelationTableConnectionData*>(pConn->GetData().get());
+    ORelationTableConnectionData* pTabConnData = static_cast<ORelationTableConnectionData*>(rConn->GetData().get());
     try
     {
         if ( m_bInRemove || pTabConnData->DropRelation())
-            return OJoinTableView::RemoveConnection( pConn ,true);
+            return OJoinTableView::RemoveConnection(rConn, true);
     }
     catch(SQLException& e)
     {
