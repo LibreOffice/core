@@ -377,6 +377,7 @@ public:
 
     bool IsFormulaDirty( SCROW nRow ) const;
 
+    void CheckVectorizationState();
     void SetAllFormulasDirty( const sc::SetFormulaDirtyContext& rCxt );
     void SetDirtyFromClip( SCROW nRow1, SCROW nRow2, sc::ColumnSpanSet& rBroadcastSpans );
     void SetDirty( SCROW nRow1, SCROW nRow2, BroadcastMode );
