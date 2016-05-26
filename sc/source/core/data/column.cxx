@@ -2648,6 +2648,28 @@ public:
     }
 };
 
+class CheckVectorizationHandler
+{
+public:
+    CheckVectorizationHandler()
+    {}
+
+    void operator() (size_t /*nRow*/, ScFormulaCell* p)
+    {
+        ScTokenArray* pCode = p->GetCode();
+        if (pCode != nullptr && pCode->GetVectorState() == FormulaVectorDisabled)
+        {
+            pCode->ResetVectorState();
+            FormulaToken* pFT = pCode->First();
+            while (pFT != nullptr)
+            {
+                pCode->CheckToken(*pFT);
+                pFT = pCode->Next();
+            }
+        }
+    }
+};
+
 struct SetDirtyVarHandler
 {
     void operator() (size_t /*nRow*/, ScFormulaCell* p)
@@ -3091,6 +3113,13 @@ bool ScColumn::IsFormulaDirty( SCROW nRow ) const
 
     const ScFormulaCell* p = sc::formula_block::at(*it->data, aPos.second);
     return p->GetDirty();
+}
+
+void ScColumn::CheckVectorizationState()
+{
+    sc::AutoCalcSwitch aSwitch(*pDocument, false);
+    CheckVectorizationHandler aFunc;
+    sc::ProcessFormula(maCells, aFunc);
 }
 
 void ScColumn::SetAllFormulasDirty( const sc::SetFormulaDirtyContext& rCxt )

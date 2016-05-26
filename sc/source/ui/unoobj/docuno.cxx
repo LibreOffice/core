@@ -2821,6 +2821,9 @@ sal_Bool ScModelObj::isOpenCLEnabled()
 void ScModelObj::enableOpenCL(sal_Bool bEnable)
     throw (uno::RuntimeException, std::exception)
 {
+    if (ScCalcConfig::isOpenCLEnabled() == static_cast<bool>(bEnable))
+        return;
+
     std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
     officecfg::Office::Common::Misc::UseOpenCL::set(bEnable, batch);
     batch->commit();
@@ -2829,6 +2832,12 @@ void ScModelObj::enableOpenCL(sal_Bool bEnable)
     if (bEnable)
         aConfig.setOpenCLConfigToDefault();
     ScInterpreter::SetGlobalConfig(aConfig);
+
+    sc::FormulaGroupInterpreter::switchOpenCLDevice(OUString(), true, false);
+
+    ScDocument* pDoc = GetDocument();
+    pDoc->CheckVectorizationState();
+
 }
 
 void ScModelObj::enableAutomaticDeviceSelection(sal_Bool bForce)
