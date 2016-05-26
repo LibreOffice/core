@@ -551,34 +551,34 @@ void SmDrawingVisitor::DrawChildren( SmNode* pNode )
 
 // SmSetSelectionVisitor
 
-SmSetSelectionVisitor::SmSetSelectionVisitor( SmCaretPos startPos, SmCaretPos endPos, SmNode* pTree) {
-    StartPos    = startPos;
-    EndPos      = endPos;
-    IsSelecting = false;
-
+SmSetSelectionVisitor::SmSetSelectionVisitor( SmCaretPos startPos, SmCaretPos endPos, SmNode* pTree)
+    : maStartPos(startPos)
+    , maEndPos(endPos)
+    , mbSelecting(false)
+{
     //Assume that pTree is a SmTableNode
     SAL_WARN_IF(pTree->GetType() != NTABLE, "starmath", "pTree should be a SmTableNode!");
     //Visit root node, this is special as this node cannot be selected, but its children can!
     if(pTree->GetType() == NTABLE){
-        //Change state if StartPos is in front of this node
-        if( StartPos.pSelectedNode == pTree && StartPos.Index == 0 )
-            IsSelecting = !IsSelecting;
-        //Change state if EndPos is in front of this node
-        if( EndPos.pSelectedNode == pTree && EndPos.Index == 0 )
-            IsSelecting = !IsSelecting;
-        SAL_WARN_IF(IsSelecting, "starmath", "Caret positions needed to set IsSelecting about, shouldn't be possible!");
+        //Change state if maStartPos is in front of this node
+        if( maStartPos.pSelectedNode == pTree && maStartPos.Index == 0 )
+            mbSelecting = !mbSelecting;
+        //Change state if maEndPos is in front of this node
+        if( maEndPos.pSelectedNode == pTree && maEndPos.Index == 0 )
+            mbSelecting = !mbSelecting;
+        SAL_WARN_IF(mbSelecting, "starmath", "Caret positions needed to set mbSelecting about, shouldn't be possible!");
 
         //Visit lines
         SmNodeIterator it( pTree );
         while( it.Next( ) ) {
             it->Accept( this );
             //If we started a selection in this line and it haven't ended, we do that now!
-            if(IsSelecting) {
-                IsSelecting = false;
+            if(mbSelecting) {
+                mbSelecting = false;
                 SetSelectedOnAll(it.Current());
-                //Set StartPos and EndPos to invalid positions, this ensures that an unused
+                //Set maStartPos and maEndPos to invalid positions, this ensures that an unused
                 //start or end (because we forced end above), doesn't start a new selection.
-                StartPos = EndPos = SmCaretPos();
+                maStartPos = maEndPos = SmCaretPos();
             }
         }
         //Check if pTree isn't selected
@@ -600,26 +600,26 @@ void SmSetSelectionVisitor::SetSelectedOnAll( SmNode* pSubTree, bool IsSelected 
 }
 
 void SmSetSelectionVisitor::DefaultVisit( SmNode* pNode ) {
-    //Change state if StartPos is in front of this node
-    if( StartPos.pSelectedNode == pNode && StartPos.Index == 0 )
-        IsSelecting = !IsSelecting;
-    //Change state if EndPos is in front of this node
-    if( EndPos.pSelectedNode == pNode && EndPos.Index == 0 )
-        IsSelecting = !IsSelecting;
+    //Change state if maStartPos is in front of this node
+    if( maStartPos.pSelectedNode == pNode && maStartPos.Index == 0 )
+        mbSelecting = !mbSelecting;
+    //Change state if maEndPos is in front of this node
+    if( maEndPos.pSelectedNode == pNode && maEndPos.Index == 0 )
+        mbSelecting = !mbSelecting;
 
     //Cache current state
-    bool WasSelecting = IsSelecting;
+    bool WasSelecting = mbSelecting;
     bool ChangedState = false;
 
     //Set selected
-    pNode->SetSelected( IsSelecting );
+    pNode->SetSelected( mbSelecting );
 
     //Visit children
     SmNodeIterator it( pNode );
     while( it.Next( ) )
     {
         it->Accept( this );
-        ChangedState = ( WasSelecting != IsSelecting ) || ChangedState;
+        ChangedState = ( WasSelecting != mbSelecting ) || ChangedState;
     }
 
     //If state changed
@@ -635,35 +635,35 @@ void SmSetSelectionVisitor::DefaultVisit( SmNode* pNode ) {
             SetSelectedOnAll( pNode->GetParent() );
         /* If the equation is:      sqrt{2 + 4} + 5
          * And the selection is:    sqrt{2 + [4} +] 5
-         *      Where [ denotes StartPos and ] denotes EndPos
+         *      Where [ denotes maStartPos and ] denotes maEndPos
          * Then the sqrt node should be selected, so that the
          * effective selection is:  [sqrt{2 + 4} +] 5
-         * The same is the case if we swap StartPos and EndPos.
+         * The same is the case if we swap maStartPos and maEndPos.
          */
     }
 
-    //Change state if StartPos is after this node
-    if( StartPos.pSelectedNode == pNode && StartPos.Index == 1 )
+    //Change state if maStartPos is after this node
+    if( maStartPos.pSelectedNode == pNode && maStartPos.Index == 1 )
     {
-        IsSelecting = !IsSelecting;
+        mbSelecting = !mbSelecting;
     }
-    //Change state if EndPos is after of this node
-    if( EndPos.pSelectedNode == pNode && EndPos.Index == 1 )
+    //Change state if maEndPos is after of this node
+    if( maEndPos.pSelectedNode == pNode && maEndPos.Index == 1 )
     {
-        IsSelecting = !IsSelecting;
+        mbSelecting = !mbSelecting;
     }
 }
 
 void SmSetSelectionVisitor::VisitCompositionNode( SmNode* pNode ) {
-    //Change state if StartPos is in front of this node
-    if( StartPos.pSelectedNode == pNode && StartPos.Index == 0 )
-        IsSelecting = !IsSelecting;
-    //Change state if EndPos is in front of this node
-    if( EndPos.pSelectedNode == pNode && EndPos.Index == 0 )
-        IsSelecting = !IsSelecting;
+    //Change state if maStartPos is in front of this node
+    if( maStartPos.pSelectedNode == pNode && maStartPos.Index == 0 )
+        mbSelecting = !mbSelecting;
+    //Change state if maEndPos is in front of this node
+    if( maEndPos.pSelectedNode == pNode && maEndPos.Index == 0 )
+        mbSelecting = !mbSelecting;
 
     //Cache current state
-    bool WasSelecting = IsSelecting;
+    bool WasSelecting = mbSelecting;
 
     //Visit children
     SmNodeIterator it( pNode );
@@ -671,46 +671,46 @@ void SmSetSelectionVisitor::VisitCompositionNode( SmNode* pNode ) {
         it->Accept( this );
 
     //Set selected, if everything was selected
-    pNode->SetSelected( WasSelecting && IsSelecting );
+    pNode->SetSelected( WasSelecting && mbSelecting );
 
-    //Change state if StartPos is after this node
-    if( StartPos.pSelectedNode == pNode && StartPos.Index == 1 )
-        IsSelecting = !IsSelecting;
-    //Change state if EndPos is after of this node
-    if( EndPos.pSelectedNode == pNode && EndPos.Index == 1 )
-        IsSelecting = !IsSelecting;
+    //Change state if maStartPos is after this node
+    if( maStartPos.pSelectedNode == pNode && maStartPos.Index == 1 )
+        mbSelecting = !mbSelecting;
+    //Change state if maEndPos is after of this node
+    if( maEndPos.pSelectedNode == pNode && maEndPos.Index == 1 )
+        mbSelecting = !mbSelecting;
 }
 
 void SmSetSelectionVisitor::Visit( SmTextNode* pNode ) {
     long    i1 = -1,
             i2 = -1;
-    if( StartPos.pSelectedNode == pNode )
-        i1 = StartPos.Index;
-    if( EndPos.pSelectedNode == pNode )
-        i2 = EndPos.Index;
+    if( maStartPos.pSelectedNode == pNode )
+        i1 = maStartPos.Index;
+    if( maEndPos.pSelectedNode == pNode )
+        i2 = maEndPos.Index;
 
     long start, end;
     pNode->SetSelected();
     if( i1 != -1 && i2 != -1 ) {
         start = i1 < i2 ? i1 : i2; //MIN
         end   = i1 > i2 ? i1 : i2; //MAX
-    } else if( IsSelecting && i1 != -1 ) {
+    } else if( mbSelecting && i1 != -1 ) {
         start = 0;
         end = i1;
-        IsSelecting = false;
-    } else if( IsSelecting && i2 != -1 ) {
+        mbSelecting = false;
+    } else if( mbSelecting && i2 != -1 ) {
         start = 0;
         end = i2;
-        IsSelecting = false;
-    } else if( !IsSelecting && i1 != -1 ) {
+        mbSelecting = false;
+    } else if( !mbSelecting && i1 != -1 ) {
         start = i1;
         end = pNode->GetText().getLength();
-        IsSelecting = true;
-    } else if( !IsSelecting && i2 != -1 ) {
+        mbSelecting = true;
+    } else if( !mbSelecting && i2 != -1 ) {
         start = i2;
         end = pNode->GetText().getLength();
-        IsSelecting = true;
-    } else if( IsSelecting ) {
+        mbSelecting = true;
+    } else if( mbSelecting ) {
         start = 0;
         end = pNode->GetText().getLength();
     } else {

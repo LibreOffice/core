@@ -255,15 +255,15 @@ private:
     void DefaultVisit( SmNode* pNode ) override;
     void VisitCompositionNode( SmNode* pNode );
     /** Caret position where the selection starts */
-    SmCaretPos  StartPos;
+    SmCaretPos maStartPos;
     /** Caret position where the selection ends */
-    SmCaretPos  EndPos;
+    SmCaretPos maEndPos;
     /** The current state of this visitor
-     * This property changes when the visitor meets either StartPos
-     * or EndPos. This means that anything visited in between will be
+     * This property changes when the visitor meets either maStartPos
+     * or maEndPos. This means that anything visited in between will be
      * selected.
      */
-    bool IsSelecting;
+    bool mbSelecting;
 };
 
 
