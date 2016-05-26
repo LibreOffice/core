@@ -33,7 +33,7 @@ namespace dbaui
     class OQueryTableView : public OJoinTableView
     {
     protected:
-        virtual void ConnDoubleClicked(OTableConnection* pConnection) override;
+        virtual void ConnDoubleClicked(VclPtr<OTableConnection>& rConnection) override;
         virtual void KeyInput(const KeyEvent& rEvt) override;
 
         virtual VclPtr<OTableWindow> createWindow(const TTableWindowData::value_type& _pData) override;
@@ -63,7 +63,7 @@ namespace dbaui
         /// base class overwritten: create and delete Connections
         virtual void AddConnection(const OJoinExchangeData& jxdSource, const OJoinExchangeData& jxdDest) override;
 
-        virtual bool RemoveConnection( OTableConnection* _pConn ,bool _bDelete) override;
+        virtual bool RemoveConnection(VclPtr<OTableConnection>& rConn, bool bDelete) override;
 
         // transfer of connections from and to UndoAction
 
@@ -74,7 +74,7 @@ namespace dbaui
             This results effectively in complete reset of request form, as all
             windows are hidden, as are all Connections to these windows and all
             request columns based on those tables */
-        void DropConnection(OQueryTableConnection* pConn);
+        void DropConnection(VclPtr<OQueryTableConnection>& rConn);
 
         // show and hide TabWin (NOT create or delete)
         bool ShowTabWin(OQueryTableWindow* pTabWin, OQueryTabWinUndoAct* pUndoAction, bool _bAppend);
