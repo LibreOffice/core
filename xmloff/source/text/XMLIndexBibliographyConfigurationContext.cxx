@@ -151,19 +151,18 @@ void XMLIndexBibliographyConfigurationContext::ProcessAttribute(
     }
 }
 
-
 SvXMLImportContext *XMLIndexBibliographyConfigurationContext::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const Reference<XAttributeList> & xAttrList )
 {
-    OUString sKey;
-    bool bSort(true);
-
     // process children here and use default context!
     if ( ( nPrefix == XML_NAMESPACE_TEXT ) &&
          IsXMLToken( rLocalName, XML_SORT_KEY ) )
     {
+        OUString sKey;
+        bool bSort(true);
+
         sal_Int16 nLength = xAttrList->getLength();
         for(sal_Int16 nAttr = 0; nAttr < nLength; nAttr++)
         {

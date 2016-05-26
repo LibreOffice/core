@@ -567,7 +567,6 @@ static void ImplCalcSet( ImplSplitSet* pSet,
         {
             nAbsItems       = 0;
             long nSizeWinSize    = 0;
-            long nNewSizeWinSize = 0;
 
             // first resize absolute items relative
             for ( i = 0; i < nItems; i++ )
@@ -584,6 +583,8 @@ static void ImplCalcSet( ImplSplitSet* pSet,
             // do not compensate rounding errors here
             if ( (nAbsItems < (sal_uInt16)(std::abs( nSizeDelta ))) && nSizeWinSize )
             {
+                long nNewSizeWinSize = 0;
+
                 for ( i = 0; i < nItems; i++ )
                 {
                     if ( !(rItems[i]->mnBits & SplitWindowItemFlags::Invisible) )
@@ -595,6 +596,7 @@ static void ImplCalcSet( ImplSplitSet* pSet,
                         }
                     }
                 }
+
                 nSizeDelta -= nNewSizeWinSize-nSizeWinSize;
             }
 

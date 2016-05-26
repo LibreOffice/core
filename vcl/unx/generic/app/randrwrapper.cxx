@@ -137,11 +137,10 @@ void SalDisplay::DeInitRandR()
 void SalDisplay::processRandREvent( XEvent* pEvent )
 {
 #ifdef USE_RANDR
-    int nRet = 0;
     XConfigureEvent* pCnfEvent=reinterpret_cast<XConfigureEvent*>(pEvent);
     if( m_bUseRandRWrapper && pWrapper && pWrapper->XRRRootToScreen(GetDisplay(),pCnfEvent->window) != -1 )
     {
-        nRet = pWrapper->XRRUpdateConfiguration( pEvent );
+        int nRet = pWrapper->XRRUpdateConfiguration( pEvent );
         if( nRet == 1 && pEvent->type != ConfigureNotify) // this should then be a XRRScreenChangeNotifyEvent
         {
             // update screens

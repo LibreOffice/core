@@ -946,8 +946,6 @@ IMPL_LINK_NOARG_TYPED(PrintFontManager, autoInstallFontLangSupport, Timer *, voi
 
 void PrintFontManager::Substitute( FontSelectPattern &rPattern, OUString& rMissingCodes )
 {
-    bool bRet = false;
-
     FontCfgWrapper& rWrapper = FontCfgWrapper::get();
 
     // build pattern argument for fontconfig query
@@ -1016,6 +1014,8 @@ void PrintFontManager::Substitute( FontSelectPattern &rPattern, OUString& rMissi
     {
         if( pSet->nfont > 0 )
         {
+            bool bRet = false;
+
             //extract the closest match
             FcChar8* file = nullptr;
             FcResult eFileRes = FcPatternGetString(pSet->fonts[0], FC_FILE, 0, &file);
