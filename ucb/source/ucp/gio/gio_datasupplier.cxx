@@ -37,7 +37,7 @@ namespace gio
 
 typedef std::vector< ResultListEntry* > ResultList;
 
-DataSupplier::DataSupplier( const uno::Reference< ::gio::Content >& rContent, sal_Int32 nOpenMode )
+DataSupplier::DataSupplier( const rtl::Reference< ::gio::Content >& rContent, sal_Int32 nOpenMode )
     : mxContent(rContent), mnOpenMode(nOpenMode), mbCountFinal(false)
 {
 }

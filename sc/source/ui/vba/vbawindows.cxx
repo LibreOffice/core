@@ -128,7 +128,7 @@ public:
                 // !! TODO !! iterate over all controllers
                 uno::Reference< frame::XController > xController( xModel->getCurrentController(), uno::UNO_SET_THROW );
                 uno::Reference< XHelperInterface > xTemp;  // temporary needed for g++ 3.3.5
-                uno::Reference< ScVbaWindow > window( new ScVbaWindow( xTemp, m_xContext, xModel, xController ) );
+                rtl::Reference< ScVbaWindow > window( new ScVbaWindow( xTemp, m_xContext, xModel, xController ) );
                 OUString sCaption;
                 window->getCaption() >>= sCaption;
                 namesToIndices[ sCaption ] = nIndex++;

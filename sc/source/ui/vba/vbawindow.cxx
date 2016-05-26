@@ -307,7 +307,7 @@ ScVbaWindow::getCaption() throw (uno::RuntimeException, std::exception)
         if ( ( nCrudLen + nCrudIndex ) == sTitle.getLength() )
         {
             sTitle = sTitle.copy( 0, nCrudIndex );
-            uno::Reference< ScVbaWorkbook > workbook( new ScVbaWorkbook( uno::Reference< XHelperInterface >( Application(), uno::UNO_QUERY_THROW ), mxContext, m_xModel ) );
+            rtl::Reference< ScVbaWorkbook > workbook( new ScVbaWorkbook( uno::Reference< XHelperInterface >( Application(), uno::UNO_QUERY_THROW ), mxContext, m_xModel ) );
             OUString sName = workbook->getName();
             // rather bizarre hack to make sure the name behavior
             // is like XL
@@ -439,7 +439,7 @@ ScVbaWindow::setWindowState( const uno::Any& _windowstate ) throw (uno::RuntimeE
 void
 ScVbaWindow::Activate() throw (css::uno::RuntimeException, std::exception)
 {
-    uno::Reference<ScVbaWorkbook> workbook( new ScVbaWorkbook( uno::Reference< XHelperInterface >( Application(), uno::UNO_QUERY_THROW ), mxContext, m_xModel ) );
+    rtl::Reference<ScVbaWorkbook> workbook( new ScVbaWorkbook( uno::Reference< XHelperInterface >( Application(), uno::UNO_QUERY_THROW ), mxContext, m_xModel ) );
 
     workbook->Activate();
 }
@@ -447,7 +447,7 @@ ScVbaWindow::Activate() throw (css::uno::RuntimeException, std::exception)
 void
 ScVbaWindow::Close( const uno::Any& SaveChanges, const uno::Any& FileName, const uno::Any& RouteWorkBook ) throw (uno::RuntimeException, std::exception)
 {
-    uno::Reference< ScVbaWorkbook > workbook( new ScVbaWorkbook( uno::Reference< XHelperInterface >( Application(), uno::UNO_QUERY_THROW ), mxContext, m_xModel ) );
+    rtl::Reference< ScVbaWorkbook > workbook( new ScVbaWorkbook( uno::Reference< XHelperInterface >( Application(), uno::UNO_QUERY_THROW ), mxContext, m_xModel ) );
     workbook->Close(SaveChanges, FileName, RouteWorkBook );
 }
 

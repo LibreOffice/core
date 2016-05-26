@@ -33,9 +33,9 @@ MultiLineEdit::GetComponentInterface(bool bCreate)
         VclMultiLineEdit::GetComponentInterface(false));
     if (!xPeer.is() && bCreate)
     {
-        css::uno::Reference< VCLXMultiLineEdit > xVCLMEdit(new VCLXMultiLineEdit);
+        rtl::Reference< VCLXMultiLineEdit > xVCLMEdit(new VCLXMultiLineEdit);
         xVCLMEdit->SetWindow(this);
-        xPeer = xVCLMEdit;
+        xPeer = xVCLMEdit.get();
         SetComponentInterface(xPeer);
     }
     return xPeer;

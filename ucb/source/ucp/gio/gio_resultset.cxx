@@ -29,7 +29,7 @@ using namespace gio;
 
 DynamicResultSet::DynamicResultSet(
     const Reference< XComponentContext >& rxContext,
-    const Reference< Content >& rxContent,
+    const rtl::Reference< Content >& rxContent,
     const OpenCommandArgument2& rCommand,
     const Reference< XCommandEnvironment >& rxEnv )
     : ResultSetImplHelper( rxContext, rCommand ),

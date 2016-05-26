@@ -42,7 +42,7 @@ namespace dbaui
     // OSingleDocumentController_Data
     struct OSingleDocumentController_Data
     {
-        Reference< UndoManager >  m_xUndoManager;
+        rtl::Reference< UndoManager >  m_xUndoManager;
 
         OSingleDocumentController_Data( ::cppu::OWeakObject& i_parent, ::osl::Mutex& i_mutex )
             :m_xUndoManager( new UndoManager( i_parent, i_mutex ) )

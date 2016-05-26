@@ -131,18 +131,18 @@ struct DocxSdrExport::Impl
     const Size* m_pFlyFrameSize;
     bool m_bTextFrameSyntax;
     bool m_bDMLTextFrameSyntax;
-    uno::Reference<sax_fastparser::FastAttributeList> m_pFlyAttrList;
-    uno::Reference<sax_fastparser::FastAttributeList> m_pTextboxAttrList;
+    rtl::Reference<sax_fastparser::FastAttributeList> m_pFlyAttrList;
+    rtl::Reference<sax_fastparser::FastAttributeList> m_pTextboxAttrList;
     OStringBuffer m_aTextFrameStyle;
     bool m_bFrameBtLr;
     bool m_bDrawingOpen;
     bool m_bParagraphSdtOpen;
     bool m_bParagraphHasDrawing; ///Flag for checking drawing in a paragraph.
     bool m_bFlyFrameGraphic;
-    css::uno::Reference<sax_fastparser::FastAttributeList> m_pFlyFillAttrList;
+    rtl::Reference<sax_fastparser::FastAttributeList> m_pFlyFillAttrList;
     sax_fastparser::FastAttributeList* m_pFlyWrapAttrList;
     sax_fastparser::FastAttributeList* m_pBodyPrAttrList;
-    css::uno::Reference<sax_fastparser::FastAttributeList> m_pDashLineStyleAttr;
+    rtl::Reference<sax_fastparser::FastAttributeList> m_pDashLineStyleAttr;
     bool m_bDMLAndVMLDrawingOpen;
     /// List of TextBoxes in this document: they are exported as part of their shape, never alone.
     std::set<const SwFrameFormat*> m_aTextBoxes;
@@ -211,12 +211,12 @@ bool DocxSdrExport::getDMLTextFrameSyntax()
     return m_pImpl->m_bDMLTextFrameSyntax;
 }
 
-uno::Reference<sax_fastparser::FastAttributeList>& DocxSdrExport::getFlyAttrList()
+rtl::Reference<sax_fastparser::FastAttributeList>& DocxSdrExport::getFlyAttrList()
 {
     return m_pImpl->m_pFlyAttrList;
 }
 
-uno::Reference<sax_fastparser::FastAttributeList>& DocxSdrExport::getTextboxAttrList()
+rtl::Reference<sax_fastparser::FastAttributeList>& DocxSdrExport::getTextboxAttrList()
 {
     return m_pImpl->m_pTextboxAttrList;
 }
@@ -256,7 +256,7 @@ void DocxSdrExport::setParagraphHasDrawing(bool bParagraphHasDrawing)
     m_pImpl->m_bParagraphHasDrawing = bParagraphHasDrawing;
 }
 
-uno::Reference<sax_fastparser::FastAttributeList>& DocxSdrExport::getFlyFillAttrList()
+rtl::Reference<sax_fastparser::FastAttributeList>& DocxSdrExport::getFlyFillAttrList()
 {
     return m_pImpl->m_pFlyFillAttrList;
 }
@@ -271,7 +271,7 @@ sax_fastparser::FastAttributeList* DocxSdrExport::getBodyPrAttrList()
     return m_pImpl->m_pBodyPrAttrList;
 }
 
-uno::Reference<sax_fastparser::FastAttributeList>& DocxSdrExport::getDashLineStyle()
+rtl::Reference<sax_fastparser::FastAttributeList>& DocxSdrExport::getDashLineStyle()
 {
     return m_pImpl->m_pDashLineStyleAttr;
 }

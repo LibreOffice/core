@@ -18,6 +18,7 @@
  */
 
 #include <rtl/ustrbuf.hxx>
+#include <rtl/ref.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <indexentrysupplier.hxx>
 #include <localedata.hxx>
@@ -116,7 +117,7 @@ IndexEntrySupplier::getLocaleSpecificIndexEntrySupplier(const Locale& rLocale, c
             rLocale.Country == aLocale.Country && rLocale.Variant == aLocale.Variant)
         return xIES;
     else {
-        uno::Reference<LocaleDataImpl> ld(new LocaleDataImpl);
+        rtl::Reference<LocaleDataImpl> ld(new LocaleDataImpl);
         aLocale = rLocale;
         if (rSortAlgorithm.isEmpty())
             aSortAlgorithm = ld->getDefaultIndexAlgorithm( rLocale );

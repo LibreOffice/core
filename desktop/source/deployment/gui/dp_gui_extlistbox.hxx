@@ -130,7 +130,7 @@ class ExtensionBox_Impl : public ::svt::IExtensionListBox
 
     VclPtr<ScrollBar>      m_pScrollBar;
 
-    css::uno::Reference<ExtensionRemovedListener> m_xRemoveListener;
+    rtl::Reference<ExtensionRemovedListener> m_xRemoveListener;
 
     TheExtensionManager      *m_pManager;
     //This mutex is used for synchronizing access to m_vEntries.

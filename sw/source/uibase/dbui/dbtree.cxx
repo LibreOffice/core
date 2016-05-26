@@ -465,7 +465,7 @@ void SwDBTreeList::StartDrag( sal_Int8 /*nAction*/, const Point& /*rPosPixel*/ )
         if( !sColumnName.isEmpty() )
         {
             // drag database field
-            uno::Reference< svx::OColumnTransferable > xColTransfer( new svx::OColumnTransferable(
+            rtl::Reference< svx::OColumnTransferable > xColTransfer( new svx::OColumnTransferable(
                             sDBName,
                             OUString(),
                             sTableName,

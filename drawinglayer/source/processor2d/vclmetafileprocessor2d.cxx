@@ -1289,13 +1289,13 @@ namespace drawinglayer
                         basegfx::B2DPolygon aLeft, aRight;
                         splitLinePolygon(rBasePolygon, aLeft, aRight);
                         const attribute::LineStartEndAttribute aEmpty;
-                        uno::Reference< primitive2d::PolygonStrokeArrowPrimitive2D > xPLeft(new primitive2d::PolygonStrokeArrowPrimitive2D(
+                        rtl::Reference< primitive2d::PolygonStrokeArrowPrimitive2D > xPLeft(new primitive2d::PolygonStrokeArrowPrimitive2D(
                             aLeft,
                             rStrokeArrowPrimitive.getLineAttribute(),
                             rStrokeArrowPrimitive.getStrokeAttribute(),
                             rStrokeArrowPrimitive.getStart(),
                             aEmpty));
-                        uno::Reference< primitive2d::PolygonStrokeArrowPrimitive2D > xPRight(new primitive2d::PolygonStrokeArrowPrimitive2D(
+                        rtl::Reference< primitive2d::PolygonStrokeArrowPrimitive2D > xPRight(new primitive2d::PolygonStrokeArrowPrimitive2D(
                             aRight,
                             rStrokeArrowPrimitive.getLineAttribute(),
                             rStrokeArrowPrimitive.getStrokeAttribute(),
