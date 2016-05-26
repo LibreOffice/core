@@ -667,30 +667,30 @@ void ResMgr::RscError_Impl( const sal_Char* pMessage, ResMgr* pResMgr,
 
     ResMgr* pNewResMgr = new ResMgr( pImp );
 
-    OStringBuffer aStr(OUStringToOString(pResMgr->GetFileName(),
+    OString aFilename(OUStringToOString(pResMgr->GetFileName(),
         RTL_TEXTENCODING_UTF8));
+    OStringBuffer aStr(pMessage);
+    aStr.append(aFilename);
+    aStr.append('\n');
 
-    if (aStr.getLength())
-        aStr.append('\n');
-
-    aStr.append("Class: ");
+    aStr.append("    Class: ");
     aStr.append(OUStringToOString(GetTypeRes_Impl(ResId(nRT, *pNewResMgr)),
         RTL_TEXTENCODING_UTF8));
     aStr.append(", Id: ");
     aStr.append(static_cast<sal_Int32>(nId));
     aStr.append(". ");
-    aStr.append(pMessage);
 
-    aStr.append("\nResource Stack\n");
+    aStr.append("    Resource Stack:");
     while( nDepth > 0 )
     {
-        aStr.append("Class: ");
+        aStr.append(" [ Class: ");
         aStr.append(OUStringToOString(GetTypeRes_Impl(
             ResId(rResStack[nDepth].pResource->GetRT(), *pNewResMgr)),
             RTL_TEXTENCODING_UTF8));
         aStr.append(", Id: ");
         aStr.append(static_cast<sal_Int32>(
             rResStack[nDepth].pResource->GetId()));
+        aStr.append("]");
         nDepth--;
     }
 
