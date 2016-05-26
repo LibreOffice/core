@@ -22,6 +22,30 @@
       "revId": "e45032f8847859c7e5aec12ccf39634e4328679e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_27eec322",
+        "filename": "svx/source/svdraw/svdograf.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 576,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2016-05-26T08:38:04Z",
+      "side": 1,
+      "message": "You need to use all four (Left/Top/Right/Bottom)Crop() values. They are in the SdrObject\u0027s model\u0027s units, so the same as in last task - 100thMM for Draw/Impress/Calc, Twips for Writer - get it from the SdrObject\u0027s SdrModel as usual.\n\nTo solve it for all cases, I would first create a \u0027Rect\u0027 filled from the SdrObject\u0027s LogicRect. Then correct Left/Top/Right/Bottom by the crop values. This is the Object\u0027s pos/size which would be fully covered by the graphic.\n\nYou then have the size of the SdrObject in the corrected Rect, it\u0027s orig size and the orig size of the graphic. You will then have to triangulate back the GraphcSize by scaling by the relations of the two Sizes from the SdrObjects.\n\nThis scale will be independent from the units the GrafSize is defined in, so in a last step you tneed to convert (LogicToLogic) frm the Graphic\u0027s internal units to SdrModel\u0027 units (as in the non-cropped case).\n\nHTH! Sorry, this really *is* complicated, more than necessary. I have no idea who decided to define it that way. *If* the crop values would just be relative to the object in theoretical unit size, all would be much easier and independent from the Graphic\u0027s MapUnit...",
+      "parentUuid": "da7fb54a_6cec30c8",
+      "range": {
+        "startLine": 575,
+        "startChar": 8,
+        "endLine": 576,
+        "endChar": 108
+      },
+      "revId": "e45032f8847859c7e5aec12ccf39634e4328679e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
