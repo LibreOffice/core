@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.20.0 -->
 <interface>
   <requires lib="gtk+" version="3.0"/>
+  <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkGrid" id="NumberFormatPropertyPanel">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -39,6 +40,11 @@
                   <item translatable="yes">Boolean Value</item>
                   <item translatable="yes">Text</item>
                 </items>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="category-atkobject">
+                    <property name="AtkObject::accessible-name" translatable="yes">Category</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -135,6 +141,11 @@
                     <property name="tooltip_markup" translatable="yes">Enter the number of decimal places that you want to display.</property>
                     <property name="tooltip_text" translatable="yes">Enter the number of decimal places that you want to display.</property>
                     <property name="invisible_char">•</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="decimalplaces-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes">Decimal Places</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -159,10 +170,10 @@
                   <object class="GtkLabel" id="leadingzeroeslabel">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
                     <property name="label" translatable="yes">Leading _zeroes:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">leadingzeroes</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -178,6 +189,11 @@
                     <property name="tooltip_markup" translatable="yes">Enter the maximum number of zeroes to display before the decimal point.</property>
                     <property name="tooltip_text" translatable="yes">Enter the maximum number of zeroes to display before the decimal point.</property>
                     <property name="invisible_char">•</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="leadingzeroes-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes">Leading Zeroes</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>

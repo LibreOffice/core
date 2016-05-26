@@ -66,9 +66,6 @@ SdPrintOptions::SdPrintOptions( vcl::Window* pParent, const SfxItemSet& rInAttrs
 #ifndef MACOSX
     SetDrawMode();
 #endif
-
-    m_pCbxFront->SetAccessibleRelationLabeledBy( m_pRbtBooklet );
-    m_pCbxBack->SetAccessibleRelationLabeledBy( m_pRbtBooklet );
 }
 
 SdPrintOptions::~SdPrintOptions()
