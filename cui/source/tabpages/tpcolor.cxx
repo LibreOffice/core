@@ -835,7 +835,6 @@ IMPL_LINK_NOARG_TYPED(SvxColorTabPage, ClickWorkOnHdl_Impl, Button*, void)
 
     if( pColorDlg->Execute() == RET_OK )
     {
-        sal_uInt16 nK = 0;
         Color aPreviewColor = pColorDlg->GetColor();
         aCurrentColor = aPreviewColor;
         if (eCM != CM_RGB)
@@ -844,7 +843,7 @@ IMPL_LINK_NOARG_TYPED(SvxColorTabPage, ClickWorkOnHdl_Impl, Button*, void)
             m_pC->SetValue( ColorToPercent_Impl( aCurrentColor.GetRed() ) );
             m_pY->SetValue( ColorToPercent_Impl( aCurrentColor.GetGreen() ) );
             m_pM->SetValue( ColorToPercent_Impl( aCurrentColor.GetBlue() ) );
-            m_pK->SetValue( ColorToPercent_Impl( nK ) );
+            m_pK->SetValue( ColorToPercent_Impl( aCurrentColor.GetTransparency() ) );
             ConvertColorValues (aCurrentColor, CM_RGB);
         }
         else
