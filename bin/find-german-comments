@@ -224,12 +224,27 @@ class Parser:
         """
         checks each _tracked_ file in a directory recursively
         """
-        sock = os.popen(r"git ls-files '%s' |egrep '\.(c|cc|cpp|cxx|h|hxx|mm)$'" % directory)
+        globalscan = False
+        if re.match(r'.*/core$', os.getcwd()) and directory == '.':
+            globalscan = True
+
+        # Change into the given dir, so "git ls-tree" does work.
+        # If we want to scan the current dir, we must not do so as we are already there.
+        if not globalscan and directory != '.':
+            currentdir = os.getcwd()
+            os.chdir(currentdir.split("core",1)[0] + "core/")
+            os.chdir(directory)
+
+        sock = os.popen(r"git ls-tree -r HEAD --name-only |egrep '\.(c|cc|cpp|cxx|h|hxx|mm)$'")
         lines = sock.readlines()
         sock.close()
 
         # Helps to speedup a global scan
         directory_whitelist = {
+            "ure" : 1,
+            "ios" : 1,
+            "bean" : 1,
+            "apple_remote" : 1,
             "UnoControls" : 1,
             "accessibility" : 1,
             "android" : 1,
@@ -351,26 +366,31 @@ class Parser:
             "xmlscript" : 1,
         }
 
-        if directory is '.':
-            sys.stderr.write("Overriding the white-list for the current directory - pass an absolute path to the top-level for faster global white-list searches.\n")
+        if globalscan:
+            print("Scanning all files globally:")
+        elif directory == '.':
+            print("Scanning all files in our current directory:")
+        else:
+            print("Scanning all files in", directory + ":")
 
         num_checked = 0
 
         for path in lines:
             baseDir = self.first_elem(path)
-
-            # Support searching within sub directories
-            if directory is '.':
-                self.check_file(path.strip())
-            elif not baseDir in directory_whitelist:
-                sys.stderr.write ("\n - Error: Missing path %s -\n\n" % baseDir)
-                sys.exit(1)
-            elif directory_whitelist[baseDir] is 0:
+            # If we have an globalscan use the whitelist.
+            if globalscan:
+                if not baseDir in directory_whitelist:
+                    sys.stderr.write ("\n - Error: Missing path %s -\n\n" % baseDir)
+                    sys.exit(1)
+                elif directory_whitelist[baseDir] is 0:
+                    self.check_file(path.strip())
+                    num_checked = num_checked + 1
+                elif directory_whitelist[baseDir] is 1:
+                    sys.stderr.write ("Skipping whitelisted directory %s\n" % baseDir)
+                    directory_whitelist[baseDir] = 2
+            elif not globalscan:
                 self.check_file(path.strip())
                 num_checked = num_checked + 1
-            elif directory_whitelist[baseDir] is 1:
-                sys.stderr.write ("Skipping whitelisted directory %s\n" % baseDir)
-                directory_whitelist[baseDir] = 2
 
         sys.stderr.write ("Scanned %s files\n" % num_checked)
 
