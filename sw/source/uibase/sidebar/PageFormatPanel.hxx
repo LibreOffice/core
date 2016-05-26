@@ -83,19 +83,35 @@ private:
     VclPtr<SvxRelativeField> mpPaperWidth;
     VclPtr<SvxRelativeField> mpPaperHeight;
     VclPtr<ListBox> mpPaperOrientation;
+    VclPtr<ListBox> mpMarginSelectBox;
+    VclPtr<FixedText> mpCustomEntry;
 
     ::sfx2::sidebar::ControllerItem maPaperSizeController;
     ::sfx2::sidebar::ControllerItem maPaperOrientationController;
     ::sfx2::sidebar::ControllerItem maMetricController;
+    ::sfx2::sidebar::ControllerItem maSwPageLRControl;
+    ::sfx2::sidebar::ControllerItem maSwPageULControl;
 
-    ::std::unique_ptr<SvxPageItem> mpPageItem;
+    ::std::unique_ptr<SvxPageItem>        mpPageItem;
+    ::std::unique_ptr<SvxLongLRSpaceItem> mpPageLRMarginItem;
+    ::std::unique_ptr<SvxLongULSpaceItem> mpPageULMarginItem;
 
     FieldUnit meFUnit, meLastFUnit;
     SfxMapUnit meUnit;
 
+    long mnPageLeftMargin;
+    long mnPageRightMargin;
+    long mnPageTopMargin;
+    long mnPageBottomMargin;
+    OUString aCustomEntry;
+
     void Initialize();
+    void UpdateMarginBox();
+    void ExecuteMarginLRChange( const long nPageLeftMargin, const long nPageRightMargin );
+    void ExecuteMarginULChange( const long nPageTopMargin, const long  nPageBottomMargin);
     DECL_LINK_TYPED(PaperFormatModifyHdl, ListBox&, void);
     DECL_LINK_TYPED(PaperSizeModifyHdl, Edit&, void);
+    DECL_LINK_TYPED(PaperModifyMarginHdl, ListBox&, void );
 };
 
 } } //end of namespace sw::sidebar
