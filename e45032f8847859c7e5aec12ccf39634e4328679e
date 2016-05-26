@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_6cec30c8",
+        "filename": "svx/source/svdraw/svdograf.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 576,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2016-05-26T00:43:36Z",
+      "side": 1,
+      "message": "I couldn\u0027t find how can i calculate cropped size of image? Can you help me?",
+      "range": {
+        "startLine": 575,
+        "startChar": 8,
+        "endLine": 576,
+        "endChar": 108
+      },
+      "revId": "e45032f8847859c7e5aec12ccf39634e4328679e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
