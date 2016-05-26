@@ -69,7 +69,7 @@ public:
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame,
         SfxBindings* pBindings);
     virtual ~PageFormatPanel();
-    virtual void dispose();
+    virtual void dispose() override;
 
 private:
 
