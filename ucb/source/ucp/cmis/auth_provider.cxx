@@ -22,8 +22,6 @@ using namespace std;
 
 namespace cmis
 {
-    css::uno::Reference< css::ucb::XCommandEnvironment>
-        AuthProvider::sm_xEnv;
     bool AuthProvider::authenticationQuery( string& username, string& password )
     {
         if ( m_xEnv.is() )
@@ -64,6 +62,18 @@ namespace cmis
             }
         }
         return false;
+    }
+
+    css::uno::WeakReference< css::ucb::XCommandEnvironment> AuthProvider::sm_xEnv;
+
+    void AuthProvider::setXEnv(const css::uno::Reference< css::ucb::XCommandEnvironment>& xEnv )
+    {
+        sm_xEnv = xEnv;
+    }
+
+    css::uno::Reference< css::ucb::XCommandEnvironment> AuthProvider::getXEnv()
+    {
+        return sm_xEnv;
     }
 
     char* AuthProvider::onedriveAuthCodeFallback( const char* url,
