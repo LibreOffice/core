@@ -25,6 +25,7 @@
 #include <com/sun/star/xml/sax/XFastDocumentHandler.hpp>
 #include <dmapper/resourcemodel.hxx>
 #include <ooxml/OOXMLDocument.hxx>
+#include <rtl/ref.hxx>
 #include "OOXMLParserState.hxx"
 
 namespace writerfilter {
@@ -41,7 +42,7 @@ public:
         Stream* pStream,
         OOXMLDocumentImpl* pDocument,
         sal_Int32 nXNoteId );
-    virtual ~OOXMLFastDocumentHandler() {}
+    virtual ~OOXMLFastDocumentHandler();
 
     // css::xml::sax::XFastDocumentHandler:
     virtual void SAL_CALL startDocument()
@@ -93,8 +94,8 @@ private:
     Stream * mpStream;
     OOXMLDocumentImpl* mpDocument;
     sal_Int32 mnXNoteId;
-    mutable css::uno::Reference<OOXMLFastContextHandler> mxContextHandler;
-    css::uno::Reference<OOXMLFastContextHandler> getContextHandler() const;
+    mutable rtl::Reference<OOXMLFastContextHandler> mxContextHandler;
+    rtl::Reference<OOXMLFastContextHandler> getContextHandler() const;
 };
 }}
 

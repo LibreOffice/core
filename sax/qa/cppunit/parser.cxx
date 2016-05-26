@@ -45,8 +45,8 @@ public:
 class ParserTest: public test::BootstrapFixture
 {
     InputSource maInput;
-    uno::Reference< sax_fastparser::FastSaxParser > mxParser;
-    uno::Reference< DummyTokenHandler > mxTokenHandler;
+    rtl::Reference< sax_fastparser::FastSaxParser > mxParser;
+    rtl::Reference< DummyTokenHandler > mxTokenHandler;
 
 public:
     virtual void setUp() override;

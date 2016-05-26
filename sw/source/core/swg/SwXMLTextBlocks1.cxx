@@ -369,7 +369,7 @@ sal_uLong SwXMLTextBlocks::PutBlockText( const OUString& rShort, const OUString&
        uno::Reference<xml::sax::XDocumentHandler> xHandler(xWriter,
         uno::UNO_QUERY);
 
-    uno::Reference<SwXMLTextBlockExport> xExp( new SwXMLTextBlockExport( xContext, *this, GetXMLToken ( XML_UNFORMATTED_TEXT ), xHandler) );
+    rtl::Reference<SwXMLTextBlockExport> xExp( new SwXMLTextBlockExport( xContext, *this, GetXMLToken ( XML_UNFORMATTED_TEXT ), xHandler) );
 
     xExp->exportDoc( rText );
 
@@ -488,7 +488,7 @@ void SwXMLTextBlocks::WriteInfo()
 
         uno::Reference<xml::sax::XDocumentHandler> xHandler(xWriter, uno::UNO_QUERY);
 
-        uno::Reference<SwXMLBlockListExport> xExp(new SwXMLBlockListExport( xContext, *this, OUString(XMLN_BLOCKLIST), xHandler) );
+        rtl::Reference<SwXMLBlockListExport> xExp(new SwXMLBlockListExport( xContext, *this, OUString(XMLN_BLOCKLIST), xHandler) );
 
         xExp->exportDoc( XML_BLOCK_LIST );
 

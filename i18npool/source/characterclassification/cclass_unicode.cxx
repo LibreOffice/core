@@ -27,6 +27,7 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <breakiteratorImpl.hxx>
+#include <rtl/ref.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -92,7 +93,7 @@ cclass_Unicode::toTitle( const OUString& Text, sal_Int32 nPos, sal_Int32 nCount,
         trans->setMappingType(MappingType::ToTitle, rLocale);
         rtl_uString* pStr = rtl_uString_alloc(nCount);
         sal_Unicode* out = pStr->buffer;
-        Reference< BreakIteratorImpl > xBrk(new BreakIteratorImpl(m_xContext));
+        rtl::Reference< BreakIteratorImpl > xBrk(new BreakIteratorImpl(m_xContext));
         Boundary bdy = xBrk->getWordBoundary(Text, nPos, rLocale,
                     WordType::ANYWORD_IGNOREWHITESPACES, true);
         for (sal_Int32 i = nPos; i < nCount + nPos; i++, out++) {

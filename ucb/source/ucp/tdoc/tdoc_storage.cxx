@@ -174,7 +174,7 @@ StorageElementFactory::createStorage( const OUString & rUri,
         bool bWritable = ( ( eMode == READ_WRITE_NOCREATE )
                             || ( eMode == READ_WRITE_CREATE ) );
 
-        uno::Reference< Storage > xElement(
+        rtl::Reference< Storage > xElement(
             new Storage( m_xContext, this, aUriKey, xParentStorage, xStorage ) );
 
         aIt = m_aMap.insert(

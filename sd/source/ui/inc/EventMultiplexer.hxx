@@ -20,9 +20,11 @@
 #ifndef INCLUDED_SD_SOURCE_UI_INC_EVENTMULTIPLEXER_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_EVENTMULTIPLEXER_HXX
 
+#include <sal/config.h>
+
+#include <rtl/ref.hxx>
 #include <svl/lstner.hxx>
 #include <tools/link.hxx>
-#include <com/sun/star/uno/Reference.hxx>
 
 #include <set>
 #include <memory>
@@ -203,7 +205,7 @@ public:
 
 private:
     class Implementation;
-    css::uno::Reference<Implementation> mpImpl;
+    rtl::Reference<Implementation> mpImpl;
 };
 
 } } // end of namespace ::sd::tools
