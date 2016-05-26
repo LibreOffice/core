@@ -219,7 +219,7 @@ public class CheckBookmarks {
     }
 
     private XTextDocument reloadFrom(String sFilter, String sExtension)
-        throws com.sun.star.io.IOException
+        throws com.sun.star.io.IOException, com.sun.star.uno.Exception
     {
         String sFileUrl = util.utils.getOfficeTemp(m_xMsf) + "/Bookmarktest." + sExtension;
         try {
