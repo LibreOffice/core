@@ -52,6 +52,7 @@
 #include <cppuhelper/component.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/basemutex.hxx>
+#include <rtl/ref.hxx>
 #include <sot/storage.hxx>
 #include <comphelper/listenernotification.hxx>
 #include <xmlscript/xmllib_imexp.hxx>
@@ -227,7 +228,7 @@ protected:
     ::osl::Mutex        maMutex;
     ModifiableHelper    maModifiable;
 
-    css::uno::Reference<NameContainer> maNameContainer;
+    rtl::Reference<NameContainer> maNameContainer;
     bool    mbOldInfoFormat;
     bool    mbOasis2OOoFormat;
 
@@ -557,7 +558,7 @@ class SfxLibrary
     css::uno::Reference< css::ucb::XSimpleFileAccess3 >   mxSFI;
 
     ModifiableHelper&                                     mrModifiable;
-    css::uno::Reference<NameContainer>                    maNameContainer;
+    rtl::Reference<NameContainer>                         maNameContainer;
 
     bool mbLoaded;
     bool mbIsModified;

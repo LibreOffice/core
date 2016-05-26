@@ -12,6 +12,7 @@
 
 #include "plugin.hxx"
 #include "compat.hxx"
+#include "typecheck.hxx"
 #include "clang/AST/CXXInheritance.h"
 
 /**
@@ -50,6 +51,7 @@ public:
 
     bool VisitFieldDecl(const FieldDecl *);
     bool VisitVarDecl(const VarDecl *);
+    bool VisitFunctionDecl(const FunctionDecl *);
 
     bool WalkUpFromObjCIvarDecl(ObjCIvarDecl * decl) {
         // Don't recurse into WalkUpFromFieldDecl, as VisitFieldDecl calls
@@ -58,7 +60,15 @@ public:
         // ObjCIvarDecl.
         return VisitObjCIvarDecl(decl);
     }
+private:
+    void checkUnoReference(QualType qt, const Decl* decl,
+                           const std::string& rParentName, const std::string& rDeclName);
 };
+
+bool endsWith(const string& a, const string& b) {
+    if (b.size() > a.size()) return false;
+    return std::equal(a.begin() + a.size() - b.size(), a.end(), b.begin());
+}
 
 bool BaseCheckNotSubclass(const CXXRecordDecl *BaseDefinition, void *p) {
     if (!BaseDefinition)
@@ -287,6 +297,38 @@ bool containsSalhelperReferenceObjectSubclass(const Type* pType0) {
     }
 }
 
+static bool containsStaticTypeMethod(const CXXRecordDecl* x)
+{
+    for (auto it = x->method_begin(); it != x->method_end(); ++it) {
+        if ( endsWith((*it)->getQualifiedNameAsString(), "::static_type") ) {
+            return true;
+        }
+    }
+    return false;
+}
+
+void RefCounting::checkUnoReference(QualType qt, const Decl* decl, const std::string& rParentName, const std::string& rDeclName)
+{
+    qt = qt.getDesugaredType(compiler.getASTContext());
+    if (loplugin::TypeCheck(qt).Class("Reference").Namespace("uno")) {
+        const CXXRecordDecl* pRecordDecl = qt->getAsCXXRecordDecl();
+        const ClassTemplateSpecializationDecl* pTemplate = dyn_cast<ClassTemplateSpecializationDecl>(pRecordDecl);
+        const TemplateArgument& rArg = pTemplate->getTemplateArgs()[0];
+        const CXXRecordDecl* x = rArg.getAsType()->getAsCXXRecordDecl()->getCanonicalDecl();
+        if (x->isThisDeclarationADefinition()) {
+            if (!containsStaticTypeMethod(x)) {
+                report(
+                    DiagnosticsEngine::Warning,
+                    "uno::Reference " + rDeclName + " with template parameter that does not contain ::static_type() "
+                    + qt.getAsString()
+                    + ", parent is " + rParentName,
+                    decl->getLocation())
+                  << decl->getSourceRange();
+            }
+        }
+    }
+}
+
 bool RefCounting::VisitFieldDecl(const FieldDecl * fieldDecl) {
     if (ignoreLocation(fieldDecl)) {
         return true;
@@ -334,6 +376,9 @@ bool RefCounting::VisitFieldDecl(const FieldDecl * fieldDecl) {
             fieldDecl->getLocation())
           << fieldDecl->getSourceRange();
     }
+
+    checkUnoReference(fieldDecl->getType(), fieldDecl, aParentName, "field");
+
     return true;
 }
 
@@ -342,37 +387,54 @@ bool RefCounting::VisitVarDecl(const VarDecl * varDecl) {
     if (ignoreLocation(varDecl)) {
         return true;
     }
-    if (isa<ParmVarDecl>(varDecl)) {
+    if (!isa<ParmVarDecl>(varDecl)) {
+        if (containsSvRefBaseSubclass(varDecl->getType().getTypePtr())) {
+            report(
+                DiagnosticsEngine::Warning,
+                "SvRefBase subclass being directly stack managed, should be managed via tools::SvRef, "
+                + varDecl->getType().getAsString(),
+                varDecl->getLocation())
+              << varDecl->getSourceRange();
+        }
+        if (containsSalhelperReferenceObjectSubclass(varDecl->getType().getTypePtr())) {
+            StringRef name { compiler.getSourceManager().getFilename(compiler.getSourceManager().getSpellingLoc(varDecl->getLocation())) };
+            // this is playing games that it believes is safe
+            if (name == SRCDIR "/stoc/source/security/permissions.cxx")
+                return true;
+            report(
+                DiagnosticsEngine::Warning,
+                "salhelper::SimpleReferenceObject subclass being directly stack managed, should be managed via rtl::Reference, "
+                + varDecl->getType().getAsString(),
+                varDecl->getLocation())
+              << varDecl->getSourceRange();
+        }
+        if (containsXInterfaceSubclass(varDecl->getType())) {
+            report(
+                DiagnosticsEngine::Warning,
+                "XInterface subclass being directly stack managed, should be managed via uno::Reference, "
+                + varDecl->getType().getAsString(),
+                varDecl->getLocation())
+              << varDecl->getSourceRange();
+        }
+    }
+    checkUnoReference(varDecl->getType(), varDecl, "", "var");
+    return true;
+}
+
+bool RefCounting::VisitFunctionDecl(const FunctionDecl * functionDecl) {
+    if (ignoreLocation(functionDecl)) {
         return true;
     }
-    if (containsSvRefBaseSubclass(varDecl->getType().getTypePtr())) {
-        report(
-            DiagnosticsEngine::Warning,
-            "SvRefBase subclass being directly stack managed, should be managed via tools::SvRef, "
-            + varDecl->getType().getAsString(),
-            varDecl->getLocation())
-          << varDecl->getSourceRange();
-    }
-    if (containsSalhelperReferenceObjectSubclass(varDecl->getType().getTypePtr())) {
-        StringRef name { compiler.getSourceManager().getFilename(compiler.getSourceManager().getSpellingLoc(varDecl->getLocation())) };
-        // this is playing games that it believes is safe
-        if (name == SRCDIR "/stoc/source/security/permissions.cxx")
+    if (functionDecl->isDeleted())
+        return true;
+    // only consider base declarations, not overriden ones, or we warn on methods that
+    // are overriding stuff from external libraries
+    const CXXMethodDecl * methodDecl = dyn_cast<CXXMethodDecl>(functionDecl);
+    if (methodDecl && methodDecl->size_overridden_methods() > 0) {
             return true;
-        report(
-            DiagnosticsEngine::Warning,
-            "salhelper::SimpleReferenceObject subclass being directly stack managed, should be managed via rtl::Reference, "
-            + varDecl->getType().getAsString(),
-            varDecl->getLocation())
-          << varDecl->getSourceRange();
     }
-    if (containsXInterfaceSubclass(varDecl->getType())) {
-        report(
-            DiagnosticsEngine::Warning,
-            "XInterface subclass being directly stack managed, should be managed via uno::Reference, "
-            + varDecl->getType().getAsString(),
-            varDecl->getLocation())
-          << varDecl->getSourceRange();
-    }
+
+    checkUnoReference(functionDecl->getReturnType(), functionDecl, "", "return");
     return true;
 }
 
