@@ -74,13 +74,13 @@ SvtIconChoiceCtrl::SvtIconChoiceCtrl( vcl::Window* pParent, WinBits nWinStyle ) 
     Control( pParent, nWinStyle | WB_CLIPCHILDREN ),
 
     _pCurKeyEvent   ( nullptr ),
-    _pImp           ( new SvxIconChoiceCtrl_Impl( this, nWinStyle ) ),
+    _pImpl           ( new SvxIconChoiceCtrl_Impl( this, nWinStyle ) ),
     _bAutoFontColor ( false )
 
 {
     SetLineColor();
-    _pImp->InitSettings();
-    _pImp->SetPositionMode( IcnViewPositionModeAutoArrange );
+    _pImpl->InitSettings();
+    _pImpl->SetPositionMode( IcnViewPositionModeAutoArrange );
 }
 
 SvtIconChoiceCtrl::~SvtIconChoiceCtrl()
@@ -90,11 +90,10 @@ SvtIconChoiceCtrl::~SvtIconChoiceCtrl()
 
 void SvtIconChoiceCtrl::dispose()
 {
-    if (_pImp)
+    if (_pImpl)
     {
-        _pImp->CallEventListeners( VCLEVENT_OBJECT_DYING );
-        delete _pImp;
-        _pImp = nullptr;
+        _pImpl->CallEventListeners( VCLEVENT_OBJECT_DYING );
+        _pImpl.reset();
     }
     Control::dispose();
 }
@@ -103,7 +102,7 @@ SvxIconChoiceCtrlEntry* SvtIconChoiceCtrl::InsertEntry( const OUString& rText, c
 {
     SvxIconChoiceCtrlEntry* pEntry = new SvxIconChoiceCtrlEntry( rText, rImage);
 
-    _pImp->InsertEntry( pEntry, CONTAINER_APPEND );
+    _pImpl->InsertEntry( pEntry, CONTAINER_APPEND );
 
     return pEntry;
 }
@@ -120,24 +119,24 @@ OUString SvtIconChoiceCtrl::GetEntryText( SvxIconChoiceCtrlEntry* pEntry, bool )
 
 void SvtIconChoiceCtrl::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
 {
-    _pImp->Paint(rRenderContext, rRect);
+    _pImpl->Paint(rRenderContext, rRect);
 }
 
 void SvtIconChoiceCtrl::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    if( !_pImp->MouseButtonDown( rMEvt ) )
+    if( !_pImpl->MouseButtonDown( rMEvt ) )
         Control::MouseButtonDown( rMEvt );
 }
 
 void SvtIconChoiceCtrl::MouseButtonUp( const MouseEvent& rMEvt )
 {
-    if( !_pImp->MouseButtonUp( rMEvt ) )
+    if( !_pImpl->MouseButtonUp( rMEvt ) )
         Control::MouseButtonUp( rMEvt );
 }
 
 void SvtIconChoiceCtrl::MouseMove( const MouseEvent& rMEvt )
 {
-    if( !_pImp->MouseMove( rMEvt ) )
+    if( !_pImpl->MouseMove( rMEvt ) )
         Control::MouseMove( rMEvt );
 }
 void SvtIconChoiceCtrl::ArrangeIcons()
@@ -150,12 +149,12 @@ void SvtIconChoiceCtrl::ArrangeIcons()
         for ( sal_Int32 i = 0; i < GetEntryCount(); i++ )
         {
             SvxIconChoiceCtrlEntry* pEntry = GetEntry ( i );
-            aEntryRect = _pImp->GetEntryBoundRect ( pEntry );
+            aEntryRect = _pImpl->GetEntryBoundRect ( pEntry );
 
             aFullSize.setWidth ( aFullSize.getWidth()+aEntryRect.GetWidth() );
         }
 
-        _pImp->Arrange ( false, aFullSize.getWidth() );
+        _pImpl->Arrange ( false, aFullSize.getWidth() );
     }
     else if ( GetStyle() & WB_ALIGN_LEFT )
     {
@@ -165,22 +164,22 @@ void SvtIconChoiceCtrl::ArrangeIcons()
         for ( sal_Int32 i = 0; i < GetEntryCount(); i++ )
         {
             SvxIconChoiceCtrlEntry* pEntry = GetEntry ( i );
-            aEntryRect = _pImp->GetEntryBoundRect ( pEntry );
+            aEntryRect = _pImpl->GetEntryBoundRect ( pEntry );
 
             aFullSize.setHeight ( aFullSize.getHeight()+aEntryRect.GetHeight() );
         }
 
-        _pImp->Arrange ( false, 0, aFullSize.getHeight() );
+        _pImpl->Arrange ( false, 0, aFullSize.getHeight() );
     }
     else
     {
-        _pImp->Arrange();
+        _pImpl->Arrange();
     }
-    _pImp->Arrange( false, 0, 1000 );
+    _pImpl->Arrange( false, 0, 1000 );
 }
 void SvtIconChoiceCtrl::Resize()
 {
-    _pImp->Resize();
+    _pImpl->Resize();
     Control::Resize();
 }
 
@@ -193,17 +192,17 @@ Point SvtIconChoiceCtrl::GetPixelPos( const Point& rPosLogic ) const
 
 void SvtIconChoiceCtrl::GetFocus()
 {
-    _pImp->GetFocus();
+    _pImpl->GetFocus();
     Control::GetFocus();
     SvxIconChoiceCtrlEntry* pSelectedEntry = GetSelectedEntry();
     if ( pSelectedEntry )
-        _pImp->CallEventListeners( VCLEVENT_LISTBOX_SELECT, pSelectedEntry );
+        _pImpl->CallEventListeners( VCLEVENT_LISTBOX_SELECT, pSelectedEntry );
 }
 
 void SvtIconChoiceCtrl::LoseFocus()
 {
-    if (_pImp)
-        _pImp->LoseFocus();
+    if (_pImpl)
+        _pImpl->LoseFocus();
     Control::LoseFocus();
 }
 
@@ -212,7 +211,7 @@ void SvtIconChoiceCtrl::SetFont(const vcl::Font& rFont)
     if (rFont != GetFont())
     {
         Control::SetFont(rFont);
-        _pImp->FontModified();
+        _pImpl->FontModified();
     }
 }
 
@@ -221,7 +220,7 @@ void SvtIconChoiceCtrl::SetPointFont(const vcl::Font& rFont)
     if (rFont != GetPointFont(*this)) //FIXME
     {
         Control::SetPointFont(*this, rFont); //FIXME
-        _pImp->FontModified();
+        _pImpl->FontModified();
     }
 }
 
@@ -229,48 +228,48 @@ SvxIconChoiceCtrlEntry* SvtIconChoiceCtrl::GetEntry( const Point& rPixPos ) cons
 {
     Point aPos( rPixPos );
     aPos -= GetMapMode().GetOrigin();
-    return const_cast<SvtIconChoiceCtrl*>(this)->_pImp->GetEntry( aPos );
+    return const_cast<SvtIconChoiceCtrl*>(this)->_pImpl->GetEntry( aPos );
 }
 
 void SvtIconChoiceCtrl::SetStyle( WinBits nWinStyle )
 {
-    _pImp->SetStyle( nWinStyle );
+    _pImpl->SetStyle( nWinStyle );
 }
 
 WinBits SvtIconChoiceCtrl::GetStyle() const
 {
-    return _pImp->GetStyle();
+    return _pImpl->GetStyle();
 }
 void SvtIconChoiceCtrl::Command( const CommandEvent& rCEvt )
 {
-    _pImp->Command( rCEvt );
+    _pImpl->Command( rCEvt );
 }
 
 #ifdef DBG_UTIL
 void SvtIconChoiceCtrl::SetEntryTextMode( SvxIconChoiceCtrlTextMode eMode, SvxIconChoiceCtrlEntry* pEntry )
 {
-    _pImp->SetEntryTextMode( eMode, pEntry );
+    _pImpl->SetEntryTextMode( eMode, pEntry );
 }
 #endif
 
 sal_Int32 SvtIconChoiceCtrl::GetEntryCount() const
 {
-    return _pImp ? _pImp->GetEntryCount() : 0;
+    return _pImpl ? _pImpl->GetEntryCount() : 0;
 }
 
 SvxIconChoiceCtrlEntry* SvtIconChoiceCtrl::GetEntry( sal_Int32 nPos ) const
 {
-    return _pImp ? _pImp->GetEntry( nPos ) : nullptr;
+    return _pImpl ? _pImpl->GetEntry( nPos ) : nullptr;
 }
 
 void SvtIconChoiceCtrl::CreateAutoMnemonics( MnemonicGenerator& _rUsedMnemonics )
 {
-    _pImp->CreateAutoMnemonics( &_rUsedMnemonics );
+    _pImpl->CreateAutoMnemonics( &_rUsedMnemonics );
 }
 
 SvxIconChoiceCtrlEntry* SvtIconChoiceCtrl::GetSelectedEntry() const
 {
-    return _pImp ? _pImp->GetFirstSelectedEntry() : nullptr;
+    return _pImpl ? _pImpl->GetFirstSelectedEntry() : nullptr;
 }
 
 void SvtIconChoiceCtrl::ClickIcon()
@@ -280,12 +279,12 @@ void SvtIconChoiceCtrl::ClickIcon()
 }
 bool SvtIconChoiceCtrl::IsEntryEditing() const
 {
-    return _pImp->IsEntryEditing();
+    return _pImpl->IsEntryEditing();
 }
 
 void SvtIconChoiceCtrl::SetChoiceWithCursor()
 {
-    _pImp->SetChoiceWithCursor();
+    _pImpl->SetChoiceWithCursor();
 }
 
 void SvtIconChoiceCtrl::KeyInput( const KeyEvent& rKEvt )
@@ -304,25 +303,25 @@ bool SvtIconChoiceCtrl::DoKeyInput( const KeyEvent& rKEvt )
     if( IsEntryEditing() )
         return true;
     _pCurKeyEvent = const_cast<KeyEvent*>(&rKEvt);
-    bool bHandled = _pImp->KeyInput( rKEvt );
+    bool bHandled = _pImpl->KeyInput( rKEvt );
     _pCurKeyEvent = nullptr;
     return bHandled;
 }
 sal_Int32 SvtIconChoiceCtrl::GetEntryListPos( SvxIconChoiceCtrlEntry* pEntry ) const
 {
-    return _pImp->GetEntryListPos( pEntry );
+    return _pImpl->GetEntryListPos( pEntry );
 }
 SvxIconChoiceCtrlEntry* SvtIconChoiceCtrl::GetCursor( ) const
 {
-    return _pImp->GetCurEntry( );
+    return _pImpl->GetCurEntry( );
 }
 void SvtIconChoiceCtrl::SetCursor( SvxIconChoiceCtrlEntry* pEntry )
 {
-    _pImp->SetCursor( pEntry );
+    _pImpl->SetCursor( pEntry );
 }
 void SvtIconChoiceCtrl::InvalidateEntry( SvxIconChoiceCtrlEntry* pEntry )
 {
-    _pImp->InvalidateEntry( pEntry );
+    _pImpl->InvalidateEntry( pEntry );
 }
 
 void SvtIconChoiceCtrl::StateChanged( StateChangedType nType )
@@ -338,7 +337,7 @@ void SvtIconChoiceCtrl::DataChanged( const DataChangedEvent& rDCEvt )
          (rDCEvt.GetType() == DataChangedEventType::FONTS) ) &&
          (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
     {
-        _pImp->InitSettings();
+        _pImpl->InitSettings();
         Invalidate(InvalidateFlags::NoChildren);
     }
     else
@@ -378,7 +377,7 @@ void SvtIconChoiceCtrl::SetBackground( const Wallpaper& rPaper )
             }
             else
             {
-                Rectangle aRect( _pImp->GetOutputRect() );
+                Rectangle aRect( _pImpl->GetOutputRect() );
                 aBackground.SetRect( aRect );
             }
             Control::SetBackground( aBackground );
@@ -396,18 +395,18 @@ void SvtIconChoiceCtrl::SetBackground( const Wallpaper& rPaper )
 
 void SvtIconChoiceCtrl::RequestHelp( const HelpEvent& rHEvt )
 {
-    if ( !_pImp->RequestHelp( rHEvt ) )
+    if ( !_pImpl->RequestHelp( rHEvt ) )
         Control::RequestHelp( rHEvt );
 }
 
 void SvtIconChoiceCtrl::SetSelectionMode( SelectionMode eMode )
 {
-    _pImp->SetSelectionMode( eMode );
+    _pImpl->SetSelectionMode( eMode );
 }
 
 Rectangle SvtIconChoiceCtrl::GetBoundingBox( SvxIconChoiceCtrlEntry* pEntry ) const
 {
-    return _pImp->GetEntryBoundRect( pEntry );
+    return _pImpl->GetEntryBoundRect( pEntry );
 }
 
 void SvtIconChoiceCtrl::FillLayoutData() const
@@ -431,7 +430,7 @@ Rectangle SvtIconChoiceCtrl::GetEntryCharacterBounds( const sal_Int32 _nEntryPos
 
 void SvtIconChoiceCtrl::SetNoSelection()
 {
-    _pImp->SetNoSelection();
+    _pImpl->SetNoSelection();
 }
 
 void SvtIconChoiceCtrl::CallImplEventListeners(sal_uLong nEvent, void* pData)
@@ -450,7 +449,7 @@ css::uno::Reference< XAccessible > SvtIconChoiceCtrl::CreateAccessible()
         if ( xAccParent.is() )
         {
             css::uno::Reference< css::awt::XWindowPeer > xTemp(GetComponentInterface());
-            xAccessible = _pImp->GetAccessibleFactory().createAccessibleIconChoiceCtrl( *this, xAccParent );
+            xAccessible = _pImpl->GetAccessibleFactory().createAccessibleIconChoiceCtrl( *this, xAccParent );
         }
     }
     return xAccessible;

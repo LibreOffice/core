@@ -207,7 +207,7 @@ class SVT_DLLPUBLIC SvtIconChoiceCtrl : public Control
 
     Link<SvtIconChoiceCtrl*,void>  _aClickIconHdl;
     KeyEvent*                      _pCurKeyEvent;
-    SvxIconChoiceCtrl_Impl*        _pImp;
+    std::unique_ptr<SvxIconChoiceCtrl_Impl>        _pImpl;
     bool                           _bAutoFontColor;
 
 protected:
