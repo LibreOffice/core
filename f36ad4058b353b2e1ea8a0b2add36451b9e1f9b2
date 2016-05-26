@@ -16,6 +16,23 @@
       "revId": "f36ad4058b353b2e1ea8a0b2add36451b9e1f9b2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_6cbb5073",
+        "filename": "sw/source/core/unocore/unostyle.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 4270,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-05-26T06:14:02Z",
+      "side": 1,
+      "message": "This should be SAL_INFO() I think, SAL_WARN() is for a situation when something went wrong, but this state is perfectly normal, that\u0027s how an UNO import filter will be able to create a table style.",
+      "revId": "f36ad4058b353b2e1ea8a0b2add36451b9e1f9b2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
