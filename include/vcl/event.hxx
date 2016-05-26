@@ -38,10 +38,10 @@ namespace com { namespace sun { namespace star { namespace awt {
     struct MouseEvent;
 } } } }
 
-enum TextDirectionality {
-    TextDirectionality_LeftToRight_TopToBottom,
-    TextDirectionality_RightToLeft_TopToBottom,
-    TextDirectionality_TopToBottom_RightToLeft
+enum class TextDirectionality {
+    LeftToRight_TopToBottom,
+    RightToLeft_TopToBottom,
+    TopToBottom_RightToLeft
 };
 
 class VCL_DLLPUBLIC KeyEvent

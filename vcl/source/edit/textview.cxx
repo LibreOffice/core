@@ -1175,9 +1175,9 @@ TextSelection TextView::ImpMoveCursor( const KeyEvent& rKeyEvent )
     TextPaM aPaM( mpImpl->maSelection.GetEnd() );
     TextPaM aOldEnd( aPaM );
 
-    TextDirectionality eTextDirection = TextDirectionality_LeftToRight_TopToBottom;
+    TextDirectionality eTextDirection = TextDirectionality::LeftToRight_TopToBottom;
     if ( mpImpl->mpTextEngine->IsRightToLeft() )
-        eTextDirection = TextDirectionality_RightToLeft_TopToBottom;
+        eTextDirection = TextDirectionality::RightToLeft_TopToBottom;
 
     KeyEvent aTranslatedKeyEvent = rKeyEvent.LogicalTextDirectionality( eTextDirection );
 
