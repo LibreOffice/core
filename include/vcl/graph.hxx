@@ -196,7 +196,8 @@ public:
 public:
 
     GraphicReader*  GetContext();
-    void            SetContext( GraphicReader* pReader );
+    std::unique_ptr<GraphicReader>  ResetContext();
+    void            SetContext( std::unique_ptr<GraphicReader> pReader );
     void            SetDummyContext(bool value);
     bool            IsDummyContext();
 private:
