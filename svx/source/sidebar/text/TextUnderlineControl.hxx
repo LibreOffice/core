@@ -32,7 +32,7 @@ namespace svx {
 class TextUnderlineControl : public SfxPopupWindow
 {
 public:
-    TextUnderlineControl(sal_uInt16 nId);
+    explicit TextUnderlineControl(sal_uInt16 nId);
     virtual ~TextUnderlineControl();
     virtual void dispose() override;
 

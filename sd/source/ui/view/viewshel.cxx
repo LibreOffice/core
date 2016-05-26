@@ -1240,7 +1240,7 @@ class KeepSlideSorterInSyncWithPageChanges
     sd::slidesorter::controller::SelectionObserver::Context m_aContext;
 
 public:
-    KeepSlideSorterInSyncWithPageChanges(sd::slidesorter::SlideSorter& rSlideSorter)
+    explicit KeepSlideSorterInSyncWithPageChanges(sd::slidesorter::SlideSorter& rSlideSorter)
         : m_aDrawLock(rSlideSorter)
         , m_aModelLock(rSlideSorter.GetController())
         , m_aUpdateLock(rSlideSorter)

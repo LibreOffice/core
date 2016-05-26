@@ -465,7 +465,7 @@ class LogWriter
 private:
     SvFileStream maStream;
 public:
-    LogWriter(OUString aFileName)
+    explicit LogWriter(OUString aFileName)
         : maStream(aFileName, StreamMode::WRITE)
     {}
 

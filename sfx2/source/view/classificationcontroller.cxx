@@ -90,7 +90,7 @@ class SAL_WARN_UNUSED ClassificationControl : public vcl::Window
     virtual void DataChanged(const DataChangedEvent& rEvent) override;
 
 public:
-    ClassificationControl(vcl::Window* pParent);
+    explicit ClassificationControl(vcl::Window* pParent);
     virtual ~ClassificationControl();
     virtual void dispose() override;
     virtual void Resize() override;

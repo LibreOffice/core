@@ -168,7 +168,7 @@ private:
     static void InitInterface_Impl();
 
 public:
-                    ScDocShell( const ScDocShell& rDocShell );
+    explicit        ScDocShell( const ScDocShell& rDocShell );
                     ScDocShell( const SfxModelFlags i_nSfxCreationFlags = SfxModelFlags::EMBEDDED_OBJECT );
                     virtual ~ScDocShell();
 
@@ -448,18 +448,18 @@ typedef tools::SvRef<ScDocShell> ScDocShellRef;
  */
 class SC_DLLPUBLIC ScDocShellModificator
 {
-            ScDocShell&     rDocShell;
+    ScDocShell&     rDocShell;
     std::unique_ptr<ScRefreshTimerProtector> mpProtector;
-            bool            bAutoCalcShellDisabled;
-            bool            bIdleEnabled;
+    bool            bAutoCalcShellDisabled;
+    bool            bIdleEnabled;
 
-                            ScDocShellModificator( const ScDocShellModificator& ) = delete;
+    ScDocShellModificator( const ScDocShellModificator& ) = delete;
     ScDocShellModificator&  operator=( const ScDocShellModificator& ) = delete;
 
 public:
-                            ScDocShellModificator( ScDocShell& );
-                            ~ScDocShellModificator();
-            void            SetDocumentModified();
+    explicit ScDocShellModificator( ScDocShell& );
+    ~ScDocShellModificator();
+    void            SetDocumentModified();
 };
 
 //#i97876# Spreadsheet data changes are not notified
