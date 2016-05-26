@@ -3716,6 +3716,19 @@ bool ScDocument::HasSelectionData( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
     return HasStringCells( ScRange( nCol, 0, nTab, nCol, MAXROW, nTab ) );
 }
 
+void ScDocument::CheckVectorizationState()
+{
+    bool bOldAutoCalc = GetAutoCalc();
+    bAutoCalc = false;      // no mulitple calculations
+
+    TableContainer::iterator it = maTabs.begin();
+    for (; it != maTabs.end(); ++it)
+        if (*it)
+            (*it)->CheckVectorizationState();
+
+    SetAutoCalc(bOldAutoCalc);
+}
+
 void ScDocument::SetAllFormulasDirty( const sc::SetFormulaDirtyContext& rCxt )
 {
     bool bOldAutoCalc = GetAutoCalc();
