@@ -2027,7 +2027,7 @@ AC_ARG_WITH(symbol-config,
     AS_HELP_STRING([--with-symbol-config],
         [Configuration for the crashreport symbol upload]),
         [],
-        [$with_symbol_config=no])
+        [with_symbol_config=no])
 
 AC_ARG_WITH(export-validation,
     AS_HELP_STRING([--with-export-validation],
