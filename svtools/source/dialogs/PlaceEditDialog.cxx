@@ -184,7 +184,7 @@ void PlaceEditDialog::InitDetails( )
 
         nPos = m_pLBServerType->InsertEntry( aTypesNamesList[i], nPos );
 
-        std::shared_ptr<DetailsContainer> xCmisDetails(std::make_shared<CmisDetailsContainer>(this, sUrl));
+        std::shared_ptr<DetailsContainer> xCmisDetails(std::make_shared<CmisDetailsContainer>(this, this, sUrl));
         xCmisDetails->setChangeHdl( LINK( this, PlaceEditDialog, EditHdl ) );
         m_aDetailsContainers.push_back(xCmisDetails);
 
