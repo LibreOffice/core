@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_27e243d6",
+        "filename": "sw/inc/tblafmt.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-05-26T12:09:06Z",
+      "side": 1,
+      "message": "I think the default visibility is fine here, no need for an explicit SAL_DLLPRIVATE here.",
+      "revId": "aa4c0f5927d41ec39995cb6ee71bfd07eca177c6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_47e747e4",
+        "filename": "sw/inc/tblafmt.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 300,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-05-26T12:09:06Z",
+      "side": 1,
+      "message": "Same here. :-)",
+      "revId": "aa4c0f5927d41ec39995cb6ee71bfd07eca177c6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_e7c13b30",
+        "filename": "sw/inc/unostyle.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-05-26T12:09:06Z",
+      "side": 1,
+      "message": "You could use cppu::supportsService() here, instead of always returning false. I would recommend making all 3 methods non-inline.",
+      "revId": "aa4c0f5927d41ec39995cb6ee71bfd07eca177c6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_c7c43742",
+        "filename": "sw/inc/unostyle.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 277,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-05-26T12:09:06Z",
+      "side": 1,
+      "message": "This should report \"com.sun.star.style.Style\", I think.",
+      "revId": "aa4c0f5927d41ec39995cb6ee71bfd07eca177c6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_67ec4bc8",
+        "filename": "sw/source/core/unocore/unostyle.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 4318,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-05-26T12:09:06Z",
+      "side": 1,
+      "message": "\"Name_\" is probably copy\u0026paste from elsewhere, in new code \"rName\" would be the preferred style.",
+      "revId": "aa4c0f5927d41ec39995cb6ee71bfd07eca177c6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
