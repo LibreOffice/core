@@ -531,6 +531,11 @@ bool SdrGrafObj::IsSwappedOut() const
     return mbIsPreview || pGraphic->IsSwappedOut();
 }
 
+bool SdrGrafObj::IsCropped() const
+{
+    return aGrafInfo.IsCropped();
+}
+
 const MapMode& SdrGrafObj::GetGrafPrefMapMode() const
 {
     return pGraphic->GetPrefMapMode();
@@ -562,15 +567,38 @@ OUString SdrGrafObj::GetGrafStreamURL() const
 Size SdrGrafObj::getOriginalSize() const
 {
     Size aSize;
+    long aCroppedWidth;
+    long aCroppedHeight;
 
-    if ( GetGrafPrefMapMode().GetMapUnit() == MAP_PIXEL )
-        aSize = Application::GetDefaultDevice()->PixelToLogic( GetGrafPrefSize(),
-                                                               GetModel()->GetScaleUnit() );
+    if (IsCropped())
+    {
+        aCroppedHeight = GetGrafPrefSize().getHeight() - ( aGrafInfo.GetBottomCrop()+aGrafInfo.GetTopCrop() );
+        aCroppedWidth = GetGrafPrefSize().getWidth() - ( aGrafInfo.GetRightCrop()+aGrafInfo.GetLeftCrop() );
+
+        if ( GetGrafPrefMapMode().GetMapUnit() == MAP_PIXEL )
+        {
+            aSize = Application::GetDefaultDevice()->PixelToLogic( Size( aCroppedWidth, aCroppedHeight ),
+                                                                   GetModel()->GetScaleUnit() );
+        }
+        else
+        {
+
+            aSize = OutputDevice::LogicToLogic( Size( aCroppedWidth, aCroppedHeight ),
+                                                GetGrafPrefMapMode(),
+                                                GetModel()->GetScaleUnit() );
+        }
+    }
     else
     {
-        aSize = OutputDevice::LogicToLogic( GetGrafPrefSize(),
-                                            GetGrafPrefMapMode(),
-                                            GetModel()->GetScaleUnit() );
+        if ( GetGrafPrefMapMode().GetMapUnit() == MAP_PIXEL )
+            aSize = Application::GetDefaultDevice()->PixelToLogic( GetGrafPrefSize(),
+                                                                   GetModel()->GetScaleUnit() );
+        else
+        {
+            aSize = OutputDevice::LogicToLogic( GetGrafPrefSize(),
+                                                GetGrafPrefMapMode(),
+                                                GetModel()->GetScaleUnit() );
+        }
     }
 
     return aSize;
