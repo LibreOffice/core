@@ -42,12 +42,12 @@ VclPtr<vcl::Window> PageMarginPanel::Create(
     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame,
     SfxBindings* pBindings)
 {
-    if( pParent == NULL )
-        throw ::com::sun::star::lang::IllegalArgumentException("no parent window given to PageMarginPanel::Create", NULL, 0);
+    if( !pParent )
+        throw ::com::sun::star::lang::IllegalArgumentException("no parent window given to PageMarginPanel::Create", nullptr, 0);
     if( !rxFrame.is() )
-        throw ::com::sun::star::lang::IllegalArgumentException("no XFrame given to PageMarginPanel::Create", NULL, 0);
-    if( pBindings == NULL )
-        throw ::com::sun::star::lang::IllegalArgumentException("no SfxBindings given to PageMarginPanel::Create", NULL, 0);
+        throw ::com::sun::star::lang::IllegalArgumentException("no XFrame given to PageMarginPanel::Create", nullptr, 0);
+    if( !pBindings )
+        throw ::com::sun::star::lang::IllegalArgumentException("no SfxBindings given to PageMarginPanel::Create", nullptr, 0);
 
     return VclPtr<PageMarginPanel>::Create(pParent, rxFrame, pBindings);
 }
@@ -119,7 +119,7 @@ void PageMarginPanel::MetricState( SfxItemState eState, const SfxPoolItem* pStat
     else
     {
         SfxViewFrame* pFrame = SfxViewFrame::Current();
-        SfxObjectShell* pSh = NULL;
+        SfxObjectShell* pSh = nullptr;
         if ( pFrame )
             pSh = pFrame->GetObjectShell();
         if ( pSh )
