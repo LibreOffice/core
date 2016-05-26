@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_a7ff3333",
+        "filename": "xmloff/source/style/xmlnumfe.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 749,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-05-26T15:02:03Z",
+      "side": 1,
+      "message": "I\u0027d like to see this wrapped in a \"which ODF version do we write\" and if \u003e\u003d1.3 automatically use XML_NAMESPACE_NUMBER, and if 1.2 strict without extensions or 1.1 do not even write XML_NAMESPACE_LO_EXT. See https://wiki.documentfoundation.org/Development/ODF_Implementer_Notes#ODF_Version_Choice for how to accomplish that using the ODFSaneDefaultVersion enum.\n\nI guess we already let creep in loext in other places that need to be checked, likely all places where XML_NAMESPACE_LO_EXT is used. Some work to do independently of this change.",
+      "range": {
+        "startLine": 749,
+        "startChar": 30,
+        "endLine": 749,
+        "endChar": 50
+      },
+      "revId": "8c06773b31ab665140e1dbe26800a709fbd07570",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_c7fc3741",
+        "filename": "xmloff/source/style/xmlnumfe.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 771,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-05-26T15:02:03Z",
+      "side": 1,
+      "message": "Ditto, check ODFSaneDefaultVersion.",
+      "revId": "8c06773b31ab665140e1dbe26800a709fbd07570",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_e7f93b4f",
+        "filename": "xmloff/source/style/xmlnumfi.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 568,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-05-26T15:02:03Z",
+      "side": 1,
+      "message": "We should be able to import both, XML_NAMESPACE_LO_EXT and XML_NAMESPACE_NUMBER.\n\nSimilar for the other elements and attributes that already use XML_NAMESPACE_LO_EXT, some work for a separate change.",
+      "revId": "8c06773b31ab665140e1dbe26800a709fbd07570",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
