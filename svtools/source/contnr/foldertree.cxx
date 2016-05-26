@@ -8,7 +8,8 @@
  */
 
 #include <svtools/foldertree.hxx>
-
+#include <toolkit/helper/vclunohelper.hxx>
+#include <vcl/dialog.hxx>
 #include "contentenumeration.hxx"
 
 FolderTree::FolderTree( vcl::Window* pParent, WinBits nBits )
@@ -18,7 +19,7 @@ FolderTree::FolderTree( vcl::Window* pParent, WinBits nBits )
 {
     Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
     Reference< XInteractionHandler > xInteractionHandler(
-                InteractionHandler::createWithParent( xContext, nullptr ), UNO_QUERY_THROW );
+                InteractionHandler::createWithParent(xContext, VCLUnoHelper::GetInterface(GetParentDialog())), UNO_QUERY_THROW );
     m_xEnv = new ::ucbhelper::CommandEnvironment( xInteractionHandler, Reference< XProgressHandler >() );
 
     SetDefaultCollapsedEntryBmp( m_aFolderImage );

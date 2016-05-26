@@ -19,6 +19,7 @@
 #include <rtl/uri.hxx>
 #include <ucbhelper/content.hxx>
 #include <ucbhelper/commandenvironment.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 
 #include <svtools/PlaceEditDialog.hxx>
 #include <svtools/ServerDetailsControls.hxx>
@@ -271,17 +272,18 @@ void SmbDetailsContainer::show( bool bShow )
     m_pFTPort->Enable( !bShow );
 }
 
-CmisDetailsContainer::CmisDetailsContainer( VclBuilderContainer* pBuilder, OUString const & sBinding ) :
+CmisDetailsContainer::CmisDetailsContainer(VclBuilderContainer* pBuilder, Dialog* pParentDialog, OUString const & sBinding) :
     DetailsContainer( pBuilder ),
     m_sUsername( ),
     m_xCmdEnv( ),
     m_aRepoIds( ),
     m_sRepoId( ),
-    m_sBinding( sBinding )
+    m_sBinding( sBinding ),
+    m_xParentDialog( VCLUnoHelper::GetInterface(pParentDialog) )
 {
     Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
     Reference< XInteractionHandler > xGlobalInteractionHandler(
-        InteractionHandler::createWithParent(xContext, nullptr), UNO_QUERY );
+        InteractionHandler::createWithParent(xContext, m_xParentDialog), UNO_QUERY);
     m_xCmdEnv = new ucbhelper::CommandEnvironment( xGlobalInteractionHandler, Reference< XProgressHandler >() );
 
     pBuilder->get( m_pFTRepository, "repositoryLabel" );
@@ -436,7 +438,7 @@ IMPL_LINK_NOARG_TYPED( CmisDetailsContainer, RefreshReposHdl, Button*, void  )
         if( !sUrl.isEmpty() && !m_sUsername.isEmpty() && !m_sPassword.isEmpty() )
         {
             Reference< XInteractionHandler > xInteractionHandler(
-                InteractionHandler::createWithParent( xContext, nullptr ),
+                InteractionHandler::createWithParent(xContext, m_xParentDialog),
                 UNO_QUERY );
 
             Sequence<OUString> aPasswd { m_sPassword };

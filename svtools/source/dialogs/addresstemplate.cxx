@@ -798,7 +798,7 @@ void AssignmentPersistentData::ImplCommit()
         try
         {
             xHandler.set(
-                InteractionHandler::createWithParent(m_xORB, nullptr),
+                InteractionHandler::createWithParent(m_xORB, VCLUnoHelper::GetInterface(this)),
                 UNO_QUERY_THROW );
         }
         catch(const Exception&) { }

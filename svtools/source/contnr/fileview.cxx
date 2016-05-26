@@ -29,6 +29,7 @@
 #include <svtools/svtabbx.hxx>
 #include <svtools/svtools.hrc>
 #include <svtools/viewdataentry.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include "fileview.hrc"
 #include "contentenumeration.hxx"
 #include <svtools/AccessibleBrowseBoxObjType.hxx>
@@ -533,7 +534,7 @@ ViewTabListBox_Impl::ViewTabListBox_Impl( vcl::Window* pParentWin,
 
     Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
     Reference< XInteractionHandler > xInteractionHandler(
-        InteractionHandler::createWithParent(xContext, nullptr), UNO_QUERY_THROW );
+        InteractionHandler::createWithParent(xContext, VCLUnoHelper::GetInterface(GetParentDialog())), UNO_QUERY_THROW );
 
     mxCmdEnv = new ::ucbhelper::CommandEnvironment( xInteractionHandler, Reference< XProgressHandler >() );
 
@@ -977,7 +978,7 @@ SvtFileView::SvtFileView( vcl::Window* pParent, WinBits nBits,
 
     Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
     Reference< XInteractionHandler > xInteractionHandler(
-        InteractionHandler::createWithParent(xContext, nullptr), UNO_QUERY_THROW );
+        InteractionHandler::createWithParent(xContext, VCLUnoHelper::GetInterface(GetParentDialog())), UNO_QUERY_THROW );
     Reference < XCommandEnvironment > xCmdEnv = new ::ucbhelper::CommandEnvironment( xInteractionHandler, Reference< XProgressHandler >() );
 
     mpImpl.reset( new SvtFileView_Impl( this, xCmdEnv, nFlags, bOnlyFolder ) );

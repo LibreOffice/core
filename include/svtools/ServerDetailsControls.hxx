@@ -18,6 +18,7 @@
 #include <tools/urlobj.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/button.hxx>
+#include <vcl/dialog.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
@@ -136,9 +137,10 @@ class CmisDetailsContainer : public DetailsContainer
         VclPtr<FixedText>  m_pFTRepository;
         VclPtr<ListBox>    m_pLBRepository;
         VclPtr<Button>     m_pBTRepoRefresh;
+        css::uno::Reference< css::awt::XWindow > m_xParentDialog;
 
     public:
-        CmisDetailsContainer( VclBuilderContainer* pBuilder, OUString const & sBinding );
+        CmisDetailsContainer(VclBuilderContainer* pBuilder, Dialog* pParentDialog, OUString const & sBinding);
         virtual ~CmisDetailsContainer( ) { };
 
         virtual void show( bool bShow = true ) override;
