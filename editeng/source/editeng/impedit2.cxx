@@ -750,11 +750,11 @@ EditSelection ImpEditEngine::MoveCursor( const KeyEvent& rKeyEvent, EditView* pE
 
     EditPaM aOldPaM( aPaM );
 
-    TextDirectionality eTextDirection = TextDirectionality_LeftToRight_TopToBottom;
+    TextDirectionality eTextDirection = TextDirectionality::LeftToRight_TopToBottom;
     if ( IsVertical() )
-        eTextDirection = TextDirectionality_TopToBottom_RightToLeft;
+        eTextDirection = TextDirectionality::TopToBottom_RightToLeft;
     else if ( IsRightToLeft( GetEditDoc().GetPos( aPaM.GetNode() ) ) )
-        eTextDirection = TextDirectionality_RightToLeft_TopToBottom;
+        eTextDirection = TextDirectionality::RightToLeft_TopToBottom;
 
     KeyEvent aTranslatedKeyEvent = rKeyEvent.LogicalTextDirectionality( eTextDirection );
 
