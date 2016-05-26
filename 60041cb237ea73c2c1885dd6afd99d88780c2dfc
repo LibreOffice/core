@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_c24b4558",
+        "filename": "sfx2/source/appl/module.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-05-26T20:11:22Z",
+      "side": 0,
+      "message": "i\u0027m guessing it crashes because you removed this - the pImgListBig member references some resource from the pResMgr so presumably the pImpl must be deleted earlier than the pResMgr",
+      "revId": "60041cb237ea73c2c1885dd6afd99d88780c2dfc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
