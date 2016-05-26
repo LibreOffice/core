@@ -56,10 +56,10 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="edit">
+      <object class="GtkMenuItem" id="manage">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Edit Templates</property>
+        <property name="label" translatable="yes">Manage Templates</property>
       </object>
     </child>
   </object>

@@ -609,7 +609,7 @@ IMPL_LINK_TYPED( BackingWindow, MenuSelectHdl, MenuButton*, pButton, void )
     {
         mpLocalView->filterItems(ViewFilter_Application(FILTER_APPLICATION::DRAW));
     }
-    else if( sId == "edit" )
+    else if( sId == "manage" )
     {
         Reference< XDispatchProvider > xFrame( mxFrame, UNO_QUERY );
 
