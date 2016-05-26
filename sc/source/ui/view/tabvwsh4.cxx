@@ -1692,6 +1692,24 @@ ScTabViewShell::ScTabViewShell( SfxViewFrame* pViewFrame,
 
     Construct( nForceDesignMode );
 
+    // make Controller known to SFX
+    new ScTabViewObj( this );
+
+    // Resolves: tdf#53899 if there is no controller, register the above
+    // ScTabViewObj as the current controller for the duration of the first
+    // round of calculations triggered here by SetZoom. That way any StarBasic
+    // macros triggered while the document is loading have a CurrentController
+    // available to them.
+    bool bInstalledScTabViewObjAsTempController = false;
+    uno::Reference<frame::XController> xCurrentController(GetViewData().GetDocShell()->GetModel()->getCurrentController());
+    if (!xCurrentController.get())
+    {
+        //GetController here returns the ScTabViewObj above
+        GetViewData().GetDocShell()->GetModel()->setCurrentController(GetController());
+        bInstalledScTabViewObjAsTempController = true;
+    }
+    xCurrentController.clear();
+
     if ( GetViewData().GetDocShell()->IsPreview() )
     {
         //  preview for template dialog: always show whole page
@@ -1704,15 +1722,16 @@ ScTabViewShell::ScTabViewShell( SfxViewFrame* pViewFrame,
         SetZoomType( rAppOpt.GetZoomType(), true );
     }
 
-    // make Controller known to SFX
-    new ScTabViewObj( this );
-
     SetCurSubShell(OST_Cell);
     SvBorder aBorder;
     GetBorderSize( aBorder, Size() );
     SetBorderPixel( aBorder );
 
     MakeDrawLayer();
+
+    //put things back as we found them
+    if (bInstalledScTabViewObjAsTempController)
+        GetViewData().GetDocShell()->GetModel()->setCurrentController(nullptr);
 }
 
 ScTabViewShell::~ScTabViewShell()
