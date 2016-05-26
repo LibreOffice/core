@@ -51,7 +51,7 @@ class SwAddressControl_Impl : public Control
 
     std::vector<VclPtr<FixedText> >       m_aFixedTexts;
     std::vector<VclPtr<Edit> >            m_aEdits;
-    std::map<Edit*, sal_Int32>            m_aEditLines;
+    std::map<void*, sal_Int32>            m_aEditLines;
 
     SwCSVData*                      m_pData;
     Size                            m_aWinOutputSize;
