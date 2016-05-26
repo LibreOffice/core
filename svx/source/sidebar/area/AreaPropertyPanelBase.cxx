@@ -161,6 +161,7 @@ void AreaPropertyPanelBase::Initialize()
     mpGradientStyle->SetSelectHdl( aLink );
     mpLbFillGradFrom->SetSelectHdl( aLink );
     mpLbFillGradTo->SetSelectHdl( aLink );
+    mpMTRAngle->SetModifyHdl(LINK(this,AreaPropertyPanelBase, ChangeGradientAngle));
 
     mpLBTransType->SetSelectHdl(LINK(this, AreaPropertyPanelBase, ChangeTrgrTypeHdl_Impl));
 
@@ -398,6 +399,26 @@ IMPL_LINK_NOARG_TYPED(AreaPropertyPanelBase, SelectFillTypeHdl, ListBox&, void)
 
 IMPL_LINK_NOARG_TYPED(AreaPropertyPanelBase, SelectFillAttrHdl, ListBox&, void)
 {
+    SelectFillAttrHdl_Impl();
+}
+
+IMPL_LINK_NOARG_TYPED(AreaPropertyPanelBase, ChangeGradientAngle, Edit&, void)
+{
+    SelectFillAttrHdl_Impl();
+}
+
+VclPtr<PopupControl> AreaPropertyPanelBase::CreateTransparencyGradientControl (PopupContainer* pParent)
+{
+    return VclPtrInstance<AreaTransparencyGradientControl>(pParent, *this);
+}
+
+void AreaPropertyPanelBase::DataChanged(
+    const DataChangedEvent& /*rEvent*/)
+{
+}
+
+void AreaPropertyPanelBase::SelectFillAttrHdl_Impl()
+{
     const drawing::FillStyle eXFS = (drawing::FillStyle)mpLbFillType->GetSelectEntryPos();
     const XFillStyleItem aXFillStyleItem(eXFS);
     SfxObjectShell* pSh = SfxObjectShell::Current();
@@ -497,16 +518,6 @@ IMPL_LINK_NOARG_TYPED(AreaPropertyPanelBase, SelectFillAttrHdl, ListBox&, void)
         default: break;
     }
     mpSidebarController->NotifyResize();
-}
-
-VclPtr<PopupControl> AreaPropertyPanelBase::CreateTransparencyGradientControl (PopupContainer* pParent)
-{
-    return VclPtrInstance<AreaTransparencyGradientControl>(pParent, *this);
-}
-
-void AreaPropertyPanelBase::DataChanged(
-    const DataChangedEvent& /*rEvent*/)
-{
 }
 
 void AreaPropertyPanelBase::ImpUpdateTransparencies()
