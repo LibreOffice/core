@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_47dd8741",
+        "filename": "filter/source/svg/parserfragments.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-05-26T09:54:24Z",
+      "side": 1,
+      "message": "just a little problem here: the \"[self]\" capture creates a copy of the ColorGrammar object, it does not reference the existing one as [\u0026self] would.\n\napparently this does not currently cause a problem because the only member of ColorGrammar is a reference but somebody could add a new member some day, so best to capture it by reference.",
+      "revId": "fe366484db3381b50f283f2076e79aa9df12e11b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
