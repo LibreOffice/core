@@ -21,6 +21,7 @@
 
 #include <unotools/configitem.hxx>
 #include <svtools/svtdllapi.h>
+#include <memory>
 
 #define HTML_FONT_COUNT 7
 
@@ -36,7 +37,7 @@ struct HtmlOptions_Impl;
 
 class SVT_DLLPUBLIC SvxHtmlOptions : public utl::ConfigItem
 {
-    HtmlOptions_Impl*pImp;
+    std::unique_ptr<HtmlOptions_Impl>   pImpl;
     static const css::uno::Sequence<OUString>& GetPropertyNames();
     void Load( const css::uno::Sequence< OUString >& rPropertyNames );
 
