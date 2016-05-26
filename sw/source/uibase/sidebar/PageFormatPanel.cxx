@@ -25,6 +25,7 @@
 #include <svx/dlgutil.hxx>
 #include <svx/rulritem.hxx>
 #include "PageFormatPanel.hxx"
+#include "PageMarginUtils.hxx"
 #include <sfx2/sidebar/ControlFactory.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/bindings.hxx>
@@ -61,7 +62,11 @@ PageFormatPanel::PageFormatPanel(
     maPaperSizeController(SID_ATTR_PAGE_SIZE, *pBindings, *this),
     maPaperOrientationController(SID_ATTR_PAGE, *pBindings, *this),
     maMetricController(SID_ATTR_METRIC, *pBindings,*this),
+    maSwPageLRControl(SID_ATTR_PAGE_LRSPACE, *pBindings, *this),
+    maSwPageULControl(SID_ATTR_PAGE_ULSPACE, *pBindings, *this),
     mpPageItem( new SvxPageItem(SID_ATTR_PAGE) ),
+    mpPageLRMarginItem( new SvxLongLRSpaceItem( 0, 0, SID_ATTR_PAGE_LRSPACE ) ),
+    mpPageULMarginItem( new SvxLongULSpaceItem( 0, 0, SID_ATTR_PAGE_ULSPACE ) ),
     meFUnit(GetModuleFieldUnit()),
     meLastFUnit(GetModuleFieldUnit()),
     meUnit()
@@ -70,6 +75,7 @@ PageFormatPanel::PageFormatPanel(
     get(mpPaperWidth, "paperwidth");
     get(mpPaperHeight, "paperheight");
     get(mpPaperOrientation, "paperorientation");
+    get(mpMarginSelectBox, "marginLB");
     Initialize();
 }
 
@@ -84,6 +90,7 @@ void PageFormatPanel::dispose()
     mpPaperWidth.disposeAndClear();
     mpPaperHeight.disposeAndClear();
     mpPaperOrientation.disposeAndClear();
+    mpMarginSelectBox.disposeAndClear();
 
     maMetricController.dispose();
     maPaperOrientationController.dispose();
@@ -111,10 +118,15 @@ void PageFormatPanel::Initialize()
     mpPaperOrientation->SetSelectHdl( LINK(this, PageFormatPanel, PaperFormatModifyHdl ));
     mpPaperHeight->SetModifyHdl( LINK(this, PageFormatPanel, PaperSizeModifyHdl ));
     mpPaperWidth->SetModifyHdl( LINK(this, PageFormatPanel, PaperSizeModifyHdl ));
+    mpMarginSelectBox->SetSelectHdl( LINK(this, PageFormatPanel, PaperModifyMarginHdl));
 
     mpBindings->Update(SID_ATTR_METRIC);
     mpBindings->Update(SID_ATTR_PAGE);
     mpBindings->Update(SID_ATTR_PAGE_SIZE);
+    mpBindings->Update( SID_ATTR_PAGE_LRSPACE );
+    mpBindings->Update( SID_ATTR_PAGE_ULSPACE );
+
+    UpdateMarginBox();
 }
 
 void PageFormatPanel::NotifyItemUpdate(
@@ -172,6 +184,26 @@ void PageFormatPanel::NotifyItemUpdate(
             }
         }
         break;
+        case SID_ATTR_PAGE_LRSPACE:
+        {
+            if ( eState >= SfxItemState::DEFAULT &&
+             pState && dynamic_cast< const SvxLongLRSpaceItem *>( pState ) !=  nullptr )
+            {
+                mpPageLRMarginItem.reset( static_cast<SvxLongLRSpaceItem*>(pState->Clone()) );
+                UpdateMarginBox();
+            }
+        }
+        break;
+        case SID_ATTR_PAGE_ULSPACE:
+        {
+            if ( eState >= SfxItemState::DEFAULT &&
+                pState && dynamic_cast< const SvxLongULSpaceItem *>( pState ) !=  nullptr )
+            {
+                mpPageULMarginItem.reset( static_cast<SvxLongULSpaceItem*>(pState->Clone()) );
+                UpdateMarginBox();
+            }
+        }
+        break;
         default:
             break;
     }
@@ -195,6 +227,51 @@ IMPL_LINK_NOARG_TYPED(PageFormatPanel, PaperSizeModifyHdl, Edit&, void)
     Size aSize( GetCoreValue( *mpPaperWidth, meUnit ), GetCoreValue( *mpPaperHeight, meUnit));
     SvxSizeItem aSizeItem(SID_ATTR_PAGE_SIZE, aSize);
     mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_SIZE, SfxCallMode::RECORD, { &aSizeItem });
+}
+
+IMPL_LINK_NOARG_TYPED(PageFormatPanel, PaperModifyMarginHdl, ListBox&, void)
+{
+    bool bMirrored = false;
+    bool bApplyNewPageMargins = true;
+    switch ( mpMarginSelectBox->GetSelectEntryPos() )
+    {
+        case 0:
+            SetNarrow(mnPageLeftMargin, mnPageRightMargin, mnPageTopMargin, mnPageBottomMargin, bMirrored);
+            break;
+        case 1:
+            SetModerate(mnPageLeftMargin, mnPageRightMargin, mnPageTopMargin, mnPageBottomMargin, bMirrored);
+            break;
+        case 2:
+            SetNormal075(mnPageLeftMargin, mnPageRightMargin, mnPageTopMargin, mnPageBottomMargin, bMirrored);
+            break;
+        case 3:
+            SetNormal100(mnPageLeftMargin, mnPageRightMargin, mnPageTopMargin, mnPageBottomMargin, bMirrored);
+            break;
+        case 4:
+            SetNormal125(mnPageLeftMargin, mnPageRightMargin, mnPageTopMargin, mnPageBottomMargin, bMirrored);
+            break;
+        case 5:
+            SetWide(mnPageLeftMargin, mnPageRightMargin, mnPageTopMargin, mnPageBottomMargin, bMirrored);
+            break;
+        case 6:
+            SetMirrored(mnPageLeftMargin, mnPageRightMargin, mnPageTopMargin, mnPageBottomMargin, bMirrored);
+            break;
+        default:
+            bApplyNewPageMargins = false;
+            break;
+    }
+
+    if(bApplyNewPageMargins)
+    {
+        ExecuteMarginLRChange( mnPageLeftMargin, mnPageRightMargin );
+        ExecuteMarginULChange( mnPageTopMargin, mnPageBottomMargin );
+        if(bMirrored != (mpPageItem->GetPageUsage() == SVX_PAGE_MIRROR))
+        {
+            mpPageItem->SetPageUsage( bMirrored ? SVX_PAGE_MIRROR : SVX_PAGE_ALL );
+            mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_PAGE,
+                                                        SfxCallMode::RECORD, { mpPageItem.get() });
+        }
+    }
 }
 
 FieldUnit PageFormatPanel::GetCurrentUnit( SfxItemState eState, const SfxPoolItem* pState )
@@ -226,6 +303,70 @@ FieldUnit PageFormatPanel::GetCurrentUnit( SfxItemState eState, const SfxPoolIte
     }
 
     return eUnit;
+}
+
+void PageFormatPanel::ExecuteMarginLRChange( const long nPageLeftMargin, const long nPageRightMargin )
+{
+    mpPageLRMarginItem->SetLeft( nPageLeftMargin );
+    mpPageLRMarginItem->SetRight( nPageRightMargin );
+    mpBindings->GetDispatcher()->ExecuteList( SID_ATTR_PAGE_LRSPACE, SfxCallMode::RECORD, { mpPageLRMarginItem.get() });
+}
+
+void PageFormatPanel::ExecuteMarginULChange(const long nPageTopMargin, const long nPageBottomMargin)
+{
+    mpPageULMarginItem->SetUpper( nPageTopMargin );
+    mpPageULMarginItem->SetLower( nPageBottomMargin );
+    mpBindings->GetDispatcher()->ExecuteList( SID_ATTR_PAGE_ULSPACE, SfxCallMode::RECORD, { mpPageULMarginItem.get() });
+}
+
+void PageFormatPanel::UpdateMarginBox()
+{
+    mnPageLeftMargin = mpPageLRMarginItem->GetLeft();
+    mnPageRightMargin = mpPageLRMarginItem->GetRight();
+    mnPageTopMargin = mpPageULMarginItem->GetUpper();
+    mnPageBottomMargin = mpPageULMarginItem->GetLower();
+
+    bool bMirrored = (mpPageItem->GetPageUsage() == SVX_PAGE_MIRROR);
+    if( IsNarrow(mnPageLeftMargin, mnPageRightMargin, mnPageTopMargin, mnPageBottomMargin, bMirrored) )
+    {
+        mpMarginSelectBox->SelectEntryPos(0);
+        mpMarginSelectBox->RemoveEntry("Custom");
+    }
+    else if( IsModerate(mnPageLeftMargin, mnPageRightMargin, mnPageTopMargin, mnPageBottomMargin, bMirrored) )
+    {
+        mpMarginSelectBox->SelectEntryPos(1);
+        mpMarginSelectBox->RemoveEntry("Custom");
+    }
+    else if( IsNormal075(mnPageLeftMargin, mnPageRightMargin, mnPageTopMargin, mnPageBottomMargin, bMirrored) )
+    {
+        mpMarginSelectBox->SelectEntryPos(2);
+        mpMarginSelectBox->RemoveEntry("Custom");
+    }
+    else if( IsNormal100(mnPageLeftMargin, mnPageRightMargin, mnPageTopMargin, mnPageBottomMargin, bMirrored) )
+    {
+        mpMarginSelectBox->SelectEntryPos(3);
+        mpMarginSelectBox->RemoveEntry("Custom");
+    }
+    else if( IsNormal125(mnPageLeftMargin, mnPageRightMargin, mnPageTopMargin, mnPageBottomMargin, bMirrored) )
+    {
+        mpMarginSelectBox->SelectEntryPos(4);
+        mpMarginSelectBox->RemoveEntry("Custom");
+    }
+    else if( IsWide(mnPageLeftMargin, mnPageRightMargin, mnPageTopMargin, mnPageBottomMargin, bMirrored) )
+    {
+        mpMarginSelectBox->SelectEntryPos(5);
+        mpMarginSelectBox->RemoveEntry("Custom");
+    }
+    else if( IsMirrored(mnPageLeftMargin, mnPageRightMargin, mnPageTopMargin, mnPageBottomMargin, bMirrored) )
+    {
+        mpMarginSelectBox->SelectEntryPos(6);
+        mpMarginSelectBox->RemoveEntry("Custom");
+    }
+    else
+    {
+        mpMarginSelectBox->InsertEntry("Custom");
+        mpMarginSelectBox->SelectEntryPos(7);
+    }
 }
 
 } }
