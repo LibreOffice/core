@@ -55,9 +55,10 @@ def special_keys(xContext):
     selectProps = mkPropertyValues({"CELL": "C3"})
     xGridWindow.executeAction("SELECT", selectProps)
 
-    # TODO: how to handle the enter
     typeProps = mkPropertyValues({"KEYCODE": "CTRL+DOWN"})
     xGridWindow.executeAction("TYPE", typeProps)
+
+    time.sleep(2)
 
     ui_test.close_doc()
 
