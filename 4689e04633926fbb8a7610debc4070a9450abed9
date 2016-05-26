@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_475ae784",
+        "filename": "sw/source/core/unocore/unostyle.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 4347,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-05-26T14:07:13Z",
+      "side": 1,
+      "message": "Uhm, I\u0027m afraid there is no com.sun.star.style.TableStyle. It\u0027ll be necessary to implement it when adding UNO API to create styles, but we\u0027re not there yet. So for now please just advertise the Style service. It\u0027s documented in offapi/com/sun/star/style/Style.idl, and what it describes is something we want to provide. There is no offapi/com/sun/star/style/TableStyle.idl yet.",
+      "revId": "4689e04633926fbb8a7610debc4070a9450abed9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
