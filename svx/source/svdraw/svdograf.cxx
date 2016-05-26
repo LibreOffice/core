@@ -531,6 +531,11 @@ bool SdrGrafObj::IsSwappedOut() const
     return mbIsPreview || pGraphic->IsSwappedOut();
 }
 
+bool SdrGrafObj::IsCropped() const
+{
+    return aGrafInfo.IsCropped();
+}
+
 const MapMode& SdrGrafObj::GetGrafPrefMapMode() const
 {
     return pGraphic->GetPrefMapMode();
@@ -561,17 +566,25 @@ OUString SdrGrafObj::GetGrafStreamURL() const
 
 Size SdrGrafObj::getOriginalSize() const
 {
-    Size aSize;
+    Size aSize = GetGrafPrefSize();
+
+    if (IsCropped())
+    {
+        long aCroppedTop = OutputDevice::LogicToLogic( aGrafInfo.GetTopCrop(), GetModel()->GetScaleUnit(), GetGrafPrefMapMode().GetMapUnit());
+        long aCroppedBottom = OutputDevice::LogicToLogic( aGrafInfo.GetBottomCrop(), GetModel()->GetScaleUnit(), GetGrafPrefMapMode().GetMapUnit());
+        long aCroppedLeft = OutputDevice::LogicToLogic( aGrafInfo.GetLeftCrop(), GetModel()->GetScaleUnit(), GetGrafPrefMapMode().GetMapUnit());
+        long aCroppedRight = OutputDevice::LogicToLogic( aGrafInfo.GetRightCrop(), GetModel()->GetScaleUnit(), GetGrafPrefMapMode().GetMapUnit());
+
+        long aCroppedWidth = aSize.getWidth() - aCroppedLeft + aCroppedRight;
+        long aCroppedHeight = aSize.getHeight() - aCroppedTop + aCroppedBottom;
+
+        aSize = Size ( aCroppedWidth, aCroppedHeight);
+    }
 
     if ( GetGrafPrefMapMode().GetMapUnit() == MAP_PIXEL )
-        aSize = Application::GetDefaultDevice()->PixelToLogic( GetGrafPrefSize(),
-                                                               GetModel()->GetScaleUnit() );
+        aSize = Application::GetDefaultDevice()->PixelToLogic( aSize, GetModel()->GetScaleUnit() );
     else
-    {
-        aSize = OutputDevice::LogicToLogic( GetGrafPrefSize(),
-                                            GetGrafPrefMapMode(),
-                                            GetModel()->GetScaleUnit() );
-    }
+        aSize = OutputDevice::LogicToLogic( aSize, GetGrafPrefMapMode(), GetModel()->GetScaleUnit() );
 
     return aSize;
 }
