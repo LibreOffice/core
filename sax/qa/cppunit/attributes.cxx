@@ -13,6 +13,7 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
 
+#include <rtl/ref.hxx>
 #include <sax/fastattribs.hxx>
 
 using namespace css;
@@ -32,7 +33,7 @@ public:
 
 void AttributesTest::test()
 {
-    uno::Reference<sax_fastparser::FastAttributeList> xAttributeList( new sax_fastparser::FastAttributeList(nullptr) );
+    rtl::Reference<sax_fastparser::FastAttributeList> xAttributeList( new sax_fastparser::FastAttributeList(nullptr) );
     xAttributeList->add(1, "1");
     xAttributeList->add(2, OString("2"));
 

@@ -575,7 +575,7 @@ void DrawViewShell::SetActiveTabLayerIndex (int nIndex)
             // Tell the draw view and the tab control of the new active layer.
             mpDrawView->SetActiveLayer (pBar->GetPageText (pBar->GetPageId ((sal_uInt16)nIndex)));
             pBar->SetCurPageId (pBar->GetPageId ((sal_uInt16)nIndex));
-            css::uno::Reference<SdUnoDrawView> pUnoDrawView(new SdUnoDrawView (
+            rtl::Reference<SdUnoDrawView> pUnoDrawView(new SdUnoDrawView (
                 *this,
                 *GetView()));
             css::uno::Reference< css::drawing::XLayer> rLayer = pUnoDrawView->getActiveLayer();

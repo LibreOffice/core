@@ -646,7 +646,7 @@ public:
     bool m_bIsDisposed;
     bool m_bIsDescriptor;
     uno::Reference<text::XText> m_xParentText;
-    uno::Reference<SwXMetaText> m_xText;
+    rtl::Reference<SwXMetaText> m_xText;
 
     Impl(   SwXMeta & rThis, SwDoc & rDoc,
             ::sw::Meta * const pMeta,

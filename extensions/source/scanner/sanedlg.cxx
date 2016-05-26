@@ -897,7 +897,7 @@ void SaneDlg::AcquirePreview()
     else
         mrSane.SetOptionValue( nOption, true );
 
-    Reference<BitmapTransporter> xTransporter(new BitmapTransporter);
+    rtl::Reference<BitmapTransporter> xTransporter(new BitmapTransporter);
     if( ! mrSane.Start( *xTransporter.get() ) )
     {
         ScopedVclPtrInstance< MessageDialog > aErrorBox(this, SaneResId(STR_ERROR_SCAN));

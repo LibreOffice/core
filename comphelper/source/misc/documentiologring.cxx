@@ -131,7 +131,7 @@ struct Instance {
         instance(new comphelper::OSimpleLogRing())
     {}
 
-    css::uno::Reference<cppu::OWeakObject> instance;
+    rtl::Reference<cppu::OWeakObject> instance;
 };
 
 struct Singleton:

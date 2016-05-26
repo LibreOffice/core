@@ -268,7 +268,7 @@ namespace sdr
                         aScale, fShearX, fRotate, aTranslate));
 
                     // directly create temp SdrBlockTextPrimitive2D
-                    css::uno::Reference< drawinglayer::primitive2d::SdrBlockTextPrimitive2D > xBlockTextPrimitive(new drawinglayer::primitive2d::SdrBlockTextPrimitive2D(
+                    rtl::Reference< drawinglayer::primitive2d::SdrBlockTextPrimitive2D > xBlockTextPrimitive(new drawinglayer::primitive2d::SdrBlockTextPrimitive2D(
                         pSdrText,
                         *pOPO,
                         aTextRangeTransform,

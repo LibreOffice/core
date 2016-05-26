@@ -1596,7 +1596,7 @@ namespace accessibility
 //                  SvxAccessibleTextPropertySet aPropSet( &GetEditSource(),
 //                      ImplGetSvxCharAndParaPropertiesMap() );
                     // MT IA2 TODO: Check if this is the correct replacement for ImplGetSvxCharAndParaPropertiesMap
-                    uno::Reference< SvxAccessibleTextPropertySet > xPropSet( new SvxAccessibleTextPropertySet( &GetEditSource(), ImplGetSvxTextPortionSvxPropertySet() ) );
+                    rtl::Reference< SvxAccessibleTextPropertySet > xPropSet( new SvxAccessibleTextPropertySet( &GetEditSource(), ImplGetSvxTextPortionSvxPropertySet() ) );
 
                     xPropSet->SetSelection( MakeSelection( 0, GetTextLen() ) );
                     rRes.Value = xPropSet->_getPropertyValue( rRes.Name, mnParagraphIndex );
@@ -1619,7 +1619,7 @@ namespace accessibility
                 else
                 {
                     // MT IA2 TODO: Check if this is the correct replacement for ImplGetSvxCharAndParaPropertiesMap
-                    uno::Reference< SvxAccessibleTextPropertySet > xPropSet( new SvxAccessibleTextPropertySet( &GetEditSource(), ImplGetSvxTextPortionSvxPropertySet() ) );
+                    rtl::Reference< SvxAccessibleTextPropertySet > xPropSet( new SvxAccessibleTextPropertySet( &GetEditSource(), ImplGetSvxTextPortionSvxPropertySet() ) );
                     xPropSet->SetSelection( MakeSelection( 0, GetTextLen() ) );
                     rRes.Value = xPropSet->_getPropertyValue( rRes.Name, mnParagraphIndex );
                     rRes.State = xPropSet->_getPropertyState( rRes.Name, mnParagraphIndex );
@@ -2399,7 +2399,7 @@ namespace accessibility
 
             // do the indices span the whole paragraph? Then use the outliner map
             // TODO: hold it as a member?
-            uno::Reference< SvxAccessibleTextPropertySet > xPropSet( new SvxAccessibleTextPropertySet( &GetEditSource(),
+            rtl::Reference< SvxAccessibleTextPropertySet > xPropSet( new SvxAccessibleTextPropertySet( &GetEditSource(),
                                                    0 == nStartIndex &&
                                                    rCacheTF.GetTextLen(nPara) == nEndIndex ?
                                                    ImplGetSvxUnoOutlinerTextCursorSvxPropertySet() :
@@ -2464,7 +2464,7 @@ namespace accessibility
 
         // get XPropertySetInfo for paragraph attributes and
         // character attributes that span all the paragraphs text.
-        uno::Reference< SvxAccessibleTextPropertySet > xPropSet( new SvxAccessibleTextPropertySet( &GetEditSource(),
+        rtl::Reference< SvxAccessibleTextPropertySet > xPropSet( new SvxAccessibleTextPropertySet( &GetEditSource(),
                 ImplGetSvxCharAndParaPropertiesSet() ) );
         xPropSet->SetSelection( MakeSelection( 0, GetTextLen() ) );
         uno::Reference< beans::XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
@@ -2566,7 +2566,7 @@ namespace accessibility
         else
             CheckPosition(nIndex);
 
-        uno::Reference< SvxAccessibleTextPropertySet > xPropSet( new SvxAccessibleTextPropertySet( &GetEditSource(),
+        rtl::Reference< SvxAccessibleTextPropertySet > xPropSet( new SvxAccessibleTextPropertySet( &GetEditSource(),
                                                ImplGetSvxCharAndParaPropertiesSet() ) );
         xPropSet->SetSelection( MakeSelection( nIndex ) );
         uno::Reference< beans::XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();

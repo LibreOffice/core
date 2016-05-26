@@ -502,7 +502,7 @@ static sal_uInt8 lcl_TryMergeLines(
  * @param[in]   rEnd        ending point of merged primitive
  * @return      merged primitive
 **/
-static css::uno::Reference<BorderLinePrimitive2D>
+static rtl::Reference<BorderLinePrimitive2D>
 lcl_MergeBorderLines(
     BorderLinePrimitive2D const& rLine, BorderLinePrimitive2D const& rOther,
     basegfx::B2DPoint const& rStart, basegfx::B2DPoint const& rEnd)
@@ -530,7 +530,7 @@ lcl_MergeBorderLines(
  * @return      merged borderline including the two input primitive, if they can be merged
  *              0, otherwise
 **/
-static css::uno::Reference<BorderLinePrimitive2D>
+static rtl::Reference<BorderLinePrimitive2D>
 lcl_TryMergeBorderLine(BorderLinePrimitive2D const& rThis,
                        BorderLinePrimitive2D const& rOther,
                        SwPaintProperties& properties)
@@ -586,7 +586,7 @@ lcl_TryMergeBorderLine(BorderLinePrimitive2D const& rThis,
                 rThis.getStart().getX(), rThis.getStart().getY());
             basegfx::B2DPoint const end(
                 rOther.getEnd().getX(), rOther.getEnd().getY());
-            return lcl_MergeBorderLines(rThis, rOther, start, end);
+            return lcl_MergeBorderLines(rThis, rOther, start, end).get();
         }
         // The merged primitive starts with rOther and ends with rThis
         else if(nRet == 2)
@@ -595,7 +595,7 @@ lcl_TryMergeBorderLine(BorderLinePrimitive2D const& rThis,
                 rOther.getStart().getX(), rOther.getStart().getY());
             basegfx::B2DPoint const end(
                 rThis.getEnd().getX(), rThis.getEnd().getY());
-            return lcl_MergeBorderLines(rOther, rThis, start, end);
+            return lcl_MergeBorderLines(rOther, rThis, start, end).get();
         }
     }
     return nullptr;
@@ -607,11 +607,11 @@ void BorderLines::AddBorderLine(
     for (drawinglayer::primitive2d::Primitive2DContainer::reverse_iterator it = m_Lines.rbegin(); it != m_Lines.rend();
          ++it)
     {
-        css::uno::Reference<BorderLinePrimitive2D> const xMerged(
-            lcl_TryMergeBorderLine(*static_cast<BorderLinePrimitive2D*>((*it).get()), *xLine.get(), properties));
+        rtl::Reference<BorderLinePrimitive2D> const xMerged(
+            lcl_TryMergeBorderLine(*static_cast<BorderLinePrimitive2D*>((*it).get()), *xLine.get(), properties).get());
         if (xMerged.is())
         {
-            *it = xMerged; // replace existing line with merged
+            *it = xMerged.get(); // replace existing line with merged
             return;
         }
     }
@@ -4918,7 +4918,7 @@ static void lcl_MakeBorderLine(SwRect const& rRect,
     Color const aLeftColor = rBorder.GetColorOut(isLeftOrTopBorder);
     Color const aRightColor = rBorder.GetColorIn(isLeftOrTopBorder);
 
-    css::uno::Reference<BorderLinePrimitive2D> const xLine =
+    rtl::Reference<BorderLinePrimitive2D> const xLine =
         new BorderLinePrimitive2D(
             aStart, aEnd, nLeftWidth, rBorder.GetDistance(), nRightWidth,
             nExtentLeftStart, nExtentLeftEnd,
@@ -4926,7 +4926,7 @@ static void lcl_MakeBorderLine(SwRect const& rRect,
             aLeftColor.getBColor(), aRightColor.getBColor(),
             rBorder.GetColorGap().getBColor(), rBorder.HasGapColor(),
             rBorder.GetBorderLineStyle() );
-    properties.pBLines->AddBorderLine(xLine, properties);
+    properties.pBLines->AddBorderLine(xLine.get(), properties);
 }
 
 /**

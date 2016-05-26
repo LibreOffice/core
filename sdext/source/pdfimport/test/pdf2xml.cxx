@@ -27,6 +27,7 @@
 
 #include <sal/main.h>
 #include <osl/process.h>
+#include <rtl/ref.hxx>
 #include <unotest/bootstrapfixturebase.hxx>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/bootstrap.hxx>
@@ -74,7 +75,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         test::BootstrapFixtureBase aEnv;
         aEnv.setUp();
 
-        uno::Reference<pdfi::PDFIRawAdaptor> xAdaptor( new pdfi::PDFIRawAdaptor(OUString(), aEnv.getComponentContext()) );
+        rtl::Reference<pdfi::PDFIRawAdaptor> xAdaptor( new pdfi::PDFIRawAdaptor(OUString(), aEnv.getComponentContext()) );
         xAdaptor->setTreeVisitorFactory(pTreeFactory);
         nRet = xAdaptor->odfConvert(aSrcURL, new OutputWrap(aDstURL), nullptr) ? 0 : 1;
     }

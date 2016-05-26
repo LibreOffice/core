@@ -350,7 +350,7 @@ void SAL_CALL XMLVersionListPersistence::store( const uno::Reference< embed::XSt
 
             Reference< XDocumentHandler > xHandler( xWriter, uno::UNO_QUERY );
 
-            Reference< XMLVersionListExport > xExp( new XMLVersionListExport( xContext, rVersions, sVerName, xHandler ) );
+            rtl::Reference< XMLVersionListExport > xExp( new XMLVersionListExport( xContext, rVersions, sVerName, xHandler ) );
 
             xExp->exportDoc( ::xmloff::token::XML_VERSION );
 

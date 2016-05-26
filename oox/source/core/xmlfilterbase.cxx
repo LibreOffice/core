@@ -245,7 +245,7 @@ void XmlFilterBase::importDocumentProperties()
     MediaDescriptor aMediaDesc( getMediaDescriptor() );
     Reference< XInputStream > xInputStream;
     Reference< XComponentContext > xContext = getComponentContext();
-    Reference< ::oox::core::FilterDetect > xDetector( new ::oox::core::FilterDetect( xContext ) );
+    rtl::Reference< ::oox::core::FilterDetect > xDetector( new ::oox::core::FilterDetect( xContext ) );
     xInputStream = xDetector->extractUnencryptedPackage( aMediaDesc );
     Reference< XComponent > xModel( getModel(), UNO_QUERY );
     Reference< XStorage > xDocumentStorage (
@@ -820,7 +820,7 @@ Reference< XInputStream > XmlFilterBase::implGetInputStream( MediaDescriptor& rM
     /*  Get the input stream directly from the media descriptor, or decrypt the
         package again. The latter is needed e.g. when the document is reloaded.
         All this is implemented in the detector service. */
-    Reference< FilterDetect > xDetector( new FilterDetect( getComponentContext() ) );
+    rtl::Reference< FilterDetect > xDetector( new FilterDetect( getComponentContext() ) );
     return xDetector->extractUnencryptedPackage( rMediaDesc );
 }
 

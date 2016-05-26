@@ -24,6 +24,7 @@
 #include <sal/types.h>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/errcode.hxx>
 #include <vcl/dialog.hxx>
@@ -100,7 +101,7 @@ private:
     Link<FileDialogHelper*,void>  m_aDialogClosedLink;
     ErrCode m_nError;
 
-    css::uno::Reference< FileDialogHelper_Impl > mpImpl;
+    rtl::Reference< FileDialogHelper_Impl > mpImpl;
 
 
 public:
