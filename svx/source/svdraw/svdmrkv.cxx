@@ -207,6 +207,31 @@ void SdrMarkView::ModelHasChanged()
     if (pV!=nullptr && !pV->IsDragObj() && !pV->IsInsObjPoint()) {
         AdjustMarkHdl();
     }
+
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        //TODO: Is MarkedObjRect valid at this point?
+        Rectangle aSelection(GetMarkedObjRect());
+        OString sSelection;
+        if (aSelection.IsEmpty())
+            sSelection = "EMPTY";
+        else
+        {
+            // In case the map mode is in 100th MM, then need to convert the coordinates over to twips for LOK.
+            if (mpMarkedPV)
+            {
+                if (OutputDevice* pOutputDevice = mpMarkedPV->GetView().GetFirstOutputDevice())
+                {
+                    if (pOutputDevice->GetMapMode().GetMapUnit() == MAP_100TH_MM)
+                        aSelection = OutputDevice::LogicToLogic(aSelection, MAP_100TH_MM, MAP_TWIP);
+                }
+            }
+
+            sSelection = aSelection.toString();
+        }
+
+        GetModel()->libreOfficeKitCallback(LOK_CALLBACK_INVALIDATE_TILES, sSelection.getStr());
+    }
 }
 
 
