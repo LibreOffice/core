@@ -892,7 +892,6 @@ void View::SetMarkedOriginalSize()
                 Rectangle aRect( pObj->GetLogicRect() );
                 aRect.SetSize( aSize );
                 pObj->SetLogicRect( aRect );
-
                 bOK = true;
             }
         }
