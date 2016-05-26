@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_22795194",
+        "filename": "basic/qa/cppunit/test_vba.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-05-26T20:33:23Z",
+      "side": 1,
+      "message": "are you sure the first parameter is LPTSTR ? the MSDN has it as LPSTR\n\nhttps://msdn.microsoft.com/en-us/library/ms714005%28v\u003dvs.85%29.aspx\n\n... but then this page claims that the MSDN is wrong and it should be LPTSTR ...\n\nhttp://www.microsoft-questions.com/microsoft/VC-MFC/33775150/strings-again-.aspx\n\n... maybe it would be best to *explicitly* call either SQLGetInstalledDriversA or SQLGetInstalledDriversW with the matching string type, then we can be sure it is doing the right thing",
+      "revId": "e832891b242d041813ee965816570f7de45866bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
