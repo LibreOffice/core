@@ -1160,8 +1160,8 @@ namespace drawinglayer
                         // per polygon. If there are more, split the polygon in half and call recursively
                         basegfx::B2DPolygon aLeft, aRight;
                         splitLinePolygon(rBasePolygon, aLeft, aRight);
-                        uno::Reference< primitive2d::PolygonHairlinePrimitive2D > xPLeft(new primitive2d::PolygonHairlinePrimitive2D(aLeft, rHairlinePrimitive.getBColor()));
-                        uno::Reference< primitive2d::PolygonHairlinePrimitive2D > xPRight(new primitive2d::PolygonHairlinePrimitive2D(aRight, rHairlinePrimitive.getBColor()));
+                        rtl::Reference< primitive2d::PolygonHairlinePrimitive2D > xPLeft(new primitive2d::PolygonHairlinePrimitive2D(aLeft, rHairlinePrimitive.getBColor()));
+                        rtl::Reference< primitive2d::PolygonHairlinePrimitive2D > xPRight(new primitive2d::PolygonHairlinePrimitive2D(aRight, rHairlinePrimitive.getBColor()));
 
                         processBasePrimitive2D(*xPLeft.get());
                         processBasePrimitive2D(*xPRight.get());
@@ -1208,9 +1208,9 @@ namespace drawinglayer
                         // per polygon. If there are more, split the polygon in half and call recursively
                         basegfx::B2DPolygon aLeft, aRight;
                         splitLinePolygon(rBasePolygon, aLeft, aRight);
-                        uno::Reference< primitive2d::PolygonStrokePrimitive2D > xPLeft(new primitive2d::PolygonStrokePrimitive2D(
+                        rtl::Reference< primitive2d::PolygonStrokePrimitive2D > xPLeft(new primitive2d::PolygonStrokePrimitive2D(
                             aLeft, rStrokePrimitive.getLineAttribute(), rStrokePrimitive.getStrokeAttribute()));
-                        uno::Reference< primitive2d::PolygonStrokePrimitive2D > xPRight(new primitive2d::PolygonStrokePrimitive2D(
+                        rtl::Reference< primitive2d::PolygonStrokePrimitive2D > xPRight(new primitive2d::PolygonStrokePrimitive2D(
                             aRight, rStrokePrimitive.getLineAttribute(), rStrokePrimitive.getStrokeAttribute()));
 
                         processBasePrimitive2D(*xPLeft.get());
@@ -1289,13 +1289,13 @@ namespace drawinglayer
                         basegfx::B2DPolygon aLeft, aRight;
                         splitLinePolygon(rBasePolygon, aLeft, aRight);
                         const attribute::LineStartEndAttribute aEmpty;
-                        uno::Reference< primitive2d::PolygonStrokeArrowPrimitive2D > xPLeft(new primitive2d::PolygonStrokeArrowPrimitive2D(
+                        rtl::Reference< primitive2d::PolygonStrokeArrowPrimitive2D > xPLeft(new primitive2d::PolygonStrokeArrowPrimitive2D(
                             aLeft,
                             rStrokeArrowPrimitive.getLineAttribute(),
                             rStrokeArrowPrimitive.getStrokeAttribute(),
                             rStrokeArrowPrimitive.getStart(),
                             aEmpty));
-                        uno::Reference< primitive2d::PolygonStrokeArrowPrimitive2D > xPRight(new primitive2d::PolygonStrokeArrowPrimitive2D(
+                        rtl::Reference< primitive2d::PolygonStrokeArrowPrimitive2D > xPRight(new primitive2d::PolygonStrokeArrowPrimitive2D(
                             aRight,
                             rStrokeArrowPrimitive.getLineAttribute(),
                             rStrokeArrowPrimitive.getStrokeAttribute(),
@@ -1367,7 +1367,7 @@ namespace drawinglayer
                     {
                         // #i112245# Metafiles use tools Polygon and are not able to have more than 65535 points
                         // per polygon. If there are more use the splitted polygon and call recursively
-                        uno::Reference< primitive2d::PolyPolygonGraphicPrimitive2D > xSplitted(new primitive2d::PolyPolygonGraphicPrimitive2D(
+                        rtl::Reference< primitive2d::PolyPolygonGraphicPrimitive2D > xSplitted(new primitive2d::PolyPolygonGraphicPrimitive2D(
                             aLocalPolyPolygon,
                             rBitmapCandidate.getFillGraphic()));
 

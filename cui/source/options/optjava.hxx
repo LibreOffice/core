@@ -81,7 +81,7 @@ private:
     ::std::vector< JavaInfo* >
                             m_aAddedInfos;
 
-    css::uno::Reference< ::svt::DialogClosedListener > xDialogListener;
+    rtl::Reference< ::svt::DialogClosedListener >           xDialogListener;
     css::uno::Reference< css::ui::dialogs::XFolderPicker2 > xFolderPicker;
 
     DECL_LINK_TYPED(        EnableHdl_Impl, Button*, void);

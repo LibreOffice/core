@@ -2025,7 +2025,7 @@ void SAL_CALL ScModelObj::consolidate(
     //  die Daten in ein ScConsolidationDescriptor Objekt zu kopieren:
     //! wenn es schon ein ScConsolidationDescriptor ist, direkt per getImplementation?
 
-    uno::Reference< ScConsolidationDescriptor > xImpl(new ScConsolidationDescriptor);
+    rtl::Reference< ScConsolidationDescriptor > xImpl(new ScConsolidationDescriptor);
     xImpl->setFunction( xDescriptor->getFunction() );
     xImpl->setSources( xDescriptor->getSources() );
     xImpl->setStartOutputPosition( xDescriptor->getStartOutputPosition() );

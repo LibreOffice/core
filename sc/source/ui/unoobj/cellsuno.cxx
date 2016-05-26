@@ -5645,7 +5645,7 @@ void SAL_CALL ScCellRangeObj::filter( const uno::Reference<sheet::XSheetFilterDe
     //! wenn es schon ein ScFilterDescriptor ist, direkt per getImplementation?
 
     ScDocShell* pDocSh = GetDocShell();
-    uno::Reference<ScFilterDescriptor> xImpl(new ScFilterDescriptor(pDocSh));
+    rtl::Reference<ScFilterDescriptor> xImpl(new ScFilterDescriptor(pDocSh));
     uno::Reference< sheet::XSheetFilterDescriptor2 > xDescriptor2( xDescriptor, uno::UNO_QUERY );
     if ( xDescriptor2.is() )
     {

@@ -293,7 +293,7 @@ bool SvxXMLXTableExportComponent::save(
 
         // Finally do the export
         const OUString aName;
-        uno::Reference< SvxXMLXTableExportComponent > xExporter( new SvxXMLXTableExportComponent( xContext, aName, xHandler, xTable, xGrfResolver ) );
+        rtl::Reference< SvxXMLXTableExportComponent > xExporter( new SvxXMLXTableExportComponent( xContext, aName, xHandler, xTable, xGrfResolver ) );
         bRet = xExporter->exportTable();
 
         if( pGraphicHelper )

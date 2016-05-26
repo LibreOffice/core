@@ -84,7 +84,7 @@ ScVbaFont::setSuperscript( const uno::Any& aValue ) throw ( uno::RuntimeExceptio
             for ( sal_Int32 row = 0; row < nRows; ++row )
             {
                 uno::Reference< beans::XPropertySet > xProps( xCellRange->getCellByPosition( col, row ) , uno::UNO_QUERY_THROW );
-                uno::Reference< ScVbaFont > aFont( new ScVbaFont( getParent(), mxContext, mPalette, xProps ) );
+                rtl::Reference< ScVbaFont > aFont( new ScVbaFont( getParent(), mxContext, mPalette, xProps ) );
                 aFont->setSuperscript( aValue );
             }
         }
@@ -124,7 +124,7 @@ ScVbaFont::getSuperscript() throw ( uno::RuntimeException, std::exception )
             for ( sal_Int32 row = 0; row < nRows; ++row )
             {
                 uno::Reference< beans::XPropertySet > xProps( xCellRange->getCellByPosition( col, row ), uno::UNO_QUERY_THROW );
-                uno::Reference< ScVbaFont > aFont( new ScVbaFont( getParent(), mxContext, mPalette, xProps ) );
+                rtl::Reference< ScVbaFont > aFont( new ScVbaFont( getParent(), mxContext, mPalette, xProps ) );
                 if ( !col && !row )
                     aRes = aFont->getSuperscript();
                 else if ( aRes != aFont->getSuperscript() )
@@ -156,7 +156,7 @@ ScVbaFont::setSubscript( const uno::Any& aValue ) throw ( uno::RuntimeException,
             for ( sal_Int32 row = 0; row < nRows; ++row )
             {
                 uno::Reference< beans::XPropertySet > xProps( xCellRange->getCellByPosition( col, row ) , uno::UNO_QUERY_THROW );
-                uno::Reference< ScVbaFont > aFont( new ScVbaFont( getParent(), mxContext, mPalette, xProps ) );
+                rtl::Reference< ScVbaFont > aFont( new ScVbaFont( getParent(), mxContext, mPalette, xProps ) );
                 aFont->setSubscript( aValue );
             }
         }
@@ -198,7 +198,7 @@ ScVbaFont::getSubscript() throw ( uno::RuntimeException, std::exception )
             for ( sal_Int32 row = 0; row < nRows; ++row )
             {
                 uno::Reference< beans::XPropertySet > xProps( xCellRange->getCellByPosition( col, row ), uno::UNO_QUERY_THROW );
-                uno::Reference< ScVbaFont > aFont( new ScVbaFont( getParent(), mxContext, mPalette, xProps ) );
+                rtl::Reference< ScVbaFont > aFont( new ScVbaFont( getParent(), mxContext, mPalette, xProps ) );
                 if ( !col && !row )
                     aRes = aFont->getSubscript();
                 else if ( aRes != aFont->getSubscript() )

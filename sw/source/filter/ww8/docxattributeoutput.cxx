@@ -338,7 +338,7 @@ void DocxAttributeOutput::StartParagraph( ww8::WW8TableNodeInfo::Pointer_t pText
     m_bIsFirstParagraph = false;
 }
 
-static void lcl_deleteAndResetTheLists( uno::Reference<sax_fastparser::FastAttributeList>& pSdtPrTokenChildren, uno::Reference<sax_fastparser::FastAttributeList>& pSdtPrDataBindingAttrs, OUString& rSdtPrAlias)
+static void lcl_deleteAndResetTheLists( rtl::Reference<sax_fastparser::FastAttributeList>& pSdtPrTokenChildren, rtl::Reference<sax_fastparser::FastAttributeList>& pSdtPrDataBindingAttrs, OUString& rSdtPrAlias)
 {
     if( pSdtPrTokenChildren.is() )
         pSdtPrTokenChildren.clear();
@@ -607,9 +607,9 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
 }
 
 void DocxAttributeOutput::WriteSdtBlock( sal_Int32& nSdtPrToken,
-                                         uno::Reference<sax_fastparser::FastAttributeList>& pSdtPrTokenChildren,
-                                         uno::Reference<sax_fastparser::FastAttributeList>& pSdtPrTokenAttributes,
-                                         uno::Reference<sax_fastparser::FastAttributeList>& pSdtPrDataBindingAttrs,
+                                         rtl::Reference<sax_fastparser::FastAttributeList>& pSdtPrTokenChildren,
+                                         rtl::Reference<sax_fastparser::FastAttributeList>& pSdtPrTokenAttributes,
+                                         rtl::Reference<sax_fastparser::FastAttributeList>& pSdtPrDataBindingAttrs,
                                          OUString& rSdtPrAlias,
                                          bool bPara )
 {
@@ -629,7 +629,7 @@ void DocxAttributeOutput::WriteSdtBlock( sal_Int32& nSdtPrToken,
                 m_pSerializer->startElement( nSdtPrToken, FSEND );
             else
             {
-                XFastAttributeListRef xAttrList(pSdtPrTokenAttributes);
+                XFastAttributeListRef xAttrList(pSdtPrTokenAttributes.get());
                 pSdtPrTokenAttributes.clear();
                 m_pSerializer->startElement(nSdtPrToken, xAttrList);
             }
@@ -651,7 +651,7 @@ void DocxAttributeOutput::WriteSdtBlock( sal_Int32& nSdtPrToken,
                 m_pSerializer->singleElement( nSdtPrToken, FSEND );
             else
             {
-                XFastAttributeListRef xAttrList(pSdtPrTokenAttributes);
+                XFastAttributeListRef xAttrList(pSdtPrTokenAttributes.get());
                 pSdtPrTokenAttributes.clear();
                 m_pSerializer->singleElement(nSdtPrToken, xAttrList);
             }
@@ -665,7 +665,7 @@ void DocxAttributeOutput::WriteSdtBlock( sal_Int32& nSdtPrToken,
 
         if( pSdtPrDataBindingAttrs.is() && !m_rExport.SdrExporter().IsParagraphHasDrawing())
         {
-            XFastAttributeListRef xAttrList( pSdtPrDataBindingAttrs );
+            XFastAttributeListRef xAttrList( pSdtPrDataBindingAttrs.get() );
             pSdtPrDataBindingAttrs.clear();
             m_pSerializer->singleElementNS( XML_w, XML_dataBinding, xAttrList );
         }
@@ -907,7 +907,7 @@ void DocxAttributeOutput::WriteCollectedParagraphProperties()
 {
     if ( m_rExport.SdrExporter().getFlyAttrList().is() )
     {
-        XFastAttributeListRef xAttrList( m_rExport.SdrExporter().getFlyAttrList() );
+        XFastAttributeListRef xAttrList( m_rExport.SdrExporter().getFlyAttrList().get() );
         m_rExport.SdrExporter().getFlyAttrList().clear();
 
         m_pSerializer->singleElementNS( XML_w, XML_framePr, xAttrList );
@@ -915,7 +915,7 @@ void DocxAttributeOutput::WriteCollectedParagraphProperties()
 
     if ( m_pParagraphSpacingAttrList.is() )
     {
-        XFastAttributeListRef xAttrList( m_pParagraphSpacingAttrList );
+        XFastAttributeListRef xAttrList( m_pParagraphSpacingAttrList.get() );
         m_pParagraphSpacingAttrList.clear();
 
         m_pSerializer->singleElementNS( XML_w, XML_spacing, xAttrList );
@@ -923,7 +923,7 @@ void DocxAttributeOutput::WriteCollectedParagraphProperties()
 
     if ( m_pBackgroundAttrList.is() )
     {
-        XFastAttributeListRef xAttrList( m_pBackgroundAttrList );
+        XFastAttributeListRef xAttrList( m_pBackgroundAttrList.get() );
         m_pBackgroundAttrList.clear();
 
         m_pSerializer->singleElementNS( XML_w, XML_shd, xAttrList );
@@ -992,11 +992,11 @@ void DocxAttributeOutput::EndParagraphProperties(const SfxItemSet& rParagraphMar
     // to the DOCX when the function 'WriteCollectedRunProperties' gets called.
     // So we need to store the current status of these lists, so that we can revert back to them when
     // we are done exporting the redline attributes.
-    uno::Reference<sax_fastparser::FastAttributeList> pFontsAttrList_Original(m_pFontsAttrList);
+    rtl::Reference<sax_fastparser::FastAttributeList> pFontsAttrList_Original(m_pFontsAttrList);
     m_pFontsAttrList.clear();
-    uno::Reference<sax_fastparser::FastAttributeList> pEastAsianLayoutAttrList_Original(m_pEastAsianLayoutAttrList);
+    rtl::Reference<sax_fastparser::FastAttributeList> pEastAsianLayoutAttrList_Original(m_pEastAsianLayoutAttrList);
     m_pEastAsianLayoutAttrList.clear();
-    uno::Reference<sax_fastparser::FastAttributeList> pCharLangAttrList_Original(m_pCharLangAttrList);
+    rtl::Reference<sax_fastparser::FastAttributeList> pCharLangAttrList_Original(m_pCharLangAttrList);
     m_pCharLangAttrList.clear();
 
     lcl_writeParagraphMarkerProperties(*this, rParagraphMarkerProperties);
@@ -1005,9 +1005,9 @@ void DocxAttributeOutput::EndParagraphProperties(const SfxItemSet& rParagraphMar
     WriteCollectedRunProperties();
 
     // Revert back the original values that were stored in 'm_pFontsAttrList', 'm_pEastAsianLayoutAttrList', 'm_pCharLangAttrList'
-    m_pFontsAttrList = pFontsAttrList_Original;
-    m_pEastAsianLayoutAttrList = pEastAsianLayoutAttrList_Original;
-    m_pCharLangAttrList = pCharLangAttrList_Original;
+    m_pFontsAttrList = pFontsAttrList_Original.get();
+    m_pEastAsianLayoutAttrList = pEastAsianLayoutAttrList_Original.get();
+    m_pCharLangAttrList = pCharLangAttrList_Original.get();
 
     if ( pRedlineParagraphMarkerDeleted )
     {
@@ -1209,7 +1209,7 @@ void DocxAttributeOutput::EndRun()
     // Start the hyperlink after the fields separators or we would generate invalid file
     if ( m_pHyperlinkAttrList.is() )
     {
-        XFastAttributeListRef xAttrList ( m_pHyperlinkAttrList );
+        XFastAttributeListRef xAttrList ( m_pHyperlinkAttrList.get() );
         m_pHyperlinkAttrList.clear();
 
         m_pSerializer->startElementNS( XML_w, XML_hyperlink, xAttrList );
@@ -1277,7 +1277,7 @@ void DocxAttributeOutput::EndRun()
     // (so on export sdt blocks are never nested ATM)
     if ( !m_bAnchorLinkedToNode && !m_bStartedCharSdt )
     {
-        uno::Reference<sax_fastparser::FastAttributeList> pRunSdtPrTokenAttributes;
+        rtl::Reference<sax_fastparser::FastAttributeList> pRunSdtPrTokenAttributes;
         WriteSdtBlock( m_nRunSdtPrToken, m_pRunSdtPrTokenChildren, pRunSdtPrTokenAttributes, m_pRunSdtPrDataBindingAttrs, m_aRunSdtPrAlias, /*bPara=*/false );
     }
     else
@@ -1969,14 +1969,14 @@ void DocxAttributeOutput::WriteCollectedRunProperties()
     // Write all differed properties
     if ( m_pFontsAttrList.is() )
     {
-        XFastAttributeListRef xAttrList( m_pFontsAttrList );
+        XFastAttributeListRef xAttrList( m_pFontsAttrList.get() );
         m_pFontsAttrList.clear();
         m_pSerializer->singleElementNS( XML_w, XML_rFonts, xAttrList );
     }
 
     if ( m_pColorAttrList.is() )
     {
-        XFastAttributeListRef xAttrList( m_pColorAttrList );
+        XFastAttributeListRef xAttrList( m_pColorAttrList.get() );
         m_pColorAttrList.clear();
 
         m_pSerializer->singleElementNS( XML_w, XML_color, xAttrList );
@@ -1984,14 +1984,14 @@ void DocxAttributeOutput::WriteCollectedRunProperties()
 
     if ( m_pEastAsianLayoutAttrList.is() )
     {
-        XFastAttributeListRef xAttrList( m_pEastAsianLayoutAttrList );
+        XFastAttributeListRef xAttrList( m_pEastAsianLayoutAttrList.get() );
         m_pEastAsianLayoutAttrList.clear();
         m_pSerializer->singleElementNS( XML_w, XML_eastAsianLayout, xAttrList );
     }
 
     if ( m_pCharLangAttrList.is() )
     {
-        XFastAttributeListRef xAttrList( m_pCharLangAttrList );
+        XFastAttributeListRef xAttrList( m_pCharLangAttrList.get() );
         m_pCharLangAttrList.clear();
         m_pSerializer->singleElementNS( XML_w, XML_lang, xAttrList );
     }
@@ -2430,11 +2430,11 @@ void DocxAttributeOutput::Redline( const SwRedlineData* pRedlineData)
                     // to the DOCX when the function 'WriteCollectedRunProperties' gets called.
                     // So we need to store the current status of these lists, so that we can revert back to them when
                     // we are done exporting the redline attributes.
-                    uno::Reference<sax_fastparser::FastAttributeList> pFontsAttrList_Original(m_pFontsAttrList);
+                    rtl::Reference<sax_fastparser::FastAttributeList> pFontsAttrList_Original(m_pFontsAttrList);
                     m_pFontsAttrList.clear();
-                    uno::Reference<sax_fastparser::FastAttributeList> pEastAsianLayoutAttrList_Original(m_pEastAsianLayoutAttrList);
+                    rtl::Reference<sax_fastparser::FastAttributeList> pEastAsianLayoutAttrList_Original(m_pEastAsianLayoutAttrList);
                     m_pEastAsianLayoutAttrList.clear();
-                    uno::Reference<sax_fastparser::FastAttributeList> pCharLangAttrList_Original(m_pCharLangAttrList);
+                    rtl::Reference<sax_fastparser::FastAttributeList> pCharLangAttrList_Original(m_pCharLangAttrList);
                     m_pCharLangAttrList.clear();
 
                     // Output the redline item set
@@ -2486,9 +2486,9 @@ void DocxAttributeOutput::Redline( const SwRedlineData* pRedlineData)
                     // to the DOCX when the function 'WriteCollectedParagraphProperties' gets called.
                     // So we need to store the current status of these lists, so that we can revert back to them when
                     // we are done exporting the redline attributes.
-                    uno::Reference<sax_fastparser::FastAttributeList> pFlyAttrList_Original(m_rExport.SdrExporter().getFlyAttrList());
+                    rtl::Reference<sax_fastparser::FastAttributeList> pFlyAttrList_Original(m_rExport.SdrExporter().getFlyAttrList());
                     m_rExport.SdrExporter().getFlyAttrList().clear();
-                    uno::Reference<sax_fastparser::FastAttributeList> pParagraphSpacingAttrList_Original(m_pParagraphSpacingAttrList);
+                    rtl::Reference<sax_fastparser::FastAttributeList> pParagraphSpacingAttrList_Original(m_pParagraphSpacingAttrList);
                     m_pParagraphSpacingAttrList.clear();
 
                     // Output the redline item set
@@ -3506,7 +3506,7 @@ void DocxAttributeOutput::TableBackgrounds( ww8::WW8TableNodeInfoInner::Pointer_
     }
     else
     {
-        css::uno::Reference<sax_fastparser::FastAttributeList> pAttrList;
+        rtl::Reference<sax_fastparser::FastAttributeList> pAttrList;
 
         for( aGrabBagElement = aGrabBag.begin(); aGrabBagElement != aGrabBag.end(); ++aGrabBagElement )
         {
@@ -3533,7 +3533,7 @@ void DocxAttributeOutput::TableBackgrounds( ww8::WW8TableNodeInfoInner::Pointer_
             else if( aGrabBagElement->first == "val")
                 AddToAttrList( pAttrList, FSNS( XML_w, XML_val ), sValue.getStr() );
         }
-        m_pSerializer->singleElementNS( XML_w, XML_shd, pAttrList );
+        m_pSerializer->singleElementNS( XML_w, XML_shd, pAttrList.get() );
     }
 }
 
@@ -5495,7 +5495,7 @@ void DocxAttributeOutput::EndSection()
     // Write the section properties
     if ( m_pSectionSpacingAttrList.is() )
     {
-        XFastAttributeListRef xAttrList( m_pSectionSpacingAttrList );
+        XFastAttributeListRef xAttrList( m_pSectionSpacingAttrList.get() );
         m_pSectionSpacingAttrList.clear();
 
         m_pSerializer->singleElementNS( XML_w, XML_pgMar, xAttrList );
@@ -8550,12 +8550,12 @@ void DocxAttributeOutput::BulletDefinition(int nId, const Graphic& rGraphic, Siz
     m_pSerializer->endElementNS(XML_w, XML_numPicBullet);
 }
 
-void DocxAttributeOutput::AddToAttrList( uno::Reference<sax_fastparser::FastAttributeList>& pAttrList, sal_Int32 nAttrName, const sal_Char* sAttrValue )
+void DocxAttributeOutput::AddToAttrList( rtl::Reference<sax_fastparser::FastAttributeList>& pAttrList, sal_Int32 nAttrName, const sal_Char* sAttrValue )
 {
     AddToAttrList( pAttrList, 1, nAttrName, sAttrValue );
 }
 
-void DocxAttributeOutput::AddToAttrList( uno::Reference<sax_fastparser::FastAttributeList>& pAttrList, sal_Int32 nAttrs, ... )
+void DocxAttributeOutput::AddToAttrList( rtl::Reference<sax_fastparser::FastAttributeList>& pAttrList, sal_Int32 nAttrs, ... )
 {
     if( !pAttrList.is() )
         pAttrList = FastSerializerHelper::createAttrList();
