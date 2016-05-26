@@ -12,6 +12,7 @@
 #include <memory>
 #include <iostream>
 #include <fstream>
+#include <sstream>
 
 #include <curl/curl.h>
 
@@ -62,13 +63,32 @@ void getProperty(const std::string& key, std::string& value,
     }
 }
 
+std::string generate_json(const std::map<std::string, std::string>& parameters)
+{
+    std::ostringstream stream;
+    stream << "{\n";
+    bool first = true;
+    for (auto itr = parameters.begin(), itrEnd = parameters.end(); itr != itrEnd; ++itr)
+    {
+        if (!first)
+        {
+            stream << ",\n";
+        }
+        first = false;
+        stream << "\"" << itr->first << "\": \"" << itr->second << "\"";
+    }
+    stream << "\n}";
+
+    return stream.str();
+}
+
 bool uploadContent(std::map<std::string, std::string>& parameters)
 {
     CURL* curl = curl_easy_init();
     if (!curl)
         return false;
 
-    std::string proxy, proxy_user_pwd, ca_certificate_file, file, url;
+    std::string proxy, proxy_user_pwd, ca_certificate_file, file, url, version;
 
     getProperty("Proxy", proxy, parameters);
     getProperty("ProxyUserPW", proxy_user_pwd, parameters);
@@ -76,6 +96,7 @@ bool uploadContent(std::map<std::string, std::string>& parameters)
 
     getProperty("DumpFile", file, parameters);
     getProperty("URL", url, parameters);
+    getProperty("Version", version, parameters);
     if (url.empty())
         return false;
 
@@ -92,13 +113,16 @@ bool uploadContent(std::map<std::string, std::string>& parameters)
 
     curl_httppost* formpost = nullptr;
     curl_httppost* lastptr = nullptr;
-    for (auto itr = parameters.begin(), itEnd = parameters.end(); itr != itEnd; ++itr)
-    {
-        curl_formadd(&formpost, &lastptr,
-                CURLFORM_COPYNAME, itr->first.c_str(),
-                CURLFORM_COPYCONTENTS, itr->second.c_str(),
-                CURLFORM_END);
-    }
+    std::string additional_data = generate_json(parameters);
+    curl_formadd(&formpost, &lastptr,
+            CURLFORM_COPYNAME, "AdditionalData",
+            CURLFORM_COPYCONTENTS, additional_data.c_str(),
+            CURLFORM_END);
+
+    curl_formadd(&formpost, &lastptr,
+            CURLFORM_COPYNAME, "Version",
+            CURLFORM_COPYCONTENTS, version.c_str(),
+            CURLFORM_END);
 
     std::string response_body;
     long response_code;
@@ -169,12 +193,6 @@ bool readConfig(char** argv)
     if (parameters.find("Version") == parameters.end())
     {
         std::cerr << "ini file needs to contain a key Version!";
-        return false;
-    }
-
-    if (parameters.find("ProductName") == parameters.end())
-    {
-        std::cerr << "ini file needs to contain a ket ProductName!";
         return false;
     }
 
