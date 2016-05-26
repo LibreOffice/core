@@ -17,8 +17,6 @@ boost_patches += boost.6369.warnings.patch
 #https://svn.boost.org/trac/boost/ticket/6142
 boost_patches += boost.6142.warnings.patch.1
 
-# https://svn.boost.org/trac/boost/ticket/9881
-boost_patches += boost.crc.Wshadow.warnings.patch
 # https://svn.boost.org/trac/boost/ticket/9882
 boost_patches += boost.date_time.Wshadow.warnings.patch
 # https://svn.boost.org/trac/boost/ticket/9885
@@ -29,8 +27,6 @@ boost_patches += boost.multi_array.Wunused-local-typedefs.warnings.patch
 boost_patches += boost.preprocessor.Wundef.warnings.patch
 # https://svn.boost.org/trac/boost/ticket/9892
 boost_patches += boost.property_tree.Wshadow.warnings.patch.1
-# fixed upstream
-boost_patches += boost.random.Wunused-local-typedefs.warnings.patch
 # https://svn.boost.org/trac/boost/ticket/9900
 boost_patches += boost.spirit.Wshadow.warnings.patch
 # https://svn.boost.org/trac/boost/ticket/9901
@@ -46,13 +42,9 @@ ifeq (GCC,$(COM))
 boost_patches += boost_1_44_0-unused-parameters.patch
 endif
 
-# Clang warnings:
-boost_patches += boost_1_44_0-clang-warnings.patch
-
 boost_patches += boost.auto_link.patch
 boost_patches += boost.std.move.patch
 boost_patches += boost.wunused.patch
-boost_patches += boost.signal2.Wshadow.warnings.patch
 
 boost_patches += ubsan.patch.0
 boost_patches += rtti.patch.0

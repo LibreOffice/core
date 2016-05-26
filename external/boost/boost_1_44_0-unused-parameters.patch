@@ -608,20 +608,6 @@ diff -ru boost.orig/boost/bind/mem_fn_template.hpp boost/boost/bind/mem_fn_templ
      {
          BOOST_MEM_FN_RETURN (get_pointer(u)->*f_)(b1, b2, b3, b4);
      }
-diff -ru boost.orig/boost/detail/dynamic_bitset.hpp boost/boost/detail/dynamic_bitset.hpp
---- foo/misc/boost.orig/boost/detail/dynamic_bitset.hpp	2015-06-04 07:43:44.000000000 +0200
-+++ foo/misc/boost/boost/detail/dynamic_bitset.hpp	2015-07-16 21:59:20.786982818 +0200
-@@ -104,8 +104,8 @@
- 
-      template <typename Iterator>
-      inline std::size_t do_count(Iterator first, std::size_t length,
--                                 int /*dummy param*/,
--                                 value_to_type<access_by_bytes>* )
-+                                 __attribute__ ((unused)) int /*dummy param*/,
-+                                 __attribute__ ((unused)) value_to_type<access_by_bytes>* )
-      {
-          std::size_t num = 0;
-          if (length)
 diff -ru boost.orig/boost/foreach.hpp boost/boost/foreach.hpp
 --- foo/misc/boost.orig/boost/foreach.hpp	2015-03-04 21:36:38.000000000 +0100
 +++ foo/misc/boost/boost/foreach.hpp	2015-07-16 22:01:53.617981100 +0200
@@ -763,30 +749,6 @@ diff -ru boost.orig/boost/optional/optional.hpp boost/boost/optional/optional.hp
  { return bool(y); }
  
  template<class T>
-diff -ru boost.orig/boost/ptr_container/detail/default_deleter.hpp boost/boost/ptr_container/detail/default_deleter.hpp
---- foo/misc/boost.orig/boost/ptr_container/detail/default_deleter.hpp	2015-01-25 20:27:11.000000000 +0100
-+++ foo/misc/boost/boost/ptr_container/detail/default_deleter.hpp	2015-07-16 22:45:54.427951420 +0200
-@@ -61,7 +61,7 @@
- { 
-     default_deleter() { }
-     template<typename TT>
--    default_deleter(default_deleter<TT> tt) { }
-+    default_deleter(__attribute__ ((unused)) default_deleter<TT> tt) { }
- };
- 
- } } } // End namespaces ptr_container_detail, move_ptrs, boost.
-diff -ru boost.orig/boost/ptr_container/ptr_sequence_adapter.hpp boost/boost/ptr_container/ptr_sequence_adapter.hpp
---- foo/misc/boost.orig/boost/ptr_container/ptr_sequence_adapter.hpp	2015-07-16 08:47:41.786947347 +0200
-+++ foo/misc/boost/boost/ptr_container/ptr_sequence_adapter.hpp	2015-07-16 22:46:28.137951041 +0200
-@@ -664,7 +664,7 @@
-             
-         }
- 
--        void range_check_impl( iterator first, iterator last, 
-+        void range_check_impl( __attribute__ ((unused)) iterator first, __attribute__ ((unused)) iterator last, 
-                                std::bidirectional_iterator_tag )
-         { /* do nothing */ }
- 
 diff -ru boost.orig/boost/spirit/home/classic/actor/ref_const_ref_actor.hpp boost/boost/spirit/home/classic/actor/ref_const_ref_actor.hpp
 --- foo/misc/boost.orig/boost/spirit/home/classic/actor/ref_const_ref_actor.hpp	2015-05-17 14:17:51.000000000 +0200
 +++ foo/misc/boost/boost/spirit/home/classic/actor/ref_const_ref_actor.hpp	2015-07-16 22:07:32.910977287 +0200

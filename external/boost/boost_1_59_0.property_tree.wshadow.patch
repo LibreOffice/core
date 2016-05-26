@@ -81,3 +81,24 @@ diff -ru boost.orig/boost/property_tree/detail/json_parser/parser.hpp boost/boos
  		{}
  
  		template <typename Range>
+diff -ru boost.org/boost/property_tree/detail/json_parser/wide_encoding.hpp boost/boost/property_tree/detail/json_parser/wide_encoding.hpp
+--- foo/misc/boost.org/boost/property_tree/detail/json_parser/wide_encoding.hpp	2015-07-07 14:20:48.000000000 +0200
++++ foo/misc/boost/boost/property_tree/detail/json_parser/wide_encoding.hpp	2015-07-22 06:51:07.089598136 +0200
+@@ -104,7 +104,7 @@
+ 
+         template <typename Iterator, typename Sentinel, typename TranscodedFn,
+                   typename EncodingErrorFn>
+-        void transcode_codepoint(Iterator& cur, Sentinel end,
++        void transcode_codepoint(Iterator& cur, Sentinel,
+                                  TranscodedFn transcoded_fn,
+                                  EncodingErrorFn error_fn,
+                                  is_utf16<false>) const {
+@@ -117,7 +117,7 @@
+         }
+         template <typename Iterator, typename Sentinel, typename TranscodedFn,
+                   typename EncodingErrorFn>
+-        void transcode_codepoint(Iterator& cur, Sentinel end,
++        void transcode_codepoint(Iterator& cur, Sentinel,
+                                  TranscodedFn transcoded_fn,
+                                  EncodingErrorFn error_fn,
+                                  is_utf16<true>) const {
