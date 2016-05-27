@@ -55,22 +55,22 @@ public:
         vector_pool<int> aPool;
 
         std::ptrdiff_t nIdx1 = aPool.store(0);
-        CPPUNIT_ASSERT_MESSAGE("allocator value semantics 1", aPool.get(nIdx1) == 0 );
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("allocator value semantics 1", 0, aPool.get(nIdx1) );
 
         std::ptrdiff_t nIdx2 = aPool.store(1);
-        CPPUNIT_ASSERT_MESSAGE("allocator value semantics 2", aPool.get(nIdx2) == 1 );
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("allocator value semantics 2", 1, aPool.get(nIdx2) );
 
         std::ptrdiff_t nIdx3 = aPool.store(2);
-        CPPUNIT_ASSERT_MESSAGE("allocator value semantics 3", aPool.get(nIdx3) == 2 );
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("allocator value semantics 3", 2, aPool.get(nIdx3) );
 
         aPool.free(nIdx2);
         aPool.free(nIdx3);
 
         nIdx2 = aPool.store(1);
-        CPPUNIT_ASSERT_MESSAGE("allocator value semantics 2 after fragmentation", aPool.get(nIdx2) == 1 );
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("allocator value semantics 2 after fragmentation", 1, aPool.get(nIdx2) );
 
         nIdx3 = aPool.store(2);
-        CPPUNIT_ASSERT_MESSAGE("allocator value semantics 3 after fragmentation", aPool.get(nIdx3) == 2 );
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("allocator value semantics 3 after fragmentation", 2, aPool.get(nIdx3) );
     }
 
     // Change the following lines only, if you add, remove or rename
