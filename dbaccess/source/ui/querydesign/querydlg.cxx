@@ -123,13 +123,15 @@ DlgQryJoin::DlgQryJoin( OQueryTableView * pParent,
     else
     {
         const sal_Int32 nCount = m_pLB_JoinType->GetEntryCount();
-        for (sal_Int32 i = 0; i < nCount; ++i)
+        for (sal_Int32 i = 0; i < nCount;)
         {
             const sal_IntPtr nJoinTyp = reinterpret_cast<sal_IntPtr>(m_pLB_JoinType->GetEntryData(i));
             if ( !bSupportFullJoin && nJoinTyp == ID_FULL_JOIN )
                 m_pLB_JoinType->RemoveEntry(i);
             else if ( !bSupportOuterJoin && (nJoinTyp == ID_LEFT_JOIN || nJoinTyp == ID_RIGHT_JOIN) )
                 m_pLB_JoinType->RemoveEntry(i);
+            else
+                ++i;
         }
 
         m_pTableControl->NotifyCellChange();
