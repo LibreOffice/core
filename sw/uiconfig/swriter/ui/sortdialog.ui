@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.20.0 -->
 <interface>
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
@@ -163,6 +163,9 @@
                                 <property name="active">True</property>
                                 <property name="draw_indicator">True</property>
                                 <property name="group">down1</property>
+                                <accessibility>
+                                  <relation type="member-of" target="key1"/>
+                                </accessibility>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -179,6 +182,9 @@
                                 <property name="active">True</property>
                                 <property name="draw_indicator">True</property>
                                 <property name="group">up1</property>
+                                <accessibility>
+                                  <relation type="member-of" target="key1"/>
+                                </accessibility>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -206,6 +212,9 @@
                                 <property name="active">True</property>
                                 <property name="draw_indicator">True</property>
                                 <property name="group">down2</property>
+                                <accessibility>
+                                  <relation type="member-of" target="key2"/>
+                                </accessibility>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -222,6 +231,9 @@
                                 <property name="active">True</property>
                                 <property name="draw_indicator">True</property>
                                 <property name="group">up2</property>
+                                <accessibility>
+                                  <relation type="member-of" target="key2"/>
+                                </accessibility>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -249,6 +261,9 @@
                                 <property name="active">True</property>
                                 <property name="draw_indicator">True</property>
                                 <property name="group">down3</property>
+                                <accessibility>
+                                  <relation type="member-of" target="key3"/>
+                                </accessibility>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -265,6 +280,9 @@
                                 <property name="active">True</property>
                                 <property name="draw_indicator">True</property>
                                 <property name="group">up3</property>
+                                <accessibility>
+                                  <relation type="member-of" target="key3"/>
+                                </accessibility>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -332,6 +350,7 @@
                             <property name="adjustment">adjustment1</property>
                             <accessibility>
                               <relation type="labelled-by" target="column"/>
+                              <relation type="member-of" target="key1"/>
                             </accessibility>
                           </object>
                           <packing>
@@ -348,6 +367,7 @@
                             <property name="adjustment">adjustment1</property>
                             <accessibility>
                               <relation type="labelled-by" target="column"/>
+                              <relation type="member-of" target="key2"/>
                             </accessibility>
                           </object>
                           <packing>
@@ -364,6 +384,7 @@
                             <property name="adjustment">adjustment1</property>
                             <accessibility>
                               <relation type="labelled-by" target="column"/>
+                              <relation type="member-of" target="key3"/>
                             </accessibility>
                           </object>
                           <packing>
@@ -380,6 +401,7 @@
                             <property name="entry_text_column">0</property>
                             <accessibility>
                               <relation type="labelled-by" target="keytype"/>
+                              <relation type="member-of" target="key1"/>
                             </accessibility>
                           </object>
                           <packing>
@@ -397,6 +419,7 @@
                             <property name="button_sensitivity">off</property>
                             <accessibility>
                               <relation type="labelled-by" target="keytype"/>
+                              <relation type="member-of" target="key2"/>
                             </accessibility>
                           </object>
                           <packing>
@@ -412,6 +435,7 @@
                             <property name="hexpand">True</property>
                             <accessibility>
                               <relation type="labelled-by" target="keytype"/>
+                              <relation type="member-of" target="key3"/>
                             </accessibility>
                           </object>
                           <packing>
@@ -430,8 +454,8 @@
                   <object class="GtkLabel" id="1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">0.56000000238418579</property>
                     <property name="label" translatable="yes">Sort Criteria</property>
+                    <property name="xalign">0.56000000238418579</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
@@ -605,6 +629,7 @@
                                     <property name="receives_default">True</property>
                                     <accessibility>
                                       <relation type="labelled-by" target="character"/>
+                                      <relation type="member-of" target="character"/>
                                     </accessibility>
                                   </object>
                                   <packing>

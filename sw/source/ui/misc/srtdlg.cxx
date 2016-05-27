@@ -154,12 +154,6 @@ SwSortDlg::SwSortDlg(vcl::Window* pParent, SwWrtShell &rShell)
     m_pTypDLB1->SetAccessibleName(m_pTypLbl->GetText());
     m_pTypDLB2->SetAccessibleName(m_pTypLbl->GetText());
     m_pTypDLB3->SetAccessibleName(m_pTypLbl->GetText());
-    m_pSortUp1RB->SetAccessibleRelationMemberOf(m_pKeyCB1);
-    m_pSortDn1RB->SetAccessibleRelationMemberOf(m_pKeyCB1);
-    m_pSortUp2RB->SetAccessibleRelationMemberOf(m_pKeyCB2);
-    m_pSortDn2RB->SetAccessibleRelationMemberOf(m_pKeyCB2);
-    m_pSortUp3RB->SetAccessibleRelationMemberOf(m_pKeyCB3);
-    m_pSortDn3RB->SetAccessibleRelationMemberOf(m_pKeyCB3);
 
     m_pDelimEdt->SetMaxTextLen( 1 );
     if(rSh.GetSelectionType() &
@@ -237,17 +231,6 @@ SwSortDlg::SwSortDlg(vcl::Window* pParent, SwWrtShell &rShell)
         m_pColEdt2->SetMax(nMax);
         m_pColEdt3->SetMax(nMax);
     }
-
-    m_pDelimPB->SetAccessibleRelationMemberOf(m_pDelimFreeRB);
-
-    m_pColEdt1->SetAccessibleRelationMemberOf(m_pKeyCB1);
-    m_pTypDLB1->SetAccessibleRelationMemberOf(m_pKeyCB1);
-
-    m_pColEdt2->SetAccessibleRelationMemberOf(m_pKeyCB2);
-    m_pTypDLB2->SetAccessibleRelationMemberOf(m_pKeyCB2);
-
-    m_pColEdt3->SetAccessibleRelationMemberOf(m_pKeyCB3);
-    m_pTypDLB3->SetAccessibleRelationMemberOf(m_pKeyCB3);
 }
 
 SwSortDlg::~SwSortDlg()
