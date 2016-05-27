@@ -32,111 +32,86 @@
  *   control if it were composite).
  */
 
-typedef sal_uInt32      ControlType;
-
+enum class ControlType {
 // for use in general purpose ImplControlValue
-#define CTRL_GENERIC            0
-
+    Generic            =   0,
 // Normal PushButton/Command Button
-#define CTRL_PUSHBUTTON         1
-
+    Pushbutton         =   1,
 // Normal single radio button
-#define CTRL_RADIOBUTTON            2
-
+    Radiobutton        =   2,
 // Normal single checkbox
-#define CTRL_CHECKBOX           10
-
+    Checkbox           =  10,
 // Combobox, i.e. a ListBox
 // that allows data entry by user
-#define CTRL_COMBOBOX           20
-
+    Combobox           =  20,
 // Control that allows text entry
-#define CTRL_EDITBOX            30
-
+    Editbox            =  30,
 // Control that allows text entry, but without the usual border
 // Has to be handled separately, because this one cannot handle
 // HAS_BACKGROUND_TEXTURE, which is drawn in the edit box'es
 // border window.
-#define CTRL_EDITBOX_NOBORDER   31
-
+    EditboxNoBorder    =  31,
 // Control that allows text entry
 // ( some systems distinguish between single and multi line edit boxes )
-#define CTRL_MULTILINE_EDITBOX 32
-
+    MultilineEditbox   =  32,
 // Control that pops up a menu,
 // but does NOT allow data entry
-#define CTRL_LISTBOX            35
-
+    Listbox            =  35,
 // An edit field together with two little
 // buttons on the side (aka spin field)
-#define CTRL_SPINBOX            40
-
+    Spinbox            =  40,
 // Two standalone spin buttons
 // without an edit field
-#define CTRL_SPINBUTTONS        45
-
+    SpinButtons        =  45,
 // A single tab
-#define CTRL_TAB_ITEM           50
-
+    TabItem            =  50,
 // The border around a tab area,
 // but without the tabs themselves.
 // May have a gap at the top for
 // the active tab
-#define CTRL_TAB_PANE           55
-
+    TabPane            =  55,
 // The background to the tab area
-#define CTRL_TAB_HEADER         56
-
+    TabHeader          =  56,
 // Background of a Tab Pane
-#define CTRL_TAB_BODY           57
-
+    TabBody            =  57,
 // Normal scrollbar, including
 // all parts like slider, buttons
-#define CTRL_SCROLLBAR          60
-
-#define CTRL_SLIDER             65
-
+    Scrollbar          =  60,
+    Slider             =  65,
 // Border around a group of related
 // items, perhaps also displaying
 // a label of identification
-#define CTRL_GROUPBOX           70
-
+    Groupbox           =  70,
 // A separator line
-#define CTRL_FIXEDLINE          80
-
+    Fixedline          =  80,
 // A toolbar control with buttons and a grip
-#define CTRL_TOOLBAR            100
-
+    Toolbar            = 100,
 // The menubar
-#define CTRL_MENUBAR            120
+    Menubar            = 120,
 // popup menu
-#define CTRL_MENU_POPUP         121
-
-#define CTRL_PROGRESS           131
+    MenuPopup          = 121,
+    Progress           = 131,
 // Progress bar for the intro window
 // (aka splash screen), in case some
 // wants native progress bar in the
 // application but not for the splash
 // screen (used in desktop/)
-#define CTRL_INTROPROGRESS      132
-
+    IntroProgress      = 132,
 // tool tips
-#define CTRL_TOOLTIP            140
-
+    Tooltip            = 140,
 // to draw the implemented theme
-#define CTRL_WINDOW_BACKGROUND  150
-
+    WindowBackground   = 150,
 //to draw border of frames natively
-#define CTRL_FRAME              160
-
+    Frame              = 160,
 // for nodes in listviews
 // used in svtools/source/contnr/svtreebx.cxx
-#define CTRL_LISTNODE           170
+    ListNode           = 170,
 // nets between elements of listviews
 // with nodes
-#define CTRL_LISTNET            171
+    ListNet            = 171,
 // for list headers
-#define CTRL_LISTHEADER         172
+    ListHeader         = 172,
+};
 
 
 /* Control Parts:
@@ -282,20 +257,20 @@ public:
     {
         switch(mnType)
         {
-            case CTRL_CHECKBOX:
-            case CTRL_RADIOBUTTON:
-            case CTRL_LISTNODE:
-            case CTRL_SLIDER:
-            case CTRL_PROGRESS:
+            case ControlType::Checkbox:
+            case ControlType::Radiobutton:
+            case ControlType::ListNode:
+            case ControlType::Slider:
+            case ControlType::Progress:
             // FIXME: these guys have complex state hidden in ImplControlValue
             // structs which affects rendering, needs to be a and needs to be
             // part of the key to our cache.
-            case CTRL_SPINBOX:
-            case CTRL_SPINBUTTONS:
-            case CTRL_TAB_ITEM:
+            case ControlType::Spinbox:
+            case ControlType::SpinButtons:
+            case ControlType::TabItem:
                 return false;
 
-            case CTRL_MENUBAR:
+            case ControlType::Menubar:
                 if (mnPart == PART_ENTIRE_CONTROL)
                     return false;
                 break;
@@ -342,11 +317,11 @@ class VCL_DLLPUBLIC ImplControlValue
 
     public:
         explicit ImplControlValue( ButtonValue nTristate )
-            : mType( CTRL_GENERIC ), mTristate(nTristate), mNumber(0) {}
+            : mType( ControlType::Generic ), mTristate(nTristate), mNumber(0) {}
         explicit ImplControlValue( long nNumeric )
-            : mType( CTRL_GENERIC ), mTristate(BUTTONVALUE_DONTKNOW), mNumber( nNumeric) {}
+            : mType( ControlType::Generic ), mTristate(BUTTONVALUE_DONTKNOW), mNumber( nNumeric) {}
         inline ImplControlValue()
-            : mType( CTRL_GENERIC ), mTristate(BUTTONVALUE_DONTKNOW), mNumber(0) {}
+            : mType( ControlType::Generic ), mTristate(BUTTONVALUE_DONTKNOW), mNumber(0) {}
 
         virtual ~ImplControlValue();
 
@@ -382,7 +357,7 @@ class VCL_DLLPUBLIC ScrollbarValue : public ImplControlValue
         ControlState    mnPage2State;
 
         inline ScrollbarValue()
-        : ImplControlValue( CTRL_SCROLLBAR, 0 )
+        : ImplControlValue( ControlType::Scrollbar, 0 )
         {
             mnMin = 0; mnMax = 0; mnCur = 0; mnVisibleSize = 0;
             mnButton1State = ControlState::NONE; mnButton2State = ControlState::NONE;
@@ -402,7 +377,7 @@ class VCL_DLLPUBLIC SliderValue : public ImplControlValue
         ControlState    mnThumbState;
 
         SliderValue()
-        : ImplControlValue( CTRL_SLIDER, 0 )
+        : ImplControlValue( ControlType::Slider, 0 )
         , mnMin( 0 ), mnMax( 0 ), mnCur( 0 ), mnThumbState( ControlState::NONE )
         {}
         virtual ~SliderValue();
@@ -435,7 +410,7 @@ class VCL_DLLPUBLIC TabitemValue : public ImplControlValue
         Rectangle       maContentRect;
 
         TabitemValue(const Rectangle &rContentRect)
-            : ImplControlValue( CTRL_TAB_ITEM, 0 )
+            : ImplControlValue( ControlType::TabItem, 0 )
             , mnAlignment(TabitemFlags::NONE)
             , maContentRect(rContentRect)
         {
@@ -469,7 +444,7 @@ class VCL_DLLPUBLIC SpinbuttonValue : public ImplControlValue
         int         mnLowerPart;
 
         SpinbuttonValue()
-            : ImplControlValue( CTRL_SPINBUTTONS, 0 )
+            : ImplControlValue( ControlType::SpinButtons, 0 )
             , mnUpperState(ControlState::NONE)
             , mnLowerState(ControlState::NONE)
             , mnUpperPart(0)
@@ -488,7 +463,7 @@ class VCL_DLLPUBLIC SpinbuttonValue : public ImplControlValue
 class VCL_DLLPUBLIC ToolbarValue : public ImplControlValue
 {
 public:
-    ToolbarValue() : ImplControlValue( CTRL_TOOLBAR, 0 )
+    ToolbarValue() : ImplControlValue( ControlType::Toolbar, 0 )
     { mbIsTopDockingArea = false; }
     virtual ~ToolbarValue();
     virtual ToolbarValue* clone() const override;
@@ -504,7 +479,7 @@ public:
 class VCL_DLLPUBLIC MenubarValue : public ImplControlValue
 {
 public:
-    MenubarValue() : ImplControlValue( CTRL_MENUBAR, 0 )
+    MenubarValue() : ImplControlValue( ControlType::Menubar, 0 )
     { maTopDockingAreaHeight=0; }
     virtual ~MenubarValue();
     virtual MenubarValue* clone() const override;
@@ -520,7 +495,7 @@ class VCL_DLLPUBLIC MenupopupValue : public ImplControlValue
 {
 public:
     MenupopupValue( long i_nGutterWidth, const Rectangle& i_rItemRect )
-    : ImplControlValue( CTRL_MENU_POPUP, i_nGutterWidth )
+    : ImplControlValue( ControlType::MenuPopup, i_nGutterWidth )
     , maItemRect( i_rItemRect )
     {}
     virtual ~MenupopupValue();
@@ -536,7 +511,7 @@ class VCL_DLLPUBLIC PushButtonValue : public ImplControlValue
 {
 public:
     PushButtonValue()
-    : ImplControlValue( CTRL_PUSHBUTTON, 0 )
+    : ImplControlValue( ControlType::Pushbutton, 0 )
     , mbBevelButton( false ), mbSingleLine( true ) {}
     virtual ~PushButtonValue();
     virtual PushButtonValue* clone() const override;

@@ -3034,7 +3034,7 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, long nLine, vcl::Render
 
                 //native
                 bool bNativeOK = false;
-                if (rRenderContext.IsNativeControlSupported(CTRL_LISTNODE, PART_ENTIRE_CONTROL))
+                if (rRenderContext.IsNativeControlSupported(ControlType::ListNode, PART_ENTIRE_CONTROL))
                 {
                     ImplControlValue aControlValue;
                     Rectangle aCtrlRegion(aPos,  pImg->GetSizePixel());
@@ -3059,7 +3059,7 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, long nLine, vcl::Render
                         }
                     }
 
-                    bNativeOK = rRenderContext.DrawNativeControl(CTRL_LISTNODE, PART_ENTIRE_CONTROL, aCtrlRegion, nState, aControlValue, OUString());
+                    bNativeOK = rRenderContext.DrawNativeControl(ControlType::ListNode, PART_ENTIRE_CONTROL, aCtrlRegion, nState, aControlValue, OUString());
                 }
 
                 if (!bNativeOK)

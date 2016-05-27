@@ -545,9 +545,9 @@ static long ImplGetNativeCheckAndRadioSize(vcl::RenderContext& rRenderContext, l
     Rectangle aNativeContent;
     Point tmp( 0, 0 );
     Rectangle aCtrlRegion( tmp, Size( 100, 15 ) );
-    if (rRenderContext.IsNativeControlSupported(CTRL_MENU_POPUP, PART_MENU_ITEM_CHECK_MARK))
+    if (rRenderContext.IsNativeControlSupported(ControlType::MenuPopup, PART_MENU_ITEM_CHECK_MARK))
     {
-        if (rRenderContext.GetNativeControlRegion(ControlType(CTRL_MENU_POPUP), ControlPart(PART_MENU_ITEM_CHECK_MARK),
+        if (rRenderContext.GetNativeControlRegion(ControlType::MenuPopup, ControlPart(PART_MENU_ITEM_CHECK_MARK),
                                                   aCtrlRegion, ControlState(ControlState::ENABLED), aVal, OUString(),
                                                   aNativeBounds, aNativeContent)
         )
@@ -556,9 +556,9 @@ static long ImplGetNativeCheckAndRadioSize(vcl::RenderContext& rRenderContext, l
             rMaxWidth = aNativeContent.GetWidth();
         }
     }
-    if (rRenderContext.IsNativeControlSupported(CTRL_MENU_POPUP, PART_MENU_ITEM_RADIO_MARK))
+    if (rRenderContext.IsNativeControlSupported(ControlType::MenuPopup, PART_MENU_ITEM_RADIO_MARK))
     {
-        if (rRenderContext.GetNativeControlRegion(ControlType(CTRL_MENU_POPUP), ControlPart(PART_MENU_ITEM_RADIO_MARK),
+        if (rRenderContext.GetNativeControlRegion(ControlType::MenuPopup, ControlPart(PART_MENU_ITEM_RADIO_MARK),
                                           aCtrlRegion, ControlState(ControlState::ENABLED), aVal, OUString(),
                                           aNativeBounds, aNativeContent)
         )
@@ -633,7 +633,7 @@ Size ToolbarMenu::implCalcSize()
 
             if( pEntry->HasCheck() && !pEntry->mbHasImage )
             {
-                if (IsNativeControlSupported(CTRL_MENU_POPUP, (pEntry->mnBits & MenuItemBits::RADIOCHECK)
+                if (IsNativeControlSupported(ControlType::MenuPopup, (pEntry->mnBits & MenuItemBits::RADIOCHECK)
                                                      ? PART_MENU_ITEM_CHECK_MARK
                                                      : PART_MENU_ITEM_RADIO_MARK ) )
                 {
@@ -811,19 +811,19 @@ void ToolbarMenu::implHighlightEntry(vcl::RenderContext& rRenderContext, int nHi
                 aItemRect.Right() -= nFontHeight + nFontHeight / 4;
             }
 
-            if (rRenderContext.IsNativeControlSupported(CTRL_MENU_POPUP, PART_ENTIRE_CONTROL))
+            if (rRenderContext.IsNativeControlSupported(ControlType::MenuPopup, PART_ENTIRE_CONTROL))
             {
                 Size aPxSize(GetOutputSizePixel());
                 rRenderContext.Push(PushFlags::CLIPREGION);
                 rRenderContext.IntersectClipRegion(Rectangle(Point(nX, nY), Size(aSz.Width(), pEntry->maSize.Height())));
                 Rectangle aCtrlRect(Point(nX, 0), Size(aPxSize.Width() - nX, aPxSize.Height()));
-                rRenderContext.DrawNativeControl(CTRL_MENU_POPUP, PART_ENTIRE_CONTROL, aCtrlRect,
+                rRenderContext.DrawNativeControl(ControlType::MenuPopup, PART_ENTIRE_CONTROL, aCtrlRect,
                                                  ControlState::ENABLED, ImplControlValue(), OUString());
-                if (rRenderContext.IsNativeControlSupported(CTRL_MENU_POPUP, PART_MENU_ITEM))
+                if (rRenderContext.IsNativeControlSupported(ControlType::MenuPopup, PART_MENU_ITEM))
                 {
                     bDrawItemRect = false;
                     ControlState eState = ControlState::SELECTED | (pEntry->mbEnabled ? ControlState::ENABLED : ControlState::NONE);
-                    if (!rRenderContext.DrawNativeControl(CTRL_MENU_POPUP, PART_MENU_ITEM, aItemRect,
+                    if (!rRenderContext.DrawNativeControl(ControlType::MenuPopup, PART_MENU_ITEM, aItemRect,
                                                           eState, ImplControlValue(), OUString()))
                     {
                         bDrawItemRect = true;
@@ -1168,14 +1168,14 @@ void ToolbarMenu::KeyInput( const KeyEvent& rKEvent )
 static void ImplPaintCheckBackground(vcl::RenderContext& rRenderContext, vcl::Window& rWindow, const Rectangle& i_rRect, bool i_bHighlight )
 {
     bool bNativeOk = false;
-    if (rRenderContext.IsNativeControlSupported(CTRL_TOOLBAR, PART_BUTTON))
+    if (rRenderContext.IsNativeControlSupported(ControlType::Toolbar, PART_BUTTON))
     {
         ImplControlValue aControlValue;
         ControlState nState = ControlState::PRESSED | ControlState::ENABLED;
 
         aControlValue.setTristateVal(BUTTONVALUE_ON);
 
-        bNativeOk = rRenderContext.DrawNativeControl(CTRL_TOOLBAR, PART_BUTTON,
+        bNativeOk = rRenderContext.DrawNativeControl(ControlType::Toolbar, PART_BUTTON,
                                                      i_rRect, nState, aControlValue, OUString());
     }
 
@@ -1275,7 +1275,7 @@ void ToolbarMenu::implPaint(vcl::RenderContext& rRenderContext, ToolbarMenuEntry
 
                     if (!pEntry->mbHasImage)
                     {
-                        if (rRenderContext.IsNativeControlSupported(CTRL_MENU_POPUP,
+                        if (rRenderContext.IsNativeControlSupported(ControlType::MenuPopup,
                                                              (pEntry->mnBits & MenuItemBits::RADIOCHECK)
                                                              ? PART_MENU_ITEM_CHECK_MARK
                                                              : PART_MENU_ITEM_RADIO_MARK))
@@ -1300,7 +1300,7 @@ void ToolbarMenu::implPaint(vcl::RenderContext& rRenderContext, ToolbarMenuEntry
                             aTmpPos.Y() = aOuterCheckRect.Top() + (aOuterCheckRect.GetHeight() - nCtrlHeight) / 2;
 
                             Rectangle aCheckRect(aTmpPos, Size(nCtrlHeight, nCtrlHeight));
-                            rRenderContext.DrawNativeControl(CTRL_MENU_POPUP, nPart, aCheckRect,
+                            rRenderContext.DrawNativeControl(ControlType::MenuPopup, nPart, aCheckRect,
                                                              nState, ImplControlValue(), OUString());
                             aPos.setX(aPos.getX() + nCtrlHeight + gfxExtra);
                         }
