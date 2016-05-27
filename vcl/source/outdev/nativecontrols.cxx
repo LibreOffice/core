@@ -194,7 +194,7 @@ static std::shared_ptr< ImplControlValue > TransformControlValue( const ImplCont
     std::shared_ptr< ImplControlValue > aResult;
     switch( rVal.getType() )
     {
-    case CTRL_SLIDER:
+    case ControlType::Slider:
         {
             const SliderValue* pSlVal = static_cast<const SliderValue*>(&rVal);
             SliderValue* pNew = new SliderValue( *pSlVal );
@@ -202,7 +202,7 @@ static std::shared_ptr< ImplControlValue > TransformControlValue( const ImplCont
             pNew->maThumbRect = rDev.ImplLogicToDevicePixel( pSlVal->maThumbRect );
         }
         break;
-    case CTRL_SCROLLBAR:
+    case ControlType::Scrollbar:
         {
             const ScrollbarValue* pScVal = static_cast<const ScrollbarValue*>(&rVal);
             ScrollbarValue* pNew = new ScrollbarValue( *pScVal );
@@ -212,7 +212,7 @@ static std::shared_ptr< ImplControlValue > TransformControlValue( const ImplCont
             pNew->maButton2Rect = rDev.ImplLogicToDevicePixel( pScVal->maButton2Rect );
         }
         break;
-    case CTRL_SPINBUTTONS:
+    case ControlType::SpinButtons:
         {
             const SpinbuttonValue* pSpVal = static_cast<const SpinbuttonValue*>(&rVal);
             SpinbuttonValue* pNew = new SpinbuttonValue( *pSpVal );
@@ -221,7 +221,7 @@ static std::shared_ptr< ImplControlValue > TransformControlValue( const ImplCont
             pNew->maLowerRect = rDev.ImplLogicToDevicePixel( pSpVal->maLowerRect );
         }
         break;
-    case CTRL_TOOLBAR:
+    case ControlType::Toolbar:
         {
             const ToolbarValue* pTVal = static_cast<const ToolbarValue*>(&rVal);
             ToolbarValue* pNew = new ToolbarValue( *pTVal );
@@ -229,7 +229,7 @@ static std::shared_ptr< ImplControlValue > TransformControlValue( const ImplCont
             pNew->maGripRect = rDev.ImplLogicToDevicePixel( pTVal->maGripRect );
         }
         break;
-    case CTRL_TAB_ITEM:
+    case ControlType::TabItem:
         {
             const TabitemValue* pTIVal = static_cast<const TabitemValue*>(&rVal);
             TabitemValue* pNew = new TabitemValue( *pTIVal );
@@ -237,24 +237,24 @@ static std::shared_ptr< ImplControlValue > TransformControlValue( const ImplCont
             aResult.reset( pNew );
         }
         break;
-    case CTRL_MENUBAR:
+    case ControlType::Menubar:
         {
             const MenubarValue* pMVal = static_cast<const MenubarValue*>(&rVal);
             MenubarValue* pNew = new MenubarValue( *pMVal );
             aResult.reset( pNew );
         }
         break;
-    case CTRL_PUSHBUTTON:
+    case ControlType::Pushbutton:
         {
             const PushButtonValue* pBVal = static_cast<const PushButtonValue*>(&rVal);
             PushButtonValue* pNew = new PushButtonValue( *pBVal );
             aResult.reset( pNew );
         }
         break;
-    case CTRL_GENERIC:
+    case ControlType::Generic:
             aResult.reset( new ImplControlValue( rVal ) );
             break;
-    case CTRL_MENU_POPUP:
+    case ControlType::MenuPopup:
         {
             const MenupopupValue* pMVal = static_cast<const MenupopupValue*>(&rVal);
             MenupopupValue* pNew = new MenupopupValue( *pMVal );

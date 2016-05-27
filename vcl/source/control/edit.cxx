@@ -443,8 +443,8 @@ long Edit::ImplGetExtraXOffset() const
 long Edit::ImplGetExtraYOffset() const
 {
     long nExtraOffset = 0;
-    int eCtrlType = ImplGetNativeControlType();
-    if (eCtrlType != CTRL_EDITBOX_NOBORDER)
+    ControlType eCtrlType = ImplGetNativeControlType();
+    if (eCtrlType != ControlType::EditboxNoBorder)
     {
         // add some space between text entry and border
         nExtraOffset = 2;
@@ -951,9 +951,9 @@ void Edit::ImplSetText( const OUString& rText, const Selection* pNewSelection )
     }
 }
 
-int Edit::ImplGetNativeControlType() const
+ControlType Edit::ImplGetNativeControlType() const
 {
-    int nCtrl = 0;
+    ControlType nCtrl = ControlType::Generic;
     const vcl::Window* pControl = mbIsSubEdit ? GetParent() : this;
 
     switch (pControl->GetType())
@@ -966,14 +966,14 @@ int Edit::ImplGetNativeControlType() const
         case WINDOW_DATEBOX:
         case WINDOW_TIMEBOX:
         case WINDOW_LONGCURRENCYBOX:
-            nCtrl = CTRL_COMBOBOX;
+            nCtrl = ControlType::Combobox;
             break;
 
         case WINDOW_MULTILINEEDIT:
             if ( GetWindow( GetWindowType::Border ) != this )
-                nCtrl = CTRL_MULTILINE_EDITBOX;
+                nCtrl = ControlType::MultilineEditbox;
             else
-                nCtrl = CTRL_EDITBOX_NOBORDER;
+                nCtrl = ControlType::EditboxNoBorder;
             break;
 
         case WINDOW_EDIT:
@@ -986,18 +986,18 @@ int Edit::ImplGetNativeControlType() const
         case WINDOW_NUMERICFIELD:
         case WINDOW_SPINFIELD:
             if (pControl->GetStyle() & WB_SPIN)
-                nCtrl = CTRL_SPINBOX;
+                nCtrl = ControlType::Spinbox;
             else
             {
                 if (GetWindow(GetWindowType::Border) != this)
-                    nCtrl = CTRL_EDITBOX;
+                    nCtrl = ControlType::Editbox;
                 else
-                    nCtrl = CTRL_EDITBOX_NOBORDER;
+                    nCtrl = ControlType::EditboxNoBorder;
             }
             break;
 
         default:
-            nCtrl = CTRL_EDITBOX;
+            nCtrl = ControlType::Editbox;
     }
     return nCtrl;
 }
@@ -1925,7 +1925,7 @@ void Edit::GetFocus()
         // check for other platforms that need similar handling
         if( ImplGetSVData()->maNWFData.mbNoFocusRects &&
             IsNativeWidgetEnabled() &&
-            IsNativeControlSupported( CTRL_EDITBOX, PART_ENTIRE_CONTROL ) )
+            IsNativeControlSupported( ControlType::Editbox, PART_ENTIRE_CONTROL ) )
         {
             ImplInvalidateOutermostBorder( mbIsSubEdit ? GetParent() : this );
         }
@@ -1959,7 +1959,7 @@ void Edit::LoseFocus()
         // check for other platforms that need similar handling
         if( ImplGetSVData()->maNWFData.mbNoFocusRects &&
             IsNativeWidgetEnabled() &&
-            IsNativeControlSupported( CTRL_EDITBOX, PART_ENTIRE_CONTROL ) )
+            IsNativeControlSupported( ControlType::Editbox, PART_ENTIRE_CONTROL ) )
         {
             ImplInvalidateOutermostBorder( mbIsSubEdit ? GetParent() : this );
         }
@@ -2400,7 +2400,7 @@ void Edit::Modify()
         // check for other platforms that need similar handling
         if( ImplGetSVData()->maNWFData.mbNoFocusRects &&
             IsNativeWidgetEnabled() &&
-            IsNativeControlSupported( CTRL_EDITBOX, PART_ENTIRE_CONTROL ) )
+            IsNativeControlSupported( ControlType::Editbox, PART_ENTIRE_CONTROL ) )
         {
             ImplInvalidateOutermostBorder( this );
         }
@@ -2726,7 +2726,7 @@ void Edit::SetSubEdit(Edit* pEdit)
 
 Size Edit::CalcMinimumSizeForText(const OUString &rString) const
 {
-    int eCtrlType = ImplGetNativeControlType();
+    ControlType eCtrlType = ImplGetNativeControlType();
 
     Size aSize;
     if (mnWidthInChars != -1)

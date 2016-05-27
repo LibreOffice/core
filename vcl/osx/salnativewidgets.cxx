@@ -175,15 +175,15 @@ bool AquaSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart n
 
     switch( nType )
     {
-        case CTRL_PUSHBUTTON:
-        case CTRL_RADIOBUTTON:
-        case CTRL_CHECKBOX:
-        case CTRL_LISTNODE:
+        case ControlType::Pushbutton:
+        case ControlType::Radiobutton:
+        case ControlType::Checkbox:
+        case ControlType::ListNode:
             if( nPart == PART_ENTIRE_CONTROL )
                 return true;
             break;
 
-        case CTRL_SCROLLBAR:
+        case ControlType::Scrollbar:
             if( nPart == PART_DRAW_BACKGROUND_HORZ ||
                 nPart == PART_DRAW_BACKGROUND_VERT ||
                 nPart == PART_ENTIRE_CONTROL       ||
@@ -191,41 +191,41 @@ bool AquaSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart n
                 return true;
             break;
 
-        case CTRL_SLIDER:
+        case ControlType::Slider:
             if( nPart == PART_TRACK_HORZ_AREA || nPart == PART_TRACK_VERT_AREA )
                 return true;
             break;
 
-        case CTRL_EDITBOX:
+        case ControlType::Editbox:
             if( nPart == PART_ENTIRE_CONTROL ||
                 nPart == HAS_BACKGROUND_TEXTURE )
                 return true;
             break;
 
-        case CTRL_MULTILINE_EDITBOX:
+        case ControlType::MultilineEditbox:
             if( nPart == PART_ENTIRE_CONTROL ||
                 nPart == HAS_BACKGROUND_TEXTURE )
                 return true;
             break;
 
-        case CTRL_SPINBOX:
+        case ControlType::Spinbox:
             if( nPart == PART_ENTIRE_CONTROL ||
                 nPart == PART_ALL_BUTTONS    ||
                 nPart == HAS_BACKGROUND_TEXTURE )
                 return true;
             break;
 
-        case CTRL_SPINBUTTONS:
+        case ControlType::SpinButtons:
                 return false;
             break;
 
-        case CTRL_COMBOBOX:
+        case ControlType::Combobox:
             if( nPart == PART_ENTIRE_CONTROL ||
                 nPart == HAS_BACKGROUND_TEXTURE )
                 return true;
             break;
 
-        case CTRL_LISTBOX:
+        case ControlType::Listbox:
             if( nPart == PART_ENTIRE_CONTROL    ||
                 nPart == PART_WINDOW            ||
                 nPart == HAS_BACKGROUND_TEXTURE ||
@@ -234,9 +234,9 @@ bool AquaSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart n
                 return true;
             break;
 
-        case CTRL_TAB_ITEM:
-        case CTRL_TAB_PANE:
-        case CTRL_TAB_BODY:  // see vcl/source/window/tabpage.cxx
+        case ControlType::TabItem:
+        case ControlType::TabPane:
+        case ControlType::TabBody:  // see vcl/source/window/tabpage.cxx
             if( nPart == PART_ENTIRE_CONTROL ||
                 nPart == PART_TABS_DRAW_RTL ||
                 nPart == HAS_BACKGROUND_TEXTURE )
@@ -245,47 +245,48 @@ bool AquaSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart n
 
         // when PART_BUTTON is used, toolbar icons are not highlighted when mouse rolls over.
         // More Aqua compliant
-        case CTRL_TOOLBAR:
+        case ControlType::Toolbar:
             if( nPart == PART_ENTIRE_CONTROL       ||
                 nPart == PART_DRAW_BACKGROUND_HORZ ||
                 nPart == PART_DRAW_BACKGROUND_VERT)
                 return true;
             break;
 
-        case  CTRL_WINDOW_BACKGROUND:
+        case  ControlType::WindowBackground:
             if ( nPart == PART_BACKGROUND_WINDOW ||
                  nPart == PART_BACKGROUND_DIALOG )
                  return true;
             break;
 
-        case CTRL_MENUBAR:
+        case ControlType::Menubar:
             if( nPart == PART_ENTIRE_CONTROL )
                 return true;
             break;
 
-        case CTRL_TOOLTIP: // ** TO DO
+        case ControlType::Tooltip: // ** TO DO
             break;
 
-        case CTRL_MENU_POPUP:
+        case ControlType::MenuPopup:
             if( nPart == PART_ENTIRE_CONTROL       ||
                 nPart == PART_MENU_ITEM            ||
                 nPart == PART_MENU_ITEM_CHECK_MARK ||
                 nPart == PART_MENU_ITEM_RADIO_MARK)
                 return true;
             break;
-        case CTRL_PROGRESS:
-        case CTRL_INTROPROGRESS:
+        case ControlType::Progress:
+        case ControlType::IntroProgress:
             if( nPart == PART_ENTIRE_CONTROL )
                 return true;
             break;
-        case CTRL_FRAME:
+        case ControlType::Frame:
             if( nPart == PART_BORDER )
                 return true;
             break;
-        case CTRL_LISTNET:
+        case ControlType::ListNet:
             if( nPart == PART_ENTIRE_CONTROL )
                 return true;
             break;
+        default: break;
     }
 
     return bOk;
@@ -301,13 +302,13 @@ bool AquaSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart n
 bool AquaSalGraphics::hitTestNativeControl( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion,
                         const Point& rPos, bool& rIsInside )
 {
-    if ( nType == CTRL_SCROLLBAR )
+    if ( nType == ControlType::Scrollbar )
     {
         Rectangle aRect;
         bool bValid = AquaGetScrollRect( /* TODO: m_nScreen */ nPart, rControlRegion, aRect );
         rIsInside = bValid && aRect.IsInside( rPos );
         return bValid;
-    }  //  CTRL_SCROLLBAR
+    }  //  ControlType::Scrollbar
 
     return false;
 }
@@ -380,7 +381,7 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
     switch( nType )
     {
 
-    case  CTRL_COMBOBOX:
+    case  ControlType::Combobox:
         if ( nPart == HAS_BACKGROUND_TEXTURE ||
              nPart == PART_ENTIRE_CONTROL )
         {
@@ -399,7 +400,7 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
         }
         break;
 
-    case CTRL_TOOLBAR:
+    case ControlType::Toolbar:
         {
 #if HAVE_FEATURE_MACOSX_SANDBOX
             HIThemeMenuItemDrawInfo aMenuItemDrawInfo;
@@ -437,7 +438,7 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
         }
         break;
 
-        case CTRL_WINDOW_BACKGROUND:
+        case ControlType::WindowBackground:
         {
             HIThemeBackgroundDrawInfo aThemeBackgroundInfo;
             aThemeBackgroundInfo.version = 0;
@@ -453,8 +454,8 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
         }
         break;
 
-    case CTRL_MENUBAR:
-    case CTRL_MENU_POPUP:
+    case ControlType::Menubar:
+    case ControlType::MenuPopup:
         {
             if ((nPart == PART_ENTIRE_CONTROL) || (nPart == PART_MENU_ITEM )|| (nPart == HAS_BACKGROUND_TEXTURE ))
             {
@@ -514,7 +515,7 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
         }
         break;
 
-    case CTRL_PUSHBUTTON:
+    case ControlType::Pushbutton:
         {
             // [ FIXME] : instead of use a value, vcl can retrieve correct values on the fly (to be implemented)
             const int PB_Mini_Height = 15;
@@ -526,7 +527,7 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
             // no animation
             aPushInfo.animation.time.start = 0;
             aPushInfo.animation.time.current = 0;
-            PushButtonValue const * pPBVal = aValue.getType() == CTRL_PUSHBUTTON ? static_cast<PushButtonValue const *>(&aValue) : nullptr;
+            PushButtonValue const * pPBVal = aValue.getType() == ControlType::Pushbutton ? static_cast<PushButtonValue const *>(&aValue) : nullptr;
             int nPaintHeight = static_cast<int>(rc.size.height);
 
             if( pPBVal && pPBVal->mbBevelButton )
@@ -576,17 +577,17 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
         }
         break;
 
-    case CTRL_RADIOBUTTON:
-    case CTRL_CHECKBOX:
+    case ControlType::Radiobutton:
+    case ControlType::Checkbox:
         {
             HIThemeButtonDrawInfo aInfo;
             aInfo.version = 0;
             switch( nType )
             {
-            case CTRL_RADIOBUTTON: if(rc.size.width >= BUTTON_HEIGHT) aInfo.kind = kThemeRadioButton;
+            case ControlType::Radiobutton: if(rc.size.width >= BUTTON_HEIGHT) aInfo.kind = kThemeRadioButton;
                                     else aInfo.kind = kThemeSmallRadioButton;
                 break;
-            case CTRL_CHECKBOX:   if(rc.size.width >= BUTTON_HEIGHT) aInfo.kind = kThemeCheckBox;
+            case ControlType::Checkbox:   if(rc.size.width >= BUTTON_HEIGHT) aInfo.kind = kThemeCheckBox;
                                     else aInfo.kind = kThemeSmallCheckBox;
                 break;
             }
@@ -606,7 +607,7 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
         }
         break;
 
-    case CTRL_LISTNODE:
+    case ControlType::ListNode:
         {
             ButtonValue aButtonValue = aValue.getTristateVal();
 
@@ -664,8 +665,8 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
         }
         break;
 
-    case CTRL_PROGRESS:
-    case CTRL_INTROPROGRESS:
+    case ControlType::Progress:
+    case ControlType::IntroProgress:
         {
             long nProgressWidth = aValue.getNumericVal();
             HIThemeTrackDrawInfo aTrackInfo;
@@ -683,7 +684,7 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
                 aTrackInfo.attributes      |= kThemeTrackRightToLeft;
             aTrackInfo.enableState          = getTrackState( nState );
             // the intro bitmap never gets key anyway; we want to draw that enabled
-            if( nType == CTRL_INTROPROGRESS )
+            if( nType == ControlType::IntroProgress )
                 aTrackInfo.enableState          = kThemeTrackActive;
             aTrackInfo.filler1              = 0;
             aTrackInfo.trackInfo.progress.phase   = static_cast<UInt8>(CFAbsoluteTimeGetCurrent()*10.0);
@@ -693,7 +694,7 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
         }
         break;
 
-    case CTRL_SLIDER:
+    case ControlType::Slider:
         {
             SliderValue const * pSLVal = static_cast<SliderValue const *>(&aValue);
 
@@ -723,9 +724,9 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
         }
         break;
 
-    case CTRL_SCROLLBAR:
+    case ControlType::Scrollbar:
         {
-            const ScrollbarValue* pScrollbarVal = (aValue.getType() == CTRL_SCROLLBAR) ? static_cast<const ScrollbarValue*>(&aValue) : nullptr;
+            const ScrollbarValue* pScrollbarVal = (aValue.getType() == ControlType::Scrollbar) ? static_cast<const ScrollbarValue*>(&aValue) : nullptr;
 
             if( nPart == PART_DRAW_BACKGROUND_VERT ||
                 nPart == PART_DRAW_BACKGROUND_HORZ )
@@ -778,7 +779,7 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
         }
         break;
 
-    case CTRL_TAB_PANE:
+    case ControlType::TabPane:
         {
             HIThemeTabPaneDrawInfo aTabPaneDrawInfo;
             aTabPaneDrawInfo.version = 1;
@@ -800,7 +801,7 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
         }
         break;
 
-    case CTRL_TAB_ITEM:
+    case ControlType::TabItem:
         {
             HIThemeTabDrawInfo aTabItemDrawInfo;
             aTabItemDrawInfo.version=1;
@@ -852,7 +853,7 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
         }
         break;
 
-    case  CTRL_LISTBOX:
+    case  ControlType::Listbox:
         switch( nPart)
         {
             case PART_ENTIRE_CONTROL:
@@ -892,8 +893,8 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
         }
         break;
 
-    case CTRL_EDITBOX:
-    case CTRL_MULTILINE_EDITBOX:
+    case ControlType::Editbox:
+    case ControlType::MultilineEditbox:
         {
             HIThemeFrameDrawInfo aTextDrawInfo;
             aTextDrawInfo.version=0;
@@ -919,7 +920,7 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
         }
         break;
 
-    case CTRL_SPINBOX:
+    case ControlType::Spinbox:
         {
             if(nPart == PART_ENTIRE_CONTROL)
             {
@@ -945,7 +946,7 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
                 if(nState & ControlState::FOCUSED) HIThemeDrawFocusRect(&rc, true, mrContext, kHIThemeOrientationNormal);
 
                 //buttons:
-                const SpinbuttonValue* pSpinButtonVal = (aValue.getType() == CTRL_SPINBUTTONS) ? static_cast<const SpinbuttonValue*>(&aValue) : nullptr;
+                const SpinbuttonValue* pSpinButtonVal = (aValue.getType() == ControlType::SpinButtons) ? static_cast<const SpinbuttonValue*>(&aValue) : nullptr;
                 ControlState nUpperState = ControlState::ENABLED;//state of the upper button
                 ControlState nLowerState = ControlState::ENABLED;//and of the lower button
                 if(pSpinButtonVal) {//pSpinButtonVal is sometimes null
@@ -1002,7 +1003,7 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
         }
         break;
 
-    case CTRL_FRAME:
+    case ControlType::Frame:
         {
             DrawFrameFlags nStyle = static_cast<DrawFrameFlags>(aValue.getNumericVal());
             if( nPart == PART_BORDER ) {
@@ -1036,7 +1037,7 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
         }
         break;
 
-    case CTRL_LISTNET:
+    case ControlType::ListNet:
         {
            //do nothing as there isn't net for listviews on macos
             bOK=true;
@@ -1054,7 +1055,7 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
        (the background is always drawn as a whole since we don't know anything
        about its possible contents)
     */
-    if( nType == CTRL_WINDOW_BACKGROUND )
+    if( nType == ControlType::WindowBackground )
     {
         CGRect aRect = { { 0, 0 }, { 0, 0 } };
         if( mxClipPath )
@@ -1100,7 +1101,7 @@ bool AquaSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPa
 
     switch (nType)
     {
-        case CTRL_SLIDER:
+        case ControlType::Slider:
             {
                 if( nPart == PART_THUMB_HORZ )
                 {
@@ -1119,7 +1120,7 @@ bool AquaSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPa
             }
             break;
 
-        case CTRL_SCROLLBAR:
+        case ControlType::Scrollbar:
             {
                 Rectangle aRect;
                 if( AquaGetScrollRect( /* m_nScreen */ nPart, aCtrlBoundRect, aRect ) )
@@ -1131,11 +1132,11 @@ bool AquaSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPa
             }
             break;
 
-        case CTRL_PUSHBUTTON:
-        case CTRL_RADIOBUTTON:
-        case CTRL_CHECKBOX:
+        case ControlType::Pushbutton:
+        case ControlType::Radiobutton:
+        case ControlType::Checkbox:
             {
-                if ( nType == CTRL_PUSHBUTTON )
+                if ( nType == ControlType::Pushbutton )
                 {
                     w = aCtrlBoundRect.GetWidth();
                     h = aCtrlBoundRect.GetHeight();
@@ -1157,7 +1158,7 @@ bool AquaSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPa
                 toReturn = true;
             }
             break;
-        case CTRL_PROGRESS:
+        case ControlType::Progress:
             {
                 Rectangle aRect( aCtrlBoundRect );
                 if( aRect.GetHeight() < 16 )
@@ -1170,7 +1171,7 @@ bool AquaSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPa
             }
             break;
 
-        case CTRL_INTROPROGRESS:
+        case ControlType::IntroProgress:
             {
                 Rectangle aRect( aCtrlBoundRect );
                 aRect.Bottom() = aRect.Top() + INTRO_PROGRESS_HEIGHT; // values taken from HIG for medium progress
@@ -1180,7 +1181,7 @@ bool AquaSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPa
             }
             break;
 
-         case CTRL_TAB_ITEM:
+         case ControlType::TabItem:
 
             w = aCtrlBoundRect.GetWidth() + 2*TAB_TEXT_OFFSET - 2*VCL_TAB_TEXT_OFFSET;
             h = TAB_HEIGHT_NORMAL+2;
@@ -1192,7 +1193,7 @@ bool AquaSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPa
 
             break;
 
-        case CTRL_EDITBOX:
+        case ControlType::Editbox:
             {
                 w = aCtrlBoundRect.GetWidth();
                 if( w < 3+2*FOCUS_RING_WIDTH )
@@ -1207,8 +1208,8 @@ bool AquaSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPa
                 toReturn = true;
             }
             break;
-        case CTRL_LISTBOX:
-        case CTRL_COMBOBOX:
+        case ControlType::Listbox:
+        case ControlType::Combobox:
             {
                 if( nPart == PART_ENTIRE_CONTROL )
                 {
@@ -1246,7 +1247,7 @@ bool AquaSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPa
                     y += 2; // don't draw into upper border
                     y += FOCUS_RING_WIDTH;
                     w -= 3 + DROPDOWN_BUTTON_WIDTH + 2*FOCUS_RING_WIDTH;
-                    if( nType == CTRL_LISTBOX )
+                    if( nType == ControlType::Listbox )
                         w -= 9; // HIG specifies 9 units distance between dropdown button area and content
                     h -= 4; // don't draw into lower border
 
@@ -1257,7 +1258,7 @@ bool AquaSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPa
                 }
             }
             break;
-        case CTRL_SPINBOX:
+        case ControlType::Spinbox:
                 if( nPart == PART_ENTIRE_CONTROL ) {
                     w = aCtrlBoundRect.GetWidth();
                     if( w < 3+2*FOCUS_RING_WIDTH+SPIN_BUTTON_SPACE+SPIN_BUTTON_WIDTH )
@@ -1308,7 +1309,7 @@ bool AquaSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPa
                     toReturn = true;
                 }
             break;
-        case CTRL_FRAME:
+        case ControlType::Frame:
             {
                 DrawFrameStyle nStyle = static_cast<DrawFrameStyle>(aValue.getNumericVal() & 0x000f);
                 DrawFrameFlags nFlags = static_cast<DrawFrameFlags>(aValue.getNumericVal() & 0xfff0);
@@ -1339,8 +1340,8 @@ bool AquaSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPa
             }
             break;
 
-        case CTRL_MENUBAR:
-        case CTRL_MENU_POPUP:
+        case ControlType::Menubar:
+        case ControlType::MenuPopup:
             {
                 if(( nPart == PART_MENU_ITEM_CHECK_MARK )||( nPart == PART_MENU_ITEM_RADIO_MARK )) {
 
