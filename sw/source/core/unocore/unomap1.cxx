@@ -1647,6 +1647,12 @@ const SfxItemPropertySet*  SwUnoPropertyMapProvider::GetPropertySet( sal_uInt16 
                 m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_TABLE_STYLE;
             }
             break;
+            case PROPERTY_MAP_CELL_STYLE:
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_CELL_STYLE(pEntries);
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_CELL_STYLE;
+            }
+            break;
         }
     }
     return m_aPropertySetArr[nPropertyId];
