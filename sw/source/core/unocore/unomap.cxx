@@ -1497,6 +1497,16 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                 m_aMapEntriesArr[nPropertyId] = aTableStyleMap;
             }
             break;
+            case PROPERTY_MAP_CELL_STYLE:
+            {
+                static SfxItemPropertyMapEntry const aCellStyleMap[] =
+                {
+                    { OUString(UNO_NAME_BACK_COLOR), RES_BACKGROUND, cppu::UnoType<sal_Int32>::get(), PROPERTY_NONE , 0 },
+                    { OUString(), 0, css::uno::Type(), 0, 0 }
+                };
+                m_aMapEntriesArr[nPropertyId] = aCellStyleMap;
+            }
+            break;
 
             default:
                 OSL_FAIL( "unexpected property map ID" );

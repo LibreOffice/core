@@ -123,7 +123,8 @@
 #define PROPERTY_MAP_METAFIELD                          98
 #define PROPERTY_MAP_ACCESSIBILITY_TEXT_ATTRIBUTE       99
 #define PROPERTY_MAP_TABLE_STYLE                        100
-#define PROPERTY_MAP_END                                101
+#define PROPERTY_MAP_CELL_STYLE                         101
+#define PROPERTY_MAP_END                                102
 
 //S&E
 #define WID_WORDS                0
