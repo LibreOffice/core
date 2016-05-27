@@ -168,7 +168,7 @@ void ComboBox::ImplCalcEditHeight()
     Rectangle aCtrlRegion( Point( 0, 0 ), Size( 10, 10 ) );
     Rectangle aBoundRegion, aContentRegion;
     ImplControlValue aControlValue;
-    ControlType aType = IsDropDownBox() ? CTRL_COMBOBOX : CTRL_EDITBOX;
+    ControlType aType = IsDropDownBox() ? ControlType::Combobox : ControlType::Editbox;
     if( GetNativeControlRegion( aType, PART_ENTIRE_CONTROL,
                                 aCtrlRegion,
                                 ControlState::ENABLED,
@@ -1069,7 +1069,7 @@ long ComboBox::getMaxWidthScrollBarAndDownButton() const
     // use the full extent of the control
     Rectangle aArea( aPoint, pBorder->GetOutputSizePixel() );
 
-    if ( GetNativeControlRegion(CTRL_COMBOBOX, PART_BUTTON_DOWN,
+    if ( GetNativeControlRegion(ControlType::Combobox, PART_BUTTON_DOWN,
         aArea, ControlState::NONE, aControlValue, OUString(), aBound, aContent) )
     {
         nButtonDownWidth = aContent.getWidth();
@@ -1507,7 +1507,7 @@ ComboBoxBounds ComboBox::Impl::calcComboBoxDropDownComponentBounds(
     // use the full extent of the control
     Rectangle aArea( aPoint, rBorderOutSz );
 
-    if (m_rThis.GetNativeControlRegion(CTRL_COMBOBOX, PART_BUTTON_DOWN,
+    if (m_rThis.GetNativeControlRegion(ControlType::Combobox, PART_BUTTON_DOWN,
             aArea, ControlState::NONE, aControlValue, OUString(), aBound, aContent) )
     {
         // convert back from border space to local coordinates
@@ -1518,7 +1518,7 @@ ComboBoxBounds ComboBox::Impl::calcComboBoxDropDownComponentBounds(
         aBounds.aButtonSize = Size(aContent.getWidth(), (nBottom-nTop));
 
         // adjust the size of the edit field
-        if (m_rThis.GetNativeControlRegion(CTRL_COMBOBOX, PART_SUB_EDIT,
+        if (m_rThis.GetNativeControlRegion(ControlType::Combobox, PART_SUB_EDIT,
                     aArea, ControlState::NONE, aControlValue, OUString(), aBound, aContent) )
         {
             // convert back from border space to local coordinates

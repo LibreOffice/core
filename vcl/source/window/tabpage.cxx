@@ -42,7 +42,7 @@ void TabPage::ImplInit( vcl::Window* pParent, WinBits nStyle )
 
     // if the tabpage is drawn (ie filled) by a native widget, make sure all controls will have transparent background
     // otherwise they will paint with a wrong background
-    if( IsNativeControlSupported(CTRL_TAB_BODY, PART_ENTIRE_CONTROL) && GetParent() && (GetParent()->GetType() == WINDOW_TABCONTROL) )
+    if( IsNativeControlSupported(ControlType::TabBody, PART_ENTIRE_CONTROL) && GetParent() && (GetParent()->GetType() == WINDOW_TABCONTROL) )
         EnableChildTransparentMode();
 }
 
@@ -129,7 +129,7 @@ void TabPage::DataChanged( const DataChangedEvent& rDCEvt )
 void TabPage::Paint( vcl::RenderContext& rRenderContext, const Rectangle& )
 {
     // draw native tabpage only inside tabcontrols, standalone tabpages look ugly (due to bad dialog design)
-    if( IsNativeControlSupported(CTRL_TAB_BODY, PART_ENTIRE_CONTROL) && GetParent() && (GetParent()->GetType() == WINDOW_TABCONTROL) )
+    if( IsNativeControlSupported(ControlType::TabBody, PART_ENTIRE_CONTROL) && GetParent() && (GetParent()->GetType() == WINDOW_TABCONTROL) )
     {
         const ImplControlValue aControlValue;
 
@@ -143,7 +143,7 @@ void TabPage::Paint( vcl::RenderContext& rRenderContext, const Rectangle& )
         // pass the whole window region to NWF as the tab body might be a gradient or bitmap
         // that has to be scaled properly, clipping makes sure that we do not paint too much
         Rectangle aCtrlRegion( aPoint, GetOutputSizePixel() );
-        rRenderContext.DrawNativeControl( CTRL_TAB_BODY, part, aCtrlRegion, nState,
+        rRenderContext.DrawNativeControl( ControlType::TabBody, part, aCtrlRegion, nState,
                 aControlValue, OUString() );
     }
 }

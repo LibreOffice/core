@@ -79,8 +79,8 @@ static void ImplInvalidateMenubar( DockingAreaWindow* pThis )
     // the menubar must be repainted if the top dockingarea changes size or visibility
     if( ImplGetSVData()->maNWFData.mbMenuBarDockingAreaCommonBG &&
         (pThis->GetAlign() == WindowAlign::Top)
-        && pThis->IsNativeControlSupported( CTRL_TOOLBAR, PART_ENTIRE_CONTROL )
-        && pThis->IsNativeControlSupported( CTRL_MENUBAR, PART_ENTIRE_CONTROL ) )
+        && pThis->IsNativeControlSupported( ControlType::Toolbar, PART_ENTIRE_CONTROL )
+        && pThis->IsNativeControlSupported( ControlType::Menubar, PART_ENTIRE_CONTROL ) )
     {
         SystemWindow *pSysWin = pThis->GetSystemWindow();
         if( pSysWin && pSysWin->GetMenuBar() )
@@ -149,7 +149,7 @@ void DockingAreaWindow::ApplySettings(vcl::RenderContext& rRenderContext)
 
         rRenderContext.SetBackground(aWallpaper);
     }
-    else if (rRenderContext.IsNativeControlSupported(CTRL_TOOLBAR, PART_ENTIRE_CONTROL))
+    else if (rRenderContext.IsNativeControlSupported(ControlType::Toolbar, PART_ENTIRE_CONTROL))
     {
         Wallpaper aWallpaper;
         aWallpaper.SetStyle(WallpaperStyle::ApplicationGradient);
@@ -165,7 +165,7 @@ void DockingAreaWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangl
     const StyleSettings rSetting = rRenderContext.GetSettings().GetStyleSettings();
 
     EnableNativeWidget(); // only required because the toolkit currently switches this flag off
-    if (rRenderContext.IsNativeControlSupported(CTRL_TOOLBAR, PART_ENTIRE_CONTROL))
+    if (rRenderContext.IsNativeControlSupported(ControlType::Toolbar, PART_ENTIRE_CONTROL))
     {
         ToolbarValue aControlValue;
 
@@ -186,7 +186,7 @@ void DockingAreaWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangl
             // draw a single toolbar background covering the whole docking area
             Rectangle aCtrlRegion(Point(), GetOutputSizePixel());
 
-            rRenderContext.DrawNativeControl(CTRL_TOOLBAR, IsHorizontal() ? PART_DRAW_BACKGROUND_HORZ : PART_DRAW_BACKGROUND_VERT,
+            rRenderContext.DrawNativeControl(ControlType::Toolbar, IsHorizontal() ? PART_DRAW_BACKGROUND_HORZ : PART_DRAW_BACKGROUND_VERT,
                                              aCtrlRegion, nState, aControlValue, OUString() );
 
             if (!ImplGetSVData()->maNWFData.mbDockingAreaAvoidTBFrames)
@@ -249,7 +249,7 @@ void DockingAreaWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangl
                     aTBRect.Top()    = 0;
                     aTBRect.Bottom() = aOutSz.Height() - 1;
                 }
-                rRenderContext.DrawNativeControl(CTRL_TOOLBAR, IsHorizontal() ? PART_DRAW_BACKGROUND_HORZ : PART_DRAW_BACKGROUND_VERT,
+                rRenderContext.DrawNativeControl(ControlType::Toolbar, IsHorizontal() ? PART_DRAW_BACKGROUND_HORZ : PART_DRAW_BACKGROUND_VERT,
                                                  aTBRect, nState, aControlValue, OUString());
             }
         }
@@ -259,7 +259,7 @@ void DockingAreaWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangl
 void DockingAreaWindow::Resize()
 {
     ImplInvalidateMenubar( this );
-    if (IsNativeControlSupported(CTRL_TOOLBAR, PART_ENTIRE_CONTROL))
+    if (IsNativeControlSupported(ControlType::Toolbar, PART_ENTIRE_CONTROL))
         Invalidate();
 }
 

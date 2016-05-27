@@ -1499,7 +1499,7 @@ void Window::Erase(vcl::RenderContext& rRenderContext)
         if (IsEnabled())
             nState |= ControlState::ENABLED;
 
-        bNativeOK = rRenderContext.DrawNativeControl(CTRL_WINDOW_BACKGROUND, aCtrlPart, aCtrlRegion,
+        bNativeOK = rRenderContext.DrawNativeControl(ControlType::WindowBackground, aCtrlPart, aCtrlRegion,
                                                      nState, ImplControlValue(), OUString());
     }
 

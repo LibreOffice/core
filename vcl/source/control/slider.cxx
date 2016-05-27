@@ -141,7 +141,7 @@ void Slider::ImplUpdateRects( bool bUpdate )
 
             const Rectangle aControlRegion( Rectangle( Point(0,0), Size( SLIDER_THUMB_SIZE, 10 ) ) );
             Rectangle aThumbBounds, aThumbContent;
-            if ( GetNativeControlRegion( CTRL_SLIDER, PART_THUMB_HORZ,
+            if ( GetNativeControlRegion( ControlType::Slider, PART_THUMB_HORZ,
                                          aControlRegion, ControlState::NONE, ImplControlValue(), OUString(),
                                          aThumbBounds, aThumbContent ) )
             {
@@ -175,7 +175,7 @@ void Slider::ImplUpdateRects( bool bUpdate )
 
             const Rectangle aControlRegion( Rectangle( Point(0,0), Size( 10, SLIDER_THUMB_SIZE ) ) );
             Rectangle aThumbBounds, aThumbContent;
-            if ( GetNativeControlRegion( CTRL_SLIDER, PART_THUMB_VERT,
+            if ( GetNativeControlRegion( ControlType::Slider, PART_THUMB_VERT,
                                          aControlRegion, ControlState::NONE, ImplControlValue(), OUString(),
                                          aThumbBounds, aThumbContent ) )
             {
@@ -343,7 +343,7 @@ void Slider::ImplDraw(vcl::RenderContext& rRenderContext)
     }
 
     const Rectangle aCtrlRegion(Point(0,0), GetOutputSizePixel());
-    bool bNativeOK = rRenderContext.DrawNativeControl(CTRL_SLIDER, nPart, aCtrlRegion, nState, sldValue, OUString());
+    bool bNativeOK = rRenderContext.DrawNativeControl(ControlType::Slider, nPart, aCtrlRegion, nState, sldValue, OUString());
     if (bNativeOK)
         return;
 

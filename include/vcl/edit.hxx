@@ -137,7 +137,7 @@ protected:
     SAL_DLLPRIVATE WinBits     ImplInitStyle( WinBits nStyle );
     SAL_DLLPRIVATE void        ImplLoadRes( const ResId& rResId );
     SAL_DLLPRIVATE void        ImplSetSelection( const Selection& rSelection, bool bPaint = true );
-    SAL_DLLPRIVATE int         ImplGetNativeControlType() const;
+    SAL_DLLPRIVATE ControlType ImplGetNativeControlType() const;
     SAL_DLLPRIVATE long        ImplGetExtraXOffset() const;
     SAL_DLLPRIVATE long        ImplGetExtraYOffset() const;
     static SAL_DLLPRIVATE void ImplInvalidateOutermostBorder( vcl::Window* pWin );

@@ -617,7 +617,7 @@ bool WidgetPainter::drawStyledWidget( QWidget *pWidget,
     }
     else if ( strcmp( QSpinWidget_String, pClassName ) == 0 )
     {
-        const SpinbuttonValue* pValue = (aValue.getType() == CTRL_SPINBUTTONS) ? static_cast<const SpinbuttonValue*>(&aValue) : NULL;
+        const SpinbuttonValue* pValue = (aValue.getType() == ControlType::SpinButtons) ? static_cast<const SpinbuttonValue*>(&aValue) : NULL;
 
         // Is any of the buttons pressed?
         QStyle::SCFlags eActive = QStyle::SC_None;
@@ -706,7 +706,7 @@ bool WidgetPainter::drawStyledWidget( QWidget *pWidget,
     }
     else if ( strcmp( QScrollBar_String, pClassName ) == 0 )
     {
-    const ScrollbarValue* pValue = (aValue.getType() == CTRL_SCROLLBAR) ? static_cast<const ScrollbarValue*>(&aValue) : NULL;
+    const ScrollbarValue* pValue = (aValue.getType() == ControlType::Scrollbar) ? static_cast<const ScrollbarValue*>(&aValue) : NULL;
 
     QStyle::SCFlags eActive = QStyle::SC_None;
     if ( pValue )
@@ -1109,7 +1109,7 @@ QScrollBar *WidgetPainter::scrollBar( const Rectangle& rControlRegion,
     m_pScrollBar->resize( qRect.size() );
     m_pScrollBar->setOrientation( bHorizontal? Qt::Horizontal: Qt::Vertical );
 
-    const ScrollbarValue* pValue = (aValue.getType() == CTRL_SCROLLBAR) ? static_cast<const ScrollbarValue*>(&aValue) : NULL;
+    const ScrollbarValue* pValue = (aValue.getType() == ControlType::Scrollbar) ? static_cast<const ScrollbarValue*>(&aValue) : NULL;
     if ( pValue )
     {
         m_pScrollBar->setMinValue( pValue->mnMin );
@@ -1268,28 +1268,28 @@ class KDESalGraphics : public X11SalGraphics
 bool KDESalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nPart )
 {
     return
-    ( (nType == CTRL_PUSHBUTTON)  && (nPart == PART_ENTIRE_CONTROL) ) ||
-    ( (nType == CTRL_RADIOBUTTON) && (nPart == PART_ENTIRE_CONTROL) ) ||
-    ( (nType == CTRL_CHECKBOX)    && (nPart == PART_ENTIRE_CONTROL) ) ||
-    ( (nType == CTRL_COMBOBOX)    && (nPart == PART_ENTIRE_CONTROL || nPart == HAS_BACKGROUND_TEXTURE) ) ||
-    ( (nType == CTRL_EDITBOX)     && (nPart == PART_ENTIRE_CONTROL || nPart == HAS_BACKGROUND_TEXTURE) ) ||
-    ( (nType == CTRL_LISTBOX)     && (nPart == PART_ENTIRE_CONTROL || nPart == PART_WINDOW || nPart == HAS_BACKGROUND_TEXTURE ) ) ||
-    ( (nType == CTRL_SPINBOX)     && (nPart == PART_ENTIRE_CONTROL || nPart == HAS_BACKGROUND_TEXTURE) ) ||
-    // no CTRL_SPINBUTTONS for KDE
-    ( (nType == CTRL_TAB_ITEM)    && (nPart == PART_ENTIRE_CONTROL) ) ||
-    ( (nType == CTRL_TAB_PANE)    && (nPart == PART_ENTIRE_CONTROL) ) ||
-    // no CTRL_TAB_BODY for KDE
-    ( (nType == CTRL_SCROLLBAR)   && (nPart == PART_ENTIRE_CONTROL || nPart == PART_DRAW_BACKGROUND_HORZ || nPart == PART_DRAW_BACKGROUND_VERT) ) ||
-    ( (nType == CTRL_SCROLLBAR)   && (nPart == HAS_THREE_BUTTONS) ) || // TODO small optimization is possible here: return this only if the style really has 3 buttons
-    // CTRL_GROUPBOX not supported
-    // CTRL_FIXEDLINE not supported
-    ( (nType == CTRL_TOOLBAR)     && (nPart == PART_ENTIRE_CONTROL ||
+    ( (nType == ControlType::Pushbutton)  && (nPart == PART_ENTIRE_CONTROL) ) ||
+    ( (nType == ControlType::Radiobutton) && (nPart == PART_ENTIRE_CONTROL) ) ||
+    ( (nType == ControlType::Checkbox)    && (nPart == PART_ENTIRE_CONTROL) ) ||
+    ( (nType == ControlType::Combobox)    && (nPart == PART_ENTIRE_CONTROL || nPart == HAS_BACKGROUND_TEXTURE) ) ||
+    ( (nType == ControlType::Editbox)     && (nPart == PART_ENTIRE_CONTROL || nPart == HAS_BACKGROUND_TEXTURE) ) ||
+    ( (nType == ControlType::Listbox)     && (nPart == PART_ENTIRE_CONTROL || nPart == PART_WINDOW || nPart == HAS_BACKGROUND_TEXTURE ) ) ||
+    ( (nType == ControlType::Spinbox)     && (nPart == PART_ENTIRE_CONTROL || nPart == HAS_BACKGROUND_TEXTURE) ) ||
+    // no ControlType::SpinButtons for KDE
+    ( (nType == ControlType::TabItem)    && (nPart == PART_ENTIRE_CONTROL) ) ||
+    ( (nType == ControlType::TabPane)    && (nPart == PART_ENTIRE_CONTROL) ) ||
+    // no ControlType::TabBody for KDE
+    ( (nType == ControlType::Scrollbar)   && (nPart == PART_ENTIRE_CONTROL || nPart == PART_DRAW_BACKGROUND_HORZ || nPart == PART_DRAW_BACKGROUND_VERT) ) ||
+    ( (nType == ControlType::Scrollbar)   && (nPart == HAS_THREE_BUTTONS) ) || // TODO small optimization is possible here: return this only if the style really has 3 buttons
+    // ControlType::Groupbox not supported
+    // ControlType::Fixedline not supported
+    ( (nType == ControlType::Toolbar)     && (nPart == PART_ENTIRE_CONTROL ||
                                       nPart == PART_DRAW_BACKGROUND_HORZ || nPart == PART_DRAW_BACKGROUND_VERT ||
                                       nPart == PART_THUMB_HORZ || nPart == PART_THUMB_VERT ||
                                       nPart == PART_BUTTON) ) ||
-    ( (nType == CTRL_MENUBAR)     && (nPart == PART_ENTIRE_CONTROL || nPart == PART_MENU_ITEM) ) ||
-    ( (nType == CTRL_MENU_POPUP)  && (nPart == PART_ENTIRE_CONTROL || nPart == PART_MENU_ITEM) ) ||
-    ( (nType == CTRL_PROGRESS)    && (nPart == PART_ENTIRE_CONTROL) )
+    ( (nType == ControlType::Menubar)     && (nPart == PART_ENTIRE_CONTROL || nPart == PART_MENU_ITEM) ) ||
+    ( (nType == ControlType::MenuPopup)  && (nPart == PART_ENTIRE_CONTROL || nPart == PART_MENU_ITEM) ) ||
+    ( (nType == ControlType::Progress)    && (nPart == PART_ENTIRE_CONTROL) )
         ;
 }
 
@@ -1303,7 +1303,7 @@ bool KDESalGraphics::hitTestNativeControl( ControlType nType, ControlPart nPart,
                                            const Rectangle& rControlRegion, const Point& rPos,
                                            bool& rIsInside )
 {
-    if ( nType == CTRL_SCROLLBAR )
+    if ( nType == ControlType::Scrollbar )
     {
     // make position relative to rControlRegion
     Point aPos = rPos - rControlRegion.TopLeft();
@@ -1412,97 +1412,97 @@ bool KDESalGraphics::drawNativeControl( ControlType nType, ControlPart nPart,
 {
     bool bReturn = false;
 
-    if ( (nType == CTRL_PUSHBUTTON) && (nPart == PART_ENTIRE_CONTROL) )
+    if ( (nType == ControlType::Pushbutton) && (nPart == PART_ENTIRE_CONTROL) )
     {
     bReturn = pWidgetPainter->drawStyledWidget(
         pWidgetPainter->pushButton( rControlRegion, bool(nState & ControlState::DEFAULT) ),
         nState, aValue, this );
     }
-    else if ( (nType == CTRL_RADIOBUTTON) && (nPart == PART_ENTIRE_CONTROL) )
+    else if ( (nType == ControlType::Radiobutton) && (nPart == PART_ENTIRE_CONTROL) )
     {
     bReturn = pWidgetPainter->drawStyledWidget(
         pWidgetPainter->radioButton( rControlRegion ),
         nState, aValue, this );
     }
-    else if ( (nType == CTRL_CHECKBOX) && (nPart == PART_ENTIRE_CONTROL) )
+    else if ( (nType == ControlType::Checkbox) && (nPart == PART_ENTIRE_CONTROL) )
     {
     bReturn = pWidgetPainter->drawStyledWidget(
         pWidgetPainter->checkBox( rControlRegion ),
         nState, aValue, this );
     }
-    else if ( (nType == CTRL_COMBOBOX) && (nPart == PART_ENTIRE_CONTROL) )
+    else if ( (nType == ControlType::Combobox) && (nPart == PART_ENTIRE_CONTROL) )
     {
     bReturn = pWidgetPainter->drawStyledWidget(
         pWidgetPainter->comboBox( rControlRegion, true ),
         nState, aValue, this );
     }
-    else if ( (nType == CTRL_EDITBOX) && (nPart == PART_ENTIRE_CONTROL) )
+    else if ( (nType == ControlType::Editbox) && (nPart == PART_ENTIRE_CONTROL) )
     {
     bReturn = pWidgetPainter->drawStyledWidget(
         pWidgetPainter->lineEdit( rControlRegion ),
         nState, aValue, this );
     }
-    else if ( (nType == CTRL_LISTBOX) && (nPart == PART_ENTIRE_CONTROL) )
+    else if ( (nType == ControlType::Listbox) && (nPart == PART_ENTIRE_CONTROL) )
     {
     bReturn = pWidgetPainter->drawStyledWidget(
         pWidgetPainter->comboBox( rControlRegion, false ),
         nState, aValue, this );
     }
-    else if ( (nType == CTRL_LISTBOX) && (nPart == PART_WINDOW) )
+    else if ( (nType == ControlType::Listbox) && (nPart == PART_WINDOW) )
     {
     bReturn = pWidgetPainter->drawStyledWidget(
         pWidgetPainter->listView( rControlRegion ),
         nState, aValue, this );
     }
-    else if ( (nType == CTRL_SPINBOX) && (nPart == PART_ENTIRE_CONTROL) )
+    else if ( (nType == ControlType::Spinbox) && (nPart == PART_ENTIRE_CONTROL) )
     {
     bReturn = pWidgetPainter->drawStyledWidget(
         pWidgetPainter->spinWidget( rControlRegion ),
         nState, aValue, this );
     }
-    else if ( (nType==CTRL_TAB_ITEM) && (nPart == PART_ENTIRE_CONTROL) )
+    else if ( (nType==ControlType::TabItem) && (nPart == PART_ENTIRE_CONTROL) )
     {
     bReturn = pWidgetPainter->drawStyledWidget(
         pWidgetPainter->tabBar( rControlRegion ),
         nState, aValue, this );
     }
-    else if ( (nType==CTRL_TAB_PANE) && (nPart == PART_ENTIRE_CONTROL) )
+    else if ( (nType==ControlType::TabPane) && (nPart == PART_ENTIRE_CONTROL) )
     {
     bReturn = pWidgetPainter->drawStyledWidget(
         pWidgetPainter->tabWidget( rControlRegion ),
         nState, aValue, this );
     }
-    else if ( (nType == CTRL_SCROLLBAR) && (nPart == PART_DRAW_BACKGROUND_HORZ || nPart == PART_DRAW_BACKGROUND_VERT) )
+    else if ( (nType == ControlType::Scrollbar) && (nPart == PART_DRAW_BACKGROUND_HORZ || nPart == PART_DRAW_BACKGROUND_VERT) )
     {
     bReturn = pWidgetPainter->drawStyledWidget(
         pWidgetPainter->scrollBar( rControlRegion, nPart == PART_DRAW_BACKGROUND_HORZ, aValue ),
         nState, aValue, this );
     }
-    else if ( (nType == CTRL_TOOLBAR) && (nPart == PART_DRAW_BACKGROUND_HORZ || nPart == PART_DRAW_BACKGROUND_VERT || nPart == PART_THUMB_HORZ || nPart == PART_THUMB_VERT) )
+    else if ( (nType == ControlType::Toolbar) && (nPart == PART_DRAW_BACKGROUND_HORZ || nPart == PART_DRAW_BACKGROUND_VERT || nPart == PART_THUMB_HORZ || nPart == PART_THUMB_VERT) )
     {
         bReturn = pWidgetPainter->drawStyledWidget(
                 pWidgetPainter->toolBar( rControlRegion, nPart == PART_DRAW_BACKGROUND_HORZ || nPart == PART_THUMB_VERT ),
                 nState, aValue, this, nPart );
     }
-    else if ( (nType == CTRL_TOOLBAR) && (nPart == PART_BUTTON) )
+    else if ( (nType == ControlType::Toolbar) && (nPart == PART_BUTTON) )
     {
         bReturn = pWidgetPainter->drawStyledWidget(
                 pWidgetPainter->toolButton( rControlRegion ),
                 nState, aValue, this, nPart );
     }
-    else if ( (nType == CTRL_MENUBAR) && (nPart == PART_ENTIRE_CONTROL || nPart == PART_MENU_ITEM) )
+    else if ( (nType == ControlType::Menubar) && (nPart == PART_ENTIRE_CONTROL || nPart == PART_MENU_ITEM) )
     {
         bReturn = pWidgetPainter->drawStyledWidget(
                 pWidgetPainter->menuBar( rControlRegion ),
                 nState, aValue, this, nPart );
     }
-    else if ( (nType == CTRL_MENU_POPUP) && (nPart == PART_ENTIRE_CONTROL || nPart == PART_MENU_ITEM) )
+    else if ( (nType == ControlType::MenuPopup) && (nPart == PART_ENTIRE_CONTROL || nPart == PART_MENU_ITEM) )
     {
         bReturn = pWidgetPainter->drawStyledWidget(
                 pWidgetPainter->popupMenu( rControlRegion ),
                 nState, aValue, this );
     }
-    else if ( (nType == CTRL_PROGRESS) && (nPart == PART_ENTIRE_CONTROL) )
+    else if ( (nType == ControlType::Progress) && (nPart == PART_ENTIRE_CONTROL) )
     {
         bReturn = pWidgetPainter->drawStyledWidget(
                 pWidgetPainter->progressBar( rControlRegion ),
@@ -1543,7 +1543,7 @@ bool KDESalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
     switch ( nType )
     {
     // Metrics of the push button
-    case CTRL_PUSHBUTTON:
+    case ControlType::Pushbutton:
         pWidget = pWidgetPainter->pushButton( rControlRegion, bool( nState & ControlState::DEFAULT ) );
 
         switch ( nPart )
@@ -1564,7 +1564,7 @@ bool KDESalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
         break;
 
         // Metrics of the radio button
-        case CTRL_RADIOBUTTON:
+        case ControlType::Radiobutton:
             pWidget = pWidgetPainter->radioButton( rControlRegion );
 
             if ( nPart == PART_ENTIRE_CONTROL )
@@ -1577,7 +1577,7 @@ bool KDESalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
             break;
 
         // Metrics of the check box
-        case CTRL_CHECKBOX:
+        case ControlType::Checkbox:
             pWidget = pWidgetPainter->checkBox( rControlRegion );
 
             if ( nPart == PART_ENTIRE_CONTROL )
@@ -1590,9 +1590,9 @@ bool KDESalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
             break;
 
     // Metrics of the combo box
-    case CTRL_COMBOBOX:
-    case CTRL_LISTBOX:
-        pWidget = pWidgetPainter->comboBox( rControlRegion, ( nType == CTRL_COMBOBOX ) );
+    case ControlType::Combobox:
+    case ControlType::Listbox:
+        pWidget = pWidgetPainter->comboBox( rControlRegion, ( nType == ControlType::Combobox ) );
         switch ( nPart )
         {
         case PART_BUTTON_DOWN:
@@ -1615,7 +1615,7 @@ bool KDESalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
         break;
 
     // Metrics of the spin box
-    case CTRL_SPINBOX:
+    case ControlType::Spinbox:
         pWidget = pWidgetPainter->spinWidget( rControlRegion );
         switch ( nPart )
         {
@@ -1643,7 +1643,7 @@ bool KDESalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
         break;
 
     // Metrics of the scroll bar
-    case CTRL_SCROLLBAR:
+    case ControlType::Scrollbar:
         pWidget = pWidgetPainter->scrollBar( rControlRegion,
             ( nPart == PART_BUTTON_LEFT || nPart == PART_BUTTON_RIGHT ),
             ImplControlValue() );

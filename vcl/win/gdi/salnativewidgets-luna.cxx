@@ -239,19 +239,19 @@ bool WinSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nP
 
     switch( nType )
     {
-        case CTRL_PUSHBUTTON:
-        case CTRL_RADIOBUTTON:
-        case CTRL_CHECKBOX:
+        case ControlType::Pushbutton:
+        case ControlType::Radiobutton:
+        case ControlType::Checkbox:
             if( nPart == PART_ENTIRE_CONTROL )
                 hTheme = getThemeHandle( mhWnd, L"Button");
             break;
-        case CTRL_SCROLLBAR:
+        case ControlType::Scrollbar:
             if( nPart == PART_DRAW_BACKGROUND_HORZ || nPart == PART_DRAW_BACKGROUND_VERT )
                 return FALSE;   // no background painting needed
             if( nPart == PART_ENTIRE_CONTROL )
                 hTheme = getThemeHandle( mhWnd, L"Scrollbar");
             break;
-        case CTRL_COMBOBOX:
+        case ControlType::Combobox:
             if( nPart == HAS_BACKGROUND_TEXTURE )
                 return FALSE;   // we do not paint the inner part (ie the selection background/focus indication)
             if( nPart == PART_ENTIRE_CONTROL )
@@ -259,7 +259,7 @@ bool WinSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nP
             else if( nPart == PART_BUTTON_DOWN )
                 hTheme = getThemeHandle( mhWnd, L"Combobox");
             break;
-        case CTRL_SPINBOX:
+        case ControlType::Spinbox:
             if( nPart == PART_ENTIRE_CONTROL )
                 hTheme = getThemeHandle( mhWnd, L"Edit");
             else if( nPart == PART_ALL_BUTTONS ||
@@ -267,19 +267,19 @@ bool WinSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nP
                 nPart == PART_BUTTON_LEFT|| nPart == PART_BUTTON_RIGHT )
                 hTheme = getThemeHandle( mhWnd, L"Spin");
             break;
-        case CTRL_SPINBUTTONS:
+        case ControlType::SpinButtons:
             if( nPart == PART_ENTIRE_CONTROL || nPart == PART_ALL_BUTTONS )
                 hTheme = getThemeHandle( mhWnd, L"Spin");
             break;
-        case CTRL_EDITBOX:
-        case CTRL_MULTILINE_EDITBOX:
+        case ControlType::Editbox:
+        case ControlType::MultilineEditbox:
             if( nPart == HAS_BACKGROUND_TEXTURE )
                 return FALSE;   // we do not paint the inner part (ie the selection background/focus indication)
                 //return TRUE;
             if( nPart == PART_ENTIRE_CONTROL )
                 hTheme = getThemeHandle( mhWnd, L"Edit");
             break;
-        case CTRL_LISTBOX:
+        case ControlType::Listbox:
             if( nPart == HAS_BACKGROUND_TEXTURE )
                 return FALSE;   // we do not paint the inner part (ie the selection background/focus indication)
             if( nPart == PART_ENTIRE_CONTROL || nPart == PART_WINDOW )
@@ -287,20 +287,20 @@ bool WinSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nP
             else if( nPart == PART_BUTTON_DOWN )
                 hTheme = getThemeHandle( mhWnd, L"Combobox");
             break;
-        case CTRL_TAB_PANE:
-        case CTRL_TAB_BODY:
-        case CTRL_TAB_ITEM:
+        case ControlType::TabPane:
+        case ControlType::TabBody:
+        case ControlType::TabItem:
             if( nPart == PART_ENTIRE_CONTROL )
                 hTheme = getThemeHandle( mhWnd, L"Tab");
             break;
-        case CTRL_TOOLBAR:
+        case ControlType::Toolbar:
             if( nPart == PART_ENTIRE_CONTROL || nPart == PART_BUTTON )
                 hTheme = getThemeHandle( mhWnd, L"Toolbar");
             else
                 // use rebar theme for grip and background
                 hTheme = getThemeHandle( mhWnd, L"Rebar");
             break;
-        case CTRL_MENUBAR:
+        case ControlType::Menubar:
             if( nPart == PART_ENTIRE_CONTROL )
                 hTheme = getThemeHandle( mhWnd, L"Rebar");
             else if( GetSalData()->mbThemeMenuSupport )
@@ -309,7 +309,7 @@ bool WinSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nP
                     hTheme = getThemeHandle( mhWnd, L"Menu" );
             }
             break;
-        case CTRL_MENU_POPUP:
+        case ControlType::MenuPopup:
             if( GetSalData()->mbThemeMenuSupport )
             {
                 if( nPart == PART_ENTIRE_CONTROL ||
@@ -320,15 +320,15 @@ bool WinSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nP
                     hTheme = getThemeHandle( mhWnd, L"Menu" );
             }
             break;
-        case CTRL_PROGRESS:
+        case ControlType::Progress:
             if( nPart == PART_ENTIRE_CONTROL )
                 hTheme = getThemeHandle( mhWnd, L"Progress");
             break;
-        case CTRL_SLIDER:
+        case ControlType::Slider:
             if( nPart == PART_TRACK_HORZ_AREA || nPart == PART_TRACK_VERT_AREA )
                 hTheme = getThemeHandle( mhWnd, L"Trackbar" );
             break;
-        case CTRL_LISTNODE:
+        case ControlType::ListNode:
             if( nPart == PART_ENTIRE_CONTROL )
                 hTheme = getThemeHandle( mhWnd, L"TreeView" );
             break;
@@ -519,22 +519,22 @@ bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
                             OUString aCaption )
 {
     // a listbox dropdown is actually a combobox dropdown
-    if( nType == CTRL_LISTBOX )
+    if( nType == ControlType::Listbox )
         if( nPart == PART_BUTTON_DOWN )
-            nType = CTRL_COMBOBOX;
+            nType = ControlType::Combobox;
 
     // draw entire combobox as a large edit box
-    if( nType == CTRL_COMBOBOX )
+    if( nType == ControlType::Combobox )
         if( nPart == PART_ENTIRE_CONTROL )
-            nType = CTRL_EDITBOX;
+            nType = ControlType::Editbox;
 
     // draw entire spinbox as a large edit box
-    if( nType == CTRL_SPINBOX )
+    if( nType == ControlType::Spinbox )
         if( nPart == PART_ENTIRE_CONTROL )
-            nType = CTRL_EDITBOX;
+            nType = ControlType::Editbox;
 
     int iPart(0), iState(0);
-    if( nType == CTRL_SCROLLBAR )
+    if( nType == ControlType::Scrollbar )
     {
         HRESULT hr;
         if( nPart == PART_BUTTON_UP )
@@ -643,11 +643,11 @@ bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
             return (hr == S_OK);
         }
     }
-    if( nType == CTRL_SPINBUTTONS && nPart == PART_ALL_BUTTONS )
+    if( nType == ControlType::SpinButtons && nPart == PART_ALL_BUTTONS )
     {
-        if( aValue.getType() == CTRL_SPINBUTTONS )
+        if( aValue.getType() == ControlType::SpinButtons )
         {
-            const SpinbuttonValue* pValue = (aValue.getType() == CTRL_SPINBUTTONS) ? static_cast<const SpinbuttonValue*>(&aValue) : NULL;
+            const SpinbuttonValue* pValue = (aValue.getType() == ControlType::SpinButtons) ? static_cast<const SpinbuttonValue*>(&aValue) : NULL;
 
             RECT rect;
             ImplConvertSpinbuttonValues( pValue->mnUpperPart, pValue->mnUpperState, pValue->maUpperRect, &iPart, &iState, &rect );
@@ -662,11 +662,11 @@ bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
             return bOk;
         }
     }
-    if( nType == CTRL_SPINBOX )
+    if( nType == ControlType::Spinbox )
     {
         if( nPart == PART_ALL_BUTTONS )
         {
-            if( aValue.getType() == CTRL_SPINBUTTONS )
+            if( aValue.getType() == ControlType::SpinButtons )
             {
                 const SpinbuttonValue *pValue = static_cast<const SpinbuttonValue*>(&aValue);
 
@@ -735,7 +735,7 @@ bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
         if( nPart == PART_BUTTON_LEFT || nPart == PART_BUTTON_RIGHT || nPart == PART_BUTTON_UP || nPart == PART_BUTTON_DOWN )
             return ImplDrawTheme( hTheme, hDC, iPart, iState, rc, aCaption);
     }
-    if( nType == CTRL_COMBOBOX )
+    if( nType == ControlType::Combobox )
     {
         if( nPart == PART_BUTTON_DOWN )
         {
@@ -751,7 +751,7 @@ bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
             return ImplDrawTheme( hTheme, hDC, iPart, iState, rc, aCaption);
         }
     }
-    if( nType == CTRL_PUSHBUTTON )
+    if( nType == ControlType::Pushbutton )
     {
         iPart = BP_PUSHBUTTON;
         if( nState & ControlState::PRESSED )
@@ -770,7 +770,7 @@ bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
         return ImplDrawTheme( hTheme, hDC, iPart, iState, rc, aCaption);
     }
 
-    if( nType == CTRL_RADIOBUTTON )
+    if( nType == ControlType::Radiobutton )
     {
         iPart = BP_RADIOBUTTON;
         bool bChecked = ( aValue.getTristateVal() == BUTTONVALUE_ON );
@@ -790,7 +790,7 @@ bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
         return ImplDrawTheme( hTheme, hDC, iPart, iState, rc, aCaption);
     }
 
-    if( nType == CTRL_CHECKBOX )
+    if( nType == ControlType::Checkbox )
     {
         iPart = BP_CHECKBOX;
         ButtonValue v = aValue.getTristateVal();
@@ -818,7 +818,7 @@ bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
         return ImplDrawTheme( hTheme, hDC, iPart, iState, rc, aCaption);
     }
 
-    if( ( nType == CTRL_EDITBOX ) || ( nType == CTRL_MULTILINE_EDITBOX ) )
+    if( ( nType == ControlType::Editbox ) || ( nType == ControlType::MultilineEditbox ) )
     {
         iPart = EP_EDITTEXT;
         if( !(nState & ControlState::ENABLED) )
@@ -833,7 +833,7 @@ bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
         return ImplDrawTheme( hTheme, hDC, iPart, iState, rc, aCaption);
     }
 
-    if( nType == CTRL_LISTBOX )
+    if( nType == ControlType::Listbox )
     {
         if( nPart == PART_ENTIRE_CONTROL || nPart == PART_WINDOW )
         {
@@ -842,24 +842,24 @@ bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
         }
     }
 
-    if( nType == CTRL_TAB_PANE )
+    if( nType == ControlType::TabPane )
     {
         iPart = TABP_PANE;
         return ImplDrawTheme( hTheme, hDC, iPart, iState, rc, aCaption);
     }
 
-    if( nType == CTRL_TAB_BODY )
+    if( nType == ControlType::TabBody )
     {
         iPart = TABP_BODY;
         return ImplDrawTheme( hTheme, hDC, iPart, iState, rc, aCaption);
     }
 
-    if( nType == CTRL_TAB_ITEM )
+    if( nType == ControlType::TabItem )
     {
         iPart = TABP_TABITEMLEFTEDGE;
         rc.bottom--;
 
-        OSL_ASSERT( aValue.getType() == CTRL_TAB_ITEM );
+        OSL_ASSERT( aValue.getType() == ControlType::TabItem );
 
         const TabitemValue *pValue = static_cast<const TabitemValue*>(&aValue);
         if( pValue->isBothAligned() )
@@ -899,7 +899,7 @@ bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
         return ImplDrawTheme( hTheme, hDC, iPart, iState, rc, aCaption);
     }
 
-    if( nType == CTRL_TOOLBAR )
+    if( nType == ControlType::Toolbar )
     {
         if( nPart == PART_BUTTON )
         {
@@ -927,7 +927,7 @@ bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
         }
         else if( nPart == PART_DRAW_BACKGROUND_HORZ || nPart == PART_DRAW_BACKGROUND_VERT )
         {
-            if( aValue.getType() == CTRL_TOOLBAR )
+            if( aValue.getType() == ControlType::Toolbar )
             {
                 const ToolbarValue *pValue = static_cast<const ToolbarValue*>(&aValue);
                 if( pValue->mbIsTopDockingArea )
@@ -945,11 +945,11 @@ bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
         }
     }
 
-    if( nType == CTRL_MENUBAR )
+    if( nType == ControlType::Menubar )
     {
         if( nPart == PART_ENTIRE_CONTROL )
         {
-            if( aValue.getType() == CTRL_MENUBAR )
+            if( aValue.getType() == ControlType::Menubar )
             {
                 const MenubarValue *pValue = static_cast<const MenubarValue*>(&aValue);
                 rc.bottom += pValue->maTopDockingAreaHeight;    // extend potential gradient to cover docking area as well
@@ -987,7 +987,7 @@ bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
         }
     }
 
-    if( nType == CTRL_PROGRESS )
+    if( nType == ControlType::Progress )
     {
         if( nPart != PART_ENTIRE_CONTROL )
             return FALSE;
@@ -1009,7 +1009,7 @@ bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
         return ImplDrawTheme( hTheme, hDC, PP_CHUNK, iState, aProgressRect, aCaption );
     }
 
-    if( nType == CTRL_SLIDER )
+    if( nType == ControlType::Slider )
     {
         iPart = (nPart == PART_TRACK_HORZ_AREA) ? TKP_TRACK : TKP_TRACKVERT;
         iState = (nPart == PART_TRACK_HORZ_AREA) ? static_cast<int>(TRS_NORMAL) : static_cast<int>(TRVS_NORMAL);
@@ -1031,7 +1031,7 @@ bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
         ImplDrawTheme( hTheme, hDC, iPart, iState, aTRect, aCaption );
 
         RECT aThumbRect;
-        OSL_ASSERT( aValue.getType() == CTRL_SLIDER );
+        OSL_ASSERT( aValue.getType() == ControlType::Slider );
         const SliderValue* pVal = static_cast<const SliderValue*>(&aValue);
         aThumbRect.left   = pVal->maThumbRect.Left();
         aThumbRect.top    = pVal->maThumbRect.Top();
@@ -1042,7 +1042,7 @@ bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
         return ImplDrawTheme( hTheme, hDC, iPart, iState, aThumbRect, aCaption );
     }
 
-    if( nType == CTRL_LISTNODE )
+    if( nType == ControlType::ListNode )
     {
         if( nPart != PART_ENTIRE_CONTROL )
             return FALSE;
@@ -1065,7 +1065,7 @@ bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
 
     if( GetSalData()->mbThemeMenuSupport )
     {
-        if( nType == CTRL_MENU_POPUP )
+        if( nType == ControlType::MenuPopup )
         {
             if( nPart == PART_ENTIRE_CONTROL )
             {
@@ -1098,7 +1098,7 @@ bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
                 if( (nState & ControlState::PRESSED) )
                 {
                     RECT aBGRect = rc;
-                    if( aValue.getType() == CTRL_MENU_POPUP )
+                    if( aValue.getType() == ControlType::MenuPopup )
                     {
                         const MenupopupValue& rMVal( static_cast<const MenupopupValue&>(aValue) );
                         aBGRect.top    = rMVal.maItemRect.Top();
@@ -1173,7 +1173,7 @@ bool WinSalGraphics::drawNativeControl( ControlType nType,
     WinOpenGLSalGraphicsImpl* pImpl = dynamic_cast<WinOpenGLSalGraphicsImpl*>(mpImpl.get());
 
     // tdf#95618 - A few controls render outside the region they're given.
-    if (pImpl && nType == CTRL_TAB_ITEM)
+    if (pImpl && nType == ControlType::TabItem)
     {
         Rectangle rNativeBoundingRegion;
         Rectangle rNativeContentRegion;
@@ -1193,52 +1193,52 @@ bool WinSalGraphics::drawNativeControl( ControlType nType,
 
     switch( nType )
     {
-        case CTRL_PUSHBUTTON:
-        case CTRL_RADIOBUTTON:
-        case CTRL_CHECKBOX:
+        case ControlType::Pushbutton:
+        case ControlType::Radiobutton:
+        case ControlType::Checkbox:
             hTheme = getThemeHandle( mhWnd, L"Button");
             break;
-        case CTRL_SCROLLBAR:
+        case ControlType::Scrollbar:
             hTheme = getThemeHandle( mhWnd, L"Scrollbar");
             break;
-        case CTRL_COMBOBOX:
+        case ControlType::Combobox:
             if( nPart == PART_ENTIRE_CONTROL )
                 hTheme = getThemeHandle( mhWnd, L"Edit");
             else if( nPart == PART_BUTTON_DOWN )
                 hTheme = getThemeHandle( mhWnd, L"Combobox");
             break;
-        case CTRL_SPINBOX:
+        case ControlType::Spinbox:
             if( nPart == PART_ENTIRE_CONTROL )
                 hTheme = getThemeHandle( mhWnd, L"Edit");
             else
                 hTheme = getThemeHandle( mhWnd, L"Spin");
             break;
-        case CTRL_SPINBUTTONS:
+        case ControlType::SpinButtons:
             hTheme = getThemeHandle( mhWnd, L"Spin");
             break;
-        case CTRL_EDITBOX:
-        case CTRL_MULTILINE_EDITBOX:
+        case ControlType::Editbox:
+        case ControlType::MultilineEditbox:
             hTheme = getThemeHandle( mhWnd, L"Edit");
             break;
-        case CTRL_LISTBOX:
+        case ControlType::Listbox:
             if( nPart == PART_ENTIRE_CONTROL || nPart == PART_WINDOW )
                 hTheme = getThemeHandle( mhWnd, L"Listview");
             else if( nPart == PART_BUTTON_DOWN )
                 hTheme = getThemeHandle( mhWnd, L"Combobox");
             break;
-        case CTRL_TAB_PANE:
-        case CTRL_TAB_BODY:
-        case CTRL_TAB_ITEM:
+        case ControlType::TabPane:
+        case ControlType::TabBody:
+        case ControlType::TabItem:
             hTheme = getThemeHandle( mhWnd, L"Tab");
             break;
-        case CTRL_TOOLBAR:
+        case ControlType::Toolbar:
             if( nPart == PART_ENTIRE_CONTROL || nPart == PART_BUTTON )
                 hTheme = getThemeHandle( mhWnd, L"Toolbar");
             else
                 // use rebar for grip and background
                 hTheme = getThemeHandle( mhWnd, L"Rebar");
             break;
-        case CTRL_MENUBAR:
+        case ControlType::Menubar:
             if( nPart == PART_ENTIRE_CONTROL )
                 hTheme = getThemeHandle( mhWnd, L"Rebar");
             else if( GetSalData()->mbThemeMenuSupport )
@@ -1247,19 +1247,19 @@ bool WinSalGraphics::drawNativeControl( ControlType nType,
                     hTheme = getThemeHandle( mhWnd, L"Menu" );
             }
             break;
-        case CTRL_PROGRESS:
+        case ControlType::Progress:
             if( nPart == PART_ENTIRE_CONTROL )
                 hTheme = getThemeHandle( mhWnd, L"Progress");
             break;
-        case CTRL_LISTNODE:
+        case ControlType::ListNode:
             if( nPart == PART_ENTIRE_CONTROL )
                 hTheme = getThemeHandle( mhWnd, L"TreeView");
             break;
-        case CTRL_SLIDER:
+        case ControlType::Slider:
             if( nPart == PART_TRACK_HORZ_AREA || nPart == PART_TRACK_VERT_AREA )
                 hTheme = getThemeHandle( mhWnd, L"Trackbar" );
             break;
-        case CTRL_MENU_POPUP:
+        case ControlType::MenuPopup:
             if( GetSalData()->mbThemeMenuSupport )
             {
                 if( nPart == PART_ENTIRE_CONTROL || nPart == PART_MENU_ITEM ||
@@ -1344,7 +1344,7 @@ bool WinSalGraphics::getNativeControlRegion(  ControlType nType,
     //        depending on which part is used; horrors.
 
     HDC hDC = GetDC( mhWnd );
-    if( nType == CTRL_TOOLBAR )
+    if( nType == ControlType::Toolbar )
     {
         if( nPart == PART_THUMB_HORZ || nPart == PART_THUMB_VERT )
         {
@@ -1384,7 +1384,7 @@ bool WinSalGraphics::getNativeControlRegion(  ControlType nType,
             }
         }
     }
-    if( nType == CTRL_PROGRESS && nPart == PART_ENTIRE_CONTROL )
+    if( nType == ControlType::Progress && nPart == PART_ENTIRE_CONTROL )
     {
         HTHEME hTheme = getThemeHandle( mhWnd, L"Progress");
         if( hTheme )
@@ -1397,7 +1397,7 @@ bool WinSalGraphics::getNativeControlRegion(  ControlType nType,
                 bRet = TRUE;
         }
     }
-    if( (nType == CTRL_LISTBOX || nType == CTRL_COMBOBOX ) && nPart == PART_ENTIRE_CONTROL )
+    if( (nType == ControlType::Listbox || nType == ControlType::Combobox ) && nPart == PART_ENTIRE_CONTROL )
     {
         HTHEME hTheme = getThemeHandle( mhWnd, L"Combobox");
         if( hTheme )
@@ -1416,7 +1416,7 @@ bool WinSalGraphics::getNativeControlRegion(  ControlType nType,
         }
     }
 
-    if( (nType == CTRL_EDITBOX || nType == CTRL_SPINBOX) && nPart == PART_ENTIRE_CONTROL )
+    if( (nType == ControlType::Editbox || nType == ControlType::Spinbox) && nPart == PART_ENTIRE_CONTROL )
     {
         HTHEME hTheme = getThemeHandle( mhWnd, L"Edit");
         if( hTheme )
@@ -1452,7 +1452,7 @@ bool WinSalGraphics::getNativeControlRegion(  ControlType nType,
 
     if( GetSalData()->mbThemeMenuSupport )
     {
-        if( nType == CTRL_MENU_POPUP )
+        if( nType == ControlType::MenuPopup )
         {
             if( nPart == PART_MENU_ITEM_CHECK_MARK ||
                 nPart == PART_MENU_ITEM_RADIO_MARK )
@@ -1473,7 +1473,7 @@ bool WinSalGraphics::getNativeControlRegion(  ControlType nType,
         }
     }
 
-    if( nType == CTRL_SLIDER && ( (nPart == PART_THUMB_HORZ) || (nPart == PART_THUMB_VERT) ) )
+    if( nType == ControlType::Slider && ( (nPart == PART_THUMB_HORZ) || (nPart == PART_THUMB_VERT) ) )
     {
         HTHEME hTheme = getThemeHandle( mhWnd, L"Trackbar");
         if( hTheme )
@@ -1501,14 +1501,14 @@ bool WinSalGraphics::getNativeControlRegion(  ControlType nType,
         }
     }
 
-    if ( ( nType == CTRL_TAB_ITEM ) && ( nPart == PART_ENTIRE_CONTROL ) )
+    if ( ( nType == ControlType::TabItem ) && ( nPart == PART_ENTIRE_CONTROL ) )
     {
         Rectangle aControlRect( rControlRegion );
         rNativeContentRegion = aControlRect;
 
         --aControlRect.Bottom();
 
-        if( rControlValue.getType() == CTRL_TAB_ITEM )
+        if( rControlValue.getType() == ControlType::TabItem )
         {
             const TabitemValue *pValue = static_cast<const TabitemValue*>(&rControlValue);
             if ( pValue->isBothAligned() )

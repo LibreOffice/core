@@ -1201,7 +1201,7 @@ void Window::ImplInitAppFontData( vcl::Window* pWindow )
         Rectangle aCtrlRegion( Point(), Size( nTextWidth < 10 ? 10 : nTextWidth, nTextHeight < 10 ? 10 : nTextHeight ) );
         Rectangle aBoundingRgn( aCtrlRegion );
         Rectangle aContentRgn( aCtrlRegion );
-        if( pWindow->GetNativeControlRegion( CTRL_EDITBOX, PART_ENTIRE_CONTROL, aCtrlRegion,
+        if( pWindow->GetNativeControlRegion( ControlType::Editbox, PART_ENTIRE_CONTROL, aCtrlRegion,
                                              ControlState::ENABLED, aControlValue, OUString(),
                                              aBoundingRgn, aContentRgn ) )
         {

@@ -1187,9 +1187,9 @@ void TabBar::MouseButtonUp(const MouseEvent& rMEvt)
 
 void TabBar::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rect)
 {
-    if (rRenderContext.IsNativeControlSupported(CTRL_WINDOW_BACKGROUND,PART_ENTIRE_CONTROL))
+    if (rRenderContext.IsNativeControlSupported(ControlType::WindowBackground,PART_ENTIRE_CONTROL))
     {
-        rRenderContext.DrawNativeControl(CTRL_WINDOW_BACKGROUND,PART_ENTIRE_CONTROL,rect,
+        rRenderContext.DrawNativeControl(ControlType::WindowBackground,PART_ENTIRE_CONTROL,rect,
                                          ControlState::ENABLED,ImplControlValue(0),OUString());
     }
     // calculate items and emit

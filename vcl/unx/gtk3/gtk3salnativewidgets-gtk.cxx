@@ -298,7 +298,7 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
                                     const ImplControlValue& rValue )
 {
     (void)nType;
-    OSL_ASSERT( rValue.getType() == CTRL_SCROLLBAR );
+    OSL_ASSERT( rValue.getType() == ControlType::Scrollbar );
     const ScrollbarValue& rScrollbarVal = static_cast<const ScrollbarValue&>(rValue);
     Rectangle        scrollbarRect;
     GtkStateFlags    stateFlags;
@@ -642,7 +642,7 @@ void GtkSalGraphics::PaintSpinButton(GtkStyleContext *context,
                                      ControlPart nPart,
                                      const ImplControlValue& rValue )
 {
-    const SpinbuttonValue *pSpinVal = (rValue.getType() == CTRL_SPINBUTTONS) ? static_cast<const SpinbuttonValue *>(&rValue) : nullptr;
+    const SpinbuttonValue *pSpinVal = (rValue.getType() == ControlType::SpinButtons) ? static_cast<const SpinbuttonValue *>(&rValue) : nullptr;
     ControlPart upBtnPart = PART_BUTTON_UP;
     ControlState upBtnState = ControlState::NONE;
     ControlPart downBtnPart = PART_BUTTON_DOWN;
@@ -745,7 +745,7 @@ void GtkSalGraphics::PaintCombobox( GtkStateFlags flags, cairo_t *cr,
                              buttonRect.Top() + (gint)((buttonRect.GetHeight() - arrowRect.GetHeight()) / 2) ) );
 
 
-    if ( nType == CTRL_COMBOBOX )
+    if ( nType == ControlType::Combobox )
     {
         gtk_style_context_save(mpComboboxButtonStyle);
         gtk_style_context_set_state(mpComboboxButtonStyle, flags);
@@ -792,7 +792,7 @@ void GtkSalGraphics::PaintCombobox( GtkStateFlags flags, cairo_t *cr,
 
         gtk_style_context_restore(mpComboboxButtonStyle);
     }
-    else if (nType == CTRL_LISTBOX)
+    else if (nType == ControlType::Listbox)
     {
         if( nPart == PART_WINDOW )
         {
@@ -1208,26 +1208,26 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
 
     switch(nType)
     {
-    case CTRL_SPINBOX:
-    case CTRL_SPINBUTTONS:
+    case ControlType::Spinbox:
+    case ControlType::SpinButtons:
         context = mpEntryStyle;
         renderType = RENDER_SPINBUTTON;
         break;
-    case CTRL_EDITBOX:
+    case ControlType::Editbox:
         context = mpEntryStyle;
         break;
-    case CTRL_MULTILINE_EDITBOX:
+    case ControlType::MultilineEditbox:
         context = mpTextViewStyle;
         break;
-    case CTRL_COMBOBOX:
+    case ControlType::Combobox:
         context = mpComboboxStyle;
         renderType = RENDER_COMBOBOX;
         break;
-    case CTRL_LISTBOX:
+    case ControlType::Listbox:
         context = mpListboxStyle;
         renderType = nPart == PART_FOCUS ? RENDER_FOCUS : RENDER_COMBOBOX;
         break;
-    case CTRL_MENU_POPUP:
+    case ControlType::MenuPopup:
         bInMenu = true;
 
         // map selected menu entries in vcl parlance to gtk prelight
@@ -1248,7 +1248,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
             styleClass = GTK_STYLE_CLASS_CHECK;
 #endif
             renderType = RENDER_CHECK;
-            nType = CTRL_CHECKBOX;
+            nType = ControlType::Checkbox;
             if (nState & ControlState::PRESSED)
             {
                 flags = (GtkStateFlags)(flags | CHECKED);
@@ -1262,7 +1262,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
             styleClass = GTK_STYLE_CLASS_RADIO;
 #endif
             renderType = RENDER_RADIO;
-            nType = CTRL_RADIOBUTTON;
+            nType = ControlType::Radiobutton;
             if (nState & ControlState::PRESSED)
             {
                 flags = (GtkStateFlags)(flags | CHECKED);
@@ -1288,7 +1288,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
             break;
         }
         break;
-    case CTRL_TOOLBAR:
+    case ControlType::Toolbar:
         switch(nPart)
         {
         case PART_DRAW_BACKGROUND_HORZ:
@@ -1309,13 +1309,13 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
             return false;
         }
         break;
-    case CTRL_RADIOBUTTON:
+    case ControlType::Radiobutton:
         flags = (GtkStateFlags)(flags |
                 ( (rValue.getTristateVal() == BUTTONVALUE_ON) ? CHECKED : GTK_STATE_FLAG_NORMAL));
         context = mpRadioButtonStyle;
         renderType = nPart == PART_FOCUS ? RENDER_FOCUS : RENDER_RADIO;
         break;
-    case CTRL_CHECKBOX:
+    case ControlType::Checkbox:
         flags = (GtkStateFlags)(flags |
                 ( (rValue.getTristateVal() == BUTTONVALUE_ON) ? CHECKED :
                   (rValue.getTristateVal() == BUTTONVALUE_MIXED) ? GTK_STATE_FLAG_INCONSISTENT :
@@ -1323,10 +1323,10 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
         context = mpCheckButtonStyle;
         renderType = nPart == PART_FOCUS ? RENDER_FOCUS : RENDER_CHECK;
         break;
-    case CTRL_PUSHBUTTON:
+    case ControlType::Pushbutton:
         context = mpButtonStyle;
         break;
-    case CTRL_SCROLLBAR:
+    case ControlType::Scrollbar:
         switch(nPart)
         {
         case PART_DRAW_BACKGROUND_VERT:
@@ -1337,27 +1337,27 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
             break;
         }
         break;
-    case CTRL_LISTNET:
+    case ControlType::ListNet:
         return true;
         break;
-    case CTRL_TAB_PANE:
+    case ControlType::TabPane:
         context = mpNotebookStyle;
         break;
-    case CTRL_TAB_BODY:
+    case ControlType::TabBody:
         context = mpNotebookStackStyle;
         break;
-    case CTRL_TAB_HEADER:
+    case ControlType::TabHeader:
         context = mpNotebookHeaderStyle;
         break;
-    case CTRL_TAB_ITEM:
+    case ControlType::TabItem:
         context = mpNotebookHeaderTabsTabStyle;
         if (nState & ControlState::SELECTED)
             flags = (GtkStateFlags) (flags | ACTIVE_TAB);
         break;
-    case CTRL_WINDOW_BACKGROUND:
+    case ControlType::WindowBackground:
         context = gtk_widget_get_style_context(mpWindow);
         break;
-    case CTRL_FRAME:
+    case ControlType::Frame:
     {
         DrawFrameStyle nStyle = static_cast<DrawFrameStyle>(rValue.getNumericVal() & 0x0f);
         if (nStyle == DrawFrameStyle::In)
@@ -1366,7 +1366,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
             context = mpFrameInStyle;
         break;
     }
-    case CTRL_MENUBAR:
+    case ControlType::Menubar:
         if (nPart == PART_MENU_ITEM)
         {
             context = mpMenuBarItemStyle;
@@ -1381,11 +1381,11 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
             context = gtk_widget_get_style_context(mpWindow);
         }
         break;
-    case CTRL_FIXEDLINE:
+    case ControlType::Fixedline:
         context = nPart == PART_SEPARATOR_HORZ ? mpFixedHoriLineStyle : mpFixedVertLineStyle;
         renderType = RENDER_SEPERATOR;
         break;
-    case CTRL_LISTNODE:
+    case ControlType::ListNode:
     {
         context = mpTreeHeaderButtonStyle;
         ButtonValue aButtonValue = rValue.getTristateVal();
@@ -1394,7 +1394,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
         renderType = RENDER_EXPANDER;
         break;
     }
-    case CTRL_LISTHEADER:
+    case ControlType::ListHeader:
         context = mpTreeHeaderButtonStyle;
         if (nPart == PART_ARROW)
         {
@@ -1407,7 +1407,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
             renderType = RENDER_ICON;
         }
         break;
-    case CTRL_PROGRESS:
+    case ControlType::Progress:
         context = mpProgressBarProgressStyle;
         renderType = RENDER_PROGRESS;
         break;
@@ -1428,7 +1428,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
 
     gtk_style_context_set_state(context, flags);
     parent_styles_context_set_state(context, flags);
-    if (nType == CTRL_TAB_ITEM)
+    if (nType == ControlType::TabItem)
     {
         GtkBorder margin;
 #if GTK_CHECK_VERSION(3,19,2)
@@ -1511,7 +1511,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
         break;
     case RENDER_FOCUS:
     {
-        if (nType != CTRL_CHECKBOX)
+        if (nType != ControlType::Checkbox)
         {
             GtkBorder border;
 
@@ -1601,12 +1601,12 @@ bool GtkSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
     Rectangle aEditRect = rControlRegion;
     gint indicator_size, indicator_spacing, point;
 
-    if(((nType == CTRL_CHECKBOX) || (nType == CTRL_RADIOBUTTON)) &&
+    if(((nType == ControlType::Checkbox) || (nType == ControlType::Radiobutton)) &&
        nPart == PART_ENTIRE_CONTROL)
     {
         rNativeBoundingRegion = rControlRegion;
 
-        GtkStyleContext *pButtonStyle = (nType == CTRL_CHECKBOX) ? mpCheckButtonStyle : mpRadioButtonStyle;
+        GtkStyleContext *pButtonStyle = (nType == ControlType::Checkbox) ? mpCheckButtonStyle : mpRadioButtonStyle;
 
 
         gtk_style_context_get_style( pButtonStyle,
@@ -1629,7 +1629,7 @@ bool GtkSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
 
         return true;
     }
-    else if( nType == CTRL_MENU_POPUP)
+    else if( nType == ControlType::MenuPopup)
     {
         if (((nPart == PART_MENU_ITEM_CHECK_MARK) ||
               (nPart == PART_MENU_ITEM_RADIO_MARK) ))
@@ -1666,7 +1666,7 @@ bool GtkSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
                                    Size( arrow_size, arrow_size ) );
         }
     }
-    else if ( (nType==CTRL_SCROLLBAR) &&
+    else if ( (nType==ControlType::Scrollbar) &&
               ((nPart==PART_BUTTON_LEFT) || (nPart==PART_BUTTON_RIGHT) ||
                (nPart==PART_BUTTON_UP) || (nPart==PART_BUTTON_DOWN)  ) )
     {
@@ -1680,44 +1680,44 @@ bool GtkSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
 
         return true;
     }
-    if( (nType == CTRL_MENUBAR) && (nPart == PART_ENTIRE_CONTROL) )
+    if( (nType == ControlType::Menubar) && (nPart == PART_ENTIRE_CONTROL) )
     {
         aEditRect = GetWidgetSize(rControlRegion, gMenuBarWidget);
     }
-    else if ( (nType==CTRL_SPINBOX) &&
+    else if ( (nType==ControlType::Spinbox) &&
               ((nPart==PART_BUTTON_UP) || (nPart==PART_BUTTON_DOWN) ||
                (nPart==PART_SUB_EDIT)) )
     {
         Rectangle aControlRegion(GetWidgetSize(rControlRegion, gSpinBox));
         aEditRect = NWGetSpinButtonRect(nPart, aControlRegion);
     }
-    else if ( (nType==CTRL_COMBOBOX) &&
+    else if ( (nType==ControlType::Combobox) &&
               ((nPart==PART_BUTTON_DOWN) || (nPart==PART_SUB_EDIT)) )
     {
         aEditRect = NWGetComboBoxButtonRect( nType, nPart, rControlRegion );
     }
-    else if ( (nType==CTRL_LISTBOX) &&
+    else if ( (nType==ControlType::Listbox) &&
               ((nPart==PART_BUTTON_DOWN) || (nPart==PART_SUB_EDIT)) )
     {
         aEditRect = NWGetComboBoxButtonRect( nType, nPart, rControlRegion );
     }
-    else if (nType == CTRL_EDITBOX && nPart == PART_ENTIRE_CONTROL)
+    else if (nType == ControlType::Editbox && nPart == PART_ENTIRE_CONTROL)
     {
         aEditRect = GetWidgetSize(rControlRegion, gEntryBox);
     }
-    else if (nType == CTRL_LISTBOX && nPart == PART_ENTIRE_CONTROL)
+    else if (nType == ControlType::Listbox && nPart == PART_ENTIRE_CONTROL)
     {
         aEditRect = GetWidgetSize(rControlRegion, gListBox);
     }
-    else if (nType == CTRL_COMBOBOX && nPart == PART_ENTIRE_CONTROL)
+    else if (nType == ControlType::Combobox && nPart == PART_ENTIRE_CONTROL)
     {
         aEditRect = GetWidgetSize(rControlRegion, gComboBox);
     }
-    else if (nType == CTRL_SPINBOX && nPart == PART_ENTIRE_CONTROL)
+    else if (nType == ControlType::Spinbox && nPart == PART_ENTIRE_CONTROL)
     {
         aEditRect = GetWidgetSize(rControlRegion, gSpinBox);
     }
-    else if (nType == CTRL_TAB_ITEM && nPart == PART_ENTIRE_CONTROL)
+    else if (nType == ControlType::TabItem && nPart == PART_ENTIRE_CONTROL)
     {
         const TabitemValue& rTabitemValue = static_cast<const TabitemValue&>(rValue);
         const Rectangle& rTabitemRect = rTabitemValue.getContentRect();
@@ -1725,7 +1725,7 @@ bool GtkSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
         aEditRect = AdjustRectForTextBordersPadding(mpNotebookHeaderTabsTabStyle, rTabitemRect.GetWidth(),
                                                     rTabitemRect.GetHeight(), rControlRegion);
     }
-    else if (nType == CTRL_FRAME && nPart == PART_BORDER)
+    else if (nType == ControlType::Frame && nPart == PART_BORDER)
     {
         aEditRect = rControlRegion;
         DrawFrameFlags nStyle = static_cast<DrawFrameFlags>(rValue.getNumericVal() & 0xfff0);
@@ -2170,61 +2170,61 @@ bool GtkSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nP
 {
     switch(nType)
     {
-        case CTRL_PUSHBUTTON:
-        case CTRL_RADIOBUTTON:
-        case CTRL_CHECKBOX:
-        case CTRL_PROGRESS:
-        case CTRL_LISTNODE:
-        case CTRL_LISTNET:
+        case ControlType::Pushbutton:
+        case ControlType::Radiobutton:
+        case ControlType::Checkbox:
+        case ControlType::Progress:
+        case ControlType::ListNode:
+        case ControlType::ListNet:
             if (nPart==PART_ENTIRE_CONTROL || nPart == PART_FOCUS)
                 return true;
             break;
 
-        case CTRL_SCROLLBAR:
+        case ControlType::Scrollbar:
             if(nPart==PART_DRAW_BACKGROUND_HORZ || nPart==PART_DRAW_BACKGROUND_VERT ||
                nPart==PART_ENTIRE_CONTROL       || nPart==HAS_THREE_BUTTONS)
                 return true;
             break;
 
-        case CTRL_EDITBOX:
-        case CTRL_MULTILINE_EDITBOX:
+        case ControlType::Editbox:
+        case ControlType::MultilineEditbox:
             if (nPart==PART_ENTIRE_CONTROL || nPart==HAS_BACKGROUND_TEXTURE)
                 return true;
             break;
 
-        case CTRL_COMBOBOX:
+        case ControlType::Combobox:
             if (nPart==PART_ENTIRE_CONTROL || nPart==HAS_BACKGROUND_TEXTURE || nPart == PART_ALL_BUTTONS)
                 return true;
             break;
 
-        case CTRL_SPINBOX:
+        case ControlType::Spinbox:
             if (nPart==PART_ENTIRE_CONTROL || nPart==HAS_BACKGROUND_TEXTURE || nPart == PART_ALL_BUTTONS || nPart == PART_BUTTON_UP || nPart == PART_BUTTON_DOWN)
                 return true;
             break;
 
-        case CTRL_SPINBUTTONS:
+        case ControlType::SpinButtons:
             if (nPart==PART_ENTIRE_CONTROL || nPart==PART_ALL_BUTTONS)
                 return true;
             break;
 
-        case CTRL_FRAME:
-        case CTRL_WINDOW_BACKGROUND:
+        case ControlType::Frame:
+        case ControlType::WindowBackground:
             return true;
 
-        case CTRL_TAB_ITEM:
-        case CTRL_TAB_HEADER:
-        case CTRL_TAB_PANE:
-        case CTRL_TAB_BODY:
+        case ControlType::TabItem:
+        case ControlType::TabHeader:
+        case ControlType::TabPane:
+        case ControlType::TabBody:
             if(nPart==PART_ENTIRE_CONTROL || nPart==PART_TABS_DRAW_RTL)
                 return true;
             break;
 
-        case CTRL_LISTBOX:
+        case ControlType::Listbox:
             if (nPart==PART_ENTIRE_CONTROL || nPart==PART_WINDOW || nPart==HAS_BACKGROUND_TEXTURE || nPart == PART_FOCUS)
                 return true;
             break;
 
-        case CTRL_TOOLBAR:
+        case ControlType::Toolbar:
             if( nPart==PART_ENTIRE_CONTROL
 //                ||  nPart==PART_DRAW_BACKGROUND_HORZ
 //                ||  nPart==PART_DRAW_BACKGROUND_VERT
@@ -2237,12 +2237,12 @@ bool GtkSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nP
                 return true;
             break;
 
-        case CTRL_MENUBAR:
+        case ControlType::Menubar:
             if (nPart==PART_ENTIRE_CONTROL || nPart==PART_MENU_ITEM)
                 return true;
             break;
 
-        case CTRL_MENU_POPUP:
+        case ControlType::MenuPopup:
             if (nPart==PART_ENTIRE_CONTROL
                 ||  nPart==PART_MENU_ITEM
                 ||  nPart==PART_MENU_ITEM_CHECK_MARK
@@ -2253,23 +2253,24 @@ bool GtkSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nP
                 return true;
             break;
 
-//        case CTRL_SLIDER:
+//        case ControlType::Slider:
 //            if(nPart == PART_TRACK_HORZ_AREA || nPart == PART_TRACK_VERT_AREA)
 //                return true;
 //            break;
 
-        case CTRL_FIXEDLINE:
+        case ControlType::Fixedline:
             if (nPart == PART_SEPARATOR_VERT || nPart == PART_SEPARATOR_HORZ)
                 return true;
             break;
 
-        case CTRL_LISTHEADER:
+        case ControlType::ListHeader:
             if (nPart == PART_BUTTON || nPart == PART_ARROW)
                 return true;
             break;
+        default: break;
     }
 
-    SAL_INFO("vcl.gtk", "Unhandled is native supported for Type:" << nType << ", Part" << nPart);
+    SAL_INFO("vcl.gtk", "Unhandled is native supported for Type:" << (int)nType << ", Part" << nPart);
 
     return false;
 }
