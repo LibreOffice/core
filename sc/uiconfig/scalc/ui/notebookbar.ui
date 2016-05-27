@@ -475,7 +475,7 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkToolbar" id="cellbordertype">
+                              <object class="sfxlo-SidebarToolBox" id="cellbordertype">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="valign">center</property>
