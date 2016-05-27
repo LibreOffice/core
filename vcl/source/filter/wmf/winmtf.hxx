@@ -70,12 +70,15 @@ enum class BkMode
 #define ANSI_VAR_FONT           12
 #define SYSTEM_FIXED_FONT       16
 
-#define R2_BLACK                1
-#define R2_MASKNOTPEN           3
-#define R2_NOT                  6
-#define R2_XORPEN               7
-#define R2_NOP                  11
-#define R2_COPYPEN              13
+enum class WMFRasterOp {
+    NONE                 = 0,
+    Black                = 1,
+    MaskNotPen           = 3,
+    Not                  = 6,
+    XorPen               = 7,
+    Nop                  = 11,
+    CopyPen              = 13
+};
 
 /* Mapping modes */
 #define MM_TEXT                 1
@@ -490,7 +493,7 @@ class WinMtfOutput
 
     Point               maActPos;
 
-    sal_uInt32          mnRop;
+    WMFRasterOp         mnRop;
     bool            mbNopMode;
     bool            mbFillStyleSelected;
     bool            mbClipNeedsUpdate;
@@ -558,7 +561,7 @@ public:
     void                Push();
     void                Pop();
 
-    sal_uInt32          SetRasterOp( sal_uInt32 nRasterOp );
+    WMFRasterOp         SetRasterOp( WMFRasterOp nRasterOp );
     void                StrokeAndFillPath( bool bStroke, bool bFill );
 
     void                SetGfxMode( sal_Int32 nGfxMode ){ mnGfxMode = nGfxMode; };

@@ -915,7 +915,7 @@ void WinSalGraphicsImpl::invert( long nX, long nY, long nWidth, long nHeight, Sa
         HPEN    hDotPen = CreatePen( PS_DOT, 0, 0 );
         HPEN    hOldPen = SelectPen( mrParent.getHDC(), hDotPen );
         HBRUSH  hOldBrush = SelectBrush( mrParent.getHDC(), GetStockBrush( NULL_BRUSH ) );
-        int     nOldROP = SetROP2( mrParent.getHDC(), R2_NOT );
+        int     nOldROP = SetROP2( mrParent.getHDC(), WMFRasterOp::Not );
 
         WIN_Rectangle( mrParent.getHDC(), (int)nX, (int)nY, (int)(nX+nWidth), (int)(nY+nHeight) );
 
@@ -958,7 +958,7 @@ void WinSalGraphicsImpl::invert( sal_uInt32 nPoints, const SalPoint* pPtAry, Sal
     HBRUSH      hBrush;
     HBRUSH      hOldBrush = 0;
     COLORREF    nOldTextColor RGB(0,0,0);
-    int         nOldROP = SetROP2( mrParent.getHDC(), R2_NOT );
+    int         nOldROP = SetROP2( mrParent.getHDC(), WMFRasterOp::Not );
 
     if ( nSalFlags & SalInvert::TrackFrame )
         hPen = CreatePen( PS_DOT, 0, 0 );
@@ -1558,7 +1558,7 @@ void WinSalGraphicsImpl::SetFillColor( SalColor nSalColor )
 void WinSalGraphicsImpl::SetXORMode( bool bSet, bool )
 {
     mbXORMode = bSet;
-    ::SetROP2( mrParent.getHDC(), bSet ? R2_XORPEN : R2_COPYPEN );
+    ::SetROP2( mrParent.getHDC(), bSet ? WMFRasterOp::XorPen : WMFRasterOp::CopyPen );
 }
 
 void WinSalGraphicsImpl::SetROPLineColor( SalROPColor nROPColor )

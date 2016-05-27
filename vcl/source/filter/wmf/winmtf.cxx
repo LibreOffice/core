@@ -846,8 +846,9 @@ WinMtfOutput::WinMtfOutput( GDIMetaFile& rGDIMetaFile ) :
     maLatestLineStyle.aLineColor = Color( 0x12, 0x34, 0x56 );
     maLatestFillStyle.aFillColor = Color( 0x12, 0x34, 0x56 );
 
-    mnRop = R2_BLACK + 1;
-    SetRasterOp( R2_BLACK );
+    mnRop = WMFRasterOp::Black;
+    meRasterOp = ROP_OVERPAINT;
+    mpGDIMetaFile->AddAction( new MetaRasterOpAction( ROP_OVERPAINT ) );
 }
 
 WinMtfOutput::~WinMtfOutput()
@@ -917,30 +918,30 @@ void WinMtfOutput::UpdateFillStyle()
     }
 }
 
-sal_uInt32 WinMtfOutput::SetRasterOp( sal_uInt32 nRasterOp )
+WMFRasterOp WinMtfOutput::SetRasterOp( WMFRasterOp nRasterOp )
 {
-    sal_uInt32 nRetROP = mnRop;
+    WMFRasterOp nRetROP = mnRop;
     if ( nRasterOp != mnRop )
     {
         mnRop = nRasterOp;
 
-        if ( mbNopMode && ( nRasterOp != R2_NOP ) )
-        {   // changing modes from R2_NOP so set pen and brush
+        if ( mbNopMode && ( nRasterOp != WMFRasterOp::Nop ) )
+        {   // changing modes from WMFRasterOp::Nop so set pen and brush
             maFillStyle = m_NopFillStyle;
             maLineStyle = m_NopLineStyle;
             mbNopMode = false;
         }
         switch( nRasterOp )
         {
-            case R2_NOT:
+            case WMFRasterOp::Not:
                 meRasterOp = ROP_INVERT;
             break;
 
-            case R2_XORPEN:
+            case WMFRasterOp::XorPen:
                 meRasterOp = ROP_XOR;
             break;
 
-            case R2_NOP:
+            case WMFRasterOp::Nop:
             {
                 meRasterOp = ROP_OVERPAINT;
                 if( !mbNopMode )
@@ -1637,7 +1638,7 @@ void WinMtfOutput::ResolveBitmapActions( BSaveStructList_impl& rSaveList )
 
             if ( (nUsed & 1) && (( nUsed & 2 ) == 0) && nWinRop != PATINVERT )
             {   // patterns aren't well supported yet
-                sal_uInt32 nOldRop = SetRasterOp( ROP_OVERPAINT );  // in this case nRasterOperation is either 0 or 0xff
+                WMFRasterOp nOldRop = SetRasterOp( WMFRasterOp::NONE );  // in this case nRasterOperation is either 0 or 0xff
                 UpdateFillStyle();
                 DrawRect( aRect, false );
                 SetRasterOp( nOldRop );
@@ -1695,7 +1696,7 @@ void WinMtfOutput::ResolveBitmapActions( BSaveStructList_impl& rSaveList )
                 if ( !bDrawn )
                 {
                     Push();
-                    sal_uInt32  nOldRop = SetRasterOp( R2_COPYPEN );
+                    WMFRasterOp nOldRop = SetRasterOp( WMFRasterOp::CopyPen );
                     Bitmap      aBitmap( pSave->aBmpEx.GetBitmap() );
                     sal_uInt32  nOperation = ( nRasterOperation & 0xf );
                     switch( nOperation )
@@ -1709,16 +1710,16 @@ void WinMtfOutput::ResolveBitmapActions( BSaveStructList_impl& rSaveList )
                             }
                             else
                             {
-                                SetRasterOp( R2_XORPEN );
+                                SetRasterOp( WMFRasterOp::XorPen );
                                 ImplDrawBitmap( aPos, aSize, aBitmap );
-                                SetRasterOp( R2_COPYPEN );
+                                SetRasterOp( WMFRasterOp::CopyPen );
                                 Bitmap  aMask( aBitmap );
                                 aMask.Invert();
                                 BitmapEx aBmpEx( aBitmap, aMask );
                                 ImplDrawBitmap( aPos, aSize, aBmpEx );
                                 if ( nOperation == 0x1 )
                                 {
-                                    SetRasterOp( R2_NOT );
+                                    SetRasterOp( WMFRasterOp::Not );
                                     DrawRect( aRect, false );
                                 }
                             }
@@ -1737,7 +1738,7 @@ void WinMtfOutput::ResolveBitmapActions( BSaveStructList_impl& rSaveList )
                             ImplDrawBitmap( aPos, aSize, aBmpEx );
                             if ( nOperation == 0x7 )
                             {
-                                SetRasterOp( R2_NOT );
+                                SetRasterOp( WMFRasterOp::Not );
                                 DrawRect( aRect, false );
                             }
                         }
@@ -1746,18 +1747,18 @@ void WinMtfOutput::ResolveBitmapActions( BSaveStructList_impl& rSaveList )
                         case 0x4 :
                         case 0xb :
                         {
-                            SetRasterOp( R2_NOT );
+                            SetRasterOp( WMFRasterOp::Not );
                             DrawRect( aRect, false );
-                            SetRasterOp( R2_COPYPEN );
+                            SetRasterOp( WMFRasterOp::CopyPen );
                             Bitmap  aMask( aBitmap );
                             aBitmap.Invert();
                             BitmapEx aBmpEx( aBitmap, aMask );
                             ImplDrawBitmap( aPos, aSize, aBmpEx );
-                            SetRasterOp( R2_XORPEN );
+                            SetRasterOp( WMFRasterOp::XorPen );
                             ImplDrawBitmap( aPos, aSize, aBitmap );
                             if ( nOperation == 0xb )
                             {
-                                SetRasterOp( R2_NOT );
+                                SetRasterOp( WMFRasterOp::Not );
                                 DrawRect( aRect, false );
                             }
                         }
@@ -1770,11 +1771,11 @@ void WinMtfOutput::ResolveBitmapActions( BSaveStructList_impl& rSaveList )
                             aMask.Invert();
                             BitmapEx aBmpEx( aBitmap, aMask );
                             ImplDrawBitmap( aPos, aSize, aBmpEx );
-                            SetRasterOp( R2_XORPEN );
+                            SetRasterOp( WMFRasterOp::XorPen );
                             ImplDrawBitmap( aPos, aSize, aBitmap );
                             if ( nOperation == 0xd )
                             {
-                                SetRasterOp( R2_NOT );
+                                SetRasterOp( WMFRasterOp::Not );
                                 DrawRect( aRect, false );
                             }
                         }
@@ -1782,11 +1783,11 @@ void WinMtfOutput::ResolveBitmapActions( BSaveStructList_impl& rSaveList )
                         case 0x6 :
                         case 0x9 :
                         {
-                            SetRasterOp( R2_XORPEN );
+                            SetRasterOp( WMFRasterOp::XorPen );
                             ImplDrawBitmap( aPos, aSize, aBitmap );
                             if ( nOperation == 0x9 )
                             {
-                                SetRasterOp( R2_NOT );
+                                SetRasterOp( WMFRasterOp::Not );
                                 DrawRect( aRect, false );
                             }
                         }
@@ -1812,7 +1813,7 @@ void WinMtfOutput::ResolveBitmapActions( BSaveStructList_impl& rSaveList )
 
                         case 0x5 :  // only destination is used
                         {
-                            SetRasterOp( R2_NOT );
+                            SetRasterOp( WMFRasterOp::Not );
                             DrawRect( aRect, false );
                         }
                         break;

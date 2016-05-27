@@ -456,7 +456,7 @@ void WinSalGraphics::InitGraphics()
 
     ::SetTextAlign( getHDC(), TA_BASELINE | TA_LEFT | TA_NOUPDATECP );
     ::SetBkMode( getHDC(), TRANSPARENT );
-    ::SetROP2( getHDC(), R2_COPYPEN );
+    ::SetROP2( getHDC(), WMFRasterOp::CopyPen );
 
     mpImpl->Init();
 }
