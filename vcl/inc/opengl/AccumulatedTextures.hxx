@@ -15,16 +15,13 @@
 
 #include <o3tl/make_unique.hxx>
 #include "opengl/texture.hxx"
+#include "opengl/VertexUtils.hxx"
 #include <memory>
 
 struct TextureDrawParameters
 {
     std::vector<GLfloat> maVertices;
     std::vector<GLfloat> maTextureCoords;
-    GLint getNumberOfVertices()
-    {
-        return maVertices.size() / 2;
-    }
 };
 
 struct AccumulatedTexturesEntry
@@ -41,29 +38,13 @@ struct AccumulatedTexturesEntry
         TextureDrawParameters& aDrawParameters = maColorTextureDrawParametersMap[aColor];
         rTexture.FillCoords<GL_TRIANGLES>(aDrawParameters.maTextureCoords, r2Rect, false);
 
-        GLfloat nX1 = r2Rect.mnDestX;
-        GLfloat nY1 = r2Rect.mnDestY;
-        GLfloat nX2 = r2Rect.mnDestX + r2Rect.mnDestWidth;
-        GLfloat nY2 = r2Rect.mnDestY + r2Rect.mnDestHeight;
+        GLfloat fX1 = r2Rect.mnDestX;
+        GLfloat fY1 = r2Rect.mnDestY;
+        GLfloat fX2 = fX1 + r2Rect.mnDestWidth;
+        GLfloat fY2 = fY1 + r2Rect.mnDestHeight;
 
-        auto& rVertices = aDrawParameters.maVertices;
-        rVertices.push_back(nX1);
-        rVertices.push_back(nY1);
-
-        rVertices.push_back(nX2);
-        rVertices.push_back(nY1);
-
-        rVertices.push_back(nX1);
-        rVertices.push_back(nY2);
-
-        rVertices.push_back(nX1);
-        rVertices.push_back(nY2);
-
-        rVertices.push_back(nX2);
-        rVertices.push_back(nY1);
-
-        rVertices.push_back(nX2);
-        rVertices.push_back(nY2);
+        std::vector<GLfloat>& rVertices = aDrawParameters.maVertices;
+        vcl::vertex::addRectangle<GL_TRIANGLES>(rVertices, fX1, fY1, fX2, fY2);
     }
 };
 
@@ -113,6 +94,6 @@ public:
     }
 };
 
-#endif // INCLUDED_VCL_INC_OPENGL_TEXTURE_H
+#endif // INCLUDED_VCL_INC_OPENGL_ACCUMULATEDTEXTURES_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

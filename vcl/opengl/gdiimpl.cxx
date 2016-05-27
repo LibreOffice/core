@@ -35,6 +35,7 @@
 #include "opengl/zone.hxx"
 #include "opengl/salbmp.hxx"
 #include "opengl/RenderState.hxx"
+#include "opengl/VertexUtils.hxx"
 
 #include <vector>
 
@@ -172,6 +173,10 @@ void OpenGLSalGraphicsImpl::Init()
 // Currently only used to get windows ordering right.
 void OpenGLSalGraphicsImpl::DeInit()
 {
+    VCL_GL_INFO("::DeInit");
+
+    FlushDeferredDrawing();
+
     // tdf#93839:
     // Our window handles and resources are being free underneath us.
     // These can be bound into a context, which relies on them. So
@@ -636,34 +641,6 @@ void OpenGLSalGraphicsImpl::DrawLine( double nX1, double nY1, double nX2, double
     CHECK_GL_ERROR();
 }
 
-namespace
-{
-
-inline void addVertex(std::vector<GLfloat>& rVertices, std::vector<GLfloat>& rExtrusionVectors, glm::vec2 point, glm::vec2 extrusionVector, float length)
-{
-    rVertices.push_back(point.x);
-    rVertices.push_back(point.y);
-
-    rExtrusionVectors.push_back(extrusionVector.x);
-    rExtrusionVectors.push_back(extrusionVector.y);
-    rExtrusionVectors.push_back(length);
-}
-
-inline void addVertexPair(std::vector<GLfloat>& rVertices, std::vector<GLfloat>& rExtrusionVectors, const glm::vec2& point, const glm::vec2& extrusionVector, float length)
-{
-    addVertex(rVertices, rExtrusionVectors, point, -extrusionVector, -length);
-    addVertex(rVertices, rExtrusionVectors, point,  extrusionVector,  length);
-}
-
-inline glm::vec2 normalize(const glm::vec2& vector)
-{
-    if (glm::length(vector) > 0.0)
-        return glm::normalize(vector);
-    return vector;
-}
-
-} // end anonymous namespace
-
 void OpenGLSalGraphicsImpl::DrawLineCap(float x1, float y1, float x2, float y2, css::drawing::LineCap eLineCap, float fLineWidth)
 {
     if (eLineCap != css::drawing::LineCap_ROUND && eLineCap != css::drawing::LineCap_SQUARE)
@@ -678,7 +655,7 @@ void OpenGLSalGraphicsImpl::DrawLineCap(float x1, float y1, float x2, float y2, 
 
     glm::vec2 p1(x1, y1);
     glm::vec2 p2(x2, y2);
-    glm::vec2 lineVector = normalize(p2 - p1);
+    glm::vec2 lineVector = vcl::vertex::normalize(p2 - p1);
     glm::vec2 normal = glm::vec2(-lineVector.y, lineVector.x);
 
     if (eLineCap == css::drawing::LineCap_ROUND)
@@ -689,15 +666,15 @@ void OpenGLSalGraphicsImpl::DrawLineCap(float x1, float y1, float x2, float y2, 
             glm::vec2 roundNormal(normal.x * glm::cos(angle) - normal.y * glm::sin(angle),
                                   normal.x * glm::sin(angle) + normal.y * glm::cos(angle));
 
-            addVertexPair(aVertices, aExtrusionVectors, p1, roundNormal, 1.0f);
+            vcl::vertex::addLineVertexPair(aVertices, aExtrusionVectors, p1, roundNormal, 1.0f);
         }
     }
     else if (eLineCap == css::drawing::LineCap_SQUARE)
     {
         glm::vec2 extrudedPoint = p1 + -lineVector * (fLineWidth / 2.0f);
 
-        addVertexPair(aVertices, aExtrusionVectors, extrudedPoint, normal, 1.0f);
-        addVertexPair(aVertices, aExtrusionVectors, p1, normal, 1.0f);
+        vcl::vertex::addLineVertexPair(aVertices, aExtrusionVectors, extrudedPoint, normal, 1.0f);
+        vcl::vertex::addLineVertexPair(aVertices, aExtrusionVectors, p1, normal, 1.0f);
     }
 
     ApplyProgramMatrices(0.5f);
@@ -712,20 +689,20 @@ void OpenGLSalGraphicsImpl::DrawLineSegment(float x1, float y1, float x2, float 
     glm::vec2 p1(x1, y1);
     glm::vec2 p2(x2, y2);
 
-    std::vector<GLfloat> aPoints;
+    std::vector<GLfloat> aVertices;
     std::vector<GLfloat> aExtrusionVectors;
 
     OpenGLZone aZone;
 
-    glm::vec2 lineVector = normalize(p2 - p1);
+    glm::vec2 lineVector = vcl::vertex::normalize(p2 - p1);
     glm::vec2 normal = glm::vec2(-lineVector.y, lineVector.x);
 
-    addVertexPair(aPoints, aExtrusionVectors, p1, normal, 1.0f);
-    addVertexPair(aPoints, aExtrusionVectors, p2, normal, 1.0f);
+    vcl::vertex::addLinePointFirst(aVertices, aExtrusionVectors, p1, normal, 1.0f);
+    vcl::vertex::addLinePointNext (aVertices, aExtrusionVectors, p1, normal, 1.0f, p2, normal, 1.0f);
 
     ApplyProgramMatrices(0.5f);
     mpProgram->SetExtrusionVectors(aExtrusionVectors.data());
-    mpProgram->DrawArrays(GL_TRIANGLE_STRIP, aPoints);
+    mpProgram->DrawArrays(GL_TRIANGLES, aVertices);
 
     CHECK_GL_ERROR();
 }
@@ -804,12 +781,12 @@ void OpenGLSalGraphicsImpl::DrawPolyLine(const basegfx::B2DPolygon& rPolygon, fl
         glm::vec2 p1(rPolygon.getB2DPoint(0).getX(), rPolygon.getB2DPoint(0).getY());
         glm::vec2 p2(rPolygon.getB2DPoint(1).getX(), rPolygon.getB2DPoint(1).getY());
 
-        nextLineVector = normalize(p2 - p1);
+        nextLineVector = vcl::vertex::normalize(p2 - p1);
 
         if (!bClosed)
         {
             normal = glm::vec2(-nextLineVector.y, nextLineVector.x); // make perpendicular
-            addVertexPair(aVertices, aExtrusionVectors, p1, normal, 1.0f);
+            vcl::vertex::addLineVertexPair(aVertices, aExtrusionVectors, p1, normal, 1.0f);
 
             i++; // first point done already
             lastPoint--; // last point will be calculated separatly from the loop
@@ -821,7 +798,7 @@ void OpenGLSalGraphicsImpl::DrawPolyLine(const basegfx::B2DPolygon& rPolygon, fl
         {
             lastPoint++; // we need to connect last point to first point so one more line segment to calculate
 
-            previousLineVector = normalize(p1 - p0);
+            previousLineVector = vcl::vertex::normalize(p1 - p0);
         }
 
         for (; i < lastPoint; ++i)
@@ -835,7 +812,7 @@ void OpenGLSalGraphicsImpl::DrawPolyLine(const basegfx::B2DPolygon& rPolygon, fl
             if (p1 == p2) // skip equal points, normals could div-by-0
                 continue;
 
-            nextLineVector = normalize(p2 - p1);
+            nextLineVector = vcl::vertex::normalize(p2 - p1);
 
             if (eLineJoin == basegfx::B2DLineJoin::Miter)
             {
@@ -859,11 +836,11 @@ void OpenGLSalGraphicsImpl::DrawPolyLine(const basegfx::B2DPolygon& rPolygon, fl
 
                 normal = glm::vec2(-previousLineVector.y, previousLineVector.x);
 
-                glm::vec2 tangent = normalize(nextLineVector + previousLineVector);
+                glm::vec2 tangent = vcl::vertex::normalize(nextLineVector + previousLineVector);
                 glm::vec2 extrusionVector(-tangent.y, tangent.x);
                 GLfloat length = glm::dot(extrusionVector, normal);
 
-                addVertexPair(aVertices, aExtrusionVectors, p1, extrusionVector, length);
+                vcl::vertex::addLineVertexPair(aVertices, aExtrusionVectors, p1, extrusionVector, length);
             }
             else if (eLineJoin == basegfx::B2DLineJoin::Bevel)
             {
@@ -875,8 +852,8 @@ void OpenGLSalGraphicsImpl::DrawPolyLine(const basegfx::B2DPolygon& rPolygon, fl
                 glm::vec2 previousNormal = glm::vec2(-previousLineVector.y, previousLineVector.x);
                 glm::vec2 nextNormal = glm::vec2(-nextLineVector.y, nextLineVector.x);
 
-                addVertexPair(aVertices, aExtrusionVectors, p1, previousNormal, 1.0f);
-                addVertexPair(aVertices, aExtrusionVectors, p1, nextNormal, 1.0f);
+                vcl::vertex::addLineVertexPair(aVertices, aExtrusionVectors, p1, previousNormal, 1.0f);
+                vcl::vertex::addLineVertexPair(aVertices, aExtrusionVectors, p1, nextNormal, 1.0f);
             }
             else if (eLineJoin == basegfx::B2DLineJoin::Round)
             {
@@ -891,15 +868,15 @@ void OpenGLSalGraphicsImpl::DrawPolyLine(const basegfx::B2DPolygon& rPolygon, fl
                 glm::vec2 previousNormal = glm::vec2(-previousLineVector.y, previousLineVector.x);
                 glm::vec2 nextNormal = glm::vec2(-nextLineVector.y, nextLineVector.x);
 
-                glm::vec2 middle = normalize(previousNormal + nextNormal);
-                glm::vec2 middleLeft  = normalize(previousNormal + middle);
-                glm::vec2 middleRight = normalize(middle + nextNormal);
+                glm::vec2 middle = vcl::vertex::normalize(previousNormal + nextNormal);
+                glm::vec2 middleLeft  = vcl::vertex::normalize(previousNormal + middle);
+                glm::vec2 middleRight = vcl::vertex::normalize(middle + nextNormal);
 
-                addVertexPair(aVertices, aExtrusionVectors, p1, previousNormal, 1.0f);
-                addVertexPair(aVertices, aExtrusionVectors, p1, middleLeft, 1.0f);
-                addVertexPair(aVertices, aExtrusionVectors, p1, middle, 1.0f);
-                addVertexPair(aVertices, aExtrusionVectors, p1, middleRight, 1.0f);
-                addVertexPair(aVertices, aExtrusionVectors, p1, nextNormal, 1.0f);
+                vcl::vertex::addLineVertexPair(aVertices, aExtrusionVectors, p1, previousNormal, 1.0f);
+                vcl::vertex::addLineVertexPair(aVertices, aExtrusionVectors, p1, middleLeft, 1.0f);
+                vcl::vertex::addLineVertexPair(aVertices, aExtrusionVectors, p1, middle, 1.0f);
+                vcl::vertex::addLineVertexPair(aVertices, aExtrusionVectors, p1, middleRight, 1.0f);
+                vcl::vertex::addLineVertexPair(aVertices, aExtrusionVectors, p1, nextNormal, 1.0f);
             }
             p0 = p1;
             previousLineVector = nextLineVector;
@@ -914,7 +891,7 @@ void OpenGLSalGraphicsImpl::DrawPolyLine(const basegfx::B2DPolygon& rPolygon, fl
 
             normal = glm::vec2(-previousLineVector.y, previousLineVector.x);
 
-            addVertexPair(aVertices, aExtrusionVectors, p1, normal, 1.0f);
+            vcl::vertex::addLineVertexPair(aVertices, aExtrusionVectors, p1, normal, 1.0f);
         }
 
         ApplyProgramMatrices(0.5f);
@@ -1184,7 +1161,18 @@ void OpenGLSalGraphicsImpl::DrawTextureRect( OpenGLTexture& /*rTexture*/, const 
 
     SAL_INFO("vcl.opengl", "draw texture rect");
 
-    DrawRect( rPosAry.mnDestX, rPosAry.mnDestY, rPosAry.mnDestWidth, rPosAry.mnDestHeight );
+    long nX = rPosAry.mnDestX;
+    long nY = rPosAry.mnDestY;
+    long nWidth  = rPosAry.mnDestWidth;
+    long nHeight = rPosAry.mnDestHeight;
+
+    std::vector<GLfloat> aVertices;
+    aVertices.reserve(8);
+    vcl::vertex::addRectangle<GL_TRIANGLE_FAN>(aVertices, nX, nY, nX + nWidth, nY + nHeight);
+
+    ApplyProgramMatrices();
+    mpProgram->DrawArrays(GL_TRIANGLE_FAN, aVertices);
+    CHECK_GL_ERROR();
 }
 
 void OpenGLSalGraphicsImpl::DrawTexture( OpenGLTexture& rTexture, const SalTwoRect& rPosAry, bool bInverted )
@@ -1475,7 +1463,7 @@ void OpenGLSalGraphicsImpl::DrawTextureWithMask( OpenGLTexture& rTexture, OpenGL
     rMask.GetCoord(aMaskCoord, rPosAry);
     mpProgram->SetMaskCoord(aMaskCoord);
 
-    DrawRect(rPosAry.mnDestX, rPosAry.mnDestY, rPosAry.mnDestWidth, rPosAry.mnDestHeight);
+    DrawTextureRect(rTexture, rPosAry);
     mpProgram->Clean();
 }
 
@@ -1978,20 +1966,8 @@ void OpenGLSalGraphicsImpl::drawBitmap(
             const SalBitmap& rSalBitmap,
             const SalBitmap& rMaskBitmap )
 {
-    assert(dynamic_cast<const OpenGLSalBitmap*>(&rSalBitmap));
-    assert(dynamic_cast<const OpenGLSalBitmap*>(&rMaskBitmap));
-
-    OpenGLZone aZone;
-
-    const OpenGLSalBitmap& rBitmap = static_cast<const OpenGLSalBitmap&>(rSalBitmap);
-    const OpenGLSalBitmap& rMask = static_cast<const OpenGLSalBitmap&>(rMaskBitmap);
-    OpenGLTexture& rTexture( rBitmap.GetTexture() );
-    OpenGLTexture& rMaskTex( rMask.GetTexture() );
-
-    VCL_GL_INFO( "::drawBitmap with MASK" );
-    PreDraw();
-    DrawTextureWithMask( rTexture, rMaskTex, rPosAry );
-    PostDraw();
+    VCL_GL_INFO("::drawBitmap with MASK -> redirect to ::drawAlphaBitmap");
+    drawAlphaBitmap(rPosAry, rSalBitmap, rMaskBitmap);
 }
 
 void OpenGLSalGraphicsImpl::drawMask(
@@ -2014,6 +1990,8 @@ void OpenGLSalGraphicsImpl::drawMask(
 
 SalBitmap* OpenGLSalGraphicsImpl::getBitmap( long nX, long nY, long nWidth, long nHeight )
 {
+    FlushDeferredDrawing();
+
     OpenGLZone aZone;
 
     OpenGLSalBitmap* pBitmap = new OpenGLSalBitmap;
