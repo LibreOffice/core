@@ -18,8 +18,8 @@
  */
 
 #include <rtl/alloc.h>
-#include <idlc/aststack.hxx>
-#include <idlc/astscope.hxx>
+#include <aststack.hxx>
+#include <astscope.hxx>
 
 #define STACKSIZE_INCREMENT 64
 

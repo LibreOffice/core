@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svgio/svgreader/svgtextpathnode.hxx>
-#include <svgio/svgreader/svgstyleattributes.hxx>
-#include <svgio/svgreader/svgpathnode.hxx>
-#include <svgio/svgreader/svgdocument.hxx>
-#include <svgio/svgreader/svgtrefnode.hxx>
+#include <svgtextpathnode.hxx>
+#include <svgstyleattributes.hxx>
+#include <svgpathnode.hxx>
+#include <svgdocument.hxx>
+#include <svgtrefnode.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <drawinglayer/primitive2d/textbreakuphelper.hxx>

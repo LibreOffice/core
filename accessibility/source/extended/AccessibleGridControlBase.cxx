@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <accessibility/extended/AccessibleGridControlBase.hxx>
+#include <extended/AccessibleGridControlBase.hxx>
 #include <svtools/accessibletable.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>

@@ -46,7 +46,7 @@ typedef long Py_hash_t;
 #  define Py_TPFLAGS_HAVE_SEQUENCE_IN 0
 #endif
 
-#include <pyuno/pyuno.hxx>
+#include <pyuno.hxx>
 
 #include <unordered_map>
 #include <unordered_set>

@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <accessibility/standard/vclxaccessiblebox.hxx>
-#include <accessibility/standard/vclxaccessibletextfield.hxx>
-#include <accessibility/standard/vclxaccessibleedit.hxx>
-#include <accessibility/standard/vclxaccessiblelist.hxx>
-#include <accessibility/helper/listboxhelper.hxx>
+#include <standard/vclxaccessiblebox.hxx>
+#include <standard/vclxaccessibletextfield.hxx>
+#include <standard/vclxaccessibleedit.hxx>
+#include <standard/vclxaccessiblelist.hxx>
+#include <helper/listboxhelper.hxx>
 
 #include <unotools/accessiblestatesethelper.hxx>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
@@ -30,8 +30,8 @@
 #include <vcl/svapp.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/lstbox.hxx>
-#include <accessibility/helper/accresmgr.hxx>
-#include <accessibility/helper/accessiblestrings.hrc>
+#include <helper/accresmgr.hxx>
+#include <helper/accessiblestrings.hrc>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

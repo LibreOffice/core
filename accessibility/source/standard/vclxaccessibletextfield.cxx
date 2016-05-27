@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <accessibility/standard/vclxaccessibletextfield.hxx>
+#include <standard/vclxaccessibletextfield.hxx>
 #include <vcl/lstbox.hxx>
-#include <accessibility/helper/listboxhelper.hxx>
+#include <helper/listboxhelper.hxx>
 
 #include <unotools/accessiblestatesethelper.hxx>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>

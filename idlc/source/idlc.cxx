@@ -17,22 +17,22 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <idlc/idlc.hxx>
-#include <idlc/errorhandler.hxx>
-#include <idlc/astscope.hxx>
-#include <idlc/astmodule.hxx>
-#include <idlc/astservice.hxx>
-#include <idlc/astconstants.hxx>
-#include <idlc/astexception.hxx>
-#include <idlc/astenum.hxx>
-#include <idlc/astinterface.hxx>
-#include <idlc/astoperation.hxx>
-#include <idlc/astbasetype.hxx>
-#include "idlc/astdeclaration.hxx"
-#include "idlc/astparameter.hxx"
-#include "idlc/astsequence.hxx"
-#include "idlc/asttype.hxx"
-#include "idlc/asttypedef.hxx"
+#include <idlc.hxx>
+#include <errorhandler.hxx>
+#include <astscope.hxx>
+#include <astmodule.hxx>
+#include <astservice.hxx>
+#include <astconstants.hxx>
+#include <astexception.hxx>
+#include <astenum.hxx>
+#include <astinterface.hxx>
+#include <astoperation.hxx>
+#include <astbasetype.hxx>
+#include "astdeclaration.hxx"
+#include "astparameter.hxx"
+#include "astsequence.hxx"
+#include "asttype.hxx"
+#include "asttypedef.hxx"
 
 #include <osl/diagnose.h>
 #include <osl/file.hxx>

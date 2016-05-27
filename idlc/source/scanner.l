@@ -29,9 +29,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <idlc/idlc.hxx>
-#include <idlc/errorhandler.hxx>
-#include <idlc/fehelper.hxx>
+#include <idlc.hxx>
+#include <errorhandler.hxx>
+#include <fehelper.hxx>
 
 #include "attributeexceptions.hxx"
 

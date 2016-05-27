@@ -29,7 +29,7 @@
 #include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
-#include <svgio/svgreader/svgdocumenthandler.hxx>
+#include <svgdocumenthandler.hxx>
 
 #include "xsvgparser.hxx"
 

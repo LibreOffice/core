@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "accessibility/extended/AccessibleBrowseBoxHeaderBar.hxx"
+#include "extended/AccessibleBrowseBoxHeaderBar.hxx"
 #include <svtools/accessibletableprovider.hxx>
 #include <comphelper/servicehelper.hxx>
 
@@ -43,7 +43,7 @@ AccessibleBrowseBoxHeaderBar::AccessibleBrowseBoxHeaderBar(
     AccessibleBrowseBoxTableBase( rxParent, rBrowseBox,eObjType )
 {
     OSL_ENSURE( isRowBar() || isColumnBar(),
-        "accessibility/extended/AccessibleBrowseBoxHeaderBar - invalid object type" );
+        "extended/AccessibleBrowseBoxHeaderBar - invalid object type" );
 }
 
 AccessibleBrowseBoxHeaderBar::~AccessibleBrowseBoxHeaderBar()

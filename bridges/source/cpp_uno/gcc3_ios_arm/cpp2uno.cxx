@@ -20,7 +20,7 @@
 // If we eventually get around to factoring out stuff from
 // cpp2uno-arm.cxx and cpp2uno-i386.cxx here, this is where to put it.
 
-#include "bridges/cpp_uno/shared/vtablefactory.hxx"
+#include "vtablefactory.hxx"
 
 void bridges::cpp_uno::shared::VtableFactory::flushCode(
     unsigned char const *, unsigned char const *)

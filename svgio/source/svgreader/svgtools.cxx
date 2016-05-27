@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svgio/svgreader/svgtools.hxx>
+#include <svgtools.hxx>
 #include <osl/thread.h>
 #include <tools/color.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
-#include <svgio/svgreader/svgtoken.hxx>
+#include <svgtoken.hxx>
 #include <unordered_map>
 
 namespace svgio

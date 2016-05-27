@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svgio/svgreader/svgpathnode.hxx>
+#include <svgpathnode.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 
 namespace svgio

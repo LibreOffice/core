@@ -18,9 +18,9 @@
  */
 
 
-#include "accessibility/extended/accessibletablistboxtable.hxx"
-#include "accessibility/extended/AccessibleBrowseBoxTableCell.hxx"
-#include "accessibility/extended/AccessibleBrowseBoxCheckBoxCell.hxx"
+#include "extended/accessibletablistboxtable.hxx"
+#include "extended/AccessibleBrowseBoxTableCell.hxx"
+#include "extended/AccessibleBrowseBoxCheckBoxCell.hxx"
 #include <svtools/svtabbx.hxx>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 

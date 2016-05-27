@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <accessibility/standard/vclxaccessibletabpagewindow.hxx>
+#include <standard/vclxaccessibletabpagewindow.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <vcl/tabctrl.hxx>
 #include <vcl/tabpage.hxx>

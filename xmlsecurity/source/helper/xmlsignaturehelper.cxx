@@ -18,8 +18,8 @@
  */
 
 
-#include <xmlsecurity/xmlsignaturehelper.hxx>
-#include <xmlsecurity/documentsignaturehelper.hxx>
+#include <xmlsignaturehelper.hxx>
+#include <documentsignaturehelper.hxx>
 #include "xsecctl.hxx"
 
 #include "xmlsignaturehelper2.hxx"

@@ -18,8 +18,8 @@
  */
 #include <string.h>
 
-#include <accessibility/standard/vclxaccessibletoolbox.hxx>
-#include <accessibility/standard/vclxaccessibletoolboxitem.hxx>
+#include <standard/vclxaccessibletoolbox.hxx>
+#include <standard/vclxaccessibletoolboxitem.hxx>
 #include <toolkit/helper/convert.hxx>
 
 #include <unotools/accessiblestatesethelper.hxx>

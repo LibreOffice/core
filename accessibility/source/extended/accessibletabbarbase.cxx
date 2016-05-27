@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "accessibility/extended/accessibletabbarbase.hxx"
+#include "extended/accessibletabbarbase.hxx"
 #ifndef ACCESSIBILITY_EXT_ACCESSIBLETABBARPAGELIST
-#include "accessibility/extended/accessibletabbarpagelist.hxx"
+#include "extended/accessibletabbarpagelist.hxx"
 #endif
 #include <toolkit/helper/externallock.hxx>
 #include <svtools/tabbar.hxx>

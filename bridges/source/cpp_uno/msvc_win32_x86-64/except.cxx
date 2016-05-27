@@ -250,7 +250,7 @@ void
 #include "com/sun/star/uno/Any.hxx"
 #include <unordered_map>
 #include "mscx.hxx"
-#include "bridges/cpp_uno/shared/except.hxx"
+#include "except.hxx"
 
 //TOOD: Work around missing __CxxDetectRethrow in clang-cl for now (predefined
 // in cl, <www.geoffchappell.com/studies/msvc/language/predefined/index.html>):

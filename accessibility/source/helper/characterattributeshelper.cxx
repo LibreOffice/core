@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <accessibility/helper/characterattributeshelper.hxx>
+#include <helper/characterattributeshelper.hxx>
 #include <tools/gen.hxx>
 #include <comphelper/sequence.hxx>
 

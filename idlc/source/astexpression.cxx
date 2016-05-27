@@ -18,10 +18,10 @@
  */
 
 
-#include <idlc/astexpression.hxx>
-#include <idlc/astconstant.hxx>
-#include <idlc/astscope.hxx>
-#include <idlc/errorhandler.hxx>
+#include <astexpression.hxx>
+#include <astconstant.hxx>
+#include <astscope.hxx>
+#include <errorhandler.hxx>
 
 #include <osl/diagnose.h>
 

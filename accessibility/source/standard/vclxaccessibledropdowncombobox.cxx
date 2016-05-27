@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <accessibility/standard/vclxaccessibledropdowncombobox.hxx>
-#include <accessibility/standard/vclxaccessiblecombobox.hxx>
-#include <accessibility/standard/vclxaccessibletextfield.hxx>
-#include <accessibility/standard/vclxaccessiblelist.hxx>
-#include <accessibility/helper/accresmgr.hxx>
-#include <accessibility/helper/accessiblestrings.hrc>
+#include <standard/vclxaccessibledropdowncombobox.hxx>
+#include <standard/vclxaccessiblecombobox.hxx>
+#include <standard/vclxaccessibletextfield.hxx>
+#include <standard/vclxaccessiblelist.hxx>
+#include <helper/accresmgr.hxx>
+#include <helper/accessiblestrings.hrc>
 
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>

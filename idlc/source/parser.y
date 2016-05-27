@@ -24,27 +24,27 @@
 %{
 #include <string.h>
 
-#include <idlc/idlc.hxx>
-#include <idlc/errorhandler.hxx>
-#include <idlc/fehelper.hxx>
-#include <idlc/astexpression.hxx>
-#include <idlc/astconstants.hxx>
-#include <idlc/astconstant.hxx>
-#include <idlc/astbasetype.hxx>
-#include <idlc/asttypedef.hxx>
-#include <idlc/astexception.hxx>
-#include <idlc/astmember.hxx>
-#include <idlc/astenum.hxx>
-#include <idlc/astsequence.hxx>
-#include <idlc/astattribute.hxx>
-#include <idlc/astoperation.hxx>
-#include <idlc/astparameter.hxx>
-#include <idlc/astinterfacemember.hxx>
-#include <idlc/astservicemember.hxx>
-#include <idlc/astobserves.hxx>
-#include <idlc/astneeds.hxx>
+#include <idlc.hxx>
+#include <errorhandler.hxx>
+#include <fehelper.hxx>
+#include <astexpression.hxx>
+#include <astconstants.hxx>
+#include <astconstant.hxx>
+#include <astbasetype.hxx>
+#include <asttypedef.hxx>
+#include <astexception.hxx>
+#include <astmember.hxx>
+#include <astenum.hxx>
+#include <astsequence.hxx>
+#include <astattribute.hxx>
+#include <astoperation.hxx>
+#include <astparameter.hxx>
+#include <astinterfacemember.hxx>
+#include <astservicemember.hxx>
+#include <astobserves.hxx>
+#include <astneeds.hxx>
 
-#include "idlc/aststructinstance.hxx"
+#include "aststructinstance.hxx"
 
 #include "attributeexceptions.hxx"
 

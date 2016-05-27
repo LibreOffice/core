@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svgio/svgreader/svgtextnode.hxx>
-#include <svgio/svgreader/svgcharacternode.hxx>
-#include <svgio/svgreader/svgstyleattributes.hxx>
-#include <svgio/svgreader/svgtrefnode.hxx>
-#include <svgio/svgreader/svgtextpathnode.hxx>
-#include <svgio/svgreader/svgtspannode.hxx>
+#include <svgtextnode.hxx>
+#include <svgcharacternode.hxx>
+#include <svgstyleattributes.hxx>
+#include <svgtrefnode.hxx>
+#include <svgtextpathnode.hxx>
+#include <svgtspannode.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 

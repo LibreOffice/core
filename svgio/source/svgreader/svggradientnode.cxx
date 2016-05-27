@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svgio/svgreader/svggradientnode.hxx>
-#include <svgio/svgreader/svgdocument.hxx>
-#include <svgio/svgreader/svggradientstopnode.hxx>
+#include <svggradientnode.hxx>
+#include <svgdocument.hxx>
+#include <svggradientstopnode.hxx>
 
 namespace svgio
 {

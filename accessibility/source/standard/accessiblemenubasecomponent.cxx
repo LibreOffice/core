@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <accessibility/standard/accessiblemenubasecomponent.hxx>
-#include <accessibility/standard/vclxaccessiblemenu.hxx>
-#include <accessibility/standard/vclxaccessiblemenuitem.hxx>
-#include <accessibility/standard/vclxaccessiblemenuseparator.hxx>
+#include <standard/accessiblemenubasecomponent.hxx>
+#include <standard/vclxaccessiblemenu.hxx>
+#include <standard/vclxaccessiblemenuitem.hxx>
+#include <standard/vclxaccessiblemenuseparator.hxx>
 #include <toolkit/helper/externallock.hxx>
 #include <toolkit/helper/convert.hxx>
 

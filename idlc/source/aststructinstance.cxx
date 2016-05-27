@@ -18,10 +18,10 @@
  */
 
 
-#include "idlc/aststructinstance.hxx"
+#include "aststructinstance.hxx"
 
-#include "idlc/asttype.hxx"
-#include "idlc/idlctypes.hxx"
+#include "asttype.hxx"
+#include "idlctypes.hxx"
 
 #include <rtl/strbuf.hxx>
 #include <rtl/string.hxx>

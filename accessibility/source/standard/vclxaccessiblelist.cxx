@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <accessibility/standard/vclxaccessiblelist.hxx>
-#include <accessibility/standard/vclxaccessiblelistitem.hxx>
-#include <accessibility/helper/listboxhelper.hxx>
+#include <standard/vclxaccessiblelist.hxx>
+#include <standard/vclxaccessiblelistitem.hxx>
+#include <helper/listboxhelper.hxx>
 
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <unotools/accessiblestatesethelper.hxx>

@@ -56,11 +56,11 @@
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <o3tl/cow_wrapper.hxx>
-#include <svgio/svgreader/svgdocument.hxx>
-#include <svgio/svgreader/svgnode.hxx>
-#include <svgio/svgreader/svgpaint.hxx>
-#include <svgio/svgreader/svgstyleattributes.hxx>
-#include <svgio/svgreader/svgtoken.hxx>
-#include <svgio/svgreader/svgtools.hxx>
+#include <svgdocument.hxx>
+#include <svgnode.hxx>
+#include <svgpaint.hxx>
+#include <svgstyleattributes.hxx>
+#include <svgtoken.hxx>
+#include <svgtools.hxx>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

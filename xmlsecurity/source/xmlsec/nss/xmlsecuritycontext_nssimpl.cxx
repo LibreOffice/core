@@ -24,7 +24,7 @@
 #include "xmlsecuritycontext_nssimpl.hxx"
 #include "xmlstreamio.hxx"
 
-#include "xmlsecurity/xmlsec-wrapper.h"
+#include "xmlsec-wrapper.h"
 
 using namespace ::com::sun::star::uno ;
 using namespace ::com::sun::star::lang ;

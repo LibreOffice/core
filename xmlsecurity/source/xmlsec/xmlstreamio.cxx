@@ -26,7 +26,7 @@
 #include <rtl/uri.hxx>
 
 #include <libxml/uri.h>
-#include "xmlsecurity/xmlsec-wrapper.h"
+#include "xmlsec-wrapper.h"
 
 #define XMLSTREAMIO_INITIALIZED 0x01
 #define XMLSTREAMIO_REGISTERED  0x02

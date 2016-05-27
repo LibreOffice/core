@@ -27,7 +27,7 @@
 #include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
-#include <xmlsecurity/documentsignaturehelper.hxx>
+#include <documentsignaturehelper.hxx>
 
 namespace com { namespace  sun { namespace star {
 
