@@ -231,7 +231,7 @@ void OGLTransitionImpl::finish()
     CHECK_GL_ERROR();
 }
 
-void OGLTransitionImpl::prepare( double, double, double, double, double )
+void OGLTransitionImpl::prepare( double, double, double, double, double, sal_Int32, sal_Int32 )
 {
 }
 
@@ -270,7 +270,7 @@ void OGLTransitionImpl::display( double nTime, sal_Int32 glLeavingSlideTex, sal_
 
     CHECK_GL_ERROR();
     glBindVertexArray(m_nVertexArrayObject);
-    prepare( nTime, SlideWidth, SlideHeight, DispWidth, DispHeight );
+    prepare( nTime, SlideWidth, SlideHeight, DispWidth, DispHeight, glLeavingSlideTex, glEnteringSlideTex );
 
     CHECK_GL_ERROR();
     displaySlides_( nTime, glLeavingSlideTex, glEnteringSlideTex, SlideWidthScale, SlideHeightScale );
@@ -1138,10 +1138,10 @@ public:
         {}
 
 private:
-    virtual void prepare( double nTime, double SlideWidth, double SlideHeight, double DispWidth, double DispHeight ) override;
+    virtual void prepare( double nTime, double SlideWidth, double SlideHeight, double DispWidth, double DispHeight, sal_Int32 glLeavingSlideTex, sal_Int32 glEnteringSlideTex ) override;
 };
 
-void DiamondTransition::prepare( double nTime, double /* SlideWidth */, double /* SlideHeight */, double /* DispWidth */, double /* DispHeight */ )
+void DiamondTransition::prepare( double nTime, double /* SlideWidth */, double /* SlideHeight */, double /* DispWidth */, double /* DispHeight */, sal_Int32 glLeavingSlideTex, sal_Int32 glEnteringSlideTex )
 {
     Primitive Slide1, Slide2;
 
@@ -1175,6 +1175,8 @@ void DiamondTransition::prepare( double nTime, double /* SlideWidth */, double /
     aLeavingSlidePrimitives.push_back (Slide2);
 
     setScene(TransitionScene(aLeavingSlidePrimitives, aEnteringSlidePrimitives));
+
+    OGLTransitionImpl::prepare(glLeavingSlideTex, glEnteringSlideTex);
 }
 
 std::shared_ptr<OGLTransitionImpl>
@@ -1808,7 +1810,7 @@ public:
 private:
     virtual GLuint makeShader() const override;
     virtual void prepareTransition( sal_Int32 glLeavingSlideTex, sal_Int32 glEnteringSlideTex ) override;
-    virtual void prepare( double nTime, double SlideWidth, double SlideHeight, double DispWidth, double DispHeight ) override;
+    virtual void prepare( double nTime, double SlideWidth, double SlideHeight, double DispWidth, double DispHeight, sal_Int32 glLeavingSlideTex, sal_Int32 glEnteringSlideTex ) override;
 
     glm::vec2 maCenter;
     GLint maSlideRatioLocation = -1;
@@ -1831,7 +1833,9 @@ void RippleTransition::prepareTransition( sal_Int32, sal_Int32 )
     CHECK_GL_ERROR();
 }
 
-void RippleTransition::prepare( double /* nTime */, double SlideWidth, double SlideHeight, double /* DispWidth */, double /* DispHeight */ )
+void RippleTransition::prepare( double /* nTime */, double SlideWidth, double SlideHeight,
+                                double /* DispWidth */, double /* DispHeight */,
+                                sal_Int32 /* glLeavingSlideTex */, sal_Int32 /*glEnteringSlideTex*/ )
 {
     if( maSlideRatioLocation != -1 )
         glUniform1f( maSlideRatioLocation, SlideWidth / SlideHeight );
