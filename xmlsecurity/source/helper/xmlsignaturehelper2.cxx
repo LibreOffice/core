@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <xmlsecurity/xmlsignaturehelper.hxx>
+#include <xmlsignaturehelper.hxx>
 #include "xmlsignaturehelper2.hxx"
 
 #include <tools/solar.h>

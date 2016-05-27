@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <accessibility/extended/accessibleiconchoicectrlentry.hxx>
+#include <extended/accessibleiconchoicectrlentry.hxx>
 #include <svtools/ivctrl.hxx>
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>

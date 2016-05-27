@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <accessibility/standard/vclxaccessibletextcomponent.hxx>
+#include <standard/vclxaccessibletextcomponent.hxx>
 #include <toolkit/helper/macros.hxx>
 #include <toolkit/helper/convert.hxx>
-#include <accessibility/helper/characterattributeshelper.hxx>
+#include <helper/characterattributeshelper.hxx>
 
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>

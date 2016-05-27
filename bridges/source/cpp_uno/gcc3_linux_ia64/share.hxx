@@ -24,7 +24,7 @@
 #include <typeinfo>
 #include <exception>
 #include <cstddef>
-#include "bridges/cpp_uno/shared/vtablefactory.hxx"
+#include "vtablefactory.hxx"
 
 namespace CPPU_CURRENT_NAMESPACE
 {

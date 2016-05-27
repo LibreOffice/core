@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "accessibility/extended/AccessibleBrowseBox.hxx"
-#include "accessibility/extended/AccessibleBrowseBoxTable.hxx"
-#include "accessibility/extended/AccessibleBrowseBoxHeaderBar.hxx"
+#include "extended/AccessibleBrowseBox.hxx"
+#include "extended/AccessibleBrowseBoxTable.hxx"
+#include "extended/AccessibleBrowseBoxHeaderBar.hxx"
 #include <svtools/accessibletableprovider.hxx>
 #include <comphelper/types.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -72,7 +72,7 @@ void AccessibleBrowseBox::setCreator( const css::uno::Reference< css::accessibil
 {
 #if OSL_DEBUG_LEVEL > 0
     css::uno::Reference< css::accessibility::XAccessible > xCreator(m_xImpl->m_aCreator);
-    OSL_ENSURE( !xCreator.is(), "accessibility/extended/AccessibleBrowseBox::setCreator: creator already set!" );
+    OSL_ENSURE( !xCreator.is(), "extended/AccessibleBrowseBox::setCreator: creator already set!" );
 #endif
     m_xImpl->m_aCreator = _rxCreator;
 }
@@ -281,7 +281,7 @@ AccessibleBrowseBox::implGetFixedChild( sal_Int32 nChildIndex )
 AccessibleBrowseBoxTable* AccessibleBrowseBox::createAccessibleTable()
 {
     css::uno::Reference< css::accessibility::XAccessible > xCreator(m_xImpl->m_aCreator);
-    OSL_ENSURE( xCreator.is(), "accessibility/extended/AccessibleBrowseBox::createAccessibleTable: my creator died - how this?" );
+    OSL_ENSURE( xCreator.is(), "extended/AccessibleBrowseBox::createAccessibleTable: my creator died - how this?" );
     return new AccessibleBrowseBoxTable( xCreator, *mpBrowseBox );
 }
 
@@ -333,7 +333,7 @@ css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL Accessibl
     ::osl::MutexGuard aGuard( m_aMutex );
 
     OSL_ENSURE( ( m_pContext && m_xContext.is() ) || ( !m_pContext && !m_xContext.is() ),
-        "accessibility/extended/AccessibleBrowseBoxAccess::getAccessibleContext: inconsistency!" );
+        "extended/AccessibleBrowseBoxAccess::getAccessibleContext: inconsistency!" );
 
     // if the context died meanwhile (there is no listener, so it won't tell us explicitily when this happens),
     // then reset and re-create.

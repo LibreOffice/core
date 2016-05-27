@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <accessibility/standard/vclxaccessibleradiobutton.hxx>
+#include <standard/vclxaccessibleradiobutton.hxx>
 
 #include <toolkit/awt/vclxwindows.hxx>
-#include <accessibility/helper/accresmgr.hxx>
-#include <accessibility/helper/accessiblestrings.hrc>
+#include <helper/accresmgr.hxx>
+#include <helper/accessiblestrings.hrc>
 
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <unotools/accessiblestatesethelper.hxx>

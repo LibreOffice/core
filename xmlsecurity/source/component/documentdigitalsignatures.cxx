@@ -18,12 +18,12 @@
  */
 
 #include "documentdigitalsignatures.hxx"
-#include <xmlsecurity/digitalsignaturesdialog.hxx>
-#include <xmlsecurity/certificatechooser.hxx>
-#include <xmlsecurity/certificateviewer.hxx>
-#include <xmlsecurity/macrosecurity.hxx>
-#include <xmlsecurity/biginteger.hxx>
-#include <xmlsecurity/global.hrc>
+#include <digitalsignaturesdialog.hxx>
+#include <certificatechooser.hxx>
+#include <certificateviewer.hxx>
+#include <macrosecurity.hxx>
+#include <biginteger.hxx>
+#include <global.hrc>
 
 #include <sax/tools/converter.hxx>
 

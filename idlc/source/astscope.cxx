@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <idlc/astscope.hxx>
-#include <idlc/astbasetype.hxx>
-#include <idlc/astinterface.hxx>
-#include <idlc/errorhandler.hxx>
+#include <astscope.hxx>
+#include <astbasetype.hxx>
+#include <astinterface.hxx>
+#include <errorhandler.hxx>
 #include <osl/diagnose.h>
 
 

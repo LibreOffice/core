@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <accessibility/standard/accessiblemenuitemcomponent.hxx>
+#include <standard/accessiblemenuitemcomponent.hxx>
 
 
-#include <accessibility/helper/accresmgr.hxx>
-#include <accessibility/helper/accessiblestrings.hrc>
+#include <helper/accresmgr.hxx>
+#include <helper/accessiblestrings.hrc>
 #include <toolkit/awt/vclxwindows.hxx>
 #include <toolkit/helper/externallock.hxx>
 #include <toolkit/helper/convert.hxx>

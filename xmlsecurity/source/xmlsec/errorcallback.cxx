@@ -23,7 +23,7 @@
  */
 #include "errorcallback.hxx"
 
-#include "xmlsecurity/xmlsec-wrapper.h"
+#include "xmlsec-wrapper.h"
 
 using namespace ::com::sun::star::xml::crypto;
 

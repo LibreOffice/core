@@ -43,7 +43,7 @@
 #include "certdb.h"
 #include "list"
 
-#include "xmlsecurity/xmlsec-wrapper.h"
+#include "xmlsec-wrapper.h"
 
 class SecurityEnvironment_NssImpl : public ::cppu::WeakImplHelper<
     css::xml::crypto::XSecurityEnvironment ,

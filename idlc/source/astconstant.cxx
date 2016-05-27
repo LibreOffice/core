@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <idlc/astconstant.hxx>
-#include <idlc/astscope.hxx>
+#include <astconstant.hxx>
+#include <astscope.hxx>
 
 #include <registry/writer.hxx>
 

@@ -18,10 +18,10 @@
  */
 
 
-#include <accessibility/standard/vclxaccessibledropdownlistbox.hxx>
-#include <accessibility/standard/vclxaccessiblelistbox.hxx>
-#include <accessibility/helper/accresmgr.hxx>
-#include <accessibility/helper/accessiblestrings.hrc>
+#include <standard/vclxaccessibledropdownlistbox.hxx>
+#include <standard/vclxaccessiblelistbox.hxx>
+#include <helper/accresmgr.hxx>
+#include <helper/accessiblestrings.hrc>
 
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>

@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "accessibility/extended/AccessibleGridControl.hxx"
-#include "accessibility/extended/AccessibleGridControlTable.hxx"
-#include "accessibility/extended/AccessibleGridControlHeader.hxx"
+#include "extended/AccessibleGridControl.hxx"
+#include "extended/AccessibleGridControlTable.hxx"
+#include "extended/AccessibleGridControlHeader.hxx"
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleTableModelChange.hpp>
 #include <com/sun/star/accessibility/AccessibleTableModelChangeType.hpp>
@@ -305,7 +305,7 @@ AccessibleGridControl::implGetFixedChild( sal_Int32 nChildIndex )
 AccessibleGridControlTable* AccessibleGridControl::createAccessibleTable()
 {
     css::uno::Reference< css::accessibility::XAccessible > xCreator(m_xImpl->m_aCreator);
-    OSL_ENSURE( xCreator.is(), "accessibility/extended/AccessibleGridControl::createAccessibleTable: my creator died - how this?" );
+    OSL_ENSURE( xCreator.is(), "extended/AccessibleGridControl::createAccessibleTable: my creator died - how this?" );
     return new AccessibleGridControlTable( xCreator, m_aTable, TCTYPE_TABLE );
 }
 
@@ -418,7 +418,7 @@ css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL Accessibl
     SolarMutexGuard g;
 
     OSL_ENSURE( ( m_pContext && m_xContext.is() ) || ( !m_pContext && !m_xContext.is() ),
-        "accessibility/extended/AccessibleGridControlAccess::getAccessibleContext: inconsistency!" );
+        "extended/AccessibleGridControlAccess::getAccessibleContext: inconsistency!" );
 
     // if the context died meanwhile (we're no listener, so it won't tell us explicitily when this happens),
     // then reset an re-create.

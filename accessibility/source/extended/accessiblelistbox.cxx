@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <accessibility/extended/accessiblelistbox.hxx>
-#include <accessibility/extended/accessiblelistboxentry.hxx>
+#include <extended/accessiblelistbox.hxx>
+#include <extended/accessiblelistboxentry.hxx>
 #include <svtools/treelistbox.hxx>
 #include <svtools/treelistentry.hxx>
 #include <com/sun/star/awt/Point.hpp>

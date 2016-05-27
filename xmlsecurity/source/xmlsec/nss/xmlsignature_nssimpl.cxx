@@ -31,7 +31,7 @@
 #include "xmlstreamio.hxx"
 #include "errorcallback.hxx"
 
-#include "xmlsecurity/xmlsec-wrapper.h"
+#include "xmlsec-wrapper.h"
 
 using namespace ::com::sun::star::uno ;
 using namespace ::com::sun::star::lang ;

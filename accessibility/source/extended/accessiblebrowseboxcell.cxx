@@ -19,7 +19,7 @@
 
 #include <sal/types.h>
 #include <svtools/accessibletableprovider.hxx>
-#include <accessibility/extended/accessiblebrowseboxcell.hxx>
+#include <extended/accessiblebrowseboxcell.hxx>
 
 namespace accessibility
 {

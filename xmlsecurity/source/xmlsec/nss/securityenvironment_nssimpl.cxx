@@ -29,12 +29,12 @@
 #include "x509certificate_nssimpl.hxx"
 #include <comphelper/servicehelper.hxx>
 
-#include "xmlsecurity/xmlsec-wrapper.h"
+#include "xmlsec-wrapper.h"
 
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/docpasswordrequest.hxx>
-#include <xmlsecurity/biginteger.hxx>
+#include <biginteger.hxx>
 #include <sal/log.hxx>
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include <vector>

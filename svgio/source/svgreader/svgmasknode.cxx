@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svgio/svgreader/svgmasknode.hxx>
+#include <svgmasknode.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <drawinglayer/primitive2d/transparenceprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>

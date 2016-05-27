@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "bridges/cpp_uno/shared/cppinterfaceproxy.hxx"
+#include "cppinterfaceproxy.hxx"
 
 #include "guardedarray.hxx"
 
-#include "bridges/cpp_uno/shared/bridge.hxx"
-#include "bridges/cpp_uno/shared/vtablefactory.hxx"
+#include "bridge.hxx"
+#include "vtablefactory.hxx"
 
 #include "com/sun/star/uno/XInterface.hpp"
 #include "osl/getglobalmutex.hxx"

@@ -18,7 +18,7 @@
  */
 
 
-#include "bridges/cpp_uno/shared/types.hxx"
+#include "types.hxx"
 
 #include "typelib/typeclass.h"
 #include "typelib/typedescription.h"

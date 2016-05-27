@@ -18,9 +18,9 @@
  */
 
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
-#include <svgio/svgreader/svgdocument.hxx>
-#include <svgio/svgreader/svgnode.hxx>
-#include <svgio/svgreader/svgstyleattributes.hxx>
+#include <svgdocument.hxx>
+#include <svgnode.hxx>
+#include <svgstyleattributes.hxx>
 #include <drawinglayer/primitive2d/objectinfoprimitive2d.hxx>
 #include <tools/urlobj.hxx>
 

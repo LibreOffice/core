@@ -20,7 +20,7 @@
 #include <config_features.h>
 #include <config_folders.h>
 
-#include <pyuno/pyuno.hxx>
+#include <pyuno.hxx>
 
 #include <osl/process.h>
 #include <osl/file.hxx>

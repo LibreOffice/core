@@ -28,7 +28,7 @@
 #include "securityenvironment_mscryptimpl.hxx"
 #include "errorcallback.hxx"
 
-#include "xmlsecurity/xmlsec-wrapper.h"
+#include "xmlsec-wrapper.h"
 
 #ifdef UNX
 #define stricmp strcasecmp

@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <accessibility/extended/accessibleeditbrowseboxcell.hxx>
+#include <extended/accessibleeditbrowseboxcell.hxx>
 #include <svtools/editbrowsebox.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/accessibility/XAccessibleText.hpp>

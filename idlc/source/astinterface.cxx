@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <idlc/astinterface.hxx>
-#include <idlc/astattribute.hxx>
-#include <idlc/astoperation.hxx>
-#include "idlc/idlc.hxx"
+#include <astinterface.hxx>
+#include <astattribute.hxx>
+#include <astoperation.hxx>
+#include "idlc.hxx"
 
 #include <registry/version.h>
 #include <registry/writer.hxx>

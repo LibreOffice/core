@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <accessibility/extended/listboxaccessible.hxx>
+#include <extended/listboxaccessible.hxx>
 #include <svtools/treelistbox.hxx>
 #include <vcl/svapp.hxx>
 

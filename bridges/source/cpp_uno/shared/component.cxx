@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "bridges/cpp_uno/shared/bridge.hxx"
+#include "bridge.hxx"
 
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/RuntimeException.hpp"
