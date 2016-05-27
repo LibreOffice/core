@@ -484,7 +484,7 @@ void ImplSmallBorderWindowView::Init( OutputDevice* pDev, long nWidth, long nHei
         {
             // for native widget drawing we must find out what
             // control this border belongs to
-            ControlType aCtrlType = 0;
+            ControlType aCtrlType = ControlType::Generic;
             if (pCtrl)
             {
                 switch( pCtrl->GetType() )
@@ -492,19 +492,19 @@ void ImplSmallBorderWindowView::Init( OutputDevice* pDev, long nWidth, long nHei
                     case WINDOW_LISTBOX:
                         if( pCtrl->GetStyle() & WB_DROPDOWN )
                         {
-                            aCtrlType = CTRL_LISTBOX;
+                            aCtrlType = ControlType::Listbox;
                             mbNWFBorder = true;
                         }
                         break;
                     case WINDOW_COMBOBOX:
                         if( pCtrl->GetStyle() & WB_DROPDOWN )
                         {
-                            aCtrlType = CTRL_COMBOBOX;
+                            aCtrlType = ControlType::Combobox;
                             mbNWFBorder = true;
                         }
                         break;
                     case WINDOW_MULTILINEEDIT:
-                        aCtrlType = CTRL_MULTILINE_EDITBOX;
+                        aCtrlType = ControlType::MultilineEditbox;
                         mbNWFBorder = true;
                         break;
                     case WINDOW_EDIT:
@@ -519,9 +519,9 @@ void ImplSmallBorderWindowView::Init( OutputDevice* pDev, long nWidth, long nHei
                     case WINDOW_CALCINPUTLINE:
                         mbNWFBorder = true;
                         if (pCtrl->GetStyle() & WB_SPIN)
-                            aCtrlType = CTRL_SPINBOX;
+                            aCtrlType = ControlType::Spinbox;
                         else
-                            aCtrlType = CTRL_EDITBOX;
+                            aCtrlType = ControlType::Editbox;
                         break;
                     default:
                         break;
@@ -533,7 +533,7 @@ void ImplSmallBorderWindowView::Init( OutputDevice* pDev, long nWidth, long nHei
                 Rectangle aCtrlRegion( (const Point&)Point(), Size( mnWidth < 10 ? 10 : mnWidth, mnHeight < 10 ? 10 : mnHeight ) );
                 Rectangle aBounds( aCtrlRegion );
                 Rectangle aContent( aCtrlRegion );
-                if( pWin->GetNativeControlRegion( aCtrlType, PART_ENTIRE_CONTROL, aCtrlRegion,
+                if( pWin->GetNativeControlRegion( aCtrlType, ControlPart::Entire, aCtrlRegion,
                                                   ControlState::ENABLED, aControlValue, OUString(),
                                                   aBounds, aContent ) )
                 {
@@ -637,14 +637,14 @@ void ImplSmallBorderWindowView::DrawWindow(vcl::RenderContext& rRenderContext, B
     // control this border belongs to
     vcl::Window* pCtrl = mpBorderWindow->GetWindow(GetWindowType::Client);
 
-    ControlType aCtrlType = 0;
-    ControlPart aCtrlPart = PART_ENTIRE_CONTROL;
+    ControlType aCtrlType = ControlType::Generic;
+    ControlPart aCtrlPart = ControlPart::Entire;
     if (pCtrl)
     {
         switch (pCtrl->GetType())
         {
             case WINDOW_MULTILINEEDIT:
-                aCtrlType = CTRL_MULTILINE_EDITBOX;
+                aCtrlType = ControlType::MultilineEditbox;
                 break;
             case WINDOW_EDIT:
             case WINDOW_PATTERNFIELD:
@@ -657,24 +657,24 @@ void ImplSmallBorderWindowView::DrawWindow(vcl::RenderContext& rRenderContext, B
             case WINDOW_SPINFIELD:
             case WINDOW_CALCINPUTLINE:
                 if (pCtrl->GetStyle() & WB_SPIN)
-                    aCtrlType = CTRL_SPINBOX;
+                    aCtrlType = ControlType::Spinbox;
                 else
-                    aCtrlType = CTRL_EDITBOX;
+                    aCtrlType = ControlType::Editbox;
                 break;
 
             case WINDOW_LISTBOX:
             case WINDOW_MULTILISTBOX:
             case WINDOW_TREELISTBOX:
-                aCtrlType = CTRL_LISTBOX;
+                aCtrlType = ControlType::Listbox;
                 if (pCtrl->GetStyle() & WB_DROPDOWN)
-                    aCtrlPart = PART_ENTIRE_CONTROL;
+                    aCtrlPart = ControlPart::Entire;
                 else
-                    aCtrlPart = PART_WINDOW;
+                    aCtrlPart = ControlPart::ListboxWindow;
                 break;
 
             case WINDOW_LISTBOXWINDOW:
-                aCtrlType = CTRL_LISTBOX;
-                aCtrlPart = PART_WINDOW;
+                aCtrlType = ControlType::Listbox;
+                aCtrlPart = ControlPart::ListboxWindow;
                 break;
 
             case WINDOW_COMBOBOX:
@@ -687,13 +687,13 @@ void ImplSmallBorderWindowView::DrawWindow(vcl::RenderContext& rRenderContext, B
             case WINDOW_LONGCURRENCYBOX:
                 if (pCtrl->GetStyle() & WB_DROPDOWN)
                 {
-                    aCtrlType = CTRL_COMBOBOX;
-                    aCtrlPart = PART_ENTIRE_CONTROL;
+                    aCtrlType = ControlType::Combobox;
+                    aCtrlPart = ControlPart::Entire;
                 }
                 else
                 {
-                    aCtrlType = CTRL_LISTBOX;
-                    aCtrlPart = PART_WINDOW;
+                    aCtrlType = ControlType::Listbox;
+                    aCtrlPart = ControlPart::ListboxWindow;
                 }
                 break;
 
@@ -702,7 +702,7 @@ void ImplSmallBorderWindowView::DrawWindow(vcl::RenderContext& rRenderContext, B
         }
     }
 
-    if (aCtrlType && pCtrl->IsNativeControlSupported(aCtrlType, aCtrlPart))
+    if (aCtrlType != ControlType::Generic && pCtrl->IsNativeControlSupported(aCtrlType, aCtrlPart))
     {
         ImplControlValue aControlValue;
         ControlState nState = ControlState::ENABLED;
@@ -748,7 +748,7 @@ void ImplSmallBorderWindowView::DrawWindow(vcl::RenderContext& rRenderContext, B
 
         // if the native theme draws the spinbuttons in one call, make sure the proper settings
         // are passed, this might force a redraw though.... (TODO: improve)
-        if ((aCtrlType == CTRL_SPINBOX) && !pCtrl->IsNativeControlSupported(CTRL_SPINBOX, PART_BUTTON_UP))
+        if ((aCtrlType == ControlType::Spinbox) && !pCtrl->IsNativeControlSupported(ControlType::Spinbox, ControlPart::ButtonUp))
         {
             Edit* pEdit = static_cast<Edit*>(pCtrl)->GetSubEdit();
             if (pEdit && !pEdit->SupportsDoubleBuffering())

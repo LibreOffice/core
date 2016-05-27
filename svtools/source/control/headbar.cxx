@@ -310,10 +310,10 @@ void HeaderBar::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos
     HeaderBarItemBits nBits = pItem->mnBits;
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
 
-    if (rRenderContext.IsNativeControlSupported(CTRL_WINDOW_BACKGROUND, PART_ENTIRE_CONTROL))
+    if (rRenderContext.IsNativeControlSupported(ControlType::WindowBackground, ControlPart::Entire))
     {
         aCtrlRegion = aRect;
-        rRenderContext.DrawNativeControl(CTRL_WINDOW_BACKGROUND, PART_ENTIRE_CONTROL,
+        rRenderContext.DrawNativeControl(ControlType::WindowBackground, ControlPart::Entire,
                                          aCtrlRegion, nState, aControlValue, OUString());
 
     }
@@ -332,14 +332,14 @@ void HeaderBar::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos
 
     Color aSelectionTextColor(COL_TRANSPARENT);
 
-    if (rRenderContext.IsNativeControlSupported(CTRL_LISTHEADER, PART_BUTTON))
+    if (rRenderContext.IsNativeControlSupported(ControlType::ListHeader, ControlPart::Button))
     {
         aCtrlRegion = aRect;
-        aControlValue.setTristateVal(BUTTONVALUE_ON);
+        aControlValue.setTristateVal(ButtonValue::On);
         nState |= ControlState::ENABLED;
         if (bHigh)
             nState |= ControlState::PRESSED;
-        rRenderContext.DrawNativeControl(CTRL_LISTHEADER, PART_BUTTON,
+        rRenderContext.DrawNativeControl(ControlType::ListHeader, ControlPart::Button,
                                          aCtrlRegion, nState, aControlValue, OUString());
     }
     else
@@ -553,7 +553,7 @@ void HeaderBar::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos
 
         if (bDraw)
         {
-            if (rRenderContext.IsNativeControlSupported(CTRL_LISTHEADER, PART_ARROW))
+            if (rRenderContext.IsNativeControlSupported(ControlType::ListHeader, ControlPart::Arrow))
             {
                 aCtrlRegion = Rectangle(Point(nArrowX, aRect.Top()), Size(nArrowWidth, aRect.GetHeight()));
                 // control value passes 1 if arrow points down, 0 otherwise
@@ -561,7 +561,7 @@ void HeaderBar::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos
                 nState |= ControlState::ENABLED;
                 if (bHigh)
                     nState |= ControlState::PRESSED;
-                rRenderContext.DrawNativeControl(CTRL_LISTHEADER, PART_ARROW, aCtrlRegion,
+                rRenderContext.DrawNativeControl(ControlType::ListHeader, ControlPart::Arrow, aCtrlRegion,
                                                  nState, aControlValue, OUString());
             }
             else

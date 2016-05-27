@@ -631,13 +631,13 @@ void SalGraphics::mirror( ImplControlValue& rVal, const OutputDevice* pOutDev ) 
 {
     switch( rVal.getType() )
     {
-        case CTRL_SLIDER:
+        case ControlType::Slider:
         {
             SliderValue* pSlVal = static_cast<SliderValue*>(&rVal);
             mirror(pSlVal->maThumbRect,pOutDev);
         }
         break;
-        case CTRL_SCROLLBAR:
+        case ControlType::Scrollbar:
         {
             ScrollbarValue* pScVal = static_cast<ScrollbarValue*>(&rVal);
             mirror(pScVal->maThumbRect,pOutDev);
@@ -645,20 +645,21 @@ void SalGraphics::mirror( ImplControlValue& rVal, const OutputDevice* pOutDev ) 
             mirror(pScVal->maButton2Rect,pOutDev);
         }
         break;
-        case CTRL_SPINBOX:
-        case CTRL_SPINBUTTONS:
+        case ControlType::Spinbox:
+        case ControlType::SpinButtons:
         {
             SpinbuttonValue* pSpVal = static_cast<SpinbuttonValue*>(&rVal);
             mirror(pSpVal->maUpperRect,pOutDev);
             mirror(pSpVal->maLowerRect,pOutDev);
         }
         break;
-        case CTRL_TOOLBAR:
+        case ControlType::Toolbar:
         {
             ToolbarValue* pTVal = static_cast<ToolbarValue*>(&rVal);
             mirror(pTVal->maGripRect,pOutDev);
         }
         break;
+        default: break;
     }
 }
 

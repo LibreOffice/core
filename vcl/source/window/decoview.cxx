@@ -651,7 +651,7 @@ void ImplDrawFrame( OutputDevice *const pDev, Rectangle& rRect,
         nFlags |= DrawFrameFlags::Mono;
 
     if( nStyle != DrawFrameStyle::NWF &&
-        pWin && pWin->IsNativeControlSupported(CTRL_FRAME, PART_BORDER) )
+        pWin && pWin->IsNativeControlSupported(ControlType::Frame, ControlPart::Border) )
     {
         long nControlFlags = static_cast<long>(nStyle);
         nControlFlags |= static_cast<long>(nFlags);
@@ -661,13 +661,13 @@ void ImplDrawFrame( OutputDevice *const pDev, Rectangle& rRect,
 
         Rectangle aBound, aContent;
         Rectangle aNatRgn( rRect );
-        if( pWin->GetNativeControlRegion(CTRL_FRAME, PART_BORDER,
+        if( pWin->GetNativeControlRegion(ControlType::Frame, ControlPart::Border,
             aNatRgn, ControlState::NONE, aControlValue, OUString(), aBound, aContent) )
         {
             // if bNoDraw is true then don't call the drawing routine
             // but just update the target rectangle
             if( bNoDraw ||
-                pWin->DrawNativeControl( CTRL_FRAME, PART_BORDER, aContent, ControlState::ENABLED,
+                pWin->DrawNativeControl( ControlType::Frame, ControlPart::Border, aContent, ControlState::ENABLED,
                                          aControlValue, OUString()) )
             {
                 rRect = aContent;
@@ -1058,12 +1058,12 @@ void DecorationView::DrawSeparator( const Point& rStart, const Point& rStop, boo
     vcl::Window *const pWin = (mpOutDev->GetOutDevType()==OUTDEV_WINDOW) ? static_cast<vcl::Window*>(mpOutDev.get()) : nullptr;
     if(pWin)
     {
-        ControlPart nPart = ( bVertical ? PART_SEPARATOR_VERT : PART_SEPARATOR_HORZ );
-        bool nativeSupported = pWin->IsNativeControlSupported( CTRL_FIXEDLINE, nPart );
+        ControlPart nPart = ( bVertical ? ControlPart::SeparatorVert : ControlPart::SeparatorHorz );
+        bool nativeSupported = pWin->IsNativeControlSupported( ControlType::Fixedline, nPart );
         ImplControlValue    aValue;
         ControlState        nState = ControlState::NONE;
         Rectangle aRect(rStart,rStop);
-        if(nativeSupported && pWin->DrawNativeControl(CTRL_FIXEDLINE,nPart,aRect,nState,aValue,OUString()))
+        if(nativeSupported && pWin->DrawNativeControl(ControlType::Fixedline,nPart,aRect,nState,aValue,OUString()))
             return;
     }
 
