@@ -3820,7 +3820,7 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, cons
             {
                 sal_uInt32 nTransColor = GetPropertyValue( DFF_Prop_pictureTransparent, 0 );
 
-                if ( aGraf.GetType() == GRAPHIC_BITMAP )
+                if ( aGraf.GetType() == GraphicType::Bitmap )
                 {
                     BitmapEx    aBitmapEx( aGraf.GetBitmapEx() );
                     Bitmap      aBitmap( aBitmapEx.GetBitmap() );
@@ -3910,7 +3910,7 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, cons
                     }
                     switch ( aGraf.GetType() )
                     {
-                        case GRAPHIC_BITMAP :
+                        case GraphicType::Bitmap :
                         {
                             BitmapEx    aBitmapEx( aGraf.GetBitmapEx() );
                             if ( nBrightness || nContrast || ( nGamma != 0x10000 ) )
@@ -3924,7 +3924,7 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, cons
                         }
                         break;
 
-                        case GRAPHIC_GDIMETAFILE :
+                        case GraphicType::GdiMetafile :
                         {
                             GDIMetaFile aGdiMetaFile( aGraf.GetGDIMetaFile() );
                             if ( nBrightness || nContrast || ( nGamma != 0x10000 ) )
@@ -6259,7 +6259,7 @@ bool SvxMSDffManager::GetBLIP( sal_uLong nIdx_, Graphic& rData, Rectangle* pVisA
             to get the Graphic via GraphicObject */
             GraphicObject aGraphicObject( iter->second );
             rData = aGraphicObject.GetGraphic();
-            if ( rData.GetType() != GRAPHIC_NONE )
+            if ( rData.GetType() != GraphicType::NONE )
                 bOk = true;
             else
                 aEscherBlipCache.erase(iter);
@@ -6470,7 +6470,7 @@ bool SvxMSDffManager::GetBLIPDirect( SvStream& rBLIPStream, Graphic& rData, Rect
             //
             // For pict graphics we will furthermore scale the metafile, because font scaling leads to error if the
             // dxarray is empty (this has been solved in wmf/emf but not for pict)
-            if( bMtfBLIP && ( GRFILTER_OK == nRes ) && ( rData.GetType() == GRAPHIC_GDIMETAFILE ) && ( ( nInst & 0xFFFE ) == 0x542 ) )
+            if( bMtfBLIP && ( GRFILTER_OK == nRes ) && ( rData.GetType() == GraphicType::GdiMetafile ) && ( ( nInst & 0xFFFE ) == 0x542 ) )
             {
                 if ( ( aMtfSize100.Width() >= 1000 ) && ( aMtfSize100.Height() >= 1000 ) )
                 {   // #75956#, scaling does not work properly, if the graphic is less than 1cm
@@ -6793,7 +6793,7 @@ bool SvxMSDffManager::ConvertToOle2( SvStream& rStm, sal_uInt32 nReadLen,
                 sal_uInt16 sz[4];
                 rStm.Read( sz, 8 );
                 Graphic aGraphic;
-                if( ERRCODE_NONE == GraphicConverter::Import( rStm, aGraphic ) && aGraphic.GetType() )
+                if( ERRCODE_NONE == GraphicConverter::Import( rStm, aGraphic ) && aGraphic.GetType() != GraphicType::NONE )
                 {
                     const GDIMetaFile& rMtf = aGraphic.GetGDIMetaFile();
                     MakeContentStream( rDest, rMtf );

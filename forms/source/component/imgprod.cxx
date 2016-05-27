@@ -259,7 +259,7 @@ void ImageProducer::setImage( css::uno::Reference< css::io::XInputStream > & rIn
 
 void ImageProducer::NewDataAvailable()
 {
-    if( ( GRAPHIC_NONE == mpGraphic->GetType() ) || mpGraphic->GetContext() )
+    if( ( GraphicType::NONE == mpGraphic->GetType() ) || mpGraphic->GetContext() )
         startProduction();
 }
 
@@ -271,17 +271,17 @@ void ImageProducer::startProduction() throw(css::uno::RuntimeException, std::exc
         bool bNotifyEmptyGraphics = false;
 
         // valid stream or filled graphic? => update consumers
-        if( mpStm || ( mpGraphic->GetType() != GRAPHIC_NONE ) )
+        if( mpStm || ( mpGraphic->GetType() != GraphicType::NONE ) )
         {
             // if we already have a graphic, we don't have to import again;
             // graphic is cleared if a new Stream is set
-            if( ( mpGraphic->GetType() == GRAPHIC_NONE ) || mpGraphic->GetContext() )
+            if( ( mpGraphic->GetType() == GraphicType::NONE ) || mpGraphic->GetContext() )
             {
                 if ( ImplImportGraphic( *mpGraphic ) )
                     maDoneHdl.Call( mpGraphic );
             }
 
-            if( mpGraphic->GetType() != GRAPHIC_NONE )
+            if( mpGraphic->GetType() != GraphicType::NONE )
                 ImplUpdateData( *mpGraphic );
             else
                 bNotifyEmptyGraphics = true;

@@ -141,7 +141,7 @@ bool SvFileObject::GetData( css::uno::Any & rData,
                 }
 
                 if( SotClipboardFormatId::SVXB != nFmt )
-                    nFmt = (bLoadError || GRAPHIC_BITMAP == aGrf.GetType())
+                    nFmt = (bLoadError || GraphicType::Bitmap == aGrf.GetType())
                                 ? SotClipboardFormatId::BITMAP
                                 : SotClipboardFormatId::GDIMETAFILE;
 
@@ -149,7 +149,7 @@ bool SvFileObject::GetData( css::uno::Any & rData,
                 switch ( nFmt )
                 {
                 case SotClipboardFormatId::SVXB:
-                    if( GRAPHIC_NONE != aGrf.GetType() )
+                    if( GraphicType::NONE != aGrf.GetType() )
                     {
                         aMemStm.SetVersion( SOFFICE_FILEFORMAT_50 );
                         WriteGraphic( aMemStm, aGrf );

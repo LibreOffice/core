@@ -165,7 +165,7 @@ namespace svgio
             basegfx::B2DRange& rViewBox,
             BitmapEx& rBitmapEx)
         {
-            if(GRAPHIC_BITMAP == rGraphic.GetType())
+            if(GraphicType::Bitmap == rGraphic.GetType())
             {
                 if(rGraphic.getSvgData().get())
                 {

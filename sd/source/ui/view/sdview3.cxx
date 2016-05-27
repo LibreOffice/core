@@ -193,7 +193,7 @@ bool View::InsertMetaFile( TransferableDataHelper& rDataHelper, const Point& rPo
                 case MetaActionType::BMPSCALE:
                 case MetaActionType::BMPEX:
                 case MetaActionType::BMPEXSCALE:
-                    if( aGraphic.GetType() != GRAPHIC_NONE )
+                    if( aGraphic.GetType() != GraphicType::NONE )
                     {
                         bVector = true;
                     }
@@ -238,7 +238,7 @@ bool View::InsertMetaFile( TransferableDataHelper& rDataHelper, const Point& rPo
     }
 
     // it is not a vector metafile but it also has no graphic?
-    if( !bVector && (aGraphic.GetType() == GRAPHIC_NONE) )
+    if( !bVector && (aGraphic.GetType() == GraphicType::NONE) )
         bVector = true;
 
     // restrict movement to WorkArea

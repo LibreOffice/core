@@ -94,7 +94,7 @@ ImpGraphic::ImpGraphic() :
         mpContext       ( nullptr ),
         mpSwapFile      ( nullptr ),
         mpGfxLink       ( nullptr ),
-        meType          ( GRAPHIC_NONE ),
+        meType          ( GraphicType::NONE ),
         mnSizeBytes     ( 0UL ),
         mnRefCount      ( 1UL ),
         mbSwapOut       ( false ),
@@ -140,7 +140,7 @@ ImpGraphic::ImpGraphic( const Bitmap& rBitmap ) :
         mpContext       ( nullptr ),
         mpSwapFile      ( nullptr ),
         mpGfxLink       ( nullptr ),
-        meType          ( !rBitmap.IsEmpty() ? GRAPHIC_BITMAP : GRAPHIC_NONE ),
+        meType          ( !rBitmap.IsEmpty() ? GraphicType::Bitmap : GraphicType::NONE ),
         mnSizeBytes     ( 0UL ),
         mnRefCount      ( 1UL ),
         mbSwapOut       ( false ),
@@ -155,7 +155,7 @@ ImpGraphic::ImpGraphic( const BitmapEx& rBitmapEx ) :
         mpContext       ( nullptr ),
         mpSwapFile      ( nullptr ),
         mpGfxLink       ( nullptr ),
-        meType          ( !rBitmapEx.IsEmpty() ? GRAPHIC_BITMAP : GRAPHIC_NONE ),
+        meType          ( !rBitmapEx.IsEmpty() ? GraphicType::Bitmap : GraphicType::NONE ),
         mnSizeBytes     ( 0UL ),
         mnRefCount      ( 1UL ),
         mbSwapOut       ( false ),
@@ -169,7 +169,7 @@ ImpGraphic::ImpGraphic(const SvgDataPtr& rSvgDataPtr)
     mpContext( nullptr ),
     mpSwapFile( nullptr ),
     mpGfxLink( nullptr ),
-    meType( rSvgDataPtr.get() ? GRAPHIC_BITMAP : GRAPHIC_NONE ),
+    meType( rSvgDataPtr.get() ? GraphicType::Bitmap : GraphicType::NONE ),
     mnSizeBytes( 0UL ),
     mnRefCount( 1UL ),
     mbSwapOut( false ),
@@ -185,7 +185,7 @@ ImpGraphic::ImpGraphic( const Animation& rAnimation ) :
         mpContext       ( nullptr ),
         mpSwapFile      ( nullptr ),
         mpGfxLink       ( nullptr ),
-        meType          ( GRAPHIC_BITMAP ),
+        meType          ( GraphicType::Bitmap ),
         mnSizeBytes     ( 0UL ),
         mnRefCount      ( 1UL ),
         mbSwapOut       ( false ),
@@ -200,7 +200,7 @@ ImpGraphic::ImpGraphic( const GDIMetaFile& rMtf ) :
         mpContext       ( nullptr ),
         mpSwapFile      ( nullptr ),
         mpGfxLink       ( nullptr ),
-        meType          ( GRAPHIC_GDIMETAFILE ),
+        meType          ( GraphicType::GdiMetafile ),
         mnSizeBytes     ( 0UL ),
         mnRefCount      ( 1UL ),
         mbSwapOut       ( false ),
@@ -271,18 +271,18 @@ bool ImpGraphic::operator==( const ImpGraphic& rImpGraphic ) const
     {
         switch( meType )
         {
-            case GRAPHIC_NONE:
+            case GraphicType::NONE:
                 bRet = true;
             break;
 
-            case GRAPHIC_GDIMETAFILE:
+            case GraphicType::GdiMetafile:
             {
                 if( rImpGraphic.maMetaFile == maMetaFile )
                     bRet = true;
             }
             break;
 
-            case GRAPHIC_BITMAP:
+            case GraphicType::Bitmap:
             {
                 if(maSvgData.get())
                 {
@@ -391,7 +391,7 @@ void ImpGraphic::ImplClear()
 
     // cleanup
     ImplClearGraphics( false );
-    meType = GRAPHIC_NONE;
+    meType = GraphicType::NONE;
     mnSizeBytes = 0;
 }
 
@@ -399,19 +399,19 @@ void ImpGraphic::ImplClear()
 void ImpGraphic::ImplSetDefaultType()
 {
     ImplClear();
-    meType = GRAPHIC_DEFAULT;
+    meType = GraphicType::Default;
 }
 
 bool ImpGraphic::ImplIsSupportedGraphic() const
 {
-    return( meType != GRAPHIC_NONE );
+    return( meType != GraphicType::NONE );
 }
 
 bool ImpGraphic::ImplIsTransparent() const
 {
     bool bRet(true);
 
-    if( meType == GRAPHIC_BITMAP && !maSvgData.get())
+    if( meType == GraphicType::Bitmap && !maSvgData.get())
     {
         bRet = ( mpAnimation ? mpAnimation->IsTransparent() : maEx.IsTransparent() );
     }
@@ -427,7 +427,7 @@ bool ImpGraphic::ImplIsAlpha() const
     {
         bRet = true;
     }
-    else if( meType == GRAPHIC_BITMAP )
+    else if( meType == GraphicType::Bitmap )
     {
         bRet = ( nullptr == mpAnimation ) && maEx.IsAlpha();
     }
@@ -442,7 +442,7 @@ bool ImpGraphic::ImplIsAnimated() const
 
 bool ImpGraphic::ImplIsEPS() const
 {
-    return( ( meType == GRAPHIC_GDIMETAFILE ) &&
+    return( ( meType == GraphicType::GdiMetafile ) &&
             ( maMetaFile.GetActionSize() > 0 ) &&
             ( maMetaFile.GetAction( 0 )->GetType() == MetaActionType::EPS ) );
 }
@@ -451,7 +451,7 @@ Bitmap ImpGraphic::ImplGetBitmap(const GraphicConversionParameters& rParameters)
 {
     Bitmap aRetBmp;
 
-    if( meType == GRAPHIC_BITMAP )
+    if( meType == GraphicType::Bitmap )
     {
         if(maSvgData.get() && maEx.IsEmpty())
         {
@@ -467,7 +467,7 @@ Bitmap ImpGraphic::ImplGetBitmap(const GraphicConversionParameters& rParameters)
         if(rParameters.getSizePixel().Width() || rParameters.getSizePixel().Height())
             aRetBmp.Scale(rParameters.getSizePixel());
     }
-    else if( ( meType != GRAPHIC_DEFAULT ) && ImplIsSupportedGraphic() )
+    else if( ( meType != GraphicType::Default ) && ImplIsSupportedGraphic() )
     {
         if(maEx.IsEmpty())
         {
@@ -503,7 +503,7 @@ Bitmap ImpGraphic::ImplGetBitmap(const GraphicConversionParameters& rParameters)
             // need to be extended when hairlines are on the right or bottom edge
             Size aPixelSize(aDrawSize);
 
-            if(GRAPHIC_GDIMETAFILE == ImplGetType())
+            if(GraphicType::GdiMetafile == ImplGetType())
             {
                 // get hairline and full bound rect
                 Rectangle aHairlineRect;
@@ -559,7 +559,7 @@ BitmapEx ImpGraphic::ImplGetBitmapEx(const GraphicConversionParameters& rParamet
 {
     BitmapEx aRetBmpEx;
 
-    if( meType == GRAPHIC_BITMAP )
+    if( meType == GraphicType::Bitmap )
     {
         if(maSvgData.get() && maEx.IsEmpty())
         {
@@ -576,7 +576,7 @@ BitmapEx ImpGraphic::ImplGetBitmapEx(const GraphicConversionParameters& rParamet
                 rParameters.getScaleHighQuality() ? BmpScaleFlag::Interpolate : BmpScaleFlag::Fast);
         }
     }
-    else if( ( meType != GRAPHIC_DEFAULT ) && ImplIsSupportedGraphic() )
+    else if( ( meType != GraphicType::Default ) && ImplIsSupportedGraphic() )
     {
         if(maEx.IsEmpty())
         {
@@ -604,13 +604,13 @@ Animation ImpGraphic::ImplGetAnimation() const
 
 const GDIMetaFile& ImpGraphic::ImplGetGDIMetaFile() const
 {
-    if (GRAPHIC_BITMAP == meType && !maMetaFile.GetActionSize())
+    if (GraphicType::Bitmap == meType && !maMetaFile.GetActionSize())
     {
         // #i119735#
         // Use the local maMetaFile as container for a metafile-representation
         // of the bitmap graphic. This will be done only once, thus be buffered.
         // I checked all usages of maMetaFile, it is only used when type is not
-        // GRAPHIC_BITMAP. In operator= it will get copied, thus buffering will
+        // GraphicType::Bitmap. In operator= it will get copied, thus buffering will
         // survive copying (change this if not wanted)
         ImpGraphic* pThat = const_cast< ImpGraphic* >(this);
 
@@ -650,11 +650,11 @@ Size ImpGraphic::ImplGetPrefSize() const
     {
         switch( meType )
         {
-            case GRAPHIC_NONE:
-            case GRAPHIC_DEFAULT:
+            case GraphicType::NONE:
+            case GraphicType::Default:
             break;
 
-            case GRAPHIC_BITMAP:
+            case GraphicType::Bitmap:
             {
                 if(maSvgData.get() && maEx.IsEmpty())
                 {
@@ -691,11 +691,11 @@ void ImpGraphic::ImplSetPrefSize( const Size& rPrefSize )
 {
     switch( meType )
     {
-        case GRAPHIC_NONE:
-        case GRAPHIC_DEFAULT:
+        case GraphicType::NONE:
+        case GraphicType::Default:
         break;
 
-        case GRAPHIC_BITMAP:
+        case GraphicType::Bitmap:
         {
             //UUUU used when importing a writer FlyFrame with SVG as graphic, added conversion
             // to allow setting the PrefSize at the BitmapEx to hold it
@@ -735,11 +735,11 @@ MapMode ImpGraphic::ImplGetPrefMapMode() const
     {
         switch( meType )
         {
-            case GRAPHIC_NONE:
-            case GRAPHIC_DEFAULT:
+            case GraphicType::NONE:
+            case GraphicType::Default:
             break;
 
-            case GRAPHIC_BITMAP:
+            case GraphicType::Bitmap:
             {
                 if(maSvgData.get() && maEx.IsEmpty())
                 {
@@ -772,11 +772,11 @@ void ImpGraphic::ImplSetPrefMapMode( const MapMode& rPrefMapMode )
 {
     switch( meType )
     {
-        case GRAPHIC_NONE:
-        case GRAPHIC_DEFAULT:
+        case GraphicType::NONE:
+        case GraphicType::Default:
         break;
 
-        case GRAPHIC_BITMAP:
+        case GraphicType::Bitmap:
         {
             if(maSvgData.get())
             {
@@ -810,7 +810,7 @@ sal_uLong ImpGraphic::ImplGetSizeBytes() const
 {
     if( 0 == mnSizeBytes )
     {
-        if( meType == GRAPHIC_BITMAP )
+        if( meType == GraphicType::Bitmap )
         {
             if(maSvgData.get())
             {
@@ -821,7 +821,7 @@ sal_uLong ImpGraphic::ImplGetSizeBytes() const
                 mnSizeBytes = mpAnimation ? mpAnimation->GetSizeBytes() : maEx.GetSizeBytes();
             }
         }
-        else if( meType == GRAPHIC_GDIMETAFILE )
+        else if( meType == GraphicType::GdiMetafile )
         {
             mnSizeBytes = maMetaFile.GetSizeBytes();
         }
@@ -836,10 +836,10 @@ void ImpGraphic::ImplDraw( OutputDevice* pOutDev, const Point& rDestPt ) const
     {
         switch( meType )
         {
-            case GRAPHIC_DEFAULT:
+            case GraphicType::Default:
             break;
 
-            case GRAPHIC_BITMAP:
+            case GraphicType::Bitmap:
             {
                 if(maSvgData.get() && !maEx)
                 {
@@ -872,10 +872,10 @@ void ImpGraphic::ImplDraw( OutputDevice* pOutDev,
     {
         switch( meType )
         {
-            case GRAPHIC_DEFAULT:
+            case GraphicType::Default:
             break;
 
-            case GRAPHIC_BITMAP:
+            case GraphicType::Bitmap:
             {
                 if(maSvgData.get() && maEx.IsEmpty())
                 {
@@ -1011,9 +1011,9 @@ bool ImpGraphic::ImplReadEmbedded( SvStream& rIStm )
 
     meType = (GraphicType) nType;
 
-    if( meType )
+    if( meType != GraphicType::NONE )
     {
-        if( meType == GRAPHIC_BITMAP )
+        if( meType == GraphicType::Bitmap )
         {
             if(maSvgData.get() && maEx.IsEmpty())
             {
@@ -1035,7 +1035,7 @@ bool ImpGraphic::ImplReadEmbedded( SvStream& rIStm )
             maMetaFile.SetPrefSize( aSize );
         }
 
-        if( meType == GRAPHIC_BITMAP || meType == GRAPHIC_GDIMETAFILE )
+        if( meType == GraphicType::Bitmap || meType == GraphicType::GdiMetafile )
         {
             ReadImpGraphic( rIStm, *this );
             bRet = ( rIStm.GetError() == 0UL );
@@ -1064,7 +1064,7 @@ bool ImpGraphic::ImplReadEmbedded( SvStream& rIStm )
                 bRet = ( rIStm.GetError() == 0UL );
             }
             else
-                meType = GRAPHIC_DEFAULT;
+                meType = GraphicType::Default;
         }
 
         if( bRet )
@@ -1085,7 +1085,7 @@ bool ImpGraphic::ImplWriteEmbedded( SvStream& rOStm )
 {
     bool bRet = false;
 
-    if( ( meType != GRAPHIC_NONE ) && ( meType != GRAPHIC_DEFAULT ) && !ImplIsSwapOut() )
+    if( ( meType != GraphicType::NONE ) && ( meType != GraphicType::Default ) && !ImplIsSwapOut() )
     {
         const MapMode   aMapMode( ImplGetPrefMapMode() );
         const Size      aSize( ImplGetPrefSize() );
@@ -1103,7 +1103,7 @@ bool ImpGraphic::ImplWriteEmbedded( SvStream& rOStm )
             // write new style header
             VersionCompat* pCompat = new VersionCompat( rOStm, StreamMode::WRITE, 1 );
 
-            rOStm.WriteInt32( meType );
+            rOStm.WriteInt32( (sal_Int32)meType );
 
             // data size is updated later
             nDataFieldPos = rOStm.Tell();
@@ -1117,7 +1117,7 @@ bool ImpGraphic::ImplWriteEmbedded( SvStream& rOStm )
         else
         {
             // write old style (<=4.0) header
-            rOStm.WriteInt32( meType );
+            rOStm.WriteInt32( (sal_Int32)meType );
 
             // data size is updated later
             nDataFieldPos = rOStm.Tell();
@@ -1373,10 +1373,10 @@ BitmapChecksum ImpGraphic::ImplGetChecksum() const
     {
         switch( meType )
         {
-            case GRAPHIC_DEFAULT:
+            case GraphicType::Default:
             break;
 
-            case GRAPHIC_BITMAP:
+            case GraphicType::Bitmap:
             {
                 if(maSvgData.get() && maEx.IsEmpty())
                 {
@@ -1609,11 +1609,11 @@ SvStream& WriteImpGraphic( SvStream& rOStm, const ImpGraphic& rImpGraphic )
 
                 switch( rImpGraphic.ImplGetType() )
                 {
-                    case GRAPHIC_NONE:
-                    case GRAPHIC_DEFAULT:
+                    case GraphicType::NONE:
+                    case GraphicType::Default:
                     break;
 
-                    case GRAPHIC_BITMAP:
+                    case GraphicType::Bitmap:
                     {
                         if(rImpGraphic.getSvgData().get())
                         {

@@ -51,14 +51,14 @@ namespace drawinglayer
                 }
             }
 #ifdef _WIN32 // Little point in displaying the "broken OLE" graphic on OSes that don't have real OLE, maybe?
-            if(GRAPHIC_NONE == aGraphic.GetType())
+            if(GraphicType::NONE == aGraphic.GetType())
             {
                 // no source, use fallback resource empty OLE graphic
                 aGraphic = SdrOle2Obj::GetEmptyOLEReplacementGraphic();
                 bScaleContent = true;
             }
 #endif
-            if(GRAPHIC_NONE != aGraphic.GetType())
+            if(GraphicType::NONE != aGraphic.GetType())
             {
                 const GraphicObject aGraphicObject(aGraphic);
                 const GraphicAttr aGraphicAttr;

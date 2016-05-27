@@ -394,7 +394,7 @@ bool PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream, Filter
     // global default value setting
     StackMember*    pGS;
 
-    if (rGraphic.GetType() == GRAPHIC_GDIMETAFILE)
+    if (rGraphic.GetType() == GraphicType::GdiMetafile)
         pMTF = &rGraphic.GetGDIMetaFile();
     else if (rGraphic.GetGDIMetaFile().GetActionSize())
         pMTF = pAMTF = new GDIMetaFile( rGraphic.GetGDIMetaFile() );

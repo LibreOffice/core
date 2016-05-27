@@ -2265,7 +2265,7 @@ bool SwTransferable::PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
         if(rData.GetSotStorageStream(SotClipboardFormatId::SVXB, xStm))
         {
             ReadGraphic( *xStm, aGraphic );
-            bRet = (GRAPHIC_NONE != aGraphic.GetType() && GRAPHIC_DEFAULT != aGraphic.GetType());
+            bRet = (GraphicType::NONE != aGraphic.GetType() && GraphicType::Default != aGraphic.GetType());
         }
 
         break;

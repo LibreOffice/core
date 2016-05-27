@@ -709,7 +709,7 @@ bool TransferableHelper::SetGDIMetaFile( const GDIMetaFile& rMtf, const DataFlav
 
 bool TransferableHelper::SetGraphic( const Graphic& rGraphic, const DataFlavor& )
 {
-    if( rGraphic.GetType() != GRAPHIC_NONE )
+    if( rGraphic.GetType() != GraphicType::NONE )
     {
         SvMemoryStream aMemStm( 65535, 65535 );
 

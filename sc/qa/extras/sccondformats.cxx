@@ -143,7 +143,7 @@ void ScConditionalFormatTest::testUndoAnchor()
 
     const GraphicObject& rGraphicObj = pObject->GetGraphicObject(true);
     CPPUNIT_ASSERT(!rGraphicObj.IsSwappedOut());
-    CPPUNIT_ASSERT_EQUAL(GRAPHIC_BITMAP, rGraphicObj.GetGraphic().GetType());
+    CPPUNIT_ASSERT_EQUAL(int(GraphicType::Bitmap), int(rGraphicObj.GetGraphic().GetType()));
     CPPUNIT_ASSERT_EQUAL(sal_uLong(864900), rGraphicObj.GetSizeBytes());
 
     // Get the document controller
@@ -177,14 +177,14 @@ void ScConditionalFormatTest::testUndoAnchor()
 
     // Check anchor type
     CPPUNIT_ASSERT(oldType == ScDrawLayer::GetAnchorType(*pObject) );
-    CPPUNIT_ASSERT_EQUAL(GRAPHIC_BITMAP, rGraphicObj.GetGraphic().GetType());
+    CPPUNIT_ASSERT_EQUAL(int(GraphicType::Bitmap), int(rGraphicObj.GetGraphic().GetType()));
     CPPUNIT_ASSERT_EQUAL(sal_uLong(864900), rGraphicObj.GetSizeBytes());
 
     pUndoMgr->Redo();
 
     // Check anchor type
     CPPUNIT_ASSERT(newType == ScDrawLayer::GetAnchorType(*pObject) );
-    CPPUNIT_ASSERT_EQUAL(GRAPHIC_BITMAP, rGraphicObj.GetGraphic().GetType());
+    CPPUNIT_ASSERT_EQUAL(int(GraphicType::Bitmap), int(rGraphicObj.GetGraphic().GetType()));
     CPPUNIT_ASSERT_EQUAL(sal_uLong(864900), rGraphicObj.GetSizeBytes());
 
     ScDrawLayer::SetPageAnchored(*pObject);
@@ -202,14 +202,14 @@ void ScConditionalFormatTest::testUndoAnchor()
 
     // Check anchor type
     CPPUNIT_ASSERT(oldType == ScDrawLayer::GetAnchorType(*pObject) );
-    CPPUNIT_ASSERT_EQUAL(GRAPHIC_BITMAP, rGraphicObj.GetGraphic().GetType());
+    CPPUNIT_ASSERT_EQUAL(int(GraphicType::Bitmap), int(rGraphicObj.GetGraphic().GetType()));
     CPPUNIT_ASSERT_EQUAL(sal_uLong(864900), rGraphicObj.GetSizeBytes());
 
     pUndoMgr->Redo();
 
     // Check anchor type
     CPPUNIT_ASSERT(newType == ScDrawLayer::GetAnchorType(*pObject) );
-    CPPUNIT_ASSERT_EQUAL(GRAPHIC_BITMAP, rGraphicObj.GetGraphic().GetType());
+    CPPUNIT_ASSERT_EQUAL(int(GraphicType::Bitmap), int(rGraphicObj.GetGraphic().GetType()));
     CPPUNIT_ASSERT_EQUAL(sal_uLong(864900), rGraphicObj.GetSizeBytes());
 
     xComponent->dispose();

@@ -234,7 +234,7 @@ bool SwGrfNode::ReRead(
         bReadGrf = true;
     }
     // Was the graphic already loaded?
-    else if( !bNewGrf && GRAPHIC_NONE != maGrfObj.GetType() )
+    else if( !bNewGrf && GraphicType::NONE != maGrfObj.GetType() )
         return true;
     else
     {
@@ -523,15 +523,15 @@ bool SwGrfNode::SwapIn( bool bWaitForData )
 
     if( pLink )
     {
-        if( GRAPHIC_NONE == maGrfObj.GetType() ||
-            GRAPHIC_DEFAULT == maGrfObj.GetType() )
+        if( GraphicType::NONE == maGrfObj.GetType() ||
+            GraphicType::Default == maGrfObj.GetType() )
         {
             // link was not loaded yet
             if( pLink->SwapIn( bWaitForData ) )
             {
                 bRet = true;
             }
-            else if( GRAPHIC_DEFAULT == maGrfObj.GetType() )
+            else if( GraphicType::Default == maGrfObj.GetType() )
             {
                 // no default bitmap anymore, thus re-paint
                 delete mpReplacementGraphic;
@@ -603,8 +603,8 @@ bool SwGrfNode::SwapIn( bool bWaitForData )
 
 bool SwGrfNode::SwapOut()
 {
-    if( maGrfObj.GetType() != GRAPHIC_DEFAULT &&
-        maGrfObj.GetType() != GRAPHIC_NONE &&
+    if( maGrfObj.GetType() != GraphicType::Default &&
+        maGrfObj.GetType() != GraphicType::NONE &&
         !maGrfObj.IsSwappedOut() && !bInSwapIn )
     {
         if( refLink.Is() )
@@ -900,7 +900,7 @@ SvStream* SwGrfNode::GetStreamForEmbedGrf(
         if ( !_refPics->hasByName( sStreamName ) ||
              !_refPics->isStreamElement( sStreamName ) )
         {
-            if ( GetGrfObj().GetType() != GRAPHIC_NONE )
+            if ( GetGrfObj().GetType() != GraphicType::NONE )
             {
                 const sal_Int32 nExtPos = sStreamName.indexOf('.');
                 const OUString aExtStr = (nExtPos>=0) ? sStreamName.copy( nExtPos ) : OUString();

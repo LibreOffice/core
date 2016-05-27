@@ -1457,7 +1457,7 @@ bool EscherPropertyContainer::CreateGraphicProperties(
                 {
                     aGraphicObject = aGraphic;
                     aUniqueId = aGraphicObject.GetUniqueID();
-                    bIsGraphicMtf = aGraphicObject.GetType() == GRAPHIC_GDIMETAFILE;
+                    bIsGraphicMtf = aGraphicObject.GetType() == GraphicType::GdiMetafile;
                 }
             }
         }
@@ -1474,7 +1474,7 @@ bool EscherPropertyContainer::CreateGraphicProperties(
                     Graphic     aGraphic( aBitmapEx );
                     aGraphicObject = aGraphic;
                     aUniqueId = aGraphicObject.GetUniqueID();
-                    bIsGraphicMtf = aGraphicObject.GetType() == GRAPHIC_GDIMETAFILE;
+                    bIsGraphicMtf = aGraphicObject.GetType() == GraphicType::GdiMetafile;
                 }
             }
         }
@@ -1507,7 +1507,7 @@ bool EscherPropertyContainer::CreateGraphicProperties(
                 aGraphicObject = lclDrawHatch( aHatch, aBackColor, bFillBackground, aRect );
                 aUniqueId = aGraphicObject.GetUniqueID();
                 eBitmapMode = css::drawing::BitmapMode_REPEAT;
-                bIsGraphicMtf = aGraphicObject.GetType() == GRAPHIC_GDIMETAFILE;
+                bIsGraphicMtf = aGraphicObject.GetType() == GraphicType::GdiMetafile;
             }
         }
 
@@ -3992,7 +3992,7 @@ EscherBlibEntry::EscherBlibEntry( sal_uInt32 nPictureOffset, const GraphicObject
     sal_uInt32      nLen = static_cast<sal_uInt32>(rId.getLength());
     const sal_Char* pData = rId.getStr();
     GraphicType     eType( rObject.GetType() );
-    if ( nLen && pData && ( eType != GRAPHIC_NONE ) )
+    if ( nLen && pData && ( eType != GraphicType::NONE ) )
     {
         mnIdentifier[ 0 ] = rtl_crc32( 0,pData, nLen );
         mnIdentifier[ 1 ] = 0;
@@ -4293,11 +4293,11 @@ sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, const OStrin
         if ( !bUseNativeGraphic )
         {
             GraphicType eGraphicType = aGraphic.GetType();
-            if ( ( eGraphicType == GRAPHIC_BITMAP ) || ( eGraphicType == GRAPHIC_GDIMETAFILE ) )
+            if ( ( eGraphicType == GraphicType::Bitmap ) || ( eGraphicType == GraphicType::GdiMetafile ) )
             {
                 sal_uInt32 nErrCode;
                 if ( !aGraphic.IsAnimated() )
-                    nErrCode = GraphicConverter::Export( aStream, aGraphic, ( eGraphicType == GRAPHIC_BITMAP ) ? ConvertDataFormat::PNG  : ConvertDataFormat::EMF );
+                    nErrCode = GraphicConverter::Export( aStream, aGraphic, ( eGraphicType == GraphicType::Bitmap ) ? ConvertDataFormat::PNG  : ConvertDataFormat::EMF );
                 else
                 {   // to store a animation, a gif has to be included into the msOG chunk of a png  #I5583#
                     GraphicFilter &rFilter = GraphicFilter::GetGraphicFilter();
@@ -4325,7 +4325,7 @@ sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, const OStrin
                 }
                 if ( nErrCode == ERRCODE_NONE )
                 {
-                    p_EscherBlibEntry->meBlibType = ( eGraphicType == GRAPHIC_BITMAP ) ? PNG : EMF;
+                    p_EscherBlibEntry->meBlibType = ( eGraphicType == GraphicType::Bitmap ) ? PNG : EMF;
                     aStream.Seek( STREAM_SEEK_TO_END );
                     p_EscherBlibEntry->mnSize = aStream.Tell();
                     pGraphicAry = static_cast<sal_uInt8 const *>(aStream.GetData());

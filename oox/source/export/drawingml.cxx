@@ -884,9 +884,9 @@ OUString DrawingML::WriteImage( const Graphic& rGraphic , bool bRelPathToMedia )
         default:
         {
             GraphicType aType = rGraphic.GetType();
-            if ( aType == GRAPHIC_BITMAP || aType == GRAPHIC_GDIMETAFILE)
+            if ( aType == GraphicType::Bitmap || aType == GraphicType::GdiMetafile)
             {
-                if ( aType == GRAPHIC_BITMAP )
+                if ( aType == GraphicType::Bitmap )
                 {
                     (void)GraphicConverter::Export( aStream, rGraphic, ConvertDataFormat::PNG );
                     sMediaType = "image/png";

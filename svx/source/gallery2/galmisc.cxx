@@ -494,7 +494,7 @@ void GalleryTransferable::AddSupportedFormats()
         {
             AddFormat( SotClipboardFormatId::SVXB );
 
-            if( mpGraphicObject->GetType() == GRAPHIC_GDIMETAFILE )
+            if( mpGraphicObject->GetType() == GraphicType::GdiMetafile )
             {
                 AddFormat( SotClipboardFormatId::GDIMETAFILE );
                 AddFormat( SotClipboardFormatId::BITMAP );

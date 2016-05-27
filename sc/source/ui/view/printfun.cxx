@@ -1173,7 +1173,7 @@ static void lcl_DrawGraphic( const SvxBrushItem &rBrush, vcl::RenderContext *pOu
                         GraphicObject aObject( *pGraphic );
 
                         if( pOut->GetPDFWriter() &&
-                            (aObject.GetType() == GRAPHIC_BITMAP || aObject.GetType() == GRAPHIC_DEFAULT) )
+                            (aObject.GetType() == GraphicType::Bitmap || aObject.GetType() == GraphicType::Default) )
                         {
                             // For PDF export, every draw
                             // operation for bitmaps takes a noticeable

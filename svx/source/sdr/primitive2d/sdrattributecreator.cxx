@@ -629,7 +629,7 @@ namespace drawinglayer
         {
             Graphic aGraphic(static_cast<const XFillBitmapItem&>(rSet.Get(XATTR_FILLBITMAP)).GetGraphicObject().GetGraphic());
 
-            if(!(GRAPHIC_BITMAP == aGraphic.GetType() || GRAPHIC_GDIMETAFILE == aGraphic.GetType()))
+            if(!(GraphicType::Bitmap == aGraphic.GetType() || GraphicType::GdiMetafile == aGraphic.GetType()))
             {
                 // no content if not bitmap or metafile
                 OSL_ENSURE(false, "No fill graphic in SfxItemSet (!)");
@@ -641,7 +641,7 @@ namespace drawinglayer
             if(!aPrefSize.Width() || !aPrefSize.Height())
             {
                 // if there is no logical size, create a size from pixel size and set MapMode accordingly
-                if(GRAPHIC_BITMAP == aGraphic.GetType())
+                if(GraphicType::Bitmap == aGraphic.GetType())
                 {
                     aGraphic.SetPrefSize(aGraphic.GetBitmapEx().GetSizePixel());
                     aGraphic.SetPrefMapMode(MAP_PIXEL);

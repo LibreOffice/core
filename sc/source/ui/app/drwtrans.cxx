@@ -121,7 +121,7 @@ ScDrawTransferObj::ScDrawTransferObj( SdrModel* pClipModel, ScDocShell* pContain
             if (nSdrObjKind == OBJ_GRAF)
             {
                 bGraphic = true;
-                if ( static_cast<SdrGrafObj*>(pObject)->GetGraphic().GetType() == GRAPHIC_BITMAP )
+                if ( static_cast<SdrGrafObj*>(pObject)->GetGraphic().GetType() == GraphicType::Bitmap )
                     bGrIsBit = true;
             }
 

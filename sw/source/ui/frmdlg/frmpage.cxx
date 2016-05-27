@@ -2596,8 +2596,8 @@ IMPL_LINK_NOARG_TYPED(SwGrfExtPage, BrowseHdl, Button*, void)
         (void)GraphicFilter::LoadGraphic(pGrfDlg->GetPath(), OUString(), aGraphic);
         m_pBmpWin->SetGraphic(aGraphic);
 
-        bool bEnable = GRAPHIC_BITMAP      == aGraphic.GetType() ||
-                            GRAPHIC_GDIMETAFILE == aGraphic.GetType();
+        bool bEnable = GraphicType::Bitmap      == aGraphic.GetType() ||
+                            GraphicType::GdiMetafile == aGraphic.GetType();
         m_pMirrorVertBox->Enable(bEnable);
         m_pMirrorHorzBox->Enable(bEnable);
         m_pAllPagesRB->Enable(bEnable);

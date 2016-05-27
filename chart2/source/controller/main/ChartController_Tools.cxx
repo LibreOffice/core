@@ -316,7 +316,7 @@ void ChartController::executeDispatch_Paste()
             }
         }
 
-        if( aGraphic.GetType() != GRAPHIC_NONE )
+        if( aGraphic.GetType() != GraphicType::NONE )
         {
             Reference< graphic::XGraphic > xGraphic( aGraphic.GetXGraphic());
             if( xGraphic.is())

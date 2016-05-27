@@ -102,7 +102,7 @@ SvXMLGraphicInputStream::SvXMLGraphicInputStream( const OUString& rGraphicId )
 
     maTmp.EnableKillingFile();
 
-    if( aGrfObject.GetType() != GRAPHIC_NONE )
+    if( aGrfObject.GetType() != GraphicType::NONE )
     {
         SvStream* pStm = ::utl::UcbStreamHelper::CreateStream( maTmp.GetURL(), StreamMode::WRITE | StreamMode::TRUNC );
 
@@ -119,7 +119,7 @@ SvXMLGraphicInputStream::SvXMLGraphicInputStream( const OUString& rGraphicId )
             }
             else
             {
-                if( aGraphic.GetType() == GRAPHIC_BITMAP )
+                if( aGraphic.GetType() == GraphicType::Bitmap )
                 {
                     GraphicFilter &rFilter = GraphicFilter::GetGraphicFilter();
                     OUString          aFormat;
@@ -131,7 +131,7 @@ SvXMLGraphicInputStream::SvXMLGraphicInputStream( const OUString& rGraphicId )
 
                     bRet = ( rFilter.ExportGraphic( aGraphic, "", *pStm, rFilter.GetExportFormatNumberForShortName( aFormat ) ) == 0 );
                 }
-                else if( aGraphic.GetType() == GRAPHIC_GDIMETAFILE )
+                else if( aGraphic.GetType() == GraphicType::GdiMetafile )
                 {
                     pStm->SetVersion( SOFFICE_FILEFORMAT_8 );
                     pStm->SetCompressMode( SvStreamCompressFlags::ZBITMAP );
@@ -277,7 +277,7 @@ void SAL_CALL SvXMLGraphicOutputStream::closeOutput()
 
 const GraphicObject& SvXMLGraphicOutputStream::GetGraphicObject()
 {
-    if( mbClosed && ( maGrfObj.GetType() == GRAPHIC_NONE ) && mpOStm )
+    if( mbClosed && ( maGrfObj.GetType() == GraphicType::NONE ) && mpOStm )
     {
         Graphic aGraphic;
 
@@ -335,7 +335,7 @@ const GraphicObject& SvXMLGraphicOutputStream::GetGraphicObject()
         }
 
         maGrfObj = aGraphic;
-        if( maGrfObj.GetType() != GRAPHIC_NONE )
+        if( maGrfObj.GetType() != GraphicType::NONE )
         {
             delete mpOStm;
             mpOStm = nullptr;
@@ -516,7 +516,7 @@ bool SvXMLGraphicHelper::ImplWriteGraphic( const OUString& rPictureStorageName,
     GraphicObject   aGrfObject( OUStringToOString(rGraphicId, RTL_TEXTENCODING_ASCII_US) );
     bool        bRet = false;
 
-    if( aGrfObject.GetType() != GRAPHIC_NONE )
+    if( aGrfObject.GetType() != GraphicType::NONE )
     {
         SvxGraphicHelperStream_Impl aStream( ImplGetGraphicStream( rPictureStorageName, rPictureStreamName ) );
         if( aStream.xStream.is() )
@@ -566,7 +566,7 @@ bool SvXMLGraphicHelper::ImplWriteGraphic( const OUString& rPictureStorageName,
                 pStream->Write( aGfxLink.GetData(), aGfxLink.GetDataSize() );
             else
             {
-                if( aGraphic.GetType() == GRAPHIC_BITMAP )
+                if( aGraphic.GetType() == GraphicType::Bitmap )
                 {
                     GraphicFilter &rFilter = GraphicFilter::GetGraphicFilter();
                     OUString          aFormat;
@@ -579,7 +579,7 @@ bool SvXMLGraphicHelper::ImplWriteGraphic( const OUString& rPictureStorageName,
                     bRet = ( rFilter.ExportGraphic( aGraphic, "", *pStream,
                                                      rFilter.GetExportFormatNumberForShortName( aFormat ) ) == 0 );
                 }
-                else if( aGraphic.GetType() == GRAPHIC_GDIMETAFILE )
+                else if( aGraphic.GetType() == GraphicType::GdiMetafile )
                 {
                     pStream->SetVersion( SOFFICE_FILEFORMAT_8 );
                     pStream->SetCompressMode( SvStreamCompressFlags::ZBITMAP );
@@ -639,7 +639,7 @@ void SvXMLGraphicHelper::ImplInsertGraphicURL( const OUString& rURLStr, sal_uInt
         {
             const GraphicObject aObj( ImplReadGraphic( aPictureStorageName, aPictureStreamName ) );
 
-            if( aObj.GetType() != GRAPHIC_NONE )
+            if( aObj.GetType() != GraphicType::NONE )
             {
                 maGrfObjs.push_back( aObj );
                 OUString aBaseURL(  XML_GRAPHICOBJECT_URL_BASE  );
@@ -655,7 +655,7 @@ void SvXMLGraphicHelper::ImplInsertGraphicURL( const OUString& rURLStr, sal_uInt
         {
             const OString aAsciiObjectID(OUStringToOString(aPictureStreamName, RTL_TEXTENCODING_ASCII_US));
             const GraphicObject aGrfObject( aAsciiObjectID );
-            if( aGrfObject.GetType() != GRAPHIC_NONE )
+            if( aGrfObject.GetType() != GraphicType::NONE )
             {
                 OUString        aStreamName( aPictureStreamName );
                 Graphic         aGraphic( (Graphic&) aGrfObject.GetGraphic() );
@@ -699,14 +699,14 @@ void SvXMLGraphicHelper::ImplInsertGraphicURL( const OUString& rURLStr, sal_uInt
                 }
                 else
                 {
-                    if( aGrfObject.GetType() == GRAPHIC_BITMAP )
+                    if( aGrfObject.GetType() == GraphicType::Bitmap )
                     {
                         if( aGrfObject.IsAnimated() )
                             aExtension = ".gif";
                         else
                             aExtension = ".png";
                     }
-                    else if( aGrfObject.GetType() == GRAPHIC_GDIMETAFILE )
+                    else if( aGrfObject.GetType() == GraphicType::GdiMetafile )
                     {
                         // SJ: first check if this metafile is just a eps file, then we will store the eps instead of svm
                         GDIMetaFile& rMtf( (GDIMetaFile&)aGraphic.GetGDIMetaFile() );

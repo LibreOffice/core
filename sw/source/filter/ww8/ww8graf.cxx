@@ -3058,7 +3058,7 @@ SwFlyFrameFormat* SwWW8ImplReader::ImportReplaceableDrawables( SdrObject* &rpObj
             // correction of fix for issue #i10939#:
             // One of the two conditions have to be true to insert the graphic
             // as a linked graphic -
-            if (GRAPHIC_NONE == eType || CanUseRemoteLink(aGrfName))
+            if (GraphicType::NONE == eType || CanUseRemoteLink(aGrfName))
             {
                 pRetFrameFormat = m_rDoc.getIDocumentContentOperations().Insert(*m_pPaM, aGrfName, OUString(), nullptr,
                     &rFlySet, &aGrSet, nullptr);

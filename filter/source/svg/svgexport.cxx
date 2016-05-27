@@ -1969,9 +1969,9 @@ bool SVGFilter::implCreateObjectsFromShape( const Reference< XDrawPage > & rxPag
         {
             Graphic aGraphic( SdrExchangeView::GetObjGraphic( pObj->GetModel(), pObj ) );
 
-            if( aGraphic.GetType() != GRAPHIC_NONE )
+            if( aGraphic.GetType() != GraphicType::NONE )
             {
-                if( aGraphic.GetType() == GRAPHIC_BITMAP )
+                if( aGraphic.GetType() == GraphicType::Bitmap )
                 {
                     GDIMetaFile    aMtf;
                     const Point    aNullPt;

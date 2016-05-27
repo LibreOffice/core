@@ -426,7 +426,7 @@ namespace sdr
                 return true;
 
             // draft when no graphic
-            if(GRAPHIC_NONE == rGraphicObject.GetType() || GRAPHIC_DEFAULT == rGraphicObject.GetType())
+            if(GraphicType::NONE == rGraphicObject.GetType() || GraphicType::Default == rGraphicObject.GetType())
                return true;
 
             return false;

@@ -614,7 +614,7 @@ void SdrEscherImport::ProcessClientAnchor2( SvStream& rSt, DffRecordHeader& rHd,
 
 void SdrEscherImport::RecolorGraphic( SvStream& rSt, sal_uInt32 nRecLen, Graphic& rGraphic )
 {
-    if ( rGraphic.GetType() == GRAPHIC_GDIMETAFILE )
+    if ( rGraphic.GetType() == GraphicType::GdiMetafile )
     {
         sal_uInt16 nX, nGlobalColorsCount, nFillColorsCount;
 

@@ -299,7 +299,7 @@ bool Graphic::operator!=( const Graphic& rGraphic ) const
 
 bool Graphic::operator!() const
 {
-    return( GRAPHIC_NONE == mpImpGraphic->ImplGetType() );
+    return( GraphicType::NONE == mpImpGraphic->ImplGetType() );
 }
 
 void Graphic::Clear()
@@ -368,7 +368,7 @@ uno::Reference< graphic::XGraphic > Graphic::GetXGraphic() const
 {
     uno::Reference< graphic::XGraphic > xRet;
 
-    if( GetType() != GRAPHIC_NONE )
+    if( GetType() != GraphicType::NONE )
     {
         uno::Reference < uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
         uno::Reference< graphic::XGraphicProvider > xProv( graphic::GraphicProvider::create( xContext ) );
@@ -433,7 +433,7 @@ Size Graphic::GetSizePixel( const OutputDevice* pRefDevice ) const
 {
     Size aRet;
 
-    if( GRAPHIC_BITMAP == mpImpGraphic->ImplGetType() )
+    if( GraphicType::Bitmap == mpImpGraphic->ImplGetType() )
         aRet = mpImpGraphic->ImplGetBitmapEx(GraphicConversionParameters()).GetSizePixel();
     else
         aRet = ( pRefDevice ? pRefDevice : Application::GetDefaultDevice() )->LogicToPixel( GetPrefSize(), GetPrefMapMode() );
@@ -454,7 +454,7 @@ void Graphic::Draw( OutputDevice* pOutDev, const Point& rDestPt ) const
 void Graphic::Draw( OutputDevice* pOutDev,
                     const Point& rDestPt, const Size& rDestSz ) const
 {
-    if( GRAPHIC_DEFAULT == mpImpGraphic->ImplGetType() )
+    if( GraphicType::Default == mpImpGraphic->ImplGetType() )
         ImplDrawDefault( pOutDev, nullptr, nullptr, nullptr, nullptr, rDestPt, rDestSz );
     else
         mpImpGraphic->ImplDraw( pOutDev, rDestPt, rDestSz );

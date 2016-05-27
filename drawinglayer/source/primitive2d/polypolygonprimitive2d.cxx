@@ -450,7 +450,7 @@ namespace drawinglayer
                 const GraphicType aType(rGraphic.GetType());
 
                 // is there a bitmap or a metafile (do we have content)?
-                if(GRAPHIC_BITMAP == aType || GRAPHIC_GDIMETAFILE == aType)
+                if(GraphicType::Bitmap == aType || GraphicType::GdiMetafile == aType)
                 {
                     const Size aPrefSize(rGraphic.GetPrefSize());
 

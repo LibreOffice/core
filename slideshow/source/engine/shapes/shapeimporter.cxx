@@ -103,8 +103,8 @@ bool importShapeGraphic(
         o_rGraphic = GraphicObject( aOldString );
 
 
-        if( GRAPHIC_DEFAULT == o_rGraphic.GetType()
-            || GRAPHIC_NONE == o_rGraphic.GetType() )
+        if( GraphicType::Default == o_rGraphic.GetType()
+            || GraphicType::NONE == o_rGraphic.GetType() )
         {
             // even the GrfMgr does not seem to know this graphic
             return false;

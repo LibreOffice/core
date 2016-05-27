@@ -3829,7 +3829,7 @@ const GraphicObject* SvxBrushItem::GetGraphicObject(OUString const & referer) co
         }
 
         // tdf#94088 when we got a graphic, set it
-        if(bGraphicLoaded && GRAPHIC_NONE != aGraphic.GetType())
+        if(bGraphicLoaded && GraphicType::NONE != aGraphic.GetType())
         {
             pImpl->pGraphicObject = new GraphicObject;
             pImpl->pGraphicObject->SetGraphic( aGraphic );

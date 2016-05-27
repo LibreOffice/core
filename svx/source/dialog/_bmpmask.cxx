@@ -1016,7 +1016,7 @@ Graphic SvxBmpMask::Mask( const Graphic& rGraphic )
 
     switch( rGraphic.GetType() )
     {
-        case GRAPHIC_BITMAP:
+        case GraphicType::Bitmap:
         {
             if( rGraphic.IsAnimated() )
             {
@@ -1081,7 +1081,7 @@ Graphic SvxBmpMask::Mask( const Graphic& rGraphic )
         }
         break;
 
-        case GRAPHIC_GDIMETAFILE:
+        case GraphicType::GdiMetafile:
         {
             GDIMetaFile aMtf( aGraphic.GetGDIMetaFile() );
 

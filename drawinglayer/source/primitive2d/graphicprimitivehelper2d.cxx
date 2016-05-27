@@ -89,7 +89,7 @@ namespace
     animatedBitmapExPreparator::animatedBitmapExPreparator(const Graphic& rGraphic)
     :   maAnimation(rGraphic.GetAnimation())
     {
-        OSL_ENSURE(GRAPHIC_BITMAP == rGraphic.GetType() && rGraphic.IsAnimated(), "animatedBitmapExPreparator: graphic is not animated (!)");
+        OSL_ENSURE(GraphicType::Bitmap == rGraphic.GetType() && rGraphic.IsAnimated(), "animatedBitmapExPreparator: graphic is not animated (!)");
 
         // #128539# secure access to Animation, looks like there exist animated GIFs out there
         // with a step count of zero
@@ -196,7 +196,7 @@ namespace drawinglayer
 
             switch(rGraphic.GetType())
             {
-                case GRAPHIC_BITMAP :
+                case GraphicType::Bitmap :
                 {
                     if(rGraphic.IsAnimated())
                     {
@@ -268,7 +268,7 @@ namespace drawinglayer
                     break;
                 }
 
-                case GRAPHIC_GDIMETAFILE :
+                case GraphicType::GdiMetafile :
                 {
                     // create MetafilePrimitive2D
                     const GDIMetaFile& rMetafile = rGraphic.GetGDIMetaFile();

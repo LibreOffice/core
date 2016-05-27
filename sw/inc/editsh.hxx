@@ -601,7 +601,7 @@ public:
     const GraphicObject* GetGraphicObj() const;
 
     bool IsLinkedGrfSwapOut() const;
-    sal_uInt16 GetGraphicType() const;
+    GraphicType GetGraphicType() const;
 
     const tools::PolyPolygon *GetGraphicPolygon() const;
     void SetGraphicPolygon( const tools::PolyPolygon *pPoly );

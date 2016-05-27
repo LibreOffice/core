@@ -97,7 +97,7 @@ void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSiz
         }
 
         bool bIsJpeg = false, bIsPng = false;
-        if( i_Graphic.GetType() != GRAPHIC_NONE && i_Graphic.GetBitmapEx() == aBitmapEx )
+        if( i_Graphic.GetType() != GraphicType::NONE && i_Graphic.GetBitmapEx() == aBitmapEx )
         {
             GfxLinkType eType = i_Graphic.GetLink().GetType();
             bIsJpeg = (eType == GFX_LINK_TYPE_NATIVE_JPG);

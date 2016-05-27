@@ -416,7 +416,7 @@ void SdTransferable::AddSupportedFormats()
 
             AddFormat( SotClipboardFormatId::SVXB );
 
-            if( mpGraphic->GetType() == GRAPHIC_BITMAP )
+            if( mpGraphic->GetType() == GraphicType::Bitmap )
             {
                 AddFormat( SotClipboardFormatId::PNG );
                 AddFormat( SotClipboardFormatId::BITMAP );
