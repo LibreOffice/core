@@ -106,19 +106,27 @@ using namespace nsSwDocInfoSubType;
 
 SwPageNumberFieldType::SwPageNumberFieldType()
     : SwFieldType( RES_PAGENUMBERFLD ),
-    nNumberingType( SVX_NUM_ARABIC ),
-    bVirtuell( false )
+    nNumberingType( SVX_NUM_ARABIC )
 {
 }
 
+SAL_DEPRECATED("use Expand( sal_uInt32 nFormat, short nOff, sal_uInt16 const nPageNumber, const OUString& rUserStr)")
 OUString SwPageNumberFieldType::Expand( sal_uInt32 nFormat, short nOff,
          sal_uInt16 const nPageNumber, sal_uInt16 const nMaxPage,
          const OUString& rUserStr ) const
 {
+    (void)nMaxPage;
+    // Forward to the new version, for backwards compatibility.
+    return Expand(nFormat, nOff, nPageNumber, rUserStr);
+}
+
+OUString SwPageNumberFieldType::Expand(sal_uInt32 nFormat, short nOff,
+        sal_uInt16 const nPageNumber, const OUString& rUserStr ) const
+{
     sal_uInt32 nTmpFormat = (SVX_NUM_PAGEDESC == nFormat) ? (sal_uInt32)nNumberingType : nFormat;
     int const nTmp = nPageNumber + nOff;
 
-    if (0 > nTmp || SVX_NUM_NUMBER_NONE == nTmpFormat || (!bVirtuell && nTmp > nMaxPage))
+    if (0 > nTmp || SVX_NUM_NUMBER_NONE == nTmpFormat)
         return OUString();
 
     if( SVX_NUM_CHAR_SPECIAL == nTmpFormat )
@@ -132,45 +140,8 @@ SwFieldType* SwPageNumberFieldType::Copy() const
     SwPageNumberFieldType *pTmp = new SwPageNumberFieldType();
 
     pTmp->nNumberingType = nNumberingType;
-    pTmp->bVirtuell  = bVirtuell;
 
     return pTmp;
-}
-
-void SwPageNumberFieldType::ChangeExpansion( SwDoc* pDoc,
-                                            bool bVirt,
-                                            const sal_Int16* pNumFormat )
-{
-    if( pNumFormat )
-        nNumberingType = *pNumFormat;
-
-    bVirtuell = false;
-    if (bVirt && pDoc)
-    {
-        // check the flag since the layout NEVER sets it back
-        const SfxItemPool &rPool = pDoc->GetAttrPool();
-        sal_uInt32 nMaxItems = rPool.GetItemCount2( RES_PAGEDESC );
-        for( sal_uInt32 n = 0; n < nMaxItems; ++n )
-        {
-            const SwFormatPageDesc *pDesc;
-            if( nullptr != (pDesc = static_cast<const SwFormatPageDesc*>(rPool.GetItem2( RES_PAGEDESC, n )) )
-                && pDesc->GetNumOffset() && pDesc->GetDefinedIn() )
-            {
-                const SwContentNode* pNd = dynamic_cast<const SwContentNode*>( pDesc->GetDefinedIn()  );
-                if( pNd )
-                {
-                    if ( SwIterator<SwFrame,SwContentNode>(*pNd).First() )
-                        bVirtuell = true;
-                }
-                else if( dynamic_cast< const SwFormat* >(pDesc->GetDefinedIn()) !=  nullptr)
-                {
-                    SwAutoFormatGetDocNode aGetHt( &pDoc->GetNodes() );
-                    bVirtuell = !pDesc->GetDefinedIn()->GetInfo( aGetHt );
-                    break;
-                }
-            }
-        }
-    }
 }
 
 SwPageNumberField::SwPageNumberField(SwPageNumberFieldType* pTyp,
@@ -196,22 +167,22 @@ OUString SwPageNumberField::Expand() const
 
     if( PG_NEXT == nSubType && 1 != nOffset )
     {
-        sRet = pFieldType->Expand(GetFormat(), 1, m_nPageNumber, m_nMaxPage, sUserStr);
+        sRet = pFieldType->Expand(GetFormat(), 1, m_nPageNumber, sUserStr);
         if (!sRet.isEmpty())
         {
-            sRet = pFieldType->Expand(GetFormat(), nOffset, m_nPageNumber, m_nMaxPage, sUserStr);
+            sRet = pFieldType->Expand(GetFormat(), nOffset, m_nPageNumber, sUserStr);
         }
     }
     else if( PG_PREV == nSubType && -1 != nOffset )
     {
-        sRet = pFieldType->Expand(GetFormat(), -1, m_nPageNumber, m_nMaxPage, sUserStr);
+        sRet = pFieldType->Expand(GetFormat(), -1, m_nPageNumber, sUserStr);
         if (!sRet.isEmpty())
         {
-            sRet = pFieldType->Expand(GetFormat(), nOffset, m_nPageNumber, m_nMaxPage, sUserStr);
+            sRet = pFieldType->Expand(GetFormat(), nOffset, m_nPageNumber, sUserStr);
         }
     }
     else
-        sRet = pFieldType->Expand(GetFormat(), nOffset, m_nPageNumber, m_nMaxPage, sUserStr);
+        sRet = pFieldType->Expand(GetFormat(), nOffset, m_nPageNumber, sUserStr);
     return sRet;
 }
 
