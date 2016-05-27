@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_42357544",
+        "filename": "sfx2/source/doc/templatedlg.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 499,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-05-27T09:11:53Z",
+      "side": 1,
+      "message": "This code is the same as in SelectRegionHdl -- could you please factor that out to an own method?",
+      "revId": "c63c4ee766b7b5a06d1115231b86c9b0502c954b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
