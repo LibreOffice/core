@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_426d7503",
+        "filename": "sfx2/source/control/templatedefaultview.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-05-27T13:24:57Z",
+      "side": 1,
+      "message": "please don\u0027t do relative imports, we try to avoid this.\nyou can move that file to sfx2/inc and do a relative include then.",
+      "revId": "eed14e084b7b83828b151595a47c90ba98c4f71b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_627279e7",
+        "filename": "sfx2/source/control/templatedefaultview.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-05-27T13:24:57Z",
+      "side": 1,
+      "message": "Why does this always return false?",
+      "revId": "eed14e084b7b83828b151595a47c90ba98c4f71b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
