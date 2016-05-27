@@ -53,8 +53,7 @@ class PageFormatPanel:
 public:
     static VclPtr<vcl::Window> Create(
         vcl::Window* pParent,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame,
-        SfxBindings* pBindings);
+        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame);
 
     virtual void NotifyItemUpdate(
         const sal_uInt16 nSId,
@@ -62,18 +61,13 @@ public:
         const SfxPoolItem* pState,
         const bool bIsEnabled) override;
 
-    SfxBindings* GetBindings() const { return mpBindings; }
-
     PageFormatPanel(
         vcl::Window* pParent,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame,
-        SfxBindings* pBindings);
+        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame);
     virtual ~PageFormatPanel();
     virtual void dispose() override;
 
 private:
-
-    SfxBindings* mpBindings;
 
     VclPtr<ListBox> mpPaperSizeLB;
     VclPtr<MetricField> mpPaperWidth;

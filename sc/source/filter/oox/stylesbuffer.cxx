@@ -2188,29 +2188,6 @@ void Xf::applyPatternToAttrList( AttrList& rAttrs, SCROW nRow1, SCROW nRow2, sal
     }
 }
 
-void Xf::writeToPropertyMap( PropertyMap& rPropMap ) const
-{
-    StylesBuffer& rStyles = getStyles();
-
-    // create and set cell style.
-
-    // TODO : We should gradually move things to writeToDoc(), to set cell
-    // styles to the document directly.
-
-    if( maModel.mbFontUsed )
-        rStyles.writeFontToPropertyMap( rPropMap, maModel.mnFontId );
-    if( maModel.mbNumFmtUsed )
-        rStyles.writeNumFmtToPropertyMap( rPropMap, maModel.mnNumFmtId );
-    if( maModel.mbAlignUsed )
-        maAlignment.writeToPropertyMap( rPropMap );
-    if( maModel.mbProtUsed )
-        maProtection.writeToPropertyMap( rPropMap );
-    if( maModel.mbBorderUsed )
-        rStyles.writeBorderToPropertyMap( rPropMap, maModel.mnBorderId );
-    if( maModel.mbAreaUsed )
-        rStyles.writeFillToPropertyMap( rPropMap, maModel.mnFillId );
-}
-
 void Xf::writeToDoc( ScDocumentImport& rDoc, const table::CellRangeAddress& rRange )
 {
     const StylesBuffer& rStyles = getStyles();

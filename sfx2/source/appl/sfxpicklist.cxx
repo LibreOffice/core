@@ -83,24 +83,6 @@ namespace
         : public rtl::Static<osl::Mutex, thePickListMutex> {};
 }
 
-void SfxPickList::RemovePickListEntries()
-{
-    ::osl::MutexGuard aGuard( thePickListMutex::get() );
-    for (PickListEntry* p : m_aPicklistVector)
-        delete p;
-    m_aPicklistVector.clear();
-}
-
-SfxPickList::PickListEntry* SfxPickList::GetPickListEntry( sal_uInt32 nIndex )
-{
-    OSL_ASSERT( m_aPicklistVector.size() > nIndex );
-
-    if ( nIndex < m_aPicklistVector.size() )
-        return m_aPicklistVector[ nIndex ];
-    else
-        return nullptr;
-}
-
 void SfxPickList::AddDocumentToPickList( SfxObjectShell* pDocSh )
 {
     if (pDocSh->IsAvoidRecentDocs() || comphelper::LibreOfficeKit::isActive())
@@ -201,7 +183,6 @@ SfxPickList::SfxPickList( sal_uInt32 nAllowedMenuSize ) :
 
 SfxPickList::~SfxPickList()
 {
-    RemovePickListEntries();
 }
 
 

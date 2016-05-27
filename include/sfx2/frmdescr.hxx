@@ -89,9 +89,7 @@ public:
     void                    SetActualURL( const INetURLObject& rURL );
     void                    SetActualURL( const OUString& rURL );
     void                    SetReadOnly( bool bSet ) { bReadOnly = bSet;}
-    bool                    IsReadOnly(  ) const { return bReadOnly;}
     void                    SetEditable( bool bSet );
-    bool                    IsEditable() const;
 
                             // Size
     void                    SetResizable( bool bRes )

@@ -653,9 +653,6 @@ public:
     void applyPatternToAttrList(
         AttrList& rAttrs, SCROW nRow1, SCROW nRow2, sal_Int32 nForceScNumFmt );
 
-    /** Writes all formatting attributes to the passed property map. */
-    void                writeToPropertyMap( PropertyMap& rPropMap ) const;
-
     void writeToDoc( ScDocumentImport& rDoc, const css::table::CellRangeAddress& rRange );
 
     const ::ScPatternAttr& createPattern( bool bSkipPoolDefs = false );

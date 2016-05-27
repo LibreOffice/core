@@ -42,9 +42,6 @@ public:
         sal_Int32 mnSharedId;
 
         SharedFormulaEntry(
-            const css::table::CellAddress& rAddress,
-            const OUString& rTokenStr, sal_Int32 nSharedId );
-        SharedFormulaEntry(
             const ScAddress& rAddress,
             const OUString& rTokenStr, sal_Int32 nSharedId );
     };
@@ -60,9 +57,6 @@ public:
         sal_Int32 mnValueType;
 
         SharedFormulaDesc(
-            const css::table::CellAddress& rAddr, sal_Int32 nSharedId,
-            const OUString& rCellValue, sal_Int32 nValueType );
-        SharedFormulaDesc(
             const ScAddress& rAddr, sal_Int32 nSharedId,
             const OUString& rCellValue, sal_Int32 nValueType );
     };
@@ -72,7 +66,6 @@ public:
         OUString maTokenStr;
         ScAddress maCellAddress;
         TokenAddressItem( const OUString& rTokenStr, const ScAddress& rCellAddress ) : maTokenStr( rTokenStr ), maCellAddress( rCellAddress ) {}
-        TokenAddressItem( const OUString& rTokenStr, const css::table::CellAddress& rCellAddress ) : maTokenStr( rTokenStr ), maCellAddress( rCellAddress.Column, rCellAddress.Row, rCellAddress.Sheet ) {}
     };
 
     struct TokenRangeAddressItem

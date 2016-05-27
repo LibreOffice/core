@@ -128,9 +128,6 @@ void FormulaDialog::dispatch(bool /*_bOK*/, bool /*_bMatrixChecked*/)
 void FormulaDialog::setDispatcherLock( bool /*bLock*/ )
 {
 }
-void FormulaDialog::setReferenceInput(const FormEditData* /*_pData*/)
-{
-}
 void FormulaDialog::deleteFormData()
 {
 }

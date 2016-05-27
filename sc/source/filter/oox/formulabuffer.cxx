@@ -344,20 +344,10 @@ FormulaBuffer::SharedFormulaEntry::SharedFormulaEntry(
     const OUString& rTokenStr, sal_Int32 nSharedId ) :
     maAddress(rAddr), maTokenStr(rTokenStr), mnSharedId(nSharedId) {}
 
-FormulaBuffer::SharedFormulaEntry::SharedFormulaEntry(
-    const css::table::CellAddress& rAddr,
-    const OUString& rTokenStr, sal_Int32 nSharedId ) :
-    maAddress( ScAddress( rAddr.Column, rAddr.Row, rAddr.Sheet ) ), maTokenStr(rTokenStr), mnSharedId(nSharedId) {}
-
 FormulaBuffer::SharedFormulaDesc::SharedFormulaDesc(
     const ScAddress& rAddr, sal_Int32 nSharedId,
     const OUString& rCellValue, sal_Int32 nValueType ) :
     maAddress(rAddr), mnSharedId(nSharedId), maCellValue(rCellValue), mnValueType(nValueType) {}
-
-FormulaBuffer::SharedFormulaDesc::SharedFormulaDesc(
-    const css::table::CellAddress& rAddr, sal_Int32 nSharedId,
-    const OUString& rCellValue, sal_Int32 nValueType ) :
-    maAddress( ScAddress( rAddr.Column, rAddr.Row, rAddr.Sheet ) ), mnSharedId(nSharedId), maCellValue(rCellValue), mnValueType(nValueType) {}
 
 FormulaBuffer::SheetItem::SheetItem() :
     mpCellFormulas(nullptr),

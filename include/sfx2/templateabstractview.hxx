@@ -73,8 +73,6 @@ public:
     virtual ~TemplateAbstractView();
     virtual void dispose() override;
 
-    void insertItem (const TemplateItemProperties &rTemplate);
-
     // Fill view with new item list
     void insertItems (const std::vector<TemplateItemProperties> &rTemplates);
 

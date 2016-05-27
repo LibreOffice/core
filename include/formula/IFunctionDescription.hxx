@@ -131,7 +131,6 @@ namespace formula
 
         virtual void clear() = 0;
         virtual void deleteFormData() = 0;
-        virtual void setReferenceInput(const FormEditData* _pData) = 0;
 
         virtual IFunctionManager*   getFunctionManager() = 0;
         virtual ::std::unique_ptr<FormulaTokenArray> convertToTokenArray(const css::uno::Sequence< css::sheet::FormulaToken >& _aTokenList) = 0;

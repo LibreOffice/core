@@ -104,29 +104,6 @@ void TemplateAbstractView::dispose()
     ThumbnailView::dispose();
 }
 
-void TemplateAbstractView::insertItem(const TemplateItemProperties &rTemplate)
-{
-    const TemplateItemProperties *pCur = &rTemplate;
-
-    TemplateViewItem *pChild = new TemplateViewItem(*this, pCur->nId);
-    pChild->mnDocId = pCur->nDocId;
-    pChild->mnRegionId = pCur->nRegionId;
-    pChild->maTitle = pCur->aName;
-    pChild->setPath(pCur->aPath);
-    pChild->maPreview1 = pCur->aThumbnail;
-
-    if ( pCur->aThumbnail.IsEmpty() )
-    {
-        // Use the default thumbnail if we have nothing else
-        pChild->maPreview1 = TemplateAbstractView::getDefaultThumbnail(pCur->aPath);
-    }
-
-    AppendItem(pChild);
-
-    CalculateItemPositions();
-    Invalidate();
-}
-
 void TemplateAbstractView::insertItems(const std::vector<TemplateItemProperties> &rTemplates)
 {
     std::vector<ThumbnailViewItem*> aItems(rTemplates.size());

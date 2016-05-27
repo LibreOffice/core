@@ -145,7 +145,7 @@ Reference<ui::XUIElement> SAL_CALL SwPanelFactory::createUIElement (
     }
     else if(rsResourceURL.endsWith("/PageStylesPanel"))
     {
-        VclPtr<vcl::Window> pPanel = sw::sidebar::PageStylesPanel::Create( pParentWindow, xFrame, pBindings );
+        VclPtr<vcl::Window> pPanel = sw::sidebar::PageStylesPanel::Create( pParentWindow, xFrame );
         xElement = sfx2::sidebar::SidebarPanelBase::Create(
             rsResourceURL,
             xFrame,
@@ -154,7 +154,7 @@ Reference<ui::XUIElement> SAL_CALL SwPanelFactory::createUIElement (
     }
     else if(rsResourceURL.endsWith("/PageFormatPanel"))
     {
-        VclPtr<vcl::Window> pPanel = sw::sidebar::PageFormatPanel::Create( pParentWindow, xFrame, pBindings );
+        VclPtr<vcl::Window> pPanel = sw::sidebar::PageFormatPanel::Create( pParentWindow, xFrame );
         xElement = sfx2::sidebar::SidebarPanelBase::Create(
             rsResourceURL,
             xFrame,
@@ -172,7 +172,7 @@ Reference<ui::XUIElement> SAL_CALL SwPanelFactory::createUIElement (
     }
     else if(rsResourceURL.endsWith("/PageFooterPanel"))
     {
-        VclPtr<vcl::Window> pPanel = sw::sidebar::PageFooterPanel::Create( pParentWindow, xFrame, pBindings );
+        VclPtr<vcl::Window> pPanel = sw::sidebar::PageFooterPanel::Create( pParentWindow, xFrame );
         xElement = sfx2::sidebar::SidebarPanelBase::Create(
             rsResourceURL,
             xFrame,

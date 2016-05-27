@@ -322,19 +322,6 @@ private:
     bool                mbCont;             /// True = automatic CONTINUE lookup enabled.
 };
 
-class BiffInputStreamPos
-{
-public:
-    explicit            BiffInputStreamPos( BiffInputStream& rStrm );
-
-    void                restorePosition();
-
-private:
-    BiffInputStream&    mrStrm;
-    sal_Int64           mnRecHandle;
-    sal_Int64           mnRecPos;
-};
-
 } // namespace xls
 } // namespace oox
 

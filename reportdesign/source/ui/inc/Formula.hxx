@@ -79,7 +79,6 @@ public:
     virtual void showReference(const OUString& _sFormula) override;
     virtual void dispatch(bool _bOK, bool _bMatrixChecked) override;
     virtual void setDispatcherLock( bool bLock ) override;
-    virtual void setReferenceInput(const formula::FormEditData* _pData) override;
     virtual void deleteFormData() override;
     virtual void clear() override;
     virtual void switchBack() override;

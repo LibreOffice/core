@@ -77,8 +77,6 @@ private:
 protected:
     IconChoicePage( vcl::Window *pParent, const OString& rID, const OUString& rUIXMLDescription, const SfxItemSet &rAttrSet );
 
-    sal_uInt16          GetWhich( sal_uInt16 nSlot ) const  { return pSet->GetPool()->GetWhich( nSlot ); }
-
 public:
     virtual ~IconChoicePage();
     virtual void        dispose() override;
