@@ -248,16 +248,39 @@ protected:
 };
 
 class SwTableAutoFormat;
+typedef std::map<OUString, sal_Int32> CellStyleNameMap;
 
 /// A text table style is a uno api wrapper for a SwTableAutoFormat
-class SwXTextTableStyle : public cppu::WeakImplHelper<css::style::XStyle, css::lang::XServiceInfo>
+class SwXTextTableStyle : public cppu::WeakImplHelper
+<
+    css::style::XStyle,
+    css::container::XNameAccess,
+    css::lang::XServiceInfo
+>
 {
-    OUString m_sTableAutoFormatName;
     SwDocShell* m_pDocShell;
+    OUString m_sTableAutoFormatName;
+
+    enum {
+        FIRST_ROW_STYLE = 0,
+        LAST_ROW_STYLE,
+        FIRST_COLUMN_STYLE,
+        LAST_COLUMN_STYLE,
+        EVEN_ROWS_STYLE,
+        ODD_ROWS_STYLE,
+        EVEN_COLUMNS_STYLE,
+        ODD_COLUMNS_STYLE,
+        BODY_STYLE,
+        BACKGROUND_STYLE,
+        STYLE_COUNT
+    };
 
     SwTableAutoFormat* GetTableAutoFormat();
+    static const CellStyleNameMap& GetCellStyleNameMap();
+    css::uno::Reference<css::style::XStyle> m_aCellStyles[STYLE_COUNT];
 public:
     SwXTextTableStyle(SwDocShell* pDocShell, const OUString& rTableAutoFormatName);
+
     //XStyle
     virtual sal_Bool SAL_CALL isUserDefined() throw (css::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL isInUse() throw (css::uno::RuntimeException, std::exception) override;
@@ -268,12 +291,55 @@ public:
     virtual OUString SAL_CALL getName() throw(css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL setName(const OUString& rName) throw(css::uno::RuntimeException, std::exception) override;
 
+    //XNameAccess
+    virtual css::uno::Any SAL_CALL getByName(const OUString& rName) throw(css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence<OUString> SAL_CALL getElementNames() throw(css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL hasByName(const OUString& rName) throw(css::uno::RuntimeException, std::exception) override;
+
+    //XElementAccess
+    virtual css::uno::Type SAL_CALL getElementType() throw(css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL hasElements() throw(css::uno::RuntimeException, std::exception) override;
+
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName() throw(css::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL supportsService(const OUString& rServiceName) throw(css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw(css::uno::RuntimeException, std::exception) override;
 
     static css::uno::Reference<css::style::XStyle> CreateXTextTableStyle(SwDocShell* pDocShell, const OUString& rTableAutoFormatName);
+};
+
+class SwBoxAutoFormat;
+/// A text cell style is a uno api wrapper for a SwBoxAutoFormat core class
+class SwXTextCellStyle : public cppu::WeakImplHelper
+<
+    css::style::XStyle,
+    css::beans::XPropertySet
+>
+{
+    SwDocShell* m_pDocShell;
+    SwBoxAutoFormat& m_rBoxAutoFormat;
+public:
+    SwXTextCellStyle(SwDocShell* pDocShell, SwBoxAutoFormat& rBoxAutoFormat);
+
+    //XStyle
+    virtual sal_Bool SAL_CALL isUserDefined() throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL isInUse() throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getParentStyle() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setParentStyle(const OUString& aParentStyle ) throw (css::container::NoSuchElementException, css::uno::RuntimeException, std::exception) override;
+
+    //XNamed
+    virtual OUString SAL_CALL getName() throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setName(const OUString& rName) throw(css::uno::RuntimeException, std::exception) override;
+
+    //XPropertySet
+    virtual css::uno::Reference<css::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setPropertyValue(const OUString& aPropertyName, const css::uno::Any& aValue) throw(css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Any SAL_CALL getPropertyValue(const OUString& PropertyName) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL addPropertyChangeListener(const OUString& aPropertyName, const css::uno::Reference<css::beans::XPropertyChangeListener>& xListener) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL removePropertyChangeListener(const OUString& aPropertyName, const css::uno::Reference<css::beans::XPropertyChangeListener>& aListener) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL addVetoableChangeListener(const OUString& PropertyName, const css::uno::Reference<css::beans::XVetoableChangeListener>& aListener) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL removeVetoableChangeListener(const OUString& PropertyName, const css::uno::Reference<css::beans::XVetoableChangeListener>& aListener) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
+
 };
 #endif
 
