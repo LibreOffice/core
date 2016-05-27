@@ -182,7 +182,7 @@ class SwUnoCollection
 #define SW_SERVICE_VBACODENAMEPROVIDER                  111
 #define SW_SERVICE_VBAPROJECTNAMEPROVIDER               112
 #define SW_SERVICE_VBAGLOBALS                           113
-
+#define SW_SERVICE_STYLE_TABLE_STYLE                    114
 
 #define SW_SERVICE_INVALID          USHRT_MAX
 
