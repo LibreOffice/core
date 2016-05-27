@@ -1991,7 +1991,7 @@ void SwHTMLWriter::OutCSS1_FrameFormatOptions( const SwFrameFormat& rFrameFormat
                 }
                 break;
             }
-            SAL_FALLTHROUGH; //TODO ???
+            SAL_FALLTHROUGH;
 
         case FLY_AT_PAGE:
         case FLY_AT_FLY:

@@ -1780,7 +1780,7 @@ bool SwContentTree::FillTransferData( TransferDataContainer& rTransfer,
         case ContentTypeId::POSTIT:
         case ContentTypeId::INDEX:
         case ContentTypeId::REFERENCE :
-            // cannot be inserted, neither as URL nor as region
+            // cannot be inserted, neither as URL nor as section
         break;
         case ContentTypeId::URLFIELD:
             sUrl = static_cast<SwURLFieldContent*>(pCnt)->GetURL();
@@ -1791,7 +1791,7 @@ bool SwContentTree::FillTransferData( TransferDataContainer& rTransfer,
                 break;
             else
                 rDragMode &= ~( DND_ACTION_MOVE | DND_ACTION_LINK );
-            SAL_FALLTHROUGH; //TODO ???
+            SAL_FALLTHROUGH;
         default:
             sEntry = GetEntryText(pEntry);
     }

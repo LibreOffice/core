@@ -1412,7 +1412,7 @@ void SwHTMLParser::NextToken( int nToken )
         else
             bGetIDOption = true;
             // <BR>s in <PRE> resemble true LFs, hence no break
-        SAL_FALLTHROUGH; //TODO ???
+        SAL_FALLTHROUGH;
 
     case HTML_NEWPARA:
         // CR in PRE/LISTING/XMP
