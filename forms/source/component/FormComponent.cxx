@@ -2039,7 +2039,7 @@ void OBoundControlModel::impl_connectDatabaseColumn_noNotify( bool _bFromReload 
     OSL_ENSURE( xRowSet.is(), "OBoundControlModel::impl_connectDatabaseColumn_noNotify: no row set!" );
     if ( !xRowSet.is() )
         return;
-    if ( !hasField() )
+    if ( !hasField() || _bFromReload )
     {
         // connect to the column
         connectToField( xRowSet );
