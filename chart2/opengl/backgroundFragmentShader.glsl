@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#version 150 core core
+#version 150 core
 
 in vec4 fragmentColor;
 
