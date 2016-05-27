@@ -206,7 +206,7 @@ void StatusBar::ApplySettings(vcl::RenderContext& rRenderContext)
 
     // NWF background
     if (!IsControlBackground() &&
-          rRenderContext.IsNativeControlSupported(CTRL_WINDOW_BACKGROUND, PART_BACKGROUND_WINDOW))
+          rRenderContext.IsNativeControlSupported(ControlType::WindowBackground, PART_BACKGROUND_WINDOW))
     {
         ImplGetWindowImpl()->mnNativeBackground = PART_BACKGROUND_WINDOW;
         EnableChildTransparentMode();
@@ -458,7 +458,7 @@ void DrawProgress(vcl::Window* pWindow, vcl::RenderContext& rRenderContext, cons
                   sal_uInt16 nPercent1, sal_uInt16 nPercent2, sal_uInt16 nPercentCount,
                   const Rectangle& rFramePosSize)
 {
-    if (rRenderContext.IsNativeControlSupported(CTRL_PROGRESS, PART_ENTIRE_CONTROL))
+    if (rRenderContext.IsNativeControlSupported(ControlType::Progress, PART_ENTIRE_CONTROL))
     {
         bool bNeedErase = ImplGetSVData()->maNWFData.mbProgressNeedsErase;
 
@@ -496,7 +496,7 @@ void DrawProgress(vcl::Window* pWindow, vcl::RenderContext& rRenderContext, cons
             rRenderContext.IntersectClipRegion(rFramePosSize);
         }
 
-        bool bNativeOK = rRenderContext.DrawNativeControl(CTRL_PROGRESS, PART_ENTIRE_CONTROL, aControlRegion,
+        bool bNativeOK = rRenderContext.DrawNativeControl(ControlType::Progress, PART_ENTIRE_CONTROL, aControlRegion,
                                                           ControlState::ENABLED, aValue, OUString());
         if (bNeedErase)
             rRenderContext.Pop();
@@ -567,7 +567,7 @@ void DrawProgress(vcl::Window* pWindow, vcl::RenderContext& rRenderContext, cons
 
 void StatusBar::ImplDrawProgress(vcl::RenderContext& rRenderContext, sal_uInt16 nPercent2)
 {
-    bool bNative = rRenderContext.IsNativeControlSupported(CTRL_PROGRESS, PART_ENTIRE_CONTROL);
+    bool bNative = rRenderContext.IsNativeControlSupported(ControlType::Progress, PART_ENTIRE_CONTROL);
     // bPaint: draw text also, else only update progress
     rRenderContext.DrawText(maPrgsTxtPos, maPrgsTxt);
     if (!bNative)
@@ -617,12 +617,12 @@ void StatusBar::ImplCalcProgressRect()
     // save the divisor for later
     mnPercentCount = 10000 / nMaxPercent;
     bool bNativeOK = false;
-    if( IsNativeControlSupported( CTRL_PROGRESS, PART_ENTIRE_CONTROL ) )
+    if( IsNativeControlSupported( ControlType::Progress, PART_ENTIRE_CONTROL ) )
     {
         ImplControlValue aValue;
         Rectangle aControlRegion( Rectangle( (const Point&)Point(), maPrgsFrameRect.GetSize() ) );
         Rectangle aNativeControlRegion, aNativeContentRegion;
-        if( (bNativeOK = GetNativeControlRegion( CTRL_PROGRESS, PART_ENTIRE_CONTROL, aControlRegion,
+        if( (bNativeOK = GetNativeControlRegion( ControlType::Progress, PART_ENTIRE_CONTROL, aControlRegion,
                                                  ControlState::ENABLED, aValue, OUString(),
                                                  aNativeControlRegion, aNativeContentRegion ) ) )
         {
@@ -1436,12 +1436,12 @@ Size StatusBar::CalcWindowSizePixel() const
     const long nBarTextOffset = STATUSBAR_OFFSET_TEXTY*2;
     long nProgressHeight = nMinHeight + nBarTextOffset;
 
-    if( IsNativeControlSupported( CTRL_PROGRESS, PART_ENTIRE_CONTROL ) )
+    if( IsNativeControlSupported( ControlType::Progress, PART_ENTIRE_CONTROL ) )
     {
         ImplControlValue aValue;
         Rectangle aControlRegion( (const Point&)Point(), Size( nCalcWidth, nMinHeight ) );
         Rectangle aNativeControlRegion, aNativeContentRegion;
-        if( GetNativeControlRegion( CTRL_PROGRESS, PART_ENTIRE_CONTROL,
+        if( GetNativeControlRegion( ControlType::Progress, PART_ENTIRE_CONTROL,
                     aControlRegion, ControlState::ENABLED, aValue, OUString(),
                     aNativeControlRegion, aNativeContentRegion ) )
         {
@@ -1450,12 +1450,12 @@ Size StatusBar::CalcWindowSizePixel() const
     }
 
     if( mpImplData->mbDrawItemFrames &&
-        IsNativeControlSupported( CTRL_FRAME, PART_BORDER ) )
+        IsNativeControlSupported( ControlType::Frame, PART_BORDER ) )
     {
         ImplControlValue aControlValue( static_cast<long>(DrawFrameFlags::NoDraw) );
         Rectangle aBound, aContent;
         Rectangle aNatRgn( Point( 0, 0 ), Size( 150, 50 ) );
-        if( GetNativeControlRegion(CTRL_FRAME, PART_BORDER,
+        if( GetNativeControlRegion(ControlType::Frame, PART_BORDER,
                     aNatRgn, ControlState::NONE, aControlValue, OUString(), aBound, aContent) )
         {
             mpImplData->mnItemBorderWidth =

@@ -251,10 +251,10 @@ void ScMenuFloatingWindow::Paint(vcl::RenderContext& rRenderContext, const Recta
 
     // Window background
     bool bNativeDrawn = true;
-    if (rRenderContext.IsNativeControlSupported(CTRL_MENU_POPUP, PART_ENTIRE_CONTROL))
+    if (rRenderContext.IsNativeControlSupported(ControlType::MenuPopup, PART_ENTIRE_CONTROL))
     {
         rRenderContext.SetClipRegion();
-        bNativeDrawn = rRenderContext.DrawNativeControl(CTRL_MENU_POPUP, PART_ENTIRE_CONTROL, aCtrlRect,
+        bNativeDrawn = rRenderContext.DrawNativeControl(ControlType::MenuPopup, PART_ENTIRE_CONTROL, aCtrlRect,
                                                         ControlState::ENABLED, ImplControlValue(), OUString());
     }
     else
@@ -384,26 +384,26 @@ void ScMenuFloatingWindow::drawSeparator(vcl::RenderContext& rRenderContext, siz
     getMenuItemPosSize(nPos, aPos, aSize);
     Rectangle aRegion(aPos,aSize);
 
-    if (rRenderContext.IsNativeControlSupported(CTRL_MENU_POPUP, PART_ENTIRE_CONTROL))
+    if (rRenderContext.IsNativeControlSupported(ControlType::MenuPopup, PART_ENTIRE_CONTROL))
     {
         rRenderContext.Push(PushFlags::CLIPREGION);
         rRenderContext.IntersectClipRegion(aRegion);
         Rectangle aCtrlRect(Point(0,0), GetOutputSizePixel());
-        rRenderContext.DrawNativeControl(CTRL_MENU_POPUP, PART_ENTIRE_CONTROL, aCtrlRect,
+        rRenderContext.DrawNativeControl(ControlType::MenuPopup, PART_ENTIRE_CONTROL, aCtrlRect,
                                          ControlState::ENABLED, ImplControlValue(), OUString());
 
         rRenderContext.Pop();
     }
 
     bool bNativeDrawn = false;
-    if (rRenderContext.IsNativeControlSupported(CTRL_MENU_POPUP, PART_MENU_SEPARATOR))
+    if (rRenderContext.IsNativeControlSupported(ControlType::MenuPopup, PART_MENU_SEPARATOR))
     {
         ControlState nState = ControlState::NONE;
         const MenuItemData& rData = maMenuItems[nPos];
         if (rData.mbEnabled)
             nState |= ControlState::ENABLED;
 
-        bNativeDrawn = rRenderContext.DrawNativeControl(CTRL_MENU_POPUP, PART_MENU_SEPARATOR,
+        bNativeDrawn = rRenderContext.DrawNativeControl(ControlType::MenuPopup, PART_MENU_SEPARATOR,
                                                         aRegion, nState, ImplControlValue(), OUString());
     }
 
@@ -677,23 +677,23 @@ void ScMenuFloatingWindow::highlightMenuItem(vcl::RenderContext& rRenderContext,
     getMenuItemPosSize(nPos, aPos, aSize);
     Rectangle aRegion(aPos,aSize);
 
-    if (rRenderContext.IsNativeControlSupported(CTRL_MENU_POPUP, PART_ENTIRE_CONTROL))
+    if (rRenderContext.IsNativeControlSupported(ControlType::MenuPopup, PART_ENTIRE_CONTROL))
     {
         rRenderContext.Push(PushFlags::CLIPREGION);
         rRenderContext.IntersectClipRegion(Rectangle(aPos, aSize));
         Rectangle aCtrlRect(Point(0,0), GetOutputSizePixel());
-        rRenderContext.DrawNativeControl(CTRL_MENU_POPUP, PART_ENTIRE_CONTROL, aCtrlRect, ControlState::ENABLED,
+        rRenderContext.DrawNativeControl(ControlType::MenuPopup, PART_ENTIRE_CONTROL, aCtrlRect, ControlState::ENABLED,
                                          ImplControlValue(), OUString());
         rRenderContext.Pop();
     }
 
     bool bNativeDrawn = true;
-    if (rRenderContext.IsNativeControlSupported(CTRL_MENU_POPUP, PART_MENU_ITEM))
+    if (rRenderContext.IsNativeControlSupported(ControlType::MenuPopup, PART_MENU_ITEM))
     {
         ControlState nState = bSelected ? ControlState::SELECTED : ControlState::NONE;
         if (maMenuItems[nPos].mbEnabled)
             nState |= ControlState::ENABLED;
-        bNativeDrawn = rRenderContext.DrawNativeControl(CTRL_MENU_POPUP, PART_MENU_ITEM,
+        bNativeDrawn = rRenderContext.DrawNativeControl(ControlType::MenuPopup, PART_MENU_ITEM,
                                                         aRegion, nState, ImplControlValue(), OUString());
     }
     else
