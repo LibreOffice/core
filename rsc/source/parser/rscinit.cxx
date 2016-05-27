@@ -105,6 +105,7 @@ void RscTypCont::Init()
     aNmTb.Put( "POS",                POSITION,       (sal_IntPtr)0     );
     aNmTb.Put( "SIZE",               DIMENSION,      (sal_IntPtr)0     );
     aNmTb.Put( "ZoomInOutputSize",   INZOOMOUTPUTSIZE,(sal_IntPtr)0    );
+    aNmTb.Put( "FloatingPos",        FLOATINGPOS,    (sal_IntPtr)0     );
 }
 {
     aShort.SetRange( -32768, 32767 );
