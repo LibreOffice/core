@@ -708,7 +708,18 @@
 
 #define STR_FILTER_SELCOUNT             533
 
-#define SC_GLOBSTR_STR_COUNT            534     /**< the count of permanently resident strings */
+#define STR_GENERAL                     534
+#define STR_NUMBER                      535
+#define STR_PERCENT                     536
+#define STR_CURRENCY                    537
+#define STR_DATE                        538
+#define STR_TIME                        539
+#define STR_SCIENTIFIC                  540
+#define STR_FRACTION                    541
+#define STR_BOOLEAN_VALUE               542
+#define STR_TEXT                        543
+
+#define SC_GLOBSTR_STR_COUNT            544     /**< the count of permanently resident strings */
 
 #endif
 

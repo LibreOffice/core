@@ -2109,6 +2109,46 @@ Resource RID_GLOBSTR
     {
         Text [ en-US ] = "%1 and %2 more";
     };
+    String STR_GENERAL
+    {
+        Text [ en-US ] = "General";
+    };
+    String STR_NUMBER
+    {
+        Text [ en-US ] = "Number";
+    };
+    String STR_PERCENT
+    {
+        Text [ en-US ] = "Percent";
+    };
+    String STR_CURRENCY
+    {
+        Text [ en-US ] = "Currency";
+    };
+    String STR_DATE
+    {
+        Text [ en-US ] = "Date";
+    };
+    String STR_TIME
+    {
+        Text [ en-US ] = "Time";
+    };
+    String STR_SCIENTIFIC
+    {
+        Text [ en-US ] = "Scientific";
+    };
+    String STR_FRACTION
+    {
+        Text [ en-US ] = "Fraction";
+    };
+    String STR_BOOLEAN_VALUE
+    {
+        Text [ en-US ] = "Boolean Value";
+    };
+    String STR_TEXT
+    {
+        Text [ en-US ] = "Text";
+    };
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

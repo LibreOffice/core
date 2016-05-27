@@ -35,6 +35,7 @@
 #include <svx/ParaLineSpacingPopup.hxx>
 #include <svx/TextCharacterSpacingPopup.hxx>
 #include <svx/TextUnderlinePopup.hxx>
+#include <NumberFormatControl.hxx>
 
 #include <svtools/parhtml.hxx>
 #include <sot/formats.hxx>
@@ -174,6 +175,7 @@ void ScDLL::Init()
     svx::TextCharacterSpacingPopup  ::RegisterControl(SID_ATTR_CHAR_KERNING,    pMod );
     svx::TextUnderlinePopup         ::RegisterControl(SID_ATTR_CHAR_UNDERLINE,  pMod );
     svx::FormatPaintBrushToolBoxControl::RegisterControl(SID_FORMATPAINTBRUSH,  pMod );
+    sc::ScNumberFormatControl       ::RegisterControl(SID_NUMBER_TYPE_FORMAT,   pMod );
 
     SvxGrafModeToolBoxControl       ::RegisterControl(SID_ATTR_GRAF_MODE,       pMod);
     SvxGrafRedToolBoxControl        ::RegisterControl(SID_ATTR_GRAF_RED,        pMod);
