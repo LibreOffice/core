@@ -124,6 +124,7 @@
 #define STR_CATEGORY_DELETE                 (RID_SFX_DOC_START+101)
 #define STR_CREATE_ERROR                    (RID_SFX_DOC_START+103)
 #define STR_ERROR_SAVEAS                    (RID_SFX_DOC_START+105)
+#define STR_CATEGORY_RENAME                 (RID_SFX_DOC_START+109)
 
 // please update to the last id
 #define ACT_SFX_DOC_END IMG_ACTION_REFRESH

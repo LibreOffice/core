@@ -70,6 +70,8 @@ public:
 
     virtual sal_uInt16 createRegion (const OUString &rName) override;
 
+    bool renameRegion(const OUString &rTitle, const OUString &rNewTitle);
+
     bool removeRegion (const sal_uInt16 nItemId);
 
     bool removeTemplate (const sal_uInt16 nItemId, const sal_uInt16 nSrcItemId);

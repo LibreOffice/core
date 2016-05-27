@@ -342,6 +342,19 @@ sal_uInt16 TemplateLocalView::createRegion(const OUString &rName)
     return pItem->mnId;
 }
 
+bool TemplateLocalView::renameRegion(const OUString &rTitle, const OUString &rNewTitle)
+{
+    sal_uInt16 nDocId = USHRT_MAX;
+    TemplateContainerItem *pRegion = getRegion(rTitle);
+
+    if(pRegion)
+    {
+        sal_uInt16 nRegionId = pRegion->mnRegionId;
+        return mpDocTemplates->SetName( rNewTitle, nRegionId, nDocId );
+    }
+    return false;
+}
+
 bool TemplateLocalView::removeRegion(const sal_uInt16 nItemId)
 {
     sal_uInt16 nRegionId = USHRT_MAX;
