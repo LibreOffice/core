@@ -106,6 +106,7 @@ public:
     void DrawArrays(GLenum GLenum, std::vector<GLfloat>& aVertices);
 
 protected:
+    bool EnableVertexAttrib(GLuint& rAttrib, const OString& rName);
     void SetVertexAttrib( GLuint& rAttrib, const OString& rName, const GLvoid* pData, GLint nSize = 2 );
     GLuint GetUniformLocation( const OString& rName );
 };
