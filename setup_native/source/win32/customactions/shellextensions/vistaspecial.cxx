@@ -17,27 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifdef _MSC_VER
-#pragma warning(push, 1) /* disable warnings within system headers */
-#endif
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-#include <msiquery.h>
-#ifdef _MSC_VER
-#pragma warning(pop)
-#endif
+#include "shlxtmsi.hxx"
 
 #include <malloc.h>
 #include <assert.h>
 
-#ifdef UNICODE
-#define _UNICODE
-#define _tstring    wstring
-#else
-#define _tstring    string
-#endif
-#include <tchar.h>
-#include <string>
 #include <queue>
 #include <stdio.h>
 #include <strsafe.h>
@@ -45,61 +29,43 @@
 #include <systools/win32/uwinapi.h>
 #include <../tools/seterror.hxx>
 
-static std::_tstring GetMsiProperty( MSIHANDLE handle, const std::_tstring& sProperty )
-{
-    std::_tstring result;
-    TCHAR szDummy[1] = TEXT("");
-    DWORD nChars = 0;
-
-    if ( MsiGetProperty( handle, sProperty.c_str(), szDummy, &nChars ) == ERROR_MORE_DATA )
-    {
-        DWORD nBytes = ++nChars * sizeof(TCHAR);
-        LPTSTR buffer = reinterpret_cast<LPTSTR>(_alloca(nBytes));
-        ZeroMemory( buffer, nBytes );
-        MsiGetProperty(handle, sProperty.c_str(), buffer, &nChars);
-        result = buffer;
-    }
-
-    return result;
-}
-
-static BOOL RemoveCompleteDirectory(const std::_tstring& rPath)
+static BOOL RemoveCompleteDirectoryW(const std::wstring& rPath)
 {
     bool bDirectoryRemoved = true;
 
-    std::_tstring sPattern = rPath + TEXT("\\") + TEXT("*.*");
+    std::wstring sPattern = rPath + L"\\" + L"*.*";
     WIN32_FIND_DATA aFindData;
 
     // Finding all content in rPath
 
-    HANDLE hFindContent = FindFirstFile( sPattern.c_str(), &aFindData );
+    HANDLE hFindContent = FindFirstFileW( sPattern.c_str(), &aFindData );
 
     if ( hFindContent != INVALID_HANDLE_VALUE )
     {
         bool fNextFile = false;
-        std::_tstring sCurrentDir = TEXT(".");
-        std::_tstring sParentDir = TEXT("..");
+        std::wstring sCurrentDir = L".";
+        std::wstring sParentDir = L"..";
 
         do
         {
-            std::_tstring sFileName = aFindData.cFileName;
+            std::wstring sFileName = aFindData.cFileName;
 
-            if (( strcmp(sFileName.c_str(),sCurrentDir.c_str()) != 0 ) &&
-                ( strcmp(sFileName.c_str(),sParentDir.c_str()) != 0 ))
+            if (( wcscmp(sFileName.c_str(),sCurrentDir.c_str()) != 0 ) &&
+                ( wcscmp(sFileName.c_str(),sParentDir.c_str()) != 0 ))
             {
-                std::_tstring sCompleteFileName = rPath + TEXT("\\") + sFileName;
+                std::wstring sCompleteFileName = rPath + L"\\" + sFileName;
 
                 if ( aFindData.dwFileAttributes == FILE_ATTRIBUTE_DIRECTORY )
                 {
-                    RemoveCompleteDirectory(sCompleteFileName);
+                    RemoveCompleteDirectoryW(sCompleteFileName);
                 }
                 else
                 {
-                    DeleteFile( sCompleteFileName.c_str() );
+                    DeleteFileW( sCompleteFileName.c_str() );
                 }
             }
 
-            fNextFile = FindNextFile( hFindContent, &aFindData );
+            fNextFile = FindNextFileW( hFindContent, &aFindData );
 
         } while ( fNextFile );
 
@@ -110,7 +76,7 @@ static BOOL RemoveCompleteDirectory(const std::_tstring& rPath)
         // -> first removing content -> closing handle -> remove empty directory
 
 
-        if( !( RemoveDirectory(rPath.c_str()) ) )
+        if( !( RemoveDirectoryW(rPath.c_str()) ) )
         {
             bDirectoryRemoved = false;
         }
@@ -121,19 +87,19 @@ static BOOL RemoveCompleteDirectory(const std::_tstring& rPath)
 
 extern "C" UINT __stdcall RenamePrgFolder( MSIHANDLE handle )
 {
-    std::_tstring sOfficeInstallPath = GetMsiProperty(handle, TEXT("INSTALLLOCATION"));
+    std::wstring sOfficeInstallPath = GetMsiPropertyW(handle, L"INSTALLLOCATION");
 
-    std::_tstring sRenameSrc = sOfficeInstallPath + TEXT("program");
-    std::_tstring sRenameDst = sOfficeInstallPath + TEXT("program_old");
+    std::wstring sRenameSrc = sOfficeInstallPath + L"program";
+    std::wstring sRenameDst = sOfficeInstallPath + L"program_old";
 
-    bool bSuccess = MoveFile( sRenameSrc.c_str(), sRenameDst.c_str() );
+    bool bSuccess = MoveFileW( sRenameSrc.c_str(), sRenameDst.c_str() );
     if ( !bSuccess )
     {
-        TCHAR sAppend[2] = TEXT("0");
+        WCHAR sAppend[2] = L"0";
         for ( int i = 0; i < 10; i++ )
         {
-            sRenameDst = sOfficeInstallPath + TEXT("program_old") + sAppend;
-            bSuccess = MoveFile( sRenameSrc.c_str(), sRenameDst.c_str() );
+            sRenameDst = sOfficeInstallPath + L"program_old" + sAppend;
+            bSuccess = MoveFileW( sRenameSrc.c_str(), sRenameDst.c_str() );
             if ( bSuccess )
                 break;
             sAppend[0] += 1;
@@ -145,16 +111,16 @@ extern "C" UINT __stdcall RenamePrgFolder( MSIHANDLE handle )
 
 extern "C" UINT __stdcall RemovePrgFolder( MSIHANDLE handle )
 {
-    std::_tstring sOfficeInstallPath = GetMsiProperty(handle, TEXT("INSTALLLOCATION"));
-    std::_tstring sRemoveDir = sOfficeInstallPath + TEXT("program_old");
+    std::wstring sOfficeInstallPath = GetMsiPropertyW(handle, L"INSTALLLOCATION");
+    std::wstring sRemoveDir = sOfficeInstallPath + L"program_old";
 
-    RemoveCompleteDirectory( sRemoveDir );
+    RemoveCompleteDirectoryW( sRemoveDir );
 
-    TCHAR sAppend[2] = TEXT("0");
+    WCHAR sAppend[2] = L"0";
     for ( int i = 0; i < 10; i++ )
     {
-        sRemoveDir = sOfficeInstallPath + TEXT("program_old") + sAppend;
-        RemoveCompleteDirectory( sRemoveDir );
+        sRemoveDir = sOfficeInstallPath + L"program_old" + sAppend;
+        RemoveCompleteDirectoryW( sRemoveDir );
         sAppend[0] += 1;
     }
 
