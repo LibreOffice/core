@@ -1,3 +1,5 @@
+Work around -fsanitize=bool
+
 --- boost/algorithm/string/find_iterator.hpp
 +++ boost/algorithm/string/find_iterator.hpp
 @@ -240,7 +240,7 @@

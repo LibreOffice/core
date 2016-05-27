@@ -8838,7 +8838,12 @@ else
     AC_MSG_RESULT([internal])
     BUILD_TYPE="$BUILD_TYPE BOOST"
     SYSTEM_BOOST=
-    BOOST_CPPFLAGS="-I${WORKDIR}/UnpackedTarball/boost"
+    if test "${COM}" = "GCC" -o "${COM_IS_CLANG}" = "TRUE"; then
+        # use warning-suppressing wrapper headers
+        BOOST_CPPFLAGS="-I$(SRCDIR)/external/boost/include -I${WORKDIR}/UnpackedTarball/boost"
+    else
+        BOOST_CPPFLAGS="-I${WORKDIR}/UnpackedTarball/boost"
+    fi
 fi
 AC_SUBST(SYSTEM_BOOST)
 

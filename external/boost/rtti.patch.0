@@ -1,3 +1,5 @@
+Visible function type RTTI for Clang -fsanitize=function
+
 --- boost/function/function_base.hpp
 +++ boost/function/function_base.hpp
 @@ -97,7 +97,7 @@

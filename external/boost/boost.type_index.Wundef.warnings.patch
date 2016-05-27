@@ -1,0 +1,12 @@
+diff -ru boost.orig/boost/type_index/stl_type_index.hpp boost/boost/type_index/stl_type_index.hpp
+--- foo/misc/boost.orig/boost/type_index/stl_type_index.hpp	2015-06-21 22:16:46.000000000 +0200
++++ foo/misc/boost/boost/type_index/stl_type_index.hpp	2015-07-16 22:55:42.886944806 +0200
+@@ -174,7 +174,7 @@
+ 
+ 
+ inline std::size_t stl_type_index::hash_code() const BOOST_NOEXCEPT {
+-#if _MSC_VER > 1600 || (__GNUC__ == 4 && __GNUC_MINOR__ > 5 && defined(__GXX_EXPERIMENTAL_CXX0X__))
++#if (defined(_MSC_VER) && _MSC_VER > 1600) || (__GNUC__ == 4 && __GNUC_MINOR__ > 5 && defined(__GXX_EXPERIMENTAL_CXX0X__))
+     return data_->hash_code();
+ #else
+     return boost::hash_range(raw_name(), raw_name() + std::strlen(raw_name()));

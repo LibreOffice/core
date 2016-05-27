@@ -1,3 +1,5 @@
+aka MSVC warning C4715: not all control paths return a value
+
 diff -ru boost.org/boost/property_tree/detail/json_parser/standard_callbacks.hpp boost/boost/property_tree/detail/json_parser/standard_callbacks.hpp
 --- foo/misc/boost.org/boost/property_tree/detail/json_parser/standard_callbacks.hpp	2015-07-07 14:20:48.000000000 +0200
 +++ foo/misc/boost/boost/property_tree/detail/json_parser/standard_callbacks.hpp	2015-07-22 08:35:07.764263463 +0200
