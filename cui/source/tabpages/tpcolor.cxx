@@ -319,7 +319,6 @@ SvxColorTabPage::SvxColorTabPage(vcl::Window* pParent, const SfxItemSet& rInAttr
     , aXFillColorItem( OUString(), Color( COL_BLACK ) )
     , aXFillAttr( static_cast<XOutdevItemPool*>( rInAttrs.GetPool() ))
     , rXFSet( aXFillAttr.GetItemSet() )
-    , eCM( CM_RGB )
 {
     get(m_pBoxEmbed, "embed");
     get(m_pBtnLoad, "load");
@@ -339,16 +338,14 @@ SvxColorTabPage::SvxColorTabPage(vcl::Window* pParent, const SfxItemSet& rInAttr
     m_pCtlPreviewOld->set_height_request(aSize.Height());
     m_pCtlPreviewNew->set_width_request(aSize.Width());
     m_pCtlPreviewNew->set_height_request(aSize.Height());
-    get(m_pLbColorModel, "modellb");
-    get(m_pRGB, "rgb");
-    get(m_pR, "R");
-    get(m_pG, "G");
-    get(m_pB, "B");
-    get(m_pCMYK, "cmyk");
-    get(m_pC, "C");
-    get(m_pY, "Y");
-    get(m_pM, "M");
-    get(m_pK, "K");
+    get(m_pRGBcustom, "rgbcustom");
+    get(m_pRGBpreset, "rgbpreset");
+    get(m_pRcustom, "R_custom");
+    get(m_pRpreset, "R_preset");
+    get(m_pGcustom, "G_custom");
+    get(m_pGpreset, "G_preset");
+    get(m_pBcustom, "B_custom");
+    get(m_pBpreset, "B_preset");
     get(m_pBtnAdd, "add");
     get(m_pBtnModify, "modify");
     get(m_pBtnWorkOn, "edit");
@@ -376,22 +373,19 @@ SvxColorTabPage::SvxColorTabPage(vcl::Window* pParent, const SfxItemSet& rInAttr
         LINK( this, SvxColorTabPage, SelectColorLBHdl_Impl ) );
     m_pValSetColorList->SetSelectHdl(
         LINK( this, SvxColorTabPage, SelectValSetHdl_Impl ) );
-    m_pLbColorModel->SetSelectHdl(
-        LINK( this, SvxColorTabPage, SelectColorModelHdl_Impl ) );
 
     Link<Edit&,void> aLink = LINK( this, SvxColorTabPage, ModifiedHdl_Impl );
-    m_pR->SetModifyHdl( aLink );
-    m_pG->SetModifyHdl( aLink );
-    m_pB->SetModifyHdl( aLink );
-    m_pC->SetModifyHdl( aLink );
-    m_pY->SetModifyHdl( aLink );
-    m_pM->SetModifyHdl( aLink );
-    m_pK->SetModifyHdl( aLink );
+    m_pRcustom->SetModifyHdl( aLink );
+    m_pGcustom->SetModifyHdl( aLink );
+    m_pBcustom->SetModifyHdl( aLink );
 
     m_pBtnAdd->SetClickHdl( LINK( this, SvxColorTabPage, ClickAddHdl_Impl ) );
     m_pBtnModify->SetClickHdl( LINK( this, SvxColorTabPage, ClickModifyHdl_Impl ) );
     m_pBtnWorkOn->SetClickHdl( LINK( this, SvxColorTabPage, ClickWorkOnHdl_Impl ) );
     m_pBtnDelete->SetClickHdl( LINK( this, SvxColorTabPage, ClickDeleteHdl_Impl ) );
+
+    // disable preset color values
+    m_pRGBpreset->Disable();
 
     // ValueSet
     m_pValSetColorList->SetStyle( m_pValSetColorList->GetStyle() | WB_ITEMBORDER );
@@ -417,16 +411,14 @@ void SvxColorTabPage::dispose()
     m_pValSetColorList.clear();
     m_pCtlPreviewOld.clear();
     m_pCtlPreviewNew.clear();
-    m_pLbColorModel.clear();
-    m_pRGB.clear();
-    m_pR.clear();
-    m_pG.clear();
-    m_pB.clear();
-    m_pCMYK.clear();
-    m_pC.clear();
-    m_pY.clear();
-    m_pM.clear();
-    m_pK.clear();
+    m_pRGBcustom.clear();
+    m_pRGBpreset.clear();
+    m_pRcustom.clear();
+    m_pRpreset.clear();
+    m_pGcustom.clear();
+    m_pGpreset.clear();
+    m_pBcustom.clear();
+    m_pBpreset.clear();
     m_pBtnAdd.clear();
     m_pBtnModify.clear();
     m_pBtnWorkOn.clear();
@@ -467,6 +459,7 @@ void SvxColorTabPage::ActivatePage( const SfxItemSet& )
                 m_pValSetColorList->SelectItem( m_pLbColor->GetSelectEntryPos() + 1 );
                 m_pEdtName->SetText( m_pLbColor->GetSelectEntry() );
                 XColorEntry* pEntry = pColorList->GetColor( *pPos );
+                aPreviousColor = pEntry->GetColor();
                 ChangeColor(pEntry->GetColor());
             }
             else if( *pPageType == PT_COLOR && *pPos == LISTBOX_ENTRY_NOTFOUND )
@@ -474,27 +467,21 @@ void SvxColorTabPage::ActivatePage( const SfxItemSet& )
                 const SfxPoolItem* pPoolItem = nullptr;
                 if( SfxItemState::SET == rOutAttrs.GetItemState( GetWhich( XATTR_FILLCOLOR ), true, &pPoolItem ) )
                 {
-                    m_pLbColorModel->SelectEntryPos( CM_RGB );
-
+                    aPreviousColor = static_cast<const XFillColorItem*>(pPoolItem)->GetColorValue();
                     ChangeColor(static_cast<const XFillColorItem*>(pPoolItem)->GetColorValue());
 
                     m_pEdtName->SetText( static_cast<const XFillColorItem*>( pPoolItem )->GetName() );
 
-                    m_pR->SetValue( ColorToPercent_Impl( aCurrentColor.GetRed() ) );
-                    m_pG->SetValue( ColorToPercent_Impl( aCurrentColor.GetGreen() ) );
-                    m_pB->SetValue( ColorToPercent_Impl( aCurrentColor.GetBlue() ) );
+                    m_pRcustom->SetValue( aCurrentColor.GetRed() );
+                    m_pGcustom->SetValue( aCurrentColor.GetGreen() );
+                    m_pBcustom->SetValue( aCurrentColor.GetBlue() );
 
-                    // fill ItemSet and pass it on to XOut
-                    rXFSet.Put( XFillColorItem( OUString(), aCurrentColor ) );
-                    m_pCtlPreviewOld->SetAttributes( aXFillAttr.GetItemSet() );
-                    m_pCtlPreviewNew->SetAttributes( aXFillAttr.GetItemSet() );
-
-                    m_pCtlPreviewNew->Invalidate();
-                    m_pCtlPreviewOld->Invalidate();
                 }
             }
 
-            // so that the possibly changed color is discarded
+            m_pCtlPreviewOld->SetAttributes( aXFillAttr.GetItemSet() );
+            m_pCtlPreviewOld->Invalidate();
+
             SelectColorLBHdl_Impl( *m_pLbColor );
 
             *pPageType = PT_COLOR;
@@ -529,9 +516,9 @@ long SvxColorTabPage::CheckChanges_Impl()
         // aNewColor, because COL_USER != COL_something, even if RGB values are the same
         // Color aNewColor( aColor.GetRed(), aColor.GetGreen(), aColor.GetBlue() );
 
-        if( ColorToPercent_Impl( aCurrentColor.GetRed() ) != ColorToPercent_Impl( aColor.GetRed() ) ||
-            ColorToPercent_Impl( aCurrentColor.GetGreen() ) != ColorToPercent_Impl( aColor.GetGreen() ) ||
-            ColorToPercent_Impl( aCurrentColor.GetBlue() ) != ColorToPercent_Impl( aColor.GetBlue() ) ||
+        if( ( aCurrentColor.GetRed() !=  aColor.GetRed() ) ||
+            ( aCurrentColor.GetGreen() !=  aColor.GetGreen() ) ||
+            ( aCurrentColor.GetBlue() !=  aColor.GetBlue() ) ||
             aString != m_pEdtName->GetText() )
         {
             ResMgr& rMgr = CUI_MGR();
@@ -624,20 +611,15 @@ void SvxColorTabPage::Reset( const SfxItemSet* rSet )
     if ( nState >= SfxItemState::DEFAULT )
     {
         XFillColorItem aColorItem( static_cast<const XFillColorItem&>(rSet->Get( XATTR_FILLCOLOR )) );
+        aPreviousColor = aColorItem.GetColorValue();
         aNewColor = aColorItem.GetColorValue();
         m_pLbColor->SelectEntry(aNewColor);
         m_pValSetColorList->SelectItem( m_pLbColor->GetSelectEntryPos() + 1 );
         m_pEdtName->SetText( m_pLbColor->GetSelectEntry() );
     }
 
-    // set color model
-    OUString aStr = GetUserData();
-    m_pLbColorModel->SelectEntryPos( aStr.toInt32() );
-
     ChangeColor(aNewColor);
-    SelectColorModelHdl_Impl( *m_pLbColorModel );
 
-    m_pCtlPreviewOld->Invalidate();
     UpdateModified();
 }
 
@@ -651,23 +633,9 @@ VclPtr<SfxTabPage> SvxColorTabPage::Create( vcl::Window* pWindow,
 // is called when the content of the MtrFields is changed for color values
 IMPL_LINK_NOARG_TYPED(SvxColorTabPage, ModifiedHdl_Impl, Edit&, void)
 {
-    if (eCM == CM_RGB)
-    {
-        // read current MtrFields, if cmyk, then k-value as transparency
-        aCurrentColor.SetColor ( Color( (sal_uInt8)PercentToColor_Impl( (sal_uInt16) m_pR->GetValue() ),
-                                        (sal_uInt8)PercentToColor_Impl( (sal_uInt16) m_pG->GetValue() ),
-                                        (sal_uInt8)PercentToColor_Impl( (sal_uInt16) m_pB->GetValue() ) ).GetColor() );
-    }
-    else
-    {
-        // read current MtrFields, if cmyk, then k-value as transparency
-        aCurrentColor.SetColor ( Color( (sal_uInt8)PercentToColor_Impl( (sal_uInt16) m_pK->GetValue() ),
-                                        (sal_uInt8)PercentToColor_Impl( (sal_uInt16) m_pC->GetValue() ),
-                                        (sal_uInt8)PercentToColor_Impl( (sal_uInt16) m_pY->GetValue() ),
-                                        (sal_uInt8)PercentToColor_Impl( (sal_uInt16) m_pM->GetValue() ) ).GetColor() );
-        ConvertColorValues (aCurrentColor, CM_RGB);
-    }
-
+    aCurrentColor.SetColor ( Color( (sal_uInt8)m_pRcustom->GetValue(),
+                                    (sal_uInt8)m_pGcustom->GetValue(),
+                                    (sal_uInt8)m_pBcustom->GetValue() ).GetColor() );
     rXFSet.Put( XFillColorItem( OUString(), aCurrentColor ) );
     m_pCtlPreviewNew->SetAttributes( aXFillAttr.GetItemSet() );
 
@@ -837,22 +805,7 @@ IMPL_LINK_NOARG_TYPED(SvxColorTabPage, ClickWorkOnHdl_Impl, Button*, void)
     {
         Color aPreviewColor = pColorDlg->GetColor();
         aCurrentColor = aPreviewColor;
-        if (eCM != CM_RGB)
-        {
-            ConvertColorValues (aCurrentColor, eCM);
-            m_pC->SetValue( ColorToPercent_Impl( aCurrentColor.GetRed() ) );
-            m_pY->SetValue( ColorToPercent_Impl( aCurrentColor.GetGreen() ) );
-            m_pM->SetValue( ColorToPercent_Impl( aCurrentColor.GetBlue() ) );
-            m_pK->SetValue( ColorToPercent_Impl( aCurrentColor.GetTransparency() ) );
-            ConvertColorValues (aCurrentColor, CM_RGB);
-        }
-        else
-        {
-            m_pR->SetValue( ColorToPercent_Impl( aCurrentColor.GetRed() ) );
-            m_pG->SetValue( ColorToPercent_Impl( aCurrentColor.GetGreen() ) );
-            m_pB->SetValue( ColorToPercent_Impl( aCurrentColor.GetBlue() ) );
-        }
-
+        UpdateColorValues();
         // fill ItemSet and pass it on to XOut
         rXFSet.Put( XFillColorItem( OUString(), aPreviewColor ) );
         //m_pCtlPreviewOld->SetAttributes( aXFillAttr );
@@ -907,10 +860,7 @@ IMPL_LINK_NOARG_TYPED(SvxColorTabPage, SelectColorLBHdl_Impl, ListBox&, void)
 
         rXFSet.Put( XFillColorItem( OUString(),
                                     m_pLbColor->GetSelectEntryColor() ) );
-        m_pCtlPreviewOld->SetAttributes( aXFillAttr.GetItemSet() );
         m_pCtlPreviewNew->SetAttributes( aXFillAttr.GetItemSet() );
-
-        m_pCtlPreviewOld->Invalidate();
         m_pCtlPreviewNew->Invalidate();
 
         XColorEntry* pEntry = pColorList->GetColor(nPos);
@@ -929,10 +879,7 @@ IMPL_LINK_NOARG_TYPED(SvxColorTabPage, SelectValSetHdl_Impl, ValueSet*, void)
 
         rXFSet.Put( XFillColorItem( OUString(),
                                     m_pLbColor->GetSelectEntryColor() ) );
-        m_pCtlPreviewOld->SetAttributes( aXFillAttr.GetItemSet() );
         m_pCtlPreviewNew->SetAttributes( aXFillAttr.GetItemSet() );
-
-        m_pCtlPreviewOld->Invalidate();
         m_pCtlPreviewNew->Invalidate();
 
         XColorEntry* pEntry = pColorList->GetColor(nPos-1);
@@ -940,86 +887,25 @@ IMPL_LINK_NOARG_TYPED(SvxColorTabPage, SelectValSetHdl_Impl, ValueSet*, void)
     }
 }
 
-
-void SvxColorTabPage::ConvertColorValues (Color& rColor, ColorModel eModell)
-{
-    switch (eModell)
-    {
-        case CM_RGB:
-        {
-            CmykToRgb_Impl (rColor, (sal_uInt16)rColor.GetTransparency() );
-            rColor.SetTransparency ((sal_uInt8) 0);
-        }
-        break;
-
-        case CM_CMYK:
-        {
-            sal_uInt16 nK;
-            RgbToCmyk_Impl (rColor, nK );
-            rColor.SetTransparency ((sal_uInt8) nK);
-        }
-        break;
-    }
-}
-
-IMPL_LINK_NOARG_TYPED(SvxColorTabPage, SelectColorModelHdl_Impl, ListBox&, void)
-{
-    int nPos = m_pLbColorModel->GetSelectEntryPos();
-    if( nPos != LISTBOX_ENTRY_NOTFOUND )
-    {
-        eCM = (ColorModel) nPos;
-
-        switch( eCM )
-        {
-            case CM_RGB:
-            {
-                m_pRGB->Show();
-                m_pCMYK->Hide();
-
-            }
-            break;
-
-            case CM_CMYK:
-            {
-                m_pCMYK->Show();
-                m_pRGB->Hide();
-            }
-            break;
-        }
-
-        ChangeColor(aCurrentColor);
-
-    }
-}
-
-
 void SvxColorTabPage::ChangeColor(const Color &rNewColor)
 {
     aCurrentColor = rNewColor;
-    if (eCM != CM_RGB)
-    {
-        ConvertColorValues (aCurrentColor, eCM);
-        m_pC->SetValue( ColorToPercent_Impl( aCurrentColor.GetRed() ) );
-        m_pY->SetValue( ColorToPercent_Impl( aCurrentColor.GetGreen() ) );
-        m_pM->SetValue( ColorToPercent_Impl( aCurrentColor.GetBlue() ) );
-        m_pK->SetValue( ColorToPercent_Impl( aCurrentColor.GetTransparency() ) );
-        ConvertColorValues (aCurrentColor, CM_RGB);
-    }
-    else
-    {
-        m_pR->SetValue( ColorToPercent_Impl( aCurrentColor.GetRed() ) );
-        m_pG->SetValue( ColorToPercent_Impl( aCurrentColor.GetGreen() ) );
-        m_pB->SetValue( ColorToPercent_Impl( aCurrentColor.GetBlue() ) );
-    }
-
+    UpdateColorValues();
     // fill ItemSet and pass it on to XOut
     rXFSet.Put( XFillColorItem( OUString(), aCurrentColor ) );
-    m_pCtlPreviewOld->SetAttributes( aXFillAttr.GetItemSet() );
     m_pCtlPreviewNew->SetAttributes( aXFillAttr.GetItemSet() );
-
     m_pCtlPreviewNew->Invalidate();
 }
 
+void SvxColorTabPage::UpdateColorValues()
+{
+    m_pRcustom->SetValue( aCurrentColor.GetRed() );
+    m_pRpreset->SetText( OUString::number( aPreviousColor.GetRed() ) );
+    m_pGcustom->SetValue( aCurrentColor.GetGreen() );
+    m_pGpreset->SetText( OUString::number( aPreviousColor.GetGreen() ) );
+    m_pBcustom->SetValue( aCurrentColor.GetBlue() );
+    m_pBpreset->SetText( OUString::number( aPreviousColor.GetBlue() ) );
+}
 
 //void SvxColorTabPage::FillValueSet_Impl( ValueSet& rVs )
 //{
@@ -1035,97 +921,6 @@ void SvxColorTabPage::ChangeColor(const Color &rNewColor)
 //        rVs.InsertItem( i + 1, pColorEntry->GetColor(), pColorEntry->GetName() );
 //    }
 //}
-
-
-// A RGB value is converted to a CMYK value - not in an ideal way as
-// R is converted into C, G into M and B into Y. The K value is held in an
-// extra variable. For further color models one should develop own
-// classes which should contain the respective casts.
-
-void SvxColorTabPage::RgbToCmyk_Impl( Color& rColor, sal_uInt16& rK )
-{
-    sal_uInt16 const nColor1 = 255 - rColor.GetRed();
-    sal_uInt16 const nColor2 = 255 - rColor.GetGreen();
-    sal_uInt16 const nColor3 = 255 - rColor.GetBlue();
-
-    rK = std::min( std::min( nColor1, nColor2 ), nColor3 );
-
-    rColor.SetRed( sal::static_int_cast< sal_uInt8 >( nColor1 - rK ) );
-    rColor.SetGreen( sal::static_int_cast< sal_uInt8 >( nColor2 - rK ) );
-    rColor.SetBlue( sal::static_int_cast< sal_uInt8 >( nColor3 - rK ) );
-}
-
-
-// reverse case to RgbToCmyk_Impl (see above)
-
-void SvxColorTabPage::CmykToRgb_Impl( Color& rColor, const sal_uInt16 nK )
-{
-    long lTemp;
-
-    lTemp = 255 - ( rColor.GetRed() + nK );
-
-    if( lTemp < 0L )
-        lTemp = 0L;
-    rColor.SetRed( (sal_uInt8)lTemp );
-
-    lTemp = 255 - ( rColor.GetGreen() + nK );
-
-    if( lTemp < 0L )
-        lTemp = 0L;
-    rColor.SetGreen( (sal_uInt8)lTemp );
-
-    lTemp = 255 - ( rColor.GetBlue() + nK );
-
-    if( lTemp < 0L )
-        lTemp = 0L;
-    rColor.SetBlue( (sal_uInt8)lTemp );
-}
-
-
-sal_uInt16 SvxColorTabPage::ColorToPercent_Impl( sal_uInt16 nColor )
-{
-    sal_uInt16 nWert = 0;
-
-    switch (eCM)
-    {
-        case CM_RGB :
-            nWert = nColor;
-            break;
-
-        case CM_CMYK:
-            nWert = (sal_uInt16) ( (double) nColor * 100.0 / 255.0 + 0.5 );
-            break;
-    }
-
-    return nWert;
-}
-
-
-sal_uInt16 SvxColorTabPage::PercentToColor_Impl( sal_uInt16 nPercent )
-{
-    sal_uInt16 nWert = 0;
-
-    switch (eCM)
-    {
-        case CM_RGB :
-            nWert = nPercent;
-            break;
-
-        case CM_CMYK:
-            nWert = (sal_uInt16) ( (double) nPercent * 255.0 / 100.0 + 0.5 );
-            break;
-    }
-
-    return nWert;
-}
-
-
-void SvxColorTabPage::FillUserData()
-{
-    // the color model is saved in the Ini-file
-    SetUserData( OUString::number( eCM ) );
-}
-
 
 void SvxColorTabPage::SetupForViewFrame( SfxViewFrame *pViewFrame )
 {
