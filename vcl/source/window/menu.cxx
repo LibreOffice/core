@@ -1366,20 +1366,20 @@ Size Menu::ImplGetNativeCheckAndRadioSize(vcl::RenderContext& rRenderContext, lo
         Rectangle aNativeContent;
 
         Rectangle aCtrlRegion(Rectangle(Point(), Size(100, 15)));
-        if (rRenderContext.IsNativeControlSupported(CTRL_MENU_POPUP, PART_MENU_ITEM_CHECK_MARK))
+        if (rRenderContext.IsNativeControlSupported(ControlType::MenuPopup, ControlPart::MenuItemCheckMark))
         {
-            if (rRenderContext.GetNativeControlRegion(ControlType(CTRL_MENU_POPUP), ControlPart(PART_MENU_ITEM_CHECK_MARK),
-                                              aCtrlRegion, ControlState(ControlState::ENABLED), aVal, OUString(),
+            if (rRenderContext.GetNativeControlRegion(ControlType::MenuPopup, ControlPart::MenuItemCheckMark,
+                                              aCtrlRegion, ControlState::ENABLED, aVal, OUString(),
                                               aNativeBounds, aNativeContent))
             {
                 rCheckHeight = aNativeBounds.GetHeight();
                 nCheckWidth = aNativeContent.GetWidth();
             }
         }
-        if (rRenderContext.IsNativeControlSupported(CTRL_MENU_POPUP, PART_MENU_ITEM_RADIO_MARK))
+        if (rRenderContext.IsNativeControlSupported(ControlType::MenuPopup, ControlPart::MenuItemRadioMark))
         {
-            if (rRenderContext.GetNativeControlRegion(ControlType(CTRL_MENU_POPUP), ControlPart(PART_MENU_ITEM_RADIO_MARK),
-                                                      aCtrlRegion, ControlState(ControlState::ENABLED), aVal, OUString(),
+            if (rRenderContext.GetNativeControlRegion(ControlType::MenuPopup, ControlPart::MenuItemRadioMark,
+                                                      aCtrlRegion, ControlState::ENABLED, aVal, OUString(),
                                                       aNativeBounds, aNativeContent))
             {
                 rRadioHeight = aNativeBounds.GetHeight();
@@ -1396,10 +1396,10 @@ bool Menu::ImplGetNativeSubmenuArrowSize(vcl::RenderContext& rRenderContext, Siz
     Rectangle aNativeBounds;
     Rectangle aNativeContent;
     Rectangle aCtrlRegion(Rectangle(Point(), Size(100, 15)));
-    if (rRenderContext.IsNativeControlSupported(CTRL_MENU_POPUP, PART_MENU_SUBMENU_ARROW))
+    if (rRenderContext.IsNativeControlSupported(ControlType::MenuPopup, ControlPart::SubmenuArrow))
     {
-        if (rRenderContext.GetNativeControlRegion(ControlType(CTRL_MENU_POPUP), ControlPart(PART_MENU_SUBMENU_ARROW),
-                                                  aCtrlRegion, ControlState(ControlState::ENABLED),
+        if (rRenderContext.GetNativeControlRegion(ControlType::MenuPopup, ControlPart::SubmenuArrow,
+                                                  aCtrlRegion, ControlState::ENABLED,
                                                   aVal, OUString(), aNativeBounds, aNativeContent))
         {
             Size aSize(aNativeContent.GetWidth(), aNativeContent.GetHeight());
@@ -1638,17 +1638,17 @@ Size Menu::ImplCalcSize( vcl::Window* pWin )
         aSz.Height() = nFontHeight+6;
 
         // get menubar height from native methods if supported
-        if( pWindow->IsNativeControlSupported( CTRL_MENUBAR, PART_ENTIRE_CONTROL ) )
+        if( pWindow->IsNativeControlSupported( ControlType::Menubar, ControlPart::Entire ) )
         {
             ImplControlValue aVal;
             Rectangle aNativeBounds;
             Rectangle aNativeContent;
             Point tmp( 0, 0 );
             Rectangle aCtrlRegion( tmp, Size( 100, 15 ) );
-            if( pWindow->GetNativeControlRegion( ControlType(CTRL_MENUBAR),
-                                                 ControlPart(PART_ENTIRE_CONTROL),
+            if( pWindow->GetNativeControlRegion( ControlType::Menubar,
+                                                 ControlPart::Entire,
                                                  aCtrlRegion,
-                                                 ControlState(ControlState::ENABLED),
+                                                 ControlState::ENABLED,
                                                  aVal,
                                                  OUString(),
                                                  aNativeBounds,
@@ -1677,15 +1677,15 @@ Size Menu::ImplCalcSize( vcl::Window* pWin )
 static void ImplPaintCheckBackground(vcl::RenderContext& rRenderContext, vcl::Window& rWindow, const Rectangle& i_rRect, bool i_bHighlight)
 {
     bool bNativeOk = false;
-    if (rRenderContext.IsNativeControlSupported(CTRL_TOOLBAR, PART_BUTTON))
+    if (rRenderContext.IsNativeControlSupported(ControlType::Toolbar, ControlPart::Button))
     {
         ImplControlValue    aControlValue;
         Rectangle           aCtrlRegion( i_rRect );
         ControlState        nState = ControlState::PRESSED | ControlState::ENABLED;
 
-        aControlValue.setTristateVal(BUTTONVALUE_ON);
+        aControlValue.setTristateVal(ButtonValue::On);
 
-        bNativeOk = rRenderContext.DrawNativeControl(CTRL_TOOLBAR, PART_BUTTON,
+        bNativeOk = rRenderContext.DrawNativeControl(ControlType::Toolbar, ControlPart::Button,
                                                      aCtrlRegion, nState, aControlValue,
                                                      OUString());
     }
@@ -1840,7 +1840,7 @@ void Menu::ImplPaint(vcl::RenderContext& rRenderContext,
                 if (!bLayout && !IsMenuBar() && (pData->eType == MenuItemType::SEPARATOR))
                 {
                     bool bNativeOk = false;
-                    if (rRenderContext.IsNativeControlSupported(CTRL_MENU_POPUP, PART_MENU_SEPARATOR))
+                    if (rRenderContext.IsNativeControlSupported(ControlType::MenuPopup, ControlPart::Separator))
                     {
                         ControlState nState = ControlState::NONE;
                         if (pData->bEnabled && pWindow->IsEnabled())
@@ -1854,7 +1854,7 @@ void Menu::ImplPaint(vcl::RenderContext& rRenderContext,
                         aSz.Width() = aOutSz.Width() - 2*nOuterSpaceX - 2 * nSepPad;
                         Rectangle aItemRect(aMpos, aSz);
                         MenupopupValue aVal(nTextPos - GUTTERBORDER, aItemRect);
-                        bNativeOk = rRenderContext.DrawNativeControl(CTRL_MENU_POPUP, PART_MENU_SEPARATOR,
+                        bNativeOk = rRenderContext.DrawNativeControl(ControlType::MenuPopup, ControlPart::Separator,
                                                                      aItemRect, nState, aVal, OUString());
                     }
                     if (!bNativeOk)
@@ -1888,14 +1888,14 @@ void Menu::ImplPaint(vcl::RenderContext& rRenderContext,
 
                     if( !((pData->eType == MenuItemType::IMAGE) || (pData->eType == MenuItemType::STRINGIMAGE)))
                     {
-                        if (rRenderContext.IsNativeControlSupported(CTRL_MENU_POPUP,
+                        if (rRenderContext.IsNativeControlSupported(ControlType::MenuPopup,
                                                                     (pData->nBits & MenuItemBits::RADIOCHECK)
-                                                                        ? PART_MENU_ITEM_CHECK_MARK
-                                                                        : PART_MENU_ITEM_RADIO_MARK))
+                                                                        ? ControlPart::MenuItemCheckMark
+                                                                        : ControlPart::MenuItemRadioMark))
                         {
                             ControlPart nPart = ((pData->nBits & MenuItemBits::RADIOCHECK)
-                                                 ? PART_MENU_ITEM_RADIO_MARK
-                                                 : PART_MENU_ITEM_CHECK_MARK);
+                                                 ? ControlPart::MenuItemRadioMark
+                                                 : ControlPart::MenuItemCheckMark);
 
                             ControlState nState = ControlState::NONE;
 
@@ -1917,7 +1917,7 @@ void Menu::ImplPaint(vcl::RenderContext& rRenderContext,
                             aSz.Width() = aOutSz.Width() - 2 * nOuterSpaceX;
                             Rectangle aItemRect(aPos, aSz);
                             MenupopupValue aVal(nTextPos - GUTTERBORDER, aItemRect);
-                            rRenderContext.DrawNativeControl(CTRL_MENU_POPUP, nPart, aCheckRect,
+                            rRenderContext.DrawNativeControl(ControlType::MenuPopup, nPart, aCheckRect,
                                                              nState, aVal, OUString());
                         }
                         else if (pData->bChecked) // by default do nothing for unchecked items
@@ -1996,7 +1996,7 @@ void Menu::ImplPaint(vcl::RenderContext& rRenderContext,
                     // hopefully matches the NWF background since it is read
                     // from the system style settings
                     bool bSetTmpBackground = !rRenderContext.IsBackground()
-                                           && rRenderContext.IsNativeControlSupported(CTRL_MENU_POPUP, PART_ENTIRE_CONTROL);
+                                           && rRenderContext.IsNativeControlSupported(ControlType::MenuPopup, ControlPart::Entire);
                     if (bSetTmpBackground)
                     {
                         Color aBg = IsMenuBar() ? rRenderContext.GetSettings().GetStyleSettings().GetMenuBarColor()
@@ -2037,7 +2037,7 @@ void Menu::ImplPaint(vcl::RenderContext& rRenderContext,
                 if (!bLayout && !IsMenuBar() && pData->pSubMenu)
                 {
                     bool bNativeOk = false;
-                    if (rRenderContext.IsNativeControlSupported(CTRL_MENU_POPUP, PART_MENU_SUBMENU_ARROW))
+                    if (rRenderContext.IsNativeControlSupported(ControlType::MenuPopup, ControlPart::SubmenuArrow))
                     {
                         ControlState nState = ControlState::NONE;
                         Size aTmpSz(0, 0);
@@ -2060,7 +2060,7 @@ void Menu::ImplPaint(vcl::RenderContext& rRenderContext,
 
                         Rectangle aItemRect(aTmpPos, aTmpSz);
                         MenupopupValue aVal(nTextPos - GUTTERBORDER, aItemRect);
-                        bNativeOk = rRenderContext.DrawNativeControl(CTRL_MENU_POPUP, PART_MENU_SUBMENU_ARROW,
+                        bNativeOk = rRenderContext.DrawNativeControl(ControlType::MenuPopup, ControlPart::SubmenuArrow,
                                                                      aItemRect, nState, aVal, OUString());
                     }
                     if (!bNativeOk)

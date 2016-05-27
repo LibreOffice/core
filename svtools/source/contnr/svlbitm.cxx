@@ -337,8 +337,8 @@ void SvLBoxButton::Paint(
 
     //Native drawing
     bool bNativeOK = false;
-    ControlType eCtrlType = (pData->IsRadio())? CTRL_RADIOBUTTON : CTRL_CHECKBOX;
-    if ( nIndex != SvBmp::STATICIMAGE && rRenderContext.IsNativeControlSupported( eCtrlType, PART_ENTIRE_CONTROL) )
+    ControlType eCtrlType = (pData->IsRadio())? ControlType::Radiobutton : ControlType::Checkbox;
+    if ( nIndex != SvBmp::STATICIMAGE && rRenderContext.IsNativeControlSupported( eCtrlType, ControlPart::Entire) )
 
     {
         Size aSize(pData->Width(), pData->Height());
@@ -353,14 +353,14 @@ void SvLBoxButton::Paint(
         if (nStyle != DrawImageFlags::Disable)
             nState |= ControlState::ENABLED;
         if (IsStateChecked())
-            aControlValue.setTristateVal(BUTTONVALUE_ON);
+            aControlValue.setTristateVal(ButtonValue::On);
         else if (IsStateUnchecked())
-            aControlValue.setTristateVal(BUTTONVALUE_OFF);
+            aControlValue.setTristateVal(ButtonValue::Off);
         else if (IsStateTristate())
-            aControlValue.setTristateVal( BUTTONVALUE_MIXED );
+            aControlValue.setTristateVal( ButtonValue::Mixed );
 
         if (isVis)
-            bNativeOK = rRenderContext.DrawNativeControl(eCtrlType, PART_ENTIRE_CONTROL,
+            bNativeOK = rRenderContext.DrawNativeControl(eCtrlType, ControlPart::Entire,
                                                          aCtrlRegion, nState, aControlValue, OUString());
     }
 
@@ -380,17 +380,17 @@ void SvLBoxButton::Clone( SvLBoxItem* pSource )
 
 void SvLBoxButton::ImplAdjustBoxSize(Size& io_rSize, ControlType i_eType, vcl::RenderContext& rRenderContext)
 {
-    if (rRenderContext.IsNativeControlSupported( i_eType, PART_ENTIRE_CONTROL) )
+    if (rRenderContext.IsNativeControlSupported( i_eType, ControlPart::Entire) )
     {
         ImplControlValue    aControlValue;
         Rectangle           aCtrlRegion( Point( 0, 0 ), io_rSize );
         ControlState        nState = ControlState::ENABLED;
 
-        aControlValue.setTristateVal( BUTTONVALUE_ON );
+        aControlValue.setTristateVal( ButtonValue::On );
 
         Rectangle aNativeBounds, aNativeContent;
         bool bNativeOK = rRenderContext.GetNativeControlRegion( i_eType,
-                                                            PART_ENTIRE_CONTROL,
+                                                            ControlPart::Entire,
                                                             aCtrlRegion,
                                                             nState,
                                                             aControlValue,
@@ -415,7 +415,7 @@ void SvLBoxButton::InitViewData(SvTreeListBox* pView,SvTreeListEntry* pEntry, Sv
         pViewData = pView->GetViewDataItem( pEntry, this );
     Size aSize( pData->Width(), pData->Height() );
 
-    ControlType eCtrlType = (pData->IsRadio())? CTRL_RADIOBUTTON : CTRL_CHECKBOX;
+    ControlType eCtrlType = (pData->IsRadio())? ControlType::Radiobutton : ControlType::Checkbox;
     if ( eKind != SvLBoxButtonKind::StaticImage && pView )
         ImplAdjustBoxSize(aSize, eCtrlType, *pView);
     pViewData->maSize = aSize;

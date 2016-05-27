@@ -3036,7 +3036,7 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, long nLine, vcl::Render
 
                 //native
                 bool bNativeOK = false;
-                if (rRenderContext.IsNativeControlSupported(CTRL_LISTNODE, PART_ENTIRE_CONTROL))
+                if (rRenderContext.IsNativeControlSupported(ControlType::ListNode, ControlPart::Entire))
                 {
                     ImplControlValue aControlValue;
                     Rectangle aCtrlRegion(aPos,  pImg->GetSizePixel());
@@ -3046,22 +3046,22 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, long nLine, vcl::Render
                         nState |= ControlState::ENABLED;
 
                     if (IsExpanded(&rEntry))
-                        aControlValue.setTristateVal(BUTTONVALUE_ON); //expanded node
+                        aControlValue.setTristateVal(ButtonValue::On); //expanded node
                     else
                     {
                         if ((!rEntry.HasChildren()) && rEntry.HasChildrenOnDemand() &&
                             (!(rEntry.GetFlags() & SvTLEntryFlags::HAD_CHILDREN)) &&
                             pImp->GetDontKnowNodeBmp().GetSizePixel().Width())
                         {
-                            aControlValue.setTristateVal( BUTTONVALUE_DONTKNOW ); //don't know
+                            aControlValue.setTristateVal( ButtonValue::DontKnow ); //don't know
                         }
                         else
                         {
-                            aControlValue.setTristateVal( BUTTONVALUE_OFF ); //collapsed node
+                            aControlValue.setTristateVal( ButtonValue::Off ); //collapsed node
                         }
                     }
 
-                    bNativeOK = rRenderContext.DrawNativeControl(CTRL_LISTNODE, PART_ENTIRE_CONTROL, aCtrlRegion, nState, aControlValue, OUString());
+                    bNativeOK = rRenderContext.DrawNativeControl(ControlType::ListNode, ControlPart::Entire, aCtrlRegion, nState, aControlValue, OUString());
                 }
 
                 if (!bNativeOK)

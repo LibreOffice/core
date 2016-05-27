@@ -296,7 +296,7 @@ void HelpTextWindow::ApplySettings(vcl::RenderContext& rRenderContext)
     rRenderContext.SetTextColor(rStyleSettings.GetHelpTextColor());
     rRenderContext.SetTextAlign(ALIGN_TOP);
 
-    if (rRenderContext.IsNativeControlSupported(CTRL_TOOLTIP, PART_ENTIRE_CONTROL))
+    if (rRenderContext.IsNativeControlSupported(ControlType::Tooltip, ControlPart::Entire))
     {
         EnableChildTransparentMode();
         SetParentClipMode(ParentClipMode::NoClip);
@@ -381,12 +381,12 @@ void HelpTextWindow::Paint( vcl::RenderContext& rRenderContext, const Rectangle&
 {
     // paint native background
     bool bNativeOK = false;
-    if (rRenderContext.IsNativeControlSupported(CTRL_TOOLTIP, PART_ENTIRE_CONTROL))
+    if (rRenderContext.IsNativeControlSupported(ControlType::Tooltip, ControlPart::Entire))
     {
         // #i46472# workaround gcc3.3 temporary problem
         Rectangle aCtrlRegion(Point(0, 0), GetOutputSizePixel());
         ImplControlValue aControlValue;
-        bNativeOK = rRenderContext.DrawNativeControl(CTRL_TOOLTIP, PART_ENTIRE_CONTROL, aCtrlRegion,
+        bNativeOK = rRenderContext.DrawNativeControl(ControlType::Tooltip, ControlPart::Entire, aCtrlRegion,
                                                      ControlState::NONE, aControlValue, OUString());
     }
 
