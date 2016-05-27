@@ -248,14 +248,34 @@ protected:
 };
 
 class SwTableAutoFormat;
+typedef std::map<OUString, sal_Int32> CellStyleNameMap;
 
 /// A text table style is a uno api wrapper for a SwTableAutoFormat
-class SwXTextTableStyle : public cppu::WeakImplHelper<css::style::XStyle, css::lang::XServiceInfo>
+class SwXTextTableStyle : public cppu::WeakImplHelper
+<
+    css::style::XStyle,
+    css::container::XNameAccess,
+    css::lang::XServiceInfo
+>
 {
     OUString m_sTableAutoFormatName;
     SwDocShell* m_pDocShell;
 
+    static const sal_Int32 first_row_style      = 0 ;
+    static const sal_Int32 last_row_style       = 1 ;
+    static const sal_Int32 first_column_style   = 2 ;
+    static const sal_Int32 last_column_style    = 3 ;
+    static const sal_Int32 even_rows_style      = 4 ;
+    static const sal_Int32 odd_rows_style       = 5 ;
+    static const sal_Int32 even_columns_style   = 6 ;
+    static const sal_Int32 odd_columns_style    = 7 ;
+    static const sal_Int32 body_style           = 8 ;
+    static const sal_Int32 background_style     = 9 ;
+    static const sal_Int32 style_count          = 10;
+
     SwTableAutoFormat* GetTableAutoFormat();
+    static const CellStyleNameMap& GetCellStyleNameMap();
+    css::uno::Reference<css::style::XStyle> maCellStyles[style_count];
 public:
     SwXTextTableStyle(SwDocShell* pDocShell, const OUString& rTableAutoFormatName);
     //XStyle
@@ -267,6 +287,15 @@ public:
     //XNamed
     virtual OUString SAL_CALL getName() throw(css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL setName(const OUString& rName) throw(css::uno::RuntimeException, std::exception) override;
+
+    //XNameAccess
+    virtual css::uno::Any SAL_CALL getByName(const OUString& rName) throw(css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence<OUString> SAL_CALL getElementNames() throw(css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL hasByName(const OUString& rName) throw(css::uno::RuntimeException, std::exception) override;
+
+    //XElementAccess
+    virtual css::uno::Type SAL_CALL getElementType(  ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL hasElements(  ) throw(css::uno::RuntimeException, std::exception) override;
 
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName() throw(css::uno::RuntimeException, std::exception) override;
