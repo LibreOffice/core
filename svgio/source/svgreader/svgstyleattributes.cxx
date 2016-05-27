@@ -17,24 +17,24 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svgio/svgreader/svgstyleattributes.hxx>
+#include <svgstyleattributes.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
-#include <svgio/svgreader/svgnode.hxx>
-#include <svgio/svgreader/svgdocument.hxx>
+#include <svgnode.hxx>
+#include <svgdocument.hxx>
 #include <drawinglayer/primitive2d/svggradientprimitive2d.hxx>
-#include <svgio/svgreader/svggradientnode.hxx>
+#include <svggradientnode.hxx>
 #include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 #include <basegfx/vector/b2enums.hxx>
 #include <drawinglayer/processor2d/linegeometryextractor2d.hxx>
 #include <drawinglayer/processor2d/textaspolygonextractor2d.hxx>
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
-#include <svgio/svgreader/svgclippathnode.hxx>
-#include <svgio/svgreader/svgmasknode.hxx>
+#include <svgclippathnode.hxx>
+#include <svgmasknode.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
-#include <svgio/svgreader/svgmarkernode.hxx>
+#include <svgmarkernode.hxx>
 #include <basegfx/curve/b2dcubicbezier.hxx>
-#include <svgio/svgreader/svgpatternnode.hxx>
+#include <svgpatternnode.hxx>
 #include <drawinglayer/primitive2d/patternfillprimitive2d.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>

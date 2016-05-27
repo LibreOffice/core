@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <accessibility/standard/vclxaccessiblemenuitem.hxx>
-#include <accessibility/helper/accresmgr.hxx>
-#include <accessibility/helper/accessiblestrings.hrc>
+#include <standard/vclxaccessiblemenuitem.hxx>
+#include <helper/accresmgr.hxx>
+#include <helper/accessiblestrings.hrc>
 #include <toolkit/helper/convert.hxx>
-#include <accessibility/helper/characterattributeshelper.hxx>
+#include <helper/characterattributeshelper.hxx>
 #include <comphelper/accessiblekeybindinghelper.hxx>
 #include <com/sun/star/awt/KeyModifier.hpp>
 

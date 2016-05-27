@@ -18,10 +18,10 @@
  */
 
 
-#include <xmlsecurity/macrosecurity.hxx>
-#include <xmlsecurity/certificatechooser.hxx>
-#include <xmlsecurity/certificateviewer.hxx>
-#include <xmlsecurity/biginteger.hxx>
+#include <macrosecurity.hxx>
+#include <certificatechooser.hxx>
+#include <certificateviewer.hxx>
+#include <biginteger.hxx>
 
 #include <osl/file.hxx>
 #include <vcl/help.hxx>

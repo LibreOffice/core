@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "accessibility/extended/accessiblelistboxentry.hxx"
+#include "extended/accessiblelistboxentry.hxx"
 #include <svtools/treelistbox.hxx>
 #include <svtools/stringtransfer.hxx>
 #include <svtools/svlbitm.hxx>
@@ -40,8 +40,8 @@
 #include <comphelper/sequence.hxx>
 #include <comphelper/accessibleeventnotifier.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <accessibility/helper/accresmgr.hxx>
-#include <accessibility/helper/accessiblestrings.hrc>
+#include <helper/accresmgr.hxx>
+#include <helper/accessiblestrings.hrc>
 #include <com/sun/star/accessibility/XAccessibleValue.hpp>
 #define ACCESSIBLE_ACTION_COUNT 1
 

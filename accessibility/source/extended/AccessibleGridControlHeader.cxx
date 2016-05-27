@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "accessibility/extended/AccessibleGridControlHeader.hxx"
-#include "accessibility/extended/AccessibleGridControlHeaderCell.hxx"
-#include "accessibility/extended/AccessibleGridControlTableCell.hxx"
+#include "extended/AccessibleGridControlHeader.hxx"
+#include "extended/AccessibleGridControlHeaderCell.hxx"
+#include "extended/AccessibleGridControlTableCell.hxx"
 #include <svtools/accessibletable.hxx>
 #include <comphelper/servicehelper.hxx>
 
@@ -45,7 +45,7 @@ AccessibleGridControlHeader::AccessibleGridControlHeader(
         AccessibleGridControlTableBase( rxParent, rTable, eObjType )
 {
     OSL_ENSURE( isRowBar() || isColumnBar(),
-        "accessibility/extended/AccessibleGridControlHeaderBar - invalid object type" );
+        "extended/AccessibleGridControlHeaderBar - invalid object type" );
 }
 
 AccessibleGridControlHeader::~AccessibleGridControlHeader()

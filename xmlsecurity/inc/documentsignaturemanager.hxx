@@ -21,11 +21,11 @@
 #define INCLUDED_XMLSECURITY_INC_DOCUMENTSIGNATUREMANAGER_HXX
 
 #include "xmlsecuritydllapi.h"
-#include <xmlsecurity/sigstruct.hxx>
-#include <xmlsecurity/xmlsignaturehelper.hxx>
+#include <sigstruct.hxx>
+#include <xmlsignaturehelper.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
-#include <xmlsecurity/documentsignaturehelper.hxx>
+#include <documentsignaturehelper.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
 /// Manages signatures (addition, removal), used by DigitalSignaturesDialog.
@@ -61,6 +61,6 @@ public:
     void write();
 };
 
-#endif // INCLUDED_XMLSECURITY_INC_XMLSECURITY_DOCUMENTSIGNATUREMANAGER_HXX
+#endif // INCLUDED_XMLSECURITY_INC_DOCUMENTSIGNATUREMANAGER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

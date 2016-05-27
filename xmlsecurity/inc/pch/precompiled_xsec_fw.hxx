@@ -17,7 +17,7 @@
  ./bin/update_pch xmlsecurity xsec_fw --cutoff=2 --exclude:system --include:module --exclude:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./xmlsecurity/inc/pch/precompiled_xsec_fw.hxx "/opt/lo/bin/make xmlsecurity.build" --find-conflicts
+ ./bin/update_pch_bisect ./inc/pch/precompiled_xsec_fw.hxx "/opt/lo/bin/make xmlsecurity.build" --find-conflicts
 */
 
 #include <cassert>

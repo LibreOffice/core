@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svgio/svgreader/svgusenode.hxx>
+#include <svgusenode.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
-#include <svgio/svgreader/svgdocument.hxx>
+#include <svgdocument.hxx>
 
 namespace svgio
 {

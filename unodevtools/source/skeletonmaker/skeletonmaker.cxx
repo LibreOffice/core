@@ -22,7 +22,7 @@
 #include "codemaker/typemanager.hxx"
 #include "sal/main.h"
 #include "rtl/process.h"
-#include "unodevtools/options.hxx"
+#include "options.hxx"
 #include "unoidl/unoidl.hxx"
 
 #include "skeletonjava.hxx"

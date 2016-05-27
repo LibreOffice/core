@@ -26,10 +26,10 @@
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <sal/log.hxx>
 
-#include "bridges/cpp_uno/shared/bridge.hxx"
-#include "bridges/cpp_uno/shared/types.hxx"
-#include "bridges/cpp_uno/shared/unointerfaceproxy.hxx"
-#include "bridges/cpp_uno/shared/vtables.hxx"
+#include "bridge.hxx"
+#include "types.hxx"
+#include "unointerfaceproxy.hxx"
+#include "vtables.hxx"
 
 #include "share.hxx"
 

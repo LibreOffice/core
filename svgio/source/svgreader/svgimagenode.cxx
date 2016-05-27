@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svgio/svgreader/svgimagenode.hxx>
-#include <svgio/svgreader/svgdocument.hxx>
+#include <svgimagenode.hxx>
+#include <svgdocument.hxx>
 #include <sax/tools/converter.hxx>
 #include <tools/stream.hxx>
 #include <vcl/bitmapex.hxx>

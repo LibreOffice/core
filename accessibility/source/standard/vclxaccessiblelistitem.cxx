@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <accessibility/standard/vclxaccessiblelistitem.hxx>
+#include <standard/vclxaccessiblelistitem.hxx>
 #include <toolkit/helper/convert.hxx>
-#include <accessibility/helper/listboxhelper.hxx>
+#include <helper/listboxhelper.hxx>
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/awt/Size.hpp>

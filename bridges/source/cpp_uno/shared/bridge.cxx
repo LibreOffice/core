@@ -18,10 +18,10 @@
  */
 
 
-#include "bridges/cpp_uno/shared/bridge.hxx"
+#include "bridge.hxx"
 
-#include "bridges/cpp_uno/shared/cppinterfaceproxy.hxx"
-#include "bridges/cpp_uno/shared/unointerfaceproxy.hxx"
+#include "cppinterfaceproxy.hxx"
+#include "unointerfaceproxy.hxx"
 
 #include "com/sun/star/uno/XInterface.hpp"
 #include "osl/interlck.h"

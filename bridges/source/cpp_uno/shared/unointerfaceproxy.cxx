@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "bridges/cpp_uno/shared/unointerfaceproxy.hxx"
+#include "unointerfaceproxy.hxx"
 
-#include "bridges/cpp_uno/shared/bridge.hxx"
+#include "bridge.hxx"
 
 #include "com/sun/star/uno/XInterface.hpp"
 #include "osl/interlck.h"

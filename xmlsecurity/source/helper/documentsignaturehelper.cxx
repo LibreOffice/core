@@ -18,7 +18,7 @@
  */
 
 
-#include <xmlsecurity/documentsignaturehelper.hxx>
+#include <documentsignaturehelper.hxx>
 
 #include <algorithm>
 

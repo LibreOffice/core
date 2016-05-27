@@ -17,17 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <idlc/astmodule.hxx>
-#include <idlc/asttypedef.hxx>
-#include <idlc/astservice.hxx>
-#include <idlc/astconstant.hxx>
-#include <idlc/astattribute.hxx>
-#include <idlc/astinterfacemember.hxx>
-#include <idlc/astservicemember.hxx>
-#include <idlc/astobserves.hxx>
-#include <idlc/astneeds.hxx>
-#include <idlc/astsequence.hxx>
-#include "idlc/astoperation.hxx"
+#include <astmodule.hxx>
+#include <asttypedef.hxx>
+#include <astservice.hxx>
+#include <astconstant.hxx>
+#include <astattribute.hxx>
+#include <astinterfacemember.hxx>
+#include <astservicemember.hxx>
+#include <astobserves.hxx>
+#include <astneeds.hxx>
+#include <astsequence.hxx>
+#include "astoperation.hxx"
 
 #include <osl/diagnose.h>
 

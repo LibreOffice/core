@@ -18,9 +18,9 @@
  */
 
 
-#include "accessibility/extended/AccessibleGridControlHeaderCell.hxx"
+#include "extended/AccessibleGridControlHeaderCell.hxx"
 #include <svtools/accessibletable.hxx>
-#include "accessibility/extended/AccessibleGridControl.hxx"
+#include "extended/AccessibleGridControl.hxx"
 
 namespace accessibility
 {

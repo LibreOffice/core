@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <xmlsecurity/certificatechooser.hxx>
-#include <xmlsecurity/certificateviewer.hxx>
+#include <certificatechooser.hxx>
+#include <certificateviewer.hxx>
 #include <com/sun/star/security/XCertificate.hpp>
 
 #include <com/sun/star/security/CertificateCharacters.hpp>

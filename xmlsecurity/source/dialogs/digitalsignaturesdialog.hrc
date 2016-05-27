@@ -20,7 +20,7 @@
 #ifndef INCLUDED_DIGITALSIGNATURESDIALOG_HRC
 #define INCLUDED_DIGITALSIGNATURESDIALOG_HRC
 
-//global.hrc in xmlsecurity/inc starts at 1000
+//global.hrc in inc starts at 1000
 #define RID_DIGITALSIGNATUREDLG_START                 2000
 
 #define STR_XMLSECDLG_OLD_ODF_FORMAT     RID_DIGITALSIGNATUREDLG_START

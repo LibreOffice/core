@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <idlc/astoperation.hxx>
-#include <idlc/asttype.hxx>
-#include <idlc/astbasetype.hxx>
-#include <idlc/astparameter.hxx>
-#include <idlc/errorhandler.hxx>
+#include <astoperation.hxx>
+#include <asttype.hxx>
+#include <astbasetype.hxx>
+#include <astparameter.hxx>
+#include <errorhandler.hxx>
 
 #include <registry/writer.hxx>
 

@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <accessibility/helper/accresmgr.hxx>
+#include <helper/accresmgr.hxx>
 
 #include <tools/simplerm.hxx>
 #include <vcl/svapp.hxx>

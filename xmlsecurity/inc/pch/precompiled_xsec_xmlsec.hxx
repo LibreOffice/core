@@ -17,7 +17,7 @@
  ./bin/update_pch xmlsecurity xsec_xmlsec --cutoff=2 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
- ./bin/update_pch_bisect ./xmlsecurity/inc/pch/precompiled_xsec_xmlsec.hxx "make xmlsecurity.build" --find-conflicts
+ ./bin/update_pch_bisect ./inc/pch/precompiled_xsec_xmlsec.hxx "make xmlsecurity.build" --find-conflicts
 */
 
 #include <cassert>
@@ -114,7 +114,7 @@
 #include <uno/data.h>
 #include <uno/sequence2.h>
 #include <xmloff/dllapi.h>
-#include <xmlsecurity/biginteger.hxx>
+#include <biginteger.hxx>
 
 // Cleanup windows header macro pollution.
 #if defined(_WIN32) && defined(WINAPI)

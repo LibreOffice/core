@@ -21,7 +21,7 @@
 #define INCLUDED_XMLSECURITY_SOURCE_DIALOGS_DIALOGS_HRC
 
 #include <svtools/controldims.hrc>
-#include <xmlsecurity/global.hrc>
+#include <global.hrc>
 
 #define STD_MASKCOLOR                   Color{Red=0xffff;Green=0x0000;Blue=0xffff;}
 

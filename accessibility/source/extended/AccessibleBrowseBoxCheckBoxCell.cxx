@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <accessibility/extended/AccessibleBrowseBoxCheckBoxCell.hxx>
+#include <extended/AccessibleBrowseBoxCheckBoxCell.hxx>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <svtools/accessibletableprovider.hxx>
 

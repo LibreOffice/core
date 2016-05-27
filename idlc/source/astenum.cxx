@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <idlc/astenum.hxx>
+#include <astenum.hxx>
 
 #include <registry/version.h>
 #include <registry/writer.hxx>

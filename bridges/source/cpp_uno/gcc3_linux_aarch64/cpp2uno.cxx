@@ -35,10 +35,10 @@
 #include <typelib/typedescription.h>
 #include <typelib/typedescription.hxx>
 
-#include <bridges/cpp_uno/shared/bridge.hxx>
-#include <bridges/cpp_uno/shared/cppinterfaceproxy.hxx>
-#include <bridges/cpp_uno/shared/types.hxx>
-#include <bridges/cpp_uno/shared/vtablefactory.hxx>
+#include <bridge.hxx>
+#include <cppinterfaceproxy.hxx>
+#include <types.hxx>
+#include <vtablefactory.hxx>
 
 #include <abi.hxx>
 

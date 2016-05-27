@@ -38,8 +38,8 @@
 #include <osl/file.hxx>
 #include <comphelper/ofopxmlhelper.hxx>
 
-#include <xmlsecurity/documentsignaturehelper.hxx>
-#include <xmlsecurity/xmlsignaturehelper.hxx>
+#include <documentsignaturehelper.hxx>
+#include <xmlsignaturehelper.hxx>
 #include <documentsignaturemanager.hxx>
 
 using namespace com::sun::star;

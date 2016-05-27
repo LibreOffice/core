@@ -18,11 +18,11 @@
  */
 
 
-#include "bridges/cpp_uno/shared/vtablefactory.hxx"
+#include "vtablefactory.hxx"
 
 #include "guardedarray.hxx"
 
-#include "bridges/cpp_uno/shared/vtables.hxx"
+#include "vtables.hxx"
 
 #include "osl/thread.h"
 #include "osl/security.hxx"
