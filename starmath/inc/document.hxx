@@ -85,7 +85,6 @@ void SetEditEngineDefaultFonts(SfxItemPool &rEditEngineItemPool);
 class SM_DLLPUBLIC SmDocShell : public SfxObjectShell, public SfxListener
 {
     friend class SmPrinterAccess;
-    friend class SmModel;
     friend class SmCursor;
 
     OUString            aText;
@@ -131,7 +130,6 @@ class SM_DLLPUBLIC SmDocShell : public SfxObjectShell, public SfxListener
     Printer             *GetPrt();
     OutputDevice*       GetRefDev();
 
-    bool                IsFormulaArranged() const { return bIsFormulaArranged; }
     void                SetFormulaArranged(bool bVal) { bIsFormulaArranged = bVal; }
 
     virtual bool        ConvertFrom(SfxMedium &rMedium) override;
@@ -140,12 +138,6 @@ class SM_DLLPUBLIC SmDocShell : public SfxObjectShell, public SfxListener
      * Deletes the current cursor
      */
     void                InvalidateCursor();
-
-    bool writeFormulaOoxml(const ::sax_fastparser::FSHelperPtr& pSerializer,
-            oox::core::OoxmlVersion version,
-            oox::drawingml::DocumentType documentType);
-    void writeFormulaRtf(OStringBuffer& rBuffer, rtl_TextEncoding nEncoding);
-    void readFormulaOoxml( oox::formulaimport::XmlStream& stream );
 
 public:
     SFX_DECL_INTERFACE(SFX_INTERFACE_SMA_START+1)
@@ -164,6 +156,7 @@ public:
     static void SaveSymbols();
 
     void        ArrangeFormula();
+    bool                IsFormulaArranged() const { return bIsFormulaArranged; }
 
     //Access for the View. This access is not for the OLE-case!
     //and for the communication with the SFX!
@@ -218,6 +211,12 @@ public:
      * has some sort of position.
      */
     bool        HasCursor();
+
+    bool writeFormulaOoxml(const ::sax_fastparser::FSHelperPtr& pSerializer,
+            oox::core::OoxmlVersion version,
+            oox::drawingml::DocumentType documentType);
+    void writeFormulaRtf(OStringBuffer& rBuffer, rtl_TextEncoding nEncoding);
+    void readFormulaOoxml( oox::formulaimport::XmlStream& stream );
 };
 
 #endif
