@@ -1386,7 +1386,16 @@ FormulaTokenArray * FormulaTokenArray::RewriteMissing( const MissingConvention &
             {
                 // Omit only a literal 0 value, nothing else.
                 if (pOcds[ i ] == nFn && pCur->GetOpCode() == ocPush && pCur->GetDouble() == 0.0)
-                    bAdd = false;
+                {
+                    // No other expression, between separators.
+                    FormulaToken* p = PeekPrevNoSpaces();
+                    if (p && p->GetOpCode() == ocSep)
+                    {
+                        p = PeekNextNoSpaces();
+                        if (p && p->GetOpCode() == ocSep)
+                            bAdd = false;
+                    }
+                }
             }
         }
         switch ( pCur->GetOpCode() )
