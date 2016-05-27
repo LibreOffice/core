@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "da7fb54a_827cdd21",
+        "filename": "compilerplugins/clang/refcounting.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-05-27T08:14:52Z",
+      "side": 1,
+      "message": "because some places use typedefs around uno::Reference",
+      "parentUuid": "da7fb54a_62b0b9f5",
+      "revId": "3f8b39e22e27c037242b9c1c62e6cbbf3440a478",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da7fb54a_22a6b1c1",
         "filename": "compilerplugins/clang/refcounting.cxx",
         "patchSetId": 1
@@ -47,6 +65,24 @@
       "writtenOn": "2016-05-27T08:03:48Z",
       "side": 1,
       "message": ".Namespace(\"star\").Namespace(\"sun\").Namespace(\"com\").GlobalNamespace()\n\n?",
+      "revId": "3f8b39e22e27c037242b9c1c62e6cbbf3440a478",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_6287d90f",
+        "filename": "compilerplugins/clang/refcounting.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-05-27T08:14:52Z",
+      "side": 1,
+      "message": "ok, I just copied some other place which did this.",
+      "parentUuid": "da7fb54a_22a6b1c1",
       "revId": "3f8b39e22e27c037242b9c1c62e6cbbf3440a478",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
