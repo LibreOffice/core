@@ -72,6 +72,8 @@ public:
     };
     explicit            MissingConvention( Convention eConvention ) : meConvention(eConvention) {}
     inline  bool        isPODF() const  { return meConvention == FORMULA_MISSING_CONVENTION_PODF; }
+    inline  bool        isODFF() const  { return meConvention == FORMULA_MISSING_CONVENTION_ODFF; }
+    inline  bool        isOOXML() const  { return meConvention == FORMULA_MISSING_CONVENTION_OOXML; }
     inline  Convention  getConvention() const { return meConvention; }
 private:
     Convention meConvention;

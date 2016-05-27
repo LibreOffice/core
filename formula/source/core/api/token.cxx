@@ -1005,6 +1005,9 @@ inline bool MissingConventionODF::isRewriteNeeded( OpCode eOp ) const
         case ocMissing:
         case ocLog:
             return isPODF();    // rewrite only for PODF
+        case ocDBCount:
+        case ocDBCount2:
+            return isODFF();    // rewrite only for ODFF
         default:
             return false;
     }
@@ -1041,6 +1044,9 @@ inline bool MissingConventionOOXML::isRewriteNeeded( OpCode eOp )
         case ocPoissonDist:
         case ocNormDist:
         case ocLogNormDist:
+
+        case ocDBCount:
+        case ocDBCount2:
             return true;
         default:
             return false;
@@ -1328,15 +1334,26 @@ FormulaTokenArray * FormulaTokenArray::RewriteMissing( const MissingConvention &
 {
     const size_t nAlloc = 256;
     FormulaMissingContext aCtx[ nAlloc ];
+
+    /* TODO: with some effort we might be able to merge the two almost
+     * identical function stacks into one and generalize things, otherwise
+     * adding yet another "omit argument" would be copypasta. */
+
     int aOpCodeAddressStack[ nAlloc ];  // use of ADDRESS() function
     const int nOmitAddressArg = 3;      // ADDRESS() 4th parameter A1/R1C1
+
+    int aOpCodeDcountStack[ nAlloc ];   // use of DCOUNT()/DCOUNTA() function
+    const int nOmitDcountArg = 1;       // DCOUNT() and DCOUNTA() 2nd parameter DatabaseField if 0
+
     sal_uInt16 nTokens = GetLen() + 1;
     FormulaMissingContext* pCtx = (nAlloc < nTokens ? new FormulaMissingContext[nTokens] : &aCtx[0]);
     int* pOcas = (nAlloc < nTokens ? new int[nTokens] : &aOpCodeAddressStack[0]);
+    int* pOcds = (nAlloc < nTokens ? new int[nTokens] : &aOpCodeDcountStack[0]);
     // Never go below 0, never use 0, mpFunc always NULL.
     pCtx[0].Clear();
     int nFn = 0;
     int nOcas = 0;
+    int nOcds = 0;
 
     FormulaTokenArray *pNewArr = new FormulaTokenArray;
     // At least ScRecalcMode::ALWAYS needs to be set.
@@ -1361,20 +1378,39 @@ FormulaTokenArray * FormulaTokenArray::RewriteMissing( const MissingConvention &
                     bAdd = false;
             }
         }
+        // Strip the 2nd argument (leaving empty) of DCOUNT() and DCOUNTA() if
+        // it is 0.
+        for (int i = nOcds; i-- > 0 && bAdd; )
+        {
+            if (pCtx[ pOcds[ i ] ].mnCurArg == nOmitDcountArg)
+            {
+                // Omit only a literal 0 value, nothing else.
+                if (pOcds[ i ] == nFn && pCur->GetOpCode() == ocPush && pCur->GetDouble() == 0.0)
+                    bAdd = false;
+            }
+        }
         switch ( pCur->GetOpCode() )
         {
             case ocOpen:
-                ++nFn;      // all following operations on _that_ function
-                pCtx[ nFn ].mpFunc = PeekPrevNoSpaces();
-                pCtx[ nFn ].mnCurArg = 0;
-                if (rConv.isPODF() && pCtx[ nFn ].mpFunc && pCtx[ nFn ].mpFunc->GetOpCode() == ocAddress)
-                    pOcas[ nOcas++ ] = nFn;     // entering ADDRESS() if PODF
-                break;
+                {
+                    ++nFn;      // all following operations on _that_ function
+                    pCtx[ nFn ].mpFunc = PeekPrevNoSpaces();
+                    pCtx[ nFn ].mnCurArg = 0;
+                    OpCode eOp;
+                    if (rConv.isPODF() && pCtx[ nFn ].mpFunc && pCtx[ nFn ].mpFunc->GetOpCode() == ocAddress)
+                        pOcas[ nOcas++ ] = nFn;     // entering ADDRESS() if PODF
+                    else if ((rConv.isODFF() || rConv.isOOXML()) && pCtx[ nFn ].mpFunc &&
+                            ((eOp = pCtx[ nFn ].mpFunc->GetOpCode()) == ocDBCount || eOp == ocDBCount2))
+                        pOcds[ nOcds++ ] = nFn;     // entering DCOUNT() or DCOUNTA() if ODFF or OOXML
+                }
+            break;
             case ocClose:
                 pCtx[ nFn ].AddMoreArgs( pNewArr, rConv );
                 SAL_WARN_IF(nFn <= 0, "formula.core", "FormulaTokenArray::RewriteMissing: underflow");
                 if (nOcas > 0 && pOcas[ nOcas-1 ] == nFn)
                     --nOcas;                    // leaving ADDRESS()
+                else if (nOcds > 0 && pOcds[ nOcds-1 ] == nFn)
+                    --nOcds;                    // leaving DCOUNT() or DCOUNTA()
                 if (nFn > 0)
                     --nFn;
                 break;
@@ -1423,6 +1459,8 @@ FormulaTokenArray * FormulaTokenArray::RewriteMissing( const MissingConvention &
         }
     }
 
+    if (pOcds != &aOpCodeDcountStack[0])
+        delete [] pOcas;
     if (pOcas != &aOpCodeAddressStack[0])
         delete [] pOcas;
     if (pCtx != &aCtx[0])
