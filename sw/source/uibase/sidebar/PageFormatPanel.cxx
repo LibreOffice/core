@@ -39,26 +39,21 @@ namespace sw { namespace sidebar{
 
 VclPtr<vcl::Window> PageFormatPanel::Create(
     vcl::Window* pParent,
-    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame,
-    SfxBindings* pBindings)
+    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame)
 {
     if( pParent == nullptr )
         throw ::com::sun::star::lang::IllegalArgumentException("no parent window given to PageFormatPanel::Create", nullptr, 0);
     if( !rxFrame.is() )
         throw ::com::sun::star::lang::IllegalArgumentException("no XFrame given to PageFormatPanel::Create", nullptr, 0);
-    if( pBindings == nullptr )
-        throw ::com::sun::star::lang::IllegalArgumentException("no SfxBindings given to PageFormatPanel::Create", nullptr, 0);
 
-    return VclPtr<PageFormatPanel>::Create(pParent, rxFrame, pBindings);
+    return VclPtr<PageFormatPanel>::Create(pParent, rxFrame);
 }
 
 PageFormatPanel::PageFormatPanel(
     vcl::Window* pParent,
-    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame,
-    SfxBindings* pBindings
+    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame
     ) :
-    PanelLayout(pParent, "PageFormatPanel", "modules/swriter/ui/pageformatpanel.ui", rxFrame),
-    mpBindings( pBindings )
+    PanelLayout(pParent, "PageFormatPanel", "modules/swriter/ui/pageformatpanel.ui", rxFrame)
 {
     get(mpPaperSizeLB, "papersize");
     get(mpPaperWidth, "paperwidth");

@@ -39,26 +39,21 @@ namespace sw { namespace sidebar{
 
 VclPtr<vcl::Window> PageStylesPanel::Create(
     vcl::Window* pParent,
-    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame,
-    SfxBindings* pBindings)
+    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame)
 {
     if( pParent == nullptr )
         throw ::com::sun::star::lang::IllegalArgumentException("no parent window given to PageStylesPanel::Create", nullptr, 0);
     if( !rxFrame.is() )
         throw ::com::sun::star::lang::IllegalArgumentException("no XFrame given to PageStylesPanel::Create", nullptr, 0);
-    if( pBindings == nullptr )
-        throw ::com::sun::star::lang::IllegalArgumentException("no SfxBindings given to PageStylesPanel::Create", nullptr, 0);
 
-    return VclPtr<PageStylesPanel>::Create(pParent, rxFrame, pBindings);
+    return VclPtr<PageStylesPanel>::Create(pParent, rxFrame);
 }
 
 PageStylesPanel::PageStylesPanel(
     vcl::Window* pParent,
-    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame,
-    SfxBindings* pBindings
+    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame
     ) :
-    PanelLayout(pParent, "PageStylesPanel", "modules/swriter/ui/pagestylespanel.ui", rxFrame),
-    mpBindings( pBindings )
+    PanelLayout(pParent, "PageStylesPanel", "modules/swriter/ui/pagestylespanel.ui", rxFrame)
 {
 }
 

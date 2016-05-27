@@ -478,20 +478,6 @@ void BiffInputStream::readUniStringHeader( bool& orb16BitChars, sal_Int32& ornAd
     ornAddSize = 4 * nFontCount + ::std::max< sal_Int32 >( 0, nPhoneticSize );
 }
 
-BiffInputStreamPos::BiffInputStreamPos( BiffInputStream& rStrm ) :
-    mrStrm( rStrm ),
-    mnRecHandle( rStrm.getRecHandle() ),
-    mnRecPos( rStrm.tell() )
-{
-}
-
-void BiffInputStreamPos::restorePosition()
-{
-    bool bValidRec = mrStrm.startRecordByHandle( mnRecHandle );
-    if( bValidRec )
-        mrStrm.seek( mnRecPos );
-}
-
 } // namespace xls
 } // namespace oox
 

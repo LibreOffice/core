@@ -39,26 +39,21 @@ namespace sw { namespace sidebar{
 
 VclPtr<vcl::Window> PageFooterPanel::Create(
     vcl::Window* pParent,
-    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame,
-    SfxBindings* pBindings)
+    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame)
 {
     if( pParent == nullptr )
         throw ::com::sun::star::lang::IllegalArgumentException("no parent window given to PageFooterPanel::Create", nullptr, 0);
     if( !rxFrame.is() )
         throw ::com::sun::star::lang::IllegalArgumentException("no XFrame given to PageFooterPanel::Create", nullptr, 0);
-    if( pBindings == nullptr )
-        throw ::com::sun::star::lang::IllegalArgumentException("no SfxBindings given to PageFooterPanel::Create", nullptr, 0);
 
-    return VclPtr<PageFooterPanel>::Create(pParent, rxFrame, pBindings);
+    return VclPtr<PageFooterPanel>::Create(pParent, rxFrame);
 }
 
 PageFooterPanel::PageFooterPanel(
     vcl::Window* pParent,
-    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame,
-    SfxBindings* pBindings
+    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame
     ) :
-    PanelLayout(pParent, "PageFooterPanel", "modules/swriter/ui/pagefooterpanel.ui", rxFrame),
-    mpBindings( pBindings )
+    PanelLayout(pParent, "PageFooterPanel", "modules/swriter/ui/pagefooterpanel.ui", rxFrame)
 {
 }
 

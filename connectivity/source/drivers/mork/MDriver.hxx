@@ -34,10 +34,6 @@ class MorkDriver:
 {
 public:
     explicit MorkDriver(const css::uno::Reference< css::uno::XComponentContext >& context);
-    static OUString getImplementationName_Static()
-        throw(css::uno::RuntimeException);
-    static css::uno::Sequence< OUString > getSupportedServiceNames_Static()
-        throw (css::uno::RuntimeException);
 
     const css::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& getFactory(){return m_xFactory;}
     const OUString& getProfilePath() {return m_sProfilePath;}

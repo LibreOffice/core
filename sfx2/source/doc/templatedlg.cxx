@@ -1490,26 +1490,6 @@ bool SfxTemplateManagerDlg::insertRepository(const OUString &rName, const OUStri
     return true;
 }
 
-bool SfxTemplateManagerDlg::deleteRepository(const sal_uInt16 nRepositoryId)
-{
-    bool bRet = false;
-
-    for (size_t i = 0, n = maRepositories.size(); i < n; ++i)
-    {
-        if (maRepositories[i]->mnId == nRepositoryId)
-        {
-            delete maRepositories[i];
-
-            maRepositories.erase(maRepositories.begin() + i);
-            mbIsSynced = false;
-            bRet = true;
-            break;
-        }
-    }
-
-    return bRet;
-}
-
 void SfxTemplateManagerDlg::syncRepositories() const
 {
     if (!mbIsSynced)

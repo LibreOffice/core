@@ -132,8 +132,6 @@ private:
 
     bool insertRepository (const OUString &rName, const OUString &rURL);
 
-    bool deleteRepository (const sal_uInt16 nRepositoryId);
-
     void syncRepositories () const;
 
     /// Return filter according to the currently selected application filter.

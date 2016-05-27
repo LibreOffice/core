@@ -84,11 +84,6 @@ void SfxFrameDescriptor::SetEditable( bool bSet )
     pImpl->bEditable = bSet;
 }
 
-bool SfxFrameDescriptor::IsEditable() const
-{
-    return pImpl->bEditable;
-}
-
 void SfxFrameDescriptor::SetWallpaper( const Wallpaper& rWallpaper )
 {
     DELETEZ( pImpl->pWallpaper );
