@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.20.0 -->
 <interface>
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -199,6 +199,11 @@
                                 <accessibility>
                                   <relation type="labelled-by" target="variable"/>
                                 </accessibility>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="zoomsb:0%-atkobject">
+                                    <property name="AtkObject::accessible-name" translatable="yes">Variable</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -320,7 +325,13 @@
                                 <property name="adjustment">adjustment1</property>
                                 <accessibility>
                                   <relation type="labelled-by" target="columns"/>
+                                  <relation type="member-of" target="columns"/>
                                 </accessibility>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="columnssb-atkobject">
+                                    <property name="AtkObject::accessible-name" translatable="yes">Columns</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -350,6 +361,7 @@
                                 <property name="draw_indicator">True</property>
                                 <accessibility>
                                   <relation type="labelled-by" target="columns"/>
+                                  <relation type="member-of" target="columns"/>
                                 </accessibility>
                               </object>
                             </child>

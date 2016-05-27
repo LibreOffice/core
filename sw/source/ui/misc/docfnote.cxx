@@ -102,8 +102,6 @@ SwEndNoteOptionPage::SwEndNoteOptionPage(vcl::Window *pParent, bool bEN,
         get(m_pPosChapterBox, "posdoccb");
         m_pPosChapterBox->SetClickHdl(LINK(this, SwEndNoteOptionPage, PosChapterHdl));
         get(m_pPosFT, "pos");
-        m_pPosPageBox->SetAccessibleRelationMemberOf(m_pPosFT);
-        m_pPosChapterBox->SetAccessibleRelationMemberOf(m_pPosFT);
         get(m_pContEdit, "conted");
         get(m_pContFromEdit, "contfromed");
     }
