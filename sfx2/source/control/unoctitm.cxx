@@ -1140,6 +1140,12 @@ void SfxDispatchController_Impl::InterceptLOKStateChangeEvent(const SfxObjectShe
     {
         aBuffer.append(OUString::boolean(aEvent.IsEnabled));
     }
+    else if (aEvent.FeatureURL.Path == "AssignLayout")
+    {
+        sal_Int32 nLayout = 0;
+        aEvent.State >>= nLayout;
+        aBuffer.append(nLayout);
+    }
     else
     {
         return;
