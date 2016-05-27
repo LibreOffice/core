@@ -1568,8 +1568,19 @@ void FmXGridPeer::unloading(const EventObject& /*aEvent*/) throw( RuntimeExcepti
 }
 
 
-void FmXGridPeer::reloaded(const EventObject& /*aEvent*/) throw( RuntimeException, std::exception )
+void FmXGridPeer::reloaded(const EventObject& aEvent) throw( RuntimeException, std::exception )
 {
+    {
+        const sal_Int32 cnt = m_xColumns->getCount();
+        for(sal_Int32 i=0; i<cnt; ++i)
+        {
+            Reference< XLoadListener> xll(m_xColumns->getByIndex(i), UNO_QUERY);
+            if(xll.is())
+            {
+                xll->reloaded(aEvent);
+            }
+        }
+    }
     updateGrid(m_xCursor);
 }
 
