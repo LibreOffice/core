@@ -62,14 +62,6 @@ sal_uInt16 ScUndoDraw::GetId() const
         return 0;
 }
 
-void ScUndoDraw::SetLinkToSfxLinkUndoAction(SfxLinkUndoAction* pSfxLinkUndoAction)
-{
-    if (pDrawUndo)
-        pDrawUndo->SetLinkToSfxLinkUndoAction(pSfxLinkUndoAction);
-    else
-        SetLinkToSfxLinkUndoAction(pSfxLinkUndoAction);
-}
-
 bool  ScUndoDraw::Merge( SfxUndoAction* pNextAction )
 {
     if (pDrawUndo)
