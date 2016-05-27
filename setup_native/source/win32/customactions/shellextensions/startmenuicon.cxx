@@ -17,41 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#define UNICODE
-
-#ifdef _MSC_VER
-#pragma warning(push, 1) /* disable warnings within system headers */
-#endif
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-#include <msiquery.h>
-#ifdef _WIN32_WINNT_WINBLUE
-#include <VersionHelpers.h>
-#endif
-#ifdef _MSC_VER
-#pragma warning(pop)
-#endif
+#include "shlxtmsi.hxx"
 
 #include <malloc.h>
-#include <string>
-
-std::wstring GetMsiPropertyW( MSIHANDLE handle, const std::wstring& sProperty )
-{
-    std::wstring   result;
-    WCHAR   szDummy[1] = L"";
-    DWORD   nChars = 0;
-
-    if ( MsiGetPropertyW( handle, sProperty.c_str(), szDummy, &nChars ) == ERROR_MORE_DATA )
-    {
-        DWORD nBytes = ++nChars * sizeof(WCHAR);
-        PWSTR buffer = reinterpret_cast<PWSTR>(_alloca(nBytes));
-        ZeroMemory( buffer, nBytes );
-        MsiGetPropertyW(handle, sProperty.c_str(), buffer, &nChars);
-        result = buffer;
-    }
-
-    return  result;
-}
 
 /*
     Called during installation to customize the start menu folder icon.

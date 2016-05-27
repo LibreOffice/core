@@ -17,24 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+// NB This file still makes use of largely ANSI MSI API calls
 #undef UNICODE
 #undef _UNICODE
 
-#ifdef _MSC_VER
-#pragma warning(push, 1) /* disable warnings within system headers */
-#endif
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-#include <msiquery.h>
-#ifdef _MSC_VER
-#pragma warning(pop)
-#endif
+#include "shlxtmsi.hxx"
 
 #include <malloc.h>
 #include <assert.h>
-
-#include <tchar.h>
-#include <string>
 
 using namespace std;
 
@@ -109,55 +99,55 @@ namespace
         return convertedGuid;
     }
 
-    string GetMsiProperty(MSIHANDLE handle, const string& sProperty)
+    string GetMsiPropertyA(MSIHANDLE handle, const string& sProperty)
     {
         string  result;
-        TCHAR   szDummy[1] = TEXT("");
+        CHAR    szDummy[1] = "";
         DWORD   nChars = 0;
 
-        if (MsiGetProperty(handle, sProperty.c_str(), szDummy, &nChars) == ERROR_MORE_DATA)
+        if (MsiGetPropertyA(handle, sProperty.c_str(), szDummy, &nChars) == ERROR_MORE_DATA)
         {
-            DWORD nBytes = ++nChars * sizeof(TCHAR);
-            LPTSTR buffer = reinterpret_cast<LPTSTR>(_alloca(nBytes));
+            DWORD nBytes = ++nChars * sizeof(CHAR);
+            LPSTR buffer = reinterpret_cast<LPSTR>(_alloca(nBytes));
             ZeroMemory( buffer, nBytes );
-            MsiGetProperty(handle, sProperty.c_str(), buffer, &nChars);
+            MsiGetPropertyA( handle, sProperty.c_str(), buffer, &nChars );
             result = buffer;
         }
         return  result;
     }
 
-    inline bool IsSetMsiProperty(MSIHANDLE handle, const string& sProperty)
+    inline bool IsSetMsiPropertyA(MSIHANDLE handle, const string& sProperty)
     {
-        return (GetMsiProperty(handle, sProperty).length() > 0);
+        return (GetMsiPropertyA(handle, sProperty).length() > 0);
     }
 
-    inline void UnsetMsiProperty(MSIHANDLE handle, const string& sProperty)
+    inline void UnsetMsiPropertyA(MSIHANDLE handle, const string& sProperty)
     {
-        MsiSetProperty(handle, sProperty.c_str(), NULL);
+        MsiSetPropertyA(handle, sProperty.c_str(), NULL);
     }
 
-    inline void SetMsiProperty(MSIHANDLE handle, const string& sProperty)
+    inline void SetMsiPropertyA(MSIHANDLE handle, const string& sProperty)
     {
-        MsiSetProperty(handle, sProperty.c_str(), TEXT("1"));
+        MsiSetPropertyA(handle, sProperty.c_str(), "1");
     }
 
     bool RegistryKeyHasUpgradeSubKey(
-        HKEY hRootKey, const string& regKey, const string& upgradeKey)
+        HKEY hRootKey, const wstring& regKey, const string& upgradeKey)
     {
         HKEY hKey;
-        if (RegOpenKey(hRootKey, regKey.c_str(), &hKey) == ERROR_SUCCESS)
+        if (RegOpenKeyW(hRootKey, regKey.c_str(), &hKey) == ERROR_SUCCESS)
         {
             DWORD nSubKeys;
             DWORD lLongestSubKey;
 
-            if (RegQueryInfoKey(
+            if (RegQueryInfoKeyA(
                 hKey, NULL, NULL, NULL, &nSubKeys, &lLongestSubKey, NULL, NULL, NULL, NULL, NULL, NULL) == ERROR_SUCCESS)
             {
-                LPTSTR buffer = reinterpret_cast<LPTSTR>(_alloca(lLongestSubKey + 1));
+                LPSTR buffer = reinterpret_cast<LPSTR>(_alloca(lLongestSubKey + 1));
 
                 for (DWORD i = 0; i < nSubKeys; i++)
                 {
-                    LONG ret = RegEnumKey(hKey, i, buffer, lLongestSubKey + 1);
+                    LONG ret = RegEnumKeyA(hKey, i, buffer, lLongestSubKey + 1);
                     if ((ret == ERROR_SUCCESS) && (buffer == upgradeKey))
                         return true;
                 }
@@ -169,26 +159,26 @@ namespace
 
 extern "C" UINT __stdcall SetProductInstallMode(MSIHANDLE handle)
 {
-    string upgradeCode = GetMsiProperty(handle, TEXT("UpgradeCode"));
+    string upgradeCode = GetMsiPropertyA(handle, "UpgradeCode");
     upgradeCode = ConvertGuid(string(upgradeCode.c_str() + 1, upgradeCode.length() - 2));
 
-    //MessageBox(NULL, upgradeCode.c_str(), TEXT("Debug"), MB_OK);
+    // MessageBoxA(NULL, upgradeCode.c_str(), "Debug", MB_OK);
 
     if (RegistryKeyHasUpgradeSubKey(
         HKEY_CURRENT_USER,
-        TEXT("Software\\Microsoft\\Installer\\UpgradeCodes"),
-        upgradeCode) && IsSetMsiProperty(handle, TEXT("ALLUSERS")))
+        L"Software\\Microsoft\\Installer\\UpgradeCodes",
+        upgradeCode) && IsSetMsiPropertyA(handle, "ALLUSERS"))
     {
-        UnsetMsiProperty(handle, TEXT("ALLUSERS"));
-        //MessageBox(NULL, "ALLUSERS removed", "DEBUG", MB_OK);
+        UnsetMsiPropertyA(handle, "ALLUSERS");
+        // MessageBoxW(NULL, L"ALLUSERS removed", L"DEBUG", MB_OK);
     }
     else if (RegistryKeyHasUpgradeSubKey(
              HKEY_LOCAL_MACHINE,
-             TEXT("Software\\Classes\\Installer\\UpgradeCodes"),
-             upgradeCode) && !IsSetMsiProperty(handle, TEXT("ALLUSERS")))
+             L"Software\\Classes\\Installer\\UpgradeCodes",
+             upgradeCode) && !IsSetMsiPropertyA(handle, "ALLUSERS"))
     {
-        SetMsiProperty(handle, TEXT("ALLUSERS"));
-        //MessageBox(NULL, "ALLUSERS set", "DEBUG", MB_OK);
+        SetMsiPropertyA(handle, "ALLUSERS");
+        // MessageBoxW(NULL, L"ALLUSERS set", L"DEBUG", MB_OK);
     }
     return ERROR_SUCCESS;
 }

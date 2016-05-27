@@ -17,49 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifdef _MSC_VER
-#pragma warning(push, 1) /* disable warnings within system headers */
-#endif
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-#include <msiquery.h>
-#ifdef _MSC_VER
-#pragma warning(pop)
-#endif
+#include "shlxtmsi.hxx"
 
 #include <malloc.h>
-
-#ifdef UNICODE
-#define _UNICODE
-#define _tstring    wstring
-#else
-#define _tstring    string
-#endif
-#include <tchar.h>
-#include <string>
-
-using namespace std;
-
-namespace
-{
-    std::_tstring GetMsiProperty( MSIHANDLE handle, const std::_tstring& sProperty )
-    {
-        std::_tstring   result;
-        TCHAR   szDummy[1] = TEXT("");
-        DWORD   nChars = 0;
-
-        if ( MsiGetProperty( handle, sProperty.c_str(), szDummy, &nChars ) == ERROR_MORE_DATA )
-        {
-            DWORD nBytes = ++nChars * sizeof(TCHAR);
-            LPTSTR buffer = reinterpret_cast<LPTSTR>(_alloca(nBytes));
-            ZeroMemory( buffer, nBytes );
-            MsiGetProperty(handle, sProperty.c_str(), buffer, &nChars);
-            result = buffer;
-        }
-
-        return  result;
-    }
-} // namespace
 
 extern "C" UINT __stdcall CompleteInstallPath( MSIHANDLE handle )
 {
@@ -75,15 +35,15 @@ extern "C" UINT __stdcall CompleteInstallPath( MSIHANDLE handle )
     // Reading property OFFICEDIRHOSTNAME_, that contains the part of the path behind
     // the program files folder.
 
-    std::_tstring   sInstallLocation = GetMsiProperty( handle, TEXT("INSTALLLOCATION") );
-    std::_tstring   sOfficeDirHostname = GetMsiProperty( handle, TEXT("OFFICEDIRHOSTNAME_") );
+    std::wstring   sInstallLocation = GetMsiPropertyW( handle, L"INSTALLLOCATION" );
+    std::wstring   sOfficeDirHostname = GetMsiPropertyW( handle, L"OFFICEDIRHOSTNAME_" );
 
     // If sInstallLocation ends with (contains) the string sOfficeDirHostname,
     // INSTALLLOCATION is good and nothing has to be done here.
 
     bool pathCompletionRequired = true;
 
-    if ( _tcsstr( sInstallLocation.c_str(), sOfficeDirHostname.c_str() ) )
+    if ( wcsstr( sInstallLocation.c_str(), sOfficeDirHostname.c_str() ) )
     {
         pathCompletionRequired = false;  // nothing to do
     }
@@ -93,49 +53,49 @@ extern "C" UINT __stdcall CompleteInstallPath( MSIHANDLE handle )
 
     if ( pathCompletionRequired )
     {
-        std::_tstring   sManufacturer = GetMsiProperty( handle, TEXT("Manufacturer") );
-        std::_tstring   sDefinedName = GetMsiProperty( handle, TEXT("DEFINEDPRODUCT") );
-        std::_tstring   sUpgradeCode = GetMsiProperty( handle, TEXT("UpgradeCode") );
+        std::wstring   sManufacturer = GetMsiPropertyW( handle, L"Manufacturer" );
+        std::wstring   sDefinedName = GetMsiPropertyW( handle, L"DEFINEDPRODUCT" );
+        std::wstring   sUpgradeCode = GetMsiPropertyW( handle, L"UpgradeCode" );
 
         // sUpdateVersion can be "3.0", "3.1" or "3.2"
 
-        std::_tstring   sProductKey30 = "Software\\" + sManufacturer + "\\" + sDefinedName +
-                                            "\\" + "3.0" + "\\" + sUpgradeCode;
+        std::wstring   sProductKey30 = L"Software\\" + sManufacturer + L"\\" + sDefinedName +
+                                            L"\\" L"3.0" L"\\" + sUpgradeCode;
 
-        std::_tstring   sProductKey31 = "Software\\" + sManufacturer + "\\" + sDefinedName +
-                                            "\\" + "3.1" + "\\" + sUpgradeCode;
+        std::wstring   sProductKey31 = L"Software\\" + sManufacturer + L"\\" + sDefinedName +
+                                            L"\\" L"3.1" L"\\" + sUpgradeCode;
 
-        std::_tstring   sProductKey32 = "Software\\" + sManufacturer + "\\" + sDefinedName +
-                                            "\\" + "3.2" + "\\" + sUpgradeCode;
+        std::wstring   sProductKey32 = L"Software\\" + sManufacturer + L"\\" + sDefinedName +
+                                            L"\\" L"3.2" L"\\" + sUpgradeCode;
 
         bool oldVersionExists = false;
 
-        if ( ERROR_SUCCESS == RegOpenKey( HKEY_CURRENT_USER,  sProductKey30.c_str(), &hKey ) )
+        if ( ERROR_SUCCESS == RegOpenKeyW( HKEY_CURRENT_USER,  sProductKey30.c_str(), &hKey ) )
         {
             oldVersionExists = true;
             RegCloseKey( hKey );
         }
-        else if ( ERROR_SUCCESS == RegOpenKey( HKEY_CURRENT_USER,  sProductKey31.c_str(), &hKey ) )
+        else if ( ERROR_SUCCESS == RegOpenKeyW( HKEY_CURRENT_USER,  sProductKey31.c_str(), &hKey ) )
         {
             oldVersionExists = true;
             RegCloseKey( hKey );
         }
-        else if ( ERROR_SUCCESS == RegOpenKey( HKEY_CURRENT_USER,  sProductKey32.c_str(), &hKey ) )
+        else if ( ERROR_SUCCESS == RegOpenKeyW( HKEY_CURRENT_USER,  sProductKey32.c_str(), &hKey ) )
         {
             oldVersionExists = true;
             RegCloseKey( hKey );
         }
-        else if ( ERROR_SUCCESS == RegOpenKey( HKEY_LOCAL_MACHINE,  sProductKey30.c_str(), &hKey ) )
+        else if ( ERROR_SUCCESS == RegOpenKeyW( HKEY_LOCAL_MACHINE,  sProductKey30.c_str(), &hKey ) )
         {
             oldVersionExists = true;
             RegCloseKey( hKey );
         }
-        else if ( ERROR_SUCCESS == RegOpenKey( HKEY_LOCAL_MACHINE,  sProductKey31.c_str(), &hKey ) )
+        else if ( ERROR_SUCCESS == RegOpenKeyW( HKEY_LOCAL_MACHINE,  sProductKey31.c_str(), &hKey ) )
         {
             oldVersionExists = true;
             RegCloseKey( hKey );
         }
-        else if ( ERROR_SUCCESS == RegOpenKey( HKEY_LOCAL_MACHINE,  sProductKey32.c_str(), &hKey ) )
+        else if ( ERROR_SUCCESS == RegOpenKeyW( HKEY_LOCAL_MACHINE,  sProductKey32.c_str(), &hKey ) )
         {
             oldVersionExists = true;
             RegCloseKey( hKey );
@@ -146,7 +106,7 @@ extern "C" UINT __stdcall CompleteInstallPath( MSIHANDLE handle )
             // Adding the new path content sOfficeDirHostname
             sInstallLocation = sInstallLocation + sOfficeDirHostname;
             // Setting the new property value
-            MsiSetProperty(handle, TEXT("INSTALLLOCATION"), sInstallLocation.c_str());
+            MsiSetPropertyW(handle, L"INSTALLLOCATION", sInstallLocation.c_str());
         }
     }
 
