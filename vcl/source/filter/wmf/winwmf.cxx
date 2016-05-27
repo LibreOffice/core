@@ -195,7 +195,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
         {
             sal_uInt16 nROP2 = 0;
             pWMF->ReadUInt16( nROP2 );
-            pOut->SetRasterOp( nROP2 );
+            pOut->SetRasterOp( (WMFRasterOp)nROP2 );
         }
         break;
 
@@ -951,10 +951,11 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
 
         case W_META_PATBLT:
         {
-            sal_uInt32 nROP = 0, nOldROP = 0;
+            sal_uInt32 nROP = 0;
+            WMFRasterOp nOldROP = WMFRasterOp::NONE;
             pWMF->ReadUInt32( nROP );
             Size aSize = ReadYXExt();
-            nOldROP = pOut->SetRasterOp( nROP );
+            nOldROP = pOut->SetRasterOp( (WMFRasterOp)nROP );
             pOut->DrawRect( Rectangle( ReadYX(), aSize ), false );
             pOut->SetRasterOp( nOldROP );
         }
