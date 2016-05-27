@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_22bb11c6",
+        "filename": "compilerplugins/clang/refcounting.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 299,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-05-27T08:24:26Z",
+      "side": 1,
+      "message": "I\u0027m always wary whether Clang get*() functions are actually cheap (I think our plugins are overall too slow already), probably better to save the result",
+      "revId": "b401175ff49411396a0bc7bda0ee090bda074a0b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_a2c72144",
+        "filename": "compilerplugins/clang/refcounting.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-05-27T08:24:26Z",
+      "side": 1,
+      "message": "but the typecheck.hxx stuff should look through that fine",
+      "range": {
+        "startLine": 308,
+        "startChar": 56,
+        "endLine": 308,
+        "endChar": 113
+      },
+      "revId": "b401175ff49411396a0bc7bda0ee090bda074a0b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_82ca1d4e",
+        "filename": "compilerplugins/clang/refcounting.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 314,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-05-27T08:24:26Z",
+      "side": 1,
+      "message": "you no longer need isThisDeclarationADefinition then",
+      "revId": "b401175ff49411396a0bc7bda0ee090bda074a0b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
