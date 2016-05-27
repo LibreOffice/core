@@ -70,7 +70,7 @@ ifeq ($(COM),MSC)
 liborcus_CXXFLAGS+=$(BOOST_CXXFLAGS)
 endif
 ifeq ($(SYSTEM_BOOST),)
-liborcus_CXXFLAGS+=-I$(WORKDIR)/UnpackedTarball/boost
+liborcus_CXXFLAGS+=${BOOST_CPPFLAGS}
 else
 liborcus_LDFLAGS+=$(BOOST_LDFLAGS)
 endif

@@ -49,7 +49,7 @@ $(call gb_ExternalProject_get_state_target,firebird,build):
 			" \
 		&& export CXXFLAGS=" \
 			$(if $(SYSTEM_BOOST),$(BOOST_CPPFLAGS), \
-				-I$(call gb_UnpackedTarball_get_dir,boost) \
+				$(BOOST_CPPFLAGS) \
 				-L$(call gb_UnpackedTarball_get_dir,boost)/source/lib \
 			) \
 			$(if $(SYSTEM_ICU),$(ICU_CPPFLAGS), \
