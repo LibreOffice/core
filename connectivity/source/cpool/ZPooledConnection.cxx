@@ -34,7 +34,7 @@ using namespace connectivity;
 using namespace ::osl;
 
 OPooledConnection::OPooledConnection(const Reference< XConnection >& _xConnection,
-                                    const Reference< ::com::sun::star::reflection::XProxyFactory >& _rxProxyFactory)
+                                    const Reference< css::reflection::XProxyFactory >& _rxProxyFactory)
     : OPooledConnection_Base(m_aMutex)
     ,m_xRealConnection(_xConnection)
     ,m_xProxyFactory(_rxProxyFactory)

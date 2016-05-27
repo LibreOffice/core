@@ -121,7 +121,7 @@ Reference< XDatabaseMetaData > SAL_CALL OEvoabConnection::getMetaData(  ) throw(
     return xMetaData;
 }
 
-::com::sun::star::uno::Reference< XTablesSupplier > OEvoabConnection::createCatalog()
+css::uno::Reference< XTablesSupplier > OEvoabConnection::createCatalog()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
      Reference< XTablesSupplier > xTab = m_xCatalog;
@@ -243,12 +243,12 @@ sal_Int32 SAL_CALL OEvoabConnection::getTransactionIsolation(  ) throw(SQLExcept
     return TransactionIsolation::NONE;
 }
 
-Reference< ::com::sun::star::container::XNameAccess > SAL_CALL OEvoabConnection::getTypeMap(  ) throw(SQLException, RuntimeException, std::exception)
+Reference< css::container::XNameAccess > SAL_CALL OEvoabConnection::getTypeMap(  ) throw(SQLException, RuntimeException, std::exception)
 {
     ::dbtools::throwFeatureNotImplementedSQLException( "XConnection::getTypeMap", *this );
     return nullptr;
 }
-void SAL_CALL OEvoabConnection::setTypeMap( const Reference< ::com::sun::star::container::XNameAccess >& /*typeMap*/ ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OEvoabConnection::setTypeMap( const Reference< css::container::XNameAccess >& /*typeMap*/ ) throw(SQLException, RuntimeException, std::exception)
 {
     ::dbtools::throwFeatureNotImplementedSQLException( "XConnection::setTypeMap", *this );
 }

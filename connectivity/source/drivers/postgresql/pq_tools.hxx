@@ -58,12 +58,12 @@ OUString concatQualified( const OUString & a, const OUString &b);
 OString OUStringToOString( const OUString& str, ConnectionSettings *settings);
 
 void bufferQuoteConstant( OUStringBuffer & buf, const OUString & str, ConnectionSettings *settings );
-void bufferQuoteAnyConstant( OUStringBuffer & buf, const com::sun::star::uno::Any &val, ConnectionSettings *settings );
+void bufferQuoteAnyConstant( OUStringBuffer & buf, const css::uno::Any &val, ConnectionSettings *settings );
 
 void bufferEscapeConstant( OUStringBuffer & buf, const OUString & str, ConnectionSettings *settings );
 
 OUString sqltype2string(
-    const com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > & column );
+    const css::uno::Reference< css::beans::XPropertySet > & column );
 
 
 void bufferQuoteQualifiedIdentifier(
@@ -79,23 +79,23 @@ void bufferQuoteQualifiedIdentifier(
 void bufferQuoteIdentifier( OUStringBuffer & buf, const OUString &toQuote, ConnectionSettings *settings );
 void bufferKey2TableConstraint(
     OUStringBuffer &buf,
-    const com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > &key,
+    const css::uno::Reference< css::beans::XPropertySet > &key,
     ConnectionSettings *settings  );
 
 OUString extractStringProperty(
-    const com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > & descriptor,
+    const css::uno::Reference< css::beans::XPropertySet > & descriptor,
     const OUString &name );
 
 sal_Int32 extractIntProperty(
-    const com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > & descriptor,
+    const css::uno::Reference< css::beans::XPropertySet > & descriptor,
     const OUString &name );
 
 bool extractBoolProperty(
-    const com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > & descriptor,
+    const css::uno::Reference< css::beans::XPropertySet > & descriptor,
     const OUString &name );
 
-void disposeNoThrow( const com::sun::star::uno::Reference< com::sun::star::uno::XInterface > & r );
-void disposeObject( const com::sun::star::uno::Reference< com::sun::star::uno::XInterface > & r );
+void disposeNoThrow( const css::uno::Reference< css::uno::XInterface > & r );
+void disposeObject( const css::uno::Reference< css::uno::XInterface > & r );
 
 OUString extractTableFromInsert( const OUString & sql );
 OString extractSingleTableFromSelect( const OStringVector &vec );
@@ -103,27 +103,27 @@ OString extractSingleTableFromSelect( const OStringVector &vec );
 void tokenizeSQL( const OString & sql, OStringVector &vec  );
 void splitSQL( const OString & sql, OStringVector &vec  );
 std::vector< sal_Int32 > parseIntArray( const OUString & str );
-std::vector< com::sun::star::uno::Any > parseArray( const OUString & str )
-    throw( com::sun::star::sdbc::SQLException );
+std::vector< css::uno::Any > parseArray( const OUString & str )
+    throw( css::sdbc::SQLException );
 
-OUString array2String( const com::sun::star::uno::Sequence< com::sun::star::uno::Any > &seq );
+OUString array2String( const css::uno::Sequence< css::uno::Any > &seq );
 
-com::sun::star::uno::Reference< com::sun::star::sdbc::XConnection > extractConnectionFromStatement(
-    const com::sun::star::uno::Reference< com::sun::star::uno::XInterface > & stmt );
+css::uno::Reference< css::sdbc::XConnection > extractConnectionFromStatement(
+    const css::uno::Reference< css::uno::XInterface > & stmt );
 
 void splitConcatenatedIdentifier( const OUString & source, OUString *first, OUString *second);
 
 
 void fillAttnum2attnameMap(
     Int2StringMap &map,
-    const com::sun::star::uno::Reference< com::sun::star::sdbc::XConnection > &conn,
+    const css::uno::Reference< css::sdbc::XConnection > &conn,
     const OUString &schema,
     const OUString &table );
 
-com::sun::star::uno::Sequence< sal_Int32 > string2intarray( const OUString & str );
+css::uno::Sequence< sal_Int32 > string2intarray( const OUString & str );
 
-com::sun::star::uno::Sequence< OUString > convertMappedIntArray2StringArray(
-    const Int2StringMap &map, const com::sun::star::uno::Sequence< sal_Int32> &source );
+css::uno::Sequence< OUString > convertMappedIntArray2StringArray(
+    const Int2StringMap &map, const css::uno::Sequence< sal_Int32> &source );
 
 typedef std::unordered_map
 <
@@ -132,32 +132,32 @@ typedef std::unordered_map
     OStringHash > String2StringMap;
 
 OUString querySingleValue(
-    const com::sun::star::uno::Reference< com::sun::star::sdbc::XConnection > &connection,
+    const css::uno::Reference< css::sdbc::XConnection > &connection,
     const OUString &query );
 
 void extractNameValuePairsFromInsert( String2StringMap & map, const OString & lastQuery );
 sal_Int32 typeNameToDataType( const OUString &typeName, const OUString &typtype );
 
 // copied from connectivity/source/dbtools, can't use the function directly
-bool implSetObject( const com::sun::star::uno::Reference< com::sun::star::sdbc::XParameters >& _rxParameters,
-                    const sal_Int32 _nColumnIndex, const com::sun::star::uno::Any& _rValue);
+bool implSetObject( const css::uno::Reference< css::sdbc::XParameters >& _rxParameters,
+                    const sal_Int32 _nColumnIndex, const css::uno::Any& _rValue);
 
 class DisposeGuard
 {
-    com::sun::star::uno::Reference< com::sun::star::uno::XInterface > d;
+    css::uno::Reference< css::uno::XInterface > d;
 public:
-    explicit DisposeGuard(const com::sun::star::uno::Reference< com::sun::star::uno::XInterface > & r );
+    explicit DisposeGuard(const css::uno::Reference< css::uno::XInterface > & r );
     ~DisposeGuard();
 
 };
 
 class TransactionGuard
 {
-    com::sun::star::uno::Reference< com::sun::star::sdbc::XStatement > m_stmt;
+    css::uno::Reference< css::sdbc::XStatement > m_stmt;
     bool m_commited;
 public:
     /// takes over ownership of given statement
-    explicit TransactionGuard( const com::sun::star::uno::Reference< com::sun::star::sdbc::XStatement > &stmt );
+    explicit TransactionGuard( const css::uno::Reference< css::sdbc::XStatement > &stmt );
     ~TransactionGuard( );
 
     void commit();

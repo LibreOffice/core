@@ -81,7 +81,7 @@ Sequence< sal_Int8 > OAdoUser::getUnoTunnelImplementationId()
     return pId->getImplementationId();
 }
 
-// com::sun::star::lang::XUnoTunnel
+// css::lang::XUnoTunnel
 
 sal_Int64 OAdoUser::getSomething( const Sequence< sal_Int8 > & rId ) throw (RuntimeException)
 {
@@ -141,7 +141,7 @@ void OUserExtend::construct()
 
 cppu::IPropertyArrayHelper* OUserExtend::createArrayHelper() const
 {
-    Sequence< com::sun::star::beans::Property > aProps;
+    Sequence< css::beans::Property > aProps;
     describeProperties(aProps);
     return new cppu::OPropertyArrayHelper(aProps);
 }

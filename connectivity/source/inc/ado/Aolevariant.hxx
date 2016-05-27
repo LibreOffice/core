@@ -85,13 +85,13 @@ namespace connectivity
 
             OLEVariant(const OUString& us) ;
             ~OLEVariant()                   ;
-            OLEVariant(const ::com::sun::star::util::Date& x );
-            OLEVariant(const ::com::sun::star::util::Time& x );
-            OLEVariant(const ::com::sun::star::util::DateTime& x );
+            OLEVariant(const css::util::Date& x );
+            OLEVariant(const css::util::Time& x );
+            OLEVariant(const css::util::DateTime& x );
             OLEVariant(const float &x);
             OLEVariant(const double &x);
             OLEVariant(IDispatch* pDispInterface);
-            OLEVariant(const ::com::sun::star::uno::Sequence< sal_Int8 >& x);
+            OLEVariant(const css::uno::Sequence< sal_Int8 >& x);
             OLEVariant& operator=(const OLEVariant& varSrc);
             // Assign a const VARIANT& (::VariantCopy handles everything)
 
@@ -134,10 +134,10 @@ namespace connectivity
             operator float()        const { return getFloat();  }
             operator double()       const { return getDouble(); }
 
-            operator ::com::sun::star::uno::Sequence< sal_Int8 >() const;
-            operator ::com::sun::star::util::Date() const ;
-            operator ::com::sun::star::util::Time() const ;
-            operator ::com::sun::star::util::DateTime()const ;
+            operator css::uno::Sequence< sal_Int8 >() const;
+            operator css::util::Date() const ;
+            operator css::util::Time() const ;
+            operator css::util::DateTime()const ;
             OUString        getString()     const;
             sal_Bool        getBool()       const;
             IUnknown*       getIUnknown()   const;
@@ -152,7 +152,7 @@ namespace connectivity
             double          getDate()       const;
             CY              getCurrency()   const;
             SAFEARRAY*      getUI1SAFEARRAYPtr() const;
-            ::com::sun::star::uno::Any makeAny() const;
+            css::uno::Any makeAny() const;
 
             static VARIANT_BOOL VariantBool(sal_Bool bEinBoolean);
 

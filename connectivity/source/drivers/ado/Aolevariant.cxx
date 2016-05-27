@@ -129,23 +129,23 @@ OLEVariant::~OLEVariant()
     OSL_ENSURE(eRet == S_OK,"Error while clearing an ado variant!");
 } // clears all the memory that was allocated before
 
-OLEVariant::OLEVariant(const ::com::sun::star::util::Date& x )
+OLEVariant::OLEVariant(const css::util::Date& x )
 {
     VariantInit(this);
     vt      = VT_DATE;
-    dblVal  = ::dbtools::DBTypeConversion::toDouble(x,::com::sun::star::util::Date(30,12,1899));
+    dblVal  = ::dbtools::DBTypeConversion::toDouble(x,css::util::Date(30,12,1899));
 }
-OLEVariant::OLEVariant(const ::com::sun::star::util::Time& x )
+OLEVariant::OLEVariant(const css::util::Time& x )
 {
     VariantInit(this);
     vt      = VT_DATE;
     dblVal  = ::dbtools::DBTypeConversion::toDouble(x);
 }
-OLEVariant::OLEVariant(const ::com::sun::star::util::DateTime& x )
+OLEVariant::OLEVariant(const css::util::DateTime& x )
 {
     VariantInit(this);
     vt      = VT_DATE;
-    dblVal  = ::dbtools::DBTypeConversion::toDouble(x,::com::sun::star::util::Date(30,12,1899));
+    dblVal  = ::dbtools::DBTypeConversion::toDouble(x,css::util::Date(30,12,1899));
 }
 OLEVariant::OLEVariant(const float &x)
 {
@@ -167,7 +167,7 @@ OLEVariant::OLEVariant(IDispatch* pDispInterface)
     setIDispatch( pDispInterface );
 }
 
-OLEVariant::OLEVariant(const ::com::sun::star::uno::Sequence< sal_Int8 >& x)
+OLEVariant::OLEVariant(const css::uno::Sequence< sal_Int8 >& x)
 {
     VariantInit(this);
 
@@ -333,17 +333,17 @@ sal_Bool OLEVariant::isEmpty() const {  return (vt == VT_EMPTY);    }
 
 VARTYPE OLEVariant::getType() const { return vt; }
 
-OLEVariant::operator ::com::sun::star::util::Date() const
+OLEVariant::operator css::util::Date() const
 {
-    return isNull() ? ::com::sun::star::util::Date(30,12,1899) : ::dbtools::DBTypeConversion::toDate(getDate(),::com::sun::star::util::Date(30,12,1899));
+    return isNull() ? css::util::Date(30,12,1899) : ::dbtools::DBTypeConversion::toDate(getDate(),css::util::Date(30,12,1899));
 }
-OLEVariant::operator ::com::sun::star::util::Time() const
+OLEVariant::operator css::util::Time() const
 {
-    return isNull() ? ::com::sun::star::util::Time() : ::dbtools::DBTypeConversion::toTime(getDate());
+    return isNull() ? css::util::Time() : ::dbtools::DBTypeConversion::toTime(getDate());
 }
-OLEVariant::operator ::com::sun::star::util::DateTime()const
+OLEVariant::operator css::util::DateTime()const
 {
-    return isNull() ? ::com::sun::star::util::DateTime() : ::dbtools::DBTypeConversion::toDateTime(getDate(),::com::sun::star::util::Date(30,12,1899));
+    return isNull() ? css::util::DateTime() : ::dbtools::DBTypeConversion::toDateTime(getDate(),css::util::Date(30,12,1899));
 }
 
 VARIANT_BOOL OLEVariant::VariantBool(sal_Bool bEinBoolean)
@@ -409,25 +409,25 @@ void OLEVariant::ChangeType(VARTYPE vartype, const OLEVariant* pSrc)
         {
             ::connectivity::SharedResources aResources;
             const OUString sError( aResources.getResourceString(STR_TYPE_NOT_CONVERT));
-            throw ::com::sun::star::sdbc::SQLException(
+            throw css::sdbc::SQLException(
                 sError,
                 NULL,
                 OUString( "S1000" ),
                 1000,
-                ::com::sun::star::uno::Any()
+                css::uno::Any()
             );
         }
     }
 }
 
 
-OLEVariant::operator ::com::sun::star::uno::Sequence< sal_Int8 >() const
+OLEVariant::operator css::uno::Sequence< sal_Int8 >() const
 {
-    ::com::sun::star::uno::Sequence< sal_Int8 > aRet;
+    css::uno::Sequence< sal_Int8 > aRet;
     if(V_VT(this) == VT_BSTR)
     {
         OLEString sStr(V_BSTR(this));
-        aRet = ::com::sun::star::uno::Sequence<sal_Int8>(reinterpret_cast<const sal_Int8*>((const wchar_t*)sStr),sizeof(sal_Unicode)*sStr.length());
+        aRet = css::uno::Sequence<sal_Int8>(reinterpret_cast<const sal_Int8*>((const wchar_t*)sStr),sizeof(sal_Unicode)*sStr.length());
     }
     else if(!isNull())
     {
@@ -666,9 +666,9 @@ SAFEARRAY* OLEVariant::getUI1SAFEARRAYPtr() const
     return V_ARRAY(&varDest);
 }
 
-::com::sun::star::uno::Any OLEVariant::makeAny() const
+css::uno::Any OLEVariant::makeAny() const
 {
-    ::com::sun::star::uno::Any aValue;
+    css::uno::Any aValue;
     switch (V_VT(this))
     {
         case VT_EMPTY:
@@ -695,7 +695,7 @@ SAFEARRAY* OLEVariant::getUI1SAFEARRAYPtr() const
          }
         case VT_DATE:
          {
-             aValue <<= (::com::sun::star::util::Date)*this;
+             aValue <<= (css::util::Date)*this;
             break;
          }
         case VT_BSTR:

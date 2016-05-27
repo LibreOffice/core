@@ -410,7 +410,7 @@ void SAL_CALL java_sql_Connection::setAutoCommit( sal_Bool autoCommit ) throw(SQ
     callVoidMethodWithBoolArg_ThrowSQL("setAutoCommit", mID, autoCommit);
 }
 
-Reference< ::com::sun::star::container::XNameAccess > SAL_CALL java_sql_Connection::getTypeMap(  ) throw(SQLException, RuntimeException, std::exception)
+Reference< css::container::XNameAccess > SAL_CALL java_sql_Connection::getTypeMap(  ) throw(SQLException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(java_sql_Connection_BASE::rBHelper.bDisposed);
@@ -422,7 +422,7 @@ Reference< ::com::sun::star::container::XNameAccess > SAL_CALL java_sql_Connecti
     return nullptr;
 }
 
-void SAL_CALL java_sql_Connection::setTypeMap( const Reference< ::com::sun::star::container::XNameAccess >& /*typeMap*/ ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL java_sql_Connection::setTypeMap( const Reference< css::container::XNameAccess >& /*typeMap*/ ) throw(SQLException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(java_sql_Connection_BASE::rBHelper.bDisposed);

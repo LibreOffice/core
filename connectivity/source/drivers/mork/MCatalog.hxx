@@ -31,7 +31,7 @@ namespace connectivity
         class OCatalog : public connectivity::sdbcx::OCatalog
         {
             OConnection*    m_pConnection;      // used to get the metadata
-            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData > m_xMetaData; // just to make things easier
+            css::uno::Reference< css::sdbc::XDatabaseMetaData > m_xMetaData; // just to make things easier
 
         public:
             // implementation of the pure virtual methods
@@ -39,7 +39,7 @@ namespace connectivity
             virtual void refreshViews() override ;
             virtual void refreshGroups() override;
             virtual void refreshUsers() override ;
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL getTables(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getTables(  ) throw(css::uno::RuntimeException, std::exception) override;
         public:
             explicit OCatalog(OConnection* _pCon);
 

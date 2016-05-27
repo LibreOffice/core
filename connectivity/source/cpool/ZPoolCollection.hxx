@@ -47,10 +47,10 @@ namespace connectivity
     // OPoolCollection - the one-instance service for PooledConnections
     // manages the active connections and the connections in the pool
 
-    typedef ::cppu::WeakImplHelper<    ::com::sun::star::sdbc::XConnectionPool,
-                                       ::com::sun::star::lang::XServiceInfo,
-                                       ::com::sun::star::frame::XTerminateListener,
-                                       ::com::sun::star::beans::XPropertyChangeListener
+    typedef ::cppu::WeakImplHelper<    css::sdbc::XConnectionPool,
+                                       css::lang::XServiceInfo,
+                                       css::frame::XTerminateListener,
+                                       css::beans::XPropertyChangeListener
                                        >   OPoolCollection_Base;
 
     /// OPoolCollection: control the whole connection pooling for oo
@@ -58,84 +58,84 @@ namespace connectivity
     {
 
 
-        typedef ::comphelper::OInterfaceCompare< ::com::sun::star::sdbc::XDriver >  ODriverCompare;
+        typedef ::comphelper::OInterfaceCompare< css::sdbc::XDriver >  ODriverCompare;
         typedef std::map<OUString, OConnectionPool*> OConnectionPools;
 
         typedef std::map<
-                ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver >,
-                ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XDriver >,
+                css::uno::Reference< css::sdbc::XDriver >,
+                css::uno::WeakReference< css::sdbc::XDriver >,
                 ODriverCompare>
                 MapDriver2DriverRef;
 
-        MapDriver2DriverRef                                                                 m_aDriverProxies;
-        ::osl::Mutex                                                                        m_aMutex;
-        OConnectionPools                                                                    m_aPools;          // the driver pools
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >        m_xContext;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriverManager2 >         m_xManager;
-        ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XProxyFactory >     m_xProxyFactory;
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >               m_xConfigNode;      // config node for general connection pooling
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDesktop2>               m_xDesktop;
+        MapDriver2DriverRef                                       m_aDriverProxies;
+        ::osl::Mutex                                              m_aMutex;
+        OConnectionPools                                          m_aPools;          // the driver pools
+        css::uno::Reference< css::uno::XComponentContext >        m_xContext;
+        css::uno::Reference< css::sdbc::XDriverManager2 >         m_xManager;
+        css::uno::Reference< css::reflection::XProxyFactory >     m_xProxyFactory;
+        css::uno::Reference< css::uno::XInterface >               m_xConfigNode;      // config node for general connection pooling
+        css::uno::Reference< css::frame::XDesktop2>               m_xDesktop;
 
     private:
         OPoolCollection(const OPoolCollection&) = delete;
         int operator= (const OPoolCollection&) = delete;
 
         explicit OPoolCollection(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext);
+            const css::uno::Reference< css::uno::XComponentContext >& _rxContext);
 
         // some configuration helper methods
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createWithServiceFactory(const OUString& _rPath) const;
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getConfigPoolRoot();
-        static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createWithProvider(   const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxConfProvider,
+        css::uno::Reference< css::uno::XInterface > createWithServiceFactory(const OUString& _rPath) const;
+        css::uno::Reference< css::uno::XInterface > getConfigPoolRoot();
+        static css::uno::Reference< css::uno::XInterface > createWithProvider(   const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxConfProvider,
                                                                                                     const OUString& _rPath);
-        static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > openNode( const OUString& _rPath,
-                                                                                        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xTreeNode) throw();
+        static css::uno::Reference< css::uno::XInterface > openNode( const OUString& _rPath,
+                                                                                        const css::uno::Reference< css::uno::XInterface >& _xTreeNode) throw();
         bool isPoolingEnabled();
         bool isDriverPoolingEnabled(const OUString& _sDriverImplName,
-                                        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxDriverNode);
+                                        css::uno::Reference< css::uno::XInterface >& _rxDriverNode);
         bool isPoolingEnabledByUrl( const OUString& _sUrl,
-                                        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver >& _rxDriver,
+                                        css::uno::Reference< css::sdbc::XDriver >& _rxDriver,
                                         OUString& _rsImplName,
-                                        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxDriverNode);
+                                        css::uno::Reference< css::uno::XInterface >& _rxDriverNode);
 
         OConnectionPool* getConnectionPool( const OUString& _sImplName,
-                                            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver >& _xDriver,
-                                            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxDriverNode);
+                                            const css::uno::Reference< css::sdbc::XDriver >& _xDriver,
+                                            const css::uno::Reference< css::uno::XInterface >& _rxDriverNode);
         void clearConnectionPools(bool _bDispose);
         void clearDesktop();
     protected:
         virtual ~OPoolCollection();
     public:
 
-        static ::com::sun::star::uno::Any getNodeValue( const OUString& _rPath,
-                                                        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _xTreeNode)throw();
+        static css::uno::Any getNodeValue( const OUString& _rPath,
+                                                        const css::uno::Reference< css::uno::XInterface>& _xTreeNode)throw();
 
     // XDriverManager
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > SAL_CALL getConnection( const OUString& url ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > SAL_CALL getConnectionWithInfo( const OUString& url, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& info ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL setLoginTimeout( sal_Int32 seconds ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual sal_Int32 SAL_CALL getLoginTimeout(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Reference< css::sdbc::XConnection > SAL_CALL getConnection( const OUString& url ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Reference< css::sdbc::XConnection > SAL_CALL getConnectionWithInfo( const OUString& url, const css::uno::Sequence< css::beans::PropertyValue >& info ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL setLoginTimeout( sal_Int32 seconds ) throw(css::uno::RuntimeException, std::exception) override;
+        virtual sal_Int32 SAL_CALL getLoginTimeout(  ) throw(css::uno::RuntimeException, std::exception) override;
 
     //XDriverAccess
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver > SAL_CALL getDriverByURL( const OUString& url ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Reference< css::sdbc::XDriver > SAL_CALL getDriverByURL( const OUString& url ) throw (css::uno::RuntimeException, std::exception) override;
     // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual OUString SAL_CALL getImplementationName(  ) throw(css::uno::RuntimeException, std::exception) override;
+        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(css::uno::RuntimeException, std::exception) override;
 
     // XServiceInfo - static methods
-        static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL CreateInstance(const::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
-        static OUString SAL_CALL getImplementationName_Static(  ) throw(::com::sun::star::uno::RuntimeException);
-        static ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames_Static(  ) throw(::com::sun::star::uno::RuntimeException);
+        static css::uno::Reference< css::uno::XInterface > SAL_CALL CreateInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >&);
+        static OUString SAL_CALL getImplementationName_Static(  ) throw(css::uno::RuntimeException);
+        static css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames_Static(  ) throw(css::uno::RuntimeException);
 
         // XEventListener
-        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException, std::exception) override;
         // XPropertyChangeListener
-        virtual void SAL_CALL propertyChange( const ::com::sun::star::beans::PropertyChangeEvent& evt ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL propertyChange( const css::beans::PropertyChangeEvent& evt ) throw (css::uno::RuntimeException, std::exception) override;
 
         // XTerminateListener
-        virtual void SAL_CALL queryTermination( const ::com::sun::star::lang::EventObject& Event ) throw (::com::sun::star::frame::TerminationVetoException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL notifyTermination( const ::com::sun::star::lang::EventObject& Event ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL queryTermination( const css::lang::EventObject& Event ) throw (css::frame::TerminationVetoException, css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL notifyTermination( const css::lang::EventObject& Event ) throw (css::uno::RuntimeException, std::exception) override;
     };
 }
 #endif // INCLUDED_CONNECTIVITY_SOURCE_CPOOL_ZPOOLCOLLECTION_HXX

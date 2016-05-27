@@ -78,7 +78,7 @@ OUString OResultSetMetaData::getCharColAttrib(sal_Int32 _column,sal_Int32 ident)
 
 SQLLEN OResultSetMetaData::getNumColAttrib(OConnection* _pConnection
                                               ,SQLHANDLE _aStatementHandle
-                                              ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface
+                                              ,const css::uno::Reference< css::uno::XInterface >& _xInterface
                                               ,sal_Int32 _column
                                               ,sal_Int32 _ident) throw(SQLException, RuntimeException)
 {
@@ -109,9 +109,9 @@ sal_Int32 SAL_CALL OResultSetMetaData::getColumnDisplaySize( sal_Int32 column ) 
 
 SQLSMALLINT OResultSetMetaData::getColumnODBCType(OConnection* _pConnection
                                               ,SQLHANDLE _aStatementHandle
-                                              ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface
+                                              ,const css::uno::Reference< css::uno::XInterface >& _xInterface
                                               ,sal_Int32 column)
-                                               throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+                                               throw(css::sdbc::SQLException, css::uno::RuntimeException)
 {
     SQLSMALLINT nType = 0;
     try
@@ -244,7 +244,7 @@ sal_Int32 SAL_CALL OResultSetMetaData::getPrecision( sal_Int32 column ) throw(SQ
     return nType;
 }
 
-sal_Int32 SAL_CALL OResultSetMetaData::getScale( sal_Int32 column ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
+sal_Int32 SAL_CALL OResultSetMetaData::getScale( sal_Int32 column ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
     sal_Int32 nType = 0;
     try

@@ -437,7 +437,7 @@ OOperand* OPredicateCompiler::execute_Operand(OSQLParseNode* pPredicateNode) thr
                  ) );
             ::dbtools::throwGenericSQLException( sError, nullptr );
         }
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> xCol;
+        css::uno::Reference< css::beans::XPropertySet> xCol;
         try
         {
             if (m_orgColumns->getByName(aColumnName) >>= xCol)

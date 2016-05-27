@@ -83,9 +83,9 @@ namespace pq_sdbc_driver
 {
 
 
-com::sun::star::uno::Reference< com::sun::star::sdbc::XCloseable > UpdateableResultSet::createFromPGResultSet(
+css::uno::Reference< css::sdbc::XCloseable > UpdateableResultSet::createFromPGResultSet(
     const ::rtl::Reference< RefCountedMutex > & mutex,
-    const com::sun::star::uno::Reference< com::sun::star::uno::XInterface > &owner,
+    const css::uno::Reference< css::uno::XInterface > &owner,
     ConnectionSettings **ppSettings,
     PGresult *result,
     const OUString &schema,
@@ -133,9 +133,9 @@ com::sun::star::uno::Reference< com::sun::star::sdbc::XCloseable > UpdateableRes
     return ret;
 }
 
-com::sun::star::uno::Any  UpdateableResultSet::queryInterface(
-    const com::sun::star::uno::Type & reqType )
-    throw (com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Any  UpdateableResultSet::queryInterface(
+    const css::uno::Type & reqType )
+    throw (css::uno::RuntimeException, std::exception)
 {
     Any ret = SequenceResultSet::queryInterface( reqType );
     if( ! ret.hasValue() )
@@ -147,8 +147,8 @@ com::sun::star::uno::Any  UpdateableResultSet::queryInterface(
 }
 
 
-com::sun::star::uno::Sequence< com::sun::star::uno::Type > UpdateableResultSet::getTypes()
-        throw( com::sun::star::uno::RuntimeException, std::exception )
+css::uno::Sequence< css::uno::Type > UpdateableResultSet::getTypes()
+        throw( css::uno::RuntimeException, std::exception )
 {
     static cppu::OTypeCollection *pCollection;
     if( ! pCollection )
@@ -167,8 +167,8 @@ com::sun::star::uno::Sequence< com::sun::star::uno::Type > UpdateableResultSet::
 
 }
 
-com::sun::star::uno::Sequence< sal_Int8> UpdateableResultSet::getImplementationId()
-        throw( com::sun::star::uno::RuntimeException, std::exception )
+css::uno::Sequence< sal_Int8> UpdateableResultSet::getImplementationId()
+        throw( css::uno::RuntimeException, std::exception )
 {
     return css::uno::Sequence<sal_Int8>();
 }
@@ -483,7 +483,7 @@ void UpdateableResultSet::updateString( sal_Int32 columnIndex, const OUString& x
     m_updateableField[columnIndex-1].value <<= x;
 }
 
-void UpdateableResultSet::updateBytes( sal_Int32 columnIndex, const ::com::sun::star::uno::Sequence< sal_Int8 >& x ) throw (SQLException, RuntimeException, std::exception)
+void UpdateableResultSet::updateBytes( sal_Int32 columnIndex, const css::uno::Sequence< sal_Int8 >& x ) throw (SQLException, RuntimeException, std::exception)
 {
     MutexGuard guard( m_refMutex->mutex );
     checkClosed();
@@ -505,47 +505,47 @@ void UpdateableResultSet::updateBytes( sal_Int32 columnIndex, const ::com::sun::
     free( escapedString );
 }
 
-void UpdateableResultSet::updateDate( sal_Int32 columnIndex, const ::com::sun::star::util::Date& x ) throw (SQLException, RuntimeException, std::exception)
+void UpdateableResultSet::updateDate( sal_Int32 columnIndex, const css::util::Date& x ) throw (SQLException, RuntimeException, std::exception)
 {
     updateString( columnIndex, DBTypeConversion::toDateString( x ) );
 }
 
-void UpdateableResultSet::updateTime( sal_Int32 columnIndex, const ::com::sun::star::util::Time& x ) throw (SQLException, RuntimeException, std::exception)
+void UpdateableResultSet::updateTime( sal_Int32 columnIndex, const css::util::Time& x ) throw (SQLException, RuntimeException, std::exception)
 {
     updateString( columnIndex, DBTypeConversion::toTimeString( x ) );
 }
 
-void UpdateableResultSet::updateTimestamp( sal_Int32 columnIndex, const ::com::sun::star::util::DateTime& x ) throw (SQLException, RuntimeException, std::exception)
+void UpdateableResultSet::updateTimestamp( sal_Int32 columnIndex, const css::util::DateTime& x ) throw (SQLException, RuntimeException, std::exception)
 {
     updateString( columnIndex, DBTypeConversion::toDateTimeString( x ) );
 }
 
-void UpdateableResultSet::updateBinaryStream( sal_Int32 /* columnIndex */, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& /* x */, sal_Int32 /* length */ ) throw (SQLException, RuntimeException, std::exception)
+void UpdateableResultSet::updateBinaryStream( sal_Int32 /* columnIndex */, const css::uno::Reference< css::io::XInputStream >& /* x */, sal_Int32 /* length */ ) throw (SQLException, RuntimeException, std::exception)
 {
 }
 
-void UpdateableResultSet::updateCharacterStream( sal_Int32 /* columnIndex */, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& /* x */, sal_Int32 /* length */ ) throw (SQLException, RuntimeException, std::exception)
+void UpdateableResultSet::updateCharacterStream( sal_Int32 /* columnIndex */, const css::uno::Reference< css::io::XInputStream >& /* x */, sal_Int32 /* length */ ) throw (SQLException, RuntimeException, std::exception)
 {
 }
 
-void UpdateableResultSet::updateObject( sal_Int32 /* columnIndex */, const ::com::sun::star::uno::Any& /* x */ ) throw (SQLException, RuntimeException, std::exception)
+void UpdateableResultSet::updateObject( sal_Int32 /* columnIndex */, const css::uno::Any& /* x */ ) throw (SQLException, RuntimeException, std::exception)
 {
 }
 
-void UpdateableResultSet::updateNumericObject( sal_Int32 /* columnIndex */, const ::com::sun::star::uno::Any& /* x */, sal_Int32 /* scale */ ) throw (SQLException, RuntimeException, std::exception)
+void UpdateableResultSet::updateNumericObject( sal_Int32 /* columnIndex */, const css::uno::Any& /* x */, sal_Int32 /* scale */ ) throw (SQLException, RuntimeException, std::exception)
 {
 }
 
 
 Sequence< Type > UpdateableResultSet::getStaticTypes( bool updateable )
-    throw( com::sun::star::uno::RuntimeException )
+    throw( css::uno::RuntimeException )
 {
     if( updateable )
     {
         cppu::OTypeCollection collection(
             cppu::UnoType<XResultSetUpdate>::get(),
             cppu::UnoType<XRowUpdate>::get(),
-//             cppu::UnoType<com::sun::star::sdbcx::XRowLocate>::get(),
+//             cppu::UnoType<css::sdbcx::XRowLocate>::get(),
             getStaticTypes( false /* updateable */ ) );
         return collection.getTypes();
     }
@@ -560,10 +560,10 @@ Sequence< Type > UpdateableResultSet::getStaticTypes( bool updateable )
             cppu::UnoType<XPropertySet>::get(),
             cppu::UnoType<XFastPropertySet>::get(),
             cppu::UnoType<XMultiPropertySet>::get(),
-            cppu::UnoType<com::sun::star::lang::XComponent>::get(),  // OComponentHelper
-            cppu::UnoType<com::sun::star::lang::XTypeProvider>::get(),
-            cppu::UnoType<com::sun::star::uno::XAggregation>::get(),
-            cppu::UnoType<com::sun::star::uno::XWeak>::get());
+            cppu::UnoType<css::lang::XComponent>::get(),  // OComponentHelper
+            cppu::UnoType<css::lang::XTypeProvider>::get(),
+            cppu::UnoType<css::uno::XAggregation>::get(),
+            cppu::UnoType<css::uno::XWeak>::get());
         return collection.getTypes();
     }
 }

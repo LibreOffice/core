@@ -104,7 +104,7 @@ static Any isAutoIncrement( const OUString & defaultValue )
 
 Columns::Columns(
         const ::rtl::Reference< RefCountedMutex > & refMutex,
-        const ::com::sun::star::uno::Reference< com::sun::star::sdbc::XConnection >  & origin,
+        const css::uno::Reference< css::sdbc::XConnection >  & origin,
         ConnectionSettings *pSettings,
         const OUString &schemaName,
         const OUString &tableName)
@@ -117,7 +117,7 @@ Columns::~Columns()
 {}
 
 OUString columnMetaData2SDBCX(
-    ReflectionBase *pBase, const com::sun::star::uno::Reference< com::sun::star::sdbc::XRow > &xRow )
+    ReflectionBase *pBase, const css::uno::Reference< css::sdbc::XRow > &xRow )
 {
     Statics & st = getStatics();
 
@@ -226,7 +226,7 @@ OUString columnMetaData2SDBCX(
 // class CommentChanger : public cppu::WeakImplHelper< XPropertyChangeListener >
 // {
 //     ::rtl::Reference< RefCountedMutex > m_refMutex;
-//     ::com::sun::star::uno::Reference< com::sun::star::sdbc::XConnection > m_connection;
+//     css::uno::Reference< css::sdbc::XConnection > m_connection;
 //     ConnectionSettings *m_pSettings;
 //     OUString m_schema;
 //     OUString m_table;
@@ -235,7 +235,7 @@ OUString columnMetaData2SDBCX(
 // public:
 //     CommentChanger(
 //         const ::rtl::Reference< RefCountedMutex > & refMutex,
-//         const ::com::sun::star::uno::Reference< com::sun::star::sdbc::XConnection > & connection,
+//         const css::uno::Reference< css::sdbc::XConnection > & connection,
 //         ConnectionSettings *pSettings,
 //         const OUString & schema,
 //         const OUString & table,
@@ -250,13 +250,13 @@ OUString columnMetaData2SDBCX(
 
 
 //     // Methods
-//     virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException)
+//     virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException)
 //     {
 //         osl::MutexGuard guard( m_refMutex->mutex );
 //         m_connection.clear();
 //     }
 //         // Methods
-//     virtual void SAL_CALL propertyChange( const ::com::sun::star::beans::PropertyChangeEvent& evt ) throw (::com::sun::star::uno::RuntimeException)
+//     virtual void SAL_CALL propertyChange( const css::beans::PropertyChangeEvent& evt ) throw (css::uno::RuntimeException)
 //     {
 //         osl::MutexGuard guard( m_refMutex->mutex );
 //         OUStringBuffer buf( 128 );
@@ -276,7 +276,7 @@ OUString columnMetaData2SDBCX(
 // };
 
 void Columns::refresh()
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     try
     {
@@ -308,7 +308,7 @@ void Columns::refresh()
         {
             Column * pColumn =
                 new Column( m_refMutex, m_origin, m_pSettings );
-            Reference< com::sun::star::beans::XPropertySet > prop = pColumn;
+            Reference< css::beans::XPropertySet > prop = pColumn;
 
             OUString name = columnMetaData2SDBCX( pColumn, xRow );
 //             pColumn->addPropertyChangeListener(
@@ -329,7 +329,7 @@ void Columns::refresh()
         }
         m_name2index.swap( map );
     }
-    catch ( com::sun::star::sdbc::SQLException & e )
+    catch ( css::sdbc::SQLException & e )
     {
         throw RuntimeException( e.Message , e.Context );
     }
@@ -342,8 +342,8 @@ void alterColumnByDescriptor(
     const OUString & tableName,
     ConnectionSettings *settings,
     const Reference< XStatement > &stmt,
-    const com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > & past,
-    const com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > & future)
+    const css::uno::Reference< css::beans::XPropertySet > & past,
+    const css::uno::Reference< css::beans::XPropertySet > & future)
 {
     Statics & st  = getStatics();
 
@@ -427,7 +427,7 @@ void alterColumnByDescriptor(
         bufferQuoteQualifiedIdentifier( buf, schemaName, tableName, settings );
         buf.append( "ALTER COLUMN" );
         bufferQuoteIdentifier( buf, futureColumnName, settings );
-        if( futureNullable == com::sun::star::sdbc::ColumnValue::NO_NULLS )
+        if( futureNullable == css::sdbc::ColumnValue::NO_NULLS )
         {
             buf.append( "SET" );
         }
@@ -460,15 +460,15 @@ void alterColumnByDescriptor(
 }
 
 void Columns::appendByDescriptor(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& future )
-    throw (::com::sun::star::sdbc::SQLException,
-           ::com::sun::star::container::ElementExistException,
-           ::com::sun::star::uno::RuntimeException, std::exception)
+    const css::uno::Reference< css::beans::XPropertySet >& future )
+    throw (css::sdbc::SQLException,
+           css::container::ElementExistException,
+           css::uno::RuntimeException, std::exception)
 {
     osl::MutexGuard guard( m_refMutex->mutex );
     Statics & st = getStatics();
     Reference< XPropertySet > past = createDataDescriptor();
-    past->setPropertyValue( st.IS_NULLABLE, makeAny( com::sun::star::sdbc::ColumnValue::NULLABLE ) );
+    past->setPropertyValue( st.IS_NULLABLE, makeAny( css::sdbc::ColumnValue::NULLABLE ) );
     alterColumnByDescriptor(
         m_schemaName, m_tableName, m_pSettings, m_origin->createStatement() , past, future  );
 
@@ -476,9 +476,9 @@ void Columns::appendByDescriptor(
 }
 
 // void Columns::dropByName( const OUString& elementName )
-//     throw (::com::sun::star::sdbc::SQLException,
-//            ::com::sun::star::container::NoSuchElementException,
-//            ::com::sun::star::uno::RuntimeException)
+//     throw (css::sdbc::SQLException,
+//            css::container::NoSuchElementException,
+//            css::uno::RuntimeException)
 // {
 //     String2IntMap::const_iterator ii = m_name2index.find( elementName );
 //     if( ii == m_name2index.end() )
@@ -491,16 +491,16 @@ void Columns::appendByDescriptor(
 //         buf.appendAscii( "." );
 //         buf.append( m_tableName );
 //         buf.appendAscii( ", so it can't be dropped" );
-//         throw com::sun::star::container::NoSuchElementException(
+//         throw css::container::NoSuchElementException(
 //             buf.makeStringAndClear(), *this );
 //     }
 //     dropByIndex( ii->second );
 // }
 
 void Columns::dropByIndex( sal_Int32 index )
-    throw (::com::sun::star::sdbc::SQLException,
-           ::com::sun::star::lang::IndexOutOfBoundsException,
-           ::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::sdbc::SQLException,
+           css::lang::IndexOutOfBoundsException,
+           css::uno::RuntimeException, std::exception)
 {
     osl::MutexGuard guard( m_refMutex->mutex );
     if( index < 0 ||  index >= (sal_Int32)m_values.size() )
@@ -511,7 +511,7 @@ void Columns::dropByIndex( sal_Int32 index )
         buf.append( ", got " );
         buf.append( index );
         buf.append( ")" );
-        throw com::sun::star::lang::IndexOutOfBoundsException(
+        throw css::lang::IndexOutOfBoundsException(
             buf.makeStringAndClear(), *this );
     }
 
@@ -534,15 +534,15 @@ void Columns::dropByIndex( sal_Int32 index )
 }
 
 
-::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > Columns::createDataDescriptor()
-        throw (::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Reference< css::beans::XPropertySet > Columns::createDataDescriptor()
+        throw (css::uno::RuntimeException, std::exception)
 {
     return new ColumnDescriptor( m_refMutex, m_origin, m_pSettings );
 }
 
-Reference< com::sun::star::container::XNameAccess > Columns::create(
+Reference< css::container::XNameAccess > Columns::create(
     const ::rtl::Reference< RefCountedMutex > & refMutex,
-    const ::com::sun::star::uno::Reference< com::sun::star::sdbc::XConnection >  & origin,
+    const css::uno::Reference< css::sdbc::XConnection >  & origin,
     ConnectionSettings *pSettings,
     const OUString &schemaName,
     const OUString &tableName,
@@ -550,7 +550,7 @@ Reference< com::sun::star::container::XNameAccess > Columns::create(
 {
     *ppColumns = new Columns(
         refMutex, origin, pSettings, schemaName, tableName );
-    Reference< com::sun::star::container::XNameAccess > ret = *ppColumns;
+    Reference< css::container::XNameAccess > ret = *ppColumns;
     (*ppColumns)->refresh();
 
     return ret;
@@ -559,14 +559,14 @@ Reference< com::sun::star::container::XNameAccess > Columns::create(
 
 ColumnDescriptors::ColumnDescriptors(
         const ::rtl::Reference< RefCountedMutex > & refMutex,
-        const ::com::sun::star::uno::Reference< com::sun::star::sdbc::XConnection >  & origin,
+        const css::uno::Reference< css::sdbc::XConnection >  & origin,
         ConnectionSettings *pSettings )
     : Container( refMutex, origin, pSettings,  "COLUMN-DESCRIPTOR" )
 {}
 
 
-Reference< ::com::sun::star::beans::XPropertySet > ColumnDescriptors::createDataDescriptor()
-        throw (::com::sun::star::uno::RuntimeException, std::exception)
+Reference< css::beans::XPropertySet > ColumnDescriptors::createDataDescriptor()
+        throw (css::uno::RuntimeException, std::exception)
 {
     return new ColumnDescriptor( m_refMutex, m_origin, m_pSettings );
 }

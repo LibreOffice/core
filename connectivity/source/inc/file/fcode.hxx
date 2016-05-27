@@ -66,7 +66,7 @@ namespace connectivity
             sal_Int32 m_eDBType;
 
             OOperand(const sal_Int32& _rType) : m_eDBType(_rType){}
-            OOperand() : m_eDBType(::com::sun::star::sdbc::DataType::OTHER){}
+            OOperand() : m_eDBType(css::sdbc::DataType::OTHER){}
 
         public:
             virtual const ORowSetValue& getValue() const = 0;
@@ -96,7 +96,7 @@ namespace connectivity
         {
         public:
             OOperandAttr(sal_uInt16 _nPos,
-                         const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xColumn);
+                         const css::uno::Reference< css::beans::XPropertySet>& _xColumn);
 
         };
 
@@ -152,7 +152,7 @@ namespace connectivity
         class OOperandResultBOOL : public OOperandResult
         {
         public:
-            OOperandResultBOOL(bool bResult) : OOperandResult(::com::sun::star::sdbc::DataType::BIT)
+            OOperandResultBOOL(bool bResult) : OOperandResult(css::sdbc::DataType::BIT)
             {
                 m_aValue = bResult ? 1.0 : 0.0;
                 m_aValue.setBound(true);
@@ -162,7 +162,7 @@ namespace connectivity
         class OOperandResultNUM : public OOperandResult
         {
         public:
-            OOperandResultNUM(double fNum) : OOperandResult(::com::sun::star::sdbc::DataType::DOUBLE)
+            OOperandResultNUM(double fNum) : OOperandResult(css::sdbc::DataType::DOUBLE)
             {
                 m_aValue = fNum;
                 m_aValue.setBound(true);

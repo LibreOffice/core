@@ -258,12 +258,12 @@ void SAL_CALL KabPreparedStatement::setTimestamp(sal_Int32, const DateTime&) thr
    ::dbtools::throwFunctionNotSupportedSQLException("setTimestamp", NULL);
 }
 
-void SAL_CALL KabPreparedStatement::setBinaryStream(sal_Int32, const Reference< ::com::sun::star::io::XInputStream >&, sal_Int32) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL KabPreparedStatement::setBinaryStream(sal_Int32, const Reference< css::io::XInputStream >&, sal_Int32) throw(SQLException, RuntimeException, std::exception)
 {
     ::dbtools::throwFunctionNotSupportedSQLException("setBinaryStream", NULL);
 }
 
-void SAL_CALL KabPreparedStatement::setCharacterStream(sal_Int32, const Reference< ::com::sun::star::io::XInputStream >&, sal_Int32) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL KabPreparedStatement::setCharacterStream(sal_Int32, const Reference< css::io::XInputStream >&, sal_Int32) throw(SQLException, RuntimeException, std::exception)
 {
    ::dbtools::throwFunctionNotSupportedSQLException("setCharacterStream", NULL);
 }

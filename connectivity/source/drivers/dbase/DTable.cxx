@@ -92,9 +92,9 @@ sal_Size lcl_getFileSize(SvStream& _rStream)
 /**
     calculates the Julian date
 */
-void lcl_CalcJulDate(sal_Int32& _nJulianDate,sal_Int32& _nJulianTime, const com::sun::star::util::DateTime& rDateTime)
+void lcl_CalcJulDate(sal_Int32& _nJulianDate,sal_Int32& _nJulianTime, const css::util::DateTime& rDateTime)
 {
-    com::sun::star::util::DateTime aDateTime = rDateTime;
+    css::util::DateTime aDateTime = rDateTime;
     // weird: months fix
     if (aDateTime.Month > 12)
     {
@@ -144,7 +144,7 @@ void lcl_CalcJulDate(sal_Int32& _nJulianDate,sal_Int32& _nJulianTime, const com:
 /**
     calculates date time from the Julian Date
 */
-void lcl_CalDate(sal_Int32 _nJulianDate,sal_Int32 _nJulianTime,com::sun::star::util::DateTime& _rDateTime)
+void lcl_CalDate(sal_Int32 _nJulianDate,sal_Int32 _nJulianTime,css::util::DateTime& _rDateTime)
 {
     if ( _nJulianDate )
     {
@@ -738,7 +738,7 @@ Sequence< Type > SAL_CALL ODbaseTable::getTypes(  ) throw(RuntimeException, std:
             aOwnTypes.push_back(*pBegin);
         }
     }
-    aOwnTypes.push_back(cppu::UnoType<com::sun::star::lang::XUnoTunnel>::get());
+    aOwnTypes.push_back(cppu::UnoType<css::lang::XUnoTunnel>::get());
     return Sequence< Type >(aOwnTypes.data(), aOwnTypes.size());
 }
 
@@ -750,7 +750,7 @@ Any SAL_CALL ODbaseTable::queryInterface( const Type & rType ) throw(RuntimeExce
         return Any();
 
     Any aRet = OTable_TYPEDEF::queryInterface(rType);
-    return aRet.hasValue() ? aRet : ::cppu::queryInterface(rType,static_cast< ::com::sun::star::lang::XUnoTunnel*> (this));
+    return aRet.hasValue() ? aRet : ::cppu::queryInterface(rType,static_cast< css::lang::XUnoTunnel*> (this));
 }
 
 
@@ -769,7 +769,7 @@ Sequence< sal_Int8 > ODbaseTable::getUnoTunnelImplementationId()
     return pId->getImplementationId();
 }
 
-// com::sun::star::lang::XUnoTunnel
+// css::lang::XUnoTunnel
 
 sal_Int64 ODbaseTable::getSomething( const Sequence< sal_Int8 > & rId ) throw (RuntimeException, std::exception)
 {
@@ -873,7 +873,7 @@ bool ODbaseTable::fetchRow(OValueRefRow& _rRow, const OSQLColumns & _rCols, bool
             }
             else
             {
-                ::com::sun::star::util::DateTime aDateTime;
+                css::util::DateTime aDateTime;
                 lcl_CalDate(nDate,nTime,aDateTime);
                 *(_rRow->get())[i] = aDateTime;
             }
@@ -953,7 +953,7 @@ bool ODbaseTable::fetchRow(OValueRefRow& _rRow, const OSQLColumns & _rCols, bool
                     const sal_uInt16  nMonth  = (sal_uInt16)aStr.copy( 4, 2 ).toInt32();
                     const sal_uInt16  nDay    = (sal_uInt16)aStr.copy( 6, 2 ).toInt32();
 
-                    const ::com::sun::star::util::Date aDate(nDay,nMonth,nYear);
+                    const css::util::Date aDate(nDay,nMonth,nYear);
                     *(_rRow->get())[i] = aDate;
                 }
                 break;
@@ -1857,7 +1857,7 @@ bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, const OValueRefRow& pOrgRo
                     break;
                 case DataType::DATE:
                 {
-                    ::com::sun::star::util::Date aDate;
+                    css::util::Date aDate;
                     if(thisColVal.getTypeKind() == DataType::DOUBLE)
                         aDate = ::dbtools::DBTypeConversion::toDate(thisColVal.getDouble());
                     else
@@ -2011,7 +2011,7 @@ bool ODbaseTable::WriteMemo(const ORowSetValue& aVariable, sal_Size& rBlockNr)
     // if the BlockNo 0 is given, the block will be appended at the end
     sal_Size nSize = 0;
     OString aStr;
-    ::com::sun::star::uno::Sequence<sal_Int8> aValue;
+    css::uno::Sequence<sal_Int8> aValue;
     sal_uInt8 nHeader[4];
     const bool bBinary = aVariable.getTypeKind() == DataType::LONGVARBINARY && m_aMemoHeader.db_typ == MemoFoxPro;
     if ( bBinary )
@@ -2160,7 +2160,7 @@ void SAL_CALL ODbaseTable::alterColumnByName( const OUString& colName, const Ref
     }
 }
 
-void SAL_CALL ODbaseTable::alterColumnByIndex( sal_Int32 index, const Reference< XPropertySet >& descriptor ) throw(SQLException, ::com::sun::star::lang::IndexOutOfBoundsException, RuntimeException, std::exception)
+void SAL_CALL ODbaseTable::alterColumnByIndex( sal_Int32 index, const Reference< XPropertySet >& descriptor ) throw(SQLException, css::lang::IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OTableDescriptor_BASE::rBHelper.bDisposed);
@@ -2296,7 +2296,7 @@ Reference< XDatabaseMetaData> ODbaseTable::getMetaData() const
     return getConnection()->getMetaData();
 }
 
-void SAL_CALL ODbaseTable::rename( const OUString& newName ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL ODbaseTable::rename( const OUString& newName ) throw(css::sdbc::SQLException, css::container::ElementExistException, css::uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OTableDescriptor_BASE::rBHelper.bDisposed);
@@ -2352,7 +2352,7 @@ namespace
     }
 }
 
-void SAL_CALL ODbaseTable::renameImpl( const OUString& newName ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL ODbaseTable::renameImpl( const OUString& newName ) throw(css::sdbc::SQLException, css::container::ElementExistException, css::uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
@@ -2731,7 +2731,7 @@ bool ODbaseTable::ReadMemo(sal_Size nBlockNo, ORowSetValue& aVariable)
                 } // if ( bIsText )
                 else
                 {
-                    ::com::sun::star::uno::Sequence< sal_Int8 > aData(nLength);
+                    css::uno::Sequence< sal_Int8 > aData(nLength);
                     m_pMemoStream->Read(aData.getArray(),nLength);
                     aVariable = aData;
                 }

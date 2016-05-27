@@ -40,9 +40,9 @@ namespace comphelper { namespace log { namespace convert
 
 
     // helpers for logging more data types than are defined in comphelper/logging.hxx
-    OUString convertLogArgToString( const ::com::sun::star::util::Date& _rDate );
-    OUString convertLogArgToString( const ::com::sun::star::util::Time& _rTime );
-    OUString convertLogArgToString( const ::com::sun::star::util::DateTime& _rDateTime );
+    OUString convertLogArgToString( const css::util::Date& _rDate );
+    OUString convertLogArgToString( const css::util::Time& _rTime );
+    OUString convertLogArgToString( const css::util::DateTime& _rDateTime );
 
 
 } } }
@@ -52,7 +52,7 @@ namespace comphelper { namespace log { namespace convert
 
 namespace connectivity
 {
-    namespace LogLevel = ::com::sun::star::logging::LogLevel;
+    namespace LogLevel = css::logging::LogLevel;
 }
 
 

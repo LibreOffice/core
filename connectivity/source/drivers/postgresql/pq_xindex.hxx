@@ -51,16 +51,16 @@ namespace pq_sdbc_driver
 {
 
 class Index : public ReflectionBase,
-              public com::sun::star::sdbcx::XColumnsSupplier
+              public css::sdbcx::XColumnsSupplier
 {
-    ::com::sun::star::uno::Reference< com::sun::star::container::XNameAccess > m_indexColumns;
+    css::uno::Reference< css::container::XNameAccess > m_indexColumns;
 
     OUString m_schemaName;
     OUString m_tableName;
 
 public:
     Index( const ::rtl::Reference< RefCountedMutex > & refMutex,
-           const ::com::sun::star::uno::Reference< com::sun::star::sdbc::XConnection > & connection,
+           const css::uno::Reference< css::sdbc::XConnection > & connection,
            ConnectionSettings *pSettings,
            const OUString &schemaName,
            const OUString &tableName);
@@ -68,58 +68,58 @@ public:
 public: // XInterface
     virtual void SAL_CALL acquire() throw() override { ReflectionBase::acquire(); }
     virtual void SAL_CALL release() throw() override { ReflectionBase::release(); }
-    virtual com::sun::star::uno::Any  SAL_CALL queryInterface(
-        const com::sun::star::uno::Type & reqType )
-        throw (com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Any  SAL_CALL queryInterface(
+        const css::uno::Type & reqType )
+        throw (css::uno::RuntimeException, std::exception) override;
 
 public: // XColumnsSupplier
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL
-    getColumns(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL
+    getColumns(  ) throw (css::uno::RuntimeException, std::exception) override;
 
 public: // XTypeProvider, first implemented by OPropertySetHelper
-    virtual com::sun::star::uno::Sequence< com::sun::star::uno::Type > SAL_CALL getTypes()
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
-    virtual com::sun::star::uno::Sequence< sal_Int8> SAL_CALL getImplementationId()
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes()
+        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Sequence< sal_Int8> SAL_CALL getImplementationId()
+        throw( css::uno::RuntimeException, std::exception ) override;
 
 public: // XDataDescriptorFactory
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > SAL_CALL
-    createDataDescriptor(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL
+    createDataDescriptor(  ) throw (css::uno::RuntimeException, std::exception) override;
 
 };
 
 
 class IndexDescriptor : public ReflectionBase,
-                        public com::sun::star::sdbcx::XColumnsSupplier
+                        public css::sdbcx::XColumnsSupplier
 {
-    ::com::sun::star::uno::Reference< com::sun::star::container::XNameAccess > m_indexColumns;
+    css::uno::Reference< css::container::XNameAccess > m_indexColumns;
 
 public:
     IndexDescriptor(
         const ::rtl::Reference< RefCountedMutex > & refMutex,
-        const ::com::sun::star::uno::Reference< com::sun::star::sdbc::XConnection > & connection,
+        const css::uno::Reference< css::sdbc::XConnection > & connection,
         ConnectionSettings *pSettings);
 
 public: // XInterface
     virtual void SAL_CALL acquire() throw() override { ReflectionBase::acquire(); }
     virtual void SAL_CALL release() throw() override { ReflectionBase::release(); }
-    virtual com::sun::star::uno::Any  SAL_CALL queryInterface(
-        const com::sun::star::uno::Type & reqType )
-        throw (com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Any  SAL_CALL queryInterface(
+        const css::uno::Type & reqType )
+        throw (css::uno::RuntimeException, std::exception) override;
 
 public: // XColumnsSupplier
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL
-    getColumns(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL
+    getColumns(  ) throw (css::uno::RuntimeException, std::exception) override;
 
 public: // XTypeProvider, first implemented by OPropertySetHelper
-    virtual com::sun::star::uno::Sequence< com::sun::star::uno::Type > SAL_CALL getTypes()
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
-    virtual com::sun::star::uno::Sequence< sal_Int8> SAL_CALL getImplementationId()
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes()
+        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Sequence< sal_Int8> SAL_CALL getImplementationId()
+        throw( css::uno::RuntimeException, std::exception ) override;
 
 public: // XDataDescriptorFactory
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > SAL_CALL
-    createDataDescriptor(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL
+    createDataDescriptor(  ) throw (css::uno::RuntimeException, std::exception) override;
 
 };
 

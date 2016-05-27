@@ -31,7 +31,7 @@ namespace connectivity
 
         class KabTable : public KabTable_TYPEDEF
         {
-            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData > m_xMetaData;
+            css::uno::Reference< css::sdbc::XDatabaseMetaData > m_xMetaData;
             KabConnection* m_pConnection;
 
         public:

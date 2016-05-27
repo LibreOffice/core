@@ -64,7 +64,7 @@ namespace pq_sdbc_driver
 {
 Views::Views(
         const ::rtl::Reference< RefCountedMutex > & refMutex,
-        const ::com::sun::star::uno::Reference< com::sun::star::sdbc::XConnection >  & origin,
+        const css::uno::Reference< css::sdbc::XConnection >  & origin,
         ConnectionSettings *pSettings )
     : Container( refMutex, origin, pSettings,  getStatics().VIEW )
 {}
@@ -73,7 +73,7 @@ Views::~Views()
 {}
 
 void Views::refresh()
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     try
     {
@@ -106,7 +106,7 @@ void Views::refresh()
             command = xRow->getString( 3 );
 
             View *pView = new View (m_refMutex, m_origin, m_pSettings );
-            Reference< com::sun::star::beans::XPropertySet > prop = pView;
+            Reference< css::beans::XPropertySet > prop = pView;
 
             pView->setPropertyValue_NoBroadcast_public(st.NAME , makeAny(table) );
             pView->setPropertyValue_NoBroadcast_public(st.SCHEMA_NAME, makeAny(schema) );
@@ -122,7 +122,7 @@ void Views::refresh()
         }
         m_name2index.swap( map );
     }
-    catch ( com::sun::star::sdbc::SQLException & e )
+    catch ( css::sdbc::SQLException & e )
     {
         throw RuntimeException( e.Message , e.Context );
     }
@@ -131,10 +131,10 @@ void Views::refresh()
 
 
 void Views::appendByDescriptor(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor )
-    throw (::com::sun::star::sdbc::SQLException,
-           ::com::sun::star::container::ElementExistException,
-           ::com::sun::star::uno::RuntimeException, std::exception)
+    const css::uno::Reference< css::beans::XPropertySet >& descriptor )
+    throw (css::sdbc::SQLException,
+           css::container::ElementExistException,
+           css::uno::RuntimeException, std::exception)
 {
     osl::MutexGuard guard( m_refMutex->mutex );
 
@@ -163,25 +163,25 @@ void Views::appendByDescriptor(
 }
 
 void Views::dropByName( const OUString& elementName )
-    throw (::com::sun::star::sdbc::SQLException,
-           ::com::sun::star::container::NoSuchElementException,
-           ::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::sdbc::SQLException,
+           css::container::NoSuchElementException,
+           css::uno::RuntimeException, std::exception)
 {
     String2IntMap::const_iterator ii = m_name2index.find( elementName );
     if( ii == m_name2index.end() )
     {
         OUStringBuffer buf( 128 );
         buf.append( "View " + elementName + " is unknown, so it can't be dropped" );
-        throw com::sun::star::container::NoSuchElementException(
+        throw css::container::NoSuchElementException(
             buf.makeStringAndClear(), *this );
     }
     dropByIndex( ii->second );
 }
 
 void Views::dropByIndex( sal_Int32 index )
-    throw (::com::sun::star::sdbc::SQLException,
-           ::com::sun::star::lang::IndexOutOfBoundsException,
-           ::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::sdbc::SQLException,
+           css::lang::IndexOutOfBoundsException,
+           css::uno::RuntimeException, std::exception)
 {
     osl::MutexGuard guard( m_refMutex->mutex );
     if( index < 0 ||  index >= (sal_Int32)m_values.size() )
@@ -189,7 +189,7 @@ void Views::dropByIndex( sal_Int32 index )
         OUStringBuffer buf( 128 );
         buf.append( "VIEWS: Index out of range (allowed 0 to " + OUString::number(m_values.size() -1) +
                     ", got " + OUString::number( index ) + ")");
-        throw com::sun::star::lang::IndexOutOfBoundsException(
+        throw css::lang::IndexOutOfBoundsException(
             buf.makeStringAndClear(), *this );
     }
 
@@ -209,20 +209,20 @@ void Views::dropByIndex( sal_Int32 index )
 }
 
 
-::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > Views::createDataDescriptor()
-        throw (::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Reference< css::beans::XPropertySet > Views::createDataDescriptor()
+        throw (css::uno::RuntimeException, std::exception)
 {
     return new ViewDescriptor( m_refMutex, m_origin, m_pSettings );
 }
 
-Reference< com::sun::star::container::XNameAccess > Views::create(
+Reference< css::container::XNameAccess > Views::create(
     const ::rtl::Reference< RefCountedMutex > & refMutex,
-    const ::com::sun::star::uno::Reference< com::sun::star::sdbc::XConnection >  & origin,
+    const css::uno::Reference< css::sdbc::XConnection >  & origin,
     ConnectionSettings *pSettings,
     Views **ppViews)
 {
     *ppViews = new Views( refMutex, origin, pSettings );
-    Reference< com::sun::star::container::XNameAccess > ret = *ppViews;
+    Reference< css::container::XNameAccess > ret = *ppViews;
     (*ppViews)->refresh();
 
     return ret;

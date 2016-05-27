@@ -45,12 +45,12 @@ jclass java_io_Reader::getMyClass() const
     return theClass;
 }
 
-sal_Int32 SAL_CALL java_io_Reader::readSomeBytes( ::com::sun::star::uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead ) throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception)
+sal_Int32 SAL_CALL java_io_Reader::readSomeBytes( css::uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead ) throw(css::io::NotConnectedException, css::io::BufferSizeExceededException, css::io::IOException, css::uno::RuntimeException, std::exception)
 {
     return readBytes(aData,nMaxBytesToRead);
 }
 
-void SAL_CALL java_io_Reader::skipBytes( sal_Int32 nBytesToSkip ) throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL java_io_Reader::skipBytes( sal_Int32 nBytesToSkip ) throw(css::io::NotConnectedException, css::io::BufferSizeExceededException, css::io::IOException, css::uno::RuntimeException, std::exception)
 {
     static jmethodID mID(nullptr);
     if(nBytesToSkip <= 0)
@@ -74,7 +74,7 @@ void SAL_CALL java_io_Reader::skipBytes( sal_Int32 nBytesToSkip ) throw(::com::s
     }
 }
 
-sal_Int32 SAL_CALL java_io_Reader::available(  ) throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception)
+sal_Int32 SAL_CALL java_io_Reader::available(  ) throw(css::io::NotConnectedException, css::io::IOException, css::uno::RuntimeException, std::exception)
 {
     if(m_buf != boost::none)
         return 1;
@@ -93,13 +93,13 @@ sal_Int32 SAL_CALL java_io_Reader::available(  ) throw(::com::sun::star::io::Not
     return (m_buf != boost::none ? 1 : 0) + (out ? 1 : 0); // no way to tell *how much* is ready
 }
 
-void SAL_CALL java_io_Reader::closeInput(  ) throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL java_io_Reader::closeInput(  ) throw(css::io::NotConnectedException, css::io::IOException, css::uno::RuntimeException, std::exception)
 {
     static jmethodID mID(nullptr);
     callVoidMethod_ThrowRuntime("close", mID);
 }
 
-sal_Int32 SAL_CALL java_io_Reader::readBytes( ::com::sun::star::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead ) throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception)
+sal_Int32 SAL_CALL java_io_Reader::readBytes( css::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead ) throw(css::io::NotConnectedException, css::io::BufferSizeExceededException, css::io::IOException, css::uno::RuntimeException, std::exception)
 {
     OSL_ENSURE(aData.getLength() >= nBytesToRead," Sequence is smaller than BytesToRead");
 

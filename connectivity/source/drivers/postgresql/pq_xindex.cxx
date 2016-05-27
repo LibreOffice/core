@@ -63,7 +63,7 @@ using com::sun::star::beans::XPropertySet;
 namespace pq_sdbc_driver
 {
 Index::Index( const ::rtl::Reference< RefCountedMutex > & refMutex,
-          const Reference< com::sun::star::sdbc::XConnection > & connection,
+          const Reference< css::sdbc::XConnection > & connection,
           ConnectionSettings *pSettings,
           const OUString & schemaName,
           const OUString & tableName )
@@ -87,7 +87,7 @@ Reference< XPropertySet > Index::createDataDescriptor(  ) throw (RuntimeExceptio
     return Reference< XPropertySet > ( pIndex );
 }
 
-Reference< XNameAccess > Index::getColumns(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+Reference< XNameAccess > Index::getColumns(  ) throw (css::uno::RuntimeException, std::exception)
 {
     if( ! m_indexColumns.is() )
     {
@@ -110,7 +110,7 @@ Sequence<Type > Index::getTypes() throw( RuntimeException, std::exception )
         if( !pCollection )
         {
             static cppu::OTypeCollection collection(
-                cppu::UnoType<com::sun::star::sdbcx::XColumnsSupplier>::get(),
+                cppu::UnoType<css::sdbcx::XColumnsSupplier>::get(),
                 ReflectionBase::getTypes());
             pCollection = &collection;
         }
@@ -131,14 +131,14 @@ Any Index::queryInterface( const Type & reqType ) throw (RuntimeException, std::
     if( ! ret.hasValue() )
         ret = ::cppu::queryInterface(
             reqType,
-            static_cast< com::sun::star::sdbcx::XColumnsSupplier * > ( this ) );
+            static_cast< css::sdbcx::XColumnsSupplier * > ( this ) );
     return ret;
 }
 
 
 IndexDescriptor::IndexDescriptor(
     const ::rtl::Reference< RefCountedMutex > & refMutex,
-    const Reference< com::sun::star::sdbc::XConnection > & connection,
+    const Reference< css::sdbc::XConnection > & connection,
     ConnectionSettings *pSettings )
     : ReflectionBase(
         getStatics().refl.indexDescriptor.implName,
@@ -157,7 +157,7 @@ Reference< XPropertySet > IndexDescriptor::createDataDescriptor(  ) throw (Runti
     return Reference< XPropertySet > ( pIndex );
 }
 
-Reference< XNameAccess > IndexDescriptor::getColumns(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+Reference< XNameAccess > IndexDescriptor::getColumns(  ) throw (css::uno::RuntimeException, std::exception)
 {
     if( ! m_indexColumns.is() )
     {
@@ -182,7 +182,7 @@ Sequence<Type > IndexDescriptor::getTypes() throw( RuntimeException, std::except
         if( !pCollection )
         {
             static cppu::OTypeCollection collection(
-                cppu::UnoType<com::sun::star::sdbcx::XColumnsSupplier>::get(),
+                cppu::UnoType<css::sdbcx::XColumnsSupplier>::get(),
                 ReflectionBase::getTypes());
             pCollection = &collection;
         }
@@ -203,7 +203,7 @@ Any IndexDescriptor::queryInterface( const Type & reqType ) throw (RuntimeExcept
     if( ! ret.hasValue() )
         ret = ::cppu::queryInterface(
             reqType,
-            static_cast< com::sun::star::sdbcx::XColumnsSupplier * > ( this ) );
+            static_cast< css::sdbcx::XColumnsSupplier * > ( this ) );
     return ret;
 }
 

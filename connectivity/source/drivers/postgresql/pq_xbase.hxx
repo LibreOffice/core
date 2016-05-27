@@ -48,9 +48,9 @@
 namespace pq_sdbc_driver
 {
 
-typedef ::cppu::WeakComponentImplHelper< ::com::sun::star::lang::XServiceInfo,
-                                          ::com::sun::star::sdbcx::XDataDescriptorFactory,
-                                          ::com::sun::star::container::XNamed
+typedef ::cppu::WeakComponentImplHelper< css::lang::XServiceInfo,
+                                         css::sdbcx::XDataDescriptorFactory,
+                                         css::container::XNamed
                                           > ReflectionBase_BASE;
 
 class ReflectionBase :
@@ -59,81 +59,81 @@ class ReflectionBase :
 {
 protected:
     const OUString m_implName;
-    const ::com::sun::star::uno::Sequence< OUString > m_supportedServices;
+    const css::uno::Sequence< OUString > m_supportedServices;
     ::rtl::Reference< RefCountedMutex > m_refMutex;
-    ::com::sun::star::uno::Reference< com::sun::star::sdbc::XConnection > m_conn;
+    css::uno::Reference< css::sdbc::XConnection > m_conn;
     ConnectionSettings *m_pSettings;
     cppu::IPropertyArrayHelper & m_propsDesc;
-    std::vector< com::sun::star::uno::Any > m_values;
+    std::vector< css::uno::Any > m_values;
 public:
     ReflectionBase(
         const OUString &implName,
-        const ::com::sun::star::uno::Sequence< OUString > &supportedServices,
+        const css::uno::Sequence< OUString > &supportedServices,
         const ::rtl::Reference< RefCountedMutex >& refMutex,
-        const ::com::sun::star::uno::Reference< com::sun::star::sdbc::XConnection > &conn,
+        const css::uno::Reference< css::sdbc::XConnection > &conn,
         ConnectionSettings *pSettings,
         cppu::IPropertyArrayHelper & props /* must survive this object !*/ );
 
 public:
-    void copyValuesFrom( const com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > &set );
+    void copyValuesFrom( const css::uno::Reference< css::beans::XPropertySet > &set );
 
 public: // for initialization purposes only, not exported via an interface !
     void setPropertyValue_NoBroadcast_public(
-        const OUString & name, const com::sun::star::uno::Any & value );
+        const OUString & name, const css::uno::Any & value );
 
 public: //XInterface
     virtual void SAL_CALL acquire() throw() override { ReflectionBase_BASE::acquire(); }
     virtual void SAL_CALL release() throw() override { ReflectionBase_BASE::release(); }
-    virtual com::sun::star::uno::Any  SAL_CALL queryInterface(
-        const com::sun::star::uno::Type & reqType )
-        throw (com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Any  SAL_CALL queryInterface(
+        const css::uno::Type & reqType )
+        throw (css::uno::RuntimeException, std::exception) override;
 
 public: // OPropertySetHelper
     virtual cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
 
     virtual sal_Bool SAL_CALL convertFastPropertyValue(
-        ::com::sun::star::uno::Any & rConvertedValue,
-        ::com::sun::star::uno::Any & rOldValue,
+        css::uno::Any & rConvertedValue,
+        css::uno::Any & rOldValue,
         sal_Int32 nHandle,
-        const ::com::sun::star::uno::Any& rValue )
-        throw (::com::sun::star::lang::IllegalArgumentException) override;
+        const css::uno::Any& rValue )
+        throw (css::lang::IllegalArgumentException) override;
 
     virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
         sal_Int32 nHandle,
-        const ::com::sun::star::uno::Any& rValue )
-        throw (::com::sun::star::uno::Exception, std::exception) override;
+        const css::uno::Any& rValue )
+        throw (css::uno::Exception, std::exception) override;
 
     using ::cppu::OPropertySetHelper::getFastPropertyValue;
 
     void SAL_CALL getFastPropertyValue(
-        ::com::sun::star::uno::Any& rValue,
+        css::uno::Any& rValue,
         sal_Int32 nHandle ) const override;
 
     // XPropertySet
-    ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySetInfo >  SAL_CALL getPropertySetInfo()
-        throw(com::sun::star::uno::RuntimeException, std::exception) override;
+    css::uno::Reference < css::beans::XPropertySetInfo >  SAL_CALL getPropertySetInfo()
+        throw(css::uno::RuntimeException, std::exception) override;
 
 public: // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
-        throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw(css::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName)
-        throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-        throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw(css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
+        throw(css::uno::RuntimeException, std::exception) override;
 
 public: // XTypeProvider, first implemented by OPropertySetHelper
-    virtual com::sun::star::uno::Sequence< com::sun::star::uno::Type > SAL_CALL getTypes()
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
-    virtual com::sun::star::uno::Sequence< sal_Int8> SAL_CALL getImplementationId()
-        throw( com::sun::star::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes()
+        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Sequence< sal_Int8> SAL_CALL getImplementationId()
+        throw( css::uno::RuntimeException, std::exception ) override;
 
 public: // XDataDescriptorFactory
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > SAL_CALL
-    createDataDescriptor(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override = 0;
+    virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL
+    createDataDescriptor(  ) throw (css::uno::RuntimeException, std::exception) override = 0;
 
 public: // XNamed
-    virtual OUString SAL_CALL getName(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setName( const OUString& aName ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getName(  ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setName( const OUString& aName ) throw (css::uno::RuntimeException, std::exception) override;
 
 };
 

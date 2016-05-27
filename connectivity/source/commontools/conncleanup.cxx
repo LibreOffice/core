@@ -27,10 +27,10 @@ namespace dbtools
 {
 
 
-    using namespace ::com::sun::star::uno;
-    using namespace ::com::sun::star::beans;
-    using namespace ::com::sun::star::sdbc;
-    using namespace ::com::sun::star::lang;
+    using namespace css::uno;
+    using namespace css::beans;
+    using namespace css::sdbc;
+    using namespace css::lang;
 
     static const char ACTIVE_CONNECTION_PROPERTY_NAME[] = "ActiveConnection";
 
@@ -204,15 +204,15 @@ namespace dbtools
         }
     }
 
-    void SAL_CALL OAutoConnectionDisposer::cursorMoved( const ::com::sun::star::lang::EventObject& /*event*/ ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+    void SAL_CALL OAutoConnectionDisposer::cursorMoved( const css::lang::EventObject& /*event*/ ) throw (css::uno::RuntimeException, std::exception)
     {
     }
 
-    void SAL_CALL OAutoConnectionDisposer::rowChanged( const ::com::sun::star::lang::EventObject& /*event*/ ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+    void SAL_CALL OAutoConnectionDisposer::rowChanged( const css::lang::EventObject& /*event*/ ) throw (css::uno::RuntimeException, std::exception)
     {
     }
 
-    void SAL_CALL OAutoConnectionDisposer::rowSetChanged( const ::com::sun::star::lang::EventObject& /*event*/ ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+    void SAL_CALL OAutoConnectionDisposer::rowSetChanged( const css::lang::EventObject& /*event*/ ) throw (css::uno::RuntimeException, std::exception)
     {
         stopRowSetListening();
         clearConnection();

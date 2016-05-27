@@ -182,7 +182,7 @@ Any SAL_CALL ODriverEnumeration::nextElement(  ) throw(NoSuchElementException, W
         {
             // create a configuration provider
             Reference< XMultiServiceFactory > xConfigurationProvider(
-                com::sun::star::configuration::theDefaultProvider::get( _rContext ) );
+                css::configuration::theDefaultProvider::get( _rContext ) );
 
             // one argument for creating the node access: the path to the configuration node
             Sequence< Any > aCreationArgs(1);
@@ -489,13 +489,13 @@ Reference< XEnumeration > SAL_CALL OSDBCDriverManager::createEnumeration(  ) thr
 }
 
 
-::com::sun::star::uno::Type SAL_CALL OSDBCDriverManager::getElementType(  ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Type SAL_CALL OSDBCDriverManager::getElementType(  ) throw(css::uno::RuntimeException, std::exception)
 {
     return cppu::UnoType<XDriver>::get();
 }
 
 
-sal_Bool SAL_CALL OSDBCDriverManager::hasElements(  ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL OSDBCDriverManager::hasElements(  ) throw(css::uno::RuntimeException, std::exception)
 {
     MutexGuard aGuard(m_aMutex);
     return !(m_aDriversBS.empty() && m_aDriversRT.empty());

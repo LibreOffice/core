@@ -49,7 +49,7 @@ sdbcx::ObjectType OKeyColumnsHelper::createObject(const OUString& _rName)
 {
     ::dbtools::OPropertyMap& rPropMap = OMetaConnection::getPropMap();
     OUString aCatalog, aSchema, aTable;
-    ::com::sun::star::uno::Any Catalog(m_pKey->getTable()->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_CATALOGNAME)));
+    css::uno::Any Catalog(m_pKey->getTable()->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_CATALOGNAME)));
     Catalog >>= aCatalog;
     m_pKey->getTable()->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_SCHEMANAME))   >>= aSchema;
     m_pKey->getTable()->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME))         >>= aTable;
@@ -129,7 +129,7 @@ Reference< XPropertySet > OKeyColumnsHelper::createDescriptor()
     return new OKeyColumn(isCaseSensitive());
 }
 
-void OKeyColumnsHelper::impl_refresh() throw(::com::sun::star::uno::RuntimeException)
+void OKeyColumnsHelper::impl_refresh() throw(css::uno::RuntimeException)
 {
     m_pKey->refreshColumns();
 }

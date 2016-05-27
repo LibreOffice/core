@@ -1640,7 +1640,7 @@ namespace
     public:
         OParameterWrapper(const ::std::vector<bool, std::allocator<bool> >& _aSet,const Reference<XIndexAccess>& _xSource) : m_aSet(_aSet),m_xSource(_xSource){}
     private:
-        // ::com::sun::star::container::XElementAccess
+        // css::container::XElementAccess
         virtual Type SAL_CALL getElementType() throw(RuntimeException, std::exception) override
         {
             return m_xSource->getElementType();
@@ -1651,7 +1651,7 @@ namespace
                 return m_xSource->hasElements();
             return ::std::count(m_aSet.begin(),m_aSet.end(),false) != 0;
         }
-        // ::com::sun::star::container::XIndexAccess
+        // css::container::XIndexAccess
         virtual sal_Int32 SAL_CALL getCount(  ) throw(RuntimeException, std::exception) override
         {
             if ( m_aSet.empty() )
@@ -1822,7 +1822,7 @@ void setObjectWithInfo(const Reference<XParameters>& _xParams,
                             _xParams->setClob(parameterIndex,xClob);
                         else
                         {
-                            Reference< ::com::sun::star::io::XInputStream > xStream;
+                            Reference< css::io::XInputStream > xStream;
                             if(x >>= xStream)
                                 _xParams->setCharacterStream(parameterIndex,xStream,xStream->available());
                         }
@@ -1873,7 +1873,7 @@ void setObjectWithInfo(const Reference<XParameters>& _xParams,
                                 _xParams->setClob(parameterIndex,xClob);
                             else
                             {
-                                Reference< ::com::sun::star::io::XInputStream > xBinStream;
+                                Reference< css::io::XInputStream > xBinStream;
                                 if(x >>= xBinStream)
                                     _xParams->setBinaryStream(parameterIndex,xBinStream,xBinStream->available());
                             }
@@ -1966,7 +1966,7 @@ namespace connectivity
 void release(oslInterlockedCount& _refCount,
              ::cppu::OBroadcastHelper& rBHelper,
              Reference< XInterface >& _xInterface,
-             ::com::sun::star::lang::XComponent* _pObject)
+             css::lang::XComponent* _pObject)
 {
     if (osl_atomic_decrement( &_refCount ) == 0)
     {

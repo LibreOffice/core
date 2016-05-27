@@ -139,7 +139,7 @@ Sequence< sal_Int8 > OAdoTable::getUnoTunnelImplementationId()
     return pId->getImplementationId();
 }
 
-// com::sun::star::lang::XUnoTunnel
+// css::lang::XUnoTunnel
 
 sal_Int64 OAdoTable::getSomething( const Sequence< sal_Int8 > & rId ) throw (RuntimeException)
 {
@@ -186,7 +186,7 @@ void SAL_CALL OAdoTable::alterColumnByName( const OUString& colName, const Refer
     refreshColumns();
 }
 
-void SAL_CALL OAdoTable::alterColumnByIndex( sal_Int32 index, const Reference< XPropertySet >& descriptor ) throw(SQLException, ::com::sun::star::lang::IndexOutOfBoundsException, RuntimeException)
+void SAL_CALL OAdoTable::alterColumnByIndex( sal_Int32 index, const Reference< XPropertySet >& descriptor ) throw(SQLException, css::lang::IndexOutOfBoundsException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OTableDescriptor_BASE_TYPEDEF::rBHelper.bDisposed);
@@ -239,7 +239,7 @@ void SAL_CALL OAdoTable::release() throw()
     OTable_TYPEDEF::release();
 }
 
-OUString SAL_CALL OAdoTable::getName() throw(::com::sun::star::uno::RuntimeException)
+OUString SAL_CALL OAdoTable::getName() throw(css::uno::RuntimeException)
 {
       return m_aTable.get_Name();
 }

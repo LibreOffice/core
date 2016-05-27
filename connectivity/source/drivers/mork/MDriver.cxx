@@ -59,16 +59,16 @@ css::uno::Reference< css::sdbc::XConnection > MorkDriver::connect(
     css::uno::Reference<css::uno::XInterface> xInstance = context_->getServiceManager()->createInstanceWithContext("com.sun.star.mozilla.MozillaBootstrap", context_);
     OSL_ENSURE( xInstance.is(), "failed to create instance" );
 
-    css::uno::Reference<::com::sun::star::mozilla::XMozillaBootstrap> xMozillaBootstrap(xInstance, css::uno::UNO_QUERY);
+    css::uno::Reference<css::mozilla::XMozillaBootstrap> xMozillaBootstrap(xInstance, css::uno::UNO_QUERY);
     OSL_ENSURE( xMozillaBootstrap.is(), "failed to create instance" );
 
     if (xMozillaBootstrap.is())
     {
-        OUString defaultProfile = xMozillaBootstrap->getDefaultProfile(::com::sun::star::mozilla::MozillaProductType_Thunderbird);
+        OUString defaultProfile = xMozillaBootstrap->getDefaultProfile(css::mozilla::MozillaProductType_Thunderbird);
 
         if (!defaultProfile.isEmpty())
         {
-            m_sProfilePath = xMozillaBootstrap->getProfilePath(::com::sun::star::mozilla::MozillaProductType_Thunderbird, defaultProfile);
+            m_sProfilePath = xMozillaBootstrap->getProfilePath(css::mozilla::MozillaProductType_Thunderbird, defaultProfile);
             SAL_INFO("connectivity.mork", "Using Thunderbird profile " << m_sProfilePath);
         }
     }

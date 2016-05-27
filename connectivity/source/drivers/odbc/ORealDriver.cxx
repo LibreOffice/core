@@ -96,7 +96,7 @@ namespace connectivity
             virtual oslGenericFunction  getOdbcFunction(ODBC3SQLFunctionId _nIndex)  const override;
             virtual SQLHANDLE   EnvironmentHandle(OUString &_rPath) override;
         public:
-            explicit ORealObdcDriver(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory) : ODBCDriver(_rxFactory) {}
+            explicit ORealObdcDriver(const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxFactory) : ODBCDriver(_rxFactory) {}
         };
 
 
@@ -322,7 +322,7 @@ oslGenericFunction ORealObdcDriver::getOdbcFunction(ODBC3SQLFunctionId _nIndex) 
 }
 
 
-::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  SAL_CALL ODBCDriver_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory) throw( ::com::sun::star::uno::Exception )
+css::uno::Reference< css::uno::XInterface >  SAL_CALL ODBCDriver_CreateInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxFactory) throw( css::uno::Exception )
 {
     return *(new ORealObdcDriver(_rxFactory));
 }

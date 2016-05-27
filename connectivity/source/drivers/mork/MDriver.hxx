@@ -75,7 +75,7 @@ private:
         throw (css::uno::RuntimeException, std::exception) override;
 
     css::uno::Reference< css::uno::XComponentContext > context_;
-    css::uno::Reference< com::sun::star::lang::XMultiServiceFactory > m_xFactory;
+    css::uno::Reference< css::lang::XMultiServiceFactory > m_xFactory;
     OUString m_sProfilePath;
 };
 

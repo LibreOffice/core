@@ -48,8 +48,8 @@ namespace connectivity
 {
     namespace evoab
     {
-        typedef ::cppu::WeakComponentImplHelper<   ::com::sun::star::sdbc::XWarningsSupplier
-                                               ,   ::com::sun::star::sdbc::XCloseable
+        typedef ::cppu::WeakComponentImplHelper<   css::sdbc::XWarningsSupplier
+                                               ,   css::sdbc::XCloseable
                                                >   OCommonStatement_IBase;
 
         struct FieldSort
@@ -146,7 +146,7 @@ namespace connectivity
             friend class OSubComponent< OCommonStatement, OCommonStatement_IBase >;
 
         private:
-            ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XResultSet>    m_xResultSet;   // The last ResultSet created
+            css::uno::WeakReference< css::sdbc::XResultSet>    m_xResultSet;   // The last ResultSet created
             OEvoabConnection                     *m_pConnection;
             connectivity::OSQLParser              m_aParser;
             connectivity::OSQLParseTreeIterator   m_aSQLIterator;
@@ -186,7 +186,7 @@ namespace connectivity
             // other methods
             OEvoabConnection* getOwnConnection() const { return m_pConnection;}
 
-            using OCommonStatement_IBase::operator ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >;
+            using OCommonStatement_IBase::operator css::uno::Reference< css::uno::XInterface >;
 
         protected:
             explicit OCommonStatement( OEvoabConnection* _pConnection );
@@ -197,19 +197,19 @@ namespace connectivity
             virtual void SAL_CALL release() throw() override;
             virtual void SAL_CALL acquire() throw() override;
             // XInterface
-            virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
             //XTypeProvider
-            virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) throw(css::uno::RuntimeException, std::exception) override;
 
             // XPropertySet
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(css::uno::RuntimeException, std::exception) override;
 
             // XWarningsSupplier
-            virtual ::com::sun::star::uno::Any SAL_CALL getWarnings(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-            virtual void SAL_CALL clearWarnings(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Any SAL_CALL getWarnings(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL clearWarnings(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
 
             // XCloseable
-            virtual void SAL_CALL close(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL close(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
 
         protected:
             /** will return the EBookQuery representing the statement WHERE condition, or throw
@@ -219,21 +219,21 @@ namespace connectivity
             QueryData
                 impl_getEBookQuery_throw( const OUString& _rSql );
 
-            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >
+            css::uno::Reference< css::sdbc::XResultSet >
                 impl_executeQuery_throw( const OUString& _rSql );
 
-            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >
+            css::uno::Reference< css::sdbc::XResultSet >
                 impl_executeQuery_throw( const QueryData& _rData );
 
-            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >
-                impl_getConnection() { return ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >( m_pConnection ); }
+            css::uno::Reference< css::sdbc::XConnection >
+                impl_getConnection() { return css::uno::Reference< css::sdbc::XConnection >( m_pConnection ); }
 
             OUString
                 impl_getColumnRefColumnName_throw( const ::connectivity::OSQLParseNode& _rColumnRef );
         };
 
-        typedef ::cppu::ImplHelper2 <   ::com::sun::star::lang::XServiceInfo
-                                    ,   ::com::sun::star::sdbc::XStatement
+        typedef ::cppu::ImplHelper2 <   css::lang::XServiceInfo
+                                    ,   css::sdbc::XStatement
                                     >   OStatement_IBase;
         class OStatement    :public OCommonStatement
                             ,public OStatement_IBase
@@ -248,7 +248,7 @@ namespace connectivity
             }
 
             // XInterface
-            virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
             virtual void SAL_CALL acquire() throw() override;
             virtual void SAL_CALL release() throw() override;
 
@@ -259,10 +259,10 @@ namespace connectivity
             DECLARE_SERVICE_INFO();
 
             // XStatement
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > SAL_CALL executeQuery( const OUString& sql ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) override ;
-            virtual sal_Int32 SAL_CALL executeUpdate( const OUString& sql ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) override ;
-            virtual sal_Bool SAL_CALL execute( const OUString& sql ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) override ;
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > SAL_CALL getConnection(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) override ;
+            virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL executeQuery( const OUString& sql ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override ;
+            virtual sal_Int32 SAL_CALL executeUpdate( const OUString& sql ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override ;
+            virtual sal_Bool SAL_CALL execute( const OUString& sql ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override ;
+            virtual css::uno::Reference< css::sdbc::XConnection > SAL_CALL getConnection(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override ;
         };
     }
 }

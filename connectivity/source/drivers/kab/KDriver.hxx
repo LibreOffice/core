@@ -42,7 +42,7 @@ namespace connectivity
         typedef int     (SAL_CALL * KDEVersionCheckFunction)( void );
         }
 
-        typedef std::vector< ::com::sun::star::uno::WeakReferenceHelper > OWeakRefArray;
+        typedef std::vector< css::uno::WeakReferenceHelper > OWeakRefArray;
 
 
         // = KabImplModule
@@ -50,7 +50,7 @@ namespace connectivity
         class KabImplModule
         {
         private:
-            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
+            css::uno::Reference< css::uno::XComponentContext >
                                         m_xContext;
 
             /// Did we already attempt to load the module and to retrieve the symbols?
@@ -65,7 +65,7 @@ namespace connectivity
             KDEVersionCheckFunction     m_pKDEVersionCheckFunc;
 
         public:
-            explicit KabImplModule( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext );
+            explicit KabImplModule( const css::uno::Reference< css::uno::XComponentContext >& _rxContext );
 
             /** determines whether there is a KDE present in the environment
             */
@@ -85,9 +85,9 @@ namespace connectivity
 
             /** initializes the implementation module.
 
-                @raises ::com::sun::star::uno::RuntimeException
+                @raises css::uno::RuntimeException
                     if the module could be loaded, but required symbols are missing
-                @raises ::com::sun::star::sdbc::SQLException
+                @raises css::sdbc::SQLException
                     if the KDE version we're running against is not supported, or no KDE was found at all
             */
             void init();
@@ -99,7 +99,7 @@ namespace connectivity
             /** creates a new connection
                 @precond
                     <member>init</member> has been called before
-                @raises ::com::sun::star::uno::RuntimeException
+                @raises css::uno::RuntimeException
                     if no connection object could be created (which is a severe error, normally impossible)
             */
             css::uno::Reference<css::sdbc::XConnection> createConnection(
@@ -112,7 +112,7 @@ namespace connectivity
 
                 @return <TRUE/> if the module could be loaded successfully.
 
-                @raises ::com::sun::star::uno::RuntimeException
+                @raises css::uno::RuntimeException
                     if the module could be loaded, but required symbols are missing
             */
             bool    impl_loadModule();
@@ -130,54 +130,54 @@ namespace connectivity
 
         // = KabDriver
 
-        typedef ::cppu::WeakComponentImplHelper<   ::com::sun::star::sdbc::XDriver,
-                                                   ::com::sun::star::lang::XServiceInfo,
-                                                   ::com::sun::star::frame::XTerminateListener > KDriver_BASE;
+        typedef ::cppu::WeakComponentImplHelper<   css::sdbc::XDriver,
+                                                   css::lang::XServiceInfo,
+                                                   css::frame::XTerminateListener > KDriver_BASE;
         class KabDriver : public KDriver_BASE
         {
         protected:
             ::osl::Mutex                m_aMutex;           // mutex is need to control member access
             OWeakRefArray               m_xConnections;     // vector containing a list of all the
                                                             //  KabConnection objects for this Driver
-            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
+            css::uno::Reference< css::uno::XComponentContext >
                                         m_xContext;       // the multi-service factory
             KabImplModule               m_aImplModule;
 
         public:
-            static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL Create(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory) throw( ::com::sun::star::uno::Exception );
+            static css::uno::Reference< css::uno::XInterface > SAL_CALL Create(const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxFactory) throw( css::uno::Exception );
 
             // XServiceInfo - static versions
-            static OUString getImplementationName_Static(  ) throw(::com::sun::star::uno::RuntimeException);
-            static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_Static(  ) throw (::com::sun::star::uno::RuntimeException);
+            static OUString getImplementationName_Static(  ) throw(css::uno::RuntimeException);
+            static css::uno::Sequence< OUString > getSupportedServiceNames_Static(  ) throw (css::uno::RuntimeException);
 
             /** returns the path of our configuration settings
             */
             static OUString  impl_getConfigurationSettingsPath();
 
         protected:
-            explicit KabDriver(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext);
+            explicit KabDriver(const css::uno::Reference< css::uno::XComponentContext >& _rxContext);
 
             // OComponentHelper
             virtual void SAL_CALL disposing() override;
 
             // XServiceInfo
-            virtual OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-            virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-            virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+            virtual OUString SAL_CALL getImplementationName(  ) throw(css::uno::RuntimeException, std::exception) override;
+            virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(css::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(css::uno::RuntimeException, std::exception) override;
 
             // XDriver
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > SAL_CALL connect( const OUString& url, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& info ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-            virtual sal_Bool SAL_CALL acceptsURL( const OUString& url ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-            virtual ::com::sun::star::uno::Sequence< ::com::sun::star::sdbc::DriverPropertyInfo > SAL_CALL getPropertyInfo( const OUString& url, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& info ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-            virtual sal_Int32 SAL_CALL getMajorVersion() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-            virtual sal_Int32 SAL_CALL getMinorVersion() throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Reference< css::sdbc::XConnection > SAL_CALL connect( const OUString& url, const css::uno::Sequence< css::beans::PropertyValue >& info ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
+            virtual sal_Bool SAL_CALL acceptsURL( const OUString& url ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Sequence< css::sdbc::DriverPropertyInfo > SAL_CALL getPropertyInfo( const OUString& url, const css::uno::Sequence< css::beans::PropertyValue >& info ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
+            virtual sal_Int32 SAL_CALL getMajorVersion() throw(css::uno::RuntimeException, std::exception) override;
+            virtual sal_Int32 SAL_CALL getMinorVersion() throw(css::uno::RuntimeException, std::exception) override;
 
             // XTerminateListener
-            virtual void SAL_CALL queryTermination( const ::com::sun::star::lang::EventObject& Event ) throw (::com::sun::star::frame::TerminationVetoException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-            virtual void SAL_CALL notifyTermination( const ::com::sun::star::lang::EventObject& Event ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL queryTermination( const css::lang::EventObject& Event ) throw (css::frame::TerminationVetoException, css::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL notifyTermination( const css::lang::EventObject& Event ) throw (css::uno::RuntimeException, std::exception) override;
 
             // XEventListener
-            virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException, std::exception) override;
 
         private:
             /** shuts down the library which contains the real implementations

@@ -53,20 +53,20 @@ using namespace com::sun::star::sdbc;
 
 
 //  IMPLEMENT_SERVICE_INFO(OResultSet,"com.sun.star.sdbcx.AResultSet","com.sun.star.sdbc.ResultSet");
-OUString SAL_CALL OResultSet::getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException)  \
+OUString SAL_CALL OResultSet::getImplementationName(  ) throw (css::uno::RuntimeException)  \
 {
     return OUString("com.sun.star.sdbcx.ado.ResultSet");
 }
 
-::com::sun::star::uno::Sequence< OUString > SAL_CALL OResultSet::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException)
+css::uno::Sequence< OUString > SAL_CALL OResultSet::getSupportedServiceNames(  ) throw(css::uno::RuntimeException)
 {
-    ::com::sun::star::uno::Sequence< OUString > aSupported(2);
+    css::uno::Sequence< OUString > aSupported(2);
     aSupported[0] = "com.sun.star.sdbc.ResultSet";
     aSupported[1] = "com.sun.star.sdbcx.ResultSet";
     return aSupported;
 }
 
-sal_Bool SAL_CALL OResultSet::supportsService( const OUString& _rServiceName ) throw(::com::sun::star::uno::RuntimeException)
+sal_Bool SAL_CALL OResultSet::supportsService( const OUString& _rServiceName ) throw(css::uno::RuntimeException)
 {
     return cppu::supportsService(this, _rServiceName);
 }
@@ -135,11 +135,11 @@ Any SAL_CALL OResultSet::queryInterface( const Type & rType ) throw(RuntimeExcep
     return aRet.hasValue() ? aRet : OResultSet_BASE::queryInterface(rType);
 }
 
-::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL OResultSet::getTypes(  ) throw(::com::sun::star::uno::RuntimeException)
+css::uno::Sequence< css::uno::Type > SAL_CALL OResultSet::getTypes(  ) throw(css::uno::RuntimeException)
 {
-    ::cppu::OTypeCollection aTypes( cppu::UnoType<com::sun::star::beans::XMultiPropertySet>::get(),
-                                    cppu::UnoType<com::sun::star::beans::XFastPropertySet>::get(),
-                                    cppu::UnoType<com::sun::star::beans::XPropertySet>::get());
+    ::cppu::OTypeCollection aTypes( cppu::UnoType<css::beans::XMultiPropertySet>::get(),
+                                    cppu::UnoType<css::beans::XFastPropertySet>::get(),
+                                    cppu::UnoType<css::beans::XPropertySet>::get());
 
     return ::comphelper::concatSequences(aTypes.getTypes(),OResultSet_BASE::getTypes());
 }
@@ -167,7 +167,7 @@ sal_Int32 SAL_CALL OResultSet::findColumn( const OUString& columnName ) throw(SQ
 }
 #define BLOCK_SIZE 256
 
-Reference< ::com::sun::star::io::XInputStream > SAL_CALL OResultSet::getBinaryStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+Reference< css::io::XInputStream > SAL_CALL OResultSet::getBinaryStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -207,7 +207,7 @@ Reference< ::com::sun::star::io::XInputStream > SAL_CALL OResultSet::getBinarySt
     return m_aValue.isNull() ? NULL : new ::comphelper::SequenceInputStream(m_aValue);
 }
 
-Reference< ::com::sun::star::io::XInputStream > SAL_CALL OResultSet::getCharacterStream( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
+Reference< css::io::XInputStream > SAL_CALL OResultSet::getCharacterStream( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFeatureNotImplementedSQLException( "XRow::getCharacterStream", *this );
     return NULL;
@@ -241,7 +241,7 @@ Sequence< sal_Int8 > SAL_CALL OResultSet::getBytes( sal_Int32 columnIndex ) thro
 }
 
 
-::com::sun::star::util::Date SAL_CALL OResultSet::getDate( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+css::util::Date SAL_CALL OResultSet::getDate( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     return getValue(columnIndex);
 }
@@ -323,7 +323,7 @@ Reference< XRef > SAL_CALL OResultSet::getRef( sal_Int32 /*columnIndex*/ ) throw
 }
 
 
-Any SAL_CALL OResultSet::getObject( sal_Int32 columnIndex, const Reference< ::com::sun::star::container::XNameAccess >& /*typeMap*/ ) throw(SQLException, RuntimeException)
+Any SAL_CALL OResultSet::getObject( sal_Int32 columnIndex, const Reference< css::container::XNameAccess >& /*typeMap*/ ) throw(SQLException, RuntimeException)
 {
     return getValue(columnIndex).makeAny();
 }
@@ -341,13 +341,13 @@ OUString SAL_CALL OResultSet::getString( sal_Int32 columnIndex ) throw(SQLExcept
 }
 
 
-::com::sun::star::util::Time SAL_CALL OResultSet::getTime( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+css::util::Time SAL_CALL OResultSet::getTime( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     return getValue(columnIndex);
 }
 
 
-::com::sun::star::util::DateTime SAL_CALL OResultSet::getTimestamp( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+css::util::DateTime SAL_CALL OResultSet::getTimestamp( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     return getValue(columnIndex);
 }
@@ -756,25 +756,25 @@ void SAL_CALL OResultSet::updateBytes( sal_Int32 columnIndex, const Sequence< sa
     updateValue(columnIndex,x);
 }
 
-void SAL_CALL OResultSet::updateDate( sal_Int32 columnIndex, const ::com::sun::star::util::Date& x ) throw(SQLException, RuntimeException)
+void SAL_CALL OResultSet::updateDate( sal_Int32 columnIndex, const css::util::Date& x ) throw(SQLException, RuntimeException)
 {
     updateValue(columnIndex,x);
 }
 
 
-void SAL_CALL OResultSet::updateTime( sal_Int32 columnIndex, const ::com::sun::star::util::Time& x ) throw(SQLException, RuntimeException)
+void SAL_CALL OResultSet::updateTime( sal_Int32 columnIndex, const css::util::Time& x ) throw(SQLException, RuntimeException)
 {
     updateValue(columnIndex,x);
 }
 
 
-void SAL_CALL OResultSet::updateTimestamp( sal_Int32 columnIndex, const ::com::sun::star::util::DateTime& x ) throw(SQLException, RuntimeException)
+void SAL_CALL OResultSet::updateTimestamp( sal_Int32 columnIndex, const css::util::DateTime& x ) throw(SQLException, RuntimeException)
 {
     updateValue(columnIndex,x);
 }
 
 
-void SAL_CALL OResultSet::updateBinaryStream( sal_Int32 columnIndex, const Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length ) throw(SQLException, RuntimeException)
+void SAL_CALL OResultSet::updateBinaryStream( sal_Int32 columnIndex, const Reference< css::io::XInputStream >& x, sal_Int32 length ) throw(SQLException, RuntimeException)
 {
     if(!x.is())
         ::dbtools::throwFunctionSequenceException(*this);
@@ -784,7 +784,7 @@ void SAL_CALL OResultSet::updateBinaryStream( sal_Int32 columnIndex, const Refer
     updateBytes(columnIndex,aSeq);
 }
 
-void SAL_CALL OResultSet::updateCharacterStream( sal_Int32 columnIndex, const Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length ) throw(SQLException, RuntimeException)
+void SAL_CALL OResultSet::updateCharacterStream( sal_Int32 columnIndex, const Reference< css::io::XInputStream >& x, sal_Int32 length ) throw(SQLException, RuntimeException)
 {
     if(!x.is())
         ::dbtools::throwFunctionSequenceException(*this);
@@ -968,7 +968,7 @@ Sequence< sal_Int32 > SAL_CALL OResultSet::deleteRows( const Sequence< Any >& ro
 }
 
 sal_Int32 OResultSet::getResultSetConcurrency() const
-    throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+    throw(css::sdbc::SQLException, css::uno::RuntimeException)
 {
     sal_Int32 nValue=ResultSetConcurrency::READ_ONLY;
     LockTypeEnum eRet;
@@ -988,7 +988,7 @@ sal_Int32 OResultSet::getResultSetConcurrency() const
 }
 
 sal_Int32 OResultSet::getResultSetType() const
-    throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+    throw(css::sdbc::SQLException, css::uno::RuntimeException)
 {
     sal_Int32 nValue=0;
     CursorTypeEnum eRet;
@@ -1013,13 +1013,13 @@ sal_Int32 OResultSet::getResultSetType() const
 }
 
 sal_Int32 OResultSet::getFetchDirection() const
-    throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+    throw(css::sdbc::SQLException, css::uno::RuntimeException)
 {
     return FetchDirection::FORWARD;
 }
 
 sal_Int32 OResultSet::getFetchSize() const
-    throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+    throw(css::sdbc::SQLException, css::uno::RuntimeException)
 {
     sal_Int32 nValue=-1;
     m_pRecordSet->get_CacheSize(&nValue);
@@ -1027,43 +1027,43 @@ sal_Int32 OResultSet::getFetchSize() const
 }
 
 OUString OResultSet::getCursorName() const
-    throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+    throw(css::sdbc::SQLException, css::uno::RuntimeException)
 {
     return OUString();
 }
 
 
 void OResultSet::setFetchDirection(sal_Int32 /*_par0*/)
-    throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+    throw(css::sdbc::SQLException, css::uno::RuntimeException)
 {
     ::dbtools::throwFeatureNotImplementedSQLException( "ResultSet::FetchDirection", *this );
 }
 
 void OResultSet::setFetchSize(sal_Int32 _par0)
-    throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+    throw(css::sdbc::SQLException, css::uno::RuntimeException)
 {
     m_pRecordSet->put_CacheSize(_par0);
 }
 
 ::cppu::IPropertyArrayHelper* OResultSet::createArrayHelper( ) const
 {
-    Sequence< com::sun::star::beans::Property > aProps(5);
-    com::sun::star::beans::Property* pProperties = aProps.getArray();
+    Sequence< css::beans::Property > aProps(5);
+    css::beans::Property* pProperties = aProps.getArray();
     sal_Int32 nPos = 0;
 
-    pProperties[nPos++] = ::com::sun::star::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FETCHDIRECTION),
+    pProperties[nPos++] = css::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FETCHDIRECTION),
         PROPERTY_ID_FETCHDIRECTION, cppu::UnoType<sal_Int32>::get(), 0);
 
-    pProperties[nPos++] = ::com::sun::star::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FETCHSIZE),
+    pProperties[nPos++] = css::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FETCHSIZE),
         PROPERTY_ID_FETCHSIZE, cppu::UnoType<sal_Int32>::get(), 0);
 
-    pProperties[nPos++] = ::com::sun::star::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISBOOKMARKABLE),
+    pProperties[nPos++] = css::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISBOOKMARKABLE),
         PROPERTY_ID_ISBOOKMARKABLE, cppu::UnoType<bool>::get(), PropertyAttribute::READONLY);
 
-    pProperties[nPos++] = ::com::sun::star::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_RESULTSETCONCURRENCY),
+    pProperties[nPos++] = css::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_RESULTSETCONCURRENCY),
         PROPERTY_ID_RESULTSETCONCURRENCY, cppu::UnoType<sal_Int32>::get(), PropertyAttribute::READONLY);
 
-    pProperties[nPos++] = ::com::sun::star::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_RESULTSETTYPE),
+    pProperties[nPos++] = css::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_RESULTSETTYPE),
         PROPERTY_ID_RESULTSETTYPE, cppu::UnoType<sal_Int32>::get(), PropertyAttribute::READONLY);
 
     return new ::cppu::OPropertyArrayHelper(aProps);
@@ -1079,7 +1079,7 @@ sal_Bool OResultSet::convertFastPropertyValue(
                             Any & rOldValue,
                             sal_Int32 nHandle,
                             const Any& rValue )
-                                throw (::com::sun::star::lang::IllegalArgumentException)
+                                throw (css::lang::IllegalArgumentException)
 {
     switch(nHandle)
     {
@@ -1087,7 +1087,7 @@ sal_Bool OResultSet::convertFastPropertyValue(
         case PROPERTY_ID_CURSORNAME:
         case PROPERTY_ID_RESULTSETCONCURRENCY:
         case PROPERTY_ID_RESULTSETTYPE:
-            throw ::com::sun::star::lang::IllegalArgumentException();
+            throw css::lang::IllegalArgumentException();
             break;
         case PROPERTY_ID_FETCHDIRECTION:
             return ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, getFetchDirection());
@@ -1159,7 +1159,7 @@ void SAL_CALL OResultSet::release() throw()
     OResultSet_BASE::release();
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL OResultSet::getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException)
+css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL OResultSet::getPropertySetInfo(  ) throw(css::uno::RuntimeException)
 {
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }

@@ -37,15 +37,15 @@ namespace connectivity
         protected:
             // OPropertySetHelper
             virtual void SAL_CALL getFastPropertyValue(
-                                ::com::sun::star::uno::Any& rValue,
-                                    sal_Int32 nHandle
+                                css::uno::Any& rValue,
+                                sal_Int32 nHandle
                                          ) const;
         public:
             OAdoView(sal_Bool _bCase, ADOView* _pView=NULL);
 
-            // com::sun::star::lang::XUnoTunnel
-            virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
-            static ::com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
+            // css::lang::XUnoTunnel
+            virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) throw(css::uno::RuntimeException);
+            static css::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
             virtual void SAL_CALL acquire() throw();
             virtual void SAL_CALL release() throw();
 

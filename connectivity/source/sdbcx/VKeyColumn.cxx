@@ -27,16 +27,16 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
 using namespace cppu;
 
-OUString SAL_CALL OKeyColumn::getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+OUString SAL_CALL OKeyColumn::getImplementationName(  ) throw (css::uno::RuntimeException, std::exception)
 {
     if(isNew())
         return OUString("com.sun.star.sdbcx.VKeyColumnDescription");
     return OUString("com.sun.star.sdbcx.VKeyColumn");
 }
 
-::com::sun::star::uno::Sequence< OUString > SAL_CALL OKeyColumn::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Sequence< OUString > SAL_CALL OKeyColumn::getSupportedServiceNames(  ) throw(css::uno::RuntimeException, std::exception)
 {
-    ::com::sun::star::uno::Sequence< OUString > aSupported(1);
+    css::uno::Sequence< OUString > aSupported(1);
     if(isNew())
         aSupported[0] = "com.sun.star.sdbcx.KeyColumnDescription";
     else
@@ -45,7 +45,7 @@ OUString SAL_CALL OKeyColumn::getImplementationName(  ) throw (::com::sun::star:
     return aSupported;
 }
 
-sal_Bool SAL_CALL OKeyColumn::supportsService( const OUString& _rServiceName ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL OKeyColumn::supportsService( const OUString& _rServiceName ) throw(css::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, _rServiceName);
 }

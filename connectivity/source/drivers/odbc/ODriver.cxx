@@ -32,7 +32,7 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 
-ODBCDriver::ODBCDriver(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory)
+ODBCDriver::ODBCDriver(const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxFactory)
     :ODriver_BASE(m_aMutex)
     ,m_xORB(_rxFactory)
     ,m_pDriverHandle(SQL_NULL_HANDLE)

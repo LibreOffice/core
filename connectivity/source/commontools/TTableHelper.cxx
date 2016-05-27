@@ -66,17 +66,17 @@ public:
     // noncopyable
     OTableContainerListener(const OTableContainerListener&) = delete;
     const OTableContainerListener& operator=(const OTableContainerListener&) = delete;
-    virtual void SAL_CALL elementInserted( const ::com::sun::star::container::ContainerEvent& /*Event*/ ) throw (RuntimeException, std::exception) override
+    virtual void SAL_CALL elementInserted( const css::container::ContainerEvent& /*Event*/ ) throw (RuntimeException, std::exception) override
     {
     }
-    virtual void SAL_CALL elementRemoved( const ::com::sun::star::container::ContainerEvent& Event ) throw (RuntimeException, std::exception) override
+    virtual void SAL_CALL elementRemoved( const css::container::ContainerEvent& Event ) throw (RuntimeException, std::exception) override
     {
         OUString sName;
         Event.Accessor  >>= sName;
         if ( m_aRefNames.find(sName) != m_aRefNames.end() )
             m_pComponent->refreshKeys();
     }
-    virtual void SAL_CALL elementReplaced( const ::com::sun::star::container::ContainerEvent& Event ) throw (RuntimeException, std::exception) override
+    virtual void SAL_CALL elementReplaced( const css::container::ContainerEvent& Event ) throw (RuntimeException, std::exception) override
     {
         OUString sOldComposedName,sNewComposedName;
         Event.ReplacedElement   >>= sOldComposedName;
@@ -94,7 +94,7 @@ public:
 }
 namespace connectivity
 {
-    OUString lcl_getServiceNameForSetting(const Reference< ::com::sun::star::sdbc::XConnection >& _xConnection,const OUString& i_sSetting)
+    OUString lcl_getServiceNameForSetting(const Reference< css::sdbc::XConnection >& _xConnection,const OUString& i_sSetting)
     {
         OUString sSupportService;
         Any aValue;
@@ -108,16 +108,16 @@ namespace connectivity
     {
         TKeyMap  m_aKeys;
         // helper services which can be provided by extensions
-        Reference< ::com::sun::star::sdb::tools::XTableRename>      m_xRename;
-        Reference< ::com::sun::star::sdb::tools::XTableAlteration>  m_xAlter;
-        Reference< ::com::sun::star::sdb::tools::XKeyAlteration>    m_xKeyAlter;
-        Reference< ::com::sun::star::sdb::tools::XIndexAlteration>  m_xIndexAlter;
+        Reference< css::sdb::tools::XTableRename>      m_xRename;
+        Reference< css::sdb::tools::XTableAlteration>  m_xAlter;
+        Reference< css::sdb::tools::XKeyAlteration>    m_xKeyAlter;
+        Reference< css::sdb::tools::XIndexAlteration>  m_xIndexAlter;
 
-        Reference< ::com::sun::star::sdbc::XDatabaseMetaData >      m_xMetaData;
-        Reference< ::com::sun::star::sdbc::XConnection >            m_xConnection;
-        rtl::Reference<OTableContainerListener> m_xTablePropertyListener;
-        ::std::vector< ColumnDesc > m_aColumnDesc;
-        explicit OTableHelperImpl(const Reference< ::com::sun::star::sdbc::XConnection >& _xConnection)
+        Reference< css::sdbc::XDatabaseMetaData >      m_xMetaData;
+        Reference< css::sdbc::XConnection >            m_xConnection;
+        rtl::Reference<OTableContainerListener>        m_xTablePropertyListener;
+        ::std::vector< ColumnDesc >                    m_aColumnDesc;
+        explicit OTableHelperImpl(const Reference< css::sdbc::XConnection >& _xConnection)
             : m_xConnection(_xConnection)
         {
             try
@@ -542,7 +542,7 @@ Reference< XDatabaseMetaData> OTableHelper::getMetaData() const
     return m_pImpl->m_xMetaData;
 }
 
-void SAL_CALL OTableHelper::alterColumnByIndex( sal_Int32 index, const Reference< XPropertySet >& descriptor ) throw(SQLException, ::com::sun::star::lang::IndexOutOfBoundsException, RuntimeException, std::exception)
+void SAL_CALL OTableHelper::alterColumnByIndex( sal_Int32 index, const Reference< XPropertySet >& descriptor ) throw(SQLException, css::lang::IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(
@@ -609,22 +609,22 @@ Reference< XConnection> OTableHelper::getConnection() const
     return m_pImpl->m_xConnection;
 }
 
-Reference< ::com::sun::star::sdb::tools::XTableRename>      OTableHelper::getRenameService() const
+Reference< css::sdb::tools::XTableRename>      OTableHelper::getRenameService() const
 {
     return m_pImpl->m_xRename;
 }
 
-Reference< ::com::sun::star::sdb::tools::XTableAlteration>  OTableHelper::getAlterService() const
+Reference< css::sdb::tools::XTableAlteration>  OTableHelper::getAlterService() const
 {
     return m_pImpl->m_xAlter;
 }
 
-Reference< ::com::sun::star::sdb::tools::XKeyAlteration>  OTableHelper::getKeyService() const
+Reference< css::sdb::tools::XKeyAlteration>  OTableHelper::getKeyService() const
 {
     return m_pImpl->m_xKeyAlter;
 }
 
-Reference< ::com::sun::star::sdb::tools::XIndexAlteration>  OTableHelper::getIndexService() const
+Reference< css::sdb::tools::XIndexAlteration>  OTableHelper::getIndexService() const
 {
     return m_pImpl->m_xIndexAlter;
 }

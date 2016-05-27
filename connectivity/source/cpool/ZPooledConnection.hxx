@@ -32,27 +32,27 @@ namespace connectivity
     // OPooledConnection -
     // allows to pool a real connection
 
-    typedef ::cppu::WeakComponentImplHelper<    ::com::sun::star::sdbc::XPooledConnection
-                                               ,::com::sun::star::lang::XEventListener>    OPooledConnection_Base;
+    typedef ::cppu::WeakComponentImplHelper<    css::sdbc::XPooledConnection
+                                               ,css::lang::XEventListener>    OPooledConnection_Base;
 
     class OPooledConnection : public ::comphelper::OBaseMutex
                              ,public OPooledConnection_Base
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >             m_xRealConnection;  // the connection fom driver
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >              m_xComponent;       // the connection which wraps the real connection
-        ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XProxyFactory >     m_xProxyFactory;
+        css::uno::Reference< css::sdbc::XConnection >             m_xRealConnection;  // the connection fom driver
+        css::uno::Reference< css::lang::XComponent >              m_xComponent;       // the connection which wraps the real connection
+        css::uno::Reference< css::reflection::XProxyFactory >     m_xProxyFactory;
     public:
         // OComponentHelper
         virtual void SAL_CALL disposing() override;
 
-        OPooledConnection(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection,
-                          const ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XProxyFactory >& _rxProxyFactory);
+        OPooledConnection(const css::uno::Reference< css::sdbc::XConnection >& _xConnection,
+                          const css::uno::Reference< css::reflection::XProxyFactory >& _rxProxyFactory);
 
         //XPooledConnection
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > SAL_CALL getConnection(  ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Reference< css::sdbc::XConnection > SAL_CALL getConnection(  ) throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
 
         // XEventListener
-        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException, std::exception) override;
     };
 
 }

@@ -193,7 +193,7 @@ OUString SequenceResultSetMetaData::getColumnServiceName( sal_Int32 /* column */
 }
 
 void SequenceResultSetMetaData::checkColumnIndex(sal_Int32 columnIndex)
-    throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+    throw (css::sdbc::SQLException, css::uno::RuntimeException)
 {
     if( columnIndex < 1 || columnIndex > m_colCount )
     {

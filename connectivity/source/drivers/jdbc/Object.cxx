@@ -203,7 +203,7 @@ void java_lang_Object::ThrowLoggedSQLException( const ::comphelper::ResourceBase
     SQLException aException;
     if ( lcl_translateJNIExceptionToUNOException( _pEnvironment, _rxContext, aException ) )
     {
-        _rLogger.log( ::com::sun::star::logging::LogLevel::SEVERE, STR_LOG_THROWING_EXCEPTION, aException.Message, aException.SQLState, aException.ErrorCode );
+        _rLogger.log( css::logging::LogLevel::SEVERE, STR_LOG_THROWING_EXCEPTION, aException.Message, aException.SQLState, aException.ErrorCode );
         throw aException;
     }
 }

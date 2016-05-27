@@ -82,9 +82,9 @@ namespace connectivity
 
         public:
             OMySQLTable(    sdbcx::OCollection* _pTables,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection);
+                            const css::uno::Reference< css::sdbc::XConnection >& _xConnection);
             OMySQLTable(    sdbcx::OCollection* _pTables,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection,
+                            const css::uno::Reference< css::sdbc::XConnection >& _xConnection,
                             const OUString& Name,
                             const OUString& Type,
                             const OUString& Description = OUString(),
@@ -95,18 +95,18 @@ namespace connectivity
 
             // ODescriptor
             virtual void construct() override;
-            // com::sun::star::lang::XUnoTunnel
-            virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-            static ::com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
+            // css::lang::XUnoTunnel
+            virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) throw(css::uno::RuntimeException, std::exception) override;
+            static css::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
 
             // XAlterTable
-            virtual void SAL_CALL alterColumnByName( const OUString& colName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL alterColumnByName( const OUString& colName, const css::uno::Reference< css::beans::XPropertySet >& descriptor ) throw(css::sdbc::SQLException, css::container::NoSuchElementException, css::uno::RuntimeException, std::exception) override;
             /** returns the ALTER TABLE XXX statement
             */
             OUString getAlterTableColumnPart();
 
             // some methods to alter table structures
-            void alterColumnType(sal_Int32 nNewType,const OUString& _rColName,const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _xDescriptor);
+            void alterColumnType(sal_Int32 nNewType,const OUString& _rColName,const css::uno::Reference< css::beans::XPropertySet >& _xDescriptor);
             void alterDefaultValue(const OUString& _sNewDefault,const OUString& _rColName);
             void dropDefaultValue(const OUString& _sNewDefault);
 

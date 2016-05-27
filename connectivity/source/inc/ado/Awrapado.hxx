@@ -102,35 +102,35 @@ namespace connectivity
              OUString get_Version() const;
 
              // special methods
-             ADORecordset* getExportedKeys( const ::com::sun::star::uno::Any& catalog, const OUString& schema, const OUString& table );
-             ADORecordset* getImportedKeys( const ::com::sun::star::uno::Any& catalog, const OUString& schema, const OUString& table );
-             ADORecordset* getPrimaryKeys( const ::com::sun::star::uno::Any& catalog, const OUString& schema, const OUString& table );
-             ADORecordset* getIndexInfo( const ::com::sun::star::uno::Any& catalog, const OUString& schema, const OUString& table, sal_Bool unique, sal_Bool approximate );
-             ADORecordset* getTablePrivileges( const ::com::sun::star::uno::Any& catalog,
+             ADORecordset* getExportedKeys( const css::uno::Any& catalog, const OUString& schema, const OUString& table );
+             ADORecordset* getImportedKeys( const css::uno::Any& catalog, const OUString& schema, const OUString& table );
+             ADORecordset* getPrimaryKeys( const css::uno::Any& catalog, const OUString& schema, const OUString& table );
+             ADORecordset* getIndexInfo( const css::uno::Any& catalog, const OUString& schema, const OUString& table, sal_Bool unique, sal_Bool approximate );
+             ADORecordset* getTablePrivileges( const css::uno::Any& catalog,
                                                   const OUString& schemaPattern,
                                                   const OUString& tableNamePattern );
-             ADORecordset* getCrossReference( const ::com::sun::star::uno::Any& primaryCatalog,
+             ADORecordset* getCrossReference( const css::uno::Any& primaryCatalog,
                                                   const OUString& primarySchema,
                                                   const OUString& primaryTable,
-                                                  const ::com::sun::star::uno::Any& foreignCatalog,
+                                                  const css::uno::Any& foreignCatalog,
                                                   const OUString& foreignSchema,
                                                   const OUString& foreignTable);
-             ADORecordset* getProcedures( const ::com::sun::star::uno::Any& catalog,
+             ADORecordset* getProcedures( const css::uno::Any& catalog,
                                                   const OUString& schemaPattern,
                                                   const OUString& procedureNamePattern );
-             ADORecordset* getProcedureColumns( const ::com::sun::star::uno::Any& catalog,
+             ADORecordset* getProcedureColumns( const css::uno::Any& catalog,
                                                   const OUString& schemaPattern,
                                                   const OUString& procedureNamePattern,
                                                   const OUString& columnNamePattern );
-             ADORecordset* getTables( const ::com::sun::star::uno::Any& catalog,
+             ADORecordset* getTables( const css::uno::Any& catalog,
                                                   const OUString& schemaPattern,
                                                   const OUString& tableNamePattern,
-                                                  const ::com::sun::star::uno::Sequence< OUString >& types );
-             ADORecordset* getColumns( const ::com::sun::star::uno::Any& catalog,
+                                                  const css::uno::Sequence< OUString >& types );
+             ADORecordset* getColumns( const css::uno::Any& catalog,
                                                   const OUString& schemaPattern,
                                                   const OUString& tableNamePattern,
                                                   const OUString& columnNamePattern );
-             ADORecordset* getColumnPrivileges( const ::com::sun::star::uno::Any& catalog,
+             ADORecordset* getColumnPrivileges( const css::uno::Any& catalog,
                                                   const OUString& schemaPattern,
                                                   const OUString& table,
                                                   const OUString& columnNamePattern );
