@@ -28,6 +28,7 @@
 #include <svx/xfillit0.hxx>
 #include <svx/xfillit.hxx>
 #include <svx/tabarea.hxx>
+#include <svx/hexcolorcontrol.hxx>
 #include <svx/SvxColorValueSet.hxx>
 
 class SdrModel;
@@ -671,18 +672,30 @@ private:
     VclPtr<SvxXRectPreview>    m_pCtlPreviewOld;
     VclPtr<SvxXRectPreview>    m_pCtlPreviewNew;
 
-    VclPtr<ListBox>            m_pLbColorModel;
+    VclPtr<RadioButton>        m_pRbRGB;
+    VclPtr<RadioButton>        m_pRbCMYK;
 
-    VclPtr<VclContainer>       m_pRGB;
-    VclPtr<NumericField>       m_pR;
-    VclPtr<NumericField>       m_pG;
-    VclPtr<NumericField>       m_pB;
+    VclPtr<VclContainer>       m_pRGBcustom;
+    VclPtr<VclContainer>       m_pRGBpreset;
+    VclPtr<NumericField>       m_pRcustom;
+    VclPtr<NumericField>       m_pRpreset;
+    VclPtr<NumericField>       m_pGcustom;
+    VclPtr<NumericField>       m_pGpreset;
+    VclPtr<NumericField>       m_pBcustom;
+    VclPtr<NumericField>       m_pBpreset;
+    VclPtr<HexColorControl>    m_pHexpreset;
+    VclPtr<HexColorControl>    m_pHexcustom;
 
-    VclPtr<VclContainer>       m_pCMYK;
-    VclPtr<MetricField>        m_pC;
-    VclPtr<MetricField>        m_pY;
-    VclPtr<MetricField>        m_pM;
-    VclPtr<MetricField>        m_pK;
+    VclPtr<VclContainer>       m_pCMYKcustom;
+    VclPtr<VclContainer>       m_pCMYKpreset;
+    VclPtr<MetricField>        m_pCcustom;
+    VclPtr<MetricField>        m_pCpreset;
+    VclPtr<MetricField>        m_pYcustom;
+    VclPtr<MetricField>        m_pYpreset;
+    VclPtr<MetricField>        m_pMcustom;
+    VclPtr<MetricField>        m_pMpreset;
+    VclPtr<MetricField>        m_pKcustom;
+    VclPtr<MetricField>        m_pKpreset;
 
     VclPtr<PushButton>         m_pBtnAdd;
     VclPtr<PushButton>         m_pBtnModify;
@@ -706,6 +719,7 @@ private:
 
     ColorModel          eCM;
 
+    Color               aPreviousColor;
     Color               aCurrentColor;
 
     static void    ConvertColorValues (Color& rColor, ColorModel eModell);
@@ -724,8 +738,11 @@ private:
 
     DECL_LINK_TYPED( SelectColorLBHdl_Impl, ListBox&, void );
     DECL_LINK_TYPED( SelectValSetHdl_Impl, ValueSet*, void );
-    DECL_LINK_TYPED( SelectColorModelHdl_Impl, ListBox&, void );
+    DECL_LINK_TYPED( SelectColorModeHdl_Impl, RadioButton&, void );
     void ChangeColor(const Color &rNewColor);
+    void SetColorModel(ColorModel eModel);
+    void ChangeColorModel();
+    void UpdateColorValues();
     DECL_LINK_TYPED( ModifiedHdl_Impl, Edit&, void );
 
     long CheckChanges_Impl();
