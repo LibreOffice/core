@@ -892,14 +892,14 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
             // #i972#
             case HANDLE_BASELINE:
             {
-                if ( !pDocSh->pTree )
+                if ( !pDocSh->GetFormulaTree() )
                     pDocSh->Parse();
-                if ( pDocSh->pTree )
+                if ( pDocSh->GetFormulaTree() )
                 {
                     if ( !pDocSh->IsFormulaArranged() )
                         pDocSh->ArrangeFormula();
 
-                    *pValue <<= static_cast<sal_Int32>( pDocSh->pTree->GetFormulaBaseline() );
+                    *pValue <<= static_cast<sal_Int32>( pDocSh->GetFormulaTree()->GetFormulaBaseline() );
                 }
                 break;
             }
