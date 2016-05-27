@@ -132,14 +132,15 @@ enum SwJumpEditFormat
 class SwPageNumberFieldType : public SwFieldType
 {
     sal_Int16   nNumberingType;
-    // fdo#35694: bVirtual is depreciated. See SwPageNumberFieldType::Expand()
-    //bool            bVirtual;
+    // fdo#35694: bool bVirtual is obsolete. See SwPageNumberFieldType::Expand()
 
 public:
     SwPageNumberFieldType();
 
     OUString Expand( sal_uInt32 nFormat, short nOff, sal_uInt16 const nPageNumber,
                      sal_uInt16 const nMaxPage, const OUString& ) const;
+    OUString Expand( sal_uInt32 nFormat, short nOff, sal_uInt16 const nPageNumber,
+                  const OUString& ) const;
     // fdo#35694: Removed void ChangeExpansion(...). See SwPageNumberFieldType::Expand()
     virtual SwFieldType* Copy() const override;
 };
