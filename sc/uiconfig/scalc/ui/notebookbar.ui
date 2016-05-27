@@ -103,6 +103,51 @@
     <property name="can_focus">False</property>
     <property name="pixbuf">cmd/lc_paste.png</property>
   </object>
+  <object class="GtkImage" id="ProtectImg">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">cmd/lc_protect.png</property>
+  </object>
+  <object class="GtkImage" id="SendToBackImg">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">cmd/lc_sendtoback.png</property>
+  </object>
+  <object class="GtkImage" id="SpellDialogImg">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">cmd/lc_spelldialog.png</property>
+  </object>
+  <object class="GtkImage" id="SpellOnlineImg">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">cmd/lc_spellonline.png</property>
+  </object>
+  <object class="GtkImage" id="SplitWindowImg">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">cmd/lc_splitwindow.png</property>
+  </object>
+  <object class="GtkImage" id="ThesaurusDialogImg">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">cmd/lc_thesaurus.png</property>
+  </object>
+  <object class="GtkImage" id="ToggleSheetGridImg">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">cmd/lc_togglesheetgrid.png</property>
+  </object>
+  <object class="GtkImage" id="ToolProtectionDocumentImg">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">cmd/lc_protect.png</property>
+  </object>
+  <object class="GtkImage" id="ZoomImg">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">cmd/lc_zoom.png</property>
+  </object>
   <object class="GtkGrid" id="NotebookBar">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -960,25 +1005,23 @@
                         <property name="can_focus">False</property>
                         <property name="orientation">vertical</property>
                         <child>
-                          <object class="GtkComboBoxText" id="category">
+                          <object class="sfxlo-SidebarToolBox" id="numberformat">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="has_tooltip">True</property>
-                            <property name="tooltip_markup" translatable="yes">Select a category of contents.</property>
-                            <property name="tooltip_text" translatable="yes">Select a category of contents.</property>
-                            <property name="hexpand">True</property>
-                            <items>
-                              <item translatable="yes">General</item>
-                              <item translatable="yes">Number</item>
-                              <item translatable="yes">Percent</item>
-                              <item translatable="yes">Currency</item>
-                              <item translatable="yes">Date </item>
-                              <item translatable="yes">Time</item>
-                              <item translatable="yes">Scientific</item>
-                              <item translatable="yes">Fraction</item>
-                              <item translatable="yes">Boolean Value</item>
-                              <item translatable="yes">Text</item>
-                            </items>
+                            <property name="show_arrow">False</property>
+                            <child>
+                              <object class="GtkToolButton" id="NumberFormatType">
+                                <property name="use_action_appearance">False</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="action_name">.uno:NumberFormatType</property>
+                                <property name="use_underline">True</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="homogeneous">True</property>
+                              </packing>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -987,7 +1030,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="sfxlo-SidebarToolBox" id="numberformat">
+                          <object class="sfxlo-SidebarToolBox" id="numberformat1">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="show_arrow">False</property>
@@ -2774,50 +2817,5 @@
         <property name="top_attach">0</property>
       </packing>
     </child>
-  </object>
-  <object class="GtkImage" id="ProtectImg">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">cmd/lc_protect.png</property>
-  </object>
-  <object class="GtkImage" id="SendToBackImg">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">cmd/lc_sendtoback.png</property>
-  </object>
-  <object class="GtkImage" id="SpellDialogImg">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">cmd/lc_spelldialog.png</property>
-  </object>
-  <object class="GtkImage" id="SpellOnlineImg">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">cmd/lc_spellonline.png</property>
-  </object>
-  <object class="GtkImage" id="SplitWindowImg">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">cmd/lc_splitwindow.png</property>
-  </object>
-  <object class="GtkImage" id="ThesaurusDialogImg">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">cmd/lc_thesaurus.png</property>
-  </object>
-  <object class="GtkImage" id="ToggleSheetGridImg">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">cmd/lc_togglesheetgrid.png</property>
-  </object>
-  <object class="GtkImage" id="ToolProtectionDocumentImg">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">cmd/lc_protect.png</property>
-  </object>
-  <object class="GtkImage" id="ZoomImg">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">cmd/lc_zoom.png</property>
   </object>
 </interface>

@@ -6600,6 +6600,6 @@ SfxUInt16Item NumberFormatType SID_NUMBER_TYPE_FORMAT
 
     AccelConfig = FALSE,
     MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
+    ToolBoxConfig = TRUE,
     GroupId = GID_FORMAT;
 ]
