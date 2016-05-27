@@ -43,7 +43,6 @@ boost_patches += boost_1_44_0-unused-parameters.patch
 endif
 
 boost_patches += boost.auto_link.patch
-boost_patches += boost.std.move.patch
 boost_patches += boost.wunused.patch
 
 boost_patches += ubsan.patch.0
