@@ -99,11 +99,11 @@ Any SAL_CALL ODatabaseMetaDataResultSet::queryInterface( const Type & rType ) th
     return aRet.hasValue() ? aRet : ODatabaseMetaDataResultSet_BASE::queryInterface(rType);
 }
 
-::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL ODatabaseMetaDataResultSet::getTypes(  ) throw(::com::sun::star::uno::RuntimeException)
+css::uno::Sequence< css::uno::Type > SAL_CALL ODatabaseMetaDataResultSet::getTypes(  ) throw(css::uno::RuntimeException)
 {
-    ::cppu::OTypeCollection aTypes( cppu::UnoType<com::sun::star::beans::XMultiPropertySet>::get(),
-                                    cppu::UnoType<com::sun::star::beans::XFastPropertySet>::get(),
-                                    cppu::UnoType<com::sun::star::beans::XPropertySet>::get());
+    ::cppu::OTypeCollection aTypes( cppu::UnoType<css::beans::XMultiPropertySet>::get(),
+                                    cppu::UnoType<css::beans::XFastPropertySet>::get(),
+                                    cppu::UnoType<css::beans::XPropertySet>::get());
 
     return ::comphelper::concatSequences(aTypes.getTypes(),ODatabaseMetaDataResultSet_BASE::getTypes());
 }
@@ -137,7 +137,7 @@ sal_Int32 SAL_CALL ODatabaseMetaDataResultSet::findColumn( const OUString& colum
 }
 #define BLOCK_SIZE 256
 
-Reference< ::com::sun::star::io::XInputStream > SAL_CALL ODatabaseMetaDataResultSet::getBinaryStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+Reference< css::io::XInputStream > SAL_CALL ODatabaseMetaDataResultSet::getBinaryStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
@@ -171,7 +171,7 @@ Reference< ::com::sun::star::io::XInputStream > SAL_CALL ODatabaseMetaDataResult
                     break;
             }
         }
-        return index ? Reference< ::com::sun::star::io::XInputStream >(new SequenceInputStream(aData)) : Reference< ::com::sun::star::io::XInputStream >();
+        return index ? Reference< css::io::XInputStream >(new SequenceInputStream(aData)) : Reference< css::io::XInputStream >();
     }
     // else we ask for a bytesequence
     aField.get_Value(m_aValue);
@@ -180,7 +180,7 @@ Reference< ::com::sun::star::io::XInputStream > SAL_CALL ODatabaseMetaDataResult
     return new SequenceInputStream(m_aValue);
 }
 
-Reference< ::com::sun::star::io::XInputStream > SAL_CALL ODatabaseMetaDataResultSet::getCharacterStream( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
+Reference< css::io::XInputStream > SAL_CALL ODatabaseMetaDataResultSet::getCharacterStream( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFeatureNotImplementedSQLException( "XRow::getCharacterStream", *this );
     return NULL;
@@ -226,7 +226,7 @@ Sequence< sal_Int8 > SAL_CALL ODatabaseMetaDataResultSet::getBytes( sal_Int32 co
 }
 
 
-::com::sun::star::util::Date SAL_CALL ODatabaseMetaDataResultSet::getDate( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+css::util::Date SAL_CALL ODatabaseMetaDataResultSet::getDate( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     return getValue(columnIndex);
 }
@@ -319,7 +319,7 @@ Reference< XRef > SAL_CALL ODatabaseMetaDataResultSet::getRef( sal_Int32 /*colum
 }
 
 
-Any SAL_CALL ODatabaseMetaDataResultSet::getObject( sal_Int32 columnIndex, const Reference< ::com::sun::star::container::XNameAccess >& /*typeMap*/ ) throw(SQLException, RuntimeException)
+Any SAL_CALL ODatabaseMetaDataResultSet::getObject( sal_Int32 columnIndex, const Reference< css::container::XNameAccess >& /*typeMap*/ ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
@@ -368,13 +368,13 @@ OUString SAL_CALL ODatabaseMetaDataResultSet::getString( sal_Int32 columnIndex )
 }
 
 
-::com::sun::star::util::Time SAL_CALL ODatabaseMetaDataResultSet::getTime( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+css::util::Time SAL_CALL ODatabaseMetaDataResultSet::getTime( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     return getValue(columnIndex);
 }
 
 
-::com::sun::star::util::DateTime SAL_CALL ODatabaseMetaDataResultSet::getTimestamp( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+css::util::DateTime SAL_CALL ODatabaseMetaDataResultSet::getTimestamp( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     return getValue(columnIndex);
 }
@@ -650,25 +650,25 @@ Any SAL_CALL ODatabaseMetaDataResultSet::getWarnings(  ) throw(SQLException, Run
 }
 
 sal_Int32 ODatabaseMetaDataResultSet::getResultSetConcurrency() const
-    throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+    throw(css::sdbc::SQLException, css::uno::RuntimeException)
 {
     return ResultSetConcurrency::READ_ONLY;
 }
 
 sal_Int32 ODatabaseMetaDataResultSet::getResultSetType() const
-    throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+    throw(css::sdbc::SQLException, css::uno::RuntimeException)
 {
     return ResultSetType::FORWARD_ONLY;
 }
 
 sal_Int32 ODatabaseMetaDataResultSet::getFetchDirection() const
-    throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+    throw(css::sdbc::SQLException, css::uno::RuntimeException)
 {
     return FetchDirection::FORWARD;
 }
 
 sal_Int32 ODatabaseMetaDataResultSet::getFetchSize() const
-    throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+    throw(css::sdbc::SQLException, css::uno::RuntimeException)
 {
     sal_Int32 nValue=-1;
     if(m_pRecordSet)
@@ -677,20 +677,20 @@ sal_Int32 ODatabaseMetaDataResultSet::getFetchSize() const
 }
 
 OUString ODatabaseMetaDataResultSet::getCursorName() const
-    throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+    throw(css::sdbc::SQLException, css::uno::RuntimeException)
 {
     return OUString();
 }
 
 
 void ODatabaseMetaDataResultSet::setFetchDirection(sal_Int32 /*_par0*/)
-    throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+    throw(css::sdbc::SQLException, css::uno::RuntimeException)
 {
     ::dbtools::throwFeatureNotImplementedSQLException( "ResultSet::FetchDirection", *this );
 }
 
 void ODatabaseMetaDataResultSet::setFetchSize(sal_Int32 _par0)
-    throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+    throw(css::sdbc::SQLException, css::uno::RuntimeException)
 {
     if(m_pRecordSet)
         m_pRecordSet->put_CacheSize(_par0);
@@ -699,18 +699,18 @@ void ODatabaseMetaDataResultSet::setFetchSize(sal_Int32 _par0)
 ::cppu::IPropertyArrayHelper* ODatabaseMetaDataResultSet::createArrayHelper( ) const
 {
 
-    Sequence< com::sun::star::beans::Property > aProps(5);
-    com::sun::star::beans::Property* pProperties = aProps.getArray();
+    Sequence< css::beans::Property > aProps(5);
+    css::beans::Property* pProperties = aProps.getArray();
     sal_Int32 nPos = 0;
-    pProperties[nPos++] = ::com::sun::star::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_CURSORNAME),
+    pProperties[nPos++] = css::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_CURSORNAME),
         PROPERTY_ID_CURSORNAME, cppu::UnoType<OUString>::get(), 0);
-    pProperties[nPos++] = ::com::sun::star::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FETCHDIRECTION),
+    pProperties[nPos++] = css::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FETCHDIRECTION),
         PROPERTY_ID_FETCHDIRECTION, cppu::UnoType<sal_Int32>::get(), 0);
-    pProperties[nPos++] = ::com::sun::star::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FETCHSIZE),
+    pProperties[nPos++] = css::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FETCHSIZE),
         PROPERTY_ID_FETCHSIZE, cppu::UnoType<sal_Int32>::get(), 0);
-    pProperties[nPos++] = ::com::sun::star::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_RESULTSETCONCURRENCY),
+    pProperties[nPos++] = css::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_RESULTSETCONCURRENCY),
         PROPERTY_ID_RESULTSETCONCURRENCY, cppu::UnoType<sal_Int32>::get(), 0);
-    pProperties[nPos++] = ::com::sun::star::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_RESULTSETTYPE),
+    pProperties[nPos++] = css::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_RESULTSETTYPE),
         PROPERTY_ID_RESULTSETTYPE, cppu::UnoType<sal_Int32>::get(), 0);
 
     return new ::cppu::OPropertyArrayHelper(aProps);
@@ -726,14 +726,14 @@ sal_Bool ODatabaseMetaDataResultSet::convertFastPropertyValue(
                             Any & rOldValue,
                             sal_Int32 nHandle,
                             const Any& rValue )
-                                throw (::com::sun::star::lang::IllegalArgumentException)
+                                throw (css::lang::IllegalArgumentException)
 {
     switch(nHandle)
     {
         case PROPERTY_ID_CURSORNAME:
         case PROPERTY_ID_RESULTSETCONCURRENCY:
         case PROPERTY_ID_RESULTSETTYPE:
-            throw ::com::sun::star::lang::IllegalArgumentException();
+            throw css::lang::IllegalArgumentException();
         case PROPERTY_ID_FETCHDIRECTION:
             return ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, getFetchDirection());
         case PROPERTY_ID_FETCHSIZE:
@@ -1193,7 +1193,7 @@ void SAL_CALL ODatabaseMetaDataResultSet::release() throw()
     ODatabaseMetaDataResultSet_BASE::release();
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL ODatabaseMetaDataResultSet::getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException)
+css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL ODatabaseMetaDataResultSet::getPropertySetInfo(  ) throw(css::uno::RuntimeException)
 {
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }

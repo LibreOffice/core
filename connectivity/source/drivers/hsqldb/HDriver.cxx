@@ -61,21 +61,21 @@ namespace connectivity
 {
 
     using namespace hsqldb;
-    using namespace ::com::sun::star::uno;
-    using namespace ::com::sun::star::sdbc;
-    using namespace ::com::sun::star::sdbcx;
-    using namespace ::com::sun::star::beans;
-    using namespace ::com::sun::star::frame;
-    using namespace ::com::sun::star::lang;
-    using namespace ::com::sun::star::embed;
-    using namespace ::com::sun::star::io;
-    using namespace ::com::sun::star::task;
-    using namespace ::com::sun::star::util;
-    using namespace ::com::sun::star::reflection;
+    using namespace css::uno;
+    using namespace css::sdbc;
+    using namespace css::sdbcx;
+    using namespace css::beans;
+    using namespace css::frame;
+    using namespace css::lang;
+    using namespace css::embed;
+    using namespace css::io;
+    using namespace css::task;
+    using namespace css::util;
+    using namespace css::reflection;
 
     namespace hsqldb
     {
-        Reference< XInterface >  SAL_CALL ODriverDelegator_CreateInstance(const Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFac) throw( Exception )
+        Reference< XInterface >  SAL_CALL ODriverDelegator_CreateInstance(const Reference< css::lang::XMultiServiceFactory >& _rxFac) throw( Exception )
         {
             return *(new ODriverDelegator(comphelper::getComponentContext(_rxFac)));
         }
@@ -518,7 +518,7 @@ namespace connectivity
         return getSupportedServiceNames_Static();
     }
 
-    void SAL_CALL ODriverDelegator::createCatalog( const Sequence< PropertyValue >& /*info*/ ) throw (SQLException, ::com::sun::star::container::ElementExistException, RuntimeException, std::exception)
+    void SAL_CALL ODriverDelegator::createCatalog( const Sequence< PropertyValue >& /*info*/ ) throw (SQLException, css::container::ElementExistException, RuntimeException, std::exception)
     {
         ::dbtools::throwFeatureNotImplementedSQLException( "XCreateCatalog::createCatalog", *this );
     }
@@ -558,7 +558,7 @@ namespace connectivity
             m_aConnections.erase(_aIter);
     }
 
-    void SAL_CALL ODriverDelegator::disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+    void SAL_CALL ODriverDelegator::disposing( const css::lang::EventObject& Source ) throw(css::uno::RuntimeException, std::exception)
     {
         ::osl::MutexGuard aGuard(m_aMutex);
         Reference<XConnection> xCon(Source.Source,UNO_QUERY);
@@ -628,7 +628,7 @@ namespace connectivity
         }
     }
 
-    void SAL_CALL ODriverDelegator::preCommit( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception)
+    void SAL_CALL ODriverDelegator::preCommit( const css::lang::EventObject& aEvent ) throw (css::uno::Exception, css::uno::RuntimeException, std::exception)
     {
         ::osl::MutexGuard aGuard(m_aMutex);
 
@@ -671,15 +671,15 @@ namespace connectivity
         }
     }
 
-    void SAL_CALL ODriverDelegator::commited( const ::com::sun::star::lang::EventObject& /*aEvent*/ ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+    void SAL_CALL ODriverDelegator::commited( const css::lang::EventObject& /*aEvent*/ ) throw (css::uno::RuntimeException, std::exception)
     {
     }
 
-    void SAL_CALL ODriverDelegator::preRevert( const ::com::sun::star::lang::EventObject& /*aEvent*/ ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception)
+    void SAL_CALL ODriverDelegator::preRevert( const css::lang::EventObject& /*aEvent*/ ) throw (css::uno::Exception, css::uno::RuntimeException, std::exception)
     {
     }
 
-    void SAL_CALL ODriverDelegator::reverted( const ::com::sun::star::lang::EventObject& /*aEvent*/ ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+    void SAL_CALL ODriverDelegator::reverted( const css::lang::EventObject& /*aEvent*/ ) throw (css::uno::RuntimeException, std::exception)
     {
     }
 
@@ -828,7 +828,7 @@ namespace connectivity
             {
 
                 Reference< XMultiServiceFactory > xConfigProvider(
-                    com::sun::star::configuration::theDefaultProvider::get( _rxContext ) );
+                    css::configuration::theDefaultProvider::get( _rxContext ) );
 
 
                 // arguments for creating the config access

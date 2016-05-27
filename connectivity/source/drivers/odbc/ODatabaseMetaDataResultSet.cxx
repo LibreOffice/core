@@ -190,13 +190,13 @@ template < typename T, SQLSMALLINT sqlTypeId > T ODatabaseMetaDataResultSet::get
 }
 
 
-Reference< ::com::sun::star::io::XInputStream > SAL_CALL ODatabaseMetaDataResultSet::getBinaryStream( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException, std::exception)
+Reference< css::io::XInputStream > SAL_CALL ODatabaseMetaDataResultSet::getBinaryStream( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException, std::exception)
 {
     ::dbtools::throwFunctionNotSupportedSQLException( "XRow::getBinaryStream", *this );
     return nullptr;
 }
 
-Reference< ::com::sun::star::io::XInputStream > SAL_CALL ODatabaseMetaDataResultSet::getCharacterStream( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException, std::exception)
+Reference< css::io::XInputStream > SAL_CALL ODatabaseMetaDataResultSet::getCharacterStream( sal_Int32 /*columnIndex*/ ) throw(SQLException, RuntimeException, std::exception)
 {
     ::dbtools::throwFunctionNotSupportedSQLException( "XRow::getCharacterStream", *this );
     return nullptr;
@@ -267,7 +267,7 @@ Sequence< sal_Int8 > SAL_CALL ODatabaseMetaDataResultSet::getBytes( sal_Int32 co
 }
 
 
-::com::sun::star::util::Date SAL_CALL ODatabaseMetaDataResultSet::getDate( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
+css::util::Date SAL_CALL ODatabaseMetaDataResultSet::getDate( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
 {
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -374,7 +374,7 @@ Reference< XRef > SAL_CALL ODatabaseMetaDataResultSet::getRef( sal_Int32 /*colum
 }
 
 
-Any SAL_CALL ODatabaseMetaDataResultSet::getObject( sal_Int32 /*columnIndex*/, const Reference< ::com::sun::star::container::XNameAccess >& /*typeMap*/ ) throw(SQLException, RuntimeException, std::exception)
+Any SAL_CALL ODatabaseMetaDataResultSet::getObject( sal_Int32 /*columnIndex*/, const Reference< css::container::XNameAccess >& /*typeMap*/ ) throw(SQLException, RuntimeException, std::exception)
 {
     ::dbtools::throwFunctionNotSupportedSQLException( "XRow::getObject", *this );
     return Any();
@@ -405,7 +405,7 @@ OUString SAL_CALL ODatabaseMetaDataResultSet::getString( sal_Int32 columnIndex )
 }
 
 
-::com::sun::star::util::Time SAL_CALL ODatabaseMetaDataResultSet::getTime( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
+css::util::Time SAL_CALL ODatabaseMetaDataResultSet::getTime( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
 {
 
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
@@ -422,7 +422,7 @@ OUString SAL_CALL ODatabaseMetaDataResultSet::getString( sal_Int32 columnIndex )
 }
 
 
-::com::sun::star::util::DateTime SAL_CALL ODatabaseMetaDataResultSet::getTimestamp( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
+css::util::DateTime SAL_CALL ODatabaseMetaDataResultSet::getTimestamp( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
 {
 
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
@@ -707,18 +707,18 @@ OUString ODatabaseMetaDataResultSet::getCursorName() throw(SQLException, Runtime
 ::cppu::IPropertyArrayHelper* ODatabaseMetaDataResultSet::createArrayHelper( ) const
 {
 
-    Sequence< com::sun::star::beans::Property > aProps(5);
-    com::sun::star::beans::Property* pProperties = aProps.getArray();
+    Sequence< css::beans::Property > aProps(5);
+    css::beans::Property* pProperties = aProps.getArray();
     sal_Int32 nPos = 0;
-    pProperties[nPos++] = ::com::sun::star::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_CURSORNAME),
+    pProperties[nPos++] = css::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_CURSORNAME),
         PROPERTY_ID_CURSORNAME, cppu::UnoType<OUString>::get(), 0);
-    pProperties[nPos++] = ::com::sun::star::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FETCHDIRECTION),
+    pProperties[nPos++] = css::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FETCHDIRECTION),
         PROPERTY_ID_FETCHDIRECTION, cppu::UnoType<sal_Int32>::get(), 0);
-    pProperties[nPos++] = ::com::sun::star::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FETCHSIZE),
+    pProperties[nPos++] = css::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FETCHSIZE),
         PROPERTY_ID_FETCHSIZE, cppu::UnoType<sal_Int32>::get(), 0);
-    pProperties[nPos++] = ::com::sun::star::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_RESULTSETCONCURRENCY),
+    pProperties[nPos++] = css::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_RESULTSETCONCURRENCY),
         PROPERTY_ID_RESULTSETCONCURRENCY, cppu::UnoType<sal_Int32>::get(), 0);
-    pProperties[nPos++] = ::com::sun::star::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_RESULTSETTYPE),
+    pProperties[nPos++] = css::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_RESULTSETTYPE),
         PROPERTY_ID_RESULTSETTYPE, cppu::UnoType<sal_Int32>::get(), 0);
 
     return new ::cppu::OPropertyArrayHelper(aProps);
@@ -734,14 +734,14 @@ sal_Bool ODatabaseMetaDataResultSet::convertFastPropertyValue(
                             Any & rOldValue,
                             sal_Int32 nHandle,
                             const Any& rValue )
-                                throw (::com::sun::star::lang::IllegalArgumentException)
+                                throw (css::lang::IllegalArgumentException)
 {
     switch(nHandle)
     {
         case PROPERTY_ID_CURSORNAME:
         case PROPERTY_ID_RESULTSETCONCURRENCY:
         case PROPERTY_ID_RESULTSETTYPE:
-            throw ::com::sun::star::lang::IllegalArgumentException();
+            throw css::lang::IllegalArgumentException();
         case PROPERTY_ID_FETCHDIRECTION:
             return ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, getFetchDirection());
         case PROPERTY_ID_FETCHSIZE:

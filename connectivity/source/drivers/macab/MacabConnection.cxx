@@ -223,7 +223,7 @@ sal_Int32 SAL_CALL MacabConnection::getTransactionIsolation(  ) throw(SQLExcepti
     return TransactionIsolation::NONE;
 }
 
-Reference< ::com::sun::star::container::XNameAccess > SAL_CALL MacabConnection::getTypeMap(  ) throw(SQLException, RuntimeException)
+Reference< css::container::XNameAccess > SAL_CALL MacabConnection::getTypeMap(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabConnection_BASE::rBHelper.bDisposed);
@@ -233,7 +233,7 @@ Reference< ::com::sun::star::container::XNameAccess > SAL_CALL MacabConnection::
     return nullptr;
 }
 
-void SAL_CALL MacabConnection::setTypeMap( const Reference< ::com::sun::star::container::XNameAccess >& ) throw(SQLException, RuntimeException)
+void SAL_CALL MacabConnection::setTypeMap( const Reference< css::container::XNameAccess >& ) throw(SQLException, RuntimeException)
 {
     // the other way around
 }
@@ -279,7 +279,7 @@ void MacabConnection::disposing()
         m_pAddressBook = nullptr;
     }
 
-    m_xMetaData = ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XDatabaseMetaData>();
+    m_xMetaData = css::uno::WeakReference< css::sdbc::XDatabaseMetaData>();
 
     dispose_ChildImpl();
     MacabConnection_BASE::disposing();

@@ -76,7 +76,7 @@ namespace pq_sdbc_driver
 //     OUString tableName;
 //     OUString schemaTableName;
 //     OUString typeName;
-//     com::sun::star::sdbc::DataType type;
+//     css::sdbc::DataType type;
 //     sal_Int32 precision;
 //     sal_Int32 scale;
 //     sal_Bool isCurrency;
@@ -113,7 +113,7 @@ static void extractPrecisionAndScale( sal_Int32 atttypmod, sal_Int32 *precision,
 
 ResultSetMetaData::ResultSetMetaData(
     const ::rtl::Reference< RefCountedMutex > & refMutex,
-    const ::com::sun::star::uno::Reference< com::sun::star::sdbc::XResultSet >  & origin,
+    const css::uno::Reference< css::sdbc::XResultSet >  & origin,
     ResultSet * pResultSet,
     ConnectionSettings **ppSettings,
     PGresult *pResult,
@@ -146,7 +146,7 @@ ResultSetMetaData::ResultSetMetaData(
         char *name = PQfname( pResult, col );
         m_colDesc[col].name = OUString( name, strlen(name) , (*m_ppSettings)->encoding );
         m_colDesc[col].typeOid = PQftype( pResult, col );
-        m_colDesc[col].type = com::sun::star::sdbc::DataType::LONGVARCHAR;
+        m_colDesc[col].type = css::sdbc::DataType::LONGVARCHAR;
     }
 }
 
@@ -198,7 +198,7 @@ void ResultSetMetaData::checkTable()
         if( m_tableName.getLength() )
         {
 
-            Reference< com::sun::star::container::XNameAccess > tables = (*m_ppSettings)->tables;
+            Reference< css::container::XNameAccess > tables = (*m_ppSettings)->tables;
             if( ! tables.is() )
             {
 
@@ -233,7 +233,7 @@ sal_Int32 ResultSetMetaData::getIntColumnProperty( const OUString & name, int in
             set->getPropertyValue( name ) >>= ret;
         }
     }
-    catch( com::sun::star::uno::Exception & )
+    catch( css::uno::Exception & )
     {
     }
     return ret;
@@ -252,14 +252,14 @@ bool ResultSetMetaData::getBoolColumnProperty( const OUString & name, int index,
             set->getPropertyValue( name ) >>= ret;
         }
     }
-    catch( com::sun::star::uno::Exception & )
+    catch( css::uno::Exception & )
     {
     }
 
     return ret;
 }
 
-Reference< com::sun::star::beans::XPropertySet > ResultSetMetaData::getColumnByIndex( int index )
+Reference< css::beans::XPropertySet > ResultSetMetaData::getColumnByIndex( int index )
 {
     Reference< XPropertySet > ret;
     checkTable();
@@ -316,7 +316,7 @@ sal_Int32 ResultSetMetaData::isNullable( sal_Int32 column )
     throw (SQLException, RuntimeException, std::exception)
 {
     return getIntColumnProperty(
-        getStatics().IS_NULLABLE, column, com::sun::star::sdbc::ColumnValue::NULLABLE_UNKNOWN );
+        getStatics().IS_NULLABLE, column, css::sdbc::ColumnValue::NULLABLE_UNKNOWN );
 }
 
 sal_Bool ResultSetMetaData::isSigned( sal_Int32 column )
@@ -390,7 +390,7 @@ sal_Int32 ResultSetMetaData::getColumnType( sal_Int32 column )
     if( -100 == ret )
     {
         checkForTypes();
-        if( com::sun::star::sdbc::DataType::LONGVARCHAR == m_colDesc[column-1].type && m_pResultSet )
+        if( css::sdbc::DataType::LONGVARCHAR == m_colDesc[column-1].type && m_pResultSet )
             m_colDesc[column-1].type = m_pResultSet->guessDataType( column );
         ret = m_colDesc[column-1].type;
     }
@@ -417,7 +417,7 @@ OUString ResultSetMetaData::getColumnTypeName( sal_Int32 column )
             ret = m_colDesc[column-1].typeName;
         }
     }
-    catch( com::sun::star::uno::Exception & )
+    catch( css::uno::Exception & )
     {
     }
     return ret;
@@ -450,7 +450,7 @@ OUString ResultSetMetaData::getColumnServiceName( sal_Int32 column )
 }
 
 void ResultSetMetaData::checkColumnIndex(sal_Int32 columnIndex)
-    throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+    throw (css::sdbc::SQLException, css::uno::RuntimeException)
 {
     if( columnIndex < 1 || columnIndex > m_colCount )
     {

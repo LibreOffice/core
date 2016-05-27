@@ -47,7 +47,7 @@ jclass java_sql_Clob::getMyClass() const
     return theClass;
 }
 
-sal_Int64 SAL_CALL java_sql_Clob::length(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
+sal_Int64 SAL_CALL java_sql_Clob::length(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
     jlong out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
@@ -65,7 +65,7 @@ sal_Int64 SAL_CALL java_sql_Clob::length(  ) throw(::com::sun::star::sdbc::SQLEx
     return (sal_Int64)out;
 }
 
-OUString SAL_CALL java_sql_Clob::getSubString( sal_Int64 pos, sal_Int32 subStringLength ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
+OUString SAL_CALL java_sql_Clob::getSubString( sal_Int64 pos, sal_Int32 subStringLength ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     OUString aStr;
@@ -84,7 +84,7 @@ OUString SAL_CALL java_sql_Clob::getSubString( sal_Int64 pos, sal_Int32 subStrin
     return  aStr;
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL java_sql_Clob::getCharacterStream(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Reference< css::io::XInputStream > SAL_CALL java_sql_Clob::getCharacterStream(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
     SDBThreadAttach t;
     static jmethodID mID(nullptr);
@@ -94,7 +94,7 @@ OUString SAL_CALL java_sql_Clob::getSubString( sal_Int64 pos, sal_Int32 subStrin
     return out==nullptr ? nullptr : new java_io_Reader( t.pEnv, out );
 }
 
-sal_Int64 SAL_CALL java_sql_Clob::position( const OUString& searchstr, sal_Int32 start ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
+sal_Int64 SAL_CALL java_sql_Clob::position( const OUString& searchstr, sal_Int32 start ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
     jlong out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
@@ -116,7 +116,7 @@ sal_Int64 SAL_CALL java_sql_Clob::position( const OUString& searchstr, sal_Int32
     return (sal_Int64)out;
 }
 
-sal_Int64 SAL_CALL java_sql_Clob::positionOfClob( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XClob >& /*pattern*/, sal_Int64 /*start*/ ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
+sal_Int64 SAL_CALL java_sql_Clob::positionOfClob( const css::uno::Reference< css::sdbc::XClob >& /*pattern*/, sal_Int64 /*start*/ ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
     ::dbtools::throwFeatureNotImplementedSQLException( "XClob::positionOfClob", *this );
     // this was put here in CWS warnings01. The previous implementation was defective, as it did ignore

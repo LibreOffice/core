@@ -59,7 +59,7 @@ class KabConditionColumn : public KabCondition
 
     public:
         explicit KabConditionColumn(
-            const OUString &sColumnName) throw(::com::sun::star::sdbc::SQLException);
+            const OUString &sColumnName) throw(css::sdbc::SQLException);
         virtual bool isAlwaysTrue() const override;
         virtual bool isAlwaysFalse() const override;
 };
@@ -68,7 +68,7 @@ class KabConditionNull : public KabConditionColumn
 {
     public:
         explicit KabConditionNull(
-            const OUString &sColumnName) throw(::com::sun::star::sdbc::SQLException);
+            const OUString &sColumnName) throw(css::sdbc::SQLException);
         virtual bool eval(const ::KABC::Addressee &aAddressee) const override;
 };
 
@@ -76,7 +76,7 @@ class KabConditionNotNull : public KabConditionColumn
 {
     public:
         explicit KabConditionNotNull(
-            const OUString &sColumnName) throw(::com::sun::star::sdbc::SQLException);
+            const OUString &sColumnName) throw(css::sdbc::SQLException);
         virtual bool eval(const ::KABC::Addressee &aAddressee) const override;
 };
 
@@ -88,7 +88,7 @@ class KabConditionCompare : public KabConditionColumn
     public:
         KabConditionCompare(
             const OUString &sColumnName,
-            const OUString &sMatchString) throw(::com::sun::star::sdbc::SQLException);
+            const OUString &sMatchString) throw(css::sdbc::SQLException);
 };
 
 class KabConditionEqual : public KabConditionCompare
@@ -96,7 +96,7 @@ class KabConditionEqual : public KabConditionCompare
     public:
         KabConditionEqual(
             const OUString &sColumnName,
-            const OUString &sMatchString) throw(::com::sun::star::sdbc::SQLException);
+            const OUString &sMatchString) throw(css::sdbc::SQLException);
         virtual bool eval(const ::KABC::Addressee &aAddressee) const override;
 };
 
@@ -105,7 +105,7 @@ class KabConditionDifferent : public KabConditionCompare
     public:
         KabConditionDifferent(
             const OUString &sColumnName,
-            const OUString &sMatchString) throw(::com::sun::star::sdbc::SQLException);
+            const OUString &sMatchString) throw(css::sdbc::SQLException);
         virtual bool eval(const ::KABC::Addressee &aAddressee) const override;
 };
 
@@ -114,7 +114,7 @@ class KabConditionSimilar : public KabConditionCompare
     public:
         KabConditionSimilar(
             const OUString &sColumnName,
-            const OUString &sMatchString) throw(::com::sun::star::sdbc::SQLException);
+            const OUString &sMatchString) throw(css::sdbc::SQLException);
         virtual bool eval(const ::KABC::Addressee &aAddressee) const override;
 };
 

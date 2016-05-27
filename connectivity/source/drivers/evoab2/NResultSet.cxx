@@ -811,7 +811,7 @@ Reference< XRef > SAL_CALL OEvoabResultSet::getRef( sal_Int32 /*nColumnNum*/ ) t
     return nullptr;
 }
 
-Any SAL_CALL OEvoabResultSet::getObject( sal_Int32 /*nColumnNum*/, const Reference< ::com::sun::star::container::XNameAccess >& /*typeMap*/ ) throw(SQLException, RuntimeException, std::exception)
+Any SAL_CALL OEvoabResultSet::getObject( sal_Int32 /*nColumnNum*/, const Reference< css::container::XNameAccess >& /*typeMap*/ ) throw(SQLException, RuntimeException, std::exception)
 {
     ::dbtools::throwFunctionNotSupportedSQLException( "XRow::getObject", *this );
     return Any();
@@ -823,16 +823,16 @@ sal_Int16 SAL_CALL OEvoabResultSet::getShort( sal_Int32 /*nColumnNum*/ ) throw(S
     return 0;
 }
 
-::com::sun::star::util::Time SAL_CALL OEvoabResultSet::getTime( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException, std::exception)
+css::util::Time SAL_CALL OEvoabResultSet::getTime( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException, std::exception)
 {
     ::dbtools::throwFunctionNotSupportedSQLException( "XRow::getTime", *this );
-    return ::com::sun::star::util::Time();
+    return css::util::Time();
 }
 
 util::DateTime SAL_CALL OEvoabResultSet::getTimestamp( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException, std::exception)
 {
     ::dbtools::throwFunctionNotSupportedSQLException( "XRow::getTimestamp", *this );
-    return ::com::sun::star::util::DateTime();
+    return css::util::DateTime();
 }
 
 Reference< XInputStream > SAL_CALL OEvoabResultSet::getBinaryStream( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException, std::exception)
@@ -859,10 +859,10 @@ Sequence< sal_Int8 > SAL_CALL OEvoabResultSet::getBytes( sal_Int32 /*nColumnNum*
     return Sequence< sal_Int8 >();
 }
 
-::com::sun::star::util::Date SAL_CALL OEvoabResultSet::getDate( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException, std::exception)
+css::util::Date SAL_CALL OEvoabResultSet::getDate( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException, std::exception)
 {
     ::dbtools::throwFunctionNotSupportedSQLException( "XRow::getDate", *this );
-    return ::com::sun::star::util::Date();
+    return css::util::Date();
 }
 
 double SAL_CALL OEvoabResultSet::getDouble( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException, std::exception)
@@ -1037,7 +1037,7 @@ Reference< XInterface > SAL_CALL OEvoabResultSet::getStatement(  ) throw(SQLExce
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-::com::sun::star::uno::WeakReferenceHelper      aStatement(static_cast<OWeakObject*>(m_pStatement));
+css::uno::WeakReferenceHelper      aStatement(static_cast<OWeakObject*>(m_pStatement));
     return aStatement.get();
 }
 
@@ -1155,8 +1155,8 @@ void SAL_CALL OEvoabResultSet::release() throw()
     OResultSet_BASE::release();
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL
-OEvoabResultSet::getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
+OEvoabResultSet::getPropertySetInfo(  ) throw(css::uno::RuntimeException, std::exception)
 {
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }

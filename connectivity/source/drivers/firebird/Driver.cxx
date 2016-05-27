@@ -62,7 +62,7 @@ const OUString FirebirdDriver::our_sFirebirdTmpVar("FIREBIRD_TMP");
 const OUString FirebirdDriver::our_sFirebirdLockVar("FIREBIRD_LOCK");
 const OUString FirebirdDriver::our_sFirebirdMsgVar("FIREBIRD_MSG");
 
-FirebirdDriver::FirebirdDriver(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext)
+FirebirdDriver::FirebirdDriver(const css::uno::Reference< css::uno::XComponentContext >& _rxContext)
     : ODriver_BASE(m_aMutex)
     , m_aContext(_rxContext)
     , m_firebirdTMPDirectory(nullptr, true)

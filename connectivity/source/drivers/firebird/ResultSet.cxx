@@ -62,9 +62,9 @@ OResultSet::OResultSet(Connection* pConnection,
     , OPropertyContainer(OResultSet_BASE::rBHelper)
     , m_bIsBookmarkable(false)
     , m_nFetchSize(1)
-    , m_nResultSetType(::com::sun::star::sdbc::ResultSetType::FORWARD_ONLY)
-    , m_nFetchDirection(::com::sun::star::sdbc::FetchDirection::FORWARD)
-    , m_nResultSetConcurrency(::com::sun::star::sdbc::ResultSetConcurrency::READ_ONLY)
+    , m_nResultSetType(css::sdbc::ResultSetType::FORWARD_ONLY)
+    , m_nFetchDirection(css::sdbc::FetchDirection::FORWARD)
+    , m_nResultSetConcurrency(css::sdbc::ResultSetConcurrency::READ_ONLY)
     , m_pConnection(pConnection)
     , m_rMutex(rMutex)
     , m_xStatement(xStatement)
@@ -684,7 +684,7 @@ uno::Reference< XRef > SAL_CALL OResultSet::getRef( sal_Int32 columnIndex ) thro
 }
 
 
-Any SAL_CALL OResultSet::getObject( sal_Int32 columnIndex, const uno::Reference< ::com::sun::star::container::XNameAccess >& typeMap ) throw(SQLException, RuntimeException, std::exception)
+Any SAL_CALL OResultSet::getObject( sal_Int32 columnIndex, const uno::Reference< css::container::XNameAccess >& typeMap ) throw(SQLException, RuntimeException, std::exception)
 {
     (void) columnIndex;
     (void) typeMap;
@@ -789,7 +789,7 @@ void SAL_CALL OResultSet::release() throw()
     OResultSet_BASE::release();
 }
 
-uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL OResultSet::getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+uno::Reference< css::beans::XPropertySetInfo > SAL_CALL OResultSet::getPropertySetInfo(  ) throw(css::uno::RuntimeException, std::exception)
 {
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }

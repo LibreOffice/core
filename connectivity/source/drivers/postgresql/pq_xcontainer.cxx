@@ -134,7 +134,7 @@ public:
 
 Container::Container(
     const ::rtl::Reference< RefCountedMutex > & refMutex,
-    const ::com::sun::star::uno::Reference< com::sun::star::sdbc::XConnection >  & origin,
+    const css::uno::Reference< css::sdbc::XConnection >  & origin,
     ConnectionSettings *pSettings,
     const OUString &type)
     : ContainerBase( refMutex->mutex ),
@@ -164,7 +164,7 @@ Any Container::getByName( const OUString& aName )
 }
 
 Sequence< OUString > Container::getElementNames(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception)
+        throw (css::uno::RuntimeException, std::exception)
 {
     Sequence< OUString > ret( m_values.size() );
     for( String2IntMap::const_iterator ii = m_name2index.begin();
@@ -179,27 +179,27 @@ Sequence< OUString > Container::getElementNames(  )
 }
 
 sal_Bool Container::hasByName( const OUString& aName )
-        throw (::com::sun::star::uno::RuntimeException, std::exception)
+        throw (css::uno::RuntimeException, std::exception)
 {
     return m_name2index.find( aName ) != m_name2index.end();
 }
     // Methods
 Type Container::getElementType(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception)
+        throw (css::uno::RuntimeException, std::exception)
 {
     return Type();
 }
 
 sal_Bool Container::hasElements(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception)
+        throw (css::uno::RuntimeException, std::exception)
 {
     return ! m_name2index.empty();
 }
 
 Any Container::getByIndex( sal_Int32 Index )
-    throw (::com::sun::star::lang::IndexOutOfBoundsException,
-           ::com::sun::star::lang::WrappedTargetException,
-           ::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::lang::IndexOutOfBoundsException,
+           css::lang::WrappedTargetException,
+           css::uno::RuntimeException, std::exception)
 {
     if( Index < 0 || Index >= (sal_Int32)m_values.size() )
     {
@@ -216,7 +216,7 @@ Any Container::getByIndex( sal_Int32 Index )
 }
 
 sal_Int32 Container::getCount()
-        throw (::com::sun::star::uno::RuntimeException, std::exception)
+        throw (css::uno::RuntimeException, std::exception)
 {
     return m_values.size();
 }
@@ -224,10 +224,10 @@ sal_Int32 Container::getCount()
 
 class ContainerEnumeration : public ::cppu::WeakImplHelper< XEnumeration >
 {
-    std::vector< com::sun::star::uno::Any > m_vec;
+    std::vector< css::uno::Any > m_vec;
     sal_Int32 m_index;
 public:
-    explicit ContainerEnumeration( const std::vector< com::sun::star::uno::Any > &vec )
+    explicit ContainerEnumeration( const std::vector< css::uno::Any > &vec )
         : m_vec( vec ),
           m_index( -1 )
     {}
@@ -235,24 +235,24 @@ public:
 public:
     // XEnumeration
     virtual sal_Bool SAL_CALL hasMoreElements(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Any SAL_CALL nextElement(  )
-        throw (::com::sun::star::container::NoSuchElementException,
-               ::com::sun::star::lang::WrappedTargetException,
-               ::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Any SAL_CALL nextElement(  )
+        throw (css::container::NoSuchElementException,
+               css::lang::WrappedTargetException,
+               css::uno::RuntimeException, std::exception) override;
 
 };
 
 sal_Bool ContainerEnumeration::hasMoreElements()
-        throw (::com::sun::star::uno::RuntimeException, std::exception)
+        throw (css::uno::RuntimeException, std::exception)
 {
     return (int)m_vec.size() > m_index +1;
 }
 
-com::sun::star::uno::Any ContainerEnumeration::nextElement()
-        throw (::com::sun::star::container::NoSuchElementException,
-               ::com::sun::star::lang::WrappedTargetException,
-               ::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Any ContainerEnumeration::nextElement()
+        throw (css::container::NoSuchElementException,
+               css::lang::WrappedTargetException,
+               css::uno::RuntimeException, std::exception)
 {
     if( ! hasMoreElements() )
     {
@@ -264,21 +264,21 @@ com::sun::star::uno::Any ContainerEnumeration::nextElement()
 }
 
 Reference< XEnumeration > Container::createEnumeration(  )
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     return new ContainerEnumeration( m_values );
 }
 
 void Container::addRefreshListener(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::util::XRefreshListener >& l )
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    const css::uno::Reference< css::util::XRefreshListener >& l )
+    throw (css::uno::RuntimeException, std::exception)
 {
     rBHelper.addListener( cppu::UnoType<decltype(l)>::get() , l );
 }
 
 void Container::removeRefreshListener(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::util::XRefreshListener >& l )
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    const css::uno::Reference< css::util::XRefreshListener >& l )
+    throw (css::uno::RuntimeException, std::exception)
 {
     rBHelper.removeListener( cppu::UnoType<decltype(l)>::get() , l );
 }
@@ -307,9 +307,9 @@ void Container::rename( const OUString &oldName, const OUString &newName )
 }
 
 void Container::dropByName( const OUString& elementName )
-    throw (::com::sun::star::sdbc::SQLException,
-           ::com::sun::star::container::NoSuchElementException,
-           ::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::sdbc::SQLException,
+           css::container::NoSuchElementException,
+           css::uno::RuntimeException, std::exception)
 {
     osl::MutexGuard guard( m_refMutex->mutex );
     String2IntMap::const_iterator ii = m_name2index.find( elementName );
@@ -325,16 +325,16 @@ void Container::dropByName( const OUString& elementName )
 //         buf.appendAscii( "." );
 //         buf.append( m_tableName );
         buf.append( " container, so it can't be dropped" );
-        throw com::sun::star::container::NoSuchElementException(
+        throw css::container::NoSuchElementException(
             buf.makeStringAndClear(), *this );
     }
     dropByIndex( ii->second );
 }
 
 void Container::dropByIndex( sal_Int32 index )
-    throw (::com::sun::star::sdbc::SQLException,
-           ::com::sun::star::lang::IndexOutOfBoundsException,
-           ::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::sdbc::SQLException,
+           css::lang::IndexOutOfBoundsException,
+           css::uno::RuntimeException, std::exception)
 {
     osl::MutexGuard guard( m_refMutex->mutex );
     if( index < 0 ||  index >=(sal_Int32)m_values.size() )
@@ -346,7 +346,7 @@ void Container::dropByIndex( sal_Int32 index )
         buf.append( index );
         buf.append( ") in " );
         buf.append( m_type );
-        throw com::sun::star::lang::IndexOutOfBoundsException(
+        throw css::lang::IndexOutOfBoundsException(
             buf.makeStringAndClear(), *this );
     }
 
@@ -386,8 +386,8 @@ void Container::dropByIndex( sal_Int32 index )
 
 void Container::append(
     const OUString & name,
-    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor )
-    throw ( ::com::sun::star::container::ElementExistException )
+    const css::uno::Reference< css::beans::XPropertySet >& descriptor )
+    throw ( css::container::ElementExistException )
 
 {
     osl::MutexGuard guard( m_refMutex->mutex );
@@ -400,7 +400,7 @@ void Container::append(
         buf.append( " with name " );
         buf.append( name );
         buf.append( " already exists in this container" );
-        throw com::sun::star::container::ElementExistException(
+        throw css::container::ElementExistException(
             buf.makeStringAndClear() , *this );
     }
 
@@ -412,25 +412,25 @@ void Container::append(
 }
 
 void Container::appendByDescriptor(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor)
-    throw (::com::sun::star::sdbc::SQLException,
-           ::com::sun::star::container::ElementExistException,
-           ::com::sun::star::uno::RuntimeException, std::exception)
+    const css::uno::Reference< css::beans::XPropertySet >& descriptor)
+    throw (css::sdbc::SQLException,
+           css::container::ElementExistException,
+           css::uno::RuntimeException, std::exception)
 {
     append( extractStringProperty( descriptor, getStatics().NAME ), descriptor );
 }
 
 
 void Container::addContainerListener(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener >& l )
-        throw (::com::sun::star::uno::RuntimeException, std::exception)
+        const css::uno::Reference< css::container::XContainerListener >& l )
+        throw (css::uno::RuntimeException, std::exception)
 {
     rBHelper.addListener( cppu::UnoType<decltype(l)>::get() , l );
 }
 
 void Container::removeContainerListener(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener >& l )
-        throw (::com::sun::star::uno::RuntimeException, std::exception)
+        const css::uno::Reference< css::container::XContainerListener >& l )
+        throw (css::uno::RuntimeException, std::exception)
 {
     rBHelper.removeListener( cppu::UnoType<decltype(l)>::get() , l );
 }
@@ -438,7 +438,7 @@ void Container::removeContainerListener(
 
 void Container::fire( const EventBroadcastHelper &helper )
 {
-    Reference< ::com::sun::star::util::XRefreshListener > l;
+    Reference< css::util::XRefreshListener > l;
     cppu::OInterfaceContainerHelper *container = rBHelper.getContainer( helper.getType() );
     if( container )
     {
@@ -449,13 +449,13 @@ void Container::fire( const EventBroadcastHelper &helper )
             {
                 helper.fire( static_cast<XEventListener *>(iterator.next()) );
             }
-            catch ( com::sun::star::uno::RuntimeException & )
+            catch ( css::uno::RuntimeException & )
             {
                 OSL_ENSURE( false, "exception catched" );
                 // loose coupling, a runtime exception shall not break anything
                 // TODO: log away as warning !
             }
-            catch( com::sun::star::uno::Exception & )
+            catch( css::uno::Exception & )
             {
                 OSL_ENSURE( false, "exception from listener flying through" );
                 throw;

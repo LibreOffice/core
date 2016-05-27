@@ -36,13 +36,13 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
-OHSQLUser::OHSQLUser(   const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection) : connectivity::sdbcx::OUser(true)
+OHSQLUser::OHSQLUser(   const css::uno::Reference< css::sdbc::XConnection >& _xConnection) : connectivity::sdbcx::OUser(true)
                 ,m_xConnection(_xConnection)
 {
     construct();
 }
 
-OHSQLUser::OHSQLUser(   const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection,
+OHSQLUser::OHSQLUser(   const css::uno::Reference< css::sdbc::XConnection >& _xConnection,
                 const OUString& Name
             ) : connectivity::sdbcx::OUser(Name, true)
                 ,m_xConnection(_xConnection)
@@ -54,7 +54,7 @@ void OHSQLUser::refreshGroups()
 {
 }
 
-OUserExtend::OUserExtend(   const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection) : OHSQLUser(_xConnection)
+OUserExtend::OUserExtend(   const css::uno::Reference< css::sdbc::XConnection >& _xConnection) : OHSQLUser(_xConnection)
 {
     construct();
 }

@@ -52,10 +52,10 @@ namespace connectivity
     {
         void release(oslInterlockedCount& _refCount,
                      ::cppu::OBroadcastHelper& rBHelper,
-                     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface,
-                     ::com::sun::star::lang::XComponent* _pObject);
+                     css::uno::Reference< css::uno::XInterface >& _xInterface,
+                     css::lang::XComponent* _pObject);
 
-        void checkDisposed(bool _bThrow) throw ( ::com::sun::star::lang::DisposedException );
+        void checkDisposed(bool _bThrow) throw ( css::lang::DisposedException );
 
 
         template <class TYPE>

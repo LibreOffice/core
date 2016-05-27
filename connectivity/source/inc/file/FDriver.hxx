@@ -31,9 +31,9 @@ namespace connectivity
 {
     namespace file
     {
-        typedef ::cppu::WeakComponentImplHelper<   ::com::sun::star::sdbc::XDriver,
-                                                   ::com::sun::star::lang::XServiceInfo,
-                                                   ::com::sun::star::sdbcx::XDataDefinitionSupplier> ODriver_BASE;
+        typedef ::cppu::WeakComponentImplHelper<   css::sdbc::XDriver,
+                                                   css::lang::XServiceInfo,
+                                                   css::sdbcx::XDataDefinitionSupplier> ODriver_BASE;
 
         class OOO_DLLPUBLIC_FILE SAL_NO_VTABLE OFileDriver : public ODriver_BASE
         {
@@ -43,33 +43,33 @@ namespace connectivity
             connectivity::OWeakRefArray                         m_xConnections; //  vector containing a list
                                                                                 //  of all the Connection objects
                                                                                 //  for this Driver
-            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
+            css::uno::Reference< css::uno::XComponentContext > m_xContext;
         public:
-            OFileDriver(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext);
+            OFileDriver(const css::uno::Reference< css::uno::XComponentContext >& _rxContext);
 
             // OComponentHelper
             virtual void SAL_CALL disposing() override;
             // XInterface
-            static OUString getImplementationName_Static(  ) throw(::com::sun::star::uno::RuntimeException);
-            static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_Static(  ) throw (::com::sun::star::uno::RuntimeException);
+            static OUString getImplementationName_Static(  ) throw(css::uno::RuntimeException);
+            static css::uno::Sequence< OUString > getSupportedServiceNames_Static(  ) throw (css::uno::RuntimeException);
 
             // XServiceInfo
-            virtual OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-            virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-            virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+            virtual OUString SAL_CALL getImplementationName(  ) throw(css::uno::RuntimeException, std::exception) override;
+            virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(css::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(css::uno::RuntimeException, std::exception) override;
 
             // XDriver
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > SAL_CALL connect( const OUString& url, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& info ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-            virtual sal_Bool SAL_CALL acceptsURL( const OUString& url ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-            virtual ::com::sun::star::uno::Sequence< ::com::sun::star::sdbc::DriverPropertyInfo > SAL_CALL getPropertyInfo( const OUString& url, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& info ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-            virtual sal_Int32 SAL_CALL getMajorVersion(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-            virtual sal_Int32 SAL_CALL getMinorVersion(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Reference< css::sdbc::XConnection > SAL_CALL connect( const OUString& url, const css::uno::Sequence< css::beans::PropertyValue >& info ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
+            virtual sal_Bool SAL_CALL acceptsURL( const OUString& url ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Sequence< css::sdbc::DriverPropertyInfo > SAL_CALL getPropertyInfo( const OUString& url, const css::uno::Sequence< css::beans::PropertyValue >& info ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
+            virtual sal_Int32 SAL_CALL getMajorVersion(  ) throw(css::uno::RuntimeException, std::exception) override;
+            virtual sal_Int32 SAL_CALL getMinorVersion(  ) throw(css::uno::RuntimeException, std::exception) override;
 
             // XDataDefinitionSupplier
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XTablesSupplier > SAL_CALL getDataDefinitionByConnection( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& connection ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XTablesSupplier > SAL_CALL getDataDefinitionByURL( const OUString& url, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& info ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Reference< css::sdbcx::XTablesSupplier > SAL_CALL getDataDefinitionByConnection( const css::uno::Reference< css::sdbc::XConnection >& connection ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Reference< css::sdbcx::XTablesSupplier > SAL_CALL getDataDefinitionByURL( const OUString& url, const css::uno::Sequence< css::beans::PropertyValue >& info ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
 
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& getComponentContext() const { return m_xContext; }
+            const css::uno::Reference< css::uno::XComponentContext >& getComponentContext() const { return m_xContext; }
         };
     }
 

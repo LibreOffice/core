@@ -211,7 +211,7 @@ Reference< XDatabaseMetaData > SAL_CALL OCalcConnection::getMetaData(  ) throw(S
 }
 
 
-::com::sun::star::uno::Reference< XTablesSupplier > OCalcConnection::createCatalog()
+css::uno::Reference< XTablesSupplier > OCalcConnection::createCatalog()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     Reference< XTablesSupplier > xTab = m_xCatalog;

@@ -60,7 +60,7 @@ class MacabConditionColumn : public MacabCondition
     public:
         MacabConditionColumn(
             const MacabHeader *header,
-            const OUString &sColumnName) throw(::com::sun::star::sdbc::SQLException);
+            const OUString &sColumnName) throw(css::sdbc::SQLException);
         virtual bool isAlwaysTrue() const override;
         virtual bool isAlwaysFalse() const override;
 };
@@ -70,7 +70,7 @@ class MacabConditionNull : public MacabConditionColumn
     public:
         MacabConditionNull(
             const MacabHeader *header,
-            const OUString &sColumnName) throw(::com::sun::star::sdbc::SQLException);
+            const OUString &sColumnName) throw(css::sdbc::SQLException);
         virtual bool eval(const MacabRecord *aRecord) const override;
 };
 
@@ -79,7 +79,7 @@ class MacabConditionNotNull : public MacabConditionColumn
     public:
         MacabConditionNotNull(
             const MacabHeader *header,
-            const OUString &sColumnName) throw(::com::sun::star::sdbc::SQLException);
+            const OUString &sColumnName) throw(css::sdbc::SQLException);
         virtual bool eval(const MacabRecord *aRecord) const override;
 };
 
@@ -92,7 +92,7 @@ class MacabConditionCompare : public MacabConditionColumn
         MacabConditionCompare(
             const MacabHeader *header,
             const OUString &sColumnName,
-            const OUString &sMatchString) throw(::com::sun::star::sdbc::SQLException);
+            const OUString &sMatchString) throw(css::sdbc::SQLException);
 };
 
 class MacabConditionEqual : public MacabConditionCompare
@@ -101,7 +101,7 @@ class MacabConditionEqual : public MacabConditionCompare
         MacabConditionEqual(
             const MacabHeader *header,
             const OUString &sColumnName,
-            const OUString &sMatchString) throw(::com::sun::star::sdbc::SQLException);
+            const OUString &sMatchString) throw(css::sdbc::SQLException);
         virtual bool eval(const MacabRecord *aRecord) const override;
 };
 
@@ -111,7 +111,7 @@ class MacabConditionDifferent : public MacabConditionCompare
         MacabConditionDifferent(
             const MacabHeader *header,
             const OUString &sColumnName,
-            const OUString &sMatchString) throw(::com::sun::star::sdbc::SQLException);
+            const OUString &sMatchString) throw(css::sdbc::SQLException);
         virtual bool eval(const MacabRecord *aRecord) const override;
 };
 
@@ -121,7 +121,7 @@ class MacabConditionSimilar : public MacabConditionCompare
         MacabConditionSimilar(
             const MacabHeader *header,
             const OUString &sColumnName,
-            const OUString &sMatchString) throw(::com::sun::star::sdbc::SQLException);
+            const OUString &sMatchString) throw(css::sdbc::SQLException);
         virtual bool eval(const MacabRecord *aRecord) const override;
 };
 

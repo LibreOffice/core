@@ -96,7 +96,7 @@ void MorkDriverTest::setUp()
 void MorkDriverTest::tearDown()
 {
 // how to make dispose() work?
-// Reference< com::sun::star::lang::XComponent >( m_xMorkComponent, UNO_QUERY_THROW )->dispose();
+// Reference< css::lang::XComponent >( m_xMorkComponent, UNO_QUERY_THROW )->dispose();
     m_xConnection->close();
     test::BootstrapFixture::tearDown();
 }

@@ -60,62 +60,62 @@ namespace pq_sdbc_driver
 struct MutexHolder { osl::Mutex m_mutex; };
 // use this to switch off sdbc support !
 // typedef cppu::WeakComponentImplHelper<
-//     com::sun::star::sdbc::XDriver,
-//     com::sun::star::lang::XServiceInfo
+//     css::sdbc::XDriver,
+//     css::lang::XServiceInfo
 //     > DriverBase ;
 typedef cppu::WeakComponentImplHelper<
-    com::sun::star::sdbc::XDriver,
-    com::sun::star::lang::XServiceInfo,
-    com::sun::star::sdbcx::XDataDefinitionSupplier > DriverBase ;
+    css::sdbc::XDriver,
+    css::lang::XServiceInfo,
+    css::sdbcx::XDataDefinitionSupplier > DriverBase ;
 class Driver : public MutexHolder, public DriverBase
 {
-    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > m_ctx;
-    com::sun::star::uno::Reference< com::sun::star::lang::XMultiComponentFactory > m_smgr;
+    css::uno::Reference< css::uno::XComponentContext > m_ctx;
+    css::uno::Reference< css::lang::XMultiComponentFactory > m_smgr;
 
 public:
-    explicit Driver ( const com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext > & ctx )
+    explicit Driver ( const css::uno::Reference < css::uno::XComponentContext > & ctx )
         : DriverBase( this->m_mutex ),
           m_ctx( ctx ),
           m_smgr( ctx->getServiceManager() )
     {}
 
 public: // XDriver
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > SAL_CALL connect(
+    virtual css::uno::Reference< css::sdbc::XConnection > SAL_CALL connect(
         const OUString& url,
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& info )
-        throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::uno::Sequence< css::beans::PropertyValue >& info )
+        throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
 
     virtual sal_Bool SAL_CALL acceptsURL( const OUString& url )
-        throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
 
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::sdbc::DriverPropertyInfo > SAL_CALL getPropertyInfo(
+    virtual css::uno::Sequence< css::sdbc::DriverPropertyInfo > SAL_CALL getPropertyInfo(
         const OUString& url,
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& info )
-        throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::uno::Sequence< css::beans::PropertyValue >& info )
+        throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
 
-    virtual sal_Int32 SAL_CALL getMajorVersion(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual sal_Int32 SAL_CALL getMinorVersion(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual sal_Int32 SAL_CALL getMajorVersion(  ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Int32 SAL_CALL getMinorVersion(  ) throw (css::uno::RuntimeException, std::exception) override;
 
 public: // XServiceInfo
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
-        throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw(css::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName)
-        throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw(css::uno::RuntimeException, std::exception) override;
 
-    virtual com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-        throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
+        throw(css::uno::RuntimeException, std::exception) override;
 
 public: // XDataDefinitionSupplier
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XTablesSupplier > SAL_CALL
+    virtual css::uno::Reference< css::sdbcx::XTablesSupplier > SAL_CALL
     getDataDefinitionByConnection(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& connection )
-        throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XTablesSupplier > SAL_CALL
+        const css::uno::Reference< css::sdbc::XConnection >& connection )
+        throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::sdbcx::XTablesSupplier > SAL_CALL
     getDataDefinitionByURL(
         const OUString& url,
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& info )
-        throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::uno::Sequence< css::beans::PropertyValue >& info )
+        throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
 
     // XComponent
     virtual void SAL_CALL disposing() override;

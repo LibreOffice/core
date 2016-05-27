@@ -39,8 +39,8 @@ namespace connectivity
             RightsEnum      Map2Right(sal_Int32 _eNum);
             ObjectTypeEnum  MapObjectType(sal_Int32 _ObjType);
         protected:
-            virtual void SAL_CALL getFastPropertyValue(::com::sun::star::uno::Any& rValue,sal_Int32 nHandle) const;
-            virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const ::com::sun::star::uno::Any& rValue)throw (::com::sun::star::uno::Exception);
+            virtual void SAL_CALL getFastPropertyValue(css::uno::Any& rValue,sal_Int32 nHandle) const;
+            virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const css::uno::Any& rValue)throw (css::uno::Exception);
 
         public:
             virtual void refreshUsers();
@@ -50,15 +50,15 @@ namespace connectivity
 
             virtual void SAL_CALL acquire() throw();
             virtual void SAL_CALL release() throw();
-            // com::sun::star::lang::XUnoTunnel
-            virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
-            static ::com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
+            // css::lang::XUnoTunnel
+            virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) throw(css::uno::RuntimeException);
+            static css::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
 
             // XAuthorizable
-            virtual sal_Int32 SAL_CALL getPrivileges( const OUString& objName, sal_Int32 objType ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            virtual sal_Int32 SAL_CALL getGrantablePrivileges( const OUString& objName, sal_Int32 objType ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL grantPrivileges( const OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL revokePrivileges( const OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            virtual sal_Int32 SAL_CALL getPrivileges( const OUString& objName, sal_Int32 objType ) throw(css::sdbc::SQLException, css::uno::RuntimeException);
+            virtual sal_Int32 SAL_CALL getGrantablePrivileges( const OUString& objName, sal_Int32 objType ) throw(css::sdbc::SQLException, css::uno::RuntimeException);
+            virtual void SAL_CALL grantPrivileges( const OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges ) throw(css::sdbc::SQLException, css::uno::RuntimeException);
+            virtual void SAL_CALL revokePrivileges( const OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges ) throw(css::sdbc::SQLException, css::uno::RuntimeException);
 
             WpADOGroup getImpl() const { return m_aGroup; }
         };

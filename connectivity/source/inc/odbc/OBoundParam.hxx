@@ -71,14 +71,14 @@ namespace connectivity
             // setInputStream
             // Sets the input stream for the bound parameter
 
-            void setInputStream(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream>& inputStream,
+            void setInputStream(const css::uno::Reference< css::io::XInputStream>& inputStream,
                                 sal_Int32 len)
             {
                 paramInputStream = inputStream;
                 paramInputStreamLen = len;
             }
 
-            void setSequence(const ::com::sun::star::uno::Sequence< sal_Int8 >& _aSequence)
+            void setSequence(const css::uno::Sequence< sal_Int8 >& _aSequence)
             {
                 aSequence = _aSequence;
             }
@@ -87,7 +87,7 @@ namespace connectivity
             // getInputStream
             // Gets the input stream for the bound parameter
 
-            const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream>& getInputStream ()
+            const css::uno::Reference< css::io::XInputStream>& getInputStream ()
             {
                 return paramInputStream;
             }
@@ -115,8 +115,8 @@ namespace connectivity
                                      // parameter.  Note that this
                                      // data is in native format.
 
-            ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream> paramInputStream;
-            ::com::sun::star::uno::Sequence< sal_Int8 > aSequence;
+            css::uno::Reference< css::io::XInputStream> paramInputStream;
+            css::uno::Sequence< sal_Int8 > aSequence;
                                         // When an input stream is
                                         // bound to a parameter, a
                                         // reference to the input stream is saved

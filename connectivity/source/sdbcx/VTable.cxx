@@ -40,7 +40,7 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
 
-OUString SAL_CALL OTable::getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+OUString SAL_CALL OTable::getImplementationName(  ) throw (css::uno::RuntimeException, std::exception)
 {
     if(isNew())
         return OUString("com.sun.star.sdbcx.VTableDescriptor");
@@ -48,9 +48,9 @@ OUString SAL_CALL OTable::getImplementationName(  ) throw (::com::sun::star::uno
 }
 
 
-::com::sun::star::uno::Sequence< OUString > SAL_CALL OTable::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Sequence< OUString > SAL_CALL OTable::getSupportedServiceNames(  ) throw(css::uno::RuntimeException, std::exception)
 {
-    ::com::sun::star::uno::Sequence< OUString > aSupported(1);
+    css::uno::Sequence< OUString > aSupported(1);
     if(isNew())
         aSupported[0] = "com.sun.star.sdbcx.TableDescriptor";
     else
@@ -59,7 +59,7 @@ OUString SAL_CALL OTable::getImplementationName(  ) throw (::com::sun::star::uno
     return aSupported;
 }
 
-sal_Bool SAL_CALL OTable::supportsService( const OUString& _rServiceName ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL OTable::supportsService( const OUString& _rServiceName ) throw(css::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, _rServiceName);
 }
@@ -284,17 +284,17 @@ void SAL_CALL OTable::alterColumnByName( const OUString& /*colName*/, const Refe
     throwFeatureNotImplementedSQLException( "XAlterTable::alterColumnByName", *this );
 }
 
-void SAL_CALL OTable::alterColumnByIndex( sal_Int32 /*index*/, const Reference< XPropertySet >& /*descriptor*/ ) throw(SQLException, ::com::sun::star::lang::IndexOutOfBoundsException, RuntimeException, std::exception)
+void SAL_CALL OTable::alterColumnByIndex( sal_Int32 /*index*/, const Reference< XPropertySet >& /*descriptor*/ ) throw(SQLException, css::lang::IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     throwFeatureNotImplementedSQLException( "XAlterTable::alterColumnByIndex", *this );
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL OTable::getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL OTable::getPropertySetInfo(  ) throw(css::uno::RuntimeException, std::exception)
 {
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }
 
-OUString SAL_CALL OTable::getName() throw(::com::sun::star::uno::RuntimeException, std::exception)
+OUString SAL_CALL OTable::getName() throw(css::uno::RuntimeException, std::exception)
 {
     // this is only correct for tables who haven't a schema or catalog name
     OSL_ENSURE(m_CatalogName.isEmpty(),"getName(): forgot to override getName()!");
@@ -302,7 +302,7 @@ OUString SAL_CALL OTable::getName() throw(::com::sun::star::uno::RuntimeExceptio
     return m_Name;
 }
 
-void SAL_CALL OTable::setName( const OUString& /*aName*/ ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL OTable::setName( const OUString& /*aName*/ ) throw(css::uno::RuntimeException, std::exception)
 {
 }
 

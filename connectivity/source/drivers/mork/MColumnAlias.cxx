@@ -32,7 +32,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::container;
 
 
-OColumnAlias::OColumnAlias( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB )
+OColumnAlias::OColumnAlias( const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxORB )
 {
     static const sal_Char* s_pProgrammaticNames[] =
     {
@@ -82,7 +82,7 @@ OColumnAlias::OColumnAlias( const ::com::sun::star::uno::Reference< ::com::sun::
 }
 
 
-void OColumnAlias::initialize( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB )
+void OColumnAlias::initialize( const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxORB )
 {
     Reference< XNameAccess > xAliasesNode(
         officecfg::Office::DataAccess::DriverSettings::

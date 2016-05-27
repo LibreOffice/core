@@ -41,10 +41,10 @@ namespace connectivity
         public:
             Table(Tables* pTables,
                   ::osl::Mutex& rMutex,
-                  const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection);
+                  const css::uno::Reference< css::sdbc::XConnection >& _xConnection);
             Table(Tables* pTables,
                   ::osl::Mutex& rMutex,
-                  const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection,
+                  const css::uno::Reference< css::sdbc::XConnection >& _xConnection,
                   const ::rtl::OUString& rName,
                   const ::rtl::OUString& rType,
                   const ::rtl::OUString& rDescription);
@@ -59,31 +59,31 @@ namespace connectivity
 
             // XAlterTable
             /**
-             * See ::com::sun::star::sdbcx::ColumnDescriptor for details of
+             * See css::sdbcx::ColumnDescriptor for details of
              * rDescriptor.
              */
             virtual void SAL_CALL alterColumnByName(
                     const ::rtl::OUString& rColName,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rDescriptor)
-                throw(::com::sun::star::sdbc::SQLException,
-                      ::com::sun::star::container::NoSuchElementException,
-                      ::com::sun::star::uno::RuntimeException, std::exception) override;
+                    const css::uno::Reference< css::beans::XPropertySet >& rDescriptor)
+                throw(css::sdbc::SQLException,
+                      css::container::NoSuchElementException,
+                      css::uno::RuntimeException, std::exception) override;
 
             // XRename -- UNSUPPORTED
             virtual void SAL_CALL rename(const ::rtl::OUString& sName)
-                throw(::com::sun::star::sdbc::SQLException,
-                      ::com::sun::star::container::ElementExistException,
-                      ::com::sun::star::uno::RuntimeException, std::exception) override;
+                throw(css::sdbc::SQLException,
+                      css::container::ElementExistException,
+                      css::uno::RuntimeException, std::exception) override;
 
             //XInterface
-            virtual ::com::sun::star::uno::Any
-                    SAL_CALL queryInterface(const ::com::sun::star::uno::Type & rType)
-                throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Any
+                    SAL_CALL queryInterface(const css::uno::Type & rType)
+                throw(css::uno::RuntimeException, std::exception) override;
 
             //XTypeProvider
-            virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >
+            virtual css::uno::Sequence< css::uno::Type >
                     SAL_CALL getTypes()
-                throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+                throw(css::uno::RuntimeException, std::exception) override;
 
         };
 

@@ -95,15 +95,15 @@ namespace connectivity
 
         OUString toString() const;
 
-        static void ThrowSQLException(JNIEnv * pEnv,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> & _rContext);
+        static void ThrowSQLException(JNIEnv * pEnv,const css::uno::Reference< css::uno::XInterface> & _rContext);
         static void ThrowLoggedSQLException(
             const ::comphelper::ResourceBasedEventLogger& _rLogger,
             JNIEnv* pEnvironment,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContext
+            const css::uno::Reference< css::uno::XInterface >& _rxContext
         );
-        static void ThrowRuntimeException(JNIEnv * pEnv,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> & _rContext);
+        static void ThrowRuntimeException(JNIEnv * pEnv,const css::uno::Reference< css::uno::XInterface> & _rContext);
 
-        static ::rtl::Reference< jvmaccess::VirtualMachine > getVM(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext=nullptr);
+        static ::rtl::Reference< jvmaccess::VirtualMachine > getVM(const css::uno::Reference< css::uno::XComponentContext >& _rxContext=nullptr);
 
         static jclass   findMyClass(const char* _pClassName);
         void            obtainMethodId_throwSQL(JNIEnv* _pEnv, const char* _pMethodName, const char* _pSignature, jmethodID& _inout_MethodID) const;

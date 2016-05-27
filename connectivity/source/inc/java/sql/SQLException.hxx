@@ -31,7 +31,7 @@ namespace connectivity
     {
     public:
         // A ctor that is needed for returning the object
-        java_sql_SQLException( const java_sql_SQLException_BASE& _rException,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> & _rContext);
+        java_sql_SQLException( const java_sql_SQLException_BASE& _rException,const css::uno::Reference< css::uno::XInterface> & _rContext);
     };
 
     class java_sql_SQLException_BASE :  public java_lang_Exception

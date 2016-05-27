@@ -362,7 +362,7 @@ static void lcl_SetValue( ORowSetValue& rValue, const Reference<XSpreadsheet>& x
                     sal_Int64 nIntTime = static_cast<sal_Int64>(rtl::math::round( fTime * static_cast<double>(::tools::Time::nanoSecPerDay) ));
                     if ( nIntTime ==  ::tools::Time::nanoSecPerDay)
                         nIntTime = 0;                       // 23:59:59.9999999995 and above is 00:00:00.00
-                    ::com::sun::star::util::Time aTime;
+                    css::util::Time aTime;
                     aTime.NanoSeconds = (sal_uInt32)( nIntTime % ::tools::Time::nanoSecPerSec );
                     nIntTime /= ::tools::Time::nanoSecPerSec;
                     aTime.Seconds = (sal_uInt16)( nIntTime % 60 );
@@ -390,7 +390,7 @@ static void lcl_SetValue( ORowSetValue& rValue, const Reference<XSpreadsheet>& x
                         ++nIntDays;                         // (next day)
                     }
 
-                    ::com::sun::star::util::DateTime aDateTime;
+                    css::util::DateTime aDateTime;
 
                     aDateTime.NanoSeconds = (sal_uInt16)( nIntTime % ::tools::Time::nanoSecPerSec );
                     nIntTime /= ::tools::Time::nanoSecPerSec;
@@ -599,7 +599,7 @@ void OCalcTable::construct()
         Reference<XPropertySet> xProp( xDoc, UNO_QUERY );
         if (xProp.is())
         {
-            ::com::sun::star::util::Date aDateStruct;
+            css::util::Date aDateStruct;
             if ( xProp->getPropertyValue("NullDate") >>= aDateStruct )
                 m_aNullDate = ::Date( aDateStruct.Day, aDateStruct.Month, aDateStruct.Year );
         }
@@ -662,7 +662,7 @@ Sequence< Type > SAL_CALL OCalcTable::getTypes(  ) throw(RuntimeException, std::
                 *pBegin == cppu::UnoType<XDataDescriptorFactory>::get()))
             aOwnTypes.push_back(*pBegin);
     }
-    aOwnTypes.push_back(cppu::UnoType<com::sun::star::lang::XUnoTunnel>::get());
+    aOwnTypes.push_back(cppu::UnoType<css::lang::XUnoTunnel>::get());
 
     return Sequence< Type >(aOwnTypes.data(), aOwnTypes.size());
 }
@@ -677,7 +677,7 @@ Any SAL_CALL OCalcTable::queryInterface( const Type & rType ) throw(RuntimeExcep
         rType == cppu::UnoType<XDataDescriptorFactory>::get())
         return Any();
 
-    const Any aRet = ::cppu::queryInterface(rType,static_cast< ::com::sun::star::lang::XUnoTunnel*> (this));
+    const Any aRet = ::cppu::queryInterface(rType,static_cast< css::lang::XUnoTunnel*> (this));
     return aRet.hasValue() ? aRet : OTable_TYPEDEF::queryInterface(rType);
 }
 
@@ -697,7 +697,7 @@ Sequence< sal_Int8 > OCalcTable::getUnoTunnelImplementationId()
     return pId->getImplementationId();
 }
 
-// com::sun::star::lang::XUnoTunnel
+// css::lang::XUnoTunnel
 
 sal_Int64 OCalcTable::getSomething( const Sequence< sal_Int8 > & rId ) throw (RuntimeException, std::exception)
 {

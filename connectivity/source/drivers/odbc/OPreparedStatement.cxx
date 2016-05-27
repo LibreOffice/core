@@ -105,7 +105,7 @@ Any SAL_CALL OPreparedStatement::queryInterface( const Type & rType ) throw(Runt
     return aRet.hasValue() ? aRet : OPreparedStatement_BASE::queryInterface(rType);
 }
 
-::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL OPreparedStatement::getTypes(  ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Sequence< css::uno::Type > SAL_CALL OPreparedStatement::getTypes(  ) throw(css::uno::RuntimeException, std::exception)
 {
     return ::comphelper::concatSequences(OPreparedStatement_BASE::getTypes(),OStatement_BASE2::getTypes());
 }
@@ -643,7 +643,7 @@ void SAL_CALL OPreparedStatement::setBytes( sal_Int32 parameterIndex, const Sequ
 }
 
 
-void SAL_CALL OPreparedStatement::setCharacterStream( sal_Int32 parameterIndex, const Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OPreparedStatement::setCharacterStream( sal_Int32 parameterIndex, const Reference< css::io::XInputStream >& x, sal_Int32 length ) throw(SQLException, RuntimeException, std::exception)
 {
     // LEM: It is quite unclear to me what the interface here is.
     // The XInputStream provides *bytes*, not characters.
@@ -651,7 +651,7 @@ void SAL_CALL OPreparedStatement::setCharacterStream( sal_Int32 parameterIndex, 
 }
 
 
-void SAL_CALL OPreparedStatement::setBinaryStream( sal_Int32 parameterIndex, const Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OPreparedStatement::setBinaryStream( sal_Int32 parameterIndex, const Reference< css::io::XInputStream >& x, sal_Int32 length ) throw(SQLException, RuntimeException, std::exception)
 {
     setStream(parameterIndex, x, length, DataType::LONGVARBINARY);
 }

@@ -46,7 +46,7 @@ ODatabaseMetaData::ODatabaseMetaData(OConnection* _pCon)
 {
 }
 
-sal_Int32 ODatabaseMetaData::getInt32Property(const OUString& _aProperty)  throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+sal_Int32 ODatabaseMetaData::getInt32Property(const OUString& _aProperty)  throw(css::sdbc::SQLException, css::uno::RuntimeException)
 {
     connectivity::ado::WpADOProperties aProps(m_pADOConnection->get_Properties());
     //  ADOS::ThrowException(*m_pADOConnection,*this);
@@ -59,7 +59,7 @@ sal_Int32 ODatabaseMetaData::getInt32Property(const OUString& _aProperty)  throw
 }
 
 
-sal_Bool ODatabaseMetaData::getBoolProperty(const OUString& _aProperty)  throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+sal_Bool ODatabaseMetaData::getBoolProperty(const OUString& _aProperty)  throw(css::sdbc::SQLException, css::uno::RuntimeException)
 {
     connectivity::ado::WpADOProperties aProps(m_pADOConnection->get_Properties());
     ADOS::ThrowException(*m_pADOConnection,*this);
@@ -68,7 +68,7 @@ sal_Bool ODatabaseMetaData::getBoolProperty(const OUString& _aProperty)  throw(:
     return (!aVar.isNull() && !aVar.isEmpty() ? aVar.getBool() : sal_False);
 }
 
-OUString ODatabaseMetaData::getStringProperty(const OUString& _aProperty)  throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+OUString ODatabaseMetaData::getStringProperty(const OUString& _aProperty)  throw(css::sdbc::SQLException, css::uno::RuntimeException)
 {
     connectivity::ado::WpADOProperties aProps(m_pADOConnection->get_Properties());
     ADOS::ThrowException(*m_pADOConnection,*this);

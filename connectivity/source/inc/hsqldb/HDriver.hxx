@@ -38,19 +38,19 @@ namespace connectivity
 
     namespace hsqldb
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL ODriverDelegator_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory) throw( ::com::sun::star::uno::Exception );
+        css::uno::Reference< css::uno::XInterface > SAL_CALL ODriverDelegator_CreateInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxFactory) throw( css::uno::Exception );
 
-        typedef ::cppu::WeakComponentImplHelper<   ::com::sun::star::sdbc::XDriver
-                                        ,::com::sun::star::sdbcx::XDataDefinitionSupplier
-                                        , ::com::sun::star::lang::XServiceInfo
-                                        , ::com::sun::star::sdbcx::XCreateCatalog
-                                        , ::com::sun::star::embed::XTransactionListener
-                                        >   ODriverDelegator_BASE;
+        typedef ::cppu::WeakComponentImplHelper<   css::sdbc::XDriver
+                                                 , css::sdbcx::XDataDefinitionSupplier
+                                                 , css::lang::XServiceInfo
+                                                 , css::sdbcx::XCreateCatalog
+                                                 , css::embed::XTransactionListener
+                                               >   ODriverDelegator_BASE;
 
-        typedef ::std::pair< ::com::sun::star::uno::WeakReferenceHelper,::com::sun::star::uno::WeakReferenceHelper> TWeakRefPair;
+        typedef ::std::pair< css::uno::WeakReferenceHelper,css::uno::WeakReferenceHelper> TWeakRefPair;
         typedef ::std::pair< OUString ,TWeakRefPair > TWeakConnectionPair;
 
-        typedef ::std::pair< ::com::sun::star::uno::WeakReferenceHelper,TWeakConnectionPair> TWeakPair;
+        typedef ::std::pair< css::uno::WeakReferenceHelper,TWeakConnectionPair> TWeakPair;
         typedef ::std::vector< TWeakPair > TWeakPairVector;
 
 
@@ -60,19 +60,19 @@ namespace connectivity
         class ODriverDelegator : public ::comphelper::OBaseMutex
                                 ,public ODriverDelegator_BASE
         {
-            TWeakPairVector                                                     m_aConnections; //  vector containing a list
-                                                                                                //  of all the Connection objects
-                                                                                                //  for this Driver
-            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver >                 m_xDriver;
-            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >        m_xContext;
-            bool                                                                            m_bInShutDownConnections;
+            TWeakPairVector                                           m_aConnections; //  vector containing a list
+                                                                                      //  of all the Connection objects
+                                                                                      //  for this Driver
+            css::uno::Reference< css::sdbc::XDriver >                 m_xDriver;
+            css::uno::Reference< css::uno::XComponentContext >        m_xContext;
+            bool                                                      m_bInShutDownConnections;
 
             /** load the driver we want to delegate.
                 The <member>m_xDriver</member> may be <NULL/> if the driver could not be loaded.
                 @return
                     The driver which was currently selected.
             */
-            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver > loadDriver( );
+            css::uno::Reference< css::sdbc::XDriver > loadDriver( );
 
             /** shut down the connection and revoke the storage from the map
                 @param  _aIter
@@ -83,35 +83,35 @@ namespace connectivity
         public:
             /** creates a new delegator for a HSQLDB driver
             */
-            ODriverDelegator(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext);
+            ODriverDelegator(const css::uno::Reference< css::uno::XComponentContext >& _rxContext);
 
             // XServiceInfo
             DECLARE_SERVICE_INFO();
-            static OUString getImplementationName_Static(  ) throw(::com::sun::star::uno::RuntimeException);
-            static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_Static(  ) throw (::com::sun::star::uno::RuntimeException);
+            static OUString getImplementationName_Static(  ) throw(css::uno::RuntimeException);
+            static css::uno::Sequence< OUString > getSupportedServiceNames_Static(  ) throw (css::uno::RuntimeException);
 
             // XDriver
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > SAL_CALL connect( const OUString& url, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& info ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-            virtual sal_Bool SAL_CALL acceptsURL( const OUString& url ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-            virtual ::com::sun::star::uno::Sequence< ::com::sun::star::sdbc::DriverPropertyInfo > SAL_CALL getPropertyInfo( const OUString& url, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& info ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-            virtual sal_Int32 SAL_CALL getMajorVersion(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-            virtual sal_Int32 SAL_CALL getMinorVersion(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Reference< css::sdbc::XConnection > SAL_CALL connect( const OUString& url, const css::uno::Sequence< css::beans::PropertyValue >& info ) throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
+            virtual sal_Bool SAL_CALL acceptsURL( const OUString& url ) throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Sequence< css::sdbc::DriverPropertyInfo > SAL_CALL getPropertyInfo( const OUString& url, const css::uno::Sequence< css::beans::PropertyValue >& info ) throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
+            virtual sal_Int32 SAL_CALL getMajorVersion(  ) throw (css::uno::RuntimeException, std::exception) override;
+            virtual sal_Int32 SAL_CALL getMinorVersion(  ) throw (css::uno::RuntimeException, std::exception) override;
 
             // XDataDefinitionSupplier
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XTablesSupplier > SAL_CALL getDataDefinitionByConnection( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& connection ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XTablesSupplier > SAL_CALL getDataDefinitionByURL( const OUString& url, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& info ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Reference< css::sdbcx::XTablesSupplier > SAL_CALL getDataDefinitionByConnection( const css::uno::Reference< css::sdbc::XConnection >& connection ) throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Reference< css::sdbcx::XTablesSupplier > SAL_CALL getDataDefinitionByURL( const OUString& url, const css::uno::Sequence< css::beans::PropertyValue >& info ) throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
 
             // XCreateCatalog
-            virtual void SAL_CALL createCatalog( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& info ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL createCatalog( const css::uno::Sequence< css::beans::PropertyValue >& info ) throw (css::sdbc::SQLException, css::container::ElementExistException, css::uno::RuntimeException, std::exception) override;
 
             // XEventListener
-            virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw(css::uno::RuntimeException, std::exception) override;
 
             // XTransactionListener
-            virtual void SAL_CALL preCommit( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) override;
-            virtual void SAL_CALL commited( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-            virtual void SAL_CALL preRevert( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) override;
-            virtual void SAL_CALL reverted( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL preCommit( const css::lang::EventObject& aEvent ) throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL commited( const css::lang::EventObject& aEvent ) throw (css::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL preRevert( const css::lang::EventObject& aEvent ) throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL reverted( const css::lang::EventObject& aEvent ) throw (css::uno::RuntimeException, std::exception) override;
 
             void shutdownConnections();
             void flushConnections();
@@ -124,7 +124,7 @@ namespace connectivity
             /** called when we connected to a newly created embedded database
             */
             void onConnectedNewDatabase(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection
+                const css::uno::Reference< css::sdbc::XConnection >& _rxConnection
             );
         };
     }

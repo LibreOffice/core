@@ -30,7 +30,7 @@ namespace connectivity
     //************ Class: java.sql.Ref
 
     class java_sql_Ref :    public java_lang_Object,
-                            public ::cppu::WeakImplHelper< ::com::sun::star::sdbc::XRef>
+                            public ::cppu::WeakImplHelper< css::sdbc::XRef>
     {
     protected:
     // Static data for the class
@@ -43,7 +43,7 @@ namespace connectivity
         java_sql_Ref( JNIEnv * pEnv, jobject myObj );
 
         // XRef
-        virtual OUString SAL_CALL getBaseTypeName(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual OUString SAL_CALL getBaseTypeName(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
     };
 }
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_SQL_REF_HXX

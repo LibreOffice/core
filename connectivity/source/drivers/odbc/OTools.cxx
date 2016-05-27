@@ -127,9 +127,9 @@ void OTools::getValue(  OConnection* _pConnection,
                         sal_Int32 columnIndex,
                         SQLSMALLINT _nType,
                         bool &_bWasNull,
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface,
+                        const css::uno::Reference< css::uno::XInterface >& _xInterface,
                         void* _pValue,
-                        SQLLEN _nSize) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+                        SQLLEN _nSize) throw(css::sdbc::SQLException, css::uno::RuntimeException)
 {
     const size_t properSize = sqlTypeLen(_nType);
     if ( properSize == static_cast<size_t>(-1) )
@@ -168,9 +168,9 @@ void OTools::bindValue( OConnection* _pConnection,
                         const void* _pValue,
                         void* _pData,
                         SQLLEN * const pLen,
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface,
+                        const css::uno::Reference< css::uno::XInterface >& _xInterface,
                         rtl_TextEncoding _nTextEncoding,
-                        bool _bUseOldTimeDate) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+                        bool _bUseOldTimeDate) throw(css::sdbc::SQLException, css::uno::RuntimeException)
 {
     SQLRETURN nRetcode;
     SQLSMALLINT   fSqlType;
@@ -248,8 +248,8 @@ void OTools::bindValue( OConnection* _pConnection,
                 case SQL_BINARY:
                 case SQL_VARBINARY:
                     {
-                        _pData = const_cast<sal_Int8 *>(static_cast<const ::com::sun::star::uno::Sequence< sal_Int8 > *>(_pValue)->getConstArray());
-                        *pLen = static_cast<const ::com::sun::star::uno::Sequence< sal_Int8 > *>(_pValue)->getLength();
+                        _pData = const_cast<sal_Int8 *>(static_cast<const css::uno::Sequence< sal_Int8 > *>(_pValue)->getConstArray());
+                        *pLen = static_cast<const css::uno::Sequence< sal_Int8 > *>(_pValue)->getLength();
                     }   break;
                 case SQL_LONGVARBINARY:
                 {
@@ -257,7 +257,7 @@ void OTools::bindValue( OConnection* _pConnection,
                      * for an explanation of that apparently weird cast */
                     _pData = reinterpret_cast<void*>((uintptr_t)columnIndex);
                     sal_Int32 nLen = 0;
-                    nLen = static_cast<const ::com::sun::star::uno::Sequence< sal_Int8 > *>(_pValue)->getLength();
+                    nLen = static_cast<const css::uno::Sequence< sal_Int8 > *>(_pValue)->getLength();
                     *pLen = (SQLLEN)SQL_LEN_DATA_AT_EXEC(nLen);
                 }
                     break;

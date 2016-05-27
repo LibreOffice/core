@@ -315,13 +315,13 @@ sal_Int32 SAL_CALL OConnection::getTransactionIsolation(  ) throw(SQLException, 
     return TransactionIsolation::NONE;
 }
 
-Reference< ::com::sun::star::container::XNameAccess > SAL_CALL OConnection::getTypeMap(  ) throw(SQLException, RuntimeException, std::exception)
+Reference< css::container::XNameAccess > SAL_CALL OConnection::getTypeMap(  ) throw(SQLException, RuntimeException, std::exception)
 {
     // if your driver has special database types you can return it here
     return nullptr;
 }
 
-void SAL_CALL OConnection::setTypeMap( const Reference< ::com::sun::star::container::XNameAccess >& /*typeMap*/ ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OConnection::setTypeMap( const Reference< css::container::XNameAccess >& /*typeMap*/ ) throw(SQLException, RuntimeException, std::exception)
 {
     ::dbtools::throwFeatureNotImplementedSQLException( "XConnection::setTypeMap", *this );
 }

@@ -41,12 +41,12 @@
 namespace connectivity
 {
 
-        typedef ::cppu::WeakComponentImplHelper<       ::com::sun::star::sdbc::XStatement,
-                                                       ::com::sun::star::sdbc::XWarningsSupplier,
-                                                       ::com::sun::star::util::XCancellable,
-                                                       ::com::sun::star::sdbc::XCloseable,
-                                                       ::com::sun::star::sdbc::XGeneratedResultSet,
-                                                       ::com::sun::star::sdbc::XMultipleResults> java_sql_Statement_BASE;
+        typedef ::cppu::WeakComponentImplHelper<       css::sdbc::XStatement,
+                                                       css::sdbc::XWarningsSupplier,
+                                                       css::util::XCancellable,
+                                                       css::sdbc::XCloseable,
+                                                       css::sdbc::XGeneratedResultSet,
+                                                       css::sdbc::XMultipleResults> java_sql_Statement_BASE;
 
     //************ Class: java.sql.Statement
 
@@ -58,27 +58,27 @@ namespace connectivity
 
     {
 
-        sal_Int32 getQueryTimeOut()             throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-        sal_Int32 getMaxFieldSize()             throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-        sal_Int32 getMaxRows()                  throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-        sal_Int32 getResultSetConcurrency()     throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-        sal_Int32 getResultSetType()            throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-        sal_Int32 getFetchDirection()           throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-        sal_Int32 getFetchSize()                throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-        OUString getCursorName()         throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+        sal_Int32 getQueryTimeOut()             throw(css::sdbc::SQLException, css::uno::RuntimeException);
+        sal_Int32 getMaxFieldSize()             throw(css::sdbc::SQLException, css::uno::RuntimeException);
+        sal_Int32 getMaxRows()                  throw(css::sdbc::SQLException, css::uno::RuntimeException);
+        sal_Int32 getResultSetConcurrency()     throw(css::sdbc::SQLException, css::uno::RuntimeException);
+        sal_Int32 getResultSetType()            throw(css::sdbc::SQLException, css::uno::RuntimeException);
+        sal_Int32 getFetchDirection()           throw(css::sdbc::SQLException, css::uno::RuntimeException);
+        sal_Int32 getFetchSize()                throw(css::sdbc::SQLException, css::uno::RuntimeException);
+        OUString getCursorName()         throw(css::sdbc::SQLException, css::uno::RuntimeException);
 
-        void setQueryTimeOut(sal_Int32 _par0)                   throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-        void setMaxFieldSize(sal_Int32 _par0)                   throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-        void setMaxRows(sal_Int32 _par0)                                throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-        void setResultSetConcurrency(sal_Int32 _par0)   throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-        void setResultSetType(sal_Int32 _par0)                  throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-        void setFetchDirection(sal_Int32 _par0)                 throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-        void setFetchSize(sal_Int32 _par0)                              throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-        void setCursorName(const OUString &_par0) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-        void setEscapeProcessing(bool _par0) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+        void setQueryTimeOut(sal_Int32 _par0)                   throw(css::sdbc::SQLException, css::uno::RuntimeException);
+        void setMaxFieldSize(sal_Int32 _par0)                   throw(css::sdbc::SQLException, css::uno::RuntimeException);
+        void setMaxRows(sal_Int32 _par0)                                throw(css::sdbc::SQLException, css::uno::RuntimeException);
+        void setResultSetConcurrency(sal_Int32 _par0)   throw(css::sdbc::SQLException, css::uno::RuntimeException);
+        void setResultSetType(sal_Int32 _par0)                  throw(css::sdbc::SQLException, css::uno::RuntimeException);
+        void setFetchDirection(sal_Int32 _par0)                 throw(css::sdbc::SQLException, css::uno::RuntimeException);
+        void setFetchSize(sal_Int32 _par0)                              throw(css::sdbc::SQLException, css::uno::RuntimeException);
+        void setCursorName(const OUString &_par0) throw(css::sdbc::SQLException, css::uno::RuntimeException);
+        void setEscapeProcessing(bool _par0) throw(css::sdbc::SQLException, css::uno::RuntimeException);
 
     protected:
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XStatement>       m_xGeneratedStatement;
+        css::uno::Reference< css::sdbc::XStatement>       m_xGeneratedStatement;
         java_sql_Connection*        m_pConnection;
         java::sql::ConnectionLog    m_aLogger;
         OUString             m_sSqlStatement;
@@ -97,19 +97,19 @@ namespace connectivity
         virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
 
         virtual sal_Bool SAL_CALL convertFastPropertyValue(
-                                    ::com::sun::star::uno::Any & rConvertedValue,
-                                    ::com::sun::star::uno::Any & rOldValue,
+                                    css::uno::Any & rConvertedValue,
+                                    css::uno::Any & rOldValue,
                                     sal_Int32 nHandle,
-                                    const ::com::sun::star::uno::Any& rValue
-                                )   throw (::com::sun::star::lang::IllegalArgumentException) override;
+                                    const css::uno::Any& rValue
+                                )   throw (css::lang::IllegalArgumentException) override;
 
         virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
                                     sal_Int32 nHandle,
-                                    const ::com::sun::star::uno::Any& rValue
-                                )   throw (::com::sun::star::uno::Exception, std::exception) override;
+                                    const css::uno::Any& rValue
+                                )   throw (css::uno::Exception, std::exception) override;
 
         virtual void SAL_CALL getFastPropertyValue(
-                                    ::com::sun::star::uno::Any& rValue,
+                                    css::uno::Any& rValue,
                                     sal_Int32 nHandle
                                 ) const override;
 
@@ -133,30 +133,30 @@ namespace connectivity
         // XInterface
         virtual void SAL_CALL acquire() throw() override;
         virtual void SAL_CALL release() throw() override;
-        virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
         //XTypeProvider
-        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) throw(css::uno::RuntimeException, std::exception) override;
 
         // XPropertySet
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(css::uno::RuntimeException, std::exception) override;
         // XStatement
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > SAL_CALL executeQuery( const OUString& sql ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) override ;
-        virtual sal_Int32 SAL_CALL executeUpdate( const OUString& sql ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) override ;
-        virtual sal_Bool SAL_CALL execute( const OUString& sql ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) override ;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > SAL_CALL getConnection(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) override ;
+        virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL executeQuery( const OUString& sql ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override ;
+        virtual sal_Int32 SAL_CALL executeUpdate( const OUString& sql ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override ;
+        virtual sal_Bool SAL_CALL execute( const OUString& sql ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override ;
+        virtual css::uno::Reference< css::sdbc::XConnection > SAL_CALL getConnection(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override ;
         // XWarningsSupplier
-        virtual ::com::sun::star::uno::Any SAL_CALL getWarnings(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL clearWarnings(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Any SAL_CALL getWarnings(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL clearWarnings(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
         // XCancellable
-        virtual void SAL_CALL cancel(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL cancel(  ) throw(css::uno::RuntimeException, std::exception) override;
         // XCloseable
-        virtual void SAL_CALL close(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL close(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
         // XMultipleResults
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > SAL_CALL getResultSet(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual sal_Int32 SAL_CALL getUpdateCount(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual sal_Bool SAL_CALL getMoreResults(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getResultSet(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
+        virtual sal_Int32 SAL_CALL getUpdateCount(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
+        virtual sal_Bool SAL_CALL getMoreResults(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
         //XGeneratedResultSet
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > SAL_CALL getGeneratedValues(  ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getGeneratedValues(  ) throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
 
     public:
         using ::cppu::OPropertySetHelper::getFastPropertyValue;
@@ -178,8 +178,8 @@ namespace connectivity
     };
 
     class java_sql_Statement :  public OStatement_BASE2,
-                                public ::com::sun::star::sdbc::XBatchExecution,
-                                public ::com::sun::star::lang::XServiceInfo
+                                public css::sdbc::XBatchExecution,
+                                public css::lang::XServiceInfo
     {
     protected:
         // Static data for the class
@@ -195,13 +195,13 @@ namespace connectivity
         // A ctor that is needed for returning the object
         java_sql_Statement( JNIEnv * pEnv, java_sql_Connection& _rCon ) : OStatement_BASE2( pEnv, _rCon){};
 
-        virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
         virtual void SAL_CALL acquire() throw() override;
         virtual void SAL_CALL release() throw() override;
         // XBatchExecution
-        virtual void SAL_CALL addBatch( const OUString& sql ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL clearBatch(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual ::com::sun::star::uno::Sequence< sal_Int32 > SAL_CALL executeBatch(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL addBatch( const OUString& sql ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL clearBatch(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Sequence< sal_Int32 > SAL_CALL executeBatch(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
     };
 }
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_SQL_JSTATEMENT_HXX

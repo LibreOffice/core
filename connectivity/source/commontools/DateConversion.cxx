@@ -59,7 +59,7 @@ OUString DBTypeConversion::toSQLString(sal_Int32 eType, const Any& _rVal, bool b
                 case DataType::BOOLEAN:
                 case DataType::TINYINT:
                 case DataType::SMALLINT:
-                    if (_rVal.getValueType().getTypeClass() == ::com::sun::star::uno::TypeClass_BOOLEAN)
+                    if (_rVal.getValueType().getTypeClass() == css::uno::TypeClass_BOOLEAN)
                     {
                         if (::cppu::any2bool(_rVal))
                             aRet.append("1");
@@ -112,14 +112,14 @@ OUString DBTypeConversion::toSQLString(sal_Int32 eType, const Any& _rVal, bool b
                 {
                     DateTime aDateTime;
                     bool bOk = false;
-                    if (_rVal.getValueType().getTypeClass() == ::com::sun::star::uno::TypeClass_DOUBLE)
+                    if (_rVal.getValueType().getTypeClass() == css::uno::TypeClass_DOUBLE)
                     {
                         double nValue = 0.0;
                        _rVal >>= nValue;
                        aDateTime = DBTypeConversion::toDateTime(nValue);
                        bOk = true;
                     }
-                    else if (_rVal.getValueType().getTypeClass() == ::com::sun::star::uno::TypeClass_STRING)
+                    else if (_rVal.getValueType().getTypeClass() == css::uno::TypeClass_STRING)
                     {
                         OUString sValue;
                        _rVal >>= sValue;
@@ -146,14 +146,14 @@ OUString DBTypeConversion::toSQLString(sal_Int32 eType, const Any& _rVal, bool b
                 {
                     Date aDate;
                     bool bOk = false;
-                    if (_rVal.getValueType().getTypeClass() == ::com::sun::star::uno::TypeClass_DOUBLE)
+                    if (_rVal.getValueType().getTypeClass() == css::uno::TypeClass_DOUBLE)
                     {
                         double nValue = 0.0;
                        _rVal >>= nValue;
                        aDate = DBTypeConversion::toDate(nValue);
                        bOk = true;
                     }
-                    else if (_rVal.getValueType().getTypeClass() == ::com::sun::star::uno::TypeClass_STRING)
+                    else if (_rVal.getValueType().getTypeClass() == css::uno::TypeClass_STRING)
                     {
                         OUString sValue;
                        _rVal >>= sValue;
@@ -173,14 +173,14 @@ OUString DBTypeConversion::toSQLString(sal_Int32 eType, const Any& _rVal, bool b
                 {
                     css::util::Time aTime;
                     bool bOk = false;
-                    if (_rVal.getValueType().getTypeClass() == ::com::sun::star::uno::TypeClass_DOUBLE)
+                    if (_rVal.getValueType().getTypeClass() == css::uno::TypeClass_DOUBLE)
                     {
                         double nValue = 0.0;
                        _rVal >>= nValue;
                        aTime = DBTypeConversion::toTime(nValue);
                        bOk = true;
                     }
-                    else if (_rVal.getValueType().getTypeClass() == ::com::sun::star::uno::TypeClass_STRING)
+                    else if (_rVal.getValueType().getTypeClass() == css::uno::TypeClass_STRING)
                     {
                         OUString sValue;
                        _rVal >>= sValue;
@@ -234,7 +234,7 @@ void DBTypeConversion::setValue(const Reference<XColumnUpdate>& xVariant,
                                 const OUString& rString,
                                 sal_Int32 nKey,
                                 sal_Int16 nFieldType,
-                                sal_Int16 nKeyType) throw(::com::sun::star::lang::IllegalArgumentException)
+                                sal_Int16 nKeyType) throw(css::lang::IllegalArgumentException)
 {
     if (!rString.isEmpty())
     {
@@ -317,9 +317,9 @@ void DBTypeConversion::setValue(const Reference<XColumnUpdate>& xVariant,
     {
         switch (nFieldType)
         {
-            case ::com::sun::star::sdbc::DataType::CHAR:
-            case ::com::sun::star::sdbc::DataType::VARCHAR:
-            case ::com::sun::star::sdbc::DataType::LONGVARCHAR:
+            case css::sdbc::DataType::CHAR:
+            case css::sdbc::DataType::VARCHAR:
+            case css::sdbc::DataType::LONGVARCHAR:
                 xVariant->updateString(rString);
                 break;
             default:
@@ -332,7 +332,7 @@ void DBTypeConversion::setValue(const Reference<XColumnUpdate>& xVariant,
 void DBTypeConversion::setValue(const Reference<XColumnUpdate>& xVariant,
                                 const Date& rNullDate,
                                 const double& rValue,
-                                sal_Int16 nKeyType) throw(::com::sun::star::lang::IllegalArgumentException)
+                                sal_Int16 nKeyType) throw(css::lang::IllegalArgumentException)
 {
     switch (nKeyType & ~NumberFormat::DEFINED)
     {
@@ -424,7 +424,7 @@ double DBTypeConversion::getValue( const Reference< XColumn >& i_column, const D
 
 OUString DBTypeConversion::getFormattedValue(const Reference< XPropertySet>& _xColumn,
                                            const Reference<XNumberFormatter>& _xFormatter,
-                                           const ::com::sun::star::lang::Locale& _rLocale,
+                                           const css::lang::Locale& _rLocale,
                                            const Date& _rNullDate)
 {
     OSL_ENSURE(_xColumn.is() && _xFormatter.is(), "DBTypeConversion::getFormattedValue: invalid arg !");

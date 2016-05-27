@@ -173,11 +173,11 @@ OUString connectivity::JavaString2String(JNIEnv *pEnv,jstring Str)
     return aStr;
 }
 
-jobject connectivity::convertTypeMapToJavaMap(JNIEnv* /*pEnv*/,const Reference< ::com::sun::star::container::XNameAccess > & _rMap)
+jobject connectivity::convertTypeMapToJavaMap(JNIEnv* /*pEnv*/,const Reference< css::container::XNameAccess > & _rMap)
 {
     if ( _rMap.is() )
     {
-        ::com::sun::star::uno::Sequence< OUString > aNames = _rMap->getElementNames();
+        css::uno::Sequence< OUString > aNames = _rMap->getElementNames();
         if ( aNames.getLength() > 0 )
             ::dbtools::throwFeatureNotImplementedSQLException( "Type maps", nullptr );
     }
@@ -201,7 +201,7 @@ bool connectivity::isExceptionOccurred(JNIEnv *pEnv,bool _bClear)
     return bRet;
 }
 
-jobject connectivity::createByteInputStream(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& x,sal_Int32 length)
+jobject connectivity::createByteInputStream(const css::uno::Reference< css::io::XInputStream >& x,sal_Int32 length)
 {
     SDBThreadAttach t;
     if( !t.pEnv || !x.is() )
@@ -228,7 +228,7 @@ jobject connectivity::createByteInputStream(const ::com::sun::star::uno::Referen
     return out;
 }
 
-jobject connectivity::createCharArrayReader(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& x,sal_Int32 length)
+jobject connectivity::createCharArrayReader(const css::uno::Reference< css::io::XInputStream >& x,sal_Int32 length)
 {
     SDBThreadAttach t;
     if( !t.pEnv || !x.is() )

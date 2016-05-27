@@ -60,28 +60,28 @@ namespace pq_sdbc_driver
 class EventBroadcastHelper
 {
 public:
-    virtual void fire(com::sun::star::lang::XEventListener * listener) const = 0;
-    virtual com::sun::star::uno::Type getType() const = 0;
+    virtual void fire(css::lang::XEventListener * listener) const = 0;
+    virtual css::uno::Type getType() const = 0;
     virtual ~EventBroadcastHelper(){};
 };
 
 class RefreshedBroadcaster : public EventBroadcastHelper
 {
-    com::sun::star::lang::EventObject m_event;
+    css::lang::EventObject m_event;
 public:
-    explicit RefreshedBroadcaster(const com::sun::star::uno::Reference< com::sun::star::uno::XInterface > & source ) :
+    explicit RefreshedBroadcaster(const css::uno::Reference< css::uno::XInterface > & source ) :
         m_event( source )
     {}
 
-    virtual void fire( com::sun::star::lang::XEventListener * listener ) const override
+    virtual void fire( css::lang::XEventListener * listener ) const override
     {
-        static_cast<com::sun::star::util::XRefreshListener*>(listener)->refreshed( m_event );
+        static_cast<css::util::XRefreshListener*>(listener)->refreshed( m_event );
     }
 
-    virtual com::sun::star::uno::Type getType() const override
+    virtual css::uno::Type getType() const override
     {
         return cppu::UnoType<
-            com::sun::star::util::XRefreshListener>::get();
+            css::util::XRefreshListener>::get();
     }
 };
 
@@ -94,14 +94,14 @@ typedef std::unordered_map
 
 typedef ::cppu::WeakComponentImplHelper
 <
-    com::sun::star::container::XNameAccess,
-    com::sun::star::container::XIndexAccess,
-    com::sun::star::container::XEnumerationAccess,
-    com::sun::star::sdbcx::XAppend,
-    com::sun::star::sdbcx::XDrop,
-    com::sun::star::util::XRefreshable,
-    com::sun::star::sdbcx::XDataDescriptorFactory,
-    com::sun::star::container::XContainer
+    css::container::XNameAccess,
+    css::container::XIndexAccess,
+    css::container::XEnumerationAccess,
+    css::sdbcx::XAppend,
+    css::sdbcx::XDrop,
+    css::util::XRefreshable,
+    css::sdbcx::XDataDescriptorFactory,
+    css::container::XContainer
 > ContainerBase;
 
 class /* abstract */ Container : public ContainerBase
@@ -109,94 +109,94 @@ class /* abstract */ Container : public ContainerBase
 protected:
     ::rtl::Reference< RefCountedMutex > m_refMutex;
     ConnectionSettings *m_pSettings;
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > m_origin;
+    css::uno::Reference< css::sdbc::XConnection > m_origin;
     String2IntMap m_name2index;  // maps the element name to an index
-    std::vector< com::sun::star::uno::Any > m_values; // contains the real values
+    std::vector< css::uno::Any > m_values; // contains the real values
     OUString m_type;
 
 public:
     Container(
         const ::rtl::Reference< RefCountedMutex > & refMutex,
-        const ::com::sun::star::uno::Reference< com::sun::star::sdbc::XConnection >  & origin,
+        const css::uno::Reference< css::sdbc::XConnection >  & origin,
         ConnectionSettings *pSettings,
         const OUString & type  // for exception messages
         );
 
 public: // XIndexAccess
     virtual sal_Int32 SAL_CALL getCount(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Any SAL_CALL getByIndex( sal_Int32 Index )
-        throw (::com::sun::star::lang::IndexOutOfBoundsException,
-               ::com::sun::star::lang::WrappedTargetException,
-               ::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Any SAL_CALL getByIndex( sal_Int32 Index )
+        throw (css::lang::IndexOutOfBoundsException,
+               css::lang::WrappedTargetException,
+               css::uno::RuntimeException, std::exception) override;
 
 public: // XEnumerationAccess
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration >
-    SAL_CALL createEnumeration(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::container::XEnumeration >
+    SAL_CALL createEnumeration(  ) throw (css::uno::RuntimeException, std::exception) override;
 
 public: // XNameAccess
-    virtual ::com::sun::star::uno::Any SAL_CALL getByName( const OUString& aName )
-        throw (::com::sun::star::container::NoSuchElementException,
-               ::com::sun::star::lang::WrappedTargetException,
-               ::com::sun::star::uno::RuntimeException, std::exception) override;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getElementNames(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Any SAL_CALL getByName( const OUString& aName )
+        throw (css::container::NoSuchElementException,
+               css::lang::WrappedTargetException,
+               css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getElementNames(  )
+        throw (css::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL hasByName( const OUString& aName )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
     // Methods
-    virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Type SAL_CALL getElementType(  )
+        throw (css::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL hasElements(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::uno::RuntimeException, std::exception) override;
 
 
 public: // XAppend
     // Must be overridden in Non-Descriptors. May be overridden in descriptors, when
     // PropertySet.NAME != container name
     virtual void SAL_CALL appendByDescriptor(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor )
-        throw (::com::sun::star::sdbc::SQLException,
-               ::com::sun::star::container::ElementExistException,
-               ::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::beans::XPropertySet >& descriptor )
+        throw (css::sdbc::SQLException,
+               css::container::ElementExistException,
+               css::uno::RuntimeException, std::exception) override;
 
     // helper method !
     void append(
         const OUString & str,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor )
-        throw ( ::com::sun::star::container::ElementExistException );
+        const css::uno::Reference< css::beans::XPropertySet >& descriptor )
+        throw ( css::container::ElementExistException );
 
 
 public: // XDrop
     virtual void SAL_CALL dropByName( const OUString& elementName )
-        throw (::com::sun::star::sdbc::SQLException,
-               ::com::sun::star::container::NoSuchElementException,
-               ::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::sdbc::SQLException,
+               css::container::NoSuchElementException,
+               css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL dropByIndex( sal_Int32 index )
-        throw (::com::sun::star::sdbc::SQLException,
-               ::com::sun::star::lang::IndexOutOfBoundsException,
-               ::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::sdbc::SQLException,
+               css::lang::IndexOutOfBoundsException,
+               css::uno::RuntimeException, std::exception) override;
 
 public: // XDataDescriptorFactory
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > SAL_CALL createDataDescriptor(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override = 0;
+    virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL createDataDescriptor(  )
+        throw (css::uno::RuntimeException, std::exception) override = 0;
 
 public: // XRefreshable
-    virtual void SAL_CALL refresh(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override {}
+    virtual void SAL_CALL refresh(  ) throw (css::uno::RuntimeException, std::exception) override {}
     virtual void SAL_CALL addRefreshListener(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::util::XRefreshListener >& l )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::util::XRefreshListener >& l )
+        throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL removeRefreshListener(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::util::XRefreshListener >& l )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::util::XRefreshListener >& l )
+        throw (css::uno::RuntimeException, std::exception) override;
 
 public:
     // Methods
     virtual void SAL_CALL addContainerListener(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener >& xListener )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::container::XContainerListener >& xListener )
+        throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL removeContainerListener(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener >& xListener )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::container::XContainerListener >& xListener )
+        throw (css::uno::RuntimeException, std::exception) override;
 
 public:
     virtual void SAL_CALL disposing() override;

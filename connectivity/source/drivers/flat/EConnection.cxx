@@ -121,7 +121,7 @@ Reference< XDatabaseMetaData > SAL_CALL OFlatConnection::getMetaData(  ) throw(S
     return xMetaData;
 }
 
-::com::sun::star::uno::Reference< XTablesSupplier > OFlatConnection::createCatalog()
+css::uno::Reference< XTablesSupplier > OFlatConnection::createCatalog()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     Reference< XTablesSupplier > xTab = m_xCatalog;

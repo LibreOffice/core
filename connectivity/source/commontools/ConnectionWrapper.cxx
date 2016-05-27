@@ -105,13 +105,13 @@ OConnectionWrapper::~OConnectionWrapper()
 
 // XServiceInfo
 
-OUString SAL_CALL OConnectionWrapper::getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+OUString SAL_CALL OConnectionWrapper::getImplementationName(  ) throw (css::uno::RuntimeException, std::exception)
 {
     return OUString( "com.sun.star.sdbc.drivers.OConnectionWrapper" );
 }
 
 
-::com::sun::star::uno::Sequence< OUString > SAL_CALL OConnectionWrapper::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Sequence< OUString > SAL_CALL OConnectionWrapper::getSupportedServiceNames(  ) throw(css::uno::RuntimeException, std::exception)
 {
     // first collect the services which are supported by our aggregate
     Sequence< OUString > aSupported;
@@ -132,7 +132,7 @@ OUString SAL_CALL OConnectionWrapper::getImplementationName(  ) throw (::com::su
 }
 
 
-sal_Bool SAL_CALL OConnectionWrapper::supportsService( const OUString& _rServiceName ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL OConnectionWrapper::supportsService( const OUString& _rServiceName ) throw(css::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, _rServiceName);
 }
@@ -144,7 +144,7 @@ Any SAL_CALL OConnectionWrapper::queryInterface( const Type& _rType ) throw (Run
     return aReturn.hasValue() ? aReturn : (m_xProxyConnection.is() ? m_xProxyConnection->queryAggregation(_rType) : aReturn);
 }
 
-Sequence< Type > SAL_CALL OConnectionWrapper::getTypes(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+Sequence< Type > SAL_CALL OConnectionWrapper::getTypes(  ) throw (css::uno::RuntimeException, std::exception)
 {
     return ::comphelper::concatSequences(
         OConnection_BASE::getTypes(),
@@ -152,7 +152,7 @@ Sequence< Type > SAL_CALL OConnectionWrapper::getTypes(  ) throw (::com::sun::st
     );
 }
 
-// com::sun::star::lang::XUnoTunnel
+// css::lang::XUnoTunnel
 sal_Int64 SAL_CALL OConnectionWrapper::getSomething( const Sequence< sal_Int8 >& rId ) throw(RuntimeException, std::exception)
 {
     if (rId.getLength() == 16 && 0 == memcmp(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
@@ -181,12 +181,12 @@ Sequence< sal_Int8 > OConnectionWrapper::getUnoTunnelImplementationId()
 
 namespace
 {
-    class TPropertyValueLessFunctor : public ::std::binary_function< ::com::sun::star::beans::PropertyValue,::com::sun::star::beans::PropertyValue,bool>
+    class TPropertyValueLessFunctor : public ::std::binary_function< css::beans::PropertyValue,css::beans::PropertyValue,bool>
     {
     public:
         TPropertyValueLessFunctor()
         {}
-        bool operator() (const ::com::sun::star::beans::PropertyValue& lhs, const ::com::sun::star::beans::PropertyValue& rhs) const
+        bool operator() (const css::beans::PropertyValue& lhs, const css::beans::PropertyValue& rhs) const
         {
             return lhs.Name.compareToIgnoreAsciiCase(rhs.Name) < 0;
         }

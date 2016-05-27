@@ -272,7 +272,7 @@ bool KabImplModule::impl_doAllowNewKDEVersion()
     try
     {
         Reference< XMultiServiceFactory > xConfigProvider(
-            com::sun::star::configuration::theDefaultProvider::get( m_xContext ) );
+            css::configuration::theDefaultProvider::get( m_xContext ) );
         Sequence< Any > aCreationArgs(1);
         aCreationArgs[0] <<= PropertyValue(
                                 OUString(  "nodepath"  ),
@@ -322,7 +322,7 @@ void KabImplModule::shutdown()
 // = KabDriver
 
 KabDriver::KabDriver(
-    const Reference< ::com::sun::star::uno::XComponentContext >& _rxContext)
+    const Reference< css::uno::XComponentContext >& _rxContext)
     : KDriver_BASE(m_aMutex),
       m_xContext(_rxContext),
       m_aImplModule(_rxContext)

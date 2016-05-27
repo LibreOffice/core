@@ -56,7 +56,7 @@ namespace connectivity
             AliasMap    m_aAliasMap;
 
         public:
-            explicit OColumnAlias( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & );
+            explicit OColumnAlias( const css::uno::Reference< css::lang::XMultiServiceFactory > & );
 
             OString getProgrammaticNameOrFallbackToUTF8Alias( const OUString& _rAlias ) const;
 
@@ -65,7 +65,7 @@ namespace connectivity
 
 
         private:
-            void initialize( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB );
+            void initialize( const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxORB );
         };
     }
 }

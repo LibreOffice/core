@@ -162,9 +162,9 @@ Any SAL_CALL OStatement_Base::queryInterface( const Type & rType ) throw(Runtime
 
 Sequence< Type > SAL_CALL OStatement_Base::getTypes(  ) throw(RuntimeException, std::exception)
 {
-    ::cppu::OTypeCollection aTypes( cppu::UnoType<com::sun::star::beans::XMultiPropertySet>::get(),
-                                                                    cppu::UnoType<com::sun::star::beans::XFastPropertySet>::get(),
-                                                                    cppu::UnoType<com::sun::star::beans::XPropertySet>::get());
+    ::cppu::OTypeCollection aTypes( cppu::UnoType<css::beans::XMultiPropertySet>::get(),
+                                    cppu::UnoType<css::beans::XFastPropertySet>::get(),
+                                    cppu::UnoType<css::beans::XPropertySet>::get());
 
     return ::comphelper::concatSequences(aTypes.getTypes(),OStatement_BASE::getTypes());
 }
@@ -308,7 +308,7 @@ void SAL_CALL OStatement_Base::disposing()
     OStatement_BASE::disposing();
 }
 
-Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL OStatement_Base::getPropertySetInfo(  ) throw(RuntimeException, std::exception)
+Reference< css::beans::XPropertySetInfo > SAL_CALL OStatement_Base::getPropertySetInfo(  ) throw(RuntimeException, std::exception)
 {
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }
@@ -421,7 +421,7 @@ void OStatement_Base::construct(const OUString& sql)  throw(SQLException, Runtim
         }
 
         // at this moment we support only one table per select statement
-        Reference< ::com::sun::star::lang::XUnoTunnel> xTunnel(rTabs.begin()->second,UNO_QUERY);
+        Reference< css::lang::XUnoTunnel> xTunnel(rTabs.begin()->second,UNO_QUERY);
         if(xTunnel.is())
         {
             if(m_pTable)

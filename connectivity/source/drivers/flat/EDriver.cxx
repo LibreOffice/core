@@ -29,11 +29,11 @@
 
 using namespace connectivity::flat;
 using namespace connectivity::file;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::sdbcx;
-using namespace ::com::sun::star::sdbc;
-using namespace ::com::sun::star::lang;
+using namespace css::uno;
+using namespace css::beans;
+using namespace css::sdbcx;
+using namespace css::sdbc;
+using namespace css::lang;
 
 
 // static ServiceInfo
@@ -50,7 +50,7 @@ OUString SAL_CALL ODriver::getImplementationName(  ) throw(RuntimeException, std
 }
 
 
-::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  SAL_CALL connectivity::flat::ODriver_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory) throw( ::com::sun::star::uno::Exception )
+css::uno::Reference< css::uno::XInterface >  SAL_CALL connectivity::flat::ODriver_CreateInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxFactory) throw( css::uno::Exception )
 {
     return *(new ODriver( comphelper::getComponentContext(_rxFactory) ));
 }

@@ -36,7 +36,7 @@ IMPLEMENT_SERVICE_INFO(OView,"com.sun.star.sdbcx.VView","com.sun.star.sdbcx.View
 
 OView::OView(bool _bCase,
             const OUString& Name,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _xMetaData,
+            const css::uno::Reference< css::sdbc::XDatabaseMetaData >& _xMetaData,
             sal_Int32 CheckOption,
             const OUString& Command,
             const OUString& SchemaName,
@@ -52,7 +52,7 @@ OView::OView(bool _bCase,
     construct();
 }
 
-OView::OView(bool _bCase, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _xMetaData)
+OView::OView(bool _bCase, const css::uno::Reference< css::sdbc::XDatabaseMetaData >& _xMetaData)
     : ODescriptor(::comphelper::OMutexAndBroadcastHelper::m_aBHelper, _bCase, true)
     ,m_xMetaData(_xMetaData)
 {
@@ -96,7 +96,7 @@ Any SAL_CALL OView::queryInterface( const Type & rType ) throw(RuntimeException,
     return *getArrayHelper(isNew() ? 1 : 0);
 }
 
-OUString SAL_CALL OView::getName() throw(::com::sun::star::uno::RuntimeException, std::exception)
+OUString SAL_CALL OView::getName() throw(css::uno::RuntimeException, std::exception)
 {
     OUString sComposedName;
     if(m_xMetaData.is())
@@ -110,12 +110,12 @@ OUString SAL_CALL OView::getName() throw(::com::sun::star::uno::RuntimeException
     return sComposedName;
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL OView::getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL OView::getPropertySetInfo(  ) throw(css::uno::RuntimeException, std::exception)
 {
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }
 
-void SAL_CALL OView::setName( const OUString& ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL OView::setName( const OUString& ) throw(css::uno::RuntimeException, std::exception)
 {
 }
 

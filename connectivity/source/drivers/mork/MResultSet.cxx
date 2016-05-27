@@ -55,7 +55,7 @@ OUString SAL_CALL OResultSet::getImplementationName(  ) throw ( RuntimeException
 
  Sequence< OUString > SAL_CALL OResultSet::getSupportedServiceNames(  ) throw( RuntimeException, std::exception)
 {
-    ::com::sun::star::uno::Sequence< OUString > aSupported(2);
+    css::uno::Sequence< OUString > aSupported(2);
     aSupported[0] = "com.sun.star.sdbc.ResultSet";
     aSupported[1] = "com.sun.star.sdbcx.ResultSet";
     return aSupported;
@@ -129,9 +129,9 @@ Any SAL_CALL OResultSet::queryInterface( const Type & rType ) throw(RuntimeExcep
 
  Sequence<  Type > SAL_CALL OResultSet::getTypes(  ) throw( RuntimeException, std::exception)
 {
-    OTypeCollection aTypes( cppu::UnoType<com::sun::star::beans::XMultiPropertySet>::get(),
-                                                cppu::UnoType<com::sun::star::beans::XFastPropertySet>::get(),
-                                                cppu::UnoType<com::sun::star::beans::XPropertySet>::get());
+    OTypeCollection aTypes( cppu::UnoType<css::beans::XMultiPropertySet>::get(),
+                                                cppu::UnoType<css::beans::XFastPropertySet>::get(),
+                                                cppu::UnoType<css::beans::XPropertySet>::get());
 
     return ::comphelper::concatSequences(aTypes.getTypes(),OResultSet_BASE::getTypes());
 }
@@ -277,7 +277,7 @@ Reference< XRef > SAL_CALL OResultSet::getRef( sal_Int32 /*columnIndex*/ ) throw
 }
 
 
-Any SAL_CALL OResultSet::getObject( sal_Int32 /*columnIndex*/, const Reference< ::com::sun::star::container::XNameAccess >& /*typeMap*/ ) throw(SQLException, RuntimeException, std::exception)
+Any SAL_CALL OResultSet::getObject( sal_Int32 /*columnIndex*/, const Reference< css::container::XNameAccess >& /*typeMap*/ ) throw(SQLException, RuntimeException, std::exception)
 {
     return Any();
 }
@@ -289,7 +289,7 @@ sal_Int16 SAL_CALL OResultSet::getShort( sal_Int32 /*columnIndex*/ ) throw(SQLEx
 }
 
 
-void OResultSet::checkIndex(sal_Int32 columnIndex ) throw(::com::sun::star::sdbc::SQLException)
+void OResultSet::checkIndex(sal_Int32 columnIndex ) throw(css::sdbc::SQLException)
 {
     if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->get().size())
         ::dbtools::throwInvalidIndexException(*this);
@@ -572,19 +572,19 @@ IPropertyArrayHelper* OResultSet::createArrayHelper( ) const
     Sequence< Property > aProps(5);
     Property* pProperties = aProps.getArray();
     sal_Int32 nPos = 0;
-    pProperties[nPos++] = ::com::sun::star::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FETCHDIRECTION),
+    pProperties[nPos++] = css::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FETCHDIRECTION),
         PROPERTY_ID_FETCHDIRECTION, cppu::UnoType<sal_Int32>::get(), 0);
 
-    pProperties[nPos++] = ::com::sun::star::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FETCHSIZE),
+    pProperties[nPos++] = css::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FETCHSIZE),
         PROPERTY_ID_FETCHSIZE, cppu::UnoType<sal_Int32>::get(), 0);
 
-    pProperties[nPos++] = ::com::sun::star::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISBOOKMARKABLE),
+    pProperties[nPos++] = css::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISBOOKMARKABLE),
         PROPERTY_ID_ISBOOKMARKABLE, cppu::UnoType<bool>::get(), PropertyAttribute::READONLY);
 
-    pProperties[nPos++] = ::com::sun::star::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_RESULTSETCONCURRENCY),
+    pProperties[nPos++] = css::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_RESULTSETCONCURRENCY),
         PROPERTY_ID_RESULTSETCONCURRENCY, cppu::UnoType<sal_Int32>::get(), PropertyAttribute::READONLY);
 
-    pProperties[nPos++] = ::com::sun::star::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_RESULTSETTYPE),
+    pProperties[nPos++] = css::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_RESULTSETTYPE),
         PROPERTY_ID_RESULTSETTYPE, cppu::UnoType<sal_Int32>::get(), PropertyAttribute::READONLY);
 
     return new OPropertyArrayHelper(aProps);
@@ -600,7 +600,7 @@ sal_Bool OResultSet::convertFastPropertyValue(
                             Any & /*rOldValue*/,
                             sal_Int32 nHandle,
                             const Any& /*rValue*/ )
-                                throw (::com::sun::star::lang::IllegalArgumentException)
+                                throw (css::lang::IllegalArgumentException)
 {
     OSL_FAIL( "OResultSet::convertFastPropertyValue: not implemented!" );
     switch(nHandle)
@@ -608,7 +608,7 @@ sal_Bool OResultSet::convertFastPropertyValue(
         case PROPERTY_ID_ISBOOKMARKABLE:
         case PROPERTY_ID_RESULTSETCONCURRENCY:
         case PROPERTY_ID_RESULTSETTYPE:
-            throw ::com::sun::star::lang::IllegalArgumentException();
+            throw css::lang::IllegalArgumentException();
         case PROPERTY_ID_FETCHDIRECTION:
         case PROPERTY_ID_FETCHSIZE:
         default:
@@ -675,7 +675,7 @@ void SAL_CALL OResultSet::release() throw()
     OResultSet_BASE::release();
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL OResultSet::getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL OResultSet::getPropertySetInfo(  ) throw(css::uno::RuntimeException, std::exception)
 {
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }
@@ -1106,8 +1106,8 @@ sal_Int32 OResultSet::getRowForCardNumber(sal_Int32 nCardNum)
 }
 
 
-void SAL_CALL OResultSet::executeQuery() throw( ::com::sun::star::sdbc::SQLException,
-                                                ::com::sun::star::uno::RuntimeException)
+void SAL_CALL OResultSet::executeQuery() throw( css::sdbc::SQLException,
+                                                css::uno::RuntimeException)
 {
     ResultSetEntryGuard aGuard( *this );
 
@@ -1515,7 +1515,7 @@ void OResultSet::setColumnMapping(const ::std::vector<sal_Int32>& _aColumnMappin
 }
 
 
-::com::sun::star::uno::Any OResultSet::getBookmark(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Any OResultSet::getBookmark(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
     SAL_INFO("connectivity.mork", "m_nRowPos = " << m_nRowPos);
     ResultSetEntryGuard aGuard( *this );
@@ -1526,7 +1526,7 @@ void OResultSet::setColumnMapping(const ::std::vector<sal_Int32>& _aColumnMappin
     OSL_ENSURE((!m_aRow->isDeleted()),"getBookmark called for deleted row");
     return makeAny((sal_Int32)(m_aRow->get())[0]);
 }
-sal_Bool  OResultSet::moveToBookmark( const ::com::sun::star::uno::Any& bookmark ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
+sal_Bool  OResultSet::moveToBookmark( const css::uno::Any& bookmark ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
     ResultSetEntryGuard aGuard( *this );
     SAL_INFO(
@@ -1536,7 +1536,7 @@ sal_Bool  OResultSet::moveToBookmark( const ::com::sun::star::uno::Any& bookmark
     fetchCurrentRow();
     return true;
 }
-sal_Bool  OResultSet::moveRelativeToBookmark( const ::com::sun::star::uno::Any& bookmark, sal_Int32 rows ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
+sal_Bool  OResultSet::moveRelativeToBookmark( const css::uno::Any& bookmark, sal_Int32 rows ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
     ResultSetEntryGuard aGuard( *this );
     SAL_INFO(
@@ -1546,7 +1546,7 @@ sal_Bool  OResultSet::moveRelativeToBookmark( const ::com::sun::star::uno::Any& 
     m_nRowPos = getRowForCardNumber(nCardNum);
     return seekRow(RELATIVE_POS,rows );
 }
-sal_Int32 OResultSet::compareBookmarks( const ::com::sun::star::uno::Any& lhs, const ::com::sun::star::uno::Any& rhs ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
+sal_Int32 OResultSet::compareBookmarks( const css::uno::Any& lhs, const css::uno::Any& rhs ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
     ResultSetEntryGuard aGuard( *this );
     SAL_INFO("connectivity.mork", "m_nRowPos = " << m_nRowPos);
@@ -1567,13 +1567,13 @@ sal_Int32 OResultSet::compareBookmarks( const ::com::sun::star::uno::Any& lhs, c
 
     return  nResult;
 }
-sal_Bool OResultSet::hasOrderedBookmarks(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
+sal_Bool OResultSet::hasOrderedBookmarks(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
     ResultSetEntryGuard aGuard( *this );
     SAL_INFO("connectivity.mork", "m_nRowPos = " << m_nRowPos);
     return true;
 }
-sal_Int32 OResultSet::hashBookmark( const ::com::sun::star::uno::Any& bookmark ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
+sal_Int32 OResultSet::hashBookmark( const css::uno::Any& bookmark ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
     ResultSetEntryGuard aGuard( *this );
     SAL_INFO("connectivity.mork", "m_nRowPos = " << m_nRowPos);
@@ -1692,25 +1692,25 @@ void SAL_CALL OResultSet::updateBytes( sal_Int32 columnIndex, const Sequence< sa
     updateValue(columnIndex,x);
 }
 
-void SAL_CALL OResultSet::updateDate( sal_Int32 columnIndex, const ::com::sun::star::util::Date& x ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OResultSet::updateDate( sal_Int32 columnIndex, const css::util::Date& x ) throw(SQLException, RuntimeException, std::exception)
 {
     updateValue(columnIndex,x);
 }
 
 
-void SAL_CALL OResultSet::updateTime( sal_Int32 columnIndex, const ::com::sun::star::util::Time& x ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OResultSet::updateTime( sal_Int32 columnIndex, const css::util::Time& x ) throw(SQLException, RuntimeException, std::exception)
 {
     updateValue(columnIndex,x);
 }
 
 
-void SAL_CALL OResultSet::updateTimestamp( sal_Int32 columnIndex, const ::com::sun::star::util::DateTime& x ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OResultSet::updateTimestamp( sal_Int32 columnIndex, const css::util::DateTime& x ) throw(SQLException, RuntimeException, std::exception)
 {
     updateValue(columnIndex,x);
 }
 
 
-void SAL_CALL OResultSet::updateBinaryStream( sal_Int32 columnIndex, const Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OResultSet::updateBinaryStream( sal_Int32 columnIndex, const Reference< css::io::XInputStream >& x, sal_Int32 length ) throw(SQLException, RuntimeException, std::exception)
 {
     ResultSetEntryGuard aGuard( *this );
 
@@ -1722,7 +1722,7 @@ void SAL_CALL OResultSet::updateBinaryStream( sal_Int32 columnIndex, const Refer
     updateValue(columnIndex,aSeq);
 }
 
-void SAL_CALL OResultSet::updateCharacterStream( sal_Int32 columnIndex, const Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OResultSet::updateCharacterStream( sal_Int32 columnIndex, const Reference< css::io::XInputStream >& x, sal_Int32 length ) throw(SQLException, RuntimeException, std::exception)
 {
     updateBinaryStream(columnIndex,x,length);
 }
@@ -1754,7 +1754,7 @@ void SAL_CALL OResultSet::updateNumericObject( sal_Int32 columnIndex, const Any&
 
 // XResultSetUpdate
 
-void SAL_CALL OResultSet::insertRow(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL OResultSet::insertRow(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
     ResultSetEntryGuard aGuard( *this );
     SAL_INFO("connectivity.mork", "in, m_nRowPos = " << m_nRowPos);
@@ -1766,27 +1766,27 @@ void SAL_CALL OResultSet::insertRow(  ) throw(::com::sun::star::sdbc::SQLExcepti
     SAL_INFO("connectivity.mork", "out, m_nRowPos = " << m_nRowPos);
 }
 
-void SAL_CALL OResultSet::updateRow(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL OResultSet::updateRow(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
     OSL_FAIL( "OResultSet::updateRow(  ) not implemented" );
 }
 
-void SAL_CALL OResultSet::deleteRow(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL OResultSet::deleteRow(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
     OSL_FAIL( "OResultSet::deleteRow(  ) not implemented" );
 }
 
-void SAL_CALL OResultSet::cancelRowUpdates(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL OResultSet::cancelRowUpdates(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
     OSL_FAIL( "OResultSet::cancelRowUpdates(  ) not implemented" );
 }
 
-void SAL_CALL OResultSet::moveToInsertRow(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL OResultSet::moveToInsertRow(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
     OSL_FAIL( "OResultSet::moveToInsertRow(  ) not implemented" );
 }
 
-void SAL_CALL OResultSet::moveToCurrentRow(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL OResultSet::moveToCurrentRow(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
     ResultSetEntryGuard aGuard( *this );
     SAL_INFO("connectivity.mork", "m_nRowPos = " << m_nRowPos);

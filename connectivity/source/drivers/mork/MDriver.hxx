@@ -39,7 +39,7 @@ public:
     static css::uno::Sequence< OUString > getSupportedServiceNames_Static()
         throw (css::uno::RuntimeException);
 
-    const css::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& getFactory(){return m_xFactory;}
+    const css::uno::Reference< css::lang::XMultiServiceFactory >& getFactory(){return m_xFactory;}
     const OUString& getProfilePath() {return m_sProfilePath;}
 private:
 
@@ -79,7 +79,7 @@ private:
         throw (css::uno::RuntimeException, std::exception) override;
 
     css::uno::Reference< css::uno::XComponentContext > context_;
-    css::uno::Reference< com::sun::star::lang::XMultiServiceFactory > m_xFactory;
+    css::uno::Reference< css::lang::XMultiServiceFactory > m_xFactory;
     OUString m_sProfilePath;
 };
 

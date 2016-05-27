@@ -46,7 +46,7 @@ using com::sun::star::beans::XPropertySet;
 namespace pq_sdbc_driver
 {
 Column::Column( const ::rtl::Reference< RefCountedMutex > & refMutex,
-                const Reference< com::sun::star::sdbc::XConnection > & connection,
+                const Reference< css::sdbc::XConnection > & connection,
                 ConnectionSettings *pSettings)
     : ReflectionBase(
         getStatics().refl.column.implName,
@@ -67,7 +67,7 @@ Reference< XPropertySet > Column::createDataDescriptor(  ) throw (RuntimeExcepti
 
 ColumnDescriptor::ColumnDescriptor(
     const ::rtl::Reference< RefCountedMutex > & refMutex,
-    const Reference< com::sun::star::sdbc::XConnection > & connection,
+    const Reference< css::sdbc::XConnection > & connection,
     ConnectionSettings *pSettings)
     : ReflectionBase(
         getStatics().refl.columnDescriptor.implName,

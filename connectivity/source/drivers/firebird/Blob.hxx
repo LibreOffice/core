@@ -21,8 +21,8 @@ namespace connectivity
 {
     namespace firebird
     {
-        typedef ::cppu::WeakComponentImplHelper< ::com::sun::star::sdbc::XBlob,
-                                                 ::com::sun::star::io::XInputStream >
+        typedef ::cppu::WeakComponentImplHelper< css::sdbc::XBlob,
+                                                 css::io::XInputStream >
             Blob_BASE;
 
         class Blob :
@@ -46,13 +46,13 @@ namespace connectivity
             ISC_STATUS_ARRAY    m_statusVector;
 
             void ensureBlobIsOpened()
-                throw(::com::sun::star::sdbc::SQLException);
+                throw(css::sdbc::SQLException);
             /**
              * Closes the blob and cleans up resources -- can be used to reset
              * the blob if we e.g. want to read from the beginning again.
              */
             void closeBlob()
-                throw(::com::sun::star::sdbc::SQLException);
+                throw(css::sdbc::SQLException);
 
         public:
             Blob(isc_db_handle* pDatabaseHandle,
@@ -62,58 +62,58 @@ namespace connectivity
             // ---- XBlob ----------------------------------------------------
             virtual sal_Int64 SAL_CALL
                 length()
-                throw(::com::sun::star::sdbc::SQLException,
-                      ::com::sun::star::uno::RuntimeException, std::exception) override;
-            virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL
+                throw(css::sdbc::SQLException,
+                      css::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Sequence< sal_Int8 > SAL_CALL
                 getBytes(sal_Int64 aPosition, sal_Int32 aLength)
-                throw(::com::sun::star::sdbc::SQLException,
-                      ::com::sun::star::uno::RuntimeException, std::exception) override;
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL
+                throw(css::sdbc::SQLException,
+                      css::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Reference< css::io::XInputStream > SAL_CALL
                 getBinaryStream()
-                throw(::com::sun::star::sdbc::SQLException,
-                      ::com::sun::star::uno::RuntimeException, std::exception) override;
+                throw(css::sdbc::SQLException,
+                      css::uno::RuntimeException, std::exception) override;
             virtual sal_Int64 SAL_CALL
-                position(const ::com::sun::star::uno::Sequence< sal_Int8 >& rPattern,
+                position(const css::uno::Sequence< sal_Int8 >& rPattern,
                          sal_Int64 aStart)
-                throw(::com::sun::star::sdbc::SQLException,
-                      ::com::sun::star::uno::RuntimeException, std::exception) override;
+                throw(css::sdbc::SQLException,
+                      css::uno::RuntimeException, std::exception) override;
             virtual sal_Int64 SAL_CALL
-                positionOfBlob(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XBlob >& rPattern,
+                positionOfBlob(const css::uno::Reference< css::sdbc::XBlob >& rPattern,
                                sal_Int64 aStart)
-                throw(::com::sun::star::sdbc::SQLException,
-                      ::com::sun::star::uno::RuntimeException, std::exception) override;
+                throw(css::sdbc::SQLException,
+                      css::uno::RuntimeException, std::exception) override;
 
             // ---- XInputStream ----------------------------------------------
             virtual sal_Int32 SAL_CALL
-                readBytes(::com::sun::star::uno::Sequence< sal_Int8 >& rDataOut,
+                readBytes(css::uno::Sequence< sal_Int8 >& rDataOut,
                           sal_Int32 nBytes)
-                throw(::com::sun::star::io::NotConnectedException,
-                      ::com::sun::star::io::BufferSizeExceededException,
-                      ::com::sun::star::io::IOException,
-                      ::com::sun::star::uno::RuntimeException, std::exception) override;
+                throw(css::io::NotConnectedException,
+                      css::io::BufferSizeExceededException,
+                      css::io::IOException,
+                      css::uno::RuntimeException, std::exception) override;
             virtual sal_Int32 SAL_CALL
-                readSomeBytes(::com::sun::star::uno::Sequence< sal_Int8 >& rDataOut,
+                readSomeBytes(css::uno::Sequence< sal_Int8 >& rDataOut,
                               sal_Int32 nMaximumBytes)
-                throw(::com::sun::star::io::NotConnectedException,
-                      ::com::sun::star::io::BufferSizeExceededException,
-                        ::com::sun::star::io::IOException,
-                      ::com::sun::star::uno::RuntimeException, std::exception) override;
+                throw(css::io::NotConnectedException,
+                      css::io::BufferSizeExceededException,
+                        css::io::IOException,
+                      css::uno::RuntimeException, std::exception) override;
             virtual void SAL_CALL
                 skipBytes(sal_Int32 nBytes)
-                throw(::com::sun::star::io::NotConnectedException,
-                      ::com::sun::star::io::BufferSizeExceededException,
-                      ::com::sun::star::io::IOException,
-                      ::com::sun::star::uno::RuntimeException, std::exception) override;
+                throw(css::io::NotConnectedException,
+                      css::io::BufferSizeExceededException,
+                      css::io::IOException,
+                      css::uno::RuntimeException, std::exception) override;
             virtual sal_Int32 SAL_CALL
                 available()
-                throw(::com::sun::star::io::NotConnectedException,
-                      ::com::sun::star::io::IOException,
-                      ::com::sun::star::uno::RuntimeException, std::exception) override;
+                throw(css::io::NotConnectedException,
+                      css::io::IOException,
+                      css::uno::RuntimeException, std::exception) override;
             virtual void SAL_CALL
                 closeInput()
-                throw(::com::sun::star::io::NotConnectedException,
-                      ::com::sun::star::io::IOException,
-                      ::com::sun::star::uno::RuntimeException, std::exception) override;
+                throw(css::io::NotConnectedException,
+                      css::io::IOException,
+                      css::uno::RuntimeException, std::exception) override;
 
             // ---- OComponentHelper ------------------------------------------
             virtual void SAL_CALL disposing() override;

@@ -31,7 +31,7 @@ namespace connectivity
     //************ Class: java.io.InputStream
 
     class java_io_Reader : public java_lang_Object,
-                                public ::cppu::WeakImplHelper< ::com::sun::star::io::XInputStream>
+                           public ::cppu::WeakImplHelper< css::io::XInputStream>
     {
     protected:
     // static Data for the Class
@@ -43,11 +43,11 @@ namespace connectivity
         // a Constructor, that is needed for when Returning the Object is needed:
         java_io_Reader( JNIEnv * pEnv, jobject myObj );
         // XInputStream
-        virtual sal_Int32 SAL_CALL readBytes( ::com::sun::star::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead ) throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual sal_Int32 SAL_CALL readSomeBytes( ::com::sun::star::uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead ) throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL skipBytes( sal_Int32 nBytesToSkip ) throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual sal_Int32 SAL_CALL available(  ) throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL closeInput(  ) throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual sal_Int32 SAL_CALL readBytes( css::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead ) throw(css::io::NotConnectedException, css::io::BufferSizeExceededException, css::io::IOException, css::uno::RuntimeException, std::exception) override;
+        virtual sal_Int32 SAL_CALL readSomeBytes( css::uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead ) throw(css::io::NotConnectedException, css::io::BufferSizeExceededException, css::io::IOException, css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL skipBytes( sal_Int32 nBytesToSkip ) throw(css::io::NotConnectedException, css::io::BufferSizeExceededException, css::io::IOException, css::uno::RuntimeException, std::exception) override;
+        virtual sal_Int32 SAL_CALL available(  ) throw(css::io::NotConnectedException, css::io::IOException, css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL closeInput(  ) throw(css::io::NotConnectedException, css::io::IOException, css::uno::RuntimeException, std::exception) override;
     };
 }
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_IO_READER_HXX

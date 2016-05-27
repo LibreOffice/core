@@ -94,7 +94,7 @@ namespace pq_sdbc_driver
 
 
 // Helper class for statement lifetime management
-class ClosableReference : public cppu::WeakImplHelper< com::sun::star::uno::XReference >
+class ClosableReference : public cppu::WeakImplHelper< css::uno::XReference >
 {
     Connection *m_conn;
     ::rtl::ByteSequence m_id;
@@ -126,7 +126,7 @@ OUString    ConnectionGetImplementationName()
 {
     return OUString( "org.openoffice.comp.connectivity.pq.Connection.noext" );
 }
-com::sun::star::uno::Sequence<OUString> ConnectionGetSupportedServiceNames()
+css::uno::Sequence<OUString> ConnectionGetSupportedServiceNames()
 {
     return Sequence< OUString > { "com.sun.star.sdbc.Connection" };
 }
@@ -166,7 +166,7 @@ static sal_Int32 readLogLevelFromConfiguration()
 
 Connection::Connection(
     const rtl::Reference< RefCountedMutex > &refMutex,
-    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > & ctx )
+    const css::uno::Reference< css::uno::XComponentContext > & ctx )
     : ConnectionBase( refMutex->mutex ),
       m_ctx( ctx ) ,
       m_refMutex( refMutex )
@@ -202,9 +202,9 @@ Connection::~Connection()
         m_settings.logFile = nullptr;
     }
 }
-typedef ::std::list< ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XCloseable > > CloseableList;
+typedef ::std::list< css::uno::Reference< css::sdbc::XCloseable > > CloseableList;
 
-typedef ::std::list< ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > > DisposeableList;
+typedef ::std::list< css::uno::Reference< css::lang::XComponent > > DisposeableList;
 
 void Connection::close() throw ( SQLException, RuntimeException, std::exception )
 {
@@ -619,7 +619,7 @@ void Connection::checkClosed() throw ( SQLException, RuntimeException )
 }
 
 Reference< XNameAccess > Connection::getTables()
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     if( isLog( &m_settings, LogLevel::INFO ) )
     {
@@ -630,12 +630,12 @@ Reference< XNameAccess > Connection::getTables()
         m_settings.tables = Tables::create( m_refMutex, this, &m_settings , &m_settings.pTablesImpl);
     else
         // TODO: how to overcome the performance problem ?
-        Reference< com::sun::star::util::XRefreshable > ( m_settings.tables, UNO_QUERY )->refresh();
+        Reference< css::util::XRefreshable > ( m_settings.tables, UNO_QUERY )->refresh();
     return m_settings.tables;
 }
 
 Reference< XNameAccess > Connection::getViews()
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     if( isLog( &m_settings, LogLevel::INFO ) )
     {
@@ -646,13 +646,13 @@ Reference< XNameAccess > Connection::getViews()
         m_settings.views = Views::create( m_refMutex, this, &m_settings, &(m_settings.pViewsImpl) );
     else
         // TODO: how to overcome the performance problem ?
-        Reference< com::sun::star::util::XRefreshable > ( m_settings.views, UNO_QUERY )->refresh();
+        Reference< css::util::XRefreshable > ( m_settings.views, UNO_QUERY )->refresh();
     return m_settings.views;
 }
 
 
 Reference< XNameAccess > Connection::getUsers()
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     if( isLog( &m_settings, LogLevel::INFO ) )
     {

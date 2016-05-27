@@ -174,9 +174,9 @@ PreparedStatement::PreparedStatement(
     m_props[PREPARED_STATEMENT_QUERY_TIME_OUT] = makeAny( (sal_Int32)0 );
     m_props[PREPARED_STATEMENT_MAX_ROWS] = makeAny( (sal_Int32)0 );
     m_props[PREPARED_STATEMENT_RESULT_SET_CONCURRENCY] = makeAny(
-        com::sun::star::sdbc::ResultSetConcurrency::READ_ONLY );
+        css::sdbc::ResultSetConcurrency::READ_ONLY );
     m_props[PREPARED_STATEMENT_RESULT_SET_TYPE] = makeAny(
-        com::sun::star::sdbc::ResultSetType::SCROLL_INSENSITIVE );
+        css::sdbc::ResultSetType::SCROLL_INSENSITIVE );
 
     splitSQL( m_stmt, m_splittedStatement );
     int elements = 0;
@@ -307,7 +307,7 @@ Reference< XResultSet > PreparedStatement::executeQuery( )
     {
         raiseSQLException(  "not a query" );
     }
-    return Reference< XResultSet > ( m_lastResultset, com::sun::star::uno::UNO_QUERY );
+    return Reference< XResultSet > ( m_lastResultset, css::uno::UNO_QUERY );
 }
 
 sal_Int32 PreparedStatement::executeUpdate( )
@@ -554,20 +554,20 @@ void PreparedStatement::setBytes(
 }
 
 
-void PreparedStatement::setDate( sal_Int32 parameterIndex, const ::com::sun::star::util::Date& x )
+void PreparedStatement::setDate( sal_Int32 parameterIndex, const css::util::Date& x )
     throw (SQLException, RuntimeException, std::exception)
 {
     setString( parameterIndex, DBTypeConversion::toDateString( x ) );
 }
 
-void PreparedStatement::setTime( sal_Int32 parameterIndex, const ::com::sun::star::util::Time& x )
+void PreparedStatement::setTime( sal_Int32 parameterIndex, const css::util::Time& x )
     throw (SQLException, RuntimeException, std::exception)
 {
     setString( parameterIndex, DBTypeConversion::toTimeString( x ) );
 }
 
 void PreparedStatement::setTimestamp(
-    sal_Int32 parameterIndex, const ::com::sun::star::util::DateTime& x )
+    sal_Int32 parameterIndex, const css::util::DateTime& x )
     throw (SQLException, RuntimeException, std::exception)
 {
     setString( parameterIndex, DBTypeConversion::toDateTimeString( x ) );
@@ -575,7 +575,7 @@ void PreparedStatement::setTimestamp(
 
 void PreparedStatement::setBinaryStream(
     sal_Int32 parameterIndex,
-    const Reference< ::com::sun::star::io::XInputStream >& x,
+    const Reference< css::io::XInputStream >& x,
     sal_Int32 length )
     throw (SQLException, RuntimeException, std::exception)
 {
@@ -587,7 +587,7 @@ void PreparedStatement::setBinaryStream(
 
 void PreparedStatement::setCharacterStream(
     sal_Int32 parameterIndex,
-    const Reference< ::com::sun::star::io::XInputStream >& x,
+    const Reference< css::io::XInputStream >& x,
     sal_Int32 length )
     throw (SQLException, RuntimeException, std::exception)
 {
@@ -617,8 +617,8 @@ void PreparedStatement::setObjectWithInfo(
     throw (SQLException, RuntimeException, std::exception)
 {
     (void) scale;
-    if( com::sun::star::sdbc::DataType::DECIMAL == targetSqlType ||
-        com::sun::star::sdbc::DataType::NUMERIC == targetSqlType )
+    if( css::sdbc::DataType::DECIMAL == targetSqlType ||
+        css::sdbc::DataType::NUMERIC == targetSqlType )
     {
         double myDouble = 0.0;
         OUString myString;
@@ -710,11 +710,11 @@ void PreparedStatement::clearWarnings(  )
 {
 }
 
-Reference< ::com::sun::star::sdbc::XResultSetMetaData > PreparedStatement::getMetaData()
+Reference< css::sdbc::XResultSetMetaData > PreparedStatement::getMetaData()
             throw (SQLException,RuntimeException, std::exception)
 {
-    Reference< com::sun::star::sdbc::XResultSetMetaData > ret;
-    Reference< com::sun::star::sdbc::XResultSetMetaDataSupplier > supplier( m_lastResultset, UNO_QUERY );
+    Reference< css::sdbc::XResultSetMetaData > ret;
+    Reference< css::sdbc::XResultSetMetaDataSupplier > supplier( m_lastResultset, UNO_QUERY );
     if( supplier.is() )
         ret = supplier->getMetaData();
     return ret;
@@ -798,17 +798,17 @@ void PreparedStatement::disposing()
 
 
 Reference< XResultSet > PreparedStatement::getResultSet(  )
-    throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
-    return Reference< XResultSet > ( m_lastResultset, com::sun::star::uno::UNO_QUERY );
+    return Reference< XResultSet > ( m_lastResultset, css::uno::UNO_QUERY );
 }
 sal_Int32 PreparedStatement::getUpdateCount(  )
-    throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
     return m_multipleResultUpdateCount;
 }
 sal_Bool PreparedStatement::getMoreResults(  )
-    throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
     return false;
 }

@@ -33,16 +33,16 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdbc;
 
 
-OUString SAL_CALL OColumn::getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+OUString SAL_CALL OColumn::getImplementationName(  ) throw (css::uno::RuntimeException, std::exception)
 {
     if(isNew())
         return OUString("com.sun.star.sdbcx.VColumnDescription");
     return OUString("com.sun.star.sdbcx.VColumn");
 }
 
-::com::sun::star::uno::Sequence< OUString > SAL_CALL OColumn::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Sequence< OUString > SAL_CALL OColumn::getSupportedServiceNames(  ) throw(css::uno::RuntimeException, std::exception)
 {
-    ::com::sun::star::uno::Sequence< OUString > aSupported(1);
+    css::uno::Sequence< OUString > aSupported(1);
     if(isNew())
         aSupported[0] = "com.sun.star.sdbcx.ColumnDescription";
     else
@@ -51,7 +51,7 @@ OUString SAL_CALL OColumn::getImplementationName(  ) throw (::com::sun::star::un
     return aSupported;
 }
 
-sal_Bool SAL_CALL OColumn::supportsService( const OUString& _rServiceName ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL OColumn::supportsService( const OUString& _rServiceName ) throw(css::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, _rServiceName);
 }
@@ -206,18 +206,18 @@ Reference< XPropertySet > SAL_CALL OColumn::createDataDescriptor(  ) throw(Runti
     return pNewColumn;
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL OColumn::getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL OColumn::getPropertySetInfo(  ) throw(css::uno::RuntimeException, std::exception)
 {
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }
 
 // XNamed
-OUString SAL_CALL OColumn::getName(  ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+OUString SAL_CALL OColumn::getName(  ) throw(css::uno::RuntimeException, std::exception)
 {
     return m_Name;
 }
 
-void SAL_CALL OColumn::setName( const OUString& aName ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL OColumn::setName( const OUString& aName ) throw(css::uno::RuntimeException, std::exception)
 {
     m_Name = aName;
 }

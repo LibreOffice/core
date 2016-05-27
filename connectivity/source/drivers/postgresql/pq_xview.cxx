@@ -67,7 +67,7 @@ namespace pq_sdbc_driver
 {
 
 View::View( const ::rtl::Reference< RefCountedMutex > & refMutex,
-            const Reference< com::sun::star::sdbc::XConnection > & connection,
+            const Reference< css::sdbc::XConnection > & connection,
             ConnectionSettings *pSettings)
     : ReflectionBase(
         getStatics().refl.view.implName,
@@ -88,9 +88,9 @@ Reference< XPropertySet > View::createDataDescriptor(  ) throw (RuntimeException
 }
 
 void View::rename( const OUString& newName )
-        throw (::com::sun::star::sdbc::SQLException,
-               ::com::sun::star::container::ElementExistException,
-               ::com::sun::star::uno::RuntimeException, std::exception)
+        throw (css::sdbc::SQLException,
+               css::container::ElementExistException,
+               css::uno::RuntimeException, std::exception)
 {
     MutexGuard guard( m_refMutex->mutex );
 
@@ -131,7 +131,7 @@ void View::rename( const OUString& newName )
             disposeNoThrow( statement );
             schema = newSchemaName;
         }
-        catch( com::sun::star::sdbc::SQLException &e )
+        catch( css::sdbc::SQLException &e )
         {
             OUString buf( e.Message + "(NOTE: Only postgresql server >= V8.1 support changing a table's schema)" );
             e.Message = buf;
@@ -167,7 +167,7 @@ Sequence<Type > View::getTypes() throw( RuntimeException, std::exception )
         if( !pCollection )
         {
             static cppu::OTypeCollection collection(
-                cppu::UnoType<com::sun::star::sdbcx::XRename>::get(),
+                cppu::UnoType<css::sdbcx::XRename>::get(),
                 ReflectionBase::getTypes());
             pCollection = &collection;
         }
@@ -188,12 +188,12 @@ Any View::queryInterface( const Type & reqType ) throw (RuntimeException, std::e
     if( ! ret.hasValue() )
         ret = ::cppu::queryInterface(
             reqType,
-            static_cast< com::sun::star::sdbcx::XRename * > ( this )
+            static_cast< css::sdbcx::XRename * > ( this )
             );
     return ret;
 }
 
-OUString View::getName(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+OUString View::getName(  ) throw (css::uno::RuntimeException, std::exception)
 {
     Statics & st = getStatics();
     return concatQualified(
@@ -201,7 +201,7 @@ OUString View::getName(  ) throw (::com::sun::star::uno::RuntimeException, std::
         extractStringProperty( this, st.NAME ) );
 }
 
-void View::setName( const OUString& aName ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void View::setName( const OUString& aName ) throw (css::uno::RuntimeException, std::exception)
 {
     rename( aName );
 }
@@ -209,7 +209,7 @@ void View::setName( const OUString& aName ) throw (::com::sun::star::uno::Runtim
 
 ViewDescriptor::ViewDescriptor(
     const ::rtl::Reference< RefCountedMutex > & refMutex,
-    const Reference< com::sun::star::sdbc::XConnection > & connection,
+    const Reference< css::sdbc::XConnection > & connection,
     ConnectionSettings *pSettings)
     : ReflectionBase(
         getStatics().refl.viewDescriptor.implName,

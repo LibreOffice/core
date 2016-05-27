@@ -47,8 +47,8 @@ namespace connectivity
         // OHsqlConnection - wraps all methods to the real connection from the driver
         // but when disposed it doesn't dispose the real connection
 
-        typedef ::cppu::WeakComponentImplHelper<   ::com::sun::star::util::XFlushable
-                                               ,   ::com::sun::star::sdb::application::XTableUIProvider
+        typedef ::cppu::WeakComponentImplHelper<   css::util::XFlushable
+                                               ,   css::sdb::application::XTableUIProvider
                                                >   OHsqlConnection_BASE;
 
         class OHsqlConnection   :public ::comphelper::OBaseMutex
@@ -57,11 +57,11 @@ namespace connectivity
                                 ,public IMethodGuardAccess
         {
         private:
-            ::comphelper::OInterfaceContainerHelper2                                                          m_aFlushListeners;
-            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver >                         m_xDriver;
-            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >                m_xContext;
-            bool                                                                                        m_bIni;
-            bool                                                                                        m_bReadOnly;
+            ::comphelper::OInterfaceContainerHelper2                          m_aFlushListeners;
+            css::uno::Reference< css::sdbc::XDriver >                         m_xDriver;
+            css::uno::Reference< css::uno::XComponentContext >                m_xContext;
+            bool                                                              m_bIni;
+            bool                                                              m_bReadOnly;
 
         protected:
             virtual void SAL_CALL disposing() override;
@@ -69,9 +69,9 @@ namespace connectivity
 
         public:
             OHsqlConnection(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver >& _rxDriver,
-                const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection,
-                const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxContext
+                const css::uno::Reference< css::sdbc::XDriver >& _rxDriver,
+                const css::uno::Reference< css::sdbc::XConnection >& _xConnection,
+                const css::uno::Reference< css::uno::XComponentContext>& _rxContext
             );
 
             // XServiceInfo
@@ -84,33 +84,33 @@ namespace connectivity
             virtual void            checkDisposed() const override;
 
             // XFlushable
-            virtual void SAL_CALL flush(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-            virtual void SAL_CALL addFlushListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XFlushListener >& l ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-            virtual void SAL_CALL removeFlushListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XFlushListener >& l ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL flush(  ) throw (css::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL addFlushListener( const css::uno::Reference< css::util::XFlushListener >& l ) throw (css::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL removeFlushListener( const css::uno::Reference< css::util::XFlushListener >& l ) throw (css::uno::RuntimeException, std::exception) override;
 
             // XTableUIProvider
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > SAL_CALL getTableIcon( const OUString& TableName, ::sal_Int32 ColorMode ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getTableEditor( const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::application::XDatabaseDocumentUI >& DocumentUI, const OUString& TableName ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Reference< css::graphic::XGraphic > SAL_CALL getTableIcon( const OUString& TableName, ::sal_Int32 ColorMode ) throw (css::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getTableEditor( const css::uno::Reference< css::sdb::application::XDatabaseDocumentUI >& DocumentUI, const OUString& TableName ) throw (css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
 
         private:
 
             /** retrieves our table container
                 @return
                     our table container. Guaranteed to not be <NULL/>.
-                @throws ::com::sun::star::lang::WrappedTargetException
+                @throws css::lang::WrappedTargetException
                     if a non-RuntimeException is caught during obtaining the container.
-                @throws ::com::sun::star::uno::RuntimeException
+                @throws css::uno::RuntimeException
                     if a serious error occurs
                 @precond
                     We're not disposed.
             */
-            ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >
+            css::uno::Reference< css::container::XNameAccess >
                     impl_getTableContainer_throw();
 
             /** checks whether the given table name denotes an existing table
                 @param _rTableName
                     the fully name of the table to check for existence
-                @throws ::com::sun::star::lang::IllegalArgumentException
+                @throws css::lang::IllegalArgumentException
                     if the name does not denote an existing table
                 @precond
                     We're not disposed.
@@ -123,7 +123,7 @@ namespace connectivity
 
             /** retrieves the icon for HSQL TEXT TABLEs
             */
-            ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >
+            css::uno::Reference< css::graphic::XGraphic >
                 impl_getTextTableIcon_nothrow();
         };
 

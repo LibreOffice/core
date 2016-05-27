@@ -52,9 +52,9 @@ namespace drivermanager
 
     // OSDBCDriverManager - the one-instance service for managing SDBC drivers
 
-    typedef ::cppu::WeakImplHelper<   ::com::sun::star::sdbc::XDriverManager2
-                                  ,   ::com::sun::star::lang::XServiceInfo
-                                  ,   ::com::sun::star::uno::XNamingService
+    typedef ::cppu::WeakImplHelper<   css::sdbc::XDriverManager2
+                                  ,   css::lang::XServiceInfo
+                                  ,   css::uno::XNamingService
                                   >   OSDBCDriverManager_Base;
 
     class OSDBCDriverManager : public OSDBCDriverManager_Base
@@ -78,45 +78,45 @@ namespace drivermanager
 
     private:
         explicit OSDBCDriverManager(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext );
+            const css::uno::Reference< css::uno::XComponentContext >& _rxContext );
         virtual ~OSDBCDriverManager();
 
     public:
 
     // XDriverManager
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > SAL_CALL getConnection( const OUString& url ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > SAL_CALL getConnectionWithInfo( const OUString& url, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& info ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL setLoginTimeout( sal_Int32 seconds ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual sal_Int32 SAL_CALL getLoginTimeout(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Reference< css::sdbc::XConnection > SAL_CALL getConnection( const OUString& url ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Reference< css::sdbc::XConnection > SAL_CALL getConnectionWithInfo( const OUString& url, const css::uno::Sequence< css::beans::PropertyValue >& info ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL setLoginTimeout( sal_Int32 seconds ) throw(css::uno::RuntimeException, std::exception) override;
+        virtual sal_Int32 SAL_CALL getLoginTimeout(  ) throw(css::uno::RuntimeException, std::exception) override;
 
     // XDriverAccess
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver > SAL_CALL getDriverByURL( const OUString& url ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Reference< css::sdbc::XDriver > SAL_CALL getDriverByURL( const OUString& url ) throw(css::uno::RuntimeException, std::exception) override;
 
     // XEnumerationAccess
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration > SAL_CALL createEnumeration(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration(  ) throw(css::uno::RuntimeException, std::exception) override;
 
     // XElementAccess
-        virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual sal_Bool SAL_CALL hasElements(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Type SAL_CALL getElementType(  ) throw(css::uno::RuntimeException, std::exception) override;
+        virtual sal_Bool SAL_CALL hasElements(  ) throw(css::uno::RuntimeException, std::exception) override;
 
     // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual OUString SAL_CALL getImplementationName(  ) throw(css::uno::RuntimeException, std::exception) override;
+        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(css::uno::RuntimeException, std::exception) override;
 
     // XServiceInfo - static methods
-        static OUString SAL_CALL getImplementationName_static(  ) throw(::com::sun::star::uno::RuntimeException);
-        static ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames_static(  ) throw(::com::sun::star::uno::RuntimeException);
-        static OUString SAL_CALL getSingletonName_static(  ) throw(::com::sun::star::uno::RuntimeException);
-        static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL Create( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxContext );
+        static OUString SAL_CALL getImplementationName_static(  ) throw(css::uno::RuntimeException);
+        static css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames_static(  ) throw(css::uno::RuntimeException);
+        static OUString SAL_CALL getSingletonName_static(  ) throw(css::uno::RuntimeException);
+        static css::uno::Reference< css::uno::XInterface > SAL_CALL Create( const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxContext );
 
     // XNamingService
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getRegisteredObject( const OUString& Name ) throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL registerObject( const OUString& Name, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& Object ) throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL revokeObject( const OUString& Name ) throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getRegisteredObject( const OUString& Name ) throw(css::uno::Exception, css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL registerObject( const OUString& Name, const css::uno::Reference< css::uno::XInterface >& Object ) throw(css::uno::Exception, css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL revokeObject( const OUString& Name ) throw(css::uno::Exception, css::uno::RuntimeException, std::exception) override;
 
     protected:
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver > implGetDriverForURL(const OUString& _rURL);
+        css::uno::Reference< css::sdbc::XDriver > implGetDriverForURL(const OUString& _rURL);
 
         /** retrieve the driver order preferences from the configuration and
             sort m_aDriversBS accordingly.

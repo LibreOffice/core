@@ -177,7 +177,7 @@ void MacabImplModule::shutdown()
 // = MacabDriver
 
 MacabDriver::MacabDriver(
-    const Reference< ::com::sun::star::uno::XComponentContext >& _rxContext)
+    const Reference< css::uno::XComponentContext >& _rxContext)
     : MacabDriver_BASE(m_aMutex),
       m_xContext(_rxContext),
       m_aImplModule()

@@ -39,11 +39,11 @@ namespace connectivity
             friend class OSQLAnalyzer;
 
             OCodeList                               m_aCodeList;
-            css::uno::Reference< css::container::XNameAccess>                           m_orgColumns; // in filecurs this are the filecolumns
+            css::uno::Reference< css::container::XNameAccess> m_orgColumns; // in filecurs this are the filecolumns
             OSQLAnalyzer*                           m_pAnalyzer;
-            ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess> m_xIndexes;
+            css::uno::Reference< css::container::XNameAccess> m_xIndexes;
             sal_Int32                               m_nParamCounter;
-            bool                                m_bORCondition;
+            bool                                    m_bORCondition;
         public:
             OPredicateCompiler(OSQLAnalyzer* pAnalyzer);
 
@@ -68,13 +68,13 @@ namespace connectivity
             void  setOrigColumns(const css::uno::Reference< css::container::XNameAccess>& rCols) { m_orgColumns = rCols; }
             const css::uno::Reference< css::container::XNameAccess>& getOrigColumns() const { return m_orgColumns; }
         protected:
-            void execute_COMPARE(connectivity::OSQLParseNode* pPredicateNode) throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            void execute_LIKE(connectivity::OSQLParseNode* pPredicateNode) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            void execute_BETWEEN(connectivity::OSQLParseNode* pPredicateNode) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            void execute_ISNULL(connectivity::OSQLParseNode* pPredicateNode) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            OOperand* execute_Operand(connectivity::OSQLParseNode* pPredicateNode) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            void execute_Fold(OSQLParseNode* pPredicateNode) throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            void executeFunction(OSQLParseNode* pPredicateNode) throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            void execute_COMPARE(connectivity::OSQLParseNode* pPredicateNode) throw( css::sdbc::SQLException, css::uno::RuntimeException);
+            void execute_LIKE(connectivity::OSQLParseNode* pPredicateNode) throw(css::sdbc::SQLException, css::uno::RuntimeException);
+            void execute_BETWEEN(connectivity::OSQLParseNode* pPredicateNode) throw(css::sdbc::SQLException, css::uno::RuntimeException);
+            void execute_ISNULL(connectivity::OSQLParseNode* pPredicateNode) throw(css::sdbc::SQLException, css::uno::RuntimeException);
+            OOperand* execute_Operand(connectivity::OSQLParseNode* pPredicateNode) throw(css::sdbc::SQLException, css::uno::RuntimeException);
+            void execute_Fold(OSQLParseNode* pPredicateNode) throw( css::sdbc::SQLException, css::uno::RuntimeException);
+            void executeFunction(OSQLParseNode* pPredicateNode) throw( css::sdbc::SQLException, css::uno::RuntimeException);
         };
 
 

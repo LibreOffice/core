@@ -62,16 +62,16 @@ protected:
     /** mutex should be locked before called
      */
     virtual void checkClosed()
-        throw ( com::sun::star::sdbc::SQLException, com::sun::star::uno::RuntimeException ) override;
+        throw ( css::sdbc::SQLException, css::uno::RuntimeException ) override;
 
     /** unchecked, acquire mutex before calling
      */
-    virtual ::com::sun::star::uno::Any getValue( sal_Int32 columnIndex ) override;
+    virtual css::uno::Any getValue( sal_Int32 columnIndex ) override;
 
 public:
     ResultSet(
         const ::rtl::Reference< RefCountedMutex > & mutex,
-        const com::sun::star::uno::Reference< com::sun::star::uno::XInterface > &owner,
+        const css::uno::Reference< css::uno::XInterface > &owner,
         ConnectionSettings **pSettings,
         PGresult *result,
         const OUString &schema,
@@ -80,15 +80,15 @@ public:
 
 public: // XCloseable
     virtual void SAL_CALL close(  )
-        throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
 
 public: // XResultSetMetaDataSupplier
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData > SAL_CALL getMetaData(  )
-        throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::sdbc::XResultSetMetaData > SAL_CALL getMetaData(  )
+        throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
 
 public: // XColumnLocate
     virtual sal_Int32 SAL_CALL findColumn( const OUString& columnName )
-        throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+        throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
 
 public:
     sal_Int32 guessDataType( sal_Int32 column );

@@ -29,13 +29,13 @@ namespace connectivity
     namespace firebird
     {
 
-        typedef ::cppu::ImplHelper1< ::com::sun::star::sdbc::XStatement >
+        typedef ::cppu::ImplHelper1< css::sdbc::XStatement >
             OStatement_Base;
 
         class OStatement :  public OStatementCommonBase,
                             public OStatement_Base,
-                            public ::com::sun::star::sdbc::XBatchExecution,
-                            public ::com::sun::star::lang::XServiceInfo
+                            public css::sdbc::XBatchExecution,
+                            public css::lang::XServiceInfo
         {
         protected:
             virtual ~OStatement(){}
@@ -57,36 +57,36 @@ namespace connectivity
             virtual void SAL_CALL release() throw() override;
 
             // XStatement
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > SAL_CALL
+            virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL
                 executeQuery(const ::rtl::OUString& sql)
-                throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+                throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
             virtual sal_Int32 SAL_CALL executeUpdate(const ::rtl::OUString& sqlIn)
-                throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+                throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
             virtual sal_Bool SAL_CALL
                 execute(const ::rtl::OUString& sql)
-                throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > SAL_CALL
+                throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Reference< css::sdbc::XConnection > SAL_CALL
                 getConnection()
-                throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+                throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
 
             // XBatchExecution - UNSUPPORTED
-            virtual void SAL_CALL addBatch( const ::rtl::OUString& sql ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-            virtual void SAL_CALL clearBatch(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-            virtual ::com::sun::star::uno::Sequence< sal_Int32 > SAL_CALL executeBatch(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL addBatch( const ::rtl::OUString& sql ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL clearBatch(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Sequence< sal_Int32 > SAL_CALL executeBatch(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
 
             // XInterface
-            virtual ::com::sun::star::uno::Any SAL_CALL
-                queryInterface(const ::com::sun::star::uno::Type & rType)
-                throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Any SAL_CALL
+                queryInterface(const css::uno::Type & rType)
+                throw(css::uno::RuntimeException, std::exception) override;
 
             //XTypeProvider
-            virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL
+            virtual css::uno::Sequence< css::uno::Type > SAL_CALL
                 getTypes()
-                throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+                throw(css::uno::RuntimeException, std::exception) override;
             // XCloseable
             virtual void SAL_CALL close()
-                throw(::com::sun::star::sdbc::SQLException,
-                      ::com::sun::star::uno::RuntimeException, std::exception) override;
+                throw(css::sdbc::SQLException,
+                      css::uno::RuntimeException, std::exception) override;
             // OComponentHelper
             virtual void SAL_CALL disposing() override;
 

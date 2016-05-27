@@ -32,14 +32,14 @@ namespace connectivity
 
         class OFlatDatabaseMetaData :   public file::ODatabaseMetaData
         {
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > impl_getTypeInfo_throw() override;
+            virtual css::uno::Reference< css::sdbc::XResultSet > impl_getTypeInfo_throw() override;
         protected:
             virtual ~OFlatDatabaseMetaData();
         public:
             OFlatDatabaseMetaData(file::OConnection* _pCon);
 
-            virtual OUString SAL_CALL getURL(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > SAL_CALL getColumns( const ::com::sun::star::uno::Any& catalog, const OUString& schemaPattern, const OUString& tableNamePattern, const OUString& columnNamePattern ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+            virtual OUString SAL_CALL getURL(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getColumns( const css::uno::Any& catalog, const OUString& schemaPattern, const OUString& tableNamePattern, const OUString& columnNamePattern ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
         };
     }
 }

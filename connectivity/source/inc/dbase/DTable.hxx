@@ -96,8 +96,8 @@ namespace connectivity
             bool        m_bWriteableMemo;
 
             void alterColumn(sal_Int32 index,
-                             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& descriptor ,
-                             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XDataDescriptorFactory>& xOldColumn );
+                             const css::uno::Reference< css::beans::XPropertySet>& descriptor ,
+                             const css::uno::Reference< css::sdbcx::XDataDescriptorFactory>& xOldColumn );
             void readHeader();
             void fillColumns();
             OUString createTempFile();
@@ -110,12 +110,12 @@ namespace connectivity
 
             bool WriteMemo(const ORowSetValue& aVariable, sal_Size& rBlockNr);
             bool WriteBuffer();
-            bool UpdateBuffer(OValueRefVector& rRow, const OValueRefRow& pOrgRow, const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xCols, bool bForceAllFields);
-            ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> isUniqueByColumnName(sal_Int32 _nColumnPos);
+            bool UpdateBuffer(OValueRefVector& rRow, const OValueRefRow& pOrgRow, const css::uno::Reference< css::container::XIndexAccess>& _xCols, bool bForceAllFields);
+            css::uno::Reference< css::beans::XPropertySet> isUniqueByColumnName(sal_Int32 _nColumnPos);
             bool AllocBuffer();
 
             void throwInvalidDbaseFormat();
-            void SAL_CALL renameImpl( const OUString& newName ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException, std::exception);
+            void SAL_CALL renameImpl( const OUString& newName ) throw(css::sdbc::SQLException, css::container::ElementExistException, css::uno::RuntimeException, std::exception);
             void throwInvalidColumnType(const sal_uInt16 _nErrorId,const OUString& _sColumnName);
 
         protected:
@@ -142,29 +142,29 @@ namespace connectivity
             virtual bool seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int32 nOffset, sal_Int32& nCurPos) override;
             virtual bool fetchRow(OValueRefRow& _rRow,const OSQLColumns& _rCols, bool bRetrieveData) override;
 
-            virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
             //XTypeProvider
-            virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) throw(css::uno::RuntimeException, std::exception) override;
             virtual void SAL_CALL disposing() override;
 
-            // com::sun::star::lang::XUnoTunnel
-            virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-            static ::com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
+            // css::lang::XUnoTunnel
+            virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) throw(css::uno::RuntimeException, std::exception) override;
+            static css::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
             // XAlterTable
-            virtual void SAL_CALL alterColumnByName( const OUString& colName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-            virtual void SAL_CALL alterColumnByIndex( sal_Int32 index, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL alterColumnByName( const OUString& colName, const css::uno::Reference< css::beans::XPropertySet >& descriptor ) throw(css::sdbc::SQLException, css::container::NoSuchElementException, css::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL alterColumnByIndex( sal_Int32 index, const css::uno::Reference< css::beans::XPropertySet >& descriptor ) throw(css::sdbc::SQLException, css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override;
             // XRename
-            virtual void SAL_CALL rename( const OUString& newName ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL rename( const OUString& newName ) throw(css::sdbc::SQLException, css::container::ElementExistException, css::uno::RuntimeException, std::exception) override;
 
             bool    DropImpl();
             bool    CreateImpl();
 
 
-            virtual bool InsertRow(OValueRefVector& rRow, const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xCols) override;
+            virtual bool InsertRow(OValueRefVector& rRow, const css::uno::Reference< css::container::XIndexAccess>& _xCols) override;
             virtual bool DeleteRow(const OSQLColumns& _rCols) override;
-            virtual bool UpdateRow(OValueRefVector& rRow, OValueRefRow& pOrgRow,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xCols) override;
+            virtual bool UpdateRow(OValueRefVector& rRow, OValueRefRow& pOrgRow,const css::uno::Reference< css::container::XIndexAccess>& _xCols) override;
 
-            virtual void addColumn(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& descriptor) override;
+            virtual void addColumn(const css::uno::Reference< css::beans::XPropertySet>& descriptor) override;
             virtual void dropColumn(sal_Int32 _nPos) override;
 
             static OUString   getEntry(file::OConnection* _pConnection,const OUString& _sURL );
@@ -172,7 +172,7 @@ namespace connectivity
 
             virtual void refreshHeader() override;
 
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData> getMetaData() const override;
+            virtual css::uno::Reference< css::sdbc::XDatabaseMetaData> getMetaData() const override;
         };
     }
 }

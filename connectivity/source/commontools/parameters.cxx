@@ -1018,73 +1018,73 @@ namespace dbtools
     }
 
 
-    void ParameterManager::setBytes( sal_Int32 _nIndex, const ::com::sun::star::uno::Sequence< sal_Int8 >& x )
+    void ParameterManager::setBytes( sal_Int32 _nIndex, const css::uno::Sequence< sal_Int8 >& x )
     {
         VISIT_PARAMETER( setBytes( _nIndex, x ) );
     }
 
 
-    void ParameterManager::setDate( sal_Int32 _nIndex, const ::com::sun::star::util::Date& x )
+    void ParameterManager::setDate( sal_Int32 _nIndex, const css::util::Date& x )
     {
         VISIT_PARAMETER( setDate( _nIndex, x ) );
     }
 
 
-    void ParameterManager::setTime( sal_Int32 _nIndex, const ::com::sun::star::util::Time& x )
+    void ParameterManager::setTime( sal_Int32 _nIndex, const css::util::Time& x )
     {
         VISIT_PARAMETER( setTime( _nIndex, x ) );
     }
 
 
-    void ParameterManager::setTimestamp( sal_Int32 _nIndex, const ::com::sun::star::util::DateTime& x )
+    void ParameterManager::setTimestamp( sal_Int32 _nIndex, const css::util::DateTime& x )
     {
         VISIT_PARAMETER( setTimestamp( _nIndex, x ) );
     }
 
 
-    void ParameterManager::setBinaryStream( sal_Int32 _nIndex, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream>& x, sal_Int32 length )
+    void ParameterManager::setBinaryStream( sal_Int32 _nIndex, const css::uno::Reference< css::io::XInputStream>& x, sal_Int32 length )
     {
         VISIT_PARAMETER( setBinaryStream( _nIndex, x, length ) );
     }
 
 
-    void ParameterManager::setCharacterStream( sal_Int32 _nIndex, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream>& x, sal_Int32 length )
+    void ParameterManager::setCharacterStream( sal_Int32 _nIndex, const css::uno::Reference< css::io::XInputStream>& x, sal_Int32 length )
     {
         VISIT_PARAMETER( setCharacterStream( _nIndex, x, length ) );
     }
 
 
-    void ParameterManager::setObject( sal_Int32 _nIndex, const ::com::sun::star::uno::Any& x )
+    void ParameterManager::setObject( sal_Int32 _nIndex, const css::uno::Any& x )
     {
         VISIT_PARAMETER( setObject( _nIndex, x ) );
     }
 
 
-    void ParameterManager::setObjectWithInfo( sal_Int32 _nIndex, const ::com::sun::star::uno::Any& x, sal_Int32 targetSqlType, sal_Int32 scale )
+    void ParameterManager::setObjectWithInfo( sal_Int32 _nIndex, const css::uno::Any& x, sal_Int32 targetSqlType, sal_Int32 scale )
     {
         VISIT_PARAMETER( setObjectWithInfo( _nIndex, x, targetSqlType, scale ) );
     }
 
 
-    void ParameterManager::setRef( sal_Int32 _nIndex, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRef>& x )
+    void ParameterManager::setRef( sal_Int32 _nIndex, const css::uno::Reference< css::sdbc::XRef>& x )
     {
         VISIT_PARAMETER( setRef( _nIndex, x ) );
     }
 
 
-    void ParameterManager::setBlob( sal_Int32 _nIndex, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XBlob>& x )
+    void ParameterManager::setBlob( sal_Int32 _nIndex, const css::uno::Reference< css::sdbc::XBlob>& x )
     {
         VISIT_PARAMETER( setBlob( _nIndex, x ) );
     }
 
 
-    void ParameterManager::setClob( sal_Int32 _nIndex, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XClob>& x )
+    void ParameterManager::setClob( sal_Int32 _nIndex, const css::uno::Reference< css::sdbc::XClob>& x )
     {
         VISIT_PARAMETER( setClob( _nIndex, x ) );
     }
 
 
-    void ParameterManager::setArray( sal_Int32 _nIndex, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XArray>& x )
+    void ParameterManager::setArray( sal_Int32 _nIndex, const css::uno::Reference< css::sdbc::XArray>& x )
     {
         VISIT_PARAMETER( setArray( _nIndex, x ) );
     }

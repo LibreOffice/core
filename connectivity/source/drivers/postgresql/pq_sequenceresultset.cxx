@@ -49,8 +49,8 @@ namespace pq_sdbc_driver
 {
 
 void SequenceResultSet::checkClosed()
-    throw ( com::sun::star::sdbc::SQLException,
-            com::sun::star::uno::RuntimeException )
+    throw ( css::sdbc::SQLException,
+            css::uno::RuntimeException )
 {
     // we never close :o)
 }
@@ -64,10 +64,10 @@ Any SequenceResultSet::getValue( sal_Int32 columnIndex )
 
 SequenceResultSet::SequenceResultSet(
     const ::rtl::Reference< RefCountedMutex > & mutex,
-    const com::sun::star::uno::Reference< com::sun::star::uno::XInterface > &owner,
+    const css::uno::Reference< css::uno::XInterface > &owner,
     const std::vector< OUString > &colNames,
     const std::vector< std::vector< Any > > &data,
-    const Reference< com::sun::star::script::XTypeConverter > & tc,
+    const Reference< css::script::XTypeConverter > & tc,
     const ColumnMetaDataVector *pVec) :
     BaseResultSet( mutex, owner, data.size(), colNames.size(), tc ),
     m_data(data ),
@@ -85,18 +85,18 @@ SequenceResultSet::~SequenceResultSet()
 }
 
 void SequenceResultSet::close(  )
-    throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
     // a noop
 }
 
 Reference< XResultSetMetaData > SAL_CALL SequenceResultSet::getMetaData(  )
-    throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
     if( ! m_meta.is() )
     {
         // Oh no, not again
-        throw ::com::sun::star::sdbc::SQLException(
+        throw css::sdbc::SQLException(
             "pq_sequenceresultset: no meta supported ", *this,
         // I did not find "IM001" in a specific standard,
         // but it seems to be used by other systems (such as ODBC)
@@ -109,7 +109,7 @@ Reference< XResultSetMetaData > SAL_CALL SequenceResultSet::getMetaData(  )
 
 sal_Int32 SAL_CALL SequenceResultSet::findColumn(
     const OUString& columnName )
-    throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
     // no need to guard, as all members are readonly !
     for( int i = 0 ;i < m_fieldCount ; i ++ )

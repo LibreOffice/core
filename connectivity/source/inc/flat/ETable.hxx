@@ -48,15 +48,15 @@ namespace connectivity
             ::std::vector<sal_Int32>        m_aPrecisions;  // same as aboth
             ::std::vector<sal_Int32>        m_aScales;
             QuotedTokenizedString           m_aCurrentLine;
-            ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter > m_xNumberFormatter;
-            ::com::sun::star::util::Date    m_aNullDate;
+            css::uno::Reference< css::util::XNumberFormatter > m_xNumberFormatter;
+            css::util::Date                 m_aNullDate;
             sal_Int32                       m_nRowPos;
             sal_Int32                       m_nMaxRowCount; // will be set if stream is once eof
             sal_Unicode                     m_cStringDelimiter;     // delimiter for strings m_cStringDelimiter blabla m_cStringDelimiter
             sal_Unicode                     m_cFieldDelimiter;      // look at the name
             bool                            m_bNeedToReadLine;
         private:
-            void fillColumns(const ::com::sun::star::lang::Locale& _aLocale);
+            void fillColumns(const css::lang::Locale& _aLocale);
             bool readLine(sal_Int32 *pEndPos = nullptr, sal_Int32 *pStartPos = nullptr, bool nonEmpty = false);
             void setRowPos(::std::vector<TRowPositionInFile>::size_type rowNum, const TRowPositionInFile &rowPos);
             void impl_fillColumnInfo_nothrow(QuotedTokenizedString& aFirstLine, sal_Int32& nStartPosFirstLine, sal_Int32& nStartPosFirstLine2,
@@ -91,14 +91,14 @@ namespace connectivity
             virtual bool fetchRow(OValueRefRow& _rRow, const OSQLColumns& _rCols, bool bRetrieveData) override;
             virtual void refreshHeader() override;
 
-            virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
             //XTypeProvider
-            virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) throw(css::uno::RuntimeException, std::exception) override;
             virtual void SAL_CALL disposing() override;
 
-            // com::sun::star::lang::XUnoTunnel
-            virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-            static ::com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
+            // css::lang::XUnoTunnel
+            virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) throw(css::uno::RuntimeException, std::exception) override;
+            static css::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
 
             OUString getEntry();
         };

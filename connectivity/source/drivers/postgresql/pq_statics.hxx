@@ -102,9 +102,9 @@ struct ImplementationStatics
     {}
 
     OUString implName;
-    com::sun::star::uno::Sequence< OUString > serviceNames;
+    css::uno::Sequence< OUString > serviceNames;
     cppu::IPropertyArrayHelper *pProps;
-    com::sun::star::uno::Sequence< com::sun::star::uno::Type > types;
+    css::uno::Sequence< css::uno::Type > types;
 };
 
 struct ReflectionImplementations
@@ -228,7 +228,7 @@ struct Statics
     std::vector< OUString > typeinfoColumnNames;
     std::vector< OUString > indexinfoColumnNames;
     std::vector< OUString > resultSetArrayColumnNames;
-    std::vector< std::vector< com::sun::star::uno::Any > > tableTypeData;
+    std::vector< std::vector< css::uno::Any > > tableTypeData;
 
     ColumnMetaDataVector typeInfoMetaData;
     BaseTypeMap baseTypeMap;

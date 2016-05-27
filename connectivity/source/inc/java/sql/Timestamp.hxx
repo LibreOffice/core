@@ -40,9 +40,9 @@ namespace connectivity
         virtual ~java_sql_Date();
         // A ctor that is needed for returning the object
         java_sql_Date( JNIEnv * pEnv, jobject myObj ) : java_util_Date(pEnv,myObj){}
-        java_sql_Date( const ::com::sun::star::util::Date& _rOut );
+        java_sql_Date( const css::util::Date& _rOut );
 
-        operator ::com::sun::star::util::Date();
+        operator css::util::Date();
         static jclass st_getMyClass();
     };
 
@@ -60,8 +60,8 @@ namespace connectivity
         virtual ~java_sql_Time();
         // A ctor that is needed for returning the object
         java_sql_Time( JNIEnv * pEnv, jobject myObj ) : java_util_Date( pEnv, myObj ){}
-        java_sql_Time( const ::com::sun::star::util::Time& _rOut );
-        operator ::com::sun::star::util::Time();
+        java_sql_Time( const css::util::Time& _rOut );
+        operator css::util::Time();
         static jclass st_getMyClass();
     };
 
@@ -78,8 +78,8 @@ namespace connectivity
         virtual ~java_sql_Timestamp();
         // A ctor that is needed for returning the object
         java_sql_Timestamp( JNIEnv * pEnv, jobject myObj ) : java_util_Date( pEnv, myObj ){}
-        java_sql_Timestamp( const ::com::sun::star::util::DateTime& _rOut);
-        operator ::com::sun::star::util::DateTime();
+        java_sql_Timestamp( const css::util::DateTime& _rOut);
+        operator css::util::DateTime();
 
         static jclass st_getMyClass();
     };

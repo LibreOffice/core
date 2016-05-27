@@ -158,7 +158,7 @@ sal_Int32 SAL_CALL java_sql_ResultSetMetaData::getPrecision( sal_Int32 column ) 
     return callIntMethodWithIntArg_ThrowSQL("getPrecision",mID,column);
 }
 
-sal_Int32 SAL_CALL java_sql_ResultSetMetaData::getScale( sal_Int32 column ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
+sal_Int32 SAL_CALL java_sql_ResultSetMetaData::getScale( sal_Int32 column ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
     static jmethodID mID(nullptr);
     return callIntMethodWithIntArg_ThrowSQL("getScale",mID,column);

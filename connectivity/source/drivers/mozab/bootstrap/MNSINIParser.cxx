@@ -21,7 +21,7 @@
 #include <rtl/byteseq.hxx>
 #include <osl/diagnose.h>
 
-IniParser::IniParser(OUString const & rIniName) throw(com::sun::star::io::IOException, std::exception)
+IniParser::IniParser(OUString const & rIniName) throw(css::io::IOException, std::exception)
 {
     OUString iniUrl;
     if (osl_File_E_None != osl_getFileURLFromSystemPath(rIniName.pData, &iniUrl.pData))
@@ -38,7 +38,7 @@ IniParser::IniParser(OUString const & rIniName) throw(com::sun::star::io::IOExce
         if (!iniUrl.isEmpty())
             fileError = osl_openFile(iniUrl.pData, &handle, osl_File_OpenFlag_Read);
     }
-    catch(const ::com::sun::star::io::IOException&)
+    catch(const css::io::IOException&)
     {
 #if OSL_DEBUG_LEVEL > 0
         OString file_tmp = OUStringToOString(iniUrl, RTL_TEXTENCODING_ASCII_US);

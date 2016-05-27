@@ -29,37 +29,37 @@
 
 namespace connectivity
 {
-    typedef ::cppu::WeakImplHelper< ::com::sun::star::util::XStringSubstitution
-                                   ,::com::sun::star::lang::XServiceInfo
-                                   ,::com::sun::star::lang::XInitialization > ParameterSubstitution_BASE;
+    typedef ::cppu::WeakImplHelper< css::util::XStringSubstitution
+                                   ,css::lang::XServiceInfo
+                                   ,css::lang::XInitialization > ParameterSubstitution_BASE;
     class ParameterSubstitution : public ParameterSubstitution_BASE
     {
-        ::osl::Mutex                                                                    m_aMutex;
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >    m_xContext;
-        ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XConnection >     m_xConnection;
+        ::osl::Mutex                                          m_aMutex;
+        css::uno::Reference< css::uno::XComponentContext >    m_xContext;
+        css::uno::WeakReference< css::sdbc::XConnection >     m_xConnection;
 
         ParameterSubstitution( const ParameterSubstitution& ) = delete;
         ParameterSubstitution& operator=( const ParameterSubstitution& ) = delete;
     public:
 
-        static OUString getImplementationName_Static(  ) throw(::com::sun::star::uno::RuntimeException);
-        static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_Static(  ) throw (::com::sun::star::uno::RuntimeException);
-        static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > create( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >  & xContext);
+        static OUString getImplementationName_Static(  ) throw(css::uno::RuntimeException);
+        static css::uno::Sequence< OUString > getSupportedServiceNames_Static(  ) throw (css::uno::RuntimeException);
+        static css::uno::Reference< css::uno::XInterface > create( const css::uno::Reference< css::uno::XComponentContext >  & xContext);
     protected:
-        ParameterSubstitution(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext );
+        ParameterSubstitution(const css::uno::Reference< css::uno::XComponentContext >& _rxContext );
         virtual ~ParameterSubstitution(){}
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual OUString SAL_CALL getImplementationName(  ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (css::uno::RuntimeException, std::exception) override;
         // XInitialization
-        virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw(css::uno::Exception, css::uno::RuntimeException, std::exception) override;
 
         // XStringSubstitution
-        virtual OUString SAL_CALL substituteVariables( const OUString& aText, sal_Bool bSubstRequired ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual OUString SAL_CALL reSubstituteVariables( const OUString& aText ) throw (::com::sun::star::uno::RuntimeException, std::exception) override;
-        virtual OUString SAL_CALL getSubstituteVariableValue( const OUString& variable ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+        virtual OUString SAL_CALL substituteVariables( const OUString& aText, sal_Bool bSubstRequired ) throw (css::container::NoSuchElementException, css::uno::RuntimeException, std::exception) override;
+        virtual OUString SAL_CALL reSubstituteVariables( const OUString& aText ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual OUString SAL_CALL getSubstituteVariableValue( const OUString& variable ) throw (css::container::NoSuchElementException, css::uno::RuntimeException, std::exception) override;
     };
 
 } // connectivity

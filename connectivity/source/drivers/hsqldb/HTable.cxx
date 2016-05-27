@@ -141,7 +141,7 @@ Sequence< sal_Int8 > OHSQLTable::getUnoTunnelImplementationId()
     return pId->getImplementationId();
 }
 
-// com::sun::star::lang::XUnoTunnel
+// css::lang::XUnoTunnel
 
 sal_Int64 OHSQLTable::getSomething( const Sequence< sal_Int8 > & rId ) throw (RuntimeException, std::exception)
 {

@@ -166,9 +166,9 @@ Statement::Statement( const ::rtl::Reference< RefCountedMutex > & refMutex,
     m_props[STATEMENT_QUERY_TIME_OUT] = makeAny( (sal_Int32)0 );
     m_props[STATEMENT_MAX_ROWS] = makeAny( (sal_Int32)0 );
     m_props[STATEMENT_RESULT_SET_CONCURRENCY] = makeAny(
-        com::sun::star::sdbc::ResultSetConcurrency::READ_ONLY );
+        css::sdbc::ResultSetConcurrency::READ_ONLY );
     m_props[STATEMENT_RESULT_SET_TYPE] = makeAny(
-        com::sun::star::sdbc::ResultSetType::SCROLL_INSENSITIVE );
+        css::sdbc::ResultSetType::SCROLL_INSENSITIVE );
 }
 
 Statement::~Statement()
@@ -263,7 +263,7 @@ Reference< XResultSet > Statement::executeQuery(const OUString& sql )
     {
         raiseSQLException( sql, "not a query" );
     }
-    return Reference< XResultSet > ( m_lastResultset, com::sun::star::uno::UNO_QUERY );
+    return Reference< XResultSet > ( m_lastResultset, css::uno::UNO_QUERY );
 }
 
 sal_Int32 Statement::executeUpdate( const OUString& sql )
@@ -305,9 +305,9 @@ static void raiseSQLException(
 
 
 // returns the elements of the primary key of the given table
-// static Sequence< Reference< com::sun::star::beans::XPropertySet > > lookupKeys(
+// static Sequence< Reference< css::beans::XPropertySet > > lookupKeys(
 static std::vector< OUString > lookupKeys(
-    const Reference< com::sun::star::container::XNameAccess > &tables,
+    const Reference< css::container::XNameAccess > &tables,
     const OUString & table,
     OUString *pSchema,
     OUString *pTable,
@@ -325,7 +325,7 @@ static std::vector< OUString > lookupKeys(
         Reference< XEnumerationAccess > enumerationAccess =
             Reference< XEnumerationAccess > ( tables, UNO_QUERY );
 
-        Reference< com::sun::star::container::XEnumeration > enumeration =
+        Reference< css::container::XEnumeration > enumeration =
             enumerationAccess->createEnumeration();
         while( enumeration->hasMoreElements() )
         {
@@ -388,7 +388,7 @@ static std::vector< OUString > lookupKeys(
             enumeration->nextElement() >>= set;
             sal_Int32 keyType = 0;
             if( (set->getPropertyValue( st.TYPE ) >>= keyType ) &&
-                keyType == com::sun::star::sdbcx::KeyType::PRIMARY )
+                keyType == css::sdbcx::KeyType::PRIMARY )
             {
                 Reference< XColumnsSupplier > columns( set, UNO_QUERY );
                 Reference< XIndexAccess > indexAccess =
@@ -493,7 +493,7 @@ bool executePostgresCommand( const OString & cmd, struct CommandData *data )
                 extractSingleTableFromSelect( vec ), pSettings->encoding );
 
         if( data->concurrency ==
-            com::sun::star::sdbc::ResultSetConcurrency::UPDATABLE )
+            css::sdbc::ResultSetConcurrency::UPDATABLE )
         {
             OString aReason;
             if( sourceTable.getLength() )
@@ -815,7 +815,7 @@ Reference< XResultSet > getGeneratedValuesFromLastInsert(
 
     if( query.getLength() )
     {
-        Reference< com::sun::star::sdbc::XStatement > stmt = connection->createStatement();
+        Reference< css::sdbc::XStatement > stmt = connection->createStatement();
         ret = stmt->executeQuery( query );
     }
 
@@ -873,11 +873,11 @@ void Statement::clearWarnings(  )
 {
 }
 
-Reference< ::com::sun::star::sdbc::XResultSetMetaData > Statement::getMetaData()
+Reference< css::sdbc::XResultSetMetaData > Statement::getMetaData()
             throw (SQLException,RuntimeException, std::exception)
 {
-    Reference< com::sun::star::sdbc::XResultSetMetaData > ret;
-    Reference< com::sun::star::sdbc::XResultSetMetaDataSupplier > supplier( m_lastResultset, UNO_QUERY );
+    Reference< css::sdbc::XResultSetMetaData > ret;
+    Reference< css::sdbc::XResultSetMetaDataSupplier > supplier( m_lastResultset, UNO_QUERY );
     if( supplier.is() )
         ret = supplier->getMetaData();
     return ret;
@@ -957,19 +957,19 @@ Reference < XPropertySetInfo >  Statement::getPropertySetInfo()
 
 
 Reference< XResultSet > Statement::getResultSet(  )
-    throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
-    return Reference< XResultSet > ( m_lastResultset, com::sun::star::uno::UNO_QUERY );
+    return Reference< XResultSet > ( m_lastResultset, css::uno::UNO_QUERY );
 }
 
 sal_Int32 Statement::getUpdateCount(  )
-    throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
     return m_multipleResultUpdateCount;
 }
 
 sal_Bool Statement::getMoreResults(  )
-    throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
     return false;
 }

@@ -129,7 +129,7 @@ BaseResultSet::BaseResultSet(
     const Reference< XInterface > & owner,
     sal_Int32 rowCount,
     sal_Int32 colCount,
-    const Reference< com::sun::star::script::XTypeConverter > & tc )
+    const Reference< css::script::XTypeConverter > & tc )
     : BaseResultSet_BASE( refMutex->mutex )
     , OPropertySetHelper( BaseResultSet_BASE::rBHelper )
     , m_owner( owner )
@@ -364,9 +364,9 @@ Any BaseResultSet::convertTo( const Any & val , const Type & type )
     {
         aRet = m_tc->convertTo( val , type );
     }
-    catch( com::sun::star::lang::IllegalArgumentException & )
+    catch( css::lang::IllegalArgumentException & )
     {}
-    catch( com::sun::star::script::CannotConvertException & )
+    catch( css::script::CannotConvertException & )
     {}
     return aRet;
 }
@@ -506,32 +506,32 @@ Sequence< sal_Int8 > BaseResultSet::getBytes( sal_Int32 columnIndex )
 }
 
 
-::com::sun::star::util::Date BaseResultSet::getDate( sal_Int32 columnIndex )
+css::util::Date BaseResultSet::getDate( sal_Int32 columnIndex )
         throw (SQLException, RuntimeException, std::exception)
 {
     return DBTypeConversion::toDate( getString( columnIndex ) );
 }
 
-::com::sun::star::util::Time BaseResultSet::getTime( sal_Int32 columnIndex )
+css::util::Time BaseResultSet::getTime( sal_Int32 columnIndex )
         throw (SQLException, RuntimeException, std::exception)
 {
     return DBTypeConversion::toTime( getString( columnIndex ) );
 }
 
-::com::sun::star::util::DateTime BaseResultSet::getTimestamp( sal_Int32 columnIndex )
+css::util::DateTime BaseResultSet::getTimestamp( sal_Int32 columnIndex )
         throw (SQLException, RuntimeException, std::exception)
 {
     return DBTypeConversion::toDateTime( getString( columnIndex ) );
 }
 
   // LEM TODO: these look like they are missing an actual implementation
-Reference< ::com::sun::star::io::XInputStream > BaseResultSet::getBinaryStream( sal_Int32 /* columnIndex */ )
+Reference< css::io::XInputStream > BaseResultSet::getBinaryStream( sal_Int32 /* columnIndex */ )
         throw (SQLException, RuntimeException, std::exception)
 {
     return nullptr;
 }
 
-Reference< ::com::sun::star::io::XInputStream > BaseResultSet::getCharacterStream( sal_Int32 /* columnIndex */ )
+Reference< css::io::XInputStream > BaseResultSet::getCharacterStream( sal_Int32 /* columnIndex */ )
         throw (SQLException, RuntimeException, std::exception)
 {
     return nullptr;
@@ -539,31 +539,31 @@ Reference< ::com::sun::star::io::XInputStream > BaseResultSet::getCharacterStrea
 
 Any BaseResultSet::getObject(
         sal_Int32 /* columnIndex */,
-        const Reference< ::com::sun::star::container::XNameAccess >& /* typeMap */ )
+        const Reference< css::container::XNameAccess >& /* typeMap */ )
         throw (SQLException, RuntimeException, std::exception)
 {
     return Any();
 }
 
-Reference< ::com::sun::star::sdbc::XRef > BaseResultSet::getRef( sal_Int32 /* columnIndex */ )
+Reference< css::sdbc::XRef > BaseResultSet::getRef( sal_Int32 /* columnIndex */ )
         throw (SQLException, RuntimeException, std::exception)
 {
-    return Reference< com::sun::star::sdbc::XRef > ();
+    return Reference< css::sdbc::XRef > ();
 }
 
-Reference< ::com::sun::star::sdbc::XBlob > BaseResultSet::getBlob( sal_Int32 /* columnIndex */ )
+Reference< css::sdbc::XBlob > BaseResultSet::getBlob( sal_Int32 /* columnIndex */ )
         throw (SQLException, RuntimeException, std::exception)
 {
-    return Reference< com::sun::star::sdbc::XBlob > ();
+    return Reference< css::sdbc::XBlob > ();
 }
 
-Reference< ::com::sun::star::sdbc::XClob > BaseResultSet::getClob( sal_Int32 /* columnIndex */ )
+Reference< css::sdbc::XClob > BaseResultSet::getClob( sal_Int32 /* columnIndex */ )
         throw (SQLException, RuntimeException, std::exception)
 {
-    return Reference< com::sun::star::sdbc::XClob > ();
+    return Reference< css::sdbc::XClob > ();
 }
 
-Reference< ::com::sun::star::sdbc::XArray > BaseResultSet::getArray( sal_Int32 columnIndex )
+Reference< css::sdbc::XArray > BaseResultSet::getArray( sal_Int32 columnIndex )
         throw (SQLException, RuntimeException, std::exception)
 {
     return new Array( m_refMutex, parseArray( getString( columnIndex ) ), *this, m_tc );

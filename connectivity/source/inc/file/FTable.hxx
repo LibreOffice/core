@@ -64,7 +64,7 @@ namespace connectivity
                 );
 
             //XInterface
-            virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
             virtual void SAL_CALL acquire() throw() override;
             virtual void SAL_CALL release() throw() override;
             // ::cppu::OComponentHelper
@@ -77,10 +77,10 @@ namespace connectivity
             virtual bool fetchRow(OValueRefRow& _rRow, const OSQLColumns& _rCols, bool bRetrieveData) = 0;
 
             const ::rtl::Reference<OSQLColumns>& getTableColumns() const {return m_aColumns;}
-            virtual bool InsertRow(OValueRefVector& rRow, const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xCols);
+            virtual bool InsertRow(OValueRefVector& rRow, const css::uno::Reference< css::container::XIndexAccess>& _xCols);
             virtual bool DeleteRow(const OSQLColumns& _rCols);
-            virtual bool UpdateRow(OValueRefVector& rRow, OValueRefRow& pOrgRow,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xCols);
-            virtual void addColumn(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& descriptor);
+            virtual bool UpdateRow(OValueRefVector& rRow, OValueRefRow& pOrgRow,const css::uno::Reference< css::container::XIndexAccess>& _xCols);
+            virtual void addColumn(const css::uno::Reference< css::beans::XPropertySet>& descriptor);
             virtual void dropColumn(sal_Int32 _nPos);
             // refresh the header of file based tables to see changes done by someone
             virtual void refreshHeader();
@@ -90,9 +90,9 @@ namespace connectivity
             const OUString& getSchema() { return m_SchemaName; }
             bool isReadOnly() const { return !m_bWriteable; }
                 // m_pFileStream && !m_pFileStream->IsWritable(); }
-            // com::sun::star::lang::XUnoTunnel
-            virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
-            static ::com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
+            // css::lang::XUnoTunnel
+            virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) throw(css::uno::RuntimeException, std::exception) override;
+            static css::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
 
 
             sal_Int32 getFilePos() const { return m_nFilePos; }

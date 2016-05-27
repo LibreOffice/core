@@ -40,7 +40,7 @@ using namespace ::com::sun::star::lang;
 OUsers::OUsers( ::cppu::OWeakObject& _rParent,
                 ::osl::Mutex& _rMutex,
                 const TStringVector &_rVector,
-                const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection,
+                const css::uno::Reference< css::sdbc::XConnection >& _xConnection,
                 connectivity::sdbcx::IRefreshableUsers* _pParent)
     : sdbcx::OCollection(_rParent, true, _rMutex, _rVector)
     ,m_xConnection(_xConnection)

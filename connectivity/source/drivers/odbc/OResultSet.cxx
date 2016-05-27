@@ -356,9 +356,9 @@ Any SAL_CALL OResultSet::queryInterface( const Type & rType ) throw(RuntimeExcep
 
  Sequence<  Type > SAL_CALL OResultSet::getTypes(  ) throw( RuntimeException, std::exception)
 {
-    OTypeCollection aTypes( cppu::UnoType<com::sun::star::beans::XMultiPropertySet>::get(),
-                                                cppu::UnoType<com::sun::star::beans::XFastPropertySet>::get(),
-                                                cppu::UnoType<com::sun::star::beans::XPropertySet>::get());
+    OTypeCollection aTypes( cppu::UnoType<css::beans::XMultiPropertySet>::get(),
+                            cppu::UnoType<css::beans::XFastPropertySet>::get(),
+                            cppu::UnoType<css::beans::XPropertySet>::get());
 
     return ::comphelper::concatSequences(aTypes.getTypes(),OResultSet_BASE::getTypes());
 }
@@ -612,7 +612,7 @@ Reference< XRef > SAL_CALL OResultSet::getRef( sal_Int32 /*columnIndex*/ ) throw
 }
 
 
-Any SAL_CALL OResultSet::getObject( sal_Int32 columnIndex, const Reference< ::com::sun::star::container::XNameAccess >& /*typeMap*/ ) throw(SQLException, RuntimeException, std::exception)
+Any SAL_CALL OResultSet::getObject( sal_Int32 columnIndex, const Reference< css::container::XNameAccess >& /*typeMap*/ ) throw(SQLException, RuntimeException, std::exception)
 {
     return getValue<ORowSetValue>( columnIndex ).makeAny();
 }
@@ -1389,7 +1389,7 @@ void OResultSet::setFetchSize(sal_Int32 _par0)
     OSL_ENSURE(_par0>0,"Illegal fetch size!");
     if ( _par0 != 1 )
     {
-        throw ::com::sun::star::beans::PropertyVetoException("SDBC/ODBC layer not prepared for fetchSize > 1", *this);
+        throw css::beans::PropertyVetoException("SDBC/ODBC layer not prepared for fetchSize > 1", *this);
     }
     if ( _par0 > 0 )
     {
@@ -1406,22 +1406,22 @@ IPropertyArrayHelper* OResultSet::createArrayHelper( ) const
     Sequence< Property > aProps(6);
     Property* pProperties = aProps.getArray();
     sal_Int32 nPos = 0;
-    pProperties[nPos++] = ::com::sun::star::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_CURSORNAME),
+    pProperties[nPos++] = css::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_CURSORNAME),
         PROPERTY_ID_CURSORNAME, cppu::UnoType<OUString>::get(), PropertyAttribute::READONLY);
 
-    pProperties[nPos++] = ::com::sun::star::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FETCHDIRECTION),
+    pProperties[nPos++] = css::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FETCHDIRECTION),
         PROPERTY_ID_FETCHDIRECTION, cppu::UnoType<sal_Int32>::get(), 0);
 
-    pProperties[nPos++] = ::com::sun::star::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FETCHSIZE),
+    pProperties[nPos++] = css::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FETCHSIZE),
         PROPERTY_ID_FETCHSIZE, cppu::UnoType<sal_Int32>::get(), 0);
 
-    pProperties[nPos++] = ::com::sun::star::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISBOOKMARKABLE),
+    pProperties[nPos++] = css::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISBOOKMARKABLE),
         PROPERTY_ID_ISBOOKMARKABLE, cppu::UnoType<bool>::get(), PropertyAttribute::READONLY);
 
-    pProperties[nPos++] = ::com::sun::star::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_RESULTSETCONCURRENCY),
+    pProperties[nPos++] = css::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_RESULTSETCONCURRENCY),
         PROPERTY_ID_RESULTSETCONCURRENCY, cppu::UnoType<sal_Int32>::get(), PropertyAttribute::READONLY);
 
-    pProperties[nPos++] = ::com::sun::star::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_RESULTSETTYPE),
+    pProperties[nPos++] = css::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_RESULTSETTYPE),
         PROPERTY_ID_RESULTSETTYPE, cppu::UnoType<sal_Int32>::get(), PropertyAttribute::READONLY);
 
     return new OPropertyArrayHelper(aProps);
@@ -1437,7 +1437,7 @@ sal_Bool OResultSet::convertFastPropertyValue(
                             Any & rOldValue,
                             sal_Int32 nHandle,
                             const Any& rValue )
-                                throw (::com::sun::star::lang::IllegalArgumentException)
+                                throw (css::lang::IllegalArgumentException)
 {
     switch(nHandle)
     {
@@ -1445,7 +1445,7 @@ sal_Bool OResultSet::convertFastPropertyValue(
         case PROPERTY_ID_CURSORNAME:
         case PROPERTY_ID_RESULTSETCONCURRENCY:
         case PROPERTY_ID_RESULTSETTYPE:
-            throw ::com::sun::star::lang::IllegalArgumentException();
+            throw css::lang::IllegalArgumentException();
         case PROPERTY_ID_FETCHDIRECTION:
             return ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, getFetchDirection());
         case PROPERTY_ID_FETCHSIZE:
@@ -1636,7 +1636,7 @@ void SAL_CALL OResultSet::release() throw()
     OResultSet_BASE::release();
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL OResultSet::getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL OResultSet::getPropertySetInfo(  ) throw(css::uno::RuntimeException, std::exception)
 {
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }

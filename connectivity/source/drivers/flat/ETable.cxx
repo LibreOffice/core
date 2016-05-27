@@ -63,7 +63,7 @@ using std::vector;
 using std::lower_bound;
 
 
-void OFlatTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
+void OFlatTable::fillColumns(const css::lang::Locale& _aLocale)
 {
     m_bNeedToReadLine = true; // we overwrite m_aCurrentLine, seek the stream, ...
     m_pFileStream->Seek(0);
@@ -288,7 +288,7 @@ void OFlatTable::impl_fillColumnInfo_nothrow(QuotedTokenizedString& aFirstLine, 
                     {
                         try
                         {
-                            nIndex = m_xNumberFormatter->detectNumberFormat(::com::sun::star::util::NumberFormat::ALL,aField2);
+                            nIndex = m_xNumberFormatter->detectNumberFormat(css::util::NumberFormat::ALL,aField2);
                         }
                         catch(Exception&)
                         {
@@ -315,7 +315,7 @@ void OFlatTable::impl_fillColumnInfo_nothrow(QuotedTokenizedString& aFirstLine, 
                 {
                     try
                     {
-                        nIndex = m_xNumberFormatter->detectNumberFormat(::com::sun::star::util::NumberFormat::ALL,aField2);
+                        nIndex = m_xNumberFormatter->detectNumberFormat(css::util::NumberFormat::ALL,aField2);
                     }
                     catch(Exception&)
                     {
@@ -412,7 +412,7 @@ OFlatTable::OFlatTable(sdbcx::OCollection* _pTables,OFlatConnection* _pConnectio
 void OFlatTable::construct()
 {
     SvtSysLocale aLocale;
-    ::com::sun::star::lang::Locale aAppLocale(aLocale.GetLanguageTag().getLocale());
+    css::lang::Locale aAppLocale(aLocale.GetLanguageTag().getLocale());
 
     Reference< XNumberFormatsSupplier > xSupplier = NumberFormatsSupplier::createWithLocale( m_pConnection->getDriver()->getComponentContext(), aAppLocale );
     m_xNumberFormatter.set( NumberFormatter::create( m_pConnection->getDriver()->getComponentContext()), UNO_QUERY_THROW);
@@ -549,7 +549,7 @@ Any SAL_CALL OFlatTable::queryInterface( const Type & rType ) throw(RuntimeExcep
         return Any();
 
     Any aRet = OTable_TYPEDEF::queryInterface(rType);
-    return aRet.hasValue() ? aRet : ::cppu::queryInterface(rType,static_cast< ::com::sun::star::lang::XUnoTunnel*> (this));
+    return aRet.hasValue() ? aRet : ::cppu::queryInterface(rType,static_cast< css::lang::XUnoTunnel*> (this));
 }
 
 
@@ -568,7 +568,7 @@ Sequence< sal_Int8 > OFlatTable::getUnoTunnelImplementationId()
     return pId->getImplementationId();
 }
 
-// com::sun::star::lang::XUnoTunnel
+// css::lang::XUnoTunnel
 
 sal_Int64 OFlatTable::getSomething( const Sequence< sal_Int8 > & rId ) throw (RuntimeException, std::exception)
 {
@@ -627,7 +627,7 @@ bool OFlatTable::fetchRow(OValueRefRow& _rRow, const OSQLColumns & _rCols, bool 
                 {
                     try
                     {
-                        double nRes = m_xNumberFormatter->convertStringToNumber(::com::sun::star::util::NumberFormat::ALL,aStr);
+                        double nRes = m_xNumberFormatter->convertStringToNumber(css::util::NumberFormat::ALL,aStr);
 
                         switch(nType)
                         {

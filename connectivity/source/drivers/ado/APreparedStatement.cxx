@@ -102,7 +102,7 @@ Any SAL_CALL OPreparedStatement::queryInterface( const Type & rType ) throw(Runt
                                         static_cast< XResultSetMetaDataSupplier*>(this));
 }
 
-::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL OPreparedStatement::getTypes(  ) throw(::com::sun::star::uno::RuntimeException)
+css::uno::Sequence< css::uno::Type > SAL_CALL OPreparedStatement::getTypes(  ) throw(css::uno::RuntimeException)
 {
     ::cppu::OTypeCollection aTypes( cppu::UnoType<XPreparedStatement>::get(),
                                     cppu::UnoType<XParameters>::get(),
@@ -399,12 +399,12 @@ void SAL_CALL OPreparedStatement::setBytes( sal_Int32 parameterIndex, const Sequ
     setParameter(parameterIndex,adVarBinary,sizeof(sal_Int8)*x.getLength(),x);
 }
 
-void SAL_CALL OPreparedStatement::setCharacterStream( sal_Int32 /*parameterIndex*/, const Reference< ::com::sun::star::io::XInputStream >& /*x*/, sal_Int32 /*length*/ ) throw(SQLException, RuntimeException)
+void SAL_CALL OPreparedStatement::setCharacterStream( sal_Int32 /*parameterIndex*/, const Reference< css::io::XInputStream >& /*x*/, sal_Int32 /*length*/ ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFeatureNotImplementedSQLException( "XParameters::setCharacterStream", *this );
 }
 
-void SAL_CALL OPreparedStatement::setBinaryStream( sal_Int32 parameterIndex, const Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length ) throw(SQLException, RuntimeException)
+void SAL_CALL OPreparedStatement::setBinaryStream( sal_Int32 parameterIndex, const Reference< css::io::XInputStream >& x, sal_Int32 length ) throw(SQLException, RuntimeException)
 {
     if(x.is())
     {

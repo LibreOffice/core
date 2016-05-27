@@ -141,7 +141,7 @@ sal_Int32 SAL_CALL KabResultSetMetaData::getPrecision(sal_Int32) throw(SQLExcept
     return 0;
 }
 
-sal_Int32 SAL_CALL KabResultSetMetaData::getScale(sal_Int32) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
+sal_Int32 SAL_CALL KabResultSetMetaData::getScale(sal_Int32) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
     return 0;
 }

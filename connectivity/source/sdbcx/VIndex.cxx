@@ -38,16 +38,16 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
 
-OUString SAL_CALL OIndex::getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+OUString SAL_CALL OIndex::getImplementationName(  ) throw (css::uno::RuntimeException, std::exception)
 {
     if(isNew())
         return OUString("com.sun.star.sdbcx.VIndexDescriptor");
     return OUString("com.sun.star.sdbcx.VIndex");
 }
 
-::com::sun::star::uno::Sequence< OUString > SAL_CALL OIndex::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Sequence< OUString > SAL_CALL OIndex::getSupportedServiceNames(  ) throw(css::uno::RuntimeException, std::exception)
 {
-    ::com::sun::star::uno::Sequence< OUString > aSupported(1);
+    css::uno::Sequence< OUString > aSupported(1);
     if(isNew())
         aSupported[0] = "com.sun.star.sdbcx.IndexDescriptor";
     else
@@ -56,7 +56,7 @@ OUString SAL_CALL OIndex::getImplementationName(  ) throw (::com::sun::star::uno
     return aSupported;
 }
 
-sal_Bool SAL_CALL OIndex::supportsService( const OUString& _rServiceName ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL OIndex::supportsService( const OUString& _rServiceName ) throw(css::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, _rServiceName);
 }
@@ -143,7 +143,7 @@ void OIndex::disposing()
         m_pColumns->disposing();
 }
 
-Reference< ::com::sun::star::container::XNameAccess > SAL_CALL OIndex::getColumns(  ) throw(RuntimeException, std::exception)
+Reference< css::container::XNameAccess > SAL_CALL OIndex::getColumns(  ) throw(RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(ODescriptor_BASE::rBHelper.bDisposed);
@@ -175,17 +175,17 @@ Reference< XPropertySet > SAL_CALL OIndex::createDataDescriptor(  ) throw(Runtim
     return this;
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL OIndex::getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL OIndex::getPropertySetInfo(  ) throw(css::uno::RuntimeException, std::exception)
 {
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }
 
-OUString SAL_CALL OIndex::getName(  ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+OUString SAL_CALL OIndex::getName(  ) throw(css::uno::RuntimeException, std::exception)
 {
     return m_Name;
 }
 
-void SAL_CALL OIndex::setName( const OUString& /*aName*/ ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL OIndex::setName( const OUString& /*aName*/ ) throw(css::uno::RuntimeException, std::exception)
 {
 }
 

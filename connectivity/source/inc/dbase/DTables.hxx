@@ -32,16 +32,16 @@ namespace connectivity
         {
         protected:
             virtual sdbcx::ObjectType createObject(const OUString& _rName) override;
-            virtual void impl_refresh() throw(::com::sun::star::uno::RuntimeException) override;
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createDescriptor() override;
-            virtual sdbcx::ObjectType appendObject( const OUString& _rForName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor ) override;
+            virtual void impl_refresh() throw(css::uno::RuntimeException) override;
+            virtual css::uno::Reference< css::beans::XPropertySet > createDescriptor() override;
+            virtual sdbcx::ObjectType appendObject( const OUString& _rForName, const css::uno::Reference< css::beans::XPropertySet >& descriptor ) override;
             virtual void dropObject(sal_Int32 _nPos, const OUString& _sElementName) override;
         public:
-            ODbaseTables(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rMetaData,::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex,
+            ODbaseTables(const css::uno::Reference< css::sdbc::XDatabaseMetaData >& _rMetaData,::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex,
                 const TStringVector &_rVector) : ODbaseTables_BASE(_rMetaData,_rParent,_rMutex,_rVector)
             {}
 
-            virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
         };
     }
 }

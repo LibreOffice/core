@@ -186,7 +186,7 @@ sal_Int32 SAL_CALL OResultSetMetaData::getPrecision( sal_Int32 column ) throw(SQ
     return 0;
 }
 
-sal_Int32 SAL_CALL OResultSetMetaData::getScale( sal_Int32 column ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+sal_Int32 SAL_CALL OResultSetMetaData::getScale( sal_Int32 column ) throw(css::sdbc::SQLException, css::uno::RuntimeException)
 {
     WpADOField aField = ADOS::getField(m_pRecordSet,column);
     if(aField.IsValid())

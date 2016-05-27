@@ -47,8 +47,8 @@ namespace connectivity
          */
         void evaluateStatusVector(const ISC_STATUS_ARRAY& rStatusVector,
                                   const ::rtl::OUString& aCause,
-                                  const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContext)
-                throw (::com::sun::star::sdbc::SQLException);
+                                  const css::uno::Reference< css::uno::XInterface >& _rxContext)
+                throw (css::sdbc::SQLException);
 
         sal_Int32 getColumnTypeFromFBType(short aType);
         ::rtl::OUString getColumnTypeNameFromFBType(short aType);

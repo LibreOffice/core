@@ -55,46 +55,46 @@ namespace pq_sdbc_driver
 
 
 OUString Array::getBaseTypeName(  )
-        throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
+        throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
     return OUString( "varchar" );
 }
 
 sal_Int32 Array::getBaseType(  )
-        throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
+        throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
-    return  com::sun::star::sdbc::DataType::VARCHAR;
+    return  css::sdbc::DataType::VARCHAR;
 }
 
-::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > Array::getArray(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& /* typeMap */ )
-        throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Sequence< css::uno::Any > Array::getArray(
+    const css::uno::Reference< css::container::XNameAccess >& /* typeMap */ )
+        throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
     return comphelper::containerToSequence(m_data);
 }
 
-::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > Array::getArrayAtIndex(
+css::uno::Sequence< css::uno::Any > Array::getArrayAtIndex(
     sal_Int32 index,
     sal_Int32 count,
-    const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& /* typeMap */ )
-    throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
+    const css::uno::Reference< css::container::XNameAccess >& /* typeMap */ )
+    throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
     checkRange( index, count );
     return Sequence< Any > ( &m_data[index-1], count );
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > Array::getResultSet(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& typeMap )
-        throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Reference< css::sdbc::XResultSet > Array::getResultSet(
+    const css::uno::Reference< css::container::XNameAccess >& typeMap )
+        throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
     return getResultSetAtIndex( 0 , m_data.size() , typeMap );
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > Array::getResultSetAtIndex(
+css::uno::Reference< css::sdbc::XResultSet > Array::getResultSetAtIndex(
     sal_Int32 index,
     sal_Int32 count,
-    const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& /* typeMap */ )
-        throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
+    const css::uno::Reference< css::container::XNameAccess >& /* typeMap */ )
+        throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
     checkRange( index, count );
     std::vector< std::vector< Any > > ret( count );

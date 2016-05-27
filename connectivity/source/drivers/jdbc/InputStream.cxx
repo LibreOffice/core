@@ -54,33 +54,33 @@ jclass java_io_InputStream::getMyClass() const
 }
 
 
-sal_Int32 SAL_CALL java_io_InputStream::readSomeBytes( ::com::sun::star::uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead ) throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception)
+sal_Int32 SAL_CALL java_io_InputStream::readSomeBytes( css::uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead ) throw(css::io::NotConnectedException, css::io::BufferSizeExceededException, css::io::IOException, css::uno::RuntimeException, std::exception)
 {
     return readBytes(aData,nMaxBytesToRead);
 }
 
-void SAL_CALL java_io_InputStream::skipBytes( sal_Int32 nBytesToSkip ) throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL java_io_InputStream::skipBytes( sal_Int32 nBytesToSkip ) throw(css::io::NotConnectedException, css::io::BufferSizeExceededException, css::io::IOException, css::uno::RuntimeException, std::exception)
 {
     static jmethodID mID(nullptr);
     callIntMethodWithIntArg_ThrowRuntime("skip",mID,nBytesToSkip);
 }
 
-sal_Int32 SAL_CALL java_io_InputStream::available(  ) throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception)
+sal_Int32 SAL_CALL java_io_InputStream::available(  ) throw(css::io::NotConnectedException, css::io::IOException, css::uno::RuntimeException, std::exception)
 {
     static jmethodID mID(nullptr);
     return callIntMethod_ThrowRuntime("available", mID);
 }
 
-void SAL_CALL java_io_InputStream::closeInput(  ) throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL java_io_InputStream::closeInput(  ) throw(css::io::NotConnectedException, css::io::IOException, css::uno::RuntimeException, std::exception)
 {
     static jmethodID mID(nullptr);
     callVoidMethod_ThrowRuntime("close",mID);
 }
 
-sal_Int32 SAL_CALL java_io_InputStream::readBytes( ::com::sun::star::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead ) throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception)
+sal_Int32 SAL_CALL java_io_InputStream::readBytes( css::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead ) throw(css::io::NotConnectedException, css::io::BufferSizeExceededException, css::io::IOException, css::uno::RuntimeException, std::exception)
 {
     if (nBytesToRead < 0)
-        throw ::com::sun::star::io::BufferSizeExceededException( THROW_WHERE, *this );
+        throw css::io::BufferSizeExceededException( THROW_WHERE, *this );
 
     jint out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");

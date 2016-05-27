@@ -379,7 +379,7 @@ sal_Int32 SAL_CALL OConnection::getTransactionIsolation(  ) throw(SQLException, 
     return nRet;
 }
 
-Reference< ::com::sun::star::container::XNameAccess > SAL_CALL OConnection::getTypeMap(  ) throw(SQLException, RuntimeException)
+Reference< css::container::XNameAccess > SAL_CALL OConnection::getTypeMap(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
@@ -388,7 +388,7 @@ Reference< ::com::sun::star::container::XNameAccess > SAL_CALL OConnection::getT
     return NULL;
 }
 
-void SAL_CALL OConnection::setTypeMap( const Reference< ::com::sun::star::container::XNameAccess >& /*typeMap*/ ) throw(SQLException, RuntimeException)
+void SAL_CALL OConnection::setTypeMap( const Reference< css::container::XNameAccess >& /*typeMap*/ ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFeatureNotImplementedSQLException( "XConnection::setTypeMap", *this );
 }
@@ -480,8 +480,8 @@ void OConnection::disposing()
     OConnection_BASE::disposing();
 
     m_bClosed   = sal_True;
-    m_xMetaData = ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XDatabaseMetaData>();
-    m_xCatalog  = ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbcx::XTablesSupplier>();
+    m_xMetaData = css::uno::WeakReference< css::sdbc::XDatabaseMetaData>();
+    m_xCatalog  = css::uno::WeakReference< css::sdbcx::XTablesSupplier>();
     m_pDriver   = NULL;
 
     m_pAdoConnection->Close();
@@ -498,7 +498,7 @@ void OConnection::disposing()
     dispose_ChildImpl();
 }
 
-sal_Int64 SAL_CALL OConnection::getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rId ) throw (::com::sun::star::uno::RuntimeException)
+sal_Int64 SAL_CALL OConnection::getSomething( const css::uno::Sequence< sal_Int8 >& rId ) throw (css::uno::RuntimeException)
 {
     return (rId.getLength() == 16 && 0 == memcmp(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
                 ?
