@@ -804,7 +804,7 @@ public:
             const long nMapY  = mpMapY[nY];
             const long nMapFY = mpMapYOffset[nY];
 
-             pLine0 = pSource->GetScanline(nMapY);
+            pLine0 = pSource->GetScanline(nMapY);
             // tdf#95481 guard nMapY + 1 to be within bounds
             pLine1 = (nMapY + 1 < pSource->Height()) ? pSource->GetScanline(nMapY + 1) : pLine0;
 
@@ -820,7 +820,7 @@ public:
                 const long nMapFX = mpMapXOffset[nX];
 
                 pColorSample1 = pLine0 + 3L * nMapX;
-                pColorSample2 = pColorSample1  + 3L;
+                pColorSample2 = (nMapX + 1 < pSource->Width()) ? pColorSample1 + 3L : pColorSample1;
                 nColor1Line1 = (static_cast<long>(*pColorSample1) << 7) + nMapFX * (static_cast<long>(*pColorSample2) - *pColorSample1);
 
                 pColorSample1++;
@@ -832,7 +832,7 @@ public:
                 nColor3Line1 = (static_cast<long>(*pColorSample1) << 7) + nMapFX * (static_cast<long>(*pColorSample2) - *pColorSample1);
 
                 pColorSample1 = pLine1 + 3L * nMapX;
-                pColorSample2 = pColorSample1  + 3L;
+                pColorSample2 = (nMapX + 1 < pSource->Width()) ? pColorSample1 + 3L : pColorSample1;
                 nColor1Line2 = (static_cast<long>(*pColorSample1) << 7) + nMapFX * (static_cast<long>(*pColorSample2) - *pColorSample1);
 
                 pColorSample1++;
@@ -844,11 +844,11 @@ public:
                 nColor3Line2 = (static_cast<long>(*pColorSample1) << 7) + nMapFX * (static_cast<long>(*pColorSample2) - *pColorSample1);
 
                 pColorSample1 = pLineAlpha0 + nMapX;
-                pColorSample2 = pColorSample1  + 1L;
+                pColorSample2 = (nMapX + 1 < pSourceAlpha->Width()) ? pColorSample1 + 1L : pColorSample1;
                 nAlphaLine1 = (static_cast<long>(*pColorSample1) << 7) + nMapFX * (static_cast<long>(*pColorSample2) - *pColorSample1);
 
                 pColorSample1 = pLineAlpha1 + nMapX;
-                pColorSample2 = pColorSample1  + 1L;
+                pColorSample2 = (nMapX + 1 < pSourceAlpha->Width()) ? pColorSample1 + 1L : pColorSample1;
                 nAlphaLine2 = (static_cast<long>(*pColorSample1) << 7) + nMapFX * (static_cast<long>(*pColorSample2) - *pColorSample1);
 
                 nColor1 = (nColor1Line1 + nMapFY * ((nColor1Line2 >> 7) - (nColor1Line1 >> 7))) >> 7;
