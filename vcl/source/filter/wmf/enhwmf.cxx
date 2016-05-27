@@ -808,7 +808,7 @@ bool EnhWMFReader::ReadEnhWMF()
                 case EMR_SETROP2 :
                 {
                     pWMF->ReadUInt32( nDat32 );
-                    pOut->SetRasterOp( nDat32 );
+                    pOut->SetRasterOp( (WMFRasterOp)nDat32 );
                 }
                 break;
 
