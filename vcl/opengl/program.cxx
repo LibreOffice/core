@@ -93,12 +93,15 @@ bool OpenGLProgram::Clean()
     return true;
 }
 
-void OpenGLProgram::SetVertexAttrib( GLuint& rAttrib, const OString& rName, const GLvoid* pData, GLint nSize )
+bool OpenGLProgram::EnableVertexAttrib(GLuint& rAttrib, const OString& rName)
 {
     if( rAttrib == SAL_MAX_UINT32 )
     {
-        rAttrib = glGetAttribLocation( mnId, rName.getStr() );
+        GLint aLocation = glGetAttribLocation(mnId, rName.getStr());
         CHECK_GL_ERROR();
+        if (aLocation < 0)
+            return false;
+        rAttrib = GLuint(aLocation);
     }
     if( (mnEnabledAttribs & ( 1 << rAttrib )) == 0 )
     {
@@ -106,8 +109,20 @@ void OpenGLProgram::SetVertexAttrib( GLuint& rAttrib, const OString& rName, cons
         CHECK_GL_ERROR();
         mnEnabledAttribs |= ( 1 << rAttrib );
     }
-    glVertexAttribPointer( rAttrib, nSize, GL_FLOAT, GL_FALSE, 0, pData );
-    CHECK_GL_ERROR();
+    return true;
+}
+
+void OpenGLProgram::SetVertexAttrib( GLuint& rAttrib, const OString& rName, const GLvoid* pData, GLint nSize )
+{
+    if (EnableVertexAttrib(rAttrib, rName))
+    {
+        glVertexAttribPointer( rAttrib, nSize, GL_FLOAT, GL_FALSE, 0, pData );
+        CHECK_GL_ERROR();
+    }
+    else
+    {
+        VCL_GL_INFO("Vertex attribute '" << rName << "' doesn't exist in this program (" << mnId << ")");
+    }
 }
 
 void OpenGLProgram::SetVertices( const GLvoid* pData )
