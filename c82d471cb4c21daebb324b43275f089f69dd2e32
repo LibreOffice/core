@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_dde4083d",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/CalcCommands.xcu",
+        "patchSetId": 1
+      },
+      "lineNbr": 646,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-05-27T17:05:47Z",
+      "side": 1,
+      "message": "Actually I find this less descriptive than what we have. Cycle what where, or ...?\n\"Cycle through relative/absolute references\" maybe? Probably too long. \"Cycle through cell reference types\"? But I\u0027m not very biased.",
+      "revId": "c82d471cb4c21daebb324b43275f089f69dd2e32",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
