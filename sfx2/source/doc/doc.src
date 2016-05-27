@@ -68,6 +68,10 @@ String STR_RENAME
 {
     Text [ en-US ] = "Rename" ;
 };
+String STR_CATEGORY_RENAME
+{
+    Text [ en-US ] = "Rename Category" ;
+};
 String STR_PROPERTIES
 {
     Text [ en-US ] = "Properties" ;

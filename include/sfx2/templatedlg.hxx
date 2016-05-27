@@ -97,6 +97,7 @@ private:
     void OnTemplateState (const ThumbnailViewItem *pItem);
 
     void OnCategoryNew ();
+    void OnCategoryRename();
     void OnCategoryDelete();
 
     void createRepositoryMenu ();

@@ -71,9 +71,10 @@ const char VIEWBAR_REPOSITORY[] = "repository";
 const char ACTIONBAR_ACTION[] = "action_menu";
 
 #define MNI_ACTION_NEW_FOLDER 1
-#define MNI_ACTION_DELETE_FOLDER 2
-#define MNI_ACTION_REFRESH   3
-#define MNI_ACTION_DEFAULT   3
+#define MNI_ACTION_RENAME_FOLDER 2
+#define MNI_ACTION_DELETE_FOLDER 3
+#define MNI_ACTION_REFRESH   4
+#define MNI_ACTION_DEFAULT   5
 #define MNI_REPOSITORY_LOCAL 1
 #define MNI_REPOSITORY_NEW   2
 #define MNI_REPOSITORY_BASE  3
@@ -185,6 +186,8 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg(vcl::Window *parent)
     mpActionMenu->InsertItem(MNI_ACTION_NEW_FOLDER,
         SfxResId(STR_CATEGORY_NEW).toString(),
         Image(SfxResId(IMG_ACTION_REFRESH)));
+    mpActionMenu->InsertItem(MNI_ACTION_RENAME_FOLDER,
+        SfxResId(STR_CATEGORY_RENAME).toString());
     mpActionMenu->InsertItem(MNI_ACTION_DELETE_FOLDER,
         SfxResId(STR_CATEGORY_DELETE).toString());
     mpActionMenu->InsertSeparator();
@@ -566,6 +569,9 @@ IMPL_LINK_TYPED(SfxTemplateManagerDlg, MenuSelectHdl, Menu*, pMenu, bool)
     {
     case MNI_ACTION_NEW_FOLDER:
         OnCategoryNew();
+        break;
+    case MNI_ACTION_RENAME_FOLDER:
+        OnCategoryRename();
         break;
     case MNI_ACTION_DELETE_FOLDER:
         OnCategoryDelete();
@@ -1203,6 +1209,47 @@ void SfxTemplateManagerDlg::OnCategoryNew()
         {
             OUString aMsg( SfxResId(STR_CREATE_ERROR).toString() );
             ScopedVclPtrInstance<MessageDialog>::Create(this, aMsg.replaceFirst("$1", aName))->Execute();
+        }
+    }
+}
+
+void SfxTemplateManagerDlg::OnCategoryRename()
+{
+    ScopedVclPtrInstance< SfxTemplateCategoryDialog > aDlg;
+    aDlg->SetCategoryLBEntries(mpLocalView->getFolderNames());
+    aDlg->HideNewCategoryOption();
+    aDlg->SetText(SfxResId(STR_CATEGORY_RENAME).toString());
+    aDlg->SetSelectLabelText(SfxResId(STR_CATEGORY_SELECT).toString());
+
+    if(aDlg->Execute() == RET_OK)
+    {
+        OUString sCategory = aDlg->GetSelectedCategory();
+        ScopedVclPtrInstance< InputDialog > dlg(SfxResId(STR_INPUT_NEW).toString(),this);
+
+        dlg->SetEntryText(sCategory);
+        int ret = dlg->Execute();
+
+        if (ret)
+        {
+            OUString aName = dlg->GetEntryText();
+
+            if(mpLocalView->renameRegion(sCategory, aName))
+            {
+                sal_Int32 nPos = mpCBFolder->GetEntryPos(sCategory);
+                mpCBFolder->RemoveEntry(nPos);
+                mpCBFolder->InsertEntry(aName, nPos);
+
+                mpLocalView->reload();
+                mpLocalView->showAllTemplates();
+                mpLocalView->ShowTooltips(true);
+                mpCBApp->SelectEntryPos(0);
+                mpCBFolder->SelectEntryPos(0);
+            }
+            else
+            {
+                OUString aMsg( SfxResId(STR_CREATE_ERROR).toString() );
+                ScopedVclPtrInstance<MessageDialog>::Create(this, aMsg.replaceFirst("$1", aName))->Execute();
+            }
         }
     }
 }
