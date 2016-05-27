@@ -119,7 +119,6 @@ public:
     bool UseInvert(SalInvert nFlags);
 
     void DrawPoint( long nX, long nY );
-    void DrawLine( double nX1, double nY1, double nX2, double nY2 );
     void DrawConvexPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry, bool blockAA = false );
     void DrawConvexPolygon( const tools::Polygon& rPolygon, bool blockAA = false );
     void DrawTrapezoid( const basegfx::B2DTrapezoid& trapezoid, bool blockAA = false );
