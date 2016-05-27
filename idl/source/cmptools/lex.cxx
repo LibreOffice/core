@@ -23,6 +23,7 @@
 #include <lex.hxx>
 #include <globals.hxx>
 #include <rtl/strbuf.hxx>
+#include<rtl/character.hxx>
 
 OString SvToken::GetTokenAsString() const
 {
@@ -172,7 +173,7 @@ sal_uLong SvTokenStream::GetNumber()
             if( isdigit( c ) )
                 l = l * nLog + (c - '0');
             else
-                l = l * nLog + (toupper( c ) - 'A' + 10 );
+                l = l * nLog + (rtl::toAsciiUpperCase( c ) - 'A' + 10 );
             c = GetFastNextChar();
         }
     }
