@@ -113,29 +113,29 @@ m_xMetaData.clear();
     SDBThreadAttach::releaseRef();
 }
 
-::com::sun::star::uno::Any SAL_CALL java_sql_ResultSet::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Any SAL_CALL java_sql_ResultSet::queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception)
 {
-    ::com::sun::star::uno::Any aRet = OPropertySetHelper::queryInterface(rType);
+    css::uno::Any aRet = OPropertySetHelper::queryInterface(rType);
     return aRet.hasValue() ? aRet : java_sql_ResultSet_BASE::queryInterface(rType);
 }
 
-::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL java_sql_ResultSet::getTypes(  ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Sequence< css::uno::Type > SAL_CALL java_sql_ResultSet::getTypes(  ) throw(css::uno::RuntimeException, std::exception)
 {
-    ::cppu::OTypeCollection aTypes( cppu::UnoType<com::sun::star::beans::XMultiPropertySet>::get(),
-                                    cppu::UnoType<com::sun::star::beans::XFastPropertySet>::get(),
-                                    cppu::UnoType<com::sun::star::beans::XPropertySet>::get());
+    ::cppu::OTypeCollection aTypes( cppu::UnoType<css::beans::XMultiPropertySet>::get(),
+                                    cppu::UnoType<css::beans::XFastPropertySet>::get(),
+                                    cppu::UnoType<css::beans::XPropertySet>::get());
 
     return ::comphelper::concatSequences(aTypes.getTypes(),java_sql_ResultSet_BASE::getTypes());
 }
 
 
-sal_Int32 SAL_CALL java_sql_ResultSet::findColumn( const OUString& columnName ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
+sal_Int32 SAL_CALL java_sql_ResultSet::findColumn( const OUString& columnName ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
     static jmethodID mID(nullptr);
     return callIntMethodWithStringArg("findColumn",mID,columnName);
 }
 
-Reference< ::com::sun::star::io::XInputStream > SAL_CALL java_sql_ResultSet::getBinaryStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
+Reference< css::io::XInputStream > SAL_CALL java_sql_ResultSet::getBinaryStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
 {
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     static jmethodID mID(nullptr);
@@ -145,7 +145,7 @@ Reference< ::com::sun::star::io::XInputStream > SAL_CALL java_sql_ResultSet::get
     return out==nullptr ? nullptr : new java_io_InputStream( t.pEnv, out );
 }
 
-Reference< ::com::sun::star::io::XInputStream > SAL_CALL java_sql_ResultSet::getCharacterStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
+Reference< css::io::XInputStream > SAL_CALL java_sql_ResultSet::getCharacterStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
 {
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     static jmethodID mID(nullptr);
@@ -188,13 +188,13 @@ Sequence< sal_Int8 > SAL_CALL java_sql_ResultSet::getBytes( sal_Int32 columnInde
 }
 
 
-::com::sun::star::util::Date SAL_CALL java_sql_ResultSet::getDate( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
+css::util::Date SAL_CALL java_sql_ResultSet::getDate( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
 {
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     static jmethodID mID(nullptr);
     jobject out = callObjectMethodWithIntArg(t.pEnv,"getDate","(I)Ljava/sql/Date;", mID, columnIndex);
     // WARNING: the caller becomes the owner of the returned pointer
-    return out ? static_cast <com::sun::star::util::Date> (java_sql_Date( t.pEnv, out )) : ::com::sun::star::util::Date();
+    return out ? static_cast <css::util::Date> (java_sql_Date( t.pEnv, out )) : css::util::Date();
 }
 
 
@@ -236,7 +236,7 @@ sal_Int64 SAL_CALL java_sql_ResultSet::getLong( sal_Int32 columnIndex ) throw(SQ
 }
 
 
-::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData > SAL_CALL java_sql_ResultSet::getMetaData(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Reference< css::sdbc::XResultSetMetaData > SAL_CALL java_sql_ResultSet::getMetaData(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     static jmethodID mID(nullptr);
@@ -286,7 +286,7 @@ Reference< XRef > SAL_CALL java_sql_ResultSet::getRef( sal_Int32 columnIndex ) t
 }
 
 
-Any SAL_CALL java_sql_ResultSet::getObject( sal_Int32 columnIndex, const Reference< ::com::sun::star::container::XNameAccess >& typeMap ) throw(SQLException, RuntimeException, std::exception)
+Any SAL_CALL java_sql_ResultSet::getObject( sal_Int32 columnIndex, const Reference< css::container::XNameAccess >& typeMap ) throw(SQLException, RuntimeException, std::exception)
 {
     jobject out(nullptr);
     Any aRet;
@@ -327,17 +327,17 @@ Any SAL_CALL java_sql_ResultSet::getObject( sal_Int32 columnIndex, const Referen
             else if ( t.pEnv->IsInstanceOf(out,java_sql_Date::st_getMyClass()) )
             {
                 java_sql_Date aVal(t.pEnv,out);
-                aRet <<= ::com::sun::star::util::Date(aVal);
+                aRet <<= css::util::Date(aVal);
             }
             else if ( t.pEnv->IsInstanceOf(out,java_sql_Time::st_getMyClass()) )
             {
                 java_sql_Time aVal(t.pEnv,out);
-                aRet <<= ::com::sun::star::util::Time(aVal);
+                aRet <<= css::util::Time(aVal);
             }
             else if ( t.pEnv->IsInstanceOf(out,java_sql_Timestamp::st_getMyClass()) )
             {
                 java_sql_Timestamp aVal(t.pEnv,out);
-                aRet <<= ::com::sun::star::util::DateTime(aVal);
+                aRet <<= css::util::DateTime(aVal);
             }
             else
                 t.pEnv->DeleteLocalRef(out);
@@ -362,23 +362,23 @@ OUString SAL_CALL java_sql_ResultSet::getString( sal_Int32 columnIndex ) throw(S
 }
 
 
-::com::sun::star::util::Time SAL_CALL java_sql_ResultSet::getTime( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
+css::util::Time SAL_CALL java_sql_ResultSet::getTime( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
 {
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     static jmethodID mID(nullptr);
     jobject out = callObjectMethodWithIntArg(t.pEnv,"getTime","(I)Ljava/sql/Time;", mID, columnIndex);
     // WARNING: the caller becomes the owner of the returned pointer
-    return out ? static_cast <com::sun::star::util::Time> (java_sql_Time( t.pEnv, out )) : ::com::sun::star::util::Time();
+    return out ? static_cast <css::util::Time> (java_sql_Time( t.pEnv, out )) : css::util::Time();
 }
 
 
-::com::sun::star::util::DateTime SAL_CALL java_sql_ResultSet::getTimestamp( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
+css::util::DateTime SAL_CALL java_sql_ResultSet::getTimestamp( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
 {
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     static jmethodID mID(nullptr);
     jobject out = callObjectMethodWithIntArg(t.pEnv,"getTimestamp","(I)Ljava/sql/Timestamp;", mID, columnIndex);
     // WARNING: the caller becomes the owner of the returned pointer
-    return out ? static_cast <com::sun::star::util::DateTime> (java_sql_Timestamp( t.pEnv, out )) : ::com::sun::star::util::DateTime();
+    return out ? static_cast <css::util::DateTime> (java_sql_Timestamp( t.pEnv, out )) : css::util::DateTime();
 }
 
 
@@ -413,7 +413,7 @@ void SAL_CALL java_sql_ResultSet::afterLast(  ) throw(SQLException, RuntimeExcep
 }
 
 
-void SAL_CALL java_sql_ResultSet::close(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL java_sql_ResultSet::close(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
     dispose();
 }
@@ -494,19 +494,19 @@ sal_Bool SAL_CALL java_sql_ResultSet::wasNull(  ) throw(SQLException, RuntimeExc
     return callBooleanMethod( "wasNull", mID );
 }
 
-void SAL_CALL java_sql_ResultSet::cancel(  ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL java_sql_ResultSet::cancel(  ) throw(css::uno::RuntimeException, std::exception)
 {
     static jmethodID mID(nullptr);
     callVoidMethod_ThrowRuntime("cancel", mID);
 }
 
-void SAL_CALL java_sql_ResultSet::clearWarnings(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL java_sql_ResultSet::clearWarnings(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
     static jmethodID mID(nullptr);
     callVoidMethod_ThrowSQL("clearWarnings", mID);
 }
 
-::com::sun::star::uno::Any SAL_CALL java_sql_ResultSet::getWarnings(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Any SAL_CALL java_sql_ResultSet::getWarnings(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
     SDBThreadAttach t;
     static jmethodID mID(nullptr);
@@ -520,104 +520,104 @@ void SAL_CALL java_sql_ResultSet::clearWarnings(  ) throw(::com::sun::star::sdbc
                 java_sql_SQLWarning(warn_base,*this)));
     }
 
-    return ::com::sun::star::uno::Any();
+    return css::uno::Any();
 }
 
 
-void SAL_CALL java_sql_ResultSet::insertRow(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL java_sql_ResultSet::insertRow(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
     static jmethodID mID(nullptr);
     callVoidMethod_ThrowSQL("insertRow", mID);
 }
 
-void SAL_CALL java_sql_ResultSet::updateRow(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL java_sql_ResultSet::updateRow(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
     static jmethodID mID(nullptr);
     callVoidMethod_ThrowSQL("updateRow", mID);
 }
 
-void SAL_CALL java_sql_ResultSet::deleteRow(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL java_sql_ResultSet::deleteRow(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
     static jmethodID mID(nullptr);
     callVoidMethod_ThrowSQL("deleteRow", mID);
 }
 
 
-void SAL_CALL java_sql_ResultSet::cancelRowUpdates(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL java_sql_ResultSet::cancelRowUpdates(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
     static jmethodID mID(nullptr);
     callVoidMethod_ThrowSQL("cancelRowUpdates", mID);
 }
 
 
-void SAL_CALL java_sql_ResultSet::moveToInsertRow(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL java_sql_ResultSet::moveToInsertRow(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
     static jmethodID mID(nullptr);
     callVoidMethod_ThrowSQL("moveToInsertRow", mID);
 }
 
 
-void SAL_CALL java_sql_ResultSet::moveToCurrentRow(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL java_sql_ResultSet::moveToCurrentRow(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
     static jmethodID mID(nullptr);
     callVoidMethod_ThrowSQL("moveToCurrentRow", mID);
 }
 
 
-void SAL_CALL java_sql_ResultSet::updateNull( sal_Int32 columnIndex ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL java_sql_ResultSet::updateNull( sal_Int32 columnIndex ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
     static jmethodID mID(nullptr);
     callVoidMethodWithIntArg_ThrowSQL("updateNull", mID, columnIndex);
 }
 
 
-void SAL_CALL java_sql_ResultSet::updateBoolean( sal_Int32 columnIndex, sal_Bool x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL java_sql_ResultSet::updateBoolean( sal_Int32 columnIndex, sal_Bool x ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
     static jmethodID mID(nullptr);
     callVoidMethod_ThrowSQL("updateBoolean", "(IZ)V", mID, columnIndex, x);
 }
 
-void SAL_CALL java_sql_ResultSet::updateByte( sal_Int32 columnIndex, sal_Int8 x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL java_sql_ResultSet::updateByte( sal_Int32 columnIndex, sal_Int8 x ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
     static jmethodID mID(nullptr);
     callVoidMethod_ThrowSQL("updateByte", "(IB)V", mID, columnIndex, x);
 }
 
 
-void SAL_CALL java_sql_ResultSet::updateShort( sal_Int32 columnIndex, sal_Int16 x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL java_sql_ResultSet::updateShort( sal_Int32 columnIndex, sal_Int16 x ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
     static jmethodID mID(nullptr);
     callVoidMethod_ThrowSQL("updateShort", "(IS)V", mID, columnIndex, x);
 }
 
-void SAL_CALL java_sql_ResultSet::updateInt( sal_Int32 columnIndex, sal_Int32 x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL java_sql_ResultSet::updateInt( sal_Int32 columnIndex, sal_Int32 x ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
     static jmethodID mID(nullptr);
     callVoidMethod_ThrowSQL("updateInt", "(II)V", mID, columnIndex, x);
 }
 
-void SAL_CALL java_sql_ResultSet::updateLong( sal_Int32 columnIndex, sal_Int64 x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL java_sql_ResultSet::updateLong( sal_Int32 columnIndex, sal_Int64 x ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
     static jmethodID mID(nullptr);
     callVoidMethod_ThrowSQL("updateLong", "(IJ)V", mID, columnIndex, x);
 }
 
 
-void SAL_CALL java_sql_ResultSet::updateFloat( sal_Int32 columnIndex, float x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL java_sql_ResultSet::updateFloat( sal_Int32 columnIndex, float x ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
     static jmethodID mID(nullptr);
     callVoidMethod_ThrowSQL("updateFloat", "(IF)V", mID, columnIndex, x);
 }
 
 
-void SAL_CALL java_sql_ResultSet::updateDouble( sal_Int32 columnIndex, double x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL java_sql_ResultSet::updateDouble( sal_Int32 columnIndex, double x ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
     static jmethodID mID(nullptr);
     callVoidMethod_ThrowSQL("updateDouble", "(ID)V", mID, columnIndex, x);
 }
 
 
-void SAL_CALL java_sql_ResultSet::updateString( sal_Int32 columnIndex, const OUString& x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL java_sql_ResultSet::updateString( sal_Int32 columnIndex, const OUString& x ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
     SDBThreadAttach t;
 
@@ -643,7 +643,7 @@ void SAL_CALL java_sql_ResultSet::updateString( sal_Int32 columnIndex, const OUS
 }
 
 
-void SAL_CALL java_sql_ResultSet::updateBytes( sal_Int32 columnIndex, const ::com::sun::star::uno::Sequence< sal_Int8 >& x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL java_sql_ResultSet::updateBytes( sal_Int32 columnIndex, const css::uno::Sequence< sal_Int8 >& x ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
     SDBThreadAttach t;
 
@@ -679,7 +679,7 @@ void SAL_CALL java_sql_ResultSet::updateBytes( sal_Int32 columnIndex, const ::co
 }
 
 
-void SAL_CALL java_sql_ResultSet::updateDate( sal_Int32 columnIndex, const ::com::sun::star::util::Date& x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL java_sql_ResultSet::updateDate( sal_Int32 columnIndex, const css::util::Date& x ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
     java_sql_Date aD(x);
     static jmethodID mID(nullptr);
@@ -687,7 +687,7 @@ void SAL_CALL java_sql_ResultSet::updateDate( sal_Int32 columnIndex, const ::com
 }
 
 
-void SAL_CALL java_sql_ResultSet::updateTime( sal_Int32 columnIndex, const ::com::sun::star::util::Time& x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL java_sql_ResultSet::updateTime( sal_Int32 columnIndex, const css::util::Time& x ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
     java_sql_Time aD(x);
     static jmethodID mID(nullptr);
@@ -695,7 +695,7 @@ void SAL_CALL java_sql_ResultSet::updateTime( sal_Int32 columnIndex, const ::com
 }
 
 
-void SAL_CALL java_sql_ResultSet::updateTimestamp( sal_Int32 columnIndex, const ::com::sun::star::util::DateTime& x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL java_sql_ResultSet::updateTimestamp( sal_Int32 columnIndex, const css::util::DateTime& x ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
     java_sql_Timestamp aD(x);
     static jmethodID mID(nullptr);
@@ -703,7 +703,7 @@ void SAL_CALL java_sql_ResultSet::updateTimestamp( sal_Int32 columnIndex, const 
 }
 
 
-void SAL_CALL java_sql_ResultSet::updateBinaryStream( sal_Int32 columnIndex, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL java_sql_ResultSet::updateBinaryStream( sal_Int32 columnIndex, const css::uno::Reference< css::io::XInputStream >& x, sal_Int32 length ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
     try
     {
@@ -734,7 +734,7 @@ void SAL_CALL java_sql_ResultSet::updateBinaryStream( sal_Int32 columnIndex, con
     }
 }
 
-void SAL_CALL java_sql_ResultSet::updateCharacterStream( sal_Int32 columnIndex, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL java_sql_ResultSet::updateCharacterStream( sal_Int32 columnIndex, const css::uno::Reference< css::io::XInputStream >& x, sal_Int32 length ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
     try
     {
@@ -765,7 +765,7 @@ void SAL_CALL java_sql_ResultSet::updateCharacterStream( sal_Int32 columnIndex, 
     }
 }
 
-void SAL_CALL java_sql_ResultSet::updateObject( sal_Int32 columnIndex, const ::com::sun::star::uno::Any& x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL java_sql_ResultSet::updateObject( sal_Int32 columnIndex, const css::uno::Any& x ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
     if(!::dbtools::implUpdateObject(this,columnIndex,x))
     {
@@ -779,7 +779,7 @@ void SAL_CALL java_sql_ResultSet::updateObject( sal_Int32 columnIndex, const ::c
 }
 
 
-void SAL_CALL java_sql_ResultSet::updateNumericObject( sal_Int32 columnIndex, const ::com::sun::star::uno::Any& x, sal_Int32 scale ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL java_sql_ResultSet::updateNumericObject( sal_Int32 columnIndex, const css::uno::Any& x, sal_Int32 scale ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
     //  OSL_FAIL("java_sql_ResultSet::updateNumericObject: NYI");
     try
@@ -821,38 +821,38 @@ void SAL_CALL java_sql_ResultSet::updateNumericObject( sal_Int32 columnIndex, co
     }
 }
 
-sal_Int32 java_sql_ResultSet::getResultSetConcurrency() const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+sal_Int32 java_sql_ResultSet::getResultSetConcurrency() const throw(css::sdbc::SQLException, css::uno::RuntimeException)
 {
     static jmethodID mID(nullptr);
     return callIntMethod_ThrowRuntime("getConcurrency", mID);
 }
 
-sal_Int32 java_sql_ResultSet::getResultSetType() const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+sal_Int32 java_sql_ResultSet::getResultSetType() const throw(css::sdbc::SQLException, css::uno::RuntimeException)
 {
     static jmethodID mID(nullptr);
     return callIntMethod_ThrowRuntime("getType",mID);
 }
 
-sal_Int32 java_sql_ResultSet::getFetchDirection() const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+sal_Int32 java_sql_ResultSet::getFetchDirection() const throw(css::sdbc::SQLException, css::uno::RuntimeException)
 {
     static jmethodID mID(nullptr);
     return callIntMethod_ThrowRuntime("getFetchDirection", mID);
 }
 
-sal_Int32 java_sql_ResultSet::getFetchSize() const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+sal_Int32 java_sql_ResultSet::getFetchSize() const throw(css::sdbc::SQLException, css::uno::RuntimeException)
 {
     static jmethodID mID(nullptr);
     return callIntMethod_ThrowRuntime("getFetchSize", mID);
 }
 
-OUString java_sql_ResultSet::getCursorName() const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+OUString java_sql_ResultSet::getCursorName() const throw(css::sdbc::SQLException, css::uno::RuntimeException)
 {
     static jmethodID mID(nullptr);
     return callStringMethod("getCursorName",mID);
 }
 
 
-void java_sql_ResultSet::setFetchDirection(sal_Int32 _par0) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+void java_sql_ResultSet::setFetchDirection(sal_Int32 _par0) throw(css::sdbc::SQLException, css::uno::RuntimeException)
 {
     static jmethodID mID(nullptr);
     callVoidMethodWithIntArg_ThrowRuntime("setFetchDirection", mID, _par0);
@@ -864,7 +864,7 @@ void SAL_CALL java_sql_ResultSet::refreshRow(  ) throw(SQLException, RuntimeExce
     callVoidMethod_ThrowSQL("refreshRow",mID);
 }
 
-void java_sql_ResultSet::setFetchSize(sal_Int32 _par0) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+void java_sql_ResultSet::setFetchSize(sal_Int32 _par0) throw(css::sdbc::SQLException, css::uno::RuntimeException)
 {
     static jmethodID mID(nullptr);
     callVoidMethodWithIntArg_ThrowRuntime("setFetchSize", mID, _par0);
@@ -875,19 +875,19 @@ void java_sql_ResultSet::setFetchSize(sal_Int32 _par0) throw(::com::sun::star::s
     Sequence< Property > aProps(5);
     Property* pProperties = aProps.getArray();
     sal_Int32 nPos = 0;
-    pProperties[nPos++] = ::com::sun::star::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_CURSORNAME),
+    pProperties[nPos++] = css::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_CURSORNAME),
         PROPERTY_ID_CURSORNAME, cppu::UnoType<OUString>::get(), PropertyAttribute::READONLY);
 
-    pProperties[nPos++] = ::com::sun::star::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FETCHDIRECTION),
+    pProperties[nPos++] = css::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FETCHDIRECTION),
         PROPERTY_ID_FETCHDIRECTION, cppu::UnoType<sal_Int32>::get(), 0);
 
-    pProperties[nPos++] = ::com::sun::star::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FETCHSIZE),
+    pProperties[nPos++] = css::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FETCHSIZE),
         PROPERTY_ID_FETCHSIZE, cppu::UnoType<sal_Int32>::get(), 0);
 
-    pProperties[nPos++] = ::com::sun::star::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_RESULTSETCONCURRENCY),
+    pProperties[nPos++] = css::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_RESULTSETCONCURRENCY),
         PROPERTY_ID_RESULTSETCONCURRENCY, cppu::UnoType<sal_Int32>::get(), PropertyAttribute::READONLY);
 
-    pProperties[nPos++] = ::com::sun::star::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_RESULTSETTYPE),
+    pProperties[nPos++] = css::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_RESULTSETTYPE),
         PROPERTY_ID_RESULTSETTYPE, cppu::UnoType<sal_Int32>::get(), PropertyAttribute::READONLY);
 
     return new ::cppu::OPropertyArrayHelper(aProps);
@@ -899,11 +899,11 @@ void java_sql_ResultSet::setFetchSize(sal_Int32 _par0) throw(::com::sun::star::s
 }
 
 sal_Bool java_sql_ResultSet::convertFastPropertyValue(
-                            ::com::sun::star::uno::Any & rConvertedValue,
-                            ::com::sun::star::uno::Any & rOldValue,
+                            css::uno::Any & rConvertedValue,
+                            css::uno::Any & rOldValue,
                             sal_Int32 nHandle,
-                            const ::com::sun::star::uno::Any& rValue )
-                                throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
+                            const css::uno::Any& rValue )
+                                throw (css::lang::IllegalArgumentException, css::uno::RuntimeException)
 {
     bool bRet = false;
     switch(nHandle)
@@ -911,7 +911,7 @@ sal_Bool java_sql_ResultSet::convertFastPropertyValue(
         case PROPERTY_ID_CURSORNAME:
         case PROPERTY_ID_RESULTSETCONCURRENCY:
         case PROPERTY_ID_RESULTSETTYPE:
-            throw ::com::sun::star::lang::IllegalArgumentException();
+            throw css::lang::IllegalArgumentException();
         case PROPERTY_ID_FETCHDIRECTION:
             bRet = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, getFetchDirection());
             break;
@@ -927,16 +927,16 @@ sal_Bool java_sql_ResultSet::convertFastPropertyValue(
 
 void java_sql_ResultSet::setFastPropertyValue_NoBroadcast(
                                 sal_Int32 nHandle,
-                                const ::com::sun::star::uno::Any& rValue
+                                const css::uno::Any& rValue
                                                  )
-                                                 throw (::com::sun::star::uno::Exception, std::exception)
+                                                 throw (css::uno::Exception, std::exception)
 {
     switch(nHandle)
     {
         case PROPERTY_ID_CURSORNAME:
         case PROPERTY_ID_RESULTSETCONCURRENCY:
         case PROPERTY_ID_RESULTSETTYPE:
-            throw ::com::sun::star::uno::Exception();
+            throw css::uno::Exception();
         case PROPERTY_ID_FETCHDIRECTION:
             setFetchDirection(comphelper::getINT32(rValue));
             break;
@@ -949,7 +949,7 @@ void java_sql_ResultSet::setFastPropertyValue_NoBroadcast(
 }
 
 void java_sql_ResultSet::getFastPropertyValue(
-                                ::com::sun::star::uno::Any& rValue,
+                                css::uno::Any& rValue,
                                 sal_Int32 nHandle
                                      ) const
 {
@@ -989,7 +989,7 @@ void SAL_CALL java_sql_ResultSet::release() throw()
     java_sql_ResultSet_BASE::release();
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL java_sql_ResultSet::getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL java_sql_ResultSet::getPropertySetInfo(  ) throw(css::uno::RuntimeException, std::exception)
 {
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }

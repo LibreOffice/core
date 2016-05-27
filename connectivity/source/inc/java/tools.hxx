@@ -41,9 +41,9 @@ namespace connectivity
     OUString JavaString2String(JNIEnv *pEnv,jstring Str);
     class java_util_Properties;
 
-    java_util_Properties* createStringPropertyArray(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& info ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    java_util_Properties* createStringPropertyArray(const css::uno::Sequence< css::beans::PropertyValue >& info ) throw(css::sdbc::SQLException, css::uno::RuntimeException);
 
-    jobject convertTypeMapToJavaMap(JNIEnv *pEnv,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > & _rMap);
+    jobject convertTypeMapToJavaMap(JNIEnv *pEnv,const css::uno::Reference< css::container::XNameAccess > & _rMap);
 
     /** return if a exception occurred
         @param  pEnv
@@ -55,8 +55,8 @@ namespace connectivity
     */
     bool isExceptionOccurred(JNIEnv *pEnv,bool _bClear);
 
-    jobject createByteInputStream(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& x,sal_Int32 length);
-    jobject createCharArrayReader(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& x,sal_Int32 length);
+    jobject createByteInputStream(const css::uno::Reference< css::io::XInputStream >& x,sal_Int32 length);
+    jobject createCharArrayReader(const css::uno::Reference< css::io::XInputStream >& x,sal_Int32 length);
 }
 
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_TOOLS_HXX

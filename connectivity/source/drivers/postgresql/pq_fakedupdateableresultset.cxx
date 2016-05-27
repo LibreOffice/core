@@ -55,7 +55,7 @@ namespace pq_sdbc_driver
 
 FakedUpdateableResultSet::FakedUpdateableResultSet(
         const ::rtl::Reference< RefCountedMutex > & mutex,
-        const com::sun::star::uno::Reference< com::sun::star::uno::XInterface > &owner,
+        const css::uno::Reference< css::uno::XInterface > &owner,
         ConnectionSettings **pSettings,
         PGresult *result,
         const OUString &schema,
@@ -66,9 +66,9 @@ FakedUpdateableResultSet::FakedUpdateableResultSet(
 {}
 
 
-com::sun::star::uno::Any  FakedUpdateableResultSet::queryInterface(
-    const com::sun::star::uno::Type & reqType )
-    throw (com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Any  FakedUpdateableResultSet::queryInterface(
+    const css::uno::Type & reqType )
+    throw (css::uno::RuntimeException, std::exception)
 {
     Any ret = ResultSet::queryInterface( reqType );
     if( ! ret.hasValue() )
@@ -80,8 +80,8 @@ com::sun::star::uno::Any  FakedUpdateableResultSet::queryInterface(
 }
 
 
-com::sun::star::uno::Sequence< com::sun::star::uno::Type > FakedUpdateableResultSet::getTypes()
-        throw( com::sun::star::uno::RuntimeException, std::exception )
+css::uno::Sequence< css::uno::Type > FakedUpdateableResultSet::getTypes()
+        throw( css::uno::RuntimeException, std::exception )
 {
     static cppu::OTypeCollection *pCollection;
     if( ! pCollection )
@@ -100,8 +100,8 @@ com::sun::star::uno::Sequence< com::sun::star::uno::Type > FakedUpdateableResult
 
 }
 
-com::sun::star::uno::Sequence< sal_Int8> FakedUpdateableResultSet::getImplementationId()
-        throw( com::sun::star::uno::RuntimeException, std::exception )
+css::uno::Sequence< sal_Int8> FakedUpdateableResultSet::getImplementationId()
+        throw( css::uno::RuntimeException, std::exception )
 {
     return css::uno::Sequence<sal_Int8>();
 }
@@ -182,42 +182,42 @@ void FakedUpdateableResultSet::updateString( sal_Int32 /* columnIndex */, const 
     throw SQLException( m_aReason, *this, OUString(),1,Any() );
 }
 
-void FakedUpdateableResultSet::updateBytes( sal_Int32 /* columnIndex */, const ::com::sun::star::uno::Sequence< sal_Int8 >& /* x */ ) throw (SQLException, RuntimeException, std::exception)
+void FakedUpdateableResultSet::updateBytes( sal_Int32 /* columnIndex */, const css::uno::Sequence< sal_Int8 >& /* x */ ) throw (SQLException, RuntimeException, std::exception)
 {
     throw SQLException( m_aReason, *this, OUString(),1,Any() );
 }
 
-void FakedUpdateableResultSet::updateDate( sal_Int32 /* columnIndex */, const ::com::sun::star::util::Date& /* x */ ) throw (SQLException, RuntimeException, std::exception)
+void FakedUpdateableResultSet::updateDate( sal_Int32 /* columnIndex */, const css::util::Date& /* x */ ) throw (SQLException, RuntimeException, std::exception)
 {
     throw SQLException( m_aReason, *this, OUString(),1,Any() );
 }
 
-void FakedUpdateableResultSet::updateTime( sal_Int32 /* columnIndex */, const ::com::sun::star::util::Time& /* x */ ) throw (SQLException, RuntimeException, std::exception)
+void FakedUpdateableResultSet::updateTime( sal_Int32 /* columnIndex */, const css::util::Time& /* x */ ) throw (SQLException, RuntimeException, std::exception)
 {
     throw SQLException( m_aReason, *this, OUString(),1,Any() );
 }
 
-void FakedUpdateableResultSet::updateTimestamp( sal_Int32 /* columnIndex */, const ::com::sun::star::util::DateTime& /* x */ ) throw (SQLException, RuntimeException, std::exception)
+void FakedUpdateableResultSet::updateTimestamp( sal_Int32 /* columnIndex */, const css::util::DateTime& /* x */ ) throw (SQLException, RuntimeException, std::exception)
 {
     throw SQLException( m_aReason, *this, OUString(),1,Any() );
 }
 
-void FakedUpdateableResultSet::updateBinaryStream( sal_Int32 /* columnIndex */, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& /* x */, sal_Int32 /* length */ ) throw (SQLException, RuntimeException, std::exception)
+void FakedUpdateableResultSet::updateBinaryStream( sal_Int32 /* columnIndex */, const css::uno::Reference< css::io::XInputStream >& /* x */, sal_Int32 /* length */ ) throw (SQLException, RuntimeException, std::exception)
 {
     throw SQLException( m_aReason, *this, OUString(),1,Any() );
 }
 
-void FakedUpdateableResultSet::updateCharacterStream( sal_Int32 /* columnIndex */, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& /* x */, sal_Int32 /* length */ ) throw (SQLException, RuntimeException, std::exception)
+void FakedUpdateableResultSet::updateCharacterStream( sal_Int32 /* columnIndex */, const css::uno::Reference< css::io::XInputStream >& /* x */, sal_Int32 /* length */ ) throw (SQLException, RuntimeException, std::exception)
 {
     throw SQLException( m_aReason, *this, OUString(),1,Any() );
 }
 
-void FakedUpdateableResultSet::updateObject( sal_Int32 /* columnIndex */, const ::com::sun::star::uno::Any& /* x */ ) throw (SQLException, RuntimeException, std::exception)
+void FakedUpdateableResultSet::updateObject( sal_Int32 /* columnIndex */, const css::uno::Any& /* x */ ) throw (SQLException, RuntimeException, std::exception)
 {
     throw SQLException( m_aReason, *this, OUString(),1,Any() );
 }
 
-void FakedUpdateableResultSet::updateNumericObject( sal_Int32 /* columnIndex */, const ::com::sun::star::uno::Any& /* x */, sal_Int32 /* scale */ ) throw (SQLException, RuntimeException, std::exception)
+void FakedUpdateableResultSet::updateNumericObject( sal_Int32 /* columnIndex */, const css::uno::Any& /* x */, sal_Int32 /* scale */ ) throw (SQLException, RuntimeException, std::exception)
 {
     throw SQLException( m_aReason, *this, OUString(),1,Any() );
 }

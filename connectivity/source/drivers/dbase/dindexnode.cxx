@@ -46,7 +46,7 @@ ONDXKey::ONDXKey(const ORowSetValue& rVal, sal_Int32 eType, sal_uInt32 nRec)
 }
 
 ONDXKey::ONDXKey(const OUString& aStr, sal_uInt32 nRec)
-    : ONDXKey_BASE(::com::sun::star::sdbc::DataType::VARCHAR)
+    : ONDXKey_BASE(css::sdbc::DataType::VARCHAR)
      ,nRecord(nRec)
 {
     if (!aStr.isEmpty())
@@ -58,7 +58,7 @@ ONDXKey::ONDXKey(const OUString& aStr, sal_uInt32 nRec)
 
 
 ONDXKey::ONDXKey(double aVal, sal_uInt32 nRec)
-    : ONDXKey_BASE(::com::sun::star::sdbc::DataType::DOUBLE)
+    : ONDXKey_BASE(css::sdbc::DataType::DOUBLE)
      ,nRecord(nRec)
      ,xValue(aVal)
 {

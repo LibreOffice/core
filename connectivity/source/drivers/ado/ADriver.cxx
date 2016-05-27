@@ -42,7 +42,7 @@ using namespace com::sun::star::sdbc;
 using namespace com::sun::star::sdbcx;
 
 
-ODriver::ODriver(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xORB)
+ODriver::ODriver(const css::uno::Reference< css::lang::XMultiServiceFactory >& _xORB)
     : ODriver_BASE(m_aMutex)
     ,m_xORB(_xORB)
 {
@@ -91,7 +91,7 @@ Sequence< OUString > ODriver::getSupportedServiceNames_Static(  ) throw (Runtime
     return aSNS;
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  SAL_CALL connectivity::ado::ODriver_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory) throw( ::com::sun::star::uno::Exception )
+css::uno::Reference< css::uno::XInterface >  SAL_CALL connectivity::ado::ODriver_CreateInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxFactory) throw( css::uno::Exception )
 {
     return *(new ODriver(_rxFactory));
 }
@@ -193,14 +193,14 @@ sal_Int32 SAL_CALL ODriver::getMinorVersion(  ) throw(RuntimeException)
 }
 
 // XDataDefinitionSupplier
-Reference< XTablesSupplier > SAL_CALL ODriver::getDataDefinitionByConnection( const Reference< ::com::sun::star::sdbc::XConnection >& connection ) throw(::com::sun::star::sdbc::SQLException, RuntimeException)
+Reference< XTablesSupplier > SAL_CALL ODriver::getDataDefinitionByConnection( const Reference< css::sdbc::XConnection >& connection ) throw(css::sdbc::SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if (ODriver_BASE::rBHelper.bDisposed)
         throw DisposedException();
 
     OConnection* pConnection = NULL;
-    Reference< ::com::sun::star::lang::XUnoTunnel> xTunnel(connection,UNO_QUERY);
+    Reference< css::lang::XUnoTunnel> xTunnel(connection,UNO_QUERY);
     if(xTunnel.is())
     {
         OConnection* pSearchConnection = reinterpret_cast< OConnection* >( xTunnel->getSomething(OConnection::getUnoTunnelImplementationId()) );
@@ -233,7 +233,7 @@ Reference< XTablesSupplier > SAL_CALL ODriver::getDataDefinitionByConnection( co
     return xTab;
 }
 
-Reference< XTablesSupplier > SAL_CALL ODriver::getDataDefinitionByURL( const OUString& url, const Sequence< PropertyValue >& info ) throw(::com::sun::star::sdbc::SQLException, RuntimeException)
+Reference< XTablesSupplier > SAL_CALL ODriver::getDataDefinitionByURL( const OUString& url, const Sequence< PropertyValue >& info ) throw(css::sdbc::SQLException, RuntimeException)
 {
     impl_checkURL_throw(url);
     return getDataDefinitionByConnection(connect(url,info));

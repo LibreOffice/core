@@ -38,7 +38,7 @@ namespace connectivity
         class OCalcConnection : public file::OConnection
         {
             // the spreadsheet document:
-            ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheetDocument > m_xDoc;
+            css::uno::Reference< css::sheet::XSpreadsheetDocument > m_xDoc;
             /// close listener that vetoes so nobody disposes m_xDoc
             ::std::unique_ptr< ::utl::CloseVeto> m_pCloseListener;
             OUString m_sPassword;
@@ -50,7 +50,7 @@ namespace connectivity
             virtual ~OCalcConnection();
 
             virtual void construct(const OUString& _rUrl,
-                                   const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rInfo )
+                                   const css::uno::Sequence< css::beans::PropertyValue >& _rInfo )
                 throw( css::sdbc::SQLException,
                        css::uno::RuntimeException,
                        css::uno::DeploymentException,
@@ -63,20 +63,20 @@ namespace connectivity
             virtual void SAL_CALL disposing() override;
 
             // XConnection
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData > SAL_CALL getMetaData(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XTablesSupplier > createCatalog() override;
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XStatement > SAL_CALL createStatement(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XPreparedStatement > SAL_CALL prepareStatement( const OUString& sql ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XPreparedStatement > SAL_CALL prepareCall( const OUString& sql ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Reference< css::sdbc::XDatabaseMetaData > SAL_CALL getMetaData(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Reference< css::sdbcx::XTablesSupplier > createCatalog() override;
+            virtual css::uno::Reference< css::sdbc::XStatement > SAL_CALL createStatement(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Reference< css::sdbc::XPreparedStatement > SAL_CALL prepareStatement( const OUString& sql ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Reference< css::sdbc::XPreparedStatement > SAL_CALL prepareCall( const OUString& sql ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
 
             // no interface methods
-            ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheetDocument> acquireDoc();
+            css::uno::Reference< css::sheet::XSpreadsheetDocument> acquireDoc();
             void releaseDoc();
 
             class ODocHolder
             {
                 OCalcConnection* m_pConnection;
-                ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheetDocument> m_xDoc;
+                css::uno::Reference< css::sheet::XSpreadsheetDocument> m_xDoc;
             public:
                 ODocHolder(OCalcConnection* _pConnection) : m_pConnection(_pConnection)
                 {
@@ -87,7 +87,7 @@ namespace connectivity
                    m_xDoc.clear();
                     m_pConnection->releaseDoc();
                 }
-                const ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheetDocument>& getDoc() const { return m_xDoc; }
+                const css::uno::Reference< css::sheet::XSpreadsheetDocument>& getDoc() const { return m_xDoc; }
             };
         };
     }

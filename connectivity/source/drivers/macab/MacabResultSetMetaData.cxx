@@ -182,7 +182,7 @@ sal_Int32 SAL_CALL MacabResultSetMetaData::getPrecision(sal_Int32) throw(SQLExce
     return 0;
 }
 
-sal_Int32 SAL_CALL MacabResultSetMetaData::getScale(sal_Int32) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+sal_Int32 SAL_CALL MacabResultSetMetaData::getScale(sal_Int32) throw(css::sdbc::SQLException, css::uno::RuntimeException)
 {
     return 0;
 }

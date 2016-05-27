@@ -224,7 +224,7 @@ sal_Int32 SAL_CALL KabConnection::getTransactionIsolation(  ) throw(SQLException
     return TransactionIsolation::NONE;
 }
 
-Reference< ::com::sun::star::container::XNameAccess > SAL_CALL KabConnection::getTypeMap(  ) throw(SQLException, RuntimeException, std::exception)
+Reference< css::container::XNameAccess > SAL_CALL KabConnection::getTypeMap(  ) throw(SQLException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabConnection_BASE::rBHelper.bDisposed);
@@ -234,7 +234,7 @@ Reference< ::com::sun::star::container::XNameAccess > SAL_CALL KabConnection::ge
     return NULL;
 }
 
-void SAL_CALL KabConnection::setTypeMap( const Reference< ::com::sun::star::container::XNameAccess >& ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL KabConnection::setTypeMap( const Reference< css::container::XNameAccess >& ) throw(SQLException, RuntimeException, std::exception)
 {
     // the other way around
 }
@@ -280,7 +280,7 @@ void KabConnection::disposing()
         m_pAddressBook = NULL;
     }
 
-    m_xMetaData = ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XDatabaseMetaData>();
+    m_xMetaData = css::uno::WeakReference< css::sdbc::XDatabaseMetaData>();
 
     dispose_ChildImpl();
     KabConnection_BASE::disposing();

@@ -271,12 +271,12 @@ void SAL_CALL MacabPreparedStatement::setTimestamp(sal_Int32, const DateTime&) t
     ::dbtools::throwFunctionNotSupportedSQLException("setTimestamp", nullptr);
 }
 
-void SAL_CALL MacabPreparedStatement::setBinaryStream(sal_Int32, const Reference< ::com::sun::star::io::XInputStream >&, sal_Int32) throw(SQLException, RuntimeException)
+void SAL_CALL MacabPreparedStatement::setBinaryStream(sal_Int32, const Reference< css::io::XInputStream >&, sal_Int32) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFunctionNotSupportedSQLException("setBinaryStream", nullptr);
 }
 
-void SAL_CALL MacabPreparedStatement::setCharacterStream(sal_Int32, const Reference< ::com::sun::star::io::XInputStream >&, sal_Int32) throw(SQLException, RuntimeException)
+void SAL_CALL MacabPreparedStatement::setCharacterStream(sal_Int32, const Reference< css::io::XInputStream >&, sal_Int32) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFunctionNotSupportedSQLException("setCharacterStream", nullptr);
 }

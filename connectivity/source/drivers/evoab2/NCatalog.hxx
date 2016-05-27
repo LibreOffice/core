@@ -30,7 +30,7 @@ namespace connectivity
         class OEvoabCatalog : public connectivity::sdbcx::OCatalog
         {
             OEvoabConnection *m_pConnection;
-            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData > m_xMetaData;
+            css::uno::Reference< css::sdbc::XDatabaseMetaData > m_xMetaData;
         public:
             explicit OEvoabCatalog(OEvoabConnection *_pCon);
             inline OEvoabConnection* getConnection() const { return m_pConnection; }
@@ -39,8 +39,8 @@ namespace connectivity
             virtual void refreshGroups() override {}
             virtual void refreshUsers() override {}
  // XTablesSupplier
-                        virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL getTables(
-                                        ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getTables(
+                                        ) throw(css::uno::RuntimeException, std::exception) override;
         };
     }
 }

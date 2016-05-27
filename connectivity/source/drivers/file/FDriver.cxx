@@ -36,7 +36,7 @@ using namespace com::sun::star::sdbc;
 using namespace com::sun::star::sdbcx;
 using namespace com::sun::star::container;
 
-OFileDriver::OFileDriver(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext)
+OFileDriver::OFileDriver(const css::uno::Reference< css::uno::XComponentContext >& _rxContext)
     : ODriver_BASE(m_aMutex)
     ,m_xContext(_rxContext)
 {
@@ -184,13 +184,13 @@ sal_Int32 SAL_CALL OFileDriver::getMinorVersion(  ) throw(RuntimeException, std:
 
 
 // XDataDefinitionSupplier
-Reference< XTablesSupplier > SAL_CALL OFileDriver::getDataDefinitionByConnection( const Reference< ::com::sun::star::sdbc::XConnection >& connection ) throw(::com::sun::star::sdbc::SQLException, RuntimeException, std::exception)
+Reference< XTablesSupplier > SAL_CALL OFileDriver::getDataDefinitionByConnection( const Reference< css::sdbc::XConnection >& connection ) throw(css::sdbc::SQLException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(ODriver_BASE::rBHelper.bDisposed);
 
     Reference< XTablesSupplier > xTab = nullptr;
-    Reference< ::com::sun::star::lang::XUnoTunnel> xTunnel(connection,UNO_QUERY);
+    Reference< css::lang::XUnoTunnel> xTunnel(connection,UNO_QUERY);
     if(xTunnel.is())
     {
         OConnection* pSearchConnection = reinterpret_cast< OConnection* >( xTunnel->getSomething(OConnection::getUnoTunnelImplementationId()) );
@@ -211,7 +211,7 @@ Reference< XTablesSupplier > SAL_CALL OFileDriver::getDataDefinitionByConnection
 }
 
 
-Reference< XTablesSupplier > SAL_CALL OFileDriver::getDataDefinitionByURL( const OUString& url, const Sequence< PropertyValue >& info ) throw(::com::sun::star::sdbc::SQLException, RuntimeException, std::exception)
+Reference< XTablesSupplier > SAL_CALL OFileDriver::getDataDefinitionByURL( const OUString& url, const Sequence< PropertyValue >& info ) throw(css::sdbc::SQLException, RuntimeException, std::exception)
 {
     if ( ! acceptsURL(url) )
     {

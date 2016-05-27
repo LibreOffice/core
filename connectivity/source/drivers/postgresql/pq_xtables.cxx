@@ -73,7 +73,7 @@ namespace pq_sdbc_driver
 {
 Tables::Tables(
         const ::rtl::Reference< RefCountedMutex > & refMutex,
-        const ::com::sun::star::uno::Reference< com::sun::star::sdbc::XConnection >  & origin,
+        const css::uno::Reference< css::sdbc::XConnection >  & origin,
         ConnectionSettings *pSettings )
     : Container( refMutex, origin, pSettings,  getStatics().TABLE )
 {}
@@ -82,7 +82,7 @@ Tables::~Tables()
 {}
 
 void Tables::refresh()
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     try
     {
@@ -106,7 +106,7 @@ void Tables::refresh()
             // instead offer a factory interface
             Table * pTable =
                 new Table( m_refMutex, m_origin, m_pSettings );
-            Reference< com::sun::star::beans::XPropertySet > prop = pTable;
+            Reference< css::beans::XPropertySet > prop = pTable;
 
             OUString name = xRow->getString( TABLE_INDEX_NAME+1);
             OUString schema = xRow->getString( TABLE_INDEX_SCHEMA+1);
@@ -121,15 +121,15 @@ void Tables::refresh()
             pTable->setPropertyValue_NoBroadcast_public(
                 st.PRIVILEGES ,
                 makeAny( (sal_Int32)
-                         ( com::sun::star::sdbcx::Privilege::SELECT |
-                           com::sun::star::sdbcx::Privilege::INSERT |
-                           com::sun::star::sdbcx::Privilege::UPDATE |
-                           com::sun::star::sdbcx::Privilege::DELETE |
-                           com::sun::star::sdbcx::Privilege::READ |
-                           com::sun::star::sdbcx::Privilege::CREATE |
-                           com::sun::star::sdbcx::Privilege::ALTER |
-                           com::sun::star::sdbcx::Privilege::REFERENCE |
-                           com::sun::star::sdbcx::Privilege::DROP ) ) );
+                         ( css::sdbcx::Privilege::SELECT |
+                           css::sdbcx::Privilege::INSERT |
+                           css::sdbcx::Privilege::UPDATE |
+                           css::sdbcx::Privilege::DELETE |
+                           css::sdbcx::Privilege::READ |
+                           css::sdbcx::Privilege::CREATE |
+                           css::sdbcx::Privilege::ALTER |
+                           css::sdbcx::Privilege::REFERENCE |
+                           css::sdbcx::Privilege::DROP ) ) );
 
             {
                 m_values.push_back( makeAny( prop ) );
@@ -141,7 +141,7 @@ void Tables::refresh()
         }
         m_name2index.swap( map );
     }
-    catch ( const com::sun::star::sdbc::SQLException & e )
+    catch ( const css::sdbc::SQLException & e )
     {
         throw RuntimeException( e.Message , e.Context );
     }
@@ -185,12 +185,12 @@ static void appendColumnList(
                 {
                     sal_Int32 dataType = 0;
                     column->getPropertyValue( st.TYPE ) >>= dataType;
-                    if( com::sun::star::sdbc::DataType::INTEGER == dataType )
+                    if( css::sdbc::DataType::INTEGER == dataType )
                     {
                         buf.append( " serial  ");
                         isNullable = false;
                     }
-                    else if( com::sun::star::sdbc::DataType::BIGINT == dataType )
+                    else if( css::sdbc::DataType::BIGINT == dataType )
                     {
                         buf.append( " serial8 " );
                         isNullable = false;
@@ -235,10 +235,10 @@ static void appendKeyList(
 }
 
 void Tables::appendByDescriptor(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor )
-    throw (::com::sun::star::sdbc::SQLException,
-           ::com::sun::star::container::ElementExistException,
-           ::com::sun::star::uno::RuntimeException, std::exception)
+    const css::uno::Reference< css::beans::XPropertySet >& descriptor )
+    throw (css::sdbc::SQLException,
+           css::container::ElementExistException,
+           css::uno::RuntimeException, std::exception)
 {
     osl::MutexGuard guard( m_refMutex->mutex );
     Reference< XStatement > stmt =
@@ -313,9 +313,9 @@ void Tables::appendByDescriptor(
 }
 
 void Tables::dropByIndex( sal_Int32 index )
-    throw (::com::sun::star::sdbc::SQLException,
-           ::com::sun::star::lang::IndexOutOfBoundsException,
-           ::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::sdbc::SQLException,
+           css::lang::IndexOutOfBoundsException,
+           css::uno::RuntimeException, std::exception)
 {
     osl::MutexGuard guard( m_refMutex->mutex );
     if( index < 0 ||  index >= (sal_Int32)m_values.size() )
@@ -323,7 +323,7 @@ void Tables::dropByIndex( sal_Int32 index )
         OUStringBuffer buf( 128 );
         buf.append( "TABLES: Index out of range (allowed 0 to " + OUString::number(m_values.size() -1) +
                     ", got " + OUString::number( index ) + ")" );
-        throw com::sun::star::lang::IndexOutOfBoundsException( buf.makeStringAndClear(), *this );
+        throw css::lang::IndexOutOfBoundsException( buf.makeStringAndClear(), *this );
     }
 
     Reference< XPropertySet > set;
@@ -354,20 +354,20 @@ void Tables::dropByIndex( sal_Int32 index )
 }
 
 
-::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > Tables::createDataDescriptor()
-        throw (::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Reference< css::beans::XPropertySet > Tables::createDataDescriptor()
+        throw (css::uno::RuntimeException, std::exception)
 {
     return new TableDescriptor( m_refMutex, m_origin, m_pSettings );
 }
 
-Reference< com::sun::star::container::XNameAccess > Tables::create(
+Reference< css::container::XNameAccess > Tables::create(
     const ::rtl::Reference< RefCountedMutex > & refMutex,
-    const ::com::sun::star::uno::Reference< com::sun::star::sdbc::XConnection >  & origin,
+    const css::uno::Reference< css::sdbc::XConnection >  & origin,
     ConnectionSettings *pSettings,
     Tables **ppTables)
 {
     *ppTables = new Tables( refMutex, origin, pSettings );
-    Reference< com::sun::star::container::XNameAccess > ret = *ppTables;
+    Reference< css::container::XNameAccess > ret = *ppTables;
     (*ppTables)->refresh();
 
     return ret;

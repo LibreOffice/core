@@ -764,7 +764,7 @@ void Connection::disposing()
 
     disposeStatements();
 
-    m_xMetaData = ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XDatabaseMetaData>();
+    m_xMetaData = css::uno::WeakReference< css::sdbc::XDatabaseMetaData>();
 
     ISC_STATUS_ARRAY status;            /* status vector */
     if (m_aTransactionHandle)

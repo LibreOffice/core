@@ -193,7 +193,7 @@ sal_Int32 SAL_CALL OConnectionWeakWrapper::getTransactionIsolation(  ) throw(SQL
     return m_xConnection->getTransactionIsolation();
 }
 
-Reference< ::com::sun::star::container::XNameAccess > SAL_CALL OConnectionWeakWrapper::getTypeMap(  ) throw(SQLException, RuntimeException, std::exception)
+Reference< css::container::XNameAccess > SAL_CALL OConnectionWeakWrapper::getTypeMap(  ) throw(SQLException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnectionWeakWrapper_BASE::rBHelper.bDisposed);
@@ -202,7 +202,7 @@ Reference< ::com::sun::star::container::XNameAccess > SAL_CALL OConnectionWeakWr
     return m_xConnection->getTypeMap();
 }
 
-void SAL_CALL OConnectionWeakWrapper::setTypeMap( const Reference< ::com::sun::star::container::XNameAccess >& typeMap ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OConnectionWeakWrapper::setTypeMap( const Reference< css::container::XNameAccess >& typeMap ) throw(SQLException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnectionWeakWrapper_BASE::rBHelper.bDisposed);
@@ -230,15 +230,17 @@ void OConnectionWeakWrapper::disposing()
     OConnectionWrapper::disposing();
 }
 
-// com::sun::star::lang::XUnoTunnel
-IMPLEMENT_FORWARD_REFCOUNT( OConnectionWeakWrapper, OConnectionWeakWrapper_BASE ) \
-::com::sun::star::uno::Any SAL_CALL OConnectionWeakWrapper::queryInterface( const ::com::sun::star::uno::Type& _rType ) throw (::com::sun::star::uno::RuntimeException, std::exception) \
-{ \
-    ::com::sun::star::uno::Any aReturn = OConnectionWeakWrapper_BASE::queryInterface( _rType ); \
-    if ( !aReturn.hasValue() ) \
-        aReturn = OConnectionWrapper::queryInterface( _rType ); \
-    return aReturn; \
+// css::lang::XUnoTunnel
+IMPLEMENT_FORWARD_REFCOUNT( OConnectionWeakWrapper, OConnectionWeakWrapper_BASE )
+
+css::uno::Any SAL_CALL OConnectionWeakWrapper::queryInterface( const css::uno::Type& _rType ) throw (css::uno::RuntimeException, std::exception)
+{
+    css::uno::Any aReturn = OConnectionWeakWrapper_BASE::queryInterface( _rType );
+    if ( !aReturn.hasValue() )
+        aReturn = OConnectionWrapper::queryInterface( _rType );
+    return aReturn;
 }
+
 IMPLEMENT_FORWARD_XTYPEPROVIDER2(OConnectionWeakWrapper,OConnectionWeakWrapper_BASE,OConnectionWrapper)
 
 

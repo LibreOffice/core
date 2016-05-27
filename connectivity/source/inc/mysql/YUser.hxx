@@ -31,24 +31,24 @@ namespace connectivity
 
         class OMySQLUser : public OUser_TYPEDEF
         {
-            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > m_xConnection;
+            css::uno::Reference< css::sdbc::XConnection > m_xConnection;
 
             static OUString getPrivilegeString(sal_Int32 nRights);
             // return the privileges and additional the grant rights
-            void findPrivilegesAndGrantPrivileges(const OUString& objName, sal_Int32 objType,sal_Int32& nRights,sal_Int32& nRightsWithGrant) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            void findPrivilegesAndGrantPrivileges(const OUString& objName, sal_Int32 objType,sal_Int32& nRights,sal_Int32& nRightsWithGrant) throw(css::sdbc::SQLException, css::uno::RuntimeException);
         public:
             virtual void refreshGroups() override;
         public:
-            OMySQLUser(  const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection);
-            OMySQLUser(  const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection,const OUString& Name);
+            OMySQLUser(  const css::uno::Reference< css::sdbc::XConnection >& _xConnection);
+            OMySQLUser(  const css::uno::Reference< css::sdbc::XConnection >& _xConnection,const OUString& Name);
 
             // XUser
-            virtual void SAL_CALL changePassword( const OUString& objPassword, const OUString& newPassword ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL changePassword( const OUString& objPassword, const OUString& newPassword ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
             // XAuthorizable
-            virtual sal_Int32 SAL_CALL getPrivileges( const OUString& objName, sal_Int32 objType ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-            virtual sal_Int32 SAL_CALL getGrantablePrivileges( const OUString& objName, sal_Int32 objType ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-            virtual void SAL_CALL grantPrivileges( const OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) override;
-            virtual void SAL_CALL revokePrivileges( const OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) override;
+            virtual sal_Int32 SAL_CALL getPrivileges( const OUString& objName, sal_Int32 objType ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
+            virtual sal_Int32 SAL_CALL getGrantablePrivileges( const OUString& objName, sal_Int32 objType ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL grantPrivileges( const OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL revokePrivileges( const OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
         };
 
         class OUserExtend;
@@ -64,7 +64,7 @@ namespace connectivity
             // OPropertySetHelper
             virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
         public:
-            OUserExtend(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection);
+            OUserExtend(const css::uno::Reference< css::sdbc::XConnection >& _xConnection);
 
             virtual void construct() override;
         };

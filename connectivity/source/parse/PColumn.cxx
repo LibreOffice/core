@@ -261,9 +261,9 @@ void OOrderColumn::construct()
     return *OOrderColumn_PROP::getArrayHelper();
 }
 
-::com::sun::star::uno::Sequence< OUString > SAL_CALL OOrderColumn::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Sequence< OUString > SAL_CALL OOrderColumn::getSupportedServiceNames(  ) throw(css::uno::RuntimeException, std::exception)
 {
-    ::com::sun::star::uno::Sequence< OUString > aSupported { "com.sun.star.sdb.OrderColumn" };
+    css::uno::Sequence< OUString > aSupported { "com.sun.star.sdb.OrderColumn" };
 
     return aSupported;
 }

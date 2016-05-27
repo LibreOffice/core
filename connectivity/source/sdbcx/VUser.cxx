@@ -89,7 +89,7 @@ Sequence< Type > SAL_CALL OUser::getTypes(  ) throw(RuntimeException, std::excep
 }
 
 // XUser
-void SAL_CALL OUser::changePassword( const OUString& /*objPassword*/, const OUString& /*newPassword*/ ) throw(::com::sun::star::sdbc::SQLException, RuntimeException, std::exception)
+void SAL_CALL OUser::changePassword( const OUString& /*objPassword*/, const OUString& /*newPassword*/ ) throw(css::sdbc::SQLException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OUser_BASE::rBHelper.bDisposed);
@@ -123,7 +123,7 @@ Reference< XNameAccess > SAL_CALL OUser::getGroups(  ) throw(RuntimeException, s
 
 SAL_WNOUNREACHABLE_CODE_PUSH
 
-sal_Int32 SAL_CALL OUser::getPrivileges( const OUString& /*objName*/, sal_Int32 /*objType*/ ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
+sal_Int32 SAL_CALL OUser::getPrivileges( const OUString& /*objName*/, sal_Int32 /*objType*/ ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OUser_BASE::rBHelper.bDisposed);
@@ -131,7 +131,7 @@ sal_Int32 SAL_CALL OUser::getPrivileges( const OUString& /*objName*/, sal_Int32 
     return 0;
 }
 
-sal_Int32 SAL_CALL OUser::getGrantablePrivileges( const OUString& /*objName*/, sal_Int32 /*objType*/ ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
+sal_Int32 SAL_CALL OUser::getGrantablePrivileges( const OUString& /*objName*/, sal_Int32 /*objType*/ ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OUser_BASE::rBHelper.bDisposed);
@@ -142,31 +142,31 @@ sal_Int32 SAL_CALL OUser::getGrantablePrivileges( const OUString& /*objName*/, s
 SAL_WNOUNREACHABLE_CODE_POP
 
 
-void SAL_CALL OUser::grantPrivileges( const OUString& /*objName*/, sal_Int32 /*objType*/, sal_Int32 /*objPrivileges*/ ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL OUser::grantPrivileges( const OUString& /*objName*/, sal_Int32 /*objType*/, sal_Int32 /*objPrivileges*/ ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OUser_BASE::rBHelper.bDisposed);
     ::dbtools::throwFeatureNotImplementedSQLException( "XAuthorizable::grantPrivileges", *this );
 }
 
-void SAL_CALL OUser::revokePrivileges( const OUString& /*objName*/, sal_Int32 /*objType*/, sal_Int32 /*objPrivileges*/ ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL OUser::revokePrivileges( const OUString& /*objName*/, sal_Int32 /*objType*/, sal_Int32 /*objPrivileges*/ ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OUser_BASE::rBHelper.bDisposed);
     ::dbtools::throwFeatureNotImplementedSQLException( "XAuthorizable::revokePrivileges", *this );
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL OUser::getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL OUser::getPropertySetInfo(  ) throw(css::uno::RuntimeException, std::exception)
 {
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }
 
-OUString SAL_CALL OUser::getName(  ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+OUString SAL_CALL OUser::getName(  ) throw(css::uno::RuntimeException, std::exception)
 {
     return m_Name;
 }
 
-void SAL_CALL OUser::setName( const OUString& /*aName*/ ) throw(::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL OUser::setName( const OUString& /*aName*/ ) throw(css::uno::RuntimeException, std::exception)
 {
     OSL_FAIL( "OUser::setName: not implemented!" );
         // not allowed to throw an SQLException here ...

@@ -1619,7 +1619,7 @@ WpBase::operator IDispatch*()
     return pIUnknown;
 }
 
-ADORecordset* WpADOConnection::getExportedKeys( const ::com::sun::star::uno::Any& catalog, const OUString& schema, const OUString& table )
+ADORecordset* WpADOConnection::getExportedKeys( const css::uno::Any& catalog, const OUString& schema, const OUString& table )
 {
     // Create elements used in the array
     SAFEARRAYBOUND rgsabound[1];
@@ -1659,7 +1659,7 @@ ADORecordset* WpADOConnection::getExportedKeys( const ::com::sun::star::uno::Any
     return pRecordset;
 }
 
-ADORecordset* WpADOConnection::getImportedKeys( const ::com::sun::star::uno::Any& catalog, const OUString& schema, const OUString& table )
+ADORecordset* WpADOConnection::getImportedKeys( const css::uno::Any& catalog, const OUString& schema, const OUString& table )
 {
     // Create elements used in the array
     SAFEARRAYBOUND rgsabound[1];
@@ -1701,7 +1701,7 @@ ADORecordset* WpADOConnection::getImportedKeys( const ::com::sun::star::uno::Any
 
 }
 
-ADORecordset* WpADOConnection::getPrimaryKeys( const ::com::sun::star::uno::Any& catalog, const OUString& schema, const OUString& table )
+ADORecordset* WpADOConnection::getPrimaryKeys( const css::uno::Any& catalog, const OUString& schema, const OUString& table )
 {
     // Create elements used in the array
     SAFEARRAYBOUND rgsabound[1];
@@ -1740,7 +1740,7 @@ ADORecordset* WpADOConnection::getPrimaryKeys( const ::com::sun::star::uno::Any&
 }
 
 ADORecordset* WpADOConnection::getIndexInfo(
-    const ::com::sun::star::uno::Any& catalog, const OUString& schema, const OUString& table,
+    const css::uno::Any& catalog, const OUString& schema, const OUString& table,
     sal_Bool /*unique*/, sal_Bool /*approximate*/ )
 {
     // Create elements used in the array
@@ -1782,7 +1782,7 @@ ADORecordset* WpADOConnection::getIndexInfo(
     return pRecordset;
 }
 
-ADORecordset* WpADOConnection::getTablePrivileges( const ::com::sun::star::uno::Any& catalog,
+ADORecordset* WpADOConnection::getTablePrivileges( const css::uno::Any& catalog,
                                                   const OUString& schemaPattern,
                                                   const OUString& tableNamePattern )
 {
@@ -1824,10 +1824,10 @@ ADORecordset* WpADOConnection::getTablePrivileges( const ::com::sun::star::uno::
     return pRecordset;
 }
 
-ADORecordset* WpADOConnection::getCrossReference( const ::com::sun::star::uno::Any& primaryCatalog,
+ADORecordset* WpADOConnection::getCrossReference( const css::uno::Any& primaryCatalog,
                                                   const OUString& primarySchema,
                                                   const OUString& primaryTable,
-                                                  const ::com::sun::star::uno::Any& foreignCatalog,
+                                                  const css::uno::Any& foreignCatalog,
                                                   const OUString& foreignSchema,
                                                   const OUString& foreignTable)
 {
@@ -1877,7 +1877,7 @@ ADORecordset* WpADOConnection::getCrossReference( const ::com::sun::star::uno::A
     return pRecordset;
 }
 
-ADORecordset* WpADOConnection::getProcedures( const ::com::sun::star::uno::Any& catalog,
+ADORecordset* WpADOConnection::getProcedures( const css::uno::Any& catalog,
                                                   const OUString& schemaPattern,
                                                   const OUString& procedureNamePattern )
 {
@@ -1916,7 +1916,7 @@ ADORecordset* WpADOConnection::getProcedures( const ::com::sun::star::uno::Any& 
     return pRecordset;
 }
 
-ADORecordset* WpADOConnection::getProcedureColumns( const ::com::sun::star::uno::Any& catalog,
+ADORecordset* WpADOConnection::getProcedureColumns( const css::uno::Any& catalog,
                                                   const OUString& schemaPattern,
                                                   const OUString& procedureNamePattern,
                                                   const OUString& columnNamePattern )
@@ -1961,10 +1961,10 @@ ADORecordset* WpADOConnection::getProcedureColumns( const ::com::sun::star::uno:
     return pRecordset;
 }
 
-ADORecordset* WpADOConnection::getTables( const ::com::sun::star::uno::Any& catalog,
+ADORecordset* WpADOConnection::getTables( const css::uno::Any& catalog,
                                                   const OUString& schemaPattern,
                                                   const OUString& tableNamePattern,
-                                                  const ::com::sun::star::uno::Sequence< OUString >& types )
+                                                  const css::uno::Sequence< OUString >& types )
 {
     // Create elements used in the array
     HRESULT hr = S_OK;
@@ -2025,7 +2025,7 @@ ADORecordset* WpADOConnection::getTables( const ::com::sun::star::uno::Any& cata
     return pRecordset;
 }
 
-ADORecordset* WpADOConnection::getColumns( const ::com::sun::star::uno::Any& catalog,
+ADORecordset* WpADOConnection::getColumns( const css::uno::Any& catalog,
                                                   const OUString& schemaPattern,
                                                   const OUString& tableNamePattern,
                                                   const OUString& columnNamePattern )
@@ -2069,7 +2069,7 @@ ADORecordset* WpADOConnection::getColumns( const ::com::sun::star::uno::Any& cat
     return pRecordset;
 }
 
-ADORecordset* WpADOConnection::getColumnPrivileges( const ::com::sun::star::uno::Any& catalog,
+ADORecordset* WpADOConnection::getColumnPrivileges( const css::uno::Any& catalog,
                                                   const OUString& schema,
                                                   const OUString& table,
                                                   const OUString& columnNamePattern )

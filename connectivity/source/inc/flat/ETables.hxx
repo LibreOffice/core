@@ -33,7 +33,7 @@ namespace connectivity
         protected:
             virtual sdbcx::ObjectType createObject(const OUString& _rName) override;
         public:
-            OFlatTables(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rMetaData,::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex,
+            OFlatTables(const css::uno::Reference< css::sdbc::XDatabaseMetaData >& _rMetaData,::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex,
                 const TStringVector &_rVector) : OFlatTables_BASE(_rMetaData,_rParent,_rMutex,_rVector)
             {}
         };

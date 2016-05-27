@@ -269,7 +269,7 @@ void OSQLParseNode::parseNodeToStr(OUString& rString,
 void OSQLParseNode::parseNodeToPredicateStr(OUString& rString,
                                               const Reference< XConnection >& _rxConnection,
                                               const Reference< XNumberFormatter > & xFormatter,
-                                              const ::com::sun::star::lang::Locale& rIntl,
+                                              const css::lang::Locale& rIntl,
                                               sal_Char _cDec,
                                               const IParseContext* pContext ) const
 {
@@ -285,7 +285,7 @@ void OSQLParseNode::parseNodeToPredicateStr(OUString& rString,
                                               const Reference< XNumberFormatter > & xFormatter,
                                               const Reference< XPropertySet > & _xField,
                                               const OUString &_sPredicateTableAlias,
-                                              const ::com::sun::star::lang::Locale& rIntl,
+                                              const css::lang::Locale& rIntl,
                                               sal_Char _cDec,
                                               const IParseContext* pContext ) const
 {
@@ -301,7 +301,7 @@ void OSQLParseNode::parseNodeToStr(OUString& rString,
                       const Reference< XNumberFormatter > & xFormatter,
                       const Reference< XPropertySet > & _xField,
                       const OUString &_sPredicateTableAlias,
-                      const ::com::sun::star::lang::Locale& rIntl,
+                      const css::lang::Locale& rIntl,
                       const IParseContext* pContext,
                       bool _bIntl,
                       bool _bQuote,
@@ -335,7 +335,7 @@ void OSQLParseNode::parseNodeToStr(OUString& rString,
 }
 
 bool OSQLParseNode::parseNodeToExecutableStatement( OUString& _out_rString, const Reference< XConnection >& _rxConnection,
-    OSQLParser& _rParser, ::com::sun::star::sdbc::SQLException* _pErrorHolder ) const
+    OSQLParser& _rParser, css::sdbc::SQLException* _pErrorHolder ) const
 {
     OSL_PRECOND( _rxConnection.is(), "OSQLParseNode::parseNodeToExecutableStatement: invalid connection!" );
     SQLParseNodeParameter aParseParam( _rxConnection,
@@ -750,7 +750,7 @@ void OSQLParseNode::impl_parseLikeNodeToString_throw( OUStringBuffer& rString, c
 
 
 bool OSQLParseNode::getTableComponents(const OSQLParseNode* _pTableNode,
-                                            ::com::sun::star::uno::Any &_rCatalog,
+                                            css::uno::Any &_rCatalog,
                                             OUString &_rSchema,
                                             OUString &_rTable,
                                             const Reference< XDatabaseMetaData >& _xMetaData)
@@ -1145,7 +1145,7 @@ OUString OSQLParser::stringToDouble(const OUString& _rValue,sal_Int16 _nScale)
 
 
 OSQLParseNode* OSQLParser::predicateTree(OUString& rErrorMessage, const OUString& rStatement,
-                                         const Reference< ::com::sun::star::util::XNumberFormatter > & xFormatter,
+                                         const Reference< css::util::XNumberFormatter > & xFormatter,
                                          const Reference< XPropertySet > & xField,
                                          bool bUseRealName)
 {
@@ -1195,9 +1195,9 @@ OSQLParseNode* OSQLParser::predicateTree(OUString& rErrorMessage, const OUString
         if (m_nFormatKey && m_xFormatter.is())
         {
             Any aValue = getNumberFormatProperty( m_xFormatter, m_nFormatKey, OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_LOCALE) );
-            OSL_ENSURE(aValue.getValueType() == cppu::UnoType<com::sun::star::lang::Locale>::get(), "OSQLParser::PredicateTree : invalid language property !");
+            OSL_ENSURE(aValue.getValueType() == cppu::UnoType<css::lang::Locale>::get(), "OSQLParser::PredicateTree : invalid language property !");
 
-            if (aValue.getValueType() == cppu::UnoType<com::sun::star::lang::Locale>::get())
+            if (aValue.getValueType() == cppu::UnoType<css::lang::Locale>::get())
                 aValue >>= m_pData->aLocale;
         }
         else
@@ -1207,13 +1207,13 @@ OSQLParseNode* OSQLParser::predicateTree(OUString& rErrorMessage, const OUString
         {
             try
             {
-                Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xFormatSup = m_xFormatter->getNumberFormatsSupplier();
+                Reference< css::util::XNumberFormatsSupplier >  xFormatSup = m_xFormatter->getNumberFormatsSupplier();
                 if ( xFormatSup.is() )
                 {
-                    Reference< ::com::sun::star::util::XNumberFormats >  xFormats = xFormatSup->getNumberFormats();
+                    Reference< css::util::XNumberFormats >  xFormats = xFormatSup->getNumberFormats();
                     if ( xFormats.is() )
                     {
-                        ::com::sun::star::lang::Locale aLocale;
+                        css::lang::Locale aLocale;
                         aLocale.Language = "en";
                         aLocale.Country = "US";
                         OUString sFormat("YYYY-MM-DD");
@@ -1299,7 +1299,7 @@ OSQLParseNode* OSQLParser::predicateTree(OUString& rErrorMessage, const OUString
 }
 
 
-OSQLParser::OSQLParser(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext, const IParseContext* _pContext)
+OSQLParser::OSQLParser(const css::uno::Reference< css::uno::XComponentContext >& rxContext, const IParseContext* _pContext)
     :m_pContext(_pContext)
     ,m_pParseTree(nullptr)
     ,m_pData( new OSQLParser_Data( rxContext ) )

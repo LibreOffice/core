@@ -40,17 +40,17 @@ namespace connectivity
     {
         class StreamHelper
         {
-            ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream>        m_xStream;
-            ::com::sun::star::uno::Reference< ::com::sun::star::io::XSeekable>      m_xSeek;
-            ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream>  m_xOutputStream;
-            ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream>   m_xInputStream;
+            css::uno::Reference< css::io::XStream>        m_xStream;
+            css::uno::Reference< css::io::XSeekable>      m_xSeek;
+            css::uno::Reference< css::io::XOutputStream>  m_xOutputStream;
+            css::uno::Reference< css::io::XInputStream>   m_xInputStream;
         public:
-            StreamHelper(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream>& _xStream);
+            StreamHelper(const css::uno::Reference< css::io::XStream>& _xStream);
             ~StreamHelper();
 
-            ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream>   getInputStream();
-            ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream>  getOutputStream();
-            ::com::sun::star::uno::Reference< ::com::sun::star::io::XSeekable>      getSeek();
+            css::uno::Reference< css::io::XInputStream>   getInputStream();
+            css::uno::Reference< css::io::XOutputStream>  getOutputStream();
+            css::uno::Reference< css::io::XSeekable>      getSeek();
         };
 
 
@@ -71,10 +71,10 @@ namespace connectivity
         class StorageContainer
         {
         public:
-            static OUString registerStorage(const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage>& _xStorage,const OUString& _sURL);
+            static OUString registerStorage(const css::uno::Reference< css::embed::XStorage>& _xStorage,const OUString& _sURL);
             static TStorages::mapped_type getRegisteredStorage(const OUString& _sKey);
-            static OUString getRegisteredKey(const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage>& _xStorage);
-            static void revokeStorage(const OUString& _sKey,const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XTransactionListener>& _xListener);
+            static OUString getRegisteredKey(const css::uno::Reference< css::embed::XStorage>& _xStorage);
+            static void revokeStorage(const OUString& _sKey,const css::uno::Reference< css::embed::XTransactionListener>& _xListener);
 
             static TStreamMap::mapped_type registerStream(JNIEnv * env,jstring name, jstring key,sal_Int32 _nMode);
             static void revokeStream(JNIEnv * env,jstring name, jstring key);
@@ -83,7 +83,7 @@ namespace connectivity
             static OUString jstring2ustring(JNIEnv * env, jstring jstr);
             static OUString removeURLPrefix(const OUString& _sURL,const OUString& _sFileURL);
             static OUString removeOldURLPrefix(const OUString& _sURL);
-            static void throwJavaException(const ::com::sun::star::uno::Exception& _aException,JNIEnv * env);
+            static void throwJavaException(const css::uno::Exception& _aException,JNIEnv * env);
         };
 
     }   // namespace hsqldb

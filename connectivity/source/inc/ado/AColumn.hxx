@@ -40,9 +40,9 @@ namespace connectivity
         protected:
             virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
                                     sal_Int32 nHandle,
-                                    const ::com::sun::star::uno::Any& rValue
+                                    const css::uno::Any& rValue
                                      )
-                                     throw (::com::sun::star::uno::Exception);
+                                     throw (css::uno::Exception);
         public:
             OAdoColumn(sal_Bool _bCase,OConnection* _pConnection,_ADOColumn* _pColumn);
             OAdoColumn(sal_Bool _bCase,OConnection* _pConnection);
@@ -50,9 +50,9 @@ namespace connectivity
             virtual void construct();
             virtual void SAL_CALL acquire() throw();
             virtual void SAL_CALL release() throw();
-            // com::sun::star::lang::XUnoTunnel
-            virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
-            static ::com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
+            // css::lang::XUnoTunnel
+            virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) throw(css::uno::RuntimeException);
+            static css::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
 
             WpADOColumn     getColumnImpl() const;
         };

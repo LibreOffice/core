@@ -27,21 +27,21 @@ namespace connectivity
     {
         class HViews : public sdbcx::OCollection
         {
-            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >         m_xConnection;
-            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >   m_xMetaData;
+            css::uno::Reference< css::sdbc::XConnection >         m_xConnection;
+            css::uno::Reference< css::sdbc::XDatabaseMetaData >   m_xMetaData;
             bool m_bInDrop;
 
         protected:
             virtual sdbcx::ObjectType createObject(const OUString& _rName) override;
-            virtual void impl_refresh() throw(::com::sun::star::uno::RuntimeException) override;
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createDescriptor() override;
-        virtual sdbcx::ObjectType appendObject( const OUString& _rForName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor ) override;
+            virtual void impl_refresh() throw(css::uno::RuntimeException) override;
+            virtual css::uno::Reference< css::beans::XPropertySet > createDescriptor() override;
+        virtual sdbcx::ObjectType appendObject( const OUString& _rForName, const css::uno::Reference< css::beans::XPropertySet >& descriptor ) override;
             virtual void dropObject(sal_Int32 _nPos, const OUString& _sElementName) override;
 
-            void createView( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor );
+            void createView( const css::uno::Reference< css::beans::XPropertySet >& descriptor );
         public:
             HViews(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
+                const css::uno::Reference< css::sdbc::XConnection >& _rxConnection,
                 ::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex, const TStringVector &_rVector );
 
             // only the name is identical to ::cppu::OComponentHelper

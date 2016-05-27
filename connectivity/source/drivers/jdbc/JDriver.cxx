@@ -40,7 +40,7 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
 
-java_sql_Driver::java_sql_Driver(const Reference< ::com::sun::star::uno::XComponentContext >& _rxContext)
+java_sql_Driver::java_sql_Driver(const Reference< css::uno::XComponentContext >& _rxContext)
     :m_aContext( _rxContext )
     ,m_aLogger( _rxContext, "sdbcl", "org.openoffice.sdbc.jdbcBridge" )
 {
@@ -65,7 +65,7 @@ Sequence< OUString > java_sql_Driver::getSupportedServiceNames_Static(  ) throw 
     return aSNS;
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL connectivity::java_sql_Driver_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory) throw( ::com::sun::star::uno::Exception )
+css::uno::Reference< css::uno::XInterface > SAL_CALL connectivity::java_sql_Driver_CreateInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxFactory) throw( css::uno::Exception )
 {
     return *(new java_sql_Driver( comphelper::getComponentContext(_rxFactory)));
 }

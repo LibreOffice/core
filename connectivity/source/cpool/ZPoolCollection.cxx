@@ -83,7 +83,7 @@ OPoolCollection::OPoolCollection(const Reference< XComponentContext >& _rxContex
     osl_atomic_increment( &m_refCount );
     {
 
-        m_xDesktop = ::com::sun::star::frame::Desktop::create( m_xContext );
+        m_xDesktop = css::frame::Desktop::create( m_xContext );
         m_xDesktop->addTerminateListener(this);
 
     }
@@ -318,7 +318,7 @@ OConnectionPool* OPoolCollection::getConnectionPool(const OUString& _sImplName,
 Reference< XInterface > OPoolCollection::createWithServiceFactory(const OUString& _rPath) const
 {
     return createWithProvider(
-        com::sun::star::configuration::theDefaultProvider::get(m_xContext),
+        css::configuration::theDefaultProvider::get(m_xContext),
         _rPath);
 }
 
@@ -404,7 +404,7 @@ Any OPoolCollection::getNodeValue(const OUString& _rPath,const Reference<XInterf
     return aReturn;
 }
 
-void SAL_CALL OPoolCollection::queryTermination( const EventObject& /*Event*/ ) throw (::com::sun::star::frame::TerminationVetoException, RuntimeException, std::exception)
+void SAL_CALL OPoolCollection::queryTermination( const EventObject& /*Event*/ ) throw (css::frame::TerminationVetoException, RuntimeException, std::exception)
 {
 }
 
@@ -441,7 +441,7 @@ void SAL_CALL OPoolCollection::disposing( const EventObject& Source ) throw (Run
     }
 }
 
-void SAL_CALL OPoolCollection::propertyChange( const ::com::sun::star::beans::PropertyChangeEvent& evt ) throw (RuntimeException, std::exception)
+void SAL_CALL OPoolCollection::propertyChange( const css::beans::PropertyChangeEvent& evt ) throw (RuntimeException, std::exception)
 {
     MutexGuard aGuard(m_aMutex);
     if(evt.Source == m_xConfigNode)

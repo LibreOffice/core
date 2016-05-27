@@ -1261,16 +1261,16 @@ sal_Int32 SAL_CALL ODatabaseMetaData::getDefaultTransactionIsolation(  ) throw(S
     switch(nValue)
     {
         case SQL_TXN_READ_UNCOMMITTED:
-            nValueTranslated = com::sun::star::sdbc::TransactionIsolation::READ_UNCOMMITTED;
+            nValueTranslated = css::sdbc::TransactionIsolation::READ_UNCOMMITTED;
             break;
         case SQL_TXN_READ_COMMITTED:
-            nValueTranslated = com::sun::star::sdbc::TransactionIsolation::READ_COMMITTED;
+            nValueTranslated = css::sdbc::TransactionIsolation::READ_COMMITTED;
             break;
         case SQL_TXN_REPEATABLE_READ:
-            nValueTranslated = com::sun::star::sdbc::TransactionIsolation::REPEATABLE_READ;
+            nValueTranslated = css::sdbc::TransactionIsolation::REPEATABLE_READ;
             break;
         case  SQL_TXN_SERIALIZABLE:
-            nValueTranslated = com::sun::star::sdbc::TransactionIsolation::SERIALIZABLE;
+            nValueTranslated = css::sdbc::TransactionIsolation::SERIALIZABLE;
             break;
         default:
             nValueTranslated = 0;

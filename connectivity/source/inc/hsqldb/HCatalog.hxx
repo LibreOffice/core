@@ -30,7 +30,7 @@ namespace connectivity
         // some compilers have problems with this task as I noticed on windows
         class OHCatalog : public connectivity::sdbcx::OCatalog
         {
-            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > m_xConnection;
+            css::uno::Reference< css::sdbc::XConnection > m_xConnection;
 
             /** calls XDatabaseMetaData::getTables.
                 @param  _sKindOfObject
@@ -38,7 +38,7 @@ namespace connectivity
                 @param  _rNames
                     The container for the names to be filled.
             */
-            void refreshObjects(const ::com::sun::star::uno::Sequence< OUString >& _sKindOfObject,TStringVector& _rNames);
+            void refreshObjects(const css::uno::Sequence< OUString >& _sKindOfObject,TStringVector& _rNames);
 
         public:
             // implementation of the pure virtual methods
@@ -48,15 +48,15 @@ namespace connectivity
             virtual void refreshUsers() override ;
 
         public:
-            OHCatalog(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection);
+            OHCatalog(const css::uno::Reference< css::sdbc::XConnection >& _xConnection);
 
             inline sdbcx::OCollection*      getPrivateTables()  const { return m_pTables;}
             inline sdbcx::OCollection*      getPrivateViews()   const { return m_pViews; }
-            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& getConnection() const { return m_xConnection; }
+            const css::uno::Reference< css::sdbc::XConnection >& getConnection() const { return m_xConnection; }
 
-            virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
             // ::cppu::OComponentHelper
-            virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) throw(css::uno::RuntimeException, std::exception) override;
         };
     }
 }

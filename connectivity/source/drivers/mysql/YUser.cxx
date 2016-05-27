@@ -36,13 +36,13 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
-OMySQLUser::OMySQLUser( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection) : connectivity::sdbcx::OUser(true)
+OMySQLUser::OMySQLUser( const css::uno::Reference< css::sdbc::XConnection >& _xConnection) : connectivity::sdbcx::OUser(true)
                 ,m_xConnection(_xConnection)
 {
     construct();
 }
 
-OMySQLUser::OMySQLUser(   const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection,
+OMySQLUser::OMySQLUser(   const css::uno::Reference< css::sdbc::XConnection >& _xConnection,
                 const OUString& Name
             ) : connectivity::sdbcx::OUser(Name, true)
                 ,m_xConnection(_xConnection)
@@ -54,7 +54,7 @@ void OMySQLUser::refreshGroups()
 {
 }
 
-OUserExtend::OUserExtend(   const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection) : OMySQLUser(_xConnection)
+OUserExtend::OUserExtend(   const css::uno::Reference< css::sdbc::XConnection >& _xConnection) : OMySQLUser(_xConnection)
 {
     construct();
 }

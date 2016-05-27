@@ -33,7 +33,7 @@ namespace connectivity
             KabTable*   m_pTable;
 
             virtual sdbcx::ObjectType createObject(const OUString& _rName) override;
-            virtual void impl_refresh() throw(::com::sun::star::uno::RuntimeException) override;
+            virtual void impl_refresh() throw(css::uno::RuntimeException) override;
 
         public:
             KabColumns( KabTable* _pTable,

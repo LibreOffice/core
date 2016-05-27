@@ -65,7 +65,7 @@ void OEvoabDriver::disposing()
             {
                 xComp->dispose();
             }
-            catch (const com::sun::star::lang::DisposedException&)
+            catch (const css::lang::DisposedException&)
             {
                 xComp.clear();
             }
@@ -111,7 +111,7 @@ Sequence< OUString > SAL_CALL OEvoabDriver::getSupportedServiceNames(  ) throw(R
 }
 
 
-::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  SAL_CALL connectivity::evoab::OEvoabDriver_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory) throw( ::com::sun::star::uno::Exception )
+css::uno::Reference< css::uno::XInterface >  SAL_CALL connectivity::evoab::OEvoabDriver_CreateInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxFactory) throw( css::uno::Exception )
 {
     return *(new OEvoabDriver(_rxFactory));
 }

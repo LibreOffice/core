@@ -35,13 +35,13 @@
 
 using namespace connectivity::macab;
 using namespace cppu;
-using namespace com::sun::star::uno;
-using namespace com::sun::star::lang;
-using namespace com::sun::star::beans;
-using namespace com::sun::star::sdbc;
-using namespace com::sun::star::sdbcx;
-using namespace com::sun::star::io;
-using namespace com::sun::star::util;
+using namespace css::uno;
+using namespace css::lang;
+using namespace css::beans;
+using namespace css::sdbc;
+using namespace css::sdbcx;
+using namespace css::io;
+using namespace css::util;
 
 IMPLEMENT_SERVICE_INFO(MacabResultSet, "com.sun.star.sdbc.drivers.MacabResultSet", "com.sun.star.sdbc.ResultSet");
 
@@ -168,14 +168,14 @@ void SAL_CALL MacabResultSet::release() throw()
 Sequence<  Type > SAL_CALL MacabResultSet::getTypes() throw(RuntimeException)
 {
     OTypeCollection aTypes(
-        cppu::UnoType<com::sun::star::beans::XMultiPropertySet>::get(),
-        cppu::UnoType<com::sun::star::beans::XFastPropertySet>::get(),
-        cppu::UnoType<com::sun::star::beans::XPropertySet>::get());
+        cppu::UnoType<css::beans::XMultiPropertySet>::get(),
+        cppu::UnoType<css::beans::XFastPropertySet>::get(),
+        cppu::UnoType<css::beans::XPropertySet>::get());
 
     return comphelper::concatSequences(aTypes.getTypes(), MacabResultSet_BASE::getTypes());
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL MacabResultSet::getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException)
+css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL MacabResultSet::getPropertySetInfo(  ) throw(css::uno::RuntimeException)
 {
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }
@@ -456,7 +456,7 @@ Reference< XInputStream > SAL_CALL MacabResultSet::getCharacterStream(sal_Int32)
     return nullptr;
 }
 
-Any SAL_CALL MacabResultSet::getObject(sal_Int32, const Reference< ::com::sun::star::container::XNameAccess >&) throw(SQLException, RuntimeException)
+Any SAL_CALL MacabResultSet::getObject(sal_Int32, const Reference< css::container::XNameAccess >&) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -984,22 +984,22 @@ IPropertyArrayHelper* MacabResultSet::createArrayHelper() const
     Sequence< Property > aProps(6);
     Property* pProperties = aProps.getArray();
     sal_Int32 nPos = 0;
-    pProperties[nPos++] = ::com::sun::star::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_CURSORNAME),
+    pProperties[nPos++] = css::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_CURSORNAME),
         PROPERTY_ID_CURSORNAME, cppu::UnoType<OUString>::get(), PropertyAttribute::READONLY);
 
-    pProperties[nPos++] = ::com::sun::star::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FETCHDIRECTION),
+    pProperties[nPos++] = css::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FETCHDIRECTION),
         PROPERTY_ID_FETCHDIRECTION, cppu::UnoType<sal_Int32>::get(), 0);
 
-    pProperties[nPos++] = ::com::sun::star::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FETCHSIZE),
+    pProperties[nPos++] = css::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FETCHSIZE),
         PROPERTY_ID_FETCHSIZE, cppu::UnoType<sal_Int32>::get(), 0);
 
-    pProperties[nPos++] = ::com::sun::star::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISBOOKMARKABLE),
+    pProperties[nPos++] = css::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISBOOKMARKABLE),
         PROPERTY_ID_ISBOOKMARKABLE, cppu::UnoType<bool>::get(), PropertyAttribute::READONLY);
 
-    pProperties[nPos++] = ::com::sun::star::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_RESULTSETCONCURRENCY),
+    pProperties[nPos++] = css::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_RESULTSETCONCURRENCY),
         PROPERTY_ID_RESULTSETCONCURRENCY, cppu::UnoType<sal_Int32>::get(), PropertyAttribute::READONLY);
 
-    pProperties[nPos++] = ::com::sun::star::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_RESULTSETTYPE),
+    pProperties[nPos++] = css::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_RESULTSETTYPE),
         PROPERTY_ID_RESULTSETTYPE, cppu::UnoType<sal_Int32>::get(), PropertyAttribute::READONLY);
 
     return new OPropertyArrayHelper(aProps);
@@ -1015,7 +1015,7 @@ sal_Bool MacabResultSet::convertFastPropertyValue(
             Any &,
             sal_Int32 nHandle,
             const Any& )
-                throw (::com::sun::star::lang::IllegalArgumentException)
+                throw (css::lang::IllegalArgumentException)
 {
     switch (nHandle)
     {
@@ -1023,7 +1023,7 @@ sal_Bool MacabResultSet::convertFastPropertyValue(
         case PROPERTY_ID_CURSORNAME:
         case PROPERTY_ID_RESULTSETCONCURRENCY:
         case PROPERTY_ID_RESULTSETTYPE:
-            throw ::com::sun::star::lang::IllegalArgumentException();
+            throw css::lang::IllegalArgumentException();
             break;
         case PROPERTY_ID_FETCHDIRECTION:
         case PROPERTY_ID_FETCHSIZE:

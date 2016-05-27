@@ -99,11 +99,7 @@ using com::sun::star::uno::UNO_QUERY_THROW;
 
 namespace pq_sdbc_driver
 {
-typedef
-std::vector
-<
-    com::sun::star::uno::Sequence< com::sun::star::uno::Any >
-> SequenceAnyVector;
+typedef std::vector< css::uno::Sequence< css::uno::Any > > SequenceAnyVector;
 
 
 #define QUOTEME(X)  #X
@@ -126,7 +122,7 @@ std::vector
 
 DatabaseMetaData::DatabaseMetaData(
     const ::rtl::Reference< RefCountedMutex > & refMutex,
-    const ::com::sun::star::uno::Reference< com::sun::star::sdbc::XConnection >  & origin,
+    const css::uno::Reference< css::sdbc::XConnection >  & origin,
     ConnectionSettings *pSettings )
   : m_refMutex( refMutex ),
     m_pSettings( pSettings ),
@@ -905,7 +901,7 @@ sal_Int32 DatabaseMetaData::getMaxCharLiteralLength(  ) throw (SQLException, Run
 
 // Copied / adapted / simplified from JDBC driver
 sal_Int32 DatabaseMetaData::getIntSetting(const OUString& settingName)
-    throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+    throw (css::sdbc::SQLException, css::uno::RuntimeException)
 {
     MutexGuard guard( m_refMutex->mutex );
 
@@ -920,7 +916,7 @@ sal_Int32 DatabaseMetaData::getIntSetting(const OUString& settingName)
 }
 
 sal_Int32 DatabaseMetaData::getMaxNameLength()
-    throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+    throw (css::sdbc::SQLException, css::uno::RuntimeException)
 {
     if ( m_pSettings->maxNameLen == 0)
         m_pSettings->maxNameLen = getIntSetting( "max_identifier_length" );
@@ -929,7 +925,7 @@ sal_Int32 DatabaseMetaData::getMaxNameLength()
 }
 
 sal_Int32 DatabaseMetaData::getMaxIndexKeys()
-    throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+    throw (css::sdbc::SQLException, css::uno::RuntimeException)
 {
     if ( m_pSettings->maxIndexKeys == 0)
         m_pSettings->maxIndexKeys = getIntSetting("max_index_keys");
@@ -1044,7 +1040,7 @@ sal_Int32 DatabaseMetaData::getMaxUserNameLength(  ) throw (SQLException, Runtim
 
 sal_Int32 DatabaseMetaData::getDefaultTransactionIsolation(  ) throw (SQLException, RuntimeException, std::exception)
 {
-    return com::sun::star::sdbc::TransactionIsolation::READ_COMMITTED;
+    return css::sdbc::TransactionIsolation::READ_COMMITTED;
 }
 
 sal_Bool DatabaseMetaData::supportsTransactions(  ) throw (SQLException, RuntimeException, std::exception)
@@ -1054,10 +1050,10 @@ sal_Bool DatabaseMetaData::supportsTransactions(  ) throw (SQLException, Runtime
 
 sal_Bool DatabaseMetaData::supportsTransactionIsolationLevel( sal_Int32 level ) throw (SQLException, RuntimeException, std::exception)
 {
-    if ( level == com::sun::star::sdbc::TransactionIsolation::READ_COMMITTED
-         || level == com::sun::star::sdbc::TransactionIsolation::SERIALIZABLE
-         || level == com::sun::star::sdbc::TransactionIsolation::READ_UNCOMMITTED
-         || level == com::sun::star::sdbc::TransactionIsolation::REPEATABLE_READ)
+    if ( level == css::sdbc::TransactionIsolation::READ_COMMITTED
+         || level == css::sdbc::TransactionIsolation::SERIALIZABLE
+         || level == css::sdbc::TransactionIsolation::READ_UNCOMMITTED
+         || level == css::sdbc::TransactionIsolation::REPEATABLE_READ)
         return true;
     else
         return false;
@@ -1084,8 +1080,8 @@ sal_Bool DatabaseMetaData::dataDefinitionIgnoredInTransactions(  ) throw (SQLExc
     return false;
 }
 
-::com::sun::star::uno::Reference< XResultSet > DatabaseMetaData::getProcedures(
-    const ::com::sun::star::uno::Any& catalog,
+css::uno::Reference< XResultSet > DatabaseMetaData::getProcedures(
+    const css::uno::Any& catalog,
     const OUString& schemaPattern,
     const OUString& procedureNamePattern ) throw (SQLException, RuntimeException, std::exception)
 {
@@ -1109,8 +1105,8 @@ sal_Bool DatabaseMetaData::dataDefinitionIgnoredInTransactions(  ) throw (SQLExc
         m_refMutex, *this, std::vector< OUString >(), std::vector< std::vector< Any > > (), m_pSettings->tc );
 }
 
-::com::sun::star::uno::Reference< XResultSet > DatabaseMetaData::getProcedureColumns(
-    const ::com::sun::star::uno::Any& catalog,
+css::uno::Reference< XResultSet > DatabaseMetaData::getProcedureColumns(
+    const css::uno::Any& catalog,
     const OUString& schemaPattern,
     const OUString& procedureNamePattern,
     const OUString& columnNamePattern ) throw (SQLException, RuntimeException, std::exception)
@@ -1123,11 +1119,11 @@ sal_Bool DatabaseMetaData::dataDefinitionIgnoredInTransactions(  ) throw (SQLExc
         m_refMutex, *this, std::vector< OUString >(), std::vector< std::vector< Any > >(), m_pSettings->tc );
 }
 
-::com::sun::star::uno::Reference< XResultSet > DatabaseMetaData::getTables(
-    const ::com::sun::star::uno::Any& catalog,
+css::uno::Reference< XResultSet > DatabaseMetaData::getTables(
+    const css::uno::Any& catalog,
     const OUString& schemaPattern,
     const OUString& tableNamePattern,
-    const ::com::sun::star::uno::Sequence< OUString >& types )
+    const css::uno::Sequence< OUString >& types )
     throw (SQLException, RuntimeException, std::exception)
 {
     (void) catalog; (void) types;
@@ -1262,7 +1258,7 @@ namespace
     };
 }
 
-::com::sun::star::uno::Reference< XResultSet > DatabaseMetaData::getSchemas(  )
+css::uno::Reference< XResultSet > DatabaseMetaData::getSchemas(  )
     throw (SQLException, RuntimeException, std::exception)
 {
     MutexGuard guard( m_refMutex->mutex );
@@ -1297,7 +1293,7 @@ namespace
         m_refMutex, *this, getStatics().schemaNames, vec, m_pSettings->tc );
 }
 
-::com::sun::star::uno::Reference< XResultSet > DatabaseMetaData::getCatalogs(  )
+css::uno::Reference< XResultSet > DatabaseMetaData::getCatalogs(  )
     throw (SQLException, RuntimeException, std::exception)
 {
     // LEM TODO: return the current catalog like JDBC driver?
@@ -1307,7 +1303,7 @@ namespace
         m_refMutex, *this, std::vector< OUString >(), std::vector< std::vector< Any > >(), m_pSettings->tc );
 }
 
-::com::sun::star::uno::Reference< XResultSet > DatabaseMetaData::getTableTypes(  )
+css::uno::Reference< XResultSet > DatabaseMetaData::getTableTypes(  )
     throw (SQLException, RuntimeException, std::exception)
 {
     // LEM TODO: this can be made dynamic, see JDBC driver
@@ -1322,11 +1318,11 @@ namespace
  */
 sal_Int32 typeNameToDataType( const OUString &typeName, const OUString &typtype )
 {
-//     sal_Int32 ret = com::sun::star::sdbc::DataType::DISTINCT;
+//     sal_Int32 ret = css::sdbc::DataType::DISTINCT;
     // map all unknown types to memo (longvarchar). This allows to show them in
     // string representation. Additionally, the edit-table-type-selection-box
     // is not so unusable anymore.
-    sal_Int32 ret = com::sun::star::sdbc::DataType::LONGVARCHAR;
+    sal_Int32 ret = css::sdbc::DataType::LONGVARCHAR;
     if( typtype == "b" )
     {
         // as long as the OOo framework does not support arrays,
@@ -1335,7 +1331,7 @@ sal_Int32 typeNameToDataType( const OUString &typeName, const OUString &typtype 
 //         {
 //             its just a naming convention, but as long as we don't have anything better,
 //             we take it as granted
-//             ret = com::sun::star::sdbc::DataType::ARRAY;
+//             ret = css::sdbc::DataType::ARRAY;
 //         }
         // base type
         Statics &statics = getStatics();
@@ -1347,11 +1343,11 @@ sal_Int32 typeNameToDataType( const OUString &typeName, const OUString &typtype 
     }
     else if( typtype == "c" )
     {
-        ret = com::sun::star::sdbc::DataType::STRUCT;
+        ret = css::sdbc::DataType::STRUCT;
     }
     else if( typtype == "d" )
     {
-        ret = com::sun::star::sdbc::DataType::LONGVARCHAR;
+        ret = css::sdbc::DataType::LONGVARCHAR;
     }
     return ret;
 }
@@ -1380,8 +1376,8 @@ namespace {
         {
             switch( dataType )
             {
-            case com::sun::star::sdbc::DataType::NUMERIC:
-            case com::sun::star::sdbc::DataType::DECIMAL:
+            case css::sdbc::DataType::NUMERIC:
+            case css::sdbc::DataType::DECIMAL:
             {
                 *precision = ( ( atttypmod - PQ_VARHDRSZ ) >> 16 ) & 0xffff;
                 *scale = (atttypmod - PQ_VARHDRSZ ) & 0xffff;
@@ -1460,8 +1456,8 @@ static void columnMetaData2DatabaseTypeDescription(
 }
 
 
-::com::sun::star::uno::Reference< XResultSet > DatabaseMetaData::getColumns(
-    const ::com::sun::star::uno::Any& catalog,
+css::uno::Reference< XResultSet > DatabaseMetaData::getColumns(
+    const css::uno::Any& catalog,
     const OUString& schemaPattern,
     const OUString& tableNamePattern,
     const OUString& columnNamePattern ) throw (SQLException, RuntimeException, std::exception)
@@ -1619,12 +1615,12 @@ static void columnMetaData2DatabaseTypeDescription(
             // row[9] RADIX TODO
             if( xRow->getBoolean( 6 ) && ! isSystemColumn(xRow->getInt( 12 )) )
             {
-                row[10] <<= OUString::number(com::sun::star::sdbc::ColumnValue::NO_NULLS);
+                row[10] <<= OUString::number(css::sdbc::ColumnValue::NO_NULLS);
                 row[17] <<= statics.NO;
             }
             else
             {
-                row[10] <<= OUString::number(com::sun::star::sdbc::ColumnValue::NULLABLE);
+                row[10] <<= OUString::number(css::sdbc::ColumnValue::NULLABLE);
                 row[17] <<= statics.YES;
             }
 
@@ -1646,8 +1642,8 @@ static void columnMetaData2DatabaseTypeDescription(
         m_refMutex, *this, statics.columnRowNames, vec, m_pSettings->tc );
 }
 
-::com::sun::star::uno::Reference< XResultSet > DatabaseMetaData::getColumnPrivileges(
-    const ::com::sun::star::uno::Any& catalog,
+css::uno::Reference< XResultSet > DatabaseMetaData::getColumnPrivileges(
+    const css::uno::Any& catalog,
     const OUString& schema,
     const OUString& table,
     const OUString& columnNamePattern ) throw (SQLException, RuntimeException, std::exception)
@@ -1678,8 +1674,8 @@ static void columnMetaData2DatabaseTypeDescription(
     return rs;
 }
 
-::com::sun::star::uno::Reference< XResultSet > DatabaseMetaData::getTablePrivileges(
-    const ::com::sun::star::uno::Any&,
+css::uno::Reference< XResultSet > DatabaseMetaData::getTablePrivileges(
+    const css::uno::Any&,
     const OUString& schemaPattern,
     const OUString& tableNamePattern ) throw (SQLException, RuntimeException, std::exception)
 {
@@ -1704,8 +1700,8 @@ static void columnMetaData2DatabaseTypeDescription(
     return rs;
 }
 
-::com::sun::star::uno::Reference< XResultSet > DatabaseMetaData::getBestRowIdentifier(
-    const ::com::sun::star::uno::Any&,
+css::uno::Reference< XResultSet > DatabaseMetaData::getBestRowIdentifier(
+    const css::uno::Any&,
     const OUString&,
     const OUString&,
     sal_Int32,
@@ -1717,8 +1713,8 @@ static void columnMetaData2DatabaseTypeDescription(
         m_refMutex, *this, std::vector< OUString >(), std::vector< std::vector< Any > >(), m_pSettings->tc );
 }
 
-::com::sun::star::uno::Reference< XResultSet > DatabaseMetaData::getVersionColumns(
-    const ::com::sun::star::uno::Any&,
+css::uno::Reference< XResultSet > DatabaseMetaData::getVersionColumns(
+    const css::uno::Any&,
     const OUString&,
     const OUString& ) throw (SQLException, RuntimeException, std::exception)
 {
@@ -1728,8 +1724,8 @@ static void columnMetaData2DatabaseTypeDescription(
         m_refMutex, *this, std::vector< OUString >(), std::vector< std::vector< Any > >(), m_pSettings->tc );
 }
 
-::com::sun::star::uno::Reference< XResultSet > DatabaseMetaData::getPrimaryKeys(
-    const ::com::sun::star::uno::Any&,
+css::uno::Reference< XResultSet > DatabaseMetaData::getPrimaryKeys(
+    const css::uno::Any&,
     const OUString& schema,
     const OUString& table ) throw (SQLException, RuntimeException, std::exception)
 {
@@ -2076,7 +2072,7 @@ void DatabaseMetaData::init_getPrivs_stmt ()
     m_getColumnPrivs_stmt = m_origin->prepareStatement( sSQL.makeStringAndClear() );
 }
 
-::com::sun::star::uno::Reference< XResultSet > DatabaseMetaData::getImportedExportedKeys(
+css::uno::Reference< XResultSet > DatabaseMetaData::getImportedExportedKeys(
     const Any& /* primaryCatalog */,
     const OUString& primarySchema,
     const OUString& primaryTable,
@@ -2113,27 +2109,27 @@ void DatabaseMetaData::init_getPrivs_stmt ()
 }
 
 
-::com::sun::star::uno::Reference< XResultSet > DatabaseMetaData::getImportedKeys(
-    const ::com::sun::star::uno::Any& catalog,
+css::uno::Reference< XResultSet > DatabaseMetaData::getImportedKeys(
+    const css::uno::Any& catalog,
     const OUString& schema,
     const OUString& table ) throw (SQLException, RuntimeException, std::exception)
 {
     return getImportedExportedKeys(Any(), OUString(), OUString(), catalog, schema, table);
 }
 
-::com::sun::star::uno::Reference< XResultSet > DatabaseMetaData::getExportedKeys(
-    const ::com::sun::star::uno::Any& catalog,
+css::uno::Reference< XResultSet > DatabaseMetaData::getExportedKeys(
+    const css::uno::Any& catalog,
     const OUString& schema,
     const OUString& table ) throw (SQLException, RuntimeException, std::exception)
 {
     return getImportedExportedKeys(catalog, schema, table, Any(), OUString(), OUString());
 }
 
-::com::sun::star::uno::Reference< XResultSet > DatabaseMetaData::getCrossReference(
-    const ::com::sun::star::uno::Any& primaryCatalog,
+css::uno::Reference< XResultSet > DatabaseMetaData::getCrossReference(
+    const css::uno::Any& primaryCatalog,
     const OUString& primarySchema,
     const OUString& primaryTable,
-    const ::com::sun::star::uno::Any& foreignCatalog,
+    const css::uno::Any& foreignCatalog,
     const OUString& foreignSchema,
     const OUString& foreignTable ) throw (SQLException, RuntimeException, std::exception)
 {
@@ -2211,11 +2207,11 @@ namespace
 
     sal_Int32 calcSearchable( sal_Int32 dataType )
     {
-        sal_Int32 ret = com::sun::star::sdbc::ColumnSearch::FULL;
-        if( com::sun::star::sdbc::DataType::BINARY == dataType ||
-            com::sun::star::sdbc::DataType::VARBINARY == dataType ||
-            com::sun::star::sdbc::DataType::LONGVARBINARY == dataType )
-            ret = com::sun::star::sdbc::ColumnSearch::NONE;
+        sal_Int32 ret = css::sdbc::ColumnSearch::FULL;
+        if( css::sdbc::DataType::BINARY == dataType ||
+            css::sdbc::DataType::VARBINARY == dataType ||
+            css::sdbc::DataType::LONGVARBINARY == dataType )
+            ret = css::sdbc::ColumnSearch::NONE;
 
         return ret;
     }
@@ -2224,7 +2220,7 @@ namespace
     {
         // LEM TODO: review, see where used, see JDBC, ...
         sal_Int32 ret = 0;
-        if( dataType == com::sun::star::sdbc::DataType::NUMERIC )
+        if( dataType == css::sdbc::DataType::NUMERIC )
             ret = 1000; // see pg-docs DataType/numeric
 //     else if( dataType == DataType::DOUBLE )
 //         ret = 308;
@@ -2287,8 +2283,8 @@ namespace
             sal_Int32 dataType =typeNameToDataType(xRow->getString(5),xRow->getString(2));
             sal_Int32 precision = xRow->getString(3).toInt32();
 
-            if( dataType == com::sun::star::sdbc::DataType::CHAR  ||
-                ( dataType == com::sun::star::sdbc::DataType::VARCHAR &&
+            if( dataType == css::sdbc::DataType::CHAR  ||
+                ( dataType == css::sdbc::DataType::VARCHAR &&
                   xRow->getString(TYPE_NAME+1).equalsIgnoreAsciiCase("varchar") ) )
             {
                 // reflect varchar as varchar with upper limit !
@@ -2298,7 +2294,7 @@ namespace
                 precision = 0x40000000; // about 1 GB, see character type docs in postgresql
                 row[CREATE_PARAMS] <<= OUString("length");
             }
-            else if( dataType == com::sun::star::sdbc::DataType::NUMERIC )
+            else if( dataType == css::sdbc::DataType::NUMERIC )
             {
                 precision = 1000;
                 row[CREATE_PARAMS] <<= OUString("length, scale");
@@ -2308,14 +2304,14 @@ namespace
             row[DATA_TYPE] <<= OUString::number(dataType);
             row[PRECISION] <<= OUString::number( precision );
             sal_Int32 nullable = xRow->getBoolean(4) ?
-                com::sun::star::sdbc::ColumnValue::NO_NULLS :
-                com::sun::star::sdbc::ColumnValue::NULLABLE;
+                css::sdbc::ColumnValue::NO_NULLS :
+                css::sdbc::ColumnValue::NULLABLE;
             row[NULLABLE] <<= OUString::number(nullable);
             row[CASE_SENSITIVE] <<= OUString::number(1);
             row[SEARCHABLE] <<= OUString::number( calcSearchable( dataType ) );
             row[UNSIGNED_ATTRIBUTE] <<= OUString("0");
-            if( com::sun::star::sdbc::DataType::INTEGER == dataType ||
-                com::sun::star::sdbc::DataType::BIGINT == dataType )
+            if( css::sdbc::DataType::INTEGER == dataType ||
+                css::sdbc::DataType::BIGINT == dataType )
                 row[AUTO_INCREMENT] <<= OUString("1");     // TODO
             else
                 row[AUTO_INCREMENT] <<= OUString("0");     // TODO
@@ -2329,7 +2325,7 @@ namespace
 }
 
 
-::com::sun::star::uno::Reference< XResultSet > DatabaseMetaData::getTypeInfo(  )
+css::uno::Reference< XResultSet > DatabaseMetaData::getTypeInfo(  )
     throw (SQLException, RuntimeException, std::exception)
 {
     // Note: Indexes start at 0 (in the API doc, they start at 1)
@@ -2380,8 +2376,8 @@ namespace
 }
 
 
-::com::sun::star::uno::Reference< XResultSet > DatabaseMetaData::getIndexInfo(
-    const ::com::sun::star::uno::Any& ,
+css::uno::Reference< XResultSet > DatabaseMetaData::getIndexInfo(
+    const css::uno::Any& ,
     const OUString& schema,
     const OUString& table,
     sal_Bool unique,
@@ -2473,8 +2469,8 @@ namespace
         bool isPrimary = xRow->getBoolean( C_IS_PRIMARY );
         (void)isPrimary;
         sal_Int32 indexType =  xRow->getBoolean( C_IS_CLUSTERED ) ?
-            com::sun::star::sdbc::IndexType::CLUSTERED :
-            com::sun::star::sdbc::IndexType::HASHED;
+            css::sdbc::IndexType::CLUSTERED :
+            css::sdbc::IndexType::HASHED;
 
         paramColumn->setString( C_SCHEMA, currentSchema );
         paramColumn->setString( C_TABLENAME, currentTable );
@@ -2508,7 +2504,7 @@ namespace
 sal_Bool DatabaseMetaData::supportsResultSetType( sal_Int32 setType )
     throw (SQLException, RuntimeException, std::exception)
 {
-    if ( setType == com::sun::star::sdbc::ResultSetType::SCROLL_SENSITIVE )
+    if ( setType == css::sdbc::ResultSetType::SCROLL_SENSITIVE )
         return false;
     else
         return true;
@@ -2573,7 +2569,7 @@ sal_Bool DatabaseMetaData::supportsBatchUpdates(  ) throw (SQLException, Runtime
     return true;
 }
 
-css::uno::Reference< XResultSet > DatabaseMetaData::getUDTs( const ::com::sun::star::uno::Any&, const OUString&, const OUString&, const ::com::sun::star::uno::Sequence< sal_Int32 >& ) throw (SQLException, RuntimeException, std::exception)
+css::uno::Reference< XResultSet > DatabaseMetaData::getUDTs( const css::uno::Any&, const OUString&, const OUString&, const css::uno::Sequence< sal_Int32 >& ) throw (SQLException, RuntimeException, std::exception)
 {
     //LEM TODO: implement! See JDBC driver
     MutexGuard guard( m_refMutex->mutex );
@@ -2581,7 +2577,7 @@ css::uno::Reference< XResultSet > DatabaseMetaData::getUDTs( const ::com::sun::s
         m_refMutex, *this, std::vector< OUString >(), std::vector< std::vector< Any > >(), m_pSettings->tc );
 }
 
-::com::sun::star::uno::Reference< com::sun::star::sdbc::XConnection > DatabaseMetaData::getConnection()
+css::uno::Reference< css::sdbc::XConnection > DatabaseMetaData::getConnection()
     throw (SQLException, RuntimeException, std::exception)
 {
     return m_origin;

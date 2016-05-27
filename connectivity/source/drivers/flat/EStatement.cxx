@@ -22,7 +22,7 @@
 
 using namespace connectivity::flat;
 using namespace connectivity::file;
-using namespace com::sun::star::uno;
+using namespace css::uno;
 
 OResultSet* OFlatStatement::createResultSet()
 {

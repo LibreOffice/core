@@ -123,19 +123,19 @@ sal_Int32 Driver::getMinorVersion(  ) throw (RuntimeException, std::exception)
 
     // XServiceInfo
 OUString SAL_CALL Driver::getImplementationName()
-    throw(::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::uno::RuntimeException, std::exception)
 {
     return DriverGetImplementationName();
 }
 
 sal_Bool Driver::supportsService(const OUString& ServiceName)
-    throw(::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 Sequence< OUString > Driver::getSupportedServiceNames()
-    throw(::com::sun::star::uno::RuntimeException, std::exception)
+    throw(css::uno::RuntimeException, std::exception)
 {
     return DriverGetSupportedServiceNames();
 }
@@ -198,12 +198,12 @@ public:
 
     // XServiceInfo
     OUString SAL_CALL getImplementationName()
-        throw(::com::sun::star::uno::RuntimeException, std::exception) override
+        throw(css::uno::RuntimeException, std::exception) override
     {
         return m_implName;
     }
     sal_Bool SAL_CALL supportsService(const OUString& ServiceName)
-        throw(::com::sun::star::uno::RuntimeException, std::exception) override
+        throw(css::uno::RuntimeException, std::exception) override
     {
         for( int i = 0 ; i < m_serviceNames.getLength() ; i ++ )
             if( m_serviceNames[i] == ServiceName )
@@ -211,7 +211,7 @@ public:
         return false;
     }
     Sequence< OUString > SAL_CALL getSupportedServiceNames()
-        throw(::com::sun::star::uno::RuntimeException, std::exception) override
+        throw(css::uno::RuntimeException, std::exception) override
     {
         return m_serviceNames;
     }
@@ -270,7 +270,7 @@ void OOneInstanceComponentFactory::disposing()
 //  Reference< XSingleComponentFactory > createOneInstanceComponentFactory(
 //      cppu::ComponentFactoryFunc fptr,
 //      OUString const & rImplementationName,
-//      ::com::sun::star::uno::Sequence< OUString > const & rServiceNames,
+//      css::uno::Sequence< OUString > const & rServiceNames,
 //      rtl_ModuleCount * pModCount = 0 )
 //
 //  {
@@ -300,9 +300,9 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL postgresql_sdbc_component_getFactory(
     // XSingleComponentFactory interface ...
     void * pRet = nullptr;
     Reference< XSingleComponentFactory > xFactory;
-    Reference< com::sun::star::lang::XMultiServiceFactory > xSmgr(
+    Reference< css::lang::XMultiServiceFactory > xSmgr(
         static_cast< XInterface * >(pServiceManager),
-        com::sun::star::uno::UNO_QUERY_THROW );
+        css::uno::UNO_QUERY_THROW );
 
     for( sal_Int32 i = 0 ; g_entries[i].create ; i ++ )
     {

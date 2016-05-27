@@ -64,13 +64,13 @@ public:
             return &mAllSection[secName];
         return NULL;
     }
-    explicit IniParser(OUString const & rIniName) throw(com::sun::star::io::IOException )
+    explicit IniParser(OUString const & rIniName) throw(css::io::IOException )
     {
         OUString curDirPth;
         OUString iniUrl;
         osl_getProcessWorkingDir( &curDirPth.pData );
         if (osl_getAbsoluteFileURL( curDirPth.pData,    rIniName.pData, &iniUrl.pData ))
-            throw ::com::sun::star::io::IOException();
+            throw css::io::IOException();
 
 
 #if OSL_DEBUG_LEVEL > 1
@@ -130,7 +130,7 @@ public:
         {
             OString file_tmp = OUStringToOString(iniUrl, RTL_TEXTENCODING_ASCII_US);
             OSL_TRACE( __FILE__" -- couldn't open file: %s", file_tmp.getStr() );
-            throw ::com::sun::star::io::IOException();
+            throw css::io::IOException();
         }
 #endif
     }

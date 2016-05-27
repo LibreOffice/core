@@ -27,19 +27,19 @@ namespace connectivity
     {
         class OTables : public sdbcx::OCollection
         {
-            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >       m_xMetaData;
+            css::uno::Reference< css::sdbc::XDatabaseMetaData >       m_xMetaData;
 
         protected:
             virtual sdbcx::ObjectType createObject(const OUString& _rName) override;
-            virtual void impl_refresh() throw(::com::sun::star::uno::RuntimeException) override;
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createDescriptor() override;
-            virtual sdbcx::ObjectType appendObject( const OUString& _rForName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor ) override;
+            virtual void impl_refresh() throw(css::uno::RuntimeException) override;
+            virtual css::uno::Reference< css::beans::XPropertySet > createDescriptor() override;
+            virtual sdbcx::ObjectType appendObject( const OUString& _rForName, const css::uno::Reference< css::beans::XPropertySet >& descriptor ) override;
             virtual void dropObject(sal_Int32 _nPos, const OUString& _sElementName) override;
 
-            void createTable( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor );
+            void createTable( const css::uno::Reference< css::beans::XPropertySet >& descriptor );
             virtual OUString getNameForObject(const sdbcx::ObjectType& _xObject) override;
         public:
-            OTables(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rMetaData,::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex,
+            OTables(const css::uno::Reference< css::sdbc::XDatabaseMetaData >& _rMetaData,::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex,
                 const TStringVector &_rVector) : sdbcx::OCollection(_rParent, true, _rMutex, _rVector)
                 ,m_xMetaData(_rMetaData)
             {}
