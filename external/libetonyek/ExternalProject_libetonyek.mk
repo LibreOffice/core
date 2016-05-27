@@ -47,7 +47,7 @@ $(call gb_ExternalProject_get_state_target,libetonyek,build) :
 			$(if $(filter LINUX,$(OS)), \
 				'LDFLAGS=-Wl$(COMMA)-z$(COMMA)origin \
 					-Wl$(COMMA)-rpath$(COMMA)\$$$$ORIGIN') \
-			CPPFLAGS="$(CPPFLAGS) $(if $(SYSTEM_BOOST),$(BOOST_CPPFLAGS),-I$(call gb_UnpackedTarball_get_dir,boost))" \
+			CPPFLAGS="$(CPPFLAGS) $(BOOST_CPPFLAGS)" \
 			CXXFLAGS="$(CXXFLAGS) $(CXXFLAGS_CXX11) $(if $(filter $(true),$(gb_SYMBOL)),$(gb_DEBUGINFO_FLAGS))" \
 			LANGTAG_CFLAGS="$(LIBLANGTAG_CFLAGS)" \
 			LANGTAG_LIBS="$(LIBLANGTAG_LIBS)" \
