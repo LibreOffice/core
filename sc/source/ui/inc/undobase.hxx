@@ -172,8 +172,6 @@ public:
     SfxUndoAction*          GetWrappedUndo()        { return pWrappedUndo; }
     void                    ForgetWrappedUndo();
 
-    virtual void SetLinkToSfxLinkUndoAction(SfxLinkUndoAction* pSfxLinkUndoAction) override;
-
     virtual void            Undo() override;
     virtual void            Redo() override;
     virtual void            Repeat(SfxRepeatTarget& rTarget) override;
