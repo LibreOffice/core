@@ -111,14 +111,32 @@ SwPageNumberFieldType::SwPageNumberFieldType()
 {
 }
 
+SAL_DEPRECATED("use Expand( sal_uInt32 nFormat, short nOff, sal_uInt16 const nPageNumber, const OUString& rUserStr)")
 OUString SwPageNumberFieldType::Expand( sal_uInt32 nFormat, short nOff,
          sal_uInt16 const nPageNumber, sal_uInt16 const nMaxPage,
          const OUString& rUserStr ) const
 {
+    //Ignore the unnecessary parameter.
+    (void)nMaxPage;
+
+    // Forward to the new version, for backwards compatibility.
+    return Expand(nFormat, nOff, nPageNumber, rUserStr);
+}
+
+OUString SwPageNumberFieldType::Expand(sal_uInt32 nFormat, short nOff,
+        sal_uInt16 const nPageNumber, const OUString& rUserStr ) const
+{
     sal_uInt32 nTmpFormat = (SVX_NUM_PAGEDESC == nFormat) ? (sal_uInt32)nNumberingType : nFormat;
     int const nTmp = nPageNumber + nOff;
 
-    if (0 > nTmp || SVX_NUM_NUMBER_NONE == nTmpFormat || (!bVirtuell && nTmp > nMaxPage))
+    /* fdo#35694 was rooted in a third part of this conditional
+     * statement: ` | (!bVirtual && nTmp > nMaxPage)`.
+     * If the offset page number was greater than the actual number of pages,
+     * then everything comes down to bVirtual, which was in turn set
+     * by SwPageNumberFieldType::SwPageNumberFieldType::Expand(). This was why
+     * the historic workaround for the bug worked - it forced Expand() to
+     * raise bVirtual. */
+    if (0 > nTmp || SVX_NUM_NUMBER_NONE == nTmpFormat)
         return OUString();
 
     if( SVX_NUM_CHAR_SPECIAL == nTmpFormat )
@@ -196,22 +214,22 @@ OUString SwPageNumberField::Expand() const
 
     if( PG_NEXT == nSubType && 1 != nOffset )
     {
-        sRet = pFieldType->Expand(GetFormat(), 1, m_nPageNumber, m_nMaxPage, sUserStr);
+        sRet = pFieldType->Expand(GetFormat(), 1, m_nPageNumber, sUserStr);
         if (!sRet.isEmpty())
         {
-            sRet = pFieldType->Expand(GetFormat(), nOffset, m_nPageNumber, m_nMaxPage, sUserStr);
+            sRet = pFieldType->Expand(GetFormat(), nOffset, m_nPageNumber, sUserStr);
         }
     }
     else if( PG_PREV == nSubType && -1 != nOffset )
     {
-        sRet = pFieldType->Expand(GetFormat(), -1, m_nPageNumber, m_nMaxPage, sUserStr);
+        sRet = pFieldType->Expand(GetFormat(), -1, m_nPageNumber, sUserStr);
         if (!sRet.isEmpty())
         {
-            sRet = pFieldType->Expand(GetFormat(), nOffset, m_nPageNumber, m_nMaxPage, sUserStr);
+            sRet = pFieldType->Expand(GetFormat(), nOffset, m_nPageNumber, sUserStr);
         }
     }
     else
-        sRet = pFieldType->Expand(GetFormat(), nOffset, m_nPageNumber, m_nMaxPage, sUserStr);
+        sRet = pFieldType->Expand(GetFormat(), nOffset, m_nPageNumber, sUserStr);
     return sRet;
 }
 
