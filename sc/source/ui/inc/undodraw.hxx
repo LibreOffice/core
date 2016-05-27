@@ -38,8 +38,6 @@ public:
     SfxUndoAction*          GetDrawUndo()       { return pDrawUndo; }
     void                    ForgetDrawUndo();
 
-    virtual void SetLinkToSfxLinkUndoAction(SfxLinkUndoAction* pSfxLinkUndoAction) override;
-
     virtual void            Undo() override;
     virtual void            Redo() override;
     virtual void            Repeat(SfxRepeatTarget& rTarget) override;

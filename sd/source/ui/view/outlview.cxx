@@ -1568,47 +1568,6 @@ void OutlineView::TryToMergeUndoActions()
                     pListAction->aUndoActions.Remove(nEditPos);
                     delete pEditUndo;
 
-                    // now check if we also can merge the draw undo actions
-                    ::svl::IUndoManager* pDocUndoManager = mpDocSh->GetUndoManager();
-                    if( pDocUndoManager && ( pListAction->aUndoActions.size() == 1 ))
-                    {
-                        SfxLinkUndoAction* pLinkAction = dynamic_cast< SfxLinkUndoAction* >( pListAction->aUndoActions.GetUndoAction(0) );
-                        SfxLinkUndoAction* pPrevLinkAction = nullptr;
-
-                        if( pLinkAction )
-                        {
-                            nAction = pPrevListAction->aUndoActions.size();
-                            while( !pPrevLinkAction && nAction )
-                                pPrevLinkAction = dynamic_cast< SfxLinkUndoAction* >(pPrevListAction->aUndoActions.GetUndoAction(--nAction));
-                        }
-
-                        if( pLinkAction && pPrevLinkAction &&
-                            ( pLinkAction->GetAction() == pDocUndoManager->GetUndoAction() ) &&
-                            ( pPrevLinkAction->GetAction() == pDocUndoManager->GetUndoAction(1) ) )
-                        {
-                            SfxListUndoAction* pSourceList = dynamic_cast< SfxListUndoAction* >(pLinkAction->GetAction());
-                            SfxListUndoAction* pDestinationList = dynamic_cast< SfxListUndoAction* >(pPrevLinkAction->GetAction());
-
-                            if( pSourceList && pDestinationList )
-                            {
-                                sal_uInt16 nCount = pSourceList->aUndoActions.size();
-                                sal_uInt16 nDestAction = pDestinationList->aUndoActions.size();
-                                while( nCount-- )
-                                {
-                                    SfxUndoAction* pTemp = pSourceList->aUndoActions.GetUndoAction(0);
-                                    pSourceList->aUndoActions.Remove(0);
-                                    pDestinationList->aUndoActions.Insert( pTemp, nDestAction++ );
-                                }
-                                pDestinationList->nCurUndoAction = pDestinationList->aUndoActions.size();
-
-                                pListAction->aUndoActions.Remove(0);
-                                delete pLinkAction;
-
-                                pDocUndoManager->RemoveLastUndoAction();
-                            }
-                        }
-                    }
-
                     if ( !pListAction->aUndoActions.empty() )
                     {
                         // now we have to move all remaining doc undo actions from the top undo

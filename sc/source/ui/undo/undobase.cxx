@@ -598,14 +598,6 @@ sal_uInt16 ScUndoWrapper::GetId() const
         return 0;
 }
 
-void ScUndoWrapper::SetLinkToSfxLinkUndoAction(SfxLinkUndoAction* pSfxLinkUndoAction)
-{
-    if (pWrappedUndo)
-        pWrappedUndo->SetLinkToSfxLinkUndoAction(pSfxLinkUndoAction);
-    else
-        SetLinkToSfxLinkUndoAction(pSfxLinkUndoAction);
-}
-
 bool ScUndoWrapper::Merge( SfxUndoAction* pNextAction )
 {
     if (pWrappedUndo)

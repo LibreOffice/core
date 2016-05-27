@@ -45,24 +45,12 @@ SfxUndoContext::~SfxUndoContext()
 }
 
 
-void SfxUndoAction::SetLinkToSfxLinkUndoAction(SfxLinkUndoAction* pSfxLinkUndoAction)
-{
-    mpSfxLinkUndoAction = pSfxLinkUndoAction;
-}
-
-
 SfxUndoAction::~SfxUndoAction()
 {
-    if(mpSfxLinkUndoAction)
-    {
-        mpSfxLinkUndoAction->LinkedSfxUndoActionDestructed(*this);
-        mpSfxLinkUndoAction = nullptr;
-    }
 }
 
 
 SfxUndoAction::SfxUndoAction()
-:   mpSfxLinkUndoAction(nullptr)
 {
 }
 
@@ -1396,90 +1384,6 @@ void SfxListUndoAction::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterEndElement(pWriter);
 }
 
-/**
- * Creates a LinkAction which points to another UndoManager.
- * Gets that UndoManagers current Action and sets it as that UndoManager's
- * associated Action.
- */
-SfxLinkUndoAction::SfxLinkUndoAction(::svl::IUndoManager *pManager)
-{
-    pUndoManager = pManager;
-    SfxUndoManager* pUndoManagerImplementation = dynamic_cast< SfxUndoManager* >( pManager );
-    ENSURE_OR_THROW( pUndoManagerImplementation != nullptr, "unsupported undo manager implementation!" );
-
-    // yes, this cast is dirty. But reaching into the SfxUndoManager's implementation,
-    // directly accessing its internal stack, and tampering with an action on that stack
-    // is dirty, too.
-    if ( pManager->GetMaxUndoActionCount() )
-    {
-        size_t nPos = pManager->GetUndoActionCount()-1;
-        pAction = pUndoManagerImplementation->m_xData->pActUndoArray->aUndoActions[nPos].pAction;
-        pAction->SetLinkToSfxLinkUndoAction(this);
-    }
-    else
-        pAction = nullptr;
-}
-
-
-void SfxLinkUndoAction::Undo()
-{
-    if ( pAction )
-        pUndoManager->Undo();
-}
-
-
-void SfxLinkUndoAction::Redo()
-{
-    if ( pAction )
-        pUndoManager->Redo();
-}
-
-
-bool SfxLinkUndoAction::CanRepeat(SfxRepeatTarget& r) const
-{
-    return pAction && pAction->CanRepeat(r);
-}
-
-
-void SfxLinkUndoAction::Repeat(SfxRepeatTarget&r)
-{
-    if ( pAction && pAction->CanRepeat( r ) )
-        pAction->Repeat( r );
-}
-
-
-OUString SfxLinkUndoAction::GetComment() const
-{
-    if ( pAction )
-        return pAction->GetComment();
-    return OUString();
-}
-
-
-OUString SfxLinkUndoAction::GetRepeatComment(SfxRepeatTarget&r) const
-{
-    if ( pAction )
-        return pAction->GetRepeatComment(r);
-    return OUString();
-}
-
-
-SfxLinkUndoAction::~SfxLinkUndoAction()
-{
-    if( pAction )
-        pAction->SetLinkToSfxLinkUndoAction(nullptr);
-}
-
-
-void SfxLinkUndoAction::LinkedSfxUndoActionDestructed(const SfxUndoAction& rCandidate)
-{
-    assert(nullptr != pAction);
-    assert(pAction == &rCandidate && "Oops, the destroyed and linked UndoActions differ (!)");
-    (void)rCandidate;
-    pAction = nullptr;
-}
-
-
 SfxUndoArray::~SfxUndoArray()
 {
     while ( !aUndoActions.empty() )
@@ -1488,12 +1392,6 @@ SfxUndoArray::~SfxUndoArray()
         aUndoActions.Remove( aUndoActions.size() - 1 );
         delete pAction;
     }
-}
-
-
-sal_uInt16 SfxLinkUndoAction::GetId() const
-{
-      return pAction ? pAction->GetId() : 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

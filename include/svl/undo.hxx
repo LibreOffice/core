@@ -41,18 +41,11 @@ public:
 };
 
 
-class SfxLinkUndoAction;
-
 class SVL_DLLPUBLIC SfxUndoAction
 {
-private:
-    SfxLinkUndoAction*      mpSfxLinkUndoAction;
-
 public:
                             SfxUndoAction();
     virtual                 ~SfxUndoAction();
-
-    virtual void SetLinkToSfxLinkUndoAction(SfxLinkUndoAction* pSfxLinkUndoAction);
 
     virtual void            Undo();
     virtual void            UndoWithContext( SfxUndoContext& i_context );
@@ -299,8 +292,6 @@ namespace svl { namespace undo { namespace impl
 struct SfxUndoManager_Data;
 class SVL_DLLPUBLIC SfxUndoManager : public ::svl::IUndoManager
 {
-    friend class SfxLinkUndoAction;
-
     std::unique_ptr< SfxUndoManager_Data >
                             m_xData;
 public:
@@ -390,48 +381,6 @@ private:
     bool ImplRedo( SfxUndoContext* i_contextOrNull );
 
     friend class ::svl::undo::impl::LockGuard;
-};
-
-
-class SVL_DLLPUBLIC SfxLinkUndoAction : public SfxUndoAction
-
-/*  [Explanation]
-
-    SfxLinkUndoAction is used to link two SfxUndoManager. The Undo/Redos inserted
-    in the first SfxUndoManager redirect their Undo/Redo to the second. With this it
-    does not matter, if the undo/redo initially was on the first or the second.
-
-    After inserting SfxLinkUndoAction on the first SfxUndoManager, you have to
-    insert it on the second as well. While the second SfxUndoManager is steered
-    from the first, you must not insert neither Actions nor issue a  undo/redo
-    command to the second, while it is steered by the first.
-*/
-
-{
-private:
-    friend class SfxUndoAction;
-    void LinkedSfxUndoActionDestructed(const SfxUndoAction& rCandidate);
-
-public:
-                            SfxLinkUndoAction(::svl::IUndoManager *pManager);
-                            virtual ~SfxLinkUndoAction();
-
-    virtual void            Undo() override;
-    virtual void            Redo() override;
-    virtual bool            CanRepeat(SfxRepeatTarget& r) const override;
-
-    virtual void            Repeat(SfxRepeatTarget&r) override;
-
-    virtual OUString        GetComment() const override;
-    virtual OUString        GetRepeatComment(SfxRepeatTarget&r) const override;
-    virtual sal_uInt16      GetId() const override;
-
-    SfxUndoAction*          GetAction() const { return pAction; }
-
-protected:
-    ::svl::IUndoManager*    pUndoManager;
-    SfxUndoAction*          pAction;
-
 };
 
 #endif
