@@ -1731,7 +1731,7 @@ static Writer & OutHTML_FrameFormatAsImage( Writer& rWrt, const SwFrameFormat& r
     {
         if( rHTMLWrt.GetOrigFileName() )
             GraphicURL = *rHTMLWrt.GetOrigFileName();
-        if( aGraphic.GetType() == GRAPHIC_NONE ||
+        if( aGraphic.GetType() == GraphicType::NONE ||
             XOutBitmap::WriteGraphic( aGraphic, GraphicURL,
                                       "JPG",
                                       (XOutFlags::UseGifIfPossible|

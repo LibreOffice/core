@@ -46,7 +46,7 @@ namespace drawinglayer
             {
                 const Graphic& rGraphic = rAttribute.getGraphic();
 
-                if(GRAPHIC_BITMAP == rGraphic.GetType() || GRAPHIC_GDIMETAFILE == rGraphic.GetType())
+                if(GraphicType::Bitmap == rGraphic.GetType() || GraphicType::GdiMetafile == rGraphic.GetType())
                 {
                     const Size aSize(rGraphic.GetPrefSize());
 

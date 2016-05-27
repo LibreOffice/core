@@ -821,7 +821,7 @@ static Graphic ImpGetScaledGraphic( const Graphic& rGraphic, FilterConfigItem& r
     sal_Int32 nLogicalWidth = rConfigItem.ReadInt32( "LogicalWidth", 0 );
     sal_Int32 nLogicalHeight = rConfigItem.ReadInt32( "LogicalHeight", 0 );
 
-    if ( rGraphic.GetType() != GRAPHIC_NONE )
+    if ( rGraphic.GetType() != GraphicType::NONE )
     {
         sal_Int32 nMode = rConfigItem.ReadInt32( "ExportMode", -1 );
 
@@ -843,7 +843,7 @@ static Graphic ImpGetScaledGraphic( const Graphic& rGraphic, FilterConfigItem& r
             nLogicalWidth = aOriginalSize.Width();
         if ( !nLogicalHeight )
             nLogicalHeight = aOriginalSize.Height();
-        if( rGraphic.GetType() == GRAPHIC_BITMAP )
+        if( rGraphic.GetType() == GraphicType::Bitmap )
         {
 
             // Resolution is set
@@ -1879,7 +1879,7 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString
 
     if( pConfig->IsExportPixelFormat( nFormat ) )
     {
-        if( eType != GRAPHIC_BITMAP )
+        if( eType != GraphicType::Bitmap )
         {
             Size aSizePixel;
             sal_uLong nColorCount,nBitsPerPixel,nNeededMem,nMaxMem;
@@ -2183,7 +2183,7 @@ IMPL_LINK_TYPED( GraphicFilter, FilterCallback, ConvertData&, rData, bool )
         default:
         break;
     }
-    if( GRAPHIC_NONE == rData.maGraphic.GetType() || rData.maGraphic.GetContext() ) // Import
+    if( GraphicType::NONE == rData.maGraphic.GetType() || rData.maGraphic.GetContext() ) // Import
     {
         // Import
         nFormat = GetImportFormatNumberForShortName( OStringToOUString( aShortName, RTL_TEXTENCODING_UTF8) );

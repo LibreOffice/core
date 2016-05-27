@@ -481,14 +481,14 @@ Graphic SdrGrafObj::GetTransformedGraphic( SdrGrafObjTransformsAttrs nTransformF
     const Size      aDestSize( GetLogicRect().GetSize() );
     const bool      bMirror = bool( nTransformFlags & SdrGrafObjTransformsAttrs::MIRROR );
     const bool      bRotate = bool( nTransformFlags & SdrGrafObjTransformsAttrs::ROTATE ) &&
-        ( aGeo.nRotationAngle && aGeo.nRotationAngle != 18000 ) && ( GRAPHIC_NONE != eType );
+        ( aGeo.nRotationAngle && aGeo.nRotationAngle != 18000 ) && ( GraphicType::NONE != eType );
 
     // Need cropping info earlier
     const_cast<SdrGrafObj*>(this)->ImpSetAttrToGrafInfo();
     GraphicAttr aActAttr;
 
     if( SdrGrafObjTransformsAttrs::NONE != nTransformFlags &&
-        GRAPHIC_NONE != eType )
+        GraphicType::NONE != eType )
     {
         // Actually transform the graphic only in this case.
         // Cropping always happens, though.
@@ -595,8 +595,8 @@ void SdrGrafObj::ForceSwapIn() const
         pGraphic->FireSwapInRequest();
 
     if( pGraphic->IsSwappedOut() ||
-        ( pGraphic->GetType() == GRAPHIC_NONE ) ||
-        ( pGraphic->GetType() == GRAPHIC_DEFAULT ) )
+        ( pGraphic->GetType() == GraphicType::NONE ) ||
+        ( pGraphic->GetType() == GraphicType::Default ) )
     {
         Graphic aDefaultGraphic;
         aDefaultGraphic.SetDefaultType();
@@ -659,7 +659,7 @@ bool SdrGrafObj::IsLinkedGraphic() const
 
 void SdrGrafObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 {
-    bool bNoPresGrf = ( pGraphic->GetType() != GRAPHIC_NONE ) && !bEmptyPresObj;
+    bool bNoPresGrf = ( pGraphic->GetType() != GraphicType::NONE ) && !bEmptyPresObj;
 
     rInfo.bResizeFreeAllowed = aGeo.nRotationAngle % 9000 == 0 ||
                                aGeo.nRotationAngle % 18000 == 0 ||
@@ -733,7 +733,7 @@ OUString SdrGrafObj::TakeObjNameSingul() const
     {
         switch( pGraphic->GetType() )
         {
-            case GRAPHIC_BITMAP:
+            case GraphicType::Bitmap:
             {
                 const sal_uInt16 nId = ( ( pGraphic->IsTransparent() || static_cast<const SdrGrafTransparenceItem&>( GetObjectItem( SDRATTR_GRAFTRANSPARENCE ) ).GetValue() ) ?
                                      ( IsLinkedGraphic() ? STR_ObjNameSingulGRAFBMPTRANSLNK : STR_ObjNameSingulGRAFBMPTRANS ) :
@@ -743,11 +743,11 @@ OUString SdrGrafObj::TakeObjNameSingul() const
             }
             break;
 
-            case GRAPHIC_GDIMETAFILE:
+            case GraphicType::GdiMetafile:
                 sName.append(ImpGetResStr(IsLinkedGraphic() ? STR_ObjNameSingulGRAFMTFLNK : STR_ObjNameSingulGRAFMTF));
             break;
 
-            case GRAPHIC_NONE:
+            case GraphicType::NONE:
                 sName.append(ImpGetResStr(IsLinkedGraphic() ? STR_ObjNameSingulGRAFNONELNK : STR_ObjNameSingulGRAFNONE));
             break;
 
@@ -786,7 +786,7 @@ OUString SdrGrafObj::TakeObjNamePlural() const
     {
         switch( pGraphic->GetType() )
         {
-            case GRAPHIC_BITMAP:
+            case GraphicType::Bitmap:
             {
                 const sal_uInt16 nId = ( ( pGraphic->IsTransparent() || static_cast<const SdrGrafTransparenceItem&>( GetObjectItem( SDRATTR_GRAFTRANSPARENCE ) ).GetValue() ) ?
                                      ( IsLinkedGraphic() ? STR_ObjNamePluralGRAFBMPTRANSLNK : STR_ObjNamePluralGRAFBMPTRANS ) :
@@ -796,11 +796,11 @@ OUString SdrGrafObj::TakeObjNamePlural() const
             }
             break;
 
-            case GRAPHIC_GDIMETAFILE:
+            case GraphicType::GdiMetafile:
                 sName.append(ImpGetResStr(IsLinkedGraphic() ? STR_ObjNamePluralGRAFMTFLNK : STR_ObjNamePluralGRAFMTF));
             break;
 
-            case GRAPHIC_NONE:
+            case GraphicType::NONE:
                 sName.append(ImpGetResStr(IsLinkedGraphic() ? STR_ObjNamePluralGRAFNONELNK : STR_ObjNamePluralGRAFNONE));
             break;
 
@@ -1027,12 +1027,12 @@ void SdrGrafObj::StartAnimation( OutputDevice* /*pOutDev*/, const Point& /*rPoin
 
 bool SdrGrafObj::HasGDIMetaFile() const
 {
-    return( pGraphic->GetType() == GRAPHIC_GDIMETAFILE );
+    return( pGraphic->GetType() == GraphicType::GdiMetafile );
 }
 
 bool SdrGrafObj::isEmbeddedSvg() const
 {
-    return GRAPHIC_BITMAP == GetGraphicType() && GetGraphic().getSvgData().get();
+    return GraphicType::Bitmap == GetGraphicType() && GetGraphic().getSvgData().get();
 }
 
 GDIMetaFile SdrGrafObj::getMetafileFromEmbeddedSvg() const
@@ -1073,16 +1073,16 @@ SdrObject* SdrGrafObj::DoConvertToPolyObj(bool bBezier, bool bAddText ) const
         // use the old converter path over the MetaFile mechanism. Create Metafile from Svg
         // primitives here pretty directly
         aMtf = getMetafileFromEmbeddedSvg();
-        aGraphicType = GRAPHIC_GDIMETAFILE;
+        aGraphicType = GraphicType::GdiMetafile;
     }
-    else if(GRAPHIC_GDIMETAFILE == aGraphicType)
+    else if(GraphicType::GdiMetafile == aGraphicType)
     {
         aMtf = GetTransformedGraphic(SdrGrafObjTransformsAttrs::COLOR|SdrGrafObjTransformsAttrs::MIRROR).GetGDIMetaFile();
     }
 
     switch(aGraphicType)
     {
-        case GRAPHIC_GDIMETAFILE:
+        case GraphicType::GdiMetafile:
         {
             // Sort into group and return ONLY those objects that can be created from the MetaFile.
             ImpSdrGDIMetaFileImport aFilter(*GetModel(), GetLayer(), maRect);
@@ -1168,7 +1168,7 @@ SdrObject* SdrGrafObj::DoConvertToPolyObj(bool bBezier, bool bAddText ) const
 
             break;
         }
-        case GRAPHIC_BITMAP:
+        case GraphicType::Bitmap:
         {
             // create basic object and add fill
             pRetval = SdrRectObj::DoConvertToPolyObj(bBezier, bAddText);
@@ -1188,8 +1188,8 @@ SdrObject* SdrGrafObj::DoConvertToPolyObj(bool bBezier, bool bAddText ) const
             }
             break;
         }
-        case GRAPHIC_NONE:
-        case GRAPHIC_DEFAULT:
+        case GraphicType::NONE:
+        case GraphicType::Default:
         {
             pRetval = SdrRectObj::DoConvertToPolyObj(bBezier, bAddText);
             break;

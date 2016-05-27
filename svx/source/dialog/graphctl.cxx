@@ -173,7 +173,7 @@ void GraphCtrl::InitSdrModel()
 void GraphCtrl::SetGraphic( const Graphic& rGraphic, bool bNewModel )
 {
     // If possible we dither bitmaps for the display
-    if ( !bAnim && ( rGraphic.GetType() == GRAPHIC_BITMAP )  )
+    if ( !bAnim && ( rGraphic.GetType() == GraphicType::Bitmap )  )
     {
         if ( rGraphic.IsTransparent() )
         {
@@ -251,7 +251,7 @@ void GraphCtrl::Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRec
 {
     // #i72889# used splitted repaint to be able to paint an own background
     // even to the buffered view
-    const bool bGraphicValid(GRAPHIC_NONE != aGraphic.GetType());
+    const bool bGraphicValid(GraphicType::NONE != aGraphic.GetType());
 
     if (bSdrMode)
     {

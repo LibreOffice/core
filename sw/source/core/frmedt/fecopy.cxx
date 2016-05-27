@@ -1213,7 +1213,7 @@ bool SwFEShell::GetDrawObjGraphic( SotClipboardFormatId nFormat, Graphic& rGrf )
                     Graphic aGrf( *pGrf );
                     if( SotClipboardFormatId::GDIMETAFILE == nFormat )
                     {
-                        if( GRAPHIC_BITMAP != aGrf.GetType() )
+                        if( GraphicType::Bitmap != aGrf.GetType() )
                         {
                             rGrf = aGrf;
                             bConvert = false;
@@ -1240,7 +1240,7 @@ bool SwFEShell::GetDrawObjGraphic( SotClipboardFormatId nFormat, Graphic& rGrf )
                             rGrf = aMtf;
                         }
                     }
-                    else if( GRAPHIC_BITMAP == aGrf.GetType() )
+                    else if( GraphicType::Bitmap == aGrf.GetType() )
                     {
                         rGrf = aGrf;
                         bConvert = false;
@@ -1468,7 +1468,7 @@ void SwFEShell::Paste( SvStream& rStrm, SwPasteSdr nAction, const Point* pPt )
                     // for SdrGrafObj, use the graphic as fill style argument
                     const Graphic& rGraphic = pSdrGrafObj->GetGraphic();
 
-                    if(GRAPHIC_NONE != rGraphic.GetType() && GRAPHIC_DEFAULT != rGraphic.GetType())
+                    if(GraphicType::NONE != rGraphic.GetType() && GraphicType::Default != rGraphic.GetType())
                     {
                         aSet.Put(XFillBitmapItem(OUString(), rGraphic));
                         aSet.Put(XFillStyleItem(drawing::FillStyle_BITMAP));

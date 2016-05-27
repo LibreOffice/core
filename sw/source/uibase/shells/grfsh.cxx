@@ -494,10 +494,10 @@ void SwGrfShell::Execute(SfxRequest &rReq)
 
 void SwGrfShell::ExecAttr( SfxRequest &rReq )
 {
-    sal_uInt16 nGrfType;
+    GraphicType nGrfType;
     if( CNT_GRF == GetShell().GetCntType() &&
-        ( GRAPHIC_BITMAP == ( nGrfType = GetShell().GetGraphicType()) ||
-          GRAPHIC_GDIMETAFILE == nGrfType ))
+        ( GraphicType::Bitmap == ( nGrfType = GetShell().GetGraphicType()) ||
+          GraphicType::GdiMetafile == nGrfType ))
     {
         SfxItemSet aGrfSet( GetShell().GetAttrPool(), RES_GRFATR_BEGIN,
                                                       RES_GRFATR_END -1 );
@@ -620,7 +620,7 @@ void SwGrfShell::ExecAttr( SfxRequest &rReq )
         case SID_GRFFILTER_POPART:
         case SID_GRFFILTER_SEPIA:
         case SID_GRFFILTER_SOLARIZE:
-            if( GRAPHIC_BITMAP == nGrfType )
+            if( GraphicType::Bitmap == nGrfType )
             {
                 // #119353# - robust
                 const GraphicObject* pFilterObj( GetShell().GetGraphicObj() );
@@ -676,7 +676,7 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
 
         case SID_SAVE_GRAPHIC:
         case SID_EXTERNAL_EDIT:
-            if( rSh.GetGraphicType() == GRAPHIC_NONE )
+            if( rSh.GetGraphicType() == GraphicType::NONE )
                 bDisable = true;
             break;
 
@@ -758,7 +758,7 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
                 if ( pGrafObj )
                 {
                     if( pGrafObj->IsAnimated() ||
-                        GRAPHIC_GDIMETAFILE == pGrafObj->GetType() )
+                        GraphicType::GdiMetafile == pGrafObj->GetType() )
                         bDisable = true;
                     else
                         rSet.Put( SfxUInt16Item( nWhich, static_cast<const SwTransparencyGrf&>(
@@ -797,9 +797,9 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
                 // #i59688# load graphic only if type is unknown
                 else
                 {
-                    const sal_uInt16 eGraphicType( rSh.GetGraphicType() );
-                    if ( ( eGraphicType == GRAPHIC_NONE ||
-                           eGraphicType == GRAPHIC_DEFAULT ) &&
+                    const GraphicType eGraphicType( rSh.GetGraphicType() );
+                    if ( ( eGraphicType == GraphicType::NONE ||
+                           eGraphicType == GraphicType::Default ) &&
                          rSh.IsLinkedGrfSwapOut() )
                     {
                         rSet.DisableItem( nWhich );
@@ -808,7 +808,7 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
                     }
                     else
                     {
-                        bDisable = eGraphicType != GRAPHIC_BITMAP;
+                        bDisable = eGraphicType != GraphicType::Bitmap;
                     }
                 }
             }
@@ -817,7 +817,7 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
         case SID_OBJECT_CROP:
             {
                 bDisable = FlyProtectFlags::NONE != rSh.IsSelObjProtected( FlyProtectFlags::Content|FlyProtectFlags::Parent );
-                if( rSh.GetGraphicType() == GRAPHIC_NONE )
+                if( rSh.GetGraphicType() == GraphicType::NONE )
                     bDisable = true;
             }
             break;
@@ -909,7 +909,7 @@ void SwGrfShell::GetAttrStateForRotation(SfxItemSet &rSet)
         {
         case SID_ROTATE_GRAPHIC_LEFT:
         case SID_ROTATE_GRAPHIC_RIGHT:
-            if( rShell.GetGraphicType() == GRAPHIC_NONE )
+            if( rShell.GetGraphicType() == GraphicType::NONE )
             {
                 bDisable = true;
             }

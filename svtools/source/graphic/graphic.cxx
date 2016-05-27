@@ -161,8 +161,8 @@ uno::Sequence< sal_Int8 > SAL_CALL Graphic::getImplementationId()
 {
     ::sal_Int8 cRet = graphic::GraphicType::EMPTY;
 
-    if( mpGraphic && ( mpGraphic->GetType() != GRAPHIC_NONE ) )
-        cRet = ( ( mpGraphic->GetType() == GRAPHIC_BITMAP ) ? graphic::GraphicType::PIXEL : graphic::GraphicType::VECTOR );
+    if( mpGraphic && ( mpGraphic->GetType() != GraphicType::NONE ) )
+        cRet = ( ( mpGraphic->GetType() == GraphicType::Bitmap ) ? graphic::GraphicType::PIXEL : graphic::GraphicType::VECTOR );
 
     return cRet;
 }
@@ -176,7 +176,7 @@ awt::Size SAL_CALL Graphic::getSize(  ) throw (uno::RuntimeException, std::excep
     SolarMutexGuard aGuard;
 
     ::Size aVclSize;
-    if( mpGraphic && ( mpGraphic->GetType() != GRAPHIC_NONE ) )
+    if( mpGraphic && ( mpGraphic->GetType() != GraphicType::NONE ) )
         aVclSize = mpGraphic->GetSizePixel();
 
     return awt::Size( aVclSize.Width(), aVclSize.Height() );
@@ -187,7 +187,7 @@ uno::Sequence< ::sal_Int8 > SAL_CALL Graphic::getDIB(  ) throw (uno::RuntimeExce
 {
     SolarMutexGuard aGuard;
 
-    if( mpGraphic && ( mpGraphic->GetType() != GRAPHIC_NONE ) )
+    if( mpGraphic && ( mpGraphic->GetType() != GraphicType::NONE ) )
     {
         SvMemoryStream aMem;
 
@@ -205,7 +205,7 @@ uno::Sequence< ::sal_Int8 > SAL_CALL Graphic::getMaskDIB(  ) throw (uno::Runtime
 {
     SolarMutexGuard aGuard;
 
-    if( mpGraphic && ( mpGraphic->GetType() != GRAPHIC_NONE ) )
+    if( mpGraphic && ( mpGraphic->GetType() != GraphicType::NONE ) )
     {
         SvMemoryStream aMem;
 

@@ -889,8 +889,8 @@ void SwNoTextFrame::PaintPicture( vcl::RenderContext* pOut, const SwRect &rGrfAr
             }
             // #i85717#, #i90395# - check, if asynchronous retrieval
             // if input stream for the graphic is possible
-            else if ( ( rGrfObj.GetType() == GRAPHIC_DEFAULT ||
-                        rGrfObj.GetType() == GRAPHIC_NONE ) &&
+            else if ( ( rGrfObj.GetType() == GraphicType::Default ||
+                        rGrfObj.GetType() == GraphicType::NONE ) &&
                       pGrfNd->IsLinkedFile() &&
                       pGrfNd->IsAsyncRetrieveInputStreamPossible() )
             {
@@ -957,7 +957,7 @@ void SwNoTextFrame::PaintPicture( vcl::RenderContext* pOut, const SwRect &rGrfAr
             {
                 sal_uInt16 nResId = 0;
 
-                if( GRAPHIC_NONE == rGrfObj.GetType() )
+                if( GraphicType::NONE == rGrfObj.GetType() )
                     nResId = STR_COMCORE_READERROR;
                 else if ( !rGrfObj.GetGraphic().IsSupportedGraphic() )
                     nResId = STR_COMCORE_CANT_SHOW;
@@ -1031,7 +1031,7 @@ void SwNoTextFrame::PaintPicture( vcl::RenderContext* pOut, const SwRect &rGrfAr
             Size aSize(aAlignedGrfArea.SSize());
 
             const Graphic* pGraphic = pOLENd->GetGraphic();
-            if ( pGraphic && pGraphic->GetType() != GRAPHIC_NONE )
+            if ( pGraphic && pGraphic->GetType() != GraphicType::NONE )
             {
                 pGraphic->Draw( pOut, aPosition, aSize );
 

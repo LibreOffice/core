@@ -93,7 +93,7 @@ bool SgaObject::CreateThumb( const Graphic& rGraphic )
 {
     bool bRet = false;
 
-    if( rGraphic.GetType() == GRAPHIC_BITMAP )
+    if( rGraphic.GetType() == GraphicType::Bitmap )
     {
         BitmapEx    aBmpEx( rGraphic.GetBitmapEx() );
         Size        aBmpSize( aBmpEx.GetSizePixel() );
@@ -144,7 +144,7 @@ bool SgaObject::CreateThumb( const Graphic& rGraphic )
             }
         }
     }
-    else if( rGraphic.GetType() == GRAPHIC_GDIMETAFILE )
+    else if( rGraphic.GetType() == GraphicType::GdiMetafile )
     {
         const Size aPrefSize( rGraphic.GetPrefSize() );
         const double fFactor  = (double)aPrefSize.Width() / (double)aPrefSize.Height();

@@ -47,7 +47,7 @@ namespace drawinglayer
                     getBackgroundColor()));
             xRetval[0] = xRefBackground;
 
-            if(GRAPHIC_BITMAP == maSnapshot.GetType() || GRAPHIC_GDIMETAFILE == maSnapshot.GetType())
+            if(GraphicType::Bitmap == maSnapshot.GetType() || GraphicType::GdiMetafile == maSnapshot.GetType())
             {
                 const GraphicObject aGraphicObject(maSnapshot);
                 const GraphicAttr aGraphicAttr;

@@ -295,8 +295,8 @@ SwFrameFormat* SwWW8ImplReader::ImportOle(const Graphic* pGrf,
             pFormat = m_rDoc.getIDocumentContentOperations().InsertDrawObj(*m_pPaM, *pRet, *pFlySet );
     }
     else if (
-                GRAPHIC_GDIMETAFILE == aGraph.GetType() ||
-                GRAPHIC_BITMAP == aGraph.GetType()
+                GraphicType::GdiMetafile == aGraph.GetType() ||
+                GraphicType::Bitmap == aGraph.GetType()
             )
     {
         pFormat = m_rDoc.getIDocumentContentOperations().Insert(*m_pPaM, OUString(), OUString(), &aGraph, pFlySet,
@@ -404,8 +404,8 @@ SdrObject* SwWW8ImplReader::ImportOleBase( Graphic& rGraph,
         }
     }
 
-    if (GRAPHIC_GDIMETAFILE == rGraph.GetType() ||
-        GRAPHIC_BITMAP == rGraph.GetType())
+    if (GraphicType::GdiMetafile == rGraph.GetType() ||
+        GraphicType::Bitmap == rGraph.GetType())
     {
         ::SetProgressState(m_nProgress, m_pDocShell);     // Update
 

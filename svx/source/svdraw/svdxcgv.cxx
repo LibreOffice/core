@@ -455,7 +455,7 @@ BitmapEx SdrExchangeView::GetMarkedObjBitmapEx(bool bNoVDevIfOneBmpMarked) const
                 SdrObject*  pGrafObjTmp = GetMarkedObjectByIndex( 0 );
                 SdrGrafObj* pGrafObj = dynamic_cast<SdrGrafObj*>( pGrafObjTmp  );
 
-                if( pGrafObj && ( pGrafObj->GetGraphicType() == GRAPHIC_BITMAP ) )
+                if( pGrafObj && ( pGrafObj->GetGraphicType() == GraphicType::Bitmap ) )
                 {
                     aBmp = pGrafObj->GetTransformedGraphic().GetBitmapEx();
                 }
@@ -630,7 +630,7 @@ Graphic SdrExchangeView::GetObjGraphic( const SdrModel* pModel, const SdrObject*
         }
 
         // if graphic could not be retrieved => go the hard way and create a MetaFile
-        if( ( GRAPHIC_NONE == aRet.GetType() ) || ( GRAPHIC_DEFAULT == aRet.GetType() ) )
+        if( ( GraphicType::NONE == aRet.GetType() ) || ( GraphicType::Default == aRet.GetType() ) )
         {
             ScopedVclPtrInstance< VirtualDevice > pOut;
             GDIMetaFile     aMtf;

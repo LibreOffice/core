@@ -2948,13 +2948,13 @@ SdrObjectPtr XclImpPictureObj::DoCreateSdrObj( XclImpDffConverter& rDffConv, con
     // XclImpPictureObj instance but there are so many layers of indirection I
     // don't see an easy way. This way at least ensures that we can
     // avoid a 'blank' shape that can result from a failed control import
-    if ( !xSdrObj && IsOcxControl() && maGraphic.GetType() == GRAPHIC_NONE )
+    if ( !xSdrObj && IsOcxControl() && maGraphic.GetType() == GraphicType::NONE )
     {
         const_cast< XclImpPictureObj* >( this )->maGraphic =
                 SdrOle2Obj::GetEmptyOLEReplacementGraphic();
     }
     // no OLE - create a plain picture from IMGDATA record data
-    if( !xSdrObj && (maGraphic.GetType() != GRAPHIC_NONE) )
+    if( !xSdrObj && (maGraphic.GetType() != GraphicType::NONE) )
     {
         xSdrObj.reset( new SdrGrafObj( maGraphic, rAnchorRect ) );
         ConvertRectStyle( *xSdrObj );
@@ -3441,7 +3441,7 @@ SdrObjectPtr XclImpDffConverter::CreateSdrObject( const XclImpPictureObj& rPicOb
                     aGraphic = rPicObj.GetGraphic();
                     aVisArea = rPicObj.GetVisArea();
                 }
-                if( aGraphic.GetType() != GRAPHIC_NONE )
+                if( aGraphic.GetType() != GraphicType::NONE )
                 {
                     ErrCode nError = ERRCODE_NONE;
                     namespace cssea = ::com::sun::star::embed::Aspects;

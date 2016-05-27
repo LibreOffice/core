@@ -249,7 +249,7 @@ void GraphicObject::ImplAutoSwapIn()
                                 if( pIStm )
                                 {
                                     ReadGraphic( *pIStm, maGraphic );
-                                    mbAutoSwapped = ( maGraphic.GetType() != GRAPHIC_NONE );
+                                    mbAutoSwapped = ( maGraphic.GetType() != GraphicType::NONE );
                                 }
                             }
                         }
@@ -266,7 +266,7 @@ void GraphicObject::ImplAutoSwapIn()
                 }
                 else
                 {
-                    DBG_ASSERT( ( GRAPHIC_NONE == meType ) || ( GRAPHIC_DEFAULT == meType ),
+                    DBG_ASSERT( ( GraphicType::NONE == meType ) || ( GraphicType::Default == meType ),
                                 "GraphicObject::ImplAutoSwapIn: could not get stream to swap in graphic! (=>KA)" );
                 }
             }
@@ -285,7 +285,7 @@ bool GraphicObject::ImplGetCropParams( OutputDevice* pOut, Point& rPt, Size& rSz
 {
     bool bRet = false;
 
-    if( GetType() != GRAPHIC_NONE )
+    if( GetType() != GraphicType::NONE )
     {
         tools::Polygon aClipPoly( Rectangle( rPt, rSz ) );
         const sal_uInt16 nRot10 = pAttr->GetRotation() % 3600;
@@ -728,7 +728,7 @@ Graphic GraphicObject::GetTransformedGraphic( const Size& rDestSize, const MapMo
     Size aCropLeftTop;
     Size aCropRightBottom;
 
-    if( GRAPHIC_GDIMETAFILE == eType )
+    if( GraphicType::GdiMetafile == eType )
     {
         GDIMetaFile aMtf( aTransGraphic.GetGDIMetaFile() );
 
@@ -797,7 +797,7 @@ Graphic GraphicObject::GetTransformedGraphic( const Size& rDestSize, const MapMo
 
         aTransGraphic = aMtf;
     }
-    else if( GRAPHIC_BITMAP == eType )
+    else if( GraphicType::Bitmap == eType )
     {
         BitmapEx aBitmapEx( aTransGraphic.GetBitmapEx() );
         Rectangle aCropRect;
@@ -953,7 +953,7 @@ Graphic GraphicObject::GetTransformedGraphic( const GraphicAttr* pAttr ) const /
     {
         if( aAttr.IsSpecialDrawMode() || aAttr.IsAdjusted() || aAttr.IsMirrored() || aAttr.IsRotated() || aAttr.IsTransparent() )
         {
-            if( GetType() == GRAPHIC_BITMAP )
+            if( GetType() == GraphicType::Bitmap )
             {
                 if( IsAnimated() )
                 {
@@ -978,7 +978,7 @@ Graphic GraphicObject::GetTransformedGraphic( const GraphicAttr* pAttr ) const /
         }
         else
         {
-            if( ( GetType() == GRAPHIC_BITMAP ) && IsAnimated() )
+            if( ( GetType() == GraphicType::Bitmap ) && IsAnimated() )
             {
                 Animation aAnimation( maGraphic.GetAnimation() );
                 aAnimation.SetLoopCount( mnAnimationLoopCount );

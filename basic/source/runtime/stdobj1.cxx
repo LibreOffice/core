@@ -67,9 +67,9 @@ void SbStdPicture::PropType( SbxVariable* pVar, SbxArray*, bool bWrite )
     GraphicType eType = aGraphic.GetType();
     sal_Int16 nType = 0;
 
-    if( eType == GRAPHIC_BITMAP )
+    if( eType == GraphicType::Bitmap )
         nType = 1;
-    else if( eType != GRAPHIC_NONE )
+    else if( eType != GraphicType::NONE )
         nType = 2;
 
     pVar->PutInteger( nType );

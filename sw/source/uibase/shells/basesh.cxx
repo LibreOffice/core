@@ -166,7 +166,7 @@ static void lcl_UpdateIMapDlg( SwWrtShell& rSh )
 {
     Graphic aGrf( rSh.GetIMapGraphic() );
     GraphicType nGrfType = aGrf.GetType();
-    void* pEditObj = GRAPHIC_NONE != nGrfType && GRAPHIC_DEFAULT != nGrfType
+    void* pEditObj = GraphicType::NONE != nGrfType && GraphicType::Default != nGrfType
                         ? rSh.GetIMapInventor() : nullptr;
     std::unique_ptr<TargetList> pList(new TargetList);
     rSh.GetView().GetViewFrame()->GetTopFrame().GetTargetList(*pList);
@@ -182,7 +182,7 @@ static bool lcl_UpdateContourDlg( SwWrtShell &rSh, int nSel )
 {
     Graphic aGraf( rSh.GetIMapGraphic() );
     GraphicType nGrfType = aGraf.GetType();
-    bool bRet = GRAPHIC_NONE != nGrfType && GRAPHIC_DEFAULT != nGrfType;
+    bool bRet = GraphicType::NONE != nGrfType && GraphicType::Default != nGrfType;
     if( bRet )
     {
         OUString aGrfName;
@@ -1233,10 +1233,10 @@ void SwBaseShell::Execute(SfxRequest &rReq)
 
 IMPL_LINK_NOARG_TYPED(SwBaseShell, GraphicArrivedHdl, SwCursorShell&, void)
 {
-    sal_uInt16 nGrfType;
+    GraphicType nGrfType;
     SwWrtShell &rSh = GetShell();
     if( CNT_GRF == rSh.SwEditShell::GetCntType() &&
-        GRAPHIC_NONE != ( nGrfType = rSh.GetGraphicType() ) &&
+        GraphicType::NONE != ( nGrfType = rSh.GetGraphicType() ) &&
         !aGrfUpdateSlots.empty() )
     {
         bool bProtect = FlyProtectFlags::NONE != rSh.IsSelObjProtected(FlyProtectFlags::Content|FlyProtectFlags::Parent);
@@ -1311,7 +1311,7 @@ IMPL_LINK_NOARG_TYPED(SwBaseShell, GraphicArrivedHdl, SwCursorShell&, void)
             case SID_GRFFILTER_POPART:
             case SID_GRFFILTER_SEPIA:
             case SID_GRFFILTER_SOLARIZE:
-                bSetState = bState = GRAPHIC_BITMAP == nGrfType;
+                bSetState = bState = GraphicType::Bitmap == nGrfType;
                 break;
             }
 
@@ -1444,7 +1444,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                         if ( !bHas &&
                              ( !bFrameSel ||
                                ( bIsGraphicSelection &&
-                                 rSh.GetGraphicType() == GRAPHIC_NONE ) ) )
+                                 rSh.GetGraphicType() == GraphicType::NONE ) ) )
                         {
                             rSet.DisableItem( nWhich );
                         }
@@ -1531,9 +1531,9 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                         // #i75481#
                         // apply fix #i59688# only for selected graphics
                         if ( nSel & nsSelectionType::SEL_GRF )
-                            bDisable = GRAPHIC_NONE == rSh.GetGraphicType();
+                            bDisable = GraphicType::NONE == rSh.GetGraphicType();
                         else
-                            bDisable = GRAPHIC_NONE == rSh.GetIMapGraphic().GetType();
+                            bDisable = GraphicType::NONE == rSh.GetIMapGraphic().GetType();
                     }
 
                     if( bDisable )
@@ -1718,7 +1718,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                                     // #i102253# applied patch from OD (see task)
                                     bDisable =
                                         nSel & nsSelectionType::SEL_FRM ||
-                                        GRAPHIC_NONE == rSh.GetIMapGraphic().GetType();
+                                        GraphicType::NONE == rSh.GetIMapGraphic().GetType();
                                 }
                             }
                             bSet = !bDisable && rWrap.IsContour();

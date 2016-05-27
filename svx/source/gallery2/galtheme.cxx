@@ -843,7 +843,7 @@ bool GalleryTheme::InsertGraphic( const Graphic& rGraphic, sal_uIntPtr nInsertPo
 {
     bool bRet = false;
 
-    if( rGraphic.GetType() != GRAPHIC_NONE )
+    if( rGraphic.GetType() != GraphicType::NONE )
     {
         ConvertDataFormat nExportFormat = ConvertDataFormat::Unknown;
         const GfxLink     aGfxLink( ( (Graphic&) rGraphic ).GetLink() );
@@ -872,7 +872,7 @@ bool GalleryTheme::InsertGraphic( const Graphic& rGraphic, sal_uIntPtr nInsertPo
         }
         else
         {
-            if( rGraphic.GetType() == GRAPHIC_BITMAP )
+            if( rGraphic.GetType() == GraphicType::Bitmap )
             {
                 if( rGraphic.IsAnimated() )
                     nExportFormat = ConvertDataFormat::GIF;

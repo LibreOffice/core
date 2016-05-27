@@ -948,7 +948,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             if( rMarkList.GetMarkCount() == 1 )
             {
                 SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
-                if( pObj && dynamic_cast< const SdrGrafObj *>( pObj ) !=  nullptr && static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GRAPHIC_BITMAP )
+                if( pObj && dynamic_cast< const SdrGrafObj *>( pObj ) !=  nullptr && static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GraphicType::Bitmap )
                 {
                     GraphicObject aGraphicObject( static_cast<SdrGrafObj*>( pObj )->GetGraphicObject() );
                     {
@@ -967,7 +967,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             if( rMarkList.GetMarkCount() == 1 )
             {
                 SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
-                if( pObj && dynamic_cast< const SdrGrafObj *>( pObj ) !=  nullptr && static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GRAPHIC_BITMAP )
+                if( pObj && dynamic_cast< const SdrGrafObj *>( pObj ) !=  nullptr && static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GraphicType::Bitmap )
                 {
                     GraphicObject aGraphicObject( static_cast<SdrGrafObj*>(pObj)->GetGraphicObject() );
                     m_ExternalEdits.push_back(
@@ -988,7 +988,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             {
                 SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
 
-                if( pObj && dynamic_cast< const SdrGrafObj *>( pObj ) !=  nullptr && static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GRAPHIC_BITMAP )
+                if( pObj && dynamic_cast< const SdrGrafObj *>( pObj ) !=  nullptr && static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GraphicType::Bitmap )
                 {
                     SdrGrafObj* pGraphicObj = static_cast<SdrGrafObj*>(pObj);
                     ScopedVclPtrInstance< CompressGraphicsDialog > dialog( GetParentWindow(), pGraphicObj, GetViewFrame()->GetBindings() );

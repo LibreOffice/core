@@ -148,12 +148,12 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
         Graphic aGrf;
 
         if( sfx2::LinkManager::GetGraphicFromAny( rMimeType, rValue, aGrf ) &&
-            ( GRAPHIC_DEFAULT != aGrf.GetType() ||
-              GRAPHIC_DEFAULT != rGrfObj.GetType() ) )
+            ( GraphicType::Default != aGrf.GetType() ||
+              GraphicType::Default != rGrfObj.GetType() ) )
         {
             aGrfSz = ::GetGraphicSizeTwip( aGrf, nullptr );
 
-            if( bGraphicPieceArrived && GRAPHIC_DEFAULT != aGrf.GetType() &&
+            if( bGraphicPieceArrived && GraphicType::Default != aGrf.GetType() &&
                 ( !aOldSz.Width() || !aOldSz.Height() ) )
             {
                 // If only a part arrives, but the size is not set
@@ -237,7 +237,7 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
 
                     if( pBLink != this &&
                         ( !bSwapIn ||
-                            GRAPHIC_DEFAULT == pGrfNd->GetGrfObj().GetType()))
+                            GraphicType::Default == pGrfNd->GetGrfObj().GetType()))
                     {
                         Size aPreArriveSize(pGrfNd->GetTwipSize());
 

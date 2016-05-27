@@ -592,7 +592,7 @@ bool SvxAreaTabPage::FillItemSet( SfxItemSet* rAttrs )
             case drawing::FillStyle_BITMAP:
             {
                 //UUUU
-                if(mbDirectGraphicSet && GRAPHIC_NONE != maDirectGraphic.GetType())
+                if(mbDirectGraphicSet && GraphicType::NONE != maDirectGraphic.GetType())
                 {
                     const XFillBitmapItem aXBmpItem(maDirectName, maDirectGraphic);
                     rAttrs->Put(XFillStyleItem(drawing::FillStyle_BITMAP));
@@ -1447,7 +1447,7 @@ IMPL_LINK_NOARG_TYPED( SvxAreaTabPage, ClickImportHdl_Impl, Button*, void )
         const int nError(aDlg.GetGraphic(maDirectGraphic));
         LeaveWait();
 
-        if(!nError && GRAPHIC_NONE != maDirectGraphic.GetType())
+        if(!nError && GraphicType::NONE != maDirectGraphic.GetType())
         {
             // extract name from filename
             const INetURLObject aURL(aDlg.GetPath());

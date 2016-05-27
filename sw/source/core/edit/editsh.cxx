@@ -237,7 +237,7 @@ const Graphic* SwEditShell::GetGraphic( bool bWait ) const
     const Graphic* pGrf( nullptr );
     if ( pGrfNode )
     {
-        pGrf = &(pGrfNode->GetGrf(bWait && GRAPHIC_DEFAULT == pGrfNode->GetGrf().GetType()));
+        pGrf = &(pGrfNode->GetGrf(bWait && GraphicType::Default == pGrfNode->GetGrf().GetType()));
     }
     return pGrf;
 }
@@ -247,7 +247,7 @@ bool SwEditShell::IsLinkedGrfSwapOut() const
     SwGrfNode *pGrfNode = GetGrfNode_();
     return pGrfNode &&
         ( pGrfNode->IsLinkedFile() &&
-          ( GRAPHIC_DEFAULT == pGrfNode->GetGrfObj().GetType() ||
+          ( GraphicType::Default == pGrfNode->GetGrfObj().GetType() ||
             pGrfNode->GetGrfObj().IsSwappedOut()));
 }
 
@@ -257,10 +257,10 @@ const GraphicObject* SwEditShell::GetGraphicObj() const
     return pGrfNode ? &(pGrfNode->GetGrfObj()) : nullptr;
 }
 
-sal_uInt16 SwEditShell::GetGraphicType() const
+GraphicType SwEditShell::GetGraphicType() const
 {
     SwGrfNode *pGrfNode = GetGrfNode_();
-    return static_cast<sal_uInt16>(pGrfNode ? pGrfNode->GetGrfObj().GetType() : GRAPHIC_NONE);
+    return pGrfNode ? pGrfNode->GetGrfObj().GetType() : GraphicType::NONE;
 }
 
 // returns the size of a graphic in <rSz> if CurrentCursor->GetPoint() points to a SwGrfNode and
@@ -585,7 +585,7 @@ Graphic SwEditShell::GetIMapGraphic() const
         if( rNd.IsGrfNode() )
         {
             SwGrfNode & rGrfNode(static_cast<SwGrfNode&>(rNd));
-            aRet = rGrfNode.GetGrf(GRAPHIC_DEFAULT == rGrfNode.GetGrf().GetType());
+            aRet = rGrfNode.GetGrf(GraphicType::Default == rGrfNode.GetGrf().GetType());
         }
         else if ( rNd.IsOLENode() )
         {

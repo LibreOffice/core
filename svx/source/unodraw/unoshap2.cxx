@@ -1567,7 +1567,7 @@ bool SvxGraphicObject::getPropertyValueImpl( const OUString& rName, const SfxIte
     {
         const Graphic& rGraphic = static_cast< SdrGrafObj*>( mpObj.get() )->GetGraphic();
 
-        if(rGraphic.GetType() != GRAPHIC_GDIMETAFILE)
+        if(rGraphic.GetType() != GraphicType::GdiMetafile)
         {
             // pack object in a bitmap
             Reference< css::awt::XBitmap >  xBitmap( VCLUnoHelper::CreateBitmap(static_cast< SdrGrafObj*>( mpObj.get() )->GetGraphic().GetBitmapEx()) );

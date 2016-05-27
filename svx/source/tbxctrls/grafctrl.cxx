@@ -657,8 +657,8 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
                 SdrGrafObj* pObj = static_cast<SdrGrafObj*>( rMarkList.GetMark( 0 )->GetMarkedSdrObj() );
 
                 if( pObj && dynamic_cast<const SdrGrafObj*>( pObj) !=  nullptr &&
-                    ( pObj->GetGraphicType() != GRAPHIC_NONE ) &&
-                    ( pObj->GetGraphicType() != GRAPHIC_DEFAULT ) )
+                    ( pObj->GetGraphicType() != GraphicType::NONE ) &&
+                    ( pObj->GetGraphicType() != GraphicType::Default ) )
                 {
                     SfxItemSet          aGrfAttr( rPool, SDRATTR_GRAFCROP, SDRATTR_GRAFCROP, 0 );
                     const SfxMapUnit    eOldMetric = rPool.GetMetric( 0 );
@@ -833,8 +833,8 @@ void SvxGrafAttrHelper::GetGrafAttrState( SfxItemSet& rSet, SdrView& rView )
         SdrGrafObj* pGrafObj = dynamic_cast< SdrGrafObj* >( rMarkList.GetMark( i )->GetMarkedSdrObj() );
 
         if( !pGrafObj ||
-            ( pGrafObj->GetGraphicType() == GRAPHIC_NONE ) ||
-            ( pGrafObj->GetGraphicType() == GRAPHIC_DEFAULT  ))
+            ( pGrafObj->GetGraphicType() == GraphicType::NONE ) ||
+            ( pGrafObj->GetGraphicType() == GraphicType::Default  ))
         {
             bEnableColors = bEnableTransparency = bEnableCrop = false;
             break;

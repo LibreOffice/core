@@ -233,11 +233,11 @@ void GraphicObjectTest::testSizeBasedAutoSwap()
 
 void GraphicObjectTest::testTdf88836()
 {
-    // Construction with empty bitmap -> type should be GRAPHIC_NONE
+    // Construction with empty bitmap -> type should be GraphicType::NONE
     Graphic aGraphic = Bitmap();
-    CPPUNIT_ASSERT_EQUAL(GRAPHIC_NONE, aGraphic.GetType());
+    CPPUNIT_ASSERT_EQUAL(int(GraphicType::NONE), int(aGraphic.GetType()));
     aGraphic = Graphic(BitmapEx());
-    CPPUNIT_ASSERT_EQUAL(GRAPHIC_NONE, aGraphic.GetType());
+    CPPUNIT_ASSERT_EQUAL(int(GraphicType::NONE), int(aGraphic.GetType()));
 }
 
 void GraphicObjectTest::testTdf88935()

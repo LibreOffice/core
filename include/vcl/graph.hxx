@@ -34,12 +34,12 @@
 #include <basegfx/vector/b2dsize.hxx>
 
 
-enum GraphicType
+enum class GraphicType
 {
-    GRAPHIC_NONE,
-    GRAPHIC_BITMAP,
-    GRAPHIC_GDIMETAFILE,
-    GRAPHIC_DEFAULT
+    NONE,
+    Bitmap,
+    GdiMetafile,
+    Default
 };
 
 namespace com { namespace sun { namespace star { namespace graphic { class XGraphic;} } } }

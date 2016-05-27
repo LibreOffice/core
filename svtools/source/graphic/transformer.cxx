@@ -81,7 +81,7 @@ uno::Reference< graphic::XGraphic > SAL_CALL GraphicTransformer::colorChange(
     BitmapColor aColorTo( static_cast< sal_uInt8 >( nColorTo ), static_cast< sal_uInt8 >( nColorTo >> 8 ), static_cast< sal_uInt8 >( nColorTo  >> 16 ) );
     const sal_uInt8 cIndexFrom = aColorFrom.GetBlueOrIndex();
 
-    if ( aGraphic.GetType() == GRAPHIC_BITMAP || aGraphic.GetType() == GRAPHIC_GDIMETAFILE )
+    if ( aGraphic.GetType() == GraphicType::Bitmap || aGraphic.GetType() == GraphicType::GdiMetafile )
     {
         BitmapEx    aBitmapEx( aGraphic.GetBitmapEx() );
         Bitmap      aBitmap( aBitmapEx.GetBitmap() );

@@ -81,7 +81,7 @@ namespace drawinglayer
 
             const GraphicObject& rGraphicObject = getGraphicObject();
             Graphic aTransformedGraphic(rGraphicObject.GetGraphic());
-            const bool isBitmap(GRAPHIC_BITMAP == aTransformedGraphic.GetType() && !aTransformedGraphic.getSvgData().get());
+            const bool isBitmap(GraphicType::Bitmap == aTransformedGraphic.GetType() && !aTransformedGraphic.getSvgData().get());
             const bool isAdjusted(getGraphicAttr().IsAdjusted());
             const bool isDrawMode(GRAPHICDRAWMODE_STANDARD != getGraphicAttr().GetDrawMode());
 

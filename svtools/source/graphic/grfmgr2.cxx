@@ -92,7 +92,7 @@ bool GraphicManager::DrawObj( OutputDevice* pOut, const Point& rPt, const Size& 
 
     rCached = false;
 
-    if( ( rObj.GetType() == GRAPHIC_BITMAP ) || ( rObj.GetType() == GRAPHIC_GDIMETAFILE ) )
+    if( ( rObj.GetType() == GraphicType::Bitmap ) || ( rObj.GetType() == GraphicType::GdiMetafile ) )
     {
         // create output and fill cache
 
@@ -245,7 +245,7 @@ bool GraphicManager::ImplDraw( OutputDevice* pOut, const Point& rPt,
 
     if( rGraphic.IsSupportedGraphic() && !rObj.IsSwappedOut() )
     {
-        if( GRAPHIC_BITMAP == rGraphic.GetType() )
+        if( GraphicType::Bitmap == rGraphic.GetType() )
         {
             const BitmapEx aSrcBmpEx( rGraphic.GetBitmapEx() );
 
@@ -1891,7 +1891,7 @@ bool GraphicObject::ImplDrawTiled( OutputDevice* pOut, const Rectangle& rArea, c
 
     // #i42643# Casting to Int64, to avoid integer overflow for
     // huge-DPI output devices
-    if( GetGraphic().GetType() == GRAPHIC_BITMAP &&
+    if( GetGraphic().GetType() == GraphicType::Bitmap &&
         static_cast<sal_Int64>(rSizePixel.Width()) * rSizePixel.Height() <
         static_cast<sal_Int64>(nTileCacheSize1D)*nTileCacheSize1D )
     {
@@ -1996,7 +1996,7 @@ bool GraphicObject::ImplDrawTiled( OutputDevice& rOut, const Point& rPosPixel,
     int     nX, nY;
 
     // #107607# Use logical coordinates for metafile playing, too
-    bool    bDrawInPixel( rOut.GetConnectMetaFile() == nullptr && GRAPHIC_BITMAP == GetType() );
+    bool    bDrawInPixel( rOut.GetConnectMetaFile() == nullptr && GraphicType::Bitmap == GetType() );
     bool    bRet = false;
 
     // #105229# Switch off mapping (converting to logic and back to

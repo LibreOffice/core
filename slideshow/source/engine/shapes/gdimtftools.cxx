@@ -133,7 +133,7 @@ public:
 
         Graphic aGraphic( mxGraphic );
 
-        if( aGraphic.GetType() == GRAPHIC_BITMAP ||
+        if( aGraphic.GetType() == GraphicType::Bitmap ||
             (bForeignSource &&
              hasUnsupportedActions(aGraphic.GetGDIMetaFile()) ) )
         {

@@ -234,7 +234,7 @@ void SvxGrfCropPage::Reset( const SfxItemSet *rSet )
         if( pGrf )
         {
             aOrigSize = GetGrfOrigSize( *pGrf );
-            if (pGrf->GetType() == GRAPHIC_BITMAP && aOrigSize.Width() && aOrigSize.Height())
+            if (pGrf->GetType() == GraphicType::Bitmap && aOrigSize.Width() && aOrigSize.Height())
             {
                 Bitmap aBitmap = pGrf->GetBitmap();
                 aOrigPixelSize = aBitmap.GetSizePixel();
@@ -388,7 +388,7 @@ void SvxGrfCropPage::ActivatePage(const SfxItemSet& rSet)
         {
             m_pExampleWN->SetGraphic( *pGrf );
             aOrigSize = GetGrfOrigSize( *pGrf );
-            if (pGrf->GetType() == GRAPHIC_BITMAP && aOrigSize.Width() > 1 && aOrigSize.Height() > 1) {
+            if (pGrf->GetType() == GraphicType::Bitmap && aOrigSize.Width() > 1 && aOrigSize.Height() > 1) {
                 Bitmap aBitmap = pGrf->GetBitmap();
                 aOrigPixelSize = aBitmap.GetSizePixel();
             }

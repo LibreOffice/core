@@ -119,7 +119,7 @@ sal_uInt16 XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileNam
                                  const OUString& rFilterName, const XOutFlags nFlags,
                                  const Size* pMtfSize_100TH_MM )
 {
-    if( rGraphic.GetType() != GRAPHIC_NONE )
+    if( rGraphic.GetType() != GraphicType::NONE )
     {
         INetURLObject   aURL( rFileName );
         Graphic         aGraphic;
@@ -177,7 +177,7 @@ sal_uInt16 XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileNam
             if( ( nFlags & XOutFlags::UseNativeIfPossible ) &&
                 !( nFlags & XOutFlags::MirrorHorz ) &&
                 !( nFlags & XOutFlags::MirrorVert ) &&
-                ( rGraphic.GetType() != GRAPHIC_GDIMETAFILE ) && rGraphic.IsLink() )
+                ( rGraphic.GetType() != GraphicType::GdiMetafile ) && rGraphic.IsLink() )
             {
                 // try to write native link
                 const GfxLink aGfxLink( ( (Graphic&) rGraphic ).GetLink() );
@@ -249,7 +249,7 @@ sal_uInt16 XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileNam
                         aGraphic = rGraphic;
                     else
                     {
-                        if( pMtfSize_100TH_MM && ( rGraphic.GetType() != GRAPHIC_BITMAP ) )
+                        if( pMtfSize_100TH_MM && ( rGraphic.GetType() != GraphicType::Bitmap ) )
                         {
                             ScopedVclPtrInstance< VirtualDevice > pVDev;
                             const Size    aSize( pVDev->LogicToPixel( *pMtfSize_100TH_MM, MAP_100TH_MM ) );
@@ -282,7 +282,7 @@ sal_uInt16 XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileNam
                 }
                 else
                 {
-                    if( pMtfSize_100TH_MM && ( rGraphic.GetType() != GRAPHIC_BITMAP ) )
+                    if( pMtfSize_100TH_MM && ( rGraphic.GetType() != GraphicType::Bitmap ) )
                     {
                         ScopedVclPtrInstance< VirtualDevice > pVDev;
                         const Size      aSize( pVDev->LogicToPixel( *pMtfSize_100TH_MM, MAP_100TH_MM ) );
@@ -310,7 +310,7 @@ sal_uInt16 XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileNam
                     aGraphic = MirrorGraphic( aGraphic, nBmpMirrorFlags );
                 }
 
-                if( ( GRFILTER_FORMAT_NOTFOUND != nFilter ) && ( aGraphic.GetType() != GRAPHIC_NONE ) )
+                if( ( GRFILTER_FORMAT_NOTFOUND != nFilter ) && ( aGraphic.GetType() != GraphicType::NONE ) )
                 {
                     if( !(nFlags & XOutFlags::DontAddExtension) )
                         aURL.setExtension( aExt );

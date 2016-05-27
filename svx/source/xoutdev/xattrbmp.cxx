@@ -481,11 +481,11 @@ bool XFillBitmapItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
     if( bSetURL )
     {
         GraphicObject aGraphicObject  = GraphicObject::CreateGraphicObjectFromURL(aURL);
-        if( aGraphicObject.GetType() != GRAPHIC_NONE )
+        if( aGraphicObject.GetType() != GraphicType::NONE )
             maGraphicObject = aGraphicObject;
 
         // #121194# Prefer GraphicObject over bitmap object if both are provided
-        if(bSetBitmap && GRAPHIC_NONE != maGraphicObject.GetType())
+        if(bSetBitmap && GraphicType::NONE != maGraphicObject.GetType())
         {
             bSetBitmap = false;
         }

@@ -57,7 +57,7 @@ namespace unographic {
 GraphicDescriptor::GraphicDescriptor() :
     ::comphelper::PropertySetHelper( createPropertySetInfo(), SAL_NO_ACQUIRE ),
     mpGraphic( nullptr ),
-    meType( GRAPHIC_NONE ),
+    meType( GraphicType::NONE ),
     mnBitsPerPixel ( 0 ),
     mbTransparent ( false ),
     mbAlpha( false ),
@@ -100,7 +100,7 @@ void GraphicDescriptor::implCreate( SvStream& rIStm, const OUString* pURL )
 
     mpGraphic = nullptr;
     maMimeType.clear();
-    meType = GRAPHIC_NONE;
+    meType = GraphicType::NONE;
     mnBitsPerPixel = 0;
     mbTransparent = false;
 
@@ -144,7 +144,7 @@ void GraphicDescriptor::implCreate( SvStream& rIStm, const OUString* pURL )
 
         if( graphic::GraphicType::EMPTY != cType )
         {
-            meType = ( ( graphic::GraphicType::PIXEL == cType ) ? GRAPHIC_BITMAP : GRAPHIC_GDIMETAFILE );
+            meType = ( ( graphic::GraphicType::PIXEL == cType ) ? GraphicType::Bitmap : GraphicType::GdiMetafile );
             maMimeType = OUString( pMimeType, strlen(pMimeType), RTL_TEXTENCODING_ASCII_US );
             maSizePixel = aDescriptor.GetSizePixel();
             maSize100thMM = aDescriptor.GetSize_100TH_MM();
@@ -306,8 +306,8 @@ void GraphicDescriptor::_getPropertyValues( const comphelper::PropertyMapEntry**
             {
                 const GraphicType eType( mpGraphic ? mpGraphic->GetType() : meType );
 
-                *pValues <<= ( ( eType == GRAPHIC_BITMAP ? graphic::GraphicType::PIXEL :
-                                ( eType == GRAPHIC_GDIMETAFILE ? graphic::GraphicType::VECTOR :
+                *pValues <<= ( ( eType == GraphicType::Bitmap ? graphic::GraphicType::PIXEL :
+                                ( eType == GraphicType::GdiMetafile ? graphic::GraphicType::VECTOR :
                                 graphic::GraphicType::EMPTY ) ) );
             }
             break;
@@ -347,7 +347,7 @@ void GraphicDescriptor::_getPropertyValues( const comphelper::PropertyMapEntry**
                             aMimeType = OUString::createFromAscii( pMimeType );
                     }
 
-                    if( aMimeType.isEmpty() && ( mpGraphic->GetType() != GRAPHIC_NONE ) )
+                    if( aMimeType.isEmpty() && ( mpGraphic->GetType() != GraphicType::NONE ) )
                         aMimeType = MIMETYPE_VCLGRAPHIC;
                 }
                 else
@@ -363,7 +363,7 @@ void GraphicDescriptor::_getPropertyValues( const comphelper::PropertyMapEntry**
 
                 if( mpGraphic )
                 {
-                    if( mpGraphic->GetType() == GRAPHIC_BITMAP )
+                    if( mpGraphic->GetType() == GraphicType::Bitmap )
                     {
                         const Size aSizePix( mpGraphic->GetBitmapEx().GetSizePixel() );
                         aAWTSize = awt::Size( aSizePix.Width(), aSizePix.Height() );
@@ -401,7 +401,7 @@ void GraphicDescriptor::_getPropertyValues( const comphelper::PropertyMapEntry**
 
                 if( mpGraphic )
                 {
-                    if( mpGraphic->GetType() == GRAPHIC_BITMAP )
+                    if( mpGraphic->GetType() == GraphicType::Bitmap )
                         nBitsPerPixel = mpGraphic->GetBitmapEx().GetBitmap().GetBitCount();
                 }
                 else

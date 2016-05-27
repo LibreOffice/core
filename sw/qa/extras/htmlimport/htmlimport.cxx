@@ -77,10 +77,10 @@ DECLARE_HTMLIMPORT_TEST(testInlinedImage, "inlined_image.html")
         if (SwGrfNode *pGrfNode = pNode->GetGrfNode())
         {
             // FIXME? For some reason without the fix in 72703173066a2db5c977d422ace
-            // I was getting GRAPHIC_NONE from SwEditShell::GetGraphicType() when
+            // I was getting GraphicType::NONE from SwEditShell::GetGraphicType() when
             // running LibreOffice but cannot reproduce that in a unit test here. :-(
             // So, this does not really test anything.
-            CPPUNIT_ASSERT(pGrfNode->GetGrfObj().GetType() != GRAPHIC_NONE);
+            CPPUNIT_ASSERT(pGrfNode->GetGrfObj().GetType() != GraphicType::NONE);
             break;
         }
     }

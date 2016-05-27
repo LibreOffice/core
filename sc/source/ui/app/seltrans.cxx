@@ -92,7 +92,7 @@ ScSelectionTransferObj* ScSelectionTransferObj::CreateFromView( ScTabView* pView
 
                         if ( nSdrObjKind == OBJ_GRAF )
                         {
-                            if ( static_cast<SdrGrafObj*>(pObj)->GetGraphic().GetType() == GRAPHIC_BITMAP )
+                            if ( static_cast<SdrGrafObj*>(pObj)->GetGraphic().GetType() == GraphicType::Bitmap )
                                 eMode = SC_SELTRANS_DRAW_BITMAP;
                             else
                                 eMode = SC_SELTRANS_DRAW_GRAPHIC;

@@ -834,7 +834,7 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
                 if( pObj && dynamic_cast<const SdrGrafObj*>( pObj) != nullptr && !static_cast<SdrGrafObj*>(pObj)->HasText() )
                 {
                     aGraphic = static_cast<SdrGrafObj*>(pObj)->GetTransformedGraphic();
-                    if ( aGraphic.GetType() == GRAPHIC_BITMAP )
+                    if ( aGraphic.GetType() == GraphicType::Bitmap )
                     {
                         Size aSizePixel( aGraphic.GetSizePixel() );
                         if( rSettings.mnWidth && rSettings.mnHeight &&

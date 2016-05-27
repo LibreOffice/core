@@ -99,7 +99,7 @@ void GraphicPreviewWindow::ScaleImageToFit()
         mpOrigGraphic->GetPrefMapMode()));
     Size aGrfSize(aSizePixel);
 
-    if( mpOrigGraphic->GetType() == GRAPHIC_BITMAP &&
+    if( mpOrigGraphic->GetType() == GraphicType::Bitmap &&
         aPreviewSize.Width() && aPreviewSize.Height() &&
         aGrfSize.Width() && aGrfSize.Height() )
     {
@@ -147,7 +147,7 @@ GraphicFilterDialog::GraphicFilterDialog(vcl::Window* pParent,
     , maSizePixel(LogicToPixel(rGraphic.GetPrefSize(),
         rGraphic.GetPrefMapMode()))
 {
-    bIsBitmap = rGraphic.GetType() == GRAPHIC_BITMAP;
+    bIsBitmap = rGraphic.GetType() == GraphicType::Bitmap;
 
     maTimer.SetTimeoutHdl( LINK( this, GraphicFilterDialog, ImplPreviewTimeoutHdl ) );
     maTimer.SetTimeout( 5 );

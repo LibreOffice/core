@@ -478,7 +478,7 @@ uno::Reference< ::graphic::XGraphic > SAL_CALL GraphicProvider::queryGraphic( co
 
             if( ( rFilter.ImportGraphic( aVCLGraphic, aPath, *pIStm,
                                          GRFILTER_FORMAT_DONTKNOW, nullptr, GraphicFilterImportFlags::NONE, pExtHeader ) == GRFILTER_OK ) &&
-                ( aVCLGraphic.GetType() != GRAPHIC_NONE ) )
+                ( aVCLGraphic.GetType() != GraphicType::NONE ) )
             {
                 ::unographic::Graphic* pUnoGraphic = new ::unographic::Graphic;
 
@@ -602,7 +602,7 @@ void ImplApplyFilterData( ::Graphic& rGraphic, uno::Sequence< beans::PropertyVal
         else if (aName == "ImageResolution")
             aValue >>= nImageResolution;
     }
-    if ( rGraphic.GetType() == GRAPHIC_BITMAP )
+    if ( rGraphic.GetType() == GraphicType::Bitmap )
     {
         if(rGraphic.getSvgData().get())
         {
@@ -623,7 +623,7 @@ void ImplApplyFilterData( ::Graphic& rGraphic, uno::Sequence< beans::PropertyVal
             ImplApplyBitmapScaling( rGraphic, nPixelWidth, nPixelHeight );
         }
     }
-    else if ( ( rGraphic.GetType() == GRAPHIC_GDIMETAFILE ) && nImageResolution )
+    else if ( ( rGraphic.GetType() == GraphicType::GdiMetafile ) && nImageResolution )
     {
         ScopedVclPtrInstance< VirtualDevice > aDummyVDev;
         GDIMetaFile aMtf( rGraphic.GetGDIMetaFile() );
@@ -812,7 +812,7 @@ void SAL_CALL GraphicProvider::storeGraphic( const uno::Reference< ::graphic::XG
                 const uno::Reference< XInterface >  xIFace( rxGraphic, uno::UNO_QUERY );
                 const ::Graphic*                    pGraphic = ::unographic::Graphic::getImplementation( xIFace );
 
-                if( pGraphic && ( pGraphic->GetType() != GRAPHIC_NONE ) )
+                if( pGraphic && ( pGraphic->GetType() != GraphicType::NONE ) )
                 {
                     ::Graphic aGraphic( *pGraphic );
                     ImplApplyFilterData( aGraphic, aFilterDataSeq );

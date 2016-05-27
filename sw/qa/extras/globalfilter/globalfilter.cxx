@@ -189,7 +189,7 @@ void Test::testLinkedGraphicRT()
                 }
                 const GraphicObject& rGraphicObj = pGrfNode->GetGrfObj(true);
                 CPPUNIT_ASSERT_MESSAGE( sFailedMessage.getStr(), !rGraphicObj.IsSwappedOut());
-                CPPUNIT_ASSERT_EQUAL_MESSAGE( sFailedMessage.getStr(), GRAPHIC_BITMAP, rGraphicObj.GetType());
+                CPPUNIT_ASSERT_EQUAL_MESSAGE( sFailedMessage.getStr(), int(GraphicType::Bitmap), int(rGraphicObj.GetType()));
                 CPPUNIT_ASSERT_EQUAL_MESSAGE( sFailedMessage.getStr(), static_cast<sal_uLong>(864900), rGraphicObj.GetSizeBytes());
                 bImageFound = true;
             }

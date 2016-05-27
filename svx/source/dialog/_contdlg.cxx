@@ -108,7 +108,7 @@ tools::PolyPolygon SvxContourDlg::CreateAutoContour( const Graphic& rGraphic,
     Bitmap  aBmp;
     XOutFlags nContourFlags = XOutFlags::ContourHorz;
 
-    if ( rGraphic.GetType() == GRAPHIC_BITMAP )
+    if ( rGraphic.GetType() == GraphicType::Bitmap )
     {
         if( rGraphic.IsAnimated() )
         {
@@ -148,7 +148,7 @@ tools::PolyPolygon SvxContourDlg::CreateAutoContour( const Graphic& rGraphic,
             nContourFlags |= XOutFlags::ContourEdgeDetect;
         }
     }
-    else if( rGraphic.GetType() != GRAPHIC_NONE )
+    else if( rGraphic.GetType() != GraphicType::NONE )
     {
         const Graphic   aTmpGrf( rGraphic.GetGDIMetaFile().GetMonochromeMtf( Color( COL_BLACK ) ) );
         ScopedVclPtrInstance< VirtualDevice > pVDev;
@@ -352,7 +352,7 @@ void SvxSuperContourDlg::SetGraphic( const Graphic& rGraphic )
 
 void SvxSuperContourDlg::SetPolyPolygon( const tools::PolyPolygon& rPolyPoly )
 {
-    DBG_ASSERT(  m_pContourWnd->GetGraphic().GetType() != GRAPHIC_NONE, "Graphic must've been set first!" );
+    DBG_ASSERT(  m_pContourWnd->GetGraphic().GetType() != GraphicType::NONE, "Graphic must've been set first!" );
 
     tools::PolyPolygon aPolyPoly( rPolyPoly );
     const MapMode   aMap100( MAP_100TH_MM );
@@ -423,12 +423,12 @@ void SvxSuperContourDlg::UpdateGraphic( const Graphic& rGraphic, bool _bGraphicL
 
 bool SvxSuperContourDlg::IsUndoPossible() const
 {
-    return aUndoGraphic.GetType() != GRAPHIC_NONE;
+    return aUndoGraphic.GetType() != GraphicType::NONE;
 }
 
 bool SvxSuperContourDlg::IsRedoPossible() const
 {
-    return aRedoGraphic.GetType() != GRAPHIC_NONE;
+    return aRedoGraphic.GetType() != GraphicType::NONE;
 }
 
 // Click handler for ToolBox
@@ -613,7 +613,7 @@ IMPL_LINK_TYPED( SvxSuperContourDlg, StateHdl, GraphCtrl*, pWnd, void )
     const bool          bPipette = m_pTbx1->IsItemChecked(mnPipetteId);
     const bool          bWorkplace = m_pTbx1->IsItemChecked(mnWorkSpaceId);
     const bool          bDontHide = !( bPipette || bWorkplace );
-    const bool          bBitmap = pWnd->GetGraphic().GetType() == GRAPHIC_BITMAP;
+    const bool          bBitmap = pWnd->GetGraphic().GetType() == GraphicType::Bitmap;
 
     m_pTbx1->EnableItem(mnApplyId, bDontHide && bExecState && pWnd->IsChanged());
 
@@ -690,7 +690,7 @@ IMPL_LINK_TYPED( SvxSuperContourDlg, PipetteClickHdl, ContourWindow&, rWnd, void
 
         EnterWait();
 
-        if( aGraphic.GetType() == GRAPHIC_BITMAP )
+        if( aGraphic.GetType() == GraphicType::Bitmap )
         {
             Bitmap      aBmp( aGraphic.GetBitmap() );
             const long  nTol = static_cast<long>(m_pMtfTolerance->GetValue() * 255L / 100L);

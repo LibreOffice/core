@@ -3833,7 +3833,7 @@ void RtfAttributeOutput::FlyFrameGraphic(const SwFlyFrameFormat* pFlyFrameFormat
     const Graphic& rGraphic(pGrfNode->GetGrf());
 
     // If there is no graphic there is not much point in parsing it
-    if (rGraphic.GetType()==GRAPHIC_NONE)
+    if (rGraphic.GetType()==GraphicType::NONE)
         return;
 
     ConvertDataFormat aConvertDestinationFormat = ConvertDataFormat::WMF;
@@ -3885,9 +3885,9 @@ void RtfAttributeOutput::FlyFrameGraphic(const SwFlyFrameFormat* pFlyFrameFormat
     if (!pGraphicAry)
     {
         if (ERRCODE_NONE == GraphicConverter::Export(aStream, rGraphic,
-                (eGraphicType == GRAPHIC_BITMAP) ? ConvertDataFormat::PNG : ConvertDataFormat::WMF))
+                (eGraphicType == GraphicType::Bitmap) ? ConvertDataFormat::PNG : ConvertDataFormat::WMF))
         {
-            pBLIPType = (eGraphicType == GRAPHIC_BITMAP) ?
+            pBLIPType = (eGraphicType == GraphicType::Bitmap) ?
                         OOO_STRING_SVTOOLS_RTF_PNGBLIP : OOO_STRING_SVTOOLS_RTF_WMETAFILE;
             aStream.Seek(STREAM_SEEK_TO_END);
             nSize = aStream.Tell();
@@ -3895,7 +3895,7 @@ void RtfAttributeOutput::FlyFrameGraphic(const SwFlyFrameFormat* pFlyFrameFormat
         }
     }
 
-    Size aMapped(eGraphicType == GRAPHIC_BITMAP ? rGraphic.GetSizePixel() : rGraphic.GetPrefSize());
+    Size aMapped(eGraphicType == GraphicType::Bitmap ? rGraphic.GetSizePixel() : rGraphic.GetPrefSize());
 
     const SwCropGrf& rCr = static_cast<const SwCropGrf&>(pGrfNode->GetAttr(RES_GRFATR_CROPGRF));
 

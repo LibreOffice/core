@@ -442,7 +442,7 @@ namespace drawinglayer
                 //
                 // when graphic is animated, force decomposition to use the correct graphic, else
                 // fill style will not be animated
-                if(GRAPHIC_BITMAP == rFillGraphicAttribute.getGraphic().GetType()
+                if(GraphicType::Bitmap == rFillGraphicAttribute.getGraphic().GetType()
                     && !rFillGraphicAttribute.getGraphic().getSvgData().get()
                     && !rFillGraphicAttribute.getGraphic().IsAnimated())
                 {
@@ -666,12 +666,12 @@ namespace drawinglayer
                 // color (e.g. shadow)
                 switch(rFillGraphicAttribute.getGraphic().GetType())
                 {
-                    case GRAPHIC_GDIMETAFILE:
+                    case GraphicType::GdiMetafile:
                     {
                         // metafiles are potentially transparent, cannot optimize, not done
                         break;
                     }
-                    case GRAPHIC_BITMAP:
+                    case GraphicType::Bitmap:
                     {
                         if(!rFillGraphicAttribute.getGraphic().IsTransparent() && !rFillGraphicAttribute.getGraphic().IsAlpha())
                         {
@@ -738,7 +738,7 @@ namespace drawinglayer
                         }
                         break;
                     }
-                    default: //GRAPHIC_NONE, GRAPHIC_DEFAULT
+                    default: //GraphicType::NONE, GraphicType::Default
                     {
                         // empty graphic, we are done
                         bDone = true;

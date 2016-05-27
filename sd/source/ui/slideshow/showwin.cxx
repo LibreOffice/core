@@ -480,7 +480,7 @@ void ShowWindow::DrawPauseScene( bool bTimeoutOnly )
     aFont.SetCharSet( aOldFont.GetCharSet() );
     aFont.SetLanguage( aOldFont.GetLanguage() );
 
-    if( !bTimeoutOnly && ( maLogo.GetType() != GRAPHIC_NONE ) )
+    if( !bTimeoutOnly && ( maLogo.GetType() != GraphicType::NONE ) )
     {
         Size aGrfSize;
 

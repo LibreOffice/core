@@ -2476,7 +2476,7 @@ bool SwFlyFrame::GetContour( tools::PolyPolygon&   rContour,
             bGrfObjCreated = true;
         }
         OSL_ENSURE( pGrfObj, "SwFlyFrame::GetContour() - No Graphic/GraphicObject found at <SwNoTextNode>." );
-        if ( pGrfObj && pGrfObj->GetType() != GRAPHIC_NONE )
+        if ( pGrfObj && pGrfObj->GetType() != GraphicType::NONE )
         {
             if( !pNd->HasContour() )
             {

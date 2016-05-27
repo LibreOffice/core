@@ -1794,7 +1794,7 @@ static inline void lcl_DrawGraphicBackgrd( const SvxBrushItem& _rBackgrdBrush,
     //     (3) intrinsic graphic is transparent OR intrinsic graphic doesn't exists
     if ( !_bNumberingGraphic &&
          !_bBackgrdAlreadyDrawn &&
-         ( _rGraphicObj.IsTransparent() || _rGraphicObj.GetType() == GRAPHIC_NONE  )
+         ( _rGraphicObj.IsTransparent() || _rGraphicObj.GetType() == GraphicType::NONE  )
        )
     {
         lcl_implDrawGraphicBackgrd( _rBackgrdBrush, _pOut, _rAlignedPaintRect, _rGraphicObj, properties );
@@ -1991,7 +1991,7 @@ void DrawGraphic(
                 referer = sh->GetMedium()->GetName();
             }
             const Graphic* pGrf = pBrush->GetGraphic(referer);
-            if( pGrf && GRAPHIC_NONE != pGrf->GetType() )
+            if( pGrf && GraphicType::NONE != pGrf->GetType() )
             {
                 ePos = pBrush->GetGraphicPos();
                 if( pGrf->IsSupportedGraphic() )

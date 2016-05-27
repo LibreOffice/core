@@ -271,7 +271,7 @@ SvStream& SvxBulletItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) c
 {
     // Correction for empty bitmap
     if( ( nStyle == SvxBulletStyle::BMP ) &&
-        ( !pGraphicObject || ( GRAPHIC_NONE == pGraphicObject->GetType() ) || ( GRAPHIC_DEFAULT == pGraphicObject->GetType() ) ) )
+        ( !pGraphicObject || ( GraphicType::NONE == pGraphicObject->GetType() ) || ( GraphicType::Default == pGraphicObject->GetType() ) ) )
     {
         if( pGraphicObject )
         {
@@ -364,7 +364,7 @@ const GraphicObject& SvxBulletItem::GetGraphicObject() const
 
 void SvxBulletItem::SetGraphicObject( const GraphicObject& rGraphicObject )
 {
-    if( ( GRAPHIC_NONE == rGraphicObject.GetType() ) || ( GRAPHIC_DEFAULT == rGraphicObject.GetType() ) )
+    if( ( GraphicType::NONE == rGraphicObject.GetType() ) || ( GraphicType::Default == rGraphicObject.GetType() ) )
     {
         if( pGraphicObject )
         {

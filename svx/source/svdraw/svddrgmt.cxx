@@ -3787,7 +3787,7 @@ bool SdrDragCrop::EndSdrDrag(bool /*bCopy*/)
     // This part of code handles the case where pSdrObject is SdrGrafObj
 
     SdrGrafObj* pObj = dynamic_cast<SdrGrafObj*>( pSdrObject );
-    if( !pObj || (pObj->GetGraphicType() == GRAPHIC_NONE) || (pObj->GetGraphicType() == GRAPHIC_DEFAULT) )
+    if( !pObj || (pObj->GetGraphicType() == GraphicType::NONE) || (pObj->GetGraphicType() == GraphicType::Default) )
         return false;
 
     const GraphicObject& rGraphicObject = pObj->GetGraphicObject();
