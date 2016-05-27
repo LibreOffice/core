@@ -690,6 +690,21 @@ const SwBoxAutoFormat& SwTableAutoFormat::GetBoxFormat( sal_uInt8 nPos ) const
     }
 }
 
+SwBoxAutoFormat& SwTableAutoFormat::GetBoxFormat( sal_uInt8 nPos )
+{
+    OSL_ENSURE( nPos < 16, "wrong area" );
+
+    SwBoxAutoFormat* pFormat = aBoxAutoFormat[ nPos ];
+    if( !pFormat )
+    {
+        // If default doesn't exist yet:
+        if( !pDfltBoxAutoFormat )
+            pDfltBoxAutoFormat = new SwBoxAutoFormat();
+        pFormat = pDfltBoxAutoFormat;
+    }
+    return *pFormat;
+}
+
 void SwTableAutoFormat::UpdateFromSet( sal_uInt8 nPos,
                                     const SfxItemSet& rSet,
                                     UpdateFlags eFlags,

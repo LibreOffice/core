@@ -11,6 +11,7 @@ import math
 import unittest
 from org.libreoffice.unotest import UnoInProcess
 from com.sun.star.container import NoSuchElementException
+from com.sun.star.beans import UnknownPropertyException
 from com.sun.star.lang import IndexOutOfBoundsException
 from com.sun.star.lang import IllegalArgumentException
 
@@ -172,6 +173,14 @@ class CheckStyle(unittest.TestCase):
         self.__test_StyleFamilyIndex(xTableStyles, vEmptyDocStyles, "SwXTextTableStyle")
         for sStyleName in vEmptyDocStyles:
             self.assertIsNotNone(xTableStyles.getByName(sStyleName))
+        #check SwXCellStyles
+        vCellStyles = ["first-row", "last-row", "first-column", "last-column", "body", "even-rows", "odd-rows", "even-columns", "odd-columns", "background"]
+        xDefaultTableStyle = xTableStyles.getByIndex(0)
+        for sCellStyle in vCellStyles:
+            xCellStyle = xDefaultTableStyle.getByName(sCellStyle)
+            self.assertIsNotNone(xCellStyle.getPropertyValue("BackColor"))
+            with self.assertRaises(UnknownPropertyException):
+                xCellStyle.getPropertyValue("foobarbaz")
         xDoc.dispose()
 
 if __name__ == '__main__':
