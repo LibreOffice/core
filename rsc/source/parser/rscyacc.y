@@ -307,7 +307,6 @@ RSCINST GetFirstTupelEle( const RSCINST & rTop )
 %token POSITION
 %token DIMENSION
 %token INZOOMOUTPUTSIZE
-%token FLOATINGPOS
 %token DEFINE
 %token INCLUDE
 %token MACROTARGET
@@ -755,18 +754,6 @@ var_definition
   {
       SetNumber( S.Top(), "_ZOOMINWIDTH", $4 );
       SetNumber( S.Top(), "_ZOOMINHEIGHT", $6 );
-  }
-  | FLOATINGPOS '=' CONSTNAME '(' long_expression ',' long_expression
-                                                         ')' ';'
-  {
-      SetConst( S.Top(),      "_FLOATINGPOSMAPMODE", $3.hashid, $3.nValue );
-      SetNumber( S.Top(), "_FLOATINGPOSX", $5 );
-      SetNumber( S.Top(), "_FLOATINGPOSY", $7 );
-  }
-  | FLOATINGPOS '=' '(' long_expression ',' long_expression ')' ';'
-  {
-      SetNumber( S.Top(), "_FLOATINGPOSX", $4 );
-      SetNumber( S.Top(), "_FLOATINGPOSY", $6 );
   }
 ;
 
