@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_1d6830f5",
+        "filename": "sw/source/core/fields/docufld.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1001243
+      },
+      "writtenOn": "2016-05-28T21:07:35Z",
+      "side": 1,
+      "message": "Another way to ignore unused parameters is to comment them,\nfor example:\nOUString SwPageNumberFieldType::Expand( sal_uInt32 nFormat, short nOff,\n         sal_uInt16 const nPageNumber, sal_uInt16 const /*nMaxPage*/,\n         const OUString\u0026 rUserStr ) const",
+      "revId": "58cc1400c37dc4c50db64188458b4251e655b50a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
