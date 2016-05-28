@@ -466,7 +466,7 @@ gdk_x11_window_set_utf8_property  (GdkWindow *window,
   if (value != nullptr)
     {
       XChangeProperty (GDK_DISPLAY_XDISPLAY (display),
-                       GDK_WINDOW_XID (window),
+                       GDK_RscWindowFlags::XID (window),
                        gdk_x11_get_xatom_by_name_for_display (display, name),
                        gdk_x11_get_xatom_by_name_for_display (display, "UTF8_STRING"), 8,
                        PropModeReplace, reinterpret_cast<guchar const *>(value), strlen (value));
@@ -474,7 +474,7 @@ gdk_x11_window_set_utf8_property  (GdkWindow *window,
   else
     {
       XDeleteProperty (GDK_DISPLAY_XDISPLAY (display),
-                       GDK_WINDOW_XID (window),
+                       GDK_RscWindowFlags::XID (window),
                        gdk_x11_get_xatom_by_name_for_display (display, name));
     }
 }
@@ -586,7 +586,7 @@ gboolean ensure_dbus_setup( gpointer data )
         GActionGroup* pActionGroup = reinterpret_cast<GActionGroup*>(g_lo_action_group_new());
 
         // Generate menu paths.
-        ::Window windowId = GDK_WINDOW_XID( gdkWindow );
+        ::Window windowId = GDK_RscWindowFlags::XID( gdkWindow );
         gchar* aDBusWindowPath = g_strdup_printf( "/org/libreoffice/window/%lu", windowId );
         gchar* aDBusMenubarPath = g_strdup_printf( "/org/libreoffice/window/%lu/menus/menubar", windowId );
 
@@ -2314,7 +2314,7 @@ void GtkSalFrame::SetPointerPos( long nX, long nY )
     unsigned int nWindowTop  = maGeometry.nY + nY;
 
     XWarpPointer( GDK_DISPLAY_XDISPLAY (pDisplay), None,
-                  GDK_WINDOW_XID (gdk_screen_get_root_window( pScreen ) ),
+                  GDK_RscWindowFlags::XID (gdk_screen_get_root_window( pScreen ) ),
                   0, 0, 0, 0, nWindowLeft, nWindowTop);
     // #i38648# ask for the next motion hint
     gint x, y;
@@ -3096,7 +3096,7 @@ gboolean GtkSalFrame::signalMap( GtkWidget *pWidget, GdkEvent*, gpointer frame )
             if (osl::FileBase::getSystemPathFromFileURL(sProgramURL, sProgram) == osl::File::E_None)
             {
                 OString sFinalProgram(OUStringToOString(sProgram, osl_getThreadTextEncoding())
-                    + " " + OString::number((int)GDK_WINDOW_XID(gdkwin)));
+                    + " " + OString::number((int)GDK_RscWindowFlags::XID(gdkwin)));
                 OString sDisplay(getDisplayString());
                 if (!sDisplay.isEmpty())
                 {
@@ -3286,7 +3286,7 @@ void GtkSalFrame::signalStyleSet( GtkWidget*, GtkStyle* pPrevious, gpointer fram
     GdkWindow* pWin = widget_get_window(GTK_WIDGET(pThis->getWindow()));
     if( pWin )
     {
-        ::Window aWin = GDK_WINDOW_XWINDOW(pWin);
+        ::Window aWin = GDK_RscWindowFlags::XWINDOW(pWin);
         if( aWin != None )
             XSetWindowBackgroundPixmap( GtkSalFrame::getDisplay()->GetDisplay(),
                                         aWin,

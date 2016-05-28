@@ -466,12 +466,13 @@ class LifecycleTest;
 
 namespace svt { class PopupWindowControllerImpl; }
 enum class RSWND;
+enum class RscWindowFlags;
 
 struct WindowResHeader
 {
-    sal_uLong nObjMask;
-    OString   aHelpId;
-    RSWND     nRSStyle;
+    RscWindowFlags nObjMask;
+    OString        aHelpId;
+    RSWND          nRSStyle;
 };
 
 enum class WindowHitTest {

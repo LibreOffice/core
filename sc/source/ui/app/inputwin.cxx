@@ -71,7 +71,7 @@
 #include <com/sun/star/frame/XLayoutManager.hpp>
 
 #define THESIZE             1000000 // Should be more than enough!
-#define TBX_WINDOW_HEIGHT   22 // in pixel - TODO: The same on all systems?
+#define TBX_RscWindowFlags::Height   22 // in pixel - TODO: The same on all systems?
 #define MULTILINE_BUTTON_WIDTH 20 // Width of the button which opens the multiline dropdown
 #define LEFT_OFFSET         5
 #define INPUTWIN_MULTILINES 6
@@ -807,7 +807,7 @@ void ScInputWindow::MouseMove( const MouseEvent& rMEvt )
     if (bInResize)
     {
         // detect direction
-        long nResizeThreshold = ((long)TBX_WINDOW_HEIGHT * 0.7);
+        long nResizeThreshold = ((long)TBX_RscWindowFlags::Height * 0.7);
         bool bResetPointerPos = false;
 
         // Detect attempt to expand toolbar too much
@@ -852,9 +852,9 @@ void ScInputWindow::MouseButtonDown( const MouseEvent& rMEvt )
             // calculate an upper limit
             // I'd prefer to leave at least a single column header and a
             // row but I don't know how to get that value in pixels.
-            // Use TBX_WINDOW_HEIGHT for the moment
+            // Use TBX_RscWindowFlags::Height for the moment
             ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
-            mnMaxY = GetOutputSizePixel().Height() + (pViewSh->GetGridHeight(SC_SPLIT_TOP) + pViewSh->GetGridHeight(SC_SPLIT_BOTTOM)) - TBX_WINDOW_HEIGHT;
+            mnMaxY = GetOutputSizePixel().Height() + (pViewSh->GetGridHeight(SC_SPLIT_TOP) + pViewSh->GetGridHeight(SC_SPLIT_BOTTOM)) - TBX_RscWindowFlags::Height;
         }
     }
 
@@ -1408,7 +1408,7 @@ ScTextWnd::ScTextWnd(ScInputBarGroup* pParent, ScTabViewShell* pViewSh)
     aTextFont.SetColor(aTxtColor);
     aTextFont.SetWeight(WEIGHT_NORMAL);
 
-    Size aSize(1,TBX_WINDOW_HEIGHT);
+    Size aSize(1,TBX_RscWindowFlags::Height);
     Size aMinEditSize( Edit::GetMinimumEditSize() );
     if( aMinEditSize.Height() > aSize.Height() )
         aSize.Height() = aMinEditSize.Height();

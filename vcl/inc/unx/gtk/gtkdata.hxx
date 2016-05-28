@@ -52,9 +52,9 @@ inline GdkWindow * widget_get_window(GtkWidget *widget)
 inline ::Window widget_get_xid(GtkWidget *widget)
 {
 #if GTK_CHECK_VERSION(3,0,0)
-    return GDK_WINDOW_XID(gtk_widget_get_window(widget));
+    return GDK_RscWindowFlags::XID(gtk_widget_get_window(widget));
 #else
-    return GDK_WINDOW_XWINDOW(widget->window);
+    return GDK_RscWindowFlags::XWINDOW(widget->window);
 #endif
 }
 

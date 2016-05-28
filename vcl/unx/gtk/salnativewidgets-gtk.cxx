@@ -66,7 +66,7 @@ GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
       m_pWindow( pWindow ),
       m_aClipRegion(true)
 {
-    Init( pFrame, GDK_WINDOW_XID( widget_get_window( pWindow ) ),
+    Init( pFrame, GDK_RscWindowFlags::XID( widget_get_window( pWindow ) ),
           SalX11Screen( gdk_x11_screen_get_screen_number(
                                 gtk_widget_get_screen( pWindow ) ) ) );
 }
@@ -77,7 +77,7 @@ GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow,
       m_pWindow( pWindow ),
       m_aClipRegion(true)
 {
-    Init( pFrame, GDK_WINDOW_XID( widget_get_window( pWindow ) ), nXScreen );
+    Init( pFrame, GDK_RscWindowFlags::XID( widget_get_window( pWindow ) ), nXScreen );
 }
 
 GtkSalGraphics::~GtkSalGraphics()
@@ -632,7 +632,7 @@ void GtkSalGraphics::copyBits( const SalTwoRect& rPosAry,
         GdkWindow* pWin = GTK_WIDGET(m_pWindow)->window;
         if( pWin )
         {
-            aWin = GDK_WINDOW_XWINDOW(pWin);
+            aWin = GDK_RscWindowFlags::XWINDOW(pWin);
             if( aWin != None )
                 XSetWindowBackgroundPixmap( GtkSalFrame::getDisplay()->GetDisplay(),
                                             aWin,
