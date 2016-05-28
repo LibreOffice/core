@@ -50,7 +50,7 @@ WindowResHeader Window::ImplLoadResHeader( const ResId& rResId )
 {
     WindowResHeader aHeader;
 
-    aHeader.nObjMask = ReadLongRes();
+    aHeader.nObjMask = (RscWindowFlags)ReadLongRes();
 
     // we need to calculate auto helpids before the resource gets closed
     // if the resource  only contains flags, it will be closed before we try to read a help id
@@ -63,7 +63,7 @@ WindowResHeader Window::ImplLoadResHeader( const ResId& rResId )
     // WinBits
     ReadLongRes();
 
-    if( aHeader.nObjMask & WINDOW_HELPID )
+    if( aHeader.nObjMask & RscWindowFlags::HelpId )
         aHeader.aHelpId = ReadByteStringRes();
 
     return aHeader;
@@ -75,40 +75,40 @@ void Window::ImplLoadRes( const ResId& rResId )
 
     SetHelpId( aHeader.aHelpId );
 
-    sal_uLong nObjMask = aHeader.nObjMask;
+    RscWindowFlags nObjMask = aHeader.nObjMask;
 
     bool  bPos  = false;
     bool  bSize = false;
     Point aPos;
     Size  aSize;
 
-    if ( nObjMask & (WINDOW_XYMAPMODE | WINDOW_X | WINDOW_Y) )
+    if ( nObjMask & (RscWindowFlags::XYMapMode | RscWindowFlags::X | RscWindowFlags::Y) )
     {
         // use size as per resource
         MapUnit ePosMap = MAP_PIXEL;
 
         bPos = true;
 
-        if ( nObjMask & WINDOW_XYMAPMODE )
+        if ( nObjMask & RscWindowFlags::XYMapMode )
             ePosMap = (MapUnit)ReadLongRes();
-        if ( nObjMask & WINDOW_X )
+        if ( nObjMask & RscWindowFlags::X )
             aPos.X() = ImplLogicUnitToPixelX( ReadLongRes(), ePosMap );
-        if ( nObjMask & WINDOW_Y )
+        if ( nObjMask & RscWindowFlags::Y )
             aPos.Y() = ImplLogicUnitToPixelY( ReadLongRes(), ePosMap );
     }
 
-    if ( nObjMask & (WINDOW_WHMAPMODE | WINDOW_WIDTH | WINDOW_HEIGHT) )
+    if ( nObjMask & (RscWindowFlags::WHMapMode | RscWindowFlags::Width | RscWindowFlags::Height) )
     {
         // use size as per resource
         MapUnit eSizeMap = MAP_PIXEL;
 
         bSize = true;
 
-        if ( nObjMask & WINDOW_WHMAPMODE )
+        if ( nObjMask & RscWindowFlags::WHMapMode )
             eSizeMap = (MapUnit)ReadLongRes();
-        if ( nObjMask & WINDOW_WIDTH )
+        if ( nObjMask & RscWindowFlags::Width )
             aSize.Width() = ImplLogicUnitToPixelX( ReadLongRes(), eSizeMap );
-        if ( nObjMask & WINDOW_HEIGHT )
+        if ( nObjMask & RscWindowFlags::Height )
             aSize.Height() = ImplLogicUnitToPixelY( ReadLongRes(), eSizeMap );
     }
 
@@ -132,14 +132,9 @@ void Window::ImplLoadRes( const ResId& rResId )
     if ( nRSStyle & RSWND::DISABLED )
         Enable( false );
 
-    if ( nObjMask & WINDOW_TEXT )
+    if ( nObjMask & RscWindowFlags::Text )
         SetText( ReadStringRes() );
-    if ( nObjMask & WINDOW_HELPTEXT )
-    {
-        SetHelpText( ReadStringRes() );
-        mpWindowImpl->mbHelpTextDynamic = true;
-    }
-    if ( nObjMask & WINDOW_QUICKTEXT )
+    if ( nObjMask & RscWindowFlags::QuickText )
         SetQuickHelpText( ReadStringRes() );
 }
 

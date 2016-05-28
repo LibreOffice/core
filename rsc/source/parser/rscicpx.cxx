@@ -251,31 +251,29 @@ RscTop * RscTypCont::InitClassWindow( RscTop * pSuper, RscEnum * pMapUnit,
     InsWinBit( pClassWindow, "DialogControl", nTabControlId );
 
     nId = aNmTb.Put( "HelpID", VARNAME );
-    pClassWindow->SetVariable( nId, &aStringLiteral, nullptr, 0, WINDOW_HELPID );
+    pClassWindow->SetVariable( nId, &aStringLiteral, nullptr, 0, (sal_uInt32)RscWindowFlags::HelpId );
 
 
     nRsc_XYMAPMODEId = nId = aNmTb.Put( "_XYMapMode", VARNAME );
-    pClassWindow->SetVariable( nId, pMapUnit, nullptr, 0, WINDOW_XYMAPMODE  );
+    pClassWindow->SetVariable( nId, pMapUnit, nullptr, 0, (sal_uInt32)RscWindowFlags::XYMapMode  );
     nRsc_X = nId = aNmTb.Put( "_X", VARNAME );
-    pClassWindow->SetVariable( nId, &aLong, nullptr, 0, WINDOW_X  );
+    pClassWindow->SetVariable( nId, &aLong, nullptr, 0, (sal_uInt32)RscWindowFlags::X  );
     nRsc_Y = nId = aNmTb.Put( "_Y", VARNAME );
-    pClassWindow->SetVariable( nId, &aLong, nullptr, 0, WINDOW_Y  );
+    pClassWindow->SetVariable( nId, &aLong, nullptr, 0, (sal_uInt32)RscWindowFlags::Y  );
 
     nRsc_WHMAPMODEId = nId = aNmTb.Put( "_WHMapMode", VARNAME );
-    pClassWindow->SetVariable( nId, pMapUnit, nullptr, 0, WINDOW_WHMAPMODE  );
+    pClassWindow->SetVariable( nId, pMapUnit, nullptr, 0, (sal_uInt32)RscWindowFlags::WHMapMode  );
     nRsc_WIDTH = nId = aNmTb.Put( "_Width", VARNAME );
-    pClassWindow->SetVariable( nId, &aLong, nullptr, 0, WINDOW_WIDTH  );
+    pClassWindow->SetVariable( nId, &aLong, nullptr, 0, (sal_uInt32)RscWindowFlags::Width  );
     nRsc_HEIGHT = nId = aNmTb.Put( "_Height", VARNAME );
-    pClassWindow->SetVariable( nId, &aLong, nullptr, 0, WINDOW_HEIGHT  );
+    pClassWindow->SetVariable( nId, &aLong, nullptr, 0, (sal_uInt32)RscWindowFlags::Height  );
 
     nRsc_DELTALANG = nId = aNmTb.Put( "DeltaLang", VARNAME );
     pClassWindow->SetVariable( nId, pLangGeo, nullptr, VAR_NORC | VAR_NOENUM);
     nId = aNmTb.Put( "Text", VARNAME );
-    pClassWindow->SetVariable( nId, &aLangString, nullptr, 0, WINDOW_TEXT );
-    nId = aNmTb.Put( "HelpText", VARNAME );
-    pClassWindow->SetVariable( nId, &aLangString, nullptr, 0, WINDOW_HELPTEXT );
+    pClassWindow->SetVariable( nId, &aLangString, nullptr, 0, (sal_uInt32)RscWindowFlags::Text );
     nId = aNmTb.Put( "QuickHelpText", VARNAME );
-    pClassWindow->SetVariable( nId, &aLangString, nullptr, 0, WINDOW_QUICKTEXT );
+    pClassWindow->SetVariable( nId, &aLangString, nullptr, 0, (sal_uInt32)RscWindowFlags::QuickText );
 
     return pClassWindow;
 }
