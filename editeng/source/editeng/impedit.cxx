@@ -187,6 +187,34 @@ void ImpEditView::SetEditSelection( const EditSelection& rEditSelection )
     }
 }
 
+/// Translate absolute <-> relative twips: LOK wants absolute coordinates as output and gives absolute coordinates as input.
+void lcl_translateTwips(vcl::Window& rParent, vcl::Window& rChild)
+{
+    // Don't translate if we already have a non-zero origin.
+    // This prevents multiple translate calls that negate
+    // one another.
+    const Point aOrigin = rChild.GetMapMode().GetOrigin();
+    if (aOrigin.getX() == 0 && aOrigin.getY() == 0)
+    {
+        // Set map mode, so that callback payloads will contain absolute coordinates instead of relative ones.
+        Point aOffset(rChild.GetOutOffXPixel() - rParent.GetOutOffXPixel(), rChild.GetOutOffYPixel() - rParent.GetOutOffYPixel());
+        if (!rChild.IsMapModeEnabled())
+        {
+            MapMode aMapMode(rChild.GetMapMode());
+            aMapMode.SetMapUnit(MAP_TWIP);
+            aMapMode.SetScaleX(rParent.GetMapMode().GetScaleX());
+            aMapMode.SetScaleY(rParent.GetMapMode().GetScaleY());
+            rChild.SetMapMode(aMapMode);
+            rChild.EnableMapMode();
+        }
+        aOffset = rChild.PixelToLogic(aOffset);
+        MapMode aMapMode(rChild.GetMapMode());
+        aMapMode.SetOrigin(aOffset);
+        aMapMode.SetMapUnit(rParent.GetMapMode().GetMapUnit());
+        rChild.SetMapMode(aMapMode);
+        rChild.EnableMapMode(false);
+    }
+}
 
 void ImpEditView::DrawSelection( EditSelection aTmpSel, vcl::Region* pRegion, OutputDevice* pTargetDevice )
 {
@@ -342,6 +370,25 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, vcl::Region* pRegion, Ou
 
         if (isTiledRendering() && !pOldRegion)
         {
+            pOutWin->Push(PushFlags::MAPMODE);
+            if (pOutWin->GetMapMode().GetMapUnit() == MAP_TWIP)
+            {
+                // Find the parent that is not right
+                // on top of us to use its offset.
+                vcl::Window* parent = pOutWin->GetParent();
+                while (parent &&
+                       parent->GetOutOffXPixel() == pOutWin->GetOutOffXPixel() &&
+                       parent->GetOutOffYPixel() == pOutWin->GetOutOffYPixel())
+                {
+                    parent = parent->GetParent();
+                }
+
+                if (parent)
+                {
+                    lcl_translateTwips(*parent, *pOutWin);
+                }
+            }
+
             bool bMm100ToTwip = pOutWin->GetMapMode().GetMapUnit() == MAP_100TH_MM;
 
             Point aOrigin;
@@ -385,6 +432,8 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, vcl::Region* pRegion, Ou
                 sRectangle = comphelper::string::join("; ", v);
             }
             libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION, sRectangle.getStr());
+
+            pOutWin->Pop();
         }
 
         delete pPolyPoly;
