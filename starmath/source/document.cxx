@@ -215,8 +215,7 @@ void SmDocShell::SetFormat(SmFormat& rFormat)
 
 OUString SmDocShell::GetAccessibleText()
 {
-    if (!IsFormulaArranged())
-        ArrangeFormula();
+    ArrangeFormula();
     if (aAccText.isEmpty())
     {
         OSL_ENSURE( pTree, "Tree missing" );
@@ -244,7 +243,7 @@ void SmDocShell::Parse()
 
 void SmDocShell::ArrangeFormula()
 {
-    if (IsFormulaArranged())
+    if (bIsFormulaArranged)
         return;
 
     // Only for the duration of the existence of this object the correct settings
@@ -402,8 +401,7 @@ void SmDocShell::DrawFormula(OutputDevice &rDev, Point &rPosition, bool bDrawSel
         Parse();
     OSL_ENSURE(pTree, "Sm : NULL pointer");
 
-    if (!IsFormulaArranged())
-        ArrangeFormula();
+    ArrangeFormula();
 
     // Problem: What happens to WYSIWYG? While we're active inplace, we don't have a reference
     // device and aren't aligned to that either. So now there can be a difference between the
@@ -460,8 +458,7 @@ Size SmDocShell::GetSize()
 
     if (pTree)
     {
-        if (!IsFormulaArranged())
-            ArrangeFormula();
+        ArrangeFormula();
         aRet = pTree->GetSize();
 
         if ( !aRet.Width() )
@@ -783,7 +780,7 @@ bool SmDocShell::Save()
     {
         if (!pTree)
             Parse();
-        if( pTree && !IsFormulaArranged() )
+        if( pTree )
             ArrangeFormula();
 
         Reference<css::frame::XModel> xModel(GetModel());
@@ -843,7 +840,7 @@ bool SmDocShell::SaveAs( SfxMedium& rMedium )
     {
         if (!pTree)
             Parse();
-        if( pTree && !IsFormulaArranged() )
+        if( pTree )
             ArrangeFormula();
 
         Reference<css::frame::XModel> xModel(GetModel());
@@ -862,7 +859,7 @@ bool SmDocShell::ConvertTo( SfxMedium &rMedium )
     {
         if( !pTree )
             Parse();
-        if( pTree && !IsFormulaArranged() )
+        if( pTree )
             ArrangeFormula();
 
         const OUString& rFltName = pFlt->GetFilterName();
@@ -893,7 +890,7 @@ bool SmDocShell::writeFormulaOoxml(
 {
     if( !pTree )
         Parse();
-    if( pTree && !IsFormulaArranged() )
+    if( pTree )
         ArrangeFormula();
     SmOoxmlExport aEquation(pTree, version, documentType);
     return aEquation.ConvertFromStarMath( pSerializer );
@@ -903,7 +900,7 @@ void SmDocShell::writeFormulaRtf(OStringBuffer& rBuffer, rtl_TextEncoding nEncod
 {
     if (!pTree)
         Parse();
-    if (pTree && !IsFormulaArranged())
+    if (pTree)
         ArrangeFormula();
     SmRtfExport aEquation(pTree);
     aEquation.ConvertFromStarMath(rBuffer, nEncoding);
