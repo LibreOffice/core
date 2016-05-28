@@ -10122,7 +10122,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 13 // Description of Parameter 6
         {
-            Text [ en-US ] = "Aggregation (default 0 = AVERAGE); method to be used to aggregate identical (time) values." ;
+            Text [ en-US ] = "Aggregation (default 1 = AVERAGE); method to be used to aggregate identical (time) values." ;
         };
     };
      // -=*# Resource for function FORECAST.ETS.MULT #*=-
@@ -10186,7 +10186,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 13 // Description of Parameter 6
         {
-            Text [ en-US ] = "Aggregation (default 0 = AVERAGE); method to be used to aggregate identical (time) values." ;
+            Text [ en-US ] = "Aggregation (default 1 = AVERAGE); method to be used to aggregate identical (time) values." ;
         };
     };
      // -=*# Resource for function FORECAST.ETS.CONFINT #*=-
