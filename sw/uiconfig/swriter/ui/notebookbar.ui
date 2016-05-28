@@ -1911,22 +1911,6 @@
                                 <property name="position">1</property>
                               </packing>
                             </child>
-                            <child>
-                              <object class="svxlo-SvxRelativeField" id="aboveparaspacing">
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="has_tooltip">True</property>
-                                <property name="tooltip_text" translatable="yes">Above Paragraph Spacing</property>
-                                <property name="hexpand">True</property>
-                                <property name="invisible_char">•</property>
-                                <property name="text">0</property>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
-                                <property name="position">2</property>
-                              </packing>
-                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -1964,25 +1948,39 @@
                                 <property name="position">1</property>
                               </packing>
                             </child>
-                            <child>
-                              <object class="svxlo-SvxRelativeField" id="belowparaspacing">
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="has_tooltip">True</property>
-                                <property name="tooltip_text" translatable="yes">Below Paragraph Spacing</property>
-                                <property name="hexpand">True</property>
-                                <property name="invisible_char">•</property>
-                                <property name="text">0</property>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
-                                <property name="position">2</property>
-                              </packing>
-                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
+                            <property name="top_attach">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="svxlo-SvxRelativeField" id="aboveparaspacing">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="has_tooltip">True</property>
+                            <property name="tooltip_text" translatable="yes">Above Paragraph Spacing</property>
+                            <property name="hexpand">True</property>
+                            <property name="invisible_char">•</property>
+                            <property name="text">0</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="top_attach">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="svxlo-SvxRelativeField" id="belowparaspacing">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="has_tooltip">True</property>
+                            <property name="tooltip_text" translatable="yes">Below Paragraph Spacing</property>
+                            <property name="hexpand">True</property>
+                            <property name="invisible_char">•</property>
+                            <property name="text">0</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
                             <property name="top_attach">1</property>
                           </packing>
                         </child>
@@ -2030,21 +2028,6 @@
                                 <property name="position">1</property>
                               </packing>
                             </child>
-                            <child>
-                              <object class="svxlo-SvxRelativeField" id="beforetextindent1">
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="tooltip_text" translatable="yes">Before Text Indent</property>
-                                <property name="hexpand">True</property>
-                                <property name="invisible_char">•</property>
-                                <property name="text">0</property>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
-                                <property name="position">2</property>
-                              </packing>
-                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -2052,7 +2035,72 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkBox" id="box68">
+                          <object class="GtkBox" id="box66">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="spacing">6</property>
+                            <child>
+                              <object class="GtkImage" id="image4">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="halign">center</property>
+                                <property name="valign">center</property>
+                                <property name="pixbuf">svx/res/symphony/Indent3.png</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="label12">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="label" translatable="yes">After</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="svxlo-SvxRelativeField" id="beforetextindent1">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="tooltip_text" translatable="yes">Before Text Indent</property>
+                            <property name="hexpand">True</property>
+                            <property name="invisible_char">•</property>
+                            <property name="text">0</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="top_attach">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="svxlo-SvxRelativeField" id="aftertextindent1">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="tooltip_text" translatable="yes">After Text Indent</property>
+                            <property name="hexpand">True</property>
+                            <property name="invisible_char">•</property>
+                            <property name="text">0</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="top_attach">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkBox" id="box30">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="spacing">6</property>
@@ -2099,73 +2147,19 @@
                             </child>
                           </object>
                           <packing>
-                            <property name="left_attach">1</property>
+                            <property name="left_attach">2</property>
                             <property name="top_attach">0</property>
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkBox" id="box66">
+                          <object class="GtkBox" id="box31">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="spacing">6</property>
-                            <child>
-                              <object class="GtkImage" id="image4">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="halign">center</property>
-                                <property name="valign">center</property>
-                                <property name="pixbuf">svx/res/symphony/Indent3.png</property>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
-                                <property name="position">0</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkLabel" id="label12">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">After</property>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
-                                <property name="position">1</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="svxlo-SvxRelativeField" id="aftertextindent1">
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="tooltip_text" translatable="yes">After Text Indent</property>
-                                <property name="hexpand">True</property>
-                                <property name="invisible_char">•</property>
-                                <property name="text">0</property>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
-                                <property name="position">2</property>
-                              </packing>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">1</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkBox" id="box30">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="spacing">6</property>
                             <child>
                               <object class="sfxlo-SidebarToolBox" id="linespacing1">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="has_tooltip">True</property>
-                                <property name="hexpand">True</property>
                                 <child>
                                   <object class="GtkMenuToolButton" id="setlinespacing1">
                                     <property name="visible">True</property>
@@ -2192,6 +2186,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="label" translatable="yes">Line spacing</property>
+                                <property name="xalign">0</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -2201,7 +2196,7 @@
                             </child>
                           </object>
                           <packing>
-                            <property name="left_attach">1</property>
+                            <property name="left_attach">2</property>
                             <property name="top_attach">1</property>
                           </packing>
                         </child>
@@ -3415,6 +3410,7 @@
                             <property name="receives_default">True</property>
                             <property name="action_name">.uno:InsertRowsAfter</property>
                             <property name="relief">none</property>
+                            <property name="xalign">0</property>
                             <property name="always_show_image">True</property>
                           </object>
                           <packing>
