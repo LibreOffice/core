@@ -47,7 +47,6 @@
 #include <dialmgr.hxx>
 #include <sfx2/module.hxx>
 #include <svl/stritem.hxx>
-#include <svx/dialogs.hrc>
 #include <editeng/eerdll.hxx>
 #include <editeng/editrids.hrc>
 #include <svx/svxids.hrc>
@@ -557,29 +556,8 @@ void SvxPageDescPage::Reset( const SfxItemSet* rSet )
     SetMetricValue( *m_pPaperWidthEdit, aPaperSize.Width(), SFX_MAPUNIT_100TH_MM );
     m_pPaperSizeBox->Clear();
 
-    sal_Int32 nActPos = LISTBOX_ENTRY_NOTFOUND;
-    sal_uInt16 nAryId = RID_SVXSTRARY_PAPERSIZE_STD;
-
-    if ( ePaperStart != PAPER_A3 )
-        nAryId = RID_SVXSTRARY_PAPERSIZE_DRAW;
-    ResStringArray aPaperAry( CUI_RES( nAryId ) );
-    sal_uInt32 nCnt = aPaperAry.Count();
-
-    sal_Int32 nUserPos = LISTBOX_ENTRY_NOTFOUND;
-    for ( sal_uInt32 i = 0; i < nCnt; ++i )
-    {
-        OUString aStr = aPaperAry.GetString(i);
-        Paper eSize = (Paper)aPaperAry.GetValue(i);
-        sal_Int32 nPos = m_pPaperSizeBox->InsertEntry( aStr );
-        m_pPaperSizeBox->SetEntryData( nPos, reinterpret_cast<void*>((sal_uLong)eSize) );
-
-        if ( eSize == ePaper )
-            nActPos = nPos;
-        if( eSize == PAPER_USER )
-            nUserPos = nPos;
-    }
-    // preselect current paper format - #115915#: ePaper might not be in aPaperSizeBox so use PAPER_USER instead
-    m_pPaperSizeBox->SelectEntryPos( nActPos != LISTBOX_ENTRY_NOTFOUND ? nActPos : nUserPos );
+    m_pPaperSizeBox->FillPaperSizeEntries( ( ePaperStart == PAPER_A3 ) ? PaperSizeStd : PaperSizeDraw );
+    m_pPaperSizeBox->SetSelection( ePaper );
 
     // application specific
 
@@ -975,8 +953,8 @@ IMPL_LINK_NOARG_TYPED(SvxPageDescPage, PaperBinHdl_Impl, Control&, void)
 
 IMPL_LINK_TYPED( SvxPageDescPage, PaperSizeSelect_Impl, ListBox&, rBox, void )
 {
-    const sal_Int32 nPos = rBox.GetSelectEntryPos();
-    Paper ePaper = (Paper)reinterpret_cast<sal_uLong>(m_pPaperSizeBox->GetEntryData( nPos ));
+    PaperSizeListBox& rListBox = static_cast<PaperSizeListBox&>( rBox );
+    Paper ePaper = rListBox.GetSelection();
 
     if ( ePaper != PAPER_USER )
     {
@@ -1050,18 +1028,8 @@ IMPL_LINK_NOARG_TYPED(SvxPageDescPage, PaperSizeModify_Impl, Edit&, void)
     Size aSize( GetCoreValue( *m_pPaperWidthEdit, eUnit ),
                 GetCoreValue( *m_pPaperHeightEdit, eUnit ) );
     Paper ePaper = SvxPaperInfo::GetSvxPaper( aSize, (MapUnit)eUnit, true );
-    sal_Int32 nEntryCount = m_pPaperSizeBox->GetEntryCount();
 
-    for ( sal_Int32 i = 0; i < nEntryCount; ++i )
-    {
-        Paper eTmp = (Paper)reinterpret_cast<sal_uLong>(m_pPaperSizeBox->GetEntryData(i));
-
-        if ( eTmp == ePaper )
-        {
-            m_pPaperSizeBox->SelectEntryPos(i);
-            break;
-        }
-    }
+    m_pPaperSizeBox->SetSelection( ePaper );
     UpdateExample_Impl( true );
 }
 
@@ -1460,8 +1428,7 @@ SfxTabPage::sfxpg SvxPageDescPage::DeactivatePage( SfxItemSet* _pSet )
     // Inquiry whether the page margins are beyond the printing area.
     // If not, ask user whether they shall be taken.
     // If not, stay on the TabPage.
-    sal_Int32 nPos = m_pPaperSizeBox->GetSelectEntryPos();
-    Paper ePaper = (Paper)reinterpret_cast<sal_uLong>(m_pPaperSizeBox->GetEntryData( nPos ));
+    Paper ePaper = m_pPaperSizeBox->GetSelection();
 
     if ( ePaper != PAPER_SCREEN_4_3 && ePaper != PAPER_SCREEN_16_9 && ePaper != PAPER_SCREEN_16_10 && IsMarginOutOfRange() )
     {
