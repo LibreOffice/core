@@ -38,16 +38,20 @@ namespace o3tl {
     template<> struct typed_flags<RSWND> : is_typed_flags<RSWND, 0x03> {};
 }
 
-#define WINDOW_XYMAPMODE                0x0001
-#define WINDOW_X                        0x0002
-#define WINDOW_Y                        0x0004
-#define WINDOW_WHMAPMODE                0x0008
-#define WINDOW_WIDTH                    0x0010
-#define WINDOW_HEIGHT                   0x0020
-#define WINDOW_TEXT                     0x0040
-#define WINDOW_HELPTEXT                 0x0080
-#define WINDOW_QUICKTEXT                0x0100
-#define WINDOW_HELPID                   0x0200
+enum class RscWindowFlags {
+    XYMapMode                = 0x0001,
+    X                        = 0x0002,
+    Y                        = 0x0004,
+    WHMapMode                = 0x0008,
+    Width                    = 0x0010,
+    Height                   = 0x0020,
+    Text                     = 0x0040,
+    QuickText                = 0x0100,
+    HelpId                   = 0x0200
+};
+namespace o3tl {
+    template<> struct typed_flags<RscWindowFlags> : is_typed_flags<RscWindowFlags, 0x07> {};
+}
 
 // For "FixedImage" resource:
 #define RSC_FIXEDIMAGE_IMAGE            0x0001
