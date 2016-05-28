@@ -417,8 +417,7 @@ void RscTypCont::Init()
                                               pClassImage, pTriState );
     pRoot->Insert( pClassToolBoxItem );
 
-    RscTop* pClassToolBox = InitClassToolBox( pClassDockingWindow, pClassToolBoxItem,
-                                      pClassImageList );
+    RscTop* pClassToolBox = InitClassToolBox( pClassDockingWindow, pClassToolBoxItem );
     pRoot->Insert( pClassToolBox );
 
     // initialize class

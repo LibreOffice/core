@@ -58,7 +58,6 @@ ToolBox RID_TB_SORTING
     Pos = MAP_APPFONT ( 0,0 ) ;
     ButtonType = BUTTON_SYMBOL;
     Align = BOXALIGN_TOP;
-    Customize = FALSE;
     ItemList =
     {
         ToolBoxItem

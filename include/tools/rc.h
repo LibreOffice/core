@@ -128,14 +128,15 @@ namespace o3tl {
 #define RSC_TOOLBOXITEM_COMMAND         0x0800
 
 // For "ToolBox" resources:
-#define RSC_TOOLBOX_BUTTONTYPE          0x01
-#define RSC_TOOLBOX_ALIGN               0x02
-#define RSC_TOOLBOX_LINECOUNT           0x04
-#define RSC_TOOLBOX_FLOATLINES          0x08
-#define RSC_TOOLBOX_CUSTOMIZE           0x10
-#define RSC_TOOLBOX_MENUSTRINGS         0x20
-#define RSC_TOOLBOX_ITEMIMAGELIST       0x40
-#define RSC_TOOLBOX_ITEMLIST            0x80
+enum class RscToolboxFlags {
+    ButtonType          = 0x01,
+    Align               = 0x02,
+    LineCount           = 0x04,
+    ItemList            = 0x80
+};
+namespace o3tl {
+    template<> struct typed_flags<RscToolboxFlags> : is_typed_flags<RscToolboxFlags, 0x87> {};
+}
 
 // For "DockingWindow" resources:
 #define RSC_DOCKINGWINDOW_XYMAPMODE     0x01

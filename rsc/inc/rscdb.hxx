@@ -210,8 +210,7 @@ class RscTypCont
     RscTop *    InitClassToolBoxItem( RscTop * pSuper, RscTop * pClassBitmap,
                                       RscTop * pClassImage,
                                       RscEnum * pTriState );
-    RscTop *    InitClassToolBox( RscTop * pSuper, RscTop * pClassToolBoxItem,
-                                  RscTop * pClassImageList );
+    RscTop *    InitClassToolBox( RscTop * pSuper, RscTop * pClassToolBoxItem );
     RscTop *    InitClassSfxStyleFamilyItem( RscTop * pSuper,
                                              RscTop * pClassBitmap,
                                              RscTop * pClassImage,
