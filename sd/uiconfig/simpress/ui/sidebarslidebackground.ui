@@ -172,42 +172,9 @@
           </packing>
         </child>
         <child>
-          <object class="GtkComboBoxText" id="paperformat">
+          <object class="svxcorelo-PaperSizeListBox" id="paperformat">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <items>
-              <item translatable="yes">A6</item>
-              <item translatable="yes">A5</item>
-              <item translatable="yes">A4</item>
-              <item translatable="yes">A3</item>
-              <item translatable="yes">A2</item>
-              <item translatable="yes">A1</item>
-              <item translatable="yes">A0</item>
-              <item translatable="yes">B6 (ISO)</item>
-              <item translatable="yes">B5 (ISO)</item>
-              <item translatable="yes">B4 (ISO)</item>
-              <item translatable="yes">Letter</item>
-              <item translatable="yes">Legal</item>
-              <item translatable="yes">Long Bond</item>
-              <item translatable="yes">Tabloid</item>
-              <item translatable="yes">B6 (JIS)</item>
-              <item translatable="yes">B5 (JIS)</item>
-              <item translatable="yes">B4 (JIS)</item>
-              <item translatable="yes">16 Kai</item>
-              <item translatable="yes">32 Kai</item>
-              <item translatable="yes">Big 32 Kai</item>
-              <item translatable="yes">User</item>
-              <item translatable="yes">DL Envelope</item>
-              <item translatable="yes">C6 Envelope</item>
-              <item translatable="yes">C6/5 Envelope</item>
-              <item translatable="yes">C5 Envelope</item>
-              <item translatable="yes">C4 Envelope</item>
-              <item translatable="yes">Dia Slide</item>
-              <item translatable="yes">Screen 4:3</item>
-              <item translatable="yes">Screen 16:9</item>
-              <item translatable="yes">Screen 16:10</item>
-              <item translatable="yes">Japanese Postcard</item>
-            </items>
           </object>
           <packing>
             <property name="left_attach">1</property>
