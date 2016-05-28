@@ -162,6 +162,7 @@ bool SfxSaveAsTemplateDialog::SaveTemplate()
     if(!mpDocTemplates->InsertTemplate( mnRegionPos, nDocId, msTemplateName, sURL))
         return false;
 
+    mpDocTemplates->Update();
     return true;
 }
 
