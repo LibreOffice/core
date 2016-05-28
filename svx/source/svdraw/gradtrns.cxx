@@ -256,14 +256,14 @@ void GradTransformer::VecToGrad(GradTransVector& rV, GradTransGradient& rG, Grad
                 sal_Int32 nNewBorder(100L - FRound(fNewBorder));
 
                 // clip
-                if(nNewBorder < 0L)
+                if(nNewBorder < 0)
                 {
-                    nNewBorder = 0L;
+                    nNewBorder = 0;
                 }
 
-                if(nNewBorder > 100L)
+                if(nNewBorder > 100)
                 {
-                    nNewBorder = 100L;
+                    nNewBorder = 100;
                 }
 
                 // set
@@ -287,14 +287,14 @@ void GradTransformer::VecToGrad(GradTransVector& rV, GradTransGradient& rG, Grad
                 sal_Int32 nNewBorder = 100 - FRound(fNewBorder);
 
                 // clip
-                if(nNewBorder < 0L)
+                if(nNewBorder < 0)
                 {
-                    nNewBorder = 0L;
+                    nNewBorder = 0;
                 }
 
-                if(nNewBorder > 100L)
+                if(nNewBorder > 100)
                 {
-                    nNewBorder = 100L;
+                    nNewBorder = 100;
                 }
 
                 // set
