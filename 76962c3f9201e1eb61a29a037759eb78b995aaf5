@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_dd9c086c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2016-05-28T00:29:50Z",
+      "side": 1,
+      "message": "There\u0027s no real fixed format for commit comments, but we absolutely want bugtracker references to read tdf#12345. fdo# markup is historic, when the project was young, and sharing the bugtracker with the FreeDesktop crowd.\n\nCurrent habits seem to look like this:\n\ntdf#35694: Fixed blah\n\nor\n\nResolves: tdf#35694 get Writer page offsets right",
+      "revId": "76962c3f9201e1eb61a29a037759eb78b995aaf5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_5db0f8f4",
+        "filename": "sw/inc/docufld.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2016-05-28T00:29:50Z",
+      "side": 1,
+      "message": "just remove those. it\u0027s all in git. there\u0027s much too much visual noise otherwise, with all the changes in this code base.",
+      "revId": "76962c3f9201e1eb61a29a037759eb78b995aaf5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_7d95bc3e",
+        "filename": "sw/inc/docufld.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2016-05-28T00:29:50Z",
+      "side": 1,
+      "message": "same here",
+      "revId": "76962c3f9201e1eb61a29a037759eb78b995aaf5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_9d928056",
+        "filename": "sw/source/core/fields/docufld.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2016-05-28T00:29:50Z",
+      "side": 1,
+      "message": "redundant comment - the pattern is quite wide-spread in the codebase",
+      "revId": "76962c3f9201e1eb61a29a037759eb78b995aaf5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_bd9f445e",
+        "filename": "sw/source/core/fields/docufld.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2016-05-28T00:29:50Z",
+      "side": 1,
+      "message": "Hmm - so this is useful information, but perhaps -- as it only seems to have historic value, and doesn\u0027t really help someone to understand the *current* code -- relegate it to the commit comment or bug report?",
+      "revId": "76962c3f9201e1eb61a29a037759eb78b995aaf5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
