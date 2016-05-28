@@ -970,8 +970,10 @@ void ScGridWindow::PaintTile( VirtualDevice& rDevice,
     // page break zoom, and aLogicMode in ScViewData
     pViewData->SetZoom(aFracX, aFracY, true);
 
-    double fTilePosXPixel = static_cast<double>(nTilePosX) * nOutputWidth / nTileWidth;
-    double fTilePosYPixel = static_cast<double>(nTilePosY) * nOutputHeight / nTileHeight;
+    const double fTilePosXPixel = static_cast<double>(nTilePosX) * nOutputWidth / nTileWidth;
+    const double fTilePosYPixel = static_cast<double>(nTilePosY) * nOutputHeight / nTileHeight;
+    const double fTileBottomPixel = static_cast<double>(nTilePosY + nTileHeight) * nOutputHeight / nTileHeight;
+    const double fTileRightPixel = static_cast<double>(nTilePosX + nTileWidth) * nOutputWidth / nTileWidth;
 
     SCTAB nTab = pViewData->GetTabNo();
     ScDocument* pDoc = pViewData->GetDocument();
@@ -982,14 +984,88 @@ void ScGridWindow::PaintTile( VirtualDevice& rDevice,
     // size of the document including drawings, charts, etc.
     pDoc->GetTiledRenderingArea(nTab, nEndCol, nEndRow);
 
-    double fPPTX = pViewData->GetPPTX();
-    double fPPTY = pViewData->GetPPTY();
+    const double fPPTX = pViewData->GetPPTX();
+    const double fPPTY = pViewData->GetPPTY();
 
-    ScTableInfo aTabInfo(nEndRow + 2);
-    pDoc->FillInfo(aTabInfo, nStartCol, nStartRow, nEndCol, nEndRow, nTab, fPPTX, fPPTY, false, false, NULL);
+    // Calculate the tile's first and last rows.
+    SCROW firstRow = -1;
+    SCROW lastRow = -1;
+    double fTopOffsetPixel = 0;
+
+    // Find the first and last rows to paint this tile.
+    sal_uInt16 nDocHeight = ScGlobal::nStdRowHeight;
+    SCROW nDocHeightEndRow = -1;
+    for (SCROW nY = nStartRow; nY <= nEndRow; ++nY)
+    {
+        if (nY > nDocHeightEndRow)
+        {
+            if (ValidRow(nY))
+                nDocHeight = pDoc->GetRowHeight( nY, nTab, nullptr, &nDocHeightEndRow );
+            else
+                nDocHeight = ScGlobal::nStdRowHeight;
+        }
+
+        auto rowHeight = static_cast<sal_uInt16>(nDocHeight * fPPTY);
+        if (fTopOffsetPixel + rowHeight >= fTilePosYPixel)
+        {
+            if (firstRow < 0)
+            {
+                firstRow = nY;
+            }
+            else if (fTopOffsetPixel + rowHeight > fTileBottomPixel)
+            {
+                lastRow = nY;
+                break;
+            }
+        }
+
+        fTopOffsetPixel += rowHeight;
+    }
+
+    firstRow = (firstRow >= 0 ? firstRow : nStartRow);
+    lastRow = (lastRow >= 0 ? lastRow : nEndRow);
+
+    // Find the first and last cols to paint this tile.
+    SCCOL firstCol = -1;
+    SCCOL lastCol = -1;
+    double fLeftOffsetPixel = 0;
+    for (SCCOL nArrCol=nStartCol+3; nArrCol<=nEndCol+2; ++nArrCol)
+    {
+        SCCOL nX = nArrCol-1;
+        if ( ValidCol(nX) )
+        {
+            if (!pDoc->ColHidden(nX, nTab))
+            {
+                sal_uInt16 nColWidth = (sal_uInt16) (pDoc->GetColWidth( nX, nTab ) * fPPTX);
+                if (!nColWidth)
+                    nColWidth = 1;
+
+                if (fLeftOffsetPixel + nColWidth >= fTilePosXPixel)
+                {
+                    if (firstCol < 0)
+                    {
+                        firstCol = nX;
+                    }
+                    else if (fLeftOffsetPixel + nColWidth > fTileRightPixel)
+                    {
+                        lastCol = nX;
+                        break;
+                    }
+                }
+
+                fLeftOffsetPixel += nColWidth;
+            }
+        }
+    }
+
+    firstCol = (firstCol >= 0 ? firstCol : nStartCol);
+    lastCol = (lastCol >= 0 ? lastCol : nEndCol);
+
+    ScTableInfo aTabInfo(nEndRow + 3);
+    pDoc->FillInfo(aTabInfo, nStartCol, nStartRow, lastCol, lastRow, nTab, fPPTX, fPPTY, false, false, NULL);
 
     ScOutputData aOutputData(&rDevice, OUTTYPE_WINDOW, aTabInfo, pDoc, nTab,
-            -fTilePosXPixel, -fTilePosYPixel, nStartCol, nStartRow, nEndCol, nEndRow,
+            -fTilePosXPixel, -fTilePosYPixel, nStartCol, firstRow, lastCol, lastRow,
             fPPTX, fPPTY);
 
     // setup the SdrPage so that drawinglayer works correctly
