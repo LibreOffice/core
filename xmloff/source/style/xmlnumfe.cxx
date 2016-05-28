@@ -569,8 +569,16 @@ void SvXMLNumFmtExport::WriteNumberElement_Impl(
 
     if ( nMinDecimals >= 0 )   // negative = automatic
     {
-        rExport.AddAttribute( XML_NAMESPACE_LO_EXT, XML_MIN_DECIMAL_PLACES,
-                              OUString::number( nMinDecimals ) );
+        // Export only for 1.2 with extensions or 1.3 and later.
+        SvtSaveOptions::ODFSaneDefaultVersion eVersion = rExport.getSaneDefaultVersion();
+        if (eVersion > SvtSaveOptions::ODFSVER_012)
+        {
+            // For 1.2+ use loext namespace, for 1.3 use number namespace.
+            rExport.AddAttribute(
+                ((eVersion < SvtSaveOptions::ODFSVER_013) ? XML_NAMESPACE_LO_EXT : XML_NAMESPACE_NUMBER),
+                                 XML_MIN_DECIMAL_PLACES,
+                                 OUString::number( nMinDecimals ) );
+        }
     }
 
     //  integer digits
@@ -648,10 +656,18 @@ void SvXMLNumFmtExport::WriteScientificElement_Impl(
                               OUString::number( nDecimals ) );
     }
 
+    SvtSaveOptions::ODFSaneDefaultVersion eVersion = rExport.getSaneDefaultVersion();
     if ( nMinDecimals >= 0 )   // negative = automatic
     {
-        rExport.AddAttribute( XML_NAMESPACE_LO_EXT, XML_MIN_DECIMAL_PLACES,
-                              OUString::number( nMinDecimals ) );
+        // Export only for 1.2 with extensions or 1.3 and later.
+        if (eVersion > SvtSaveOptions::ODFSVER_012)
+        {
+            // For 1.2+ use loext namespace, for 1.3 use number namespace.
+            rExport.AddAttribute(
+                ((eVersion < SvtSaveOptions::ODFSVER_013) ? XML_NAMESPACE_LO_EXT : XML_NAMESPACE_NUMBER),
+                                 XML_MIN_DECIMAL_PLACES,
+                                 OUString::number( nMinDecimals ) );
+        }
     }
 
     //  integer digits
@@ -678,7 +694,6 @@ void SvXMLNumFmtExport::WriteScientificElement_Impl(
     if ( nExpInterval >= 0 )
     {
         // Export only for 1.2 with extensions or 1.3 and later.
-        SvtSaveOptions::ODFSaneDefaultVersion eVersion = rExport.getSaneDefaultVersion();
         if (eVersion > SvtSaveOptions::ODFSVER_012)
         {
             // For 1.2+ use loext namespace, for 1.3 use number namespace.
@@ -689,13 +704,14 @@ void SvXMLNumFmtExport::WriteScientificElement_Impl(
     }
 
     //  exponent sign
-    if ( bExpSign )
+    // Export only for 1.2 with extensions or 1.3 and later.
+    if (eVersion > SvtSaveOptions::ODFSVER_012)
     {
-        rExport.AddAttribute( XML_NAMESPACE_LO_EXT, XML_FORCED_EXPONENT_SIGN, XML_TRUE );
-    }
-    else
-    {
-        rExport.AddAttribute( XML_NAMESPACE_LO_EXT, XML_FORCED_EXPONENT_SIGN, XML_FALSE );
+        // For 1.2+ use loext namespace, for 1.3 use number namespace.
+        rExport.AddAttribute(
+            ((eVersion < SvtSaveOptions::ODFSVER_013) ? XML_NAMESPACE_LO_EXT : XML_NAMESPACE_NUMBER),
+                             XML_FORCED_EXPONENT_SIGN,
+                             bExpSign? XML_TRUE : XML_FALSE );
     }
 
     SvXMLElementExport aElem( rExport,
