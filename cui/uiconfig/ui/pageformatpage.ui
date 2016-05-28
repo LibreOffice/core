@@ -55,7 +55,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkComboBox" id="comboPageFormat">
+                      <object class="svxcorelo-PaperSizeListBox" id="comboPageFormat">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                       </object>

@@ -26,6 +26,7 @@
 #include <vcl/lstbox.hxx>
 #include <svtools/stdctrl.hxx>
 #include <svx/pagectrl.hxx>
+#include <svx/papersizelistbox.hxx>
 #include <svx/frmdirlbox.hxx>
 #include <editeng/svxenum.hxx>
 #include <i18nutil/paper.hxx>
@@ -76,7 +77,7 @@ class SvxPageDescPage : public SfxTabPage
     static const sal_uInt16 pRanges[];
 private:
     // paper format
-    VclPtr<ListBox>             m_pPaperSizeBox;
+    VclPtr<PaperSizeListBox>    m_pPaperSizeBox;
 
     VclPtr<MetricField>         m_pPaperWidthEdit;
     VclPtr<MetricField>         m_pPaperHeightEdit;
