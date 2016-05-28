@@ -65,7 +65,6 @@ Animation::Animation() :
     mnLoopCount         ( 0 ),
     mnLoops             ( 0 ),
     mnPos               ( 0 ),
-    meCycleMode         ( CYCLE_NORMAL ),
     mbIsInAnimation     ( false ),
     mbLoopTerminated    ( false ),
     mbIsWaiting         ( false )
@@ -78,7 +77,6 @@ Animation::Animation( const Animation& rAnimation ) :
     maGlobalSize        ( rAnimation.maGlobalSize ),
     mnLoopCount         ( rAnimation.mnLoopCount ),
     mnPos               ( rAnimation.mnPos ),
-    meCycleMode         ( rAnimation.meCycleMode ),
     mbIsInAnimation     ( false ),
     mbLoopTerminated    ( rAnimation.mbLoopTerminated ),
     mbIsWaiting         ( rAnimation.mbIsWaiting )
@@ -113,7 +111,6 @@ Animation& Animation::operator=( const Animation& rAnimation )
 
     maGlobalSize = rAnimation.maGlobalSize;
     maBitmapEx = rAnimation.maBitmapEx;
-    meCycleMode = rAnimation.meCycleMode;
     mnLoopCount = rAnimation.mnLoopCount;
     mnPos = rAnimation.mnPos;
     mbLoopTerminated = rAnimation.mbLoopTerminated;
@@ -131,7 +128,6 @@ bool Animation::operator==( const Animation& rAnimation ) const
     if(  rAnimation.maList.size() == nCount
       && rAnimation.maBitmapEx    == maBitmapEx
       && rAnimation.maGlobalSize  == maGlobalSize
-      && rAnimation.meCycleMode   == meCycleMode
       )
     {
         bRet = true;
@@ -217,9 +213,6 @@ BitmapChecksum Animation::GetChecksum() const
     nCrc = vcl_get_checksum( nCrc, aBT32, 4 );
 
     UInt32ToSVBT32( maGlobalSize.Height(), aBT32 );
-    nCrc = vcl_get_checksum( nCrc, aBT32, 4 );
-
-    UInt32ToSVBT32( (long) meCycleMode, aBT32 );
     nCrc = vcl_get_checksum( nCrc, aBT32, 4 );
 
     for(const AnimationBitmap* i : maList)

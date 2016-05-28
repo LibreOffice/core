@@ -34,15 +34,6 @@ enum class Disposal
     Previous
 };
 
-enum CycleMode
-{
-    CYCLE_NOT,
-    CYCLE_NORMAL,
-    CYCLE_FALLBACK,
-    CYCLE_REVERS,
-    CYCLE_REVERS_FALLBACK
-};
-
 struct VCL_DLLPUBLIC AnimationBitmap
 {
     BitmapEx        aBmpEx;
@@ -131,8 +122,6 @@ public:
     void            SetLoopCount( const sal_uLong nLoopCount );
     void            ResetLoopCount();
 
-    CycleMode       GetCycleMode() const { return meCycleMode; }
-
     void            SetNotifyHdl( const Link<Animation*,void>& rLink ) { maNotifyLink = rLink; }
     const Link<Animation*,void>& GetNotifyHdl() const { return maNotifyLink; }
 
@@ -190,7 +179,6 @@ private:
     long            mnLoopCount;
     long            mnLoops;
     size_t          mnPos;
-    CycleMode       meCycleMode;
     bool            mbIsInAnimation;
     bool            mbLoopTerminated;
     bool            mbIsWaiting;
