@@ -1542,41 +1542,18 @@ void ToolBox::ImplLoadRes( const ResId& rResId )
 
     DockingWindow::ImplLoadRes( rResId );
 
-    sal_uLong              nObjMask;
+    RscToolboxFlags nObjMask = (RscToolboxFlags)ReadLongRes();
 
-    nObjMask = ReadLongRes();
-
-    if ( nObjMask & RSC_TOOLBOX_BUTTONTYPE )
+    if ( nObjMask & RscToolboxFlags::ButtonType )
         SetButtonType( (ButtonType)ReadLongRes() );
 
-    if ( nObjMask & RSC_TOOLBOX_ALIGN )
+    if ( nObjMask & RscToolboxFlags::Align )
         SetAlign( (WindowAlign)ReadLongRes() );
 
-    if ( nObjMask & RSC_TOOLBOX_LINECOUNT )
+    if ( nObjMask & RscToolboxFlags::LineCount )
         SetLineCount( sal::static_int_cast<sal_uInt16>(ReadLongRes()) );
 
-    if ( nObjMask & RSC_TOOLBOX_CUSTOMIZE )
-    {
-        bool bCust = ReadShortRes();
-        EnableCustomize( bCust );
-    }
-
-    if ( nObjMask & RSC_TOOLBOX_MENUSTRINGS )
-    {
-        bool bCust = ReadShortRes();
-        EnableMenuStrings( bCust );
-    }
-
-    if ( nObjMask & RSC_TOOLBOX_FLOATLINES )
-        SetFloatingLines( ReadShortRes() );
-
-    if ( nObjMask & RSC_TOOLBOX_ITEMIMAGELIST )
-    {
-        maImageList = ImageList( ResId( static_cast<RSHEADER_TYPE*>(GetClassRes()), *pMgr ) );
-        IncrementRes( GetObjSizeRes( static_cast<RSHEADER_TYPE*>(GetClassRes()) ) );
-    }
-
-    if ( nObjMask & RSC_TOOLBOX_ITEMLIST )
+    if ( nObjMask & RscToolboxFlags::ItemList )
     {
         sal_uLong nEle = ReadLongRes();
 
