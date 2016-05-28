@@ -118,23 +118,28 @@ static std::vector<int> uploadPrimitives(const Primitives_t& primitives)
     for (const Primitive& primitive: primitives)
         size += primitive.getVerticesSize();
 
-    CHECK_GL_ERROR();
-    glBufferData(GL_ARRAY_BUFFER, size, nullptr, GL_STATIC_DRAW);
-    CHECK_GL_ERROR();
-    Vertex *buf = static_cast<Vertex*>(glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY));
-
     std::vector<int> indices;
-    int last_pos = 0;
-    for (const Primitive& primitive: primitives) {
-        indices.push_back(last_pos);
-        int num = primitive.writeVertices(buf);
-        buf += num;
-        last_pos += num;
+
+    CHECK_GL_ERROR();
+    if (size != 0)
+    {
+        glBufferData(GL_ARRAY_BUFFER, size, nullptr, GL_STATIC_DRAW);
+        CHECK_GL_ERROR();
+        Vertex *buf = static_cast<Vertex*>(glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY));
+
+        int last_pos = 0;
+        for (const Primitive& primitive: primitives) {
+            indices.push_back(last_pos);
+            int num = primitive.writeVertices(buf);
+            buf += num;
+            last_pos += num;
+        }
+
+        CHECK_GL_ERROR();
+        glUnmapBuffer(GL_ARRAY_BUFFER);
+        CHECK_GL_ERROR();
     }
 
-    CHECK_GL_ERROR();
-    glUnmapBuffer(GL_ARRAY_BUFFER);
-    CHECK_GL_ERROR();
     return indices;
 }
 
@@ -1143,6 +1148,8 @@ private:
 
 void DiamondTransition::prepare( double nTime, double /* SlideWidth */, double /* SlideHeight */, double /* DispWidth */, double /* DispHeight */, sal_Int32 glLeavingSlideTex, sal_Int32 glEnteringSlideTex )
 {
+    return;
+
     Primitive Slide1, Slide2;
 
     Slide1.pushTriangle (glm::vec2 (0,0), glm::vec2 (1,0), glm::vec2 (0,1));
@@ -1176,23 +1183,42 @@ void DiamondTransition::prepare( double nTime, double /* SlideWidth */, double /
 
     setScene(TransitionScene(aLeavingSlidePrimitives, aEnteringSlidePrimitives));
 
-    OGLTransitionImpl::prepare(glLeavingSlideTex, glEnteringSlideTex);
-}
-
-std::shared_ptr<OGLTransitionImpl>
-makeDiamondTransition(const TransitionSettings& rSettings)
-{
-    return std::make_shared<DiamondTransition>(TransitionScene(), rSettings);
+//    OGLTransitionImpl::prepare(glLeavingSlideTex, glEnteringSlideTex);
+    (void)glLeavingSlideTex;
+    (void)glEnteringSlideTex;
 }
 
 }
 
 std::shared_ptr<OGLTransitionImpl> makeDiamond()
 {
-    TransitionSettings aSettings;
-    aSettings.mbUseMipMapLeaving = aSettings.mbUseMipMapEntering = false;
+    unsigned int nRows = 10;
+    Primitives_t aLeavingSlide;
+    Primitives_t aEnteringSlide;
+    double invN(1.0/static_cast<double>(nRows));
+    for (unsigned int i(0); i < nRows; ++i)
+    {
+        Primitive Slide2;
 
-    return makeDiamondTransition(aSettings);
+        double nTime = ((double)i)/nRows;
+
+        double l = 0.5 - nTime;
+        double h = 0.5 + nTime;
+
+        Slide2.pushTriangle (glm::vec2 (0,0), glm::vec2 (1,0), glm::vec2 (0.5,l));
+        Slide2.pushTriangle (glm::vec2 (0.5,l), glm::vec2 (1,0), glm::vec2 (h,0.5));
+
+        fprintf(stderr, "time is %f\n", nTime);
+
+        Slide2.Operations.push_back (makeSTranslate (glm::vec3 (0, 0, -0.000001),
+                                     true, i * invN, i * (invN+1) ) );
+        aLeavingSlide.push_back(Slide2);
+
+        Slide2.Operations.push_back (makeSTranslate (glm::vec3 (0, 0, 0.000001), false, -1, 0));
+        aEnteringSlide.push_back(Slide2);
+    }
+
+    return makeSimpleTransition(aLeavingSlide, aEnteringSlide);
 }
 
 std::shared_ptr<OGLTransitionImpl> makeVenetianBlinds( bool vertical, int parts )
@@ -1209,11 +1235,11 @@ std::shared_ptr<OGLTransitionImpl> makeVenetianBlinds( bool vertical, int parts 
         if( vertical ) {
             Slide.pushTriangle (glm::vec2 (ln,0), glm::vec2 (n,0), glm::vec2 (ln,1));
             Slide.pushTriangle (glm::vec2 (n,0), glm::vec2 (ln,1), glm::vec2 (n,1));
-            Slide.Operations.push_back(makeRotateAndScaleDepthByWidth(glm::vec3(0, 1, 0), glm::vec3(n + ln - 1, 0, -t30*p), -120, true, true, 0.0, 1.0));
+            Slide.Operations.push_back(makeRotateAndScaleDepthByWidth(glm::vec3(0, 1, 0), glm::vec3(n + ln - 1, 0, -t30*p), -120, true, true, p*i, p*(i+1)));
         } else {
             Slide.pushTriangle (glm::vec2 (0,ln), glm::vec2 (1,ln), glm::vec2 (0,n));
             Slide.pushTriangle (glm::vec2 (1,ln), glm::vec2 (0,n), glm::vec2 (1,n));
-            Slide.Operations.push_back(makeRotateAndScaleDepthByHeight(glm::vec3(1, 0, 0), glm::vec3(0, 1 - n - ln, -t30*p), -120, true, true, 0.0, 1.0));
+            Slide.Operations.push_back(makeRotateAndScaleDepthByHeight(glm::vec3(1, 0, 0), glm::vec3(0, 1 - n - ln, -t30*p), -120, true, true, p*i, p*(i+1)));
         }
         aLeavingSlide.push_back (Slide);
 

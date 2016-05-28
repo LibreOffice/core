@@ -1243,6 +1243,9 @@ public:
         std::shared_ptr<OGLTransitionImpl> pTransition;
 
         if( transitionType == animations::TransitionType::MISCSHAPEWIPE ) {
+            fprintf(stderr, "misc plus %d\n", (int)transitionSubType);
+
+
             switch( transitionSubType )
                 {
                 case animations::TransitionSubType::LEFTTORIGHT:
