@@ -1065,8 +1065,7 @@ RscTop * RscTypCont::InitClassToolBoxItem( RscTop * pSuper,
 }
 
 RscTop * RscTypCont::InitClassToolBox( RscTop * pSuper,
-                                       RscTop * pClassToolBoxItem,
-                                       RscTop * pClassImageList )
+                                       RscTop * pClassToolBoxItem )
 {
     Atom        nId;
     RscTop *    pClassToolBox;
@@ -1089,7 +1088,7 @@ RscTop * RscTypCont::InitClassToolBox( RscTop * pSuper,
         // add variable
         nId = aNmTb.Put( "ButtonType", VARNAME );
         pClassToolBox->SetVariable( nId, pEnum, nullptr, 0,
-                                  RSC_TOOLBOX_BUTTONTYPE  );
+                                  (sal_uInt32)RscToolboxFlags::ButtonType  );
     }
     {
         RscEnum   * pEnum;
@@ -1103,23 +1102,11 @@ RscTop * RscTypCont::InitClassToolBox( RscTop * pSuper,
         // add variable
         nId = aNmTb.Put( "Align", VARNAME );
         pClassToolBox->SetVariable( nId, pEnum, nullptr, 0,
-                                  RSC_TOOLBOX_ALIGN  );
+                                  (sal_uInt32)RscToolboxFlags::Align  );
     }
     nId = aNmTb.Put( "LineCount", VARNAME );
     pClassToolBox->SetVariable( nId, &aIdNoZeroUShort, nullptr, 0,
-                                RSC_TOOLBOX_LINECOUNT  );
-    nId = aNmTb.Put( "FloatingLines", VARNAME );
-    pClassToolBox->SetVariable( nId, &aUShort, nullptr, 0,
-                                RSC_TOOLBOX_FLOATLINES  );
-    nId = aNmTb.Put( "Customize", VARNAME );
-    pClassToolBox->SetVariable( nId, &aBool, nullptr, 0,
-                                RSC_TOOLBOX_CUSTOMIZE );
-    nId = aNmTb.Put( "MenuStrings", VARNAME );
-    pClassToolBox->SetVariable( nId, &aBool, nullptr, 0,
-                                RSC_TOOLBOX_MENUSTRINGS );
-    nId = aNmTb.Put( "ItemImageList", VARNAME );
-    pClassToolBox->SetVariable( nId, pClassImageList, nullptr, 0,
-                                RSC_TOOLBOX_ITEMIMAGELIST );
+                                 (sal_uInt32)RscToolboxFlags::LineCount );
     {
         RscLangArray* pLA;
         RscCont * pCont;
@@ -1135,7 +1122,7 @@ RscTop * RscTypCont::InitClassToolBox( RscTop * pSuper,
         );
         nId = aNmTb.Put( "ItemList", VARNAME );
         pClassToolBox->SetVariable( nId, pLA, nullptr, 0,
-                                    RSC_TOOLBOX_ITEMLIST );
+                                    (sal_uInt32)RscToolboxFlags::ItemList );
     }
     INS_WINBIT(pClassToolBox,Scroll)
     INS_WINBIT(pClassToolBox,LineSpacing)
