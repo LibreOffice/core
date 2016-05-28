@@ -34,6 +34,7 @@
 #include <com/sun/star/drawing/XDrawView.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include "fupage.hxx"
+#include <svx/papersizelistbox.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/xgrad.hxx>
 #include <svx/xflgrit.hxx>
@@ -42,6 +43,7 @@
 #include <svx/xbtmpit.hxx>
 #include <svx/xflhtit.hxx>
 #include "EventMultiplexer.hxx"
+
 
 namespace sd { namespace sidebar {
 
@@ -70,7 +72,7 @@ private:
 
     ViewShellBase& mrBase;
 
-    VclPtr<ListBox> mpPaperSizeBox;
+    VclPtr<PaperSizeListBox> mpPaperSizeBox;
     VclPtr<ListBox> mpPaperOrientation;
     VclPtr<ListBox> mpMasterSlide;
     VclPtr<SvxFillTypeBox> mpFillStyle;

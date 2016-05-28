@@ -1091,9 +1091,11 @@
 #define RID_SVXSTR_PT                    (RID_SVX_START + 1392)
 #define RID_SVXIMG_WIDTH_CUSTOM          (RID_SVX_START + 1393)
 #define RID_SVXIMG_WIDTH_CUSTOM_GRAY     (RID_SVX_START + 1394)
+#define RID_SVXSTRARY_PAPERSIZE_STD      (RID_SVX_START + 1395)
+#define RID_SVXSTRARY_PAPERSIZE_DRAW     (RID_SVX_START + 1396)
 
 // !!! IMPORTANT: consider and update RID_SVXSTR_NEXTFREE when introducing new RIDs for Strings !!!
-#define RID_SVXSTR_NEXTFREE              (RID_SVX_START + 1395)
+#define RID_SVXSTR_NEXTFREE              (RID_SVX_START + 1397)
 
 // if we have _a_lot_ time, we should group the resource ids by type, instead
 // of grouping them by semantics. The reason is that resource ids have to be
