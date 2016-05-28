@@ -156,7 +156,6 @@ public:
     static void SaveSymbols();
 
     void        ArrangeFormula();
-    bool                IsFormulaArranged() const { return bIsFormulaArranged; }
 
     //Access for the View. This access is not for the OLE-case!
     //and for the communication with the SFX!
