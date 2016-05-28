@@ -521,10 +521,17 @@ void SvXMLNumFmtExport::WriteMinutesElement_Impl( bool bLong )
 
 void SvXMLNumFmtExport::WriteRepeatedElement_Impl( sal_Unicode nChar )
 {
-    FinishTextElement_Impl(true);
-    SvXMLElementExport aElem( rExport, XML_NAMESPACE_LO_EXT, XML_FILL_CHARACTER,
-                                  true, false );
-    rExport.Characters( OUString( nChar ) );
+    // Export only for 1.2 with extensions or 1.3 and later.
+    SvtSaveOptions::ODFSaneDefaultVersion eVersion = rExport.getSaneDefaultVersion();
+    if (eVersion > SvtSaveOptions::ODFSVER_012)
+    {
+        FinishTextElement_Impl(true);
+        // For 1.2+ use loext namespace, for 1.3 use number namespace.
+        SvXMLElementExport aElem( rExport,
+                                  ((eVersion < SvtSaveOptions::ODFSVER_013) ? XML_NAMESPACE_LO_EXT : XML_NAMESPACE_NUMBER),
+                                  XML_FILL_CHARACTER, true, false );
+        rExport.Characters( OUString( nChar ) );
+    }
 }
 
 void SvXMLNumFmtExport::WriteSecondsElement_Impl( bool bLong, sal_uInt16 nDecimals )
