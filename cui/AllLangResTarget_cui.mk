@@ -49,7 +49,6 @@ $(eval $(call gb_SrsTarget_add_files,cui/res,\
     cui/source/options/treeopt.src \
     cui/source/tabpages/border.src \
     cui/source/tabpages/frmdirlbox.src \
-    cui/source/tabpages/page.src \
     cui/source/tabpages/paragrph.src \
     cui/source/tabpages/strings.src \
 ))
