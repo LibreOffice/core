@@ -60,7 +60,7 @@ namespace framework{
 class RequestFilterSelect_Impl;
 class FWE_DLLPUBLIC RequestFilterSelect
 {
-    RequestFilterSelect_Impl* pImp;
+    std::unique_ptr<RequestFilterSelect_Impl> pImpl;
 
 public:
     RequestFilterSelect( const OUString& sURL );

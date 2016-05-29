@@ -156,14 +156,14 @@ css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > >
 }
 
 RequestFilterSelect::RequestFilterSelect( const OUString& sURL )
+    : pImpl( new RequestFilterSelect_Impl( sURL ))
 {
-    pImp = new RequestFilterSelect_Impl( sURL );
-    pImp->acquire();
+    pImpl->acquire();
 }
 
 RequestFilterSelect::~RequestFilterSelect()
 {
-    pImp->release();
+    pImpl->release();
 }
 
 // return abort state of interaction
@@ -171,7 +171,7 @@ RequestFilterSelect::~RequestFilterSelect()
 
 bool RequestFilterSelect::isAbort() const
 {
-    return pImp->isAbort();
+    return pImpl->isAbort();
 }
 
 // return user selected filter
@@ -179,12 +179,12 @@ bool RequestFilterSelect::isAbort() const
 
 OUString RequestFilterSelect::getFilter() const
 {
-    return pImp->getFilter();
+    return pImpl->getFilter();
 }
 
 uno::Reference < task::XInteractionRequest > RequestFilterSelect::GetRequest()
 {
-    return uno::Reference < task::XInteractionRequest > (pImp);
+    return uno::Reference < task::XInteractionRequest > (pImpl.get());
 }
 
 class InteractionRequest_Impl : public ::cppu::WeakImplHelper< css::task::XInteractionRequest >
