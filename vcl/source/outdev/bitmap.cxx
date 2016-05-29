@@ -246,7 +246,7 @@ void OutputDevice::DrawBitmapEx( const Point& rDestPt,
     if( ImplIsRecordLayout() )
         return;
 
-    if( TRANSPARENT_NONE == rBitmapEx.GetTransparentType() )
+    if( TransparentType::NONE == rBitmapEx.GetTransparentType() )
     {
         DrawBitmap( rDestPt, rBitmapEx.GetBitmap() );
     }
@@ -265,7 +265,7 @@ void OutputDevice::DrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
     if( ImplIsRecordLayout() )
         return;
 
-    if ( TRANSPARENT_NONE == rBitmapEx.GetTransparentType() )
+    if ( TransparentType::NONE == rBitmapEx.GetTransparentType() )
     {
         DrawBitmap( rDestPt, rDestSize, rBitmapEx.GetBitmap() );
     }
@@ -285,7 +285,7 @@ void OutputDevice::DrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
     if( ImplIsRecordLayout() )
         return;
 
-    if( TRANSPARENT_NONE == rBitmapEx.GetTransparentType() )
+    if( TransparentType::NONE == rBitmapEx.GetTransparentType() )
     {
         DrawBitmap( rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel, rBitmapEx.GetBitmap() );
     }

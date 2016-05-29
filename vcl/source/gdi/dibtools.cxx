@@ -1658,16 +1658,16 @@ bool ReadDIBBitmapEx(
 
         if(bRetval)
         {
-            sal_uInt8 transparent = TRANSPARENT_NONE;
-
-            rIStm.ReadUChar( transparent );
+            sal_uInt8 tmp = 0;
+            rIStm.ReadUChar( tmp );
+            TransparentType transparent = (TransparentType)tmp;
             bRetval = !rIStm.GetError();
 
             if(bRetval)
             {
                 switch (transparent)
                 {
-                case TRANSPARENT_BITMAP:
+                case TransparentType::Bitmap:
                     {
                         Bitmap aMask;
 
@@ -1694,7 +1694,7 @@ bool ReadDIBBitmapEx(
                         }
                         break;
                     }
-                case TRANSPARENT_COLOR:
+                case TransparentType::Color:
                     {
                         Color aTransparentColor;
 
@@ -1707,6 +1707,7 @@ bool ReadDIBBitmapEx(
                         }
                         break;
                     }
+                default: break;
                 }
             }
         }
@@ -1748,13 +1749,13 @@ bool WriteDIBBitmapEx(
     {
         rOStm.WriteUInt32( 0x25091962 );
         rOStm.WriteUInt32( 0xACB20201 );
-        rOStm.WriteUChar( rSource.eTransparent );
+        rOStm.WriteUChar( (sal_uChar)rSource.eTransparent );
 
-        if(TRANSPARENT_BITMAP == rSource.eTransparent)
+        if(TransparentType::Bitmap == rSource.eTransparent)
         {
             return ImplWriteDIB(rSource.aMask, nullptr, rOStm, true, true);
         }
-        else if(TRANSPARENT_COLOR == rSource.eTransparent)
+        else if(TransparentType::Color == rSource.eTransparent)
         {
             WriteColor( rOStm, rSource.aTransparentColor );
             return true;

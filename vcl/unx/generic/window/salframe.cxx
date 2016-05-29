@@ -216,16 +216,16 @@ static void CreateNetWmAppIcon( sal_uInt16 nIcon, NetWmIconData& netwm_icon )
         AlphaMask mask;
         switch( aIcon.GetTransparentType())
         {
-            case TRANSPARENT_NONE:
+            case TransparentType::NONE:
             {
                 sal_uInt8 nTrans = 0;
                 mask = AlphaMask( icon.GetSizePixel(), &nTrans );
             }
             break;
-            case TRANSPARENT_COLOR:
+            case TransparentType::Color:
                 mask = AlphaMask( icon.CreateMask( aIcon.GetTransparentColor() ) );
             break;
-            case TRANSPARENT_BITMAP:
+            case TransparentType::Bitmap:
                 mask = aIcon.GetAlpha();
             break;
         }
@@ -294,7 +294,7 @@ static bool lcl_SelectAppIconPixmap( SalDisplay *pDisplay, SalX11Screen nXScreen
 
     icon_mask = None;
 
-    if( TRANSPARENT_BITMAP == aIcon.GetTransparentType() )
+    if( TransparentType::Bitmap == aIcon.GetTransparentType() )
     {
         icon_mask = XCreatePixmap( pDisplay->GetDisplay(),
                                    pDisplay->GetRootWindow( pDisplay->GetDefaultXScreen() ),

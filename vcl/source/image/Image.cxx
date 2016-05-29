@@ -67,7 +67,7 @@ Image::Image( const ResId& rResId ) :
 
         if( nObjMask & RscImageFlags::MaskColor )
         {
-            if( !aBmpEx.IsEmpty() && aBmpEx.GetTransparentType() == TRANSPARENT_NONE )
+            if( !aBmpEx.IsEmpty() && aBmpEx.GetTransparentType() == TransparentType::NONE )
             {
                 const Color aMaskColor( ResId( static_cast<RSHEADER_TYPE*>(pResMgr->GetClass()), *pResMgr ) );
                 aBmpEx = BitmapEx( aBmpEx.GetBitmap(), aMaskColor );

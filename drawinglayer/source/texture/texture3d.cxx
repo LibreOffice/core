@@ -117,11 +117,11 @@ namespace drawinglayer
         {
             switch(maBitmapEx.GetTransparentType())
             {
-                case TRANSPARENT_NONE:
+                case TransparentType::NONE:
                 {
                     break;
                 }
-                case TRANSPARENT_COLOR:
+                case TransparentType::Color:
                 {
                     const BitmapColor aBitmapColor(mpReadBitmap->GetColor(rY, rX));
 
@@ -132,7 +132,7 @@ namespace drawinglayer
 
                     break;
                 }
-                case TRANSPARENT_BITMAP:
+                case TransparentType::Bitmap:
                 {
                     OSL_ENSURE(mpReadTransparence, "OOps, transparence type Bitmap, but no read access created in the constructor (?)");
                     const BitmapColor aBitmapColor(mpReadTransparence->GetPixel(rY, rX));

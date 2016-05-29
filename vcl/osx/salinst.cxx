@@ -1052,7 +1052,7 @@ CGImageRef CreateCGImage( const Image& rImage )
         else
             xImage = pSalBmp->CreateCroppedImage( 0, 0, pSalBmp->mnWidth, pSalBmp->mnHeight );
     }
-    else if( aBmpEx.GetTransparentType() == TRANSPARENT_BITMAP )
+    else if( aBmpEx.GetTransparentType() == TransparentType::Bitmap )
     {
         Bitmap aMask( aBmpEx.GetMask() );
         QuartzSalBitmap* pMaskBmp = static_cast<QuartzSalBitmap*>(aMask.ImplGetImpBitmap()->ImplGetSalBitmap());
@@ -1061,7 +1061,7 @@ CGImageRef CreateCGImage( const Image& rImage )
         else
             xImage = pSalBmp->CreateCroppedImage( 0, 0, pSalBmp->mnWidth, pSalBmp->mnHeight );
     }
-    else if( aBmpEx.GetTransparentType() == TRANSPARENT_COLOR )
+    else if( aBmpEx.GetTransparentType() == TransparentType::Color )
     {
         Color aTransColor( aBmpEx.GetTransparentColor() );
         SalColor nTransColor = MAKE_SALCOLOR( aTransColor.GetRed(), aTransColor.GetGreen(), aTransColor.GetBlue() );

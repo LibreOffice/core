@@ -11146,15 +11146,15 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
         {
             switch( rObject.m_aBitmap.GetTransparentType() )
             {
-                case TRANSPARENT_NONE:
+                case TransparentType::NONE:
                     // comes from drawMask function
                     if( aBitmap.GetBitCount() == 1 && rObject.m_bDrawMask )
                         bMask = true;
                     break;
-                case TRANSPARENT_COLOR:
+                case TransparentType::Color:
                     aTransparentColor = rObject.m_aBitmap.GetTransparentColor();
                     break;
-                case TRANSPARENT_BITMAP:
+                case TransparentType::Bitmap:
                     bWriteMask = true;
                     break;
             }
