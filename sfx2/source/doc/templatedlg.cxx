@@ -164,6 +164,7 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg(vcl::Window *parent)
     : ModalDialog(parent, "TemplateDialog", "sfx/ui/templatedlg.ui"),
       maSelTemplates(cmpSelectionItems),
       mxDesktop( Desktop::create(comphelper::getProcessComponentContext()) ),
+      mbIsImpressDoc(false),
       mbIsSynced(false),
       maRepositories()
 {
@@ -342,11 +343,29 @@ void SfxTemplateManagerDlg::dispose()
 
 short SfxTemplateManagerDlg::Execute()
 {
-    //use application specific settings if there's no previous setting
-    getApplicationSpecificSettings();
-    readSettings();
+    if(mbIsImpressDoc)
+        setPresentationMode();
+    else
+    {
+        //use application specific settings if there's no previous setting
+        getApplicationSpecificSettings();
+        readSettings();
+    }
 
     return ModalDialog::Execute();
+}
+
+void SfxTemplateManagerDlg::setPresentationMode()
+{
+    mpCBApp->SelectEntryPos(MNI_IMPRESS);
+    mpCBApp->Disable();
+    mpCBFolder->SelectEntryPos(0);
+
+    if(mpLocalView->IsVisible())
+    {
+        mpLocalView->filterItems(ViewFilter_Application(getCurrentApplicationFilter()));
+        mpLocalView->showAllTemplates();
+    }
 }
 
 void SfxTemplateManagerDlg::setDocumentModel(const uno::Reference<frame::XModel> &rModel)

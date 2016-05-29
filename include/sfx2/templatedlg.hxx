@@ -52,6 +52,7 @@ public:
     virtual short Execute() override;
 
     void setDocumentModel (const css::uno::Reference<css::frame::XModel> &rModel);
+    inline void setAsImpressDoc() { mbIsImpressDoc = true; };
 
 private:
 
@@ -60,6 +61,8 @@ private:
     void readSettings ();
 
     void writeSettings ();
+
+    void setPresentationMode();
 
     void fillFolderComboBox();
 
@@ -165,6 +168,7 @@ private:
     css::uno::Reference< css::frame::XModel > m_xModel;
     css::uno::Reference< css::frame::XDesktop2 > mxDesktop;
 
+    bool mbIsImpressDoc;
     bool mbIsSynced; ///< Tells whether maRepositories is synchronized with the user config
     std::vector<TemplateRepository*> maRepositories; ///< Stores the remote repositories for templates
 };
