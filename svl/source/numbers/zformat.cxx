@@ -2694,16 +2694,14 @@ bool SvNumberformat::ImpGetFractionOutput(double fNumber,
     else
     {
         bRes |= ImpNumberFill(sFrac, fNumber, k, j, nIx, NF_SYMBOLTYPE_FRACBLANK);
+        bCont = false;  // there is no main number?
         if (rInfo.nTypeArray[j] == NF_SYMBOLTYPE_FRACBLANK)
         {
             sFrac.insert(0, rInfo.sStrArray[j]);
             if ( j )
             {
                 j--;
-            }
-            else
-            {
-                bCont = false;
+                bCont = true;  // Yes, there is a main number
             }
         }
     }
@@ -4293,6 +4291,7 @@ bool SvNumberformat::ImpNumberFill( OUStringBuffer& sBuff, // number string
                                     short eSymbolType )    // type of stop condition
 {
     bool bRes = false;
+    bool bStop = false;
     const ImpSvNumberformatInfo& rInfo = NumFor[nIx].Info();
     // no normal thousands separators if number divided by thousands
     bool bDoThousands = (rInfo.nThousand == 0);
@@ -4300,8 +4299,12 @@ bool SvNumberformat::ImpNumberFill( OUStringBuffer& sBuff, // number string
 
     k = sBuff.getLength(); // behind last digit
 
-    while (j > 0 && (nType = rInfo.nTypeArray[j]) != eSymbolType ) // Backwards
+    while (!bStop && (nType = rInfo.nTypeArray[j]) != eSymbolType ) // Backwards
     {
+        if (j == 0)
+        {
+            bStop = true;
+        }
         switch ( nType )
         {
         case NF_SYMBOLTYPE_STAR:
@@ -4374,7 +4377,8 @@ bool SvNumberformat::ImpNumberFill( OUStringBuffer& sBuff, // number string
             sBuff.insert(k, rInfo.sStrArray[j]);
             break;
         } // of switch
-        j--; // Next String
+        if ( j )
+            j--; // Next String
     } // of while
     return bRes;
 }
