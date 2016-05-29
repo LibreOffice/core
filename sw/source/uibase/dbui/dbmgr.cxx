@@ -140,6 +140,8 @@
 #include <comphelper/propertysequence.hxx>
 #include <officecfg/Office/Common.hxx>
 
+#include<o3tl/make_unique.hxx>
+
 using namespace ::com::sun::star;
 
 #define DB_SEP_SPACE    0
@@ -493,8 +495,8 @@ bool SwDBManager::Merge( const SwMergeDescriptor& rMergeDesc, vcl::Window* pPare
             *pTemp = *pImpl->pMergeData;
         else
         {
+            m_DataSourceParams.push_back(o3tl::make_unique<SwDSParam>(*pImpl->pMergeData));
             std::unique_ptr<SwDSParam> pInsert(new SwDSParam(*pImpl->pMergeData));
-            m_DataSourceParams.push_back(std::move(pInsert));
             try
             {
                 uno::Reference<lang::XComponent> xComponent(pInsert->xConnection, uno::UNO_QUERY);
