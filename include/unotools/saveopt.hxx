@@ -21,11 +21,12 @@
 
 #include <unotools/unotoolsdllapi.h>
 #include <unotools/options.hxx>
+#include <memory>
 
 struct SvtLoadSaveOptions_Impl;
 class UNOTOOLS_DLLPUBLIC SvtSaveOptions: public utl::detail::Options
 {
-    SvtLoadSaveOptions_Impl*    pImp;
+    std::shared_ptr<SvtLoadSaveOptions_Impl>    pImpl;
 
 public:
 
