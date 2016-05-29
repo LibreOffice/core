@@ -25,7 +25,6 @@
 #include "custsdlg.hxx"
 #include "dlg_char.hxx"
 #include "dlgpage.hxx"
-#include "dlgass.hxx"
 #include "dlgfield.hxx"
 #include "dlgsnap.hxx"
 #include "layeroptionsdlg.hxx"
@@ -53,7 +52,6 @@ IMPL_ABSTDLG_BASE(AbstractCopyDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractSdCustomShowDlg_Impl);
 IMPL_ABSTDLG_BASE(SdAbstractTabDialog_Impl);
 IMPL_ABSTDLG_BASE(SdPresLayoutTemplateDlg_Impl);
-IMPL_ABSTDLG_BASE(AbstractAssistentDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractSdModifyFieldDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractSdSnapLineDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractSdInsertLayerDlg_Impl);
@@ -186,46 +184,6 @@ void SdPresLayoutTemplateDlg_Impl::SetText( const OUString& rStr )
 OUString SdPresLayoutTemplateDlg_Impl::GetText() const
 {
     return pDlg->GetText();
-}
-
-SfxObjectShellLock AbstractAssistentDlg_Impl::GetDocument()
-{
-    return pDlg->GetDocument();
-}
-
-OutputType AbstractAssistentDlg_Impl::GetOutputMedium() const
-{
-    return pDlg->GetOutputMedium();
-}
-
-bool AbstractAssistentDlg_Impl::IsSummary() const
-{
-    return pDlg->IsSummary();
-}
-
-StartType AbstractAssistentDlg_Impl::GetStartType() const
-{
-    return pDlg->GetStartType();
-}
-
-OUString AbstractAssistentDlg_Impl::GetDocPath() const
-{
-    return pDlg->GetDocPath();
-}
-
-bool AbstractAssistentDlg_Impl::GetStartWithFlag() const
-{
-    return pDlg->GetStartWithFlag();
-}
-
-bool AbstractAssistentDlg_Impl::IsDocEmpty() const
-{
-    return pDlg->IsDocEmpty();
-}
-
-css::uno::Sequence< css::beans::NamedValue > AbstractAssistentDlg_Impl::GetPassword()
-{
-    return pDlg->GetPassword();
 }
 
 SvxFieldData* AbstractSdModifyFieldDlg_Impl::GetField()
@@ -376,11 +334,6 @@ SfxAbstractTabDialog *  SdAbstractDialogFactory_Impl::CreateSdTabCharDialog(vcl:
 SfxAbstractTabDialog *  SdAbstractDialogFactory_Impl::CreateSdTabPageDialog(vcl::Window* pParent, const SfxItemSet* pAttr, SfxObjectShell* pDocShell, bool bAreaPage )
 {
     return new SdAbstractTabDialog_Impl( VclPtr<SdPageDlg>::Create( pDocShell, pParent, pAttr, bAreaPage ) );
-}
-
-AbstractAssistentDlg * SdAbstractDialogFactory_Impl::CreateAssistentDlg(bool bAutoPilot)
-{
-    return new AbstractAssistentDlg_Impl( VclPtr<AssistentDlg>::Create( nullptr, bAutoPilot ) );
 }
 
 AbstractSdModifyFieldDlg * SdAbstractDialogFactory_Impl::CreateSdModifyFieldDlg( vcl::Window* pParent, const SvxFieldData* pInField, const SfxItemSet& rSet )

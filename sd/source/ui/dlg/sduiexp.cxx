@@ -29,7 +29,6 @@
 #include "layeroptionsdlg.hxx"
 #include "dlgsnap.hxx"
 #include "dlgfield.hxx"
-#include "dlgass.hxx"
 #include "prltempl.hxx"
 #include "custsdlg.hxx"
 #include "copydlg.hxx"
