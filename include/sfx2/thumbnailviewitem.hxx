@@ -106,9 +106,8 @@ public:
     void setHelpText (const OUString &sText) { maHelpText = sText; }
 
     virtual OUString getHelpText() const { return maHelpText; };
+    virtual OUString getTitle() const { return maTitle; };
 
-    virtual void setEditTitle (bool edit, bool bChangeFocus = true);
-    void updateTitleEditSize ();
     void setTitle (const OUString& rTitle);
 
     css::uno::Reference< css::accessibility::XAccessible >
@@ -117,7 +116,6 @@ public:
     void setDrawArea (const Rectangle &area);
 
     const Rectangle& getDrawArea () const { return maDrawArea; }
-    Rectangle getTextArea () const;
 
     virtual void calculateItemsPosition (const long nThumbnailHeight, const long nDisplayHeight,
                                          const long nPadding, sal_uInt32 nMaxTextLength,
@@ -137,9 +135,6 @@ protected:
     Point maTextPos;
     Point maPrev1Pos;
     Rectangle maDrawArea;
-    bool mbEditTitle;
-    VclPtr<VclMultiLineEdit> mpTitleED;
-    Rectangle maTextEditMaxArea;
 };
 
 #endif // INCLUDED_SFX2_THUMBNAILVIEWITEM_HXX
