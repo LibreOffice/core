@@ -31,6 +31,8 @@
 
 #include <i18nlangtag/lang.h>
 
+#include <math.h>
+
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
 #include <svl/sharedstringpool.hxx>
@@ -60,6 +62,7 @@ public:
     void testI116701();
     void testDateInput();
     void testIsNumberFormat();
+    void testUserDefinedNumberFormats();
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testNumberFormat);
@@ -70,6 +73,7 @@ public:
     CPPUNIT_TEST(testI116701);
     CPPUNIT_TEST(testDateInput);
     CPPUNIT_TEST(testIsNumberFormat);
+    CPPUNIT_TEST(testUserDefinedNumberFormats);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -1077,6 +1081,28 @@ void Test::testIsNumberFormat()
             aFormatter.GetOutputString( fNumber, nIndex, aString, &pColor);
             CPPUNIT_ASSERT_EQUAL( OUString::createFromAscii( aSpanishTests[i].mpOutput), aString);
         }
+    }
+}
+
+void Test::testUserDefinedNumberFormats()
+{
+    LanguageType eLang = LANGUAGE_ENGLISH_US;
+    OUString sCode, sExpected;
+    SvNumberFormatter aFormatter(m_xContext, eLang);
+    {  // tdf#97835: suppress decimal separator
+        sCode = "0.##\" m\"";
+        sExpected = "12 m";
+        checkPreviewString(aFormatter, sCode, 12.0, eLang, sExpected);
+    }
+    {  // tdf#61996: skip quoted text
+        sCode = "0.00\" ;\"";
+        sExpected = "-12.00 ;";
+        checkPreviewString(aFormatter, sCode, -12.0, eLang, sExpected);
+    }
+    {  // tdf#995339: detect SSMM as second minute
+        sCode = "SS:MM:HH DD/MM/YY";
+        sExpected = "54:23:03 02/01/00";
+        checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
     }
 }
 
