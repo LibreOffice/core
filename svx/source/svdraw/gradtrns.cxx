@@ -253,17 +253,17 @@ void GradTransformer::VecToGrad(GradTransVector& rV, GradTransGradient& rG, Grad
                 const double fFullLen(aFullVec.getLength());
                 const double fOldLen(aOldVec.getLength());
                 const double fNewBorder((fFullLen * 100.0) / fOldLen);
-                sal_Int32 nNewBorder(100L - FRound(fNewBorder));
+                sal_Int32 nNewBorder(100 - FRound(fNewBorder));
 
                 // clip
-                if(nNewBorder < 0L)
+                if(nNewBorder < 0)
                 {
-                    nNewBorder = 0L;
+                    nNewBorder = 0;
                 }
 
-                if(nNewBorder > 100L)
+                if(nNewBorder > 100)
                 {
-                    nNewBorder = 100L;
+                    nNewBorder = 100;
                 }
 
                 // set
@@ -287,14 +287,14 @@ void GradTransformer::VecToGrad(GradTransVector& rV, GradTransGradient& rG, Grad
                 sal_Int32 nNewBorder = 100 - FRound(fNewBorder);
 
                 // clip
-                if(nNewBorder < 0L)
+                if(nNewBorder < 0)
                 {
-                    nNewBorder = 0L;
+                    nNewBorder = 0;
                 }
 
-                if(nNewBorder > 100L)
+                if(nNewBorder > 100)
                 {
-                    nNewBorder = 100L;
+                    nNewBorder = 100;
                 }
 
                 // set
@@ -342,24 +342,24 @@ void GradTransformer::VecToGrad(GradTransVector& rV, GradTransGradient& rG, Grad
                 sal_Int32 nNewYOffset(FRound((aOffset.getY() * 100.0) / aRange.getHeight()));
 
                 // clip
-                if(nNewXOffset < 0L)
+                if(nNewXOffset < 0)
                 {
-                    nNewXOffset = 0L;
+                    nNewXOffset = 0;
                 }
 
-                if(nNewXOffset > 100L)
+                if(nNewXOffset > 100)
                 {
-                    nNewXOffset = 100L;
+                    nNewXOffset = 100;
                 }
 
-                if(nNewYOffset < 0L)
+                if(nNewYOffset < 0)
                 {
-                    nNewYOffset = 0L;
+                    nNewYOffset = 0;
                 }
 
-                if(nNewYOffset > 100L)
+                if(nNewYOffset > 100)
                 {
-                    nNewYOffset = 100L;
+                    nNewYOffset = 100;
                 }
 
                 rG.aGradient.SetXOffset((sal_uInt16)nNewXOffset);
@@ -378,17 +378,17 @@ void GradTransformer::VecToGrad(GradTransVector& rV, GradTransGradient& rG, Grad
                 const double fFullLen(aFullVec.getLength());
                 const double fOldLen(aOldVec.getLength());
                 const double fNewBorder((fFullLen * 100.0) / fOldLen);
-                sal_Int32 nNewBorder(100L - FRound(fNewBorder));
+                sal_Int32 nNewBorder(100 - FRound(fNewBorder));
 
                 // clip
-                if(nNewBorder < 0L)
+                if(nNewBorder < 0)
                 {
-                    nNewBorder = 0L;
+                    nNewBorder = 0;
                 }
 
-                if(nNewBorder > 100L)
+                if(nNewBorder > 100)
                 {
-                    nNewBorder = 100L;
+                    nNewBorder = 100;
                 }
 
                 // set
@@ -438,24 +438,24 @@ void GradTransformer::VecToGrad(GradTransVector& rV, GradTransGradient& rG, Grad
                 sal_Int32 nNewYOffset(FRound((aOffset.getY() * 100.0) / aRange.getHeight()));
 
                 // clip
-                if(nNewXOffset < 0L)
+                if(nNewXOffset < 0)
                 {
-                    nNewXOffset = 0L;
+                    nNewXOffset = 0;
                 }
 
-                if(nNewXOffset > 100L)
+                if(nNewXOffset > 100)
                 {
-                    nNewXOffset = 100L;
+                    nNewXOffset = 100;
                 }
 
-                if(nNewYOffset < 0L)
+                if(nNewYOffset < 0)
                 {
-                    nNewYOffset = 0L;
+                    nNewYOffset = 0;
                 }
 
-                if(nNewYOffset > 100L)
+                if(nNewYOffset > 100)
                 {
-                    nNewYOffset = 100L;
+                    nNewYOffset = 100;
                 }
 
                 rG.aGradient.SetXOffset((sal_uInt16)nNewXOffset);
@@ -474,17 +474,17 @@ void GradTransformer::VecToGrad(GradTransVector& rV, GradTransGradient& rG, Grad
                 const double fFullLen(aFullVec.getLength());
                 const double fOldLen(aOldVec.getLength());
                 const double fNewBorder((fFullLen * 100.0) / fOldLen);
-                sal_Int32 nNewBorder(100L - FRound(fNewBorder));
+                sal_Int32 nNewBorder(100 - FRound(fNewBorder));
 
                 // clip
-                if(nNewBorder < 0L)
+                if(nNewBorder < 0)
                 {
-                    nNewBorder = 0L;
+                    nNewBorder = 0;
                 }
 
-                if(nNewBorder > 100L)
+                if(nNewBorder > 100)
                 {
-                    nNewBorder = 100L;
+                    nNewBorder = 100;
                 }
 
                 // set
