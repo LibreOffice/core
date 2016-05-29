@@ -192,7 +192,7 @@ class SVL_DLLPUBLIC SfxStyleSheetBasePool: public SfxBroadcaster, public comphel
 friend class SfxStyleSheetIterator;
 friend class SfxStyleSheetBase;
 
-    SfxStyleSheetBasePool_Impl *pImp;
+    std::unique_ptr<SfxStyleSheetBasePool_Impl> pImpl;
 
 protected:
     SfxStyleSheetIterator&      GetIterator_Impl();
