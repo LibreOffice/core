@@ -115,7 +115,7 @@ SvxIconChoiceCtrl_Impl::SvxIconChoiceCtrl_Impl(
     bUpdateMode = true;
     bEntryEditingEnabled = false;
     bHighlightFramePressed = false;
-    eSelectionMode = MULTIPLE_SELECTION;
+    eSelectionMode = SelectionMode::Multiple;
     pView = pCurView;
     pZOrderList = new SvxIconChoiceCtrlEntryList_impl();
     ePositionMode = IcnViewPositionModeFree;
@@ -230,7 +230,7 @@ void SvxIconChoiceCtrl_Impl::SetStyle( WinBits nWinStyle )
     if( nWinBits & (WB_SMALLICON | WB_DETAILS) )
         nCurTextDrawFlags = DRAWTEXT_FLAGS_SMALLICON;
     if( nWinBits & WB_NOSELECTION )
-        eSelectionMode = NO_SELECTION;
+        eSelectionMode = SelectionMode::NONE;
     if( !(nWinStyle & (WB_ALIGN_TOP | WB_ALIGN_LEFT)))
         nWinBits |= WB_ALIGN_LEFT;
     if( (nWinStyle & WB_DETAILS))
@@ -353,7 +353,7 @@ void SvxIconChoiceCtrl_Impl::SetListPositions()
 void SvxIconChoiceCtrl_Impl::SelectEntry( SvxIconChoiceCtrlEntry* pEntry, bool bSelect,
     bool bAdd, bool bSyncPaint )
 {
-    if( eSelectionMode == NO_SELECTION )
+    if( eSelectionMode == SelectionMode::NONE )
         return;
 
     if( !bAdd )
@@ -392,7 +392,7 @@ void SvxIconChoiceCtrl_Impl::EntrySelected(SvxIconChoiceCtrlEntry* pEntry, bool 
     // When using SingleSelection, make sure that the cursor is always placed
     // over the (only) selected entry. (But only if a cursor exists.)
     if (bSelect && pCursor &&
-        eSelectionMode == SINGLE_SELECTION &&
+        eSelectionMode == SelectionMode::Single &&
         pEntry != pCursor)
     {
         SetCursor(pEntry);
@@ -728,7 +728,7 @@ bool SvxIconChoiceCtrl_Impl::MouseButtonDown( const MouseEvent& rMEvt)
     if( pEntry )
         MakeEntryVisible( pEntry, false );
 
-    if( rMEvt.IsShift() && eSelectionMode != SINGLE_SELECTION )
+    if( rMEvt.IsShift() && eSelectionMode != SelectionMode::Single )
     {
         if( pEntry )
             SetCursor_Impl( pCursor, pEntry, rMEvt.IsMod1(), rMEvt.IsShift(), true);
@@ -737,7 +737,7 @@ bool SvxIconChoiceCtrl_Impl::MouseButtonDown( const MouseEvent& rMEvt)
 
     if( pAnchor && (rMEvt.IsShift() || rMEvt.IsMod1())) // keyboard selection?
     {
-        DBG_ASSERT(eSelectionMode != SINGLE_SELECTION,"Invalid selection mode");
+        DBG_ASSERT(eSelectionMode != SelectionMode::Single,"Invalid selection mode");
         if( rMEvt.IsMod1() )
             nFlags |= IconChoiceFlags::AddMode;
 
@@ -769,7 +769,7 @@ bool SvxIconChoiceCtrl_Impl::MouseButtonDown( const MouseEvent& rMEvt)
     {
         if( !pEntry )
         {
-            if( eSelectionMode == MULTIPLE_SELECTION )
+            if( eSelectionMode == SelectionMode::Multiple )
             {
                 if( !rMEvt.IsMod1() )  // Ctrl
                 {
@@ -810,7 +810,7 @@ bool SvxIconChoiceCtrl_Impl::MouseButtonDown( const MouseEvent& rMEvt)
                 EditEntry( pEntry );
             }
         }
-        else if( eSelectionMode == SINGLE_SELECTION )
+        else if( eSelectionMode == SelectionMode::Single )
         {
             DeselectAllBut( pEntry );
             SetCursor( pEntry );
@@ -820,7 +820,7 @@ bool SvxIconChoiceCtrl_Impl::MouseButtonDown( const MouseEvent& rMEvt)
                 nFlags |= IconChoiceFlags::StartEditTimerInMouseUp;
             }
         }
-        else if( eSelectionMode == NO_SELECTION )
+        else if( eSelectionMode == SelectionMode::NONE )
         {
             if( rMEvt.IsLeft() && (nWinBits & WB_HIGHLIGHTFRAME) )
             {
@@ -938,7 +938,7 @@ void SvxIconChoiceCtrl_Impl::SetCursor_Impl( SvxIconChoiceCtrlEntry* pOldCursor,
     {
         SvxIconChoiceCtrlEntry* pFilterEntry = nullptr;
         bool bDeselectAll = false;
-        if( eSelectionMode != SINGLE_SELECTION )
+        if( eSelectionMode != SelectionMode::Single )
         {
             if( !bMod1 && !bShift )
                 bDeselectAll = true;
@@ -1004,7 +1004,7 @@ bool SvxIconChoiceCtrl_Impl::KeyInput( const KeyEvent& rKEvt )
     bool bMod1 = rKEvt.GetKeyCode().IsMod1();
     bool bShift = rKEvt.GetKeyCode().IsShift();
 
-    if( eSelectionMode == SINGLE_SELECTION || eSelectionMode == NO_SELECTION)
+    if( eSelectionMode == SelectionMode::Single || eSelectionMode == SelectionMode::NONE)
     {
         bShift = false;
         bMod1 = false;
@@ -1117,7 +1117,7 @@ bool SvxIconChoiceCtrl_Impl::KeyInput( const KeyEvent& rKEvt )
             break;
 
         case KEY_SPACE:
-            if( pCursor && eSelectionMode != SINGLE_SELECTION )
+            if( pCursor && eSelectionMode != SelectionMode::Single )
             {
                 if( !bMod1 )
                 {
@@ -1154,7 +1154,7 @@ bool SvxIconChoiceCtrl_Impl::KeyInput( const KeyEvent& rKEvt )
         case KEY_ADD:
         case KEY_DIVIDE :
         case KEY_A:
-            if( bMod1 && (eSelectionMode != SINGLE_SELECTION))
+            if( bMod1 && (eSelectionMode != SelectionMode::Single))
                 SelectAll();
             else
                 bKeyUsed = false;
@@ -1510,7 +1510,7 @@ void SvxIconChoiceCtrl_Impl::PaintEmphasis(const Rectangle& rTextRect, bool bSel
 
     bool bSolidTextRect = false;
 
-    if(bDropTarget && (eSelectionMode != NO_SELECTION))
+    if(bDropTarget && (eSelectionMode != SelectionMode::NONE))
     {
         rRenderContext.SetFillColor(rSettings.GetHighlightColor());
         bSolidTextRect = true;
@@ -1592,7 +1592,7 @@ void SvxIconChoiceCtrl_Impl::PaintEntry(SvxIconChoiceCtrlEntry* pEntry, const Po
 {
     bool bSelected = false;
 
-    if (eSelectionMode != NO_SELECTION)
+    if (eSelectionMode != SelectionMode::NONE)
         bSelected = pEntry->IsSelected();
 
     bool bCursored = pEntry->IsCursored();
@@ -1605,7 +1605,7 @@ void SvxIconChoiceCtrl_Impl::PaintEntry(SvxIconChoiceCtrlEntry* pEntry, const Po
     Rectangle aTextRect(CalcTextRect(pEntry, &rPos, false, &aEntryText));
     Rectangle aBmpRect(CalcBmpRect(pEntry, &rPos));
 
-    bool bShowSelection = ((bSelected && !bCursored) && !bNoEmphasis && (eSelectionMode != NO_SELECTION));
+    bool bShowSelection = ((bSelected && !bCursored) && !bNoEmphasis && (eSelectionMode != SelectionMode::NONE));
 
     bool bActiveSelection = (0 != (nWinBits & WB_NOHIDESELECTION)) || pView->HasFocus();
 
@@ -1992,7 +1992,7 @@ void SvxIconChoiceCtrl_Impl::SetCursor( SvxIconChoiceCtrlEntry* pEntry )
 {
     if( pEntry == pCursor )
     {
-        if( pCursor && eSelectionMode == SINGLE_SELECTION &&
+        if( pCursor && eSelectionMode == SelectionMode::Single &&
                 !pCursor->IsSelected() )
             SelectEntry( pCursor, true );
         return;
@@ -2003,14 +2003,14 @@ void SvxIconChoiceCtrl_Impl::SetCursor( SvxIconChoiceCtrlEntry* pEntry )
     if( pOldCursor )
     {
         pOldCursor->ClearFlags( SvxIconViewFlags::FOCUSED );
-        if( eSelectionMode == SINGLE_SELECTION )
+        if( eSelectionMode == SelectionMode::Single )
             SelectEntry( pOldCursor, false ); // deselect old cursor
     }
     if( pCursor )
     {
         ToTop( pCursor );
         pCursor->SetFlags( SvxIconViewFlags::FOCUSED );
-        if( eSelectionMode == SINGLE_SELECTION )
+        if( eSelectionMode == SelectionMode::Single )
             SelectEntry( pCursor, true );
         ShowCursor( true );
     }
@@ -2996,7 +2996,7 @@ SvxIconChoiceCtrlEntry* SvxIconChoiceCtrl_Impl::GetFirstSelectedEntry() const
     if( !GetSelectionCount() )
         return nullptr;
 
-    if( (nWinBits & WB_HIGHLIGHTFRAME) && (eSelectionMode == NO_SELECTION) )
+    if( (nWinBits & WB_HIGHLIGHTFRAME) && (eSelectionMode == SelectionMode::NONE) )
     {
         return pCurHighlightFrame;
     }

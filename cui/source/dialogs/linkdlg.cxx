@@ -112,7 +112,7 @@ SvBaseLinksDlg::SvBaseLinksDlg( vcl::Window * pParent, LinkManager* pMgr, bool b
     get(m_pPbChangeSource, "CHANGE_SOURCE");
     get(m_pPbBreakLink, "BREAK_LINK");
 
-    m_pTbLinks->SetSelectionMode( MULTIPLE_SELECTION );
+    m_pTbLinks->SetSelectionMode( SelectionMode::Multiple );
     m_pTbLinks->SetTabs( &nTabs[0] );
     FixedText *pFtFiles = get<FixedText>("FILES");
     pFtFiles->set_width_request(LogicToPixel(Size(nTabs[2] - nTabs[1] - 2, 0), MAP_APPFONT).Width());

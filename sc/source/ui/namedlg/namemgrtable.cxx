@@ -60,7 +60,7 @@ ScRangeManagerTable::ScRangeManagerTable(SvSimpleTableContainer& rParent,
     UpdateViewSize();
     Init();
     ShowTable();
-    SetSelectionMode(MULTIPLE_SELECTION);
+    SetSelectionMode(SelectionMode::Multiple);
     SetScrolledHdl( LINK( this, ScRangeManagerTable, ScrollHdl ) );
     HeaderEndDragHdl(nullptr);
 }

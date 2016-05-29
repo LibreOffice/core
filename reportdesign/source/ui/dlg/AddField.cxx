@@ -105,7 +105,7 @@ OAddFieldWindowListBox::OAddFieldWindowListBox( OAddFieldWindow* _pParent )
     ,m_pTabWin( _pParent )
 {
     SetHelpId( HID_RPT_FIELD_SEL );
-    SetSelectionMode(MULTIPLE_SELECTION);
+    SetSelectionMode(SelectionMode::Multiple);
     SetDragDropMode( DragDropMode::ALL );
     SetHighlightRange( );
 }

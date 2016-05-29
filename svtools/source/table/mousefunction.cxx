@@ -175,7 +175,7 @@ namespace svt { namespace table
         TableCell const tableCell( i_tableControl.hitTest( i_event.GetPosPixel() ) );
         if ( tableCell.nRow >= 0 )
         {
-            if ( i_tableControl.getSelEngine()->GetSelectionMode() == NO_SELECTION )
+            if ( i_tableControl.getSelEngine()->GetSelectionMode() == SelectionMode::NONE )
             {
                 i_tableControl.activateCell( tableCell.nColumn, tableCell.nRow );
                 handled = true;
@@ -197,7 +197,7 @@ namespace svt { namespace table
         TableCell const tableCell = i_tableControl.hitTest( i_event.GetPosPixel() );
         if ( tableCell.nRow >= 0 )
         {
-            if ( i_tableControl.getSelEngine()->GetSelectionMode() != NO_SELECTION )
+            if ( i_tableControl.getSelEngine()->GetSelectionMode() != SelectionMode::NONE )
             {
                 i_tableControl.getSelEngine()->SelMouseButtonUp( i_event );
             }

@@ -86,7 +86,7 @@ namespace dbaui
         m_pTablesList->SetCheckHandler(LINK(this,OGenericAdministrationPage,OnControlModified));
 
         // initialize the TabListBox
-        m_pTablesList->SetSelectionMode( MULTIPLE_SELECTION );
+        m_pTablesList->SetSelectionMode( SelectionMode::Multiple );
         m_pTablesList->SetDragDropMode( DragDropMode::NONE );
         m_pTablesList->EnableInplaceEditing( false );
         m_pTablesList->SetStyle(m_pTablesList->GetStyle() | WB_BORDER | WB_HASLINES | WB_HASLINESATROOT | WB_SORT | WB_HASBUTTONS | WB_HSCROLL |WB_HASBUTTONSATROOT);

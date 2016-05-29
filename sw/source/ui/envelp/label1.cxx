@@ -593,7 +593,7 @@ SwVisitingCardPage::SwVisitingCardPage(vcl::Window* pParent, const SfxItemSet& r
 
     m_pAutoTextLB->SetStyle( m_pAutoTextLB->GetStyle() | WB_HSCROLL );
     m_pAutoTextLB->SetSpaceBetweenEntries(0);
-    m_pAutoTextLB->SetSelectionMode( SINGLE_SELECTION );
+    m_pAutoTextLB->SetSelectionMode( SelectionMode::Single );
 
     SetExchangeSupport();
     m_pAutoTextLB->SetSelectHdl(LINK(this, SwVisitingCardPage, AutoTextSelectTreeListBoxHdl));

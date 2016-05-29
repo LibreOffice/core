@@ -314,7 +314,7 @@ OExceptionChainDialog::OExceptionChainDialog(vcl::Window* pParent, const Excepti
     m_sStatusLabel = ModuleRes( STR_EXCEPTION_STATUS );
     m_sErrorCodeLabel = ModuleRes( STR_EXCEPTION_ERRORCODE );
 
-    m_pExceptionList->SetSelectionMode(SINGLE_SELECTION);
+    m_pExceptionList->SetSelectionMode(SelectionMode::Single);
     m_pExceptionList->SetDragDropMode(DragDropMode::NONE);
     m_pExceptionList->EnableInplaceEditing(false);
     m_pExceptionList->SetStyle(m_pExceptionList->GetStyle() | WB_HASLINES | WB_HASBUTTONS | WB_HASBUTTONSATROOT | WB_HSCROLL);

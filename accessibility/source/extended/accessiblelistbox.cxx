@@ -582,7 +582,7 @@ namespace accessibility
         {
             rStateSet.AddState( AccessibleStateType::FOCUSABLE );
             rStateSet.AddState( AccessibleStateType::MANAGES_DESCENDANTS );
-            if ( getListBox()->GetSelectionMode() == MULTIPLE_SELECTION )
+            if ( getListBox()->GetSelectionMode() == SelectionMode::Multiple )
                 rStateSet.AddState( AccessibleStateType::MULTI_SELECTABLE );
         }
     }

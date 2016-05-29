@@ -227,7 +227,7 @@ SfxVersionDialog::SfxVersionDialog ( SfxViewFrame* pVwFrame, bool bIsSaveVersion
 
     m_pVersionBox->GrabFocus();
     m_pVersionBox->SetStyle( m_pVersionBox->GetStyle() | WB_HSCROLL | WB_CLIPCHILDREN );
-    m_pVersionBox->SetSelectionMode( SINGLE_SELECTION );
+    m_pVersionBox->SetSelectionMode( SelectionMode::Single );
 
     long nTabs_Impl[] = { 3, 0, 0, 0 };
 
@@ -548,7 +548,7 @@ SfxCmisVersionsDialog::SfxCmisVersionsDialog ( SfxViewFrame* pVwFrame )
 
     m_pVersionBox->GrabFocus();
     m_pVersionBox->SetStyle( m_pVersionBox->GetStyle() | WB_HSCROLL | WB_CLIPCHILDREN );
-    m_pVersionBox->SetSelectionMode( SINGLE_SELECTION );
+    m_pVersionBox->SetSelectionMode( SelectionMode::Single );
 
     long nTabs_Impl[] = { 3, 0, 0, 0 };
 

@@ -204,7 +204,7 @@ SwAddressListDialog::SwAddressListDialog(SwMailMergeAddressBlockPage* pParent)
     m_pListLB->setColSizes();
 
     m_pListLB->SetStyle( m_pListLB->GetStyle() | WB_SORT | WB_HSCROLL | WB_CLIPCHILDREN | WB_TABSTOP );
-    m_pListLB->SetSelectionMode( SINGLE_SELECTION );
+    m_pListLB->SetSelectionMode( SelectionMode::Single );
     m_pOK->SetClickHdl( LINK( this, SwAddressListDialog, OKHdl_Impl));
 
     uno::Reference<XComponentContext> xContext( ::comphelper::getProcessComponentContext() );

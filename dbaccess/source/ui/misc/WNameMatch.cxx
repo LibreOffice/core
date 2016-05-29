@@ -365,7 +365,7 @@ OColumnTreeBox::OColumnTreeBox( vcl::Window* pParent, WinBits nBits )
     SetDragDropMode( DragDropMode::NONE );
     EnableInplaceEditing( false );
     SetStyle(GetStyle() | WB_BORDER | WB_HASBUTTONS | WB_HSCROLL | nBits);
-    SetSelectionMode( SINGLE_SELECTION );
+    SetSelectionMode( SelectionMode::Single );
 }
 
 VCL_BUILDER_FACTORY(OColumnTreeBox)

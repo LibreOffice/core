@@ -79,7 +79,7 @@ OCreationList::OCreationList( OTasksWindow& _rParent )
 {
     sal_uInt16 nSize = SPACEBETWEENENTRIES;
     SetSpaceBetweenEntries(nSize);
-    SetSelectionMode( NO_SELECTION );
+    SetSelectionMode( SelectionMode::NONE );
     SetExtendedWinBits( EWB_NO_AUTO_CURENTRY );
     SetNodeDefaultImages( );
     EnableEntryMnemonics();

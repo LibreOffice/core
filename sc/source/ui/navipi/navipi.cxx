@@ -631,7 +631,7 @@ ScNavigatorDlg::ScNavigatorDlg( SfxBindings* pB, SfxChildWindowContext* pCW, vcl
     aLbEntries->InitWindowBits(true);
 
     aLbEntries->SetSpaceBetweenEntries(0);
-    aLbEntries->SetSelectionMode( SINGLE_SELECTION );
+    aLbEntries->SetSelectionMode( SelectionMode::Single );
     aLbEntries->SetDragDropMode( DragDropMode::CTRL_MOVE |
                                  DragDropMode::CTRL_COPY |
                                  DragDropMode::ENABLE_TOP );

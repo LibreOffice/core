@@ -418,7 +418,7 @@ ScConflictsDlg::ScConflictsDlg( vcl::Window* pParent, ScViewData* pViewData, ScD
     m_pLbConflicts->InsertHeaderEntry( aHeader, HEADERBAR_APPEND, HeaderBarItemBits::LEFT | HeaderBarItemBits::LEFTIMAGE | HeaderBarItemBits::VCENTER );
 
     m_pLbConflicts->SetStyle( m_pLbConflicts->GetStyle() | WB_HASLINES | WB_CLIPCHILDREN | WB_HASBUTTONS | WB_HASBUTTONSATROOT | WB_HSCROLL );
-    m_pLbConflicts->SetSelectionMode( MULTIPLE_SELECTION );
+    m_pLbConflicts->SetSelectionMode( SelectionMode::Multiple );
     m_pLbConflicts->SetHighlightRange();
 
     maSelectionIdle.SetPriority( SchedulerPriority::LOW );

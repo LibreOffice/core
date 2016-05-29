@@ -143,7 +143,7 @@ namespace svxform
 
         SetDragDropMode(DragDropMode::ALL);
         EnableInplaceEditing( true );
-        SetSelectionMode(MULTIPLE_SELECTION);
+        SetSelectionMode(SelectionMode::Multiple);
 
         m_pNavModel = new NavigatorTreeModel( m_aNavigatorImages );
         Clear();

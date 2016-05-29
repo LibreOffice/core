@@ -34,7 +34,7 @@ class CommandEvent;
 #define SELENG_AUTOREPEAT_INTERVAL_MIN 25
 #define SELENG_AUTOREPEAT_INTERVAL_MAX 300
 
-enum SelectionMode { NO_SELECTION, SINGLE_SELECTION, RANGE_SELECTION, MULTIPLE_SELECTION };
+enum class SelectionMode { NONE, Single, Range, Multiple };
 
 
 class VCL_DLLPUBLIC FunctionSet

@@ -424,7 +424,7 @@ namespace svt { namespace table
 
                 rStateSet.AddState( AccessibleStateType::FOCUSABLE );
 
-                if ( m_pImpl->getSelEngine()->GetSelectionMode() == MULTIPLE_SELECTION )
+                if ( m_pImpl->getSelEngine()->GetSelectionMode() == SelectionMode::Multiple )
                     rStateSet.AddState( AccessibleStateType::MULTI_SELECTABLE);
 
                 if ( HasChildPathFocus() )

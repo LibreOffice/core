@@ -231,7 +231,7 @@ SvxPathTabPage::SvxPathTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
 
     pPathBox->SetDoubleClickHdl( LINK( this, SvxPathTabPage, DoubleClickPathHdl_Impl ) );
     pPathBox->SetSelectHdl( LINK( this, SvxPathTabPage, PathSelect_Impl ) );
-    pPathBox->SetSelectionMode( MULTIPLE_SELECTION );
+    pPathBox->SetSelectionMode( SelectionMode::Multiple );
     pPathBox->SetHighlightRange();
 
     xDialogListener->SetDialogClosedLink( LINK( this, SvxPathTabPage, DialogClosedHdl ) );

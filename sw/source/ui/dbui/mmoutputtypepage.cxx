@@ -293,7 +293,7 @@ SwSendMailDialog::SwSendMailDialog(vcl::Window *pParent, SwMailMergeConfigItem& 
 
     static long nTabs[] = {2, 0, nPos1};
     m_pStatus->SetStyle( m_pStatus->GetStyle() | WB_SORT | WB_HSCROLL | WB_CLIPCHILDREN | WB_TABSTOP );
-    m_pStatus->SetSelectionMode( SINGLE_SELECTION );
+    m_pStatus->SetSelectionMode( SelectionMode::Single );
     m_pStatus->SetTabs(&nTabs[0], MAP_PIXEL);
     m_pStatus->SetSpaceBetweenEntries(3);
 

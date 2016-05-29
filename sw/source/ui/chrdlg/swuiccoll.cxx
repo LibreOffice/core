@@ -91,7 +91,7 @@ SwCondCollPage::SwCondCollPage(vcl::Window *pParent, const SfxItemSet &rSet)
     m_pFilterLB->SetSelectHdl(     LINK(this, SwCondCollPage, SelectListBoxHdl));
 
     m_pTbLinks->SetStyle(m_pTbLinks->GetStyle()|WB_HSCROLL|WB_CLIPCHILDREN);
-    m_pTbLinks->SetSelectionMode( SINGLE_SELECTION );
+    m_pTbLinks->SetSelectionMode( SelectionMode::Single );
     m_pTbLinks->SetTabs( &nTabs[0] );
     m_pTbLinks->Resize();  // OS: Hack for the right selection
     m_pTbLinks->SetSpaceBetweenEntries( 0 );

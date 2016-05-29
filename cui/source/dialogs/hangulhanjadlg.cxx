@@ -1117,7 +1117,7 @@ namespace svx
         m_pDictsLB->set_height_request(m_pDictsLB->GetTextHeight() * 5);
         m_pDictsLB->set_width_request(m_pDictsLB->approximate_char_width() * 32);
         m_pDictsLB->SetStyle( m_pDictsLB->GetStyle() | WB_CLIPCHILDREN | WB_HSCROLL | WB_FORCE_MAKEVISIBLE );
-        m_pDictsLB->SetSelectionMode( SINGLE_SELECTION );
+        m_pDictsLB->SetSelectionMode( SelectionMode::Single );
         m_pDictsLB->SetHighlightRange();
         m_pDictsLB->SetSelectHdl( LINK( this, HangulHanjaOptionsDialog, DictsLB_SelectHdl ) );
         m_pDictsLB->SetDeselectHdl( LINK( this, HangulHanjaOptionsDialog, DictsLB_SelectHdl ) );

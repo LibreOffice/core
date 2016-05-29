@@ -67,7 +67,7 @@ SvxFontSubstTabPage::SvxFontSubstTabPage( vcl::Window* pParent,
     m_pCheckLB->SetHelpId(HID_OFA_FONT_SUBST_CLB);
 
     m_pCheckLB->SetStyle(m_pCheckLB->GetStyle()|WB_HSCROLL|WB_VSCROLL);
-    m_pCheckLB->SetSelectionMode(MULTIPLE_SELECTION);
+    m_pCheckLB->SetSelectionMode(SelectionMode::Multiple);
     m_pCheckLB->SortByCol(2);
     long aStaticTabs[] = { 4, 0, 0, 0, 0 };
     m_pCheckLB->SvSimpleTable::SetTabs(&aStaticTabs[0]);

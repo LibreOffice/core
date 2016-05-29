@@ -218,7 +218,7 @@ protected:
     SelectionEngine         aSelEng;
     sal_uLong               nVisibleCount;  // Number of lines in control
     bool                    bInVScrollHdl : 1;
-    bool                    bSimpleTravel : 1; // ist true bei SINGLE_SELECTION
+    bool                    bSimpleTravel : 1; // ist true bei SelectionMode::Single
     long                    nNextVerVisSize;
     long                    nNodeBmpTabDistance; // typical smaller than 0
 

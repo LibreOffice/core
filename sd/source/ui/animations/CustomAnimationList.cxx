@@ -463,7 +463,7 @@ CustomAnimationList::CustomAnimationList( vcl::Window* pParent )
 {
 
     EnableContextMenuHandling();
-    SetSelectionMode( MULTIPLE_SELECTION );
+    SetSelectionMode( SelectionMode::Multiple );
     SetOptimalImageIndent();
     SetNodeDefaultImages();
 }

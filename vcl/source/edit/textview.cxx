@@ -202,7 +202,7 @@ TextView::TextView( TextEngine* pEng, vcl::Window* pWindow ) :
 
     mpImpl->mpSelFuncSet = new TextSelFunctionSet( this );
     mpImpl->mpSelEngine = new SelectionEngine( mpImpl->mpWindow, mpImpl->mpSelFuncSet );
-    mpImpl->mpSelEngine->SetSelectionMode( RANGE_SELECTION );
+    mpImpl->mpSelEngine->SetSelectionMode( SelectionMode::Range );
     mpImpl->mpSelEngine->EnableDrag( true );
 
     mpImpl->mpCursor = new vcl::Cursor;

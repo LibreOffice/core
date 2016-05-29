@@ -133,7 +133,7 @@ ScAcceptChgDlg::ScAcceptChgDlg(SfxBindings* pB, SfxChildWindow* pCW, vcl::Window
     pTheView->SetDeselectHdl( LINK(this, ScAcceptChgDlg, SelectHandle));
     pTheView->SetCommandHdl( LINK(this, ScAcceptChgDlg, CommandHdl));
     pTheView->SetColCompareHdl( LINK(this, ScAcceptChgDlg,ColCompareHdl));
-    pTheView->SetSelectionMode(MULTIPLE_SELECTION);
+    pTheView->SetSelectionMode(SelectionMode::Multiple);
     pTheView->SetHighlightRange(1);
 
     Init();

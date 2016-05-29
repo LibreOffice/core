@@ -211,7 +211,7 @@ namespace dbaui
 
         m_pIndexList->SetSelectHdl(LINK(this, DbaIndexDialog, OnIndexSelected));
         m_pIndexList->SetEndEditHdl(LINK(this, DbaIndexDialog, OnEntryEdited));
-        m_pIndexList->SetSelectionMode(SINGLE_SELECTION);
+        m_pIndexList->SetSelectionMode(SelectionMode::Single);
         m_pIndexList->SetHighlightRange();
         m_pIndexList->setConnection(m_xConnection);
 

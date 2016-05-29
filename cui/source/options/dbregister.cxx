@@ -147,7 +147,7 @@ DbRegistrationOptionsPage::DbRegistrationOptionsPage( vcl::Window* pParent, cons
     m_pPathBox->SetStyle( m_pPathBox->GetStyle()|nBits );
     m_pPathBox->SetDoubleClickHdl( LINK( this, DbRegistrationOptionsPage, PathBoxDoubleClickHdl ) );
     m_pPathBox->SetSelectHdl( LINK( this, DbRegistrationOptionsPage, PathSelect_Impl ) );
-    m_pPathBox->SetSelectionMode( SINGLE_SELECTION );
+    m_pPathBox->SetSelectionMode( SelectionMode::Single );
     m_pPathBox->SetPosSizePixel( Point( 0, aHeadSize.Height() ),
                                Size( aBoxSize.Width(), aBoxSize.Height() - aHeadSize.Height() ) );
     m_pPathBox->SvSimpleTable::SetTabs( aTabs );

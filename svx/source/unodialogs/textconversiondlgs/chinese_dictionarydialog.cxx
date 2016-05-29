@@ -385,7 +385,7 @@ void DictionaryList::init(const Reference< linguistic2::XConversionDictionary>& 
     vcl::Window *pFT_Term, vcl::Window *pFT_Mapping, vcl::Window *pFT_Property)
 {
     SetStyle( WB_VSCROLL | WB_TABSTOP );
-    SetSelectionMode( SINGLE_SELECTION );
+    SetSelectionMode( SelectionMode::Single );
     SetBorderStyle( WindowBorderStyle::MONO );
     SetHighlightRange();
 

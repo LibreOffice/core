@@ -1851,7 +1851,7 @@ StackWindow::StackWindow (Layout* pParent) :
     aTreeListBox->SetAccessibleName(IDEResId(RID_STR_STACKNAME).toString());
     aTreeListBox->SetPosPixel( Point( DWBORDER, nVirtToolBoxHeight ) );
     aTreeListBox->SetHighlightRange();
-    aTreeListBox->SetSelectionMode( NO_SELECTION );
+    aTreeListBox->SetSelectionMode( SelectionMode::NONE );
     aTreeListBox->InsertEntry( OUString() );
     aTreeListBox->Show();
 
@@ -1906,7 +1906,7 @@ void StackWindow::UpdateCalls()
     if (StarBASIC::IsRunning())
     {
         SbxError eOld = SbxBase::GetError();
-        aTreeListBox->SetSelectionMode( SINGLE_SELECTION );
+        aTreeListBox->SetSelectionMode( SelectionMode::Single );
 
         sal_Int32 nScope = 0;
         SbMethod* pMethod = StarBASIC::GetActiveMethod( nScope );
@@ -1966,7 +1966,7 @@ void StackWindow::UpdateCalls()
     }
     else
     {
-        aTreeListBox->SetSelectionMode( NO_SELECTION );
+        aTreeListBox->SetSelectionMode( SelectionMode::NONE );
         aTreeListBox->InsertEntry( OUString() );
     }
 

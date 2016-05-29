@@ -206,7 +206,7 @@ SwRedlineAcceptDlg::SwRedlineAcceptDlg(vcl::Window *pParent, VclBuilderContainer
 
     m_pTable->SetStyle(m_pTable->GetStyle()|WB_HASLINES|WB_CLIPCHILDREN|WB_HASBUTTONS|WB_HASBUTTONSATROOT|WB_HSCROLL);
     m_pTable->SetNodeDefaultImages();
-    m_pTable->SetSelectionMode(MULTIPLE_SELECTION);
+    m_pTable->SetSelectionMode(SelectionMode::Multiple);
     m_pTable->SetHighlightRange(1);
 
     m_pTable->SortByCol(nSortMode, bSortDir);

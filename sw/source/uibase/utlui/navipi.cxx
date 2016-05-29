@@ -773,7 +773,7 @@ SwNavigationPI::SwNavigationPI( SfxBindings* _pBindings,
     m_aContentTree->SetStyle( m_aContentTree->GetStyle()|WB_HASBUTTONS|WB_HASBUTTONSATROOT|
                             WB_CLIPCHILDREN|WB_HSCROLL|WB_FORCE_MAKEVISIBLE );
     m_aContentTree->SetSpaceBetweenEntries(3);
-    m_aContentTree->SetSelectionMode( SINGLE_SELECTION );
+    m_aContentTree->SetSelectionMode( SelectionMode::Single );
     m_aContentTree->SetDragDropMode( DragDropMode::CTRL_MOVE |
                                   DragDropMode::CTRL_COPY |
                                   DragDropMode::ENABLE_TOP );
@@ -783,7 +783,7 @@ SwNavigationPI::SwNavigationPI( SfxBindings* _pBindings,
 
 //  TreeListBox for global document
     m_aGlobalTree->setPosSizePixel( 0, nListboxYPos, 0, 0, PosSizeFlags::Y );
-    m_aGlobalTree->SetSelectionMode( MULTIPLE_SELECTION );
+    m_aGlobalTree->SetSelectionMode( SelectionMode::Multiple );
     m_aGlobalTree->SetStyle( m_aGlobalTree->GetStyle()|WB_HASBUTTONS|WB_HASBUTTONSATROOT|
                                 WB_CLIPCHILDREN|WB_HSCROLL );
     Size aGlblSize(m_aGlobalToolBox->CalcWindowSizePixel());

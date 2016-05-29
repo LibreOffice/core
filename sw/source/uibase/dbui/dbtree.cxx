@@ -183,7 +183,7 @@ void SwDBTreeList::InitTreeList()
 {
     if(!pImpl->HasContext() && pImpl->GetWrtShell())
         return;
-    SetSelectionMode(SINGLE_SELECTION);
+    SetSelectionMode(SelectionMode::Single);
     SetStyle(GetStyle()|WB_HASLINES|WB_CLIPCHILDREN|WB_HASBUTTONS|WB_HASBUTTONSATROOT|WB_HSCROLL);
     // don't set font, so that the Control's font is being applied!
     SetSpaceBetweenEntries(0);
