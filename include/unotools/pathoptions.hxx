@@ -34,7 +34,7 @@ class SvtPathOptions_Impl;
 class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtPathOptions : public utl::detail::Options
 {
 private:
-    SvtPathOptions_Impl*    pImp;
+    std::unique_ptr<SvtPathOptions_Impl>    pImpl;
 
 public:
     enum Paths
