@@ -56,7 +56,7 @@ void VclContainer::setLayoutAllocation(vcl::Window &rChild, const Point &rAllocP
     VclAlign eValign = rChild.get_valign();
 
     //typical case
-    if (eHalign == VCL_ALIGN_FILL && eValign == VCL_ALIGN_FILL)
+    if (eHalign == VclAlign::Fill && eValign == VclAlign::Fill)
     {
         setLayoutPosSize(rChild, rAllocPos, rChildAlloc);
         return;
@@ -68,19 +68,19 @@ void VclContainer::setLayoutAllocation(vcl::Window &rChild, const Point &rAllocP
 
     switch (eHalign)
     {
-        case VCL_ALIGN_FILL:
+        case VclAlign::Fill:
             break;
-        case VCL_ALIGN_START:
+        case VclAlign::Start:
             if (aChildPreferredSize.Width() < rChildAlloc.Width())
                 aChildSize.Width() = aChildPreferredSize.Width();
             break;
-        case VCL_ALIGN_END:
+        case VclAlign::End:
             if (aChildPreferredSize.Width() < rChildAlloc.Width())
                 aChildSize.Width() = aChildPreferredSize.Width();
             aChildPos.X() += rChildAlloc.Width();
             aChildPos.X() -= aChildSize.Width();
             break;
-        case VCL_ALIGN_CENTER:
+        case VclAlign::Center:
             if (aChildPreferredSize.Width() < aChildSize.Width())
                 aChildSize.Width() = aChildPreferredSize.Width();
             aChildPos.X() += (rChildAlloc.Width() - aChildSize.Width()) / 2;
@@ -89,19 +89,19 @@ void VclContainer::setLayoutAllocation(vcl::Window &rChild, const Point &rAllocP
 
     switch (eValign)
     {
-        case VCL_ALIGN_FILL:
+        case VclAlign::Fill:
             break;
-        case VCL_ALIGN_START:
+        case VclAlign::Start:
             if (aChildPreferredSize.Height() < rChildAlloc.Height())
                 aChildSize.Height() = aChildPreferredSize.Height();
             break;
-        case VCL_ALIGN_END:
+        case VclAlign::End:
             if (aChildPreferredSize.Height() < rChildAlloc.Height())
                 aChildSize.Height() = aChildPreferredSize.Height();
             aChildPos.Y() += rChildAlloc.Height();
             aChildPos.Y() -= aChildSize.Height();
             break;
-        case VCL_ALIGN_CENTER:
+        case VclAlign::Center:
             if (aChildPreferredSize.Height() < aChildSize.Height())
                 aChildSize.Height() = aChildPreferredSize.Height();
             aChildPos.Y() += (rChildAlloc.Height() - aChildSize.Height()) / 2;
@@ -2171,7 +2171,7 @@ short MessageDialog::Execute()
         }
         m_pImage->set_grid_left_attach(0);
         m_pImage->set_grid_top_attach(0);
-        m_pImage->set_valign(VCL_ALIGN_START);
+        m_pImage->set_valign(VclAlign::Start);
         m_pImage->Show();
 
         WinBits nWinStyle = WB_CLIPCHILDREN | WB_LEFT | WB_VCENTER | WB_NOLABEL | WB_NOTABSTOP;

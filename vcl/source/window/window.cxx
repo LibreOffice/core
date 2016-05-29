@@ -638,8 +638,8 @@ WindowImpl::WindowImpl( WindowType nType )
     mnDlgCtrlFlags                      = DialogControlFlags::NONE;  // DialogControl-Flags
     mnLockCount                         = 0;                         // LockCount
     meAlwaysInputMode                   = AlwaysInputNone;           // neither AlwaysEnableInput nor AlwaysDisableInput called
-    meHalign                            = VCL_ALIGN_FILL;
-    meValign                            = VCL_ALIGN_FILL;
+    meHalign                            = VclAlign::Fill;
+    meValign                            = VclAlign::Fill;
     mePackType                          = VclPackType::Start;
     mnPadding                           = 0;
     mnGridHeight                        = 1;

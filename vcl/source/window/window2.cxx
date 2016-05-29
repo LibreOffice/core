@@ -1420,16 +1420,16 @@ namespace
 {
     VclAlign toAlign(const OString &rValue)
     {
-        VclAlign eRet = VCL_ALIGN_FILL;
+        VclAlign eRet = VclAlign::Fill;
 
         if (rValue == "fill")
-            eRet = VCL_ALIGN_FILL;
+            eRet = VclAlign::Fill;
         else if (rValue == "start")
-            eRet = VCL_ALIGN_START;
+            eRet = VclAlign::Start;
         else if (rValue == "end")
-            eRet = VCL_ALIGN_END;
+            eRet = VclAlign::End;
         else if (rValue == "center")
-            eRet = VCL_ALIGN_CENTER;
+            eRet = VclAlign::Center;
         return eRet;
     }
 }
