@@ -34,6 +34,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <framework/fwedllapi.h>
+#include <memory>
 
 namespace framework{
 
@@ -60,7 +61,7 @@ namespace framework{
 class RequestFilterSelect_Impl;
 class FWE_DLLPUBLIC RequestFilterSelect
 {
-    RequestFilterSelect_Impl* pImp;
+    std::unique_ptr<RequestFilterSelect_Impl> pImpl;
 
 public:
     RequestFilterSelect( const OUString& sURL );
