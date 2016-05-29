@@ -1520,7 +1520,7 @@ FormulaTokenArray * FormulaTokenArray::RewriteMissing( const MissingConvention &
     }
 
     if (pOcds != &aOpCodeDcountStack[0])
-        delete [] pOcas;
+        delete [] pOcds;
     if (pOcas != &aOpCodeAddressStack[0])
         delete [] pOcas;
     if (pCtx != &aCtx[0])
