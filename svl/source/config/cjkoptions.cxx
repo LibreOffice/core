@@ -395,7 +395,7 @@ SvtCJKOptions::SvtCJKOptions(bool bDontLoad)
         pCJKOptions->Load();
 
     ++nCJKRefCount;
-    pImp = pCJKOptions;
+    pImpl.reset( pCJKOptions );
 }
 
 
