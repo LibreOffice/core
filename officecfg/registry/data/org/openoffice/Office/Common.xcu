@@ -389,28 +389,6 @@
           <value>private:image/3216</value>
         </prop>
       </node>
-      <node oor:name="m4" oor:op="replace">
-        <prop oor:name="URL" oor:type="xs:string">
-          <value>private:separator</value>
-        </prop>
-        <prop oor:name="TargetName" oor:type="xs:string">
-          <value>_self</value>
-        </prop>
-      </node>
-      <node oor:name="m5" oor:op="replace" install:module="impress">
-        <prop oor:name="URL" oor:type="xs:string">
-          <value>slot:10425</value>
-        </prop>
-        <prop oor:name="Title">
-          <value xml:lang="en-US">~Presentation...</value>
-        </prop>
-        <prop oor:name="TargetName" oor:type="xs:string">
-          <value>_self</value>
-        </prop>
-        <prop oor:name="ImageIdentifier" oor:type="xs:string">
-          <value>private:image/3216</value>
-        </prop>
-      </node>
       <node oor:name="m6" oor:op="replace">
         <prop oor:name="URL" oor:type="xs:string">
           <value>private:separator</value>
