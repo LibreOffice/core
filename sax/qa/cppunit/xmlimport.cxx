@@ -69,7 +69,6 @@ private:
 
 public:
     TestDocumentHandler() {}
-    OUString getString() { return m_aStr; }
 
     // XDocumentHandler
     virtual void SAL_CALL startDocument() throw (xml::sax::SAXException, RuntimeException, std::exception) override;
