@@ -37,6 +37,13 @@ TemplateViewItem::~TemplateViewItem ()
 {
 }
 
+void TemplateViewItem::setEditTitle (bool edit, bool bChangeFocus)
+{
+    // Unused parameters.
+    (void)edit;
+    (void)bChangeFocus;
+}
+
 void TemplateViewItem::Paint(drawinglayer::processor2d::BaseProcessor2D *pProcessor,
                                    const ThumbnailItemAttributes *pAttrs)
 {

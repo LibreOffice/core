@@ -24,6 +24,8 @@ public:
 
     const OUString& getPath () const { return maPath; }
 
+    virtual void setEditTitle (bool edit, bool bChangeFocus = true) override;
+
     virtual void Paint (drawinglayer::processor2d::BaseProcessor2D *pProcessor,
                         const ThumbnailItemAttributes *pAttrs) override;
 
