@@ -803,16 +803,16 @@ bool Dialog::ImplStartExecuteModal()
 
     switch ( Application::GetDialogCancelMode() )
     {
-    case Application::DIALOG_CANCEL_OFF:
+    case Application::DialogCancelMode::Off:
         break;
-    case Application::DIALOG_CANCEL_SILENT:
+    case Application::DialogCancelMode::Silent:
         SAL_INFO(
             "vcl",
             "Dialog \"" << ImplGetDialogText(this).getStr()
                 << "\"cancelled in silent mode");
         return false;
     default: // default cannot happen
-    case Application::DIALOG_CANCEL_FATAL:
+    case Application::DialogCancelMode::Fatal:
         std::abort();
     }
 
