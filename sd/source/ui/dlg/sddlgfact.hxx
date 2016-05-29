@@ -111,20 +111,6 @@ class SdPresLayoutTemplateDlg_Impl : public SfxAbstractTabDialog
     virtual OUString    GetText() const override;
 };
 
-class AssistentDlg;
-class AbstractAssistentDlg_Impl : public AbstractAssistentDlg
-{
-    DECL_ABSTDLG_BASE(AbstractAssistentDlg_Impl,AssistentDlg)
-    virtual SfxObjectShellLock GetDocument() override;
-    virtual OutputType GetOutputMedium() const override;
-    virtual bool IsSummary() const override;
-    virtual StartType GetStartType() const override;
-    virtual OUString GetDocPath() const override;
-    virtual bool GetStartWithFlag() const override;
-    virtual bool IsDocEmpty() const override;
-    virtual css::uno::Sequence< css::beans::NamedValue > GetPassword() override;
-};
-
 class SdModifyFieldDlg;
 class AbstractSdModifyFieldDlg_Impl : public AbstractSdModifyFieldDlg
 {
@@ -225,7 +211,6 @@ public:
     virtual AbstractSdCustomShowDlg*    CreateSdCustomShowDlg(vcl::Window* pParent, SdDrawDocument& rDrawDoc) override;
     virtual SfxAbstractTabDialog*       CreateSdTabCharDialog(vcl::Window* pWindow, const SfxItemSet* pAttr, SfxObjectShell* pDocShell) override;
     virtual SfxAbstractTabDialog*       CreateSdTabPageDialog(vcl::Window* pWindow, const SfxItemSet* pAttr, SfxObjectShell* pDocShell, bool bAreaPage = true) override;
-    virtual AbstractAssistentDlg*       CreateAssistentDlg(bool bAutoPilot) override;
     virtual AbstractSdModifyFieldDlg*   CreateSdModifyFieldDlg( vcl::Window* pWindow, const SvxFieldData* pInField, const SfxItemSet& rSet ) override;
     virtual AbstractSdSnapLineDlg*      CreateSdSnapLineDlg(vcl::Window* pParent, const SfxItemSet& rInAttrs, ::sd::View* pView) override;
     virtual AbstractSdInsertLayerDlg*   CreateSdInsertLayerDlg(vcl::Window* pParent, const SfxItemSet& rInAttrs, bool bDeletable, const OUString& aStr) override;
