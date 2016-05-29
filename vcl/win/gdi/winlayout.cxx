@@ -50,8 +50,6 @@
 #include <unordered_map>
 #include <unordered_set>
 
-typedef std::unordered_map<int,int> IntMap;
-
 // Graphite headers
 #include <config_graphite.h>
 #if ENABLE_GRAPHITE
@@ -233,10 +231,10 @@ public:
     }
 
 private:
-    IntMap                  maWidthMap;
-    mutable int             mnMinKashidaWidth;
-    mutable int             mnMinKashidaGlyph;
-    bool                    mbGLyphySetupCalled;
+    std::unordered_map<int, int>    maWidthMap;
+    mutable int                     mnMinKashidaWidth;
+    mutable int                     mnMinKashidaGlyph;
+    bool                            mbGLyphySetupCalled;
 };
 
 GLuint WinFontInstance::mnGLyphyProgram = 0;
@@ -345,7 +343,7 @@ inline void WinFontInstance::CacheGlyphWidth( int nCharCode, int nCharWidth )
 
 inline int WinFontInstance::GetCachedGlyphWidth( int nCharCode ) const
 {
-    IntMap::const_iterator it = maWidthMap.find( nCharCode );
+    auto it = maWidthMap.find( nCharCode );
     if( it == maWidthMap.end() )
         return -1;
     return it->second;
