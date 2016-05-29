@@ -1023,7 +1023,7 @@ oslProcessError SAL_CALL osl_getProcessInfo(oslProcess Process, oslProcessData F
         int  fd;
         sal_Char name[PATH_MAX + 1];
 
-        snprintf(name, sizeof(name), "/proc/%u", pid);
+        snprintf(name, sizeof(name), "/proc/%ld", (long)pid);
 
         if ((fd = open(name, O_RDONLY)) >= 0)
         {
