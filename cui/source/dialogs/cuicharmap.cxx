@@ -530,7 +530,7 @@ IMPL_LINK_NOARG_TYPED(SvxCharacterMap, CharSelectHdl, SvxShowCharSet*, void)
             else
                 m_pShowText->SetText( aOUStr );
 
-            m_pShowText->SetSelection( Selection( nPos + 1 ) );
+            m_pShowText->SetSelection(Selection(nPos + aOUStr.getLength()));
         }
 
     }
