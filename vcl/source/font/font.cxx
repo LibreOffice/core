@@ -421,7 +421,7 @@ SvStream& WriteImplFont( SvStream& rOStm, const ImplFont& rImplFont )
     rOStm.WriteUChar( static_cast<sal_uInt8>(rImplFont.meKerning) );
 
     // new in version 2
-    rOStm.WriteUChar( rImplFont.meRelief );
+    rOStm.WriteUChar( (sal_uChar)rImplFont.meRelief );
     rOStm.WriteUInt16( rImplFont.maCJKLanguageTag.getLanguageType( false) );
     rOStm.WriteBool( rImplFont.mbVertical );
     rOStm.WriteUInt16( (sal_uInt16)rImplFont.meEmphasisMark );
@@ -726,7 +726,7 @@ ImplFont::ImplFont() :
     meUnderline( LINESTYLE_NONE ),
     meOverline( LINESTYLE_NONE ),
     meStrikeout( STRIKEOUT_NONE ),
-    meRelief( RELIEF_NONE ),
+    meRelief( FontRelief::NONE ),
     meEmphasisMark( FontEmphasisMark::NONE ),
     meKerning( FontKerning::NONE ),
     meCharSet( RTL_TEXTENCODING_DONTKNOW ),

@@ -2582,10 +2582,10 @@ void RtfAttributeOutput::CharRelief(const SvxCharReliefItem& rRelief)
     const sal_Char* pStr;
     switch (rRelief.GetValue())
     {
-    case RELIEF_EMBOSSED:
+    case FontRelief::Embossed:
         pStr = OOO_STRING_SVTOOLS_RTF_EMBO;
         break;
-    case RELIEF_ENGRAVED:
+    case FontRelief::Engraved:
         pStr = OOO_STRING_SVTOOLS_RTF_IMPR;
         break;
     default:

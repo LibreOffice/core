@@ -523,7 +523,7 @@ void ScXMLTableRowCellContext::PushFormat(sal_Int32 nBegin, sal_Int32 nEnd, cons
             case EE_CHAR_RELIEF:
             {
                 if (!pPoolItem)
-                    pPoolItem.reset(new SvxCharReliefItem(RELIEF_NONE, pEntry->mnItemID));
+                    pPoolItem.reset(new SvxCharReliefItem(FontRelief::NONE, pEntry->mnItemID));
 
                 pPoolItem->PutValue(it->maValue, pEntry->mnFlag);
             }

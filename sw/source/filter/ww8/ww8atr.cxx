@@ -1387,8 +1387,8 @@ void WW8AttributeOutput::CharRelief( const SvxCharReliefItem& rRelief )
     sal_uInt16 nId;
     switch ( rRelief.GetValue() )
     {
-        case RELIEF_EMBOSSED:   nId = NS_sprm::LN_CFEmboss;     break;
-        case RELIEF_ENGRAVED:   nId = NS_sprm::LN_CFImprint;    break;
+        case FontRelief::Embossed:   nId = NS_sprm::LN_CFEmboss;     break;
+        case FontRelief::Engraved:   nId = NS_sprm::LN_CFImprint;    break;
         default:                nId = 0;                        break;
     }
 

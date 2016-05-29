@@ -62,7 +62,7 @@ namespace cppcanvas
                 textDirection(css::rendering::TextDirection::WEAK_LEFT_TO_RIGHT),
                 textAlignment(0), // TODO(Q2): Synchronize with implrenderer
                                   // and possibly new rendering::TextAlignment
-                textReliefStyle(RELIEF_NONE),
+                textReliefStyle(FontRelief::NONE),
                 textOverlineStyle(LINESTYLE_NONE),
                 textUnderlineStyle(LINESTYLE_NONE),
                 textStrikeoutStyle(STRIKEOUT_NONE),
@@ -103,7 +103,7 @@ namespace cppcanvas
             PushFlags                                                                pushFlags;
             sal_Int8                                                                 textDirection;
             sal_Int8                                                                 textAlignment;
-            sal_Int8                                                                 textReliefStyle;
+            FontRelief                                                               textReliefStyle;
             sal_Int8                                                                 textOverlineStyle;
             sal_Int8                                                                 textUnderlineStyle;
             sal_Int8                                                                 textStrikeoutStyle;

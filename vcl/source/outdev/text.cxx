@@ -340,7 +340,7 @@ void OutputDevice::ImplDrawSpecialText( SalLayout& rSalLayout )
     FontRelief  eRelief             = maFont.GetRelief();
 
     Point aOrigPos = rSalLayout.DrawBase();
-    if ( eRelief != RELIEF_NONE )
+    if ( eRelief != FontRelief::NONE )
     {
         Color   aReliefColor( COL_LIGHTGRAY );
         Color   aTextColor( aOldColor );
@@ -370,7 +370,7 @@ void OutputDevice::ImplDrawSpecialText( SalLayout& rSalLayout )
         long nOff = 1;
         nOff += mnDPIX/300;
 
-        if ( eRelief == RELIEF_ENGRAVED )
+        if ( eRelief == FontRelief::Engraved )
             nOff = -nOff;
         rSalLayout.DrawOffset() += Point( nOff, nOff);
         ImplDrawTextDirect( rSalLayout, mbTextLines );
@@ -2482,7 +2482,7 @@ bool OutputDevice::GetTextBoundRect( Rectangle& rRect,
     vcl::Font aFont( GetFont() );
     aFont.SetShadow( false );
     aFont.SetOutline( false );
-    aFont.SetRelief( RELIEF_NONE );
+    aFont.SetRelief( FontRelief::NONE );
     aFont.SetOrientation( 0 );
     aFont.SetFontSize( Size( mpFontInstance->maFontSelData.mnWidth, mpFontInstance->maFontSelData.mnHeight ) );
     aVDev->SetFont( aFont );
@@ -2707,7 +2707,7 @@ bool OutputDevice::GetTextOutlines( basegfx::B2DPolyPolygonVector& rVector,
     vcl::Font aFont(GetFont());
     aFont.SetShadow(false);
     aFont.SetOutline(false);
-    aFont.SetRelief(RELIEF_NONE);
+    aFont.SetRelief(FontRelief::NONE);
     aFont.SetOrientation(0);
     if( bOptimize )
     {

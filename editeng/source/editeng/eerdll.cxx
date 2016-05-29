@@ -151,7 +151,7 @@ SfxPoolItem** GlobalEditData::GetDefItems()
         ppDefItems[41] = new SvxPostureItem( ITALIC_NONE, EE_CHAR_ITALIC_CJK );
         ppDefItems[42] = new SvxPostureItem( ITALIC_NONE, EE_CHAR_ITALIC_CTL );
         ppDefItems[43] = new SvxEmphasisMarkItem( FontEmphasisMark::NONE, EE_CHAR_EMPHASISMARK );
-        ppDefItems[44] = new SvxCharReliefItem( RELIEF_NONE, EE_CHAR_RELIEF );
+        ppDefItems[44] = new SvxCharReliefItem( FontRelief::NONE, EE_CHAR_RELIEF );
         ppDefItems[45] = new SfxVoidItem( EE_CHAR_RUBI_DUMMY );
         ppDefItems[46] = new SvXMLAttrContainerItem( EE_CHAR_XMLATTRIBS );
         ppDefItems[47] = new SvxOverlineItem( LINESTYLE_NONE, EE_CHAR_OVERLINE );

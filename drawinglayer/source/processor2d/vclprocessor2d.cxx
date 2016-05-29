@@ -204,18 +204,18 @@ namespace drawinglayer
                         }
 
                         // set Relief attribute
-                        FontRelief eFontRelief = RELIEF_NONE;
+                        FontRelief eFontRelief = FontRelief::NONE;
                         switch( pTCPP->getTextRelief() )
                         {
                             default:
                                 SAL_WARN( "drawinglayer", "Unknown Relief style " << pTCPP->getTextRelief() );
                                 SAL_FALLTHROUGH;
-                            case primitive2d::TEXT_RELIEF_NONE:     eFontRelief = RELIEF_NONE; break;
-                            case primitive2d::TEXT_RELIEF_EMBOSSED: eFontRelief = RELIEF_EMBOSSED; break;
-                            case primitive2d::TEXT_RELIEF_ENGRAVED: eFontRelief = RELIEF_ENGRAVED; break;
+                            case primitive2d::TEXT_RELIEF_NONE:     eFontRelief = FontRelief::NONE; break;
+                            case primitive2d::TEXT_RELIEF_EMBOSSED: eFontRelief = FontRelief::Embossed; break;
+                            case primitive2d::TEXT_RELIEF_ENGRAVED: eFontRelief = FontRelief::Engraved; break;
                         }
 
-                        if( eFontRelief != RELIEF_NONE )
+                        if( eFontRelief != FontRelief::NONE )
                             aFont.SetRelief( eFontRelief );
 
                         // set Shadow attribute

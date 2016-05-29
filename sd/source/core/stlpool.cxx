@@ -245,7 +245,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const OUString& rLayoutName, bool
                 rSet.Put( SvxShadowedItem(false, EE_CHAR_SHADOW ) );
                 rSet.Put( SvxContourItem(false, EE_CHAR_OUTLINE ) );
                 rSet.Put( SvxEmphasisMarkItem(FontEmphasisMark::NONE, EE_CHAR_EMPHASISMARK ) );
-                rSet.Put( SvxCharReliefItem(RELIEF_NONE, EE_CHAR_RELIEF) );
+                rSet.Put( SvxCharReliefItem(FontRelief::NONE, EE_CHAR_RELIEF) );
                 rSet.Put( SvxColorItem( Color(COL_AUTO), EE_CHAR_COLOR) );
                 rSet.Put( SvxBackgroundColorItem( Color (COL_AUTO), EE_CHAR_BKGCOLOR )  );
                 rSet.Put( XLineStyleItem(css::drawing::LineStyle_NONE) );
@@ -363,7 +363,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const OUString& rLayoutName, bool
         rTitleSet.Put(SvxShadowedItem(false, EE_CHAR_SHADOW ));
         rTitleSet.Put(SvxContourItem(false, EE_CHAR_OUTLINE ));
         rTitleSet.Put( SvxEmphasisMarkItem(FontEmphasisMark::NONE, EE_CHAR_EMPHASISMARK ) );
-        rTitleSet.Put( SvxCharReliefItem(RELIEF_NONE, EE_CHAR_RELIEF ) );
+        rTitleSet.Put( SvxCharReliefItem(FontRelief::NONE, EE_CHAR_RELIEF ) );
         rTitleSet.Put(SvxColorItem( Color(COL_AUTO), EE_CHAR_COLOR ));
         rTitleSet.Put(SvxBackgroundColorItem( Color(COL_AUTO), EE_CHAR_BKGCOLOR ));
         rTitleSet.Put(SvxAdjustItem(SVX_ADJUST_CENTER, EE_PARA_JUST ));
@@ -409,7 +409,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const OUString& rLayoutName, bool
         rSubtitleSet.Put(SvxShadowedItem(false, EE_CHAR_SHADOW ));
         rSubtitleSet.Put(SvxContourItem(false, EE_CHAR_OUTLINE ));
         rSubtitleSet.Put( SvxEmphasisMarkItem(FontEmphasisMark::NONE, EE_CHAR_EMPHASISMARK ) );
-        rSubtitleSet.Put( SvxCharReliefItem(RELIEF_NONE, EE_CHAR_RELIEF ) );
+        rSubtitleSet.Put( SvxCharReliefItem(FontRelief::NONE, EE_CHAR_RELIEF ) );
         rSubtitleSet.Put(SvxColorItem( Color(COL_AUTO), EE_CHAR_COLOR ));
         rSubtitleSet.Put(SvxBackgroundColorItem( Color(COL_AUTO), EE_CHAR_BKGCOLOR ));
         rSubtitleSet.Put(SvxAdjustItem(SVX_ADJUST_CENTER, EE_PARA_JUST ));
@@ -458,7 +458,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const OUString& rLayoutName, bool
         rNotesSet.Put( SvxShadowedItem(false, EE_CHAR_SHADOW ) );
         rNotesSet.Put( SvxContourItem(false, EE_CHAR_OUTLINE ) );
         rNotesSet.Put( SvxEmphasisMarkItem(FontEmphasisMark::NONE, EE_CHAR_EMPHASISMARK ) );
-        rNotesSet.Put( SvxCharReliefItem(RELIEF_NONE, EE_CHAR_RELIEF) );
+        rNotesSet.Put( SvxCharReliefItem(FontRelief::NONE, EE_CHAR_RELIEF) );
         rNotesSet.Put( SvxColorItem( Color(COL_AUTO), EE_CHAR_COLOR ) );
         rNotesSet.Put( SvxBackgroundColorItem( Color(COL_AUTO), EE_CHAR_BKGCOLOR ) );
         rNotesSet.Put( SvxLRSpaceItem( 0, 0, 600, -600, EE_PARA_LRSPACE  ) );

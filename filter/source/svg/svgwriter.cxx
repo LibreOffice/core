@@ -1559,7 +1559,7 @@ void SVGTextWriter::writeTextPortion( const Point& rPos,
 #if 0
     const FontMetric aMetric( mpVDev->GetFontMetric() );
 
-    bool bTextSpecial = aMetric.IsShadow() || aMetric.IsOutline() || (aMetric.GetRelief() != RELIEF_NONE);
+    bool bTextSpecial = aMetric.IsShadow() || aMetric.IsOutline() || (aMetric.GetRelief() != FontRelief::NONE);
 
     if( true || !bTextSpecial )
     {
@@ -2370,7 +2370,7 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const OUString& rText,
 {
     const FontMetric aMetric( mpVDev->GetFontMetric() );
 
-    bool bTextSpecial = aMetric.IsShadow() || aMetric.IsOutline() || (aMetric.GetRelief() != RELIEF_NONE);
+    bool bTextSpecial = aMetric.IsShadow() || aMetric.IsOutline() || (aMetric.GetRelief() != FontRelief::NONE);
 
     if( !bTextSpecial )
     {
@@ -2378,7 +2378,7 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const OUString& rText,
     }
     else
     {
-        if( aMetric.GetRelief() != RELIEF_NONE )
+        if( aMetric.GetRelief() != FontRelief::NONE )
         {
             Color aReliefColor( COL_LIGHTGRAY );
             Color aTextColor( mpVDev->GetTextColor() );
@@ -2393,7 +2393,7 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const OUString& rText,
             Point aPos( rPos );
             Point aOffset( 6, 6 );
 
-            if ( aMetric.GetRelief() == RELIEF_ENGRAVED )
+            if ( aMetric.GetRelief() == FontRelief::Engraved )
             {
                 aPos -= aOffset;
             }

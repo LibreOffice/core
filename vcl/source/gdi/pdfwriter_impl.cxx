@@ -8548,7 +8548,7 @@ void PDFWriterImpl::drawRelief( SalLayout& rLayout, const OUString& rText, bool 
         aReliefColor = Color( COL_BLACK );
 
     Font aSetFont = m_aCurrentPDFState.m_aFont;
-    aSetFont.SetRelief( RELIEF_NONE );
+    aSetFont.SetRelief( FontRelief::NONE );
     aSetFont.SetShadow( false );
 
     aSetFont.SetColor( aReliefColor );
@@ -8556,7 +8556,7 @@ void PDFWriterImpl::drawRelief( SalLayout& rLayout, const OUString& rText, bool 
     setOverlineColor( aReliefColor );
     setFont( aSetFont );
     long nOff = 1 + getReferenceDevice()->mnDPIX/300;
-    if( eRelief == RELIEF_ENGRAVED )
+    if( eRelief == FontRelief::Engraved )
         nOff = -nOff;
 
     rLayout.DrawOffset() += Point( nOff, nOff );
@@ -8791,7 +8791,7 @@ void PDFWriterImpl::drawHorizontalGlyphs(
 void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool bTextLines )
 {
     // relief takes precedence over shadow (see outdev3.cxx)
-    if(  m_aCurrentPDFState.m_aFont.GetRelief() != RELIEF_NONE )
+    if(  m_aCurrentPDFState.m_aFont.GetRelief() != FontRelief::NONE )
     {
         drawRelief( rLayout, rText, bTextLines );
         return;
