@@ -320,8 +320,8 @@ sal_Bool SfxAppEvent_Impl( const OUString& rCmd, const OUString& rEvent,
 long SfxApplication::DdeExecute( const OUString&   rCmd )  // Expressed in our BASIC-Syntax
 {
     // Print or Open-Event?
-    if ( !( SfxAppEvent_Impl( rCmd, "Print", ApplicationEvent::TYPE_PRINT ) ||
-            SfxAppEvent_Impl( rCmd, "Open", ApplicationEvent::TYPE_OPEN ) ) )
+    if ( !( SfxAppEvent_Impl( rCmd, "Print", ApplicationEvent::Type::Print ) ||
+            SfxAppEvent_Impl( rCmd, "Open", ApplicationEvent::Type::Open ) ) )
     {
         // all others are BASIC
         StarBASIC* pBasic = GetBasic();

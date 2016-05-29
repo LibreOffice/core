@@ -98,79 +98,79 @@ namespace o3tl
 typedef long (*VCLEventHookProc)( NotifyEvent& rEvt, void* pData );
 
 /** An application can be notified of a number of different events:
-    - TYPE_ACCEPT       - listen for connection to the application (a connection
+    - Type::Accept       - listen for connection to the application (a connection
                           string is passed via the event)
-    - TYPE_UNACCEPT     - stops listening for a connection to the app (determined by
+    - Type::Unaccept     - stops listening for a connection to the app (determined by
                           a connection string passed via the event)
-    - TYPE_APPEAR       - brings the app to the front (i.e. makes it "appear")
-    - TYPE_VERSION      - display the app version
-    - TYPE_HELP         - opens a help topic (help topic passed as string)
-    - TYPE_OPENHELP_URL - opens a help URL (URL passed as a string)
-    - TYPE_SHOWDIALOG   - shows a dialog (dialog passed as a string)
-    - TYPE_OPEN         - opens a document or group of documents (documents passed
+    - Type::Appear       - brings the app to the front (i.e. makes it "appear")
+    - Type::Version      - display the app version
+    - Type::Help         - opens a help topic (help topic passed as string)
+    - Type::OpenHELP_URL - opens a help URL (URL passed as a string)
+    - Type::ShowDialog   - shows a dialog (dialog passed as a string)
+    - Type::Open         - opens a document or group of documents (documents passed
                           as an array of strings)
-    - TYPE_PRINT        - print a document or group of documents (documents passed
+    - Type::Print        - print a document or group of documents (documents passed
                           as an array of strings
-    - TYPE_PRIVATE_DOSHUTDOWN - shutdown the app
+    - Type::PrivateDoShutdown - shutdown the app
 */
 
 class VCL_DLLPUBLIC ApplicationEvent
 {
 public:
-    enum Type {
-        TYPE_ACCEPT,                ///< Listen for connections
-        TYPE_APPEAR,                ///< Make application appear
-        TYPE_HELP,                  ///< Bring up help options (command-line help)
-        TYPE_VERSION,               ///< Display product version
-        TYPE_OPEN,                  ///< Open a document
-        TYPE_OPENHELPURL,           ///< Open a help URL
-        TYPE_PRINT,                 ///< Print document
-        TYPE_PRIVATE_DOSHUTDOWN,    ///< Shutdown application
-        TYPE_QUICKSTART,            ///< Start QuickStart
-        TYPE_SHOWDIALOG,            ///< Show a dialog
-        TYPE_UNACCEPT               ///< Stop listening for connections
+    enum class Type {
+        Accept,                ///< Listen for connections
+        Appear,                ///< Make application appear
+        Help,                  ///< Bring up help options (command-line help)
+        Version,               ///< Display product version
+        Open,                  ///< Open a document
+        OpenHelpUrl,           ///< Open a help URL
+        Print,                 ///< Print document
+        PrivateDoShutdown,    ///< Shutdown application
+        QuickStart,            ///< Start QuickStart
+        ShowDialog,            ///< Show a dialog
+        Unaccept               ///< Stop listening for connections
     };
 
     /** Explicit constructor for ApplicationEvent.
 
-     @attention TYPE_APPEAR, TYPE_VERSION, TYPE_PRIVATE_DOSHUTDOWN and
-        TYPE_QUICKSTART are the \em only events that don't need to include
+     @attention Type::Appear, Type::Version, Type::PrivateDoShutdown and
+        Type::QuickStart are the \em only events that don't need to include
         a data string with the event. No other events should use this
         constructor!
     */
     explicit ApplicationEvent(Type type): aEvent(type)
     {
         assert(
-            type == TYPE_APPEAR || type == TYPE_VERSION
-            || type == TYPE_PRIVATE_DOSHUTDOWN || type == TYPE_QUICKSTART);
+            type == Type::Appear || type == Type::Version
+            || type == Type::PrivateDoShutdown || type == Type::QuickStart);
     }
 
     /** Constructor for ApplicationEvent, accepts a string for the data
      associated with the event.
 
-     @attention TYPE_ACCEPT, TYPE_HELP, TYPE_OPENHELPURL, TYPE_SHOWDIALOG
-        and TYPE_UNACCEPT are the \em only events that accept a single
+     @attention Type::Accept, Type::Help, Type::OpenHelpUrl, Type::ShowDialog
+        and Type::Unaccept are the \em only events that accept a single
         string as event data. No other events should use this constructor!
     */
     ApplicationEvent(Type type, OUString const & data): aEvent(type)
     {
         assert(
-            type == TYPE_ACCEPT || type == TYPE_HELP || type == TYPE_OPENHELPURL
-            || type == TYPE_SHOWDIALOG || type == TYPE_UNACCEPT);
+            type == Type::Accept || type == Type::Help || type == Type::OpenHelpUrl
+            || type == Type::ShowDialog || type == Type::Unaccept);
         aData.push_back(data);
     }
 
     /** Constructor for ApplicationEvent, accepts an array of strings for
      the data associated with the event.
 
-     @attention TYPE_OPEN and TYPE_PRINT can apply to multiple documents,
+     @attention Type::Open and Type::Print can apply to multiple documents,
         and are the \em only events that accept an array of strings. No other
         events should use this constructor.
     */
     ApplicationEvent(Type type, std::vector<OUString> const & data):
         aEvent(type), aData(data)
     {
-        assert(type == TYPE_OPEN || type == TYPE_PRINT);
+        assert(type == Type::Open || type == Type::Print);
     }
 
     /** Get the type of event.
@@ -184,17 +184,17 @@ public:
 
     /** Gets the application event's data string.
 
-     @attention The \em only events that need a single string TYPE_ACCEPT,
-        TYPE_HELP, TYPE_OPENHELPURL, TYPE_SHOWDIALOG and TYPE_UNACCEPT
+     @attention The \em only events that need a single string Type::Accept,
+        Type::Help, Type::OpenHelpUrl, Type::ShowDialog and Type::Unaccept
 
      @returns The event's data string.
     */
     OUString GetStringData() const
     {
         assert(
-            aEvent == TYPE_ACCEPT || aEvent == TYPE_HELP
-            || aEvent == TYPE_OPENHELPURL || aEvent == TYPE_SHOWDIALOG
-            || aEvent == TYPE_UNACCEPT);
+            aEvent == Type::Accept || aEvent == Type::Help
+            || aEvent == Type::OpenHelpUrl || aEvent == Type::ShowDialog
+            || aEvent == Type::Unaccept);
         assert(aData.size() == 1);
         return aData[0];
     }
@@ -202,11 +202,11 @@ public:
     /** Gets the event's array of strings.
 
      @attention The \em only events that need an array of strings
-        are TYPE_OPEN and TYPE_PRINT.
+        are Type::Open and Type::Print.
     */
     std::vector<OUString> const & GetStringsData() const
     {
-        assert(aEvent == TYPE_OPEN || aEvent == TYPE_PRINT);
+        assert(aEvent == Type::Open || aEvent == Type::Print);
         return aData;
     }
 
