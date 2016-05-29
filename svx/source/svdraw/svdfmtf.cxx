@@ -1586,11 +1586,11 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaFloatTransparentAction& rAct)
                     {
                         aOldMask = aBitmapEx.GetAlpha();
                     }
-                    else if(TRANSPARENT_BITMAP == aBitmapEx.GetTransparentType())
+                    else if(TransparentType::Bitmap == aBitmapEx.GetTransparentType())
                     {
                         aOldMask = aBitmapEx.GetMask();
                     }
-                    else if(TRANSPARENT_COLOR == aBitmapEx.GetTransparentType())
+                    else if(TransparentType::Color == aBitmapEx.GetTransparentType())
                     {
                         aOldMask = aBitmapEx.GetBitmap().CreateMask(aBitmapEx.GetTransparentColor());
                     }

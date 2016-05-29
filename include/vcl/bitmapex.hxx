@@ -33,11 +33,11 @@ namespace com { namespace sun { namespace star { namespace rendering {
     class XBitmapCanvas;
 } } } }
 
-enum TransparentType
+enum class TransparentType
 {
-    TRANSPARENT_NONE,
-    TRANSPARENT_COLOR,
-    TRANSPARENT_BITMAP
+    NONE,
+    Color,
+    Bitmap
 };
 
 class VCL_DLLPUBLIC BitmapEx
