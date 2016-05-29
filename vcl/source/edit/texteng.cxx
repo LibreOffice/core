@@ -79,7 +79,7 @@ TextEngine::TextEngine()
     , mnCurTextWidth {-1}
     , mnCurTextHeight {0}
     , mnDefTab {0}
-    , meAlign {TXTALIGN_LEFT}
+    , meAlign {TxtAlign::Left}
     , mbIsFormatting {false}
     , mbFormatted {false}
     , mbUpdate {true}
@@ -1608,9 +1608,9 @@ void TextEngine::CreateAndInsertEmptyLine( sal_uInt32 nPara )
     aTmpLine.SetStart( pNode->GetText().getLength() );
     aTmpLine.SetEnd( aTmpLine.GetStart() );
 
-    if ( ImpGetAlign() == TXTALIGN_CENTER )
+    if ( ImpGetAlign() == TxtAlign::Center )
         aTmpLine.SetStartX( (short)(mnMaxTextWidth / 2) );
-    else if ( ImpGetAlign() == TXTALIGN_RIGHT )
+    else if ( ImpGetAlign() == TxtAlign::Right )
         aTmpLine.SetStartX( (short)mnMaxTextWidth );
     else
         aTmpLine.SetStartX( mpDoc->GetLeftMargin() );
@@ -2283,7 +2283,7 @@ bool TextEngine::CreateLines( sal_uInt32 nPara )
             ImpBreakLine( nPara, pLine, pPortion, nPortionStart, nRemainingWidth );
         }
 
-        if ( ( ImpGetAlign() == TXTALIGN_CENTER ) || ( ImpGetAlign() == TXTALIGN_RIGHT ) )
+        if ( ( ImpGetAlign() == TxtAlign::Center ) || ( ImpGetAlign() == TxtAlign::Right ) )
         {
             // adjust
             long nTextWidth = 0;
@@ -2295,9 +2295,9 @@ bool TextEngine::CreateLines( sal_uInt32 nPara )
             const long nSpace = mnMaxTextWidth - nTextWidth;
             if ( nSpace > 0 )
             {
-                if ( ImpGetAlign() == TXTALIGN_CENTER )
+                if ( ImpGetAlign() == TxtAlign::Center )
                     pLine->SetStartX( (sal_uInt16)(nSpace / 2) );
-                else    // TXTALIGN_RIGHT
+                else    // TxtAlign::Right
                     pLine->SetStartX( (sal_uInt16)nSpace );
             }
         }
@@ -2841,7 +2841,7 @@ void TextEngine::SetRightToLeft( bool bR2L )
     if ( mbRightToLeft != bR2L )
     {
         mbRightToLeft = bR2L;
-        meAlign = bR2L ? TXTALIGN_RIGHT : TXTALIGN_LEFT;
+        meAlign = bR2L ? TxtAlign::Right : TxtAlign::Left;
         FormatFullDoc();
         UpdateViews();
     }
@@ -2997,10 +2997,10 @@ TxtAlign TextEngine::ImpGetAlign() const
     TxtAlign eAlign = meAlign;
     if ( IsRightToLeft() )
     {
-        if ( eAlign == TXTALIGN_LEFT )
-            eAlign = TXTALIGN_RIGHT;
-        else if ( eAlign == TXTALIGN_RIGHT )
-            eAlign = TXTALIGN_LEFT;
+        if ( eAlign == TxtAlign::Left )
+            eAlign = TxtAlign::Right;
+        else if ( eAlign == TxtAlign::Right )
+            eAlign = TxtAlign::Left;
     }
     return eAlign;
 }
