@@ -27,7 +27,12 @@
 ########################################################################
 
 
-import sys, re, subprocess, os, optparse, string
+import sys
+import re
+import subprocess
+import os
+import argparse
+import string
 
 class Parser:
     """
@@ -37,34 +42,28 @@ class Parser:
     def __init__(self):
         self.strip = string.punctuation + " \n"
         self.text_cat = self.start_text_cat()
-        op = optparse.OptionParser()
-        op.set_usage("%prog [options] <rootdir>\n\n" +
-            "Searches for german comments in cxx/hxx source files inside a given root\n" +
-            "directory recursively.")
-        op.add_option("-f", "--filenames-only", action="store_true", dest="filenames_only", default=False,
+        parser = argparse.ArgumentParser(description='Searches for german comments in cxx/hxx source files inside a given root directory recursively.')
+        parser.add_argument("-f", "--filenames-only", action="store_true",
             help="Only print the filenames of files containing German comments")
-        op.add_option("-v", "--verbose", action="store_true", dest="verbose", default=False,
+        parser.add_argument("-v", "--verbose", action="store_true",
             help="Turn on verbose mode (print only positives progress to stderr)")
-        op.add_option("-l", "--line-numbers", action="store_true", dest="line_numbers", default=False,
+        parser.add_argument("-l", "--line-numbers", action="store_true",
             help="Prints the filenames and line numbers only.")
-        op.add_option("-L", "--line-numbers-pos", action="store_true", dest="line_numbers_pos", default=False,
+        parser.add_argument("-L", "--line-numbers-pos", action="store_true",
             help="Prints the filenames and line numbers only (if positive).")
-        op.add_option("-t", "--threshold", action="store", dest="THRESHOLD", default=0,
+        parser.add_argument("-t", "--threshold", action="store", default=0, type=int,
             help="When used with '--line-numbers', only bothers outputting comment info if there are more than X number of flagged comments. Useful for weeding out false positives.")
-        self.options, args = op.parse_args()
-        try:
-            dir = args[0]
-        except IndexError:
-            dir = "."
-        self.check_source_files(dir)
+        parser.add_argument("directory", nargs='?', default='.', type=str, help='Give a directory to search in')
+        self.args = parser.parse_args()
+        self.check_source_files(self.args.directory)
 
     def get_comments(self, filename):
         """
         Extracts the source code comments.
         """
         linenum = 0
-        if self.options.verbose:
-            sys.stderr.write("processing file '%s'...\n" % filename)
+        if self.args.verbose:
+            print("processing file '%s'...\n" % filename)
         sock = open(filename)
         # add an empty line to trigger the output of collected oneliner
         # comment group
@@ -146,39 +145,39 @@ class Parser:
         s = s.replace('\n', ' ')
         if len(s) < 32 or len(s.split()) < 4:
             return False
-        return b"german" == self.get_lang(s)
+        return self.get_lang(s) == b"german"
 
     def check_file(self, path):
         """
         checks each comment in a file
         """
-        def tab_calc (string):
+        def tab_calc(path):
             START = 40 #Default of 10 tabs
-            if len(string) >= START:
+            if len(path) >= START:
                 return 1
-            diff = START - len(string)
+            diff = START - len(path)
             if diff % 4 is not 0:
                 padding = 1
             else:
                 padding = 0
             return (diff/4)+padding
 
-        if self.options.line_numbers or self.options.line_numbers_pos:
+        if self.args.line_numbers or self.args.line_numbers_pos:
             TABS = "\t"*10
             path_linenums = []
             for linenum, s in self.get_comments(path):
                 if self.is_german(s):
                     path_linenums.append(linenum)
-            valid = len(path_linenums) > int(self.options.THRESHOLD)
-            if self.options.line_numbers:
-                sys.stderr.write("%s ... %s positives -- %s\n" % (path, str(len(path_linenums)), str(valid)))
+            valid = len(path_linenums) > int(self.args.threshold)
+            if self.args.line_numbers:
+                print("%s ... %s positives -- %s\n" % (path, str(len(path_linenums)), str(valid)))
             if valid:
-                if self.options.line_numbers_pos:
-                    sys.stderr.write("%s ... %s positives\n" % (path, str(len(path_linenums))))
+                if self.args.line_numbers_pos:
+                    print("%s ... %s positives\n" % (path, str(len(path_linenums))))
                     return
                 if len(path) + (len(path_linenums)*4) > 75:
                     print("%s:\n" % path)
-                    while(path_linenums):
+                    while path_linenums:
                         i = 0
                         numline = []
                         while i < 10:
@@ -191,11 +190,11 @@ class Parser:
                         numline = [str(i) for i in numline]
                         print("%s%s" % (TABS, ",".join(numline)))
                 else:
-                    if self.options.line_numbers:
+                    if self.args.line_numbers:
                         path_linenums = [str(i) for i in path_linenums]
-                        print("%s:%s%s" % (path, "\t"*tab_calc(path), ",".join(path_linenums)))
+                        print("%s:%s%s" % (path, "\t"*int(tab_calc(path)), ",".join(path_linenums)))
 
-        elif not self.options.filenames_only:
+        elif not self.args.filenames_only:
             for linenum, s in self.get_comments(path):
                 if self.is_german(s):
                     print("%s:%s: %s" % (path, linenum, s))
@@ -210,6 +209,9 @@ class Parser:
                 print(f)
 
     def first_elem(self, path):
+        """
+        Returns the root directory in our repo of a given path, so we can check against the whitelist.
+        """
         lastElem = os.path.dirname(path)
         done = False
         while not done:
@@ -232,7 +234,7 @@ class Parser:
         # If we want to scan the current dir, we must not do so as we are already there.
         if not globalscan and directory != '.':
             currentdir = os.getcwd()
-            os.chdir(currentdir.split("core",1)[0] + "core/")
+            os.chdir(currentdir.split("core", 1)[0] + "core/")
             os.chdir(directory)
 
         sock = os.popen(r"git ls-tree -r HEAD --name-only |egrep '\.(c|cc|cpp|cxx|h|hxx|mm)$'")
@@ -380,19 +382,19 @@ class Parser:
             # If we have an globalscan use the whitelist.
             if globalscan:
                 if not baseDir in directory_whitelist:
-                    sys.stderr.write ("\n - Error: Missing path %s -\n\n" % baseDir)
+                    sys.stderr.write("\n - Error: Missing path %s -\n\n" % baseDir)
                     sys.exit(1)
                 elif directory_whitelist[baseDir] is 0:
                     self.check_file(path.strip())
                     num_checked = num_checked + 1
                 elif directory_whitelist[baseDir] is 1:
-                    sys.stderr.write ("Skipping whitelisted directory %s\n" % baseDir)
+                    sys.stderr.write("Skipping whitelisted directory %s\n" % baseDir)
                     directory_whitelist[baseDir] = 2
             elif not globalscan:
                 self.check_file(path.strip())
                 num_checked = num_checked + 1
 
-        sys.stderr.write ("Scanned %s files\n" % num_checked)
+        print("Scanned %s files\n" % num_checked)
 
 try:
     Parser()
