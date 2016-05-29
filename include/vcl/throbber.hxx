@@ -31,18 +31,18 @@
 class VCL_DLLPUBLIC Throbber : public ImageControl
 {
 public:
-    enum ImageSet
+    enum class ImageSet
     {
         /// no (default) images at all
-        IMAGES_NONE,
+        NONE,
         /// automatically decide between different image sets, depending on what fits best the actual size
-        IMAGES_AUTO,
+        Auto,
         /// default images, 16x16 pixels
-        IMAGES_16_PX,
+        N16px,
         /// default images, 32x32 pixels
-        IMAGES_32_PX,
+        N32px,
         /// default images, 64x64 pixels
-        IMAGES_64_PX,
+        N64px,
     };
 
 public:

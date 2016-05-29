@@ -45,7 +45,7 @@ Throbber::Throbber( vcl::Window* i_parentWindow, WinBits i_style )
     ,mbRepeat( true )
     ,mnStepTime( 100 )
     ,mnCurStep( 0 )
-    ,meImageSet( IMAGES_AUTO )
+    ,meImageSet( ImageSet::Auto )
 {
     maWaitTimer.SetTimeout( mnStepTime );
     maWaitTimer.SetTimeoutHdl( LINK( this, Throbber, TimeOutHdl ) );
@@ -70,7 +70,7 @@ namespace
     ::std::vector< Image > lcl_loadImageSet( const Throbber::ImageSet i_imageSet )
     {
         ::std::vector< Image > aImages;
-        ENSURE_OR_RETURN( i_imageSet != Throbber::IMAGES_NONE, "lcl_loadImageSet: illegal image set", aImages );
+        ENSURE_OR_RETURN( i_imageSet != Throbber::ImageSet::NONE, "lcl_loadImageSet: illegal image set", aImages );
 
         const Reference< css::uno::XComponentContext > aContext( ::comphelper::getProcessComponentContext() );
         const Reference< XGraphicProvider > xGraphicProvider( css::graphic::GraphicProvider::create(aContext) );
@@ -98,23 +98,23 @@ void Throbber::Resize()
 {
     ImageControl::Resize();
 
-    if ( meImageSet == IMAGES_AUTO )
+    if ( meImageSet == ImageSet::Auto )
         initImages();
 }
 
 void Throbber::initImages()
 {
-    if ( meImageSet == IMAGES_NONE )
+    if ( meImageSet == ImageSet::NONE )
         return;
 
     try
     {
         ::std::vector< ::std::vector< Image > > aImageSets;
-        if ( meImageSet == IMAGES_AUTO )
+        if ( meImageSet == ImageSet::Auto )
         {
-            aImageSets.push_back( lcl_loadImageSet( IMAGES_16_PX ) );
-            aImageSets.push_back( lcl_loadImageSet( IMAGES_32_PX ) );
-            aImageSets.push_back( lcl_loadImageSet( IMAGES_64_PX ) );
+            aImageSets.push_back( lcl_loadImageSet( ImageSet::N16px ) );
+            aImageSets.push_back( lcl_loadImageSet( ImageSet::N32px ) );
+            aImageSets.push_back( lcl_loadImageSet( ImageSet::N64px ) );
         }
         else
         {
@@ -200,11 +200,11 @@ void Throbber::setImageList( ::std::vector< Image > const& i_images )
     size_t index = 0;
     switch ( i_imageSet )
     {
-    case IMAGES_16_PX:  index = 0;  break;
-    case IMAGES_32_PX:  index = 1;  break;
-    case IMAGES_64_PX:  index = 2;  break;
-    case IMAGES_NONE:
-    case IMAGES_AUTO:
+    case ImageSet::N16px:  index = 0;  break;
+    case ImageSet::N32px:  index = 1;  break;
+    case ImageSet::N64px:  index = 2;  break;
+    case ImageSet::NONE:
+    case ImageSet::Auto:
         OSL_ENSURE( false, "Throbber::getDefaultImageURLs: illegal image set!" );
         return aImageURLs;
     }
