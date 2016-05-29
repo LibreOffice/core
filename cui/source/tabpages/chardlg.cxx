@@ -2080,7 +2080,7 @@ void SvxCharEffectsPage::Reset( const SfxItemSet* rSet )
         case SfxItemState::SET:
         {
             const SvxCharReliefItem& rItem = static_cast<const SvxCharReliefItem&>(rSet->Get( nWhich ));
-            m_pReliefLB->SelectEntryPos(rItem.GetValue());
+            m_pReliefLB->SelectEntryPos((sal_Int32)rItem.GetValue());
             SelectHdl_Impl(m_pReliefLB);
             break;
         }

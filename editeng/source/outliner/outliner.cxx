@@ -854,7 +854,7 @@ vcl::Font Outliner::ImpCalcBulletFont( sal_Int32 nPara ) const
         aBulletFont.SetOverline( LINESTYLE_NONE );
         aBulletFont.SetStrikeout( STRIKEOUT_NONE );
         aBulletFont.SetEmphasisMark( FontEmphasisMark::NONE );
-        aBulletFont.SetRelief( RELIEF_NONE );
+        aBulletFont.SetRelief( FontRelief::NONE );
     }
 
     // Use original scale...

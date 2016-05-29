@@ -1167,7 +1167,7 @@ bool OutputDevice::ImplNewFont() const
                       ((maFont.GetOverline()  != LINESTYLE_NONE) && (maFont.GetOverline()  != LINESTYLE_DONTKNOW)) ||
                       ((maFont.GetStrikeout() != STRIKEOUT_NONE) && (maFont.GetStrikeout() != STRIKEOUT_DONTKNOW));
     mbTextSpecial   = maFont.IsShadow() || maFont.IsOutline() ||
-                      (maFont.GetRelief() != RELIEF_NONE);
+                      (maFont.GetRelief() != FontRelief::NONE);
 
 
     // #95414# fix for OLE objects which use scale factors very creatively

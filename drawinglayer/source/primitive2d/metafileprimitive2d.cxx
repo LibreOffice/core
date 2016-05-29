@@ -1293,7 +1293,7 @@ namespace
                 || LINESTYLE_NONE != rFont.GetUnderline()
                 || STRIKEOUT_NONE != rFont.GetStrikeout()
                 || FontEmphasisMark::NONE != (rFont.GetEmphasisMark() & FontEmphasisMark::Style)
-                || RELIEF_NONE != rFont.GetRelief()
+                || FontRelief::NONE != rFont.GetRelief()
                 || rFont.IsShadow()
                 || bWordLineMode);
 
@@ -1327,8 +1327,8 @@ namespace
 
                 switch(rFont.GetRelief())
                 {
-                    case RELIEF_EMBOSSED : eTextRelief = drawinglayer::primitive2d::TEXT_RELIEF_EMBOSSED; break;
-                    case RELIEF_ENGRAVED : eTextRelief = drawinglayer::primitive2d::TEXT_RELIEF_ENGRAVED; break;
+                    case FontRelief::Embossed : eTextRelief = drawinglayer::primitive2d::TEXT_RELIEF_EMBOSSED; break;
+                    case FontRelief::Engraved : eTextRelief = drawinglayer::primitive2d::TEXT_RELIEF_ENGRAVED; break;
                     default : break; // RELIEF_NONE, FontRelief_FORCE_EQUAL_SIZE
                 }
 

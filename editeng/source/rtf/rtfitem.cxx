@@ -1062,14 +1062,14 @@ ATTR_SETEMPHASIS:
             case RTF_EMBO:
                 if (aPlainMap.nRelief)
                 {
-                    pSet->Put(SvxCharReliefItem(RELIEF_EMBOSSED,
+                    pSet->Put(SvxCharReliefItem(FontRelief::Embossed,
                         aPlainMap.nRelief));
                 }
                 break;
             case RTF_IMPR:
                 if (aPlainMap.nRelief)
                 {
-                    pSet->Put(SvxCharReliefItem(RELIEF_ENGRAVED,
+                    pSet->Put(SvxCharReliefItem(FontRelief::Engraved,
                         aPlainMap.nRelief));
                 }
                 break;

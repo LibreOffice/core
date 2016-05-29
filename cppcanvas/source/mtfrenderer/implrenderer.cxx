@@ -905,7 +905,7 @@ namespace cppcanvas
                 aShadowColor.SetTransparency( aTextColor.GetTransparency() );
             }
 
-            if( rState.textReliefStyle )
+            if( rState.textReliefStyle != FontRelief::NONE )
             {
                 // calculate relief offset (similar to outdev3.cxx)
                 sal_Int32 nReliefOffset = rParms.mrVDev.PixelToLogic( Size( 1, 1 ) ).Height();
@@ -913,7 +913,7 @@ namespace cppcanvas
                 if( nReliefOffset < 1 )
                     nReliefOffset = 1;
 
-                if( rState.textReliefStyle == RELIEF_ENGRAVED )
+                if( rState.textReliefStyle == FontRelief::Engraved )
                     nReliefOffset = -nReliefOffset;
 
                 aReliefOffset.setWidth( nReliefOffset );
@@ -1491,7 +1491,7 @@ namespace cppcanvas
                                                    rFactoryParms );
 
                         // TODO(Q2): define and use appropriate enumeration types
-                        rState.textReliefStyle          = (sal_Int8)rFont.GetRelief();
+                        rState.textReliefStyle          = rFont.GetRelief();
                         rState.textOverlineStyle        = (sal_Int8)rFont.GetOverline();
                         rState.textUnderlineStyle       = rParms.maFontUnderline.is_initialized() ?
                             (*rParms.maFontUnderline ? (sal_Int8)LINESTYLE_SINGLE : (sal_Int8)LINESTYLE_NONE) :

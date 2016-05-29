@@ -4491,13 +4491,13 @@ void SwWW8ImplReader::Read_Relief( sal_uInt16 nId, const sal_uInt8* pData, short
 
             const SvxCharReliefItem* pOld = static_cast<const SvxCharReliefItem*>(
                                             GetFormatAttr( RES_CHRATR_RELIEF ));
-            FontRelief nNewValue = 0x854 == nId ? RELIEF_ENGRAVED
-                                        : ( 0x858 == nId ? RELIEF_EMBOSSED
-                                                         : RELIEF_NONE );
+            FontRelief nNewValue = 0x854 == nId ? FontRelief::Engraved
+                                        : ( 0x858 == nId ? FontRelief::Embossed
+                                                         : FontRelief::NONE );
             if( pOld->GetValue() == nNewValue )
             {
-                if( RELIEF_NONE != nNewValue )
-                    nNewValue = RELIEF_NONE;
+                if( FontRelief::NONE != nNewValue )
+                    nNewValue = FontRelief::NONE;
             }
             NewAttr( SvxCharReliefItem( nNewValue, RES_CHRATR_RELIEF ));
         }

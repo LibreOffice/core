@@ -912,10 +912,10 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
         break;
         case EE_CHAR_RELIEF:
         {
-            sal_uInt16 nRelief = static_cast<const SvxCharReliefItem&>(rItem).GetValue();
-            if ( nRelief == RELIEF_EMBOSSED )
+            FontRelief nRelief = static_cast<const SvxCharReliefItem&>(rItem).GetValue();
+            if ( nRelief == FontRelief::Embossed )
                 rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_EMBO );
-            if ( nRelief == RELIEF_ENGRAVED )
+            if ( nRelief == FontRelief::Engraved )
                 rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_IMPR );
         }
         break;

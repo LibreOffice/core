@@ -388,7 +388,7 @@ void Writer::Impl_writeText( const Point& rPos, const OUString& rText, const lon
 {
     const FontMetric aMetric( mpVDev->GetFontMetric() );
 
-    bool bTextSpecial = aMetric.IsShadow() || aMetric.IsOutline() || (aMetric.GetRelief() != RELIEF_NONE);
+    bool bTextSpecial = aMetric.IsShadow() || aMetric.IsOutline() || (aMetric.GetRelief() != FontRelief::NONE);
 
     if( !bTextSpecial )
     {
@@ -396,7 +396,7 @@ void Writer::Impl_writeText( const Point& rPos, const OUString& rText, const lon
     }
     else
     {
-        if( aMetric.GetRelief() != RELIEF_NONE )
+        if( aMetric.GetRelief() != FontRelief::NONE )
         {
             Color aReliefColor( COL_LIGHTGRAY );
             Color aTextColor( mpVDev->GetTextColor() );
@@ -411,7 +411,7 @@ void Writer::Impl_writeText( const Point& rPos, const OUString& rText, const lon
             Point aPos( rPos );
             Point aOffset( 6,6 );
 
-            if ( aMetric.GetRelief() == RELIEF_ENGRAVED )
+            if ( aMetric.GetRelief() == FontRelief::Engraved )
             {
                 aPos -= aOffset;
             }

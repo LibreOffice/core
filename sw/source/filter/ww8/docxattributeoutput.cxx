@@ -3992,7 +3992,7 @@ void DocxAttributeOutput::OutputDefaultItem(const SfxPoolItem& rHt)
             bMustWrite = static_cast< const SvxCharScaleWidthItem& >(rHt).GetValue() != 100;
             break;
         case RES_CHRATR_RELIEF:
-            bMustWrite = static_cast< const SvxCharReliefItem& >(rHt).GetValue() != RELIEF_NONE;
+            bMustWrite = static_cast< const SvxCharReliefItem& >(rHt).GetValue() != FontRelief::NONE;
             break;
         case RES_CHRATR_HIDDEN:
             bMustWrite = static_cast< const SvxCharHiddenItem& >(rHt).GetValue();
@@ -6545,10 +6545,10 @@ void DocxAttributeOutput::CharRelief( const SvxCharReliefItem& rRelief )
 {
     switch ( rRelief.GetValue() )
     {
-        case RELIEF_EMBOSSED:
+        case FontRelief::Embossed:
             m_pSerializer->singleElementNS( XML_w, XML_emboss, FSEND );
             break;
-        case RELIEF_ENGRAVED:
+        case FontRelief::Engraved:
             m_pSerializer->singleElementNS( XML_w, XML_imprint, FSEND );
             break;
         default:

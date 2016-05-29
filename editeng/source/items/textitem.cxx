@@ -132,7 +132,7 @@ SfxPoolItem* SvxTwoLinesItem::CreateDefault() {return new SvxTwoLinesItem(true, 
 SfxPoolItem* SvxScriptTypeItem::CreateDefault() {return new SvxScriptTypeItem();}
 SfxPoolItem* SvxCharRotateItem::CreateDefault() {return new SvxCharRotateItem(0, false, 0);}
 SfxPoolItem* SvxCharScaleWidthItem::CreateDefault() {return new SvxCharScaleWidthItem(100, 0);}
-SfxPoolItem* SvxCharReliefItem::CreateDefault() {return new SvxCharReliefItem(RELIEF_NONE, 0);}
+SfxPoolItem* SvxCharReliefItem::CreateDefault() {return new SvxCharReliefItem(FontRelief::NONE, 0);}
 SfxPoolItem* SvxRsidItem::CreateDefault() {return new SvxRsidItem(0, 0);}
 
 
@@ -3110,8 +3110,8 @@ SfxPoolItem* SvxCharReliefItem::Create(SvStream & rStrm, sal_uInt16) const
 
 SvStream& SvxCharReliefItem::Store(SvStream & rStrm, sal_uInt16 /*nIVer*/) const
 {
-    sal_uInt16 nVal = GetValue();
-    rStrm.WriteUInt16( nVal );
+    FontRelief nVal = GetValue();
+    rStrm.WriteUInt16( (sal_uInt16)nVal );
     return rStrm;
 }
 
@@ -3140,7 +3140,7 @@ bool SvxCharReliefItem::GetPresentation
     OUString&           rText, const IntlWrapper * /*pIntl*/
 )   const
 {
-    rText = GetValueTextByPos( GetValue() );
+    rText = GetValueTextByPos( (sal_uInt16)GetValue() );
     return true;
 }
 
@@ -3155,8 +3155,8 @@ bool SvxCharReliefItem::PutValue( const css::uno::Any& rVal,
         {
             sal_Int16 nVal = -1;
             rVal >>= nVal;
-            if(nVal >= 0 && nVal <= RELIEF_ENGRAVED)
-                SetValue( (sal_uInt16)nVal );
+            if(nVal >= 0 && nVal <= (sal_Int16)FontRelief::Engraved)
+                SetValue( (FontRelief)nVal );
             else
                 bRet = false;
         }
