@@ -109,6 +109,7 @@
 #include <svl/numuno.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbconversion.hxx>
+#include<o3tl/make_unique.hxx>
 
 #include <unomailmerge.hxx>
 #include <sfx2/event.hxx>
@@ -139,6 +140,7 @@
 #include <memory>
 #include <comphelper/propertysequence.hxx>
 #include <officecfg/Office/Common.hxx>
+
 
 using namespace ::com::sun::star;
 
@@ -493,8 +495,7 @@ bool SwDBManager::Merge( const SwMergeDescriptor& rMergeDesc, vcl::Window* pPare
             *pTemp = *pImpl->pMergeData;
         else
         {
-            std::unique_ptr<SwDSParam> pInsert(new SwDSParam(*pImpl->pMergeData));
-            m_DataSourceParams.push_back(std::move(pInsert));
+            m_DataSourceParams.push_back(o3tl::make_unique<SwDSParam>(*pImpl->pMergeData));
             try
             {
                 uno::Reference<lang::XComponent> xComponent(m_DataSourceParams.back()->xConnection, uno::UNO_QUERY);
