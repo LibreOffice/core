@@ -39,6 +39,20 @@ inline void addRectangle<GL_TRIANGLE_FAN>(std::vector<GLfloat>& rVertices, GLflo
     });
 }
 
+template<GLenum TYPE>
+inline void addTrapezoid(std::vector<GLfloat>& rVertices, GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2,
+                                                          GLfloat x3, GLfloat y3, GLfloat x4, GLfloat y4);
+
+template<>
+inline void addTrapezoid<GL_TRIANGLES>(std::vector<GLfloat>& rVertices, GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2,
+                                                                        GLfloat x3, GLfloat y3, GLfloat x4, GLfloat y4)
+{
+    rVertices.insert(rVertices.end(), {
+        x1, y1, x2, y2, x3, y3,
+        x3, y3, x2, y2, x4, y4
+    });
+}
+
 inline glm::vec4 createGLColor(const SalColor& rColor, GLfloat rTransparency)
 {
     return glm::vec4(SALCOLOR_RED(rColor)   / 255.0f,

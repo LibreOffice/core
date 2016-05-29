@@ -1776,27 +1776,10 @@ void OpenGLSalGraphicsImpl::drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32*
     drawPolyPolygon(aPolyPoly, 0.0);
 }
 
-bool OpenGLSalGraphicsImpl::drawPolyPolygon( const basegfx::B2DPolyPolygon& rPolyPolygon, double fTransparency )
+bool OpenGLSalGraphicsImpl::drawPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPolygon, double fTransparency)
 {
-    VCL_GL_INFO( "::drawPolyPolygon trans " << fTransparency );
-    if( rPolyPolygon.count() <= 0 )
-        return true;
-
-    PreDraw( XOROption::IMPLEMENT_XOR );
-
-    if( UseSolid( mnFillColor, fTransparency ) )
-        DrawPolyPolygon( rPolyPolygon );
-
-    if( mnLineColor != mnFillColor && UseSolid( mnLineColor, fTransparency ))
-    {
-        basegfx::B2DTrapezoidVector aB2DTrapVector;
-        basegfx::tools::createLineTrapezoidFromB2DPolyPolygon( aB2DTrapVector, rPolyPolygon );
-        for(basegfx::B2DTrapezoid & i : aB2DTrapVector)
-            DrawTrapezoid( i );
-    }
-
-    PostDraw();
-
+    VCL_GL_INFO("::drawPolyPolygon " << rPolyPolygon.getB2DRange());
+    mpRenderList->addDrawPolyPolygon(rPolyPolygon, fTransparency, mnLineColor, mnFillColor, mrParent.getAntiAliasB2DDraw());
     return true;
 }
 

@@ -11,6 +11,11 @@
 #include "opengl/RenderList.hxx"
 #include "opengl/VertexUtils.hxx"
 
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/polygon/b2dpolygontriangulator.hxx>
+#include <basegfx/polygon/b2dpolypolygoncutter.hxx>
+#include <basegfx/polygon/b2dtrapezoid.hxx>
+
 namespace
 {
 
@@ -117,6 +122,95 @@ void RenderList::addDrawLine(long nX1, long nY1, long nX2, long nY2, const SalCo
     RenderParameters& rRenderParameter = bUseAA ? maRenderEntries.back().maLineAAParameters :
                                                   maRenderEntries.back().maLineParameters;
     lclAddLineSegmentVertices(rRenderParameter, nX1, nY1, nX2, nY2, rLineColor, 0.0f);
+}
+
+void RenderList::addDrawPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPolygon, double fTransparency,
+                        const SalColor& rLineColor, const SalColor& rFillColor, bool bUseAA)
+{
+    if (rPolyPolygon.count() <= 0)
+        return;
+    if (rLineColor == SALCOLOR_NONE && rFillColor == SALCOLOR_NONE)
+        return;
+    if (fTransparency == 1.0)
+        return;
+
+    checkOverlapping(rPolyPolygon.getB2DRange());
+
+    RenderParameters& rLineParameter = maRenderEntries.back().maLineParameters;
+    RenderParameters& rLineAAParameter = maRenderEntries.back().maLineAAParameters;
+
+    if (rFillColor != SALCOLOR_NONE)
+    {
+        RenderParameters& rTriangleParameter = maRenderEntries.back().maTriangleParameters;
+
+        const basegfx::B2DPolyPolygon& aSimplePolyPolygon = ::basegfx::tools::solveCrossovers(rPolyPolygon);
+        basegfx::B2DTrapezoidVector aTrapezoidVector;
+        basegfx::tools::trapezoidSubdivide(aTrapezoidVector, aSimplePolyPolygon);
+
+        if (!aTrapezoidVector.empty())
+        {
+            for (basegfx::B2DTrapezoid & rTrapezoid : aTrapezoidVector)
+            {
+                GLfloat topX1 = rTrapezoid.getTopXLeft();
+                GLfloat topX2 = rTrapezoid.getTopXRight();
+                GLfloat topY  = rTrapezoid.getTopY();
+
+                GLfloat bottomX1 = rTrapezoid.getBottomXLeft();
+                GLfloat bottomX2 = rTrapezoid.getBottomXRight();
+                GLfloat bottomY  = rTrapezoid.getBottomY();
+
+                vcl::vertex::addTrapezoid<GL_TRIANGLES>(rTriangleParameter.maVertices,
+                                                         topX1,    topY,
+                                                         topX2,    topY,
+                                                         bottomX1, bottomY,
+                                                         bottomX2, bottomY);
+                vcl::vertex::addQuadColors<GL_TRIANGLES>(rTriangleParameter.maColors, rFillColor, fTransparency);
+                vcl::vertex::addQuadEmptyExtrusionVectors<GL_TRIANGLES>(rTriangleParameter.maExtrusionVectors);
+
+                if (bUseAA)
+                {
+                    lclAddLineSegmentVertices(rLineAAParameter, topX1, topY, topX2, topY,
+                                              rFillColor, fTransparency);
+                    lclAddLineSegmentVertices(rLineAAParameter, topX2, topY, bottomX2, bottomY,
+                                              rFillColor, fTransparency);
+                    lclAddLineSegmentVertices(rLineAAParameter, bottomX2, bottomY, bottomX1, bottomY,
+                                              rFillColor, fTransparency);
+                    lclAddLineSegmentVertices(rLineAAParameter, bottomX1, bottomY, topX1, topY,
+                                              rFillColor, fTransparency);
+                }
+            }
+        }
+    }
+
+    if (rLineColor != SALCOLOR_NONE && rLineColor != rFillColor)
+    {
+        RenderParameters& rParameter = bUseAA ? rLineAAParameter : rLineParameter;
+
+        for (const basegfx::B2DPolygon& rPolygon : rPolyPolygon)
+        {
+            basegfx::B2DPolygon aPolygon(rPolygon);
+            if (rPolygon.areControlPointsUsed())
+                aPolygon = rPolygon.getDefaultAdaptiveSubdivision();
+
+            sal_uInt32 nPoints = aPolygon.count();
+
+            GLfloat x1, y1, x2, y2;
+            sal_uInt32 index1, index2;
+
+            for (sal_uInt32 i = 0; i <= nPoints; ++i)
+            {
+                index1 = (i)     % nPoints;
+                index2 = (i + 1) % nPoints;
+
+                x1 = aPolygon.getB2DPoint(index1).getX();
+                y1 = aPolygon.getB2DPoint(index1).getY();
+                x2 = aPolygon.getB2DPoint(index2).getX();
+                y2 = aPolygon.getB2DPoint(index2).getY();
+
+                lclAddLineSegmentVertices(rParameter, x1, y1, x2, y2, rLineColor, fTransparency);
+            }
+        }
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -91,6 +91,9 @@ public:
                           const SalColor& rLineColor, const SalColor& rFillColor);
 
     void addDrawLine(long nX1, long nY1, long nX2, long nY2, const SalColor& rLineColor, bool bUseAA);
+
+    void addDrawPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPolygon, double fTransparency,
+                            const SalColor& rLineColor, const SalColor& rFillColor, bool bUseAA);
 };
 
 #endif // INCLUDED_VCL_INC_OPENGL_RENDERLIST_H
