@@ -9,8 +9,14 @@
 
 attribute vec2 position;
 attribute vec4 extrusion_vectors;
+#ifdef USE_VERTEX_COLORS
+attribute vec4 vertex_color_in;
+#endif
 
 varying float fade_factor; // fade factor for anti-aliasing
+#ifdef USE_VERTEX_COLORS
+varying vec4 vertex_color;
+#endif
 
 uniform float line_width;
 uniform float feather; // width where we fade the line
@@ -42,6 +48,9 @@ void main()
    }
 
    gl_Position = mvp * final_position;
+#ifdef USE_VERTEX_COLORS
+   vertex_color = vertex_color_in;
+#endif
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

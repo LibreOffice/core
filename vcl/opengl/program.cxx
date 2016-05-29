@@ -24,8 +24,9 @@ OpenGLProgram::OpenGLProgram() :
     mnTexCoordAttrib( SAL_MAX_UINT32 ),
     mnAlphaCoordAttrib( SAL_MAX_UINT32 ),
     mnMaskCoordAttrib( SAL_MAX_UINT32 ),
-    mnNormalAttrib( SAL_MAX_UINT32 ),
-    mbBlending( false ),
+    mnExtrusionVectorsAttrib( SAL_MAX_UINT32 ),
+    mnVertexColorsAttrib( SAL_MAX_UINT32 ),
+    mbBlending(false),
     mfLastWidth(0.0),
     mfLastHeight(0.0),
     mfLastPixelOffset(0.0)
@@ -147,7 +148,12 @@ void OpenGLProgram::SetMaskCoord(const GLvoid* pData)
 
 void OpenGLProgram::SetExtrusionVectors(const GLvoid* pData)
 {
-    SetVertexAttrib(mnNormalAttrib, "extrusion_vectors", pData, 3);
+    SetVertexAttrib(mnExtrusionVectorsAttrib, "extrusion_vectors", pData, 3);
+}
+
+void OpenGLProgram::SetVertexColors(std::vector<glm::vec4>& rColorVector)
+{
+    SetVertexAttrib(mnVertexColorsAttrib, "vertex_color_in", glm::value_ptr(rColorVector[0]), 4);
 }
 
 void OpenGLProgram::SetShaderType(TextureShaderType eTextureShaderType)

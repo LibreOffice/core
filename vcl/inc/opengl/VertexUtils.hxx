@@ -39,6 +39,44 @@ inline void addRectangle<GL_TRIANGLE_FAN>(std::vector<GLfloat>& rVertices, GLflo
     });
 }
 
+inline glm::vec4 createGLColor(const SalColor& rColor, GLfloat rTransparency)
+{
+    return glm::vec4(SALCOLOR_RED(rColor)   / 255.0f,
+                     SALCOLOR_GREEN(rColor) / 255.0f,
+                     SALCOLOR_BLUE(rColor)  / 255.0f,
+                     1.0f - rTransparency);
+}
+
+template<GLenum TYPE>
+inline void addQuadColors(std::vector<glm::vec4>& rColors, const SalColor& rColor, GLfloat rTransparency);
+
+template<>
+inline void addQuadColors<GL_TRIANGLES>(std::vector<glm::vec4>& rColors, const SalColor& rColor, GLfloat rTransparency)
+{
+    glm::vec4 color = createGLColor(rColor, rTransparency);
+
+    rColors.insert(rColors.end(), {
+        color, color, color,
+        color, color, color
+    });
+}
+
+template<GLenum TYPE>
+inline void addQuadEmptyExtrusionVectors(std::vector<GLfloat>& rExtrusions);
+
+template<>
+inline void addQuadEmptyExtrusionVectors<GL_TRIANGLES>(std::vector<GLfloat>& rExtrusions)
+{
+    rExtrusions.insert(rExtrusions.end(), {
+        0.0f, 0.0f, 0.0f,
+        0.0f, 0.0f, 0.0f,
+        0.0f, 0.0f, 0.0f,
+        0.0f, 0.0f, 0.0f,
+        0.0f, 0.0f, 0.0f,
+        0.0f, 0.0f, 0.0f,
+    });
+}
+
 inline void addLineVertex(std::vector<GLfloat>& rVertices, std::vector<GLfloat>& rExtrusionVectors, glm::vec2 point, glm::vec2 extrusionVector, float length)
 {
     rVertices.push_back(point.x);

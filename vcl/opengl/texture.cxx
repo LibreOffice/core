@@ -386,18 +386,8 @@ void OpenGLTexture::GetCoord( GLfloat* pCoord, const SalTwoRect& rPosAry, bool b
     }
 }
 
-template <>
-void OpenGLTexture::FillCoords<GL_TRIANGLES>(std::vector<GLfloat>& aCoord, const SalTwoRect& rPosAry, bool bInverted) const
+bool OpenGLTexture::GetTextureRect(const SalTwoRect& rPosAry, bool bInverted, GLfloat& x1, GLfloat& x2, GLfloat& y1, GLfloat& y2) const
 {
-    VCL_GL_INFO("Add coord " << Id() << " [" << maRect.Left() << "," << maRect.Top() << "] " << GetWidth() << "x" << GetHeight() );
-    VCL_GL_INFO("   With 2Rect Src  [" << rPosAry.mnSrcX << ", " << rPosAry.mnSrcY << "] wh (" << rPosAry.mnSrcWidth << ", " << rPosAry.mnSrcHeight << ")");
-    VCL_GL_INFO("   With 2Rect Dest [" << rPosAry.mnDestX << ", " << rPosAry.mnDestY << "] wh (" << rPosAry.mnDestWidth << ", " << rPosAry.mnDestHeight << ")");
-
-    GLfloat x1 = 0.0f;
-    GLfloat x2 = 0.0f;
-    GLfloat y1 = 0.0f;
-    GLfloat y2 = 0.0f;
-
     if (mpImpl)
     {
         double fTextureWidth(mpImpl->mnWidth);
@@ -416,25 +406,41 @@ void OpenGLTexture::FillCoords<GL_TRIANGLES>(std::vector<GLfloat>& aCoord, const
             y1 = 1.0f - (maRect.Top() + rPosAry.mnSrcY) / fTextureHeight;
             y2 = 1.0f - (maRect.Top() + rPosAry.mnSrcY + rPosAry.mnSrcHeight) / fTextureHeight;
         }
+        return true;
     }
+    return false;
+}
 
-    aCoord.push_back(x1);
-    aCoord.push_back(y1);
+template <>
+void OpenGLTexture::FillCoords<GL_TRIANGLE_FAN>(std::vector<GLfloat>& rCoords, const SalTwoRect& rPosAry, bool bInverted) const
+{
+    GLfloat x1 = 0.0f;
+    GLfloat x2 = 0.0f;
+    GLfloat y1 = 0.0f;
+    GLfloat y2 = 0.0f;
 
-    aCoord.push_back(x2);
-    aCoord.push_back(y1);
+    GetTextureRect(rPosAry, bInverted, x1, x2, y1, y2);
 
-    aCoord.push_back(x1);
-    aCoord.push_back(y2);
+    rCoords.insert(rCoords.end(), {
+        x1, y2, x1, y1,
+        x2, y1, x2, y2
+    });
+}
 
-    aCoord.push_back(x1);
-    aCoord.push_back(y2);
+template <>
+void OpenGLTexture::FillCoords<GL_TRIANGLES>(std::vector<GLfloat>& rCoords, const SalTwoRect& rPosAry, bool bInverted) const
+{
+    GLfloat x1 = 0.0f;
+    GLfloat x2 = 0.0f;
+    GLfloat y1 = 0.0f;
+    GLfloat y2 = 0.0f;
 
-    aCoord.push_back(x2);
-    aCoord.push_back(y1);
+    GetTextureRect(rPosAry, bInverted, x1, x2, y1, y2);
 
-    aCoord.push_back(x2);
-    aCoord.push_back(y2);
+    rCoords.insert(rCoords.end(), {
+        x1, y1, x2, y1, x1, y2,
+        x1, y2, x2, y1, x2, y2
+    });
 }
 
 void OpenGLTexture::GetWholeCoord( GLfloat* pCoord ) const

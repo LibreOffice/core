@@ -22,6 +22,7 @@
 #include <tools/color.hxx>
 #include <opengl/texture.hxx>
 
+#include <glm/glm.hpp>
 #include <unordered_map>
 
 typedef std::unordered_map< OString, GLuint, OStringHash > UniformCache;
@@ -52,7 +53,9 @@ private:
     GLuint          mnTexCoordAttrib;
     GLuint          mnAlphaCoordAttrib;
     GLuint          mnMaskCoordAttrib;
-    GLuint          mnNormalAttrib;
+    GLuint          mnExtrusionVectorsAttrib;
+    GLuint          mnVertexColorsAttrib;
+
     TextureList     maTextures;
     bool            mbBlending;
 
@@ -79,6 +82,7 @@ public:
     void SetAlphaCoord( const GLvoid* pData );
     void SetMaskCoord(const GLvoid* pData);
     void SetExtrusionVectors(const GLvoid* pData);
+    void SetVertexColors(std::vector<glm::vec4>& rColorVector);
 
     void SetUniform1f( const OString& rName, GLfloat v1 );
     void SetUniform2f( const OString& rName, GLfloat v1, GLfloat v2 );

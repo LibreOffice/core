@@ -8,8 +8,12 @@
  */
 
 varying float fade_factor; // 0->1 fade factor used for AA
-uniform vec4 color;
 
+#ifdef USE_VERTEX_COLORS
+varying vec4 vertex_color;
+#endif
+
+uniform vec4 color;
 uniform float line_width;
 uniform float feather;
 
@@ -21,6 +25,12 @@ uniform int type;
 void main()
 {
     float alpha = 1.0;
+
+#ifdef USE_VERTEX_COLORS
+    vec4 result = vertex_color;
+#else
+    vec4 result = color;
+#endif
 
     if (type == TYPE_LINE)
     {
@@ -36,10 +46,9 @@ void main()
         alpha = clamp(dist, 0.0, 1.0);
     }
 
-    vec4 result_color = color;
-    result_color.a = result_color.a * alpha;
+    result.a = result.a * alpha;
 
-    gl_FragColor = result_color;
+    gl_FragColor = result;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
