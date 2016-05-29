@@ -33,6 +33,7 @@
 #include <sfx2/request.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/docfile.hxx>
+#include <sfx2/templatedlg.hxx>
 #include <editeng/paperinf.hxx>
 #include <editeng/eeitem.hxx>
 #include <unotools/useroptions.hxx>
@@ -530,7 +531,7 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
         bool bStartWithTemplate = pOpt->IsStartWithTemplate();
 
         bool bNewDocDirect = rReq.GetSlot() == SID_NEWSD;
-        if( bNewDocDirect && !bStartWithTemplate )
+        if( bNewDocDirect  && !bStartWithTemplate )
         {
             //we start without wizard
 
@@ -551,6 +552,26 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
         }
         else
         {
+            SfxObjectShell* pCurrentShell = SfxObjectShell::Current();
+            Reference<css::frame::XModel> xModel;
+
+            if(pCurrentShell)
+                xModel = pCurrentShell->GetModel();
+
+            ScopedVclPtrInstance< SfxTemplateManagerDlg > aTemplDlg;
+
+            if(xModel.is())
+                aTemplDlg->setDocumentModel(pCurrentShell->GetModel());
+
+            int nRet = aTemplDlg->Execute();
+            if ( nRet == RET_OK )
+            {
+            }
+
+        /*
+            Before deprecating the Presentation wizard completely,
+            it has been decided to disable it to get some reviews over the step.
+
             SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
             std::unique_ptr< AbstractAssistentDlg > pPilotDlg( pFact ? pFact->CreateAssistentDlg( !bNewDocDirect ) : nullptr );
 
@@ -703,7 +724,7 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
                     }
                     pOpt->SetStartWithTemplate(bStartWithTemplate);
                 }
-            }
+            }*/
         }
     }
 
