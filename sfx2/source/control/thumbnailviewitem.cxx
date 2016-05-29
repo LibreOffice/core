@@ -44,62 +44,6 @@ using namespace ::com::sun::star;
 using namespace drawinglayer::attribute;
 using namespace drawinglayer::primitive2d;
 
-class ResizableMultiLineEdit : public VclMultiLineEdit
-{
-    private:
-        ThumbnailViewItem* mpItem;
-        bool mbIsInGrabFocus;
-
-    public:
-        ResizableMultiLineEdit (vcl::Window* pParent, ThumbnailViewItem* pItem);
-
-        void SetInGrabFocus(bool bInGrabFocus) { mbIsInGrabFocus = bInGrabFocus; }
-
-        virtual bool PreNotify(NotifyEvent& rNEvt) override;
-        virtual void Modify() override;
-};
-
-ResizableMultiLineEdit::ResizableMultiLineEdit (vcl::Window* pParent, ThumbnailViewItem* pItem) :
-    VclMultiLineEdit (pParent, WB_CENTER | WB_BORDER),
-    mpItem(pItem),
-    mbIsInGrabFocus(false)
-{
-}
-
-bool ResizableMultiLineEdit::PreNotify(NotifyEvent& rNEvt)
-{
-    bool bDone = false;
-    if( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
-    {
-        const KeyEvent& rKEvt = *rNEvt.GetKeyEvent();
-        vcl::KeyCode aCode = rKEvt.GetKeyCode();
-        switch (aCode.GetCode())
-        {
-            case KEY_RETURN:
-                mpItem->setTitle( GetText() );
-                SAL_FALLTHROUGH;
-            case KEY_ESCAPE:
-                mpItem->setEditTitle(false);
-                bDone = true;
-                break;
-            default:
-                break;
-        }
-    }
-    else if ( rNEvt.GetType() == MouseNotifyEvent::LOSEFOCUS && !mbIsInGrabFocus )
-    {
-        mpItem->setTitle( GetText() );
-        mpItem->setEditTitle(false, false);
-    }
-    return bDone || VclMultiLineEdit::PreNotify(rNEvt);
-}
-
-void ResizableMultiLineEdit::Modify()
-{
-    VclMultiLineEdit::Modify();
-    mpItem->updateTitleEditSize();
-}
-
 ThumbnailViewItem::ThumbnailViewItem(ThumbnailView &rView, sal_uInt16 nId)
     : mrParent(rView)
     , mnId(nId)
@@ -107,16 +51,11 @@ ThumbnailViewItem::ThumbnailViewItem(ThumbnailView &rView, sal_uInt16 nId)
     , mbSelected(false)
     , mbHover(false)
     , mxAcc()
-    , mbEditTitle(false)
-    , mpTitleED(nullptr)
-    , maTextEditMaxArea()
 {
-    mpTitleED = VclPtr<ResizableMultiLineEdit>::Create(&rView, this);
 }
 
 ThumbnailViewItem::~ThumbnailViewItem()
 {
-    mpTitleED.disposeAndClear();
     if( mxAcc.is() )
     {
         static_cast< ThumbnailViewItemAcc* >( mxAcc.get() )->ParentDestroyed();
@@ -126,8 +65,6 @@ ThumbnailViewItem::~ThumbnailViewItem()
 void ThumbnailViewItem::show (bool bVisible)
 {
     mbVisible = bVisible;
-    if (!mbVisible)
-        mpTitleED->Show(false);
 }
 
 void ThumbnailViewItem::setSelection (bool state)
@@ -152,7 +89,7 @@ Rectangle ThumbnailViewItem::updateHighlight(bool bVisible, const Point& rPoint)
     }
     else
     {
-        if (isHighlighted() || mpTitleED->SupportsDoubleBuffering())
+        if (isHighlighted())
             bNeedsPaint = true;
         setHighlight(false);
     }
@@ -161,47 +98,6 @@ Rectangle ThumbnailViewItem::updateHighlight(bool bVisible, const Point& rPoint)
         return getDrawArea();
 
     return Rectangle();
-}
-
-void ThumbnailViewItem::setEditTitle (bool edit, bool bChangeFocus)
-{
-    mbEditTitle = edit;
-    mpTitleED->Show(edit);
-    if (edit)
-    {
-        mpTitleED->SetText(maTitle);
-        updateTitleEditSize();
-        static_cast<ResizableMultiLineEdit*>(mpTitleED.get())->SetInGrabFocus(true);
-        mpTitleED->GrabFocus();
-        static_cast<ResizableMultiLineEdit*>(mpTitleED.get())->SetInGrabFocus(false);
-    }
-    else if (bChangeFocus)
-    {
-        mrParent.GrabFocus();
-    }
-}
-
-Rectangle ThumbnailViewItem::getTextArea() const
-{
-    Rectangle aTextArea(maTextEditMaxArea);
-
-    TextEngine aTextEngine;
-    aTextEngine.SetMaxTextWidth(maDrawArea.getWidth());
-    aTextEngine.SetText(maTitle);
-
-    long nTxtHeight = aTextEngine.GetTextHeight() + 6;
-    if (nTxtHeight < aTextArea.GetHeight())
-        aTextArea.SetSize(Size(aTextArea.GetWidth(), nTxtHeight));
-
-    return aTextArea;
-}
-
-void ThumbnailViewItem::updateTitleEditSize()
-{
-    Rectangle aTextArea = getTextArea();
-    Point aPos = aTextArea.TopLeft();
-    Size aSize = aTextArea.GetSize();
-    mpTitleED->SetPosSizePixel(aPos, aSize);
 }
 
 void ThumbnailViewItem::setTitle (const OUString& rTitle)
@@ -245,12 +141,6 @@ void ThumbnailViewItem::calculateItemsPosition (const long nThumbnailHeight, con
     aPos.Y() = maDrawArea.getY() + nThumbnailHeight + nPadding * 2;
     aPos.X() = maDrawArea.Left() + (aRectSize.Width() - aTextDev.getTextWidth(maTitle,0,nMaxTextLength))/2;
     maTextPos = aPos;
-
-    // Calculate the text edit max area
-    aPos = Point(maDrawArea.getX() + nPadding, maTextPos.getY());
-    Size aEditSize(maDrawArea.GetWidth() - nPadding * 2,
-                   maDrawArea.Bottom() - maTextPos.Y());
-    maTextEditMaxArea = Rectangle( aPos, aEditSize );
 }
 
 void ThumbnailViewItem::Paint (drawinglayer::processor2d::BaseProcessor2D *pProcessor,
