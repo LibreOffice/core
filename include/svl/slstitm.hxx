@@ -24,13 +24,14 @@
 #include <svl/svldllapi.h>
 #include <svl/poolitem.hxx>
 #include <com/sun/star/uno/Sequence.h>
+#include <memory>
 
 class SfxImpStringList;
 
 class SVL_DLLPUBLIC SfxStringListItem : public SfxPoolItem
 {
 protected:
-    SfxImpStringList*   pImp;
+    std::shared_ptr<SfxImpStringList>   pImpl;
 
 public:
     static SfxPoolItem* CreateDefault();
