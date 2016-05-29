@@ -2285,12 +2285,12 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
 {
     switch ( rAppEvent.GetEvent() )
     {
-    case ApplicationEvent::TYPE_ACCEPT:
+    case ApplicationEvent::Type::Accept:
         // every time an accept parameter is used we create an acceptor
         // with the corresponding accept-string
         createAcceptor(rAppEvent.GetStringData());
         break;
-    case ApplicationEvent::TYPE_APPEAR:
+    case ApplicationEvent::Type::Appear:
         if ( !GetCommandLineArgs().IsInvisible() )
         {
             Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
@@ -2336,13 +2336,13 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
             }
         }
         break;
-    case ApplicationEvent::TYPE_HELP:
+    case ApplicationEvent::Type::Help:
         displayCmdlineHelp(rAppEvent.GetStringData());
         break;
-    case ApplicationEvent::TYPE_VERSION:
+    case ApplicationEvent::Type::Version:
         displayVersion();
         break;
-    case ApplicationEvent::TYPE_OPEN:
+    case ApplicationEvent::Type::Open:
         {
             const CommandLineArgs& rCmdLine = GetCommandLineArgs();
             if ( !rCmdLine.IsInvisible() && !rCmdLine.IsTerminateAfterInit() )
@@ -2355,11 +2355,11 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
             }
         }
         break;
-    case ApplicationEvent::TYPE_OPENHELPURL:
+    case ApplicationEvent::Type::OpenHelpUrl:
         // start help for a specific URL
         Application::GetHelp()->Start(rAppEvent.GetStringData(), nullptr);
         break;
-    case ApplicationEvent::TYPE_PRINT:
+    case ApplicationEvent::Type::Print:
         {
             const CommandLineArgs& rCmdLine = GetCommandLineArgs();
             if ( !rCmdLine.IsInvisible() && !rCmdLine.IsTerminateAfterInit() )
@@ -2372,7 +2372,7 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
             }
         }
         break;
-    case ApplicationEvent::TYPE_PRIVATE_DOSHUTDOWN:
+    case ApplicationEvent::Type::PrivateDoShutdown:
         {
             Desktop* pD = dynamic_cast<Desktop*>(GetpApp());
             OSL_ENSURE( pD, "no desktop ?!?" );
@@ -2380,7 +2380,7 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
                 pD->doShutdown();
         }
         break;
-    case ApplicationEvent::TYPE_QUICKSTART:
+    case ApplicationEvent::Type::QuickStart:
         if ( !GetCommandLineArgs().IsInvisible()  )
         {
             // If the office has been started the second time its command line arguments are sent through a pipe
@@ -2392,7 +2392,7 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
             css::office::Quickstart::createStart(xContext, true/*Quickstart*/);
         }
         break;
-    case ApplicationEvent::TYPE_SHOWDIALOG:
+    case ApplicationEvent::Type::ShowDialog:
         // ignore all errors here. It's clicking a menu entry only ...
         // The user will try it again, in case nothing happens .-)
         try
@@ -2419,7 +2419,7 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
         catch(const css::uno::Exception&)
         {}
         break;
-    case ApplicationEvent::TYPE_UNACCEPT:
+    case ApplicationEvent::Type::Unaccept:
         // try to remove corresponding acceptor
         destroyAcceptor(rAppEvent.GetStringData());
         break;

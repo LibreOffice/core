@@ -323,7 +323,7 @@
     aFile.push_back( GetOUString( pFile ) );
     if( ! AquaSalInstance::isOnCommandLine( aFile[0] ) )
     {
-        const ApplicationEvent* pAppEvent = new ApplicationEvent(ApplicationEvent::TYPE_OPEN, aFile);
+        const ApplicationEvent* pAppEvent = new ApplicationEvent(ApplicationEvent::Type::Open, aFile);
         AquaSalInstance::aAppEventList.push_back( pAppEvent );
     }
     return YES;
@@ -351,7 +351,7 @@
         // we have no back channel here, we have to assume success, in which case
         // replyToOpenOrPrint does not need to be called according to documentation
         // [app replyToOpenOrPrint: NSApplicationDelegateReplySuccess];
-        const ApplicationEvent* pAppEvent = new ApplicationEvent(ApplicationEvent::TYPE_OPEN, aFileList);
+        const ApplicationEvent* pAppEvent = new ApplicationEvent(ApplicationEvent::Type::Open, aFileList);
         AquaSalInstance::aAppEventList.push_back( pAppEvent );
     }
 }
@@ -361,7 +361,7 @@
     (void)app;
     std::vector<OUString> aFile;
     aFile.push_back( GetOUString( pFile ) );
-	const ApplicationEvent* pAppEvent = new ApplicationEvent(ApplicationEvent::TYPE_PRINT, aFile);
+	const ApplicationEvent* pAppEvent = new ApplicationEvent(ApplicationEvent::Type::Print, aFile);
 	AquaSalInstance::aAppEventList.push_back( pAppEvent );
     return YES;
 }
@@ -380,7 +380,7 @@
     {
         aFileList.push_back( GetOUString( pFile ) );
     }
-	const ApplicationEvent* pAppEvent = new ApplicationEvent(ApplicationEvent::TYPE_PRINT, aFileList);
+	const ApplicationEvent* pAppEvent = new ApplicationEvent(ApplicationEvent::Type::Print, aFileList);
 	AquaSalInstance::aAppEventList.push_back( pAppEvent );
     // we have no back channel here, we have to assume success
     // correct handling would be NSPrintingReplyLater and then send [app replyToOpenOrPrint]
@@ -410,7 +410,7 @@
 
         if( aReply == NSTerminateNow )
         {
-            ApplicationEvent aEv(ApplicationEvent::TYPE_PRIVATE_DOSHUTDOWN);
+            ApplicationEvent aEv(ApplicationEvent::Type::PrivateDoShutdown);
             GetpApp()->AppEvent( aEv );
             ImplImageTree::get().shutDown();
             // DeInitVCL should be called in ImplSVMain - unless someon _exits first which

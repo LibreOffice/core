@@ -959,13 +959,13 @@ bool IpcThread::process(OString const & arguments, bool * waitProcessed) {
     if ( !aUnknown.isEmpty() || aCmdLineArgs->IsHelp() )
     {
         ApplicationEvent* pAppEvent =
-            new ApplicationEvent(ApplicationEvent::TYPE_HELP, aUnknown);
+            new ApplicationEvent(ApplicationEvent::Type::Help, aUnknown);
         ImplPostForeignAppEvent( pAppEvent );
     }
     else if ( aCmdLineArgs->IsVersion() )
     {
         ApplicationEvent* pAppEvent =
-            new ApplicationEvent(ApplicationEvent::TYPE_VERSION);
+            new ApplicationEvent(ApplicationEvent::Type::Version);
         ImplPostForeignAppEvent( pAppEvent );
     }
     else
@@ -976,7 +976,7 @@ bool IpcThread::process(OString const & arguments, bool * waitProcessed) {
         {
             // we have to use application event, because we have to start quickstart service in main thread!!
             ApplicationEvent* pAppEvent =
-                new ApplicationEvent(ApplicationEvent::TYPE_QUICKSTART);
+                new ApplicationEvent(ApplicationEvent::Type::QuickStart);
             ImplPostForeignAppEvent( pAppEvent );
         }
 
@@ -986,7 +986,7 @@ bool IpcThread::process(OString const & arguments, bool * waitProcessed) {
              i != accept.end(); ++i)
         {
             ApplicationEvent* pAppEvent = new ApplicationEvent(
-                ApplicationEvent::TYPE_ACCEPT, *i);
+                ApplicationEvent::Type::Accept, *i);
             ImplPostForeignAppEvent( pAppEvent );
         }
         // handle acceptor removal
@@ -995,7 +995,7 @@ bool IpcThread::process(OString const & arguments, bool * waitProcessed) {
              i != unaccept.end(); ++i)
         {
             ApplicationEvent* pAppEvent = new ApplicationEvent(
-                ApplicationEvent::TYPE_UNACCEPT, *i);
+                ApplicationEvent::Type::Unaccept, *i);
             ImplPostForeignAppEvent( pAppEvent );
         }
 
@@ -1096,7 +1096,7 @@ bool IpcThread::process(OString const & arguments, bool * waitProcessed) {
                 aHelpURLBuffer.appendAscii("&System=WIN");
 #endif
                 ApplicationEvent* pAppEvent = new ApplicationEvent(
-                    ApplicationEvent::TYPE_OPENHELPURL,
+                    ApplicationEvent::Type::OpenHelpUrl,
                     aHelpURLBuffer.makeStringAndClear());
                 ImplPostForeignAppEvent( pAppEvent );
             }
@@ -1133,7 +1133,7 @@ bool IpcThread::process(OString const & arguments, bool * waitProcessed) {
         {
             // no document was sent, just bring Office to front
             ApplicationEvent* pAppEvent =
-                new ApplicationEvent(ApplicationEvent::TYPE_APPEAR);
+                new ApplicationEvent(ApplicationEvent::Type::Appear);
             ImplPostForeignAppEvent( pAppEvent );
         }
     }

@@ -86,7 +86,7 @@ const AquaSalMenu* AquaSalMenu::pCurrentMenuBar = nullptr;
         else if( nDialog == ShowDialogId::Preferences )
             aDialog = "PREFERENCES";
         const ApplicationEvent* pAppEvent = new ApplicationEvent(
-            ApplicationEvent::TYPE_SHOWDIALOG, aDialog);
+            ApplicationEvent::Type::ShowDialog, aDialog);
         AquaSalInstance::aAppEventList.push_back( pAppEvent );
     }
 }
