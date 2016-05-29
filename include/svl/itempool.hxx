@@ -24,6 +24,7 @@
 #include <svl/poolitem.hxx>
 #include <svl/svldllapi.h>
 #include <tools/solar.h>
+#include <memory>
 
 class SvStream;
 class SfxBroadcaster;
@@ -62,7 +63,7 @@ class SVL_DLLPUBLIC SfxItemPool
     friend struct SfxItemPool_Impl;
 
     const SfxItemInfo*              pItemInfos;
-    SfxItemPool_Impl*               pImp;
+    std::unique_ptr<SfxItemPool_Impl>               pImpl;
 
 public:
     void AddSfxItemPoolUser(SfxItemPoolUser& rNewUser);
