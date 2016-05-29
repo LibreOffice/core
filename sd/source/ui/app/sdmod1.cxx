@@ -33,6 +33,7 @@
 #include <sfx2/request.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/docfile.hxx>
+#include <sfx2/templatedlg.hxx>
 #include <editeng/paperinf.hxx>
 #include <editeng/eeitem.hxx>
 #include <unotools/useroptions.hxx>
@@ -551,159 +552,15 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
         }
         else
         {
-            SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-            std::unique_ptr< AbstractAssistentDlg > pPilotDlg( pFact ? pFact->CreateAssistentDlg( !bNewDocDirect ) : nullptr );
+            //create an empty document into frame
+            pFrame = CreateEmptyDocument( xTargetFrame );
+            ScopedVclPtrInstance< SfxTemplateManagerDlg > aTemplDlg;
+            aTemplDlg->setAsImpressDoc();
 
-            // Open the Pilot
-            if( pPilotDlg.get() && pPilotDlg->Execute()==RET_OK )
-            {
-                const OUString aDocPath( pPilotDlg->GetDocPath());
-                const bool bIsDocEmpty = pPilotDlg->IsDocEmpty();
-
-                // So that you can open the document without AutoLayout-Dialog
-                pOpt->SetStartWithTemplate(false);
-                if(bNewDocDirect && !pPilotDlg->GetStartWithFlag())
-                    bStartWithTemplate = false;
-
-                if( pPilotDlg->GetStartType() == ST_OPEN )
-                {
-                    DBG_ASSERT( !aDocPath.isEmpty(), "The autopilot should have asked for a file itself already!" );
-                    if (!aDocPath.isEmpty())
-                    {
-                        css::uno::Sequence< css::beans::NamedValue > aPasswrd( pPilotDlg->GetPassword() );
-
-                        SfxStringItem aFile( SID_FILE_NAME, aDocPath );
-                        SfxStringItem aReferer( SID_REFERER, OUString());
-                        SfxUnoAnyItem aPassword( SID_ENCRYPTIONDATA, css::uno::makeAny(aPasswrd) );
-
-                        if ( xTargetFrame.is() )
-                        {
-                            SfxAllItemSet aSet( *rReq.GetArgs()->GetPool() );
-                            aSet.Put( aFile );
-                            aSet.Put( aReferer );
-                            // Put the password into the request
-                            // only if it is not empty.
-                            if (aPasswrd.getLength() > 0)
-                                aSet.Put( aPassword );
-
-                            const SfxPoolItem* pRet = SfxFrame::OpenDocumentSynchron( aSet, xTargetFrame );
-                            const SfxViewFrameItem* pFrameItem = dynamic_cast<const SfxViewFrameItem*>( pRet  );
-                            if ( pFrameItem && pFrameItem->GetFrame() )
-                                pFrame = &pFrameItem->GetFrame()->GetFrame();
-                        }
-                        else
-                        {
-                            SfxRequest aRequest (SID_OPENDOC, SfxCallMode::SYNCHRON, SfxGetpApp()->GetPool());
-                            aRequest.AppendItem (aFile);
-                            aRequest.AppendItem (aReferer);
-                            // Put the password into the request
-                            // only if it is not empty.
-                            if (aPasswrd.getLength() > 0)
-                                aRequest.AppendItem (aPassword);
-                            aRequest.AppendItem (SfxStringItem (
-                                SID_TARGETNAME,
-                                OUString("_default")));
-                            try
-                            {
-                                const SfxPoolItem* pRet = SfxGetpApp()->ExecuteSlot (aRequest);
-                                const SfxViewFrameItem* pFrameItem = dynamic_cast<const SfxViewFrameItem*>( pRet  );
-                                if ( pFrameItem )
-                                    pFrame = &pFrameItem->GetFrame()->GetFrame();
-                            }
-                            catch (const css::uno::Exception&)
-                            {
-                                DBG_ASSERT (false, "caught IllegalArgumentException while loading document from Impress autopilot");
-                            }
-                        }
-                    }
-
-                    pOpt->SetStartWithTemplate(bStartWithTemplate);
-                    if(bNewDocDirect && !bStartWithTemplate)
-                    {
-                        std::unique_ptr< SfxItemSet > pRet( CreateItemSet( SID_SD_EDITOPTIONS ) );
-                        if(pRet.get())
-                            ApplyItemSet( SID_SD_EDITOPTIONS, *pRet.get() );
-
-                    }
-                }
-                else
-                {
-                    SfxObjectShellLock xShell( pPilotDlg->GetDocument() );
-                    SfxObjectShell* pShell = xShell;
-                    if( pShell )
-                    {
-                        SfxViewFrame* pViewFrame = SfxViewFrame::LoadDocumentIntoFrame( *pShell, xTargetFrame );
-                        DBG_ASSERT( pViewFrame, "no ViewFrame!!" );
-                        pFrame = pViewFrame ? &pViewFrame->GetFrame() : nullptr;
-
-                        if(bNewDocDirect && !bStartWithTemplate)
-                        {
-                            std::unique_ptr< SfxItemSet > pRet( CreateItemSet( SID_SD_EDITOPTIONS ) );
-                            if(pRet.get())
-                                ApplyItemSet( SID_SD_EDITOPTIONS, *pRet.get() );
-                        }
-
-                        ::sd::DrawDocShell* pDocShell(nullptr);
-                        ::sd::ViewShellBase* pBase(nullptr);
-                        SdDrawDocument* pDoc(nullptr);
-                        if (pShell && pViewFrame)
-                        {
-                            pDocShell = dynamic_cast< ::sd::DrawDocShell *>( pShell );
-                            pDoc = pDocShell ? pDocShell->GetDoc() : nullptr;
-                            pBase = ::sd::ViewShellBase::GetViewShellBase(pViewFrame);
-                        }
-
-                        if (pDoc && pBase)
-                        {
-                            std::shared_ptr<sd::ViewShell> pViewSh = pBase->GetMainViewShell();
-                            SdOptions* pOptions = GetSdOptions(pDoc->GetDocumentType());
-
-                            if (pOptions && pViewSh.get())
-                            {
-                                // The AutoPilot-document shall be open without its own options
-                                ::sd::FrameView* pFrameView = pViewSh->GetFrameView();
-                                pFrameView->Update(pOptions);
-                                pViewSh->ReadFrameViewData(pFrameView);
-                            }
-
-                            ChangeMedium( pDocShell, pViewFrame, pPilotDlg->GetOutputMedium() );
-
-                            if(pPilotDlg->IsSummary())
-                                AddSummaryPage(pViewFrame, pDoc);
-
-                            // empty document
-                            if (aDocPath.isEmpty() && pViewFrame && pViewFrame->GetDispatcher())
-                            {
-                                SfxBoolItem aIsChangedItem(SID_MODIFYPAGE, !bIsDocEmpty);
-                                SfxUInt32Item eAutoLayout( ID_VAL_WHATLAYOUT, (sal_uInt32) AUTOLAYOUT_TITLE );
-                                pViewFrame->GetDispatcher()->ExecuteList(SID_MODIFYPAGE,
-                                   SfxCallMode::ASYNCHRON | SfxCallMode::RECORD,
-                                   { &aIsChangedItem, &eAutoLayout });
-                            }
-
-                            // clear document info
-                            using namespace ::com::sun::star;
-                            uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
-                                pDocShell->GetModel(), uno::UNO_QUERY_THROW);
-                            uno::Reference<document::XDocumentProperties>
-                                xDocProps(xDPS->getDocumentProperties());
-                            DBG_ASSERT(xDocProps.is(), "no DocumentProperties");
-                            xDocProps->resetUserData(
-                                SvtUserOptions().GetFullName() );
-                            xDocProps->setTemplateName(xDocProps->getTitle());
-                            xDocProps->setTemplateURL(pPilotDlg->GetDocPath());
-
-                            pDoc->SetChanged(!bIsDocEmpty);
-
-                            pDocShell->SetUseUserData(true);
-
-                            // clear UNDO stack after autopilot
-                            pDocShell->ClearUndoBuffer();
-                        }
-                    }
-                    pOpt->SetStartWithTemplate(bStartWithTemplate);
-                }
-            }
+            aTemplDlg->Execute();
+            //pFrame is loaded with the desired template
+            if(!aTemplDlg->getTemplatePath().isEmpty())
+                pFrame = CreateFromTemplate(aTemplDlg->getTemplatePath(), xTargetFrame);
         }
     }
 

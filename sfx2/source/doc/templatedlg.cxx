@@ -164,6 +164,8 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg(vcl::Window *parent)
     : ModalDialog(parent, "TemplateDialog", "sfx/ui/templatedlg.ui"),
       maSelTemplates(cmpSelectionItems),
       mxDesktop( Desktop::create(comphelper::getProcessComponentContext()) ),
+      msImpressTemplatePath(OUString()),
+      mbIsImpressDoc(false),
       mbIsSynced(false),
       maRepositories()
 {
@@ -342,11 +344,29 @@ void SfxTemplateManagerDlg::dispose()
 
 short SfxTemplateManagerDlg::Execute()
 {
-    //use application specific settings if there's no previous setting
-    getApplicationSpecificSettings();
-    readSettings();
+    if(mbIsImpressDoc)
+        setPresentationMode();
+    else
+    {
+        //use application specific settings if there's no previous setting
+        getApplicationSpecificSettings();
+        readSettings();
+    }
 
     return ModalDialog::Execute();
+}
+
+void SfxTemplateManagerDlg::setPresentationMode()
+{
+    mpCBApp->SelectEntryPos(MNI_IMPRESS);
+    mpCBApp->Disable();
+    mpCBFolder->SelectEntryPos(0);
+
+    if(mpLocalView->IsVisible())
+    {
+        mpLocalView->filterItems(ViewFilter_Application(getCurrentApplicationFilter()));
+        mpLocalView->showAllTemplates();
+    }
 }
 
 void SfxTemplateManagerDlg::setDocumentModel(const uno::Reference<frame::XModel> &rModel)
@@ -789,12 +809,17 @@ IMPL_LINK_TYPED(SfxTemplateManagerDlg, OpenTemplateHdl, ThumbnailViewItem*, pIte
 
     TemplateViewItem *pTemplateItem = static_cast<TemplateViewItem*>(pItem);
 
-    try
+    if(mbIsImpressDoc)
+        msImpressTemplatePath = pTemplateItem->getPath();
+    else
     {
-        mxDesktop->loadComponentFromURL(pTemplateItem->getPath(),"_default", 0, aArgs );
-    }
-    catch( const uno::Exception& )
-    {
+        try
+        {
+                mxDesktop->loadComponentFromURL(pTemplateItem->getPath(),"_default", 0, aArgs );
+        }
+        catch( const uno::Exception& )
+        {
+        }
     }
 
     Close();
