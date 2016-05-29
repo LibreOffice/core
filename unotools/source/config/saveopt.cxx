@@ -828,7 +828,7 @@ SvtSaveOptions::SvtSaveOptions()
         ItemHolder1::holdConfigItem(E_SAVEOPTIONS);
    }
    ++nRefCount;
-    pImp = pOptions;
+    pImpl.reset(pOptions);
 }
 
 SvtSaveOptions::~SvtSaveOptions()
@@ -850,172 +850,172 @@ SvtSaveOptions::~SvtSaveOptions()
 
 void SvtSaveOptions::SetAutoSaveTime( sal_Int32 n )
 {
-    pImp->pSaveOpt->SetAutoSaveTime( n );
+    pImpl->pSaveOpt->SetAutoSaveTime( n );
 }
 
 sal_Int32 SvtSaveOptions::GetAutoSaveTime() const
 {
-    return pImp->pSaveOpt->GetAutoSaveTime();
+    return pImpl->pSaveOpt->GetAutoSaveTime();
 }
 
 void SvtSaveOptions::SetUseUserData( bool b )
 {
-    pImp->pSaveOpt->SetUseUserData( b );
+    pImpl->pSaveOpt->SetUseUserData( b );
 }
 
 bool SvtSaveOptions::IsUseUserData() const
 {
-    return pImp->pSaveOpt->IsUseUserData();
+    return pImpl->pSaveOpt->IsUseUserData();
 }
 
 void SvtSaveOptions::SetBackup( bool b )
 {
-    pImp->pSaveOpt->SetBackup( b );
+    pImpl->pSaveOpt->SetBackup( b );
 }
 
 bool SvtSaveOptions::IsBackup() const
 {
-    return pImp->pSaveOpt->IsBackup();
+    return pImpl->pSaveOpt->IsBackup();
 }
 
 void SvtSaveOptions::SetAutoSave( bool b )
 {
-    pImp->pSaveOpt->SetAutoSave( b );
+    pImpl->pSaveOpt->SetAutoSave( b );
 }
 
 bool SvtSaveOptions::IsAutoSave() const
 {
-    return pImp->pSaveOpt->IsAutoSave();
+    return pImpl->pSaveOpt->IsAutoSave();
 }
 
 void SvtSaveOptions::SetAutoSavePrompt( bool b )
 {
-    pImp->pSaveOpt->SetAutoSavePrompt( b );
+    pImpl->pSaveOpt->SetAutoSavePrompt( b );
 }
 
 bool SvtSaveOptions::IsAutoSavePrompt() const
 {
-    return pImp->pSaveOpt->IsAutoSavePrompt();
+    return pImpl->pSaveOpt->IsAutoSavePrompt();
 }
 
 void SvtSaveOptions::SetUserAutoSave( bool b )
 {
-    pImp->pSaveOpt->SetUserAutoSave( b );
+    pImpl->pSaveOpt->SetUserAutoSave( b );
 }
 
 bool SvtSaveOptions::IsUserAutoSave() const
 {
-    return pImp->pSaveOpt->IsUserAutoSave();
+    return pImpl->pSaveOpt->IsUserAutoSave();
 }
 
 void SvtSaveOptions::SetDocInfoSave(bool b)
 {
-    pImp->pSaveOpt->SetDocInfoSave( b );
+    pImpl->pSaveOpt->SetDocInfoSave( b );
 }
 
 bool SvtSaveOptions::IsDocInfoSave() const
 {
-    return pImp->pSaveOpt->IsDocInfoSave();
+    return pImpl->pSaveOpt->IsDocInfoSave();
 }
 
 void SvtSaveOptions::SetSaveWorkingSet( bool b )
 {
-    pImp->pSaveOpt->SetSaveWorkingSet( b );
+    pImpl->pSaveOpt->SetSaveWorkingSet( b );
 }
 
 bool SvtSaveOptions::IsSaveWorkingSet() const
 {
-    return pImp->pSaveOpt->IsSaveWorkingSet();
+    return pImpl->pSaveOpt->IsSaveWorkingSet();
 }
 
 void SvtSaveOptions::SetSaveDocView( bool b )
 {
-    pImp->pSaveOpt->SetSaveDocView( b );
+    pImpl->pSaveOpt->SetSaveDocView( b );
 }
 
 bool SvtSaveOptions::IsSaveDocView() const
 {
-    return pImp->pSaveOpt->IsSaveDocView();
+    return pImpl->pSaveOpt->IsSaveDocView();
 }
 
 void SvtSaveOptions::SetSaveRelINet( bool b )
 {
-    pImp->pSaveOpt->SetSaveRelINet( b );
+    pImpl->pSaveOpt->SetSaveRelINet( b );
 }
 
 bool SvtSaveOptions::IsSaveRelINet() const
 {
-    return pImp->pSaveOpt->IsSaveRelINet();
+    return pImpl->pSaveOpt->IsSaveRelINet();
 }
 
 void SvtSaveOptions::SetSaveRelFSys( bool b )
 {
-    pImp->pSaveOpt->SetSaveRelFSys( b );
+    pImpl->pSaveOpt->SetSaveRelFSys( b );
 }
 
 bool SvtSaveOptions::IsSaveRelFSys() const
 {
-    return pImp->pSaveOpt->IsSaveRelFSys();
+    return pImpl->pSaveOpt->IsSaveRelFSys();
 }
 
 bool SvtSaveOptions::IsSaveUnpacked() const
 {
-    return pImp->pSaveOpt->IsSaveUnpacked();
+    return pImpl->pSaveOpt->IsSaveUnpacked();
 }
 
 void SvtSaveOptions::SetLoadUserSettings(bool b)
 {
-    pImp->pLoadOpt->SetLoadUserSettings(b);
+    pImpl->pLoadOpt->SetLoadUserSettings(b);
 }
 
 bool   SvtSaveOptions::IsLoadUserSettings() const
 {
-    return pImp->pLoadOpt->IsLoadUserSettings();
+    return pImpl->pLoadOpt->IsLoadUserSettings();
 }
 
 void SvtSaveOptions::SetPrettyPrinting( bool _bEnable )
 {
-    pImp->pSaveOpt->EnablePrettyPrinting( _bEnable );
+    pImpl->pSaveOpt->EnablePrettyPrinting( _bEnable );
 }
 
 bool SvtSaveOptions::IsPrettyPrinting() const
 {
-    return pImp->pSaveOpt->IsPrettyPrintingEnabled();
+    return pImpl->pSaveOpt->IsPrettyPrintingEnabled();
 }
 
 void SvtSaveOptions::SetWarnAlienFormat( bool _bEnable )
 {
-    pImp->pSaveOpt->SetWarnAlienFormat( _bEnable );
+    pImpl->pSaveOpt->SetWarnAlienFormat( _bEnable );
 }
 
 bool SvtSaveOptions::IsWarnAlienFormat() const
 {
-    return pImp->pSaveOpt->IsWarnAlienFormat();
+    return pImpl->pSaveOpt->IsWarnAlienFormat();
 }
 
 void SvtSaveOptions::SetLoadDocumentPrinter( bool _bEnable )
 {
-    pImp->pSaveOpt->SetLoadDocPrinter( _bEnable );
+    pImpl->pSaveOpt->SetLoadDocPrinter( _bEnable );
 }
 
 bool SvtSaveOptions::IsLoadDocumentPrinter() const
 {
-    return pImp->pSaveOpt->IsLoadDocPrinter();
+    return pImpl->pSaveOpt->IsLoadDocPrinter();
 }
 
 void SvtSaveOptions::SetODFDefaultVersion( SvtSaveOptions::ODFDefaultVersion eVersion )
 {
-    pImp->pSaveOpt->SetODFDefaultVersion( eVersion );
+    pImpl->pSaveOpt->SetODFDefaultVersion( eVersion );
 }
 
 SvtSaveOptions::ODFDefaultVersion SvtSaveOptions::GetODFDefaultVersion() const
 {
-    return pImp->pSaveOpt->GetODFDefaultVersion();
+    return pImpl->pSaveOpt->GetODFDefaultVersion();
 }
 
 SvtSaveOptions::ODFSaneDefaultVersion SvtSaveOptions::GetODFSaneDefaultVersion() const
 {
-    switch (pImp->pSaveOpt->GetODFDefaultVersion())
+    switch (pImpl->pSaveOpt->GetODFDefaultVersion())
     {
         default:
             assert(!"map new ODFDefaultVersion to ODFSaneDefaultVersion");
@@ -1037,17 +1037,17 @@ SvtSaveOptions::ODFSaneDefaultVersion SvtSaveOptions::GetODFSaneDefaultVersion()
 
 bool SvtSaveOptions::IsUseSHA1InODF12() const
 {
-    return pImp->pSaveOpt->IsUseSHA1InODF12();
+    return pImpl->pSaveOpt->IsUseSHA1InODF12();
 }
 
 bool SvtSaveOptions::IsUseBlowfishInODF12() const
 {
-    return pImp->pSaveOpt->IsUseBlowfishInODF12();
+    return pImpl->pSaveOpt->IsUseBlowfishInODF12();
 }
 
 bool SvtSaveOptions::IsReadOnly( SvtSaveOptions::EOption eOption ) const
 {
-    return pImp->pSaveOpt->IsReadOnly(eOption);
+    return pImpl->pSaveOpt->IsReadOnly(eOption);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
