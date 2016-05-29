@@ -799,12 +799,6 @@ void ThumbnailView::MouseButtonDown( const MouseEvent& rMEvt )
             mpStartSelRange = mFilteredItemList.begin() + nPos;
         }
 
-        if (pItem->isSelected())
-        {
-            bool bClickOnTitle = pItem->getTextArea().IsInside(rMEvt.GetPosPixel());
-            pItem->setEditTitle(bClickOnTitle);
-        }
-
         if (!pItem->isHighlighted())
             DrawItem(pItem);
 
@@ -1146,7 +1140,6 @@ void ThumbnailView::deselectItems()
     {
         if (p->isSelected())
         {
-            p->setEditTitle(false);
             p->setSelection(false);
 
             maItemStateHdl.Call(p);
