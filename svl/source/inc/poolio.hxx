@@ -163,7 +163,7 @@ struct SfxItemPool_Impl
 
     // unit testing
     friend class PoolItemTest;
-    static SfxItemPool_Impl *GetImpl(SfxItemPool *pPool) { return pPool->pImp; }
+    static SfxItemPool_Impl *GetImpl(SfxItemPool *pPool) { return pPool->pImpl.get(); }
 };
 
 

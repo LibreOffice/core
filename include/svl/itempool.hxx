@@ -62,7 +62,7 @@ class SVL_DLLPUBLIC SfxItemPool
     friend struct SfxItemPool_Impl;
 
     const SfxItemInfo*              pItemInfos;
-    SfxItemPool_Impl*               pImp;
+    std::unique_ptr<SfxItemPool_Impl>               pImpl;
 
 public:
     void AddSfxItemPoolUser(SfxItemPoolUser& rNewUser);
