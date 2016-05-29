@@ -13,6 +13,7 @@
 
 #include <rtl/bootstrap.hxx>
 #include <desktop/crashreport.hxx>
+#include <osl/file.hxx>
 
 CrashReportDialog::CrashReportDialog(vcl::Window* pParent):
     Dialog(pParent, "CrashReportDialog",
@@ -40,12 +41,12 @@ void CrashReportDialog::dispose()
 
 namespace {
 
-OString getLibDir()
+OUString getLibDir()
 {
     OUString aOriginal = "$BRAND_BASE_DIR/" LIBO_LIBEXEC_FOLDER;
     rtl::Bootstrap::expandMacros(aOriginal);
 
-    return rtl::OUStringToOString(aOriginal, RTL_TEXTENCODING_UTF8);
+    return aOriginal;
 }
 
 }
@@ -55,12 +56,12 @@ IMPL_LINK_TYPED(CrashReportDialog, BtnHdl, Button*, pBtn, void)
     if (pBtn == mpBtnSend.get())
     {
         std::string ini_path = CrashReporter::getIniFileName();
-#if defined WNT
-        OString aCommand = getLibDir().copy(8) + "/minidump_upload.exe " + ini_path.c_str();
-#else
-        OString aCommand = getLibDir().copy(7) + "/minidump_upload " + ini_path.c_str();
-#endif
-        int retVal = std::system(aCommand.getStr());
+        OUString aCommand;
+        osl::FileBase::getSystemPathFromFileURL(getLibDir() + "/minidump_upload" + SAL_EXEEXTENSION, aCommand);
+
+        aCommand = aCommand;
+        OString aOStringCommand = rtl::OUStringToOString(aCommand, RTL_TEXTENCODING_UTF8) + " " + ini_path.c_str();
+        int retVal = std::system(aOStringCommand.getStr());
         SAL_WARN_IF(retVal != 0, "svx.dialog", "Failed to upload minidump. Error Code: " << retVal);
         // TODO: moggi: return the id for the user to look it up
         Close();

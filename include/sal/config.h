@@ -29,6 +29,7 @@
 #ifdef _WIN32
 #define SAL_W32
 #define SAL_DLLEXTENSION ".dll"
+#define SAL_EXEEXTENSION ".exe"
 #define SAL_PATHSEPARATOR ';'
 #define SAL_PATHDELIMITER '\\'
 #define SAL_NEWLINE_STRING "\r\n"
@@ -56,6 +57,7 @@
     defined(AIX) || defined(OPENBSD) || defined(DRAGONFLY) || defined(ANDROID)
 #define SAL_UNX
 #define SAL_DLLEXTENSION ".so"
+#define SAL_EXEEXTENSION ""
 #define SAL_DLLPREFIX "lib"
 #define SAL_PATHSEPARATOR ':'
 #define SAL_PATHDELIMITER '/'
@@ -66,6 +68,7 @@
 #ifdef EMSCRIPTEN
 #define SAL_UNX
 #define SAL_DLLEXTENSION ".bc"
+#define SAL_EXEEXTENSION ""
 #define SAL_DLLPREFIX "lib"
 #define SAL_PATHSEPARATOR ':'
 #define SAL_PATHDELIMITER '/'
@@ -76,6 +79,7 @@
 #ifdef MACOSX
 #define SAL_UNX
 #define SAL_DLLEXTENSION ".dylib"
+#define SAL_EXEEXTENSION ""
 #define SAL_DLLPREFIX "lib"
 #define SAL_PATHSEPARATOR ':'
 #define SAL_PATHDELIMITER '/'
