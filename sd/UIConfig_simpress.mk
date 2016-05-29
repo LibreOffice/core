@@ -103,7 +103,6 @@ $(eval $(call gb_UIConfig_add_toolbarfiles,modules/simpress,\
 ))
 
 $(eval $(call gb_UIConfig_add_uifiles,modules/simpress,\
-	sd/uiconfig/simpress/ui/assistentdialog \
 	sd/uiconfig/simpress/ui/customanimationspanel \
 	sd/uiconfig/simpress/ui/customanimationproperties \
 	sd/uiconfig/simpress/ui/customanimationeffecttab \
