@@ -70,7 +70,7 @@ namespace i18n {
 
 class LocaleDataWrapper;
 
-enum TxtAlign { TXTALIGN_LEFT, TXTALIGN_CENTER, TXTALIGN_RIGHT };
+enum class TxtAlign { Left, Center, Right };
 
 typedef std::vector<TextView*> TextViews;
 

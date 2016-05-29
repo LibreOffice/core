@@ -338,11 +338,11 @@ void ImpVclMEdit::SetAlign( WinBits nWinStyle )
     mpTextWindow->GetTextEngine()->SetRightToLeft( bRTL );
 
     if ( nWinStyle & WB_CENTER )
-        mpTextWindow->GetTextEngine()->SetTextAlign( TXTALIGN_CENTER );
+        mpTextWindow->GetTextEngine()->SetTextAlign( TxtAlign::Center );
     else if ( nWinStyle & WB_RIGHT )
-        mpTextWindow->GetTextEngine()->SetTextAlign( !bRTL ? TXTALIGN_RIGHT : TXTALIGN_LEFT );
+        mpTextWindow->GetTextEngine()->SetTextAlign( !bRTL ? TxtAlign::Right : TxtAlign::Left );
     else if ( nWinStyle & WB_LEFT )
-        mpTextWindow->GetTextEngine()->SetTextAlign( !bRTL ? TXTALIGN_LEFT : TXTALIGN_RIGHT );
+        mpTextWindow->GetTextEngine()->SetTextAlign( !bRTL ? TxtAlign::Left : TxtAlign::Right );
 }
 
 void ImpVclMEdit::SetModified( bool bMod )
