@@ -99,12 +99,12 @@ inline bool operator !=(const ItalicMatrix& a, const ItalicMatrix& b)
     return a.xx != b.xx || a.xy != b.xy || a.yx != b.yx || a.yy != b.yy;
 }
 
-enum VclAlign
+enum class VclAlign
 {
-    VCL_ALIGN_FILL,
-    VCL_ALIGN_START,
-    VCL_ALIGN_END,
-    VCL_ALIGN_CENTER
+    Fill,
+    Start,
+    End,
+    Center
 };
 
 enum class VclPackType

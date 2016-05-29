@@ -505,7 +505,7 @@ uno::Reference< awt::XControlModel >  BibGeneralPage::AddXControl(
                     vcl::Window* pWindow = VCLUnoHelper::GetWindow(xControl->getPeer());
                     pWindow->set_grid_top_attach(rLabel.get_grid_top_attach());
                     pWindow->set_grid_left_attach(rLabel.get_grid_left_attach()+1);
-                    pWindow->set_valign(VCL_ALIGN_CENTER);
+                    pWindow->set_valign(VclAlign::Center);
                     rLabel.set_mnemonic_widget(pWindow);
                     if (&rLabel == pTitleFT)
                         pWindow->set_grid_width(3);
