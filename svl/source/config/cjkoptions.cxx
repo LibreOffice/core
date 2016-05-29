@@ -377,25 +377,24 @@ bool SvtCJKOptions_Impl::IsReadOnly(SvtCJKOptions::EOption eOption) const
 }
 
 // global
+std::weak_ptr<SvtCJKOptions_Impl>  pCJKOptions;
 
-static SvtCJKOptions_Impl*  pCJKOptions = nullptr;
-static sal_Int32            nCJKRefCount = 0;
 namespace { struct theCJKOptionsMutex : public rtl::Static< ::osl::Mutex , theCJKOptionsMutex >{}; }
 
 SvtCJKOptions::SvtCJKOptions(bool bDontLoad)
 {
     // Global access, must be guarded (multithreading)
     ::osl::MutexGuard aGuard( theCJKOptionsMutex::get() );
-    if ( !pCJKOptions )
+    pImpl = pCJKOptions.lock();
+    if ( !pImpl )
     {
-        pCJKOptions = new SvtCJKOptions_Impl;
+        pImpl = std::make_shared<SvtCJKOptions_Impl>();
+        pCJKOptions = pImpl;
         ItemHolder2::holdConfigItem(E_CJKOPTIONS);
     }
-    if( !bDontLoad && !pCJKOptions->IsLoaded())
-        pCJKOptions->Load();
 
-    ++nCJKRefCount;
-    pImp = pCJKOptions;
+    if( !bDontLoad && !pImpl->IsLoaded())
+        pImpl->Load();
 }
 
 
@@ -403,68 +402,69 @@ SvtCJKOptions::~SvtCJKOptions()
 {
     // Global access, must be guarded (multithreading)
     ::osl::MutexGuard aGuard( theCJKOptionsMutex::get() );
-    if ( !--nCJKRefCount )
-        DELETEZ( pCJKOptions );
+
+    // pImpl needs to be cleared before the mutex is dropped
+    pImpl.reset();
 }
 
 bool SvtCJKOptions::IsCJKFontEnabled() const
 {
-    assert(pCJKOptions->IsLoaded());
-    return pCJKOptions->IsCJKFontEnabled();
+    assert(pImpl->IsLoaded());
+    return pImpl->IsCJKFontEnabled();
 }
 
 bool SvtCJKOptions::IsVerticalTextEnabled() const
 {
-    assert(pCJKOptions->IsLoaded());
-    return pCJKOptions->IsVerticalTextEnabled();
+    assert(pImpl->IsLoaded());
+    return pImpl->IsVerticalTextEnabled();
 }
 
 bool SvtCJKOptions::IsAsianTypographyEnabled() const
 {
-    assert(pCJKOptions->IsLoaded());
-    return pCJKOptions->IsAsianTypographyEnabled();
+    assert(pImpl->IsLoaded());
+    return pImpl->IsAsianTypographyEnabled();
 }
 
 bool SvtCJKOptions::IsJapaneseFindEnabled() const
 {
-    assert(pCJKOptions->IsLoaded());
-    return pCJKOptions->IsJapaneseFindEnabled();
+    assert(pImpl->IsLoaded());
+    return pImpl->IsJapaneseFindEnabled();
 }
 
 bool SvtCJKOptions::IsRubyEnabled() const
 {
-    assert(pCJKOptions->IsLoaded());
-    return pCJKOptions->IsRubyEnabled();
+    assert(pImpl->IsLoaded());
+    return pImpl->IsRubyEnabled();
 }
 
 bool SvtCJKOptions::IsChangeCaseMapEnabled() const
 {
-    assert(pCJKOptions->IsLoaded());
-    return pCJKOptions->IsChangeCaseMapEnabled();
+    assert(pImpl->IsLoaded());
+    return pImpl->IsChangeCaseMapEnabled();
 }
 
 bool SvtCJKOptions::IsDoubleLinesEnabled() const
 {
-    assert(pCJKOptions->IsLoaded());
-    return pCJKOptions->IsDoubleLinesEnabled();
+    assert(pImpl->IsLoaded());
+    return pImpl->IsDoubleLinesEnabled();
 }
 
 void        SvtCJKOptions::SetAll(bool bSet)
 {
-    assert(pCJKOptions->IsLoaded());
-    pCJKOptions->SetAll(bSet);
+    assert(pImpl->IsLoaded());
+    pImpl->SetAll(bSet);
 }
 
 bool    SvtCJKOptions::IsAnyEnabled() const
 {
-    assert(pCJKOptions->IsLoaded());
-    return pCJKOptions->IsAnyEnabled();
+    assert(pImpl->IsLoaded());
+    return pImpl->IsAnyEnabled();
 }
 
 bool    SvtCJKOptions::IsReadOnly(EOption eOption) const
 {
-    assert(pCJKOptions->IsLoaded());
-    return pCJKOptions->IsReadOnly(eOption);
+    assert(pImpl->IsLoaded());
+    return pImpl->IsReadOnly(eOption);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
