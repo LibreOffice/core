@@ -16,6 +16,24 @@
       "revId": "e832891b242d041813ee965816570f7de45866bf",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_3d37b3b1",
+        "filename": "basic/qa/cppunit/test_vba.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1000392
+      },
+      "writtenOn": "2016-05-29T12:47:49Z",
+      "side": 1,
+      "message": "Thank you for your review.\nI had corrected my mistake.\nIn this case, it is better that I call \"SQLGetInstalledDriversW\" directly.\nThen the first parameter is LPWSTR(\u003da pointer of sal_Unicode) according to declaration into odbcinst.h.\nI will push the revised commit.",
+      "parentUuid": "da7fb54a_22795194",
+      "revId": "e832891b242d041813ee965816570f7de45866bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
