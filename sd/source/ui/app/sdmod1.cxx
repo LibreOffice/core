@@ -530,7 +530,7 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
         bool bStartWithTemplate = pOpt->IsStartWithTemplate();
 
         bool bNewDocDirect = rReq.GetSlot() == SID_NEWSD;
-        if( bNewDocDirect && !bStartWithTemplate )
+        if( bNewDocDirect /* && !bStartWithTemplate */ )
         {
             //we start without wizard
 
@@ -550,7 +550,10 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
             }
         }
         else
-        {
+        {/*
+            Before deprecating the Presentation wizard completely,
+            it has been decided to disable it to get some reviews over the step.
+
             SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
             std::unique_ptr< AbstractAssistentDlg > pPilotDlg( pFact ? pFact->CreateAssistentDlg( !bNewDocDirect ) : nullptr );
 
@@ -703,7 +706,7 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
                     }
                     pOpt->SetStartWithTemplate(bStartWithTemplate);
                 }
-            }
+            }*/
         }
     }
 
