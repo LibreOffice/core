@@ -232,10 +232,10 @@ private:
 class VCL_DLLPUBLIC Application
 {
 public:
-    enum DialogCancelMode {
-        DIALOG_CANCEL_OFF,      ///< do not automatically cancel dialogs
-        DIALOG_CANCEL_SILENT,   ///< silently cancel any dialogs
-        DIALOG_CANCEL_FATAL     ///< cancel any dialogs by std::abort
+    enum class DialogCancelMode {
+        Off,      ///< do not automatically cancel dialogs
+        Silent,   ///< silently cancel any dialogs
+        Fatal     ///< cancel any dialogs by std::abort
     };
 
     /** @name Initialization

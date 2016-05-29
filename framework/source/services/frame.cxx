@@ -2133,7 +2133,7 @@ void SAL_CALL Frame::disposing()
     //      (b) Don't forget to save the old value of IsDialogCancelEnabled() to
     //          restore it afterwards (to not kill headless mode).
     Application::DialogCancelMode old = Application::GetDialogCancelMode();
-    Application::SetDialogCancelMode( Application::DIALOG_CANCEL_SILENT );
+    Application::SetDialogCancelMode( Application::DialogCancelMode::Silent );
 
     // We should be alone for ever and further dispose calls are rejected by lines before ...
     // I hope it :-)

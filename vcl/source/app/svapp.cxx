@@ -1500,7 +1500,7 @@ void Application::SetDialogCancelMode( DialogCancelMode mode )
 
 bool Application::IsDialogCancelEnabled()
 {
-    return ImplGetSVData()->maAppData.meDialogCancel != DIALOG_CANCEL_OFF;
+    return ImplGetSVData()->maAppData.meDialogCancel != DialogCancelMode::Off;
 }
 
 void Application::SetSystemWindowMode( SystemWindowFlags nMode )
@@ -1658,7 +1658,7 @@ const LocaleDataWrapper& Application::GetAppLocaleDataWrapper()
 void Application::EnableHeadlessMode( bool dialogsAreFatal )
 {
     SetDialogCancelMode(
-        dialogsAreFatal ? DIALOG_CANCEL_FATAL : DIALOG_CANCEL_SILENT );
+        dialogsAreFatal ? DialogCancelMode::Fatal : DialogCancelMode::Silent );
 }
 
 bool Application::IsHeadlessModeEnabled()
