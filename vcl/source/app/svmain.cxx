@@ -304,7 +304,7 @@ bool InitVCL()
     pSVData->maGDIData.mpScreenFontCache    = new ImplFontCache;
     pSVData->maGDIData.mpGrfConverter       = new GraphicConverter;
 
-    g_bIsLeanException = getenv("LO_LEAN_EXCEPTION") ? true : false;
+    g_bIsLeanException = getenv("LO_LEAN_EXCEPTION") != nullptr;
     // Set exception handler
     pExceptionHandler = osl_addSignalHandler(VCLExceptionSignal_impl, nullptr);
 
