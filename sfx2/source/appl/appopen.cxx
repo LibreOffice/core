@@ -450,14 +450,13 @@ void SfxApplication::NewDocExec_Impl( SfxRequest& rReq )
 
         SfxObjectShell* pCurrentShell = SfxObjectShell::Current();
         Reference<XModel> xModel;
-
         if(pCurrentShell)
             xModel = pCurrentShell->GetModel();
 
         ScopedVclPtrInstance< SfxTemplateManagerDlg > aTemplDlg;
 
-        if(xModel.is())
-            aTemplDlg->setDocumentModel(pCurrentShell->GetModel());
+        if (xModel.is())
+            aTemplDlg->setDocumentModel(xModel);
 
         int nRet = aTemplDlg->Execute();
         if ( nRet == RET_OK )
