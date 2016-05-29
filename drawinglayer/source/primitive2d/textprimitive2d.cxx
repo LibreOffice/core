@@ -205,7 +205,7 @@ namespace drawinglayer
                             aRetval,
                             aTranslate,
                             fRotate,
-                            TEXTEFFECTSTYLE2D_OUTLINE));
+                            TextEffectStyle2D::Outline));
 
                         aRetval = Primitive2DContainer { aNewTextEffect };
                     }

@@ -248,28 +248,28 @@ namespace drawinglayer
                         // be view-dependent
                         const basegfx::BColor aBBlack(0.0, 0.0, 0.0);
                         const bool bDefaultTextColor(aBBlack == getFontColor());
-                        TextEffectStyle2D aTextEffectStyle2D(TEXTEFFECTSTYLE2D_RELIEF_EMBOSSED);
+                        TextEffectStyle2D aTextEffectStyle2D(TextEffectStyle2D::ReliefEmbossed);
 
                         if(bDefaultTextColor)
                         {
                             if(TEXT_RELIEF_ENGRAVED == getTextRelief())
                             {
-                                aTextEffectStyle2D = TEXTEFFECTSTYLE2D_RELIEF_ENGRAVED_DEFAULT;
+                                aTextEffectStyle2D = TextEffectStyle2D::ReliefEngravedDefault;
                             }
                             else
                             {
-                                aTextEffectStyle2D = TEXTEFFECTSTYLE2D_RELIEF_EMBOSSED_DEFAULT;
+                                aTextEffectStyle2D = TextEffectStyle2D::ReliefEmbossedDefault;
                             }
                         }
                         else
                         {
                             if(TEXT_RELIEF_ENGRAVED == getTextRelief())
                             {
-                                aTextEffectStyle2D = TEXTEFFECTSTYLE2D_RELIEF_ENGRAVED;
+                                aTextEffectStyle2D = TextEffectStyle2D::ReliefEngraved;
                             }
                             else
                             {
-                                aTextEffectStyle2D = TEXTEFFECTSTYLE2D_RELIEF_EMBOSSED;
+                                aTextEffectStyle2D = TextEffectStyle2D::ReliefEmbossed;
                             }
                         }
 
@@ -288,7 +288,7 @@ namespace drawinglayer
                             aRetval,
                             aDecTrans.getTranslate(),
                             aDecTrans.getRotate(),
-                            TEXTEFFECTSTYLE2D_OUTLINE));
+                            TextEffectStyle2D::Outline));
                         aRetval = Primitive2DContainer { aNewTextEffect };
                     }
 

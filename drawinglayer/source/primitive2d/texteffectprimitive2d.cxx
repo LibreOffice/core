@@ -43,10 +43,10 @@ namespace drawinglayer
 
             switch(getTextEffectStyle2D())
             {
-                case TEXTEFFECTSTYLE2D_RELIEF_EMBOSSED:
-                case TEXTEFFECTSTYLE2D_RELIEF_ENGRAVED:
-                case TEXTEFFECTSTYLE2D_RELIEF_EMBOSSED_DEFAULT:
-                case TEXTEFFECTSTYLE2D_RELIEF_ENGRAVED_DEFAULT:
+                case TextEffectStyle2D::ReliefEmbossed:
+                case TextEffectStyle2D::ReliefEngraved:
+                case TextEffectStyle2D::ReliefEmbossedDefault:
+                case TextEffectStyle2D::ReliefEngravedDefault:
                 {
                     // prepare transform of sub-group back to (0,0) and align to X-Axis
                     basegfx::B2DHomMatrix aBackTransform(basegfx::tools::createTranslateB2DHomMatrix(
@@ -59,11 +59,11 @@ namespace drawinglayer
 
                     // create transformation for one discrete unit
                     const bool bEmbossed(
-                        TEXTEFFECTSTYLE2D_RELIEF_EMBOSSED  == getTextEffectStyle2D()
-                        || TEXTEFFECTSTYLE2D_RELIEF_EMBOSSED_DEFAULT == getTextEffectStyle2D());
+                        TextEffectStyle2D::ReliefEmbossed  == getTextEffectStyle2D()
+                        || TextEffectStyle2D::ReliefEmbossedDefault == getTextEffectStyle2D());
                     const bool bDefaultTextColor(
-                        TEXTEFFECTSTYLE2D_RELIEF_EMBOSSED_DEFAULT == getTextEffectStyle2D()
-                        || TEXTEFFECTSTYLE2D_RELIEF_ENGRAVED_DEFAULT == getTextEffectStyle2D());
+                        TextEffectStyle2D::ReliefEmbossedDefault == getTextEffectStyle2D()
+                        || TextEffectStyle2D::ReliefEngravedDefault == getTextEffectStyle2D());
                     basegfx::B2DHomMatrix aTransform(aBackTransform);
                     aRetval.resize(2);
 
@@ -128,7 +128,7 @@ namespace drawinglayer
 
                     break;
                 }
-                case TEXTEFFECTSTYLE2D_OUTLINE:
+                case TextEffectStyle2D::Outline:
                 {
                     // create transform primitives in all directions
                     basegfx::B2DHomMatrix aTransform;

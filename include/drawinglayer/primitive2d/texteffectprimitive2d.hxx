@@ -31,13 +31,13 @@ namespace drawinglayer
     namespace primitive2d
     {
         /** TextEffectStyle2D definition */
-        enum TextEffectStyle2D
+        enum class TextEffectStyle2D
         {
-            TEXTEFFECTSTYLE2D_RELIEF_EMBOSSED_DEFAULT,
-            TEXTEFFECTSTYLE2D_RELIEF_ENGRAVED_DEFAULT,
-            TEXTEFFECTSTYLE2D_RELIEF_EMBOSSED,
-            TEXTEFFECTSTYLE2D_RELIEF_ENGRAVED,
-            TEXTEFFECTSTYLE2D_OUTLINE
+            ReliefEmbossedDefault,
+            ReliefEngravedDefault,
+            ReliefEmbossed,
+            ReliefEngraved,
+            Outline
         };
 
         /** TextEffectPrimitive2D class
