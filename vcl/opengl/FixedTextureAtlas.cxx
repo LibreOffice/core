@@ -17,6 +17,8 @@
 
 #include "opengl/FixedTextureAtlas.hxx"
 
+#include <o3tl/make_unique.hxx>
+
 struct FixedTexture
 {
     ImplOpenGLTexture* mpTexture;
@@ -83,11 +85,9 @@ void FixedTextureAtlasManager::CreateNewTexture()
 {
     int nTextureWidth = mWidthFactor  * mSubTextureSize;
     int nTextureHeight = mHeightFactor * mSubTextureSize;
-    std::unique_ptr<FixedTexture> pFixedTexture(
-                                    new FixedTexture(new ImplOpenGLTexture(nTextureWidth, nTextureHeight, true),
+    maFixedTextures.push_back(o3tl::make_unique<FixedTexture>(new ImplOpenGLTexture(nTextureWidth, nTextureHeight, true),
                                     mWidthFactor * mHeightFactor));
 
-    maFixedTextures.push_back(std::move(pFixedTexture));
 }
 
 OpenGLTexture FixedTextureAtlasManager::Reserve(int nWidth, int nHeight)
