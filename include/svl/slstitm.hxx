@@ -30,7 +30,7 @@ class SfxImpStringList;
 class SVL_DLLPUBLIC SfxStringListItem : public SfxPoolItem
 {
 protected:
-    SfxImpStringList*   pImp;
+    std::unique_ptr<SfxImpStringList>   pImpl;
 
 public:
     static SfxPoolItem* CreateDefault();
