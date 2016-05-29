@@ -101,13 +101,6 @@ RecentDocsViewItem::RecentDocsViewItem(ThumbnailView &rView, const OUString &rUR
     maPreview1 = TemplateAbstractView::scaleImg(aThumbnail, nThumbnailSize, nThumbnailSize);
 }
 
-void RecentDocsViewItem::setEditTitle (bool edit, bool bChangeFocus)
-{
-    // Unused parameters.
-    (void)edit;
-    (void)bChangeFocus;
-}
-
 Rectangle RecentDocsViewItem::updateHighlight(bool bVisible, const Point& rPoint)
 {
     Rectangle aRect(ThumbnailViewItem::updateHighlight(bVisible, rPoint));

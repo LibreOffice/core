@@ -213,7 +213,7 @@ IMPL_LINK_TYPED(TemplateLocalView, ContextMenuSelectHdl, Menu*, pMenu, bool)
     case MNI_RENAME:
     {
         ScopedVclPtrInstance< InputDialog > m_pTitleEditDlg( SfxResId(STR_RENAME_TEMPLATE).toString(), this);
-        OUString sOldTitle = maSelectedItem->getHelpText();
+        OUString sOldTitle = maSelectedItem->getTitle();
         m_pTitleEditDlg->SetEntryText( sOldTitle );
         m_pTitleEditDlg->HideHelpBtn();
 
@@ -224,7 +224,6 @@ IMPL_LINK_TYPED(TemplateLocalView, ContextMenuSelectHdl, Menu*, pMenu, bool)
         if ( !sNewTitle.isEmpty() && sNewTitle != sOldTitle )
         {
             maSelectedItem->setTitle(sNewTitle);
-            maSelectedItem->setEditTitle(true);
         }
     }
         break;
