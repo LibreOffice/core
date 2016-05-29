@@ -297,7 +297,7 @@ namespace pcr
         SetDragDropMode(DragDropMode::ALL/*DragDropMode::CTRL_MOVE*/);
             // Hmm. The flag alone is not enough, so to be on the safe side ...
 
-        SetSelectionMode( MULTIPLE_SELECTION );
+        SetSelectionMode( SelectionMode::Multiple );
     }
 
     VCL_BUILDER_DECL_FACTORY(TabOrderListBox)

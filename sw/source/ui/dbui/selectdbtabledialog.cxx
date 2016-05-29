@@ -55,7 +55,7 @@ SwAddressTable::SwAddressTable(SvSimpleTableContainer& rParent)
     : SvSimpleTable(rParent, 0)
 {
     SetSpaceBetweenEntries(3);
-    SetSelectionMode(SINGLE_SELECTION);
+    SetSelectionMode(SelectionMode::Single);
     SetDragDropMode(DragDropMode::NONE);
     EnableAsyncDrag(false);
 }

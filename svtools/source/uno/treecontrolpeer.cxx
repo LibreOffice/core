@@ -1247,11 +1247,11 @@ void TreeControlPeer::setProperty( const OUString& PropertyName, const Any& aVal
                 SelectionMode eSelMode;
                 switch( eSelectionType )
                 {
-                case SelectionType_SINGLE:  eSelMode = SINGLE_SELECTION; break;
-                case SelectionType_RANGE:   eSelMode = RANGE_SELECTION; break;
-                case SelectionType_MULTI:   eSelMode = MULTIPLE_SELECTION; break;
+                case SelectionType_SINGLE:  eSelMode = SelectionMode::Single; break;
+                case SelectionType_RANGE:   eSelMode = SelectionMode::Range; break;
+                case SelectionType_MULTI:   eSelMode = SelectionMode::Multiple; break;
     //          case SelectionType_NONE:
-                default:                    eSelMode = NO_SELECTION; break;
+                default:                    eSelMode = SelectionMode::NONE; break;
                 }
                 if( rTree.GetSelectionMode() != eSelMode )
                     rTree.SetSelectionMode( eSelMode );
@@ -1336,10 +1336,10 @@ Any TreeControlPeer::getProperty( const OUString& PropertyName ) throw(RuntimeEx
             SelectionMode eSelMode = rTree.GetSelectionMode();
             switch( eSelMode )
             {
-            case SINGLE_SELECTION:  eSelectionType = SelectionType_SINGLE; break;
-            case RANGE_SELECTION:   eSelectionType = SelectionType_RANGE; break;
-            case MULTIPLE_SELECTION:eSelectionType = SelectionType_MULTI; break;
-//          case NO_SELECTION:
+            case SelectionMode::Single:  eSelectionType = SelectionType_SINGLE; break;
+            case SelectionMode::Range:   eSelectionType = SelectionType_RANGE; break;
+            case SelectionMode::Multiple:eSelectionType = SelectionType_MULTI; break;
+//          case SelectionMode::NONE:
             default:                eSelectionType = SelectionType_NONE; break;
             }
             return Any( eSelectionType );

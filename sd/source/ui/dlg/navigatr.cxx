@@ -103,7 +103,7 @@ SdNavigatorWin::SdNavigatorWin(
     long nListboxYPos = maToolbox->GetPosPixel().Y() + maToolbox->GetSizePixel().Height() + 4;
     maTlbObjects->setPosSizePixel( 0, nListboxYPos, 0, 0, PosSizeFlags::Y );
     maTlbObjects->SetDoubleClickHdl( LINK( this, SdNavigatorWin, ClickObjectHdl ) );
-    maTlbObjects->SetSelectionMode( SINGLE_SELECTION );
+    maTlbObjects->SetSelectionMode( SelectionMode::Single );
     // set focus to listbox, otherwise it is in the toolbox which is only useful
     // for keyboard navigation
     maTlbObjects->GrabFocus();
@@ -465,10 +465,10 @@ IMPL_LINK_TYPED( SdNavigatorWin, MenuSelectHdl, Menu *, pMenu, bool )
                 if( maTlbObjects->GetSelectionCount() > 1 )
                     maTlbObjects->SelectAll( false );
 
-                maTlbObjects->SetSelectionMode( SINGLE_SELECTION );
+                maTlbObjects->SetSelectionMode( SelectionMode::Single );
             }
             else
-                maTlbObjects->SetSelectionMode( MULTIPLE_SELECTION );
+                maTlbObjects->SetSelectionMode( SelectionMode::Multiple );
         }
     }
     return false;
@@ -601,7 +601,7 @@ bool SdNavigatorWin::InsertFile(const OUString& rFileName)
             if (xMedium->IsStorage())
             {
                 // Now depending on mode:
-                // maTlbObjects->SetSelectionMode(MULTIPLE_SELECTION);
+                // maTlbObjects->SetSelectionMode(SelectionMode::Multiple);
                 // handover of ownership of xMedium;
                 SdDrawDocument* pDropDoc = maTlbObjects->GetBookmarkDoc(xMedium.release());
 
@@ -917,7 +917,7 @@ void SdPageNameControllerItem::StateChanged( sal_uInt16 nSId,
 
             if( !pNavigatorWin->maTlbObjects->HasSelectedChildren( aPageName ) )
             {
-                if( pNavigatorWin->maTlbObjects->GetSelectionMode() == MULTIPLE_SELECTION )
+                if( pNavigatorWin->maTlbObjects->GetSelectionMode() == SelectionMode::Multiple )
                 {
                     // because otherwise it is always additional select
                     pNavigatorWin->maTlbObjects->SelectAll( false );

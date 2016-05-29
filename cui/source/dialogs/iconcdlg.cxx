@@ -182,7 +182,7 @@ IconChoiceDialog::IconChoiceDialog ( vcl::Window* pParent, const OUString& rID,
     m_pIconCtrl->SetClickHdl ( LINK ( this, IconChoiceDialog , ChosePageHdl_Impl ) );
     m_pIconCtrl->Show();
     m_pIconCtrl->SetChoiceWithCursor();
-    m_pIconCtrl->SetSelectionMode( SINGLE_SELECTION );
+    m_pIconCtrl->SetSelectionMode( SelectionMode::Single );
     m_pIconCtrl->SetHelpId( HID_ICCDIALOG_CHOICECTRL );
 
     // ItemSet

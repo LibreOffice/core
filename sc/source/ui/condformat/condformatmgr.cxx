@@ -30,7 +30,7 @@ ScCondFormatManagerWindow::ScCondFormatManagerWindow(SvSimpleTableContainer& rPa
 
     Init();
     Show();
-    SetSelectionMode(MULTIPLE_SELECTION);
+    SetSelectionMode(SelectionMode::Multiple);
 }
 
 OUString ScCondFormatManagerWindow::createEntryString(const ScConditionalFormat& rFormat)

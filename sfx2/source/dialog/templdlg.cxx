@@ -854,7 +854,7 @@ void SfxCommonTemplateDialog_Impl::Initialize()
     aFilterLb->SetSelectHdl( LINK( this, SfxCommonTemplateDialog_Impl, FilterSelectHdl ) );
     aFmtLb->SetDoubleClickHdl( LINK( this, SfxCommonTemplateDialog_Impl, TreeListApplyHdl ) );
     aFmtLb->SetSelectHdl( LINK( this, SfxCommonTemplateDialog_Impl, FmtSelectHdl ) );
-    aFmtLb->SetSelectionMode(MULTIPLE_SELECTION);
+    aFmtLb->SetSelectionMode(SelectionMode::Multiple);
 
 
     aFilterLb->Show();

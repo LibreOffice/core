@@ -523,7 +523,7 @@ ViewTabListBox_Impl::ViewTabListBox_Impl( vcl::Window* pParentWin,
     SetHighlightRange();
     SetEntryHeight( ROW_HEIGHT );
     if (nFlags & FileViewFlags::MULTISELECTION)
-        SetSelectionMode( MULTIPLE_SELECTION );
+        SetSelectionMode( SelectionMode::Multiple );
 
     Show();
     if( mbShowHeader )

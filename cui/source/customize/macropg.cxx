@@ -727,7 +727,7 @@ void SvxMacroTabPage_::InitAndSetHandler( const Reference< container::XNameRepla
 
     rListBox.SetSelectHdl( LINK( this, SvxMacroTabPage_, SelectEvent_Impl ));
 
-    rListBox.SetSelectionMode( SINGLE_SELECTION );
+    rListBox.SetSelectionMode( SelectionMode::Single );
     rListBox.SetTabs( &nTabs[0] );
     Size aSize( nTabs[ 2 ], 0 );
     rHeaderBar.InsertItem( ITEMID_EVENT, mpImpl->sStrEvent, LogicToPixel( aSize, MapMode( MAP_APPFONT ) ).Width() );

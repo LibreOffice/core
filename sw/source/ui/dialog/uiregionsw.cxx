@@ -362,7 +362,7 @@ SwEditRegionDlg::SwEditRegionDlg( vcl::Window* pParent, SwWrtShell& rWrtSh )
     m_pSubRegionED->AddEventListener(LINK(this, SwEditRegionDlg, SubRegionEventHdl));
     m_pSubRegionED->EnableAutocomplete(true, true);
 
-    m_pTree->SetSelectionMode( MULTIPLE_SELECTION );
+    m_pTree->SetSelectionMode( SelectionMode::Multiple );
     m_pTree->SetStyle(m_pTree->GetStyle()|WB_HASBUTTONSATROOT|WB_CLIPCHILDREN|WB_HSCROLL);
     m_pTree->SetSpaceBetweenEntries(0);
     m_pTree->SetAllEntriesAccessibleRoleType(SvTreeAccRoleType::TREE);

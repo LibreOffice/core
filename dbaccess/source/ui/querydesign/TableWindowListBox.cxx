@@ -51,7 +51,7 @@ OTableWindowListBox::OTableWindowListBox( OTableWindow* pParent )
     m_aScrollTimer.SetTimeout( SCROLLING_TIMESPAN );
     SetDoubleClickHdl( LINK(this, OTableWindowListBox, OnDoubleClick) );
 
-    SetSelectionMode(SINGLE_SELECTION);
+    SetSelectionMode(SelectionMode::Single);
 
     SetHighlightRange( );
 }

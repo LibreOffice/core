@@ -1111,7 +1111,7 @@ FmFilterNavigator::FmFilterNavigator( vcl::Window* pParent )
     StartListening( *m_pModel );
 
     EnableInplaceEditing( true );
-    SetSelectionMode(MULTIPLE_SELECTION);
+    SetSelectionMode(SelectionMode::Multiple);
 
     SetDragDropMode(DragDropMode::ALL);
 

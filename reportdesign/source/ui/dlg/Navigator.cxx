@@ -244,7 +244,7 @@ NavigatorTree::NavigatorTree( vcl::Window* pParent,OReportController& _rControll
 
     SetDragDropMode(DragDropMode::ALL);
     EnableInplaceEditing( false );
-    SetSelectionMode(MULTIPLE_SELECTION);
+    SetSelectionMode(SelectionMode::Multiple);
     Clear();
 
     m_aDropActionTimer.SetTimeoutHdl(LINK(this, NavigatorTree, OnDropActionTimer));

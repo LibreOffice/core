@@ -57,7 +57,7 @@ OApplicationIconControl::OApplicationIconControl(vcl::Window* _pParent)
     }
 
     SetChoiceWithCursor();
-    SetSelectionMode(SINGLE_SELECTION);
+    SetSelectionMode(SelectionMode::Single);
 }
 
 OApplicationIconControl::~OApplicationIconControl()

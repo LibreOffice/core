@@ -383,7 +383,7 @@ void SfxMacroTabPage_::InitAndSetHandler()
     mpImpl->pGroupLB->SetSelectHdl( LINK( this, SfxMacroTabPage_, SelectGroup_Impl ));
     mpImpl->pMacroLB->SetSelectHdl( LINK( this, SfxMacroTabPage_, SelectMacro_Impl ));
 
-    rListBox.SetSelectionMode( SINGLE_SELECTION );
+    rListBox.SetSelectionMode( SelectionMode::Single );
     rListBox.SetTabs( &nTabs[0] );
     Size aSize( nTabs[ 2 ], 0 );
     rHeaderBar.InsertItem( ITEMID_EVENT, mpImpl->sStrEvent, LogicToPixel( aSize, MapMode( MAP_APPFONT ) ).Width() );

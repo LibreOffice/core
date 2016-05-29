@@ -1622,7 +1622,7 @@ SvxMenuEntriesListBox::SvxMenuEntriesListBox(vcl::Window* pParent, SvxConfigPage
     SetEntryHeight( ENTRY_HEIGHT );
 
     SetHighlightRange();
-    SetSelectionMode(SINGLE_SELECTION);
+    SetSelectionMode(SelectionMode::Single);
 
     SetDragDropMode( DragDropMode::CTRL_MOVE  |
                      DragDropMode::APP_COPY   |

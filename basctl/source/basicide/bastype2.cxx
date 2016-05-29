@@ -180,7 +180,7 @@ TreeListBox::TreeListBox (vcl::Window* pParent, WinBits nStyle)
 void TreeListBox::Init()
 {
     SetNodeDefaultImages();
-    SetSelectionMode( SINGLE_SELECTION );
+    SetSelectionMode( SelectionMode::Single );
     nMode = 0xFF;   // everything
 }
 

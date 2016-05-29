@@ -751,7 +751,7 @@ ScViewSelectionEngine::ScViewSelectionEngine( vcl::Window* pWindow, ScTabView* p
         SelectionEngine( pWindow, &pView->GetFunctionSet() ),
         eWhich( eSplitPos )
 {
-    SetSelectionMode( MULTIPLE_SELECTION );
+    SetSelectionMode( SelectionMode::Multiple );
     EnableDrag( true );
 }
 
@@ -945,7 +945,7 @@ void ScHeaderFunctionSet::DeselectAll()
 ScHeaderSelectionEngine::ScHeaderSelectionEngine( vcl::Window* pWindow, ScHeaderFunctionSet* pFuncSet ) :
         SelectionEngine( pWindow, pFuncSet )
 {
-    SetSelectionMode( MULTIPLE_SELECTION );
+    SetSelectionMode( SelectionMode::Multiple );
     EnableDrag( false );
 }
 

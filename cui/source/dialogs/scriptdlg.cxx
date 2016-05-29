@@ -84,7 +84,7 @@ SFTreeListBox::SFTreeListBox(vcl::Window* pParent)
     , m_sMyMacros(CUI_RESSTR(RID_SVXSTR_MYMACROS))
     , m_sProdMacros(CUI_RESSTR(RID_SVXSTR_PRODMACROS))
 {
-    SetSelectionMode( SINGLE_SELECTION );
+    SetSelectionMode( SelectionMode::Single );
 
     SetStyle( GetStyle() | WB_CLIPCHILDREN | WB_HSCROLL |
                    WB_HASBUTTONS | WB_HASBUTTONSATROOT | WB_HIDESELECTION |

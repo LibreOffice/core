@@ -58,7 +58,7 @@ ScTpSubTotalGroup::ScTpSubTotalGroup( vcl::Window* pParent,
     mpLbFunctions->set_height_request(nHeight);
 
     // Font is correctly initialized by SvTreeListBox ctor
-    mpLbColumns->SetSelectionMode( SINGLE_SELECTION );
+    mpLbColumns->SetSelectionMode( SelectionMode::Single );
     mpLbColumns->SetDragDropMode( DragDropMode::NONE );
     mpLbColumns->SetSpaceBetweenEntries( 0 );
 

@@ -70,7 +70,7 @@ MacroChooser::MacroChooser( vcl::Window* pParnt, bool bCreateEntries )
     get(m_pNewLibButton, "newlibrary");
     get(m_pNewModButton, "newmodule");
 
-    m_pMacroBox->SetSelectionMode( SINGLE_SELECTION );
+    m_pMacroBox->SetSelectionMode( SelectionMode::Single );
     m_pMacroBox->SetHighlightRange(); // select over the whole width
 
     m_pRunButton->SetClickHdl( LINK( this, MacroChooser, ButtonHdl ) );

@@ -276,7 +276,7 @@ ContentListBox_Impl::ContentListBox_Impl(vcl::Window* pParent, WinBits nStyle)
     SetStyle( GetStyle() | WB_HIDESELECTION | WB_HSCROLL );
 
     SetEntryHeight( 16 );
-    SetSelectionMode( SINGLE_SELECTION );
+    SetSelectionMode( SelectionMode::Single );
     SetSpaceBetweenEntries( 2 );
     SetNodeBitmaps( aClosedBookImage, aOpenBookImage );
 

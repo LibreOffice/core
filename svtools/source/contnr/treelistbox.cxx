@@ -338,7 +338,7 @@ SvTreeListBox::SvTreeListBox(vcl::Window* pParent, WinBits nWinStyle) :
     mbContextBmpExpanded(false),
     mbAlternatingRowColors(false),
     mbUpdateAlternatingRows(false),
-    eSelMode(NO_SELECTION),
+    eSelMode(SelectionMode::NONE),
     nMinWidthInChars(0),
     mbCenterAndClipText(false)
 {
@@ -353,7 +353,7 @@ SvTreeListBox::SvTreeListBox(vcl::Window* pParent, WinBits nWinStyle) :
     pModel->InsertView( this );
     pHdlEntry = nullptr;
     pEdCtrl = nullptr;
-    eSelMode = SINGLE_SELECTION;
+    eSelMode = SelectionMode::Single;
     nDragDropMode = DragDropMode::NONE;
     SetType(WINDOW_TREELISTBOX);
 
@@ -370,7 +370,7 @@ SvTreeListBox::SvTreeListBox(vcl::Window* pParent, const ResId& rResId) :
     mbContextBmpExpanded(false),
     mbAlternatingRowColors(false),
     mbUpdateAlternatingRows(false),
-    eSelMode(NO_SELECTION),
+    eSelMode(SelectionMode::NONE),
     nMinWidthInChars(0),
     mbCenterAndClipText(false)
 {
@@ -2372,7 +2372,7 @@ void SvTreeListBox::SelectAll( bool bSelect, bool )
     pImpl->SelAllDestrAnch(
         bSelect,
         true,       // delete anchor,
-        true );     // even when using SINGLE_SELECTION, deselect the cursor
+        true );     // even when using SelectionMode::Single, deselect the cursor
 }
 
 void SvTreeListBox::ModelHasInsertedTree( SvTreeListEntry* pEntry )
@@ -2682,7 +2682,7 @@ void SvTreeListBox::EditedText( const OUString& rStr )
         }
         if( GetSelectionCount() == 0 )
             Select( pEdEntry );
-        if( GetSelectionMode() == MULTIPLE_SELECTION && !GetCurEntry() )
+        if( GetSelectionMode() == SelectionMode::Multiple && !GetCurEntry() )
             SetCurEntry( pEdEntry );
     }
 }

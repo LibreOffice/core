@@ -1879,7 +1879,7 @@ SwTOXEntryTabPage::SwTOXEntryTabPage(vcl::Window* pParent, const SfxItemSet& rAt
     sLevelStr = m_pLevelFT->GetText();
     m_pLevelLB->SetStyle( m_pLevelLB->GetStyle() | WB_HSCROLL );
     m_pLevelLB->SetSpaceBetweenEntries(0);
-    m_pLevelLB->SetSelectionMode( SINGLE_SELECTION );
+    m_pLevelLB->SetSelectionMode( SelectionMode::Single );
     m_pLevelLB->SetHighlightRange();   // select full width
     m_pLevelLB->Show();
 

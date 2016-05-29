@@ -738,7 +738,7 @@ DBTreeListBox* OAppDetailPageHelper::createTree( DBTreeListBox* _pTreeView, cons
     _pTreeView->SetStyle(_pTreeView->GetStyle() | WB_HASLINES | WB_SORT | WB_HASBUTTONS | WB_HSCROLL |WB_HASBUTTONSATROOT | WB_TABSTOP);
     _pTreeView->GetModel()->SetSortMode(SortAscending);
     _pTreeView->EnableCheckButton( nullptr ); // do not show any buttons
-    _pTreeView->SetSelectionMode(MULTIPLE_SELECTION);
+    _pTreeView->SetSelectionMode(SelectionMode::Multiple);
 
     _pTreeView->SetDefaultCollapsedEntryBmp( _rImage );
     _pTreeView->SetDefaultExpandedEntryBmp( _rImage );

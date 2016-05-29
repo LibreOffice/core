@@ -74,7 +74,7 @@ void SdInsertPagesObjsDlg::Reset()
 {
     if( pMedium )
     {
-        m_pLbTree->SetSelectionMode( MULTIPLE_SELECTION );
+        m_pLbTree->SetSelectionMode( SelectionMode::Multiple );
 
         // transfer ownership of Medium
         m_pLbTree->Fill( mpDoc, pMedium, rName );

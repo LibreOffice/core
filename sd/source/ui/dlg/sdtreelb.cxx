@@ -1143,7 +1143,7 @@ void SdPageObjsTLB::StartDrag( sal_Int8 nAction, const Point& rPosPixel)
         // targets.  This prevents moving shapes from one page to another.
 
         // Select all entries and disable them as drop targets.
-        SetSelectionMode(MULTIPLE_SELECTION);
+        SetSelectionMode(SelectionMode::Multiple);
         SetCursor(static_cast<SvTreeListEntry*>(nullptr));
         SelectAll(true, false);
         EnableSelectionAsDropTarget(false);
@@ -1162,7 +1162,7 @@ void SdPageObjsTLB::StartDrag( sal_Int8 nAction, const Point& rPosPixel)
 
         // Set selection back to the entry under the mouse.
         SelectAll(false, false);
-        SetSelectionMode(SINGLE_SELECTION);
+        SetSelectionMode(SelectionMode::Single);
         Select(pEntry);
 
         // We can delete the Navigator from ExecuteDrag (when switching to

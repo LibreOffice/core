@@ -303,7 +303,7 @@ bool OTableWindow::Init()
     {
         m_xListBox = CreateListBox();
         OSL_ENSURE( m_xListBox != nullptr, "OTableWindow::Init() : CreateListBox returned NULL !" );
-        m_xListBox->SetSelectionMode( MULTIPLE_SELECTION );
+        m_xListBox->SetSelectionMode( SelectionMode::Multiple );
     }
 
     // Set the title
