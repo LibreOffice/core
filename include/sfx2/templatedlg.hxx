@@ -53,7 +53,7 @@ public:
 
     void setDocumentModel (const css::uno::Reference<css::frame::XModel> &rModel);
 
-private:
+protected:
 
     void getApplicationSpecificSettings();
 
@@ -137,7 +137,7 @@ private:
     /// Return filter according to the currently selected application filter.
     FILTER_APPLICATION getCurrentApplicationFilter();
 
-private:
+protected:
 
     VclPtr<Edit> mpSearchFilter;
     VclPtr<ListBox> mpCBApp;
@@ -208,6 +208,27 @@ public:
     virtual ~SfxTemplateCategoryDialog();
     virtual void dispose() override;
 };
+
+
+//  class SfxTemplateSelectionDialog -------------------------------------------------------------------
+
+class SFX2_DLLPUBLIC SfxTemplateSelectionDlg : public SfxTemplateManagerDlg
+{
+public:
+    SfxTemplateSelectionDlg(vcl::Window *parent = nullptr);
+
+    virtual ~SfxTemplateSelectionDlg();
+    virtual void dispose() override;
+    virtual short Execute() override;
+
+    inline OUString getTemplatePath() const { return msImpressTemplatePath; };
+
+private:
+    DECL_LINK_TYPED(OpenTemplateHdl, ThumbnailViewItem*, void);
+
+    OUString   msImpressTemplatePath;
+};
+
 
 #endif // INCLUDED_SFX2_INC_TEMPLATEDLG_HXX
 

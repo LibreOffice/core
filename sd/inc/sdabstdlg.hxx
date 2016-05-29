@@ -72,19 +72,6 @@ public:
     virtual bool        IsCustomShow() const = 0;
 };
 
-class AbstractAssistentDlg : public VclAbstractDialog
-{
-public:
-    virtual SfxObjectShellLock GetDocument() = 0;
-    virtual OutputType GetOutputMedium() const = 0;
-    virtual bool IsSummary() const = 0;
-    virtual StartType GetStartType() const = 0;
-    virtual OUString GetDocPath() const = 0;
-    virtual bool GetStartWithFlag() const = 0;
-    virtual bool IsDocEmpty() const = 0;
-    virtual css::uno::Sequence< css::beans::NamedValue > GetPassword() = 0;
-};
-
 class AbstractSdModifyFieldDlg : public VclAbstractDialog
 {
 public:
@@ -170,7 +157,6 @@ public:
     virtual AbstractSdCustomShowDlg*    CreateSdCustomShowDlg(vcl::Window* pWindow, SdDrawDocument& rDrawDoc) = 0;
     virtual SfxAbstractTabDialog*       CreateSdTabCharDialog(vcl::Window* pWindow, const SfxItemSet* pAttr, SfxObjectShell* pDocShell) = 0;
     virtual SfxAbstractTabDialog*       CreateSdTabPageDialog(vcl::Window* pWindow, const SfxItemSet* pAttr, SfxObjectShell* pDocShell, bool bAreaPage = true) = 0;
-    virtual AbstractAssistentDlg*       CreateAssistentDlg(bool bAutoPilot) = 0;
     virtual AbstractSdModifyFieldDlg*   CreateSdModifyFieldDlg(vcl::Window* pWindow, const SvxFieldData* pInField, const SfxItemSet& rSet) = 0;
     virtual AbstractSdSnapLineDlg*      CreateSdSnapLineDlg(vcl::Window* pParent, const SfxItemSet& rInAttrs, ::sd::View* pView) = 0;
     virtual AbstractSdInsertLayerDlg*   CreateSdInsertLayerDlg(vcl::Window* pParent, const SfxItemSet& rInAttrs, bool bDeletable, const OUString& aStr) = 0;

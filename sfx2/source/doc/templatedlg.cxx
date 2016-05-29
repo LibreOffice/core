@@ -1645,5 +1645,47 @@ void SfxTemplateCategoryDialog::HideNewCategoryOption()
     mpNewCategoryEdit->Hide();
 }
 
+// SfxTemplateSelectionDialog -----------------------------------------------------------------
+
+SfxTemplateSelectionDlg::SfxTemplateSelectionDlg(vcl::Window* pParent):
+    SfxTemplateManagerDlg(pParent),
+    msImpressTemplatePath(OUString())
+{
+    mpCBApp->SelectEntryPos(MNI_IMPRESS);
+    mpCBApp->Disable();
+    mpCBFolder->SelectEntryPos(0);
+
+    if(mpLocalView->IsVisible())
+    {
+        mpLocalView->filterItems(ViewFilter_Application(getCurrentApplicationFilter()));
+        mpLocalView->showAllTemplates();
+    }
+
+    mpLocalView->setOpenTemplateHdl(LINK(this,SfxTemplateSelectionDlg, OpenTemplateHdl));
+    mpSearchView->setOpenTemplateHdl(LINK(this,SfxTemplateSelectionDlg, OpenTemplateHdl));
+}
+
+SfxTemplateSelectionDlg::~SfxTemplateSelectionDlg()
+{
+    disposeOnce();
+}
+
+void SfxTemplateSelectionDlg::dispose()
+{
+    SfxTemplateManagerDlg::dispose();
+}
+
+short SfxTemplateSelectionDlg::Execute()
+{
+    return ModalDialog::Execute();
+}
+
+IMPL_LINK_TYPED(SfxTemplateSelectionDlg, OpenTemplateHdl, ThumbnailViewItem*, pItem, void)
+{
+    TemplateViewItem *pViewItem = static_cast<TemplateViewItem*>(pItem);
+    msImpressTemplatePath = pViewItem->getPath();
+
+    EndDialog(RET_OK);
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
