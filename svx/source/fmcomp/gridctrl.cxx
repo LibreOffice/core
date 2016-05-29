@@ -2822,7 +2822,7 @@ void DbGridControl::StartDrag( sal_Int8 /*nAction*/, const Point& rPosPixel )
     }
 }
 
-bool DbGridControl::canCopyCellText(sal_Int32 _nRow, sal_Int16 _nColId)
+bool DbGridControl::canCopyCellText(sal_Int32 _nRow, sal_uInt16 _nColId)
 {
     return  (_nRow >= 0)
         &&  (_nRow < GetRowCount())
@@ -2830,7 +2830,7 @@ bool DbGridControl::canCopyCellText(sal_Int32 _nRow, sal_Int16 _nColId)
         &&  (_nColId <= ColCount());
 }
 
-void DbGridControl::copyCellText(sal_Int32 _nRow, sal_Int16 _nColId)
+void DbGridControl::copyCellText(sal_Int32 _nRow, sal_uInt16 _nColId)
 {
     DBG_ASSERT(canCopyCellText(_nRow, _nColId), "DbGridControl::copyCellText: invalid call!");
     DbGridColumn* pColumn = m_aColumns[ GetModelColumnPos(_nColId) ];

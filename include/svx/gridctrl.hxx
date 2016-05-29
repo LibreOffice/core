@@ -498,9 +498,9 @@ public:
         getContext() const { return m_xContext; }
 
     /// returns <TRUE/> if the text of the given cell can be copied into the clipboard
-    bool    canCopyCellText(sal_Int32 _nRow, sal_Int16 _nColId);
+    bool    canCopyCellText(sal_Int32 _nRow, sal_uInt16 _nColId);
     /// copies the text of the given cell into the clipboard
-    void        copyCellText(sal_Int32 _nRow, sal_Int16 _nColId);
+    void        copyCellText(sal_Int32 _nRow, sal_uInt16 _nColId);
 
     // select in listener handling
     void                        setGridListener( FmGridListener* _pListener ) { m_pGridListener = _pListener; }
