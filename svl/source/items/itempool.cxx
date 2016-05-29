@@ -73,7 +73,7 @@ lcl_CheckSlots2(std::map<sal_uInt16, sal_uInt16> & rSlotMap,
 #define CHECK_SLOTS() \
 do { \
     std::map<sal_uInt16, sal_uInt16> slotmap; \
-    for (SfxItemPool * p = pImp->mpMaster; p; p = p->pImp->mpSecondary) \
+    for (SfxItemPool * p = pImpl->mpMaster; p; p = p->pImpl->mpSecondary) \
     { \
         lcl_CheckSlots2(slotmap, *p, p->pItemInfos); \
     } \
@@ -86,16 +86,16 @@ do { \
 
 void SfxItemPool::AddSfxItemPoolUser(SfxItemPoolUser& rNewUser)
 {
-    pImp->maSfxItemPoolUsers.push_back(&rNewUser);
+    pImpl->maSfxItemPoolUsers.push_back(&rNewUser);
 }
 
 void SfxItemPool::RemoveSfxItemPoolUser(SfxItemPoolUser& rOldUser)
 {
     const std::vector<SfxItemPoolUser*>::iterator aFindResult = ::std::find(
-        pImp->maSfxItemPoolUsers.begin(), pImp->maSfxItemPoolUsers.end(), &rOldUser);
-    if(aFindResult != pImp->maSfxItemPoolUsers.end())
+        pImpl->maSfxItemPoolUsers.begin(), pImpl->maSfxItemPoolUsers.end(), &rOldUser);
+    if(aFindResult != pImpl->maSfxItemPoolUsers.end())
     {
-        pImp->maSfxItemPoolUsers.erase(aFindResult);
+        pImpl->maSfxItemPoolUsers.erase(aFindResult);
     }
 }
 
@@ -103,9 +103,9 @@ const SfxPoolItem* SfxItemPool::GetPoolDefaultItem( sal_uInt16 nWhich ) const
 {
     const SfxPoolItem* pRet;
     if( IsInRange( nWhich ) )
-        pRet = *(pImp->ppPoolDefaults + GetIndex_Impl( nWhich ));
-    else if( pImp->mpSecondary )
-        pRet = pImp->mpSecondary->GetPoolDefaultItem( nWhich );
+        pRet = *(pImpl->ppPoolDefaults + GetIndex_Impl( nWhich ));
+    else if( pImpl->mpSecondary )
+        pRet = pImpl->mpSecondary->GetPoolDefaultItem( nWhich );
     else
     {
         assert(false && "unknown WhichId - cannot get pool default");
@@ -123,7 +123,7 @@ bool SfxItemPool::IsItemPoolable_Impl( sal_uInt16 nPos ) const
 
 bool SfxItemPool::IsItemPoolable( sal_uInt16 nWhich ) const
 {
-    for ( const SfxItemPool *pPool = this; pPool; pPool = pPool->pImp->mpSecondary )
+    for ( const SfxItemPool *pPool = this; pPool; pPool = pPool->pImpl->mpSecondary )
     {
         if ( pPool->IsInRange(nWhich) )
             return pPool->IsItemPoolable_Impl( pPool->GetIndex_Impl(nWhich));
@@ -135,7 +135,7 @@ bool SfxItemPool::IsItemPoolable( sal_uInt16 nWhich ) const
 
 SfxBroadcaster& SfxItemPool::BC()
 {
-    return pImp->aBC;
+    return pImpl->aBC;
 }
 
 
@@ -173,19 +173,19 @@ SfxItemPool::SfxItemPool
     bool                bLoadRefCounts  /* Load RefCounts or set to 1? */
 ) :
     pItemInfos(pInfo),
-    pImp( new SfxItemPool_Impl( this, rName, nStartWhich, nEndWhich ) )
+    pImpl( new SfxItemPool_Impl( this, rName, nStartWhich, nEndWhich ) )
 {
-    pImp->eDefMetric = SFX_MAPUNIT_TWIP;
-    pImp->nVersion = 0;
-    pImp->bStreaming = false;
-    pImp->nLoadingVersion = 0;
-    pImp->nInitRefCount = 1;
-    pImp->nVerStart = pImp->mnStart;
-    pImp->nVerEnd = pImp->mnEnd;
-    pImp->bInSetItem = false;
-    pImp->nStoringStart = nStartWhich;
-    pImp->nStoringEnd = nEndWhich;
-    pImp->mbPersistentRefCounts = bLoadRefCounts;
+    pImpl->eDefMetric = SFX_MAPUNIT_TWIP;
+    pImpl->nVersion = 0;
+    pImpl->bStreaming = false;
+    pImpl->nLoadingVersion = 0;
+    pImpl->nInitRefCount = 1;
+    pImpl->nVerStart = pImpl->mnStart;
+    pImpl->nVerEnd = pImpl->mnEnd;
+    pImpl->bInSetItem = false;
+    pImpl->nStoringStart = nStartWhich;
+    pImpl->nStoringEnd = nEndWhich;
+    pImpl->mbPersistentRefCounts = bLoadRefCounts;
 
     if ( pDefaults )
         SetDefaults(pDefaults);
@@ -207,74 +207,74 @@ SfxItemPool::SfxItemPool
                                                     Take over static Defaults */
 ) :
     pItemInfos(rPool.pItemInfos),
-    pImp( new SfxItemPool_Impl( this, rPool.pImp->aName, rPool.pImp->mnStart, rPool.pImp->mnEnd ) )
+    pImpl( new SfxItemPool_Impl( this, rPool.pImpl->aName, rPool.pImpl->mnStart, rPool.pImpl->mnEnd ) )
 {
-    pImp->eDefMetric = rPool.pImp->eDefMetric;
-    pImp->nVersion = rPool.pImp->nVersion;
-    pImp->bStreaming = false;
-    pImp->nLoadingVersion = 0;
-    pImp->nInitRefCount = 1;
-    pImp->nVerStart = rPool.pImp->nVerStart;
-    pImp->nVerEnd = rPool.pImp->nVerEnd;
-    pImp->bInSetItem = false;
-    pImp->nStoringStart = pImp->mnStart;
-    pImp->nStoringEnd = pImp->mnEnd;
-    pImp->mbPersistentRefCounts = rPool.pImp->mbPersistentRefCounts;
+    pImpl->eDefMetric = rPool.pImpl->eDefMetric;
+    pImpl->nVersion = rPool.pImpl->nVersion;
+    pImpl->bStreaming = false;
+    pImpl->nLoadingVersion = 0;
+    pImpl->nInitRefCount = 1;
+    pImpl->nVerStart = rPool.pImpl->nVerStart;
+    pImpl->nVerEnd = rPool.pImpl->nVerEnd;
+    pImpl->bInSetItem = false;
+    pImpl->nStoringStart = pImpl->mnStart;
+    pImpl->nStoringEnd = pImpl->mnEnd;
+    pImpl->mbPersistentRefCounts = rPool.pImpl->mbPersistentRefCounts;
 
     // Take over static Defaults
     if ( bCloneStaticDefaults )
     {
-        SfxPoolItem **ppDefaults = new SfxPoolItem*[pImp->mnEnd-pImp->mnStart+1];
-        for ( sal_uInt16 n = 0; n <= pImp->mnEnd - pImp->mnStart; ++n )
+        SfxPoolItem **ppDefaults = new SfxPoolItem*[pImpl->mnEnd-pImpl->mnStart+1];
+        for ( sal_uInt16 n = 0; n <= pImpl->mnEnd - pImpl->mnStart; ++n )
         {
-            (*( ppDefaults + n )) = (*( rPool.pImp->ppStaticDefaults + n ))->Clone(this);
+            (*( ppDefaults + n )) = (*( rPool.pImpl->ppStaticDefaults + n ))->Clone(this);
             (*( ppDefaults + n ))->SetKind( SFX_ITEMS_STATICDEFAULT );
         }
 
         SetDefaults( ppDefaults );
     }
     else
-        SetDefaults( rPool.pImp->ppStaticDefaults );
+        SetDefaults( rPool.pImpl->ppStaticDefaults );
 
     // Copy Pool Defaults
-    for ( sal_uInt16 n = 0; n <= pImp->mnEnd - pImp->mnStart; ++n )
-        if ( (*( rPool.pImp->ppPoolDefaults + n )) )
+    for ( sal_uInt16 n = 0; n <= pImpl->mnEnd - pImpl->mnStart; ++n )
+        if ( (*( rPool.pImpl->ppPoolDefaults + n )) )
         {
-            (*( pImp->ppPoolDefaults + n )) = (*( rPool.pImp->ppPoolDefaults + n ))->Clone(this);
-            (*( pImp->ppPoolDefaults + n ))->SetKind( SFX_ITEMS_POOLDEFAULT );
+            (*( pImpl->ppPoolDefaults + n )) = (*( rPool.pImpl->ppPoolDefaults + n ))->Clone(this);
+            (*( pImpl->ppPoolDefaults + n ))->SetKind( SFX_ITEMS_POOLDEFAULT );
         }
 
     // Copy Version map
-    for (std::shared_ptr<SfxPoolVersion_Impl>& pOld : rPool.pImp->aVersions)
+    for (std::shared_ptr<SfxPoolVersion_Impl>& pOld : rPool.pImpl->aVersions)
     {
         SfxPoolVersion_ImplPtr pNew = std::make_shared<SfxPoolVersion_Impl>( *pOld );
-        pImp->aVersions.push_back( pNew );
+        pImpl->aVersions.push_back( pNew );
     }
 
     // Repair linkage
-    if ( rPool.pImp->mpSecondary )
-        SetSecondaryPool( rPool.pImp->mpSecondary->Clone() );
+    if ( rPool.pImpl->mpSecondary )
+        SetSecondaryPool( rPool.pImpl->mpSecondary->Clone() );
 }
 
 
 void SfxItemPool::SetDefaults( SfxPoolItem **pDefaults )
 {
     DBG_ASSERT( pDefaults, "first we ask for it, and then we don't give back..." );
-    DBG_ASSERT( !pImp->ppStaticDefaults, "already have Defaults" );
+    DBG_ASSERT( !pImpl->ppStaticDefaults, "already have Defaults" );
 
-    pImp->ppStaticDefaults = pDefaults;
+    pImpl->ppStaticDefaults = pDefaults;
     //! if ( (*ppStaticDefaults)->GetKind() != SFX_ITEMS_STATICDEFAULT )
     //! FIXME: Probably doesn't work with SetItems at the end
     {
-        DBG_ASSERT( (*pImp->ppStaticDefaults)->GetRefCount() == 0 ||
-                    IsDefaultItem( (*pImp->ppStaticDefaults) ),
+        DBG_ASSERT( (*pImpl->ppStaticDefaults)->GetRefCount() == 0 ||
+                    IsDefaultItem( (*pImpl->ppStaticDefaults) ),
                     "these are not static" );
-        for ( sal_uInt16 n = 0; n <= pImp->mnEnd - pImp->mnStart; ++n )
+        for ( sal_uInt16 n = 0; n <= pImpl->mnEnd - pImpl->mnStart; ++n )
         {
-            assert(((*(pImp->ppStaticDefaults + n))->Which() == n + pImp->mnStart)
+            assert(((*(pImpl->ppStaticDefaults + n))->Which() == n + pImpl->mnStart)
                         && "static defaults not sorted" );
-            (*( pImp->ppStaticDefaults + n ))->SetKind( SFX_ITEMS_STATICDEFAULT );
-            DBG_ASSERT( !(pImp->maPoolItems[n]), "defaults with setitems with items?!" );
+            (*( pImpl->ppStaticDefaults + n ))->SetKind( SFX_ITEMS_STATICDEFAULT );
+            DBG_ASSERT( !(pImpl->maPoolItems[n]), "defaults with setitems with items?!" );
         }
     }
 }
@@ -298,12 +298,12 @@ void SfxItemPool::ReleaseDefaults
 
 
 {
-    DBG_ASSERT( pImp->ppStaticDefaults, "requirements not met" );
-    ReleaseDefaults( pImp->ppStaticDefaults, pImp->mnEnd - pImp->mnStart + 1, bDelete );
+    DBG_ASSERT( pImpl->ppStaticDefaults, "requirements not met" );
+    ReleaseDefaults( pImpl->ppStaticDefaults, pImpl->mnEnd - pImpl->mnStart + 1, bDelete );
 
     // ppStaticDefaults points to deleted memory if bDelete == true.
     if ( bDelete )
-        pImp->ppStaticDefaults = nullptr;
+        pImpl->ppStaticDefaults = nullptr;
 }
 
 
@@ -346,21 +346,19 @@ void SfxItemPool::ReleaseDefaults
 
 SfxItemPool::~SfxItemPool()
 {
-    if ( !pImp->maPoolItems.empty() && pImp->ppPoolDefaults )
+    if ( !pImpl->maPoolItems.empty() && pImpl->ppPoolDefaults )
         Delete();
 
-    if (pImp->mpMaster != nullptr && pImp->mpMaster != this)
+    if (pImpl->mpMaster != nullptr && pImpl->mpMaster != this)
     {
         // This condition indicates an error.
-        // A pImp->mpMaster->SetSecondaryPool(...) call should have been made
+        // A pImpl->mpMaster->SetSecondaryPool(...) call should have been made
         // earlier to prevent this. At this point we can only try to
         // prevent a crash later on.
-        DBG_ASSERT( pImp->mpMaster == this, "destroying active Secondary-Pool" );
-        if (pImp->mpMaster->pImp->mpSecondary == this)
-            pImp->mpMaster->pImp->mpSecondary = nullptr;
+        DBG_ASSERT( pImpl->mpMaster == this, "destroying active Secondary-Pool" );
+        if (pImpl->mpMaster->pImpl->mpSecondary == this)
+            pImpl->mpMaster->pImpl->mpSecondary = nullptr;
     }
-
-    delete pImp;
 }
 
 void SfxItemPool::Free(SfxItemPool* pPool)
@@ -368,7 +366,7 @@ void SfxItemPool::Free(SfxItemPool* pPool)
     if(pPool)
     {
         // tell all the registered SfxItemPoolUsers that the pool is in destruction
-        std::vector<SfxItemPoolUser*> aListCopy(pPool->pImp->maSfxItemPoolUsers.begin(), pPool->pImp->maSfxItemPoolUsers.end());
+        std::vector<SfxItemPoolUser*> aListCopy(pPool->pImpl->maSfxItemPoolUsers.begin(), pPool->pImpl->maSfxItemPoolUsers.end());
         for(std::vector<SfxItemPoolUser*>::const_iterator aIterator = aListCopy.begin(); aIterator != aListCopy.end(); ++aIterator)
         {
             SfxItemPoolUser* pSfxItemPoolUser = *aIterator;
@@ -378,7 +376,7 @@ void SfxItemPool::Free(SfxItemPool* pPool)
 
         // Clear the vector. This means that user do not need to call RemoveSfxItemPoolUser()
         // when they get called from ObjectInDestruction().
-        pPool->pImp->maSfxItemPoolUsers.clear();
+        pPool->pImpl->maSfxItemPoolUsers.clear();
 
         // delete pool
         delete pPool;
@@ -389,25 +387,25 @@ void SfxItemPool::Free(SfxItemPool* pPool)
 void SfxItemPool::SetSecondaryPool( SfxItemPool *pPool )
 {
     // Reset Master in attached Pools
-    if ( pImp->mpSecondary )
+    if ( pImpl->mpSecondary )
     {
 #ifdef DBG_UTIL
-        if (pImp->ppStaticDefaults != nullptr && !pImp->maPoolItems.empty()
-            && !pImp->mpSecondary->pImp->maPoolItems.empty())
+        if (pImpl->ppStaticDefaults != nullptr && !pImpl->maPoolItems.empty()
+            && !pImpl->mpSecondary->pImpl->maPoolItems.empty())
             // Delete() did not yet run?
         {
                 // Does the Master have SetItems?
             bool bHasSetItems = false;
-            for ( sal_uInt16 i = 0; !bHasSetItems && i < pImp->mnEnd - pImp->mnStart; ++i )
-                bHasSetItems = dynamic_cast<const SfxSetItem *>(pImp->ppStaticDefaults[i]) != nullptr;
+            for ( sal_uInt16 i = 0; !bHasSetItems && i < pImpl->mnEnd - pImpl->mnStart; ++i )
+                bHasSetItems = dynamic_cast<const SfxSetItem *>(pImpl->ppStaticDefaults[i]) != nullptr;
 
             // Detached Pools must be empty
             bool bOK = bHasSetItems;
             for ( sal_uInt16 n = 0;
-                  bOK && n <= pImp->mpSecondary->pImp->mnEnd - pImp->mpSecondary->pImp->mnStart;
+                  bOK && n <= pImpl->mpSecondary->pImpl->mnEnd - pImpl->mpSecondary->pImpl->mnStart;
                   ++n )
             {
-                SfxPoolItemArray_Impl* pItemArr = pImp->mpSecondary->pImp->maPoolItems[n];
+                SfxPoolItemArray_Impl* pItemArr = pImpl->mpSecondary->pImpl->maPoolItems[n];
                 if ( pItemArr )
                 {
                     SfxPoolItemArrayBase_Impl::const_iterator ppHtArr =   pItemArr->begin();
@@ -423,19 +421,19 @@ void SfxItemPool::SetSecondaryPool( SfxItemPool *pPool )
         }
 #endif
 
-        pImp->mpSecondary->pImp->mpMaster = pImp->mpSecondary;
-        for ( SfxItemPool *p = pImp->mpSecondary->pImp->mpSecondary; p; p = p->pImp->mpSecondary )
-            p->pImp->mpMaster = pImp->mpSecondary;
+        pImpl->mpSecondary->pImpl->mpMaster = pImpl->mpSecondary;
+        for ( SfxItemPool *p = pImpl->mpSecondary->pImpl->mpSecondary; p; p = p->pImpl->mpSecondary )
+            p->pImpl->mpMaster = pImpl->mpSecondary;
     }
 
     // Set Master of new Secondary Pools
-    DBG_ASSERT( !pPool || pPool->pImp->mpMaster == pPool, "Secondary is present in two Pools" );
-    SfxItemPool *pNewMaster = GetMasterPool() ? pImp->mpMaster : this;
-    for ( SfxItemPool *p = pPool; p; p = p->pImp->mpSecondary )
-        p->pImp->mpMaster = pNewMaster;
+    DBG_ASSERT( !pPool || pPool->pImpl->mpMaster == pPool, "Secondary is present in two Pools" );
+    SfxItemPool *pNewMaster = GetMasterPool() ? pImpl->mpMaster : this;
+    for ( SfxItemPool *p = pPool; p; p = p->pImpl->mpSecondary )
+        p->pImpl->mpMaster = pNewMaster;
 
     // Remember new Secondary Pool
-    pImp->mpSecondary = pPool;
+    pImpl->mpSecondary = pPool;
 
     CHECK_SLOTS();
 }
@@ -449,18 +447,18 @@ void SfxItemPool::SetItemInfos(SfxItemInfo const*const pInfo)
 
 SfxMapUnit SfxItemPool::GetMetric( sal_uInt16 ) const
 {
-    return pImp->eDefMetric;
+    return pImpl->eDefMetric;
 }
 
 
 void SfxItemPool::SetDefaultMetric( SfxMapUnit eNewMetric )
 {
-    pImp->eDefMetric = eNewMetric;
+    pImpl->eDefMetric = eNewMetric;
 }
 
 const OUString& SfxItemPool::GetName() const
 {
-    return pImp->aName;
+    return pImpl->aName;
 }
 
 
@@ -487,21 +485,21 @@ SfxItemPool* SfxItemPool::Clone() const
 void SfxItemPool::Delete()
 {
     // Already deleted?
-    if ( pImp->maPoolItems.empty() || !pImp->ppPoolDefaults )
+    if ( pImpl->maPoolItems.empty() || !pImpl->ppPoolDefaults )
         return;
 
     // Inform e.g. running Requests
-    pImp->aBC.Broadcast( SfxSimpleHint( SFX_HINT_DYING ) );
+    pImpl->aBC.Broadcast( SfxSimpleHint( SFX_HINT_DYING ) );
 
     // Iterate through twice: first for the SetItems.
     // We separate this into two loops (for clarity's sake)
-    std::vector<SfxPoolItemArray_Impl*>::iterator itrItemArr = pImp->maPoolItems.begin();
-    SfxPoolItem** ppDefaultItem = pImp->ppPoolDefaults;
-    SfxPoolItem** ppStaticDefaultItem = pImp->ppStaticDefaults;
+    std::vector<SfxPoolItemArray_Impl*>::iterator itrItemArr = pImpl->maPoolItems.begin();
+    SfxPoolItem** ppDefaultItem = pImpl->ppPoolDefaults;
+    SfxPoolItem** ppStaticDefaultItem = pImpl->ppStaticDefaults;
     sal_uInt16 nArrCnt;
 
     // Collect the SetItems first
-    if (pImp->ppStaticDefaults != nullptr) {
+    if (pImpl->ppStaticDefaults != nullptr) {
         for ( nArrCnt = GetSize_Impl();
               nArrCnt;
               --nArrCnt, ++itrItemArr, ++ppDefaultItem, ++ppStaticDefaultItem )
@@ -535,8 +533,8 @@ void SfxItemPool::Delete()
         }
     }
 
-    itrItemArr = pImp->maPoolItems.begin();
-    ppDefaultItem = pImp->ppPoolDefaults;
+    itrItemArr = pImpl->maPoolItems.begin();
+    ppDefaultItem = pImpl->ppPoolDefaults;
 
     // Now for the easy Items
     for ( nArrCnt = GetSize_Impl();
@@ -565,7 +563,7 @@ void SfxItemPool::Delete()
         }
     }
 
-    pImp->DeleteItems();
+    pImpl->DeleteItems();
 }
 
 
@@ -574,7 +572,7 @@ void SfxItemPool::SetPoolDefaultItem(const SfxPoolItem &rItem)
     if ( IsInRange(rItem.Which()) )
     {
         SfxPoolItem **ppOldDefault =
-            pImp->ppPoolDefaults + GetIndex_Impl(rItem.Which());
+            pImpl->ppPoolDefaults + GetIndex_Impl(rItem.Which());
         SfxPoolItem *pNewDefault = rItem.Clone(this);
         pNewDefault->SetKind(SFX_ITEMS_POOLDEFAULT);
         if ( *ppOldDefault )
@@ -584,8 +582,8 @@ void SfxItemPool::SetPoolDefaultItem(const SfxPoolItem &rItem)
         }
         *ppOldDefault = pNewDefault;
     }
-    else if ( pImp->mpSecondary )
-        pImp->mpSecondary->SetPoolDefaultItem(rItem);
+    else if ( pImpl->mpSecondary )
+        pImpl->mpSecondary->SetPoolDefaultItem(rItem);
     else
     {
         assert(false && "unknown WhichId - cannot set pool default");
@@ -601,15 +599,15 @@ void SfxItemPool::ResetPoolDefaultItem( sal_uInt16 nWhichId )
     if ( IsInRange(nWhichId) )
     {
         SfxPoolItem **ppOldDefault =
-            pImp->ppPoolDefaults + GetIndex_Impl( nWhichId );
+            pImpl->ppPoolDefaults + GetIndex_Impl( nWhichId );
         if ( *ppOldDefault )
         {
             (*ppOldDefault)->SetRefCount(0);
             DELETEZ( *ppOldDefault );
         }
     }
-    else if ( pImp->mpSecondary )
-        pImp->mpSecondary->ResetPoolDefaultItem(nWhichId);
+    else if ( pImpl->mpSecondary )
+        pImpl->mpSecondary->ResetPoolDefaultItem(nWhichId);
     else
     {
         assert(false && "unknown WhichId - cannot reset pool default");
@@ -626,8 +624,8 @@ const SfxPoolItem& SfxItemPool::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich
     bool bSID = nWhich > SFX_WHICH_MAX;
     if ( !bSID && !IsInRange(nWhich) )
     {
-        if ( pImp->mpSecondary )
-            return pImp->mpSecondary->Put( rItem, nWhich );
+        if ( pImpl->mpSecondary )
+            return pImpl->mpSecondary->Put( rItem, nWhich );
         OSL_FAIL( "unknown WhichId - cannot put item" );
     }
 
@@ -638,20 +636,20 @@ const SfxPoolItem& SfxItemPool::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich
         assert((USHRT_MAX != nIndex || rItem.Which() != nWhich ||
             !IsDefaultItem(&rItem) || rItem.GetKind() == SFX_ITEMS_DELETEONIDLE)
                 && "a non Pool Item is Default?!");
-        SfxPoolItem *pPoolItem = rItem.Clone(pImp->mpMaster);
+        SfxPoolItem *pPoolItem = rItem.Clone(pImpl->mpMaster);
         pPoolItem->SetWhich(nWhich);
         AddRef( *pPoolItem );
         return *pPoolItem;
     }
 
-    assert(!pImp->ppStaticDefaults ||
+    assert(!pImpl->ppStaticDefaults ||
             typeid(rItem) == typeid(GetDefaultItem(nWhich)));
 
-    SfxPoolItemArray_Impl* pItemArr = pImp->maPoolItems[nIndex];
+    SfxPoolItemArray_Impl* pItemArr = pImpl->maPoolItems[nIndex];
     if (!pItemArr)
     {
-        pImp->maPoolItems[nIndex] = new SfxPoolItemArray_Impl;
-        pItemArr = pImp->maPoolItems[nIndex];
+        pImpl->maPoolItems[nIndex] = new SfxPoolItemArray_Impl;
+        pItemArr = pImpl->maPoolItems[nIndex];
     }
 
     SfxPoolItemArrayBase_Impl::iterator ppFree;
@@ -714,7 +712,7 @@ const SfxPoolItem& SfxItemPool::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich
     }
 
     // 3. not found, so clone to insert into the pointer array.
-    SfxPoolItem* pNewItem = rItem.Clone(pImp->mpMaster);
+    SfxPoolItem* pNewItem = rItem.Clone(pImpl->mpMaster);
     pNewItem->SetWhich(nWhich);
     assert(typeid(rItem) == typeid(*pNewItem) && "SfxItemPool::Put(): unequal types, no Clone() override?");
     if (dynamic_cast<const SfxSetItem*>(&rItem) == nullptr)
@@ -724,7 +722,7 @@ const SfxPoolItem& SfxItemPool::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich
         assert((!IsItemPoolable(*pNewItem) || *pNewItem == rItem)
             && "SfxItemPool::Put(): unequal items: no operator== override?");
     }
-    AddRef( *pNewItem, pImp->nInitRefCount );
+    AddRef( *pNewItem, pImpl->nInitRefCount );
 
     // 4. finally insert into the pointer array
     assert( pItemArr->maPtrToIndex.find(pNewItem) == pItemArr->maPtrToIndex.end() );
@@ -772,9 +770,9 @@ void SfxItemPool::Remove( const SfxPoolItem& rItem )
     bool bSID = nWhich > SFX_WHICH_MAX;
     if ( !bSID && !IsInRange(nWhich) )
     {
-        if ( pImp->mpSecondary )
+        if ( pImpl->mpSecondary )
         {
-            pImp->mpSecondary->Remove( rItem );
+            pImpl->mpSecondary->Remove( rItem );
             return;
         }
         OSL_FAIL( "unknown WhichId - cannot remove item" );
@@ -798,11 +796,11 @@ void SfxItemPool::Remove( const SfxPoolItem& rItem )
 
     // Static Defaults are just there
     if ( rItem.GetKind() == SFX_ITEMS_STATICDEFAULT &&
-         &rItem == *( pImp->ppStaticDefaults + GetIndex_Impl(nWhich) ) )
+         &rItem == *( pImpl->ppStaticDefaults + GetIndex_Impl(nWhich) ) )
         return;
 
     // Find Item in own Pool
-    SfxPoolItemArray_Impl* pItemArr = pImp->maPoolItems[nIndex];
+    SfxPoolItemArray_Impl* pItemArr = pImpl->maPoolItems[nIndex];
     assert(pItemArr && "removing Item not in Pool");
 
     SfxPoolItemArray_Impl::PoolItemPtrToIndexMap::const_iterator it;
@@ -846,27 +844,27 @@ const SfxPoolItem& SfxItemPool::GetDefaultItem( sal_uInt16 nWhich ) const
 {
     if ( !IsInRange(nWhich) )
     {
-        if ( pImp->mpSecondary )
-            return pImp->mpSecondary->GetDefaultItem( nWhich );
+        if ( pImpl->mpSecondary )
+            return pImpl->mpSecondary->GetDefaultItem( nWhich );
         assert(!"unknown which - don't ask me for defaults");
     }
 
-    DBG_ASSERT( pImp->ppStaticDefaults, "no defaults known - don't ask me for defaults" );
+    DBG_ASSERT( pImpl->ppStaticDefaults, "no defaults known - don't ask me for defaults" );
     sal_uInt16 nPos = GetIndex_Impl(nWhich);
-    SfxPoolItem *pDefault = *(pImp->ppPoolDefaults + nPos);
+    SfxPoolItem *pDefault = *(pImpl->ppPoolDefaults + nPos);
     if ( pDefault )
         return *pDefault;
-    return **(pImp->ppStaticDefaults + nPos);
+    return **(pImpl->ppStaticDefaults + nPos);
 }
 
 SfxItemPool* SfxItemPool::GetSecondaryPool() const
 {
-    return pImp->mpSecondary;
+    return pImpl->mpSecondary;
 }
 
 SfxItemPool* SfxItemPool::GetMasterPool() const
 {
-    return pImp->mpMaster;
+    return pImpl->mpMaster;
 }
 
 /**
@@ -878,33 +876,33 @@ SfxItemPool* SfxItemPool::GetMasterPool() const
  */
 void SfxItemPool::FreezeIdRanges()
 {
-    FillItemIdRanges_Impl( pImp->mpPoolRanges );
+    FillItemIdRanges_Impl( pImpl->mpPoolRanges );
 }
 
 
 void SfxItemPool::FillItemIdRanges_Impl( sal_uInt16*& pWhichRanges ) const
 {
-    DBG_ASSERT( !pImp->mpPoolRanges, "GetFrozenRanges() would be faster!" );
+    DBG_ASSERT( !pImpl->mpPoolRanges, "GetFrozenRanges() would be faster!" );
 
     const SfxItemPool *pPool;
     sal_uInt16 nLevel = 0;
-    for( pPool = this; pPool; pPool = pPool->pImp->mpSecondary )
+    for( pPool = this; pPool; pPool = pPool->pImpl->mpSecondary )
         ++nLevel;
 
     pWhichRanges = new sal_uInt16[ 2*nLevel + 1 ];
 
     nLevel = 0;
-    for( pPool = this; pPool; pPool = pPool->pImp->mpSecondary )
+    for( pPool = this; pPool; pPool = pPool->pImpl->mpSecondary )
     {
-        *(pWhichRanges+(nLevel++)) = pPool->pImp->mnStart;
-        *(pWhichRanges+(nLevel++)) = pPool->pImp->mnEnd;
+        *(pWhichRanges+(nLevel++)) = pPool->pImpl->mnStart;
+        *(pWhichRanges+(nLevel++)) = pPool->pImpl->mnEnd;
         *(pWhichRanges+nLevel) = 0;
     }
 }
 
 const sal_uInt16* SfxItemPool::GetFrozenIdRanges() const
 {
-    return pImp->mpPoolRanges;
+    return pImpl->mpPoolRanges;
 }
 
 const SfxPoolItem *SfxItemPool::GetItem2Default(sal_uInt16 nWhich) const
@@ -916,17 +914,17 @@ const SfxPoolItem *SfxItemPool::GetItem2(sal_uInt16 nWhich, sal_uInt32 nOfst) co
 {
     if ( !IsInRange(nWhich) )
     {
-        if ( pImp->mpSecondary )
-            return pImp->mpSecondary->GetItem2( nWhich, nOfst );
+        if ( pImpl->mpSecondary )
+            return pImpl->mpSecondary->GetItem2( nWhich, nOfst );
         assert(false && "unknown WhichId - cannot resolve surrogate");
         return nullptr;
     }
 
     // default attribute?
     if ( nOfst == SFX_ITEMS_DEFAULT )
-        return *(pImp->ppStaticDefaults + GetIndex_Impl(nWhich));
+        return *(pImpl->ppStaticDefaults + GetIndex_Impl(nWhich));
 
-    SfxPoolItemArray_Impl* pItemArr = pImp->maPoolItems[GetIndex_Impl(nWhich)];
+    SfxPoolItemArray_Impl* pItemArr = pImpl->maPoolItems[GetIndex_Impl(nWhich)];
     if( pItemArr && nOfst < pItemArr->size() )
         return (*pItemArr)[nOfst];
 
@@ -937,13 +935,13 @@ sal_uInt32 SfxItemPool::GetItemCount2(sal_uInt16 nWhich) const
 {
     if ( !IsInRange(nWhich) )
     {
-        if ( pImp->mpSecondary )
-            return pImp->mpSecondary->GetItemCount2( nWhich );
+        if ( pImpl->mpSecondary )
+            return pImpl->mpSecondary->GetItemCount2( nWhich );
         assert(false && "unknown WhichId - cannot resolve surrogate");
         return 0;
     }
 
-    SfxPoolItemArray_Impl* pItemArr = pImp->maPoolItems[GetIndex_Impl(nWhich)];
+    SfxPoolItemArray_Impl* pItemArr = pImpl->maPoolItems[GetIndex_Impl(nWhich)];
     if  ( pItemArr )
         return pItemArr->size();
     return 0;
@@ -955,12 +953,12 @@ sal_uInt16 SfxItemPool::GetWhich( sal_uInt16 nSlotId, bool bDeep ) const
     if ( !IsSlot(nSlotId) )
         return nSlotId;
 
-    sal_uInt16 nCount = pImp->mnEnd - pImp->mnStart + 1;
+    sal_uInt16 nCount = pImpl->mnEnd - pImpl->mnStart + 1;
     for ( sal_uInt16 nOfs = 0; nOfs < nCount; ++nOfs )
         if ( pItemInfos[nOfs]._nSID == nSlotId )
-            return nOfs + pImp->mnStart;
-    if ( pImp->mpSecondary && bDeep )
-        return pImp->mpSecondary->GetWhich(nSlotId);
+            return nOfs + pImpl->mnStart;
+    if ( pImpl->mpSecondary && bDeep )
+        return pImpl->mpSecondary->GetWhich(nSlotId);
     return nSlotId;
 }
 
@@ -972,13 +970,13 @@ sal_uInt16 SfxItemPool::GetSlotId( sal_uInt16 nWhich, bool bDeep ) const
 
     if ( !IsInRange( nWhich ) )
     {
-        if ( pImp->mpSecondary && bDeep )
-            return pImp->mpSecondary->GetSlotId(nWhich);
+        if ( pImpl->mpSecondary && bDeep )
+            return pImpl->mpSecondary->GetSlotId(nWhich);
         assert(false && "unknown WhichId - cannot get slot-id");
         return 0;
     }
 
-    sal_uInt16 nSID = pItemInfos[nWhich - pImp->mnStart]._nSID;
+    sal_uInt16 nSID = pItemInfos[nWhich - pImpl->mnStart]._nSID;
     return nSID ? nSID : nWhich;
 }
 
@@ -988,12 +986,12 @@ sal_uInt16 SfxItemPool::GetTrueWhich( sal_uInt16 nSlotId, bool bDeep ) const
     if ( !IsSlot(nSlotId) )
         return 0;
 
-    sal_uInt16 nCount = pImp->mnEnd - pImp->mnStart + 1;
+    sal_uInt16 nCount = pImpl->mnEnd - pImpl->mnStart + 1;
     for ( sal_uInt16 nOfs = 0; nOfs < nCount; ++nOfs )
         if ( pItemInfos[nOfs]._nSID == nSlotId )
-            return nOfs + pImp->mnStart;
-    if ( pImp->mpSecondary && bDeep )
-        return pImp->mpSecondary->GetTrueWhich(nSlotId);
+            return nOfs + pImpl->mnStart;
+    if ( pImpl->mpSecondary && bDeep )
+        return pImpl->mpSecondary->GetTrueWhich(nSlotId);
     return 0;
 }
 
@@ -1005,12 +1003,12 @@ sal_uInt16 SfxItemPool::GetTrueSlotId( sal_uInt16 nWhich ) const
 
     if ( !IsInRange( nWhich ) )
     {
-        if ( pImp->mpSecondary )
-            return pImp->mpSecondary->GetTrueSlotId(nWhich);
+        if ( pImpl->mpSecondary )
+            return pImpl->mpSecondary->GetTrueSlotId(nWhich);
         assert(false && "unknown WhichId - cannot get slot-id");
         return 0;
     }
-    return pItemInfos[nWhich - pImp->mnStart]._nSID;
+    return pItemInfos[nWhich - pImpl->mnStart]._nSID;
 }
 
 /**
@@ -1021,10 +1019,10 @@ sal_uInt16 SfxItemPool::GetTrueSlotId( sal_uInt16 nWhich ) const
  */
 void SfxItemPool::SetFileFormatVersion( sal_uInt16 nFileFormatVersion )
 {
-    DBG_ASSERT( this == pImp->mpMaster,
+    DBG_ASSERT( this == pImpl->mpMaster,
                 "SfxItemPool::SetFileFormatVersion() but not a master pool" );
-    for ( SfxItemPool *pPool = this; pPool; pPool = pPool->pImp->mpSecondary )
-        pPool->pImp->mnFileFormatVersion = nFileFormatVersion;
+    for ( SfxItemPool *pPool = this; pPool; pPool = pPool->pImpl->mpSecondary )
+        pPool->pImpl->mnFileFormatVersion = nFileFormatVersion;
 }
 
 const SfxItemPool* SfxItemPool::pStoringPool_ = nullptr;
