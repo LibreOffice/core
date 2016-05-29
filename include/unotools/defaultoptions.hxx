@@ -22,6 +22,7 @@
 #include <unotools/unotoolsdllapi.h>
 #include <rtl/ustring.hxx>
 #include <unotools/options.hxx>
+#include <memory>
 
 class SvtDefaultOptions_Impl;
 
@@ -29,7 +30,7 @@ class SvtDefaultOptions_Impl;
 class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtDefaultOptions : public utl::detail::Options
 {
 private:
-    SvtDefaultOptions_Impl* pImp;
+    std::unique_ptr<SvtDefaultOptions_Impl> pImpl;
 
 public:
 

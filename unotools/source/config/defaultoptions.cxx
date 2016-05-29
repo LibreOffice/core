@@ -326,7 +326,7 @@ SvtDefaultOptions::SvtDefaultOptions()
         ItemHolder1::holdConfigItem(E_DEFAULTOPTIONS);
     }
     ++nRefCount;
-    pImp = pOptions;
+    pImpl.reset(pOptions);
 }
 
 SvtDefaultOptions::~SvtDefaultOptions()
@@ -343,7 +343,7 @@ SvtDefaultOptions::~SvtDefaultOptions()
 
 OUString SvtDefaultOptions::GetDefaultPath( sal_uInt16 nId ) const
 {
-    return pImp->GetDefaultPath( nId );
+    return pImpl->GetDefaultPath( nId );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
