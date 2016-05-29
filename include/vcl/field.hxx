@@ -366,12 +366,18 @@ public:
 
 class VCL_DLLPUBLIC TimeFormatter : public FormatterBase
 {
+public:
+                            enum class TimeFormat {
+                                Hour12,
+                                Hour24
+                            };
+
 private:
     tools::Time             maLastTime;
     tools::Time             maMin;
     tools::Time             maMax;
     TimeFieldFormat         meFormat;
-    sal_uInt16              mnTimeFormat;
+    TimeFormat              mnTimeFormat;
     bool                    mbDuration;
     bool                    mbEnforceValidValue;
 
@@ -388,11 +394,6 @@ protected:
     SAL_DLLPRIVATE bool     ImplAllowMalformedInput() const;
 
 public:
-
-                            enum TimeFormat {
-                                HOUR_12,
-                                HOUR_24
-                            };
 
     virtual                 ~TimeFormatter();
 

@@ -2199,7 +2199,7 @@ bool TimeFormatter::ImplTimeReformat( const OUString& rStr, OUString& rOutStr )
     else
     {
         rOutStr = ImplGetLocaleDataWrapper().getTime( aTempTime, bSecond, b100Sec );
-        if ( GetTimeFormat() == HOUR_12 )
+        if ( GetTimeFormat() == TimeFormat::Hour12 )
         {
             if ( aTempTime.GetHour() > 12 )
             {
@@ -2299,7 +2299,7 @@ void TimeFormatter::ImplInit()
 {
     meFormat        = TimeFieldFormat::F_NONE;
     mbDuration      = false;
-    mnTimeFormat    = HOUR_24;  // Should become a ExtTimeFieldFormat in next implementation, merge with mbDuration and meFormat
+    mnTimeFormat    = TimeFormat::Hour24;  // Should become a ExtTimeFieldFormat in next implementation, merge with mbDuration and meFormat
 }
 
 TimeFormatter::TimeFormatter() :
@@ -2337,7 +2337,7 @@ void TimeFormatter::SetMax( const tools::Time& rNewMax )
 
 void TimeFormatter::SetTimeFormat( TimeFormatter::TimeFormat eNewFormat )
 {
-    mnTimeFormat = sal::static_int_cast<sal_uInt16>(eNewFormat);
+    mnTimeFormat = eNewFormat;
 }
 
 
@@ -2427,7 +2427,7 @@ void TimeFormatter::ImplSetUserTime( const tools::Time& rNewTime, Selection* pNe
         else
         {
             aStr = ImplGetLocaleDataWrapper().getTime( aNewTime, bSec, b100Sec );
-            if ( GetTimeFormat() == HOUR_12 )
+            if ( GetTimeFormat() == TimeFormat::Hour12 )
             {
                 if ( aNewTime.GetHour() > 12 )
                 {
@@ -2599,28 +2599,28 @@ void TimeField::SetExtFormat( ExtTimeFieldFormat eFormat )
     {
         case EXTTIMEF_24H_SHORT:
         {
-            SetTimeFormat( HOUR_24 );
+            SetTimeFormat( TimeFormat::Hour24 );
             SetDuration( false );
             SetFormat( TimeFieldFormat::F_NONE );
         }
         break;
         case EXTTIMEF_24H_LONG:
         {
-            SetTimeFormat( HOUR_24 );
+            SetTimeFormat( TimeFormat::Hour24 );
             SetDuration( false );
             SetFormat( TimeFieldFormat::F_SEC );
         }
         break;
         case EXTTIMEF_12H_SHORT:
         {
-            SetTimeFormat( HOUR_12 );
+            SetTimeFormat( TimeFormat::Hour12 );
             SetDuration( false );
             SetFormat( TimeFieldFormat::F_NONE );
         }
         break;
         case EXTTIMEF_12H_LONG:
         {
-            SetTimeFormat( HOUR_12 );
+            SetTimeFormat( TimeFormat::Hour12 );
             SetDuration( false );
             SetFormat( TimeFieldFormat::F_SEC );
         }
