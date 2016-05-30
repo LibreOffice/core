@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_e05be052",
+        "filename": "sw/source/core/doc/tblafmt.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 695,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-05-30T12:56:07Z",
+      "side": 1,
+      "message": "Sorry, I didn\u0027t spot this before, again in new code please use SAL_WARN(), OSL_ENSURE() is legacy.",
+      "revId": "c17e066b67d48deea56a77483ca649fb72313190",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
