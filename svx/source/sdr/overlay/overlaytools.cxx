@@ -183,7 +183,7 @@ namespace drawinglayer
                 // add BasePosition
                 aTransform.translate(getBasePosition().getX(), getBasePosition().getY());
 
-                const Primitive2DReference aPrimitive(new BitmapPrimitive2D(getBitmapEx(), aTransform));
+                const Primitive2DReference aPrimitive(new SimpleBitmapPrimitive2D(getBitmapEx(), aTransform));
                 aRetval = Primitive2DContainer { aPrimitive };
             }
 

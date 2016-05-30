@@ -305,7 +305,7 @@ namespace svgio
                         // create content from created bitmap, use calculated unit range size
                         // as transformation to map the picture data correctly
                         aNewTarget.resize(1);
-                        aNewTarget[0] = new drawinglayer::primitive2d::BitmapPrimitive2D(
+                        aNewTarget[0] = new drawinglayer::primitive2d::SimpleBitmapPrimitive2D(
                             aBitmapEx,
                             basegfx::tools::createScaleTranslateB2DHomMatrix(
                                 aViewBox.getRange(),

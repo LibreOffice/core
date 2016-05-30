@@ -30,11 +30,9 @@ namespace drawinglayer
     namespace primitive2d
     {
         BitmapPrimitive2D::BitmapPrimitive2D(
-            const BitmapEx& rBitmapEx,
             const basegfx::B2DHomMatrix& rTransform)
-        :   BasePrimitive2D(),
-            maBitmapEx(rBitmapEx),
-            maTransform(rTransform)
+        :   BasePrimitive2D()
+        ,   maTransform(rTransform)
         {
         }
 
@@ -61,6 +59,13 @@ namespace drawinglayer
         // provide unique ID
         ImplPrimitive2DIDBlock(BitmapPrimitive2D, PRIMITIVE2D_ID_BITMAPPRIMITIVE2D)
 
+        SimpleBitmapPrimitive2D::SimpleBitmapPrimitive2D(
+            const BitmapEx& rBitmapEx,
+            const basegfx::B2DHomMatrix& rTransform)
+        :   BitmapPrimitive2D(rTransform)
+        ,   maBitmapEx(rBitmapEx)
+        {
+        }
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 

@@ -797,7 +797,7 @@ namespace
             aObjectTransform = rProperties.getTransformation() * aObjectTransform;
 
             rTarget.append(
-                new drawinglayer::primitive2d::BitmapPrimitive2D(
+                new drawinglayer::primitive2d::SimpleBitmapPrimitive2D(
                     rBitmapEx,
                     aObjectTransform));
         }

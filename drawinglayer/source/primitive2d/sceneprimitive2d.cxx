@@ -474,7 +474,7 @@ namespace drawinglayer
                         aNew2DTransform *= aInverseOToV;
 
                         // create bitmap primitive and add
-                        const Primitive2DReference xRef(new BitmapPrimitive2D(maOldRenderedBitmap, aNew2DTransform));
+                        const Primitive2DReference xRef(new SimpleBitmapPrimitive2D(maOldRenderedBitmap, aNew2DTransform));
                         aRetval.push_back(xRef);
 
                         // test: Allow to add an outline in the debugger when tests are needed

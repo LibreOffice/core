@@ -54,7 +54,7 @@ namespace drawinglayer
                         aObjectTransform.set(1, 2, getLocalObjectRange().getMinY());
 
                         Primitive2DReference xReference(
-                            new BitmapPrimitive2D(
+                            new SimpleBitmapPrimitive2D(
                                 getBitmapEx(),
                                 aObjectTransform));
 
@@ -153,7 +153,7 @@ namespace drawinglayer
                             aObjectTransform.set(1, 2, aTargetRange.getMinY());
 
                             Primitive2DReference xReference(
-                                new BitmapPrimitive2D(
+                                new SimpleBitmapPrimitive2D(
                                     getBitmapEx(),
                                     aObjectTransform));
                             aRetval = Primitive2DContainer { xReference };

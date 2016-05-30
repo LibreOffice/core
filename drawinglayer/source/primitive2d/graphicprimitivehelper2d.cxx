@@ -39,31 +39,8 @@
 
 namespace
 {
-    struct animationStep
+    sal_uInt32 generateStepTime(const AnimationBitmap& rAnimBitmap)
     {
-        BitmapEx                                maBitmapEx;
-        sal_uInt32                              mnTime;
-    };
-
-    class animatedBitmapExPreparator
-    {
-        ::Animation                             maAnimation;
-        ::std::vector< animationStep >          maSteps;
-
-        sal_uInt32 generateStepTime(sal_uInt32 nIndex) const;
-
-    public:
-        explicit animatedBitmapExPreparator(const Graphic& rGraphic);
-
-        sal_uInt32 count() const { return maSteps.size(); }
-        sal_uInt32 loopCount() const { return (sal_uInt32)maAnimation.GetLoopCount(); }
-        sal_uInt32 stepTime(sal_uInt32 a) const { return maSteps[a].mnTime; }
-        const BitmapEx& stepBitmapEx(sal_uInt32 a) const { return maSteps[a].maBitmapEx; }
-    };
-
-    sal_uInt32 animatedBitmapExPreparator::generateStepTime(sal_uInt32 nIndex) const
-    {
-        const AnimationBitmap& rAnimBitmap = maAnimation.Get(sal_uInt16(nIndex));
         sal_uInt32 nWaitTime(rAnimBitmap.nWait * 10);
 
         // Take care of special value for MultiPage TIFFs. ATM these shall just
@@ -85,103 +62,6 @@ namespace
 
         return nWaitTime;
     }
-
-    animatedBitmapExPreparator::animatedBitmapExPreparator(const Graphic& rGraphic)
-    :   maAnimation(rGraphic.GetAnimation())
-    {
-        OSL_ENSURE(GraphicType::Bitmap == rGraphic.GetType() && rGraphic.IsAnimated(), "animatedBitmapExPreparator: graphic is not animated (!)");
-
-        // #128539# secure access to Animation, looks like there exist animated GIFs out there
-        // with a step count of zero
-        if(maAnimation.Count())
-        {
-            ScopedVclPtrInstance< VirtualDevice > aVirtualDevice(*Application::GetDefaultDevice());
-            ScopedVclPtrInstance< VirtualDevice > aVirtualDeviceMask(*Application::GetDefaultDevice(),
-                                                                     DeviceFormat::BITMASK);
-
-            // Prepare VirtualDevices and their states
-            aVirtualDevice->EnableMapMode(false);
-            aVirtualDeviceMask->EnableMapMode(false);
-            aVirtualDevice->SetOutputSizePixel(maAnimation.GetDisplaySizePixel());
-            aVirtualDeviceMask->SetOutputSizePixel(maAnimation.GetDisplaySizePixel());
-            aVirtualDevice->Erase();
-            aVirtualDeviceMask->Erase();
-
-            for(size_t a(0); a < maAnimation.Count(); a++)
-            {
-                animationStep aNextStep;
-                aNextStep.mnTime = generateStepTime(a);
-
-                // prepare step
-                const AnimationBitmap& rAnimBitmap = maAnimation.Get(sal_uInt16(a));
-
-                switch(rAnimBitmap.eDisposal)
-                {
-                    case Disposal::Not:
-                    {
-                        aVirtualDevice->DrawBitmapEx(rAnimBitmap.aPosPix, rAnimBitmap.aBmpEx);
-                        Bitmap aMask = rAnimBitmap.aBmpEx.GetMask();
-
-                        if(aMask.IsEmpty())
-                        {
-                            const Point aEmpty;
-                            const Rectangle aRect(aEmpty, aVirtualDeviceMask->GetOutputSizePixel());
-                            const Wallpaper aWallpaper(COL_BLACK);
-                            aVirtualDeviceMask->DrawWallpaper(aRect, aWallpaper);
-                        }
-                        else
-                        {
-                            BitmapEx aExpandVisibilityMask = BitmapEx(aMask, aMask);
-                            aVirtualDeviceMask->DrawBitmapEx(rAnimBitmap.aPosPix, aExpandVisibilityMask);
-                        }
-
-                        break;
-                    }
-                    case Disposal::Back:
-                    {
-                        // #i70772# react on no mask, for primitives, too.
-                        const Bitmap aMask(rAnimBitmap.aBmpEx.GetMask());
-                        const Bitmap aContent(rAnimBitmap.aBmpEx.GetBitmap());
-
-                        aVirtualDeviceMask->Erase();
-                        aVirtualDevice->DrawBitmap(rAnimBitmap.aPosPix, aContent);
-
-                        if(aMask.IsEmpty())
-                        {
-                            const Rectangle aRect(rAnimBitmap.aPosPix, aContent.GetSizePixel());
-                            aVirtualDeviceMask->SetFillColor(COL_BLACK);
-                            aVirtualDeviceMask->SetLineColor();
-                            aVirtualDeviceMask->DrawRect(aRect);
-                        }
-                        else
-                        {
-                            aVirtualDeviceMask->DrawBitmap(rAnimBitmap.aPosPix, aMask);
-                        }
-
-                        break;
-                    }
-                    case Disposal::Previous :
-                    {
-                        aVirtualDevice->DrawBitmapEx(rAnimBitmap.aPosPix, rAnimBitmap.aBmpEx);
-                        aVirtualDeviceMask->DrawBitmap(rAnimBitmap.aPosPix, rAnimBitmap.aBmpEx.GetMask());
-                        break;
-                    }
-                }
-
-                // create BitmapEx
-                Bitmap aMainBitmap = aVirtualDevice->GetBitmap(Point(), aVirtualDevice->GetOutputSizePixel());
-#if defined(MACOSX) || defined(IOS)
-                AlphaMask aMaskBitmap( aVirtualDeviceMask->GetBitmap( Point(), aVirtualDeviceMask->GetOutputSizePixel()));
-#else
-                Bitmap aMaskBitmap = aVirtualDeviceMask->GetBitmap( Point(), aVirtualDeviceMask->GetOutputSizePixel());
-#endif
-                aNextStep.maBitmapEx = BitmapEx(aMainBitmap, aMaskBitmap);
-
-                // add to vector
-                maSteps.push_back(aNextStep);
-            }
-        }
-    }
 } // end of anonymous namespace
 
 namespace drawinglayer
@@ -198,24 +78,35 @@ namespace drawinglayer
             {
                 case GraphicType::Bitmap :
                 {
-                    if(rGraphic.IsAnimated())
+                    if (rGraphic.IsAnimated())
                     {
                         // prepare animation data
-                        animatedBitmapExPreparator aData(rGraphic);
+                        ::Animation aAnimation = rGraphic.GetAnimation();
 
-                        if(aData.count())
+                        if (aAnimation.Count())
                         {
                             // create sub-primitives for animated bitmap and the needed animation loop
-                            animation::AnimationEntryLoop aAnimationLoop(aData.loopCount() ? aData.loopCount() : 0xffff);
-                            Primitive2DContainer aBitmapPrimitives(aData.count());
+                            animation::AnimationEntryLoop aAnimationLoop(aAnimation.GetLoopCount() ? aAnimation.GetLoopCount() : 0xffff);
+                            Primitive2DContainer aBitmapPrimitives(aAnimation.Count());
 
-                            for(sal_uInt32 a(0); a < aData.count(); a++)
+                            VclPtrInstance<VirtualDevice> aVirtualDevice(*Application::GetDefaultDevice());
+                            VclPtrInstance<VirtualDevice> aVirtualDeviceMask(*Application::GetDefaultDevice(),
+                                                                             DeviceFormat::BITMASK);
+
+                            // Prepare VirtualDevices mode and size
+                            aVirtualDevice->EnableMapMode(false);
+                            aVirtualDeviceMask->EnableMapMode(false);
+                            aVirtualDevice->SetOutputSizePixel(aAnimation.GetDisplaySizePixel());
+                            aVirtualDeviceMask->SetOutputSizePixel(aAnimation.GetDisplaySizePixel());
+
+                            for (sal_uInt16 a(0); a < aAnimation.Count(); ++a)
                             {
-                                animation::AnimationEntryFixed aTime((double)aData.stepTime(a), (double)a / (double)aData.count());
+                                const AnimationBitmap& rAnimBitmap = aAnimation.Get(a);
+                                sal_uInt32 nStepTime = generateStepTime(rAnimBitmap);
+                                animation::AnimationEntryFixed aTime((double)nStepTime, (double)a / (double)aAnimation.Count());
                                 aAnimationLoop.append(aTime);
-                                aBitmapPrimitives[a] = new BitmapPrimitive2D(
-                                    aData.stepBitmapEx(a),
-                                    rTransform);
+                                aBitmapPrimitives[a] = new AnimationFrameBitmapPrimitive2D(rAnimBitmap,
+                                    aVirtualDevice, aVirtualDeviceMask, rTransform, a == 0);
                             }
 
                             // prepare animation list
@@ -260,7 +151,7 @@ namespace drawinglayer
                     else
                     {
                         aRetval.resize(1);
-                        aRetval[0] = new BitmapPrimitive2D(
+                        aRetval[0] = new SimpleBitmapPrimitive2D(
                             rGraphic.GetBitmapEx(),
                             rTransform);
                     }
@@ -433,6 +324,92 @@ namespace drawinglayer
             return aRetval;
         }
 
+        AnimationFrameBitmapPrimitive2D::AnimationFrameBitmapPrimitive2D(
+            const AnimationBitmap& rAnimBitmap,
+            const VclPtr<VirtualDevice> rVirtualDevice,
+            const VclPtr<VirtualDevice> rVirtualDeviceMask,
+            const basegfx::B2DHomMatrix& rTransform,
+            bool bFirst)
+        : BitmapPrimitive2D(rTransform)
+        , maVirtualDevice(rVirtualDevice)
+        , maVirtualDeviceMask(rVirtualDeviceMask)
+        , maAnimBitmap(rAnimBitmap)
+        , mbFirst(bFirst)
+        {
+        }
+
+        BitmapEx AnimationFrameBitmapPrimitive2D::getBitmapEx() const
+        {
+            if (mbFirst)
+            {
+                // Prepare VirtualDevices state
+                maVirtualDevice->Erase();
+                maVirtualDeviceMask->Erase();
+            }
+
+            // prepare step
+            switch (maAnimBitmap.eDisposal)
+            {
+                case Disposal::Not:
+                {
+                    maVirtualDevice->DrawBitmapEx(maAnimBitmap.aPosPix, maAnimBitmap.aBmpEx);
+                    Bitmap aMask = maAnimBitmap.aBmpEx.GetMask();
+
+                    if(aMask.IsEmpty())
+                    {
+                        const Point aEmpty;
+                        const Rectangle aRect(aEmpty, maVirtualDeviceMask->GetOutputSizePixel());
+                        const Wallpaper aWallpaper(COL_BLACK);
+                        maVirtualDeviceMask->DrawWallpaper(aRect, aWallpaper);
+                    }
+                    else
+                    {
+                        BitmapEx aExpandVisibilityMask = BitmapEx(aMask, aMask);
+                        maVirtualDeviceMask->DrawBitmapEx(maAnimBitmap.aPosPix, aExpandVisibilityMask);
+                    }
+
+                    break;
+                }
+                case Disposal::Back:
+                {
+                    // #i70772# react on no mask, for primitives, too.
+                    const Bitmap aMask(maAnimBitmap.aBmpEx.GetMask());
+                    const Bitmap aContent(maAnimBitmap.aBmpEx.GetBitmap());
+
+                    maVirtualDeviceMask->Erase();
+                    maVirtualDevice->DrawBitmap(maAnimBitmap.aPosPix, aContent);
+
+                    if(aMask.IsEmpty())
+                    {
+                        const Rectangle aRect(maAnimBitmap.aPosPix, aContent.GetSizePixel());
+                        maVirtualDeviceMask->SetFillColor(COL_BLACK);
+                        maVirtualDeviceMask->SetLineColor();
+                        maVirtualDeviceMask->DrawRect(aRect);
+                    }
+                    else
+                    {
+                        maVirtualDeviceMask->DrawBitmap(maAnimBitmap.aPosPix, aMask);
+                    }
+
+                    break;
+                }
+                case Disposal::Previous :
+                {
+                    maVirtualDevice->DrawBitmapEx(maAnimBitmap.aPosPix, maAnimBitmap.aBmpEx);
+                    maVirtualDeviceMask->DrawBitmap(maAnimBitmap.aPosPix, maAnimBitmap.aBmpEx.GetMask());
+                    break;
+                }
+            }
+
+            // create BitmapEx
+            Bitmap aMainBitmap = maVirtualDevice->GetBitmap(Point(), maVirtualDevice->GetOutputSizePixel());
+#if defined(MACOSX) || defined(IOS)
+            AlphaMask aMaskBitmap( maVirtualDeviceMask->GetBitmap( Point(), maVirtualDeviceMask->GetOutputSizePixel()));
+#else
+            Bitmap aMaskBitmap = maVirtualDeviceMask->GetBitmap( Point(), maVirtualDeviceMask->GetOutputSizePixel());
+#endif
+            return BitmapEx(aMainBitmap, aMaskBitmap);
+        }
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 

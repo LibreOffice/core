@@ -68,7 +68,7 @@ namespace drawinglayer
                         aTransform.set(0, 2, aRange.getMinX());
                         aTransform.set(1, 2, aRange.getMinY());
 
-                        xRetval[a] = Primitive2DReference(new BitmapPrimitive2D(getMarker(), aTransform));
+                        xRetval[a] = Primitive2DReference(new SimpleBitmapPrimitive2D(getMarker(), aTransform));
                     }
                 }
             }

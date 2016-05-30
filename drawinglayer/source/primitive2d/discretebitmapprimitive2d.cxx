@@ -65,7 +65,7 @@ namespace drawinglayer
                 aObjectTransform = aInverseObjectTransformation * aObjectTransform;
 
                 // create BitmapPrimitive2D with now object-local coordinate data
-                const Primitive2DReference xRef(new BitmapPrimitive2D(getBitmapEx(), aObjectTransform));
+                const Primitive2DReference xRef(new SimpleBitmapPrimitive2D(getBitmapEx(), aObjectTransform));
                 xRetval = Primitive2DContainer { xRef };
             }
 
