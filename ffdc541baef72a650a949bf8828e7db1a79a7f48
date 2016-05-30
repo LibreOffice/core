@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "da7fb54a_c03fbc23",
+        "filename": "framework/inc/services/dispatchhelper.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2016-05-30T10:30:11Z",
+      "side": 1,
+      "message": "i have tested the virtual is mandatory (without: not export, linker not found the methode)",
+      "parentUuid": "da7fb54a_60043015",
+      "revId": "ffdc541baef72a650a949bf8828e7db1a79a7f48",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da7fb54a_de4c0b79",
         "filename": "sfx2/Library_sfx.mk",
         "patchSetId": 4
