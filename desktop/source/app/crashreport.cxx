@@ -68,11 +68,9 @@ OUString getCrashUserProfileDirectory()
     rtl::Bootstrap::expandMacros(url);
     osl::Directory::create(url);
 
-#if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID
-    return url.copy(7);
-#elif defined WNT
-    return url.copy(8);
-#endif
+    OUString aProfilePath;
+    osl::FileBase::getSystemPathFromFileURL(url, aProfilePath);
+    return aProfilePath;
 }
 
 }
