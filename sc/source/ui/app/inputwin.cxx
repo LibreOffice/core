@@ -1086,9 +1086,9 @@ void ScInputBarGroup::TriggerToolboxLayout()
         if ( xLayoutManager.is() )
         {
             if ( maTextWnd->GetNumLines() > 1)
-                rParent.SetToolbarLayoutMode( TBX_LAYOUT_LOCKVERT );
+                rParent.SetToolbarLayoutMode( ToolBoxLayoutMode::LockVert );
             else
-                rParent.SetToolbarLayoutMode( TBX_LAYOUT_NORMAL );
+                rParent.SetToolbarLayoutMode( ToolBoxLayoutMode::Normal );
             xLayoutManager->lock();
             DataChangedEvent aFakeUpdate( DataChangedEventType::SETTINGS, nullptr,  AllSettingsFlags::STYLE );
 

@@ -62,11 +62,11 @@ namespace o3tl
 // dontcare will let the toolbox decide about its size
 enum ToolBoxButtonSize { TOOLBOX_BUTTONSIZE_DONTCARE, TOOLBOX_BUTTONSIZE_SMALL, TOOLBOX_BUTTONSIZE_LARGE };
 
-// TBX_LAYOUT_NORMAL   - traditional layout, items are centered in the toolbar
-// TBX_LAYOUT_LOCKVERT - special mode (currently used for calc input/formula
+// ToolBoxLayoutMode::Normal   - traditional layout, items are centered in the toolbar
+// ToolBoxLayoutMode::LockVert - special mode (currently used for calc input/formula
 //                       bar) where item's vertical position is locked, e.g.
 //                       toolbox is prevented from centering the items
-enum ToolBoxLayoutMode { TBX_LAYOUT_NORMAL, TBX_LAYOUT_LOCKVERT };
+enum class ToolBoxLayoutMode { Normal, LockVert };
 
 struct ImplToolSize
 {
