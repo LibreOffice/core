@@ -541,12 +541,11 @@ void ScTable::CopyToClip(
 void ScTable::CopyToClip(
     sc::CopyToClipContext& rCxt, const ScRangeList& rRanges, ScTable* pTable )
 {
-    ScRangeList aRanges(rRanges);
-    for ( size_t i = 0, nListSize = aRanges.size(); i < nListSize; ++i )
+    for ( size_t i = 0, nListSize = rRanges.size(); i < nListSize; ++i )
     {
-        ScRange* p = aRanges[ i ];
-        CopyToClip(
-            rCxt, p->aStart.Col(), p->aStart.Row(), p->aEnd.Col(), p->aEnd.Row(), pTable);
+        const ScRange* p = rRanges[ i ];
+        if (p)
+            CopyToClip( rCxt, p->aStart.Col(), p->aStart.Row(), p->aEnd.Col(), p->aEnd.Row(), pTable);
     }
 }
 
