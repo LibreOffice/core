@@ -16,6 +16,24 @@
       "revId": "c17e066b67d48deea56a77483ca649fb72313190",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_2056a829",
+        "filename": "sw/source/core/doc/tblafmt.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 695,
+      "author": {
+        "id": 1001243
+      },
+      "writtenOn": "2016-05-30T12:58:59Z",
+      "side": 1,
+      "message": "OK, sorry. I copied this function. Thought shouldn\u0027t modify",
+      "parentUuid": "da7fb54a_e05be052",
+      "revId": "c17e066b67d48deea56a77483ca649fb72313190",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
