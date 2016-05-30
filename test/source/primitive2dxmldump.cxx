@@ -28,6 +28,7 @@
 #include <drawinglayer/primitive2d/svggradientprimitive2d.hxx>
 
 #include <drawinglayer/attribute/lineattribute.hxx>
+#include <drawinglayer/attribute/fontattribute.hxx>
 
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
@@ -191,6 +192,9 @@ void Primitive2dXmlDump::decomposeAndWrite(
                 }
                 rWriter.attribute("text", rTextSimplePortionPrimitive2D.getText());
                 rWriter.attribute("fontcolor", convertColorToString(rTextSimplePortionPrimitive2D.getFontColor()));
+
+                drawinglayer::attribute::FontAttribute aFontAttribute = rTextSimplePortionPrimitive2D.getFontAttribute();
+                rWriter.attribute("familyname", aFontAttribute.getFamilyName());
                 rWriter.endElement();
             }
             break;

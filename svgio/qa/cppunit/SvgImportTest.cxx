@@ -213,16 +213,55 @@ void Test::testFontsizeKeywords()
 
     CPPUNIT_ASSERT (pDocument);
 
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "fontcolor", "#000000");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "text", "Sample");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "height", "9");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "familyname", "Times New Roman");
+
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]", "fontcolor", "#ffffff");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]", "text", "Sample");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]", "height", "11");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]", "familyname", "Times New Roman");
+
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[3]", "fontcolor", "#ffd700");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[3]", "text", "Sample");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[3]", "height", "13");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[3]", "familyname", "Times New Roman");
+
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[4]", "fontcolor", "#ff0000");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[4]", "text", "Sample");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[4]", "height", "16");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[4]", "familyname", "Times New Roman");
+
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[5]", "fontcolor", "#ffff00");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[5]", "text", "Sample");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[5]", "height", "19");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[5]", "familyname", "Times New Roman");
+
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[6]", "fontcolor", "#0000ff");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[6]", "text", "Sample");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[6]", "height", "23");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[6]", "familyname", "Times New Roman");
+
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[7]", "fontcolor", "#008000");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[7]", "text", "Sample");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[7]", "height", "27");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[7]", "familyname", "Times New Roman");
+
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[8]", "fontcolor", "#ff7f50");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[8]", "text", "Sample");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[8]", "height", "13");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[8]", "familyname", "Times New Roman");
+
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[9]", "fontcolor", "#ffc0cb");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[9]", "text", "Sample");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[9]", "height", "19");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[9]", "familyname", "Times New Roman");
+
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[10]", "fontcolor", "#fffff0");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[10]", "text", "Sample");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[10]", "height", "16");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[9]", "familyname", "Times New Roman");
 }
 
 
@@ -237,7 +276,10 @@ void Test::testFontsizePercentage()
 
     CPPUNIT_ASSERT (pDocument);
 
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "fontcolor", "#000000");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "text", "Sample");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "height", "16");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "familyname", "Times New Roman");
 }
 
 void Test::testFontsizeRelative()
@@ -251,7 +293,10 @@ void Test::testFontsizeRelative()
 
     CPPUNIT_ASSERT (pDocument);
 
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "fontcolor", "#000000");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "text", "Sample");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "height", "50");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "familyname", "Times New Roman");
 }
 
 void Test::testTdf45771()
@@ -265,7 +310,10 @@ void Test::testTdf45771()
 
     CPPUNIT_ASSERT (pDocument);
 
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "fontcolor", "#000000");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "text", "Sample");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "height", "32");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "familyname", "Times New Roman");
 }
 
 void Test::testTdf97941()
@@ -279,7 +327,10 @@ void Test::testTdf97941()
 
     CPPUNIT_ASSERT (pDocument);
 
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "fontcolor", "#000000");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "text", "Sample");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "height", "48");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "familyname", "Times New Roman");
 }
 
 void Test::testTdf85770()
@@ -292,9 +343,19 @@ void Test::testTdf85770()
 
     CPPUNIT_ASSERT (pDocument);
 
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "fontcolor", "#000000");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "text", "Start Middle End");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "height", "11");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "familyname", "Times New Roman");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]", "fontcolor", "#000000");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]", "text", "Start ");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]", "height", "11");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]", "familyname", "Times New Roman");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[3]", "fontcolor", "#000000");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[3]", "text", "End");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[3]", "height", "11");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[3]", "familyname", "Times New Roman");
+
 }
 
 void Test::testTdf79163()
@@ -322,6 +383,9 @@ void Test::testTdf97542_1()
     CPPUNIT_ASSERT (pDocument);
 
     assertXPath(pDocument, "/primitive2D/transform/objectinfo/textsimpleportion", "fontcolor", "#ffff00");
+    assertXPath(pDocument, "/primitive2D/transform/objectinfo/textsimpleportion", "text", "Text");
+    assertXPath(pDocument, "/primitive2D/transform/objectinfo/textsimpleportion", "height", "48");
+    assertXPath(pDocument, "/primitive2D/transform/objectinfo/textsimpleportion", "familyname", "serif");
 }
 
 void Test::testTdf97542_2()
@@ -532,7 +596,10 @@ void Test::testMaskText()
     CPPUNIT_ASSERT (pDocument);
 
     assertXPath(pDocument, "/primitive2D/transform/transform/polypolygoncolor", "color", "#000000");
+    assertXPath(pDocument, "/primitive2D/transform/transform/textsimpleportion", "fontcolor", "#ffffff");
     assertXPath(pDocument, "/primitive2D/transform/transform/textsimpleportion", "text", "Black White");
+    assertXPath(pDocument, "/primitive2D/transform/transform/textsimpleportion", "height", "26");
+    assertXPath(pDocument, "/primitive2D/transform/transform/textsimpleportion", "familyname", "Times New Roman");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
