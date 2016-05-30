@@ -44,7 +44,23 @@ Idle::Idle( const Idle& rIdle ) : Scheduler(rIdle)
 void Idle::Start()
 {
     Scheduler::Start();
-    Scheduler::ImplStartTimer(Scheduler::ImmediateTimeoutMs);
+
+    sal_uInt64 nPeriod = Scheduler::ImmediateTimeoutMs;
+    if (Scheduler::GetDeterministicMode())
+    {
+        switch (mePriority)
+        {
+            case SchedulerPriority::LOW:
+            case SchedulerPriority::LOWER:
+            case SchedulerPriority::LOWEST:
+                nPeriod = Scheduler::InfiniteTimeoutMs;
+                break;
+            default:
+                break;
+        }
+    }
+
+    Scheduler::ImplStartTimer(nPeriod);
 }
 
 bool Idle::ReadyForSchedule( bool bTimerOnly, sal_uInt64 /* nTimeNow */ ) const
@@ -67,6 +83,15 @@ sal_uInt64 Idle::UpdateMinPeriod( sal_uInt64 nMinPeriod, sal_uInt64 /* nTime */ 
     case SchedulerPriority::REPAINT:
         nMinPeriod = ImmediateTimeoutMs; // don't wait.
         break;
+    case SchedulerPriority::LOW:
+    case SchedulerPriority::LOWER:
+    case SchedulerPriority::LOWEST:
+        if (Scheduler::GetDeterministicMode())
+        {
+            nMinPeriod = Scheduler::InfiniteTimeoutMs;
+            break;
+        }
+        // fall-through intended
     default:
         // FIXME: tdf#92036 workaround, I should be 1 too - wait 5ms
         if (nMinPeriod > 5) // only shrink the min. period if nothing is quicker.

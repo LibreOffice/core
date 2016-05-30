@@ -199,6 +199,9 @@ public:
     virtual sal_Int64 SAL_CALL getOpenGLBufferSwapCounter()
         throw (css::uno::RuntimeException, std::exception) override;
 
+    virtual void SAL_CALL setDeterministicScheduling(sal_Bool bDeterministicMode)
+        throw (css::uno::RuntimeException, std::exception) override;
+
     // css::awt::XToolkit
     css::uno::Reference< css::awt::XWindowPeer >  SAL_CALL getDesktopWindow(  ) throw(css::uno::RuntimeException, std::exception) override;
     css::awt::Rectangle                                        SAL_CALL getWorkArea(  ) throw(css::uno::RuntimeException, std::exception) override;
@@ -1922,7 +1925,14 @@ void SAL_CALL VCLXToolkit::processEventsToIdle()
 sal_Int64 SAL_CALL VCLXToolkit::getOpenGLBufferSwapCounter()
     throw (css::uno::RuntimeException, std::exception)
 {
-     return OpenGLWrapper::getBufferSwapCounter();
+    return OpenGLWrapper::getBufferSwapCounter();
+}
+
+void SAL_CALL VCLXToolkit::setDeterministicScheduling(sal_Bool bDeterministicMode)
+    throw (css::uno::RuntimeException, std::exception)
+{
+    SolarMutexGuard aSolarGuard;
+    Scheduler::SetDeterministicMode(bDeterministicMode);
 }
 
 // css:awt:XToolkitRobot

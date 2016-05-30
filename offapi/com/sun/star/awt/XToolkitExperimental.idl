@@ -19,14 +19,18 @@ module com {  module sun {  module star {  module awt {
 
 interface XToolkitExperimental : XToolkit2
 {
-  /** Process all pending idle events
-   */
-  void processEventsToIdle();
+    /** Process all pending idle events
+     */
+    void processEventsToIdle();
 
 
-  /** Get the number of OpenGL buffer swaps.
-   */
-  hyper getOpenGLBufferSwapCounter();
+    /** Get the number of OpenGL buffer swaps.
+     */
+    hyper getOpenGLBufferSwapCounter();
+
+    /** Turn on or off deterministic scheduling (off is the default).
+     */
+    void setDeterministicScheduling([in] boolean bDeterministicMode);
 };
 
 }; }; }; };
