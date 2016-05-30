@@ -33,6 +33,24 @@
       "revId": "228aa03a902e0360805721e48d289b58563ebdae",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_632b5a83",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4381,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2016-05-30T14:36:36Z",
+      "side": 1,
+      "message": "With the new one, the loop is treated for j\u003d\u003d0.\nThe new one is a copy of the while loop in ImpNumberFillWithThousands",
+      "parentUuid": "da7fb54a_e0092033",
+      "revId": "228aa03a902e0360805721e48d289b58563ebdae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
