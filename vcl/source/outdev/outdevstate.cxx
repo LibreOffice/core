@@ -40,7 +40,7 @@ OutDevState::OutDevState()
     , mpRefPoint(nullptr)
     , meTextAlign(ALIGN_TOP)
     , meRasterOp(ROP_OVERPAINT)
-    , mnTextLayoutMode(TEXT_LAYOUT_DEFAULT)
+    , mnTextLayoutMode(ComplexTextLayoutFlags::Default)
     , meTextLanguage(0)
     , mnFlags(PushFlags::NONE)
 {
@@ -263,7 +263,7 @@ void OutputDevice::SetDrawMode( DrawModeFlags nDrawMode )
         mpAlphaVDev->SetDrawMode( nDrawMode );
 }
 
-void OutputDevice::SetLayoutMode( ComplexTextLayoutMode nTextLayoutMode )
+void OutputDevice::SetLayoutMode( ComplexTextLayoutFlags nTextLayoutMode )
 {
     if( mpMetaFile )
         mpMetaFile->AddAction( new MetaLayoutModeAction( nTextLayoutMode ) );

@@ -736,7 +736,7 @@ The following structure describes the permissions used in PDF security
     void               IntersectClipRegion( const Rectangle& rRect );
     void               IntersectClipRegion( const basegfx::B2DPolyPolygon& rRegion );
 
-    void               SetLayoutMode( ComplexTextLayoutMode nMode );
+    void               SetLayoutMode( ComplexTextLayoutFlags nMode );
     void               SetDigitLanguage( LanguageType eLang );
 
     void               SetLineColor( const Color& rColor );

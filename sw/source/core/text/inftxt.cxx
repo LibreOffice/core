@@ -284,14 +284,14 @@ void SwTextSizeInfo::CtorInitTextSizeInfo( OutputDevice* pRenderContext, SwTextF
     // Set default layout mode ( LTR or RTL ).
     if ( m_pFrame->IsRightToLeft() )
     {
-        m_pOut->SetLayoutMode( TEXT_LAYOUT_BIDI_STRONG | TEXT_LAYOUT_BIDI_RTL );
-        m_pRef->SetLayoutMode( TEXT_LAYOUT_BIDI_STRONG | TEXT_LAYOUT_BIDI_RTL );
+        m_pOut->SetLayoutMode( ComplexTextLayoutFlags::BiDiStrong | ComplexTextLayoutFlags::BiDiRtl );
+        m_pRef->SetLayoutMode( ComplexTextLayoutFlags::BiDiStrong | ComplexTextLayoutFlags::BiDiRtl );
         m_nDirection = DIR_RIGHT2LEFT;
     }
     else
     {
-        m_pOut->SetLayoutMode( TEXT_LAYOUT_BIDI_STRONG );
-        m_pRef->SetLayoutMode( TEXT_LAYOUT_BIDI_STRONG );
+        m_pOut->SetLayoutMode( ComplexTextLayoutFlags::BiDiStrong );
+        m_pRef->SetLayoutMode( ComplexTextLayoutFlags::BiDiStrong );
         m_nDirection = DIR_LEFT2RIGHT;
     }
 
@@ -591,7 +591,7 @@ void SwTextPaintInfo::DrawText_( const OUString &rText, const SwLinePortion &rPo
             if ( GetTextFrame()->IsRightToLeft() )
                 GetTextFrame()->SwitchLTRtoRTL( aPoint );
 
-            if ( TEXT_LAYOUT_BIDI_STRONG != GetOut()->GetLayoutMode() )
+            if ( ComplexTextLayoutFlags::BiDiStrong != GetOut()->GetLayoutMode() )
                 aPoint.X() -= rPor.Width();
 
             if ( GetTextFrame()->IsVertical() )

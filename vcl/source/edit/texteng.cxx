@@ -2985,9 +2985,9 @@ long TextEngine::ImpGetPortionXOffset( sal_uInt32 nPara, TextLine* pLine, sal_uI
 
 void TextEngine::ImpInitLayoutMode( OutputDevice* pOutDev )
 {
-    ComplexTextLayoutMode nLayoutMode = pOutDev->GetLayoutMode();
+    ComplexTextLayoutFlags nLayoutMode = pOutDev->GetLayoutMode();
 
-    nLayoutMode &= ~(TEXT_LAYOUT_BIDI_RTL | TEXT_LAYOUT_COMPLEX_DISABLED | TEXT_LAYOUT_BIDI_STRONG );
+    nLayoutMode &= ~ComplexTextLayoutFlags(ComplexTextLayoutFlags::BiDiRtl | ComplexTextLayoutFlags::ComplexDisabled | ComplexTextLayoutFlags::BiDiStrong );
 
     pOutDev->SetLayoutMode( nLayoutMode );
 }

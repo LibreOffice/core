@@ -246,12 +246,12 @@ namespace drawinglayer
                     const basegfx::BColor aRGBFontColor(maBColorModifierStack.getModifiedColor(rTextCandidate.getFontColor()));
                     const basegfx::B2DPoint aPoint(aLocalTransform * basegfx::B2DPoint(0.0, 0.0));
                     const Point aStartPoint(basegfx::fround(aPoint.getX()), basegfx::fround(aPoint.getY()));
-                    const ComplexTextLayoutMode nOldLayoutMode(mpOutputDevice->GetLayoutMode());
+                    const ComplexTextLayoutFlags nOldLayoutMode(mpOutputDevice->GetLayoutMode());
 
                     if(rTextCandidate.getFontAttribute().getRTL())
                     {
-                        ComplexTextLayoutMode nRTLLayoutMode(nOldLayoutMode & ~(TEXT_LAYOUT_COMPLEX_DISABLED|TEXT_LAYOUT_BIDI_STRONG));
-                        nRTLLayoutMode |= TEXT_LAYOUT_BIDI_RTL|TEXT_LAYOUT_TEXTORIGIN_LEFT;
+                        ComplexTextLayoutFlags nRTLLayoutMode(nOldLayoutMode & ~ComplexTextLayoutFlags(ComplexTextLayoutFlags::ComplexDisabled|ComplexTextLayoutFlags::BiDiStrong));
+                        nRTLLayoutMode |= ComplexTextLayoutFlags::BiDiRtl|ComplexTextLayoutFlags::TextOriginLeft;
                         mpOutputDevice->SetLayoutMode(nRTLLayoutMode);
                     }
 

@@ -375,7 +375,7 @@ private:
     mutable long                    mnEmphasisAscent;
     mutable long                    mnEmphasisDescent;
     DrawModeFlags                   mnDrawMode;
-    ComplexTextLayoutMode           mnTextLayoutMode;
+    ComplexTextLayoutFlags           mnTextLayoutMode;
     ImplMapRes                      maMapRes;
     ImplThresholdRes                maThresRes;
     OutDevType                      meOutDevType;
@@ -638,8 +638,8 @@ public:
     void                        SetDrawMode( DrawModeFlags nDrawMode );
     DrawModeFlags               GetDrawMode() const { return mnDrawMode; }
 
-    void                        SetLayoutMode( ComplexTextLayoutMode nTextLayoutMode );
-    ComplexTextLayoutMode       GetLayoutMode() const { return mnTextLayoutMode; }
+    void                        SetLayoutMode( ComplexTextLayoutFlags nTextLayoutMode );
+    ComplexTextLayoutFlags       GetLayoutMode() const { return mnTextLayoutMode; }
 
     void                        SetDigitLanguage( LanguageType );
     LanguageType                GetDigitLanguage() const { return meTextLanguage; }

@@ -1198,11 +1198,11 @@ ImplLayoutArgs OutputDevice::ImplPrepareLayoutArgs( OUString& rStr,
     if( nEndIndex < nMinIndex )
         nEndIndex = nMinIndex;
 
-    if( mnTextLayoutMode & TEXT_LAYOUT_BIDI_RTL )
+    if( mnTextLayoutMode & ComplexTextLayoutFlags::BiDiRtl )
         nLayoutFlags |= SalLayoutFlags::BiDiRtl;
-    if( mnTextLayoutMode & TEXT_LAYOUT_BIDI_STRONG )
+    if( mnTextLayoutMode & ComplexTextLayoutFlags::BiDiStrong )
         nLayoutFlags |= SalLayoutFlags::BiDiStrong;
-    else if( !(mnTextLayoutMode & TEXT_LAYOUT_BIDI_RTL) )
+    else if( !(mnTextLayoutMode & ComplexTextLayoutFlags::BiDiRtl) )
     {
         // disable Bidi if no RTL hint and no RTL codes used
         const sal_Unicode* pStr = rStr.getStr() + nMinIndex;
@@ -1223,9 +1223,9 @@ ImplLayoutArgs OutputDevice::ImplPrepareLayoutArgs( OUString& rStr,
     if( maFont.IsVertical() )
         nLayoutFlags |= SalLayoutFlags::Vertical;
 
-    if( mnTextLayoutMode & TEXT_LAYOUT_ENABLE_LIGATURES )
+    if( mnTextLayoutMode & ComplexTextLayoutFlags::LigaturesEnabled )
         nLayoutFlags |= SalLayoutFlags::EnableLigatures;
-    else if( mnTextLayoutMode & TEXT_LAYOUT_COMPLEX_DISABLED )
+    else if( mnTextLayoutMode & ComplexTextLayoutFlags::ComplexDisabled )
         nLayoutFlags |= SalLayoutFlags::ComplexDisabled;
     else
     {
@@ -1247,7 +1247,7 @@ ImplLayoutArgs OutputDevice::ImplPrepareLayoutArgs( OUString& rStr,
             nLayoutFlags |= SalLayoutFlags::ComplexDisabled;
     }
 
-    if( meTextLanguage ) //TODO: (mnTextLayoutMode & TEXT_LAYOUT_SUBSTITUTE_DIGITS)
+    if( meTextLanguage ) //TODO: (mnTextLayoutMode & ComplexTextLayoutFlags::SubstituteDigits)
     {
         // disable character localization when no digits used
         const sal_Unicode* pBase = rStr.getStr();
@@ -1270,10 +1270,10 @@ ImplLayoutArgs OutputDevice::ImplPrepareLayoutArgs( OUString& rStr,
     }
 
     // right align for RTL text, DRAWPOS_REVERSED, RTL window style
-    bool bRightAlign = bool(mnTextLayoutMode & TEXT_LAYOUT_BIDI_RTL);
-    if( mnTextLayoutMode & TEXT_LAYOUT_TEXTORIGIN_LEFT )
+    bool bRightAlign = bool(mnTextLayoutMode & ComplexTextLayoutFlags::BiDiRtl);
+    if( mnTextLayoutMode & ComplexTextLayoutFlags::TextOriginLeft )
         bRightAlign = false;
-    else if ( mnTextLayoutMode & TEXT_LAYOUT_TEXTORIGIN_RIGHT )
+    else if ( mnTextLayoutMode & ComplexTextLayoutFlags::TextOriginRight )
         bRightAlign = true;
     // SSA: hack for western office, ie text get right aligned
     //      for debugging purposes of mirrored UI

@@ -679,7 +679,7 @@ private:
         Color                            m_aOverlineColor;
         basegfx::B2DPolyPolygon          m_aClipRegion;
         bool                             m_bClipRegion;
-        ComplexTextLayoutMode            m_nLayoutMode;
+        ComplexTextLayoutFlags            m_nLayoutMode;
         LanguageType                     m_aDigitLanguage;
         sal_Int32                        m_nTransparentPercent;
         PushFlags                        m_nFlags;
@@ -703,7 +703,7 @@ private:
                 m_aTextLineColor( COL_TRANSPARENT ),
                 m_aOverlineColor( COL_TRANSPARENT ),
                 m_bClipRegion( false ),
-                m_nLayoutMode( TEXT_LAYOUT_DEFAULT ),
+                m_nLayoutMode( ComplexTextLayoutFlags::Default ),
                 m_aDigitLanguage( 0 ),
                 m_nTransparentPercent( 0 ),
                 m_nFlags( PushFlags::ALL ),
@@ -1112,7 +1112,7 @@ public:
 
     bool intersectClipRegion( const basegfx::B2DPolyPolygon& rRegion );
 
-    void setLayoutMode( ComplexTextLayoutMode nLayoutMode )
+    void setLayoutMode( ComplexTextLayoutFlags nLayoutMode )
     {
         m_aGraphicsStack.front().m_nLayoutMode = nLayoutMode;
         m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsState::updateLayoutMode;

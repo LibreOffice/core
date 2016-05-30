@@ -678,7 +678,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
         }
     }
 
-    // SW disables TEXT_LAYOUT_COMPLEX_DISABLED, so maybe I have to enable it...
+    // SW disables ComplexTextLayoutFlags::ComplexDisabled, so maybe I have to enable it...
 
     // Saving both layout mode and language (since I'm potentially changing both)
     GetRefDevice()->Push( PushFlags::TEXTLAYOUTMODE|PushFlags::TEXTLANGUAGE );
@@ -4203,24 +4203,24 @@ void ImpEditEngine::ImplInitLayoutMode( OutputDevice* pOutDev, sal_Int32 nPara, 
         // it also works for issue 55927
     }
 
-    ComplexTextLayoutMode nLayoutMode = pOutDev->GetLayoutMode();
+    ComplexTextLayoutFlags nLayoutMode = pOutDev->GetLayoutMode();
 
     // We always use the left position for DrawText()
-    nLayoutMode &= ~(TEXT_LAYOUT_BIDI_RTL);
+    nLayoutMode &= ~(ComplexTextLayoutFlags::BiDiRtl);
 
     if ( !bCTL && !bR2L)
     {
         // No CTL/Bidi checking necessary
-        nLayoutMode |= ( TEXT_LAYOUT_COMPLEX_DISABLED | TEXT_LAYOUT_BIDI_STRONG );
+        nLayoutMode |= ( ComplexTextLayoutFlags::ComplexDisabled | ComplexTextLayoutFlags::BiDiStrong );
     }
     else
     {
         // CTL/Bidi checking necessary
         // Don't use BIDI_STRONG, VCL must do some checks.
-        nLayoutMode &= ~( TEXT_LAYOUT_COMPLEX_DISABLED | TEXT_LAYOUT_BIDI_STRONG );
+        nLayoutMode &= ~ComplexTextLayoutFlags( ComplexTextLayoutFlags::ComplexDisabled | ComplexTextLayoutFlags::BiDiStrong );
 
         if ( bR2L )
-            nLayoutMode |= TEXT_LAYOUT_BIDI_RTL|TEXT_LAYOUT_TEXTORIGIN_LEFT;
+            nLayoutMode |= ComplexTextLayoutFlags::BiDiRtl|ComplexTextLayoutFlags::TextOriginLeft;
     }
 
     pOutDev->SetLayoutMode( nLayoutMode );

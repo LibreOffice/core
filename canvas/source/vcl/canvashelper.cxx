@@ -596,22 +596,22 @@ namespace vclcanvas
                 return uno::Reference< rendering::XCachedPrimitive >(nullptr); // no output necessary
 
             // change text direction and layout mode
-            ComplexTextLayoutMode nLayoutMode(TEXT_LAYOUT_DEFAULT);
+            ComplexTextLayoutFlags nLayoutMode(ComplexTextLayoutFlags::Default);
             switch( textDirection )
             {
                 case rendering::TextDirection::WEAK_LEFT_TO_RIGHT:
                     // FALLTHROUGH intended
                 case rendering::TextDirection::STRONG_LEFT_TO_RIGHT:
-                    nLayoutMode |= TEXT_LAYOUT_BIDI_STRONG;
-                    nLayoutMode |= TEXT_LAYOUT_TEXTORIGIN_LEFT;
+                    nLayoutMode |= ComplexTextLayoutFlags::BiDiStrong;
+                    nLayoutMode |= ComplexTextLayoutFlags::TextOriginLeft;
                     break;
 
                 case rendering::TextDirection::WEAK_RIGHT_TO_LEFT:
-                    nLayoutMode |= TEXT_LAYOUT_BIDI_RTL;
+                    nLayoutMode |= ComplexTextLayoutFlags::BiDiRtl;
                     SAL_FALLTHROUGH;
                 case rendering::TextDirection::STRONG_RIGHT_TO_LEFT:
-                    nLayoutMode |= TEXT_LAYOUT_BIDI_RTL | TEXT_LAYOUT_BIDI_STRONG;
-                    nLayoutMode |= TEXT_LAYOUT_TEXTORIGIN_RIGHT;
+                    nLayoutMode |= ComplexTextLayoutFlags::BiDiRtl | ComplexTextLayoutFlags::BiDiStrong;
+                    nLayoutMode |= ComplexTextLayoutFlags::TextOriginRight;
                     break;
             }
 

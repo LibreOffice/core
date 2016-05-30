@@ -48,19 +48,19 @@ namespace vclcanvas
                               sal_Int8      nTextDirection )
         {
             // TODO(P3): avoid if already correctly set
-            ComplexTextLayoutMode nLayoutMode = TEXT_LAYOUT_DEFAULT;
+            ComplexTextLayoutFlags nLayoutMode = ComplexTextLayoutFlags::Default;
             switch( nTextDirection )
             {
                 case rendering::TextDirection::WEAK_LEFT_TO_RIGHT:
                     break;
                 case rendering::TextDirection::STRONG_LEFT_TO_RIGHT:
-                    nLayoutMode = TEXT_LAYOUT_BIDI_STRONG;
+                    nLayoutMode = ComplexTextLayoutFlags::BiDiStrong;
                     break;
                 case rendering::TextDirection::WEAK_RIGHT_TO_LEFT:
-                    nLayoutMode = TEXT_LAYOUT_BIDI_RTL;
+                    nLayoutMode = ComplexTextLayoutFlags::BiDiRtl;
                     break;
                 case rendering::TextDirection::STRONG_RIGHT_TO_LEFT:
-                    nLayoutMode = TEXT_LAYOUT_BIDI_RTL | TEXT_LAYOUT_BIDI_STRONG;
+                    nLayoutMode = ComplexTextLayoutFlags::BiDiRtl | ComplexTextLayoutFlags::BiDiStrong;
                     break;
                 default:
                     break;
@@ -68,7 +68,7 @@ namespace vclcanvas
 
             // set calculated layout mode. Origin is always the left edge,
             // as required at the API spec
-            rOutDev.SetLayoutMode( nLayoutMode | TEXT_LAYOUT_TEXTORIGIN_LEFT );
+            rOutDev.SetLayoutMode( nLayoutMode | ComplexTextLayoutFlags::TextOriginLeft );
         }
     }
 
