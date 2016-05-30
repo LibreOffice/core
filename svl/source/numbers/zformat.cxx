@@ -1941,8 +1941,8 @@ bool SvNumberformat::GetOutputString(const OUString& sString,
                 }
                 break;
             case NF_SYMBOLTYPE_BLANK:
-                InsertBlanks( sOutBuff, sOutBuff.getLength(),
-                              rInfo.sStrArray[i][1] );
+                if (rInfo.sStrArray[i].getLength() >= 2)
+                    InsertBlanks( sOutBuff, sOutBuff.getLength(), rInfo.sStrArray[i][1] );
                 break;
             case NF_KEY_GENERAL :   // #77026# "General" is the same as "@"
             case NF_SYMBOLTYPE_DEL :
@@ -2272,8 +2272,8 @@ bool SvNumberformat::GetOutputString(double fNumber,
                     }
                     break;
                 case NF_SYMBOLTYPE_BLANK:
-                    InsertBlanks(sBuff, sBuff.getLength(),
-                                 rInfo.sStrArray[i][1] );
+                    if (rInfo.sStrArray[i].getLength() >= 2)
+                        InsertBlanks(sBuff, sBuff.getLength(), rInfo.sStrArray[i][1] );
                     break;
                 case NF_SYMBOLTYPE_STRING:
                 case NF_SYMBOLTYPE_CURRENCY:
@@ -2904,8 +2904,8 @@ bool SvNumberformat::ImpGetTimeOutput(double fNumber,
             }
             break;
         case NF_SYMBOLTYPE_BLANK:
-            InsertBlanks(sBuff, sBuff.getLength(),
-                         rInfo.sStrArray[i][1] );
+            if (rInfo.sStrArray[i].getLength() >= 2)
+                InsertBlanks(sBuff, sBuff.getLength(), rInfo.sStrArray[i][1] );
             break;
         case NF_SYMBOLTYPE_STRING:
         case NF_SYMBOLTYPE_CURRENCY:
@@ -3397,7 +3397,8 @@ bool SvNumberformat::ImpGetDateOutput(double fNumber,
             }
             break;
         case NF_SYMBOLTYPE_BLANK:
-            InsertBlanks( sBuff, sBuff.getLength(), rInfo.sStrArray[i][1] );
+            if (rInfo.sStrArray[i].getLength() >= 2)
+                InsertBlanks( sBuff, sBuff.getLength(), rInfo.sStrArray[i][1] );
             break;
         case NF_SYMBOLTYPE_STRING:
         case NF_SYMBOLTYPE_CURRENCY:
@@ -3690,8 +3691,8 @@ bool SvNumberformat::ImpGetDateTimeOutput(double fNumber,
             }
             break;
         case NF_SYMBOLTYPE_BLANK:
-            InsertBlanks( sBuff, sBuff.getLength(),
-                          rInfo.sStrArray[i][1] );
+            if (rInfo.sStrArray[i].getLength() >= 2)
+                InsertBlanks( sBuff, sBuff.getLength(), rInfo.sStrArray[i][1] );
             break;
         case NF_SYMBOLTYPE_STRING:
         case NF_SYMBOLTYPE_CURRENCY:
@@ -4337,7 +4338,8 @@ bool SvNumberformat::ImpNumberFill( OUStringBuffer& sBuff, // number string
             }
             break;
         case NF_SYMBOLTYPE_BLANK:
-            k = InsertBlanks(sBuff, k, rInfo.sStrArray[j][1] );
+            if (rInfo.sStrArray[j].getLength() >= 2)
+                k = InsertBlanks(sBuff, k, rInfo.sStrArray[j][1] );
             break;
         case NF_SYMBOLTYPE_THSEP:
             // Same as in ImpNumberFillWithThousands() above, do not insert
