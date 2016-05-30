@@ -16,6 +16,24 @@
       "revId": "e297fa74d66f3b9952213f844976172863563a2e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_4079ecfb",
+        "filename": "xmloff/source/style/xmlnumfe.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 750,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2016-05-30T10:29:56Z",
+      "side": 1,
+      "message": "Actually it was intended, as max-numerator-digits is not part of ODF 1.3. It should appear only with extended versions (1.2+).\nShould it be added to 1.3, even if it is not strict ODF 1.3?",
+      "parentUuid": "da7fb54a_204788bc",
+      "revId": "e297fa74d66f3b9952213f844976172863563a2e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
