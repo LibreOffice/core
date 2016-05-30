@@ -1,0 +1,591 @@
+--- src/include/firebird.h	2016-07-15 11:31:27.151443500 +0200
++++ src/include/firebird.h	2016-07-17 14:50:04.043792400 +0200
+@@ -32,11 +32,7 @@
+ #ifndef INCLUDE_Firebird_H
+ #define INCLUDE_Firebird_H
+ 
+-#ifdef _MSC_VER
+-#include "gen/autoconfig_msvc.h"
+-#else
+ #include "gen/autoconfig.h"
+-#endif
+ 
+ // Using our debugging code is pointless when we may use Valgrind features
+ #if defined(DEV_BUILD) && !defined(USE_VALGRIND)
+--- src/misc/writeBuildNum.sh	2016-07-07 15:57:04.538983200 +0200
++++ src/misc/writeBuildNum.sh	2016-07-13 11:31:18.132820200 +0200
+@@ -95,9 +95,9 @@
+ createMakeVersion() {
+
+ OdsH="${Root}/src/jrd/ods.h"
+-Mini="/tmp/miniods.h"
+-TestCpp="/tmp/test.cpp"
+-AOut="/tmp/a.out"
++Mini=$(cygpath -m "/tmp/miniods.h")
++TestCpp=$(cygpath -m "/tmp/test.cpp")
++AOut=$(cygpath -m "/tmp/a.out")
+
+ grep ODS_VERSION $OdsH | grep -v ENCODE_ODS >$Mini
+
+--- builds/make.new/config/config.h.in	2016-07-07 15:55:55.693112800 +0200
++++ builds/make.new/config/config.h.in	2016-07-08 13:38:49.994986400 +0200
+@@ -646,7 +646,7 @@
+ #undef TIME_WITH_SYS_TIME
+ 
+ /* Define this if OS is Windows NT */
+-#undef WIN_NT
++#define WIN_NT
+ 
+ /* Define WORDS_BIGENDIAN to 1 if your processor stores words with the most
+    significant byte first (like Motorola and SPARC, unlike Intel). */
+@@ -703,3 +703,40 @@
+ #ifndef HAVE_SOCKLEN_T
+ typedef int socklen_t;
+ #endif
++
++/* taken from src/include/gen/autoconfig_msvc.h */
++#define WIN32_LEAN_AND_MEAN		// Exclude rarely-used stuff from Windows headers
++/* target architecture */
++#if defined(_M_IX86)
++/* sizeof(void *) */
++#define SIZEOF_VOID_P 4
++/* sizeof(size_t) */
++#define SIZEOF_SIZE_T 4
++/* alignment of long */
++#define FB_ALIGNMENT 4
++#elif defined(_M_AMD64)
++#define AMD64
++/* sizeof(void *) */
++#define SIZEOF_VOID_P 8
++/* sizeof(size_t) */
++#define SIZEOF_SIZE_T 8
++/* alignment of long */
++#define FB_ALIGNMENT 8
++#else
++#error unknown target platform
++#endif
++
++#define HAVE_IO_H
++
++#define HAVE_GETPAGESIZE
++
++#if defined _MSC_VER
++#if _MSC_VER < 1500
++#define vsnprintf _vsnprintf
++#endif
++#define isnan _isnan
++#endif
++
++#if _MSC_VER < 1900
++#define snprintf _snprintf
++#endif
+--- src/common/common.h	2016-07-15 11:31:26.366735500 +0200
++++ src/common/common.h	2016-07-17 16:18:39.121579400 +0200
+@@ -551,15 +551,6 @@
+ #endif /* WIN_NT */
+ 
+ 
+-#ifndef FB_CPU
+-#error Define FB_CPU for your platform
+-#endif
+-#ifndef FB_OS
+-#error Define FB_OS for your platform
+-#endif
+-#ifndef FB_CC
+-#error Define FB_CC for your platform
+-#endif
+ 
+ 
+ /*****************************************************
+diff -ur builds/posix/make.defaults builds/posix/make.defaults
+--- builds/posix/make.defaults	2016-07-07 13:56:13.036235166 +0200
++++ builds/posix/make.defaults	2016-07-07 14:29:52.368289242 +0200
+@@ -55,7 +55,11 @@
+ else
+   FIREBIRD=$(FB_BUILD)
+ endif
+-FIREBIRD_LOCK=$(FIREBIRD)
++ifeq (@PLATFORM@,win32)
++  FIREBIRD_LOCK=$(shell cygpath -w $(FIREBIRD) )
++else
++  FIREBIRD_LOCK=$(FIREBIRD)
++endif
+
+ export FIREBIRD
+ export FIREBIRD_LOCK
+@@ -152,7 +156,11 @@
+ CD=			cd
+ CAT=			cat
+ AR=			ar @AR_OPTIONS@
+-LN=			@LN_S@
++ifeq (@PLATFORM@,win32)
++  LN=                   cp
++else
++  LN=		        @LN_S@
++endif
+ RANLIB=			@RANLIB@
+ BTYACC=$(ROOT)/extern/btyacc/btyacc
+ CLOOP=$(GEN_ROOT)/$(TARGET)/cloop/release/bin/cloop
+@@ -174,10 +182,18 @@
+
+ # Default extensions
+
++ifeq (@PLATFORM@,win32)
++ARCH_EXT=		.lib
++else
+ ARCH_EXT=		.a
++endif
+ EXEC_EXT=		@EXEEXT@
+ SHRLIB_EXT=@SHRLIB_EXT@
++ifeq (@PLATFORM@,win32)
++LIB_PREFIX=
++else
+ LIB_PREFIX=		lib
++endif
+ SHRLIB_FOREIGN_EXT=	$(SHRLIB_EXT)
+
+ #_____________________________________________________________________________
+@@ -203,6 +219,7 @@
+ vpath %.so $(LIB)
+ vpath %.a $(LIB)
+ vpath %.dll $(LIB)
++vpath %.lib $(LIB)
+
+ #_____________________________________________________________________________
+
+@@ -216,9 +233,9 @@
+ #
+
+ #LibraryFileName=libfbclient
+-LibraryFileName=libfbclient
+-LibraryFullName=$(LibraryFileName).${SHRLIB_EXT}.${FirebirdVersion}
+-LibrarySoName=$(LibraryFileName).${SHRLIB_EXT}.2
++LibraryFileName=ifbclient
++LibraryFullName=$(LibraryFileName).${SHRLIB_EXT}
++LibrarySoName=$(LibraryFileName).${SHRLIB_EXT}
+ LibraryBaseName=$(LibraryFileName).${SHRLIB_EXT}
+
+ LIBFIREBIRD_FULLNAME = $(LIB)/$(LibraryFullName)
+@@ -241,7 +258,11 @@
+   ifeq ($(STD_EDITLINE), true)
+ 	LIBEDITLINE := -l$(READLINE)
+   else
++        ifeq ($(PLATFORM),win32)
++	LIBEDITLINE := $(LIB)/edit.lib
++        else
+ 	LIBEDITLINE := $(LIB)/libedit.a
++        endif
+   endif
+ endif
+ 
+@@ -329,7 +350,12 @@
+
+ # Pay attention - we place common library into obj, not lib dir
+ # It's just a set of object files, prepared to be used by ld, not an output library
++
++ifeq ($(platform),WIN32)
++COMMON_LIB      = $(OBJ)/common.lib
++else
+ COMMON_LIB	= $(OBJ)/common.a
++endif
+
+ # From utilities
+ CREATE_DB	= $(RBIN)/create_db$(EXEC_EXT)
+--- builds/posix/Makefile.in	2016-07-07 15:56:06.459221300 +0200
++++ builds/posix/Makefile.in	2016-07-13 12:44:57.134217200 +0200
+@@ -33,7 +33,8 @@
+ #		Alex Peshkoff - created single makefile based on Mark's files
+ # 
+ 
+-ROOT=$(shell cd ..; pwd)
++#ROOT=$(shell cd ..; pwd)
++ROOT=$(shell cygpath -m '$(shell cd ..; pwd)')
+
+ include     make.defaults
+ ifeq ($(CROSS_OUT), Y)
+@@ -163,7 +164,7 @@
+ .PHONY:	cross1 cross2 boot yvalve engine fbintl gpre utilities plugins rest codes ids examples cross_rest
+ 
+ master_process:
+-	ln -sf $(SRC_ROOT)/include/gen/autoconfig.auto $(SRC_ROOT)/include/gen/autoconfig.h
++	cp -f $(SRC_ROOT)/include/gen/autoconfig.auto $(SRC_ROOT)/include/gen/autoconfig.h
+ 	$(MAKE) updateBuildNum
+ 	$(MAKE) export_lists
+ 	$(MAKE) extern
+@@ -198,7 +199,7 @@
+ 	$(MAKE) CROSS_OUT=Y cross2
+ 
+ cross1:
+-	ln -sf $(SRC_ROOT)/include/gen/autoconfig.auto $(SRC_ROOT)/include/gen/autoconfig.h
++	cp -f $(SRC_ROOT)/include/gen/autoconfig.auto $(SRC_ROOT)/include/gen/autoconfig.h
+ 	$(MAKE) updateBuildNum
+ 	$(MAKE) export_lists
+ 	$(MAKE) extern
+@@ -223,7 +224,7 @@
+ 	$(MAKE) -f Makefile.examples -C $(GEN_ROOT)/examples/
+ 
+ cross2:
+-	ln -sf $(SRC_ROOT)/include/cross/$(CROSS_CONFIG) $(SRC_ROOT)/include/gen/autoconfig.h
++	cp -f $(SRC_ROOT)/include/cross/$(CROSS_CONFIG) $(SRC_ROOT)/include/gen/autoconfig.h
+ 	$(MAKE) prerequisites
+ 	$(MAKE) tommath
+ 	$(MAKE) yvalve
+@@ -275,7 +275,8 @@
+ 
+ # remote redirector is statically linked in main FB library
+ $(LIBFIREBIRD_FULLNAME):	$(YValve_Objects) $(Remote_Client_Objects) $(COMMON_LIB)
+-	$(LINK_FIREBIRD) -o $@ $^ $(LINK_FIREBIRD_LIBS)
++	@echo 'compile: $(LINK_FIREBIRD) $(CPPFLAGS) -o $@ $^ $(LINK_FIREBIRD_LIBS)'
++	$(LINK_FIREBIRD) $(CPPFLAGS) -o $@ $^ $(LINK_FIREBIRD_LIBS)
+ 
+ 
+ #___________________________________________________________________________
+diff -ur builds/posix/Makefile.in.examples builds/posix/Makefile.in.examples
+--- builds/posix/Makefile.in.examples	2016-07-07 13:56:13.048235166 +0200
++++ builds/posix/Makefile.in.examples	2016-07-07 14:37:36.904301682 +0200
+@@ -65,10 +65,13 @@
+ EXAMPLES_DEST=	$(GEN_ROOT)/examples
+ EXAMPLES_SRC=	$(ROOT)/examples
+
+-
++ifeq ($(PLATFORM),win32)
++EMPBLD_Objects=	$(EXAMPLES_DEST)/empbuild.obj
++INTLBLD_Objects= $(EXAMPLES_DEST)/intlbld.obj
++else
+ EMPBLD_Objects=	$(EXAMPLES_DEST)/empbuild.o
+-
+ INTLBLD_Objects= $(EXAMPLES_DEST)/intlbld.o
++endif
+
+ INPUT_Files   =	empddl.sql empdml.sql indexoff.sql indexon.sql \
+ 		job.inp lang.inp proj.inp qtr.inp
+@@ -172,3 +175,5 @@
+ 
+ $(EXAMPLES_DEST)/%.h: $(EXAMPLES_SRC)/common/%.h
+ 	$(CP) $^ $@
++$(EXAMPLES_DEST)/%.obj: $(EXAMPLES_DEST)/%.c
++	$(CC) -c $(firstword $<) -Fo$@ $(WCFLAGS)
+diff -ur builds/posix/make.rules builds/posix/make.rules
+--- builds/posix/make.rules	2016-07-07 13:56:13.036235166 +0200
++++ builds/posix/make.rules	2016-07-07 14:31:16.116291485 +0200
+@@ -88,22 +88,19 @@
+ 
+ $(OBJ)/%.o: $(SRC_ROOT)/%.c
+ 	$(CC) $(WCFLAGS) -c $(firstword $<) -o $@
+-	@sed $(INLINE_EDIT_SED) -e "1,2s/:/: \$$(wildcard/" -e "\$$s/\(.*\)/\\1)/" $(patsubst %.o,%.d,$@)
+ 
+ $(OBJ)/%.o: $(OBJ)/%.cpp
+ 	$(CXX) $(WCXXFLAGS) -c $(firstword $<) -o $@
+-	@sed $(INLINE_EDIT_SED) -e "1,2s/:/: \$$(wildcard/" -e "\$$s/\(.*\)/\\1)/" $(patsubst %.o,%.d,$@)
+ 
+ $(OBJ)/%.o: $(SRC_ROOT)/%.cpp
+ 	$(CXX) $(WCXXFLAGS) -c $(firstword $<) -o $@
+-	@sed $(INLINE_EDIT_SED) -e "1,2s/:/: \$$(wildcard/" -e "\$$s/\(.*\)/\\1)/" $(patsubst %.o,%.d,$@)
+ 
+ .SUFFIXES: .epp .e
+ 
+ # Rules for making resource files
+ 
+ $(GEN_ROOT)/%.res: $(SRC_ROOT)/%.rc
+-	windres --output-format=coff --include-dir=$(<D) $< $@
++	rc.exe $(SOLARINC) /fo $@ $<
+ 
+ # Rule for making gbak files when cross-compiling
+ 
+--- src/common/utils.cpp	2016-07-15 11:31:26.746871100 +0200
++++ src/common/utils.cpp	2016-07-19 19:14:45.370689300 +0200
+@@ -880,15 +880,15 @@
+ 	FILETIME utime, stime, dummy;
+ 	if (GetProcessTimes(GetCurrentProcess(), &dummy, &dummy, &stime, &utime))
+ 	{
+-		LARGE_INTEGER lint;
++		LARGE_INTEGER myLargeInt;
+ 
+-		lint.HighPart = stime.dwHighDateTime;
+-		lint.LowPart = stime.dwLowDateTime;
+-		sysTime = lint.QuadPart / 10000;
+-
+-		lint.HighPart = utime.dwHighDateTime;
+-		lint.LowPart = utime.dwLowDateTime;
+-		userTime = lint.QuadPart / 10000;
++		myLargeInt.HighPart = stime.dwHighDateTime;
++		myLargeInt.LowPart = stime.dwLowDateTime;
++		sysTime = myLargeInt.QuadPart / 10000;
++
++		myLargeInt.HighPart = utime.dwHighDateTime;
++		myLargeInt.LowPart = utime.dwLowDateTime;
++		userTime = myLargeInt.QuadPart / 10000;
+ 	}
+ 	else
+ 	{
+diff -ur builds/posix/prefix.mingw builds/posix/prefix.mingw
+--- builds/posix/prefix.mingw	2016-07-07 13:56:13.048235166 +0200
++++ builds/posix/prefix.mingw	2016-07-07 14:50:54.704323046 +0200
+@@ -20,8 +20,8 @@
+ # 
+
+ # -Wno-unused-variable is used due to unused gpre generated variables
+-PROD_FLAGS=-O2  -DMINGW -Wall -Wshadow -Wundef -Wno-long-long -Wno-unused-variable -Wno-sign-compare -Wno-parentheses -Wno-switch -fmessage-length=0 -Dlint -DWIN32_LEAN_AND_MEAN -MMD -mthreads -Wno-non-virtual-dtor
+-DEV_FLAGS=-ggdb -DMINGW -Wall -Wshadow -Wundef -Wno-long-long -Wno-unused-variable -Wno-sign-compare -Wno-parentheses -Wno-switch -fmessage-length=0 -Dlint -DWIN32_LEAN_AND_MEAN -MMD -mthreads -Wno-non-virtual-dtor
++PROD_FLAGS=-O2  -DMINGW  -Dlint -DWIN32_LEAN_AND_MEAN
++DEV_FLAGS=-ggdb  -DMINGW -Dlint -DWIN32_LEAN_AND_MEAN
+
+ PLATFORM_PATH=os/win32
+
+@@ -29,6 +29,7 @@
+ LIB_LINK=$(LD)
+
+ LIB_LINK_OPTIONS+=-Wl,--enable-stdcall-fixup
++LIB_PLATFORM_RPATH=
+
+ # Strip symbols from release versions to decrease size
+ ifeq ($(IsProdTypeBuild),Y)
+@@ -36,6 +37,9 @@
+ LIB_LINK_OPTIONS+=-Wl,-s
+ endif
+
++LIB_LINK_OPTIONS=
++LINK_OPTS=
++
+ # Generation of fbclient_ms.lib
+ LIB_LINK_IMPLIB:=-Wl,--out-implib,firebird/lib/fbclient_ms.lib
+ LIB_GUI:= -mwindows -lcomctl32 -lgdi32
+@@ -55,7 +59,7 @@
+ ClientLibrarySoName := $(ClientLibraryName)
+
+ # Looks like MinGW 3 does not support version scripts but support def-files
+-LINK_FIREBIRD_SYMBOLS = $(BLD_ROOT)/win32/defs/fbclient_s.def $(BLD_ROOT)/win32/defs/fbclient.def
++LINK_FIREBIRD_SYMBOLS = /def:$(BLD_ROOT)/win32/defs/fbclient_s.def /def:$(BLD_ROOT)/win32/defs/fbclient.def
+
+ # This is required for newly built executable to find newly built shared
+ # libraries because on Win32 there is no such thing as LD_LIBRARY_PATH
+diff -ur configure configure
+--- configure	2016-07-07 13:55:54.976234682 +0200
++++ configure	2016-07-07 14:54:30.012328812 +0200
+@@ -3337,6 +3337,14 @@
+     SHRLIB_EXT=dll
+     ;;
+
++  *-*-cygwin*)
++    MAKEFILE_PREFIX=mingw
++    PLATFORM=win32
++    EDITLINE_FLG=N
++    RAW_DEVICES_FLG=N
++    SHRLIB_EXT=dll
++    ;;
++
+   *)
+     as_fn_error $? "unsupported platform ${build}" "$LINENO" 5
+     ;;
+@@ -8432,6 +8432,9 @@
+ mingw*)
+   opt_cr=`$ECHO 'x\{0,1\}' | tr x '\015'` # option cr in regexp
+   ;;
++cygwin*)
++  opt_cr=`$ECHO 'x\{0,1\}' | tr x '\015'` # option cr in regexp
++  ;;
+ esac
+
+ # Try without a prefix underscore, then with it.
+diff -ur extern/btyacc/main.c extern/btyacc/main.c
+--- extern/btyacc/main.c	2016-07-07 13:55:55.448234695 +0200
++++ extern/btyacc/main.c	2016-07-07 14:56:03.560331317 +0200
+@@ -2,7 +2,7 @@
+ #include <signal.h>
+ #include <stdio.h>
+
+-#if defined(WIN32)
++#if defined(WIN32) || defined(_WIN32)
+ #include <io.h>
+ #else
+ #include <unistd.h>
+diff -ur extern/btyacc/Makefile extern/btyacc/Makefile
+--- extern/btyacc/Makefile	2016-07-07 13:55:55.448234695 +0200
++++ extern/btyacc/Makefile	2016-07-07 14:57:42.284333961 +0200
+@@ -42,7 +42,10 @@
+ all:		$(PROGRAM)
+
+ $(PROGRAM):     $(OBJS) $(LIBS)
+-		$(CC) $(LDFLAGS) -o $(PROGRAM) $(OBJS) $(LIBS)
++		$(CC) -o $(PROGRAM).exe $(OBJS) $(LIBS) $(LDFLAGS)
++
++%.o: %.c
++		$(CC)  -c $< -Fo$@ $(CCFLAGS)
+
+ clean:;		rm -f $(OBJS)
+
+--- extern/cloop/src/tests/test1/CppTest.cpp	2016-07-07 15:56:27.948015300 +0200
++++ extern/cloop/src/tests/test1/CppTest.cpp	2016-07-13 18:58:48.529822600 +0200
+@@ -24,6 +24,7 @@
+ #include <stdio.h>
+ #include <assert.h>
+ 
++#define WIN32
+ #ifdef WIN32
+ #include <windows.h>
+ #define DLL_EXPORT __declspec(dllexport)
+--- extern/cloop/src/tests/test1/CTest.c	2016-07-07 15:56:27.611791300 +0200
++++ extern/cloop/src/tests/test1/CTest.c	2016-07-13 17:04:22.805090300 +0200
+@@ -23,6 +23,7 @@
+ #include <malloc.h>
+ #include <stdio.h>
+ 
++#define WIN32
+ #ifdef WIN32
+ #include <windows.h>
+ #define DLL_EXPORT __declspec(dllexport)
+--- extern/cloop/Makefile	2016-07-07 15:56:28.279136300 +0200
++++ extern/cloop/Makefile	2016-07-13 16:22:38.493479800 +0200
+@@ -4,15 +4,15 @@
+ 
+ TARGET	:= release
+ 
+-CC	:= gcc
+-CXX	:= g++
+-LD	:= $(CXX)
++#CC	:= gcc
++#CXX	:= g++
++#LD	:= $(CXX)
+ 
+ SRC_DIR		:= src
+ BUILD_DIR	:= build
+ OUT_DIR		:= output
+-SHRLIB_EXT	:= .so
+-EXE_EXT		:=
++SHRLIB_EXT	:= .dll
++EXE_EXT		:= .exe
+ 
+ OBJ_DIR := $(BUILD_DIR)/$(TARGET)
+ BIN_DIR := $(OUT_DIR)/$(TARGET)/bin
+@@ -27,17 +27,17 @@
+ OBJS_C := $(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SRCS_C))
+ OBJS_CPP := $(patsubst $(SRC_DIR)/%.cpp,$(OBJ_DIR)/%.o,$(SRCS_CPP))
+ 
+-C_FLAGS := -ggdb -fPIC -MMD -MP -W -Wall -Wno-unused-parameter
++C_FLAGS := -fPIC
+ CXX_FLAGS := $(C_FLAGS)
+ FPC_FLAGS := -Mdelphi
+ 
+-ifeq ($(TARGET),release)
+-	CXX_FLAGS += -O3
+-endif
+-
+-ifeq ($(TARGET),debug)
+-	FPC_FLAGS += -g
+-endif
++#ifeq ($(TARGET),release)
++#	CXX_FLAGS += -O3
++#endif
++
++#ifeq ($(TARGET),debug)
++#	FPC_FLAGS += -g
++#endif
+ 
+ vpath %.c $(SRC_DIRS)
+ vpath %.cpp $(SRC_DIRS)
+@@ -53,7 +53,7 @@
+ .PHONY: all mkdirs clean
+ 
+ all: mkdirs \
+-	$(BIN_DIR)/cloop	\
++	$(BIN_DIR)/cloop$(EXE_EXT)	\
+ 	$(BIN_DIR)/test1-c$(SHRLIB_EXT)	\
+ 	$(BIN_DIR)/test1-c$(EXE_EXT)	\
+ 	$(BIN_DIR)/test1-cpp$(SHRLIB_EXT)	\
+@@ -74,7 +74,7 @@
+ -include $(addsuffix .d,$(basename $(OBJS_C)))
+ -include $(addsuffix .d,$(basename $(OBJS_CPP)))
+ 
+-$(BIN_DIR)/cloop: \
++$(BIN_DIR)/cloop$(EXE_EXT): \
+ 	$(OBJ_DIR)/cloop/Expr.o \
+ 	$(OBJ_DIR)/cloop/Generator.o \
+ 	$(OBJ_DIR)/cloop/Lexer.o \
+@@ -83,20 +83,20 @@
+ 
+ 	$(LD) $^ -o $@
+ 
+-$(SRC_DIR)/tests/test1/CalcCApi.h: $(BIN_DIR)/cloop $(SRC_DIR)/tests/test1/Interface.idl
+-	$(BIN_DIR)/cloop $(SRC_DIR)/tests/test1/Interface.idl c-header $@ CALC_C_API_H CALC_I
++$(SRC_DIR)/tests/test1/CalcCApi.h: $(BIN_DIR)/cloop$(EXE_EXT) $(SRC_DIR)/tests/test1/Interface.idl
++	$(BIN_DIR)/cloop$(EXE_EXT) $(SRC_DIR)/tests/test1/Interface.idl c-header $@ CALC_C_API_H CALC_I
+ 
+-$(SRC_DIR)/tests/test1/CalcCApi.c: $(BIN_DIR)/cloop $(SRC_DIR)/tests/test1/Interface.idl $(SRC_DIR)/tests/test1/CalcCApi.h
+-	$(BIN_DIR)/cloop $(SRC_DIR)/tests/test1/Interface.idl c-impl $@ CalcCApi.h CALC_I
++$(SRC_DIR)/tests/test1/CalcCApi.c: $(BIN_DIR)/cloop$(EXE_EXT) $(SRC_DIR)/tests/test1/Interface.idl $(SRC_DIR)/tests/test1/CalcCApi.h
++	$(BIN_DIR)/cloop$(EXE_EXT) $(SRC_DIR)/tests/test1/Interface.idl c-impl $@ CalcCApi.h CALC_I
+ 
+-$(SRC_DIR)/tests/test1/CalcCppApi.h: $(BIN_DIR)/cloop $(SRC_DIR)/tests/test1/Interface.idl
+-	$(BIN_DIR)/cloop $(SRC_DIR)/tests/test1/Interface.idl c++ $@ CALC_CPP_API_H calc I
++$(SRC_DIR)/tests/test1/CalcCppApi.h: $(BIN_DIR)/cloop$(EXE_EXT) $(SRC_DIR)/tests/test1/Interface.idl
++	$(BIN_DIR)/cloop$(EXE_EXT) $(SRC_DIR)/tests/test1/Interface.idl c++ $@ CALC_CPP_API_H calc I
+ 
+-$(SRC_DIR)/tests/test1/CalcPascalApi.pas: $(BIN_DIR)/cloop \
++$(SRC_DIR)/tests/test1/CalcPascalApi.pas: $(BIN_DIR)/cloop$(EXE_EXT) \
+ 	$(SRC_DIR)/tests/test1/Interface.idl \
+ 	$(SRC_DIR)/tests/test1/CalcPascalApi.interface.pas \
+ 	$(SRC_DIR)/tests/test1/CalcPascalApi.implementation.pas
+-	$(BIN_DIR)/cloop $(SRC_DIR)/tests/test1/Interface.idl pascal $@ CalcPascalApi \
++	$(BIN_DIR)/cloop$(EXE_EXT) $(SRC_DIR)/tests/test1/Interface.idl pascal $@ CalcPascalApi \
+ 		--uses "SysUtils" \
+ 		--interfaceFile $(SRC_DIR)/tests/test1/CalcPascalApi.interface.pas \
+ 		--implementationFile $(SRC_DIR)/tests/test1/CalcPascalApi.implementation.pas \
+@@ -108,23 +108,23 @@
+ 	$(OBJ_DIR)/tests/test1/CalcCApi.o \
+ 	$(OBJ_DIR)/tests/test1/CTest.o \
+ 
+-	$(LD) $^ -shared -ldl -o $@
++	$(LD) $^ -o $@
+ 
+ $(BIN_DIR)/test1-c$(EXE_EXT): \
+ 	$(OBJ_DIR)/tests/test1/CalcCApi.o \
+ 	$(OBJ_DIR)/tests/test1/CTest.o \
+ 
+-	$(LD) $^ -ldl -o $@
++	$(LD) $^ -o $@
+ 
+ $(BIN_DIR)/test1-cpp$(SHRLIB_EXT): \
+ 	$(OBJ_DIR)/tests/test1/CppTest.o \
+ 
+-	$(LD) $^ -shared -ldl -o $@
++	$(LD) $^ -o $@
+ 
+ $(BIN_DIR)/test1-cpp$(EXE_EXT): \
+ 	$(OBJ_DIR)/tests/test1/CppTest.o \
+ 
+-	$(LD) $^ -ldl -o $@
++	$(LD) $^ -o $@
+ 
+ $(BIN_DIR)/test1-pascal$(SHRLIB_EXT): \
+ 	$(SRC_DIR)/tests/test1/PascalClasses.pas \
+diff -ur src/common/classes/fb_string.cpp src/common/classes/fb_string.cpp
+--- src/common/classes/fb_string.cpp	2016-07-07 13:55:56.064234711 +0200
++++ src/common/classes/fb_string.cpp	2016-07-07 14:59:01.516336083 +0200
+@@ -32,6 +32,12 @@
+ #include <ctype.h>
+ #include <stdarg.h>
+ 
++#ifdef WIN_NT
++#pragma comment(lib, "User32.lib")
++#pragma comment(lib, "advapi32")
++#pragma comment(lib, "shell32.lib")
++#endif
++
+ #ifdef HAVE_STRCASECMP
+ #define STRNCASECMP strncasecmp
+ #else
+diff -ur src/misc/makeHeader.cpp src/misc/makeHeader.cpp
+--- src/misc/makeHeader.cpp	2016-07-07 13:56:00.100234819 +0200
++++ src/misc/makeHeader.cpp	2016-07-07 15:00:14.780338045 +0200
+@@ -1,9 +1,9 @@
+ #include <stdio.h>
+ #include <string.h>
+ #include <errno.h>
+-//#ifdef HAVE_UNISTD_H
++#ifdef HAVE_UNISTD_H
+ #include <unistd.h>
+-//#endif
++#endif
+
+
+
