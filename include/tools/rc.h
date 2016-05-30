@@ -118,18 +118,20 @@ namespace o3tl {
 }
 
 // For "ToolBoxItem" resources:
-#define RSC_TOOLBOXITEM_ID              0x0001
-#define RSC_TOOLBOXITEM_TYPE            0x0002
-#define RSC_TOOLBOXITEM_STATUS          0x0004
-#define RSC_TOOLBOXITEM_HELPID          0x0008
-#define RSC_TOOLBOXITEM_TEXT            0x0010
-#define RSC_TOOLBOXITEM_HELPTEXT        0x0020
-#define RSC_TOOLBOXITEM_BITMAP          0x0040
-#define RSC_TOOLBOXITEM_IMAGE           0x0080
-#define RSC_TOOLBOXITEM_DISABLE         0x0100
-#define RSC_TOOLBOXITEM_STATE           0x0200
-#define RSC_TOOLBOXITEM_HIDE            0x0400
-#define RSC_TOOLBOXITEM_COMMAND         0x0800
+enum class RscToolboxItemFlags {
+    Id              = 0x0001,
+    Type            = 0x0002,
+    Status          = 0x0004,
+    HelpId          = 0x0008,
+    Text            = 0x0010,
+    Bitmap          = 0x0040,
+    Disable         = 0x0100,
+    Hide            = 0x0400,
+    Command         = 0x0800
+};
+namespace o3tl {
+    template<> struct typed_flags<RscToolboxItemFlags> : is_typed_flags<RscToolboxItemFlags, 0xd5f> {};
+}
 
 // For "ToolBox" resources:
 enum class RscToolboxFlags {
