@@ -14,23 +14,23 @@ $(eval $(call gb_UnpackedTarball_set_tarball,firebird,$(FIREBIRD_TARBALL)))
 $(eval $(call gb_UnpackedTarball_set_patchlevel,firebird,0))
 
 $(eval $(call gb_UnpackedTarball_add_patches,firebird,\
-	external/firebird/firebird-rpath.patch.0 \
-	external/firebird/firebird-c++11.patch.1 \
         external/firebird/firebird.disable-ib-util-not-found.patch.1 \
-	external/firebird/firebird-c++14.patch \
+		external/firebird/firebird-rpath-Engine12.patch \
+		external/firebird/firebird-rpath.patch \
 ))
 
 ifeq ($(OS)-$(COM),WNT-MSC)
 $(eval $(call gb_UnpackedTarball_add_patches,firebird,\
-	external/firebird/firebird-cygwin-msvc.patch.1 \
+	external/firebird/firebird-cygwin-msvc.patch \
 ))
 endif
 
-ifeq ($(OS),MACOSX)
-$(eval $(call gb_UnpackedTarball_add_patches,firebird,\
-	external/firebird/firebird-macosx.patch.1 \
-	external/firebird/firebird-configure-x86-64-macosx.patch.1 \
-	external/firebird/macosx-elcapitan-dyld.patch \
-))
-endif
+#ifeq ($(OS),MACOSX)
+#$(eval $(call gb_UnpackedTarball_add_patches,firebird,\
+#	external/firebird/firebird-macosx.patch.1 \
+#	external/firebird/firebird-configure-x86-64-macosx.patch.1 \
+#	external/firebird/macosx-elcapitan-dyld.patch \
+#))
+#endif
+
 # vim: set noet sw=4 ts=4:
