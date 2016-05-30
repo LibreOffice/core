@@ -130,6 +130,7 @@ public:
     void testTableCellBorder();
     void testBulletColor();
     void testTdf62176();
+    void testTdf93883();
     void testBulletCharAndFont();
     void testBulletMarginAndIndentation();
     void testParaMarginAndindentation();
@@ -185,6 +186,7 @@ public:
     CPPUNIT_TEST(testTableCellBorder);
     CPPUNIT_TEST(testBulletColor);
     CPPUNIT_TEST(testTdf62176);
+    CPPUNIT_TEST(testTdf93883);
     CPPUNIT_TEST(testBulletCharAndFont);
     CPPUNIT_TEST(testBulletMarginAndIndentation);
     CPPUNIT_TEST(testParaMarginAndindentation);
@@ -1068,6 +1070,16 @@ void SdExportTest::testTdf62176()
     CPPUNIT_ASSERT_EQUAL(OUString("Hello World"), xParagraph2->getString());
 
     xDocShRef->DoClose();
+}
+
+void SdExportTest::testTdf93883()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL( m_directories.getURLFromSrc("/sd/qa/unit/data/odp/tdf93883.odp"), ODP);
+    xDocShRef = saveAndReload( xDocShRef, PPTX );
+    uno::Reference< beans::XPropertySet > xShape( getShapeFromPage( 0, 0, xDocShRef ) );
+    uno::Reference<text::XTextRange> const xParagraph( getParagraphFromShape( 0, xShape ) );
+    uno::Reference< beans::XPropertySet > xPropSet( xParagraph, uno::UNO_QUERY_THROW );
+    CPPUNIT_ASSERT(!xPropSet->getPropertyValue("NumberingLevel").hasValue());
 }
 
 void SdExportTest::testBulletCharAndFont()
