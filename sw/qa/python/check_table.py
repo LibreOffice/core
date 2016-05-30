@@ -482,6 +482,23 @@ class CheckTable(unittest.TestCase):
         self.assertEqual(xTable.getCellByPosition(0, 1).getValue(), 42307.0)
         xDoc.dispose()
 
+    def test_tableTemplate(self):
+        xDoc = CheckTable._uno.openEmptyWriterDoc()
+        xDocFrame = xDoc.CurrentController.Frame
+        xContext = CheckTable._uno.getContext()
+        xServiceManager = xContext.ServiceManager
+        xDispatcher = xServiceManager.createInstanceWithContext(
+            'com.sun.star.frame.DispatchHelper', xContext)
+        xTable = xDoc.createInstance("com.sun.star.text.TextTable")
+        xTable.initialize(1, 1)
+        xTable.setPropertyValue("TableTemplateName", "Default")
+        self.assertEqual(xTable.getPropertyValue("TableTemplateName"), "Default")
+        xTable.setPropertyValue("TableTemplateName", "other_style")
+        self.assertEqual(xTable.getPropertyValue("TableTemplateName"), "other_style")
+        xTable.setPropertyValue("TableTemplateName", "")
+        self.assertEqual(xTable.getPropertyValue("TableTemplateName"), "")
+        xDoc.dispose()
+
 if __name__ == '__main__':
     unittest.main()
 
