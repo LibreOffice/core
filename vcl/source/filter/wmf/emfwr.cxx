@@ -1484,15 +1484,15 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
 
             case( MetaActionType::LAYOUTMODE ):
             {
-                ComplexTextLayoutMode nLayoutMode = static_cast<const MetaLayoutModeAction*>(pAction)->GetLayoutMode();
+                ComplexTextLayoutFlags nLayoutMode = static_cast<const MetaLayoutModeAction*>(pAction)->GetLayoutMode();
                 mnHorTextAlign = 0;
-                if ((nLayoutMode & TEXT_LAYOUT_BIDI_RTL) != TEXT_LAYOUT_DEFAULT)
+                if ((nLayoutMode & ComplexTextLayoutFlags::BiDiRtl) != ComplexTextLayoutFlags::Default)
                 {
                     mnHorTextAlign = TA_RIGHT | TA_RTLREADING;
                 }
-                if ((nLayoutMode & TEXT_LAYOUT_TEXTORIGIN_RIGHT) != TEXT_LAYOUT_DEFAULT)
+                if ((nLayoutMode & ComplexTextLayoutFlags::TextOriginRight) != ComplexTextLayoutFlags::Default)
                     mnHorTextAlign |= TA_RIGHT;
-                else if ((nLayoutMode & TEXT_LAYOUT_TEXTORIGIN_LEFT) != TEXT_LAYOUT_DEFAULT)
+                else if ((nLayoutMode & ComplexTextLayoutFlags::TextOriginLeft) != ComplexTextLayoutFlags::Default)
                     mnHorTextAlign &= ~TA_RIGHT;
                 break;
             }

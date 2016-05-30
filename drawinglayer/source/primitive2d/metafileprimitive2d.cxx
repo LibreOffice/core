@@ -88,7 +88,7 @@ namespace
         /// font, etc.
         vcl::Font               maFont;
         RasterOp                maRasterOp;
-        ComplexTextLayoutMode   mnLayoutMode;
+        ComplexTextLayoutFlags   mnLayoutMode;
         LanguageType            maLanguageType;
         PushFlags               mnPushFlags;
 
@@ -115,7 +115,7 @@ namespace
             maClipPolyPoygon(),
             maFont(),
             maRasterOp(ROP_OVERPAINT),
-            mnLayoutMode(TEXT_LAYOUT_DEFAULT),
+            mnLayoutMode(ComplexTextLayoutFlags::Default),
             maLanguageType(0),
             mnPushFlags(PushFlags::NONE),
             mbLineColor(false),
@@ -183,8 +183,8 @@ namespace
         bool isRasterOpForceBlack() const { return ROP_0 == maRasterOp; }
         bool isRasterOpActive() const { return isRasterOpInvert() || isRasterOpForceBlack(); }
 
-        ComplexTextLayoutMode getLayoutMode() const { return mnLayoutMode; }
-        void setLayoutMode(ComplexTextLayoutMode nNew) { if(nNew != mnLayoutMode) mnLayoutMode = nNew; }
+        ComplexTextLayoutFlags getLayoutMode() const { return mnLayoutMode; }
+        void setLayoutMode(ComplexTextLayoutFlags nNew) { if(nNew != mnLayoutMode) mnLayoutMode = nNew; }
 
         LanguageType getLanguageType() const { return maLanguageType; }
         void setLanguageType(LanguageType aNew) { if(aNew != maLanguageType) maLanguageType = aNew; }
@@ -1220,8 +1220,8 @@ namespace
             drawinglayer::primitive2d::getFontAttributeFromVclFont(
                 aFontScaling,
                 rFont,
-                bool(rProperty.getLayoutMode() & TEXT_LAYOUT_BIDI_RTL),
-                bool(rProperty.getLayoutMode() & TEXT_LAYOUT_BIDI_STRONG)));
+                bool(rProperty.getLayoutMode() & ComplexTextLayoutFlags::BiDiRtl),
+                bool(rProperty.getLayoutMode() & ComplexTextLayoutFlags::BiDiStrong)));
 
         // add FontScaling
         rTextTransform.scale(aFontScaling.getX(), aFontScaling.getY());

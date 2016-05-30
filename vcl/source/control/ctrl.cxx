@@ -81,8 +81,8 @@ void Control::dispose()
 void Control::EnableRTL( bool bEnable )
 {
     // convenience: for controls also switch layout mode
-    SetLayoutMode( bEnable ? TEXT_LAYOUT_BIDI_RTL | TEXT_LAYOUT_TEXTORIGIN_LEFT :
-                                TEXT_LAYOUT_TEXTORIGIN_LEFT );
+    SetLayoutMode( bEnable ? ComplexTextLayoutFlags::BiDiRtl | ComplexTextLayoutFlags::TextOriginLeft :
+                                ComplexTextLayoutFlags::TextOriginLeft );
     CompatStateChanged( StateChangedType::Mirroring );
     OutputDevice::EnableRTL(bEnable);
 }

@@ -1596,15 +1596,15 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
 
                 case( MetaActionType::LAYOUTMODE ):
                 {
-                    ComplexTextLayoutMode nLayoutMode = static_cast<const MetaLayoutModeAction*>(pMA)->GetLayoutMode();
+                    ComplexTextLayoutFlags nLayoutMode = static_cast<const MetaLayoutModeAction*>(pMA)->GetLayoutMode();
                     eSrcHorTextAlign = 0; // TA_LEFT
-                    if ((nLayoutMode & TEXT_LAYOUT_BIDI_RTL) != TEXT_LAYOUT_DEFAULT)
+                    if ((nLayoutMode & ComplexTextLayoutFlags::BiDiRtl) != ComplexTextLayoutFlags::Default)
                     {
                         eSrcHorTextAlign = W_TA_RIGHT | W_TA_RTLREADING;
                     }
-                    if ((nLayoutMode & TEXT_LAYOUT_TEXTORIGIN_RIGHT) != TEXT_LAYOUT_DEFAULT)
+                    if ((nLayoutMode & ComplexTextLayoutFlags::TextOriginRight) != ComplexTextLayoutFlags::Default)
                         eSrcHorTextAlign |= W_TA_RIGHT;
-                    else if ((nLayoutMode & TEXT_LAYOUT_TEXTORIGIN_LEFT) != TEXT_LAYOUT_DEFAULT)
+                    else if ((nLayoutMode & ComplexTextLayoutFlags::TextOriginLeft) != ComplexTextLayoutFlags::Default)
                         eSrcHorTextAlign &= ~W_TA_RIGHT;
                     break;
                 }

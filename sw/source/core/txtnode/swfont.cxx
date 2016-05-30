@@ -1478,7 +1478,7 @@ void SwDrawTextInfo::Shift( sal_uInt16 nDir )
 #endif
 
     const bool bBidiPor = ( GetFrame() && GetFrame()->IsRightToLeft() ) !=
-                          ( TEXT_LAYOUT_DEFAULT != ( TEXT_LAYOUT_BIDI_RTL & GetpOut()->GetLayoutMode() ) );
+                          ( ComplexTextLayoutFlags::Default != ( ComplexTextLayoutFlags::BiDiRtl & GetpOut()->GetLayoutMode() ) );
 
     nDir = bBidiPor ?
             1800 :
