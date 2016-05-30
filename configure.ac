@@ -1451,325 +1451,330 @@ AC_ARG_ENABLE(readonly-installset,
 ,)
 
 AC_ARG_ENABLE(postgresql-sdbc,
-    AS_HELP_STRING([--disable-postgresql-sdbc],
-        [Disable the build of the PostgreSQL-SDBC driver.])
-)
+              AS_HELP_STRING([--disable-postgresql-sdbc],
+                             [Disable the build of the PostgreSQL-SDBC driver.])
+              )
 
 AC_ARG_ENABLE(lotuswordpro,
-    AS_HELP_STRING([--disable-lotuswordpro],
-        [Disable the build of the Lotus Word Pro filter.]),
-,enable_lotuswordpro=yes)
+              AS_HELP_STRING([--disable-lotuswordpro],
+                             [Disable the build of the Lotus Word Pro filter.]),
+                             ,enable_lotuswordpro=yes)
 
 AC_ARG_ENABLE(firebird-sdbc,
-    AS_HELP_STRING([--disable-firebird-sdbc],
-        [Disable the build of the Firebird-SDBC driver if it doesn't compile for you.]),
-,enable_firebird_sdbc=yes)
+              AS_HELP_STRING([--disable-firebird-sdbc],
+                             [Disable the build of the Firebird-SDBC driver if it doesn't compile for you.]),
+                             ,enable_firebird_sdbc=yes)
 
 AC_ARG_ENABLE(winegcc,
-    AS_HELP_STRING([--enable-winegcc],
-        [Enable use of winegcc during the build, in order to create msi* tools
-         needed for MinGW cross-compilation.]),
-)
+              AS_HELP_STRING([--enable-winegcc],
+                             [Enable use of winegcc during the build, in order to create msi* tools
+                              needed for MinGW cross-compilation.]),
+                              )
 
 AC_ARG_ENABLE(liblangtag,
-    AS_HELP_STRING([--disable-liblangtag],
-        [Disable use of liblangtag, and instead use an own simple
-         implementation.]),
-)
+              AS_HELP_STRING([--disable-liblangtag],
+                             [Disable use of liblangtag, and instead use an own simple
+                              implementation.]),
+                              )
 
 AC_ARG_ENABLE(bogus-pkg-config,
-    AS_HELP_STRING([--enable-bogus-pkg-config],
-        [MACOSX only: on MacOSX pkg-config can cause trouble. by default if one is found in the PATH, an error is issued. This flag turn that error into a warning.]),
-)
+              AS_HELP_STRING([--enable-bogus-pkg-config],
+                             [MACOSX only: on MacOSX pkg-config can cause trouble. by default if one is found in the PATH, an error is issued. This flag turn that error into a warning.]),
+                             )
 
 AC_ARG_ENABLE(openssl,
-    AS_HELP_STRING([--disable-openssl],
-        [Disable using libssl/libcrypto from OpenSSL. If disabled,
-         components will either use GNUTLS or NSS. Work in progress,
-         use only if you are hacking on it.]),
-,enable_openssl=yes)
+              AS_HELP_STRING([--disable-openssl],
+                             [Disable using libssl/libcrypto from OpenSSL. If disabled,
+                              components will either use GNUTLS or NSS. Work in progress,
+                              use only if you are hacking on it.]),
+                              ,enable_openssl=yes)
 
 AC_ARG_ENABLE(library-bin-tar,
-    AS_HELP_STRING([--enable-library-bin-tar],
-        [Enable the building and reused of tarball of binary build for some 'external' libraries.
-        Some libraries can save their build result in a tarball
-        stored in TARFILE_LOCATION. That binary tarball is
-        uniquely identified by the source tarball,
-        the content of the config_host.mk file and the content
-        of the top-level directory in core for that library
-        If this option is enabled, then if such a tarfile exist, it will be untarred
-        instead of the source tarfile, and the build step will be skipped for that
-        library.
-        If a proper tarfile does not exist, then the normal source-based
-        build is done for that library and a proper binary tarfile is created
-        for the next time.]),
-)
+              AS_HELP_STRING([--enable-library-bin-tar],
+                             [Enable the building and reused of tarball of binary build for some 'external' libraries.
+                              Some libraries can save their build result in a tarball
+                              stored in TARFILE_LOCATION. That binary tarball is
+                              uniquely identified by the source tarball,
+                              the content of the config_host.mk file and the content
+                              of the top-level directory in core for that library
+                              If this option is enabled, then if such a tarfile exist, it will be untarred
+                              instead of the source tarfile, and the build step will be skipped for that
+                              library.
+                              If a proper tarfile does not exist, then the normal source-based
+                              build is done for that library and a proper binary tarfile is created
+                              for the next time.]),
+                                  )
 
 AC_ARG_ENABLE(gltf,
-    AS_HELP_STRING([--disable-gltf],
-        [Determines whether to build libraries related to glTF 3D model rendering.]))
+              AS_HELP_STRING([--disable-gltf],
+                             [Determines whether to build libraries related to glTF 3D model rendering.]))
 
 AC_ARG_ENABLE(collada,
-    AS_HELP_STRING([--disable-collada],
-        [Disable collada support (Rendering 3D models stored in *.dae and *.kmz format).]))
+              AS_HELP_STRING([--disable-collada],
+                             [Disable collada support (Rendering 3D models stored in *.dae and *.kmz format).]))
 
 AC_ARG_ENABLE(dconf,
-    AS_HELP_STRING([--disable-dconf],
-        [Disable the dconf configuration backend (enabled by default where
-         available).]))
+              AS_HELP_STRING([--disable-dconf],
+                             [Disable the dconf configuration backend (enabled by default where
+                              available).]))
 
 dnl ===================================================================
 dnl Optional Packages (--with/without-)
 dnl ===================================================================
 
 AC_ARG_WITH(gcc-home,
-    AS_HELP_STRING([--with-gcc-home],
-        [Specify the location of gcc/g++ manually. This can be used in conjunction
-         with --enable-icecream when icecream gcc/g++ wrappers are installed in a
-         non-default path.]),
-,)
+            AS_HELP_STRING([--with-gcc-home],
+                           [Specify the location of gcc/g++ manually. This can be used in conjunction
+                            with --enable-icecream when icecream gcc/g++ wrappers are installed in a
+                            non-default path.]),
+                            ,)
 
 AC_ARG_WITH(gnu-patch,
-    AS_HELP_STRING([--with-gnu-patch],
-        [Specify location of GNU patch on Solaris or FreeBSD.]),
-,)
+            AS_HELP_STRING([--with-gnu-patch],
+                           [Specify location of GNU patch on Solaris or FreeBSD.]),
+                           ,)
 
 AC_ARG_WITH(build-platform-configure-options,
-    AS_HELP_STRING([--with-build-platform-configure-options],
-        [Specify options for the configure script run for the *build* platform in a cross-compilation]),
-,)
+            AS_HELP_STRING([--with-build-platform-configure-options],
+                           [Specify options for the configure script run for the *build* platform in a cross-compilation]),
+                           ,)
 
 AC_ARG_WITH(gnu-cp,
-    AS_HELP_STRING([--with-gnu-cp],
-        [Specify location of GNU cp on Solaris or FreeBSD.]),
-,)
+            AS_HELP_STRING([--with-gnu-cp],
+                           [Specify location of GNU cp on Solaris or FreeBSD.]),
+                           ,)
 
 AC_ARG_WITH(external-tar,
-    AS_HELP_STRING([--with-external-tar=<TARFILE_PATH>],
-        [Specify an absolute path of where to find (and store) tarfiles.]),
-    TARFILE_LOCATION=$withval ,
-)
+            AS_HELP_STRING([--with-external-tar=<TARFILE_PATH>],
+                           [Specify an absolute path of where to find (and store) tarfiles.]),
+                           TARFILE_LOCATION=$withval ,
+                           )
 
 AC_ARG_WITH(referenced-git,
-    AS_HELP_STRING([--with-referenced-git=<OTHER_CHECKOUT_DIR>],
-        [Specify another checkout directory to reference. This makes use of
-                 git submodule update --reference, and saves a lot of diskspace
-                 when having multiple trees side-by-side.]),
-    GIT_REFERENCE_SRC=$withval ,
-)
+            AS_HELP_STRING([--with-referenced-git=<OTHER_CHECKOUT_DIR>],
+                           [Specify another checkout directory to reference. This makes use of
+                            git submodule update --reference, and saves a lot of diskspace
+                            when having multiple trees side-by-side.]),
+                            GIT_REFERENCE_SRC=$withval ,
+                            )
 
 AC_ARG_WITH(linked-git,
-    AS_HELP_STRING([--with-linked-git=<submodules repo basedir>],
-        [Specify a directory where the repositories of submodules are located.
-         This uses a method similar to git-new-workdir to get submodules.]),
-    GIT_LINK_SRC=$withval ,
-)
+            AS_HELP_STRING([--with-linked-git=<submodules repo basedir>],
+                           [Specify a directory where the repositories of submodules are located.
+                            This uses a method similar to git-new-workdir to get submodules.]),
+                            GIT_LINK_SRC=$withval ,
+                            )
 
 AC_ARG_WITH(galleries,
-    AS_HELP_STRING([--with-galleries],
-        [Specify how galleries should be built. It is possible either to
-         build these internally from source ("build"),
-         or to disable them ("no")]),
-)
+            AS_HELP_STRING([--with-galleries],
+                           [Specify how galleries should be built. It is possible either to
+                            build these internally from source ("build"),
+                            or to disable them ("no")]),
+                            )
 
 AC_ARG_WITH(theme,
-    AS_HELP_STRING([--with-theme="theme1 theme2..."],
-        [Choose which themes to include. By default those themes with an '*' are included.
-         Possible choices: *breeze, crystal, *galaxy, *hicontrast, human, *oxygen, *sifr, *tango, *tango_testing.]),
-,)
+            AS_HELP_STRING([--with-theme="theme1 theme2..."],
+                           [Choose which themes to include. By default those themes with an '*' are included.
+                            Possible choices: *breeze, crystal, *galaxy, *hicontrast, human, *oxygen, *sifr, *tango, *tango_testing.]),
+                            ,)
 
 AC_ARG_WITH(helppack-integration,
-    AS_HELP_STRING([--without-helppack-integration],
-        [It will not integrate the helppacks to the installer
-         of the product. Please use this switch to use the online help
-         or separate help packages.]),
-,)
+            AS_HELP_STRING([--without-helppack-integration],
+                           [It will not integrate the helppacks to the installer
+                            of the product. Please use this switch to use the online help
+                            or separate help packages.]),
+                            ,)
 
 AC_ARG_WITH(fonts,
-    AS_HELP_STRING([--without-fonts],
-        [LibreOffice includes some third-party fonts to provide a reliable basis for
-         help content, templates, samples, etc. When these fonts are already
-         known to be available on the system then you should use this option.]),
-,)
+            AS_HELP_STRING([--without-fonts],
+                           [LibreOffice includes some third-party fonts to provide a reliable basis for
+                            help content, templates, samples, etc. When these fonts are already
+                            known to be available on the system then you should use this option.]),
+                            ,)
 
 AC_ARG_WITH(epm,
-    AS_HELP_STRING([--with-epm],
-        [Decides which epm to use. Default is to use the one from the system if
-         one is built. When either this is not there or you say =internal epm
-         will be built.]),
-,)
+            AS_HELP_STRING([--with-epm],
+                           [Decides which epm to use. Default is to use the one from the system if
+                            one is built. When either this is not there or you say =internal epm
+                            will be built.]),
+                            ,)
 
 AC_ARG_WITH(package-format,
-    AS_HELP_STRING([--with-package-format],
-        [Specify package format(s) for LibreOffice installation sets. The
-         implicit --without-package-format leads to no installation sets being
-         generated. Possible values: aix, archive, bsd, deb, dmg,
-         installed, msi, pkg, and rpm.
-         Example: --with-package-format='deb rpm']),
-,)
+            AS_HELP_STRING([--with-package-format],
+                           [Specify package format(s) for LibreOffice installation sets. The
+                            implicit --without-package-format leads to no installation sets being
+                            generated. Possible values: aix, archive, bsd, deb, dmg,
+                            installed, msi, pkg, and rpm.
+                            Example: --with-package-format='deb rpm']),
+                            ,)
 
 AC_ARG_WITH(tls,
-    AS_HELP_STRING([--with-tls],
-        [Decides which TLS/SSL and cryptographic implementations to use for
-         LibreOffice's code. Notice that this doesn't apply for depending
-         libraries like "neon", for example. Default is to use OpenSSL
-         although NSS is also possible. Notice that selecting NSS restricts
-         the usage of OpenSSL in LO's code but selecting OpenSSL doesn't
-         restrict by now the usage of NSS in LO's code. Possible values:
-         openssl, nss. Example: --with-tls="nss"]),
-,)
+            AS_HELP_STRING([--with-tls],
+                           [Decides which TLS/SSL and cryptographic implementations to use for
+                            LibreOffice's code. Notice that this doesn't apply for depending
+                            libraries like "neon", for example. Default is to use OpenSSL
+                            although NSS is also possible. Notice that selecting NSS restricts
+                            the usage of OpenSSL in LO's code but selecting OpenSSL doesn't
+                            restrict by now the usage of NSS in LO's code. Possible values:
+                            openssl, nss. Example: --with-tls="nss"]),
+                            ,)
 
 AC_ARG_WITH(system-libs,
-    AS_HELP_STRING([--with-system-libs],
-        [Use libraries already on system -- enables all --with-system-* flags.]),
-,)
+            AS_HELP_STRING([--with-system-libs],
+                           [Use libraries already on system -- enables all --with-system-* flags.]),
+                           ,)
 
 AC_ARG_WITH(system-bzip2,
-    AS_HELP_STRING([--with-system-bzip2],
-        [Use bzip2 already on system. Used only when --enable-online-update=mar]),,
-    [with_system_bzip2="$with_system_libs"])
+            AS_HELP_STRING([--with-system-bzip2],
+                           [Use bzip2 already on system. Used only when --enable-online-update=mar]),,
+                           [with_system_bzip2="$with_system_libs"])
 
 AC_ARG_WITH(system-headers,
-    AS_HELP_STRING([--with-system-headers],
-        [Use headers already on system -- enables all --with-system-* flags for
-         external packages whose headers are the only entities used i.e.
-         boost/odbc/sane-header(s).]),,
-    [with_system_headers="$with_system_libs"])
+            AS_HELP_STRING([--with-system-headers],
+                           [Use headers already on system -- enables all --with-system-* flags for
+                            external packages whose headers are the only entities used i.e.
+                            boost/odbc/sane-header(s).]),,
+                            [with_system_headers="$with_system_libs"])
 
 AC_ARG_WITH(system-jars,
-    AS_HELP_STRING([--without-system-jars],
-        [When building with --with-system-libs, also the needed jars are expected
-         on the system. Use this to disable that]),,
-    [with_system_jars="$with_system_libs"])
+            AS_HELP_STRING([--without-system-jars],
+                           [When building with --with-system-libs, also the needed jars are expected
+                            on the system. Use this to disable that]),,
+                            [with_system_jars="$with_system_libs"])
 
 AC_ARG_WITH(system-cairo,
-    AS_HELP_STRING([--with-system-cairo],
-        [Use cairo libraries already on system.  Happens automatically for
-         (implicit) --enable-gtk and for --enable-gtk3.]))
+            AS_HELP_STRING([--with-system-cairo],
+                           [Use cairo libraries already on system.  Happens automatically for
+                            (implicit) --enable-gtk and for --enable-gtk3.]))
 
 AC_ARG_WITH(myspell-dicts,
-    AS_HELP_STRING([--with-myspell-dicts],
-        [Adds myspell dictionaries to the LibreOffice installation set]),
-,)
+            AS_HELP_STRING([--with-myspell-dicts],
+                           [Adds myspell dictionaries to the LibreOffice installation set]),
+                           ,)
 
 AC_ARG_WITH(system-dicts,
-    AS_HELP_STRING([--without-system-dicts],
-        [Do not use dictionaries from system paths.]),
-,)
+            AS_HELP_STRING([--without-system-dicts],
+                           [Do not use dictionaries from system paths.]),
+                           ,)
 
 AC_ARG_WITH(external-dict-dir,
-    AS_HELP_STRING([--with-external-dict-dir],
-        [Specify external dictionary dir.]),
-,)
+            AS_HELP_STRING([--with-external-dict-dir],
+                           [Specify external dictionary dir.]),
+                           ,)
 
 AC_ARG_WITH(external-hyph-dir,
-    AS_HELP_STRING([--with-external-hyph-dir],
-        [Specify external hyphenation pattern dir.]),
-,)
+            AS_HELP_STRING([--with-external-hyph-dir],
+                           [Specify external hyphenation pattern dir.]),
+                           ,)
 
 AC_ARG_WITH(external-thes-dir,
-    AS_HELP_STRING([--with-external-thes-dir],
-        [Specify external thesaurus dir.]),
-,)
+            AS_HELP_STRING([--with-external-thes-dir],
+                           [Specify external thesaurus dir.]),
+                           ,)
 
 AC_ARG_WITH(system-zlib,
-    AS_HELP_STRING([--with-system-zlib],
-        [Use zlib already on system.]),,
-    [with_system_zlib=auto])
+            AS_HELP_STRING([--with-system-zlib],
+                           [Use zlib already on system.]),,
+                           [with_system_zlib=auto])
 
 AC_ARG_WITH(system-jpeg,
-    AS_HELP_STRING([--with-system-jpeg],
-        [Use jpeg already on system.]),,
-    [with_system_jpeg="$with_system_libs"])
+            AS_HELP_STRING([--with-system-jpeg],
+                           [Use jpeg already on system.]),,
+                           [with_system_jpeg="$with_system_libs"])
 
 AC_ARG_WITH(system-libgltf,
-    AS_HELP_STRING([--with-system-libgltf],
-        [Use libgltf already on system.]),,
-    [with_system_libgltf="$with_system_libs"])
+            AS_HELP_STRING([--with-system-libgltf],
+                           [Use libgltf already on system.]),,
+                           [with_system_libgltf="$with_system_libs"])
 
 AC_ARG_WITH(system-clucene,
-    AS_HELP_STRING([--with-system-clucene],
-        [Use clucene already on system.]),,
-    [with_system_clucene="$with_system_libs"])
+            AS_HELP_STRING([--with-system-clucene],
+                           [Use clucene already on system.]),,
+                           [with_system_clucene="$with_system_libs"])
 
 AC_ARG_WITH(system-expat,
-    AS_HELP_STRING([--with-system-expat],
-        [Use expat already on system.]),,
-    [with_system_expat="$with_system_libs"])
+            AS_HELP_STRING([--with-system-expat],
+                           [Use expat already on system.]),,
+                           [with_system_expat="$with_system_libs"])
 
 AC_ARG_WITH(system-libxml,
-    AS_HELP_STRING([--with-system-libxml],
-        [Use libxml/libxslt already on system.]),,
-    [with_system_libxml=auto])
+            AS_HELP_STRING([--with-system-libxml],
+                           [Use libxml/libxslt already on system.]),,
+                           [with_system_libxml=auto])
 
 AC_ARG_WITH(system-icu,
-    AS_HELP_STRING([--with-system-icu],
-        [Use icu already on system.]),,
-    [with_system_icu="$with_system_libs"])
+            AS_HELP_STRING([--with-system-icu],
+                           [Use icu already on system.]),,
+                           [with_system_icu="$with_system_libs"])
 
 AC_ARG_WITH(system-ucpp,
-    AS_HELP_STRING([--with-system-ucpp],
-        [Use ucpp already on system.]),,
-    [])
+            AS_HELP_STRING([--with-system-ucpp],
+                           [Use ucpp already on system.]),,
+                           [])
 
 AC_ARG_WITH(system-opencollada,
-    AS_HELP_STRING([--with-system-opencollada],
-        [Use openCOLLADA already on system.]),,
-    [with_system_opencollada=no])
+            AS_HELP_STRING([--with-system-opencollada],
+                           [Use openCOLLADA already on system.]),,
+                           [with_system_opencollada=no])
 
 AC_ARG_WITH(system-collada2gltf,
-    AS_HELP_STRING([--with-system-collada2gltf],
-        [Use collada2gltf already on system.]),,
-    [with_system_collada2gltf=no])
+            AS_HELP_STRING([--with-system-collada2gltf],
+                           [Use collada2gltf already on system.]),,
+                           [with_system_collada2gltf=no])
 
 AC_ARG_WITH(system-openldap,
-    AS_HELP_STRING([--with-system-openldap],
-        [Use the OpenLDAP LDAP SDK already on system.]),,
-    [with_system_openldap="$with_system_libs"])
+            AS_HELP_STRING([--with-system-openldap],
+                           [Use the OpenLDAP LDAP SDK already on system.]),,
+                           [with_system_openldap="$with_system_libs"])
 
 AC_ARG_WITH(system-poppler,
-    AS_HELP_STRING([--with-system-poppler],
-        [Use system poppler (only needed for PDF import).]),,
-    [with_system_poppler="$with_system_libs"])
+            AS_HELP_STRING([--with-system-poppler],
+                           [Use system poppler (only needed for PDF import).]),,
+                           [with_system_poppler="$with_system_libs"])
 
 AC_ARG_WITH(system-apache-commons,
-    AS_HELP_STRING([--with-system-apache-commons],
-        [Use Apache commons libraries already on system.]),,
-    [with_system_apache_commons="$with_system_jars"])
+            AS_HELP_STRING([--with-system-apache-commons],
+                           [Use Apache commons libraries already on system.]),,
+                           [with_system_apache_commons="$with_system_jars"])
 
 AC_ARG_WITH(system-mariadb,
-    AS_HELP_STRING([--with-system-mariadb],
-        [Use MariaDB/MySQL libraries already on system, for building the MariaDB Connector/LibreOffice
-         extension.]),,
-    [with_system_mariadb="$with_system_libs"])
+            AS_HELP_STRING([--with-system-mariadb],
+                           [Use MariaDB/MySQL libraries already on system, for building the MariaDB Connector/LibreOffice
+                            extension.]),,
+                            [with_system_mariadb="$with_system_libs"])
 
 AC_ARG_ENABLE(bundle-mariadb,
-    AS_HELP_STRING([--enable-bundle-mariadb],
-        [When using MariaDB/MySQL libraries already on system, bundle them with the MariaDB Connector/LibreOffice extension.])
-)
+              AS_HELP_STRING([--enable-bundle-mariadb],
+                             [When using MariaDB/MySQL libraries already on system, bundle them with the MariaDB Connector/LibreOffice extension.])
+              )
 
 AC_ARG_WITH(system-mysql-cppconn,
-    AS_HELP_STRING([--with-system-mysql-cppconn],
-        [Use MySQL C++ Connector libraries already on system.]),,
-    [with_system_mysql_cppconn="$with_system_libs"])
+            AS_HELP_STRING([--with-system-mysql-cppconn],
+                           [Use MySQL C++ Connector libraries already on system.]),,
+                           [with_system_mysql_cppconn="$with_system_libs"])
 
 AC_ARG_WITH(system-postgresql,
-    AS_HELP_STRING([--with-system-postgresql],
-        [Use PostgreSQL libraries already on system, for building the PostgreSQL-SDBC
-         driver. If pg_config is not in PATH, use PGCONFIG to point to it.]),,
-    [with_system_postgresql="$with_system_libs"])
+            AS_HELP_STRING([--with-system-postgresql],
+                           [Use PostgreSQL libraries already on system, for building the PostgreSQL-SDBC
+                            driver. If pg_config is not in PATH, use PGCONFIG to point to it.]),,
+                            [with_system_postgresql="$with_system_libs"])
 
 AC_ARG_WITH(libpq-path,
-    AS_HELP_STRING([--with-libpq-path=<absolute path to your libpq installation>],
-        [Use this PostgreSQL C interface (libpq) installation for building
-         the PostgreSQL-SDBC extension.]),
-,)
+            AS_HELP_STRING([--with-libpq-path=<absolute path to your libpq installation>],
+                           [Use this PostgreSQL C interface (libpq) installation for building
+                            the PostgreSQL-SDBC extension.]),
+                            ,)
 
 AC_ARG_WITH(system-firebird,
-    AS_HELP_STRING([--with-system-firebird],
+            AS_HELP_STRING([--with-system-firebird],
         [Use Firebird libraries already on system, for building the Firebird-SDBC
          driver. If fb_config is not in PATH, use FBCONFIG to point to it.]),,
     [with_system_firebird="$with_system_libs"])
+
+AC_ARG_WITH(system-libtommath,
+            AS_HELP_STRING([--with-system-libtommath],
+                           [Use libtommath already on system]),,
+            [with_system_libtommath="$with_system_libs"])
 
 AC_ARG_WITH(system-hsqldb,
     AS_HELP_STRING([--with-system-hsqldb],
@@ -8776,8 +8781,22 @@ int fb_api_is_30(void) { return 0; }
 
         AC_MSG_RESULT([internal])
         SYSTEM_FIREBIRD=
-        FIREBIRD_CFLAGS="-I${WORKDIR}/UnpackedTarball/firebird/include"
-        FIREBIRD_LIBS="-lfbembed"
+        FIREBIRD_CFLAGS="-I${WORKDIR}/UnpackedTarball/firebird/gen/Release/firebird/include"
+        FIREBIRD_LIBS="-lfbclient -Engine12"
+
+        if test "$with_system_libtommath" = "yes"; then
+        SYSTEM_LIBTOMMATH=TRUE
+        dnl check for tommath presence
+        save_LIBS=$LIBS
+        AC_CHECK_HEADER(tommath.h,,AC_MSG_ERROR(Include file for tommath not found - please install development tommath package))
+        AC_CHECK_LIB(tommath, mp_init, TOMMATH_LIBS=-ltommath, AC_MSG_ERROR(Library tommath not found - please install development tommath package))
+        LIBS=$save_LIBS
+        else
+        SYSTEM_LIBTOMMATH=
+        LIBTOMMATH_CFLAGS="-I${WORKDIR}/UnpackedTarball/libtommath"
+        LIBTOMMATH_LIBS="-ltommath"
+        BUILD_TYPE="$BUILD_TYPE LIBTOMMATH"
+        fi
 
         BUILD_TYPE="$BUILD_TYPE FIREBIRD"
         ENABLE_FIREBIRD_SDBC="TRUE"
@@ -8791,8 +8810,8 @@ AC_SUBST(SYSTEM_FIREBIRD)
 AC_SUBST(FIREBIRD_CFLAGS)
 AC_SUBST(FIREBIRD_LIBS)
 AC_SUBST(HAVE_FIREBIRD_30)
-dnl AC_SUBST([TOMMATH_CFLAGS])
-dnl AC_SUBST([TOMMATH_LIBS])
+AC_SUBST([LIBTOMMATH_CFLAGS])
+AC_SUBST([LIBTOMMATH_LIBS])
 
 dnl ===================================================================
 dnl Check for system curl
