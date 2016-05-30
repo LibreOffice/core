@@ -1383,7 +1383,7 @@ void ToolBox::ImplInitToolBoxData()
     meDockAlign       = WindowAlign::Top;
     meLastStyle       = PointerStyle::Arrow;
     mnWinStyle        = 0;
-    meLayoutMode      = TBX_LAYOUT_NORMAL;
+    meLayoutMode      = ToolBoxLayoutMode::Normal;
     mnLastFocusItemId = 0;
     mnKeyModifier     = 0;
     mnActivateCount   = 0;
@@ -2546,13 +2546,13 @@ void ToolBox::ImplFormat( bool bResize )
                     if ( mbHorz )
                     {
                         it->maCalcRect.Left()     = nX;
-                        // if special TBX_LAYOUT_LOCKVERT lock vertical position
+                        // if special ToolBoxLayoutMode::LockVert lock vertical position
                         // don't recalculate the vertical position of the item
-                        if ( meLayoutMode == TBX_LAYOUT_LOCKVERT && mnLines == 1 )
+                        if ( meLayoutMode == ToolBoxLayoutMode::LockVert && mnLines == 1 )
                         {
                             // Somewhat of a hack here, calc deletes and re-adds
                             // the sum/assign & ok/cancel items dynamically.
-                            // Because TBX_LAYOUT_LOCKVERT effectively prevents
+                            // Because ToolBoxLayoutMode::LockVert effectively prevents
                             // recalculation of the vertical pos of an item the
                             // it->maRect.Top() for those newly added items is
                             // 0. The hack here is that we want to effectively
