@@ -1185,11 +1185,12 @@ bool SwFEShell::SetTableStyle(const SwTableAutoFormat& rStyle)
         return false;
 
     // set the name & update
-    pTableNode->GetTable().SetTableStyleName(rStyle.GetName());
-    return UpdateTableStyleFormatting(pTableNode);
+    OUString const name(rStyle.GetName());
+    return UpdateTableStyleFormatting(pTableNode, false, &name);
 }
 
-bool SwFEShell::UpdateTableStyleFormatting(SwTableNode *pTableNode, bool bResetDirect)
+bool SwFEShell::UpdateTableStyleFormatting(SwTableNode *pTableNode,
+        bool bResetDirect, OUString const*const pStyleName)
 {
     if (!pTableNode)
     {
@@ -1198,7 +1199,9 @@ bool SwFEShell::UpdateTableStyleFormatting(SwTableNode *pTableNode, bool bResetD
             return false;
     }
 
-    OUString aTableStyleName(pTableNode->GetTable().GetTableStyleName());
+    OUString const aTableStyleName((pStyleName)
+            ? *pStyleName
+            : pTableNode->GetTable().GetTableStyleName());
     SwTableAutoFormat* pTableStyle = GetDoc()->GetTableStyles().FindAutoFormat(aTableStyleName);
     if (!pTableStyle)
         return false;
@@ -1226,7 +1229,8 @@ bool SwFEShell::UpdateTableStyleFormatting(SwTableNode *pTableNode, bool bResetD
     {
         SET_CURR_SHELL( this );
         StartAllAction();
-        bRet = GetDoc()->SetTableAutoFormat(aBoxes, *pTableStyle, bResetDirect);
+        bRet = GetDoc()->SetTableAutoFormat(
+                aBoxes, *pTableStyle, bResetDirect, pStyleName != nullptr);
         DELETEZ( pLastCols );
         DELETEZ( pLastRows );
         EndAllActionAndCall();
