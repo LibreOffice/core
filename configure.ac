@@ -1771,6 +1771,11 @@ AC_ARG_WITH(system-firebird,
          driver. If fb_config is not in PATH, use FBCONFIG to point to it.]),,
     [with_system_firebird="$with_system_libs"])
 
+AC_ARG_WITH(system-libtommath,
+            AS_HELP_STRING([--with-system-libtommath],
+                           [Use libtommath already on system]),,
+            [with_system_libtommath="$with_system_libs"])
+
 AC_ARG_WITH(system-hsqldb,
     AS_HELP_STRING([--with-system-hsqldb],
         [Use hsqldb already on system.]))
@@ -8787,8 +8792,22 @@ int fb_api_is_30(void) { return 0; }
 
         AC_MSG_RESULT([internal])
         SYSTEM_FIREBIRD=
-        FIREBIRD_CFLAGS="-I${WORKDIR}/UnpackedTarball/firebird/include"
-        FIREBIRD_LIBS="-lfbembed"
+        FIREBIRD_CFLAGS="-I${WORKDIR}/UnpackedTarball/firebird/gen/Release/firebird/include"
+        FIREBIRD_LIBS="-lfbclient"
+
+        if test "$with_system_libtommath" = "yes"; then
+            SYSTEM_LIBTOMMATH=TRUE
+            dnl check for tommath presence
+            save_LIBS=$LIBS
+            AC_CHECK_HEADER(tommath.h,,AC_MSG_ERROR(Include file for tommath not found - please install development tommath package))
+            AC_CHECK_LIB(tommath, mp_init, TOMMATH_LIBS=-ltommath, AC_MSG_ERROR(Library tommath not found - please install development tommath package))
+            LIBS=$save_LIBS
+        else
+            SYSTEM_LIBTOMMATH=
+            LIBTOMMATH_CFLAGS="-I${WORKDIR}/UnpackedTarball/libtommath"
+            LIBTOMMATH_LIBS="-ltommath"
+            BUILD_TYPE="$BUILD_TYPE LIBTOMMATH"
+        fi
 
         BUILD_TYPE="$BUILD_TYPE FIREBIRD"
         ENABLE_FIREBIRD_SDBC="TRUE"
@@ -8802,8 +8821,8 @@ AC_SUBST(SYSTEM_FIREBIRD)
 AC_SUBST(FIREBIRD_CFLAGS)
 AC_SUBST(FIREBIRD_LIBS)
 AC_SUBST(HAVE_FIREBIRD_30)
-dnl AC_SUBST([TOMMATH_CFLAGS])
-dnl AC_SUBST([TOMMATH_LIBS])
+AC_SUBST([TOMMATH_CFLAGS])
+AC_SUBST([TOMMATH_LIBS])
 
 dnl ===================================================================
 dnl Check for system curl
