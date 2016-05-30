@@ -71,6 +71,24 @@
     },
     {
       "key": {
+        "uuid": "da7fb54a_a049d88d",
+        "filename": "sw/source/core/unocore/unostyle.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 4249,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-05-30T12:53:47Z",
+      "side": 1,
+      "message": "Ah, I see now, existing client code for that interface also uses hardwired numbers, so that\u0027s OK for now.",
+      "parentUuid": "da7fb54a_60a6f0c2",
+      "revId": "ec8fce74a0e152992e8faf6b6911b357649d184b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da7fb54a_c0e7bc10",
         "filename": "sw/source/core/unocore/unostyle.cxx",
         "patchSetId": 3
