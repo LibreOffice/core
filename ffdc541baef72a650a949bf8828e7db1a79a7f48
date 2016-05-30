@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "da7fb54a_60043015",
+        "filename": "framework/inc/services/dispatchhelper.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2016-05-30T06:15:06Z",
+      "side": 1,
+      "message": "I think this class is a virtual interface, and when we need a exported methode, it must be virtual. I see no problem why, but i want testing and when no problem i change.",
+      "parentUuid": "da7fb54a_be3107ef",
+      "revId": "ffdc541baef72a650a949bf8828e7db1a79a7f48",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da7fb54a_de4c0b79",
         "filename": "sfx2/Library_sfx.mk",
         "patchSetId": 4
@@ -53,6 +71,24 @@
     },
     {
       "key": {
+        "uuid": "da7fb54a_8009342f",
+        "filename": "sfx2/source/control/statcach.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2016-05-30T06:15:06Z",
+      "side": 1,
+      "message": "sorry, my first commit, i have not look, that was my fault, i change",
+      "parentUuid": "da7fb54a_fe51cf0f",
+      "revId": "ffdc541baef72a650a949bf8828e7db1a79a7f48",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da7fb54a_9e3443df",
         "filename": "sfx2/source/control/unoctitm.cxx",
         "patchSetId": 4
@@ -64,6 +100,24 @@
       "writtenOn": "2016-05-20T13:12:58Z",
       "side": 1,
       "message": "the case pItem !\u003d nullptr, and something else than bool item is not handled yet - that was bSuccess\u003dtrue before",
+      "revId": "ffdc541baef72a650a949bf8828e7db1a79a7f48",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_e0104051",
+        "filename": "sfx2/source/control/unoctitm.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 861,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2016-05-30T06:15:06Z",
+      "side": 1,
+      "message": "The other Item is the SfxVoidItem in this case bSuccess must be false, when a other type is coming, it must be false too, wrong return value.\nThat was the mistake before, when bSuccess\u003dtrue that means the save was okay",
+      "parentUuid": "da7fb54a_9e3443df",
       "revId": "ffdc541baef72a650a949bf8828e7db1a79a7f48",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
