@@ -856,8 +856,7 @@ uno::Any SAL_CALL SwXTextTables::getByIndex(sal_Int32 nIndex)
         {
             SwFrameFormat& rFormat = GetDoc()->GetTableFrameFormat(nIndex, true);
             uno::Reference< XTextTable >  xTable = SwXTextTables::GetObject(rFormat);
-            aRet.setValue( &xTable,
-                cppu::UnoType<XTextTable>::get());
+            aRet <<= xTable;
         }
         else
             throw IndexOutOfBoundsException();
@@ -882,8 +881,7 @@ uno::Any SwXTextTables::getByName(const OUString& rItemName)
             if (rItemName == rFormat.GetName())
             {
                 xTable = SwXTextTables::GetObject(rFormat);
-                aRet.setValue(&xTable,
-                    cppu::UnoType<XTextTable>::get());
+                aRet <<= xTable;
                 break;
             }
         }
@@ -1447,7 +1445,7 @@ uno::Any SwXTextSections::getByName(const OUString& rName)
                 && (rName == pFormat->GetSection()->GetSectionName()))
             {
                 xSect = GetObject(*pFormat);
-                aRet.setValue(&xSect, cppu::UnoType<XTextSection>::get());
+                aRet <<= xSect;
                 break;
             }
         }
@@ -1727,7 +1725,7 @@ uno::Any SwXNumberingRulesCollection::getByIndex(sal_Int32 nIndex)
         if ( static_cast<size_t>(nIndex) < GetDoc()->GetNumRuleTable().size() )
         {
             xRef = new SwXNumberingRules( *GetDoc()->GetNumRuleTable()[ nIndex ], GetDoc());
-            aRet.setValue(&xRef, cppu::UnoType<XIndexReplace>::get());
+            aRet <<= xRef;
         }
 
         if(!xRef.is())
@@ -1897,7 +1895,7 @@ uno::Any SwXReferenceMarks::getByIndex(sal_Int32 nIndex)
         if(pMark)
         {
             xRef = SwXReferenceMark::CreateXReferenceMark(*GetDoc(), pMark);
-            aRet.setValue(&xRef, cppu::UnoType<XTextContent>::get());
+            aRet <<= xRef;
         }
     }
     if(!xRef.is())
@@ -1918,7 +1916,7 @@ uno::Any SwXReferenceMarks::getByName(const OUString& rName)
         {
             uno::Reference<XTextContent> const xRef =
                 SwXReferenceMark::CreateXReferenceMark(*GetDoc(), pMark);
-            aRet.setValue(&xRef, cppu::UnoType<XTextContent>::get());
+            aRet <<= xRef;
         }
         else
             throw NoSuchElementException();

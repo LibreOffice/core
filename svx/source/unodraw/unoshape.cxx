@@ -686,7 +686,7 @@ uno::Any SvxShape::GetBitmap( bool bMetaFile /* = false */ ) const
         const uno::Sequence<sal_Int8> aSeq(
             static_cast< const sal_Int8* >(aDestStrm.GetData()),
             aDestStrm.GetEndOfData());
-        aAny.setValue( &aSeq, cppu::UnoType<uno::Sequence< sal_Int8 >>::get() );
+        aAny <<= aSeq;
     }
     else
     {

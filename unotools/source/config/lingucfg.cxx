@@ -363,20 +363,17 @@ uno::Any SvtLinguConfigItem::GetProperty( sal_Int32 nPropertyHandle ) const
         }
         case UPH_DEFAULT_LOCALE :
         {
-            lang::Locale aLocale( LanguageTag::convertToLocale( rOpt.nDefaultLanguage, false) );
-            aRes.setValue( &aLocale, cppu::UnoType<lang::Locale>::get());
+            aRes <<= LanguageTag::convertToLocale( rOpt.nDefaultLanguage, false);
             break;
         }
         case UPH_DEFAULT_LOCALE_CJK :
         {
-            lang::Locale aLocale( LanguageTag::convertToLocale( rOpt.nDefaultLanguage_CJK, false) );
-            aRes.setValue( &aLocale, cppu::UnoType<lang::Locale>::get());
+            aRes <<= LanguageTag::convertToLocale( rOpt.nDefaultLanguage_CJK, false);
             break;
         }
         case UPH_DEFAULT_LOCALE_CTL :
         {
-            lang::Locale aLocale( LanguageTag::convertToLocale( rOpt.nDefaultLanguage_CTL, false) );
-            aRes.setValue( &aLocale, cppu::UnoType<lang::Locale>::get());
+            aRes <<= LanguageTag::convertToLocale( rOpt.nDefaultLanguage_CTL, false);
             break;
         }
         case UPH_IS_IGNORE_POST_POSITIONAL_WORD :       pbVal = &rOpt.bIsIgnorePostPositionalWord; break;
@@ -671,8 +668,6 @@ bool SvtLinguConfigItem::SaveOptions( const uno::Sequence< OUString > &rProperyN
     osl::MutexGuard aGuard(theSvtLinguConfigItemMutex::get());
 
     bool bRet = false;
-    const uno::Type &rINT16    = cppu::UnoType<sal_Int16>::get();
-    const uno::Type &rINT32    = cppu::UnoType<sal_Int32>::get();
 
     sal_Int32 nProps = rProperyNames.getLength();
     uno::Sequence< uno::Any > aValues( nProps );
@@ -699,9 +694,9 @@ bool SvtLinguConfigItem::SaveOptions( const uno::Sequence< OUString > &rProperyN
         *pValue++ <<= rOpt.bIsSpellSpecial;            //  11
         *pValue++ <<= rOpt.bIsSpellReverse;            //  14
 
-        pValue++->setValue( &rOpt.nHyphMinLeading, rINT16 );           //  15
-        pValue++->setValue( &rOpt.nHyphMinTrailing, rINT16 );          //  16
-        pValue++->setValue( &rOpt.nHyphMinWordLength, rINT16 );        //  17
+        *pValue++ <<= rOpt.nHyphMinLeading;            //  15
+        *pValue++ <<= rOpt.nHyphMinTrailing;           //  16
+        *pValue++ <<= rOpt.nHyphMinWordLength;         //  17
         *pValue++ <<= rOpt.bIsHyphSpecial;             //  18
         *pValue++ <<= rOpt.bIsHyphAuto;                //  19
 
@@ -717,7 +712,7 @@ bool SvtLinguConfigItem::SaveOptions( const uno::Sequence< OUString > &rProperyN
         *pValue++ <<= rOpt.bIsTranslateCommonTerms; //  27
         *pValue++ <<= rOpt.bIsReverseMapping; //  28
 
-        pValue++->setValue( &rOpt.nDataFilesChangedCheckValue, rINT32 ); //  29
+        *pValue++ <<= rOpt.nDataFilesChangedCheckValue; //  29
         *pValue++ <<= rOpt.bIsGrammarAuto; //  30
         *pValue++ <<= rOpt.bIsGrammarInteractive; // 31
 

@@ -172,47 +172,47 @@ uno::Any SAL_CALL SwXTextView::queryInterface( const uno::Type& aType )
     if(aType == cppu::UnoType<view::XSelectionSupplier>::get())
     {
         uno::Reference<view::XSelectionSupplier> xRet = this;
-        aRet.setValue(&xRet, aType);
+        aRet <<= xRet;
     }
     else if(aType == cppu::UnoType<lang::XServiceInfo>::get())
     {
         uno::Reference<lang::XServiceInfo> xRet = this;
-        aRet.setValue(&xRet, aType);
+        aRet <<= xRet;
     }
     else if(aType == cppu::UnoType<view::XControlAccess>::get())
     {
         uno::Reference<view::XControlAccess> xRet = this;
-        aRet.setValue(&xRet, aType);
+        aRet <<= xRet;
     }
     else if(aType == cppu::UnoType<view::XFormLayerAccess>::get())
     {
         uno::Reference<view::XFormLayerAccess> xRet = this;
-        aRet.setValue(&xRet, aType);
+        aRet <<= xRet;
     }
     else if(aType == cppu::UnoType<text::XTextViewCursorSupplier>::get())
     {
         uno::Reference<text::XTextViewCursorSupplier> xRet = this;
-        aRet.setValue(&xRet, aType);
+        aRet <<= xRet;
     }
     else if(aType == cppu::UnoType<view::XViewSettingsSupplier>::get())
     {
         uno::Reference<view::XViewSettingsSupplier> xRet = this;
-        aRet.setValue(&xRet, aType);
+        aRet <<= xRet;
     }
     else if(aType == cppu::UnoType<XRubySelection>::get())
     {
         uno::Reference<XRubySelection> xRet = this;
-        aRet.setValue(&xRet, aType);
+        aRet <<= xRet;
     }
     else if(aType == cppu::UnoType<XPropertySet>::get())
     {
         uno::Reference<XPropertySet> xRet = this;
-        aRet.setValue(&xRet, aType);
+        aRet <<= xRet;
     }
     else if(aType == cppu::UnoType<datatransfer::XTransferableSupplier>::get())
     {
         uno::Reference<datatransfer::XTransferableSupplier> xRet = this;
-        aRet.setValue(&xRet, aType);
+        aRet <<= xRet;
     }
     else
         aRet = SfxBaseController::queryInterface(aType);

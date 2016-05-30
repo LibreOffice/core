@@ -544,13 +544,13 @@ bool getCursorPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                     if(FN_UNO_TEXT_TABLE == rEntry.nWID)
                     {
                         uno::Reference< XTextTable >  xTable = SwXTextTables::GetObject(*pTableFormat);
-                        pAny->setValue(&xTable, cppu::UnoType<XTextTable>::get());
+                        *pAny <<= xTable;
                     }
                     else
                     {
                         SwTableBox* pBox = pSttNode->GetTableBox();
                         uno::Reference< XCell >  xCell = SwXCell::CreateXCell(pTableFormat, pBox);
-                        pAny->setValue(&xCell, cppu::UnoType<XCell>::get());
+                        *pAny <<= xCell;
                     }
                 }
             }
@@ -585,7 +585,7 @@ bool getCursorPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                 if( pAny )
                 {
                     uno::Reference< XTextSection >  xSect = SwXTextSections::GetObject( *pSect->GetFormat() );
-                    pAny->setValue(&xSect, cppu::UnoType<XTextSection>::get());
+                    *pAny <<= xSect;
                 }
             }
             else
@@ -635,7 +635,7 @@ bool getCursorPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                     uno::Reference<XTextContent> const xRef =
                         SwXReferenceMark::CreateXReferenceMark(*rPam.GetDoc(),
                                 const_cast<SwFormatRefMark*>(&rRef));
-                    pAny->setValue(&xRef, cppu::UnoType<XTextContent>::get());
+                    *pAny <<= xRef;
                 }
             }
             else
@@ -885,7 +885,7 @@ void  getNumberingProperty(SwPaM& rPam, PropertyState& eState, Any * pAny )
     {
         uno::Reference< XIndexReplace >  xNum = new SwXNumberingRules(*pNumRule);
         if ( pAny )
-            pAny->setValue(&xNum, cppu::UnoType<XIndexReplace>::get());
+            *pAny <<= xNum;
         eState = PropertyState_DIRECT_VALUE;
     }
     else

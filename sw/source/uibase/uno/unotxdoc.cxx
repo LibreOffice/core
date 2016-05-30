@@ -3736,56 +3736,49 @@ Any SwXLinkTargetSupplier::getByName(const OUString& rName)
 
         Reference< XNameAccess >  xTables = new SwXLinkNameAccessWrapper(
                                         pxDoc->getTextTables(), rName, sSuffix );
-        Reference< XPropertySet >  xRet(xTables, UNO_QUERY);
-        aRet.setValue(&xRet, cppu::UnoType<XPropertySet>::get());
+        aRet <<= Reference< XPropertySet >(xTables, UNO_QUERY);
     }
     else if(rName == sFrames)
     {
         sSuffix += "frame";
         Reference< XNameAccess >  xTables = new SwXLinkNameAccessWrapper(
                                         pxDoc->getTextFrames(), rName, sSuffix );
-        Reference< XPropertySet >  xRet(xTables, UNO_QUERY);
-        aRet.setValue(&xRet, cppu::UnoType<XPropertySet>::get());
+        aRet <<= Reference< XPropertySet >(xTables, UNO_QUERY);
     }
     else if(rName == sSections)
     {
         sSuffix += "region";
         Reference< XNameAccess >  xTables = new SwXLinkNameAccessWrapper(
                                         pxDoc->getTextSections(), rName, sSuffix );
-        Reference< XPropertySet >  xRet(xTables, UNO_QUERY);
-        aRet.setValue(&xRet, cppu::UnoType<XPropertySet>::get());
+        aRet <<= Reference< XPropertySet >(xTables, UNO_QUERY);
     }
     else if(rName == sGraphics)
     {
         sSuffix += "graphic";
         Reference< XNameAccess >  xTables = new SwXLinkNameAccessWrapper(
                                         pxDoc->getGraphicObjects(), rName, sSuffix );
-        Reference< XPropertySet >  xRet(xTables, UNO_QUERY);
-        aRet.setValue(&xRet, cppu::UnoType<XPropertySet>::get());
+        aRet <<= Reference< XPropertySet >(xTables, UNO_QUERY);
     }
     else if(rName == sOLEs)
     {
         sSuffix += "ole";
         Reference< XNameAccess >  xTables = new SwXLinkNameAccessWrapper(
                                         pxDoc->getEmbeddedObjects(), rName, sSuffix );
-        Reference< XPropertySet >  xRet(xTables, UNO_QUERY);
-        aRet.setValue(&xRet, cppu::UnoType<XPropertySet>::get());
+        aRet <<= Reference< XPropertySet >(xTables, UNO_QUERY);
     }
     else if(rName == sOutlines)
     {
         sSuffix += "outline";
         Reference< XNameAccess >  xTables = new SwXLinkNameAccessWrapper(
                                         *pxDoc, rName, sSuffix );
-        Reference< XPropertySet >  xRet(xTables, UNO_QUERY);
-        aRet.setValue(&xRet, cppu::UnoType<XPropertySet>::get());
+        aRet <<= Reference< XPropertySet >(xTables, UNO_QUERY);
     }
     else if(rName == sBookmarks)
     {
         sSuffix.clear();
         Reference< XNameAccess >  xBkms = new SwXLinkNameAccessWrapper(
                                         pxDoc->getBookmarks(), rName, sSuffix );
-        Reference< XPropertySet >  xRet(xBkms, UNO_QUERY);
-        aRet.setValue(&xRet, cppu::UnoType<XPropertySet>::get());
+        aRet <<= Reference< XPropertySet >(xBkms, UNO_QUERY);
     }
     else
         throw NoSuchElementException();
@@ -3903,7 +3896,7 @@ Any SwXLinkNameAccessWrapper::getByName(const OUString& rName)
                     if(sParam == lcl_CreateOutlineString(i, rOutlineNodes, pOutlRule))
                     {
                         Reference< XPropertySet >  xOutline = new SwXOutlineTarget(sParam);
-                        aRet.setValue(&xOutline, cppu::UnoType<XPropertySet>::get());
+                        aRet <<= xOutline;
                         bFound = true;
                     }
                 }
@@ -4069,8 +4062,7 @@ static Any lcl_GetDisplayBitmap(const OUString& _sLinkSuffix)
         ImageList aEntryImages( SW_RES(IMG_NAVI_ENTRYBMP) );
         const Image& rImage = aEntryImages.GetImage( (int)nImgId + 2000 );
         Bitmap aBitmap( rImage.GetBitmapEx().GetBitmap() );
-        Reference<awt::XBitmap> xBmp = VCLUnoHelper::CreateBitmap( aBitmap );
-        aRet.setValue( &xBmp, cppu::UnoType<awt::XBitmap>::get());
+        aRet <<= VCLUnoHelper::CreateBitmap( aBitmap );
     }
     return aRet;
 }

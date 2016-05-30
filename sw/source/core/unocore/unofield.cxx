@@ -2334,7 +2334,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
             uno::Sequence<text::TextContentAnchorType> aTypes(1);
             text::TextContentAnchorType* pArray = aTypes.getArray();
             pArray[0] = text::TextContentAnchorType_AS_CHARACTER;
-            aRet.setValue(&aTypes, cppu::UnoType<uno::Sequence<text::TextContentAnchorType>>::get());
+            aRet <<= aTypes;
         }
         break;
 

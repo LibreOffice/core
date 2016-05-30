@@ -74,7 +74,7 @@ bool SvXMLAttrContainerItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMembe
     Reference<XNameContainer> xContainer =
         new SvUnoAttributeContainer( new SvXMLAttrContainerData( *pImpl.get() ) );
 
-    rVal.setValue( &xContainer, cppu::UnoType<XNameContainer>::get());
+    rVal <<= xContainer;
     return true;
 }
 

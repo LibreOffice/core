@@ -150,7 +150,7 @@ void BibPosListener::cursorMoved(const lang::EventObject& /*aEvent*/) throw( uno
                 uno::Sequence<sal_Int16> aSelSeq(1);
                 sal_Int16* pArr = aSelSeq.getArray();
                 pArr[0] = TYPE_COUNT;
-                aSel.setValue(&aSelSeq, cppu::UnoType<Sequence<sal_Int16>>::get());
+                aSel <<= aSelSeq;
                 xPropSet->setPropertyValue("SelectedItems", aSel);
             }
         }

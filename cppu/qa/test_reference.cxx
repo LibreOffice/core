@@ -52,16 +52,14 @@ public:
     virtual Any SAL_CALL queryInterface(const Type & _type)
         throw (RuntimeException, std::exception) override
     {
-        Any aInterface;
         if (_type == cppu::UnoType<XInterface>::get())
         {
-            Reference< XInterface > ref( static_cast< XInterface * >( this ) );
-            aInterface.setValue( &ref, _type );
+            return css::uno::makeAny<css::uno::Reference<css::uno::XInterface>>(
+                this);
         }
         else if (_type == cppu::UnoType<Interface1>::get())
         {
-            Reference< Interface1 > ref( this );
-            aInterface.setValue( &ref, _type );
+            return css::uno::makeAny<css::uno::Reference<Interface1>>(this);
         }
 
         return Any();

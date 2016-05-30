@@ -1529,7 +1529,7 @@ uno::Any SwXShape::getPropertyValue(const OUString& rPropertyName)
                         Point aPt = pObj->GetAnchorPos();
                         awt::Point aPoint( convertTwipToMm100( aPt.X() ),
                                            convertTwipToMm100( aPt.Y() ) );
-                        aRet.setValue(&aPoint, cppu::UnoType<awt::Point>::get());
+                        aRet <<= aPoint;
                     }
                 }
                 // #i26791# - special handling for FN_TEXT_RANGE
@@ -1552,7 +1552,7 @@ uno::Any SwXShape::getPropertyValue(const OUString& rPropertyName)
                                                     *pFormat->GetDoc(),
                                                     *aAnchor.GetContentAnchor(),
                                                     nullptr );
-                            aRet.setValue(&xTextRange, cppu::UnoType<text::XTextRange>::get());
+                            aRet <<= xTextRange;
                         }
                         else
                         {
@@ -1664,15 +1664,14 @@ uno::Any SwXShape::getPropertyValue(const OUString& rPropertyName)
                         pItem = pImpl->GetSurround();
                     break;
                     case FN_TEXT_RANGE :
-                        aRet.setValue(&pImpl->GetTextRange(), cppu::UnoType<text::XTextRange>::get());
+                        aRet <<= pImpl->GetTextRange();
                     break;
                     case RES_OPAQUE :
                         aRet <<= pImpl->GetOpaque();
                     break;
                     case FN_ANCHOR_POSITION :
                     {
-                        awt::Point aPoint;
-                        aRet.setValue(&aPoint, cppu::UnoType<awt::Point>::get());
+                        aRet <<= awt::Point();
                     }
                     break;
                     // #i26791#

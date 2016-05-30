@@ -251,7 +251,7 @@ bool SwUINumRuleItem::operator==( const SfxPoolItem& rAttr ) const
 bool SwUINumRuleItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
     uno::Reference< container::XIndexReplace >xRules = new SwXNumberingRules(*pRule);
-    rVal.setValue(&xRules, cppu::UnoType<container::XIndexReplace>::get());
+    rVal <<= xRules;
     return true;
 }
 bool SwUINumRuleItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/ )

@@ -894,7 +894,7 @@ bool ::sw::GetDefaultTextContentValue(
         {   uno::Sequence<text::TextContentAnchorType> aTypes(1);
             text::TextContentAnchorType* pArray = aTypes.getArray();
             pArray[0] = text::TextContentAnchorType_AT_PARAGRAPH;
-            rAny.setValue(&aTypes, cppu::UnoType<uno::Sequence<text::TextContentAnchorType>>::get());
+            rAny <<= aTypes;
         }
         break;
         default:

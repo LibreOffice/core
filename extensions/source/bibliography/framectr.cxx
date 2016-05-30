@@ -664,8 +664,7 @@ void BibFrameController_Impl::addStatusListener(
         aEvent.IsEnabled  = true;
         aEvent.FeatureDescriptor=pDatMan->getQueryField();
 
-        uno::Sequence<OUString> aStringSeq=pDatMan->getQueryFields();
-        aEvent.State.setValue(&aStringSeq,cppu::UnoType<uno::Sequence<OUString>>::get());
+        aEvent.State <<= pDatMan->getQueryFields();
 
     }
     else if ( aURL.Path == "Bib/source")
@@ -673,8 +672,7 @@ void BibFrameController_Impl::addStatusListener(
         aEvent.IsEnabled  = true;
         aEvent.FeatureDescriptor=pDatMan->getActiveDataTable();
 
-        uno::Sequence<OUString> aStringSeq=pDatMan->getDataSources();
-        aEvent.State.setValue(&aStringSeq,cppu::UnoType<uno::Sequence<OUString>>::get());
+        aEvent.State <<= pDatMan->getDataSources();
     }
     else if( aURL.Path == "Bib/sdbsource" ||
              aURL.Path == "Bib/Mapping" ||

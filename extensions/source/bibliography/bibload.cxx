@@ -480,7 +480,7 @@ Any BibliographyLoader::getByName(const OUString& rName) throw
                         pValues[nEntry].Name = sColName;
                         pValues[nEntry].Value <<= lcl_AddProperty(xColumns, pMapping, sColName);
                     }
-                    aRet.setValue(&aPropSequ, cppu::UnoType<Sequence<PropertyValue>>::get());
+                    aRet <<= aPropSequ;
 
                     break;
                 }
@@ -641,7 +641,7 @@ Any BibliographyLoader::getPropertyValue(const OUString& rPropertyName)
             pArray[i].Name = pConfig->GetDefColumnName(aInternalMapping[i]);
             pArray[i].Value <<= (sal_Int16) i;
         }
-        aRet.setValue(&aSeq, cppu::UnoType<Sequence<PropertyValue>>::get());
+        aRet <<= aSeq;
     }
     else
         throw UnknownPropertyException();

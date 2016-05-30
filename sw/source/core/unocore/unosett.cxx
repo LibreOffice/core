@@ -1265,14 +1265,14 @@ uno::Any SwXNumberingRules::getByIndex(sal_Int32 nIndex)
     {
         uno::Sequence<beans::PropertyValue> aRet = GetNumberingRuleByIndex(
                                         *pRule, nIndex);
-        aVal.setValue(&aRet, cppu::UnoType<uno::Sequence<beans::PropertyValue>>::get());
+        aVal <<= aRet;
 
     }
     else if(pDocShell)
     {
         uno::Sequence<beans::PropertyValue> aRet = GetNumberingRuleByIndex(
                 *pDocShell->GetDoc()->GetOutlineNumRule(), nIndex);
-        aVal.setValue(&aRet, cppu::UnoType<uno::Sequence<beans::PropertyValue>>::get());
+        aVal <<= aRet;
     }
     else
         throw uno::RuntimeException();

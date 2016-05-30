@@ -3326,7 +3326,7 @@ uno::Any SwXAutoStyles::getByIndex(sal_Int32 nIndex)
             default:
                 ;
         }
-        aRet.setValue(&aRef, cppu::UnoType<style::XAutoStyleFamily>::get());
+        aRet <<= aRef;
     }
     else
         throw uno::RuntimeException();
@@ -3724,7 +3724,7 @@ uno::Any SwXAutoStylesEnumerator::nextElement(  )
         SfxItemSet_Pointer_t pNextSet = m_pImpl->nextElement();
         uno::Reference< style::XAutoStyle > xAutoStyle = new SwXAutoStyle(m_pImpl->getDoc(),
                                                         pNextSet, m_pImpl->getFamily());
-        aRet.setValue(&xAutoStyle, cppu::UnoType<style::XAutoStyle>::get());
+        aRet <<= xAutoStyle;
     }
     return aRet;
 }

@@ -63,7 +63,7 @@ static Sequence<Any> *lcl_docbasic_convertArgs( SbxArray& rArgs )
                 pUnoArgs[i] <<= (sal_Int32)pVar->GetLong();
                 break;
             default:
-                pUnoArgs[i].setValue(nullptr, cppu::UnoType<void>::get());
+                pUnoArgs[i].clear();
                 break;
             }
         }

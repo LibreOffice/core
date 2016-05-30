@@ -136,7 +136,7 @@ bool SwFormatDrop::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             aDrop.Lines = nLines   ;
             aDrop.Count = nChars   ;
             aDrop.Distance  = convertTwipToMm100(nDistance);
-            rVal.setValue(&aDrop, ::cppu::UnoType<style::DropCapFormat>::get());
+            rVal <<= aDrop;
         }
         break;
         case MID_DROPCAP_WHOLE_WORD:

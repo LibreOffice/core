@@ -2021,7 +2021,7 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
         pArray[2] = text::TextContentAnchorType_AT_PAGE;
         pArray[3] = text::TextContentAnchorType_AT_FRAME;
         pArray[4] = text::TextContentAnchorType_AT_CHARACTER;
-        aAny.setValue(&aTypes, cppu::UnoType<uno::Sequence<text::TextContentAnchorType>>::get());
+        aAny <<= aTypes;
     }
     else if(pFormat)
     {
@@ -2169,7 +2169,7 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
                 awt::Size aTmp;
                 aTmp.Width = convertTwipToMm100(aActSize.Width());
                 aTmp.Height = convertTwipToMm100(aActSize.Height());
-                aAny.setValue(&aTmp, ::cppu::UnoType<awt::Size>::get());
+                aAny <<= aTmp;
             }
         }
         else if(FN_PARAM_LINK_DISPLAY_NAME == pEntry->nWID)

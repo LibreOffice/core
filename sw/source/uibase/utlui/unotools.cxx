@@ -145,8 +145,7 @@ void SwOneExampleFrame::CreateControl()
         pValues[1].Value <<= OUString("-RB");
         pValues[2].Name = "Referer";
         pValues[2].Value <<= OUString("private:user");
-        uno::Any aArgs;
-        aArgs.setValue(&aSeq, cppu::UnoType<uno::Sequence<beans::PropertyValue>>::get());
+        uno::Any aArgs(aSeq);
 
         xPrSet->setPropertyValue( "LoaderArguments", aArgs );
         //save and set readonly???
@@ -356,7 +355,7 @@ IMPL_LINK_TYPED( SwOneExampleFrame, TimeoutHdl, Idle*, pTimer, void )
             aSize >>= aPSize;
             //TODO: set page width to card width
             aPSize.Width = 10000;
-            aSize.setValue(&aPSize, ::cppu::UnoType<awt::Size>::get());
+            aSize <<= aPSize;
             xPProp->setPropertyValue(UNO_NAME_SIZE, aSize);
 
             uno::Any aZero; aZero <<= (sal_Int32)0;

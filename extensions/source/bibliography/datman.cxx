@@ -1325,8 +1325,7 @@ Reference< awt::XControlModel > BibDataManager::loadControlModel(
                 //uno::Reference< beans::XPropertySet >  xPropSet(xControl, UNO_QUERY);
                 aAny <<= (sal_Int16)1;
                 xPropSet->setPropertyValue("BoundColumn", aAny);
-                ListSourceType eSet = ListSourceType_VALUELIST;
-                aAny.setValue( &eSet, ::cppu::UnoType<ListSourceType>::get() );
+                aAny <<= ListSourceType_VALUELIST;
                 xPropSet->setPropertyValue("ListSourceType", aAny);
 
                 uno::Sequence<OUString> aListSource(TYPE_COUNT);
@@ -1334,7 +1333,7 @@ Reference< awt::XControlModel > BibDataManager::loadControlModel(
                 //pListSourceArr[0] = "select TypeName, TypeIndex from TypeNms";
                 for(sal_Int32 i = 0; i < TYPE_COUNT; ++i)
                     pListSourceArr[i] = OUString::number(i);
-                aAny.setValue(&aListSource, cppu::UnoType<uno::Sequence<OUString>>::get());
+                aAny <<= aListSource;
 
                 xPropSet->setPropertyValue("ListSource", aAny);
 
@@ -1365,7 +1364,7 @@ Reference< awt::XControlModel > BibDataManager::loadControlModel(
                 // empty string if an invalid value no values is set
                 pValuesArr[TYPE_COUNT].clear();
 
-                aAny.setValue(&aValues, cppu::UnoType<uno::Sequence<OUString>>::get());
+                aAny <<= aValues;
 
                 xPropSet->setPropertyValue("StringItemList", aAny);
 

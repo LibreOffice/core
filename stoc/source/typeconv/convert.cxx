@@ -825,9 +825,8 @@ Any TypeConverter_Impl::convertToSimpleType( const Any& rVal, TypeClass aDestina
             }
             if (nPos >= 0)
             {
-                aRet.setValue(
-                    &reinterpret_cast<typelib_EnumTypeDescription *>(aEnumTD.get())->ppEnumNames[nPos],
-                    cppu::UnoType<OUString>::get());
+                aRet <<= OUString::unacquired(
+                    &reinterpret_cast<typelib_EnumTypeDescription *>(aEnumTD.get())->ppEnumNames[nPos]);
             }
             else
             {

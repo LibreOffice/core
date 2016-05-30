@@ -142,8 +142,7 @@ void SwDrawFormShell::Execute(SfxRequest &rReq)
                                     xPropSet->setPropertyValue( "TargetFrame", aTmp );
                                 }
 
-                                form::FormButtonType eButtonType = form::FormButtonType_URL;
-                                aTmp.setValue( &eButtonType, ::cppu::UnoType<form::FormButtonType>::get());
+                                aTmp <<= form::FormButtonType_URL;
                                 xPropSet->setPropertyValue( "ButtonType", aTmp );
                             }
                         }

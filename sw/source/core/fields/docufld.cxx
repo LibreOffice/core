@@ -258,7 +258,7 @@ bool SwPageNumberField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
                 eType = text::PageNumberType_PREV;
             else if(nSubType == PG_NEXT)
                 eType = text::PageNumberType_NEXT;
-            rAny.setValue(&eType, cppu::UnoType<text::PageNumberType>::get());
+            rAny <<= eType;
         }
         break;
     case FIELD_PROP_PAR1:
@@ -1192,7 +1192,7 @@ bool SwDocInfoField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
     case FIELD_PROP_DOUBLE:
         {
             double fVal = GetValue();
-            rAny.setValue(&fVal, cppu::UnoType<decltype(fVal)>::get());
+            rAny <<= fVal;
         }
         break;
     case FIELD_PROP_PAR3:
@@ -1771,8 +1771,7 @@ bool SwPostItField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         }
     case FIELD_PROP_DATE:
         {
-            css::util::Date aSetDate = aDateTime.GetUNODate();
-            rAny.setValue(&aSetDate, ::cppu::UnoType<util::Date>::get());
+            rAny <<= aDateTime.GetUNODate();
         }
         break;
     case FIELD_PROP_DATE_TIME:

@@ -218,7 +218,7 @@ bool SwFormatFrameSize::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             awt::Size aTmp;
             aTmp.Height = convertTwipToMm100(m_aSize.Height());
             aTmp.Width = convertTwipToMm100(m_aSize.Width());
-            rVal.setValue(&aTmp, ::cppu::UnoType<awt::Size>::get());
+            rVal <<= aTmp;
         }
         break;
         case MID_FRMSIZE_REL_HEIGHT:
@@ -1050,7 +1050,7 @@ bool SwFormatCol::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     else
     {
         uno::Reference< text::XTextColumns >  xCols = new SwXTextColumns(*this);
-        rVal.setValue(&xCols, cppu::UnoType<text::XTextColumns>::get());
+        rVal <<= xCols;
     }
     return true;
 }

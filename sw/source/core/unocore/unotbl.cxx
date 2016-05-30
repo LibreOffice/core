@@ -657,7 +657,7 @@ static void lcl_GetTableSeparators(uno::Any& rRet, SwTable* pTable, SwTableBox* 
         }
     }
     if(!bError)
-        rRet.setValue(&aColSeq, cppu::UnoType<uno::Sequence< text::TableColumnSeparator>>::get());
+        rRet <<= aColSeq;
 
 }
 

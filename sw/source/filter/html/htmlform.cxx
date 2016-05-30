@@ -630,7 +630,7 @@ static void lcl_html_setFixedFontProperty(
     rPropSet->setPropertyValue("FontPitch", aTmp );
 
     float fVal(10.);
-    aTmp.setValue( &fVal, cppu::UnoType<decltype(fVal)>::get());
+    aTmp <<= fVal;
     rPropSet->setPropertyValue("FontHeight", aTmp );
 }
 
@@ -1000,7 +1000,7 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
         {
             float fVal = static_cast< float >(
                 (static_cast<const SvxFontHeightItem *>(pItem)->GetHeight()) / 20.0 );
-            aTmp.setValue( &fVal, cppu::UnoType<decltype(fVal)>::get());
+            aTmp <<= fVal;
             rFCompPropSet->setPropertyValue( sPropName, aTmp );
         }
 
@@ -1047,7 +1047,7 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
         {
             float fVal = VCLUnoHelper::ConvertFontWeight(
                     static_cast<const SvxWeightItem *>(pItem)->GetWeight() );
-            aTmp.setValue( &fVal, cppu::UnoType<decltype(fVal)>::get());
+            aTmp <<= fVal;
             rFCompPropSet->setPropertyValue( sPropName, aTmp );
         }
 
@@ -1176,8 +1176,7 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
                 xTextRg = new SwXTextRange( *m_pPam, xDummyTextRef );
             }
 
-            aTmp.setValue( &xTextRg,
-                           cppu::UnoType<text::XTextRange>::get());
+            aTmp <<= xTextRg;
             xShapePropSet->setPropertyValue("TextRange", aTmp );
         }
 
@@ -1354,13 +1353,11 @@ void SwHTMLParser::NewForm( bool bAppend )
     xFormPropSet->setPropertyValue("TargetURL",
                                     aTmp );
 
-    FormSubmitMethod eMethod = (FormSubmitMethod)nMethod;
-    aTmp.setValue( &eMethod, cppu::UnoType<FormSubmitMethod>::get());
+    aTmp <<= FormSubmitMethod(nMethod);
     xFormPropSet->setPropertyValue("SubmitMethod",
                                     aTmp );
 
-     FormSubmitEncoding eEncType = (FormSubmitEncoding)nEncType;
-    aTmp.setValue( &eEncType, cppu::UnoType<FormSubmitEncoding>::get());
+    aTmp <<= FormSubmitEncoding(nEncType);
     xFormPropSet->setPropertyValue("SubmitEncoding", aTmp );
 
     if( !sTarget.isEmpty() )
@@ -1700,9 +1697,7 @@ void SwHTMLParser::InsertInput()
                 aSz = Application::GetDefaultDevice()
                     ->PixelToLogic( aSz, MapMode( MAP_100TH_MM ) );
             }
-             FormButtonType eButtonType = FormButtonType_SUBMIT;
-            aTmp.setValue( &eButtonType,
-                           cppu::UnoType<FormButtonType>::get());
+            aTmp <<= FormButtonType_SUBMIT;
             xPropSet->setPropertyValue("ButtonType", aTmp );
 
             aTmp <<= (sal_Int16) 0  ;
@@ -1738,8 +1733,7 @@ void SwHTMLParser::InsertInput()
             xPropSet->setPropertyValue("Label",
                                         aTmp );
 
-            aTmp.setValue( &eButtonType,
-                           cppu::UnoType<FormButtonType>::get());
+            aTmp <<= eButtonType;
             xPropSet->setPropertyValue("ButtonType", aTmp );
 
             bMinWidth = bMinHeight = true;

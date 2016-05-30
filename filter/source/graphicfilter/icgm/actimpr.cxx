@@ -516,8 +516,7 @@ void CGMImpressOutAct::DrawEllipticalArc( FloatPoint& rCenter, FloatPoint& rSize
             if ( nType == 2 )
             {
                 ImplSetLineBundle();
-                drawing::FillStyle eFillStyle = drawing::FillStyle_NONE;
-                aAny.setValue( &eFillStyle, cppu::UnoType<drawing::FillStyle>::get());
+                aAny <<= drawing::FillStyle_NONE;
                 maXPropSet->setPropertyValue( "FillStyle", aAny );
             }
         }
