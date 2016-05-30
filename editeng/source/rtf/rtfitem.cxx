@@ -1538,7 +1538,7 @@ void SvxRTFParser::ReadBorderAttr( int nToken, SfxItemSet& rSet,
                     break;
 
                 case RTF_BOX:
-                    aAttr.SetDistance( (sal_uInt16)nTokenValue );
+                    aAttr.SetAllDistances( (sal_uInt16)nTokenValue );
                     break;
                 }
             }

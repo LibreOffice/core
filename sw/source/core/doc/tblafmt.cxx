@@ -305,7 +305,7 @@ SwBoxAutoFormat::SwBoxAutoFormat()
     m_aRotateMode( SVX_ROTATE_MODE_STANDARD, 0 )
 {
     m_eSysLanguage = m_eNumFormatLanguage = ::GetAppLanguage();
-    m_aBox.SetDistance( 55 );
+    m_aBox.SetAllDistances(55);
 }
 
 SwBoxAutoFormat::SwBoxAutoFormat( const SwBoxAutoFormat& rNew )
@@ -1118,7 +1118,7 @@ SwTableAutoFormatTable::SwTableAutoFormatTable()
         pNew->SetBoxFormat( aNew, i );
 
     SvxBoxItem aBox( RES_BOX );
-    aBox.SetDistance( 55 );
+    aBox.SetAllDistances(55);
     SvxBorderLine aLn( &aColor, DEF_LINE_WIDTH_0 );
     aBox.SetLine( &aLn, SvxBoxItemLine::LEFT );
     aBox.SetLine( &aLn, SvxBoxItemLine::BOTTOM );

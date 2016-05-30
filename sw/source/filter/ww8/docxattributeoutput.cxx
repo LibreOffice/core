@@ -4002,7 +4002,7 @@ void DocxAttributeOutput::OutputDefaultItem(const SfxPoolItem& rHt)
                 const SvxBoxItem& rBoxItem = static_cast< const SvxBoxItem& >(rHt);
                 bMustWrite = rBoxItem.GetTop() || rBoxItem.GetLeft() ||
                              rBoxItem.GetBottom() || rBoxItem.GetRight() ||
-                             rBoxItem.GetDistance();
+                             rBoxItem.GetSmallestDistance();
             }
             break;
         case RES_CHRATR_HIGHLIGHT:

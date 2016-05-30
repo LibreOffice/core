@@ -2708,7 +2708,7 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName, const uno::An
                     aBoxInfo.SetLine(aVertLine.isEmpty() ? nullptr : &aVertLine, SvxBoxInfoItemLine::VERT);
                     aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::VERT, aBorder.IsVerticalLineValid);
 
-                    aBox.SetDistance((sal_uInt16)convertMm100ToTwip(aBorder.Distance));
+                    aBox.SetAllDistances(static_cast<sal_uInt16>(convertMm100ToTwip(aBorder.Distance)));
                     aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::DISTANCE, aBorder.IsDistanceValid);
 
                     aSet.Put(aBox);
@@ -2898,7 +2898,7 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName)
                         aTableBorder.IsHorizontalLineValid  = rBoxInfoItem.IsValid(SvxBoxInfoItemValidFlags::HORI);
                         aTableBorder.VerticalLine           = SvxBoxItem::SvxLineToLine(rBoxInfoItem.GetVert(), true);
                         aTableBorder.IsVerticalLineValid    = rBoxInfoItem.IsValid(SvxBoxInfoItemValidFlags::VERT);
-                        aTableBorder.Distance               = convertTwipToMm100( rBox.GetDistance() );
+                        aTableBorder.Distance               = convertTwipToMm100(rBox.GetSmallestDistance());
                         aTableBorder.IsDistanceValid        = rBoxInfoItem.IsValid(SvxBoxInfoItemValidFlags::DISTANCE);
                         aRet <<= aTableBorder;
                     }
@@ -2917,7 +2917,7 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName)
                         aTableBorder.IsHorizontalLineValid  = rBoxInfoItem.IsValid(SvxBoxInfoItemValidFlags::HORI);
                         aTableBorder.VerticalLine           = SvxBoxItem::SvxLineToLine(rBoxInfoItem.GetVert(), true);
                         aTableBorder.IsVerticalLineValid    = rBoxInfoItem.IsValid(SvxBoxInfoItemValidFlags::VERT);
-                        aTableBorder.Distance               = convertTwipToMm100( rBox.GetDistance() );
+                        aTableBorder.Distance               = convertTwipToMm100(rBox.GetSmallestDistance());
                         aTableBorder.IsDistanceValid        = rBoxInfoItem.IsValid(SvxBoxInfoItemValidFlags::DISTANCE);
                         aRet <<= aTableBorder;
                     }

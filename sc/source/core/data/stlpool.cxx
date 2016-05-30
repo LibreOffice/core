@@ -374,7 +374,7 @@ void ScStyleSheetPool::CreateStandardStyles()
     aBoxItem.SetLine( &aBorderLine, SvxBoxItemLine::BOTTOM );
     aBoxItem.SetLine( &aBorderLine, SvxBoxItemLine::LEFT );
     aBoxItem.SetLine( &aBorderLine, SvxBoxItemLine::RIGHT );
-    aBoxItem.SetDistance( 10 ); // 0.2mm
+    aBoxItem.SetAllDistances( 10 ); // 0.2mm
     aBoxInfoItem.SetValid( SvxBoxInfoItemValidFlags::TOP );
     aBoxInfoItem.SetValid( SvxBoxInfoItemValidFlags::BOTTOM );
     aBoxInfoItem.SetValid( SvxBoxInfoItemValidFlags::LEFT );

@@ -1669,7 +1669,7 @@ bool SvxBoxItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             aSeq[1] = uno::makeAny( SvxBoxItem::SvxLineToLine(GetRight(), bConvert) );
             aSeq[2] = uno::makeAny( SvxBoxItem::SvxLineToLine(GetBottom(), bConvert) );
             aSeq[3] = uno::makeAny( SvxBoxItem::SvxLineToLine(GetTop(), bConvert) );
-            aSeq[4] <<= uno::makeAny( (sal_Int32)(bConvert ? convertTwipToMm100( GetDistance()) : GetDistance()));
+            aSeq[4] <<= uno::makeAny( (sal_Int32)(bConvert ? convertTwipToMm100( GetSmallestDistance()) : GetSmallestDistance()));
             aSeq[5] <<= uno::makeAny( (sal_Int32)(bConvert ? convertTwipToMm100( nTopDist ) : nTopDist ));
             aSeq[6] <<= uno::makeAny( (sal_Int32)(bConvert ? convertTwipToMm100( nBottomDist ) : nBottomDist ));
             aSeq[7] <<= uno::makeAny( (sal_Int32)(bConvert ? convertTwipToMm100( nLeftDist ) : nLeftDist ));
@@ -1694,7 +1694,7 @@ bool SvxBoxItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             aRetLine = SvxBoxItem::SvxLineToLine(GetTop(), bConvert);
             break;
         case BORDER_DISTANCE:
-            nDist = GetDistance();
+            nDist = GetSmallestDistance();
             bDistMember = true;
             break;
         case TOP_BORDER_DISTANCE:
@@ -1852,7 +1852,7 @@ bool SvxBoxItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                         if( bConvert )
                             nDist = convertMm100ToTwip(nDist);
                         if ( n == 4 )
-                            SetDistance( sal_uInt16( nDist ));
+                            SetAllDistances(sal_uInt16(nDist));
                         else
                             SetDistance( sal_uInt16( nDist ), nLines[n-5] );
                     }
@@ -1951,7 +1951,7 @@ bool SvxBoxItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             if( bConvert )
                 nDist = convertMm100ToTwip(nDist);
             if( nMemberId == BORDER_DISTANCE )
-                SetDistance( sal_uInt16( nDist ));
+                SetAllDistances(sal_uInt16(nDist));
             else
                 SetDistance( sal_uInt16( nDist ), nLine );
         }
@@ -2164,7 +2164,7 @@ bool SvxBoxItem::GetPresentation
 
 SvStream& SvxBoxItem::Store( SvStream& rStrm , sal_uInt16 nItemVersion ) const
 {
-    rStrm.WriteUInt16( GetDistance() );
+    rStrm.WriteUInt16( GetSmallestDistance() );
     const SvxBorderLine* pLine[ 4 ];    // top, left, right, bottom
     pLine[ 0 ] = GetTop();
     pLine[ 1 ] = GetLeft();
@@ -2265,7 +2265,7 @@ SfxPoolItem* SvxBoxItem::Create( SvStream& rStrm, sal_uInt16 nIVersion ) const
     }
     else
     {
-        pAttr->SetDistance( nDistance );
+        pAttr->SetAllDistances(nDistance);
     }
 
     return pAttr;
@@ -2328,7 +2328,7 @@ void SvxBoxItem::SetLine( const SvxBorderLine* pNew, SvxBoxItemLine nLine )
 }
 
 
-sal_uInt16 SvxBoxItem::GetDistance() const
+sal_uInt16 SvxBoxItem::GetSmallestDistance() const
 {
     // The smallest distance that is not 0 will be returned.
     sal_uInt16 nDist = nTopDist;

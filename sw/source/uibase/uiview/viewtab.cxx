@@ -1650,7 +1650,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                     SvxColumnItem aColItem(nNum);
                     const SwRect aPrtRect = rSh.GetAnyCurRect(RECT_PAGE_PRT, pPt);
                     const SvxBoxItem& rBox = static_cast<const SvxBoxItem&>(rMaster.GetFormatAttr(RES_BOX));
-                    long nDist = rBox.GetDistance();
+                    long nDist = rBox.GetSmallestDistance();
 
                     lcl_FillSvxColumn(
                         aCol,
@@ -1946,8 +1946,9 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                     const SwFormatCol* pCols = pFormat ? &pFormat->GetCol():
                                                    &rDesc.GetMaster().GetCol();
                     const SwColumns& rCols = pCols->GetColumns();
-                    const sal_uInt16 nBorder = pFormat ? pFormat->GetBox().GetDistance() :
-                                                  rDesc.GetMaster().GetBox().GetDistance();
+                    const sal_uInt16 nBorder = (pFormat)
+                        ? pFormat->GetBox().GetSmallestDistance()
+                        : rDesc.GetMaster().GetBox().GetSmallestDistance();
 
                     // RECT_FLY_PRT_EMBEDDED returns the relative position to RECT_FLY_EMBEDDED
                     // the absolute position must be added here

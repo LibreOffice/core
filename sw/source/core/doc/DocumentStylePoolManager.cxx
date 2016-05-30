@@ -1289,7 +1289,7 @@ SwFormat* DocumentStylePoolManager::GetFormatFromPool( sal_uInt16 nId )
                 aBox.SetLine( &aLine, SvxBoxItemLine::BOTTOM );
                 aBox.SetLine( &aLine, SvxBoxItemLine::LEFT );
                 aBox.SetLine( &aLine, SvxBoxItemLine::RIGHT );
-                aBox.SetDistance( 85 );
+                aBox.SetAllDistances( 85 );
                 aSet.Put( aBox );
                 aSet.Put( SvxLRSpaceItem( 114, 114, 0, 0, RES_LR_SPACE ) );
                 aSet.Put( SvxULSpaceItem( 114, 114, RES_UL_SPACE ) );

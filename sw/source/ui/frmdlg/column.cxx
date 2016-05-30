@@ -154,7 +154,7 @@ SwColumnDlg::SwColumnDlg(vcl::Window* pParent, SwWrtShell& rSh)
 
         const SvxLRSpaceItem& rLRSpace = (const SvxLRSpaceItem&)rFormat.GetLRSpace();
         const SvxBoxItem& rBox = (const SvxBoxItem&) rFormat.GetBox();
-        nPageWidth -= rLRSpace.GetLeft() + rLRSpace.GetRight() + rBox.GetDistance();
+        nPageWidth -= rLRSpace.GetLeft() + rLRSpace.GetRight() + rBox.GetSmallestDistance();
 
         pPageSet->Put(rFormat.GetCol());
         pPageSet->Put(rFormat.GetLRSpace());
@@ -636,7 +636,7 @@ void SwColumnPage::Reset(const SfxItemSet *rSet)
         {
             const SwFormatFrameSize& rSize = static_cast<const SwFormatFrameSize&>(rSet->Get(RES_FRM_SIZE));
             const SvxBoxItem& rBox = static_cast<const SvxBoxItem&>(rSet->Get(RES_BOX));
-            pColMgr->SetActualWidth((sal_uInt16)rSize.GetSize().Width() - rBox.GetDistance());
+            pColMgr->SetActualWidth((sal_uInt16)rSize.GetSize().Width() - rBox.GetSmallestDistance());
         }
     }
     if(m_pBalanceColsCB->IsVisible())
@@ -1251,7 +1251,7 @@ void SwColumnPage::ActivatePage(const SfxItemSet& rSet)
                                                                     RES_LR_SPACE ));
                 const SvxBoxItem& rBox = static_cast<const SvxBoxItem&>( rSet.Get(RES_BOX));
                 nActWidth = rSize.GetSize().Width()
-                                - rLRSpace.GetLeft() - rLRSpace.GetRight() - rBox.GetDistance();
+                                - rLRSpace.GetLeft() - rLRSpace.GetRight() - rBox.GetSmallestDistance();
             }
             else
             {
@@ -1259,7 +1259,7 @@ void SwColumnPage::ActivatePage(const SfxItemSet& rSet)
                                                                     RES_UL_SPACE ));
                 const SvxBoxItem& rBox = static_cast<const SvxBoxItem&>( rSet.Get(RES_BOX));
                 nActWidth = rSize.GetSize().Height()
-                                - rULSpace.GetUpper() - rULSpace.GetLower() - rBox.GetDistance();
+                                - rULSpace.GetUpper() - rULSpace.GetLower() - rBox.GetSmallestDistance();
 
             }
 
@@ -1289,7 +1289,7 @@ void SwColumnPage::ActivatePage(const SfxItemSet& rSet)
             nTotalWish = FRAME_FORMAT_WIDTH;
         else
         {
-            long nDistance = rBox.GetDistance();
+            long const nDistance = rBox.GetSmallestDistance();
             nTotalWish = (!bVertical ? rSize.GetWidth() : rSize.GetHeight()) - 2 * nDistance;
         }
 

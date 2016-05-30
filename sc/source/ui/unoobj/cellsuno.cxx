@@ -962,7 +962,7 @@ template<typename TableBorderType>
 void lcl_fillBoxItems( SvxBoxItem& rOuter, SvxBoxInfoItem& rInner, const TableBorderType& rBorder )
 {
     ::editeng::SvxBorderLine aLine;
-    rOuter.SetDistance( static_cast<sal_uInt16>(HMMToTwips( rBorder.Distance )) );
+    rOuter.SetAllDistances(static_cast<sal_uInt16>(HMMToTwips(rBorder.Distance)));
     rOuter.SetLine( ScHelperFunctions::GetBorderLine( aLine, rBorder.TopLine ),         SvxBoxItemLine::TOP );
     rOuter.SetLine( ScHelperFunctions::GetBorderLine( aLine, rBorder.BottomLine ),      SvxBoxItemLine::BOTTOM );
     rOuter.SetLine( ScHelperFunctions::GetBorderLine( aLine, rBorder.LeftLine ),        SvxBoxItemLine::LEFT );
@@ -1014,7 +1014,7 @@ void lcl_fillTableBorder( TableBorderItem& rBorder, const SvxBoxItem& rOuter, co
     ScHelperFunctions::FillBorderLine( rBorder.HorizontalLine,  rInner.GetHori() );
     ScHelperFunctions::FillBorderLine( rBorder.VerticalLine,    rInner.GetVert() );
 
-    rBorder.Distance                = rOuter.GetDistance();
+    rBorder.Distance                = rOuter.GetSmallestDistance();
     rBorder.IsTopLineValid          = rInner.IsValid(SvxBoxInfoItemValidFlags::TOP);
     rBorder.IsBottomLineValid       = rInner.IsValid(SvxBoxInfoItemValidFlags::BOTTOM);
     rBorder.IsLeftLineValid         = rInner.IsValid(SvxBoxInfoItemValidFlags::LEFT);

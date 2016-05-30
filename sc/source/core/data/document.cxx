@@ -4956,7 +4956,7 @@ void ScDocument::GetSelectionFrame( const ScMarkData& rMark,
     rLineOuter.SetLine(nullptr, SvxBoxItemLine::BOTTOM);
     rLineOuter.SetLine(nullptr, SvxBoxItemLine::LEFT);
     rLineOuter.SetLine(nullptr, SvxBoxItemLine::RIGHT);
-    rLineOuter.SetDistance(0);
+    rLineOuter.SetAllDistances(0);
 
     rLineInner.SetLine(nullptr, SvxBoxInfoItemLine::HORI);
     rLineInner.SetLine(nullptr, SvxBoxInfoItemLine::VERT);

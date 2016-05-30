@@ -1099,7 +1099,7 @@ void SwDoc::GetTabBorders( const SwCursor& rCursor, SfxItemSet& rSet )
                                 rBox.GetDistance( k ) )
                             {
                                 aSetBoxInfo.SetValid( SvxBoxInfoItemValidFlags::DISTANCE, false );
-                                aSetBox.SetDistance( 0 );
+                                aSetBox.SetAllDistances(0);
                                 break;
                             }
                     }

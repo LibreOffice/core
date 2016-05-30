@@ -1009,7 +1009,8 @@ void SwFrameShell::ExecFrameStyle(SfxRequest& rReq)
                     if(!StarBASIC::IsRunning())
 #endif
                     {
-                        aNewBox.SetDistance( rBoxItem.GetDistance() );
+                        // TODO: should this copy 4 individual Dist instead?
+                        aNewBox.SetAllDistances(rBoxItem.GetSmallestDistance());
                     }
 
                     aBoxItem = aNewBox;
@@ -1115,7 +1116,7 @@ void SwFrameShell::ExecFrameStyle(SfxRequest& rReq)
     if (bDefault && (aBoxItem.GetTop() || aBoxItem.GetBottom() ||
         aBoxItem.GetLeft() || aBoxItem.GetRight()))
     {
-        aBoxItem.SetDistance(MIN_BORDER_DIST);
+        aBoxItem.SetAllDistances(MIN_BORDER_DIST);
     }
     aFrameSet.Put( aBoxItem );
     // Template AutoUpdate

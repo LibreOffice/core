@@ -491,9 +491,11 @@ void SwTableShell::Execute(SfxRequest &rReq)
                 sal_uInt16 nDefValue = MIN_BORDER_DIST;
                 if ( !rReq.IsAPI() )
                     nDefValue = 55;
-                if ( !rReq.IsAPI() || aBox.GetDistance() < MIN_BORDER_DIST )
+                if (!rReq.IsAPI() || aBox.GetSmallestDistance() < MIN_BORDER_DIST)
+                {
                     for( SvxBoxItemLine k : o3tl::enumrange<SvxBoxItemLine>() )
                         aBox.SetDistance( std::max(rCoreBox.GetDistance(k), nDefValue) , k );
+                }
             }
             else
                 OSL_ENSURE( false, "where is BoxItem?" );

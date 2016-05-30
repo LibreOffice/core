@@ -3254,7 +3254,7 @@ void RtfAttributeOutput::FormatBox(const SvxBoxItem& rBox)
         OOO_STRING_SVTOOLS_RTF_BRDRT, OOO_STRING_SVTOOLS_RTF_BRDRL, OOO_STRING_SVTOOLS_RTF_BRDRB, OOO_STRING_SVTOOLS_RTF_BRDRR
     };
 
-    sal_uInt16 nDist = rBox.GetDistance();
+    sal_uInt16 const nDist = rBox.GetSmallestDistance();
 
     if (m_rExport.m_bRTFFlySyntax)
     {

@@ -1046,7 +1046,7 @@ void SAL_CALL Cell::setPropertyValue( const OUString& rPropertyName, const Any& 
             aBoxInfo.SetLine(bSet ? &aLine : nullptr, SvxBoxInfoItemLine::VERT);
             aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::VERT, pBorder->IsVerticalLineValid);
 
-            aBox.SetDistance(pBorder->Distance); //TODO
+            aBox.SetAllDistances(pBorder->Distance); //TODO
             aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::DISTANCE, pBorder->IsDistanceValid);
 
             mpProperties->SetObjectItem(aBox);
@@ -1162,7 +1162,7 @@ Any SAL_CALL Cell::getPropertyValue( const OUString& PropertyName ) throw(Unknow
             aTableBorder.IsHorizontalLineValid  = rBoxInfoItem.IsValid(SvxBoxInfoItemValidFlags::HORI);
             aTableBorder.VerticalLine           = SvxBoxItem::SvxLineToLine(rBoxInfoItem.GetVert(), false);
             aTableBorder.IsVerticalLineValid    = rBoxInfoItem.IsValid(SvxBoxInfoItemValidFlags::VERT);
-            aTableBorder.Distance               = rBox.GetDistance();
+            aTableBorder.Distance               = rBox.GetSmallestDistance();
             aTableBorder.IsDistanceValid        = rBoxInfoItem.IsValid(SvxBoxInfoItemValidFlags::DISTANCE);
 
             return Any( aTableBorder );

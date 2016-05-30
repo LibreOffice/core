@@ -2095,8 +2095,8 @@ void SwHTMLParser::SetFrameFormatAttrs( SfxItemSet &rItemSet,
         if( (nFlags & HTML_FF_PADDING) == 0 )
         {
             SvxBoxItem aBoxItem( *static_cast<const SvxBoxItem *>(pItem) );
-            // Alle 4 Seiten gleichzeitig auf 0 setzen
-            aBoxItem.SetDistance( 0 );
+            // reset all 4 sides to 0
+            aBoxItem.SetAllDistances(0);
             rFrameItemSet.Put( aBoxItem );
         }
         else

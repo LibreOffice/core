@@ -307,7 +307,7 @@ SdrItemPool::SdrItemPool(
     mppLocalPoolDefaults[ SDRATTR_CUSTOMSHAPE_REPLACEMENT_URL - SDRATTR_START ] = new SdrCustomShapeReplacementURLItem;
 
     SvxBoxItem* pboxItem = new SvxBoxItem( SDRATTR_TABLE_BORDER );
-    pboxItem->SetDistance( 100 );
+    pboxItem->SetAllDistances( 100 );
     mppLocalPoolDefaults[ SDRATTR_TABLE_BORDER - SDRATTR_START ] = pboxItem;
 
     SvxBoxInfoItem* pBoxInfoItem = new SvxBoxInfoItem( SDRATTR_TABLE_BORDER_INNER );

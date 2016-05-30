@@ -1425,10 +1425,10 @@ void HTMLTable::FixFrameFormat( SwTableBox *pBox,
                     (2*nCellPadding <= nInnerFrameWidth) ? nCellPadding
                                                       : (nInnerFrameWidth / 2) );
                 // wir setzen das Item nur, wenn es eine Umrandung gibt
-                // oder eine sheet::Border-Distanz vorgegeben ist. Fehlt letztere,
+                // oder eine Border-Distanz vorgegeben ist. Fehlt letztere,
                 // dann gibt es eine Umrandung, und wir muessen die Distanz
                 // setzen
-                aBoxItem.SetDistance( nBDist ? nBDist : MIN_BORDER_DIST );
+                aBoxItem.SetAllDistances((nBDist) ? nBDist : MIN_BORDER_DIST);
                 pFrameFormat->SetFormatAttr( aBoxItem );
             }
             else
@@ -1528,7 +1528,7 @@ void HTMLTable::FixFillerFrameFormat( SwTableBox *pBox, bool bRight ) const
             aBoxItem.SetLine( &aInhLeftBorderLine, SvxBoxItemLine::LEFT );
         if( bRight && bInhRightBorder )
             aBoxItem.SetLine( &aInhRightBorderLine, SvxBoxItemLine::RIGHT );
-        aBoxItem.SetDistance( MIN_BORDER_DIST );
+        aBoxItem.SetAllDistances(MIN_BORDER_DIST);
         pFrameFormat->SetFormatAttr( aBoxItem );
     }
     else

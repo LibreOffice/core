@@ -99,12 +99,12 @@ public:
     void    SetLine( const editeng::SvxBorderLine* pNew, SvxBoxItemLine nLine );
 
     sal_uInt16  GetDistance( SvxBoxItemLine nLine ) const;
-    sal_uInt16  GetDistance() const;
+    sal_uInt16  GetSmallestDistance() const;
 
     bool IsRemoveAdjacentCellBorder() const { return bRemoveAdjCellBorder; }
 
     void    SetDistance( sal_uInt16 nNew, SvxBoxItemLine nLine );
-    inline void SetDistance( sal_uInt16 nNew );
+    inline void SetAllDistances( sal_uInt16 nNew );
 
     void SetRemoveAdjacentCellBorder( bool bSet = true ) { bRemoveAdjCellBorder = bSet; }
 
@@ -116,7 +116,7 @@ public:
     static bool LineToSvxLine(const css::table::BorderLine2& rLine, editeng::SvxBorderLine& rSvxLine, bool bConvert);
 };
 
-inline void SvxBoxItem::SetDistance( sal_uInt16 nNew )
+inline void SvxBoxItem::SetAllDistances(sal_uInt16 const nNew)
 {
     nTopDist = nBottomDist = nLeftDist = nRightDist = nNew;
 }

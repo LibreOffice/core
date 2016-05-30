@@ -125,7 +125,8 @@ static void lcl_SetDfltBoxAttr( SwFrameFormat& rFormat, sal_uInt8 nId )
         aLine.SetBorderLineStyle(table::BorderLineStyle::DOUBLE);
         aLine.SetWidth( DEF_LINE_WIDTH_0 );
     }
-    SvxBoxItem aBox(RES_BOX); aBox.SetDistance( 55 );
+    SvxBoxItem aBox(RES_BOX);
+    aBox.SetAllDistances(55);
     if ( bTop )
         aBox.SetLine( &aLine, SvxBoxItemLine::TOP );
     if ( bBottom )

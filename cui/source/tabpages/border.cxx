@@ -496,7 +496,7 @@ void SvxBorderTabPage::Reset( const SfxItemSet* rSet )
                                     nDefDist != nRightDist ||
                                     nDefDist != nTopDist   ||
                                     nDefDist != nBottomDist);
-                        if((pBoxItem->GetDistance() ||
+                        if ((pBoxItem->GetSmallestDistance() ||
                                 bIsAnyBorderVisible) && bDiffDist )
                         {
                             m_pLeftMF->SetModifyFlag();
