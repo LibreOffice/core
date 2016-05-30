@@ -66,7 +66,7 @@ void FirebirdTest::testEmptyDBConnection()
 void FirebirdTest::testIntegerDatabase()
 {
     uno::Reference< XOfficeDatabaseDocument > xDocument =
-#if HAVE_FIREBIRD_30
+#ifdef HAVE_FIREBIRD_30
         getDocumentForFileName("firebird_integer_x64le_ods12.odb");
 #else
         getDocumentForFileName("firebird_integer_x64le.odb");
