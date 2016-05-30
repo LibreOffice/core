@@ -1688,6 +1688,7 @@ endef
 endif # SYSTEM_EBOOK
 
 
+
 ifneq ($(SYSTEM_ETONYEK),)
 
 define gb_LinkTarget__use_etonyek
@@ -2816,6 +2817,22 @@ endef
 
 endif # SYSTEM_OPENLDAP
 
+define gb_linkTarget__use_libtommath
+$(call gb_LinkTarget_set_include,$(1),\
+	$$(INCLUDE) \
+	-I${WORKDIR}/UnpackedTarball/libtommath \
+)
+$(call gb_LinkTarget_add_libs,$(1),\
+	$(call gb_UnpackedTarball_get_dir,libtommath)/libtommmath$(gb_StaticLibrary_PLAINEXT) \
+)
+$(call gb_LinkTarget_use_external_project,$(1),libtommath)
+
+endef
+
+define gb_ExternalProject__use_libtommath
+$(call gb_ExternalProject_use_external_project,$(1),libtommath)
+
+endef
 
 ifeq ($(ENABLE_FIREBIRD_SDBC),TRUE)
 
@@ -2830,9 +2847,6 @@ $(call gb_LinkTarget_add_libs,$(1),$(FIREBIRD_LIBS))
 
 endef
 
-# gb_LinkTarget__use_atomic_ops :=
-# gb_LinkTarget__use_tommath :=
-
 else # !SYSTEM_FIREBIRD
 
 #$(call gb_LinkTarget__use_libatomic_ops,$(1))
@@ -2841,15 +2855,16 @@ define gb_LinkTarget__use_libfbembed
 $(call gb_LinkTarget_use_package,$(1),firebird)
 $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
-	-I$(call gb_UnpackedTarball_get_dir,firebird)/gen/firebird/include \
+	-I$(call gb_UnpackedTarball_get_dir,firebird)/gen/Release/firebird/include \
 )
 ifeq ($(COM),MSC)
 $(call gb_LinkTarget_add_libs,$(1),\
-	$(call gb_UnpackedTarball_get_dir,firebird)/gen/firebird/bin/ifbembed.lib \
+	$(call gb_UnpackedTarball_get_dir,firebird)/gen/Release/firebird/bin/ifbclient.lib \
 )
 else
 $(call gb_LinkTarget_add_libs,$(1),\
-	-L$(call gb_UnpackedTarball_get_dir,firebird)/gen/firebird/lib -lfbembed \
+	-L$(call gb_UnpackedTarball_get_dir,firebird)/gen/Release/firebird/lib -lfbclient \
+    -L$(call gb_UnpackedTarball_get_dir,firebird)/gen/Release/firebird/plugins -lEngine12 \
 )
 endif
 
