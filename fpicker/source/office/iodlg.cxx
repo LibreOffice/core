@@ -542,6 +542,7 @@ void SvtFileDialog::dispose()
     }
 
     delete _pImp;
+    _pImp = nullptr;
     _pFileView.disposeAndClear();
     _pSplitter.disposeAndClear();
     _pContainer.disposeAndClear();
