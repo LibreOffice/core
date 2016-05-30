@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?> <svg height="600" width="400" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-<g font-size="5px">
-	<text x="150" y="150" font-size="10em">Sample</text>
+<g font-size="5px" font-family="serif">
+	<text x="10" y="150" font-size="10em" font-family="inherit">Sample</text>
+	<text x="200" y="150" font-size="10em" font-family="serif">Sample</text>
 </g> 
 </svg>

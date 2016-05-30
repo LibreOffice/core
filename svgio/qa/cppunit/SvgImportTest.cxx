@@ -296,7 +296,12 @@ void Test::testFontsizeRelative()
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "fontcolor", "#000000");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "text", "Sample");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "height", "50");
-    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "familyname", "Times New Roman");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "familyname", "serif");
+
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]", "fontcolor", "#000000");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]", "text", "Sample");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]", "height", "50");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]", "familyname", "serif");
 }
 
 void Test::testTdf45771()
