@@ -221,6 +221,10 @@ published service TextTable
     */
     [optional, property] sequence<com::sun::star::beans::PropertyValue> TableInteropGrabBag;
 
+    /** contains the name of table style used by the table.
+     */
+    [optional, property] string TableTemplateName;
+
 };
 
 
