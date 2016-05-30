@@ -1413,7 +1413,7 @@ void SmCursor::EndEdit(){
     mpDocShell->SetModified(true);
     //I think SmDocShell uses this value when it sends an update graphics event
     //Anyway comments elsewhere suggests it need to be updated...
-    mpDocShell->nModifyCount++;
+    mpDocShell->mnModifyCount++;
 
     //TODO: Consider copying the update accessibility code from SmDocShell::SetText in here...
     //This somehow updates the size of SmGraphicView if it is running in embedded mode
@@ -1427,7 +1427,7 @@ void SmCursor::EndEdit(){
     OUString formula;
     SmNodeToTextVisitor(mpTree, formula);
     //mpTree->CreateTextFromNode(formula);
-    mpDocShell->aText = formula;
+    mpDocShell->maText = formula;
     mpDocShell->GetEditEngine().QuickInsertText( formula, ESelection( 0, 0, EE_PARA_ALL, EE_TEXTPOS_ALL ) );
     mpDocShell->GetEditEngine().QuickFormatDoc();
 }

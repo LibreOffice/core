@@ -120,7 +120,7 @@ void SmDocShell::Notify(SfxBroadcaster&, const SfxHint& rHint)
         case HINT_FORMATCHANGED:
             SetFormulaArranged(false);
 
-            nModifyCount++;     //! see comment for SID_GAPHIC_SM in SmDocShell::GetState
+            mnModifyCount++;     //! see comment for SID_GAPHIC_SM in SmDocShell::GetState
 
             Repaint();
             break;
@@ -146,13 +146,13 @@ const OUString SmDocShell::GetComment() const
 
 void SmDocShell::SetText(const OUString& rBuffer)
 {
-    if (rBuffer != aText)
+    if (rBuffer != maText)
     {
         bool bIsEnabled = IsEnableSetModified();
         if( bIsEnabled )
             EnableSetModified( false );
 
-        aText = rBuffer;
+        maText = rBuffer;
         SetFormulaArranged( false );
 
         Parse();
@@ -183,7 +183,7 @@ void SmDocShell::SetText(const OUString& rBuffer)
         if (pAcc)
         {
             Any aOldValue, aNewValue;
-            if ( comphelper::OCommonAccessibleText::implInitTextChangedEvent( aText, rBuffer, aOldValue, aNewValue ) )
+            if ( comphelper::OCommonAccessibleText::implInitTextChangedEvent( maText, rBuffer, aOldValue, aNewValue ) )
             {
                 pAcc->LaunchEvent( AccessibleEventId::TEXT_CHANGED,
                         aOldValue, aNewValue );
@@ -197,11 +197,11 @@ void SmDocShell::SetText(const OUString& rBuffer)
 
 void SmDocShell::SetFormat(SmFormat& rFormat)
 {
-    aFormat = rFormat;
+    maFormat = rFormat;
     SetFormulaArranged( false );
     SetModified( true );
 
-    nModifyCount++;     //! see comment for SID_GAPHIC_SM in SmDocShell::GetState
+    mnModifyCount++;     //! see comment for SID_GAPHIC_SM in SmDocShell::GetState
 
     // don't use SmGetActiveView since the view shell might not be active (0 pointer)
     // if for example the Basic Macro dialog currently has the focus. Thus:
@@ -216,34 +216,34 @@ void SmDocShell::SetFormat(SmFormat& rFormat)
 OUString SmDocShell::GetAccessibleText()
 {
     ArrangeFormula();
-    if (aAccText.isEmpty())
+    if (maAccText.isEmpty())
     {
-        OSL_ENSURE( pTree, "Tree missing" );
-        if (pTree)
+        OSL_ENSURE( mpTree, "Tree missing" );
+        if (mpTree)
         {
             OUStringBuffer aBuf;
-            pTree->GetAccessibleText(aBuf);
-            aAccText = aBuf.makeStringAndClear();
+            mpTree->GetAccessibleText(aBuf);
+            maAccText = aBuf.makeStringAndClear();
         }
     }
-    return aAccText;
+    return maAccText;
 }
 
 void SmDocShell::Parse()
 {
-    delete pTree;
+    delete mpTree;
     ReplaceBadChars();
-    pTree = aInterpreter.Parse(aText);
-    nModifyCount++;     //! see comment for SID_GAPHIC_SM in SmDocShell::GetState
+    mpTree = maParser.Parse(maText);
+    mnModifyCount++;     //! see comment for SID_GAPHIC_SM in SmDocShell::GetState
     SetFormulaArranged( false );
     InvalidateCursor();
-    aUsedSymbols = aInterpreter.GetUsedSymbols();
+    maUsedSymbols = maParser.GetUsedSymbols();
 }
 
 
 void SmDocShell::ArrangeFormula()
 {
-    if (bIsFormulaArranged)
+    if (mbFormulaArranged)
         return;
 
     // Only for the duration of the existence of this object the correct settings
@@ -269,7 +269,7 @@ void SmDocShell::ArrangeFormula()
                "Sm : falscher MapMode");
 
     const SmFormat &rFormat = GetFormat();
-    pTree->Prepare(rFormat, *this);
+    mpTree->Prepare(rFormat, *this);
 
     // format/draw formulas always from left to right,
     // and numbers should not be converted
@@ -278,7 +278,7 @@ void SmDocShell::ArrangeFormula()
     sal_Int16 nDigitLang = pOutDev->GetDigitLanguage();
     pOutDev->SetDigitLanguage( LANGUAGE_ENGLISH );
 
-    pTree->Arrange(*pOutDev, rFormat);
+    mpTree->Arrange(*pOutDev, rFormat);
 
     pOutDev->SetLayoutMode( nLayoutMode );
     pOutDev->SetDigitLanguage( nDigitLang );
@@ -286,7 +286,7 @@ void SmDocShell::ArrangeFormula()
     SetFormulaArranged(true);
 
     // invalidate accessible text
-    aAccText.clear();
+    maAccText.clear();
 }
 
 
@@ -346,60 +346,60 @@ void SetEditEngineDefaultFonts(SfxItemPool &rEditEngineItemPool)
 
 EditEngine& SmDocShell::GetEditEngine()
 {
-    if (!pEditEngine)
+    if (!mpEditEngine)
     {
         //!
         //! see also SmEditWindow::DataChanged !
         //!
 
-        pEditEngineItemPool = EditEngine::CreatePool();
+        mpEditEngineItemPool = EditEngine::CreatePool();
 
-        SetEditEngineDefaultFonts(*pEditEngineItemPool);
+        SetEditEngineDefaultFonts(*mpEditEngineItemPool);
 
-        pEditEngine = new EditEngine( pEditEngineItemPool );
+        mpEditEngine = new EditEngine( mpEditEngineItemPool );
 
-        pEditEngine->EnableUndo( true );
-        pEditEngine->SetDefTab( sal_uInt16(
+        mpEditEngine->EnableUndo( true );
+        mpEditEngine->SetDefTab( sal_uInt16(
             Application::GetDefaultDevice()->GetTextWidth("XXXX")) );
 
-        pEditEngine->SetControlWord(
-                (pEditEngine->GetControlWord() | EEControlBits::AUTOINDENTING) &
+        mpEditEngine->SetControlWord(
+                (mpEditEngine->GetControlWord() | EEControlBits::AUTOINDENTING) &
                 EEControlBits(~EEControlBits::UNDOATTRIBS) &
                 EEControlBits(~EEControlBits::PASTESPECIAL) );
 
-        pEditEngine->SetWordDelimiters(" .=+-*/(){}[];\"");
-        pEditEngine->SetRefMapMode( MAP_PIXEL );
+        mpEditEngine->SetWordDelimiters(" .=+-*/(){}[];\"");
+        mpEditEngine->SetRefMapMode( MAP_PIXEL );
 
-        pEditEngine->SetPaperSize( Size( 800, 0 ) );
+        mpEditEngine->SetPaperSize( Size( 800, 0 ) );
 
-        pEditEngine->EraseVirtualDevice();
+        mpEditEngine->EraseVirtualDevice();
 
         // set initial text if the document already has some...
         // (may be the case when reloading a doc)
         OUString aTxt( GetText() );
         if (!aTxt.isEmpty())
-            pEditEngine->SetText( aTxt );
+            mpEditEngine->SetText( aTxt );
 
-        pEditEngine->ClearModifyFlag();
+        mpEditEngine->ClearModifyFlag();
 
     }
-    return *pEditEngine;
+    return *mpEditEngine;
 }
 
 
 SfxItemPool& SmDocShell::GetEditEngineItemPool()
 {
-    if (!pEditEngineItemPool)
+    if (!mpEditEngineItemPool)
         GetEditEngine();
-    assert(pEditEngineItemPool && "EditEngineItemPool missing");
-    return *pEditEngineItemPool;
+    assert(mpEditEngineItemPool && "EditEngineItemPool missing");
+    return *mpEditEngineItemPool;
 }
 
 void SmDocShell::DrawFormula(OutputDevice &rDev, Point &rPosition, bool bDrawSelection)
 {
-    if (!pTree)
+    if (!mpTree)
         Parse();
-    OSL_ENSURE(pTree, "Sm : NULL pointer");
+    OSL_ENSURE(mpTree, "Sm : NULL pointer");
 
     ArrangeFormula();
 
@@ -408,8 +408,8 @@ void SmDocShell::DrawFormula(OutputDevice &rDev, Point &rPosition, bool bDrawSel
     // VisArea (i.e. the size within the client) and the current size.
     // Idea: The difference could be adapted with SmNod::SetSize (no long-term solution)
 
-    rPosition.X() += aFormat.GetDistance( DIS_LEFTSPACE );
-    rPosition.Y() += aFormat.GetDistance( DIS_TOPSPACE  );
+    rPosition.X() += maFormat.GetDistance( DIS_LEFTSPACE );
+    rPosition.Y() += maFormat.GetDistance( DIS_TOPSPACE  );
 
     //! in case of high contrast-mode (accessibility option!)
     //! the draw mode needs to be set to default, because when imbedding
@@ -433,13 +433,13 @@ void SmDocShell::DrawFormula(OutputDevice &rDev, Point &rPosition, bool bDrawSel
     rDev.SetDigitLanguage( LANGUAGE_ENGLISH );
 
     //Set selection if any
-    if(pCursor && bDrawSelection){
-        pCursor->AnnotateSelection();
-        SmSelectionDrawingVisitor(rDev, pTree, rPosition);
+    if(mpCursor && bDrawSelection){
+        mpCursor->AnnotateSelection();
+        SmSelectionDrawingVisitor(rDev, mpTree, rPosition);
     }
 
     //Drawing using visitor
-    SmDrawingVisitor(rDev, rPosition, pTree);
+    SmDrawingVisitor(rDev, rPosition, mpTree);
 
 
     rDev.SetLayoutMode( nLayoutMode );
@@ -453,42 +453,42 @@ Size SmDocShell::GetSize()
 {
     Size aRet;
 
-    if (!pTree)
+    if (!mpTree)
         Parse();
 
-    if (pTree)
+    if (mpTree)
     {
         ArrangeFormula();
-        aRet = pTree->GetSize();
+        aRet = mpTree->GetSize();
 
         if ( !aRet.Width() )
             aRet.Width() = 2000;
         else
-            aRet.Width()  += aFormat.GetDistance( DIS_LEFTSPACE ) +
-                             aFormat.GetDistance( DIS_RIGHTSPACE );
+            aRet.Width()  += maFormat.GetDistance( DIS_LEFTSPACE ) +
+                             maFormat.GetDistance( DIS_RIGHTSPACE );
         if ( !aRet.Height() )
             aRet.Height() = 1000;
         else
-            aRet.Height() += aFormat.GetDistance( DIS_TOPSPACE ) +
-                             aFormat.GetDistance( DIS_BOTTOMSPACE );
+            aRet.Height() += maFormat.GetDistance( DIS_TOPSPACE ) +
+                             maFormat.GetDistance( DIS_BOTTOMSPACE );
     }
 
     return aRet;
 }
 
 void SmDocShell::InvalidateCursor(){
-    pCursor.reset();
+    mpCursor.reset();
 }
 
 SmCursor& SmDocShell::GetCursor(){
-    if(!pCursor)
-        pCursor.reset(new SmCursor(pTree, this));
-    return *pCursor;
+    if(!mpCursor)
+        mpCursor.reset(new SmCursor(mpTree, this));
+    return *mpCursor;
 }
 
 bool SmDocShell::HasCursor()
 {
-    return pCursor.get() != nullptr;
+    return mpCursor.get() != nullptr;
 }
 
 SmPrinterAccess::SmPrinterAccess( SmDocShell &rDocShell )
@@ -562,11 +562,11 @@ Printer* SmDocShell::GetPrt()
         // there is no connection) it still can be the case that we know the printer because it
         // has been passed on by the server in OnDocumentPrinterChanged and being kept temporarily.
         Printer* pPrt = GetDocumentPrinter();
-        if (!pPrt && pTmpPrinter)
-            pPrt = pTmpPrinter;
+        if (!pPrt && mpTmpPrinter)
+            pPrt = mpTmpPrinter;
         return pPrt;
     }
-    else if (!pPrinter)
+    else if (!mpPrinter)
     {
         SfxItemSet* pOptions = new SfxItemSet(GetPool(),
                                               SID_PRINTSIZE,       SID_PRINTSIZE,
@@ -580,10 +580,10 @@ Printer* SmDocShell::GetPrt()
                                               0);
         SmModule *pp = SM_MOD();
         pp->GetConfig()->ConfigToItemSet(*pOptions);
-        pPrinter = VclPtr<SfxPrinter>::Create(pOptions);
-        pPrinter->SetMapMode(MapMode(MAP_100TH_MM));
+        mpPrinter = VclPtr<SfxPrinter>::Create(pOptions);
+        mpPrinter->SetMapMode(MapMode(MAP_100TH_MM));
     }
-    return pPrinter;
+    return mpPrinter;
 }
 
 OutputDevice* SmDocShell::GetRefDev()
@@ -600,22 +600,22 @@ OutputDevice* SmDocShell::GetRefDev()
 
 void SmDocShell::SetPrinter( SfxPrinter *pNew )
 {
-    pPrinter.disposeAndClear();
-    pPrinter = pNew;    //Transfer ownership
-    pPrinter->SetMapMode( MapMode(MAP_100TH_MM) );
+    mpPrinter.disposeAndClear();
+    mpPrinter = pNew;    //Transfer ownership
+    mpPrinter->SetMapMode( MapMode(MAP_100TH_MM) );
     SetFormulaArranged(false);
     Repaint();
 }
 
 void SmDocShell::OnDocumentPrinterChanged( Printer *pPrt )
 {
-    pTmpPrinter = pPrt;
+    mpTmpPrinter = pPrt;
     SetFormulaArranged(false);
     Size aOldSize = GetVisArea().GetSize();
     Repaint();
-    if( aOldSize != GetVisArea().GetSize() && !aText.isEmpty() )
+    if( aOldSize != GetVisArea().GetSize() && !maText.isEmpty() )
         SetModified( true );
-    pTmpPrinter = nullptr;
+    mpTmpPrinter = nullptr;
 }
 
 void SmDocShell::Repaint()
@@ -638,20 +638,20 @@ void SmDocShell::Repaint()
 
 SmDocShell::SmDocShell( SfxModelFlags i_nSfxCreationFlags )
     : SfxObjectShell(i_nSfxCreationFlags)
-    , pTree(nullptr)
-    , pEditEngineItemPool(nullptr)
-    , pEditEngine(nullptr)
-    , pPrinter(nullptr)
-    , pTmpPrinter(nullptr)
-    , nModifyCount(0)
-    , bIsFormulaArranged(false)
+    , mpTree(nullptr)
+    , mpEditEngineItemPool(nullptr)
+    , mpEditEngine(nullptr)
+    , mpPrinter(nullptr)
+    , mpTmpPrinter(nullptr)
+    , mnModifyCount(0)
+    , mbFormulaArranged(false)
 {
     SetPool(&SfxGetpApp()->GetPool());
 
     SmModule *pp = SM_MOD();
-    aFormat = pp->GetConfig()->GetStandardFormat();
+    maFormat = pp->GetConfig()->GetStandardFormat();
 
-    StartListening(aFormat);
+    StartListening(maFormat);
     StartListening(*pp->GetConfig());
 
     SetBaseModel(new SmModel(this));
@@ -661,14 +661,14 @@ SmDocShell::~SmDocShell()
 {
     SmModule *pp = SM_MOD();
 
-    EndListening(aFormat);
+    EndListening(maFormat);
     EndListening(*pp->GetConfig());
 
-    pCursor.reset();
-    delete pEditEngine;
-    SfxItemPool::Free(pEditEngineItemPool);
-    delete pTree;
-    pPrinter.disposeAndClear();
+    mpCursor.reset();
+    delete mpEditEngine;
+    SfxItemPool::Free(mpEditEngineItemPool);
+    delete mpTree;
+    mpPrinter.disposeAndClear();
 }
 
 bool SmDocShell::ConvertFrom(SfxMedium &rMedium)
@@ -680,10 +680,10 @@ bool SmDocShell::ConvertFrom(SfxMedium &rMedium)
 
     if ( rFltName == MATHML_XML )
     {
-        if (pTree)
+        if (mpTree)
         {
-            delete pTree;
-            pTree = nullptr;
+            delete mpTree;
+            mpTree = nullptr;
             InvalidateCursor();
         }
         Reference<css::frame::XModel> xModel(GetModel());
@@ -701,7 +701,7 @@ bool SmDocShell::ConvertFrom(SfxMedium &rMedium)
                 if ( aStorage->IsStream("Equation Native") )
                 {
                     // is this a MathType Storage?
-                    MathType aEquation( aText );
+                    MathType aEquation( maText );
                     bSuccess = aEquation.Parse( aStorage );
                     if ( bSuccess )
                         Parse();
@@ -778,9 +778,9 @@ bool SmDocShell::Save()
 
     if ( SfxObjectShell::Save() )
     {
-        if (!pTree)
+        if (!mpTree)
             Parse();
-        if( pTree )
+        if( mpTree )
             ArrangeFormula();
 
         Reference<css::frame::XModel> xModel(GetModel());
@@ -799,9 +799,9 @@ void SmDocShell::ReplaceBadChars()
 {
     bool bReplace = false;
 
-    if (pEditEngine)
+    if (mpEditEngine)
     {
-        OUStringBuffer aBuf( pEditEngine->GetText() );
+        OUStringBuffer aBuf( mpEditEngine->GetText() );
 
         for (sal_Int32 i = 0;  i < aBuf.getLength();  ++i)
         {
@@ -813,16 +813,16 @@ void SmDocShell::ReplaceBadChars()
         }
 
         if (bReplace)
-            aText = aBuf.makeStringAndClear();
+            maText = aBuf.makeStringAndClear();
     }
 }
 
 
 void SmDocShell::UpdateText()
 {
-    if (pEditEngine && pEditEngine->IsModified())
+    if (mpEditEngine && mpEditEngine->IsModified())
     {
-        OUString aEngTxt( pEditEngine->GetText() );
+        OUString aEngTxt( mpEditEngine->GetText() );
         if (GetText() != aEngTxt)
             SetText( aEngTxt );
     }
@@ -838,9 +838,9 @@ bool SmDocShell::SaveAs( SfxMedium& rMedium )
 
     if ( SfxObjectShell::SaveAs( rMedium ) )
     {
-        if (!pTree)
+        if (!mpTree)
             Parse();
-        if( pTree )
+        if( mpTree )
             ArrangeFormula();
 
         Reference<css::frame::XModel> xModel(GetModel());
@@ -857,9 +857,9 @@ bool SmDocShell::ConvertTo( SfxMedium &rMedium )
     std::shared_ptr<const SfxFilter> pFlt = rMedium.GetFilter();
     if( pFlt )
     {
-        if( !pTree )
+        if( !mpTree )
             Parse();
-        if( pTree )
+        if( mpTree )
             ArrangeFormula();
 
         const OUString& rFltName = pFlt->GetFilterName();
@@ -888,21 +888,21 @@ bool SmDocShell::writeFormulaOoxml(
         oox::core::OoxmlVersion const version,
         oox::drawingml::DocumentType const documentType)
 {
-    if( !pTree )
+    if( !mpTree )
         Parse();
-    if( pTree )
+    if( mpTree )
         ArrangeFormula();
-    SmOoxmlExport aEquation(pTree, version, documentType);
+    SmOoxmlExport aEquation(mpTree, version, documentType);
     return aEquation.ConvertFromStarMath( pSerializer );
 }
 
 void SmDocShell::writeFormulaRtf(OStringBuffer& rBuffer, rtl_TextEncoding nEncoding)
 {
-    if (!pTree)
+    if (!mpTree)
         Parse();
-    if (pTree)
+    if (mpTree)
         ArrangeFormula();
-    SmRtfExport aEquation(pTree);
+    SmRtfExport aEquation(mpTree);
     aEquation.ConvertFromStarMath(rBuffer, nEncoding);
 }
 
@@ -1163,10 +1163,10 @@ void SmDocShell::GetState(SfxItemSet &rSet)
 
         case SID_GAPHIC_SM:
             //! very old (pre UNO) and ugly hack to invalidate the SmGraphicWindow.
-            //! If nModifyCount gets changed then the call below will implicitly notify
+            //! If mnModifyCount gets changed then the call below will implicitly notify
             //! SmGraphicController::StateChanged and there the window gets invalidated.
-            //! Thus all the 'nModifyCount++' before invalidating this slot.
-            rSet.Put(SfxInt16Item(SID_GAPHIC_SM, nModifyCount));
+            //! Thus all the 'mnModifyCount++' before invalidating this slot.
+            rSet.Put(SfxInt16Item(SID_GAPHIC_SM, mnModifyCount));
             break;
 
         case SID_UNDO:
@@ -1224,9 +1224,9 @@ void SmDocShell::GetState(SfxItemSet &rSet)
 
 ::svl::IUndoManager *SmDocShell::GetUndoManager()
 {
-    if (!pEditEngine)
+    if (!mpEditEngine)
         GetEditEngine();
-    return &pEditEngine->GetUndoManager();
+    return &mpEditEngine->GetUndoManager();
 }
 
 
@@ -1327,7 +1327,7 @@ void SmDocShell::SetModified(bool bModified)
 
 bool SmDocShell::WriteAsMathType3( SfxMedium& rMedium )
 {
-    MathType aEquation( aText, pTree );
+    MathType aEquation( maText, mpTree );
     return aEquation.ConvertFromStarMath( rMedium );
 }
 
