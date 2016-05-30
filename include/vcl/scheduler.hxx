@@ -53,6 +53,7 @@ protected:
     // These should be constexpr static, when supported.
     static const sal_uInt64 ImmediateTimeoutMs = 1;
     static const sal_uInt64 MaximumTimeoutMs = 1000 * 60; // 1 minute
+    static const sal_uInt64 InfiniteTimeoutMs = 1000 * 60 * 60 * 24; // 1 day
 
     static void ImplStartTimer(sal_uInt64 nMS, bool bForce = false);
 
@@ -90,7 +91,7 @@ public:
     Scheduler&      operator=( const Scheduler& rScheduler );
     static void ImplDeInitScheduler();
 
-    // Process one pending Timer with highhest priority
+    /// Process one pending Timer with highhest priority
     static void CallbackTaskScheduling( bool ignore );
     /// Calculate minimum timeout - and return its value.
     static sal_uInt64 CalculateMinimumTimeout( bool &bHasActiveIdles );
@@ -98,6 +99,12 @@ public:
     static bool       ProcessTaskScheduling( bool bTimerOnly );
     /// Process all events until we are idle
     static void       ProcessEventsToIdle();
+
+    /// Control the deterministic mode.  In this mode, two subsequent runs of
+    /// LibreOffice fire about the same amount idles.
+    static void SetDeterministicMode(bool bDeterministic);
+    /// Return the current state of deterministic mode.
+    static bool GetDeterministicMode();
 };
 
 #endif // INCLUDED_VCL_SCHEDULER_HXX
