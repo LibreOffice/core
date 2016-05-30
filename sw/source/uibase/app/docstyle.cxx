@@ -1885,7 +1885,7 @@ bool SwDocStyleSheet::FillStyleSheet(
         }
         else if( !bCreate )
             nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( aName, nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC );
-        SetMask( USER_FMT & nPoolId ? SFXSTYLEBIT_USERDEF : 0 );
+        SetMask( (USER_FMT & nPoolId) ? SFXSTYLEBIT_USERDEF : 0 );
 
         bRet = nullptr != pDesc || USHRT_MAX != nPoolId;
         if( bDeleteInfo )
@@ -1914,7 +1914,7 @@ bool SwDocStyleSheet::FillStyleSheet(
         }
         else if( !bCreate )
             nPoolId = SwStyleNameMapper::GetPoolIdFromUIName( aName, nsSwGetPoolIdFromName::GET_POOLID_NUMRULE );
-        SetMask( USER_FMT & nPoolId ? SFXSTYLEBIT_USERDEF : 0 );
+        SetMask( (USER_FMT & nPoolId) ? SFXSTYLEBIT_USERDEF : 0 );
 
         bRet = nullptr != pNumRule || USHRT_MAX != nPoolId;
 

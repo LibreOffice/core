@@ -118,10 +118,10 @@ void SwView::InsertCaption(const InsCaptionOpt *pOpt)
     if (eType & nsSelectionType::SEL_OLE)
         eType = nsSelectionType::SEL_GRF;
 
-    const SwLabelType eT = eType & nsSelectionType::SEL_TBL ? LTYPE_TABLE :
-                      eType & nsSelectionType::SEL_FRM ? LTYPE_FLY :
-                      eType == nsSelectionType::SEL_TXT ? LTYPE_FLY :
-                      eType & nsSelectionType::SEL_DRW ? LTYPE_DRAW :
+    const SwLabelType eT = (eType & nsSelectionType::SEL_TBL) ? LTYPE_TABLE :
+                      (eType & nsSelectionType::SEL_FRM) ? LTYPE_FLY :
+                      (eType == nsSelectionType::SEL_TXT) ? LTYPE_FLY :
+                      (eType & nsSelectionType::SEL_DRW) ? LTYPE_DRAW :
                                                     LTYPE_OBJECT;
 
     SwFieldMgr aMgr(&rSh);
