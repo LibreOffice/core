@@ -412,7 +412,7 @@ bool PageSyncData::PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIMtfAc
                         if ( rGraphic.IsLink() )
                         {
                             GfxLinkType eType = rGraphic.GetLink().GetType();
-                            if ( eType == GFX_LINK_TYPE_NATIVE_JPG && mParaRects.size() >= 2 )
+                            if ( eType == GfxLinkType::NativeJpg && mParaRects.size() >= 2 )
                             {
                                 mbGroupIgnoreGDIMtfActions =
                                 rOutDevData.HasAdequateCompression(
@@ -420,7 +420,7 @@ bool PageSyncData::PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIMtfAc
                                 if ( !mbGroupIgnoreGDIMtfActions )
                                     mCurrentGraphic = rGraphic;
                             }
-                            else if ( eType == GFX_LINK_TYPE_NATIVE_PNG )
+                            else if ( eType == GfxLinkType::NativePng )
                             {
                                 mCurrentGraphic = rGraphic;
                             }
@@ -453,7 +453,7 @@ bool PageSyncData::PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIMtfAc
                     bool bClippingNeeded = ( aOutputRect != aVisibleOutputRect ) && !aVisibleOutputRect.IsEmpty();
 
                     GfxLink   aGfxLink( aGraphic.GetLink() );
-                    if ( aGfxLink.GetType() == GFX_LINK_TYPE_NATIVE_JPG )
+                    if ( aGfxLink.GetType() == GfxLinkType::NativeJpg )
                     {
                         if ( bClippingNeeded )
                         {
@@ -796,7 +796,7 @@ bool PDFExtOutDevData::HasAdequateCompression( const Graphic &rGraphic,
 {
     bool bReduceResolution = false;
 
-    assert( rGraphic.IsLink() && rGraphic.GetLink().GetType() == GFX_LINK_TYPE_NATIVE_JPG );
+    assert( rGraphic.IsLink() && rGraphic.GetLink().GetType() == GfxLinkType::NativeJpg );
 
     // small items better off as PNG anyway
     if ( rGraphic.GetSizePixel().Width() < 32 &&

@@ -100,8 +100,8 @@ void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSiz
         if( i_Graphic.GetType() != GraphicType::NONE && i_Graphic.GetBitmapEx() == aBitmapEx )
         {
             GfxLinkType eType = i_Graphic.GetLink().GetType();
-            bIsJpeg = (eType == GFX_LINK_TYPE_NATIVE_JPG);
-            bIsPng = (eType == GFX_LINK_TYPE_NATIVE_PNG);
+            bIsJpeg = (eType == GfxLinkType::NativeJpg);
+            bIsPng = (eType == GfxLinkType::NativePng);
         }
 
         if( i_rContext.m_nMaxImageResolution > 50 )

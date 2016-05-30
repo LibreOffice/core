@@ -63,28 +63,28 @@ void GraphicHelper::GetPreferredExtension( OUString& rExtension, const Graphic& 
     OUString aExtension = "png";
     switch( rGraphic.GetLink().GetType() )
     {
-        case GFX_LINK_TYPE_NATIVE_GIF:
+        case GfxLinkType::NativeGif:
             aExtension = "gif";
             break;
-        case GFX_LINK_TYPE_NATIVE_TIF:
+        case GfxLinkType::NativeTif:
             aExtension = "tif";
             break;
-        case GFX_LINK_TYPE_NATIVE_WMF:
+        case GfxLinkType::NativeWmf:
             aExtension = "wmf";
             break;
-        case GFX_LINK_TYPE_NATIVE_MET:
+        case GfxLinkType::NativeMet:
             aExtension = "met";
             break;
-        case GFX_LINK_TYPE_NATIVE_PCT:
+        case GfxLinkType::NativePct:
             aExtension = "pct";
             break;
-        case GFX_LINK_TYPE_NATIVE_JPG:
+        case GfxLinkType::NativeJpg:
             aExtension = "jpg";
             break;
-        case GFX_LINK_TYPE_NATIVE_BMP:
+        case GfxLinkType::NativeBmp:
             aExtension = "bmp";
             break;
-        case GFX_LINK_TYPE_NATIVE_SVG:
+        case GfxLinkType::NativeSvg:
             aExtension = "svg";
             break;
         default:

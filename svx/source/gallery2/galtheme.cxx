@@ -852,20 +852,20 @@ bool GalleryTheme::InsertGraphic( const Graphic& rGraphic, sal_uIntPtr nInsertPo
         {
             switch( aGfxLink.GetType() )
             {
-                case GFX_LINK_TYPE_EPS_BUFFER: nExportFormat = ConvertDataFormat::SVM; break;
-                case GFX_LINK_TYPE_NATIVE_GIF: nExportFormat = ConvertDataFormat::GIF; break;
+                case GfxLinkType::EpsBuffer: nExportFormat = ConvertDataFormat::SVM; break;
+                case GfxLinkType::NativeGif: nExportFormat = ConvertDataFormat::GIF; break;
 
                 // #i15508# added BMP type
                 // could not find/trigger a call to this, but should do no harm
-                case GFX_LINK_TYPE_NATIVE_BMP: nExportFormat = ConvertDataFormat::BMP; break;
+                case GfxLinkType::NativeBmp: nExportFormat = ConvertDataFormat::BMP; break;
 
-                case GFX_LINK_TYPE_NATIVE_JPG: nExportFormat = ConvertDataFormat::JPG; break;
-                case GFX_LINK_TYPE_NATIVE_PNG: nExportFormat = ConvertDataFormat::PNG; break;
-                case GFX_LINK_TYPE_NATIVE_TIF: nExportFormat = ConvertDataFormat::TIF; break;
-                case GFX_LINK_TYPE_NATIVE_WMF: nExportFormat = ConvertDataFormat::WMF; break;
-                case GFX_LINK_TYPE_NATIVE_MET: nExportFormat = ConvertDataFormat::MET; break;
-                case GFX_LINK_TYPE_NATIVE_PCT: nExportFormat = ConvertDataFormat::PCT; break;
-                case GFX_LINK_TYPE_NATIVE_SVG: nExportFormat = ConvertDataFormat::SVG; break;
+                case GfxLinkType::NativeJpg: nExportFormat = ConvertDataFormat::JPG; break;
+                case GfxLinkType::NativePng: nExportFormat = ConvertDataFormat::PNG; break;
+                case GfxLinkType::NativeTif: nExportFormat = ConvertDataFormat::TIF; break;
+                case GfxLinkType::NativeWmf: nExportFormat = ConvertDataFormat::WMF; break;
+                case GfxLinkType::NativeMet: nExportFormat = ConvertDataFormat::MET; break;
+                case GfxLinkType::NativePct: nExportFormat = ConvertDataFormat::PCT; break;
+                case GfxLinkType::NativeSvg: nExportFormat = ConvertDataFormat::SVG; break;
                 default:
                     break;
             }

@@ -234,7 +234,7 @@ bool SvxOle2Shape::getPropertyValueImpl( const OUString& rName, const SfxItemPro
                 if ( pGraphic->IsLink() )
                 {
                     GfxLink aLnk = pGraphic->GetLink();
-                    if ( aLnk.GetType() == GFX_LINK_TYPE_NATIVE_WMF )
+                    if ( aLnk.GetType() == GfxLinkType::NativeWmf )
                     {
                         bIsWMF = true;
                         uno::Sequence<sal_Int8> aSeq(reinterpret_cast<sal_Int8 const *>(aLnk.GetData()), (sal_Int32) aLnk.GetDataSize());

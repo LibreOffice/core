@@ -1325,7 +1325,7 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPat
     sal_uLong               nStreamBegin;
     sal_uInt16              nStatus;
     GraphicReader*          pContext = rGraphic.GetContext();
-    GfxLinkType             eLinkType = GFX_LINK_TYPE_NONE;
+    GfxLinkType             eLinkType = GfxLinkType::NONE;
     bool                    bDummyContext = rGraphic.IsDummyContext();
     const bool              bLinkSet = rGraphic.IsLink();
     FilterConfigItem*       pFilterConfigItem = nullptr;
@@ -1424,7 +1424,7 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPat
             if( !ImportGIF( rIStream, rGraphic ) )
                 nStatus = GRFILTER_FILTERERROR;
             else
-                eLinkType = GFX_LINK_TYPE_NATIVE_GIF;
+                eLinkType = GfxLinkType::NativeGif;
         }
         else if( aFilterName.equalsIgnoreAsciiCase( IMP_PNG ) )
         {
@@ -1464,7 +1464,7 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPat
                             aIStrm.Read(pGraphicContent, nGraphicContentSize);
                             aIStrm.Seek(aCurrentPosition);
                             ImportGIF(aIStrm, rGraphic);
-                            eLinkType = GFX_LINK_TYPE_NATIVE_GIF;
+                            eLinkType = GfxLinkType::NativeGif;
                             break;
                         }
                     }
@@ -1472,7 +1472,7 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPat
                 }
             }
 
-            if ( eLinkType == GFX_LINK_TYPE_NONE )
+            if ( eLinkType == GfxLinkType::NONE )
             {
                 BitmapEx aBmpEx( aPNGReader.Read( aPreviewSizeHint ) );
                 if ( aBmpEx.IsEmpty() )
@@ -1480,7 +1480,7 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPat
                 else
                 {
                     rGraphic = aBmpEx;
-                    eLinkType = GFX_LINK_TYPE_NATIVE_PNG;
+                    eLinkType = GfxLinkType::NativePng;
                 }
             }
         }
@@ -1497,7 +1497,7 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPat
             if( !ImportJPEG( rIStream, rGraphic, nullptr, nImportFlags ) )
                 nStatus = GRFILTER_FILTERERROR;
             else
-                eLinkType = GFX_LINK_TYPE_NATIVE_JPG;
+                eLinkType = GfxLinkType::NativeJpg;
         }
         else if( aFilterName.equalsIgnoreAsciiCase( IMP_SVG ) )
         {
@@ -1562,7 +1562,7 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPat
 
             if (bOkay)
             {
-                eLinkType = GFX_LINK_TYPE_NATIVE_SVG;
+                eLinkType = GfxLinkType::NativeSvg;
             }
             else
             {
@@ -1597,7 +1597,7 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPat
             else if (aFilterName.equalsIgnoreAsciiCase(IMP_BMP))
             {
                 // #i15508# added BMP type (checked, works)
-                eLinkType = GFX_LINK_TYPE_NATIVE_BMP;
+                eLinkType = GfxLinkType::NativeBmp;
             }
         }
         else if( aFilterName.equalsIgnoreAsciiCase( IMP_MOV ) )
@@ -1609,7 +1609,7 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPat
             {
                 rGraphic.SetDefaultType();
                 rIStream.Seek( STREAM_SEEK_TO_END );
-                eLinkType = GFX_LINK_TYPE_NATIVE_MOV;
+                eLinkType = GfxLinkType::NativeMov;
             }
         }
         else if( aFilterName.equalsIgnoreAsciiCase( IMP_WMF ) ||
@@ -1621,7 +1621,7 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPat
             else
             {
                 rGraphic = aMtf;
-                eLinkType = GFX_LINK_TYPE_NATIVE_WMF;
+                eLinkType = GfxLinkType::NativeWmf;
             }
         }
         else if( aFilterName.equalsIgnoreAsciiCase( IMP_SVSGF )
@@ -1726,18 +1726,18 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPat
                     if( nFormat != GRFILTER_FORMAT_DONTKNOW )
                     {
                         if( aShortName.startsWith( TIF_SHORTNAME ) )
-                            eLinkType = GFX_LINK_TYPE_NATIVE_TIF;
+                            eLinkType = GfxLinkType::NativeTif;
                         else if( aShortName.startsWith( MET_SHORTNAME ) )
-                            eLinkType = GFX_LINK_TYPE_NATIVE_MET;
+                            eLinkType = GfxLinkType::NativeMet;
                         else if( aShortName.startsWith( PCT_SHORTNAME ) )
-                            eLinkType = GFX_LINK_TYPE_NATIVE_PCT;
+                            eLinkType = GfxLinkType::NativePct;
                     }
                 }
             }
         }
     }
 
-    if( nStatus == GRFILTER_OK && bCreateNativeLink && ( eLinkType != GFX_LINK_TYPE_NONE ) && !rGraphic.GetContext() && !bLinkSet )
+    if( nStatus == GRFILTER_OK && bCreateNativeLink && ( eLinkType != GfxLinkType::NONE ) && !rGraphic.GetContext() && !bLinkSet )
     {
         if (pGraphicContent == nullptr)
         {
