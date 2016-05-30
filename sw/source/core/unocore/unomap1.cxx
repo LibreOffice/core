@@ -680,6 +680,7 @@ const SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetTablePropertyMap()
         { OUString(UNO_NAME_WRITING_MODE), RES_FRAMEDIR, cppu::UnoType<sal_Int16>::get(), PROPERTY_NONE, 0 },
         { OUString(UNO_NAME_TABLE_NAME),   FN_UNO_TABLE_NAME,   cppu::UnoType<OUString>::get(),        PROPERTY_NONE, 0 },
          { OUString(UNO_NAME_PAGE_STYLE_NAME), RES_PAGEDESC, cppu::UnoType<OUString>::get(),         PROPERTY_NONE, 0},
+        { OUString(UNO_NAME_TABLE_TEMPLATE_NAME),   FN_UNO_TABLE_TEMPLATE_NAME,   cppu::UnoType<OUString>::get(),        PROPERTY_NONE, 0 },
         // #i29550#
         { OUString(UNO_NAME_COLLAPSING_BORDERS), RES_COLLAPSING_BORDERS, cppu::UnoType<bool>::get(), PROPERTY_NONE, 0},
         REDLINE_NODE_PROPERTIES
