@@ -3742,7 +3742,7 @@ static bool lcl_SetAFormatBox(FndBox_ & rBox, SetAFormatTabPara *pSetPara, bool 
     return true;
 }
 
-bool SwDoc::SetTableAutoFormat(const SwSelBoxes& rBoxes, const SwTableAutoFormat& rNew, bool bResetDirect)
+bool SwDoc::SetTableAutoFormat(const SwSelBoxes& rBoxes, const SwTableAutoFormat& rNew, bool bResetDirect, bool const isSetStyleName)
 {
     OSL_ENSURE( !rBoxes.empty(), "No valid Box list" );
     SwTableNode* pTableNd = const_cast<SwTableNode*>(rBoxes[0]->GetSttNd()->FindTableNode());
@@ -3779,6 +3779,11 @@ bool SwDoc::SetTableAutoFormat(const SwSelBoxes& rBoxes, const SwTableAutoFormat
         pUndo = new SwUndoTableAutoFormat( *pTableNd, rNew );
         GetIDocumentUndoRedo().AppendUndo(pUndo);
         GetIDocumentUndoRedo().DoUndo(false);
+    }
+
+    if (isSetStyleName)
+    {   // tdf#98226 do this here where undo can record it
+        pTableNd->GetTable().SetTableStyleName(rNew.GetName());
     }
 
     rNew.RestoreTableProperties(table);
