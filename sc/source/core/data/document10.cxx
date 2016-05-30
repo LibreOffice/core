@@ -81,6 +81,10 @@ bool ScDocument::CopyOneCellFromClip(
     if (nDestColSize < nSrcColSize)
         return false;
 
+    if (pClipDoc->maTabs.size() > 1)
+        // Copying from multiple source sheets is not handled here.
+        return false;
+
     ScAddress aSrcPos = aClipRange.aStart;
 
     for (SCCOL nCol = aClipRange.aStart.Col(); nCol <= aClipRange.aEnd.Col(); ++nCol)
