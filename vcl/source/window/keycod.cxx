@@ -75,32 +75,6 @@ vcl::KeyCode::KeyCode( KeyFuncType eFunction )
     eFunc = eFunction;
 }
 
-vcl::KeyCode::KeyCode( const ResId& rResId )
-    : nKeyCodeAndModifiers(0)
-    , eFunc(KeyFuncType::DONTKNOW)
-{
-    rResId.SetRT( RSC_KEYCODE );
-
-    ResMgr* pResMgr = rResId.GetResMgr();
-    if ( pResMgr && pResMgr->GetResource( rResId ) )
-    {
-        pResMgr->Increment( sizeof( RSHEADER_TYPE ) );
-
-        sal_uLong nKeyCode  = pResMgr->ReadLong();
-        sal_uLong nModifier = pResMgr->ReadLong();
-        sal_uLong nKeyFunc  = pResMgr->ReadLong();
-
-        eFunc = (KeyFuncType)nKeyFunc;
-        if ( eFunc != KeyFuncType::DONTKNOW )
-        {
-            sal_uInt16 nDummy;
-            ImplGetKeyCode( eFunc, nKeyCodeAndModifiers, nDummy, nDummy, nDummy );
-        }
-        else
-            nKeyCodeAndModifiers = sal::static_int_cast<sal_uInt16>(nKeyCode | nModifier);
-    }
-}
-
 OUString vcl::KeyCode::GetName( vcl::Window* pWindow ) const
 {
     if ( !pWindow )

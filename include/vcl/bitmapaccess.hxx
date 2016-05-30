@@ -113,18 +113,8 @@ public:
     BitmapColor GetColorWithFallback( double fY, double fX, const BitmapColor& rFallback ) const;
 
 private:
-
-    BitmapReadAccess()
-    {}
-
-    BitmapReadAccess(const BitmapReadAccess&)
-        : BitmapInfoAccess()
-    {}
-
-    BitmapReadAccess& operator=(const BitmapReadAccess&)
-    {
-        return *this;
-    }
+    BitmapReadAccess(const BitmapReadAccess&) = delete;
+    BitmapReadAccess& operator=(const BitmapReadAccess&) = delete;
 
 protected:
     Scanline*   mpScanBuf;

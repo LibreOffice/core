@@ -73,7 +73,6 @@ public:
 
     sal_uInt16              GetItemCount() const;
     sal_uInt16              GetItemId( sal_uInt16 nPos ) const;
-    vcl::KeyCode            GetKeyCode( sal_uInt16 nItemId ) const;
 
     Accelerator*            GetAccel( sal_uInt16 nItemId ) const;
 

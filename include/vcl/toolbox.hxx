@@ -406,8 +406,6 @@ public:
 
     /// Convenience method to hide items (via ShowItem).
     void                HideItem(sal_uInt16 nItemId) { ShowItem( nItemId, false ); }
-    /// Overload to provide HideItem via command id.
-    void                HideItem(const OUString& rCommand) { ShowItem(rCommand, false); }
 
     bool                IsItemVisible( sal_uInt16 nItemId ) const;
     bool                IsItemReallyVisible( sal_uInt16 nItemId ) const;
@@ -442,7 +440,6 @@ public:
     // computes the smallest useful size when docked, ie with the first item visible only (+drag area and menu button)
     Size                CalcMinimumWindowSizePixel() const;
 
-    void                SetFloatingLines( sal_uInt16 nFloatLines );
     sal_uInt16          GetFloatingLines() const;
 
     void                SetStyle( WinBits nNewStyle );
@@ -536,11 +533,6 @@ inline Size ToolBox::CalcWindowSizePixel() const
     return CalcWindowSizePixel( mnLines );
 }
 
-
-inline void ToolBox::SetFloatingLines( sal_uInt16 nNewLines )
-{
-    mnFloatLines = nNewLines;
-}
 
 inline sal_uInt16 ToolBox::GetFloatingLines() const
 {

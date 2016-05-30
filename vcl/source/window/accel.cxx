@@ -123,25 +123,6 @@ static void ImplAccelEntryInsert( ImplAccelList* pList, ImplAccelEntry* pEntry )
     }
 }
 
-static sal_uInt16 ImplAccelEntryGetFirstPos( ImplAccelList* pList, sal_uInt16 nId )
-{
-    sal_uInt16 nIndex = ImplAccelEntryGetIndex( pList, nId );
-    if ( nIndex != ACCELENTRY_NOTFOUND )
-    {
-        while ( nIndex )
-        {
-            nIndex--;
-            if ( (*pList)[ nIndex ]->mnId != nId )
-                break;
-        }
-
-        if ( (*pList)[ nIndex ]->mnId != nId )
-            nIndex++;
-    }
-
-    return nIndex;
-}
-
 void Accelerator::ImplInit()
 {
     mnCurId             = 0;
@@ -293,16 +274,6 @@ sal_uInt16 Accelerator::GetItemCount() const
 {
 
     return (sal_uInt16)mpData->maIdList.size();
-}
-
-vcl::KeyCode Accelerator::GetKeyCode( sal_uInt16 nItemId ) const
-{
-
-    sal_uInt16 nIndex = ImplAccelEntryGetFirstPos( &(mpData->maIdList), nItemId );
-    if ( nIndex != ACCELENTRY_NOTFOUND )
-        return mpData->maIdList[ nIndex ]->maKeyCode;
-    else
-        return vcl::KeyCode();
 }
 
 sal_uInt16 Accelerator::GetItemId( sal_uInt16 nPos ) const
