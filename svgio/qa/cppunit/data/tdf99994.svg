@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg">
+<style type="text/css" id="style1">
+*{fill:blue;}
+</style>
+<text id="text1" style="font-family:Sans;">
+	<tspan id="tspan1">test</tspan>
+</text>
+</svg>
