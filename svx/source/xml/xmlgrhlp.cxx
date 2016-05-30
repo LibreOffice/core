@@ -667,17 +667,17 @@ void SvXMLGraphicHelper::ImplInsertGraphicURL( const OUString& rURLStr, sal_uInt
                 {
                     switch( aGfxLink.GetType() )
                     {
-                        case GFX_LINK_TYPE_EPS_BUFFER: aExtension = ".eps"; break;
-                        case GFX_LINK_TYPE_NATIVE_GIF: aExtension = ".gif"; break;
+                        case GfxLinkType::EpsBuffer: aExtension = ".eps"; break;
+                        case GfxLinkType::NativeGif: aExtension = ".gif"; break;
                         // #i15508# added BMP type for better exports (checked, works)
-                        case GFX_LINK_TYPE_NATIVE_BMP: aExtension = ".bmp"; break;
-                        case GFX_LINK_TYPE_NATIVE_JPG: aExtension = ".jpg"; break;
-                        case GFX_LINK_TYPE_NATIVE_PNG: aExtension = ".png"; break;
-                        case GFX_LINK_TYPE_NATIVE_TIF: aExtension = ".tif"; break;
-                        case GFX_LINK_TYPE_NATIVE_WMF: aExtension = ".wmf"; break;
-                        case GFX_LINK_TYPE_NATIVE_MET: aExtension = ".met"; break;
-                        case GFX_LINK_TYPE_NATIVE_PCT: aExtension = ".pct"; break;
-                        case GFX_LINK_TYPE_NATIVE_SVG:
+                        case GfxLinkType::NativeBmp: aExtension = ".bmp"; break;
+                        case GfxLinkType::NativeJpg: aExtension = ".jpg"; break;
+                        case GfxLinkType::NativePng: aExtension = ".png"; break;
+                        case GfxLinkType::NativeTif: aExtension = ".tif"; break;
+                        case GfxLinkType::NativeWmf: aExtension = ".wmf"; break;
+                        case GfxLinkType::NativeMet: aExtension = ".met"; break;
+                        case GfxLinkType::NativePct: aExtension = ".pct"; break;
+                        case GfxLinkType::NativeSvg:
                             // backward-compat kludge: since no released OOo
                             // version to date can handle svg properly, wrap it up
                             // into an svm. slight catch22 here, since strict ODF

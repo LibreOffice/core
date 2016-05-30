@@ -139,31 +139,31 @@ void CompressGraphicsDialog::Update()
     OUString aGraphicTypeString;
     switch(aLinkType)
     {
-        case GFX_LINK_TYPE_NATIVE_GIF:
+        case GfxLinkType::NativeGif:
             aGraphicTypeString = SVX_RESSTR(STR_IMAGE_GIF);
             break;
-        case GFX_LINK_TYPE_NATIVE_JPG:
+        case GfxLinkType::NativeJpg:
             aGraphicTypeString = SVX_RESSTR(STR_IMAGE_JPEG);
             break;
-        case GFX_LINK_TYPE_NATIVE_PNG:
+        case GfxLinkType::NativePng:
             aGraphicTypeString = SVX_RESSTR(STR_IMAGE_PNG);
             break;
-        case GFX_LINK_TYPE_NATIVE_TIF:
+        case GfxLinkType::NativeTif:
             aGraphicTypeString = SVX_RESSTR(STR_IMAGE_TIFF);
             break;
-        case GFX_LINK_TYPE_NATIVE_WMF:
+        case GfxLinkType::NativeWmf:
             aGraphicTypeString = SVX_RESSTR(STR_IMAGE_WMF);
             break;
-        case GFX_LINK_TYPE_NATIVE_MET:
+        case GfxLinkType::NativeMet:
             aGraphicTypeString = SVX_RESSTR(STR_IMAGE_MET);
             break;
-        case GFX_LINK_TYPE_NATIVE_PCT:
+        case GfxLinkType::NativePct:
             aGraphicTypeString = SVX_RESSTR(STR_IMAGE_PCT);
             break;
-        case GFX_LINK_TYPE_NATIVE_SVG:
+        case GfxLinkType::NativeSvg:
             aGraphicTypeString = SVX_RESSTR(STR_IMAGE_SVG);
             break;
-        case GFX_LINK_TYPE_NATIVE_BMP:
+        case GfxLinkType::NativeBmp:
             aGraphicTypeString = SVX_RESSTR(STR_IMAGE_BMP);
             break;
         default:

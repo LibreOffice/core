@@ -184,13 +184,13 @@ sal_uInt16 XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileNam
 
                 switch( aGfxLink.GetType() )
                 {
-                    case GFX_LINK_TYPE_NATIVE_GIF: aExt = FORMAT_GIF; break;
+                    case GfxLinkType::NativeGif: aExt = FORMAT_GIF; break;
 
                     // #i15508# added BMP type for better exports (no call/trigger found, prob used in HTML export)
-                    case GFX_LINK_TYPE_NATIVE_BMP: aExt = FORMAT_BMP; break;
+                    case GfxLinkType::NativeBmp: aExt = FORMAT_BMP; break;
 
-                    case GFX_LINK_TYPE_NATIVE_JPG: aExt = FORMAT_JPG; break;
-                    case GFX_LINK_TYPE_NATIVE_PNG: aExt = FORMAT_PNG; break;
+                    case GfxLinkType::NativeJpg: aExt = FORMAT_JPG; break;
+                    case GfxLinkType::NativePng: aExt = FORMAT_PNG; break;
 
                     default:
                     break;
@@ -336,15 +336,15 @@ bool XOutBitmap::GraphicToBase64(const Graphic& rGraphic, OUString& rOUString)
     ConvertDataFormat aCvtType;
     switch(  aLink.GetType() )
     {
-        case GFX_LINK_TYPE_NATIVE_JPG:
+        case GfxLinkType::NativeJpg:
             aCvtType = ConvertDataFormat::JPG;
             aMimeType = "image/jpeg";
             break;
-        case GFX_LINK_TYPE_NATIVE_PNG:
+        case GfxLinkType::NativePng:
             aCvtType = ConvertDataFormat::PNG;
             aMimeType = "image/png";
             break;
-        case GFX_LINK_TYPE_NATIVE_SVG:
+        case GfxLinkType::NativeSvg:
             aCvtType = ConvertDataFormat::SVG;
             aMimeType = "image/svg+xml";
             break;
@@ -365,7 +365,7 @@ bool XOutBitmap::GraphicToBase64(const Graphic& rGraphic, OUString& rOUString)
     OUStringBuffer aStrBuffer;
     ::sax::Converter::encodeBase64(aStrBuffer,aOStmSeq);
     OUString aEncodedBase64Image = aStrBuffer.makeStringAndClear();
-    if( aLink.GetType() == GFX_LINK_TYPE_NATIVE_SVG )
+    if( aLink.GetType() == GfxLinkType::NativeSvg )
     {
       sal_Int32 ite(8);
       sal_Int32 nBufferLength(aOStmSeq.getLength());
