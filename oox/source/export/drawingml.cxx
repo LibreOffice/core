@@ -1583,6 +1583,9 @@ void DrawingML::WriteRun( const Reference< XTextRange >& rRun )
     sal_Int16 nLevel = -1;
     GET( nLevel, NumberingLevel );
 
+    bool bNumberingIsNumber = true;
+    GET( bNumberingIsNumber, NumberingIsNumber );
+
     bool bIsURLField = false;
     OUString sFieldValue = GetFieldValue( rRun, bIsURLField );
     bool bWriteField  = !( sFieldValue.isEmpty() || bIsURLField );
@@ -1590,7 +1593,7 @@ void DrawingML::WriteRun( const Reference< XTextRange >& rRun )
     OUString sText = rRun->getString();
 
     //if there is no text following the bullet, add a space after the bullet
-    if (nLevel !=-1 && sText.isEmpty() )
+    if (nLevel !=-1 && bNumberingIsNumber && sText.isEmpty() )
          sText=" ";
 
     if ( bIsURLField )
