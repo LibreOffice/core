@@ -883,18 +883,18 @@ openFilePath( const char *cpFilePath, oslFileHandle* pHandle, sal_uInt32 uFlags,
 #endif
 
     /* set mode and flags */
-    int defmode = uFlags & osl_File_OpenFlag_Private
+    int defmode = (uFlags & osl_File_OpenFlag_Private)
         ? S_IRUSR : S_IRUSR | S_IRGRP | S_IROTH;
     int flags = O_RDONLY;
     if (uFlags & osl_File_OpenFlag_Write)
     {
-        defmode |= uFlags & osl_File_OpenFlag_Private
+        defmode |= (uFlags & osl_File_OpenFlag_Private)
             ? S_IWUSR : S_IWUSR | S_IWGRP | S_IWOTH;
         flags = OPEN_WRITE_FLAGS;
     }
     if (uFlags & osl_File_OpenFlag_Create)
     {
-        defmode |= uFlags & osl_File_OpenFlag_Private
+        defmode |= (uFlags & osl_File_OpenFlag_Private)
             ? S_IWUSR : S_IWUSR | S_IWGRP | S_IWOTH;
         flags = OPEN_CREATE_FLAGS;
     }
@@ -938,7 +938,7 @@ openFilePath( const char *cpFilePath, oslFileHandle* pHandle, sal_uInt32 uFlags,
     if (-1 == fd)
     {
         int saved_errno = errno;
-        SAL_INFO("sal.file", "osl_openFile(" << cpFilePath << ", " << (flags & O_RDWR ? "writeable":"readonly") << ") failed: " << strerror(saved_errno));
+        SAL_INFO("sal.file", "osl_openFile(" << cpFilePath << ", " << ((flags & O_RDWR) ? "writeable":"readonly") << ") failed: " << strerror(saved_errno));
         return oslTranslateFileError (OSL_FET_ERROR, saved_errno);
     }
 
@@ -950,7 +950,7 @@ openFilePath( const char *cpFilePath, oslFileHandle* pHandle, sal_uInt32 uFlags,
         if (-1 == f)
         {
             int saved_errno = errno;
-            SAL_INFO("sal.file", "osl_openFile(" << cpFilePath << ", " << (flags & O_RDWR ? "writeable":"readonly") << "): fcntl(" << fd << ", F_GETFL) failed: " << strerror(saved_errno));
+            SAL_INFO("sal.file", "osl_openFile(" << cpFilePath << ", " << ((flags & O_RDWR) ? "writeable":"readonly") << "): fcntl(" << fd << ", F_GETFL) failed: " << strerror(saved_errno));
             eRet = oslTranslateFileError (OSL_FET_ERROR, saved_errno);
             (void) close(fd);
             return eRet;
@@ -958,7 +958,7 @@ openFilePath( const char *cpFilePath, oslFileHandle* pHandle, sal_uInt32 uFlags,
         if (-1 == fcntl (fd, F_SETFL, (f & ~O_NONBLOCK)))
         {
             int saved_errno = errno;
-             SAL_INFO("sal.file", "osl_openFile(" << cpFilePath << ", " << (flags & O_RDWR ? "writeable":"readonly") << "): fcntl(" << fd << ", F_SETFL) failed: " << strerror(saved_errno));
+             SAL_INFO("sal.file", "osl_openFile(" << cpFilePath << ", " << ((flags & O_RDWR) ? "writeable":"readonly") << "): fcntl(" << fd << ", F_SETFL) failed: " << strerror(saved_errno));
             eRet = oslTranslateFileError (OSL_FET_ERROR, saved_errno);
             (void) close(fd);
             return eRet;
@@ -970,7 +970,7 @@ openFilePath( const char *cpFilePath, oslFileHandle* pHandle, sal_uInt32 uFlags,
     if (-1 == fstat (fd, &aFileStat))
     {
         int saved_errno = errno;
-        SAL_INFO("sal.file", "osl_openFile(" << cpFilePath << ", " << (flags & O_RDWR ? "writeable":"readonly") << "): fstat(" << fd << ") failed: " << strerror(saved_errno));
+        SAL_INFO("sal.file", "osl_openFile(" << cpFilePath << ", " << ((flags & O_RDWR) ? "writeable":"readonly") << "): fstat(" << fd << ") failed: " << strerror(saved_errno));
         eRet = oslTranslateFileError (OSL_FET_ERROR, saved_errno);
         (void) close(fd);
         return eRet;
@@ -1008,7 +1008,7 @@ openFilePath( const char *cpFilePath, oslFileHandle* pHandle, sal_uInt32 uFlags,
             if (-1 == fcntl (fd, F_SETLK, &aflock))
             {
                 int saved_errno = errno;
-                SAL_INFO("sal.file", "osl_openFile(" << cpFilePath << ", " << (flags & O_RDWR ? "writeable":"readonly") << "): fcntl(" << fd << ", F_SETLK) failed: " << strerror(saved_errno));
+                SAL_INFO("sal.file", "osl_openFile(" << cpFilePath << ", " << ((flags & O_RDWR) ? "writeable":"readonly") << "): fcntl(" << fd << ", F_SETLK) failed: " << strerror(saved_errno));
                 eRet = oslTranslateFileError (OSL_FET_ERROR, saved_errno);
                 (void) close(fd);
                 return eRet;
@@ -1029,7 +1029,7 @@ openFilePath( const char *cpFilePath, oslFileHandle* pHandle, sal_uInt32 uFlags,
         pImpl->m_state |= FileHandle_Impl::STATE_WRITEABLE;
     pImpl->m_size = sal::static_int_cast< sal_uInt64 >(aFileStat.st_size);
 
-    SAL_INFO("sal.file", "osl_openFile(" << cpFilePath << ", " << (flags & O_RDWR ? "writeable":"readonly") << ") => " << pImpl->m_fd);
+    SAL_INFO("sal.file", "osl_openFile(" << cpFilePath << ", " << ((flags & O_RDWR) ? "writeable":"readonly") << ") => " << pImpl->m_fd);
 
     *pHandle = static_cast<oslFileHandle>(pImpl);
     return osl_File_E_None;

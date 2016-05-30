@@ -2186,7 +2186,7 @@ std::shared_ptr<OGLTransitionImpl> makeHoneycomb()
     Primitive aHexagon;
     for (int y = 0; y < NY+2; y+=2)
         for (int x = 0; x < NX+2; x+=2)
-            aHexagon.pushTriangle(glm::vec2(y % 4 ? fdiv(x, NX) : fdiv(x + 1, NX), fdiv(y, NY)), glm::vec2(1, 0), glm::vec2(0, 0));
+            aHexagon.pushTriangle(glm::vec2((y % 4) ? fdiv(x, NX) : fdiv(x + 1, NX), fdiv(y, NY)), glm::vec2(1, 0), glm::vec2(0, 0));
     aSlide.push_back(aHexagon);
 
     return makeHoneycombTransition(aSlide, aSlide, aSettings);
