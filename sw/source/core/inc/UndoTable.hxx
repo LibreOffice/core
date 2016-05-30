@@ -143,6 +143,7 @@ class SwUndoTableNumFormat;
 
 class SwUndoTableAutoFormat : public SwUndo
 {
+    OUString m_TableStyleName;
     sal_uLong nSttNode;
     _SaveTable* pSaveTable;
     std::vector< std::shared_ptr<SwUndoTableNumFormat> > m_Undos;
