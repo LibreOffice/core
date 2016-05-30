@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_fd062b1f",
+        "filename": "vcl/win/gdi/winlayout.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2016-05-30T05:50:55Z",
+      "side": 1,
+      "message": "Not sure there is any deeper reason to use so much whitespace here. If touching there lines anyway, please just reduce the whitespace to minimum necessary to keep the columns aligned (assuming that is the style we want; I have no idea...).",
+      "revId": "0b2398d1d39acd692f7ce9c671a665eac414a976",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_dd096733",
+        "filename": "vcl/win/gdi/winlayout.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 346,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2016-05-30T05:50:55Z",
+      "side": 1,
+      "message": "Please use \u0027auto\u0027 here.",
+      "revId": "0b2398d1d39acd692f7ce9c671a665eac414a976",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
