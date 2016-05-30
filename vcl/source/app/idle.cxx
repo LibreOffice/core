@@ -44,7 +44,23 @@ Idle::Idle( const Idle& rIdle ) : Scheduler(rIdle)
 void Idle::Start()
 {
     Scheduler::Start();
-    Scheduler::ImplStartTimer(Scheduler::ImmediateTimeoutMs);
+
+    sal_uInt64 nPeriod = Scheduler::ImmediateTimeoutMs;
+    if (Scheduler::GetDeterministicMode())
+    {
+        switch (mePriority)
+        {
+            case SchedulerPriority::LOW:
+            case SchedulerPriority::LOWER:
+            case SchedulerPriority::LOWEST:
+                nPeriod = Scheduler::InfiniteTimeoutMs;
+                break;
+            default:
+                break;
+        }
+    }
+
+    Scheduler::ImplStartTimer(nPeriod);
 }
 
 bool Idle::ReadyForSchedule( bool bTimerOnly, sal_uInt64 /* nTimeNow */ ) const
