@@ -60,6 +60,7 @@ class Test : public test::BootstrapFixture, public XmlTestTools
     void test47446();
     void test47446b();
     void testMaskText();
+    void testTdf99994();
 
     Primitive2DSequence parseSvg(const char* aSource);
 
@@ -90,6 +91,7 @@ public:
     CPPUNIT_TEST(test47446);
     CPPUNIT_TEST(test47446b);
     CPPUNIT_TEST(testMaskText);
+    CPPUNIT_TEST(testTdf99994);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -533,6 +535,23 @@ void Test::testMaskText()
 
     assertXPath(pDocument, "/primitive2D/transform/transform/polypolygoncolor", "color", "#000000");
     assertXPath(pDocument, "/primitive2D/transform/transform/textsimpleportion", "text", "Black White");
+}
+
+void Test::testTdf99994()
+{
+    //Check text fontsize when using relative units
+    Primitive2DSequence aSequenceTdf99994 = parseSvg("/svgio/qa/cppunit/data/tdf99994.svg");
+    CPPUNIT_ASSERT_EQUAL(1, (int)aSequenceTdf99994.getLength());
+
+    Primitive2dXmlDump dumper;
+    xmlDocPtr pDocument = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequenceTdf99994));
+
+    CPPUNIT_ASSERT (pDocument);
+
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "fontcolor", "#0000ff");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "height", "16");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "text", "test");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "familyname", "Sans");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
