@@ -50,7 +50,7 @@ enum class RscWindowFlags {
     HelpId                   = 0x0200
 };
 namespace o3tl {
-    template<> struct typed_flags<RscWindowFlags> : is_typed_flags<RscWindowFlags, 0x07> {};
+    template<> struct typed_flags<RscWindowFlags> : is_typed_flags<RscWindowFlags, 0x37F> {};
 }
 
 // For "FixedImage" resource:
