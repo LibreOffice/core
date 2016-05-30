@@ -136,7 +136,6 @@ private:
                         mbCustomize:1,
                         mbCustomizeMode:1,
                         mbDragging:1,
-                        mbMenuStrings:1,
                         mbIsShift:1,
                         mbIsKeyEvent:1,
                         mbChangingHighlight:1,
@@ -451,8 +450,6 @@ public:
     void                Lock( bool bLock = true );
     // read configuration to determine locking behaviour
     static bool         AlwaysLocked();
-
-    void                EnableMenuStrings( bool bEnable = true ) { mbMenuStrings = bEnable; }
 
     void                SetOutStyle( sal_uInt16 nNewStyle );
     sal_uInt16          GetOutStyle() const { return mnOutStyle; }

@@ -48,6 +48,7 @@
 #include <com/sun/star/ucb/XCommandProcessor.hpp>
 #include <com/sun/star/ucb/Command.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
+#include <comphelper/string.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include "AppView.hxx"
 #include "dbaccess_helpid.hrc"
@@ -197,7 +198,6 @@ OAppDetailPageHelper::OAppDetailPageHelper(vcl::Window* _pParent,OAppBorderWindo
     m_aTBPreview->InsertItem(SID_DB_APP_DISABLE_PREVIEW,m_aMenu->GetItemText(SID_DB_APP_DISABLE_PREVIEW),ToolBoxItemBits::LEFT|ToolBoxItemBits::DROPDOWN|ToolBoxItemBits::AUTOSIZE|ToolBoxItemBits::RADIOCHECK);
     m_aTBPreview->SetHelpId(HID_APP_VIEW_PREVIEW_CB);
     m_aTBPreview->SetDropdownClickHdl( LINK( this, OAppDetailPageHelper, OnDropdownClickHdl ) );
-    m_aTBPreview->EnableMenuStrings();
     m_aTBPreview->Enable();
 
     m_aPreview->SetHelpId(HID_APP_VIEW_PREVIEW_1);
@@ -957,6 +957,14 @@ bool OAppDetailPageHelper::isPreviewEnabled()
     return m_ePreviewMode != E_PREVIEWNONE;
 }
 
+namespace
+{
+    OUString stripTrailingDots(const OUString& rStr)
+    {
+        return comphelper::string::stripEnd(rStr, '.');
+    }
+}
+
 void OAppDetailPageHelper::switchPreview(PreviewMode _eMode,bool _bForce)
 {
     if ( m_ePreviewMode != _eMode || _bForce )
@@ -983,7 +991,7 @@ void OAppDetailPageHelper::switchPreview(PreviewMode _eMode,bool _bForce)
         }
 
         m_aMenu->CheckItem(nSelectedAction);
-        m_aTBPreview->SetItemText(SID_DB_APP_DISABLE_PREVIEW, m_aMenu->GetItemText(nSelectedAction));
+        m_aTBPreview->SetItemText(SID_DB_APP_DISABLE_PREVIEW, stripTrailingDots(m_aMenu->GetItemText(nSelectedAction)));
         Resize();
 
         // simulate a selectionChanged event at the controller, to force the preview to be updated
@@ -1168,7 +1176,7 @@ IMPL_LINK_NOARG_TYPED(OAppDetailPageHelper, OnDropdownClickHdl, ToolBox*, void)
     m_aTBPreview->SetItemDown( SID_DB_APP_DISABLE_PREVIEW, false);
     if ( nSelectedAction )
     {
-        m_aTBPreview->SetItemText(SID_DB_APP_DISABLE_PREVIEW, aMenu->GetItemText(nSelectedAction));
+        m_aTBPreview->SetItemText(SID_DB_APP_DISABLE_PREVIEW, stripTrailingDots(aMenu->GetItemText(nSelectedAction)));
         Resize();
         getBorderWin().getView()->getAppController().executeChecked(nSelectedAction,Sequence<PropertyValue>());
     }

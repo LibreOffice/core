@@ -20,7 +20,6 @@
 #include "sal/config.h"
 
 #include <comphelper/processfactory.hxx>
-#include <comphelper/string.hxx>
 #include <tools/debug.hxx>
 #include <tools/rc.h>
 
@@ -338,11 +337,7 @@ bool ImplToolItem::IsItemHidden() const
 
 const OUString ToolBox::ImplConvertMenuString( const OUString& rStr )
 {
-    OUString aCvtStr( rStr );
-    if ( mbMenuStrings )
-        aCvtStr = comphelper::string::stripEnd(aCvtStr, '.');
-    aCvtStr = MnemonicGenerator::EraseAllMnemonicChars( aCvtStr );
-    return aCvtStr;
+    return MnemonicGenerator::EraseAllMnemonicChars(rStr);
 }
 
 void ToolBox::ImplInvalidate( bool bNewCalc, bool bFullPaint )

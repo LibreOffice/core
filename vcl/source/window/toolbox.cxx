@@ -1373,7 +1373,6 @@ void ToolBox::ImplInitToolBoxData()
     mbCustomize       = false;
     mbCustomizeMode   = false;
     mbDragging        = false;
-    mbMenuStrings     = false;
     mbIsShift         = false;
     mbIsKeyEvent = false;
     mbChangingHighlight = false;
