@@ -335,11 +335,6 @@ bool ImplToolItem::IsItemHidden() const
     return ( meType == ToolBoxItemType::BUTTON && !mbVisible );
 }
 
-const OUString ToolBox::ImplConvertMenuString( const OUString& rStr )
-{
-    return MnemonicGenerator::EraseAllMnemonicChars(rStr);
-}
-
 void ToolBox::ImplInvalidate( bool bNewCalc, bool bFullPaint )
 {
     ImplUpdateInputEnable();
@@ -473,7 +468,7 @@ void ToolBox::InsertItem( const ResId& rResId )
     if ( nObjMask & RSC_TOOLBOXITEM_TEXT )
     {
         aItem.maText = ReadStringRes();
-        aItem.maText = ImplConvertMenuString( aItem.maText );
+        aItem.maText = MnemonicGenerator::EraseAllMnemonicChars(aItem.maText);
     }
     if ( nObjMask & RSC_TOOLBOXITEM_HELPTEXT )
         aItem.maHelpText = ReadStringRes();
@@ -566,7 +561,7 @@ void ToolBox::InsertItem( sal_uInt16 nItemId, const Image& rImage, const OUStrin
 
     // create item and add to list
     mpData->m_aItems.insert( (nPos < mpData->m_aItems.size()) ? mpData->m_aItems.begin()+nPos : mpData->m_aItems.end(),
-                             ImplToolItem( nItemId, rImage, ImplConvertMenuString( rText ), nBits ) );
+                             ImplToolItem( nItemId, rImage, MnemonicGenerator::EraseAllMnemonicChars(rText), nBits ) );
     SetItemImage(nItemId, rImage);
     mpData->ImplClearLayoutData();
 
@@ -585,7 +580,7 @@ void ToolBox::InsertItem( sal_uInt16 nItemId, const OUString& rText, ToolBoxItem
 
     // create item and add to list
     mpData->m_aItems.insert( (nPos < mpData->m_aItems.size()) ? mpData->m_aItems.begin()+nPos : mpData->m_aItems.end(),
-                             ImplToolItem( nItemId, ImplConvertMenuString( rText ), nBits ) );
+                             ImplToolItem( nItemId, MnemonicGenerator::EraseAllMnemonicChars(rText), nBits ) );
     mpData->ImplClearLayoutData();
 
     ImplInvalidate( true );
@@ -1266,7 +1261,7 @@ void ToolBox::SetItemText( sal_uInt16 nItemId, const OUString& rText )
              ((meButtonType != ButtonType::SYMBOLONLY) || !pItem->maImage) )
         {
             long nOldWidth = GetCtrlTextWidth( pItem->maText );
-            pItem->maText = ImplConvertMenuString( rText );
+            pItem->maText = MnemonicGenerator::EraseAllMnemonicChars(rText);
             mpData->ImplClearLayoutData();
             if ( nOldWidth != GetCtrlTextWidth( pItem->maText ) )
                 ImplInvalidate( true );
@@ -1274,7 +1269,7 @@ void ToolBox::SetItemText( sal_uInt16 nItemId, const OUString& rText )
                 ImplUpdateItem( nPos );
         }
         else
-            pItem->maText = ImplConvertMenuString( rText );
+            pItem->maText = MnemonicGenerator::EraseAllMnemonicChars(rText);
 
         // Notify button changed event to prepare accessibility bridge
         CallEventListeners( VCLEVENT_TOOLBOX_BUTTONSTATECHANGED, reinterpret_cast< void* >( nPos ) );
