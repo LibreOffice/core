@@ -34,6 +34,24 @@
       "revId": "e297fa74d66f3b9952213f844976172863563a2e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_e0512064",
+        "filename": "xmloff/source/style/xmlnumfe.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 750,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-05-30T11:05:29Z",
+      "side": 1,
+      "message": "No. If there isn\u0027t even a proposal then just handle it as extension. I thought there was.",
+      "parentUuid": "da7fb54a_4079ecfb",
+      "revId": "e297fa74d66f3b9952213f844976172863563a2e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
