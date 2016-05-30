@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_204788bc",
+        "filename": "xmloff/source/style/xmlnumfe.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 750,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-05-30T10:20:15Z",
+      "side": 1,
+      "message": "For versions \u003e\u003d 1.3 and no extensions allowed this is not saved at all. Likely that was not intended ;-) Should use the same mechanism as XML_MAX_DENOMINATOR_VALUE below.",
+      "revId": "e297fa74d66f3b9952213f844976172863563a2e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
