@@ -1418,8 +1418,7 @@ Any sbxToUnoValue( const SbxValue* pVar, const Type& rType, Property* pUnoProper
         }
         case TypeClass_CHAR:
         {
-            sal_Unicode c = pVar->GetChar();
-            aRetVal.setValue( &c , cppu::UnoType<cppu::UnoCharType>::get() );
+            aRetVal <<= pVar->GetChar();
             break;
         }
         case TypeClass_STRING:          aRetVal <<= pVar->GetOUString(); break;

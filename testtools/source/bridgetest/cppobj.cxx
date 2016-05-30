@@ -1003,8 +1003,7 @@ void Test_Impl::testConstructorsService(
     args[7] <<= SAL_MAX_UINT64;
     args[8] <<= 0.123f;
     args[9] <<= 0.456;
-    sal_Unicode arg10c = 'X';
-    args[10].setValue(&arg10c, UnoType< UnoCharType >::get());
+    args[10] <<= sal_Unicode('X');
     args[11] <<= OUString("test");
     args[12] <<= UnoType< Any >::get();
     args[13] <<= true;
@@ -1018,7 +1017,7 @@ void Test_Impl::testConstructorsService(
     args[21] <<= arg21;
     args[22] <<= arg22;
     args[23] <<= arg23;
-    args[24].setValue(&arg24, UnoType< UnoSequenceType< UnoCharType > >::get());
+    args[24] <<= arg24;
     args[25] <<= arg25;
     args[26] <<= arg26;
     args[27] <<= arg27;

@@ -761,14 +761,14 @@ Any TypeConverter_Impl::convertToSimpleType( const Any& rVal, TypeClass aDestina
     {
         if (aSourceClass==TypeClass_STRING)
         {
-            if ((*static_cast<const OUString *>(rVal.getValue())).getLength() == 1)      // single char
-                aRet.setValue( (*static_cast<const OUString *>(rVal.getValue())).getStr(), cppu::UnoType<cppu::UnoCharType>::get() );
+            auto const s = static_cast<const OUString *>(rVal.getValue());
+            if (s->getLength() == 1)      // single char
+                aRet <<= (*s)[0];
         }
         else if (aSourceClass!=TypeClass_ENUM &&        // exclude enums, chars
                  aSourceClass!=TypeClass_CHAR)
         {
-             sal_Unicode cRet = (sal_Unicode)toHyper( rVal, 0, 0xffff );    // range
-            aRet.setValue( &cRet, cppu::UnoType<cppu::UnoCharType>::get() );
+            aRet <<= sal_Unicode(toHyper( rVal, 0, 0xffff ));    // range
         }
         break;
     }

@@ -810,8 +810,7 @@ Any Runtime::pyObject2Any ( const PyRef & source, enum ConversionMode mode ) con
         }
         else if( PyObject_IsInstance( o, getCharClass( runtime ).get() ) )
         {
-            sal_Unicode c = PyChar2Unicode( o );
-            a.setValue( &c, cppu::UnoType<cppu::UnoCharType>::get());
+            a <<= PyChar2Unicode( o );
         }
         else if( PyObject_IsInstance( o, getAnyClass( runtime ).get() ) )
         {

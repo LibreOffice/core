@@ -275,7 +275,7 @@ static bool performAnyTest( const Reference< XBridgeTest > &xLBT, const TestData
     }
 
     {
-        a.setValue( &(data.Char) , cppu::UnoType<cppu::UnoCharType>::get() );
+        a <<= data.Char;
         OSL_ASSERT( xLBT->transportAny( a ) == a );
     }
 
