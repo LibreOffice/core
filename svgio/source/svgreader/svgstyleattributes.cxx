@@ -2334,7 +2334,7 @@ namespace svgio
 
         const SvgStringVector& SvgStyleAttributes::getFontFamily() const
         {
-            if(!maFontFamily.empty())
+            if(!maFontFamily.empty() && !maFontFamily[0].startsWith("inherit"))
             {
                 return maFontFamily;
             }
