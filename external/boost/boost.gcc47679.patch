@@ -1,0 +1,63 @@
+diff -ru boost.orig/boost/optional/optional.hpp boost/boost/optional/optional.hpp
+--- foo/misc/boost.orig/boost/optional/optional.hpp	2015-07-18 11:27:36.168127029 +0200
++++ foo/misc/boost/boost/optional/optional.hpp	2015-07-18 20:36:13.777997833 +0200
+@@ -53,6 +53,8 @@
+ 
+ #include <boost/optional/optional_fwd.hpp>
+ 
++#include <string.h>
++
+ #if (defined BOOST_NO_CXX11_RVALUE_REFERENCES) || (defined BOOST_OPTIONAL_CONFIG_NO_RVALUE_REFERENCES)
+ #define BOOST_OPTIONAL_DETAIL_NO_RVALUE_REFERENCES
+ #endif
+@@ -134,6 +136,11 @@
+ 
+   public:
+ 
++    aligned_storage()
++    {
++      memset(&dummy_, 0, sizeof(dummy_));
++    }
++
+ #if defined(BOOST_OPTIONAL_DETAIL_USE_ATTRIBUTE_MAY_ALIAS)
+     void const* address() const { return &dummy_; }
+     void      * address()       { return &dummy_; }
+diff -ru boost.orig/boost/spirit/home/classic/core/primitives/impl/numerics.ipp boost/boost/spirit/home/classic/core/primitives/impl/numerics.ipp
+--- foo/misc/boost.orig/boost/spirit/home/classic/core/primitives/impl/numerics.ipp	2015-07-18 11:27:36.169127029 +0200
++++ foo/misc/boost/boost/spirit/home/classic/core/primitives/impl/numerics.ipp	2015-07-18 20:34:32.110998976 +0200
+@@ -218,6 +218,19 @@
+                 }
+             }
+         };
++        template <int Radix>
++        struct negative_accumulate<unsigned char, Radix>
++        {
++            //  Use this accumulator if number is negative
++            static bool add(unsigned char& n, unsigned digit)
++            {
++                n *= Radix;
++                if (n < digit)
++                    return false;
++                n -= digit;
++                return true;
++            }
++        };
+ 
+         template <int MaxDigits>
+         inline bool allow_more_digits(std::size_t i)
+diff -ru boost.orig/boost/utility/compare_pointees.hpp boost/boost/utility/compare_pointees.hpp
+--- foo/misc/boost.orig/boost/utility/compare_pointees.hpp	2015-02-27 07:26:11.000000000 +0100
++++ foo/misc/boost/boost/utility/compare_pointees.hpp	2015-07-18 20:20:41.388988458 +0200
+@@ -29,7 +29,11 @@
+ inline
+ bool equal_pointees ( OptionalPointee const& x, OptionalPointee const& y )
+ {
+-  return (!x) != (!y) ? false : ( !x ? true : (*x) == (*y) ) ;
++  if (!x && !y)
++    return true;
++  if (!x || !y)
++    return false;
++  return (*x) == (*y);
+ }
+ 
+ template<class OptionalPointee>
