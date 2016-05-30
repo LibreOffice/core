@@ -727,7 +727,8 @@ public:
     /// Update the direct formatting according to the current table style.
     /// @param pTableNode Table node to update.  When nullptr, current cursor position is used.
     /// @param bResetDirect Reset direct formatting that might be applied to the cells.
-    bool UpdateTableStyleFormatting(SwTableNode *pTableNode = nullptr, bool bResetDirect = false);
+    /// @param pStyleName new style to apply
+    bool UpdateTableStyleFormatting(SwTableNode *pTableNode = nullptr, bool bResetDirect = false, OUString const* pStyleName = nullptr);
 
     bool GetTableAutoFormat( SwTableAutoFormat& rGet );
 

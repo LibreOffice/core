@@ -1409,9 +1409,10 @@ void SwUndoAttrTable::RedoImpl(::sw::UndoRedoContext & rContext)
 // UndoObject for AutoFormat on Table
 SwUndoTableAutoFormat::SwUndoTableAutoFormat( const SwTableNode& rTableNd,
                                     const SwTableAutoFormat& rAFormat )
-    : SwUndo( UNDO_TABLE_AUTOFMT ),
-    nSttNode( rTableNd.GetIndex() ),
-    bSaveContentAttr( false )
+    : SwUndo( UNDO_TABLE_AUTOFMT )
+    , m_TableStyleName(rTableNd.GetTable().GetTableStyleName())
+    , nSttNode( rTableNd.GetIndex() )
+    , bSaveContentAttr( false )
     , m_nRepeatHeading(rTableNd.GetTable().GetRowsToRepeat())
 {
     pSaveTable = new SaveTable( rTableNd.GetTable() );
@@ -1444,6 +1445,12 @@ SwUndoTableAutoFormat::UndoRedo(bool const bUndo, ::sw::UndoRedoContext & rConte
     OSL_ENSURE( pTableNd, "no TableNode" );
 
     SwTable& table = pTableNd->GetTable();
+    if (table.GetTableStyleName() != m_TableStyleName)
+    {
+        OUString const temp(table.GetTableStyleName());
+        table.SetTableStyleName(m_TableStyleName);
+        m_TableStyleName = temp;
+    }
     SaveTable* pOrig = new SaveTable( table );
     // than go also over the ContentNodes of the EndBoxes and collect
     // all paragraph attributes
