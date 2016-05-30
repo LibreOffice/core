@@ -816,7 +816,7 @@ Reference< XRow > FTPContent::getPropertyValues(
         else if(aDirEntry.m_nMode != INETCOREFTP_FILEMODE_UNKNOWN) {
             if(Name == "ContentType")
                 xRow->appendString(seqProp[i],
-                                   aDirEntry.m_nMode&INETCOREFTP_FILEMODE_ISDIR
+                                   (aDirEntry.m_nMode & INETCOREFTP_FILEMODE_ISDIR)
                                    ? OUString(FTP_FOLDER)
                                    : OUString(FTP_FILE) );
             else if(Name == "IsReadOnly")
