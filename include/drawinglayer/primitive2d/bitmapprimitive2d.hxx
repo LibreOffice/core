@@ -24,6 +24,7 @@
 
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <vcl/bitmapex.hxx>
+#include <vcl/virdev.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
 
@@ -33,19 +34,9 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        /** BitmapPrimitive2D class
-
-            This class is the central primitive for Bitmap-based primitives.
-            It provides RGBA-based bitmaps, currently using a BitmapEx from VCL.
-            This may change in the future to any other, maybe more general base
-            class providing 24bit RGBA.
-         */
-        class DRAWINGLAYER_DLLPUBLIC BitmapPrimitive2D : public BasePrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC BitmapPrimitive2DBase : public BasePrimitive2D
         {
-        private:
-            /// the RGBA Bitmap-data
-            BitmapEx                                    maBitmapEx;
-
+        protected:
             /** the object transformation from unit coordinates, defining
                 size, shear, rotate and position
              */
@@ -53,12 +44,10 @@ namespace drawinglayer
 
         public:
             /// constructor
-            BitmapPrimitive2D(
-                const BitmapEx& rBitmapEx,
-                const basegfx::B2DHomMatrix& rTransform);
+            BitmapPrimitive2DBase(const basegfx::B2DHomMatrix& rTransform);
 
             /// data read access
-            const BitmapEx& getBitmapEx() const { return maBitmapEx; }
+            virtual BitmapEx getBitmapEx() const = 0;
             const basegfx::B2DHomMatrix& getTransform() const { return maTransform; }
 
             /// compare operator
@@ -70,6 +59,57 @@ namespace drawinglayer
             /// provide unique ID
             DeclPrimitive2DIDBlock()
         };
+
+        /** BitmapPrimitive2D class
+
+            This class is the central primitive for Bitmap-based primitives.
+            It provides RGBA-based bitmaps, currently using a BitmapEx from VCL.
+            This may change in the future to any other, maybe more general base
+            class providing 24bit RGBA.
+         */
+        class DRAWINGLAYER_DLLPUBLIC BitmapPrimitive2D : public BitmapPrimitive2DBase
+        {
+        private:
+            /// the RGBA Bitmap-data
+            BitmapEx                                    maBitmapEx;
+
+        public:
+            /// constructor
+            BitmapPrimitive2D(
+                const BitmapEx& rBitmapEx,
+                const basegfx::B2DHomMatrix& rTransform);
+
+            /// data read access
+            virtual BitmapEx getBitmapEx() const override { return maBitmapEx; }
+        };
+
+        /** BitmapPrimitive2D class
+
+            This class provides on-demand access to a specific frame of an animated gif
+         */
+        class DRAWINGLAYER_DLLPUBLIC AnimationFrameBitmapPrimitive2D : public BitmapPrimitive2DBase
+        {
+        private:
+            //SharedPtrs to virtual devices shared among the frames of an animated gif
+            VclPtr<VirtualDevice> maVirtualDevice;
+            VclPtr<VirtualDevice> maVirtualDeviceMask;
+            mutable std::unique_ptr<BitmapEx> mxCachedFrame0BitmapEx;
+            mutable std::shared_ptr<sal_Int32> mxLastDrawnIndex;
+            ::Animation           maAnimation;
+            sal_Int32             mnIndex;
+        public:
+            /// constructor
+            AnimationFrameBitmapPrimitive2D(
+                const ::Animation& rAnimation,
+                const VclPtr<VirtualDevice> rVirtualDevice,
+                const VclPtr<VirtualDevice> rVirtualDeviceMask,
+                const basegfx::B2DHomMatrix& rTransform,
+                std::shared_ptr<sal_Int32>& rLastDrawnIndex,
+                sal_Int32                   nIndex);
+
+            virtual BitmapEx getBitmapEx() const override;
+        };
+
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 
