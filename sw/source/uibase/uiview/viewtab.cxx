@@ -1094,7 +1094,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
             if ( ( nFrameType & FrameTypeFlags::HEADER || nFrameType & FrameTypeFlags::FOOTER ) &&
                  !(nFrameType & FrameTypeFlags::COLSECT) )
             {
-                SwFrameFormat *pFormat = const_cast<SwFrameFormat*>(nFrameType & FrameTypeFlags::HEADER ?
+                SwFrameFormat *pFormat = const_cast<SwFrameFormat*>((nFrameType & FrameTypeFlags::HEADER) ?
                                 rDesc.GetMaster().GetHeader().GetHeaderFormat() :
                                 rDesc.GetMaster().GetFooter().GetFooterFormat());
                 if( pFormat )// #i80890# if rDesc is not the one belonging to the current page is might crash

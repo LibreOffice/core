@@ -714,7 +714,7 @@ IMPL_LINK_TYPED( SwInsertDBColAutoPilot, TableFormatHdl, Button*, pButton, void 
         }
         else
             nWidth = rSh.GetAnyCurRect(
-                                FrameTypeFlags::FLY_ANY & rSh.GetFrameType( nullptr, true )
+                                (FrameTypeFlags::FLY_ANY & rSh.GetFrameType( nullptr, true ))
                                               ? RECT_FLY_PRT_EMBEDDED
                                               : RECT_PAGE_PRT ).Width();
 

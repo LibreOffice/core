@@ -2242,7 +2242,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                                     nsSelectionType::SEL_DRW_FORM))
 
                         {
-                            eKeyState = rKeyCode.GetModifier() & KEY_SHIFT ?
+                            eKeyState = (rKeyCode.GetModifier() & KEY_SHIFT) ?
                                                 KS_PrevObject : KS_NextObject;
                         }
                         else if ( !rSh.IsMultiSelection() && rSh.CursorInsideInputField() )

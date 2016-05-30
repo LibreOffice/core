@@ -2545,7 +2545,7 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
     case RES_AUTHORFLD:
         {
             ww::eField eField =
-                (AF_SHORTCUT & pField->GetFormat() ? ww::eUSERINITIALS : ww::eUSERNAME);
+                ((AF_SHORTCUT & pField->GetFormat()) ? ww::eUSERINITIALS : ww::eUSERNAME);
             GetExport().OutputField(pField, eField, FieldString(eField));
         }
         break;

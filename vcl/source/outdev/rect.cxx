@@ -217,7 +217,7 @@ void OutputDevice::DrawCheckered(const Point& rPos, const Size& rSize, sal_uInt3
         {
             const sal_uInt32 nBottom(std::min(nMaxY, nY + nLen));
 
-            SetFillColor((x & 0x0001) ^ (y & 0x0001) ? aStart : aEnd);
+            SetFillColor(((x & 0x0001) ^ (y & 0x0001)) ? aStart : aEnd);
             DrawRect(Rectangle(nX, nY, nRight, nBottom));
         }
     }
