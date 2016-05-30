@@ -25,6 +25,7 @@
 using namespace ::com::sun::star;
 
 static const sal_Int32 nDefaultProgressBarRange = 1000000;
+static const float fProgressStep = 0.5;
 
 ProgressBarHelper::ProgressBarHelper(const ::com::sun::star::uno::Reference < ::com::sun::star::task::XStatusIndicator>& xTempStatusIndicator,
                                     const bool bTempStrict)
@@ -32,6 +33,7 @@ ProgressBarHelper::ProgressBarHelper(const ::com::sun::star::uno::Reference < ::
 , nRange(nDefaultProgressBarRange)
 , nReference(100)
 , nValue(0)
+, fOldPercent(0.0)
 , bStrict(bTempStrict)
 , bRepeat(true)
 #ifdef DBG_UTIL
@@ -87,9 +89,12 @@ void ProgressBarHelper::SetValue(sal_Int32 nTempValue)
             double fValue(nValue);
             double fNewValue ((fValue * nRange) / nReference);
 
-            xStatusIndicator->setValue((sal_Int32)fNewValue);
-
-            // #95181# disabled, because we want to call setValue very often to enable a good reschedule
+            double fPercent((fNewValue * 100) / nRange);
+            if (fPercent >= (fOldPercent + fProgressStep) || fPercent < fOldPercent)
+            {
+                xStatusIndicator->setValue((sal_Int32)fNewValue);
+                fOldPercent = fPercent;
+            }
         }
 #ifdef DBG_UTIL
         else if (!bFailure)
