@@ -306,6 +306,7 @@
 #define UNO_NAME_SURROUND_CONTOUR "SurroundContour"
 #define UNO_NAME_SURROUND_ANCHORONLY "SurroundAnchorOnly"
 #define UNO_NAME_TABLE_NAME "TableName"
+#define UNO_NAME_TABLE_TEMPLATE_NAME "TableTemplateName"
 #define UNO_NAME_TABSTOPS "ParaTabStops"
 #define UNO_NAME_TITLE "Title"
 #define UNO_NAME_TOP_MARGIN "TopMargin"
