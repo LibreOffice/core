@@ -2806,7 +2806,7 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
         else
             DeleteArea(nCol1, nRow1, nCol2, nRow2, rMark, nDelFlag, false, &aBroadcastSpans);
 
-        if (CopyOneCellFromClip(aCxt, rMark, nCol1, nRow1, nCol2, nRow2))
+        if (CopyOneCellFromClip(aCxt, nCol1, nRow1, nCol2, nRow2))
             continue;
 
         SCCOL nC1 = nCol1;
