@@ -1041,10 +1041,13 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
         aAny <<= (sal_Int32)( GetPage()->GetSize().getHeight() );
         break;
     case WID_PAGE_ORIENT:
-        aAny = ::cppu::int2enum( (sal_Int32)((GetPage()->GetOrientation() == ORIENTATION_PORTRAIT)? view::PaperOrientation_PORTRAIT: view::PaperOrientation_LANDSCAPE), ::cppu::UnoType<view::PaperOrientation>::get() );
+        aAny <<= view::PaperOrientation(
+            GetPage()->GetOrientation() == ORIENTATION_PORTRAIT
+            ? view::PaperOrientation_PORTRAIT
+            : view::PaperOrientation_LANDSCAPE);
         break;
     case WID_PAGE_EFFECT:
-        aAny = ::cppu::int2enum( (sal_Int32)GetPage()->GetFadeEffect(), ::cppu::UnoType<presentation::FadeEffect>::get() );
+        aAny <<= presentation::FadeEffect(GetPage()->GetFadeEffect());
         break;
     case WID_PAGE_CHANGE:
         aAny <<= (sal_Int32)( GetPage()->GetPresChange() );
@@ -1052,7 +1055,8 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
     case WID_PAGE_SPEED:
         {
             const double fDuration = GetPage()->getTransitionDuration();
-            aAny = ::cppu::int2enum( fDuration < 2.0 ? 2 : (fDuration > 2.0 ? 0 : 1), ::cppu::UnoType<presentation::AnimationSpeed>::get() );
+            aAny <<= presentation::AnimationSpeed(
+                fDuration < 2.0 ? 2 : fDuration > 2.0 ? 0 : 1);
         }
         break;
     case WID_PAGE_LAYOUT:

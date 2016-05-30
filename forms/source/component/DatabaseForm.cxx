@@ -3977,7 +3977,7 @@ void SAL_CALL ODatabaseForm::read(const Reference<XObjectInputStream>& _rxInStre
     if (nVersion > 1)
     {
         sal_Int32 nCycle = _rxInStream->readShort();
-        m_aCycle = ::cppu::int2enum(nCycle, cppu::UnoType<TabulatorCycle>::get());
+        m_aCycle <<= TabulatorCycle(nCycle);
         m_eNavigation = (NavigationBarMode)_rxInStream->readShort();
 
         _rxInStream >> sAggregateProp;
@@ -3995,7 +3995,7 @@ void SAL_CALL ODatabaseForm::read(const Reference<XObjectInputStream>& _rxInStre
         if (nAnyMask & CYCLE)
         {
             sal_Int32 nCycle = _rxInStream->readShort();
-            m_aCycle = ::cppu::int2enum(nCycle, cppu::UnoType<TabulatorCycle>::get());
+            m_aCycle <<= TabulatorCycle(nCycle);
         }
         else
             m_aCycle.clear();
