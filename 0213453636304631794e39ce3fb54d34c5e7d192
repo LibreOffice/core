@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_80f3f409",
+        "filename": "sw/source/uibase/dbui/dbmgr.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-05-30T07:09:02Z",
+      "side": 1,
+      "message": "I\u0027d rather insert this into the first block of includes (as unsorted as that may be)",
+      "revId": "0213453636304631794e39ce3fb54d34c5e7d192",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_60eef023",
+        "filename": "sw/source/uibase/dbui/dbmgr.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 499,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-05-30T07:09:02Z",
+      "side": 1,
+      "message": "what do you still need pInsert for?",
+      "revId": "0213453636304631794e39ce3fb54d34c5e7d192",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
