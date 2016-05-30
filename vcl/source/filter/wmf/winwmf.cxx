@@ -533,9 +533,9 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
             pWMF->ReadUInt16( nLen );
             pWMF->ReadUInt16( nOptions );
 
-            ComplexTextLayoutMode nTextLayoutMode = TEXT_LAYOUT_DEFAULT;
+            ComplexTextLayoutFlags nTextLayoutMode = ComplexTextLayoutFlags::Default;
             if ( nOptions & ETO_RTLREADING )
-                nTextLayoutMode = TEXT_LAYOUT_BIDI_RTL | TEXT_LAYOUT_TEXTORIGIN_LEFT;
+                nTextLayoutMode = ComplexTextLayoutFlags::BiDiRtl | ComplexTextLayoutFlags::TextOriginLeft;
             pOut->SetTextLayoutMode( nTextLayoutMode );
             DBG_ASSERT( ( nOptions & ( ETO_PDY | ETO_GLYPH_INDEX ) ) == 0, "SJ: ETO_PDY || ETO_GLYPH_INDEX in WMF" );
 

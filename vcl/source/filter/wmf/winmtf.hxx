@@ -419,7 +419,7 @@ struct SaveStruct
 {
     BkMode              nBkMode;
     sal_uInt32          nMapMode, nGfxMode;
-    ComplexTextLayoutMode nTextLayoutMode;
+    ComplexTextLayoutFlags nTextLayoutMode;
     sal_Int32           nWinOrgX, nWinOrgY, nWinExtX, nWinExtY;
     sal_Int32           nDevOrgX, nDevOrgY, nDevWidth, nDevHeight;
 
@@ -482,8 +482,8 @@ class WinMtfOutput
     Color               maTextColor;
     Color               maLatestBkColor;
     Color               maBkColor;
-    ComplexTextLayoutMode  mnLatestTextLayoutMode;
-    ComplexTextLayoutMode  mnTextLayoutMode;
+    ComplexTextLayoutFlags  mnLatestTextLayoutMode;
+    ComplexTextLayoutFlags  mnTextLayoutMode;
     BkMode              mnLatestBkMode;
     BkMode              mnBkMode;
     RasterOp            meLatestRasterOp;
@@ -583,7 +583,7 @@ public:
     void                SelectObject( sal_Int32 nIndex );
     rtl_TextEncoding    GetCharSet(){ return maFont.GetCharSet(); };
     const vcl::Font&    GetFont() const { return maFont;}
-    void                SetTextLayoutMode( ComplexTextLayoutMode nLayoutMode );
+    void                SetTextLayoutMode( ComplexTextLayoutFlags nLayoutMode );
 
     void                ClearPath(){ aPathObj.Init(); };
     void                ClosePath(){ aPathObj.ClosePath(); };

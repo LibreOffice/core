@@ -227,7 +227,7 @@ SmElementsControl::SmElementsControl(vcl::Window *pParent)
 {
     SetMapMode( MapMode(MAP_100TH_MM) );
     SetDrawMode( DrawModeFlags::Default );
-    SetLayoutMode( TEXT_LAYOUT_DEFAULT );
+    SetLayoutMode( ComplexTextLayoutFlags::Default );
     SetDigitLanguage( LANGUAGE_ENGLISH );
 
     maFormat.SetBaseSize(PixelToLogic(Size(0, SmPtsTo100th_mm(12))));

@@ -344,7 +344,7 @@ void GDIMetaFile::Play( OutputDevice* pOut, size_t nPos )
         // recent add-ons. Newer metafiles must of course explicitly set
         // those states.
         pOut->Push( PushFlags::TEXTLAYOUTMODE|PushFlags::TEXTLANGUAGE );
-        pOut->SetLayoutMode( TEXT_LAYOUT_DEFAULT );
+        pOut->SetLayoutMode( ComplexTextLayoutFlags::Default );
         pOut->SetDigitLanguage( 0 );
 
         OSL_TRACE("GDIMetaFile::Play on device of size: %ld x %ld", pOut->GetOutputSizePixel().Width(), pOut->GetOutputSizePixel().Height());
@@ -576,7 +576,7 @@ void GDIMetaFile::Play( OutputDevice* pOut, const Point& rPos,
         // This is necessary, since old metafiles don't even know of these
         // recent add-ons. Newer metafiles must of course explicitly set
         // those states.
-        pOut->SetLayoutMode( TEXT_LAYOUT_DEFAULT );
+        pOut->SetLayoutMode( ComplexTextLayoutFlags::Default );
         pOut->SetDigitLanguage( 0 );
 
         Play( pOut );

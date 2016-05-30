@@ -2245,12 +2245,12 @@ void Edit::StateChanged( StateChangedType nType )
             if (GetParent()->GetStyle() & WB_LEFT)
                 mnAlign = EDIT_ALIGN_RIGHT;
             if (nType == StateChangedType::Mirroring)
-                SetLayoutMode(TEXT_LAYOUT_BIDI_RTL | TEXT_LAYOUT_TEXTORIGIN_LEFT);
+                SetLayoutMode(ComplexTextLayoutFlags::BiDiRtl | ComplexTextLayoutFlags::TextOriginLeft);
         }
         else if (mbIsSubEdit && !GetParent()->IsRTLEnabled())
         {
             if (nType == StateChangedType::Mirroring)
-                SetLayoutMode(TEXT_LAYOUT_TEXTORIGIN_LEFT);
+                SetLayoutMode(ComplexTextLayoutFlags::TextOriginLeft);
         }
 
         if (nStyle & WB_RIGHT)

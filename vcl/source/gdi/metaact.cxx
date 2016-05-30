@@ -3373,13 +3373,13 @@ void MetaCommentAction::Read( SvStream& rIStm, ImplMetaReadData* )
 
 MetaLayoutModeAction::MetaLayoutModeAction() :
     MetaAction  ( MetaActionType::LAYOUTMODE ),
-    mnLayoutMode( TEXT_LAYOUT_DEFAULT )
+    mnLayoutMode( ComplexTextLayoutFlags::Default )
 {}
 
 MetaLayoutModeAction::~MetaLayoutModeAction()
 {}
 
-MetaLayoutModeAction::MetaLayoutModeAction( ComplexTextLayoutMode nLayoutMode ) :
+MetaLayoutModeAction::MetaLayoutModeAction( ComplexTextLayoutFlags nLayoutMode ) :
     MetaAction  ( MetaActionType::LAYOUTMODE ),
     mnLayoutMode( nLayoutMode )
 {}
@@ -3400,7 +3400,7 @@ void MetaLayoutModeAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
     VersionCompat aCompat(rOStm, StreamMode::WRITE, 1);
-    rOStm.WriteUInt32( mnLayoutMode );
+    rOStm.WriteUInt32( (sal_uInt32)mnLayoutMode );
 }
 
 void MetaLayoutModeAction::Read( SvStream& rIStm, ImplMetaReadData* )
@@ -3408,7 +3408,7 @@ void MetaLayoutModeAction::Read( SvStream& rIStm, ImplMetaReadData* )
     VersionCompat aCompat(rIStm, StreamMode::READ);
     sal_uInt32 tmp;
     rIStm.ReadUInt32( tmp );
-    mnLayoutMode = static_cast<ComplexTextLayoutMode>(tmp);
+    mnLayoutMode = static_cast<ComplexTextLayoutFlags>(tmp);
 }
 
 MetaTextLanguageAction::MetaTextLanguageAction() :

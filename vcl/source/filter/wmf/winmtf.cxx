@@ -614,7 +614,7 @@ void WinMtfOutput::SelectObject( sal_Int32 nIndex )
     }
 }
 
-void WinMtfOutput::SetTextLayoutMode( ComplexTextLayoutMode nTextLayoutMode )
+void WinMtfOutput::SetTextLayoutMode( ComplexTextLayoutFlags nTextLayoutMode )
 {
     mnTextLayoutMode = nTextLayoutMode;
 }
@@ -805,8 +805,8 @@ WinMtfOutput::WinMtfOutput( GDIMetaFile& rGDIMetaFile ) :
     mnTextAlign         ( TA_LEFT | TA_TOP | TA_NOUPDATECP ),
     maLatestBkColor     ( 0x12345678 ),
     maBkColor           ( COL_WHITE ),
-    mnLatestTextLayoutMode( TEXT_LAYOUT_DEFAULT ),
-    mnTextLayoutMode    ( TEXT_LAYOUT_DEFAULT ),
+    mnLatestTextLayoutMode( ComplexTextLayoutFlags::Default ),
+    mnTextLayoutMode    ( ComplexTextLayoutFlags::Default ),
     mnLatestBkMode      ( BkMode::NONE ),
     mnBkMode            ( BkMode::OPAQUE ),
     meLatestRasterOp    ( ROP_INVERT ),
