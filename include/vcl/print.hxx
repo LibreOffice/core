@@ -50,12 +50,12 @@ namespace vcl {
 }
 
 
-enum PrinterSupport
+enum class PrinterSupport
 {
-    SUPPORT_SET_ORIENTATION, SUPPORT_SET_PAPERBIN,
-    SUPPORT_SET_PAPERSIZE, SUPPORT_SET_PAPER,
-    SUPPORT_COPY, SUPPORT_COLLATECOPY,
-    SUPPORT_SETUPDIALOG, SUPPORT_FAX, SUPPORT_PDF
+    SetOrientation, SetPaperBin,
+    SetPaperSize, SetPaper,
+    Copy, CollateCopy,
+    SetupDialog, Fax, Pdf
 };
 
 

@@ -1163,7 +1163,7 @@ bool PspSalPrinter::StartJob( const OUString* i_pFileName, const OUString& i_rJo
     {
         if( bCollate )
         {
-            if (aPDFFiles.size() == 1 && xPrinter->HasSupport(SUPPORT_COLLATECOPY))
+            if (aPDFFiles.size() == 1 && xPrinter->HasSupport(PrinterSupport::CollateCopy))
             {
                 m_aJobData.setCollate( true );
                 m_aJobData.m_nCopies = nCopies;

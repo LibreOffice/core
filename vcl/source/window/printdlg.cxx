@@ -1221,7 +1221,7 @@ void PrintDialog::checkControlDependencies()
     maJobPage.mpCollateImage->SetImage( aImg );
 
     // enable setup button only for printers that can be setup
-    bool bHaveSetup = maPController->getPrinter()->HasSupport( SUPPORT_SETUPDIALOG );
+    bool bHaveSetup = maPController->getPrinter()->HasSupport( PrinterSupport::SetupDialog );
     maJobPage.mpSetupButton->Enable(bHaveSetup);
 }
 

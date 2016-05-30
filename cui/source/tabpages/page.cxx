@@ -527,7 +527,7 @@ void SvxPageDescPage::Reset( const SfxItemSet* rSet )
         aPaperSize = static_cast<const SvxSizeItem*>(pItem)->GetSize();
 
     bool bOrientationSupport =
-        mpDefPrinter->HasSupport( SUPPORT_SET_ORIENTATION );
+        mpDefPrinter->HasSupport( PrinterSupport::SetOrientation );
 
     if ( !bOrientationSupport &&
          aPaperSize.Width() > aPaperSize.Height() )
