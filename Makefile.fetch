@@ -160,6 +160,7 @@ $(WORKDIR)/download: $(BUILDDIR)/config_host.mk $(SRCDIR)/download.lst $(SRCDIR)
 		$(call fetch_Optional,LIBLANGTAG,LANGTAGREG_TARBALL) \
 		$(call fetch_Optional,LIBLANGTAG,LIBLANGTAG_TARBALL) \
 		$(call fetch_Optional,LIBPNG,PNG_TARBALL) \
+		$(call fetch_Optional,LIBTOMMATH,LIBTOMMATH_TARBALL) \
 		$(call fetch_Optional,LIBXML2,LIBXML_TARBALL) \
 		LIBXMLSEC_TARBALL \
 		$(call fetch_Optional,LIBXSLT,LIBXSLT_TARBALL) \
