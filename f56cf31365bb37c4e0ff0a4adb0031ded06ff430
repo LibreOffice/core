@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_204ce8c6",
+        "filename": "include/sfx2/thumbnailviewitem.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-05-30T11:06:09Z",
+      "side": 1,
+      "message": "are these still used?",
+      "range": {
+        "startLine": 138,
+        "startChar": 4,
+        "endLine": 139,
+        "endChar": 32
+      },
+      "revId": "f56cf31365bb37c4e0ff0a4adb0031ded06ff430",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
