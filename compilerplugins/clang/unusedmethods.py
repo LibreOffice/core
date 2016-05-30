@@ -270,6 +270,8 @@ for d in definitionSet:
     # ignore the SfxPoolItem CreateDefault methods for now
     if d[1].endswith("::CreateDefault()"):
         continue
+    if "::operator" in d[1]:
+        continue
 
     unusedSet.add(d) # used by the "unused return types" analysis
     tmp1set.add((method, definitionToSourceLocationMap[d]))

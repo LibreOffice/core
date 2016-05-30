@@ -281,7 +281,6 @@ public:
     virtual        void    doDeferredInit(WinBits nBits);
 protected:
                     DockingWindow( WindowType nType );
-    DockingWindow(vcl::Window* pParent, const ResId& rResId);
 
 public:
     DockingWindow(vcl::Window* pParent, WinBits nStyle = WB_STDDOCKWIN);

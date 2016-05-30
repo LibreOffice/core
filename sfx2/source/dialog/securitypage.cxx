@@ -37,7 +37,6 @@
 #include <svl/poolitem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/PasswordHelper.hxx>
-#include <svtools/xwindowitem.hxx>
 
 #include "../appl/app.hrc"
 

@@ -127,7 +127,6 @@
 #define SID_PRINTDOCDIRECT                  (SID_SFX_START + 509)
 #define SID_PICKLIST                        (SID_SFX_START + 510)
 #define SID_DOC_SERVICE                     (SID_SFX_START + 511)
-#define SID_ATTR_XWINDOW                    (SID_SFX_START + 777)
 #define SID_PLUGIN_MODE                     (SID_SFX_START + 827)
 #define SID_EXPORTDOC                       (SID_SFX_START + 829)
 #define SID_EXPORTDOCASPDF                  (SID_SFX_START + 1673)

@@ -427,19 +427,6 @@ DockingWindow::DockingWindow( vcl::Window* pParent, WinBits nStyle ) :
     ImplInit( pParent, nStyle );
 }
 
-DockingWindow::DockingWindow( vcl::Window* pParent, const ResId& rResId ) :
-    Window( WINDOW_DOCKINGWINDOW )
-{
-    ImplInitDockingWindowData();
-    rResId.SetRT( RSC_DOCKINGWINDOW );
-    WinBits nStyle = ImplInitRes( rResId );
-    ImplInit( pParent, nStyle );
-    ImplLoadRes( rResId );
-
-    if ( !(nStyle & WB_HIDE) )
-        Show();
-}
-
 //Find the real parent stashed in mpDialogParent.
 void DockingWindow::doDeferredInit(WinBits nBits)
 {

@@ -42,7 +42,6 @@ using namespace ::com::sun::star;
 #include <svx/dataaccessdescriptor.hxx>
 #include <svx/drawitem.hxx>
 #include <svx/fmshell.hxx>
-#include <svtools/xwindowitem.hxx>
 #include <sfx2/passwd.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/dispatch.hxx>
@@ -562,13 +561,6 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 const SfxBoolItem* pItem = rReq.GetArg<SfxBoolItem>(FID_CHG_RECORD);
                 bool bDo = true;
 
-                // xmlsec05/06:
-                // getting real parent window when called from Security-Options TP
-                vcl::Window* pParent = nullptr;
-                const SfxPoolItem* pParentItem;
-                if( pReqArgs && SfxItemState::SET == pReqArgs->GetItemState( SID_ATTR_XWINDOW, false, &pParentItem ) )
-                    pParent = static_cast<const XWindowItem*>( pParentItem )->GetWindowPtr();
-
                 // desired state
                 ScChangeTrack* pChangeTrack = rDoc.GetChangeTrack();
                 bool bActivateTracking = (pChangeTrack == nullptr);   // toggle
@@ -580,7 +572,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                     if ( !pItem )
                     {
                         // no dialog on playing the macro
-                        ScopedVclPtrInstance<WarningBox> aBox( pParent ? pParent : GetActiveDialogParent(),
+                        ScopedVclPtrInstance<WarningBox> aBox( GetActiveDialogParent(),
                             WinBits(WB_YES_NO | WB_DEF_NO),
                             ScGlobal::GetRscString( STR_END_REDLINING ) );
                         bDo = ( aBox->Execute() == RET_YES );
@@ -626,11 +618,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
 
         case SID_CHG_PROTECT :
             {
-                vcl::Window* pParent = nullptr;
-                const SfxPoolItem* pParentItem;
-                if( pReqArgs && SfxItemState::SET == pReqArgs->GetItemState( SID_ATTR_XWINDOW, false, &pParentItem ) )
-                    pParent = static_cast<const XWindowItem*>( pParentItem )->GetWindowPtr();
-                if ( ExecuteChangeProtectionDialog( pParent ) )
+                if ( ExecuteChangeProtectionDialog( nullptr ) )
                 {
                     rReq.Done();
                     SetDocumentModified();
