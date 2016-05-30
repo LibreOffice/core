@@ -876,9 +876,9 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
     const bool bSwitchH2V = rInf.GetFrame() && rInf.GetFrame()->IsVertical();
     const bool bSwitchL2R = rInf.GetFrame() && rInf.GetFrame()->IsRightToLeft() &&
                             ! rInf.IsIgnoreFrameRTL();
-    const ComplexTextLayoutMode nMode = rInf.GetOut().GetLayoutMode();
+    const ComplexTextLayoutFlags nMode = rInf.GetOut().GetLayoutMode();
     const bool bBidiPor = ( bSwitchL2R !=
-                            ( TEXT_LAYOUT_DEFAULT != ( TEXT_LAYOUT_BIDI_RTL & nMode ) ) );
+                            ( ComplexTextLayoutFlags::Default != ( ComplexTextLayoutFlags::BiDiRtl & nMode ) ) );
 
     // be sure to have the correct layout mode at the printer
     if ( pPrinter )
@@ -1341,7 +1341,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                                                 rInf.GetIdx() + j, i - j );
                         j = i + 1;
                         SwTwips nAdd = pKernArray[ i ] + nKernSum;
-                        if ( ( TEXT_LAYOUT_BIDI_STRONG | TEXT_LAYOUT_BIDI_RTL ) == nMode )
+                        if ( ( ComplexTextLayoutFlags::BiDiStrong | ComplexTextLayoutFlags::BiDiRtl ) == nMode )
                             nAdd *= -1;
                         aTmpPos.X() = aTextOriginPos.X() + nAdd;
                     }

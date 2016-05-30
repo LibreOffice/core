@@ -1511,22 +1511,22 @@ namespace cppcanvas
                     case MetaActionType::LAYOUTMODE:
                     {
                         // TODO(F2): A lot is missing here
-                        ComplexTextLayoutMode nLayoutMode = static_cast<MetaLayoutModeAction*>(pCurrAct)->GetLayoutMode();
+                        ComplexTextLayoutFlags nLayoutMode = static_cast<MetaLayoutModeAction*>(pCurrAct)->GetLayoutMode();
                         ::cppcanvas::internal::OutDevState& rState = rStates.getState();
 
-                        ComplexTextLayoutMode nBidiLayoutMode = nLayoutMode & (TEXT_LAYOUT_BIDI_RTL|TEXT_LAYOUT_BIDI_STRONG);
-                        if( nBidiLayoutMode == TEXT_LAYOUT_DEFAULT)
+                        ComplexTextLayoutFlags nBidiLayoutMode = nLayoutMode & (ComplexTextLayoutFlags::BiDiRtl|ComplexTextLayoutFlags::BiDiStrong);
+                        if( nBidiLayoutMode == ComplexTextLayoutFlags::Default)
                                 rState.textDirection = rendering::TextDirection::WEAK_LEFT_TO_RIGHT;
-                        else if( nBidiLayoutMode == TEXT_LAYOUT_BIDI_STRONG)
+                        else if( nBidiLayoutMode == ComplexTextLayoutFlags::BiDiStrong)
                                 rState.textDirection = rendering::TextDirection::STRONG_LEFT_TO_RIGHT;
-                        else if( nBidiLayoutMode == TEXT_LAYOUT_BIDI_RTL)
+                        else if( nBidiLayoutMode == ComplexTextLayoutFlags::BiDiRtl)
                                 rState.textDirection = rendering::TextDirection::WEAK_RIGHT_TO_LEFT;
-                        else if( nBidiLayoutMode == (TEXT_LAYOUT_BIDI_RTL | TEXT_LAYOUT_BIDI_STRONG))
+                        else if( nBidiLayoutMode == (ComplexTextLayoutFlags::BiDiRtl | ComplexTextLayoutFlags::BiDiStrong))
                                 rState.textDirection = rendering::TextDirection::STRONG_RIGHT_TO_LEFT;
 
                         rState.textAlignment = 0; // TODO(F2): rendering::TextAlignment::LEFT_ALIGNED;
-                        if( (nLayoutMode & (TEXT_LAYOUT_BIDI_RTL | TEXT_LAYOUT_TEXTORIGIN_RIGHT) )
-                            && !(nLayoutMode & TEXT_LAYOUT_TEXTORIGIN_LEFT ) )
+                        if( (nLayoutMode & (ComplexTextLayoutFlags::BiDiRtl | ComplexTextLayoutFlags::TextOriginRight) )
+                            && !(nLayoutMode & ComplexTextLayoutFlags::TextOriginLeft ) )
                         {
                             rState.textAlignment = 1; // TODO(F2): rendering::TextAlignment::RIGHT_ALIGNED;
                         }

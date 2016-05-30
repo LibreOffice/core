@@ -479,7 +479,7 @@ void Writer::Impl_writeText( const Point& rPos, const OUString& rText, const lon
     if( !nLen )
         return;
 
-    const bool bRTL = bool(mpVDev->GetLayoutMode() & TEXT_LAYOUT_BIDI_RTL);
+    const bool bRTL = bool(mpVDev->GetLayoutMode() & ComplexTextLayoutFlags::BiDiRtl);
 
     sal_Int16 nScriptType = ScriptType::LATIN;
     Reference < XBreakIterator > xBI( Impl_GetBreakIterator() );

@@ -265,7 +265,7 @@ void GetTextAreaOutline( const FWData& rFWData, const SdrObject* pCustomShape, F
             pVirDev->SetFont( aFont );
             pVirDev->EnableRTL();
             if ( aParagraphIter->nFrameDirection == FRMDIR_HORI_RIGHT_TOP )
-                pVirDev->SetLayoutMode( TEXT_LAYOUT_BIDI_RTL );
+                pVirDev->SetLayoutMode( ComplexTextLayoutFlags::BiDiRtl );
 
             const SvxCharScaleWidthItem& rCharScaleWidthItem = static_cast<const SvxCharScaleWidthItem&>(pCustomShape->GetMergedItem( EE_CHAR_FONTWIDTH ));
             sal_uInt16 nCharScaleWidth = rCharScaleWidthItem.GetValue();

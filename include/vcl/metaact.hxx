@@ -1461,7 +1461,7 @@ class VCL_DLLPUBLIC MetaLayoutModeAction : public MetaAction
 {
 private:
 
-    ComplexTextLayoutMode  mnLayoutMode;
+    ComplexTextLayoutFlags  mnLayoutMode;
 
 public:
                         MetaLayoutModeAction();
@@ -1473,9 +1473,9 @@ public:
     virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) override;
     virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) override;
 
-    explicit            MetaLayoutModeAction( ComplexTextLayoutMode nLayoutMode );
+    explicit            MetaLayoutModeAction( ComplexTextLayoutFlags nLayoutMode );
 
-    ComplexTextLayoutMode  GetLayoutMode() const { return mnLayoutMode; }
+    ComplexTextLayoutFlags  GetLayoutMode() const { return mnLayoutMode; }
 };
 
 class VCL_DLLPUBLIC MetaTextLanguageAction : public MetaAction

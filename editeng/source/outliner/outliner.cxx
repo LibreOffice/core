@@ -963,10 +963,10 @@ void Outliner::PaintBullet( sal_Int32 nPara, const Point& rStartPos,
                 }
 
                 // VCL will take care of brackets and so on...
-                ComplexTextLayoutMode nLayoutMode = pOutDev->GetLayoutMode();
-                nLayoutMode &= ~(TEXT_LAYOUT_BIDI_RTL|TEXT_LAYOUT_COMPLEX_DISABLED|TEXT_LAYOUT_BIDI_STRONG);
+                ComplexTextLayoutFlags nLayoutMode = pOutDev->GetLayoutMode();
+                nLayoutMode &= ~ComplexTextLayoutFlags(ComplexTextLayoutFlags::BiDiRtl|ComplexTextLayoutFlags::ComplexDisabled|ComplexTextLayoutFlags::BiDiStrong);
                 if ( bRightToLeftPara )
-                    nLayoutMode |= TEXT_LAYOUT_BIDI_RTL | TEXT_LAYOUT_TEXTORIGIN_LEFT | TEXT_LAYOUT_BIDI_STRONG;
+                    nLayoutMode |= ComplexTextLayoutFlags::BiDiRtl | ComplexTextLayoutFlags::TextOriginLeft | ComplexTextLayoutFlags::BiDiStrong;
                 pOutDev->SetLayoutMode( nLayoutMode );
 
                 if(bStrippingPortions)

@@ -273,8 +273,8 @@ void SmDocShell::ArrangeFormula()
 
     // format/draw formulas always from left to right,
     // and numbers should not be converted
-    ComplexTextLayoutMode nLayoutMode = pOutDev->GetLayoutMode();
-    pOutDev->SetLayoutMode( TEXT_LAYOUT_DEFAULT );
+    ComplexTextLayoutFlags nLayoutMode = pOutDev->GetLayoutMode();
+    pOutDev->SetLayoutMode( ComplexTextLayoutFlags::Default );
     sal_Int16 nDigitLang = pOutDev->GetDigitLanguage();
     pOutDev->SetDigitLanguage( LANGUAGE_ENGLISH );
 
@@ -427,8 +427,8 @@ void SmDocShell::DrawFormula(OutputDevice &rDev, Point &rPosition, bool bDrawSel
 
     // format/draw formulas always from left to right
     // and numbers should not be converted
-    ComplexTextLayoutMode nLayoutMode = rDev.GetLayoutMode();
-    rDev.SetLayoutMode( TEXT_LAYOUT_DEFAULT );
+    ComplexTextLayoutFlags nLayoutMode = rDev.GetLayoutMode();
+    rDev.SetLayoutMode( ComplexTextLayoutFlags::Default );
     sal_Int16 nDigitLang = rDev.GetDigitLanguage();
     rDev.SetDigitLanguage( LANGUAGE_ENGLISH );
 

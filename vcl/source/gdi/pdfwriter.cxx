@@ -273,7 +273,7 @@ void PDFWriter::IntersectClipRegion( const Rectangle& rRect )
     xImplementation->intersectClipRegion( rRect );
 }
 
-void PDFWriter::SetLayoutMode( ComplexTextLayoutMode nMode )
+void PDFWriter::SetLayoutMode( ComplexTextLayoutFlags nMode )
 {
     xImplementation->setLayoutMode( nMode );
 }

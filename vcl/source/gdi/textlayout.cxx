@@ -258,11 +258,11 @@ namespace vcl
             return Rectangle();
 
         // determine text layout mode from the RTL-ness of the control whose text we render
-        ComplexTextLayoutMode nTextLayoutMode = m_bRTLEnabled ? TEXT_LAYOUT_BIDI_RTL : TEXT_LAYOUT_DEFAULT;
+        ComplexTextLayoutFlags nTextLayoutMode = m_bRTLEnabled ? ComplexTextLayoutFlags::BiDiRtl : ComplexTextLayoutFlags::Default;
         m_rReferenceDevice.SetLayoutMode( nTextLayoutMode );
-        m_rTargetDevice.SetLayoutMode( nTextLayoutMode | TEXT_LAYOUT_TEXTORIGIN_LEFT );
+        m_rTargetDevice.SetLayoutMode( nTextLayoutMode | ComplexTextLayoutFlags::TextOriginLeft );
 
-        // TEXT_LAYOUT_TEXTORIGIN_LEFT is because when we do actually draw the text (in DrawText( Point, ... )), then
+        // ComplexTextLayoutFlags::TextOriginLeft is because when we do actually draw the text (in DrawText( Point, ... )), then
         // our caller gives us the left border of the draw position, regardless of script type, text layout,
         // and the like in our ctor, we set the map mode of the target device from pixel to twip, but our caller doesn't know this,
         // but passed pixel coordinates. So, adjust the rect.
