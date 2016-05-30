@@ -19,6 +19,10 @@
 #ifndef INCLUDED_COMPHELPER_EXTRACT_HXX
 #define INCLUDED_COMPHELPER_EXTRACT_HXX
 
+#include <sal/config.h>
+
+#include <cassert>
+
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/uno/TypeClass.hpp>
 #include <com/sun/star/uno/Type.hxx>
@@ -38,12 +42,8 @@ namespace cppu
 inline css::uno::Any SAL_CALL int2enum(
     sal_Int32 nEnum, const css::uno::Type & rType )
 {
-    if (rType.getTypeClass() == css::uno::TypeClass_ENUM)
-    {
-        int nVal = nEnum;
-        return css::uno::Any( &nVal, rType );
-    }
-    return css::uno::Any();
+    assert(rType.getTypeClass() == css::uno::TypeClass_ENUM);
+    return css::uno::Any( &nEnum, rType );
 }
 
 /**
