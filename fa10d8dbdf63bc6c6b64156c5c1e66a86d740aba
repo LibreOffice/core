@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_a088f8e8",
+        "filename": "xmloff/source/style/xmlnumfe.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 534,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-05-30T10:32:10Z",
+      "side": 1,
+      "message": "Writing the character without the element doesn\u0027t make sense.\n\nBtw, number:fill-character was proposed to the ODF TC, wasn\u0027t it?",
+      "revId": "fa10d8dbdf63bc6c6b64156c5c1e66a86d740aba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
