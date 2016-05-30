@@ -2459,7 +2459,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                 aRet <<= m_pImpl->m_pProps->bBool4;
                 break;
             case FIELD_PROP_DATE :
-                aRet.setValue(&m_pImpl->m_pProps->aDate, ::cppu::UnoType<util::Date>::get());
+                aRet <<= m_pImpl->m_pProps->aDate.GetUNODate();
                 break;
             case FIELD_PROP_USHORT1:
                 aRet <<= static_cast<sal_Int16>(m_pImpl->m_pProps->nUSHORT1);
