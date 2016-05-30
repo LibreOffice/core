@@ -1,0 +1,125 @@
+./temp/Release/jrd/IntlManager.o: $(wildcard \
+./src/jrd/IntlManager.cpp \
+./src/include/firebird.h \
+./src/include/gen/autoconfig.h \
+./src/include/../common/common.h \
+./src/include/fb_macros.h \
+./src/include/fb_types.h \
+./src/include/types_pub.h \
+./src/jrd/../jrd/IntlManager.h \
+./src/jrd/../jrd/../common/classes/fb_string.h \
+./src/include/fb_exception.h \
+./src/include/fb_types.h \
+./src/include/firebird/Interface.h \
+./src/include/ibase.h \
+./src/include/../jrd/ibase.h \
+./src/include/types_pub.h \
+./src/include/../jrd/../common/dsc_pub.h \
+./src/include/../jrd/../dsql/sqlda_pub.h \
+./src/include/../jrd/blr.h \
+./src/include/consts_pub.h \
+./src/include/../jrd/../jrd/inf_pub.h \
+./src/include/gen/iberror.h \
+./src/include/firebird/IdlFbInterfaces.h \
+./src/include/../common/ThreadStart.h \
+./src/include/../common/../common/ThreadData.h \
+./src/include/fb_pthread.h \
+./src/include/../common/classes/alloc.h \
+./src/include/../common/classes/locks.h \
+./src/include/../common/gdsassert.h \
+./src/include/../common/../yvalve/gds_proto.h \
+./src/include/../common/classes/Reasons.h \
+./src/include/../common/classes/auto.h \
+./src/include/../common/classes/fb_atomic.h \
+./src/include/../common/classes/RefCounted.h \
+./src/jrd/../jrd/../common/config/config_file.h \
+./src/include/../common/classes/fb_pair.h \
+./src/include/../common/classes/objects_array.h \
+./src/include/../common/classes/array.h \
+./src/include/../common/classes/vector.h \
+./src/include/../common/classes/fb_string.h \
+./src/jrd/../common/os/mod_loader.h \
+./src/jrd/../common/intlobj_new.h \
+./src/jrd/../jrd/intl_proto.h \
+./src/jrd/../jrd/../jrd/intl_classes.h \
+./src/jrd/../jrd/../jrd/../common/intlobj_new.h \
+./src/jrd/../jrd/../jrd/../jrd/constants.h \
+./src/jrd/../jrd/../jrd/../common/unicode_util.h \
+./src/jrd/../jrd/../jrd/../common/intlobj_new.h \
+./src/jrd/../jrd/../jrd/../common/../common/IntlUtil.h \
+./src/jrd/../jrd/../jrd/../common/../common/../common/classes/array.h \
+./src/jrd/../jrd/../jrd/../common/../common/../common/classes/auto.h \
+./src/jrd/../jrd/../jrd/../common/../common/../common/classes/GenericMap.h \
+./src/include/../common/classes/tree.h \
+./src/include/../common/classes/vector.h \
+./src/jrd/../jrd/../jrd/../common/../common/../common/classes/fb_string.h \
+./src/jrd/../jrd/../jrd/../common/../common/../common/classes/init.h \
+./src/jrd/../jrd/../jrd/../common/../common/../common/intlobj_new.h \
+./src/jrd/../jrd/../jrd/../common/../common/os/mod_loader.h \
+./src/jrd/../jrd/../jrd/../common/../common/classes/fb_string.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/ucnv.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/ucnv_err.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/utypes.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/umachine.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/ptypes.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/platform.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/uconfig.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/uvernum.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/urename.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/uversion.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/utf.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/utf8.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/utf16.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/utf_old.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/uenum.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/localpointer.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/strenum.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/uobject.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/unistr.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/rep.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/std_string.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/stringpiece.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/bytestream.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/ucasemap.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/ustring.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/putil.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/uiter.h \
+./src/jrd/../jrd/../jrd/../common/CsConvert.h \
+./src/jrd/../jrd/../jrd/../common/../common/classes/array.h \
+./src/jrd/../jrd/../jrd/../common/../common/StatusArg.h \
+./src/include/firebird/Interface.h \
+./src/jrd/../jrd/../jrd/../common/../common/../common/SimpleStatusVector.h \
+./src/jrd/../jrd/../jrd/../common/../common/../common/../common/utils_proto.h \
+./src/jrd/../jrd/../jrd/../common/../common/../common/../common/../common/classes/fb_string.h \
+./src/jrd/../jrd/../jrd/../common/../common/../common/../common/../common/classes/array.h \
+./src/include/gen/iberror.h \
+./src/jrd/../jrd/../jrd/../common/../common/../common/../common/classes/array.h \
+./src/jrd/../jrd/../jrd/../common/CharSet.h \
+./src/jrd/../jrd/../jrd/../common/CsConvert.h \
+./src/jrd/../jrd/../jrd/../common/TextType.h \
+./src/jrd/../jrd/../jrd/../common/../common/classes/MetaName.h \
+./src/include/../jrd/constants.h \
+./src/jrd/../jrd/intl.h \
+./src/jrd/../jrd/../common/dsc.h \
+./src/jrd/../jrd/../common/../common/dsc_pub.h \
+./src/jrd/../jrd/../common/../jrd/ods.h \
+./src/jrd/../jrd/../common/../jrd/../jrd/RecordNumber.h \
+./src/jrd/../jrd/../common/../jrd/../jrd/../common/gdsassert.h \
+./src/jrd/../jrd/../common/../jrd/../common/classes/fb_string.h \
+./src/jrd/../jrd/../common/../intl/charsets.h \
+./src/jrd/../jrd/../intl/charsets.h \
+./src/jrd/../common/isc_proto.h \
+./src/jrd/../common/../common/classes/fb_string.h \
+./src/jrd/../common/utils_proto.h \
+./src/jrd/../common/config/config.h \
+./src/include/../common/config/config_file.h \
+./src/include/../common/classes/ImplementHelper.h \
+./src/include/../yvalve/gds_proto.h \
+./src/include/../common/classes/init.h \
+./src/include/../common/StatusArg.h \
+./src/jrd/../common/classes/GenericMap.h \
+./src/jrd/../common/classes/objects_array.h \
+./src/jrd/../common/classes/fb_string.h \
+./src/jrd/../common/classes/init.h \
+./src/jrd/../common/ScanDir.h \
+./src/jrd/../common/config/config_file.h)
