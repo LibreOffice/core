@@ -1347,7 +1347,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                             {
                                 aEmbeddedStr = *pElemStr;
                             }
-                            else
+                            else if (pElemStr->getLength() >= 2)
                             {
                                 SvNumberformat::InsertBlanks( aEmbeddedStr, 0, (*pElemStr)[1] );
                             }
@@ -1419,7 +1419,8 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                         //  (#i20396# the spaces may also be in embedded-text elements)
 
                         OUString aBlanks;
-                        SvNumberformat::InsertBlanks( aBlanks, 0, (*pElemStr)[1] );
+                        if (pElemStr->getLength() >= 2)
+                            SvNumberformat::InsertBlanks( aBlanks, 0, (*pElemStr)[1] );
                         AddToTextElement_Impl( aBlanks );
                     }
                     break;
