@@ -181,6 +181,18 @@ bool Scheduler::ProcessTaskScheduling( bool bTimerOnly )
         return false;
 }
 
+static bool g_bDeterministicMode = false;
+
+void Scheduler::SetDeterministicMode(bool bDeterministic)
+{
+    g_bDeterministicMode = bDeterministic;
+}
+
+bool Scheduler::GetDeterministicMode()
+{
+    return g_bDeterministicMode;
+}
+
 sal_uInt64 Scheduler::CalculateMinimumTimeout( bool &bHasActiveIdles )
 {
     // process all pending Tasks
