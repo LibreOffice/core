@@ -211,6 +211,10 @@ published service TextTable
      */
     [optional, property] boolean CollapsingBorders;
 
+    /** contains the name of table style used by the table.
+     */
+    [optional, property] string TableTemplateName;
+
     /** Grab bag of table properties, used as a string-any map for interim interop purposes.
 
         @since LibreOffice 4.3

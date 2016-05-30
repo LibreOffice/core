@@ -106,6 +106,8 @@
 #include <comphelper/sequence.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <swtable.hxx>
+#include <docsh.hxx>
+#include <fesh.hxx>
 
 using namespace ::com::sun::star;
 using ::editeng::SvxBorderLine;
@@ -2779,6 +2781,16 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName, const uno::An
 
                 case FN_UNO_TABLE_COLUMN_RELATIVE_SUM:/*_readonly_*/ break;
 
+                case FN_UNO_TABLE_TEMPLATE_NAME:
+                {
+                    SwTable* pTable = SwTable::FindTable(pFormat);
+                    OUString sName; aValue >>= sName;
+                    pTable->SetTableStyleName(sName);
+                    SwDoc* pDoc = pFormat->GetDoc();
+                    pDoc->GetDocShell()->GetFEShell()->UpdateTableStyleFormatting(pTable->GetTableNode());
+                }
+                break;
+
                 default:
                 {
                     SwAttrSet aSet(pFormat->GetAttrSet());
@@ -3015,6 +3027,14 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName)
                                         SwXTextSections::GetObject( *rSect.GetFormat() );
                         aRet <<= xSect;
                     }
+                }
+                break;
+
+                case FN_UNO_TABLE_TEMPLATE_NAME:
+                {
+                    SwTable* pTable = SwTable::FindTable(pFormat);
+                    OUString sName = pTable->GetTableStyleName();
+                    aRet <<= sName;
                 }
                 break;
 
