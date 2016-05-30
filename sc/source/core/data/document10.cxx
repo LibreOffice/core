@@ -82,7 +82,7 @@ bool ScDocument::CopyOneCellFromClip(
     if (nDestColSize < nSrcColSize)
         return false;
 
-    if (rCxt.getClipDoc()->maTabs.size() > 1)
+    if (pClipDoc->maTabs.size() > 1)
         // Copying from multiple source sheets is not handled here.
         return false;
 
