@@ -175,7 +175,7 @@ public:
     // For LibreOffice internal D&D we provide the Transferable without Gtk
     // intermediaries as a shortcut, see tdf#100097 for how dbaccess depends on this
     static GtkDragSource* g_ActiveDragSource;
-    css::uno::Reference<css::datatransfer::XTransferable> GetTransferrable() const { return m_xTrans; }
+    css::uno::Reference<css::datatransfer::XTransferable> const & GetTransferrable() const { return m_xTrans; }
 };
 
 #endif
