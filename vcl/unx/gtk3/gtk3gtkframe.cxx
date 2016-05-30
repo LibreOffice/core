@@ -3694,7 +3694,7 @@ static bool checkSingleKeyCommitHack( guint keyval, sal_Unicode cCode )
     return bRet;
 }
 
-void GtkSalFrame::IMHandler::signalIMCommit( GtkIMContext* pContext, gchar* pText, gpointer im_handler )
+void GtkSalFrame::IMHandler::signalIMCommit( GtkIMContext* /*pContext*/, gchar* pText, gpointer im_handler )
 {
     GtkSalFrame::IMHandler* pThis = static_cast<GtkSalFrame::IMHandler*>(im_handler);
 
@@ -3755,15 +3755,6 @@ void GtkSalFrame::IMHandler::signalIMCommit( GtkIMContext* pContext, gchar* pTex
             pThis->updateIMSpotLocation();
         }
     }
-#ifdef SOLARIS
-    // #i51356# workaround a solaris IIIMP bug
-    // in case of partial commits the preedit changed signal
-    // and commit signal come in wrong order
-    if( ! aDel.isDeleted() )
-        signalIMPreeditChanged( pContext, im_handler );
-#else
-    (void) pContext;
-#endif
 }
 
 void GtkSalFrame::IMHandler::signalIMPreeditChanged( GtkIMContext*, gpointer im_handler )
