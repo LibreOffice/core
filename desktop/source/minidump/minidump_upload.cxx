@@ -73,8 +73,8 @@ std::string generate_json(const std::map<std::string, std::string>& parameters)
         if (!first)
         {
             stream << ",\n";
-            first = false;
         }
+        first = false;
         stream << "\"" << itr->first << "\": \"" << itr->second << "\"";
     }
     stream << "\n}";
