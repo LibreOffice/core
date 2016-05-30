@@ -1,0 +1,41 @@
+diff -ur makefile.include makefile.include
+--- makefile.include	2016-02-05 23:25:32.000000000 +0100
++++ makefile.include	2016-07-08 12:28:49.062103200 +0200
+@@ -25,30 +25,30 @@
+    MAKE=make
+ endif
+ 
+-CFLAGS += -I./ -Wall -Wsign-compare -Wextra -Wshadow
++#CFLAGS += -I./ -Wall -Wsign-compare -Wextra -Wshadow
+ 
+ ifndef NO_ADDTL_WARNINGS
+ # additional warnings
+-CFLAGS += -Wsystem-headers -Wdeclaration-after-statement -Wbad-function-cast -Wcast-align
+-CFLAGS += -Wstrict-prototypes -Wpointer-arith
++#CFLAGS += -Wsystem-headers -Wdeclaration-after-statement -Wbad-function-cast -Wcast-align
++#CFLAGS += -Wstrict-prototypes -Wpointer-arith
+ endif
+ 
+ ifdef COMPILE_DEBUG
+ #debug
+-CFLAGS += -g3
++#CFLAGS += -g3
+ else
+ 
+ ifdef COMPILE_SIZE
+ #for size
+-CFLAGS += -Os
++#CFLAGS += -Os
+ else
+ 
+ ifndef IGNORE_SPEED
+ #for speed
+-CFLAGS += -O3 -funroll-loops
++#CFLAGS += -O3 -funroll-loops
+ 
+ #x86 optimizations [should be valid for any GCC install though]
+-CFLAGS  += -fomit-frame-pointer
++#CFLAGS  += -fomit-frame-pointer
+ endif
+ 
+ endif # COMPILE_SIZE
