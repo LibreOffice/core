@@ -824,6 +824,12 @@ GtkDragSource::~GtkDragSource()
 {
     if (m_pFrame)
         m_pFrame->deregisterDragSource(this);
+
+    if (GtkDragSource::g_ActiveDragSource == this)
+    {
+        SAL_WARN( "vcl.gtk", "dragEnd should have been called on GtkDragSource before dtor");
+        GtkDragSource::g_ActiveDragSource = nullptr;
+    }
 }
 
 void GtkDragSource::deinitialize()
