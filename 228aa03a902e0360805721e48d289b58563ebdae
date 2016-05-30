@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_80121461",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4307,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-05-30T13:37:54Z",
+      "side": 1,
+      "message": "I\u0027d rather pull this down to the end of the loop and combine with ...",
+      "revId": "228aa03a902e0360805721e48d289b58563ebdae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_e0092033",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4381,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-05-30T13:37:54Z",
+      "side": 1,
+      "message": "... this if here. So it would form\n\n if (j)\n     j--;\n else\n    bStop \u003d true;\n\nBUT, where\u0027s the difference between\n\n while (!bStop)\n {\n     if (j)\n         j--;\n     else\n         bStop \u003d true;\n }\n\nand the original\n\n while (j \u003e 0)\n {\n     j--;\n }\n\nMaybe I\u0027m blind but I see none. I just find the new code harder to read.",
+      "revId": "228aa03a902e0360805721e48d289b58563ebdae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
