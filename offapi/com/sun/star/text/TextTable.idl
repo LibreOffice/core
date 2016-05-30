@@ -221,6 +221,12 @@ published service TextTable
     */
     [optional, property] sequence<com::sun::star::beans::PropertyValue> TableInteropGrabBag;
 
+    /** contains the name of table style used by the table.
+
+        @since LibreOffice 5.3
+     */
+    [optional, property] string TableTemplateName;
+
 };
 
 
