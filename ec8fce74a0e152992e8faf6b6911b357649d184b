@@ -53,6 +53,24 @@
     },
     {
       "key": {
+        "uuid": "da7fb54a_60a6f0c2",
+        "filename": "sw/source/core/unocore/unostyle.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 4249,
+      "author": {
+        "id": 1001243
+      },
+      "writtenOn": "2016-05-30T12:18:57Z",
+      "side": 1,
+      "message": "The numbers in GetBoxFormat describes cells in SwTableAutoFormat \nhttps://docs.libreoffice.org/sw/html/tblafmt_8hxx_source.html#l00185\nThere are 16 cells to describe style which have to be mapped into 10 cells:\n\"first-row\", \"last-row\", \"first-column\", \"last-column\", \"body\", \"even-rows\", \"odd-rows\", \"even-columns\", \"odd-columns\", \"background\"\n\nI can\u0027t use the defined constants because they describe something else.",
+      "parentUuid": "da7fb54a_a0e2b801",
+      "revId": "ec8fce74a0e152992e8faf6b6911b357649d184b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da7fb54a_c0e7bc10",
         "filename": "sw/source/core/unocore/unostyle.cxx",
         "patchSetId": 3
