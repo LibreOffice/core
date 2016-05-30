@@ -31,7 +31,7 @@
 #include <memory>
 
 GfxLink::GfxLink() :
-    meType      ( GFX_LINK_TYPE_NONE ),
+    meType      ( GfxLinkType::NONE ),
     mpBuf       ( nullptr ),
     mpSwap      ( nullptr ),
     mnBufSize   ( 0 ),
@@ -169,18 +169,18 @@ bool GfxLink::LoadNative( Graphic& rGraphic )
 
             switch( meType )
             {
-                case GFX_LINK_TYPE_NATIVE_GIF: nCvtType = ConvertDataFormat::GIF; break;
+                case GfxLinkType::NativeGif: nCvtType = ConvertDataFormat::GIF; break;
 
                 // #i15508# added BMP type for better exports (reload when swapped - checked, works)
-                case GFX_LINK_TYPE_NATIVE_BMP: nCvtType = ConvertDataFormat::BMP; break;
+                case GfxLinkType::NativeBmp: nCvtType = ConvertDataFormat::BMP; break;
 
-                case GFX_LINK_TYPE_NATIVE_JPG: nCvtType = ConvertDataFormat::JPG; break;
-                case GFX_LINK_TYPE_NATIVE_PNG: nCvtType = ConvertDataFormat::PNG; break;
-                case GFX_LINK_TYPE_NATIVE_TIF: nCvtType = ConvertDataFormat::TIF; break;
-                case GFX_LINK_TYPE_NATIVE_WMF: nCvtType = ConvertDataFormat::WMF; break;
-                case GFX_LINK_TYPE_NATIVE_MET: nCvtType = ConvertDataFormat::MET; break;
-                case GFX_LINK_TYPE_NATIVE_PCT: nCvtType = ConvertDataFormat::PCT; break;
-                case GFX_LINK_TYPE_NATIVE_SVG: nCvtType = ConvertDataFormat::SVG; break;
+                case GfxLinkType::NativeJpg: nCvtType = ConvertDataFormat::JPG; break;
+                case GfxLinkType::NativePng: nCvtType = ConvertDataFormat::PNG; break;
+                case GfxLinkType::NativeTif: nCvtType = ConvertDataFormat::TIF; break;
+                case GfxLinkType::NativeWmf: nCvtType = ConvertDataFormat::WMF; break;
+                case GfxLinkType::NativeMet: nCvtType = ConvertDataFormat::MET; break;
+                case GfxLinkType::NativePct: nCvtType = ConvertDataFormat::PCT; break;
+                case GfxLinkType::NativeSvg: nCvtType = ConvertDataFormat::SVG; break;
 
                 default: nCvtType = ConvertDataFormat::Unknown; break;
             }
@@ -245,7 +245,7 @@ SvStream& WriteGfxLink( SvStream& rOStream, const GfxLink& rGfxLink )
     std::unique_ptr<VersionCompat> pCompat(new VersionCompat( rOStream, StreamMode::WRITE, 2 ));
 
     // Version 1
-    rOStream.WriteUInt16( rGfxLink.GetType() ).WriteUInt32( rGfxLink.GetDataSize() ).WriteUInt32( rGfxLink.GetUserId() );
+    rOStream.WriteUInt16( (sal_uInt16)rGfxLink.GetType() ).WriteUInt32( rGfxLink.GetDataSize() ).WriteUInt32( rGfxLink.GetUserId() );
 
     // Version 2
     WritePair( rOStream, rGfxLink.GetPrefSize() );

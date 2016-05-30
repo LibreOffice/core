@@ -3853,25 +3853,25 @@ void RtfAttributeOutput::FlyFrameGraphic(const SwFlyFrameFormat* pFlyFrameFormat
         // to PNG, else the BMP array will be used.
         // It may work using direct DIB data, but that needs to be checked eventually
         //
-        // #i15508# before GFX_LINK_TYPE_NATIVE_BMP was added the graphic data
+        // #i15508# before GfxLinkType::NativeBmp was added the graphic data
         // (to be hold in pGraphicAry) was not available; thus for now to stay
         // compatible, keep it that way by assigning NULL value to pGraphicAry
-        case GFX_LINK_TYPE_NATIVE_BMP:
+        case GfxLinkType::NativeBmp:
             //    pBLIPType = OOO_STRING_SVTOOLS_RTF_WBITMAP;
             pGraphicAry = nullptr;
             break;
 
-        case GFX_LINK_TYPE_NATIVE_JPG:
+        case GfxLinkType::NativeJpg:
             pBLIPType = OOO_STRING_SVTOOLS_RTF_JPEGBLIP;
             break;
-        case GFX_LINK_TYPE_NATIVE_PNG:
+        case GfxLinkType::NativePng:
             pBLIPType = OOO_STRING_SVTOOLS_RTF_PNGBLIP;
             break;
-        case GFX_LINK_TYPE_NATIVE_WMF:
+        case GfxLinkType::NativeWmf:
             pBLIPType =
                 IsEMF(pGraphicAry, nSize) ? OOO_STRING_SVTOOLS_RTF_EMFBLIP : OOO_STRING_SVTOOLS_RTF_WMETAFILE;
             break;
-        case GFX_LINK_TYPE_NATIVE_GIF:
+        case GfxLinkType::NativeGif:
             // GIF is not supported by RTF, but we override default conversion to WMF, PNG seems fits better here.
             aConvertDestinationFormat = ConvertDataFormat::PNG;
             pConvertDestinationBLIPType = OOO_STRING_SVTOOLS_RTF_PNGBLIP;

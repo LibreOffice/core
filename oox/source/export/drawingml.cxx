@@ -841,43 +841,43 @@ OUString DrawingML::WriteImage( const Graphic& rGraphic , bool bRelPathToMedia )
 
     switch ( aLink.GetType() )
     {
-        case GFX_LINK_TYPE_NATIVE_GIF:
+        case GfxLinkType::NativeGif:
             sMediaType = "image/gif";
             pExtension = ".gif";
             break;
 
         // #i15508# added BMP type for better exports
         // export not yet active, so adding for reference (not checked)
-        case GFX_LINK_TYPE_NATIVE_BMP:
+        case GfxLinkType::NativeBmp:
             sMediaType = "image/bmp";
             pExtension = ".bmp";
             break;
 
-        case GFX_LINK_TYPE_NATIVE_JPG:
+        case GfxLinkType::NativeJpg:
             sMediaType = "image/jpeg";
             pExtension = ".jpeg";
             break;
-        case GFX_LINK_TYPE_NATIVE_PNG:
+        case GfxLinkType::NativePng:
             sMediaType = "image/png";
             pExtension = ".png";
             break;
-        case GFX_LINK_TYPE_NATIVE_TIF:
+        case GfxLinkType::NativeTif:
             sMediaType = "image/tiff";
             pExtension = ".tif";
             break;
-        case GFX_LINK_TYPE_NATIVE_WMF:
+        case GfxLinkType::NativeWmf:
             sMediaType = "image/x-wmf";
             pExtension = ".wmf";
             break;
-        case GFX_LINK_TYPE_NATIVE_MET:
+        case GfxLinkType::NativeMet:
             sMediaType = "image/x-met";
             pExtension = ".met";
             break;
-        case GFX_LINK_TYPE_NATIVE_PCT:
+        case GfxLinkType::NativePct:
             sMediaType = "image/x-pict";
             pExtension = ".pct";
             break;
-        case GFX_LINK_TYPE_NATIVE_MOV:
+        case GfxLinkType::NativeMov:
             sMediaType = "application/movie";
             pExtension = ".MOV";
             break;
