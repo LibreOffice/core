@@ -1,0 +1,87 @@
+./temp/Release/intl/cs_icu.o: $(wildcard \
+./src/intl/cs_icu.cpp \
+./src/include/firebird.h \
+./src/include/gen/autoconfig.h \
+./src/include/../common/common.h \
+./src/include/fb_macros.h \
+./src/include/fb_types.h \
+./src/include/types_pub.h \
+./src/intl/../intl/ldcommon.h \
+./src/intl/../intl/../common/classes/alloc.h \
+./src/include/../common/classes/locks.h \
+./src/include/fb_exception.h \
+./src/include/fb_types.h \
+./src/include/firebird/Interface.h \
+./src/include/ibase.h \
+./src/include/../jrd/ibase.h \
+./src/include/types_pub.h \
+./src/include/../jrd/../common/dsc_pub.h \
+./src/include/../jrd/../dsql/sqlda_pub.h \
+./src/include/../jrd/blr.h \
+./src/include/consts_pub.h \
+./src/include/../jrd/../jrd/inf_pub.h \
+./src/include/gen/iberror.h \
+./src/include/firebird/IdlFbInterfaces.h \
+./src/include/../common/ThreadStart.h \
+./src/include/../common/../common/ThreadData.h \
+./src/include/fb_pthread.h \
+./src/include/../common/gdsassert.h \
+./src/include/../common/../yvalve/gds_proto.h \
+./src/include/../common/classes/Reasons.h \
+./src/include/../common/classes/auto.h \
+./src/include/../common/classes/fb_atomic.h \
+./src/intl/../intl/../common/intlobj_new.h \
+./src/intl/../intl/../jrd/constants.h \
+./src/intl/../intl/../common/gdsassert.h \
+./src/intl/../intl/../intl/charsets.h \
+./src/intl/../intl/../intl/country_codes.h \
+./src/intl/../intl/../intl/ld.h \
+./src/intl/../intl/../common/classes/Aligner.h \
+./src/include/../common/classes/array.h \
+./src/include/../common/classes/vector.h \
+./src/include/../common/classes/alloc.h \
+./src/intl/cs_icu.h \
+./src/intl/cv_icu.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/ucnv.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/ucnv_err.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/utypes.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/umachine.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/ptypes.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/platform.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/uconfig.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/uvernum.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/urename.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/uversion.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/utf.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/utf8.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/utf16.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/utf_old.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/uenum.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/localpointer.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/strenum.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/uobject.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/unistr.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/rep.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/std_string.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/stringpiece.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/bytestream.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/ucasemap.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/ustring.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/putil.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/uiter.h \
+./src/intl/../common/unicode_util.h \
+./src/intl/../common/intlobj_new.h \
+./src/intl/../common/../common/IntlUtil.h \
+./src/intl/../common/../common/../common/classes/array.h \
+./src/intl/../common/../common/../common/classes/auto.h \
+./src/intl/../common/../common/../common/classes/GenericMap.h \
+./src/include/../common/classes/fb_string.h \
+./src/include/../common/classes/RefCounted.h \
+./src/include/../common/classes/fb_pair.h \
+./src/include/../common/classes/tree.h \
+./src/include/../common/classes/vector.h \
+./src/intl/../common/../common/../common/classes/fb_string.h \
+./src/intl/../common/../common/../common/classes/init.h \
+./src/intl/../common/../common/../common/intlobj_new.h \
+./src/intl/../common/../common/os/mod_loader.h \
+./src/intl/../common/../common/classes/fb_string.h)

@@ -1,0 +1,29 @@
+./temp/Release/common/classes/timestamp.o: $(wildcard \
+./src/common/classes/timestamp.cpp \
+./src/include/firebird.h \
+./src/include/gen/autoconfig.h \
+./src/include/../common/common.h \
+./src/include/fb_macros.h \
+./src/include/fb_types.h \
+./src/include/types_pub.h \
+./src/include/fb_exception.h \
+./src/include/fb_types.h \
+./src/include/firebird/Interface.h \
+./src/include/ibase.h \
+./src/include/../jrd/ibase.h \
+./src/include/types_pub.h \
+./src/include/../jrd/../common/dsc_pub.h \
+./src/include/../jrd/../dsql/sqlda_pub.h \
+./src/include/../jrd/blr.h \
+./src/include/consts_pub.h \
+./src/include/../jrd/../jrd/inf_pub.h \
+./src/include/gen/iberror.h \
+./src/include/firebird/IdlFbInterfaces.h \
+./src/include/../common/ThreadStart.h \
+./src/include/../common/../common/ThreadData.h \
+./src/include/fb_pthread.h \
+./src/include/../common/gdsassert.h \
+./src/include/../common/../yvalve/gds_proto.h \
+./src/include/../common/classes/timestamp.h \
+./src/include/../common/classes/NoThrowTimeStamp.h \
+./src/include/../common/dsc_pub.h)

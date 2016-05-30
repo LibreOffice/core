@@ -1,0 +1,137 @@
+./temp/Release/burp/canonical.o: $(wildcard \
+./src/burp/canonical.cpp \
+./src/include/firebird.h \
+./src/include/gen/autoconfig.h \
+./src/include/../common/common.h \
+./src/include/fb_macros.h \
+./src/include/fb_types.h \
+./src/include/types_pub.h \
+./src/burp/../burp/burp.h \
+./src/burp/../burp/../jrd/ibase.h \
+./src/include/types_pub.h \
+./src/burp/../burp/../jrd/../common/dsc_pub.h \
+./src/burp/../burp/../jrd/../dsql/sqlda_pub.h \
+./src/burp/../burp/../jrd/blr.h \
+./src/include/consts_pub.h \
+./src/burp/../burp/../jrd/../jrd/inf_pub.h \
+./src/include/gen/iberror.h \
+./src/burp/../burp/../common/dsc.h \
+./src/burp/../burp/../common/../common/dsc_pub.h \
+./src/burp/../burp/../common/../jrd/ods.h \
+./src/burp/../burp/../common/../jrd/../jrd/RecordNumber.h \
+./src/burp/../burp/../common/../jrd/../jrd/../common/gdsassert.h \
+./src/burp/../burp/../common/../jrd/../jrd/../common/../yvalve/gds_proto.h \
+./src/burp/../burp/../common/../jrd/../common/classes/fb_string.h \
+./src/include/fb_exception.h \
+./src/include/fb_types.h \
+./src/include/firebird/Interface.h \
+./src/include/ibase.h \
+./src/include/../jrd/ibase.h \
+./src/include/firebird/IdlFbInterfaces.h \
+./src/include/../common/ThreadStart.h \
+./src/include/../common/../common/ThreadData.h \
+./src/include/fb_pthread.h \
+./src/include/../common/classes/alloc.h \
+./src/include/../common/classes/locks.h \
+./src/include/../common/gdsassert.h \
+./src/include/../common/classes/Reasons.h \
+./src/include/../common/classes/auto.h \
+./src/include/../common/classes/fb_atomic.h \
+./src/include/../common/classes/RefCounted.h \
+./src/burp/../burp/../common/../intl/charsets.h \
+./src/burp/../burp/../burp/misc_proto.h \
+./src/burp/../burp/../yvalve/gds_proto.h \
+./src/burp/../burp/../common/ThreadData.h \
+./src/burp/../burp/../common/UtilSvc.h \
+./src/burp/../burp/../common/../common/classes/alloc.h \
+./src/burp/../burp/../common/../common/classes/array.h \
+./src/include/../common/classes/vector.h \
+./src/burp/../burp/../common/../common/classes/fb_string.h \
+./src/burp/../burp/../common/classes/array.h \
+./src/burp/../burp/../common/classes/fb_pair.h \
+./src/burp/../burp/../common/classes/MetaName.h \
+./src/include/../common/classes/fb_string.h \
+./src/include/../common/classes/fb_pair.h \
+./src/include/../jrd/constants.h \
+./src/include/gen/../../jrd/SimilarToMatcher.h \
+./src/include/gen/../../jrd/../jrd/intl_classes.h \
+./src/include/gen/../../jrd/../jrd/../common/intlobj_new.h \
+./src/include/gen/../../jrd/../jrd/../jrd/constants.h \
+./src/include/gen/../../jrd/../jrd/../common/unicode_util.h \
+./src/include/gen/../../jrd/../jrd/../common/intlobj_new.h \
+./src/include/gen/../../jrd/../jrd/../common/../common/IntlUtil.h \
+./src/include/gen/../../jrd/../jrd/../common/../common/../common/classes/array.h \
+./src/include/gen/../../jrd/../jrd/../common/../common/../common/classes/auto.h \
+./src/include/gen/../../jrd/../jrd/../common/../common/../common/classes/GenericMap.h \
+./src/include/../common/classes/tree.h \
+./src/include/../common/classes/vector.h \
+./src/include/gen/../../jrd/../jrd/../common/../common/../common/classes/fb_string.h \
+./src/include/gen/../../jrd/../jrd/../common/../common/../common/classes/init.h \
+./src/include/gen/../../jrd/../jrd/../common/../common/../common/intlobj_new.h \
+./src/include/gen/../../jrd/../jrd/../common/../common/os/mod_loader.h \
+./src/include/gen/../../jrd/../jrd/../common/../common/classes/fb_string.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/ucnv.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/ucnv_err.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/utypes.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/umachine.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/ptypes.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/platform.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/uconfig.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/uvernum.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/urename.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/uversion.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/utf.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/utf8.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/utf16.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/utf_old.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/uenum.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/localpointer.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/strenum.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/uobject.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/unistr.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/rep.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/std_string.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/stringpiece.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/bytestream.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/ucasemap.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/ustring.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/putil.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/uiter.h \
+./src/include/gen/../../jrd/../jrd/../common/CsConvert.h \
+./src/include/gen/../../jrd/../jrd/../common/../common/classes/array.h \
+./src/include/gen/../../jrd/../jrd/../common/../common/StatusArg.h \
+./src/include/firebird/Interface.h \
+./src/include/gen/../../jrd/../jrd/../common/../common/../common/SimpleStatusVector.h \
+./src/include/gen/../../jrd/../jrd/../common/../common/../common/../common/utils_proto.h \
+./src/include/gen/../../jrd/../jrd/../common/../common/../common/../common/../common/classes/fb_string.h \
+./src/include/gen/../../jrd/../jrd/../common/../common/../common/../common/../common/classes/array.h \
+./src/include/gen/iberror.h \
+./src/include/gen/../../jrd/../jrd/../common/../common/../common/../common/classes/array.h \
+./src/include/gen/../../jrd/../jrd/../common/CharSet.h \
+./src/include/gen/../../jrd/../jrd/../common/CsConvert.h \
+./src/include/gen/../../jrd/../jrd/../common/TextType.h \
+./src/include/gen/../../jrd/../jrd/../common/../common/classes/MetaName.h \
+./src/include/gen/../../jrd/../jrd/evl_string.h \
+./src/include/gen/../../jrd/../jrd/../common/classes/alloc.h \
+./src/include/gen/../../jrd/../jrd/../common/classes/array.h \
+./src/burp/../burp/../burp/std_desc.h \
+./src/burp/../jrd/align.h \
+./src/burp/../jrd/../jrd/blr.h \
+./src/burp/../jrd/../common/dsc.h \
+./src/burp/../jrd/../jrd/RecordNumber.h \
+./src/burp/../common/sdl.h \
+./src/burp/../common/../common/classes/MetaName.h \
+./src/burp/../burp/canon_proto.h \
+./src/burp/../common/sdl_proto.h \
+./src/burp/../common/xdr_proto.h \
+./src/burp/../common/../common/dsc.h \
+./src/burp/../common/../common/xdr.h \
+./src/burp/../common/gdsassert.h \
+./src/burp/../common/StatusHolder.h \
+./src/burp/../common/../common/utils_proto.h \
+./src/burp/../common/../common/classes/ImplementHelper.h \
+./src/include/../yvalve/gds_proto.h \
+./src/include/../common/classes/init.h \
+./src/include/../common/StatusArg.h \
+./src/burp/../common/../common/SimpleStatusVector.h \
+./src/burp/../common/../common/DynamicStrings.h)

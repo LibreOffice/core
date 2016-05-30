@@ -1,0 +1,121 @@
+./temp/Release/utilities/ntrace/traceplugin.o: $(wildcard \
+./src/utilities/ntrace/traceplugin.cpp \
+./src/include/firebird.h \
+./src/include/gen/autoconfig.h \
+./src/include/../common/common.h \
+./src/include/fb_macros.h \
+./src/include/fb_types.h \
+./src/include/types_pub.h \
+./src/include/../common/classes/ImplementHelper.h \
+./src/include/firebird/Interface.h \
+./src/include/ibase.h \
+./src/include/../jrd/ibase.h \
+./src/include/types_pub.h \
+./src/include/../jrd/../common/dsc_pub.h \
+./src/include/../jrd/../dsql/sqlda_pub.h \
+./src/include/../jrd/blr.h \
+./src/include/consts_pub.h \
+./src/include/../jrd/../jrd/inf_pub.h \
+./src/include/gen/iberror.h \
+./src/include/firebird/IdlFbInterfaces.h \
+./src/include/../common/classes/alloc.h \
+./src/include/../common/classes/locks.h \
+./src/include/fb_exception.h \
+./src/include/fb_types.h \
+./src/include/firebird/Interface.h \
+./src/include/../common/ThreadStart.h \
+./src/include/../common/../common/ThreadData.h \
+./src/include/fb_pthread.h \
+./src/include/../common/gdsassert.h \
+./src/include/../common/../yvalve/gds_proto.h \
+./src/include/../common/classes/Reasons.h \
+./src/include/../common/classes/auto.h \
+./src/include/../common/classes/fb_atomic.h \
+./src/include/gen/iberror.h \
+./src/include/../yvalve/gds_proto.h \
+./src/include/../common/classes/init.h \
+./src/include/../common/classes/RefCounted.h \
+./src/include/../common/StatusArg.h \
+./src/include/../common/../common/SimpleStatusVector.h \
+./src/include/../common/../common/../common/utils_proto.h \
+./src/include/../common/../common/../common/../common/classes/fb_string.h \
+./src/include/../common/../common/../common/../common/classes/array.h \
+./src/include/../common/classes/vector.h \
+./src/include/../common/../common/../common/classes/array.h \
+./src/utilities/ntrace/TraceConfiguration.h \
+./src/utilities/ntrace/../../common/classes/auto.h \
+./src/utilities/ntrace/../../common/classes/fb_string.h \
+./src/utilities/ntrace/../../common/config/config_file.h \
+./src/include/../common/classes/fb_pair.h \
+./src/include/../common/classes/objects_array.h \
+./src/include/../common/classes/array.h \
+./src/include/../common/classes/fb_string.h \
+./src/utilities/ntrace/TracePluginConfig.h \
+./src/include/../common/config/config_file.h \
+./src/utilities/ntrace/paramtable.h \
+./src/utilities/ntrace/TracePluginImpl.h \
+./src/utilities/ntrace/../../jrd/ntrace.h \
+./src/utilities/ntrace/TraceUnicodeUtils.h \
+./src/utilities/ntrace/../../jrd/intl_classes.h \
+./src/utilities/ntrace/../../jrd/../common/intlobj_new.h \
+./src/utilities/ntrace/../../jrd/../jrd/constants.h \
+./src/utilities/ntrace/../../jrd/../common/unicode_util.h \
+./src/utilities/ntrace/../../jrd/../common/intlobj_new.h \
+./src/utilities/ntrace/../../jrd/../common/../common/IntlUtil.h \
+./src/utilities/ntrace/../../jrd/../common/../common/../common/classes/array.h \
+./src/utilities/ntrace/../../jrd/../common/../common/../common/classes/auto.h \
+./src/utilities/ntrace/../../jrd/../common/../common/../common/classes/GenericMap.h \
+./src/include/../common/classes/tree.h \
+./src/include/../common/classes/vector.h \
+./src/utilities/ntrace/../../jrd/../common/../common/../common/classes/fb_string.h \
+./src/utilities/ntrace/../../jrd/../common/../common/../common/classes/init.h \
+./src/utilities/ntrace/../../jrd/../common/../common/../common/intlobj_new.h \
+./src/utilities/ntrace/../../jrd/../common/../common/os/mod_loader.h \
+./src/utilities/ntrace/../../jrd/../common/../common/classes/fb_string.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/ucnv.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/ucnv_err.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/utypes.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/umachine.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/ptypes.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/platform.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/uconfig.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/uvernum.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/urename.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/uversion.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/utf.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/utf8.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/utf16.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/utf_old.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/uenum.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/localpointer.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/strenum.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/uobject.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/unistr.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/rep.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/std_string.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/stringpiece.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/bytestream.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/ucasemap.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/ustring.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/putil.h \
+ /home/wastack/libreoffice/core/workdir/UnpackedTarball/icu/source/common/unicode/uiter.h \
+./src/utilities/ntrace/../../jrd/../common/CsConvert.h \
+./src/utilities/ntrace/../../jrd/../common/../common/classes/array.h \
+./src/utilities/ntrace/../../jrd/../common/../common/StatusArg.h \
+./src/utilities/ntrace/../../jrd/../common/CharSet.h \
+./src/utilities/ntrace/../../jrd/../common/CsConvert.h \
+./src/utilities/ntrace/../../jrd/../common/TextType.h \
+./src/utilities/ntrace/../../jrd/../common/../common/classes/MetaName.h \
+./src/include/../jrd/constants.h \
+./src/utilities/ntrace/../../common/TextType.h \
+./src/utilities/ntrace/../../common/unicode_util.h \
+./src/utilities/ntrace/../../jrd/evl_string.h \
+./src/utilities/ntrace/../../jrd/../common/classes/alloc.h \
+./src/utilities/ntrace/../../jrd/../common/classes/array.h \
+./src/utilities/ntrace/../../jrd/SimilarToMatcher.h \
+./src/utilities/ntrace/../../jrd/../jrd/intl_classes.h \
+./src/utilities/ntrace/../../jrd/../jrd/evl_string.h \
+./src/utilities/ntrace/../../common/classes/rwlock.h \
+./src/utilities/ntrace/../../common/classes/GenericMap.h \
+./src/utilities/ntrace/../../common/classes/locks.h \
+./src/utilities/ntrace/../../common/classes/ImplementHelper.h)
