@@ -203,7 +203,8 @@ namespace XSLT
 
     Reader::Reader(LibXSLTTransformer* transformer) :
         Thread("LibXSLTTransformer"), m_transformer(transformer),
-        m_readBuf(INPUT_BUFFER_SIZE), m_writeBuf(OUTPUT_BUFFER_SIZE)
+        m_readBuf(INPUT_BUFFER_SIZE), m_writeBuf(OUTPUT_BUFFER_SIZE),
+        m_tcontext(nullptr)
     {
         LIBXML_TEST_VERSION;
     }
@@ -288,7 +289,6 @@ namespace XSLT
         xsltStylesheetPtr styleSheet = xsltParseStylesheetFile(
                 reinterpret_cast<const xmlChar *>(m_transformer->getStyleSheetURL().getStr()));
         xmlDocPtr result = nullptr;
-        xsltTransformContextPtr tcontext = nullptr;
         exsltRegisterAll();
         registerExtensionModule();
 #ifdef DEBUG_FILTER_LIBXSLTTRANSFORMER
@@ -298,11 +298,11 @@ namespace XSLT
         std::unique_ptr<OleHandler> oh(new OleHandler(m_transformer->getComponentContext()));
         if (styleSheet)
             {
-                tcontext = xsltNewTransformContext(styleSheet, doc);
-                tcontext->_private = static_cast<void *> (oh.get());
-                xsltQuoteUserParams(tcontext, &params[0]);
+                m_tcontext = xsltNewTransformContext(styleSheet, doc);
+                m_tcontext->_private = static_cast<void *> (oh.get());
+                xsltQuoteUserParams(m_tcontext, &params[0]);
                 result = xsltApplyStylesheetUser(styleSheet, doc, nullptr, nullptr, nullptr,
-                        tcontext);
+                                                 m_tcontext);
             }
 
         if (result)
@@ -330,7 +330,8 @@ namespace XSLT
         closeOutput();
         oh.reset();
         xsltFreeStylesheet(styleSheet);
-        xsltFreeTransformContext(tcontext);
+        xsltFreeTransformContext(m_tcontext);
+        m_tcontext = nullptr;
         xmlFreeDoc(doc);
         xmlFreeDoc(result);
     }
@@ -349,6 +350,16 @@ namespace XSLT
                                 oleModuleURI,
                                  &ExtFuncOleCB::getByName);
 
+    }
+
+    void Reader::forceStateStopped()
+    {
+        if (!m_tcontext)
+            return;
+        //tdf#100057 If we force a cancel, libxslt will of course just keep on going unless something
+        //tells it to stop. Here we force the stopped state so that libxslt will stop processing
+        //and so Reader::execute will complete and we can join cleanly
+        m_tcontext->state = XSLT_STATE_STOPPED;
     }
 
     Reader::~Reader()
@@ -455,6 +466,7 @@ namespace XSLT
         if (m_Reader.is())
         {
             m_Reader->terminate();
+            m_Reader->forceStateStopped();
             m_Reader->join();
         }
         m_Reader.clear();

@@ -47,6 +47,36 @@ using ::std::map;
 namespace XSLT
 {
 
+    class LibXSLTTransformer;
+
+    /*
+     * Reader provides a worker thread to perform the actual transformation.
+     * It pipes the streams provided by a LibXSLTTransformer
+     * instance through libxslt.
+     */
+    class Reader : public salhelper::Thread
+    {
+    public:
+        Reader(LibXSLTTransformer* transformer);
+        int SAL_CALL read(char * buffer, int len);
+        int SAL_CALL write(const char * buffer, int len);
+        void forceStateStopped();
+        int SAL_CALL closeOutput();
+
+    private:
+        virtual ~Reader();
+
+        static const sal_Int32 OUTPUT_BUFFER_SIZE;
+        static const sal_Int32 INPUT_BUFFER_SIZE;
+        LibXSLTTransformer* m_transformer;
+        Sequence<sal_Int8> m_readBuf;
+        Sequence<sal_Int8> m_writeBuf;
+        xsltTransformContextPtr m_tcontext;
+
+        virtual void execute() override;
+        static void SAL_CALL registerExtensionModule();
+    };
+
     /*
      * LibXSLTTransformer provides an transforming pipe service to XSLTFilter.
      *
@@ -85,13 +115,14 @@ namespace XSLT
 
         ::std::map<const char *, OString> m_parameters;
 
-        rtl::Reference< salhelper::Thread > m_Reader;
+        rtl::Reference<Reader> m_Reader;
 
     protected:
         virtual ~LibXSLTTransformer() {
             if (m_Reader.is()) {
-                    m_Reader->terminate();
-                    m_Reader->join();
+                m_Reader->terminate();
+                m_Reader->forceStateStopped();
+                m_Reader->join();
             }
         }
 
@@ -144,39 +175,7 @@ namespace XSLT
         }
 
     };
-
-    /*
-     * Reader provides a worker thread to perform the actual transformation.
-     * It pipes the streams provided by a LibXSLTTransformer
-     * instance through libxslt.
-     */
-    class Reader : public salhelper::Thread
-    {
-    public:
-        Reader(LibXSLTTransformer* transformer);
-        int SAL_CALL
-        read(char * buffer, int len);
-        int SAL_CALL
-        write(const char * buffer, int len);
-        int SAL_CALL
-        closeOutput();
-
-    private:
-        virtual
-        ~Reader();
-
-        static const sal_Int32 OUTPUT_BUFFER_SIZE;
-        static const sal_Int32 INPUT_BUFFER_SIZE;
-        LibXSLTTransformer* m_transformer;
-        Sequence<sal_Int8> m_readBuf;
-        Sequence<sal_Int8> m_writeBuf;
-
-        virtual void execute() override;
-        static void SAL_CALL registerExtensionModule();
-    };
-
 }
-;
 
 #endif // INCLUDED_FILTER_SOURCE_XSLTFILTER_LIBXSLTTRANSFORMER_HXX
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
