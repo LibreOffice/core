@@ -87,19 +87,19 @@ class SM_DLLPUBLIC SmDocShell : public SfxObjectShell, public SfxListener
     friend class SmPrinterAccess;
     friend class SmCursor;
 
-    OUString            aText;
-    SmFormat            aFormat;
-    SmParser            aInterpreter;
-    OUString            aAccText;
-    SmNode             *pTree;
-    SfxItemPool        *pEditEngineItemPool;
-    EditEngine         *pEditEngine;
-    VclPtr<SfxPrinter>  pPrinter;       //q.v. comment to SmPrinter Access!
-    VclPtr<Printer>     pTmpPrinter;    //ditto
-    sal_uInt16          nModifyCount;
-    bool                bIsFormulaArranged;
-    std::unique_ptr<SmCursor> pCursor;
-    std::set< OUString >    aUsedSymbols;   // to export used symbols only when saving
+    OUString            maText;
+    SmFormat            maFormat;
+    SmParser            maParser;
+    OUString            maAccText;
+    SmNode             *mpTree;
+    SfxItemPool        *mpEditEngineItemPool;
+    EditEngine         *mpEditEngine;
+    VclPtr<SfxPrinter>  mpPrinter;       //q.v. comment to SmPrinter Access!
+    VclPtr<Printer>     mpTmpPrinter;    //ditto
+    sal_uInt16          mnModifyCount;
+    bool                mbFormulaArranged;
+    std::unique_ptr<SmCursor> mpCursor;
+    std::set< OUString >    maUsedSymbols;   // to export used symbols only when saving
 
 
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
@@ -130,7 +130,7 @@ class SM_DLLPUBLIC SmDocShell : public SfxObjectShell, public SfxListener
     Printer             *GetPrt();
     OutputDevice*       GetRefDev();
 
-    void                SetFormulaArranged(bool bVal) { bIsFormulaArranged = bVal; }
+    void                SetFormulaArranged(bool bVal) { mbFormulaArranged = bVal; }
 
     virtual bool        ConvertFrom(SfxMedium &rMedium) override;
 
@@ -160,8 +160,8 @@ public:
     //Access for the View. This access is not for the OLE-case!
     //and for the communication with the SFX!
     //All internal printer uses should work with the SmPrinterAccess only
-    bool        HasPrinter()    { return pPrinter != nullptr; }
-    SfxPrinter *GetPrinter()    { GetPrt(); return pPrinter; }
+    bool        HasPrinter()    { return mpPrinter != nullptr; }
+    SfxPrinter *GetPrinter()    { GetPrt(); return mpPrinter; }
     void        SetPrinter( SfxPrinter * );
 
     const OUString GetComment() const;
@@ -171,16 +171,16 @@ public:
 
     void        UpdateText();
     void        SetText(const OUString& rBuffer);
-    const OUString&  GetText() { return aText; }
+    const OUString&  GetText() { return maText; }
     void        SetFormat(SmFormat& rFormat);
-    const SmFormat&  GetFormat() { return aFormat; }
+    const SmFormat&  GetFormat() { return maFormat; }
 
     void            Parse();
-    SmParser &      GetParser() { return aInterpreter; }
-    const SmNode *  GetFormulaTree() const  { return pTree; }
-    void            SetFormulaTree(SmNode *&rTree) { pTree = rTree; }
+    SmParser &      GetParser() { return maParser; }
+    const SmNode *  GetFormulaTree() const  { return mpTree; }
+    void            SetFormulaTree(SmNode *&rTree) { mpTree = rTree; }
 
-    const std::set< OUString > &    GetUsedSymbols() const  { return aUsedSymbols; }
+    const std::set< OUString > &    GetUsedSymbols() const  { return maUsedSymbols; }
 
     OUString        GetAccessibleText();
 
