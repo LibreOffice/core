@@ -43,7 +43,7 @@ SotClipboardFormatId ReadClipboardFormat( SvStream & rStm )
         else
             rStm.SetError( SVSTREAM_GENERALERROR );
     }
-    else if( nLen == -1L )
+    else if( nLen == -1 )
     {
         // Windows clipboard format
         // SV und Win stimmen ueberein (bis einschl. SotClipboardFormatId::GDIMETAFILE)
@@ -51,7 +51,7 @@ SotClipboardFormatId ReadClipboardFormat( SvStream & rStm )
         rStm.ReadUInt32( nTmp );
         nFormat = static_cast<SotClipboardFormatId>(nTmp);
     }
-    else if( nLen == -2L )
+    else if( nLen == -2 )
     {
         sal_uInt32 nTmp;
         rStm.ReadUInt32( nTmp );
