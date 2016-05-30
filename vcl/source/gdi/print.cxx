@@ -1031,23 +1031,23 @@ bool Printer::HasSupport( PrinterSupport eFeature ) const
 {
     switch ( eFeature )
     {
-        case SUPPORT_SET_ORIENTATION:
+        case PrinterSupport::SetOrientation:
             return GetCapabilities( PrinterCapType::SetOrientation ) != 0;
-        case SUPPORT_SET_PAPERBIN:
+        case PrinterSupport::SetPaperBin:
             return GetCapabilities( PrinterCapType::SetPaperBin ) != 0;
-        case SUPPORT_SET_PAPERSIZE:
+        case PrinterSupport::SetPaperSize:
             return GetCapabilities( PrinterCapType::SetPaperSize ) != 0;
-        case SUPPORT_SET_PAPER:
+        case PrinterSupport::SetPaper:
             return GetCapabilities( PrinterCapType::SetPaper ) != 0;
-        case SUPPORT_COPY:
+        case PrinterSupport::Copy:
             return (GetCapabilities( PrinterCapType::Copies ) != 0);
-        case SUPPORT_COLLATECOPY:
+        case PrinterSupport::CollateCopy:
             return (GetCapabilities( PrinterCapType::CollateCopies ) != 0);
-        case SUPPORT_SETUPDIALOG:
+        case PrinterSupport::SetupDialog:
             return GetCapabilities( PrinterCapType::SupportDialog ) != 0;
-        case SUPPORT_FAX:
+        case PrinterSupport::Fax:
             return GetCapabilities( PrinterCapType::Fax ) != 0;
-        case SUPPORT_PDF:
+        case PrinterSupport::Pdf:
             return GetCapabilities( PrinterCapType::PDF ) != 0;
     }
 
@@ -1330,7 +1330,7 @@ void Printer::ImplFindPaperFormatForUserSize( JobSetup& aJobSetup, bool bMatchNe
     // all paper sizes with portrait orientation only!!
     if ( pSetupData->mePaperFormat == PAPER_USER &&
          nLandscapeAngle != 0 &&
-         HasSupport( SUPPORT_SET_ORIENTATION ))
+         HasSupport( PrinterSupport::SetOrientation ))
     {
         const long nRotatedWidth = pSetupData->mnPaperHeight;
         const long nRotatedHeight = pSetupData->mnPaperWidth;

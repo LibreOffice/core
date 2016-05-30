@@ -786,7 +786,7 @@ IMPL_LINK_TYPED(SwMMResultPrintDialog, PrinterChangeHdl_Impl, ListBox&, rBox, vo
         else if( ! m_pTempPrinter )
             m_pTempPrinter = VclPtr<Printer>::Create();
 
-        m_pPrinterSettingsPB->Enable( m_pTempPrinter->HasSupport( SUPPORT_SETUPDIALOG ) );
+        m_pPrinterSettingsPB->Enable( m_pTempPrinter->HasSupport( PrinterSupport::SetupDialog ) );
     }
     else
         m_pPrinterSettingsPB->Disable();

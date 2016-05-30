@@ -38,7 +38,7 @@ void ImplFillPrnDlgListBox( const Printer* pPrinter,
     }
 
     pBox->Enable( nCount != 0 );
-    pPropBtn->Show( pPrinter->HasSupport( SUPPORT_SETUPDIALOG ) );
+    pPropBtn->Show( pPrinter->HasSupport( PrinterSupport::SetupDialog ) );
 }
 
 
@@ -76,7 +76,7 @@ Printer* ImplPrnDlgListBoxSelect( ListBox* pBox, PushButton* pPropBtn,
                 }
             }
 
-            pPropBtn->Enable( pTempPrinter->HasSupport( SUPPORT_SETUPDIALOG ) );
+            pPropBtn->Enable( pTempPrinter->HasSupport( PrinterSupport::SetupDialog ) );
         }
         else
             pPropBtn->Disable();
