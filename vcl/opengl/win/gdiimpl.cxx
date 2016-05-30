@@ -8,6 +8,7 @@
  */
 
 #include "opengl/win/gdiimpl.hxx"
+#include <desktop/exithelper.h>
 #include <opengl/zone.hxx>
 #include <o3tl/lru_map.hxx>
 #include <win/wincomp.hxx>
@@ -349,6 +350,97 @@ bool InitMultisample(const PIXELFORMATDESCRIPTOR& pfd, int& rPixelFormat,
     return bArbMultisampleSupported;
 }
 
+namespace
+{
+
+bool tryShaders(const OUString& rVertexShader, const OUString& rFragmentShader, const OUString& rGeometryShader = "")
+{
+    GLint nId;
+
+    // Somewhat mysteriously, the OpenGLHelper::LoadShaders() API saves a compiled binary of the
+    // shader only if you give it the digest of the shaders. We have API to calculate the digest
+    // only of the combination of vertex and fragment (but not geometry) shader. So if we have a
+    // geometry shader, we should not save the binary.
+    if (rGeometryShader.isEmpty())
+        nId = OpenGLHelper::LoadShaders(rVertexShader, rFragmentShader, rGeometryShader, "", OpenGLHelper::GetDigest( rVertexShader, rFragmentShader, ""));
+    else
+        nId = OpenGLHelper::LoadShaders(rVertexShader, rFragmentShader, rGeometryShader);
+    if (!nId)
+        return false;
+    glDeleteProgram(nId);
+    return glGetError() == GL_NO_ERROR;
+}
+
+bool compiledShaderBinariesWork()
+{
+    static bool bBeenHere = false;
+    static bool bResult;
+
+    if (bBeenHere)
+        return bResult;
+
+    bBeenHere = true;
+
+    bResult =
+        (
+#if 0 // Only look at shaders used by vcl for now
+         // canvas
+         tryShaders("dummyVertexShader", "linearMultiColorGradientFragmentShader") &&
+         tryShaders("dummyVertexShader", "linearTwoColorGradientFragmentShader") &&
+         tryShaders("dummyVertexShader", "radialMultiColorGradientFragmentShader") &&
+         tryShaders("dummyVertexShader", "radialTwoColorGradientFragmentShader") &&
+         tryShaders("dummyVertexShader", "rectangularMultiColorGradientFragmentShader") &&
+         tryShaders("dummyVertexShader", "rectangularTwoColorGradientFragmentShader") &&
+         // chart2
+         (GLEW_VERSION_3_3 ?
+          (tryShaders("shape3DVertexShader", "shape3DFragmentShader") &&
+           tryShaders("shape3DVertexShaderBatchScroll", "shape3DFragmentShaderBatchScroll") &&
+           tryShaders("shape3DVertexShaderBatch", "shape3DFragmentShaderBatch") &&
+           tryShaders("textVertexShaderBatch", "textFragmentShaderBatch")) :
+          (tryShaders("shape3DVertexShaderV300", "shape3DFragmentShaderV300"))) &&
+         tryShaders("textVertexShader", "textFragmentShader") &&
+         tryShaders("screenTextVertexShader", "screenTextFragmentShader") &&
+         tryShaders("commonVertexShader", "commonFragmentShader") &&
+         tryShaders("pickingVertexShader", "pickingFragmentShader") &&
+         tryShaders("backgroundVertexShader", "backgroundFragmentShader") &&
+         tryShaders("symbolVertexShader", "symbolFragmentShader") &&
+         tryShaders("symbolVertexShader", "symbolFragmentShader") &&
+         // slideshow
+         tryShaders("reflectionVertexShader", "reflectionFragmentShader") &&
+         tryShaders("basicVertexShader", "basicFragmentShader") &&
+         tryShaders("vortexVertexShader", "vortexFragmentShader", "vortexGeometryShader") &&
+         tryShaders("basicVertexShader", "rippleFragmentShader") &&
+         tryShaders("glitterVertexShader", "glitterFragmentShader") &&
+         tryShaders("honeycombVertexShader", "honeycombFragmentShader", "honeycombGeometryShader") &&
+#endif
+         // vcl
+         tryShaders("combinedVertexShader", "combinedFragmentShader") &&
+         tryShaders("dumbVertexShader", "invert50FragmentShader") &&
+         tryShaders("combinedTextureVertexShader", "combinedTextureFragmentShader") &&
+         tryShaders("textureVertexShader", "areaScaleFragmentShader") &&
+         tryShaders("transformedTextureVertexShader", "maskedTextureFragmentShader") &&
+         tryShaders("transformedTextureVertexShader", "areaScaleFastFragmentShader") &&
+         tryShaders("transformedTextureVertexShader", "areaScaleFragmentShader") &&
+         tryShaders("transformedTextureVertexShader", "textureFragmentShader") &&
+         tryShaders("combinedTextureVertexShader", "combinedTextureFragmentShader") &&
+         tryShaders("textureVertexShader", "linearGradientFragmentShader") &&
+         tryShaders("textureVertexShader", "radialGradientFragmentShader") &&
+         tryShaders("textureVertexShader", "textureFragmentShader") &&
+         tryShaders("textureVertexShader", "convolutionFragmentShader") &&
+         tryShaders("textureVertexShader", "areaScaleFastFragmentShader") &&
+         tryShaders("textureVertexShader", "areaScaleFragmentShader"));
+
+    if (!bResult)
+    {
+        OpenGLZone::hardDisable();
+        TerminateProcess(GetCurrentProcess(), EXITHELPER_NORMAL_RESTART);
+    }
+
+    return bResult;
+}
+
+} // unnamed namespace
+
 bool WinOpenGLContext::ImplInit()
 {
     OpenGLZone aZone;
@@ -459,6 +551,13 @@ bool WinOpenGLContext::ImplInit()
     {
         ImplWriteLastError(GetLastError(), "wglCreateContextAttribsARB in OpenGLContext::ImplInit");
         SAL_WARN("vcl.opengl", "wglCreateContextAttribsARB failed");
+        wglMakeCurrent(NULL, NULL);
+        wglDeleteContext(hTempRC);
+        return false;
+    }
+
+    if (!compiledShaderBinariesWork())
+    {
         wglMakeCurrent(NULL, NULL);
         wglDeleteContext(hTempRC);
         return false;
