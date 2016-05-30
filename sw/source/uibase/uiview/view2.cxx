@@ -47,7 +47,6 @@
 #include <editeng/langitem.hxx>
 #include <svx/viewlayoutitem.hxx>
 #include <svx/zoomslideritem.hxx>
-#include <svtools/xwindowitem.hxx>
 #include <svx/linkwarn.hxx>
 #include <sfx2/htmlmode.hxx>
 #include <vcl/svapp.hxx>
@@ -579,12 +578,7 @@ void SwView::Execute(SfxRequest &rReq)
                 {
                     OSL_ENSURE( !static_cast<const SfxBoolItem*>(pItem)->GetValue(), "SwView::Execute(): password set an redlining off doesn't match!" );
                     // xmlsec05:    new password dialog
-                    vcl::Window* pParent;
-                    const SfxPoolItem* pParentItem;
-                    if( SfxItemState::SET == pArgs->GetItemState( SID_ATTR_XWINDOW, false, &pParentItem ) )
-                        pParent = static_cast<const XWindowItem*>( pParentItem )->GetWindowPtr();
-                    else
-                        pParent = &GetViewFrame()->GetWindow();
+                    vcl::Window* pParent = &GetViewFrame()->GetWindow();
                     ScopedVclPtrInstance< SfxPasswordDialog > aPasswdDlg( pParent );
                     aPasswdDlg->SetMinLen( 1 );
                     //#i69751# the result of Execute() can be ignored
@@ -617,12 +611,7 @@ void SwView::Execute(SfxRequest &rReq)
 
             // xmlsec05:    new password dialog
             //              message box for wrong password
-            vcl::Window* pParent;
-            const SfxPoolItem* pParentItem;
-            if( pArgs && SfxItemState::SET == pArgs->GetItemState( SID_ATTR_XWINDOW, false, &pParentItem ) )
-                pParent = static_cast<const XWindowItem*>( pParentItem )->GetWindowPtr();
-            else
-                pParent = &GetViewFrame()->GetWindow();
+            vcl::Window* pParent = &GetViewFrame()->GetWindow();
             ScopedVclPtrInstance< SfxPasswordDialog > aPasswdDlg( pParent );
             aPasswdDlg->SetMinLen( 1 );
             if(!aPasswd.getLength())

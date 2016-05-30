@@ -492,13 +492,6 @@ void SfxUndoManager::SetMaxUndoActionCount( size_t nMaxUndoActionCount )
 }
 
 
-size_t SfxUndoManager::GetMaxUndoActionCount() const
-{
-    UndoManagerGuard aGuard( *m_xData );
-    return m_xData->pActUndoArray->nMaxUndoActions;
-}
-
-
 void SfxUndoManager::ImplClearCurrentLevel_NoNotify( UndoManagerGuard& i_guard )
 {
     // clear array

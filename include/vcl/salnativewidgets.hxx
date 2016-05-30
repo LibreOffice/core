@@ -448,7 +448,6 @@ class VCL_DLLPUBLIC TabitemValue : public ImplControlValue
         bool isBothAligned() const  { return isLeftAligned() && isRightAligned(); }
         bool isNotAligned() const   { return !(mnAlignment & (TabitemFlags::LeftAligned | TabitemFlags::RightAligned)); }
         bool isFirst() const        { return bool(mnAlignment & TabitemFlags::FirstInGroup); }
-        bool isLast() const         { return bool(mnAlignment & TabitemFlags::LastInGroup); }
         const Rectangle& getContentRect() const { return maContentRect; }
 };
 

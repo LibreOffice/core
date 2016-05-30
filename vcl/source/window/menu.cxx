@@ -2339,18 +2339,6 @@ Rectangle Menu::GetBoundingRectangle( sal_uInt16 nPos ) const
     return aRet;
 }
 
-void Menu::SetAccessibleName( sal_uInt16 nItemId, const OUString& rStr )
-{
-    size_t nPos;
-    MenuItemData* pData = pItemList->GetData( nItemId, nPos );
-
-    if (pData && !rStr.equals(pData->aAccessibleName))
-    {
-        pData->aAccessibleName = rStr;
-        ImplCallEventListeners(VCLEVENT_MENU_ACCESSIBLENAMECHANGED, nPos);
-    }
-}
-
 OUString Menu::GetAccessibleName( sal_uInt16 nItemId ) const
 {
     MenuItemData* pData = pItemList->GetData( nItemId );
