@@ -22,9 +22,9 @@
 #include "mysqlc_propertyids.hxx"
 #include "mysqlc_resultsetmetadata.hxx"
 
+#include <boost/config.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
-
 #include <cppconn/connection.h>
 #include <cppconn/exception.h>
 #include <cppconn/parameter_metadata.h>
