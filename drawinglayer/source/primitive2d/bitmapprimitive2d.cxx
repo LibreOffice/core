@@ -29,16 +29,14 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        BitmapPrimitive2D::BitmapPrimitive2D(
-            const BitmapEx& rBitmapEx,
+        BitmapPrimitive2DBase::BitmapPrimitive2DBase(
             const basegfx::B2DHomMatrix& rTransform)
-        :   BasePrimitive2D(),
-            maBitmapEx(rBitmapEx),
-            maTransform(rTransform)
+        :   BasePrimitive2D()
+        ,   maTransform(rTransform)
         {
         }
 
-        bool BitmapPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
+        bool BitmapPrimitive2DBase::operator==(const BasePrimitive2D& rPrimitive) const
         {
             if(BasePrimitive2D::operator==(rPrimitive))
             {
@@ -51,7 +49,7 @@ namespace drawinglayer
             return false;
         }
 
-        basegfx::B2DRange BitmapPrimitive2D::getB2DRange(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        basegfx::B2DRange BitmapPrimitive2DBase::getB2DRange(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             basegfx::B2DRange aRetval(0.0, 0.0, 1.0, 1.0);
             aRetval.transform(maTransform);
@@ -59,8 +57,15 @@ namespace drawinglayer
         }
 
         // provide unique ID
-        ImplPrimitive2DIDBlock(BitmapPrimitive2D, PRIMITIVE2D_ID_BITMAPPRIMITIVE2D)
+        ImplPrimitive2DIDBlock(BitmapPrimitive2DBase, PRIMITIVE2D_ID_BITMAPPRIMITIVE2D)
 
+        BitmapPrimitive2D::BitmapPrimitive2D(
+            const BitmapEx& rBitmapEx,
+            const basegfx::B2DHomMatrix& rTransform)
+        :   BitmapPrimitive2DBase(rTransform)
+        ,   maBitmapEx(rBitmapEx)
+        {
+        }
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 
