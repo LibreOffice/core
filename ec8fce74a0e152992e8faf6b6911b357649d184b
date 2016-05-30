@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_2018681d",
+        "filename": "sw/inc/tblafmt.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-05-30T08:16:30Z",
+      "side": 1,
+      "message": "No need to name this differently (no need for the \"Ref\" suffix), it\u0027s valid to have two member functions, one cost and one non-const with the same name. And we use that pattern in sw code already.",
+      "revId": "ec8fce74a0e152992e8faf6b6911b357649d184b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_60d8b054",
+        "filename": "sw/inc/unostyle.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-05-30T08:16:30Z",
+      "side": 1,
+      "message": "Did you consider making this an enumeration? That feels more natural. You can still assign values explicitly.",
+      "revId": "ec8fce74a0e152992e8faf6b6911b357649d184b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_a0e2b801",
+        "filename": "sw/source/core/unocore/unostyle.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 4249,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-05-30T08:16:30Z",
+      "side": 1,
+      "message": "Instead of 0, can\u0027t you use the constants defined previously here (and in the below lines)? That would make the code more readable.",
+      "revId": "ec8fce74a0e152992e8faf6b6911b357649d184b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_c0e7bc10",
+        "filename": "sw/source/core/unocore/unostyle.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 4311,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-05-30T08:16:30Z",
+      "side": 1,
+      "message": "I think you can omit the explicit OUString() here, as just aNewMap[\"foo\"] should work as-is.",
+      "revId": "ec8fce74a0e152992e8faf6b6911b357649d184b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
