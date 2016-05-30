@@ -288,26 +288,26 @@ void SwTextFrame::SwitchLTRtoRTL( Point& rPoint ) const
 }
 
 SwLayoutModeModifier::SwLayoutModeModifier( const OutputDevice& rOutp ) :
-        rOut( rOutp ), nOldLayoutMode( rOutp.GetLayoutMode() )
+        m_rOut( rOutp ), m_nOldLayoutMode( rOutp.GetLayoutMode() )
 {
 }
 
 SwLayoutModeModifier::~SwLayoutModeModifier()
 {
-    const_cast<OutputDevice&>(rOut).SetLayoutMode( nOldLayoutMode );
+    const_cast<OutputDevice&>(m_rOut).SetLayoutMode( m_nOldLayoutMode );
 }
 
 void SwLayoutModeModifier::Modify( bool bChgToRTL )
 {
-    const_cast<OutputDevice&>(rOut).SetLayoutMode( bChgToRTL ?
+    const_cast<OutputDevice&>(m_rOut).SetLayoutMode( bChgToRTL ?
                                          TEXT_LAYOUT_BIDI_STRONG | TEXT_LAYOUT_BIDI_RTL :
                                          TEXT_LAYOUT_BIDI_STRONG );
 }
 
 void SwLayoutModeModifier::SetAuto()
 {
-    const ComplexTextLayoutMode nNewLayoutMode = nOldLayoutMode & ~TEXT_LAYOUT_BIDI_STRONG;
-    const_cast<OutputDevice&>(rOut).SetLayoutMode( nNewLayoutMode );
+    const ComplexTextLayoutMode nNewLayoutMode = m_nOldLayoutMode & ~TEXT_LAYOUT_BIDI_STRONG;
+    const_cast<OutputDevice&>(m_rOut).SetLayoutMode( nNewLayoutMode );
 }
 
 SwDigitModeModifier::SwDigitModeModifier( const OutputDevice& rOutp, LanguageType eCurLang ) :

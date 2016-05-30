@@ -793,8 +793,8 @@ public:
 
 class SwLayoutModeModifier
 {
-    const OutputDevice& rOut;
-    ComplexTextLayoutMode nOldLayoutMode;
+    const OutputDevice& m_rOut;
+    ComplexTextLayoutMode m_nOldLayoutMode;
 public:
     SwLayoutModeModifier( const OutputDevice& rOutp );
     ~SwLayoutModeModifier();
