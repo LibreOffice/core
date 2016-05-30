@@ -65,7 +65,7 @@ void ScDocument::DeleteBeforeCopyFromClip(
 }
 
 bool ScDocument::CopyOneCellFromClip(
-    sc::CopyFromClipContext& rCxt, const ScMarkData& rMark, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 )
+    sc::CopyFromClipContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 )
 {
     ScDocument* pClipDoc = rCxt.getClipDoc();
     if (pClipDoc->GetClipParam().mbCutMode)
@@ -82,9 +82,8 @@ bool ScDocument::CopyOneCellFromClip(
     if (nDestColSize < nSrcColSize)
         return false;
 
-    if (rCxt.getClipDoc()->maTabs.size() > 1 || rMark.GetSelectCount() > 1)
-        // Copying from multiple source sheets or to multiple destination
-        // sheets is not handled here.
+    if (rCxt.getClipDoc()->maTabs.size() > 1)
+        // Copying from multiple source sheets is not handled here.
         return false;
 
     ScAddress aSrcPos = aClipRange.aStart;
