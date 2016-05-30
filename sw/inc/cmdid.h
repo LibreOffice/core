@@ -623,6 +623,7 @@
 #define FN_UNO_REPLACEMENT_GRAPHIC_U_R_L    (FN_EXTRA2 + 121)
 #define FN_UNO_HIDDEN                       (FN_EXTRA2 + 122)
 #define FN_UNO_STYLE_INTEROP_GRAB_BAG       (FN_EXTRA2 + 123)
+#define FN_UNO_TABLE_TEMPLATE_NAME          (FN_EXTRA2 + 124)
 
 // Area: Help
 // Region: Traveling & Selection
