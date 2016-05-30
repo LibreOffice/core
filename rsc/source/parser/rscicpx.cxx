@@ -933,9 +933,7 @@ RscTop * RscTypCont::InitClassDockingWindow( RscTop * pSuper,
 }
 
 RscTop * RscTypCont::InitClassToolBoxItem( RscTop * pSuper,
-                                           RscTop * pClassBitmap,
-                                           RscTop * pClassImage,
-                                           RscEnum * pTriState )
+                                           RscTop * pClassBitmap )
 {
     Atom        nId;
     RscTop *    pClassToolBoxItem;
@@ -948,7 +946,7 @@ RscTop * RscTypCont::InitClassToolBoxItem( RscTop * pSuper,
     // initialize variables
     nId = aNmTb.Put( "Identifier", VARNAME );
     pClassToolBoxItem->SetVariable( nId, &aIdNoZeroUShort, nullptr, 0,
-                                    RSC_TOOLBOXITEM_ID );
+                                    (sal_uInt32)RscToolboxItemFlags::Id );
     {
         RscEnum   * pEnum;
 
@@ -961,7 +959,7 @@ RscTop * RscTypCont::InitClassToolBoxItem( RscTop * pSuper,
         // add variable
         nId = aNmTb.Put( "Type", VARNAME );
         pClassToolBoxItem->SetVariable( nId, pEnum, nullptr, 0,
-                                  RSC_TOOLBOXITEM_TYPE  );
+                                  (sal_uInt32)RscToolboxItemFlags::Type  );
     }
     {
         RscFlag *   pFlag;
@@ -988,7 +986,7 @@ RscTop * RscTypCont::InitClassToolBoxItem( RscTop * pSuper,
         l_nVarId = aNmTb.Put( "_ToolBoxItemFlags", VARNAME );
         pClassToolBoxItem->SetVariable( l_nVarId, pFlag, nullptr,
                                      VAR_HIDDEN | VAR_NOENUM,
-                                     RSC_TOOLBOXITEM_STATUS );
+                                     (sal_uInt32)RscToolboxItemFlags::Status );
 
         // add client variables
         aBaseLst.push_back(
@@ -1029,35 +1027,23 @@ RscTop * RscTypCont::InitClassToolBoxItem( RscTop * pSuper,
     }
     nId = aNmTb.Put( "HelpID", VARNAME );
     pClassToolBoxItem->SetVariable( nId, &aStringLiteral, nullptr, 0,
-                                    RSC_TOOLBOXITEM_HELPID  );
+                                    (sal_uInt32)RscToolboxItemFlags::HelpId  );
     nId = aNmTb.Put( "Text", VARNAME );
     pClassToolBoxItem->SetVariable( nId, &aLangString, nullptr, 0,
-                                    RSC_TOOLBOXITEM_TEXT );
-    nId = aNmTb.Put( "HelpText", VARNAME );
-    pClassToolBoxItem->SetVariable( nId, &aLangString, nullptr, 0,
-                                    RSC_TOOLBOXITEM_HELPTEXT );
+                                    (sal_uInt32)RscToolboxItemFlags::Text );
     nId = aNmTb.Put( "ItemBitmap", VARNAME );
     pClassToolBoxItem->SetVariable( nId, pClassBitmap, nullptr, 0,
-                                    RSC_TOOLBOXITEM_BITMAP );
-    nId = aNmTb.Put( "ItemImage", VARNAME );
-    pClassToolBoxItem->SetVariable( nId, pClassImage, nullptr, 0,
-                                    RSC_TOOLBOXITEM_IMAGE );
+                                    (sal_uInt32)RscToolboxItemFlags::Bitmap );
     nId = aNmTb.Put( "Disable", VARNAME );
     pClassToolBoxItem->SetVariable( nId, &aBool, nullptr, 0,
-                                    RSC_TOOLBOXITEM_DISABLE );
+                                    (sal_uInt32)RscToolboxItemFlags::Disable );
 
-    nId = aNmTb.Put( "State", VARNAME );
-    pClassToolBoxItem->SetVariable( nId, pTriState, nullptr, 0,
-                                    RSC_TOOLBOXITEM_STATE );
     nId = aNmTb.Put( "Hide", VARNAME );
     pClassToolBoxItem->SetVariable( nId, &aBool, nullptr, 0,
-                                    RSC_TOOLBOXITEM_HIDE );
-    nId = aNmTb.Put( "Hide", VARNAME );
-    pClassToolBoxItem->SetVariable( nId, &aBool, nullptr, 0,
-                                    RSC_TOOLBOXITEM_HIDE );
+                                    (sal_uInt32)RscToolboxItemFlags::Hide );
     nId = aNmTb.Put( "Command", VARNAME );
     pClassToolBoxItem->SetVariable( nId, &aString, nullptr, 0,
-                                    RSC_TOOLBOXITEM_COMMAND );
+                                    (sal_uInt32)RscToolboxItemFlags::Command );
 
     return pClassToolBoxItem;
 }

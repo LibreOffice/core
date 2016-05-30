@@ -413,8 +413,7 @@ void RscTypCont::Init()
     RscTop* pClassDockingWindow = InitClassDockingWindow( pClassWindow, pMapUnit );
     pRoot->Insert( pClassDockingWindow );
 
-    RscTop* pClassToolBoxItem = InitClassToolBoxItem( pClassMgr, pClassBitmap,
-                                              pClassImage, pTriState );
+    RscTop* pClassToolBoxItem = InitClassToolBoxItem( pClassMgr, pClassBitmap );
     pRoot->Insert( pClassToolBoxItem );
 
     RscTop* pClassToolBox = InitClassToolBox( pClassDockingWindow, pClassToolBoxItem );

@@ -442,38 +442,36 @@ void ToolBox::Select()
 
 void ToolBox::InsertItem( const ResId& rResId )
 {
-    sal_uLong nObjMask;
+    RscToolboxItemFlags nObjMask;
     bool      bImage = false;     // has image
 
     // create item
     ImplToolItem aItem;
 
     GetRes( rResId.SetRT( RSC_TOOLBOXITEM ) );
-    nObjMask            = ReadLongRes();
+    nObjMask            = (RscToolboxItemFlags)ReadLongRes();
 
-    if ( nObjMask & RSC_TOOLBOXITEM_ID )
+    if ( nObjMask & RscToolboxItemFlags::Id )
         aItem.mnId = sal::static_int_cast<sal_uInt16>(ReadLongRes());
     else
         aItem.mnId = 1;
 
-    if ( nObjMask & RSC_TOOLBOXITEM_TYPE )
+    if ( nObjMask & RscToolboxItemFlags::Type )
         aItem.meType = (ToolBoxItemType)ReadLongRes();
 
-    if ( nObjMask & RSC_TOOLBOXITEM_STATUS )
+    if ( nObjMask & RscToolboxItemFlags::Status )
         aItem.mnBits = (ToolBoxItemBits)ReadLongRes();
 
-    if( nObjMask & RSC_TOOLBOXITEM_HELPID )
+    if( nObjMask & RscToolboxItemFlags::HelpId )
         aItem.maHelpId = ReadByteStringRes();
 
-    if ( nObjMask & RSC_TOOLBOXITEM_TEXT )
+    if ( nObjMask & RscToolboxItemFlags::Text )
     {
         aItem.maText = ReadStringRes();
         aItem.maText = MnemonicGenerator::EraseAllMnemonicChars(aItem.maText);
     }
-    if ( nObjMask & RSC_TOOLBOXITEM_HELPTEXT )
-        aItem.maHelpText = ReadStringRes();
 
-    if ( nObjMask & RSC_TOOLBOXITEM_BITMAP )
+    if ( nObjMask & RscToolboxItemFlags::Bitmap )
     {
         Bitmap aBmp = Bitmap( ResId( static_cast<RSHEADER_TYPE*>(GetClassRes()), *rResId.GetResMgr() ) );
         IncrementRes( GetObjSizeRes( static_cast<RSHEADER_TYPE*>(GetClassRes()) ) );
@@ -481,22 +479,13 @@ void ToolBox::InsertItem( const ResId& rResId )
         aItem.maImageOriginal = aItem.maImage;
         bImage = true;
     }
-    if ( nObjMask & RSC_TOOLBOXITEM_IMAGE )
-    {
-        aItem.maImage = Image( ResId( static_cast<RSHEADER_TYPE*>(GetClassRes()), *rResId.GetResMgr() ) );
-        IncrementRes( GetObjSizeRes( static_cast<RSHEADER_TYPE*>(GetClassRes()) ) );
-        bImage = true;
-    }
-    if ( nObjMask & RSC_TOOLBOXITEM_DISABLE )
+    if ( nObjMask & RscToolboxItemFlags::Disable )
         aItem.mbEnabled = ReadShortRes() == 0;
 
-    if ( nObjMask & RSC_TOOLBOXITEM_STATE )
-        aItem.meState   = (TriState)ReadLongRes();
-
-    if ( nObjMask & RSC_TOOLBOXITEM_HIDE )
+    if ( nObjMask & RscToolboxItemFlags::Hide )
         aItem.mbVisible = ReadShortRes() == 0;
 
-    if ( nObjMask & RSC_TOOLBOXITEM_COMMAND )
+    if ( nObjMask & RscToolboxItemFlags::Command )
         aItem.maCommandStr = ReadStringRes();
 
     // if no image is loaded, try to load one from the image list
