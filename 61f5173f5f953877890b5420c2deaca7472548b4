@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_e0f680d6",
+        "filename": "sd/source/ui/app/sdmod1.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 566,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-05-30T07:57:54Z",
+      "side": 1,
+      "message": "and to make matters perfect, you could perhaps pre-select Impress/presentation templates here",
+      "revId": "61f5173f5f953877890b5420c2deaca7472548b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
