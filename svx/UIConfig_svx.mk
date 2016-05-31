@@ -47,6 +47,8 @@ $(eval $(call gb_UIConfig_add_uifiles,svx,\
 	svx/uiconfig/ui/namespacedialog \
 	svx/uiconfig/ui/optgridpage \
 	svx/uiconfig/ui/paralinespacingcontrol \
+	svx/uiconfig/ui/paralrspacing \
+	svx/uiconfig/ui/paraulspacing \
 	svx/uiconfig/ui/passwd \
 	svx/uiconfig/ui/querydeletecontourdialog \
 	svx/uiconfig/ui/querydeleteobjectdialog \
