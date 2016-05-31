@@ -40,6 +40,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
+#include <svx/hexcolorcontrol.hxx>
 #include <sax/tools/converter.hxx>
 #include <basegfx/color/bcolortools.hxx>
 #include "dialmgr.hxx"
@@ -129,128 +130,6 @@ static void RGBtoCMYK( double dR, double dG, double dB, double& fCyan, double& f
        fMagenta = ( fMagenta - fKey ) / ( 1.0 - fKey );
        fYellow = ( fYellow - fKey ) / ( 1.0 - fKey );
     }
-}
-
-class HexColorControl : public Edit
-{
-public:
-    HexColorControl( vcl::Window* pParent, WinBits nStyle );
-
-    virtual bool PreNotify( NotifyEvent& rNEvt ) override;
-    virtual void Paste() override;
-
-    void SetColor( sal_Int32 nColor );
-    sal_Int32 GetColor();
-
-private:
-    static bool ImplProcessKeyInput( const KeyEvent& rKEv );
-};
-
-HexColorControl::HexColorControl( vcl::Window* pParent, WinBits nStyle )
-    : Edit(pParent, nStyle)
-{
-    SetMaxTextLen( 6 );
-}
-
-VCL_BUILDER_FACTORY_ARGS(HexColorControl, WB_BORDER)
-
-void HexColorControl::SetColor(sal_Int32 nColor)
-{
-    OUStringBuffer aBuffer;
-    sax::Converter::convertColor(aBuffer, nColor);
-    SetText(aBuffer.makeStringAndClear().copy(1));
-}
-
-sal_Int32 HexColorControl::GetColor()
-{
-    sal_Int32 nColor = -1;
-
-    OUString aStr("#");
-    aStr += GetText();
-    sal_Int32 nLen = aStr.getLength();
-
-    if (nLen < 7)
-    {
-        static const sal_Char* pNullStr = "000000";
-        aStr += OUString::createFromAscii( &pNullStr[nLen-1] );
-    }
-
-    sax::Converter::convertColor(nColor, aStr);
-
-    if (nColor == -1)
-        SetControlBackground(Color(COL_RED));
-    else
-        SetControlBackground();
-
-    return nColor;
-}
-
-bool HexColorControl::PreNotify( NotifyEvent& rNEvt )
-{
-    if ( (rNEvt.GetType() == MouseNotifyEvent::KEYINPUT) && !rNEvt.GetKeyEvent()->GetKeyCode().IsMod2() )
-    {
-        if ( ImplProcessKeyInput( *rNEvt.GetKeyEvent() ) )
-            return true;
-    }
-
-    return Edit::PreNotify( rNEvt );
-}
-
-void HexColorControl::Paste()
-{
-    css::uno::Reference<css::datatransfer::clipboard::XClipboard> aClipboard(GetClipboard());
-    if (aClipboard.is())
-    {
-        css::uno::Reference<css::datatransfer::XTransferable> xDataObj;
-
-        try
-        {
-            SolarMutexReleaser aReleaser;
-            xDataObj = aClipboard->getContents();
-        }
-        catch (const css::uno::Exception&)
-        {
-        }
-
-        if (xDataObj.is())
-        {
-            css::datatransfer::DataFlavor aFlavor;
-            SotExchange::GetFormatDataFlavor(SotClipboardFormatId::STRING, aFlavor);
-            try
-            {
-                css::uno::Any aData = xDataObj->getTransferData(aFlavor);
-                OUString aText;
-                aData >>= aText;
-
-                if( !aText.isEmpty() && aText.startsWith( "#" ) )
-                    aText = aText.copy(1);
-
-                if( aText.getLength() > 6 )
-                    aText = aText.copy( 0, 6 );
-
-                SetText(aText);
-            }
-            catch(const css::uno::Exception&)
-            {}
-        }
-    }
-}
-
-bool HexColorControl::ImplProcessKeyInput( const KeyEvent& rKEv )
-{
-    const vcl::KeyCode& rKeyCode = rKEv.GetKeyCode();
-
-    if( rKeyCode.GetGroup() == KEYGROUP_ALPHA && !rKeyCode.IsMod1() && !rKeyCode.IsMod2() )
-    {
-        if( (rKeyCode.GetCode() < KEY_A) || (rKeyCode.GetCode() > KEY_F) )
-            return true;
-    }
-    else if( rKeyCode.GetGroup() == KEYGROUP_NUM )
-    {
-        if( rKeyCode.IsShift() )
-            return true;
-    }
-    return false;
 }
 
 class ColorPreviewControl : public Control
