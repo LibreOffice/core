@@ -197,14 +197,14 @@ void SfxCommonPrintOptionsTabPage::ImplUpdateControls( const PrinterOptions* pCu
 {
     m_pReduceTransparencyCB->Check( pCurrentOptions->IsReduceTransparency() );
 
-    if( pCurrentOptions->GetReducedTransparencyMode() == PRINTER_TRANSPARENCY_AUTO )
+    if( pCurrentOptions->GetReducedTransparencyMode() == PrinterTransparencyMode::Auto )
         m_pReduceTransparencyAutoRB->Check();
     else
         m_pReduceTransparencyNoneRB->Check( );
 
     m_pReduceGradientsCB->Check( pCurrentOptions->IsReduceGradients() );
 
-    if( pCurrentOptions->GetReducedGradientMode() == PRINTER_GRADIENT_STRIPES )
+    if( pCurrentOptions->GetReducedGradientMode() == PrinterGradientMode::Stripes )
         m_pReduceGradientsStripesRB->Check();
     else
         m_pReduceGradientsColorRB->Check();
@@ -213,9 +213,9 @@ void SfxCommonPrintOptionsTabPage::ImplUpdateControls( const PrinterOptions* pCu
 
     m_pReduceBitmapsCB->Check( pCurrentOptions->IsReduceBitmaps() );
 
-    if( pCurrentOptions->GetReducedBitmapMode() == PRINTER_BITMAP_OPTIMAL )
+    if( pCurrentOptions->GetReducedBitmapMode() == PrinterBitmapMode::Optimal )
         m_pReduceBitmapsOptimalRB->Check();
-    else if( pCurrentOptions->GetReducedBitmapMode() == PRINTER_BITMAP_NORMAL )
+    else if( pCurrentOptions->GetReducedBitmapMode() == PrinterBitmapMode::Normal )
         m_pReduceBitmapsNormalRB->Check();
     else
         m_pReduceBitmapsResolutionRB->Check();
@@ -250,13 +250,13 @@ void SfxCommonPrintOptionsTabPage::ImplUpdateControls( const PrinterOptions* pCu
 void SfxCommonPrintOptionsTabPage::ImplSaveControls( PrinterOptions* pCurrentOptions )
 {
     pCurrentOptions->SetReduceTransparency( m_pReduceTransparencyCB->IsChecked() );
-    pCurrentOptions->SetReducedTransparencyMode( m_pReduceTransparencyAutoRB->IsChecked() ? PRINTER_TRANSPARENCY_AUTO : PRINTER_TRANSPARENCY_NONE );
+    pCurrentOptions->SetReducedTransparencyMode( m_pReduceTransparencyAutoRB->IsChecked() ? PrinterTransparencyMode::Auto : PrinterTransparencyMode::NONE );
     pCurrentOptions->SetReduceGradients( m_pReduceGradientsCB->IsChecked() );
-    pCurrentOptions->SetReducedGradientMode( m_pReduceGradientsStripesRB->IsChecked() ? PRINTER_GRADIENT_STRIPES : PRINTER_GRADIENT_COLOR  );
+    pCurrentOptions->SetReducedGradientMode( m_pReduceGradientsStripesRB->IsChecked() ? PrinterGradientMode::Stripes : PrinterGradientMode::Color  );
     pCurrentOptions->SetReducedGradientStepCount( (sal_uInt16) m_pReduceGradientsStepCountNF->GetValue() );
     pCurrentOptions->SetReduceBitmaps( m_pReduceBitmapsCB->IsChecked() );
-    pCurrentOptions->SetReducedBitmapMode( m_pReduceBitmapsOptimalRB->IsChecked() ? PRINTER_BITMAP_OPTIMAL :
-                                           ( m_pReduceBitmapsNormalRB->IsChecked() ? PRINTER_BITMAP_NORMAL : PRINTER_BITMAP_RESOLUTION ) );
+    pCurrentOptions->SetReducedBitmapMode( m_pReduceBitmapsOptimalRB->IsChecked() ? PrinterBitmapMode::Optimal :
+                                           ( m_pReduceBitmapsNormalRB->IsChecked() ? PrinterBitmapMode::Normal : PrinterBitmapMode::Resolution ) );
     pCurrentOptions->SetReducedBitmapResolution( aDPIArray[ std::min<sal_uInt16>( m_pReduceBitmapsResolutionLB->GetSelectEntryPos(),
                                                                    SAL_N_ELEMENTS(aDPIArray) - 1 ) ] );
     pCurrentOptions->SetReducedBitmapIncludesTransparency( m_pReduceBitmapsTransparencyCB->IsChecked() );

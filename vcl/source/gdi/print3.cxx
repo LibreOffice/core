@@ -1215,12 +1215,12 @@ DrawModeFlags PrinterController::removeTransparencies( GDIMetaFile& i_rIn, GDIMe
     if( rPrinterOptions.IsReduceBitmaps() )
     {
         // calculate maximum resolution for bitmap graphics
-        if( PRINTER_BITMAP_OPTIMAL == rPrinterOptions.GetReducedBitmapMode() )
+        if( PrinterBitmapMode::Optimal == rPrinterOptions.GetReducedBitmapMode() )
         {
             nMaxBmpDPIX = std::min( sal_Int32(OPTIMAL_BMP_RESOLUTION), nMaxBmpDPIX );
             nMaxBmpDPIY = std::min( sal_Int32(OPTIMAL_BMP_RESOLUTION), nMaxBmpDPIY );
         }
-        else if( PRINTER_BITMAP_NORMAL == rPrinterOptions.GetReducedBitmapMode() )
+        else if( PrinterBitmapMode::Normal == rPrinterOptions.GetReducedBitmapMode() )
         {
             nMaxBmpDPIX = std::min( sal_Int32(NORMAL_BMP_RESOLUTION), nMaxBmpDPIX );
             nMaxBmpDPIY = std::min( sal_Int32(NORMAL_BMP_RESOLUTION), nMaxBmpDPIY );
@@ -1241,7 +1241,7 @@ DrawModeFlags PrinterController::removeTransparencies( GDIMetaFile& i_rIn, GDIMe
     }
 
     // disable transparency output
-    if( rPrinterOptions.IsReduceTransparency() && ( PRINTER_TRANSPARENCY_NONE == rPrinterOptions.GetReducedTransparencyMode() ) )
+    if( rPrinterOptions.IsReduceTransparency() && ( PrinterTransparencyMode::NONE == rPrinterOptions.GetReducedTransparencyMode() ) )
     {
         mpImplData->mxPrinter->SetDrawMode( mpImplData->mxPrinter->GetDrawMode() | DrawModeFlags::NoTransparency );
     }
@@ -1256,7 +1256,7 @@ DrawModeFlags PrinterController::removeTransparencies( GDIMetaFile& i_rIn, GDIMe
     }
     mpImplData->mxPrinter->RemoveTransparenciesFromMetaFile( i_rIn, o_rOut, nMaxBmpDPIX, nMaxBmpDPIY,
                                                              rPrinterOptions.IsReduceTransparency(),
-                                                             rPrinterOptions.GetReducedTransparencyMode() == PRINTER_TRANSPARENCY_AUTO,
+                                                             rPrinterOptions.GetReducedTransparencyMode() == PrinterTransparencyMode::Auto,
                                                              rPrinterOptions.IsReduceBitmaps() && rPrinterOptions.IsReducedBitmapIncludesTransparency(),
                                                              aBg
                                                              );

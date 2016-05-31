@@ -85,25 +85,25 @@ public:
 };
 
 
-enum PrinterTransparencyMode
+enum class PrinterTransparencyMode
 {
-    PRINTER_TRANSPARENCY_AUTO = 0,
-    PRINTER_TRANSPARENCY_NONE = 1
+    Auto = 0,
+    NONE = 1
 };
 
 
-enum PrinterGradientMode
+enum class PrinterGradientMode
 {
-    PRINTER_GRADIENT_STRIPES  = 0,
-    PRINTER_GRADIENT_COLOR    = 1
+    Stripes  = 0,
+    Color    = 1
 };
 
 
-enum PrinterBitmapMode
+enum class PrinterBitmapMode
 {
-    PRINTER_BITMAP_OPTIMAL    = 0,
-    PRINTER_BITMAP_NORMAL     = 1,
-    PRINTER_BITMAP_RESOLUTION = 2
+    Optimal    = 0,
+    Normal     = 1,
+    Resolution = 2
 };
 
 
