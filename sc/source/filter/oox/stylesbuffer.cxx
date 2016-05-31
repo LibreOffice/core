@@ -1346,20 +1346,6 @@ void Alignment::fillToItemSet( SfxItemSet& rItemSet, bool bSkipPoolDefs ) const
     ScfTools::PutItem( rItemSet, SfxBoolItem( ATTR_SHRINKTOFIT, maApiData.mbShrink ), bSkipPoolDefs );
 }
 
-void Alignment::writeToPropertyMap( PropertyMap& rPropMap ) const
-{
-    rPropMap.setProperty( PROP_HoriJustify, maApiData.meHorJustify);
-    rPropMap.setProperty( PROP_HoriJustifyMethod, maApiData.mnHorJustifyMethod);
-    rPropMap.setProperty( PROP_VertJustify, maApiData.mnVerJustify);
-    rPropMap.setProperty( PROP_VertJustifyMethod, maApiData.mnVerJustifyMethod);
-    rPropMap.setProperty( PROP_WritingMode, maApiData.mnWritingMode);
-    rPropMap.setProperty( PROP_RotateAngle, maApiData.mnRotation);
-    rPropMap.setProperty( PROP_Orientation, maApiData.meOrientation);
-    rPropMap.setProperty( PROP_ParaIndent, maApiData.mnIndent);
-    rPropMap.setProperty( PROP_IsTextWrapped, maApiData.mbWrapText);
-    rPropMap.setProperty( PROP_ShrinkToFit, maApiData.mbShrink);
-}
-
 ProtectionModel::ProtectionModel() :
     mbLocked( true ),   // default in Excel and Calc
     mbHidden( false )
@@ -1401,11 +1387,6 @@ void Protection::finalizeImport()
 {
     maApiData.maCellProt.IsLocked = maModel.mbLocked;
     maApiData.maCellProt.IsFormulaHidden = maModel.mbHidden;
-}
-
-void Protection::writeToPropertyMap( PropertyMap& rPropMap ) const
-{
-    rPropMap.setProperty( PROP_CellProtection, maApiData.maCellProt);
 }
 
 void Protection::fillToItemSet( SfxItemSet& rItemSet, bool bSkipPoolDefs ) const
@@ -3058,20 +3039,9 @@ void StylesBuffer::writeFontToItemSet( SfxItemSet& rItemSet, sal_Int32 nFontId, 
         pFont->fillToItemSet( rItemSet, false, bSkipPoolDefs );
 }
 
-void StylesBuffer::writeFontToPropertyMap( PropertyMap& rPropMap, sal_Int32 nFontId ) const
-{
-    if( Font* pFont = maFonts.get( nFontId ).get() )
-        pFont->writeToPropertyMap( rPropMap, FONT_PROPTYPE_CELL );
-}
-
 sal_uLong StylesBuffer::writeNumFmtToItemSet( SfxItemSet& rItemSet, sal_Int32 nNumFmtId, bool bSkipPoolDefs ) const
 {
     return maNumFmts.fillToItemSet( rItemSet, nNumFmtId, bSkipPoolDefs );
-}
-
-void StylesBuffer::writeNumFmtToPropertyMap( PropertyMap& rPropMap, sal_Int32 nNumFmtId ) const
-{
-    maNumFmts.writeToPropertyMap( rPropMap, nNumFmtId );
 }
 
 void StylesBuffer::writeBorderToItemSet( SfxItemSet& rItemSet, sal_Int32 nBorderId, bool bSkipPoolDefs ) const
@@ -3080,22 +3050,10 @@ void StylesBuffer::writeBorderToItemSet( SfxItemSet& rItemSet, sal_Int32 nBorder
         pBorder->fillToItemSet( rItemSet, bSkipPoolDefs );
 }
 
-void StylesBuffer::writeBorderToPropertyMap( PropertyMap& rPropMap, sal_Int32 nBorderId ) const
-{
-    if( Border* pBorder = maBorders.get( nBorderId ).get() )
-        pBorder->writeToPropertyMap( rPropMap );
-}
-
 void StylesBuffer::writeFillToItemSet( SfxItemSet& rItemSet, sal_Int32 nFillId, bool bSkipPoolDefs ) const
 {
     if( Fill* pFill = maFills.get( nFillId ).get() )
         pFill->fillToItemSet( rItemSet, bSkipPoolDefs );
-}
-
-void StylesBuffer::writeFillToPropertyMap( PropertyMap& rPropMap, sal_Int32 nFillId ) const
-{
-    if( Fill* pFill = maFills.get( nFillId ).get() )
-        pFill->writeToPropertyMap( rPropMap );
 }
 
 bool operator==( const XfModel& rXfModel1,  const XfModel& rXfModel2 )
