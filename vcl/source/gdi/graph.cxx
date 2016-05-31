@@ -501,9 +501,14 @@ GraphicReader* Graphic::GetContext()
     return mpImpGraphic->ImplGetContext();
 }
 
-void Graphic::SetContext( GraphicReader* pReader )
+std::unique_ptr<GraphicReader> Graphic::ResetContext()
 {
-    mpImpGraphic->ImplSetContext( pReader );
+    return mpImpGraphic->ImplResetContext();
+}
+
+void Graphic::SetContext( std::unique_ptr<GraphicReader> pReader )
+{
+    mpImpGraphic->ImplSetContext( std::move(pReader) );
 }
 
 void Graphic::SetDummyContext( bool value )
