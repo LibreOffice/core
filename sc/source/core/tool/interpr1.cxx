@@ -1679,15 +1679,16 @@ void ScInterpreter::ScRandom()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "pfg", "ScInterpreter::ScRandom" );
 
-    static rtlRandomPool aPool = rtl_random_createPool();
     static sal_Bool SqSeeded = sal_False;
     static sal_uInt32 ScCNG, ScXS = 362436069;
 
     // Seeding for the PRNG
     if (SqSeeded == sal_False) {
+        rtlRandomPool aPool = rtl_random_createPool();
         rtl_random_getBytes(aPool, &ScCNG, sizeof(ScCNG));
         rtl_random_getBytes(aPool, &nScRandomQ,
                             sizeof(nScRandomQ[0]) * SCRANDOMQ_SIZE);
+        rtl_random_destroyPool(aPool);
         SqSeeded = sal_True;
         }
     PushDouble(static_cast<double>(KISS) / SAL_MAX_UINT32);
