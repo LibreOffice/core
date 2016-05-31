@@ -1,56 +1,3 @@
-# clang-cl supports constexpr, so BOOST_CHRONO_LIB_CONSTEXPR expands to
-# "constexpr", but MSVC's std::numeric_limits<>::max() isn't marked as
-# constexpr, so clang-cl issues -Winvalid-constexpr:
---- boost/chrono/duration.hpp
-+++ boost/chrono/duration.hpp
-@@ -348,29 +348,36 @@
-         static BOOST_CHRONO_LIB_CONSTEXPR T lowest() BOOST_CHRONO_LIB_NOEXCEPT_OR_THROW {return (std::numeric_limits<T>::min)  ();}
-     };
- 
-+#if defined _MSC_VER && defined __clang__
-+#pragma clang diagnostic push
-+#pragma clang diagnostic ignored "-Winvalid-constexpr"
-+#endif
-     template <>
-     struct chrono_numeric_limits<float,true> {
-         static BOOST_CHRONO_LIB_CONSTEXPR float lowest() BOOST_CHRONO_LIB_NOEXCEPT_OR_THROW
-         {
-             return -(std::numeric_limits<float>::max) ();
-         }
-     };
- 
-     template <>
-     struct chrono_numeric_limits<double,true> {
-         static BOOST_CHRONO_LIB_CONSTEXPR double lowest() BOOST_CHRONO_LIB_NOEXCEPT_OR_THROW
-         {
-             return -(std::numeric_limits<double>::max) ();
-         }
-     };
- 
-     template <>
-     struct chrono_numeric_limits<long double,true> {
-         static BOOST_CHRONO_LIB_CONSTEXPR long double lowest() BOOST_CHRONO_LIB_NOEXCEPT_OR_THROW
-         {
-             return -(std::numeric_limits<long double>::max)();
-         }
-     };
-+#if defined _MSC_VER && defined __clang__
-+#pragma clang diagnostic pop
-+#endif
- 
-     template <class T>
-     struct numeric_limits : chrono_numeric_limits<typename remove_cv<T>::type>
---- boost/config/stdlib/dinkumware.hpp
-+++ boost/config/stdlib/dinkumware.hpp
-@@ -96,7 +96,7 @@
- #include <exception>
- #endif
- #include <typeinfo>
--#if ( (!_HAS_EXCEPTIONS && !defined(__ghs__)) || (!_HAS_NAMESPACE && defined(__ghs__)) ) && !defined(__TI_COMPILER_VERSION__) && !defined(__VISUALDSPVERSION__)
-+#if ( (!_HAS_EXCEPTIONS && !defined(__ghs__)) || (!(defined _HAS_NAMESPACE && _HAS_NAMESPACE) && defined(__ghs__)) ) && !defined(__TI_COMPILER_VERSION__) && !defined(__VISUALDSPVERSION__)
- #  define BOOST_NO_STD_TYPEINFO
- #endif  
- 
 --- boost/date_time/filetime_functions.hpp
 +++ boost/date_time/filetime_functions.hpp
 @@ -27,6 +27,16 @@
@@ -90,28 +37,6 @@
  #else
          system_time st;
          GetSystemTime(&st);
---- boost/exception/exception.hpp
-+++ boost/exception/exception.hpp
-@@ -5,7 +5,7 @@
- 
- #ifndef UUID_274DA366004E11DCB1DDFE2E56D89593
- #define UUID_274DA366004E11DCB1DDFE2E56D89593
--#if (__GNUC__*100+__GNUC_MINOR__>301) && !defined(BOOST_EXCEPTION_ENABLE_WARNINGS)
-+#if defined __GNUC__ && (__GNUC__*100+__GNUC_MINOR__>301) && !defined(BOOST_EXCEPTION_ENABLE_WARNINGS)
- #pragma GCC system_header
- #endif
- #if defined(_MSC_VER) && !defined(BOOST_EXCEPTION_ENABLE_WARNINGS)
---- boost/math/special_functions/log1p.hpp
-+++ boost/math/special_functions/log1p.hpp
-@@ -396,7 +396,7 @@
-          "log1p<%1%>(%1%)", 0, pol);
-    return ::log1p(x); 
- }
--#elif defined(_MSC_VER) && (BOOST_MSVC >= 1400)
-+#elif defined(_MSC_VER) && defined BOOST_MSVC && (BOOST_MSVC >= 1400)
- //
- // You should only enable this branch if you are absolutely sure
- // that your compilers optimizer won't mess this code up!!
 --- boost/multi_array/base.hpp
 +++ boost/multi_array/base.hpp
 @@ -222,7 +222,7 @@
@@ -161,39 +86,6 @@
  #else
  #include <_mingw.h>
  #if !defined __MINGW64_VERSION_MAJOR
---- boost/smart_ptr/intrusive_ptr.hpp
-+++ boost/smart_ptr/intrusive_ptr.hpp
-@@ -220,7 +220,7 @@
-     return a != b.get();
- }
- 
--#if __GNUC__ == 2 && __GNUC_MINOR__ <= 96
-+#if defined __GUNC__ && __GNUC__ == 2 && __GNUC_MINOR__ <= 96
- 
- // Resolve the ambiguity between our op!= and the one in rel_ops
- 
---- boost/smart_ptr/shared_ptr.hpp
-+++ boost/smart_ptr/shared_ptr.hpp
-@@ -780,7 +780,7 @@
-     return a.get() != b.get();
- }
- 
--#if __GNUC__ == 2 && __GNUC_MINOR__ <= 96
-+#if defined __GUNC__ && __GNUC__ == 2 && __GNUC_MINOR__ <= 96
- 
- // Resolve the ambiguity between our op!= and the one in rel_ops
- 
---- boost/ratio/config.hpp
-+++ boost/ratio/config.hpp
-@@ -13,7 +13,7 @@
- #include <boost/cstdint.hpp>
- 
- 
--#if __GNUC__ < 4 || (__GNUC__ == 4 && __GNUC_MINOR__ < 5) || !defined(__GXX_EXPERIMENTAL_CXX0X__)
-+#if defined __GNUC__ && (__GNUC__ < 4 || (__GNUC__ == 4 && __GNUC_MINOR__ < 5) || !defined(__GXX_EXPERIMENTAL_CXX0X__))
- #  if ! defined BOOST_NO_CXX11_U16STRING
- #    define BOOST_NO_CXX11_U16STRING
- #  endif
 
 # workdir/UnpackedTarball/boost/libs/thread/src/win32/thread.cpp(1006,36) :  error: dllimport cannot be applied to non-inline function definition
 #     BOOST_THREAD_DECL void __cdecl on_process_enter()
@@ -209,16 +101,6 @@
        //For compilers supporting auto-tss cleanup
              //with Boost.Threads lib, use Boost.Threads lib
  #           define BOOST_THREAD_USE_LIB
---- boost/throw_exception.hpp
-+++ boost/throw_exception.hpp
-@@ -1,6 +1,6 @@
- #ifndef UUID_AA15E74A856F11E08B8D93F24824019B
- #define UUID_AA15E74A856F11E08B8D93F24824019B
--#if (__GNUC__*100+__GNUC_MINOR__>301) && !defined(BOOST_EXCEPTION_ENABLE_WARNINGS)
-+#if defined __GUNC__ && (__GNUC__*100+__GNUC_MINOR__>301) && !defined(BOOST_EXCEPTION_ENABLE_WARNINGS)
- #pragma GCC system_header
- #endif
- #if defined(_MSC_VER) && !defined(BOOST_EXCEPTION_ENABLE_WARNINGS)
 --- boost/type_traits/has_nothrow_assign.hpp
 +++ boost/type_traits/has_nothrow_assign.hpp
 @@ -24,7 +24,7 @@
