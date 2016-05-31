@@ -730,8 +730,7 @@ ipsGraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
                             aGraphic);
                     }
 
-                    GfxLink     aGfxLink( pBuf.get(), nPSSize, GfxLinkType::EpsBuffer ) ;
-                    pBuf.release();
+                    GfxLink     aGfxLink( std::move(pBuf), nPSSize, GfxLinkType::EpsBuffer ) ;
                     aMtf.AddAction( static_cast<MetaAction*>( new MetaEPSAction( Point(), Size( nWidth, nHeight ),
                                                                       aGfxLink, aGraphic.GetGDIMetaFile() ) ) );
                     CreateMtfReplacementAction( aMtf, rStream, nOrigPos, nPSSize, nPosWMF, nSizeWMF, nPosTIFF, nSizeTIFF );

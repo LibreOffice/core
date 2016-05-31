@@ -1334,8 +1334,7 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPat
     bool                bAllowPartialStreamRead = false;
     bool                bCreateNativeLink = true;
 
-    sal_uInt8* pGraphicContent = nullptr;
-    bool bGraphicContentOwned = true;
+    std::unique_ptr<sal_uInt8[]> pGraphicContent;
     sal_Int32  nGraphicContentSize = 0;
 
     ResetLastError();
@@ -1459,9 +1458,9 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPat
                             const std::vector<sal_uInt8>& rData = aIter->aData;
                             nGraphicContentSize = nChunkSize - 11;
                             SvMemoryStream aIStrm(const_cast<sal_uInt8*>(&rData[11]), nGraphicContentSize, StreamMode::READ);
-                            pGraphicContent = new sal_uInt8[nGraphicContentSize];
+                            pGraphicContent = std::unique_ptr<sal_uInt8[]>(new sal_uInt8[nGraphicContentSize]);
                             sal_uInt64 aCurrentPosition = aIStrm.Tell();
-                            aIStrm.Read(pGraphicContent, nGraphicContentSize);
+                            aIStrm.Read(pGraphicContent.get(), nGraphicContentSize);
                             aIStrm.Seek(aCurrentPosition);
                             ImportGIF(aIStrm, rGraphic);
                             eLinkType = GfxLinkType::NativeGif;
@@ -1534,8 +1533,8 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPat
 
                         // Make a uncompressed copy for GfxLink
                         nGraphicContentSize = nMemoryLength;
-                        pGraphicContent = new sal_uInt8[nGraphicContentSize];
-                        std::copy(aNewData.begin(), aNewData.end(), pGraphicContent);
+                        pGraphicContent = std::unique_ptr<sal_uInt8[]>(new sal_uInt8[nGraphicContentSize]);
+                        std::copy(aNewData.begin(), aNewData.end(), pGraphicContent.get());
 
                         if(!aMemStream.GetError() )
                         {
@@ -1739,7 +1738,7 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPat
 
     if( nStatus == GRFILTER_OK && bCreateNativeLink && ( eLinkType != GfxLinkType::NONE ) && !rGraphic.GetContext() && !bLinkSet )
     {
-        if (pGraphicContent == nullptr)
+        if (!pGraphicContent)
         {
             const sal_uLong nStreamEnd = rIStream.Tell();
             nGraphicContentSize = nStreamEnd - nStreamBegin;
@@ -1748,7 +1747,7 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPat
             {
                 try
                 {
-                    pGraphicContent = new sal_uInt8[nGraphicContentSize];
+                    pGraphicContent =  std::unique_ptr<sal_uInt8[]>(new sal_uInt8[nGraphicContentSize]);
                 }
                 catch (const std::bad_alloc&)
                 {
@@ -1758,19 +1757,15 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPat
                 if( nStatus == GRFILTER_OK )
                 {
                     rIStream.Seek(nStreamBegin);
-                    rIStream.Read(pGraphicContent, nGraphicContentSize);
+                    rIStream.Read(pGraphicContent.get(), nGraphicContentSize);
                 }
             }
         }
         if( nStatus == GRFILTER_OK )
         {
-            rGraphic.SetLink( GfxLink( pGraphicContent, nGraphicContentSize, eLinkType ) );
-            bGraphicContentOwned = false; //ownership passed to the GfxLink
+            rGraphic.SetLink( GfxLink( std::move(pGraphicContent), nGraphicContentSize, eLinkType ) );
         }
     }
-
-    if (bGraphicContentOwned)
-        delete[] pGraphicContent;
 
     // Set error code or try to set native buffer
     if( nStatus != GRFILTER_OK )
