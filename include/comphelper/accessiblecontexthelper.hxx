@@ -26,6 +26,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/comphelperdllapi.h>
+#include <memory>
 
 
 namespace comphelper
@@ -86,7 +87,7 @@ namespace comphelper
                 ,public OAccessibleContextHelper_Base
     {
     private:
-        OContextHelper_Impl*    m_pImpl;
+        std::unique_ptr<OContextHelper_Impl>    m_pImpl;
 
     protected:
         virtual ~OAccessibleContextHelper( );
