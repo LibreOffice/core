@@ -33,6 +33,41 @@
       "revId": "0213453636304631794e39ce3fb54d34c5e7d192",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_c0ddfc71",
+        "filename": "sw/source/uibase/dbui/dbmgr.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 499,
+      "author": {
+        "id": 1001256
+      },
+      "writtenOn": "2016-05-31T07:14:46Z",
+      "side": 1,
+      "message": "pInsert being used in line 502",
+      "parentUuid": "da7fb54a_60eef023",
+      "revId": "0213453636304631794e39ce3fb54d34c5e7d192",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_e0da0078",
+        "filename": "sw/source/uibase/dbui/dbmgr.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 502,
+      "author": {
+        "id": 1001256
+      },
+      "writtenOn": "2016-05-31T07:14:46Z",
+      "side": 1,
+      "message": "\"pInsert\" here demands to be defined.",
+      "revId": "0213453636304631794e39ce3fb54d34c5e7d192",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
