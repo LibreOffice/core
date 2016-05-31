@@ -84,7 +84,6 @@ private:
     VclPtr<ValueSet> aLineEndSet;
     sal_uInt16      nCols;
     sal_uInt16      nLines;
-    sal_uIntPtr     nLineEndWidth;
     Size            aBmpSize;
     bool            bPopupMode;
     bool            mbInResize;

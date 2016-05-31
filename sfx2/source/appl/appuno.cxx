@@ -182,8 +182,6 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
 
     if ( nSlotId == SID_OPENURL )
         nSlotId = SID_OPENDOC;
-    if ( nSlotId == SID_SAVEASURL )
-        nSlotId = SID_SAVEASDOC;
 
     sal_Int32 nCount = rArgs.getLength();
     if ( !nCount )
@@ -922,7 +920,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
 
     if ( nSlotId == SID_OPENURL )
         nSlotId = SID_OPENDOC;
-    if ( nSlotId == SID_SAVEASURL || nSlotId == SID_SAVEASREMOTE )
+    if ( nSlotId == SID_SAVEASREMOTE )
         nSlotId = SID_SAVEASDOC;
 
     // find number of properties to avoid permanent reallocations in the sequence

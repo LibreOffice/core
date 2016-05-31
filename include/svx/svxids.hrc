@@ -271,7 +271,6 @@
 #define SID_ATTR_PAGE_SIZE                              ( SID_SVX_START + 51 )
 #define SID_ATTR_PAGE_MAXSIZE                           ( SID_SVX_START + 52 )
 #define SID_ATTR_PAGE_PAPERBIN                          ( SID_SVX_START + 54 )
-#define SID_ATTR_PAGE_APP                               ( SID_SVX_START + 55 )
 #define SID_ATTR_PAGE_EXT1                              ( SID_SVX_START + 56 )
 #define SID_ATTR_PAGE_EXT2                              ( SID_SVX_START + 57 )
 #define SID_ATTR_PAGE_HEADERSET                         ( SID_SVX_START + 58 )
@@ -279,7 +278,6 @@
 #define SID_ATTR_PAGE_ON                                ( SID_SVX_START + 60 )
 #define SID_ATTR_PAGE_DYNAMIC                           ( SID_SVX_START + 61 )
 #define SID_ATTR_PAGE_SHARED                            ( SID_SVX_START + 62 )
-#define SID_ATTR_PAGE_BSP                               ( SID_SVX_START + 63 )
 
 // CAUTION! Range <64 .. 67> used by EditEngine (!)
 
@@ -348,7 +346,6 @@
 #define SID_PRESENTATION                                ( SID_SVX_START + 157 )
 #define SID_PRESENTATION_CURRENT_SLIDE                  ( SID_SVX_START + 158 )
 #define SID_REHEARSE_TIMINGS                            ( SID_SVX_START + 159 )
-#define SID_LAST_EDITED_SLIDE                           ( SID_SVX_START + 160 )
 #define SID_HIDE_SLIDE                                  ( SID_SVX_START + 161 )
 #define SID_CHOOSE_POLYGON                              ( SID_SVX_START + 162 )
 #define SID_ATTR_FILL_STYLE                             ( SID_SVX_START + 164 )
@@ -494,8 +491,6 @@
 #define SID_OPTFILTER_MSOFFICE                          ( SID_SVX_START + 369 )
 #define SID_IMAP                                        ( SID_SVX_START + 371 )
 #define SID_IMAP_EXEC                                   ( SID_SVX_START + 374 )
-#define SID_SHOW_HIDDEN                                 ( SID_SVX_START + 375 )
-#define SID_SHOW_FORMS                                  ( SID_SVX_START + 376 )
 #define SID_DRAW_RECT_NOFILL                            ( SID_SVX_START + 378 )
 #define SID_DRAW_RECT_ROUND_NOFILL                      ( SID_SVX_START + 379 )
 #define SID_DRAW_SQUARE                                 ( SID_SVX_START + 380 )
@@ -588,7 +583,6 @@
 #define SID_FIELD_GRABFOCUS                             ( SID_SVX_START + 567 )
 #define SID_ATTR_ALIGN_DEGREES                          ( SID_SVX_START + 577 )
 #define SID_ATTR_ALIGN_LOCKPOS                          ( SID_SVX_START + 578 )
-#define SID_ATTR_LINEEND_WIDTH_DEFAULT                  ( SID_SVX_START + 579 )
 #define SID_ATTR_NUMBERFORMAT_ONE_AREA                  ( SID_SVX_START + 580 )
 
 // CAUTION! Range <587 .. 587> used by EditEngine (!)
@@ -650,10 +644,8 @@
 #define SID_3D_ASSIGN                                   ( SID_SVX_START + 647 )
 #define SID_CONVERT_TO_3D                               ( SID_SVX_START + 648 )
 #define SID_CONVERT_TO_3D_LATHE_FAST                    ( SID_SVX_START + 649 )
-#define SID_ATTR_3D_LIGHTDIRECTION_8                    ( SID_SVX_START + 691 )
-#define SID_ATTR_3D_END                                     SID_ATTR_3D_LIGHTDIRECTION_8
+#define SID_ATTR_3D_END                                   SID_CONVERT_TO_3D_LATHE_FAST
 #define SID_ATTR_NUMBERFORMAT_NOLANGUAGE                ( SID_SVX_START + 700 )
-#define SID_MN_GROUP                                    ( SID_SVX_START + 701 )
 
 #define SID_MORE_FMSLOTS_START                          ( SID_SVX_START + 702 )
 #define SID_FM_SHOW_PROPERTY_BROWSER                    ( SID_SVX_START + 703 )
@@ -728,10 +720,6 @@
 #define SID_FM_DATANAVIGATOR_CONTROL                    ( SID_SVX_START + 774 )
 #define SID_FM_REFRESH_FORM_CONTROL                     ( SID_SVX_START + 775 )
 
-#define SID_HLINKBAR_LINK                               ( SID_SVX_START + 851 )
-#define SID_HLINKBAR_SEARCH                             ( SID_SVX_START + 853 )
-#define SID_HLINKBAR_TARGET                             ( SID_SVX_START + 854 )
-
 // CAUTION! Range <855 .. 855> used by EditEngine (!)
 
 #define SID_PARAM_NUM_PRESET                            ( SID_SVX_START + 856 )
@@ -772,7 +760,6 @@
 #define SID_TRANSLITERATE_FULLWIDTH                     ( SID_SVX_START + 915 )
 #define SID_TRANSLITERATE_HIRAGANA                      ( SID_SVX_START + 916 )
 #define SID_TRANSLITERATE_KATAGANA                      ( SID_SVX_START + 917 )
-#define SID_MN_SUB_TRANSLITERATE                        ( SID_SVX_START + 918 )
 
 // CAUTION! Range <919 .. 920> used by EditEngine (!)
 
@@ -986,7 +973,6 @@
 #define SID_ATTR_SPECIALCHAR                            ( SID_SVX_START + 1120 )
 #define SID_ROTATE_GRAPHIC_LEFT                         ( SID_SVX_START + 1121 )
 #define SID_ROTATE_GRAPHIC_RIGHT                        ( SID_SVX_START + 1122 )
-#define SID_MENU_MANAGE_GRAPHIC                         ( SID_SVX_START + 1123 )
 
 // new slots for panels
 #define SID_ATTR_FILL_TRANSPARENCE                      ( SID_SVX_START + 1124 )

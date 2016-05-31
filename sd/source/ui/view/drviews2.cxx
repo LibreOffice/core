@@ -538,36 +538,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             rReq.Done ();
             break;
         }
-        case SID_ZOOMING :  // no menu entry, but generated from zoom dialog
-        {
-            const SfxItemSet* pArgs = rReq.GetArgs();
-
-            if (pArgs)
-                if (pArgs->Count () == 1)
-                {
-                    const SfxUInt32Item* pScale = rReq.GetArg<SfxUInt32Item>(ID_VAL_ZOOM);
-                    if (CHECK_RANGE (10, pScale->GetValue (), 1000))
-                    {
-                        SetZoom (pScale->GetValue ());
-
-                        SfxBindings& rBindings = GetViewFrame()->GetBindings();
-                        rBindings.Invalidate( SID_ATTR_ZOOM );
-                        rBindings.Invalidate( SID_ZOOM_IN );
-                        rBindings.Invalidate( SID_ZOOM_OUT );
-                        rBindings.Invalidate( SID_ATTR_ZOOMSLIDER );
-                    }
-#if HAVE_FEATURE_SCRIPTING
-                    else StarBASIC::FatalError (ERRCODE_BASIC_BAD_PROP_VALUE);
-#endif
-                    rReq.Ignore ();
-                    break;
-                }
-#if HAVE_FEATURE_SCRIPTING
-            StarBASIC::FatalError (ERRCODE_BASIC_WRONG_ARGS);
-#endif
-            rReq.Ignore ();
-            break;
-        }
 
         case SID_ATTR_ZOOM:
         {
@@ -1381,13 +1351,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         case SID_POLYGON_MORPHING:
         {
             SetCurrentFunction( FuMorph::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq ) );
-            Cancel();
-        }
-        break;
-
-        case SID_VECTORIZE:
-        {
-            SetCurrentFunction( FuVectorize::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq ) );
             Cancel();
         }
         break;

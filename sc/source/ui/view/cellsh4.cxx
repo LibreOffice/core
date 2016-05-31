@@ -84,12 +84,6 @@ void ScCellShell::ExecuteCursor( SfxRequest& rReq )
             case SID_CURSORPAGEUP:
                 rReq.SetSlot(SID_CURSORPAGEUP_SEL);
             break;
-            case SID_CURSORPAGERIGHT:
-                rReq.SetSlot(SID_CURSORPAGERIGHT_SEL);
-            break;
-            case SID_CURSORPAGELEFT:
-                rReq.SetSlot(SID_CURSORPAGELEFT_SEL);
-            break;
             case SID_CURSORBLKDOWN:
                 rReq.SetSlot(SID_CURSORBLKDOWN_SEL);
             break;

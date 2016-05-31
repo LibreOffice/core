@@ -508,11 +508,6 @@ void SwView::GetDrawState(SfxItemSet &rSet)
                 rSet.Put( SfxBoolItem( nWhich, m_nDrawSfxId == nWhich ) );
             break;
 
-        case SID_SHOW_HIDDEN:
-        case SID_SHOW_FORMS:
-            rSet.DisableItem( nWhich );
-            break;
-
         case SID_DRAW_TEXT_MARQUEE:
             if (::GetHtmlMode(GetDocShell()) & HTMLMODE_SOME_STYLES)
                 rSet.Put( SfxBoolItem(nWhich, m_nDrawSfxId == nWhich));

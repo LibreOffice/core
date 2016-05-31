@@ -161,8 +161,6 @@ void SfxViewFrame::Exec_Impl(SfxRequest &rReq )
         {
             const SfxBoolItem* pShowItem = rReq.GetArg<SfxBoolItem>(SID_SHOWPOPUPS);
             bool bShow = pShowItem == nullptr || pShowItem->GetValue();
-            const SfxUInt16Item* pIdItem = rReq.GetArg<SfxUInt16Item>(SID_CONFIGITEMID);
-            sal_uInt16 nId = pIdItem ? pIdItem->GetValue() : 0;
 
             SfxWorkWindow *pWorkWin = GetFrame().GetWorkWindow_Impl();
             if ( bShow )
@@ -184,7 +182,7 @@ void SfxViewFrame::Exec_Impl(SfxRequest &rReq )
                     pBind = pBind->GetSubBindings_Impl();
                 }
 
-                pWorkWin->HidePopups_Impl( !bShow, true, nId );
+                pWorkWin->HidePopups_Impl( !bShow, true );
                 pWorkWin->MakeChildrenVisible_Impl( bShow );
             }
 

@@ -654,9 +654,6 @@ void SfxToolBoxControl::StateChanged
 {
     DBG_ASSERT( pImpl->pBox != nullptr, "setting state to dangling ToolBox" );
 
-    if ( GetId() >= SID_OBJECTMENU0 && GetId() <= SID_OBJECTMENU_LAST )
-        return;
-
     // enabled/disabled-Flag correcting the lump sum
     pImpl->pBox->EnableItem( GetId(), eState != SfxItemState::DISABLED );
 

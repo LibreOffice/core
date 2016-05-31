@@ -44,7 +44,6 @@
 #define SID_QUITAPP                         (SID_SFX_START + 300)
 #define SID_ABOUT                           (SID_SFX_START + 301)
 #define SID_SETUPPRINTER                    (SID_SFX_START + 302)
-#define SID_EXITANDRETURN                   (SID_SFX_START + 303)
 
 #define SID_CONTEXT                         (SID_SFX_START + 310)
 
@@ -87,7 +86,6 @@
 #define SID_HELPBALLOONS                    (SID_SFX_START + 403)
 #define SID_HELPTIPS                        (SID_SFX_START + 404)
 #define SID_HELPMENU                        (SID_SFX_START + 410)
-#define SID_HELP_DOWNLOAD                   (SID_SFX_START + 415)
 #define SID_SEND_FEEDBACK                   (SID_SFX_START + 421)
 #define SID_SHOW_LICENSE                    (SID_SFX_START + 1683)
 #define SID_SHOW_CREDITS                    (SID_SFX_START + 1711)
@@ -98,7 +96,6 @@
 #define SID_OPENDOC                         (SID_SFX_START + 501)
 #define SID_OPENREMOTE                      (SID_SFX_START + 517)
 #define SID_OPENURL                         (SID_SFX_START + 596)
-#define SID_SAVEASURL                       (SID_SFX_START + 643)
 #define SID_JUMPTOMARK                      (SID_SFX_START + 598)
 #define SID_OPENTEMPLATE                    (SID_SFX_START + 594)
 #define SID_SAVEASDOC                       (SID_SFX_START + 502)
@@ -119,7 +116,6 @@
 #define SID_PRINT_COLLATE                   (SID_SFX_START +1590)
 #define SID_PRINT_SORT                      (SID_SFX_START +1591)
 #define SID_SAVEDOC                         (SID_SFX_START + 505)
-#define SID_UPDATEDOC                       (SID_SFX_START + 506)
 #define SID_FILE_NAME                       (SID_SFX_START + 507)
 #define SID_DOCINFO_TITLE                   (SID_SFX_START + 557)
 #define SID_FILE_FILTEROPTIONS              (SID_SFX_START + 527)
@@ -187,7 +183,6 @@
 #define SID_TIPWINDOW                           (SID_SFX_START + 1632)
 #define SID_CHARSET                         (SID_SFX_START + 1633)
 #define SID_OVERWRITE                           (SID_SFX_START + 1634)
-#define SID_RENAME                          (SID_SFX_START + 1653)
 #define SID_PARTWIN                         (SID_SFX_START + 1640)
     // FREE (was: SID_CRASH)
 #define SID_FAIL_ON_WARNING                 (SID_SFX_START + 1646)
@@ -196,7 +191,6 @@
 #define SID_JUMPMARK                        (SID_SFX_START + 1654)
 #define SID_BROWSE                          (SID_SFX_START + 1658)
     // FREE (was: SID_BACKTOWEBTOP)
-#define SID_SEGMENTSIZE                     (SID_SFX_START + 1659)
 #define SID_VIEW_DATA_SOURCE_BROWSER        (SID_SFX_START + 1660)
 #define SID_UNPACK                          (SID_SFX_START + 1662)
 // (SID_SFX_START + 1663) used further down
@@ -209,14 +203,12 @@
 #define SID_STOP_RECORDING                  (SID_SFX_START + 1671)
 #define SID_INTERACTIONHANDLER              (SID_SFX_START + 1675)
 #define SID_OPENHYPERLINK                   (SID_SFX_START + 1676)
-#define SID_ADDONLIST                       (SID_SFX_START + 1677)
 #define SID_ADDONS                          (SID_SFX_START + 1678)
 #define SID_CONTENT                         (SID_SFX_START + 1679)
 #define SID_SHOW_IME_STATUS_WINDOW          (SID_SFX_START + 1680)
 #define SID_UPDATE_CONFIG                   (SID_SFX_START + 1681)
 #define SID_VIEWONLY                        (SID_SFX_START + 1682)
 #define SID_REPAIRPACKAGE                       (SID_SFX_START + 1683)
-#define SID_ADDONHELP                       (SID_SFX_START + 1684)
 #define SID_MINIMIZED                       (SID_SFX_START + 1687)
 #define SID_COMPONENTDATA                   (SID_SFX_START + 1688)
 #define SID_COMPONENTCONTEXT                (SID_SFX_START + 1689)
@@ -294,7 +286,6 @@
 #define SID_NEWDOCDIRECT                    (SID_SFX_START + 537)
 #define SID_DOCFRAME                        (SID_SFX_START + 598)
 #define SID_TARGETNAME                      (SID_SFX_START + 560)
-#define SID_ORIGURL                         (SID_SFX_START + 644)
 #define SID_POSTDATA                        (SID_SFX_START + 1536)
 #define SID_DONELINK                        (SID_SFX_START + 646)
 #define SID_REFERER                         (SID_SFX_START + 654)
@@ -303,8 +294,6 @@
 #define SID_SOURCEVIEW                      (SID_SFX_START + 675)
 #define SID_DOC_STARTPRESENTATION           (SID_SFX_START + 695)
 #define SID_DDE_RECONNECT_ONLOAD            (SID_SFX_START + 696)
-
-#define SID_NEWWINDOWFOREDIT                (SID_SFX_START + 667)
 
 #define SID_DOCTEMPLATE                     (SID_SFX_START + 538)
 #define SID_AUTOPILOTMENU                   (SID_SFX_START + 1381)
@@ -366,7 +355,6 @@
 
 // default-ids for windows
 
-#define SID_CLOSEWINS                       (SID_SFX_START + 605)
 #define SID_MDIWINDOWLIST                   (SID_SFX_START + 610)
 #define SID_NEWWINDOW                       (SID_SFX_START + 620)
 #define SID_CLOSEWIN                        (SID_SFX_START + 621)
@@ -401,8 +389,6 @@
 #define SID_CURSORRIGHT                     (SID_SFX_START + 734)
 #define SID_CURSORPAGEDOWN                  (SID_SFX_START + 735)
 #define SID_CURSORPAGEUP                    (SID_SFX_START + 736)
-#define SID_CURSORPAGERIGHT                 (SID_SFX_START + 737)
-#define SID_CURSORPAGELEFT                  (SID_SFX_START + 738)
 #define SID_CURSORENDOFFILE                 (SID_SFX_START + 741)
 #define SID_CURSORTOPOFFILE                 (SID_SFX_START + 742)
 #define SID_CURSORENDOFSCREEN               (SID_SFX_START + 743)
@@ -410,9 +396,6 @@
 #define SID_CURSORHOME                      (SID_SFX_START + 745)
 #define SID_CURSOREND                       (SID_SFX_START + 746)
 #define SID_FORMATMENU                      (SID_SFX_START + 780)
-#define SID_OBJECTMENU0                     SID_FORMATMENU
-#define SID_OBJECTMENU3                     (SID_SFX_START + 783)
-#define SID_OBJECTMENU_LAST                 SID_OBJECTMENU3
 #define SID_FORMATMENUSTATE                 (SID_SFX_START + 791)
 #define SID_UNICODE_NOTATION_TOGGLE         (SID_SFX_START + 792)
 
@@ -433,10 +416,8 @@
 
 // default-ids for configuration
 #define SID_CONFIG                          (SID_SFX_START + 904)
-#define SID_TOGGLECOMMONTASKBAR             (SID_SFX_START + 928)
 #define SID_TOOLBOXOPTIONS                  (SID_SFX_START + 907)
 #define SID_TOGGLEFUNCTIONBAR               (SID_SFX_START + 910)
-#define SID_CONFIGITEMID                    (SID_SFX_START + 919)
 #define SID_MACROINFO                       (SID_SFX_START + 919)
 #define SID_TOGGLESTATUSBAR                 (SID_SFX_START + 920)
 #define SID_CONFIGSTATUSBAR                 (SID_SFX_START + 921)
@@ -464,7 +445,6 @@
 #define SID_GALLERY                         (SID_SFX_START + 960)
 #define SID_SEARCH_DLG                      (SID_SFX_START + 961)
 #define SID_SEARCH_QUIET                    (SID_SFX_START + 1684)
-#define SID_HELP_PI                         (SID_SFX_START + 962)
 #define SID_BASIC_ENABLED                   (SID_SFX_START + 964)
 #define SID_EXPORT_DIALOG                   (SID_SFX_START + 965)
 #define SID_IMPORT_DIALOG                   (SID_SFX_START + 966)
@@ -479,7 +459,6 @@
 
 #define SID_SIGNATURE                       (SID_SFX_START + 1643)
 
-#define SID_FRAMEDESCRIPTOR                 (SID_SFX_START + 1229)
 #define SID_INSERT_3DMODEL                  (SID_SFX_START + 1230)
 
 // SaveTabPage
@@ -501,7 +480,6 @@
 #define SID_ATTR_BUTTON_OUTSTYLE3D      (SID_OPTIONS_START + 62)
 #define SID_ATTR_BUTTON_BIGSIZE         (SID_OPTIONS_START + 63)
 #define SID_ATTR_WELCOMESCREEN              (SID_OPTIONS_START + 81)
-#define SID_WELCOMESCREEN_RESET         (SID_OPTIONS_START + 82)
 #define SID_ATTR_QUICKLAUNCHER          (SID_OPTIONS_START + 74)
 #define SID_ATTR_YEAR2000               (SID_OPTIONS_START + 87)
 #define SID_ATTR_APPLYCHARUNIT          (SID_OPTIONS_START + 88)
@@ -514,15 +492,12 @@
 #define SID_ATTR_LANGUAGE               (SID_OPTIONS_START +  7)
 #define SID_ATTR_SPELL                  (SID_OPTIONS_START +  9)
 #define SID_ATTR_HYPHENREGION           (SID_OPTIONS_START + 12)
-#define SID_SPELL_MODIFIED              (SID_OPTIONS_START + 15)
 #define SID_AUTOSPELL_CHECK             (SID_OPTIONS_START + 21)
 
 // InetTabPage
 
 #define SID_INET_PROXY_TYPE             (SID_OPTIONS_START + 23)
-#define SID_INET_PROXY_PORT             (SID_OPTIONS_START + 25)
 
-#define SID_INET_SMTPSERVER             (SID_OPTIONS_START + 33)
 #define SID_PASSWORD                    (SID_OPTIONS_START + 36)
 
 #define SID_INET_NOPROXY                (SID_OPTIONS_START + 37)
@@ -531,12 +506,8 @@
 #define SID_INET_HTTP_PROXY_PORT        (SID_OPTIONS_START + 39)
 #define SID_INET_FTP_PROXY_NAME         (SID_OPTIONS_START + 40)
 #define SID_INET_FTP_PROXY_PORT         (SID_OPTIONS_START + 41)
-#define SID_INET_SOCKS_PROXY_PORT       (SID_OPTIONS_START + 43)
 
 #define SID_INET_EXE_PLUGIN             (SID_OPTIONS_START + 52)
-
-#define SID_INET_DNS_AUTO               (SID_OPTIONS_START + 57)
-#define SID_INET_DNS_SERVER             (SID_OPTIONS_START + 58)
 
 #define SID_SAVEREL_INET                (SID_OPTIONS_START + 30)
 #define SID_SAVEREL_FSYS                (SID_OPTIONS_START + 31)

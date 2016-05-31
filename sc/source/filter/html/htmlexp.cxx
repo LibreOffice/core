@@ -252,18 +252,6 @@ ScHTMLExport::ScHTMLExport( SvStream& rStrmP, const OUString& rBaseURL, ScDocume
         if ( !IsEmptyTable( nTab ) )
             nUsedTables++;
     }
-
-    // Content-Id for Mail export?
-    SfxObjectShell* pDocSh = pDoc->GetDocumentShell();
-    if ( pDocSh )
-    {
-        const SfxPoolItem* pItem = pDocSh->GetItem( SID_ORIGURL );
-        if( pItem )
-        {
-            aCId = static_cast<const SfxStringItem *>(pItem)->GetValue();
-            OSL_ENSURE( !aCId.isEmpty(), "CID without length!" );
-        }
-    }
 }
 
 ScHTMLExport::~ScHTMLExport()

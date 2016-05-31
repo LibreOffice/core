@@ -1692,9 +1692,7 @@ void SfxMedium::TransactedTransferForFS_Impl( const INetURLObject& aSource,
         {
             bool bTransactStarted = false;
             const SfxBoolItem* pOverWrite = SfxItemSet::GetItem<SfxBoolItem>(GetItemSet(), SID_OVERWRITE, false);
-               const SfxBoolItem* pRename = SfxItemSet::GetItem<SfxBoolItem>(GetItemSet(), SID_RENAME, false);
-            bool bRename = pRename && pRename->GetValue();
-            bool bOverWrite = pOverWrite ? pOverWrite->GetValue() : !bRename;
+            bool bOverWrite = !pOverWrite || pOverWrite->GetValue();
 
             try
             {
@@ -1807,12 +1805,10 @@ bool SfxMedium::TryDirectTransfer( const OUString& aURL, SfxItemSet& aTargetSet 
 
                     InsertCommandArgument aInsertArg;
                     aInsertArg.Data = xInStream;
-                       const SfxBoolItem* pRename = aTargetSet.GetItem<SfxBoolItem>(SID_RENAME, false);
-                       const SfxBoolItem* pOverWrite = aTargetSet.GetItem<SfxBoolItem>(SID_OVERWRITE, false);
-                       if ( (pOverWrite && !pOverWrite->GetValue()) // argument says: never overwrite
-                         || (pRename && pRename->GetValue()) ) // argument says: rename file
+                    const SfxBoolItem* pOverWrite = aTargetSet.GetItem<SfxBoolItem>(SID_OVERWRITE, false);
+                    if ( pOverWrite && !pOverWrite->GetValue() ) // argument says: never overwrite
                         aInsertArg.ReplaceExisting = false;
-                       else
+                    else
                         aInsertArg.ReplaceExisting = true; // default is overwrite existing files
 
                     Any aCmdArg;
@@ -1925,35 +1921,6 @@ void SfxMedium::Transfer_Impl()
             return;
         }
 
-        const SfxInt32Item* pSegmentSize = SfxItemSet::GetItem<SfxInt32Item>(GetItemSet(), SID_SEGMENTSIZE, false);
-        if ( pSegmentSize )
-        {
-            // this file must be stored into a disk spanned package
-            try
-            {
-                uno::Reference < embed::XStorage > xStor = comphelper::OStorageHelper::GetStorageFromURL( GetName(),
-                        embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE );
-
-                // set segment size property; package will automatically be divided in pieces fitting
-                // into this size
-
-                uno::Reference < beans::XPropertySet > xSet( pImpl->xStorage, uno::UNO_QUERY );
-                xSet->setPropertyValue("SegmentSize", Any(pSegmentSize->GetValue()) );
-
-                // copy the temporary storage into the disk spanned package
-                GetStorage()->copyToStorage( xStor );
-                uno::Reference < embed::XTransactedObject > xTrans( pImpl->xStorage, uno::UNO_QUERY );
-                if ( xTrans.is() )
-                    xTrans->commit();
-
-            }
-            catch ( const uno::Exception& )
-            {
-                //TODO/MBA: error handling
-            }
-            return;
-        }
-
         INetURLObject aDest( GetURLObject() );
 
         // source is the temp file written so far
@@ -2056,15 +2023,11 @@ void SfxMedium::Transfer_Impl()
                 (void)::ucbhelper::Content::create( aSource.GetMainURL( INetURLObject::NO_DECODE ), xEnv, comphelper::getProcessComponentContext(), aSourceContent );
 
                 // check for external parameters that may customize the handling of NameClash situations
-                const SfxBoolItem* pRename = SfxItemSet::GetItem<SfxBoolItem>(GetItemSet(), SID_RENAME, false);
                 const SfxBoolItem* pOverWrite = SfxItemSet::GetItem<SfxBoolItem>(GetItemSet(), SID_OVERWRITE, false);
                 sal_Int32 nNameClash;
                 if ( pOverWrite && !pOverWrite->GetValue() )
                     // argument says: never overwrite
                     nNameClash = NameClash::ERROR;
-                else if ( pRename && pRename->GetValue() )
-                    // argument says: rename file
-                    nNameClash = NameClash::RENAME;
                 else
                     // default is overwrite existing files
                     nNameClash = NameClash::OVERWRITE;

@@ -72,7 +72,6 @@ static sal_uInt16 SidArray[] = {
                 SID_SET_SUPER_SCRIPT,
                 SID_SET_SUB_SCRIPT,
                 SID_HYPERLINK_GETLINK,
-                SID_PRESENTATION_TEMPLATES,
                 SID_STATUS_PAGE,
                 SID_STATUS_LAYOUT,
                 SID_EXPAND_PAGE,
