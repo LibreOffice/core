@@ -62,7 +62,6 @@ class SbxVariableImpl
 
 SbxVariable::SbxVariable() : SbxValue()
 {
-    mpSbxVariableImpl = nullptr;
     pCst = nullptr;
     pParent = nullptr;
     nUserData = 0;
@@ -75,14 +74,13 @@ SbxVariable::SbxVariable( const SbxVariable& r )
       mpPar( r.mpPar ),
       pInfo( r.pInfo )
 {
-    mpSbxVariableImpl = nullptr;
-    if( r.mpSbxVariableImpl != nullptr )
+    if( r.mpImpl != nullptr )
     {
-        mpSbxVariableImpl = new SbxVariableImpl( *r.mpSbxVariableImpl );
+        mpImpl.reset( new SbxVariableImpl( *r.mpImpl ) );
 #if HAVE_FEATURE_SCRIPTING
-        if( mpSbxVariableImpl->m_xComListener.is() )
+        if( mpImpl->m_xComListener.is() )
         {
-            registerComListenerVariableForBasic( this, mpSbxVariableImpl->m_pComListenerParentBasic );
+            registerComListenerVariableForBasic( this, mpImpl->m_pComListenerParentBasic );
         }
 #endif
     }
@@ -104,7 +102,6 @@ SbxVariable::SbxVariable( const SbxVariable& r )
 
 SbxVariable::SbxVariable( SbxDataType t, void* p ) : SbxValue( t, p )
 {
-    mpSbxVariableImpl = nullptr;
     pCst = nullptr;
     pParent = nullptr;
     nUserData = 0;
@@ -119,7 +116,6 @@ SbxVariable::~SbxVariable()
         removeDimAsNewRecoverItem( this );
     }
 #endif
-    delete mpSbxVariableImpl;
     delete pCst;
 }
 
@@ -349,20 +345,16 @@ sal_uInt16 SbxVariable::MakeHashCode( const OUString& rName )
 SbxVariable& SbxVariable::operator=( const SbxVariable& r )
 {
     SbxValue::operator=( r );
-    delete mpSbxVariableImpl;
-    if( r.mpSbxVariableImpl != nullptr )
+    mpImpl.reset();
+    if( r.mpImpl != nullptr )
     {
-        mpSbxVariableImpl = new SbxVariableImpl( *r.mpSbxVariableImpl );
+        mpImpl.reset( new SbxVariableImpl( *r.mpImpl ) );
 #if HAVE_FEATURE_SCRIPTING
-        if( mpSbxVariableImpl->m_xComListener.is() )
+        if( mpImpl->m_xComListener.is() )
         {
-            registerComListenerVariableForBasic( this, mpSbxVariableImpl->m_pComListenerParentBasic );
+            registerComListenerVariableForBasic( this, mpImpl->m_pComListenerParentBasic );
         }
 #endif
-    }
-    else
-    {
-        mpSbxVariableImpl = nullptr;
     }
     return *this;
 }
@@ -431,11 +423,11 @@ void SbxVariable::SetParent( SbxObject* p )
 
 SbxVariableImpl* SbxVariable::getImpl()
 {
-    if( mpSbxVariableImpl == nullptr )
+    if(!mpImpl)
     {
-        mpSbxVariableImpl = new SbxVariableImpl();
+        mpImpl.reset(new SbxVariableImpl);
     }
-    return mpSbxVariableImpl;
+    return mpImpl.get();
 }
 
 const OUString& SbxVariable::GetDeclareClassName()

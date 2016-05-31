@@ -24,6 +24,7 @@
 #include <com/sun/star/bridge/oleautomation/Decimal.hpp>
 #include <basic/sbxcore.hxx>
 #include <basic/basicdllapi.h>
+#include <memory>
 
 
 class SbxDecimal;
@@ -227,7 +228,7 @@ class BASIC_DLLPUBLIC SbxVariable : public SbxValue
 {
     friend class SbMethod;
 
-    SbxVariableImpl* mpSbxVariableImpl; // Impl data
+    std::unique_ptr<SbxVariableImpl> mpImpl; // Impl data
     SfxBroadcaster*  pCst;              // Broadcaster, if needed
     OUString         maName;            // Name, if available
     SbxArrayRef      mpPar;             // Parameter-Array, if set
