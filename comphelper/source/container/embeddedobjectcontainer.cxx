@@ -96,8 +96,8 @@ const uno::Reference < embed::XStorage >& EmbedImpl::GetReplacements()
 }
 
 EmbeddedObjectContainer::EmbeddedObjectContainer()
+    :     pImpl(new EmbedImpl)
 {
-    pImpl = new EmbedImpl;
     pImpl->mxStorage = ::comphelper::OStorageHelper::GetTemporaryStorage();
     pImpl->mbOwnsStorage = true;
     pImpl->mbUserAllowsLinkUpdate = true;
@@ -105,8 +105,8 @@ EmbeddedObjectContainer::EmbeddedObjectContainer()
 }
 
 EmbeddedObjectContainer::EmbeddedObjectContainer( const uno::Reference < embed::XStorage >& rStor )
+    :     pImpl(new EmbedImpl)
 {
-    pImpl = new EmbedImpl;
     pImpl->mxStorage = rStor;
     pImpl->mbOwnsStorage = false;
     pImpl->mbUserAllowsLinkUpdate = true;
@@ -114,8 +114,8 @@ EmbeddedObjectContainer::EmbeddedObjectContainer( const uno::Reference < embed::
 }
 
 EmbeddedObjectContainer::EmbeddedObjectContainer( const uno::Reference < embed::XStorage >& rStor, const uno::Reference < uno::XInterface >& xModel )
+    :     pImpl(new EmbedImpl)
 {
-    pImpl = new EmbedImpl;
     pImpl->mxStorage = rStor;
     pImpl->mbOwnsStorage = false;
     pImpl->mbUserAllowsLinkUpdate = true;
@@ -191,7 +191,6 @@ EmbeddedObjectContainer::~EmbeddedObjectContainer()
         pImpl->mxStorage->dispose();
 
     delete pImpl->mpTempObjectContainer;
-    delete pImpl;
 }
 
 void EmbeddedObjectContainer::CloseEmbeddedObjects()
