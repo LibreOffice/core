@@ -49,6 +49,7 @@ unusedMethodsExclusionSet = set([
     "void OpenGLContext::requestSingleBufferedRendering()",
 	"_Bool TabitemValue::isBothAligned() const",
 	"_Bool TabitemValue::isNotAligned() const",
+	"void TabitemValue::isLast() const",
 	"void StyleSettings::SetSpinSize(long)",
 	"void StyleSettings::SetFloatTitleHeight(long)",
     "void StyleSettings::SetTitleHeight(long)",
