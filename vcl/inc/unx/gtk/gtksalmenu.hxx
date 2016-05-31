@@ -112,6 +112,8 @@ public:
     virtual void                Update() override;  // Update this menu only.
     // Update full menu hierarchy from this menu.
     void                        UpdateFull () { ActivateAllSubmenus(mpVCLMenu); Update(); }
+    // Clear ActionGroup and MenuModel from full menu hierarchy
+    void                        ClearActionGroupAndMenuModel();
     GtkSalMenu*                 GetTopLevel();
     void                        SetNeedsUpdate();
 

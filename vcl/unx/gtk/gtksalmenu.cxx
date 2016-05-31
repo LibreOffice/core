@@ -400,6 +400,7 @@ bool GtkSalMenu::ShowNativePopupMenu(FloatingWindow* pWin, const Rectangle& rRec
     gtk_widget_destroy(pWidget);
 
     g_object_unref(mpActionGroup);
+    ClearActionGroupAndMenuModel();
 
     return true;
 #else
@@ -999,6 +1000,19 @@ void GtkSalMenu::ActivateAllSubmenus(Menu* pMenuBar)
             pSalItem->mpSubMenu->ActivateAllSubmenus(pMenuBar);
             pSalItem->mpSubMenu->Update();
             pMenuBar->HandleMenuDeActivateEvent(pSalItem->mpSubMenu->GetMenu());
+        }
+    }
+}
+
+void GtkSalMenu::ClearActionGroupAndMenuModel()
+{
+    SetMenuModel(nullptr);
+    mpActionGroup = nullptr;
+    for (GtkSalMenuItem* pSalItem : maItems)
+    {
+        if ( pSalItem->mpSubMenu != nullptr )
+        {
+            pSalItem->mpSubMenu->ClearActionGroupAndMenuModel();
         }
     }
 }
