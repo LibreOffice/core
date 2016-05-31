@@ -3605,6 +3605,13 @@ GraphicZOrderHelper* DomainMapper::graphicZOrderHelper()
     return zOrderHelper.get();
 }
 
+GraphicNamingHelper& DomainMapper::GetGraphicNamingHelper()
+{
+    if (m_pGraphicNamingHelper.get() == nullptr)
+        m_pGraphicNamingHelper.reset(new GraphicNamingHelper());
+    return *m_pGraphicNamingHelper;
+}
+
 uno::Reference<drawing::XShape> DomainMapper::PopPendingShape()
 {
     return m_pImpl->PopPendingShape();
