@@ -353,7 +353,7 @@ bool InitMultisample(const PIXELFORMATDESCRIPTOR& pfd, int& rPixelFormat,
 namespace
 {
 
-bool tryShaders(const OUString& rVertexShader, const OUString& rFragmentShader, const OUString& rGeometryShader = "")
+bool tryShaders(const OUString& rVertexShader, const OUString& rFragmentShader, const OUString& rGeometryShader = "", const OString& rPreamble = "")
 {
     GLint nId;
 
@@ -362,9 +362,14 @@ bool tryShaders(const OUString& rVertexShader, const OUString& rFragmentShader, 
     // only of the combination of vertex and fragment (but not geometry) shader. So if we have a
     // geometry shader, we should not save the binary.
     if (rGeometryShader.isEmpty())
-        nId = OpenGLHelper::LoadShaders(rVertexShader, rFragmentShader, rGeometryShader, "", OpenGLHelper::GetDigest( rVertexShader, rFragmentShader, ""));
+    {
+        nId = OpenGLHelper::LoadShaders(rVertexShader, rFragmentShader, rPreamble, OpenGLHelper::GetDigest( rVertexShader, rFragmentShader, rPreamble));
+    }
     else
+    {
+        assert(rPreamble.isEmpty());
         nId = OpenGLHelper::LoadShaders(rVertexShader, rFragmentShader, rGeometryShader);
+    }
     if (!nId)
         return false;
     glDeleteProgram(nId);
@@ -420,11 +425,17 @@ bool compiledShaderBinariesWork()
          tryShaders("textureVertexShader", "areaScaleFragmentShader") &&
          tryShaders("transformedTextureVertexShader", "maskedTextureFragmentShader") &&
          tryShaders("transformedTextureVertexShader", "areaScaleFastFragmentShader") &&
+         tryShaders("transformedTextureVertexShader", "areaScaleFastFragmentShader", "", "#define MASKED") &&
          tryShaders("transformedTextureVertexShader", "areaScaleFragmentShader") &&
+         tryShaders("transformedTextureVertexShader", "areaScaleFragmentShader", "", "#define MASKED") &&
          tryShaders("transformedTextureVertexShader", "textureFragmentShader") &&
          tryShaders("combinedTextureVertexShader", "combinedTextureFragmentShader") &&
+         tryShaders("combinedTextureVertexShader", "combinedTextureFragmentShader", "", "// flush shader\n") &&
          tryShaders("textureVertexShader", "linearGradientFragmentShader") &&
          tryShaders("textureVertexShader", "radialGradientFragmentShader") &&
+         tryShaders("textureVertexShader", "areaHashCRC64TFragmentShader") &&
+         tryShaders("textureVertexShader", "replaceColorFragmentShader") &&
+         tryShaders("textureVertexShader", "greyscaleFragmentShader") &&
          tryShaders("textureVertexShader", "textureFragmentShader") &&
          tryShaders("textureVertexShader", "convolutionFragmentShader") &&
          tryShaders("textureVertexShader", "areaScaleFastFragmentShader") &&
