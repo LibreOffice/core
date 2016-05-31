@@ -217,8 +217,7 @@ OUString SfxHelp_Impl::GetHelpText( const OUString& aCommandURL, const OUString&
 }
 
 SfxHelp::SfxHelp() :
-    bIsDebug( false ),
-    pImpl( new SfxHelp_Impl )
+    bIsDebug( false )
 {
     // read the environment variable "HELP_DEBUG"
     // if it's set, you will see debug output on active help

@@ -126,8 +126,6 @@ class TOOLS_DLLPUBLIC ErrorHandler
     friend class ErrorHandler_Impl;
 
 private:
-    std::unique_ptr<ErrorHandler_Impl>  pImpl;
-
     static sal_uInt16   HandleError_Impl( sal_uIntPtr lId,
                               sal_uInt16 nFlags,
                               bool bJustCreateString,
