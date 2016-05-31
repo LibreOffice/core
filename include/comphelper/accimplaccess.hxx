@@ -62,7 +62,7 @@ namespace comphelper
     class COMPHELPER_DLLPUBLIC OAccessibleImplementationAccess : public OAccImpl_Base
     {
     private:
-        OAccImpl_Impl*  m_pImpl;
+        std::unique_ptr<OAccImpl_Impl>  m_pImpl;
 
     protected:
         /// retrieves the parent previously set via <method>setAccessibleParent</method>
