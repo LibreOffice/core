@@ -886,10 +886,6 @@ BasicManager::~BasicManager()
 {
     // Notify listener if something needs to be saved
     Broadcast( SfxSimpleHint( SFX_HINT_DYING) );
-
-    // Destroy Basic-Infos...
-    // In reverse order
-    delete mpImpl;
 }
 
 void BasicManager::LegacyDeleteBasicManager( BasicManager*& _rpManager )
@@ -915,7 +911,7 @@ bool BasicManager::HasExeCode( const OUString& sLib )
 
 void BasicManager::Init()
 {
-    mpImpl = new BasicManagerImpl();
+    mpImpl.reset(new BasicManagerImpl);
 }
 
 BasicLibInfo* BasicManager::CreateLibInfo()
