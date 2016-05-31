@@ -16,6 +16,24 @@
       "revId": "980895868463dbb7cfb501f682a7f9d23434d5dd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_66a608c3",
+        "filename": "sw/source/uibase/dbui/dbmgr.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1001256
+      },
+      "writtenOn": "2016-05-31T10:37:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da7fb54a_26c6c067",
+      "revId": "980895868463dbb7cfb501f682a7f9d23434d5dd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
