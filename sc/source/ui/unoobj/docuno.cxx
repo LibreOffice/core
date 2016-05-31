@@ -2833,7 +2833,9 @@ void ScModelObj::enableOpenCL(sal_Bool bEnable)
         aConfig.setOpenCLConfigToDefault();
     ScInterpreter::SetGlobalConfig(aConfig);
 
+#if HAVE_FEATURE_OPENCL
     sc::FormulaGroupInterpreter::switchOpenCLDevice(OUString(), true, false);
+#endif
 
     ScDocument* pDoc = GetDocument();
     pDoc->CheckVectorizationState();
