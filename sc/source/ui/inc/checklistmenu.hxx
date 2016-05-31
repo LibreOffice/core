@@ -19,6 +19,7 @@
 
 #include <memory>
 #include <unordered_map>
+#include <map>
 
 namespace com { namespace sun { namespace star {
 
@@ -218,6 +219,8 @@ public:
     void clear();
 };
 
+struct ScCheckListMember;
+
 class ScCheckListBox : public SvTreeListBox
 {
     SvLBoxButtonData*   mpCheckButton;
@@ -234,7 +237,7 @@ class ScCheckListBox : public SvTreeListBox
     void Init();
     void CheckEntry( const OUString& sName, SvTreeListEntry* pParent, bool bCheck = true );
     void CheckEntry( SvTreeListEntry* pEntry, bool bCheck = true );
-    void ShowCheckEntry( const OUString& sName, SvTreeListEntry* pParent, bool bShow = true, bool bCheck = true );
+    SvTreeListEntry* ShowCheckEntry( const OUString& sName, ScCheckListMember& rMember, bool bShow = true, bool bCheck = true );
     bool IsChecked( const OUString& sName, SvTreeListEntry* pParent );
     SvTreeListEntry* FindEntry( SvTreeListEntry* pParent, const OUString& sNode );
     sal_uInt16 GetCheckedEntryCount() const;
@@ -260,6 +263,27 @@ public:
 
     virtual void MouseButtonDown( const MouseEvent& rMEvt ) override;
     void SetTabStopsContainer( ScTabStops* pTabStops )  { mpTabStops = pTabStops; }
+};
+
+struct ScCheckListMember
+{
+    enum DatePartType
+    {
+        YEAR,
+        MONTH,
+        DAY,
+    };
+
+    OUString                 maName; // node name
+    OUString                 maRealName;
+    bool                     mbVisible;
+    bool                     mbDate;
+    bool                     mbLeaf;
+    DatePartType             meDatePartType;
+    // To store Year and Month if the member if DAY type
+    std::vector<OUString>    maDateParts;
+    ScCheckListMember();
+    SvTreeListEntry* mpParent;
 };
 
 /**
@@ -330,17 +354,6 @@ protected:
     virtual void handlePopupEnd() override;
 
 private:
-    struct Member
-    {
-        OUString maName; // node name
-        OUString maRealName;
-        bool            mbVisible;
-        bool            mbDate;
-        bool            mbLeaf;
-
-        Member();
-        SvTreeListEntry* mpParent;
-    };
 
     class CancelButton : public ::CancelButton
     {
@@ -376,6 +389,7 @@ private:
     void packWindow();
     void setAllMemberState(bool bSet);
     void selectCurrentMemberOnly(bool bSet);
+    void updateMemberParents( SvTreeListEntry* pLeaf, size_t nIdx );
 
     DECL_LINK_TYPED( ButtonHdl, Button*, void );
     DECL_LINK_TYPED( TriStateHdl, Button*, void );
@@ -393,7 +407,10 @@ private:
     VclPtr<OKButton>        maBtnOk;
     VclPtr<CancelButton>    maBtnCancel;
 
-    std::vector<Member>           maMembers;
+    std::vector<ScCheckListMember> maMembers;
+    // For Dates
+    std::map<OUString, size_t>    maYearMonthMap;
+
     std::unique_ptr<ExtendedData> mpExtendedData;
     std::unique_ptr<Action>       mpOKAction;
     std::unique_ptr<Action>       mpPopupEndAction;
