@@ -334,8 +334,6 @@ public:
     inline const ApiAlignmentData& getApiData() const { return maApiData; }
 
     void                fillToItemSet( SfxItemSet& rItemSet, bool bSkipPoolDefs = false ) const;
-    /** Writes all alignment attributes to the passed property map. */
-    void                writeToPropertyMap( PropertyMap& rPropMap ) const;
 
 private:
     ::SvxCellHorJustify GetScHorAlign() const;
@@ -383,8 +381,6 @@ public:
     /** Returns the converted API protection data struct. */
     inline const ApiProtectionData& getApiData() const { return maApiData; }
 
-    /** Writes all protection attributes to the passed property map. */
-    void                writeToPropertyMap( PropertyMap& rPropMap ) const;
     void                fillToItemSet( SfxItemSet& rItemSet, bool bSkipPoolDefs = false ) const;
 private:
     ProtectionModel     maModel;            /// Protection model data.
@@ -881,17 +877,11 @@ public:
     OUString     createDxfStyle( sal_Int32 nDxfId ) const;
 
     void                writeFontToItemSet( SfxItemSet& rItemSet, sal_Int32 nFontId, bool bSkipPoolDefs = false ) const;
-    /** Writes the font attributes of the specified font data to the passed property map. */
-    void                writeFontToPropertyMap( PropertyMap& rPropMap, sal_Int32 nFontId ) const;
     sal_uLong           writeNumFmtToItemSet( SfxItemSet& rItemSet, sal_Int32 nNumFmtId, bool bSkipPoolDefs = false ) const;
     /** Writes the specified number format to the passed property map. */
-    void                writeNumFmtToPropertyMap( PropertyMap& rPropMap, sal_Int32 nNumFmtId ) const;
     void                writeBorderToItemSet( SfxItemSet& rItemSet, sal_Int32 nBorderId, bool bSkipPoolDefs = false ) const;
-    /** Writes the border attributes of the specified border data to the passed property map. */
-    void                writeBorderToPropertyMap( PropertyMap& rPropMap, sal_Int32 nBorderId ) const;
     /** Writes the fill attributes of the specified fill data to the passed property map. */
     void                writeFillToItemSet( SfxItemSet& rItemSet, sal_Int32 nFillId, bool bSkipPoolDefs = false ) const;
-    void                writeFillToPropertyMap( PropertyMap& rPropMap, sal_Int32 nFillId ) const;
 
     /** Writes the cell formatting attributes of the specified XF to the passed property set. */
     void                writeCellXfToDoc( ScDocumentImport& rDoc, const css::table::CellRangeAddress& rRange, sal_Int32 nXfId ) const;

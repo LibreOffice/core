@@ -120,35 +120,6 @@ private:
     FuncT const m_func;
 };
 
-template <typename T>
-class copy_back_wrapper
-{
-public:
-    operator T *() const { return &m_holder->m_value; }
-    operator T &() const { return m_holder->m_value; }
-
-    explicit copy_back_wrapper( T * p ) : m_holder( new data_holder(p) ) {}
-
-    // no thread-safe counting needed here, because calling thread blocks
-    // until solar thread has executed the functor.
-    copy_back_wrapper( copy_back_wrapper<T> const& r )
-        : m_holder(r.m_holder) { ++m_holder->m_refCount; }
-    ~copy_back_wrapper() {
-        --m_holder->m_refCount;
-        if (m_holder->m_refCount == 0) {
-            delete m_holder;
-        }
-    }
-private:
-    struct data_holder {
-        T m_value;
-        T * const m_ptr;
-        data_holder( T * p ) : m_value(*p), m_ptr(p) {}
-        ~data_holder() { *m_ptr = m_value; }
-    };
-    data_holder * const m_holder;
-};
-
 } // namespace detail
 
 
