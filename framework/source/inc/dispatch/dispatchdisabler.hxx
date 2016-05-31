@@ -44,7 +44,6 @@ class DispatchDisabler : public ::cppu::WeakImplHelper<
     std::set<OUString> maDisabledURLs;
     css::uno::Reference< css::frame::XDispatchProvider > mxSlave;
     css::uno::Reference< css::frame::XDispatchProvider > mxMaster;
-    css::uno::Reference< css::uno::XComponentContext >   mxContext;
 public:
              DispatchDisabler(const css::uno::Reference< css::uno::XComponentContext >& rxContext);
     virtual ~DispatchDisabler() {}

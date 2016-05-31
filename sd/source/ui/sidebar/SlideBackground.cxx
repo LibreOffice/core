@@ -132,7 +132,6 @@ SlideBackground::SlideBackground(
     maDspBckController(SID_DISPLAY_MASTER_BACKGROUND, *pBindings, *this),
     maDspObjController(SID_DISPLAY_MASTER_OBJECTS, *pBindings, *this),
     maMetricController(SID_ATTR_METRIC, *pBindings, *this),
-    mpFillStyleItem(),
     mpColorItem(),
     mpGradientItem(),
     mpHatchItem(),

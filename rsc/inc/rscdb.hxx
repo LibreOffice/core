@@ -236,8 +236,6 @@ public:
     RscLangArray        aLangString;
     RscLangArray        aLangShort;
 
-    Atom                nAcceleratorType;
-
     RscError*           pEH;        // error handler
     RscNameTable        aNmTb;      // name table
     RscFileTab          aFileTab;   // fila name table

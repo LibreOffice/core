@@ -1006,7 +1006,7 @@ uno::Reference<XAccessible> ScShapeChildren::GetBackgroundShapeAt(const awt::Poi
     if (!rShape.mpAccShape.is())
     {
         ::accessibility::ShapeTypeHandler& rShapeHandler = ::accessibility::ShapeTypeHandler::Instance();
-        ::accessibility::AccessibleShapeInfo aShapeInfo(rShape.mxShape, mpAccDoc, const_cast<ScShapeChildren*>(this));
+        ::accessibility::AccessibleShapeInfo aShapeInfo(rShape.mxShape, mpAccDoc);
 
         if (mpViewShell)
         {
