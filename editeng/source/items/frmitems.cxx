@@ -41,6 +41,7 @@
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/frame/status/UpperLowerMarginScale.hpp>
+#include <com/sun/star/frame/status/LeftRightMarginScale.hpp>
 #include <com/sun/star/drawing/ShadingPattern.hpp>
 
 #include <i18nutil/unicode.hxx>
@@ -430,6 +431,20 @@ bool SvxLRSpaceItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     switch( nMemberId )
     {
         // now all signed
+        case 0:
+        {
+            css::frame::status::LeftRightMarginScale aLRSpace;
+            aLRSpace.Left = (sal_Int32)(bConvert ? convertTwipToMm100(nLeftMargin) : nLeftMargin);
+            aLRSpace.TextLeft = (sal_Int32)(bConvert ? convertTwipToMm100(nTxtLeft) : nTxtLeft);
+            aLRSpace.Right = (sal_Int32)(bConvert ? convertTwipToMm100(nRightMargin) : nRightMargin);
+            aLRSpace.ScaleLeft = (sal_Int16)nPropLeftMargin;
+            aLRSpace.ScaleRight = (sal_Int16)nPropRightMargin;
+            aLRSpace.FirstLine = (sal_Int32)(bConvert ? convertTwipToMm100(nFirstLineOfst) : nFirstLineOfst);
+            aLRSpace.ScaleFirstLine = (sal_Int16)(nPropFirstLineOfst);
+            aLRSpace.AutoFirstLine = IsAutoFirst();
+            rVal <<= aLRSpace;
+            break;
+        }
         case MID_L_MARGIN:
             rVal <<= (sal_Int32)(bConvert ? convertTwipToMm100(nLeftMargin) : nLeftMargin);
             break;
@@ -473,13 +488,29 @@ bool SvxLRSpaceItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     bool bConvert = 0 != (nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     sal_Int32 nVal = 0;
-    if( nMemberId != MID_FIRST_AUTO &&
+    if( nMemberId != 0 && nMemberId != MID_FIRST_AUTO &&
             nMemberId != MID_L_REL_MARGIN && nMemberId != MID_R_REL_MARGIN)
         if(!(rVal >>= nVal))
             return false;
 
     switch( nMemberId )
     {
+        case 0:
+        {
+            css::frame::status::LeftRightMarginScale aLRSpace;
+            if(!(rVal >>= aLRSpace))
+                return false;
+
+            SetLeft( bConvert ? convertMm100ToTwip(aLRSpace.Left) : aLRSpace.Left );
+            SetTextLeft( bConvert ? convertMm100ToTwip(aLRSpace.TextLeft) : aLRSpace.TextLeft );
+            SetRight(bConvert ? convertMm100ToTwip(aLRSpace.Right) : aLRSpace.Right);
+            nPropLeftMargin = aLRSpace.ScaleLeft;
+            nPropRightMargin = aLRSpace.ScaleRight;
+            SetTextFirstLineOfst((short)(bConvert ?  convertMm100ToTwip(aLRSpace.FirstLine) : aLRSpace.FirstLine));
+            SetPropTextFirstLineOfst ( (sal_uInt16)aLRSpace.ScaleFirstLine );
+            SetAutoFirst( aLRSpace.AutoFirstLine );
+            break;
+        }
         case MID_L_MARGIN:
             SetLeft( bConvert ? convertMm100ToTwip(nVal) : nVal );
             break;

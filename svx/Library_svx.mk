@@ -196,6 +196,8 @@ $(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/sidebar/paragraph/ParaLineSpacingControl \
     svx/source/sidebar/paragraph/ParaLineSpacingPopup \
     svx/source/sidebar/paragraph/ParaPropertyPanel \
+    svx/source/sidebar/paragraph/ParaSpacingWindow \
+    svx/source/sidebar/paragraph/ParaSpacingControl \
     svx/source/sidebar/area/AreaPropertyPanel \
     svx/source/sidebar/area/AreaPropertyPanelBase \
     svx/source/sidebar/area/AreaTransparencyGradientControl \

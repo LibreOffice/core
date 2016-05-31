@@ -5303,6 +5303,8 @@ SfxVoidItem LeftRightParaMargin SID_ATTR_PARA_LRSPACE
     RecordAbsolute = FALSE,
     RecordPerSet;
 
+    SlotType = SvxLRSpaceItem
+
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     ToolBoxConfig = FALSE,
