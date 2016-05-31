@@ -254,7 +254,7 @@ SvXMLNumFmtExport::SvXMLNumFmtExport(
         pLocaleData = new LocaleDataWrapper( rExport.getComponentContext(), aLanguageTag );
     }
 
-    pUsedList = new SvXMLNumUsedList_Impl;
+    pImpl.reset(new SvXMLNumUsedList_Impl);
 }
 
 SvXMLNumFmtExport::SvXMLNumFmtExport(
@@ -288,12 +288,11 @@ SvXMLNumFmtExport::SvXMLNumFmtExport(
         pLocaleData = new LocaleDataWrapper( rExport.getComponentContext(), aLanguageTag );
     }
 
-    pUsedList = new SvXMLNumUsedList_Impl;
+    pImpl.reset(new SvXMLNumUsedList_Impl);
 }
 
 SvXMLNumFmtExport::~SvXMLNumFmtExport()
 {
-    delete pUsedList;
     delete pLocaleData;
     delete pCharClass;
 }
@@ -1764,13 +1763,13 @@ void SvXMLNumFmtExport::Export( bool bIsAutoStyle )
 
     sal_uInt32 nKey;
     const SvNumberformat* pFormat = nullptr;
-    bool bNext(pUsedList->GetFirstUsed(nKey));
+    bool bNext(pImpl->GetFirstUsed(nKey));
     while(bNext)
     {
         pFormat = pFormatter->GetEntry(nKey);
         if(pFormat)
             ExportFormat_Impl( *pFormat, nKey );
-        bNext = pUsedList->GetNextUsed(nKey);
+        bNext = pImpl->GetNextUsed(nKey);
     }
     if (!bIsAutoStyle)
     {
@@ -1788,25 +1787,25 @@ void SvXMLNumFmtExport::Export( bool bIsAutoStyle )
             {
                 nKey = it2->first;
                 pFormat = it2->second;
-                if (!pUsedList->IsUsed(nKey))
+                if (!pImpl->IsUsed(nKey))
                 {
                     DBG_ASSERT((pFormat->GetType() & css::util::NumberFormat::DEFINED), "a not user defined numberformat found");
                     //  user-defined and used formats are exported
                     ExportFormat_Impl( *pFormat, nKey );
                     // if it is a user-defined Format it will be added else nothing will happen
-                    pUsedList->SetUsed(nKey);
+                    pImpl->SetUsed(nKey);
                 }
 
                 ++it2;
             }
         }
     }
-    pUsedList->Export();
+    pImpl->Export();
 }
 
 OUString SvXMLNumFmtExport::GetStyleName( sal_uInt32 nKey )
 {
-    if(pUsedList->IsUsed(nKey) || pUsedList->IsWasUsed(nKey))
+    if(pImpl->IsUsed(nKey) || pImpl->IsWasUsed(nKey))
         return lcl_CreateStyleName( nKey, 0, true, sPrefix );
     else
     {
@@ -1822,7 +1821,7 @@ void SvXMLNumFmtExport::SetUsed( sal_uInt32 nKey )
         return;
 
     if (pFormatter->GetEntry(nKey))
-        pUsedList->SetUsed( nKey );
+        pImpl->SetUsed( nKey );
     else {
         OSL_FAIL("no existing Numberformat found with this key");
     }
@@ -1830,14 +1829,14 @@ void SvXMLNumFmtExport::SetUsed( sal_uInt32 nKey )
 
 void SvXMLNumFmtExport::GetWasUsed(uno::Sequence<sal_Int32>& rWasUsed)
 {
-    if (pUsedList)
-        pUsedList->GetWasUsed(rWasUsed);
+    if (pImpl)
+        pImpl->GetWasUsed(rWasUsed);
 }
 
 void SvXMLNumFmtExport::SetWasUsed(const uno::Sequence<sal_Int32>& rWasUsed)
 {
-    if (pUsedList)
-        pUsedList->SetWasUsed(rWasUsed);
+    if (pImpl)
+        pImpl->SetWasUsed(rWasUsed);
 }
 
 static const SvNumberformat* lcl_GetFormat( SvNumberFormatter* pFormatter,
