@@ -111,7 +111,7 @@ public:
     bool                        PrepUpdate();
     virtual void                Update() override;  // Update this menu only.
     // Update full menu hierarchy from this menu.
-    void                        UpdateFull () { ActivateAllSubmenus(mpVCLMenu); }
+    void                        UpdateFull () { ActivateAllSubmenus(mpVCLMenu); Update(); }
     GtkSalMenu*                 GetTopLevel();
     void                        SetNeedsUpdate();
 
