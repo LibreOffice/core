@@ -39,6 +39,7 @@
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
 #include <vcl/dibtools.hxx>
 #include <memory>
+#include <o3tl/make_unique.hxx>
 
 #define GRAPHIC_MTFTOBMP_MAXEXT     2048
 #define GRAPHIC_STREAMBUFSIZE       8192UL
@@ -54,7 +55,7 @@
 struct ImpSwapFile
 {
     INetURLObject   aSwapURL;
-    sal_uLong           nRefCount;
+    ~ImpSwapFile();
 };
 
 class ReaderData
@@ -90,10 +91,6 @@ Size GraphicReader::GetPreviewSize() const
 }
 
 ImpGraphic::ImpGraphic() :
-        mpAnimation     ( nullptr ),
-        mpContext       ( nullptr ),
-        mpSwapFile      ( nullptr ),
-        mpGfxLink       ( nullptr ),
         meType          ( GraphicType::NONE ),
         mnSizeBytes     ( 0UL ),
         mnRefCount      ( 1UL ),
@@ -106,7 +103,6 @@ ImpGraphic::ImpGraphic() :
 ImpGraphic::ImpGraphic( const ImpGraphic& rImpGraphic ) :
         maMetaFile      ( rImpGraphic.maMetaFile ),
         maEx            ( rImpGraphic.maEx ),
-        mpContext       ( nullptr ),
         mpSwapFile      ( rImpGraphic.mpSwapFile ),
         meType          ( rImpGraphic.meType ),
         mnSizeBytes     ( rImpGraphic.mnSizeBytes ),
@@ -115,31 +111,20 @@ ImpGraphic::ImpGraphic( const ImpGraphic& rImpGraphic ) :
         mbSwapUnderway  ( false ),
         mbDummyContext  ( rImpGraphic.mbDummyContext )
 {
-    if( mpSwapFile )
-        mpSwapFile->nRefCount++;
-
     if( rImpGraphic.mpGfxLink )
-        mpGfxLink = new GfxLink( *rImpGraphic.mpGfxLink );
-    else
-        mpGfxLink = nullptr;
+        mpGfxLink = o3tl::make_unique<GfxLink>( *rImpGraphic.mpGfxLink );
 
     if( rImpGraphic.mpAnimation )
     {
-        mpAnimation = new Animation( *rImpGraphic.mpAnimation );
+        mpAnimation = o3tl::make_unique<Animation>( *rImpGraphic.mpAnimation );
         maEx = mpAnimation->GetBitmapEx();
     }
-    else
-        mpAnimation = nullptr;
 
     maSvgData = rImpGraphic.maSvgData;
 }
 
 ImpGraphic::ImpGraphic( const Bitmap& rBitmap ) :
         maEx            ( rBitmap ),
-        mpAnimation     ( nullptr ),
-        mpContext       ( nullptr ),
-        mpSwapFile      ( nullptr ),
-        mpGfxLink       ( nullptr ),
         meType          ( !rBitmap.IsEmpty() ? GraphicType::Bitmap : GraphicType::NONE ),
         mnSizeBytes     ( 0UL ),
         mnRefCount      ( 1UL ),
@@ -151,10 +136,6 @@ ImpGraphic::ImpGraphic( const Bitmap& rBitmap ) :
 
 ImpGraphic::ImpGraphic( const BitmapEx& rBitmapEx ) :
         maEx            ( rBitmapEx ),
-        mpAnimation     ( nullptr ),
-        mpContext       ( nullptr ),
-        mpSwapFile      ( nullptr ),
-        mpGfxLink       ( nullptr ),
         meType          ( !rBitmapEx.IsEmpty() ? GraphicType::Bitmap : GraphicType::NONE ),
         mnSizeBytes     ( 0UL ),
         mnRefCount      ( 1UL ),
@@ -164,11 +145,7 @@ ImpGraphic::ImpGraphic( const BitmapEx& rBitmapEx ) :
 {
 }
 
-ImpGraphic::ImpGraphic(const SvgDataPtr& rSvgDataPtr)
-:   mpAnimation( nullptr ),
-    mpContext( nullptr ),
-    mpSwapFile( nullptr ),
-    mpGfxLink( nullptr ),
+ImpGraphic::ImpGraphic(const SvgDataPtr& rSvgDataPtr) :
     meType( rSvgDataPtr.get() ? GraphicType::Bitmap : GraphicType::NONE ),
     mnSizeBytes( 0UL ),
     mnRefCount( 1UL ),
@@ -181,10 +158,7 @@ ImpGraphic::ImpGraphic(const SvgDataPtr& rSvgDataPtr)
 
 ImpGraphic::ImpGraphic( const Animation& rAnimation ) :
         maEx            ( rAnimation.GetBitmapEx() ),
-        mpAnimation     ( new Animation( rAnimation ) ),
-        mpContext       ( nullptr ),
-        mpSwapFile      ( nullptr ),
-        mpGfxLink       ( nullptr ),
+        mpAnimation     ( o3tl::make_unique<Animation>( rAnimation ) ),
         meType          ( GraphicType::Bitmap ),
         mnSizeBytes     ( 0UL ),
         mnRefCount      ( 1UL ),
@@ -196,10 +170,6 @@ ImpGraphic::ImpGraphic( const Animation& rAnimation ) :
 
 ImpGraphic::ImpGraphic( const GDIMetaFile& rMtf ) :
         maMetaFile      ( rMtf ),
-        mpAnimation     ( nullptr ),
-        mpContext       ( nullptr ),
-        mpSwapFile      ( nullptr ),
-        mpGfxLink       ( nullptr ),
         meType          ( GraphicType::GdiMetafile ),
         mnSizeBytes     ( 0UL ),
         mnRefCount      ( 1UL ),
@@ -212,7 +182,6 @@ ImpGraphic::ImpGraphic( const GDIMetaFile& rMtf ) :
 ImpGraphic::~ImpGraphic()
 {
     ImplClear();
-    delete mpContext;
 }
 
 ImpGraphic& ImpGraphic::operator=( const ImpGraphic& rImpGraphic )
@@ -226,16 +195,15 @@ ImpGraphic& ImpGraphic::operator=( const ImpGraphic& rImpGraphic )
         meType = rImpGraphic.meType;
         mnSizeBytes = rImpGraphic.mnSizeBytes;
 
-        delete mpAnimation;
+        mpAnimation.reset();
 
         if ( rImpGraphic.mpAnimation )
         {
-            mpAnimation = new Animation( *rImpGraphic.mpAnimation );
+            mpAnimation = o3tl::make_unique<Animation>( *rImpGraphic.mpAnimation );
             maEx = mpAnimation->GetBitmapEx();
         }
         else
         {
-            mpAnimation = nullptr;
             maEx = rImpGraphic.maEx;
         }
 
@@ -243,17 +211,12 @@ ImpGraphic& ImpGraphic::operator=( const ImpGraphic& rImpGraphic )
         {
             mbSwapOut = rImpGraphic.mbSwapOut;
             mpSwapFile = rImpGraphic.mpSwapFile;
-
-            if( mpSwapFile )
-                mpSwapFile->nRefCount++;
         }
 
-        delete mpGfxLink;
+        mpGfxLink.reset();
 
         if( rImpGraphic.mpGfxLink )
-            mpGfxLink = new GfxLink( *rImpGraphic.mpGfxLink );
-        else
-            mpGfxLink = nullptr;
+            mpGfxLink = o3tl::make_unique<GfxLink>( *rImpGraphic.mpGfxLink );
 
         maSvgData = rImpGraphic.maSvgData;
     }
@@ -337,55 +300,41 @@ void ImpGraphic::ImplClearGraphics( bool bCreateSwapInfo )
 
     if( mpAnimation )
     {
-        mpAnimation->Clear();
-        delete mpAnimation;
-        mpAnimation = nullptr;
+        mpAnimation->Clear();   //TODO: Is this required?
+        mpAnimation.reset();
     }
 
-    if( mpGfxLink )
-    {
-        delete mpGfxLink;
-        mpGfxLink = nullptr;
-    }
-
+    mpGfxLink.reset();
     maSvgData.reset();
+}
+
+ImpSwapFile::~ImpSwapFile()
+{
+    try
+    {
+        ::ucbhelper::Content aCnt( aSwapURL.GetMainURL( INetURLObject::NO_DECODE ),
+            css::uno::Reference< css::ucb::XCommandEnvironment >(),
+            comphelper::getProcessComponentContext() );
+
+        aCnt.executeCommand( "delete", css::uno::makeAny( true ) );
+    }
+    catch( const css::ucb::ContentCreationException& )
+    {
+    }
+    catch( const css::uno::RuntimeException& )
+    {
+    }
+    catch( const css::ucb::CommandAbortedException& )
+    {
+    }
+    catch( const css::uno::Exception& )
+    {
+    }
 }
 
 void ImpGraphic::ImplClear()
 {
-    if( mpSwapFile )
-    {
-        if( mpSwapFile->nRefCount > 1 )
-            mpSwapFile->nRefCount--;
-        else
-        {
-            try
-            {
-                ::ucbhelper::Content aCnt( mpSwapFile->aSwapURL.GetMainURL( INetURLObject::NO_DECODE ),
-                                     css::uno::Reference< css::ucb::XCommandEnvironment >(),
-                                     comphelper::getProcessComponentContext() );
-
-                aCnt.executeCommand( "delete",
-                                     css::uno::makeAny( true ) );
-            }
-            catch( const css::ucb::ContentCreationException& )
-            {
-            }
-            catch( const css::uno::RuntimeException& )
-            {
-            }
-            catch( const css::ucb::CommandAbortedException& )
-            {
-            }
-            catch( const css::uno::Exception& )
-            {
-            }
-
-            delete mpSwapFile;
-        }
-
-        mpSwapFile = nullptr;
-    }
+    mpSwapFile.reset();
 
     mbSwapOut = false;
 
@@ -940,10 +889,8 @@ sal_uLong ImpGraphic::ImplGetAnimationLoopCount() const
     return( mpAnimation ? mpAnimation->GetLoopCount() : 0UL );
 }
 
-
-void ImpGraphic::ImplSetContext( GraphicReader* pReader )
+void ImpGraphic::ImplSetContext( std::shared_ptr<GraphicReader> &pReader )
 {
-    assert(!mpContext);
     mpContext = pReader;
     mbDummyContext = false;
 }
@@ -1183,8 +1130,7 @@ bool ImpGraphic::ImplSwapOut()
 
                 if( ( bRet = ImplSwapOut( xOStm.get() ) ) )
                 {
-                    mpSwapFile = new ImpSwapFile;
-                    mpSwapFile->nRefCount = 1;
+                    mpSwapFile = o3tl::make_unique<ImpSwapFile>();
                     mpSwapFile->aSwapURL = aTmpURL;
                 }
                 else
@@ -1282,38 +1228,7 @@ bool ImpGraphic::ImplSwapIn()
                 bRet = ImplSwapIn( xIStm.get() );
                 xIStm.reset();
 
-                if( mpSwapFile )
-                {
-                    if( mpSwapFile->nRefCount > 1 )
-                        mpSwapFile->nRefCount--;
-                    else
-                    {
-                        try
-                        {
-                            ::ucbhelper::Content aCnt( aSwapURL,
-                                                 css::uno::Reference< css::ucb::XCommandEnvironment >(),
-                                                 comphelper::getProcessComponentContext() );
-
-                            aCnt.executeCommand( "delete", css::uno::makeAny( true ) );
-                        }
-                        catch( const css::ucb::ContentCreationException& )
-                        {
-                        }
-                        catch( const css::uno::RuntimeException& )
-                        {
-                        }
-                        catch( const css::ucb::CommandAbortedException& )
-                        {
-                        }
-                        catch( const css::uno::Exception& )
-                        {
-                        }
-
-                        delete mpSwapFile;
-                    }
-
-                    mpSwapFile = nullptr;
-                }
+                mpSwapFile.reset();
             }
         }
     }
@@ -1348,8 +1263,7 @@ bool ImpGraphic::ImplSwapIn( SvStream* xIStm )
 
 void ImpGraphic::ImplSetLink( const GfxLink& rGfxLink )
 {
-    delete mpGfxLink;
-    mpGfxLink = new GfxLink( rGfxLink );
+    mpGfxLink = o3tl::make_unique<GfxLink>( rGfxLink );
 
     if( mpGfxLink->IsNative() )
         mpGfxLink->SwapOut();
@@ -1362,7 +1276,7 @@ GfxLink ImpGraphic::ImplGetLink()
 
 bool ImpGraphic::ImplIsLink() const
 {
-    return ( mpGfxLink != nullptr );
+    return ( bool(mpGfxLink) );
 }
 
 BitmapChecksum ImpGraphic::ImplGetChecksum() const
@@ -1465,7 +1379,7 @@ SvStream& ReadImpGraphic( SvStream& rIStm, ImpGraphic& rImpGraphic )
                 if( !rIStm.GetError() && aLink.LoadNative( aGraphic ) )
                 {
                     // set link only, if no other link was set
-                    const bool bSetLink = ( rImpGraphic.mpGfxLink == nullptr );
+                    const bool bSetLink = ( !rImpGraphic.mpGfxLink );
 
                     // assign graphic
                     rImpGraphic = *aGraphic.ImplGetImpGraphic();
@@ -1506,8 +1420,7 @@ SvStream& ReadImpGraphic( SvStream& rIStm, ImpGraphic& rImpGraphic )
 
                     if( !rIStm.GetError() && ( 0x5344414e == nMagic1 ) && ( 0x494d4931 == nMagic2 ) )
                     {
-                        delete rImpGraphic.mpAnimation;
-                        rImpGraphic.mpAnimation = new Animation;
+                        rImpGraphic.mpAnimation = o3tl::make_unique<Animation>();
                         ReadAnimation( rIStm, *rImpGraphic.mpAnimation );
 
                         // #108077# manually set loaded BmpEx to Animation
