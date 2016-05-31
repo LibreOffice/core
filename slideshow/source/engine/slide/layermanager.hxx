@@ -65,16 +65,12 @@ namespace slideshow
                 @param rViews
                 Views currently registered
 
-                @param rPageBounds
-                Overall page bounds, in user space coordinates
-
                 @param bDisableAnimationZOrder
                 When true, all sprite animations run in the
                 foreground.  That is, no extra layers are created, and
                 the slideshow runs potentially faster.
              */
             LayerManager( const UnoViewContainer&    rViews,
-                          const ::basegfx::B2DRange& rPageBounds,
                           bool                       bDisableAnimationZOrder );
 
             /// Forbid copy construction
@@ -333,12 +329,6 @@ namespace slideshow
                 redundant information for faster update processing.
              */
             ShapeUpdateSet           maUpdateShapes;
-
-            /** Overall slide bounds (in user coordinate
-                system). shapes that exceed this boundary are clipped,
-                thus, layers only need to be of this size.
-             */
-            const basegfx::B2DRange  maPageBounds;
 
             /// Number of shape sprites currently active on this LayerManager
             sal_Int32                mnActiveSprites;

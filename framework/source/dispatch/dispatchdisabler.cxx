@@ -18,8 +18,7 @@
 using namespace css;
 using namespace framework;
 
-DispatchDisabler::DispatchDisabler(const uno::Reference< uno::XComponentContext >& rxContext) :
-    mxContext( rxContext )
+DispatchDisabler::DispatchDisabler(const uno::Reference< uno::XComponentContext >& )
 {
 }
 
