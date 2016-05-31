@@ -8,39 +8,24 @@
  */
 #include "caret.hxx"
 
-/////////////////////////////// SmCaretPosGraph
+#include <o3tl/make_unique.hxx>
 
-SmCaretPosGraphEntry* SmCaretPosGraphIterator::Next(){
-    if(nOffset >= pGraph->nOffset){
-        if(pGraph->pNext){
-            pGraph = pGraph->pNext;
-            nOffset = 0;
-            pEntry = Next();
-        }else
-            pEntry = nullptr;
-    }else
-        pEntry = pGraph->Graph + nOffset++;
-    return pEntry;
-}
+SmCaretPosGraph::SmCaretPosGraph() = default;
 
-SmCaretPosGraphEntry* SmCaretPosGraph::Add(SmCaretPosGraphEntry entry){
-    if(nOffset >= SmCaretPosGraphSize){
-        if(!pNext)
-            pNext = new SmCaretPosGraph();
-        return pNext->Add(entry);
-    }else{
-        //Set Left and Right to point to the entry itself if they are NULL
-        entry.Left = entry.Left ? entry.Left : Graph + nOffset;
-        entry.Right = entry.Right ? entry.Right : Graph + nOffset;
-        //Save the entry
-        Graph[nOffset] = entry;
-        return Graph + nOffset++;
-    }
-}
+SmCaretPosGraph::~SmCaretPosGraph() = default;
 
-SmCaretPosGraph::~SmCaretPosGraph(){
-    delete pNext;
-    pNext = nullptr;
+SmCaretPosGraphEntry* SmCaretPosGraph::Add(SmCaretPos pos,
+                                           SmCaretPosGraphEntry* left,
+                                           SmCaretPosGraphEntry* right)
+{
+    SAL_WARN_IF( pos.Index < 0, "starmath", "Index shouldn't be -1!" );
+    auto entry = o3tl::make_unique<SmCaretPosGraphEntry>(pos, left, right);
+    SmCaretPosGraphEntry* e = entry.get();
+    //Set Left and Right to point to the entry itself if they are NULL
+    entry->Left = entry->Left ? entry->Left : e;
+    entry->Right = entry->Right ? entry->Right : e;
+    mvEntries.push_back(std::move(entry));
+    return e;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

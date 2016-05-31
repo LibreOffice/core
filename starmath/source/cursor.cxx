@@ -36,12 +36,12 @@ void SmCursor::Move(OutputDevice* pDev, SmMovementDirection direction, bool bMov
                         best_line,  //Best approximated line found so far
                         curr_line;  //Current line
             long dbp_sq = 0;        //Distance squared to best line
-            SmCaretPosGraphIterator it = mpGraph->GetIterator();
-            while(it.Next()){
+            for(auto &pEntry : *mpGraph)
+            {
                 //Reject it if it's the current position
-                if(it->CaretPos == mpPosition->CaretPos) continue;
+                if(pEntry->CaretPos == mpPosition->CaretPos) continue;
                 //Compute caret line
-                curr_line = SmCaretPos2LineVisitor(pDev, it->CaretPos).GetResult();
+                curr_line = SmCaretPos2LineVisitor(pDev, pEntry->CaretPos).GetResult();
                 //Reject anything above if we're moving down
                 if(curr_line.GetTop() <= from_line.GetTop() && direction == MoveDown) continue;
                 //Reject anything below if we're moving up
@@ -57,7 +57,7 @@ void SmCursor::Move(OutputDevice* pDev, SmMovementDirection direction, bool bMov
                 }
                 //Take current line as the best
                 best_line = curr_line;
-                NewPos = it.Current();
+                NewPos = pEntry.get();
                 //Update distance to best line
                 dbp_sq = best_line.SquaredDistanceX(from_line) * HORIZONTICAL_DISTANCE_FACTOR +
                          best_line.SquaredDistanceY(from_line);
@@ -80,11 +80,11 @@ void SmCursor::MoveTo(OutputDevice* pDev, Point pos, bool bMoveAnchor){
     SmCaretPosGraphEntry* NewPos = nullptr;
     long dp_sq = 0,     //Distance to current line squared
          dbp_sq = 1;    //Distance to best line squared
-    SmCaretPosGraphIterator it = mpGraph->GetIterator();
-    while(it.Next()){
-        OSL_ENSURE(it->CaretPos.IsValid(), "The caret position graph may not have invalid positions!");
+    for(auto &pEntry : *mpGraph)
+    {
+        OSL_ENSURE(pEntry->CaretPos.IsValid(), "The caret position graph may not have invalid positions!");
         //Compute current line
-        curr_line = SmCaretPos2LineVisitor(pDev, it->CaretPos).GetResult();
+        curr_line = SmCaretPos2LineVisitor(pDev, pEntry->CaretPos).GetResult();
         //If we have a position compare to it
         if(NewPos){
             //Compute squared distance to current line
@@ -94,7 +94,7 @@ void SmCursor::MoveTo(OutputDevice* pDev, Point pos, bool bMoveAnchor){
         }
         //Accept current position as the best
         best_line = curr_line;
-        NewPos = it.Current();
+        NewPos = pEntry.get();
         //Update distance to best line
         dbp_sq = best_line.SquaredDistanceX(pos) + best_line.SquaredDistanceY(pos);
     }
@@ -126,18 +126,18 @@ void SmCursor::BuildGraph(){
 
     //Restore anchor and position pointers
     if(_anchor.IsValid() || _position.IsValid()){
-        SmCaretPosGraphIterator it = mpGraph->GetIterator();
-        while(it.Next()){
-            if(_anchor == it->CaretPos)
-                mpAnchor = it.Current();
-            if(_position == it->CaretPos)
-                mpPosition = it.Current();
+        for(auto &pEntry : *mpGraph)
+        {
+            if(_anchor == pEntry->CaretPos)
+                mpAnchor = pEntry.get();
+            if(_position == pEntry->CaretPos)
+                mpPosition = pEntry.get();
         }
     }
     //Set position and anchor to first caret position
-    SmCaretPosGraphIterator it = mpGraph->GetIterator();
+    auto it = mpGraph->begin();
     if(!mpPosition)
-        mpPosition = it.Next();
+        mpPosition = (it == mpGraph->end()) ? nullptr : it->get();
     if(!mpAnchor)
         mpAnchor = mpPosition;
 
@@ -146,11 +146,12 @@ void SmCursor::BuildGraph(){
 }
 
 bool SmCursor::SetCaretPosition(SmCaretPos pos){
-    SmCaretPosGraphIterator it = mpGraph->GetIterator();
-    while(it.Next()){
-        if(it->CaretPos == pos){
-            mpPosition = it.Current();
-            mpAnchor = it.Current();
+    for(auto &pEntry : *mpGraph)
+    {
+        if(pEntry->CaretPos == pos)
+        {
+            mpPosition = pEntry.get();
+            mpAnchor = pEntry.get();
             return true;
         }
     }
