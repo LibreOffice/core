@@ -26,7 +26,7 @@ class VCL_DLLPUBLIC EmbeddedFontsHelper
 {
 public:
     /// Specification of what kind of operation is allowed when embedding a font
-    enum FontRights
+    enum class FontRights
     {
         ViewingAllowed, ///< Font may be embedded for viewing the document (but not editing)
         EditingAllowed ///< Font may be embedded for editing document (implies viewing)

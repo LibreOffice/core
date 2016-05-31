@@ -306,7 +306,7 @@ void XMLFontAutoStylePool::exportXML()
                 // the font license rights too and open either read-only or not use the font for editing).
                 OUString fileUrl = EmbeddedFontsHelper::fontFileUrl( pEntry->GetFamilyName(), pEntry->GetFamily(),
                     italic[ j ], weight[ j ], pEntry->GetPitch(), pEntry->GetEncoding(),
-                    EmbeddedFontsHelper::ViewingAllowed );
+                    EmbeddedFontsHelper::FontRights::ViewingAllowed );
                 if( fileUrl.isEmpty())
                     continue;
                 if( !fontFilesMap.count( fileUrl ))
