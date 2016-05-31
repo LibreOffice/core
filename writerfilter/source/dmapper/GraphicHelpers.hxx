@@ -66,6 +66,17 @@ public:
 };
 typedef std::shared_ptr<WrapHandler> WrapHandlerPtr;
 
+/// Keeps track of the next available unique automatic name.
+class GraphicNamingHelper
+{
+    int m_nCounter;
+
+public:
+    GraphicNamingHelper();
+    /// Name a graphic based on rTemplate.
+    OUString NameGraphic(const OUString& rTemplate);
+};
+
 } }
 
 #endif
