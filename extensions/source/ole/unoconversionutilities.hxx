@@ -245,8 +245,10 @@ bool convertSelfToCom( T& unoInterface, VARIANT * pVar)
             Sequence<sal_Int8> seqId( arId, 16);
             Any anySource;
             anySource <<= xInt;
-            Any anyDisp=    xSupplier->createBridge( anySource, seqId, UNO, OLE);
-            if( anyDisp.getValueTypeClass() == TypeClass_UNSIGNED_LONG)
+            Any anyDisp = xSupplier->createBridge(anySource, seqId, UNO, OLE);
+
+            // due to global-process-id check this must be in-process pointer
+            if (anyDisp.getValueTypeClass() == cppu::UnoType<sal_uIntPtr>::get().getTypeClass())
             {
                 VARIANT* pvariant= *(VARIANT**)anyDisp.getValue();
                 HRESULT hr;

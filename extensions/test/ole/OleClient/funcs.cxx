@@ -93,7 +93,7 @@ Reference<XInvocation> convertComObject( IUnknown* pUnk)
 
     Any any;
     CComVariant var( pUnk);
-    any <<= ( sal_uInt32)&var;
+    any <<= (sal_uIntPtr) &var;
     sal_uInt8 arId[16];
     rtl_getGlobalProcessId( arId);
     Any target= xSuppl->createBridge( any, Sequence<sal_Int8>( (sal_Int8*)arId, 16), OLE, UNO );
