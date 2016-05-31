@@ -62,6 +62,7 @@ class DomainMapper_Impl;
 class ListsManager;
 class StyleSheetTable;
 class GraphicZOrderHelper;
+class GraphicNamingHelper;
 
 // different context types require different sprm handling (e.g. names)
 enum SprmType
@@ -107,6 +108,7 @@ public:
     OUString getOrCreateCharStyle( PropertyValueVector_t& rCharProperties, bool bAlwaysCreate );
     std::shared_ptr< StyleSheetTable > GetStyleSheetTable( );
     GraphicZOrderHelper* graphicZOrderHelper();
+    GraphicNamingHelper& GetGraphicNamingHelper();
 
     /// Return the first from the pending (not inserted to the document) shapes, if there are any.
     css::uno::Reference<css::drawing::XShape> PopPendingShape();
@@ -169,6 +171,7 @@ private:
     static sal_Unicode getFillCharFromValue(const sal_Int32 nIntValue);
     bool mbIsSplitPara;
     std::unique_ptr< GraphicZOrderHelper > zOrderHelper;
+    std::unique_ptr<GraphicNamingHelper> m_pGraphicNamingHelper;
 };
 
 } // namespace dmapper

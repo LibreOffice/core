@@ -2588,6 +2588,13 @@ DECLARE_RTFIMPORT_TEST(testTdf74795, "tdf74795.rtf")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), getProperty<sal_Int32>(xCell, "LeftBorderDistance"));
 }
 
+DECLARE_RTFIMPORT_TEST(testTdf77349, "tdf77349.rtf")
+{
+    uno::Reference<container::XNamed> xImage(getShape(1), uno::UNO_QUERY);
+    // This was empty: imported image wasn't named automatically.
+    CPPUNIT_ASSERT_EQUAL(OUString("graphic1"), xImage->getName());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
