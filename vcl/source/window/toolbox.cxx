@@ -5010,20 +5010,19 @@ bool ToolBox::ImplActivateItem( vcl::KeyCode aKeyCode )
         else
         {
             mnDownItemId = mnCurItemId = mnHighItemId;
-            ImplToolItem* pItem = ImplGetItem( mnHighItemId );
-            if ( pItem->mnBits & ToolBoxItemBits::AUTOCHECK )
+            if ( pToolItem->mnBits & ToolBoxItemBits::AUTOCHECK )
             {
-                if ( pItem->mnBits & ToolBoxItemBits::RADIOCHECK )
+                if ( pToolItem->mnBits & ToolBoxItemBits::RADIOCHECK )
                 {
-                    if ( pItem->meState != TRISTATE_TRUE )
-                        SetItemState( pItem->mnId, TRISTATE_TRUE );
+                    if ( pToolItem->meState != TRISTATE_TRUE )
+                        SetItemState( pToolItem->mnId, TRISTATE_TRUE );
                 }
                 else
                 {
-                    if ( pItem->meState != TRISTATE_TRUE )
-                        pItem->meState = TRISTATE_TRUE;
+                    if ( pToolItem->meState != TRISTATE_TRUE )
+                        pToolItem->meState = TRISTATE_TRUE;
                     else
-                        pItem->meState = TRISTATE_FALSE;
+                        pToolItem->meState = TRISTATE_FALSE;
                 }
             }
             mnMouseModifier = aKeyCode.GetModifier();
