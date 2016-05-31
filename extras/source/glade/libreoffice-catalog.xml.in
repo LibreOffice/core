@@ -807,5 +807,8 @@
     <glade-widget-class title="Show Text" name="cuilo-SvxShowText"
                         generic-name="ShowText" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
+    <glade-widget-class title="Paragraph LR Spacing" name="svxlo-ParaLRSpacingWindow"
+                        generic-name="Formula ListBox" parent="GtkComboBox"
+                        icon-name="widget-gtk-combobox"/>
   </glade-widget-classes>
 </glade-catalog>

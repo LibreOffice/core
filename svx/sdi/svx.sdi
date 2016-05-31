@@ -5305,7 +5305,7 @@ SfxVoidItem LeftRightParaMargin SID_ATTR_PARA_LRSPACE
 
     AccelConfig = FALSE,
     MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
+    ToolBoxConfig = TRUE,
     GroupId = GID_FORMAT;
 ]
 
@@ -5455,7 +5455,7 @@ SvxULSpaceItem ULSpacing SID_ATTR_PARA_ULSPACE
 
     AccelConfig = FALSE,
     MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
+    ToolBoxConfig = TRUE,
     GroupId = GID_FORMAT;
 ]
 
