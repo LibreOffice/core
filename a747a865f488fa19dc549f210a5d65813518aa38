@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_261b2074",
+        "filename": "sw/source/core/unocore/unotbl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2787,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-05-31T07:30:05Z",
+      "side": 1,
+      "message": "Why is this necessary?",
+      "revId": "a747a865f488fa19dc549f210a5d65813518aa38",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_462664bb",
+        "filename": "sw/source/core/unocore/unotbl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2788,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-05-31T07:30:05Z",
+      "side": 1,
+      "message": "this static_cast\u003c\u003e is not safe. A better alternative:\n\nif (aValue \u003e\u003e\u003d sName) { ... aValue contained a string, handle it ... }\n\n(Yes, I see that surrounding code does that already, a bad habit, better not to copy it. ;-) )",
+      "revId": "a747a865f488fa19dc549f210a5d65813518aa38",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
