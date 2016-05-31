@@ -41,7 +41,7 @@ friend class SfxSlotPool;
     sal_uInt16              nCount;         // number of slots in SlotMap
     SfxInterfaceId          nClassId;       // Id of interface
     bool                    bSuperClass;    // Whether children inherit its toolbars etc
-    SfxInterface_Impl*      pImpData;
+    std::unique_ptr<SfxInterface_Impl>      pImplData;
 
     SfxSlot*                operator[]( sal_uInt16 nPos ) const;
 
