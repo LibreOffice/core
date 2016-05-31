@@ -497,7 +497,7 @@ bool SwDBManager::Merge( const SwMergeDescriptor& rMergeDesc, vcl::Window* pPare
             m_DataSourceParams.push_back(std::move(pInsert));
             try
             {
-                uno::Reference<lang::XComponent> xComponent(pInsert->xConnection, uno::UNO_QUERY);
+                uno::Reference<lang::XComponent> xComponent(m_DataSourceParams.back()->xConnection, uno::UNO_QUERY);
                 if(xComponent.is())
                     xComponent->addEventListener(pImpl->m_xDisposeListener.get());
             }
