@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_c6db54ec",
+        "filename": "sc/source/ui/sidebar/NumberFormatControl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-05-31T13:33:27Z",
+      "side": 1,
+      "message": "nitpick: please reduce the indentation by one level here.",
+      "range": {
+        "startLine": 59,
+        "startChar": 16,
+        "endLine": 61,
+        "endChar": 48
+      },
+      "revId": "4c39f56051717721780127725bdbb839e185559b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
