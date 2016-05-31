@@ -433,7 +433,7 @@ IMPL_LINK_NOARG_TYPED(SvxCharacterMap, FontSelectHdl, ListBox&, void)
     // notify children using this font
     m_pShowSet->SetFont( aFont );
     m_pShowChar->SetFont( aFont );
-    m_pShowText->SetFont( aFont );
+    m_pShowText->SetControlFont( aFont );
 
     // setup unicode subset listbar with font specific subsets,
     // hide unicode subset listbar for symbol fonts
