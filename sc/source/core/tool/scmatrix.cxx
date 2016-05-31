@@ -3362,6 +3362,10 @@ void ScVectorRefMatrix::ensureFullMatrix()
     size_t nRowSize = mnRowSize;
     size_t nRowEnd = mnRowStart + mnRowSize;
     size_t nDataRowEnd = mpToken->GetArrayLength();
+
+    if (mnRowStart >= nDataRowEnd)
+        return;
+
     if (nRowEnd > nDataRowEnd)
     {
         // Data array is shorter than the row size of the reference. Truncate
