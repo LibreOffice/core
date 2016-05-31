@@ -82,7 +82,7 @@ namespace comphelper
     {
     private:
         oslInterlockedCount     m_nClients;     /// number of registered clients
-        OModuleImpl*            m_pImpl;        /// impl class. lives as long as at least one client for the module is registered
+        std::unique_ptr<OModuleImpl>            m_pImpl;        /// impl class. lives as long as at least one client for the module is registered
 
     protected:
         mutable ::osl::Mutex    m_aMutex;       /// access safety
