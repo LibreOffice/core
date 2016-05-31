@@ -62,6 +62,7 @@
 #include "ViewShell.hxx"
 #include "sdmod.hxx"
 #include "View.hxx"
+#include "CustomAnimationEffect.hxx"
 #include "sdpage.hxx"
 #include "sdresid.hxx"
 #include "DrawViewShell.hxx"
@@ -546,6 +547,23 @@ bool DrawDocShell::SaveAs( SfxMedium& rMedium )
         }
     }
     mpDoc->StopWorkStartupDelay();
+
+    //With custom animation, if Outliner is modified, update text before saving
+    if( mpViewShell )
+    {
+        SdPage* pPage = mpViewShell->getCurrentPage();
+        if( pPage && pPage->getMainSequence()->getCount() )
+        {
+            SdrObject* pObj = mpViewShell->GetView()->GetTextEditObject();
+            SdrOutliner* pOutl = mpViewShell->GetView()->GetTextEditOutliner();
+            if( pObj && pOutl && pOutl->IsModified() )
+            {
+                OutlinerParaObject* pNewText = pOutl->CreateParaObject( 0, pOutl->GetParagraphCount() );
+                pObj->SetOutlinerParaObject( pNewText );
+                pOutl->ClearModifyFlag();
+            }
+        }
+    }
 
     //TODO/LATER: why this?!
     if( GetCreateMode() == SfxObjectCreateMode::STANDARD )
