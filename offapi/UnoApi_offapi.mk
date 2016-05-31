@@ -2664,6 +2664,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/frame/status,\
 	ItemState \
 	ItemStatus \
 	LeftRightMargin \
+	LeftRightMarginScale \
 	Template \
 	UpperLowerMargin \
 	UpperLowerMarginScale \
