@@ -24,6 +24,7 @@
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <comphelper/comphelperdllapi.h>
+#include <memory>
 
 namespace comphelper
 {
@@ -36,7 +37,7 @@ class COMPHELPER_DLLPUBLIC PropertySetHelper : public css::beans::XPropertySet,
                           public css::beans::XMultiPropertySet
 {
 private:
-    PropertySetHelperImpl* mp;
+    std::unique_ptr<PropertySetHelperImpl> mpImpl;
 
 protected:
     virtual void _setPropertyValues( const comphelper::PropertyMapEntry** ppEntries, const css::uno::Any* pValues ) throw(css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception ) = 0;
