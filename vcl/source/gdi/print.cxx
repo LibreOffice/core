@@ -88,12 +88,12 @@ void ImplUpdateJobSetupPaper( JobSetup& rJobSetup )
 // PrinterOptions
 PrinterOptions::PrinterOptions() :
     mbReduceTransparency( false ),
-    meReducedTransparencyMode( PRINTER_TRANSPARENCY_AUTO ),
+    meReducedTransparencyMode( PrinterTransparencyMode::Auto ),
     mbReduceGradients( false ),
-    meReducedGradientsMode( PRINTER_GRADIENT_STRIPES ),
+    meReducedGradientsMode( PrinterGradientMode::Stripes ),
     mnReducedGradientStepCount( 64 ),
     mbReduceBitmaps( false ),
-    meReducedBitmapMode( PRINTER_BITMAP_NORMAL ),
+    meReducedBitmapMode( PrinterBitmapMode::Normal ),
     mnReducedBitmapResolution( 200 ),
     mbReducedBitmapsIncludeTransparency( true ),
     mbConvertToGreyscales( false ),

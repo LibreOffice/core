@@ -1346,7 +1346,7 @@ void Printer::DrawGradientEx( OutputDevice* pOut, const Rectangle& rRect, const 
 
     if( rPrinterOptions.IsReduceGradients() )
     {
-        if( PRINTER_GRADIENT_STRIPES == rPrinterOptions.GetReducedGradientMode() )
+        if( PrinterGradientMode::Stripes == rPrinterOptions.GetReducedGradientMode() )
         {
             if( !rGradient.GetSteps() || ( rGradient.GetSteps() > rPrinterOptions.GetReducedGradientStepCount() ) )
             {
