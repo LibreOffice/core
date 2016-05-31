@@ -22,6 +22,7 @@
 #include "rgbtable.hxx"
 #include "xpmread.hxx"
 #include <cstring>
+#include <o3tl/make_unique.hxx>
 
 #define XPMTEMPBUFSIZE      0x00008000
 #define XPMSTRINGBUF        0x00008000
@@ -723,25 +724,25 @@ bool XPMReader::ImplGetString()
 
 VCL_DLLPUBLIC bool ImportXPM( SvStream& rStm, Graphic& rGraphic )
 {
-    XPMReader*  pXPMReader = static_cast<XPMReader*>(rGraphic.GetContext());
-    ReadState   eReadState;
+    auto pContext = rGraphic.GetContext();
+    rGraphic.SetContext();
+    XPMReader* pXPMReader = dynamic_cast<XPMReader*>( pContext.get() );
+    if (!pXPMReader)
+    {
+        pContext = std::make_shared<XPMReader>( rStm );
+        pXPMReader = static_cast<XPMReader*>( pContext.get() );
+    }
+
     bool        bRet = true;
 
-    if( !pXPMReader )
-        pXPMReader = new XPMReader( rStm );
-
-    rGraphic.SetContext( nullptr );
-    eReadState = pXPMReader->ReadXPM( rGraphic );
+    ReadState eReadState = pXPMReader->ReadXPM( rGraphic );
 
     if( eReadState == XPMREAD_ERROR )
     {
         bRet = false;
-        delete pXPMReader;
     }
-    else if( eReadState == XPMREAD_OK )
-        delete pXPMReader;
-    else
-        rGraphic.SetContext( pXPMReader );
+    else if( eReadState == XPMREAD_NEED_MORE )
+        rGraphic.SetContext( pContext );
 
     return bRet;
 }

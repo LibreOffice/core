@@ -20,6 +20,7 @@
 #include <ctype.h>
 #include <comphelper/string.hxx>
 #include "xbmread.hxx"
+#include <o3tl/make_unique.hxx>
 
 enum XBMFormat
 {
@@ -381,25 +382,25 @@ ReadState XBMReader::ReadXBM( Graphic& rGraphic )
 
 VCL_DLLPUBLIC bool ImportXBM( SvStream& rStm, Graphic& rGraphic )
 {
-    XBMReader*  pXBMReader = static_cast<XBMReader*>( rGraphic.GetContext() );
-    ReadState   eReadState;
-    bool        bRet = true;
+    auto pContext = rGraphic.GetContext();
+    rGraphic.SetContext();
+    XBMReader* pXBMReader = dynamic_cast<XBMReader*>( pContext.get() );
+    if (!pXBMReader)
+    {
+        pContext = std::make_shared<XBMReader>( rStm );
+        pXBMReader = static_cast<XBMReader*>( pContext.get() );
+    }
 
-    if( !pXBMReader )
-        pXBMReader = new XBMReader( rStm );
+    bool bRet = true;
 
-    rGraphic.SetContext( nullptr );
-    eReadState = pXBMReader->ReadXBM( rGraphic );
+    ReadState eReadState = pXBMReader->ReadXBM( rGraphic );
 
     if( eReadState == XBMREAD_ERROR )
     {
         bRet = false;
-        delete pXBMReader;
     }
-    else if( eReadState == XBMREAD_OK )
-        delete pXBMReader;
-    else
-        rGraphic.SetContext( pXBMReader );
+    else if( eReadState == XBMREAD_NEED_MORE )
+        rGraphic.SetContext( pContext );
 
     return bRet;
 }
