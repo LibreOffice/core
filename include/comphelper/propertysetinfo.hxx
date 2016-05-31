@@ -27,6 +27,7 @@
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/comphelperdllapi.h>
+#include <memory>
 
 namespace comphelper
 {
@@ -56,7 +57,7 @@ class COMPHELPER_DLLPUBLIC PropertySetInfo
     : public PropertySetInfo_BASE
 {
 private:
-    PropertyMapImpl* mpMap;
+    std::unique_ptr<PropertyMapImpl> mpImpl;
 public:
     PropertySetInfo() throw();
     PropertySetInfo( PropertyMapEntry const * pMap ) throw();

@@ -129,18 +129,18 @@ bool PropertyMapImpl::hasPropertyByName( const OUString& aName ) throw()
 
 
 PropertySetInfo::PropertySetInfo() throw()
+    : mpImpl(new PropertyMapImpl)
 {
-    mpMap = new PropertyMapImpl();
 }
 
 PropertySetInfo::PropertySetInfo( PropertyMapEntry const * pMap ) throw()
+    : mpImpl(new PropertyMapImpl)
 {
-    mpMap = new PropertyMapImpl();
-    mpMap->add( pMap );
+    mpImpl->add( pMap );
 }
 
 PropertySetInfo::PropertySetInfo(uno::Sequence<beans::Property> const& rProps) throw()
-    : mpMap(new PropertyMapImpl)
+    : mpImpl(new PropertyMapImpl)
 {
     PropertyMapEntry * pEntries(new PropertyMapEntry[rProps.getLength() + 1]);
     PropertyMapEntry * pEntry(&pEntries[0]);
@@ -154,42 +154,41 @@ PropertySetInfo::PropertySetInfo(uno::Sequence<beans::Property> const& rProps) t
         ++pEntry;
     }
     pEntry->maName = OUString();
-    mpMap->add(pEntries);
+    mpImpl->add(pEntries);
 }
 
 PropertySetInfo::~PropertySetInfo() throw()
 {
-    delete mpMap;
 }
 
 void PropertySetInfo::add( PropertyMapEntry const * pMap ) throw()
 {
-    mpMap->add( pMap );
+    mpImpl->add( pMap );
 }
 
 void PropertySetInfo::remove( const OUString& aName ) throw()
 {
-    mpMap->remove( aName );
+    mpImpl->remove( aName );
 }
 
 Sequence< css::beans::Property > SAL_CALL PropertySetInfo::getProperties() throw(css::uno::RuntimeException, std::exception)
 {
-    return comphelper::containerToSequence(mpMap->getProperties());
+    return comphelper::containerToSequence(mpImpl->getProperties());
 }
 
 Property SAL_CALL PropertySetInfo::getPropertyByName( const OUString& aName ) throw(css::beans::UnknownPropertyException, css::uno::RuntimeException, std::exception)
 {
-    return mpMap->getPropertyByName( aName );
+    return mpImpl->getPropertyByName( aName );
 }
 
 sal_Bool SAL_CALL PropertySetInfo::hasPropertyByName( const OUString& Name ) throw(css::uno::RuntimeException, std::exception)
 {
-    return mpMap->hasPropertyByName( Name );
+    return mpImpl->hasPropertyByName( Name );
 }
 
 const PropertyMap& PropertySetInfo::getPropertyMap() const throw()
 {
-    return mpMap->getPropertyMap();
+    return mpImpl->getPropertyMap();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
