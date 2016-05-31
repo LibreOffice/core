@@ -25,10 +25,8 @@
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">_Background:</property>
                 <property name="use_underline">True</property>
+                <property name="mnemonic_widget">cellbackgroundcolor</property>
                 <property name="xalign">0</property>
-                <accessibility>
-                  <relation type="label-for" target="cellbackgroundcolor"/>
-                </accessibility>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -59,9 +57,6 @@
                     <property name="homogeneous">True</property>
                   </packing>
                 </child>
-                <accessibility>
-                  <relation type="labelled-by" target="cellbackgroundlabel"/>
-                </accessibility>
               </object>
               <packing>
                 <property name="expand">False</property>
