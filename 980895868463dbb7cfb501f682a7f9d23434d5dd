@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_26c6c067",
+        "filename": "sw/source/uibase/dbui/dbmgr.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-05-31T10:32:05Z",
+      "side": 1,
+      "message": "Can you still address my trivial nit-pick about placing this include into the first block of includes?",
+      "revId": "980895868463dbb7cfb501f682a7f9d23434d5dd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
