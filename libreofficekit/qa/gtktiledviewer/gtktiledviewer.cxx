@@ -897,13 +897,11 @@ static void signalCommand(LOKDocView* pLOKDocView, char* pPayload, gpointer /*pD
     {
         std::string aKey = aPayload.substr(0, nPosition);
         std::string aValue = aPayload.substr(nPosition + 1);
-
         if (rWindow.m_aCommandNameToolItems.find(aKey) != rWindow.m_aCommandNameToolItems.end())
         {
             GtkToolItem* pItem = rWindow.m_aCommandNameToolItems[aKey];
-            gboolean bEdit = aValue == "true";
-            if (GTK_IS_TOGGLE_TOOL_BUTTON(pItem))
-            {
+            if (aValue == "true" || aValue == "false") {
+                gboolean bEdit = aValue == "true";
                 if (gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(pItem)) != bEdit)
                 {
                     // Avoid invoking lok_doc_view_post_command().
@@ -911,6 +909,9 @@ static void signalCommand(LOKDocView* pLOKDocView, char* pPayload, gpointer /*pD
                     gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(pItem), bEdit);
                     rWindow.m_bToolItemBroadcast = true;
                 }
+            } else if (aValue == "enabled" || aValue == "disabled") {
+                gboolean bSensitive = aValue == "enabled";
+                gtk_widget_set_sensitive(GTK_WIDGET(pItem), bSensitive);
             }
         }
     }
