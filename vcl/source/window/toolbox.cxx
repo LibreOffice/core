@@ -5010,7 +5010,7 @@ bool ToolBox::ImplActivateItem( vcl::KeyCode aKeyCode )
         else
         {
             mnDownItemId = mnCurItemId = mnHighItemId;
-            if ( pToolItem->mnBits & ToolBoxItemBits::AUTOCHECK )
+            if (pToolItem && (pToolItem->mnBits & ToolBoxItemBits::AUTOCHECK))
             {
                 if ( pToolItem->mnBits & ToolBoxItemBits::RADIOCHECK )
                 {
