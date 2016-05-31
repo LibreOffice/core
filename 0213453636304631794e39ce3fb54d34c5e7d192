@@ -72,6 +72,24 @@
     },
     {
       "key": {
+        "uuid": "da7fb54a_c672747c",
+        "filename": "sw/source/uibase/dbui/dbmgr.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 499,
+      "author": {
+        "id": 1001256
+      },
+      "writtenOn": "2016-05-31T09:48:23Z",
+      "side": 1,
+      "message": "Okay.So I will try to rebase this on new master.\nThanks",
+      "parentUuid": "da7fb54a_06bffcfb",
+      "revId": "0213453636304631794e39ce3fb54d34c5e7d192",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da7fb54a_e0da0078",
         "filename": "sw/source/uibase/dbui/dbmgr.cxx",
         "patchSetId": 2
