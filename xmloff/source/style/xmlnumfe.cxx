@@ -254,7 +254,7 @@ SvXMLNumFmtExport::SvXMLNumFmtExport(
         pLocaleData = new LocaleDataWrapper( rExport.getComponentContext(), aLanguageTag );
     }
 
-    pUsedList = new SvXMLNumUsedList_Impl;
+    pUsedList.reset(new SvXMLNumUsedList_Impl);
 }
 
 SvXMLNumFmtExport::SvXMLNumFmtExport(
@@ -288,12 +288,11 @@ SvXMLNumFmtExport::SvXMLNumFmtExport(
         pLocaleData = new LocaleDataWrapper( rExport.getComponentContext(), aLanguageTag );
     }
 
-    pUsedList = new SvXMLNumUsedList_Impl;
+    pUsedList.reset(new SvXMLNumUsedList_Impl);
 }
 
 SvXMLNumFmtExport::~SvXMLNumFmtExport()
 {
-    delete pUsedList;
     delete pLocaleData;
     delete pCharClass;
 }
