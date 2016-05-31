@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_e65bf852",
+        "filename": "offapi/com/sun/star/text/TextTable.idl",
+        "patchSetId": 5
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-05-31T15:01:45Z",
+      "side": 1,
+      "message": "Please use \"@since LibreOffice 5.3\".",
+      "revId": "e74d92562c70f5ea5b0cb904444b151e05ef9bc1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
