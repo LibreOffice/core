@@ -160,7 +160,7 @@ STDMETHODIMP ProviderOleWrapper_Impl::CreateInstance(IUnknown FAR* punkOuter,
                                         OLE);
 
 
-            if (oleAny.getValueTypeClass() == cppu::UnoType<sal_uInt32>::get().getTypeClass())
+            if (oleAny.getValueTypeClass() == cppu::UnoType<sal_uIntPtr>::get().getTypeClass())
             {
                 VARIANT* pVariant = *(VARIANT**)oleAny.getValue();
 
@@ -291,7 +291,7 @@ STDMETHODIMP OneInstanceOleWrapper_Impl::CreateInstance(IUnknown FAR* punkOuter,
                                         OLE);
 
 
-        if (oleAny.getValueTypeClass() == TypeClass_UNSIGNED_LONG)
+        if (oleAny.getValueTypeClass() == cppu::UnoType<sal_uIntPtr>::get().getTypeClass())
         {
             VARIANT* pVariant = *(VARIANT**)oleAny.getValue();
 
@@ -374,14 +374,14 @@ Any SAL_CALL OleConverter_Impl2::createBridge(const Any& modelDepObject,
                     CoTaskMemFree(pVariant);
                     throw IllegalArgumentException();
                 }
-                ret.setValue((void*) &pVariant, cppu::UnoType<sal_uInt32>::get());
+                ret.setValue(static_cast<void*>(&pVariant), cppu::UnoType<sal_uIntPtr>::get());
             }
             else
                 throw IllegalArgumentException();
         }
         else if (sourceModelType == OLE)
         {
-            if (modelDepObject.getValueType() != cppu::UnoType<sal_uInt32>::get())
+            if (modelDepObject.getValueType() != cppu::UnoType<sal_uIntPtr>::get())
             {
                 throw IllegalArgumentException();
             }
@@ -397,7 +397,7 @@ Any SAL_CALL OleConverter_Impl2::createBridge(const Any& modelDepObject,
                 }
                 else
                 {
-                    ret.setValue((void*) &pVariant, cppu::UnoType<sal_uInt32>::get());
+                    ret.setValue(static_cast<void*>(&pVariant), cppu::UnoType<sal_uIntPtr>::get());
                 }
             }
             else if (destModelType == UNO)
