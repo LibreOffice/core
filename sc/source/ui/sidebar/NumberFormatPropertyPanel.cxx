@@ -95,8 +95,6 @@ void NumberFormatPropertyPanel::Initialize()
     mpBtnNegRed->SetClickHdl( LINK(this, NumberFormatPropertyPanel, NumFormatValueClickHdl) );
     mpBtnThousand->SetClickHdl( LINK(this, NumberFormatPropertyPanel, NumFormatValueClickHdl) );
     mpBtnEngineering->SetClickHdl( LINK(this, NumberFormatPropertyPanel, NumFormatValueClickHdl) );
-
-    mpTBCategory->SetAccessibleRelationLabeledBy(mpTBCategory);
 }
 
 IMPL_LINK_TYPED( NumberFormatPropertyPanel, NumFormatSelectHdl, ListBox&, rBox, void )

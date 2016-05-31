@@ -126,6 +126,9 @@
                     <property name="label" translatable="yes">_Decimal places:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">decimalplaces</property>
+                    <accessibility>
+                      <relation type="label-for" target="decimalplaces"/>
+                    </accessibility>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -141,6 +144,9 @@
                     <property name="tooltip_markup" translatable="yes">Enter the number of decimal places that you want to display.</property>
                     <property name="tooltip_text" translatable="yes">Enter the number of decimal places that you want to display.</property>
                     <property name="invisible_char">•</property>
+                    <accessibility>
+                      <relation type="labelled-by" target="decimalplaceslabel"/>
+                    </accessibility>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="decimalplaces-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes">Decimal Places</property>
@@ -174,6 +180,9 @@
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">leadingzeroes</property>
                     <property name="xalign">0</property>
+                    <accessibility>
+                      <relation type="label-for" target="leadingzeroes"/>
+                    </accessibility>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -189,6 +198,9 @@
                     <property name="tooltip_markup" translatable="yes">Enter the maximum number of zeroes to display before the decimal point.</property>
                     <property name="tooltip_text" translatable="yes">Enter the maximum number of zeroes to display before the decimal point.</property>
                     <property name="invisible_char">•</property>
+                    <accessibility>
+                      <relation type="labelled-by" target="leadingzeroeslabel"/>
+                    </accessibility>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="leadingzeroes-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes">Leading Zeroes</property>

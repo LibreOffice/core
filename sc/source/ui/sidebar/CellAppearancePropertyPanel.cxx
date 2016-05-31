@@ -176,9 +176,6 @@ void CellAppearancePropertyPanel::Initialize()
     mpTBLineStyle->Disable();
 
     mpTBLineColor->Disable();
-
-    mpTBLineColor->SetAccessibleRelationLabeledBy(mpTBLineColor);
-    mpTBLineStyle->SetAccessibleRelationLabeledBy(mpTBLineStyle);
 }
 
 IMPL_LINK_TYPED(CellAppearancePropertyPanel, TbxCellBorderSelectHdl, ToolBox*, pToolBox, void)
