@@ -104,6 +104,17 @@ namespace basic
         BasicManager*&
                 impl_getLocationForModel( const Reference< XModel >& _rxDocumentModel );
 
+        /** tests if there is a location set at which the BasicManager for the given model
+            is stored.
+
+            @param _rxDocumentModel
+                the model whose BasicManager's location is to be retrieved. Must not be <NULL/>.
+
+            @precond
+                our mutex is locked
+        */
+        bool impl_hasLocationForModel( const Reference< XModel >& _rxDocumentModel );
+
         /** creates a new BasicManager instance for the given model
 
             @param _out_rpBasicManager
@@ -113,7 +124,7 @@ namespace basic
             @param _rxDocumentModel
                 the model whose BasicManager will be created. Must not be <NULL/>.
         */
-        void impl_createManagerForModel(
+        bool impl_createManagerForModel(
                     BasicManager*& _out_rpBasicManager,
                     const Reference< XModel >& _rxDocumentModel );
 
@@ -207,7 +218,6 @@ namespace basic
             create( CreateImplRepository(), ::osl::GetGlobalMutex() );
     }
 
-
     BasicManager* ImplRepository::getDocumentBasicManager( const Reference< XModel >& _rxDocumentModel )
     {
         SolarMutexGuard g;
@@ -221,12 +231,12 @@ namespace basic
             without creating another instance.
          */
         BasicManager*& pBasicManager = impl_getLocationForModel( _rxDocumentModel );
-        if ( pBasicManager == nullptr )
-            impl_createManagerForModel( pBasicManager, _rxDocumentModel );
-
-        return pBasicManager;
+        if (pBasicManager != nullptr)
+            return pBasicManager;
+        if (impl_createManagerForModel(pBasicManager, _rxDocumentModel))
+            return pBasicManager;
+        return nullptr;
     }
-
 
     BasicManager* ImplRepository::getApplicationBasicManager( bool _bCreate )
     {
@@ -353,7 +363,6 @@ namespace basic
         return pAppBasic;
     }
 
-
     BasicManager*& ImplRepository::impl_getLocationForModel( const Reference< XModel >& _rxDocumentModel )
     {
         Reference< XInterface > xNormalized( _rxDocumentModel, UNO_QUERY );
@@ -363,6 +372,13 @@ namespace basic
         return location;
     }
 
+    bool ImplRepository::impl_hasLocationForModel( const Reference< XModel >& _rxDocumentModel )
+    {
+        Reference< XInterface > xNormalized( _rxDocumentModel, UNO_QUERY );
+        DBG_ASSERT( _rxDocumentModel.is(), "ImplRepository::impl_getLocationForModel: invalid model!" );
+
+        return m_aStore.find(xNormalized) != m_aStore.end();
+    }
 
     void ImplRepository::impl_initDocLibraryContainers_nothrow( const Reference< XPersistentLibraryContainer >& _rxBasicLibraries, const Reference< XPersistentLibraryContainer >& _rxDialogLibraries )
     {
@@ -389,8 +405,7 @@ namespace basic
         }
     }
 
-
-    void ImplRepository::impl_createManagerForModel( BasicManager*& _out_rpBasicManager, const Reference< XModel >& _rxDocumentModel )
+    bool ImplRepository::impl_createManagerForModel( BasicManager*& _out_rpBasicManager, const Reference< XModel >& _rxDocumentModel )
     {
         StarBASIC* pAppBasic = impl_getDefaultAppBasicLibrary();
 
@@ -399,13 +414,13 @@ namespace basic
         if ( !impl_getDocumentStorage_nothrow( _rxDocumentModel, xStorage ) )
         {
             // the document is not able to provide the storage it is based on.
-            return;
+            return false;
         }
         Reference< XPersistentLibraryContainer > xBasicLibs;
         Reference< XPersistentLibraryContainer > xDialogLibs;
         if ( !impl_getDocumentLibraryContainers_nothrow( _rxDocumentModel, xBasicLibs, xDialogLibs ) )
             // the document does not have BasicLibraries and DialogLibraries
-            return;
+            return false;
 
         if ( xStorage.is() )
         {
@@ -466,19 +481,26 @@ namespace basic
 
         // register as listener for this model being disposed/closed
         OSL_ENSURE( _rxDocumentModel.is(), "ImplRepository::impl_createManagerForModel: the document must be an XComponent!" );
+        assert(impl_hasLocationForModel(_rxDocumentModel));
         startComponentListening( _rxDocumentModel );
 
-        // register as listener for the BasicManager being destroyed
-        StartListening( *_out_rpBasicManager );
+        bool bOk = false;
+        // startComponentListening may fail in a disposed _rxDocumentModel, in which case _out_rpBasicManager will be removed
+        // from the map and destroyed
+        if (impl_hasLocationForModel(_rxDocumentModel))
+        {
+            bOk = true;
+            // register as listener for the BasicManager being destroyed
+            StartListening( *_out_rpBasicManager );
+        }
 
         // #i104876: Library container must not be modified just after
         // creation. This happens as side effect when creating default
         // "Standard" libraries and needs to be corrected here
         xBasicLibs->setModified( false );
         xDialogLibs->setModified( false );
-
+        return bOk;
     }
-
 
     bool ImplRepository::impl_getDocumentStorage_nothrow( const Reference< XModel >& _rxDocument, Reference< XStorage >& _out_rStorage )
     {
