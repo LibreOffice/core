@@ -10,6 +10,9 @@
 varying vec2 tex_coord;
 varying vec2 alpha_coord;
 varying vec2 mask_coord;
+#ifdef USE_VERTEX_COLORS
+varying vec4 vertex_color;
+#endif
 
 uniform sampler2D texture;
 uniform sampler2D mask;
@@ -56,7 +59,11 @@ void main()
     }
     else if (type == TYPE_MASKED_COLOR)
     {
+#ifdef USE_VERTEX_COLORS
+        gl_FragColor = vertex_color;
+#else
         gl_FragColor = color;
+#endif
         gl_FragColor.a = 1.0 - texelTexture.r;
     }
 }

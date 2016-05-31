@@ -11,10 +11,16 @@ attribute vec4 position;
 attribute vec2 tex_coord_in;
 attribute vec2 mask_coord_in;
 attribute vec2 alpha_coord_in;
+#ifdef USE_VERTEX_COLORS
+attribute vec4 vertex_color_in;
+#endif
 
 varying vec2 tex_coord;
 varying vec2 mask_coord;
 varying vec2 alpha_coord;
+#ifdef USE_VERTEX_COLORS
+varying vec4 vertex_color;
+#endif
 
 uniform mat4 mvp;
 uniform mat4 transform;
@@ -27,6 +33,9 @@ void main()
    tex_coord = tex_coord_in;
    mask_coord = mask_coord_in;
    alpha_coord = alpha_coord_in;
+#ifdef USE_VERTEX_COLORS
+   vertex_color = vertex_color_in;
+#endif
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

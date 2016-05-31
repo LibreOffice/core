@@ -29,7 +29,6 @@
 #include "opengl/framebuffer.hxx"
 #include "opengl/program.hxx"
 #include "opengl/texture.hxx"
-#include "opengl/AccumulatedTextures.hxx"
 #include "opengl/RenderList.hxx"
 
 #include <memory>
@@ -101,7 +100,6 @@ protected:
     SalColor mProgramSolidColor;
     double mProgramSolidTransparency;
 
-    std::unique_ptr<AccumulatedTextures>  mpAccumulatedTextures;
     std::unique_ptr<RenderList> mpRenderList;
 
     void ImplInitClipRegion();
