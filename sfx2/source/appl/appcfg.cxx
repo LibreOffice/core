@@ -615,16 +615,6 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
         aHelpOptions.SetWelcomeScreen( static_cast<const SfxBoolItem *>(pItem)->GetValue() );
     }
 
-    // WelcomeScreen
-    if ( SfxItemState::SET == rSet.GetItemState(rPool.GetWhich(SID_WELCOMESCREEN_RESET ), true, &pItem))
-    {
-        DBG_ASSERT(dynamic_cast< const SfxBoolItem *>( pItem ) !=  nullptr, "BoolItem expected");
-        bool bReset = static_cast<const SfxBoolItem *>(pItem)->GetValue();
-        if ( bReset )
-        {
-            OSL_FAIL( "Not implemented, may be EOL!" );
-        }                                                   }
-
     if ( SfxItemState::SET == rSet.GetItemState(rPool.GetWhich(SID_HELP_STYLESHEET ), true, &pItem))
     {
         DBG_ASSERT(dynamic_cast< const SfxStringItem *>( pItem ) !=  nullptr, "StringItem expected");

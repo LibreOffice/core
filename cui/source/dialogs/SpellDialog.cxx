@@ -512,7 +512,6 @@ void SpellDialog::StartSpellOptDlg_Impl()
     sal_uInt16 aSpellInfos[] =
     {
         SID_ATTR_SPELL,SID_ATTR_SPELL,
-        SID_SPELL_MODIFIED, SID_SPELL_MODIFIED,
         SID_AUTOSPELL_CHECK, SID_AUTOSPELL_CHECK,
         0
     };

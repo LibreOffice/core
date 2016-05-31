@@ -273,7 +273,6 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
         }
 
         case SID_QUITAPP:
-        case SID_EXITANDRETURN:
         case SID_LOGOUT:
         {
             // protect against reentrant calls
@@ -380,7 +379,6 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
         }
 
         case SID_CLOSEDOCS:
-        case SID_CLOSEWINS:
         {
 
             Reference < XDesktop2 > xDesktop  = Desktop::create( ::comphelper::getProcessComponentContext() );
@@ -705,7 +703,6 @@ void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
                     if ( !SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::EModule::DATABASE) )
                         rSet.Put(SfxVisibilityItem(nWhich, false));
                     break;
-                case SID_EXITANDRETURN:
                 case SID_QUITAPP:
                 {
                     if ( pAppData_Impl->nDocModalMode )
@@ -751,7 +748,6 @@ void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
                 break;
 
                 case SID_CLOSEDOCS:
-                case SID_CLOSEWINS:
                 {
                     Reference < XDesktop2 > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );
                     Reference< XIndexAccess > xTasks( xDesktop->getFrames(), UNO_QUERY );

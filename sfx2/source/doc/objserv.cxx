@@ -1240,25 +1240,6 @@ void SfxObjectShell::ExecView_Impl(SfxRequest &rReq)
             rReq.Done();
             break;
         }
-        case SID_NEWWINDOWFOREDIT:
-        {
-            SfxViewFrame* pFrame = SfxViewFrame::Current();
-            if( pFrame->GetObjectShell() == this &&
-                ( pFrame->GetFrameType() & SFXFRAME_HASTITLE ) )
-                pFrame->ExecuteSlot( rReq );
-            else
-            {
-                OUString aFileName( GetObjectShell()->GetMedium()->GetName() );
-                if ( !aFileName.isEmpty() )
-                {
-                    SfxStringItem aName( SID_FILE_NAME, aFileName );
-                    SfxBoolItem aCreateView( SID_OPEN_NEW_VIEW, true );
-                    SfxGetpApp()->GetAppDispatcher_Impl()->ExecuteList(
-                        SID_OPENDOC, SfxCallMode::ASYNCHRON,
-                        { &aName, &aCreateView });
-                }
-            }
-        }
     }
 }
 

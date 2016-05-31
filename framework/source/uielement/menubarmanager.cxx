@@ -95,7 +95,6 @@ namespace framework
 // special menu ids/command ids for dynamic popup menus
 #define SID_SFX_START           5000
 #define SID_MDIWINDOWLIST       (SID_SFX_START + 610)
-#define SID_ADDONLIST           (SID_SFX_START + 1677)
 #define SID_HELPMENU            (SID_SFX_START + 410)
 
 #define aCmdHelpIndex ".uno:HelpIndex"
@@ -1257,7 +1256,7 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
                     // Check if this is the help menu. Add menu item if needed
                     CheckAndAddMenuExtension( pPopup );
                 }
-                else if (( nItemId == SID_ADDONLIST || aItemCommand == aSlotSpecialToolsMenu || aItemCommand == aCmdToolsMenu ) &&
+                else if (( aItemCommand == aSlotSpecialToolsMenu || aItemCommand == aCmdToolsMenu ) &&
                         AddonMenuManager::HasAddonMenuElements() )
                 {
                     // Create addon popup menu if there exist elements and this is the tools popup menu

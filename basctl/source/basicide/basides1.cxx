@@ -817,12 +817,6 @@ void Shell::GetState(SfxItemSet &rSet)
                     rSet.DisableItem( nWh );
             }
             break;
-            case SID_SHOW_FORMS:
-            case SID_SHOW_HIDDEN:
-            {
-                rSet.DisableItem( nWh );
-            }
-            break;
             case SID_SEARCH_OPTIONS:
             {
                 SearchOptionFlags nOptions = SearchOptionFlags::NONE;

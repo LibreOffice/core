@@ -654,7 +654,6 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 if( pSalvageItem )
                 {
                     aURL = pSalvageItem->GetValue();
-                    pNewSet->ClearItem( SID_ORIGURL );
                     pNewSet->ClearItem( SID_DOC_SALVAGE );
                 }
 

@@ -215,7 +215,7 @@ const SfxItemSet* FuPage::ExecuteDialog( vcl::Window* pParent )
     SfxItemSet aNewAttr(mpDoc->GetPool(),
                         mpDoc->GetPool().GetWhich(SID_ATTR_LRSPACE),
                         mpDoc->GetPool().GetWhich(SID_ATTR_ULSPACE),
-                        SID_ATTR_PAGE, SID_ATTR_PAGE_BSP,
+                        SID_ATTR_PAGE, SID_ATTR_PAGE_SHARED,
                         SID_ATTR_BORDER_OUTER, SID_ATTR_BORDER_OUTER,
                         SID_ATTR_BORDER_SHADOW, SID_ATTR_BORDER_SHADOW,
                         XATTR_FILL_FIRST, XATTR_FILL_LAST,

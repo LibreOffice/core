@@ -842,7 +842,6 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
     if (aTest.isEmpty())
     {
         bUnique = false;
-        rSet.DisableItem(SID_PRESENTATION_TEMPLATES);
     }
 
     if (!bUnique)

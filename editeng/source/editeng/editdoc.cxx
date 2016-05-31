@@ -212,7 +212,6 @@ const SfxItemInfo aItemInfos[EDITITEMCOUNT] = {
         { 0, true },                           // EE_FEATURE_TAB
         { 0, true },                           // EE_FEATURE_LINEBR
         { SID_ATTR_CHAR_CHARSETCOLOR, true },  // EE_FEATURE_NOTCONV
-        { SID_FIELD, false }
 };
 
 const sal_uInt16 aV1Map[] = {

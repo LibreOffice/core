@@ -771,7 +771,6 @@ OUString  SwDocStyleSheet::GetDescription(SfxMapUnit eUnit)
                     case SID_ATTR_PAGE_SIZE:
                     case SID_ATTR_PAGE_MAXSIZE:
                     case SID_ATTR_PAGE_PAPERBIN:
-                    case SID_ATTR_PAGE_APP:
                     case SID_ATTR_BORDER_INNER:
                         break;
                     default:

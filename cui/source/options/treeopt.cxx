@@ -1288,11 +1288,8 @@ SfxItemSet* OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId )
                 pRet = new SfxItemSet( SfxGetpApp()->GetPool(),
                                 SID_BASIC_ENABLED, SID_BASIC_ENABLED,
                 //SID_OPTIONS_START - ..END
-                                SID_INET_PROXY_TYPE, SID_INET_PROXY_PORT,
                                 SID_SAVEREL_INET, SID_SAVEREL_FSYS,
-                                SID_INET_SMTPSERVER, SID_INET_SMTPSERVER,
-                                SID_INET_NOPROXY, SID_INET_SOCKS_PROXY_PORT,
-                                SID_INET_DNS_AUTO, SID_INET_DNS_SERVER,
+                                SID_INET_NOPROXY, SID_INET_FTP_PROXY_PORT,
                                 SID_SECURE_URL, SID_SECURE_URL,
                                 0L );
                 SfxGetpApp()->GetOptions(*pRet);
@@ -1410,10 +1407,6 @@ void OfaTreeOptionsDialog::ApplyLanguageOptions(const SfxItemSet& rSet)
     bool bSaveSpellCheck = false;
     const SfxPoolItem* pItem = nullptr;
 
-    if ( SfxItemState::SET == rSet.GetItemState( SID_SPELL_MODIFIED, false, &pItem ) )
-    {
-        bSaveSpellCheck = static_cast<const SfxBoolItem*>(pItem)->GetValue();
-    }
     Reference< XComponentContext >  xContext( ::comphelper::getProcessComponentContext() );
     Reference< XLinguProperties >  xProp = LinguProperties::create( xContext );
     if ( SfxItemState::SET == rSet.GetItemState(SID_ATTR_HYPHENREGION, false, &pItem ) )

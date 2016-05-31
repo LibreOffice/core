@@ -539,10 +539,6 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     if ( !mpDrawView->IsMorphingAllowed() )
         rSet.DisableItem( SID_POLYGON_MORPHING );
 
-    // disable vectorizing if necessary
-    if ( !mpDrawView->IsVectorizeAllowed() )
-        rSet.DisableItem( SID_VECTORIZE );
-
     if( !mpDrawView->IsReverseOrderPossible() )
     {
         rSet.DisableItem( SID_REVERSE_ORDER );

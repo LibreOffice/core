@@ -254,7 +254,6 @@ SvxLineEndWindow::SvxLineEndWindow(
     aLineEndSet     ( VclPtr<ValueSet>::Create(this, WinBits( WB_ITEMBORDER | WB_3DLOOK | WB_NO_DIRECTSELECT ) )),
     nCols           ( 2 ),
     nLines          ( 12 ),
-    nLineEndWidth   ( 400 ),
     bPopupMode      ( true ),
     mbInResize      ( false ),
     mxFrame         ( rFrame )
@@ -275,10 +274,6 @@ void SvxLineEndWindow::implInit()
         const SfxPoolItem*  pItem = pDocSh->GetItem( SID_LINEEND_LIST );
         if( pItem )
             pLineEndList = static_cast<const SvxLineEndListItem*>( pItem )->GetLineEndList();
-
-        pItem = pDocSh->GetItem( SID_ATTR_LINEEND_WIDTH_DEFAULT );
-        if( pItem )
-            nLineEndWidth = static_cast<const SfxUInt16Item*>( pItem )->GetValue();
     }
     DBG_ASSERT( pLineEndList.is(), "LineEndList not found" );
 

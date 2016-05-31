@@ -457,7 +457,6 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
         rSet.DisableItem( SID_FRAME_TO_BOTTOM );
         rSet.DisableItem( SID_BEFORE_OBJ );
         rSet.DisableItem( SID_BEHIND_OBJ );
-        rSet.DisableItem( SID_CONVERT );
         rSet.DisableItem( SID_POSITION );
 
         rSet.DisableItem( SID_SIZE_OPTIMAL );

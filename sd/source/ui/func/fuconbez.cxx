@@ -70,19 +70,6 @@ rtl::Reference<FuPoor> FuConstructBezierPolygon::Create( ViewShell* pViewSh, ::s
     return xFunc;
 }
 
-void FuConstructBezierPolygon::DoExecute( SfxRequest& rReq )
-{
-    FuConstruct::DoExecute( rReq );
-
-    const SfxItemSet* pArgs = rReq.GetArgs();
-    if( pArgs )
-    {
-        const SfxPoolItem*  pPoolItem = nullptr;
-        if( SfxItemState::SET == pArgs->GetItemState( SID_ADD_MOTION_PATH, true, &pPoolItem ) )
-            maTargets = static_cast<const SfxUnoAnyItem*>( pPoolItem )->GetValue();
-    }
-}
-
 bool FuConstructBezierPolygon::MouseButtonDown(const MouseEvent& rMEvt)
 {
     bool bReturn = FuConstruct::MouseButtonDown(rMEvt);
