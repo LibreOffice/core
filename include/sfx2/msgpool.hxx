@@ -35,9 +35,9 @@ typedef std::vector<SfxInterface*> SfxInterfaceArr_Impl;
 
 class SFX2_DLLPUBLIC SfxSlotPool
 {
-    SfxSlotGroupArr_Impl*       _pGroups;
+    std::unique_ptr<SfxSlotGroupArr_Impl>       _pGroups;
     SfxSlotPool*                _pParentPool;
-    SfxInterfaceArr_Impl*       _pInterfaces;
+    std::unique_ptr<SfxInterfaceArr_Impl>       _pInterfaces;
     sal_uInt16                      _nCurGroup;
     sal_uInt16                      _nCurInterface;
     sal_uInt16                      _nCurMsg;
