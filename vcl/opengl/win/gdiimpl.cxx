@@ -433,7 +433,7 @@ bool compiledShaderBinariesWork()
     if (!bResult)
     {
         OpenGLZone::hardDisable();
-        TerminateProcess(GetCurrentProcess(), EXITHELPER_CRASH_WITH_RESTART);
+        TerminateProcess(GetCurrentProcess(), EXITHELPER_NORMAL_RESTART);
     }
 
     return bResult;
