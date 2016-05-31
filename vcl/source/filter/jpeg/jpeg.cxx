@@ -24,17 +24,18 @@
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/FilterConfigItem.hxx>
 #include <vcl/graphicfilter.hxx>
+#include <o3tl/make_unique.hxx>
 
 VCL_DLLPUBLIC bool ImportJPEG( SvStream& rInputStream, Graphic& rGraphic, void* pCallerData, GraphicFilterImportFlags nImportFlags )
 {
-    ReadState   eReadState;
     bool        bReturn = true;
 
-    JPEGReader* pJPEGReader = static_cast<JPEGReader*>( rGraphic.GetContext() );
-
-    if( !pJPEGReader )
+    auto pContext = rGraphic.ResetContext();
+    JPEGReader* pJPEGReader = dynamic_cast<JPEGReader*>( pContext.get() );
+    if (!pJPEGReader)
     {
-        pJPEGReader = new JPEGReader( rInputStream, pCallerData, bool( nImportFlags & GraphicFilterImportFlags::SetLogsizeForJpeg ) );
+        pContext = o3tl::make_unique<JPEGReader>( rInputStream, pCallerData, bool( nImportFlags & GraphicFilterImportFlags::SetLogsizeForJpeg ) );
+        pJPEGReader = static_cast<JPEGReader*>( pContext.get() );
     }
 
     if( nImportFlags & GraphicFilterImportFlags::ForPreview )
@@ -46,21 +47,15 @@ VCL_DLLPUBLIC bool ImportJPEG( SvStream& rInputStream, Graphic& rGraphic, void* 
         pJPEGReader->DisablePreviewMode();
     }
 
-    rGraphic.SetContext( nullptr );
-    eReadState = pJPEGReader->Read( rGraphic );
+    ReadState eReadState = pJPEGReader->Read( rGraphic );
 
     if( eReadState == JPEGREAD_ERROR )
     {
         bReturn = false;
-        delete pJPEGReader;
     }
-    else if( eReadState == JPEGREAD_OK )
+    else if( eReadState == JPEGREAD_NEED_MORE )
     {
-        delete pJPEGReader;
-    }
-    else
-    {
-        rGraphic.SetContext( pJPEGReader );
+        rGraphic.SetContext( std::move(pContext) );
     }
 
     return bReturn;
