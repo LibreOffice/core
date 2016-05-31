@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_c696f493",
+        "filename": "sfx2/source/doc/templatedlg.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-05-31T08:59:54Z",
+      "side": 1,
+      "message": "I can\u0027t say I like this approach so much, it is very ... ehm, opposite of general. Suppose we would want to introduce more options/modes here (like, preselecting spreadsheet templates when template manager is called from Calc, text templates when called from Writer ...) and then you\u0027d need one mbIs$FooDoc for every case",
+      "revId": "75bd99a3bfced95b8c510f2c00817dd2550b1cc3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_46e9041a",
+        "filename": "sfx2/source/doc/templatedlg.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 346,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-05-31T08:59:54Z",
+      "side": 1,
+      "message": "So what I\u0027d suggest instead is to introduce or even reuse some kind of enum (AppImpress, AppWriter, ...) and write a more general method (setMode? preselectCategory?) taking 1 enum argument ...",
+      "revId": "75bd99a3bfced95b8c510f2c00817dd2550b1cc3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_a6f810e7",
+        "filename": "sfx2/source/doc/templatedlg.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 360,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-05-31T08:59:54Z",
+      "side": 1,
+      "message": "... and then add some switch/case here and select entry depending on our argument",
+      "revId": "75bd99a3bfced95b8c510f2c00817dd2550b1cc3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
