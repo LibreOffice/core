@@ -93,7 +93,6 @@ private:
 
 protected:
     XMLChildNode( XMLParentNode *pPar );
-    XMLChildNode(): m_pParent( nullptr ){};
     XMLChildNode( const XMLChildNode& rObj);
     XMLChildNode& operator=(const XMLChildNode& rObj);
 public:

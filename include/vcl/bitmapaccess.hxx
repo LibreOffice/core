@@ -61,16 +61,8 @@ public:
     inline ColorMask&           GetColorMask() const;
 
 private:
-    BitmapInfoAccess()
-    {}
-
-    BitmapInfoAccess(const BitmapInfoAccess&)
-    {}
-
-    BitmapInfoAccess& operator=(const BitmapInfoAccess&)
-    {
-        return *this;
-    }
+    BitmapInfoAccess(const BitmapInfoAccess&) = delete;
+    BitmapInfoAccess& operator=(const BitmapInfoAccess&) = delete;
 
 protected:
     Bitmap maBitmap;

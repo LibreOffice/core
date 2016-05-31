@@ -55,8 +55,6 @@ public:
     void                SetItalic(const FontItalic eItalic )        { meItalic = eItalic; }
     void                SetWeight(const FontWeight eWeight )        { meWeight = eWeight; }
     void                SetWidthType(const FontWidth eWidthType)    { meWidthType = eWidthType; }
-    void                SetAlignment(const TextAlign eAlignment)    { meAlign = eAlignment; }
-    void                SetCharSet( const rtl_TextEncoding );
 
     void                SetSymbolFlag(const bool );
 
@@ -69,13 +67,9 @@ public:
     bool                IsBuiltInFont() const                       { return mbDevice; }
     bool                CanEmbed() const                            { return mbEmbeddable; }
     bool                CanSubset() const                           { return mbSubsettable; }
-    bool                CanRotate() const                           { return mbOrientation; }
-    bool                HasMapNames() const                         { return (maMapNames.getLength() > 0); }
 
     void                SetQuality( int nQuality )                  { mnQuality = nQuality; }
     void                IncreaseQualityBy( int nQualityAmount )     { mnQuality += nQualityAmount; }
-    void                DecreaseQualityBy( int nQualityAmount )     { mnQuality -= nQualityAmount; }
-    void                SetMapNames( OUString const & aMapNames )   { maMapNames = aMapNames; }
     void                AddMapName( OUString const& );
 
     void                SetBuiltInFontFlag( bool bIsBuiltInFont )   { mbDevice = bIsBuiltInFont; }
@@ -124,13 +118,6 @@ inline void FontAttributes::SetSymbolFlag( const bool bSymbolFlag )
         }
     }
 }
-
-inline void FontAttributes::SetCharSet( const rtl_TextEncoding aEncoding )
-{
-    meCharSet = aEncoding;
-    mbSymbolFlag = meCharSet == RTL_TEXTENCODING_SYMBOL;
-}
-
 
 inline void FontAttributes::AddMapName( OUString const & aMapName )
 {
