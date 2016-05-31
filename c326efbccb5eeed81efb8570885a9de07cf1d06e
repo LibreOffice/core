@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_83121e61",
+        "filename": "vcl/win/gdi/winlayout.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001256
+      },
+      "writtenOn": "2016-05-31T07:06:51Z",
+      "side": 1,
+      "message": "Everything is at it\u0027s simplest possible.So why does build fails in \u0027Mac\u0027.Please help me figure it out.",
+      "revId": "c326efbccb5eeed81efb8570885a9de07cf1d06e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
