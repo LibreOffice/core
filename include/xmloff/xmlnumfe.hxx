@@ -49,7 +49,7 @@ private:
     OUString             sPrefix;
     SvNumberFormatter*          pFormatter;
     OUStringBuffer       sTextContent;
-    SvXMLNumUsedList_Impl*      pUsedList;
+    std::unique_ptr<SvXMLNumUsedList_Impl>      pImpl;
     CharClass*                  pCharClass;
     LocaleDataWrapper*          pLocaleData;
 
