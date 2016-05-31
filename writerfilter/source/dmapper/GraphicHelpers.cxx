@@ -29,8 +29,12 @@
 #include <com/sun/star/text/WrapTextMode.hpp>
 
 #include <oox/drawingml/drawingmltypes.hxx>
+#include <tools/resmgr.hxx>
+#include <vcl/svapp.hxx>
+#include <svx/svdstr.hrc>
 
 #include <iostream>
+#include <memory>
 
 namespace writerfilter {
 namespace dmapper {
@@ -282,6 +286,26 @@ sal_Int32 GraphicZOrderHelper::findZOrder( sal_Int32 relativeHeight, bool bOldSt
     }
     SAL_WARN( "writerfilter", "findZOrder() didn't find item z-order" );
     return 0; // this should not(?) happen
+}
+
+GraphicNamingHelper::GraphicNamingHelper()
+    : m_nCounter(0)
+{
+}
+
+OUString GraphicNamingHelper::NameGraphic(const OUString& rTemplate)
+{
+    OUString aRet = rTemplate;
+
+    if (aRet.isEmpty())
+    {
+        // Empty template: then auto-generate a unique name.
+        std::unique_ptr<ResMgr> pResMgr(ResMgr::CreateResMgr("svx", Application::GetSettings().GetUILanguageTag()));
+        OUString aPrefix(ResId(STR_ObjNameSingulGRAF, *pResMgr).toString());
+        aRet += aPrefix + OUString::number(++m_nCounter);
+    }
+
+    return aRet;
 }
 
 } }

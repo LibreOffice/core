@@ -388,11 +388,12 @@ public:
     {
         try
         {
-            if( !sName.isEmpty() )
-            {
-                uno::Reference< container::XNamed > xNamed( xGraphicObjectProperties, uno::UNO_QUERY_THROW );
-                xNamed->setName( sName );
-            }
+            // Ask the graphic naming helper to find out the name for this
+            // object: It's around till the end of the import, so it remembers
+            // what's the first free name.
+            uno::Reference< container::XNamed > xNamed( xGraphicObjectProperties, uno::UNO_QUERY_THROW );
+            xNamed->setName(rDomainMapper.GetGraphicNamingHelper().NameGraphic(sName));
+
             xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_DESCRIPTION ),
                 uno::makeAny( sAlternativeText ));
             xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_TITLE ),
