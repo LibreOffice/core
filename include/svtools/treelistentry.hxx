@@ -114,6 +114,7 @@ public:
 
     void SetBackColor( const Color& aColor ) { maBackColor = aColor; }
     const Color& GetBackColor() const { return maBackColor; }
+    SvTreeListEntry* GetParent() const { return pParent; }
 };
 
 #endif

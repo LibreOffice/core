@@ -845,10 +845,11 @@ ScCheckListMenuWindow::Config::Config() :
 {
 }
 
-ScCheckListMenuWindow::Member::Member()
+ScCheckListMember::ScCheckListMember()
     : mbVisible(true)
     , mbDate(false)
     , mbLeaf(false)
+    , meDatePartType(YEAR)
     , mpParent(nullptr)
 {
 }
@@ -1223,29 +1224,61 @@ IMPL_LINK_NOARG_TYPED(ScCheckListMenuWindow, EdModifyHdl, Edit&, void)
     size_t n = maMembers.size();
     size_t nSelCount = 0;
     OUString aLabelDisp;
+    bool bSomeDateDeletes = false;
 
     for (size_t i = 0; i < n; ++i)
     {
-        aLabelDisp = maMembers[i].maName;
+        bool bIsDate = maMembers[i].mbDate;
+        bool bPartialMatch = false;
 
+        aLabelDisp = maMembers[i].maName;
         if ( aLabelDisp.isEmpty() )
             aLabelDisp = ScGlobal::GetRscString( STR_EMPTYDATA );
 
+        if ( !bSearchTextEmpty )
+        {
+            if ( !bIsDate )
+                bPartialMatch = ( aLabelDisp.toAsciiLowerCase().indexOf( aSearchText ) != -1 );
+            else if ( maMembers[i].meDatePartType == ScCheckListMember::DAY ) // Match with both numerical and text version of month
+                bPartialMatch = bPartialMatch || ( OUString( maMembers[i].maRealName + maMembers[i].maDateParts[1] )
+                                                   .toAsciiLowerCase().indexOf( aSearchText ) != -1 );
+            else
+                continue;
+        }
+        else if ( bIsDate && maMembers[i].meDatePartType != ScCheckListMember::DAY )
+            continue;
+
         if ( bSearchTextEmpty )
         {
-            maChecks->ShowCheckEntry( aLabelDisp, maMembers[i].mpParent, true, maMembers[i].mbVisible );
+            SvTreeListEntry* pLeaf = maChecks->ShowCheckEntry( aLabelDisp, maMembers[i], true, maMembers[i].mbVisible );
+            updateMemberParents( pLeaf, i );
             if ( maMembers[i].mbVisible )
                 ++nSelCount;
             continue;
         }
 
-        if ( aLabelDisp.toAsciiLowerCase().indexOf( aSearchText ) != -1 )
+        if ( bPartialMatch )
         {
-            maChecks->ShowCheckEntry( aLabelDisp, maMembers[i].mpParent );
+            SvTreeListEntry* pLeaf = maChecks->ShowCheckEntry( aLabelDisp, maMembers[i] );
+            updateMemberParents( pLeaf, i );
             ++nSelCount;
         }
         else
-            maChecks->ShowCheckEntry( aLabelDisp, maMembers[i].mpParent, false, false );
+        {
+            maChecks->ShowCheckEntry( aLabelDisp, maMembers[i], false, false );
+            if( bIsDate )
+                bSomeDateDeletes = true;
+        }
+    }
+
+    if ( bSomeDateDeletes )
+    {
+        for (size_t i = 0; i < n; ++i)
+        {
+            if ( !maMembers[i].mbDate ) continue;
+            if ( maMembers[i].meDatePartType != ScCheckListMember::DAY ) continue;
+            updateMemberParents( nullptr, i );
+        }
     }
 
     if ( nSelCount == n )
@@ -1331,6 +1364,42 @@ void ScCheckListMenuWindow::Paint(vcl::RenderContext& rRenderContext, const Rect
     rRenderContext.DrawRect(Rectangle(aPos,aSize));
 }
 
+void ScCheckListMenuWindow::updateMemberParents( SvTreeListEntry* pLeaf, size_t nIdx )
+{
+
+    if ( !maMembers[nIdx].mbDate || maMembers[nIdx].meDatePartType != ScCheckListMember::DAY )
+        return;
+
+    OUString aYearName  = maMembers[nIdx].maDateParts[0];
+    OUString aMonthName = maMembers[nIdx].maDateParts[1];
+    auto aItr = maYearMonthMap.find(aYearName + aMonthName);
+
+    if ( pLeaf )
+    {
+        SvTreeListEntry* pMonthEntry = pLeaf->GetParent();
+        SvTreeListEntry* pYearEntry = ( pMonthEntry ) ? pMonthEntry->GetParent() : nullptr;
+
+        maMembers[nIdx].mpParent = pMonthEntry;
+        if ( aItr != maYearMonthMap.end() )
+        {
+            size_t nMonthIdx = aItr->second;
+            maMembers[nMonthIdx].mpParent = pYearEntry;
+        }
+    }
+    else
+    {
+        SvTreeListEntry* pYearEntry = maChecks->FindEntry( nullptr, aYearName );
+        if ( aItr != maYearMonthMap.end() && !pYearEntry )
+        {
+            size_t nMonthIdx = aItr->second;
+            maMembers[nMonthIdx].mpParent = nullptr;
+            maMembers[nIdx].mpParent = nullptr;
+        }
+        else if ( pYearEntry && !maChecks->FindEntry( pYearEntry, aMonthName ) )
+            maMembers[nIdx].mpParent = nullptr;
+    }
+}
+
 Reference<XAccessible> ScCheckListMenuWindow::CreateAccessible()
 {
     if (!mxAccessible.is())
@@ -1387,19 +1456,23 @@ void ScCheckListMenuWindow::addDateMember(const OUString& rsName, double nVal, b
     OUString aMonthName = aMonths[nMonth-1].FullName;
     OUString aDayName = OUString::number(nDay);
 
+    if ( aDayName.getLength() == 1 )
+        aDayName = "0" + aDayName;
+
     maChecks->SetUpdateMode(false);
 
     SvTreeListEntry* pYearEntry = maChecks->FindEntry(nullptr, aYearName);
     if (!pYearEntry)
     {
         pYearEntry = maChecks->InsertEntry(aYearName, nullptr, true);
-        Member aMemYear;
+        ScCheckListMember aMemYear;
         aMemYear.maName = aYearName;
         aMemYear.maRealName = rsName;
         aMemYear.mbDate = true;
         aMemYear.mbLeaf = false;
         aMemYear.mbVisible = bVisible;
         aMemYear.mpParent = nullptr;
+        aMemYear.meDatePartType = ScCheckListMember::YEAR;
         maMembers.push_back(aMemYear);
     }
 
@@ -1407,27 +1480,33 @@ void ScCheckListMenuWindow::addDateMember(const OUString& rsName, double nVal, b
     if (!pMonthEntry)
     {
         pMonthEntry = maChecks->InsertEntry(aMonthName, pYearEntry, true);
-        Member aMemMonth;
+        ScCheckListMember aMemMonth;
         aMemMonth.maName = aMonthName;
         aMemMonth.maRealName = rsName;
         aMemMonth.mbDate = true;
         aMemMonth.mbLeaf = false;
         aMemMonth.mbVisible = bVisible;
         aMemMonth.mpParent = pYearEntry;
+        aMemMonth.meDatePartType = ScCheckListMember::MONTH;
         maMembers.push_back(aMemMonth);
+        maYearMonthMap[aYearName + aMonthName] = maMembers.size() - 1;
     }
 
     SvTreeListEntry* pDayEntry = maChecks->FindEntry(pMonthEntry, aDayName);
     if (!pDayEntry)
     {
         maChecks->InsertEntry(aDayName, pMonthEntry);
-        Member aMemDay;
+        ScCheckListMember aMemDay;
         aMemDay.maName = aDayName;
         aMemDay.maRealName = rsName;
+        aMemDay.maDateParts.resize(2);
+        aMemDay.maDateParts[0] = aYearName;
+        aMemDay.maDateParts[1] = aMonthName;
         aMemDay.mbDate = true;
         aMemDay.mbLeaf = true;
         aMemDay.mbVisible = bVisible;
         aMemDay.mpParent = pMonthEntry;
+        aMemDay.meDatePartType = ScCheckListMember::DAY;
         maMembers.push_back(aMemDay);
     }
 
@@ -1436,7 +1515,7 @@ void ScCheckListMenuWindow::addDateMember(const OUString& rsName, double nVal, b
 
 void ScCheckListMenuWindow::addMember(const OUString& rName, bool bVisible)
 {
-    Member aMember;
+    ScCheckListMember aMember;
     aMember.maName = rName;
     aMember.mbDate = false;
     aMember.mbLeaf = true;
@@ -1625,13 +1704,31 @@ void ScCheckListBox::CheckEntry( SvTreeListEntry* pParent, bool bCheck )
     }
 }
 
-void ScCheckListBox::ShowCheckEntry( const OUString& sName, SvTreeListEntry* pParent, bool bShow, bool bCheck )
+SvTreeListEntry* ScCheckListBox::ShowCheckEntry( const OUString& sName, ScCheckListMember& rMember, bool bShow, bool bCheck )
 {
-    SvTreeListEntry* pEntry = FindEntry( pParent, sName );
+    SvTreeListEntry* pEntry = nullptr;
+    if ( !rMember.mbDate || ( rMember.mbDate && rMember.mpParent ) )
+        pEntry = FindEntry( rMember.mpParent, sName );
+
     if ( bShow )
     {
         if ( !pEntry )
         {
+            if ( rMember.mbDate )
+            {
+                SvTreeListEntry* pYearEntry = FindEntry( nullptr, rMember.maDateParts[0] );
+                if ( !pYearEntry )
+                    pYearEntry = InsertEntry( rMember.maDateParts[0], nullptr, true );
+                SvTreeListEntry* pMonthEntry = FindEntry( pYearEntry, rMember.maDateParts[1] );
+                if ( !pMonthEntry )
+                    pMonthEntry = InsertEntry( rMember.maDateParts[1], pYearEntry, true );
+                SvTreeListEntry* pDayEntry = FindEntry( pMonthEntry, rMember.maName );
+                if ( !pDayEntry )
+                    pDayEntry = InsertEntry( rMember.maName, pMonthEntry );
+
+                return pDayEntry; // Return leaf node
+            }
+
             pEntry = InsertEntry(
                 sName);
 
@@ -1642,7 +1739,17 @@ void ScCheckListBox::ShowCheckEntry( const OUString& sName, SvTreeListEntry* pPa
             CheckEntry( pEntry, bCheck );
     }
     else if ( pEntry )
-        RemoveParentKeepChildren( pEntry );
+    {
+        GetModel()->Remove( pEntry );
+        SvTreeListEntry* pParent = rMember.mpParent;
+        while ( pParent && !pParent->HasChildren() )
+        {
+            SvTreeListEntry* pTmp = pParent;
+            pParent = pTmp->GetParent();
+            GetModel()->Remove( pTmp );
+        }
+    }
+    return nullptr;
 }
 
 void ScCheckListBox::CountCheckedEntries( SvTreeListEntry* pParent, sal_uLong& nCount ) const
