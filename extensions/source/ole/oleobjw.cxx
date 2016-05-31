@@ -731,7 +731,7 @@ Any SAL_CALL IUnknownWrapper_Impl::createBridge( const Any& modelDepObject,
                 pVariant->punkVal->AddRef();
             }
 
-            ret.setValue((void*)&pVariant, cppu::UnoType<sal_uInt32>::get());
+            ret.setValue(static_cast<void*>(&pVariant), cppu::UnoType<sal_uIntPtr>::get());
         }
     }
 
