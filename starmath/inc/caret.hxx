@@ -15,6 +15,9 @@
 
 #include "node.hxx"
 
+#include <memory>
+#include <vector>
+
 /** Representation of caret position with an equation */
 struct SmCaretPos{
     SmCaretPos(SmNode* selectedNode = nullptr, int iIndex = 0) {
@@ -117,74 +120,34 @@ struct SmCaretPosGraphEntry{
     }
 };
 
-class SmCaretPosGraph;
-
-/** Iterator for SmCaretPosGraph */
-class SmCaretPosGraphIterator{
-public:
-    SmCaretPosGraphIterator(SmCaretPosGraph* graph){
-        pGraph = graph;
-        nOffset = 0;
-        pEntry = nullptr;
-    }
-    /** Get the next entry, NULL if none */
-    SmCaretPosGraphEntry* Next();
-    /** Get the current entry, NULL if none */
-    SmCaretPosGraphEntry* Current(){
-        return pEntry;
-    }
-    /** Get the current entry, NULL if none */
-    SmCaretPosGraphEntry* operator->(){
-        return pEntry;
-    }
-private:
-    /** Next entry to return */
-    int nOffset;
-    /** Current graph */
-    SmCaretPosGraph* pGraph;
-    /** Current entry */
-    SmCaretPosGraphEntry* pEntry;
-};
-
-
 /** A graph over all caret positions
  * @remarks Graphs can only grow, entries cannot be removed!
  */
 class SmCaretPosGraph{
 public:
-    SmCaretPosGraph(){
-        pNext = nullptr;
-        nOffset = 0;
-    }
+    SmCaretPosGraph();
+
     ~SmCaretPosGraph();
-    /** Add a caret position
-     *  @remarks If Left and/or Right are set NULL, they will point back to the entry.
-     */
-    SmCaretPosGraphEntry* Add(SmCaretPosGraphEntry entry);
+
     /** Add a caret position
      *  @remarks If left and/or right are set NULL, they will point back to the entry.
      */
     SmCaretPosGraphEntry* Add(SmCaretPos pos,
                             SmCaretPosGraphEntry* left = nullptr,
-                            SmCaretPosGraphEntry* right = nullptr){
-        SAL_WARN_IF( pos.Index < 0, "starmath", "Index shouldn't be -1!" );
-        return Add(SmCaretPosGraphEntry(pos, left, right));
-    }
-    /** Get an iterator for this graph */
-    SmCaretPosGraphIterator GetIterator(){
-        return SmCaretPosGraphIterator(this);
-    }
-    friend class SmCaretPosGraphIterator;
-private:
-    /** Define SmCaretPosGraph to be less than one page 4096 */
-    static const int SmCaretPosGraphSize = 255;
+                            SmCaretPosGraphEntry* right = nullptr);
 
-    /** Next graph, to be used when this graph is full */
-    SmCaretPosGraph* pNext;
-    /** Next free entry in graph */
-    int nOffset;
-    /** Entries in this graph segment */
-    SmCaretPosGraphEntry Graph[SmCaretPosGraphSize];
+    std::vector<std::unique_ptr<SmCaretPosGraphEntry>>::iterator begin()
+    {
+        return mvEntries.begin();
+    }
+
+    std::vector<std::unique_ptr<SmCaretPosGraphEntry>>::iterator end()
+    {
+        return mvEntries.end();
+    }
+
+private:
+    std::vector<std::unique_ptr<SmCaretPosGraphEntry>> mvEntries;
 };
 
 /** \page visual_formula_editing Visual Formula Editing
