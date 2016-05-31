@@ -1556,6 +1556,7 @@ void OpenGLSalGraphicsImpl::FlushDeferredDrawing()
                 RenderParameters& rParameters = rRenderEntry.maTriangleParameters;
                 VCL_GL_INFO("Flush Triangles: " << rParameters.maVertices.size());
                 mpProgram->SetShaderType(DrawShaderType::Normal);
+                mpProgram->SetBlendMode(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
                 ApplyProgramMatrices(0.5f);
                 mpProgram->SetExtrusionVectors(rParameters.maExtrusionVectors.data());
                 mpProgram->SetVertexColors(rParameters.maColors);
@@ -1735,6 +1736,7 @@ void OpenGLSalGraphicsImpl::drawRect( long nX, long nY, long nWidth, long nHeigh
 
 void OpenGLSalGraphicsImpl::drawPolyLine( sal_uInt32 nPoints, const SalPoint* pPtAry )
 {
+    VCL_GL_INFO("::drawPolyLine legacy -> redirecting to drawPolyLine");
     basegfx::B2DPolygon aPoly;
     aPoly.append(basegfx::B2DPoint(pPtAry->mnX, pPtAry->mnY), nPoints);
     for (sal_uInt32 i = 1; i < nPoints; ++i)
@@ -1747,6 +1749,7 @@ void OpenGLSalGraphicsImpl::drawPolyLine( sal_uInt32 nPoints, const SalPoint* pP
 
 void OpenGLSalGraphicsImpl::drawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry )
 {
+    VCL_GL_INFO("::drawPolygon legacy -> redirecting to drawPolyPolygon with transparency");
     basegfx::B2DPolygon aPoly;
     aPoly.append(basegfx::B2DPoint(pPtAry->mnX, pPtAry->mnY), nPoints);
     for (sal_uInt32 i = 1; i < nPoints; ++i)
@@ -1757,6 +1760,7 @@ void OpenGLSalGraphicsImpl::drawPolygon( sal_uInt32 nPoints, const SalPoint* pPt
 
 void OpenGLSalGraphicsImpl::drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pPointCounts, PCONSTSALPOINT* pPtAry )
 {
+    VCL_GL_INFO("::drawPolyPolygon legacy -> redirecting to drawPolyPolygon with transparency");
     basegfx::B2DPolyPolygon aPolyPoly;
     for(sal_uInt32 nPolygon = 0; nPolygon < nPoly; ++nPolygon)
     {
