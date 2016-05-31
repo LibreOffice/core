@@ -131,7 +131,7 @@ HRESULT doTest()
     rtl_getGlobalProcessId( arId);
     Any target= xSuppl->createBridge( any, Sequence<sal_Int8>( (sal_Int8*)arId, 16), UNO, OLE);
     CComDispatchDriver oletest;
-    if (target.getValueTypeClass() == cppu::UnoType<sal_uInt32>::get().getTypeClass())
+    if (target.getValueTypeClass() == cppu::UnoType<sal_uIntPtr>::get().getTypeClass())
     {
         VARIANT* pVariant = *(VARIANT**)target.getValue();
 
