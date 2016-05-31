@@ -54,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "da7fb54a_06bffcfb",
+        "filename": "sw/source/uibase/dbui/dbmgr.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 499,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-05-31T09:26:24Z",
+      "side": 1,
+      "message": "Ah, right; but now you\u0027re creating two instances of SwDSParam, where in the past there was only one.\n\nAnd, of course, 38ea2d0ecc1d59844f9371ae6da7980c4e3a9e10 \"sw: replace boost::ptr_vector with std::vector\u003cstd::unique_ptr\u003e\" broke things here, using pInsert after being std::move\u0027d; I fixed that with 9d8184b34e9e4c53f93e4d44ac53590e9231c520 \"Don\u0027t use pInsert after it has been moved\" now.\n\nI suggest you first rebase this change on latest master (so it contains my above fix), then change it to use o3tl::make_unique instead of new.  Or, if rebasing etc. sounds scary, simply abandon this change and create a new one based on latest master.",
+      "parentUuid": "da7fb54a_c0ddfc71",
+      "revId": "0213453636304631794e39ce3fb54d34c5e7d192",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da7fb54a_e0da0078",
         "filename": "sw/source/uibase/dbui/dbmgr.cxx",
         "patchSetId": 2
