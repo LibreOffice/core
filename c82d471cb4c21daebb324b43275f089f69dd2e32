@@ -16,6 +16,24 @@
       "revId": "c82d471cb4c21daebb324b43275f089f69dd2e32",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_46c74412",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/CalcCommands.xcu",
+        "patchSetId": 1
+      },
+      "lineNbr": 646,
+      "author": {
+        "id": 1000796
+      },
+      "writtenOn": "2016-05-31T13:25:21Z",
+      "side": 1,
+      "message": "Yes i\u0027ve seen text like \"cycles through the various combinations of absolute and relative references\" and \"Cycles through all 4 types of cell references\", which is where i derived the new string from. How about \"Cycle Reference Types\"?",
+      "parentUuid": "da7fb54a_dde4083d",
+      "revId": "c82d471cb4c21daebb324b43275f089f69dd2e32",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
