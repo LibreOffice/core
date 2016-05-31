@@ -24,6 +24,7 @@
 
 #include <set>
 #include <string.h>
+#include <memory>
 
 
 namespace comphelper
@@ -49,8 +50,6 @@ namespace comphelper
 
     OAccessibleImplementationAccess::~OAccessibleImplementationAccess( )
     {
-        delete m_pImpl;
-        m_pImpl = nullptr;
     }
 
 
