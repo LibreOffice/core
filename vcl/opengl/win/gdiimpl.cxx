@@ -438,8 +438,7 @@ bool compiledShaderBinariesWork()
          tryShaders("textureVertexShader", "greyscaleFragmentShader") &&
          tryShaders("textureVertexShader", "textureFragmentShader") &&
          tryShaders("textureVertexShader", "convolutionFragmentShader") &&
-         tryShaders("textureVertexShader", "areaScaleFastFragmentShader") &&
-         tryShaders("textureVertexShader", "areaScaleFragmentShader"));
+         tryShaders("textureVertexShader", "areaScaleFastFragmentShader"));
 
     if (!bResult)
     {
