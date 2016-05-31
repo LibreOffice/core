@@ -5865,7 +5865,7 @@ void DocxAttributeOutput::EmbedFontStyle( const OUString& name, int tag, FontFam
     // Embed font if at least viewing is allowed (in which case the opening app must check
     // the font license rights too and open either read-only or not use the font for editing).
     OUString fontUrl = EmbeddedFontsHelper::fontFileUrl( name, family, italic, weight, pitch, encoding,
-        EmbeddedFontsHelper::ViewingAllowed );
+        EmbeddedFontsHelper::FontRights::ViewingAllowed );
     if( fontUrl.isEmpty())
         return;
     // TODO IDocumentSettingAccess::EMBED_SYSTEM_FONTS
