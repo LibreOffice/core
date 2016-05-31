@@ -152,7 +152,7 @@ IMPL_LINK_NOARG_TYPED(SvxNewDictionaryDialog, OKHdl_Impl, Button*, void)
     if ( bFound )
     {
         // duplicate names?
-        ScopedVclPtrInstance<MessageDialog>::Create(this, CUI_RESSTR(RID_SVXSTR_OPT_DOUBLE_DICTS), VCL_MESSAGE_INFO)->Execute();
+        ScopedVclPtrInstance<MessageDialog>::Create(this, CUI_RESSTR(RID_SVXSTR_OPT_DOUBLE_DICTS), VclMessageType::Info)->Execute();
         pNameEdit->GrabFocus();
         return;
     }
@@ -453,7 +453,7 @@ IMPL_LINK_NOARG_TYPED(SvxEditDictionaryDialog, SelectLangHdl_Impl, ListBox&, voi
 
     if ( nLang != nOldLang )
     {
-        ScopedVclPtrInstance< MessageDialog > aBox(this, CUI_RES( RID_SVXSTR_CONFIRM_SET_LANGUAGE), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
+        ScopedVclPtrInstance< MessageDialog > aBox(this, CUI_RES( RID_SVXSTR_CONFIRM_SET_LANGUAGE), VclMessageType::Question, VCL_BUTTONS_YES_NO);
         OUString sTxt(aBox->get_primary_text());
         sTxt = sTxt.replaceFirst( "%1", pAllDictsLB->GetSelectEntry() );
         aBox->set_primary_text(sTxt);

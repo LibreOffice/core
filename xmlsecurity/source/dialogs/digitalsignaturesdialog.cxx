@@ -278,7 +278,7 @@ bool DigitalSignaturesDialog::canAddRemove()
             //is shown every time until the user presses 'OK'. From then on, the warning
             //is not displayed anymore as long as the signatures dialog is alive.
             if (ScopedVclPtr<MessageDialog>::Create(
-                  nullptr, XMLSEC_RES(STR_XMLSECDLG_QUERY_REMOVEDOCSIGNBEFORESIGN), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO)->Execute() == RET_NO)
+                  nullptr, XMLSEC_RES(STR_XMLSECDLG_QUERY_REMOVEDOCSIGNBEFORESIGN), VclMessageType::Question, VCL_BUTTONS_YES_NO)->Execute() == RET_NO)
                 ret = false;
             else
                 m_bWarningShowSignMacro = true;

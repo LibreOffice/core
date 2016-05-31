@@ -616,7 +616,7 @@ SfxTabPage::sfxpg SfxManageStyleSheetPage::DeactivatePage( SfxItemSet* pItemSet 
 
         if (!pStyle->SetName(comphelper::string::stripStart(m_pNameRw->GetText(), ' ')))
         {
-            ScopedVclPtrInstance< MessageDialog > aBox(this, SfxResId( STR_TABPAGE_INVALIDNAME ), VCL_MESSAGE_INFO);
+            ScopedVclPtrInstance< MessageDialog > aBox(this, SfxResId( STR_TABPAGE_INVALIDNAME ), VclMessageType::Info);
             aBox->Execute();
             m_pNameRw->GrabFocus();
             m_pNameRw->SetSelection( Selection( SELECTION_MIN, SELECTION_MAX ) );
@@ -633,7 +633,7 @@ SfxTabPage::sfxpg SfxManageStyleSheetPage::DeactivatePage( SfxItemSet* pItemSet 
         {
             if ( !pStyle->SetFollow( aFollowEntry ) )
             {
-                ScopedVclPtrInstance< MessageDialog > aBox(this, SfxResId( STR_TABPAGE_INVALIDSTYLE ), VCL_MESSAGE_INFO);
+                ScopedVclPtrInstance< MessageDialog > aBox(this, SfxResId( STR_TABPAGE_INVALIDSTYLE ), VclMessageType::Info);
                 aBox->Execute();
                 m_pFollowLb->GrabFocus();
                 return SfxTabPage::KEEP_PAGE;
@@ -653,7 +653,7 @@ SfxTabPage::sfxpg SfxManageStyleSheetPage::DeactivatePage( SfxItemSet* pItemSet 
         {
             if ( !pStyle->SetParent( aParentEntry ) )
             {
-                ScopedVclPtrInstance< MessageDialog > aBox(this, SfxResId( STR_TABPAGE_INVALIDPARENT ), VCL_MESSAGE_INFO);
+                ScopedVclPtrInstance< MessageDialog > aBox(this, SfxResId( STR_TABPAGE_INVALIDPARENT ), VclMessageType::Info);
                 aBox->Execute();
                 m_pBaseLb->GrabFocus();
                 return SfxTabPage::KEEP_PAGE;

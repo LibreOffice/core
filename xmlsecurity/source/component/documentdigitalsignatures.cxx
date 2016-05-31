@@ -245,7 +245,7 @@ bool DocumentDigitalSignatures::ImplViewSignatures(
     }
     else
     {
-        ScopedVclPtrInstance< MessageDialog > aBox(nullptr, XMLSEC_RES(RID_XMLSECWB_NO_MOZILLA_PROFILE), VCL_MESSAGE_WARNING);
+        ScopedVclPtrInstance< MessageDialog > aBox(nullptr, XMLSEC_RES(RID_XMLSECWB_NO_MOZILLA_PROFILE), VclMessageType::Warning);
         aBox->Execute();
     }
 

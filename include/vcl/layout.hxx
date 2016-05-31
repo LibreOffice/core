@@ -621,12 +621,12 @@ enum VclButtonsType
     VCL_BUTTONS_OK_CANCEL
 };
 
-enum VclMessageType
+enum class VclMessageType
 {
-    VCL_MESSAGE_INFO,
-    VCL_MESSAGE_WARNING,
-    VCL_MESSAGE_QUESTION,
-    VCL_MESSAGE_ERROR
+    Info,
+    Warning,
+    Question,
+    Error
 };
 
 class VCL_DLLPUBLIC MessageDialog : public Dialog
@@ -655,7 +655,7 @@ public:
 
     MessageDialog(vcl::Window* pParent,
         const OUString &rMessage,
-        VclMessageType eMessageType = VCL_MESSAGE_ERROR,
+        VclMessageType eMessageType = VclMessageType::Error,
         VclButtonsType eButtonsType = VCL_BUTTONS_OK,
         WinBits nStyle = WB_MOVEABLE | WB_3DLOOK | WB_CLOSEABLE);
     MessageDialog(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription);

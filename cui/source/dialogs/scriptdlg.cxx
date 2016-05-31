@@ -1075,7 +1075,7 @@ void SvxScriptOrgDialog::deleteEntry( SvTreeListEntry* pEntry )
     Reference< browse::XBrowseNode > node = getBrowseNode( pEntry );
     // ISSUE L10N string & can we centre list?
     OUString aQuery = m_delQueryStr + getListOfChildren( node, 0 );
-    VclPtrInstance< MessageDialog > aQueryBox(static_cast<vcl::Window*>(this), aQuery, VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
+    VclPtrInstance< MessageDialog > aQueryBox(static_cast<vcl::Window*>(this), aQuery, VclMessageType::Question, VCL_BUTTONS_YES_NO);
     aQueryBox->SetText( m_delQueryTitleStr );
     if ( aQueryBox->Execute() == RET_NO )
     {
@@ -1483,7 +1483,7 @@ IMPL_STATIC_LINK_TYPED( SvxScriptErrorDialog, ShowDialog, void*, p, void )
         message = OUString( CUI_RES( RID_SVXSTR_ERROR_TITLE ) );
     }
 
-    ScopedVclPtrInstance<MessageDialog> pBox( nullptr, message, VCL_MESSAGE_WARNING );
+    ScopedVclPtrInstance<MessageDialog> pBox( nullptr, message, VclMessageType::Warning );
     pBox->SetText( CUI_RES( RID_SVXSTR_ERROR_TITLE ) );
     pBox->Execute();
 

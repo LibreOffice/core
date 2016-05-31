@@ -1215,7 +1215,7 @@ IMPL_LINK_NOARG_TYPED(SwAuthorMarkPane, InsertHdl, Button*, void)
                 bDifferent |= m_sFields[i] != pEntry->GetAuthorField((ToxAuthorityField)i);
             if(bDifferent)
             {
-                ScopedVclPtrInstance< MessageDialog > aQuery(&m_rDialog, SW_RES(STR_QUERY_CHANGE_AUTH_ENTRY), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
+                ScopedVclPtrInstance< MessageDialog > aQuery(&m_rDialog, SW_RES(STR_QUERY_CHANGE_AUTH_ENTRY), VclMessageType::Question, VCL_BUTTONS_YES_NO);
                 if(RET_YES != aQuery->Execute())
                     return;
             }

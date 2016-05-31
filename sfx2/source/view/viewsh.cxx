@@ -529,7 +529,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
 
             if ( eResult == SfxMailModel::SEND_MAIL_ERROR )
             {
-                ScopedVclPtrInstance< MessageDialog > aBox(SfxGetpApp()->GetTopWindow(), SfxResId( STR_ERROR_SEND_MAIL ), VCL_MESSAGE_INFO);
+                ScopedVclPtrInstance< MessageDialog > aBox(SfxGetpApp()->GetTopWindow(), SfxResId( STR_ERROR_SEND_MAIL ), VclMessageType::Info);
                 aBox->Execute();
                 rReq.Ignore();
             }
@@ -549,7 +549,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
             SfxMailModel::SendMailResult eResult = aModel.SaveAndSend( xFrame, OUString() );
             if( eResult == SfxMailModel::SEND_MAIL_ERROR )
             {
-                    ScopedVclPtrInstance< MessageDialog > aBox(SfxGetpApp()->GetTopWindow(), SfxResId( STR_ERROR_SEND_MAIL ), VCL_MESSAGE_INFO);
+                    ScopedVclPtrInstance< MessageDialog > aBox(SfxGetpApp()->GetTopWindow(), SfxResId( STR_ERROR_SEND_MAIL ), VclMessageType::Info);
                     aBox->Execute();
                     rReq.Ignore();
             }
@@ -1145,7 +1145,7 @@ bool SfxViewShell::PrepareClose
     {
         if ( bUI )
         {
-            ScopedVclPtrInstance< MessageDialog > aInfoBox(&GetViewFrame()->GetWindow(), SfxResId( STR_CANT_CLOSE ), VCL_MESSAGE_INFO );
+            ScopedVclPtrInstance< MessageDialog > aInfoBox(&GetViewFrame()->GetWindow(), SfxResId( STR_CANT_CLOSE ), VclMessageType::Info );
             aInfoBox->Execute();
         }
 

@@ -257,7 +257,7 @@ IMPL_LINK_TYPED( OUserAdmin, UserHdl, Button *, pButton, void )
                 Reference<XDrop> xDrop(m_xUsers,UNO_QUERY);
                 if(xDrop.is())
                 {
-                    ScopedVclPtrInstance< MessageDialog > aQry(this, ModuleRes(STR_QUERY_USERADMIN_DELETE_USER), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
+                    ScopedVclPtrInstance< MessageDialog > aQry(this, ModuleRes(STR_QUERY_USERADMIN_DELETE_USER), VclMessageType::Question, VCL_BUTTONS_YES_NO);
                     if(aQry->Execute() == RET_YES)
                         xDrop->dropByName(GetUser());
                 }

@@ -520,7 +520,7 @@ void SfxViewShell::SetPrinter_Impl( VclPtr<SfxPrinter>& pNewPrinter )
 
     // Ask if possible, if page format should be taken over from printer.
     if ( ( bOriChg  || bPgSzChg ) &&
-        RET_YES == ScopedVclPtrInstance<MessageDialog>::Create(nullptr, aMsg, VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO)->Execute() )
+        RET_YES == ScopedVclPtrInstance<MessageDialog>::Create(nullptr, aMsg, VclMessageType::Question, VCL_BUTTONS_YES_NO)->Execute() )
     {
         // Flags with changes for  <SetPrinter(SfxPrinter*)> are maintained
         nChangedFlags |= nNewOpt;
@@ -805,7 +805,7 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
             {
                 // if printer is busy, abort configuration
                 if ( !bSilent )
-                    ScopedVclPtrInstance<MessageDialog>::Create(nullptr, SfxResId(STR_ERROR_PRINTER_BUSY), VCL_MESSAGE_INFO)->Execute();
+                    ScopedVclPtrInstance<MessageDialog>::Create(nullptr, SfxResId(STR_ERROR_PRINTER_BUSY), VclMessageType::Info)->Execute();
                 rReq.SetReturnValue(SfxBoolItem(0,false));
 
                 return;

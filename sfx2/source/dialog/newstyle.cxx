@@ -40,7 +40,7 @@ IMPL_LINK_NOARG_TYPED( SfxNewStyleDlg, OKHdl, ComboBox&, void )
     {
         if ( !pStyle->IsUserDefined() )
         {
-            ScopedVclPtrInstance<MessageDialog>::Create( this, SfxResId( STR_POOL_STYLE_NAME ), VCL_MESSAGE_INFO )->Execute();
+            ScopedVclPtrInstance<MessageDialog>::Create( this, SfxResId( STR_POOL_STYLE_NAME ), VclMessageType::Info )->Execute();
             return;
         }
 
@@ -59,7 +59,7 @@ IMPL_LINK_TYPED( SfxNewStyleDlg, ModifyHdl, Edit&, rBox, void )
 SfxNewStyleDlg::SfxNewStyleDlg( vcl::Window* pParent, SfxStyleSheetBasePool& rInPool )
     : ModalDialog(pParent, "CreateStyleDialog", "sfx/ui/newstyle.ui")
     , aQueryOverwriteBox(VclPtr<MessageDialog>::Create(this, SfxResId(STR_QUERY_OVERWRITE),
-                                           VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO))
+                                           VclMessageType::Question, VCL_BUTTONS_YES_NO))
     , rPool(rInPool)
 {
     get(m_pColBox, "stylename");

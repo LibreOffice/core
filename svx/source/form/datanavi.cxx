@@ -956,7 +956,7 @@ namespace svxform
                     bool bIsElement = ( eChildType == css::xml::dom::NodeType_ELEMENT_NODE );
                     sal_uInt16 nResId = bIsElement ? RID_STR_QRY_REMOVE_ELEMENT : RID_STR_QRY_REMOVE_ATTRIBUTE;
                     OUString sVar = bIsElement ? OUString(ELEMENTNAME) : OUString(ATTRIBUTENAME);
-                    ScopedVclPtrInstance< MessageDialog > aQBox(this, SVX_RES(nResId), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
+                    ScopedVclPtrInstance< MessageDialog > aQBox(this, SVX_RES(nResId), VclMessageType::Question, VCL_BUTTONS_YES_NO);
                     OUString sMessText = aQBox->get_primary_text();
                     sMessText = sMessText.replaceFirst(
                         sVar, m_xUIHelper->getNodeDisplayName( pNode->m_xNode, false ) );
@@ -999,7 +999,7 @@ namespace svxform
                     SAL_WARN( "svx.form", "XFormsPage::RemoveEntry(): exception caught" );
                 }
                 ScopedVclPtrInstance<MessageDialog> aQBox(this, SVX_RES(nResId),
-                                                          VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
+                                                          VclMessageType::Question, VCL_BUTTONS_YES_NO);
                 OUString sMessText = aQBox->get_primary_text();
                 sMessText = sMessText.replaceFirst( sSearch, sName);
                 aQBox->set_primary_text(sMessText);
@@ -1599,7 +1599,7 @@ namespace svxform
             else if (sIdent == "modelsremove")
             {
                 ScopedVclPtrInstance<MessageDialog> aQBox(this, SVX_RES( RID_STR_QRY_REMOVE_MODEL),
-                                    VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
+                                    VclMessageType::Question, VCL_BUTTONS_YES_NO);
                 OUString sText = aQBox->get_primary_text();
                 sText = sText.replaceFirst( MODELNAME, sSelectedModel );
                 aQBox->set_primary_text(sText);
@@ -1700,7 +1700,7 @@ namespace svxform
                 {
                     OUString sInstName = pPage->GetInstanceName();
                     ScopedVclPtrInstance<MessageDialog> aQBox(this, SVX_RES(RID_STR_QRY_REMOVE_INSTANCE),
-                                                              VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
+                                                              VclMessageType::Question, VCL_BUTTONS_YES_NO);
                     OUString sMessText = aQBox->get_primary_text();
                     sMessText = sMessText.replaceFirst( INSTANCENAME, sInstName );
                     aQBox->set_primary_text(sMessText);

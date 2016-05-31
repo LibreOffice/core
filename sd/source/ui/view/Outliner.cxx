@@ -1180,7 +1180,7 @@ void Outliner::ShowEndOfSearchDialog()
 
     // Show the message in an info box that is modal with respect to the
     // whole application.
-    ScopedVclPtrInstance< MessageDialog > aInfoBox(nullptr, aString, VCL_MESSAGE_INFO);
+    ScopedVclPtrInstance< MessageDialog > aInfoBox(nullptr, aString, VclMessageType::Info);
     ShowModalMessageBox (*aInfoBox.get());
 }
 

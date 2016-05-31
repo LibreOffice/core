@@ -274,7 +274,7 @@ IMPL_LINK_NOARG_TYPED(DbRegistrationOptionsPage, DeleteHdl, Button*, void)
     SvTreeListEntry* pEntry = m_pPathBox->FirstSelected();
     if ( pEntry )
     {
-        ScopedVclPtrInstance< MessageDialog > aQuery(this, CUI_RES(RID_SVXSTR_QUERY_DELETE_CONFIRM), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
+        ScopedVclPtrInstance< MessageDialog > aQuery(this, CUI_RES(RID_SVXSTR_QUERY_DELETE_CONFIRM), VclMessageType::Question, VCL_BUTTONS_YES_NO);
         if ( aQuery->Execute() == RET_YES )
             m_pPathBox->GetModel()->Remove(pEntry);
     }

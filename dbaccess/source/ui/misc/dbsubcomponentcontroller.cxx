@@ -306,7 +306,7 @@ namespace dbaui
         bool bReConnect = true;
         if ( _bUI )
         {
-            ScopedVclPtrInstance< MessageDialog > aQuery(getView(), ModuleRes(STR_QUERY_CONNECTION_LOST), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
+            ScopedVclPtrInstance< MessageDialog > aQuery(getView(), ModuleRes(STR_QUERY_CONNECTION_LOST), VclMessageType::Question, VCL_BUTTONS_YES_NO);
             bReConnect = ( RET_YES == aQuery->Execute() );
         }
 
@@ -455,7 +455,7 @@ namespace dbaui
         if ( !pWin )
             pWin = getView()->Window::GetParent();
 
-        ScopedVclPtrInstance<MessageDialog>::Create(pWin, aMessage, VCL_MESSAGE_INFO)->Execute();
+        ScopedVclPtrInstance<MessageDialog>::Create(pWin, aMessage, VclMessageType::Info)->Execute();
     }
     const Reference< XConnection >& DBSubComponentController::getConnection() const
     {

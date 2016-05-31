@@ -1052,7 +1052,7 @@ IMPL_LINK_NOARG_TYPED(SearchTabPage_Impl, SearchHdl, LinkParamNone*, void)
 
         if ( aFactories.empty() )
         {
-            ScopedVclPtrInstance< MessageDialog > aBox(this, SfxResId( STR_INFO_NOSEARCHRESULTS ), VCL_MESSAGE_INFO);
+            ScopedVclPtrInstance< MessageDialog > aBox(this, SfxResId( STR_INFO_NOSEARCHRESULTS ), VclMessageType::Info);
             aBox->Execute();
         }
     }
@@ -2270,7 +2270,7 @@ void SfxHelpTextWindow_Impl::FindHdl(sfx2::SearchDialog* pDlg)
                 else
                 {
                     DBG_ASSERT( pSrchDlg, "no search dialog" );
-                    ScopedVclPtrInstance< MessageDialog > aBox(pSrchDlg, SfxResId( STR_INFO_NOSEARCHTEXTFOUND ), VCL_MESSAGE_INFO);
+                    ScopedVclPtrInstance< MessageDialog > aBox(pSrchDlg, SfxResId( STR_INFO_NOSEARCHTEXTFOUND ), VclMessageType::Info);
                     aBox->Execute();
                     pSrchDlg->SetFocusOnEdit();
                 }

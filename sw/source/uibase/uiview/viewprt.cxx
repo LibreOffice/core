@@ -175,7 +175,7 @@ void SwView::ExecutePrint(SfxRequest& rReq)
             }
             else
             {
-                ScopedVclPtrInstance< MessageDialog > aInfoBox(&GetEditWin(), SW_RES(STR_ERR_NO_FAX), VCL_MESSAGE_INFO);
+                ScopedVclPtrInstance< MessageDialog > aInfoBox(&GetEditWin(), SW_RES(STR_ERR_NO_FAX), VclMessageType::Info);
                 sal_uInt16 nResNo = bWeb ? STR_WEBOPTIONS : STR_TEXTOPTIONS;
                 aInfoBox->set_primary_text(aInfoBox->get_primary_text().replaceFirst("%1", OUString(SW_RES(nResNo))));
                 aInfoBox->Execute();

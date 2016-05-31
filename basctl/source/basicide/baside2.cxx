@@ -304,7 +304,7 @@ void ModulWindow::BasicExecute()
     {
         if ( !aDocument.allowMacros() )
         {
-            ScopedVclPtrInstance<MessageDialog>::Create(this, IDE_RESSTR(RID_STR_CANNOTRUNMACRO), VCL_MESSAGE_WARNING)->Execute();
+            ScopedVclPtrInstance<MessageDialog>::Create(this, IDE_RESSTR(RID_STR_CANNOTRUNMACRO), VclMessageType::Warning)->Execute();
             return;
         }
     }

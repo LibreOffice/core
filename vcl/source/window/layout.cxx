@@ -2001,7 +2001,7 @@ void MessageDialog::create_owned_areas()
 MessageDialog::MessageDialog(vcl::Window* pParent, WinBits nStyle)
     : Dialog(pParent, nStyle)
     , m_eButtonsType(VCL_BUTTONS_NONE)
-    , m_eMessageType(VCL_MESSAGE_INFO)
+    , m_eMessageType(VclMessageType::Info)
     , m_pOwnedContentArea(nullptr)
     , m_pOwnedActionArea(nullptr)
     , m_pGrid(nullptr)
@@ -2033,7 +2033,7 @@ MessageDialog::MessageDialog(vcl::Window* pParent,
 MessageDialog::MessageDialog(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription)
     : Dialog(pParent, OStringToOUString(rID, RTL_TEXTENCODING_UTF8), rUIXMLDescription, WINDOW_MESSBOX)
     , m_eButtonsType(VCL_BUTTONS_NONE)
-    , m_eMessageType(VCL_MESSAGE_INFO)
+    , m_eMessageType(VclMessageType::Info)
     , m_pOwnedContentArea(nullptr)
     , m_pOwnedActionArea(nullptr)
     , m_pGrid(nullptr)
@@ -2156,16 +2156,16 @@ short MessageDialog::Execute()
         m_pImage = VclPtr<FixedImage>::Create(m_pGrid, WB_CENTER | WB_VCENTER | WB_3DLOOK);
         switch (m_eMessageType)
         {
-            case VCL_MESSAGE_INFO:
+            case VclMessageType::Info:
                 m_pImage->SetImage(InfoBox::GetStandardImage());
                 break;
-            case VCL_MESSAGE_WARNING:
+            case VclMessageType::Warning:
                 m_pImage->SetImage(WarningBox::GetStandardImage());
                 break;
-            case VCL_MESSAGE_QUESTION:
+            case VclMessageType::Question:
                 m_pImage->SetImage(QueryBox::GetStandardImage());
                 break;
-            case VCL_MESSAGE_ERROR:
+            case VclMessageType::Error:
                 m_pImage->SetImage(ErrorBox::GetStandardImage());
                 break;
         }
@@ -2283,15 +2283,15 @@ bool MessageDialog::set_property(const OString &rKey, const OString &rValue)
         set_secondary_text(OStringToOUString(rValue, RTL_TEXTENCODING_UTF8));
     else if (rKey == "message-type")
     {
-        VclMessageType eMode = VCL_MESSAGE_INFO;
+        VclMessageType eMode = VclMessageType::Info;
         if (rValue.equals("info"))
-            eMode = VCL_MESSAGE_INFO;
+            eMode = VclMessageType::Info;
         else if (rValue.equals("warning"))
-            eMode = VCL_MESSAGE_WARNING;
+            eMode = VclMessageType::Warning;
         else if (rValue.equals("question"))
-            eMode = VCL_MESSAGE_QUESTION;
+            eMode = VclMessageType::Question;
         else if (rValue.equals("error"))
-            eMode = VCL_MESSAGE_ERROR;
+            eMode = VclMessageType::Error;
         else
         {
             SAL_WARN("vcl.layout", "unknown message type mode" << rValue.getStr());

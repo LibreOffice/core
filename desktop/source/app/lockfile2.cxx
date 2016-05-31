@@ -39,7 +39,7 @@ bool Lockfile_execWarning( Lockfile * that )
 
     // display warning and return response
     ScopedVclPtrInstance<MessageDialog> aBox(nullptr, DesktopResId(STR_QUERY_USERDATALOCKED),
-                                             VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
+                                             VclMessageType::Question, VCL_BUTTONS_YES_NO);
     // set box title
     OUString aTitle = OUString( DesktopResId( STR_TITLE_USERDATALOCKED ));
     aBox->SetText( aTitle );

@@ -613,7 +613,7 @@ IMPL_LINK_TYPED( MacroChooser, ButtonHdl, Button *, pButton, void )
                 ScriptDocument aDocument( ScriptDocument::getDocumentForBasicManager( pBasMgr ) );
                 if ( aDocument.isDocument() && !aDocument.allowMacros() )
                 {
-                    ScopedVclPtrInstance<MessageDialog>::Create(this, IDEResId(RID_STR_CANNOTRUNMACRO), VCL_MESSAGE_WARNING)->Execute();
+                    ScopedVclPtrInstance<MessageDialog>::Create(this, IDEResId(RID_STR_CANNOTRUNMACRO), VclMessageType::Warning)->Execute();
                     return;
                 }
             }

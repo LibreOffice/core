@@ -488,7 +488,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                     {
                         // css::sdbcx::User offering to open it as a template
                         ScopedVclPtrInstance<MessageDialog> aBox(&GetWindow(), SfxResId(STR_QUERY_OPENASTEMPLATE),
-                                           VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
+                                           VclMessageType::Question, VCL_BUTTONS_YES_NO);
                         if ( RET_YES == aBox->Execute() )
                         {
                             SfxApplication* pApp = SfxGetpApp();
@@ -571,7 +571,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                  !rReq.IsAPI() && ( !pSilentItem || !pSilentItem->GetValue() ) )
             {
                 ScopedVclPtrInstance<MessageDialog> aBox(&GetWindow(), SfxResId(STR_QUERY_LASTVERSION),
-                                   VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
+                                   VclMessageType::Question, VCL_BUTTONS_YES_NO);
                 bDo = ( RET_YES == aBox->Execute() );
             }
 
@@ -747,7 +747,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                     {
                         // ask user for opening as template
                         ScopedVclPtrInstance<MessageDialog> aBox(&GetWindow(), SfxResId(STR_QUERY_OPENASTEMPLATE),
-                                           VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
+                                           VclMessageType::Question, VCL_BUTTONS_YES_NO);
                         if ( RET_YES == aBox->Execute() )
                         {
                             SfxAllItemSet aSet( pApp->GetPool() );
