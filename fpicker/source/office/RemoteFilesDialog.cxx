@@ -851,7 +851,7 @@ IMPL_LINK_TYPED ( RemoteFilesDialog, EditServiceMenuHdl, MenuButton *, pButton, 
         {
             OUString sMsg = fpicker::SvtResId( STR_SVT_DELETESERVICE );
             sMsg = sMsg.replaceFirst( "$servicename$", m_pServices_lb->GetSelectEntry() );
-            ScopedVclPtrInstance< MessageDialog > aBox( this, sMsg, VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO );
+            ScopedVclPtrInstance< MessageDialog > aBox( this, sMsg, VclMessageType::Question, VCL_BUTTONS_YES_NO );
 
             if( aBox->Execute() == RET_YES )
             {
@@ -1149,7 +1149,7 @@ IMPL_LINK_NOARG_TYPED ( RemoteFilesDialog, OkHdl, Button*, void )
         {
             OUString sMsg = fpicker::SvtResId( STR_SVT_ALREADYEXISTOVERWRITE );
             sMsg = sMsg.replaceFirst( "$filename$", sName );
-            ScopedVclPtrInstance< MessageDialog > aBox( this, sMsg, VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO );
+            ScopedVclPtrInstance< MessageDialog > aBox( this, sMsg, VclMessageType::Question, VCL_BUTTONS_YES_NO );
             if( aBox->Execute() != RET_YES )
                 return;
         }

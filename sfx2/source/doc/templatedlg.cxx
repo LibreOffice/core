@@ -827,7 +827,7 @@ IMPL_LINK_TYPED(SfxTemplateManagerDlg, EditTemplateHdl, ThumbnailViewItem*, pIte
 
 IMPL_LINK_TYPED(SfxTemplateManagerDlg, DeleteTemplateHdl, ThumbnailViewItem*, pItem, void)
 {
-    ScopedVclPtrInstance< MessageDialog > aQueryDlg(this, SfxResId(STR_QMSG_SEL_TEMPLATE_DELETE), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
+    ScopedVclPtrInstance< MessageDialog > aQueryDlg(this, SfxResId(STR_QMSG_SEL_TEMPLATE_DELETE), VclMessageType::Question, VCL_BUTTONS_YES_NO);
 
     if ( aQueryDlg->Execute() != RET_YES )
         return;
@@ -1267,7 +1267,7 @@ void SfxTemplateManagerDlg::OnCategoryDelete()
         OUString sCategory = aDlg->GetSelectedCategory();
         aDlg->Close();
         ScopedVclPtrInstance< MessageDialog > popupDlg(this, SfxResId(STR_QMSG_SEL_FOLDER_DELETE),
-            VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
+            VclMessageType::Question, VCL_BUTTONS_YES_NO);
 
         if ( popupDlg->Execute() != RET_YES )
             return;

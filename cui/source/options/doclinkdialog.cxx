@@ -147,7 +147,7 @@ namespace svx
             {
                 OUString sMsg = CUI_RES(STR_NAME_CONFLICT);
                 sMsg = sMsg.replaceFirst("$file$", sCurrentText);
-                ScopedVclPtrInstance< MessageDialog > aError(this, sMsg, VCL_MESSAGE_INFO);
+                ScopedVclPtrInstance< MessageDialog > aError(this, sMsg, VclMessageType::Info);
                 aError->Execute();
 
                 m_pName->SetSelection(Selection(0,sCurrentText.getLength()));

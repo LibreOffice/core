@@ -156,7 +156,7 @@ bool SvxOpenCLTabPage::FillItemSet( SfxItemSet* )
         officecfg::Office::Common::Misc::UseSwInterpreter::set(mpUseSwInterpreter->IsChecked(), batch);
         bModified = true;
 
-        ScopedVclPtrInstance<MessageDialog> aWarnBox(this, CUI_RES(RID_SVXSTR_OPTIONS_RESTART), VCL_MESSAGE_INFO);
+        ScopedVclPtrInstance<MessageDialog> aWarnBox(this, CUI_RES(RID_SVXSTR_OPTIONS_RESTART), VclMessageType::Info);
         aWarnBox->Execute();
     }
 

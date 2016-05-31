@@ -900,7 +900,7 @@ IMPL_LINK_NOARG_TYPED(ImpPDFTabGeneralPage, ToggleExportPDFAHdl, CheckBox&, void
     // if a password was set, inform the user that this will not be used in PDF/A case
     if( mpCbPDFA1b->IsChecked() && pSecPage && pSecPage->hasPassword() )
     {
-        ScopedVclPtrInstance< MessageDialog > aBox(this, PDFFilterResId(STR_WARN_PASSWORD_PDFA), VCL_MESSAGE_WARNING);
+        ScopedVclPtrInstance< MessageDialog > aBox(this, PDFFilterResId(STR_WARN_PASSWORD_PDFA), VclMessageType::Warning);
         aBox->Execute();
     }
 }

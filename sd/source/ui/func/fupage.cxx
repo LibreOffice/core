@@ -379,7 +379,7 @@ const SfxItemSet* FuPage::ExecuteDialog( vcl::Window* pParent )
                 {
                     ScopedVclPtrInstance<MessageDialog> aQuestionBox(
                         pParent, SD_RESSTR(STR_PAGE_BACKGROUND_TXT),
-                        VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
+                        VclMessageType::Question, VCL_BUTTONS_YES_NO);
                     aQuestionBox->SetText(SD_RESSTR(STR_PAGE_BACKGROUND_TITLE));
                     bSetToAllPages = ( RET_YES == aQuestionBox->Execute() );
                 }

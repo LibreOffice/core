@@ -847,7 +847,7 @@ void LibPage::InsertLib()
             }
 
             if ( !pLibDlg )
-                ScopedVclPtrInstance<MessageDialog>::Create(this, IDE_RESSTR(RID_STR_NOLIBINSTORAGE), VCL_MESSAGE_INFO)->Execute();
+                ScopedVclPtrInstance<MessageDialog>::Create(this, IDE_RESSTR(RID_STR_NOLIBINSTORAGE), VclMessageType::Info)->Execute();
             else
             {
                 bool bChanges = false;

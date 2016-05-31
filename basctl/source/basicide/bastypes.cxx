@@ -777,7 +777,7 @@ bool QueryDel( const OUString& rName, const ResId& rId, vcl::Window* pParent )
     aNameBuf.append('\'');
     aNameBuf.insert(0, '\'');
     aQuery = aQuery.replaceAll("XX", aNameBuf.makeStringAndClear());
-    ScopedVclPtrInstance< MessageDialog > aQueryBox(pParent, aQuery, VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
+    ScopedVclPtrInstance< MessageDialog > aQueryBox(pParent, aQuery, VclMessageType::Question, VCL_BUTTONS_YES_NO);
     return ( aQueryBox->Execute() == RET_YES );
 }
 

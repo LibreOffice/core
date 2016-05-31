@@ -614,7 +614,7 @@ IMPL_LINK_TYPED( SaneDlg, ClickBtnHdl, Button*, pButton, void )
             aString = aString.replaceFirst( "%s", Sane::GetVendor( mrSane.GetDeviceNumber() ) );
             aString = aString.replaceFirst( "%s", Sane::GetModel( mrSane.GetDeviceNumber() ) );
             aString = aString.replaceFirst( "%s", Sane::GetType( mrSane.GetDeviceNumber() ) );
-            ScopedVclPtrInstance< MessageDialog > aInfoBox(this, aString, VCL_MESSAGE_INFO);
+            ScopedVclPtrInstance< MessageDialog > aInfoBox(this, aString, VclMessageType::Info);
             aInfoBox->Execute();
         }
         else if( pButton == mpPreviewButton )
@@ -890,7 +890,7 @@ void SaneDlg::AcquirePreview()
     if( nOption == -1 )
     {
         OUString aString(SaneResId(STR_SLOW_PREVIEW));
-        ScopedVclPtrInstance< MessageDialog > aBox(this, aString, VCL_MESSAGE_WARNING, VCL_BUTTONS_OK_CANCEL);
+        ScopedVclPtrInstance< MessageDialog > aBox(this, aString, VclMessageType::Warning, VCL_BUTTONS_OK_CANCEL);
         if (aBox->Execute() == RET_CANCEL)
             return;
     }

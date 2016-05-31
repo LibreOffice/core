@@ -263,7 +263,7 @@ IMPL_LINK_NOARG_TYPED(ScAutoFormatDlg, AddHdl, Button*, void)
                 {
                     sal_uInt16 nRet = ScopedVclPtr<MessageDialog>::Create(this,
                                             ScGlobal::GetRscString(STR_INVALID_AFNAME),
-                                            VCL_MESSAGE_ERROR,
+                                            VclMessageType::Error,
                                             VCL_BUTTONS_OK_CANCEL
                                           )->Execute();
 
@@ -383,7 +383,7 @@ IMPL_LINK_NOARG_TYPED(ScAutoFormatDlg, RenameHdl, Button*, void)
             {
                 bOk = RET_CANCEL == ScopedVclPtr<MessageDialog>::Create( this,
                                       ScGlobal::GetRscString(STR_INVALID_AFNAME),
-                                      VCL_MESSAGE_ERROR,
+                                      VclMessageType::Error,
                                       VCL_BUTTONS_OK_CANCEL
                                       )->Execute();
             }

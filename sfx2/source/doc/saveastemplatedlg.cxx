@@ -69,7 +69,7 @@ void SfxSaveAsTemplateDialog::setDocumentModel(const uno::Reference<frame::XMode
 
 IMPL_LINK_NOARG_TYPED(SfxSaveAsTemplateDialog, OkClickHdl, Button*, void)
 {
-    ScopedVclPtrInstance< MessageDialog > aQueryDlg(this, OUString(), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
+    ScopedVclPtrInstance< MessageDialog > aQueryDlg(this, OUString(), VclMessageType::Question, VCL_BUTTONS_YES_NO);
 
     if(!IsTemplateNameUnique())
     {

@@ -654,7 +654,7 @@ sal_Int8 ModelData_Impl::CheckSaveAcceptable( sal_Int8 nCurStatus )
             // notify the user that SaveAs is going to be done
             vcl::Window* pWin = SfxStoringHelper::GetModelWindow( m_xModel );
             ScopedVclPtrInstance<MessageDialog> aMessageBox(pWin, SfxResId(STR_NEW_FILENAME_SAVE),
-                                      VCL_MESSAGE_QUESTION, VCL_BUTTONS_OK_CANCEL);
+                                      VclMessageType::Question, VCL_BUTTONS_OK_CANCEL);
             if ( aMessageBox->Execute() == RET_OK )
                 nResult = STATUS_SAVEAS;
             else
@@ -1397,7 +1397,7 @@ bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >& xMo
            || SignatureState::PARTIAL_OK == nDocumentSignatureState)
         {
             if (ScopedVclPtrInstance<MessageDialog>(nullptr, SfxResId(RID_SVXSTR_XMLSEC_QUERY_LOSINGSIGNATURE),
-                              VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO)->Execute() != RET_YES)
+                              VclMessageType::Question, VCL_BUTTONS_YES_NO)->Execute() != RET_YES)
             {
                 // the user has decided not to store the document
                 throw task::ErrorCodeIOException(

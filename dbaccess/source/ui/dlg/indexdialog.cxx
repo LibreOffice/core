@@ -419,7 +419,7 @@ namespace dbaui
             {
                 OUString sConfirm(ModuleRes(STR_CONFIRM_DROP_INDEX));
                 sConfirm = sConfirm.replaceFirst("$name$", m_pIndexList->GetEntryText(pSelected));
-                ScopedVclPtrInstance< MessageDialog > aConfirm(this, sConfirm, VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
+                ScopedVclPtrInstance< MessageDialog > aConfirm(this, sConfirm, VclMessageType::Question, VCL_BUTTONS_YES_NO);
                 if (RET_YES != aConfirm->Execute())
                     return;
             }

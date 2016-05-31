@@ -2349,7 +2349,7 @@ IMPL_LINK_NOARG_TYPED( SvxConfigPage, AsyncInfoMsg, void*, void )
     // Asynchronous msg because of D&D
     ScopedVclPtr<MessageDialog>::Create( this,
         CUI_RES( RID_SVXSTR_MNUCFG_ALREADY_INCLUDED ),
-        VCL_MESSAGE_INFO )->Execute();
+        VclMessageType::Info )->Execute();
 }
 
 IMPL_LINK_TYPED( SvxConfigPage, MoveHdl, Button *, pButton, void )
@@ -3249,7 +3249,7 @@ void SvxToolbarConfigPage::DeleteSelectedContent()
              GetTopLevelSelection()->IsDeletable() )
         {
             ScopedVclPtrInstance<MessageDialog> qbox(this,
-                CUI_RES(RID_SXVSTR_CONFIRM_DELETE_TOOLBAR), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
+                CUI_RES(RID_SXVSTR_CONFIRM_DELETE_TOOLBAR), VclMessageType::Question, VCL_BUTTONS_YES_NO);
 
             if ( qbox->Execute() == RET_YES )
             {
@@ -3324,7 +3324,7 @@ IMPL_LINK_TYPED( SvxToolbarConfigPage, ToolbarSelectHdl, MenuButton *, pButton, 
         case ID_DEFAULT_STYLE:
         {
             ScopedVclPtrInstance<MessageDialog> qbox(this,
-                CUI_RES(RID_SVXSTR_CONFIRM_RESTORE_DEFAULT), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
+                CUI_RES(RID_SVXSTR_CONFIRM_RESTORE_DEFAULT), VclMessageType::Question, VCL_BUTTONS_YES_NO);
 
             if ( qbox->Execute() == RET_YES )
             {

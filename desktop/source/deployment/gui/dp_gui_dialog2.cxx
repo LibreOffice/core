@@ -587,7 +587,7 @@ bool DialogHelper::continueOnSharedExtension( const uno::Reference< deployment::
     {
         const SolarMutexGuard guard;
         ScopedVclPtrInstance<MessageDialog> aInfoBox(pParent, getResId(nResID),
-                                                     VCL_MESSAGE_WARNING, VCL_BUTTONS_OK_CANCEL);
+                                                     VclMessageType::Warning, VCL_BUTTONS_OK_CANCEL);
         bHadWarning = true;
 
         if ( RET_OK == aInfoBox->Execute() )
@@ -627,7 +627,7 @@ bool DialogHelper::installExtensionWarn( const OUString &rExtensionName ) const
 {
     const SolarMutexGuard guard;
     ScopedVclPtrInstance<MessageDialog> aInfo(m_pVCLWindow, getResId(RID_STR_WARNING_INSTALL_EXTENSION),
-                                              VCL_MESSAGE_WARNING, VCL_BUTTONS_OK_CANCEL);
+                                              VclMessageType::Warning, VCL_BUTTONS_OK_CANCEL);
 
     OUString sText(aInfo->get_primary_text());
     sText = sText.replaceAll("%NAME", rExtensionName);
@@ -788,7 +788,7 @@ bool ExtMgrDialog::removeExtensionWarn( const OUString &rExtensionName ) const
 {
     const SolarMutexGuard guard;
     ScopedVclPtrInstance<MessageDialog> aInfo(const_cast<ExtMgrDialog*>(this), getResId(RID_STR_WARNING_REMOVE_EXTENSION),
-                                              VCL_MESSAGE_WARNING, VCL_BUTTONS_OK_CANCEL);
+                                              VclMessageType::Warning, VCL_BUTTONS_OK_CANCEL);
 
     OUString sText(aInfo->get_primary_text());
     sText = sText.replaceAll("%NAME", rExtensionName);

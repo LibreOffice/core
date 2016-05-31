@@ -449,7 +449,7 @@ void ProgressCmdEnv::handle( uno::Reference< task::XInteractionRequest > const &
         {
             SolarMutexGuard guard;
             ScopedVclPtrInstance<MessageDialog> box(m_pDialogHelper? m_pDialogHelper->getWindow() : nullptr,
-                                                    ResId(id, *DeploymentGuiResMgr::get()), VCL_MESSAGE_WARNING, VCL_BUTTONS_OK_CANCEL);
+                                                    ResId(id, *DeploymentGuiResMgr::get()), VclMessageType::Warning, VCL_BUTTONS_OK_CANCEL);
             OUString s;
             if (bEqualNames)
             {

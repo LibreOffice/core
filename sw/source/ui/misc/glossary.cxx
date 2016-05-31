@@ -462,7 +462,7 @@ IMPL_LINK_TYPED( SwGlossaryDlg, MenuHdl, Menu *, pMn, bool )
         const OUString aShortName(m_pShortNameEdit->GetText());
         if(pGlossaryHdl->HasShortName(aShortName))
         {
-            ScopedVclPtrInstance<MessageDialog>::Create(this, SW_RES(STR_DOUBLE_SHORTNAME), VCL_MESSAGE_INFO)->Execute();
+            ScopedVclPtrInstance<MessageDialog>::Create(this, SW_RES(STR_DOUBLE_SHORTNAME), VclMessageType::Info)->Execute();
             m_pShortNameEdit->SetSelection(Selection(0, SELECTION_MAX));
             m_pShortNameEdit->GrabFocus();
             return true;
@@ -520,7 +520,7 @@ IMPL_LINK_TYPED( SwGlossaryDlg, MenuHdl, Menu *, pMn, bool )
     }
     else if (sItemIdent == "delete")
     {
-        ScopedVclPtrInstance< MessageDialog > aQuery(this, SW_RES(STR_QUERY_DELETE), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
+        ScopedVclPtrInstance< MessageDialog > aQuery(this, SW_RES(STR_QUERY_DELETE), VclMessageType::Question, VCL_BUTTONS_YES_NO);
         if (RET_YES == aQuery->Execute())
         {
             const OUString aShortName(m_pShortNameEdit->GetText());
@@ -599,7 +599,7 @@ IMPL_LINK_TYPED( SwGlossaryDlg, MenuHdl, Menu *, pMn, bool )
                 Init();
             else
             {
-                ScopedVclPtrInstance<MessageDialog>::Create(this, SW_RES( STR_NO_GLOSSARIES ), VCL_MESSAGE_INFO)->Execute();
+                ScopedVclPtrInstance<MessageDialog>::Create(this, SW_RES( STR_NO_GLOSSARIES ), VclMessageType::Info)->Execute();
             }
         }
     }
@@ -678,7 +678,7 @@ IMPL_LINK_NOARG_TYPED(SwGlossaryDlg, BibHdl, Button*, void)
         }
         else
         {
-            ScopedVclPtrInstance< MessageDialog > aBox(this, sReadonlyPath, VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
+            ScopedVclPtrInstance< MessageDialog > aBox(this, sReadonlyPath, VclMessageType::Question, VCL_BUTTONS_YES_NO);
 
             if(RET_YES == aBox->Execute())
                 PathHdl(m_pPathBtn);
@@ -812,7 +812,7 @@ IMPL_LINK_NOARG_TYPED(SwNewGlosNameDlg, Rename, Button*, void)
     if( pDlg->pGlossaryHdl->HasShortName(m_pNewShort->GetText())
         && sNew != m_pOldShort->GetText() )
     {
-        ScopedVclPtrInstance<MessageDialog>::Create(this, SW_RES(STR_DOUBLE_SHORTNAME), VCL_MESSAGE_INFO)->Execute();
+        ScopedVclPtrInstance<MessageDialog>::Create(this, SW_RES(STR_DOUBLE_SHORTNAME), VclMessageType::Info)->Execute();
         m_pNewShort->GrabFocus();
     }
     else

@@ -815,7 +815,7 @@ void SwSrcView::Load(SwDocShell* pDocShell)
         else
         {
             vcl::Window *pTmpWindow = &GetViewFrame()->GetWindow();
-            ScopedVclPtrInstance<MessageDialog>::Create(pTmpWindow, SW_RES(STR_ERR_SRCSTREAM), VCL_MESSAGE_INFO)->Execute();
+            ScopedVclPtrInstance<MessageDialog>::Create(pTmpWindow, SW_RES(STR_ERR_SRCSTREAM), VclMessageType::Info)->Execute();
         }
     }
     else

@@ -1087,7 +1087,7 @@ void SvtFileDialog::OpenHdl_Impl(void* pVoid)
                     "$filename$",
                     aFileObj.getName(INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET)
                 );
-                ScopedVclPtrInstance< MessageDialog > aBox(this, aMsg, VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
+                ScopedVclPtrInstance< MessageDialog > aBox(this, aMsg, VclMessageType::Question, VCL_BUTTONS_YES_NO);
                 if ( aBox->Execute() != RET_YES )
                     return;
             }

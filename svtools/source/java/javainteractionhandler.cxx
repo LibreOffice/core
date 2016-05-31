@@ -122,7 +122,7 @@ void SAL_CALL JavaInteractionHandler::handle( const Reference< XInteractionReque
            // No suitable JRE found
             SolarMutexGuard aSolarGuard;
             m_bJavaNotFound_Handled = true;
-            ScopedVclPtrInstance< MessageDialog > aWarningBox(nullptr, SvtResId(STR_WARNING_JAVANOTFOUND), VCL_MESSAGE_WARNING);
+            ScopedVclPtrInstance< MessageDialog > aWarningBox(nullptr, SvtResId(STR_WARNING_JAVANOTFOUND), VclMessageType::Warning);
             aWarningBox->SetText(SvtResId(STR_WARNING_JAVANOTFOUND_TITLE));
             nResult = aWarningBox->Execute();
         }
@@ -139,9 +139,9 @@ void SAL_CALL JavaInteractionHandler::handle( const Reference< XInteractionReque
             SolarMutexGuard aSolarGuard;
             m_bInvalidSettings_Handled = true;
 #ifdef MACOSX
-            ScopedVclPtrInstance< MessageDialog > aWarningBox(nullptr, SvtResId(STR_WARNING_INVALIDJAVASETTINGS_MAC), VCL_MESSAGE_WARNING);
+            ScopedVclPtrInstance< MessageDialog > aWarningBox(nullptr, SvtResId(STR_WARNING_INVALIDJAVASETTINGS_MAC), VclMessageType::Warning);
 #else
-            ScopedVclPtrInstance< MessageDialog > aWarningBox(nullptr, SvtResId(STR_WARNING_INVALIDJAVASETTINGS), VCL_MESSAGE_WARNING);
+            ScopedVclPtrInstance< MessageDialog > aWarningBox(nullptr, SvtResId(STR_WARNING_INVALIDJAVASETTINGS), VclMessageType::Warning);
 #endif
             aWarningBox->SetText(SvtResId(STR_WARNING_INVALIDJAVASETTINGS_TITLE));
             nResult = aWarningBox->Execute();
