@@ -75,8 +75,8 @@ void SwViewShell::Init( const SwViewOption *pNewOpt )
 
     SwDocShell* pDShell = mpDoc->GetDocShell();
     mpDoc->GetDocumentSettingManager().set(DocumentSettingId::HTML_MODE, 0 != ::GetHtmlMode( pDShell ) );
-    // JP 02.02.99: Bug 61335 - set readonly flag at ViewOptions before creating layout. Otherwise,
-    //                          one would have to reformat again.
+    // Set readonly flag at ViewOptions before creating layout. Otherwise,
+    // one would have to reformat again.
 
     if( pDShell && pDShell->IsReadOnly() )
         mpOpt->SetReadonly( true );
@@ -96,7 +96,7 @@ void SwViewShell::Init( const SwViewOption *pNewOpt )
         InitPrt( pPDFOut );
     // <--
 
-    // --> FME 2005-03-16 #i44963# Good occasion to check if page sizes in
+    // Good occasion to check if page sizes in
     // page descriptions are still set to (LONG_MAX, LONG_MAX) (html import)
     if ( !bBrowseMode )
     {
@@ -176,7 +176,7 @@ SwViewShell::SwViewShell( SwDoc& rDocument, vcl::Window *pWindow,
     mpPrePostOutDev(nullptr), // #i72754#
     maPrePostMapMode()
 {
-    // OD 2004-06-01 #i26791# - in order to suppress event handling in
+    // In order to suppress event handling in
     // <SwDrawContact::Changed> during construction of <SwViewShell> instance
     mbInConstructor = true;
 
@@ -185,7 +185,7 @@ SwViewShell::SwViewShell( SwDoc& rDocument, vcl::Window *pWindow,
     mbPaintWorks = mbEnableSmooth = true;
     mbPreview = 0 !=( VSHELLFLAG_ISPREVIEW & nFlags );
 
-    // --> OD 2005-02-11 #i38810# - Do not reset modified state of document,
+    // Do not reset modified state of document,
     // if it's already been modified.
     const bool bIsDocModified( mpDoc->getIDocumentState().IsModified() );
     mpDoc->acquire();
@@ -197,7 +197,7 @@ SwViewShell::SwViewShell( SwDoc& rDocument, vcl::Window *pWindow,
     // is created in <SwViewShell::Init(..)> - called above.
     if ( mbPreview )
     {
-        // OD 12.12.2002 #103492# - init page preview layout
+        // init page preview layout
         mpImp->InitPagePreviewLayout();
     }
 
@@ -256,7 +256,7 @@ SwViewShell::SwViewShell( SwViewShell& rShell, vcl::Window *pWindow,
     mpPrePostOutDev(nullptr), // #i72754#
     maPrePostMapMode()
 {
-    // OD 2004-06-01 #i26791# - in order to suppress event handling in
+    // In order to suppress event handling in
     // <SwDrawContact::Changed> during construction of <SwViewShell> instance
     mbInConstructor = true;
 
@@ -307,7 +307,7 @@ SwViewShell::~SwViewShell()
         SET_CURR_SHELL( this );
         mbPaintWorks = false;
 
-        // FME 2004-06-21 #i9684# Stopping the animated graphics is not
+        // Stopping the animated graphics is not
         // necessary during printing or pdf export, because the animation
         // has not been started in this case.
         if( mpDoc && GetWin() )
