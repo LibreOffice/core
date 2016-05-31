@@ -52,7 +52,7 @@ namespace comphelper
 struct EmbedImpl;
 class COMPHELPER_DLLPUBLIC EmbeddedObjectContainer
 {
-    EmbedImpl*  pImpl;
+    std::unique_ptr<EmbedImpl>  pImpl;
 
     css::uno::Reference < css::embed::XEmbeddedObject > Get_Impl( const OUString&,
             const css::uno::Reference < css::embed::XEmbeddedObject >& xCopy,
