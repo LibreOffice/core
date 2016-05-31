@@ -57,7 +57,6 @@ RscTypCont::RscTypCont( RscError * pErrHdl,
     , aLangType()
     , aLangString( pHS->getID( "Lang_Chars" ), RSC_NOTYPE, &aString, &aLangType )
     , aLangShort( pHS->getID( "Lang_short" ), RSC_NOTYPE, &aShort, &aLangType )
-    , nAcceleratorType( 0 )
     , nFlags( nFlagsP )
 {
     nUniqueId = 256;

@@ -24,30 +24,16 @@ namespace accessibility {
 
 AccessibleShapeInfo::AccessibleShapeInfo (
         const css::uno::Reference<css::drawing::XShape>& rxShape,
-        const css::uno::Reference<css::accessibility::XAccessible>& rxParent,
-        IAccessibleParent* pChildrenManager)
-    : mxShape (rxShape),
-      mxParent (rxParent),
-      mpChildrenManager (pChildrenManager)
-{
-    // empty.
-}
-
-
-AccessibleShapeInfo::AccessibleShapeInfo (
-        const css::uno::Reference<css::drawing::XShape>& rxShape,
         const css::uno::Reference<css::accessibility::XAccessible>& rxParent)
     : mxShape (rxShape),
-      mxParent (rxParent),
-      mpChildrenManager (nullptr)
+      mxParent (rxParent)
 {
     // empty.
 }
 
 AccessibleShapeInfo::AccessibleShapeInfo (const AccessibleShapeInfo &rOther)
     : mxShape (rOther.mxShape),
-      mxParent (rOther.mxParent),
-      mpChildrenManager (rOther.mpChildrenManager)
+      mxParent (rOther.mxParent)
 {
     // empty.
 }

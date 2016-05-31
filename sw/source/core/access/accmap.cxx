@@ -2032,7 +2032,7 @@ uno::Reference< XAccessible> SwAccessibleMap::GetContext(
                                 ::accessibility::ShapeTypeHandler::Instance();
                     uno::Reference < XAccessible > xParent( pParentImpl );
                     ::accessibility::AccessibleShapeInfo aShapeInfo(
-                            xShape, xParent, this );
+                            xShape, xParent );
 
                     pAcc = rShapeTypeHandler.CreateAccessibleObject(
                                 aShapeInfo, mpShapeMap->GetInfo() );
@@ -3200,8 +3200,7 @@ bool SwAccessibleMap::ReplaceChild (
         // create the new child
         ::accessibility::ShapeTypeHandler& rShapeTypeHandler =
                         ::accessibility::ShapeTypeHandler::Instance();
-        ::accessibility::AccessibleShapeInfo aShapeInfo(
-                                            xShape, xParent, this );
+        ::accessibility::AccessibleShapeInfo aShapeInfo( xShape, xParent );
         rtl::Reference< ::accessibility::AccessibleShape> pReplacement(
             rShapeTypeHandler.CreateAccessibleObject (
                 aShapeInfo, mpShapeMap->GetInfo() ));

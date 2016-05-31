@@ -175,9 +175,6 @@ private:
     /// Prefetch show, but don't call applyInitialShapeAttributes()
     bool implPrefetchShow();
 
-    /// Query the rectangle covered by the slide
-    ::basegfx::B2DRectangle getSlideRect() const;
-
     /// Start GIF and other intrinsic shape animations
     void endIntrinsicAnimations();
 
@@ -334,7 +331,6 @@ SlideImpl::SlideImpl( const uno::Reference< drawing::XDrawPage >&           xDra
     mxRootNode( xRootNode ),
     mpLayerManager( new LayerManager(
                         rViewContainer,
-                        getSlideRect(),
                         bDisableAnimationZOrder) ),
     mpShapeManager( new ShapeManagerImpl(
                         rEventMultiplexer,
@@ -857,14 +853,6 @@ void SlideImpl::deactivatePaintOverlay()
 
     mpPaintOverlay.reset();
     mbPaintOverlayActive = false;
-}
-
-::basegfx::B2DRectangle SlideImpl::getSlideRect() const
-{
-    const basegfx::B2ISize slideSize( getSlideSizeImpl() );
-    return ::basegfx::B2DRectangle(0.0,0.0,
-                                   slideSize.getX(),
-                                   slideSize.getY());
 }
 
 void SlideImpl::endIntrinsicAnimations()

@@ -453,7 +453,7 @@ bool ScChildrenShapes::ReplaceChild (::accessibility::AccessibleShape* pCurrentC
 {
     // create the new child
     rtl::Reference< ::accessibility::AccessibleShape > pReplacement(::accessibility::ShapeTypeHandler::Instance().CreateAccessibleObject (
-        ::accessibility::AccessibleShapeInfo ( _rxShape, pCurrentChild->getAccessibleParent(), this ),
+        ::accessibility::AccessibleShapeInfo ( _rxShape, pCurrentChild->getAccessibleParent() ),
         _rShapeTreeInfo
     ));
     if ( pReplacement.is() )
@@ -558,7 +558,7 @@ uno::Reference< XAccessible > ScChildrenShapes::Get(const ScAccessibleShapeData*
     if (!pData->pAccShape.is())
     {
         ::accessibility::ShapeTypeHandler& rShapeHandler = ::accessibility::ShapeTypeHandler::Instance();
-        ::accessibility::AccessibleShapeInfo aShapeInfo(pData->xShape, mpAccessibleDocument, const_cast<ScChildrenShapes*>(this));
+        ::accessibility::AccessibleShapeInfo aShapeInfo(pData->xShape, mpAccessibleDocument);
         pData->pAccShape = rShapeHandler.CreateAccessibleObject(
             aShapeInfo, maShapeTreeInfo);
         if (pData->pAccShape.is())

@@ -185,7 +185,6 @@ ErrorContext *ErrorContext::GetContext()
 
 
 ErrorHandler::ErrorHandler()
-    : pImpl(new ErrorHandler_Impl)
 {
     EDcrData &rData = TheEDcrData::get();
     rData.errorHandlers.insert(rData.errorHandlers.begin(), this);

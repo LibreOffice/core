@@ -92,7 +92,6 @@ private:
     ::sfx2::sidebar::ControllerItem maDspObjController;
     ::sfx2::sidebar::ControllerItem maMetricController;
 
-    std::unique_ptr< XFillStyleItem > mpFillStyleItem;
     std::unique_ptr< XFillColorItem > mpColorItem;
     std::unique_ptr< XFillGradientItem > mpGradientItem;
     std::unique_ptr< XFillHatchItem > mpHatchItem;

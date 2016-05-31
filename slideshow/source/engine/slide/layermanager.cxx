@@ -68,14 +68,12 @@ namespace slideshow
         }
 
         LayerManager::LayerManager( const UnoViewContainer&    rViews,
-                                    const ::basegfx::B2DRange& rPageBounds,
                                     bool                       bDisableAnimationZOrder ) :
             mrViews(rViews),
             maLayers(),
             maXShapeHash( 101 ),
             maAllShapes(),
             maUpdateShapes(),
-            maPageBounds( rPageBounds ),
             mnActiveSprites(0),
             mbLayerAssociationDirty(false),
             mbActive(false),
