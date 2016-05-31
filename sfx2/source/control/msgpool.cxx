@@ -34,9 +34,7 @@
 #include <sfx2/sfx.hrc>
 
 SfxSlotPool::SfxSlotPool(SfxSlotPool *pParent)
- : _pGroups(nullptr)
- , _pParentPool( pParent )
- , _pInterfaces(nullptr)
+ : _pParentPool( pParent )
  , _nCurGroup(0)
  , _nCurInterface(0)
  , _nCurMsg(0)
@@ -48,8 +46,6 @@ SfxSlotPool::~SfxSlotPool()
     _pParentPool = nullptr;
     for ( SfxInterface *pIF = FirstInterface(); pIF; pIF = FirstInterface() )
         delete pIF;
-    delete _pInterfaces;
-    delete _pGroups;
 }
 
 
@@ -58,8 +54,8 @@ SfxSlotPool::~SfxSlotPool()
 void SfxSlotPool::RegisterInterface( SfxInterface& rInterface )
 {
     // add to the list of SfxObjectInterface instances
-    if ( _pInterfaces == nullptr )
-        _pInterfaces = new SfxInterfaceArr_Impl;
+    if(!_pInterfaces)
+        _pInterfaces.reset(new SfxInterfaceArr_Impl);
     _pInterfaces->push_back(&rInterface);
 
     // Stop at a (single) Null-slot (for syntactic reasons the interfaces
@@ -70,7 +66,7 @@ void SfxSlotPool::RegisterInterface( SfxInterface& rInterface )
     // possibly add Interface-id and group-ids of funcs to the list of groups
     if ( !_pGroups )
     {
-        _pGroups = new SfxSlotGroupArr_Impl;
+        _pGroups.reset(new SfxSlotGroupArr_Impl);
 
         if ( _pParentPool )
         {
