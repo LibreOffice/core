@@ -154,8 +154,7 @@ uno::Reference<XAccessible>
         {
             AccessibleShapeInfo aShapeInfo(
                         rChildDescriptor.mxShape,
-                        mxParent,
-                        this);
+                        mxParent);
             // Create accessible object that corresponds to the descriptor's
             // shape.
             rtl::Reference<AccessibleShape> pShape(
@@ -760,7 +759,7 @@ bool ChildrenManagerImpl::ReplaceChild (
     const AccessibleShapeTreeInfo& _rShapeTreeInfo)
     throw (uno::RuntimeException)
 {
-    AccessibleShapeInfo aShapeInfo( _rxShape, pCurrentChild->getAccessibleParent(), this );
+    AccessibleShapeInfo aShapeInfo( _rxShape, pCurrentChild->getAccessibleParent() );
     // create the new child
     rtl::Reference<AccessibleShape> pNewChild(ShapeTypeHandler::Instance().CreateAccessibleObject (
         aShapeInfo,

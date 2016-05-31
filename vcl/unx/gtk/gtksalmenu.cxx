@@ -1081,7 +1081,6 @@ GtkSalMenuItem::GtkSalMenuItem( const SalItemParams* pItemData ) :
     mnId( pItemData->nId ),
     mnType( pItemData->eType ),
     mbVisible( true ),
-    mpVCLMenu( pItemData->pMenu ),
     mpParentMenu( nullptr ),
     mpSubMenu( nullptr )
 {

@@ -135,7 +135,6 @@ public:
     sal_uInt16          mnId;               // Item ID
     MenuItemType        mnType;             // Item type
     bool                mbVisible;          // Item visibility.
-    Menu*               mpVCLMenu;          // VCL Menu into which this menu item is inserted
     GtkSalMenu*         mpParentMenu;       // The menu into which this menu item is inserted
     GtkSalMenu*         mpSubMenu;          // Submenu of this item (if defined)
 };

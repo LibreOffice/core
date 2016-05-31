@@ -106,8 +106,7 @@ AccessibleShape::AccessibleShape (
       mxShape (rShapeInfo.mxShape),
       maShapeTreeInfo (rShapeTreeInfo),
       m_nIndexInParent(-1),
-      mpText (nullptr),
-      mpParent (rShapeInfo.mpChildrenManager)
+      mpText (nullptr)
 {
     m_pShape = GetSdrObjectFromXShape(mxShape);
     UpdateNameAndDescription();

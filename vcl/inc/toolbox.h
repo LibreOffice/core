@@ -110,7 +110,6 @@ namespace vcl
 struct ToolBoxLayoutData : public ControlLayoutData
 {
     std::vector< sal_uInt16 >               m_aLineItemIds;
-    std::vector< sal_uInt16 >               m_aLineItemPositions;
 };
 
 } /* namespace vcl */

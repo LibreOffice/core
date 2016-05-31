@@ -159,7 +159,6 @@ protected:
     bool    m_bProtectContent;
     bool    m_bProtectSize;
     bool    m_bProtectPos;
-    bool    m_bEditable;
     bool    m_bPrintable;
     bool    m_bBackground;
     sal_Int16 m_nTransparency;

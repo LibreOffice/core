@@ -53,22 +53,6 @@ public:
     css::uno::Reference<
         css::accessibility::XAccessible> mxParent;
 
-    /** This object that may be realized by the same implementation as that
-        of that of <member>mxParent</member> can be used to modify
-        parent/child relationships with the shape as initiator.
-        Note that NULL is a valid value for this member.
-    */
-    IAccessibleParent* mpChildrenManager;
-
-    /** Copy the given values into the members described above.
-    */
-    AccessibleShapeInfo (
-        const css::uno::Reference<
-            css::drawing::XShape>& rxShape,
-        const css::uno::Reference<
-            css::accessibility::XAccessible>& rxParent,
-        IAccessibleParent* pChildrenManager);
-
     /** Copy the given values into the members described above.
         The accessible parent implementation object is set to NULL.
     */

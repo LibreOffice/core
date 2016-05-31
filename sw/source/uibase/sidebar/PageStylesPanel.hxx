@@ -66,15 +66,6 @@ public:
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame);
     virtual ~PageStylesPanel();
     virtual void dispose() override;
-
-private:
-
-    VclPtr<CheckBox> mpFooterToggle;
-    VclPtr<MetricField> mpFooterHeightField;
-    VclPtr<MetricField> mpFooterLMargin;
-    VclPtr<MetricField> mpFooterRMargin;
-    VclPtr<MetricField> mpFooterSpacing;
-    VclPtr<ListBox> mpSameContentLB;
 };
 
 } } //end of namespace sw::sidebar

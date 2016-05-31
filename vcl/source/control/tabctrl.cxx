@@ -64,7 +64,6 @@ struct ImplTabCtrlData
 {
     std::unordered_map< int, int >        maLayoutPageIdToLine;
     std::unordered_map< int, int >        maLayoutLineToPageId;
-    std::vector< Rectangle >        maTabRectangles;
     Point                           maItemsOffset;       // offset of the tabitems
     std::vector< ImplTabItem >      maItemList;
     VclPtr<ListBox>                 mpListBox;
