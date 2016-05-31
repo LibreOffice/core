@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "da7fb54a_46bae4e2",
+        "filename": "sfx2/source/doc/templatedlg.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1001193
+      },
+      "writtenOn": "2016-05-31T10:25:31Z",
+      "side": 1,
+      "message": "Hi, I understand your point. See SfxTemplateManagerDlg::getApplicationSpecificSettings() for other modes. When we initialize this dialog fron sdmod1.cxx, there is no application model set. Hence, for this specific case of creating a new Impress doc, I have to use this IsImpressDoc variable.",
+      "parentUuid": "da7fb54a_c696f493",
+      "revId": "75bd99a3bfced95b8c510f2c00817dd2550b1cc3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da7fb54a_46e9041a",
         "filename": "sfx2/source/doc/templatedlg.cxx",
         "patchSetId": 5
@@ -30,6 +48,24 @@
       "writtenOn": "2016-05-31T08:59:54Z",
       "side": 1,
       "message": "So what I\u0027d suggest instead is to introduce or even reuse some kind of enum (AppImpress, AppWriter, ...) and write a more general method (setMode? preselectCategory?) taking 1 enum argument ...",
+      "revId": "75bd99a3bfced95b8c510f2c00817dd2550b1cc3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_a6b9f0eb",
+        "filename": "sfx2/source/doc/templatedlg.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 346,
+      "author": {
+        "id": 1001193
+      },
+      "writtenOn": "2016-05-31T10:25:31Z",
+      "side": 1,
+      "message": "We have only one case where app model cannot be set. Hence, enum created will be mostly unused.",
+      "parentUuid": "da7fb54a_46e9041a",
       "revId": "75bd99a3bfced95b8c510f2c00817dd2550b1cc3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
