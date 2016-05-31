@@ -85,6 +85,8 @@ class SwXMLExport : public SvXMLExport
     void ExportTableLines( const SwTableLines& rLines,
                            SwXMLTableInfo_Impl& rTableInfo,
                            sal_uInt32 nHeaderRows = 0 );
+    void ExportCellStyle(css::uno::Reference<css::style::XStyle> xCellStyle);
+    void ExportTableTemplates();
 
     virtual void ExportMeta_() override;
     virtual void ExportFontDecls_() override;

@@ -19,6 +19,7 @@
 
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextSection.hpp>
+#include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 
 #include <hintids.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -54,6 +55,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
@@ -1093,6 +1095,9 @@ void SwXMLExport::ExportTable( const SwTableNode& rTableNd )
         AddAttribute( XML_NAMESPACE_TABLE, XML_STYLE_NAME,
                       EncodeStyleName( pTableFormat->GetName() ) );
     }
+    // table:table-template=
+    if (!rTable.GetTableStyleName().isEmpty())
+        AddAttribute(XML_NAMESPACE_TABLE, XML_TABLE_TEMPLATE, rTable.GetTableStyleName());
 
     sal_uInt16 nPrefix = XML_NAMESPACE_TABLE;
     if (const SwFrameFormat* pFlyFormat = rTableNd.GetFlyFormat())
@@ -1202,6 +1207,73 @@ void SwXMLExport::DeleteTableLines()
             delete p;
         pTableLines->clear();
         delete pTableLines;
+    }
+}
+
+void SwXMLExport::ExportCellStyle(Reference<XStyle> xCellStyle)
+{
+    // <style:style
+    // style:style-name
+    AddAttribute(XML_NAMESPACE_STYLE, XML_STYLE_NAME, EncodeStyleName(xCellStyle->getName()));
+    // style:style-family
+    AddAttribute(XML_NAMESPACE_STYLE, XML_FAMILY, XML_TABLE_CELL);
+    // style:parent-style-name
+    AddAttribute(XML_NAMESPACE_STYLE, XML_PARENT_STYLE_NAME, EncodeStyleName(xCellStyle->getParentStyle()));
+    SvXMLElementExport cellStyle(*this, XML_NAMESPACE_STYLE, XML_STYLE, true, true);
+
+    // style:table-cell-properties
+    // probably should call smth
+    //SvXMLElementExport cellProperties(*this, XML_NAMESPACE_STYLE, XML_STYLE, true, true);
+    /*
+     AddAttribute(XML_NAMESPACE_FO, XML_BACKGROUND_COLOR, EncodeStyleName(xCellStyle->getParentStyle()));
+     */
+}
+
+/// Exports cell styles used by templates and the templates
+void SwXMLExport::ExportTableTemplates()
+{
+    Reference<XStyleFamiliesSupplier> xFamiliesSupp(GetModel(), UNO_QUERY);
+    Reference<XNameAccess> xFamilies(xFamiliesSupp->getStyleFamilies());
+    const OUString sFamilyName("TableStyles");
+    Reference<XIndexAccess> xTableFamily(xFamilies->getByName(sFamilyName), UNO_QUERY);
+
+    for(sal_Int32 nIndex = 0; nIndex < xTableFamily->getCount(); nIndex++) try
+    {
+        Reference<XStyle> xTableStyle(xTableFamily->getByIndex(nIndex), UNO_QUERY);
+        if(!xTableStyle->isInUse())
+            continue;
+
+        // export cell styles
+        Reference<XIndexAccess> xTableIndexAccess(xTableStyle, UNO_QUERY);
+        sal_Int32 nSize = xTableIndexAccess->getCount();
+        for (sal_Int32 i=0; i < nSize; ++i)
+        {
+            Reference<XStyle> xCellStyle(xTableIndexAccess->getByIndex(i), UNO_QUERY);
+            ExportCellStyle(xCellStyle);
+        }
+
+        // table-template
+        AddAttribute(XML_NAMESPACE_TABLE, XML_STYLE_NAME, EncodeStyleName(xTableStyle->getName()));
+        SvXMLElementExport tableTemplate(*this, XML_NAMESPACE_TABLE, XML_TABLE_TEMPLATE, true, true);
+
+        // Link cell styles to table template.
+        // It should be done using some more intelligent mapping. As many other things of Table Styles.
+        // first-row
+        Reference<XNameAccess> xTableNameAccess(xTableStyle, UNO_QUERY);
+        Reference<XStyle> xCellStyle(xTableNameAccess->getByName("first-row"), UNO_QUERY);
+        AddAttribute(XML_NAMESPACE_TABLE, XML_STYLE_NAME, EncodeStyleName(xCellStyle->getName()));
+        SvXMLElementExport tableFirstRow(*this, XML_NAMESPACE_TABLE, XML_FIRST_ROW, true, true);
+        // last-row
+        // first-column
+        // last-column
+        // odd-rows
+        // odd-columns
+        // body
+
+    }
+    catch (const Exception&)
+    {
+        SAL_WARN("sw.export", "ExportTableTemplates failed");
     }
 }
 

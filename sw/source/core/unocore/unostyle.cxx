@@ -61,6 +61,7 @@
 #include <sfx2/printer.hxx>
 #include <com/sun/star/style/ParagraphStyleCategory.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
+#include <com/sun/star/text/XTextTablesSupplier.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/drawing/BitmapMode.hpp>
@@ -4246,16 +4247,16 @@ SwXTextTableStyle::SwXTextTableStyle(SwDocShell* pDocShell, const OUString& rTab
     if (pAutoFormat)
     {
         // TODO fix styles mapping
-        m_aCellStyles[ FIRST_ROW_STYLE    ] = new SwXTextCellStyle(pAutoFormat->GetBoxFormat( 0 ));  // 0
-        m_aCellStyles[ LAST_ROW_STYLE     ] = new SwXTextCellStyle(pAutoFormat->GetBoxFormat( 12 )); // 1
-        m_aCellStyles[ FIRST_COLUMN_STYLE ] = new SwXTextCellStyle(pAutoFormat->GetBoxFormat( 4 ));  // 2
-        m_aCellStyles[ LAST_COLUMN_STYLE  ] = new SwXTextCellStyle(pAutoFormat->GetBoxFormat( 7 ));  // 3
-        m_aCellStyles[ EVEN_ROWS_STYLE    ] = new SwXTextCellStyle(pAutoFormat->GetBoxFormat( 13 )); // 4
-        m_aCellStyles[ ODD_ROWS_STYLE     ] = new SwXTextCellStyle(pAutoFormat->GetBoxFormat( 13 )); // 5
-        m_aCellStyles[ EVEN_COLUMNS_STYLE ] = new SwXTextCellStyle(pAutoFormat->GetBoxFormat( 13 )); // 6
-        m_aCellStyles[ ODD_COLUMNS_STYLE  ] = new SwXTextCellStyle(pAutoFormat->GetBoxFormat( 13 )); // 7
-        m_aCellStyles[ BODY_STYLE         ] = new SwXTextCellStyle(pAutoFormat->GetBoxFormat( 13 )); // 8
-        m_aCellStyles[ BACKGROUND_STYLE   ] = new SwXTextCellStyle(pAutoFormat->GetBoxFormat( 13 )); // 9
+        m_aCellStyles[ FIRST_ROW_STYLE    ] = new SwXTextCellStyle(pAutoFormat->GetBoxFormat( 0 ),  m_sTableAutoFormatName, FIRST_ROW_STYLE     ); // 0
+        m_aCellStyles[ LAST_ROW_STYLE     ] = new SwXTextCellStyle(pAutoFormat->GetBoxFormat( 12 ), m_sTableAutoFormatName, LAST_ROW_STYLE      ); // 1
+        m_aCellStyles[ FIRST_COLUMN_STYLE ] = new SwXTextCellStyle(pAutoFormat->GetBoxFormat( 4 ),  m_sTableAutoFormatName, FIRST_COLUMN_STYLE  ); // 2
+        m_aCellStyles[ LAST_COLUMN_STYLE  ] = new SwXTextCellStyle(pAutoFormat->GetBoxFormat( 7 ),  m_sTableAutoFormatName, LAST_COLUMN_STYLE   ); // 3
+        m_aCellStyles[ EVEN_ROWS_STYLE    ] = new SwXTextCellStyle(pAutoFormat->GetBoxFormat( 13 ), m_sTableAutoFormatName, EVEN_ROWS_STYLE     ); // 4
+        m_aCellStyles[ ODD_ROWS_STYLE     ] = new SwXTextCellStyle(pAutoFormat->GetBoxFormat( 13 ), m_sTableAutoFormatName, ODD_ROWS_STYLE      ); // 5
+        m_aCellStyles[ EVEN_COLUMNS_STYLE ] = new SwXTextCellStyle(pAutoFormat->GetBoxFormat( 13 ), m_sTableAutoFormatName, EVEN_COLUMNS_STYLE  ); // 6
+        m_aCellStyles[ ODD_COLUMNS_STYLE  ] = new SwXTextCellStyle(pAutoFormat->GetBoxFormat( 13 ), m_sTableAutoFormatName, ODD_COLUMNS_STYLE   ); // 7
+        m_aCellStyles[ BODY_STYLE         ] = new SwXTextCellStyle(pAutoFormat->GetBoxFormat( 13 ), m_sTableAutoFormatName, BODY_STYLE          ); // 8
+        m_aCellStyles[ BACKGROUND_STYLE   ] = new SwXTextCellStyle(pAutoFormat->GetBoxFormat( 13 ), m_sTableAutoFormatName, BACKGROUND_STYLE    ); // 9
     }
 }
 
@@ -4331,6 +4332,20 @@ sal_Bool SAL_CALL SwXTextTableStyle::isUserDefined() throw (uno::RuntimeExceptio
 
 sal_Bool SAL_CALL SwXTextTableStyle::isInUse() throw (uno::RuntimeException, std::exception)
 {
+    SolarMutexGuard aGuard;
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(m_pDocShell->GetModel(), uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    sal_Int32 nTables = xTables->getCount();
+    for (sal_Int32 i=0; i < nTables; ++i)
+    {
+        uno::Reference<beans::XPropertySet> xTable(xTables->getByIndex(i), uno::UNO_QUERY);
+        uno::Any xName = xTable->getPropertyValue("TableTemplateName");
+        OUString sStyleName;
+        if (!(xName >>= sStyleName))
+            continue;
+        if (sStyleName == m_sTableAutoFormatName)
+            return true;
+    }
     return false;
 }
 
@@ -4395,6 +4410,17 @@ sal_Bool SAL_CALL SwXTextTableStyle::hasByName(const OUString& rName) throw(css:
     return iter != rMap.end();
 }
 
+//XIndexAccess
+sal_Int32 SAL_CALL SwXTextTableStyle::SwXTextTableStyle::getCount() throw(css::uno::RuntimeException, std::exception)
+{
+    return STYLE_COUNT;
+}
+
+css::uno::Any SAL_CALL SwXTextTableStyle::getByIndex(sal_Int32 nIndex) throw(css::lang::IndexOutOfBoundsException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
+{
+    return uno::Any(m_aCellStyles[nIndex]);
+}
+
 //XElementAccess
 uno::Type SAL_CALL SAL_CALL SwXTextTableStyle::getElementType() throw(uno::RuntimeException, std::exception)
 {
@@ -4423,8 +4449,8 @@ css::uno::Sequence<OUString> SAL_CALL SwXTextTableStyle::getSupportedServiceName
 }
 
 // SwXTextCellStyle
-SwXTextCellStyle::SwXTextCellStyle(SwBoxAutoFormat& rBoxAutoFormat) :
-    m_rBoxAutoFormat(rBoxAutoFormat)
+SwXTextCellStyle::SwXTextCellStyle(SwBoxAutoFormat& rBoxAutoFormat, OUString& sParentStyle, sal_Int32 nCellId) :
+    m_rBoxAutoFormat(rBoxAutoFormat), m_sParentStyle(sParentStyle), m_nCellId(nCellId)
 { }
 
 // XStyle
@@ -4440,16 +4466,19 @@ sal_Bool SAL_CALL SwXTextCellStyle::isInUse() throw (css::uno::RuntimeException,
 
 OUString SAL_CALL SwXTextCellStyle::getParentStyle() throw (css::uno::RuntimeException, std::exception)
 {
-    return OUString();
+    return m_sParentStyle;
 }
 
-void SAL_CALL SwXTextCellStyle::setParentStyle( const OUString& /*aParentStyle*/ ) throw (css::container::NoSuchElementException, css::uno::RuntimeException, std::exception)
-{ }
+void SAL_CALL SwXTextCellStyle::setParentStyle(const OUString& sParentStyle) throw (css::container::NoSuchElementException, css::uno::RuntimeException, std::exception)
+{
+    SAL_WARN("sw.uno", "changing parent of SwXTextCellStyle, why?");
+    m_sParentStyle = sParentStyle;
+}
 
 //XNamed
 OUString SAL_CALL SwXTextCellStyle::getName() throw(css::uno::RuntimeException, std::exception)
 {
-    return OUString();
+    return m_sParentStyle + "." + OUString::number(m_nCellId);
 }
 
 void SAL_CALL SwXTextCellStyle::setName(const OUString& /*rName*/) throw(css::uno::RuntimeException, std::exception)

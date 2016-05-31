@@ -255,6 +255,7 @@ class SwXTextTableStyle : public cppu::WeakImplHelper
 <
     css::style::XStyle,
     css::container::XNameAccess,
+    css::container::XIndexAccess,
     css::lang::XServiceInfo
 >
 {
@@ -296,6 +297,10 @@ public:
     virtual css::uno::Sequence<OUString> SAL_CALL getElementNames() throw(css::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL hasByName(const OUString& rName) throw(css::uno::RuntimeException, std::exception) override;
 
+    //XIndexAccess
+    virtual sal_Int32 SAL_CALL getCount() throw(css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Any SAL_CALL getByIndex(sal_Int32 nIndex) throw(css::lang::IndexOutOfBoundsException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
+
     //XElementAccess
     virtual css::uno::Type SAL_CALL getElementType() throw(css::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL hasElements() throw(css::uno::RuntimeException, std::exception) override;
@@ -317,14 +322,16 @@ class SwXTextCellStyle : public cppu::WeakImplHelper
 >
 {
     SwBoxAutoFormat& m_rBoxAutoFormat;
+    OUString& m_sParentStyle;
+    sal_Int32 m_nCellId;
 public:
-    SwXTextCellStyle(SwBoxAutoFormat& rBoxAutoFormat);
+    SwXTextCellStyle(SwBoxAutoFormat& rBoxAutoFormat, OUString& sParentStyle, sal_Int32 nCellId);
 
     //XStyle
     virtual sal_Bool SAL_CALL isUserDefined() throw (css::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL isInUse() throw (css::uno::RuntimeException, std::exception) override;
     virtual OUString SAL_CALL getParentStyle() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setParentStyle(const OUString& aParentStyle ) throw (css::container::NoSuchElementException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setParentStyle(const OUString& sParentStyle) throw (css::container::NoSuchElementException, css::uno::RuntimeException, std::exception) override;
 
     //XNamed
     virtual OUString SAL_CALL getName() throw(css::uno::RuntimeException, std::exception) override;
