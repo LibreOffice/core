@@ -28,7 +28,7 @@ public:
     explicit ScNumberFormat(vcl::Window* pParent, WinBits nStyle);
 
 private:
-    DECL_LINK_TYPED(NumFormatSelectHdl, ListBox&, void);
+    DECL_STATIC_LINK_TYPED(ScNumberFormat, NumFormatSelectHdl, ListBox&, void);
 };
 
 #endif
