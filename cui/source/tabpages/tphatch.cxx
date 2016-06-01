@@ -240,6 +240,12 @@ void SvxHatchTabPage::ActivatePage( const SfxItemSet& rSet )
     if(aBckItem.GetValue())
         aColor = aColorItem.GetColorValue();
     m_pLbBackgroundColor->SelectEntry(aColor);
+    if( m_pLbBackgroundColor->GetSelectEntryCount() == 0 )
+    {
+        m_pLbBackgroundColor->InsertEntry( aColor , OUString() );
+        m_pLbBackgroundColor->SelectEntry( aColor );
+    }
+
     m_rXFSet.Put( aBckItem );
     m_rXFSet.Put( aColorItem );
 
