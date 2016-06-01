@@ -110,16 +110,16 @@ void UnregisterActiveXNative( const char* pActiveXPath, int nMode, BOOL InstallF
 }
 
 
-BOOL GetMsiProp( MSIHANDLE hMSI, const wchar_t* pPropName, wchar_t** ppValue )
+BOOL GetMsiPropW( MSIHANDLE hMSI, const wchar_t* pPropName, wchar_t** ppValue )
 {
     DWORD sz = 0;
-       if ( MsiGetProperty( hMSI, pPropName, const_cast<wchar_t *>(L""), &sz ) == ERROR_MORE_DATA )
-       {
+    if ( MsiGetPropertyW( hMSI, pPropName, const_cast<wchar_t *>(L""), &sz ) == ERROR_MORE_DATA )
+    {
            sz++;
            DWORD nbytes = sz * sizeof( wchar_t );
            wchar_t* buff = reinterpret_cast<wchar_t*>( malloc( nbytes ) );
            ZeroMemory( buff, nbytes );
-           MsiGetProperty( hMSI, pPropName, buff, &sz );
+           MsiGetPropertyW( hMSI, pPropName, buff, &sz );
            *ppValue = buff;
 
         return TRUE;
@@ -132,7 +132,7 @@ BOOL GetMsiProp( MSIHANDLE hMSI, const wchar_t* pPropName, wchar_t** ppValue )
 BOOL GetActiveXControlPath( MSIHANDLE hMSI, char** ppActiveXPath )
 {
     wchar_t* pProgPath = NULL;
-    if ( GetMsiProp( hMSI, L"INSTALLLOCATION", &pProgPath ) && pProgPath )
+    if ( GetMsiPropW( hMSI, L"INSTALLLOCATION", &pProgPath ) && pProgPath )
        {
         char* pCharProgPath = UnicodeToAnsiString( pProgPath );
 
@@ -259,7 +259,7 @@ BOOL MakeInstallForAllUsers( MSIHANDLE hMSI )
 {
     BOOL bResult = FALSE;
     wchar_t* pVal = NULL;
-    if ( GetMsiProp( hMSI, L"ALLUSERS", &pVal ) && pVal )
+    if ( GetMsiPropW( hMSI, L"ALLUSERS", &pVal ) && pVal )
     {
         bResult = UnicodeEquals( pVal , L"1" );
         free( pVal );
@@ -273,7 +273,7 @@ BOOL MakeInstallFor64Bit( MSIHANDLE hMSI )
 {
     BOOL bResult = FALSE;
     wchar_t* pVal = NULL;
-    if ( GetMsiProp( hMSI, L"VersionNT64", &pVal ) && pVal )
+    if ( GetMsiPropW( hMSI, L"VersionNT64", &pVal ) && pVal )
     {
         bResult = TRUE;
         free( pVal );
