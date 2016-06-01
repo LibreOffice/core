@@ -37,7 +37,7 @@ using ::rtl::Bootstrap;
 
 namespace psp {
 
-OUString getOfficePath( enum whichOfficePath ePath )
+OUString getOfficePath( whichOfficePath ePath )
 {
     static OUString aInstallationRootPath;
     static OUString aUserPath;
@@ -87,9 +87,9 @@ OUString getOfficePath( enum whichOfficePath ePath )
 
     switch( ePath )
     {
-        case ConfigPath: return aConfigPath;
-        case InstallationRootPath: return aInstallationRootPath;
-        case UserPath: return aUserPath;
+        case whichOfficePath::ConfigPath: return aConfigPath;
+        case whichOfficePath::InstallationRootPath: return aInstallationRootPath;
+        case whichOfficePath::UserPath: return aUserPath;
     }
     return aEmpty;
 }
@@ -116,7 +116,7 @@ void psp::getPrinterPathList( std::list< OUString >& rPathList, const char* pSub
     OUStringBuffer aPathBuffer( 256 );
 
     // append net path
-    aPathBuffer.append( getOfficePath( psp::InstallationRootPath ) );
+    aPathBuffer.append( getOfficePath( whichOfficePath::InstallationRootPath ) );
     if( !aPathBuffer.isEmpty() )
     {
         aPathBuffer.append( "/" LIBO_SHARE_FOLDER "/psprint" );
@@ -128,7 +128,7 @@ void psp::getPrinterPathList( std::list< OUString >& rPathList, const char* pSub
         rPathList.push_back( aPathBuffer.makeStringAndClear() );
     }
     // append user path
-    aPathBuffer.append( getOfficePath( psp::UserPath ) );
+    aPathBuffer.append( getOfficePath( whichOfficePath::UserPath ) );
     if( !aPathBuffer.isEmpty() )
     {
         aPathBuffer.append( "/user/psprint" );
@@ -193,9 +193,9 @@ OUString psp::getFontPath()
     {
         OUStringBuffer aPathBuffer( 512 );
 
-        OUString aConfigPath( getOfficePath( psp::ConfigPath ) );
-        OUString aInstallationRootPath( getOfficePath( psp::InstallationRootPath ) );
-        OUString aUserPath( getOfficePath( psp::UserPath ) );
+        OUString aConfigPath( getOfficePath( whichOfficePath::ConfigPath ) );
+        OUString aInstallationRootPath( getOfficePath( whichOfficePath::InstallationRootPath ) );
+        OUString aUserPath( getOfficePath( whichOfficePath::UserPath ) );
         if( !aConfigPath.isEmpty() )
         {
             // #i53530# Path from CustomDataUrl will completely
