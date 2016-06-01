@@ -34,6 +34,24 @@
       "revId": "c82d471cb4c21daebb324b43275f089f69dd2e32",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_4c05a3c0",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/CalcCommands.xcu",
+        "patchSetId": 1
+      },
+      "lineNbr": 646,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-06-01T10:20:34Z",
+      "side": 1,
+      "message": "Might do.",
+      "parentUuid": "da7fb54a_46c74412",
+      "revId": "c82d471cb4c21daebb324b43275f089f69dd2e32",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
