@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <cmath>
 #include <comphelper/string.hxx>
 #include "vclprocessor2d.hxx"
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
@@ -123,7 +124,9 @@ namespace drawinglayer
             aLocalTransform.decompose(aFontScaling, aTranslate, fRotate, fShearX);
             bool bPrimitiveAccepted(false);
 
-            if(basegfx::fTools::equalZero(fShearX))
+            // tdf#95581: Assume tiny shears are rounding artefacts or whatever and can be ignored,
+            // especially if the effect is less than a pixel.
+            if(std::abs(aFontScaling.getY() * fShearX) < 1)
             {
                 if(basegfx::fTools::less(aFontScaling.getX(), 0.0) && basegfx::fTools::less(aFontScaling.getY(), 0.0))
                 {
