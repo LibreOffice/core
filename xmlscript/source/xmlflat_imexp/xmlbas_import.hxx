@@ -29,6 +29,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <osl/mutex.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <rtl/ref.hxx>
 
 namespace xmlscript
 {
@@ -43,8 +44,8 @@ namespace xmlscript
     class BasicElementBase : public BasicElementBase_BASE
     {
     protected:
-        BasicImport* m_pImport;
-        BasicElementBase* m_pParent;
+        rtl::Reference<BasicImport> m_xImport;
+        rtl::Reference<BasicElementBase> m_xParent;
         OUString m_aLocalName;
         css::uno::Reference< css::xml::input::XAttributes > m_xAttributes;
 

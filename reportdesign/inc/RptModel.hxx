@@ -43,7 +43,7 @@ class REPORTDESIGN_DLLPUBLIC OReportModel : public SdrModel
     friend class OReportPage;
 
 private:
-    OXUndoEnvironment*                  m_pUndoEnv;
+    rtl::Reference<OXUndoEnvironment>   m_xUndoEnv;
     ::dbaui::DBSubComponentController*  m_pController;
     ::reportdesign::OReportDefinition*  m_pReportDefinition;
 
@@ -63,7 +63,7 @@ public:
     /** @returns the numbering type that is used to format page fields in drawing shapes */
     virtual SvxNumType  GetPageNumType() const override;
 
-    OXUndoEnvironment&  GetUndoEnv() { return *m_pUndoEnv;}
+    OXUndoEnvironment&  GetUndoEnv() { return *m_xUndoEnv.get();}
     void                SetModified(bool _bModified);
 
     inline dbaui::DBSubComponentController* getController() const { return m_pController; }

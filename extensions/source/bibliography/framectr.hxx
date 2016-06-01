@@ -60,7 +60,7 @@ class BibFrameController_Impl : public cppu::WeakImplHelper <
 >
 {
 friend class BibFrameCtrl_Impl;
-    BibFrameCtrl_Impl*          pImp;
+    rtl::Reference<BibFrameCtrl_Impl>                         mxImpl;
     BibStatusDispatchArr        aStatusListeners;
     css::uno::Reference< css::awt::XWindow >                  xWindow;
     css::uno::Reference< css::frame::XFrame >                 xFrame;

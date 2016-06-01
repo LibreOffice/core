@@ -24,6 +24,7 @@
 
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <rtl/ref.hxx>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -85,8 +86,8 @@ class ModuleElement
     : public ::cppu::WeakImplHelper< css::xml::input::XElement >
 {
 protected:
-    ModuleImport * _pImport;
-    ModuleElement * _pParent;
+    rtl::Reference<ModuleImport> mxImport;
+    rtl::Reference<ModuleElement> mxParent;
 
     OUString _aLocalName;
     css::uno::Reference< css::xml::input::XAttributes > _xAttributes;
