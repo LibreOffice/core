@@ -22,7 +22,6 @@
 // StandardTabPage ----------------------------------------------------------
 
 #define STR_EXAMPLE                     5010
-#define STR_PAGE_STYLE                  5011
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

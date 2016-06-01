@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.20.0 -->
 <interface>
-  <!-- interface-requires gtk+ 3.0 -->
+  <requires lib="gtk+" version="3.0"/>
   <object class="GtkAdjustment" id="adjustmentPERSPECTIVE">
     <property name="upper">100</property>
     <property name="step_increment">1</property>
@@ -32,55 +33,48 @@
         <property name="left_attach">0</property>
         <property name="top_attach">0</property>
         <property name="width">2</property>
-        <property name="height">1</property>
       </packing>
     </child>
     <child>
       <object class="GtkLabel" id="FT_X_ROTATION">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="xalign">0</property>
         <property name="label" translatable="yes">_X rotation</property>
         <property name="use_underline">True</property>
         <property name="mnemonic_widget">MTR_FLD_X_ROTATION:0degrees</property>
+        <property name="xalign">0</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
         <property name="top_attach">1</property>
-        <property name="width">1</property>
-        <property name="height">1</property>
       </packing>
     </child>
     <child>
       <object class="GtkLabel" id="FT_Y_ROTATION">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="xalign">0</property>
         <property name="label" translatable="yes">_Y rotation</property>
         <property name="use_underline">True</property>
         <property name="mnemonic_widget">MTR_FLD_Y_ROTATION:0degrees</property>
+        <property name="xalign">0</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
         <property name="top_attach">2</property>
-        <property name="width">1</property>
-        <property name="height">1</property>
       </packing>
     </child>
     <child>
       <object class="GtkLabel" id="FT_Z_ROTATION">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="xalign">0</property>
         <property name="label" translatable="yes">_Z rotation</property>
         <property name="use_underline">True</property>
         <property name="mnemonic_widget">MTR_FLD_Z_ROTATION:0degrees</property>
+        <property name="xalign">0</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
         <property name="top_attach">3</property>
-        <property name="width">1</property>
-        <property name="height">1</property>
       </packing>
     </child>
     <child>
@@ -92,12 +86,13 @@
         <property name="use_underline">True</property>
         <property name="xalign">0</property>
         <property name="draw_indicator">True</property>
+        <accessibility>
+          <relation type="label-for" target="MTR_FLD_PERSPECTIVE:0%"/>
+        </accessibility>
       </object>
       <packing>
         <property name="left_attach">0</property>
         <property name="top_attach">4</property>
-        <property name="width">1</property>
-        <property name="height">1</property>
       </packing>
     </child>
     <child>
@@ -106,12 +101,18 @@
         <property name="can_focus">False</property>
         <property name="invisible_char">•</property>
         <property name="adjustment">adjustmentPERSPECTIVE</property>
+        <accessibility>
+          <relation type="labelled-by" target="CBX_PERSPECTIVE"/>
+        </accessibility>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="MTR_FLD_PERSPECTIVE:0%-atkobject">
+            <property name="AtkObject::accessible-name" translatable="yes">Perspective</property>
+          </object>
+        </child>
       </object>
       <packing>
         <property name="left_attach">1</property>
         <property name="top_attach">4</property>
-        <property name="width">1</property>
-        <property name="height">1</property>
       </packing>
     </child>
     <child>
@@ -126,8 +127,6 @@
       <packing>
         <property name="left_attach">1</property>
         <property name="top_attach">3</property>
-        <property name="width">1</property>
-        <property name="height">1</property>
       </packing>
     </child>
     <child>
@@ -140,8 +139,6 @@
       <packing>
         <property name="left_attach">1</property>
         <property name="top_attach">2</property>
-        <property name="width">1</property>
-        <property name="height">1</property>
       </packing>
     </child>
     <child>
@@ -154,8 +151,6 @@
       <packing>
         <property name="left_attach">1</property>
         <property name="top_attach">1</property>
-        <property name="width">1</property>
-        <property name="height">1</property>
       </packing>
     </child>
   </object>
