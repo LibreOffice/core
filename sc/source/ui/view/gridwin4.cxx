@@ -1051,7 +1051,8 @@ void ScGridWindow::PaintTile( VirtualDevice& rDevice,
     firstCol = (firstCol >= 0 ? firstCol : nStartCol);
     lastCol = (lastCol >= 0 ? lastCol : nEndCol);
 
-    ScTableInfo aTabInfo(nEndRow + 3);
+    auto capacity = std::min(nEndRow + 3, 1002);
+    ScTableInfo aTabInfo(capacity);
     pDoc->FillInfo(aTabInfo, nStartCol, nStartRow, lastCol, lastRow, nTab, fPPTX, fPPTY, false, false, NULL);
 
     ScOutputData aOutputData(&rDevice, OUTTYPE_WINDOW, aTabInfo, pDoc, nTab,
