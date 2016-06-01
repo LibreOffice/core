@@ -68,11 +68,6 @@
 #define SV_PRINT_PRT_NUP_ORIENTATION_PORTRAIT           1
 #define SV_PRINT_PRT_NUP_ORIENTATION_LANDSCAPE          2
 
-#define SV_PRINT_PRT_NUP_ORDER_LRTB                     0
-#define SV_PRINT_PRT_NUP_ORDER_TBLR                     1
-#define SV_PRINT_PRT_NUP_ORDER_TBRL                     2
-#define SV_PRINT_PRT_NUP_ORDER_RLTB                     3
-
 #define SV_PRINT_NATIVE_STRINGS                      2050
 
 #define SV_HELPTEXT_CLOSE                           10000
