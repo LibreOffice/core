@@ -54,7 +54,7 @@ OpenService_t OpenService_ = NULL;
 QueryServiceStatus_t QueryServiceStatus_ = NULL;
 StartService_t StartService_ = NULL;
 
-const TCHAR* const INDEXING_SERVICE_NAME = TEXT("cisvc");
+const char * const INDEXING_SERVICE_NAME = "cisvc";
 
 bool StopIndexingService(SC_HANDLE hService)
 {
@@ -150,7 +150,7 @@ void StartIndexingService(SC_HANDLE hService)
 
 extern "C" UINT __stdcall RestartIndexingService(MSIHANDLE)
 {
-    //MessageBox(NULL, TEXT("Restarting Indexing Service"), TEXT("Message"), MB_OK | MB_ICONINFORMATION);
+    // MessageBoxW(NULL, L"Restarting Indexing Service", L"Message", MB_OK | MB_ICONINFORMATION);
 
     HMODULE hAdvapi32 = LoadLibrary("advapi32.dll");
 
