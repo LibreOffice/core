@@ -221,7 +221,7 @@ public:
     virtual void dispose() override;
     virtual short Execute() override;
 
-    inline OUString getTemplatePath() const { return msTemplatePath; };
+    inline OUString const & getTemplatePath() const { return msTemplatePath; };
 
 private:
     DECL_LINK_TYPED(OpenTemplateHdl, ThumbnailViewItem*, void);
