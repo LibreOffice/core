@@ -18,6 +18,8 @@
  */
 
 #include "scitems.hxx"
+#include <editeng/editview.hxx>
+#include <editeng/editeng.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
@@ -177,19 +179,37 @@ void ScCellShell::Execute( SfxRequest& rReq )
                 {
                     OUString aStr( static_cast<const SfxStringItem&>(pReqArgs->
                                     Get( SID_ENTER_STRING )).GetValue() );
-
-                    pTabViewShell->EnterData( GetViewData()->GetCurX(),
-                                               GetViewData()->GetCurY(),
-                                               GetViewData()->GetTabNo(),
-                                               aStr );
+                    const SfxPoolItem* pDontCommitItem;
+                    bool bCommit = true;
+                    if (pReqArgs->HasItem(FN_PARAM_1, &pDontCommitItem))
+                        bCommit = !(static_cast<const SfxBoolItem*>(pDontCommitItem)->GetValue());
 
                     ScInputHandler* pHdl = SC_MOD()->GetInputHdl( pTabViewShell );
+                    if (bCommit)
+                    {
+                        pTabViewShell->EnterData( GetViewData()->GetCurX(),
+                                                  GetViewData()->GetCurY(),
+                                                  GetViewData()->GetTabNo(),
+                                                  aStr );
+                    }
+                    else
+                    {
+                        SC_MOD()->SetInputMode(SC_INPUT_TABLE);
+
+                        EditView* pTableView = pHdl->GetActiveView();
+                        pHdl->DataChanging();
+                        if (pTableView)
+                            pTableView->GetEditEngine()->SetText(aStr);
+                        pHdl->DataChanged();
+
+                        SC_MOD()->SetInputMode(SC_INPUT_NONE);
+                    }
+
                     if ( !pHdl || !pHdl->IsInEnterHandler() )
                     {
                         //  UpdateInputHandler is needed after the cell content
                         //  has changed, but if called from EnterHandler, UpdateInputHandler
                         //  will be called later when moving the cursor.
-
                         pTabViewShell->UpdateInputHandler();
                     }
 
