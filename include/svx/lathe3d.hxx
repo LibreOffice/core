@@ -36,8 +36,6 @@
 class SVX_DLLPUBLIC E3dLatheObj : public E3dCompoundObject
 {
 private:
-    // Part codes for Wireframe generation: standard oder cover surface
-    enum { LATHE_PART_STD = 1, LATHE_PART_COVER = 2 };
     basegfx::B2DPolyPolygon maPolyPoly2D;
 
  protected:
