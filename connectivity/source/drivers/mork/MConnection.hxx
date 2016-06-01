@@ -37,8 +37,8 @@ namespace connectivity
 
             // Data attributes
 
-            MorkDriver*                             m_pDriver;      //  Pointer to the owning
-                                                                    //  driver object
+            rtl::Reference<MorkDriver> m_xDriver;              //  Pointer to the owning
+                                                               //  driver object
             OColumnAlias    m_aColumnAlias;
             // Mork Parser (abook)
             MorkParser* m_pBook;
@@ -52,7 +52,7 @@ namespace connectivity
             explicit OConnection(MorkDriver* const driver);
             virtual ~OConnection();
 
-            MorkDriver* getDriver() {return m_pDriver;};
+            const rtl::Reference<MorkDriver>& getDriver() {return m_xDriver;};
             MorkParser* getMorkParser(const OString& t) {return t == "CollectedAddressBook" ? m_pHistory : m_pBook;};
 
             // OComponentHelper

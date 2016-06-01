@@ -446,7 +446,7 @@ private:
 
     css::uno::Reference< css::scanner::XScannerManager2 > mxScannerManager;
     css::uno::Reference< css::lang::XEventListener >      mxScannerListener;
-    TransferableClipboardListener*                        mpClipEvtLstnr;
+    rtl::Reference<TransferableClipboardListener>         mxClipEvtLstnr;
     bool                                                  mbPastePossible;
 
     virtual void Notify (SfxBroadcaster& rBC, const SfxHint& rHint) override;

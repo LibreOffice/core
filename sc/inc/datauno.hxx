@@ -44,6 +44,7 @@
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/util/XRefreshable.hpp>
 #include <cppuhelper/implbase.hxx>
+#include <rtl/ref.hxx>
 #include <svl/itemprop.hxx>
 #include <svl/lstner.hxx>
 
@@ -222,7 +223,7 @@ public:
 class ScRangeSubTotalDescriptor : public ScSubTotalDescriptorBase
 {
 private:
-    ScDatabaseRangeObj*     pParent;
+    rtl::Reference<ScDatabaseRangeObj>  mxParent;
 
 public:
                             ScRangeSubTotalDescriptor(ScDatabaseRangeObj* pPar);
@@ -435,7 +436,7 @@ public:
 class ScRangeFilterDescriptor : public ScFilterDescriptorBase
 {
 private:
-    ScDatabaseRangeObj*     pParent;
+    rtl::Reference<ScDatabaseRangeObj>  mxParent;
 
 public:
                             ScRangeFilterDescriptor(ScDocShell* pDocSh, ScDatabaseRangeObj* pPar);
@@ -451,7 +452,7 @@ public:
 class ScDataPilotFilterDescriptor : public ScFilterDescriptorBase
 {
 private:
-    ScDataPilotDescriptorBase*  pParent;
+    rtl::Reference<ScDataPilotDescriptorBase>  mxParent;
 
 public:
                             ScDataPilotFilterDescriptor(ScDocShell* pDocSh, ScDataPilotDescriptorBase* pPar);
