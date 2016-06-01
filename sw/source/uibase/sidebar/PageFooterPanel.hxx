@@ -42,7 +42,7 @@
 #include <svl/intitem.hxx>
 #include <tools/fldunit.hxx>
 #include <svl/poolitem.hxx>
-#include <svx/rulritem.hxx>
+#include <svl/eitem.hxx>
 
 namespace sw { namespace sidebar {
 
@@ -53,7 +53,8 @@ class PageFooterPanel:
 public:
     static VclPtr<vcl::Window> Create(
         vcl::Window* pParent,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame);
+        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame,
+        SfxBindings* pBindings);
 
     virtual void NotifyItemUpdate(
         const sal_uInt16 nSId,
@@ -61,11 +62,45 @@ public:
         const SfxPoolItem* pState,
         const bool bIsEnabled) override;
 
+    SfxBindings* GetBindings() const { return mpBindings; }
     PageFooterPanel(
         vcl::Window* pParent,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame);
+        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame,
+        SfxBindings* pBindings);
     virtual ~PageFooterPanel();
     virtual void dispose() override;
+
+private:
+
+    SfxBindings* mpBindings;
+
+    ::sfx2::sidebar::ControllerItem maHFToggleController;
+    ::sfx2::sidebar::ControllerItem maFooterLRMarginController;
+    ::sfx2::sidebar::ControllerItem maFooterSpacingController;
+    ::sfx2::sidebar::ControllerItem maFooterLayoutController;
+
+    VclPtr<CheckBox>    mpFooterToggle;
+    VclPtr<ListBox>     mpFooterSpacingLB;
+    VclPtr<ListBox>     mpFooterLayoutLB;
+    VclPtr<ListBox>     mpFooterMarginPresetLB;
+    VclPtr<FixedText>   mpCustomEntry;
+    OUString aCustomEntry;
+
+    void Initialize();
+    void UpdateFooterCheck();
+    void UpdateMarginControl();
+    void UpdateSpacingControl();
+    void UpdateLayoutControl();
+
+    ::std::unique_ptr<SfxBoolItem>        mpFooterItem;
+    ::std::unique_ptr<SvxLongLRSpaceItem> mpFooterLRMarginItem;
+    ::std::unique_ptr<SvxLongULSpaceItem> mpFooterSpacingItem;
+    ::std::unique_ptr<SfxInt16Item>       mpFooterLayoutItem;
+
+    DECL_LINK_TYPED( FooterToggleHdl, Button*, void );
+    DECL_LINK_TYPED( FooterLRMarginHdl, ListBox&, void);
+    DECL_LINK_TYPED( FooterSpacingHdl, ListBox&, void);
+    DECL_LINK_TYPED( FooterLayoutHdl, ListBox&, void);
 };
 
 } } //end of namespace sw::sidebar

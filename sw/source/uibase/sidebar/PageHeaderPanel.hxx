@@ -42,7 +42,7 @@
 #include <svl/intitem.hxx>
 #include <tools/fldunit.hxx>
 #include <svl/poolitem.hxx>
-#include <svx/rulritem.hxx>
+#include <svl/eitem.hxx>
 
 namespace sw { namespace sidebar {
 
@@ -74,18 +74,33 @@ private:
 
     SfxBindings* mpBindings;
 
-    VclPtr<CheckBox> mpHeaderToggle;
-    VclPtr<MetricField> mpHeaderHeightField;
-    VclPtr<MetricField> mpHeaderLMargin;
-    VclPtr<MetricField> mpHeaderRMargin;
-    VclPtr<MetricField> mpHeaderSpacing;
-    VclPtr<ListBox> mpSameContentLB;
+    ::sfx2::sidebar::ControllerItem maHFToggleController;
+    ::sfx2::sidebar::ControllerItem maHeaderLRMarginController;
+    ::sfx2::sidebar::ControllerItem maHeaderSpacingController;
+    ::sfx2::sidebar::ControllerItem maHeaderLayoutController;
+
+    VclPtr<CheckBox>    mpHeaderToggle;
+    VclPtr<ListBox>     mpHeaderSpacingLB;
+    VclPtr<ListBox>     mpHeaderLayoutLB;
+    VclPtr<ListBox>     mpHeaderMarginPresetLB;
+    VclPtr<FixedText>   mpCustomEntry;
+    OUString aCustomEntry;
 
     void Initialize();
-    void UpdateControls();
+    void UpdateHeaderCheck();
+    void UpdateMarginControl();
+    void UpdateSpacingControl();
+    void UpdateLayoutControl();
+
+    ::std::unique_ptr<SfxBoolItem>        mpHeaderItem;
+    ::std::unique_ptr<SvxLongLRSpaceItem> mpHeaderLRMarginItem;
+    ::std::unique_ptr<SvxLongULSpaceItem> mpHeaderSpacingItem;
+    ::std::unique_ptr<SfxInt16Item>       mpHeaderLayoutItem;
 
     DECL_LINK_TYPED( HeaderToggleHdl, Button*, void );
-
+    DECL_LINK_TYPED( HeaderLRMarginHdl, ListBox&, void);
+    DECL_LINK_TYPED( HeaderSpacingHdl, ListBox&, void);
+    DECL_LINK_TYPED( HeaderLayoutHdl, ListBox&, void);
 };
 
 } } //end of namespace sw::sidebar
