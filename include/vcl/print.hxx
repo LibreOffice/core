@@ -391,17 +391,17 @@ namespace vcl
 {
 class ImplPrinterControllerData;
 
+enum class NupOrderType
+{
+    LRTB, TBLR, TBRL, RLTB
+};
+
 class VCL_DLLPUBLIC PrinterController
 {
     ImplPrinterControllerData*          mpImplData;
 protected:
                                         PrinterController( const VclPtr<Printer>& );
 public:
-    enum NupOrderType
-    {
-        LRTB, TBLR, TBRL, RLTB
-    };
-
     struct MultiPageSetup
     {
         // all metrics in 100th mm
@@ -416,7 +416,7 @@ public:
         long                            nHorizontalSpacing;
         long                            nVerticalSpacing;
         bool                            bDrawBorder;
-        PrinterController::NupOrderType nOrder;
+        NupOrderType                    nOrder;
 
         MultiPageSetup()
              : nRows( 1 ), nColumns( 1 ), nRepeat( 1 ), aPaperSize( 21000, 29700 )
@@ -424,7 +424,7 @@ public:
              , nRightMargin( 0 ), nBottomMargin( 0 )
              , nHorizontalSpacing( 0 ), nVerticalSpacing( 0 )
              , bDrawBorder( false )
-             , nOrder( LRTB ) {}
+             , nOrder( NupOrderType::LRTB ) {}
     };
 
     struct PageSize
