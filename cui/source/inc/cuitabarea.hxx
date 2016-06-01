@@ -390,7 +390,7 @@ private:
     VclPtr<ColorLB>            m_pLbColorTo;
     VclPtr<MetricField>        m_pMtrColorTo;
     VclPtr<GradientLB>         m_pLbGradients;
-    VclPtr<MetricField>        m_pMtrIncrement;
+    VclPtr<NumericField>       m_pMtrIncrement;
     VclPtr<Slider>             m_pSliderIncrement;
     VclPtr<SvxXRectPreview>    m_pCtlPreview;
     VclPtr<PushButton>         m_pBtnAdd;
