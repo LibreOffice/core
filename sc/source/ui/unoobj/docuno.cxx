@@ -2834,7 +2834,7 @@ void ScModelObj::enableOpenCL(sal_Bool bEnable)
     ScInterpreter::SetGlobalConfig(aConfig);
 
 #if HAVE_FEATURE_OPENCL
-    sc::FormulaGroupInterpreter::switchOpenCLDevice(OUString(), true, false);
+    sc::FormulaGroupInterpreter::switchOpenCLDevice(OUString(), true);
 #endif
 
     ScDocument* pDoc = GetDocument();
