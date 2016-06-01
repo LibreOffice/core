@@ -26,9 +26,5 @@ String STR_EXAMPLE
 {
     Text [ en-US ] = "Example" ;
 };
-String STR_PAGE_STYLE
-{
-    Text [ en-US ] = "Page Style" ;
-};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

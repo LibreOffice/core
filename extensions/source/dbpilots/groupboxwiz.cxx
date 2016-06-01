@@ -335,7 +335,6 @@ namespace dbp
 
         announceControls(*m_pDefSelYes, *m_pDefSelNo, *m_pDefSelection);
         m_pDefSelection->SetDropDownLineCount(10);
-        m_pDefSelection->SetAccessibleRelationLabeledBy( m_pDefSelYes );
         m_pDefSelection->SetStyle(WB_DROPDOWN);
     }
 

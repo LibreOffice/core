@@ -1902,12 +1902,6 @@ SvxExtParagraphTabPage::SvxExtParagraphTabPage( vcl::Window* pParent, const SfxI
     get(m_pWidowRowNo,"spinWidow");
     get(m_pWidowRowLabel,"labelWidow");
 
-    m_pApplyCollBox->SetAccessibleRelationLabeledBy(m_pApplyCollBtn);
-    m_pApplyCollBox->SetAccessibleName(CUI_RES(STR_PAGE_STYLE));
-
-    m_pOrphanRowNo->SetAccessibleRelationLabeledBy(m_pOrphanBox);
-    m_pWidowRowNo->SetAccessibleRelationLabeledBy(m_pWidowBox);
-
     // this page needs ExchangeSupport
     SetExchangeSupport();
 

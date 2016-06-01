@@ -449,9 +449,6 @@ ScImportAsciiDlg::ScImportAsciiDlg( vcl::Window* pParent, const OUString& aDatNa
 
     mpTableBox->Execute( CSVCMD_NEWCELLTEXTS );
 
-    pEdOther->SetAccessibleName(pCkbOther->GetText());
-    pEdOther->SetAccessibleRelationLabeledBy(pCkbOther);
-
     if (meCall == SC_TEXTTOCOLUMNS)
     {
         pFtCharSet->Disable();

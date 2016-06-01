@@ -143,8 +143,6 @@ ThreeD_SceneGeometry_TabPage::ThreeD_SceneGeometry_TabPage( vcl::Window* pWindow
     {
         m_pCbxRightAngledAxes->Enable(false);
     }
-    m_pMFPerspective->SetAccessibleName(m_pCbxPerspective->GetText());
-    m_pMFPerspective->SetAccessibleRelationLabeledBy(m_pCbxPerspective);
 }
 
 ThreeD_SceneGeometry_TabPage::~ThreeD_SceneGeometry_TabPage()
