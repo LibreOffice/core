@@ -114,8 +114,7 @@ namespace drawinglayer
             /// constructor
             AnimatedBlinkPrimitive2D(
                 const animation::AnimationEntry& rAnimationEntry,
-                const Primitive2DContainer& rChildren,
-                bool bIsTextAnimation);
+                const Primitive2DContainer& rChildren);
 
             /// create local decomposition
             virtual Primitive2DContainer get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;
@@ -150,8 +149,7 @@ namespace drawinglayer
             AnimatedInterpolatePrimitive2D(
                 const std::vector< basegfx::B2DHomMatrix >& rmMatrixStack,
                 const animation::AnimationEntry& rAnimationEntry,
-                const Primitive2DContainer& rChildren,
-                bool bIsTextAnimation);
+                const Primitive2DContainer& rChildren);
 
             /// create local decomposition
             virtual Primitive2DContainer get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const override;

@@ -252,8 +252,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                 sal_uInt32 nSize = pMemStrm->Seek( STREAM_SEEK_TO_END );
                 aPropOpt.AddOpt( ESCHER_Prop_pihlShape, false, nSize, const_cast<sal_uInt8 *>(pBuf), nSize );
             }
-            if ( pInteraction->hasInteraction() )
-                aPropOpt.AddOpt( ESCHER_Prop_fPrint, 0x00080008 );
+            aPropOpt.AddOpt( ESCHER_Prop_fPrint, 0x00080008 );
         }
 
         if ( rObj.GetType() == "drawing.Custom" )

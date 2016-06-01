@@ -1752,8 +1752,7 @@ void ScAttrArray::FindStyleSheet( const SfxStyleSheetBase* pStyleSheet, ScFlatBo
     }
 }
 
-bool ScAttrArray::IsStyleSheetUsed( const ScStyleSheet& rStyle,
-        bool bGatherAllStyles ) const
+bool ScAttrArray::IsStyleSheetUsed( const ScStyleSheet& rStyle ) const
 {
     bool    bIsUsed = false;
     SCSIZE  nPos    = 0;
@@ -1766,8 +1765,6 @@ bool ScAttrArray::IsStyleSheetUsed( const ScStyleSheet& rStyle,
             pStyle->SetUsage( ScStyleSheet::USED );
             if ( pStyle == &rStyle )
             {
-                if ( !bGatherAllStyles )
-                    return true;
                 bIsUsed = true;
             }
         }

@@ -165,7 +165,7 @@ namespace cairocanvas
         return SurfaceSharedPtr();
     }
 
-    SurfaceSharedPtr SpriteCanvas::changeSurface( bool, bool )
+    SurfaceSharedPtr SpriteCanvas::changeSurface()
     {
         // non-modifiable surface here
         return SurfaceSharedPtr();

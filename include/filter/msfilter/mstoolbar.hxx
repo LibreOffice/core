@@ -62,7 +62,7 @@ public:
     OUString MSOCommandToOOCommand( sal_Int16 msoCmd );
     OUString MSOTCIDToOOCommand( sal_Int16 msoTCID );
     SfxObjectShell& GetDocShell() { return mrDocSh; }
-    bool createMenu( const OUString& rName, const css::uno::Reference< css::container::XIndexAccess >& xMenuDesc, bool bPersist );
+    bool createMenu( const OUString& rName, const css::uno::Reference< css::container::XIndexAccess >& xMenuDesc );
 };
 
 class MSFILTER_DLLPUBLIC TBBase

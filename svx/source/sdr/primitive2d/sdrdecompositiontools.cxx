@@ -353,7 +353,7 @@ namespace drawinglayer
                     const Primitive2DContainer aContent { xRefA };
 
                     // create and add animated switch primitive
-                    return Primitive2DReference(new AnimatedBlinkPrimitive2D(aAnimationList, aContent, true));
+                    return Primitive2DReference(new AnimatedBlinkPrimitive2D(aAnimationList, aContent));
                 }
                 else
                 {
@@ -445,7 +445,7 @@ namespace drawinglayer
                         std::vector< basegfx::B2DHomMatrix > aMatrixStack;
                         aMatrixStack.push_back(aLeft);
                         aMatrixStack.push_back(aRight);
-                        const Primitive2DReference xRefA(new AnimatedInterpolatePrimitive2D(aMatrixStack, aAnimationList, aAnimSequence, true));
+                        const Primitive2DReference xRefA(new AnimatedInterpolatePrimitive2D(aMatrixStack, aAnimationList, aAnimSequence));
                         const Primitive2DContainer aContent { xRefA };
 
                         // scrolling needs an encapsulating clipping primitive

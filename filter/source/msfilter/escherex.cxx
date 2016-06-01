@@ -4991,7 +4991,7 @@ void EscherEx::Flush( SvStream* pPicStreamMergeBSE /* = NULL */ )
         {
             /*  The DGG record is still not written. ESCHER_Persist_Dgg seeks
                 to the place where the complete record has to be inserted. */
-            InsertAtCurrentPos( mxGlobal->GetDggAtomSize(), false );
+            InsertAtCurrentPos( mxGlobal->GetDggAtomSize() );
             mxGlobal->WriteDggAtom( *mpOutStrm );
 
             if ( mxGlobal->HasGraphics() )
@@ -5002,7 +5002,7 @@ void EscherEx::Flush( SvStream* pPicStreamMergeBSE /* = NULL */ )
                 sal_uInt32 nBSCSize = mxGlobal->GetBlibStoreContainerSize( pPicStreamMergeBSE );
                 if ( nBSCSize > 0 )
                 {
-                    InsertAtCurrentPos( nBSCSize, false );
+                    InsertAtCurrentPos( nBSCSize );
                     mxGlobal->WriteBlibStoreContainer( *mpOutStrm, pPicStreamMergeBSE );
                 }
             }
@@ -5016,7 +5016,7 @@ void EscherEx::Flush( SvStream* pPicStreamMergeBSE /* = NULL */ )
     }
 }
 
-void EscherEx::InsertAtCurrentPos( sal_uInt32 nBytes, bool bExpandEndOfAtom )
+void EscherEx::InsertAtCurrentPos( sal_uInt32 nBytes )
 {
     sal_uInt32  nSize, nType, nSource, nBufSize, nToCopy, nCurPos = mpOutStrm->Tell();
 
@@ -5038,7 +5038,7 @@ void EscherEx::InsertAtCurrentPos( sal_uInt32 nBytes, bool bExpandEndOfAtom )
         /*  Expand the record, if the insertion position is inside, or if the
             position is at the end of a container (expands always), or at the
             end of an atom and bExpandEndOfAtom is set. */
-        if ( (nCurPos < nEndOfRecord) || ((nCurPos == nEndOfRecord) && (bContainer || bExpandEndOfAtom)) )
+        if ( (nCurPos < nEndOfRecord) || ((nCurPos == nEndOfRecord) && bContainer) )
         {
             mpOutStrm->SeekRel( -4 );
             mpOutStrm->WriteUInt32( nSize + nBytes );

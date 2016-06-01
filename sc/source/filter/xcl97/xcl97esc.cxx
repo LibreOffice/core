@@ -568,7 +568,7 @@ ShapeInteractionHelper::PopulateShapeInteractionInfo( XclExpObjectManager& rObjM
          hExpHlink.WriteEmbeddedData( tmpStream );
       }
       if ( !sHyperLink.isEmpty() || !sMacro.isEmpty() )
-          rHostAppData.SetInteractionInfo( new InteractionInfo( pMemStrm, true ) );
+          rHostAppData.SetInteractionInfo( new InteractionInfo( pMemStrm ) );
    }
    catch( Exception& )
    {
