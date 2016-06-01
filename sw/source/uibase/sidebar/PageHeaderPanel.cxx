@@ -59,14 +59,22 @@ PageHeaderPanel::PageHeaderPanel(
     SfxBindings* pBindings
     ) :
     PanelLayout(pParent, "PageHeaderPanel", "modules/swriter/ui/pageheaderpanel.ui", rxFrame),
-    mpBindings( pBindings )
+    mpBindings( pBindings ),
+    maHFToggleController(SID_ATTR_PAGE_HEADER, *pBindings, *this),
+    maHeaderLRMarginController(SID_ATTR_PAGE_HEADER_LRMARGIN, *pBindings, *this),
+    maHeaderSpacingController(SID_ATTR_PAGE_HEADER_SPACING, *pBindings, *this),
+    maHeaderLayoutController(SID_ATTR_PAGE_HEADER_LAYOUT, *pBindings, *this),
+    mpHeaderItem( new SfxBoolItem(SID_ATTR_PAGE_HEADER) ),
+    mpHeaderLRMarginItem( new SvxLongLRSpaceItem(0, 0, SID_ATTR_PAGE_HEADER_LRMARGIN)),
+    mpHeaderSpacingItem( new SvxLongULSpaceItem(0, 0, SID_ATTR_PAGE_HEADER_SPACING)),
+    mpHeaderLayoutItem( new SfxInt16Item(SID_ATTR_PAGE_HEADER_LAYOUT)),
+    aCustomEntry()
 {
     get(mpHeaderToggle, "headertoggle");
-    get(mpHeaderHeightField, "heightspinfield");
-    get(mpHeaderLMargin, "leftmargin");
-    get(mpHeaderRMargin, "rightmargin");
-    get(mpHeaderSpacing, "spacingspinfield");
-    get(mpSameContentLB, "samecontentLB");
+    get(mpHeaderSpacingLB, "spacingpreset");
+    get(mpHeaderLayoutLB, "samecontentLB");
+    get(mpHeaderMarginPresetLB, "headermarginpreset");
+    get(mpCustomEntry, "customlabel");
 
     Initialize();
 }
@@ -79,57 +87,180 @@ PageHeaderPanel::~PageHeaderPanel()
 void PageHeaderPanel::dispose()
 {
     mpHeaderToggle.disposeAndClear();
-    mpHeaderHeightField.disposeAndClear();
-    mpHeaderLMargin.disposeAndClear();
-    mpHeaderRMargin.disposeAndClear();
-    mpHeaderSpacing.disposeAndClear();
-    mpSameContentLB.disposeAndClear();
+    mpHeaderSpacingLB.disposeAndClear();
+    mpHeaderLayoutLB.disposeAndClear();
+    mpHeaderMarginPresetLB.disposeAndClear();
+    mpCustomEntry.clear();
 
     PanelLayout::dispose();
 }
 
 void PageHeaderPanel::Initialize()
 {
+    aCustomEntry = mpCustomEntry->GetText();
     mpHeaderToggle->SetClickHdl( LINK(this, PageHeaderPanel, HeaderToggleHdl) );
+    mpHeaderMarginPresetLB->SetSelectHdl( LINK(this, PageHeaderPanel, HeaderLRMarginHdl));
+    mpHeaderSpacingLB->SetSelectHdl( LINK(this, PageHeaderPanel, HeaderSpacingHdl));
+    mpHeaderLayoutLB->SetSelectHdl( LINK(this, PageHeaderPanel, HeaderLayoutHdl));
+
+    mpBindings->Invalidate(SID_ATTR_PAGE_HEADER);
+    mpBindings->Invalidate(SID_ATTR_PAGE_HEADER_LRMARGIN);
+    mpBindings->Invalidate(SID_ATTR_PAGE_HEADER_SPACING);
+    mpBindings->Invalidate(SID_ATTR_PAGE_HEADER_LAYOUT);
 }
 
-void PageHeaderPanel::UpdateControls()
+void PageHeaderPanel::UpdateHeaderCheck()
 {
     bool bIsEnabled = (bool)mpHeaderToggle->IsChecked();
     if(bIsEnabled)
     {
-        mpHeaderHeightField->Enable();
-        mpHeaderLMargin->Enable();
-        mpHeaderRMargin->Enable();
-        mpHeaderSpacing->Enable();
-        mpSameContentLB->Enable();
+        mpHeaderSpacingLB->Enable();
+        mpHeaderLayoutLB->Enable();
+        mpHeaderMarginPresetLB->Enable();
     }
     else
     {
-        mpHeaderHeightField->Disable();
-        mpHeaderLMargin->Disable();
-        mpHeaderRMargin->Disable();
-        mpHeaderSpacing->Disable();
-        mpSameContentLB->Disable();
+        mpHeaderSpacingLB->Disable();
+        mpHeaderLayoutLB->Disable();
+        mpHeaderMarginPresetLB->Disable();
     }
 }
 
-void PageHeaderPanel::NotifyItemUpdate(
-    const sal_uInt16 /*nSid*/,
-    const SfxItemState /*eState*/,
-    const SfxPoolItem* /*pState*/,
-    const bool /*bIsEnabled*/)
+void PageHeaderPanel::UpdateMarginControl()
 {
+    sal_uInt16 nLeft = mpHeaderLRMarginItem->GetLeft();
+    sal_uInt16 nRight = mpHeaderLRMarginItem->GetRight();
+    sal_uInt16 nCount = mpHeaderMarginPresetLB->GetEntryCount();
+    if(nLeft == nRight)
+    {
+        for(sal_uInt16 i = 0; i < nCount; i++)
+        {
+            if(reinterpret_cast<sal_uLong>(mpHeaderMarginPresetLB->GetEntryData(i)) == nLeft )
+            {
+                mpHeaderMarginPresetLB->SelectEntryPos(i);
+                mpHeaderMarginPresetLB->RemoveEntry(aCustomEntry);
+                return;
+            }
+        }
+    }
+    mpHeaderMarginPresetLB->InsertEntry(aCustomEntry);
+    mpHeaderMarginPresetLB->SelectEntry(aCustomEntry);
+}
+
+void PageHeaderPanel::UpdateSpacingControl()
+{
+    sal_uInt16 nBottom = mpHeaderSpacingItem->GetLower();
+    sal_uInt16 nCount = mpHeaderSpacingLB->GetEntryCount();
+    for(sal_uInt16 i = 0; i < nCount; i++)
+    {
+        if(reinterpret_cast<sal_uLong>(mpHeaderSpacingLB->GetEntryData(i)) == nBottom )
+        {
+            mpHeaderSpacingLB->SelectEntryPos(i);
+            mpHeaderSpacingLB->RemoveEntry(aCustomEntry);
+            return;
+        }
+    }
+    mpHeaderSpacingLB->InsertEntry(aCustomEntry);
+    mpHeaderSpacingLB->SelectEntry(aCustomEntry);
+}
+
+void PageHeaderPanel::UpdateLayoutControl()
+{
+    sal_uInt16 nLayout = mpHeaderLayoutItem->GetValue();
+    mpHeaderLayoutLB->SelectEntryPos( nLayout );
+}
+
+void PageHeaderPanel::NotifyItemUpdate(
+    const sal_uInt16 nSid,
+    const SfxItemState eState,
+    const SfxPoolItem* pState,
+    const bool bIsEnabled)
+{
+    (void)bIsEnabled;
+
+    if (IsDisposed())
+        return;
+
+    switch(nSid)
+    {
+        case SID_ATTR_PAGE_HEADER:
+        {
+            if(eState >= SfxItemState::DEFAULT &&
+                pState && dynamic_cast<const SfxBoolItem*>( pState) !=  nullptr )
+            {
+                mpHeaderItem.reset( static_cast<SfxBoolItem*>(pState->Clone()) );
+                mpHeaderToggle->Check(mpHeaderItem->GetValue());
+                UpdateHeaderCheck();
+            }
+        }
+        break;
+        case SID_ATTR_PAGE_HEADER_LRMARGIN:
+        {
+            if(eState >= SfxItemState::DEFAULT &&
+                pState && dynamic_cast<const SvxLongLRSpaceItem*>( pState) !=  nullptr )
+            {
+                mpHeaderLRMarginItem.reset( static_cast<SvxLongLRSpaceItem*>(pState->Clone()) );
+                UpdateMarginControl();
+            }
+        }
+        break;
+        case SID_ATTR_PAGE_HEADER_SPACING:
+        {
+            if(eState >= SfxItemState::DEFAULT &&
+                pState && dynamic_cast<const SvxLongULSpaceItem*>( pState) !=  nullptr )
+            {
+                mpHeaderSpacingItem.reset(static_cast<SvxLongULSpaceItem*>(pState->Clone()) );
+                UpdateSpacingControl();
+            }
+        }
+        break;
+        case SID_ATTR_PAGE_HEADER_LAYOUT:
+        {
+            if(eState >= SfxItemState::DEFAULT &&
+                pState && dynamic_cast<const SfxInt16Item*>( pState) !=  nullptr )
+            {
+                mpHeaderLayoutItem.reset(static_cast<SfxInt16Item*>(pState->Clone()) );
+                UpdateLayoutControl();
+            }
+        }
+        break;
+        default:
+            break;
+    }
 }
 
 IMPL_LINK_NOARG_TYPED( PageHeaderPanel, HeaderToggleHdl, Button*, void )
 {
     bool IsChecked = mpHeaderToggle->IsChecked();
-    SfxBoolItem aItem(SID_ATTR_PAGE_ON, IsChecked);
-    GetBindings()->GetDispatcher()->ExecuteList( SID_ATTR_PAGE_HEADERSET, SfxCallMode::RECORD, { &aItem } );
-    UpdateControls();
+    mpHeaderItem->SetValue(IsChecked);
+    GetBindings()->GetDispatcher()->ExecuteList( SID_ATTR_PAGE_HEADER, SfxCallMode::RECORD, { mpHeaderItem.get() } );
+    UpdateHeaderCheck();
 }
 
+IMPL_LINK_NOARG_TYPED( PageHeaderPanel, HeaderLRMarginHdl, ListBox&, void )
+{
+    sal_uInt16 nVal = (sal_uInt16)reinterpret_cast<sal_uLong>(mpHeaderMarginPresetLB->GetSelectEntryData());
+    mpHeaderLRMarginItem->SetLeft(nVal);
+    mpHeaderLRMarginItem->SetRight(nVal);
+    GetBindings()->GetDispatcher()->ExecuteList( SID_ATTR_PAGE_HEADER_LRMARGIN,
+                                                 SfxCallMode::RECORD, { mpHeaderLRMarginItem.get() } );
+}
+
+IMPL_LINK_NOARG_TYPED( PageHeaderPanel, HeaderSpacingHdl, ListBox&, void )
+{
+    sal_uInt16 nVal = (sal_uInt16)reinterpret_cast<sal_uLong>(mpHeaderSpacingLB->GetSelectEntryData());
+    mpHeaderSpacingItem->SetLower(nVal);
+    GetBindings()->GetDispatcher()->ExecuteList( SID_ATTR_PAGE_HEADER_SPACING,
+                                                 SfxCallMode::RECORD, { mpHeaderSpacingItem.get() } );
+
+}
+IMPL_LINK_NOARG_TYPED( PageHeaderPanel, HeaderLayoutHdl, ListBox&, void )
+{
+    sal_uInt16 nVal = mpHeaderLayoutLB->GetSelectEntryPos();
+    mpHeaderLayoutItem->SetValue(nVal);
+    GetBindings()->GetDispatcher()->ExecuteList( SID_ATTR_PAGE_HEADER_LAYOUT,
+                                                 SfxCallMode::RECORD, { mpHeaderLayoutItem.get() } );
+}
 
 
 } }
