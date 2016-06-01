@@ -43,23 +43,15 @@ namespace xmlscript
     BasicElementBase::BasicElementBase( const OUString& rLocalName,
             const Reference< xml::input::XAttributes >& xAttributes,
             BasicElementBase* pParent, BasicImport* pImport )
-        :m_pImport( pImport )
-        ,m_pParent( pParent )
+        :m_xImport( pImport )
+        ,m_xParent( pParent )
         ,m_aLocalName( rLocalName )
         ,m_xAttributes( xAttributes )
     {
-        if ( m_pImport )
-            m_pImport->acquire();
-        if ( m_pParent )
-            m_pParent->acquire();
     }
 
     BasicElementBase::~BasicElementBase()
     {
-        if ( m_pImport )
-            m_pImport->release();
-        if ( m_pParent )
-            m_pParent->release();
     }
 
     bool BasicElementBase::getBoolAttr( bool* pRet, const OUString& rAttrName,
@@ -95,7 +87,7 @@ namespace xmlscript
     Reference< xml::input::XElement > BasicElementBase::getParent()
         throw (RuntimeException, std::exception)
     {
-        return static_cast< xml::input::XElement* >( m_pParent );
+        return m_xParent.get();
     }
 
     OUString BasicElementBase::getLocalName()
@@ -108,8 +100,8 @@ namespace xmlscript
         throw (RuntimeException, std::exception)
     {
         sal_Int32 nId = -1;
-        if ( m_pImport )
-            nId = m_pImport->XMLNS_UID;
+        if ( m_xImport.is() )
+            nId = m_xImport->XMLNS_UID;
         return nId;
     }
 
@@ -168,7 +160,7 @@ void BasicElementBase::processingInstruction( const OUString& /*rTarget*/, const
     {
         Reference< xml::input::XElement > xElement;
 
-        if ( nUid != m_pImport->XMLNS_UID )
+        if ( nUid != m_xImport->XMLNS_UID )
         {
             throw xml::sax::SAXException( "illegal namespace!", Reference< XInterface >(), Any() );
         }
@@ -176,12 +168,12 @@ void BasicElementBase::processingInstruction( const OUString& /*rTarget*/, const
         {
             if ( xAttributes.is() )
             {
-                OUString aName = xAttributes->getValueByUidName( m_pImport->XMLNS_UID, "name" );
+                OUString aName = xAttributes->getValueByUidName( m_xImport->XMLNS_UID, "name" );
 
-                OUString aStorageURL = xAttributes->getValueByUidName(m_pImport->XMLNS_XLINK_UID, "href" );
+                OUString aStorageURL = xAttributes->getValueByUidName(m_xImport->XMLNS_XLINK_UID, "href" );
 
                 bool bReadOnly = false;
-                getBoolAttr( &bReadOnly,"readonly", xAttributes, m_pImport->XMLNS_UID );
+                getBoolAttr( &bReadOnly,"readonly", xAttributes, m_xImport->XMLNS_UID );
 
                 if ( m_xLibContainer.is() )
                 {
@@ -190,7 +182,7 @@ void BasicElementBase::processingInstruction( const OUString& /*rTarget*/, const
                         Reference< container::XNameAccess > xLib(
                             m_xLibContainer->createLibraryLink( aName, aStorageURL, bReadOnly ) );
                         if ( xLib.is() )
-                            xElement.set( new BasicElementBase( rLocalName, xAttributes, this, m_pImport ) );
+                            xElement.set( new BasicElementBase( rLocalName, xAttributes, this, m_xImport.get() ) );
                     }
                     catch ( const container::ElementExistException& e )
                     {
@@ -209,10 +201,10 @@ void BasicElementBase::processingInstruction( const OUString& /*rTarget*/, const
 
             if ( xAttributes.is() )
             {
-                OUString aName = xAttributes->getValueByUidName( m_pImport->XMLNS_UID, "name" );
+                OUString aName = xAttributes->getValueByUidName( m_xImport->XMLNS_UID, "name" );
 
                 bool bReadOnly = false;
-                getBoolAttr( &bReadOnly, "readonly", xAttributes, m_pImport->XMLNS_UID );
+                getBoolAttr( &bReadOnly, "readonly", xAttributes, m_xImport->XMLNS_UID );
 
                 if ( m_xLibContainer.is() )
                 {
@@ -230,7 +222,7 @@ void BasicElementBase::processingInstruction( const OUString& /*rTarget*/, const
                         }
 
                         if ( xLib.is() )
-                            xElement.set( new BasicEmbeddedLibraryElement( rLocalName, xAttributes, this, m_pImport, m_xLibContainer, aName, bReadOnly ) );
+                            xElement.set( new BasicEmbeddedLibraryElement( rLocalName, xAttributes, this, m_xImport.get(), m_xLibContainer, aName, bReadOnly ) );
                     }
                     catch ( const lang::IllegalArgumentException& e )
                     {
@@ -284,7 +276,7 @@ void BasicElementBase::processingInstruction( const OUString& /*rTarget*/, const
     {
         Reference< xml::input::XElement > xElement;
 
-        if ( nUid != m_pImport->XMLNS_UID )
+        if ( nUid != m_xImport->XMLNS_UID )
         {
             throw xml::sax::SAXException( "illegal namespace!", Reference< XInterface >(), Any() );
         }
@@ -292,10 +284,10 @@ void BasicElementBase::processingInstruction( const OUString& /*rTarget*/, const
         {
             if ( xAttributes.is() )
             {
-                OUString aName = xAttributes->getValueByUidName(m_pImport->XMLNS_UID, "name" );
+                OUString aName = xAttributes->getValueByUidName(m_xImport->XMLNS_UID, "name" );
 
                 if ( m_xLib.is() && !aName.isEmpty() )
-                    xElement.set( new BasicModuleElement( rLocalName, xAttributes, this, m_pImport, m_xLib, aName ) );
+                    xElement.set( new BasicModuleElement( rLocalName, xAttributes, this, m_xImport.get(), m_xLib, aName ) );
             }
         }
         else
@@ -336,7 +328,7 @@ void BasicElementBase::processingInstruction( const OUString& /*rTarget*/, const
 
         Reference< xml::input::XElement > xElement;
 
-        if ( nUid != m_pImport->XMLNS_UID )
+        if ( nUid != m_xImport->XMLNS_UID )
         {
             throw xml::sax::SAXException( "illegal namespace!", Reference< XInterface >(), Any() );
         }
@@ -347,7 +339,7 @@ void BasicElementBase::processingInstruction( const OUString& /*rTarget*/, const
             if ( xAttributes.is() )
             {
                 if ( m_xLib.is() && !m_aName.isEmpty() )
-                    xElement.set( new BasicSourceCodeElement( rLocalName, xAttributes, this, m_pImport, m_xLib, m_aName ) );
+                    xElement.set( new BasicSourceCodeElement( rLocalName, xAttributes, this, m_xImport.get(), m_xLib, m_aName ) );
             }
         }
         else

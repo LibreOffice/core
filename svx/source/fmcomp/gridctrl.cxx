@@ -197,7 +197,7 @@ class DisposeListenerGridBridge : public FmXDisposeListener
 {
     osl::Mutex              m_aMutex;
     DbGridControl&          m_rParent;
-    FmXDisposeMultiplexer*  m_pRealListener;
+    rtl::Reference<FmXDisposeMultiplexer>  m_xRealListener;
 
 public:
     DisposeListenerGridBridge(  DbGridControl& _rParent, const Reference< XComponent >& _rxObject);
@@ -209,25 +209,20 @@ public:
 DisposeListenerGridBridge::DisposeListenerGridBridge(DbGridControl& _rParent, const Reference< XComponent >& _rxObject)
     :FmXDisposeListener(m_aMutex)
     ,m_rParent(_rParent)
-    ,m_pRealListener(nullptr)
 {
 
     if (_rxObject.is())
     {
-        m_pRealListener = new FmXDisposeMultiplexer(this, _rxObject);
-        m_pRealListener->acquire();
+        m_xRealListener = new FmXDisposeMultiplexer(this, _rxObject);
     }
 }
 
 DisposeListenerGridBridge::~DisposeListenerGridBridge()
 {
-    if (m_pRealListener)
+    if (m_xRealListener.is())
     {
-        m_pRealListener->dispose();
-        m_pRealListener->release();
-        m_pRealListener = nullptr;
+        m_xRealListener->dispose();
     }
-
 }
 
 static const sal_uInt16 ControlMap[] =

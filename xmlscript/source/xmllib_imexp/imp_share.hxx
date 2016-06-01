@@ -32,6 +32,7 @@
 #include <com/sun/star/awt/FontDescriptor.hpp>
 
 #include <com/sun/star/xml/input/XRoot.hpp>
+#include <rtl/ref.hxx>
 
 #include <vector>
 
@@ -155,8 +156,8 @@ class LibElementBase
     : public ::cppu::WeakImplHelper< css::xml::input::XElement >
 {
 protected:
-    LibraryImport * _pImport;
-    LibElementBase * _pParent;
+    rtl::Reference<LibraryImport>  mxImport;
+    rtl::Reference<LibElementBase> mxParent;
 
     OUString _aLocalName;
     css::uno::Reference< css::xml::input::XAttributes > _xAttributes;

@@ -21,6 +21,7 @@
 #define INCLUDED_SFX2_BROKENPACKAGEINT_HXX
 
 #include <sal/config.h>
+#include <rtl/ref.hxx>
 #include <sfx2/dllapi.h>
 #include <com/sun/star/document/BrokenPackageRequest.hpp>
 #include <com/sun/star/task/XInteractionApprove.hpp>
@@ -29,10 +30,12 @@
 class RequestPackageReparation_Impl;
 class SFX2_DLLPUBLIC RequestPackageReparation
 {
-    RequestPackageReparation_Impl* pImp;
+    rtl::Reference<RequestPackageReparation_Impl> mxImpl;
 public:
     RequestPackageReparation( const OUString& aName );
     ~RequestPackageReparation();
+    RequestPackageReparation( const RequestPackageReparation&) = delete;
+    RequestPackageReparation& operator=( const RequestPackageReparation&) = delete;
     bool    isApproved();
     css::uno::Reference < css::task::XInteractionRequest > GetRequest();
 };
@@ -40,10 +43,12 @@ public:
 class NotifyBrokenPackage_Impl;
 class SFX2_DLLPUBLIC NotifyBrokenPackage
 {
-    NotifyBrokenPackage_Impl* pImp;
+    rtl::Reference<NotifyBrokenPackage_Impl> mxImpl;
 public:
     NotifyBrokenPackage( const OUString& aName );
     ~NotifyBrokenPackage();
+    NotifyBrokenPackage( const NotifyBrokenPackage&) = delete;
+    NotifyBrokenPackage& operator=( const NotifyBrokenPackage&) = delete;
     css::uno::Reference < css::task::XInteractionRequest > GetRequest();
 };
 

@@ -307,7 +307,7 @@ class ScDPDimension : public cppu::WeakImplHelper<
 {
     ScDPSource*         pSource;
     long                nDim;               // dimension index (== column ID)
-    ScDPHierarchies*    pHierarchies;
+    rtl::Reference<ScDPHierarchies> mxHierarchies;
     long                nUsedHier;
     sal_uInt16          nFunction;          // enum GeneralFunction
     OUString            aName;              // if empty, take from source
@@ -459,7 +459,7 @@ private:
     ScDPSource*     pSource;
     long            nDim;
     long            nHier;
-    ScDPLevels*     pLevels;
+    rtl::Reference<ScDPLevels> mxLevels;
 
 public:
                             ScDPHierarchy( ScDPSource* pSrc, long nD, long nH );
@@ -539,7 +539,7 @@ private:
     long                        nDim;
     long                        nHier;
     long                        nLev;
-    ScDPMembers*                pMembers;
+    rtl::Reference<ScDPMembers> mxMembers;
     css::uno::Sequence<css::sheet::GeneralFunction> aSubTotals;
     css::sheet::DataPilotFieldSortInfo     aSortInfo;      // stored user settings
     css::sheet::DataPilotFieldAutoShowInfo aAutoShowInfo;  // stored user settings
