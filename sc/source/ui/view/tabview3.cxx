@@ -333,6 +333,12 @@ void ScTabView::SetCursor( SCCOL nPosX, SCROW nPosY, bool bNew )
 
     //  DeactivateIP only for MarkListHasChanged
 
+    // FIXME: this is to limit the number of rows handled in the Online
+    // to 1000; this will be removed again when the performance
+    // bottlenecks are sorted out
+    if (comphelper::LibreOfficeKit::isActive())
+        nPosY = std::min(nPosY, MAXTILEDROW);
+
     if ( nPosX != nOldX || nPosY != nOldY || bNew )
     {
         ScTabViewShell* pViewShell = aViewData.GetViewShell();
@@ -362,10 +368,10 @@ void ScTabView::SetCursor( SCCOL nPosX, SCROW nPosY, bool bNew )
                     aOldSize = pModelObj->getDocumentSize();
 
                 if (nPosX > aViewData.GetMaxTiledCol() - 10)
-                    aViewData.SetMaxTiledCol(std::max(nPosX, aViewData.GetMaxTiledCol()) + 10);
+                    aViewData.SetMaxTiledCol(std::min<SCCOL>(std::max(nPosX, aViewData.GetMaxTiledCol()) + 10, MAXCOL));
 
                 if (nPosY > aViewData.GetMaxTiledRow() - 25)
-                    aViewData.SetMaxTiledRow(std::max(nPosY, aViewData.GetMaxTiledRow()) + 25);
+                    aViewData.SetMaxTiledRow(std::min<SCROW>(std::max(nPosY, aViewData.GetMaxTiledRow()) + 25,  MAXTILEDROW));
 
                 Size aNewSize(0, 0);
                 if (pModelObj)
@@ -1120,6 +1126,12 @@ void ScTabView::MoveCursorAbs( SCsCOL nCurX, SCsROW nCurY, ScFollowMode eMode,
     if (nCurY < 0) nCurY = 0;
     if (nCurX > MAXCOL) nCurX = MAXCOL;
     if (nCurY > MAXROW) nCurY = MAXROW;
+
+    // FIXME: this is to limit the number of rows handled in the Online
+    // to 1000; this will be removed again when the performance
+    // bottlenecks are sorted out
+    if (comphelper::LibreOfficeKit::isActive())
+        nCurY = std::min(nCurY, MAXTILEDROW);
 
     HideAllCursors();
 
