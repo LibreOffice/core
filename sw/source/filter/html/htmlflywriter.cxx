@@ -520,10 +520,9 @@ void SwHTMLWriter::OutFrameFormat( sal_uInt8 nMode, const SwFrameFormat& rFrameF
 
 OString SwHTMLWriter::OutFrameFormatOptions( const SwFrameFormat &rFrameFormat,
                                      const OUString& rAlternateText,
-                                     sal_uInt32 nFrameOpts,
-                                     const OString &rEndTags )
+                                     sal_uInt32 nFrameOpts )
 {
-    OString sRetEndTags(rEndTags);
+    OString sRetEndTags;
     OStringBuffer sOut;
     const SfxPoolItem* pItem;
     const SfxItemSet& rItemSet = rFrameFormat.GetAttrSet();
@@ -796,11 +795,10 @@ OString SwHTMLWriter::OutFrameFormatOptions( const SwFrameFormat &rFrameFormat,
         {
             sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_linebreak).
                 append(' ').append(OOO_STRING_SVTOOLS_HTML_O_clear).
-                append("=\"").append(pStr).append("\">").append(rEndTags);
+                append("=\"").append(pStr).append("\">");
             sRetEndTags = sOut.makeStringAndClear();
         }
     }
-    assert(sRetEndTags.endsWith(rEndTags)); // fdo#58286
     return sRetEndTags;
 }
 

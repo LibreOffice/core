@@ -560,8 +560,7 @@ protected:
     SVT_DLLPRIVATE void         AdjustEntryHeight();
 
     SVT_DLLPRIVATE void         ImpEntryInserted( SvTreeListEntry* pEntry );
-    SVT_DLLPRIVATE void         PaintEntry1( SvTreeListEntry&, long nLine, vcl::RenderContext& rRenderContext,
-                                             SvLBoxTabFlags nTabFlagMask = SvLBoxTabFlags::ALL );
+    SVT_DLLPRIVATE void         PaintEntry1( SvTreeListEntry&, long nLine, vcl::RenderContext& rRenderContext );
 
     SVT_DLLPRIVATE void         InitTreeView();
     SVT_DLLPRIVATE SvLBoxItem*  GetItem_Impl( SvTreeListEntry*, long nX, SvLBoxTab** ppTab );

@@ -423,7 +423,7 @@ static bool lcl_GetColumnCnt(SwDSParam* pParam, const OUString& rColumnName,
 };
 
 // import data
-bool SwDBManager::Merge( const SwMergeDescriptor& rMergeDesc, vcl::Window* pParent )
+bool SwDBManager::Merge( const SwMergeDescriptor& rMergeDesc )
 {
     assert( !bInMerge && !pImpl->pMergeData && "merge already activated!" );
 
@@ -549,7 +549,7 @@ bool SwDBManager::Merge( const SwMergeDescriptor& rMergeDesc, vcl::Window* pPare
         case DBMGR_MERGE_FILE:
         case DBMGR_MERGE_SHELL:
             // save files and send them as e-Mail if required
-            bRet = MergeMailFiles(pWorkShell, rMergeDesc, pParent);
+            bRet = MergeMailFiles(pWorkShell, rMergeDesc, nullptr);
             break;
 
         default:

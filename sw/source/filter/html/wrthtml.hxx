@@ -464,7 +464,7 @@ public:
     // Frame-Formats ausgeben und ggf. ein <BR CLEAR=...> vorne an
     // rEndTags anhaengen
     OString OutFrameFormatOptions( const SwFrameFormat& rFrameFormat, const OUString& rAltText,
-        sal_uInt32 nFrameOpts, const OString& rEndTags = OString() );
+        sal_uInt32 nFrameOpts );
 
     void writeFrameFormatOptions(HtmlWriter& aHtml, const SwFrameFormat& rFrameFormat, const OUString& rAltText, sal_uInt32 nFrameOpts);
 

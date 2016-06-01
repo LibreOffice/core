@@ -2724,29 +2724,19 @@ void SvxIconChoiceCtrl_Impl::AdjustEntryAtGrid()
 }
 
 // align a row, might expand width, doesn't break the line
-void SvxIconChoiceCtrl_Impl::AdjustAtGrid( const SvxIconChoiceCtrlEntryPtrVec& rRow, SvxIconChoiceCtrlEntry* pStart )
+void SvxIconChoiceCtrl_Impl::AdjustAtGrid( const SvxIconChoiceCtrlEntryPtrVec& rRow )
 {
     if( rRow.empty() )
         return;
 
-    bool bGo;
-    if( !pStart )
-        bGo = true;
-    else
-        bGo = false;
-
     long nCurRight = 0;
     for(SvxIconChoiceCtrlEntry* pCur : rRow)
     {
-        if( !bGo && pCur == pStart )
-            bGo = true;
-
-        // SvIcnVwDataEntry* pViewData = ICNVIEWDATA(pCur);
         // Decisive (for our eye) is the bitmap, else, the entry might jump too
         // much within long texts.
         const Rectangle& rBoundRect = GetEntryBoundRect( pCur );
         Rectangle aCenterRect( CalcBmpRect( pCur ));
-        if( bGo && !pCur->IsPosLocked() )
+        if( !pCur->IsPosLocked() )
         {
             long nWidth = aCenterRect.GetSize().Width();
             Point aNewPos( AdjustAtGrid( aCenterRect, rBoundRect ) );
