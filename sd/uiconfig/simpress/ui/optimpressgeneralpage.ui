@@ -110,7 +110,7 @@
                 <property name="column_spacing">12</property>
                 <child>
                   <object class="GtkCheckButton" id="startwithwizard">
-                    <property name="label" translatable="yes">Start with _wizard</property>
+                    <property name="label" translatable="yes">Start with _Template Selection</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
