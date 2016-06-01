@@ -43,4 +43,21 @@ void SfxNotebookBar::StateMethod(SfxBindings& rBindings, const OUString& rUIFile
         pNotebookBar->Hide();
 }
 
+void SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
+                                 const css::uno::Reference<css::frame::XFrame> xFrame,
+                                 const OUString& rUIFile)
+{
+    SvtViewOptions aViewOpt(E_WINDOW, "notebookbar");
+
+    if (aViewOpt.IsVisible())
+    {
+        // setup if necessary
+        pSysWindow->SetNotebookBar(rUIFile, xFrame);
+
+        pSysWindow->GetNotebookBar()->Show();
+    }
+    else if (auto pNotebookBar = pSysWindow->GetNotebookBar())
+        pNotebookBar->Hide();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
