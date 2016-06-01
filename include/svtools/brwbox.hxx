@@ -64,7 +64,7 @@ enum class BrowserMode
     HLINES               = 0x000010,
     VLINES               = 0x000020,
 
-    HIDESELECT           = 0x000100, // old => don't use!
+    HIDESELECT           = 0x000100,
     HIDECURSOR           = 0x000200,
 
     NO_HSCROLL           = 0x000400,
