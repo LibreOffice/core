@@ -137,14 +137,12 @@ void SwOneExampleFrame::CreateControl()
             sTempURL = sArgumentURL;
         aURL <<= sTempURL;
 
-        uno::Sequence<beans::PropertyValue> aSeq(3);
+        uno::Sequence<beans::PropertyValue> aSeq(2);
         beans::PropertyValue* pValues = aSeq.getArray();
-        pValues[0].Name = "ReadOnly";
-        pValues[0].Value <<= true;
-        pValues[1].Name = "OpenFlags";
-        pValues[1].Value <<= OUString("-RB");
-        pValues[2].Name = "Referer";
-        pValues[2].Value <<= OUString("private:user");
+        pValues[0].Name = "OpenFlags";
+        pValues[0].Value <<= OUString("-RB");
+        pValues[1].Name = "Referer";
+        pValues[1].Value <<= OUString("private:user");
         uno::Any aArgs(aSeq);
 
         xPrSet->setPropertyValue( "LoaderArguments", aArgs );
