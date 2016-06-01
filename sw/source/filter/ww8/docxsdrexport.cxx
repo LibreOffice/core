@@ -332,7 +332,7 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
         uno::Any aAny;
         pObject->GetGrabBagItem(aAny);
         comphelper::SequenceAsHashMap aGrabBag(aAny);
-        comphelper::SequenceAsHashMap::iterator it = aGrabBag.find("CT_EffectExtent");
+        auto it = aGrabBag.find("CT_EffectExtent");
         if (it != aGrabBag.end())
         {
             comphelper::SequenceAsHashMap aEffectExtent(it->second);
@@ -646,7 +646,7 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
         uno::Any aAny;
         pObject->GetGrabBagItem(aAny);
         comphelper::SequenceAsHashMap aGrabBag(aAny);
-        comphelper::SequenceAsHashMap::iterator it = aGrabBag.find("EG_WrapType");
+        auto it = aGrabBag.find("EG_WrapType");
         if (it != aGrabBag.end())
         {
             OUString sType = it->second.get<OUString>();
@@ -668,7 +668,7 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
                                                        FSEND);
                 drawing::PointSequenceSequence aSeqSeq = it->second.get< drawing::PointSequenceSequence >();
                 std::vector<awt::Point> aPoints(comphelper::sequenceToContainer<std::vector<awt::Point> >(aSeqSeq[0]));
-                for (std::vector<awt::Point>::iterator i = aPoints.begin(); i != aPoints.end(); ++i)
+                for (auto i = aPoints.begin(); i != aPoints.end(); ++i)
                 {
                     awt::Point& rPoint = *i;
                     m_pImpl->m_pSerializer->singleElementNS(XML_wp, (i == aPoints.begin() ? XML_start : XML_lineTo),
