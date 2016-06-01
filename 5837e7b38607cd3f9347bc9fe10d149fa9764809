@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_2c013faf",
+        "filename": "include/xmloff/xmlnumfe.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-06-01T10:29:37Z",
+      "side": 1,
+      "message": "Please don\u0027t rename, this is not just a standard pImpl idiom, it is one member that implements the used list, so keep the name pUsedList, else things get more confusing.",
+      "range": {
+        "startLine": 53,
+        "startChar": 48,
+        "endLine": 53,
+        "endChar": 53
+      },
+      "revId": "5837e7b38607cd3f9347bc9fe10d149fa9764809",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
