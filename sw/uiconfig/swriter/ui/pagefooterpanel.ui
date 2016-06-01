@@ -1,7 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.16.1 -->
 <interface>
   <requires lib="gtk+" version="3.12"/>
+  <object class="GtkListStore" id="spacinglist">
+    <columns>
+      <!-- column-name gchararray1 -->
+      <column type="gchararray"/>
+      <!-- column-name gint1 -->
+      <column type="gint"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes">None</col>
+        <col id="1">0</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Extra Small (0.16cm)</col>
+        <col id="1">91</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Small (0.32cm)</col>
+        <col id="1">181</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Small Medium (0.64cm)</col>
+        <col id="1">363</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Medium (0.95cm)</col>
+        <col id="1">539</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Medium Large (1.27cm)</col>
+        <col id="1">720</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Large (1.9cm)</col>
+        <col id="1">1077</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Extra Large (2.54cm)</col>
+        <col id="1">1440</col>
+      </row>
+    </data>
+  </object>
   <object class="GtkGrid" id="PageFooterPanel">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -11,6 +53,7 @@
         <property name="can_focus">False</property>
         <property name="hexpand">True</property>
         <property name="vexpand">True</property>
+        <property name="border_width">6</property>
         <property name="row_spacing">6</property>
         <property name="column_spacing">6</property>
         <child>
@@ -19,7 +62,7 @@
             <property name="can_focus">False</property>
             <property name="spacing">6</property>
             <child>
-              <object class="GtkCheckButton" id="headertoggle">
+              <object class="GtkCheckButton" id="footertoggle">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
@@ -33,10 +76,10 @@
               </packing>
             </child>
             <child>
-              <object class="GtkLabel" id="height">
+              <object class="GtkLabel" id="samecontent">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Height:</property>
+                <property name="label" translatable="yes">Same Content:</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -48,17 +91,8 @@
           <packing>
             <property name="left_attach">0</property>
             <property name="top_attach">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkSpinButton" id="heightspinfield">
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="hexpand">True</property>
-          </object>
-          <packing>
-            <property name="left_attach">1</property>
-            <property name="top_attach">0</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
           </packing>
         </child>
         <child>
@@ -70,39 +104,8 @@
           <packing>
             <property name="left_attach">0</property>
             <property name="top_attach">1</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkBox" id="box2">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="spacing">6</property>
-            <child>
-              <object class="GtkSpinButton" id="leftmargin">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkSpinButton" id="rightmargin">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="left_attach">1</property>
-            <property name="top_attach">1</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
           </packing>
         </child>
         <child>
@@ -114,28 +117,23 @@
           <packing>
             <property name="left_attach">0</property>
             <property name="top_attach">2</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
           </packing>
         </child>
         <child>
-          <object class="GtkLabel" id="samecontent">
+          <object class="GtkComboBox" id="spacingpreset">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Same Content:</property>
-          </object>
-          <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">3</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkSpinButton" id="spacingspinfield">
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="hexpand">True</property>
+            <property name="tooltip_markup" translatable="yes">Set the amount of space between the image and surrounding text</property>
+            <property name="tooltip_text" translatable="yes">Set the amount of space between the image and surrounding text</property>
+            <property name="model">spacinglist</property>
           </object>
           <packing>
             <property name="left_attach">1</property>
             <property name="top_attach">2</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
           </packing>
         </child>
         <child>
@@ -144,6 +142,7 @@
             <property name="can_focus">False</property>
             <property name="hexpand">True</property>
             <items>
+              <item translatable="yes">First &amp; Left/Right</item>
               <item translatable="yes">Left/Right</item>
               <item translatable="yes">First Page</item>
               <item translatable="yes">All Pages</item>
@@ -151,13 +150,47 @@
           </object>
           <packing>
             <property name="left_attach">1</property>
-            <property name="top_attach">3</property>
+            <property name="top_attach">0</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
           </packing>
+        </child>
+        <child>
+          <object class="GtkComboBox" id="footermarginpreset">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="tooltip_markup" translatable="yes">Set the amount of space between the image and surrounding text</property>
+            <property name="tooltip_text" translatable="yes">Set the amount of space between the image and surrounding text</property>
+            <property name="model">spacinglist</property>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="top_attach">1</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="customlabel">
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes">Custom</property>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="top_attach">3</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <placeholder/>
         </child>
       </object>
       <packing>
         <property name="left_attach">0</property>
         <property name="top_attach">0</property>
+        <property name="width">1</property>
+        <property name="height">1</property>
       </packing>
     </child>
   </object>
