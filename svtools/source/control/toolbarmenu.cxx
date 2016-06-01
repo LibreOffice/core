@@ -443,7 +443,7 @@ void ToolbarMenu::dispose()
 
     mpImpl->mxAccessible.clear();
 
-    std::unique_ptr<ToolbarMenu_Impl> pImpl = std::move(pImpl);
+    std::unique_ptr<ToolbarMenu_Impl> pImpl = std::move(mpImpl);
     mpImpl.reset();
 
     pImpl->maEntryVector.clear();
