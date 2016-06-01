@@ -80,6 +80,8 @@ public:
     virtual void RequestHelp( const HelpEvent& rHEvt ) override;
     virtual Size GetOptimalSize() const override;
     void Clear();
+
+    virtual void ExpandedHdl() override;
 };
 
 class SwOneExampleFrame;

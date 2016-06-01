@@ -316,6 +316,7 @@ IMPL_LINK_TYPED( SwGlossaryDlg, GrpSelect, SvTreeListBox *, pBox, void )
         aReq.AppendItem(SfxStringItem(FN_SET_ACT_GLOSSARY, sTemp));
         aReq.Done();
     }
+    Invalidate(InvalidateFlags::Update);
 }
 
 void SwGlossaryDlg::Apply()
@@ -1012,6 +1013,12 @@ TriState SwGlTreeListBox::NotifyCopyingOrMoving(
         }
     }
     return TRISTATE_FALSE; // otherwise the entry is being set automatically
+}
+
+void SwGlTreeListBox::ExpandedHdl()
+{
+    Invalidate(InvalidateFlags::Update);
+    SvTreeListBox::ExpandedHdl();
 }
 
 OUString SwGlossaryDlg::GetCurrGrpName() const
