@@ -50,7 +50,7 @@ using namespace utl;
 FontCache::FontCache()
 {
     m_bDoFlush = false;
-    m_aCacheFile = getOfficePath( UserPath );
+    m_aCacheFile = getOfficePath( whichOfficePath::UserPath );
     if( !m_aCacheFile.isEmpty() )
     {
         m_aCacheFile += "/user/psprint/pspfontcache";

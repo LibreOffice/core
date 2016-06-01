@@ -31,7 +31,9 @@
 // forwards
 namespace osl { class File; }
 
-namespace psp {
+namespace psp
+{
+
 typedef int fontID;
 
 void VCL_DLLPUBLIC getPrinterPathList( std::list< OUString >& rPathList, const char* pSubDir );
@@ -49,10 +51,11 @@ void VCL_DLLPUBLIC normPath( OString& rPath );
 // rOrgPath will be subject to normPath
 void VCL_DLLPUBLIC splitPath( OString& rOrgPath, OString& rDir, OString& rBase );
 
-enum whichOfficePath { InstallationRootPath, UserPath, ConfigPath };
+enum class whichOfficePath { InstallationRootPath, UserPath, ConfigPath };
 // note: gcc 3.4.1 warns about visibility if we retunr a const OUString& here
 // seems to be a bug in gcc, now we return an object instead of a reference
-OUString VCL_DLLPUBLIC getOfficePath( enum whichOfficePath ePath );
+OUString VCL_DLLPUBLIC getOfficePath( whichOfficePath ePath );
+
 } // namespace
 
 
