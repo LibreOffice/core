@@ -1604,18 +1604,18 @@ void RtfAttributeOutput::WriteField_Impl(const SwField* pField, ww::eField eType
 
 void RtfAttributeOutput::WriteBookmarks_Impl(std::vector< OUString >& rStarts, std::vector< OUString >& rEnds)
 {
-    for (std::vector< OUString >::const_iterator it = rStarts.begin(), end = rStarts.end(); it != end; ++it)
+    for (const auto& rStart : rStarts)
     {
         m_aRun->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_BKMKSTART " ");
-        m_aRun->append(msfilter::rtfutil::OutString(*it, m_rExport.m_eCurrentEncoding));
+        m_aRun->append(msfilter::rtfutil::OutString(rStart, m_rExport.m_eCurrentEncoding));
         m_aRun->append('}');
     }
     rStarts.clear();
 
-    for (std::vector< OUString >::const_iterator it = rEnds.begin(), end = rEnds.end(); it != end; ++it)
+    for (const auto& rEnd : rEnds)
     {
         m_aRun->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_BKMKEND " ");
-        m_aRun->append(msfilter::rtfutil::OutString(*it, m_rExport.m_eCurrentEncoding));
+        m_aRun->append(msfilter::rtfutil::OutString(rEnd, m_rExport.m_eCurrentEncoding));
         m_aRun->append('}');
     }
     rEnds.clear();
@@ -1623,9 +1623,9 @@ void RtfAttributeOutput::WriteBookmarks_Impl(std::vector< OUString >& rStarts, s
 
 void RtfAttributeOutput::WriteAnnotationMarks_Impl(std::vector< OUString >& rStarts, std::vector< OUString >& rEnds)
 {
-    for (std::vector< OUString >::const_iterator i = rStarts.begin(), end = rStarts.end(); i != end; ++i)
+    for (const auto& rStart : rStarts)
     {
-        OString rName = OUStringToOString(*i, RTL_TEXTENCODING_UTF8);
+        OString rName = OUStringToOString(rStart, RTL_TEXTENCODING_UTF8);
 
         // Output the annotation mark
         const sal_Int32 nId = m_nNextAnnotationMarkId++;
@@ -1636,12 +1636,12 @@ void RtfAttributeOutput::WriteAnnotationMarks_Impl(std::vector< OUString >& rSta
     }
     rStarts.clear();
 
-    for (std::vector< OUString >::const_iterator i = rEnds.begin(), end = rEnds.end(); i != end; ++i)
+    for (const auto& rEnd : rEnds)
     {
-        OString rName = OUStringToOString(*i, RTL_TEXTENCODING_UTF8);
+        OString rName = OUStringToOString(rEnd, RTL_TEXTENCODING_UTF8);
 
         // Get the id of the annotation mark
-        std::map<OString, sal_Int32>::iterator it = m_rOpenedAnnotationMarksIds.find(rName);
+        auto it = m_rOpenedAnnotationMarksIds.find(rName);
         if (it != m_rOpenedAnnotationMarksIds.end())
         {
             const sal_Int32 nId = it->second;
@@ -3433,7 +3433,7 @@ void RtfAttributeOutput::PostitField(const SwField* pField)
     const SwPostItField& rPField = *static_cast<const SwPostItField*>(pField);
 
     OString aName = OUStringToOString(rPField.GetName(), RTL_TEXTENCODING_UTF8);
-    std::map<OString, sal_Int32>::iterator it = m_rOpenedAnnotationMarksIds.find(aName);
+    auto it = m_rOpenedAnnotationMarksIds.find(aName);
     if (it != m_rOpenedAnnotationMarksIds.end())
     {
         // In case this field is inside annotation marks, we want to write the
@@ -3908,11 +3908,11 @@ void RtfAttributeOutput::FlyFrameGraphic(const SwFlyFrameFormat* pFlyFrameFormat
     aRendered.Height() = rS.GetHeight();
 
     ww8::Frame* pFrame = nullptr;
-    for (ww8::FrameIter it = m_rExport.m_aFrames.begin(); it != m_rExport.m_aFrames.end(); ++it)
+    for (auto& rFrame : m_rExport.m_aFrames)
     {
-        if (pFlyFrameFormat == &it->GetFrameFormat())
+        if (pFlyFrameFormat == &rFrame.GetFrameFormat())
         {
-            pFrame = &(*it);
+            pFrame = &rFrame;
             break;
         }
     }

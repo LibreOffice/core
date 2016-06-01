@@ -111,10 +111,8 @@ void RtfExport::AppendBookmarks(const SwTextNode& rNode, sal_Int32 nAktPos, sal_
     IMarkVector aMarks;
     if (GetBookmarks(rNode, nAktPos, nAktPos + nLen, aMarks))
     {
-        for (IMarkVector::const_iterator it = aMarks.begin(), end = aMarks.end();
-                it != end; ++it)
+        for (const auto& pMark : aMarks)
         {
-            sw::mark::IMark* pMark = (*it);
             const sal_Int32 nStart = pMark->GetMarkStart().nContent.GetIndex();
             const sal_Int32 nEnd = pMark->GetMarkEnd().nContent.GetIndex();
 
@@ -148,10 +146,8 @@ void RtfExport::AppendAnnotationMarks(const SwTextNode& rNode, sal_Int32 nAktPos
     IMarkVector aMarks;
     if (GetAnnotationMarks(rNode, nAktPos, nAktPos + nLen, aMarks))
     {
-        for (IMarkVector::const_iterator it = aMarks.begin(), end = aMarks.end();
-                it != end; ++it)
+        for (const auto& pMark : aMarks)
         {
-            sw::mark::IMark* pMark = (*it);
             const sal_Int32 nStart = pMark->GetMarkStart().nContent.GetIndex();
             const sal_Int32 nEnd = pMark->GetMarkEnd().nContent.GetIndex();
 
@@ -997,11 +993,11 @@ void RtfExport::OutDateTime(const sal_Char* pStr, const util::DateTime& rDT)
 
 sal_uInt16 RtfExport::GetColor(const Color& rColor) const
 {
-    for (RtfColorTable::const_iterator it=m_aColTable.begin() ; it != m_aColTable.end(); ++it)
-        if ((*it).second == rColor)
+    for (const auto& rEntry : m_aColTable)
+        if (rEntry.second == rColor)
         {
-            SAL_INFO("sw.rtf", OSL_THIS_FUNC << " returning " << (*it).first << " (" << rColor.GetRed() << "," << rColor.GetGreen() << "," << rColor.GetBlue() << ")");
-            return (*it).first;
+            SAL_INFO("sw.rtf", OSL_THIS_FUNC << " returning " << rEntry.first << " (" << rColor.GetRed() << "," << rColor.GetGreen() << "," << rColor.GetBlue() << ")");
+            return rEntry.first;
         }
     OSL_FAIL("No such Color in m_aColTable!");
     return 0;
@@ -1011,11 +1007,11 @@ void RtfExport::InsColor(const Color& rCol)
 {
     sal_uInt16 n;
     bool bAutoColorInTable = false;
-    for (RtfColorTable::iterator it=m_aColTable.begin() ; it != m_aColTable.end(); ++it)
+    for (const auto& rEntry : m_aColTable)
     {
-        if ((*it).second == rCol)
+        if (rEntry.second == rCol)
             return; // Already in the table
-        if ((*it).second == COL_AUTO)
+        if (rEntry.second == COL_AUTO)
             bAutoColorInTable = true;
     }
     if (rCol.GetColor() == COL_AUTO)
@@ -1202,17 +1198,17 @@ void RtfExport::InsStyle(sal_uInt16 nId, const OString& rStyle)
 
 OString* RtfExport::GetStyle(sal_uInt16 nId)
 {
-    std::map<sal_uInt16,OString>::iterator i = m_aStyTable.find(nId);
-    if (i != m_aStyTable.end())
-        return &i->second;
+    auto it = m_aStyTable.find(nId);
+    if (it != m_aStyTable.end())
+        return &it->second;
     return nullptr;
 }
 
 sal_uInt16 RtfExport::GetRedline(const OUString& rAuthor)
 {
-    std::map<OUString,sal_uInt16>::iterator i = m_aRedlineTable.find(rAuthor);
-    if (i != m_aRedlineTable.end())
-        return i->second;
+    auto it = m_aRedlineTable.find(rAuthor);
+    if (it != m_aRedlineTable.end())
+        return it->second;
 
     const sal_uInt16 nId = static_cast<sal_uInt16>(m_aRedlineTable.size());
     m_aRedlineTable.insert(std::pair<OUString,sal_uInt16>(rAuthor,nId));
@@ -1221,9 +1217,9 @@ sal_uInt16 RtfExport::GetRedline(const OUString& rAuthor)
 
 const OUString* RtfExport::GetRedline(sal_uInt16 nId)
 {
-    for (std::map<OUString,sal_uInt16>::iterator aIter = m_aRedlineTable.begin(); aIter != m_aRedlineTable.end(); ++aIter)
-        if ((*aIter).second == nId)
-            return &(*aIter).first;
+    for (const auto& rEntry : m_aRedlineTable)
+        if (rEntry.second == nId)
+            return &rEntry.first;
     return nullptr;
 }
 
