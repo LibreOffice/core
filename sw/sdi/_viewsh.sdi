@@ -441,6 +441,46 @@ interface BaseTextEditView
         ExecMethod = ExecTabWin ;
         StateMethod = StateTabWin ;
     ]
+    SID_ATTR_PAGE_HEADER
+    [
+        ExecMethod = ExecTabWin ;
+        StateMethod = StateTabWin ;
+    ]
+    SID_ATTR_PAGE_HEADER_LRMARGIN
+    [
+        ExecMethod = ExecTabWin ;
+        StateMethod = StateTabWin ;
+    ]
+    SID_ATTR_PAGE_HEADER_SPACING
+    [
+        ExecMethod = ExecTabWin ;
+        StateMethod = StateTabWin ;
+    ]
+    SID_ATTR_PAGE_HEADER_LAYOUT
+    [
+        ExecMethod = ExecTabWin ;
+        StateMethod = StateTabWin ;
+    ]
+    SID_ATTR_PAGE_FOOTER
+    [
+        ExecMethod = ExecTabWin ;
+        StateMethod = StateTabWin ;
+    ]
+    SID_ATTR_PAGE_FOOTER_LRMARGIN
+    [
+        ExecMethod = ExecTabWin ;
+        StateMethod = StateTabWin ;
+    ]
+    SID_ATTR_PAGE_FOOTER_SPACING
+    [
+        ExecMethod = ExecTabWin ;
+        StateMethod = StateTabWin ;
+    ]
+    SID_ATTR_PAGE_FOOTER_LAYOUT
+    [
+        ExecMethod = ExecTabWin ;
+        StateMethod = StateTabWin ;
+    ]
     SID_ATTR_PAGE_ULSPACE
     [
         ExecMethod = ExecTabWin ;
