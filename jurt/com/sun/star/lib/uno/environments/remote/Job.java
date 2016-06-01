@@ -41,8 +41,6 @@ import com.sun.star.uno.XCurrentContext;
  * @since       UDK1.0
  */
 public class Job {
-    protected Job _next;
-
     protected IReceiver _iReceiver;
     protected Message  _iMessage;
               Object    _disposeId;
