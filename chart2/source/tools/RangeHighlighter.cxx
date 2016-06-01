@@ -31,8 +31,6 @@
 #include <com/sun/star/drawing/XShape.hpp>
 #include <comphelper/sequence.hxx>
 
-#define PREFERED_DEFAULT_COLOR 0x0000ff
-
 using namespace ::com::sun::star;
 
 using ::com::sun::star::uno::Reference;
@@ -41,10 +39,12 @@ using ::com::sun::star::uno::Sequence;
 namespace
 {
 
+const auto defaultPreferredColor = COL_LIGHTBLUE;
+
 void lcl_fillRanges(
     Sequence< chart2::data::HighlightedRange > & rOutRanges,
     const Sequence< OUString >& aRangeStrings,
-    sal_Int32 nPreferredColor = PREFERED_DEFAULT_COLOR,
+    sal_Int32 nPreferredColor = defaultPreferredColor,
     sal_Int32 nIndex = -1 )
 {
     rOutRanges.realloc( aRangeStrings.getLength());
@@ -199,7 +199,7 @@ void RangeHighlighter::fillRangesForDiagram( const Reference< chart2::XDiagram >
     {
         m_aSelectedRanges[i].RangeRepresentation = aSelectedRanges[i];
         m_aSelectedRanges[i].Index = -1;
-        m_aSelectedRanges[i].PreferredColor = PREFERED_DEFAULT_COLOR;
+        m_aSelectedRanges[i].PreferredColor = defaultPreferredColor;
         m_aSelectedRanges[i].AllowMerginigWithOtherRanges = true;
     }
 }
@@ -209,7 +209,7 @@ void RangeHighlighter::fillRangesForDataSeries( const uno::Reference< chart2::XD
     Reference< chart2::data::XDataSource > xSource( xSeries, uno::UNO_QUERY );
     if( xSource.is())
     {
-        sal_Int32 nPreferredColor = PREFERED_DEFAULT_COLOR;
+        sal_Int32 nPreferredColor = defaultPreferredColor;
         lcl_fillRanges( m_aSelectedRanges,
                         ::chart::DataSourceHelper::getRangesFromDataSource( xSource ),
                         nPreferredColor );
@@ -240,7 +240,7 @@ void RangeHighlighter::fillRangesForErrorBars(
         Reference< chart2::data::XDataSource > xSource( xErrorBar, uno::UNO_QUERY );
         if( xSource.is())
         {
-            sal_Int32 nPreferredColor = PREFERED_DEFAULT_COLOR;
+            sal_Int32 nPreferredColor = defaultPreferredColor;
             lcl_fillRanges( m_aSelectedRanges,
                             ::chart::DataSourceHelper::getRangesFromDataSource( xSource ),
                             nPreferredColor );
@@ -268,7 +268,7 @@ void RangeHighlighter::fillRangesForDataPoint( const Reference< uno::XInterface 
         Reference< chart2::data::XDataSource > xSource( xDataSeries, uno::UNO_QUERY );
         if( xSource.is() )
         {
-            sal_Int32 nPreferredColor = PREFERED_DEFAULT_COLOR;
+            sal_Int32 nPreferredColor = defaultPreferredColor;
             ::std::vector< chart2::data::HighlightedRange > aHilightedRanges;
             Sequence< Reference< chart2::data::XLabeledDataSequence > > aLSeqSeq( xSource->getDataSequences());
             for( sal_Int32 i=0; i<aLSeqSeq.getLength(); ++i )

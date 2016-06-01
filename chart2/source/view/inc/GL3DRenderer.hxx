@@ -25,11 +25,11 @@
 #include <list>
 #include <map>
 
-#define MAX_LIGHT_NUM 8
-
 namespace chart {
 
 namespace opengl3D {
+
+const auto maxLights = 8;
 
 struct PosVecf3
 {
@@ -65,7 +65,7 @@ struct GlobalLights
 {
     int lightNum;
     glm::vec4 ambient;
-    LightSource light[MAX_LIGHT_NUM];
+    LightSource light[maxLights];
 };
 
 struct Polygon3DInfo
@@ -464,9 +464,9 @@ private:
     //for 3.0 version
     int m_iLightNum;
     glm::vec4 m_Ambient;
-    glm::vec4 m_LightColor[MAX_LIGHT_NUM];
-    glm::vec4 m_PositionWorldspace[MAX_LIGHT_NUM];
-    float m_fLightPower[MAX_LIGHT_NUM];
+    glm::vec4 m_LightColor[maxLights];
+    glm::vec4 m_PositionWorldspace[maxLights];
+    float m_fLightPower[maxLights];
     //for 3.0 end
     std::vector<GLuint> m_Texturelist;
     std::vector<GLuint> m_ScreenTexturelist;
