@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "da7fb54a_ac3aaf34",
+        "filename": "framework/Library_fwe.mk",
+        "patchSetId": 5
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2016-06-01T13:51:23Z",
+      "side": 1,
+      "message": "i have removed from _fwl to _fwe, in this library were i need is the _fwe library included. That was Thorsten idee",
+      "parentUuid": "da7fb54a_91126861",
+      "revId": "b1c67f801f4b63ad4d562882d78a2d09d4442f38",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da7fb54a_667e08e6",
         "filename": "framework/source/services/dispatchhelper.cxx",
         "patchSetId": 5
