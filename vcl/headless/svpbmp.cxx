@@ -75,7 +75,7 @@ BitmapBuffer* ImplCreateDIB(
             switch (nBitCount)
             {
                 case 1:
-                    pDIB->mnFormat = ScanlineFormat::N1BitMsbPal;
+                    pDIB->mnFormat = ScanlineFormat::N1BitLsbPal;
                     break;
                 case 4:
                     pDIB->mnFormat = ScanlineFormat::N4BitMsnPal;
