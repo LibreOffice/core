@@ -42,8 +42,9 @@
 #include <svl/intitem.hxx>
 #include <tools/fldunit.hxx>
 #include <svl/poolitem.hxx>
-#include <svx/rulritem.hxx>
+#include <svl/eitem.hxx>
 
+class List;
 namespace sw { namespace sidebar {
 
 class PageHeaderPanel:
@@ -74,15 +75,18 @@ private:
 
     SfxBindings* mpBindings;
 
+    ::sfx2::sidebar::ControllerItem maHeaderController;
+    ::sfx2::sidebar::ControllerItem maHFToggleController;
+
     VclPtr<CheckBox> mpHeaderToggle;
-    VclPtr<MetricField> mpHeaderHeightField;
-    VclPtr<MetricField> mpHeaderLMargin;
-    VclPtr<MetricField> mpHeaderRMargin;
-    VclPtr<MetricField> mpHeaderSpacing;
+    VclPtr<ListBox> mpHeaderSpacing;
     VclPtr<ListBox> mpSameContentLB;
+    VclPtr<ListBox> mpHeaderMarginPresetBox;
 
     void Initialize();
     void UpdateControls();
+
+    ::std::unique_ptr<SvxSetItem> mpHeaderItem;
 
     DECL_LINK_TYPED( HeaderToggleHdl, Button*, void );
 

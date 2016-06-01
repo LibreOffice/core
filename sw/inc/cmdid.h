@@ -849,6 +849,7 @@
 #define SID_ATTR_PAGE_COLUMN            (FN_SIDEBAR + 0)
 #define SID_ATTR_PAGE_ULSPACE           (FN_SIDEBAR + 1)
 #define SID_ATTR_PAGE_LRSPACE           (FN_SIDEBAR + 2)
+#define SID_ATTR_PAGE_HEADER            (FN_SIDEBAR + 3)
 
 //Member IDs for Fill / SetVariable of items
 #define         MID_STYLE       0xe0

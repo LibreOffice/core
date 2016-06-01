@@ -7489,6 +7489,24 @@ SvxLongLRSpaceItem SwPageLRMargin SID_ATTR_PAGE_LRSPACE
     GroupId = GID_FORMAT;
 ]
 
+SvxSetItem PageHeaderItem SID_ATTR_PAGE_HEADER
+
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_FORMAT;
+]
+
 SfxVoidItem AddTextBox FN_ADD_TEXT_BOX
 ()
 [

@@ -59,14 +59,15 @@ PageHeaderPanel::PageHeaderPanel(
     SfxBindings* pBindings
     ) :
     PanelLayout(pParent, "PageHeaderPanel", "modules/swriter/ui/pageheaderpanel.ui", rxFrame),
-    mpBindings( pBindings )
+    mpBindings( pBindings ),
+    maHeaderController(SID_ATTR_PAGE_HEADERSET, *pBindings, *this),
+    maHFToggleController(SID_ATTR_PAGE_HEADER, *pBindings, *this),
+    mpHeaderItem( new SvxSetItem(SID_ATTR_PAGE_HEADER) )
 {
     get(mpHeaderToggle, "headertoggle");
-    get(mpHeaderHeightField, "heightspinfield");
-    get(mpHeaderLMargin, "leftmargin");
-    get(mpHeaderRMargin, "rightmargin");
-    get(mpHeaderSpacing, "spacingspinfield");
+    get(mpHeaderSpacing, "spacingpreset");
     get(mpSameContentLB, "samecontentLB");
+    get(mpHeaderMarginPresetBox, "headermarginpreset");
 
     Initialize();
 }
@@ -79,11 +80,9 @@ PageHeaderPanel::~PageHeaderPanel()
 void PageHeaderPanel::dispose()
 {
     mpHeaderToggle.disposeAndClear();
-    mpHeaderHeightField.disposeAndClear();
-    mpHeaderLMargin.disposeAndClear();
-    mpHeaderRMargin.disposeAndClear();
     mpHeaderSpacing.disposeAndClear();
     mpSameContentLB.disposeAndClear();
+    mpHeaderMarginPresetBox.disposeAndClear();
 
     PanelLayout::dispose();
 }
@@ -98,36 +97,57 @@ void PageHeaderPanel::UpdateControls()
     bool bIsEnabled = (bool)mpHeaderToggle->IsChecked();
     if(bIsEnabled)
     {
-        mpHeaderHeightField->Enable();
-        mpHeaderLMargin->Enable();
-        mpHeaderRMargin->Enable();
         mpHeaderSpacing->Enable();
         mpSameContentLB->Enable();
+        mpHeaderMarginPresetBox->Enable();
     }
     else
     {
-        mpHeaderHeightField->Disable();
-        mpHeaderLMargin->Disable();
-        mpHeaderRMargin->Disable();
         mpHeaderSpacing->Disable();
         mpSameContentLB->Disable();
+        mpHeaderMarginPresetBox->Disable();
     }
 }
 
 void PageHeaderPanel::NotifyItemUpdate(
-    const sal_uInt16 /*nSid*/,
-    const SfxItemState /*eState*/,
-    const SfxPoolItem* /*pState*/,
-    const bool /*bIsEnabled*/)
+    const sal_uInt16 nSid,
+    const SfxItemState eState,
+    const SfxPoolItem* pState,
+    const bool bIsEnabled)
 {
+    (void)bIsEnabled;
+
+    if (IsDisposed())
+        return;
+
+    switch(nSid)
+    {
+        case SID_ATTR_PAGE_HEADERSET:
+        {
+        }
+        break;
+        case SID_ATTR_PAGE_HEADER:
+        {
+            if(eState >= SfxItemState::DEFAULT &&
+                pState && dynamic_cast<const SvxSetItem*>( pState) !=  nullptr )
+            {
+                const SvxSetItem* pItem = static_cast<const SvxSetItem*>(pState);
+                const SfxItemSet rHeaderSet = pItem->GetItemSet();
+//                 const SfxBoolItem& rHeaderOn = static_cast<const SfxBoolItem&>(rHeaderSet.Get( SID_ATTR_PAGE_HEADER ));
+            }
+        }
+        break;
+        default:
+            break;
+    }
 }
 
 IMPL_LINK_NOARG_TYPED( PageHeaderPanel, HeaderToggleHdl, Button*, void )
 {
-    bool IsChecked = mpHeaderToggle->IsChecked();
-    SfxBoolItem aItem(SID_ATTR_PAGE_ON, IsChecked);
-    GetBindings()->GetDispatcher()->ExecuteList( SID_ATTR_PAGE_HEADERSET, SfxCallMode::RECORD, { &aItem } );
-    UpdateControls();
+//     bool IsChecked = mpHeaderToggle->IsChecked();
+//     SfxBoolItem aItem(SID_ATTR_PAGE_ON, IsChecked);
+//     GetBindings()->GetDispatcher()->ExecuteList( SID_ATTR_PAGE_HEADER, SfxCallMode::RECORD, { &aItem } );
+//     UpdateControls();
 }
 
 
