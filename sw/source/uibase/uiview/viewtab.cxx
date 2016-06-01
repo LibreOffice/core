@@ -21,6 +21,8 @@
 #include "uitool.hxx"
 #include <sfx2/app.hxx>
 #include <svx/rulritem.hxx>
+#include <svx/xfillit.hxx>
+#include <svx/xfillit0.hxx>
 #include <editeng/tstpitem.hxx>
 #include <sfx2/request.hxx>
 #include <editeng/lrspitem.hxx>
@@ -55,6 +57,8 @@
 #include "pam.hxx"
 
 #include <IDocumentSettingAccess.hxx>
+
+#include <svx/xtable.hxx>
 
 using namespace ::com::sun::star;
 
@@ -975,6 +979,113 @@ void SwView::ExecTabWin( SfxRequest& rReq )
         }
         break;
 
+    case SID_ATTR_PAGE_HEADER:
+    {
+        if ( pReqArgs )
+        {
+            const bool bHeaderOn =  static_cast<const SfxBoolItem&>(pReqArgs->Get(SID_ATTR_PAGE_HEADER)).GetValue();
+            SwPageDesc aDesc(rDesc);
+            SwFrameFormat &rMaster = aDesc.GetMaster();
+            rMaster.SetFormatAttr( SwFormatHeader( bHeaderOn ));
+            rSh.ChgPageDesc(rSh.GetCurPageDesc(), aDesc);
+        }
+    }
+    break;
+    case SID_ATTR_PAGE_HEADER_LRMARGIN:
+    {
+        if ( pReqArgs && rDesc.GetMaster().GetHeader().IsActive() )
+        {
+            const SvxLongLRSpaceItem& aLongLR = static_cast<const SvxLongLRSpaceItem&>(pReqArgs->Get(SID_ATTR_PAGE_HEADER_LRMARGIN));
+            SvxLRSpaceItem aLR(RES_LR_SPACE);
+            SwPageDesc aDesc(rDesc);
+            aLR.SetLeft(aLongLR.GetLeft());
+            aLR.SetRight(aLongLR.GetRight());
+            SwFrameFormat* pFormat = const_cast<SwFrameFormat*>(aDesc.GetMaster().GetHeader().GetHeaderFormat());
+            pFormat->SetFormatAttr( aLR );
+            rSh.ChgPageDesc(rSh.GetCurPageDesc(), aDesc);
+        }
+    }
+    break;
+    case SID_ATTR_PAGE_HEADER_SPACING:
+    {
+        if ( pReqArgs && rDesc.GetMaster().GetHeader().IsActive())
+        {
+            const SvxLongULSpaceItem& aLongUL = static_cast<const SvxLongULSpaceItem&>(pReqArgs->Get(SID_ATTR_PAGE_HEADER_SPACING));
+            SwPageDesc aDesc(rDesc);
+            SvxULSpaceItem aUL(0, aLongUL.GetLower(), RES_UL_SPACE );
+            SwFrameFormat* pFormat = const_cast<SwFrameFormat*>(aDesc.GetMaster().GetHeader().GetHeaderFormat());
+            pFormat->SetFormatAttr( aUL );
+            rSh.ChgPageDesc(rSh.GetCurPageDesc(), aDesc);
+        }
+    }
+    break;
+    case SID_ATTR_PAGE_HEADER_LAYOUT:
+    {
+        if ( pReqArgs && rDesc.GetMaster().GetHeader().IsActive())
+        {
+            const SfxInt16Item& aLayoutItem = static_cast<const SfxInt16Item&>(pReqArgs->Get(SID_ATTR_PAGE_HEADER_LAYOUT));
+            sal_uInt16 nLayout = aLayoutItem.GetValue();
+            SwPageDesc aDesc(rDesc);
+            aDesc.ChgHeaderShare((nLayout>>1) == 1);
+            aDesc.ChgFirstShare((nLayout % 2) == 1); // FIXME control changes for both header footer - tdf#100287
+            rSh.ChgPageDesc(rSh.GetCurPageDesc(), aDesc);
+        }
+    }
+    break;
+    case SID_ATTR_PAGE_FOOTER:
+    {
+        if ( pReqArgs )
+        {
+            const bool bFooterOn =  static_cast<const SfxBoolItem&>(pReqArgs->Get(SID_ATTR_PAGE_FOOTER)).GetValue();
+            SwPageDesc aDesc(rDesc);
+            SwFrameFormat &rMaster = aDesc.GetMaster();
+            rMaster.SetFormatAttr( SwFormatFooter( bFooterOn ));
+            rSh.ChgPageDesc(rSh.GetCurPageDesc(), aDesc);
+        }
+    }
+    break;
+    case SID_ATTR_PAGE_FOOTER_LRMARGIN:
+    {
+        if ( pReqArgs && rDesc.GetMaster().GetFooter().IsActive() )
+        {
+            const SvxLongLRSpaceItem& aLongLR = static_cast<const SvxLongLRSpaceItem&>(pReqArgs->Get(SID_ATTR_PAGE_FOOTER_LRMARGIN));
+            SvxLRSpaceItem aLR(RES_LR_SPACE);
+            SwPageDesc aDesc(rDesc);
+            aLR.SetLeft(aLongLR.GetLeft());
+            aLR.SetRight(aLongLR.GetRight());
+            SwFrameFormat* pFormat = const_cast<SwFrameFormat*>(aDesc.GetMaster().GetFooter().GetFooterFormat());
+            pFormat->SetFormatAttr( aLR );
+            rSh.ChgPageDesc(rSh.GetCurPageDesc(), aDesc);
+        }
+    }
+    break;
+    case SID_ATTR_PAGE_FOOTER_SPACING:
+    {
+        if ( pReqArgs && rDesc.GetMaster().GetFooter().IsActive())
+        {
+            const SvxLongULSpaceItem& aLongUL = static_cast<const SvxLongULSpaceItem&>(pReqArgs->Get(SID_ATTR_PAGE_FOOTER_SPACING));
+            SwPageDesc aDesc(rDesc);
+            SvxULSpaceItem aUL(aLongUL.GetUpper(), 0, RES_UL_SPACE );
+            SwFrameFormat* pFormat = const_cast<SwFrameFormat*>(aDesc.GetMaster().GetFooter().GetFooterFormat());
+            pFormat->SetFormatAttr( aUL );
+            rSh.ChgPageDesc(rSh.GetCurPageDesc(), aDesc);
+        }
+    }
+    break;
+    case SID_ATTR_PAGE_FOOTER_LAYOUT:
+    {
+        if ( pReqArgs && rDesc.GetMaster().GetFooter().IsActive())
+        {
+            const SfxInt16Item& aLayoutItem = static_cast<const SfxInt16Item&>(pReqArgs->Get(SID_ATTR_PAGE_FOOTER_LAYOUT));
+            sal_uInt16 nLayout = aLayoutItem.GetValue();
+            SwPageDesc aDesc(rDesc);
+            aDesc.ChgFooterShare((nLayout>>1) == 1);
+            aDesc.ChgFirstShare((nLayout % 2) == 1); // FIXME control changes for both header footer - tdf#100287
+            rSh.ChgPageDesc(rSh.GetCurPageDesc(), aDesc);
+        }
+    }
+    break;
+
     default:
         OSL_ENSURE( false, "wrong SlotId");
     }
@@ -1076,6 +1187,8 @@ void SwView::StateTabWin(SfxItemSet& rSet)
             {
                 nColumnType = 3;
             }
+            else
+                nColumnType = nCols;
 
             rSet.Put( SfxInt16Item( SID_ATTR_PAGE_COLUMN, nColumnType ) );
         }
@@ -2034,6 +2147,58 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                     aProtect.SetPosProtect(true);
                 }
                 rSet.Put(aProtect);
+            }
+        }
+        break;
+        case SID_ATTR_PAGE_HEADER:
+        case SID_ATTR_PAGE_HEADER_LRMARGIN:
+        case SID_ATTR_PAGE_HEADER_SPACING:
+        case SID_ATTR_PAGE_HEADER_LAYOUT:
+        {
+            const SwFormatHeader& rHeader = rDesc.GetMaster().GetHeader();
+            bool bHeaderOn = rHeader.IsActive();
+            rSet.Put( SfxBoolItem(SID_ATTR_PAGE_HEADER, bHeaderOn ) );
+            if(bHeaderOn)
+            {
+                const SvxLRSpaceItem* rLR = static_cast<const SvxLRSpaceItem*>(
+                                            rHeader.GetHeaderFormat()->GetAttrSet().GetItem(SID_ATTR_LRSPACE));
+                const SvxULSpaceItem* rUL = static_cast<const SvxULSpaceItem*>(
+                                            rHeader.GetHeaderFormat()->GetAttrSet().GetItem(SID_ATTR_ULSPACE));
+                SvxLongLRSpaceItem aLR(rLR->GetLeft(), rLR->GetRight(), SID_ATTR_PAGE_HEADER_LRMARGIN);
+                rSet.Put(aLR);
+                SvxLongULSpaceItem aUL( rUL->GetUpper(), rUL->GetLower(), SID_ATTR_PAGE_HEADER_SPACING);
+                rSet.Put(aUL);
+
+                bool rShared = rDesc.IsHeaderShared();
+                bool rFirst = rDesc.IsFirstShared(); // FIXME control changes for both header footer - tdf#100287
+                sal_uInt16 nLayout = ((int)rShared<<1) + (int)rFirst;
+                SfxInt16Item aLayoutItem(SID_ATTR_PAGE_HEADER_LAYOUT, nLayout);
+                rSet.Put(aLayoutItem);
+            }
+        }
+        break;
+        case SID_ATTR_PAGE_FOOTER:
+        case SID_ATTR_PAGE_FOOTER_LRMARGIN:
+        case SID_ATTR_PAGE_FOOTER_SPACING:
+        case SID_ATTR_PAGE_FOOTER_LAYOUT:
+        {
+            const SwFormatFooter& rFooter = rDesc.GetMaster().GetFooter();
+            bool bFooterOn = rFooter.IsActive();
+            rSet.Put( SfxBoolItem(SID_ATTR_PAGE_FOOTER, bFooterOn ) );
+            if(bFooterOn)
+            {
+                const SvxLRSpaceItem* rLR = static_cast<const SvxLRSpaceItem*>(rFooter.GetFooterFormat()->GetAttrSet().GetItem(SID_ATTR_LRSPACE));
+                const SvxULSpaceItem* rUL = static_cast<const SvxULSpaceItem*>(rFooter.GetFooterFormat()->GetAttrSet().GetItem(SID_ATTR_ULSPACE));
+                SvxLongLRSpaceItem aLR(rLR->GetLeft(), rLR->GetRight(), SID_ATTR_PAGE_FOOTER_LRMARGIN);
+                rSet.Put(aLR);
+                SvxLongULSpaceItem aUL( rUL->GetUpper(), rUL->GetLower(), SID_ATTR_PAGE_FOOTER_SPACING);
+                rSet.Put(aUL);
+
+                bool rShared = rDesc.IsFooterShared();
+                bool rFirst = rDesc.IsFirstShared(); // FIXME control changes for both header footer - tdf#100287
+                sal_uInt16 nLayout = ((int)rShared<<1) + (int)rFirst;
+                SfxInt16Item aLayoutItem(SID_ATTR_PAGE_FOOTER_LAYOUT, nLayout);
+                rSet.Put(aLayoutItem);
             }
         }
         break;

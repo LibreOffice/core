@@ -850,6 +850,14 @@
 #define SID_ATTR_PAGE_COLUMN            (FN_SIDEBAR + 0)
 #define SID_ATTR_PAGE_ULSPACE           (FN_SIDEBAR + 1)
 #define SID_ATTR_PAGE_LRSPACE           (FN_SIDEBAR + 2)
+#define SID_ATTR_PAGE_HEADER            (FN_SIDEBAR + 3)
+#define SID_ATTR_PAGE_HEADER_LRMARGIN   (FN_SIDEBAR + 4)
+#define SID_ATTR_PAGE_HEADER_SPACING    (FN_SIDEBAR + 5)
+#define SID_ATTR_PAGE_HEADER_LAYOUT     (FN_SIDEBAR + 6)
+#define SID_ATTR_PAGE_FOOTER            (FN_SIDEBAR + 7)
+#define SID_ATTR_PAGE_FOOTER_LRMARGIN   (FN_SIDEBAR + 8)
+#define SID_ATTR_PAGE_FOOTER_SPACING    (FN_SIDEBAR + 9)
+#define SID_ATTR_PAGE_FOOTER_LAYOUT     (FN_SIDEBAR + 10)
 
 //Member IDs for Fill / SetVariable of items
 #define         MID_STYLE       0xe0
