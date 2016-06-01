@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_8c5a4b82",
+        "filename": "sw/source/uibase/sidebar/PageMarginPanel.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-06-01T15:02:07Z",
+      "side": 1,
+      "message": "nullptr (NULL was yesterday)",
+      "revId": "718cc70e6a865f4c9cf7feca92e11945aadab227",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
