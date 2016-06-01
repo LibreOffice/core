@@ -20,6 +20,7 @@
 #include <string.h>
 #include <vcl/opengl/OpenGLContext.hxx>
 #include <vcl/opengl/OpenGLHelper.hxx>
+#include <opengl/helper.hxx>
 #include <opengl/zone.hxx>
 
 #include "osx/saldata.hxx"

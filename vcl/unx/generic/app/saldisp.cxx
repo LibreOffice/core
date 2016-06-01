@@ -48,6 +48,7 @@
 #endif
 
 #include "GL/glxew.h"
+#include "opengl/helper.hxx"
 #include <opengl/zone.hxx>
 
 #include <vcl/svapp.hxx>

@@ -11,22 +11,13 @@
 #define INCLUDED_VCL_OPENGL_OPENGLHELPER_HXX
 
 #include <GL/glew.h>
-#include <sal/log.hxx>
-#include <vcl/dllapi.h>
+
+#include <rtl/string.hxx>
+#include <rtl/ustring.hxx>
 #include <vcl/bitmapex.hxx>
+#include <vcl/dllapi.h>
 
 #include <rtl/ustring.hxx>
-
-/// Helper to do a SAL_INFO as well as a GL log.
-#define VCL_GL_INFO(stream) \
-    do { \
-        if (SAL_DETAIL_ENABLE_LOG_INFO && OpenGLHelper::isVCLOpenGLEnabled()) \
-        { \
-            ::std::ostringstream detail_stream; \
-            detail_stream << stream;            \
-            OpenGLHelper::debugMsgStream(detail_stream); \
-        } \
-    } while (false)
 
 // All member functions static and VCL_DLLPUBLIC. Basically a glorified namespace.
 struct VCL_DLLPUBLIC OpenGLHelper
@@ -34,9 +25,6 @@ struct VCL_DLLPUBLIC OpenGLHelper
     OpenGLHelper() = delete; // Should not be instantiated
 
 public:
-
-    static OString GetDigest(const OUString& rVertexShaderName, const OUString& rFragmentShaderName, const OString& preamble = "" );
-
     static GLint LoadShaders(const OUString& rVertexShaderName, const OUString& rFragmentShaderName, const OUString& rGeometryShaderName, const OString& preamble, const OString& rDigest );
     static GLint LoadShaders(const OUString& rVertexShaderName, const OUString& rFragmentShaderName, const OString& preamble, const OString& rDigest );
     static GLint LoadShaders(const OUString& rVertexShaderName, const OUString& rFragmentShaderName, const OUString& rGeometryShaderName);
@@ -51,8 +39,6 @@ public:
     static void ConvertBitmapExToRGBATextureBuffer(const BitmapEx& rBitmapEx, sal_uInt8* o_pRGBABuffer, const bool bFlip = false);
     static BitmapEx ConvertBGRABufferToBitmapEx(const sal_uInt8* const pBuffer, long nWidth, long nHeight);
     static void renderToFile(long nWidth, long nHeight, const OUString& rFileName);
-
-    static const char* GLErrorString(GLenum errorCode);
 
     /**
      * The caller is responsible for deleting the buffer objects identified by
@@ -73,27 +59,21 @@ public:
 
     static void checkGLError(const char* aFile, size_t nLine);
 
-    /**
+     /**
      * Insert a glDebugMessage into the queue - helpful for debugging
      * with apitrace to annotate the output and correlate it with code.
      */
-    static void debugMsgPrint(const char *pFormat, ...);
     static void debugMsgStream(std::ostringstream const &pStream);
-
-    /**
-     * checks if the device/driver pair is on our OpenGL blacklist
-     */
-    static bool isDeviceBlacklisted();
-
-    /**
-     * checks if the system supports all features that are necessary for the OpenGL VCL support
-     */
-    static bool supportsVCLOpenGL();
 
     /**
      * Returns true if VCL has OpenGL rendering enabled
      */
     static bool isVCLOpenGLEnabled();
+
+    /**
+     * Returns the number of times OpenGL buffers have been swapped.
+     */
+    static sal_Int64 getBufferSwapCounter();
 };
 
 #ifdef SAL_LOG_WARN

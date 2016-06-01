@@ -7,11 +7,11 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <sal/log.hxx>
-
 #include <opengl/framebuffer.hxx>
 
 #include <vcl/opengl/OpenGLHelper.hxx>
+
+#include "opengl/helper.hxx"
 
 OpenGLFramebuffer::OpenGLFramebuffer() :
     mnId( 0 ),

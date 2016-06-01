@@ -34,6 +34,7 @@
 #include <vcl/salbtype.hxx>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 
+#include "opengl/helper.hxx"
 #include <unx/salunx.h>
 #include <unx/saldata.hxx>
 #include <unx/saldisp.hxx>

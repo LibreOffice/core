@@ -52,7 +52,7 @@
 #include <vcl/unohelp.hxx>
 #include <vcl/lazydelete.hxx>
 #if HAVE_FEATURE_OPENGL
-#include <vcl/opengl/OpenGLWrapper.hxx>
+#include <vcl/opengl/OpenGLHelper.hxx>
 #endif
 
 #include "salinst.hxx"
@@ -1226,7 +1226,7 @@ OUString Application::GetHWOSConfInfo()
 
     aDetails.append( VclResId(SV_APP_UIRENDER).toString() );
 #if HAVE_FEATURE_OPENGL
-    if ( OpenGLWrapper::isVCLOpenGLEnabled() )
+    if ( OpenGLHelper::isVCLOpenGLEnabled() )
         aDetails.append( VclResId(SV_APP_GL).toString() );
     else
 #endif

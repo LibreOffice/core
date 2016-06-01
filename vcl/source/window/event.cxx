@@ -21,7 +21,7 @@
 #include <vcl/window.hxx>
 #include <vcl/dockwin.hxx>
 #include <vcl/layout.hxx>
-#include <vcl/opengl/OpenGLWrapper.hxx>
+#include <vcl/opengl/OpenGLHelper.hxx>
 
 #include <window.h>
 #include <svdata.hxx>
@@ -509,7 +509,7 @@ void Window::ImplCallResize()
     // some legacy code eg. the app-menu has the beautiful feature of
     // avoiding re-paints when width doesn't change => invalidate all.
 #if HAVE_FEATURE_OPENGL
-    if( OpenGLWrapper::isVCLOpenGLEnabled() )
+    if( OpenGLHelper::isVCLOpenGLEnabled() )
         Invalidate();
 
     // Normally we avoid blanking on re-size unless people might notice:
