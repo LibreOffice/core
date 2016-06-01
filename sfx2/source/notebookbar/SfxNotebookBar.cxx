@@ -29,17 +29,23 @@ void SfxNotebookBar::ExecMethod(SfxBindings& rBindings)
 void SfxNotebookBar::StateMethod(SfxBindings& rBindings, const OUString& rUIFile)
 {
     SfxFrame& rFrame = rBindings.GetDispatcher_Impl()->GetFrame()->GetFrame();
+    StateMethod(rFrame.GetSystemWindow(), rFrame.GetFrameInterface(), rUIFile);
+}
 
+void SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
+                                 const css::uno::Reference<css::frame::XFrame> xFrame,
+                                 const OUString& rUIFile)
+{
     SvtViewOptions aViewOpt(E_WINDOW, "notebookbar");
 
     if (aViewOpt.IsVisible())
     {
         // setup if necessary
-        rFrame.GetSystemWindow()->SetNotebookBar(rUIFile, rFrame.GetFrameInterface());
+        pSysWindow->SetNotebookBar(rUIFile, xFrame);
 
-        rFrame.GetSystemWindow()->GetNotebookBar()->Show();
+        pSysWindow->GetNotebookBar()->Show();
     }
-    else if (auto pNotebookBar = rFrame.GetSystemWindow()->GetNotebookBar())
+    else if (auto pNotebookBar = pSysWindow->GetNotebookBar())
         pNotebookBar->Hide();
 }
 

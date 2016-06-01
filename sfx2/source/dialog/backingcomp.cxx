@@ -59,6 +59,7 @@
 
 #include <unotools/bootstrap.hxx>
 
+#include <sfx2/notebookbar/SfxNotebookBar.hxx>
 
 namespace {
 
@@ -428,6 +429,13 @@ void SAL_CALL BackingComp::attachFrame( /*IN*/ const css::uno::Reference< css::f
     BackingWindow* pBack = dynamic_cast<BackingWindow*>(pWindow.get());
     if( pBack )
         pBack->setOwningFrame( m_xFrame );
+
+    // set NotebookBar
+    SystemWindow* pSysWindow = static_cast<SystemWindow*>(pParent);
+    if (pSysWindow)
+    {
+        sfx2::SfxNotebookBar::StateMethod(pSysWindow, m_xFrame, "sfx/ui/notebookbar.ui");
+    }
 
     // Set a minimum size for Start Center
     if( pParent && pBack )
