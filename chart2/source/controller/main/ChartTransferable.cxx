@@ -32,8 +32,6 @@
 #include <svx/unomodel.hxx>
 #include <svx/svdview.hxx>
 
-#define CHARTTRANSFER_OBJECTTYPE_DRAWMODEL      SotClipboardFormatId::STRING
-
 using namespace ::com::sun::star;
 
 using ::com::sun::star::uno::Reference;
@@ -83,7 +81,7 @@ bool ChartTransferable::GetData( const css::datatransfer::DataFlavor& rFlavor, c
     {
         if ( nFormat == SotClipboardFormatId::DRAWING )
         {
-            bResult = SetObject( m_pMarkedObjModel, CHARTTRANSFER_OBJECTTYPE_DRAWMODEL, rFlavor );
+            bResult = SetObject( m_pMarkedObjModel, SotClipboardFormatId::STRING, rFlavor );
         }
         else if ( nFormat == SotClipboardFormatId::GDIMETAFILE )
         {
@@ -108,7 +106,7 @@ bool ChartTransferable::WriteObject( tools::SvRef<SotStorageStream>& rxOStm, voi
     bool bRet = false;
     switch ( nUserObjectId )
     {
-        case CHARTTRANSFER_OBJECTTYPE_DRAWMODEL:
+        case SotClipboardFormatId::STRING:
             {
                 SdrModel* pMarkedObjModel = static_cast< SdrModel* >( pUserObject );
                 if ( pMarkedObjModel )

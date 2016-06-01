@@ -52,25 +52,6 @@
 #include <algorithm>
 #include <functional>
 
-/*  BrowserMode::COLUMNSELECTION :  single cells may be selected rather than only
-                               entire rows
-    BROWSER_(H|V)LINES :       show horizontal or vertical grid-lines
-
-    BROWSER_AUTO_(H|V)SCROLL : scroll automated horizontally or vertically when
-                               cursor is moved beyond the edge of the dialog
-    BrowserMode::HIDESELECT     :   Do not mark the current row with selection color
-                               (usually blue)
-
- */
-#define BROWSER_STANDARD_FLAGS  \
-    BrowserMode::COLUMNSELECTION | \
-    BrowserMode::HLINES | BrowserMode::VLINES | \
-    BrowserMode::AUTO_HSCROLL | BrowserMode::AUTO_VSCROLL | \
-    BrowserMode::HIDESELECT
-
-// BrowserMode::HIDECURSOR would prevent flickering in edit fields, but navigating
-// with shift up/down, and entering non-editable cells would be problematic,
-// e.g.  the first cell, or when being in read-only mode
 
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
@@ -79,6 +60,22 @@ using namespace ::svt;
 
 namespace
 {
+/*  BrowserMode::COLUMNSELECTION : single cells may be selected rather than only
+                                   entire rows
+    BrowserMode::(H|V)LINES : show horizontal or vertical grid-lines
+    BrowserMode::AUTO_(H|V)SCROLL : scroll automated horizontally or vertically when
+                                    cursor is moved beyond the edge of the dialog
+    BrowserMode::HIDESELECT : Do not mark the current row with selection color
+                              (usually blue)
+  ! BrowserMode::HIDECURSOR would prevent flickering in edit fields, but navigating
+        with shift up/down, and entering non-editable cells would be problematic,
+        e.g.  the first cell, or when being in read-only mode
+*/
+const BrowserMode BrowserStdFlags = BrowserMode::COLUMNSELECTION |
+                                    BrowserMode::HLINES | BrowserMode::VLINES |
+                                    BrowserMode::AUTO_HSCROLL | BrowserMode::AUTO_VSCROLL |
+                                    BrowserMode::HIDESELECT;
+
 sal_Int32 lcl_getRowInData( long nRow )
 {
     return static_cast< sal_Int32 >( nRow );
@@ -440,7 +437,7 @@ sal_Int32 lcl_getColumnInDataOrHeader(
 } // anonymous namespace
 
 DataBrowser::DataBrowser( vcl::Window* pParent, WinBits nStyle, bool bLiveUpdate ) :
-    ::svt::EditBrowseBox( pParent, EditBrowseBoxFlags::SMART_TAB_TRAVEL | EditBrowseBoxFlags::HANDLE_COLUMN_TEXT, nStyle, BROWSER_STANDARD_FLAGS ),
+    ::svt::EditBrowseBox( pParent, EditBrowseBoxFlags::SMART_TAB_TRAVEL | EditBrowseBoxFlags::HANDLE_COLUMN_TEXT, nStyle, BrowserStdFlags ),
     m_nSeekRow( 0 ),
     m_bIsReadOnly( false ),
     m_bIsDirty( false ),

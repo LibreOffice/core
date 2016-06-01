@@ -26,8 +26,6 @@
 #include <functional>
 #include <memory>
 
-#define MAX_BSPLINE_DEGREE 15
-
 namespace chart
 {
 using namespace ::com::sun::star;
@@ -676,8 +674,8 @@ void SplineCalculater::CalculateBSplines(
     OSL_ASSERT( nResolution > 1 );
     OSL_ASSERT( nDegree >= 1 );
 
-    // limit the b-spline degree to prevent insanely large sets of points
-    sal_uInt32 p = std::min<sal_uInt32>(nDegree, MAX_BSPLINE_DEGREE);
+    // limit the b-spline degree at 15 to prevent insanely large sets of points
+    sal_uInt32 p = std::min<sal_uInt32>(nDegree, 15);
 
     rResult.SequenceX.realloc(0);
     rResult.SequenceY.realloc(0);
