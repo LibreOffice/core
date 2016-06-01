@@ -1425,7 +1425,7 @@ namespace cairocanvas
                 {
                     SAL_INFO( "canvas.cairo","trying to change surface to rgb");
                     if( mpSurfaceProvider ) {
-                        SurfaceSharedPtr pNewSurface = mpSurfaceProvider->changeSurface( false, false );
+                        SurfaceSharedPtr pNewSurface = mpSurfaceProvider->changeSurface();
 
                         if( pNewSurface )
                             setSurface( pNewSurface, false );

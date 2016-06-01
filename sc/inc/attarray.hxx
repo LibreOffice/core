@@ -163,7 +163,7 @@ public:
     void    RemoveAreaMerge( SCROW nStartRow, SCROW nEndRow );
 
     void    FindStyleSheet( const SfxStyleSheetBase* pStyleSheet, ScFlatBoolRowSegments& rUsedRows, bool bReset );
-    bool    IsStyleSheetUsed( const ScStyleSheet& rStyle, bool bGatherAllStyles ) const;
+    bool    IsStyleSheetUsed( const ScStyleSheet& rStyle ) const;
 
     void    DeleteAreaSafe(SCROW nStartRow, SCROW nEndRow);
     void    SetPatternAreaSafe( SCROW nStartRow, SCROW nEndRow,

@@ -1661,8 +1661,7 @@ SdrPowerPointImport::~SdrPowerPointImport()
 }
 
 bool PPTConvertOCXControls::ReadOCXStream( tools::SvRef<SotStorage>& rSrc,
-        css::uno::Reference< css::drawing::XShape > *pShapeRef,
-        bool bFloatingCtrl )
+        css::uno::Reference< css::drawing::XShape > *pShapeRef )
 {
     bool bRes = false;
     uno::Reference< form::XFormComponent > xFComp;
@@ -1671,7 +1670,7 @@ bool PPTConvertOCXControls::ReadOCXStream( tools::SvRef<SotStorage>& rSrc,
         if ( xFComp.is() )
         {
             css::awt::Size aSz;  // not used in import
-            bRes = InsertControl( xFComp, aSz,pShapeRef,bFloatingCtrl);
+            bRes = InsertControl( xFComp, aSz,pShapeRef, false/*bFloatingCtrl*/);
         }
     }
     return bRes;
@@ -2977,10 +2976,9 @@ sal_uInt16 SdrPowerPointImport::GetMasterPageIndex( sal_uInt16 nPageNum, PptPage
     return nIdx;
 }
 
-SdrObject* SdrPowerPointImport::ImportPageBackgroundObject( const SdrPage& rPage, sal_uInt32& nBgFileOffset, bool bForce )
+SdrObject* SdrPowerPointImport::ImportPageBackgroundObject( const SdrPage& rPage, sal_uInt32& nBgFileOffset )
 {
     SdrObject* pRet = nullptr;
-    bool bCreateObj = bForce;
     std::unique_ptr<SfxItemSet> pSet;
     sal_uLong nFPosMerk = rStCtrl.Tell(); // remember FilePos for restoring it later
     DffRecordHeader aPageHd;
@@ -3017,24 +3015,21 @@ SdrObject* SdrPowerPointImport::ImportPageBackgroundObject( const SdrPage& rPage
         }
     }
     rStCtrl.Seek( nFPosMerk ); // restore FilePos
-    if ( bCreateObj )
+    if ( !pSet )
     {
-        if ( !pSet )
-        {
-            pSet.reset(new SfxItemSet( pSdrModel->GetItemPool() ));
-            pSet->Put( XFillStyleItem( drawing::FillStyle_NONE ) );
-        }
-        pSet->Put( XLineStyleItem( drawing::LineStyle_NONE ) );
-        Rectangle aRect( rPage.GetLftBorder(), rPage.GetUppBorder(), rPage.GetWdt()-rPage.GetRgtBorder(), rPage.GetHgt()-rPage.GetLwrBorder() );
-        pRet = new SdrRectObj( aRect );
-        pRet->SetModel( pSdrModel );
-
-        pRet->SetMergedItemSet(*pSet);
-
-        pRet->SetMarkProtect( true );
-        pRet->SetMoveProtect( true );
-        pRet->SetResizeProtect( true );
+        pSet.reset(new SfxItemSet( pSdrModel->GetItemPool() ));
+        pSet->Put( XFillStyleItem( drawing::FillStyle_NONE ) );
     }
+    pSet->Put( XLineStyleItem( drawing::LineStyle_NONE ) );
+    Rectangle aRect( rPage.GetLftBorder(), rPage.GetUppBorder(), rPage.GetWdt()-rPage.GetRgtBorder(), rPage.GetHgt()-rPage.GetLwrBorder() );
+    pRet = new SdrRectObj( aRect );
+    pRet->SetModel( pSdrModel );
+
+    pRet->SetMergedItemSet(*pSet);
+
+    pRet->SetMarkProtect( true );
+    pRet->SetMoveProtect( true );
+    pRet->SetResizeProtect( true );
     return pRet;
 }
 

@@ -246,7 +246,7 @@ protected:
     virtual void CollRemove( SbxArray* pPar ) override;
 public:
     SBX_DECL_PERSIST_NODATA(SBXCR_SBX,SBXID_FIXCOLLECTION,1);
-    SbxStdCollection( const OUString& rClassname, const OUString& rElemClass, bool=true );
+    SbxStdCollection( const OUString& rClassname, const OUString& rElemClass );
     SbxStdCollection( const SbxStdCollection& );
     SbxStdCollection& operator=( const SbxStdCollection& );
     virtual void Insert( SbxVariable* ) override;

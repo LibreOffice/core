@@ -33,27 +33,27 @@ SvMetaObject *SvMetaSlot::MakeClone() const
 }
 
 SvMetaSlot::SvMetaSlot()
-    : aRecordPerSet( true, false )
-    , aRecordAbsolute( false, false )
+    : aRecordPerSet( true )
+    , aRecordAbsolute( false )
     , pLinkedSlot(nullptr)
     , pNextSlot(nullptr)
     , nListPos(0)
     , pEnumValue(nullptr)
-    , aReadOnlyDoc ( true, false )
-    , aExport( true, false )
+    , aReadOnlyDoc ( true )
+    , aExport( true )
 {
 }
 
 SvMetaSlot::SvMetaSlot( SvMetaType * pType )
     : SvMetaAttribute( pType )
-    , aRecordPerSet( true, false )
-    , aRecordAbsolute( false, false )
+    , aRecordPerSet( true )
+    , aRecordAbsolute( false )
     , pLinkedSlot(nullptr)
     , pNextSlot(nullptr)
     , nListPos(0)
     , pEnumValue(nullptr)
-    , aReadOnlyDoc ( true, false )
-    , aExport( true, false )
+    , aReadOnlyDoc ( true )
+    , aExport( true )
 {
 }
 

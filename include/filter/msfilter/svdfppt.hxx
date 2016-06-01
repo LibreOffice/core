@@ -600,8 +600,7 @@ public:
     Size                    GetPageSize() const;
     SdrObject*              ImportPageBackgroundObject(
                                 const SdrPage& rPage,
-                                sal_uInt32& nBgFileOffset,
-                                bool bForce
+                                sal_uInt32& nBgFileOffset
                             );
     bool                    IsNoteOrHandout( sal_uInt16 nPageNum, PptPageKind ePageKind ) const;
     bool                    HasMasterPage(
@@ -1289,9 +1288,7 @@ public:
         mpPPTImporter           ( pPPTImporter )
     {};
     bool ReadOCXStream( tools::SvRef<SotStorage>& rSrc1,
-        css::uno::Reference<
-        css::drawing::XShape > *pShapeRef=nullptr,
-        bool bFloatingCtrl=false );
+        css::uno::Reference<css::drawing::XShape > *pShapeRef=nullptr );
     virtual bool InsertControl(
         const css::uno::Reference< css::form::XFormComponent > &rFComp,
         const css::awt::Size& rSize,

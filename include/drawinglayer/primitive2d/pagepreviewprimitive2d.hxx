@@ -73,8 +73,7 @@ namespace drawinglayer
                 const basegfx::B2DHomMatrix& rTransform,
                 double fContentWidth,
                 double fContentHeight,
-                const Primitive2DContainer& rPageContent,
-                bool bKeepAspectRatio);
+                const Primitive2DContainer& rPageContent);
 
             /// data read access
             const css::uno::Reference< css::drawing::XDrawPage >& getXDrawPage() const { return mxDrawPage; }

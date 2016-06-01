@@ -117,19 +117,14 @@ namespace cairocanvas
         return mpSpriteCanvas->createSurface(rBitmap);
     }
 
-    SurfaceSharedPtr CanvasCustomSprite::changeSurface( bool bHasAlpha, bool bCopyContent )
+    SurfaceSharedPtr CanvasCustomSprite::changeSurface()
     {
-        if( !bHasAlpha && !bCopyContent )
-        {
-            SAL_INFO( "canvas.cairo", "replacing sprite background surface");
+        SAL_INFO( "canvas.cairo", "replacing sprite background surface");
 
-            mpBufferSurface = mpSpriteCanvas->createSurface( maSize, CAIRO_CONTENT_COLOR );
-            maSpriteHelper.setSurface( mpBufferSurface );
+        mpBufferSurface = mpSpriteCanvas->createSurface( maSize, CAIRO_CONTENT_COLOR );
+        maSpriteHelper.setSurface( mpBufferSurface );
 
-            return mpBufferSurface;
-        }
-
-        return SurfaceSharedPtr();
+        return mpBufferSurface;
     }
 
     OutputDevice* CanvasCustomSprite::getOutputDevice()

@@ -665,7 +665,7 @@ void ScColumn::FindStyleSheet( const SfxStyleSheetBase* pStyleSheet, ScFlatBoolR
 
 bool ScColumn::IsStyleSheetUsed( const ScStyleSheet& rStyle ) const
 {
-    return pAttrArray->IsStyleSheetUsed( rStyle, true/*bGatherAllStyles*/ );
+    return pAttrArray->IsStyleSheetUsed( rStyle );
 }
 
 bool ScColumn::ApplyFlags( SCROW nStartRow, SCROW nEndRow, ScMF nFlags )
