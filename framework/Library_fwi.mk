@@ -41,6 +41,7 @@ $(eval $(call gb_Library_use_libraries,fwi,\
     cppuhelper \
     i18nlangtag \
     sal \
+    salhelper \
     svl \
     svt \
     tk \

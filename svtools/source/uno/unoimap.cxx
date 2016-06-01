@@ -79,7 +79,7 @@ public:
 
     IMapObject* createIMapObject() const;
 
-    SvMacroTableEventDescriptor* mpEvents;
+    rtl::Reference<SvMacroTableEventDescriptor> mxEvents;
 
     // overriden helpers from PropertySetHelper
     virtual void _setPropertyValues( const PropertyMapEntry** ppEntries, const Any* pValues ) throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException ) override;
@@ -186,8 +186,7 @@ SvUnoImageMapObject::SvUnoImageMapObject( sal_uInt16 nType, const SvEventDescrip
 ,   mbIsActive( true )
 ,   mnRadius( 0 )
 {
-    mpEvents = new SvMacroTableEventDescriptor( pSupportedMacroItems );
-    mpEvents->acquire();
+    mxEvents = new SvMacroTableEventDescriptor( pSupportedMacroItems );
 }
 
 SvUnoImageMapObject::SvUnoImageMapObject( const IMapObject& rMapObject, const SvEventDescription* pSupportedMacroItems )
@@ -243,13 +242,11 @@ SvUnoImageMapObject::SvUnoImageMapObject( const IMapObject& rMapObject, const Sv
         }
     }
 
-    mpEvents = new SvMacroTableEventDescriptor( rMapObject.GetMacroTable(), pSupportedMacroItems );
-    mpEvents->acquire();
+    mxEvents = new SvMacroTableEventDescriptor( rMapObject.GetMacroTable(), pSupportedMacroItems );
 }
 
 SvUnoImageMapObject::~SvUnoImageMapObject() throw()
 {
-    mpEvents->release();
 }
 
 IMapObject* SvUnoImageMapObject::createIMapObject() const
@@ -297,7 +294,7 @@ IMapObject* SvUnoImageMapObject::createIMapObject() const
     }
 
     SvxMacroTableDtor aMacroTable;
-    mpEvents->copyMacrosIntoTable(aMacroTable);
+    mxEvents->copyMacrosIntoTable(aMacroTable);
     pNewIMapObject->SetMacroTable( aMacroTable );
 
     return pNewIMapObject;
@@ -512,9 +509,7 @@ void SvUnoImageMapObject::_getPropertyValues( const PropertyMapEntry** ppEntries
 Reference< XNameReplace > SAL_CALL SvUnoImageMapObject::getEvents()
     throw( RuntimeException, std::exception )
 {
-    // try weak reference first
-    Reference< XNameReplace > xEvents( mpEvents );
-    return xEvents;
+    return mxEvents.get();
 }
 
 

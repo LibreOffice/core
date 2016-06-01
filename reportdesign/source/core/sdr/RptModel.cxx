@@ -50,8 +50,7 @@ OReportModel::OReportModel(::reportdesign::OReportDefinition* _pReportDefinition
     ,m_pController(nullptr)
     ,m_pReportDefinition(_pReportDefinition)
 {
-    m_pUndoEnv = new OXUndoEnvironment(*this);
-    m_pUndoEnv->acquire();
+    m_xUndoEnv = new OXUndoEnvironment(*this);
     SetSdrUndoFactory(new OReportUndoFactory);
 }
 
@@ -59,16 +58,15 @@ OReportModel::OReportModel(::reportdesign::OReportDefinition* _pReportDefinition
 OReportModel::~OReportModel()
 {
     detachController();
-    m_pUndoEnv->release();
 }
 
 void OReportModel::detachController()
 {
     m_pReportDefinition = nullptr;
     m_pController = nullptr;
-    m_pUndoEnv->EndListening( *this );
+    m_xUndoEnv->EndListening( *this );
     ClearUndoBuffer();
-    m_pUndoEnv->Clear(OXUndoEnvironment::Accessor());
+    m_xUndoEnv->Clear(OXUndoEnvironment::Accessor());
 }
 
 SdrPage* OReportModel::AllocPage(bool /*bMasterPage*/)
@@ -102,7 +100,7 @@ OReportPage* OReportModel::createNewPage(const uno::Reference< report::XSection 
     SolarMutexGuard aSolarGuard;
     OReportPage* pPage = new OReportPage( *this ,_xSection);
     InsertPage(pPage);
-    m_pUndoEnv->AddSection(_xSection);
+    m_xUndoEnv->AddSection(_xSection);
     return pPage;
 }
 

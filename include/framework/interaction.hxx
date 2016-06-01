@@ -32,6 +32,7 @@
 
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
+#include <rtl/ref.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <framework/fwedllapi.h>
@@ -61,7 +62,7 @@ namespace framework{
 class RequestFilterSelect_Impl;
 class FWE_DLLPUBLIC RequestFilterSelect
 {
-    rtl::Reference<RequestFilterSelect_Impl> pImpl;
+    rtl::Reference<RequestFilterSelect_Impl> mxImpl;
 
 public:
     RequestFilterSelect( const OUString& sURL );
