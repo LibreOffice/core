@@ -127,6 +127,7 @@ public:
     void testCellLeftAndRightMargin();
     void testRightToLeftParaghraph();
     void testTextboxWithHyperlink();
+    void testMergedCells();
     void testTableCellBorder();
     void testBulletColor();
     void testTdf62176();
@@ -182,6 +183,7 @@ public:
     CPPUNIT_TEST(testCellLeftAndRightMargin);
     CPPUNIT_TEST(testRightToLeftParaghraph);
     CPPUNIT_TEST(testTextboxWithHyperlink);
+    CPPUNIT_TEST(testMergedCells);
     CPPUNIT_TEST(testTableCellBorder);
     CPPUNIT_TEST(testBulletColor);
     CPPUNIT_TEST(testTdf62176);
@@ -1336,6 +1338,23 @@ void SdExportTest::testCellLeftAndRightMargin()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(45720), nRightMargin);
 
     xDocShRef->DoClose();
+}
+
+void SdExportTest::testMergedCells()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/odp/cellspan.odp"), ODP);
+    xDocShRef = saveAndReload( xDocShRef, PPTX );
+    const SdrPage *pPage = GetPage( 1, xDocShRef );
+
+    sdr::table::SdrTableObj *pTableObj = dynamic_cast<sdr::table::SdrTableObj*>(pPage->GetObj(0));
+
+    CPPUNIT_ASSERT( pTableObj );
+    uno::Reference< table::XTable > xTable(pTableObj->getTable(), uno::UNO_QUERY_THROW);
+    uno::Reference< text::XTextRange > xText1(xTable->getCellByPosition(3, 0), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL( OUString("0,3"), xText1->getString() );
+
+    uno::Reference< text::XTextRange > xText2(xTable->getCellByPosition(3, 2), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL( OUString("2,3"), xText2->getString() );
 }
 
 void SdExportTest::testTableCellBorder()
