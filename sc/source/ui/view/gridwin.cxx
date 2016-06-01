@@ -138,6 +138,7 @@
 #include <comphelper/lok.hxx>
 
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <comphelper/lok.hxx>
 
 #include <memory>
 #include <vector>
@@ -1859,6 +1860,13 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
     SCsROW nPosY;
     pViewData->GetPosFromPixel( aPos.X(), aPos.Y(), eWhich, nPosX, nPosY );
     SCTAB nTab = pViewData->GetTabNo();
+
+    if ( comphelper::LibreOfficeKit::isActive() && nPosY > MAXTILEDROW - 1 )
+    {
+        nButtonDown = 0;
+        nMouseStatus = SC_GM_NONE;
+        return;
+    }
 
     // Auto filter / pivot table / data select popup.  This shouldn't activate the part.
 
