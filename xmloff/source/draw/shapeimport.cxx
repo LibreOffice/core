@@ -856,14 +856,11 @@ void ShapeSortContext::popGroupAndSort()
     sal_Int32 nIndex = 0;
     for (ZOrderHint& rHint : maZOrderList)
     {
-        while( nIndex < rHint.nShould && !maUnsortedList.empty() )
+        for (vector<ZOrderHint>::iterator aIt = maUnsortedList.begin(); aIt != maUnsortedList.end() && nIndex < rHint.nShould; )
         {
-            auto it = maUnsortedList.begin();
+            moveShape( (*aIt).nIs, nIndex++ );
+            aIt = maUnsortedList.erase(aIt);
 
-            ZOrderHint aGapHint(*it);
-            maUnsortedList.erase(it);
-
-            moveShape( aGapHint.nIs, nIndex++ );
         }
 
         if(rHint.nIs != nIndex )
