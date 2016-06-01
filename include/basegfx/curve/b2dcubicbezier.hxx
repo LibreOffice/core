@@ -116,7 +116,7 @@ namespace basegfx
             and the end point
             #i37443# allow the criteria to get unsharp in recursions
         */
-        void adaptiveSubdivideByAngle(B2DPolygon& rTarget, double fAngleBound, bool bAllowUnsharpen) const;
+        void adaptiveSubdivideByAngle(B2DPolygon& rTarget, double fAngleBound) const;
 
         /** #i37443# adaptive subdivide by nCount subdivisions
             no start point is added, but all necessary created edges

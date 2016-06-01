@@ -42,7 +42,7 @@ ScNumberFormat::ScNumberFormat(vcl::Window* pParent, WinBits nStyle) :
     InsertEntry(ScGlobal::GetRscString(STR_TEXT));
 }
 
-IMPL_LINK_TYPED(ScNumberFormat, NumFormatSelectHdl, ListBox&, rBox, void)
+IMPL_STATIC_LINK_TYPED(ScNumberFormat, NumFormatSelectHdl, ListBox&, rBox, void)
 {
     if(SfxViewFrame::Current())
     {

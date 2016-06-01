@@ -438,7 +438,7 @@ bool PPTWriter::ImplCloseDocument()
         nBytesToInsert += ImplDocumentListContainer();
 
         // insert nBytes into stream and adjust depending container
-        mpPptEscherEx->InsertAtCurrentPos( nBytesToInsert, false );
+        mpPptEscherEx->InsertAtCurrentPos( nBytesToInsert );
 
         // CREATE HYPERLINK CONTAINER
         if ( nExEmbedSize )

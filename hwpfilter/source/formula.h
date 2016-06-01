@@ -37,11 +37,11 @@ using namespace ::com::sun::star::xml::sax;
 class Formula
 {
 public:
-    Formula(char *_eq, int _ishwpeq = 1)
+    Formula(char *_eq)
         : pList(NULL)
     {
         eq = _eq;
-        isHwpEQ = _ishwpeq;
+        isHwpEQ = 1;
         trim();
     }
     virtual ~Formula(){ }

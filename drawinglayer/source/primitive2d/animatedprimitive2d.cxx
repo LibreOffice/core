@@ -94,9 +94,8 @@ namespace drawinglayer
     {
         AnimatedBlinkPrimitive2D::AnimatedBlinkPrimitive2D(
             const animation::AnimationEntry& rAnimationEntry,
-            const Primitive2DContainer& rChildren,
-            bool bIsTextAnimation)
-        :   AnimatedSwitchPrimitive2D(rAnimationEntry, rChildren, bIsTextAnimation)
+            const Primitive2DContainer& rChildren)
+        :   AnimatedSwitchPrimitive2D(rAnimationEntry, rChildren, true/*bIsTextAnimation*/)
         {
         }
 
@@ -129,9 +128,8 @@ namespace drawinglayer
         AnimatedInterpolatePrimitive2D::AnimatedInterpolatePrimitive2D(
             const std::vector< basegfx::B2DHomMatrix >& rmMatrixStack,
             const animation::AnimationEntry& rAnimationEntry,
-            const Primitive2DContainer& rChildren,
-            bool bIsTextAnimation)
-        :   AnimatedSwitchPrimitive2D(rAnimationEntry, rChildren, bIsTextAnimation),
+            const Primitive2DContainer& rChildren)
+        :   AnimatedSwitchPrimitive2D(rAnimationEntry, rChildren, true/*bIsTextAnimation*/),
             maMatrixStack()
         {
             // copy matrices to locally pre-decomposed matrix stack

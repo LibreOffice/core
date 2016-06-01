@@ -57,10 +57,10 @@ namespace cairocanvas
         /// create new surface from given bitmap
         virtual ::cairo::SurfaceSharedPtr createSurface( ::Bitmap& rBitmap ) = 0;
 
-        /** convert surface between alpha and non-alpha
+        /** convert surface from alpha to non-alpha, does not copy content
             channel. returns new surface on success, NULL otherwise
         */
-        virtual ::cairo::SurfaceSharedPtr changeSurface( bool bHasAlpha, bool bCopyContent ) = 0;
+        virtual ::cairo::SurfaceSharedPtr changeSurface() = 0;
 
         /** Provides the underlying vcl outputdevice this surface renders on
          */

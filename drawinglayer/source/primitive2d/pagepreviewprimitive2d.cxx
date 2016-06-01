@@ -122,15 +122,14 @@ namespace drawinglayer
             const basegfx::B2DHomMatrix& rTransform,
             double fContentWidth,
             double fContentHeight,
-            const Primitive2DContainer& rPageContent,
-            bool bKeepAspectRatio)
+            const Primitive2DContainer& rPageContent)
         :   BufferedDecompositionPrimitive2D(),
             mxDrawPage(rxDrawPage),
             maPageContent(rPageContent),
             maTransform(rTransform),
             mfContentWidth(fContentWidth),
             mfContentHeight(fContentHeight),
-            mbKeepAspectRatio(bKeepAspectRatio)
+            mbKeepAspectRatio(true)
         {
         }
 

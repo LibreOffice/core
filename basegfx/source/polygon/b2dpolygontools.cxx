@@ -295,7 +295,7 @@ namespace basegfx
                         if(aBezier.isBezier())
                         {
                             // call adaptive subdivide
-                            aBezier.adaptiveSubdivideByAngle(aRetval, fAngleBound, true);
+                            aBezier.adaptiveSubdivideByAngle(aRetval, fAngleBound);
                         }
                         else
                         {

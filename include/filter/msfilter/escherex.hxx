@@ -993,15 +993,13 @@ public:
 
 class InteractionInfo
 {
-    bool mbHasInteraction;
     std::unique_ptr<SvMemoryStream>       mpHyperlinkRecord;
 
 public:
-    InteractionInfo( SvMemoryStream* pStream, bool bInteraction ) : mbHasInteraction( bInteraction )
+    InteractionInfo( SvMemoryStream* pStream )
     {
         mpHyperlinkRecord.reset( pStream );
     }
-    bool    hasInteraction() { return mbHasInteraction; }
     const std::unique_ptr< SvMemoryStream >&  getHyperlinkRecord() { return mpHyperlinkRecord; }
 };
 
@@ -1191,16 +1189,14 @@ public:
 
         @param nBytes  The number of bytes to be inserted into the stream.
 
-        @param bExpandEndOfAtom  If set to true, an atom that currently ends
-            exactly at the current stream position will be expanded to include
-            the inserted data. If set to false, an atom that currently ends
-            exactly at the current stream position will not be expanded to
-            include the inserted data (used to insert e.g. a new atom after an
-            existing atom). Note that containers that end exactly at the
-            current stream position are always expanded to include the inserted
-            data.
+        An atom that currently ends
+        exactly at the current stream position will not be expanded to
+        include the inserted data (used to insert e.g. a new atom after an
+        existing atom). Note that containers that end exactly at the
+        current stream position are always expanded to include the inserted
+        data.
      */
-    void            InsertAtCurrentPos( sal_uInt32 nBytes, bool bExpandEndOfAtom );
+    void            InsertAtCurrentPos( sal_uInt32 nBytes );
 
     void            InsertPersistOffset( sal_uInt32 nKey, sal_uInt32 nOffset ); // It is not being checked if this key is already in the PersistantTable
     void            ReplacePersistOffset( sal_uInt32 nKey, sal_uInt32 nOffset );
