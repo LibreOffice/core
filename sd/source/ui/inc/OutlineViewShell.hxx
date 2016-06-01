@@ -152,7 +152,7 @@ private:
     void ShowSlideShow(SfxRequest& rReq);
     OutlineView* pOlView;
     SdPage*         pLastPage; // For efficient processing of the preview
-    TransferableClipboardListener* pClipEvtLstnr;
+    rtl::Reference<TransferableClipboardListener> mxClipEvtLstnr;
     bool            bPastePossible;
     bool mbInitialized;
 

@@ -176,15 +176,13 @@ BibFrameController_Impl::BibFrameController_Impl( const uno::Reference< awt::XWi
 {
     bDisposing=false;
     bHierarchical=true;
-    pImp = new BibFrameCtrl_Impl;
-    pImp->pController = this;
-    pImp->acquire();
+    mxImpl = new BibFrameCtrl_Impl;
+    mxImpl->pController = this;
 }
 
 BibFrameController_Impl::~BibFrameController_Impl()
 {
-    pImp->pController = nullptr;
-    pImp->release();
+    mxImpl->pController = nullptr;
     delete pDatMan;
     if(pBibMod)
         CloseBibModul(pBibMod);
@@ -211,7 +209,7 @@ css::uno::Sequence< OUString > SAL_CALL BibFrameController_Impl::getSupportedSer
 void BibFrameController_Impl::attachFrame( const uno::Reference< XFrame > & xArg ) throw (css::uno::RuntimeException, std::exception)
 {
     xFrame = xArg;
-    xFrame->addFrameActionListener( pImp );
+    xFrame->addFrameActionListener( mxImpl.get() );
 }
 
 sal_Bool BibFrameController_Impl::attachModel( const uno::Reference< XModel > & /*xModel*/ ) throw (css::uno::RuntimeException, std::exception)
@@ -222,9 +220,9 @@ sal_Bool BibFrameController_Impl::attachModel( const uno::Reference< XModel > & 
 sal_Bool BibFrameController_Impl::suspend( sal_Bool bSuspend ) throw (css::uno::RuntimeException, std::exception)
 {
     if ( bSuspend )
-        getFrame()->removeFrameActionListener( pImp );
+        getFrame()->removeFrameActionListener( mxImpl.get() );
     else
-        getFrame()->addFrameActionListener( pImp );
+        getFrame()->addFrameActionListener( mxImpl.get() );
     return true;
 }
 
@@ -252,7 +250,7 @@ void BibFrameController_Impl::dispose() throw (css::uno::RuntimeException, std::
     bDisposing = true;
     lang::EventObject aObject;
     aObject.Source = static_cast<XController*>(this);
-    pImp->aLC.disposeAndClear(aObject);
+    mxImpl->aLC.disposeAndClear(aObject);
     m_xDatMan = nullptr;
     pDatMan = nullptr;
     aStatusListeners.clear();
@@ -260,12 +258,12 @@ void BibFrameController_Impl::dispose() throw (css::uno::RuntimeException, std::
 
 void BibFrameController_Impl::addEventListener( const uno::Reference< lang::XEventListener > & aListener ) throw (css::uno::RuntimeException, std::exception)
 {
-    pImp->aLC.addInterface( cppu::UnoType<lang::XEventListener>::get(), aListener );
+    mxImpl->aLC.addInterface( cppu::UnoType<lang::XEventListener>::get(), aListener );
 }
 
 void BibFrameController_Impl::removeEventListener( const uno::Reference< lang::XEventListener > & aListener ) throw (css::uno::RuntimeException, std::exception)
 {
-    pImp->aLC.removeInterface( cppu::UnoType<lang::XEventListener>::get(), aListener );
+    mxImpl->aLC.removeInterface( cppu::UnoType<lang::XEventListener>::get(), aListener );
 }
 
 uno::Reference< frame::XDispatch >  BibFrameController_Impl::queryDispatch( const util::URL& aURL, const OUString& /*aTarget*/, sal_Int32 /*nSearchFlags*/ ) throw (css::uno::RuntimeException, std::exception)
@@ -556,7 +554,7 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequen
                     bLeft = xCursor->isLast() && nCount > 1;
                     bRight= !xCursor->isLast();
                     // ask for confirmation
-                    Reference< frame::XController > xCtrl = pImp->pController;
+                    Reference< frame::XController > xCtrl = mxImpl->pController;
                     Reference< form::XConfirmDeleteListener >  xConfirm(pDatMan->GetFormController(),UNO_QUERY);
                     if (xConfirm.is())
                     {

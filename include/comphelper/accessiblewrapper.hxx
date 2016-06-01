@@ -40,6 +40,7 @@
 #include <comphelper/accessibleeventnotifier.hxx>
 #include <comphelper/stl_types.hxx>
 #include <comphelper/comphelperdllapi.h>
+#include <rtl/ref.hxx>
 
 
 namespace comphelper
@@ -156,7 +157,7 @@ namespace comphelper
         css::uno::Reference< css::accessibility::XAccessible >
                                                             m_xParentAccessible;
 
-        OWrappedAccessibleChildrenManager*                  m_pChildMapper;         // for mapping children from our inner context to our callers
+        rtl::Reference<OWrappedAccessibleChildrenManager>   m_xChildMapper;     // for mapping children from our inner context to our callers
 
     protected:
         /** ctor
