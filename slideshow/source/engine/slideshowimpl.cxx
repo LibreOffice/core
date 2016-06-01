@@ -30,7 +30,6 @@
 #include <comphelper/anytostring.hxx>
 #include <comphelper/make_shared_from_uno.hxx>
 #include <comphelper/scopeguard.hxx>
-#include <comphelper/optional.hxx>
 #include <comphelper/servicedecl.hxx>
 #include <comphelper/namecontainer.hxx>
 
