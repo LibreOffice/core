@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_6c3187a2",
+        "filename": "cui/source/tabpages/tpcolor.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 636,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-06-01T12:55:55Z",
+      "side": 1,
+      "message": "This comment is not relevant anymore ( as we removed CMYK )",
+      "revId": "1b581e11b9b06668be637e697a0464ea6ea615c4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_8c26cb66",
+        "filename": "cui/source/tabpages/tpcolor.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 637,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-06-01T12:55:55Z",
+      "side": 1,
+      "message": "Does this work w/o conversion (from percent to colour value)?",
+      "revId": "1b581e11b9b06668be637e697a0464ea6ea615c4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
