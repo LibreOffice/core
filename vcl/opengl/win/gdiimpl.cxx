@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include "opengl/helper.hxx"
 #include "opengl/win/gdiimpl.hxx"
 #include <desktop/exithelper.h>
 #include <opengl/zone.hxx>
@@ -363,7 +364,7 @@ bool tryShaders(const OUString& rVertexShader, const OUString& rFragmentShader, 
     // geometry shader, we should not save the binary.
     if (rGeometryShader.isEmpty())
     {
-        nId = OpenGLHelper::LoadShaders(rVertexShader, rFragmentShader, rPreamble, OpenGLHelper::GetDigest( rVertexShader, rFragmentShader, rPreamble));
+        nId = OpenGLHelper::LoadShaders(rVertexShader, rFragmentShader, rPreamble, LocalOpenGLHelper::GetDigest( rVertexShader, rFragmentShader, rPreamble));
     }
     else
     {

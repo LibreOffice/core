@@ -34,10 +34,10 @@
 #include "svdata.hxx"
 #include "salgdi.hxx"
 #include "salinst.hxx"
+#include "opengl/helper.hxx"
 #include "opengl/zone.hxx"
 #include "opengl/watchdog.hxx"
 #include <osl/conditn.h>
-#include <vcl/opengl/OpenGLWrapper.hxx>
 #include <vcl/opengl/OpenGLContext.hxx>
 #include <desktop/crashreport.hxx>
 
@@ -371,11 +371,14 @@ namespace
     }
 }
 
-rtl::OString OpenGLHelper::GetDigest( const OUString& rVertexShaderName,
-                                      const OUString& rFragmentShaderName,
-                                      const OString& rPreamble )
+namespace LocalOpenGLHelper
 {
-    return getStringDigest(rVertexShaderName, rFragmentShaderName, rPreamble);
+    rtl::OString GetDigest( const OUString& rVertexShaderName,
+                            const OUString& rFragmentShaderName,
+                            const OString& rPreamble )
+    {
+        return getStringDigest(rVertexShaderName, rFragmentShaderName, rPreamble);
+    }
 }
 
 GLint OpenGLHelper::LoadShaders(const OUString& rVertexShaderName,
@@ -604,7 +607,9 @@ BitmapEx OpenGLHelper::ConvertBGRABufferToBitmapEx(const sal_uInt8* const pBuffe
     return BitmapEx(aBitmap, aAlpha);
 }
 
-const char* OpenGLHelper::GLErrorString(GLenum errorCode)
+namespace {
+
+const char* GLErrorString(GLenum errorCode)
 {
     static const struct {
         GLenum code;
@@ -635,6 +640,8 @@ const char* OpenGLHelper::GLErrorString(GLenum errorCode)
      }
 
     return nullptr;
+}
+
 }
 
 std::ostream& operator<<(std::ostream& rStrm, const glm::vec4& rPos)
@@ -750,7 +757,7 @@ void OpenGLHelper::checkGLError(const char* pFile, size_t nLine)
         {
             break;
         }
-        const char* sError = OpenGLHelper::GLErrorString(glErr);
+        const char* sError = GLErrorString(glErr);
         if (!sError)
             sError = "no message available";
 
@@ -765,7 +772,13 @@ void OpenGLHelper::checkGLError(const char* pFile, size_t nLine)
     }
 }
 
-bool OpenGLHelper::isDeviceBlacklisted()
+namespace {
+
+/**
+ * checks if the device/driver pair is on our OpenGL blacklist
+ */
+
+bool isDeviceBlacklisted()
 {
     static bool bSet = false;
     static bool bBlacklisted = true; // assume the worst
@@ -789,7 +802,11 @@ bool OpenGLHelper::isDeviceBlacklisted()
     return bBlacklisted;
 }
 
-bool OpenGLHelper::supportsVCLOpenGL()
+/**
+ * checks if the system supports all features that are necessary for the OpenGL VCL support
+ */
+
+bool supportsVCLOpenGL()
 {
     static bool bDisableGL = !!getenv("SAL_DISABLEGL");
     bool bBlacklisted = isDeviceBlacklisted();
@@ -798,6 +815,8 @@ bool OpenGLHelper::supportsVCLOpenGL()
         return false;
     else
         return true;
+}
+
 }
 
 void OpenGLZone::enter() { gnEnterCount++; }
@@ -1011,18 +1030,9 @@ bool OpenGLHelper::isVCLOpenGLEnabled()
     return bRet;
 }
 
-bool OpenGLWrapper::isVCLOpenGLEnabled()
-{
-    return OpenGLHelper::isVCLOpenGLEnabled();
-}
+namespace {
 
-void OpenGLHelper::debugMsgStream(std::ostringstream const &pStream)
-{
-    debugMsgPrint ("%x: %s", osl_getThreadIdentifier(nullptr),
-                   pStream.str().c_str());
-}
-
-void OpenGLHelper::debugMsgPrint(const char *pFormat, ...)
+void debugMsgPrint(const char *pFormat, ...)
 {
     va_list aArgs;
     va_start (aArgs, pFormat);
@@ -1059,6 +1069,14 @@ void OpenGLHelper::debugMsgPrint(const char *pFormat, ...)
     }
 
     va_end (aArgs);
+}
+
+}
+
+void OpenGLHelper::debugMsgStream(std::ostringstream const &pStream)
+{
+    debugMsgPrint ("%x: %s", osl_getThreadIdentifier(nullptr),
+                   pStream.str().c_str());
 }
 
 OutputDevice::PaintScope::PaintScope(OutputDevice *pDev)

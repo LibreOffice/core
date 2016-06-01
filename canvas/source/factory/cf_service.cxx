@@ -41,7 +41,7 @@
 #include <o3tl/functional.hxx>
 #include <config_features.h>
 #if HAVE_FEATURE_OPENGL
-#include <vcl/opengl/OpenGLWrapper.hxx>
+#include <vcl/opengl/OpenGLHelper.hxx>
 #endif
 
 using namespace ::com::sun::star;
@@ -313,7 +313,7 @@ Reference<XInterface> CanvasFactory::lookupAndUse(
 
     // tdf#93870 - force VCL canvas in OpenGL mode for now.
 #if HAVE_FEATURE_OPENGL
-    if( OpenGLWrapper::isVCLOpenGLEnabled() )
+    if( OpenGLHelper::isVCLOpenGLEnabled() )
         bForceLastEntry = true;
 #endif
 

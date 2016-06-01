@@ -23,6 +23,12 @@ $(eval $(call gb_Library_set_componentfile,gdipluscanvas,canvas/source/directx/g
 
 $(eval $(call gb_Library_use_external,gdipluscanvas,boost_headers))
 
+ifeq ($(ENABLE_OPENGL),TRUE)
+$(eval $(call gb_Library_use_externals,gdipluscanvas,\
+     glew \
+ ))
+endif
+
 $(eval $(call gb_Library_use_sdk_api,gdipluscanvas))
 
 # clear NOMINMAX because GdiplusTypes.h uses those macros :(

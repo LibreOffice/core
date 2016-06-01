@@ -31,7 +31,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/sysdata.hxx>
-#include <vcl/opengl/OpenGLWrapper.hxx>
+#include <vcl/opengl/OpenGLHelper.hxx>
 
 #include <canvas/canvastools.hxx>
 
@@ -56,7 +56,7 @@ namespace cairocanvas
             return;
 
         // tdf#93870 - force VCL canvas in OpenGL mode for now.
-        assert( !OpenGLWrapper::isVCLOpenGLEnabled() );
+        assert( !OpenGLHelper::isVCLOpenGLEnabled() );
 
         /* maArguments:
            0: ptr to creating instance (Window or VirtualDevice)

@@ -30,6 +30,12 @@ $(eval $(call gb_Library_add_defs,directx9canvas,\
 
 $(eval $(call gb_Library_use_external,directx9canvas,boost_headers))
 
+ifeq ($(ENABLE_OPENGL),TRUE)
+$(eval $(call gb_Library_use_externals,directx9canvas,\
+     glew \
+ ))
+endif
+
 $(eval $(call gb_Library_use_libraries,directx9canvas,\
 	cppu \
 	tk \

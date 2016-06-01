@@ -33,6 +33,7 @@
 #include <o3tl/make_unique.hxx>
 #include <o3tl/make_shared.hxx>
 
+#include "opengl/helper.hxx"
 #include "opengl/zone.hxx"
 #include "opengl/program.hxx"
 #include "opengl/salbmp.hxx"

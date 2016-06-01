@@ -32,6 +32,7 @@
 #include <vcl/opengl/OpenGLHelper.hxx>
 #include "salgdi.hxx"
 #include "svdata.hxx"
+#include "opengl/helper.hxx"
 #include "opengl/zone.hxx"
 #include "opengl/salbmp.hxx"
 #include "opengl/RenderState.hxx"
