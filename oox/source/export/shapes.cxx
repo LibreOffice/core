@@ -1321,7 +1321,7 @@ void ShapeExport::WriteTable( const Reference< XShape >& rXShape  )
                     // having : horizontal merge
                     mpFS->startElementNS(XML_a, XML_tc, XML_gridSpan,
                                          I32S(xCell->getColumnSpan()), FSEND);
-                    for(sal_Int32 columnIndex = nColumn; columnIndex < xCell->getColumnSpan(); ++columnIndex) {
+                    for(sal_Int32 columnIndex = nColumn; columnIndex < nColumn + xCell->getColumnSpan(); ++columnIndex) {
                         sal_Int32 transposeIndexForMergeCell = (nRow*nColumnCount) + columnIndex;
                         mergedCellMap[transposeIndexForMergeCell] =
                             std::make_pair(transposedIndexofCell, xCell);
@@ -1333,7 +1333,7 @@ void ShapeExport::WriteTable( const Reference< XShape >& rXShape  )
                     mpFS->startElementNS(XML_a, XML_tc, XML_rowSpan,
                                          I32S(xCell->getRowSpan()), FSEND);
 
-                    for(sal_Int32 rowIndex = nRow; rowIndex < xCell->getRowSpan(); ++rowIndex) {
+                    for(sal_Int32 rowIndex = nRow; rowIndex < nRow + xCell->getRowSpan(); ++rowIndex) {
                         sal_Int32 transposeIndexForMergeCell = (rowIndex*nColumnCount) + nColumn;
                         mergedCellMap[transposeIndexForMergeCell] =
                             std::make_pair(transposedIndexofCell, xCell);
