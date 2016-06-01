@@ -12,7 +12,6 @@
 
 #include <vcl/opengl/OpenGLContext.hxx>
 #include <vcl/opengl/OpenGLHelper.hxx>
-#include <vcl/opengl/OpenGLWrapper.hxx>
 #include <vcl/syschild.hxx>
 #include <vcl/sysdata.hxx>
 
@@ -31,6 +30,7 @@
 #include <opengl/texture.hxx>
 #include <opengl/zone.hxx>
 
+#include "opengl/helper.hxx"
 #include "opengl/RenderState.hxx"
 
 using namespace com::sun::star;
@@ -563,7 +563,7 @@ void OpenGLContext::BuffersSwapped()
 }
 
 
-sal_Int64 OpenGLWrapper::getBufferSwapCounter()
+sal_Int64 OpenGLHelper::getBufferSwapCounter()
 {
     return nBufferSwapCounter;
 }
@@ -786,7 +786,7 @@ OpenGLProgram* OpenGLContext::GetProgram( const OUString& rVertexShader, const O
     // LibreOffice process instances) based on a hash of their source
     // code, as the source code can and will change between
     // LibreOffice versions even if the shader names don't change.
-    rtl::OString aPersistentKey = OpenGLHelper::GetDigest( rVertexShader, rFragmentShader, preamble );
+    rtl::OString aPersistentKey = LocalOpenGLHelper::GetDigest( rVertexShader, rFragmentShader, preamble );
     std::shared_ptr<OpenGLProgram> pProgram = std::make_shared<OpenGLProgram>();
     if( !pProgram->Load( rVertexShader, rFragmentShader, preamble, aPersistentKey ) )
         return nullptr;

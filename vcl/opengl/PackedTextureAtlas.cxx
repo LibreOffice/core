@@ -13,6 +13,7 @@
 #include <vcl/opengl/OpenGLHelper.hxx>
 
 #include "opengl/framebuffer.hxx"
+#include "opengl/helper.hxx"
 #include "opengl/texture.hxx"
 
 #include "opengl/PackedTextureAtlas.hxx"

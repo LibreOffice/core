@@ -40,7 +40,7 @@
 #include <vcl/sysdata.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/fontcharmap.hxx>
-#include <vcl/opengl/OpenGLWrapper.hxx>
+#include <vcl/opengl/OpenGLHelper.hxx>
 
 #include "fontsubset.hxx"
 #include "outdev.h"
@@ -1302,7 +1302,7 @@ void ImplGetLogFontFromFontSelect( HDC hDC,
     static BYTE nDefaultQuality = NONANTIALIASED_QUALITY;
     if (nDefaultQuality == NONANTIALIASED_QUALITY)
     {
-        if (OpenGLWrapper::isVCLOpenGLEnabled())
+        if (OpenGLHelper::isVCLOpenGLEnabled())
             nDefaultQuality = ANTIALIASED_QUALITY;
         else
             nDefaultQuality = DEFAULT_QUALITY;

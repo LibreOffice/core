@@ -36,7 +36,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <osl/mutex.hxx>
 #include <tools/urlobj.hxx>
-#include <vcl/opengl/OpenGLWrapper.hxx>
+#include <vcl/opengl/OpenGLHelper.hxx>
 
 namespace framework{
 
@@ -569,7 +569,7 @@ void TitleHelper::impl_appendDebugVersion (OUStringBuffer& sTitle)
     OUString sVersion = ::utl::Bootstrap::getBuildIdData(sDefault);
     sTitle.append(" [");
     sTitle.append(sVersion);
-    if (OpenGLWrapper::isVCLOpenGLEnabled())
+    if (OpenGLHelper::isVCLOpenGLEnabled())
         sTitle.append("-GL");
     sTitle.append("]");
 }

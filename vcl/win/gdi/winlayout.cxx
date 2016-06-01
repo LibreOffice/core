@@ -33,6 +33,7 @@
 #include <win/saldata.hxx>
 #include <outdev.h>
 
+#include "opengl/helper.hxx"
 #include "sft.hxx"
 #include "sallayout.hxx"
 

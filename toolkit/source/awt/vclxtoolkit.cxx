@@ -59,6 +59,10 @@
 #include <tools/fract.hxx>
 #include <tools/wintypes.hxx>
 
+#if HAVE_FEATURE_OPENGL
+#include <vcl/opengl/OpenGLHelper.hxx>
+#endif
+
 #ifdef MACOSX
 #include "premac.h"
 #include <Cocoa/Cocoa.h>
@@ -114,9 +118,6 @@
 #include <vcl/window.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/throbber.hxx>
-#if HAVE_FEATURE_OPENGL
-#include <vcl/opengl/OpenGLWrapper.hxx>
-#endif
 #include "toolkit/awt/vclxspinbutton.hxx"
 #include <tools/debug.hxx>
 #include <comphelper/processfactory.hxx>
@@ -1929,7 +1930,7 @@ sal_Int64 SAL_CALL VCLXToolkit::getOpenGLBufferSwapCounter()
     throw (css::uno::RuntimeException, std::exception)
 {
 #if HAVE_FEATURE_OPENGL
-    return OpenGLWrapper::getBufferSwapCounter();
+    return OpenGLHelper::getBufferSwapCounter();
 #else
     return 0;
 #endif

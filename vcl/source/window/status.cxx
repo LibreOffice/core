@@ -29,7 +29,7 @@
 #include <vcl/settings.hxx>
 #include <config_features.h>
 #if HAVE_FEATURE_OPENGL
-#include <vcl/opengl/OpenGLWrapper.hxx>
+#include <vcl/opengl/OpenGLHelper.hxx>
 #endif
 #include <svdata.hxx>
 #include <window.h>
@@ -714,7 +714,7 @@ void StatusBar::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect
             // tdf#94213 - un-necessary virtual-device in GL mode
             // causes context switch & hence flicker during sizing.
 #if HAVE_FEATURE_OPENGL
-            if( OpenGLWrapper::isVCLOpenGLEnabled() )
+            if( OpenGLHelper::isVCLOpenGLEnabled() )
                 bOffscreen = false;
 #endif
 

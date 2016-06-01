@@ -27,6 +27,7 @@
 #include <config_features.h>
 #if HAVE_FEATURE_OPENGL
 #include <vcl/opengl/OpenGLHelper.hxx>
+#include "opengl/helper.hxx"
 #endif
 #include <memory>
 

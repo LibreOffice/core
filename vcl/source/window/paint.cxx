@@ -34,6 +34,7 @@
 #include <comphelper/lok.hxx>
 #if HAVE_FEATURE_OPENGL
 #include <vcl/opengl/OpenGLHelper.hxx>
+#include "opengl/helper.hxx"
 #endif
 
 #define IMPL_PAINT_PAINT            ((sal_uInt16)0x0001)

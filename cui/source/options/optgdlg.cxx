@@ -91,7 +91,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/IconThemeInfo.hxx>
 #if HAVE_FEATURE_OPENGL
-#include <vcl/opengl/OpenGLWrapper.hxx>
+#include <vcl/opengl/OpenGLHelper.hxx>
 #endif
 #include "optgdlg.hxx"
 #include <svx/ofaitem.hxx>
@@ -516,7 +516,7 @@ CanvasSettings::CanvasSettings() :
 bool CanvasSettings::IsHardwareAccelerationAvailable() const
 {
 #if HAVE_FEATURE_OPENGL
-    if( OpenGLWrapper::isVCLOpenGLEnabled() )
+    if( OpenGLHelper::isVCLOpenGLEnabled() )
         mbHWAccelAvailable = false;
 
     else
@@ -988,7 +988,7 @@ void OfaViewTabPage::UpdateOGLStatus()
         return;
     // Easier than a custom translation string.
 #if HAVE_FEATURE_OPENGL
-    bool bEnabled = OpenGLWrapper::isVCLOpenGLEnabled();
+    bool bEnabled = OpenGLHelper::isVCLOpenGLEnabled();
 #else
     bool bEnabled = false;
 #endif

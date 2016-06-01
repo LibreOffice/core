@@ -20,6 +20,7 @@
 #include <unx/salvd.h>
 #include <unx/x11/xlimits.hxx>
 
+#include "opengl/helper.hxx"
 #include <opengl/texture.hxx>
 #include <opengl/zone.hxx>
 #include <opengl/RenderState.hxx>

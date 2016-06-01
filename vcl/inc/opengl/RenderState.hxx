@@ -11,6 +11,7 @@
 #ifndef INCLUDED_VCL_INC_OPENGL_RENDER_STATE_H
 #define INCLUDED_VCL_INC_OPENGL_RENDER_STATE_H
 
+#include "opengl/helper.hxx"
 #include "opengl/TextureState.hxx"
 
 template<GLenum ENUM_TYPE, typename TYPE>

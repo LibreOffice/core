@@ -30,6 +30,7 @@
 #include <vcl/opengl/OpenGLContext.hxx>
 #include <vcl/timer.hxx>
 
+#include "opengl/helper.hxx"
 #include "opengl/salbmp.hxx"
 #include "win/wincomp.hxx"
 #include "win/salids.hrc"

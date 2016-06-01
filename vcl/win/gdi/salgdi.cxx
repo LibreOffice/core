@@ -34,6 +34,7 @@
 
 #include "salgdiimpl.hxx"
 #include "gdiimpl.hxx"
+#include "opengl/helper.hxx"
 #include "opengl/win/gdiimpl.hxx"
 
 #include <vcl/opengl/OpenGLHelper.hxx>
