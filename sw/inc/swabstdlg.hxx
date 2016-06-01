@@ -416,11 +416,10 @@ public:
         SwWrtShell* pWrtSh) = 0;
     virtual AbstractMailMergeDlg*       CreateMailMergeDlg( int nResId,
                                                 vcl::Window* pParent, SwWrtShell& rSh,
-                                                 const OUString& rSourceName,
+                                                const OUString& rSourceName,
                                                 const OUString& rTableName,
                                                 sal_Int32 nCommandType,
-                                                const css::uno::Reference< css::sdbc::XConnection>& xConnection,
-                                                css::uno::Sequence< css::uno::Any >* pSelection = nullptr ) = 0;
+                                                const css::uno::Reference< css::sdbc::XConnection>& xConnection ) = 0;
     virtual AbstractMailMergeCreateFromDlg*     CreateMailMergeCreateFromDlg(vcl::Window* pParent) = 0;
     virtual AbstractMailMergeFieldConnectionsDlg* CreateMailMergeFieldConnectionsDlg(vcl::Window* pParent) = 0;
     virtual VclAbstractDialog*          CreateMultiTOXMarkDlg(vcl::Window* pParent, SwTOXMgr &rTOXMgr) = 0;

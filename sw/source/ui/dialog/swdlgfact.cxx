@@ -998,14 +998,13 @@ AbstractMailMergeDlg * SwAbstractDialogFactory_Impl::CreateMailMergeDlg( int nRe
                                                 const OUString& rSourceName,
                                                 const OUString& rTableName,
                                                 sal_Int32 nCommandType,
-                                                const uno::Reference< sdbc::XConnection>& xConnection,
-                                                uno::Sequence< uno::Any >* pSelection )
+                                                const uno::Reference< sdbc::XConnection>& xConnection )
 {
     VclPtr<SwMailMergeDlg> pDlg;
     switch ( nResId )
     {
         case DLG_MAILMERGE :
-            pDlg = VclPtr<SwMailMergeDlg>::Create( pParent, rSh, rSourceName, rTableName, nCommandType, xConnection, pSelection );
+            pDlg = VclPtr<SwMailMergeDlg>::Create( pParent, rSh, rSourceName, rTableName, nCommandType, xConnection, nullptr );
             break;
         default:
             break;

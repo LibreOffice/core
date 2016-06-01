@@ -479,46 +479,21 @@ void IcnCursor_Impl::SetDeltas()
     }
 }
 
-void IcnCursor_Impl::CreateGridAjustData( IconChoiceMap& rLists, SvxIconChoiceCtrlEntry* pRefEntry)
+void IcnCursor_Impl::CreateGridAjustData( IconChoiceMap& rLists )
 {
-    if( !pRefEntry )
-    {
-        sal_uInt16 nGridRows = (sal_uInt16)(pView->aVirtOutputSize.Height() / pView->nGridDY);
-        nGridRows++; // because we round down later!
+    sal_uInt16 nGridRows = (sal_uInt16)(pView->aVirtOutputSize.Height() / pView->nGridDY);
+    nGridRows++; // because we round down later!
 
-        if( !nGridRows )
-            return;
-        const size_t nCount = pView->aEntries.size();
-        for( size_t nCur = 0; nCur < nCount; nCur++ )
-        {
-            SvxIconChoiceCtrlEntry* pEntry = pView->aEntries[ nCur ];
-            const Rectangle& rRect = pView->GetEntryBoundRect( pEntry );
-            short nY = (short)( ((rRect.Top()+rRect.Bottom())/2) / pView->nGridDY );
-            sal_uInt16 nIns = GetSortListPos( rLists[nY], rRect.Left(), false );
-            rLists[ nY ].insert( rLists[ nY ].begin() + nIns, pEntry );
-        }
-    }
-    else
+    if( !nGridRows )
+        return;
+    const size_t nCount = pView->aEntries.size();
+    for( size_t nCur = 0; nCur < nCount; nCur++ )
     {
-        // build a horizontal "tube" in the RefEntry line
-        // STOP AND THINK: maybe use bounding rectangle because of overlaps?
-        Rectangle rRefRect( pView->CalcBmpRect( pRefEntry ) );
-        //const Rectangle& rRefRect = pView->GetEntryBoundRect( pRefEntry );
-        short nRefRow = (short)( ((rRefRect.Top()+rRefRect.Bottom())/2) / pView->nGridDY );
-        SvxIconChoiceCtrlEntryPtrVec& rRow = rLists[0];
-        size_t nCount = pView->aEntries.size();
-        for( size_t nCur = 0; nCur < nCount; nCur++ )
-        {
-            SvxIconChoiceCtrlEntry* pEntry = pView->aEntries[ nCur ];
-            Rectangle rRect( pView->CalcBmpRect(pEntry) );
-            //const Rectangle& rRect = pView->GetEntryBoundRect( pEntry );
-            short nY = (short)( ((rRect.Top()+rRect.Bottom())/2) / pView->nGridDY );
-            if( nY == nRefRow )
-            {
-                sal_uInt16 nIns = GetSortListPos( rRow, rRect.Left(), false );
-                rRow.insert( rRow.begin() + nIns, pEntry );
-            }
-        }
+        SvxIconChoiceCtrlEntry* pEntry = pView->aEntries[ nCur ];
+        const Rectangle& rRect = pView->GetEntryBoundRect( pEntry );
+        short nY = (short)( ((rRect.Top()+rRect.Bottom())/2) / pView->nGridDY );
+        sal_uInt16 nIns = GetSortListPos( rLists[nY], rRect.Left(), false );
+        rLists[ nY ].insert( rLists[ nY ].begin() + nIns, pEntry );
     }
 }
 

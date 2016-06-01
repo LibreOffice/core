@@ -2763,8 +2763,7 @@ void SvTreeListBox::InvalidateEntry(SvTreeListEntry* pEntry)
     }
 }
 
-void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, long nLine, vcl::RenderContext& rRenderContext,
-                                SvLBoxTabFlags nTabFlags)
+void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, long nLine, vcl::RenderContext& rRenderContext)
 {
 
     Rectangle aRect; // multi purpose
@@ -2842,122 +2841,120 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, long nLine, vcl::Render
         else
             nX = nTabPos + pTab->CalcOffset(aSize.Width(), nNextTabPos - nTabPos);
 
-        if (nFlags & nTabFlags)
+        aEntryPos.X() = nX;
+        aEntryPos.Y() = nLine;
+
+        // set background pattern/color
+
+        Wallpaper aWallpaper = rRenderContext.GetBackground();
+
+        bool bSelTab = bool(nFlags & SvLBoxTabFlags::SHOW_SELECTION);
+        sal_uInt16 nItemType = pItem->GetType();
+
+        if (pViewDataEntry->IsHighlighted() && bSelTab && !pViewDataEntry->IsCursored())
         {
-            aEntryPos.X() = nX;
-            aEntryPos.Y() = nLine;
-
-            // set background pattern/color
-
-            Wallpaper aWallpaper = rRenderContext.GetBackground();
-
-            bool bSelTab = bool(nFlags & SvLBoxTabFlags::SHOW_SELECTION);
-            sal_uInt16 nItemType = pItem->GetType();
-
-            if (pViewDataEntry->IsHighlighted() && bSelTab && !pViewDataEntry->IsCursored())
+            Color aNewWallColor = rSettings.GetHighlightColor();
+            if (!bInUse || nItemType != SV_ITEM_ID_LBOXCONTEXTBMP)
             {
-                Color aNewWallColor = rSettings.GetHighlightColor();
-                if (!bInUse || nItemType != SV_ITEM_ID_LBOXCONTEXTBMP)
+                // if the face color is bright then the deactive color is also bright
+                // -> so you can't see any deactive selection
+                if (bHideSelection && !rSettings.GetFaceColor().IsBright()
+                   && aWallpaper.GetColor().IsBright() != rSettings.GetDeactiveColor().IsBright())
                 {
-                    // if the face color is bright then the deactive color is also bright
-                    // -> so you can't see any deactive selection
-                    if (bHideSelection && !rSettings.GetFaceColor().IsBright()
-                       && aWallpaper.GetColor().IsBright() != rSettings.GetDeactiveColor().IsBright())
-                    {
-                        aNewWallColor = rSettings.GetDeactiveColor();
-                    }
-                    // set font color to highlight
-                    if (!bCurFontIsSel)
-                    {
-                        rRenderContext.SetTextColor(aHighlightTextColor);
-                        rRenderContext.SetFont(aHighlightFont);
-                        bCurFontIsSel = true;
-                    }
+                    aNewWallColor = rSettings.GetDeactiveColor();
                 }
-                aWallpaper.SetColor(aNewWallColor);
-            }
-            else  // no selection
-            {
-                if (bInUse && nItemType == SV_ITEM_ID_LBOXCONTEXTBMP)
+                // set font color to highlight
+                if (!bCurFontIsSel)
                 {
-                    aWallpaper.SetColor(rSettings.GetFieldColor());
-                }
-                else if (bCurFontIsSel)
-                {
-                    bCurFontIsSel = false;
-                    rRenderContext.SetTextColor(aBackupTextColor);
-                    rRenderContext.SetFont(aBackupFont);
-                }
-                else
-                {
-                    aWallpaper.SetColor(rEntry.GetBackColor());
+                    rRenderContext.SetTextColor(aHighlightTextColor);
+                    rRenderContext.SetFont(aHighlightFont);
+                    bCurFontIsSel = true;
                 }
             }
-
-            // draw background
-            if (!(nTreeFlags & SvTreeFlags::USESEL))
+            aWallpaper.SetColor(aNewWallColor);
+        }
+        else  // no selection
+        {
+            if (bInUse && nItemType == SV_ITEM_ID_LBOXCONTEXTBMP)
             {
-                // only draw the area that is used by the item
-                aRectSize.Width() = aSize.Width();
-                aRect.SetPos(aEntryPos);
-                aRect.SetSize(aRectSize);
+                aWallpaper.SetColor(rSettings.GetFieldColor());
+            }
+            else if (bCurFontIsSel)
+            {
+                bCurFontIsSel = false;
+                rRenderContext.SetTextColor(aBackupTextColor);
+                rRenderContext.SetFont(aBackupFont);
             }
             else
             {
-                // draw from the current to the next tab
-                if (nCurTab != 0)
-                    aRect.Left() = nTabPos;
-                else
-                    // if we're in the 0th tab, always draw from column 0 --
-                    // else we get problems with centered tabs
-                    aRect.Left() = 0;
-                aRect.Top() = nLine;
-                aRect.Bottom() = nLine + nTempEntryHeight - 1;
-                if (pNextTab)
-                {
-                    long nRight;
-                    nRight = GetTabPos(&rEntry, pNextTab) - 1;
-                    if (nRight > nMaxRight)
-                        nRight = nMaxRight;
-                    aRect.Right() = nRight;
-                }
-                else
-                {
-                    aRect.Right() = nMaxRight;
-                }
+                aWallpaper.SetColor(rEntry.GetBackColor());
             }
-            // A custom selection that starts at a tab position > 0, do not fill
-            // the background of the 0th item, else e.g. we might not be able to
-            // realize tab listboxes with lines.
-            if (!(nCurTab == 0 && (nTreeFlags & SvTreeFlags::USESEL) && nFirstSelTab))
-            {
-                Color aBackgroundColor = aWallpaper.GetColor();
-                if (aBackgroundColor != Color(COL_TRANSPARENT))
-                {
-                    rRenderContext.SetFillColor(aBackgroundColor);
-                    // this case may occur for smaller horizontal resizes
-                    if (aRect.Left() < aRect.Right())
-                        rRenderContext.DrawRect(aRect);
-                }
-            }
-            // draw item
-            // center vertically
-            aEntryPos.Y() += (nTempEntryHeight - aSize.Height()) / 2;
-            pViewDataEntry->SetPaintRectangle(aRect);
-
-            pItem->Paint(aEntryPos, *this, rRenderContext, pViewDataEntry, rEntry);
-
-            // division line between tabs
-            if (pNextTab && pItem->GetType() == SV_ITEM_ID_LBOXSTRING &&
-                // not at the right edge of the window!
-                aRect.Right() < nMaxRight)
-            {
-                aRect.Left() = aRect.Right() - SV_TAB_BORDER;
-                rRenderContext.DrawRect(aRect);
-            }
-
-            rRenderContext.SetFillColor(aBackupColor);
         }
+
+        // draw background
+        if (!(nTreeFlags & SvTreeFlags::USESEL))
+        {
+            // only draw the area that is used by the item
+            aRectSize.Width() = aSize.Width();
+            aRect.SetPos(aEntryPos);
+            aRect.SetSize(aRectSize);
+        }
+        else
+        {
+            // draw from the current to the next tab
+            if (nCurTab != 0)
+                aRect.Left() = nTabPos;
+            else
+                // if we're in the 0th tab, always draw from column 0 --
+                // else we get problems with centered tabs
+                aRect.Left() = 0;
+            aRect.Top() = nLine;
+            aRect.Bottom() = nLine + nTempEntryHeight - 1;
+            if (pNextTab)
+            {
+                long nRight;
+                nRight = GetTabPos(&rEntry, pNextTab) - 1;
+                if (nRight > nMaxRight)
+                    nRight = nMaxRight;
+                aRect.Right() = nRight;
+            }
+            else
+            {
+                aRect.Right() = nMaxRight;
+            }
+        }
+        // A custom selection that starts at a tab position > 0, do not fill
+        // the background of the 0th item, else e.g. we might not be able to
+        // realize tab listboxes with lines.
+        if (!(nCurTab == 0 && (nTreeFlags & SvTreeFlags::USESEL) && nFirstSelTab))
+        {
+            Color aBackgroundColor = aWallpaper.GetColor();
+            if (aBackgroundColor != Color(COL_TRANSPARENT))
+            {
+                rRenderContext.SetFillColor(aBackgroundColor);
+                // this case may occur for smaller horizontal resizes
+                if (aRect.Left() < aRect.Right())
+                    rRenderContext.DrawRect(aRect);
+            }
+        }
+        // draw item
+        // center vertically
+        aEntryPos.Y() += (nTempEntryHeight - aSize.Height()) / 2;
+        pViewDataEntry->SetPaintRectangle(aRect);
+
+        pItem->Paint(aEntryPos, *this, rRenderContext, pViewDataEntry, rEntry);
+
+        // division line between tabs
+        if (pNextTab && pItem->GetType() == SV_ITEM_ID_LBOXSTRING &&
+            // not at the right edge of the window!
+            aRect.Right() < nMaxRight)
+        {
+            aRect.Left() = aRect.Right() - SV_TAB_BORDER;
+            rRenderContext.DrawRect(aRect);
+        }
+
+        rRenderContext.SetFillColor(aBackupColor);
+
         nCurItem++;
         nCurTab++;
     }

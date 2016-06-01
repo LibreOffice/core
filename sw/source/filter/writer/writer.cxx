@@ -391,17 +391,14 @@ void Writer::PutNumFormatFontsInAttrPool()
                 }
 }
 
-void Writer::PutEditEngFontsInAttrPool( bool bIncl_CJK_CTL )
+void Writer::PutEditEngFontsInAttrPool()
 {
     SfxItemPool& rPool = pDoc->GetAttrPool();
     if( rPool.GetSecondaryPool() )
     {
         AddFontItems_( rPool, EE_CHAR_FONTINFO );
-        if( bIncl_CJK_CTL )
-        {
-            AddFontItems_( rPool, EE_CHAR_FONTINFO_CJK );
-            AddFontItems_( rPool, EE_CHAR_FONTINFO_CTL );
-        }
+        AddFontItems_( rPool, EE_CHAR_FONTINFO_CJK );
+        AddFontItems_( rPool, EE_CHAR_FONTINFO_CTL );
     }
 }
 
