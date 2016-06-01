@@ -306,7 +306,7 @@ void PrintDialog::PrintPreviewWindow::preparePreviewBitmap()
 
 PrintDialog::ShowNupOrderWindow::ShowNupOrderWindow( vcl::Window* i_pParent )
     : Window( i_pParent, WB_NOBORDER )
-    , mnOrderMode( 0 )
+    , mnOrderMode( NupOrderType::LRTB )
     , mnRows( 1 )
     , mnColumns( 1 )
 {
@@ -353,19 +353,19 @@ void PrintDialog::ShowNupOrderWindow::Paint(vcl::RenderContext& rRenderContext, 
         int nX = 0, nY = 0;
         switch (mnOrderMode)
         {
-        case SV_PRINT_PRT_NUP_ORDER_LRTB:
+        case NupOrderType::LRTB:
             nX = (i % mnColumns);
             nY = (i / mnColumns);
             break;
-        case SV_PRINT_PRT_NUP_ORDER_TBLR:
+        case NupOrderType::TBLR:
             nX = (i / mnRows);
             nY = (i % mnRows);
             break;
-        case SV_PRINT_PRT_NUP_ORDER_RLTB:
+        case NupOrderType::RLTB:
             nX = mnColumns - 1 - (i % mnColumns);
             nY = (i / mnColumns);
             break;
-        case SV_PRINT_PRT_NUP_ORDER_TBRL:
+        case NupOrderType::TBRL:
             nX = mnColumns - 1 - (i / mnRows);
             nY = (i % mnRows);
             break;
@@ -469,7 +469,7 @@ void PrintDialog::NUpTabPage::initFromMultiPageSetup( const vcl::PrinterControll
     mpBorderCB->Check( i_rMPS.bDrawBorder );
     mpNupRowsEdt->SetValue( i_rMPS.nRows );
     mpNupColEdt->SetValue( i_rMPS.nColumns );
-    mpNupOrderBox->SelectEntryPos( i_rMPS.nOrder );
+    mpNupOrderBox->SelectEntryPos( (sal_Int32)i_rMPS.nOrder );
     if( i_rMPS.nRows != 1 || i_rMPS.nColumns != 1 )
     {
         mpNupPagesBox->SelectEntryPos( mpNupPagesBox->GetEntryCount()-1 );
@@ -1492,15 +1492,7 @@ void PrintDialog::updateNup()
 
     aMPS.bDrawBorder        = maNUpPage.mpBorderCB->IsChecked();
 
-    int nOrderMode = maNUpPage.mpNupOrderBox->GetSelectEntryPos();
-    if( nOrderMode == SV_PRINT_PRT_NUP_ORDER_LRTB )
-        aMPS.nOrder = PrinterController::LRTB;
-    else if( nOrderMode == SV_PRINT_PRT_NUP_ORDER_TBLR )
-        aMPS.nOrder = PrinterController::TBLR;
-    else if( nOrderMode == SV_PRINT_PRT_NUP_ORDER_RLTB )
-        aMPS.nOrder = PrinterController::RLTB;
-    else if( nOrderMode == SV_PRINT_PRT_NUP_ORDER_TBRL )
-        aMPS.nOrder = PrinterController::TBRL;
+    aMPS.nOrder = (NupOrderType)maNUpPage.mpNupOrderBox->GetSelectEntryPos();
 
     int nOrientationMode = maNUpPage.mpNupOrientationBox->GetSelectEntryPos();
     if( nOrientationMode == SV_PRINT_PRT_NUP_ORIENTATION_LANDSCAPE )
@@ -1522,7 +1514,7 @@ void PrintDialog::updateNup()
 
     maPController->setMultipage( aMPS );
 
-    maNUpPage.mpNupOrderWin->setValues( nOrderMode, nCols, nRows );
+    maNUpPage.mpNupOrderWin->setValues( aMPS.nOrder, nCols, nRows );
 
     preparePreview( true, true );
 }

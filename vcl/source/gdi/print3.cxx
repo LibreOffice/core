@@ -433,7 +433,7 @@ bool Printer::PreparePrintJob(std::shared_ptr<PrinterController> xController,
         if( nValue >= 0 )
             aMPS.nVerticalSpacing = nValue;
         aMPS.bDrawBorder = xController->getBoolProperty( "NUpDrawBorder", aMPS.bDrawBorder );
-        aMPS.nOrder = static_cast<PrinterController::NupOrderType>(xController->getIntProperty( "NUpSubPageOrder", aMPS.nOrder ));
+        aMPS.nOrder = static_cast<NupOrderType>(xController->getIntProperty( "NUpSubPageOrder", (sal_Int32)aMPS.nOrder ));
         aMPS.aPaperSize = xController->getPrinter()->PixelToLogic( xController->getPrinter()->GetPaperSizePixel(), MapMode( MAP_100TH_MM ) );
         css::beans::PropertyValue* pPgSizeVal = xController->getValue( OUString( "NUpPaperSize" ) );
         css::awt::Size aSizeVal;
@@ -1143,19 +1143,19 @@ PrinterController::PageSize PrinterController::getFilteredPageFile( int i_nFilte
                 long nCellX = 0, nCellY = 0;
                 switch( rMPS.nOrder )
                 {
-                case PrinterController::LRTB:
+                case NupOrderType::LRTB:
                     nCellX = (nSubPage % rMPS.nColumns);
                     nCellY = (nSubPage / rMPS.nColumns);
                     break;
-                case PrinterController::TBLR:
+                case NupOrderType::TBLR:
                     nCellX = (nSubPage / rMPS.nRows);
                     nCellY = (nSubPage % rMPS.nRows);
                     break;
-                case PrinterController::RLTB:
+                case NupOrderType::RLTB:
                     nCellX = rMPS.nColumns - 1 - (nSubPage % rMPS.nColumns);
                     nCellY = (nSubPage / rMPS.nColumns);
                     break;
-                case PrinterController::TBRL:
+                case NupOrderType::TBRL:
                     nCellX = rMPS.nColumns - 1 - (nSubPage / rMPS.nRows);
                     nCellY = (nSubPage % rMPS.nRows);
                     break;
