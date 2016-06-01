@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_4c184385",
+        "filename": "include/svx/lathe3d.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2016-06-01T18:14:10Z",
+      "side": 1,
+      "message": "remove this comment too\n(btw the german *oder* was not translated to english *or*)",
+      "range": {
+        "startLine": 39,
+        "startChar": 4,
+        "endLine": 39,
+        "endChar": 71
+      },
+      "revId": "100422259d661c252f12ceb1fee455f41fd6f2e3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
