@@ -754,11 +754,10 @@ ChartTypeTabPage::ChartTypeTabPage(vcl::Window* pParent
         m_aChartTypeDialogControllerList.push_back(new StockChartDialogController() );
     }
     m_aChartTypeDialogControllerList.push_back(new CombiColumnLineChartDialogController() );
-#if ENABLE_GL3D_BARCHART
+
     SvtMiscOptions aOpts;
     if ( aOpts.IsExperimentalMode() )
         m_aChartTypeDialogControllerList.push_back(new GL3DBarChartDialogController());
-#endif
 
     ::std::vector< ChartTypeDialogController* >::const_iterator       aIter = m_aChartTypeDialogControllerList.begin();
     const ::std::vector< ChartTypeDialogController* >::const_iterator aEnd  = m_aChartTypeDialogControllerList.end();
