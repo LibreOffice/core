@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_4ce9231a",
+        "filename": "sw/source/core/view/vnew.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-06-01T09:44:14Z",
+      "side": 1,
+      "message": "i#44963 is still a valid bug reference, please don\u0027t remove it.",
+      "revId": "9aa053f5e6cec6add49ea64964c91ec1e32bd989",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
