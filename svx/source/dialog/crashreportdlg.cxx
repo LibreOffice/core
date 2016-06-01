@@ -57,7 +57,7 @@ IMPL_LINK_TYPED(CrashReportDialog, BtnHdl, Button*, pBtn, void)
     {
         std::string ini_path = CrashReporter::getIniFileName();
         OUString aCommand;
-        osl::FileBase::getSystemPathFromFileURL(getLibDir() + "/minidump_upload" + SAL_EXEEXTENSION, aCommand);
+        osl::FileBase::getSystemPathFromFileURL(getLibDir() + "/minidump_upload" SAL_EXEEXTENSION, aCommand);
 
         aCommand = aCommand;
         OString aOStringCommand = rtl::OUStringToOString(aCommand, RTL_TEXTENCODING_UTF8) + " " + ini_path.c_str();
