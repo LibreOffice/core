@@ -7489,6 +7489,150 @@ SvxLongLRSpaceItem SwPageLRMargin SID_ATTR_PAGE_LRSPACE
     GroupId = GID_FORMAT;
 ]
 
+SfxBoolItem SwPageHeaderItem SID_ATTR_PAGE_HEADER
+
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_FORMAT;
+]
+
+SvxLongLRSpaceItem SwPageHeaderLRMargin SID_ATTR_PAGE_HEADER_LRMARGIN
+
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_FORMAT;
+]
+
+SvxLongULSpaceItem SwPageHeaderSpacing SID_ATTR_PAGE_HEADER_SPACING
+
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_FORMAT;
+]
+
+SfxInt16Item SwPageHeaderLayout SID_ATTR_PAGE_HEADER_LAYOUT
+
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_FORMAT;
+]
+
+SfxBoolItem SwPageFooterItem SID_ATTR_PAGE_FOOTER
+
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_FORMAT;
+]
+
+SvxLongLRSpaceItem SwPageFooterLRMargin SID_ATTR_PAGE_FOOTER_LRMARGIN
+
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_FORMAT;
+]
+
+SvxLongULSpaceItem SwPageFooterSpacing SID_ATTR_PAGE_FOOTER_SPACING
+
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_FORMAT;
+]
+
+SfxInt16Item SwPageFooterLayout SID_ATTR_PAGE_FOOTER_LAYOUT
+
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_FORMAT;
+]
+
 SfxVoidItem AddTextBox FN_ADD_TEXT_BOX
 ()
 [

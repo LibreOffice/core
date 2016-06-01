@@ -42,7 +42,7 @@
 #include <svl/intitem.hxx>
 #include <tools/fldunit.hxx>
 #include <svl/poolitem.hxx>
-#include <svx/rulritem.hxx>
+#include <svl/eitem.hxx>
 
 namespace sw { namespace sidebar {
 
@@ -74,12 +74,31 @@ private:
 
     SfxBindings* mpBindings;
 
+    ::sfx2::sidebar::ControllerItem maHFToggleController;
+    ::sfx2::sidebar::ControllerItem maFooterLRMarginController;
+    ::sfx2::sidebar::ControllerItem maFooterSpacingController;
+    ::sfx2::sidebar::ControllerItem maFooterLayoutController;
+
     VclPtr<CheckBox> mpFooterToggle;
-    VclPtr<MetricField> mpFooterHeightField;
-    VclPtr<MetricField> mpFooterLMargin;
-    VclPtr<MetricField> mpFooterRMargin;
-    VclPtr<MetricField> mpFooterSpacing;
-    VclPtr<ListBox> mpSameContentLB;
+    VclPtr<ListBox> mpFooterSpacingLB;
+    VclPtr<ListBox> mpFooterLayoutLB;
+    VclPtr<ListBox> mpFooterMarginPresetLB;
+
+    void Initialize();
+    void UpdateFooterCheck();
+    void UpdateMarginControl();
+    void UpdateSpacingControl();
+    void UpdateLayoutControl();
+
+    ::std::unique_ptr<SfxBoolItem>        mpFooterItem;
+    ::std::unique_ptr<SvxLongLRSpaceItem> mpFooterLRMarginItem;
+    ::std::unique_ptr<SvxLongULSpaceItem> mpFooterSpacingItem;
+    ::std::unique_ptr<SfxInt16Item>       mpFooterLayoutItem;
+
+    DECL_LINK_TYPED( FooterToggleHdl, Button*, void );
+    DECL_LINK_TYPED( FooterLRMarginHdl, ListBox&, void);
+    DECL_LINK_TYPED( FooterSpacingHdl, ListBox&, void);
+    DECL_LINK_TYPED( FooterLayoutHdl, ListBox&, void);
 };
 
 } } //end of namespace sw::sidebar
