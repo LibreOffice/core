@@ -68,7 +68,7 @@ public:
     long SquaredDistanceX(const SmCaretLine& line) const{
         return (GetLeft() - line.GetLeft()) * (GetLeft() - line.GetLeft());
     }
-    long SquaredDistanceX(Point pos) const{
+    long SquaredDistanceX(const Point &pos) const{
         return (GetLeft() - pos.X()) * (GetLeft() - pos.X());
     }
     long SquaredDistanceY(const SmCaretLine& line) const{
@@ -81,7 +81,7 @@ public:
             return 0;
         return d * d;
     }
-    long SquaredDistanceY(Point pos) const{
+    long SquaredDistanceY(const Point &pos) const{
         long d = GetTop() - pos.Y();
         if(d < 0)
             d = (d * -1) - GetHeight();
