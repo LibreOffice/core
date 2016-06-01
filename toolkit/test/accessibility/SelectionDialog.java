@@ -68,7 +68,7 @@ class SelectionDialog extends JDialog
         maChildrenSelector = new JList (GetChildrenList());
         maChildrenSelector.setPreferredSize (new Dimension (500,300));
         aContent.add (maChildrenSelector, BorderLayout.CENTER);
-        maChildrenSelector.setSelectionMode (ListSelectionModel.SelectionMode::Single);
+        maChildrenSelector.setSelectionMode (ListSelectionModel.SINGLE_SELECTION);
 
         JPanel aButtons = new JPanel();
         aButtons.setLayout( new FlowLayout() );
