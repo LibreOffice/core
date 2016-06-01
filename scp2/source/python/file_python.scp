@@ -81,9 +81,9 @@ End
 
 File gid_File_Py_Python_Core
     TXT_FILE_BODY;
-    Dir = gid_Dir_Py_PythonCore_Lib;
-    Name = STRING(CONCAT3(python-core-,PYVERSION,.zip));
-    Styles = (ARCHIVE);
+    Dir = FILELIST_DIR;
+    Name = "python-core.filelist";
+    Styles = (FILELIST);
 End
 
 Directory gid_Dir_Py_PythonCore_Bin

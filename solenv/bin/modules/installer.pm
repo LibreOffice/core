@@ -24,7 +24,6 @@ use Cwd;
 use Data::Dumper;
 use File::Copy;
 use List::Util qw(shuffle);
-use installer::archivefiles;
 use installer::control;
 use installer::converter;
 use installer::copyproject;
@@ -603,16 +602,6 @@ sub run {
         }
 
         installer::scriptitems::make_filename_language_specific($filesinproductlanguageresolvedarrayref);
-
-        ######################################################################################
-        # Unzipping files with flag ARCHIVE and putting all included files into the file list
-        ######################################################################################
-
-        installer::logger::print_message( "... analyzing files with flag ARCHIVE ...\n" );
-
-        my @additional_paths_from_zipfiles = ();
-
-        $filesinproductlanguageresolvedarrayref = installer::archivefiles::resolving_archive_flag($filesinproductlanguageresolvedarrayref, \@additional_paths_from_zipfiles, $languagestringref, $loggingdir);
 
         ######################################################################################
         # Processing files with flag FILELIST and putting listed files into the file list

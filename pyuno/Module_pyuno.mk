@@ -32,7 +32,7 @@ endif
 # that why it makes sense to handle the next 3 targets
 # with SYSTEM_PYTHON=TRUE and SYSTEM_PYTHON=
 
-# zipcore: pyuno/python.exe on Windows
+# python-core: pyuno/python.exe on Windows
 ifeq ($(OS),WNT)
 $(eval $(call gb_Module_add_targets,pyuno,\
     Executable_python \
@@ -41,7 +41,7 @@ endif
 
 ifeq ($(SYSTEM_PYTHON),)
 
-# zipcore: python.sh on Unix
+# python-core: python.sh on Unix
 ifneq ($(OS),WNT)
 $(eval $(call gb_Module_add_targets,pyuno,\
     CustomTarget_python_shell \
@@ -55,8 +55,7 @@ else # SYSTEM_PYTHON
 # FIXME remove this
 ifeq ($(OS)$(COM),WNTGCC)
 $(eval $(call gb_Module_add_targets,pyuno,\
-    CustomTarget_zipcore \
-    Package_zipcore \
+    GeneratedPackage_python-core \
 ))
 endif
 
