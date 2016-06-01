@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_acb9cfeb",
+        "filename": "include/sfx2/templatedlg.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-06-01T11:17:47Z",
+      "side": 1,
+      "message": "Can this be msTemplatePath instead? It\u0027s not Impress-specific as far as I see.",
+      "revId": "c1a03ede11c691fbd4e69f0545d021f36af0381b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
