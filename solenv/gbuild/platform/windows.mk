@@ -8,6 +8,9 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
+# to block heavy exception handling that try to acquire the solarmutex
+export LO_LEAN_EXCEPTION=1
+
 # to avoid flashing windows during tests
 export VCL_HIDE_WINDOWS=1
 
