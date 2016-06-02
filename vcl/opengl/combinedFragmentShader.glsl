@@ -29,7 +29,7 @@ void main()
 
         // Calculate the multiplier so we can transform the 0->1 fade factor
         // to take feather and line width into account.
-        float multiplied = 1.0 / (1.0 - (start / end));
+        float multiplied = start == end ? 1.0 : 1.0 / (1.0 - (start / end));
 
         float dist = (1.0 - abs(fade_factor)) * multiplied;
 
