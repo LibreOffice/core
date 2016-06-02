@@ -1599,7 +1599,8 @@ bool ScImportExport::Doc2Text( SvStream& rStrm )
     SCTAB nEndTab = aRange.aEnd.Tab();
 
     if (!pDoc->GetClipParam().isMultiRange() && nStartTab == nEndTab)
-        pDoc->ShrinkToDataArea( nStartTab, nStartCol, nStartRow, nEndCol, nEndRow );
+        if (!pDoc->ShrinkToDataArea( nStartTab, nStartCol, nStartRow, nEndCol, nEndRow ))
+            return false;
 
     OUString aCell;
 
