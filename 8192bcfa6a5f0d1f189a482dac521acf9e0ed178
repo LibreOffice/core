@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_92b426f3",
+        "filename": "include/framework/dispatchhelper.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2016-06-02T20:07:42Z",
+      "side": 1,
+      "message": "Oh - so the below methods are clearly not from XInterface?",
+      "revId": "8192bcfa6a5f0d1f189a482dac521acf9e0ed178",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_b2b92aec",
+        "filename": "include/framework/dispatchhelper.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2016-06-02T20:07:42Z",
+      "side": 1,
+      "message": "Instead, all of the above is from XServiceInfo. Did you try to remove all of it? And the XServiceInfo reference as one of the baseclasses?",
+      "revId": "8192bcfa6a5f0d1f189a482dac521acf9e0ed178",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_d2ceae82",
+        "filename": "sfx2/source/control/unoctitm.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 705,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2016-06-02T20:07:42Z",
+      "side": 1,
+      "message": "Question from an earlier review again:\n\npItem is SfxBrushItem, and not nullptr. code below will keep bSuccess on false, old code set it to true.\n\nAre you sure that case does not happen?",
+      "revId": "8192bcfa6a5f0d1f189a482dac521acf9e0ed178",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
