@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_37918cf1",
+        "filename": "sfx2/source/control/templateview.src",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1001193
+      },
+      "writtenOn": "2016-06-02T10:44:42Z",
+      "side": 1,
+      "message": "I need to change this dummy icon with some star icon.. how to access them. Ex: icon-themes/tango_testing/sfx2/res/select.png",
+      "range": {
+        "startLine": 53,
+        "startChar": 4,
+        "endLine": 53,
+        "endChar": 44
+      },
+      "revId": "66a4cff21020503af4cb95817f24eea66dbe951e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
