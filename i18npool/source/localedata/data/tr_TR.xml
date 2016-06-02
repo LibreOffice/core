@@ -199,16 +199,16 @@
     <FormatElement msgid="DateTimeFormatskey2" default="false" type="medium" usage="DATE_TIME" formatindex="47">
       <FormatCode>DD.MM.YYYY HH:MM:SS</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey22" default="false" type="medium" usage="DATE" formatindex="51">
+    <FormatElement msgid="DateFormatskey22" default="false" type="medium" usage="DATE" formatindex="61">
       <FormatCode>DD/MM/YYYY</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey23" default="false" type="short" usage="DATE" formatindex="52">
+    <FormatElement msgid="DateFormatskey23" default="false" type="short" usage="DATE" formatindex="62">
       <FormatCode>DD/MM/YY</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey24" default="false" type="long" usage="DATE" formatindex="53">
+    <FormatElement msgid="DateFormatskey24" default="false" type="long" usage="DATE" formatindex="63">
       <FormatCode>DD/MMM/YYYY</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateTimeFormatskey3" default="false" type="medium" usage="DATE_TIME" formatindex="54">
+    <FormatElement msgid="DateTimeFormatskey3" default="false" type="medium" usage="DATE_TIME" formatindex="64">
       <FormatCode>DD/MM/YYYY HH:MM:SS</FormatCode>
     </FormatElement>
   </LC_FORMAT>

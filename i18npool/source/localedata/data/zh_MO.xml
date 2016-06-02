@@ -173,22 +173,22 @@
     <FormatElement msgid="TimeFormatskey7" default="true" type="long" usage="TIME"  formatindex="45">
       <FormatCode>[HH]:MM:SS.00</FormatCode>
     </FormatElement>
-    <FormatElement msgid="TimeFormatskey8" default="false" type="short" usage="TIME"  formatindex="50">
+    <FormatElement msgid="TimeFormatskey8" default="false" type="short" usage="TIME"  formatindex="60">
       <FormatCode>HH"時"MM"分"</FormatCode>
     </FormatElement>
-    <FormatElement msgid="TimeFormatskey9" default="false" type="medium" usage="TIME"  formatindex="51">
+    <FormatElement msgid="TimeFormatskey9" default="false" type="medium" usage="TIME"  formatindex="61">
       <FormatCode>HH"時"MM"分"SS"秒"</FormatCode>
     </FormatElement>
-    <FormatElement msgid="TimeFormatskey10" default="false" type="medium" usage="TIME"  formatindex="52">
+    <FormatElement msgid="TimeFormatskey10" default="false" type="medium" usage="TIME"  formatindex="62">
       <FormatCode>AM/PM HH"時"MM"分"</FormatCode>
     </FormatElement>
-    <FormatElement msgid="TimeFormatskey11" default="true" type="medium" usage="TIME"  formatindex="53">
+    <FormatElement msgid="TimeFormatskey11" default="true" type="medium" usage="TIME"  formatindex="63">
       <FormatCode>AM/PM HH"時"MM"分"SS"秒"</FormatCode>
     </FormatElement>
-    <FormatElement msgid="TimeFormatskey12" default="false" type="medium" usage="TIME"  formatindex="54">
+    <FormatElement msgid="TimeFormatskey12" default="false" type="medium" usage="TIME"  formatindex="64">
       <FormatCode>[HH] "時"MM"分"SS"秒"</FormatCode>
     </FormatElement>
-    <FormatElement msgid="TimeFormatskey13" default="false" type="medium" usage="TIME"  formatindex="55">
+    <FormatElement msgid="TimeFormatskey13" default="false" type="medium" usage="TIME"  formatindex="65">
       <FormatCode>MM"分"SS"秒"00</FormatCode>
     </FormatElement>
     <!-- DateTime formats. Index range is 46-47. -->
@@ -198,13 +198,13 @@
     <FormatElement msgid="DateTimeFormatskey2" default="false" type="long" usage="DATE_TIME"  formatindex="47">
       <FormatCode>DD/MM/YYYY HH:MM:SS</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateTimeFormatskey3" default="true" type="long" usage="DATE_TIME"  formatindex="56">
+    <FormatElement msgid="DateTimeFormatskey3" default="true" type="long" usage="DATE_TIME"  formatindex="66">
       <FormatCode>YYYY"年"M"月"D"日" HH"時"MM"分"SS"秒"</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateTimeFormatskey4" default="false" type="long" usage="DATE_TIME"  formatindex="57">
+    <FormatElement msgid="DateTimeFormatskey4" default="false" type="long" usage="DATE_TIME"  formatindex="67">
       <FormatCode>YY"年"M"月"D"日" HH"時"MM"分"SS"秒"</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey22" default="false" type="medium" usage="DATE" formatindex="58">
+    <FormatElement msgid="DateFormatskey22" default="false" type="medium" usage="DATE" formatindex="68">
       <FormatCode>D-M-YYYY</FormatCode>
     </FormatElement>
   </LC_FORMAT>
