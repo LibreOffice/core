@@ -700,7 +700,7 @@ SwBoxAutoFormat& SwTableAutoFormat::GetBoxFormat( sal_uInt8 nPos )
         // If default doesn't exist yet:
         if( !pDfltBoxAutoFormat )
             pDfltBoxAutoFormat = new SwBoxAutoFormat();
-        *pFormat = *pDfltBoxAutoFormat;
+        pFormat = pDfltBoxAutoFormat;
     }
     return *pFormat;
 }
