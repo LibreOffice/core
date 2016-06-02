@@ -1328,6 +1328,8 @@ void SfxTemplateManagerDlg::createDefaultTemplateMenu ()
     }
     else
         mpActionMenu->HideItem(MNI_ACTION_DEFAULT);
+
+    mpLocalView->reload();
 }
 
 void SfxTemplateManagerDlg::switchMainView(bool bDisplayLocal)
