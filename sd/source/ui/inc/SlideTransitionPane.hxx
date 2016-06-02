@@ -58,6 +58,12 @@ public:
         ViewShellBase & rBase,
         SdDrawDocument* pDoc,
         const css::uno::Reference<css::frame::XFrame>& rxFrame );
+    explicit SlideTransitionPane(
+        Window * pParent,
+        ViewShellBase & rBase,
+        SdDrawDocument* pDoc,
+        const css::uno::Reference<css::frame::XFrame>& rxFrame,
+        bool bHorizontalLayout );
     virtual ~SlideTransitionPane();
     virtual void dispose() override;
 
@@ -87,6 +93,8 @@ private:
     ::sd::slidesorter::SharedPageSelection getSelectedPages() const;
 
     void UpdateLook();
+
+    void Initialize(SdDrawDocument* pDoc);
 
     DECL_LINK_TYPED( ApplyToAllButtonClicked, Button*, void );
     DECL_LINK_TYPED( PlayButtonClicked, Button*, void );
@@ -127,6 +135,7 @@ private:
     bool         mbHasSelection;
     bool         mbUpdatingControls;
     bool         mbIsMainViewChangePending;
+    bool         mbHorizontalLayout;
 
     typedef ::std::vector< OUString > tSoundListType;
     tSoundListType  maSoundList;
