@@ -298,7 +298,7 @@ End
         Value = STRING(default); \
     End
 
-#define REGISTRY_ENTRY_NEW_CMD(name,modid,app) \
+#define REGISTRY_ENTRY_NEW_CMD_PPA(name,modid,progpath_program_app) \
     RegistryItem CONCAT3(gid_Regitem_Openoffice_,name,_Shell_New) \
         ParentID = PREDEFINED_HKEY_CLASSES_ROOT; \
         ModuleID = modid; \
@@ -309,32 +309,44 @@ End
         ParentID = PREDEFINED_HKEY_CLASSES_ROOT; \
         ModuleID = modid; \
         Subkey = STRING(CONCAT3(LibreOffice.,name,\shell\new\command)); \
-        Value = "\"<progpath>\program\\" STRING(app) "\" -n \"%1\""; \
+        Value = "\"" STRING(progpath_program_app) "\" -n \"%1\""; \
     End
 
-#define REGISTRY_ENTRY_OPEN_CMD(name,modid,app) \
+#define REGISTRY_ENTRY_NEW_CMD(name,modid,app) \
+	REGISTRY_ENTRY_NEW_CMD_PPA(name,modid,<progpath>\program\app)
+
+#define REGISTRY_ENTRY_OPEN_CMD_PPA(name,modid,progpath_program_app) \
     RegistryItem CONCAT3(gid_Regitem_Openoffice_,name,_Shell_Open_Command) \
         ParentID = PREDEFINED_HKEY_CLASSES_ROOT; \
         ModuleID = modid; \
         Subkey = STRING(CONCAT3(LibreOffice.,name,\shell\open\command)); \
-        Value = "\"<progpath>\program\\" STRING(app) "\" -o \"%1\""; \
+        Value = "\"" STRING(progpath_program_app) "\" -o \"%1\""; \
     End
 
-#define REGISTRY_ENTRY_PRINT_CMD(name,modid,app) \
+#define REGISTRY_ENTRY_OPEN_CMD(name,modid,app) \
+	REGISTRY_ENTRY_OPEN_CMD_PPA(name,modid,<progpath>\program\app)
+
+#define REGISTRY_ENTRY_PRINT_CMD_PPA(name,modid,progpath_program_app) \
     RegistryItem CONCAT3(gid_Regitem_Openoffice_,name,_Shell_Print_Command) \
         ParentID = PREDEFINED_HKEY_CLASSES_ROOT; \
         ModuleID = modid; \
         Subkey = STRING(CONCAT3(LibreOffice.,name,\shell\print\command)); \
-        Value = "\"<progpath>\program\\" STRING(app) "\" -p \"%1\""; \
+        Value = "\"" STRING(progpath_program_app) "\" -p \"%1\""; \
     End
 
-#define REGISTRY_ENTRY_PRINTTO_CMD(name,modid,app) \
+#define REGISTRY_ENTRY_PRINT_CMD(name,modid,app) \
+	REGISTRY_ENTRY_PRINT_CMD_PPA(name,modid,<progpath>\program\app)
+
+#define REGISTRY_ENTRY_PRINTTO_CMD_PPA(name,modid,progpath_program_app) \
     RegistryItem CONCAT3(gid_Regitem_Openoffice_,name,_Shell_Printto_Command) \
         ParentID = PREDEFINED_HKEY_CLASSES_ROOT; \
         ModuleID = modid; \
         Subkey = STRING(CONCAT3(LibreOffice.,name,\shell\printto\command)); \
-        Value = "\"<progpath>\program\\" STRING(app) "\" -pt \"%2\" \"%1\""; \
+        Value = "\"" STRING(progpath_program_app) "\" -pt \"%2\" \"%1\""; \
     End
+
+#define REGISTRY_ENTRY_PRINTTO_CMD(name,modid,app) \
+	REGISTRY_ENTRY_PRINTTO_CMD_PPA(name,modid,<progpath>\program\app)
 
 #define REGISTRY_ENTRY_CAPABILITIES(name,modid,key,doc_type) \
     RegistryItem CONCAT2(gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_,name) \
