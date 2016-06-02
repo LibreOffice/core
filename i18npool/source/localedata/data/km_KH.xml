@@ -71,13 +71,13 @@
     <FormatElement msgid="FixedFormatskey6" default="false" type="medium" usage="FIXED_NUMBER" formatindex="5">
       <FormatCode>#.###,00</FormatCode>
     </FormatElement>
-    <FormatElement msgid="FixedFormatskey7" default="false" type="short" usage="FIXED_NUMBER" formatindex="52">
+    <FormatElement msgid="FixedFormatskey7" default="false" type="short" usage="FIXED_NUMBER" formatindex="62">
       <FormatCode>[NatNum1]0</FormatCode>
     </FormatElement>
-    <FormatElement msgid="FixedFormatskey8" default="false" type="medium" usage="FIXED_NUMBER" formatindex="53">
+    <FormatElement msgid="FixedFormatskey8" default="false" type="medium" usage="FIXED_NUMBER" formatindex="63">
       <FormatCode>[NatNum1]0,00</FormatCode>
     </FormatElement>
-    <FormatElement msgid="FixedFormatskey9" default="false" type="medium" usage="FIXED_NUMBER" formatindex="54">
+    <FormatElement msgid="FixedFormatskey9" default="false" type="medium" usage="FIXED_NUMBER" formatindex="64">
       <FormatCode>[NatNum1]#.###,00</FormatCode>
     </FormatElement>
     <FormatElement msgid="ScientificFormatskey1" default="false" type="medium" usage="SCIENTIFIC_NUMBER" formatindex="6">
@@ -89,10 +89,10 @@
     <FormatElement msgid="ScientificFormatskey3" default="false" type="medium" usage="SCIENTIFIC_NUMBER" formatindex="78">
       <FormatCode>##0,00E+00</FormatCode>
     </FormatElement>
-    <FormatElement msgid="PercentFormatskey3" default="false" type="short" usage="PERCENT_NUMBER" formatindex="58">
+    <FormatElement msgid="PercentFormatskey3" default="false" type="short" usage="PERCENT_NUMBER" formatindex="68">
       <FormatCode>[NatNum1]0%</FormatCode>
     </FormatElement>
-    <FormatElement msgid="PercentFormatskey4" default="false" type="long" usage="PERCENT_NUMBER" formatindex="59">
+    <FormatElement msgid="PercentFormatskey4" default="false" type="long" usage="PERCENT_NUMBER" formatindex="69">
       <FormatCode>[NatNum1]0,00%</FormatCode>
     </FormatElement>
     <FormatElement msgid="PercentFormatskey1" default="true" type="short" usage="PERCENT_NUMBER" formatindex="8">
@@ -119,13 +119,13 @@
     <FormatElement msgid="CurrencyFormatskey6" default="false" type="medium" usage="CURRENCY" formatindex="17">
       <FormatCode>#.##0[CURRENCY].--;[RED]-#.##0[CURRENCY].--</FormatCode>
     </FormatElement>
-    <FormatElement msgid="CurrencyFormatskey7" default="false" type="short" usage="CURRENCY" formatindex="55">
+    <FormatElement msgid="CurrencyFormatskey7" default="false" type="short" usage="CURRENCY" formatindex="65">
       <FormatCode>[NatNum1]#.##0[CURRENCY];-#.##0[CURRENCY]</FormatCode>
     </FormatElement>
-    <FormatElement msgid="CurrencyFormatskey8" default="false" type="medium" usage="CURRENCY" formatindex="56">
+    <FormatElement msgid="CurrencyFormatskey8" default="false" type="medium" usage="CURRENCY" formatindex="66">
       <FormatCode>[NatNum1]#.##0[CURRENCY].--;[RED]-#.##0[CURRENCY].--</FormatCode>
     </FormatElement>
-    <FormatElement msgid="CurrencyFormatskey9" default="false" type="medium" usage="CURRENCY" formatindex="57">
+    <FormatElement msgid="CurrencyFormatskey9" default="false" type="medium" usage="CURRENCY" formatindex="67">
       <FormatCode>[NatNum1]#.##0,00[CURRENCY];[RED]-#.##0,00[CURRENCY]</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey1" default="true" type="short" usage="DATE" formatindex="18">

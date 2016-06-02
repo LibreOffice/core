@@ -709,6 +709,10 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
 
         aFormatIndex = currNodeAttr.getValueByName("formatindex");
         sal_Int16 formatindex = (sal_Int16)aFormatIndex.toInt32();
+        // Ensure the new reserved range is not used anymore, free usage start
+        // was up'ed from 50 to 60.
+        if (50 <= formatindex && formatindex < 60)
+            incErrorInt( "Error: Reserved formatindex=\"%d\" in FormatElement, free usage starts at 60.\n", formatindex);
         if (!aFormatIndexSet.insert( formatindex).second)
             incErrorInt( "Error: Duplicated formatindex=\"%d\" in FormatElement.\n", formatindex);
         of.writeIntParameter("Formatindex", formatCount, formatindex);

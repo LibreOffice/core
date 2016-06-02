@@ -205,8 +205,8 @@
     The following FormatElements must follow specific rules:
 
     All:
-        The format indices 0..49 are reserved and, for backwards compatibility,
-        MUST be used as stated in
+        The format indices 0..59 are reserved and, for backwards compatibility,
+        indices 0..49 MUST be used as stated in
         offapi/com/sun/star/i18n/NumberFormatIndex.idl (
         http://opengrok.libreoffice.org/xref/core/offapi/com/sun/star/i18n/NumberFormatIndex.idl )
         Note that indices 10 ("# ?/?"), 11 ("# ??/??"), 48 (BOOLEAN) and 49 (@
@@ -236,7 +236,7 @@
 
         If you want to define yet more formats than the preset and reserved
         0..49 range that's fine, only make sure those formatindex="..." values
-        are each >=50 and all values are unique within one locale.
+        are each >=60 and all values are unique within one locale.
 
     Of usage="FIXED_NUMBER":
         formatindex="0" MUST be the format containing the 'General' keyword.

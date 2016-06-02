@@ -117,13 +117,13 @@
     <FormatElement msgid="DateFormatskey21" default="false" type="medium" usage="DATE" formatindex="38">
       <FormatCode>WW</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey22" default="false" type="medium" usage="DATE" formatindex="50">
+    <FormatElement msgid="DateFormatskey22" default="false" type="medium" usage="DATE" formatindex="60">
       <FormatCode>[NatNum2][~jewish]YY</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey23" default="false" type="medium" usage="DATE" formatindex="51">
+    <FormatElement msgid="DateFormatskey23" default="false" type="medium" usage="DATE" formatindex="61">
       <FormatCode>[NatNum2][~jewish]NNN DD MMMM YY</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey24" default="false" type="medium" usage="DATE" formatindex="52">
+    <FormatElement msgid="DateFormatskey24" default="false" type="medium" usage="DATE" formatindex="62">
       <FormatCode>[NatNum2][~jewish]"יום "NN"׳ "DD MMMM YY</FormatCode>
     </FormatElement>
     <FormatElement msgid="TimeFormatskey1" default="true" type="short" usage="TIME"  formatindex="39">
