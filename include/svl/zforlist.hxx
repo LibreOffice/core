@@ -74,6 +74,7 @@ namespace com { namespace sun { namespace star {
 
     Do NOT insert any new values!
     The values here correspond with those in offapi/com/sun/star/i18n/NumberFormatIndex.idl
+    You may append values though.
  */
 enum NfIndexTableOffset
 {
@@ -131,6 +132,7 @@ enum NfIndexTableOffset
     NF_DATE_DIN_MMDD,                       // 10-08                        DIN
     NF_DATE_DIN_YYMMDD,                     // 97-10-08                     DIN
     NF_DATE_DIN_YYYYMMDD,                   // 1997-10-08                   DIN
+    NF_DATE_ISO_YYYYMMDD = NF_DATE_DIN_YYYYMMDD, // 1997-10-08              ISO clarify with name
     NF_DATE_SYS_MMYY,                       // 10.97
     NF_DATE_SYS_DDMMM,                      // 08.Oct
     NF_DATE_MMMM,                           // October
@@ -156,15 +158,26 @@ enum NfIndexTableOffset
     NF_BOOLEAN,                             // BOOLEAN
     NF_TEXT,                                // @
 
-    NF_INDEX_TABLE_LOCALE_DATA_DEFAULTS,    // old number of predefined entries, locale data additions start after this
+    NF_INDEX_TABLE_LOCALE_DATA_DEFAULTS,    // == 50, old number of predefined entries, i18npool locale data additions start after this
 
     // From here on are values of new built-in formats that are not in the
     // original NumberFormatIndex.idl
 
+    // XXX Values appended here must also get a corresponding entry in
+    // svl/source/numbers/zforlist.cxx indexTable[] in the same order.
+
+    // XXX The dialog's number format shell assumes start/end spans
+    // (NF_..._START and NF_..._END above) to fill its categories with builtin
+    // formats, make new formats known to svx/source/items/numfmtsh.cxx
+    // SvxNumberFormatShell::FillEListWithStd_Impl(), otherwise they will not
+    // be be listed at all. Yes that is ugly.
+
     NF_FRACTION_3 = NF_INDEX_TABLE_LOCALE_DATA_DEFAULTS,    // # ?/4
     NF_FRACTION_4,                          // # ?/100
 
-    NF_INDEX_TABLE_ENTRIES
+    NF_DATETIME_ISO_YYYYMMDD_HHMMSS,        // 1997-10-08 01:23:45          ISO (with blank instead of T)
+
+    NF_INDEX_TABLE_ENTRIES                  // == 53, reserved up to 59 to not use in i18npool locale data.
 };
 
 

@@ -91,6 +91,7 @@ using namespace ::std;
  * (old currency) is recognized as a date (#53155#). */
 #define UNKNOWN_SUBSTITUTE      LANGUAGE_ENGLISH_US
 
+// Same order as in include/svl/zforlist.hxx enum NfIndexTableOffset
 static sal_uInt32 const indexTable[NF_INDEX_TABLE_ENTRIES] = {
     ZF_STANDARD, // NF_NUMBER_STANDARD
     ZF_STANDARD + 1, // NF_NUMBER_INT
@@ -143,7 +144,8 @@ static sal_uInt32 const indexTable[NF_INDEX_TABLE_ENTRIES] = {
     ZF_STANDARD_LOGICAL, // NF_BOOLEAN
     ZF_STANDARD_TEXT, // NF_TEXT
     ZF_STANDARD_FRACTION + 2, // NF_FRACTION_3
-    ZF_STANDARD_FRACTION + 3 // NF_FRACTION_4
+    ZF_STANDARD_FRACTION + 3, // NF_FRACTION_4
+    ZF_STANDARD_DATETIME + 2 // NF_DATETIME_ISO_YYYYMMDD_HHMMSS
 };
 
 /**
@@ -2495,7 +2497,7 @@ void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, bool bNoAdditio
     ImpInsertFormat( aFormatSeq[nIdx],
                      CLOffset + ZF_STANDARD_NEWEXTENDED_DATE_DIN_YYMMDD /* NF_DATE_DIN_YYMMDD */ );
 
-    // YYYY-MM-DD   DIN/EN
+    // YYYY-MM-DD   DIN/EN/ISO
     nIdx = ImpGetFormatCodeIndex( aFormatSeq, NF_DATE_DIN_YYYYMMDD );
     ImpInsertFormat( aFormatSeq[nIdx],
                      CLOffset + ZF_STANDARD_NEWEXTENDED_DATE_DIN_YYYYMMDD /* NF_DATE_DIN_YYYYMMDD */ );
@@ -2555,6 +2557,22 @@ void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, bool bNoAdditio
     ImpInsertFormat( aFormatSeq[nIdx],
                      CLOffset + ZF_STANDARD_DATETIME+1 /* NF_DATETIME_SYS_DDMMYYYY_HHMMSS */ );
 
+    const NfKeywordTable & rKeyword = pFormatScanner->GetKeywords();
+    i18n::NumberFormatCode aSingleFormatCode;
+    OUStringBuffer aBuf;
+    aSingleFormatCode.Usage = i18n::KNumberFormatUsage::DATE_TIME;
+
+    // YYYY-MM-DD HH:MM:SS   ISO
+    aBuf.append( rKeyword[NF_KEY_YYYY]).append('-').
+        append( rKeyword[NF_KEY_MM]).append('-').
+        append( rKeyword[NF_KEY_DD]).append(' ').
+        append( rKeyword[NF_KEY_HH]).append(':').
+        append( rKeyword[NF_KEY_MMI]).append(':').
+        append( rKeyword[NF_KEY_SS]);
+    aSingleFormatCode.Code = aBuf.makeStringAndClear();
+    ImpInsertFormat( aSingleFormatCode,
+                     CLOffset + ZF_STANDARD_DATETIME+2 /* NF_DATETIME_ISO_YYYYMMDD_HHMMSS */ );
+
 
     // Scientific number
     aFormatSeq = aNumberFormatCode.getAllFormatCode( i18n::KNumberFormatUsage::SCIENTIFIC_NUMBER );
@@ -2572,7 +2590,6 @@ void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, bool bNoAdditio
 
 
     // Fraction number (no default option)
-    i18n::NumberFormatCode aSingleFormatCode;
     aSingleFormatCode.Usage = i18n::KNumberFormatUsage::FRACTION_NUMBER;
 
      // # ?/?
@@ -2598,7 +2615,6 @@ void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, bool bNoAdditio
 
 
     // Week of year
-    const NfKeywordTable & rKeyword = pFormatScanner->GetKeywords();
     aSingleFormatCode.Code = rKeyword[NF_KEY_WW];
     ImpInsertFormat( aSingleFormatCode,
                      CLOffset + ZF_STANDARD_NEWEXTENDED_DATE_WW /* NF_DATE_WW */ );
