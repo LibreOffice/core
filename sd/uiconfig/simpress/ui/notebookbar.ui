@@ -123,6 +123,16 @@
     <property name="can_focus">False</property>
     <property name="pixbuf">cmd/lc_zoom.png</property>
   </object>
+  <object class="GtkImage" id="ZoomOptimalImg">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">cmd/lc_zoomoptimal.png</property>
+  </object>
+  <object class="GtkImage" id="ZoomPageImg">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">cmd/lc_zoompage.png</property>
+  </object>
   <object class="GtkGrid" id="NotebookBar">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -1848,6 +1858,41 @@
               </packing>
             </child>
             <child>
+              <object class="sfxlo-SidebarToolBox" id="Transition">
+                <property name="width_request">1600</property>
+                <property name="height_request">75</property>
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="show_arrow">False</property>
+                <child>
+                  <object class="sdlo-SlideTransitionBox" id="SlideTransitionBox">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="is_important">True</property>
+                    <property name="use_underline">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="position">3</property>
+              </packing>
+            </child>
+            <child type="tab">
+              <object class="GtkLabel" id="TransitionsLabel">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">Transitions</property>
+              </object>
+              <packing>
+                <property name="position">3</property>
+                <property name="tab_fill">False</property>
+              </packing>
+            </child>
+            <child>
               <object class="GtkBox" id="SlideShowBox">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
@@ -1994,7 +2039,7 @@
                 </child>
               </object>
               <packing>
-                <property name="position">3</property>
+                <property name="position">4</property>
               </packing>
             </child>
             <child type="tab">
@@ -2004,7 +2049,7 @@
                 <property name="label" translatable="yes">Slide Show</property>
               </object>
               <packing>
-                <property name="position">3</property>
+                <property name="position">4</property>
                 <property name="tab_fill">False</property>
               </packing>
             </child>
@@ -2128,7 +2173,7 @@
                 </child>
               </object>
               <packing>
-                <property name="position">4</property>
+                <property name="position">5</property>
               </packing>
             </child>
             <child type="tab">
@@ -2138,7 +2183,7 @@
                 <property name="label" translatable="yes">Review</property>
               </object>
               <packing>
-                <property name="position">4</property>
+                <property name="position">5</property>
                 <property name="tab_fill">False</property>
               </packing>
             </child>
@@ -2449,7 +2494,6 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="action_name">.uno:OutputQualityColor</property>
-                        <property name="image">OutputQualityColorImg</property>
                         <property name="relief">none</property>
                         <property name="image_position">top</property>
                       </object>
@@ -2465,7 +2509,6 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="action_name">.uno:OutputQualityGrayscale</property>
-                        <property name="image">ZoomPageImg3</property>
                         <property name="relief">none</property>
                         <property name="image_position">top</property>
                       </object>
@@ -2481,7 +2524,6 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="action_name">.uno:OutputQualityBlackWhite</property>
-                        <property name="image">ZoomPageImg2</property>
                         <property name="relief">none</property>
                         <property name="image_position">top</property>
                       </object>
@@ -2500,7 +2542,7 @@
                 </child>
               </object>
               <packing>
-                <property name="position">5</property>
+                <property name="position">6</property>
               </packing>
             </child>
             <child type="tab">
@@ -2510,7 +2552,7 @@
                 <property name="label" translatable="yes">View</property>
               </object>
               <packing>
-                <property name="position">5</property>
+                <property name="position">6</property>
                 <property name="tab_fill">False</property>
               </packing>
             </child>
@@ -2527,15 +2569,5 @@
         <property name="top_attach">0</property>
       </packing>
     </child>
-  </object>
-  <object class="GtkImage" id="ZoomOptimalImg">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">cmd/lc_zoomoptimal.png</property>
-  </object>
-  <object class="GtkImage" id="ZoomPageImg">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">cmd/lc_zoompage.png</property>
   </object>
 </interface>
