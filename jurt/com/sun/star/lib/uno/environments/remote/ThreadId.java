@@ -19,18 +19,15 @@
 
 package com.sun.star.lib.uno.environments.remote;
 
-import com.sun.star.uno.UnoRuntime;
 import java.io.UnsupportedEncodingException;
-import java.math.BigInteger;
 import java.util.Arrays;
+import java.util.concurrent.atomic.AtomicLong;
+
+import com.sun.star.uno.UnoRuntime;
 
 public final class ThreadId {
     public static ThreadId createFresh() {
-        BigInteger c;
-        synchronized (PREFIX) {
-            c = count;
-            count = count.add(BigInteger.ONE);
-        }
+        long c = count.getAndIncrement();
         try {
             return new ThreadId((PREFIX + c).getBytes("UTF-8"));
         } catch (UnsupportedEncodingException e) {
@@ -103,7 +100,7 @@ public final class ThreadId {
     }
 
     private static final String PREFIX = "java:" + UnoRuntime.getUniqueKey() + ":";
-    private static BigInteger count = BigInteger.ZERO;
+    private static final AtomicLong count = new AtomicLong(0);
 
     private final byte[] id;
     private int hash = 0;
