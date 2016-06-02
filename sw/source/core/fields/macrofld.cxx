@@ -161,7 +161,7 @@ bool SwMacroField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         rAny <<= bIsScriptURL ? GetMacroName() : OUString();
         break;
     default:
-        OSL_FAIL("illegal property");
+        assert(false);
     }
     return true;
 }
@@ -187,7 +187,7 @@ bool SwMacroField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         bIsScriptURL = isScriptURL(aMacro);
         break;
     default:
-        OSL_FAIL("illegal property");
+        assert(false);
     }
 
     return true;

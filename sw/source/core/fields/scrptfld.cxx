@@ -91,7 +91,7 @@ bool SwScriptField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         rAny <<= bCodeURL;
         break;
     default:
-        OSL_FAIL("illegal property");
+        assert(false);
     }
     return true;
 }
@@ -110,7 +110,7 @@ bool SwScriptField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         bCodeURL = *static_cast<sal_Bool const *>(rAny.getValue());
         break;
     default:
-        OSL_FAIL("illegal property");
+        assert(false);
     }
     return true;
 }

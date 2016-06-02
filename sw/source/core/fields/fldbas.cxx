@@ -299,7 +299,7 @@ bool  SwField::QueryValue( uno::Any& rVal, sal_uInt16 nWhichId ) const
             rVal <<= !m_bIsAutomaticLanguage;
         break;
         default:
-            OSL_FAIL("illegal property");
+            assert(false);
     }
     return true;
 }
@@ -316,7 +316,7 @@ bool SwField::PutValue( const uno::Any& rVal, sal_uInt16 nWhichId )
         }
         break;
         default:
-            OSL_FAIL("illegal property");
+            assert(false);
     }
     return true;
 }

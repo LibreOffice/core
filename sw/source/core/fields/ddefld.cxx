@@ -325,7 +325,7 @@ bool SwDDEFieldType::QueryValue( uno::Any& rVal, sal_uInt16 nWhichId ) const
         rVal <<= aExpansion;
         break;
     default:
-        OSL_FAIL("illegal property");
+        assert(false);
     }
     if ( nPart>=0 )
         rVal <<= GetCmd().getToken(nPart, sfx2::cTokenSeparator);
@@ -349,7 +349,7 @@ bool SwDDEFieldType::PutValue( const uno::Any& rVal, sal_uInt16 nWhichId )
         rVal >>= aExpansion;
         break;
     default:
-        OSL_FAIL("illegal property");
+        assert(false);
     }
     if( nPart>=0 )
     {
