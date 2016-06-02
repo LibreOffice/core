@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_72e242d7",
+        "filename": "xmloff/source/text/txtimp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2518,
+      "author": {
+        "id": 1001193
+      },
+      "writtenOn": "2016-06-02T22:31:52Z",
+      "side": 1,
+      "message": "Please use auto here, for simplicity.",
+      "range": {
+        "startLine": 2518,
+        "startChar": 8,
+        "endLine": 2518,
+        "endChar": 41
+      },
+      "revId": "b34cea875b9ec58f82b7c55139ebcf9000cfb30e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
