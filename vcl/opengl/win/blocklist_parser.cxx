@@ -131,8 +131,12 @@ OUString getVendor(const OString& rString)
     {
         return "0x1414";
     }
-
-    throw InvalidFileException();
+    else
+    {
+        // Allow having simply the hex number as such there, too. After all, it's hex numbers that
+        // are output to opengl_device.log.
+        return OStringToOUString(rString, RTL_TEXTENCODING_UTF8);
+    }
 }
 
 uint64_t getVersion(const OString& rString)

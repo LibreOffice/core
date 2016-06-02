@@ -27,6 +27,9 @@
         <entry os="8" vendor="microsoft" compare="not_equal" version="10.20.30.40">
             <device id="all"/>
         </entry>
+        <entry os="8" vendor="0xcafe" compare="not_equal" version="10.20.30.40">
+            <device id="all"/>
+        </entry>
         <entry os="8_1" compare="between_exclusive" version="10.20.30.40">
             <device id="all"/>
         </entry>
@@ -57,6 +60,9 @@
             <device id="all"/>
         </entry>
         <entry os="8" vendor="microsoft" compare="not_equal" version="10.20.30.40">
+            <device id="all"/>
+        </entry>
+        <entry os="8" vendor="0xcafe" compare="not_equal" version="10.20.30.40">
             <device id="all"/>
         </entry>
         <entry os="8_1" compare="between_exclusive" version="10.20.30.40">
