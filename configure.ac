@@ -8657,8 +8657,10 @@ if test "$enable_firebird_sdbc" = "yes" ; then
         AC_PATH_PROG(FIREBIRDCONFIG, [fb_config])
         if test -z "$FIREBIRDCONFIG"; then
             AC_MSG_NOTICE([No fb_config -- using pkg-config])
-            PKG_CHECK_MODULES(FIREBIRD, fbembed)
-            FIREBIRD_VERSION=`pkg-config --modversion fbembed`
+            PKG_CHECK_MODULES([FIREBIRD], [fbclient >= 3], [FIREBIRD_PKGNAME=fbclient], [
+                PKG_CHECK_MODULES([FIREBIRD], [fbembed], [FIREBIRD_PKGNAME=fbembed])
+            ])
+            FIREBIRD_VERSION=`pkg-config --modversion "$FIREBIRD_PKGNAME"`
         else
             AC_MSG_NOTICE([fb_config found])
             FIREBIRD_VERSION=`$FIREBIRDCONFIG --version`
@@ -8673,19 +8675,20 @@ if test "$enable_firebird_sdbc" = "yes" ; then
         if test -n "${FIREBIRD_VERSION}"; then
             FIREBIRD_MAJOR=`echo $FIREBIRD_VERSION | cut -d"." -f1`
             FIREBIRD_MINOR=`echo $FIREBIRD_VERSION | cut -d"." -f2`
-            if test "$FIREBIRD_MAJOR" -eq "2" -a "$FIREBIRD_MINOR" -eq "5"; then
+            if test "$FIREBIRD_MAJOR" -eq "2" -a "$FIREBIRD_MINOR" -eq "5" -o \
+                    "$FIREBIRD_MAJOR" -eq "3" -a "$FIREBIRD_MINOR" -eq "0"; then
                 AC_MSG_RESULT([OK])
             else
-                AC_MSG_ERROR([Ensure firebird 2.5.x is installed])
+                AC_MSG_ERROR([Ensure firebird 2.5.x or 3.0.x is installed])
             fi
         else
             __save_CFLAGS="${CFLAGS}"
             CFLAGS="${CFLAGS} ${FIREBIRD_CFLAGS}"
             AC_COMPILE_IFELSE([AC_LANG_SOURCE([[#include <ibase.h>
-#if defined(FB_API_VER) && FB_API_VER == 25
+#if defined(FB_API_VER) && (FB_API_VER == 25 || FB_API_VER == 30)
 #else
 #error "Wrong Firebird API version"
-#endif]])],AC_MSG_RESULT([OK]),AC_MSG_ERROR([Ensure firebird 2.5.x is installed]))
+#endif]])],AC_MSG_RESULT([OK]),AC_MSG_ERROR([Ensure firebird 2.5.x or 3.0.x is installed]))
             CFLAGS="${__save_CFLAGS}"
         fi
         ENABLE_FIREBIRD_SDBC="TRUE"
