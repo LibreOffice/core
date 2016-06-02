@@ -40,7 +40,7 @@ void BlocklistParserTest::testParse()
     aBlocklistParser.parse();
 
     size_t const n = aDriveInfos.size();
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(20), n);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(22), n);
 
     size_t i = 0;
 
@@ -77,6 +77,11 @@ void BlocklistParserTest::testParse()
         aDriveInfo = aDriveInfos[i++];
         CPPUNIT_ASSERT_EQUAL(bIsWhitelisted, aDriveInfo.mbWhitelisted);
         CPPUNIT_ASSERT_EQUAL(WinOpenGLDeviceInfo::GetDeviceVendor(wgl::VendorMicrosoft), aDriveInfo.maAdapterVendor);
+        CPPUNIT_ASSERT_EQUAL(wgl::VersionComparisonOp::DRIVER_NOT_EQUAL, aDriveInfo.meComparisonOp);
+
+        aDriveInfo = aDriveInfos[i++];
+        CPPUNIT_ASSERT_EQUAL(bIsWhitelisted, aDriveInfo.mbWhitelisted);
+        CPPUNIT_ASSERT_EQUAL(OUString("0xcafe"), aDriveInfo.maAdapterVendor);
         CPPUNIT_ASSERT_EQUAL(wgl::VersionComparisonOp::DRIVER_NOT_EQUAL, aDriveInfo.meComparisonOp);
 
         aDriveInfo = aDriveInfos[i++];
