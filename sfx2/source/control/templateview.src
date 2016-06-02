@@ -48,4 +48,9 @@ Bitmap IMG_RECENTDOC_REMOVE_HIGHLIGHTED
     File = "recentdoc_remove_highlighted.png";
 };
 
+Bitmap IMG_DEFAULT
+{
+    File = "plus.png";  //add a deafult icon
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

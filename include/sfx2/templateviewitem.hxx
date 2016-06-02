@@ -24,6 +24,10 @@ public:
 
     const OUString& getPath () const { return maPath; }
 
+    void showDefaultIcon(bool bVal) { mbIsDefaultTemplate = bVal; }
+
+    Rectangle getDefaultIconArea() const;
+
     virtual void Paint (drawinglayer::processor2d::BaseProcessor2D *pProcessor,
                         const ThumbnailItemAttributes *pAttrs) override;
 
@@ -33,6 +37,8 @@ public:
 private:
 
     OUString maPath;
+    BitmapEx maDefaultBitmap;
+    bool mbIsDefaultTemplate;
 };
 
 #endif // INCLUDED_SFX2_TEMPLATEVIEWITEM_HXX

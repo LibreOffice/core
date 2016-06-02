@@ -13,9 +13,11 @@
 #include <sfx2/templatecontaineritem.hxx>
 #include <sfx2/templateviewitem.hxx>
 #include <sfx2/sfxresid.hxx>
+#include <sfx2/docfac.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/pngread.hxx>
+#include <unotools/moduleoptions.hxx>
 
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
@@ -34,6 +36,7 @@
 
 using namespace basegfx;
 using namespace drawinglayer::primitive2d;
+using namespace ::com::sun::star::uno;
 
 bool ViewFilter_Application::isFilteredExtension(FILTER_APPLICATION filter, const OUString &rExt)
 {
@@ -118,6 +121,9 @@ void TemplateAbstractView::insertItems(const std::vector<TemplateItemProperties>
         pChild->setPath(pCur->aPath);
         pChild->setHelpText(pCur->aRegionName);
         pChild->maPreview1 = pCur->aThumbnail;
+
+        if(IsDefaultTemplate(pCur->aPath))
+            pChild->showDefaultIcon(true);
 
         if ( pCur->aThumbnail.IsEmpty() )
         {
@@ -210,6 +216,22 @@ BitmapEx TemplateAbstractView::scaleImg (const BitmapEx &rImg, long width, long 
     }
 
     return aImg;
+}
+
+bool TemplateAbstractView::IsDefaultTemplate(const OUString& rPath)
+{
+    SvtModuleOptions aModOpt;
+    std::vector<OUString> aList;
+    const css::uno::Sequence<OUString> &aServiceNames = aModOpt.GetAllServiceNames();
+
+    for( sal_Int32 i=0, nCount = aServiceNames.getLength(); i < nCount; ++i )
+    {
+        const OUString defaultPath = SfxObjectFactory::GetStandardTemplate( aServiceNames[i] );
+        if(defaultPath.match(rPath))
+            return true;
+    }
+
+    return false;
 }
 
 BitmapEx TemplateAbstractView::getDefaultThumbnail( const OUString& rPath )
