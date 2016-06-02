@@ -140,6 +140,8 @@ void TemplateAbstractView::updateThumbnailDimensions(long itemMaxSize)
 
 void TemplateAbstractView::MouseButtonDown( const MouseEvent& rMEvt )
 {
+    GrabFocus();
+    deselectItems();
     if (rMEvt.IsRight())
     {
         size_t nPos = ImplGetItem(rMEvt.GetPosPixel());
