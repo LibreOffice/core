@@ -316,7 +316,7 @@ void OpenGLContext::InitGLEWDebugging()
     }
 
     // Test hooks for inserting tracing messages into the stream
-    VCL_GL_INFO("LibreOffice GLContext initialized: " << this);
+    VCL_GL_INFO("LibreOffice GLContext initialized");
 #endif
 }
 
