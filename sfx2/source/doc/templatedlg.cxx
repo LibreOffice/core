@@ -67,7 +67,7 @@ const char TM_SETTING_LASTAPPLICATION[] = "LastApplication";
 
 const char SERVICENAME_CFGREADACCESS[] = "com.sun.star.configuration.ConfigurationAccess";
 
-const char VIEWBAR_REPOSITORY[] = "repository";
+const char ACTIONBAR_REPOSITORY[] = "repository";
 const char ACTIONBAR_ACTION[] = "action_menu";
 
 #define MNI_ACTION_NEW_FOLDER 1
@@ -170,7 +170,6 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg(vcl::Window *parent)
     get(mpSearchFilter, "search_filter");
     get(mpCBApp, "filter_application");
     get(mpCBFolder, "filter_folder");
-    get(mpViewBar, "action_view");
     get(mpActionBar, "action_action");
     get(mpLocalView, "template_view");
     get(mpSearchView, "search_view");
@@ -205,14 +204,13 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg(vcl::Window *parent)
     mpActionMenu->SetPopupMenu(MNI_ACTION_DEFAULT,mpTemplateDefaultMenu);
 
     // Set toolbox styles
-    mpViewBar->SetButtonType(ButtonType::SYMBOLTEXT);
+    mpActionBar->SetButtonType(ButtonType::SYMBOLTEXT);
 
     // Set toolbox button bits
-    mpViewBar->SetItemBits(mpViewBar->GetItemId(VIEWBAR_REPOSITORY), ToolBoxItemBits::DROPDOWNONLY);
+    mpActionBar->SetItemBits(mpActionBar->GetItemId(ACTIONBAR_REPOSITORY), ToolBoxItemBits::DROPDOWNONLY);
     mpActionBar->SetItemBits(mpActionBar->GetItemId(ACTIONBAR_ACTION), ToolBoxItemBits::DROPDOWNONLY);
 
     // Set toolbox handlers
-    mpViewBar->SetDropdownClickHdl(LINK(this,SfxTemplateManagerDlg,TBXDropdownHdl));
     mpActionBar->SetDropdownClickHdl(LINK(this,SfxTemplateManagerDlg,TBXDropdownHdl));
 
     mpLocalView->SetStyle(mpLocalView->GetStyle() | WB_VSCROLL);
@@ -267,11 +265,10 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg(vcl::Window *parent)
     SvtMiscOptions aMiscOptions;
     if ( !aMiscOptions.IsExperimentalMode() )
     {
-        sal_uInt16 nPos = mpViewBar->GetItemPos(mpViewBar->GetItemId(VIEWBAR_REPOSITORY));
-        mpViewBar->RemoveItem(nPos);
+        sal_uInt16 nPos = mpActionBar->GetItemPos(mpActionBar->GetItemId(ACTIONBAR_REPOSITORY));
+        mpActionBar->RemoveItem(nPos);
     }
 
-    mpViewBar->Show();
     mpActionBar->Show();
 
     switchMainView(true);
@@ -331,7 +328,6 @@ void SfxTemplateManagerDlg::dispose()
     mpSearchFilter.clear();
     mpCBApp.clear();
     mpCBFolder.clear();
-    mpViewBar.clear();
     mpActionBar.clear();
     mpSearchView.clear();
     mpCurView.clear();
@@ -527,30 +523,19 @@ IMPL_LINK_NOARG_TYPED(SfxTemplateManagerDlg, SelectRegionHdl, ListBox&, void)
         SearchUpdateHdl(*mpSearchFilter);
 }
 
-IMPL_LINK_TYPED(SfxTemplateManagerDlg, TBXDropdownHdl, ToolBox*, pBox, void)
+IMPL_LINK_NOARG_TYPED(SfxTemplateManagerDlg, TBXDropdownHdl, ToolBox*, void)
 {
-    const sal_uInt16 nCurItemId = pBox->GetCurItemId();
+    const sal_uInt16 nCurItemId = mpActionBar->GetCurItemId();
+    mpActionBar->SetItemDown( nCurItemId, true );
 
-    if (pBox == mpActionBar && nCurItemId == mpActionBar->GetItemId(ACTIONBAR_ACTION))
-    {
-        pBox->SetItemDown( nCurItemId, true );
+    if (nCurItemId == mpActionBar->GetItemId(ACTIONBAR_ACTION))
+        mpActionMenu->Execute(mpActionBar, mpActionBar->GetItemRect(nCurItemId), PopupMenuFlags::ExecuteDown);
+    else if (nCurItemId == mpActionBar->GetItemId(ACTIONBAR_REPOSITORY))
+        mpRepositoryMenu->Execute(mpActionBar, mpActionBar->GetItemRect(nCurItemId), PopupMenuFlags::ExecuteDown);
 
-        mpActionMenu->Execute(pBox, pBox->GetItemRect(nCurItemId), PopupMenuFlags::ExecuteDown);
-
-        pBox->SetItemDown( nCurItemId, false );
-        pBox->EndSelection();
-        pBox->Invalidate();
-    }
-    else if (pBox == mpViewBar && nCurItemId == mpViewBar->GetItemId(VIEWBAR_REPOSITORY))
-    {
-        pBox->SetItemDown( nCurItemId, true );
-
-        mpRepositoryMenu->Execute(pBox, pBox->GetItemRect(nCurItemId), PopupMenuFlags::ExecuteDown);
-
-        pBox->SetItemDown( nCurItemId, false );
-        pBox->EndSelection();
-        pBox->Invalidate();
-    }
+    mpActionBar->SetItemDown( nCurItemId, false );
+    mpActionBar->EndSelection();
+    mpActionBar->Invalidate();
 }
 
 IMPL_LINK_TYPED(SfxTemplateManagerDlg, TVItemStateHdl, const ThumbnailViewItem*, pItem, void)
@@ -751,10 +736,7 @@ IMPL_STATIC_LINK_NOARG_TYPED(SfxTemplateManagerDlg, LinkClickHdl, Button*, void)
 IMPL_LINK_NOARG_TYPED(SfxTemplateManagerDlg, OpenRegionHdl, void*, void)
 {
     maSelTemplates.clear();
-
     mpOKButton->Disable();
-
-    mpViewBar->Show();
     mpActionBar->Show();
 }
 
