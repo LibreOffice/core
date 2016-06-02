@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_f279f230",
+        "filename": "sd/source/ui/controller/slidetransitioncontroller.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2016-06-02T21:01:09Z",
+      "side": 1,
+      "message": "This is rather a hack...\nWhen I\u0027ve tried to create SlideTransitionPane here I couldn\u0027t get necessary arguments. I\u0027ve got only null pointers after I called SfxViewFrame::Current() etc.\nAfter some time SfxViewFrame::Current() returns an useful pointer.",
+      "revId": "315faf0ce8ebe74475ca6047f62b839c551bd0db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
