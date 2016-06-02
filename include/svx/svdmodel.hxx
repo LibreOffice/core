@@ -220,7 +220,7 @@ private:
 
 public:
     sal_uInt16          nStarDrawPreviewMasterPageNum;
-    SvxForbiddenCharactersTable* mpForbiddenCharactersTable;
+    rtl::Reference<SvxForbiddenCharactersTable> mpForbiddenCharactersTable;
     SdrSwapGraphicsMode nSwapGraphicsMode;
 
     SdrOutlinerCache*   mpOutlinerCache;
@@ -567,7 +567,7 @@ public:
     void setLock( bool bLock );
 
     void            SetForbiddenCharsTable( const rtl::Reference<SvxForbiddenCharactersTable>& xForbiddenChars );
-    rtl::Reference<SvxForbiddenCharactersTable> GetForbiddenCharsTable() const { return mpForbiddenCharactersTable;}
+    const rtl::Reference<SvxForbiddenCharactersTable>& GetForbiddenCharsTable() const { return mpForbiddenCharactersTable;}
 
     void SetCharCompressType( sal_uInt16 nType );
     sal_uInt16 GetCharCompressType() const { return mnCharCompressType; }

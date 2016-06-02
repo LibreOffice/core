@@ -55,7 +55,7 @@ namespace com { namespace sun { namespace star { namespace form {
 
 class SVX_DLLPUBLIC FmFormView : public E3dView
 {
-    FmXFormView*    pImpl;
+    rtl::Reference<FmXFormView> pImpl;
     FmFormShell*    pFormShell;
 
     void Init();
@@ -130,7 +130,7 @@ public:
 
     SVX_DLLPRIVATE void ChangeDesignMode(bool bDesign);
 
-    SVX_DLLPRIVATE FmXFormView* GetImpl() const { return pImpl; }
+    SVX_DLLPRIVATE FmXFormView* GetImpl() const { return pImpl.get(); }
     SVX_DLLPRIVATE FmFormShell* GetFormShell() const { return pFormShell; }
 
     struct FormShellAccess { friend class FmFormShell; private: FormShellAccess() { } };

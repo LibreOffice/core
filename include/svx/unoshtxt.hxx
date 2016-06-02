@@ -83,7 +83,7 @@ public:
 private:
     SVX_DLLPRIVATE SvxTextEditSource( SvxTextEditSourceImpl* pImpl );
 
-    SvxTextEditSourceImpl*  mpImpl;
+    rtl::Reference<SvxTextEditSourceImpl>  mpImpl;
 };
 
 #endif

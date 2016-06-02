@@ -35,6 +35,7 @@
 #include <com/sun/star/ucb/XAnyCompareFactory.hpp>
 #include <com/sun/star/ucb/ListAction.hpp>
 #include <cppuhelper/implbase.hxx>
+#include <rtl/ref.hxx>
 #include <deque>
 
 namespace comphelper {
@@ -126,7 +127,7 @@ class SortedResultSet: public cppu::WeakImplHelper <
     css::uno::Reference < css::sdbc::XResultSet >            mxOriginal;
     css::uno::Reference < css::sdbc::XResultSet >            mxOther;
 
-    SRSPropertySetInfo* mpPropSetInfo;
+    rtl::Reference<SRSPropertySetInfo> mpPropSetInfo;
     SortInfo*           mpSortInfo;
     osl::Mutex          maMutex;
     SortedEntryList     maS2O;          // maps the sorted entries to the original ones

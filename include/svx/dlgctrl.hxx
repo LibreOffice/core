@@ -78,7 +78,7 @@ private:
     SVX_DLLPRIVATE void             Resize_Impl();
 
 protected:
-    SvxRectCtlAccessibleContext* pAccContext;
+    rtl::Reference<SvxRectCtlAccessibleContext> pAccContext;
     sal_uInt16 nBorderWidth;
     sal_uInt16 nRadius;
     Size aSize;

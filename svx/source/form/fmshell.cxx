@@ -211,7 +211,6 @@ FmFormShell::FmFormShell( SfxViewShell* _pParent, FmFormView* pView )
             ,m_bDesignMode( true )
             ,m_bHasForms(false)
 {
-    m_pImpl->acquire();
     SetPool( &SfxGetpApp()->GetPool() );
     SetName( "Form" );
 
@@ -225,8 +224,6 @@ FmFormShell::~FmFormShell()
         SetView( nullptr );
 
     m_pImpl->dispose();
-    m_pImpl->release();
-    m_pImpl = nullptr;
 }
 
 

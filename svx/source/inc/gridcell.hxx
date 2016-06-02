@@ -71,7 +71,7 @@ class DbGridColumn
     ::svt::CellControllerRef m_xController; // Struktur zum Verwalten der Controls fuer eine Spalte
                                         // diese wird von der DbBrowseBox auf die jeweiligen Zellen
                                         // einer Spalte positioniert
-    FmXGridCell*                m_pCell;
+    rtl::Reference<FmXGridCell>                           m_pCell;
 
 protected:
     DbGridControl&      m_rParent;
@@ -134,7 +134,7 @@ public:
     const   ::svt::CellControllerRef& GetController() const {return m_bLocked ? s_xEmptyController : m_xController;}
     const   css::uno::Reference< css::beans::XPropertySet >& GetField() const {return m_xField;}
     DbGridControl& GetParent() const {return m_rParent;}
-    FmXGridCell* GetCell() const {return m_pCell;}
+    FmXGridCell* GetCell() const {return m_pCell.get();}
 
     css::uno::Reference< css::sdb::XColumn >  GetCurrentFieldValue() const;
 
@@ -200,8 +200,8 @@ class DbCellControl
         ,public ::comphelper::OPropertyChangeListener
 {
 private:
-    ::comphelper::OPropertyChangeMultiplexer*   m_pModelChangeBroadcaster;
-    ::comphelper::OPropertyChangeMultiplexer*   m_pFieldChangeBroadcaster;
+    rtl::Reference<::comphelper::OPropertyChangeMultiplexer>  m_pModelChangeBroadcaster;
+    rtl::Reference<::comphelper::OPropertyChangeMultiplexer>  m_pFieldChangeBroadcaster;
 
 private:
     bool                    m_bTransparent : 1;

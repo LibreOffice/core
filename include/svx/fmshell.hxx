@@ -71,7 +71,7 @@ class SVX_DLLPUBLIC FmFormShell : public SfxShell
     friend class FmFormView;
     friend class FmXFormShell;
 
-    FmXFormShell*   m_pImpl;
+    rtl::Reference<FmXFormShell> m_pImpl;
     FmFormView*     m_pFormView;
     FmFormModel*    m_pFormModel;
 
@@ -113,7 +113,7 @@ public:
     FmFormView*  GetFormView() const { return m_pFormView; }
     FmFormModel* GetFormModel() const { return m_pFormModel; }
     FmFormPage*  GetCurPage() const;
-    FmXFormShell* GetImpl() const {return m_pImpl;};
+    FmXFormShell* GetImpl() const {return m_pImpl.get();};
 
     bool PrepareClose(bool bUI = true);
 

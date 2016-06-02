@@ -283,19 +283,8 @@ FmXDisposeListener::~FmXDisposeListener()
 
 void FmXDisposeListener::setAdapter(FmXDisposeMultiplexer* pAdapter)
 {
-    if (m_pAdapter)
-    {
-        ::osl::MutexGuard aGuard(m_rMutex);
-        m_pAdapter->release();
-        m_pAdapter = nullptr;
-    }
-
-    if (pAdapter)
-    {
-        ::osl::MutexGuard aGuard(m_rMutex);
-        m_pAdapter = pAdapter;
-        m_pAdapter->acquire();
-    }
+    ::osl::MutexGuard aGuard(m_rMutex);
+    m_pAdapter = pAdapter;
 }
 
 

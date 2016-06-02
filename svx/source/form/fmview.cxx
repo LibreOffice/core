@@ -90,8 +90,6 @@ void FmFormView::Init()
 {
     pFormShell = nullptr;
     pImpl = new FmXFormView(this);
-    pImpl->acquire();
-
 
     // Model setzen
     SdrModel* pModel = GetModel();
@@ -138,8 +136,6 @@ FmFormView::~FmFormView()
         pFormShell->SetView( nullptr );
 
     pImpl->notifyViewDying();
-    pImpl->release();
-    pImpl = nullptr;
 }
 
 
@@ -163,7 +159,7 @@ void FmFormView::MarkListHasChanged()
             pImpl->m_pMarkedGrid = nullptr;
             if ( pImpl->m_xWindow.is() )
             {
-                pImpl->m_xWindow->removeFocusListener(pImpl);
+                pImpl->m_xWindow->removeFocusListener(pImpl.get());
                 pImpl->m_xWindow = nullptr;
             }
             SetMoveOutside(false);
@@ -500,7 +496,7 @@ bool FmFormView::KeyInput(const KeyEvent& rKEvt, vcl::Window* pWin)
                     pImpl->m_pMarkedGrid = pObj;
                     pImpl->m_xWindow = xWindow;
                     // add as listener to get notified when ESC will be pressed inside the grid
-                    pImpl->m_xWindow->addFocusListener(pImpl);
+                    pImpl->m_xWindow->addFocusListener(pImpl.get());
                     SetMoveOutside(true);
                     //OLMRefreshAllIAOManagers();
                     xWindow->setFocus();

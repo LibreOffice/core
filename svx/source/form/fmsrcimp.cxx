@@ -217,14 +217,12 @@ bool FmSearchEngine::MoveCursor()
         else
             if (m_xSearchCursor.isFirst())
             {
-                FmRecordCountListener* prclListener = new FmRecordCountListener(m_xSearchCursor);
-                prclListener->acquire();
+                rtl::Reference<FmRecordCountListener> prclListener = new FmRecordCountListener(m_xSearchCursor);
                 prclListener->SetPropChangeHandler(LINK(this, FmSearchEngine, OnNewRecordCount));
 
                 m_xSearchCursor.last();
 
                 prclListener->DisConnect();
-                prclListener->release();
             }
             else
                 m_xSearchCursor.previous();

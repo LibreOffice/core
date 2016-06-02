@@ -490,7 +490,6 @@ void SAL_CALL FmFilterAdapter::disjunctiveTermAdded( const FilterEvent& Event ) 
 FmFilterModel::FmFilterModel()
               :FmParentData(nullptr, OUString())
               ,OSQLParserClient(comphelper::getProcessComponentContext())
-              ,m_pAdapter(nullptr)
               ,m_pCurrentItems(nullptr)
 {
 }
@@ -509,11 +508,10 @@ void FmFilterModel::Clear()
     Broadcast( aClearedHint );
 
     // lose endings
-    if (m_pAdapter)
+    if (m_pAdapter.is())
     {
         m_pAdapter->dispose();
-        m_pAdapter->release();
-        m_pAdapter= nullptr;
+        m_pAdapter.clear();
     }
 
     m_pCurrentItems  = nullptr;
@@ -551,7 +549,6 @@ void FmFilterModel::Update(const Reference< XIndexAccess > & xControllers, const
 
         // Listening for TextChanges
         m_pAdapter = new FmFilterAdapter(this, xControllers);
-        m_pAdapter->acquire();
 
         SetCurrentController(xCurrent);
         EnsureEmptyFilterRows( *this );
