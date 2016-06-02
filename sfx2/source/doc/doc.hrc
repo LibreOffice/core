@@ -29,8 +29,6 @@
 #define STR_ERROR_PRINTER_BUSY              (RID_SFX_DOC_START+ 1)
 #define STR_NOSTARTPRINTER                  (RID_SFX_DOC_START+ 2)
 
-#define STR_BACKUP_COPY                     (RID_SFX_DOC_START+ 23)
-#define STR_ERROR_SAVE                      (RID_SFX_DOC_START+ 27)
 #define STR_TEMPLATE_FILTER                 (RID_SFX_DOC_START+ 28)
 
 #define STR_SAVEDOC                         (RID_SFX_DOC_START+ 45)
