@@ -245,7 +245,7 @@ published interface XCharacterClassification : com::sun::star::uno::XInterface
             // Continuing characters may be any alphanumeric or underscore.
             sal_Int32 nContFlags = nStartFlags;
             // Additionally, continuing characters may contain a blank.
-            OUString aContChars( RTL_CONSTASCII_USTRINGPARAM(" ") );
+            OUString aContChars( " " );
             // Parse predefined (must be an IDENTNAME) token.
             ParseResult rRes = xCC->parsePredefinedToken( KParseType::IDENTNAME, rName, 0, aLocale,
                 nStartFlags, aEmptyString, nContFlags, aContChars );

@@ -3092,7 +3092,7 @@ uno::Sequence<uno::Any> SwXPageStyle::GetPropertyValues_Impl(const uno::Sequence
             case SID_ATTR_PAGE_SHARED_FIRST:
             case SID_ATTR_PAGE_ON:
             case RES_HEADER_FOOTER_EAT_SPACING:
-                throw beans::UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropName, static_cast < cppu::OWeakObject * > ( this ) );
+                throw beans::UnknownPropertyException( "Unknown property: " + rPropName, static_cast < cppu::OWeakObject * > ( this ) );
             case FN_UNO_HEADER:
             case FN_UNO_HEADER_LEFT:
             case FN_UNO_HEADER_FIRST:

@@ -658,12 +658,12 @@ void DrawController::FillPropertyTable (
             beans::PropertyAttribute::BOUND|beans::PropertyAttribute::READONLY|beans::PropertyAttribute::MAYBEVOID ));
     // add new property to update current page's acc information
     rProperties.push_back(
-        beans::Property( OUString( RTL_CONSTASCII_USTRINGPARAM("UpdateAcc") ),
+        beans::Property( "UpdateAcc",
             PROPERTY_UPDATEACC,
             ::cppu::UnoType<sal_Int16>::get(),
             beans::PropertyAttribute::BOUND ));
     rProperties.push_back(
-        beans::Property( OUString( RTL_CONSTASCII_USTRINGPARAM("PageChange") ),
+        beans::Property( "PageChange",
             PROPERTY_PAGE_CHANGE,
             ::cppu::UnoType<sal_Int16>::get(),
             beans::PropertyAttribute::BOUND ));

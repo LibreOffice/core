@@ -164,9 +164,9 @@ void PageStyleContext::FillPropertySet(const uno::Reference<beans::XPropertySet 
     // ones are used when a FillStyle is defined
     if(!m_bIsFillStyleAlreadyConverted && GetProperties().size())
     {
-        static ::rtl::OUString s_FillStyle(RTL_CONSTASCII_USTRINGPARAM("FillStyle"));
-        static ::rtl::OUString s_HeaderFillStyle(RTL_CONSTASCII_USTRINGPARAM("HeaderFillStyle"));
-        static ::rtl::OUString s_FooterFillStyle(RTL_CONSTASCII_USTRINGPARAM("FooterFillStyle"));
+        static ::rtl::OUString s_FillStyle("FillStyle");
+        static ::rtl::OUString s_HeaderFillStyle("HeaderFillStyle");
+        static ::rtl::OUString s_FooterFillStyle("FooterFillStyle");
 
         if(doNewDrawingLayerFillStyleDefinitionsExist(s_FillStyle))
         {

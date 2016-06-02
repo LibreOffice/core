@@ -94,13 +94,13 @@ const OldFillStyleDefinitionSet& XMLPropStyleContext::getStandardSet()
 {
     if(maStandardSet.empty())
     {
-        maStandardSet.insert(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BackColorRGB")));
-        maStandardSet.insert(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BackTransparent")));
-        maStandardSet.insert(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BackColorTransparency")));
-        maStandardSet.insert(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BackGraphicURL")));
-        maStandardSet.insert(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BackGraphicFilter")));
-        maStandardSet.insert(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BackGraphicLocation")));
-        maStandardSet.insert(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BackGraphicTransparency")));
+        maStandardSet.insert("BackColorRGB");
+        maStandardSet.insert("BackTransparent");
+        maStandardSet.insert("BackColorTransparency");
+        maStandardSet.insert("BackGraphicURL");
+        maStandardSet.insert("BackGraphicFilter");
+        maStandardSet.insert("BackGraphicLocation");
+        maStandardSet.insert("BackGraphicTransparency");
     }
 
     return maStandardSet;
@@ -110,13 +110,13 @@ const OldFillStyleDefinitionSet& XMLPropStyleContext::getHeaderSet()
 {
     if(maHeaderSet.empty())
     {
-        maHeaderSet.insert(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HeaderBackColorRGB")));
-        maHeaderSet.insert(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HeaderBackTransparent")));
-        maHeaderSet.insert(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HeaderBackColorTransparency")));
-        maHeaderSet.insert(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HeaderBackGraphicURL")));
-        maHeaderSet.insert(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HeaderBackGraphicFilter")));
-        maHeaderSet.insert(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HeaderBackGraphicLocation")));
-        maHeaderSet.insert(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HeaderBackGraphicTransparency")));
+        maHeaderSet.insert("HeaderBackColorRGB");
+        maHeaderSet.insert("HeaderBackTransparent");
+        maHeaderSet.insert("HeaderBackColorTransparency");
+        maHeaderSet.insert("HeaderBackGraphicURL");
+        maHeaderSet.insert("HeaderBackGraphicFilter");
+        maHeaderSet.insert("HeaderBackGraphicLocation");
+        maHeaderSet.insert("HeaderBackGraphicTransparency");
     }
 
     return maHeaderSet;
@@ -126,13 +126,13 @@ const OldFillStyleDefinitionSet& XMLPropStyleContext::getFooterSet()
 {
     if(maFooterSet.empty())
     {
-        maFooterSet.insert(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FooterBackColorRGB")));
-        maFooterSet.insert(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FooterBackTransparent")));
-        maFooterSet.insert(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FooterBackColorTransparency")));
-        maFooterSet.insert(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FooterBackGraphicURL")));
-        maFooterSet.insert(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FooterBackGraphicFilter")));
-        maFooterSet.insert(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FooterBackGraphicLocation")));
-        maFooterSet.insert(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FooterBackGraphicTransparency")));
+        maFooterSet.insert("FooterBackColorRGB");
+        maFooterSet.insert("FooterBackTransparent");
+        maFooterSet.insert("FooterBackColorTransparency");
+        maFooterSet.insert("FooterBackGraphicURL");
+        maFooterSet.insert("FooterBackGraphicFilter");
+        maFooterSet.insert("FooterBackGraphicLocation");
+        maFooterSet.insert("FooterBackGraphicTransparency");
     }
 
     return maFooterSet;
@@ -144,15 +144,15 @@ const OldFillStyleDefinitionSet& XMLPropStyleContext::getParaSet()
     {
         // Caution: here it is *not* 'ParaBackColorRGB' as it should be, but indeed
         // 'ParaBackColor' is used, see aXMLParaPropMap definition (line 313)
-        maParaSet.insert(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParaBackColor")));
-        maParaSet.insert(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParaBackTransparent")));
-        maParaSet.insert(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParaBackGraphicLocation")));
-        maParaSet.insert(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParaBackGraphicFilter")));
-        maParaSet.insert(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParaBackGraphicURL")));
+        maParaSet.insert("ParaBackColor");
+        maParaSet.insert("ParaBackTransparent");
+        maParaSet.insert("ParaBackGraphicLocation");
+        maParaSet.insert("ParaBackGraphicFilter");
+        maParaSet.insert("ParaBackGraphicURL");
 
         // These are not used in aXMLParaPropMap definition, thus not needed here
-        // maParaSet.insert(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParaBackColorTransparency")));
-        // maParaSet.insert(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParaBackGraphicTransparency")));
+        // maParaSet.insert("ParaBackColorTransparency");
+        // maParaSet.insert("ParaBackGraphicTransparency");
     }
 
     return maParaSet;
@@ -262,7 +262,7 @@ void XMLPropStyleContext::CreateAndInsert( bool bOverwrite )
     if(bTakeCareOfDrawingLayerFillStyle)
     {
         // check if new FillStyles are used and if so mark old ones with -1
-        static ::rtl::OUString s_FillStyle(RTL_CONSTASCII_USTRINGPARAM("FillStyle"));
+        static ::rtl::OUString s_FillStyle("FillStyle");
 
         if(doNewDrawingLayerFillStyleDefinitionsExist(s_FillStyle))
         {
@@ -593,10 +593,10 @@ void XMLPropStyleContext::translateNameBasedDrawingLayerFillStyleDefinitionsToSt
 
         if(rMapper.is())
         {
-            static OUString s_FillGradientName(RTL_CONSTASCII_USTRINGPARAM("FillGradientName"));
-            static OUString s_FillHatchName(RTL_CONSTASCII_USTRINGPARAM("FillHatchName"));
-            static OUString s_FillBitmapName(RTL_CONSTASCII_USTRINGPARAM("FillBitmapName"));
-            static OUString s_FillTransparenceGradientName(RTL_CONSTASCII_USTRINGPARAM("FillTransparenceGradientName"));
+            static OUString s_FillGradientName("FillGradientName");
+            static OUString s_FillHatchName("FillHatchName");
+            static OUString s_FillBitmapName("FillBitmapName");
+            static OUString s_FillTransparenceGradientName("FillTransparenceGradientName");
 
             for(::std::vector< XMLPropertyState >::iterator a = maProperties.begin(); a != maProperties.end(); ++a)
             {

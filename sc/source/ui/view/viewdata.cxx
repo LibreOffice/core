@@ -2708,7 +2708,7 @@ void ScViewData::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>& rSe
             pSettings[SC_SHEETTABS].Value <<= pOptions->GetOption( VOPT_TABCONTROLS );
             pSettings[SC_OUTLSYMB].Name = SC_UNO_OUTLSYMB;
             pSettings[SC_OUTLSYMB].Value <<= pOptions->GetOption( VOPT_OUTLINER );
-            pSettings[SC_VALUE_HIGHLIGHTING].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNO_VALUEHIGH ) );
+            pSettings[SC_VALUE_HIGHLIGHTING].Name = SC_UNO_VALUEHIGH;
             pSettings[SC_VALUE_HIGHLIGHTING].Value <<= pOptions->GetOption( VOPT_SYNTAX );
 
             const ScGridOptions& aGridOpt = pOptions->GetGridOptions();

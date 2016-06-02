@@ -309,7 +309,7 @@ sal_Int32 SvtRulerAccessible::getBackground(  )
 // XServiceInfo
 OUString SAL_CALL SvtRulerAccessible::getImplementationName() throw( RuntimeException, std::exception )
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.ui.SvtRulerAccessible" ) );
+    return OUString( "com.sun.star.comp.ui.SvtRulerAccessible" );
 }
 
 sal_Bool SAL_CALL SvtRulerAccessible::supportsService( const OUString& sServiceName ) throw( RuntimeException, std::exception )
@@ -319,8 +319,7 @@ sal_Bool SAL_CALL SvtRulerAccessible::supportsService( const OUString& sServiceN
 
 Sequence< OUString > SAL_CALL SvtRulerAccessible::getSupportedServiceNames() throw( RuntimeException, std::exception )
 {
-    const OUString sServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.accessibility.AccessibleContext" ) );
-    return Sequence< OUString >( &sServiceName, 1 );
+    return Sequence< OUString > { OUString("com.sun.star.accessibility.AccessibleContext") };
 }
 
 //=====  XTypeProvider  =======================================================

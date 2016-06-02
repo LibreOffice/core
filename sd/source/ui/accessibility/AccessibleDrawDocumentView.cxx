@@ -339,11 +339,11 @@ void SAL_CALL
                 IAccessibleViewForwarderListener::VISIBLE_AREA,
                 &maViewForwarder);
     }
-    else if (rEventObject.PropertyName == OUString (RTL_CONSTASCII_USTRINGPARAM("ActiveLayer")))
+    else if (rEventObject.PropertyName == "ActiveLayer")
     {
         CommitChange(AccessibleEventId::PAGE_CHANGED,rEventObject.NewValue,rEventObject.OldValue);
     }
-    else if (rEventObject.PropertyName == OUString (RTL_CONSTASCII_USTRINGPARAM("UpdateAcc")))
+    else if (rEventObject.PropertyName == "UpdateAcc")
     {
         OSL_TRACE ("    acc on current page should be updated");
 

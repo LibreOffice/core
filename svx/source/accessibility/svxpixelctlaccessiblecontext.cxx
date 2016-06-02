@@ -770,7 +770,7 @@ void SAL_CALL SvxPixelCtlAccessibleChild::removeAccessibleEventListener( const u
 // XServiceInfo
 OUString SAL_CALL SvxPixelCtlAccessibleChild::getImplementationName() throw( RuntimeException, std::exception )
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "SvxPixelCtlAccessibleChild" ) );
+    return OUString( "SvxPixelCtlAccessibleChild" );
 }
 
 sal_Bool SAL_CALL SvxPixelCtlAccessibleChild::supportsService( const OUString& rServiceName ) throw( RuntimeException, std::exception )
