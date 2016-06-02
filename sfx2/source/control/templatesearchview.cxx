@@ -33,8 +33,10 @@ VCL_BUILDER_FACTORY(TemplateSearchView)
 
 void TemplateSearchView::MouseButtonDown( const MouseEvent& rMEvt )
 {
+    GrabFocus();
     if (rMEvt.IsRight())
     {
+        deselectItems();
         size_t nPos = ImplGetItem(rMEvt.GetPosPixel());
         Point aPosition (rMEvt.GetPosPixel());
         maPosition = aPosition;

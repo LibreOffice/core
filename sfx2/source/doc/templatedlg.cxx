@@ -830,7 +830,7 @@ IMPL_LINK_TYPED(SfxTemplateManagerDlg, DeleteTemplateHdl, ThumbnailViewItem*, pI
         TemplateViewItem *pViewItem = static_cast<TemplateViewItem*>(pItem);
         sal_uInt16 nRegionItemId = mpLocalView->getRegionId(pViewItem->mnRegionId);
 
-        if (!mpLocalView->removeTemplate((pViewItem)->mnId,nRegionItemId))
+        if (!mpLocalView->removeTemplate((pViewItem)->mnDocId + 1, nRegionItemId))//mnId w.r.t. region is mnDocId + 1;
         {
             aDeletedTemplate = (pItem)->maTitle;
         }
@@ -1113,7 +1113,7 @@ void SfxTemplateManagerDlg::OnTemplateExport()
 
                 OUString aPath = aPathObj.GetMainURL( INetURLObject::NO_DECODE );
 
-                if (!mpLocalView->exportTo(pItem->mnId,
+                if (!mpLocalView->exportTo(pItem->mnDocId + 1,   //mnId w.r.t. region = mDocId + 1
                     mpLocalView->getRegionId(pItem->mnRegionId), //pItem->mnRegionId does not store actual region Id
                     aPath))
                 {
