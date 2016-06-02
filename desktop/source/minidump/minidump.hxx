@@ -7,23 +7,13 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "minidump.hxx"
+#ifndef INCLUDED_DESKTOP_MINIDUMP_MINIDUMP_HXX
+#define INCLUDED_DESKTOP_MINIDUMP_MINIDUMP_HXX
 
-#include<iostream>
+#include <string>
 
-int main(int argc, char** argv)
-{
-    if (argc < 2)
-    {
-        std::cerr << "minidump_upload path_to_ini_file" << std::endl;
-        return EXIT_FAILURE;
-    }
+bool readConfig(const std::string& iniPath);
 
-    std::string iniPath(argv[1]);
-    if (!readConfig(iniPath))
-        return EXIT_FAILURE;
-
-    return EXIT_SUCCESS;
-}
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

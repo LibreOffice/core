@@ -13,6 +13,10 @@ $(eval $(call gb_Executable_use_libraries,minidump_upload,\
     sal \
 ))
 
+$(eval $(call gb_Executable_use_static_libraries,minidump_upload,\
+	minidump \
+))
+
 $(eval $(call gb_Executable_use_external,minidump_upload,curl))
 
 $(eval $(call gb_Executable_add_exception_objects,minidump_upload,\
