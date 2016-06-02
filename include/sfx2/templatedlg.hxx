@@ -148,7 +148,6 @@ protected:
     VclPtr<PushButton> mpExportButton;
     VclPtr<PushButton> mpImportButton;
     VclPtr<PushButton> mpLinkButton;
-    VclPtr<ToolBox> mpViewBar;
     VclPtr<ToolBox> mpActionBar;
     VclPtr<TemplateSearchView> mpSearchView;
     VclPtr<TemplateAbstractView> mpCurView;
