@@ -143,9 +143,6 @@
 #define RID_STR_NORMAL_MODULES          ( RID_BASICIDE_START + 120 )
 #define RID_STR_CLASS_MODULES           ( RID_BASICIDE_START + 121 )
 
-#define RID_FT_LINE                     ( RID_BASICIDE_START + 123 )
-#define RID_ED_LINE                     ( RID_BASICIDE_START + 124 )
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

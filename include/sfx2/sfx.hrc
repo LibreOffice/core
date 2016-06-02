@@ -44,7 +44,6 @@
 #define SFX_EVENT_ACTIVATEDOC       (EVENT_SFX_START + 7)
 #define SFX_EVENT_DEACTIVATEDOC     (EVENT_SFX_START + 8)
 #define SFX_EVENT_PRINTDOC          (EVENT_SFX_START + 9)
-#define SFX_EVENT_SAVEACOPY         (EVENT_SFX_START + 10)
 
 #define SFX_EVENT_LOADFINISHED      (EVENT_SFX_START + 11)
 
@@ -110,13 +109,9 @@
 #define RID_DEFAULTIMAGELIST_SC             (RID_SFX_START+15)
 #define RID_DEFAULTIMAGELIST_LC             (RID_SFX_START+17)
 
-#define RID_STYLECATALOG                    (RID_SFX_START+1201)
-
 #define RID_DEFAULTABOUT                    (RID_SFX_START+0)
 
 #define DLG_STYLE_DESIGNER                  (RID_SFX_START+8)
-
-#define RID_SFX_INCORRECT_PASSWORD          (RID_SFX_START+216)
 
 #define STR_STYLE_FILTER_AUTO               (RID_SFX_START+9)
 #define STR_STYLE_FILTER_USED               (RID_SFX_START+10)

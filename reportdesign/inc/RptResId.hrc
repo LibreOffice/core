@@ -37,10 +37,6 @@
 #define RID_CONTROL_START               RID_RPT_START
 #define RID_MISC_START                  RID_RPT_START
 
-// Dialog Control Id's -----------------------------------------------------------
-#define RID_DATETIME_DLG                ( RID_DIALOG_START + 2 )
-#define WIN_CONDITION                   ( RID_DIALOG_START + 4 )
-
 // strings
 #define RID_STR_CLASS_FORMATTEDFIELD        ( RID_STRING_START +   1 )
 #define RID_STR_CLASS_FIXEDTEXT             ( RID_STRING_START +   2 )

@@ -22,7 +22,6 @@
 #include "sdresid.hxx"
 
 #include "strings.hrc"
-#include "dialogs.hrc"
 #include "masterlayoutdlg.hxx"
 #include "drawdoc.hxx"
 

@@ -23,7 +23,6 @@
 #include <vcl/settings.hxx>
 
 #include "parawin.hxx"
-#include "helpids.hrc"
 #include "formula/formdata.hxx"
 #include "formula/IFunctionDescription.hxx"
 #include "ModuleHelper.hxx"

@@ -11,7 +11,6 @@ $(eval $(call gb_Library_Library,forui))
 
 $(eval $(call gb_Library_set_include,forui,\
     $$(INCLUDE) \
-    -I$(SRCDIR)/formula/inc \
     -I$(SRCDIR)/formula/source/ui/inc \
 ))
 
