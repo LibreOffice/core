@@ -1420,24 +1420,29 @@ sal_uInt32 SvNumberFormatter::GetEditFormat( double fNumber, sal_uInt32 nFIndex,
     {
     // #61619# always edit using 4-digit year
     case css::util::NumberFormat::DATE :
-        if (rtl::math::approxFloor( fNumber) != fNumber)
-            nKey = GetFormatIndex( NF_DATETIME_SYS_DDMMYYYY_HHMMSS, eLang );
-        // fdo#34977 preserve time when editing even if only date was
-        // displayed.
-        /* FIXME: in case an ISO 8601 format was used, editing should
-         * also use such. Unfortunately we have no builtin combined
-         * date+time ISO format defined. Needs also locale data work.
-         * */
-        else
         {
             // Preserve ISO 8601 format.
-            if (    nFIndex == GetFormatIndex( NF_DATE_DIN_YYYYMMDD, eLang) ||
-                    nFIndex == GetFormatIndex( NF_DATE_DIN_YYMMDD, eLang) ||
-                    nFIndex == GetFormatIndex( NF_DATE_DIN_MMDD, eLang) ||
-                    (pFormat && pFormat->IsIso8601( 0 )))
-                nKey = GetFormatIndex( NF_DATE_DIN_YYYYMMDD, eLang);
+            bool bIsoDate =
+                nFIndex == GetFormatIndex( NF_DATE_DIN_YYYYMMDD, eLang) ||
+                nFIndex == GetFormatIndex( NF_DATE_DIN_YYMMDD, eLang) ||
+                nFIndex == GetFormatIndex( NF_DATE_DIN_MMDD, eLang) ||
+                (pFormat && pFormat->IsIso8601( 0 ));
+            if (rtl::math::approxFloor( fNumber) != fNumber)
+            {
+                // fdo#34977 preserve time when editing even if only date was
+                // displayed.
+                if (bIsoDate)
+                    nKey = GetFormatIndex( NF_DATETIME_ISO_YYYYMMDD_HHMMSS, eLang);
+                else
+                    nKey = GetFormatIndex( NF_DATETIME_SYS_DDMMYYYY_HHMMSS, eLang );
+            }
             else
-                nKey = GetFormatIndex( NF_DATE_SYS_DDMMYYYY, eLang );
+            {
+                if (bIsoDate)
+                    nKey = GetFormatIndex( NF_DATE_ISO_YYYYMMDD, eLang);
+                else
+                    nKey = GetFormatIndex( NF_DATE_SYS_DDMMYYYY, eLang );
+            }
         }
         break;
     case css::util::NumberFormat::TIME :
@@ -1458,10 +1463,10 @@ sal_uInt32 SvNumberFormatter::GetEditFormat( double fNumber, sal_uInt32 nFIndex,
             nKey = GetStandardFormat( fNumber, nFIndex, eType, eLang );
         break;
     case css::util::NumberFormat::DATETIME :
-        nKey = GetFormatIndex( NF_DATETIME_SYS_DDMMYYYY_HHMMSS, eLang );
-        /* FIXME: in case an ISO 8601 format was used, editing should
-         * also use such. Unfortunately we have no builtin combined
-         * date+time ISO format defined. Needs also locale data work. */
+        if (nFIndex == GetFormatIndex( NF_DATETIME_ISO_YYYYMMDD_HHMMSS, eLang) || (pFormat && pFormat->IsIso8601( 0 )))
+            nKey = GetFormatIndex( NF_DATETIME_ISO_YYYYMMDD_HHMMSS, eLang );
+        else
+            nKey = GetFormatIndex( NF_DATETIME_SYS_DDMMYYYY_HHMMSS, eLang );
         break;
     default:
         nKey = GetStandardFormat( fNumber, nFIndex, eType, eLang );
