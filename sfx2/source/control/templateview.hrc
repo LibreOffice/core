@@ -14,5 +14,6 @@
 #define IMG_WELCOME                      261
 #define IMG_RECENTDOC_REMOVE             262
 #define IMG_RECENTDOC_REMOVE_HIGHLIGHTED 263
+#define IMG_DEFAULT                      264
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

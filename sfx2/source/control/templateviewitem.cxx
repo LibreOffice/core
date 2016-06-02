@@ -15,11 +15,15 @@
 #include <drawinglayer/primitive2d/fillgraphicprimitive2d.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
+#include <drawinglayer/primitive2d/discretebitmapprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <vcl/button.hxx>
 #include <vcl/graph.hxx>
+#include <sfx2/sfxresid.hxx>
+
+#include <templateview.hrc>
 
 using namespace basegfx;
 using namespace basegfx::tools;
@@ -29,12 +33,24 @@ using namespace drawinglayer::primitive2d;
 TemplateViewItem::TemplateViewItem (ThumbnailView &rView, sal_uInt16 nId)
     : ThumbnailViewItem(rView, nId),
       mnRegionId(USHRT_MAX),
-      mnDocId(USHRT_MAX)
+      mnDocId(USHRT_MAX),
+      maDefaultBitmap(SfxResId(IMG_DEFAULT)),
+      mbIsDefaultTemplate(false)
 {
 }
 
 TemplateViewItem::~TemplateViewItem ()
 {
+}
+
+Rectangle TemplateViewItem::getDefaultIconArea() const
+{
+    Rectangle aArea(getDrawArea());
+    Size aSize(maDefaultBitmap.GetSizePixel());
+
+    return Rectangle(
+            Point(aArea.Left() + THUMBNAILVIEW_ITEM_CORNER, aArea.Top() + THUMBNAILVIEW_ITEM_CORNER),
+            aSize);
 }
 
 void TemplateViewItem::Paint(drawinglayer::processor2d::BaseProcessor2D *pProcessor,
@@ -89,6 +105,14 @@ void TemplateViewItem::Paint(drawinglayer::processor2d::BaseProcessor2D *pProces
 
     // draw thumbnail borders
     aSeq[3] = drawinglayer::primitive2d::Primitive2DReference(createBorderLine(aBounds));
+
+    if(mbIsDefaultTemplate)
+    {
+        Point aIconPos(getDefaultIconArea().TopLeft());
+
+        aSeq[4] = drawinglayer::primitive2d::Primitive2DReference(new DiscreteBitmapPrimitive2D( maDefaultBitmap,
+                    B2DPoint(aIconPos.X(), aIconPos.Y())));
+    }
 
     addTextPrimitives(maTitle, pAttrs, maTextPos, aSeq);
 
