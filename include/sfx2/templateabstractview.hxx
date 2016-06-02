@@ -112,6 +112,8 @@ public:
     long getThumbnailWidth() const  { return mnThumbnailWidth;}
     long getThumbnailHeight() const {return mnThumbnailHeight;}
 
+    void RemoveDefaultTemplateIcon( OUString rPath);
+
     static BitmapEx scaleImg (const BitmapEx &rImg, long width, long height);
 
     static BitmapEx getDefaultThumbnail( const OUString& rPath );
@@ -121,6 +123,8 @@ public:
 protected:
 
     virtual void OnItemDblClicked(ThumbnailViewItem *pItem) override;
+
+    bool IsDefaultTemplate(const OUString& rPath);
 
 protected:
 
