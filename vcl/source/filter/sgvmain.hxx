@@ -155,7 +155,6 @@ public:
     {
     }
     virtual ~ObjkType() {}
-    friend SvStream& ReadObjkType(SvStream& rIStream, ObjkType& rObjk);
     virtual void Draw(OutputDevice& rOut);
 };
 

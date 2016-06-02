@@ -35,52 +35,6 @@
     p.x=OSL_SWAPWORD(p.x); \
     p.y=OSL_SWAPWORD(p.y); }
 
-#define SWAPPAGE(p) {                         \
-    p.Next   =OSL_SWAPDWORD (p.Next   );           \
-    p.nList  =OSL_SWAPDWORD (p.nList  );           \
-    p.ListEnd=OSL_SWAPDWORD (p.ListEnd);           \
-    p.Paper.Size.x=OSL_SWAPWORD(p.Paper.Size.x); \
-    p.Paper.Size.y=OSL_SWAPWORD(p.Paper.Size.y); \
-    p.Paper.RandL =OSL_SWAPWORD(p.Paper.RandL ); \
-    p.Paper.RandR =OSL_SWAPWORD(p.Paper.RandR ); \
-    p.Paper.RandO =OSL_SWAPWORD(p.Paper.RandO ); \
-    p.Paper.RandU =OSL_SWAPWORD(p.Paper.RandU ); \
-    SWAPPOINT(p.U);                           \
-    sal_uInt16 iTemp;                             \
-    for (iTemp=0;iTemp<20;iTemp++) {          \
-        rPage.HlpLnH[iTemp]=OSL_SWAPWORD(rPage.HlpLnH[iTemp]);       \
-        rPage.HlpLnV[iTemp]=OSL_SWAPWORD(rPage.HlpLnV[iTemp]);      }}
-
-#define SWAPOBJK(o) {                 \
-    o.Last    =OSL_SWAPDWORD (o.Last    ); \
-    o.Next    =OSL_SWAPDWORD (o.Next    ); \
-    o.MemSize =OSL_SWAPWORD(o.MemSize ); \
-    SWAPPOINT(o.ObjMin);              \
-    SWAPPOINT(o.ObjMax);              }
-
-#define SWAPLINE(l) {             \
-    l.LMSize=OSL_SWAPWORD(l.LMSize); \
-    l.LDicke=OSL_SWAPWORD(l.LDicke); }
-
-#define SWAPAREA(a) {               \
-    a.FDummy2=OSL_SWAPWORD(a.FDummy2); \
-    a.FMuster=OSL_SWAPWORD(a.FMuster); }
-
-#define SWAPTEXT(t) {               \
-    SWAPLINE(t.L);                  \
-    SWAPAREA(t.F);                  \
-    t.FontLo =OSL_SWAPWORD(t.FontLo ); \
-    t.FontHi =OSL_SWAPWORD(t.FontHi ); \
-    t.Grad   =OSL_SWAPWORD(t.Grad   ); \
-    t.Breite =OSL_SWAPWORD(t.Breite ); \
-    t.Schnitt=OSL_SWAPWORD(t.Schnitt); \
-    t.LnFeed =OSL_SWAPWORD(t.LnFeed ); \
-    t.Slant  =OSL_SWAPWORD(t.Slant  ); \
-    SWAPLINE(t.ShdL);               \
-    SWAPAREA(t.ShdF);               \
-    SWAPPOINT(t.ShdVers);           \
-    SWAPAREA(t.BackF);              }
-
 #endif
 
 //  Restrictions:
@@ -148,11 +102,61 @@ PageType::PageType()
 
 SvStream& ReadPageType(SvStream& rIStream, PageType& rPage)
 {
-    rIStream.Read(&rPage.Next, PageSize);
-#if defined OSL_BIGENDIAN
-    SWAPPAGE(rPage);
-#endif
+    sal_uInt64 const nOldPos(rIStream.Tell());
+    rIStream.ReadUInt32(rPage.Next);
+    rIStream.ReadUInt32(rPage.nList);
+    rIStream.ReadUInt32(rPage.ListEnd);
+    rIStream.ReadInt16(rPage.Paper.Size.x);
+    rIStream.ReadInt16(rPage.Paper.Size.y);
+    rIStream.ReadInt16(rPage.Paper.RandL);
+    rIStream.ReadInt16(rPage.Paper.RandR);
+    rIStream.ReadInt16(rPage.Paper.RandO);
+    rIStream.ReadInt16(rPage.Paper.RandU);
+    rIStream.ReadUChar(rPage.Paper.PColor);
+    rIStream.ReadUChar(rPage.Paper.PIntens);
+    rIStream.ReadCharAsBool(rPage.BorderClip);
+    rIStream.ReadUChar(rPage.StdPg);
+    rIStream.ReadInt16(rPage.U.x);
+    rIStream.ReadInt16(rPage.U.y);
+    for (int i = 0; i < 20; ++i)
+    {
+        rIStream.ReadInt16(rPage.HlpLnH[i]);
+    }
+    for (int i = 0; i < 20; ++i)
+    {
+        rIStream.ReadInt16(rPage.HlpLnV[i]);
+    }
+    rIStream.ReadUChar(rPage.LnAnzH);
+    rIStream.ReadUChar(rPage.LnAnzV);
+    for (int i = 0; i < 32; ++i)
+    {
+        rIStream.ReadUChar(rPage.PgName[i]);
+    }
+    assert(rIStream.GetError() || rIStream.Tell() == nOldPos + PageSize);
+    (void) nOldPos;
     return rIStream;
+}
+
+void ReadObjLineType(SvStream & rInp, ObjLineType & rLine)
+{
+    // reads 8 bytes
+    rInp.ReadUChar(rLine.LFarbe);
+    rInp.ReadUChar(rLine.LBFarbe);
+    rInp.ReadUChar(rLine.LIntens);
+    rInp.ReadUChar(rLine.LMuster);
+    rInp.ReadInt16(rLine.LMSize);
+    rInp.ReadInt16(rLine.LDicke);
+}
+
+void ReadObjAreaType(SvStream & rInp, ObjAreaType & rArea)
+{
+    // reads 8 bytes
+    rInp.ReadUChar(rArea.FFarbe);
+    rInp.ReadUChar(rArea.FBFarbe);
+    rInp.ReadUChar(rArea.FIntens);
+    rInp.ReadUChar(rArea.FDummy1);
+    rInp.ReadInt16(rArea.FDummy2);
+    rInp.ReadUInt16(rArea.FMuster);
 }
 
 void ObjkOverSeek(SvStream& rInp, ObjkType& rObjk)
@@ -162,123 +166,203 @@ void ObjkOverSeek(SvStream& rInp, ObjkType& rObjk)
     rInp.Seek(rInp.Tell()+Siz);
 }
 
-SvStream& ReadObjkType(SvStream& rInp, ObjkType& rObjk)
+SvStream& ReadObjkType(SvStream& rInp, ObjkType& rObjk, bool const isRewind = true)
 {
     // fileposition in stream is not changed!
-    sal_uLong nPos;
-    nPos=rInp.Tell();
-    rInp.Read(&rObjk.Last, ObjkSize);
-#if defined OSL_BIGENDIAN
-    SWAPOBJK(rObjk);
-#endif
-    rInp.Seek(nPos);
+    sal_uInt64 const nOldPos = rInp.Tell();
+    rInp.ReadUInt32(rObjk.Last);
+    rInp.ReadUInt32(rObjk.Next);
+    rInp.ReadUInt16(rObjk.MemSize);
+    rInp.ReadInt16(rObjk.ObjMin.x);
+    rInp.ReadInt16(rObjk.ObjMin.y);
+    rInp.ReadInt16(rObjk.ObjMax.x);
+    rInp.ReadInt16(rObjk.ObjMax.y);
+    rInp.ReadUChar(rObjk.Art);
+    rInp.ReadUChar(rObjk.Layer);
+    assert(rInp.GetError() || rInp.Tell() == nOldPos + ObjkSize);
+    if (isRewind)
+        rInp.Seek(nOldPos);
     return rInp;
 }
 SvStream& ReadStrkType(SvStream& rInp, StrkType& rStrk)
 {
-    rInp.Read(&rStrk.Last, StrkSize);
-#if defined OSL_BIGENDIAN
-    SWAPOBJK (rStrk);
-    SWAPLINE (rStrk.L);
-    SWAPPOINT(rStrk.Pos1);
-    SWAPPOINT(rStrk.Pos2);
-#endif
+    sal_uInt64 const nOldPos(rInp.Tell());
+    ReadObjkType(rInp, rStrk, false);
+    rInp.ReadUChar(rStrk.Flags);
+    rInp.ReadUChar(rStrk.LEnden);
+    ReadObjLineType(rInp, rStrk.L);
+    rInp.ReadInt16(rStrk.Pos1.x);
+    rInp.ReadInt16(rStrk.Pos1.y);
+    rInp.ReadInt16(rStrk.Pos2.x);
+    rInp.ReadInt16(rStrk.Pos2.y);
+    assert(rInp.GetError() || rInp.Tell() == nOldPos + StrkSize);
+    (void) nOldPos;
     return rInp;
 }
 SvStream& ReadRectType(SvStream& rInp, RectType& rRect)
 {
-    rInp.Read(&rRect.Last, RectSize);
-#if defined OSL_BIGENDIAN
-    SWAPOBJK (rRect);
-    SWAPLINE (rRect.L);
-    SWAPAREA (rRect.F);
-    SWAPPOINT(rRect.Pos1);
-    SWAPPOINT(rRect.Pos2);
-    rRect.Radius        = OSL_SWAPWORD(rRect.Radius  );
-    rRect.RotationAngle = OSL_SWAPWORD(rRect.RotationAngle);
-    rRect.Slant         = OSL_SWAPWORD(rRect.Slant   );
-#endif
+    sal_uInt64 const nOldPos(rInp.Tell());
+    ReadObjkType(rInp, rRect, false);
+    rInp.ReadUChar(rRect.Flags);
+    rInp.ReadUChar(rRect.Reserve);
+    ReadObjLineType(rInp, rRect.L);
+    ReadObjAreaType(rInp, rRect.F);
+    rInp.ReadInt16(rRect.Pos1.x);
+    rInp.ReadInt16(rRect.Pos1.y);
+    rInp.ReadInt16(rRect.Pos2.x);
+    rInp.ReadInt16(rRect.Pos2.y);
+    rInp.ReadInt16(rRect.Radius);
+    rInp.ReadUInt16(rRect.RotationAngle);
+    rInp.ReadUInt16(rRect.Slant);
+    assert(rInp.GetError() || rInp.Tell() == nOldPos + RectSize);
+    (void) nOldPos;
     return rInp;
 }
 SvStream& ReadPolyType(SvStream& rInp, PolyType& rPoly)
 {
-    rInp.Read(&rPoly.Last, PolySize);
-#if defined OSL_BIGENDIAN
-    SWAPOBJK (rPoly);
-    SWAPLINE (rPoly.L);
-    SWAPAREA (rPoly.F);
-#endif
+    sal_uInt64 const nOldPos(rInp.Tell());
+    ReadObjkType(rInp, rPoly, false);
+    rInp.ReadUChar(rPoly.Flags);
+    rInp.ReadUChar(rPoly.LEnden);
+    ReadObjLineType(rInp, rPoly.L);
+    ReadObjAreaType(rInp, rPoly.F);
+    rInp.ReadUChar(rPoly.nPoints);
+    rInp.ReadUChar(rPoly.Reserve);
+    rInp.ReadUInt32(rPoly.SD_EckP);
+    assert(rInp.GetError() || rInp.Tell() == nOldPos + PolySize);
+    (void) nOldPos;
     return rInp;
 }
+
 SvStream& ReadSplnType(SvStream& rInp, SplnType& rSpln)
 {
-    rInp.Read(&rSpln.Last, SplnSize);
-#if defined OSL_BIGENDIAN
-    SWAPOBJK (rSpln);
-    SWAPLINE (rSpln.L);
-    SWAPAREA (rSpln.F);
-#endif
+    sal_uInt64 const nOldPos(rInp.Tell());
+    ReadObjkType(rInp, rSpln, false);
+    rInp.ReadUChar(rSpln.Flags);
+    rInp.ReadUChar(rSpln.LEnden);
+    ReadObjLineType(rInp, rSpln.L);
+    ReadObjAreaType(rInp, rSpln.F);
+    rInp.ReadUChar(rSpln.nPoints);
+    rInp.ReadUChar(rSpln.Reserve);
+    rInp.ReadUInt32(rSpln.SD_EckP);
+    assert(rInp.GetError() || rInp.Tell() == nOldPos + SplnSize);
+    (void) nOldPos;
     return rInp;
 }
 SvStream& ReadCircType(SvStream& rInp, CircType& rCirc)
 {
-    rInp.Read(&rCirc.Last, CircSize);
-#if defined OSL_BIGENDIAN
-    SWAPOBJK (rCirc);
-    SWAPLINE (rCirc.L);
-    SWAPAREA (rCirc.F);
-    SWAPPOINT(rCirc.Radius);
-    SWAPPOINT(rCirc.Center);
-    rCirc.RotationAngle = OSL_SWAPWORD(rCirc.RotationAngle );
-    rCirc.StartAngle     = OSL_SWAPWORD(rCirc.StartAngle);
-    rCirc.RelAngle       = OSL_SWAPWORD(rCirc.RelAngle  );
-#endif
+    sal_uInt64 const nOldPos(rInp.Tell());
+    ReadObjkType(rInp, rCirc, false);
+    rInp.ReadUChar(rCirc.Flags);
+    rInp.ReadUChar(rCirc.LEnden);
+    ReadObjLineType(rInp, rCirc.L);
+    ReadObjAreaType(rInp, rCirc.F);
+    rInp.ReadInt16(rCirc.Center.x);
+    rInp.ReadInt16(rCirc.Center.y);
+    rInp.ReadInt16(rCirc.Radius.x);
+    rInp.ReadInt16(rCirc.Radius.y);
+    rInp.ReadUInt16(rCirc.RotationAngle);
+    rInp.ReadUInt16(rCirc.StartAngle);
+    rInp.ReadUInt16(rCirc.RelAngle);
+    assert(rInp.GetError() || rInp.Tell() == nOldPos + CircSize);
+    (void) nOldPos;
     return rInp;
 }
 SvStream& ReadTextType(SvStream& rInp, TextType& rText)
 {
-    rInp.Read(&rText.Last, TextSize);
-#if defined OSL_BIGENDIAN
-    SWAPOBJK (rText);
-    SWAPTEXT (rText.T);
-    SWAPPOINT(rText.Pos1);
-    SWAPPOINT(rText.Pos2);
-    rText.TopOfs        = OSL_SWAPWORD(rText.TopOfs  );
-    rText.RotationAngle = OSL_SWAPWORD(rText.RotationAngle);
-    rText.BoxSlant      = OSL_SWAPWORD(rText.BoxSlant);
-    rText.BufSize       = OSL_SWAPWORD(rText.BufSize );
-    SWAPPOINT(rText.FitSize);
-    rText.FitBreit      = OSL_SWAPWORD(rText.FitBreit);
-#endif
+    sal_uInt64 const nOldPos(rInp.Tell());
+    ReadObjkType(rInp, rText, false);
+    rInp.ReadUChar(rText.Flags);
+    rInp.ReadUChar(rText.Reserve);
+    ReadObjLineType(rInp, rText.T.L);
+    ReadObjAreaType(rInp, rText.T.F);
+    rInp.ReadUInt16(rText.T.FontLo);
+    rInp.ReadUInt16(rText.T.FontHi);
+    rInp.ReadUInt16(rText.T.Grad);
+    rInp.ReadUInt16(rText.T.Breite);
+    rInp.ReadUChar(rText.T.Justify);
+    rInp.ReadUChar(rText.T.Kapit);
+    rInp.ReadUInt16(rText.T.Schnitt);
+    rInp.ReadUInt16(rText.T.LnFeed);
+    rInp.ReadUInt16(rText.T.Slant);
+    rInp.ReadUChar(rText.T.ZAbst);
+    rInp.ReadSChar(rText.T.ChrVPos);
+    ReadObjLineType(rInp, rText.T.ShdL);
+    ReadObjAreaType(rInp, rText.T.ShdF);
+    rInp.ReadInt16(rText.T.ShdVers.x);
+    rInp.ReadInt16(rText.T.ShdVers.y);
+    rInp.ReadCharAsBool(rText.T.ShdAbs);
+    rInp.ReadCharAsBool(rText.T.NoSpc);
+    ReadObjAreaType(rInp, rText.T.BackF);
+    rInp.ReadInt16(rText.Pos1.x);
+    rInp.ReadInt16(rText.Pos1.y);
+    rInp.ReadInt16(rText.Pos2.x);
+    rInp.ReadInt16(rText.Pos2.y);
+    rInp.ReadInt16(rText.TopOfs);
+    rInp.ReadUInt16(rText.RotationAngle);
+    rInp.ReadUInt16(rText.BoxSlant);
+    rInp.ReadUInt16(rText.BufSize);
+    rInp.ReadUInt16(rText.BufLo);
+    rInp.ReadUInt16(rText.BufHi);
+    rInp.ReadUInt16(rText.ExtLo);
+    rInp.ReadUInt16(rText.ExtHi);
+    rInp.ReadInt16(rText.FitSize.x);
+    rInp.ReadInt16(rText.FitSize.y);
+    rInp.ReadInt16(rText.FitBreit);
+    assert(rInp.GetError() || rInp.Tell() == nOldPos + TextSize);
+    (void) nOldPos;
     rText.Buffer=nullptr;
     return rInp;
 }
 SvStream& ReadBmapType(SvStream& rInp, BmapType& rBmap)
 {
-    rInp.Read(&rBmap.Last, BmapSize);
-#if defined OSL_BIGENDIAN
-    SWAPOBJK (rBmap);
-    SWAPAREA (rBmap.F);
-    SWAPPOINT(rBmap.Pos1);
-    SWAPPOINT(rBmap.Pos2);
-    rBmap.RotationAngle = OSL_SWAPWORD(rBmap.RotationAngle);
-    rBmap.Slant         = OSL_SWAPWORD(rBmap.Slant   );
-    SWAPPOINT(rBmap.PixSize);
-#endif
+    sal_uInt64 const nOldPos(rInp.Tell());
+    ReadObjkType(rInp, rBmap, false);
+    rInp.ReadUChar(rBmap.Flags);
+    rInp.ReadUChar(rBmap.Reserve);
+    ReadObjAreaType(rInp, rBmap.F);
+    rInp.ReadInt16(rBmap.Pos1.x);
+    rInp.ReadInt16(rBmap.Pos1.y);
+    rInp.ReadInt16(rBmap.Pos2.x);
+    rInp.ReadInt16(rBmap.Pos2.y);
+    rInp.ReadUInt16(rBmap.RotationAngle);
+    rInp.ReadUInt16(rBmap.Slant);
+    for (int i = 0; i < 80; ++i)
+    {
+        rInp.ReadUChar(rBmap.Filename[i]);
+    }
+    rInp.ReadInt16(rBmap.PixSize.x);
+    rInp.ReadInt16(rBmap.PixSize.y);
+    static_assert(sizeof(enum GrafStat) == 4, "enum has unexpected size");
+    sal_uInt32 nTemp(0);
+    rInp.ReadUInt32(nTemp);
+    rBmap.Format = static_cast<GrafStat>(nTemp);
+    rInp.ReadUChar(rBmap.nPlanes);
+    rInp.ReadCharAsBool(rBmap.RawOut);
+    rInp.ReadCharAsBool(rBmap.InvOut);
+    rInp.ReadCharAsBool(rBmap.LightOut);
+    rInp.ReadUChar(rBmap.GrfFlg);
+    assert(rInp.GetError() || rInp.Tell() == nOldPos + BmapSize);
+    (void) nOldPos;
     return rInp;
 }
 SvStream& ReadGrupType(SvStream& rInp, GrupType& rGrup)
 {
-    rInp.Read(&rGrup.Last, GrupSize);
-#if defined OSL_BIGENDIAN
-    SWAPOBJK (rGrup);
-    rGrup.SbLo     =OSL_SWAPWORD(rGrup.SbLo     );
-    rGrup.SbHi     =OSL_SWAPWORD(rGrup.SbHi     );
-    rGrup.UpLo     =OSL_SWAPWORD(rGrup.UpLo     );
-    rGrup.UpHi     =OSL_SWAPWORD(rGrup.UpHi     );
-    rGrup.ChartSize=OSL_SWAPWORD(rGrup.ChartSize);
-    rGrup.ChartPtr =OSL_SWAPDWORD (rGrup.ChartPtr );
-#endif
+    sal_uInt64 const nOldPos(rInp.Tell());
+    ReadObjkType(rInp, rGrup, false);
+    rInp.ReadUChar(rGrup.Flags);
+    for (int i = 0; i < 13; ++i)
+    {
+        rInp.ReadUChar(rGrup.Name[i]);
+    }
+    rInp.ReadUInt16(rGrup.SbLo);
+    rInp.ReadUInt16(rGrup.SbHi);
+    rInp.ReadUInt16(rGrup.UpLo);
+    rInp.ReadUInt16(rGrup.UpHi);
+    rInp.ReadUInt16(rGrup.ChartSize);
+    rInp.ReadUInt32(rGrup.ChartPtr);
+    assert(rInp.GetError() || rInp.Tell() == nOldPos + GrupSize);
+    (void) nOldPos;
     return rInp;
 }
 
