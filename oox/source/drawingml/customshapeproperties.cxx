@@ -147,7 +147,7 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFi
 
             aPropertyMap = maPresetDataMap[mnShapePresetType];
 #ifdef DEBUG
-            aPropertyMap.dumpCode();
+            aPropertyMap.dumpCode( aPropertyMap.makePropertySet() );
 #endif
         }
 
@@ -373,10 +373,10 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFi
 
 #ifdef DEBUG
         SAL_INFO("oox.cscode", "==cscode== begin");
-        aPropertyMap.dumpCode();
+        aPropertyMap.dumpCode( aPropertyMap.makePropertySet() );
         SAL_INFO("oox.cscode", "==cscode== end");
         SAL_INFO("oox.csdata", "==csdata== begin");
-        aPropertyMap.dumpData();
+        aPropertyMap.dumpData( aPropertyMap.makePropertySet() );
         SAL_INFO("oox.csdata", "==csdata== end");
 #endif
         // converting the vector to a sequence

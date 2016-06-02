@@ -13768,8 +13768,8 @@
       <gd name="n" fmla="*/ iwd2 ihd2 m" />
       <gd name="drd2" fmla="*/ dr 1 2" />
       <gd name="dang" fmla="at2 n drd2" />
-      <gd name="2dang" fmla="*/ dang 2 1" />
-      <gd name="swAng" fmla="+- -10800000 2dang 0" />
+      <gd name="dang2" fmla="*/ dang 2 1" />
+      <gd name="swAng" fmla="+- -10800000 dang2 0" />
       <gd name="t3" fmla="at2 w h" />
       <gd name="stAng1" fmla="+- t3 0 dang" />
       <gd name="stAng2" fmla="+- stAng1 0 cd2" />
