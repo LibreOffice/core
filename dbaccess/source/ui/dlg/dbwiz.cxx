@@ -89,8 +89,8 @@ ODbTypeWizDialog::ODbTypeWizDialog(vcl::Window* _pParent
     m_pFinish->SetHelpId(HID_DBWIZ_FINISH);
     // no local resources needed anymore
 
-    const DbuTypeCollectionItem* pCollectionItem = dynamic_cast<const DbuTypeCollectionItem*>( _pItems->GetItem(DSID_TYPECOLLECTION) );
-    m_pCollection = pCollectionItem->getCollection();
+    const DbuTypeCollectionItem& rCollectionItem = dynamic_cast<const DbuTypeCollectionItem&>(*_pItems->GetItem(DSID_TYPECOLLECTION));
+    m_pCollection = rCollectionItem.getCollection();
 
     ActivatePage();
     setTitleBase(ModuleRes(STR_DATABASE_TYPE_CHANGE));
