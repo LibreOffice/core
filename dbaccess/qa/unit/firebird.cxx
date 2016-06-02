@@ -16,6 +16,7 @@
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XStatement.hpp>
 #include <svtools/miscopt.hxx>
+#include <config_firebird.h>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::sdb;
@@ -65,7 +66,11 @@ void FirebirdTest::testEmptyDBConnection()
 void FirebirdTest::testIntegerDatabase()
 {
     uno::Reference< XOfficeDatabaseDocument > xDocument =
+#ifdef HAVE_FIREBIRD_30
+        getDocumentForFileName("firebird_integer_x64le_ods12.odb");
+#else
         getDocumentForFileName("firebird_integer_x64le.odb");
+#endif
 
     uno::Reference< XConnection > xConnection =
         getConnectionForDocument(xDocument);
