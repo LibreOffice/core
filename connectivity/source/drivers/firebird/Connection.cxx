@@ -773,9 +773,12 @@ void Connection::disposing()
         isc_rollback_transaction(status, &m_aTransactionHandle);
     }
 
-    if (isc_detach_database(status, &m_aDBHandle))
+    if (m_aDBHandle != 0)
     {
-        evaluateStatusVector(status, "isc_detach_database", *this);
+        if (isc_detach_database(status, &m_aDBHandle))
+        {
+            evaluateStatusVector(status, "isc_detach_database", *this);
+        }
     }
     // TODO: write to storage again?
 
