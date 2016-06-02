@@ -172,7 +172,7 @@ void GIFReader::CreateBitmaps( long nWidth, long nHeight, BitmapPalette* pPal,
 {
     const Size aSize( nWidth, nHeight );
 
-#ifdef __LP64__
+#if SAL_TYPES_SIZEOFPOINTER == 8
     // Don't bother allocating a bitmap of a size that would fail on a
     // 32-bit system. We have at least one unit tests that is expected
     // to fail (loading a 65535*65535 size GIF
