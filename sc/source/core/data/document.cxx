@@ -3442,12 +3442,12 @@ svl::SharedString ScDocument::GetSharedString( const ScAddress& rPos ) const
     return maTabs[rPos.Tab()]->GetSharedString(rPos.Col(), rPos.Row());
 }
 
-sc::FormulaGroupContext& ScDocument::GetFormulaGroupContext()
+std::shared_ptr<sc::FormulaGroupContext>& ScDocument::GetFormulaGroupContext()
 {
     if (!mpFormulaGroupCxt)
         mpFormulaGroupCxt.reset(new sc::FormulaGroupContext);
 
-    return *mpFormulaGroupCxt;
+    return mpFormulaGroupCxt;
 }
 
 void ScDocument::GetInputString( SCCOL nCol, SCROW nRow, SCTAB nTab, OUString& rString )

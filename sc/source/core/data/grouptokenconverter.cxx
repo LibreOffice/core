@@ -135,6 +135,15 @@ bool ScGroupTokenConverter::convert(ScTokenArray& rCode, std::vector<ScTokenArra
 
                     formula::SingleVectorRefToken aTok(aArray, nLen, nTrimLen);
                     mrGroupTokens.AddToken(aTok);
+
+                    if (nTrimLen && !mxFormulaGroupContext)
+                    {
+                        //tdf#98880 if the SingleVectorRefToken relies on the
+                        //underlying storage provided by the Document
+                        //FormulaGroupContext, take a reference to it here to
+                        //ensure that backing storage exists for our lifetime
+                        mxFormulaGroupContext = mrDoc.GetFormulaGroupContext();
+                    }
                 }
                 else
                 {
@@ -210,6 +219,15 @@ bool ScGroupTokenConverter::convert(ScTokenArray& rCode, std::vector<ScTokenArra
 
                 formula::DoubleVectorRefToken aTok(aArrays, nRequestedLength, nArrayLength, nRefRowSize, bAbsFirst, bAbsLast);
                 mrGroupTokens.AddToken(aTok);
+
+                if (nArrayLength && !aArrays.empty() && !mxFormulaGroupContext)
+                {
+                    //tdf#98880 if the DoubleVectorRefToken relies on the
+                    //underlying storage provided by the Document
+                    //FormulaGroupContext, take a reference to it here to
+                    //ensure that backing storage exists for our lifetime
+                    mxFormulaGroupContext = mrDoc.GetFormulaGroupContext();
+                }
             }
             break;
             case svIndex:
