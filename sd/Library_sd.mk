@@ -180,6 +180,7 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
 	sd/source/ui/animations/CustomAnimationPane \
 	sd/source/ui/animations/STLPropertySet \
 	sd/source/ui/animations/SlideTransitionPane \
+	sd/source/ui/animations/SlideTransitionBox \
 	sd/source/ui/animations/motionpathtag \
 	sd/source/ui/annotations/annotationmanager \
 	sd/source/ui/annotations/annotationtag \

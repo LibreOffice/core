@@ -947,6 +947,12 @@ void SystemWindow::SetNotebookBar(const OUString& rUIXMLDescription, const css::
     }
 }
 
+void SystemWindow::CloseNotebookBar()
+{
+    static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow.get())->CloseNotebookBar();
+    maNotebookBarUIFile = "";
+}
+
 VclPtr<NotebookBar> SystemWindow::GetNotebookBar() const
 {
     return static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow.get())->GetNotebookBar();

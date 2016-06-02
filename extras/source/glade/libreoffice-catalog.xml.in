@@ -807,5 +807,8 @@
     <glade-widget-class title="Show Text" name="cuilo-SvxShowText"
                         generic-name="ShowText" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
+    <glade-widget-class title="Slide Transition Pane" name="sdlo-SlideTransitionBox"
+                        generic-name="ShowText" parent="GtkToolButton"
+                        icon-name="widget-gtk-toolbutton"/>
   </glade-widget-classes>
 </glade-catalog>

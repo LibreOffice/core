@@ -83,6 +83,8 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/settings.hxx>
 
+#include <sfx2/notebookbar/SfxNotebookBar.hxx>
+
 #include <tools/diagnose_ex.h>
 
 #include "fubullet.hxx"
@@ -768,6 +770,8 @@ bool ViewShellBase::PrepareClose (bool bUI)
 
     if (bResult)
     {
+        sfx2::SfxNotebookBar::CloseMethod(GetFrame()->GetBindings());
+
         mpImpl->mbIsClosing = true;
 
         // Forward call to main sub shell.
