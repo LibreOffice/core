@@ -349,7 +349,8 @@ void SlideBackground::populateMasterSlideDropdown()
 
 void SlideBackground::updateMasterSlideSelection()
 {
-    SdPage* pPage = mrBase.GetMainViewShell().get()->getCurrentPage();
+    ViewShell* pMainViewShell = mrBase.GetMainViewShell().get();
+    SdPage* pPage = pMainViewShell ? pMainViewShell->getCurrentPage() : nullptr;
     if (pPage != nullptr && pPage->TRG_HasMasterPage())
     {
         SdrPage& rMasterPage (pPage->TRG_GetMasterPage());
