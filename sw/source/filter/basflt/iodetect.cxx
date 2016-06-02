@@ -127,7 +127,7 @@ bool SwIoSystem::IsValidStgFilter(SotStorage& rStg, const SfxFilter& rFilter)
             {
                 tools::SvRef<SotStorageStream> xRef =
                     rStg.OpenSotStream("WordDocument",
-                            STREAM_STD_READ | StreamMode::NOCREATE );
+                            STREAM_STD_READ );
                 xRef->Seek(10);
                 sal_uInt8 nByte;
                 xRef->ReadUChar( nByte );

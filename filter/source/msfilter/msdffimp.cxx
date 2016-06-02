@@ -7113,7 +7113,7 @@ SdrOle2Obj* SvxMSDffManager::CreateSdrOLEFromStorage(
                         // TODO/LATER: should the caller be notified if the aspect changes in future?
 
                         tools::SvRef<SotStorageStream> xObjInfoSrc = xObjStg->OpenSotStream(
-                            "\3ObjInfo", STREAM_STD_READ | StreamMode::NOCREATE );
+                            "\3ObjInfo", STREAM_STD_READ );
                         if ( xObjInfoSrc.Is() && !xObjInfoSrc->GetError() )
                         {
                             sal_uInt8 nByte = 0;
