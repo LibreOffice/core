@@ -20,6 +20,7 @@ class SC_DLLPUBLIC ScGroupTokenConverter
 {
     ScTokenArray& mrGroupTokens;
     ScDocument& mrDoc;
+    std::shared_ptr<sc::FormulaGroupContext> mxFormulaGroupContext;
     ScFormulaCell& mrCell;
     const ScAddress& mrPos;
 
