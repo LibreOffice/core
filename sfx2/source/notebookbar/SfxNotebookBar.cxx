@@ -22,6 +22,13 @@ using namespace sfx2;
 using namespace css::uno;
 using namespace css::ui;
 
+void SfxNotebookBar::CloseMethod(SfxBindings& rBindings)
+{
+    SfxFrame& rFrame = rBindings.GetDispatcher_Impl()->GetFrame()->GetFrame();
+    if (rFrame.GetSystemWindow()->GetNotebookBar())
+        rFrame.GetSystemWindow()->CloseNotebookBar();
+}
+
 void SfxNotebookBar::ExecMethod(SfxBindings& rBindings)
 {
     SvtViewOptions aViewOpt(E_WINDOW, "notebookbar");

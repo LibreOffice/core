@@ -21,6 +21,8 @@ namespace sfx2 {
 class SFX2_DLLPUBLIC SfxNotebookBar
 {
 public:
+    static void CloseMethod(SfxBindings& rBindings);
+
     /// Function to be called from the sdi's ExecMethod.
     static void ExecMethod(SfxBindings& rBindings);
 
