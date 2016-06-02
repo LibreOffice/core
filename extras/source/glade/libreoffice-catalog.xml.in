@@ -807,5 +807,8 @@
     <glade-widget-class title="Notebookbar with context" name="vcllo-ContextTabControl"
                         generic-name="ContextTabControl" parent="GtkNotebook"
                         icon-name="widget-gtk-notebook"/>
+    <glade-widget-class title="Slide Transition Pane" name="sdlo-SlideTransitionBox"
+                        generic-name="ShowText" parent="GtkToolButton"
+                        icon-name="widget-gtk-toolbutton"/>
   </glade-widget-classes>
 </glade-catalog>
