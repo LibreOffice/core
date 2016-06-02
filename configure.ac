@@ -443,16 +443,14 @@ if test -n "$with_android_ndk"; then
 
     # This stays empty if there is just one version of the toolchain in the NDK
     ANDROID_NDK_TOOLCHAIN_VERSION_SUBDIR=
-    case "`echo $ANDROID_NDK_HOME/toolchains/$android_cpu*-*/prebuilt/*/bin`" in
-    */bin\ */bin*)
-        # Trailing slash intentional and necessary, compare to how this is used
+    if test ! -d "$ANDROID_NDK_HOME/sources/cxx-stl/gnu-libstdc++/libs" ; then
+        # nope, won't work if empty...
+        # as is the case when using the ndk-bundle as installed with android studio
+        ANDROID_NDK_TOOLCHAIN_VERSION_SUBDIR="${with_android_ndk_toolchain_version}/"
         if test -n "$ANDROID_USING_CLANG"; then
             ANDROID_NDK_TOOLCHAIN_VERSION_SUBDIR=4.8/
-        else
-            ANDROID_NDK_TOOLCHAIN_VERSION_SUBDIR="${with_android_ndk_toolchain_version}/"
         fi
-        ;;
-    esac
+    fi
 
     ANDROID_API_LEVEL=15
     if test $host_cpu = arm; then
