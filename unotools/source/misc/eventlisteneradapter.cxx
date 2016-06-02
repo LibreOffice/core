@@ -24,6 +24,7 @@
 #include <unotools/eventlisteneradapter.hxx>
 #include <osl/diagnose.h>
 #include <cppuhelper/implbase.hxx>
+#include <rtl/ref.hxx>
 
 namespace utl
 {
@@ -92,7 +93,7 @@ namespace utl
     struct OEventListenerAdapterImpl
     {
     public:
-        ::std::vector< void* >  aListeners;
+        std::vector< rtl::Reference<OEventListenerImpl> >  aListeners;
     };
 
     //= OEventListenerAdapter
@@ -112,32 +113,26 @@ namespace utl
         if ( m_pImpl->aListeners.empty() )
             return;
 
-        ::std::vector< void* >::iterator dispose = m_pImpl->aListeners.begin();
+        auto it = m_pImpl->aListeners.begin();
         do
         {
-            OEventListenerImpl* pListenerImpl = static_cast< OEventListenerImpl* >( *dispose );
+            rtl::Reference<OEventListenerImpl>& pListenerImpl = *it;
             if ( pListenerImpl->getComponent().get() == _rxComp.get() )
             {
                 pListenerImpl->dispose();
-                pListenerImpl->release();
-                dispose = m_pImpl->aListeners.erase( dispose );
+                it = m_pImpl->aListeners.erase( it );
             }
             else
-                ++dispose;
+                ++it;
         }
-        while ( dispose != m_pImpl->aListeners.end() );
+        while ( it != m_pImpl->aListeners.end() );
     }
 
     void OEventListenerAdapter::stopAllComponentListening(  )
     {
-        for (   ::std::vector< void* >::const_iterator aDisposeLoop = m_pImpl->aListeners.begin();
-                aDisposeLoop != m_pImpl->aListeners.end();
-                ++aDisposeLoop
-            )
+        for ( const auto & i : m_pImpl->aListeners )
         {
-            OEventListenerImpl* pListenerImpl = static_cast< OEventListenerImpl* >(*aDisposeLoop);
-            pListenerImpl->dispose();
-            pListenerImpl->release();
+            i->dispose();
         }
         m_pImpl->aListeners.clear();
     }
@@ -151,7 +146,6 @@ namespace utl
         }
 
         OEventListenerImpl* pListenerImpl = new OEventListenerImpl(this, _rxComp);
-        pListenerImpl->acquire();
         m_pImpl->aListeners.push_back(pListenerImpl);
     }
 

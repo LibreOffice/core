@@ -237,7 +237,7 @@ private:
     // if we modify the row for the new record, we automatically insert a "new new row".
     // But if somebody else inserts a new record into the data source, we have to do the same.
     // For that reason we have to listen to some properties of our data source.
-    ::comphelper::OPropertyChangeMultiplexer*       m_pDataSourcePropMultiplexer;
+    rtl::Reference<::comphelper::OPropertyChangeMultiplexer>  m_pDataSourcePropMultiplexer;
     FmXGridSourcePropListener*                      m_pDataSourcePropListener;
     css::uno::Reference< css::sdb::XRowsChangeListener>
                                                     m_xRowSetListener; // get notification when rows were changed

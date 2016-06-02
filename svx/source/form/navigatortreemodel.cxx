@@ -193,7 +193,6 @@ namespace svxform
                     ,m_aNormalImages( _rNormalImages )
     {
         m_pPropChangeList = new OFormComponentObserver(this);
-        m_pPropChangeList->acquire();
         m_pRootList = new FmEntryDataList();
     }
 
@@ -215,7 +214,6 @@ namespace svxform
         Clear();
         delete m_pRootList;
         m_pPropChangeList->ReleaseModel();
-        m_pPropChangeList->release();
     }
 
 
@@ -232,7 +230,7 @@ namespace svxform
     {
         Reference< css::form::XForms >  xForms( GetForms());
         if(xForms.is())
-            xForms->removeContainerListener(static_cast<XContainerListener*>(m_pPropChangeList));
+            xForms->removeContainerListener(m_pPropChangeList.get());
 
 
         // delete RootList
@@ -325,7 +323,7 @@ namespace svxform
         // register as PropertyChangeListener
         Reference< XPropertySet >  xSet(xElement, UNO_QUERY);
         if( xSet.is() )
-            xSet->addPropertyChangeListener( FM_PROP_NAME, m_pPropChangeList );
+            xSet->addPropertyChangeListener( FM_PROP_NAME, m_pPropChangeList.get() );
 
 
         // Remove data from model
@@ -333,7 +331,7 @@ namespace svxform
         {
             Reference< XContainer >  xContainer(xElement, UNO_QUERY);
             if (xContainer.is())
-                xContainer->addContainerListener(static_cast<XContainerListener*>(m_pPropChangeList));
+                xContainer->addContainerListener(m_pPropChangeList.get());
         }
 
         if (pFolder)
@@ -466,11 +464,11 @@ namespace svxform
         // unregister as PropertyChangeListener
         Reference< XPropertySet > xSet( pFormData->GetPropertySet() );
         if ( xSet.is() )
-            xSet->removePropertyChangeListener( FM_PROP_NAME, m_pPropChangeList );
+            xSet->removePropertyChangeListener( FM_PROP_NAME, m_pPropChangeList.get() );
 
         Reference< XContainer >  xContainer( pFormData->GetContainer() );
         if (xContainer.is())
-            xContainer->removeContainerListener(static_cast<XContainerListener*>(m_pPropChangeList));
+            xContainer->removeContainerListener(m_pPropChangeList.get());
     }
 
 
@@ -485,7 +483,7 @@ namespace svxform
         // unregister as PropertyChangeListener
         Reference< XPropertySet >  xSet( pControlData->GetPropertySet() );
         if (xSet.is())
-            xSet->removePropertyChangeListener( FM_PROP_NAME, m_pPropChangeList);
+            xSet->removePropertyChangeListener( FM_PROP_NAME, m_pPropChangeList.get());
     }
 
 
@@ -835,7 +833,7 @@ namespace svxform
         Clear();
         if (xForms.is())
         {
-            xForms->addContainerListener(static_cast<XContainerListener*>(m_pPropChangeList));
+            xForms->addContainerListener(m_pPropChangeList.get());
 
             FillBranch(nullptr);
 

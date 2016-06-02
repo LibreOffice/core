@@ -117,7 +117,6 @@ AccessibleControlShape::AccessibleControlShape (
     ,   m_bWaitingForControl( false )
 {
     m_pChildManager = new comphelper::OWrappedAccessibleChildrenManager( comphelper::getProcessComponentContext() );
-    m_pChildManager->acquire();
 
     osl_atomic_increment( &m_refCount );
     {
@@ -128,8 +127,7 @@ AccessibleControlShape::AccessibleControlShape (
 
 AccessibleControlShape::~AccessibleControlShape()
 {
-    m_pChildManager->release();
-    m_pChildManager = nullptr;
+    m_pChildManager.clear();
 
     if ( m_xControlContextProxy.is() )
         m_xControlContextProxy->setDelegator( nullptr );

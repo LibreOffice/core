@@ -70,7 +70,6 @@ Bitmap& SvxRectCtl::GetRectBitmap()
 SvxRectCtl::SvxRectCtl(vcl::Window* pParent, RECT_POINT eRpt,
     sal_uInt16 nBorder, sal_uInt16 nCircle)
     : Control(pParent, WB_BORDER | WB_TABSTOP)
-    , pAccContext(nullptr)
     , nBorderWidth(nBorder)
     , nRadius(nCircle)
     , eDefRP(eRpt)
@@ -110,8 +109,7 @@ void SvxRectCtl::dispose()
 {
     delete pBitmap;
 
-    if( pAccContext )
-        pAccContext->release();
+    pAccContext.clear();
     Control::dispose();
 }
 
@@ -567,7 +565,7 @@ void SvxRectCtl::GetFocus()
     // Send the accessible focused event
     Control::GetFocus();
     // Send accessibility event.
-    if(pAccContext)
+    if(pAccContext.is())
     {
         pAccContext->FireChildFocus(GetActualRP());
     }
@@ -652,7 +650,7 @@ void SvxRectCtl::SetActualRP( RECT_POINT eNewRP )
     Invalidate( Rectangle( aPtNew - Point( nRadius, nRadius ), aPtNew + Point( nRadius, nRadius ) ) );
 
     // notify accessibility object about change
-    if( pAccContext )
+    if( pAccContext.is() )
         pAccContext->selectChild( eNewRP /* MT, bFireFocus */ );
 }
 
@@ -718,11 +716,10 @@ Reference< XAccessible > SvxRectCtl::CreateAccessible()
     if( xAccParent.is() )
     {
         pAccContext = new SvxRectCtlAccessibleContext( xAccParent, *this );
-        pAccContext->acquire();
 
         SetActualRP( GetActualRP() );
 
-        return pAccContext;
+        return pAccContext.get();
     }
     else
         return Reference< XAccessible >();

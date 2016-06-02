@@ -137,14 +137,9 @@ XMLShapeImportHelper::XMLShapeImportHelper(
 
     mpSdPropHdlFactory = new XMLSdPropHdlFactory( rModel, rImporter );
 
-    // set lock to avoid deletion
-    mpSdPropHdlFactory->acquire();
-
     // construct PropertySetMapper
-    rtl::Reference < XMLPropertySetMapper > xMapper = new XMLShapePropertySetMapper(mpSdPropHdlFactory, false);
+    rtl::Reference < XMLPropertySetMapper > xMapper = new XMLShapePropertySetMapper(mpSdPropHdlFactory.get(), false);
     mpPropertySetMapper = new SvXMLImportPropertyMapper( xMapper, rImporter );
-    // set lock to avoid deletion
-    mpPropertySetMapper->acquire();
 
     if( pExtMapper )
     {
@@ -157,10 +152,8 @@ XMLShapeImportHelper::XMLShapeImportHelper(
     mpPropertySetMapper->ChainImportMapper(XMLTextImportHelper::CreateParaDefaultExtPropMapper(rImporter));
 
     // construct PresPagePropsMapper
-    xMapper = new XMLPropertySetMapper(aXMLSDPresPageProps, mpSdPropHdlFactory, false);
+    xMapper = new XMLPropertySetMapper(aXMLSDPresPageProps, mpSdPropHdlFactory.get(), false);
     mpPresPagePropsMapper = new SvXMLImportPropertyMapper( xMapper, rImporter );
-    // set lock to avoid deletion
-    mpPresPagePropsMapper->acquire();
 
     uno::Reference< lang::XServiceInfo > xInfo( rImporter.GetModel(), uno::UNO_QUERY );
     const OUString aSName( "com.sun.star.presentation.PresentationDocument" );
@@ -172,25 +165,13 @@ XMLShapeImportHelper::~XMLShapeImportHelper()
     DBG_ASSERT( mpImpl->maConnections.empty(), "XMLShapeImportHelper::restoreConnections() was not called!" );
 
     // cleanup factory, decrease refcount. Should lead to destruction.
-    if(mpSdPropHdlFactory)
-    {
-        mpSdPropHdlFactory->release();
-        mpSdPropHdlFactory = nullptr;
-    }
+    mpSdPropHdlFactory.clear();
 
     // cleanup mapper, decrease refcount. Should lead to destruction.
-    if(mpPropertySetMapper)
-    {
-        mpPropertySetMapper->release();
-        mpPropertySetMapper = nullptr;
-    }
+    mpPropertySetMapper.clear();
 
     // cleanup presPage mapper, decrease refcount. Should lead to destruction.
-    if(mpPresPagePropsMapper)
-    {
-        mpPresPagePropsMapper->release();
-        mpPresPagePropsMapper = nullptr;
-    }
+    mpPresPagePropsMapper.clear();
 
     delete mpGroupShapeElemTokenMap;
     delete mpFrameShapeElemTokenMap;

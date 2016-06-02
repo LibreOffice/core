@@ -270,9 +270,9 @@ class XMLOFF_DLLPUBLIC XMLShapeImportHelper : public salhelper::SimpleReferenceO
     XMLShapeImportPageContextImpl*  mpPageContext;
 
     // PropertySetMappers and factory
-    XMLSdPropHdlFactory*        mpSdPropHdlFactory;
-    SvXMLImportPropertyMapper*      mpPropertySetMapper;
-    SvXMLImportPropertyMapper*      mpPresPagePropsMapper;
+    rtl::Reference<XMLSdPropHdlFactory>       mpSdPropHdlFactory;
+    rtl::Reference<SvXMLImportPropertyMapper> mpPropertySetMapper;
+    rtl::Reference<SvXMLImportPropertyMapper> mpPresPagePropsMapper;
 
     // contexts for Style and AutoStyle import
     SvXMLStylesContext*         mpStylesContext;
@@ -341,8 +341,8 @@ public:
     void SetAutoStylesContext(SvXMLStylesContext* pNew);
 
     // get factories and mappers
-    SvXMLImportPropertyMapper* GetPropertySetMapper() const { return mpPropertySetMapper; }
-    SvXMLImportPropertyMapper* GetPresPagePropsMapper() const { return mpPresPagePropsMapper; }
+    SvXMLImportPropertyMapper* GetPropertySetMapper() const { return mpPropertySetMapper.get(); }
+    SvXMLImportPropertyMapper* GetPresPagePropsMapper() const { return mpPresPagePropsMapper.get(); }
 
     // this function is called whenever the implementation classes like to add this new
     // shape to the given XShapes.
@@ -409,7 +409,7 @@ public:
     /** queries the capability of the current model to create presentation shapes */
     bool IsPresentationShapesSupported();
 
-    XMLSdPropHdlFactory* GetSdPropHdlFactory() const { return mpSdPropHdlFactory; }
+    XMLSdPropHdlFactory* GetSdPropHdlFactory() const { return mpSdPropHdlFactory.get(); }
 
     const rtl::Reference< XMLTableImport >&     GetShapeTableImport();
 };

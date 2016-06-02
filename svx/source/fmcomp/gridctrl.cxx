@@ -129,7 +129,7 @@ class GridFieldValueListener : protected ::comphelper::OPropertyChangeListener
 {
     osl::Mutex                          m_aMutex;
     DbGridControl&                      m_rParent;
-    ::comphelper::OPropertyChangeMultiplexer*   m_pRealListener;
+    rtl::Reference<::comphelper::OPropertyChangeMultiplexer> m_pRealListener;
     sal_uInt16                          m_nId;
     sal_Int16                           m_nSuspended;
     bool                                m_bDisposed : 1;
@@ -149,7 +149,6 @@ public:
 GridFieldValueListener::GridFieldValueListener(DbGridControl& _rParent, const Reference< XPropertySet >& _rField, sal_uInt16 _nId)
     :OPropertyChangeListener(m_aMutex)
     ,m_rParent(_rParent)
-    ,m_pRealListener(nullptr)
     ,m_nId(_nId)
     ,m_nSuspended(0)
     ,m_bDisposed(false)
@@ -158,7 +157,6 @@ GridFieldValueListener::GridFieldValueListener(DbGridControl& _rParent, const Re
     {
         m_pRealListener = new ::comphelper::OPropertyChangeMultiplexer(this, _rField);
         m_pRealListener->addProperty(FM_PROP_VALUE);
-        m_pRealListener->acquire();
     }
 }
 
@@ -178,15 +176,14 @@ void GridFieldValueListener::dispose()
 {
     if (m_bDisposed)
     {
-        DBG_ASSERT(m_pRealListener == nullptr, "GridFieldValueListener::dispose : inconsistent !");
+        DBG_ASSERT(m_pRealListener.get() == nullptr, "GridFieldValueListener::dispose : inconsistent !");
         return;
     }
 
-    if (m_pRealListener)
+    if (m_pRealListener.is())
     {
         m_pRealListener->dispose();
-        m_pRealListener->release();
-        m_pRealListener = nullptr;
+        m_pRealListener.clear();
     }
 
     m_bDisposed = true;
@@ -952,7 +949,6 @@ DbGridControl::DbGridControl(
             ,m_xContext(_rxContext)
             ,m_aBar(VclPtr<DbGridControl::NavigationBar>::Create(this))
             ,m_nAsynAdjustEvent(nullptr)
-            ,m_pDataSourcePropMultiplexer(nullptr)
             ,m_pDataSourcePropListener(nullptr)
             ,m_pFieldListeners(nullptr)
             ,m_pCursorDisposeListener(nullptr)
@@ -1036,12 +1032,11 @@ void DbGridControl::dispose()
     if (m_nDeleteEvent)
         Application::RemoveUserEvent(m_nDeleteEvent);
 
-    if (m_pDataSourcePropMultiplexer)
+    if (m_pDataSourcePropMultiplexer.is())
     {
         m_pDataSourcePropMultiplexer->dispose();
-        m_pDataSourcePropMultiplexer->release();    // this should delete the multiplexer
+        m_pDataSourcePropMultiplexer.clear();    // this should delete the multiplexer
         delete m_pDataSourcePropListener;
-        m_pDataSourcePropMultiplexer = nullptr;
         m_pDataSourcePropListener = nullptr;
     }
     m_xRowSetListener.clear();
@@ -1431,12 +1426,11 @@ void DbGridControl::setDataSource(const Reference< XRowSet >& _xCursor, sal_uInt
     if (!_xCursor.is() && !m_pDataCursor)
         return;
 
-    if (m_pDataSourcePropMultiplexer)
+    if (m_pDataSourcePropMultiplexer.is())
     {
         m_pDataSourcePropMultiplexer->dispose();
-        m_pDataSourcePropMultiplexer->release();    // this should delete the multiplexer
+        m_pDataSourcePropMultiplexer.clear();    // this should delete the multiplexer
         delete m_pDataSourcePropListener;
-        m_pDataSourcePropMultiplexer = nullptr;
         m_pDataSourcePropListener = nullptr;
     }
     m_xRowSetListener.clear();
@@ -1513,7 +1507,6 @@ void DbGridControl::setDataSource(const Reference< XRowSet >& _xCursor, sal_uInt
     {
         m_pDataSourcePropListener = new FmXGridSourcePropListener(this);
         m_pDataSourcePropMultiplexer = new ::comphelper::OPropertyChangeMultiplexer(m_pDataSourcePropListener, m_pDataCursor->getPropertySet() );
-        m_pDataSourcePropMultiplexer->acquire();
         m_pDataSourcePropMultiplexer->addProperty(FM_PROP_ISMODIFIED);
         m_pDataSourcePropMultiplexer->addProperty(FM_PROP_ISNEW);
     }

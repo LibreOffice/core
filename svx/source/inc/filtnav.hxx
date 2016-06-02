@@ -156,7 +156,7 @@ class FmFilterModel : public FmParentData
 
     css::uno::Reference< css::container::XIndexAccess >           m_xControllers;
     css::uno::Reference< css::form::runtime::XFormController >    m_xController;
-    FmFilterAdapter*        m_pAdapter;
+    rtl::Reference<FmFilterAdapter>                               m_pAdapter;
     FmFilterItems*          m_pCurrentItems;
 
 public:
