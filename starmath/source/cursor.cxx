@@ -16,53 +16,56 @@
 
 void SmCursor::Move(OutputDevice* pDev, SmMovementDirection direction, bool bMoveAnchor){
     SmCaretPosGraphEntry* NewPos = nullptr;
-    switch(direction){
+    switch(direction)
+    {
         case MoveLeft:
-        {
-            NewPos = mpPosition->Left;
+            if (mpPosition)
+                NewPos = mpPosition->Left;
             OSL_ENSURE(NewPos, "NewPos shouldn't be NULL here!");
-        }break;
+            break;
         case MoveRight:
-        {
-            NewPos = mpPosition->Right;
+            if (mpPosition)
+                NewPos = mpPosition->Right;
             OSL_ENSURE(NewPos, "NewPos shouldn't be NULL here!");
-        }break;
+            break;
         case MoveUp:
             //Implementation is practically identical to MoveDown, except for a single if statement
             //so I've implemented them together and added a direction == MoveDown to the if statements.
         case MoveDown:
-        {
-            SmCaretLine from_line = SmCaretPos2LineVisitor(pDev, mpPosition->CaretPos).GetResult(),
-                        best_line,  //Best approximated line found so far
-                        curr_line;  //Current line
-            long dbp_sq = 0;        //Distance squared to best line
-            for(auto &pEntry : *mpGraph)
+            if (mpPosition)
             {
-                //Reject it if it's the current position
-                if(pEntry->CaretPos == mpPosition->CaretPos) continue;
-                //Compute caret line
-                curr_line = SmCaretPos2LineVisitor(pDev, pEntry->CaretPos).GetResult();
-                //Reject anything above if we're moving down
-                if(curr_line.GetTop() <= from_line.GetTop() && direction == MoveDown) continue;
-                //Reject anything below if we're moving up
-                if(curr_line.GetTop() + curr_line.GetHeight() >= from_line.GetTop() + from_line.GetHeight()
-                        && direction == MoveUp) continue;
-                //Compare if it to what we have, if we have anything yet
-                if(NewPos){
-                    //Compute distance to current line squared, multiplied with a horizontal factor
-                    long dp_sq = curr_line.SquaredDistanceX(from_line) * HORIZONTICAL_DISTANCE_FACTOR +
-                                 curr_line.SquaredDistanceY(from_line);
-                    //Discard current line if best line is closer
-                    if(dbp_sq <= dp_sq) continue;
+                SmCaretLine from_line = SmCaretPos2LineVisitor(pDev, mpPosition->CaretPos).GetResult(),
+                            best_line,  //Best approximated line found so far
+                            curr_line;  //Current line
+                long dbp_sq = 0;        //Distance squared to best line
+                for(auto &pEntry : *mpGraph)
+                {
+                    //Reject it if it's the current position
+                    if(pEntry->CaretPos == mpPosition->CaretPos) continue;
+                    //Compute caret line
+                    curr_line = SmCaretPos2LineVisitor(pDev, pEntry->CaretPos).GetResult();
+                    //Reject anything above if we're moving down
+                    if(curr_line.GetTop() <= from_line.GetTop() && direction == MoveDown) continue;
+                    //Reject anything below if we're moving up
+                    if(curr_line.GetTop() + curr_line.GetHeight() >= from_line.GetTop() + from_line.GetHeight()
+                            && direction == MoveUp) continue;
+                    //Compare if it to what we have, if we have anything yet
+                    if(NewPos){
+                        //Compute distance to current line squared, multiplied with a horizontal factor
+                        long dp_sq = curr_line.SquaredDistanceX(from_line) * HORIZONTICAL_DISTANCE_FACTOR +
+                                     curr_line.SquaredDistanceY(from_line);
+                        //Discard current line if best line is closer
+                        if(dbp_sq <= dp_sq) continue;
+                    }
+                    //Take current line as the best
+                    best_line = curr_line;
+                    NewPos = pEntry.get();
+                    //Update distance to best line
+                    dbp_sq = best_line.SquaredDistanceX(from_line) * HORIZONTICAL_DISTANCE_FACTOR +
+                             best_line.SquaredDistanceY(from_line);
                 }
-                //Take current line as the best
-                best_line = curr_line;
-                NewPos = pEntry.get();
-                //Update distance to best line
-                dbp_sq = best_line.SquaredDistanceX(from_line) * HORIZONTICAL_DISTANCE_FACTOR +
-                         best_line.SquaredDistanceY(from_line);
             }
-        }break;
+            break;
         default:
             SAL_WARN("starmath", "Movement direction not supported!");
     }
