@@ -100,6 +100,12 @@ bool uploadContent(std::map<std::string, std::string>& parameters)
     if (url.empty())
         return false;
 
+    if (file.empty())
+        return false;
+
+    if (version.empty())
+        return false;
+
     curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
     curl_easy_setopt(curl, CURLOPT_USERAGENT, kUserAgent);
     // Set proxy information if necessary.
