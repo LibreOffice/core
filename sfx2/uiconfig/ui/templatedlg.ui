@@ -3,21 +3,6 @@
 <interface>
   <requires lib="gtk+" version="3.6"/>
   <requires lib="LibreOffice" version="1.0"/>
-  <object class="GtkImage" id="image1">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">sfx2/imglst/actiontemplates020.png</property>
-  </object>
-  <object class="GtkImage" id="image3">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">sfx2/imglst/actiontemplates017.png</property>
-  </object>
-  <object class="GtkImage" id="image4">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">sfx2/imglst/actionview010.png</property>
-  </object>
   <object class="GtkListStore" id="applist">
     <columns>
       <!-- column-name gchararray1 -->
@@ -41,7 +26,6 @@
       </row>
     </data>
   </object>
-
   <object class="GtkListStore" id="folderlist">
     <columns>
       <!-- column-name gchararray1 -->
@@ -52,6 +36,26 @@
         <col id="0" translatable="yes">All Categories</col>
       </row>
     </data>
+  </object>
+  <object class="GtkImage" id="image1">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">sfx2/imglst/actiontemplates020.png</property>
+  </object>
+  <object class="GtkImage" id="image3">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">sfx2/imglst/actiontemplates017.png</property>
+  </object>
+  <object class="GtkImage" id="image4">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">sfx2/imglst/actionview010.png</property>
+  </object>
+  <object class="GtkImage" id="image5">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">cmd/lc_webhtml.png</property>
   </object>
   <object class="GtkDialog" id="TemplateDialog">
     <property name="width_request">800</property>
@@ -291,9 +295,11 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <child>
-                      <object class="GtkToolbar" id="action_view">
+                      <object class="GtkToolbar" id="action_action">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="halign">end</property>
+                        <property name="hexpand">True</property>
                         <child>
                           <object class="GtkToolButton" id="repository">
                             <property name="visible">True</property>
@@ -308,26 +314,11 @@
                             <property name="homogeneous">True</property>
                           </packing>
                         </child>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkToolbar" id="action_action">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="halign">end</property>
-                        <property name="hexpand">True</property>
                         <child>
                           <object class="GtkToolButton" id="action_menu">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="action_name">action_menu</property>
-                            <property name="label" translatable="yes">Action Menu</property>
-                            <property name="use_underline">True</property>
                             <property name="icon_name">sfx2/imglst/actionaction013.png</property>
                           </object>
                           <packing>
@@ -452,10 +443,5 @@
       <action-widget response="0">ok</action-widget>
       <action-widget response="0">cancel</action-widget>
     </action-widgets>
-  </object>
-  <object class="GtkImage" id="image5">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">cmd/lc_webhtml.png</property>
   </object>
 </interface>
