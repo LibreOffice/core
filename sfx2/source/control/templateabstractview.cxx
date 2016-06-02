@@ -127,14 +127,21 @@ void TemplateAbstractView::insertItem(const TemplateItemProperties &rTemplate)
     Invalidate();
 }
 
-void TemplateAbstractView::insertItems(const std::vector<TemplateItemProperties> &rTemplates)
+void TemplateAbstractView::insertItems(const std::vector<TemplateItemProperties> &rTemplates, bool isRegionSelected)
 {
+    mItemList.clear();
+
     std::vector<ThumbnailViewItem*> aItems(rTemplates.size());
     for (size_t i = 0, n = rTemplates.size(); i < n; ++i )
     {
         const TemplateItemProperties *pCur = &rTemplates[i];
 
-        TemplateViewItem *pChild = new TemplateViewItem(*this, pCur->nId);
+        TemplateViewItem *pChild;
+        if(isRegionSelected)
+            pChild = new TemplateViewItem(*this, pCur->nId);
+        else
+            pChild = new TemplateViewItem(*this, i+1);
+
         pChild->mnDocId = pCur->nDocId;
         pChild->mnRegionId = pCur->nRegionId;
         pChild->maTitle = pCur->aName;
@@ -163,8 +170,11 @@ void TemplateAbstractView::updateThumbnailDimensions(long itemMaxSize)
 
 void TemplateAbstractView::MouseButtonDown( const MouseEvent& rMEvt )
 {
+    GrabFocus();
+
     if (rMEvt.IsRight())
     {
+        deselectItems();
         size_t nPos = ImplGetItem(rMEvt.GetPosPixel());
         Point aPosition (rMEvt.GetPosPixel());
         maPosition = aPosition;
