@@ -604,7 +604,9 @@ void SvxNumberFormatShell::FillEListWithStd_Impl( std::vector<OUString>& rList,
                                      break;
             case CAT_FRACTION       :eOffsetStart=NF_FRACTION_START;
                                      eOffsetEnd=NF_FRACTION_END;
-                                     break;
+                                     nSelPos = FillEListWithFormats_Impl( rList, nSelPos, eOffsetStart, eOffsetEnd);
+                                     nSelPos = FillEListWithFormats_Impl( rList, nSelPos, NF_FRACTION_3, NF_FRACTION_4);
+                                     return;
             case CAT_BOOLEAN        :eOffsetStart=NF_BOOLEAN;
                                      eOffsetEnd=NF_BOOLEAN;
                                      break;
