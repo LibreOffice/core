@@ -61,7 +61,6 @@ private:
 
 protected:
     virtual void    Resize() override;
-    virtual bool    Close() override;
 
 public:
     SvxColorWindow_Impl( const OUString& rCommand,

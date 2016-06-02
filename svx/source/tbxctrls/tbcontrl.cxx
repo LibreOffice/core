@@ -258,7 +258,6 @@ private:
 
 protected:
     virtual void    Resize() override;
-    virtual bool    Close() override;
     virtual void    GetFocus() override;
 
 public:
@@ -283,7 +282,6 @@ private:
 
 protected:
     virtual void    Resize() override;
-    virtual bool    Close() override;
     virtual void    GetFocus() override;
 public:
     SvxLineWindow_Impl( sal_uInt16 nId, const Reference< XFrame >& rFrame, vcl::Window* pParentWindow );
@@ -1458,11 +1456,6 @@ void SvxColorWindow_Impl::StartSelection()
     mpColorSet->StartSelection();
 }
 
-bool SvxColorWindow_Impl::Close()
-{
-    return SfxPopupWindow::Close();
-}
-
 void SvxColorWindow_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
 {
     if ( nSID == SID_COLOR_TABLE )
@@ -1850,11 +1843,6 @@ void SvxFrameWindow_Impl::StartSelection()
     aFrameSet->StartSelection();
 }
 
-bool SvxFrameWindow_Impl::Close()
-{
-    return SfxPopupWindow::Close();
-}
-
 static Color lcl_mediumColor( Color aMain, Color /*aDefault*/ )
 {
     return SvxBorderLine::threeDMediumColor( aMain );
@@ -2028,11 +2016,6 @@ IMPL_LINK_NOARG_TYPED(SvxLineWindow_Impl, SelectHdl, ListBox&, void)
 void SvxLineWindow_Impl::Resize()
 {
     m_aLineStyleLb->Resize();
-}
-
-bool SvxLineWindow_Impl::Close()
-{
-    return SfxPopupWindow::Close();
 }
 
 void SvxLineWindow_Impl::GetFocus()

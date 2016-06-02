@@ -957,9 +957,9 @@ bool ImplStdBorderWindowView::Tracking( const TrackingEvent& rTEvt )
                 {
                     // dispatch to correct window type (why is Close() not virtual ??? )
                     // TODO: make Close() virtual
-                    VclPtr<vcl::Window> pWin = pBorderWindow->ImplGetClientWindow()->ImplGetWindow();
-                    SystemWindow  *pSysWin  = dynamic_cast<SystemWindow* >(pWin.get());
-                    DockingWindow *pDockWin = dynamic_cast<DockingWindow*>(pWin.get());
+                    vcl::Window *pWin = pBorderWindow->ImplGetClientWindow()->ImplGetWindow();
+                    SystemWindow  *pSysWin  = dynamic_cast<SystemWindow* >(pWin);
+                    DockingWindow *pDockWin = dynamic_cast<DockingWindow*>(pWin);
                     if ( pSysWin )
                         pSysWin->Close();
                     else if ( pDockWin )
