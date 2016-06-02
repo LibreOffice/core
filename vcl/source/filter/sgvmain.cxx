@@ -914,10 +914,6 @@ bool SgfFilterSDrw( SvStream& rInp, SgfHeader&, SgfEntry&, GDIMetaFile& rMtf )
 
 bool SgfSDrwFilter(SvStream& rInp, GDIMetaFile& rMtf, const INetURLObject& _aIniPath )
 {
-#if OSL_DEBUG_LEVEL > 1 // check record size. New compiler possibly aligns different!
-    if (sizeof(ObjTextType)!=ObjTextTypeSize)  return false;
-#endif
-
     sal_uLong   nFileStart;        // offset of SgfHeaders. In general 0.
     SgfHeader   aHead;
     SgfEntry    aEntr;
