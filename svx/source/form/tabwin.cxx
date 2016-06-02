@@ -172,7 +172,6 @@ FmFieldWin::FmFieldWin(SfxBindings* _pBindings, SfxChildWindow* _pMgr, vcl::Wind
             ,SfxControllerItem(SID_FM_FIELDS_CONTROL, *_pBindings)
             ,::comphelper::OPropertyChangeListener(m_aMutex)
             ,m_nObjectType(0)
-            ,m_pChangeListener(nullptr)
 {
     SetHelpId( HID_FIELD_SEL_WIN );
 
@@ -191,11 +190,10 @@ FmFieldWin::~FmFieldWin()
 
 void FmFieldWin::dispose()
 {
-    if (m_pChangeListener)
+    if (m_pChangeListener.is())
     {
         m_pChangeListener->dispose();
-        m_pChangeListener->release();
-        //  delete m_pChangeListener;
+        m_pChangeListener.clear();
     }
     pListBox.disposeAndClear();
     ::SfxControllerItem::dispose();
@@ -358,13 +356,12 @@ void FmFieldWin::UpdateContent(const css::uno::Reference< css::form::XForm > & x
         }
 
         // listen for changes at ControlSource in PropertySet
-        if (m_pChangeListener)
+        if (m_pChangeListener.is())
         {
             m_pChangeListener->dispose();
-            m_pChangeListener->release();
+            m_pChangeListener.clear();
         }
         m_pChangeListener = new ::comphelper::OPropertyChangeMultiplexer(this, xSet);
-        m_pChangeListener->acquire();
         m_pChangeListener->addProperty(FM_PROP_DATASOURCE);
         m_pChangeListener->addProperty(FM_PROP_COMMAND);
         m_pChangeListener->addProperty(FM_PROP_COMMANDTYPE);

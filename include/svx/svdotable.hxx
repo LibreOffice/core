@@ -303,7 +303,7 @@ private:
 
     Rectangle   maLogicRect;
 private:
-    SdrTableObjImpl*    mpImpl;
+    rtl::Reference<SdrTableObjImpl>    mpImpl;
 };
 
 

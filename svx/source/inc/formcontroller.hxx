@@ -75,6 +75,7 @@
 #include <comphelper/proparrhlp.hxx>
 #include <cppuhelper/propshlp.hxx>
 #include <comphelper/interfacecontainer2.hxx>
+#include <rtl/ref.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/idle.hxx>
 
@@ -203,8 +204,7 @@ namespace svxform
 
         // as we want to intercept dispatches of _all_ controls we're responsible for, and an object implementing
         // the css::frame::XDispatchProviderInterceptor interface can intercept only _one_ objects dispatches, we need a helper class
-        typedef std::vector<DispatchInterceptionMultiplexer*> Interceptors;
-        Interceptors    m_aControlDispatchInterceptors;
+        std::vector<rtl::Reference<DispatchInterceptionMultiplexer>>  m_aControlDispatchInterceptors;
 
     public:
         FormController( const css::uno::Reference< css::uno::XComponentContext > & _rxORB );

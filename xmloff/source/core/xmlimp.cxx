@@ -430,7 +430,6 @@ SvXMLImport::SvXMLImport(
     mpProgressBarHelper( nullptr ),
     mpEventImportHelper( nullptr ),
     mpXMLErrors( nullptr ),
-    mpStyleMap(nullptr),
     mnImportFlags( nImportFlags ),
     mnErrorFlags(SvXMLErrorFlags::NO),
     mbIsFormsSupported( true ),
@@ -618,11 +617,7 @@ void SAL_CALL SvXMLImport::endDocument()
         Reference< lang::XComponent > xComp( mxEmbeddedResolver, UNO_QUERY );
         xComp->dispose();
     }
-    if( mpStyleMap )
-    {
-        mpStyleMap->release();
-        mpStyleMap = nullptr;
-    }
+    mpStyleMap.clear();
 
     if ( mpXMLErrors != nullptr )
     {
@@ -1008,7 +1003,6 @@ void SAL_CALL SvXMLImport::initialize( const uno::Sequence< uno::Any >& aArgumen
                     if( pSMap )
                     {
                         mpStyleMap = pSMap;
-                        mpStyleMap->acquire();
                     }
                 }
                 OUString sBaseURI;
@@ -1405,10 +1399,9 @@ void SvXMLImport::AddStyleDisplayName( sal_uInt16 nFamily,
                                        const OUString& rName,
                                        const OUString& rDisplayName )
 {
-    if( !mpStyleMap )
+    if( !mpStyleMap.is() )
     {
         mpStyleMap = new StyleMap;
-        mpStyleMap->acquire();
         if( mxImportInfo.is() )
         {
             OUString sPrivateData( "PrivateData" );
@@ -1418,7 +1411,7 @@ void SvXMLImport::AddStyleDisplayName( sal_uInt16 nFamily,
                 xPropertySetInfo->hasPropertyByName(sPrivateData) )
             {
                 Reference < XInterface > xIfc(
-                        static_cast< XUnoTunnel *>( mpStyleMap ) );
+                        static_cast< XUnoTunnel *>( mpStyleMap.get() ) );
                 mxImportInfo->setPropertyValue( sPrivateData, Any(xIfc) );
             }
         }
@@ -1437,7 +1430,7 @@ OUString SvXMLImport::GetStyleDisplayName( sal_uInt16 nFamily,
                                            const OUString& rName ) const
 {
     OUString sName( rName );
-    if( mpStyleMap && !rName.isEmpty() )
+    if( mpStyleMap.is() && !rName.isEmpty() )
     {
         StyleMap::key_type aKey( nFamily, rName );
         StyleMap::const_iterator aIter = mpStyleMap->find( aKey );

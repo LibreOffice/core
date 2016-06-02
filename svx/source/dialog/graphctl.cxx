@@ -64,7 +64,6 @@ GraphCtrl::GraphCtrl( vcl::Window* pParent, WinBits nStyle ) :
             bEditMode       ( false ),
             bSdrMode        ( false ),
             bAnim           ( false ),
-            mpAccContext    ( nullptr ),
             pModel          ( nullptr ),
             pView           ( nullptr )
 {
@@ -93,10 +92,10 @@ void GraphCtrl::dispose()
 {
     aUpdateIdle.Stop();
 
-    if( mpAccContext )
+    if( mpAccContext.is() )
     {
         mpAccContext->disposing();
-        mpAccContext->release();
+        mpAccContext.clear();
     }
     delete pView;
     pView = nullptr;
@@ -166,7 +165,7 @@ void GraphCtrl::InitSdrModel()
     pView->SetBufferedOverlayAllowed(true);
 
     // Tell the accessibility object about the changes.
-    if (mpAccContext != nullptr)
+    if (mpAccContext.is())
         mpAccContext->setModelAndView (pModel, pView);
 }
 
@@ -769,12 +768,11 @@ css::uno::Reference< css::accessibility::XAccessible > GraphCtrl::CreateAccessib
                 xAccParent.is() )
             {
                 mpAccContext = new SvxGraphCtrlAccessibleContext( xAccParent, *this );
-                mpAccContext->acquire();
             }
         }
     }
 
-    return mpAccContext;
+    return mpAccContext.get();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

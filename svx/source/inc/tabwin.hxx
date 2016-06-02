@@ -74,7 +74,7 @@ class FmFieldWin :public SfxFloatingWindow
                        m_aObjectName;
     sal_Int32          m_nObjectType;
 
-    ::comphelper::OPropertyChangeMultiplexer*   m_pChangeListener;
+    rtl::Reference<::comphelper::OPropertyChangeMultiplexer>  m_pChangeListener;
 
 public:
     FmFieldWin(SfxBindings *pBindings,
