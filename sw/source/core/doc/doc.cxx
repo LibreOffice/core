@@ -147,19 +147,19 @@ using namespace ::com::sun::star;
 /* IInterface */
 sal_Int32 SwDoc::acquire()
 {
-    OSL_ENSURE(mReferenceCount >= 0, "Negative reference count detected! This is a sign for unbalanced acquire/release calls.");
+    assert(mReferenceCount >= 0);
     return osl_atomic_increment(&mReferenceCount);
 }
 
 sal_Int32 SwDoc::release()
 {
-    OSL_PRECOND(mReferenceCount >= 1, "Object is already released! Releasing it again leads to a negative reference count.");
+    assert(mReferenceCount >= 1);
     return osl_atomic_decrement(&mReferenceCount);
 }
 
 sal_Int32 SwDoc::getReferenceCount() const
 {
-    OSL_ENSURE(mReferenceCount >= 0, "Negative reference count detected! This is a sign for unbalanced acquire/release calls.");
+    assert(mReferenceCount >= 0);
     return mReferenceCount;
 }
 
@@ -552,7 +552,7 @@ bool sw_GetPostIts(
     bool bHasPostIts = false;
 
     SwFieldType* pFieldType = pIDFA->GetSysFieldType( RES_POSTITFLD );
-    OSL_ENSURE( pFieldType, "no PostItType ? ");
+    assert(pFieldType);
 
     if( pFieldType->HasWriterListeners() )
     {
@@ -589,7 +589,7 @@ static void lcl_FormatPostIt(
 {
     static char const sTmp[] = " : ";
 
-    OSL_ENSURE( SwViewShell::GetShellRes(), "missing ShellRes" );
+    assert(SwViewShell::GetShellRes());
 
     if (bNewPage)
     {
@@ -782,8 +782,8 @@ void SwDoc::UpdatePagesForPrintingWithPostItData(
 {
 
     SwPostItMode nPostItMode = static_cast<SwPostItMode>( rOptions.getIntValue( "PrintAnnotationMode", 0 ) );
-    OSL_ENSURE(nPostItMode == SwPostItMode::NONE || rData.HasPostItData(),
-            "print post-its without post-it data?" );
+    assert((nPostItMode == SwPostItMode::NONE || rData.HasPostItData())
+            && "print post-its without post-it data?");
     const SetGetExpFields::size_type nPostItCount =
         rData.HasPostItData() ? rData.m_pPostItFields->size() : 0;
     if (nPostItMode != SwPostItMode::NONE && nPostItCount > 0)
@@ -861,11 +861,9 @@ void SwDoc::UpdatePagesForPrintingWithPostItData(
             const SwPageFrame * pPageFrame = static_cast<SwPageFrame*>(rData.m_pPostItShell->GetLayout()->Lower());
             while( pPageFrame && nPageNum < nPostItDocPageCount )
             {
-                OSL_ENSURE( pPageFrame, "Empty page frame. How are we going to print this?" );
                 ++nPageNum;
                 // negative page number indicates page is from the post-it doc
                 rData.GetPagesToPrint().push_back( -nPageNum );
-                OSL_ENSURE( pPageFrame, "pPageFrame is NULL!" );
                 pPageFrame = static_cast<const SwPageFrame*>(pPageFrame->GetNext());
             }
             OSL_ENSURE( nPageNum == nPostItDocPageCount, "unexpected number of pages" );
@@ -953,7 +951,6 @@ void SwDoc::CalculatePagePairsForProspectPrinting(
     const SwPageFrame *pPageFrame  = dynamic_cast<const SwPageFrame*>( rLayout.Lower() );
     while( pPageFrame && nPageNum < nDocPageCount )
     {
-        OSL_ENSURE( pPageFrame, "Empty page frame. How are we going to print this?" );
         ++nPageNum;
         rValidPagesSet.insert( nPageNum );
         validStartFrames[ nPageNum ] = pPageFrame;
@@ -1186,7 +1183,7 @@ static bool lcl_CheckSmartTagsAgain( const SwNodePtr& rpNd, void*  )
 void SwDoc::SpellItAgainSam( bool bInvalid, bool bOnlyWrong, bool bSmartTags )
 {
     std::set<SwRootFrame*> aAllLayouts = GetAllLayouts();
-    OSL_ENSURE( getIDocumentLayoutAccess().GetCurrentLayout(), "SpellAgain: Where's my RootFrame?" );
+    assert(getIDocumentLayoutAccess().GetCurrentLayout() && "SpellAgain: Where's my RootFrame?");
     if( bInvalid )
     {
         for ( auto aLayout : aAllLayouts )
