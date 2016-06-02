@@ -532,8 +532,7 @@ struct XMLTextImportHelper::Impl
     /// start ranges for open bookmarks
     std::map< OUString, BookmarkMapEntry_t > m_BookmarkStartRanges;
 
-    typedef std::vector< OUString > BookmarkVector_t;
-    BookmarkVector_t m_BookmarkVector;
+    std::vector< OUString > m_BookmarkVector;
 
     /// name of the last 'open' redline that started between paragraphs
     OUString m_sOpenRedlineIdentifier;
@@ -2516,7 +2515,7 @@ bool XMLTextImportHelper::FindAndRemoveBookmarkStartRange(
         o_rXmlId = std::get<1>(rEntry);
         o_rpRDFaAttributes = std::get<2>(rEntry);
         m_xImpl->m_BookmarkStartRanges.erase(sName);
-        Impl::BookmarkVector_t::iterator it(m_xImpl->m_BookmarkVector.begin());
+        std::vector< OUString >::iterator it(m_xImpl->m_BookmarkVector.begin());
         while (it != m_xImpl->m_BookmarkVector.end() && it->compareTo(sName)!=0)
         {
             ++it;
