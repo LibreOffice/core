@@ -21,8 +21,6 @@
 
 #include <sfx2/sfx.hrc>
 
-#define STR_TITLE_DISCRIPTION               ( RID_SFX_PROPERTYPANEL_START + 0 )
-
 #ifndef STD_MASKCOLOR
 #define STD_MASKCOLOR Color { Red = 0xFF00; Green = 0x0000; Blue = 0xFF00; }
 #endif
@@ -37,7 +35,6 @@
 #define TEXT_CONTROL_SPACING_VERTICAL   2
 
 #define TEXT_HEIGHT         8
-#define CBOX_HEIGHT         12
 #define MBOX_HEIGHT         12
 
 

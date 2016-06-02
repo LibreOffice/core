@@ -18,7 +18,6 @@
  */
 
 #include "dialogs.hrc"
-#include "helpids.hrc"
 
 String STR_CERTIFICATE_NOT_VALIDATED
 {

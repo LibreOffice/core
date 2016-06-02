@@ -62,11 +62,4 @@
 #define MN_ACTIVATE             9
 #define MN_MACRO                10
 
-/******************************************************************************/
-
-#define RID_SVXCTL_FT_TARGET    (RID_SVX_IMAPDLG_START + 3)
-#define RID_SVXCTL_CBB_TARGET   (RID_SVX_IMAPDLG_START + 4)
-
-/******************************************************************************/
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -34,40 +34,12 @@
 
 // Member-Id's
 
-#define MID_APPFLAG             0x20
-#define MID_AUTOBREAK           0x21
-#define MID_BREAKxxx            0x22
-#define MID_BRUSHSTYLE          0x23
-#define MID_CELLTYPE            0x24
-#define MID_CHARSET             0x25
-#define MID_COMMAND             0x26
-#define MID_CONTENT             0x27
-#define MID_DESCNAMExxx         0x28
-
-#define MID_ESCAPEMENT          0x2a
-#define MID_FAMILY              0x2b
-#define MID_FIRSTLINE_OFFSET    0x2d
-#define MID_FONTFAMILY          0x2f
-#define MID_FONTFAMILYNAME      0x30
-#define MID_FONTSTYLE           0x32
-#define MID_HYPHEN              0x34
 #define MID_INTER_LINESPACE     0x36
 #define MID_INTER_SPACE         0x37
-#define MID_LANDSCAPE           0x38
 
-#define MID_LEFT_MARGIN         0x3a
 #define MID_LOWER               0x3d
-#define MID_MAXHYPHENS          0x3e
-#define MID_MINLEAD             0x3f
-#define MID_MINTRAIL            0x40
-#define MID_NUMTYPExxx          0x41
-#define MID_PAGEEND             0x42
 #define MID_POS                 0x43
-#define MID_PROPORTIONAL        0x44
-#define MID_REPLACE_STRING      0x45
 #define MID_RIGHT               0x46
-#define MID_RIGHT_MARGIN        0x47
-#define MID_ROW_DIRECTION       0x48
 #define MID_SIZE                0x4a
 #define MID_UPPER               0x4b
 #define MID_USExxx              0x4c
