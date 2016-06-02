@@ -143,7 +143,7 @@ void TemplateLocalView::showAllTemplates()
     mnCurRegionId = 0;
     maCurRegionName.clear();
 
-    insertItems(maAllTemplates);
+    insertItems(maAllTemplates, false);
     maOpenRegionHdl.Call(nullptr);
 }
 
@@ -575,7 +575,7 @@ bool TemplateLocalView::moveTemplates(const std::set<const ThumbnailViewItem*, s
                         if (pPropIter->nDocId == pViewItem->mnDocId)
                         {
                             pPropIter = pSrc->maTemplates.erase(pPropIter);
-                            aItemIds.push_back(pViewItem->mnId);
+                            aItemIds.push_back(pViewItem->mnDocId + 1);//mnid
                         }
                         else
                         {
