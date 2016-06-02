@@ -855,7 +855,12 @@ IMPL_LINK_TYPED(SfxTemplateManagerDlg, DefaultTemplateHdl, ThumbnailViewItem*, p
     OUString aServiceName;
     if (lcl_getServiceName(pViewItem->getPath(),aServiceName))
     {
+        OUString sPrevDefault = SfxObjectFactory::GetStandardTemplate( aServiceName );
+        if(!sPrevDefault.isEmpty())
+            mpLocalView->RemoveDefaultTemplateIcon(sPrevDefault);
+
         SfxObjectFactory::SetStandardTemplate(aServiceName,pViewItem->getPath());
+        pViewItem->showDefaultIcon(true);
 
         createDefaultTemplateMenu();
     }

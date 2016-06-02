@@ -48,4 +48,9 @@ Bitmap IMG_RECENTDOC_REMOVE_HIGHLIGHTED
     File = "recentdoc_remove_highlighted.png";
 };
 
+Bitmap IMG_DEFAULT
+{
+    File = "templatestar.png";
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
