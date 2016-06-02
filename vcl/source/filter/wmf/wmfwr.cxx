@@ -1633,6 +1633,9 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                 }
                 break;
 
+                case( MetaActionType::COMMENT ): // ignore
+                break;
+
                 default:
                 {
                     OSL_FAIL(OStringBuffer(
