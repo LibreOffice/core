@@ -77,7 +77,6 @@
 
 // FixedLine
 #define FL_FRAME                    6
-#define FL_FORMSETINGS              7
 
 // Image
 
@@ -86,7 +85,6 @@
 
 #define WINDOW_SIZE_X       260
 #define WINDOW_SIZE_Y       185
-#define WINDOW_HALF_SIZE_X  ( WINDOW_SIZE_X / 2 )
 
 #endif
 

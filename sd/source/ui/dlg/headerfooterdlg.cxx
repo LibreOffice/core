@@ -36,7 +36,6 @@
 
 #include "helpids.h"
 #include "Outliner.hxx"
-#include "dialogs.hrc"
 #include "headerfooterdlg.hxx"
 #include "DrawDocShell.hxx"
 #include "drawdoc.hxx"

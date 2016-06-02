@@ -47,7 +47,6 @@
 
 #include "dialogs.hrc"
 #include "digitalsignaturesdialog.hrc"
-#include "helpids.hrc"
 #include "resourcemanager.hxx"
 
 #include <vcl/layout.hxx>
