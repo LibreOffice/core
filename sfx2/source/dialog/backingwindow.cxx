@@ -392,7 +392,7 @@ bool BackingWindow::PreNotify( NotifyEvent& rNEvt )
         {
             if( rKeyCode.IsShift() ) // Shift + F6
             {
-                if( mpAllRecentThumbnails->HasFocus() )
+                if( mpAllRecentThumbnails->HasFocus() || mpLocalView->HasFocus())
                 {
                     mpOpenButton->GrabFocus();
                     return true;
@@ -400,14 +400,27 @@ bool BackingWindow::PreNotify( NotifyEvent& rNEvt )
             }
             else if ( rKeyCode.IsMod1() ) // Ctrl + F6
             {
-                mpAllRecentThumbnails->GrabFocus();
-                return true;
+                if(mpAllRecentThumbnails->IsVisible())
+                {
+                    mpAllRecentThumbnails->GrabFocus();
+                    return true;
+                }
+                else if(mpLocalView->IsVisible())
+                {
+                    mpLocalView->GrabFocus();
+                    return true;
+                }
             }
             else // F6
             {
-                if( mpAllButtonsBox->HasChildPathFocus() )
+                if(mpAllRecentThumbnails->IsVisible())
                 {
                     mpAllRecentThumbnails->GrabFocus();
+                    return true;
+                }
+                else if(mpLocalView->IsVisible())
+                {
+                    mpLocalView->GrabFocus();
                     return true;
                 }
             }
