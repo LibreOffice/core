@@ -8671,8 +8671,10 @@ if test "$enable_firebird_sdbc" = "yes" ; then
         if test -n "${FIREBIRD_VERSION}"; then
             FIREBIRD_MAJOR=`echo $FIREBIRD_VERSION | cut -d"." -f1`
             FIREBIRD_MINOR=`echo $FIREBIRD_VERSION | cut -d"." -f2`
-            if test "$FIREBIRD_MAJOR" -eq "2" -a "$FIREBIRD_MINOR" -eq "5" -o \
-                    "$FIREBIRD_MAJOR" -eq "3" -a "$FIREBIRD_MINOR" -eq "0"; then
+            if test "$FIREBIRD_MAJOR" -eq "2" -a "$FIREBIRD_MINOR" -eq "5"; then
+                AC_MSG_RESULT([OK])
+            elif test "$FIREBIRD_MAJOR" -eq "3" -a "$FIREBIRD_MINOR" -eq "0"; then
+                AC_DEFINE(HAVE_FIREBIRD_30, 1)
                 AC_MSG_RESULT([OK])
             else
                 AC_MSG_ERROR([Ensure firebird 2.5.x or 3.0.x is installed])
@@ -8681,10 +8683,16 @@ if test "$enable_firebird_sdbc" = "yes" ; then
             __save_CFLAGS="${CFLAGS}"
             CFLAGS="${CFLAGS} ${FIREBIRD_CFLAGS}"
             AC_COMPILE_IFELSE([AC_LANG_SOURCE([[#include <ibase.h>
-#if defined(FB_API_VER) && (FB_API_VER == 25 || FB_API_VER == 30)
+#if defined(FB_API_VER) && FB_API_VER == 25
+int fb_api_is_25(void) { return 0; }
+#elif defined(FB_API_VER) && FB_API_VER == 30
+int fb_api_is_30(void) { return 0; }
 #else
 #error "Wrong Firebird API version"
 #endif]])],AC_MSG_RESULT([OK]),AC_MSG_ERROR([Ensure firebird 2.5.x or 3.0.x is installed]))
+            if nm conftest.$OBJEXT | grep fb_api_is_30; then
+                AC_DEFINE(HAVE_FIREBIRD_30, 1)
+            fi
             CFLAGS="${__save_CFLAGS}"
         fi
         ENABLE_FIREBIRD_SDBC="TRUE"
@@ -8727,6 +8735,7 @@ AC_SUBST(LIBATOMIC_OPS_LIBS)
 AC_SUBST(SYSTEM_FIREBIRD)
 AC_SUBST(FIREBIRD_CFLAGS)
 AC_SUBST(FIREBIRD_LIBS)
+AC_SUBST(HAVE_FIREBIRD_30)
 dnl AC_SUBST([TOMMATH_CFLAGS])
 dnl AC_SUBST([TOMMATH_LIBS])
 
@@ -12934,6 +12943,7 @@ AC_CONFIG_HEADERS([config_host/config_cairo_canvas.h])
 AC_CONFIG_HEADERS([config_host/config_cxxabi.h])
 AC_CONFIG_HEADERS([config_host/config_dbus.h])
 AC_CONFIG_HEADERS([config_host/config_features.h])
+AC_CONFIG_HEADERS([config_host/config_firebird.h])
 AC_CONFIG_HEADERS([config_host/config_folders.h])
 AC_CONFIG_HEADERS([config_host/config_gio.h])
 AC_CONFIG_HEADERS([config_host/config_global.h])
