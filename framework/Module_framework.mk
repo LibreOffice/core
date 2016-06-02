@@ -20,6 +20,7 @@
 $(eval $(call gb_Module_Module,framework))
 
 $(eval $(call gb_Module_add_targets,framework,\
+    CppunitTest_framework_dispatch \
     Library_fwe \
     Library_fwi \
     Library_fwk \
