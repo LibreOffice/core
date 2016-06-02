@@ -226,7 +226,6 @@ void DbGridColumn::CreateControl(sal_Int32 _nFieldPos, const Reference< css::bea
                 m_pCell = new FmXEditCell( this, *pCellControl );
         }
     }
-    m_pCell->acquire();
     m_pCell->init();
 
     impl_toggleScriptManager_nothrow( true );
@@ -262,9 +261,9 @@ void DbGridColumn::impl_toggleScriptManager_nothrow( bool _bAttach )
 
 void DbGridColumn::UpdateFromField(const DbGridRow* pRow, const Reference< XNumberFormatter >& xFormatter)
 {
-    if (FmXFilterCell* pCell = dynamic_cast<FmXFilterCell*>(m_pCell))
+    if (FmXFilterCell* pCell = dynamic_cast<FmXFilterCell*>(m_pCell.get()))
         pCell->Update();
-    else if (pRow && pRow->IsValid() && m_nFieldPos >= 0 && m_pCell && pRow->HasField(m_nFieldPos))
+    else if (pRow && pRow->IsValid() && m_nFieldPos >= 0 && m_pCell.is() && pRow->HasField(m_nFieldPos))
     {
         dynamic_cast<FmXDataCell&>(*m_pCell).UpdateFromField( pRow->GetField( m_nFieldPos ).getColumn(), xFormatter  );
     }
@@ -273,13 +272,13 @@ void DbGridColumn::UpdateFromField(const DbGridRow* pRow, const Reference< XNumb
 bool DbGridColumn::Commit()
 {
     bool bResult = true;
-    if (!m_bInSave && m_pCell)
+    if (!m_bInSave && m_pCell.is())
     {
         m_bInSave = true;
         bResult = m_pCell->Commit();
 
         // store the data into the model
-        FmXDataCell* pDataCell = dynamic_cast<FmXDataCell*>( m_pCell );
+        FmXDataCell* pDataCell = dynamic_cast<FmXDataCell*>( m_pCell.get() );
         if (bResult && pDataCell)
         {
             Reference< css::form::XBoundComponent >  xComp(m_xModel, UNO_QUERY);
@@ -300,25 +299,24 @@ DbGridColumn::~DbGridColumn()
 
 void DbGridColumn::setModel(const css::uno::Reference< css::beans::XPropertySet >&  _xModel)
 {
-    if ( m_pCell )
+    if ( m_pCell.is() )
         impl_toggleScriptManager_nothrow( false );
 
     m_xModel = _xModel;
 
-    if ( m_pCell )
+    if ( m_pCell.is() )
         impl_toggleScriptManager_nothrow( true );
 }
 
 
 void DbGridColumn::Clear()
 {
-    if ( m_pCell )
+    if ( m_pCell.is() )
     {
         impl_toggleScriptManager_nothrow( false );
 
         m_pCell->dispose();
-        m_pCell->release();
-        m_pCell = nullptr;
+        m_pCell.clear();
     }
 
     m_xController = nullptr;
@@ -370,7 +368,7 @@ sal_Int16 DbGridColumn::SetAlignment(sal_Int16 _nAlign)
     }
 
     m_nAlign = _nAlign;
-    if (m_pCell && m_pCell->isAlignedController())
+    if (m_pCell.is() && m_pCell->isAlignedController())
         m_pCell->AlignControl(m_nAlign);
 
     return m_nAlign;
@@ -411,7 +409,7 @@ void DbGridColumn::setLock(bool _bLock)
 OUString DbGridColumn::GetCellText(const DbGridRow* pRow, const Reference< XNumberFormatter >& xFormatter) const
 {
     OUString aText;
-    if (m_pCell && dynamic_cast<const FmXFilterCell*>( m_pCell) !=  nullptr)
+    if (m_pCell.is() && dynamic_cast<const FmXFilterCell*>( m_pCell.get() ) !=  nullptr)
         return aText;
 
     if (!pRow || !pRow->IsValid())
@@ -429,7 +427,7 @@ OUString DbGridColumn::GetCellText(const Reference< css::sdb::XColumn >& xField,
     OUString aText;
     if (xField.is())
     {
-        FmXTextCell* pTextCell = dynamic_cast<FmXTextCell*>( m_pCell );
+        FmXTextCell* pTextCell = dynamic_cast<FmXTextCell*>( m_pCell.get() );
         if (pTextCell)
             aText = pTextCell->GetText(xField, xFormatter);
         else if (m_bObject)
@@ -459,7 +457,7 @@ void DbGridColumn::Paint(OutputDevice& rDev,
     bool bEnabled = ( rDev.GetOutDevType() != OUTDEV_WINDOW )
                 ||  ( static_cast< vcl::Window& >( rDev ).IsEnabled() );
 
-    FmXDataCell* pDataCell = dynamic_cast<FmXDataCell*>( m_pCell );
+    FmXDataCell* pDataCell = dynamic_cast<FmXDataCell*>( m_pCell.get() );
     if (pDataCell)
     {
         if (!pRow || !pRow->IsValid())
@@ -495,7 +493,7 @@ void DbGridColumn::Paint(OutputDevice& rDev,
             pDataCell->PaintFieldToCell(rDev, rRect, pRow->GetField( m_nFieldPos ).getColumn(), xFormatter);
         }
     }
-    else if (!m_pCell)
+    else if (!m_pCell.is())
     {
         if (!pRow || !pRow->IsValid())
         {
@@ -513,14 +511,14 @@ void DbGridColumn::Paint(OutputDevice& rDev,
             rDev.DrawText(rRect, OUString(OBJECTTEXT), nStyle);
         }
     }
-    else if ( dynamic_cast<const FmXFilterCell*>( m_pCell) !=  nullptr )
-        static_cast< FmXFilterCell* >( m_pCell )->PaintCell( rDev, rRect );
+    else if ( dynamic_cast<const FmXFilterCell*>( m_pCell.get() ) !=  nullptr )
+        static_cast< FmXFilterCell* >( m_pCell.get() )->PaintCell( rDev, rRect );
 }
 
 
 void DbGridColumn::ImplInitWindow( vcl::Window& rParent, const InitWindowFacet _eInitWhat )
 {
-    if ( m_pCell )
+    if ( m_pCell.is() )
         m_pCell->ImplInitWindow( rParent, _eInitWhat );
 }
 
@@ -530,8 +528,6 @@ void DbGridColumn::ImplInitWindow( vcl::Window& rParent, const InitWindowFacet _
 
 DbCellControl::DbCellControl( DbGridColumn& _rColumn )
     :OPropertyChangeListener(m_aMutex)
-    ,m_pModelChangeBroadcaster(nullptr)
-    ,m_pFieldChangeBroadcaster(nullptr)
     ,m_bTransparent( false )
     ,m_bAlignedController( true )
     ,m_bAccessingValueProperty( false )
@@ -544,7 +540,6 @@ DbCellControl::DbCellControl( DbGridColumn& _rColumn )
     {
         // if our model's format key changes we want to propagate the new value to our windows
         m_pModelChangeBroadcaster = new ::comphelper::OPropertyChangeMultiplexer(this, Reference< css::beans::XPropertySet > (_rColumn.getModel(), UNO_QUERY));
-        m_pModelChangeBroadcaster->acquire();
 
         // be listener for some common properties
         implDoPropertyListening( FM_PROP_READONLY, false );
@@ -570,7 +565,6 @@ DbCellControl::DbCellControl( DbGridColumn& _rColumn )
                 if ( xField.is() )
                 {
                     m_pFieldChangeBroadcaster = new ::comphelper::OPropertyChangeMultiplexer(this, xField);
-                    m_pFieldChangeBroadcaster->acquire();
                     m_pFieldChangeBroadcaster->addProperty( FM_PROP_ISREADONLY );
                 }
             }
@@ -613,13 +607,12 @@ void DbCellControl::doPropertyListening(const OUString& _rPropertyName)
     implDoPropertyListening( _rPropertyName );
 }
 
-static void lcl_clearBroadCaster(::comphelper::OPropertyChangeMultiplexer*& _pBroadcaster)
+static void lcl_clearBroadCaster(rtl::Reference<::comphelper::OPropertyChangeMultiplexer>& _pBroadcaster)
 {
-    if ( _pBroadcaster )
+    if ( _pBroadcaster.is() )
     {
         _pBroadcaster->dispose();
-        _pBroadcaster->release();
-        _pBroadcaster = nullptr;
+        _pBroadcaster.clear();
         // no delete, this is done implicitly
     }
 }

@@ -334,7 +334,7 @@ namespace svxform
         FmFormShell*                m_pFormShell;
         FmFormPage*                 m_pFormPage;
         FmFormModel*                m_pFormModel;
-        OFormComponentObserver*     m_pPropChangeList;
+        rtl::Reference<OFormComponentObserver> m_pPropChangeList;
 
         ImageList                   m_aNormalImages;
 

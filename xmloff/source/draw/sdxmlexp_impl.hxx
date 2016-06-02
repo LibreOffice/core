@@ -106,9 +106,9 @@ class SdXMLExport : public SvXMLExport
 
     HeaderFooterPageSettingsImpl            maHandoutPageHeaderFooterSettings;
 
-    XMLSdPropHdlFactory*                mpSdPropHdlFactory;
-    XMLShapeExportPropertyMapper*       mpPropertySetMapper;
-    XMLPageExportPropertyMapper*        mpPresPagePropsMapper;
+    rtl::Reference<XMLSdPropHdlFactory>          mpSdPropHdlFactory;
+    rtl::Reference<XMLShapeExportPropertyMapper> mpPropertySetMapper;
+    rtl::Reference<XMLPageExportPropertyMapper>  mpPresPagePropsMapper;
 
     SdXMLFormatMap  maUsedDateStyles;           // this is a vector with the used formatings for date fields
     SdXMLFormatMap  maUsedTimeStyles;           // this is a vector with the used formatings for time fields
@@ -171,8 +171,8 @@ public:
     virtual void SAL_CALL setSourceDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) throw(css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
 
     // get factories and mappers
-    XMLShapeExportPropertyMapper* GetPropertySetMapper() const { return mpPropertySetMapper; }
-    XMLPageExportPropertyMapper* GetPresPagePropsMapper() const { return mpPresPagePropsMapper; }
+    XMLShapeExportPropertyMapper* GetPropertySetMapper() const { return mpPropertySetMapper.get(); }
+    XMLPageExportPropertyMapper* GetPresPagePropsMapper() const { return mpPresPagePropsMapper.get(); }
 
     bool IsDraw() const { return mbIsDraw; }
     bool IsImpress() const { return !mbIsDraw; }

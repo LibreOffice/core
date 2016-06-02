@@ -4165,21 +4165,17 @@ Reference< XDispatchProviderInterceptor >  FormController::createInterceptor(con
     OSL_ENSURE( !impl_isDisposed_nofail(), "FormController: already disposed!" );
 #ifdef DBG_UTIL
     // check if we already have a interceptor for the given object
-    for (   Interceptors::const_iterator aIter = m_aControlDispatchInterceptors.begin();
-            aIter != m_aControlDispatchInterceptors.end();
-            ++aIter
-        )
+    for ( const auto & it : m_aControlDispatchInterceptors )
     {
-        if ((*aIter)->getIntercepted() == _xInterception)
+        if (it->getIntercepted() == _xInterception)
             OSL_FAIL("FormController::createInterceptor : we already do intercept this objects dispatches !");
     }
 #endif
 
-    DispatchInterceptionMultiplexer* pInterceptor = new DispatchInterceptionMultiplexer( _xInterception, this );
-    pInterceptor->acquire();
-    m_aControlDispatchInterceptors.insert( m_aControlDispatchInterceptors.end(), pInterceptor );
+    rtl::Reference<DispatchInterceptionMultiplexer> pInterceptor(new DispatchInterceptionMultiplexer( _xInterception, this ));
+    m_aControlDispatchInterceptors.push_back( pInterceptor );
 
-    return pInterceptor;
+    return pInterceptor.get();
 }
 
 
@@ -4208,28 +4204,20 @@ void FormController::deleteInterceptor(const Reference< XDispatchProviderInterce
 {
     OSL_ENSURE( !impl_isDisposed_nofail(), "FormController: already disposed!" );
     // search the interceptor responsible for the given object
-    Interceptors::const_iterator aEnd = m_aControlDispatchInterceptors.end();
-    Interceptors::iterator aIter;
-    for (   aIter = m_aControlDispatchInterceptors.begin();
+    const auto aEnd = m_aControlDispatchInterceptors.end();
+    for ( auto aIter = m_aControlDispatchInterceptors.begin();
             aIter != aEnd;
             ++aIter
         )
     {
-        if ((*aIter)->getIntercepted() == _xInterception)
-            break;
+        if ((*aIter)->getIntercepted() == _xInterception) {
+            // log off the interception from its interception object
+            (*aIter)->dispose();
+            // remove the interceptor from our array
+            m_aControlDispatchInterceptors.erase(aIter);
+            return;
+        }
     }
-    if (aIter == aEnd)
-    {
-        return;
-    }
-
-    // log off the interception from its interception object
-    DispatchInterceptionMultiplexer* pInterceptorImpl = *aIter;
-    pInterceptorImpl->dispose();
-    pInterceptorImpl->release();
-
-    // remove the interceptor from our array
-    m_aControlDispatchInterceptors.erase(aIter);
 }
 
 

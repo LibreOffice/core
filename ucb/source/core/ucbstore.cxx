@@ -28,6 +28,7 @@
 #include <unordered_map>
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
+#include <rtl/ref.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <comphelper/interfacecontainer2.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -1063,8 +1064,8 @@ typedef OMultiTypeInterfaceContainerHelperVar<OUString> PropertyListeners_Impl;
 
 struct PersistentPropertySet_Impl
 {
-    PropertySetRegistry*        m_pCreator;
-    PropertySetInfo_Impl*       m_pInfo;
+    rtl::Reference<PropertySetRegistry>  m_pCreator;
+    rtl::Reference<PropertySetInfo_Impl> m_pInfo;
     OUString                    m_aKey;
     OUString                    m_aFullKey;
     osl::Mutex                  m_aMutex;
@@ -1078,16 +1079,10 @@ struct PersistentPropertySet_Impl
       m_pDisposeEventListeners( nullptr ), m_pPropSetChangeListeners( nullptr ),
       m_pPropertyChangeListeners( nullptr )
     {
-        m_pCreator->acquire();
     }
 
     ~PersistentPropertySet_Impl()
     {
-        m_pCreator->release();
-
-        if ( m_pInfo )
-            m_pInfo->release();
-
         delete m_pDisposeEventListeners;
         delete m_pPropSetChangeListeners;
         delete m_pPropertyChangeListeners;
@@ -1189,13 +1184,11 @@ Reference< XPropertySetInfo > SAL_CALL PersistentPropertySet::getPropertySetInfo
 {
     osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
 
-    PropertySetInfo_Impl*& rpInfo = m_pImpl->m_pInfo;
-    if ( !rpInfo )
+    if ( !m_pImpl->m_pInfo.is() )
     {
-        rpInfo = new PropertySetInfo_Impl( this );
-        rpInfo->acquire();
+        m_pImpl->m_pInfo = new PropertySetInfo_Impl( this );
     }
-    return Reference< XPropertySetInfo >( rpInfo );
+    return Reference< XPropertySetInfo >( m_pImpl->m_pInfo.get() );
 }
 
 
@@ -1410,7 +1403,7 @@ void SAL_CALL PersistentPropertySet::removeVetoableChangeListener(
 Reference< XPropertySetRegistry > SAL_CALL PersistentPropertySet::getRegistry()
     throw( RuntimeException, std::exception )
 {
-    return Reference< XPropertySetRegistry >( m_pImpl->m_pCreator );
+    return Reference< XPropertySetRegistry >( m_pImpl->m_pCreator.get() );
 }
 
 
@@ -1549,7 +1542,7 @@ void SAL_CALL PersistentPropertySet::addProperty(
                 xBatch->commitChanges();
 
                 // Property set info is invalid.
-                if ( m_pImpl->m_pInfo )
+                if ( m_pImpl->m_pInfo.is() )
                     m_pImpl->m_pInfo->reset();
 
                 // Notify propertyset info change listeners.
@@ -1717,7 +1710,7 @@ void SAL_CALL PersistentPropertySet::removeProperty( const OUString& Name )
                 xBatch->commitChanges();
 
                 // Property set info is invalid.
-                if ( m_pImpl->m_pInfo )
+                if ( m_pImpl->m_pInfo.is() )
                     m_pImpl->m_pInfo->reset();
 
                 // Notify propertyset info change listeners.

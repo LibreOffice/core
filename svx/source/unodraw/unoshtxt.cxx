@@ -1006,35 +1006,31 @@ IMPL_LINK_TYPED(SvxTextEditSourceImpl, NotifyHdl, EENotify&, rNotify, void)
 SvxTextEditSource::SvxTextEditSource( SdrObject* pObject, SdrText* pText )
 {
     mpImpl = new SvxTextEditSourceImpl( pObject, pText );
-    mpImpl->acquire();
 }
 
 
 SvxTextEditSource::SvxTextEditSource( SdrObject& rObj, SdrText* pText, SdrView& rView, const vcl::Window& rWindow )
 {
     mpImpl = new SvxTextEditSourceImpl( rObj, pText, rView, rWindow );
-    mpImpl->acquire();
 }
 
 
 SvxTextEditSource::SvxTextEditSource( SvxTextEditSourceImpl* pImpl )
 {
     mpImpl = pImpl;
-    mpImpl->acquire();
 }
 
 
 SvxTextEditSource::~SvxTextEditSource()
 {
     ::SolarMutexGuard aGuard;
-
-    mpImpl->release();
+    mpImpl.clear();
 }
 
 
 SvxEditSource* SvxTextEditSource::Clone() const
 {
-    return new SvxTextEditSource( mpImpl );
+    return new SvxTextEditSource( mpImpl.get() );
 }
 
 

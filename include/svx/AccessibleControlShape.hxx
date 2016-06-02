@@ -183,7 +183,7 @@ private:
     css::uno::Reference< css::lang::XComponent >
                     m_xControlContextComponent;     // cached interface of our aggregate
 
-    ::comphelper::OWrappedAccessibleChildrenManager*
+    rtl::Reference<::comphelper::OWrappedAccessibleChildrenManager>
                     m_pChildManager;
 
     bool        m_bListeningForName     : 1;    // are we currently listening for changes of the "Name" property?

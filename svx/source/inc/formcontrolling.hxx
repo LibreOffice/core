@@ -27,6 +27,7 @@
 #include <com/sun/star/sdb/XSQLErrorListener.hpp>
 
 #include <cppuhelper/implbase.hxx>
+#include <rtl/ref.hxx>
 
 #include <vector>
 
@@ -72,7 +73,7 @@ namespace svx
     {
     protected:
         IControllerFeatureInvalidation* m_pInvalidationCallback;    // necessary as long as m_pImpl is not yet constructed
-        FormControllerHelper*           m_pImpl;
+        rtl::Reference<FormControllerHelper>  m_pImpl;
 
     public:
         /** standard ctor
@@ -116,8 +117,8 @@ namespace svx
         void dispose();
 
         // access to the instance which implements the functionality. Not to be used when not assigned
-        inline const FormControllerHelper* operator->() const { return m_pImpl; }
-        inline       FormControllerHelper* operator->()       { return m_pImpl; }
+        inline const FormControllerHelper* operator->() const { return m_pImpl.get(); }
+        inline       FormControllerHelper* operator->()       { return m_pImpl.get(); }
     };
 
 
