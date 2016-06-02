@@ -624,8 +624,6 @@ bool getModifier( char c, sal_uInt16& mod )
     return false;
 }
 
-typedef std::map< OUString, sal_uInt16 > MSKeyCodeMap;
-
 sal_uInt16 parseChar( char c ) throw ( uno::RuntimeException )
 {
     sal_uInt16 nVclKey = 0;
@@ -692,7 +690,7 @@ KeyCodeEntry aMSKeyCodesData[] = {
 
 awt::KeyEvent parseKeyEvent( const OUString& Key ) throw ( uno::RuntimeException )
 {
-    static MSKeyCodeMap s_KeyCodes;
+    static std::map< OUString, sal_uInt16 > s_KeyCodes;
     if ( s_KeyCodes.empty() )
     {
         for (KeyCodeEntry & i : aMSKeyCodesData)
@@ -731,7 +729,7 @@ awt::KeyEvent parseKeyEvent( const OUString& Key ) throw ( uno::RuntimeException
             nVclKey |= parseChar( (char)( sKeyCode[ 0 ] ) );
         else
         {
-            MSKeyCodeMap::iterator it = s_KeyCodes.find( sKeyCode );
+            std::map< OUString, sal_uInt16 >::iterator it = s_KeyCodes.find( sKeyCode );
             if ( it == s_KeyCodes.end() ) // unknown or unsupported
                 throw uno::RuntimeException();
             nVclKey |= it->second;
