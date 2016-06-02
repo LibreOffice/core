@@ -378,7 +378,7 @@ bool UnusedMethods::VisitDeclRefExpr( const DeclRefExpr* declRefExpr )
     return true;
 }
 
-loplugin::Plugin::Registration< UnusedMethods > X("unusedmethods", true);
+loplugin::Plugin::Registration< UnusedMethods > X("unusedmethods", false);
 
 }
 
