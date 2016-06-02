@@ -621,6 +621,8 @@ void SvxNumberFormatShell::FillEListWithStd_Impl( std::vector<OUString>& rList,
         if(nPrivCat==CAT_DATE || nPrivCat==CAT_TIME)
         {
             nSelPos=FillEListWithDateTime_Impl(rList,nSelPos);
+            nSelPos = FillEListWithFormats_Impl( rList, nSelPos,
+                    NF_DATETIME_ISO_YYYYMMDD_HHMMSS, NF_DATETIME_ISO_YYYYMMDD_HHMMSS);
         }
     }
 }
