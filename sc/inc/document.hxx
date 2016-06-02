@@ -299,7 +299,7 @@ private:
     rtl::Reference<ScPoolHelper> xPoolHelper;
 
     std::shared_ptr<svl::SharedStringPool> mpCellStringPool;
-    std::unique_ptr<sc::FormulaGroupContext> mpFormulaGroupCxt;
+    std::shared_ptr<sc::FormulaGroupContext> mpFormulaGroupCxt;
     mutable std::unique_ptr<sc::DocumentLinkManager> mpDocLinkMgr;
 
     ScCalcConfig        maCalcConfig;
@@ -1050,7 +1050,7 @@ public:
 
     svl::SharedString GetSharedString( const ScAddress& rPos ) const;
 
-    sc::FormulaGroupContext& GetFormulaGroupContext();
+    std::shared_ptr<sc::FormulaGroupContext>& GetFormulaGroupContext();
 
     SC_DLLPUBLIC void GetInputString( SCCOL nCol, SCROW nRow, SCTAB nTab, OUString& rString );
     sal_uInt16 GetStringForFormula( const ScAddress& rPos, OUString& rString );
