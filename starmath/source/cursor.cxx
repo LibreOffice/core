@@ -136,11 +136,14 @@ void SmCursor::BuildGraph(){
     }
     //Set position and anchor to first caret position
     auto it = mpGraph->begin();
+    assert(it != mpGraph->end());
     if(!mpPosition)
-        mpPosition = (it == mpGraph->end()) ? nullptr : it->get();
+        mpPosition = it->get();
     if(!mpAnchor)
         mpAnchor = mpPosition;
 
+    assert(mpPosition);
+    assert(mpAnchor);
     OSL_ENSURE(mpPosition->CaretPos.IsValid(), "Position must be valid");
     OSL_ENSURE(mpAnchor->CaretPos.IsValid(), "Anchor must be valid");
 }
