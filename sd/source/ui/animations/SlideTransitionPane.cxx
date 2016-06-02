@@ -404,7 +404,32 @@ SlideTransitionPane::SlideTransitionPane(
         mbHasSelection( false ),
         mbUpdatingControls( false ),
         mbIsMainViewChangePending( false ),
+        mbHorizontalLayout( false ),
         maLateInitTimer()
+{
+    Initialize(pDoc);
+}
+
+SlideTransitionPane::SlideTransitionPane(
+    Window * pParent,
+    ViewShellBase & rBase,
+    SdDrawDocument* pDoc,
+    const css::uno::Reference<css::frame::XFrame>& rxFrame,
+    bool /*bHorizontalLayout*/ ) :
+        PanelLayout( pParent, "SlideTransitionsPanel", "modules/simpress/ui/slidetransitionspanelhorizontal.ui", rxFrame ),
+
+        mrBase( rBase ),
+        mpDrawDoc( pDoc ),
+        mbHasSelection( false ),
+        mbUpdatingControls( false ),
+        mbIsMainViewChangePending( false ),
+        mbHorizontalLayout( true ),
+        maLateInitTimer()
+{
+    Initialize(pDoc);
+}
+
+void SlideTransitionPane::Initialize(SdDrawDocument* pDoc)
 {
     get(mpFT_VARIANT, "variant_label");
     get(mpLB_VARIANT, "variant_list");
@@ -511,9 +536,16 @@ void SlideTransitionPane::DataChanged (const DataChangedEvent& rEvent)
 
 void SlideTransitionPane::UpdateLook()
 {
-    SetBackground(::sfx2::sidebar::Theme::GetWallpaper(::sfx2::sidebar::Theme::Paint_PanelBackground));
-    mpFT_duration->SetBackground(Wallpaper());
-    mpFT_SOUND->SetBackground(Wallpaper());
+    if( mbHorizontalLayout )
+    {
+        SetBackground(Wallpaper());
+    }
+    else
+    {
+        SetBackground(::sfx2::sidebar::Theme::GetWallpaper(::sfx2::sidebar::Theme::Paint_PanelBackground));
+        mpFT_duration->SetBackground(Wallpaper());
+        mpFT_SOUND->SetBackground(Wallpaper());
+    }
 }
 
 void SlideTransitionPane::onSelectionChanged()
@@ -935,8 +967,11 @@ void SlideTransitionPane::addListener()
 
 void SlideTransitionPane::removeListener()
 {
-    Link<tools::EventMultiplexerEvent&,void> aLink( LINK(this,SlideTransitionPane,EventMultiplexerListener) );
-    mrBase.GetEventMultiplexer()->RemoveEventListener( aLink );
+    if(!mbHorizontalLayout)
+    {
+        Link<tools::EventMultiplexerEvent&,void> aLink( LINK(this,SlideTransitionPane,EventMultiplexerListener) );
+        mrBase.GetEventMultiplexer()->RemoveEventListener( aLink );
+    }
 }
 
 IMPL_LINK_TYPED(SlideTransitionPane,EventMultiplexerListener,
@@ -981,6 +1016,11 @@ IMPL_LINK_TYPED(SlideTransitionPane,EventMultiplexerListener,
             break;
 
         default:
+            if (rEvent.meEventId != tools::EventMultiplexerEvent::EID_DISPOSING)
+            {
+                onSelectionChanged();
+                onChangeCurrentPage();
+            }
             break;
     }
 }

@@ -3797,6 +3797,23 @@ SfxBoolItem SlideChangeWindow SID_SLIDE_TRANSITIONS_PANEL
     GroupId = GID_MODIFY;
 ]
 
+SfxBoolItem SlideTransitionController SID_ASSIGN_TRANSITION
+[
+    AutoUpdate = TRUE,
+    FastCall = TRUE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = TRUE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_DOCUMENT;
+]
+
 SfxVoidItem SlideMasterPage SID_SLIDE_MASTER_MODE
 ()
 [
