@@ -28,6 +28,10 @@ $(eval $(call gb_Module_add_targets,framework,\
     Package_dtd \
 ))
 
+$(eval $(call gb_Module_add_slowcheck_targets,framework,\
+    CppunitTest_framework_dispatch \
+))
+
 $(eval $(call gb_Module_add_l10n_targets,framework,\
     AllLangResTarget_fwe \
     UIConfig_startmodule \
