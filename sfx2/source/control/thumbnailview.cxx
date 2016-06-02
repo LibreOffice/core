@@ -664,7 +664,8 @@ void ThumbnailView::KeyInput( const KeyEvent& rKEvt )
         else if (!aKeyCode.IsShift())
         {
             deselectItems();
-            SelectItem(pNext->mnId);
+            SelectItem(pNext->mnId);  // A bug here...... restricts keyboard navigation for All Templates case.
+                                      // Different Templates have same mnId when all templates are viewed
 
             //Mark it as the selection range start position
             mpStartSelRange = mFilteredItemList.begin() + nNextPos;

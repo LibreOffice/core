@@ -111,7 +111,7 @@ void TemplateAbstractView::insertItems(const std::vector<TemplateItemProperties>
     {
         const TemplateItemProperties *pCur = &rTemplates[i];
 
-        TemplateViewItem *pChild = new TemplateViewItem(*this, pCur->nId);
+        TemplateViewItem *pChild = new TemplateViewItem(*this, pCur->nId);  // bug occured due to this step
         pChild->mnDocId = pCur->nDocId;
         pChild->mnRegionId = pCur->nRegionId;
         pChild->maTitle = pCur->aName;
@@ -140,6 +140,8 @@ void TemplateAbstractView::updateThumbnailDimensions(long itemMaxSize)
 
 void TemplateAbstractView::MouseButtonDown( const MouseEvent& rMEvt )
 {
+    GrabFocus();
+    deselectItems();
     if (rMEvt.IsRight())
     {
         size_t nPos = ImplGetItem(rMEvt.GetPosPixel());
