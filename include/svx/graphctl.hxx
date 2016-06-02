@@ -55,7 +55,7 @@ class SVX_DLLPUBLIC GraphCtrl : public Control
 
                         DECL_LINK_TYPED( UpdateHdl, Idle*, void );
 
-    SvxGraphCtrlAccessibleContext* mpAccContext;
+    rtl::Reference<SvxGraphCtrlAccessibleContext> mpAccContext;
 
 protected:
 

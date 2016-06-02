@@ -311,8 +311,7 @@ SdrModel::~SdrModel()
         SfxItemPool::Free(pOutlPool);
     }
 
-    if( mpForbiddenCharactersTable )
-        mpForbiddenCharactersTable->release();
+    mpForbiddenCharactersTable.clear();
 
     delete mpNumberFormatter;
 
@@ -1905,13 +1904,7 @@ void SdrModel::MigrateItemSet( const SfxItemSet* pSourceSet, SfxItemSet* pDestSe
 
 void SdrModel::SetForbiddenCharsTable( const rtl::Reference<SvxForbiddenCharactersTable>& xForbiddenChars )
 {
-    if( mpForbiddenCharactersTable )
-        mpForbiddenCharactersTable->release();
-
-    mpForbiddenCharactersTable = xForbiddenChars.get();
-
-    if( mpForbiddenCharactersTable )
-        mpForbiddenCharactersTable->acquire();
+    mpForbiddenCharactersTable = xForbiddenChars;
 
     ImpSetOutlinerDefaults( pDrawOutliner );
     ImpSetOutlinerDefaults( pHitTestOutliner );

@@ -151,7 +151,7 @@ class XMLOFF_DLLPUBLIC SvXMLImport : public ::cppu::WeakImplHelper7<
     ProgressBarHelper           *mpProgressBarHelper;
     XMLEventImportHelper        *mpEventImportHelper;
     XMLErrors                   *mpXMLErrors;
-    StyleMap                    *mpStyleMap;
+    rtl::Reference<StyleMap>    mpStyleMap;
     OUString                    msPackageProtocol;
 
     SAL_DLLPRIVATE void InitCtor_();

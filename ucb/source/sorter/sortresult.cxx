@@ -124,7 +124,6 @@ SortedResultSet::SortedResultSet( Reference< XResultSet > aResult )
     mpDisposeEventListeners = nullptr;
     mpPropChangeListeners   = nullptr;
     mpVetoChangeListeners   = nullptr;
-    mpPropSetInfo           = nullptr;
 
     mxOriginal  = aResult;
     mpSortInfo  = nullptr;
@@ -153,8 +152,7 @@ SortedResultSet::~SortedResultSet()
 
     mpSortInfo = nullptr;
 
-    if ( mpPropSetInfo )
-        mpPropSetInfo->release();
+    mpPropSetInfo.clear();
 
     delete mpPropChangeListeners;
     delete mpVetoChangeListeners;
@@ -830,13 +828,12 @@ SortedResultSet::getPropertySetInfo() throw( RuntimeException, std::exception )
 {
     osl::Guard< osl::Mutex > aGuard( maMutex );
 
-    if ( !mpPropSetInfo )
+    if ( !mpPropSetInfo.is() )
     {
         mpPropSetInfo = new SRSPropertySetInfo();
-        mpPropSetInfo->acquire();
     }
 
-    return Reference< XPropertySetInfo >( mpPropSetInfo );
+    return Reference< XPropertySetInfo >( mpPropSetInfo.get() );
 }
 
 

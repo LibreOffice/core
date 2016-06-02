@@ -62,6 +62,7 @@
 #include <com/sun/star/util/XNumberFormatter.hpp>
 #include <com/sun/star/util/XNumberFormats.hpp>
 
+#include <rtl/ref.hxx>
 #include <tools/wintypes.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <comphelper/uno3.hxx>
@@ -156,11 +157,11 @@ class SAL_WARN_UNUSED FmXDisposeListener
 {
     friend class FmXDisposeMultiplexer;
 
-    FmXDisposeMultiplexer*  m_pAdapter;
+    rtl::Reference<FmXDisposeMultiplexer> m_pAdapter;
     ::osl::Mutex&   m_rMutex;
 
 public:
-    FmXDisposeListener(::osl::Mutex& _rMutex) : m_pAdapter(nullptr), m_rMutex(_rMutex) { }
+    FmXDisposeListener(::osl::Mutex& _rMutex) : m_rMutex(_rMutex) { }
     virtual ~FmXDisposeListener();
 
     virtual void disposing(const css::lang::EventObject& _rEvent, sal_Int16 _nId) throw( css::uno::RuntimeException ) = 0;
