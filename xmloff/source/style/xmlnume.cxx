@@ -33,6 +33,8 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
+#include <o3tl/any.hxx>
+
 #include <rtl/ustrbuf.hxx>
 
 #include <tools/debug.hxx>
@@ -674,7 +676,7 @@ void SvxXMLNumRuleExport::exportNumberingRule(
         xPropSetInfo->hasPropertyByName( sIsContinuousNumbering ) )
     {
         Any aAny( xPropSet->getPropertyValue( sIsContinuousNumbering ) );
-        bContNumbering = *static_cast<sal_Bool const *>(aAny.getValue());
+        bContNumbering = *o3tl::doGet<bool>(aAny);
     }
     if( bContNumbering )
         GetExport().AddAttribute( XML_NAMESPACE_TEXT,
@@ -702,7 +704,7 @@ void SvxXMLNumRuleExport::exportStyle( const Reference< XStyle >& rStyle )
     if( xPropSetInfo->hasPropertyByName( sIsPhysical ) )
     {
         aAny = xPropSet->getPropertyValue( sIsPhysical );
-        if( !*static_cast<sal_Bool const *>(aAny.getValue()) )
+        if( !*o3tl::doGet<bool>(aAny) )
             return;
     }
 

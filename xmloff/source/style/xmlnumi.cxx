@@ -30,6 +30,7 @@
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 
+#include <o3tl/any.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
 
@@ -1183,7 +1184,7 @@ void SvxXMLListStyleContext::CreateAndInsertLate( bool bOverwrite )
         if( !bNew && xPropSetInfo->hasPropertyByName( sIsPhysical ) )
         {
             Any aAny = xPropSet->getPropertyValue( sIsPhysical );
-            bNew = !*static_cast<sal_Bool const *>(aAny.getValue());
+            bNew = !*o3tl::doGet<bool>(aAny);
         }
 
         if ( xPropSetInfo->hasPropertyByName( "Hidden" ) )

@@ -26,6 +26,7 @@
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/awt/FontUnderline.hpp>
 #include <com/sun/star/text/XChapterNumberingSupplier.hpp>
+#include <o3tl/any.hxx>
 #include <tools/debug.hxx>
 #include <tools/color.hxx>
 #include <xmloff/txtprmap.hxx>
@@ -148,7 +149,7 @@ void XMLTextExportPropertySetMapper::handleSpecialItem(
     {
     case CTF_DROPCAPWHOLEWORD:
         DBG_ASSERT( !bDropWholeWord, "drop whole word is set already!" );
-        pThis->bDropWholeWord = *static_cast<sal_Bool const *>(rProperty.maValue.getValue());
+        pThis->bDropWholeWord = *o3tl::doGet<bool>(rProperty.maValue);
         break;
     case CTF_DROPCAPCHARSTYLE:
         DBG_ASSERT( sDropCharStyle.isEmpty(), "drop char style is set already!" );
@@ -1004,7 +1005,7 @@ void XMLTextExportPropertySetMapper::ContextFilter(
         }
         if( pWrapContourModeState  &&
             (!pWrapContourState ||
-             !*static_cast<sal_Bool const *>(pWrapContourState ->maValue.getValue()) ) )
+             !*o3tl::doGet<bool>(pWrapContourState ->maValue) ) )
             pWrapContourModeState->mnIndex = -1;
     }
 
@@ -1022,7 +1023,7 @@ void XMLTextExportPropertySetMapper::ContextFilter(
         if( pHoriOrientState && pHoriOrientMirroredState )
         {
             if( pHoriOrientMirrorState &&
-                *static_cast<sal_Bool const *>(pHoriOrientMirrorState->maValue.getValue()) )
+                *o3tl::doGet<bool>(pHoriOrientMirrorState->maValue) )
                 pHoriOrientState->mnIndex = -1;
             else
                 pHoriOrientMirroredState->mnIndex = -1;
@@ -1098,7 +1099,7 @@ void XMLTextExportPropertySetMapper::ContextFilter(
         if( pShapeHoriOrientState && pShapeHoriOrientMirroredState )
         {
             if( pShapeHoriOrientMirrorState &&
-                *static_cast<sal_Bool const *>(pShapeHoriOrientMirrorState->maValue.getValue()) )
+                *o3tl::doGet<bool>(pShapeHoriOrientMirrorState->maValue) )
                 pShapeHoriOrientState->mnIndex = -1;
             else
                 pShapeHoriOrientMirroredState->mnIndex = -1;

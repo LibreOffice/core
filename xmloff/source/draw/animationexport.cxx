@@ -49,7 +49,7 @@
 #include <com/sun/star/presentation/ShapeAnimationSubType.hpp>
 #include <com/sun/star/presentation/EffectCommands.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
-
+#include <o3tl/any.hxx>
 #include <sax/tools/converter.hxx>
 
 #include <tools/debug.hxx>
@@ -513,7 +513,7 @@ public:
     void exportAudio( const Reference< XAudio >& xAudio );
     void exportCommand( const Reference< XCommand >& xCommand );
 
-    static Reference< XInterface > getParagraphTarget( const ParagraphTarget* pTarget );
+    static Reference< XInterface > getParagraphTarget( const ParagraphTarget& pTarget );
 
     static void convertPath( OUStringBuffer& sTmp, const Any& rPath );
     void convertValue( XMLTokenEnum eAttributeName, OUStringBuffer& sTmp, const Any& rValue ) const;
@@ -1412,14 +1412,14 @@ void AnimationsExporterImpl::exportCommand( const Reference< XCommand >& xComman
     }
 }
 
-Reference< XInterface > AnimationsExporterImpl::getParagraphTarget( const ParagraphTarget* pTarget )
+Reference< XInterface > AnimationsExporterImpl::getParagraphTarget( const ParagraphTarget& pTarget )
 {
-    if( pTarget ) try
+    try
     {
-        Reference< XEnumerationAccess > xParaEnumAccess( pTarget->Shape, UNO_QUERY_THROW );
+        Reference< XEnumerationAccess > xParaEnumAccess( pTarget.Shape, UNO_QUERY_THROW );
 
         Reference< XEnumeration > xEnumeration( xParaEnumAccess->createEnumeration(), UNO_QUERY_THROW );
-        sal_Int32 nParagraph = pTarget->Paragraph;
+        sal_Int32 nParagraph = pTarget.Paragraph;
 
         while( xEnumeration->hasMoreElements() )
         {
@@ -1450,18 +1450,16 @@ void AnimationsExporterImpl::convertValue( XMLTokenEnum eAttributeName, OUString
     if( !rValue.hasValue() )
         return;
 
-    if( rValue.getValueType() == cppu::UnoType<ValuePair>::get() )
+    if( auto pValuePair = o3tl::tryGet<ValuePair>(rValue) )
     {
-        const ValuePair* pValuePair = static_cast< const ValuePair* >( rValue.getValue() );
         OUStringBuffer sTmp2;
         convertValue( eAttributeName, sTmp, pValuePair->First );
         sTmp.append( ',' );
         convertValue( eAttributeName, sTmp2, pValuePair->Second );
         sTmp.append( sTmp2.makeStringAndClear() );
     }
-    else if( rValue.getValueType() == cppu::UnoType< Sequence<Any> >::get() )
+    else if( auto pSequence = o3tl::tryGet<Sequence<Any>>(rValue) )
     {
-        const Sequence<Any>* pSequence = static_cast< const Sequence<Any>* >( rValue.getValue() );
         const sal_Int32 nLength = pSequence->getLength();
         sal_Int32 nElement;
         const Any* pAny = pSequence->getConstArray();
@@ -1478,7 +1476,6 @@ void AnimationsExporterImpl::convertValue( XMLTokenEnum eAttributeName, OUString
     }
     else
     {
-        OUString aString;
         sal_Int32 nType;
 
         switch( eAttributeName )
@@ -1490,13 +1487,13 @@ void AnimationsExporterImpl::convertValue( XMLTokenEnum eAttributeName, OUString
         case XML_ANIMATETRANSFORM:
         case XML_ANIMATEMOTION:
         {
-            if( rValue >>= aString )
+            if( auto aString = o3tl::tryGet<OUString>(rValue) )
             {
-                sTmp.append( aString );
+                sTmp.append( *aString );
             }
-            else if( rValue.getValueType() == cppu::UnoType<double>::get() )
+            else if( auto x = o3tl::tryGet<double>(rValue) )
             {
-                sTmp.append( *(static_cast< const double* >( rValue.getValue() )) );
+                sTmp.append( *x );
             }
             else
             {
@@ -1530,6 +1527,7 @@ void AnimationsExporterImpl::convertValue( XMLTokenEnum eAttributeName, OUString
         const XMLPropertyHandler* pHandler = mpSdPropHdlFactory->GetPropertyHandler( nType );
         if( pHandler )
         {
+            OUString aString;
             pHandler->exportXML( aString, rValue, mrExport.GetMM100UnitConverter() );
             sTmp.append( aString );
         }
@@ -1541,9 +1539,8 @@ void AnimationsExporterImpl::convertTiming( OUStringBuffer& sTmp, const Any& rVa
     if( !rValue.hasValue() )
         return;
 
-    if( rValue.getValueType() == cppu::UnoType< Sequence<Any> >::get() )
+    if( auto pSequence = o3tl::tryGet<Sequence<Any>>(rValue) )
     {
-        const Sequence<Any>* pSequence = static_cast< const Sequence<Any>* >( rValue.getValue() );
         const sal_Int32 nLength = pSequence->getLength();
         sal_Int32 nElement;
         const Any* pAny = pSequence->getConstArray();
@@ -1558,21 +1555,18 @@ void AnimationsExporterImpl::convertTiming( OUStringBuffer& sTmp, const Any& rVa
             sTmp.append( sTmp2.makeStringAndClear() );
         }
     }
-    else if( rValue.getValueType() == cppu::UnoType<double>::get() )
+    else if( auto x = o3tl::tryGet<double>(rValue) )
     {
-        sTmp.append( *(static_cast< const double* >( rValue.getValue() )) );
+        sTmp.append( *x );
         sTmp.append( 's');
     }
-    else if( rValue.getValueType() == cppu::UnoType<Timing>::get() )
+    else if( auto pTiming = o3tl::tryGet<Timing>(rValue) )
     {
-        const Timing* pTiming = static_cast< const Timing* >( rValue.getValue() );
         sTmp.append( GetXMLToken( (*pTiming == Timing_MEDIA) ? XML_MEDIA : XML_INDEFINITE ) );
     }
-    else if( rValue.getValueType() == cppu::UnoType<Event>::get() )
+    else if( auto pEvent = o3tl::tryGet<Event>(rValue) )
     {
         OUStringBuffer sTmp2;
-
-        const Event* pEvent = static_cast< const Event* >( rValue.getValue() );
 
         if( pEvent->Trigger != EventTrigger::NONE )
         {
@@ -1615,13 +1609,12 @@ void AnimationsExporterImpl::convertTarget( OUStringBuffer& sTmp, const Any& rTa
 
     Reference< XInterface > xRef;
 
-    if( rTarget.getValueTypeClass() == css::uno::TypeClass_INTERFACE )
+    if( !(rTarget >>= xRef) )
     {
-        rTarget >>= xRef;
-    }
-    else if( rTarget.getValueType() == cppu::UnoType<ParagraphTarget>::get() )
-    {
-        xRef = getParagraphTarget( static_cast< const ParagraphTarget* >( rTarget.getValue() ) );
+        if( auto pt = o3tl::tryGet<ParagraphTarget>(rTarget) )
+        {
+            xRef = getParagraphTarget( *pt );
+        }
     }
 
     DBG_ASSERT( xRef.is(), "xmloff::AnimationsExporterImpl::convertTarget(), invalid target type!" );
@@ -1638,15 +1631,13 @@ void AnimationsExporterImpl::prepareValue( const Any& rValue )
     if( !rValue.hasValue() )
         return;
 
-    if( rValue.getValueType() == cppu::UnoType<ValuePair>::get() )
+    if( auto pValuePair = o3tl::tryGet<ValuePair>(rValue) )
     {
-        const ValuePair* pValuePair = static_cast< const ValuePair* >( rValue.getValue() );
         prepareValue( pValuePair->First );
         prepareValue( pValuePair->Second );
     }
-    else if( rValue.getValueType() == cppu::UnoType< Sequence<Any> >::get() )
+    else if( auto pSequence = o3tl::tryGet<Sequence<Any>>(rValue) )
     {
-        const Sequence<Any>* pSequence = static_cast< const Sequence<Any>* >( rValue.getValue() );
         const sal_Int32 nLength = pSequence->getLength();
         sal_Int32 nElement;
         const Any* pAny = pSequence->getConstArray();
@@ -1660,15 +1651,14 @@ void AnimationsExporterImpl::prepareValue( const Any& rValue )
         if( xRef.is() )
             mrExport.getInterfaceToIdentifierMapper().registerReference( xRef );
     }
-    else if( rValue.getValueType() == cppu::UnoType<ParagraphTarget>::get() )
+    else if( auto pt = o3tl::tryGet<ParagraphTarget>(rValue) )
     {
-        Reference< XInterface> xRef( getParagraphTarget( static_cast< const ParagraphTarget* >( rValue.getValue() ) ) );
+        Reference< XInterface> xRef( getParagraphTarget( *pt ) );
         if( xRef.is() )
             mrExport.getInterfaceToIdentifierMapper().registerReference( xRef );
     }
-    else if( rValue.getValueType() == cppu::UnoType<Event>::get() )
+    else if( auto pEvent = o3tl::tryGet<Event>(rValue) )
     {
-        const Event* pEvent = static_cast< const Event* >( rValue.getValue() );
         prepareValue( pEvent->Source );
     }
 }

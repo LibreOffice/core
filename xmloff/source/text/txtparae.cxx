@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <o3tl/any.hxx>
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 #include <tools/debug.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -513,13 +516,13 @@ void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
                             xNumPropSet->getPropertySetInfo()
                                        ->hasPropertyByName( "IsAutomatic" ) )
                         {
-                            bAdd = *static_cast<sal_Bool const *>(xNumPropSet->getPropertyValue( "IsAutomatic" ).getValue());
+                            bAdd = *o3tl::doGet<bool>(xNumPropSet->getPropertyValue( "IsAutomatic" ));
                             // Check on outline style (#i73361#)
                             if ( bAdd &&
                                  xNumPropSet->getPropertySetInfo()
                                            ->hasPropertyByName( "NumberingIsOutline" ) )
                             {
-                                bAdd = !(*static_cast<sal_Bool const *>(xNumPropSet->getPropertyValue( "NumberingIsOutline" ).getValue()));
+                                bAdd = !(*o3tl::doGet<bool>(xNumPropSet->getPropertyValue( "NumberingIsOutline" )));
                             }
                         }
                         else
@@ -619,13 +622,13 @@ void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
                     xNumPropSet->getPropertySetInfo()
                                ->hasPropertyByName( "IsAutomatic" ) )
                 {
-                    bAdd = *static_cast<sal_Bool const *>(xNumPropSet->getPropertyValue( "IsAutomatic" ).getValue());
+                    bAdd = *o3tl::doGet<bool>(xNumPropSet->getPropertyValue( "IsAutomatic" ));
                     // Check on outline style (#i73361#)
                     if ( bAdd &&
                          xNumPropSet->getPropertySetInfo()
                                    ->hasPropertyByName( "NumberingIsOutline" ) )
                     {
-                        bAdd = !(*static_cast<sal_Bool const *>(xNumPropSet->getPropertyValue( "NumberingIsOutline" ).getValue()));
+                        bAdd = !(*o3tl::doGet<bool>(xNumPropSet->getPropertyValue( "NumberingIsOutline" )));
                     }
                 }
                 else
@@ -1456,13 +1459,13 @@ bool XMLTextParagraphExport::collectTextAutoStylesOptimized( bool bIsProgress )
             }
 
             Any aAny = xAutoStyleFamilies->getByName( sName );
-            Reference< XAutoStyleFamily > xAutoStyles = *static_cast<Reference<XAutoStyleFamily> const *>(aAny.getValue());
+            Reference< XAutoStyleFamily > xAutoStyles = *o3tl::doGet<Reference<XAutoStyleFamily>>(aAny);
             Reference < XEnumeration > xAutoStylesEnum( xAutoStyles->createEnumeration() );
 
             while ( xAutoStylesEnum->hasMoreElements() )
             {
                 aAny = xAutoStylesEnum->nextElement();
-                Reference< XAutoStyle > xAutoStyle = *static_cast<Reference<XAutoStyle> const *>(aAny.getValue());
+                Reference< XAutoStyle > xAutoStyle = *o3tl::doGet<Reference<XAutoStyle>>(aAny);
                 Reference < XPropertySet > xPSet( xAutoStyle, uno::UNO_QUERY );
                 Add( nFamily, xPSet, nullptr, true );
             }
@@ -1479,7 +1482,7 @@ bool XMLTextParagraphExport::collectTextAutoStylesOptimized( bool bIsProgress )
         while ( xTextFieldsEnum->hasMoreElements() )
         {
             Any aAny = xTextFieldsEnum->nextElement();
-            Reference< XTextField > xTextField = *static_cast<Reference<XTextField> const *>(aAny.getValue());
+            Reference< XTextField > xTextField = *o3tl::doGet<Reference<XTextField>>(aAny);
             exportTextField( xTextField, bAutoStyles, bIsProgress,
                 !xAutoStylesSupp.is() );
             try
@@ -1557,7 +1560,7 @@ bool XMLTextParagraphExport::collectTextAutoStylesOptimized( bool bIsProgress )
             for( sal_Int32 i = 0; i < nCount; ++i )
             {
                 Any aAny = xSections->getByIndex( i );
-                Reference< XTextSection > xSection = *static_cast<Reference<XTextSection> const *>(aAny.getValue());
+                Reference< XTextSection > xSection = *o3tl::doGet<Reference<XTextSection>>(aAny);
                 Reference < XPropertySet > xPSet( xSection, uno::UNO_QUERY );
                 Add( XML_STYLE_FAMILY_TEXT_SECTION, xPSet );
             }
@@ -1575,7 +1578,7 @@ bool XMLTextParagraphExport::collectTextAutoStylesOptimized( bool bIsProgress )
             for( sal_Int32 i = 0; i < nCount; ++i )
             {
                 Any aAny = xTables->getByIndex( i );
-                Reference< XTextTable > xTable = *static_cast<Reference<XTextTable> const *>(aAny.getValue());
+                Reference< XTextTable > xTable = *o3tl::doGet<Reference<XTextTable>>(aAny);
                 exportTable( xTable, true, true );
             }
         }
@@ -1605,13 +1608,13 @@ bool XMLTextParagraphExport::collectTextAutoStylesOptimized( bool bIsProgress )
                         xNumPropSet->getPropertySetInfo()
                                    ->hasPropertyByName( "IsAutomatic" ) )
                     {
-                        bAdd = *static_cast<sal_Bool const *>(xNumPropSet->getPropertyValue( "IsAutomatic" ).getValue());
+                        bAdd = *o3tl::doGet<bool>(xNumPropSet->getPropertyValue( "IsAutomatic" ));
                         // Check on outline style (#i73361#)
                         if ( bAdd &&
                              xNumPropSet->getPropertySetInfo()
                                        ->hasPropertyByName( "NumberingIsOutline" ) )
                         {
-                            bAdd = !(*static_cast<sal_Bool const *>(xNumPropSet->getPropertyValue( "NumberingIsOutline" ).getValue()));
+                            bAdd = !(*o3tl::doGet<bool>(xNumPropSet->getPropertyValue( "NumberingIsOutline" )));
                         }
                     }
                     else
@@ -2503,13 +2506,13 @@ void XMLTextParagraphExport::exportTextMark(
 
         // start, end, or point-reference?
         sal_Int8 nElement;
-        if( *static_cast<sal_Bool const *>(rPropSet->getPropertyValue(sIsCollapsed).getValue()) )
+        if( *o3tl::doGet<bool>(rPropSet->getPropertyValue(sIsCollapsed)) )
         {
             nElement = 0;
         }
         else
         {
-            nElement = *static_cast<sal_Bool const *>(rPropSet->getPropertyValue(sIsStart).getValue()) ? 1 : 2;
+            nElement = *o3tl::doGet<bool>(rPropSet->getPropertyValue(sIsStart)) ? 1 : 2;
         }
 
         // bookmark, bookmark-start: xml:id and RDFa for RDF metadata
@@ -2669,7 +2672,7 @@ XMLShapeExportFlags XMLTextParagraphExport::addTextFrameAttributes(
     bool bSyncWidth = false;
     if( xPropSetInfo->hasPropertyByName( sIsSyncWidthToHeight ) )
     {
-        bSyncWidth = *static_cast<sal_Bool const *>(rPropSet->getPropertyValue( sIsSyncWidthToHeight ).getValue());
+        bSyncWidth = *o3tl::doGet<bool>(rPropSet->getPropertyValue( sIsSyncWidthToHeight ));
         if( bSyncWidth )
             GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_REL_WIDTH,
                                       XML_SCALE );
@@ -2697,7 +2700,7 @@ XMLShapeExportFlags XMLTextParagraphExport::addTextFrameAttributes(
     bool bSyncHeight = false;
     if( xPropSetInfo->hasPropertyByName( sIsSyncHeightToWidth ) )
     {
-        bSyncHeight = *static_cast<sal_Bool const *>(rPropSet->getPropertyValue( sIsSyncHeightToWidth ).getValue());
+        bSyncHeight = *o3tl::doGet<bool>(rPropSet->getPropertyValue( sIsSyncHeightToWidth ));
     }
     sal_Int16 nRelHeight =  0;
     if( !bSyncHeight && xPropSetInfo->hasPropertyByName( sRelativeHeight ) )
@@ -2964,7 +2967,7 @@ void XMLTextParagraphExport::exportContour(
 
     if( rPropSetInfo->hasPropertyByName( sIsPixelContour ) )
     {
-        bPixel = *static_cast<sal_Bool const *>(rPropSet->getPropertyValue( sIsPixelContour ).getValue());
+        bPixel = *o3tl::doGet<bool>(rPropSet->getPropertyValue( sIsPixelContour ));
     }
 
     // svg: width
@@ -3026,8 +3029,8 @@ void XMLTextParagraphExport::exportContour(
 
     if( rPropSetInfo->hasPropertyByName( sIsAutomaticContour ) )
     {
-        bool bTmp = *static_cast<sal_Bool const *>(rPropSet->getPropertyValue(
-                                            sIsAutomaticContour ).getValue());
+        bool bTmp = *o3tl::doGet<bool>(rPropSet->getPropertyValue(
+                                            sIsAutomaticContour ));
         GetExport().AddAttribute( XML_NAMESPACE_DRAW,
                       XML_RECREATE_ON_EDIT, bTmp ? XML_TRUE : XML_FALSE );
     }
@@ -3247,7 +3250,7 @@ bool XMLTextParagraphExport::addHyperlinkAttributes(
          && ( !rPropState.is()
               || PropertyState_DIRECT_VALUE == rPropState->getPropertyState( sServerMap ) ) )
     {
-        bServerMap = *static_cast<sal_Bool const *>(rPropSet->getPropertyValue( sServerMap ).getValue());
+        bServerMap = *o3tl::doGet<bool>(rPropSet->getPropertyValue( sServerMap ));
         if ( bServerMap )
             bExport = true;
     }
@@ -3624,11 +3627,11 @@ void XMLTextParagraphExport::exportRuby(
     bool bAutoStyles )
 {
     // early out: a collapsed ruby makes no sense
-    if (*static_cast<sal_Bool const *>(rPropSet->getPropertyValue(sIsCollapsed).getValue()))
+    if (*o3tl::doGet<bool>(rPropSet->getPropertyValue(sIsCollapsed)))
         return;
 
     // start value ?
-    bool bStart = *static_cast<sal_Bool const *>(rPropSet->getPropertyValue(sIsStart).getValue());
+    bool bStart = *o3tl::doGet<bool>(rPropSet->getPropertyValue(sIsStart));
 
     if (bAutoStyles)
     {

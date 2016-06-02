@@ -19,6 +19,7 @@
 
 #include <string.h>
 #include <com/sun/star/xml/AttributeData.hpp>
+#include <o3tl/any.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -157,13 +158,11 @@ sal_Bool SAL_CALL SvUnoAttributeContainer::hasByName(const OUString& aName) thro
 void SAL_CALL SvUnoAttributeContainer::replaceByName(const OUString& aName, const uno::Any& aElement)
     throw( lang::IllegalArgumentException, container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
 {
-    if( aElement.hasValue() && aElement.getValueType() == cppu::UnoType<xml::AttributeData>::get())
+    if( auto pData = o3tl::tryGet<xml::AttributeData>(aElement) )
     {
         sal_uInt16 nAttr = getIndexByName(aName );
         if( nAttr == USHRT_MAX )
             throw container::NoSuchElementException();
-
-        xml::AttributeData const * pData = static_cast<xml::AttributeData const *>(aElement.getValue());
 
         sal_Int32 nPos = aName.indexOf( ':' );
         if( nPos != -1L )
@@ -199,14 +198,13 @@ void SAL_CALL SvUnoAttributeContainer::replaceByName(const OUString& aName, cons
 void SAL_CALL SvUnoAttributeContainer::insertByName(const OUString& aName, const uno::Any& aElement)
 throw( lang::IllegalArgumentException, container::ElementExistException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
 {
-    if( !aElement.hasValue() || aElement.getValueType() != cppu::UnoType<xml::AttributeData>::get())
+    auto pData = o3tl::tryGet<xml::AttributeData>(aElement);
+    if( !pData )
         throw lang::IllegalArgumentException();
 
     sal_uInt16 nAttr = getIndexByName(aName );
     if( nAttr != USHRT_MAX )
         throw container::ElementExistException();
-
-    xml::AttributeData const * pData = static_cast<xml::AttributeData const *>(aElement.getValue());
 
     sal_Int32 nPos = aName.indexOf( ':' );
     if( nPos != -1L )

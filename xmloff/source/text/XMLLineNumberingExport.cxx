@@ -21,6 +21,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/text/XLineNumberingProperties.hpp>
 #include <com/sun/star/style/LineNumberPosition.hpp>
+#include <o3tl/any.hxx>
 #include <sax/tools/converter.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmluconv.hxx>
@@ -89,7 +90,7 @@ void XMLLineNumberingExport::Export()
 
             // enable
             aAny = xLineNumbering->getPropertyValue(sIsOn);
-            if (! *static_cast<sal_Bool const *>(aAny.getValue()))
+            if (! *o3tl::doGet<bool>(aAny))
             {
                 rExport.AddAttribute(XML_NAMESPACE_TEXT,
                                      XML_NUMBER_LINES, XML_FALSE);
@@ -97,7 +98,7 @@ void XMLLineNumberingExport::Export()
 
             // count empty lines
             aAny = xLineNumbering->getPropertyValue(sCountEmptyLines);
-            if (! *static_cast<sal_Bool const *>(aAny.getValue()))
+            if (! *o3tl::doGet<bool>(aAny))
             {
                 rExport.AddAttribute(XML_NAMESPACE_TEXT,
                                      XML_COUNT_EMPTY_LINES, XML_FALSE);
@@ -105,7 +106,7 @@ void XMLLineNumberingExport::Export()
 
             // count in frames
             aAny = xLineNumbering->getPropertyValue(sCountLinesInFrames);
-            if (*static_cast<sal_Bool const *>(aAny.getValue()))
+            if (*o3tl::doGet<bool>(aAny))
             {
                 rExport.AddAttribute(XML_NAMESPACE_TEXT,
                                      XML_COUNT_IN_TEXT_BOXES, XML_TRUE);
@@ -113,7 +114,7 @@ void XMLLineNumberingExport::Export()
 
             // restart numbering
             aAny = xLineNumbering->getPropertyValue(sRestartAtEachPage);
-            if (*static_cast<sal_Bool const *>(aAny.getValue()))
+            if (*o3tl::doGet<bool>(aAny))
             {
                 rExport.AddAttribute(XML_NAMESPACE_TEXT,
                                      XML_RESTART_ON_PAGE, XML_TRUE);

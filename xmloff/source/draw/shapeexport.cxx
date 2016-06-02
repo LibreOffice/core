@@ -85,6 +85,8 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
 
+#include <o3tl/any.hxx>
+
 #include <rtl/math.hxx>
 #include <rtl/ustrbuf.hxx>
 
@@ -1995,9 +1997,8 @@ void XMLShapeExport::ImpExportLineShape(
 
         // get the two points
         uno::Any aAny(xPropSet->getPropertyValue("Geometry"));
-        drawing::PointSequenceSequence const * pSourcePolyPolygon = static_cast<drawing::PointSequenceSequence const *>(aAny.getValue());
-
-        if(pSourcePolyPolygon)
+        if (auto pSourcePolyPolygon
+                = o3tl::tryGet<drawing::PointSequenceSequence>(aAny))
         {
             drawing::PointSequence* pOuterSequence = const_cast<css::drawing::PointSequenceSequence *>(pSourcePolyPolygon)->getArray();
             if(pOuterSequence)
@@ -2172,7 +2173,7 @@ void XMLShapeExport::ImpExportPolygonShape(
             // get PolygonBezier
             uno::Any aAny( xPropSet->getPropertyValue("Geometry") );
             const basegfx::B2DPolyPolygon aPolyPolygon(
-                basegfx::tools::UnoPolyPolygonBezierCoordsToB2DPolyPolygon(*static_cast<drawing::PolyPolygonBezierCoords const *>(aAny.getValue())));
+                basegfx::tools::UnoPolyPolygonBezierCoordsToB2DPolyPolygon(*o3tl::doGet<drawing::PolyPolygonBezierCoords>(aAny)));
 
             if(aPolyPolygon.count())
             {
@@ -2193,7 +2194,7 @@ void XMLShapeExport::ImpExportPolygonShape(
             // get non-bezier polygon
             uno::Any aAny( xPropSet->getPropertyValue("Geometry") );
             const basegfx::B2DPolyPolygon aPolyPolygon(
-                basegfx::tools::UnoPointSequenceSequenceToB2DPolyPolygon(*static_cast<drawing::PointSequenceSequence const *>(aAny.getValue())));
+                basegfx::tools::UnoPointSequenceSequenceToB2DPolyPolygon(*o3tl::doGet<drawing::PointSequenceSequence>(aAny)));
 
             if(!aPolyPolygon.areControlPointsUsed() && 1 == aPolyPolygon.count())
             {
@@ -2585,7 +2586,7 @@ void XMLShapeExport::ImpExportConnectorShape(
     if( xProps->getPropertyValue("PolyPolygonBezier") >>= aAny )
     {
         // get PolygonBezier
-        drawing::PolyPolygonBezierCoords const * pSourcePolyPolygon = static_cast<drawing::PolyPolygonBezierCoords const *>(aAny.getValue());
+        auto pSourcePolyPolygon = o3tl::tryGet<drawing::PolyPolygonBezierCoords>(aAny);
 
         if(pSourcePolyPolygon && pSourcePolyPolygon->Coordinates.getLength())
         {

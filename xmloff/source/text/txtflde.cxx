@@ -64,6 +64,7 @@
 #include <com/sun/star/text/BibliographyDataType.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/rdf/XMetadatable.hpp>
+#include <o3tl/any.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <tools/debug.hxx>
 #include <rtl/math.hxx>
@@ -2950,7 +2951,7 @@ enum XMLTokenEnum XMLTextFieldExport::MapPageNumberName(
     enum XMLTokenEnum eName = XML_TOKEN_INVALID;
     PageNumberType ePage;
     Any aAny = xPropSet->getPropertyValue(sPropertySubType);
-    ePage = *static_cast<PageNumberType const *>(aAny.getValue());
+    ePage = *o3tl::doGet<PageNumberType>(aAny);
 
     switch (ePage)
     {
@@ -3492,7 +3493,7 @@ inline bool GetBoolProperty(
     const Reference<XPropertySet> & xPropSet)
 {
     Any aAny = xPropSet->getPropertyValue(sPropName);
-    bool bBool = *static_cast<sal_Bool const *>(aAny.getValue());
+    bool bBool = *o3tl::doGet<bool>(aAny);
     return bBool;
 }
 

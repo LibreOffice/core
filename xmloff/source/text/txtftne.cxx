@@ -26,6 +26,10 @@
  * - footnote configuration elements
  * - endnote configuration elements
  */
+
+#include <sal/config.h>
+
+#include <o3tl/any.hxx>
 #include <tools/debug.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -315,7 +319,7 @@ void XMLTextParagraphExport::exportTextFootnoteConfigurationHelper(
         aAny = rFootnoteConfig->getPropertyValue(
             sPositionEndOfDoc);
         GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_FOOTNOTES_POSITION,
-                                 ( (*static_cast<sal_Bool const *>(aAny.getValue())) ?
+                                 ( (*o3tl::doGet<bool>(aAny)) ?
                                         XML_DOCUMENT : XML_PAGE ) );
 
         aAny = rFootnoteConfig->getPropertyValue(sFootnoteCounting);

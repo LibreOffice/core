@@ -18,6 +18,7 @@
  */
 
 #include "XMLSectionExport.hxx"
+#include <o3tl/any.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 
@@ -429,7 +430,7 @@ void XMLSectionExport::ExportRegularSectionStart(
 
         // #97450# store hidden-status (of conditional sections only)
         aAny = xPropSet->getPropertyValue(sIsCurrentlyVisible);
-        if (! *static_cast<sal_Bool const *>(aAny.getValue()))
+        if (! *o3tl::doGet<bool>(aAny))
         {
             GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_IS_HIDDEN,
                                      XML_TRUE);
@@ -440,14 +441,14 @@ void XMLSectionExport::ExportRegularSectionStart(
         eDisplay = XML_NONE;
     }
     aAny = xPropSet->getPropertyValue(sIsVisible);
-    if (! *static_cast<sal_Bool const *>(aAny.getValue()))
+    if (! *o3tl::doGet<bool>(aAny))
     {
         GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_DISPLAY, eDisplay);
     }
 
     // protect + protection key
     aAny = xPropSet->getPropertyValue(sIsProtected);
-    if (*static_cast<sal_Bool const *>(aAny.getValue()))
+    if (*o3tl::doGet<bool>(aAny))
     {
         GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_PROTECTED, XML_TRUE);
     }
@@ -531,7 +532,7 @@ void XMLSectionExport::ExportRegularSectionStart(
                                          sItem);
 
                 aAny = xPropSet->getPropertyValue(sIsAutomaticUpdate);
-                if (*static_cast<sal_Bool const *>(aAny.getValue()))
+                if (*o3tl::doGet<bool>(aAny))
                 {
                     GetExport().AddAttribute(XML_NAMESPACE_OFFICE,
                                              XML_AUTOMATIC_UPDATE, XML_TRUE);
@@ -765,7 +766,7 @@ void XMLSectionExport::ExportBaseIndexStart(
 {
     // protect + protection key
     Any aAny = rPropertySet->getPropertyValue(sIsProtected);
-    if (*static_cast<sal_Bool const *>(aAny.getValue()))
+    if (*o3tl::doGet<bool>(aAny))
     {
         GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_PROTECTED, XML_TRUE);
     }
@@ -809,7 +810,7 @@ void XMLSectionExport::ExportBaseIndexSource(
     {
         // document or chapter index?
         aAny = rPropertySet->getPropertyValue(sCreateFromChapter);
-        if (*static_cast<sal_Bool const *>(aAny.getValue()))
+        if (*o3tl::doGet<bool>(aAny))
         {
             GetExport().AddAttribute(XML_NAMESPACE_TEXT,
                                      XML_INDEX_SCOPE, XML_CHAPTER);
@@ -817,7 +818,7 @@ void XMLSectionExport::ExportBaseIndexSource(
 
         // tab-stops relative to margin?
         aAny = rPropertySet->getPropertyValue(sIsRelativeTabstops);
-        if (! *static_cast<sal_Bool const *>(aAny.getValue()))
+        if (! *o3tl::doGet<bool>(aAny))
         {
             GetExport().AddAttribute(XML_NAMESPACE_TEXT,
                                      XML_RELATIVE_TAB_STOP_POSITION,
@@ -914,7 +915,7 @@ void XMLSectionExport::ExportTableAndIllustrationIndexSourceAttributes(
 {
     // use caption
     Any aAny = rPropertySet->getPropertyValue(sCreateFromLabels);
-    if (! *static_cast<sal_Bool const *>(aAny.getValue()))
+    if (! *o3tl::doGet<bool>(aAny))
     {
         GetExport().AddAttribute(XML_NAMESPACE_TEXT,
                                  XML_USE_CAPTION, XML_FALSE);
@@ -1284,7 +1285,7 @@ void XMLSectionExport::ExportIndexTemplateElement(
 
                 case TOK_TPARAM_TAB_RIGHT_ALIGNED:
                     bRightAligned =
-                        *static_cast<sal_Bool const *>(rValues[i].Value.getValue());
+                        *o3tl::doGet<bool>(rValues[i].Value);
                     break;
 
                 case TOK_TPARAM_TAB_POSITION:
@@ -1294,7 +1295,7 @@ void XMLSectionExport::ExportIndexTemplateElement(
 
                 // #i21237#
                 case TOK_TPARAM_TAB_WITH_TAB:
-                    bWithTabStop = *static_cast<sal_Bool const *>(rValues[i].Value.getValue());
+                    bWithTabStop = *o3tl::doGet<bool>(rValues[i].Value);
                     bWithTabStopOK = true;
                     break;
 
@@ -1591,7 +1592,7 @@ void XMLSectionExport::ExportBoolean(
     OSL_ENSURE(eAttributeName != XML_TOKEN_INVALID, "Need attribute name");
 
     Any aAny = rPropSet->getPropertyValue(sPropertyName);
-    bool bTmp = *static_cast<sal_Bool const *>(aAny.getValue());
+    bool bTmp = *o3tl::doGet<bool>(aAny);
 
     // value = value ^ bInvert
     // omit if value == default
@@ -1647,14 +1648,14 @@ void XMLSectionExport::ExportBibliographyConfiguration(SvXMLExport& rExport)
             rExport.AddAttribute(XML_NAMESPACE_TEXT, XML_SUFFIX, sTmp);
 
             aAny = xPropSet->getPropertyValue(sIsNumberEntries);
-            if (*static_cast<sal_Bool const *>(aAny.getValue()))
+            if (*o3tl::doGet<bool>(aAny))
             {
                 rExport.AddAttribute(XML_NAMESPACE_TEXT,
                                      XML_NUMBERED_ENTRIES, XML_TRUE);
             }
 
             aAny = xPropSet->getPropertyValue(sIsSortByPosition);
-            if (! *static_cast<sal_Bool const *>(aAny.getValue()))
+            if (! *o3tl::doGet<bool>(aAny))
             {
                 rExport.AddAttribute(XML_NAMESPACE_TEXT,
                                      XML_SORT_BY_POSITION, XML_FALSE);
@@ -1709,7 +1710,7 @@ void XMLSectionExport::ExportBibliographyConfiguration(SvXMLExport& rExport)
                     }
                     else if (rValue.Name == "IsSortAscending")
                     {
-                        bool bTmp = *static_cast<sal_Bool const *>(rValue.Value.getValue());
+                        bool bTmp = *o3tl::doGet<bool>(rValue.Value);
                         rExport.AddAttribute(XML_NAMESPACE_TEXT,
                                              XML_SORT_ASCENDING,
                                              bTmp ? XML_TRUE : XML_FALSE);
@@ -1749,7 +1750,7 @@ bool XMLSectionExport::IsMuteSection(
             {
                 Any aAny = xPropSet->getPropertyValue(sIsGlobalDocumentSection);
 
-                if ( *static_cast<sal_Bool const *>(aAny.getValue()) )
+                if ( *o3tl::doGet<bool>(aAny) )
                 {
                     Reference<XDocumentIndex> xIndex;
                     if (! GetIndex(rSection, xIndex))

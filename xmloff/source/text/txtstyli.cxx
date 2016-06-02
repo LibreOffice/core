@@ -39,6 +39,8 @@
 #include <com/sun/star/style/ParagraphStyleCategory.hpp>
 #include <com/sun/star/style/XStyle.hpp>
 
+#include <o3tl/any.hxx>
+
 #include <sax/tools/converter.hxx>
 
 #include <tools/debug.hxx>
@@ -482,7 +484,7 @@ void XMLTextStyleContext::FillPropertySet(
         if ( nIndex != -1 )
         {
             Any& rAny = GetProperties()[nIndex].maValue;
-            bool bVal = *static_cast<sal_Bool const *>(rAny.getValue());
+            bool bVal = *o3tl::doGet<bool>(rAny);
             bHasCombinedCharactersLetter = bVal;
         }
 

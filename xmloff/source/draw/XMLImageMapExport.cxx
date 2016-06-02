@@ -18,6 +18,7 @@
  */
 
 #include "XMLImageMapExport.hxx"
+#include <o3tl/any.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <tools/debug.hxx>
@@ -199,7 +200,7 @@ void XMLImageMapExport::ExportMapEntry(
 
         // is-active
         aAny = rPropertySet->getPropertyValue(msIsActive);
-        if (! *static_cast<sal_Bool const *>(aAny.getValue()))
+        if (! *o3tl::doGet<bool>(aAny))
         {
             mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_NOHREF, XML_NOHREF);
         }

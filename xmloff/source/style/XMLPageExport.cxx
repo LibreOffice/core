@@ -18,6 +18,7 @@
  */
 
 #include <xmloff/XMLPageExport.hxx>
+#include <o3tl/any.hxx>
 #include <tools/debug.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
@@ -92,7 +93,7 @@ bool XMLPageExport::exportStyle(
     if( xPropSetInfo->hasPropertyByName( sIsPhysical ) )
     {
         Any aAny = xPropSet->getPropertyValue( sIsPhysical );
-        if( !*static_cast<sal_Bool const *>(aAny.getValue()) )
+        if( !*o3tl::doGet<bool>(aAny) )
             return false;
     }
 

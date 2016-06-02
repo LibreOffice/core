@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <o3tl/any.hxx>
 #include <tools/debug.hxx>
 #include <osl/diagnose.h>
 #include <set>
@@ -373,7 +376,7 @@ void XMLPropStyleContext::CreateAndInsert( bool bOverwrite )
         if( !bNew && xPropSetInfo->hasPropertyByName( msIsPhysical ) )
         {
             Any aAny = xPropSet->getPropertyValue( msIsPhysical );
-            bNew = !*static_cast<sal_Bool const *>(aAny.getValue());
+            bNew = !*o3tl::doGet<bool>(aAny);
         }
         SetNew( bNew );
         if( rName != GetName() )

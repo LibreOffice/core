@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <o3tl/any.hxx>
 #include <rtl/ustrbuf.hxx>
 
 
@@ -72,7 +75,7 @@ void XMLTextColumnsExport::exportXML( const Any& rAny )
     if( xPropSet.is() )
     {
         Any aAny = xPropSet->getPropertyValue( sIsAutomatic );
-        if ( *static_cast<sal_Bool const *>(aAny.getValue()) )
+        if ( *o3tl::doGet<bool>(aAny) )
         {
             aAny = xPropSet->getPropertyValue( sAutomaticDistance );
             sal_Int32 nDistance = 0;
@@ -92,7 +95,7 @@ void XMLTextColumnsExport::exportXML( const Any& rAny )
     if( xPropSet.is() )
     {
         Any aAny = xPropSet->getPropertyValue( sSeparatorLineIsOn );
-        if( *static_cast<sal_Bool const *>(aAny.getValue()) )
+        if( *o3tl::doGet<bool>(aAny) )
         {
             // style:width
             aAny = xPropSet->getPropertyValue( sSeparatorLineWidth );

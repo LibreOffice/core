@@ -18,6 +18,7 @@
  */
 
 #include "XMLIndexMarkExport.hxx"
+#include <o3tl/any.hxx>
 #include <tools/debug.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -91,7 +92,7 @@ void XMLIndexMarkExport::ExportIndexMark(
 
         // collapsed/alternative text entry?
         aAny = rPropSet->getPropertyValue(sIsCollapsed);
-        if (*static_cast<sal_Bool const *>(aAny.getValue()))
+        if (*o3tl::doGet<bool>(aAny))
         {
             // collapsed entry: needs alternative text
             nElementNo = 0;
@@ -107,7 +108,7 @@ void XMLIndexMarkExport::ExportIndexMark(
         {
             // start and end entries: has ID
             aAny = rPropSet->getPropertyValue(sIsStart);
-            nElementNo = *static_cast<sal_Bool const *>(aAny.getValue()) ? 1 : 2;
+            nElementNo = *o3tl::doGet<bool>(aAny) ? 1 : 2;
 
             // generate ID
             OUStringBuffer sBuf;

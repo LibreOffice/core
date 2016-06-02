@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <o3tl/any.hxx>
 #include <osl/thread.h>
 #include <com/sun/star/awt/FontFamily.hpp>
 #include <com/sun/star/awt/FontPitch.hpp>
@@ -671,7 +674,7 @@ void XMLTextImportPropertyMapper::finished(
     // #i5775# don't overwrite %transparency with binary transparency
     if( ( pBackTransparency != nullptr ) && ( pBackTransparent != nullptr ) )
     {
-        if( ! *static_cast<sal_Bool const *>(pBackTransparent->maValue.getValue()) )
+        if( ! *o3tl::doGet<bool>(pBackTransparent->maValue) )
             pBackTransparent->mnIndex = -1;
     }
 
