@@ -144,7 +144,7 @@ static bool ResponseFile( StringList * pList, int argc, char ** argv )
     {
         if( '@' == **(argv +i) )
         { // when @, then response file
-            SvFileStream aStm( OUString::createFromAscii((*(argv +i)) +1), STREAM_STD_READ | StreamMode::NOCREATE );
+            SvFileStream aStm( OUString::createFromAscii((*(argv +i)) +1), STREAM_STD_READ );
             if( aStm.GetError() != SVSTREAM_OK )
                 return false;
 

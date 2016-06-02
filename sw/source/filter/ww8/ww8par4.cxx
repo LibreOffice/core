@@ -83,7 +83,7 @@ static bool SwWw8ReadScaling(long& rX, long& rY, tools::SvRef<SotStorage>& rSrc1
     //      0x34, 0x38, 0x3c, 0x40 Crop Left, Top, Right, Bot in tw
 
     tools::SvRef<SotStorageStream> xSrc3 = rSrc1->OpenSotStream( "\3PIC",
-        STREAM_STD_READ | StreamMode::NOCREATE);
+        STREAM_STD_READ );
     SotStorageStream* pS = xSrc3;
     pS->SetEndian( SvStreamEndian::LITTLE );
     pS->Seek( STREAM_SEEK_TO_END );
@@ -128,7 +128,7 @@ static bool SwWw6ReadMetaStream(GDIMetaFile& rWMF, OLE_MFP* pMfp,
     tools::SvRef<SotStorage>& rSrc1)
 {
     tools::SvRef<SotStorageStream> xSrc2 = rSrc1->OpenSotStream( "\3META",
-        STREAM_STD_READ | StreamMode::NOCREATE);
+        STREAM_STD_READ );
     SotStorageStream* pSt = xSrc2;
     pSt->SetEndian( SvStreamEndian::LITTLE );
     sal_uLong nRead = pSt->Read( pMfp, sizeof(*pMfp ) );
@@ -424,7 +424,7 @@ SdrObject* SwWW8ImplReader::ImportOleBase( Graphic& rGraph,
 
             {
                 tools::SvRef<SotStorageStream> xObjInfoSrc = xSrc1->OpenSotStream("\3ObjInfo",
-                    STREAM_STD_READ | StreamMode::NOCREATE );
+                    STREAM_STD_READ );
                 if ( xObjInfoSrc.Is() && !xObjInfoSrc->GetError() )
                 {
                     sal_uInt8 nByte = 0;

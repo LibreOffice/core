@@ -5446,7 +5446,7 @@ sal_uLong SwWW8ImplReader::SetSubStreams(tools::SvRef<SotStorageStream> &rTableS
             m_pTableStream->SetEndian( SvStreamEndian::LITTLE );
 
             rDataStream = m_pStg->OpenSotStream(OUString(SL::aData),
-                STREAM_STD_READ | StreamMode::NOCREATE );
+                STREAM_STD_READ );
 
             if (rDataStream.Is() && SVSTREAM_OK == rDataStream->GetError())
             {

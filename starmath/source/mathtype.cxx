@@ -557,7 +557,7 @@ bool MathType::Parse(SotStorage *pStor)
 {
     tools::SvRef<SotStorageStream> xSrc = pStor->OpenSotStream(
         "Equation Native",
-        STREAM_STD_READ | StreamMode::NOCREATE);
+        STREAM_STD_READ);
     if ( (!xSrc.Is()) || (SVSTREAM_OK != xSrc->GetError()))
         return false;
     pS = &xSrc;
