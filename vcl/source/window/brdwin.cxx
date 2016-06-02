@@ -2183,6 +2183,14 @@ void ImplBorderWindow::SetNotebookBar(const OUString& rUIXMLDescription, const c
     Resize();
 }
 
+void ImplBorderWindow::CloseNotebookBar()
+{
+    if (mpNotebookBar)
+        mpNotebookBar.disposeAndClear();
+    mpNotebookBar = nullptr;
+    Resize();
+}
+
 void ImplBorderWindow::GetBorder( sal_Int32& rLeftBorder, sal_Int32& rTopBorder,
                                   sal_Int32& rRightBorder, sal_Int32& rBottomBorder ) const
 {
