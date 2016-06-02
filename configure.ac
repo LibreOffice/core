@@ -349,15 +349,21 @@ if test -n "$with_android_ndk"; then
     # Set up a lot of pre-canned defaults
 
     if test ! -f $ANDROID_NDK_HOME/RELEASE.TXT; then
-        AC_MSG_ERROR([Unrecognized Android NDK. Missing RELEASE.TXT file in $ANDROID_NDK_HOME.])
+        if test ! -f $ANDROID_NDK_HOME/source.properties; then
+            AC_MSG_ERROR([Unrecognized Android NDK. Missing RELEASE.TXT or source.properties file in $ANDROID_NDK_HOME.])
+        fi
+        ANDROID_NDK_VERSION=`sed -n -e 's/Pkg.Revision = //p' $ANDROID_NDK_HOME/source.properties`
+    else
+        ANDROID_NDK_VERSION=`cut -f1 -d' ' <$ANDROID_NDK_HOME/RELEASE.TXT`
     fi
-    ANDROID_NDK_VERSION=`cut -f1 -d' ' <$ANDROID_NDK_HOME/RELEASE.TXT`
 
     case $ANDROID_NDK_VERSION in
     r9*|r10*)
         ;;
+    11.1.*)
+        ;;
     *)
-        AC_MSG_ERROR([Unsupported NDK version $ANDROID_NDK_VERSION, only r9* and r10* versions are supported])
+        AC_MSG_ERROR([Unsupported NDK version $ANDROID_NDK_VERSION, only r9*, r10* and 11.1.* versions are supported])
         ;;
     esac
 
