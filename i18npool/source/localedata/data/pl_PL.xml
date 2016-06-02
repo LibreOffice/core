@@ -195,7 +195,7 @@
     <FormatElement msgid="DateTimeFormatskey2" default="false" type="medium" usage="DATE_TIME" formatindex="47">
       <FormatCode>YYYY-MM-DD HH:MM:SS</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateTimeFormatskey3" default="true" type="medium" usage="DATE_TIME" formatindex="50">
+    <FormatElement msgid="DateTimeFormatskey3" default="true" type="medium" usage="DATE_TIME" formatindex="60">
       <FormatCode>YYYY-MM-DD HH:MM</FormatCode>
     </FormatElement>
   </LC_FORMAT>

@@ -192,115 +192,115 @@
     <FormatElement msgid="ScientificFormatskey2" default="true" type="medium" usage="SCIENTIFIC_NUMBER"  formatindex="7">
       <FormatCode>0.00E+00</FormatCode>
     </FormatElement>
-    <FormatElement msgid="ScientificFormatskey3" default="false" type="medium" usage="SCIENTIFIC_NUMBER" formatindex="88">
+    <FormatElement msgid="ScientificFormatskey3" default="false" type="medium" usage="SCIENTIFIC_NUMBER" formatindex="98">
       <FormatCode>##0.00E+00</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey22" default="false" type="medium" usage="DATE" formatindex="51">
+    <FormatElement msgid="DateFormatskey22" default="false" type="medium" usage="DATE" formatindex="61">
       <FormatCode>[~buddhist]DD/MM/YY</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey23" default="false" type="medium" usage="DATE" formatindex="52">
+    <FormatElement msgid="DateFormatskey23" default="false" type="medium" usage="DATE" formatindex="62">
       <FormatCode>[~buddhist]DD/MM/YYYY</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateTimeFormatskey3" default="false" type="medium" usage="DATE_TIME" formatindex="53">
+    <FormatElement msgid="DateTimeFormatskey3" default="false" type="medium" usage="DATE_TIME" formatindex="63">
       <FormatCode>[~buddhist]DD/MM/YY HH:MM</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateTimeFormatskey4" default="false" type="medium" usage="DATE_TIME" formatindex="54">
+    <FormatElement msgid="DateTimeFormatskey4" default="false" type="medium" usage="DATE_TIME" formatindex="64">
       <FormatCode>[~buddhist]DD/MM/YYYY HH:MM:SS</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey24" default="false" type="short" usage="DATE" formatindex="55">
+    <FormatElement msgid="DateFormatskey24" default="false" type="short" usage="DATE" formatindex="65">
       <FormatCode>D/M/YY</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey25" default="false" type="long" usage="DATE" formatindex="56">
+    <FormatElement msgid="DateFormatskey25" default="false" type="long" usage="DATE" formatindex="66">
       <FormatCode>D MMM YY</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey26" default="false" type="short" usage="DATE" formatindex="57">
+    <FormatElement msgid="DateFormatskey26" default="false" type="short" usage="DATE" formatindex="67">
       <FormatCode>[NatNum1][~buddhist]D/M/YY</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey27" default="false" type="medium" usage="DATE" formatindex="58">
+    <FormatElement msgid="DateFormatskey27" default="false" type="medium" usage="DATE" formatindex="68">
       <FormatCode>[NatNum1][~buddhist]DD/MM/YY</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey28" default="false" type="medium" usage="DATE" formatindex="59">
+    <FormatElement msgid="DateFormatskey28" default="false" type="medium" usage="DATE" formatindex="69">
       <FormatCode>[NatNum1][~buddhist]DD/MM/YYYY</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey29" default="false" type="long" usage="DATE" formatindex="60">
+    <FormatElement msgid="DateFormatskey29" default="false" type="long" usage="DATE" formatindex="70">
       <FormatCode>[NatNum1][~buddhist]D MMM YY</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey30" default="false" type="long" usage="DATE" formatindex="61">
+    <FormatElement msgid="DateFormatskey30" default="false" type="long" usage="DATE" formatindex="71">
       <FormatCode>[NatNum1][~buddhist]NN D MMM YY</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey31" default="false" type="long" usage="DATE" formatindex="62">
+    <FormatElement msgid="DateFormatskey31" default="false" type="long" usage="DATE" formatindex="72">
       <FormatCode>[NatNum1][~buddhist]D MMM YYYY</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey32" default="false" type="long" usage="DATE" formatindex="63">
+    <FormatElement msgid="DateFormatskey32" default="false" type="long" usage="DATE" formatindex="73">
       <FormatCode>[NatNum1][~buddhist]D MMMM YYYY</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey33" default="false" type="long" usage="DATE" formatindex="64">
+    <FormatElement msgid="DateFormatskey33" default="false" type="long" usage="DATE" formatindex="74">
       <FormatCode>[NatNum1][~buddhist]NN D MMMM YYYY</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey34" default="false" type="long" usage="DATE" formatindex="65">
+    <FormatElement msgid="DateFormatskey34" default="false" type="long" usage="DATE" formatindex="75">
       <FormatCode>[NatNum1][~buddhist]วันNNNNที่ D MMMM GG YYYY</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey35" default="false" type="long" usage="DATE" formatindex="66">
+    <FormatElement msgid="DateFormatskey35" default="false" type="long" usage="DATE" formatindex="76">
       <FormatCode>[NatNum1][~buddhist]วันNNNNที่ D MMMM YYYY</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateTimeFormatskey5" default="false" type="medium" usage="DATE_TIME" formatindex="67">
+    <FormatElement msgid="DateTimeFormatskey5" default="false" type="medium" usage="DATE_TIME" formatindex="77">
       <FormatCode>[NatNum1][~buddhist]DD/MM/YY HH:MM</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateTimeFormatskey6" default="false" type="medium" usage="DATE_TIME" formatindex="68">
+    <FormatElement msgid="DateTimeFormatskey6" default="false" type="medium" usage="DATE_TIME" formatindex="78">
       <FormatCode>[NatNum1][~buddhist]DD/MM/YYYY HH:MM:SS</FormatCode>
     </FormatElement>
-    <FormatElement msgid="TimeFormatskey8" default="false" type="short" usage="TIME" formatindex="69">
+    <FormatElement msgid="TimeFormatskey8" default="false" type="short" usage="TIME" formatindex="79">
       <FormatCode>[NatNum1]HH:MM</FormatCode>
     </FormatElement>
-    <FormatElement msgid="TimeFormatsKey9" default="false" type="medium" usage="TIME" formatindex="70">
+    <FormatElement msgid="TimeFormatsKey9" default="false" type="medium" usage="TIME" formatindex="80">
       <FormatCode>[NatNum1]HH:MM:SS</FormatCode>
     </FormatElement>
-    <FormatElement msgid="PercentFormatskey3" default="false" type="short" usage="PERCENT_NUMBER"  formatindex="71">
+    <FormatElement msgid="PercentFormatskey3" default="false" type="short" usage="PERCENT_NUMBER"  formatindex="81">
       <FormatCode>[NatNum1]0%</FormatCode>
     </FormatElement>
-    <FormatElement msgid="PercentFormatskey4" default="false" type="long" usage="PERCENT_NUMBER"  formatindex="72">
+    <FormatElement msgid="PercentFormatskey4" default="false" type="long" usage="PERCENT_NUMBER"  formatindex="82">
       <FormatCode>[NatNum1]0.00%</FormatCode>
     </FormatElement>
-    <FormatElement msgid="FixedFormatskey7" default="false" type="medium" usage="FIXED_NUMBER"  formatindex="50">
+    <FormatElement msgid="FixedFormatskey7" default="false" type="medium" usage="FIXED_NUMBER"  formatindex="60">
       <FormatCode>[NatNum1]Standard</FormatCode>
     </FormatElement>
-    <FormatElement msgid="FixedFormatskey8" default="false" type="short" usage="FIXED_NUMBER"  formatindex="73">
+    <FormatElement msgid="FixedFormatskey8" default="false" type="short" usage="FIXED_NUMBER"  formatindex="83">
       <FormatCode>[NatNum1]0</FormatCode>
     </FormatElement>
-    <FormatElement msgid="FixedFormatskey9" default="false" type="medium" usage="FIXED_NUMBER"  formatindex="74">
+    <FormatElement msgid="FixedFormatskey9" default="false" type="medium" usage="FIXED_NUMBER"  formatindex="84">
       <FormatCode>[NatNum1]0.00</FormatCode>
     </FormatElement>
-    <FormatElement msgid="FixedFormatskey10" default="false" type="short" usage="FIXED_NUMBER"  formatindex="75">
+    <FormatElement msgid="FixedFormatskey10" default="false" type="short" usage="FIXED_NUMBER"  formatindex="85">
       <FormatCode>[NatNum1]#,##0</FormatCode>
     </FormatElement>
-    <FormatElement msgid="FixedFormatskey11" default="false" type="medium" usage="FIXED_NUMBER"  formatindex="76">
+    <FormatElement msgid="FixedFormatskey11" default="false" type="medium" usage="FIXED_NUMBER"  formatindex="86">
       <FormatCode>[NatNum1]#,##0.00</FormatCode>
     </FormatElement>
-    <FormatElement msgid="FixedFormatskey12" default="false" type="medium" usage="FIXED_NUMBER"  formatindex="77">
+    <FormatElement msgid="FixedFormatskey12" default="false" type="medium" usage="FIXED_NUMBER"  formatindex="87">
       <FormatCode>[NatNum1]#,###.00</FormatCode>
     </FormatElement>
-    <FormatElement msgid="CurrencyFormatskey7" default="false" type="short" usage="CURRENCY"  formatindex="78">
+    <FormatElement msgid="CurrencyFormatskey7" default="false" type="short" usage="CURRENCY"  formatindex="88">
       <FormatCode>#,##0 [$บาท-41E];-#,##0 [$บาท-41E]</FormatCode>
     </FormatElement>
-    <FormatElement msgid="CurrencyFormatskey8" default="false" type="medium" usage="CURRENCY"  formatindex="79">
+    <FormatElement msgid="CurrencyFormatskey8" default="false" type="medium" usage="CURRENCY"  formatindex="89">
       <FormatCode>#,##0.00 [$บาท-41E];-#,##0.00 [$บาท-41E]</FormatCode>
     </FormatElement>
-    <FormatElement msgid="CurrencyFormatskey9" default="false" type="medium" usage="CURRENCY"  formatindex="80">
+    <FormatElement msgid="CurrencyFormatskey9" default="false" type="medium" usage="CURRENCY"  formatindex="90">
       <FormatCode>#,##0 [$บาท-41E];[RED]-#,##0 [$บาท-41E]</FormatCode>
     </FormatElement>
-    <FormatElement msgid="CurrencyFormatskey10" default="false" type="medium" usage="CURRENCY"  formatindex="81">
+    <FormatElement msgid="CurrencyFormatskey10" default="false" type="medium" usage="CURRENCY"  formatindex="91">
       <FormatCode>#,##0.00 [$บาท-41E];[RED]-#,##0.00 [$บาท-41E]</FormatCode>
     </FormatElement>
-    <FormatElement msgid="CurrencyFormatskey11" default="false" type="short" usage="CURRENCY"  formatindex="82">
+    <FormatElement msgid="CurrencyFormatskey11" default="false" type="short" usage="CURRENCY"  formatindex="92">
       <FormatCode>[NatNum1]#,##0 [$บาท-41E];[NatNum1]-#,##0 [$บาท-41E]</FormatCode>
     </FormatElement>
-    <FormatElement msgid="CurrencyFormatskey12" default="false" type="medium" usage="CURRENCY"  formatindex="83">
+    <FormatElement msgid="CurrencyFormatskey12" default="false" type="medium" usage="CURRENCY"  formatindex="93">
       <FormatCode>[NatNum1]#,##0.00 [$บาท-41E];[NatNum1]-#,##0.00 [$บาท-41E]</FormatCode>
     </FormatElement>
-    <FormatElement msgid="CurrencyFormatskey13" default="false" type="medium" usage="CURRENCY"  formatindex="84">
+    <FormatElement msgid="CurrencyFormatskey13" default="false" type="medium" usage="CURRENCY"  formatindex="94">
       <FormatCode>[NatNum1]#,##0 [$บาท-41E];[NatNum1][RED]-#,##0 [$บาท-41E]</FormatCode>
     </FormatElement>
-    <FormatElement msgid="CurrencyFormatskey14" default="false" type="medium" usage="CURRENCY"  formatindex="85">
+    <FormatElement msgid="CurrencyFormatskey14" default="false" type="medium" usage="CURRENCY"  formatindex="95">
       <FormatCode>[NatNum1]#,##0.00 [$บาท-41E];[NatNum1][RED]-#,##0.00 [$บาท-41E]</FormatCode>
     </FormatElement>
 
