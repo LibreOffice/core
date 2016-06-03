@@ -36,7 +36,7 @@ namespace connectivity
 
         class MacabDatabaseMetaData : public MacabDatabaseMetaData_BASE
         {
-            css::uno::Reference< MacabConnection > m_xConnection;
+            rtl::Reference< MacabConnection > m_xConnection;
             bool                                   m_bUseCatalog;
 
         public:
