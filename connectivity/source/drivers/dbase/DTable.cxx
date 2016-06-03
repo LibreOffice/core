@@ -323,8 +323,15 @@ void ODbaseTable::fillColumns()
     for (; i < nFieldCount; i++)
     {
         DBFColumn aDBFColumn;
-        sal_Size nRead = m_pFileStream->Read(&aDBFColumn, sizeof(aDBFColumn));
-        if (nRead != sizeof(aDBFColumn))
+        sal_uInt64 const nOldPos(m_pFileStream->Tell());
+        m_pFileStream->Read(aDBFColumn.db_fnm, 11);
+        m_pFileStream->ReadUChar(aDBFColumn.db_typ);
+        m_pFileStream->ReadUInt32(aDBFColumn.db_adr);
+        m_pFileStream->ReadUChar(aDBFColumn.db_flng);
+        m_pFileStream->ReadUChar(aDBFColumn.db_dez);
+        m_pFileStream->Read(aDBFColumn.db_frei2, 14);
+        assert(m_pFileStream->GetError() || m_pFileStream->Tell() == nOldPos + sizeof(aDBFColumn));
+        if (m_pFileStream->GetError())
         {
             SAL_WARN("connectivity.drivers", "ODbaseTable::fillColumns: short read!");
             break;

@@ -349,11 +349,27 @@ ONDXPage* ODbaseIndex::CreatePage(sal_uInt32 nPagePos, ONDXPage* pParent, bool b
     return pPage;
 }
 
+void connectivity::dbase::ReadHeader(
+        SvStream & rStream, ODbaseIndex::NDXHeader & rHeader)
+{
+    sal_uInt64 const nOldPos(rStream.Tell());
+    rStream.ReadUInt32(rHeader.db_rootpage);
+    rStream.ReadUInt32(rHeader.db_pagecount);
+    rStream.Read(&rHeader.db_frei, 4);
+    rStream.ReadUInt16(rHeader.db_keylen);
+    rStream.ReadUInt16(rHeader.db_maxkeys);
+    rStream.ReadUInt16(rHeader.db_keytype);
+    rStream.ReadUInt16(rHeader.db_keyrec);
+    rStream.Read(&rHeader.db_frei1, 3);
+    rStream.ReadUChar(rHeader.db_unique);
+    rStream.Read(&rHeader.db_name, 488);
+    assert(rStream.GetError() || rStream.Tell() == nOldPos + DINDEX_PAGE_SIZE);
+}
 
 SvStream& connectivity::dbase::operator >> (SvStream &rStream, ODbaseIndex& rIndex)
 {
     rStream.Seek(0);
-    rStream.Read(&rIndex.m_aHeader,DINDEX_PAGE_SIZE);
+    ReadHeader(rStream, rIndex.m_aHeader);
 
     rIndex.m_nRootPage = rIndex.m_aHeader.db_rootpage;
     rIndex.m_nPageCount = rIndex.m_aHeader.db_pagecount;
@@ -363,7 +379,19 @@ SvStream& connectivity::dbase::operator >> (SvStream &rStream, ODbaseIndex& rInd
 SvStream& connectivity::dbase::WriteODbaseIndex(SvStream &rStream, ODbaseIndex& rIndex)
 {
     rStream.Seek(0);
-    OSL_VERIFY( rStream.Write(&rIndex.m_aHeader,DINDEX_PAGE_SIZE) == DINDEX_PAGE_SIZE );
+    sal_uInt64 const nOldPos(rStream.Tell());
+    rStream.WriteUInt32(rIndex.m_aHeader.db_rootpage);
+    rStream.WriteUInt32(rIndex.m_aHeader.db_pagecount);
+    rStream.Write(&rIndex.m_aHeader.db_frei, 4);
+    rStream.WriteUInt16(rIndex.m_aHeader.db_keylen);
+    rStream.WriteUInt16(rIndex.m_aHeader.db_maxkeys);
+    rStream.WriteUInt16(rIndex.m_aHeader.db_keytype);
+    rStream.WriteUInt16(rIndex.m_aHeader.db_keyrec);
+    rStream.Write(&rIndex.m_aHeader.db_frei1, 3);
+    rStream.WriteUChar(rIndex.m_aHeader.db_unique);
+    rStream.Write(&rIndex.m_aHeader.db_name, 488);
+    assert(rStream.GetError() || rStream.Tell() == nOldPos + DINDEX_PAGE_SIZE);
+    SAL_WARN_IF(rStream.GetError(), "connectivity.dbase", "write error");
     return rStream;
 }
 
