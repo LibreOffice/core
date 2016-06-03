@@ -200,9 +200,7 @@ bool readConfig(const std::string& iniPath)
         return false;
     }
 
-    uploadContent(parameters);
-
-    return true;
+    return uploadContent(parameters);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
