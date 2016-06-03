@@ -2733,14 +2733,39 @@ if test "$with_export_validation" = yes; then
     AC_MSG_RESULT([yes])
     AC_DEFINE(HAVE_EXPORT_VALIDATION)
 
-    AC_CHECK_PROGS(ODFVALIDATOR, odfvalidator)
-    if test -z "$ODFVALIDATOR"; then
-        AC_MSG_ERROR([odfvalidator not found, but required by --with-export-validation])
-    fi
+    if test "$build_os" = "cygwin"; then
+        # In case of CygWin it will be executed from Windows,
+        # so we need to run bash and absolute path to validator
+        # so instead of "odfvalidator" it will be
+        # something like "bash.exe C:\cygwin\opt\lo\bin\odfvalidator"
+        AC_PATH_PROGS(ODFVALIDATOR, odfvalidator)
+        if test -z "$ODFVALIDATOR"; then
+            AC_MSG_ERROR([odfvalidator not found, but required by --with-export-validation])
+        fi
+        ODFVALIDATOR="bash.exe `cygpath -m "$ODFVALIDATOR"`"
+    else
+        AC_CHECK_PROGS(ODFVALIDATOR, odfvalidator)
+        if test -z "$ODFVALIDATOR"; then
+            AC_MSG_ERROR([odfvalidator not found, but required by --with-export-validation])
+        fi
+	fi
     AC_SUBST(ODFVALIDATOR)
-    AC_CHECK_PROGS(OFFICEOTRON, officeotron)
-    if test -z "$OFFICEOTRON"; then
-        AC_MSG_ERROR([officeotron not found, but required by --with-export-validation])
+
+    if test "$build_os" = "cygwin"; then
+        # In case of CygWin it will be executed from Windows,
+        # so we need to run bash and absolute path to validator
+        # so instead of "officeotron" it will be
+        # something like "bash.exe C:\cygwin\opt\lo\bin\officeotron"
+        AC_PATH_PROGS(OFFICEOTRON, officeotron)
+        if test -z "$OFFICEOTRON"; then
+            AC_MSG_ERROR([officeotron not found, but required by --with-export-validation])
+        fi
+        OFFICEOTRON="bash.exe `cygpath -m "$OFFICEOTRON"`"
+    else
+        AC_CHECK_PROGS(OFFICEOTRON, officeotron)
+        if test -z "$OFFICEOTRON"; then
+            AC_MSG_ERROR([officeotron not found, but required by --with-export-validation])
+        fi
     fi
     OFFICEOTRON_VER=`$OFFICEOTRON --version | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
     if test 0"$OFFICEOTRON_VER" -lt 704; then
