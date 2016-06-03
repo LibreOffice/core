@@ -476,7 +476,6 @@ struct OBroadcastHelperVar
         const css::uno::Reference < css::uno::XInterface > & r )
     {
         ::osl::MutexGuard guard( rMutex );
-        OSL_ENSURE( !bDisposed, "object is disposed" );
         if( ! bInDispose && ! bDisposed  )
             aLC.removeInterface( key , r );
     }
