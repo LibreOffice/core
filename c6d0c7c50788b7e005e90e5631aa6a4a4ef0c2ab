@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_a6964b92",
+        "filename": "svx/source/dialog/compressgraphicdialog.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 422,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-06-03T09:09:57Z",
+      "side": 1,
+      "message": "It\u0027d be wonderful to move this class to a separate file",
+      "revId": "c6d0c7c50788b7e005e90e5631aa6a4a4ef0c2ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_068e1778",
+        "filename": "svx/source/dialog/compressgraphicdialog.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 519,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-06-03T09:09:57Z",
+      "side": 1,
+      "message": "What happens if a preferred unit isn\u0027t 1/100 mm ? (Hint: it isn\u0027t everywhere and every time) \n\nYou might want to consider using SdrGrafObj::getOriginalSize Gulsah introduced in commit b12354a2de297f05dcdf4602290b56d64675006a. Also useful method: GetGrafPrefSize(). Then you don\u0027t have to convert between the units so much",
+      "revId": "c6d0c7c50788b7e005e90e5631aa6a4a4ef0c2ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_86f867e7",
+        "filename": "svx/source/dialog/compressgraphicdialog.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 554,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-06-03T09:09:57Z",
+      "side": 1,
+      "message": "Those methods can be static, b/c they don\u0027t operate on our GraphicInfoDialog object, but disregarding that, if you use the methods of SdrGrafObj I mentioned above, you will not need them",
+      "revId": "c6d0c7c50788b7e005e90e5631aa6a4a4ef0c2ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
