@@ -54,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "da7fb54a_06a8d71e",
+        "filename": "sw/source/uibase/sidebar/PageMarginPanel.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1001174
+      },
+      "writtenOn": "2016-06-03T16:50:30Z",
+      "side": 1,
+      "message": "The original patch which you merged had NULL itself. I guess someone merged a commit and I had rebased this one, so NULL came back.",
+      "parentUuid": "da7fb54a_26dddb14",
+      "revId": "718cc70e6a865f4c9cf7feca92e11945aadab227",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da7fb54a_86ece7c8",
         "filename": "sw/source/uibase/sidebar/PageMarginPanel.cxx",
         "patchSetId": 1
