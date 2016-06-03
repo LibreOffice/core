@@ -34,6 +34,7 @@
 #include <tools/urlobj.hxx>
 #include <osl/file.hxx>
 #include <unotools/pathoptions.hxx>
+#include<rtl/character.hxx>
 
 #include <com/sun/star/awt/KeyModifier.hpp>
 #include <svtools/acceleratorexecute.hxx>
@@ -632,8 +633,8 @@ sal_uInt16 parseChar( char c ) throw ( uno::RuntimeException )
     // do we care about locale here for isupper etc. ? probably not
     if ( isalpha( c ) )
     {
-        nVclKey |= ( toupper( c ) - 'A' ) + KEY_A;
-        if ( isupper( c ) )
+        nVclKey |= ( rtl::toAsciiUpperCase( c ) - 'A' ) + KEY_A;
+        if ( rtl::isAsciiUpperCase( c ) )
             nVclKey |= KEY_SHIFT;
     }
     else if ( isdigit( c ) )
