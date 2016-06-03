@@ -64,11 +64,11 @@ void SAL_CALL SfxUnoPanel::setTitle( const OUString& newTitle )
     SolarMutexGuard aGuard;
 
     SidebarController* pSidebarController = getSidebarController();
-    PanelDescriptor* pPanelDescriptor = pSidebarController->GetResourceManager()->GetPanelDescriptor(mPanelId);
+    std::shared_ptr<PanelDescriptor> xPanelDescriptor = pSidebarController->GetResourceManager()->GetPanelDescriptor(mPanelId);
 
-    if (pPanelDescriptor)
+    if (xPanelDescriptor)
     {
-        pPanelDescriptor->msTitle = newTitle;
+        xPanelDescriptor->msTitle = newTitle;
         PanelTitleBar* pTitleBar = mpPanel->GetTitleBar();
         if (pTitleBar)
             pTitleBar->SetTitle(newTitle);
@@ -147,11 +147,11 @@ void SAL_CALL SfxUnoPanel::setOrderIndex( const sal_Int32 newOrderIndex )
     SolarMutexGuard aGuard;
     SidebarController* pSidebarController = getSidebarController();
 
-    PanelDescriptor* pPanelDescriptor = pSidebarController->GetResourceManager()->GetPanelDescriptor(mPanelId);
+    std::shared_ptr<PanelDescriptor> xPanelDescriptor = pSidebarController->GetResourceManager()->GetPanelDescriptor(mPanelId);
 
-    if (pPanelDescriptor)
+    if (xPanelDescriptor)
     {
-        pPanelDescriptor->mnOrderIndex = newOrderIndex;
+        xPanelDescriptor->mnOrderIndex = newOrderIndex;
         // update the sidebar
         pSidebarController->NotifyResize();
     }
@@ -171,10 +171,10 @@ void SAL_CALL SfxUnoPanel::moveFirst()
     if (curOrderIndex != minIndex) // is current panel already in place ?
     {
         minIndex -= 1;
-        PanelDescriptor* pPanelDescriptor = pSidebarController->GetResourceManager()->GetPanelDescriptor(mPanelId);
-        if (pPanelDescriptor)
+        std::shared_ptr<PanelDescriptor> xPanelDescriptor = pSidebarController->GetResourceManager()->GetPanelDescriptor(mPanelId);
+        if (xPanelDescriptor)
         {
-            pPanelDescriptor->mnOrderIndex = minIndex;
+            xPanelDescriptor->mnOrderIndex = minIndex;
             // update the sidebar
             pSidebarController->NotifyResize();
         }
@@ -195,10 +195,10 @@ void SAL_CALL SfxUnoPanel::moveLast()
     if (curOrderIndex != maxIndex) // is current panel already in place ?
     {
         maxIndex += 1;
-        PanelDescriptor* pPanelDescriptor = pSidebarController->GetResourceManager()->GetPanelDescriptor(mPanelId);
-        if (pPanelDescriptor)
+        std::shared_ptr<PanelDescriptor> xPanelDescriptor = pSidebarController->GetResourceManager()->GetPanelDescriptor(mPanelId);
+        if (xPanelDescriptor)
         {
-            pPanelDescriptor->mnOrderIndex = maxIndex;
+            xPanelDescriptor->mnOrderIndex = maxIndex;
             // update the sidebar
             pSidebarController->NotifyResize();
         }
@@ -228,10 +228,10 @@ void SAL_CALL SfxUnoPanel::moveUp()
     if (curOrderIndex != previousIndex) // is current panel already in place ?
     {
         previousIndex -= 1;
-        PanelDescriptor* pPanelDescriptor = pSidebarController->GetResourceManager()->GetPanelDescriptor(mPanelId);
-        if (pPanelDescriptor)
+        std::shared_ptr<PanelDescriptor> xPanelDescriptor = pSidebarController->GetResourceManager()->GetPanelDescriptor(mPanelId);
+        if (xPanelDescriptor)
         {
-            pPanelDescriptor->mnOrderIndex = previousIndex;
+            xPanelDescriptor->mnOrderIndex = previousIndex;
             // update the sidebar
             pSidebarController->NotifyResize();
         }
@@ -261,10 +261,10 @@ void SAL_CALL SfxUnoPanel::moveDown()
     if (curOrderIndex != nextIndex) // is current panel already in place ?
     {
         nextIndex += 1;
-        PanelDescriptor* pPanelDescriptor = pSidebarController->GetResourceManager()->GetPanelDescriptor(mPanelId);
-        if (pPanelDescriptor)
+        std::shared_ptr<PanelDescriptor> xPanelDescriptor = pSidebarController->GetResourceManager()->GetPanelDescriptor(mPanelId);
+        if (xPanelDescriptor)
         {
-            pPanelDescriptor->mnOrderIndex = nextIndex;
+            xPanelDescriptor->mnOrderIndex = nextIndex;
             // update the sidebar
             pSidebarController->NotifyResize();
         }

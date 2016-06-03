@@ -43,11 +43,8 @@ public:
      ResourceManager();
     ~ResourceManager();
 
-    const DeckDescriptor* GetDeckDescriptor(const OUString& rsDeckId) const;
-    DeckDescriptor* GetDeckDescriptor(const OUString& rsDeckId);
-
-    const PanelDescriptor* GetPanelDescriptor(const OUString& rsPanelId) const;
-    PanelDescriptor* GetPanelDescriptor(const OUString& rsPanelId);
+    std::shared_ptr<DeckDescriptor> GetDeckDescriptor(const OUString& rsDeckId) const;
+    std::shared_ptr<PanelDescriptor> GetPanelDescriptor(const OUString& rsPanelId) const;
 
     void UpdateModel(css::uno::Reference<css::frame::XModel> xModel);
 
@@ -96,10 +93,10 @@ public:
 private:
 
 
-    typedef std::vector<DeckDescriptor> DeckContainer;
+    typedef std::vector<std::shared_ptr<DeckDescriptor>> DeckContainer;
     DeckContainer maDecks;
 
-    typedef std::vector<PanelDescriptor> PanelContainer;
+    typedef std::vector<std::shared_ptr<PanelDescriptor>> PanelContainer;
     PanelContainer maPanels;
     mutable std::set<rtl::OUString> maProcessedApplications;
 
@@ -119,8 +116,8 @@ private:
                        const Context& rContext,
                        const css::uno::Reference<css::frame::XController>& rxController);
 
-    const DeckDescriptor* ImplGetDeckDescriptor(const OUString& rsDeckId) const;
-    const PanelDescriptor* ImplGetPanelDescriptor(const OUString& rsPanelId) const;
+    std::shared_ptr<DeckDescriptor> ImplGetDeckDescriptor(const OUString& rsDeckId) const;
+    std::shared_ptr<PanelDescriptor> ImplGetPanelDescriptor(const OUString& rsPanelId) const;
 };
 
 } } // end of namespace sfx2::sidebar
