@@ -157,14 +157,9 @@ css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > >
 
 RequestFilterSelect::RequestFilterSelect( const OUString& sURL )
     : pImpl( new RequestFilterSelect_Impl( sURL ))
-{
-    pImpl->acquire();
-}
+{}
 
-RequestFilterSelect::~RequestFilterSelect()
-{
-    pImpl->release();
-}
+RequestFilterSelect::~RequestFilterSelect() {}
 
 // return abort state of interaction
 // If it is true, return value of method "getFilter()" will be unspecified then!

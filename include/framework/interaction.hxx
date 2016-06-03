@@ -30,11 +30,11 @@
 #include <com/sun/star/document/NoSuchFilterRequest.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
 
+#include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <framework/fwedllapi.h>
-#include <memory>
 
 namespace framework{
 
@@ -61,7 +61,7 @@ namespace framework{
 class RequestFilterSelect_Impl;
 class FWE_DLLPUBLIC RequestFilterSelect
 {
-    std::unique_ptr<RequestFilterSelect_Impl> pImpl;
+    rtl::Reference<RequestFilterSelect_Impl> pImpl;
 
 public:
     RequestFilterSelect( const OUString& sURL );
