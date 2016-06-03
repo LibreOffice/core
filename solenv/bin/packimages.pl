@@ -27,9 +27,10 @@ use strict;
 use Getopt::Long;
 use File::Find;
 use File::Basename;
+use File::Copy qw(copy);
+use File::Path qw(mkpath);
 require File::Temp;
-use File::Temp ();
-use Archive::Zip qw(:ERROR_CODES :CONSTANTS);
+use File::Temp qw(tempdir);
 
 #### globals ####
 
@@ -91,7 +92,8 @@ remove_links_from_zip_list($zip_hash_ref, \%links);
 
 $do_rebuild = is_file_newer($zip_hash_ref) if $do_rebuild == 0;
 if ( $do_rebuild == 1 ) {
-    create_zip_archive($zip_hash_ref, \%links);
+    my $tmpdir = copy_images($zip_hash_ref);
+    create_zip_archive($zip_hash_ref, \%links, $tmpdir);
     replace_file($tmp_out_file, $out_file);
     print_message("packing  $out_file finished.") if $verbose;
 } else {
@@ -354,40 +356,50 @@ sub optimize_zip_layout($)
     return @sorted;
 }
 
-sub create_zip_archive
+sub copy_images($)
 {
-    my $zip_hash_ref = shift;
-    my $links_hash_ref = shift;
+    my ($zip_hash_ref) = @_;
+    my $dir = tempdir( CLEANUP => 1);
+    foreach (keys %$zip_hash_ref) {
+        my $path = $zip_hash_ref->{$_} . "/$_";
+        my $outpath = $dir . "/$_";
+        print_message("copying '$path' to '$outpath' ...") if $extra_verbose;
+        if ( -e $path) {
+            my $dirname = dirname($outpath);
+            if (!-d $dirname) {
+                mkpath($dirname);
+            }
+            copy($path, $outpath)
+                or print_error("can't add file '$path' to image dir: $!", 5);
+        }
+    }
+    return $dir;
+}
+
+sub create_zip_archive($$$)
+{
+    my ($zip_hash_ref, $links_hash_ref, $image_dir_ref) = @_;
 
     print_message("creating image archive ...") if $verbose;
-    my $zip = Archive::Zip->new();
 
-    my $linktmp;
+    chdir $image_dir_ref;
+
     if (keys %{$links_hash_ref}) {
-        $linktmp = write_links($links_hash_ref);
-        my $member = $zip->addFile($linktmp->filename, "links.txt", COMPRESSION_DEFLATED);
-        if (!$member) {
-            print_error("failed to add links file: $!", 5);
-        }
+        write_links($links_hash_ref, $image_dir_ref);
+        system "zip $tmp_out_file links.txt";
+            # print_error("failed to add links file: $!", 5);
     }
 
-# FIXME: test - $member = addfile ... $member->desiredCompressionMethod( COMPRESSION_STORED );
-# any measurable performance win/loss ?
-    foreach ( optimize_zip_layout($zip_hash_ref) ) {
-        my $path = $zip_hash_ref->{$_} . "/$_";
-        print_message("zipping '$path' ...") if $extra_verbose;
-        if ( -e $path) {
-            my $member = $zip->addFile($path, $_, COMPRESSION_STORED);
-            if ( !$member ) {
-                print_error("can't add file '$path' to image zip archive: $!", 5);
-            }
-        }
+    my @sorted_list = optimize_zip_layout($zip_hash_ref);
+    my $sorted_file = File::Temp->new();
+    foreach my $item (@sorted_list) {
+        print $sorted_file "$item\n";
     }
-    my $status = $zip->writeToFileNamed($tmp_out_file);
-    if ( $status != AZ_OK ) {
-        print_error("write image zip archive '$tmp_out_file' failed. Reason: $status", 6);
-    }
-    return;
+    binmode $sorted_file; # flush
+
+    system "cat $sorted_file | zip -0 -@ $tmp_out_file";
+        # print_error("write image zip archive '$tmp_out_file' failed. Reason: $!", 6);
+    chdir; # just go out of the temp dir
 }
 
 sub replace_file
@@ -489,18 +501,17 @@ sub read_links($$)
     close ($fh);
 }
 
-# write out the links to a tmp file
-sub write_links($)
+# write out the links
+sub write_links($$)
 {
-    my $links = shift;
-    my $tmp = File::Temp->new( TEMPLATE => "linksXXXXXXX" );
-    $tmp || die "can't create tmp: $!";
+    my ($links, $out_dir_ref) = @_;
+    open (my $fh, ">", "$out_dir_ref/links.txt")
+        || die "can't create links.txt";
     for my $missing (sort keys %{$links}) {
         my $line = $missing . " " . $links->{$missing} . "\n";
-        print $tmp $line;
+        print $fh $line;
     }
-    binmode $tmp; # force flush
-    return $tmp;
+    close $fh;
 }
 
 # Ensure that no link points to another link
