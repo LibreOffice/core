@@ -55,8 +55,8 @@ public:
     class DeckMenuData
     {
     public:
-        ::rtl::OUString msDisplayName;
-        ::rtl::OUString msDeckId;
+        OUString msDisplayName;
+        OUString msDeckId;
         bool mbIsCurrentDeck;
         bool mbIsActive;
         bool mbIsEnabled;
@@ -67,7 +67,7 @@ public:
     TabBar (
         vcl::Window* pParentWindow,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
-        const ::std::function<void (const ::rtl::OUString&rsDeckId)>& rDeckActivationFunctor,
+        const ::std::function<void (const OUString& rsDeckId)>& rDeckActivationFunctor,
         const PopupMenuProvider& rPopupMenuProvider,
         SidebarController* rParentSidebarController);
 
@@ -82,9 +82,9 @@ public:
 
     void SetDecks (
         const ResourceManager::DeckContextDescriptorContainer& rDecks);
-    void HighlightDeck (const ::rtl::OUString& rsDeckId);
+    void HighlightDeck (const OUString& rsDeckId);
     void RemoveDeckHighlight ();
-    const ::rtl::OUString GetDeckIdForIndex (const sal_Int32 nIndex) const;
+    const OUString GetDeckIdForIndex (const sal_Int32 nIndex) const;
     void ToggleHideFlag (const sal_Int32 nIndex);
     void RestoreHideFlags();
 
@@ -99,13 +99,13 @@ private:
         DECL_LINK_TYPED(HandleClick, Button*, void);
         VclPtr<RadioButton> mpButton;
         OUString msDeckId;
-        ::std::function<void (const ::rtl::OUString&rsDeckId)> maDeckActivationFunctor;
+        ::std::function<void (const OUString& rsDeckId)> maDeckActivationFunctor;
         bool mbIsHidden;
         bool mbIsHiddenByDefault;
     };
     typedef ::std::vector<Item> ItemContainer;
     ItemContainer maItems;
-    const ::std::function<void (const ::rtl::OUString&rsDeckId)> maDeckActivationFunctor;
+    const ::std::function<void (const OUString& rsDeckId)> maDeckActivationFunctor;
     sal_Int32 mnMenuSeparatorY;
     PopupMenuProvider maPopupMenuProvider;
 

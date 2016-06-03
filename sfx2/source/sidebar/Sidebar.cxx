@@ -33,9 +33,9 @@ void Sidebar::ShowPanel (
     if (!pController)
         return;
 
-    const PanelDescriptor* pPanelDescriptor = pController->GetResourceManager()->GetPanelDescriptor(rsPanelId);
+    std::shared_ptr<PanelDescriptor> xPanelDescriptor = pController->GetResourceManager()->GetPanelDescriptor(rsPanelId);
 
-    if (!pPanelDescriptor)
+    if (!xPanelDescriptor)
         return;
 
     // This should be a lot more sophisticated:
@@ -44,7 +44,7 @@ void Sidebar::ShowPanel (
 
     // All that is not necessary for the current use cases so lets
     // keep it simple for the time being.
-    pController->OpenThenSwitchToDeck(pPanelDescriptor->msDeckId);
+    pController->OpenThenSwitchToDeck(xPanelDescriptor->msDeckId);
 }
 
 void Sidebar::TogglePanel (
@@ -55,9 +55,9 @@ void Sidebar::TogglePanel (
     if (!pController)
         return;
 
-    const PanelDescriptor* pPanelDescriptor = pController->GetResourceManager()->GetPanelDescriptor(rsPanelId);
+    std::shared_ptr<PanelDescriptor> xPanelDescriptor = pController->GetResourceManager()->GetPanelDescriptor(rsPanelId);
 
-    if (!pPanelDescriptor)
+    if (!xPanelDescriptor)
         return;
 
     // This should be a lot more sophisticated:
@@ -66,7 +66,7 @@ void Sidebar::TogglePanel (
 
     // All that is not necessary for the current use cases so lets
     // keep it simple for the time being.
-    pController->OpenThenToggleDeck(pPanelDescriptor->msDeckId);
+    pController->OpenThenToggleDeck(xPanelDescriptor->msDeckId);
 }
 
 bool Sidebar::IsPanelVisible(
@@ -77,11 +77,11 @@ bool Sidebar::IsPanelVisible(
     if (!pController)
         return false;
 
-    const PanelDescriptor* pPanelDescriptor = pController->GetResourceManager()->GetPanelDescriptor(rsPanelId);
-    if (!pPanelDescriptor)
+    std::shared_ptr<PanelDescriptor> xPanelDescriptor = pController->GetResourceManager()->GetPanelDescriptor(rsPanelId);
+    if (!xPanelDescriptor)
         return false;
 
-    return pController->IsDeckVisible(pPanelDescriptor->msDeckId);
+    return pController->IsDeckVisible(xPanelDescriptor->msDeckId);
 }
 
 } } // end of namespace sfx2::sidebar

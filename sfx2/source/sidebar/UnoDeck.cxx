@@ -67,16 +67,16 @@ void SAL_CALL SfxUnoDeck::setTitle( const OUString& newTitle )
     SidebarController* pSidebarController = getSidebarController();
     pSidebarController->CreateDeck(mDeckId);
 
-    DeckDescriptor* pDeckDescriptor = pSidebarController->GetResourceManager()->GetDeckDescriptor(mDeckId);
+    std::shared_ptr<DeckDescriptor> xDeckDescriptor = pSidebarController->GetResourceManager()->GetDeckDescriptor(mDeckId);
 
-    if (pDeckDescriptor)
+    if (xDeckDescriptor)
     {
-        Deck* pDeck = pDeckDescriptor->mpDeck;
+        Deck* pDeck = xDeckDescriptor->mpDeck;
         DeckTitleBar* pTitleBar = pDeck->GetTitleBar();
         pTitleBar->SetTitle(newTitle);
 
-        pDeckDescriptor->msTitle = newTitle;
-        pDeckDescriptor->msHelpText = newTitle;
+        xDeckDescriptor->msTitle = newTitle;
+        xDeckDescriptor->msHelpText = newTitle;
 
         pSidebarController->notifyDeckTitle(mDeckId);
     }
@@ -133,11 +133,11 @@ void SAL_CALL SfxUnoDeck::setOrderIndex( const sal_Int32 newOrderIndex )
     SolarMutexGuard aGuard;
     SidebarController* pSidebarController = getSidebarController();
 
-    DeckDescriptor* pDeckDescriptor = pSidebarController->GetResourceManager()->GetDeckDescriptor(mDeckId);
+    std::shared_ptr<DeckDescriptor> xDeckDescriptor = pSidebarController->GetResourceManager()->GetDeckDescriptor(mDeckId);
 
-    if (pDeckDescriptor)
+    if (xDeckDescriptor)
     {
-        pDeckDescriptor->mnOrderIndex = newOrderIndex;
+        xDeckDescriptor->mnOrderIndex = newOrderIndex;
         // update the sidebar
         pSidebarController->NotifyResize();
     }
@@ -157,10 +157,10 @@ void SAL_CALL SfxUnoDeck::moveFirst()
     if (curOrderIndex != minIndex) // is deck already in place ?
     {
         minIndex -= 1;
-        DeckDescriptor* pDeckDescriptor = pSidebarController->GetResourceManager()->GetDeckDescriptor(mDeckId);
-        if (pDeckDescriptor)
+        std::shared_ptr<DeckDescriptor> xDeckDescriptor = pSidebarController->GetResourceManager()->GetDeckDescriptor(mDeckId);
+        if (xDeckDescriptor)
         {
-            pDeckDescriptor->mnOrderIndex = minIndex;
+            xDeckDescriptor->mnOrderIndex = minIndex;
             // update the sidebar
             pSidebarController->NotifyResize();
         }
@@ -181,10 +181,10 @@ void SAL_CALL SfxUnoDeck::moveLast()
     if (curOrderIndex != maxIndex) // is deck already in place ?
     {
         maxIndex += 1;
-        DeckDescriptor* pDeckDescriptor = pSidebarController->GetResourceManager()->GetDeckDescriptor(mDeckId);
-        if (pDeckDescriptor)
+        std::shared_ptr<DeckDescriptor> xDeckDescriptor = pSidebarController->GetResourceManager()->GetDeckDescriptor(mDeckId);
+        if (xDeckDescriptor)
         {
-            pDeckDescriptor->mnOrderIndex = maxIndex;
+            xDeckDescriptor->mnOrderIndex = maxIndex;
             // update the sidebar
             pSidebarController->NotifyResize();
         }
@@ -214,10 +214,10 @@ void SAL_CALL SfxUnoDeck::moveUp()
     if (curOrderIndex != previousIndex) // is deck already in place ?
     {
         previousIndex -= 1;
-        DeckDescriptor* pDeckDescriptor = pSidebarController->GetResourceManager()->GetDeckDescriptor(mDeckId);
-        if (pDeckDescriptor)
+        std::shared_ptr<DeckDescriptor> xDeckDescriptor = pSidebarController->GetResourceManager()->GetDeckDescriptor(mDeckId);
+        if (xDeckDescriptor)
         {
-            pDeckDescriptor->mnOrderIndex = previousIndex;
+            xDeckDescriptor->mnOrderIndex = previousIndex;
             // update the sidebar
             pSidebarController->NotifyResize();
         }
@@ -248,16 +248,15 @@ void SAL_CALL SfxUnoDeck::moveDown()
     if (curOrderIndex != nextIndex) // is deck already in place ?
     {
         nextIndex += 1;
-        DeckDescriptor* pDeckDescriptor = pSidebarController->GetResourceManager()->GetDeckDescriptor(mDeckId);
-        if (pDeckDescriptor)
+        std::shared_ptr<DeckDescriptor> xDeckDescriptor = pSidebarController->GetResourceManager()->GetDeckDescriptor(mDeckId);
+        if (xDeckDescriptor)
         {
-            pDeckDescriptor->mnOrderIndex = nextIndex;
+            xDeckDescriptor->mnOrderIndex = nextIndex;
             // update the sidebar
             pSidebarController->NotifyResize();
         }
     }
 }
-
 
 sal_Int32 SfxUnoDeck::GetMinOrderIndex(ResourceManager::DeckContextDescriptorContainer aDecks)
 {
