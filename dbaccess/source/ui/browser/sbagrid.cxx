@@ -562,6 +562,17 @@ SbaGridHeader::SbaGridHeader(BrowseBox* pParent, WinBits nWinBits)
 {
 }
 
+SbaGridHeader::~SbaGridHeader()
+{
+    disposeOnce();
+}
+
+void SbaGridHeader::dispose()
+{
+    DragSourceHelper::dispose();
+    FmGridHeader::dispose();
+}
+
 void SbaGridHeader::StartDrag( sal_Int8 _nAction, const Point& _rPosPixel )
 {
     SolarMutexGuard aGuard;
