@@ -31,6 +31,8 @@
 
 #include <svsys.h>
 
+#include <comphelper/windowserrorstring.hxx>
+
 #include <rtl/string.h>
 #include <rtl/ustring.h>
 
@@ -437,8 +439,8 @@ SalFrame* ImplSalCreateFrame( WinSalInstance* pInst,
     hWnd = CreateWindowExW( nExSysStyle, pClassName, L"", nSysStyle,
                             CW_USEDEFAULT, 0, CW_USEDEFAULT, 0,
                             hWndParent, 0, pInst->mhInst, (void*)pFrame );
-    if( !hWnd )
-        ImplWriteLastError( GetLastError(), "CreateWindowEx" );
+    SAL_WARN_IF(!hWnd, "vcl", "CreateWindowExW failed: " << WindowsErrorString(GetLastError()));
+
 #if OSL_DEBUG_LEVEL > 1
     // set transparency value
     if( GetWindowExStyle( hWnd ) & WS_EX_LAYERED )
@@ -4381,7 +4383,7 @@ static WinSalMenuItem* ImplGetSalMenuItem( HMENU hMenu, UINT nPos, bool bByPosit
     mi.cbSize = sizeof( mi );
     mi.fMask = MIIM_DATA;
     if( !GetMenuItemInfoW( hMenu, nPos, bByPosition, &mi) )
-        ImplWriteLastError( GetLastError(), "ImplGetSalMenuItem" );
+        SAL_WARN("vcl", "GetMenuItemInfoW failed: " << WindowsErrorString(GetLastError()));
 
     return (WinSalMenuItem *) mi.dwItemData;
 }
@@ -4399,7 +4401,7 @@ static int ImplGetSelectedIndex( HMENU hMenu )
         for(int i=0; i<n; i++ )
         {
             if( !GetMenuItemInfoW( hMenu, i, TRUE, &mi) )
-                ImplWriteLastError( GetLastError(), "ImplGetSelectedIndex" );
+                SAL_WARN( "vcl", "GetMenuItemInfoW faled: " << WindowsErrorString( GetLastError() ) );
             else
             {
                 if( mi.fState & MFS_HILITE )
@@ -4543,7 +4545,7 @@ static int ImplDrawItem(HWND, WPARAM wParam, LPARAM lParam )
 
         // Fill background
         if(!PatBlt( pDI->hDC, aRect.left, aRect.top, aRect.right-aRect.left, aRect.bottom-aRect.top, PATCOPY ))
-            ImplWriteLastError(GetLastError(), "ImplDrawItem");
+            SAL_WARN("vcl", "PatBlt failed: " << WindowsErrorString(GetLastError()));
 
         int lineHeight = aRect.bottom-aRect.top;
 
@@ -4627,7 +4629,7 @@ static int ImplDrawItem(HWND, WPARAM wParam, LPARAM lParam )
             (LPARAM)(LPWSTR) aStr.getStr(),
             (WPARAM)0, aRect.left, aRect.top + (lineHeight - strSize.cy)/2, 0, 0,
             DST_PREFIXTEXT | (fDisabled && !fSelected ? DSS_DISABLED : DSS_NORMAL) ) )
-            ImplWriteLastError(GetLastError(), "ImplDrawItem");
+            SAL_WARN("vcl", "DrawStateW failed: " << WindowsErrorString(GetLastError()));
 
         if( pSalMenuItem->mAccelText.getLength() )
         {
@@ -4644,7 +4646,7 @@ static int ImplDrawItem(HWND, WPARAM wParam, LPARAM lParam )
                 (LPARAM)(LPWSTR) aStr.getStr(),
                 (WPARAM)0, aRect.right-strSizeA.cx-tm.tmMaxCharWidth, aRect.top + (lineHeight - strSizeA.cy)/2, 0, 0,
                 DST_TEXT | (fDisabled && !fSelected ? DSS_DISABLED : DSS_NORMAL) ) )
-                ImplWriteLastError(GetLastError(), "ImplDrawItem");
+                SAL_WARN("vcl", "DrawStateW failed: " << WindowsErrorString(GetLastError()));
         }
 
         // Restore the original font and colors.
@@ -5934,29 +5936,6 @@ bool ImplHandleGlobalMsg( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam, LR
         bResult = (pSys != NULL);
     }
     return bResult;
-}
-
-void ImplWriteLastError(DWORD lastError, const char *szApiCall)
-{
-#if OSL_DEBUG_LEVEL > 0
-    LPVOID lpMsgBuf;
-    if (FormatMessageA(
-                FORMAT_MESSAGE_ALLOCATE_BUFFER |
-                FORMAT_MESSAGE_FROM_SYSTEM |
-                FORMAT_MESSAGE_IGNORE_INSERTS,
-                NULL,
-                lastError & 0xffff,
-                MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
-                (LPTSTR) &lpMsgBuf,
-                0,
-                NULL ))
-    {
-        SAL_WARN("vcl", "API call: " << szApiCall << " returned " << lastError << " (0x" << std::hex << lastError << "): " << (LPTSTR) lpMsgBuf);
-        LocalFree(lpMsgBuf);
-    }
-    else
-        SAL_WARN("vcl", "API call: " << szApiCall << " returned " << lastError << " (0x" << std::hex << lastError << ")");
-#endif
 }
 
 #ifdef _WIN32

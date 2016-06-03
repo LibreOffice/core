@@ -8,6 +8,8 @@
  */
 
 #include "opengl/win/gdiimpl.hxx"
+
+#include <comphelper/windowserrorstring.hxx>
 #include <desktop/exithelper.h>
 #include <opengl/zone.hxx>
 #include <o3tl/lru_map.hxx>
@@ -94,7 +96,7 @@ void WinOpenGLContext::makeCurrent()
 
     if (!wglMakeCurrent(m_aGLWin.hDC, m_aGLWin.hRC))
     {
-        SAL_WARN("vcl.opengl", "OpenGLContext::makeCurrent(): wglMakeCurrent failed: " << GetLastError());
+        SAL_WARN("vcl.opengl", "wglMakeCurrent failed: " << WindowsErrorString(GetLastError()));
         return;
     }
 
@@ -522,8 +524,7 @@ bool WinOpenGLContext::ImplInit()
 
     if (!SetPixelFormat(m_aGLWin.hDC, WindowPix, &PixelFormatFront))
     {
-        ImplWriteLastError(GetLastError(), "SetPixelFormat in OpenGLContext::ImplInit");
-        SAL_WARN("vcl.opengl", "SetPixelFormat failed");
+        SAL_WARN("vcl.opengl", "SetPixelFormat failed: " << WindowsErrorString(GetLastError()));
         if (bFirstCall)
             disableOpenGLAndTerminateForRestart();
         bFirstCall = false;
@@ -533,8 +534,7 @@ bool WinOpenGLContext::ImplInit()
     HGLRC hTempRC = wglCreateContext(m_aGLWin.hDC);
     if (hTempRC == NULL)
     {
-        ImplWriteLastError(GetLastError(), "wglCreateContext in OpenGLContext::ImplInit");
-        SAL_WARN("vcl.opengl", "wglCreateContext failed");
+        SAL_WARN("vcl.opengl", "wglCreateContext failed: "<< WindowsErrorString(GetLastError()));
         if (bFirstCall)
             disableOpenGLAndTerminateForRestart();
         bFirstCall = false;
@@ -543,8 +543,7 @@ bool WinOpenGLContext::ImplInit()
 
     if (!wglMakeCurrent(m_aGLWin.hDC, hTempRC))
     {
-        ImplWriteLastError(GetLastError(), "wglMakeCurrent in OpenGLContext::ImplInit");
-        SAL_WARN("vcl.opengl", "wglMakeCurrent failed");
+        SAL_WARN("vcl.opengl", "wglMakeCurrent failed: "<< WindowsErrorString(GetLastError()));
         if (bFirstCall)
             disableOpenGLAndTerminateForRestart();
         bFirstCall = false;
@@ -585,8 +584,7 @@ bool WinOpenGLContext::ImplInit()
     m_aGLWin.hRC = wglCreateContextAttribsARB(m_aGLWin.hDC, hSharedCtx, attribs);
     if (m_aGLWin.hRC == 0)
     {
-        ImplWriteLastError(GetLastError(), "wglCreateContextAttribsARB in OpenGLContext::ImplInit");
-        SAL_WARN("vcl.opengl", "wglCreateContextAttribsARB failed");
+        SAL_WARN("vcl.opengl", "wglCreateContextAttribsARB failed: "<< WindowsErrorString(GetLastError()));
         wglMakeCurrent(NULL, NULL);
         wglDeleteContext(hTempRC);
         if (bFirstCall)
@@ -610,8 +608,7 @@ bool WinOpenGLContext::ImplInit()
 
     if (!wglMakeCurrent(m_aGLWin.hDC, m_aGLWin.hRC))
     {
-        ImplWriteLastError(GetLastError(), "wglMakeCurrent (with shared context) in OpenGLContext::ImplInit");
-        SAL_WARN("vcl.opengl", "wglMakeCurrent failed");
+        SAL_WARN("vcl.opengl", "wglMakeCurrent failed: " << WindowsErrorString(GetLastError()));
         if (bFirstCall)
             disableOpenGLAndTerminateForRestart();
         bFirstCall = false;

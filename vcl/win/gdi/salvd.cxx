@@ -19,6 +19,8 @@
 
 #include <svsys.h>
 
+#include <comphelper/windowserrorstring.hxx>
+
 #include <vcl/sysdata.hxx>
 
 #include <win/wincomp.hxx>
@@ -35,6 +37,7 @@ HBITMAP WinSalVirtualDevice::ImplCreateVirDevBitmap(HDC hDC, long nDX, long nDY,
      if ( nBitCount == 1 )
      {
          hBitmap = CreateBitmap( (int)nDX, (int)nDY, 1, 1, NULL );
+         SAL_WARN_IF( !hBitmap, "vcl", "CreateBitmap failed: " << WindowsErrorString( GetLastError() ) );
          ppData = NULL;
      }
      else
@@ -61,6 +64,7 @@ HBITMAP WinSalVirtualDevice::ImplCreateVirDevBitmap(HDC hDC, long nDX, long nDY,
          hBitmap = CreateDIBSection( hDC, &aBitmapInfo,
                                      DIB_RGB_COLORS, ppData, NULL,
                                      0 );
+         SAL_WARN_IF( !hBitmap, "vcl", "CreateDIBSection failed: " << WindowsErrorString( GetLastError() ) );
      }
 
     return hBitmap;
@@ -107,18 +111,14 @@ SalVirtualDevice* WinSalInstance::CreateVirtualDevice( SalGraphics* pSGraphics,
     else
     {
         hDC = CreateCompatibleDC( pGraphics->getHDC() );
-        if( !hDC )
-            ImplWriteLastError( GetLastError(), "CreateCompatibleDC in CreateVirtualDevice" );
+        SAL_WARN_IF( !hDC, "vcl", "CreateCompatibleDC failed: " << WindowsErrorString( GetLastError() ) );
 
         void *pDummy;
         hBmp = WinSalVirtualDevice::ImplCreateVirDevBitmap(pGraphics->getHDC(), nDX, nDY, nBitCount, &pDummy);
-        if( !hBmp )
-            ImplWriteLastError( GetLastError(), "ImplCreateVirDevBitmap in CreateVirtualDevice" );
+
         // #124826# continue even if hBmp could not be created
         // if we would return a failure in this case, the process
         // would terminate which is not required
-
-        DBG_ASSERT( hBmp, "WinSalInstance::CreateVirtualDevice(), could not create Bitmap!" );
 
         bOk = (hDC != NULL);
     }
@@ -247,7 +247,6 @@ bool WinSalVirtualDevice::SetSize( long nDX, long nDY )
         }
         else
         {
-            ImplWriteLastError( GetLastError(), "ImplCreateVirDevBitmap in SetSize" );
             mnWidth = 0;
             mnHeight = 0;
             return FALSE;
