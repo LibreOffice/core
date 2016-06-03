@@ -306,6 +306,7 @@ SvStream& ReadPptSlideLayoutAtom( SvStream& rIn, PptSlideLayoutAtom& rAtom )
     sal_Int32 nTmp;
     rIn.ReadInt32(nTmp);
     rAtom.eLayout = static_cast<PptSlideLayout>(nTmp);
+    static_assert(sizeof(rAtom.aPlaceholderId) == 8, "wrong size of serialized array");
     rIn.Read( rAtom.aPlaceholderId, 8 );
     return rIn;
 }
