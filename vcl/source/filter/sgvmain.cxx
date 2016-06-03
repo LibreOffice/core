@@ -29,14 +29,6 @@
 #include "sgvspln.hxx"
 #include <unotools/ucbstreamhelper.hxx>
 
-#if defined OSL_BIGENDIAN
-
-#define SWAPPOINT(p) {  \
-    p.x=OSL_SWAPWORD(p.x); \
-    p.y=OSL_SWAPWORD(p.y); }
-
-#endif
-
 //  Restrictions:
 
 //  - area patterns are matched to the available ones in Starview.
@@ -802,10 +794,11 @@ void DrawObjkList( SvStream& rInp, OutputDevice& rOut )
                     ReadPolyType( rInp, aPoly );
                     if (!rInp.GetError()) {
                         aPoly.EckP=new PointType[aPoly.nPoints];
-                        rInp.Read(aPoly.EckP, 4*aPoly.nPoints);
-#if defined OSL_BIGENDIAN
-                        for(short i=0;i<aPoly.nPoints;i++) SWAPPOINT(aPoly.EckP[i]);
-#endif
+                        for (int i = 0; i < aPoly.nPoints; ++i)
+                        {
+                            rInp.ReadInt16(aPoly.EckP[i].x);
+                            rInp.ReadInt16(aPoly.EckP[i].y);
+                        }
                         if (!rInp.GetError()) aPoly.Draw(rOut);
                         delete[] aPoly.EckP;
                     }
@@ -815,10 +808,11 @@ void DrawObjkList( SvStream& rInp, OutputDevice& rOut )
                     ReadSplnType( rInp, aSpln );
                     if (!rInp.GetError()) {
                         aSpln.EckP=new PointType[aSpln.nPoints];
-                        rInp.Read(aSpln.EckP, 4*aSpln.nPoints);
-#if defined OSL_BIGENDIAN
-                        for(short i=0;i<aSpln.nPoints;i++) SWAPPOINT(aSpln.EckP[i]);
-#endif
+                        for (int i = 0; i < aSpln.nPoints; ++i)
+                        {
+                            rInp.ReadInt16(aSpln.EckP[i].x);
+                            rInp.ReadInt16(aSpln.EckP[i].y);
+                        }
                         if (!rInp.GetError()) aSpln.Draw(rOut);
                         delete[] aSpln.EckP;
                     }
