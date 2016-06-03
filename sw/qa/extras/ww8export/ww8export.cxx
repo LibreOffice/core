@@ -46,6 +46,20 @@ public:
         // If the testcase is stored in some other format, it's pointless to test.
         return OString(filename).endsWith(".doc");
     }
+
+    /**
+     * Validation handling
+     */
+    bool mustValidate(const char* filename) const override
+    {
+        const char* aBlacklist[] = {
+            "cjklist31.doc",
+        };
+        std::vector<const char*> vBlacklist(aBlacklist, aBlacklist + SAL_N_ELEMENTS(aBlacklist));
+
+        // If the testcase is stored in some other format, it's pointless to test.
+        return (OString(filename).endsWith(".doc") && std::find(vBlacklist.begin(), vBlacklist.end(), filename) == vBlacklist.end());
+    }
 protected:
     bool CjkNumberedListTestHelper(sal_Int16 &nValue)
     {

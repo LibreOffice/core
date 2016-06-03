@@ -173,9 +173,13 @@ void test::BootstrapFixture::validate(const OUString& rPath, test::ValidationFor
     {
         var = "OFFICEOTRON";
     }
-    else
+    else if ( eFormat == test::ODF )
     {
         var = "ODFVALIDATOR";
+    }
+    else if ( eFormat == test::MSBINARY )
+    {
+        var = "BFFVALIDATOR";
     }
     OUString aValidator;
     oslProcessError e = osl_getEnvironment(var.pData, &aValidator.pData);
@@ -190,7 +194,7 @@ void test::BootstrapFixture::validate(const OUString& rPath, test::ValidationFor
     utl::TempFile aOutput;
     aOutput.EnableKillingFile();
     OUString aOutputFile = aOutput.GetFileName();
-    OUString aCommand = aValidator + rPath + " > " + aOutputFile;
+    OUString aCommand = aValidator + rPath + " > " + aOutputFile + " 2>&1";
 
     int returnValue = system(OUStringToOString(aCommand, RTL_TEXTENCODING_UTF8).getStr());
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
