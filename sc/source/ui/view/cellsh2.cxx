@@ -371,18 +371,15 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                 {
                     SfxItemSet  aArgSet( GetPool(), SCITEM_SORTDATA, SCITEM_SORTDATA );
                     SCCOL nCol  = GetViewData()->GetCurX();
-                    SCCOL nTab  = GetViewData()->GetTabNo();
-                    ScDocument* pDoc    = GetViewData()->GetDocument();
 
                     pDBData->GetSortParam( aSortParam );
-                    bool bHasHeader = pDoc->HasColHeader( aSortParam.nCol1, aSortParam.nRow1, aSortParam.nCol2, aSortParam.nRow2, nTab );
 
                     if( nCol < aSortParam.nCol1 )
                         nCol = aSortParam.nCol1;
                     else if( nCol > aSortParam.nCol2 )
                         nCol = aSortParam.nCol2;
 
-                    aSortParam.bHasHeader       = bHasHeader;
+                    aSortParam.bHasHeader       = false;
                     aSortParam.bByRow           = true;
                     aSortParam.bCaseSens        = false;
                     aSortParam.bNaturalSort     = false;
