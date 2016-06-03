@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_06e53736",
+        "filename": "cui/source/inc/cuitabarea.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 680,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-06-03T09:25:52Z",
+      "side": 1,
+      "message": "Please don\u0027t use Edit ( \u003d plain text entry) here, see the comment in the other file why",
+      "revId": "f9db80f1b226055e5e508a057ace2a5d07880e2d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_a6c48b92",
+        "filename": "cui/source/tabpages/tpcolor.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1032,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-06-03T09:25:52Z",
+      "side": 1,
+      "message": "Not all the languages/locales use the same format for \u0027number%\u0027 (some use space between, some don\u0027t, some even write % sign first ... )\n\n\u003d\u003e Please use the same type of widget in both preset and custom sections. MetricField (or is it NumericField?) has a built-in number formatter, so you don\u0027t have to format the string manually",
+      "revId": "f9db80f1b226055e5e508a057ace2a5d07880e2d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
