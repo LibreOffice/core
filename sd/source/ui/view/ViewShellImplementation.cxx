@@ -116,6 +116,8 @@ void ViewShell::Implementation::ProcessModifyPageSlot (
         if (!pArgs || pArgs->Count() == 1 || pArgs->Count() == 2 )
         {
             // First make sure that the sidebar is visible
+            mrViewShell.GetDrawView()->SdrEndTextEdit();
+            mrViewShell.GetDrawView()->UnmarkAll();
             mrViewShell.GetViewFrame()->ShowChildWindow(SID_SIDEBAR);
             sfx2::sidebar::Sidebar::ShowPanel(
                 "SdLayoutsPanel",
