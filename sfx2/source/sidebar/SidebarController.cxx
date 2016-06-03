@@ -95,7 +95,7 @@ SidebarController::SidebarController (
       mpTabBar(VclPtr<TabBar>::Create(
               mpParentWindow,
               rxFrame,
-              [this](const ::rtl::OUString& rsDeckId) { return this->OpenThenSwitchToDeck(rsDeckId); },
+              [this](const ::rtl::OUString& rsDeckId) { return this->OpenThenToggleDeck(rsDeckId); },
               [this](const Rectangle& rButtonBox,const ::std::vector<TabBar::DeckMenuData>& rMenuData) { return this->ShowPopupMenu(rButtonBox,rMenuData); },
               this)),
       mxFrame(rxFrame),
@@ -503,8 +503,8 @@ void SidebarController::UpdateConfigurations()
     }
 }
 
-void SidebarController::OpenThenSwitchToDeck (
-    const ::rtl::OUString& rsDeckId)
+void SidebarController::OpenThenToggleDeck (
+    const OUString& rsDeckId)
 {
     SfxSplitWindow* pSplitWindow = GetSplitWindow();
     if ( pSplitWindow && !pSplitWindow->IsFadeIn() )
@@ -520,6 +520,19 @@ void SidebarController::OpenThenSwitchToDeck (
             mpParentWindow->Close();
         return;
     }
+    RequestOpenDeck();
+    SwitchToDeck(rsDeckId);
+    mpTabBar->Invalidate();
+    mpTabBar->HighlightDeck(rsDeckId);
+}
+
+void SidebarController::OpenThenSwitchToDeck (
+    const OUString& rsDeckId)
+{
+    SfxSplitWindow* pSplitWindow = GetSplitWindow();
+    if ( pSplitWindow && !pSplitWindow->IsFadeIn() )
+        // tdf#83546 Collapsed sidebar should expand first
+        pSplitWindow->FadeIn();
     RequestOpenDeck();
     SwitchToDeck(rsDeckId);
     mpTabBar->Invalidate();

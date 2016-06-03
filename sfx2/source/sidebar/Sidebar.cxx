@@ -47,6 +47,28 @@ void Sidebar::ShowPanel (
     pController->OpenThenSwitchToDeck(pPanelDescriptor->msDeckId);
 }
 
+void Sidebar::TogglePanel (
+    const OUString& rsPanelId,
+    const css::uno::Reference<frame::XFrame>& rxFrame)
+{
+    SidebarController* pController = SidebarController::GetSidebarControllerForFrame(rxFrame);
+    if (!pController)
+        return;
+
+    const PanelDescriptor* pPanelDescriptor = pController->GetResourceManager()->GetPanelDescriptor(rsPanelId);
+
+    if (!pPanelDescriptor)
+        return;
+
+    // This should be a lot more sophisticated:
+    // - Make the deck switching asynchronous
+    // - Make sure to use a context that really shows the panel
+
+    // All that is not necessary for the current use cases so lets
+    // keep it simple for the time being.
+    pController->OpenThenToggleDeck(pPanelDescriptor->msDeckId);
+}
+
 bool Sidebar::IsPanelVisible(
     const OUString& rsPanelId,
     const css::uno::Reference<frame::XFrame>& rxFrame)
