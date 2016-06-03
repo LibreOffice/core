@@ -57,7 +57,7 @@ class PPTTextObj;
 class DffRecordHeader;
 class SvxBulletItem;
 enum class PptSlideLayout;
-enum class PptPlaceholder;
+enum class PptPlaceholder : sal_uInt8;
 
 #define PPT_IMPORTFLAGS_NO_TEXT_ASSERT  1
 
@@ -1463,7 +1463,7 @@ enum class PptSlideLayout
 };
 
 // the following table describes the placeholder id's (values from reality followed by values taken from the documentation)
-enum class PptPlaceholder
+enum class PptPlaceholder : sal_uInt8
 {
     NONE                   = 0,   //  0 None
     MASTERTITLE            = 1,   //  1 Master title
