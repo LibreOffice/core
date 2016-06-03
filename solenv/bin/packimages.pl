@@ -107,7 +107,6 @@ sub parse_options
     my $opt_help;
     my $p = Getopt::Long::Parser->new();
     my @custom_path_list;
-    my $custom_path_extended;
     my $success =$p->getoptions(
                              '-h' => \$opt_help,
                              '-o=s' => \$out_file,
@@ -115,12 +114,10 @@ sub parse_options
                  '-s=s' => \$sort_file,
                              '-m=s' => \$module_path,
                              '-c=s' => \@custom_path_list,
-                             '-e=s' => \$custom_path_extended,
                              '-l=s' => \@imagelist_path,
                              '-v'   => \$verbose,
                              '-vv'  => \$extra_verbose
                             );
-    push @custom_path_list, $custom_path_extended if ($custom_path_extended);
     if ( $opt_help || !$success || !$out_file || !$global_path
         || !$module_path || !@custom_path_list || !@imagelist_path )
     {
