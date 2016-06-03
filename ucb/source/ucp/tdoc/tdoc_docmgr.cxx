@@ -40,6 +40,7 @@
 #include "com/sun/star/frame/XStorable.hpp"
 #include "com/sun/star/frame/ModuleManager.hpp"
 #include "com/sun/star/lang/DisposedException.hpp"
+#include "com/sun/star/lang/NotInitializedException.hpp"
 #include "com/sun/star/util/XCloseBroadcaster.hpp"
 
 #include "tdoc_docmgr.hxx"
@@ -411,9 +412,7 @@ void SAL_CALL OfficeDocumentsManager::documentEventOccured(
     }
 }
 
-
 // lang::XDocumentEventListener (base of document::XDocumentEventListener)
-
 
 // virtual
 void SAL_CALL OfficeDocumentsManager::disposing(
@@ -422,9 +421,7 @@ void SAL_CALL OfficeDocumentsManager::disposing(
 {
 }
 
-
 // Non-interface.
-
 
 void OfficeDocumentsManager::buildDocumentsList()
 {
@@ -491,11 +488,15 @@ void OfficeDocumentsManager::buildDocumentsList()
         catch ( lang::DisposedException const & )
         {
             // Note: Due to race conditions the XEnumeration can
-            //       contains docs that already have been closed
+            //       contain docs that have already been closed
+        }
+        catch ( lang::NotInitializedException const & )
+        {
+            // Note: Due to race conditions the XEnumeration can
+            //       contain docs that are still uninitialized
         }
     }
 }
-
 
 uno::Reference< embed::XStorage >
 OfficeDocumentsManager::queryStorage( const OUString & rDocId )
