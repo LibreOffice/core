@@ -353,6 +353,12 @@ bool InitMultisample(const PIXELFORMATDESCRIPTOR& pfd, int& rPixelFormat,
 namespace
 {
 
+void disableOpenGLAndTerminateForRestart()
+{
+    OpenGLZone::hardDisable();
+    TerminateProcess(GetCurrentProcess(), EXITHELPER_NORMAL_RESTART);
+}
+
 bool tryShaders(const OUString& rVertexShader, const OUString& rFragmentShader, const OUString& rGeometryShader = "", const OString& rPreamble = "")
 {
     GLint nId;
@@ -440,12 +446,6 @@ bool compiledShaderBinariesWork()
          tryShaders("textureVertexShader", "convolutionFragmentShader") &&
          tryShaders("textureVertexShader", "areaScaleFastFragmentShader"));
 
-    if (!bResult)
-    {
-        OpenGLZone::hardDisable();
-        TerminateProcess(GetCurrentProcess(), EXITHELPER_NORMAL_RESTART);
-    }
-
     return bResult;
 }
 
@@ -453,6 +453,16 @@ bool compiledShaderBinariesWork()
 
 bool WinOpenGLContext::ImplInit()
 {
+    // Failures here typically means that OpenGL can't be used. Returning false is fairly pointless
+    // as the calling code doesn't even check, but oh well. If we notice that OpenGL is broken the
+    // first time being called, it is not too late to call
+    // disableOpenGLAndTerminateForRestart(). The first time this will be called is from displaying
+    // the splash screen, so if OpenGL is broken, it is "early enough" for us to be able to disable
+    // OpenGL and terminate bluntly with EXITHELPER_NORMAL_RESTART, thus causing the wrapper process
+    // to restart us, then without using OpenGL.
+
+    static bool bFirstCall = true;
+
     OpenGLZone aZone;
 
     VCL_GL_INFO("OpenGLContext::ImplInit----start");
@@ -504,6 +514,9 @@ bool WinOpenGLContext::ImplInit()
     if (WindowPix == 0)
     {
         SAL_WARN("vcl.opengl", "Invalid pixelformat");
+        if (bFirstCall)
+            disableOpenGLAndTerminateForRestart();
+        bFirstCall = false;
         return false;
     }
 
@@ -511,6 +524,9 @@ bool WinOpenGLContext::ImplInit()
     {
         ImplWriteLastError(GetLastError(), "SetPixelFormat in OpenGLContext::ImplInit");
         SAL_WARN("vcl.opengl", "SetPixelFormat failed");
+        if (bFirstCall)
+            disableOpenGLAndTerminateForRestart();
+        bFirstCall = false;
         return false;
     }
 
@@ -519,6 +535,9 @@ bool WinOpenGLContext::ImplInit()
     {
         ImplWriteLastError(GetLastError(), "wglCreateContext in OpenGLContext::ImplInit");
         SAL_WARN("vcl.opengl", "wglCreateContext failed");
+        if (bFirstCall)
+            disableOpenGLAndTerminateForRestart();
+        bFirstCall = false;
         return false;
     }
 
@@ -526,13 +545,17 @@ bool WinOpenGLContext::ImplInit()
     {
         ImplWriteLastError(GetLastError(), "wglMakeCurrent in OpenGLContext::ImplInit");
         SAL_WARN("vcl.opengl", "wglMakeCurrent failed");
+        if (bFirstCall)
+            disableOpenGLAndTerminateForRestart();
+        bFirstCall = false;
         return false;
     }
 
     if (!InitGLEW())
     {
-        wglMakeCurrent(NULL, NULL);
-        wglDeleteContext(hTempRC);
+        if (bFirstCall)
+            disableOpenGLAndTerminateForRestart();
+        bFirstCall = false;
         return false;
     }
 
@@ -544,6 +567,9 @@ bool WinOpenGLContext::ImplInit()
     {
         wglMakeCurrent(NULL, NULL);
         wglDeleteContext(hTempRC);
+        if (bFirstCall)
+            disableOpenGLAndTerminateForRestart();
+        bFirstCall = false;
         return false;
     }
 
@@ -563,6 +589,9 @@ bool WinOpenGLContext::ImplInit()
         SAL_WARN("vcl.opengl", "wglCreateContextAttribsARB failed");
         wglMakeCurrent(NULL, NULL);
         wglDeleteContext(hTempRC);
+        if (bFirstCall)
+            disableOpenGLAndTerminateForRestart();
+        bFirstCall = false;
         return false;
     }
 
@@ -570,6 +599,9 @@ bool WinOpenGLContext::ImplInit()
     {
         wglMakeCurrent(NULL, NULL);
         wglDeleteContext(hTempRC);
+        if (bFirstCall)
+            disableOpenGLAndTerminateForRestart();
+        bFirstCall = false;
         return false;
     }
 
@@ -580,6 +612,9 @@ bool WinOpenGLContext::ImplInit()
     {
         ImplWriteLastError(GetLastError(), "wglMakeCurrent (with shared context) in OpenGLContext::ImplInit");
         SAL_WARN("vcl.opengl", "wglMakeCurrent failed");
+        if (bFirstCall)
+            disableOpenGLAndTerminateForRestart();
+        bFirstCall = false;
         return false;
     }
 
@@ -595,6 +630,8 @@ bool WinOpenGLContext::ImplInit()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
     registerAsCurrent();
+
+    bFirstCall = false;
 
     return true;
 }
