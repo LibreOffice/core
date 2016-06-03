@@ -94,7 +94,7 @@ bool ScStyleSheet::SetParent( const OUString& rParentName )
     SfxStyleSheetBase* pStyle = pPool->Find( aEffName, nFamily );
     if (!pStyle)
     {
-        SfxStyleSheetIteratorPtr pIter = pPool->CreateIterator( nFamily, SFXSTYLEBIT_ALL );
+        std::shared_ptr<SfxStyleSheetIterator> pIter = pPool->CreateIterator( nFamily, SFXSTYLEBIT_ALL );
         pStyle = pIter->First();
         if (pStyle)
             aEffName = pStyle->GetName();

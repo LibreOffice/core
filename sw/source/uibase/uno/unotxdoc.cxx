@@ -3602,11 +3602,11 @@ uno::Sequence< lang::Locale > SAL_CALL SwXTextDocument::getDocumentLanguages(
     };
     for (IStyleAccess::SwAutoStyleFamily i : aFam)
     {
-        std::vector< SfxItemSet_Pointer_t > rStyles;
+        std::vector< std::shared_ptr<SfxItemSet> > rStyles;
         pDoc->GetIStyleAccess().getAllStyles(rStyles, i);
         while (!rStyles.empty())
         {
-            SfxItemSet_Pointer_t pStyle = rStyles.back();
+            std::shared_ptr<SfxItemSet> pStyle = rStyles.back();
             rStyles.pop_back();
             const SfxItemSet *pSet = dynamic_cast< const SfxItemSet * >(pStyle.get());
 

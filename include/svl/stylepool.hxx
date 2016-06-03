@@ -31,8 +31,6 @@ class SVL_DLLPUBLIC StylePool
 private:
     std::unique_ptr<StylePoolImpl> pImpl;
 public:
-    typedef std::shared_ptr<SfxItemSet> SfxItemSet_Pointer_t;
-
     explicit StylePool( SfxItemSet* pIgnorableItems = nullptr );
 
     /** Insert a SfxItemSet into the style pool.
@@ -44,7 +42,7 @@ public:
 
         @return a shared pointer to the SfxItemSet
     */
-    SfxItemSet_Pointer_t insertItemSet( const SfxItemSet& rSet );
+    std::shared_ptr<SfxItemSet> insertItemSet( const SfxItemSet& rSet );
 
     /** Create an iterator
 
@@ -69,7 +67,7 @@ public:
 
     virtual ~StylePool();
 
-    static OUString nameOf( const SfxItemSet_Pointer_t& pSet );
+    static OUString nameOf( const std::shared_ptr<SfxItemSet>& pSet );
 };
 
 class SVL_DLLPUBLIC IStylePoolIteratorAccess
@@ -78,7 +76,7 @@ public:
     /** Delivers a shared pointer to the next SfxItemSet of the pool
         If there is no more SfxItemSet, the delivered share_pointer is empty.
     */
-    virtual StylePool::SfxItemSet_Pointer_t getNext() = 0;
+    virtual std::shared_ptr<SfxItemSet> getNext() = 0;
     virtual ~IStylePoolIteratorAccess() {};
 };
 #endif

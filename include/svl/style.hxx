@@ -182,9 +182,6 @@ private:
 friend class SfxStyleSheetBasePool;
 };
 
-typedef std::shared_ptr< SfxStyleSheetIterator > SfxStyleSheetIteratorPtr;
-
-
 class SfxStyleSheetBasePool_Impl;
 
 class SVL_DLLPUBLIC SfxStyleSheetBasePool: public SfxBroadcaster, public comphelper::OWeakTypeObject
@@ -224,7 +221,7 @@ public:
     SfxItemPool&                GetPool() { return rPool;}
     const SfxItemPool&          GetPool() const { return rPool;}
 
-    virtual SfxStyleSheetIteratorPtr CreateIterator(SfxStyleFamily, sal_uInt16 nMask);
+    virtual std::shared_ptr<SfxStyleSheetIterator> CreateIterator(SfxStyleFamily, sal_uInt16 nMask);
     sal_uInt16              Count();
     SfxStyleSheetBase*  operator[](sal_uInt16 nIdx);
 

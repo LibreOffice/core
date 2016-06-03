@@ -36,7 +36,7 @@ namespace {
         std::vector<Node*> mChildren; // child nodes, create by findChildNode(..)
         // container of shared pointers of inserted item sets; for non-poolable
         // items more than one item set is needed
-        std::vector< StylePool::SfxItemSet_Pointer_t > maItemSet;
+        std::vector< std::shared_ptr<SfxItemSet> > maItemSet;
         const SfxPoolItem *mpItem;   // my pool item
         Node *mpUpper;               // if I'm a child node that's my parent node
         // #i86923#
@@ -61,12 +61,12 @@ namespace {
         // #i86923#
         bool hasItemSet( const bool bCheckUsage ) const;
         // #i87808#
-        const StylePool::SfxItemSet_Pointer_t getItemSet() const
+        const std::shared_ptr<SfxItemSet> getItemSet() const
         {
             return maItemSet.back();
         }
-        const StylePool::SfxItemSet_Pointer_t getUsedOrLastAddedItemSet() const;
-        void setItemSet( const SfxItemSet& rSet ){ maItemSet.push_back( StylePool::SfxItemSet_Pointer_t( rSet.Clone() ) ); }
+        const std::shared_ptr<SfxItemSet> getUsedOrLastAddedItemSet() const;
+        void setItemSet( const SfxItemSet& rSet ){ maItemSet.push_back( std::shared_ptr<SfxItemSet>( rSet.Clone() ) ); }
         // #i86923#
         Node* findChildNode( const SfxPoolItem& rItem,
                              const bool bIsItemIgnorable = false );
@@ -76,14 +76,14 @@ namespace {
         const SfxPoolItem& getPoolItem() const { return *mpItem; }
         // #i86923#
         bool hasIgnorableChildren( const bool bCheckUsage ) const;
-        const StylePool::SfxItemSet_Pointer_t getItemSetOfIgnorableChild(
+        const std::shared_ptr<SfxItemSet> getItemSetOfIgnorableChild(
                                         const bool bSkipUnusedItemSets ) const;
     };
 
     // #i87808#
-    const StylePool::SfxItemSet_Pointer_t Node::getUsedOrLastAddedItemSet() const
+    const std::shared_ptr<SfxItemSet> Node::getUsedOrLastAddedItemSet() const
     {
-        std::vector< StylePool::SfxItemSet_Pointer_t >::const_reverse_iterator aIter;
+        std::vector< std::shared_ptr<SfxItemSet> >::const_reverse_iterator aIter;
 
         for ( aIter = maItemSet.rbegin(); aIter != maItemSet.rend(); ++aIter )
         {
@@ -105,7 +105,7 @@ namespace {
         {
             if ( bCheckUsage )
             {
-                std::vector< StylePool::SfxItemSet_Pointer_t >::const_reverse_iterator aIter;
+                std::vector< std::shared_ptr<SfxItemSet> >::const_reverse_iterator aIter;
 
                 for ( aIter = maItemSet.rbegin(); aIter != maItemSet.rend(); ++aIter )
                 {
@@ -230,7 +230,7 @@ namespace {
         return bHasIgnorableChildren;
     }
 
-    const StylePool::SfxItemSet_Pointer_t Node::getItemSetOfIgnorableChild(
+    const std::shared_ptr<SfxItemSet> Node::getItemSetOfIgnorableChild(
                                         const bool bSkipUnusedItemSets ) const
     {
         DBG_ASSERT( hasIgnorableChildren( bSkipUnusedItemSets ),
@@ -258,7 +258,7 @@ namespace {
             ++aIter;
         }
 
-        StylePool::SfxItemSet_Pointer_t pReturn;
+        std::shared_ptr<SfxItemSet> pReturn;
         return pReturn;
     }
 
@@ -291,12 +291,12 @@ namespace {
               mbSkipUnusedItemSets( bSkipUnusedItemSets ),
               mbSkipIgnorable( bSkipIgnorable )
         {}
-        virtual StylePool::SfxItemSet_Pointer_t getNext() override;
+        virtual std::shared_ptr<SfxItemSet> getNext() override;
     };
 
-    StylePool::SfxItemSet_Pointer_t Iterator::getNext()
+    std::shared_ptr<SfxItemSet> Iterator::getNext()
     {
-        StylePool::SfxItemSet_Pointer_t pReturn;
+        std::shared_ptr<SfxItemSet> pReturn;
         while( mpNode || mpCurrNode != mrRoot.end() )
         {
             if( !mpNode )
@@ -332,7 +332,7 @@ namespace {
  * This static method creates a unique name from a shared pointer to a SfxItemSet
  * The name is the memory address of the SfxItemSet itself.
  */
-OUString StylePool::nameOf( const SfxItemSet_Pointer_t& pSet )
+OUString StylePool::nameOf( const std::shared_ptr<SfxItemSet>& pSet )
 {
     return OUString::number( reinterpret_cast<sal_IntPtr>( pSet.get() ), 16 );
 }
@@ -368,14 +368,14 @@ public:
         delete mpIgnorableItems;
     }
 
-    StylePool::SfxItemSet_Pointer_t insertItemSet( const SfxItemSet& rSet );
+    std::shared_ptr<SfxItemSet> insertItemSet( const SfxItemSet& rSet );
 
     // #i86923#
     IStylePoolIteratorAccess* createIterator( bool bSkipUnusedItemSets = false,
                                               bool bSkipIgnorableItems = false );
 };
 
-StylePool::SfxItemSet_Pointer_t StylePoolImpl::insertItemSet( const SfxItemSet& rSet )
+std::shared_ptr<SfxItemSet> StylePoolImpl::insertItemSet( const SfxItemSet& rSet )
 {
     bool bNonPoolable = false;
     Node* pCurNode = &maRoot[ rSet.GetParent() ];
@@ -428,7 +428,7 @@ StylePool::SfxItemSet_Pointer_t StylePoolImpl::insertItemSet( const SfxItemSet& 
     {
         sal_Int32 nCheck = -1;
         IStylePoolIteratorAccess* pIter = createIterator();
-        StylePool::SfxItemSet_Pointer_t pTemp;
+        std::shared_ptr<SfxItemSet> pTemp;
         do
         {
             ++nCheck;
@@ -454,7 +454,7 @@ StylePool::StylePool( SfxItemSet* pIgnorableItems )
     : pImpl( new StylePoolImpl( pIgnorableItems ) )
 {}
 
-StylePool::SfxItemSet_Pointer_t StylePool::insertItemSet( const SfxItemSet& rSet )
+std::shared_ptr<SfxItemSet> StylePool::insertItemSet( const SfxItemSet& rSet )
 { return pImpl->insertItemSet( rSet ); }
 
 // #i86923#

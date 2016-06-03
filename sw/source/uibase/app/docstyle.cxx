@@ -2326,9 +2326,9 @@ SfxStyleSheetBase*   SwDocStyleSheetPool::Create( const OUString &,
     return nullptr;
 }
 
-SfxStyleSheetIteratorPtr SwDocStyleSheetPool::CreateIterator( SfxStyleFamily eFam, sal_uInt16 _nMask )
+std::shared_ptr<SfxStyleSheetIterator> SwDocStyleSheetPool::CreateIterator( SfxStyleFamily eFam, sal_uInt16 _nMask )
 {
-    return SfxStyleSheetIteratorPtr(new SwStyleSheetIterator( this, eFam, _nMask ));
+    return std::shared_ptr<SfxStyleSheetIterator>(new SwStyleSheetIterator( this, eFam, _nMask ));
 }
 
 void SwDocStyleSheetPool::dispose()
