@@ -82,7 +82,7 @@ std::string generate_json(const std::map<std::string, std::string>& parameters)
     return stream.str();
 }
 
-bool uploadContent(std::map<std::string, std::string>& parameters)
+bool uploadContent(std::map<std::string, std::string>& parameters, std::string& response)
 {
     CURL* curl = curl_easy_init();
     if (!curl)
@@ -175,6 +175,7 @@ bool uploadContent(std::map<std::string, std::string>& parameters)
 
     std::cerr << response_body << " " << error_description << std::endl;
 
+    response = response_body;
 
     if( CURLE_OK != cc )
         return false;
@@ -182,7 +183,7 @@ bool uploadContent(std::map<std::string, std::string>& parameters)
     return true;
 }
 
-bool readConfig(const std::string& iniPath)
+bool readConfig(const std::string& iniPath, std::string& response)
 {
     std::ifstream file(iniPath);
     std::map<std::string, std::string> parameters = readStrings(file);
@@ -200,7 +201,7 @@ bool readConfig(const std::string& iniPath)
         return false;
     }
 
-    return uploadContent(parameters);
+    return uploadContent(parameters, response);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -20,9 +20,11 @@ int main(int argc, char** argv)
     }
 
     std::string iniPath(argv[1]);
-    if (!readConfig(iniPath))
+    std::string response;
+    if (!readConfig(iniPath, response))
         return EXIT_FAILURE;
 
+    std::cout << "Response: " << response << std::endl;
     return EXIT_SUCCESS;
 }
 
