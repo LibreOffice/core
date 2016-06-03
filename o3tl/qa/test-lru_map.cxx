@@ -62,7 +62,7 @@ void lru_map_test::testBaseUsage()
     CPPUNIT_ASSERT_EQUAL(5, it->second);
 
     it = lru.find(0);
-    CPPUNIT_ASSERT(it == lru.end());
+    CPPUNIT_ASSERT(bool(it == lru.end()));
 }
 
 void lru_map_test::testReplaceValue()
@@ -110,20 +110,20 @@ void lru_map_test::testReplaceKey()
     lru.insert(std::make_pair<int, int>(1, 100));
     CPPUNIT_ASSERT_EQUAL(size_t(1), lru.size());
     CPPUNIT_ASSERT_EQUAL(100, lru.find(1)->second);
-    CPPUNIT_ASSERT(lru.find(2) == lru.end());
-    CPPUNIT_ASSERT(lru.find(3) == lru.end());
+    CPPUNIT_ASSERT(bool(lru.find(2) == lru.end()));
+    CPPUNIT_ASSERT(bool(lru.find(3) == lru.end()));
 
     // inserting new entry
     lru.insert(std::make_pair<int, int>(2, 200));
     CPPUNIT_ASSERT_EQUAL(size_t(2), lru.size());
     CPPUNIT_ASSERT_EQUAL(100, lru.find(1)->second);
     CPPUNIT_ASSERT_EQUAL(200, lru.find(2)->second);
-    CPPUNIT_ASSERT(lru.find(3) == lru.end());
+    CPPUNIT_ASSERT(bool(lru.find(3) == lru.end()));
 
     // inserting new entry, lru entry is removed
     lru.insert(std::make_pair<int, int>(3, 300));
     CPPUNIT_ASSERT_EQUAL(size_t(2), lru.size());
-    CPPUNIT_ASSERT(lru.find(1) == lru.end());
+    CPPUNIT_ASSERT(bool(lru.find(1) == lru.end()));
     CPPUNIT_ASSERT_EQUAL(200, lru.find(2)->second);
     CPPUNIT_ASSERT_EQUAL(300, lru.find(3)->second);
 
@@ -131,8 +131,8 @@ void lru_map_test::testReplaceKey()
     std::pair<int, int> pair(4, 400);
     lru.insert(pair);
     CPPUNIT_ASSERT_EQUAL(size_t(2), lru.size());
-    CPPUNIT_ASSERT(lru.find(1) == lru.end());
-    CPPUNIT_ASSERT(lru.find(2) == lru.end());
+    CPPUNIT_ASSERT(bool(lru.find(1) == lru.end()));
+    CPPUNIT_ASSERT(bool(lru.find(2) == lru.end()));
     CPPUNIT_ASSERT_EQUAL(300, lru.find(3)->second);
     CPPUNIT_ASSERT_EQUAL(400, lru.find(4)->second);
 }
@@ -221,7 +221,7 @@ void lru_map_test::testCustomHash()
     lru.insert(std::make_pair<TestClassKey, int>(TestClassKey(1,2), 9));
     CPPUNIT_ASSERT_EQUAL(size_t(2), lru.size());
 
-    CPPUNIT_ASSERT(lru.end() == lru.find(TestClassKey(0,0))); // non existent
+    CPPUNIT_ASSERT(bool(lru.end() == lru.find(TestClassKey(0,0)))); // non existent
     CPPUNIT_ASSERT_EQUAL(7, lru.find(TestClassKey(1,1))->second);
     CPPUNIT_ASSERT_EQUAL(9, lru.find(TestClassKey(1,2))->second);
 
@@ -229,7 +229,7 @@ void lru_map_test::testCustomHash()
 
     CPPUNIT_ASSERT_EQUAL(size_t(2), lru.size());
 
-    CPPUNIT_ASSERT(lru.end() == lru.find(TestClassKey(1,1)));
+    CPPUNIT_ASSERT(bool(lru.end() == lru.find(TestClassKey(1,1))));
     CPPUNIT_ASSERT_EQUAL(9,  lru.find(TestClassKey(1,2))->second);
     CPPUNIT_ASSERT_EQUAL(13, lru.find(TestClassKey(2,1))->second);
 }
