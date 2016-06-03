@@ -830,7 +830,7 @@ void SAL_CALL GraphicProvider::storeGraphic( const uno::Reference< ::graphic::XG
                                                     ( aFilterDataSeq.getLength() ? &aFilterDataSeq : nullptr ) );
                     }
                     aMemStrm.Seek( STREAM_SEEK_TO_END );
-                    pOStm->Write( aMemStrm.GetData(), aMemStrm.Tell() );
+                    pOStm->WriteBytes( aMemStrm.GetData(), aMemStrm.Tell() );
                 }
             }
         }

@@ -234,7 +234,7 @@ bool GfxLink::ExportNative( SvStream& rOStream ) const
         if( IsSwappedOut() )
             mpSwap->WriteTo( rOStream );
         else if( GetData() )
-            rOStream.Write( GetData(), GetDataSize() );
+            rOStream.WriteBytes( GetData(), GetDataSize() );
     }
 
     return ( rOStream.GetError() == ERRCODE_NONE );
@@ -258,7 +258,7 @@ SvStream& WriteGfxLink( SvStream& rOStream, const GfxLink& rGfxLink )
         if( rGfxLink.IsSwappedOut() )
             rGfxLink.mpSwap->WriteTo( rOStream );
         else if( rGfxLink.GetData() )
-            rOStream.Write( rGfxLink.GetData(), rGfxLink.GetDataSize() );
+            rOStream.WriteBytes( rGfxLink.GetData(), rGfxLink.GetDataSize() );
     }
 
     return rOStream;
@@ -288,7 +288,7 @@ SvStream& ReadGfxLink( SvStream& rIStream, GfxLink& rGfxLink)
     pCompat.reset(); // destructor writes stuff into the header
 
     pBuf = new sal_uInt8[ nSize ];
-    rIStream.Read( pBuf, nSize );
+    rIStream.ReadBytes( pBuf, nSize );
 
     rGfxLink = GfxLink( pBuf, nSize, (GfxLinkType) nType );
     rGfxLink.SetUserId( nUserId );
@@ -316,7 +316,7 @@ ImpSwap::ImpSwap( sal_uInt8* pData, sal_uLong nDataSize ) :
             std::unique_ptr<SvStream> xOStm(::utl::UcbStreamHelper::CreateStream( maURL, STREAM_READWRITE | StreamMode::SHARE_DENYWRITE ));
             if( xOStm )
             {
-                xOStm->Write( pData, mnDataSize );
+                xOStm->WriteBytes( pData, mnDataSize );
                 bool bError = ( ERRCODE_NONE != xOStm->GetError() );
                 xOStm.reset();
 
@@ -346,7 +346,7 @@ sal_uInt8* ImpSwap::GetData() const
         if( xIStm )
         {
             pData = new sal_uInt8[ mnDataSize ];
-            xIStm->Read( pData, mnDataSize );
+            xIStm->ReadBytes( pData, mnDataSize );
             bool bError = ( ERRCODE_NONE != xIStm->GetError() );
             sal_Size nActReadSize = xIStm->Tell();
             if (nActReadSize != mnDataSize)
@@ -376,7 +376,7 @@ void ImpSwap::WriteTo( SvStream& rOStm ) const
 
     if( pData )
     {
-        rOStm.Write( pData, mnDataSize );
+        rOStm.WriteBytes( pData, mnDataSize );
         delete[] pData;
     }
 }

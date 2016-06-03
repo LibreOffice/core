@@ -2260,7 +2260,7 @@ void OS2METReader::ReadImageData(sal_uInt16 nDataID, sal_uInt16 nDataLen)
             // OK, now the map data is being pushed. Unfortunately OS2 and BMP
             // do have a different RGB ordering when using 24-bit
             std::unique_ptr<sal_uInt8[]> pBuf(new sal_uInt8[nDataLen]);
-            pOS2MET->Read(pBuf.get(),nDataLen);
+            pOS2MET->ReadBytes(pBuf.get(), nDataLen);
             if (p->nBitsPerPixel==24) {
                 sal_uLong i, j, nAlign, nBytesPerLine;
                 sal_uInt8 nTemp;
@@ -2278,7 +2278,7 @@ void OS2METReader::ReadImageData(sal_uInt16 nDataID, sal_uInt16 nDataLen)
                     }
                 }
             }
-            p->pBMP->Write(pBuf.get(),nDataLen);
+            p->pBMP->WriteBytes(pBuf.get(), nDataLen);
             p->nMapPos+=nDataLen;
             break;
         }
@@ -2321,7 +2321,7 @@ void OS2METReader::ReadFont(sal_uInt16 nFieldSize)
                     case 0x08: { // Font Typeface
                         char str[33];
                         pOS2MET->SeekRel(1);
-                        pOS2MET->Read( &str, 32 );
+                        pOS2MET->ReadBytes( &str, 32 );
                         str[ 32 ] = 0;
                         OUString aStr( str, strlen(str), osl_getThreadTextEncoding() );
                         if ( aStr.compareToIgnoreAsciiCase( "Helv" ) == 0 )
@@ -2588,8 +2588,8 @@ void OS2METReader::ReadField(sal_uInt16 nFieldType, sal_uInt16 nFieldSize)
                 pOrdFile->SetEndian(SvStreamEndian::LITTLE);
             }
             std::unique_ptr<sal_uInt8[]> pBuf(new sal_uInt8[nFieldSize]);
-            pOS2MET->Read(pBuf.get(),nFieldSize);
-            pOrdFile->Write(pBuf.get(),nFieldSize);
+            pOS2MET->ReadBytes(pBuf.get(), nFieldSize);
+            pOrdFile->WriteBytes(pBuf.get(), nFieldSize);
             break;
         }
         case MapCodFntMagic:

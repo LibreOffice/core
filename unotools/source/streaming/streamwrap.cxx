@@ -58,7 +58,7 @@ sal_Int32 SAL_CALL OInputStreamWrapper::readBytes(css::uno::Sequence< sal_Int8 >
     if (aData.getLength() < nBytesToRead)
         aData.realloc(nBytesToRead);
 
-    sal_uInt32 nRead = m_pSvStream->Read(static_cast<void*>(aData.getArray()), nBytesToRead);
+    sal_uInt32 nRead = m_pSvStream->ReadBytes(static_cast<void*>(aData.getArray()), nBytesToRead);
     checkError();
 
     // Wenn gelesene Zeichen < MaxLength, css::uno::Sequence anpassen
@@ -195,7 +195,7 @@ OOutputStreamWrapper::~OOutputStreamWrapper() {}
 
 void SAL_CALL OOutputStreamWrapper::writeBytes(const css::uno::Sequence< sal_Int8 >& aData) throw( css::io::NotConnectedException, css::io::BufferSizeExceededException, css::uno::RuntimeException, std::exception )
 {
-    sal_uInt32 nWritten = rStream.Write(aData.getConstArray(),aData.getLength());
+    sal_uInt32 nWritten = rStream.WriteBytes(aData.getConstArray(), aData.getLength());
     ErrCode err = rStream.GetError();
     if  (   (ERRCODE_NONE != err)
         ||  (nWritten != (sal_uInt32)aData.getLength())
@@ -293,7 +293,7 @@ css::uno::Reference< css::io::XOutputStream > SAL_CALL OStreamWrapper::getOutput
 
 void SAL_CALL OStreamWrapper::writeBytes(const css::uno::Sequence< sal_Int8 >& aData) throw(css::io::NotConnectedException, css::io::BufferSizeExceededException, css::uno::RuntimeException, std::exception)
 {
-    sal_uInt32 nWritten = m_pSvStream->Write(aData.getConstArray(),aData.getLength());
+    sal_uInt32 nWritten = m_pSvStream->WriteBytes(aData.getConstArray(), aData.getLength());
     ErrCode err = m_pSvStream->GetError();
     if  (   (ERRCODE_NONE != err)
         ||  (nWritten != (sal_uInt32)aData.getLength())

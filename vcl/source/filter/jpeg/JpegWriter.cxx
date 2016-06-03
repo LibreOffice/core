@@ -53,7 +53,7 @@ extern "C" boolean empty_output_buffer (j_compress_ptr cinfo)
 {
     DestinationManagerStruct * destination = reinterpret_cast<DestinationManagerStruct *>(cinfo->dest);
 
-    if (destination->stream->Write(destination->buffer, BUFFER_SIZE) != (size_t) BUFFER_SIZE)
+    if (destination->stream->WriteBytes(destination->buffer, BUFFER_SIZE) != BUFFER_SIZE)
     {
         ERREXIT(cinfo, JERR_FILE_WRITE);
     }
@@ -72,7 +72,7 @@ extern "C" void term_destination (j_compress_ptr cinfo)
     /* Write any data remaining in the buffer */
     if (datacount > 0)
     {
-        if (destination->stream->Write(destination->buffer, datacount) != datacount)
+        if (destination->stream->WriteBytes(destination->buffer, datacount) != datacount)
         {
             ERREXIT(cinfo, JERR_FILE_WRITE);
         }

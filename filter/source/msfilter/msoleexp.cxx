@@ -272,7 +272,7 @@ void SvxMSExportOLEObjects::ExportOLEObject( svt::EmbeddedObjectRef& rObj, SotSt
                         }
                     }
 
-                    bExtentSuccess = ( xExtStm->Write( aWriteSet, 16 ) == 16 );
+                    bExtentSuccess = (xExtStm->WriteBytes(aWriteSet, 16) == 16);
                 }
             }
 

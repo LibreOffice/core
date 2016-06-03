@@ -70,7 +70,7 @@ Sequence< sal_Int8 > BitmapTransporter::getDIB() throw(std::exception)
     m_aStream.Seek( 0 );
 
     Sequence< sal_Int8 > aValue( nBytes );
-    m_aStream.Read( aValue.getArray(), nBytes );
+    m_aStream.ReadBytes( aValue.getArray(), nBytes );
     m_aStream.Seek( nPreviousPos );
 
     return aValue;

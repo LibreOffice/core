@@ -105,7 +105,7 @@ Primitive2DSequence Test::parseSvg(const char* aSource)
     SvFileStream aFileStream(aUrl, StreamMode::READ);
     sal_Size nSize = aFileStream.remainingSize();
     std::unique_ptr<sal_Int8[]> pBuffer(new sal_Int8[nSize + 1]);
-    aFileStream.Read(pBuffer.get(), nSize);
+    aFileStream.ReadBytes(pBuffer.get(), nSize);
     pBuffer[nSize] = 0;
 
     Sequence<sal_Int8> aData(pBuffer.get(), nSize + 1);

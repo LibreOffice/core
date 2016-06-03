@@ -135,7 +135,7 @@ bool SvEmbedTransferHelper::GetData( const css::datatransfer::DataFlavor& rFlavo
                             css::uno::Sequence< sal_Int8 > aSeq( nLen );
 
                             pStream->Seek( STREAM_SEEK_TO_BEGIN );
-                            pStream->Read( aSeq.getArray(),  nLen );
+                            pStream->ReadBytes(aSeq.getArray(), nLen);
                             if ( bDeleteStream )
                                 delete pStream;
 

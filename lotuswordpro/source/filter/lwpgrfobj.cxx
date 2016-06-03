@@ -367,7 +367,7 @@ sal_uInt32 LwpGraphicObject::GetRawGrafData(sal_uInt8*& pGrafData)
         // read image data
         sal_uInt32 nDataLen = pMemGrafStream->GetEndOfData();
         pGrafData = new sal_uInt8 [nDataLen];
-        pMemGrafStream->Read(pGrafData, nDataLen);
+        pMemGrafStream->ReadBytes(pGrafData, nDataLen);
 
         delete pMemGrafStream;
         pMemGrafStream = nullptr;
@@ -418,7 +418,7 @@ sal_uInt32 LwpGraphicObject::GetGrafData(sal_uInt8*& pGrafData)
         pGrafStream->Seek(nPos);
 
         pGrafData = new sal_uInt8 [nDataLen];
-        pMemGrafStream->Read(pGrafData, nDataLen);
+        pMemGrafStream->ReadBytes(pGrafData, nDataLen);
 
         delete pMemGrafStream;
         pMemGrafStream = nullptr;

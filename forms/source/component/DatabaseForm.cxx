@@ -550,7 +550,9 @@ Sequence<sal_Int8> ODatabaseForm::GetDataMultiPartEncoded(const Reference<XContr
     char* pBuf = new char[1025];
     int nRead;
     while( (nRead = aMessStream.Read(pBuf, 1024)) > 0 )
-        aMemStream.Write( pBuf, nRead );
+    {
+        aMemStream.WriteBytes(pBuf, nRead);
+    }
     delete[] pBuf;
 
     aMemStream.Flush();

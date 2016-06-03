@@ -237,7 +237,7 @@ bool PSDReader::ImplReadHeader()
             if ( nColorLength != 768 )      // we need the color map
                 return false;
             mpPalette = new sal_uInt8[ 768 ];
-            m_rPSD.Read( mpPalette, 768 );
+            m_rPSD.ReadBytes(mpPalette, 768);
         }
         break;
 

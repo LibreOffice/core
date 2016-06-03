@@ -81,7 +81,7 @@ int INetMIMEMessageStream::GetBodyLine(sal_Char* pData, sal_uIntPtr nSize)
         if (pMsgStrm == nullptr)
             pMsgStrm = new SvStream (pSourceMsg->GetDocumentLB());
 
-        sal_uIntPtr nRead = pMsgStrm->Read(pWBuf, (pWEnd - pWBuf));
+        sal_uIntPtr nRead = pMsgStrm->ReadBytes(pWBuf, (pWEnd - pWBuf));
         pWBuf += nRead;
     }
 

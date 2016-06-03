@@ -43,9 +43,9 @@ void INetImage::Write( SvStream& rOStm, SotClipboardFormatId nFormat ) const
             OString sOut(OUStringToOString(sString,
                 RTL_TEXTENCODING_UTF8));
 
-            rOStm.Write(sOut.getStr(), sOut.getLength());
+            rOStm.WriteBytes(sOut.getStr(), sOut.getLength());
             static const sal_Char aEndChar[2] = { 0 };
-            rOStm.Write( aEndChar, sizeof( aEndChar ));
+            rOStm.WriteBytes(aEndChar, sizeof(aEndChar));
         }
         break;
 

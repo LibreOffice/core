@@ -864,7 +864,7 @@ bool TransferableHelper::SetObject( void* pUserObject, SotClipboardFormatId nUse
         Sequence< sal_Int8 >    aSeq( nLen );
 
         xStm->Seek( STREAM_SEEK_TO_BEGIN );
-        xStm->Read( aSeq.getArray(),  nLen );
+        xStm->ReadBytes(aSeq.getArray(), nLen);
 
         if( nLen && ( SotExchange::GetFormat( rFlavor ) == SotClipboardFormatId::STRING ) )
         {
@@ -2037,7 +2037,7 @@ bool TransferableDataHelper::GetSotStorageStream( const DataFlavor& rFlavor, too
     if (aSeq.getLength())
     {
         rxStream = new SotStorageStream( "" );
-        rxStream->Write( aSeq.getConstArray(), aSeq.getLength() );
+        rxStream->WriteBytes( aSeq.getConstArray(), aSeq.getLength() );
         rxStream->Seek( 0 );
     }
 

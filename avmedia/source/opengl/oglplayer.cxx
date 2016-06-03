@@ -54,7 +54,7 @@ static bool lcl_LoadFile( glTFFile* io_pFile, const OUString& rURL)
 
     const sal_Int64 nBytes = aStream.remainingSize();
     char* pBuffer = new char[nBytes];
-    aStream.Read( pBuffer, nBytes );
+    aStream.ReadBytes(pBuffer, nBytes);
     aStream.Close();
 
     io_pFile->buffer = pBuffer;

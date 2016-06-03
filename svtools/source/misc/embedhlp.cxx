@@ -584,7 +584,7 @@ SvStream* EmbeddedObjectRef::GetGraphicStream( bool bUpdate ) const
                 do
                 {
                     nRead = xStream->readBytes ( aSequence, nConstBufferSize );
-                    pStream->Write( aSequence.getConstArray(), nRead );
+                    pStream->WriteBytes(aSequence.getConstArray(), nRead);
                 }
                 while ( nRead == nConstBufferSize );
                 pStream->Seek(0);

@@ -242,7 +242,7 @@ void ImplWriteFont( SvStream& rOStm, const vcl::Font& rFont,
     rActualCharSet = GetStoreCharSet( rFont.GetCharSet() );
     ImplWriteColor( rOStm, rFont.GetColor() );
     ImplWriteColor( rOStm, rFont.GetFillColor() );
-    rOStm.Write( aName, 32 );
+    rOStm.WriteBytes( aName, 32 );
     WritePair( rOStm, rFont.GetFontSize() );
     rOStm.WriteInt16( 0 ); // no character orientation anymore
     rOStm.WriteInt16( rFont.GetOrientation() );
@@ -477,7 +477,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
     sal_Int16   nVersion;
 
     // read header
-    rIStm.Read( aCode, sizeof( aCode ) );  // Identifier
+    rIStm.ReadBytes(aCode, sizeof(aCode));  // Identifier
     rIStm.ReadInt16( nSize );                                 // Size
     rIStm.ReadInt16( nVersion );                              // Version
     sal_Int32 nTmp32(0);
@@ -817,7 +817,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 
                     ImplReadColor( rIStm, aActionColor ); aFont.SetColor( aActionColor );
                     ImplReadColor( rIStm, aActionColor ); aFont.SetFillColor( aActionColor );
-                    rIStm.Read( aName, 32 );
+                    rIStm.ReadBytes( aName, 32 );
                     aFont.SetFamilyName( OUString( aName, strlen(aName), rIStm.GetStreamCharSet() ) );
                     rIStm.ReadInt32( nWidth ).ReadInt32( nHeight );
                     rIStm.ReadInt16( nCharOrient ).ReadInt16( nLineOrient );
@@ -1330,7 +1330,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     if( nDataSize )
                     {
                         pData = new sal_uInt8[ nDataSize ];
-                        rIStm.Read( pData, nDataSize );
+                        rIStm.ReadBytes( pData, nDataSize );
                     }
                     else
                         pData = nullptr;
@@ -1736,7 +1736,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                 rOStm.WriteInt32( pAct->GetIndex() );
                 rOStm.WriteInt32( pAct->GetLen() );
                 rOStm.WriteInt32( nStrLen );
-                rOStm.Write( aText.getStr(), nStrLen + 1 );
+                rOStm.WriteBytes( aText.getStr(), nStrLen + 1 );
                 nCount++;
             }
             break;
@@ -1776,7 +1776,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                 rOStm.WriteInt32( nLen );
                 rOStm.WriteInt32( nLen );
                 rOStm.WriteInt32( nAryLen );
-                rOStm.Write( aText.getStr()+pAct->GetIndex(), nLen + 1 );
+                rOStm.WriteBytes( aText.getStr()+pAct->GetIndex(), nLen + 1 );
 
                 for (sal_Int32 n = 0; n < nAryLen; ++n)
                     rOStm.WriteInt32( pDXArray[ n ] );
@@ -1802,7 +1802,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                 rOStm.WriteInt32( pAct->GetLen() );
                 rOStm.WriteInt32( nStrLen );
                 rOStm.WriteInt32( pAct->GetWidth() );
-                rOStm.Write( aText.getStr(), nStrLen + 1 );
+                rOStm.WriteBytes( aText.getStr(), nStrLen + 1 );
                 nCount++;
             }
             break;
@@ -2441,7 +2441,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                 rOStm.WriteInt32( pA->GetValue() ).WriteUInt32( nDataSize );
 
                 if( nDataSize )
-                    rOStm.Write( pA->GetData(), nDataSize );
+                    rOStm.WriteBytes( pA->GetData(), nDataSize );
 
                 rOStm.WriteInt32( 0 ); // number of actions that follow this comment
 

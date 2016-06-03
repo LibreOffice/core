@@ -89,7 +89,7 @@ void WW8FFData::Write(SvStream * pDataStrm)
         0,0,0,0,0,0,0,0,0,0,0,0,0,0
     };
 
-    pDataStrm->Write( aHeader, sizeof(aHeader) );
+    pDataStrm->WriteBytes(aHeader, sizeof(aHeader));
 
     sal_uInt8 aData[10] = {
         0xff, 0xff, 0xff, 0xff,
@@ -123,7 +123,7 @@ void WW8FFData::Write(SvStream * pDataStrm)
     aData[8] = ::sal::static_int_cast<sal_uInt8>(mnCheckboxHeight & 0xffff);
     aData[9] = ::sal::static_int_cast<sal_uInt8>(mnCheckboxHeight >> 8);
 
-    pDataStrm->Write(aData, sizeof(aData));
+    pDataStrm->WriteBytes(aData, sizeof(aData));
 
     WriteOUString(pDataStrm, msName, true);
 
@@ -141,7 +141,7 @@ void WW8FFData::Write(SvStream * pDataStrm)
     if (mnType == 2)
     {
         sal_uInt8 aData1[2] = { 0xff, 0xff };
-        pDataStrm->Write(aData1, sizeof(aData1));
+        pDataStrm->WriteBytes(aData1, sizeof(aData1));
 
         sal_uInt32 nListboxEntries = msListEntries.size();
         pDataStrm->WriteUInt32( nListboxEntries );

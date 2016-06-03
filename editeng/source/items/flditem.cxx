@@ -529,7 +529,7 @@ static void write_unicode( SvPersistStream & rStm, const OUString& rString )
     sal_uInt16 nL =  sal::static_int_cast<sal_uInt16>(rString.getLength());
     rStm.WriteUInt16( nL );
     //endian specific?, yipes!
-    rStm.Write( rString.getStr(), nL*sizeof(sal_Unicode) );
+    rStm.WriteBytes( rString.getStr(), nL*sizeof(sal_Unicode) );
 }
 
 static OUString read_unicode( SvPersistStream & rStm )
@@ -548,7 +548,7 @@ static OUString read_unicode( SvPersistStream & rStm )
     {
         pStr = rtl_uString_alloc(nL);
         //endian specific?, yipes!
-        rStm.Read(pStr->buffer, nL*sizeof(sal_Unicode));
+        rStm.ReadBytes(pStr->buffer, nL*sizeof(sal_Unicode));
     }
     //take ownership of buffer and return, otherwise return empty string
     return pStr ? OUString(pStr, SAL_NO_ACQUIRE) : OUString();

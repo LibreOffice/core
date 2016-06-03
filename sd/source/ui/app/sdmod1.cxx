@@ -807,7 +807,7 @@ OutlineToImpressFinalizer::OutlineToImpressFinalizer (
             // Append the read bytes to the end of the memory stream.
             if (nReadByteCount > 0)
             {
-                mpStream->Write(pBuffer.get(), nReadByteCount);
+                mpStream->WriteBytes(pBuffer.get(), nReadByteCount);
                 nReadPosition += nReadByteCount;
             }
         }

@@ -3725,7 +3725,7 @@ bool SwTrnsfrDdeLink::WriteData( SvStream& rStrm )
     pMem[ nLen++ ] = 0;
     pMem[ nLen++ ] = 0;
 
-    rStrm.Write( pMem.get(), nLen );
+    rStrm.WriteBytes( pMem.get(), nLen );
     pMem.reset();
 
     IDocumentMarkAccess* const pMarkAccess = pDocShell->GetDoc()->getIDocumentMarkAccess();

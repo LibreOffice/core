@@ -102,7 +102,7 @@ void SAL_CALL OPackageStructureCreator::convertToPackage( const OUString& aFolde
                         if ( aSeq.getLength() < 32000 )
                             aSeq.realloc( 32000 );
 
-                        nRead = pTempStream->Read( aSeq.getArray(), 32000 );
+                        nRead = pTempStream->ReadBytes(aSeq.getArray(), 32000);
                         if ( nRead < 32000 )
                             aSeq.realloc( nRead );
                         xTargetStream->writeBytes( aSeq );

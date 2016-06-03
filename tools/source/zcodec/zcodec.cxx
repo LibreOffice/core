@@ -118,7 +118,8 @@ void ZCodec::Compress( SvStream& rIStm, SvStream& rOStm )
     mpOStm = &rOStm;
     InitCompress();
     mpInBuf = new sal_uInt8[ mnInBufSize ];
-    while (( PZSTREAM->avail_in = rIStm.Read( PZSTREAM->next_in = mpInBuf, mnInBufSize )) != 0 )
+    while ((PZSTREAM->avail_in = rIStm.ReadBytes(
+                    PZSTREAM->next_in = mpInBuf, mnInBufSize )) != 0)
     {
         if ( PZSTREAM->avail_out == 0 )
             ImplWriteBack();
@@ -146,7 +147,8 @@ long ZCodec::Decompress( SvStream& rIStm, SvStream& rOStm )
         if ( PZSTREAM->avail_in == 0 && mnInToRead )
         {
             nInToRead = ( mnInBufSize > mnInToRead ) ? mnInToRead : mnInBufSize;
-            PZSTREAM->avail_in = rIStm.Read( PZSTREAM->next_in = mpInBuf, nInToRead );
+            PZSTREAM->next_in = mpInBuf;
+            PZSTREAM->avail_in = rIStm.ReadBytes(mpInBuf, nInToRead);
             mnInToRead -= nInToRead;
 
             if ( mbUpdateCrc )
@@ -211,8 +213,8 @@ long ZCodec::Read( SvStream& rIStm, sal_uInt8* pData, sal_uIntPtr nSize )
         if ( PZSTREAM->avail_in == 0 && mnInToRead )
         {
             nInToRead = (mnInBufSize > mnInToRead) ? mnInToRead : mnInBufSize;
-            PZSTREAM->avail_in = rIStm.Read (
-                PZSTREAM->next_in = mpInBuf, nInToRead);
+            PZSTREAM->next_in = mpInBuf;
+            PZSTREAM->avail_in = rIStm.ReadBytes(mpInBuf, nInToRead);
             mnInToRead -= nInToRead;
 
             if ( mbUpdateCrc )
@@ -264,8 +266,8 @@ long ZCodec::ReadAsynchron( SvStream& rIStm, sal_uInt8* pData, sal_uIntPtr nSize
                 break;
             }
 
-            PZSTREAM->avail_in = rIStm.Read (
-                PZSTREAM->next_in = mpInBuf, nInToRead);
+            PZSTREAM->next_in = mpInBuf;
+            PZSTREAM->avail_in = rIStm.ReadBytes(mpInBuf, nInToRead);
             mnInToRead -= nInToRead;
 
             if ( mbUpdateCrc )
@@ -297,7 +299,8 @@ void ZCodec::ImplWriteBack()
     {
         if (meState == STATE_COMPRESS && mbUpdateCrc)
             UpdateCRC( mpOutBuf, nAvail );
-        mpOStm->Write( PZSTREAM->next_out = mpOutBuf, nAvail );
+        PZSTREAM->next_out = mpOutBuf;
+        mpOStm->WriteBytes( mpOutBuf, nAvail );
         PZSTREAM->avail_out = mnOutBufSize;
     }
 }

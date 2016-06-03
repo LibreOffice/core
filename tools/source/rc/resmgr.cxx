@@ -489,13 +489,13 @@ bool InternalResMgr::Create()
                                                         fRes, 0 ) ) != (RSHEADER_TYPE *)-1)
                                                         */
         pStm->SeekRel( - (int)sizeof( lContLen ) );
-        pStm->Read( &lContLen, sizeof( lContLen ) );
-        // is bigendian, swab to the right endian
+        pStm->ReadBytes( &lContLen, sizeof( lContLen ) );
+        // file is bigendian but SvStreamEndian not set, swab to the right endian
         lContLen = ResMgr::GetLong( &lContLen );
         pStm->SeekRel( -lContLen );
         // allocate stored ImpContent data (12 bytes per unit)
         sal_uInt8* pContentBuf = static_cast<sal_uInt8*>(rtl_allocateMemory( lContLen ));
-        pStm->Read( pContentBuf, lContLen );
+        pStm->ReadBytes( pContentBuf, lContLen );
         // allocate ImpContent space (sizeof(ImpContent) per unit, not necessarily 12)
         pContent = static_cast<ImpContent *>(rtl_allocateMemory( sizeof(ImpContent)*lContLen/12 ));
         // Shorten to number of ImpContent
@@ -590,11 +590,11 @@ void* InternalResMgr::LoadGlobalRes( RESOURCE_TYPE nRT, sal_uInt32 nId,
                 --pLast;
                 pStm->Seek( pLast->nOffset );
                 RSHEADER_TYPE aHdr;
-                pStm->Read( &aHdr, sizeof( aHdr ) );
+                pStm->ReadBytes( &aHdr, sizeof( aHdr ) );
                 nSize = pLast->nOffset + aHdr.GetGlobOff() - nOffCorrection;
                 pStringBlock = static_cast<sal_uInt8*>(rtl_allocateMemory( nSize ));
                 pStm->Seek( pFirst->nOffset );
-                pStm->Read( pStringBlock, nSize );
+                pStm->ReadBytes( pStringBlock, nSize );
             }
             *pResHandle = pStringBlock;
             return pStringBlock + pFind->nOffset - nOffCorrection;
@@ -604,10 +604,10 @@ void* InternalResMgr::LoadGlobalRes( RESOURCE_TYPE nRT, sal_uInt32 nId,
             *pResHandle = nullptr;
             RSHEADER_TYPE aHeader;
             pStm->Seek( pFind->nOffset );
-            pStm->Read( &aHeader, sizeof( RSHEADER_TYPE ) );
+            pStm->ReadBytes( &aHeader, sizeof( RSHEADER_TYPE ) );
             void * pRes = rtl_allocateMemory( aHeader.GetGlobOff() );
             memcpy( pRes, &aHeader, sizeof( RSHEADER_TYPE ) );
-            pStm->Read( static_cast<sal_uInt8*>(pRes) + sizeof( RSHEADER_TYPE ),
+            pStm->ReadBytes(static_cast<sal_uInt8*>(pRes) + sizeof(RSHEADER_TYPE),
                         aHeader.GetGlobOff() - sizeof( RSHEADER_TYPE ) );
             return pRes;
         }

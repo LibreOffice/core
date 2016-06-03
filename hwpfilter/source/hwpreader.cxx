@@ -127,7 +127,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportHWP(const OUString &rURL
 
     while (true)
     {
-        nRead = aFileStream.Read(aData, nBlock);
+        nRead = aFileStream.ReadBytes(aData, nBlock);
         if (nRead == 0)
             break;
         stream->addData(aData, (int)nRead);

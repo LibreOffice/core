@@ -203,7 +203,7 @@ static bool RenderAsEMF(const sal_uInt8* pBuf, sal_uInt32 nBytesRead, Graphic &r
     osl::FileBase::getSystemPathFromFileURL(aTempInput.GetURL(), input);
 
     SvStream* pInputStream = aTempInput.GetStream(StreamMode::WRITE);
-    sal_uInt64 nCount = pInputStream->Write(pBuf, nBytesRead);
+    sal_uInt64 nCount = pInputStream->WriteBytes(pBuf, nBytesRead);
     aTempInput.CloseStream();
 
     //fdo#64161 pstoedit under non-windows uses libEMF to output the EMF, but
@@ -316,7 +316,7 @@ static bool RenderAsBMPThroughHelper(const sal_uInt8* pBuf, sal_uInt32 nBytesRea
         oslFileError eFileErr = osl_readFile(pOut, aBuf, 32000, &nCount);
         while (eFileErr == osl_File_E_None && nCount)
         {
-            aMemStm.Write(aBuf, sal::static_int_cast< sal_Size >(nCount));
+            aMemStm.WriteBytes(aBuf, sal::static_int_cast< sal_Size >(nCount));
             eFileErr = osl_readFile(pOut, aBuf, 32000, &nCount);
         }
 
@@ -420,15 +420,15 @@ void CreateMtfReplacementAction( GDIMetaFile& rMtf, SvStream& rStrm, sal_uInt32 
         {
             std::unique_ptr<sal_uInt8[]> pBuf(new sal_uInt8[ nSizeWMF ]);
             rStrm.Seek( nOrigPos + nPosWMF );
-            rStrm.Read( pBuf.get(), nSizeWMF );
-            aReplacement.Write( pBuf.get(), nSizeWMF );
+            rStrm.ReadBytes(pBuf.get(), nSizeWMF);
+            aReplacement.WriteBytes(pBuf.get(), nSizeWMF);
         }
         if ( nSizeTIFF )
         {
             std::unique_ptr<sal_uInt8[]> pBuf(new sal_uInt8[ nSizeTIFF ]);
             rStrm.Seek( nOrigPos + nPosTIFF );
-            rStrm.Read( pBuf.get(), nSizeTIFF );
-            aReplacement.Write( pBuf.get(), nSizeTIFF );
+            rStrm.ReadBytes(pBuf.get(), nSizeTIFF);
+            aReplacement.WriteBytes(pBuf.get(), nSizeTIFF);
         }
         rMtf.AddAction( static_cast<MetaAction*>( new MetaCommentAction( aComment, 0, static_cast<const sal_uInt8*>(aReplacement.GetData()), aReplacement.Tell() ) ) );
     }
@@ -581,7 +581,7 @@ ipsGraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
     }
     std::unique_ptr<sal_uInt8[]> pHeader( new sal_uInt8[ 22 ] );
     rStream.Seek( nPSStreamPos );
-    rStream.Read( pHeader.get(), 22 );    // check PostScript header
+    rStream.ReadBytes(pHeader.get(), 22); // check PostScript header
     if ( ImplSearchEntry( pHeader.get(), reinterpret_cast<sal_uInt8 const *>("%!PS-Adobe"), 10, 10 ) &&
         ImplSearchEntry( &pHeader[ 15 ], reinterpret_cast<sal_uInt8 const *>("EPS"), 3, 3 ) )
     {
@@ -589,7 +589,7 @@ ipsGraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
         std::unique_ptr<sal_uInt8[]> pBuf( new sal_uInt8[ nPSSize ] );
 
         sal_uInt32 nBufStartPos = rStream.Tell();
-        sal_uInt32 nBytesRead = rStream.Read( pBuf.get(), nPSSize );
+        sal_uInt32 nBytesRead = rStream.ReadBytes(pBuf.get(), nPSSize);
         if ( nBytesRead == nPSSize )
         {
             sal_uInt32 nSecurityCount = 32;

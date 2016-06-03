@@ -36,7 +36,7 @@ void BitmapTools::loadFromSvg(SvStream& rStream, const OUString& sPath, BitmapEx
 
     sal_Size nSize = rStream.remainingSize();
     std::vector<sal_Int8> aBuffer(nSize + 1);
-    rStream.Read(aBuffer.data(), nSize);
+    rStream.ReadBytes(aBuffer.data(), nSize);
     aBuffer[nSize] = 0;
 
     uno::Sequence<sal_Int8> aData(aBuffer.data(), nSize + 1);

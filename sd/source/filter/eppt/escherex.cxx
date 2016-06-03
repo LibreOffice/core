@@ -255,7 +255,7 @@ sal_uInt32 PptEscherEx::EnterGroup( Rectangle* pBoundRect, SvMemoryStream* pClie
             {
                 mpOutStrm->WriteUInt32( ( ESCHER_ClientData << 16 ) | 0xf )
                        .WriteUInt32( nSize );
-                mpOutStrm->Write( pClientData->GetData(), nSize );
+                mpOutStrm->WriteBytes(pClientData->GetData(), nSize);
             }
         }
         CloseContainer();                                               // ESCHER_SpContainer

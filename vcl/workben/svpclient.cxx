@@ -266,7 +266,7 @@ IMPL_LINK_NOARG_TYPED( MyWin, SelectHdl, ListBox&, void)
         aCommand.append( OUStringToOString( aEntry.copy( nPos+2 ), RTL_TEXTENCODING_ASCII_US ) );
         OString aAnswer( processCommand( aCommand.makeStringAndClear() ) );
         SvMemoryStream aStream( aAnswer.getLength() );
-        aStream.Write( aAnswer.getStr(), aAnswer.getLength() );
+        aStream.WriteBytes( aAnswer.getStr(), aAnswer.getLength() );
         aStream.Seek( STREAM_SEEK_TO_BEGIN );
 
         Graphic aGraphicResult;

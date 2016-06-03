@@ -504,7 +504,7 @@ bool SfxMultiRecordReader::ReadHeader_Impl()
         _pContentOfs = new sal_uInt32[_nContentCount];
         memset(_pContentOfs, 0, _nContentCount*sizeof(sal_uInt32));
         #if defined(OSL_LITENDIAN)
-        _pStream->Read( _pContentOfs, sizeof(sal_uInt32)*_nContentCount );
+        _pStream->ReadBytes( _pContentOfs, sizeof(sal_uInt32)*_nContentCount );
         #else
         // (loop without braces)
         for ( sal_uInt16 n = 0; n < _nContentCount; ++n )

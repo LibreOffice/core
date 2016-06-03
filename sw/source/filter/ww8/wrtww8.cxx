@@ -857,7 +857,7 @@ void WW8_WrPlc1::Write( SvStream& rStrm )
     for( i = 0; i < aPos.size(); ++i )
         SwWW8Writer::WriteLong( rStrm, aPos[i] );
     if( i )
-        rStrm.Write( pData, (i-1) * nStructSiz );
+        rStrm.WriteBytes(pData, (i-1) * nStructSiz);
 }
 
 // Class WW8_WrPlcField for fields
@@ -953,10 +953,10 @@ void SwWW8Writer::FillCount( SvStream& rStrm, sal_uLong nCount )
 
     while (nCount > 64)
     {
-        rStrm.Write( aNulls, 64 );          // in steps of 64-Byte
+        rStrm.WriteBytes(aNulls, 64); // in steps of 64-Byte
         nCount -= 64;
     }
-    rStrm.Write( aNulls, nCount );          // write the rest ( 0 .. 64 Bytes )
+    rStrm.WriteBytes(aNulls, nCount); // write the rest (0 .. 64 Bytes)
 }
 
 sal_uLong SwWW8Writer::FillUntil( SvStream& rStrm, sal_uLong nEndPos )
@@ -1008,7 +1008,7 @@ void WW8_WrPlcPn::AppendFkpEntry(WW8_FC nEndFc,short nVarLen,const sal_uInt8* pS
 
         long nDataPos = rWrt.pDataStrm->Tell();
         SwWW8Writer::WriteShort( *rWrt.pDataStrm, nVarLen );
-        rWrt.pDataStrm->Write( pSprms, nVarLen );
+        rWrt.pDataStrm->WriteBytes(pSprms, nVarLen);
 
         Set_UInt16( p, 0x6646 );    // set SprmCode
         Set_UInt32( p, nDataPos );  // set startpos (FC) in the datastream
@@ -1279,7 +1279,7 @@ void WW8_WrFkp::Write( SvStream& rStrm, SwWW8WrGrf& rGrf )
         UInt32ToSVBT32( rGrf.GetFPos(), nPos );   // FilePos the graphics
         memcpy( p, nPos, 4 );       // patch FilePos over the signature
     }
-    rStrm.Write( pFkp, 512 );
+    rStrm.WriteBytes(pFkp, 512);
 }
 
 void WW8_WrFkp::MergeToNew( short& rVarLen, sal_uInt8 *& rpNewSprms )
@@ -1770,7 +1770,7 @@ void SwWW8Writer::WriteString16(SvStream& rStrm, const OUString& rStr,
     //vectors are guaranteed to have contiguous memory, so we can do
     //this while migrating away from WW8Bytes. Meyers Effective STL, item 16
     if (!aBytes.empty())
-        rStrm.Write(&aBytes[0], aBytes.size());
+        rStrm.WriteBytes(&aBytes[0], aBytes.size());
 }
 
 void SwWW8Writer::WriteString_xstz(SvStream& rStrm, const OUString& rStr, bool bAddZero)
@@ -1780,7 +1780,7 @@ void SwWW8Writer::WriteString_xstz(SvStream& rStrm, const OUString& rStr, bool b
     SwWW8Writer::InsAsString16(aBytes, rStr);
     if (bAddZero)
         SwWW8Writer::InsUInt16(aBytes, 0);
-    rStrm.Write(&aBytes[0], aBytes.size());
+    rStrm.WriteBytes(&aBytes[0], aBytes.size());
 }
 
 void SwWW8Writer::WriteString8(SvStream& rStrm, const OUString& rStr,
@@ -1793,7 +1793,7 @@ void SwWW8Writer::WriteString8(SvStream& rStrm, const OUString& rStr,
     //vectors are guaranteed to have contiguous memory, so we can do
     ////this while migrating away from WW8Bytes. Meyers Effective STL, item 16
     if (!aBytes.empty())
-        rStrm.Write(&aBytes[0], aBytes.size());
+        rStrm.WriteBytes(&aBytes[0], aBytes.size());
 }
 
 void WW8Export::WriteStringAsPara( const OUString& rText )
@@ -3058,10 +3058,10 @@ namespace
         for (sal_Size nI = 0, nBlock = 0; nI < nLen; nI += WW_BLOCKSIZE, ++nBlock)
         {
             sal_Size nBS = (nLen - nI > WW_BLOCKSIZE) ? WW_BLOCKSIZE : nLen - nI;
-            nBS = rIn.Read(in, nBS);
+            nBS = rIn.ReadBytes(in, nBS);
             rCtx.InitCipher(nBlock);
             rCtx.Encode(in, nBS, in, nBS);
-            rOut.Write(in, nBS);
+            rOut.WriteBytes(in, nBS);
         }
     }
 }
@@ -3235,7 +3235,7 @@ void WW8Export::ExportDocument_Impl()
         pDataStrm = aTempData.GetStream( STREAM_READWRITE | StreamMode::SHARE_DENYWRITE );
 
         sal_uInt8 aRC4EncryptionHeader[ 52 ] = {0};
-        pTableStrm->Write( aRC4EncryptionHeader, 52 );
+        pTableStrm->WriteBytes(aRC4EncryptionHeader, 52);
     }
 
     // Default: "Standard"
@@ -3313,9 +3313,9 @@ void WW8Export::ExportDocument_Impl()
         sal_uInt8 pSaltDigest[16];
         aCtx.GetEncryptKey( pDocId, pSaltData, pSaltDigest );
 
-        pTableStrmTemp->Write( pDocId, 16 );
-        pTableStrmTemp->Write( pSaltData, 16 );
-        pTableStrmTemp->Write( pSaltDigest, 16 );
+        pTableStrmTemp->WriteBytes(pDocId, 16);
+        pTableStrmTemp->WriteBytes(pSaltData, 16);
+        pTableStrmTemp->WriteBytes(pSaltDigest, 16);
 
         EncryptRC4(aCtx, GetWriter().Strm(), *pStrmTemp);
 
@@ -3399,7 +3399,7 @@ void WW8Export::PrepareStorage()
     GetWriter().GetStorage().SetClass(
         aGName, SotClipboardFormatId::NONE, "Microsoft Word-Document");
     tools::SvRef<SotStorageStream> xStor( GetWriter().GetStorage().OpenSotStream(sCompObj) );
-    xStor->Write( pData, sizeof( pData ) );
+    xStor->WriteBytes(pData, sizeof(pData));
 
     SwDocShell* pDocShell = m_pDoc->GetDocShell ();
     OSL_ENSURE(pDocShell, "no SwDocShell");
@@ -3712,7 +3712,7 @@ void WW8Export::RestoreMacroCmds()
             sal_uInt8 *pBuffer = new sal_uInt8[pFib->lcbCmds];
             bool bReadOk = checkRead(*pStream, pBuffer, pFib->lcbCmds);
             if (bReadOk)
-                pTableStrm->Write(pBuffer, pFib->lcbCmds);
+                pTableStrm->WriteBytes(pBuffer, pFib->lcbCmds);
             delete[] pBuffer;
 
         }
@@ -3867,7 +3867,7 @@ void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
 
     int len = sizeof( aFieldData );
     OSL_ENSURE( len == 0x44-sizeof(sal_uInt32), "SwWW8Writer::WriteFormData(..) - wrong aFieldData length" );
-    pDataStrm->Write( aFieldData, len );
+    pDataStrm->WriteBytes( aFieldData, len );
 
     pDataStrm->WriteUInt32( aFieldHeader.version ).WriteUInt16( aFieldHeader.bits ).WriteUInt16( aFieldHeader.cch ).WriteUInt16( aFieldHeader.hps );
 

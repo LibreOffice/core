@@ -201,9 +201,9 @@ void SotStorageStream::CopyTo( SotStorageStream * pDestStm )
 
         std::unique_ptr<sal_uInt8[]> pMem(new sal_uInt8[ 8192 ]);
         sal_uLong  nRead;
-        while( 0 != (nRead = Read( pMem.get(), 8192 )) )
+        while (0 != (nRead = ReadBytes(pMem.get(), 8192)))
         {
-            if( nRead != pDestStm->Write( pMem.get(), nRead ) )
+            if (nRead != pDestStm->WriteBytes(pMem.get(), nRead))
             {
                 SetError( SVSTREAM_GENERALERROR );
                 break;

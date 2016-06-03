@@ -70,7 +70,7 @@ OUString SAL_CALL SwFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
         pInStrm->Seek( STREAM_SEEK_TO_BEGIN );
         const sal_uInt8 nBufSize = 3;
         sal_uInt8 nBuffer[ nBufSize ];
-        if ( pInStrm->Read( nBuffer, nBufSize ) < nBufSize )
+        if (pInStrm->ReadBytes(nBuffer, nBufSize) < nBufSize)
             return OUString();
 
         bIsDetected = (nBuffer[0] == 0x9B && nBuffer[1] == 0xA5 && nBuffer[2] == 0x21)  // WinWord 1

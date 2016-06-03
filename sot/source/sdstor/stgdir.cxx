@@ -443,9 +443,9 @@ sal_Int32 StgDirEntry::Read( void* p, sal_Int32 nLen )
     if( nLen <= 0 )
         return 0;
     if( m_pTmpStrm )
-        nLen = m_pTmpStrm->Read( p, nLen );
+        nLen = m_pTmpStrm->ReadBytes( p, nLen );
     else if( m_pCurStrm )
-        nLen = m_pCurStrm->Read( p, nLen );
+        nLen = m_pCurStrm->ReadBytes( p, nLen );
     else
     {
         OSL_ENSURE( m_pStgStrm, "The pointer may not be NULL!" );
@@ -479,7 +479,7 @@ sal_Int32 StgDirEntry::Write( const void* p, sal_Int32 nLen )
 
     if( m_pTmpStrm )
     {
-        nLen = m_pTmpStrm->Write( p, nLen );
+        nLen = m_pTmpStrm->WriteBytes( p, nLen );
         m_pStgStrm->GetIo().SetError( m_pTmpStrm->GetError() );
     }
     else
@@ -589,7 +589,7 @@ bool StgDirEntry::Strm2Tmp()
                             nn = 4096;
                         if( (sal_uLong) m_pStgStrm->Read( p, nn ) != nn )
                             break;
-                        if( m_pTmpStrm->Write( p, nn ) != nn )
+                        if (m_pTmpStrm->WriteBytes( p, nn ) != nn)
                             break;
                         n -= nn;
                     }
@@ -647,7 +647,7 @@ bool StgDirEntry::Tmp2Strm()
                 sal_uLong nn = n;
                 if( nn > 4096 )
                     nn = 4096;
-                if( m_pTmpStrm->Read( p, nn ) != nn )
+                if (m_pTmpStrm->ReadBytes( p, nn ) != nn)
                     break;
                 if( (sal_uLong) pNewStrm->Write( p, nn ) != nn )
                     break;

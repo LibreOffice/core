@@ -480,7 +480,7 @@ void ScImportExport::WriteUnicodeOrByteString( SvStream& rStrm, const OUString& 
     if ( eEnc == RTL_TEXTENCODING_UNICODE )
     {
         if ( !IsEndianSwap( rStrm ) )
-            rStrm.Write( rString.getStr(), rString.getLength() * sizeof(sal_Unicode) );
+            rStrm.WriteBytes(rString.getStr(), rString.getLength() * sizeof(sal_Unicode));
         else
         {
             const sal_Unicode* p = rString.getStr();

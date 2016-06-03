@@ -125,7 +125,7 @@ bool PropItem::Read( OUString& rString, sal_uInt32 nStringType, bool bAlign )
                     }
                     else
                     {
-                        SvMemoryStream::Read( pString, nItemSize );
+                        SvMemoryStream::ReadBytes(pString, nItemSize);
                         if ( pString[ nItemSize - 1 ] == 0 )
                         {
                             if ( nItemSize > 1 )
@@ -201,7 +201,7 @@ PropItem& PropItem::operator=( PropItem& rPropItem )
         mnTextEnc = rPropItem.mnTextEnc;
         sal_uInt32 nItemPos = rPropItem.Tell();
         rPropItem.Seek( STREAM_SEEK_TO_END );
-        SvMemoryStream::Write( rPropItem.GetData(), rPropItem.Tell() );
+        SvMemoryStream::WriteBytes(rPropItem.GetData(), rPropItem.Tell());
         rPropItem.Seek( nItemPos );
     }
     return *this;
@@ -238,7 +238,7 @@ bool Section::GetProperty( sal_uInt32 nId, PropItem& rPropItem )
         {
             rPropItem.Clear();
             rPropItem.SetTextEncoding( mnTextEnc );
-            rPropItem.Write( (*iter)->mpBuf, (*iter)->mnSize );
+            rPropItem.WriteBytes( (*iter)->mpBuf, (*iter)->mnSize );
             rPropItem.Seek( STREAM_SEEK_TO_BEGIN );
             return true;
         }
@@ -311,7 +311,7 @@ void Section::GetDictionary(Dictionary& rDict)
             else
             {
                 sal_Char* pString = new sal_Char[nSize];
-                aStream.Read(pString, nSize);
+                aStream.ReadBytes(pString, nSize);
                 aString = OUString(pString, lcl_getMaxSafeStrLen(nSize), mnTextEnc);
                 delete[] pString;
             }
@@ -461,7 +461,7 @@ void Section::Read( SotStorageStream *pStrm )
                 if( nPropSize > nSecSize - nSecOfs )
                     nPropSize = nSecSize - nSecOfs;
                 sal_uInt8* pBuf = new sal_uInt8[ nPropSize ];
-                nPropSize = pStrm->Read(pBuf, nPropSize);
+                nPropSize = pStrm->ReadBytes(pBuf, nPropSize);
                 AddProperty( nPropId, pBuf, nPropSize );
                 delete[] pBuf;
             }
@@ -522,7 +522,7 @@ void Section::Read( SotStorageStream *pStrm )
                 break;
             }
             sal_uInt8* pBuf = new sal_uInt8[ nSize ];
-            nSize = pStrm->Read(pBuf, nSize);
+            nSize = pStrm->ReadBytes(pBuf, nSize);
             AddProperty( 0xffffffff, pBuf, nSize );
             delete[] pBuf;
         }
@@ -591,7 +591,7 @@ void PropRead::Read()
         if ( mnByteOrder == 0xfffe )
         {
             sal_uInt8*  pSectCLSID = new sal_uInt8[ 16 ];
-            mpSvStream->Read( mApplicationCLSID, 16 );
+            mpSvStream->ReadBytes(mApplicationCLSID, 16);
             mpSvStream->ReadUInt32( nSections );
             if ( nSections > 2 )                // sj: PowerPoint documents are containing max 2 sections
             {
@@ -599,7 +599,7 @@ void PropRead::Read()
             }
             else for ( sal_uInt32 i = 0; i < nSections; i++ )
             {
-                mpSvStream->Read( pSectCLSID, 16 );
+                mpSvStream->ReadBytes(pSectCLSID, 16);
                 mpSvStream->ReadUInt32( nSectionOfs );
                 nCurrent = mpSvStream->Tell();
                 mpSvStream->Seek( nSectionOfs );

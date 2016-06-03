@@ -469,7 +469,7 @@ bool PageSyncData::PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIMtfAc
                         sal_uInt32 nBytes = aGfxLink.GetDataSize();
                         if( pData && nBytes )
                         {
-                            aTmp.Write( pData, nBytes );
+                            aTmp.WriteBytes( pData, nBytes );
                             rWriter.DrawJPGBitmap( aTmp, aGraphic.GetBitmap().GetBitCount() > 8, aGraphic.GetSizePixel(), aOutputRect, aMask );
                         }
 

@@ -1971,7 +1971,7 @@ Any SAL_CALL SfxBaseModel::getTransferData( const datatransfer::DataFlavor& aFla
                     const sal_uInt32 nLen = pStream->Seek( STREAM_SEEK_TO_END );
                     Sequence< sal_Int8 > aSeq( nLen );
                     pStream->Seek( STREAM_SEEK_TO_BEGIN );
-                    pStream->Read( aSeq.getArray(),  nLen );
+                    pStream->ReadBytes(aSeq.getArray(), nLen);
                     delete pStream;
                     if( aSeq.getLength() )
                         aAny <<= aSeq;

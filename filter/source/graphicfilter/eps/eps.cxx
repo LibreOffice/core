@@ -1173,7 +1173,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                         ImplWriteLine( "gs" );
                         ImplGetMapMode( aMapMode );
                         ImplWriteLine( "%%BeginDocument:" );
-                        mpPS->Write( pSource, aGfxLink.GetDataSize() );
+                        mpPS->WriteBytes(pSource, aGfxLink.GetDataSize());
                         ImplWriteLine( "%%EndDocument\ngr" );
                     }
                 }

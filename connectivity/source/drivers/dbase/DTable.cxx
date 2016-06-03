@@ -201,7 +201,7 @@ void ODbaseTable::readHeader()
     if(ERRCODE_NONE != m_pFileStream->GetErrorCode())
         throwInvalidDbaseFormat();
 
-    m_pFileStream->Read(m_aHeader.db_aedat, 3*sizeof(sal_uInt8));
+    m_pFileStream->ReadBytes(m_aHeader.db_aedat, 3);
     if(ERRCODE_NONE != m_pFileStream->GetErrorCode())
         throwInvalidDbaseFormat();
     (*m_pFileStream).ReadUInt32( m_aHeader.db_anz );
@@ -215,7 +215,7 @@ void ODbaseTable::readHeader()
         throwInvalidDbaseFormat();
     if (m_aHeader.db_slng == 0)
         throwInvalidDbaseFormat();
-    m_pFileStream->Read(m_aHeader.db_frei, 20*sizeof(sal_uInt8));
+    m_pFileStream->ReadBytes(m_aHeader.db_frei, 20);
     if(ERRCODE_NONE != m_pFileStream->GetErrorCode())
         throwInvalidDbaseFormat();
 
@@ -326,12 +326,12 @@ void ODbaseTable::fillColumns()
 #if !defined(NDEBUG)
         sal_uInt64 const nOldPos(m_pFileStream->Tell());
 #endif
-        m_pFileStream->Read(aDBFColumn.db_fnm, 11);
+        m_pFileStream->ReadBytes(aDBFColumn.db_fnm, 11);
         m_pFileStream->ReadUChar(aDBFColumn.db_typ);
         m_pFileStream->ReadUInt32(aDBFColumn.db_adr);
         m_pFileStream->ReadUChar(aDBFColumn.db_flng);
         m_pFileStream->ReadUChar(aDBFColumn.db_dez);
-        m_pFileStream->Read(aDBFColumn.db_frei2, 14);
+        m_pFileStream->ReadBytes(aDBFColumn.db_frei2, 14);
         assert(m_pFileStream->GetError() || m_pFileStream->Tell() == nOldPos + sizeof(aDBFColumn));
         if (m_pFileStream->GetError())
         {
@@ -593,7 +593,7 @@ bool ODbaseTable::ReadMemoHeader()
                 // There are files using size specification, though they are dBase-files
                 char sHeader[4];
                 m_pMemoStream->Seek(m_aMemoHeader.db_size);
-                m_pMemoStream->Read(sHeader,4);
+                m_pMemoStream->ReadBytes(sHeader, 4);
 
                 if ((m_pMemoStream->GetErrorCode() != ERRCODE_NONE) || ((sal_uInt8)sHeader[0]) != 0xFF || ((sal_uInt8)sHeader[1]) != 0xFF || ((sal_uInt8)sHeader[2]) != 0x08)
                     m_aMemoHeader.db_typ  = MemodBaseIII;
@@ -1227,7 +1227,7 @@ bool ODbaseTable::CreateFile(const INetURLObject& aFile, bool& bCreateMemo)
     (*m_pFileStream).WriteUInt16( (m_pColumns->getCount()+1) * 32 + 1 );  // header information,
                                                                           // pColumns contains always an additional column
     (*m_pFileStream).WriteUInt16( 0 );                                     // record length will be determined later
-    m_pFileStream->Write(aBuffer, 20);
+    m_pFileStream->WriteBytes(aBuffer, 20);
 
     sal_uInt16 nRecLength = 1;                                              // Length 1 for deleted flag
     sal_Int32  nMaxFieldLength = m_pConnection->getMetaData()->getMaxColumnNameLength();
@@ -1255,7 +1255,7 @@ bool ODbaseTable::CreateFile(const INetURLObject& aFile, bool& bCreateMemo)
             }
 
             (*m_pFileStream).WriteCharPtr( aCol.getStr() );
-            m_pFileStream->Write(aBuffer, 11 - aCol.getLength());
+            m_pFileStream->WriteBytes(aBuffer, 11 - aCol.getLength());
 
             sal_Int32 nPrecision = 0;
             xCol->getPropertyValue(sPropPrec) >>= nPrecision;
@@ -1312,7 +1312,7 @@ bool ODbaseTable::CreateFile(const INetURLObject& aFile, bool& bCreateMemo)
             if ( nDbaseType == VisualFoxPro )
                 (*m_pFileStream).WriteUInt32( nRecLength-1 );
             else
-                m_pFileStream->Write(aBuffer, 4);
+                m_pFileStream->WriteBytes(aBuffer, 4);
 
             switch(cTyp)
             {
@@ -1378,7 +1378,7 @@ bool ODbaseTable::CreateFile(const INetURLObject& aFile, bool& bCreateMemo)
                 default:
                     throwInvalidColumnType(STR_INVALID_COLUMN_TYPE, aName);
             }
-            m_pFileStream->Write(aBuffer, 14);
+            m_pFileStream->WriteBytes(aBuffer, 14);
             aBuffer[0] = 0x00;
         }
 
@@ -1564,7 +1564,7 @@ bool ODbaseTable::UpdateRow(OValueRefVector& rRow, OValueRefRow& pOrgRow, const 
     // position on desired record:
     sal_Size nPos = m_aHeader.db_kopf + (long)(m_nFilePos-1) * m_aHeader.db_slng;
     m_pFileStream->Seek(nPos);
-    m_pFileStream->Read(m_pBuffer, m_aHeader.db_slng);
+    m_pFileStream->ReadBytes(m_pBuffer, m_aHeader.db_slng);
 
     sal_Size nMemoFileSize( 0 );
     if (HasMemoFields() && m_pMemoStream)
@@ -2049,7 +2049,7 @@ bool ODbaseTable::WriteMemo(const ORowSetValue& aVariable, sal_Size& rBlockNr)
                 char sHeader[4];
                 m_pMemoStream->Seek(rBlockNr * m_aMemoHeader.db_size);
                 m_pMemoStream->SeekRel(4L);
-                m_pMemoStream->Read(sHeader,4);
+                m_pMemoStream->ReadBytes(sHeader, 4);
 
                 sal_Size nOldSize;
                 if (m_aMemoHeader.db_typ == MemoFoxPro)
@@ -2091,7 +2091,7 @@ bool ODbaseTable::WriteMemo(const ORowSetValue& aVariable, sal_Size& rBlockNr)
         {
             const char cEOF = (char) DBF_EOL;
             nSize++;
-            m_pMemoStream->Write( aStr.getStr(), aStr.getLength() );
+            m_pMemoStream->WriteBytes(aStr.getStr(), aStr.getLength());
             (*m_pMemoStream).WriteChar( cEOF ).WriteChar( cEOF );
         } break;
         case MemoFoxPro:
@@ -2124,11 +2124,11 @@ bool ODbaseTable::WriteMemo(const ORowSetValue& aVariable, sal_Size& rBlockNr)
                     nHeader[i++] = (sal_uInt8) (nWriteSize % 256);
             }
 
-            m_pMemoStream->Write(nHeader,4);
+            m_pMemoStream->WriteBytes(nHeader, 4);
             if ( bBinary )
-                m_pMemoStream->Write( aValue.getConstArray(), aValue.getLength() );
+                m_pMemoStream->WriteBytes(aValue.getConstArray(), aValue.getLength());
             else
-                m_pMemoStream->Write( aStr.getStr(), aStr.getLength() );
+                m_pMemoStream->WriteBytes(aStr.getStr(), aStr.getLength());
             m_pMemoStream->Flush();
         }
     }
@@ -2638,7 +2638,7 @@ bool ODbaseTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int32 
         if (m_pFileStream->GetError() != ERRCODE_NONE)
             goto Error;
 
-        sal_Size nRead = m_pFileStream->Read(m_pBuffer, nEntryLen);
+        sal_Size nRead = m_pFileStream->ReadBytes(m_pBuffer, nEntryLen);
         if (nRead != nEntryLen)
         {
             SAL_WARN("connectivity.drivers", "ODbaseTable::seekRow: short read!");
@@ -2690,7 +2690,7 @@ bool ODbaseTable::ReadMemo(sal_Size nBlockNo, ORowSetValue& aVariable)
 
             do
             {
-                m_pMemoStream->Read(&aBuf,512);
+                m_pMemoStream->ReadBytes(&aBuf, 512);
 
                 sal_uInt16 i = 0;
                 while (aBuf[i] != cEOF && ++i < 512)
@@ -2711,7 +2711,7 @@ bool ODbaseTable::ReadMemo(sal_Size nBlockNo, ORowSetValue& aVariable)
         {
             bool bIsText = true;
             char sHeader[4];
-            m_pMemoStream->Read(sHeader,4);
+            m_pMemoStream->ReadBytes(sHeader, 4);
             // Foxpro stores text and binary data
             if (m_aMemoHeader.db_typ == MemoFoxPro)
             {
@@ -2741,7 +2741,7 @@ bool ODbaseTable::ReadMemo(sal_Size nBlockNo, ORowSetValue& aVariable)
                 else
                 {
                     css::uno::Sequence< sal_Int8 > aData(nLength);
-                    m_pMemoStream->Read(aData.getArray(),nLength);
+                    m_pMemoStream->ReadBytes(aData.getArray(), nLength);
                     aVariable = aData;
                 }
             } // if ( nLength )
@@ -2778,7 +2778,7 @@ bool ODbaseTable::WriteBuffer()
     // position on desired record:
     sal_Size nPos = m_aHeader.db_kopf + (long)(m_nFilePos-1) * m_aHeader.db_slng;
     m_pFileStream->Seek(nPos);
-    return m_pFileStream->Write(m_pBuffer, m_aHeader.db_slng) > 0;
+    return m_pFileStream->WriteBytes(m_pBuffer, m_aHeader.db_slng) > 0;
 }
 
 sal_Int32 ODbaseTable::getCurrentLastPos() const

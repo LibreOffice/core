@@ -170,7 +170,7 @@ void Impl_OlePres::Write( SvStream & rStm )
     WriteClipboardFormat( rStm, SotClipboardFormatId::GDIMETAFILE );
     rStm.WriteInt32( nJobLen + 4 );       // a TargetDevice that's always empty
     if( nJobLen )
-        rStm.Write( pJob, nJobLen );
+        rStm.WriteBytes(pJob, nJobLen);
     rStm.WriteUInt32( nAspect );
     rStm.WriteInt32( -1 );      //L-Index always -1
     rStm.WriteInt32( nAdvFlags );
@@ -2708,7 +2708,7 @@ void DffPropertyReader::CheckAndCorrectExcelTextRotation( SvStream& rIn, SfxItem
             if ( nLen )
             {
                 css::uno::Sequence< sal_Int8 > aXMLDataSeq( nLen );
-                rIn.Read( aXMLDataSeq.getArray(), nLen );
+                rIn.ReadBytes(aXMLDataSeq.getArray(), nLen);
                 css::uno::Reference< css::io::XInputStream > xInputStream
                     ( new ::comphelper::SequenceInputStream( aXMLDataSeq ) );
                 try
@@ -6520,7 +6520,7 @@ bool SvxMSDffManager::ProcessClientAnchor(SvStream& rStData, sal_uInt32 nDatLen,
     {
         rBuffLen = std::min(rStData.remainingSize(), static_cast<sal_uInt64>(nDatLen));
         rpBuff = new char[rBuffLen];
-        rBuffLen = rStData.Read(rpBuff, rBuffLen);
+        rBuffLen = rStData.ReadBytes(rpBuff, rBuffLen);
     }
     return true;
 }
@@ -6532,7 +6532,7 @@ bool SvxMSDffManager::ProcessClientData(SvStream& rStData, sal_uInt32 nDatLen,
     {
         rBuffLen = std::min(rStData.remainingSize(), static_cast<sal_uInt64>(nDatLen));
         rpBuff = new char[rBuffLen];
-        rBuffLen = rStData.Read(rpBuff, rBuffLen);
+        rBuffLen = rStData.ReadBytes(rpBuff, rBuffLen);
     }
     return true;
 }
@@ -6739,7 +6739,7 @@ bool SvxMSDffManager::ConvertToOle2( SvStream& rStm, sal_uInt32 nReadLen,
             if( 0x10000L > nStrLen )
             {
                 std::unique_ptr<sal_Char[]> pBuf(new sal_Char[ nStrLen ]);
-                rStm.Read( pBuf.get(), nStrLen );
+                rStm.ReadBytes(pBuf.get(), nStrLen);
                 aSvrName = OUString( pBuf.get(), (sal_uInt16) nStrLen-1, osl_getThreadTextEncoding() );
             }
             else
@@ -6759,11 +6759,11 @@ bool SvxMSDffManager::ConvertToOle2( SvStream& rStm, sal_uInt32 nReadLen,
                 if( !pData )
                     return false;
 
-                rStm.Read( pData.get(), nDataLen );
+                rStm.ReadBytes(pData.get(), nDataLen);
 
                 // write to ole10 stream
                 xOle10Stm->WriteUInt32( nDataLen );
-                xOle10Stm->Write( pData.get(), nDataLen );
+                xOle10Stm->WriteBytes(pData.get(), nDataLen);
                 xOle10Stm = tools::SvRef<SotStorageStream>();
 
                 // set the compobj stream
@@ -6791,7 +6791,7 @@ bool SvxMSDffManager::ConvertToOle2( SvStream& rStm, sal_uInt32 nReadLen,
             {
                 sal_uLong nPos = rStm.Tell();
                 sal_uInt16 sz[4];
-                rStm.Read( sz, 8 );
+                rStm.ReadBytes( sz, 8 );
                 Graphic aGraphic;
                 if( ERRCODE_NONE == GraphicConverter::Import( rStm, aGraphic ) && aGraphic.GetType() != GraphicType::NONE )
                 {
@@ -7093,13 +7093,13 @@ SdrOle2Obj* SvxMSDffManager::CreateSdrOLEFromStorage(
                     sal_uInt8 aTestA[10];   // exist the \1CompObj-Stream ?
                     tools::SvRef<SotStorageStream> xSrcTst = xObjStg->OpenSotStream( "\1CompObj" );
                     bValidStorage = xSrcTst.Is() && sizeof( aTestA ) ==
-                                    xSrcTst->Read( aTestA, sizeof( aTestA ) );
+                                    xSrcTst->ReadBytes(aTestA, sizeof(aTestA));
                     if( !bValidStorage )
                     {
                         // or the \1Ole-Stream ?
                         xSrcTst = xObjStg->OpenSotStream( "\1Ole" );
                         bValidStorage = xSrcTst.Is() && sizeof(aTestA) ==
-                                        xSrcTst->Read(aTestA, sizeof(aTestA));
+                                    xSrcTst->ReadBytes(aTestA, sizeof(aTestA));
                     }
                 }
 

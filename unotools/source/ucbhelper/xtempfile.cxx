@@ -165,7 +165,7 @@ throw (css::io::NotConnectedException, css::io::BufferSizeExceededException, css
     if (aData.getLength() < nBytesToRead)
         aData.realloc(nBytesToRead);
 
-    sal_uInt32 nRead = mpStream->Read(static_cast < void* > ( aData.getArray() ), nBytesToRead);
+    sal_uInt32 nRead = mpStream->ReadBytes(static_cast<void*>(aData.getArray()), nBytesToRead);
     checkError();
 
     if (nRead < (sal_Size)aData.getLength())
@@ -262,7 +262,7 @@ throw ( css::io::NotConnectedException, css::io::BufferSizeExceededException, cs
         throw css::io::NotConnectedException ( OUString(), const_cast < css::uno::XWeak * > ( static_cast < const css::uno::XWeak * > (this ) ) );
 
     checkConnected();
-    sal_uInt32 nWritten = mpStream->Write(aData.getConstArray(),aData.getLength());
+    sal_uInt32 nWritten = mpStream->WriteBytes(aData.getConstArray(), aData.getLength());
     checkError();
     if  ( nWritten != (sal_uInt32)aData.getLength())
         throw css::io::BufferSizeExceededException( OUString(),static_cast < css::uno::XWeak * > ( this ) );

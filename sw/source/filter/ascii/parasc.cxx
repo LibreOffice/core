@@ -264,7 +264,7 @@ sal_uLong SwASCIIParser::ReadChars()
         aEmpty.GetParaFlags() == rOpt.GetParaFlags())
     {
         sal_uLong nLen, nOrig;
-        nOrig = nLen = rInput.Read(pArr, ASC_BUFFLEN);
+        nOrig = nLen = rInput.ReadBytes(pArr, ASC_BUFFLEN);
         rtl_TextEncoding eCharSet;
         bool bRet = SwIoSystem::IsDetectableText(pArr, nLen, &eCharSet, &bSwapUnicode);
         OSL_ENSURE(bRet, "Autodetect of text import without nag dialog must have failed");
@@ -310,7 +310,7 @@ sal_uLong SwASCIIParser::ReadChars()
             // Read a new block
             sal_uLong lGCount;
             if( SVSTREAM_OK != rInput.GetError() || 0 == (lGCount =
-                        rInput.Read( pArr + nArrOffset,
+                        rInput.ReadBytes( pArr + nArrOffset,
                                      ASC_BUFFLEN - nArrOffset )))
                 break;      // break from the while loop
 

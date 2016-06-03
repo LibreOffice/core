@@ -39,7 +39,7 @@ OString DXFReadLine(SvStream& rIStm)
     while( !bEnd && !rIStm.GetError() )   // !!! do not check for EOF
                                           // !!! because we read blockwise
     {
-        sal_uInt16 nLen = (sal_uInt16)rIStm.Read( buf, sizeof(buf)-1 );
+        sal_uInt16 nLen = static_cast<sal_uInt16>(rIStm.ReadBytes(buf, sizeof(buf)-1));
         if( !nLen )
         {
             if( aBuf.isEmpty() )
@@ -76,7 +76,7 @@ OString DXFReadLine(SvStream& rIStm)
     if( bEnd && (c=='\r' || c=='\n'))  // special treatment of DOS files
     {
         char cTemp(0);
-        rIStm.Read(&cTemp, 1);
+        rIStm.ReadBytes(&cTemp, 1);
         if( cTemp == c || (cTemp != '\n' && cTemp != '\r') )
             rIStm.Seek( nOldFilePos );
     }
@@ -89,7 +89,7 @@ void DXFSkipLine(SvStream& rIStm)
     while (rIStm.good())
     {
         char  buf[256 + 1];
-        sal_uInt16 nLen = (sal_uInt16)rIStm.Read(buf, sizeof(buf) - 1);
+        sal_uInt16 nLen = static_cast<sal_uInt16>(rIStm.ReadBytes(buf, sizeof(buf) - 1));
         for (sal_uInt16 n = 0; n < nLen; n++)
         {
             char c = buf[n];
@@ -97,7 +97,7 @@ void DXFSkipLine(SvStream& rIStm)
             {
                 rIStm.SeekRel(n-nLen+1); // return stream to next to current position
                 char c1 = 0;
-                rIStm.Read(&c1, 1);
+                rIStm.ReadBytes(&c1, 1);
                 if (c1 == c || (c1 != '\n' && c1!= '\r'))
                     rIStm.SeekRel(-1);
                 return;

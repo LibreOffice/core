@@ -27,7 +27,7 @@ namespace
 int lclWriteCallback(void* pContext, const char* sBuffer, int nLen)
 {
     SvStream* pStream = static_cast<SvStream*>(pContext);
-    return (int) pStream->Write(sBuffer, nLen);
+    return static_cast<int>(pStream->WriteBytes(sBuffer, nLen));
 }
 
 int lclCloseCallback(void* pContext)

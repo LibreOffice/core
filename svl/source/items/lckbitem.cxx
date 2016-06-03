@@ -84,8 +84,8 @@ SfxPoolItem* SfxLockBytesItem::Create( SvStream &rStream, sal_uInt16 ) const
             nToRead = MAX_BUF;
         else
             nToRead = nSize - nActRead;
-        nActRead += rStream.Read( cTmpBuf, nToRead );
-        aNewStream.Write( cTmpBuf, nToRead );
+        nActRead += rStream.ReadBytes( cTmpBuf, nToRead );
+        aNewStream.WriteBytes( cTmpBuf, nToRead );
     } while( nSize > nActRead );
 
     return new SfxLockBytesItem( Which(), aNewStream );
@@ -113,7 +113,7 @@ bool SfxLockBytesItem::PutValue( const css::uno::Any& rVal, sal_uInt8 )
         if ( aSeq.getLength() )
         {
             SvMemoryStream* pStream = new SvMemoryStream();
-            pStream->Write( aSeq.getConstArray(), aSeq.getLength() );
+            pStream->WriteBytes( aSeq.getConstArray(), aSeq.getLength() );
             pStream->Seek(0);
 
             _xVal = new SvLockBytes( pStream, true );

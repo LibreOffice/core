@@ -189,7 +189,7 @@ void ImportLotus::Userrange()
     Read( nRangeType );
 
     sal_Char aBuffer[ 17 ];
-    pIn->Read( aBuffer, 16 );
+    pIn->ReadBytes(aBuffer, 16);
     aBuffer[ 16 ] = 0;
     OUString      aName( aBuffer, strlen(aBuffer), eQuellChar );
 

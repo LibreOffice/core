@@ -648,7 +648,7 @@ SbError SbiStream::Write( const OString& rBuf )
         {
             return nError = ERRCODE_BASIC_BAD_RECORD_LENGTH;
         }
-        pStrm->Write(rBuf.getStr(), nLen);
+        pStrm->WriteBytes(rBuf.getStr(), nLen);
         MapError();
     }
     return nError;

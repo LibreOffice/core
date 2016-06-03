@@ -111,8 +111,6 @@ public:
     void            SetTextEncoding( sal_uInt16 nTextEnc ){ mnTextEnc = nTextEnc; };
     bool            Read( OUString& rString, sal_uInt32 nType = VT_EMPTY, bool bDwordAlign = true );
     PropItem&       operator=( PropItem& rPropItem );
-
-    using SvStream::Read;
 };
 
 class Section

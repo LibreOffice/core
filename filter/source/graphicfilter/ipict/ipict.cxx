@@ -684,7 +684,7 @@ sal_uLong PictReader::ReadAndDrawText()
 
     pPict->ReadChar( nByteLen ); nLen=((sal_uLong)nByteLen)&0x000000ff;
     nDataLen = nLen + 1;
-    pPict->Read( &sText, nLen );
+    pPict->ReadBytes(&sText, nLen);
 
     if (IsInvisible(PDM_TEXT)) return nDataLen;
     DrawingMethod(PDM_TEXT);
@@ -1177,7 +1177,7 @@ void PictReader::ReadHeader()
           nOffset = 509+st; // illogical : more logical will be nStartPos+509+st or to consider that nStartPos=0
           // a small test to check if versionOp code exists after the bdbox ( with no extra NOP codes)
           pPict->Seek(nOffset+10);
-          pPict->Read( sBuf, 2 );
+          pPict->ReadBytes(sBuf, 2);
           if (pPict->IsEof() || pPict->GetError()) break;
           if (sBuf[0] == 0x11 || (sBuf[0] == 0x00 && sBuf[1] == 0x11)) ; // maybe ok
           else continue;
@@ -1198,7 +1198,7 @@ void PictReader::ReadHeader()
 
         if (pPict->IsEof() || pPict->GetError()) continue;
         // read version
-        pPict->Read( sBuf, 2 );
+        pPict->ReadBytes(sBuf, 2);
         // version 1 file
         if ( sBuf[ 0 ] == 0x11 && sBuf[ 1 ] == 0x01 ) {
           // pict v1 must be rare and we do only few tests
@@ -1211,7 +1211,7 @@ void PictReader::ReadHeader()
           {
         numZero++;
         pPict->SeekRel(-1);
-        pPict->Read( sBuf, 2 );
+        pPict->ReadBytes(sBuf, 2);
           }
         while ( sBuf[0] == 0x00 && numZero < 10);
         actualConfid -= (numZero-1); // extra nop are dubious
@@ -1589,7 +1589,7 @@ sal_uLong PictReader::ReadData(sal_uInt16 nOpcode)
         else                      aActFont.SetFamily(FAMILY_ROMAN);
         aActFont.SetCharSet(GetTextEncoding(nUSHORT));
         pPict->ReadChar( nByteLen ); nLen=((sal_uInt16)nByteLen)&0x00ff;
-        pPict->Read( &sFName, nLen );
+        pPict->ReadBytes(&sFName, nLen);
         sFName[ nLen ] = 0;
         OUString aString( sFName, strlen(sFName), osl_getThreadTextEncoding() );
         aActFont.SetFamilyName( aString );

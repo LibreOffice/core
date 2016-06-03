@@ -73,7 +73,7 @@ SEEEEEEE EEEEEEEE IMMMMMMM MMMMMMMM MMMMMMMM MMMMMMMM MMMMMMMM MMMMMMMM MMMMMMMM
     long double lfFakt = 256.0;
     sal_uInt8 pDouble10[ 10 ];
 
-    rStrm.Read( pDouble10, 10 );            // Intel-10 in pDouble10
+    rStrm.ReadBytes(pDouble10, 10);            // Intel-10 in pDouble10
 
     lfDouble  = static_cast< long double >( pDouble10[ 7 ] );   // Byte 7
     lfDouble *= lfFakt;
