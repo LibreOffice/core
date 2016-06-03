@@ -59,7 +59,7 @@ static bool enabled = false;
         mdAllWrapper = [ [ [ NSMutableDictionary alloc ] init ] retain ];
         // initialize keyboard focus tracker
         rtl::Reference< AquaA11yFocusListener > listener( AquaA11yFocusListener::get() );
-        AquaA11yFocusTracker::get().setFocusListener(listener.get());
+        TheAquaA11yFocusTracker::get().setFocusListener(listener.get());
         enabled = true;      
     }
     return mdAllWrapper;
