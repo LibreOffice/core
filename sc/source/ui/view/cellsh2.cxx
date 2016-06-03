@@ -369,6 +369,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
 
                     pDBData->GetSortParam( aSortParam );
                     bool bHasHeader = pDoc->HasColHeader( aSortParam.nCol1, aSortParam.nRow1, aSortParam.nCol2, aSortParam.nRow2, nTab );
+                    if (nSlotId == SID_SORT_ASCENDING || nSlotId == SID_SORT_DESCENDING) bHasHeader = false;
 
                     if( nCol < aSortParam.nCol1 )
                         nCol = aSortParam.nCol1;
