@@ -229,6 +229,8 @@ void BrowserDataWin::dispose()
     pHeaderBar.clear();
     pEventWin.clear();
     pCornerWin.clear();
+    DragSourceHelper::dispose();
+    DropTargetHelper::dispose();
     Control::dispose();
 }
 

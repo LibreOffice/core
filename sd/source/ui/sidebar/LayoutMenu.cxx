@@ -200,6 +200,8 @@ void LayoutMenu::dispose()
 {
     SAL_INFO("sd.ui", "destroying LayoutMenu at " << this);
     Dispose();
+    DragSourceHelper::dispose();
+    DropTargetHelper::dispose();
     ValueSet::dispose();
 }
 

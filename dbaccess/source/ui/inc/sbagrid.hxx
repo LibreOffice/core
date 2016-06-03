@@ -170,7 +170,8 @@ namespace dbaui
     {
     public:
         SbaGridHeader(BrowseBox* pParent, WinBits nWinBits = WB_STDHEADERBAR | WB_DRAG);
-
+        virtual void dispose() override;
+        virtual ~SbaGridHeader();
     protected:
 
         // FmGridHeader overridables

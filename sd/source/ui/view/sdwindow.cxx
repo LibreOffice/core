@@ -102,6 +102,7 @@ void Window::dispose()
             pWindowUpdater->UnregisterWindow (this);
     }
     mpShareWin.clear();
+    DropTargetHelper::dispose();
     vcl::Window::dispose();
 }
 

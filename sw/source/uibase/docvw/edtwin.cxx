@@ -5158,6 +5158,8 @@ void SwEditWin::dispose()
     delete m_pFrameControlsManager;
     m_pFrameControlsManager = nullptr;
 
+    DragSourceHelper::dispose();
+    DropTargetHelper::dispose();
     vcl::Window::dispose();
 }
 
