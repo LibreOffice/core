@@ -72,7 +72,7 @@ long StreamRead( SvStream* pStream, void* pBuffer, long nBufferSize )
     {
         long nInitialPosition = pStream->Tell();
 
-        nRead = (long) pStream->Read( pBuffer, nBufferSize );
+        nRead = static_cast<long>(pStream->ReadBytes(pBuffer, nBufferSize));
 
         if( pStream->GetError() == ERRCODE_IO_PENDING )
         {

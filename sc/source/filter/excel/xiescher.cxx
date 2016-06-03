@@ -3675,9 +3675,9 @@ OUString XclImpDffConverter::ReadHlinkProperty( SvStream& rDffStrm ) const
         // copy from DFF stream to memory stream
         ::std::vector< sal_uInt8 > aBuffer( nBufferSize );
         sal_uInt8* pnData = &aBuffer.front();
-        if( rDffStrm.Read( pnData, nBufferSize ) == nBufferSize )
+        if (rDffStrm.ReadBytes(pnData, nBufferSize) == nBufferSize)
         {
-            aMemStream.Write( pnData, nBufferSize );
+            aMemStream.WriteBytes(pnData, nBufferSize);
 
             // create BIFF import stream to be able to use XclImpHyperlink class
             XclImpStream aXclStrm( aMemStream, GetRoot() );

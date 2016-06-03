@@ -197,7 +197,7 @@ void SwUnoCursorHelper::GetTextFromPam(SwPaM & rPam, OUString & rBuffer)
                 aStream.ResetError();
 
                 rtl_uString *pStr = rtl_uString_alloc(lUniLen);
-                aStream.Read(pStr->buffer, lUniLen * sizeof(sal_Unicode));
+                aStream.ReadBytes(pStr->buffer, lUniLen * sizeof(sal_Unicode));
                 rBuffer = OUString(pStr, SAL_NO_ACQUIRE);
             }
         }

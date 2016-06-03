@@ -95,7 +95,7 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( vcl::Window* pParent, SwDocShell& rDocSh,
     {
         char aBuffer[ 4098 ];
         const sal_uLong nOldPos = pStream->Tell();
-        const sal_uLong nBytesRead = pStream->Read( aBuffer, 4096 );
+        const size_t nBytesRead = pStream->ReadBytes(aBuffer, 4096);
         pStream->Seek( nOldPos );
 
         if( nBytesRead <= 4096 )

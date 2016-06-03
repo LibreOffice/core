@@ -279,7 +279,7 @@ bool PNGWriterImpl::Write(SvStream& rOStm)
         rOStm.WriteUInt32(nDataSize);
         rOStm.WriteUInt32(aBeg->nType);
         if (nDataSize)
-            rOStm.Write(&aBeg->aData[0], nDataSize);
+            rOStm.WriteBytes(&aBeg->aData[0], nDataSize);
         rOStm.WriteUInt32(nCRC);
         ++aBeg;
     }

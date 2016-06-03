@@ -235,7 +235,7 @@ SvStream& ReadJobSetup( SvStream& rIStream, JobSetup& rJobSetup )
         }
         sal_Size nFirstPos = rIStream.Tell();
         std::unique_ptr<char[]> pTempBuf(new char[nRead]);
-        rIStream.Read(pTempBuf.get(), nRead);
+        rIStream.ReadBytes(pTempBuf.get(), nRead);
         if (nRead >= sizeof(ImplOldJobSetupData))
         {
             ImplOldJobSetupData* pData = reinterpret_cast<ImplOldJobSetupData*>(pTempBuf.get());
@@ -341,9 +341,9 @@ SvStream& WriteJobSetup( SvStream& rOStream, const JobSetup& rJobSetup )
             int nPos = rOStream.Tell();
             rOStream.WriteUInt16( nLen );
             rOStream.WriteUInt16( nSystem );
-            rOStream.Write( &aOldData, sizeof( aOldData ) );
-            rOStream.Write( &aOldJobData, nOldJobDataSize );
-            rOStream.Write( pJobData->mpDriverData, pJobData->mnDriverDataLen );
+            rOStream.WriteBytes( &aOldData, sizeof( aOldData ) );
+            rOStream.WriteBytes( &aOldJobData, nOldJobDataSize );
+            rOStream.WriteBytes( pJobData->mpDriverData, pJobData->mnDriverDataLen );
             std::unordered_map< OUString, OUString, OUStringHash >::const_iterator it;
             for( it = pJobData->maValueMap.begin(); it != pJobData->maValueMap.end(); ++it )
             {

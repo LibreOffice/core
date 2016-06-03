@@ -444,10 +444,10 @@ void SwWW8ImplReader::PicRead(SvStream *pDataStream, WW8_PIC *pPic,
 {
     //Only the first 0x2e bytes are the same between version 6/7 and 8+
     WW8_PIC_SHADOW aPicS;
-    pDataStream->Read( &aPicS, sizeof( aPicS ) );
+    pDataStream->ReadBytes( &aPicS, sizeof( aPicS ) );
     WW8PicShadowToReal( &aPicS, pPic );
     for (WW8_BRC & i : pPic->rgbrc)
-        pDataStream->Read( &i, bVer67 ? 2 : 4);
+        pDataStream->ReadBytes(&i, bVer67 ? 2 : 4);
     pDataStream->ReadInt16( pPic->dxaOrigin );
     pDataStream->ReadInt16( pPic->dyaOrigin );
     if (!bVer67)

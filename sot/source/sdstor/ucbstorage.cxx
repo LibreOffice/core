@@ -148,7 +148,7 @@ sal_Int32 SAL_CALL FileStreamWrapper_Impl::readBytes(Sequence< sal_Int8 >& aData
     if (aData.getLength() < nBytesToRead)
         aData.realloc(nBytesToRead);
 
-    sal_uInt32 nRead = m_pSvStream->Read(static_cast<void*>(aData.getArray()), nBytesToRead);
+    sal_uInt32 nRead = m_pSvStream->ReadBytes(static_cast<void*>(aData.getArray()), nBytesToRead);
     checkError();
 
     // Wenn gelesene Zeichen < MaxLength, Sequence anpassen
@@ -806,7 +806,7 @@ void UCBStorageStream_Impl::ReadSourceWriteTemporary()
             do
             {
                 aReaded = m_rSource->readBytes( aData, 32000 );
-                m_pStream->Write( aData.getArray(), aReaded );
+                m_pStream->WriteBytes(aData.getArray(), aReaded);
             } while( aReaded == 32000 );
         }
         catch (const Exception &e)
@@ -839,7 +839,7 @@ sal_uInt64 UCBStorageStream_Impl::ReadSourceWriteTemporary(sal_uInt64 aLength)
             {
                 sal_uLong aToCopy = min( aLength - nInd, 32000 );
                 aReaded = m_rSource->readBytes( aData, aToCopy );
-                aResult += m_pStream->Write( aData.getArray(), aReaded );
+                aResult += m_pStream->WriteBytes(aData.getArray(), aReaded);
             }
 
             if( aResult < aLength )
@@ -878,7 +878,7 @@ sal_uLong UCBStorageStream_Impl::GetData( void* pData, sal_uLong nSize )
 
 
     // read data that is in temporary stream
-    aResult = m_pStream->Read( pData, nSize );
+    aResult = m_pStream->ReadBytes( pData, nSize );
     if( m_bSourceRead && aResult < nSize )
     {
         // read the tail of the data from original stream
@@ -891,7 +891,7 @@ sal_uLong UCBStorageStream_Impl::GetData( void* pData, sal_uLong nSize )
         {
             Sequence<sal_Int8> aData( aToRead );
             sal_uLong aReaded = m_rSource->readBytes( aData, aToRead );
-            aResult += m_pStream->Write( static_cast<void*>(aData.getArray()), aReaded );
+            aResult += m_pStream->WriteBytes(static_cast<void*>(aData.getArray()), aReaded);
             memcpy( pData, aData.getArray(), aReaded );
         }
         catch (const Exception &e)
@@ -918,7 +918,7 @@ sal_uLong UCBStorageStream_Impl::PutData( const void* pData, sal_uLong nSize )
     if( !nSize || !Init() )
         return 0;
 
-    sal_uLong aResult = m_pStream->Write( pData, nSize );
+    sal_uLong aResult = m_pStream->WriteBytes( pData, nSize );
 
     m_bModified = aResult > 0;
 

@@ -1583,7 +1583,7 @@ static void InsertSpecialChar( WW8Export& rWrt, sal_uInt8 c,
         const sal_uInt16 nEmptyHdrLen = 0x44;
         sal_uInt8 aEmptyHeader[ nEmptyHdrLen ] = { 0 };
         aEmptyHeader[ 4 ] = 0x44;
-        rStrm.Write( aEmptyHeader, nEmptyHdrLen );
+        rStrm.WriteBytes( aEmptyHeader, nEmptyHdrLen );
         // writer fixed header
         const sal_uInt16 nFixHdrLen = 0x19;
         sal_uInt8 aFixHeader[ nFixHdrLen ] =
@@ -1593,7 +1593,7 @@ static void InsertSpecialChar( WW8Export& rWrt, sal_uInt8 c,
             0x0B, 0x02, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00,
             0x00,
         };
-        rStrm.Write( aFixHeader, nFixHdrLen );
+        rStrm.WriteBytes( aFixHeader, nFixHdrLen );
         // write reference string including length+1
         sal_uInt32 nStrLen( pLinkStr->getLength() + 1 );
         SwWW8Writer::WriteLong( rStrm, nStrLen );
@@ -1603,9 +1603,7 @@ static void InsertSpecialChar( WW8Export& rWrt, sal_uInt8 c,
         // write length of hyperlink data
         const sal_uInt32 nCurrPos = rStrm.Tell();
         rStrm.Seek( nLinkPosInDataStrm );
-        SVBT32 nLen;
-        UInt32ToSVBT32( nCurrPos - nLinkPosInDataStrm, nLen );
-        rStrm.Write( nLen, 4 );
+        rStrm.WriteUInt32(nCurrPos - nLinkPosInDataStrm);
         rStrm.Seek( nCurrPos );
 
         // write attributes of hyperlink character 0x01

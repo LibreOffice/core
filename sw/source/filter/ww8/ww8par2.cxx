@@ -3591,7 +3591,7 @@ void WW8RStyle::ImportSprms(sal_Size nPosFc, short nLen, bool bPap)
     if (checkSeek(*pStStrm, nPosFc))
     {
         sal_uInt8 *pSprms = new sal_uInt8[nLen];
-        nLen = pStStrm->Read(pSprms, nLen);
+        nLen = pStStrm->ReadBytes(pSprms, nLen);
         ImportSprms(pSprms, nLen, bPap);
         delete[] pSprms;
     }
@@ -3602,7 +3602,7 @@ static inline short WW8SkipOdd(SvStream* pSt )
     if ( pSt->Tell() & 0x1 )
     {
         sal_uInt8 c;
-        return pSt->Read( &c, 1 );
+        return pSt->ReadBytes( &c, 1 );
     }
     return 0;
 }
@@ -3612,7 +3612,7 @@ static inline short WW8SkipEven(SvStream* pSt )
     if (!(pSt->Tell() & 0x1))
     {
         sal_uInt8 c;
-        return pSt->Read( &c, 1 );
+        return pSt->ReadBytes( &c, 1 );
     }
     return 0;
 }

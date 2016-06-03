@@ -41,8 +41,8 @@ bool FileMove_Impl( const OUString & rFile1, const OUString & rFile2, bool bImme
         {
             std::unique_ptr<sal_uInt8[]> pBuf1(new sal_uInt8[ BR ]);
             std::unique_ptr<sal_uInt8[]> pBuf2(new sal_uInt8[ BR ]);
-            nC1 = aOutStm1.Read( pBuf1.get(), BR );
-            nC2 = aOutStm2.Read( pBuf2.get(), BR );
+            nC1 = aOutStm1.ReadBytes(pBuf1.get(), BR);
+            nC2 = aOutStm2.ReadBytes(pBuf2.get(), BR);
             while( nC1 == nC2 )
             {
                 if( memcmp( pBuf1.get(), pBuf2.get(), nC1 ) )
@@ -54,8 +54,8 @@ bool FileMove_Impl( const OUString & rFile1, const OUString & rFile2, bool bImme
                 {
                     if( 0x8000 != nC1 )
                         break;
-                    nC1 = aOutStm1.Read( pBuf1.get(), BR );
-                    nC2 = aOutStm2.Read( pBuf2.get(), BR );
+                    nC1 = aOutStm1.ReadBytes(pBuf1.get(), BR);
+                    nC2 = aOutStm2.ReadBytes(pBuf2.get(), BR);
                 }
             }
         }

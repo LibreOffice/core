@@ -505,7 +505,7 @@ sal_uLong ImageMap::ImpDetectFormat( SvStream& rIStm )
     sal_uLong   nRet = IMAP_FORMAT_BIN;
     char    cMagic[6];
 
-    rIStm.Read( cMagic, sizeof( cMagic ) );
+    rIStm.ReadBytes(cMagic, sizeof(cMagic));
 
     // if we do not have an internal formats
     // we check the format

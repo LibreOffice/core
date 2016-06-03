@@ -227,7 +227,7 @@ bool SdrTextObj::LoadText(const OUString& rFileName, const OUString& /*rFilterNa
 
         char cRTF[5];
         cRTF[4] = 0;
-        pIStm->Read(cRTF, 5);
+        pIStm->ReadBytes(cRTF, 5);
 
         bool bRTF = cRTF[0] == '{' && cRTF[1] == '\\' && cRTF[2] == 'r' && cRTF[3] == 't' && cRTF[4] == 'f';
 

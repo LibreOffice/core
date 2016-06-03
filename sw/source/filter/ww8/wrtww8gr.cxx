@@ -252,7 +252,7 @@ void WW8Export::OutputOLENode( const SwOLENode& rOLENode )
                             tools::SvRef<SotStorageStream> rObjInfoStream = xOleStg->OpenSotStream( aObjInfo );
                             if ( rObjInfoStream.Is() && !rObjInfoStream->GetError() )
                             {
-                                rObjInfoStream->Write( pObjInfoData, sizeof( pObjInfoData ) );
+                                rObjInfoStream->WriteBytes(pObjInfoData, sizeof(pObjInfoData));
                                 xOleStg->Commit();
                             }
                         }
@@ -650,7 +650,7 @@ void SwWW8WrGrf::WritePICFHeader(SvStream& rStrm, const ww8::Frame &rFly,
         Set_UInt16( pArr, nCropB );                     // set dyaCropBottom
     }
 
-    rStrm.Write( aArr, nHdrLen );
+    rStrm.WriteBytes(aArr, nHdrLen);
 }
 
 void SwWW8WrGrf::WriteGrfFromGrfNode(SvStream& rStrm, const SwGrfNode &rGrfNd,
@@ -763,7 +763,7 @@ void SwWW8WrGrf::WritePICBulletFHeader(SvStream& rStrm, const Graphic &rGrf,
     Set_UInt16( pArr, nCropR );                     // set dxaCropRight
     Set_UInt16( pArr, nCropB );                     // set dyaCropBottom
 
-    rStrm.Write( aArr, nHdrLen );
+    rStrm.WriteBytes(aArr, nHdrLen);
 }
 
 void SwWW8WrGrf::WriteGrfForBullet(SvStream& rStrm, const Graphic &rGrf, sal_uInt16 nWidth, sal_uInt16 nHeight)
@@ -869,9 +869,7 @@ void SwWW8WrGrf::WriteGraphicNode(SvStream& rStrm, const GraphicDetails &rItem)
 
     sal_uInt32 nPos2 = rStrm.Tell();                    // store the end
     rStrm.Seek( nPos );
-    SVBT32 nLen;
-    UInt32ToSVBT32( nPos2 - nPos, nLen );             // calculate graphic length
-    rStrm.Write( nLen, 4 );                         // patch it in the header
+    rStrm.WriteUInt32(nPos2 - nPos); // patch graphic length in the header
     rStrm.Seek( nPos2 );                            // restore Pos
 }
 

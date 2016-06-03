@@ -1221,14 +1221,15 @@ void EditTextObjectImpl::StoreData( SvStream& rOStream ) const
             const ContentInfo& rC = *aContents[nPara].get();
             sal_uInt16 nL = rC.GetText().getLength();
             rOStream.WriteUInt16( nL );
-            rOStream.Write(rC.GetText().getStr(), nL*sizeof(sal_Unicode));
+            // FIXME this isn't endian safe, but presumably this is just used for copy/paste?
+            rOStream.WriteBytes(rC.GetText().getStr(), nL*sizeof(sal_Unicode));
 
             // StyleSheetName must be Unicode too!
             // Copy/Paste from EA3 to BETA or from BETA to EA3 not possible, not needed...
             // If needed, change nL back to sal_uLong and increase version...
             nL = rC.GetStyle().getLength();
             rOStream.WriteUInt16( nL );
-            rOStream.Write(rC.GetStyle().getStr(), nL*sizeof(sal_Unicode));
+            rOStream.WriteBytes(rC.GetStyle().getStr(), nL*sizeof(sal_Unicode));
         }
     }
 }
@@ -1495,7 +1496,8 @@ void EditTextObjectImpl::CreateData( SvStream& rIStream )
                     }
 
                     rtl_uString *pStr = rtl_uString_alloc(nL);
-                    rIStream.Read(pStr->buffer, nL*sizeof(sal_Unicode));
+                    // FIXME this isn't endian safe, but presumably this is just used for copy/paste?
+                    rIStream.ReadBytes(pStr->buffer, nL*sizeof(sal_Unicode));
                     rC.SetText((OUString(pStr, SAL_NO_ACQUIRE)));
 
                     nL = 0;
@@ -1514,7 +1516,7 @@ void EditTextObjectImpl::CreateData( SvStream& rIStream )
                     }
 
                     rtl_uString *pStr = rtl_uString_alloc(nL);
-                    rIStream.Read(pStr->buffer, nL*sizeof(sal_Unicode) );
+                    rIStream.ReadBytes(pStr->buffer, nL*sizeof(sal_Unicode) );
                     rC.GetStyle() = OUString(pStr, SAL_NO_ACQUIRE);
                 }
             }

@@ -98,7 +98,7 @@ sal_uInt16 XclImpDecrypter::Read( SvStream& rStrm, void* pData, sal_uInt16 nByte
             mnOldPos = rStrm.Tell();
         }
         else
-            nRet = static_cast< sal_uInt16 >( rStrm.Read( pData, nBytes ) );
+            nRet = static_cast<sal_uInt16>(rStrm.ReadBytes(pData, nBytes));
     }
     return nRet;
 }
@@ -187,7 +187,7 @@ void XclImpBiff5Decrypter::OnUpdate( sal_Size /*nOldStrmPos*/, sal_Size nNewStrm
 
 sal_uInt16 XclImpBiff5Decrypter::OnRead( SvStream& rStrm, sal_uInt8* pnData, sal_uInt16 nBytes )
 {
-    sal_uInt16 nRet = static_cast< sal_uInt16 >( rStrm.Read( pnData, nBytes ) );
+    sal_uInt16 nRet = static_cast<sal_uInt16>(rStrm.ReadBytes(pnData, nBytes));
     maCodec.Decode( pnData, nRet );
     return nRet;
 }
@@ -291,7 +291,7 @@ sal_uInt16 XclImpBiff8Decrypter::OnRead( SvStream& rStrm, sal_uInt8* pnData, sal
         sal_uInt16 nDecBytes = ::std::min< sal_uInt16 >( nBytesLeft, nBlockLeft );
 
         // read the block from stream
-        nRet = nRet + static_cast< sal_uInt16 >( rStrm.Read( pnCurrData, nDecBytes ) );
+        nRet = nRet + static_cast<sal_uInt16>(rStrm.ReadBytes(pnCurrData, nDecBytes));
         // decode the block inplace
         maCodec.Decode( pnCurrData, nDecBytes, pnCurrData, nDecBytes );
         if( GetOffset( rStrm.Tell() ) == 0 )
@@ -734,7 +734,7 @@ sal_Size XclImpStream::CopyToStream( SvStream& rOutStrm, sal_Size nBytes )
             nRet += Read( pnBuffer.get(), nReadSize );
             // writing more bytes than read results in invalid memory access
             SAL_WARN_IF(nRet != nReadSize, "sc", "read less bytes than requested");
-            rOutStrm.Write( pnBuffer.get(), nReadSize );
+            rOutStrm.WriteBytes(pnBuffer.get(), nReadSize);
             nBytesLeft -= nReadSize;
         }
     }
@@ -1047,7 +1047,7 @@ sal_uInt16 XclImpStream::ReadRawData( void* pData, sal_uInt16 nBytes )
     if( mbUseDecr )
         nRet = mxDecrypter->Read( mrStrm, pData, nBytes );
     else
-        nRet = static_cast< sal_uInt16 >( mrStrm.Read( pData, nBytes ) );
+        nRet = static_cast<sal_uInt16>(mrStrm.ReadBytes(pData, nBytes));
     mnRawRecLeft = mnRawRecLeft - nRet;
     return nRet;
 }

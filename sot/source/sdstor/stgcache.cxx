@@ -344,7 +344,7 @@ bool StgCache::Read( sal_Int32 nPage, void* pBuf )
             {
                 m_pStrm->Seek(nPos);
             }
-            m_pStrm->Read( pBuf, nBytes );
+            m_pStrm->ReadBytes( pBuf, nBytes );
             if ( 1 != nPg2 )
                 SetError( SVSTREAM_READ_ERROR );
             else
@@ -372,7 +372,7 @@ bool StgCache::Write( sal_Int32 nPage, void* pBuf )
         {
             m_pStrm->Seek(nPos);
         }
-        sal_uLong nRes = m_pStrm->Write( pBuf, nBytes );
+        sal_uLong nRes = m_pStrm->WriteBytes( pBuf, nBytes );
         if( nRes != nBytes )
             SetError( SVSTREAM_WRITE_ERROR );
         else

@@ -37,7 +37,7 @@ namespace ww8
             sal_Size nRemainingSize = rSt.remainingSize();
             nSize = std::min<sal_uInt32>(nRemainingSize, nSize);
             m_pData = o3tl::make_shared_array<sal_uInt8>(nSize);
-            mn_size = rSt.Read(m_pData.get(), nSize);
+            mn_size = rSt.ReadBytes(m_pData.get(), nSize);
         }
         OSL_ENSURE(mn_size == nSize, "short read in WW8Struct::WW8Struct");
     }

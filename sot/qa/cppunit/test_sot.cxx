@@ -62,7 +62,7 @@ namespace
             CPPUNIT_ASSERT_MESSAGE( "check size #2", xStream->remainingSize() == nSize );
 
             // Read as much as we can, a corrupted FAT chain can cause real grief here
-            nReadableSize = xStream->Read( static_cast<void *>(pData), nSize );
+            nReadableSize = xStream->ReadBytes(static_cast<void *>(pData), nSize);
 //            fprintf(stderr, "readable size %d vs size %d remaining %d\n", nReadableSize, nSize, nReadableSize);
         }
         {   // Read the data backwards as well
@@ -73,7 +73,7 @@ namespace
                 unsigned char c;
                 xStream->Seek( i - 1 );
                 CPPUNIT_ASSERT_MESSAGE( "sot storage reading byte",
-                                        xStream->Read( &c, 1 ) == 1);
+                                        xStream->ReadBytes(&c, 1) == 1);
                 CPPUNIT_ASSERT_MESSAGE( "mismatching data storage reading byte",
                                         pData[i - 1] == c );
             }

@@ -49,7 +49,7 @@ ScMultipleReadHeader::ScMultipleReadHeader(SvStream& rNewStream) :
         sal_uInt32 nSizeTableLen;
         rStream.ReadUInt32( nSizeTableLen );
         pBuf = new sal_uInt8[nSizeTableLen];
-        rStream.Read( pBuf, nSizeTableLen );
+        rStream.ReadBytes( pBuf, nSizeTableLen );
         pMemStream = new SvMemoryStream( pBuf, nSizeTableLen, StreamMode::READ );
     }
 
@@ -122,7 +122,7 @@ ScMultipleWriteHeader::~ScMultipleWriteHeader()
 
     rStream.WriteUInt16( SCID_SIZES );
     rStream.WriteUInt32( aMemStream.Tell() );
-    rStream.Write( aMemStream.GetData(), aMemStream.Tell() );
+    rStream.WriteBytes( aMemStream.GetData(), aMemStream.Tell() );
 
     if ( nDataEnd - nDataPos != nDataSize )                 // matched default ?
     {

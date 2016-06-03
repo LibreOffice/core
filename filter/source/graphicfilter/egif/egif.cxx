@@ -286,7 +286,7 @@ void GIFWriter::WriteSignature( bool bGIF89a )
 {
     if( bStatus )
     {
-        m_rGIF.Write( bGIF89a ? "GIF89a" : "GIF87a" , 6 );
+        m_rGIF.WriteBytes(bGIF89a ? "GIF89a" : "GIF87a" , 6);
 
         if( m_rGIF.GetError() )
             bStatus = false;
@@ -345,7 +345,7 @@ void GIFWriter::WriteLoopExtension( const Animation& rAnimation )
         m_rGIF.WriteUChar( 0x21 );
         m_rGIF.WriteUChar( 0xff );
         m_rGIF.WriteUChar( 0x0b );
-        m_rGIF.Write( "NETSCAPE2.0", 11 );
+        m_rGIF.WriteBytes( "NETSCAPE2.0", 11 );
         m_rGIF.WriteUChar( 0x03 );
         m_rGIF.WriteUChar( 0x01 );
         m_rGIF.WriteUChar( cLoByte );
@@ -363,7 +363,7 @@ void GIFWriter::WriteLogSizeExtension( const Size& rSize100 )
         m_rGIF.WriteUChar( 0x21 );
         m_rGIF.WriteUChar( 0xff );
         m_rGIF.WriteUChar( 0x0b );
-        m_rGIF.Write( "STARDIV 5.0", 11 );
+        m_rGIF.WriteBytes( "STARDIV 5.0", 11 );
         m_rGIF.WriteUChar( 0x09 );
         m_rGIF.WriteUChar( 0x01 );
         m_rGIF.WriteUInt32( rSize100.Width() );

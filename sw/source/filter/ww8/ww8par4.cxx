@@ -131,7 +131,7 @@ static bool SwWw6ReadMetaStream(GDIMetaFile& rWMF, OLE_MFP* pMfp,
         STREAM_STD_READ );
     SotStorageStream* pSt = xSrc2;
     pSt->SetEndian( SvStreamEndian::LITTLE );
-    sal_uLong nRead = pSt->Read( pMfp, sizeof(*pMfp ) );
+    size_t const nRead = pSt->ReadBytes(pMfp, sizeof(*pMfp));
                                 // read mini-placable-header
     if (nRead != sizeof(*pMfp))
         return false;
@@ -185,7 +185,7 @@ static bool SwWw6ReadMacPICTStream(Graphic& rGraph, tools::SvRef<SotStorage>& rS
     SotStorageStream* pStp = xSrc4;
     pStp->SetEndian( SvStreamEndian::LITTLE );
     sal_uInt8 aTestA[10];        // Does the 01Ole-stream even exist?
-    sal_uLong nReadTst = pStp->Read( aTestA, sizeof( aTestA ) );
+    size_t const nReadTst = pStp->ReadBytes(aTestA, sizeof(aTestA));
     if (nReadTst != sizeof(aTestA))
         return false;
 

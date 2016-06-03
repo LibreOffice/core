@@ -120,7 +120,7 @@ void ImplCopySvStreamToXOutputStream( SvStream& rIn, Reference< XOutputStream > 
             aBuffer.realloc( nSize );
         }
 
-        sal_uInt32 nRead = rIn.Read( aBuffer.getArray(), nBufferSize );
+        sal_uInt32 nRead = rIn.ReadBytes(aBuffer.getArray(), nBufferSize);
         DBG_ASSERT( nRead == nBufferSize, "ImplCopySvStreamToXOutputStream failed!" );
         xOut->writeBytes( aBuffer );
 

@@ -152,7 +152,7 @@ bool GraphicNativeTransform::rotateJPEG(sal_uInt16 aRotation)
         GfxLink aLink = mrGraphic.GetLink();
 
         SvMemoryStream aSourceStream;
-        aSourceStream.Write(aLink.GetData(), aLink.GetDataSize());
+        aSourceStream.WriteBytes(aLink.GetData(), aLink.GetDataSize());
         aSourceStream.Seek( STREAM_SEEK_TO_BEGIN );
 
         Orientation aOrientation = TOP_LEFT;

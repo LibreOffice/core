@@ -963,7 +963,7 @@ void Writer::Impl_writeBmp( sal_uInt16 nBitmapId, sal_uInt32 width, sal_uInt32 h
     mpTag->addUI16( uInt16_(width) );
     mpTag->addUI16( uInt16_(height) );
 
-    mpTag->Write( pCompressed, compressed_size );
+    mpTag->WriteBytes(pCompressed, compressed_size);
 
     endTag();
 }
@@ -1030,8 +1030,8 @@ void Writer::Impl_writeJPEG(sal_uInt16 nBitmapId, const sal_uInt8* pJpgData, sal
         {
         case 0xD8:
         case 0xD9:
-            EncodingTableStream.Write( pJpgSearch, nLength );
-            ImageBitsStream.Write( pJpgSearch, nLength );
+            EncodingTableStream.WriteBytes(pJpgSearch, nLength);
+            ImageBitsStream.WriteBytes(pJpgSearch, nLength);
             break;
 
         case 0x01:
@@ -1039,7 +1039,7 @@ void Writer::Impl_writeJPEG(sal_uInt16 nBitmapId, const sal_uInt8* pJpgData, sal
         case 0xDC:
         case 0xDD:
         case 0xC4:
-            EncodingTableStream.Write( pJpgSearch, nLength );
+            EncodingTableStream.WriteBytes(pJpgSearch, nLength);
             break;
 
         case 0xC0:
@@ -1058,7 +1058,7 @@ void Writer::Impl_writeJPEG(sal_uInt16 nBitmapId, const sal_uInt8* pJpgData, sal
         case 0xCF:
         case 0xDA:
         case 0xE0:
-            ImageBitsStream.Write( pJpgSearch, nLength );
+            ImageBitsStream.WriteBytes(pJpgSearch, nLength);
             break;
 
         default:
@@ -1084,10 +1084,10 @@ void Writer::Impl_writeJPEG(sal_uInt16 nBitmapId, const sal_uInt8* pJpgData, sal
 
         mpTag->addUI32( nEncodingTableSize + nImageBitsSize );
 
-        mpTag->Write(EncodingTableStream.GetData(), nEncodingTableSize);
-        mpTag->Write(ImageBitsStream.GetData(), nImageBitsSize);
+        mpTag->WriteBytes(EncodingTableStream.GetData(), nEncodingTableSize);
+        mpTag->WriteBytes(ImageBitsStream.GetData(), nImageBitsSize);
 
-        mpTag->Write( pAlphaCompressed, alpha_compressed_size );
+        mpTag->WriteBytes(pAlphaCompressed, alpha_compressed_size);
 
         endTag();
     }
@@ -1097,8 +1097,8 @@ void Writer::Impl_writeJPEG(sal_uInt16 nBitmapId, const sal_uInt8* pJpgData, sal
 
         mpTag->addUI16( nBitmapId );
 
-        mpTag->Write(EncodingTableStream.GetData(), nEncodingTableSize);
-        mpTag->Write(ImageBitsStream.GetData(), nImageBitsSize);
+        mpTag->WriteBytes(EncodingTableStream.GetData(), nEncodingTableSize);
+        mpTag->WriteBytes(ImageBitsStream.GetData(), nImageBitsSize);
 
         endTag();
     }

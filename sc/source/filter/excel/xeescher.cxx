@@ -370,7 +370,7 @@ XclExpMsoDrawingGroup::XclExpMsoDrawingGroup( XclEscherEx& rEscherEx ) :
         0x00, 0x08
     };
     mrEscherEx.AddAtom( sizeof( spnDffOpt ), ESCHER_OPT, 3, 3 );
-    rDffStrm.Write( spnDffOpt, sizeof( spnDffOpt ) );
+    rDffStrm.WriteBytes(spnDffOpt, sizeof(spnDffOpt));
 
     // SPLITMENUCOLORS contains colors in toolbar
     static const sal_uInt8 spnDffSplitMenuColors[] = {
@@ -378,7 +378,7 @@ XclExpMsoDrawingGroup::XclExpMsoDrawingGroup( XclEscherEx& rEscherEx ) :
         0x17, 0x00, 0x00, 0x08, 0xF7, 0x00, 0x00, 0x10
     };
     mrEscherEx.AddAtom( sizeof( spnDffSplitMenuColors ), ESCHER_SplitMenuColors, 0, 4 );
-    rDffStrm.Write( spnDffSplitMenuColors, sizeof( spnDffSplitMenuColors ) );
+    rDffStrm.WriteBytes(spnDffSplitMenuColors, sizeof(spnDffSplitMenuColors));
 
     // close the DGGCONTAINER
     mrEscherEx.CloseContainer();

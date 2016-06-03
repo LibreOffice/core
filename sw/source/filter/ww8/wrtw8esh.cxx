@@ -230,11 +230,11 @@ void SwBasicEscherEx::WriteHyperlinkWithinFly( SvMemoryStream& rStrm, const SwFo
 
         nFlags |= WW8_HLINK_BODY;
 
-        tmpStrm.Write( aGuidFileMoniker,sizeof(aGuidFileMoniker) );
+        tmpStrm.WriteBytes(aGuidFileMoniker, sizeof(aGuidFileMoniker));
         tmpStrm.WriteUInt16( nLevel );
         SwWW8Writer::WriteLong(tmpStrm, aFileName.getLength()+1);
         SwWW8Writer::WriteString8( tmpStrm, aFileName, true, RTL_TEXTENCODING_MS_1252 );
-        tmpStrm.Write( aGuidFileTail,sizeof(aGuidFileTail) );
+        tmpStrm.WriteBytes(aGuidFileTail, sizeof(aGuidFileTail));
 
         //For UNICODE
         SwWW8Writer::WriteLong(tmpStrm, 2*aFileName.getLength()+6);
@@ -244,7 +244,7 @@ void SwBasicEscherEx::WriteHyperlinkWithinFly( SvMemoryStream& rStrm, const SwFo
     }
     else if( eProtocol != INetProtocol::NotValid )
     {
-        tmpStrm.Write( aGuidUrlMoniker,sizeof(aGuidUrlMoniker) );
+        tmpStrm.WriteBytes(aGuidUrlMoniker, sizeof(aGuidUrlMoniker));
             SwWW8Writer::WriteLong(tmpStrm, 2*(rUrl.getLength()+1));
 
         SwWW8Writer::WriteString16(tmpStrm, rUrl, true);
@@ -270,7 +270,7 @@ void SwBasicEscherEx::WriteHyperlinkWithinFly( SvMemoryStream& rStrm, const SwFo
         nFlags |= WW8_HLINK_MARK;
     }
 
-    rStrm.Write( aGuidStdLink,16 );
+    rStrm.WriteBytes(aGuidStdLink, 16);
     rStrm .WriteUInt32( 2 )
           .WriteUInt32( nFlags );
     tmpStrm.Seek( STREAM_SEEK_TO_BEGIN );
@@ -278,8 +278,8 @@ void SwBasicEscherEx::WriteHyperlinkWithinFly( SvMemoryStream& rStrm, const SwFo
     if(nLen >0)
     {
         sal_uInt8* pBuffer = new sal_uInt8[ nLen ];
-        tmpStrm.Read(pBuffer, nLen);
-        rStrm.Write( pBuffer, nLen );
+        tmpStrm.ReadBytes(pBuffer, nLen);
+        rStrm.WriteBytes(pBuffer, nLen);
         delete[] pBuffer;
     }
 }

@@ -246,9 +246,9 @@ void ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc,
                             aStrDelimEncoded, nPos+1+aStrDelimEncoded.getLength());
                     }
                     // write byte encoded
-                    rOut.Write(aStrDelimEncoded.getStr(), aStrDelimEncoded.getLength());
-                    rOut.Write(aStrEnc.getStr(), aStrEnc.getLength());
-                    rOut.Write(aStrDelimEncoded.getStr(), aStrDelimEncoded.getLength());
+                    rOut.WriteBytes(aStrDelimEncoded.getStr(), aStrDelimEncoded.getLength());
+                    rOut.WriteBytes(aStrEnc.getStr(), aStrEnc.getLength());
+                    rOut.WriteBytes(aStrDelimEncoded.getStr(), aStrDelimEncoded.getLength());
                 }
                 rOut.WriteUniOrByteChar( '\n', eCharSet );
             }

@@ -435,7 +435,7 @@ void WMFWriter::WMFRecord_Escape( sal_uInt32 nEsc, sal_uInt32 nLen, const sal_In
          .WriteUInt32( 0xa2c2a )        // evil magic number
          .WriteUInt32( nCheckSum )      // crc32 checksum about nEsc & pData
          .WriteUInt32( nEsc );          // escape number
-    pWMF->Write( pData, nLen );
+    pWMF->WriteBytes( pData, nLen );
     if ( nLen & 1 )
         pWMF->WriteUChar( 0 );          // pad byte
 }
@@ -1922,7 +1922,7 @@ void WMFWriter::WriteEMFRecord( SvMemoryStream& rStream, sal_uInt32 nCurSize, sa
          .WriteUInt32( nRemainingSize )                 // remaining size of data in following records, missing in MSDN documentation
          .WriteUInt32( nTotalSize );                    // total size of EMF stream
 
-   pWMF->Write( static_cast< const sal_Char* >( rStream.GetData() ) + rStream.Tell(), nCurSize );
+   pWMF->WriteBytes(static_cast<const sal_Char*>(rStream.GetData()) + rStream.Tell(), nCurSize);
    rStream.SeekRel( nCurSize );
    UpdateRecordHeader();
 }

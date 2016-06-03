@@ -134,8 +134,8 @@ void ExSoundEntry::Write( SvStream& rSt, sal_uInt32 nId ) const
             while ( nBytesLeft )
             {
                 sal_uInt32 nToDo = ( nBytesLeft > 0x10000 ) ? 0x10000 : nBytesLeft;
-                pSourceFile->Read( pBuf, nToDo );
-                rSt.Write( pBuf, nToDo );
+                pSourceFile->ReadBytes(pBuf, nToDo);
+                rSt.WriteBytes(pBuf, nToDo);
                 nBytesLeft -= nToDo;
             }
             delete pSourceFile;

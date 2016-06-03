@@ -424,7 +424,7 @@ uno::Any SAL_CALL ScDocumentConfiguration::getPropertyValue( const OUString& aPr
                 sal_uInt32 nSize = aStream.Tell();
                 aStream.Seek ( STREAM_SEEK_TO_BEGIN );
                 uno::Sequence < sal_Int8 > aSequence( nSize );
-                aStream.Read ( aSequence.getArray(), nSize );
+                aStream.ReadBytes(aSequence.getArray(), nSize);
                 aRet <<= aSequence;
             }
             else

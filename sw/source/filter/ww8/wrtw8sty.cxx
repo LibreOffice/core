@@ -393,7 +393,7 @@ void WW8AttributeOutput::EndStyle()
     p = &m_rWW8Export.pO->front() + nPOPosStdLen2;
     ShortToSVBT16( nLen, p );               // dito
 
-    m_rWW8Export.pTableStrm->Write( m_rWW8Export.pO->data(), m_rWW8Export.pO->size() );      // write it into the file
+    m_rWW8Export.pTableStrm->WriteBytes(m_rWW8Export.pO->data(), m_rWW8Export.pO->size());
     m_rWW8Export.pO->clear();
 }
 
@@ -567,13 +567,11 @@ void WW8AttributeOutput::DefaultStyle( sal_uInt16 nStyle )
 {
     if ( nStyle == 10 )           // Default Char-Style ( only WW )
     {
-        sal_uInt16 n = 0;
-        m_rWW8Export.pTableStrm->Write( &n , 2 );   // empty Style
+        m_rWW8Export.pTableStrm->WriteUInt16(0);   // empty Style
     }
     else
     {
-        sal_uInt16 n = 0;
-        m_rWW8Export.pTableStrm->Write( &n , 2 );   // empty Style
+        m_rWW8Export.pTableStrm->WriteUInt16(0);   // empty Style
     }
 }
 
@@ -661,7 +659,7 @@ void WW8AttributeOutput::StartStyles()
         0x0F, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00,
         0x00, 0x00 };
 
-    m_rWW8Export.pTableStrm->Write( &aStShi, sizeof( aStShi ) );
+    m_rWW8Export.pTableStrm->WriteBytes(&aStShi, sizeof(aStShi));
 }
 
 void WW8AttributeOutput::EndStyles( sal_uInt16 nNumberOfStyles )
@@ -780,7 +778,7 @@ wwFont::wwFont(const OUString &rFamilyName, FontPitch ePitch, FontFamily eFamily
 
 void wwFont::Write(SvStream *pTableStrm) const
 {
-    pTableStrm->Write(maWW8_FFN, sizeof(maWW8_FFN));    // fixed part
+    pTableStrm->WriteBytes(maWW8_FFN, sizeof(maWW8_FFN));    // fixed part
     // ab Ver8 sind folgende beiden Felder eingeschoben,
     // werden von uns ignoriert.
     //char  panose[ 10 ];       //  0x6   PANOSE
@@ -967,9 +965,7 @@ void WW8_WrPlc0::Write( SvStream& rStrm )
     std::vector<sal_uLong>::const_iterator iter;
     for( iter = aPos.begin(); iter != aPos.end(); ++iter )
     {
-        SVBT32 nP;
-        UInt32ToSVBT32( *iter, nP );
-        rStrm.Write( nP, 4 );
+        rStrm.WriteUInt32(*iter);
     }
 }
 
@@ -1829,11 +1825,9 @@ void WW8_WrPlcSepx::WriteSepx( SvStream& rStrm ) const
         WW8_PdAttrDesc *const pA = rSectionAttribute.get();
         if (pA->m_nLen && pA->m_pData != nullptr)
         {
-            SVBT16 nL;
             pA->m_nSepxFcPos = rStrm.Tell();
-            ShortToSVBT16( pA->m_nLen, nL );
-            rStrm.Write( nL, 2 );
-            rStrm.Write( pA->m_pData.get(), pA->m_nLen );
+            rStrm.WriteUInt16(pA->m_nLen);
+            rStrm.WriteBytes(pA->m_pData.get(), pA->m_nLen);
         }
     }
 }
@@ -1849,9 +1843,7 @@ void WW8_WrPlcSepx::WritePlcSed( WW8Export& rWrt ) const
     for( i = 0; i <= aSects.size(); i++ )
     {
         sal_uInt32 nP = aCps[i];
-        SVBT32 nPos;
-        UInt32ToSVBT32( nP, nPos );
-        rWrt.pTableStrm->Write( nPos, 4 );
+        rWrt.pTableStrm->WriteUInt32(nP);
     }
 
     static WW8_SED aSed = {{4, 0},{0, 0, 0, 0},{0, 0},{0xff, 0xff, 0xff, 0xff}};
@@ -1860,7 +1852,7 @@ void WW8_WrPlcSepx::WritePlcSed( WW8Export& rWrt ) const
     {
         // Sepx-Pos
         UInt32ToSVBT32( rSectionAttribute->m_nSepxFcPos, aSed.fcSepx );
-        rWrt.pTableStrm->Write( &aSed, sizeof( aSed ) );
+        rWrt.pTableStrm->WriteBytes(&aSed, sizeof(aSed));
     }
     rWrt.pFib->fcPlcfsed = nFcStart;
     rWrt.pFib->lcbPlcfsed = rWrt.pTableStrm->Tell() - nFcStart;

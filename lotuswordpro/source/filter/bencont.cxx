@@ -331,13 +331,13 @@ void LtcBenContainer::CreateGraphicStream(SvStream * &pStream, const char *pObje
     char * pPointer = pBuf;
     if(pD)
     {
-        pD->Read(pPointer, nDLen);
+        pD->ReadBytes(pPointer, nDLen);
         delete pD;
     }
     pPointer += nDLen;
     if(pS)
     {
-        pS->Read(pPointer, nLen - nDLen);
+        pS->ReadBytes(pPointer, nLen - nDLen);
         delete pS;
     }
 
