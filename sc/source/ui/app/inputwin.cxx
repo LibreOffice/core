@@ -1440,6 +1440,7 @@ void ScTextWnd::dispose()
     delete pEditEngine;
     pEditEngine = nullptr;
 
+    DragSourceHelper::dispose();
     ScTextWndBase::dispose();
 }
 

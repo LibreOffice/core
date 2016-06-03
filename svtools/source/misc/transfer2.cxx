@@ -78,10 +78,19 @@ DragSourceHelper::DragSourceHelper( vcl::Window* pWindow ) :
 }
 
 
+void DragSourceHelper::dispose()
+{
+    osl::MutexGuard aGuard( maMutex );
+    if( mxDragGestureRecognizer.is()  )
+    {
+        mxDragGestureRecognizer->removeDragGestureListener( mxDragGestureListener );
+        mxDragGestureRecognizer.clear();
+    }
+}
+
 DragSourceHelper::~DragSourceHelper()
 {
-    if( mxDragGestureRecognizer.is()  )
-        mxDragGestureRecognizer->removeDragGestureListener( mxDragGestureListener );
+    dispose();
 }
 
 
@@ -240,11 +249,17 @@ DropTargetHelper::DropTargetHelper( const Reference< XDropTarget >& rxDropTarget
 }
 
 
-DropTargetHelper::~DropTargetHelper()
+void DropTargetHelper::dispose()
 {
+    osl::MutexGuard aGuard( maMutex );
     if( mxDropTarget.is() )
         mxDropTarget->removeDropTargetListener( mxDropTargetListener );
+    mxDropTarget.clear();
+}
 
+DropTargetHelper::~DropTargetHelper()
+{
+    dispose();
     delete mpFormats;
 }
 

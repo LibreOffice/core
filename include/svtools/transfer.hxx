@@ -398,6 +398,7 @@ private:
 
     css::uno::Reference< css::datatransfer::dnd::XDragGestureRecognizer > mxDragGestureRecognizer;
     css::uno::Reference< css::datatransfer::dnd::XDragGestureListener >   mxDragGestureListener;
+    osl::Mutex                                                            maMutex;
 
     DragSourceHelper&   operator=( const DragSourceHelper& rDragSourceHelper ) = delete;
     bool                operator==( const DragSourceHelper& rDragSourceHelper ) const = delete;
@@ -408,6 +409,7 @@ public:
     virtual void        StartDrag( sal_Int8 nAction, const Point& rPosPixel );
 
                         DragSourceHelper( vcl::Window* pWindow );
+    void                dispose();
     virtual             ~DragSourceHelper();
 };
 
@@ -448,6 +450,7 @@ private:
     css::uno::Reference< css::datatransfer::dnd::XDropTarget >            mxDropTarget;
     css::uno::Reference< css::datatransfer::dnd::XDropTargetListener >    mxDropTargetListener;
     DataFlavorExVector*                                                   mpFormats;
+    osl::Mutex                                                            maMutex;
 
                         DropTargetHelper() = delete;
     DropTargetHelper&   operator=( const DropTargetHelper& rDropTargetHelper ) = delete;
@@ -468,6 +471,7 @@ public:
                         DropTargetHelper( vcl::Window* pWindow );
                         DropTargetHelper( const css::uno::Reference< css::datatransfer::dnd::XDropTarget >& rxDropTarget );
 
+    void                dispose();
     virtual             ~DropTargetHelper();
 
                         // typically called by the application in ::AcceptDrop and ::ExecuteDrop and (see above)
