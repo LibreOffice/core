@@ -284,7 +284,9 @@ void WeakAggComponentImplHelperBase::removeEventListener(
     Reference< lang::XEventListener > const & xListener )
     throw (RuntimeException, std::exception)
 {
-    rBHelper.removeListener( cppu::UnoType<decltype(xListener)>::get(), xListener );
+    // if we have disposed, then we have cleared the list already
+    if (!rBHelper.bDisposed)
+        rBHelper.removeListener( cppu::UnoType<decltype(xListener)>::get(), xListener );
 }
 
 }

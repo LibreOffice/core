@@ -57,6 +57,13 @@ LayerTabBar::LayerTabBar(DrawViewShell* pViewSh, vcl::Window* pParent)
 
 LayerTabBar::~LayerTabBar()
 {
+    disposeOnce();
+}
+
+void LayerTabBar::dispose()
+{
+    DropTargetHelper::dispose();
+    TabBar::dispose();
 }
 
 void LayerTabBar::Select()

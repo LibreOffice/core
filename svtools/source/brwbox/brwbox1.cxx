@@ -162,6 +162,8 @@ void BrowseBox::dispose()
     delete pColSel;
     if ( bMultiSelection )
         delete uRow.pSel;
+    DragSourceHelper::dispose();
+    DropTargetHelper::dispose();
     Control::dispose();
 }
 

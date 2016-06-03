@@ -1481,6 +1481,8 @@ void SvTreeListBox::dispose()
         mpImpl.reset();
     }
 
+    DropTargetHelper::dispose();
+    DragSourceHelper::dispose();
     Control::dispose();
 }
 
