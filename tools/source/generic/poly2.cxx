@@ -546,8 +546,6 @@ bool PolyPolygon::operator==( const tools::PolyPolygon& rPolyPoly ) const
 
 SvStream& ReadPolyPolygon( SvStream& rIStream, tools::PolyPolygon& rPolyPoly )
 {
-    SAL_WARN_IF( !rIStream.GetVersion(), "tools", "PolyPolygon::>> - Solar-Version not set on rIStream" );
-
     tools::Polygon* pPoly;
     sal_uInt16 nPolyCount(0);
 
@@ -587,8 +585,6 @@ SvStream& ReadPolyPolygon( SvStream& rIStream, tools::PolyPolygon& rPolyPoly )
 
 SvStream& WritePolyPolygon( SvStream& rOStream, const tools::PolyPolygon& rPolyPoly )
 {
-    SAL_WARN_IF( !rOStream.GetVersion(), "tools", "PolyPolygon::<< - Solar-Version not set on rOStream" );
-
     // Write number of polygons
     sal_uInt16 nPolyCount = rPolyPoly.mpImplPolyPolygon->mnCount;
     rOStream.WriteUInt16( nPolyCount );
@@ -603,8 +599,6 @@ SvStream& WritePolyPolygon( SvStream& rOStream, const tools::PolyPolygon& rPolyP
 void PolyPolygon::Read( SvStream& rIStream )
 {
     VersionCompat aCompat( rIStream, StreamMode::READ );
-
-    SAL_WARN_IF( !rIStream.GetVersion(), "tools","PolyPolygon::>> - Solar-Version not set on rIStream" );
 
     tools::Polygon* pPoly;
     sal_uInt16 nPolyCount(0);
