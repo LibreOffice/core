@@ -31,6 +31,8 @@ public:
 
     TerminalCheck Char() const;
 
+    TypeCheck Pointer() const;
+
     TypeCheck LvalueReference() const;
 
     template<std::size_t N> inline NamespaceCheck Class(char const (& id)[N])

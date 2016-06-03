@@ -86,34 +86,34 @@ class ProtocolCheck
         switch(eRequired)
         {
             case E_PRIVATE:
-                bRet = sURL.matchAsciiL(RTL_CONSTASCII_STRINGPARAM(SPECIALPROTOCOL_PRIVATE));
+                bRet = sURL.startsWith(SPECIALPROTOCOL_PRIVATE);
                 break;
             case E_PRIVATE_OBJECT:
-                bRet = sURL.matchAsciiL(RTL_CONSTASCII_STRINGPARAM(SPECIALPROTOCOL_PRIVATE_OBJECT));
+                bRet = sURL.startsWith(SPECIALPROTOCOL_PRIVATE_OBJECT);
                 break;
             case E_PRIVATE_STREAM:
-                bRet = sURL.matchAsciiL(RTL_CONSTASCII_STRINGPARAM(SPECIALPROTOCOL_PRIVATE_STREAM));
+                bRet = sURL.startsWith(SPECIALPROTOCOL_PRIVATE_STREAM);
                 break;
             case E_PRIVATE_FACTORY:
-                bRet = sURL.matchAsciiL(RTL_CONSTASCII_STRINGPARAM(SPECIALPROTOCOL_PRIVATE_FACTORY));
+                bRet = sURL.startsWith(SPECIALPROTOCOL_PRIVATE_FACTORY);
                 break;
             case E_SLOT:
-                bRet = sURL.matchAsciiL(RTL_CONSTASCII_STRINGPARAM(SPECIALPROTOCOL_SLOT));
+                bRet = sURL.startsWith(SPECIALPROTOCOL_SLOT);
                 break;
             case E_UNO:
-                bRet = sURL.matchAsciiL(RTL_CONSTASCII_STRINGPARAM(SPECIALPROTOCOL_UNO));
+                bRet = sURL.startsWith(SPECIALPROTOCOL_UNO);
                 break;
             case E_MACRO:
-                bRet = sURL.matchAsciiL(RTL_CONSTASCII_STRINGPARAM(SPECIALPROTOCOL_MACRO));
+                bRet = sURL.startsWith(SPECIALPROTOCOL_MACRO);
                 break;
             case E_SERVICE:
-                bRet = sURL.matchAsciiL(RTL_CONSTASCII_STRINGPARAM(SPECIALPROTOCOL_SERVICE));
+                bRet = sURL.startsWith(SPECIALPROTOCOL_SERVICE);
                 break;
             case E_MAILTO:
-                bRet = sURL.matchAsciiL(RTL_CONSTASCII_STRINGPARAM(SPECIALPROTOCOL_MAILTO));
+                bRet = sURL.startsWith(SPECIALPROTOCOL_MAILTO);
                 break;
             case E_NEWS:
-                bRet = sURL.matchAsciiL(RTL_CONSTASCII_STRINGPARAM(SPECIALPROTOCOL_NEWS));
+                bRet = sURL.startsWith(SPECIALPROTOCOL_NEWS);
                 break;
             default:
                 bRet = sal_False;

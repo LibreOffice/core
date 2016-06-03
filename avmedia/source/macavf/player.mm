@@ -392,7 +392,7 @@ uno::Reference< media::XFrameGrabber > SAL_CALL Player::createFrameGrabber()
 sal_Bool SAL_CALL Player::supportsService( const ::rtl::OUString& ServiceName )
     throw (uno::RuntimeException)
 {
-    return ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( AVMEDIA_MACAVF_PLAYER_SERVICENAME ) );
+    return ServiceName == AVMEDIA_MACAVF_PLAYER_SERVICENAME;
 }
 
 

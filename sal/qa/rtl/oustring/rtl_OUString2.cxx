@@ -925,32 +925,16 @@ public:
 };
 
 void indexOfAscii::test() {
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), rtl::OUString().indexOf(""));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), rtl::OUString().lastIndexOf(""));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), rtl::OUString("foo").indexOf("foo"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), rtl::OUString("foo").lastIndexOf("foo"));
     CPPUNIT_ASSERT_EQUAL(
-        sal_Int32(-1),
-        rtl::OUString().indexOfAsciiL(RTL_CONSTASCII_STRINGPARAM("")));
+        sal_Int32(2), rtl::OUString("fofoobar").indexOf("foo"));
     CPPUNIT_ASSERT_EQUAL(
-        sal_Int32(-1),
-        rtl::OUString().lastIndexOfAsciiL(RTL_CONSTASCII_STRINGPARAM("")));
+        sal_Int32(3), rtl::OUString("foofoofob").lastIndexOf("foo"));
     CPPUNIT_ASSERT_EQUAL(
-        sal_Int32(0),
-        rtl::OUString("foo").indexOfAsciiL(
-            RTL_CONSTASCII_STRINGPARAM("foo")));
-    CPPUNIT_ASSERT_EQUAL(
-        sal_Int32(0),
-        rtl::OUString("foo").lastIndexOfAsciiL(
-            RTL_CONSTASCII_STRINGPARAM("foo")));
-    CPPUNIT_ASSERT_EQUAL(
-        sal_Int32(2),
-        rtl::OUString("fofoobar").indexOfAsciiL(
-            RTL_CONSTASCII_STRINGPARAM("foo")));
-    CPPUNIT_ASSERT_EQUAL(
-        sal_Int32(3),
-        rtl::OUString("foofoofob").
-        lastIndexOfAsciiL(RTL_CONSTASCII_STRINGPARAM("foo")));
-    CPPUNIT_ASSERT_EQUAL(
-        sal_Int32(3),
-        rtl::OUString("foofoobar").indexOfAsciiL(
-            RTL_CONSTASCII_STRINGPARAM("foo"), 1));
+        sal_Int32(3), rtl::OUString("foofoobar").indexOf("foo", 1));
 }
 
 class endsWith: public CppUnit::TestFixture {
@@ -963,24 +947,11 @@ public:
 };
 
 void endsWith::test() {
-    CPPUNIT_ASSERT_EQUAL(
-        true,
-        rtl::OUString().endsWithAsciiL(RTL_CONSTASCII_STRINGPARAM("")));
-    CPPUNIT_ASSERT_EQUAL(
-        false,
-        rtl::OUString().endsWithAsciiL(RTL_CONSTASCII_STRINGPARAM("foo")));
-    CPPUNIT_ASSERT_EQUAL(
-        true,
-        rtl::OUString("bar").endsWithAsciiL(
-            RTL_CONSTASCII_STRINGPARAM("bar")));
-    CPPUNIT_ASSERT_EQUAL(
-        true,
-        rtl::OUString("foobar").endsWithAsciiL(
-            RTL_CONSTASCII_STRINGPARAM("bar")));
-    CPPUNIT_ASSERT_EQUAL(
-        false,
-        rtl::OUString("FOOBAR").endsWithAsciiL(
-            RTL_CONSTASCII_STRINGPARAM("bar")));
+    CPPUNIT_ASSERT_EQUAL(true, rtl::OUString().endsWith(""));
+    CPPUNIT_ASSERT_EQUAL(false, rtl::OUString().endsWith("foo"));
+    CPPUNIT_ASSERT_EQUAL(true, rtl::OUString("bar").endsWith("bar"));
+    CPPUNIT_ASSERT_EQUAL(true, rtl::OUString("foobar").endsWith("bar"));
+    CPPUNIT_ASSERT_EQUAL(false, rtl::OUString("FOOBAR").endsWith("bar"));
 }
 
 class isEmpty: public CppUnit::TestFixture {

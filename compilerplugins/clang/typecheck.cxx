@@ -39,6 +39,16 @@ TypeCheck TypeCheck::LvalueReference() const {
     return TypeCheck();
 }
 
+TypeCheck TypeCheck::Pointer() const {
+    if (!type_.isNull()) {
+        auto const t = type_->getAs<clang::PointerType>();
+        if (t != nullptr) {
+            return TypeCheck(t->getPointeeType());
+        }
+    }
+    return TypeCheck();
+}
+
 TypeCheck TypeCheck::NotSubstTemplateTypeParmType() const {
     return
         (!type_.isNull()

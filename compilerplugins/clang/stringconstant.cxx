@@ -821,6 +821,20 @@ bool StringConstant::isStringConstant(
     assert(embeddedNuls != nullptr);
     assert(terminatingNul != nullptr);
     QualType t = expr->getType();
+    // Look inside RTL_CONSTASCII_STRINGPARAM:
+    if (loplugin::TypeCheck(t).Pointer().Const().Char()) {
+        auto e2 = dyn_cast<UnaryOperator>(expr);
+        if (e2 == nullptr || e2->getOpcode() != UO_AddrOf) {
+            return false;
+        }
+        auto e3 = dyn_cast<ArraySubscriptExpr>(
+            e2->getSubExpr()->IgnoreParenImpCasts());
+        if (e3 == nullptr || !isZero(e3->getIdx()->IgnoreParenImpCasts())) {
+            return false;
+        }
+        expr = e3->getBase()->IgnoreParenImpCasts();
+        t = expr->getType();
+    }
     if (!(t->isConstantArrayType() && t.isConstQualified()
           && (loplugin::TypeCheck(t->getAsArrayTypeUnsafe()->getElementType())
               .Char())))
