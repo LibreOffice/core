@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_c6c18f82",
+        "filename": "sfx2/source/notebookbar/SfxNotebookBar.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000068
+      },
+      "writtenOn": "2016-06-03T09:26:17Z",
+      "side": 1,
+      "message": "This code now becomes copy/paste of the StateMethod(SystemWindow*, ...) - please make this call that, instead of having a copy here :-)",
+      "revId": "33e5ca016fec6f5dcacc77e8bf1618d8c21542c7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
