@@ -1734,7 +1734,7 @@ namespace osl_FileStatus
             test_Attributes &= rFileStatus.getAttributes();
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE( "test for getAttributes function: Hidden files( Solaris version )",
-                                    osl_File_Attribute_Hidden, test_Attributes );
+                                    static_cast<sal_Int32>(osl_File_Attribute_Hidden), test_Attributes );
         }
 #else                                    //Windows version
         void getAttributes_004()
@@ -2615,7 +2615,7 @@ namespace osl_File
             CPPUNIT_ASSERT_EQUAL( nError1, ::osl::FileBase::E_None );
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE( "test for isEndOfFile function: use isEndOfFile to move pointer step by step",
-                                      nFilePointer, sizeof( pBuffer_Char ) + 1 );
+                                      nFilePointer, static_cast<sal_uInt64>(sizeof( pBuffer_Char ) + 1) );
         }
         CPPUNIT_TEST_SUITE( isEndOfFile );
         CPPUNIT_TEST( isEndOfFile_001 );
