@@ -48,6 +48,11 @@ void TemplateDefaultView::reload()
     set_width_request(mnTextHeight + mnItemMaxSize + 2*mnItemPadding);
 }
 
+void TemplateDefaultView::KeyInput( const KeyEvent& rKEvt )
+{
+    ThumbnailView::KeyInput(rKEvt);
+}
+
 void TemplateDefaultView::createContextMenu()
 {
     std::unique_ptr<PopupMenu> pItemMenu(new PopupMenu);

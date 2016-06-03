@@ -140,8 +140,10 @@ void TemplateAbstractView::updateThumbnailDimensions(long itemMaxSize)
 
 void TemplateAbstractView::MouseButtonDown( const MouseEvent& rMEvt )
 {
+    GrabFocus();
     if (rMEvt.IsRight())
     {
+        deselectItems();
         size_t nPos = ImplGetItem(rMEvt.GetPosPixel());
         Point aPosition (rMEvt.GetPosPixel());
         maPosition = aPosition;
@@ -156,6 +158,29 @@ void TemplateAbstractView::MouseButtonDown( const MouseEvent& rMEvt )
     }
 
     ThumbnailView::MouseButtonDown(rMEvt);
+}
+
+void TemplateAbstractView::KeyInput( const KeyEvent& rKEvt )
+{
+    vcl::KeyCode aKeyCode = rKEvt.GetKeyCode();
+
+    if(aKeyCode == ( KEY_MOD1 | KEY_A ) )
+    {
+        for (ThumbnailViewItem* pItem : mItemList)
+        {
+            if (!pItem->isSelected())
+            {
+                pItem->setSelection(true);
+                maItemStateHdl.Call(pItem);
+            }
+        }
+
+        if (IsReallyVisible() && IsUpdateMode())
+            Invalidate();
+        return;
+    }
+
+    ThumbnailView::KeyInput(rKEvt);
 }
 
 

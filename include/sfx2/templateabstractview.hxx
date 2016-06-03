@@ -83,6 +83,8 @@ public:
 
     virtual void MouseButtonDown( const MouseEvent& rMEvt ) override;
 
+    virtual void KeyInput( const KeyEvent& rKEvt ) override;
+
     virtual void showAllTemplates () = 0;
 
     virtual void showRegion (TemplateContainerItem *pItem) = 0;
