@@ -12,6 +12,8 @@
 
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
+#include <vcl/fixed.hxx>
+#include <vcl/edit.hxx>
 
 class CrashReportDialog : public Dialog
 {
@@ -27,6 +29,9 @@ private:
 
     VclPtr<Button> mpBtnSend;
     VclPtr<Button> mpBtnCancel;
+    VclPtr<Button> mpBtnClose;
+    VclPtr<FixedText> mpEditPreUpload;
+    VclPtr<FixedText> mpEditPostUpload;
 
     DECL_LINK_TYPED(BtnHdl, Button*, void);
 };

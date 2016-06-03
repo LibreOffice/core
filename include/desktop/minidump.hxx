@@ -12,7 +12,7 @@
 
 #include <string>
 
-bool readConfig(const std::string& iniPath);
+bool readConfig(const std::string& iniPath, std::string& response);
 
 #endif
 
