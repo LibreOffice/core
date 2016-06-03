@@ -106,7 +106,7 @@ void LwpSdwGroupLoaderV0102::BeginDrawObjects(std::vector< rtl::Reference<XFFram
     }
     //version
     unsigned short nVersion;
-    m_pStream->Read(&nVersion,2);
+    m_pStream->ReadUInt16(nVersion);
     if (nVersion<0x0102)
     {
         assert(false);
@@ -116,15 +116,15 @@ void LwpSdwGroupLoaderV0102::BeginDrawObjects(std::vector< rtl::Reference<XFFram
     m_pStream->SeekRel(4);
     //record count
     unsigned short nRecCount;
-    m_pStream->Read(&nRecCount,2);
+    m_pStream->ReadUInt16(nRecCount);
     // selCount
     m_pStream->SeekRel(2);
     //boundrect
     unsigned short left,top,right,bottom;
-    m_pStream->Read(&left,2);
-    m_pStream->Read(&top,2);
-    m_pStream->Read(&right,2);
-    m_pStream->Read(&bottom,2);
+    m_pStream->ReadUInt16(left);
+    m_pStream->ReadUInt16(top);
+    m_pStream->ReadUInt16(right);
+    m_pStream->ReadUInt16(bottom);
     // fileSize
     m_pStream->SeekRel(2);
 
@@ -251,7 +251,7 @@ XFDrawGroup* LwpSdwGroupLoaderV0102::CreateDrawGroupObject()
     }
     //version
     unsigned short nVersion;
-    m_pStream->Read(&nVersion,2);
+    m_pStream->ReadUInt16(nVersion);
     if (nVersion<0x0102)
     {
         assert(false);
@@ -261,15 +261,15 @@ XFDrawGroup* LwpSdwGroupLoaderV0102::CreateDrawGroupObject()
     m_pStream->SeekRel(4);
     //record count
     unsigned short nRecCount;
-    m_pStream->Read(&nRecCount,2);
+    m_pStream->ReadUInt16(nRecCount);
     // selCount
     m_pStream->SeekRel(2);
     //boundrect
     unsigned short left,top,right,bottom;
-    m_pStream->Read(&left,2);
-    m_pStream->Read(&top,2);
-    m_pStream->Read(&right,2);
-    m_pStream->Read(&bottom,2);
+    m_pStream->ReadUInt16(left);
+    m_pStream->ReadUInt16(top);
+    m_pStream->ReadUInt16(right);
+    m_pStream->ReadUInt16(bottom);
     // fileSize
     m_pStream->SeekRel(2);
 
@@ -304,7 +304,7 @@ XFFrame* LwpSdwGroupLoaderV0102::CreateDrawObject()
 {
     //record type
     unsigned char recType;
-    m_pStream->Read(&recType,1);
+    m_pStream->ReadUChar(recType);
 
     LwpDrawObj* pDrawObj = nullptr;
     XFFrame* pRetObjct = nullptr;
