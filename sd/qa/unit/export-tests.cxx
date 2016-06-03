@@ -30,7 +30,6 @@
 
 #include <rsc/rscsfx.hxx>
 
-
 #include <svx/svdoutl.hxx>
 #include <svx/svdotext.hxx>
 #include <svx/svdoashp.hxx>
@@ -43,6 +42,8 @@
 #include <unotools/mediadescriptor.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <rtl/ustring.hxx>
+
+#include <vcl/opengl/OpenGLWrapper.hxx>
 
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
@@ -445,6 +446,9 @@ void SdExportTest::testTransparentBackground()
 
 void SdExportTest::testMediaEmbedding()
 {
+    if (!OpenGLWrapper::isVCLOpenGLEnabled())
+        return;
+
     ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/media_embedding.odp"), ODP);
 
 #if HAVE_FEATURE_GLTF
