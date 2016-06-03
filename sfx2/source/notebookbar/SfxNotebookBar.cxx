@@ -36,6 +36,8 @@ void SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
                                  const css::uno::Reference<css::frame::XFrame> xFrame,
                                  const OUString& rUIFile)
 {
+    assert(pSysWindow);
+
     SvtViewOptions aViewOpt(E_WINDOW, "notebookbar");
 
     if (aViewOpt.IsVisible())
