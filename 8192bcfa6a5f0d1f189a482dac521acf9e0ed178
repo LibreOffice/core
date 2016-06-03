@@ -54,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "da7fb54a_46873f61",
+        "filename": "include/framework/dispatchhelper.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2016-06-03T08:50:49Z",
+      "side": 1,
+      "message": "see irc discussion ;)",
+      "parentUuid": "da7fb54a_f222d2b8",
+      "revId": "8192bcfa6a5f0d1f189a482dac521acf9e0ed178",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da7fb54a_d2ceae82",
         "filename": "sfx2/source/control/unoctitm.cxx",
         "patchSetId": 7
@@ -83,6 +101,24 @@
       "side": 1,
       "message": "The pDispatcher-\u003eExecute is here sfx2/source/control/dispatch.cxx:992, you see: In error case it give a nullptr back.\nThe baseclass from pitem is SfxPoolItem, and here is the save handling sfx2/source/doc/objserv.cxx:731 and return always SfxBoolItem.\nThe main problem here was, when the save was wrong the return was a vaild pointer but in the pointer was set to false and in this case he close the application and your changes was lost.\nAnd this fix solved that, but when i get a other type as SfxBoolItem, in this case i can not interpet and mean the save was not okay (no data lost)\nI have the backtrace of this part but i not sure to past here",
       "parentUuid": "da7fb54a_d2ceae82",
+      "revId": "8192bcfa6a5f0d1f189a482dac521acf9e0ed178",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_e6b93330",
+        "filename": "sfx2/source/control/unoctitm.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 705,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2016-06-03T08:50:49Z",
+      "side": 1,
+      "message": "Umm - SfxDispatcher::Execute() calls arbitrary slots, how do you know nothing else is ever returned?",
+      "parentUuid": "da7fb54a_923b46eb",
       "revId": "8192bcfa6a5f0d1f189a482dac521acf9e0ed178",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
