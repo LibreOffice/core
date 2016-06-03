@@ -45,6 +45,29 @@ void Sidebar::ShowPanel (
     }
 }
 
+void Sidebar::TogglePanel (
+    const ::rtl::OUString& rsPanelId,
+    const css::uno::Reference<frame::XFrame>& rxFrame)
+{
+    SidebarController* pController = SidebarController::GetSidebarControllerForFrame(rxFrame);
+
+    if (!pController)
+        return;
+
+    std::shared_ptr<PanelDescriptor> xPanelDescriptor = pController->GetResourceManager()->GetPanelDescriptor(rsPanelId);
+
+    if (!xPanelDescriptor)
+        return;
+
+    // This should be a lot more sophisticated:
+    // - Make the deck switching asynchronous
+    // - Make sure to use a context that really shows the panel
+
+    // All that is not necessary for the current use cases so lets
+    // keep it simple for the time being.
+    pController->OpenThenToggleDeck(xPanelDescriptor->msDeckId);
+}
+
 } } // end of namespace sfx2::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
