@@ -638,7 +638,7 @@ bool XPMReader::ImplGetString()
     {
         if ( mnTempAvail == 0 )
         {
-            mnTempAvail = mrIStm.Read( mpTempBuf, XPMTEMPBUFSIZE );
+            mnTempAvail = mrIStm.ReadBytes( mpTempBuf, XPMTEMPBUFSIZE );
             if ( mnTempAvail == 0 )
                 break;
 

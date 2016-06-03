@@ -508,7 +508,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
             if ( nLength )
             {
                 std::unique_ptr<char[]> pChar(new char[ ( nLength + 1 ) &~ 1 ]);
-                pWMF->Read( pChar.get(), ( nLength + 1 ) &~ 1 );
+                pWMF->ReadBytes(pChar.get(), (nLength + 1) &~ 1);
                 OUString aText( pChar.get(), nLength, pOut->GetCharSet() );
                 pChar.reset();
                 Point aPosition( ReadYX() );
@@ -550,7 +550,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
                     aRect = Rectangle( aPt1, aPt2 );
                 }
                 std::unique_ptr<char[]> pChar(new char[ ( nOriginalTextLen + 1 ) &~ 1 ]);
-                pWMF->Read( pChar.get(), ( nOriginalTextLen + 1 ) &~ 1 );
+                pWMF->ReadBytes(pChar.get(), (nOriginalTextLen + 1) &~ 1);
                 OUString aText( pChar.get(), (sal_uInt16)nOriginalTextLen, pOut->GetCharSet() );// after this conversion the text may contain
                 nNewTextLen = aText.getLength();                                          // less character (japanese version), so the
                 pChar.reset();                                                         // dxAry will not fit
@@ -903,7 +903,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
             pWMF->ReadUChar( aLogFont.lfClipPrecision );
             pWMF->ReadUChar( aLogFont.lfQuality );
             pWMF->ReadUChar( aLogFont.lfPitchAndFamily );
-            pWMF->Read( lfFaceName, LF_FACESIZE );
+            pWMF->ReadBytes( lfFaceName, LF_FACESIZE );
             aLogFont.lfWidth = aFontSize.Width();
             aLogFont.lfHeight = aFontSize.Height();
             aLogFont.lfEscapement = lfEscapement;
@@ -1024,7 +1024,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
                                 if ( nEscLen > 0 )
                                 {
                                     pData.reset(new sal_Int8[ nEscLen ]);
-                                    pWMF->Read( pData.get(), nEscLen );
+                                    pWMF->ReadBytes(pData.get(), nEscLen);
                                     nCheckSum = rtl_crc32( nCheckSum, pData.get(), nEscLen );
                                 }
                                 if ( nCheck == nCheckSum )
@@ -1041,7 +1041,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
                                                 sal_uInt32  nStringLen, nDXCount;
                                                 std::unique_ptr<long[]> pDXAry;
                                                 SvMemoryStream aMemoryStream( nEscLen );
-                                                aMemoryStream.Write( pData.get(), nEscLen );
+                                                aMemoryStream.WriteBytes(pData.get(), nEscLen);
                                                 aMemoryStream.Seek( STREAM_SEEK_TO_BEGIN );
                                                 sal_Int32 nTmpX(0), nTmpY(0);
                                                 aMemoryStream.ReadInt32( nTmpX )
@@ -1112,9 +1112,9 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
                             if( pEMFStream )
                             {
                                 std::unique_ptr<sal_Int8[]> pBuf(new sal_Int8[ nCurRecSize ]);
-                                sal_uInt32 nCount = pWMF->Read( pBuf.get(), nCurRecSize );
+                                sal_uInt32 nCount = pWMF->ReadBytes(pBuf.get(), nCurRecSize);
                                 if( nCount == nCurRecSize )
-                                    pEMFStream->Write( pBuf.get(), nCount );
+                                    pEMFStream->WriteBytes(pBuf.get(), nCount);
                             }
                         }
                     }

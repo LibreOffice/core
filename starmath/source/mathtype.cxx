@@ -1904,7 +1904,7 @@ bool MathType::ConvertFromStarMath( SfxMedium& rMedium )
             0x00, 0x00, 0x00, 0x00, 0x00, 0x00
         };
         tools::SvRef<SotStorageStream> xStor( pStor->OpenSotStream("\1CompObj"));
-        xStor->Write(aCompObj,sizeof(aCompObj));
+        xStor->WriteBytes(aCompObj, sizeof(aCompObj));
 
         static sal_uInt8 const aOle[] = {
             0x01, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00,
@@ -1912,7 +1912,7 @@ bool MathType::ConvertFromStarMath( SfxMedium& rMedium )
             0x00, 0x00, 0x00, 0x00
             };
         tools::SvRef<SotStorageStream> xStor2( pStor->OpenSotStream("\1Ole"));
-        xStor2->Write(aOle,sizeof(aOle));
+        xStor2->WriteBytes(aOle, sizeof(aOle));
         xStor.Clear();
         xStor2.Clear();
 

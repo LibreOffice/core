@@ -1848,7 +1848,7 @@ namespace cppcanvas
 
                     OSL_ENSURE(dataSize >= 4, "No room for TotalObjectSize in EmfPlusContinuedObjectRecord");
                     // 1st 4 bytes are TotalObjectSize
-                    mMStream.Write (static_cast<const char *>(rMF.GetData()) + rMF.Tell() + 4, dataSize - 4);
+                    mMStream.WriteBytes(static_cast<const char *>(rMF.GetData()) + rMF.Tell() + 4, dataSize - 4);
                     SAL_INFO("cppcanvas.emf", "EMF+ read next object part size: " << size << " type: " << type << " flags: " << flags << " data size: " << dataSize);
                 } else {
                     if (mbMultipart) {

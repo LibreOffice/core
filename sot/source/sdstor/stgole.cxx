@@ -123,7 +123,7 @@ bool StgCompObjStream::Load()
 
             std::unique_ptr<sal_Char[]> p(new sal_Char[ nStrLen+1 ]);
             p[nStrLen] = 0;
-            if( Read( p.get(), nStrLen ) == nStrLen )
+            if (ReadBytes( p.get(), nStrLen ) == nStrLen)
             {
                 //The encoding here is "ANSI", which is pretty useless seeing as
                 //the actual codepage used doesn't seem to be specified/stored

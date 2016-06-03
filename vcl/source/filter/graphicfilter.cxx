@@ -90,7 +90,7 @@ protected:
 
     virtual void SAL_CALL   writeBytes( const css::uno::Sequence< sal_Int8 >& rData )
         throw (css::io::NotConnectedException, css::io::BufferSizeExceededException, css::io::IOException, css::uno::RuntimeException, std::exception) override
-        { mrStm.Write( rData.getConstArray(), rData.getLength() ); }
+        { mrStm.WriteBytes(rData.getConstArray(), rData.getLength()); }
     virtual void SAL_CALL   flush()
         throw (css::io::NotConnectedException, css::io::BufferSizeExceededException, css::io::IOException, css::uno::RuntimeException, std::exception) override
         { mrStm.Flush(); }
@@ -206,7 +206,7 @@ bool isPCT(SvStream& rStream, sal_uLong nStreamPos, sal_uLong nStreamLen)
           bdBoxOk = false;
 
         // read version op
-        rStream.Read( sBuf,3 );
+        rStream.ReadBytes(sBuf, 3);
         // see http://developer.apple.com/legacy/mac/library/documentation/mac/pdf/Imaging_With_QuickDraw/Appendix_A.pdf
         // normal version 2 - page A23 and A24
         if ( sBuf[ 0 ] == 0x00 && sBuf[ 1 ] == 0x11 && sBuf[ 2 ] == 0x02)
@@ -273,13 +273,13 @@ static bool ImpPeekGraphicFormat( SvStream& rStream, OUString& rFormatExtension,
     else if (nStreamLen >= 256)
     {
         // load first 256 bytes into a buffer
-        sal_uLong nRead = rStream.Read(sFirstBytes, 256);
+        sal_uLong nRead = rStream.ReadBytes(sFirstBytes, 256);
         if (nRead < 256)
             nStreamLen = nRead;
     }
     else
     {
-        nStreamLen = rStream.Read(sFirstBytes, nStreamLen);
+        nStreamLen = rStream.ReadBytes(sFirstBytes, nStreamLen);
     }
 
 
@@ -477,7 +477,7 @@ static bool ImpPeekGraphicFormat( SvStream& rStream, OUString& rFormatExtension,
         {
             char sBuf[8];
             rStream.Seek( nStreamPos + 2048 );
-            rStream.Read( sBuf, 7 );
+            rStream.ReadBytes( sBuf, 7 );
 
             if( strncmp( sBuf, "PCD_IPI", 7 ) == 0 )
             {
@@ -618,7 +618,7 @@ static bool ImpPeekGraphicFormat( SvStream& rStream, OUString& rFormatExtension,
         std::unique_ptr<sal_uInt8[]> pBuf(new sal_uInt8 [ nSize ]);
 
         rStream.Seek( nStreamPos );
-        rStream.Read( pBuf.get(), nSize );
+        rStream.ReadBytes( pBuf.get(), nSize );
         sal_uInt8* pPtr = ImplSearchEntry( pBuf.get(), reinterpret_cast<sal_uInt8 const *>("#define"), nSize, 7 );
 
         if( pPtr )
@@ -700,7 +700,7 @@ static bool ImpPeekGraphicFormat( SvStream& rStream, OUString& rFormatExtension,
             {
                 nCheckSize = nStreamLen < 2048 ? nStreamLen : 2048;
                 rStream.Seek(nStreamPos);
-                nCheckSize = rStream.Read(sExtendedOrDecompressedFirstBytes, nCheckSize);
+                nCheckSize = rStream.ReadBytes(sExtendedOrDecompressedFirstBytes, nCheckSize);
             }
 
             if(ImplSearchEntry(pCheckArray, reinterpret_cast<sal_uInt8 const *>("<svg"), nCheckSize, 4)) // '<svg'
@@ -1461,7 +1461,7 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPat
                             SvMemoryStream aIStrm(const_cast<sal_uInt8*>(&rData[11]), nGraphicContentSize, StreamMode::READ);
                             pGraphicContent = new sal_uInt8[nGraphicContentSize];
                             sal_uInt64 aCurrentPosition = aIStrm.Tell();
-                            aIStrm.Read(pGraphicContent, nGraphicContentSize);
+                            aIStrm.ReadBytes(pGraphicContent, nGraphicContentSize);
                             aIStrm.Seek(aCurrentPosition);
                             ImportGIF(aIStrm, rGraphic);
                             eLinkType = GfxLinkType::NativeGif;
@@ -1513,7 +1513,7 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPat
             {
                 std::vector<sal_uInt8> aTwoBytes(2);
                 rIStream.Seek(nStreamPosition);
-                rIStream.Read(&aTwoBytes[0], 2);
+                rIStream.ReadBytes(&aTwoBytes[0], 2);
                 rIStream.Seek(nStreamPosition);
 
                 if(aTwoBytes[0] == 0x1F && aTwoBytes[1] == 0x8B)
@@ -1530,7 +1530,7 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPat
                     {
                         SvgDataArray aNewData(nMemoryLength);
                         aMemStream.Seek(STREAM_SEEK_TO_BEGIN);
-                        aMemStream.Read(aNewData.begin(), nMemoryLength);
+                        aMemStream.ReadBytes(aNewData.begin(), nMemoryLength);
 
                         // Make a uncompressed copy for GfxLink
                         nGraphicContentSize = nMemoryLength;
@@ -1549,7 +1549,7 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPat
                 {
                     SvgDataArray aNewData(nStreamLength);
                     rIStream.Seek(nStreamPosition);
-                    rIStream.Read(aNewData.begin(), nStreamLength);
+                    rIStream.ReadBytes(aNewData.begin(), nStreamLength);
 
                     if(!rIStream.GetError())
                     {
@@ -1758,7 +1758,7 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPat
                 if( nStatus == GRFILTER_OK )
                 {
                     rIStream.Seek(nStreamBegin);
-                    rIStream.Read(pGraphicContent, nGraphicContentSize);
+                    rIStream.ReadBytes(pGraphicContent, nGraphicContentSize);
                 }
             }
         }
@@ -2043,7 +2043,7 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString
 
                 if (aSvgDataPtr.get() && aSvgDataPtr->getSvgDataArrayLength())
                 {
-                    rOStm.Write(aSvgDataPtr->getSvgDataArray().getConstArray(), aSvgDataPtr->getSvgDataArrayLength());
+                    rOStm.WriteBytes(aSvgDataPtr->getSvgDataArray().getConstArray(), aSvgDataPtr->getSvgDataArrayLength());
 
                     if( rOStm.GetError() )
                     {

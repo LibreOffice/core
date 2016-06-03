@@ -276,8 +276,8 @@ public:
     SvStream&       WriteUInt32AsString( sal_uInt32 nUInt32 );
     SvStream&       WriteInt32AsString( sal_Int32 nInt32 );
 
-    sal_Size        Read( void* pData, sal_Size nSize );
-    sal_Size        Write( const void* pData, sal_Size nSize );
+    sal_Size        ReadBytes( void* pData, sal_Size nSize );
+    sal_Size        WriteBytes( const void* pData, sal_Size nSize );
     sal_uInt64      Seek( sal_uInt64 nPos );
     sal_uInt64      SeekRel( sal_Int64 nPos );
     sal_uInt64      Tell() const { return m_nBufFilePos + m_nBufActualPos;  }
@@ -537,7 +537,7 @@ inline OUString read_uInt8_lenPrefixed_uInt8s_ToOUString(SvStream& rStrm,
 inline sal_Size write_uInt8s_FromOString(SvStream& rStrm, const OString& rStr,
                                                          sal_Size nUnits)
 {
-    return rStrm.Write(rStr.getStr(), nUnits);
+    return rStrm.WriteBytes(rStr.getStr(), nUnits);
 }
 
 inline sal_Size write_uInt8s_FromOString(SvStream& rStrm, const OString& rStr)

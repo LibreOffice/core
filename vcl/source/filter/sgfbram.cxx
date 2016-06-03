@@ -47,8 +47,8 @@ SvStream& ReadSgfHeader(SvStream& rIStream, SgfHeader& rHead)
     rIStream.ReadInt16(rHead.Yoffs);
     rIStream.ReadUInt16(rHead.Planes);
     rIStream.ReadUInt16(rHead.SwGrCol);
-    rIStream.Read(&rHead.Autor, 10);
-    rIStream.Read(&rHead.Programm, 10);
+    rIStream.ReadBytes(&rHead.Autor, 10);
+    rIStream.ReadBytes(&rHead.Programm, 10);
     rIStream.ReadUInt16(rHead.OfsLo);
     rIStream.ReadUInt16(rHead.OfsHi);
     assert(rIStream.GetError() || rIStream.Tell() == nOldPos + SgfHeaderSize);
@@ -75,7 +75,7 @@ SvStream& ReadSgfEntry(SvStream& rIStream, SgfEntry& rEntr)
     rIStream.ReadUInt16(rEntr.iFrei);
     rIStream.ReadUInt16(rEntr.lFreiLo);
     rIStream.ReadUInt16(rEntr.lFreiHi);
-    rIStream.Read(&rEntr.cFrei, 10);
+    rIStream.ReadBytes(&rEntr.cFrei, 10);
     rIStream.ReadUInt16(rEntr.OfsLo);
     rIStream.ReadUInt16(rEntr.OfsHi);
     assert(rIStream.GetError() || rIStream.Tell() == nOldPos + SgfEntrySize);
@@ -154,7 +154,7 @@ SvStream& WriteBmpInfoHeader(SvStream& rOStream, BmpInfoHeader& rInfo)
 
 SvStream& WriteRGBQuad(SvStream& rOStream, const RGBQuad& rQuad)
 {
-    rOStream.Write(&rQuad, sizeof(rQuad));
+    rOStream.WriteBytes(&rQuad, sizeof(rQuad));
     return rOStream;
 }
 
@@ -176,10 +176,10 @@ sal_uInt8 PcxExpand::GetByte(SvStream& rInp)
     if (Count>0) {
         Count--;
     } else {
-        rInp.Read(&Data, 1);
+        rInp.ReadBytes(&Data, 1);
         if ((Data & 0xC0) == 0xC0) {
             Count=(Data & 0x3F) -1;
-            rInp.Read(&Data, 1);
+            rInp.ReadBytes(&Data, 1);
         }
     }
     return Data;
@@ -233,14 +233,14 @@ bool SgfFilterBMap(SvStream& rInp, SvStream& rOut, SgfHeader& rHead, SgfEntry&)
         WriteRGBQuad( rOut, RGBQuad(0xFF,0xFF,0xFF) ); // white
         nOfs=rOut.Tell();
         for (j=0;j<rHead.Ysize;j++)
-            rOut.Write(pBuf.get(), nWdtOut); // fill file with zeroes
+            rOut.WriteBytes(pBuf.get(), nWdtOut); // fill file with zeroes
         for (j=0;j<rHead.Ysize;j++) {
             for(i=0;i<nWdtInp;i++) {
                 pBuf[i]=aPcx.GetByte(rInp);
             }
             for(i=nWdtInp;i<nWdtOut;i++) pBuf[i]=0;     // up to 3 bytes
             rOut.Seek(nOfs+((sal_uLong)rHead.Ysize-j-1L)*(sal_uLong)nWdtOut); // write backwards
-            rOut.Write(pBuf.get(), nWdtOut);
+            rOut.WriteBytes(pBuf.get(), nWdtOut);
         }
     } else if (nColors==16) {
         sal_uInt8 pl2= 0;     // planes' masks
@@ -264,7 +264,7 @@ bool SgfFilterBMap(SvStream& rInp, SvStream& rOut, SgfHeader& rHead, SgfEntry&)
 
         nOfs=rOut.Tell();
         for (j=0;j<rHead.Ysize;j++)
-            rOut.Write(pBuf.get(), nWdtOut); // fill file with zeroes
+            rOut.WriteBytes(pBuf.get(), nWdtOut); // fill file with zeroes
         for (j=0;j<rHead.Ysize;j++) {
             memset(pBuf.get(),0,nWdtOut);
             for(k=0;k<4;k++) {
@@ -288,27 +288,27 @@ bool SgfFilterBMap(SvStream& rInp, SvStream& rOut, SgfHeader& rHead, SgfEntry&)
             }
             for(i=nWdtInp*4;i<nWdtOut;i++) pBuf[i]=0;            // up to 3 bytes
             rOut.Seek(nOfs+((sal_uLong)rHead.Ysize-j-1L)*(sal_uLong)nWdtOut); // write backwards
-            rOut.Write(pBuf.get(), nWdtOut);
+            rOut.WriteBytes(pBuf.get(), nWdtOut);
         }
     } else if (nColors==256) {
         cRGB[3]=0;                      // fourth palette entry for BMP
         for (i=0;i<256;i++) {           // copy palette
-            rInp.Read(cRGB, 3);
+            rInp.ReadBytes(cRGB, 3);
             pl1=cRGB[0];                // switch red and blue
             cRGB[0]=cRGB[2];
             cRGB[2]=pl1;
-            rOut.Write(cRGB, 4);
+            rOut.WriteBytes(cRGB, 4);
         }
 
         nOfs=rOut.Tell();
         for (j=0;j<rHead.Ysize;j++)
-            rOut.Write(pBuf.get(), nWdtOut); // fill file with zeroes
+            rOut.WriteBytes(pBuf.get(), nWdtOut); // fill file with zeroes
         for (j=0;j<rHead.Ysize;j++) {
             for(i=0;i<rHead.Xsize;i++)
                 pBuf[i]=aPcx.GetByte(rInp);
             for(i=rHead.Xsize;i<nWdtOut;i++) pBuf[i]=0;          // up to 3 bytes
             rOut.Seek(nOfs+((sal_uLong)rHead.Ysize-j-1L)*(sal_uLong)nWdtOut); // write backwards
-            rOut.Write(pBuf.get(), nWdtOut);
+            rOut.WriteBytes(pBuf.get(), nWdtOut);
         }
     }
     return true;

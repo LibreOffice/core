@@ -106,8 +106,8 @@ using namespace OpenStormBento;
     pCompressed->Seek(0);
     std::unique_ptr<SvStream> aDecompressed(new SvMemoryStream(4096, 4096));
     unsigned char buffer[512];
-    pCompressed->Read(buffer, 16);
-    aDecompressed->Write(buffer, 16);
+    pCompressed->ReadBytes(buffer, 16);
+    aDecompressed->WriteBytes(buffer, 16);
 
     std::unique_ptr<LwpSvStream> aLwpStream(new LwpSvStream(pCompressed));
     LtcBenContainer* pBentoContainer;
@@ -129,8 +129,8 @@ using namespace OpenStormBento;
     nPos += 0x10;
 
     pCompressed->Seek(nPos);
-    while (sal_uInt32 iRead = pCompressed->Read(buffer, 512))
-        aDecompressed->Write(buffer, iRead);
+    while (sal_uInt32 iRead = pCompressed->ReadBytes(buffer, 512))
+        aDecompressed->WriteBytes(buffer, iRead);
 
     //transfer ownership of aDecompressed's ptr
     pOutDecompressed = aDecompressed.release();

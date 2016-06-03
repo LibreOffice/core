@@ -310,7 +310,7 @@ SvStream& ReadPptSlideLayoutAtom( SvStream& rIn, PptSlideLayoutAtom& rAtom )
     rIn.ReadInt32(nTmp);
     rAtom.eLayout = static_cast<PptSlideLayout>(nTmp);
     static_assert(sizeof(rAtom.aPlaceholderId) == 8, "wrong size of serialized array");
-    rIn.Read( rAtom.aPlaceholderId, 8 );
+    rIn.ReadBytes(rAtom.aPlaceholderId, 8);
     return rIn;
 }
 
@@ -371,7 +371,7 @@ SvStream& ReadPptColorSchemeAtom( SvStream& rIn, PptColorSchemeAtom& rAtom )
 {
     DffRecordHeader aHd;
     ReadDffRecordHeader( rIn, aHd );
-    rIn.Read( rAtom.aData, 32 );
+    rIn.ReadBytes(rAtom.aData, 32);
     aHd.SeekToEndOfRecord( rIn );
     return rIn;
 }
@@ -381,7 +381,7 @@ SvStream& ReadPptFontEntityAtom( SvStream& rIn, PptFontEntityAtom& rAtom )
     DffRecordHeader aHd;
     ReadDffRecordHeader( rIn, aHd );
     sal_Unicode nTemp, cData[ 32 ];
-    rIn.Read( cData, 64 );
+    rIn.ReadBytes(cData, 64);
 
     sal_uInt8   lfCharset, lfPitchAndFamily;
 
@@ -1768,7 +1768,7 @@ bool SdrPowerPointOLEDecompress( SvStream& rOutput, SvStream& rInput, sal_uInt32
 {
     sal_uInt32 nOldPos = rInput.Tell();
     std::unique_ptr<char[]> pBuf(new char[ nInputSize ]);
-    rInput.Read( pBuf.get(), nInputSize );
+    rInput.ReadBytes(pBuf.get(), nInputSize);
     ZCodec aZCodec( 0x8000, 0x8000 );
     aZCodec.BeginCompression();
     SvMemoryStream aSource( pBuf.get(), nInputSize, StreamMode::READ );
@@ -1857,11 +1857,12 @@ SdrObject* SdrPowerPointImport::ImportOLE( long nOLEId,
                         if ( xSrcTst.Is() )
                         {
                             sal_uInt8 aTestA[ 10 ];
-                            bool bGetItAsOle = ( sizeof( aTestA ) == xSrcTst->Read( aTestA, sizeof( aTestA ) ) );
+                            bool bGetItAsOle = (sizeof(aTestA) == xSrcTst->ReadBytes(aTestA, sizeof(aTestA)));
                             if ( !bGetItAsOle )
                             {   // maybe there is a contents stream in here
                                 xSrcTst = xObjStor->OpenSotStream( "Contents", STREAM_READWRITE | StreamMode::NOCREATE );
-                                bGetItAsOle = ( xSrcTst.Is() && sizeof( aTestA ) == xSrcTst->Read( aTestA, sizeof( aTestA ) ) );
+                                bGetItAsOle = (xSrcTst.Is() &&
+                                    sizeof(aTestA) == xSrcTst->ReadBytes(aTestA, sizeof(aTestA)));
                             }
                             if ( bGetItAsOle )
                             {
@@ -2065,8 +2066,8 @@ void SdrPowerPointImport::SeekOle( SfxObjectShell* pShell, sal_uInt32 nFilterOpt
                                                                     while ( nToCopy )
                                                                     {
                                                                         nBufSize = ( nToCopy >= 0x40000 ) ? 0x40000 : nToCopy;
-                                                                        rStCtrl.Read( pBuf.get(), nBufSize );
-                                                                        xOriginal->Write( pBuf.get(), nBufSize );
+                                                                        rStCtrl.ReadBytes(pBuf.get(), nBufSize);
+                                                                        xOriginal->WriteBytes(pBuf.get(), nBufSize);
                                                                         nToCopy -= nBufSize;
                                                                     }
                                                                 }
@@ -5239,7 +5240,7 @@ void PPTStyleTextPropReader::Init( SvStream& rIn, const DffRecordHeader& rTextHe
         sal_uInt32 i;
         sal_Unicode nChar;
         std::unique_ptr<sal_Unicode[]> pBuf(new sal_Unicode[ ( nMaxLen >> 1 ) + 1 ]);
-        rIn.Read( pBuf.get(), nMaxLen );
+        rIn.ReadBytes(pBuf.get(), nMaxLen);
         nMaxLen >>= 1;
         pBuf[ nMaxLen ] = 0;
         sal_Unicode* pPtr = pBuf.get();
@@ -5275,7 +5276,7 @@ void PPTStyleTextPropReader::Init( SvStream& rIn, const DffRecordHeader& rTextHe
     {
         std::unique_ptr<sal_Char[]> pBuf(new sal_Char[ nMaxLen + 1 ]);
         pBuf[ nMaxLen ] = 0;
-        rIn.Read( pBuf.get(), nMaxLen );
+        rIn.ReadBytes(pBuf.get(), nMaxLen);
         sal_Char* pPtr = pBuf.get();
         for (;;)
         {

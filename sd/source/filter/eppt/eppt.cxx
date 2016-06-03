@@ -180,7 +180,7 @@ void PPTWriter::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_
     mpPptEscherEx->OpenContainer( EPP_Slide );
     mpPptEscherEx->AddAtom( 24, EPP_SlideAtom, 2 );
     mpStrm->WriteInt32( static_cast<sal_Int32>(rLayout.nLayout) );
-    mpStrm->Write( rLayout.nPlaceHolder, 8 );       // placeholderIDs (8 parts)
+    mpStrm->WriteBytes(rLayout.nPlaceHolder, 8);    // placeholderIDs (8 parts)
     mpStrm->WriteUInt32( nMasterNum | 0x80000000 )  // master ID (equals 0x80000000 on a master page)
            .WriteUInt32( nPageNum + 0x100 )         // notes ID (equals null if no notes are present)
            .WriteUInt16( nMode )
@@ -336,7 +336,7 @@ void PPTWriter::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_
                 EscherExAtom aMagic( aBinaryTagData10Atom, 0x2b00 );
                 aBinaryTagData10Atom.WriteUInt32( 0 );
             }
-            aBinaryTagData10Atom.Write( amsofbtAnimGroup.GetData(), amsofbtAnimGroup.Tell() );
+            aBinaryTagData10Atom.WriteBytes(amsofbtAnimGroup.GetData(), amsofbtAnimGroup.Tell());
             {
                 EscherExContainer aMagic2( aBinaryTagData10Atom, 0x2b02 );
             }
@@ -356,7 +356,7 @@ void PPTWriter::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_
         }
         {
             EscherExAtom aBinaryTagData( *mpStrm, EPP_BinaryTagData );
-            mpStrm->Write( aBinaryTagData10Atom.GetData(), aBinaryTagData10Atom.Tell() );
+            mpStrm->WriteBytes(aBinaryTagData10Atom.GetData(), aBinaryTagData10Atom.Tell());
         }
     }
     mpPptEscherEx->CloseContainer();    // EPP_Slide
@@ -488,7 +488,7 @@ bool PPTWriter::ImplCreateCurrentUserStream()
                   .WriteUChar( 0 )                      // MinorVersion
                   .WriteUInt16( 0 );                    // Pad Word
     pUserName[ nLenOfUserName ] = 8;
-    mpCurUserStrm->Write( pUserName, nLenOfUserName + 1 );
+    mpCurUserStrm->WriteBytes(pUserName, nLenOfUserName + 1);
     for ( sal_uInt32 i = 0x15 + nLenOfUserName; i < nSizeOfRecord; i++ )
     {
         mpCurUserStrm->WriteUChar( 0 );                 // pad bytes
@@ -557,7 +557,7 @@ void PPTWriter::ImplWriteExtParaHeader( SvMemoryStream& rSt, sal_uInt32 nRef, sa
                            .WriteUInt32( 8 )
                            .WriteUInt32( nSlideId )
                            .WriteUInt32( nInstance );
-        aBuExOutlineStream.Write( rSt.GetData(), rSt.Tell() );
+        aBuExOutlineStream.WriteBytes(rSt.GetData(), rSt.Tell());
     }
 }
 
@@ -1246,7 +1246,7 @@ void PPTWriter::ImplWriteVBA()
             nLen -= 8;
             mnVBAOleOfs = mpStrm->Tell();
             mpPptEscherEx->BeginAtom();
-            mpStrm->Write( static_cast<sal_Int8 const *>(mpVBA->GetData()) + 8, nLen );
+            mpStrm->WriteBytes(static_cast<sal_Int8 const *>(mpVBA->GetData()) + 8, nLen);
             mpPptEscherEx->EndAtom( EPP_ExOleObjStg, 0, 1 );
         }
     }
@@ -1475,7 +1475,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL SaveVBA( SfxObjectShell& rDocS
                 {
                     char* pTemp = new char[ nLen ];
                     xTemp->Seek( STREAM_SEEK_TO_BEGIN );
-                    xTemp->Read( pTemp, nLen );
+                    xTemp->ReadBytes(pTemp, nLen);
                     pBas = new SvMemoryStream( pTemp, nLen, StreamMode::READ );
                     pBas->ObjectOwnsMemory( true );
                     return true;

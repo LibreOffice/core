@@ -97,7 +97,7 @@ namespace
         {
             blob.pData = new sal_uInt8[blobSize];
             blob.size = static_cast<sal_Size>(blobSize);
-            stream.Read(blob.pData, blob.size);
+            stream.ReadBytes(blob.pData, blob.size);
         }
 
         return stream;
@@ -109,7 +109,7 @@ namespace
         const sal_uInt64 endOfBlob = stream.Tell() + sizeof(sal_uInt64) + blob.size;
         stream.WriteUInt64( endOfBlob );
         if (blob.size)
-            stream.Write(blob.pData, blob.size);
+            stream.WriteBytes(blob.pData, blob.size);
 
         return stream;
     }

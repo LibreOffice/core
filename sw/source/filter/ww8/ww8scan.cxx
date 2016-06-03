@@ -1674,7 +1674,7 @@ WW8ScannerBase::WW8ScannerBase( SvStream* pSt, SvStream* pTableSt,
                 if (checkSeek(*pTableSt, pWwFib->fcAtrdExtra) && (pTableSt->remainingSize() >= pWwFib->lcbAtrdExtra))
                 {
                     pExtendedAtrds = new sal_uInt8[pWwFib->lcbAtrdExtra];
-                    pWwFib->lcbAtrdExtra = pTableSt->Read(pExtendedAtrds, pWwFib->lcbAtrdExtra);
+                    pWwFib->lcbAtrdExtra = pTableSt->ReadBytes(pExtendedAtrds, pWwFib->lcbAtrdExtra);
                 }
                 else
                     pWwFib->lcbAtrdExtra = 0;
@@ -1939,7 +1939,7 @@ WW8PLCFspecial::WW8PLCFspecial(SvStream* pSt, sal_uInt32 nFilePos,
     pPLCF_PosArray = new sal_Int32[ ( nPLCF + 3 ) / 4 ];
     pPLCF_PosArray[0] = 0;
 
-    nPLCF = bValid ? pSt->Read(pPLCF_PosArray, nPLCF) : nValidMin;
+    nPLCF = bValid ? pSt->ReadBytes(pPLCF_PosArray, nPLCF) : nValidMin;
 
     nPLCF = std::max(nPLCF, nValidMin);
 
@@ -2287,7 +2287,7 @@ WW8PLCFpcd::WW8PLCFpcd(SvStream* pSt, sal_uInt32 nFilePos,
     pPLCF_PosArray = new sal_Int32[ ( nPLCF + 3 ) / 4 ];    // Pointer to Pos-array
     pPLCF_PosArray[0] = 0;
 
-    nPLCF = bValid ? pSt->Read(pPLCF_PosArray, nPLCF) : nValidMin;
+    nPLCF = bValid ? pSt->ReadBytes(pPLCF_PosArray, nPLCF) : nValidMin;
     nPLCF = std::max(nPLCF, nValidMin);
 
     nIMax = ( nPLCF - 4 ) / ( 4 + nStruct );
@@ -2557,7 +2557,7 @@ WW8PLCFx_Fc_FKP::WW8Fkp::WW8Fkp(ww::WordVersion eVersion, SvStream* pSt,
                                     new sal_uInt8[aEntry.mnLen + nOrigLen];
                                 aEntry.mbMustDelete = true;
                                 aEntry.mnLen =
-                                    pDataSt->Read(aEntry.mpData, aEntry.mnLen);
+                                    pDataSt->ReadBytes(aEntry.mpData, aEntry.mnLen);
 
                                 pDataSt->Seek( nCurr );
 
@@ -3456,7 +3456,7 @@ void WW8PLCFx_SEPX::GetSprms(WW8PLCFxDesc* p)
                 nArrMax = nSprmSiz;                 // Get more memory
                 pSprms = new sal_uInt8[nArrMax];
             }
-            nSprmSiz = pStrm->Read(pSprms, nSprmSiz); // read Sprms
+            nSprmSiz = pStrm->ReadBytes(pSprms, nSprmSiz); // read Sprms
 
             p->nSprmsLen = nSprmSiz;
             p->pMemPos = pSprms;                    // return Position
@@ -3871,7 +3871,7 @@ void WW8ReadSTTBF(bool bVer8, SvStream& rStrm, sal_uInt32 nStart, sal_Int32 nLen
                     if (pExtraArray)
                     {
                         ww::bytes extraData(nExtraLen);
-                        rStrm.Read(extraData.data(), nExtraLen);
+                        rStrm.ReadBytes(extraData.data(), nExtraLen);
                         pExtraArray->push_back(extraData);
                     }
                     else
@@ -3927,7 +3927,7 @@ void WW8ReadSTTBF(bool bVer8, SvStream& rStrm, sal_uInt32 nStart, sal_Int32 nLen
                     if (pExtraArray)
                     {
                         ww::bytes extraData(nExtraLen);
-                        rStrm.Read(extraData.data(), nExtraLen);
+                        rStrm.ReadBytes(extraData.data(), nExtraLen);
                         pExtraArray->push_back(extraData);
                     }
                     else
@@ -6006,7 +6006,7 @@ void WW8Fib::WriteHeader(SvStream& rStrm)
     // Marke: "rglw"  Beginning of the array of longs
     Set_UInt32( pData, cbMac );
 
-    rStrm.Write( pDataPtr, nUnencryptedHdr );
+    rStrm.WriteBytes(pDataPtr, nUnencryptedHdr);
     delete[] pDataPtr;
 }
 
@@ -6250,7 +6250,7 @@ void WW8Fib::Write(SvStream& rStrm)
         Set_UInt32( pData, 0);
     }
 
-    rStrm.Write( pDataPtr, fcMin - nUnencryptedHdr );
+    rStrm.WriteBytes(pDataPtr, fcMin - nUnencryptedHdr);
     delete[] pDataPtr;
 }
 
@@ -6839,7 +6839,7 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib& rFib )
     rSt.SeekRel( 2 );
 
     // read all font information
-    nFFn = rSt.Read(pA, nFFn);
+    nFFn = rSt.ReadBytes(pA, nFFn);
     sal_uInt8 * const pEnd = pA + nFFn;
     const sal_uInt16 nCalcMax = calcMaxFonts(pA, nFFn);
 
@@ -7169,7 +7169,7 @@ WW8Dop::WW8Dop(SvStream& rSt, sal_Int16 nFib, sal_Int32 nPos, sal_uInt32 nSize)
     sal_uInt8* pData = pDataPtr;
 
     sal_uInt32 nRead = nMaxDopSize < nSize ? nMaxDopSize : nSize;
-    if (nSize < 2 || !checkSeek(rSt, nPos) || nRead != rSt.Read(pData, nRead))
+    if (nSize < 2 || !checkSeek(rSt, nPos) || nRead != rSt.ReadBytes(pData, nRead))
         nDopError = ERR_SWG_READ_ERROR;     // report error
     else
     {
@@ -7781,7 +7781,7 @@ void WW8Dop::Write(SvStream& rStrm, WW8Fib& rFib) const
         a16Bit = 0x0080;
         Set_UInt16(pData, a16Bit);
     }
-    rStrm.Write( aData, nLen );
+    rStrm.WriteBytes(aData, nLen);
 }
 
 void WW8DopTypography::ReadFromMem(sal_uInt8 *&pData)
@@ -8021,7 +8021,7 @@ bool checkSeek(SvStream &rSt, sal_uInt32 nOffset)
 
 bool checkRead(SvStream &rSt, void *pDest, sal_uInt32 nLength)
 {
-    return (rSt.Read(pDest, nLength) == static_cast<sal_Size>(nLength));
+    return (rSt.ReadBytes(pDest, nLength) == static_cast<sal_Size>(nLength));
 }
 
 #ifdef OSL_BIGENDIAN

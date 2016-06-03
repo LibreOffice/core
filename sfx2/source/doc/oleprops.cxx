@@ -277,7 +277,7 @@ OUString SfxOleStringHelper::ImplLoadString8( SvStream& rStrm ) const
     {
         // load character buffer
         ::std::vector< sal_Char > aBuffer( static_cast< size_t >( nSize + 1 ), 0 );
-        rStrm.Read( &aBuffer.front(), static_cast< sal_Size >( nSize ) );
+        rStrm.ReadBytes(&aBuffer.front(), static_cast<sal_Size>(nSize));
         // create string from encoded character array
         aValue = OUString( &aBuffer.front(), strlen( &aBuffer.front() ), GetTextEncoding() );
     }
@@ -321,7 +321,7 @@ void SfxOleStringHelper::ImplSaveString8( SvStream& rStrm, const OUString& rValu
     sal_Int32 nSize = aEncoded.getLength() + 1;
     rStrm.WriteInt32( nSize );
     // write character array with trailing NUL character
-    rStrm.Write(aEncoded.getStr(), aEncoded.getLength());
+    rStrm.WriteBytes(aEncoded.getStr(), aEncoded.getLength());
     rStrm.WriteUChar( 0 );
 }
 
@@ -629,7 +629,7 @@ void SfxOleThumbnailProperty::ImplSave( SvStream& rStrm )
         // clipboard size: clip_format_tag + data_format_tag + bitmap_len
         sal_Int32 nClipSize = static_cast< sal_Int32 >( 4 + 4 + mData.getLength() );
         rStrm.WriteInt32( nClipSize ).WriteInt32( CLIPFMT_WIN ).WriteInt32( CLIPDATAFMT_DIB );
-        rStrm.Write( mData.getConstArray(), mData.getLength() );
+        rStrm.WriteBytes(mData.getConstArray(), mData.getLength());
     }
     else
     {
@@ -655,7 +655,7 @@ void SfxOleBlobProperty::ImplLoad( SvStream& )
 void SfxOleBlobProperty::ImplSave( SvStream& rStrm )
 {
     if (IsValid()) {
-        rStrm.Write( mData.getConstArray(), mData.getLength() );
+        rStrm.WriteBytes(mData.getConstArray(), mData.getLength());
     } else {
         SAL_WARN( "sfx.doc", "SfxOleBlobProperty::ImplSave - invalid BLOB property" );
         SetError( SVSTREAM_INVALID_ACCESS );

@@ -162,7 +162,7 @@ sal_uInt16 XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileNam
 
             if(pOStm)
             {
-                pOStm->Write(aSvgDataPtr->getSvgDataArray().getConstArray(), aSvgDataPtr->getSvgDataArrayLength());
+                pOStm->WriteBytes(aSvgDataPtr->getSvgDataArray().getConstArray(), aSvgDataPtr->getSvgDataArrayLength());
                 aMedium.Commit();
 
                 if(!aMedium.GetError())
@@ -207,7 +207,7 @@ sal_uInt16 XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileNam
 
                     if( pOStm && aGfxLink.GetDataSize() && aGfxLink.GetData() )
                     {
-                        pOStm->Write( aGfxLink.GetData(), aGfxLink.GetDataSize() );
+                        pOStm->WriteBytes(aGfxLink.GetData(), aGfxLink.GetDataSize());
                         aMedium.Commit();
 
                         if( !aMedium.GetError() )

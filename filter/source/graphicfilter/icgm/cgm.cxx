@@ -675,7 +675,7 @@ bool CGM::Write( SvStream& rIStm )
 
     mnParaSize = 0;
     mpSource = mpBuf;
-    if (rIStm.Read(mpSource, 2) != 2)
+    if (rIStm.ReadBytes(mpSource, 2) != 2)
         return false;
     mpEndValidSource = mpSource + 2;
     mnEscape = ImplGetUI16();
@@ -685,7 +685,7 @@ bool CGM::Write( SvStream& rIStm )
 
     if ( mnElementSize == 31 )
     {
-        if (rIStm.Read(mpSource + mnParaSize, 2) != 2)
+        if (rIStm.ReadBytes(mpSource + mnParaSize, 2) != 2)
             return false;
         mpEndValidSource = mpSource + mnParaSize + 2;
         mnElementSize = ImplGetUI16();
@@ -693,7 +693,7 @@ bool CGM::Write( SvStream& rIStm )
     mnParaSize = 0;
     if (mnElementSize)
     {
-        if (rIStm.Read(mpSource, mnElementSize) != mnElementSize)
+        if (rIStm.ReadBytes(mpSource, mnElementSize) != mnElementSize)
             return false;
         mpEndValidSource = mpSource + mnElementSize;
     }

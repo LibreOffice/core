@@ -174,7 +174,7 @@ void PCDReader::CheckPCDImagePacFile()
     char Buf[ 8 ];
 
     m_rPCD.Seek( 2048 );
-    m_rPCD.Read( Buf, 7 );
+    m_rPCD.ReadBytes(Buf, 7);
     Buf[ 7 ] = 0;
     if (OString(Buf) != "PCD_IPI")
         bStatus = false;
@@ -235,10 +235,10 @@ void PCDReader::ReadImage()
     m_rPCD.Seek( nImagePos );
 
     // next pair of rows := first pair of rows:
-    m_rPCD.Read( pL0N, nWidth );
-    m_rPCD.Read( pL1N, nWidth );
-    m_rPCD.Read( pCbN, nW2 );
-    m_rPCD.Read( pCrN, nW2 );
+    m_rPCD.ReadBytes( pL0N, nWidth );
+    m_rPCD.ReadBytes( pL1N, nWidth );
+    m_rPCD.ReadBytes( pCbN, nW2 );
+    m_rPCD.ReadBytes( pCrN, nW2 );
     pCbN[ nW2 ] = pCbN[ nW2 - 1 ];
     pCrN[ nW2 ] = pCrN[ nW2 - 1 ];
 
@@ -253,10 +253,10 @@ void PCDReader::ReadImage()
         // get the next pair of rows:
         if ( nYPair < nH2 - 1 )
         {
-            m_rPCD.Read( pL0N, nWidth );
-            m_rPCD.Read( pL1N, nWidth );
-            m_rPCD.Read( pCbN, nW2 );
-            m_rPCD.Read( pCrN, nW2 );
+            m_rPCD.ReadBytes( pL0N, nWidth );
+            m_rPCD.ReadBytes( pL1N, nWidth );
+            m_rPCD.ReadBytes( pCbN, nW2 );
+            m_rPCD.ReadBytes( pCrN, nW2 );
             pCbN[nW2]=pCbN[ nW2 - 1 ];
             pCrN[nW2]=pCrN[ nW2 - 1 ];
         }

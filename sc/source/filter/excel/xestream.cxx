@@ -231,7 +231,7 @@ sal_Size XclExpStream::Write( const void* pData, sal_Size nBytes )
                 }
                 else
                 {
-                    nWriteRet = mrStrm.Write( pBuffer, nWriteLen );
+                    nWriteRet = mrStrm.WriteBytes(pBuffer, nWriteLen);
                 bValid = (nWriteLen == nWriteRet);
                 OSL_ENSURE( bValid, "XclExpStream::Write - stream write error" );
                 }
@@ -242,7 +242,7 @@ sal_Size XclExpStream::Write( const void* pData, sal_Size nBytes )
             }
         }
         else
-            nRet = mrStrm.Write( pData, nBytes );
+            nRet = mrStrm.WriteBytes(pData, nBytes);
     }
     return nRet;
 }
@@ -289,7 +289,7 @@ void XclExpStream::CopyFromStream(SvStream& rInStrm, sal_uInt64 const nBytes)
         while( bValid && (nBytesLeft > 0) )
         {
             sal_Size nWriteLen = ::std::min<sal_Size>(nBytesLeft, nMaxBuffer);
-            rInStrm.Read( pBuffer.get(), nWriteLen );
+            rInStrm.ReadBytes(pBuffer.get(), nWriteLen);
             sal_Size nWriteRet = Write( pBuffer.get(), nWriteLen );
             bValid = (nWriteLen == nWriteRet);
             nBytesLeft -= nWriteRet;
@@ -447,7 +447,7 @@ void XclExpStream::WriteRawZeroBytes( sal_Size nBytes )
         nBytesLeft -= sizeof( nData );
     }
     if( nBytesLeft )
-        mrStrm.Write( &nData, nBytesLeft );
+        mrStrm.WriteBytes(&nData, nBytesLeft);
 }
 
 XclExpBiff8Encrypter::XclExpBiff8Encrypter( const XclExpRoot& rRoot ) :
@@ -623,7 +623,7 @@ void XclExpBiff8Encrypter::EncryptBytes( SvStream& rStrm, vector<sal_uInt8>& aBy
         OSL_ENSURE(bRet, "XclExpBiff8Encrypter::EncryptBytes: encryption failed!!");
         (void) bRet; // to remove a silly compiler warning.
 
-        sal_Size nRet = rStrm.Write(&aBytes[nPos], nEncBytes);
+        sal_Size nRet = rStrm.WriteBytes(&aBytes[nPos], nEncBytes);
         OSL_ENSURE(nRet == nEncBytes, "XclExpBiff8Encrypter::EncryptBytes: fail to write to stream!!");
         (void) nRet; // to remove a silly compiler warning.
 

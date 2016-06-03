@@ -357,14 +357,14 @@ void connectivity::dbase::ReadHeader(
 #endif
     rStream.ReadUInt32(rHeader.db_rootpage);
     rStream.ReadUInt32(rHeader.db_pagecount);
-    rStream.Read(&rHeader.db_frei, 4);
+    rStream.ReadBytes(&rHeader.db_frei, 4);
     rStream.ReadUInt16(rHeader.db_keylen);
     rStream.ReadUInt16(rHeader.db_maxkeys);
     rStream.ReadUInt16(rHeader.db_keytype);
     rStream.ReadUInt16(rHeader.db_keyrec);
-    rStream.Read(&rHeader.db_frei1, 3);
+    rStream.ReadBytes(&rHeader.db_frei1, 3);
     rStream.ReadUChar(rHeader.db_unique);
-    rStream.Read(&rHeader.db_name, 488);
+    rStream.ReadBytes(&rHeader.db_name, 488);
     assert(rStream.GetError() || rStream.Tell() == nOldPos + DINDEX_PAGE_SIZE);
 }
 
@@ -383,14 +383,14 @@ SvStream& connectivity::dbase::WriteODbaseIndex(SvStream &rStream, ODbaseIndex& 
     rStream.Seek(0);
     rStream.WriteUInt32(rIndex.m_aHeader.db_rootpage);
     rStream.WriteUInt32(rIndex.m_aHeader.db_pagecount);
-    rStream.Write(&rIndex.m_aHeader.db_frei, 4);
+    rStream.WriteBytes(&rIndex.m_aHeader.db_frei, 4);
     rStream.WriteUInt16(rIndex.m_aHeader.db_keylen);
     rStream.WriteUInt16(rIndex.m_aHeader.db_maxkeys);
     rStream.WriteUInt16(rIndex.m_aHeader.db_keytype);
     rStream.WriteUInt16(rIndex.m_aHeader.db_keyrec);
-    rStream.Write(&rIndex.m_aHeader.db_frei1, 3);
+    rStream.WriteBytes(&rIndex.m_aHeader.db_frei1, 3);
     rStream.WriteUChar(rIndex.m_aHeader.db_unique);
-    rStream.Write(&rIndex.m_aHeader.db_name, 488);
+    rStream.WriteBytes(&rIndex.m_aHeader.db_name, 488);
     assert(rStream.GetError() || rStream.Tell() == DINDEX_PAGE_SIZE);
     SAL_WARN_IF(rStream.GetError(), "connectivity.dbase", "write error");
     return rStream;

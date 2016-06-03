@@ -217,12 +217,12 @@ bool TGAReader::ImplReadHeader()
         {
             mnTGAVersion = 2;
 
-            m_rTGA.Read( mpExtension->sAuthorName, 41 );
-            m_rTGA.Read( mpExtension->sAuthorComment, 324 );
-            m_rTGA.Read( mpExtension->sDateTimeStamp, 12 );
-            m_rTGA.Read( mpExtension->sJobNameID, 12 );
+            m_rTGA.ReadBytes(mpExtension->sAuthorName, 41);
+            m_rTGA.ReadBytes(mpExtension->sAuthorComment, 324);
+            m_rTGA.ReadBytes(mpExtension->sDateTimeStamp, 12);
+            m_rTGA.ReadBytes(mpExtension->sJobNameID, 12);
             m_rTGA.ReadChar( mpExtension->sJobNameID[ 0 ] ).ReadChar( mpExtension->sJobNameID[ 1 ] ).ReadChar( mpExtension->sJobNameID[ 2 ] );
-            m_rTGA.Read( mpExtension->sSoftwareID, 41 );
+            m_rTGA.ReadBytes(mpExtension->sSoftwareID, 41);
             m_rTGA.ReadUInt16( mpExtension->nSoftwareVersionNumber ).ReadUChar( mpExtension->nSoftwareVersionLetter )
                .ReadUInt32( mpExtension->nKeyColor ).ReadUInt16( mpExtension->nPixelAspectRatioNumerator )
                    .ReadUInt16( mpExtension->nPixelAspectRatioDeNumerator ).ReadUInt16( mpExtension->nGammaValueNumerator )

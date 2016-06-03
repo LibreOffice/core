@@ -1553,7 +1553,7 @@ SvStream& ReadImpGraphic( SvStream& rIStm, ImpGraphic& rImpGraphic )
                             {
                                 SvgDataArray aNewData(nSvgDataArrayLength);
 
-                                rIStm.Read(aNewData.getArray(), nSvgDataArrayLength);
+                                rIStm.ReadBytes(aNewData.getArray(), nSvgDataArrayLength);
                                 OUString aPath = rIStm.ReadUniOrByteString(rIStm.GetStreamCharSet());
 
                                 if (!rIStm.GetError())
@@ -1625,7 +1625,8 @@ SvStream& WriteImpGraphic( SvStream& rOStm, const ImpGraphic& rImpGraphic )
 
                             rOStm.WriteUInt32( nSvgMagic );
                             rOStm.WriteUInt32( rImpGraphic.getSvgData()->getSvgDataArrayLength() );
-                            rOStm.Write(rImpGraphic.getSvgData()->getSvgDataArray().getConstArray(), rImpGraphic.getSvgData()->getSvgDataArrayLength());
+                            rOStm.WriteBytes(rImpGraphic.getSvgData()->getSvgDataArray().getConstArray(),
+                                rImpGraphic.getSvgData()->getSvgDataArrayLength());
                             rOStm.WriteUniOrByteString(rImpGraphic.getSvgData()->getPath(),
                                                        rOStm.GetStreamCharSet());
                         }

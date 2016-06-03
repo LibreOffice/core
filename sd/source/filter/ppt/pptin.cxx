@@ -1950,12 +1950,12 @@ OUString ImplSdPPTImport::ReadSound(sal_uInt32 nSoundRef) const
                             sal_uInt32 nSoundDataLen = aSoundDataRecHd.nRecLen;
                             sal_uInt8* pBuf = new sal_uInt8[ nSoundDataLen ];
 
-                            rStCtrl.Read( pBuf, nSoundDataLen );
+                            rStCtrl.ReadBytes(pBuf, nSoundDataLen);
                             SvStream* pOStm = ::utl::UcbStreamHelper::CreateStream( aGalleryUserSound.GetMainURL( INetURLObject::NO_DECODE ), StreamMode::WRITE | StreamMode::TRUNC );
 
                             if( pOStm )
                             {
-                                pOStm->Write( pBuf, nSoundDataLen );
+                                pOStm->WriteBytes(pBuf, nSoundDataLen);
 
                                 if( pOStm->GetError() == ERRCODE_NONE )
                                 {

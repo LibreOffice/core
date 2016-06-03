@@ -557,7 +557,7 @@ bool TIFFReader::ReadMap()
                 pTIFF->Seek( pStripOffsets[ nStrip ] + ( ny % GetRowsPerStrip() ) * nStripBytesPerRow );
                 if (np >= SAL_N_ELEMENTS(pMap))
                     return false;
-                pTIFF->Read( pMap[ np ], nBytesPerRow );
+                pTIFF->ReadBytes(pMap[ np ], nBytesPerRow);
                 if (!pTIFF->good())
                     return false;
             }
@@ -693,7 +693,7 @@ bool TIFFReader::ReadMap()
                         nRecCount=0x00000001+((sal_uLong)nRecHeader);
                         if ( nRecCount > nRowBytesLeft )
                             return false;
-                        pTIFF->Read(pdst,nRecCount);
+                        pTIFF->ReadBytes(pdst, nRecCount);
                         if (!pTIFF->good())
                             return false;
                         pdst+=nRecCount;

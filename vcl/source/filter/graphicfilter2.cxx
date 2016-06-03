@@ -910,7 +910,7 @@ bool GraphicDescriptor::ImpDetectEPS( SvStream& rStm, bool )
     rStm.SetEndian( SvStreamEndian::BIG );
     rStm.ReadUInt32( nFirstLong );
     rStm.SeekRel( -4 );
-    rStm.Read( &nFirstBytes, 20 );
+    rStm.ReadBytes( &nFirstBytes, 20 );
 
     if ( ( nFirstLong == 0xC5D0D3C6 ) || aPathExt.startsWith( "eps" ) ||
         ( ImplSearchEntry( nFirstBytes, reinterpret_cast<sal_uInt8 const *>("%!PS-Adobe"), 10, 10 )

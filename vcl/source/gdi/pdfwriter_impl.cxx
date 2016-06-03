@@ -2110,7 +2110,7 @@ bool PDFWriterImpl::compressStream( SvMemoryStream* pStream )
     pStream->Seek( STREAM_SEEK_TO_BEGIN );
     aStream.Seek( STREAM_SEEK_TO_BEGIN );
     pStream->SetStreamSize( nEndPos );
-    pStream->Write( aStream.GetData(), nEndPos );
+    pStream->WriteBytes( aStream.GetData(), nEndPos );
     return true;
 #else
     (void)pStream;
@@ -2155,7 +2155,8 @@ bool PDFWriterImpl::writeBuffer( const void* pBuffer, sal_uInt64 nBytes )
     if( !m_aOutputStreams.empty() )
     {
         m_aOutputStreams.front().m_pStream->Seek( STREAM_SEEK_TO_END );
-        m_aOutputStreams.front().m_pStream->Write( pBuffer, sal::static_int_cast<sal_Size>(nBytes) );
+        m_aOutputStreams.front().m_pStream->WriteBytes(
+                pBuffer, sal::static_int_cast<sal_Size>(nBytes));
         return true;
     }
 
@@ -9997,7 +9998,8 @@ void PDFWriterImpl::drawTransparent( const tools::PolyPolygon& rPolyPoly, sal_uI
         aContent.append( " S\n" );
     else
         aContent.append( " f*\n" );
-    m_aTransparentObjects.back().m_pContentStream->Write( aContent.getStr(), aContent.getLength() );
+    m_aTransparentObjects.back().m_pContentStream->WriteBytes(
+        aContent.getStr(), aContent.getLength() );
 
     OStringBuffer aObjName( 16 );
     aObjName.append( "Tr" );
@@ -11808,7 +11810,8 @@ void PDFWriterImpl::drawWallpaper( const Rectangle& rRect, const Wallpaper& rWal
                 m_aTilings.back().m_nObject         = createObject();
                 m_aTilings.back().m_aRectangle      = Rectangle( Point( 0, 0 ), aConvertRect.GetSize() );
                 m_aTilings.back().m_pTilingStream   = new SvMemoryStream();
-                m_aTilings.back().m_pTilingStream->Write( aTilingStream.getStr(), aTilingStream.getLength() );
+                m_aTilings.back().m_pTilingStream->WriteBytes(
+                    aTilingStream.getStr(), aTilingStream.getLength() );
                 // phase the tiling so wallpaper begins on upper left
                 if ((aConvertRect.GetWidth() == 0) || (aConvertRect.GetHeight() == 0))
                     throw o3tl::divide_by_zero();

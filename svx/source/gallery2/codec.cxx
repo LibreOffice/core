@@ -97,7 +97,7 @@ void GalleryCodec::Read( SvStream& rStmToRead )
         if( 1 == nVersion )
         {
             std::unique_ptr<sal_uInt8[]> pCompressedBuffer(new sal_uInt8[ nCompressedSize ]);
-            rStm.Read( pCompressedBuffer.get(), nCompressedSize );
+            rStm.ReadBytes(pCompressedBuffer.get(), nCompressedSize);
             sal_uInt8*  pInBuf = pCompressedBuffer.get();
             std::unique_ptr<sal_uInt8[]> pOutBuf(new sal_uInt8[ nUnCompressedSize ]);
             sal_uInt8*  pTmpBuf = pOutBuf.get();
@@ -137,7 +137,7 @@ void GalleryCodec::Read( SvStream& rStmToRead )
             }
             while ( !bEndDecoding && ( pTmpBuf <= pLast ) );
 
-            rStmToRead.Write( pOutBuf.get(), nUnCompressedSize );
+            rStmToRead.WriteBytes(pOutBuf.get(), nUnCompressedSize);
         }
         else if( 2 == nVersion )
         {

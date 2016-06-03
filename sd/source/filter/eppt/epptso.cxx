@@ -251,12 +251,12 @@ sal_uInt32 PPTWriter::ImplProgBinaryTag( SvStream* pStrm )
         if ( nPictureStreamSize )
         {
             pStrm->WriteUInt32( 0xf | ( EPP_PST_ExtendedBuGraContainer << 16 ) ).WriteUInt32( nPictureStreamSize );
-            pStrm->Write( aBuExPictureStream.GetData(), nPictureStreamSize );
+            pStrm->WriteBytes(aBuExPictureStream.GetData(), nPictureStreamSize);
         }
         if ( nOutlineStreamSize )
         {
             pStrm->WriteUInt32( 0xf | ( EPP_PST_ExtendedPresRuleContainer << 16 ) ).WriteUInt32( nOutlineStreamSize );
-            pStrm->Write( aBuExOutlineStream.GetData(), nOutlineStreamSize );
+            pStrm->WriteBytes(aBuExOutlineStream.GetData(), nOutlineStreamSize);
         }
     }
     return nSize;
@@ -277,7 +277,7 @@ sal_uInt32 PPTWriter::ImplProgBinaryTagContainer( SvStream* pStrm, SvMemoryStrea
         sal_uInt32 nLen = pBinTagStrm->Tell();
         nSize += nLen + 8;
         pStrm->WriteUInt32( EPP_BinaryTagData << 16 ).WriteUInt32( nLen );
-        pStrm->Write( pBinTagStrm->GetData(), nLen );
+        pStrm->WriteBytes(pBinTagStrm->GetData(), nLen);
     }
     else
         nSize += ImplProgBinaryTag( pStrm );
@@ -451,7 +451,7 @@ bool PPTWriter::ImplCloseDocument()
                    .WriteUInt32( 4 )
                    .WriteUInt32( mnExEmbed );
             mpPptEscherEx->InsertPersistOffset( EPP_Persist_ExObj, mpStrm->Tell() );
-            mpStrm->Write( mpExEmbed->GetData(), nExEmbedSize );
+            mpStrm->WriteBytes(mpExEmbed->GetData(), nExEmbedSize);
         }
 
         // CREATE ENVIRONMENT
@@ -536,7 +536,7 @@ bool PPTWriter::ImplCloseDocument()
                .WriteUChar( 8 )                         // ?
                .WriteInt16( 0 );                        // ?
 
-        mpStrm->Write( aTxMasterStyleAtomStrm.GetData(), aTxMasterStyleAtomStrm.Tell() );
+        mpStrm->WriteBytes(aTxMasterStyleAtomStrm.GetData(), aTxMasterStyleAtomStrm.Tell());
         maSoundCollection.Write( *mpStrm );
         mpPptEscherEx->WriteDrawingGroupContainer( *mpStrm );
         ImplMasterSlideListContainer( mpStrm );
@@ -2122,7 +2122,7 @@ bool PPTWriter::ImplCreatePresentationPlaceholder( const bool bMasterPage, const
             mpStrm->WriteUInt32( ( ESCHER_ClientTextbox << 16 ) | 0xf )
                    .WriteUInt32( aClientTextBox.Tell() );
 
-            mpStrm->Write( aClientTextBox.GetData(), aClientTextBox.Tell() );
+            mpStrm->WriteBytes(aClientTextBox.GetData(), aClientTextBox.Tell());
         }
         mpPptEscherEx->CloseContainer();    // ESCHER_SpContainer
     }
@@ -3318,7 +3318,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                         SvMemoryStream* pOut = aTextRule.pOut;
                         if ( pOut )
                         {
-                            pClientTextBox->Write( pOut->GetData(), pOut->Tell() );
+                            pClientTextBox->WriteBytes(pOut->GetData(), pOut->Tell());
                             delete pOut;
                             aTextRule.pOut = nullptr;
                         }
@@ -3382,7 +3382,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                 mpStrm->WriteUInt32( ( ESCHER_ClientData << 16 ) | 0xf )
                        .WriteUInt32( pClientData->Tell() );
 
-                mpStrm->Write( pClientData->GetData(), pClientData->Tell() );
+                mpStrm->WriteBytes(pClientData->GetData(), pClientData->Tell());
                 delete pClientData;
                 pClientData = nullptr;
             }
@@ -3391,7 +3391,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                 mpStrm->WriteUInt32( ( ESCHER_ClientTextbox << 16 ) | 0xf )
                        .WriteUInt32( pClientTextBox->Tell() );
 
-                mpStrm->Write( pClientTextBox->GetData(), pClientTextBox->Tell() );
+                mpStrm->WriteBytes(pClientTextBox->GetData(), pClientTextBox->Tell());
                 delete pClientTextBox;
                 pClientTextBox = nullptr;
             }
@@ -3457,7 +3457,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
             mpStrm->WriteUInt32( ( ESCHER_ClientTextbox << 16 ) | 0xf )
                    .WriteUInt32( pClientTextBox->Tell() );
 
-            mpStrm->Write( pClientTextBox->GetData(), pClientTextBox->Tell() );
+            mpStrm->WriteBytes(pClientTextBox->GetData(), pClientTextBox->Tell());
             delete pClientTextBox;
             pClientTextBox = nullptr;
 
@@ -3705,7 +3705,7 @@ void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape >& rXShape, Esc
                             mpStrm->WriteUInt32( ( ESCHER_ClientData << 16 ) | 0xf )
                                .WriteUInt32( pClientData->Tell() );
 
-                            mpStrm->Write( pClientData->GetData(), pClientData->Tell() );
+                            mpStrm->WriteBytes(pClientData->GetData(), pClientData->Tell());
                             delete pClientData;
                             pClientData = nullptr;
                         }
@@ -3720,7 +3720,7 @@ void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape >& rXShape, Esc
                         mpStrm->WriteUInt32( ( ESCHER_ClientTextbox << 16 ) | 0xf )
                            .WriteUInt32( aClientTextBox.Tell() );
 
-                        mpStrm->Write( aClientTextBox.GetData(), aClientTextBox.Tell() );
+                        mpStrm->WriteBytes(aClientTextBox.GetData(), aClientTextBox.Tell());
                         xCellContainer.reset();
                     }
                 }

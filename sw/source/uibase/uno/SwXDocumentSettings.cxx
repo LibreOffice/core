@@ -954,7 +954,7 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
                 sal_uInt32 nSize = aStream.Tell();
                 aStream.Seek ( STREAM_SEEK_TO_BEGIN );
                 Sequence < sal_Int8 > aSequence( nSize );
-                aStream.Read ( aSequence.getArray(), nSize );
+                aStream.ReadBytes(aSequence.getArray(), nSize);
                 rValue <<= aSequence;
             }
             else

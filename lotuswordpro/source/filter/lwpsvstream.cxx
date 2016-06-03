@@ -68,7 +68,7 @@ LwpSvStream::LwpSvStream(SvStream* pStream, LwpSvStream * pCompressed)
 */
 sal_Int32 LwpSvStream::Read(void* buf, sal_Int32 nBytesToRead)
 {
-    return m_pStream->Read(buf,nBytesToRead);
+    return m_pStream->ReadBytes(buf, nBytesToRead);
 }
 
 LwpSvStream& LwpSvStream::ReadUInt8( sal_uInt8& rUInt8 )

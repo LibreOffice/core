@@ -287,7 +287,7 @@ void SwWW8ImplReader::ReadEmbeddedData( SvMemoryStream& rStrm, SwDocShell* pDocS
     sal_uInt8 aGuid[16];
     sal_uInt32 nFlags(0);
 
-    rStrm.Read(aGuid, 16);
+    rStrm.ReadBytes(aGuid, 16);
     rStrm.SeekRel( 4 );
     rStrm.ReadUInt32( nFlags );
 
@@ -318,7 +318,7 @@ void SwWW8ImplReader::ReadEmbeddedData( SvMemoryStream& rStrm, SwDocShell* pDocS
     // file link or URL
     else if( ::get_flag( nFlags, WW8_HLINK_BODY ) )
     {
-        rStrm.Read( aGuid, 16);
+        rStrm.ReadBytes(aGuid, 16);
 
         if( (memcmp(aGuid, aGuidFileMoniker, 16) == 0) )
         {
@@ -1157,9 +1157,9 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
         ::std::vector< sal_uInt8 > aBuffer( nBufferSize );
         sal_uInt8* pnData = &aBuffer.front();
         sal_uInt8 nStreamSize;
-        if( pnData && rSt.Read( pnData, nBufferSize ) == nBufferSize )
+        if (pnData && rSt.ReadBytes(pnData, nBufferSize) == nBufferSize)
         {
-            aMemStream.Write( pnData, nBufferSize );
+            aMemStream.WriteBytes(pnData, nBufferSize);
             aMemStream.Seek( STREAM_SEEK_TO_END );
             nStreamSize = aMemStream.Tell();
             aMemStream.Seek( STREAM_SEEK_TO_BEGIN );
@@ -4689,8 +4689,8 @@ void SwWW8ImplReader::StoreMacroCmds()
 
             sal_uInt32 lcbCmds = std::min<sal_uInt32>(m_pWwFib->lcbCmds, m_pTableStream->remainingSize());
             std::unique_ptr<sal_uInt8[]> xBuffer(new sal_uInt8[lcbCmds]);
-            m_pWwFib->lcbCmds = m_pTableStream->Read(xBuffer.get(), lcbCmds);
-            xOutStream->Write(xBuffer.get(), m_pWwFib->lcbCmds);
+            m_pWwFib->lcbCmds = m_pTableStream->ReadBytes(xBuffer.get(), lcbCmds);
+            xOutStream->WriteBytes(xBuffer.get(), m_pWwFib->lcbCmds);
         }
         catch (...)
         {
@@ -5487,10 +5487,10 @@ namespace
         for (sal_Size nI = 0, nBlock = 0; nI < nLen; nI += WW_BLOCKSIZE, ++nBlock)
         {
             sal_Size nBS = (nLen - nI > WW_BLOCKSIZE) ? WW_BLOCKSIZE : nLen - nI;
-            nBS = rIn.Read(in, nBS);
+            nBS = rIn.ReadBytes(in, nBS);
             rCtx.InitCipher(nBlock);
             rCtx.Decode(in, nBS, in, nBS);
-            rOut.Write(in, nBS);
+            rOut.WriteBytes(in, nBS);
         }
     }
 
@@ -5508,9 +5508,9 @@ namespace
         for (sal_Size nI = nSt; nI < nLen; nI += 0x4096)
         {
             sal_Size nBS = (nLen - nI > 0x4096 ) ? 0x4096 : nLen - nI;
-            nBS = rIn.Read(in, nBS);
+            nBS = rIn.ReadBytes(in, nBS);
             rCtx.Decode(in, nBS);
-            rOut.Write(in, nBS);
+            rOut.WriteBytes(in, nBS);
         }
     }
 
@@ -5714,8 +5714,8 @@ sal_uLong SwWW8ImplReader::LoadThroughDecryption(WW8Glossary *pGloss)
                         size_t nUnencryptedHdr =
                             (8 == m_pWwFib->nVersion) ? 0x44 : 0x34;
                         sal_uInt8 *pIn = new sal_uInt8[nUnencryptedHdr];
-                        nUnencryptedHdr = m_pStrm->Read(pIn, nUnencryptedHdr);
-                        aDecryptMain.Write(pIn, nUnencryptedHdr);
+                        nUnencryptedHdr = m_pStrm->ReadBytes(pIn, nUnencryptedHdr);
+                        aDecryptMain.WriteBytes(pIn, nUnencryptedHdr);
                         delete [] pIn;
 
                         DecryptXOR(aCtx, *m_pStrm, aDecryptMain);
@@ -5768,12 +5768,12 @@ sal_uLong SwWW8ImplReader::LoadThroughDecryption(WW8Glossary *pGloss)
                         m_pStrm->Seek(0);
                         sal_Size nUnencryptedHdr = 0x44;
                         sal_uInt8 *pIn = new sal_uInt8[nUnencryptedHdr];
-                        nUnencryptedHdr = m_pStrm->Read(pIn, nUnencryptedHdr);
+                        nUnencryptedHdr = m_pStrm->ReadBytes(pIn, nUnencryptedHdr);
 
                         DecryptRC4(aCtx, *m_pStrm, aDecryptMain);
 
                         aDecryptMain.Seek(0);
-                        aDecryptMain.Write(pIn, nUnencryptedHdr);
+                        aDecryptMain.WriteBytes(pIn, nUnencryptedHdr);
                         delete [] pIn;
 
                         pTempTable = MakeTemp(aDecryptTable);

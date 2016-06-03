@@ -715,7 +715,7 @@ uno::Any SwMailTransferable::getTransferData( const datatransfer::DataFlavor& /*
             aData.realloc(pStream->Tell());
             pStream->Seek(0);
             sal_Int8 * pData = aData.getArray();
-            pStream->Read( pData, aData.getLength() );
+            pStream->ReadBytes( pData, aData.getLength() );
         }
         aRet <<= aData;
     }

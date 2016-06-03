@@ -110,7 +110,7 @@ SvStream& WriteSvGlobalName( SvStream& rOStr, const SvGlobalName & rObj )
     rOStr.WriteUInt32( rObj.pImp->szData.Data1 );
     rOStr.WriteUInt16( rObj.pImp->szData.Data2 );
     rOStr.WriteUInt16( rObj.pImp->szData.Data3 );
-    rOStr.Write( &rObj.pImp->szData.Data4, 8 );
+    rOStr.WriteBytes( &rObj.pImp->szData.Data4, 8 );
     return rOStr;
 }
 
@@ -121,7 +121,7 @@ SvStream& operator >> ( SvStream& rStr, SvGlobalName & rObj )
     rStr.ReadUInt32( rObj.pImp->szData.Data1 );
     rStr.ReadUInt16( rObj.pImp->szData.Data2 );
     rStr.ReadUInt16( rObj.pImp->szData.Data3 );
-    rStr.Read( &rObj.pImp->szData.Data4, 8 );
+    rStr.ReadBytes( &rObj.pImp->szData.Data4, 8 );
     return rStr;
 }
 

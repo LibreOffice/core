@@ -793,7 +793,7 @@ bool Sane::Start( BitmapTransporter& rBitmap )
                         SAL_WARN( "extensions.scanner", "short read, padding with zeros" );
                         memset(pBuffer + items_read, 0, aParams.bytes_per_line - items_read);
                     }
-                    aConverter.Write( pBuffer, aParams.bytes_per_line );
+                    aConverter.WriteBytes(pBuffer, aParams.bytes_per_line);
                 }
                 else if( eType == FrameStyle_Gray )
                 {

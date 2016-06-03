@@ -175,7 +175,7 @@ SvgData::SvgData(const OUString& rPath):
     if (nStmLen)
     {
         maSvgDataArray.realloc(nStmLen);
-        rIStm.Read(maSvgDataArray.begin(), nStmLen);
+        rIStm.ReadBytes(maSvgDataArray.begin(), nStmLen);
 
         if (rIStm.GetError())
         {

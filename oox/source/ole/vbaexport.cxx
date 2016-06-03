@@ -177,7 +177,7 @@ void VBACompressionChunk::write()
         sal_uInt16 nHeader = handleHeader(true);
         setUInt16(pCompressedChunkStream, 0, nHeader);
         // copy the compressed stream to our output stream
-        mrCompressedStream.Write(pCompressedChunkStream, mnCompressedCurrent);
+        mrCompressedStream.WriteBytes(pCompressedChunkStream, mnCompressedCurrent);
     }
 }
 
@@ -356,7 +356,7 @@ void VBACompressionChunk::writeRawChunk()
 {
     // we need to use up to 4096 bytes of the original stream
     // and fill the rest with padding
-    mrCompressedStream.Write(mpUncompressedData, mnChunkSize);
+    mrCompressedStream.WriteBytes(mpUncompressedData, mnChunkSize);
     sal_Size nPadding = 4096 - mnChunkSize;
     for (size_t i = 0; i < nPadding; ++i)
     {

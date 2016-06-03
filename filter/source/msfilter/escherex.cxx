@@ -314,7 +314,7 @@ void EscherPropertyContainer::Commit( SvStream& rSt, sal_uInt16 nVersion, sal_uI
             for ( i = 0; i < nSortCount; i++ )
             {
                 if ( pSortStruct[ i ].pBuf )
-                    rSt.Write( pSortStruct[ i ].pBuf, pSortStruct[ i ].nPropSize );
+                    rSt.WriteBytes(pSortStruct[i].pBuf, pSortStruct[i].nPropSize);
             }
         }
     }
@@ -4062,7 +4062,7 @@ void EscherBlibEntry::WriteBlibEntry( SvStream& rSt, bool bWritePictureOffset, s
             rSt.WriteUChar( meBlibType );
     }
 
-    rSt.Write( &mnIdentifier[ 0 ], 16 );
+    rSt.WriteBytes(&mnIdentifier[0], 16);
     rSt.WriteUInt16( 0 )
        .WriteUInt32( mnSize + mnSizeExtra )
        .WriteUInt32( mnRefCount )
@@ -4185,8 +4185,8 @@ void EscherGraphicProvider::WriteBlibStoreContainer( SvStream& rSt, SvStream* pM
                 while ( nBlipSize )
                 {
                     sal_uInt32 nBytes = ( nBlipSize > nBuf ? nBuf : nBlipSize );
-                    pMergePicStreamBSE->Read( pBuf.get(), nBytes );
-                    rSt.Write( pBuf.get(), nBytes );
+                    pMergePicStreamBSE->ReadBytes(pBuf.get(), nBytes);
+                    rSt.WriteBytes(pBuf.get(), nBytes);
                     nBlipSize -= nBytes;
                 }
             }
@@ -4303,7 +4303,7 @@ sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, const OStrin
                     GraphicFilter &rFilter = GraphicFilter::GetGraphicFilter();
                     SvMemoryStream  aGIFStream;
                     const char* pString = "MSOFFICE9.0";
-                    aGIFStream.Write( pString, strlen(pString) );
+                    aGIFStream.WriteBytes(pString, strlen(pString));
                     nErrCode = rFilter.ExportGraphic( aGraphic, OUString(), aGIFStream,
                         rFilter.GetExportFormatNumberForShortName( "GIF" ) );
                     css::uno::Sequence< css::beans::PropertyValue > aFilterData( 1 );
@@ -4312,7 +4312,7 @@ sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, const OStrin
                     css::uno::Sequence< sal_Int8 > aGIFSeq( nGIFSreamLen );
                     sal_Int8* pSeq = aGIFSeq.getArray();
                     aGIFStream.Seek( STREAM_SEEK_TO_BEGIN );
-                    aGIFStream.Read( pSeq, nGIFSreamLen );
+                    aGIFStream.ReadBytes(pSeq, nGIFSreamLen);
                     css::beans::PropertyValue aChunkProp, aFilterProp;
                     aChunkProp.Name = "msOG";
                     aChunkProp.Value <<= aGIFSeq;
@@ -4382,9 +4382,9 @@ sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, const OStrin
 
 
                 rPicOutStrm.WriteUInt32( nInstance ).WriteUInt32( p_EscherBlibEntry->mnSize + nExtra );
-                rPicOutStrm.Write( p_EscherBlibEntry->mnIdentifier, 16 );
+                rPicOutStrm.WriteBytes(p_EscherBlibEntry->mnIdentifier, 16);
                 rPicOutStrm.WriteUChar( 0xff );
-                rPicOutStrm.Write( pGraphicAry, p_EscherBlibEntry->mnSize );
+                rPicOutStrm.WriteBytes(pGraphicAry, p_EscherBlibEntry->mnSize);
             }
             else
             {
@@ -4403,8 +4403,8 @@ sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, const OStrin
                     nInstance = ( eBlibType == WMF ) ? 0xf01b2170 : 0xf01a3d40;                 // !EMF -> no change
                     rPicOutStrm.WriteUInt32( nInstance ).WriteUInt32( p_EscherBlibEntry->mnSize + nExtra );
                     if ( eBlibType == WMF )                                                     // !EMF -> no change
-                        rPicOutStrm.Write( p_EscherBlibEntry->mnIdentifier, 16 );
-                    rPicOutStrm.Write( p_EscherBlibEntry->mnIdentifier, 16 );
+                        rPicOutStrm.WriteBytes(p_EscherBlibEntry->mnIdentifier, 16);
+                    rPicOutStrm.WriteBytes(p_EscherBlibEntry->mnIdentifier, 16);
 
                     /*
                      ##913##
@@ -4440,7 +4440,7 @@ sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, const OStrin
                    .WriteUInt32( nHeight )
                    .WriteUInt32( p_EscherBlibEntry->mnSize )
                    .WriteUInt16( 0xfe00 );  // compression Flags
-                    rPicOutStrm.Write( pGraphicAry, p_EscherBlibEntry->mnSize );
+                    rPicOutStrm.WriteBytes(pGraphicAry, p_EscherBlibEntry->mnSize);
                 }
             }
             if ( nAtomSize )
@@ -5063,9 +5063,9 @@ void EscherEx::InsertAtCurrentPos( sal_uInt32 nBytes )
         nToCopy -= nBufSize;
         nSource -= nBufSize;
         mpOutStrm->Seek( nSource );
-        mpOutStrm->Read( pBuf.get(), nBufSize );
+        mpOutStrm->ReadBytes(pBuf.get(), nBufSize);
         mpOutStrm->Seek( nSource + nBytes );
-        mpOutStrm->Write( pBuf.get(), nBufSize );
+        mpOutStrm->WriteBytes(pBuf.get(), nBufSize);
     }
     mpOutStrm->Seek( nCurPos );
 }

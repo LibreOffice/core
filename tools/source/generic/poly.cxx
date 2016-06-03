@@ -1587,7 +1587,7 @@ SvStream& ReadPolygon( SvStream& rIStream, tools::Polygon& rPoly )
 #else
         if ( rIStream.GetEndian() == SvStreamEndian::LITTLE )
 #endif
-            rIStream.Read( rPoly.mpImplPolygon->mpPointAry, nPoints*sizeof(Point) );
+            rIStream.ReadBytes(rPoly.mpImplPolygon->mpPointAry, nPoints*sizeof(Point));
         else
 #endif
         {
@@ -1622,7 +1622,7 @@ SvStream& WritePolygon( SvStream& rOStream, const tools::Polygon& rPoly )
 #endif
         {
             if ( nPoints )
-                rOStream.Write( rPoly.mpImplPolygon->mpPointAry, nPoints*sizeof(Point) );
+                rOStream.WriteBytes(rPoly.mpImplPolygon->mpPointAry, nPoints*sizeof(Point));
         }
         else
 #endif
@@ -1648,7 +1648,7 @@ void Polygon::ImplRead( SvStream& rIStream )
     if ( bHasPolyFlags )
     {
         mpImplPolygon->mpFlagAry = new sal_uInt8[ mpImplPolygon->mnPoints ];
-        rIStream.Read( mpImplPolygon->mpFlagAry, mpImplPolygon->mnPoints );
+        rIStream.ReadBytes(mpImplPolygon->mpFlagAry, mpImplPolygon->mnPoints);
     }
 }
 
@@ -1666,7 +1666,7 @@ void Polygon::ImplWrite( SvStream& rOStream ) const
     rOStream.WriteBool(bHasPolyFlags);
 
     if ( bHasPolyFlags )
-        rOStream.Write( mpImplPolygon->mpFlagAry, mpImplPolygon->mnPoints );
+        rOStream.WriteBytes( mpImplPolygon->mpFlagAry, mpImplPolygon->mnPoints );
 }
 
 void Polygon::Write( SvStream& rOStream ) const

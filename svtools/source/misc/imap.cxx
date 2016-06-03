@@ -953,7 +953,7 @@ void ImageMap::Read( SvStream& rIStm, const OUString& rBaseURL )
     sal_uInt16      nCount;
 
     rIStm.SetEndian( SvStreamEndian::LITTLE );
-    rIStm.Read( cMagic, sizeof( cMagic ) );
+    rIStm.ReadBytes(cMagic, sizeof(cMagic));
 
     if ( !memcmp( cMagic, IMAPMAGIC, sizeof( cMagic ) ) )
     {

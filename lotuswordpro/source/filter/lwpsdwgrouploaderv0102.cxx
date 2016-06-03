@@ -98,7 +98,7 @@ void LwpSdwGroupLoaderV0102::BeginDrawObjects(std::vector< rtl::Reference<XFFram
 
     //flag
     unsigned char BinSignature[2];
-    m_pStream->Read(BinSignature,2);
+    m_pStream->ReadBytes(BinSignature, 2);
     if (BinSignature[0] != 'S' || BinSignature[1] != 'M')
     {
         assert(false);
@@ -243,7 +243,7 @@ XFDrawGroup* LwpSdwGroupLoaderV0102::CreateDrawGroupObject()
 {
     //flag
     unsigned char BinSignature[2];
-    m_pStream->Read(BinSignature,2);
+    m_pStream->ReadBytes(BinSignature, 2);
     if (BinSignature[0] != 'S' || BinSignature[1] != 'M')
     {
         assert(false);

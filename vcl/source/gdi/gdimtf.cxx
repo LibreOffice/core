@@ -2758,7 +2758,7 @@ SvStream& ReadGDIMetaFile( SvStream& rIStm, GDIMetaFile& rGDIMetaFile )
 
         aId[ 0 ] = 0;
         aId[ 6 ] = 0;
-        rIStm.Read( aId, 6 );
+        rIStm.ReadBytes( aId, 6 );
 
         if ( !strcmp( aId, "VCLMTF" ) )
         {
@@ -2861,7 +2861,7 @@ SvStream& GDIMetaFile::Write( SvStream& rOStm )
     SvStreamEndian   nOldFormat = rOStm.GetEndian();
 
     rOStm.SetEndian( SvStreamEndian::LITTLE );
-    rOStm.Write( "VCLMTF", 6 );
+    rOStm.WriteBytes( "VCLMTF", 6 );
 
     pCompat = new VersionCompat( rOStm, StreamMode::WRITE, 1 );
 

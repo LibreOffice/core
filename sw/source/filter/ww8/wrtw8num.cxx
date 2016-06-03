@@ -271,7 +271,7 @@ void WW8AttributeOutput::NumberingLevel( sal_uInt8 /*nLevel*/,
 
     // Write the rgbxchNums[9], positions of placeholders for paragraph
     // numbers in the text
-    m_rWW8Export.pTableStrm->Write( pNumLvlPos, WW8ListManager::nMaxLevel );
+    m_rWW8Export.pTableStrm->WriteBytes(pNumLvlPos, WW8ListManager::nMaxLevel);
 
     // Type of the character between the bullet and the text
     m_rWW8Export.pTableStrm->WriteUChar( nFollow );
@@ -333,11 +333,11 @@ void WW8AttributeOutput::NumberingLevel( sal_uInt8 /*nLevel*/,
     pData += 5;
     Set_UInt16( pData, nListTabPos );
 
-    m_rWW8Export.pTableStrm->Write( aPapSprms, sizeof( aPapSprms ));
+    m_rWW8Export.pTableStrm->WriteBytes(aPapSprms, sizeof(aPapSprms));
 
     // write Chpx
     if( !aCharAtrs.empty() )
-        m_rWW8Export.pTableStrm->Write( aCharAtrs.data(), aCharAtrs.size() );
+        m_rWW8Export.pTableStrm->WriteBytes(aCharAtrs.data(), aCharAtrs.size());
 
     // write the num string
     SwWW8Writer::WriteShort( *m_rWW8Export.pTableStrm, rNumberingString.getLength() );

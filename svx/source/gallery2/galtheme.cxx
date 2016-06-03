@@ -901,7 +901,7 @@ bool GalleryTheme::InsertGraphic( const Graphic& rGraphic, sal_uIntPtr nInsertPo
             {
                 if( aGfxLink.GetDataSize() && aGfxLink.GetData() )
                 {
-                    pOStm->Write( aGfxLink.GetData(), aGfxLink.GetDataSize() );
+                    pOStm->WriteBytes(aGfxLink.GetData(), aGfxLink.GetDataSize());
                     bRet = ( pOStm->GetError() == ERRCODE_NONE );
                 }
                 else
@@ -1360,7 +1360,7 @@ SvStream& GalleryTheme::WriteData( SvStream& rOStm ) const
     {
         std::unique_ptr<char[]> pReserve(new char[ nRest ]);
         memset( pReserve.get(), 0, nRest );
-        rOStm.Write( pReserve.get(), nRest );
+        rOStm.WriteBytes(pReserve.get(), nRest);
     }
 
     return rOStm;

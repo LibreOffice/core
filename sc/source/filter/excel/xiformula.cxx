@@ -56,7 +56,7 @@ void XclImpFmlaCompImpl::CreateRangeList(
     {
         SvMemoryStream aMemStrm;
         aMemStrm.WriteUInt16( EXC_ID_EOF ).WriteUInt16( rXclTokArr.GetSize() );
-        aMemStrm.Write( rXclTokArr.GetData(), rXclTokArr.GetSize() );
+        aMemStrm.WriteBytes(rXclTokArr.GetData(), rXclTokArr.GetSize());
         XclImpStream aFmlaStrm( aMemStrm, GetRoot() );
         aFmlaStrm.StartNextRecord();
         GetOldFmlaConverter().GetAbsRefs( rScRanges, aFmlaStrm, aFmlaStrm.GetRecSize() );
@@ -72,7 +72,7 @@ const ScTokenArray* XclImpFmlaCompImpl::CreateFormula(
     // evil hack!  are we trying to phase out the old style formula converter ?
     SvMemoryStream aMemStrm;
     aMemStrm.WriteUInt16( EXC_ID_EOF ).WriteUInt16( rXclTokArr.GetSize() );
-    aMemStrm.Write( rXclTokArr.GetData(), rXclTokArr.GetSize() );
+    aMemStrm.WriteBytes(rXclTokArr.GetData(), rXclTokArr.GetSize());
     XclImpStream aFmlaStrm( aMemStrm, GetRoot() );
     aFmlaStrm.StartNextRecord();
     const ScTokenArray* pArray = nullptr;

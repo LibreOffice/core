@@ -320,7 +320,7 @@ bool SwEditShell::GetSelectedText( OUString &rBuf, int nHndlParaBrk )
                     aStream.Seek( 0 );
                     aStream.ResetError();
                     //endian specific?, yipes!
-                    aStream.Read(pStr->buffer, nLen);
+                    aStream.ReadBytes(pStr->buffer, nLen);
                     rBuf = OUString(pStr, SAL_NO_ACQUIRE);
                 }
             }

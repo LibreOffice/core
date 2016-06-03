@@ -178,7 +178,7 @@ bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
                 if( bBadVer ) break;
                 pCode = new char[ nLen ];
                 nCodeSize = nLen;
-                r.Read( pCode, nCodeSize );
+                r.ReadBytes(pCode, nCodeSize);
                 if ( bLegacy )
                 {
                     ReleaseLegacyBuffer(); // release any previously held buffer
@@ -231,7 +231,7 @@ bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
                     nStringSize = (sal_uInt16) nLen;
 
                     std::unique_ptr<char[]> pByteStrings(new char[ nLen ]);
-                    r.Read( pByteStrings.get(), nStringSize );
+                    r.ReadBytes(pByteStrings.get(), nStringSize);
                     for( short j = 0; j < nStrings; j++ )
                     {
                         sal_uInt16 nOff2 = (sal_uInt16) pStringOff[ j ];
@@ -427,11 +427,11 @@ bool SbiImage::Save( SvStream& r, sal_uInt32 nVer )
             aNewToLegacy.convert();
             pLegacyPCode = reinterpret_cast<char*>(aNewToLegacy.GetBuffer());
             nLegacyCodeSize = aNewToLegacy.GetSize();
-            r.Write( pLegacyPCode, nLegacyCodeSize );
+            r.WriteBytes(pLegacyPCode, nLegacyCodeSize);
         }
         else
         {
-            r.Write( pCode, nCodeSize );
+            r.WriteBytes(pCode, nCodeSize);
         }
         SbiCloseRecord( r, nPos );
     }
@@ -456,7 +456,7 @@ bool SbiImage::Save( SvStream& r, sal_uInt32 nVer )
             memcpy( pByteStrings.get() + nOff, aStr.getStr(), (aStr.getLength() + 1) * sizeof( char ) );
         }
         r.WriteUInt32( nStringSize );
-        r.Write( pByteStrings.get(), nStringSize );
+        r.WriteBytes(pByteStrings.get(), nStringSize);
 
         pByteStrings.reset();
         SbiCloseRecord( r, nPos );

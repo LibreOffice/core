@@ -3418,9 +3418,9 @@ void SfxMedium::CreateTempFile( bool bReplace )
 
                 while( !pImpl->m_pInStream->IsEof() && nErr == ERRCODE_NONE )
                 {
-                    sal_uInt32 nRead = pImpl->m_pInStream->Read( pBuf, 8192 );
+                    sal_uInt32 nRead = pImpl->m_pInStream->ReadBytes(pBuf, 8192);
                     nErr = pImpl->m_pInStream->GetError();
-                    pImpl->m_pOutStream->Write( pBuf, nRead );
+                    pImpl->m_pOutStream->WriteBytes( pBuf, nRead );
                 }
 
                 bTransferSuccess = true;

@@ -97,7 +97,7 @@ sal_Int16 ReadDicVersion( SvStreamPtr &rpStream, sal_uInt16 &nLng, bool &bNeg )
     sal_Size nSniffPos = rpStream->Tell();
     static sal_Size nVerOOo7Len = sal::static_int_cast< sal_Size >(strlen( pVerOOo7 ));
     pMagicHeader[ nVerOOo7Len ] = '\0';
-    if ((rpStream->Read(static_cast<void *>(pMagicHeader), nVerOOo7Len) == nVerOOo7Len) &&
+    if ((rpStream->ReadBytes(static_cast<void *>(pMagicHeader), nVerOOo7Len) == nVerOOo7Len) &&
         !strcmp(pMagicHeader, pVerOOo7))
     {
         bool bSuccess;
@@ -151,7 +151,7 @@ sal_Int16 ReadDicVersion( SvStreamPtr &rpStream, sal_uInt16 &nLng, bool &bNeg )
         if (nLen >= MAX_HEADER_LENGTH)
             return -1;
 
-        rpStream->Read(pMagicHeader, nLen);
+        rpStream->ReadBytes(pMagicHeader, nLen);
         pMagicHeader[nLen] = '\0';
 
         // Check version magic
@@ -291,7 +291,7 @@ sal_uLong DictionaryNeo::loadEntries(const OUString &rMainURL)
                 return nErr;
             if ( nLen < BUFSIZE )
             {
-                pStream->Read(aWordBuf, nLen);
+                pStream->ReadBytes(aWordBuf, nLen);
                 if (0 != (nErr = pStream->GetError()))
                     return nErr;
                 *(aWordBuf + nLen) = 0;
@@ -320,7 +320,7 @@ sal_uLong DictionaryNeo::loadEntries(const OUString &rMainURL)
 
             if (nLen < BUFSIZE)
             {
-                pStream->Read(aWordBuf, nLen);
+                pStream->ReadBytes(aWordBuf, nLen);
                 if (0 != (nErr = pStream->GetError()))
                     return nErr;
             }

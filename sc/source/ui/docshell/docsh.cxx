@@ -2138,11 +2138,11 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
 
                             // write byte encoded
                             if ( bNeedQuotes )
-                                rStream.Write(
+                                rStream.WriteBytes(
                                     aStrDelimEncoded.getStr(), aStrDelimEncoded.getLength());
-                            rStream.Write(aStrEnc.getStr(), aStrEnc.getLength());
+                            rStream.WriteBytes(aStrEnc.getStr(), aStrEnc.getLength());
                             if ( bNeedQuotes )
-                                rStream.Write(
+                                rStream.WriteBytes(
                                     aStrDelimEncoded.getStr(), aStrDelimEncoded.getLength());
                         }
                     }

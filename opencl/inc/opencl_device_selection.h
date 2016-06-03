@@ -244,7 +244,7 @@ private:
     static int funcWriteCallback(void* pContext, const char* sBuffer, int nLen)
     {
         SvStream* pStream = static_cast<SvStream*>(pContext);
-        return static_cast<int>(pStream->Write(sBuffer, nLen));
+        return static_cast<int>(pStream->WriteBytes(sBuffer, nLen));
     }
 
     static int funcCloseCallback(void* pContext)
@@ -340,7 +340,7 @@ public:
     {
         sal_Size nSize = pStream->remainingSize();
         std::vector<sal_uInt8> aBuffer(nSize + 1);
-        pStream->Read(aBuffer.data(), nSize);
+        pStream->ReadBytes(aBuffer.data(), nSize);
         aBuffer[nSize] = 0;
         mpDocPtr = xmlParseDoc(reinterpret_cast<xmlChar*>(aBuffer.data()));
         if (mpDocPtr == nullptr)

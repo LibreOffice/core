@@ -3349,7 +3349,7 @@ void MetaCommentAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     rOStm.WriteInt32( mnValue ).WriteUInt32( mnDataSize );
 
     if ( mnDataSize )
-        rOStm.Write( mpData, mnDataSize );
+        rOStm.WriteBytes( mpData, mnDataSize );
 }
 
 void MetaCommentAction::Read( SvStream& rIStm, ImplMetaReadData* )
@@ -3365,7 +3365,7 @@ void MetaCommentAction::Read( SvStream& rIStm, ImplMetaReadData* )
     if( mnDataSize )
     {
         mpData = new sal_uInt8[ mnDataSize ];
-        rIStm.Read( mpData, mnDataSize );
+        rIStm.ReadBytes(mpData, mnDataSize);
     }
     else
         mpData = nullptr;

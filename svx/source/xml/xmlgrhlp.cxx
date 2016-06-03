@@ -114,7 +114,7 @@ SvXMLGraphicInputStream::SvXMLGraphicInputStream( const OUString& rGraphicId )
 
             if( aGfxLink.GetDataSize() && aGfxLink.GetData() )
             {
-                pStm->Write( aGfxLink.GetData(), aGfxLink.GetDataSize() );
+                pStm->WriteBytes(aGfxLink.GetData(), aGfxLink.GetDataSize());
                 bRet = ( pStm->GetError() == 0 );
             }
             else
@@ -310,7 +310,7 @@ const GraphicObject& SvXMLGraphicOutputStream::GetGraphicObject()
             if( nStreamLen >= 2 )
             {
                 //read two byte
-                mpOStm->Read( sFirstBytes, 2 );
+                mpOStm->ReadBytes(sFirstBytes, 2);
 
                 if( sFirstBytes[0] == 0x1f && sFirstBytes[1] == 0x8b )
                 {
@@ -563,7 +563,7 @@ bool SvXMLGraphicHelper::ImplWriteGraphic( const OUString& rPictureStorageName,
 
             std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream( aStream.xStream ));
             if( bUseGfxLink && aGfxLink.GetDataSize() && aGfxLink.GetData() )
-                pStream->Write( aGfxLink.GetData(), aGfxLink.GetDataSize() );
+                pStream->WriteBytes(aGfxLink.GetData(), aGfxLink.GetDataSize());
             else
             {
                 if( aGraphic.GetType() == GraphicType::Bitmap )
@@ -592,12 +592,12 @@ bool SvXMLGraphicHelper::ImplWriteGraphic( const OUString& rPictureStorageName,
                         sal_uInt32  nSize = pComment->GetDataSize();
                         const sal_uInt8* pData = pComment->GetData();
                         if ( nSize && pData )
-                            pStream->Write( pData, nSize );
+                            pStream->WriteBytes(pData, nSize);
 
                         const MetaEPSAction* pAct = static_cast<const MetaEPSAction*>(rMtf.FirstAction());
                         const GfxLink&       rLink = pAct->GetLink();
 
-                        pStream->Write( rLink.GetData(), rLink.GetDataSize() );
+                        pStream->WriteBytes(rLink.GetData(), rLink.GetDataSize());
                     }
                     else
                         rMtf.Write( *pStream );

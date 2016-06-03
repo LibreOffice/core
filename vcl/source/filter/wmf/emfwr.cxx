@@ -872,7 +872,7 @@ void EMFWriter::ImplWriteBmpRecord( const Bitmap& rBmp, const Point& rPt,
 
         sal_uInt32 nPalSize = nPalCount * 4;
 
-        m_rStm.Write( aMemStm.GetData(), nDIBSize );
+        m_rStm.WriteBytes( aMemStm.GetData(), nDIBSize );
 
         const sal_uLong nEndPos = m_rStm.Tell();
         m_rStm.Seek( nOffPos );
@@ -1504,7 +1504,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
                 if (pCommentAction->GetComment() == "EMF_PLUS")
                 {
                     ImplBeginCommentRecord(WIN_EMR_COMMENT_EMFPLUS);
-                    m_rStm.Write(pCommentAction->GetData(),
+                    m_rStm.WriteBytes(pCommentAction->GetData(),
                                  pCommentAction->GetDataSize());
                     ImplEndCommentRecord();
                 }

@@ -777,7 +777,7 @@ void DrawObjkList( SvStream& rInp, OutputDevice& rOut )
                     ReadTextType( rInp, aText );
                     if (!rInp.GetError()) {
                         aText.Buffer=new UCHAR[aText.BufSize+1]; // add one for LookAhead at CK-separation
-                        rInp.Read(aText.Buffer, aText.BufSize);
+                        rInp.ReadBytes(aText.Buffer, aText.BufSize);
                         if (!rInp.GetError()) aText.Draw(rOut);
                         delete[] aText.Buffer;
                     }

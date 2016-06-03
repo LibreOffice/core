@@ -224,7 +224,7 @@ bool ScQProReader::nextRecord()
 void ScQProReader::readString( OUString &rString, sal_uInt16 nLength )
 {
     std::unique_ptr<sal_Char[]> pText(new sal_Char[ nLength + 1 ]);
-    nLength = mpStream->Read(pText.get(), nLength);
+    nLength = mpStream->ReadBytes(pText.get(), nLength);
     pText[ nLength ] = 0;
     rString = OUString( pText.get(), strlen(pText.get()), mpStream->GetStreamCharSet() );
 }

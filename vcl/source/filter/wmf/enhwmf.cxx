@@ -434,7 +434,7 @@ void EnhWMFReader::ReadEMFPlusComment(sal_uInt32 length, bool& bHaveDC)
 
     sal_Size pos = pWMF->Tell();
     void *buffer = malloc( length );
-    pOut->PassEMFPlus( buffer, pWMF->Read( buffer, length ) );
+    pOut->PassEMFPlus( buffer, pWMF->ReadBytes(buffer, length) );
     free( buffer );
     pWMF->Seek( pos );
 
@@ -1275,7 +1275,7 @@ bool EnhWMFReader::ReadEnhWMF()
 
                             // copy DIBInfoHeader from source (cbBmiSrc bytes)
                             pWMF->Seek( nStart + offBmiSrc );
-                            pWMF->Read( pBuf + 14, cbBmiSrc );
+                            pWMF->ReadBytes(pBuf + 14, cbBmiSrc);
 
                             if(bReadAlpha)
                             {
@@ -1287,7 +1287,7 @@ bool EnhWMFReader::ReadEnhWMF()
 
                             // copy bitmap data from source (offBitsSrc bytes)
                             pWMF->Seek( nStart + offBitsSrc );
-                            pWMF->Read( pBuf + 14 + nDeltaToDIB5HeaderSize + cbBmiSrc, cbBitsSrc );
+                            pWMF->ReadBytes(pBuf + 14 + nDeltaToDIB5HeaderSize + cbBmiSrc, cbBitsSrc);
                             aTmp.Seek( 0 );
 
                             // prepare to read and fill BitmapEx
@@ -1394,9 +1394,9 @@ bool EnhWMFReader::ReadEnhWMF()
                                 .WriteUInt16( 0 )
                                 .WriteUInt32( cbBmiSrc + 14 );
                             pWMF->Seek( nStart + offBmiSrc );
-                            pWMF->Read( pBuf + 14, cbBmiSrc );
+                            pWMF->ReadBytes(pBuf + 14, cbBmiSrc);
                             pWMF->Seek( nStart + offBitsSrc );
-                            pWMF->Read( pBuf + 14 + cbBmiSrc, cbBitsSrc );
+                            pWMF->ReadBytes(pBuf + 14 + cbBmiSrc, cbBitsSrc);
                             aTmp.Seek( 0 );
                             ReadDIB(aBitmap, aTmp, true);
 
@@ -1461,9 +1461,9 @@ bool EnhWMFReader::ReadEnhWMF()
                                .WriteUInt16( 0 )
                                .WriteUInt32( cbBmiSrc + 14 );
                             pWMF->Seek( nStart + offBmiSrc );
-                            pWMF->Read( pBuf + 14, cbBmiSrc );
+                            pWMF->ReadBytes(pBuf + 14, cbBmiSrc);
                             pWMF->Seek( nStart + offBitsSrc );
-                            pWMF->Read( pBuf + 14 + cbBmiSrc, cbBitsSrc );
+                            pWMF->ReadBytes(pBuf + 14 + cbBmiSrc, cbBitsSrc);
                             aTmp.Seek( 0 );
                             ReadDIB(aBitmap, aTmp, true);
 
@@ -1580,7 +1580,7 @@ bool EnhWMFReader::ReadEnhWMF()
                             if ( nLen <= static_cast<sal_Int32>( nEndPos - pWMF->Tell() ) )
                             {
                                 std::unique_ptr<sal_Char[]> pBuf(new sal_Char[ nLen ]);
-                                pWMF->Read( pBuf.get(), nLen );
+                                pWMF->ReadBytes(pBuf.get(), nLen);
                                 aText = OUString(pBuf.get(), nLen, pOut->GetCharSet());
                                 pBuf.reset();
 
@@ -1605,7 +1605,7 @@ bool EnhWMFReader::ReadEnhWMF()
                             if ( ( nLen * sizeof(sal_Unicode) ) <= ( nEndPos - pWMF->Tell() ) )
                             {
                                 std::unique_ptr<sal_Unicode[]> pBuf(new sal_Unicode[ nLen ]);
-                                pWMF->Read( pBuf.get(), nLen << 1 );
+                                pWMF->ReadBytes(pBuf.get(), nLen << 1);
 #ifdef OSL_BIGENDIAN
                                 sal_Char nTmp, *pTmp = (sal_Char*)( pBuf.get() + nLen );
                                 while ( pTmp-- != (sal_Char*)pBuf.get() )
@@ -1708,9 +1708,9 @@ bool EnhWMFReader::ReadEnhWMF()
                                     .WriteUInt16( 0 )
                                     .WriteUInt32( cbBmi + 14 );
                                 pWMF->Seek( nStart + offBmi );
-                                pWMF->Read( pBuf + 14, cbBmi );
+                                pWMF->ReadBytes(pBuf + 14, cbBmi);
                                 pWMF->Seek( nStart + offBits );
-                                pWMF->Read( pBuf + 14 + cbBmi, cbBits );
+                                pWMF->ReadBytes(pBuf + 14 + cbBmi, cbBits);
                                 aTmp.Seek( 0 );
                                 ReadDIB(aBitmap, aTmp, true);
                             }

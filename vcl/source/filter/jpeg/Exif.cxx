@@ -208,7 +208,7 @@ bool Exif::processExif(SvStream& rStream, sal_uInt16 aSectionLength, bool bSetVa
     std::unique_ptr<sal_uInt8[]> aExifData(new sal_uInt8[aLength]);
     sal_uInt32 aExifDataBeginPosition = rStream.Tell();
 
-    rStream.Read(aExifData.get(), aLength);
+    rStream.ReadBytes(aExifData.get(), aLength);
 
     // Exif detected
     mbExifPresent = true;
@@ -257,7 +257,7 @@ bool Exif::processExif(SvStream& rStream, sal_uInt16 aSectionLength, bool bSetVa
     if (bSetValue)
     {
         rStream.Seek(aExifDataBeginPosition);
-        rStream.Write(aExifData.get(), aLength);
+        rStream.WriteBytes(aExifData.get(), aLength);
     }
 
     return true;

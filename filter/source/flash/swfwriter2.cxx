@@ -159,7 +159,7 @@ void Tag::write( SvStream &out )
         }
     }
 
-    out.Write( GetData(), nSz );
+    out.WriteBytes( GetData(), nSz );
 }
 #if 0
 

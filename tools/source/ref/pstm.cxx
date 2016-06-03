@@ -93,7 +93,7 @@ void SvPersistStream::ResetError()
 sal_uIntPtr SvPersistStream::GetData( void* pData, sal_uIntPtr nSize )
 {
     DBG_ASSERT( pStm, "stream not set" );
-    sal_uIntPtr nRet = pStm->Read( pData, nSize );
+    sal_Size const nRet = pStm->ReadBytes( pData, nSize );
     SetError( pStm->GetError() );
     return nRet;
 }
@@ -101,7 +101,7 @@ sal_uIntPtr SvPersistStream::GetData( void* pData, sal_uIntPtr nSize )
 sal_uIntPtr SvPersistStream::PutData( const void* pData, sal_uIntPtr nSize )
 {
     DBG_ASSERT( pStm, "stream not set" );
-    sal_uIntPtr nRet = pStm->Write( pData, nSize );
+    sal_Size const nRet = pStm->WriteBytes( pData, nSize );
     SetError( pStm->GetError() );
     return nRet;
 }
