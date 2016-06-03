@@ -734,14 +734,21 @@ bool TGAReader::ImplReadPalette()
                 break;
 
             case 32 :
-                m_rTGA.Read( mpColorMap, 4 * nColors );
+                for (sal_uInt16 i = 0; i < nColors; i++)
+                {
+                    m_rTGA.ReadUInt32(mpColorMap[i]);
+                }
                 break;
 
             case 24 :
                 {
                     for ( sal_uLong i = 0; i < nColors; i++ )
                     {
-                        m_rTGA.Read( &mpColorMap[ i ], 3 );
+                        sal_uInt8 nBlue;
+                        sal_uInt8 nGreen;
+                        sal_uInt8 nRed;
+                        m_rTGA.ReadUChar(nBlue).ReadUChar(nGreen).ReadUChar(nRed);
+                        mpColorMap[i] = (nRed << 16) | (nGreen << 8) | nBlue;
                     }
                 }
                 break;
