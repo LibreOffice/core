@@ -282,8 +282,23 @@ bool OpenGLContext::InitGLEW()
             bGlewInit = true;
     }
 
-    VCL_GL_INFO("OpenGLContext::ImplInit----end");
+    VCL_GL_INFO("OpenGLContext::ImplInit----end, GL version: " << OpenGLHelper::getGLVersion());
     mbInitialized = true;
+
+    // I think we need at least GL 3.0
+    if (!GLEW_VERSION_3_0)
+    {
+        SAL_WARN("vcl.opengl", "We don't have at least OpenGL 3.0");
+        return false;
+    }
+
+    // Check that some "optional" APIs that we use unconditionally are present
+    if (!glBindFramebuffer)
+    {
+        SAL_WARN("vcl.opengl", "We don't have glBindFramebuffer");
+        return false;
+    }
+
     return true;
 }
 
