@@ -2178,7 +2178,7 @@ bool SwHTMLParser::AppendTextNode( SwHTMLAppendMode eMode, bool bUpdateNum )
                                             rText, pAttr->GetSttCnt() );
                             sal_Int32 nScriptEnd = g_pBreakIt->GetBreakIter()
                                     ->endOfScript( rText, nStt, nScriptText );
-                            while( nScriptEnd < nEndCnt )
+                            while (nScriptEnd < nEndCnt && nScriptEnd != -1)
                             {
                                 if( nScriptItem == nScriptText )
                                 {
