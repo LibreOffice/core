@@ -46,6 +46,7 @@
 #include <rtl/process.h>
 #include <tools/getprocessworkingdir.hxx>
 
+#include <algorithm>
 #include <cassert>
 #include <cstdlib>
 #include <memory>
@@ -405,20 +406,17 @@ struct DbusConnectionHolder {
         connection(theConnection)
     {}
 
-    ~DbusConnectionHolder() { clear(); }
+    DbusConnectionHolder(DbusConnectionHolder && other): connection(nullptr)
+    { std::swap(connection, other.connection); }
 
-    void clear() {
+    ~DbusConnectionHolder() {
         if (connection != nullptr) {
+            dbus_connection_close(connection);
             dbus_connection_unref(connection);
         }
-        connection = nullptr;
     }
 
     DBusConnection * connection;
-
-private:
-    DbusConnectionHolder(DbusConnectionHolder &) = delete;
-    void operator =(DbusConnectionHolder) = delete;
 };
 
 struct DbusMessageHolder {
@@ -447,8 +445,8 @@ public:
     static RequestHandler::Status enable(rtl::Reference<IpcThread> * thread);
 
 private:
-    explicit DbusIpcThread(DBusConnection * connection):
-        IpcThread("DbusIPC"), connection_(connection)
+    explicit DbusIpcThread(DbusConnectionHolder && connection):
+        IpcThread("DbusIPC"), connection_(std::move(connection))
     {}
 
     virtual ~DbusIpcThread() {}
@@ -469,12 +467,13 @@ RequestHandler::Status DbusIpcThread::enable(rtl::Reference<IpcThread> * thread)
     }
     DBusError e;
     dbus_error_init(&e);
-    DbusConnectionHolder con(dbus_bus_get(DBUS_BUS_SESSION, &e));
+    DbusConnectionHolder con(dbus_bus_get_private(DBUS_BUS_SESSION, &e));
     assert((con.connection == nullptr) == bool(dbus_error_is_set(&e)));
     if (con.connection == nullptr) {
         SAL_WARN(
             "desktop.app",
-            "dbus_bus_get failed with: " << e.name << ": " << e.message);
+            "dbus_bus_get_private failed with: " << e.name << ": "
+                << e.message);
         dbus_error_free(&e);
         return RequestHandler::IPC_STATUS_BOOTSTRAP_ERROR;
     }
@@ -492,8 +491,7 @@ RequestHandler::Status DbusIpcThread::enable(rtl::Reference<IpcThread> * thread)
             dbus_error_free(&e);
             return RequestHandler::IPC_STATUS_BOOTSTRAP_ERROR;
         case DBUS_REQUEST_NAME_REPLY_PRIMARY_OWNER:
-            *thread = new DbusIpcThread(con.connection);
-            con.connection = nullptr;
+            *thread = new DbusIpcThread(std::move(con));
             return RequestHandler::IPC_STATUS_OK;
         case DBUS_REQUEST_NAME_REPLY_EXISTS:
             {
@@ -569,11 +567,16 @@ void DbusIpcThread::execute()
                 break;
             }
         }
-        dbus_connection_read_write(connection_.connection, 0);
+        dbus_connection_read_write_dispatch(connection_.connection, -1);
         DbusMessageHolder msg(
             dbus_connection_pop_message(connection_.connection));
         if (msg.message == nullptr) {
             continue;
+        }
+        if (dbus_message_is_method_call(
+                msg.message, "org.libreoffice.LibreOfficeIpcIfc0", "Close"))
+        {
+            break;
         }
         if (!dbus_message_is_method_call(
                 msg.message, "org.libreoffice.LibreOfficeIpcIfc0", "Execute"))
@@ -622,6 +625,37 @@ void DbusIpcThread::close() {
     assert(connection_.connection != nullptr);
     DBusError e;
     dbus_error_init(&e);
+    {
+        // Let DbusIpcThread::execute return from dbus_connection_read_write;
+        // for now, just abort on failure (the process would otherwise block,
+        // with DbusIpcThread::execute hanging in dbus_connection_read_write);
+        // this apparently needs a more DBus-y design anyway:
+        DbusConnectionHolder con(dbus_bus_get_private(DBUS_BUS_SESSION, &e));
+        assert((con.connection == nullptr) == bool(dbus_error_is_set(&e)));
+        if (con.connection == nullptr) {
+            SAL_WARN(
+                "desktop.app",
+                "dbus_bus_get_private failed with: " << e.name << ": "
+                    << e.message);
+            dbus_error_free(&e);
+            std::abort();
+        }
+        DbusMessageHolder msg(
+            dbus_message_new_method_call(
+                "org.libreoffice.LibreOfficeIpc0",
+                "/org/libreoffice/LibreOfficeIpc0",
+                "org.libreoffice.LibreOfficeIpcIfc0", "Close"));
+        if (msg.message == nullptr) {
+            SAL_WARN("desktop.app", "dbus_message_new_method_call failed");
+            std::abort();
+        }
+        if (!dbus_connection_send(con.connection, msg.message, nullptr))
+        {
+            SAL_WARN("desktop.app", "dbus_connection_send failed");
+            std::abort();
+        }
+        dbus_connection_flush(con.connection);
+    }
     int n = dbus_bus_release_name(
         connection_.connection, "org.libreoffice.LibreOfficeIpc0", &e);
     assert((n == -1) == bool(dbus_error_is_set(&e)));
@@ -644,7 +678,6 @@ void DbusIpcThread::close() {
     default:
         for (;;) std::abort();
     }
-    connection_.clear();
 }
 
 #endif
