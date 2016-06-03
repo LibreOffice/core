@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "da7fb54a_a6d1ebfd",
+        "filename": "sw/source/uibase/sidebar/PageMarginPanel.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-06-03T13:54:32Z",
+      "side": 1,
+      "message": "Those magic constants should go into some shared header (PageUtilsCommon.hxx, or whatever appropriate)",
+      "revId": "718cc70e6a865f4c9cf7feca92e11945aadab227",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da7fb54a_8c5a4b82",
         "filename": "sw/source/uibase/sidebar/PageMarginPanel.cxx",
         "patchSetId": 1
@@ -13,6 +30,58 @@
       "writtenOn": "2016-06-01T15:02:07Z",
       "side": 1,
       "message": "nullptr (NULL was yesterday)",
+      "revId": "718cc70e6a865f4c9cf7feca92e11945aadab227",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_26dddb14",
+        "filename": "sw/source/uibase/sidebar/PageMarginPanel.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-06-03T13:54:32Z",
+      "side": 1,
+      "message": "Just between us girls, what was wrong w/ the old code?",
+      "parentUuid": "da7fb54a_8c5a4b82",
+      "revId": "718cc70e6a865f4c9cf7feca92e11945aadab227",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_86ece7c8",
+        "filename": "sw/source/uibase/sidebar/PageMarginPanel.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-06-03T13:54:32Z",
+      "side": 1,
+      "message": "nullptr",
+      "revId": "718cc70e6a865f4c9cf7feca92e11945aadab227",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_66fe036d",
+        "filename": "sw/source/uibase/sidebar/PageMarginPanel.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 324,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-06-03T13:54:32Z",
+      "side": 1,
+      "message": "those if\u0027s should also be shared in a common header, you can make e.g. bool functions (IsNarrow, IsNormal, IsWide, IsMirrored etc.) outta them",
       "revId": "718cc70e6a865f4c9cf7feca92e11945aadab227",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
