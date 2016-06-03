@@ -40,20 +40,48 @@
                 <property name="position">1</property>
               </packing>
             </child>
+            <child>
+              <object class="GtkButton" id="btn_close">
+                <property name="label" translatable="yes">Close</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">2</property>
+              </packing>
+            </child>
           </object>
           <packing>
             <property name="expand">False</property>
             <property name="fill">False</property>
-            <property name="position">0</property>
+            <property name="position">3</property>
           </packing>
         </child>
         <child>
-          <object class="GtkLabel" id="label1">
+          <object class="GtkLabel" id="ed_pre">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">We are sorry but it seems that LibreOffice crashed the last time.
 You can help us fix this issue by sending the crash report to the
 LibreOffice crash reporting server.</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="ed_post">
+            <property name="can_focus">False</property>
+            <property name="valign">center</property>
+            <property name="xalign">0</property>
+            <property name="label" translatable="yes">The crash report was successfully uploaded.
+You can soon find the report on crashreport.libreoffice.org.
+The report can be found by</property>
+            <property name="wrap">True</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -64,4 +92,5 @@ LibreOffice crash reporting server.</property>
       </object>
     </child>
   </object>
+  <object class="GtkActionGroup" id="actiongroup1"/>
 </interface>
