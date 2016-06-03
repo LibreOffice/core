@@ -130,7 +130,7 @@ void ScModule::InitInterface_Impl()
 }
 
 ScModule::ScModule( SfxObjectFactory* pFact ) :
-    SfxModule( ResMgr::CreateResMgr( "sc" ), false, pFact, nullptr ),
+    SfxModule( ResMgr::CreateResMgr( "sc" ), pFact, nullptr ),
     aIdleTimer("sc ScModule IdleTimer"),
     aSpellIdle("sc ScModule SpellIdle"),
     mpDragData(new ScDragData),
