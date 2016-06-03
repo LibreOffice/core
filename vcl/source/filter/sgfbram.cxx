@@ -35,20 +35,21 @@ SgfHeader::SgfHeader()
 
 SvStream& ReadSgfHeader(SvStream& rIStream, SgfHeader& rHead)
 {
-    rIStream.Read(&rHead.Magic, SgfHeaderSize);
-#if defined OSL_BIGENDIAN
-    rHead.Magic  =OSL_SWAPWORD(rHead.Magic  );
-    rHead.Version=OSL_SWAPWORD(rHead.Version);
-    rHead.Typ    =OSL_SWAPWORD(rHead.Typ    );
-    rHead.Xsize  =OSL_SWAPWORD(rHead.Xsize  );
-    rHead.Ysize  =OSL_SWAPWORD(rHead.Ysize  );
-    rHead.Xoffs  =OSL_SWAPWORD(rHead.Xoffs  );
-    rHead.Yoffs  =OSL_SWAPWORD(rHead.Yoffs  );
-    rHead.Planes =OSL_SWAPWORD(rHead.Planes );
-    rHead.SwGrCol=OSL_SWAPWORD(rHead.SwGrCol);
-    rHead.OfsLo  =OSL_SWAPWORD(rHead.OfsLo  );
-    rHead.OfsHi  =OSL_SWAPWORD(rHead.OfsHi  );
-#endif
+    sal_uInt64 const nOldPos(rIStream.Tell());
+    rIStream.ReadUInt16(rHead.Magic);
+    rIStream.ReadUInt16(rHead.Version);
+    rIStream.ReadUInt16(rHead.Typ);
+    rIStream.ReadUInt16(rHead.Xsize);
+    rIStream.ReadUInt16(rHead.Ysize);
+    rIStream.ReadInt16(rHead.Xoffs);
+    rIStream.ReadInt16(rHead.Yoffs);
+    rIStream.ReadUInt16(rHead.Planes);
+    rIStream.ReadUInt16(rHead.SwGrCol);
+    rIStream.Read(&rHead.Autor, 10);
+    rIStream.Read(&rHead.Programm, 10);
+    rIStream.ReadUInt16(rHead.OfsLo);
+    rIStream.ReadUInt16(rHead.OfsHi);
+    assert(rIStream.GetError() || rIStream.Tell() == nOldPos + SgfHeaderSize);
     return rIStream;
 }
 
@@ -65,15 +66,15 @@ SgfEntry::SgfEntry()
 
 SvStream& ReadSgfEntry(SvStream& rIStream, SgfEntry& rEntr)
 {
-    rIStream.Read(&rEntr.Typ, SgfEntrySize);
-#if defined OSL_BIGENDIAN
-    rEntr.Typ  =OSL_SWAPWORD(rEntr.Typ  );
-    rEntr.iFrei=OSL_SWAPWORD(rEntr.iFrei);
-    rEntr.lFreiLo=OSL_SWAPWORD (rEntr.lFreiLo);
-    rEntr.lFreiHi=OSL_SWAPWORD (rEntr.lFreiHi);
-    rEntr.OfsLo=OSL_SWAPWORD(rEntr.OfsLo);
-    rEntr.OfsHi=OSL_SWAPWORD(rEntr.OfsHi);
-#endif
+    sal_uInt64 const nOldPos(rIStream.Tell());
+    rIStream.ReadUInt16(rEntr.Typ);
+    rIStream.ReadUInt16(rEntr.iFrei);
+    rIStream.ReadUInt16(rEntr.lFreiLo);
+    rIStream.ReadUInt16(rEntr.lFreiHi);
+    rIStream.Read(&rEntr.cFrei, 10);
+    rIStream.ReadUInt16(rEntr.OfsLo);
+    rIStream.ReadUInt16(rEntr.OfsHi);
+    assert(rIStream.GetError() || rIStream.Tell() == nOldPos + SgfEntrySize);
     return rIStream;
 }
 
@@ -82,38 +83,27 @@ sal_uInt32 SgfEntry::GetOffset()
 
 SvStream& ReadSgfVector(SvStream& rIStream, SgfVector& rVect)
 {
-    rIStream.Read(&rVect, sizeof(rVect));
-#if defined OSL_BIGENDIAN
-    rVect.Flag =OSL_SWAPWORD(rVect.Flag );
-    rVect.x    =OSL_SWAPWORD(rVect.x    );
-    rVect.y    =OSL_SWAPWORD(rVect.y    );
-    rVect.OfsLo=OSL_SWAPDWORD (rVect.OfsLo);
-    rVect.OfsHi=OSL_SWAPDWORD (rVect.OfsHi);
-#endif
+    sal_uInt64 const nOldPos(rIStream.Tell());
+    rIStream.ReadUInt16(rVect.Flag);
+    rIStream.ReadInt16(rVect.x);
+    rIStream.ReadInt16(rVect.y);
+    rIStream.ReadUInt16(rVect.OfsLo);
+    rIStream.ReadUInt16(rVect.OfsHi);
+    assert(rIStream.GetError() || rIStream.Tell() == nOldPos + SgfVectorSize);
     return rIStream;
 }
 
 SvStream& WriteBmpFileHeader(SvStream& rOStream, BmpFileHeader& rHead)
 {
-#if defined OSL_BIGENDIAN
-    rHead.Typ     =OSL_SWAPWORD(rHead.Typ     );
-    rHead.SizeLo  =OSL_SWAPWORD(rHead.SizeLo  );
-    rHead.SizeHi  =OSL_SWAPWORD(rHead.SizeHi  );
-    rHead.Reserve1=OSL_SWAPWORD(rHead.Reserve1);
-    rHead.Reserve2=OSL_SWAPWORD(rHead.Reserve2);
-    rHead.OfsLo   =OSL_SWAPWORD(rHead.OfsLo   );
-    rHead.OfsHi   =OSL_SWAPWORD(rHead.OfsHi   );
-#endif
-    rOStream.Write(&rHead, sizeof(rHead));
-#if defined OSL_BIGENDIAN
-    rHead.Typ     =OSL_SWAPWORD(rHead.Typ     );
-    rHead.SizeLo  =OSL_SWAPWORD(rHead.SizeLo  );
-    rHead.SizeHi  =OSL_SWAPWORD(rHead.SizeHi  );
-    rHead.Reserve1=OSL_SWAPWORD(rHead.Reserve1);
-    rHead.Reserve2=OSL_SWAPWORD(rHead.Reserve2);
-    rHead.OfsLo   =OSL_SWAPWORD(rHead.OfsLo   );
-    rHead.OfsHi   =OSL_SWAPWORD(rHead.OfsHi   );
-#endif
+    sal_uInt64 const nOldPos(rOStream.Tell());
+    rOStream.WriteUInt16(rHead.Typ);
+    rOStream.WriteUInt16(rHead.SizeLo);
+    rOStream.WriteUInt16(rHead.SizeHi);
+    rOStream.WriteUInt16(rHead.Reserve1);
+    rOStream.WriteUInt16(rHead.Reserve2);
+    rOStream.WriteUInt16(rHead.OfsLo);
+    rOStream.WriteUInt16(rHead.OfsHi);
+    assert(rOStream.GetError() || rOStream.Tell() == nOldPos + BmpFileHeaderSize);
     return rOStream;
 }
 
@@ -136,33 +126,19 @@ sal_uInt32 BmpFileHeader::GetOfs()
 
 SvStream& WriteBmpInfoHeader(SvStream& rOStream, BmpInfoHeader& rInfo)
 {
-#if defined OSL_BIGENDIAN
-    rInfo.Size    =OSL_SWAPDWORD (rInfo.Size    );
-    rInfo.Width   =OSL_SWAPDWORD (rInfo.Width   );
-    rInfo.Hight   =OSL_SWAPDWORD (rInfo.Hight   );
-    rInfo.Planes  =OSL_SWAPWORD(rInfo.Planes  );
-    rInfo.PixBits =OSL_SWAPWORD(rInfo.PixBits );
-    rInfo.Compress=OSL_SWAPDWORD (rInfo.Compress);
-    rInfo.ImgSize =OSL_SWAPDWORD (rInfo.ImgSize );
-    rInfo.xDpmm   =OSL_SWAPDWORD (rInfo.xDpmm   );
-    rInfo.yDpmm   =OSL_SWAPDWORD (rInfo.yDpmm   );
-    rInfo.ColUsed =OSL_SWAPDWORD (rInfo.ColUsed );
-    rInfo.ColMust =OSL_SWAPDWORD (rInfo.ColMust );
-#endif
-    rOStream.Write(&rInfo, sizeof(rInfo));
-#if defined OSL_BIGENDIAN
-    rInfo.Size    =OSL_SWAPDWORD (rInfo.Size    );
-    rInfo.Width   =OSL_SWAPDWORD (rInfo.Width   );
-    rInfo.Hight   =OSL_SWAPDWORD (rInfo.Hight   );
-    rInfo.Planes  =OSL_SWAPWORD(rInfo.Planes  );
-    rInfo.PixBits =OSL_SWAPWORD(rInfo.PixBits );
-    rInfo.Compress=OSL_SWAPDWORD (rInfo.Compress);
-    rInfo.ImgSize =OSL_SWAPDWORD (rInfo.ImgSize );
-    rInfo.xDpmm   =OSL_SWAPDWORD (rInfo.xDpmm   );
-    rInfo.yDpmm   =OSL_SWAPDWORD (rInfo.yDpmm   );
-    rInfo.ColUsed =OSL_SWAPDWORD (rInfo.ColUsed );
-    rInfo.ColMust =OSL_SWAPDWORD (rInfo.ColMust );
-#endif
+    sal_uInt64 const nOldPos(rOStream.Tell());
+    rOStream.WriteUInt32(rInfo.Size);
+    rOStream.WriteInt32(rInfo.Width);
+    rOStream.WriteInt32(rInfo.Hight);
+    rOStream.WriteUInt16(rInfo.Planes);
+    rOStream.WriteUInt16(rInfo.PixBits);
+    rOStream.WriteUInt32(rInfo.Compress);
+    rOStream.WriteUInt32(rInfo.ImgSize);
+    rOStream.WriteInt32(rInfo.xDpmm);
+    rOStream.WriteInt32(rInfo.yDpmm);
+    rOStream.WriteUInt32(rInfo.ColUsed);
+    rOStream.WriteUInt32(rInfo.ColMust);
+    assert(rOStream.GetError() || rOStream.Tell() == nOldPos + BmpInfoHeaderSize);
     return rOStream;
 }
 
