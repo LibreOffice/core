@@ -1243,15 +1243,21 @@ void ViewShellBase::Implementation::GetSlotState (SfxItemSet& rSet)
                         break;
 
                     case SID_NORMAL_MULTI_PANE_GUI:
-                        pFrameView = mrBase.GetMainViewShell()->GetFrameView();
-                        bState = pFrameView->GetViewShEditMode() == EM_PAGE
-                            && pFrameView->GetPageKind() == PK_STANDARD;
+                        if (ViewShell* pViewShell = mrBase.GetMainViewShell().get())
+                        {
+                            pFrameView = pViewShell->GetFrameView();
+                            bState = pFrameView->GetViewShEditMode() == EM_PAGE
+                                && pFrameView->GetPageKind() == PK_STANDARD;
+                        }
                         break;
 
                     case SID_SLIDE_MASTER_MODE:
-                        pFrameView = mrBase.GetMainViewShell()->GetFrameView();
-                        bState = pFrameView->GetViewShEditMode() == EM_MASTERPAGE
-                            && pFrameView->GetPageKind() == PK_STANDARD;
+                        if (ViewShell* pViewShell = mrBase.GetMainViewShell().get())
+                        {
+                            pFrameView = pViewShell->GetFrameView();
+                            bState = pFrameView->GetViewShEditMode() == EM_MASTERPAGE
+                                && pFrameView->GetPageKind() == PK_STANDARD;
+                        }
                         break;
 
                     case SID_SLIDE_SORTER_MULTI_PANE_GUI:
@@ -1272,21 +1278,30 @@ void ViewShellBase::Implementation::GetSlotState (SfxItemSet& rSet)
                         break;
 
                     case SID_HANDOUT_MASTER_MODE:
-                        pFrameView = mrBase.GetMainViewShell()->GetFrameView();
-                        bState = pFrameView->GetViewShEditMode() == EM_MASTERPAGE
-                            && pFrameView->GetPageKind() == PK_HANDOUT;
+                        if (ViewShell* pViewShell = mrBase.GetMainViewShell().get())
+                        {
+                            pFrameView = pViewShell->GetFrameView();
+                            bState = pFrameView->GetViewShEditMode() == EM_MASTERPAGE
+                                && pFrameView->GetPageKind() == PK_HANDOUT;
+                        }
                         break;
 
                     case SID_NOTES_MODE:
-                        pFrameView = mrBase.GetMainViewShell()->GetFrameView();
-                        bState = pFrameView->GetViewShEditMode() == EM_PAGE
-                            && pFrameView->GetPageKind() == PK_NOTES;
+                        if (ViewShell* pViewShell = mrBase.GetMainViewShell().get())
+                        {
+                            pFrameView = pViewShell->GetFrameView();
+                            bState = pFrameView->GetViewShEditMode() == EM_PAGE
+                                && pFrameView->GetPageKind() == PK_NOTES;
+                        }
                         break;
 
                     case SID_NOTES_MASTER_MODE:
-                        pFrameView = mrBase.GetMainViewShell()->GetFrameView();
-                        bState = pFrameView->GetViewShEditMode() == EM_MASTERPAGE
-                            && pFrameView->GetPageKind() == PK_NOTES;
+                        if (ViewShell* pViewShell = mrBase.GetMainViewShell().get())
+                        {
+                            pFrameView = pViewShell->GetFrameView();
+                            bState = pFrameView->GetViewShEditMode() == EM_MASTERPAGE
+                                && pFrameView->GetPageKind() == PK_NOTES;
+                        }
                         break;
 
                     case SID_TOGGLE_TABBAR_VISIBILITY:
