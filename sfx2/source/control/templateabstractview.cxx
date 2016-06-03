@@ -168,6 +168,29 @@ void TemplateAbstractView::MouseButtonDown( const MouseEvent& rMEvt )
     ThumbnailView::MouseButtonDown(rMEvt);
 }
 
+void TemplateAbstractView::KeyInput( const KeyEvent& rKEvt )
+{
+    vcl::KeyCode aKeyCode = rKEvt.GetKeyCode();
+
+    if(aKeyCode == ( KEY_MOD1 | KEY_A ) )
+    {
+        for (ThumbnailViewItem* pItem : mItemList)
+        {
+            if (!pItem->isSelected())
+            {
+                pItem->setSelection(true);
+                maItemStateHdl.Call(pItem);
+            }
+        }
+
+        if (IsReallyVisible() && IsUpdateMode())
+            Invalidate();
+        return;
+    }
+
+    ThumbnailView::KeyInput(rKEvt);
+}
+
 
 void TemplateAbstractView::setOpenRegionHdl(const Link<void*,void> &rLink)
 {
