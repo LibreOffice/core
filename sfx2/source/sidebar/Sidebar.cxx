@@ -31,9 +31,9 @@ void Sidebar::ShowPanel (
 {
     SidebarController* pController = SidebarController::GetSidebarControllerForFrame(rxFrame);
 
-    const PanelDescriptor* pPanelDescriptor = pController->GetResourceManager()->GetPanelDescriptor(rsPanelId);
+    std::shared_ptr<PanelDescriptor> xPanelDescriptor = pController->GetResourceManager()->GetPanelDescriptor(rsPanelId);
 
-    if (pController!=nullptr && pPanelDescriptor != nullptr)
+    if (pController && xPanelDescriptor)
     {
         // This should be a lot more sophisticated:
         // - Make the deck switching asynchronous
@@ -41,7 +41,7 @@ void Sidebar::ShowPanel (
 
         // All that is not necessary for the current use cases so lets
         // keep it simple for the time being.
-        pController->OpenThenSwitchToDeck(pPanelDescriptor->msDeckId);
+        pController->OpenThenSwitchToDeck(xPanelDescriptor->msDeckId);
     }
 }
 

@@ -119,20 +119,20 @@ void TabBar::SetDecks(const ResourceManager::DeckContextDescriptorContainer& rDe
     for (ResourceManager::DeckContextDescriptorContainer::const_iterator
              iDeck(rDecks.begin()); iDeck != rDecks.end(); ++iDeck)
     {
-        const DeckDescriptor* pDescriptor = pParentSidebarController->GetResourceManager()->GetDeckDescriptor(iDeck->msId);
-        if (pDescriptor == nullptr)
+        std::shared_ptr<DeckDescriptor> xDescriptor = pParentSidebarController->GetResourceManager()->GetDeckDescriptor(iDeck->msId);
+        if (xDescriptor == nullptr)
         {
-            OSL_ASSERT(pDescriptor!=nullptr);
+            OSL_ASSERT(xDescriptor!=nullptr);
             continue;
         }
 
         Item& rItem (maItems[nIndex++]);
-        rItem.msDeckId = pDescriptor->msId;
+        rItem.msDeckId = xDescriptor->msId;
         rItem.mpButton.disposeAndClear();
-        rItem.mpButton = CreateTabItem(*pDescriptor);
+        rItem.mpButton = CreateTabItem(*xDescriptor);
         rItem.mpButton->SetClickHdl(LINK(&rItem, TabBar::Item, HandleClick));
         rItem.maDeckActivationFunctor = maDeckActivationFunctor;
-        rItem.mbIsHidden = ! pDescriptor->mbIsEnabled;
+        rItem.mbIsHidden = ! xDescriptor->mbIsEnabled;
         rItem.mbIsHiddenByDefault = rItem.mbIsHidden; // the default is the state while creating
 
         rItem.mpButton->Enable(iDeck->mbIsEnabled);
@@ -158,11 +158,11 @@ void TabBar::UpdateButtonIcons()
         iItem!=iEnd;
         ++iItem)
     {
-        const DeckDescriptor* pDeckDescriptor = pParentSidebarController->GetResourceManager()->GetDeckDescriptor(iItem->msDeckId);
+        std::shared_ptr<DeckDescriptor> xDeckDescriptor = pParentSidebarController->GetResourceManager()->GetDeckDescriptor(iItem->msDeckId);
 
-        if (pDeckDescriptor != nullptr)
+        if (xDeckDescriptor)
         {
-            aImage = GetItemImage(*pDeckDescriptor);
+            aImage = GetItemImage(*xDeckDescriptor);
             if ( mpMenuButton->GetDPIScaleFactor() > 1 )
             {
                 BitmapEx b = aImage.GetBitmapEx();
@@ -335,18 +335,18 @@ void TabBar::ToggleHideFlag (const sal_Int32 nIndex)
     {
         maItems[nIndex].mbIsHidden = ! maItems[nIndex].mbIsHidden;
 
-        DeckDescriptor* pDeckDescriptor = pParentSidebarController->GetResourceManager()->GetDeckDescriptor(maItems[nIndex].msDeckId);
-        if (pDeckDescriptor)
+        std::shared_ptr<DeckDescriptor> xDeckDescriptor = pParentSidebarController->GetResourceManager()->GetDeckDescriptor(maItems[nIndex].msDeckId);
+        if (xDeckDescriptor)
         {
-            pDeckDescriptor->mbIsEnabled = ! maItems[nIndex].mbIsHidden;
+            xDeckDescriptor->mbIsEnabled = ! maItems[nIndex].mbIsHidden;
 
             Context aContext;
             aContext.msApplication = pParentSidebarController->GetCurrentContext().msApplication;
             // leave aContext.msContext on default 'any' ... this func is used only for decks
             // and we don't have context-sensitive decks anyway
 
-            pDeckDescriptor->maContextList.ToggleVisibilityForContext(
-                aContext, pDeckDescriptor->mbIsEnabled );
+            xDeckDescriptor->maContextList.ToggleVisibilityForContext(
+                aContext, xDeckDescriptor->mbIsEnabled );
         }
 
         Layout();
@@ -363,9 +363,9 @@ void TabBar::RestoreHideFlags()
             iItem->mbIsHidden = iItem->mbIsHiddenByDefault;
             bNeedsLayout = true;
 
-            DeckDescriptor* pDeckDescriptor = pParentSidebarController->GetResourceManager()->GetDeckDescriptor(iItem->msDeckId);
-            if (pDeckDescriptor)
-                pDeckDescriptor->mbIsEnabled = ! iItem->mbIsHidden;
+            std::shared_ptr<DeckDescriptor> xDeckDescriptor = pParentSidebarController->GetResourceManager()->GetDeckDescriptor(iItem->msDeckId);
+            if (xDeckDescriptor)
+                xDeckDescriptor->mbIsEnabled = ! iItem->mbIsHidden;
 
         }
     }
@@ -395,13 +395,13 @@ IMPL_LINK_NOARG_TYPED(TabBar, OnToolboxClicked, Button*, void)
 
     for (ItemContainer::const_iterator iItem(maItems.begin()); iItem != maItems.end(); ++iItem)
     {
-        const DeckDescriptor* pDeckDescriptor = pParentSidebarController->GetResourceManager()->GetDeckDescriptor(iItem->msDeckId);
+        std::shared_ptr<DeckDescriptor> xDeckDescriptor = pParentSidebarController->GetResourceManager()->GetDeckDescriptor(iItem->msDeckId);
 
-        if (pDeckDescriptor != nullptr)
+        if (xDeckDescriptor)
         {
             DeckMenuData aData;
-            aData.msDisplayName = pDeckDescriptor->msTitle;
-            aData.msDeckId = pDeckDescriptor->msId;
+            aData.msDisplayName = xDeckDescriptor->msTitle;
+            aData.msDeckId = xDeckDescriptor->msId;
             aData.mbIsCurrentDeck = iItem->mpButton->IsChecked();
             aData.mbIsActive = !iItem->mbIsHidden;
             aData.mbIsEnabled = iItem->mpButton->IsEnabled();
