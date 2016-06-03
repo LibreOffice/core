@@ -7,9 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "minidump.hxx"
+#include <desktop/minidump.hxx>
 
-#include<iostream>
+#include <iostream>
 
 int main(int argc, char** argv)
 {
