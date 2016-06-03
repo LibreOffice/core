@@ -60,7 +60,7 @@ sdbcx::ObjectType ODbaseIndexes::createObject(const OUString& _rName)
         ODbaseIndex::NDXHeader aHeader;
 
         pFileStream->Seek(0);
-        pFileStream->Read(&aHeader,DINDEX_PAGE_SIZE);
+        ReadHeader(*pFileStream, aHeader);
         delete pFileStream;
 
         ODbaseIndex* pIndex = new ODbaseIndex(m_pTable,aHeader,_rName);
