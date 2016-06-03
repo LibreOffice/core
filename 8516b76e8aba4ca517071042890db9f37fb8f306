@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_d2894ecc",
+        "filename": "sfx2/source/control/thumbnailview.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 668,
+      "author": {
+        "id": 1001193
+      },
+      "writtenOn": "2016-06-03T06:12:05Z",
+      "side": 1,
+      "message": "A bug here...... \nKeyboard navigation didn\u0027t worked for All Templates case as it depends on mnId. In all templates case, different templates has same mnId as it\u0027s their position in respective categories.\n\nResolved in Patch 3.",
+      "range": {
+        "startLine": 667,
+        "startChar": 38,
+        "endLine": 668,
+        "endChar": 105
+      },
+      "revId": "8516b76e8aba4ca517071042890db9f37fb8f306",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
