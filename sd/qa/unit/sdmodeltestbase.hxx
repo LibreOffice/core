@@ -198,11 +198,15 @@ protected:
         save(pShell, pFormat, *pTempFile);
         if(nExportType == ODP)
         {
-            // BootstrapFixture::validate(pTempFile->GetFileName(), test::ODF);
+            BootstrapFixture::validate(pTempFile->GetFileName(), test::ODF);
         }
         else if(nExportType == PPTX)
         {
             BootstrapFixture::validate(pTempFile->GetFileName(), test::OOXML);
+        }
+        else if(nExportType == PPT)
+        {
+            BootstrapFixture::validate(pTempFile->GetFileName(), test::MSBINARY);
         }
         pTempFile->EnableKillingFile();
         return loadURL(pTempFile->GetURL(), nExportType);

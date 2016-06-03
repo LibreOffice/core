@@ -36,6 +36,34 @@
 #include <view.hxx>
 #include <wrtsh.hxx>
 
+static const std::vector<const char*>& implGetBlacklistedDocuments()
+{
+    // the following doc exports currently don't pass binary validation
+    static const std::vector<const char*> vBlacklist(
+    {
+        "tdf56321_flipImage_both.doc",
+        "cjklist30.doc",
+        "cjklist31.doc",
+        "cjklist34.doc",
+        "cjklist35.doc",
+        "fdo77454.doc",
+        "new-page-styles.doc",
+        "tdf36117_verticalAdjustment.doc",
+        "bnc636128.doc",
+        "tdf92281.doc",
+        "fdo59530.doc",
+        "fdo56513.doc",
+        "tscp.doc",
+        "zoom.doc",
+        "comments-nested.doc",
+        "commented-table.doc",
+        "zoomtype.doc",
+        "n325936.doc",
+        "first-header-footer.doc"
+    });
+    return vBlacklist;
+}
+
 class Test : public SwModelTestBase
 {
 public:
@@ -45,6 +73,17 @@ public:
     {
         // If the testcase is stored in some other format, it's pointless to test.
         return OString(filename).endsWith(".doc");
+    }
+
+    /**
+     * Validation handling
+     */
+    bool mustValidate(const char* filename) const override
+    {
+        const std::vector<const char*>& vBlacklist=implGetBlacklistedDocuments();
+
+        // Don' bother with non-.doc files; weed out blacklisted .doc files
+        return (OString(filename).endsWith(".doc") && std::find(vBlacklist.begin(), vBlacklist.end(), filename) == vBlacklist.end());
     }
 protected:
     bool CjkNumberedListTestHelper(sal_Int16 &nValue)
