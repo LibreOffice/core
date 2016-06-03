@@ -31,6 +31,15 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
+        void AnimatedSwitchPrimitive2D::setAnimationEntry(const animation::AnimationEntry& rNew)
+        {
+            // delete cloned animation description
+            delete mpAnimationEntry;
+
+            // clone given animation description
+            mpAnimationEntry = rNew.clone();
+        }
+
         AnimatedSwitchPrimitive2D::AnimatedSwitchPrimitive2D(
             const animation::AnimationEntry& rAnimationEntry,
             const Primitive2DContainer& rChildren,
