@@ -53,7 +53,6 @@ namespace sw
 {
     class XStyleFamily;
 };
-typedef std::shared_ptr<SfxItemSet> SfxItemSet_Pointer_t;
 
 class SwXStyleFamilies :  public cppu::WeakImplHelper
 <
@@ -202,7 +201,7 @@ class SwXAutoStyle : public cppu::WeakImplHelper
     public SwClient
 {
 private:
-    SfxItemSet_Pointer_t                mpSet;
+    std::shared_ptr<SfxItemSet>                mpSet;
     IStyleAccess::SwAutoStyleFamily     meFamily;
     SwDoc&                              mrDoc;
 
@@ -210,7 +209,7 @@ private:
 
 public:
 
-    SwXAutoStyle( SwDoc* pDoc, SfxItemSet_Pointer_t pInitSet, IStyleAccess::SwAutoStyleFamily eFam );
+    SwXAutoStyle( SwDoc* pDoc, std::shared_ptr<SfxItemSet> pInitSet, IStyleAccess::SwAutoStyleFamily eFam );
     virtual ~SwXAutoStyle();
 
     //XPropertySet

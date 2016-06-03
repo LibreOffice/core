@@ -87,7 +87,7 @@ private:
     SfxStyleSheetBasePool_Impl(const SfxStyleSheetBasePool_Impl&) = delete;
     SfxStyleSheetBasePool_Impl& operator=(const SfxStyleSheetBasePool_Impl&) = delete;
 public:
-    SfxStyleSheetIteratorPtr pIter;
+    std::shared_ptr<SfxStyleSheetIterator> pIter;
 
     /** This member holds the indexed style sheets.
      *
@@ -630,7 +630,7 @@ void SfxStyleSheetBasePool::SetSearchMask(SfxStyleFamily eFam, sal_uInt16 n)
 }
 
 
-SfxStyleSheetIteratorPtr SfxStyleSheetBasePool::CreateIterator
+std::shared_ptr<SfxStyleSheetIterator> SfxStyleSheetBasePool::CreateIterator
 (
  SfxStyleFamily eFam,
  sal_uInt16 mask

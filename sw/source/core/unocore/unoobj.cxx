@@ -241,7 +241,7 @@ throw (lang::IllegalArgumentException)
     {
          throw lang::IllegalArgumentException();
     }
-    StylePool::SfxItemSet_Pointer_t pStyle = bPara ?
+    std::shared_ptr<SfxItemSet> pStyle = bPara ?
         rStyleAccess.getByName(uStyle, IStyleAccess::AUTO_STYLE_PARA ):
         rStyleAccess.getByName(uStyle, IStyleAccess::AUTO_STYLE_CHAR );
     if(pStyle.get())

@@ -817,7 +817,7 @@ uno::Any XStyleFamily::getByName(const OUString& rName)
     SwStyleNameMapper::FillUIName(rName, sStyleName, m_rEntry.m_aPoolId, true);
     if(!m_pBasePool)
         throw uno::RuntimeException();
-    SfxStyleSheetIteratorPtr pIt = m_pBasePool->CreateIterator(m_rEntry.m_eFamily, SFXSTYLEBIT_ALL);
+    std::shared_ptr<SfxStyleSheetIterator> pIt = m_pBasePool->CreateIterator(m_rEntry.m_eFamily, SFXSTYLEBIT_ALL);
     SfxStyleSheetBase* pBase = pIt->Find(sStyleName);
     if(!pBase)
         throw container::NoSuchElementException();
@@ -833,7 +833,7 @@ uno::Sequence<OUString> XStyleFamily::getElementNames() throw( uno::RuntimeExcep
     if(!m_pBasePool)
         throw uno::RuntimeException();
     std::vector<OUString> vRet;
-    SfxStyleSheetIteratorPtr pIt = m_pBasePool->CreateIterator(m_rEntry.m_eFamily, SFXSTYLEBIT_ALL);
+    std::shared_ptr<SfxStyleSheetIterator> pIt = m_pBasePool->CreateIterator(m_rEntry.m_eFamily, SFXSTYLEBIT_ALL);
     for (SfxStyleSheetBase* pStyle = pIt->First(); pStyle; pStyle = pIt->Next())
     {
         OUString sName;
@@ -850,7 +850,7 @@ sal_Bool XStyleFamily::hasByName(const OUString& rName) throw( uno::RuntimeExcep
         throw uno::RuntimeException();
     OUString sStyleName;
     SwStyleNameMapper::FillUIName(rName, sStyleName, m_rEntry.m_aPoolId, true);
-    SfxStyleSheetIteratorPtr pIt = m_pBasePool->CreateIterator(m_rEntry.m_eFamily, SFXSTYLEBIT_ALL);
+    std::shared_ptr<SfxStyleSheetIterator> pIt = m_pBasePool->CreateIterator(m_rEntry.m_eFamily, SFXSTYLEBIT_ALL);
     SfxStyleSheetBase* pBase = pIt->Find(sStyleName);
     return nullptr != pBase;
 }
@@ -3261,14 +3261,14 @@ const IStyleAccess::SwAutoStyleFamily aAutoStyleByIndex[] =
 
 class SwAutoStylesEnumImpl
 {
-    std::vector<SfxItemSet_Pointer_t> mAutoStyles;
-    std::vector<SfxItemSet_Pointer_t>::iterator aIter;
+    std::vector<std::shared_ptr<SfxItemSet>> mAutoStyles;
+    std::vector<std::shared_ptr<SfxItemSet>>::iterator aIter;
     SwDoc* pDoc;
     IStyleAccess::SwAutoStyleFamily eFamily;
 public:
     SwAutoStylesEnumImpl( SwDoc* pInitDoc, IStyleAccess::SwAutoStyleFamily eFam );
     bool hasMoreElements() { return aIter != mAutoStyles.end(); }
-    SfxItemSet_Pointer_t nextElement() { return *(aIter++); }
+    std::shared_ptr<SfxItemSet> nextElement() { return *(aIter++); }
     IStyleAccess::SwAutoStyleFamily getFamily() const { return eFamily; }
     SwDoc* getDoc() const { return pDoc; }
 };
@@ -3624,7 +3624,7 @@ uno::Reference< style::XAutoStyle > SwXAutoStyleFamily::insertStyle(
     m_pDocShell->GetDoc()->CheckForUniqueItemForLineFillNameOrIndex(aSet);
 
     // AutomaticStyle creation
-    SfxItemSet_Pointer_t pSet = m_pDocShell->GetDoc()->GetIStyleAccess().cacheAutomaticStyle( aSet, m_eFamily );
+    std::shared_ptr<SfxItemSet> pSet = m_pDocShell->GetDoc()->GetIStyleAccess().cacheAutomaticStyle( aSet, m_eFamily );
     uno::Reference<style::XAutoStyle> xRet = new SwXAutoStyle(m_pDocShell->GetDoc(), pSet, m_eFamily);
 
     return xRet;
@@ -3668,7 +3668,7 @@ SwAutoStylesEnumImpl::SwAutoStylesEnumImpl( SwDoc* pInitDoc, IStyleAccess::SwAut
                 if ( aRubyMap.find( aPair ) == aRubyMap.end() )
                 {
                     aRubyMap.insert( aPair );
-                    SfxItemSet_Pointer_t pItemSet( new SfxItemSet( rAttrPool, RES_TXTATR_CJK_RUBY, RES_TXTATR_CJK_RUBY ) );
+                    std::shared_ptr<SfxItemSet> pItemSet( new SfxItemSet( rAttrPool, RES_TXTATR_CJK_RUBY, RES_TXTATR_CJK_RUBY ) );
                     pItemSet->Put( *pItem );
                     mAutoStyles.push_back( pItemSet );
                 }
@@ -3721,7 +3721,7 @@ uno::Any SwXAutoStylesEnumerator::nextElement(  )
     uno::Any aRet;
     if( m_pImpl->hasMoreElements() )
     {
-        SfxItemSet_Pointer_t pNextSet = m_pImpl->nextElement();
+        std::shared_ptr<SfxItemSet> pNextSet = m_pImpl->nextElement();
         uno::Reference< style::XAutoStyle > xAutoStyle = new SwXAutoStyle(m_pImpl->getDoc(),
                                                         pNextSet, m_pImpl->getFamily());
         aRet <<= xAutoStyle;
@@ -3738,7 +3738,7 @@ uno::Any SwXAutoStylesEnumerator::nextElement(  )
 
 SwXAutoStyle::SwXAutoStyle(
     SwDoc* pDoc,
-    SfxItemSet_Pointer_t pInitSet,
+    std::shared_ptr<SfxItemSet> pInitSet,
     IStyleAccess::SwAutoStyleFamily eFam)
 :   mpSet(pInitSet),
     meFamily(eFam),
