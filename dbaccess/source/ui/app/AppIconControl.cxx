@@ -77,6 +77,7 @@ void OApplicationIconControl::dispose()
             pEntry->SetUserData(nullptr);
         }
     }
+    DropTargetHelper::dispose();
     SvtIconChoiceCtrl::dispose();
 }
 
