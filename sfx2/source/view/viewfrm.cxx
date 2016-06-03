@@ -3035,8 +3035,8 @@ void SfxViewFrame::ChildWindowExecute( SfxRequest &rReq )
         // First make sure that the sidebar is visible
         ShowChildWindow(SID_SIDEBAR);
 
-        ::sfx2::sidebar::Sidebar::ShowPanel("StyleListPanel",
-                                            GetFrame().GetFrameInterface());
+        ::sfx2::sidebar::Sidebar::TogglePanel("StyleListPanel",
+                                              GetFrame().GetFrameInterface());
         rReq.Done();
         return;
     }
