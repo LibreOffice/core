@@ -124,8 +124,8 @@ public:
 
     const static sal_Int32 gnMaximumSidebarWidth = 400;
 
-    void OpenThenSwitchToDeck (
-        const ::rtl::OUString& rsDeckId);
+    void OpenThenSwitchToDeck(const OUString& rsDeckId);
+    void OpenThenToggleDeck(const OUString& rsDeckId);
 
     /** Show only the tab bar, not the deck.
     */
@@ -137,7 +137,7 @@ public:
 
     /** Returns true when the given deck is the currently visible deck
      */
-    bool IsDeckVisible (const ::rtl::OUString& rsDeckId);
+    bool IsDeckVisible(const OUString& rsDeckId);
 
     FocusManager& GetFocusManager() { return maFocusManager;}
 
@@ -148,14 +148,14 @@ public:
     Context GetCurrentContext() const { return maCurrentContext;}
     bool IsDocumentReadOnly (void) const { return mbIsDocumentReadOnly;}
 
-    void SwitchToDeck ( const ::rtl::OUString& rsDeckId);
+    void SwitchToDeck(const OUString& rsDeckId);
     void SwitchToDefaultDeck();
 
     void CreateDeck(const ::rtl::OUString& rDeckId, bool bForceCreate = false);
     void CreatePanels(const ::rtl::OUString& rDeckId);
 
     ResourceManager::DeckContextDescriptorContainer GetMatchingDecks();
-    ResourceManager::PanelContextDescriptorContainer GetMatchingPanels( const ::rtl::OUString& rDeckId);
+    ResourceManager::PanelContextDescriptorContainer GetMatchingPanels(const OUString& rDeckId);
 
     void notifyDeckTitle(const OUString& targetDeckId);
 
@@ -174,7 +174,7 @@ private:
     css::uno::Reference<css::frame::XController> mxCurrentController;
     /// Use a combination of SwitchFlag_* as value.
     sal_Int32 mnRequestedForceFlags;
-    ::rtl::OUString msCurrentDeckId;
+    OUString msCurrentDeckId;
     AsynchronousCall maPropertyChangeForwarder;
     AsynchronousCall maContextChangeUpdate;
     AsynchronousCall maAsynchronousDeckSwitch;
@@ -216,12 +216,12 @@ private:
 
     css::uno::Reference<css::ui::XUIElement> CreateUIElement (
         const css::uno::Reference<css::awt::XWindowPeer>& rxWindow,
-        const ::rtl::OUString& rsImplementationURL,
+        const OUString& rsImplementationURL,
         const bool bWantsCanvas,
         const Context& rContext);
 
     VclPtr<Panel> CreatePanel (
-        const ::rtl::OUString& rsPanelId,
+        const OUString& rsPanelId,
         vcl::Window* pParentWindow,
         const bool bIsInitiallyExpanded,
         const Context& rContext,
