@@ -20,8 +20,6 @@ sudo -s
 
 pkg install git make gcc-45 autoconf autogen automake-110 gnu-m4
 
-perl -MCPAN -e 'install Archive::Zip::Archive'
-
 pkg install pkg:/system/header@0.5.11-0.175.0.0.0.2.1
 pkg install pkg:/developer/gperf@3.0.3-0.175.0.0.0.2.537
 pkg install pkg:/developer/parser/bison@2.3-0.175.0.0.0.2.537
