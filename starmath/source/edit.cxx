@@ -149,6 +149,7 @@ void SmEditWindow::dispose()
     pVScrollBar.disposeAndClear();
     pScrollBox.disposeAndClear();
 
+    DropTargetHelper::dispose();
     vcl::Window::dispose();
 }
 

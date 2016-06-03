@@ -40,6 +40,7 @@ class TabControl
     sal_uInt16    RrePageID;
 public:
     TabControl (DrawViewShell* pDrViewSh, vcl::Window* pParent);
+    virtual void dispose() override;
     virtual ~TabControl();
 
     /** Inform all listeners of this control that the current page has been

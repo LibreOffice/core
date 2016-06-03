@@ -142,6 +142,7 @@ void FmGridHeader::dispose()
 {
     delete m_pImpl;
     m_pImpl = nullptr;
+    DropTargetHelper::dispose();
     svt::EditBrowserHeader::dispose();
 }
 

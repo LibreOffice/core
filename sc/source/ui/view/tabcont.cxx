@@ -111,6 +111,14 @@ IMPL_LINK_TYPED(ScTabControl, ShowPageList, const CommandEvent &, rEvent, void)
 
 ScTabControl::~ScTabControl()
 {
+    disposeOnce();
+}
+
+void ScTabControl::dispose()
+{
+    DragSourceHelper::dispose();
+    DropTargetHelper::dispose();
+    TabBar::dispose();
 }
 
 sal_uInt16 ScTabControl::GetMaxId() const

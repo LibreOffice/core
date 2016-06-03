@@ -408,6 +408,7 @@ public:
     virtual void        StartDrag( sal_Int8 nAction, const Point& rPosPixel );
 
                         DragSourceHelper( vcl::Window* pWindow );
+    void                dispose();
     virtual             ~DragSourceHelper();
 };
 
@@ -468,6 +469,7 @@ public:
                         DropTargetHelper( vcl::Window* pWindow );
                         DropTargetHelper( const css::uno::Reference< css::datatransfer::dnd::XDropTarget >& rxDropTarget );
 
+    void                dispose();
     virtual             ~DropTargetHelper();
 
                         // typically called by the application in ::AcceptDrop and ::ExecuteDrop and (see above)

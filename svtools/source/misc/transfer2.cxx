@@ -78,10 +78,18 @@ DragSourceHelper::DragSourceHelper( vcl::Window* pWindow ) :
 }
 
 
-DragSourceHelper::~DragSourceHelper()
+void DragSourceHelper::dispose()
 {
     if( mxDragGestureRecognizer.is()  )
+    {
         mxDragGestureRecognizer->removeDragGestureListener( mxDragGestureListener );
+        mxDragGestureRecognizer.clear();
+    }
+}
+
+DragSourceHelper::~DragSourceHelper()
+{
+    dispose();
 }
 
 
@@ -240,11 +248,16 @@ DropTargetHelper::DropTargetHelper( const Reference< XDropTarget >& rxDropTarget
 }
 
 
-DropTargetHelper::~DropTargetHelper()
+void DropTargetHelper::dispose()
 {
     if( mxDropTarget.is() )
         mxDropTarget->removeDropTargetListener( mxDropTargetListener );
+    mxDropTarget.clear();
+}
 
+DropTargetHelper::~DropTargetHelper()
+{
+    dispose();
     delete mpFormats;
 }
 

@@ -78,6 +78,14 @@ TabControl::TabControl(DrawViewShell* pViewSh, vcl::Window* pParent) :
 
 TabControl::~TabControl()
 {
+    disposeOnce();
+}
+
+void TabControl::dispose()
+{
+    DragSourceHelper::dispose();
+    DropTargetHelper::dispose();
+    TabBar::dispose();
 }
 
 void TabControl::Select()
