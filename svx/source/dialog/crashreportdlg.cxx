@@ -23,9 +23,13 @@ CrashReportDialog::CrashReportDialog(vcl::Window* pParent):
 {
     get(mpBtnSend, "btn_send");
     get(mpBtnCancel, "btn_cancel");
+    get(mpBtnClose, "btn_close");
+    get(mpEditPreUpload, "ed_pre");
+    get(mpEditPostUpload, "ed_post");
 
     mpBtnSend->SetClickHdl(LINK(this, CrashReportDialog, BtnHdl));
     mpBtnCancel->SetClickHdl(LINK(this, CrashReportDialog, BtnHdl));
+    mpBtnClose->SetClickHdl(LINK(this, CrashReportDialog, BtnHdl));
 }
 
 CrashReportDialog::~CrashReportDialog()
@@ -37,6 +41,9 @@ void CrashReportDialog::dispose()
 {
     mpBtnSend.clear();
     mpBtnCancel.clear();
+    mpBtnClose.clear();
+    mpEditPreUpload.clear();
+    mpEditPostUpload.clear();
 
     Dialog::dispose();
 }
@@ -59,17 +66,29 @@ IMPL_LINK_TYPED(CrashReportDialog, BtnHdl, Button*, pBtn, void)
     {
         std::string ini_path = CrashReporter::getIniFileName();
 
-        readConfig(ini_path);
-        // TODO: moggi: return the id for the user to look it up
-        Close();
+        std::string response;
+        bool bSuccess = readConfig(ini_path, response);
+
+        OUString aCrashID = OUString::createFromAscii(response.c_str());
+
+        if (bSuccess)
+            mpEditPostUpload->SetText(mpEditPostUpload->GetText() + " " + aCrashID);
+        else
+            mpEditPostUpload->SetText(mpEditPostUpload->GetText() + " Error!");
+
+        mpBtnClose->Show();
+        mpEditPreUpload->Hide();
+        mpEditPostUpload->Show();
+        mpBtnSend->Hide();
+        mpBtnCancel->Hide();
     }
     else if (pBtn == mpBtnCancel.get())
     {
         Close();
     }
-    else
+    else if (pBtn == mpBtnClose.get())
     {
-        assert(false);
+        Close();
     }
 }
 
