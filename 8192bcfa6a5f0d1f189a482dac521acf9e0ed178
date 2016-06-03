@@ -122,6 +122,24 @@
       "revId": "8192bcfa6a5f0d1f189a482dac521acf9e0ed178",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_e66cd39e",
+        "filename": "sfx2/source/control/unoctitm.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 705,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-06-03T10:10:26Z",
+      "side": 1,
+      "message": "well, to preserve the orig. semantics, I\u0027d guess one has to do sth like:\n\nif (pItem !\u003d nullptr)\n{\n    SfxBoolItem *someBoolItem \u003d dynamic_cast\u003cSfxBoolItem*\u003e(pItem);\n    if ( someBoolItem !\u003d nullptr)\n        bSuccess \u003d someBoolItem-\u003eGetValue();\n    else\n        bSuccess \u003d true;\n}\nelse\n   bSuccess \u003d false;\n\nBut that\u0027s very clumsy and I can\u0027t quickly think of a way how to write it better",
+      "parentUuid": "da7fb54a_e6b93330",
+      "revId": "8192bcfa6a5f0d1f189a482dac521acf9e0ed178",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
