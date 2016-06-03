@@ -139,6 +139,8 @@ namespace connectivity
 
         SvStream& WriteODbaseIndex(SvStream &rStream, ODbaseIndex&);
         SvStream& operator >> (SvStream &rStream, ODbaseIndex&);
+
+        void ReadHeader(SvStream & rStream, ODbaseIndex::NDXHeader & rHeader);
     }
 }
 
