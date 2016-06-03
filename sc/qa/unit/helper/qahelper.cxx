@@ -652,6 +652,8 @@ ScDocShellRef ScBootstrapFixture::saveAndReload(
         validate(aTempFile.GetFileName(), test::OOXML);
     else if (nFormatType == ODS_FORMAT_TYPE)
         validate(aTempFile.GetFileName(), test::ODF);
+    //else if (nFormatType == XLS_FORMAT_TYPE)
+    //    validate(aTempFile.GetFileName(), test::MSBINARY);
     aTempFile.EnableKillingFile();
     return xDocSh;
 }

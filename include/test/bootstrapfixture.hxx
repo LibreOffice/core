@@ -30,7 +30,8 @@ namespace test {
 enum ValidationFormat
 {
     OOXML,
-    ODF
+    ODF,
+    MSBINARY
 };
 
 // Class to do lots of heavy-lifting UNO & environment
