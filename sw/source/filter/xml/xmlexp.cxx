@@ -132,7 +132,7 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
     SwDoc *pDoc = getDoc();
 
     if( getExportFlags() & (SvXMLExportFlags::FONTDECLS|SvXMLExportFlags::STYLES|
-                            SvXMLExportFlags::MASTERSTYLES|SvXMLExportFlags::CONTENT))
+                            SvXMLExportFlags::MASTERSTYLES|SvXMLExportFlags::CONTENT|SvXMLExportFlags::UNDO))
     {
         if( getDefaultVersion() > SvtSaveOptions::ODFVER_012 )
         {
@@ -268,7 +268,7 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
     // set redline mode if we export STYLES or CONTENT, unless redline
     // mode is taken care of outside (through info XPropertySet)
     bool bSaveRedline =
-        bool( getExportFlags() & (SvXMLExportFlags::CONTENT|SvXMLExportFlags::STYLES) );
+        bool( getExportFlags() & (SvXMLExportFlags::UNDO|SvXMLExportFlags::STYLES) );
     if( bSaveRedline )
     {
         // if the info property set has a ShowChanges property,
@@ -483,7 +483,6 @@ void SwXMLExport::ExportContent_()
         }
     }
 
-    GetTextParagraphExport()->exportTrackedChanges( false );
     GetTextParagraphExport()->exportTextDeclarations();
     Reference < XTextDocument > xTextDoc( GetModel(), UNO_QUERY );
     Reference < XText > xText = xTextDoc->getText();
@@ -496,6 +495,7 @@ void SwXMLExport::ExportUndo_()
 {
     SvXMLElementExport aElem( *this, XML_NAMESPACE_OFFICE, XML_UNDO,
                                 true, true );
+    GetTextParagraphExport()->exportTrackedChanges( false );
 }
 
 namespace
@@ -572,7 +572,7 @@ com_sun_star_comp_Writer_XMLUndoExporter_get_implementation(css::uno::XComponent
         css::uno::Sequence<css::uno::Any> const &)
 {
     return cppu::acquire(new SwXMLExport(context, OUString("com.sun.star.comp.Writer.XMLUndoExporter"),
-                SvXMLExportFlags::UNDO));
+                SvXMLExportFlags::UNDO | SvXMLExportFlags::AUTOSTYLES));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
@@ -622,7 +622,7 @@ com_sun_star_comp_Writer_XMLOasisUndoExporter_get_implementation(css::uno::XComp
         css::uno::Sequence<css::uno::Any> const &)
 {
     return cppu::acquire(new SwXMLExport(context, OUString("com.sun.star.comp.Writer.XMLOasisUndoExporter"),
-                SvXMLExportFlags::UNDO | SvXMLExportFlags::OASIS));
+                SvXMLExportFlags::UNDO | SvXMLExportFlags::AUTOSTYLES | SvXMLExportFlags::OASIS));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
