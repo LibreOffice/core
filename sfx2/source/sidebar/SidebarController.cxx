@@ -220,7 +220,7 @@ void SAL_CALL SidebarController::disposing()
             iDeck(aDecks.begin()), iEnd(aDecks.end());
             iDeck!=iEnd; ++iDeck)
     {
-        const DeckDescriptor* deckDesc = mpResourceManager->GetDeckDescriptor(iDeck->msId);
+        std::shared_ptr<DeckDescriptor> deckDesc = mpResourceManager->GetDeckDescriptor(iDeck->msId);
 
         VclPtr<Deck> aDeck = deckDesc->mpDeck;
         if (aDeck)
@@ -492,13 +492,11 @@ void SidebarController::UpdateConfigurations()
         // with the deck.
         mpTabBar->HighlightDeck(sNewDeckId);
 
-        const DeckDescriptor* pDescriptor = mpResourceManager->GetDeckDescriptor(sNewDeckId);
+        std::shared_ptr<DeckDescriptor> xDescriptor = mpResourceManager->GetDeckDescriptor(sNewDeckId);
 
-        if (pDescriptor)
+        if (xDescriptor)
         {
-            SwitchToDeck(
-                *pDescriptor,
-                maCurrentContext);
+            SwitchToDeck(*xDescriptor, maCurrentContext);
         }
     }
 }
@@ -551,10 +549,10 @@ void SidebarController::SwitchToDeck (
         || ! mbIsDeckOpen
         || mnRequestedForceFlags!=SwitchFlag_NoForce)
     {
-        const DeckDescriptor* pDeckDescriptor = mpResourceManager->GetDeckDescriptor(rsDeckId);
+        std::shared_ptr<DeckDescriptor> xDeckDescriptor = mpResourceManager->GetDeckDescriptor(rsDeckId);
 
-        if (pDeckDescriptor != nullptr)
-            SwitchToDeck(*pDeckDescriptor, maCurrentContext);
+        if (xDeckDescriptor)
+            SwitchToDeck(*xDeckDescriptor, maCurrentContext);
     }
 }
 
@@ -564,34 +562,33 @@ void SidebarController::CreateDeck(const ::rtl::OUString& rDeckId) {
 
 void SidebarController::CreateDeck(const ::rtl::OUString& rDeckId, const Context& rContext, bool bForceCreate)
 {
-    DeckDescriptor* pDeckDescriptor = mpResourceManager->GetDeckDescriptor(rDeckId);
+    std::shared_ptr<DeckDescriptor> xDeckDescriptor = mpResourceManager->GetDeckDescriptor(rDeckId);
 
-    if (pDeckDescriptor)
+    if (xDeckDescriptor)
     {
-        VclPtr<Deck> aDeck = pDeckDescriptor->mpDeck;
+        VclPtr<Deck> aDeck = xDeckDescriptor->mpDeck;
         if (aDeck.get()==nullptr || bForceCreate)
         {
             if (aDeck.get()!=nullptr)
                 aDeck.disposeAndClear();
 
             aDeck = VclPtr<Deck>::Create(
-                            *pDeckDescriptor,
+                            *xDeckDescriptor,
                             mpParentWindow,
                             [this]() { return this->RequestCloseDeck(); });
         }
-        pDeckDescriptor->mpDeck = aDeck;
+        xDeckDescriptor->mpDeck = aDeck;
         CreatePanels(rDeckId, rContext);
     }
 }
 
 void SidebarController::CreatePanels(const ::rtl::OUString& rDeckId, const Context& rContext)
 {
-
-     DeckDescriptor* pDeckDescriptor = mpResourceManager->GetDeckDescriptor(rDeckId);
+     std::shared_ptr<DeckDescriptor> xDeckDescriptor = mpResourceManager->GetDeckDescriptor(rDeckId);
 
     // init panels bounded to that deck, do not wait them being displayed as may be accessed through API
 
-    VclPtr<Deck> pDeck = pDeckDescriptor->mpDeck;
+    VclPtr<Deck> pDeck = xDeckDescriptor->mpDeck;
 
     ResourceManager::PanelContextDescriptorContainer aPanelContextDescriptors;
 
@@ -781,14 +778,14 @@ VclPtr<Panel> SidebarController::CreatePanel (
     const Context& rContext,
     const VclPtr<Deck>& pDeck)
 {
-    const PanelDescriptor* pPanelDescriptor = mpResourceManager->GetPanelDescriptor(rsPanelId);
+    std::shared_ptr<PanelDescriptor> xPanelDescriptor = mpResourceManager->GetPanelDescriptor(rsPanelId);
 
-    if (pPanelDescriptor == nullptr)
+    if (!xPanelDescriptor)
         return nullptr;
 
     // Create the panel which is the parent window of the UIElement.
     VclPtr<Panel> pPanel = VclPtr<Panel>::Create(
-        *pPanelDescriptor,
+        *xPanelDescriptor,
         pParentWindow,
         bIsInitiallyExpanded,
         [pDeck]() { return pDeck.get()->RequestLayout(); },
@@ -798,8 +795,8 @@ VclPtr<Panel> SidebarController::CreatePanel (
     // Create the XUIElement.
     Reference<ui::XUIElement> xUIElement (CreateUIElement(
             pPanel->GetComponentInterface(),
-            pPanelDescriptor->msImplementationURL,
-            pPanelDescriptor->mbWantsCanvas,
+            xPanelDescriptor->msImplementationURL,
+            xPanelDescriptor->mbWantsCanvas,
             rContext));
     if (xUIElement.is())
     {
@@ -1246,13 +1243,13 @@ void SidebarController::UpdateTitleBarIcons()
     const ResourceManager& rResourceManager = *mpResourceManager;
 
     // Update the deck icon.
-    const DeckDescriptor* pDeckDescriptor = rResourceManager.GetDeckDescriptor(mpCurrentDeck->GetId());
-    if (pDeckDescriptor != nullptr && mpCurrentDeck->GetTitleBar())
+    std::shared_ptr<DeckDescriptor> xDeckDescriptor = rResourceManager.GetDeckDescriptor(mpCurrentDeck->GetId());
+    if (xDeckDescriptor && mpCurrentDeck->GetTitleBar())
     {
         const OUString sIconURL(
             bIsHighContrastModeActive
-                ? pDeckDescriptor->msHighContrastTitleBarIconURL
-                : pDeckDescriptor->msTitleBarIconURL);
+                ? xDeckDescriptor->msHighContrastTitleBarIconURL
+                : xDeckDescriptor->msTitleBarIconURL);
         mpCurrentDeck->GetTitleBar()->SetIcon(Tools::GetImage(sIconURL, mxFrame));
     }
 
@@ -1267,13 +1264,13 @@ void SidebarController::UpdateTitleBarIcons()
             continue;
         if ((*iPanel)->GetTitleBar() == nullptr)
             continue;
-        const PanelDescriptor* pPanelDescriptor = rResourceManager.GetPanelDescriptor((*iPanel)->GetId());
-        if (pPanelDescriptor == nullptr)
+        std::shared_ptr<PanelDescriptor> xPanelDescriptor = rResourceManager.GetPanelDescriptor((*iPanel)->GetId());
+        if (!xPanelDescriptor)
             continue;
         const OUString sIconURL (
             bIsHighContrastModeActive
-               ? pPanelDescriptor->msHighContrastTitleBarIconURL
-               : pPanelDescriptor->msTitleBarIconURL);
+               ? xPanelDescriptor->msHighContrastTitleBarIconURL
+               : xPanelDescriptor->msTitleBarIconURL);
         (*iPanel)->GetTitleBar()->SetIcon(Tools::GetImage(sIconURL, mxFrame));
     }
 }

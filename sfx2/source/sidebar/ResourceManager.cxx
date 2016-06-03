@@ -109,61 +109,57 @@ void ResourceManager::InitDeckContext(const Context& rContext)
     DeckContainer::iterator iDeck;
     for (iDeck = maDecks.begin(); iDeck != maDecks.end(); ++iDeck)
     {
-        bool bIsEnabled;
-        const ContextList::Entry* pMatchingEntry = iDeck->maContextList.GetMatch(rContext);
+        std::shared_ptr<DeckDescriptor>& rDeck = *iDeck;
 
+        const ContextList::Entry* pMatchingEntry = rDeck->maContextList.GetMatch(rContext);
+
+        bool bIsEnabled;
         if (pMatchingEntry)
             bIsEnabled = pMatchingEntry->mbIsInitiallyVisible;
         else
             bIsEnabled = false;
 
-        iDeck->mbIsEnabled = bIsEnabled;
+        rDeck->mbIsEnabled = bIsEnabled;
     }
 }
 
-const DeckDescriptor* ResourceManager::ImplGetDeckDescriptor(const OUString& rsDeckId) const
+std::shared_ptr<DeckDescriptor> ResourceManager::ImplGetDeckDescriptor(const OUString& rsDeckId) const
 {
     DeckContainer::const_iterator iDeck;
 
     for (iDeck = maDecks.begin(); iDeck != maDecks.end(); ++iDeck)
     {
-        if (iDeck->mbExperimental && !maMiscOptions.IsExperimentalMode())
+        const std::shared_ptr<DeckDescriptor>& rDeck = *iDeck;
+
+        if (rDeck->mbExperimental && !maMiscOptions.IsExperimentalMode())
             continue;
-        if (iDeck->msId.equals(rsDeckId))
-            return &*iDeck;
+        if (rDeck->msId.equals(rsDeckId))
+            return rDeck;
     }
     return nullptr;
 }
-const DeckDescriptor* ResourceManager::GetDeckDescriptor(const OUString& rsDeckId) const
+
+std::shared_ptr<DeckDescriptor> ResourceManager::GetDeckDescriptor(const OUString& rsDeckId) const
 {
     return ImplGetDeckDescriptor( rsDeckId );
 }
 
-DeckDescriptor* ResourceManager::GetDeckDescriptor(const OUString& rsDeckId)
-{
-      const ResourceManager* constMe = this;
-      return const_cast<DeckDescriptor*>( constMe->ImplGetDeckDescriptor(rsDeckId) );
-}
-
-const PanelDescriptor* ResourceManager::ImplGetPanelDescriptor(const OUString& rsPanelId) const
+std::shared_ptr<PanelDescriptor> ResourceManager::ImplGetPanelDescriptor(const OUString& rsPanelId) const
 {
     PanelContainer::const_iterator iPanel;
     for (iPanel = maPanels.begin(); iPanel != maPanels.end(); ++iPanel)
     {
-        if (iPanel->msId.equals(rsPanelId))
-            return &*iPanel;
+        const std::shared_ptr<PanelDescriptor>& rPanel = *iPanel;
+
+        if (rPanel->msId.equals(rsPanelId))
+            return rPanel;
     }
     return nullptr;
 }
-const PanelDescriptor* ResourceManager::GetPanelDescriptor(const OUString& rsPanelId) const
+
+std::shared_ptr<PanelDescriptor> ResourceManager::GetPanelDescriptor(const OUString& rsPanelId) const
 {
     return ImplGetPanelDescriptor( rsPanelId );
-}
-
-PanelDescriptor* ResourceManager::GetPanelDescriptor(const OUString& rsPanelId)
-{
-      const ResourceManager* constMe = this;
-      return const_cast<PanelDescriptor*>( constMe->ImplGetPanelDescriptor(rsPanelId) );
 }
 
 const ResourceManager::DeckContextDescriptorContainer& ResourceManager::GetMatchingDecks (
@@ -178,10 +174,12 @@ const ResourceManager::DeckContextDescriptorContainer& ResourceManager::GetMatch
     DeckContainer::const_iterator iDeck;
     for (iDeck = maDecks.begin(); iDeck != maDecks.end(); ++iDeck)
     {
-        if (iDeck->mbExperimental && !maMiscOptions.IsExperimentalMode())
+        const std::shared_ptr<DeckDescriptor>& rDeck = *iDeck;
+
+        if (rDeck->mbExperimental && !maMiscOptions.IsExperimentalMode())
             continue;
 
-        const DeckDescriptor& rDeckDescriptor (*iDeck);
+        const DeckDescriptor& rDeckDescriptor (*rDeck);
         if (rDeckDescriptor.maContextList.GetMatch(rContext) == nullptr)
             continue;
 
@@ -212,16 +210,18 @@ const ResourceManager::PanelContextDescriptorContainer& ResourceManager::GetMatc
                                                             const OUString& rsDeckId,
                                                             const Reference<frame::XController>& rxController)
 {
+    OUString sDeckId(rsDeckId);
     ReadLegacyAddons(rxController);
 
     std::multimap<sal_Int32, PanelContextDescriptor> aOrderedIds;
     PanelContainer::const_iterator iPanel;
     for (iPanel = maPanels.begin(); iPanel != maPanels.end(); ++iPanel)
     {
-        const PanelDescriptor& rPanelDescriptor (*iPanel);
+        const std::shared_ptr<PanelDescriptor>& rPanel = *iPanel;
+        const PanelDescriptor& rPanelDescriptor (*rPanel);
         if (rPanelDescriptor.mbExperimental && !maMiscOptions.IsExperimentalMode())
             continue;
-        if ( ! rPanelDescriptor.msDeckId.equals(rsDeckId))
+        if ( ! rPanelDescriptor.msDeckId.equals(sDeckId))
             continue;
 
         const ContextList::Entry* pEntry = rPanelDescriptor.maContextList.GetMatch(rContext);
@@ -258,15 +258,15 @@ void ResourceManager::ReadDeckList()
 
     const Sequence<OUString> aDeckNodeNames (aDeckRootNode.getNodeNames());
     const sal_Int32 nCount(aDeckNodeNames.getLength());
-    maDecks.resize(nCount);
-    sal_Int32 nWriteIndex(0);
+    maDecks.clear();
     for (sal_Int32 nReadIndex(0); nReadIndex<nCount; ++nReadIndex)
     {
         const utl::OConfigurationNode aDeckNode(aDeckRootNode.openNode(aDeckNodeNames[nReadIndex]));
         if (!aDeckNode.isValid())
             continue;
 
-        DeckDescriptor& rDeckDescriptor (maDecks[nWriteIndex++]);
+        maDecks.push_back(std::make_shared<DeckDescriptor>());
+        DeckDescriptor& rDeckDescriptor (*maDecks.back());
 
         rDeckDescriptor.msTitle = getString(aDeckNode, "Title");
         rDeckDescriptor.msId = getString(aDeckNode, "Id");
@@ -276,7 +276,6 @@ void ResourceManager::ReadDeckList()
         rDeckDescriptor.msHighContrastTitleBarIconURL = getString(aDeckNode, "HighContrastTitleBarIconURL");
         rDeckDescriptor.msHelpURL = getString(aDeckNode, "HelpURL");
         rDeckDescriptor.msHelpText = rDeckDescriptor.msTitle;
-    //  rDeckDescriptor.mbIsEnabled = true; // TODO ??? update rDeckDescriptor.mbIsEnabled according to context , see IsDeckEnabled ?
         rDeckDescriptor.mnOrderIndex = getInt32(aDeckNode, "OrderIndex");
         rDeckDescriptor.mbExperimental = getBool(aDeckNode, "IsExperimental");
 
@@ -288,25 +287,21 @@ void ResourceManager::ReadDeckList()
             OUString());
 
     }
-
-    // When there where invalid nodes then we have to adapt the size
-    // of the deck vector.
-    if (nWriteIndex<nCount)
-        maDecks.resize(nWriteIndex);
 }
 
 void ResourceManager::SaveDecksSettings(const Context& rContext)
 {
-
     DeckContainer::const_iterator iDeck;
     for (iDeck = maDecks.begin(); iDeck != maDecks.end(); ++iDeck)
     {
-       const ContextList::Entry* pMatchingEntry = iDeck->maContextList.GetMatch(rContext);
+       const std::shared_ptr<DeckDescriptor>& rDeck = *iDeck;
+
+       const ContextList::Entry* pMatchingEntry = rDeck->maContextList.GetMatch(rContext);
        if (pMatchingEntry)
        {
-            const DeckDescriptor* pDeckDesc = GetDeckDescriptor(iDeck->msId);
-            if (pDeckDesc)
-                SaveDeckSettings(pDeckDesc);
+            std::shared_ptr<DeckDescriptor> xDeckDesc = GetDeckDescriptor(rDeck->msId);
+            if (xDeckDesc)
+                SaveDeckSettings(xDeckDesc.get());
        }
 
     }
@@ -350,20 +345,20 @@ void ResourceManager::SaveDeckSettings(const DeckDescriptor* pDeckDesc)
 
     for ( SharedPanelContainer::iterator iPanel(rPanels.begin()), iEnd(rPanels.end());
               iPanel!=iEnd; ++iPanel)
-            {
-                Panel* aPanel = *iPanel;
-                OUString panelId = aPanel->GetId();
-                const PanelDescriptor* pPanelDesc = GetPanelDescriptor(panelId);
+    {
+        Panel* aPanel = *iPanel;
+        OUString panelId = aPanel->GetId();
+        std::shared_ptr<PanelDescriptor> xPanelDesc = GetPanelDescriptor(panelId);
 
-                ::uno::Sequence< OUString > sPanelContextList = BuildContextList(pPanelDesc->maContextList);
+        ::uno::Sequence< OUString > sPanelContextList = BuildContextList(xPanelDesc->maContextList);
 
-                utl::OConfigurationNode aPanelNode (aPanelRootNode.openNode(pPanelDesc->msNodeName));
+        utl::OConfigurationNode aPanelNode (aPanelRootNode.openNode(xPanelDesc->msNodeName));
 
-                aPanelNode.setNodeValue("Title", makeAny(pPanelDesc->msTitle));
-                aPanelNode.setNodeValue("OrderIndex", makeAny(pPanelDesc->mnOrderIndex));
-                aPanelNode.setNodeValue("ContextList", makeAny( sPanelContextList ));
+        aPanelNode.setNodeValue("Title", makeAny(xPanelDesc->msTitle));
+        aPanelNode.setNodeValue("OrderIndex", makeAny(xPanelDesc->mnOrderIndex));
+        aPanelNode.setNodeValue("ContextList", makeAny( sPanelContextList ));
 
-            }
+    }
 
      aPanelRootNode.commit();
 
@@ -380,15 +375,15 @@ void ResourceManager::ReadPanelList()
 
     const Sequence<OUString> aPanelNodeNames (aPanelRootNode.getNodeNames());
     const sal_Int32 nCount (aPanelNodeNames.getLength());
-    maPanels.resize(nCount);
-    sal_Int32 nWriteIndex (0);
+    maPanels.clear();
     for (sal_Int32 nReadIndex(0); nReadIndex<nCount; ++nReadIndex)
     {
         const utl::OConfigurationNode aPanelNode (aPanelRootNode.openNode(aPanelNodeNames[nReadIndex]));
         if (!aPanelNode.isValid())
             continue;
 
-        PanelDescriptor& rPanelDescriptor (maPanels[nWriteIndex++]);
+        maPanels.push_back(std::make_shared<PanelDescriptor>());
+        PanelDescriptor& rPanelDescriptor(*maPanels.back());
 
         rPanelDescriptor.msTitle = getString(aPanelNode, "Title");
         rPanelDescriptor.mbIsTitleBarOptional = getBool(aPanelNode, "TitleBarIsOptional");
@@ -408,11 +403,6 @@ void ResourceManager::ReadPanelList()
 
         ReadContextList(aPanelNode, rPanelDescriptor.maContextList, sDefaultMenuCommand);
     }
-
-    // When there where invalid nodes then we have to adapt the size
-    // of the deck vector.
-    if (nWriteIndex<nCount)
-        maPanels.resize(nWriteIndex);
 }
 
 void ResourceManager::ReadContextList (
@@ -591,10 +581,6 @@ void ResourceManager::ReadLegacyAddons (const Reference<frame::XController>& rxC
     std::vector<OUString> aMatchingNodeNames;
     GetToolPanelNodeNames(aMatchingNodeNames, aLegacyRootNode);
     const sal_Int32 nCount (aMatchingNodeNames.size());
-    size_t nDeckWriteIndex (maDecks.size());
-    size_t nPanelWriteIndex (maPanels.size());
-    maDecks.resize(maDecks.size() + nCount);
-    maPanels.resize(maPanels.size() + nCount);
     for (sal_Int32 nReadIndex(0); nReadIndex<nCount; ++nReadIndex)
     {
         const OUString& rsNodeName (aMatchingNodeNames[nReadIndex]);
@@ -609,7 +595,8 @@ void ResourceManager::ReadLegacyAddons (const Reference<frame::XController>& rxC
              rsNodeName == "private:resource/toolpanel/DrawingFramework/TableDesign" )
           continue;
 
-        DeckDescriptor& rDeckDescriptor (maDecks[nDeckWriteIndex++]);
+        maDecks.push_back(std::make_shared<DeckDescriptor>());
+        DeckDescriptor& rDeckDescriptor(*maDecks.back());
         rDeckDescriptor.msTitle = getString(aChildNode, "UIName");
         rDeckDescriptor.msId = rsNodeName;
         rDeckDescriptor.msIconURL = getString(aChildNode, "ImageURL");
@@ -622,7 +609,8 @@ void ResourceManager::ReadLegacyAddons (const Reference<frame::XController>& rxC
         rDeckDescriptor.mnOrderIndex = 100000 + nReadIndex;
         rDeckDescriptor.maContextList.AddContextDescription(Context(sModuleName, OUString("any")), true, OUString());
 
-        PanelDescriptor& rPanelDescriptor (maPanels[nPanelWriteIndex++]);
+        maPanels.push_back(std::make_shared<PanelDescriptor>());
+        PanelDescriptor& rPanelDescriptor(*maPanels.back());
         rPanelDescriptor.msTitle = getString(aChildNode, "UIName");
         rPanelDescriptor.mbIsTitleBarOptional = true;
         rPanelDescriptor.msId = rsNodeName;
@@ -636,13 +624,6 @@ void ResourceManager::ReadLegacyAddons (const Reference<frame::XController>& rxC
         rPanelDescriptor.mbWantsCanvas = false;
         rPanelDescriptor.maContextList.AddContextDescription(Context(sModuleName, OUString("any")), true, OUString());
     }
-
-    // When there where invalid nodes then we have to adapt the size
-    // of the deck and panel vectors.
-    if (nDeckWriteIndex < maDecks.size())
-        maDecks.resize(nDeckWriteIndex);
-    if (nPanelWriteIndex < maPanels.size())
-        maPanels.resize(nPanelWriteIndex);
 }
 
 void ResourceManager::StorePanelExpansionState (
@@ -653,9 +634,11 @@ void ResourceManager::StorePanelExpansionState (
     PanelContainer::iterator iPanel;
     for (iPanel = maPanels.begin(); iPanel != maPanels.end(); ++iPanel)
     {
-        if (iPanel->msId.equals(rsPanelId))
+        const std::shared_ptr<PanelDescriptor>& rPanel = *iPanel;
+
+        if (rPanel->msId.equals(rsPanelId))
         {
-            ContextList::Entry* pEntry(iPanel->maContextList.GetMatch(rContext));
+            ContextList::Entry* pEntry(rPanel->maContextList.GetMatch(rContext));
             if (pEntry != nullptr)
                 pEntry->mbIsInitiallyVisible = bExpansionState;
         }
@@ -726,10 +709,12 @@ void ResourceManager::UpdateModel(const css::uno::Reference<css::frame::XModel>&
 {
     for (DeckContainer::iterator itr = maDecks.begin(); itr != maDecks.end(); ++itr)
     {
-        if (!itr->mpDeck)
+        std::shared_ptr<DeckDescriptor>& rDeck = *itr;
+
+        if (!rDeck->mpDeck)
             continue;
 
-        const SharedPanelContainer& rContainer = itr->mpDeck->GetPanels();
+        const SharedPanelContainer& rContainer = rDeck->mpDeck->GetPanels();
 
         for (SharedPanelContainer::const_iterator it = rContainer.begin(); it != rContainer.end(); ++it)
         {
@@ -742,7 +727,10 @@ void ResourceManager::UpdateModel(const css::uno::Reference<css::frame::XModel>&
 void ResourceManager::disposeDecks()
 {
     for (DeckContainer::iterator itr = maDecks.begin(); itr != maDecks.end(); ++itr)
-        itr->mpDeck.disposeAndClear();
+    {
+        std::shared_ptr<DeckDescriptor>& rDeck = *itr;
+        rDeck->mpDeck.disposeAndClear();
+    }
 }
 
 } } // end of namespace sfx2::sidebar
