@@ -96,6 +96,8 @@ AquaA11yFocusTracker::AquaA11yFocusTracker() :
     window_got_focus(Application::GetFocusWindow());
 }
 
+AquaA11yFocusTracker::~AquaA11yFocusTracker() {}
+
 void AquaA11yFocusTracker::setFocusedObject(const Reference< XAccessible >& xAccessible)
 {
     if( xAccessible != m_xFocusedObject )
