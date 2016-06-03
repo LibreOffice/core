@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "da7fb54a_f222d2b8",
+        "filename": "include/framework/dispatchhelper.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2016-06-03T06:58:52Z",
+      "side": 1,
+      "message": "I hope you mean here only the comment",
+      "parentUuid": "da7fb54a_b2b92aec",
+      "revId": "8192bcfa6a5f0d1f189a482dac521acf9e0ed178",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da7fb54a_d2ceae82",
         "filename": "sfx2/source/control/unoctitm.cxx",
         "patchSetId": 7
@@ -47,6 +65,24 @@
       "writtenOn": "2016-06-02T20:07:42Z",
       "side": 1,
       "message": "Question from an earlier review again:\n\npItem is SfxBrushItem, and not nullptr. code below will keep bSuccess on false, old code set it to true.\n\nAre you sure that case does not happen?",
+      "revId": "8192bcfa6a5f0d1f189a482dac521acf9e0ed178",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_923b46eb",
+        "filename": "sfx2/source/control/unoctitm.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 705,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2016-06-03T06:58:52Z",
+      "side": 1,
+      "message": "The pDispatcher-\u003eExecute is here sfx2/source/control/dispatch.cxx:992, you see: In error case it give a nullptr back.\nThe baseclass from pitem is SfxPoolItem, and here is the save handling sfx2/source/doc/objserv.cxx:731 and return always SfxBoolItem.\nThe main problem here was, when the save was wrong the return was a vaild pointer but in the pointer was set to false and in this case he close the application and your changes was lost.\nAnd this fix solved that, but when i get a other type as SfxBoolItem, in this case i can not interpet and mean the save was not okay (no data lost)\nI have the backtrace of this part but i not sure to past here",
+      "parentUuid": "da7fb54a_d2ceae82",
       "revId": "8192bcfa6a5f0d1f189a482dac521acf9e0ed178",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
