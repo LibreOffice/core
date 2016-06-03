@@ -127,12 +127,15 @@ void SlideBackground::Initialize()
     mpFillGrad->SetSelectHdl(LINK(this, SlideBackground, FillColorHdl));
     mpFillAttr->SetSelectHdl(LINK(this, SlideBackground, FillBackgroundHdl));
 
-    ViewShell* pMainViewShell = mrBase.GetMainViewShell().get();
-    DrawViewShell* pDrawViewShell = static_cast<DrawViewShell*>(pMainViewShell);
-    SdPage* mpPage = pDrawViewShell->getCurrentPage();
-    OUString aLayoutName( mpPage->GetLayoutName() );
-    aLayoutName = aLayoutName.copy(0,aLayoutName.indexOf(SD_LT_SEPARATOR));
-    mpMasterSlide->SelectEntry(aLayoutName);
+    if (ViewShell* pMainViewShell = mrBase.GetMainViewShell().get())
+    {
+        DrawViewShell* pDrawViewShell = static_cast<DrawViewShell*>(pMainViewShell);
+        SdPage* mpPage = pDrawViewShell->getCurrentPage();
+        OUString aLayoutName( mpPage->GetLayoutName() );
+        aLayoutName = aLayoutName.copy(0,aLayoutName.indexOf(SD_LT_SEPARATOR));
+        mpMasterSlide->SelectEntry(aLayoutName);
+    }
+
     mpFillStyle->SelectEntryPos(0);
 
     mpDspMasterBackground->SetClickHdl(LINK(this, SlideBackground, DspBackground));
