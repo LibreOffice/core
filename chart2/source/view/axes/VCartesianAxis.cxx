@@ -1021,17 +1021,6 @@ bool VCartesianAxis::createTextShapesSimple(
     return true;
 }
 
-drawing::PointSequenceSequence lcl_makePointSequence( B2DVector& rStart, B2DVector& rEnd )
-{
-    drawing::PointSequenceSequence aPoints(1);
-    aPoints[0].realloc(2);
-    aPoints[0][0].X = static_cast<sal_Int32>(rStart.getX());
-    aPoints[0][0].Y = static_cast<sal_Int32>(rStart.getY());
-    aPoints[0][1].X = static_cast<sal_Int32>(rEnd.getX());
-    aPoints[0][1].Y = static_cast<sal_Int32>(rEnd.getY());
-    return aPoints;
-}
-
 double VCartesianAxis::getAxisIntersectionValue() const
 {
     if (m_aAxisProperties.m_pfMainLinePositionAtOtherAxis)
@@ -1860,7 +1849,9 @@ void VCartesianAxis::createShapes()
                 AxisLabelAlignment aLabelAlign = m_aAxisProperties.maLabelAlignment;
                 get2DAxisMainLine(aStart, aEnd, aLabelAlign, fExtraLineCrossesOtherAxis);
                 m_aAxisProperties.maLabelAlignment = aLabelAlign;
-                drawing::PointSequenceSequence aPoints( lcl_makePointSequence(aStart,aEnd) );
+                drawing::PointSequenceSequence aPoints{{
+                        {static_cast<sal_Int32>(aStart.getX()), static_cast<sal_Int32>(aStart.getY())},
+                        {static_cast<sal_Int32>(aEnd.getX()), static_cast<sal_Int32>(aEnd.getY())} }};
                 Reference< drawing::XShape > xShape = m_pShapeFactory->createLine2D(
                         m_xGroupShape_Shapes, aPoints, &m_aAxisProperties.m_aLineProperties );
             }
