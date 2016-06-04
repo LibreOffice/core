@@ -423,17 +423,17 @@ bool SfxApplication::InitializeDde()
 {
     int nError = 0;
 #if defined(_WIN32)
-    DBG_ASSERT( !pAppData_Impl->pDdeService,
+    DBG_ASSERT( !pImpl->pDdeService,
                 "Dde can not be initialized multiple times" );
 
-    pAppData_Impl->pDdeService = new ImplDdeService( Application::GetAppName() );
-    nError = pAppData_Impl->pDdeService->GetError();
+    pImpl->pDdeService = new ImplDdeService( Application::GetAppName() );
+    nError = pImpl->pDdeService->GetError();
     if( !nError )
     {
-        pAppData_Impl->pDocTopics = new SfxDdeDocTopics_Impl;
+        pImpl->pDocTopics = new SfxDdeDocTopics_Impl;
 
         // we certainly want to support RTF!
-        pAppData_Impl->pDdeService->AddFormat( SotClipboardFormatId::RTF );
+        pImpl->pDdeService->AddFormat( SotClipboardFormatId::RTF );
 
         // Config path as a topic because of multiple starts
         INetURLObject aOfficeLockFile( SvtPathOptions().GetUserConfigPath() );
@@ -441,9 +441,9 @@ bool SfxApplication::InitializeDde()
         OUString aService( SfxDdeServiceName_Impl(
                     aOfficeLockFile.GetMainURL(INetURLObject::DECODE_TO_IURI) ) );
         aService = aService.toAsciiUpperCase();
-        pAppData_Impl->pDdeService2 = new ImplDdeService( aService );
-        pAppData_Impl->pTriggerTopic = new SfxDdeTriggerTopic_Impl;
-        pAppData_Impl->pDdeService2->AddTopic( *pAppData_Impl->pTriggerTopic );
+        pImpl->pDdeService2 = new ImplDdeService( aService );
+        pImpl->pTriggerTopic = new SfxDdeTriggerTopic_Impl;
+        pImpl->pDdeService2->AddTopic( *pImpl->pTriggerTopic );
     }
 #endif
     return !nError;
@@ -461,15 +461,15 @@ void SfxAppData_Impl::DeInitDDE()
 void SfxApplication::AddDdeTopic( SfxObjectShell* pSh )
 {
     //OV: DDE is disconnected in server mode!
-    if( !pAppData_Impl->pDocTopics )
+    if( !pImpl->pDocTopics )
         return;
 
     // prevent double submit
     OUString sShellNm;
     sal_Bool bFnd = sal_False;
-    for (size_t n = pAppData_Impl->pDocTopics->size(); n;)
+    for (size_t n = pImpl->pDocTopics->size(); n;)
     {
-        if( (*pAppData_Impl->pDocTopics)[ --n ]->pSh == pSh )
+        if( (*pImpl->pDocTopics)[ --n ]->pSh == pSh )
         {
             // If the document is untitled, is still a new Topic is created!
             if( !bFnd )
@@ -477,15 +477,15 @@ void SfxApplication::AddDdeTopic( SfxObjectShell* pSh )
                 bFnd = sal_True;
                 sShellNm = pSh->GetTitle(SFX_TITLE_FULLNAME).toAsciiLowerCase();
             }
-            OUString sNm( (*pAppData_Impl->pDocTopics)[ n ]->GetName() );
+            OUString sNm( (*pImpl->pDocTopics)[ n ]->GetName() );
             if( sShellNm == sNm.toAsciiLowerCase() )
                 return ;
         }
     }
 
     SfxDdeDocTopic_Impl *const pTopic = new SfxDdeDocTopic_Impl(pSh);
-    pAppData_Impl->pDocTopics->push_back(pTopic);
-    pAppData_Impl->pDdeService->AddTopic( *pTopic );
+    pImpl->pDocTopics->push_back(pTopic);
+    pImpl->pDdeService->AddTopic( *pTopic );
 }
 #endif
 
@@ -493,17 +493,17 @@ void SfxApplication::RemoveDdeTopic( SfxObjectShell* pSh )
 {
 #if defined(_WIN32)
     //OV: DDE is disconnected in server mode!
-    if( !pAppData_Impl->pDocTopics )
+    if( !pImpl->pDocTopics )
         return;
 
-    for (size_t n = pAppData_Impl->pDocTopics->size(); n; )
+    for (size_t n = pImpl->pDocTopics->size(); n; )
     {
-        SfxDdeDocTopic_Impl *const pTopic = (*pAppData_Impl->pDocTopics)[ --n ];
+        SfxDdeDocTopic_Impl *const pTopic = (*pImpl->pDocTopics)[ --n ];
         if (pTopic->pSh == pSh)
         {
-            pAppData_Impl->pDdeService->RemoveTopic( *pTopic );
+            pImpl->pDdeService->RemoveTopic( *pTopic );
             delete pTopic;
-            pAppData_Impl->pDocTopics->erase( pAppData_Impl->pDocTopics->begin() + n );
+            pImpl->pDocTopics->erase( pImpl->pDocTopics->begin() + n );
         }
     }
 #else
@@ -513,12 +513,12 @@ void SfxApplication::RemoveDdeTopic( SfxObjectShell* pSh )
 
 const DdeService* SfxApplication::GetDdeService() const
 {
-    return pAppData_Impl->pDdeService;
+    return pImpl->pDdeService;
 }
 
 DdeService* SfxApplication::GetDdeService()
 {
-    return pAppData_Impl->pDdeService;
+    return pImpl->pDdeService;
 }
 
 #if defined(_WIN32)

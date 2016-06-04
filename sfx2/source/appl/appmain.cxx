@@ -43,13 +43,13 @@
 
 SfxFilterMatcher& SfxApplication::GetFilterMatcher()
 {
-    if( !pAppData_Impl->pMatcher )
+    if( !pImpl->pMatcher )
     {
-        pAppData_Impl->pMatcher = new SfxFilterMatcher();
+        pImpl->pMatcher = new SfxFilterMatcher();
         URIHelper::SetMaybeFileHdl( LINK(
-            pAppData_Impl->pMatcher, SfxFilterMatcher, MaybeFileHdl_Impl ) );
+            pImpl->pMatcher, SfxFilterMatcher, MaybeFileHdl_Impl ) );
     }
-    return *pAppData_Impl->pMatcher;
+    return *pImpl->pMatcher;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

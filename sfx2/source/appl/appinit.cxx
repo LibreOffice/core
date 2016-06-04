@@ -208,8 +208,8 @@ void SfxApplication::Initialize_Impl()
 
     Application::EnableAutoHelpId();
 
-    pAppData_Impl->pAppDispatch = new SfxStatusDispatcher;
-    pAppData_Impl->pAppDispatch->acquire();
+    pImpl->pAppDispatch = new SfxStatusDispatcher;
+    pImpl->pAppDispatch->acquire();
 
     // SV-Look
     Help::EnableContextHelp();
@@ -222,19 +222,19 @@ void SfxApplication::Initialize_Impl()
         Application::SetDialogScaleX    ( (short)(aLocalisation.GetDialogScale()) );
     }
 
-    pAppData_Impl->m_pToolsErrorHdl = new SfxErrorHandler(
+    pImpl->m_pToolsErrorHdl = new SfxErrorHandler(
         RID_ERRHDL, ERRCODE_AREA_TOOLS, ERRCODE_AREA_LIB1);
 
 #if HAVE_FEATURE_SCRIPTING
-    pAppData_Impl->pBasicResMgr = ResMgr::CreateResMgr("sb");
+    pImpl->pBasicResMgr = ResMgr::CreateResMgr("sb");
 #endif
-    pAppData_Impl->pSvtResMgr = ResMgr::CreateResMgr("svt");
+    pImpl->pSvtResMgr = ResMgr::CreateResMgr("svt");
 
-    pAppData_Impl->m_pSoErrorHdl = new SfxErrorHandler(
-        RID_SO_ERROR_HANDLER, ERRCODE_AREA_SO, ERRCODE_AREA_SO_END, pAppData_Impl->pSvtResMgr );
+    pImpl->m_pSoErrorHdl = new SfxErrorHandler(
+        RID_SO_ERROR_HANDLER, ERRCODE_AREA_SO, ERRCODE_AREA_SO_END, pImpl->pSvtResMgr );
 #if HAVE_FEATURE_SCRIPTING
-    pAppData_Impl->m_pSbxErrorHdl = new SfxErrorHandler(
-        RID_BASIC_START, ERRCODE_AREA_SBX, ERRCODE_AREA_SBX_END, pAppData_Impl->pBasicResMgr );
+    pImpl->m_pSbxErrorHdl = new SfxErrorHandler(
+        RID_BASIC_START, ERRCODE_AREA_SBX, ERRCODE_AREA_SBX_END, pImpl->pBasicResMgr );
 #endif
 
     if (!utl::ConfigManager::IsAvoidConfig())
@@ -244,34 +244,34 @@ void SfxApplication::Initialize_Impl()
         SfxPickList::ensure();
     }
 
-    DBG_ASSERT( !pAppData_Impl->pAppDispat, "AppDispatcher already exists" );
-    pAppData_Impl->pAppDispat = new SfxDispatcher(static_cast<SfxDispatcher*>(nullptr));
-    pAppData_Impl->pSlotPool = new SfxSlotPool;
-    pAppData_Impl->pTbxCtrlFac = new SfxTbxCtrlFactArr_Impl;
-    pAppData_Impl->pStbCtrlFac = new SfxStbCtrlFactArr_Impl;
-    pAppData_Impl->pViewFrames = new SfxViewFrameArr_Impl;
-    pAppData_Impl->pViewShells = new SfxViewShellArr_Impl;
-    pAppData_Impl->pObjShells = new SfxObjectShellArr_Impl;
-    pAppData_Impl->nInterfaces = SFX_INTERFACE_APP+8;
-    pAppData_Impl->pInterfaces = new SfxInterface*[pAppData_Impl->nInterfaces];
-    memset( pAppData_Impl->pInterfaces, 0, sizeof(SfxInterface*) * pAppData_Impl->nInterfaces );
+    DBG_ASSERT( !pImpl->pAppDispat, "AppDispatcher already exists" );
+    pImpl->pAppDispat = new SfxDispatcher(static_cast<SfxDispatcher*>(nullptr));
+    pImpl->pSlotPool = new SfxSlotPool;
+    pImpl->pTbxCtrlFac = new SfxTbxCtrlFactArr_Impl;
+    pImpl->pStbCtrlFac = new SfxStbCtrlFactArr_Impl;
+    pImpl->pViewFrames = new SfxViewFrameArr_Impl;
+    pImpl->pViewShells = new SfxViewShellArr_Impl;
+    pImpl->pObjShells = new SfxObjectShellArr_Impl;
+    pImpl->nInterfaces = SFX_INTERFACE_APP+8;
+    pImpl->pInterfaces = new SfxInterface*[pImpl->nInterfaces];
+    memset( pImpl->pInterfaces, 0, sizeof(SfxInterface*) * pImpl->nInterfaces );
 
     Registrations_Impl();
 
     // Subklasse initialisieren
-    pAppData_Impl->bDowning = false;
+    pImpl->bDowning = false;
 
     // get CHAOS item pool...
-    pAppData_Impl->pPool = NoChaos::GetItemPool();
-    SetPool( pAppData_Impl->pPool );
+    pImpl->pPool = NoChaos::GetItemPool();
+    SetPool( pImpl->pPool );
 
-    if ( pAppData_Impl->bDowning )
+    if ( pImpl->bDowning )
         return;
 
     // App-Dispatcher aufbauen
-    pAppData_Impl->pAppDispat->Push(*this);
-    pAppData_Impl->pAppDispat->Flush();
-    pAppData_Impl->pAppDispat->DoActivate_Impl( true, nullptr );
+    pImpl->pAppDispat->Push(*this);
+    pImpl->pAppDispat->Flush();
+    pImpl->pAppDispat->DoActivate_Impl( true, nullptr );
 
     {
         SolarMutexGuard aGuard;
