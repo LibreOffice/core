@@ -315,9 +315,11 @@ class SwXTextCellStyle : public cppu::WeakImplHelper
     css::beans::XPropertySet
 >
 {
+    SwDocShell* m_pDocShell;
     SwBoxAutoFormat& m_rBoxAutoFormat;
+    OUString m_sParentStyle;
 public:
-    SwXTextCellStyle(SwBoxAutoFormat& rBoxAutoFormat);
+    SwXTextCellStyle(SwDocShell* pDocShell, SwBoxAutoFormat& rBoxAutoFormat, OUString& sParentStyle);
 
     //XStyle
     virtual sal_Bool SAL_CALL isUserDefined() throw (css::uno::RuntimeException, std::exception) override;

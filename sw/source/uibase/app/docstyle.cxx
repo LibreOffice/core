@@ -77,6 +77,7 @@
 #define cPAGE       (sal_Unicode)'g'
 #define cNUMRULE    (sal_Unicode)'n'
 #define cTABSTYLE   (sal_Unicode)'t'
+#define cCELLSTYLE  (sal_Unicode)'e'
 
 using namespace com::sun::star;
 
@@ -345,6 +346,9 @@ sal_uInt32 SwStyleSheetIterator::SwPoolFormatList::FindName(SfxStyleFamily eFam,
             break;
         case SfxStyleFamily::Table:
             cStyle = cTABSTYLE;
+            break;
+        case SfxStyleFamily::Cell:
+            cStyle = cCELLSTYLE;
             break;
         default:
             cStyle = ' ';
@@ -2529,6 +2533,9 @@ SfxStyleSheetBase* SwDocStyleSheetPool::Find( const OUString& rName,
             }
             break;
 
+        case SfxStyleFamily::Table:
+        case SfxStyleFamily::Cell:
+            break;
         default:
             OSL_ENSURE(false, "unknown style family");
         }
@@ -2939,6 +2946,24 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
         {
             aLst.Append( cTABSTYLE, rTableStyles[i].GetName() );
         }
+    }
+
+    if( nSearchFamily == SfxStyleFamily::Cell ||
+        nSearchFamily == SfxStyleFamily::All )
+    {
+        const std::vector<sal_Int32> aTableTemplateMap = SwTableAutoFormat::GetTableTemplateMap();
+        const SwTableAutoFormatTable& rTableStyles = rDoc.GetTableStyles();
+        for(size_t i = 0; i < rTableStyles.size(); ++i)
+            for(sal_uInt32 nBoxFormat = 0; nBoxFormat < aTableTemplateMap.size(); ++nBoxFormat)
+            {
+                const sal_uInt32 nBoxIndex = aTableTemplateMap[nBoxFormat];
+                const SwTableAutoFormat& rTableStyle = rTableStyles[i];
+                const SwBoxAutoFormat& rBoxFormat = rTableStyle.GetBoxFormat(nBoxIndex);
+                OUString sBoxFormatName;
+                SwStyleNameMapper::FillProgName(rTableStyle.GetName(), sBoxFormatName, nsSwGetPoolIdFromName::GET_POOLID_CELLSTYLE, true);
+                sBoxFormatName += rTableStyle.GetTableTemplateCellSubName(rBoxFormat);
+                aLst.Append( cCELLSTYLE, sBoxFormatName );
+            }
     }
 
     if(!aLst.empty())
