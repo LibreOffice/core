@@ -32,6 +32,7 @@ namespace nsSwGetPoolIdFromName
     const SwGetPoolIdFromName GET_POOLID_PAGEDESC = 0x08;
     const SwGetPoolIdFromName GET_POOLID_NUMRULE  = 0x10;
     const SwGetPoolIdFromName GET_POOLID_TABSTYLE = 0x20;
+    const SwGetPoolIdFromName GET_POOLID_CELLSTYLE= 0x40;
 }
 
 #endif

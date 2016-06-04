@@ -312,12 +312,15 @@ class SwBoxAutoFormat;
 class SwXTextCellStyle : public cppu::WeakImplHelper
 <
     css::style::XStyle,
-    css::beans::XPropertySet
+    css::beans::XPropertySet,
+    css::lang::XServiceInfo
 >
 {
+    SwDocShell* m_pDocShell;
     SwBoxAutoFormat& m_rBoxAutoFormat;
+    OUString m_sParentStyle;
 public:
-    SwXTextCellStyle(SwBoxAutoFormat& rBoxAutoFormat);
+    SwXTextCellStyle(SwDocShell* pDocShell, SwBoxAutoFormat& rBoxAutoFormat, const OUString& sParentStyle);
 
     //XStyle
     virtual sal_Bool SAL_CALL isUserDefined() throw (css::uno::RuntimeException, std::exception) override;
@@ -338,6 +341,12 @@ public:
     virtual void SAL_CALL addVetoableChangeListener(const OUString& PropertyName, const css::uno::Reference<css::beans::XVetoableChangeListener>& aListener) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL removeVetoableChangeListener(const OUString& PropertyName, const css::uno::Reference<css::beans::XVetoableChangeListener>& aListener) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
 
+    //XServiceInfo
+    virtual OUString SAL_CALL getImplementationName() throw(css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL supportsService(const OUString& rServiceName) throw(css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw(css::uno::RuntimeException, std::exception) override;
+
+    static css::uno::Reference<css::style::XStyle> CreateXTextCellStyle(SwDocShell* pDocShell, const OUString& sName);
 };
 #endif
 

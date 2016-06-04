@@ -77,6 +77,7 @@
 #define cPAGE       (sal_Unicode)'g'
 #define cNUMRULE    (sal_Unicode)'n'
 #define cTABSTYLE   (sal_Unicode)'t'
+#define cCELLSTYLE  (sal_Unicode)'b'
 
 using namespace com::sun::star;
 
@@ -320,6 +321,40 @@ static const SwTableAutoFormat* lcl_FindTableStyle(SwDoc& rDoc, const OUString& 
     return pFormat;
 }
 
+static const SwBoxAutoFormat* lcl_FindCellStyle(SwDoc& rDoc, const OUString& rName, SwDocStyleSheet *pStyle = nullptr)
+{
+    const SwBoxAutoFormat* pFormat = nullptr;
+
+    auto aTableTemplateMap = SwTableAutoFormat::GetTableTemplateMap();
+    SwTableAutoFormatTable& rTableStyles = rDoc.GetTableStyles();
+    for (size_t i=0; i < rTableStyles.size() && !pFormat; ++i)
+    {
+        const SwTableAutoFormat& rTableStyle = rTableStyles[i];
+        for (size_t nBoxFormat=0; nBoxFormat < aTableTemplateMap.size() && !pFormat; ++nBoxFormat)
+        {
+                const sal_uInt32 nBoxIndex = aTableTemplateMap[nBoxFormat];
+                const SwBoxAutoFormat& rBoxFormat = rTableStyle.GetBoxFormat(nBoxIndex);
+                OUString sBoxFormatName;
+                SwStyleNameMapper::FillProgName(rTableStyle.GetName(), sBoxFormatName, nsSwGetPoolIdFromName::GET_POOLID_CELLSTYLE, true);
+                sBoxFormatName += rTableStyle.GetTableTemplateCellSubName(rBoxFormat);
+                if (rName == sBoxFormatName)
+                    pFormat = &rBoxFormat;
+        }
+    }
+
+    if(pStyle)
+    {
+        if(pFormat)
+        {
+            pStyle->SetPhysical(true);
+            pStyle->PresetParent(OUString());
+        }
+        else
+            pStyle->SetPhysical(false);
+    }
+    return pFormat;
+}
+
 sal_uInt32 SwStyleSheetIterator::SwPoolFormatList::FindName(SfxStyleFamily eFam,
                                                          const OUString &rName)
 {
@@ -345,6 +380,9 @@ sal_uInt32 SwStyleSheetIterator::SwPoolFormatList::FindName(SfxStyleFamily eFam,
             break;
         case SfxStyleFamily::Table:
             cStyle = cTABSTYLE;
+            break;
+        case SfxStyleFamily::Cell:
+            cStyle = cCELLSTYLE;
             break;
         default:
             cStyle = ' ';
@@ -1945,6 +1983,11 @@ bool SwDocStyleSheet::FillStyleSheet(
         pTableFormat = lcl_FindTableStyle(rDoc, aName, this);
         bRet = bPhysical = (nullptr != pTableFormat);
         break;
+
+    case SfxStyleFamily::Cell:
+        pBoxFormat = lcl_FindCellStyle(rDoc, aName, this);
+        bRet = bPhysical = (nullptr != pBoxFormat);
+        break;
         default:; //prevent warning
     }
 
@@ -2529,6 +2572,9 @@ SfxStyleSheetBase* SwDocStyleSheetPool::Find( const OUString& rName,
             }
             break;
 
+        case SfxStyleFamily::Table:
+        case SfxStyleFamily::Cell:
+            break;
         default:
             OSL_ENSURE(false, "unknown style family");
         }
@@ -2938,6 +2984,26 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
         for(size_t i = 0; i < rTableStyles.size(); ++i)
         {
             aLst.Append( cTABSTYLE, rTableStyles[i].GetName() );
+        }
+    }
+
+    if( nSearchFamily == SfxStyleFamily::Cell ||
+        nSearchFamily == SfxStyleFamily::All )
+    {
+        const std::vector<sal_Int32> aTableTemplateMap = SwTableAutoFormat::GetTableTemplateMap();
+        const SwTableAutoFormatTable& rTableStyles = rDoc.GetTableStyles();
+        for(size_t i = 0; i < rTableStyles.size(); ++i)
+        {
+            const SwTableAutoFormat& rTableStyle = rTableStyles[i];
+            for(size_t nBoxFormat = 0; nBoxFormat < aTableTemplateMap.size(); ++nBoxFormat)
+            {
+                const sal_uInt32 nBoxIndex = aTableTemplateMap[nBoxFormat];
+                const SwBoxAutoFormat& rBoxFormat = rTableStyle.GetBoxFormat(nBoxIndex);
+                OUString sBoxFormatName;
+                SwStyleNameMapper::FillProgName(rTableStyle.GetName(), sBoxFormatName, nsSwGetPoolIdFromName::GET_POOLID_CELLSTYLE, true);
+                sBoxFormatName += rTableStyle.GetTableTemplateCellSubName(rBoxFormat);
+                aLst.Append( cCELLSTYLE, sBoxFormatName );
+            }
         }
     }
 

@@ -39,11 +39,11 @@ class CheckStyle(unittest.TestCase):
         self.assertFalse(xStyleFamilies.supportsService("foobarbaz"))
         self.assertTrue(xStyleFamilies.hasElements())
         self.assertRegex(str(xStyleFamilies.ElementType), "com\.sun\.star\.container\.XNameContainer")
-        self.assertEqual(len(xStyleFamilies.ElementNames), 6)
+        self.assertEqual(len(xStyleFamilies.ElementNames), 7)
 
         for sFamilyname in xStyleFamilies.ElementNames:
             self.assertIn(sFamilyname,
-                          ["CharacterStyles", "ParagraphStyles", "PageStyles", "FrameStyles", "NumberingStyles", "TableStyles"])
+                          ["CharacterStyles", "ParagraphStyles", "PageStyles", "FrameStyles", "NumberingStyles", "TableStyles", "CellStyles"])
 
         with self.assertRaises(NoSuchElementException):
             xStyleFamilies.getByName("foobarbaz")
@@ -181,6 +181,14 @@ class CheckStyle(unittest.TestCase):
             self.assertIsNotNone(xCellStyle.getPropertyValue("BackColor"))
             with self.assertRaises(UnknownPropertyException):
                 xCellStyle.getPropertyValue("foobarbaz")
+        xDoc.dispose()
+
+    def test_CellFamily(self):
+        xDoc = CheckStyle._uno.openEmptyWriterDoc()
+        xCellStyles = xDoc.StyleFamilies["CellStyles"]
+        vEmptyDocStyles = ['Default Style.1', 'Default Style.2', 'Default Style.3', 'Default Style.4', 'Default Style.5', 'Default Style.6', 'Default Style.7', 'Default Style.8', 'Default Style.9', 'Default Style.10']
+        self.__test_StyleFamily(xCellStyles, vEmptyDocStyles, "SwXTextCellStyle")
+        #possibly more depth tests could be added, to test properties of a cell style... yet to come
         xDoc.dispose()
 
 if __name__ == '__main__':
