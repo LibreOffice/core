@@ -205,7 +205,7 @@ friend struct ModifyBlocker_Impl;
 friend class SfxObjectShellLock;
 
 private:
-    struct SfxObjectShell_Impl* pImp;     // internal data
+    std::unique_ptr<struct SfxObjectShell_Impl> pImpl;     // internal data
 
     SfxMedium *                 pMedium;  // Description of the file for example
                                           // storage that contains the object
@@ -654,12 +654,12 @@ public:
     SAL_DLLPRIVATE bool IsModifyPasswordEntered();
 
     SAL_DLLPRIVATE void InitBasicManager_Impl();
-    SAL_DLLPRIVATE SfxObjectShell_Impl* Get_Impl() { return pImp; }
+    SAL_DLLPRIVATE SfxObjectShell_Impl* Get_Impl() { return pImpl.get(); }
 
     SAL_DLLPRIVATE static bool UseInteractionToHandleError(
                     const css::uno::Reference< css::task::XInteractionHandler >& xHandler,
                     sal_uInt32 nError );
-    SAL_DLLPRIVATE const SfxObjectShell_Impl* Get_Impl() const { return pImp; }
+    SAL_DLLPRIVATE const SfxObjectShell_Impl* Get_Impl() const { return pImpl.get(); }
 
     SAL_DLLPRIVATE void SetCreateMode_Impl( SfxObjectCreateMode nMode );
 

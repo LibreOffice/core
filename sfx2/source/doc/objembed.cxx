@@ -95,7 +95,7 @@ void SfxObjectShell::OnDocumentPrinterChanged( Printer* /*pNewPrinter*/ )
 Rectangle SfxObjectShell::GetVisArea( sal_uInt16 nAspect ) const
 {
     if( nAspect == ASPECT_CONTENT )
-        return pImp->m_aVisArea;
+        return pImpl->m_aVisArea;
     else if( nAspect == ASPECT_THUMBNAIL )
     {
         Rectangle aRect;
@@ -109,16 +109,16 @@ Rectangle SfxObjectShell::GetVisArea( sal_uInt16 nAspect ) const
 
 const Rectangle& SfxObjectShell::GetVisArea() const
 {
-    pImp->m_aVisArea = GetVisArea( ASPECT_CONTENT );
-    return pImp->m_aVisArea;
+    pImpl->m_aVisArea = GetVisArea( ASPECT_CONTENT );
+    return pImpl->m_aVisArea;
 }
 
 
 void SfxObjectShell::SetVisArea( const Rectangle & rVisArea )
 {
-    if( pImp->m_aVisArea != rVisArea )
+    if( pImpl->m_aVisArea != rVisArea )
     {
-        pImp->m_aVisArea = rVisArea;
+        pImpl->m_aVisArea = rVisArea;
         if ( GetCreateMode() == SfxObjectCreateMode::EMBEDDED )
         {
             if ( IsEnableSetModified() )
@@ -144,13 +144,13 @@ sal_uIntPtr SfxObjectShell::GetMiscStatus() const
 
 MapUnit SfxObjectShell::GetMapUnit() const
 {
-    return pImp->m_nMapUnit;
+    return pImpl->m_nMapUnit;
 }
 
 
 void SfxObjectShell::SetMapUnit( MapUnit nMapUnit )
 {
-    pImp->m_nMapUnit = nMapUnit;
+    pImpl->m_nMapUnit = nMapUnit;
 }
 
 
@@ -246,15 +246,15 @@ void SfxObjectShell::DoDraw_Impl( OutputDevice* pDev,
 
 comphelper::EmbeddedObjectContainer& SfxObjectShell::GetEmbeddedObjectContainer() const
 {
-    if ( !pImp->mpObjectContainer )
-        pImp->mpObjectContainer = new comphelper::EmbeddedObjectContainer( const_cast<SfxObjectShell*>(this)->GetStorage(), GetModel() );
-    return *pImp->mpObjectContainer;
+    if ( !pImpl->mpObjectContainer )
+        pImpl->mpObjectContainer = new comphelper::EmbeddedObjectContainer( const_cast<SfxObjectShell*>(this)->GetStorage(), GetModel() );
+    return *pImpl->mpObjectContainer;
 }
 
 void SfxObjectShell::ClearEmbeddedObjects()
 {
     // frees alle space taken by embedded objects
-    DELETEZ( pImp->mpObjectContainer );
+    DELETEZ( pImpl->mpObjectContainer );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
