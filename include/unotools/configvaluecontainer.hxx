@@ -65,8 +65,7 @@ namespace utl
     class UNOTOOLS_DLLPUBLIC OConfigurationValueContainer
     {
     private:
-        OConfigurationValueContainerImpl*
-                    m_pImpl;
+        std::unique_ptr<OConfigurationValueContainerImpl> m_pImpl;
 
     protected:
 
