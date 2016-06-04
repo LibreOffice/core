@@ -648,18 +648,12 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
     return eRet;
 }
 
-SfxMailModel::SfxMailModel() :
-    mpToList    ( nullptr ),
-    mpCcList    ( nullptr ),
-    mpBccList   ( nullptr )
+SfxMailModel::SfxMailModel()
 {
 }
 
 SfxMailModel::~SfxMailModel()
 {
-    delete mpToList;
-    delete mpCcList;
-    delete mpBccList;
 }
 
 void SfxMailModel::AddAddress( const OUString& rAddress, AddressRole eRole )
@@ -672,22 +666,22 @@ void SfxMailModel::AddAddress( const OUString& rAddress, AddressRole eRole )
         {
             if ( !mpToList )
                 // create the list
-                mpToList = new AddressList_Impl();
-            pList = mpToList;
+                mpToList.reset(new AddressList_Impl);
+            pList = mpToList.get();
         }
         else if ( ROLE_CC == eRole )
         {
             if ( !mpCcList )
                 // create the list
-                mpCcList = new AddressList_Impl();
-            pList = mpCcList;
+                mpCcList.reset(new AddressList_Impl);
+            pList = mpCcList.get();
         }
         else if ( ROLE_BCC == eRole )
         {
             if ( !mpBccList )
                 // create the list
-                mpBccList = new AddressList_Impl();
-            pList = mpBccList;
+                mpBccList.reset(new AddressList_Impl);
+            pList = mpBccList.get();
         }
         else
         {
