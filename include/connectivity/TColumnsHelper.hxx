@@ -33,7 +33,7 @@ namespace connectivity
     */
     class OOO_DLLPUBLIC_DBTOOLS OColumnsHelper : public sdbcx::OCollection
     {
-        OColumnsHelperImpl* m_pImpl;
+        std::unique_ptr<OColumnsHelperImpl> m_pImpl;
     protected:
         OTableHelper*   m_pTable;
 

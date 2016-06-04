@@ -64,15 +64,12 @@ OColumnsHelper::OColumnsHelper( ::cppu::OWeakObject& _rParent
                                 ,const TStringVector &_rVector
                                 ,bool _bUseHardRef
             ) : OCollection(_rParent,_bCase,_rMutex,_rVector,false,_bUseHardRef)
-    ,m_pImpl(nullptr)
     ,m_pTable(nullptr)
 {
 }
 
 OColumnsHelper::~OColumnsHelper()
 {
-    delete m_pImpl;
-    m_pImpl = nullptr;
 }
 
 
@@ -82,7 +79,7 @@ sdbcx::ObjectType OColumnsHelper::createObject(const OUString& _rName)
     Reference<XConnection> xConnection = m_pTable->getConnection();
 
     if ( !m_pImpl )
-        m_pImpl = new OColumnsHelperImpl(isCaseSensitive());
+        m_pImpl.reset(new OColumnsHelperImpl(isCaseSensitive()));
 
     bool bQueryInfo     = true;
     bool bAutoIncrement = false;
