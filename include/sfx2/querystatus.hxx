@@ -30,6 +30,7 @@
 #include <com/sun/star/frame/XStatusListener.hpp>
 
 #include <sfx2/sfxuno.hxx>
+#include <rtl/ref.hxx>
 
 class SfxQueryStatus_Impl;
 class SFX2_DLLPUBLIC SfxQueryStatus
@@ -45,8 +46,7 @@ class SFX2_DLLPUBLIC SfxQueryStatus
         SfxQueryStatus( const SfxQueryStatus& ) = delete;
         SfxQueryStatus& operator=( const SfxQueryStatus& ) = delete;
 
-        css::uno::Reference< css::frame::XStatusListener >   m_xStatusListener;
-        SfxQueryStatus_Impl*                                 m_pSfxQueryStatusImpl;
+        rtl::Reference< SfxQueryStatus_Impl >   m_pImpl;
 };
 
 #endif // INCLUDED_SFX2_QUERYSTATUS_HXX
