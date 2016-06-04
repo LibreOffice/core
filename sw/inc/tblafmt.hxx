@@ -110,6 +110,8 @@ class SwBoxAutoFormat
     OUString            m_sNumFormatString;
     LanguageType        m_eSysLanguage, m_eNumFormatLanguage;
 
+    css::uno::WeakReference<css::uno::XInterface> m_wXObject;
+
 public:
     SwBoxAutoFormat();
     SwBoxAutoFormat( const SwBoxAutoFormat& rNew );
@@ -175,6 +177,11 @@ public:
     void SetBackground( const SvxBrushItem& rNew )      { m_aBackground = rNew; }
     void SetValueFormat( const OUString& rFormat, LanguageType eLng, LanguageType eSys )
         { m_sNumFormatString = rFormat; m_eNumFormatLanguage = eLng; m_eSysLanguage = eSys; }
+
+    css::uno::WeakReference<css::uno::XInterface> const& GetXObject() const
+        { return m_wXObject; }
+    void SetXObject(css::uno::Reference<css::uno::XInterface> const& xObject)
+        { m_wXObject = xObject; }
 
     bool Load( SvStream& rStream, const SwAfVersions& rVersions, sal_uInt16 nVer );
     bool Save( SvStream& rStream, sal_uInt16 fileVersion ) const;
@@ -300,6 +307,11 @@ public:
         { return m_wXObject; }
     void SetXObject(css::uno::Reference<css::uno::XInterface> const& xObject)
         { m_wXObject = xObject; }
+
+    /// Returns the cell's name postfix. eg. ".1"
+    OUString GetTableTemplateCellSubName(const SwBoxAutoFormat& rBoxFormat) const;
+    /// Returns a vector of indexes in aBoxAutoFormat array. Returned indexes points to cells which are mapped to a table-template.
+    static const std::vector<sal_Int32>& GetTableTemplateMap();
 };
 
 class SW_DLLPUBLIC SwTableAutoFormatTable
