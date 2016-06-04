@@ -1029,6 +1029,47 @@ bool SwTableAutoFormat::Save( SvStream& rStream, sal_uInt16 fileVersion ) const
     return bRet;
 }
 
+OUString SwTableAutoFormat::GetTableTemplateCellSubName(const SwBoxAutoFormat& rBoxFormat) const
+{
+    sal_Int32 nIndex = 0;
+    for (; nIndex < 16; ++nIndex)
+        if (aBoxAutoFormat[nIndex] == &rBoxFormat) break;
+
+    // box format doesn't belong to this table format
+    if (16 <= nIndex)
+        return OUString();
+
+    const std::vector<sal_Int32> aTableTemplateMap = GetTableTemplateMap();
+    for (sal_uInt32 i=0; i < aTableTemplateMap.size(); ++i)
+    {
+        if (aTableTemplateMap[i] == nIndex)
+            return OUString(".") + OUString::number(i + 1);
+    }
+
+    // box format doesn't belong to a table template
+    return OUString();
+}
+
+const std::vector<sal_Int32>& SwTableAutoFormat::GetTableTemplateMap()
+{
+    static std::vector<sal_Int32>* pTableTemplateMap;
+    if (!pTableTemplateMap)
+    {
+        pTableTemplateMap = new std::vector<sal_Int32>;
+        pTableTemplateMap->push_back(0); // FIRST_ROW
+        pTableTemplateMap->push_back(1); // LAST_ROW
+        pTableTemplateMap->push_back(2); // FIRST_COLUMN
+        pTableTemplateMap->push_back(3); // LAST_COLUMN
+        pTableTemplateMap->push_back(4); // EVEN_ROWS
+        pTableTemplateMap->push_back(5); // ODD_ROWS
+        pTableTemplateMap->push_back(6); // EVEN_COLUMNS
+        pTableTemplateMap->push_back(7); // ODD_COLUMNS
+        pTableTemplateMap->push_back(8); // BODY
+        pTableTemplateMap->push_back(9); // BACKGROUND
+    }
+    return *pTableTemplateMap;
+}
+
 struct SwTableAutoFormatTable::Impl
 {
     std::vector<std::unique_ptr<SwTableAutoFormat>> m_AutoFormats;

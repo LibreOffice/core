@@ -315,9 +315,11 @@ class SwXTextCellStyle : public cppu::WeakImplHelper
     css::beans::XPropertySet
 >
 {
+    SwDocShell* m_pDocShell;
     SwBoxAutoFormat& m_rBoxAutoFormat;
+    OUString m_sParentStyle;
 public:
-    SwXTextCellStyle(SwBoxAutoFormat& rBoxAutoFormat);
+    SwXTextCellStyle(SwDocShell* pDocShell, SwBoxAutoFormat& rBoxAutoFormat, const OUString& sParentStyle);
 
     //XStyle
     virtual sal_Bool SAL_CALL isUserDefined() throw (css::uno::RuntimeException, std::exception) override;
@@ -338,6 +340,7 @@ public:
     virtual void SAL_CALL addVetoableChangeListener(const OUString& PropertyName, const css::uno::Reference<css::beans::XVetoableChangeListener>& aListener) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL removeVetoableChangeListener(const OUString& PropertyName, const css::uno::Reference<css::beans::XVetoableChangeListener>& aListener) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
 
+    static css::uno::Reference<css::style::XStyle> CreateXTextCellStyle(SwDocShell* pDocShell, OUString sName);
 };
 #endif
 
