@@ -64,7 +64,7 @@ namespace basegfx
 
 class SFX2_DLLPUBLIC SfxViewFrame: public SfxShell, public SfxListener
 {
-    struct SfxViewFrame_Impl*   m_pImp;
+    std::unique_ptr<struct SfxViewFrame_Impl>   m_pImpl;
 
     SfxObjectShellRef           m_xObjSh;
     SfxDispatcher*              m_pDispatcher;

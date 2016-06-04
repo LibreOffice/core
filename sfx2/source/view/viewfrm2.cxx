@@ -116,7 +116,7 @@ void SfxViewFrame::UpdateTitle()
 {
 
     const SfxObjectFactory &rFact = GetObjectShell()->GetFactory();
-    m_pImp->aFactoryName = OUString::createFromAscii(rFact.GetShortName());
+    m_pImpl->aFactoryName = OUString::createFromAscii(rFact.GetShortName());
 
     SfxObjectShell *pObjSh = GetObjectShell();
     if ( !pObjSh )
@@ -132,16 +132,16 @@ void SfxViewFrame::UpdateTitle()
         aURL = aTmp.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
     }
 
-    if ( aURL != m_pImp->aActualURL )
+    if ( aURL != m_pImpl->aActualURL )
         // URL has changed
-        m_pImp->aActualURL = aURL;
+        m_pImpl->aActualURL = aURL;
 
     // SbxObjects name
     OUString aSbxName = pObjSh->SfxShell::GetName();
     if ( IsVisible() )
     {
         aSbxName += ":";
-        aSbxName += OUString::number(m_pImp->nDocViewNo);
+        aSbxName += OUString::number(m_pImpl->nDocViewNo);
     }
 
     SetName( aSbxName );
@@ -204,8 +204,8 @@ void SfxViewFrame::Exec_Impl(SfxRequest &rReq )
             OUString aFactName;
             if ( pFactoryItem )
                 aFactName = pFactoryItem->GetValue();
-            else if ( !m_pImp->aFactoryName.isEmpty() )
-                aFactName = m_pImp->aFactoryName;
+            else if ( !m_pImpl->aFactoryName.isEmpty() )
+                aFactName = m_pImpl->aFactoryName;
             else
             {
                 OSL_FAIL("Missing argument!");
@@ -291,10 +291,10 @@ void SfxViewFrame::GetState_Impl( SfxItemSet &rSet )
             {
             case SID_NEWDOCDIRECT :
             {
-                if ( !m_pImp->aFactoryName.isEmpty() )
+                if ( !m_pImpl->aFactoryName.isEmpty() )
                 {
                     OUString aFact("private:factory/");
-                    aFact += m_pImp->aFactoryName;
+                    aFact += m_pImpl->aFactoryName;
                     rSet.Put( SfxStringItem( nWhich, aFact ) );
                 }
                 break;
@@ -385,7 +385,7 @@ void SfxViewFrame::Activate( bool bMDI )
 {
     DBG_ASSERT(GetViewShell(), "No Shell");
     if ( bMDI )
-        m_pImp->bActive = true;
+        m_pImpl->bActive = true;
 //(mba): here maybe as in Beanframe NotifyEvent ?!
 }
 
@@ -393,7 +393,7 @@ void SfxViewFrame::Deactivate( bool bMDI )
 {
     DBG_ASSERT(GetViewShell(), "No Shell");
     if ( bMDI )
-        m_pImp->bActive = false;
+        m_pImpl->bActive = false;
 //(mba): here maybe as in Beanframe NotifyEvent ?!
 }
 
