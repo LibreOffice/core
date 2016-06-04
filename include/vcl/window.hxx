@@ -538,7 +538,7 @@ private:
     //       Please do *not* add new members or inline functions to class Window,
     //       but use class WindowImpl instead
 
-    WindowImpl* mpWindowImpl;
+    std::unique_ptr<WindowImpl> mpWindowImpl;
 
 #ifdef DBG_UTIL
     friend const char* ::ImplDbgCheckWindow( const void* pObj );
@@ -580,7 +580,7 @@ public:
 
     SAL_DLLPRIVATE void                 ImplIsInTaskPaneList( bool mbIsInTaskList );
 
-    SAL_DLLPRIVATE WindowImpl*          ImplGetWindowImpl() const { return mpWindowImpl; }
+    SAL_DLLPRIVATE WindowImpl*          ImplGetWindowImpl() const { return mpWindowImpl.get(); }
 
     SAL_DLLPRIVATE Point                ImplFrameToOutput( const Point& rPos );
 
