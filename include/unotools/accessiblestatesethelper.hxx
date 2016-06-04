@@ -144,7 +144,7 @@ protected:
 
 private:
     /// The implementation of this helper interface.
-    AccessibleStateSetHelperImpl*   mpHelperImpl;
+    std::unique_ptr<AccessibleStateSetHelperImpl>   mpHelperImpl;
 };
 
 }
