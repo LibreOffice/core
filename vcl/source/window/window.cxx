@@ -550,7 +550,7 @@ void Window::dispose()
     }
 
     // should be the last statements
-    delete mpWindowImpl; mpWindowImpl = nullptr;
+    mpWindowImpl.reset();
 
     OutputDevice::dispose();
 }
