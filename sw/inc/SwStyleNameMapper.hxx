@@ -94,6 +94,7 @@ protected:
                             *m_pPageDescUINameArray,
                             *m_pNumRuleUINameArray,
                             *m_pTableStyleUINameArray,
+                            *m_pCellStyleUINameArray,
     // Programmatic Name tables
                             *m_pTextProgNameArray,
                             *m_pListsProgNameArray,
@@ -106,7 +107,8 @@ protected:
                             *m_pHTMLChrFormatProgNameArray,
                             *m_pPageDescProgNameArray,
                             *m_pNumRuleProgNameArray,
-                            *m_pTableStyleProgNameArray;
+                            *m_pTableStyleProgNameArray,
+                            *m_pCellStyleProgNameArray;
 
     static NameToIdHash     *m_pParaUIMap,
                             *m_pCharUIMap,
@@ -114,13 +116,15 @@ protected:
                             *m_pFrameUIMap,
                             *m_pNumRuleUIMap,
                             *m_pTableStyleUIMap,
+                            *m_pCellStyleUIMap,
 
                             *m_pParaProgMap,
                             *m_pCharProgMap,
                             *m_pPageProgMap,
                             *m_pFrameProgMap,
                             *m_pNumRuleProgMap,
-                            *m_pTableStyleProgMap;
+                            *m_pTableStyleProgMap,
+                            *m_pCellStyleProgMap;
 
     static void fillNameFromId(sal_uInt16 nId, OUString &rName, bool bProgName);
     static const OUString& getNameFromId(sal_uInt16 nId, const OUString &rName,
@@ -181,6 +185,7 @@ public:
     static const ::std::vector<OUString>& GetPageDescUINameArray();
     static const ::std::vector<OUString>& GetNumRuleUINameArray();
     static const ::std::vector<OUString>& GetTableStyleUINameArray();
+    static const ::std::vector<OUString>& GetCellStyleUINameArray();
 
     static const ::std::vector<OUString>& GetTextProgNameArray();
     static const ::std::vector<OUString>& GetListsProgNameArray();
@@ -194,6 +199,7 @@ public:
     static const ::std::vector<OUString>& GetPageDescProgNameArray();
     static const ::std::vector<OUString>& GetNumRuleProgNameArray();
     static const ::std::vector<OUString>& GetTableStyleProgNameArray();
+    static const ::std::vector<OUString>& GetCellStyleProgNameArray();
 };
 #endif // _NAME_MAPPER_HXX
 

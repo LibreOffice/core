@@ -30,8 +30,9 @@
 #define STR_STYLE_FAMILY_PAGE               (RC_UNOCORE_BEGIN + 6)
 #define STR_STYLE_FAMILY_NUMBERING          (RC_UNOCORE_BEGIN + 7)
 #define STR_STYLE_FAMILY_TABLE              (RC_UNOCORE_BEGIN + 8)
+#define STR_STYLE_FAMILY_CELL               (RC_UNOCORE_BEGIN + 9)
 
-#define UNOCORE_ACT_END                     STR_STYLE_FAMILY_TABLE
+#define UNOCORE_ACT_END                     STR_STYLE_FAMILY_CELL
 
 #if UNOCORE_ACT_END > RC_UNOCORE_END
 #error Resource-Id Ueberlauf in #file, #line

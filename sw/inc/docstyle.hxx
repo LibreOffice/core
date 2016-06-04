@@ -37,6 +37,7 @@ class SwTextFormatColl;
 class SwFrameFormat;
 class SwNumRule;
 class SwTableAutoFormat;
+class SwBoxAutoFormat;
 
 // Temporary StyleSheet.
 class SW_DLLPUBLIC SwDocStyleSheet : public SfxStyleSheetBase
@@ -50,6 +51,7 @@ class SW_DLLPUBLIC SwDocStyleSheet : public SfxStyleSheetBase
     const SwPageDesc*   pDesc;
     const SwNumRule*    pNumRule;
     const SwTableAutoFormat* pTableFormat;
+    const SwBoxAutoFormat*   pBoxFormat;
     SwDoc&              rDoc;
     SfxItemSet          aCoreSet;
 
