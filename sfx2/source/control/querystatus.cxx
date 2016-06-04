@@ -205,9 +205,9 @@ SfxItemState SfxQueryStatus_Impl::QueryState( SfxPoolItem*& rpPoolItem )
 
 
 SfxQueryStatus::SfxQueryStatus( const Reference< XDispatchProvider >& rDispatchProvider, sal_uInt16 nSlotId, const OUString& rCommand )
+    : m_pImpl(new SfxQueryStatus_Impl( rDispatchProvider, nSlotId, rCommand ))
 {
-    m_pSfxQueryStatusImpl = new SfxQueryStatus_Impl( rDispatchProvider, nSlotId, rCommand );
-    m_xStatusListener.set( static_cast< cppu::OWeakObject* >( m_pSfxQueryStatusImpl ),
+    m_xStatusListener.set( static_cast< cppu::OWeakObject* >( m_pImpl.get() ),
                            UNO_QUERY );
 }
 
@@ -218,7 +218,7 @@ SfxQueryStatus::~SfxQueryStatus()
 SfxItemState SfxQueryStatus::QueryState( SfxPoolItem*& rpPoolItem )
 {
     SolarMutexGuard aGuard;
-    return m_pSfxQueryStatusImpl->QueryState( rpPoolItem );
+    return m_pImpl->QueryState( rpPoolItem );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -46,7 +46,7 @@ class SFX2_DLLPUBLIC SfxQueryStatus
         SfxQueryStatus& operator=( const SfxQueryStatus& ) = delete;
 
         css::uno::Reference< css::frame::XStatusListener >   m_xStatusListener;
-        SfxQueryStatus_Impl*                                 m_pSfxQueryStatusImpl;
+        std::unique_ptr<SfxQueryStatus_Impl>                                 m_pImpl;
 };
 
 #endif // INCLUDED_SFX2_QUERYSTATUS_HXX
