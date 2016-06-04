@@ -1659,6 +1659,30 @@ void SwDocTest::testTableCellComparison()
     CPPUNIT_ASSERT_EQUAL( +1, sw_CompareCellRanges("A2", "Z2", "A1", "Z1", false) );
     CPPUNIT_ASSERT_EQUAL( +1, sw_CompareCellRanges("A2", "Z2", "A1", "Z1", true) );
     CPPUNIT_ASSERT_EQUAL( +1, sw_CompareCellRanges("A6", "Z2", "A1", "Z1", true) );
+
+    OUString rCell1 = OUString("A1");
+    OUString rCell2 = OUString("C5");
+
+    sw_NormalizeRange(rCell1, rCell2);
+    CPPUNIT_ASSERT_EQUAL( OUString("A1"), rCell1 );
+    CPPUNIT_ASSERT_EQUAL( OUString("C5"), rCell2 );
+
+    sw_NormalizeRange(rCell2, rCell1);
+    CPPUNIT_ASSERT_EQUAL( OUString("C5"), rCell1 );
+    CPPUNIT_ASSERT_EQUAL( OUString("A1"), rCell2 );
+
+    rCell1 = OUString("A5");
+    rCell2 = OUString("C1");
+
+    sw_NormalizeRange(rCell1, rCell2);
+    CPPUNIT_ASSERT_EQUAL( OUString("A1"), rCell1 );
+    CPPUNIT_ASSERT_EQUAL( OUString("C5"), rCell2 );
+
+    sw_NormalizeRange(rCell2, rCell1);
+    CPPUNIT_ASSERT_EQUAL( OUString("C5"), rCell1 );
+    CPPUNIT_ASSERT_EQUAL( OUString("A1"), rCell2 );
+
+    CPPUNIT_ASSERT_EQUAL( OUString(), sw_GetCellName(-1, -1) );
 }
 
 void SwDocTest::setUp()
