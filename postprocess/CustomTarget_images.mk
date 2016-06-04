@@ -45,7 +45,6 @@ $(packimages_DIR)/%.zip : \
 			-l $(dir $(call gb_UIConfig_get_imagelist_target)) \
 			-l $(dir $(call gb_UIConfig_get_imagelist_target,modules/)) \
 			$(call gb_Helper_optional,DBCONNECTIVITY,$(if $(ENABLE_JAVA),-l $(SRCDIR)/connectivity/source/drivers/hsqldb)) \
-			$(call gb_Helper_optional,DBCONNECTIVITY,$(if $(ENABLE_FIREBIRD_SDBC),-l $(SRCDIR)/connectivity/source/drivers/firebird)) \
 			-s $< -o $@ \
 			$(if $(findstring s,$(MAKEFLAGS)),> /dev/null))
 
