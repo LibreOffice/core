@@ -60,6 +60,18 @@ class CheckTable(unittest.TestCase):
         xCursor = xText.createTextCursor()
         xText.insertTextContent(xCursor, xTable, False)
 
+        borderDistances = xTable.TableBorderDistances
+
+        self.assertEqual(97, borderDistances.TopDistance)
+        self.assertEqual(97, borderDistances.BottomDistance)
+        self.assertEqual(97, borderDistances.LeftDistance)
+        self.assertEqual(97, borderDistances.RightDistance)
+
+        self.assertEqual(True, borderDistances.IsTopDistanceValid)
+        self.assertEqual(True, borderDistances.IsBottomDistanceValid)
+        self.assertEqual(True, borderDistances.IsLeftDistanceValid)
+        self.assertEqual(True, borderDistances.IsRightDistanceValid)
+
         border = xTable.getPropertyValue("TableBorder")
 
         self.__test_borderAsserts(border.TopLine, border.IsTopLineValid)
@@ -230,6 +242,10 @@ class CheckTable(unittest.TestCase):
         xDoc.Text.insertTextContent(xCursor, xTable, False)
         self.assertEqual(3, xTable.Rows.Count)
         self.assertEqual(3, xTable.Columns.Count)
+        xTable.TableName = "foo"
+        self.assertEqual("foo", xTable.TableName)
+        xTable.TableTemplateName = "bar"
+        self.assertEqual("bar", xTable.TableTemplateName)
         # fill table
         self._fill_table(xTable)
         self._check_table(xTable)
@@ -492,6 +508,39 @@ class CheckTable(unittest.TestCase):
         self.assertEqual(xTable.getPropertyValue("TableTemplateName"), "other_style")
         xTable.setPropertyValue("TableTemplateName", "")
         self.assertEqual(xTable.getPropertyValue("TableTemplateName"), "")
+        xDoc.dispose()
+
+
+    def test_unoNames(self):
+        xDoc = CheckTable._uno.openEmptyWriterDoc()
+        xTable = xDoc.createInstance("com.sun.star.text.TextTable")
+        xTable.initialize(3, 3)
+        xText = xDoc.getText()
+        xCursor = xText.createTextCursor()
+        xText.insertTextContent(xCursor, xTable, False)
+
+        self.assertEqual("SwXTextTable", xTable.ImplementationName)
+        self.assertEqual(("com.sun.star.document.LinkTarget",
+                          "com.sun.star.text.TextTable",
+                          "com.sun.star.text.TextContent",
+                          "com.sun.star.text.TextSortable"), xTable.SupportedServiceNames)
+        self.assertEqual(b'', xTable.ImplementationId.value)
+
+        xCell = xTable.getCellByPosition(1, 1)
+        self.assertEqual("SwXCell", xCell.ImplementationName)
+        self.assertEqual(("com.sun.star.text.CellProperties",), xCell.SupportedServiceNames)
+        self.assertEqual(b'', xCell.ImplementationId.value)
+
+        xRow = xTable.Rows[0]
+        self.assertEqual("SwXTextTableRow", xRow.ImplementationName)
+        self.assertEqual(("com.sun.star.text.TextTableRow",), xRow.SupportedServiceNames)
+        self.assertEqual(b'', xRow.ImplementationId.value)
+
+        xTableCursor = xTable.createCursorByCellName("A1")
+        self.assertEqual("SwXTextTableCursor", xTableCursor.ImplementationName)
+        self.assertEqual(("com.sun.star.text.TextTableCursor",), xTableCursor.SupportedServiceNames)
+        self.assertEqual(b'', xTableCursor.ImplementationId.value)
+
         xDoc.dispose()
 
 if __name__ == '__main__':
