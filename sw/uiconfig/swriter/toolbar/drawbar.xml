@@ -22,10 +22,11 @@
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:Line" toolbar:helpid="10102"/>
  <toolbar:toolbaritem xlink:href=".uno:LineToolbox"/>
+ <toolbar:toolbaritem xlink:href=".uno:Freeline_Unfilled" toolbar:helpid="10464" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:Freeline" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:Bezier_Unfilled" toolbar:helpid="10397" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:Bezier_Unfilled" toolbar:helpid="10397"/>
  <toolbar:toolbaritem xlink:href=".uno:BezierFill" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:Polygon_Unfilled" toolbar:helpid="10395" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:Polygon_Unfilled" toolbar:helpid="10395"/>
  <toolbar:toolbaritem xlink:href=".uno:Polygon_Diagonal_Unfilled" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:Polygon_Diagonal" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
