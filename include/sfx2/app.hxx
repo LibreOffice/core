@@ -107,7 +107,7 @@ class SfxObjectShellLock;
 
 class SFX2_DLLPUBLIC SfxApplication: public SfxShell
 {
-    SfxAppData_Impl*            pAppData_Impl;
+    std::unique_ptr<SfxAppData_Impl>            pImpl;
 
     DECL_DLLPRIVATE_LINK_TYPED( GlobalBasicErrorHdl_Impl, StarBASIC*, bool );
 
@@ -183,7 +183,7 @@ public:
     SAL_DLLPRIVATE void         SetOptions_Impl(const SfxItemSet &);
     SAL_DLLPRIVATE void         Initialize_Impl();
 
-    SAL_DLLPRIVATE SfxAppData_Impl* Get_Impl() const { return pAppData_Impl; }
+    SAL_DLLPRIVATE SfxAppData_Impl* Get_Impl() const { return pImpl.get(); }
 
     // Object-Factories/global arrays
     SAL_DLLPRIVATE void         RegisterChildWindow_Impl(SfxModule*, SfxChildWinFactory*);
