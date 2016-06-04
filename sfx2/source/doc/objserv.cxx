@@ -548,7 +548,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 
             // by default versions should be preserved always except in case of an explicit
             // SaveAs via GUI, so the flag must be set accordingly
-            pImp->bPreserveVersions = (nId == SID_SAVEDOC);
+            pImpl->bPreserveVersions = (nId == SID_SAVEDOC);
             try
             {
                 SfxErrorContext aEc( ERRCTX_SFX_SAVEASDOC, GetTitle() ); // ???
@@ -688,7 +688,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 
             // by default versions should be preserved always except in case of an explicit
             // SaveAs via GUI, so the flag must be reset to guarantee this
-            pImp->bPreserveVersions = true;
+            pImpl->bPreserveVersions = true;
             sal_uIntPtr lErr=GetErrorCode();
 
             if ( !lErr && nErrorCode )
@@ -1008,7 +1008,7 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
                 break;
 
             case SID_DOCINFO:
-                if ( pImp->eFlags & SfxObjectShellFlags::NODOCINFO )
+                if ( pImpl->eFlags & SfxObjectShellFlags::NODOCINFO )
                     rSet.DisableItem( nWhich );
                 break;
 
@@ -1034,7 +1034,7 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
 
             case SID_SAVEASDOC:
             {
-                if( !( pImp->nLoadedFlags & SfxLoadedFlags::MAINDOCUMENT ) )
+                if( !( pImpl->nLoadedFlags & SfxLoadedFlags::MAINDOCUMENT ) )
                 {
                     rSet.DisableItem( nWhich );
                     break;
@@ -1048,7 +1048,7 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
 
             case SID_SAVEACOPY:
             {
-                if( !( pImp->nLoadedFlags & SfxLoadedFlags::MAINDOCUMENT ) )
+                if( !( pImpl->nLoadedFlags & SfxLoadedFlags::MAINDOCUMENT ) )
                 {
                     rSet.DisableItem( nWhich );
                     break;
@@ -1099,7 +1099,7 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
             case SID_MACRO_SIGNATURE:
             {
                 // the slot makes sense only if there is a macro in the document
-                if ( pImp->documentStorageHasMacros() || pImp->aMacroMode.hasMacroLibrary() )
+                if ( pImpl->documentStorageHasMacros() || pImpl->aMacroMode.hasMacroLibrary() )
                     rSet.Put( SfxUInt16Item( SID_MACRO_SIGNATURE, static_cast<sal_uInt16>(GetScriptingSignatureState()) ) );
                 else
                     rSet.DisableItem( nWhich );
@@ -1216,11 +1216,11 @@ void SfxObjectShell::StateProps_Impl(SfxItemSet &rSet)
             }
 
             case SID_DOC_LOADING:
-                rSet.Put( SfxBoolItem( nSID, ! ( pImp->nLoadedFlags & SfxLoadedFlags::MAINDOCUMENT ) ) );
+                rSet.Put( SfxBoolItem( nSID, ! ( pImpl->nLoadedFlags & SfxLoadedFlags::MAINDOCUMENT ) ) );
                 break;
 
             case SID_IMG_LOADING:
-                rSet.Put( SfxBoolItem( nSID, ! ( pImp->nLoadedFlags & SfxLoadedFlags::IMAGES ) ) );
+                rSet.Put( SfxBoolItem( nSID, ! ( pImpl->nLoadedFlags & SfxLoadedFlags::IMAGES ) ) );
                 break;
         }
     }
@@ -1328,7 +1328,7 @@ uno::Sequence< security::DocumentSignatureInformation > SfxObjectShell::ImplAnal
 
 SignatureState SfxObjectShell::ImplGetSignatureState( bool bScriptingContent )
 {
-    SignatureState* pState = bScriptingContent ? &pImp->nScriptingSignatureState : &pImp->nDocumentSignatureState;
+    SignatureState* pState = bScriptingContent ? &pImpl->nScriptingSignatureState : &pImpl->nDocumentSignatureState;
 
     if ( *pState == SignatureState::UNKNOWN )
     {
@@ -1367,7 +1367,7 @@ void SfxObjectShell::ImplSign( bool bScriptingContent )
     // check whether the document is signed
     ImplGetSignatureState(); // document signature
     ImplGetSignatureState( true ); // script signature
-    bool bHasSign = ( pImp->nScriptingSignatureState != SignatureState::NOSIGNATURES || pImp->nDocumentSignatureState != SignatureState::NOSIGNATURES );
+    bool bHasSign = ( pImpl->nScriptingSignatureState != SignatureState::NOSIGNATURES || pImpl->nDocumentSignatureState != SignatureState::NOSIGNATURES );
 
     // the target ODF version on saving
     SvtSaveOptions aSaveOpt;
@@ -1454,27 +1454,27 @@ void SfxObjectShell::ImplSign( bool bScriptingContent )
         bool bSigned = GetMedium()->SignContents_Impl(
             bScriptingContent,
             aODFVersion,
-            pImp->nDocumentSignatureState == SignatureState::OK
-            || pImp->nDocumentSignatureState == SignatureState::NOTVALIDATED
-            || pImp->nDocumentSignatureState == SignatureState::PARTIAL_OK);
+            pImpl->nDocumentSignatureState == SignatureState::OK
+            || pImpl->nDocumentSignatureState == SignatureState::NOTVALIDATED
+            || pImpl->nDocumentSignatureState == SignatureState::PARTIAL_OK);
 
-        pImp->m_bSavingForSigning = true;
+        pImpl->m_bSavingForSigning = true;
         DoSaveCompleted( GetMedium() );
-        pImp->m_bSavingForSigning = false;
+        pImpl->m_bSavingForSigning = false;
 
         if ( bSigned )
         {
             if ( bScriptingContent )
             {
-                pImp->nScriptingSignatureState = SignatureState::UNKNOWN;// Re-Check
+                pImpl->nScriptingSignatureState = SignatureState::UNKNOWN;// Re-Check
 
                 // adding of scripting signature removes existing document signature
-                pImp->nDocumentSignatureState = SignatureState::UNKNOWN;// Re-Check
+                pImpl->nDocumentSignatureState = SignatureState::UNKNOWN;// Re-Check
             }
             else
-                pImp->nDocumentSignatureState = SignatureState::UNKNOWN;// Re-Check
+                pImpl->nDocumentSignatureState = SignatureState::UNKNOWN;// Re-Check
 
-            pImp->bSignatureErrorIsShown = false;
+            pImpl->bSignatureErrorIsShown = false;
 
             Invalidate( SID_SIGNATURE );
             Invalidate( SID_MACRO_SIGNATURE );
