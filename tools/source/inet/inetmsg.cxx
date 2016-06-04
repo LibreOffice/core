@@ -22,7 +22,6 @@
 #include <tools/datetime.hxx>
 #include <tools/inetmime.hxx>
 #include <tools/inetmsg.hxx>
-#include <tools/inetstrm.hxx>
 #include <tools/contnr.hxx>
 #include <rtl/instance.hxx>
 #include <comphelper/string.hxx>

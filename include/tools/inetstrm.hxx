@@ -21,7 +21,6 @@
 
 #include <tools/toolsdllapi.h>
 #include <sal/types.h>
-#include <rtl/ustring.hxx>
 
 class INetMIMEMessage;
 class SvMemoryStream;
