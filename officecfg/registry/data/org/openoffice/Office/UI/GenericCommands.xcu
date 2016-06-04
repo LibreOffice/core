@@ -5770,6 +5770,11 @@
           <value xml:lang="en-US">~Object</value>
         </prop>
       </node>
+      <node oor:name=".uno:ChartMenu" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">~Chart</value>
+        </prop>
+      </node>
       <node oor:name=".uno:EditMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Edit</value>
@@ -6037,6 +6042,16 @@
       <node oor:name=".uno:ClassificationApply" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Apply Document Classification</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:EditSelectMenu" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Select</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:EditPasteSpecialMenu" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Paste Special</value>
         </prop>
       </node>
     </node>
