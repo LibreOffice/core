@@ -31,7 +31,6 @@ class TOOLS_DLLPUBLIC INetMIMEMessageStream
     INetMIMEMessage *pSourceMsg;
     bool            bHeaderGenerated;
 
-    sal_uIntPtr           nBufSiz;
     sal_Char       *pBuffer;
     sal_Char       *pRead;
     sal_Char       *pWrite;

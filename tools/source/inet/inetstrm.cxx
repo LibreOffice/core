@@ -222,11 +222,17 @@ int INetMIMEMessageStream::GetMsgLine(sal_Char* pData, sal_uIntPtr nSize)
     }
 }
 
+namespace
+{
+
+const int BUFFER_SIZE = 2048;
+
+}
+
 INetMIMEMessageStream::INetMIMEMessageStream(
     INetMIMEMessage *pMsg, bool headerGenerated):
     pSourceMsg(pMsg),
     bHeaderGenerated(headerGenerated),
-    nBufSiz(2048),
     pMsgStrm(nullptr),
     pMsgBuffer(new SvMemoryStream),
     pMsgRead(nullptr),
@@ -237,7 +243,7 @@ INetMIMEMessageStream::INetMIMEMessageStream(
 {
     assert(pMsg != nullptr);
     pMsgBuffer->SetStreamCharSet(RTL_TEXTENCODING_ASCII_US);
-    pBuffer = new sal_Char[nBufSiz];
+    pBuffer = new sal_Char[BUFFER_SIZE];
     pRead = pWrite = pBuffer;
 }
 
@@ -271,7 +277,7 @@ int INetMIMEMessageStream::Read(sal_Char* pData, sal_uIntPtr nSize)
             pRead = pWrite = pBuffer;
 
             // Read next message line.
-            int nRead = GetMsgLine(pBuffer, nBufSiz);
+            int nRead = GetMsgLine(pBuffer, BUFFER_SIZE);
             if (nRead > 0)
             {
                 // Set read pointer.
