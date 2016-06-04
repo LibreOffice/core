@@ -148,7 +148,7 @@ friend class SfxBaseController;
 friend class SfxPrinterController;
 #endif
 
-    struct SfxViewShell_Impl*   pImp;
+    std::unique_ptr<struct SfxViewShell_Impl>   pImpl;
     SfxViewFrame*               pFrame;
     SfxShell*                   pSubShell;
     VclPtr<vcl::Window>         pWindow;

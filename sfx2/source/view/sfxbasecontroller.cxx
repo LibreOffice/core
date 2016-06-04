@@ -996,7 +996,7 @@ void SAL_CALL SfxBaseController::dispose() throw( RuntimeException, std::excepti
         if ( pFrame && pFrame->GetViewShell() == m_pData->m_pViewShell )
             pFrame->GetFrame().SetIsClosing_Impl();
         m_pData->m_pViewShell->DiscardClients_Impl();
-        m_pData->m_pViewShell->pImp->m_bControllerSet = false;
+        m_pData->m_pViewShell->pImpl->m_bControllerSet = false;
 
         if ( pFrame )
         {
