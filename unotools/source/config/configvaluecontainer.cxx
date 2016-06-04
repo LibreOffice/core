@@ -220,7 +220,6 @@ namespace utl
 
     OConfigurationValueContainer::~OConfigurationValueContainer()
     {
-        delete m_pImpl;
     }
 
     void OConfigurationValueContainer::implConstruct( const OUString& _rConfigLocation,
