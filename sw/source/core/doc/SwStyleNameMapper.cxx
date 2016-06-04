@@ -43,6 +43,7 @@ extern ResMgr* pSwResMgr;
                 *SwStyleNameMapper::m_pPageDescUINameArray = nullptr,
                 *SwStyleNameMapper::m_pNumRuleUINameArray = nullptr,
                 *SwStyleNameMapper::m_pTableStyleUINameArray = nullptr,
+                *SwStyleNameMapper::m_pCellStyleUINameArray = nullptr,
 
 // Initialise programmatic names to 0
                 *SwStyleNameMapper::m_pTextProgNameArray = nullptr,
@@ -56,7 +57,8 @@ extern ResMgr* pSwResMgr;
                 *SwStyleNameMapper::m_pHTMLChrFormatProgNameArray = nullptr,
                 *SwStyleNameMapper::m_pPageDescProgNameArray = nullptr,
                 *SwStyleNameMapper::m_pNumRuleProgNameArray = nullptr,
-                *SwStyleNameMapper::m_pTableStyleProgNameArray = nullptr;
+                *SwStyleNameMapper::m_pTableStyleProgNameArray = nullptr,
+                *SwStyleNameMapper::m_pCellStyleProgNameArray = nullptr;
 
 NameToIdHash    *SwStyleNameMapper::m_pParaUIMap = nullptr,
                 *SwStyleNameMapper::m_pCharUIMap = nullptr,
@@ -64,13 +66,15 @@ NameToIdHash    *SwStyleNameMapper::m_pParaUIMap = nullptr,
                 *SwStyleNameMapper::m_pFrameUIMap = nullptr,
                 *SwStyleNameMapper::m_pNumRuleUIMap = nullptr,
                 *SwStyleNameMapper::m_pTableStyleUIMap = nullptr,
+                *SwStyleNameMapper::m_pCellStyleUIMap = nullptr,
 
                 *SwStyleNameMapper::m_pParaProgMap = nullptr,
                 *SwStyleNameMapper::m_pCharProgMap = nullptr,
                 *SwStyleNameMapper::m_pPageProgMap = nullptr,
                 *SwStyleNameMapper::m_pFrameProgMap = nullptr,
                 *SwStyleNameMapper::m_pNumRuleProgMap = nullptr,
-                *SwStyleNameMapper::m_pTableStyleProgMap = nullptr;
+                *SwStyleNameMapper::m_pTableStyleProgMap = nullptr,
+                *SwStyleNameMapper::m_pCellStyleProgMap = nullptr;
 
 // SwTableEntry so we can pass the length to the String CTOR
 struct SwTableEntry
@@ -498,6 +502,12 @@ const NameToIdHash & SwStyleNameMapper::getHashTable ( SwGetPoolIdFromName eFlag
             vIndexes.push_back( std::make_tuple(RES_POOLTABSTYLE_BEGIN, RES_POOLTABSTYLE_END, bProgName ? &GetTableStyleProgNameArray : &GetTableStyleUINameArray) );
         }
         break;
+        case nsSwGetPoolIdFromName::GET_POOLID_CELLSTYLE:
+        {
+            pHashPointer = bProgName ? &m_pCellStyleProgMap : &m_pCellStyleUIMap;
+            vIndexes.push_back( std::make_tuple(RES_POOLCELLSTYLE_BEGIN, RES_POOLCELLSTYLE_END, bProgName ? &GetCellStyleProgNameArray : &GetCellStyleUINameArray) );
+        }
+        break;
         default:
             assert(false && "unknown pool family");
     }
@@ -855,6 +865,13 @@ const ::std::vector<OUString>& SwStyleNameMapper::GetTableStyleUINameArray()
     return *m_pTableStyleUINameArray;
 }
 
+const ::std::vector<OUString>& SwStyleNameMapper::GetCellStyleUINameArray()
+{
+    if (!m_pCellStyleUINameArray)
+        m_pCellStyleUINameArray = new std::vector<OUString>();
+    return *m_pCellStyleUINameArray;
+}
+
 const ::std::vector<OUString>& SwStyleNameMapper::GetTextProgNameArray()
 {
     if (!m_pTextProgNameArray)
@@ -949,6 +966,13 @@ const ::std::vector<OUString>& SwStyleNameMapper::GetTableStyleProgNameArray()
         m_pTableStyleProgNameArray = lcl_NewProgNameArray( TableStyleProgNameTable,
             sizeof ( TableStyleProgNameTable ) / sizeof ( SwTableEntry ) );
     return *m_pTableStyleProgNameArray;
+}
+/// retuns an empty array because Cell Names aren't translated
+const ::std::vector<OUString>& SwStyleNameMapper::GetCellStyleProgNameArray()
+{
+    if (!m_pCellStyleProgNameArray)
+        m_pCellStyleProgNameArray = new std::vector<OUString>();
+    return *m_pCellStyleProgNameArray;
 }
 
 const OUString

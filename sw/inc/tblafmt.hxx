@@ -300,6 +300,10 @@ public:
         { return m_wXObject; }
     void SetXObject(css::uno::Reference<css::uno::XInterface> const& xObject)
         { m_wXObject = xObject; }
+
+    OUString GetTableTemplateCellSubName(const SwBoxAutoFormat& rBoxFormat);
+    /// Returns a vector of indexes in aBoxAutoFormat array. Returned indexes points to cells which have to be mapped to a table-template.
+    static const std::vector<sal_Int32>& GetTableTemplateMap();
 };
 
 class SW_DLLPUBLIC SwTableAutoFormatTable

@@ -711,6 +711,14 @@ sal_Int32 lcl_GetCountOrName<SfxStyleFamily::Table>(const SwDoc& rDoc, OUString*
     return nCount;
 }
 
+template<>
+sal_Int32 lcl_GetCountOrName<SfxStyleFamily::Cell>(const SwDoc& rDoc, OUString* pString, sal_Int32 nIndex)
+{
+    const auto pAutoFormats = &rDoc.GetTableStyles();
+    const sal_Int32 nCount = pAutoFormats->size() * SwTableAutoFormat::GetTableTemplateMap().size();
+    return nCount;
+}
+
 template<SfxStyleFamily eFamily>
 static uno::Reference< css::style::XStyle> lcl_CreateStyle(SfxStyleSheetBasePool* pBasePool, SwDocShell* pDocShell, const OUString& sStyleName)
     { return pBasePool ? new SwXStyle(pBasePool, eFamily, pDocShell->GetDoc(), sStyleName) : new SwXStyle(pDocShell->GetDoc(), eFamily, false); };
@@ -777,6 +785,12 @@ sal_uInt16 lcl_TranslateIndex<SfxStyleFamily::Para>(const sal_uInt16 nIndex)
 
 template<>
 sal_uInt16 lcl_TranslateIndex<SfxStyleFamily::Table>(const sal_uInt16 nIndex)
+{
+    return nIndex;
+}
+
+template<>
+sal_uInt16 lcl_TranslateIndex<SfxStyleFamily::Cell>(const sal_uInt16 nIndex)
 {
     return nIndex;
 }
@@ -976,7 +990,8 @@ static const std::vector<StyleFamilyEntry>* lcl_GetStyleFamilyEntries()
             { SfxStyleFamily::Page,   PROPERTY_MAP_PAGE_STYLE,  nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC, "PageStyles",      STR_STYLE_FAMILY_PAGE,      &lcl_GetCountOrName<SfxStyleFamily::Page>,   &lcl_CreateStyle<SfxStyleFamily::Page>,   &lcl_TranslateIndexRange<RES_POOLPAGE_BEGIN,    nPoolPageRange>  },
             { SfxStyleFamily::Frame,  PROPERTY_MAP_FRAME_STYLE, nsSwGetPoolIdFromName::GET_POOLID_FRMFMT,   "FrameStyles",     STR_STYLE_FAMILY_FRAME,     &lcl_GetCountOrName<SfxStyleFamily::Frame>,  &lcl_CreateStyle<SfxStyleFamily::Frame>,  &lcl_TranslateIndexRange<RES_POOLFRM_BEGIN,     nPoolFrameRange> },
             { SfxStyleFamily::Pseudo, PROPERTY_MAP_NUM_STYLE,   nsSwGetPoolIdFromName::GET_POOLID_NUMRULE,  "NumberingStyles", STR_STYLE_FAMILY_NUMBERING, &lcl_GetCountOrName<SfxStyleFamily::Pseudo>, &lcl_CreateStyle<SfxStyleFamily::Pseudo>, &lcl_TranslateIndexRange<RES_POOLNUMRULE_BEGIN, nPoolNumRange>   },
-            { SfxStyleFamily::Table,  PROPERTY_MAP_TABLE_STYLE, nsSwGetPoolIdFromName::GET_POOLID_TABSTYLE, "TableStyles",     STR_STYLE_FAMILY_TABLE,     &lcl_GetCountOrName<SfxStyleFamily::Table>,  &lcl_CreateStyle<SfxStyleFamily::Table>,  &lcl_TranslateIndex<SfxStyleFamily::Table>                       }
+            { SfxStyleFamily::Table,  PROPERTY_MAP_TABLE_STYLE, nsSwGetPoolIdFromName::GET_POOLID_TABSTYLE, "TableStyles",     STR_STYLE_FAMILY_TABLE,     &lcl_GetCountOrName<SfxStyleFamily::Table>,  &lcl_CreateStyle<SfxStyleFamily::Table>,  &lcl_TranslateIndex<SfxStyleFamily::Table>                       },
+            { SfxStyleFamily::Cell,   PROPERTY_MAP_CELL_STYLE,  nsSwGetPoolIdFromName::GET_POOLID_CELLSTYLE,"CellStyles",      STR_STYLE_FAMILY_CELL,      &lcl_GetCountOrName<SfxStyleFamily::Cell>,   &lcl_CreateStyle<SfxStyleFamily::Cell>,   &lcl_TranslateIndex<SfxStyleFamily::Cell>                        }
        };
     }
     return our_pStyleFamilyEntries;
@@ -4245,17 +4260,13 @@ SwXTextTableStyle::SwXTextTableStyle(SwDocShell* pDocShell, const OUString& rTab
 
     if (pAutoFormat)
     {
-        // TODO fix styles mapping
-        m_aCellStyles[ FIRST_ROW_STYLE    ] = new SwXTextCellStyle(pAutoFormat->GetBoxFormat( 0 ));  // 0
-        m_aCellStyles[ LAST_ROW_STYLE     ] = new SwXTextCellStyle(pAutoFormat->GetBoxFormat( 12 )); // 1
-        m_aCellStyles[ FIRST_COLUMN_STYLE ] = new SwXTextCellStyle(pAutoFormat->GetBoxFormat( 4 ));  // 2
-        m_aCellStyles[ LAST_COLUMN_STYLE  ] = new SwXTextCellStyle(pAutoFormat->GetBoxFormat( 7 ));  // 3
-        m_aCellStyles[ EVEN_ROWS_STYLE    ] = new SwXTextCellStyle(pAutoFormat->GetBoxFormat( 13 )); // 4
-        m_aCellStyles[ ODD_ROWS_STYLE     ] = new SwXTextCellStyle(pAutoFormat->GetBoxFormat( 13 )); // 5
-        m_aCellStyles[ EVEN_COLUMNS_STYLE ] = new SwXTextCellStyle(pAutoFormat->GetBoxFormat( 13 )); // 6
-        m_aCellStyles[ ODD_COLUMNS_STYLE  ] = new SwXTextCellStyle(pAutoFormat->GetBoxFormat( 13 )); // 7
-        m_aCellStyles[ BODY_STYLE         ] = new SwXTextCellStyle(pAutoFormat->GetBoxFormat( 13 )); // 8
-        m_aCellStyles[ BACKGROUND_STYLE   ] = new SwXTextCellStyle(pAutoFormat->GetBoxFormat( 13 )); // 9
+        const std::vector<sal_Int32> aTableTemplateMap = SwTableAutoFormat::GetTableTemplateMap();
+        assert(aTableTemplateMap.size() == STYLE_COUNT && "can not map SwTableAutoFormat to a SwXTextTableStyle");
+        for (sal_Int32 i=0; i<STYLE_COUNT; ++i)
+        {
+            sal_Int32 nIndex = aTableTemplateMap[i];
+            m_aCellStyles[i] = new SwXTextCellStyle(m_pDocShell, pAutoFormat->GetBoxFormat(nIndex), m_sTableAutoFormatName);
+        }
     }
 }
 
@@ -4425,8 +4436,8 @@ css::uno::Sequence<OUString> SAL_CALL SwXTextTableStyle::getSupportedServiceName
 }
 
 // SwXTextCellStyle
-SwXTextCellStyle::SwXTextCellStyle(SwBoxAutoFormat& rBoxAutoFormat) :
-    m_rBoxAutoFormat(rBoxAutoFormat)
+SwXTextCellStyle::SwXTextCellStyle(SwDocShell* pDocShell, SwBoxAutoFormat& rBoxAutoFormat, OUString& sParentStyle) :
+    m_pDocShell(pDocShell), m_rBoxAutoFormat(rBoxAutoFormat), m_sParentStyle(sParentStyle)
 { }
 
 // XStyle
@@ -4442,16 +4453,24 @@ sal_Bool SAL_CALL SwXTextCellStyle::isInUse() throw (css::uno::RuntimeException,
 
 OUString SAL_CALL SwXTextCellStyle::getParentStyle() throw (css::uno::RuntimeException, std::exception)
 {
-    return OUString();
+    return m_sParentStyle;
 }
 
-void SAL_CALL SwXTextCellStyle::setParentStyle( const OUString& /*aParentStyle*/ ) throw (css::container::NoSuchElementException, css::uno::RuntimeException, std::exception)
-{ }
+void SAL_CALL SwXTextCellStyle::setParentStyle(const OUString& sParentStyle) throw (css::container::NoSuchElementException, css::uno::RuntimeException, std::exception)
+{
+    m_sParentStyle = sParentStyle;
+}
 
 //XNamed
 OUString SAL_CALL SwXTextCellStyle::getName() throw(css::uno::RuntimeException, std::exception)
 {
-    return OUString();
+    OUString sParentStyle;
+    SwStyleNameMapper::FillUIName(m_sParentStyle, sParentStyle, nsSwGetPoolIdFromName::GET_POOLID_TABSTYLE, true);
+    SwTableAutoFormat* pTableFormat = m_pDocShell->GetDoc()->GetTableStyles().FindAutoFormat(sParentStyle);
+    if (!pTableFormat)
+        return OUString();
+
+    return sParentStyle + pTableFormat->GetTableTemplateCellSubName(m_rBoxAutoFormat);
 }
 
 void SAL_CALL SwXTextCellStyle::setName(const OUString& /*rName*/) throw(css::uno::RuntimeException, std::exception)

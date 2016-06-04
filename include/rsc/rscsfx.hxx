@@ -38,6 +38,7 @@ enum class SfxStyleFamily {
     Page    = 0x08,
     Pseudo  = 0x10,
     Table   = 0x20,
+    Cell    = 0x40,
     All     = 0x7fff
 };
 

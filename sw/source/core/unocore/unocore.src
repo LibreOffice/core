@@ -59,4 +59,9 @@ String STR_STYLE_FAMILY_TABLE
     Text [ en-US ] = "Table" ;
 };
 
+String STR_STYLE_FAMILY_CELL
+{
+    Text [ en-US ] = "Cell" ;
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
