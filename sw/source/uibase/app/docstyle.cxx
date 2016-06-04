@@ -300,6 +300,26 @@ static const SwNumRule* lcl_FindNumRule(   SwDoc&  rDoc,
     return pRule;
 }
 
+static const SwTableAutoFormat* lcl_FindTableStyle(SwDoc& rDoc, const OUString& rName, SwDocStyleSheet *pStyle = nullptr)
+{
+    const SwTableAutoFormat* pFormat = nullptr;
+
+    if (!rName.isEmpty())
+        pFormat = rDoc.GetTableStyles().FindAutoFormat(rName);
+
+    if(pStyle)
+    {
+        if(pFormat)
+        {
+            pStyle->SetPhysical(true);
+            pStyle->PresetParent(OUString());
+        }
+        else
+            pStyle->SetPhysical(false);
+    }
+    return pFormat;
+}
+
 sal_uInt32 SwStyleSheetIterator::SwPoolFormatList::FindName(SfxStyleFamily eFam,
                                                          const OUString &rName)
 {
@@ -1919,6 +1939,11 @@ bool SwDocStyleSheet::FillStyleSheet(
 
         if( bDeleteInfo )
             pNumRule = nullptr;
+        break;
+
+    case SfxStyleFamily::Table:
+        pTableFormat = lcl_FindTableStyle(rDoc, aName, this);
+        bRet = bPhysical = (nullptr != pTableFormat);
         break;
         default:; //prevent warning
     }

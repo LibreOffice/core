@@ -317,7 +317,23 @@ const struct SwTableEntry NumRuleProgNameTable [] =
 
 const struct SwTableEntry TableStyleProgNameTable [] =
 {
-    ENTRY( "Default Style" ), // RES_POOLTABLESTYLE_DEFAULT
+    ENTRY( "Default Style" ),     // RES_POOLTABLESTYLE_DEFAULT
+    ENTRY( "3D" ),                // RES_POOLTABLESTYLE_3D
+    ENTRY( "Black 1" ),           // RES_POOLTABLESTYLE_BLACK1
+    ENTRY( "Black 2" ),           // RES_POOLTABLESTYLE_BLACK2
+    ENTRY( "Blue" ),              // RES_POOLTABLESTYLE_BLUE
+    ENTRY( "Brown" ),             // RES_POOLTABLESTYLE_BROWN
+    ENTRY( "Currency" ),          // RES_POOLTABLESTYLE_CURRENCY
+    ENTRY( "Currency 3D" ),       // RES_POOLTABLESTYLE_CURRENCY_3D
+    ENTRY( "Currency Gray" ),     // RES_POOLTABLESTYLE_CURRENCY_GRAY
+    ENTRY( "Currency Lavender" ), // RES_POOLTABLESTYLE_CURRENCY_LAVENDER
+    ENTRY( "Currency Turquoise" ),// RES_POOLTABLESTYLE_CURRENCY_TURQUOISE
+    ENTRY( "Gray" ),              // RES_POOLTABLESTYLE_GRAY
+    ENTRY( "Green" ),             // RES_POOLTABLESTYLE_GREEN
+    ENTRY( "Lavender" ),          // RES_POOLTABLESTYLE_LAVENDER
+    ENTRY( "Red" ),               // RES_POOLTABLESTYLE_RED
+    ENTRY( "Turquoise" ),         // RES_POOLTABLESTYLE_TURQUOISE
+    ENTRY( "Yellow" ),            // RES_POOLTABLESTYLE_YELLOW
     { 0, nullptr }
 };
 #undef ENTRY
