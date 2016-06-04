@@ -40,13 +40,13 @@ class TOOLS_DLLPUBLIC ZCodec
     bool            mbStatus;
     bool            mbFinish;
     sal_uInt8*      mpInBuf;
-    sal_uIntPtr     mnInBufSize;
-    sal_uIntPtr     mnInToRead;
+    size_t          mnInBufSize;
+    size_t          mnInToRead;
     SvStream*       mpOStm;
     sal_uInt8*      mpOutBuf;
-    sal_uIntPtr     mnOutBufSize;
+    size_t          mnOutBufSize;
 
-    sal_uIntPtr     mnCRC;
+    sal_uInt32      mnCRC;
     int             mnCompressLevel;
     bool            mbUpdateCrc;
     bool            mbGzLib;
@@ -55,7 +55,6 @@ class TOOLS_DLLPUBLIC ZCodec
     void            InitCompress();
     void            InitDecompress(SvStream & inStream);
     void            ImplWriteBack();
-
     void            UpdateCRC( sal_uInt8* pSource, long nDatSize );
 
 public:
@@ -69,14 +68,14 @@ public:
     long            Decompress( SvStream& rIStm, SvStream& rOStm );
     bool            AttemptDecompression( SvStream& rIStm, SvStream& rOStm );
 
-    void            Write( SvStream& rOStm, const sal_uInt8* pData, sal_uIntPtr nSize );
-    long            Read( SvStream& rIStm, sal_uInt8* pData, sal_uIntPtr nSize );
-    long            ReadAsynchron( SvStream& rIStm, sal_uInt8* pData, sal_uIntPtr nSize );
+    void            Write( SvStream& rOStm, const sal_uInt8* pData, sal_uInt32 nSize );
+    long            Read( SvStream& rIStm, sal_uInt8* pData, sal_uInt32 nSize );
+    long            ReadAsynchron( SvStream& rIStm, sal_uInt8* pData, sal_uInt32 nSize );
 
-    void            SetBreak( sal_uIntPtr );
-    sal_uIntPtr     GetBreak();
-    void            SetCRC( sal_uIntPtr nCurrentCRC );
-    sal_uIntPtr     GetCRC() { return mnCRC;}
+    void            SetBreak( size_t );
+    size_t          GetBreak();
+    void            SetCRC( sal_uInt32 nCurrentCRC );
+    sal_uInt32      GetCRC() { return mnCRC;}
 };
 
 #endif
