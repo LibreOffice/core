@@ -59,6 +59,7 @@
  <toolbar:toolbaritem xlink:href=".uno:SortDescending"/>
  <toolbar:toolbaritem xlink:href=".uno:DataFilterAutoFilter"/>
  <toolbar:toolbaritem xlink:href=".uno:DataFilterStandardFilter" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:DataFilterSpecialFilter" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:GoalSeekDialog" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:InsertGraphic"/>
