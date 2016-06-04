@@ -23,6 +23,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <osl/mutex.hxx>
 #include <o3tl/typed_flags_set.hxx>
+#include <memory>
 
 
 enum class CVCFlags
@@ -65,8 +66,7 @@ namespace utl
     class UNOTOOLS_DLLPUBLIC OConfigurationValueContainer
     {
     private:
-        OConfigurationValueContainerImpl*
-                    m_pImpl;
+        std::unique_ptr<OConfigurationValueContainerImpl> m_pImpl;
 
     protected:
 
