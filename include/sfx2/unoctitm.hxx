@@ -73,7 +73,7 @@ class SfxDispatchController_Impl;
 class SfxOfficeDispatch : public ::cppu::ImplInheritanceHelper1< SfxStatusDispatcher, css::lang::XUnoTunnel >
 {
 friend class SfxDispatchController_Impl;
-    SfxDispatchController_Impl*  pControllerItem;
+    std::unique_ptr<SfxDispatchController_Impl>  pImpl;
 public:
                                 SfxOfficeDispatch( SfxBindings& rBind,
                                                    SfxDispatcher* pDispat,
