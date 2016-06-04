@@ -136,7 +136,7 @@ protected:
 
 private:
     /// The implementation of this helper interface.
-    AccessibleRelationSetHelperImpl*    mpHelperImpl;
+    std::unique_ptr<AccessibleRelationSetHelperImpl>    mpHelperImpl;
 };
 
 }
