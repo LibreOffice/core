@@ -133,7 +133,7 @@ void ZCodec::Compress( SvStream& rIStm, SvStream& rOStm )
 long ZCodec::Decompress( SvStream& rIStm, SvStream& rOStm )
 {
     int err;
-    sal_uIntPtr nInToRead;
+    sal_uLong nInToRead;
     long    nOldTotal_Out = PZSTREAM->total_out;
 
     assert(meState == STATE_INIT);
@@ -167,7 +167,7 @@ long ZCodec::Decompress( SvStream& rIStm, SvStream& rOStm )
     return ( mbStatus ) ? (long)(PZSTREAM->total_out - nOldTotal_Out) : -1;
 }
 
-void ZCodec::Write( SvStream& rOStm, const sal_uInt8* pData, sal_uIntPtr nSize )
+void ZCodec::Write( SvStream& rOStm, const sal_uInt8* pData, sal_uInt64 nSize )
 {
     if (meState == STATE_INIT)
     {
@@ -192,10 +192,10 @@ void ZCodec::Write( SvStream& rOStm, const sal_uInt8* pData, sal_uIntPtr nSize )
     }
 }
 
-long ZCodec::Read( SvStream& rIStm, sal_uInt8* pData, sal_uIntPtr nSize )
+long ZCodec::Read( SvStream& rIStm, sal_uInt8* pData, sal_uInt64 nSize )
 {
     int err;
-    sal_uIntPtr nInToRead;
+    sal_uInt64 nInToRead;
 
     if ( mbFinish )
         return 0;           // PZSTREAM->total_out;
@@ -236,10 +236,10 @@ long ZCodec::Read( SvStream& rIStm, sal_uInt8* pData, sal_uIntPtr nSize )
     return (mbStatus ? (long)(nSize - PZSTREAM->avail_out) : -1);
 }
 
-long ZCodec::ReadAsynchron( SvStream& rIStm, sal_uInt8* pData, sal_uIntPtr nSize )
+long ZCodec::ReadAsynchron( SvStream& rIStm, sal_uInt8* pData, sal_uInt32 nSize )
 {
     int err = 0;
-    sal_uIntPtr nInToRead;
+    sal_uInt32 nInToRead;
 
     if ( mbFinish )
         return 0;           // PZSTREAM->total_out;
@@ -256,7 +256,7 @@ long ZCodec::ReadAsynchron( SvStream& rIStm, sal_uInt8* pData, sal_uIntPtr nSize
         {
             nInToRead = (mnInBufSize > mnInToRead) ? mnInToRead : mnInBufSize;
 
-            sal_uInt64 const nRemaining = rIStm.remainingSize();
+            sal_uInt32 const nRemaining = rIStm.remainingSize();
             if (nRemaining < nInToRead)
             {
                 rIStm.SetError( ERRCODE_IO_PENDING );
@@ -302,17 +302,17 @@ void ZCodec::ImplWriteBack()
     }
 }
 
-void ZCodec::SetBreak( sal_uIntPtr nInToRead )
+void ZCodec::SetBreak( sal_uLong nInToRead )
 {
     mnInToRead = nInToRead;
 }
 
-sal_uIntPtr ZCodec::GetBreak()
+sal_uLong ZCodec::GetBreak()
 {
     return ( mnInToRead + PZSTREAM->avail_in );
 }
 
-void ZCodec::SetCRC( sal_uIntPtr nCRC )
+void ZCodec::SetCRC( sal_uLong nCRC )
 {
     mnCRC = nCRC;
 }
