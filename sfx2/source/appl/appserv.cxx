@@ -276,7 +276,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
         case SID_LOGOUT:
         {
             // protect against reentrant calls
-            if ( pAppData_Impl->bInQuit )
+            if ( pImpl->bInQuit )
                 return;
 
             if ( rReq.GetSlot() == SID_LOGOUT )
@@ -299,7 +299,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
 
                 SfxStringItem aNameItem( SID_FILE_NAME, OUString("vnd.sun.star.cmd:logout") );
                 SfxStringItem aReferer( SID_REFERER, "private/user" );
-                pAppData_Impl->pAppDispat->ExecuteList(SID_OPENDOC,
+                pImpl->pAppDispat->ExecuteList(SID_OPENDOC,
                         SfxCallMode::SLOT, { &aNameItem, &aReferer });
                 return;
             }
@@ -318,16 +318,16 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             }
 
             // block reentrant calls
-            pAppData_Impl->bInQuit = true;
+            pImpl->bInQuit = true;
             Reference < XDesktop2 > xDesktop = Desktop::create ( ::comphelper::getProcessComponentContext() );
 
             rReq.ForgetAllArgs();
 
-            // if terminate() failed, pAppData_Impl->bInQuit will now be sal_False, allowing further calls of SID_QUITAPP
+            // if terminate() failed, pImpl->bInQuit will now be sal_False, allowing further calls of SID_QUITAPP
             bool bTerminated = xDesktop->terminate();
             if (!bTerminated)
                 // if terminate() was successful, SfxApplication is now dead!
-                pAppData_Impl->bInQuit = false;
+                pImpl->bInQuit = false;
 
             // Set return value, terminate if possible
             rReq.SetReturnValue( SfxBoolItem( rReq.GetSlot(), bTerminated ) );
@@ -570,9 +570,9 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             {
                 const SfxBoolItem * pItem = rReq.GetArg<SfxBoolItem>(SID_SHOW_IME_STATUS_WINDOW);
                 bool bShow = pItem == nullptr
-                    ? !pAppData_Impl->m_xImeStatusWindow->isShowing()
+                    ? !pImpl->m_xImeStatusWindow->isShowing()
                     : pItem->GetValue();
-                pAppData_Impl->m_xImeStatusWindow->show(bShow);
+                pImpl->m_xImeStatusWindow->show(bShow);
                 if (pItem == nullptr)
                     rReq.AppendItem(SfxBoolItem(SID_SHOW_IME_STATUS_WINDOW,
                                                 bShow));
@@ -705,7 +705,7 @@ void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
                     break;
                 case SID_QUITAPP:
                 {
-                    if ( pAppData_Impl->nDocModalMode )
+                    if ( pImpl->nDocModalMode )
                         rSet.DisableItem(nWhich);
                     else
                         rSet.Put(SfxStringItem(nWhich, SfxResId(STR_QUITAPP).toString()));
@@ -779,7 +779,7 @@ void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
                     if (sfx2::appl::ImeStatusWindow::canToggle())
                         rSet.Put(SfxBoolItem(
                                      SID_SHOW_IME_STATUS_WINDOW,
-                                     pAppData_Impl->m_xImeStatusWindow->
+                                     pImpl->m_xImeStatusWindow->
                                          isShowing()));
                     else
                         rSet.DisableItem(SID_SHOW_IME_STATUS_WINDOW);

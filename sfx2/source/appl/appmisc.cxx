@@ -116,7 +116,7 @@ void SfxApplication::InitInterface_Impl()
 */
 SfxProgress* SfxApplication::GetProgress() const
 {
-    return pAppData_Impl->pProgress;
+    return pImpl->pProgress;
 }
 
 SfxModule* SfxApplication::GetModule_Impl()
@@ -133,9 +133,9 @@ SfxModule* SfxApplication::GetModule_Impl()
     }
 }
 
-bool  SfxApplication::IsDowning() const { return pAppData_Impl->bDowning; }
-SfxDispatcher* SfxApplication::GetAppDispatcher_Impl() { return pAppData_Impl->pAppDispat; }
-SfxSlotPool& SfxApplication::GetAppSlotPool_Impl() const { return *pAppData_Impl->pSlotPool; }
+bool  SfxApplication::IsDowning() const { return pImpl->bDowning; }
+SfxDispatcher* SfxApplication::GetAppDispatcher_Impl() { return pImpl->pAppDispat; }
+SfxSlotPool& SfxApplication::GetAppSlotPool_Impl() const { return *pImpl->pSlotPool; }
 
 bool SfxApplication::loadBrandSvg(const char *pName, BitmapEx &rBitmap, int nWidth)
 {

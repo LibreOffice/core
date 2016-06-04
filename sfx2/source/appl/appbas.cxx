@@ -89,8 +89,8 @@ using ::basic::BasicManagerRepository;
 
 void SfxApplication::SaveBasicAndDialogContainer() const
 {
-    if ( pAppData_Impl->pBasicManager->isValid() )
-        pAppData_Impl->pBasicManager->storeAllLibraries();
+    if ( pImpl->pBasicManager->isValid() )
+        pImpl->pBasicManager->storeAllLibraries();
 }
 
 BasicManager* SfxApplication::GetBasicManager()
@@ -111,9 +111,9 @@ XLibraryContainer * SfxApplication::GetDialogContainer()
 #else
     if (utl::ConfigManager::IsAvoidConfig())
         return nullptr;
-    if ( !pAppData_Impl->pBasicManager->isValid() )
+    if ( !pImpl->pBasicManager->isValid() )
         GetBasicManager();
-    return pAppData_Impl->pBasicManager->getLibraryContainer( SfxBasicManagerHolder::DIALOGS );
+    return pImpl->pBasicManager->getLibraryContainer( SfxBasicManagerHolder::DIALOGS );
 #endif
 }
 
@@ -125,9 +125,9 @@ XLibraryContainer * SfxApplication::GetBasicContainer()
 #else
     if (utl::ConfigManager::IsAvoidConfig())
         return nullptr;
-    if ( !pAppData_Impl->pBasicManager->isValid() )
+    if ( !pImpl->pBasicManager->isValid() )
         GetBasicManager();
-    return pAppData_Impl->pBasicManager->getLibraryContainer( SfxBasicManagerHolder::SCRIPTS );
+    return pImpl->pBasicManager->getLibraryContainer( SfxBasicManagerHolder::SCRIPTS );
 #endif
 }
 
