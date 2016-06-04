@@ -161,24 +161,24 @@ sal_Int64 SAL_CALL SfxOfficeDispatch::getSomething( const css::uno::Sequence< sa
 }
 
 SfxOfficeDispatch::SfxOfficeDispatch( SfxBindings& rBindings, SfxDispatcher* pDispat, const SfxSlot* pSlot, const css::util::URL& rURL )
+    : pImpl( new SfxDispatchController_Impl( this, &rBindings, pDispat, pSlot, rURL ))
 {
-    // this object is an adapter that shows a css::frame::XDispatch-Interface to the outside and uses a SfxControllerItem to monitor a state
-    pControllerItem = new SfxDispatchController_Impl( this, &rBindings, pDispat, pSlot, rURL );
+    // pImpl is an adapter that shows a css::frame::XDispatch-Interface to the outside and uses a SfxControllerItem to monitor a state
+
 }
 
 SfxOfficeDispatch::SfxOfficeDispatch( SfxDispatcher* pDispat, const SfxSlot* pSlot, const css::util::URL& rURL )
+    : pImpl( new SfxDispatchController_Impl( this, nullptr, pDispat, pSlot, rURL ))
 {
-    // this object is an adapter that shows a css::frame::XDispatch-Interface to the outside and uses a SfxControllerItem to monitor a state
-    pControllerItem = new SfxDispatchController_Impl( this, nullptr, pDispat, pSlot, rURL );
+    // pImpl is an adapter that shows a css::frame::XDispatch-Interface to the outside and uses a SfxControllerItem to monitor a state
 }
 
 SfxOfficeDispatch::~SfxOfficeDispatch()
 {
-    if ( pControllerItem )
+    if ( pImpl )
     {
         // when dispatch object is released, destroy its connection to this object and destroy it
-        pControllerItem->UnBindController();
-        delete pControllerItem;
+        pImpl->UnBindController();
     }
 }
 
@@ -194,7 +194,7 @@ const css::uno::Sequence< sal_Int8 >& SfxOfficeDispatch::impl_getStaticIdentifie
 void SAL_CALL SfxOfficeDispatch::dispatch( const css::util::URL& aURL, const css::uno::Sequence< css::beans::PropertyValue >& aArgs ) throw ( css::uno::RuntimeException, std::exception )
 {
     // ControllerItem is the Impl class
-    if ( pControllerItem )
+    if ( pImpl )
     {
 #if HAVE_FEATURE_JAVA
         // The JavaContext contains an interaction handler which is used when
@@ -206,7 +206,7 @@ void SAL_CALL SfxOfficeDispatch::dispatch( const css::util::URL& aURL, const css
         css::uno::ContextLayer layer(
             new svt::JavaContext( css::uno::getCurrentContext() ) );
 #endif
-        pControllerItem->dispatch( aURL, aArgs, css::uno::Reference < css::frame::XDispatchResultListener >() );
+        pImpl->dispatch( aURL, aArgs, css::uno::Reference < css::frame::XDispatchResultListener >() );
     }
 }
 
@@ -215,41 +215,41 @@ void SAL_CALL SfxOfficeDispatch::dispatchWithNotification( const css::util::URL&
         const css::uno::Reference< css::frame::XDispatchResultListener >& rListener ) throw( css::uno::RuntimeException, std::exception )
 {
     // ControllerItem is the Impl class
-    if ( pControllerItem )
+    if ( pImpl )
     {
 #if HAVE_FEATURE_JAVA
         // see comment for SfxOfficeDispatch::dispatch
         css::uno::ContextLayer layer( new svt::JavaContext( css::uno::getCurrentContext() ) );
 #endif
-        pControllerItem->dispatch( aURL, aArgs, rListener );
+        pImpl->dispatch( aURL, aArgs, rListener );
     }
 }
 
 void SAL_CALL SfxOfficeDispatch::addStatusListener(const css::uno::Reference< css::frame::XStatusListener > & aListener, const css::util::URL& aURL) throw ( css::uno::RuntimeException, std::exception )
 {
     GetListeners().addInterface( aURL.Complete, aListener );
-    if ( pControllerItem )
+    if ( pImpl )
     {
         // ControllerItem is the Impl class
-        pControllerItem->addStatusListener( aListener, aURL );
+        pImpl->addStatusListener( aListener, aURL );
     }
 }
 
 SfxDispatcher* SfxOfficeDispatch::GetDispatcher_Impl()
 {
-    return pControllerItem->GetDispatcher();
+    return pImpl->GetDispatcher();
 }
 
 void SfxOfficeDispatch::SetFrame(const css::uno::Reference< css::frame::XFrame >& xFrame)
 {
-    if ( pControllerItem )
-        pControllerItem->SetFrame( xFrame );
+    if ( pImpl )
+        pImpl->SetFrame( xFrame );
 }
 
 void SfxOfficeDispatch::SetMasterUnoCommand( bool bSet )
 {
-    if ( pControllerItem )
-        pControllerItem->setMasterSlaveCommand( bSet );
+    if ( pImpl )
+        pImpl->setMasterSlaveCommand( bSet );
 }
 
 // Determine if URL contains a master/slave command which must be handled a little bit different
@@ -315,7 +315,7 @@ SfxDispatchController_Impl::~SfxDispatchController_Impl()
     if ( pDispatch )
     {
         // disconnect
-        pDispatch->pControllerItem = nullptr;
+        pDispatch->pImpl = nullptr;
 
         // force all listeners to release the dispatch object
         css::lang::EventObject aObject;
