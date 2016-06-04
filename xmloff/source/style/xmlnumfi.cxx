@@ -760,14 +760,18 @@ static bool lcl_ValidChar( sal_Unicode cChar, const SvXMLNumFormatContext& rPare
     }
 
     //  see ImpSvNumberformatScan::Next_Symbol
-    if ( cChar == ' ' ||
-         cChar == '-' ||
-         cChar == '/' ||
-         cChar == '.' ||
-         cChar == ',' ||
-         cChar == ':' ||
-         cChar == '\'' )
-        return true;    // for all format types
+    if ( cChar == '-' )
+        return true;   // all format types may content minus sign or delimiter
+    if ( ( cChar == ' ' ||
+           cChar == '/' ||
+           cChar == '.' ||
+           cChar == ',' ||
+           cChar == ':' ||
+           cChar == '\''   ) &&
+         ( nFormatType == XML_TOK_STYLES_CURRENCY_STYLE ||
+           nFormatType == XML_TOK_STYLES_DATE_STYLE ||
+           nFormatType == XML_TOK_STYLES_TIME_STYLE ) ) // other formats do not require delimiter tdf#97837
+        return true;
 
     //  percent sign must be used without quotes for percentage styles only
     if ( nFormatType == XML_TOK_STYLES_PERCENTAGE_STYLE && cChar == '%' )
