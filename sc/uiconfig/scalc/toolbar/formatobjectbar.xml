@@ -24,6 +24,8 @@
  <toolbar:toolbaritem xlink:href=".uno:CharFontName"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:FontHeight"/>
+ <toolbar:toolbaritem xlink:href=".uno:Grow" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:Shrink" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:Bold"/>
  <toolbar:toolbaritem xlink:href=".uno:Italic"/>
