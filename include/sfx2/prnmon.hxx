@@ -34,7 +34,7 @@ struct SfxPrintOptDlg_Impl;
 class SfxPrintOptionsDialog : public ModalDialog
 {
 private:
-    SfxPrintOptDlg_Impl*    pDlgImpl;
+    std::unique_ptr<SfxPrintOptDlg_Impl>   pDlgImpl;
     SfxViewShell*           pViewSh;
     SfxItemSet*             pOptions;
     VclPtr<SfxTabPage>      pPage;
