@@ -767,13 +767,16 @@ static bool lcl_ValidChar( sal_Unicode cChar, const SvXMLNumFormatContext& rPare
     }
 
     //  see ImpSvNumberformatScan::Next_Symbol
-    if ( cChar == ' ' ||
-         cChar == '-' ||
-         cChar == '/' ||
-         cChar == '.' ||
-         cChar == ',' ||
-         cChar == ':' ||
-         cChar == '\'' )
+    if ( ( cChar == ' ' ||
+           cChar == '-' ||
+           cChar == '/' ||
+           cChar == '.' ||
+           cChar == ',' ||
+           cChar == ':' ||
+           cChar == '\''   ) &&
+         ( nFormatType == XML_TOK_STYLES_CURRENCY_STYLE ||
+           nFormatType == XML_TOK_STYLES_DATE_STYLE ||
+           nFormatType == XML_TOK_STYLES_TIME_STYLE ) ) // other formats do not require delimiter tdf#97837
         return true;    // for all format types
 
     //  percent sign must be used without quotes for percentage styles only
