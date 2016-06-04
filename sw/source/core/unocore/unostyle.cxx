@@ -817,8 +817,8 @@ uno::Any XStyleFamily::getByName(const OUString& rName)
     SwStyleNameMapper::FillUIName(rName, sStyleName, m_rEntry.m_aPoolId, true);
     if(!m_pBasePool)
         throw uno::RuntimeException();
-    std::shared_ptr<SfxStyleSheetIterator> pIt = m_pBasePool->CreateIterator(m_rEntry.m_eFamily, SFXSTYLEBIT_ALL);
-    SfxStyleSheetBase* pBase = pIt->Find(sStyleName);
+    m_pBasePool->SetSearchMask(m_rEntry.m_eFamily);
+    SfxStyleSheetBase* pBase = m_pBasePool->Find(sStyleName);
     if(!pBase)
         throw container::NoSuchElementException();
     uno::Reference<style::XStyle> xStyle = FindStyle(sStyleName);
@@ -850,8 +850,8 @@ sal_Bool XStyleFamily::hasByName(const OUString& rName) throw( uno::RuntimeExcep
         throw uno::RuntimeException();
     OUString sStyleName;
     SwStyleNameMapper::FillUIName(rName, sStyleName, m_rEntry.m_aPoolId, true);
-    std::shared_ptr<SfxStyleSheetIterator> pIt = m_pBasePool->CreateIterator(m_rEntry.m_eFamily, SFXSTYLEBIT_ALL);
-    SfxStyleSheetBase* pBase = pIt->Find(sStyleName);
+    m_pBasePool->SetSearchMask(m_rEntry.m_eFamily);
+    SfxStyleSheetBase* pBase = m_pBasePool->Find(sStyleName);
     return nullptr != pBase;
 }
 
@@ -4345,6 +4345,8 @@ void SAL_CALL SwXTextTableStyle::setParentStyle(const OUString& /*aParentStyle*/
 //XNamed
 OUString SAL_CALL SwXTextTableStyle::getName() throw(uno::RuntimeException, std::exception)
 {
+    OUString sProgName;
+    SwStyleNameMapper::FillProgName(m_sTableAutoFormatName, sProgName, nsSwGetPoolIdFromName::GET_POOLID_TABSTYLE, true);
     return m_sTableAutoFormatName;
 }
 
