@@ -28,7 +28,6 @@
 #include <unotools/pathoptions.hxx>
 #include <sfx2/app.hxx>
 #include <svx/dialmgr.hxx>
-#include <svx/dialogs.hrc>
 #include <swtable.hxx>
 #include <swtblfmt.hxx>
 #include <com/sun/star/text/VertOrientation.hpp>
@@ -940,11 +939,12 @@ bool SwTableAutoFormat::Load( SvStream& rStream, const SwAfVersions& rVersions )
         if( AUTOFORMAT_DATA_ID_552 <= nVal )
         {
             rStream.ReadUInt16( nStrResId );
-            sal_uInt16 nId = RID_SVXSTR_TBLAFMT_BEGIN + nStrResId;
-            if( RID_SVXSTR_TBLAFMT_BEGIN <= nId &&
-                nId < RID_SVXSTR_TBLAFMT_END )
+            // start from 3d because default is added via constructor
+            sal_uInt16 nId = RES_POOLTABLESTYLE_3D + nStrResId;
+            if( RES_POOLTABLESTYLE_3D <= nId &&
+                nId < RES_POOLTABSTYLE_END )
             {
-                m_aName = SVX_RESSTR( nId );
+                m_aName = SwStyleNameMapper::GetUIName(nId, m_aName);
             }
             else
                 nStrResId = USHRT_MAX;
@@ -1095,7 +1095,7 @@ SwTableAutoFormatTable::SwTableAutoFormatTable()
 {
     OUString sNm;
     std::unique_ptr<SwTableAutoFormat> pNew(new SwTableAutoFormat(
-                SwStyleNameMapper::GetUIName(RES_POOLCOLL_STANDARD, sNm)));
+                SwStyleNameMapper::GetUIName(RES_POOLTABSTYLE_DEFAULT, sNm)));
 
     SwBoxAutoFormat aNew;
 

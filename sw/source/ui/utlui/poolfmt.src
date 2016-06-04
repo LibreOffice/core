@@ -765,5 +765,69 @@ String STR_TABSTYLE_DEFAULT
 {
     Text [ en-US ] = "Default Style";
 };
+String STR_TABSTYLE_3D
+{
+    Text [ en-US ] = "3D";
+};
+String STR_TABSTYLE_BLACK1
+{
+    Text [ en-US ] = "Black 1";
+};
+String STR_TABSTYLE_BLACK2
+{
+    Text [ en-US ] = "Black 2";
+};
+String STR_TABSTYLE_BLUE
+{
+    Text [ en-US ] = "Blue";
+};
+String STR_TABSTYLE_BROWN
+{
+    Text [ en-US ] = "Brown";
+};
+String STR_TABSTYLE_CURRENCY
+{
+    Text [ en-US ] = "Currency";
+};
+String STR_TABSTYLE_CURRENCY_3D
+{
+    Text [ en-US ] = "Currency 3D";
+};
+String STR_TABSTYLE_CURRENCY_GRAY
+{
+    Text [ en-US ] = "Currency Gray";
+};
+String STR_TABSTYLE_CURRENCY_LAVENDER
+{
+    Text [ en-US ] = "Currency Lavender";
+};
+String STR_TABSTYLE_CURRENCY_TURQUOISE
+{
+    Text [ en-US ] = "Currency Turquoise";
+};
+String STR_TABSTYLE_GRAY
+{
+    Text [ en-US ] = "Gray";
+};
+String STR_TABSTYLE_GREEN
+{
+    Text [ en-US ] = "Green";
+};
+String STR_TABSTYLE_LAVENDER
+{
+    Text [ en-US ] = "Lavender";
+};
+String STR_TABSTYLE_RED
+{
+    Text [ en-US ] = "Red";
+};
+String STR_TABSTYLE_TURQUOISE
+{
+    Text [ en-US ] = "Turquoise";
+};
+String STR_TABSTYLE_YELLOW
+{
+    Text [ en-US ] = "Yellow";
+};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
