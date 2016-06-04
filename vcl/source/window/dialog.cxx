@@ -362,7 +362,7 @@ void Dialog::ImplInitDialogData()
     mpContentArea.clear();
     mpActionArea.clear();
     mnMousePositioned       = 0;
-    mpDialogImpl            = new DialogImpl;
+    mpDialogImpl.reset(new DialogImpl);
 }
 
 void Dialog::ImplInit( vcl::Window* pParent, WinBits nStyle, InitFlag eFlag )
@@ -583,8 +583,7 @@ Dialog::~Dialog()
 
 void Dialog::dispose()
 {
-    delete mpDialogImpl;
-    mpDialogImpl = nullptr;
+    mpDialogImpl.reset();
     mpPrevExecuteDlg.clear();
     mpActionArea.clear();
     mpContentArea.clear();

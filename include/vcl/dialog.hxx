@@ -37,7 +37,7 @@ public:
 
 private:
     VclPtr<Dialog>  mpPrevExecuteDlg;
-    DialogImpl*     mpDialogImpl;
+    std::unique_ptr<DialogImpl>     mpDialogImpl;
     long            mnMousePositioned;
     bool            mbInExecute;
     bool            mbInClose;
