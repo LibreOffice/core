@@ -71,9 +71,9 @@ protected:
                                               OUString& rFileNamePath );
 
 private:
-    AddressList_Impl*   mpToList;
-    AddressList_Impl*   mpCcList;
-    AddressList_Impl*   mpBccList;
+    std::unique_ptr<AddressList_Impl>   mpToList;
+    std::unique_ptr<AddressList_Impl>   mpCcList;
+    std::unique_ptr<AddressList_Impl>   mpBccList;
     OUString            maFromAddress;
     OUString            maSubject;
 
