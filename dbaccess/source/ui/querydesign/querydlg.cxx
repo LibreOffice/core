@@ -122,8 +122,7 @@ DlgQryJoin::DlgQryJoin( OQueryTableView * pParent,
     }
     else
     {
-        const sal_Int32 nCount = m_pLB_JoinType->GetEntryCount();
-        for (sal_Int32 i = 0; i < nCount;)
+        for (sal_Int32 i = 0; i < m_pLB_JoinType->GetEntryCount();)
         {
             const sal_IntPtr nJoinTyp = reinterpret_cast<sal_IntPtr>(m_pLB_JoinType->GetEntryData(i));
             if ( !bSupportFullJoin && nJoinTyp == ID_FULL_JOIN )
