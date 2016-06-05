@@ -379,8 +379,6 @@ SdrObject::~SdrObject()
         delete mpViewContact;
         mpViewContact = nullptr;
     }
-
-    delete mpImpl;
 }
 
 void SdrObject::Free( SdrObject*& _rpObject )

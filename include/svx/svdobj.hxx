@@ -261,7 +261,7 @@ class SVX_DLLPUBLIC SdrObject: public SfxListener, public tools::WeakBase< SdrOb
 {
 private:
     struct Impl;
-    Impl* mpImpl;
+    std::unique_ptr<Impl> mpImpl;
 
     SdrObject( const SdrObject& ) = delete;
 
