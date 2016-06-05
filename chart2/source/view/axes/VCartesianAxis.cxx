@@ -497,20 +497,21 @@ bool VCartesianAxis::isBreakOfLabelsAllowed(
     //break only for horizontal axis
     return bIsHorizontalAxis;
 }
+namespace{
 
-bool VCartesianAxis::isAutoStaggeringOfLabelsAllowed(
-    const AxisLabelProperties& rAxisLabelProperties, bool bIsHorizontalAxis, bool bIsVerticalAxis )
+bool canAutoAdjustLabelPlacement(
+    const AxisLabelProperties& rAxisLabelProperties, bool bIsHorizontalAxis, bool bIsVerticalAxis)
 {
-    if( rAxisLabelProperties.eStaggering != STAGGER_AUTO )
-        return false;
+    // joined prerequisite checks for auto rotate and auto stagger
     if( rAxisLabelProperties.bOverlapAllowed )
         return false;
-    if( rAxisLabelProperties.bLineBreakAllowed ) //auto line break or auto staggering, doing both automatisms they may conflict...
+    if( rAxisLabelProperties.bLineBreakAllowed ) // auto line break may conflict with...
         return false;
     if( !::rtl::math::approxEqual( rAxisLabelProperties.fRotationAngleDegree, 0.0 ) )
         return false;
-    //automatic staggering only for horizontal axis with horizontal text
-    //or vertical axis with vertical text
+    // automatic adjusting labels only works for
+    // horizontal axis with horizontal text
+    // or vertical axis with vertical text
     if( bIsHorizontalAxis )
         return !rAxisLabelProperties.bStackCharacters;
     if( bIsVerticalAxis )
@@ -518,6 +519,18 @@ bool VCartesianAxis::isAutoStaggeringOfLabelsAllowed(
     return false;
 }
 
+bool isAutoStaggeringOfLabelsAllowed(
+    const AxisLabelProperties& rAxisLabelProperties, bool bIsHorizontalAxis, bool bIsVerticalAxis )
+{
+    if( rAxisLabelProperties.eStaggering != STAGGER_AUTO )
+        return false;
+    return canAutoAdjustLabelPlacement(rAxisLabelProperties, bIsHorizontalAxis, bIsVerticalAxis);
+}
+
+// make clear that we check for auto rotation prerequisites
+const auto& isAutoRotatingOfLabelsAllowed = canAutoAdjustLabelPlacement;
+
+} // namespace
 void VCartesianAxis::createAllTickInfosFromComplexCategories( TickInfoArraysType& rAllTickInfos, bool bShiftedPosition )
 {
     //no minor tickmarks will be generated!
@@ -827,7 +840,8 @@ bool VCartesianAxis::createTextShapes(
                 {
                     // Compatibility option: starting from LibreOffice 5.1 the rotated
                     // layout is preferred to staggering for axis labels.
-                    if( m_aAxisProperties.m_bTryStaggeringFirst || !(::rtl::math::approxEqual( rAxisLabelProperties.fRotationAngleDegree, 0.0 ) ) )
+                    if( !isAutoRotatingOfLabelsAllowed(rAxisLabelProperties, bIsHorizontalAxis, bIsVerticalAxis)
+                        || m_aAxisProperties.m_bTryStaggeringFirst )
                     {
                         bIsStaggered = true;
                         rAxisLabelProperties.eStaggering = STAGGER_EVEN;
@@ -844,10 +858,11 @@ bool VCartesianAxis::createTextShapes(
                 if (bOverlapsAfterAutoStagger)
                 {
                     // Staggering didn't solve the overlap.
-                    if( !rAxisLabelProperties.bOverlapAllowed && ::rtl::math::approxEqual( rAxisLabelProperties.fRotationAngleDegree, 0.0 ) )
+                    if( isAutoRotatingOfLabelsAllowed(rAxisLabelProperties, bIsHorizontalAxis, bIsVerticalAxis) )
                     {
-                        // Try auto-rotating the labels at 45 degrees and
-                        // start over.  This rotation angle will be stored for
+                        // Try auto-rotating the labels on horizontal axis
+                        // at 45 degrees and start over.
+                        // This rotation angle will be stored for
                         // all future text shape creation runs.
                         // The nRhythm parameter is reset to 1 since the layout
                         // used for text labels is changed.
@@ -986,10 +1001,11 @@ bool VCartesianAxis::createTextShapesSimple(
             if( doesOverlap( pLastVisibleNeighbourTickInfo->xTextShape, pTickInfo->xTextShape, rAxisLabelProperties.fRotationAngleDegree ) )
             {
                 // It overlaps.
-                if( !rAxisLabelProperties.bOverlapAllowed && ::rtl::math::approxEqual( rAxisLabelProperties.fRotationAngleDegree, 0.0 ) )
+                if( isAutoRotatingOfLabelsAllowed(rAxisLabelProperties, bIsHorizontalAxis, bIsVerticalAxis) )
                 {
-                    // Try auto-rotating the labels at 45 degrees and
-                    // start over.  This rotation angle will be stored for
+                    // Try auto-rotating the labels on horizontal axis
+                    // at 45 degrees and start over.
+                    // This rotation angle will be stored for
                     // all future text shape creation runs.
                     // The nRhythm parameter is reset to 1 since the layout
                     // used for text labels is changed.
