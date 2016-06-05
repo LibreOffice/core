@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_bc101c50",
+        "filename": "filter/source/msfilter/svdfppt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4460,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-06-05T11:14:41Z",
+      "side": 1,
+      "message": "I don\u0027t see any reason to add this operator ?",
+      "revId": "42655b54302ad57892d4987e5f41e22f2e6c77d0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

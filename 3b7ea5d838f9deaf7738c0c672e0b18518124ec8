@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_7c0e9435",
+        "filename": "filter/source/msfilter/svdfppt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4471,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-06-05T11:14:41Z",
+      "side": 0,
+      "message": "you discarded a bunch of field copying here",
+      "revId": "3b7ea5d838f9deaf7738c0c672e0b18518124ec8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
