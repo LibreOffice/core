@@ -559,6 +559,9 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
             ScopedVclPtrInstance< SfxTemplateSelectionDlg > aTemplDlg;
             aTemplDlg->Execute();
 
+            //check to disable the dialog
+            pOpt->SetStartWithTemplate( aTemplDlg->IsStartWithTemplate() );
+
             //pFrame is loaded with the desired template
             if(!aTemplDlg->getTemplatePath().isEmpty())
                 pFrame = CreateFromTemplate(aTemplDlg->getTemplatePath(), xTargetFrame);
