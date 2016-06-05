@@ -147,13 +147,6 @@ private: //methods
                             , TickFactory2D* pTickFactory2D );
 
     /**
-     * @return true if we can try to stagger labels in order to avoid
-     *         overlaps, otherwise false.
-     */
-    static bool isAutoStaggeringOfLabelsAllowed(
-        const AxisLabelProperties& rAxisLabelProperties, bool bIsHorizontalAxis, bool bIsVerticalAxis );
-
-    /**
      * @return true if we can break a single line label text into multiple
      *         lines for better fitting, otherwise false.
      */
