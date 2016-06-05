@@ -262,6 +262,7 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg(vcl::Window *parent)
 
     mpSearchFilter->SetUpdateDataHdl(LINK(this, SfxTemplateManagerDlg, SearchUpdateHdl));
     mpSearchFilter->EnableUpdateData();
+    mpSearchFilter->SetGetFocusHdl(LINK( this, SfxTemplateManagerDlg, GetFocusHdl ));
 
     SvtMiscOptions aMiscOptions;
     if ( !aMiscOptions.IsExperimentalMode() )
@@ -910,6 +911,12 @@ IMPL_LINK_NOARG_TYPED(SfxTemplateManagerDlg, SearchUpdateHdl, Edit&, void)
             mpLocalView->showRegion(sLastFolder);
         }
     }
+}
+
+IMPL_LINK_NOARG_TYPED(SfxTemplateManagerDlg, GetFocusHdl, Control&, void)
+{
+    mpCurView->deselectItems();
+    maSelTemplates.clear();
 }
 
 void SfxTemplateManagerDlg::OnTemplateState (const ThumbnailViewItem *pItem)
