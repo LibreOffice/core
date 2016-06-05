@@ -2150,6 +2150,10 @@ void SwCrsrShell::ShowCrsr()
         m_bSVCrsrVis = true;
         m_pCurCrsr->SetShowTextInputFieldOverlay( true );
 
+        UpdateCrsr();
+
+        // Update the cursor position before making visible.
+        // Otherwise, we make visible a cursor with invalid position.
         if (comphelper::LibreOfficeKit::isActive())
         {
             if (comphelper::LibreOfficeKit::isViewCallback())
@@ -2157,8 +2161,6 @@ void SwCrsrShell::ShowCrsr()
             else
                 libreOfficeKitCallback(LOK_CALLBACK_CURSOR_VISIBLE, OString::boolean(true).getStr());
         }
-
-        UpdateCrsr();
     }
 }
 
