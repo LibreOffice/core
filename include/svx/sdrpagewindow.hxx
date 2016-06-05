@@ -47,7 +47,7 @@ class SVX_DLLPUBLIC SdrPageWindow
 {
     struct Impl;
 
-    Impl* mpImpl;
+    std::unique_ptr<Impl> mpImpl;
 
     SdrPageWindow( const SdrPageWindow& ) = delete;
     SdrPageWindow& operator= ( const SdrPageWindow& ) = delete;
