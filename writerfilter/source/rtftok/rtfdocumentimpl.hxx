@@ -265,7 +265,8 @@ public:
     RTFFrame aFrame;
 
     /// Maps to OOXML's ascii, cs or eastAsia.
-    enum { LOCH, HICH, DBCH } eRunType;
+    enum class RunType { LOCH, HICH, DBCH };
+    RunType eRunType;
     /// ltrch or rtlch
     bool isRightToLeft;
 

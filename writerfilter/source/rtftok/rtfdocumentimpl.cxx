@@ -1099,7 +1099,7 @@ RTFError RTFDocumentImpl::resolveChars(char ch)
                 {
                     // fdo#79384: Word will reject Shift-JIS following \loch
                     // but apparently OOo could read and (worse) write such documents
-                    SAL_INFO_IF(m_aStates.top().eRunType != RTFParserState::DBCH, "writerfilter.rtf", "invalid Shift-JIS without DBCH");
+                    SAL_INFO_IF(m_aStates.top().eRunType != RTFParserState::RunType::DBCH, "writerfilter.rtf", "invalid Shift-JIS without DBCH");
                     assert(bUnicodeChecked);
                     aBuf.append(ch);
                 }
@@ -1674,11 +1674,13 @@ RTFError RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int n
     {
     case RTF_B:
     case RTF_AB:
-        nSprm = (m_aStates.top().isRightToLeft || m_aStates.top().eRunType == RTFParserState::HICH) ? NS_ooxml::LN_EG_RPrBase_bCs : NS_ooxml::LN_EG_RPrBase_b;
+        nSprm =   (m_aStates.top().isRightToLeft || m_aStates.top().eRunType == RTFParserState::RunType::HICH)
+                ? NS_ooxml::LN_EG_RPrBase_bCs : NS_ooxml::LN_EG_RPrBase_b;
         break;
     case RTF_I:
     case RTF_AI:
-        nSprm = (m_aStates.top().isRightToLeft || m_aStates.top().eRunType == RTFParserState::HICH) ? NS_ooxml::LN_EG_RPrBase_iCs : NS_ooxml::LN_EG_RPrBase_i;
+        nSprm =   (m_aStates.top().isRightToLeft || m_aStates.top().eRunType == RTFParserState::RunType::HICH)
+                ? NS_ooxml::LN_EG_RPrBase_iCs : NS_ooxml::LN_EG_RPrBase_i;
         break;
     case RTF_OUTL:
         nSprm = NS_ooxml::LN_EG_RPrBase_outline;
@@ -1762,7 +1764,7 @@ RTFError RTFDocumentImpl::pushState()
     else
     {
         // fdo#85812 group resets run type of _current_ and new state (but not RTL)
-        m_aStates.top().eRunType = RTFParserState::LOCH;
+        m_aStates.top().eRunType = RTFParserState::RunType::LOCH;
 
         if (m_aStates.top().eDestination == Destination::MR)
             lcl_DestinationToMath(*m_aStates.top().pDestinationText, m_aMathBuffer, m_bMathNor);
@@ -3171,7 +3173,7 @@ RTFParserState::RTFParserState(RTFDocumentImpl* pDocumentImpl)
       aShape(),
       aDrawingObject(),
       aFrame(this),
-      eRunType(LOCH),
+      eRunType(RunType::LOCH),
       isRightToLeft(false),
       nYear(0),
       nMonth(0),
