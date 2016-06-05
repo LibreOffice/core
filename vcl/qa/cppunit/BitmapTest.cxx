@@ -36,6 +36,7 @@ class BitmapTest : public CppUnit::TestFixture
     void testConvert();
     void testScale();
     void testCRC();
+    void testBitmap32();
 
     CPPUNIT_TEST_SUITE(BitmapTest);
     CPPUNIT_TEST(testConvert);
