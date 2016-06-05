@@ -2981,22 +2981,23 @@ void WW8AttributeOutput::ParaVerticalAlign( const SvxParaVertAlignItem& rAlign )
 
     m_rWW8Export.InsUInt16( NS_sprm::LN_PWAlignFont );
 
-    sal_Int16 nVal = rAlign.GetValue();
-    switch ( nVal )
+    SvxParaVertAlignItem::Align nAlign = rAlign.GetValue();
+    sal_uInt16 nVal;
+    switch ( nAlign )
     {
-        case SvxParaVertAlignItem::BASELINE:
+        case SvxParaVertAlignItem::Align::Baseline:
             nVal = 2;
             break;
-        case SvxParaVertAlignItem::TOP:
+        case SvxParaVertAlignItem::Align::Top:
             nVal = 0;
             break;
-        case SvxParaVertAlignItem::CENTER:
+        case SvxParaVertAlignItem::Align::Center:
             nVal = 1;
             break;
-        case SvxParaVertAlignItem::BOTTOM:
+        case SvxParaVertAlignItem::Align::Bottom:
             nVal = 3;
             break;
-        case SvxParaVertAlignItem::AUTOMATIC:
+        case SvxParaVertAlignItem::Align::Automatic:
             nVal = 4;
             break;
         default:

@@ -88,7 +88,7 @@ using namespace ::com::sun::star::beans;
 SwLineInfo::SwLineInfo()
     : pRuler( nullptr ),
       pSpace( nullptr ),
-      nVertAlign( 0 ),
+      nVertAlign( SvxParaVertAlignItem::Align::Automatic ),
       nDefTabStop( 0 ),
       bListTabStopIncluded( false ),
       nListTabStopPosition( 0 )

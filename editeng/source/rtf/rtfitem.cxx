@@ -210,7 +210,7 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
     FontEmphasisMark eEmphasis;
     bPardTokenRead = false;
     RTF_CharTypeDef eCharType = NOTDEF_CHARTYPE;
-    sal_uInt16 nFontAlign;
+    SvxParaVertAlignItem::Align nFontAlign;
 
     bool bChkStkPos = !bNewGroup && !aAttrStack.empty();
 
@@ -517,15 +517,15 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
                 break;
 
             case RTF_FAFIXED:
-            case RTF_FAAUTO:    nFontAlign = SvxParaVertAlignItem::AUTOMATIC;
+            case RTF_FAAUTO:    nFontAlign = SvxParaVertAlignItem::Align::Automatic;
                                 goto SET_FONTALIGNMENT;
-            case RTF_FAHANG:    nFontAlign = SvxParaVertAlignItem::TOP;
+            case RTF_FAHANG:    nFontAlign = SvxParaVertAlignItem::Align::Top;
                                 goto SET_FONTALIGNMENT;
-            case RTF_FAVAR:     nFontAlign = SvxParaVertAlignItem::BOTTOM;
+            case RTF_FAVAR:     nFontAlign = SvxParaVertAlignItem::Align::Bottom;
                                 goto SET_FONTALIGNMENT;
-            case RTF_FACENTER:  nFontAlign = SvxParaVertAlignItem::CENTER;
+            case RTF_FACENTER:  nFontAlign = SvxParaVertAlignItem::Align::Center;
                                 goto SET_FONTALIGNMENT;
-            case RTF_FAROMAN:   nFontAlign = SvxParaVertAlignItem::BASELINE;
+            case RTF_FAROMAN:   nFontAlign = SvxParaVertAlignItem::Align::Baseline;
                                 goto SET_FONTALIGNMENT;
 SET_FONTALIGNMENT:
             if( aPardMap.nFontAlign )

@@ -4046,7 +4046,7 @@ void DocxAttributeOutput::OutputDefaultItem(const SfxPoolItem& rHt)
             bMustWrite = !static_cast< const SfxBoolItem& >(rHt).GetValue();
             break;
         case RES_PARATR_VERTALIGN:
-            bMustWrite = static_cast< const SvxParaVertAlignItem& >(rHt).GetValue() != SvxParaVertAlignItem::AUTOMATIC;
+            bMustWrite = static_cast< const SvxParaVertAlignItem& >(rHt).GetValue() != SvxParaVertAlignItem::Align::Automatic;
             break;
         case RES_PARATR_SNAPTOGRID:
             bMustWrite = !static_cast< const SvxParaGridItem& >(rHt).GetValue();
@@ -7191,19 +7191,19 @@ void DocxAttributeOutput::ParaVerticalAlign( const SvxParaVertAlignItem& rAlign 
 
     switch ( rAlign.GetValue() )
     {
-        case SvxParaVertAlignItem::BASELINE:
+        case SvxParaVertAlignItem::Align::Baseline:
             pAlignString = "baseline";
             break;
-        case SvxParaVertAlignItem::TOP:
+        case SvxParaVertAlignItem::Align::Top:
             pAlignString = "top";
             break;
-        case SvxParaVertAlignItem::CENTER:
+        case SvxParaVertAlignItem::Align::Center:
             pAlignString = "center";
             break;
-        case SvxParaVertAlignItem::BOTTOM:
+        case SvxParaVertAlignItem::Align::Bottom:
             pAlignString = "bottom";
             break;
-        case SvxParaVertAlignItem::AUTOMATIC:
+        case SvxParaVertAlignItem::Align::Automatic:
             pAlignString = "auto";
             break;
         default:

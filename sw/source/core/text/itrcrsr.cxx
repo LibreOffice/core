@@ -831,7 +831,7 @@ void SwTextCursor::GetCharRect_( SwRect* pOrig, const sal_Int32 nOfst,
                                 // correct for reverse (270 degree) portions
                                 if( static_cast<SwMultiPortion*>(pPor)->IsRevers() )
                                 {
-                                    if ( SvxParaVertAlignItem::AUTOMATIC ==
+                                    if ( SvxParaVertAlignItem::Align::Automatic ==
                                          GetLineInfo().GetVertAlign() )
                                         // if vertical alignment is set to auto,
                                         // we switch from base line alignment
