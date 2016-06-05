@@ -179,7 +179,7 @@ private:
     SvxConvertTo3DItem*         pConvertTo3DItem;
     SvxConvertTo3DItem*         pConvertTo3DLatheItem;
 
-    Svx3DWinImpl*       mpImpl;
+    std::unique_ptr<Svx3DWinImpl>        mpImpl;
     SfxMapUnit          ePoolUnit;
     FieldUnit           eFUnit;
 
