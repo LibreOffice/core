@@ -468,8 +468,8 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
 
     ScTableInfo aTabInfo;
     rDoc.FillInfo( aTabInfo, nX1, nY1, nX2, nY2, nTab,
-                                        nPPTX, nPPTY, false, rOpts.GetOption(VOPT_FORMULAS),
-                                        &pViewData->GetMarkData() );
+                   nPPTX, nPPTY, false, rOpts.GetOption(VOPT_FORMULAS),
+                   &pViewData->GetMarkData() );
 
     Fraction aZoomX = pViewData->GetZoomX();
     Fraction aZoomY = pViewData->GetZoomY();
@@ -587,6 +587,8 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
         else
             bEditMode = false;
     }
+
+    const MapMode aOriginalMode = rDevice.GetMapMode();
 
     // define drawing layer map mode and paint rectangle
     MapMode aDrawMode = GetDrawMapMode();
@@ -811,9 +813,26 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
 
     pContentDev->SetMapMode(aDrawMode);
 
+    // Bitmaps and buttons are in absolute pixel coordinates.
+    const MapMode aOrig = pContentDev->GetMapMode();
+    if (bIsTiledRendering)
+    {
+        MapMode aNew = aOrig;
+        auto aOrigin = aOriginalMode.GetOrigin();
+        aOrigin.setX(aOrigin.getX() / TWIPS_PER_PIXEL + nScrX);
+        aOrigin.setY(aOrigin.getY() / TWIPS_PER_PIXEL + nScrY);
+        aNew.SetOrigin(aOrigin);
+        pContentDev->SetMapMode(aNew);
+    }
+
     DrawRedraw( aOutputData, eMode, SC_LAYER_FRONT );
     DrawRedraw( aOutputData, eMode, SC_LAYER_INTERN );
     DrawSdrGrid( aDrawingRectLogic, pContentDev );
+
+    if (bIsTiledRendering)
+    {
+        pContentDev->SetMapMode(aOrig);
+    }
 
     if (!bIsInScroll)                               // Drawing marks
     {
@@ -945,6 +964,41 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
         mpNoteMarker->Draw(); // Above the cursor, in drawing map mode
 }
 
+namespace {
+    // Find the row/col just -before- the nPosition in pixels and its offset
+    inline void mapConservativeToRowCol(ScDocument *pDoc,
+                                        sal_Int32  *nIndex,
+                                        sal_Int32  *nOffset,
+                                        sal_Int32  *nOrigin,
+                                        sal_Int32   nTabNo,
+                                        sal_Int32   nPosition,
+                                        bool        bRowNotCol,
+                                        double      nPPTX,
+                                        double      nPPTY)
+    {
+        long nTmp = 0; // row/col to render for nPosition
+        long nLastScrPos = 0, nScrPos = 0;
+        while (nScrPos <= nPosition && nTmp < MAXROW)
+        {
+            long nSize = bRowNotCol ? pDoc->GetRowHeight( nTmp, nTabNo )
+                                    : pDoc->GetColWidth( nTmp, nTabNo );
+            if (nSize)
+            {
+                nLastScrPos = nScrPos;
+                nScrPos += ScViewData::ToPixel( nSize, bRowNotCol ? nPPTY : nPPTX );
+            } // else - FIXME 'skip multiple hidden rows'
+
+            *nIndex = nTmp;
+            nTmp++;
+        }
+
+        // offset into that row/col for nPosition
+        assert (nPosition >= nLastScrPos);
+        *nOffset = (nScrPos == nPosition ? 0 : nPosition - nLastScrPos);
+        *nOrigin = nLastScrPos;
+    }
+}
+
 void ScGridWindow::PaintTile( VirtualDevice& rDevice,
                               int nOutputWidth, int nOutputHeight,
                               int nTilePosX, int nTilePosY,
@@ -971,27 +1025,81 @@ void ScGridWindow::PaintTile( VirtualDevice& rDevice,
     // page break zoom, and aLogicMode in ScViewData
     pViewData->SetZoom(aFracX, aFracY, true);
 
-    double fTilePosXPixel = static_cast<double>(nTilePosX) * nOutputWidth / nTileWidth;
-    double fTilePosYPixel = static_cast<double>(nTilePosY) * nOutputHeight / nTileHeight;
+    const double fTilePosXPixel = static_cast<double>(nTilePosX) * nOutputWidth / nTileWidth;
+    const double fTilePosYPixel = static_cast<double>(nTilePosY) * nOutputHeight / nTileHeight;
+    const double fTileBottomPixel = static_cast<double>(nTilePosY + nTileHeight) * nOutputHeight / nTileHeight;
+    const double fTileRightPixel = static_cast<double>(nTilePosX + nTileWidth) * nOutputWidth / nTileWidth;
 
     SCTAB nTab = pViewData->GetTabNo();
     ScDocument* pDoc = pViewData->GetDocument();
 
-    SCCOL nStartCol = 0, nEndCol = 0;
-    SCROW nStartRow = 0, nEndRow = 0;
+    SCCOL nEndCol = 0;
+    SCROW nEndRow = 0;
 
     // size of the document including drawings, charts, etc.
     pDoc->GetTiledRenderingArea(nTab, nEndCol, nEndRow);
 
-    double fPPTX = pViewData->GetPPTX();
-    double fPPTY = pViewData->GetPPTY();
+    const double fPPTX = pViewData->GetPPTX();
+    const double fPPTY = pViewData->GetPPTY();
 
-    ScTableInfo aTabInfo(nEndRow + 2);
-    pDoc->FillInfo(aTabInfo, nStartCol, nStartRow, nEndCol, nEndRow, nTab, fPPTX, fPPTY, false, false);
+    ScTableInfo aTabInfo(nEndRow + 3);
+    sal_Int32 nTopLeftTileRowOffset = 0;
+    sal_Int32 nTopLeftTileColOffset = 0;
+    sal_Int32 nTopLeftTileRowOrigin = 0;
+    sal_Int32 nTopLeftTileColOrigin = 0;
+
+    // find approximate col/row offsets of nearby.
+    sal_Int32 nTopLeftTileRow =0;
+    sal_Int32 nTopLeftTileCol =0;
+    sal_Int32 nBottomRightTileRow = 0;
+    sal_Int32 nBottomRightTileCol = 0;
+    sal_Int32 nDummy;
+    mapConservativeToRowCol(pDoc, &nTopLeftTileCol, &nTopLeftTileColOffset,
+                            &nTopLeftTileColOrigin,
+                            nTab, fTilePosXPixel, false, fPPTX, fPPTY);
+    mapConservativeToRowCol(pDoc, &nBottomRightTileCol, &nDummy, &nDummy, nTab,
+                            fTileRightPixel, false, fPPTX, fPPTY);
+    mapConservativeToRowCol(pDoc, &nTopLeftTileRow, &nTopLeftTileRowOffset,
+                            &nTopLeftTileRowOrigin,
+                            nTab, fTilePosYPixel, true, fPPTX, fPPTY);
+    mapConservativeToRowCol(pDoc, &nBottomRightTileRow, &nDummy, &nDummy, nTab,
+                            fTileBottomPixel, true, fPPTX, fPPTY);
+    // Enlarge
+    nBottomRightTileCol++;
+    nBottomRightTileRow++;
+
+    nTopLeftTileCol = std::min(nTopLeftTileCol, (sal_Int32)nEndCol);
+    nTopLeftTileRow = std::min(nTopLeftTileRow, (sal_Int32)nEndRow);
+    nTopLeftTileCol = std::max<sal_Int32>(nTopLeftTileCol, 0);
+    nTopLeftTileRow = std::max<sal_Int32>(nTopLeftTileRow, 0);
+    nBottomRightTileCol = std::min(nBottomRightTileCol, (sal_Int32)nEndCol);
+    nBottomRightTileRow = std::min(nBottomRightTileRow, (sal_Int32)nEndRow);
+    nTopLeftTileColOrigin = nTopLeftTileColOrigin * TWIPS_PER_PIXEL;
+    nTopLeftTileRowOrigin = nTopLeftTileRowOrigin * TWIPS_PER_PIXEL;
+
+    // Checkout -> 'rDoc.ExtendMerge' ... if we miss merged cells.
+
+    // Origin must be the offset of the first col and row
+    // containing our top-left pixel.
+    const MapMode aOriginalMode = rDevice.GetMapMode();
+    MapMode aAbsMode = aOriginalMode;
+    const Point aOrigin(-nTopLeftTileColOrigin, -nTopLeftTileRowOrigin);
+    aAbsMode.SetOrigin(aOrigin);
+    rDevice.SetMapMode(aAbsMode);
+
+    pDoc->FillInfo(aTabInfo, nTopLeftTileCol, nTopLeftTileRow,
+                   nBottomRightTileCol, nBottomRightTileRow,
+                   nTab, fPPTX, fPPTY, false, false);
+
+// FIXME: is this called some
+//        Point aScrPos = pViewData->GetScrPos( nX1, nY1, eWhich );
 
     ScOutputData aOutputData(&rDevice, OUTTYPE_WINDOW, aTabInfo, pDoc, nTab,
-            -fTilePosXPixel, -fTilePosYPixel, nStartCol, nStartRow, nEndCol, nEndRow,
-            fPPTX, fPPTY);
+                             -nTopLeftTileColOffset,
+                             -nTopLeftTileRowOffset,
+                             nTopLeftTileCol, nTopLeftTileRow,
+                             nBottomRightTileCol, nBottomRightTileRow,
+                             fPPTX, fPPTY);
 
     // setup the SdrPage so that drawinglayer works correctly
     ScDrawLayer* pModel = pDoc->GetDrawLayer();
@@ -1005,6 +1113,8 @@ void ScGridWindow::PaintTile( VirtualDevice& rDevice,
 
     // draw the content
     DrawContent(rDevice, aTabInfo, aOutputData, true, SC_UPDATE_ALL);
+
+    rDevice.SetMapMode(aOriginalMode);
 }
 
 void ScGridWindow::LogicInvalidate(const Rectangle* pRectangle)
