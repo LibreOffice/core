@@ -35,6 +35,7 @@
 #include <com/sun/star/rendering/XSpriteCanvas.hpp>
 #include <drawinglayer/processor2d/processor2dtools.hxx>
 #include <svx/unoapi.hxx>
+#include <comphelper/lok.hxx>
 
 #include "eventhandler.hxx"
 #include <boost/scoped_ptr.hpp>
@@ -167,7 +168,7 @@ namespace sdr
             bool bClipRegionPushed(false);
             const vcl::Region& rRedrawArea(rDisplayInfo.GetRedrawArea());
 
-            if(!rRedrawArea.IsEmpty())
+            if(!rRedrawArea.IsEmpty() && !comphelper::LibreOfficeKit::isActive())
             {
                 bClipRegionPushed = true;
                 pOutDev->Push(PushFlags::CLIPREGION);
@@ -291,14 +292,31 @@ namespace sdr
                 rDisplayInfo.ClearGhostedDrawMode(); // reset, else the VCL-paint with the processor will not do the right thing
                 pOutDev->SetLayoutMode(TEXT_LAYOUT_DEFAULT); // reset, default is no BiDi/RTL
 
+                // Save the map-mode since creating the 2D processor will replace it.
+                const MapMode aOrig = pOutDev->GetMapMode();
+                MapMode aNew = aOrig;
+
                 // create renderer
                 boost::scoped_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor2D(
                     drawinglayer::processor2d::createProcessor2DFromOutputDevice(
                         rTargetOutDev, getViewInformation2D()));
 
+                if (comphelper::LibreOfficeKit::isActive())
+                {
+                    // Restore the origin.
+                    aNew.SetOrigin(aOrig.GetOrigin());
+                    pOutDev->SetMapMode(aNew);
+                }
+
                 if(pProcessor2D)
                 {
                     pProcessor2D->process(xPrimitiveSequence);
+                }
+
+                if (comphelper::LibreOfficeKit::isActive())
+                {
+                    // Restore the original map-mode.
+                    pOutDev->SetMapMode(aOrig);
                 }
             }
 
