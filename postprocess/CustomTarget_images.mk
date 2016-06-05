@@ -29,24 +29,20 @@ $(packimages_DIR)/%.zip : \
 		$(packimages_DIR)/commandimagelist.ilst \
 		$(call gb_Helper_optional,HELP,$(helpimages_DIR)/helpimg.ilst) \
 		$(call gb_Helper_optional,DBCONNECTIVITY,$(if $(ENABLE_JAVA),$(SRCDIR)/connectivity/source/drivers/hsqldb/hsqlui.ilst)) \
-		$(call gb_Postprocess_get_target,AllResources) \
-		$(call gb_Postprocess_get_target,AllUIConfigs)
+		$(call gb_Helper_get_imagelists)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PRL,2)
 	$(call gb_Helper_abbreviate_dirs, \
+		ILSTFILE=$(call var2file,$(shell $(gb_MKTEMP)),100,$(filter %.ilst,$^)) && \
 		$(PERL) $(SRCDIR)/solenv/bin/packimages.pl \
 			$(if $(DEFAULT_THEME),\
 				-g $(packimages_DIR) -m $(packimages_DIR) -c $(packimages_DIR),\
 				-g $(SRCDIR)/icon-themes/$(subst images_,,$*) -m $(SRCDIR)/icon-themes/$(subst images_,,$*) -c $(SRCDIR)/icon-themes/$(subst images_,,$*) \
 			) \
 			$(INDUSTRIAL_FALLBACK) \
-			$(call gb_Helper_optional,HELP,-l $(helpimages_DIR) ) \
-			-l $(packimages_DIR) \
-			-l $(dir $(call gb_ResTarget_get_imagelist_target)) \
-			-l $(dir $(call gb_UIConfig_get_imagelist_target)) \
-			-l $(dir $(call gb_UIConfig_get_imagelist_target,modules/)) \
-			$(call gb_Helper_optional,DBCONNECTIVITY,$(if $(ENABLE_JAVA),-l $(SRCDIR)/connectivity/source/drivers/hsqldb)) \
+			-l $${ILSTFILE} \
 			-s $< -o $@ \
-			$(if $(findstring s,$(MAKEFLAGS)),> /dev/null))
+			$(if $(findstring s,$(MAKEFLAGS)),> /dev/null) && \
+		rm -rf $${ILSTFILE})
 
 # commandimagelist.ilst and sorted.lst are phony to rebuild everything each time
 .PHONY : $(packimages_DIR)/commandimagelist.ilst $(packimages_DIR)/sorted.lst
