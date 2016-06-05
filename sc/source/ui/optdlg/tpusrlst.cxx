@@ -243,12 +243,12 @@ bool ScTpUserLists::FillItemSet( SfxItemSet* rCoreAttrs )
     return bDataModified;
 }
 
-SfxTabPage::sfxpg ScTpUserLists::DeactivatePage( SfxItemSet* pSetP )
+DeactivateRC ScTpUserLists::DeactivatePage( SfxItemSet* pSetP )
 {
     if ( pSetP )
         FillItemSet( pSetP );
 
-    return LEAVE_PAGE;
+    return DeactivateRC::LeavePage;
 }
 
 size_t ScTpUserLists::UpdateUserListBox()

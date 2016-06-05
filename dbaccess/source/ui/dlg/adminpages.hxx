@@ -125,7 +125,7 @@ namespace dbaui
 
     protected:
         /// default implementation: call FillItemSet, call prepareLeave,
-        virtual sfxpg DeactivatePage(SfxItemSet* pSet) override;
+        virtual DeactivateRC DeactivatePage(SfxItemSet* pSet) override;
         using SfxTabPage::DeactivatePage;
         /// default implementation: call implInitControls with the given item set and _bSaveValue = sal_False
         virtual void Reset(const SfxItemSet* _rCoreAttrs) override;

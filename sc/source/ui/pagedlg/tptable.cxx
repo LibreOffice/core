@@ -341,12 +341,12 @@ bool ScTablePage::FillItemSet( SfxItemSet* rCoreSet )
     return bDataChanged;
 }
 
-SfxTabPage::sfxpg ScTablePage::DeactivatePage( SfxItemSet* pSetP )
+DeactivateRC ScTablePage::DeactivatePage( SfxItemSet* pSetP )
 {
     if ( pSetP )
         FillItemSet( pSetP );
 
-    return LEAVE_PAGE;
+    return DeactivateRC::LeavePage;
 }
 
 void ScTablePage::DataChanged( const DataChangedEvent& rDCEvt )

@@ -919,15 +919,15 @@ bool SvxBackgroundTabPage::FillItemSetWithWallpaperItem( SfxItemSet& rCoreSet, s
 }
 
 /** virtual method; is called on deactivation */
-SfxTabPage::sfxpg SvxBackgroundTabPage::DeactivatePage( SfxItemSet* _pSet )
+DeactivateRC SvxBackgroundTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if ( pPageImpl->bIsImportDlgInExecute )
-        return KEEP_PAGE;
+        return DeactivateRC::KeepPage;
 
     if ( _pSet )
         FillItemSet( _pSet );
 
-    return LEAVE_PAGE;
+    return DeactivateRC::LeavePage;
 }
 
 void SvxBackgroundTabPage::PointChanged( vcl::Window* , RECT_POINT  )

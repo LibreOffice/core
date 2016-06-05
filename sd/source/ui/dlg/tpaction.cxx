@@ -369,12 +369,12 @@ void SdTPAction::ActivatePage( const SfxItemSet& )
 {
 }
 
-SfxTabPage::sfxpg SdTPAction::DeactivatePage( SfxItemSet* pPageSet )
+DeactivateRC SdTPAction::DeactivatePage( SfxItemSet* pPageSet )
 {
     if( pPageSet )
         FillItemSet( pPageSet );
 
-    return LEAVE_PAGE;
+    return DeactivateRC::LeavePage;
 }
 
 VclPtr<SfxTabPage> SdTPAction::Create( vcl::Window* pWindow,

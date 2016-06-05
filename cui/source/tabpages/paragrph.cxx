@@ -611,13 +611,13 @@ void SvxStdParagraphTabPage::EnableRelativeMode()
     bRelativeMode = true;
 }
 
-SfxTabPage::sfxpg SvxStdParagraphTabPage::DeactivatePage( SfxItemSet* _pSet )
+DeactivateRC SvxStdParagraphTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
     ELRLoseFocusHdl( *m_pFLineIndent );
 
     if ( _pSet )
         FillItemSet( _pSet );
-    return LEAVE_PAGE;
+    return DeactivateRC::LeavePage;
 }
 
 SvxStdParagraphTabPage::SvxStdParagraphTabPage( vcl::Window* pParent,  const SfxItemSet& rAttr ) :
@@ -1067,11 +1067,11 @@ void SvxParaAlignTabPage::dispose()
     SfxTabPage::dispose();
 }
 
-SfxTabPage::sfxpg SvxParaAlignTabPage::DeactivatePage( SfxItemSet* _pSet )
+DeactivateRC SvxParaAlignTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if ( _pSet )
         FillItemSet( _pSet );
-    return LEAVE_PAGE;
+    return DeactivateRC::LeavePage;
 }
 
 VclPtr<SfxTabPage> SvxParaAlignTabPage::Create( vcl::Window* pParent, const SfxItemSet* rSet )
@@ -1844,11 +1844,11 @@ void SvxExtParagraphTabPage::ChangesApplied()
     m_pWidowRowNo->SetValue(m_pWidowRowNo->GetValue());
 }
 
-SfxTabPage::sfxpg SvxExtParagraphTabPage::DeactivatePage( SfxItemSet* _pSet )
+DeactivateRC SvxExtParagraphTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if ( _pSet )
         FillItemSet( _pSet );
-    return LEAVE_PAGE;
+    return DeactivateRC::LeavePage;
 }
 
 void SvxExtParagraphTabPage::DisablePageBreak()

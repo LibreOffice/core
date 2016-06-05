@@ -333,14 +333,14 @@ void SvxAngleTabPage::ActivatePage(const SfxItemSet& /*rSet*/)
 }
 
 
-SfxTabPage::sfxpg SvxAngleTabPage::DeactivatePage( SfxItemSet* _pSet )
+DeactivateRC SvxAngleTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if(_pSet)
     {
         FillItemSet(_pSet);
     }
 
-    return LEAVE_PAGE;
+    return DeactivateRC::LeavePage;
 }
 
 
@@ -703,14 +703,14 @@ void SvxSlantTabPage::ActivatePage( const SfxItemSet& rSet )
 }
 
 
-SfxTabPage::sfxpg SvxSlantTabPage::DeactivatePage( SfxItemSet* _pSet )
+DeactivateRC SvxSlantTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if(_pSet)
     {
         FillItemSet(_pSet);
     }
 
-    return LEAVE_PAGE;
+    return DeactivateRC::LeavePage;
 }
 
 
@@ -1158,7 +1158,7 @@ void SvxPositionSizeTabPage::ActivatePage( const SfxItemSet& rSet )
 }
 
 
-SfxTabPage::sfxpg SvxPositionSizeTabPage::DeactivatePage( SfxItemSet* _pSet )
+DeactivateRC SvxPositionSizeTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if( _pSet )
     {
@@ -1174,7 +1174,7 @@ SfxTabPage::sfxpg SvxPositionSizeTabPage::DeactivatePage( SfxItemSet* _pSet )
         FillItemSet(_pSet);
     }
 
-    return LEAVE_PAGE;
+    return DeactivateRC::LeavePage;
 }
 
 

@@ -1736,7 +1736,7 @@ void SwFramePage::ActivatePage(const SfxItemSet& rSet)
     m_pFollowTextFlowCB->SaveValue();
 }
 
-SfxTabPage::sfxpg SwFramePage::DeactivatePage(SfxItemSet * _pSet)
+DeactivateRC SwFramePage::DeactivatePage(SfxItemSet * _pSet)
 {
     if ( _pSet )
     {
@@ -1751,7 +1751,7 @@ SfxTabPage::sfxpg SwFramePage::DeactivatePage(SfxItemSet * _pSet)
         _pSet->Put( aAnc );
     }
 
-    return LEAVE_PAGE;
+    return DeactivateRC::LeavePage;
 }
 
 // swap left/right with inside/outside
@@ -2554,11 +2554,11 @@ bool SwGrfExtPage::FillItemSet( SfxItemSet *rSet )
     return bModified;
 }
 
-SfxTabPage::sfxpg SwGrfExtPage::DeactivatePage(SfxItemSet *_pSet)
+DeactivateRC SwGrfExtPage::DeactivatePage(SfxItemSet *_pSet)
 {
     if( _pSet )
         FillItemSet( _pSet );
-    return LEAVE_PAGE;
+    return DeactivateRC::LeavePage;
 }
 
 IMPL_LINK_NOARG_TYPED(SwGrfExtPage, BrowseHdl, Button*, void)

@@ -158,7 +158,7 @@ class SwColumnPage : public SfxTabPage
     using SfxTabPage::DeactivatePage;
 
     virtual void    ActivatePage(const SfxItemSet& rSet) override;
-    virtual sfxpg   DeactivatePage(SfxItemSet *pSet) override;
+    virtual DeactivateRC   DeactivatePage(SfxItemSet *pSet) override;
 
     void connectPercentField(PercentField &rWrap, const OString &rName);
 

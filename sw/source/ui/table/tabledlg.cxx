@@ -619,7 +619,7 @@ void    SwFormatTablePage::ActivatePage( const SfxItemSet& rSet )
 
 }
 
-SfxTabPage::sfxpg SwFormatTablePage::DeactivatePage( SfxItemSet* _pSet )
+DeactivateRC SwFormatTablePage::DeactivatePage( SfxItemSet* _pSet )
 {
     //os: VCL doesn't take care of making the active widget
     //in the dialog lose the focus
@@ -630,7 +630,7 @@ SfxTabPage::sfxpg SwFormatTablePage::DeactivatePage( SfxItemSet* _pSet )
     {
         ScopedVclPtrInstance<MessageDialog>::Create(this, SW_RES(STR_WRONG_TABLENAME), VclMessageType::Info)->Execute();
         m_pNameED->GrabFocus();
-        return KEEP_PAGE;
+        return DeactivateRC::KeepPage;
     }
     if(_pSet)
     {
@@ -730,7 +730,7 @@ SfxTabPage::sfxpg SwFormatTablePage::DeactivatePage( SfxItemSet* _pSet )
                 _pSet->Put(SwPtrItem(FN_TABLE_REP, pTableData));
         }
     }
-    return LEAVE_PAGE;
+    return DeactivateRC::LeavePage;
 }
 
 //Description: Page column configuration
@@ -1136,7 +1136,7 @@ void    SwTableColumnPage::ActivatePage( const SfxItemSet& )
 
 }
 
-SfxTabPage::sfxpg SwTableColumnPage::DeactivatePage( SfxItemSet* _pSet )
+DeactivateRC SwTableColumnPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if(_pSet)
     {
@@ -1195,7 +1195,7 @@ SfxTabPage::sfxpg SwTableColumnPage::DeactivatePage( SfxItemSet* _pSet )
         }
         _pSet->Put(SwPtrItem( FN_TABLE_REP, pTableData ));
     }
-    return LEAVE_PAGE;
+    return DeactivateRC::LeavePage;
 }
 
 SwTwips  SwTableColumnPage::GetVisibleWidth(sal_uInt16 nPos)

@@ -75,9 +75,9 @@ void IconChoicePage::ActivatePage( const SfxItemSet& )
 }
 
 
-int IconChoicePage::DeactivatePage( SfxItemSet* )
+DeactivateRC IconChoicePage::DeactivatePage( SfxItemSet* )
 {
-    return LEAVE_PAGE;
+    return DeactivateRC::LeavePage;
 }
 
 bool IconChoicePage::QueryClose()
@@ -484,7 +484,7 @@ void IconChoiceDialog::DeActivatePageImpl ()
 {
     IconChoicePageData *pData = GetPageData ( mnCurrentPageId );
 
-    int nRet = IconChoicePage::LEAVE_PAGE;
+    DeactivateRC nRet = DeactivateRC::LeavePage;
 
     if ( pData )
     {
@@ -500,7 +500,7 @@ void IconChoiceDialog::DeActivatePageImpl ()
             if ( pPage->HasExchangeSupport() )
                 nRet = pPage->DeactivatePage( &aTmp );
 
-            if ( ( IconChoicePage::LEAVE_PAGE & nRet ) == IconChoicePage::LEAVE_PAGE &&
+            if ( ( DeactivateRC::LeavePage & nRet ) &&
                  aTmp.Count() )
             {
                 pExampleSet->Put( aTmp );
@@ -523,7 +523,7 @@ void IconChoiceDialog::DeActivatePageImpl ()
                 nRet = pPage->DeactivatePage( nullptr );
         }
 
-        if ( nRet & IconChoicePage::REFRESH_SET )
+        if ( nRet & DeactivateRC::RefreshSet )
         {
             RefreshInputSet();
             // flag all pages to be newly initialized
@@ -720,7 +720,7 @@ bool IconChoiceDialog::OK_Impl()
     bool bEnd = !pPage;
     if ( pPage )
     {
-        int nRet = IconChoicePage::LEAVE_PAGE;
+        DeactivateRC nRet = DeactivateRC::LeavePage;
         if ( pSet )
         {
             SfxItemSet aTmp( *pSet->GetPool(), pSet->GetRanges() );
@@ -728,7 +728,7 @@ bool IconChoiceDialog::OK_Impl()
             if ( pPage->HasExchangeSupport() )
                 nRet = pPage->DeactivatePage( &aTmp );
 
-            if ( ( IconChoicePage::LEAVE_PAGE & nRet ) == IconChoicePage::LEAVE_PAGE
+            if ( ( DeactivateRC::LeavePage & nRet )
                  && aTmp.Count() )
             {
                 pExampleSet->Put( aTmp );
@@ -737,7 +737,7 @@ bool IconChoiceDialog::OK_Impl()
         }
         else
             nRet = pPage->DeactivatePage( nullptr );
-        bEnd = nRet;
+        bEnd = nRet != DeactivateRC::KeepPage;
     }
 
     return bEnd;

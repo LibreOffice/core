@@ -589,7 +589,7 @@ void SfxManageStyleSheetPage::ActivatePage( const SfxItemSet& rSet)
 }
 
 
-SfxTabPage::sfxpg SfxManageStyleSheetPage::DeactivatePage( SfxItemSet* pItemSet )
+DeactivateRC SfxManageStyleSheetPage::DeactivatePage( SfxItemSet* pItemSet )
 
 /*  [Description]
 
@@ -606,7 +606,7 @@ SfxTabPage::sfxpg SfxManageStyleSheetPage::DeactivatePage( SfxItemSet* pItemSet 
 */
 
 {
-    sfxpg nRet = SfxTabPage::LEAVE_PAGE;
+    DeactivateRC nRet = DeactivateRC::LeavePage;
 
     if ( m_pNameRw->IsModified() )
     {
@@ -620,7 +620,7 @@ SfxTabPage::sfxpg SfxManageStyleSheetPage::DeactivatePage( SfxItemSet* pItemSet 
             aBox->Execute();
             m_pNameRw->GrabFocus();
             m_pNameRw->SetSelection( Selection( SELECTION_MIN, SELECTION_MAX ) );
-            return SfxTabPage::KEEP_PAGE;
+            return DeactivateRC::KeepPage;
         }
         bModified = true;
     }
@@ -636,7 +636,7 @@ SfxTabPage::sfxpg SfxManageStyleSheetPage::DeactivatePage( SfxItemSet* pItemSet 
                 ScopedVclPtrInstance< MessageDialog > aBox(this, SfxResId( STR_TABPAGE_INVALIDSTYLE ), VclMessageType::Info);
                 aBox->Execute();
                 m_pFollowLb->GrabFocus();
-                return SfxTabPage::KEEP_PAGE;
+                return DeactivateRC::KeepPage;
             }
             bModified = true;
         }
@@ -656,10 +656,10 @@ SfxTabPage::sfxpg SfxManageStyleSheetPage::DeactivatePage( SfxItemSet* pItemSet 
                 ScopedVclPtrInstance< MessageDialog > aBox(this, SfxResId( STR_TABPAGE_INVALIDPARENT ), VclMessageType::Info);
                 aBox->Execute();
                 m_pBaseLb->GrabFocus();
-                return SfxTabPage::KEEP_PAGE;
+                return DeactivateRC::KeepPage;
             }
             bModified = true;
-            nRet = sfxpg(nRet | SfxTabPage::REFRESH_SET);
+            nRet = nRet | DeactivateRC::RefreshSet;
         }
     }
 

@@ -82,7 +82,7 @@ class SwWrapTabPage: public SfxTabPage
 
     void            ApplyImageList();
     virtual void    ActivatePage(const SfxItemSet& rSet) override;
-    virtual sfxpg   DeactivatePage(SfxItemSet *pSet) override;
+    virtual DeactivateRC   DeactivatePage(SfxItemSet *pSet) override;
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
 
     DECL_LINK_TYPED( RangeModifyHdl, SpinField&, void );

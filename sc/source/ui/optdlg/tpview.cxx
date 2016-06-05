@@ -235,11 +235,11 @@ void ScTpContentOptions::ActivatePage( const SfxItemSet& rSet)
         *pLocalOptions = static_cast<const ScTpViewItem*>(pItem)->GetViewOptions();
 }
 
-SfxTabPage::sfxpg ScTpContentOptions::DeactivatePage( SfxItemSet* pSetP )
+DeactivateRC ScTpContentOptions::DeactivatePage( SfxItemSet* pSetP )
 {
     if(pSetP)
         FillItemSet(pSetP);
-    return SfxTabPage::LEAVE_PAGE;
+    return DeactivateRC::LeavePage;
 }
 
 IMPL_LINK_TYPED( ScTpContentOptions, SelLbObjHdl, ListBox&, rLb, void )
@@ -671,11 +671,11 @@ void    ScTpLayoutOptions::ActivatePage( const SfxItemSet& /* rCoreSet */ )
 {
 }
 
-SfxTabPage::sfxpg ScTpLayoutOptions::DeactivatePage( SfxItemSet* pSetP )
+DeactivateRC ScTpLayoutOptions::DeactivatePage( SfxItemSet* pSetP )
 {
     if(pSetP)
         FillItemSet(pSetP);
-    return SfxTabPage::LEAVE_PAGE;
+    return DeactivateRC::LeavePage;
 }
 
 IMPL_LINK_NOARG_TYPED(ScTpLayoutOptions, MetricHdl, ListBox&, void)

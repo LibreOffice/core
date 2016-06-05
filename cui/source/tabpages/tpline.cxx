@@ -678,7 +678,7 @@ void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
 }
 
 
-SfxTabPage::sfxpg SvxLineTabPage::DeactivatePage( SfxItemSet* _pSet )
+DeactivateRC SvxLineTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if( m_nDlgType == 0 ) // Line dialog
     {
@@ -693,7 +693,7 @@ SfxTabPage::sfxpg SvxLineTabPage::DeactivatePage( SfxItemSet* _pSet )
     if( _pSet )
         FillItemSet( _pSet );
 
-    return LEAVE_PAGE;
+    return DeactivateRC::LeavePage;
 }
 
 

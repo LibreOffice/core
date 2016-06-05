@@ -1044,11 +1044,11 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
     RangeHdl();
 }
 
-SfxTabPage::sfxpg SvxHFPage::DeactivatePage( SfxItemSet* _pSet )
+DeactivateRC SvxHFPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if ( _pSet )
         FillItemSet( _pSet );
-    return LEAVE_PAGE;
+    return DeactivateRC::LeavePage;
 }
 
 IMPL_LINK_NOARG_TYPED(SvxHFPage, RangeFocusHdl, Control&, void)

@@ -168,7 +168,7 @@ public:
     virtual void Reset(const SfxItemSet*) override;
     virtual void ChangesApplied() override;
     virtual void ActivatePage(const SfxItemSet& rSet) override;
-    virtual sfxpg DeactivatePage(SfxItemSet* pSet) override;
+    virtual DeactivateRC DeactivatePage(SfxItemSet* pSet) override;
     virtual void PointChanged(vcl::Window* pWindow, RECT_POINT eRP) override;
 
     void SetPageType(sal_uInt16 nInType) { nPageType = nInType; }
@@ -290,7 +290,7 @@ public:
     virtual void Reset( const SfxItemSet * ) override;
     virtual void ChangesApplied() override;
     virtual void ActivatePage( const SfxItemSet& rSet ) override;
-    virtual sfxpg DeactivatePage( SfxItemSet* pSet ) override;
+    virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
     virtual void PointChanged( vcl::Window* pWindow, RECT_POINT eRP ) override;
 
     void    SetColorList( XColorListRef pColorList ) { m_pColorList = pColorList; }
@@ -358,7 +358,7 @@ public:
     virtual bool FillItemSet( SfxItemSet* ) override;
     virtual void Reset( const SfxItemSet * ) override;
     virtual void ActivatePage( const SfxItemSet& rSet ) override;
-    virtual sfxpg DeactivatePage( SfxItemSet* pSet ) override;
+    virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
     virtual void PointChanged( vcl::Window* pWindow, RECT_POINT eRP ) override;
 
     void    SetColorList( XColorListRef pColorList ) { m_pColorList = pColorList; }
@@ -441,7 +441,7 @@ public:
     virtual void Reset( const SfxItemSet * ) override;
 
     virtual void ActivatePage( const SfxItemSet& rSet ) override;
-    virtual sfxpg DeactivatePage( SfxItemSet* pSet ) override;
+    virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
 
     void    SetColorList( XColorListRef pColorList ) { m_pColorList = pColorList; }
     void    SetGradientList( XGradientListRef pGrdLst)
@@ -523,7 +523,7 @@ public:
     virtual void Reset( const SfxItemSet * ) override;
 
     virtual void ActivatePage( const SfxItemSet& rSet ) override;
-    virtual sfxpg DeactivatePage( SfxItemSet* pSet ) override;
+    virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
 
     virtual void PointChanged( vcl::Window* pWindow, RECT_POINT eRP ) override;
 
@@ -609,7 +609,7 @@ public:
     virtual void Reset( const SfxItemSet * ) override;
 
     virtual void ActivatePage( const SfxItemSet& rSet ) override;
-    virtual sfxpg DeactivatePage( SfxItemSet* pSet ) override;
+    virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
 
     virtual void PointChanged( vcl::Window* pWindow, RECT_POINT eRP ) override;
 
@@ -743,7 +743,7 @@ public:
     virtual void Reset( const SfxItemSet * ) override;
 
     virtual void ActivatePage( const SfxItemSet& rSet ) override;
-    virtual sfxpg DeactivatePage( SfxItemSet* pSet ) override;
+    virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
 
     void             SetPropertyList( XPropertyListType t, const XPropertyListRef &xRef );
 

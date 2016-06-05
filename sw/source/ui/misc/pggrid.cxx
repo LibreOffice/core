@@ -267,9 +267,9 @@ void    SwTextGridPage::ActivatePage( const SfxItemSet& rSet )
     m_pExampleWN->Invalidate();
 }
 
-SfxTabPage::sfxpg SwTextGridPage::DeactivatePage( SfxItemSet* )
+DeactivateRC SwTextGridPage::DeactivatePage( SfxItemSet* )
 {
-    return LEAVE_PAGE;
+    return DeactivateRC::LeavePage;
 }
 
 void SwTextGridPage::PutGridItem(SfxItemSet& rSet)

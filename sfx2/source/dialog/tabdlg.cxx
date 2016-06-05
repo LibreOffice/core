@@ -199,7 +199,7 @@ void SfxTabPage::ActivatePage( const SfxItemSet& )
 {
 }
 
-SfxTabPage::sfxpg SfxTabPage::DeactivatePage( SfxItemSet* )
+DeactivateRC SfxTabPage::DeactivatePage( SfxItemSet* )
 
 /*  [Description]
 
@@ -213,11 +213,11 @@ SfxTabPage::sfxpg SfxTabPage::DeactivatePage( SfxItemSet* )
 
     [Return value]
 
-    LEAVE_PAGE; Allow leaving the page
+    DeactivateRC::LeavePage; Allow leaving the page
 */
 
 {
-    return LEAVE_PAGE;
+    return DeactivateRC::LeavePage;
 }
 
 
@@ -827,7 +827,7 @@ void SfxTabDialog::RefreshInputSet()
 
     Default implementation of the virtual Method.
     This is called, when <SfxTabPage::DeactivatePage(SfxItemSet *)>
-    returns <SfxTabPage::REFRESH_SET>.
+    returns <DeactivateRC::RefreshSet>.
 */
 
 {
@@ -841,7 +841,7 @@ IMPL_LINK_NOARG_TYPED(SfxTabDialog, OkHdl, Button*, void)
 
     Handler of the Ok-Buttons
     This calls the current page <SfxTabPage::DeactivatePage(SfxItemSet *)>.
-    Returns <SfxTabPage::LEAVE_PAGE>, <SfxTabDialog::Ok()> is called
+    Returns <DeactivateRC::LeavePage>, <SfxTabDialog::Ok()> is called
     and the Dialog is ended.
 */
 
@@ -886,7 +886,7 @@ bool SfxTabDialog::PrepareLeaveCurrentPage()
 
     if ( pPage )
     {
-        int nRet = SfxTabPage::LEAVE_PAGE;
+        DeactivateRC nRet = DeactivateRC::LeavePage;
         if ( m_pSet )
         {
             SfxItemSet aTmp( *m_pSet->GetPool(), m_pSet->GetRanges() );
@@ -896,7 +896,7 @@ bool SfxTabDialog::PrepareLeaveCurrentPage()
             else
                 nRet = pPage->DeactivatePage( nullptr );
 
-            if ( ( SfxTabPage::LEAVE_PAGE & nRet ) == SfxTabPage::LEAVE_PAGE
+            if ( ( DeactivateRC::LeavePage & nRet ) == DeactivateRC::LeavePage
                  && aTmp.Count() )
             {
                 m_pExampleSet->Put( aTmp );
@@ -905,7 +905,7 @@ bool SfxTabDialog::PrepareLeaveCurrentPage()
         }
         else
             nRet = pPage->DeactivatePage( nullptr );
-        bEnd = nRet;
+        bEnd = nRet != DeactivateRC::KeepPage;
     }
 
     return bEnd;
@@ -918,7 +918,7 @@ IMPL_LINK_NOARG_TYPED(SfxTabDialog, UserHdl, Button*, void)
 
     Handler of the User-Buttons
     This calls the current page <SfxTabPage::DeactivatePage(SfxItemSet *)>.
-    returns this <SfxTabPage::LEAVE_PAGE> and  <SfxTabDialog::Ok()> is called.
+    returns this <DeactivateRC::LeavePage> and  <SfxTabDialog::Ok()> is called.
     Then the Dialog is ended with the Return value <SfxTabDialog::Ok()>
 */
 
@@ -1153,7 +1153,7 @@ IMPL_LINK_TYPED( SfxTabDialog, DeactivatePageHdl, TabControl *, pTabCtrl, bool )
     DBG_ASSERT( pDataObject, "no Data structure for current page" );
 #endif
 
-    int nRet = SfxTabPage::LEAVE_PAGE;
+    DeactivateRC nRet = DeactivateRC::LeavePage;
 
     if ( !m_pExampleSet && pPage->HasExchangeSupport() && m_pSet )
         m_pExampleSet = new SfxItemSet( *m_pSet->GetPool(), m_pSet->GetRanges() );
@@ -1166,7 +1166,7 @@ IMPL_LINK_TYPED( SfxTabDialog, DeactivatePageHdl, TabControl *, pTabCtrl, bool )
             nRet = pPage->DeactivatePage( &aTmp );
         else
             nRet = pPage->DeactivatePage( nullptr );
-        if ( ( SfxTabPage::LEAVE_PAGE & nRet ) == SfxTabPage::LEAVE_PAGE &&
+        if ( ( DeactivateRC::LeavePage & nRet ) == DeactivateRC::LeavePage &&
              aTmp.Count() )
         {
             m_pExampleSet->Put( aTmp );
@@ -1189,7 +1189,7 @@ IMPL_LINK_TYPED( SfxTabDialog, DeactivatePageHdl, TabControl *, pTabCtrl, bool )
             nRet = pPage->DeactivatePage( nullptr );
     }
 
-    if ( nRet & SfxTabPage::REFRESH_SET )
+    if ( nRet & DeactivateRC::RefreshSet )
     {
         RefreshInputSet();
         // Flag all Pages as to be initialized as new
@@ -1204,7 +1204,7 @@ IMPL_LINK_TYPED( SfxTabDialog, DeactivatePageHdl, TabControl *, pTabCtrl, bool )
                 pObj->bRefresh = false;
         }
     }
-    if ( nRet & SfxTabPage::LEAVE_PAGE )
+    if ( nRet & DeactivateRC::LeavePage )
         return true;
     else
         return false;

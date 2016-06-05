@@ -416,11 +416,11 @@ void SvxGeneralTabPage::SetAddress_Impl()
 }
 
 
-SvxGeneralTabPage::sfxpg SvxGeneralTabPage::DeactivatePage( SfxItemSet* pSet_ )
+DeactivateRC SvxGeneralTabPage::DeactivatePage( SfxItemSet* pSet_ )
 {
     if ( pSet_ )
         FillItemSet( pSet_ );
-    return LEAVE_PAGE;
+    return DeactivateRC::LeavePage;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

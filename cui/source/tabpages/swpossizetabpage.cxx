@@ -1089,11 +1089,11 @@ void SvxSwPosSizeTabPage::Reset( const SfxItemSet* rSet)
     }
 }
 
-SfxTabPage::sfxpg SvxSwPosSizeTabPage::DeactivatePage( SfxItemSet* _pSet )
+DeactivateRC SvxSwPosSizeTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if( _pSet )
         FillItemSet( _pSet );
-    return LEAVE_PAGE;
+    return DeactivateRC::LeavePage;
 }
 
 void SvxSwPosSizeTabPage::EnableAnchorTypes(sal_uInt16 nAnchorEnable)

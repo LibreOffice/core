@@ -371,10 +371,10 @@ void ScTpFormulaOptions::Reset(const SfxItemSet* rCoreSet)
     maCurrentDocOptions = maSavedDocOptions;
 }
 
-SfxTabPage::sfxpg ScTpFormulaOptions::DeactivatePage(SfxItemSet* /*pSet*/)
+DeactivateRC ScTpFormulaOptions::DeactivatePage(SfxItemSet* /*pSet*/)
 {
     // What's this method for ?
-    return KEEP_PAGE;
+    return DeactivateRC::KeepPage;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

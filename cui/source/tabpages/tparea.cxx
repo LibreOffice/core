@@ -419,7 +419,7 @@ void SvxAreaTabPage::ActivatePage( const SfxItemSet& rSet )
 }
 
 
-SfxTabPage::sfxpg SvxAreaTabPage::DeactivatePage( SfxItemSet* _pSet )
+DeactivateRC SvxAreaTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if( m_nDlgType == 0 ) // area dialog
     {
@@ -466,7 +466,7 @@ SfxTabPage::sfxpg SvxAreaTabPage::DeactivatePage( SfxItemSet* _pSet )
     if( _pSet )
         FillItemSet( _pSet );
 
-    return LEAVE_PAGE;
+    return DeactivateRC::LeavePage;
 }
 
 

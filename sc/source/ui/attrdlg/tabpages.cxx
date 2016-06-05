@@ -149,12 +149,12 @@ bool ScTabPageProtection::FillItemSet( SfxItemSet* rCoreAttrs )
     return bAttrsChanged;
 }
 
-SfxTabPage::sfxpg ScTabPageProtection::DeactivatePage( SfxItemSet* pSetP )
+DeactivateRC ScTabPageProtection::DeactivatePage( SfxItemSet* pSetP )
 {
     if ( pSetP )
         FillItemSet( pSetP );
 
-    return LEAVE_PAGE;
+    return DeactivateRC::LeavePage;
 }
 
 IMPL_LINK_TYPED( ScTabPageProtection, ButtonClickHdl, Button*, pBox, void )

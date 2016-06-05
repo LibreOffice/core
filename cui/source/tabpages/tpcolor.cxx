@@ -505,15 +505,15 @@ void SvxColorTabPage::ActivatePage( const SfxItemSet& )
         m_pBoxEmbed->Hide();
 }
 
-SfxTabPage::sfxpg SvxColorTabPage::DeactivatePage( SfxItemSet* _pSet )
+DeactivateRC SvxColorTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if ( CheckChanges_Impl() == -1L )
-        return KEEP_PAGE;
+        return DeactivateRC::KeepPage;
 
     if( _pSet )
         FillItemSet( _pSet );
 
-    return LEAVE_PAGE;
+    return DeactivateRC::LeavePage;
 }
 
 

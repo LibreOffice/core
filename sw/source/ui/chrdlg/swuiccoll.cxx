@@ -145,12 +145,12 @@ void SwCondCollPage::dispose()
     SfxTabPage::dispose();
 }
 
-SfxTabPage::sfxpg SwCondCollPage::DeactivatePage(SfxItemSet * _pSet)
+DeactivateRC SwCondCollPage::DeactivatePage(SfxItemSet * _pSet)
 {
     if( _pSet )
         FillItemSet(_pSet);
 
-    return LEAVE_PAGE;
+    return DeactivateRC::LeavePage;
 }
 
 VclPtr<SfxTabPage> SwCondCollPage::Create(vcl::Window *pParent, const SfxItemSet *rSet)

@@ -66,7 +66,7 @@ friend class SwDropCapsPict;
 
     SwWrtShell &rSh;
 
-    virtual sfxpg   DeactivatePage(SfxItemSet *pSet) override;
+    virtual DeactivateRC   DeactivatePage(SfxItemSet *pSet) override;
     void    FillSet( SfxItemSet &rSet );
 
     DECL_LINK_TYPED( ClickHdl, Button*, void );

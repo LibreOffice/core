@@ -302,11 +302,11 @@ void SvxGridTabPage::ActivatePage( const SfxItemSet& rSet )
 }
 
 
-SfxTabPage::sfxpg SvxGridTabPage::DeactivatePage( SfxItemSet* _pSet )
+DeactivateRC SvxGridTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if ( _pSet )
         FillItemSet( _pSet );
-    return LEAVE_PAGE;
+    return DeactivateRC::LeavePage;
 }
 
 IMPL_LINK_TYPED( SvxGridTabPage, ChangeDrawHdl_Impl, Edit&, rField, void )

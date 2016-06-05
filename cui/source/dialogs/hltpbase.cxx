@@ -525,7 +525,7 @@ void SvxHyperlinkTabPageBase::ActivatePage( const SfxItemSet& rItemSet )
         ShowMarkWnd ();
 }
 
-int SvxHyperlinkTabPageBase::DeactivatePage( SfxItemSet* _pSet)
+DeactivateRC SvxHyperlinkTabPageBase::DeactivatePage( SfxItemSet* _pSet)
 {
     // hide mark-wnd
     SetMarkWndShouldOpen( IsMarkWndVisible () );
@@ -547,7 +547,7 @@ int SvxHyperlinkTabPageBase::DeactivatePage( SfxItemSet* _pSet)
         _pSet->Put( aItem );
     }
 
-    return LEAVE_PAGE;
+    return DeactivateRC::LeavePage;
 }
 
 bool SvxHyperlinkTabPageBase::ShouldOpenMarkWnd()

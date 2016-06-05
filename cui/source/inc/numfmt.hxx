@@ -76,7 +76,7 @@ public:
 
     virtual bool            FillItemSet( SfxItemSet* rSet ) override;
     virtual void            Reset( const SfxItemSet* rSet ) override;
-    virtual sfxpg           DeactivatePage  ( SfxItemSet* pSet = nullptr ) override;
+    virtual DeactivateRC    DeactivatePage  ( SfxItemSet* pSet = nullptr ) override;
 
     void                    SetInfoItem( const SvxNumberInfoItem& rItem );
     void                    SetNumberFormatList( const SvxNumberInfoItem& rItem )

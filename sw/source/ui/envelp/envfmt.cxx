@@ -473,11 +473,11 @@ void SwEnvFormatPage::ActivatePage(const SfxItemSet& rSet)
     Reset(&aSet);
 }
 
-SfxTabPage::sfxpg SwEnvFormatPage::DeactivatePage(SfxItemSet* _pSet)
+DeactivateRC SwEnvFormatPage::DeactivatePage(SfxItemSet* _pSet)
 {
     if( _pSet )
         FillItemSet(_pSet);
-    return SfxTabPage::LEAVE_PAGE;
+    return DeactivateRC::LeavePage;
 }
 
 void SwEnvFormatPage::FillItem(SwEnvItem& rItem)

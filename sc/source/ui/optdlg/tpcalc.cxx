@@ -190,18 +190,18 @@ bool ScTpCalcOptions::FillItemSet( SfxItemSet* rCoreAttrs )
         return false;
 }
 
-SfxTabPage::sfxpg ScTpCalcOptions::DeactivatePage( SfxItemSet* pSetP )
+DeactivateRC ScTpCalcOptions::DeactivatePage( SfxItemSet* pSetP )
 {
-    sfxpg nReturn = KEEP_PAGE;
+    DeactivateRC nReturn = DeactivateRC::KeepPage;
 
     double fEps;
     if( m_pEdEps->GetValue( fEps ) && (fEps > 0.0) )
     {
         pLocalOptions->SetIterEps( fEps );
-        nReturn = LEAVE_PAGE;
+        nReturn = DeactivateRC::LeavePage;
     }
 
-    if ( nReturn == KEEP_PAGE )
+    if ( nReturn == DeactivateRC::KeepPage )
     {
         ScopedVclPtr<MessageDialog>::Create( this,
                   ScGlobal::GetRscString( STR_INVALID_EPS )

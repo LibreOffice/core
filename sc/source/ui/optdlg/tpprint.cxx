@@ -57,12 +57,12 @@ VclPtr<SfxTabPage> ScTpPrintOptions::Create( vcl::Window* pParent, const SfxItem
     return VclPtr<ScTpPrintOptions>::Create( pParent, *rAttrSet );
 }
 
-SfxTabPage::sfxpg ScTpPrintOptions::DeactivatePage( SfxItemSet* pSetP )
+DeactivateRC ScTpPrintOptions::DeactivatePage( SfxItemSet* pSetP )
 {
     if ( pSetP )
         FillItemSet( pSetP );
 
-    return LEAVE_PAGE;
+    return DeactivateRC::LeavePage;
 }
 
 void ScTpPrintOptions::Reset( const SfxItemSet* rCoreSet )

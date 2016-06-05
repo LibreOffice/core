@@ -356,11 +356,11 @@ void SvxTabulatorTabPage::DisableControls(const TabulatorDisableFlags nFlag)
         m_pFillFrame->Disable();
 }
 
-SfxTabPage::sfxpg SvxTabulatorTabPage::DeactivatePage( SfxItemSet* _pSet )
+DeactivateRC SvxTabulatorTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if ( _pSet )
         FillItemSet( _pSet );
-    return LEAVE_PAGE;
+    return DeactivateRC::LeavePage;
 }
 
 void SvxTabulatorTabPage::InitTabPos_Impl( sal_uInt16 nTabPos )

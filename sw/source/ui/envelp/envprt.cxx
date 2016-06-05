@@ -151,11 +151,11 @@ void SwEnvPrtPage::ActivatePage(const SfxItemSet&)
         m_pPrinterInfo->SetText(pPrt->GetName());
 }
 
-SfxTabPage::sfxpg SwEnvPrtPage::DeactivatePage(SfxItemSet* _pSet)
+DeactivateRC SwEnvPrtPage::DeactivatePage(SfxItemSet* _pSet)
 {
     if( _pSet )
         FillItemSet(_pSet);
-    return SfxTabPage::LEAVE_PAGE;
+    return DeactivateRC::LeavePage;
 }
 
 void SwEnvPrtPage::FillItem(SwEnvItem& rItem)

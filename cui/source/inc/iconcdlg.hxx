@@ -29,6 +29,7 @@
 #include <vcl/button.hxx>
 #include <vcl/image.hxx>
 #include <vcl/layout.hxx>
+#include <sfx2/tabdlg.hxx>
 #include <vector>
 
 // forward-declarations
@@ -89,17 +90,8 @@ public:
     bool                HasExchangeSupport() const { return bHasExchangeSupport; }
     void                SetExchangeSupport()       { bHasExchangeSupport = true; }
 
-    enum {
-        KEEP_PAGE = 0x0000, ///< error handling
-        /** 2nd filling of an ItemSet for updating superior examples;
-            this pointer can always be NULL!! */
-        LEAVE_PAGE = 0x0001,
-        /// refresh set and update other pages
-        REFRESH_SET = 0x0002
-    };
-
     virtual void        ActivatePage( const SfxItemSet& );
-    virtual int         DeactivatePage( SfxItemSet* pSet );
+    virtual DeactivateRC DeactivatePage( SfxItemSet* pSet );
     const OUString&     GetUserData() { return aUserString; }
     virtual bool        QueryClose();
 

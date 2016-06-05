@@ -264,15 +264,15 @@ void SvxGradientTabPage::ActivatePage( const SfxItemSet&  )
 }
 
 
-SfxTabPage::sfxpg SvxGradientTabPage::DeactivatePage( SfxItemSet* _pSet )
+DeactivateRC SvxGradientTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if( CheckChanges_Impl() == -1L )
-        return KEEP_PAGE;
+        return DeactivateRC::KeepPage;
 
     if( _pSet )
         FillItemSet( _pSet );
 
-    return LEAVE_PAGE;
+    return DeactivateRC::LeavePage;
 }
 
 
