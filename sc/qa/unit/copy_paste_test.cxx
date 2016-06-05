@@ -32,9 +32,11 @@ public:
     virtual void tearDown() override;
 
     void testCopyPasteXLS();
+    void testTdf84411();
 
     CPPUNIT_TEST_SUITE(ScCopyPasteTest);
     CPPUNIT_TEST(testCopyPasteXLS);
+    CPPUNIT_TEST(testTdf84411);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -119,6 +121,103 @@ void ScCopyPasteTest::testCopyPasteXLS()
     pViewShell->GetViewData().GetView()->PasteFromClip(InsertDeleteFlags::ALL, &aClipDoc);
 
     xComponent->dispose();
+}
+
+void lcl_copy( const OUString& rSrcRange, const OUString& rDstRange, ScDocument& rDoc, ScTabViewShell* pViewShell )
+{
+    ScDocument aClipDoc(SCDOCMODE_CLIP);
+
+    // 1. Copy
+    ScRange aSrcRange;
+    sal_uInt16 nRes = aSrcRange.Parse(rSrcRange, &rDoc, rDoc.GetAddressConvention());
+    CPPUNIT_ASSERT_MESSAGE("Failed to parse.", (nRes & SCA_VALID) != 0);
+    pViewShell->GetViewData().GetMarkData().SetMarkArea(aSrcRange);
+    pViewShell->GetViewData().GetView()->CopyToClip(&aClipDoc, false, false, false, false);
+
+    // 2. Paste
+    ScRange aDstRange;
+    nRes = aDstRange.Parse(rDstRange, &rDoc, rDoc.GetAddressConvention());
+    CPPUNIT_ASSERT_MESSAGE("Failed to parse.", (nRes & SCA_VALID) != 0);
+    pViewShell->GetViewData().GetMarkData().SetMarkArea(aDstRange);
+    pViewShell->GetViewData().GetView()->PasteFromClip(InsertDeleteFlags::ALL, &aClipDoc);
+}
+
+void ScCopyPasteTest::testTdf84411()
+{
+    uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create(::comphelper::getProcessComponentContext());
+    CPPUNIT_ASSERT( xDesktop.is() );
+
+    // create a frame
+    Reference< frame::XFrame > xTargetFrame = xDesktop->findFrame( "_blank", 0 );
+    CPPUNIT_ASSERT( xTargetFrame.is() );
+
+    // 1. Create spreadsheet
+    uno::Sequence< beans::PropertyValue > aEmptyArgList;
+    uno::Reference< lang::XComponent > xComponent = xDesktop->loadComponentFromURL(
+            "private:factory/scalc",
+            "_blank",
+            0,
+            aEmptyArgList );
+    CPPUNIT_ASSERT( xComponent.is() );
+
+    // Get the document model
+    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
+    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
+
+    ScDocShellRef xDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
+    CPPUNIT_ASSERT(xDocSh != nullptr);
+
+    uno::Reference< frame::XModel2 > xModel2 ( xDocSh->GetModel(), UNO_QUERY );
+    CPPUNIT_ASSERT( xModel2.is() );
+
+    Reference< frame::XController2 > xController ( xModel2->createDefaultViewController( xTargetFrame ), UNO_QUERY );
+    CPPUNIT_ASSERT( xController.is() );
+
+    // introduce model/view/controller to each other
+    xController->attachModel( xModel2.get() );
+    xModel2->connectController( xController.get() );
+    xTargetFrame->setComponent( xController->getComponentWindow(), xController.get() );
+    xController->attachFrame( xTargetFrame );
+    xModel2->setCurrentController( xController.get() );
+
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    // Get the document controller
+    ScTabViewShell* pViewShell = xDocSh->GetBestViewShell(false);
+    CPPUNIT_ASSERT(pViewShell != nullptr);
+
+
+    // 2. Setup data and formulas
+    for (unsigned int r = 0; r <= 4991; ++r)
+        for (unsigned int c = 0; c <= 14; ++c)
+            rDoc.SetValue( ScAddress(c,r,0), (r+1)*(c+1) );
+
+    rDoc.SetString(ScAddress(15,10000,0), "=AVERAGE(A10001:O10001)");
+    rDoc.SetString(ScAddress(16,10000,0), "=MIN(A10001:O10001)");
+    rDoc.SetString(ScAddress(17,10000,0), "=MAX(A10001:O10001)");
+
+    lcl_copy("P10001:R10001", "P10002:R12500", rDoc, pViewShell);
+
+
+    // 3. Disable OpenCL
+    ScModelObj* pModel = ScModelObj::getImplementation(pFoundShell->GetModel());
+    CPPUNIT_ASSERT(pModel != nullptr);
+    pModel->enableOpenCL(false);
+    CPPUNIT_ASSERT(ScCalcConfig::isOpenCLEnabled() == false);
+    pModel->enableAutomaticCalculation(true);
+    CPPUNIT_ASSERT( ScCalcConfig::isSwInterpreterEnabled() );
+
+
+    // 4. Copy and Paste
+    lcl_copy("A1:O2500", "A10001:O12500", rDoc, pViewShell);
+
+    lcl_copy("A2501:O5000", "A12501:O15000", rDoc, pViewShell);
+
+    lcl_copy("P10001:R10001", "P12501:R15000", rDoc, pViewShell);
+
+
+    // 5. Close the document (Ctrl-W)
+    xDocSh->DoClose();
 }
 
 ScCopyPasteTest::ScCopyPasteTest()
