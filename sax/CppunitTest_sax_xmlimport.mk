@@ -22,18 +22,35 @@ $(eval $(call gb_CppunitTest_use_libraries,sax_xmlimport, \
     sax \
     unotest \
     utl \
+    salhelper \
     $(gb_UWINAPI) \
 ))
+
+
+$(eval $(call gb_CppunitTest_use_library_objects,sax_xmlimport, \
+	expwrap \
+))
+
 
 $(eval $(call gb_CppunitTest_use_api,sax_xmlimport,\
     offapi \
     udkapi \
 ))
 
-$(eval $(call gb_CppunitTest_use_external,sax_xmlimport,boost_headers))
+$(eval $(call gb_CppunitTest_use_externals,sax_xmlimport, \
+	boost_headers \
+	libxml2 \
+	expat \
+	zlib \
+))
 
 $(eval $(call gb_CppunitTest_use_ure,sax_xmlimport))
 $(eval $(call gb_CppunitTest_use_vcl,sax_xmlimport))
+
+$(eval $(call gb_CppunitTest_set_include,sax_xmlimport,\
+    -I$(SRCDIR)/sax/inc \
+    $$(INCLUDE) \
+))
 
 $(eval $(call gb_CppunitTest_use_components,sax_xmlimport,\
     configmgr/source/configmgr \
@@ -41,7 +58,6 @@ $(eval $(call gb_CppunitTest_use_components,sax_xmlimport,\
     ucb/source/core/ucb1 \
     ucb/source/ucp/file/ucpfile1 \
 ))
-
 
 $(eval $(call gb_CppunitTest_use_configuration,sax_xmlimport))
 
