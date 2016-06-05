@@ -835,8 +835,6 @@ static OUString ImpValueOfInKB( const sal_Int64& rVal )
 
 void ExportDialog::updateControls()
 {
-    GetGraphicStream();
-
     // Size Controls
     if ( !mbIsPixelFormat )
     {
@@ -885,6 +883,8 @@ void ExportDialog::updateControls()
 
     if (mpSbCompression && mpSbCompression->IsVisible() && mpNfCompression)
         mpSbCompression->SetThumbPos(mpNfCompression->GetValue());
+
+    GetGraphicStream();
 
     // updating estimated size
     sal_Int64 nRealFileSize( mpTempStream->Tell() );
