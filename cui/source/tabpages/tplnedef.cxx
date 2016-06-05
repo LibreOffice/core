@@ -215,14 +215,14 @@ void SvxLineDefTabPage::ActivatePage( const SfxItemSet& )
 }
 
 
-SfxTabPage::sfxpg SvxLineDefTabPage::DeactivatePage( SfxItemSet* _pSet )
+DeactivateRC SvxLineDefTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
     CheckChanges_Impl();
 
     if( _pSet )
         FillItemSet( _pSet );
 
-    return LEAVE_PAGE;
+    return DeactivateRC::LeavePage;
 }
 
 

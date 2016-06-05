@@ -328,12 +328,12 @@ void SwEnvPage::ActivatePage(const SfxItemSet& rSet)
     Reset(&aSet);
 }
 
-SfxTabPage::sfxpg SwEnvPage::DeactivatePage(SfxItemSet* _pSet)
+DeactivateRC SwEnvPage::DeactivatePage(SfxItemSet* _pSet)
 {
     FillItem(GetParentSwEnvDlg()->aEnvItem);
     if( _pSet )
         FillItemSet(_pSet);
-    return SfxTabPage::LEAVE_PAGE;
+    return DeactivateRC::LeavePage;
 }
 
 void SwEnvPage::FillItem(SwEnvItem& rItem)

@@ -102,11 +102,11 @@ inline void OfaMemoryOptionsPage::SetNfGraphicObjectCacheLast( long nSizeInBytes
     m_pNfGraphicObjectCache->SetLast( long( double( nSizeInBytes ) * BYTES2NF ) );
 }
 
-SfxTabPage::sfxpg OfaMemoryOptionsPage::DeactivatePage( SfxItemSet* _pSet )
+DeactivateRC OfaMemoryOptionsPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if ( _pSet )
         FillItemSet( _pSet );
-    return LEAVE_PAGE;
+    return DeactivateRC::LeavePage;
 }
 
 

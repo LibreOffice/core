@@ -79,9 +79,9 @@ void ScTpDefaultsOptions::Reset(const SfxItemSet* rCoreSet)
     m_pEdSheetPrefix->SaveValue();
 }
 
-SfxTabPage::sfxpg ScTpDefaultsOptions::DeactivatePage(SfxItemSet* /*pSet*/)
+DeactivateRC ScTpDefaultsOptions::DeactivatePage(SfxItemSet* /*pSet*/)
 {
-    return KEEP_PAGE;
+    return DeactivateRC::KeepPage;
 }
 
 void ScTpDefaultsOptions::CheckNumSheets()

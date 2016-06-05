@@ -276,12 +276,12 @@ void AxisPositionsTabPage::Reset(const SfxItemSet* rInAttrs)
     }
 }
 
-SfxTabPage::sfxpg AxisPositionsTabPage::DeactivatePage(SfxItemSet* pItemSet)
+DeactivateRC AxisPositionsTabPage::DeactivatePage(SfxItemSet* pItemSet)
 {
     if( pItemSet )
         FillItemSet( pItemSet );
 
-    return LEAVE_PAGE;
+    return DeactivateRC::LeavePage;
 }
 
 void AxisPositionsTabPage::SetNumFormatter( SvNumberFormatter* pFormatter )

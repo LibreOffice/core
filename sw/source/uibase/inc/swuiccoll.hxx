@@ -50,7 +50,7 @@ class SwCondCollPage : public SfxTabPage
     virtual ~SwCondCollPage();
     virtual void dispose() override;
 
-    virtual sfxpg   DeactivatePage(SfxItemSet *pSet) override;
+    virtual DeactivateRC   DeactivatePage(SfxItemSet *pSet) override;
 
     DECL_LINK_TYPED( OnOffHdl, Button*, void );
     DECL_LINK_TYPED( AssignRemoveHdl, ListBox&, void);

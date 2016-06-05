@@ -1158,11 +1158,11 @@ void SvxColorOptionsTabPage::Reset( const SfxItemSet* )
     UpdateColorConfig();
 }
 
-SfxTabPage::sfxpg SvxColorOptionsTabPage::DeactivatePage( SfxItemSet* pSet_ )
+DeactivateRC SvxColorOptionsTabPage::DeactivatePage( SfxItemSet* pSet_ )
 {
     if ( pSet_ )
         FillItemSet( pSet_ );
-    return LEAVE_PAGE;
+    return DeactivateRC::LeavePage;
 }
 
 void SvxColorOptionsTabPage::UpdateColorConfig()

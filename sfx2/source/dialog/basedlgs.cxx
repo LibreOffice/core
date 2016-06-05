@@ -629,8 +629,8 @@ IMPL_LINK_NOARG_TYPED(SfxSingleTabDialog, OKHdl_Impl, Button*, void)
 
     if ( pImpl->m_pSfxPage->HasExchangeSupport() )
     {
-        int nRet = pImpl->m_pSfxPage->DeactivatePage( GetOutputSetImpl() );
-        if ( nRet != SfxTabPage::LEAVE_PAGE )
+        DeactivateRC nRet = pImpl->m_pSfxPage->DeactivatePage( GetOutputSetImpl() );
+        if ( nRet != DeactivateRC::LeavePage )
             return;
         else
             bModified = ( GetOutputItemSet()->Count() > 0 );

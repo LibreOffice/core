@@ -578,12 +578,12 @@ void SwWrapTabPage::ActivatePage(const SfxItemSet& rSet)
     ContourHdl(nullptr);
 }
 
-SfxTabPage::sfxpg SwWrapTabPage::DeactivatePage(SfxItemSet* _pSet)
+DeactivateRC SwWrapTabPage::DeactivatePage(SfxItemSet* _pSet)
 {
     if(_pSet)
         FillItemSet(_pSet);
 
-    return LEAVE_PAGE;
+    return DeactivateRC::LeavePage;
 }
 
 // range check

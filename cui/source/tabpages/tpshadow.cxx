@@ -255,12 +255,12 @@ void SvxShadowTabPage::ActivatePage( const SfxItemSet& rSet )
 }
 
 
-SfxTabPage::sfxpg SvxShadowTabPage::DeactivatePage( SfxItemSet* _pSet )
+DeactivateRC SvxShadowTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if( _pSet )
         FillItemSet( _pSet );
 
-    return LEAVE_PAGE;
+    return DeactivateRC::LeavePage;
 }
 
 

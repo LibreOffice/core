@@ -30,6 +30,7 @@
 #include <svl/itempool.hxx>
 #include <svl/itemset.hxx>
 #include <com/sun/star/frame/XFrame.hpp>
+#include <o3tl/typed_flags_set.hxx>
 
 class SfxPoolItem;
 class SfxTabDialog;
@@ -201,6 +202,18 @@ public:
 
 namespace sfx { class ItemConnectionBase; }
 
+enum class DeactivateRC {
+    KeepPage   = 0x00,      // Error handling; page does not change
+    // 2. Fill an itemset for update
+    // parent examples, this pointer can be NULL all the time!
+    LeavePage  = 0x01,
+    // Set, refresh and update other Page
+    RefreshSet = 0x02
+};
+namespace o3tl {
+    template<> struct typed_flags<DeactivateRC> : is_typed_flags<DeactivateRC, 0x03> {};
+}
+
 class SFX2_DLLPUBLIC SfxTabPage: public TabPage
 {
 friend class SfxTabDialog;
@@ -235,19 +248,10 @@ public:
     void                SetExchangeSupport()
                             { bHasExchangeSupport = true; }
 
-    enum sfxpg {
-      KEEP_PAGE = 0x0000,      // Error handling; page does not change
-        // 2. Fill an itemset for update
-        // parent examples, this pointer can be NULL all the time!
-        LEAVE_PAGE = 0x0001,
-        // Set, refresh and update other Page
-        REFRESH_SET = 0x0002
-    };
-
         using TabPage::ActivatePage;
         using TabPage::DeactivatePage;
     virtual void            ActivatePage( const SfxItemSet& );
-    virtual sfxpg           DeactivatePage( SfxItemSet* pSet );
+    virtual DeactivateRC    DeactivatePage( SfxItemSet* pSet );
     void                    SetUserData(const OUString& rString)
                               { aUserString = rString; }
     const OUString&         GetUserData() { return aUserString; }

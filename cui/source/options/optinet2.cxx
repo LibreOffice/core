@@ -867,11 +867,11 @@ void SvxSecurityTabPage::ActivatePage( const SfxItemSet& )
 {
 }
 
-SfxTabPage::sfxpg SvxSecurityTabPage::DeactivatePage( SfxItemSet* _pSet )
+DeactivateRC SvxSecurityTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if( _pSet )
         FillItemSet( _pSet );
-    return LEAVE_PAGE;
+    return DeactivateRC::LeavePage;
 }
 
 namespace

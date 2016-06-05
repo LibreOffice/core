@@ -128,13 +128,13 @@ void ScHFPage::ActivatePage( const SfxItemSet& rSet )
     SvxHFPage::ActivatePage( rSet );
 }
 
-SfxTabPage::sfxpg ScHFPage::DeactivatePage( SfxItemSet* pSetP )
+DeactivateRC ScHFPage::DeactivatePage( SfxItemSet* pSetP )
 {
-    if ( LEAVE_PAGE == SvxHFPage::DeactivatePage( pSetP ) )
+    if ( DeactivateRC::LeavePage == SvxHFPage::DeactivatePage( pSetP ) )
         if ( pSetP )
             FillItemSet( pSetP );
 
-    return LEAVE_PAGE;
+    return DeactivateRC::LeavePage;
 }
 
 void ScHFPage::ActivatePage()

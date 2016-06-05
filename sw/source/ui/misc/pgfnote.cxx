@@ -358,12 +358,12 @@ void SwFootNotePage::ActivatePage(const SfxItemSet& rSet)
     HeightModify(*m_pMaxHeightEdit);
 }
 
-SfxTabPage::sfxpg SwFootNotePage::DeactivatePage( SfxItemSet* _pSet)
+DeactivateRC SwFootNotePage::DeactivatePage( SfxItemSet* _pSet)
 {
     if(_pSet)
         FillItemSet(_pSet);
 
-    return LEAVE_PAGE;
+    return DeactivateRC::LeavePage;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

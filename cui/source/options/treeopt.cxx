@@ -685,8 +685,8 @@ IMPL_LINK_NOARG_TYPED(OfaTreeOptionsDialog, OKHdl_Impl, Button*, void)
             if ( RID_SVXPAGE_COLOR != pPageInfo->m_nPageId
                 && pPageInfo->m_pPage->HasExchangeSupport() )
             {
-                int nLeave = pPageInfo->m_pPage->DeactivatePage(pGroupInfo->m_pOutItemSet);
-                if ( nLeave == SfxTabPage::KEEP_PAGE )
+                DeactivateRC nLeave = pPageInfo->m_pPage->DeactivatePage(pGroupInfo->m_pOutItemSet);
+                if ( nLeave == DeactivateRC::KeepPage )
                 {
                     // the page mustn't be left
                     pTreeLB->Select(pCurrentPageEntry);
@@ -951,11 +951,11 @@ void OfaTreeOptionsDialog::SelectHdl_Impl()
     {
         pOldPage = pOptPageInfo->m_pPage;
         OptionsGroupInfo* pGroupInfo = static_cast<OptionsGroupInfo*>(pTreeLB->GetParent(pCurrentPageEntry)->GetUserData());
-        int nLeave = SfxTabPage::LEAVE_PAGE;
+        DeactivateRC nLeave = DeactivateRC::LeavePage;
         if ( RID_SVXPAGE_COLOR != pOptPageInfo->m_nPageId && pOptPageInfo->m_pPage->HasExchangeSupport() )
            nLeave = pOptPageInfo->m_pPage->DeactivatePage( pGroupInfo->m_pOutItemSet );
 
-        if ( nLeave == SfxTabPage::KEEP_PAGE )
+        if ( nLeave == DeactivateRC::KeepPage )
         {
             // we cannot leave this page
             pBox->Select( pCurrentPageEntry );

@@ -815,11 +815,11 @@ bool SvxNumberFormatTabPage::FillItemSet( SfxItemSet* rCoreAttrs )
 }
 
 
-SfxTabPage::sfxpg SvxNumberFormatTabPage::DeactivatePage( SfxItemSet* _pSet )
+DeactivateRC SvxNumberFormatTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if ( _pSet )
         FillItemSet( _pSet );
-    return LEAVE_PAGE;
+    return DeactivateRC::LeavePage;
 }
 
 void SvxNumberFormatTabPage::SetInfoItem( const SvxNumberInfoItem& rItem )

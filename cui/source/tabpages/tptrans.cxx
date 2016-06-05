@@ -482,11 +482,11 @@ void SvxTransparenceTabPage::ActivatePage(const SfxItemSet& rSet)
     InitPreview ( rSet );
 }
 
-SfxTabPage::sfxpg SvxTransparenceTabPage::DeactivatePage(SfxItemSet* _pSet)
+DeactivateRC SvxTransparenceTabPage::DeactivatePage(SfxItemSet* _pSet)
 {
     if( _pSet )
         FillItemSet( _pSet );
-    return LEAVE_PAGE;
+    return DeactivateRC::LeavePage;
 }
 
 void SvxTransparenceTabPage::PointChanged(vcl::Window* , RECT_POINT eRcPt)

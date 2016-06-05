@@ -1423,7 +1423,7 @@ void SvxPageDescPage::ActivatePage( const SfxItemSet& rSet )
 }
 
 
-SfxTabPage::sfxpg SvxPageDescPage::DeactivatePage( SfxItemSet* _pSet )
+DeactivateRC SvxPageDescPage::DeactivatePage( SfxItemSet* _pSet )
 {
     // Inquiry whether the page margins are beyond the printing area.
     // If not, ask user whether they shall be taken.
@@ -1449,7 +1449,7 @@ SfxTabPage::sfxpg SvxPageDescPage::DeactivatePage( SfxItemSet* _pSet )
             if ( pField )
                 pField->GrabFocus();
             UpdateExample_Impl();
-            return KEEP_PAGE;
+            return DeactivateRC::KeepPage;
         }
         else
             CheckMarginEdits( false );
@@ -1471,7 +1471,7 @@ SfxTabPage::sfxpg SvxPageDescPage::DeactivatePage( SfxItemSet* _pSet )
             _pSet->Put( SvxSizeItem( nWh, aSize ) );
     }
 
-    return LEAVE_PAGE;
+    return DeactivateRC::LeavePage;
 }
 
 

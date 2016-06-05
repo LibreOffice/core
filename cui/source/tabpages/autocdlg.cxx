@@ -945,9 +945,9 @@ void OfaAutocorrReplacePage::ActivatePage( const SfxItemSet& )
     static_cast<OfaAutoCorrDlg*>(GetTabDialog())->EnableLanguage(true);
 }
 
-SfxTabPage::sfxpg OfaAutocorrReplacePage::DeactivatePage( SfxItemSet*  )
+DeactivateRC OfaAutocorrReplacePage::DeactivatePage( SfxItemSet*  )
 {
-    return LEAVE_PAGE;
+    return DeactivateRC::LeavePage;
 }
 
 bool OfaAutocorrReplacePage::FillItemSet( SfxItemSet* )
@@ -1464,9 +1464,9 @@ void    OfaAutocorrExceptPage::ActivatePage( const SfxItemSet& )
     static_cast<OfaAutoCorrDlg*>(GetTabDialog())->EnableLanguage(true);
 }
 
-SfxTabPage::sfxpg OfaAutocorrExceptPage::DeactivatePage( SfxItemSet* )
+DeactivateRC OfaAutocorrExceptPage::DeactivatePage( SfxItemSet* )
 {
-    return LEAVE_PAGE;
+    return DeactivateRC::LeavePage;
 }
 
 bool OfaAutocorrExceptPage::FillItemSet( SfxItemSet*  )

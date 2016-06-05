@@ -128,7 +128,7 @@ class SwFramePage: public SfxTabPage
     bool    m_bIsMathBaselineAlignment;
 
     virtual void    ActivatePage(const SfxItemSet& rSet) override;
-    virtual sfxpg   DeactivatePage(SfxItemSet *pSet) override;
+    virtual DeactivateRC   DeactivatePage(SfxItemSet *pSet) override;
 
     DECL_LINK_TYPED(RangeModifyLoseFocusHdl, Control&, void);
     DECL_LINK_TYPED(RangeModifyClickHdl, Button*, void);
@@ -240,7 +240,7 @@ public:
 
     virtual bool FillItemSet(SfxItemSet *rSet) override;
     virtual void Reset(const SfxItemSet *rSet) override;
-    virtual sfxpg DeactivatePage(SfxItemSet *pSet) override;
+    virtual DeactivateRC DeactivatePage(SfxItemSet *pSet) override;
 };
 
 class SwFrameURLPage : public SfxTabPage

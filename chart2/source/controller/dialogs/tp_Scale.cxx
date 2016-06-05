@@ -416,12 +416,12 @@ void ScaleTabPage::Reset(const SfxItemSet* rInAttrs)
     SetNumFormat();
 }
 
-SfxTabPage::sfxpg ScaleTabPage::DeactivatePage(SfxItemSet* pItemSet)
+DeactivateRC ScaleTabPage::DeactivatePage(SfxItemSet* pItemSet)
 {
     if( !pNumFormatter )
     {
         OSL_FAIL( "No NumberFormatter available" );
-        return LEAVE_PAGE;
+        return DeactivateRC::LeavePage;
     }
 
     bool bDateAxis = chart2::AxisType::DATE == m_nAxisType;
@@ -527,12 +527,12 @@ SfxTabPage::sfxpg ScaleTabPage::DeactivatePage(SfxItemSet* pItemSet)
     }
 
     if( ShowWarning( nErrStrId, pControl ) )
-        return KEEP_PAGE;
+        return DeactivateRC::KeepPage;
 
     if( pItemSet )
         FillItemSet( pItemSet );
 
-    return LEAVE_PAGE;
+    return DeactivateRC::LeavePage;
 }
 
 void ScaleTabPage::SetNumFormatter( SvNumberFormatter* pFormatter )

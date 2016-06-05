@@ -93,7 +93,7 @@ void SfxStyleDialog::RefreshInputSet()
 /*  [Description]
 
     This is called when <SfxTabPage::DeactivatePage(SfxItemSet *)>
-    returns <SfxTabPage::REFRESH_SET>.
+    returns <DeactivateRC::RefreshSet>.
 */
 
 {

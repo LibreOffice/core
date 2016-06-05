@@ -66,16 +66,16 @@ namespace dbaui
         SetExchangeSupport();
     }
 
-    SfxTabPage::sfxpg OGenericAdministrationPage::DeactivatePage(SfxItemSet* _pSet)
+    DeactivateRC OGenericAdministrationPage::DeactivatePage(SfxItemSet* _pSet)
     {
         if (_pSet)
         {
             if (!prepareLeave())
-                return KEEP_PAGE;
+                return DeactivateRC::KeepPage;
             FillItemSet(_pSet);
         }
 
-        return LEAVE_PAGE;
+        return DeactivateRC::LeavePage;
     }
 
     void OGenericAdministrationPage::Reset(const SfxItemSet* _rCoreAttrs)

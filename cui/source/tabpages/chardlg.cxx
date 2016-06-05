@@ -1202,11 +1202,11 @@ void SvxCharNamePage::ActivatePage( const SfxItemSet& rSet )
 }
 
 
-SfxTabPage::sfxpg SvxCharNamePage::DeactivatePage( SfxItemSet* _pSet )
+DeactivateRC SvxCharNamePage::DeactivatePage( SfxItemSet* _pSet )
 {
     if ( _pSet )
         FillItemSet( _pSet );
-    return LEAVE_PAGE;
+    return DeactivateRC::LeavePage;
 }
 
 
@@ -1767,11 +1767,11 @@ IMPL_LINK_TYPED( SvxCharEffectsPage, ColorBoxSelectHdl_Impl, ListBox&, rListBox,
 }
 
 
-SfxTabPage::sfxpg SvxCharEffectsPage::DeactivatePage( SfxItemSet* _pSet )
+DeactivateRC SvxCharEffectsPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if ( _pSet )
         FillItemSet( _pSet );
-    return LEAVE_PAGE;
+    return DeactivateRC::LeavePage;
 }
 
 
@@ -2865,11 +2865,11 @@ IMPL_LINK_NOARG_TYPED(SvxCharPositionPage, ScaleWidthModifyHdl_Impl, Edit&, void
     m_pPreviewWin->SetFontWidthScale( sal_uInt16( m_pScaleWidthMF->GetValue() ) );
 }
 
-SfxTabPage::sfxpg SvxCharPositionPage::DeactivatePage( SfxItemSet* _pSet )
+DeactivateRC SvxCharPositionPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if ( _pSet )
         FillItemSet( _pSet );
-    return LEAVE_PAGE;
+    return DeactivateRC::LeavePage;
 }
 
 
@@ -3402,11 +3402,11 @@ void SvxCharTwoLinesPage::ActivatePage( const SfxItemSet& rSet )
 }
 
 
-SfxTabPage::sfxpg SvxCharTwoLinesPage::DeactivatePage( SfxItemSet* _pSet )
+DeactivateRC SvxCharTwoLinesPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if ( _pSet )
         FillItemSet( _pSet );
-    return LEAVE_PAGE;
+    return DeactivateRC::LeavePage;
 }
 
 

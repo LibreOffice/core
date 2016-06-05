@@ -384,9 +384,9 @@ namespace dbaui
             m_pTablesList->checkWildcard(m_pTablesList->getAllObjectsEntry());
     }
 
-    SfxTabPage::sfxpg OTableSubscriptionPage::DeactivatePage(SfxItemSet* _pSet)
+    DeactivateRC OTableSubscriptionPage::DeactivatePage(SfxItemSet* _pSet)
     {
-        sfxpg nResult = OGenericAdministrationPage::DeactivatePage(_pSet);
+        DeactivateRC nResult = OGenericAdministrationPage::DeactivatePage(_pSet);
 
         // dispose the connection, we don't need it anymore, so we're not wasting resources
         try

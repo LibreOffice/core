@@ -2261,11 +2261,11 @@ void SfxCustomPropertiesPage::Reset( const SfxItemSet* rItemSet )
     }
 }
 
-SfxTabPage::sfxpg SfxCustomPropertiesPage::DeactivatePage( SfxItemSet* /*pSet*/ )
+DeactivateRC SfxCustomPropertiesPage::DeactivatePage( SfxItemSet* /*pSet*/ )
 {
-    sfxpg nRet = LEAVE_PAGE;
+    DeactivateRC nRet = DeactivateRC::LeavePage;
     if ( !m_pPropertiesCtrl->AreAllLinesValid() )
-        nRet = KEEP_PAGE;
+        nRet = DeactivateRC::KeepPage;
     return nRet;
 }
 
@@ -2760,9 +2760,9 @@ void SfxCmisPropertiesPage::Reset( const SfxItemSet* rItemSet )
     m_pPropertiesCtrl.setScrollRange();
 }
 
-SfxTabPage::sfxpg SfxCmisPropertiesPage::DeactivatePage( SfxItemSet* /*pSet*/ )
+DeactivateRC SfxCmisPropertiesPage::DeactivatePage( SfxItemSet* /*pSet*/ )
 {
-    return LEAVE_PAGE;
+    return DeactivateRC::LeavePage;
 }
 
 VclPtr<SfxTabPage> SfxCmisPropertiesPage::Create( vcl::Window* pParent, const SfxItemSet* rItemSet )

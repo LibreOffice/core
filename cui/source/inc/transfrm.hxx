@@ -154,7 +154,7 @@ public:
     virtual void Reset( const SfxItemSet * ) override;
 
     virtual void ActivatePage( const SfxItemSet& rSet ) override;
-    virtual sfxpg DeactivatePage( SfxItemSet* pSet ) override;
+    virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
 
     virtual void PointChanged( vcl::Window* pWindow, RECT_POINT eRP ) override;
 
@@ -212,7 +212,7 @@ public:
     virtual void Reset( const SfxItemSet * ) override;
 
     virtual void ActivatePage( const SfxItemSet& rSet ) override;
-    virtual sfxpg DeactivatePage( SfxItemSet* pSet ) override;
+    virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
 
     virtual void PointChanged( vcl::Window* pWindow, RECT_POINT eRP ) override;
 
@@ -265,7 +265,7 @@ public:
     virtual void Reset( const SfxItemSet * ) override;
 
     virtual void ActivatePage( const SfxItemSet& rSet ) override;
-    virtual sfxpg DeactivatePage( SfxItemSet* pSet ) override;
+    virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
 
     virtual void PointChanged( vcl::Window* pWindow, RECT_POINT eRP ) override;
 

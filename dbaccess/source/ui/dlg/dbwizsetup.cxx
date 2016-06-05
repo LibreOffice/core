@@ -650,7 +650,7 @@ bool ODbTypeWizDialogSetup::leaveState(WizardState _nState)
         resetPages(m_pImpl->getCurrentDataSource());
     }
     SfxTabPage* pPage = static_cast<SfxTabPage*>(WizardDialog::GetPage(_nState));
-    return pPage && pPage->DeactivatePage(m_pOutSet) != 0;
+    return pPage && pPage->DeactivatePage(m_pOutSet) != DeactivateRC::LeavePage;
 }
 
 void ODbTypeWizDialogSetup::setTitle(const OUString& /*_sTitle*/)
@@ -659,9 +659,8 @@ void ODbTypeWizDialogSetup::setTitle(const OUString& /*_sTitle*/)
         // why?
 }
 
-void ODbTypeWizDialogSetup::enableConfirmSettings( bool _bEnable )
+void ODbTypeWizDialogSetup::enableConfirmSettings( bool /*_bEnable*/ )
 {
-    (void)_bEnable;
 }
 
 namespace

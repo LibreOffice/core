@@ -213,7 +213,7 @@ public:
     virtual void Reset( const SfxItemSet* ) override;
 
     virtual void ActivatePage( const SfxItemSet& rSet ) override;
-    virtual sfxpg DeactivatePage( SfxItemSet* pSet ) override;
+    virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
 
     virtual void PointChanged( vcl::Window* pWindow, RECT_POINT eRP ) override;
 
@@ -312,7 +312,7 @@ public:
     virtual void Reset( const SfxItemSet * ) override;
 
     virtual void ActivatePage( const SfxItemSet& rSet ) override;
-    virtual sfxpg DeactivatePage( SfxItemSet* pSet ) override;
+    virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
 
     void    SetDashList( XDashListRef pDshLst ) { pDashList = pDshLst; }
     void    SetObjSelected( bool bHasObj ) { bObjSelected = bHasObj; }
@@ -382,7 +382,7 @@ public:
     virtual void Reset( const SfxItemSet * ) override;
 
     virtual void ActivatePage( const SfxItemSet& rSet ) override;
-    virtual sfxpg DeactivatePage( SfxItemSet* pSet ) override;
+    virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
 
     void    SetLineEndList( XLineEndListRef pInList ) { pLineEndList = pInList; }
     void    SetPolyObj( const SdrObject* pObj ) { pPolyObj = pObj; }

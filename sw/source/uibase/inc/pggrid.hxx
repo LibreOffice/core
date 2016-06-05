@@ -95,7 +95,7 @@ public:
     virtual void    Reset(const SfxItemSet *rSet) override;
 
     virtual void    ActivatePage( const SfxItemSet& rSet ) override;
-    virtual sfxpg   DeactivatePage( SfxItemSet* pSet = nullptr ) override;
+    virtual DeactivateRC   DeactivatePage( SfxItemSet* pSet = nullptr ) override;
 };
 
 #endif

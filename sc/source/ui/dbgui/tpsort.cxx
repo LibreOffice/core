@@ -319,7 +319,7 @@ void ScTabPageSortFields::ActivatePage( const SfxItemSet& rSet )
     }
 }
 
-SfxTabPage::sfxpg ScTabPageSortFields::DeactivatePage( SfxItemSet* pSetP )
+DeactivateRC ScTabPageSortFields::DeactivatePage( SfxItemSet* pSetP )
 {
     if ( pDlg )
     {
@@ -333,7 +333,7 @@ SfxTabPage::sfxpg ScTabPageSortFields::DeactivatePage( SfxItemSet* pSetP )
     if ( pSetP )
         FillItemSet( pSetP );
 
-    return SfxTabPage::LEAVE_PAGE;
+    return DeactivateRC::LeavePage;
 }
 
 void ScTabPageSortFields::FillFieldLists( sal_uInt16 nStartField )
@@ -783,7 +783,7 @@ void ScTabPageSortOptions::ActivatePage( const SfxItemSet& rSet )
     }
 }
 
-SfxTabPage::sfxpg ScTabPageSortOptions::DeactivatePage( SfxItemSet* pSetP )
+DeactivateRC ScTabPageSortOptions::DeactivatePage( SfxItemSet* pSetP )
 {
     bool bPosInputOk = true;
 
@@ -830,7 +830,7 @@ SfxTabPage::sfxpg ScTabPageSortOptions::DeactivatePage( SfxItemSet* pSetP )
     if ( pSetP && bPosInputOk )
         FillItemSet( pSetP );
 
-    return bPosInputOk ? SfxTabPage::LEAVE_PAGE : SfxTabPage::KEEP_PAGE;
+    return bPosInputOk ? DeactivateRC::LeavePage : DeactivateRC::KeepPage;
 }
 
 void ScTabPageSortOptions::FillUserSortListBox()

@@ -52,7 +52,7 @@ private:
     inline void         SetNfGraphicObjectCacheMax( long nSizeInBytes );
     inline void         SetNfGraphicObjectCacheLast( long nSizeInBytes );
 protected:
-    virtual sfxpg       DeactivatePage( SfxItemSet* pSet = nullptr ) override;
+    virtual DeactivateRC   DeactivatePage( SfxItemSet* pSet = nullptr ) override;
 
 public:
     OfaMemoryOptionsPage( vcl::Window* pParent, const SfxItemSet& rSet );

@@ -363,7 +363,7 @@ void SdTpOptionsMisc::ActivatePage( const SfxItemSet& rSet )
     }
 }
 
-SfxTabPage::sfxpg SdTpOptionsMisc::DeactivatePage( SfxItemSet* pActiveSet )
+DeactivateRC SdTpOptionsMisc::DeactivatePage( SfxItemSet* pActiveSet )
 {
     // check parser
     sal_Int32 nX, nY;
@@ -371,17 +371,17 @@ SfxTabPage::sfxpg SdTpOptionsMisc::DeactivatePage( SfxItemSet* pActiveSet )
     {
         if( pActiveSet )
             FillItemSet( pActiveSet );
-        return LEAVE_PAGE;
+        return DeactivateRC::LeavePage;
     }
     ScopedVclPtrInstance< WarningBox > aWarnBox( GetParent(), WB_YES_NO, SD_RESSTR( STR_WARN_SCALE_FAIL ) );
 
     if( aWarnBox->Execute() == RET_YES )
-        return KEEP_PAGE;
+        return DeactivateRC::KeepPage;
 
     if( pActiveSet )
         FillItemSet( pActiveSet );
 
-    return LEAVE_PAGE;
+    return DeactivateRC::LeavePage;
 }
 
 bool SdTpOptionsMisc::FillItemSet( SfxItemSet* rAttrs )

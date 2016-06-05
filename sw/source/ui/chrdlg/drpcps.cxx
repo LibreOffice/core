@@ -610,12 +610,12 @@ void SwDropCapsPage::dispose()
     SfxTabPage::dispose();
 }
 
-SfxTabPage::sfxpg SwDropCapsPage::DeactivatePage(SfxItemSet * _pSet)
+DeactivateRC SwDropCapsPage::DeactivatePage(SfxItemSet * _pSet)
 {
     if (_pSet)
         FillSet(*_pSet);
 
-    return LEAVE_PAGE;
+    return DeactivateRC::LeavePage;
 }
 
 VclPtr<SfxTabPage> SwDropCapsPage::Create(vcl::Window *pParent,

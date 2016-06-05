@@ -127,7 +127,7 @@ private:
 
 protected:
     virtual void ActivatePage( const SfxItemSet& rSet ) override;
-    virtual sfxpg DeactivatePage( SfxItemSet* pSet ) override;
+    virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
 
 public:
             SdTpOptionsMisc( vcl::Window* pParent, const SfxItemSet& rInAttrs  );

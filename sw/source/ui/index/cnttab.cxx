@@ -1302,13 +1302,13 @@ void SwTOXSelectTabPage::ActivatePage( const SfxItemSet& )
     //nothing to do
 }
 
-SfxTabPage::sfxpg SwTOXSelectTabPage::DeactivatePage( SfxItemSet* _pSet )
+DeactivateRC SwTOXSelectTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if(_pSet)
         _pSet->Put(SfxUInt16Item(FN_PARAM_TOX_TYPE,
             (sal_uInt16)reinterpret_cast<sal_IntPtr>(m_pTypeLB->GetSelectEntryData())));
     FillTOXDescription();
-    return LEAVE_PAGE;
+    return DeactivateRC::LeavePage;
 }
 
 VclPtr<SfxTabPage> SwTOXSelectTabPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet)
@@ -2212,10 +2212,10 @@ void SwTOXEntryTabPage::UpdateDescriptor()
         pCurrentForm->SetCommaSeparated(m_pCommaSeparatedCB->IsChecked());
 }
 
-SfxTabPage::sfxpg SwTOXEntryTabPage::DeactivatePage( SfxItemSet* /*pSet*/)
+DeactivateRC SwTOXEntryTabPage::DeactivatePage( SfxItemSet* /*pSet*/)
 {
     UpdateDescriptor();
-    return LEAVE_PAGE;
+    return DeactivateRC::LeavePage;
 }
 
 VclPtr<SfxTabPage> SwTOXEntryTabPage::Create( vcl::Window* pParent,     const SfxItemSet* rAttrSet)
@@ -3721,10 +3721,10 @@ void SwTOXStylesTabPage::ActivatePage( const SfxItemSet& )
     EnableSelectHdl(*m_pParaLayLB);
 }
 
-SfxTabPage::sfxpg SwTOXStylesTabPage::DeactivatePage( SfxItemSet* /*pSet*/  )
+DeactivateRC SwTOXStylesTabPage::DeactivatePage( SfxItemSet* /*pSet*/  )
 {
     GetForm() = *m_pCurrentForm;
-    return LEAVE_PAGE;
+    return DeactivateRC::LeavePage;
 }
 
 VclPtr<SfxTabPage> SwTOXStylesTabPage::Create( vcl::Window* pParent,
