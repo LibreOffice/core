@@ -4408,7 +4408,7 @@ PPTCharPropSet::PPTCharPropSet(sal_uInt32 nParagraph)
     : mnOriginalTextPos(0)
     , mnParagraph(nParagraph)
     , mpFieldItem(nullptr)
-    , pCharSet(new ImplPPTCharPropSet)
+    , mpImplPPTCharPropSet()
 {
     mnHylinkOrigColor = 0;
     mbIsHyperlink = false;
@@ -4417,12 +4417,11 @@ PPTCharPropSet::PPTCharPropSet(sal_uInt32 nParagraph)
 }
 
 PPTCharPropSet::PPTCharPropSet( const PPTCharPropSet& rCharPropSet )
+    : mpImplPPTCharPropSet( rCharPropSet.mpImplPPTCharPropSet )
 {
     mnHylinkOrigColor = rCharPropSet.mnHylinkOrigColor;
     mbIsHyperlink = rCharPropSet.mbIsHyperlink;
     mbHardHylinkOrigColor = rCharPropSet.mbHardHylinkOrigColor;
-    pCharSet = rCharPropSet.pCharSet;
-    pCharSet->mnRefCount++;
 
     mnParagraph = rCharPropSet.mnParagraph;
     mnOriginalTextPos = rCharPropSet.mnOriginalTextPos;
@@ -4434,10 +4433,8 @@ PPTCharPropSet::PPTCharPropSet( const PPTCharPropSet& rCharPropSet )
 }
 
 PPTCharPropSet::PPTCharPropSet( const PPTCharPropSet& rCharPropSet, sal_uInt32 nParagraph )
+    : mpImplPPTCharPropSet(rCharPropSet.mpImplPPTCharPropSet)
 {
-    pCharSet = rCharPropSet.pCharSet;
-    pCharSet->mnRefCount++;
-
     mnHylinkOrigColor = rCharPropSet.mnHylinkOrigColor;
     mbIsHyperlink = rCharPropSet.mbIsHyperlink;
     mbHardHylinkOrigColor = rCharPropSet.mbHardHylinkOrigColor;
@@ -4451,60 +4448,44 @@ PPTCharPropSet::PPTCharPropSet( const PPTCharPropSet& rCharPropSet, sal_uInt32 n
 
 PPTCharPropSet::~PPTCharPropSet()
 {
-    if ( ! ( --pCharSet->mnRefCount ) )
-        delete pCharSet;
     delete mpFieldItem;
 }
 
 PPTCharPropSet& PPTCharPropSet::operator=( const PPTCharPropSet& rCharPropSet )
 {
-    if ( this != &rCharPropSet )
-    {
-        if ( ! ( --pCharSet->mnRefCount ) )
-            delete pCharSet;
-        pCharSet = rCharPropSet.pCharSet;
-        pCharSet->mnRefCount++;
-
-        mnOriginalTextPos = rCharPropSet.mnOriginalTextPos;
-        mnParagraph = rCharPropSet.mnParagraph;
-        maString = rCharPropSet.maString;
-        mpFieldItem = ( rCharPropSet.mpFieldItem ) ? new SvxFieldItem( *rCharPropSet.mpFieldItem ) : nullptr;
-    }
+    mpImplPPTCharPropSet = rCharPropSet.mpImplPPTCharPropSet;
     return *this;
 }
 
-void PPTCharPropSet::ImplMakeUnique()
+bool PPTCharPropSet::operator==( const PPTCharPropSet& rCharPropSet ) const
 {
-    if ( pCharSet->mnRefCount > 1 )
-    {
-        ImplPPTCharPropSet& rOld = *pCharSet;
-        rOld.mnRefCount--;
-        pCharSet = new ImplPPTCharPropSet( rOld );
-        pCharSet->mnRefCount = 1;
-    }
+    if ( mnOriginalTextPos == rCharPropSet.mnOriginalTextPos &&
+        mnParagraph == rCharPropSet.mnParagraph &&
+        maString == rCharPropSet.maString &&
+        mpFieldItem == rCharPropSet.mpFieldItem)
+            return true;
+    return false;
 }
 
 void PPTCharPropSet::SetFont( sal_uInt16 nFont )
 {
     sal_uInt32  nMask = 1 << PPT_CharAttr_Font;
-    bool bDoNotMake = (pCharSet->mnAttrSet & nMask) != 0;
+    bool bDoNotMake = (mpImplPPTCharPropSet->mnAttrSet & nMask) != 0;
 
     if ( bDoNotMake )
-        bDoNotMake = nFont == pCharSet->mnFont;
+        bDoNotMake = nFont == mpImplPPTCharPropSet->mnFont;
 
     if ( !bDoNotMake )
     {
-        ImplMakeUnique();
-        pCharSet->mnFont = nFont;
-        pCharSet->mnAttrSet |= nMask;
+        mpImplPPTCharPropSet->mnFont = nFont;
+        mpImplPPTCharPropSet->mnAttrSet |= nMask;
     }
 }
 
 void PPTCharPropSet::SetColor( sal_uInt32 nColor )
 {
-    ImplMakeUnique();
-    pCharSet->mnColor = nColor;
-    pCharSet->mnAttrSet |= 1 << PPT_CharAttr_FontColor;
+    mpImplPPTCharPropSet->mnColor = nColor;
+    mpImplPPTCharPropSet->mnAttrSet |= 1 << PPT_CharAttr_FontColor;
 }
 
 PPTRuler::PPTRuler()
@@ -5143,7 +5124,7 @@ void PPTStyleTextPropReader::ReadCharProps( SvStream& rIn, PPTCharPropSet& aChar
             OSL_FAIL( "SJ:PPTStyleTextPropReader::could not get this PPT_PST_StyleTextPropAtom by reading the character attributes" );
         }
     }
-    ImplPPTCharPropSet& aSet = *aCharPropSet.pCharSet;
+    ImplPPTCharPropSet& aSet = *aCharPropSet.mpImplPPTCharPropSet;
 
     // character attributes
     rIn.ReadUInt32( nMask );
@@ -5395,8 +5376,8 @@ void PPTStyleTextPropReader::Init( SvStream& rIn, const DffRecordHeader& rTextHe
                         }
                         PPTCharPropSet* pCPropSet = new PPTCharPropSet( aCharPropSet, nCurrentPara );
                         pCPropSet->maString = aString.copy(nCharAnzRead, 1);
-                        if ( aCharPropSet.pCharSet->mnAttrSet & ( 1 << PPT_CharAttr_Symbol ) )
-                            pCPropSet->SetFont( aCharPropSet.pCharSet->mnSymbolFont );
+                        if ( aCharPropSet.mpImplPPTCharPropSet->mnAttrSet & ( 1 << PPT_CharAttr_Symbol ) )
+                            pCPropSet->SetFont( aCharPropSet.mpImplPPTCharPropSet->mnSymbolFont );
                         aCharPropList.push_back( pCPropSet );
                         nCharCount--;
                         nCharAnzRead++;
@@ -5492,7 +5473,7 @@ bool PPTPortionObj::GetAttrib( sal_uInt32 nAttr, sal_uInt32& rRetValue, TSS_Type
     sal_uInt32  nMask = 1 << nAttr;
     rRetValue = 0;
 
-    bool bIsHardAttribute = ( ( pCharSet->mnAttrSet & nMask ) != 0 );
+    bool bIsHardAttribute = ( ( mpImplPPTCharPropSet->mnAttrSet & nMask ) != 0 );
 
     if ( bIsHardAttribute )
     {
@@ -5504,22 +5485,22 @@ bool PPTPortionObj::GetAttrib( sal_uInt32 nAttr, sal_uInt32& rRetValue, TSS_Type
             case PPT_CharAttr_Shadow :
             case PPT_CharAttr_Strikeout :
             case PPT_CharAttr_Embossed :
-                rRetValue = ( pCharSet->mnFlags & nMask ) ? 1 : 0;
+                rRetValue = ( mpImplPPTCharPropSet->mnFlags & nMask ) ? 1 : 0;
             break;
             case PPT_CharAttr_Font :
-                rRetValue = pCharSet->mnFont;
+                rRetValue = mpImplPPTCharPropSet->mnFont;
             break;
             case PPT_CharAttr_AsianOrComplexFont :
-                rRetValue = pCharSet->mnAsianOrComplexFont;
+                rRetValue = mpImplPPTCharPropSet->mnAsianOrComplexFont;
             break;
             case PPT_CharAttr_FontHeight :
-                rRetValue = pCharSet->mnFontHeight;
+                rRetValue = mpImplPPTCharPropSet->mnFontHeight;
             break;
             case PPT_CharAttr_FontColor :
-                rRetValue = pCharSet->mnColor;
+                rRetValue = mpImplPPTCharPropSet->mnColor;
             break;
             case PPT_CharAttr_Escapement :
-                rRetValue = pCharSet->mnEscapement;
+                rRetValue = mpImplPPTCharPropSet->mnEscapement;
             break;
             default :
                 OSL_FAIL( "SJ:PPTPortionObj::GetAttrib ( hard attribute does not exist )" );
@@ -5897,9 +5878,9 @@ void PPTParagraphObj::UpdateBulletRelSize( sal_uInt32& nBulletRelSize ) const
         if (!m_PortionList.empty())
         {
             PPTPortionObj const& rPortion = *m_PortionList.front();
-            if (rPortion.pCharSet->mnAttrSet & (1 << PPT_CharAttr_FontHeight))
+            if (rPortion.mpImplPPTCharPropSet->mnAttrSet & (1 << PPT_CharAttr_FontHeight))
             {
-                nFontHeight = rPortion.pCharSet->mnFontHeight;
+                nFontHeight = rPortion.mpImplPPTCharPropSet->mnFontHeight;
             }
         }
         // if we do not have a hard attributed fontheight, the fontheight is taken from the style
@@ -5940,9 +5921,9 @@ bool PPTParagraphObj::GetAttrib( sal_uInt32 nAttr, sal_uInt32& rRetValue, TSS_Ty
                 if ((nDestinationInstance != TSS_Type::Unknown) && !m_PortionList.empty())
                 {
                     PPTPortionObj const& rPortion = *m_PortionList.front();
-                    if (rPortion.pCharSet->mnAttrSet & (1 << PPT_CharAttr_FontColor))
+                    if (rPortion.mpImplPPTCharPropSet->mnAttrSet & (1 << PPT_CharAttr_FontColor))
                     {
-                        rRetValue = rPortion.pCharSet->mnColor;
+                        rRetValue = rPortion.mpImplPPTCharPropSet->mnColor;
                     }
                     else
                     {
@@ -5968,9 +5949,9 @@ bool PPTParagraphObj::GetAttrib( sal_uInt32 nAttr, sal_uInt32& rRetValue, TSS_Ty
                 if ((nDestinationInstance != TSS_Type::Unknown) && !m_PortionList.empty())
                 {
                     PPTPortionObj const& rPortion = *m_PortionList.front();
-                    if (rPortion.pCharSet->mnAttrSet & ( 1 << PPT_CharAttr_Font ) )
+                    if (rPortion.mpImplPPTCharPropSet->mnAttrSet & ( 1 << PPT_CharAttr_Font ) )
                     {
-                        rRetValue = rPortion.pCharSet->mnFont;
+                        rRetValue = rPortion.mpImplPPTCharPropSet->mnFont;
                     }
                     else
                     {
@@ -7032,8 +7013,8 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                                             const SvxURLField* pField = static_cast<const SvxURLField*>((*FE)->pField1->GetField());
 
                                                             pCurrent->mbIsHyperlink = true;
-                                                            pCurrent->mnHylinkOrigColor = pCurrent->pCharSet->mnColor;
-                                                            pCurrent->mbHardHylinkOrigColor = ( ( pCurrent->pCharSet->mnAttrSet >>PPT_CharAttr_FontColor ) & 1)>0;
+                                                            pCurrent->mnHylinkOrigColor = pCurrent->mpImplPPTCharPropSet->mnColor;
+                                                            pCurrent->mbHardHylinkOrigColor = ( ( pCurrent->mpImplPPTCharPropSet->mnAttrSet >>PPT_CharAttr_FontColor ) & 1)>0;
 
                                                             if ( pCurrent->mpFieldItem )
                                                             {
