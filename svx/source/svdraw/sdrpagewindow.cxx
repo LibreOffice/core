@@ -149,8 +149,6 @@ SdrPageWindow::~SdrPageWindow()
         uno::Reference< lang::XComponent > xComponent(mpImpl->mxControlContainer, uno::UNO_QUERY);
         xComponent->dispose();
     }
-
-    delete mpImpl;
 }
 
 SdrPageView& SdrPageWindow::GetPageView() const

@@ -24,6 +24,7 @@
 #include <svx/svdtypes.hxx>
 #include <svx/svxdllapi.h>
 #include <rtl/ref.hxx>
+#include <memory>
 
 #include <com/sun/star/awt/XControlContainer.hpp>
 
@@ -47,7 +48,7 @@ class SVX_DLLPUBLIC SdrPageWindow
 {
     struct Impl;
 
-    Impl* mpImpl;
+    std::unique_ptr<Impl> mpImpl;
 
     SdrPageWindow( const SdrPageWindow& ) = delete;
     SdrPageWindow& operator= ( const SdrPageWindow& ) = delete;
