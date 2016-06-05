@@ -336,7 +336,7 @@ void Svx3DWin::dispose()
 
     delete mpRemember2DAttributes;
 
-    delete mpImpl;
+    mpImpl.reset();
 
     m_pBtnGeo.clear();
     m_pBtnRepresentation.clear();
