@@ -231,7 +231,7 @@ public:
     SdrOutlinerCache*   mpOutlinerCache;
     //get a vector of all the SdrOutliner belonging to the model
     std::vector<SdrOutliner*> GetActiveOutliners() const;
-    SdrModelImpl*       mpImpl;
+    std::unique_ptr<SdrModelImpl>       mpImpl;
     sal_uInt16          mnCharCompressType;
     sal_uInt16          mnHandoutPageCount;
     sal_uInt16          nReserveUInt6;

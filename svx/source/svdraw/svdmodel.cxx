@@ -108,7 +108,7 @@ struct SdrModelImpl
 void SdrModel::ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* _pEmbeddedHelper,
     bool bUseExtColorTable, bool bLoadRefCounts)
 {
-    mpImpl = new SdrModelImpl;
+    mpImpl.reset(new SdrModelImpl);
     mpImpl->mpUndoManager=nullptr;
     mpImpl->mpUndoFactory=nullptr;
     mbInDestruction = false;
@@ -318,7 +318,6 @@ SdrModel::~SdrModel()
     delete mpNumberFormatter;
 
     delete mpImpl->mpUndoFactory;
-    delete mpImpl;
 }
 
 void SdrModel::SetSwapGraphics( bool bSwap )
