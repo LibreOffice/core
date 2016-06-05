@@ -80,6 +80,10 @@ String STR_RENAME_TEMPLATE
 {
     Text [ en-US ] = "Enter New Name: " ;
 };
+String STR_TEMPLATE_SELECTION
+{
+    Text [ en-US ] = "Select a Template" ;
+};
 String STR_AUTOMATICVERSION
 {
     Text [ en-US ] = "Automatically saved version" ;

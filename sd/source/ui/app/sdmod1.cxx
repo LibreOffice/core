@@ -557,7 +557,12 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
 
             //Launch TemplateSelectionDialog
             ScopedVclPtrInstance< SfxTemplateSelectionDlg > aTemplDlg;
-            aTemplDlg->Execute();
+            if (aTemplDlg->Execute())
+            {
+                // TP_OPTIONS_MISC:
+                SdOptionsMiscItem aSdOptionsMiscItem( ATTR_OPTIONS_MISC , pOpt);
+                aSdOptionsMiscItem.GetOptionsMisc().SetStartWithTemplate( aTemplDlg->IsStartWithTemplate() );
+            }
 
             //pFrame is loaded with the desired template
             if(!aTemplDlg->getTemplatePath().isEmpty())
