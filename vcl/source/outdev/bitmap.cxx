@@ -38,6 +38,7 @@
 
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <memory>
+#include <comphelper/lok.hxx>
 
 void OutputDevice::DrawBitmap( const Point& rDestPt, const Bitmap& rBitmap )
 {
@@ -1177,7 +1178,6 @@ void OutputDevice::DrawTransformedBitmapEx(
     if ( mnDrawMode & DrawModeFlags::NoBitmap )
         return;
 
-
     // decompose matrix to check rotation and shear
     basegfx::B2DVector aScale, aTranslate;
     double fRotate, fShearX;
@@ -1194,12 +1194,23 @@ void OutputDevice::DrawTransformedBitmapEx(
         // with no rotation, shear or mirroring it can be mapped to DrawBitmapEx
         // do *not* execute the mirroring here, it's done in the fallback
         // #i124580# the correct DestSize needs to be calculated based on MaxXY values
-        const Point aDestPt(basegfx::fround(aTranslate.getX()), basegfx::fround(aTranslate.getY()));
+        Point aDestPt(basegfx::fround(aTranslate.getX()), basegfx::fround(aTranslate.getY()));
         const Size aDestSize(
             basegfx::fround(aScale.getX() + aTranslate.getX()) - aDestPt.X(),
             basegfx::fround(aScale.getY() + aTranslate.getY()) - aDestPt.Y());
+        const Point aOrigin = GetMapMode().GetOrigin();
+        if (comphelper::LibreOfficeKit::isActive())
+        {
+            aDestPt.Move(aOrigin.getX(), aOrigin.getY());
+            EnableMapMode(false);
+        }
 
         DrawBitmapEx(aDestPt, aDestSize, rBitmapEx);
+        if (comphelper::LibreOfficeKit::isActive())
+        {
+            EnableMapMode(true);
+            aDestPt.Move(-aOrigin.getX(), -aOrigin.getY());
+        }
         return;
     }
 
