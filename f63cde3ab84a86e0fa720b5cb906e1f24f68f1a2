@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_9c41983c",
+        "filename": "sfx2/source/appl/module.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-06-05T11:22:47Z",
+      "side": 1,
+      "message": "by doing this even if bDummy\u003d\u003dtrue you have changed the logic",
+      "revId": "f63cde3ab84a86e0fa720b5cb906e1f24f68f1a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
