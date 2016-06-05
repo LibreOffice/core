@@ -821,6 +821,9 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
         auto aOrigin = aOriginalMode.GetOrigin();
         aOrigin.setX(aOrigin.getX() / TWIPS_PER_PIXEL + nScrX);
         aOrigin.setY(aOrigin.getY() / TWIPS_PER_PIXEL + nScrY);
+        static const double twipFactor = 15 * 1.76388889; // 26.45833335
+        aOrigin = Point(aOrigin.getX() - aOrigin.getX() / twipFactor,
+                        aOrigin.getY() - aOrigin.getY() / twipFactor);
         aNew.SetOrigin(aOrigin);
         pContentDev->SetMapMode(aNew);
     }
