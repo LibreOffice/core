@@ -272,12 +272,12 @@ namespace treeview {
 
     };  // end class TVChildTarget
 
-    enum IteratorState
+    enum class IteratorState
     {
-        USER_EXTENSIONS,
-        SHARED_EXTENSIONS,
-        BUNDLED_EXTENSIONS,
-        END_REACHED
+        UserExtensions,
+        SharedExtensions,
+        BundledExtensions,
+        EndReached
     };
 
     class ExtensionIteratorBase

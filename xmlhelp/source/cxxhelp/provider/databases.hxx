@@ -305,14 +305,14 @@ namespace chelp {
 
     }; // end class Databases
 
-    enum IteratorState
+    enum class IteratorState
     {
-        INITIAL_MODULE,
+        InitialModule,
         //SHARED_MODULE,        // Later, avoids redundancies in help compiling
-        USER_EXTENSIONS,
-        SHARED_EXTENSIONS,
-        BUNDLED_EXTENSIONS,
-        END_REACHED
+        UserExtensions,
+        SharedExtensions,
+        BundledExtensions,
+        EndReached
     };
 
     // Hashtable to cache extension help status
