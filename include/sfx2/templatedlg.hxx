@@ -149,6 +149,7 @@ protected:
     VclPtr<PushButton> mpExportButton;
     VclPtr<PushButton> mpImportButton;
     VclPtr<PushButton> mpLinkButton;
+    VclPtr<CheckBox> mpCBXHideDlg;
     VclPtr<ToolBox> mpActionBar;
     VclPtr<TemplateSearchView> mpSearchView;
     VclPtr<TemplateAbstractView> mpCurView;
@@ -222,9 +223,11 @@ public:
     virtual short Execute() override;
 
     inline OUString const & getTemplatePath() const { return msTemplatePath; };
+    inline bool IsStartWithTemplate() const { return mpCBXHideDlg->IsChecked(); };
 
 private:
     DECL_LINK_TYPED(OpenTemplateHdl, ThumbnailViewItem*, void);
+    DECL_LINK_TYPED(OkClickHdl, Button*, void);
 
     OUString   msTemplatePath;
 };
