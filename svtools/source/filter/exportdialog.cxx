@@ -1313,8 +1313,6 @@ void ExportDialog::updatePreview()
 
 void ExportDialog::updateControls()
 {
-    GetGraphicStream();
-
     // Size Controls
     if ( !mbIsPixelFormat )
     {
@@ -1363,6 +1361,8 @@ void ExportDialog::updateControls()
 
     if ( maSbCompression.IsVisible() )
         maSbCompression.SetThumbPos( maNfCompression.GetValue() );
+
+    GetGraphicStream();
 
     // updating estimated size
     sal_Int64 nRealFileSize( mpTempStream->Tell() );
