@@ -364,4 +364,9 @@ $(foreach lang,$(gb_AllLangResTarget_LANGS),\
 
 endef
 
+define gb_AllLangResTarget_get_imagelists
+$(foreach lang,$(gb_AllLangResTarget_LANGS),\
+    $(call gb_ResTarget_get_imagelist_target,$(1)$(lang)))
+endef
+
 # vim: set noet sw=4: 

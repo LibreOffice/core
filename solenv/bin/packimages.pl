@@ -43,7 +43,7 @@ my $global_path;             # path to global images directory
 my $module_path;             # path to module images directory
 my $sort_file;               # path to file containing sorting data
 my @custom_path;             # path to custom images directory
-my @imagelist_path;          # paths to directories containing the image lists
+my $imagelist_file;          # file containing list of image list files
 my $verbose;                 # be verbose
 my $extra_verbose;           # be extra verbose
 my $do_rebuild = 0;          # is rebuilding zipfile required?
@@ -116,12 +116,12 @@ sub parse_options
                  '-s=s' => \$sort_file,
                              '-m=s' => \$module_path,
                              '-c=s' => \@custom_path_list,
-                             '-l=s' => \@imagelist_path,
+                             '-l=s' => \$imagelist_file,
                              '-v'   => \$verbose,
                              '-vv'  => \$extra_verbose
                             );
     if ( $opt_help || !$success || !$out_file || !$global_path
-        || !$module_path || !@custom_path_list || !@imagelist_path )
+        || !$module_path || !@custom_path_list || !$imagelist_file )
     {
         usage();
         exit(1);
@@ -134,7 +134,8 @@ sub parse_options
     my $out_dir = dirname($out_file);
 
     # Check paths.
-    foreach ($out_dir, $global_path, $module_path, @imagelist_path) {
+    print_error("no such file '$_'", 2) if ! -f $imagelist_file;
+    foreach ($out_dir, $global_path, $module_path) {
         print_error("no such directory: '$_'", 2) if ! -d $_;
         print_error("can't search directory: '$_'", 2) if ! -x $_;
     }
@@ -158,17 +159,15 @@ sub parse_options
 sub get_image_lists
 {
     my @image_lists;
-    my $glob_imagelist_path;
 
-    foreach ( @imagelist_path ) {
-        $glob_imagelist_path = $_;
-        # cygwin perl
-        chomp( $glob_imagelist_path = qx{cygpath -u "$glob_imagelist_path"} ) if "$^O" eq "cygwin";
-        push @image_lists, glob("$glob_imagelist_path/*.ilst");
+    open (my $fh, $imagelist_file) or die "cannot open imagelist file $imagelist_file\n";
+    while (<$fh>) {
+        chomp;
+        next if /^\s*$/;
+        my @ilsts = split ' ';
+        push @image_lists, @ilsts;
     }
-    if ( !@image_lists ) {
-        print_error("can't find any image lists in '@imagelist_path'", 3);
-    }
+    close $fh;
 
     return wantarray ? @image_lists : \@image_lists;
 }
@@ -420,7 +419,7 @@ sub replace_file
 
 sub usage
 {
-    print STDERR "Usage: packimages.pl [-h] -o out_file -g g_path -m m_path -c c_path -l imagelist_path\n";
+    print STDERR "Usage: packimages.pl [-h] -o out_file -g g_path -m m_path -c c_path -l imagelist_file\n";
     print STDERR "Creates archive of images\n";
     print STDERR "Options:\n";
     print STDERR "    -h                 print this help\n";
@@ -429,7 +428,7 @@ sub usage
     print STDERR "    -m m_path          path to module images directory\n";
     print STDERR "    -c c_path          path to custom images directory\n";
     print STDERR "    -s sort_file       path to image sort order file\n";
-    print STDERR "    -l imagelist_path  path to directory containing image lists (may appear mutiple times)\n";
+    print STDERR "    -l imagelist_file  file containing list of image list files\n";
     print STDERR "    -v                 verbose\n";
     print STDERR "    -vv                very verbose\n";
 }

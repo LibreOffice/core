@@ -239,6 +239,23 @@ gb_Package_MODULE_$(1) += $(2)
 
 endef
 
+# TODO: this should be extended to handle auto-installation.
+define gb_Helper_register_resources
+gb_AllLangResTarget_REGISTERED += $(1)
+
+endef
+
+# TODO: this should be extended to handle auto-installation.
+define gb_Helper_register_uiconfigs
+gb_UIConfig_REGISTERED += $(1)
+
+endef
+
+define gb_Helper_get_imagelists
+$(foreach res,$(gb_AllLangResTarget_REGISTERED),$(call gb_AllLangResTarget_get_imagelists,$(res))) \
+$(foreach ui,$(gb_UIConfig_REGISTERED),$(call gb_UIConfig_get_imagelist_target,$(ui)))
+endef
+
 # call gb_Helper_replace_if_different_and_touch,source,target,optional-touch-reference-file
 define gb_Helper_replace_if_different_and_touch
 if cmp -s $(1) $(2); then rm $(1); \

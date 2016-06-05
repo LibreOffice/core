@@ -908,4 +908,114 @@ $(eval $(call gb_ExternalExecutable_register_executables,\
 	xsltproc \
 ))
 
+# Resources
+$(eval $(call gb_Helper_register_resources,\
+	abp \
+	acc \
+	analysis \
+	avmedia \
+	$(call gb_Helper_optional,SCRIPTING,basctl) \
+	$(call gb_Helper_optional,DBCONNECTIVITY,bib) \
+	chartcontroller \
+	cnr \
+	cui \
+	date \
+	$(call gb_Helper_optional,DBCONNECTIVITY,\
+		dba \
+		dbmm \
+		dbp \
+		dbu \
+	) \
+	dbw \
+	deployment \
+	deploymentgui \
+	dkt \
+	editeng \
+	eps \
+	eur \
+	for \
+	forui \
+	fps_office \
+	frm \
+	fwe \
+	gal \
+	imp \
+	ofa \
+	$(call gb_Helper_optional,DBCONNECTIVITY,pcr) \
+	pdffilter \
+	pricing \
+	rpt \
+	rptui \
+	$(call gb_Helper_optional,SCRIPTING,sb) \
+	sc \
+	scn \
+	sd \
+	sdbcl \
+	sdberr \
+	$(call gb_Helper_optional,DBCONNECTIVITY,sdbt) \
+	sfx \
+	sm \
+	$(if $(ENABLE_COINMP)$(ENABLE_LPSOLVE),solver) \
+	svl \
+	svt \
+	svx \
+	sw \
+	t602filter \
+	tpl \
+	upd \
+	$(if $(ENABLE_ONLINE_UPDATE),updchk) \
+	uui \
+	vcl \
+	writerperfect \
+	wzi \
+	xmlsec \
+	xsltdlg \
+))
+
+# UI configuration
+$(eval $(call gb_Helper_register_uiconfigs,\
+	cui \
+	$(call gb_Helper_optional,DBCONNECTIVITY,dbaccess) \
+	desktop \
+	filter \
+	formula \
+	fps \
+	$(call gb_Helper_optional,SCRIPTING,modules/BasicIDE) \
+	$(call gb_Helper_optional,DBCONNECTIVITY,\
+		modules/dbapp \
+		modules/dbbrowser \
+		modules/dbquery \
+		modules/dbrelation \
+	) \
+	modules/dbreport \
+	$(call gb_Helper_optional,DBCONNECTIVITY,\
+		modules/dbtable \
+		modules/dbtdata \
+	) \
+	modules/sabpilot \
+	$(call gb_Helper_optional,DBCONNECTIVITY,modules/sbibliography) \
+	modules/scalc \
+	modules/scanner \
+	modules/schart \
+	modules/sdraw \
+	modules/sglobal \
+	modules/simpress \
+	modules/smath \
+	$(call gb_Helper_optional,DBCONNECTIVITY,modules/spropctrlr) \
+	modules/StartModule \
+	modules/sweb \
+	modules/swform \
+	modules/swreport \
+	modules/swriter \
+	modules/swxform \
+	sfx \
+	svt \
+	svx \
+	$(if $(ENABLE_TELEPATHY),tubes) \
+	uui \
+	vcl \
+	writerperfect \
+	xmlsec \
+))
+
 # vim: set noet sw=4 ts=4:
