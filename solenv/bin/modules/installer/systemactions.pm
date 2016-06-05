@@ -91,7 +91,7 @@ sub create_directory
                     }
                     else
                     {
-                        $infoline = "\Error: \"$directory\" could not be created. Even the parent directory \"$parentdir\" does not exist and could not be created.\n";
+                        $infoline = "Error: \"$directory\" could not be created. Even the parent directory \"$parentdir\" does not exist and could not be created.\n";
                         $installer::logger::Lang->print($infoline);
                         if ( -d $parentdir )
                         {
@@ -211,7 +211,7 @@ sub create_directory_with_privileges
                     }
                     else
                     {
-                        $infoline = "\Error: \"$directory\" could not be created. Even the parent directory \"$parentdir\" does not exist and could not be created.\n";
+                        $infoline = "Error: \"$directory\" could not be created. Even the parent directory \"$parentdir\" does not exist and could not be created.\n";
                         $installer::logger::Lang->print($infoline);
                         if ( -d $parentdir )
                         {
