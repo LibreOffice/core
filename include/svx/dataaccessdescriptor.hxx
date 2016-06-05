@@ -23,17 +23,13 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <svx/svxdllapi.h>
-
+#include <memory>
 
 namespace svx
 {
-
-
     class ODADescriptorImpl;
 
-
     //= DataAccessDescriptorProperty
-
     enum DataAccessDescriptorProperty
     {
         daDataSource,           /// data source name            (string)
@@ -56,7 +52,6 @@ namespace svx
         daComponent             /// component name              (XContent)
     };
 
-
     //= ODataAccessDescriptor
 
     /** class encapsulating the css::sdb::DataAccessDescriptor service.
@@ -64,7 +59,7 @@ namespace svx
     class SAL_WARN_UNUSED SVX_DLLPUBLIC ODataAccessDescriptor
     {
     protected:
-        ODADescriptorImpl*      m_pImpl;
+        std::unique_ptr<ODADescriptorImpl>      m_pImpl;
 
     public:
         ODataAccessDescriptor();
@@ -112,11 +107,9 @@ namespace svx
         */
                 css::uno::Any& operator [] ( DataAccessDescriptorProperty _eWhich );
 
-
         /** returns either the data source name if given or the database location
         */
         OUString getDataSource() const;
-
 
         /** set the data source name, if it is not file URL
             @param  _sDataSourceNameOrLocation
@@ -125,11 +118,8 @@ namespace svx
         void setDataSource(const OUString& _sDataSourceNameOrLocation);
     };
 
-
 }
 
-
 #endif // INCLUDED_SVX_DATAACCESSDESCRIPTOR_HXX
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
