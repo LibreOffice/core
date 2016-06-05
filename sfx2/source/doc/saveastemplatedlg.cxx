@@ -11,13 +11,20 @@
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
+#include <comphelper/storagehelper.hxx>
 #include <sfx2/sfxresid.hxx>
+#include <sfx2/app.hxx>
+#include <sfx2/fcontnr.hxx>
+#include <sfx2/docfac.hxx>
 #include <sfx2/doctempl.hxx>
+#include <sfx2/docfilt.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/lstbox.hxx>
+#include <sot/storage.hxx>
 
 #include <com/sun/star/frame/DocumentTemplates.hpp>
+#include <com/sun/star/frame/XStorable.hpp>
 
 #include "doc.hrc"
 
@@ -34,6 +41,7 @@ SfxSaveAsTemplateDialog::SfxSaveAsTemplateDialog( vcl::Window* pParent):
         mpDocTemplates(new SfxDocumentTemplates)
 {
     get(mpLBCategory, "categorylb");
+    get(mpCBXDefault, "defaultcb");
     get(mpTemplateNameEdit, "name_entry");
     get(mpOKButton, "ok");
 
@@ -158,9 +166,32 @@ bool SfxSaveAsTemplateDialog::SaveTemplate()
 
     sal_uInt16 nDocId = mpDocTemplates->GetCount(mnRegionPos);
     OUString     sURL = mpDocTemplates->GetTemplateTargetURLFromComponent(msSelectedCategory, msTemplateName);
+    bool bIsSaved = mpDocTemplates->InsertTemplate( mnRegionPos, nDocId, msTemplateName, sURL);
 
-    if(!mpDocTemplates->InsertTemplate( mnRegionPos, nDocId, msTemplateName, sURL))
+    if (!bIsSaved)
         return false;
+
+    if ( !sURL.isEmpty() && mpCBXDefault->IsChecked() )
+    {
+        OUString aServiceName;
+        try
+        {
+            uno::Reference< embed::XStorage > xStorage =
+                    comphelper::OStorageHelper::GetStorageFromURL( sURL, embed::ElementModes::READ );
+
+            SotClipboardFormatId nFormat = SotStorage::GetFormatID( xStorage );
+
+            std::shared_ptr<const SfxFilter> pFilter = SfxGetpApp()->GetFilterMatcher().GetFilter4ClipBoardId( nFormat );
+
+            if ( pFilter )
+                aServiceName = pFilter->GetServiceName();
+        }
+        catch( uno::Exception& )
+        {}
+
+        if(!aServiceName.isEmpty())
+            SfxObjectFactory::SetStandardTemplate(aServiceName, sURL);
+    }
 
     mpDocTemplates->Update();
     return true;
