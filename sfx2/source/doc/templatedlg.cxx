@@ -179,6 +179,7 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg(vcl::Window *parent)
     get(mpExportButton, "export_btn");
     get(mpImportButton, "import_btn");
     get(mpLinkButton, "online_link");
+    get(mpCBXHideDlg, "hidedialogcb");
 
     // Create popup menus
     mpActionMenu = new PopupMenu;
@@ -325,6 +326,7 @@ void SfxTemplateManagerDlg::dispose()
     mpExportButton.clear();
     mpImportButton.clear();
     mpLinkButton.clear();
+    mpCBXHideDlg.clear();
     mpSearchFilter.clear();
     mpCBApp.clear();
     mpCBFolder.clear();
@@ -1634,8 +1636,8 @@ SfxTemplateSelectionDlg::SfxTemplateSelectionDlg(vcl::Window* pParent):
     msTemplatePath(OUString())
 {
     mpCBApp->SelectEntryPos(MNI_IMPRESS);
-    mpCBApp->Disable();
     mpCBFolder->SelectEntryPos(0);
+    SetText(SfxResId(STR_TEMPLATE_SELECTION).toString());
 
     if(mpLocalView->IsVisible())
     {
@@ -1643,8 +1645,17 @@ SfxTemplateSelectionDlg::SfxTemplateSelectionDlg(vcl::Window* pParent):
         mpLocalView->showAllTemplates();
     }
 
+    mpCBApp->Disable();
+    mpActionBar->Hide();
+    mpLinkButton->Hide();
+    mpMoveButton->Hide();
+    mpExportButton->Hide();
+    mpCBXHideDlg->Show();
+    mpCBXHideDlg->Check(true);
+
     mpLocalView->setOpenTemplateHdl(LINK(this,SfxTemplateSelectionDlg, OpenTemplateHdl));
     mpSearchView->setOpenTemplateHdl(LINK(this,SfxTemplateSelectionDlg, OpenTemplateHdl));
+    mpOKButton->SetClickHdl(LINK(this, SfxTemplateSelectionDlg, OkClickHdl));
 }
 
 SfxTemplateSelectionDlg::~SfxTemplateSelectionDlg()
@@ -1668,6 +1679,14 @@ IMPL_LINK_TYPED(SfxTemplateSelectionDlg, OpenTemplateHdl, ThumbnailViewItem*, pI
     msTemplatePath = pViewItem->getPath();
 
     EndDialog(RET_OK);
+}
+
+IMPL_LINK_NOARG_TYPED(SfxTemplateSelectionDlg, OkClickHdl, Button*, void)
+{
+   TemplateViewItem *pViewItem = static_cast<TemplateViewItem*>(const_cast<ThumbnailViewItem*>(*maSelTemplates.begin()));
+   msTemplatePath = pViewItem->getPath();
+
+   EndDialog(RET_OK);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
