@@ -69,6 +69,8 @@ public:
     typedef vcl::ScopedBitmapAccess< BitmapReadAccess, AlphaMask, &AlphaMask::AcquireReadAccess >
         ScopedReadAccess;
 
+    using Bitmap::IsEmpty;
+
 private:
     friend class BitmapEx;
     friend class ::OutputDevice;

@@ -652,18 +652,7 @@ css::uno::Sequence< sal_Int8 > GetMaskDIB(BitmapEx const & aBmpEx)
 
 static sal_uInt8 lcl_GetColor(BitmapColor const& rColor)
 {
-    sal_uInt8 nTemp(0);
-    if (rColor.IsIndex())
-    {
-        nTemp = rColor.GetIndex();
-    }
-    else
-    {
-        nTemp = rColor.GetBlue();
-        // greyscale expected here, or what would non-grey colors mean?
-        assert(rColor.GetRed() == nTemp && rColor.GetGreen() == nTemp);
-    }
-    return nTemp;
+    return rColor.GetBlueOrIndex();
 }
 
 
