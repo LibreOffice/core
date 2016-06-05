@@ -18,6 +18,7 @@
 
 class Edit;
 class ListBox;
+class CheckBox;
 class SfxDocumentTemplates;
 
 //  class SfxSaveAsTemplateDialog -------------------------------------------------------------------
@@ -27,6 +28,7 @@ class SFX2_DLLPUBLIC SfxSaveAsTemplateDialog : public ModalDialog
 
 private:
     VclPtr<ListBox>         mpLBCategory;
+    VclPtr<CheckBox>         mpCBXDefault;
     VclPtr<Edit>            mpTemplateNameEdit;
     VclPtr<PushButton>      mpOKButton;
 
