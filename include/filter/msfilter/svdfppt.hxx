@@ -915,8 +915,6 @@ struct PPTParaPropSet
 
 struct ImplPPTCharPropSet
 {
-    sal_uInt32  mnRefCount;
-
     sal_uInt32  mnAttrSet;
     sal_uInt16  mnFlags;
     sal_uInt32  mnColor;
@@ -928,8 +926,7 @@ struct ImplPPTCharPropSet
     sal_uInt16  mnSymbolFont;
 
     ImplPPTCharPropSet()
-        : mnRefCount ( 1 )
-        , mnAttrSet( 0 )
+        : mnAttrSet( 0 )
         , mnFlags( 0 )
         , mnColor( 0 )
         , mnFont( 0 )
@@ -958,8 +955,6 @@ struct PPTCharPropSet
     SvxFieldItem*       mpFieldItem;
     sal_uInt16          mnLanguage[ 3 ];
 
-    ImplPPTCharPropSet* pCharSet;
-
     void                SetFont( sal_uInt16 nFont );
     void                SetColor( sal_uInt32 nColor );
 
@@ -970,8 +965,13 @@ struct PPTCharPropSet
 
     PPTCharPropSet&     operator=( const PPTCharPropSet& rCharPropSet );
 
+    friend class PPTTextObj;
+    friend class PPTParagraphObj;
+    friend class PPTPortionObj;
+    friend struct PPTStyleTextPropReader;
+
 private:
-    void                ImplMakeUnique();
+    o3tl::cow_wrapper< ImplPPTCharPropSet > mpImplPPTCharPropSet;
 };
 
 struct PPTTabEntry
