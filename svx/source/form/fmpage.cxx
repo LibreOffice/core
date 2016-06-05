@@ -73,7 +73,6 @@ void FmFormPage::lateInit(const FmFormPage& rPage, FmFormModel* const pNewModel)
 
 FmFormPage::~FmFormPage()
 {
-    delete m_pImpl;
 }
 
 
