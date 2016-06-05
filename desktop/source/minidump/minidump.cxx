@@ -11,7 +11,6 @@
 
 #include <map>
 #include <memory>
-#include <iostream>
 #include <fstream>
 #include <sstream>
 
@@ -162,8 +161,6 @@ bool uploadContent(std::map<std::string, std::string>& parameters, std::string& 
                 curl_easy_strerror(cc));
 #endif
 
-    const char* error_description = curl_easy_strerror(cc);
-
     if (formpost != nullptr)
     {
         curl_formfree(formpost);
@@ -172,8 +169,6 @@ bool uploadContent(std::map<std::string, std::string>& parameters, std::string& 
     {
         curl_slist_free_all(headerlist);
     }
-
-    std::cerr << response_body << " " << error_description << std::endl;
 
     response = response_body;
 
@@ -191,13 +186,13 @@ bool readConfig(const std::string& iniPath, std::string& response)
     // make sure that at least the mandatory parameters are in there
     if (parameters.find("DumpFile") == parameters.end())
     {
-        std::cerr << "ini file needs to contain a key DumpFile!";
+        response = "ini file needs to contain a key DumpFile!";
         return false;
     }
 
     if (parameters.find("Version") == parameters.end())
     {
-        std::cerr << "ini file needs to contain a key Version!";
+        response = "ini file needs to contain a key Version!";
         return false;
     }
 
