@@ -75,7 +75,7 @@ class SwLineInfo
 
     SvxTabStopItem* pRuler;
     const SvxLineSpacingItem *pSpace;
-    sal_uInt16 nVertAlign;
+    SvxParaVertAlignItem::Align nVertAlign;
     sal_uInt16 nDefTabStop;
     bool bListTabStopIncluded;
     long nListTabStopPosition;
@@ -95,12 +95,12 @@ public:
         { const_cast<SwLineInfo*>(this)->nDefTabStop = nNew; }
 
     // vertical alignment
-    inline sal_uInt16 GetVertAlign() const { return nVertAlign; }
+    inline SvxParaVertAlignItem::Align GetVertAlign() const { return nVertAlign; }
     inline bool HasSpecialAlign( bool bVert ) const
         { return bVert ?
-                 ( SvxParaVertAlignItem::BASELINE  != nVertAlign ) :
-                 ( SvxParaVertAlignItem::BASELINE  != nVertAlign &&
-                   SvxParaVertAlignItem::AUTOMATIC != nVertAlign ); }
+                 ( SvxParaVertAlignItem::Align::Baseline  != nVertAlign ) :
+                 ( SvxParaVertAlignItem::Align::Baseline  != nVertAlign &&
+                   SvxParaVertAlignItem::Align::Automatic != nVertAlign ); }
 
     sal_uInt16 NumberOfTabStops() const;
 

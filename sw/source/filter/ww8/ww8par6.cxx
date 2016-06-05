@@ -4921,29 +4921,30 @@ void SwWW8ImplReader::Read_AlignFont( sal_uInt16, const sal_uInt8* pData, short 
     else
     {
         sal_uInt16 nVal = SVBT16ToShort( pData );
+        SvxParaVertAlignItem::Align nAlign;
         switch (nVal)
         {
             case 0:
-                nVal = SvxParaVertAlignItem::TOP;
+                nAlign = SvxParaVertAlignItem::Align::Top;
                 break;
             case 1:
-                nVal = SvxParaVertAlignItem::CENTER;
+                nAlign = SvxParaVertAlignItem::Align::Center;
                 break;
             case 2:
-                nVal = SvxParaVertAlignItem::BASELINE;
+                nAlign = SvxParaVertAlignItem::Align::Baseline;
                 break;
             case 3:
-                nVal = SvxParaVertAlignItem::BOTTOM;
+                nAlign = SvxParaVertAlignItem::Align::Bottom;
                 break;
             case 4:
-                nVal = SvxParaVertAlignItem::AUTOMATIC;
+                nAlign = SvxParaVertAlignItem::Align::Automatic;
                 break;
             default:
-                nVal = SvxParaVertAlignItem::AUTOMATIC;
+                nAlign = SvxParaVertAlignItem::Align::Automatic;
                 OSL_ENSURE(false,"Unknown paragraph vertical align");
                 break;
         }
-        NewAttr( SvxParaVertAlignItem( nVal, RES_PARATR_VERTALIGN ) );
+        NewAttr( SvxParaVertAlignItem( nAlign, RES_PARATR_VERTALIGN ) );
     }
 }
 

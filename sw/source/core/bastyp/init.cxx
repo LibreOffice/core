@@ -558,7 +558,7 @@ void InitCore()
     aAttrTab[ RES_PARATR_SCRIPTSPACE - POOLATTR_BEGIN ] =   new SvxScriptSpaceItem( true, RES_PARATR_SCRIPTSPACE );
     aAttrTab[ RES_PARATR_HANGINGPUNCTUATION - POOLATTR_BEGIN ] = new SvxHangingPunctuationItem( true, RES_PARATR_HANGINGPUNCTUATION );
     aAttrTab[ RES_PARATR_FORBIDDEN_RULES - POOLATTR_BEGIN ] = new SvxForbiddenRuleItem( true, RES_PARATR_FORBIDDEN_RULES );
-    aAttrTab[ RES_PARATR_VERTALIGN - POOLATTR_BEGIN ] =     new SvxParaVertAlignItem( 0, RES_PARATR_VERTALIGN );
+    aAttrTab[ RES_PARATR_VERTALIGN - POOLATTR_BEGIN ] =     new SvxParaVertAlignItem( SvxParaVertAlignItem::Align::Automatic, RES_PARATR_VERTALIGN );
     aAttrTab[ RES_PARATR_SNAPTOGRID - POOLATTR_BEGIN ] =    new SvxParaGridItem( true, RES_PARATR_SNAPTOGRID );
     aAttrTab[ RES_PARATR_CONNECT_BORDER - POOLATTR_BEGIN ] = new SwParaConnectBorderItem;
 

@@ -64,7 +64,7 @@ SfxPoolItem* SvxPageModelItem::CreateDefault() { return new  SvxPageModelItem(0)
 SfxPoolItem* SvxScriptSpaceItem::CreateDefault() { return new  SvxScriptSpaceItem(false, 0);}
 SfxPoolItem* SvxHangingPunctuationItem::CreateDefault() { return new  SvxHangingPunctuationItem(false, 0);}
 SfxPoolItem* SvxForbiddenRuleItem::CreateDefault() { return new  SvxForbiddenRuleItem(false, 0);}
-SfxPoolItem* SvxParaVertAlignItem::CreateDefault() { return new  SvxParaVertAlignItem(0, 0);}
+SfxPoolItem* SvxParaVertAlignItem::CreateDefault() { return new  SvxParaVertAlignItem(Align::Automatic, 0);}
 SfxPoolItem* SvxParaGridItem::CreateDefault() { return new  SvxParaGridItem(true, 0);}
 
 
@@ -1383,9 +1383,9 @@ bool SvxForbiddenRuleItem::GetPresentation(
 |*    class SvxParaVertAlignItem
 *************************************************************************/
 
-SvxParaVertAlignItem::SvxParaVertAlignItem( sal_uInt16 nValue,
+SvxParaVertAlignItem::SvxParaVertAlignItem( Align nValue,
     const sal_uInt16 nW )
-    : SfxUInt16Item( nW, nValue )
+    : SfxUInt16Item( nW, (sal_uInt16)nValue )
 {
 }
 
@@ -1398,12 +1398,12 @@ SfxPoolItem* SvxParaVertAlignItem::Create( SvStream& rStrm, sal_uInt16 ) const
 {
     sal_uInt16 nVal;
     rStrm.ReadUInt16( nVal );
-    return new SvxParaVertAlignItem( nVal, Which() );
+    return new SvxParaVertAlignItem( (Align)nVal, Which() );
 }
 
 SvStream& SvxParaVertAlignItem::Store( SvStream & rStrm, sal_uInt16 ) const
 {
-    rStrm.WriteUInt16( GetValue() );
+    rStrm.WriteUInt16( (sal_uInt16)GetValue() );
     return rStrm;
 }
 
@@ -1420,10 +1420,10 @@ bool SvxParaVertAlignItem::GetPresentation(
     sal_uInt16 nTmp;
     switch( GetValue() )
     {
-        case AUTOMATIC: nTmp = RID_SVXITEMS_PARAVERTALIGN_AUTO; break;
-        case TOP:       nTmp = RID_SVXITEMS_PARAVERTALIGN_TOP; break;
-        case CENTER:    nTmp = RID_SVXITEMS_PARAVERTALIGN_CENTER; break;
-        case BOTTOM:    nTmp = RID_SVXITEMS_PARAVERTALIGN_BOTTOM; break;
+        case Align::Automatic: nTmp = RID_SVXITEMS_PARAVERTALIGN_AUTO; break;
+        case Align::Top:       nTmp = RID_SVXITEMS_PARAVERTALIGN_TOP; break;
+        case Align::Center:    nTmp = RID_SVXITEMS_PARAVERTALIGN_CENTER; break;
+        case Align::Bottom:    nTmp = RID_SVXITEMS_PARAVERTALIGN_BOTTOM; break;
         default:    nTmp = RID_SVXITEMS_PARAVERTALIGN_BASELINE; break;
     }
     rText = EE_RESSTR( nTmp );
@@ -1441,9 +1441,9 @@ bool SvxParaVertAlignItem::PutValue( const css::uno::Any& rVal,
                                          sal_uInt8 /*nMemberId*/ )
 {
     sal_Int16 nVal = sal_Int16();
-    if((rVal >>= nVal) && nVal >=0 && nVal <= BOTTOM )
+    if((rVal >>= nVal) && nVal >=0 && nVal <= (sal_uInt16)Align::Bottom )
     {
-        SetValue( (sal_uInt16)nVal );
+        SetValue( (Align)nVal );
         return true;
     }
     else

@@ -34,10 +34,10 @@
 class EDITENG_DLLPUBLIC SvxParaVertAlignItem : public SfxUInt16Item
 {
 public:
-    enum { AUTOMATIC, BASELINE, TOP, CENTER, BOTTOM };
+    enum class Align { Automatic, Baseline, Top, Center, Bottom };
     static SfxPoolItem* CreateDefault();
 
-    SvxParaVertAlignItem( sal_uInt16 nValue /*= 0*/,
+    SvxParaVertAlignItem( Align nValue /*= 0*/,
                        const sal_uInt16 nId  );
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
@@ -53,6 +53,9 @@ public:
 
     virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
+
+    Align                   GetValue() const { return (Align) SfxUInt16Item::GetValue(); }
+    void                    SetValue(Align n) { SfxUInt16Item::SetValue((sal_uInt16)n); }
 
     inline SvxParaVertAlignItem& operator=( const SvxParaVertAlignItem& rItem )
     {

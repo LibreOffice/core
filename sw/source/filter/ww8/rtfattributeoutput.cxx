@@ -2898,16 +2898,16 @@ void RtfAttributeOutput::ParaVerticalAlign(const SvxParaVertAlignItem& rAlign)
     const char* pStr;
     switch (rAlign.GetValue())
     {
-    case SvxParaVertAlignItem::TOP:
+    case SvxParaVertAlignItem::Align::Top:
         pStr = OOO_STRING_SVTOOLS_RTF_FAHANG;
         break;
-    case SvxParaVertAlignItem::BOTTOM:
+    case SvxParaVertAlignItem::Align::Bottom:
         pStr = OOO_STRING_SVTOOLS_RTF_FAVAR;
         break;
-    case SvxParaVertAlignItem::CENTER:
+    case SvxParaVertAlignItem::Align::Center:
         pStr = OOO_STRING_SVTOOLS_RTF_FACENTER;
         break;
-    case SvxParaVertAlignItem::BASELINE:
+    case SvxParaVertAlignItem::Align::Baseline:
         pStr = OOO_STRING_SVTOOLS_RTF_FAROMAN;
         break;
 

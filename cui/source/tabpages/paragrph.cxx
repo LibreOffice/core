@@ -1153,7 +1153,7 @@ bool SvxParaAlignTabPage::FillItemSet( SfxItemSet* rOutSet )
     }
     if(m_pVertAlignLB->IsValueChangedFromSaved())
     {
-        rOutSet->Put(SvxParaVertAlignItem(m_pVertAlignLB->GetSelectEntryPos(), GetWhich( SID_PARA_VERTALIGN )));
+        rOutSet->Put(SvxParaVertAlignItem((SvxParaVertAlignItem::Align)m_pVertAlignLB->GetSelectEntryPos(), GetWhich( SID_PARA_VERTALIGN )));
         bModified = true;
     }
 
@@ -1242,7 +1242,7 @@ void SvxParaAlignTabPage::Reset( const SfxItemSet* rSet )
 
         const SvxParaVertAlignItem& rAlign = static_cast<const SvxParaVertAlignItem&>(rSet->Get( _nWhich ));
 
-        m_pVertAlignLB->SelectEntryPos(rAlign.GetValue());
+        m_pVertAlignLB->SelectEntryPos((sal_Int32)rAlign.GetValue());
     }
 
     _nWhich = GetWhich( SID_ATTR_FRAMEDIRECTION );
