@@ -192,7 +192,7 @@ SalPrinterBmp::GetPixelRGB (sal_uInt32 nRow, sal_uInt32 nColumn) const
     Scanline pScan = mpScanAccess + nRow * mnScanOffset;
     BitmapColor aColor = mpFncGetPixel (pScan, nColumn, mpBmpBuffer->maColorMask);
 
-    if (aColor.IsIndex())
+    if (!!mpBmpBuffer->maPalette)
         GetPaletteColor(aColor.GetIndex());
 
     return ((aColor.GetBlue())        & 0x000000ff)
@@ -206,7 +206,7 @@ SalPrinterBmp::GetPixelGray (sal_uInt32 nRow, sal_uInt32 nColumn) const
     Scanline pScan = mpScanAccess + nRow * mnScanOffset;
     BitmapColor aColor = mpFncGetPixel (pScan, nColumn, mpBmpBuffer->maColorMask);
 
-    if (aColor.IsIndex())
+    if (!!mpBmpBuffer->maPalette)
         aColor = mpBmpBuffer->maPalette[aColor.GetIndex()];
 
     return (  aColor.GetBlue()  *  28UL
@@ -221,7 +221,7 @@ SalPrinterBmp::GetPixelIdx (sal_uInt32 nRow, sal_uInt32 nColumn) const
     Scanline pScan = mpScanAccess + nRow * mnScanOffset;
     BitmapColor aColor = mpFncGetPixel (pScan, nColumn, mpBmpBuffer->maColorMask);
 
-    if (aColor.IsIndex())
+    if (!!mpBmpBuffer->maPalette)
         return aColor.GetIndex();
     else
         return 0;
