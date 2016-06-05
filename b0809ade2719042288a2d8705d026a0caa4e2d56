@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_69125464",
+        "filename": "sw/source/uibase/sidebar/PageFormatPanel.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-06-05T08:48:33Z",
+      "side": 1,
+      "message": "Please use bool value as an argument (i.e. don\u0027t misuse integer even if it can only take 0 or 1 value)",
+      "revId": "b0809ade2719042288a2d8705d026a0caa4e2d56",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
