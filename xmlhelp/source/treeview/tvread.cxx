@@ -865,7 +865,7 @@ void TVChildTarget::subst( OUString& instpath )
 static const char aHelpMediaType[] = "application/vnd.sun.star.help";
 
 ExtensionIteratorBase::ExtensionIteratorBase( const OUString& aLanguage )
-        : m_eState( USER_EXTENSIONS )
+        : m_eState( IteratorState::UserExtensions )
         , m_aLanguage( aLanguage )
 {
     init();
@@ -958,7 +958,7 @@ Reference< deployment::XPackage > ExtensionIteratorBase::implGetNextUserHelpPack
 
     if( m_iUserPackage == m_aUserPackagesSeq.getLength() )
     {
-        m_eState = SHARED_EXTENSIONS;       // Later: SHARED_MODULE
+        m_eState = IteratorState::SharedExtensions;       // Later: SHARED_MODULE
     }
     else
     {
@@ -988,7 +988,7 @@ Reference< deployment::XPackage > ExtensionIteratorBase::implGetNextSharedHelpPa
 
     if( m_iSharedPackage == m_aSharedPackagesSeq.getLength() )
     {
-        m_eState = BUNDLED_EXTENSIONS;
+        m_eState = IteratorState::BundledExtensions;
     }
     else
     {
@@ -1018,7 +1018,7 @@ Reference< deployment::XPackage > ExtensionIteratorBase::implGetNextBundledHelpP
 
     if( m_iBundledPackage == m_aBundledPackagesSeq.getLength() )
     {
-        m_eState = END_REACHED;
+        m_eState = IteratorState::EndReached;
     }
     else
     {
@@ -1074,11 +1074,11 @@ OUString TreeFileIterator::nextTreeFile( sal_Int32& rnFileSize )
 {
     OUString aRetFile;
 
-    while( aRetFile.isEmpty() && m_eState != END_REACHED )
+    while( aRetFile.isEmpty() && m_eState != IteratorState::EndReached )
     {
         switch( m_eState )
         {
-            case USER_EXTENSIONS:
+            case IteratorState::UserExtensions:
             {
                 Reference< deployment::XPackage > xParentPackageBundle;
                 Reference< deployment::XPackage > xHelpPackage = implGetNextUserHelpPackage( xParentPackageBundle );
@@ -1089,7 +1089,7 @@ OUString TreeFileIterator::nextTreeFile( sal_Int32& rnFileSize )
                 break;
             }
 
-            case SHARED_EXTENSIONS:
+            case IteratorState::SharedExtensions:
             {
                 Reference< deployment::XPackage > xParentPackageBundle;
                 Reference< deployment::XPackage > xHelpPackage = implGetNextSharedHelpPackage( xParentPackageBundle );
@@ -1099,7 +1099,7 @@ OUString TreeFileIterator::nextTreeFile( sal_Int32& rnFileSize )
                 aRetFile = implGetTreeFileFromPackage( rnFileSize, xHelpPackage );
                 break;
             }
-            case BUNDLED_EXTENSIONS:
+            case IteratorState::BundledExtensions:
             {
                 Reference< deployment::XPackage > xParentPackageBundle;
                 Reference< deployment::XPackage > xHelpPackage = implGetNextBundledHelpPackage( xParentPackageBundle );
@@ -1110,8 +1110,8 @@ OUString TreeFileIterator::nextTreeFile( sal_Int32& rnFileSize )
                 break;
             }
 
-        case END_REACHED:
-                OSL_FAIL( "DataBaseIterator::nextTreeFile(): Invalid case END_REACHED" );
+        case IteratorState::EndReached:
+                OSL_FAIL( "DataBaseIterator::nextTreeFile(): Invalid case IteratorState::EndReached" );
                 break;
         }
     }
