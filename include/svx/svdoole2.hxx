@@ -44,7 +44,7 @@ class SdrOle2ObjImpl;
 class SVX_DLLPUBLIC SdrOle2Obj : public SdrRectObj
 {
 private:
-    SdrOle2ObjImpl* mpImpl;
+    std::unique_ptr<SdrOle2ObjImpl> mpImpl;
 
 private:
     SVX_DLLPRIVATE void Connect_Impl();
