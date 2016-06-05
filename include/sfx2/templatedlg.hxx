@@ -88,6 +88,7 @@ protected:
     DECL_LINK_TYPED(DefaultTemplateHdl, ThumbnailViewItem*, void);
 
     DECL_LINK_TYPED(SearchUpdateHdl, Edit&, void);
+    DECL_LINK_TYPED(GetFocusHdl, Control&, void);
 
     void OnTemplateImportCategory(const OUString& sCategory);
     static void OnTemplateLink ();
