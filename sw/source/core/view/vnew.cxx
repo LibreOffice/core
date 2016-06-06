@@ -92,7 +92,7 @@ void SwViewShell::Init( const SwViewOption *pNewOpt )
     if( pPDFOut )
         InitPrt( pPDFOut );
 
-    //Good occasion to check if page sizes in
+    // i#44963 Good occasion to check if page sizes in
     // page descriptions are still set to (LONG_MAX, LONG_MAX) (html import)
     if ( !bBrowseMode )
     {
@@ -178,7 +178,7 @@ SwViewShell::SwViewShell( SwDoc& rDocument, vcl::Window *pWindow,
     mbPaintWorks = mbEnableSmooth = true;
     mbPreview = 0 !=( VSHELLFLAG_ISPREVIEW & nFlags );
 
-    // Do not reset modified state of document,
+    // i#38810 Do not reset modified state of document,
     // if it's already been modified.
     const bool bIsDocModified( mpDoc->getIDocumentState().IsModified() );
     mpDoc->acquire();
@@ -295,7 +295,7 @@ SwViewShell::~SwViewShell()
         SET_CURR_SHELL( this );
         mbPaintWorks = false;
 
-        // Stopping the animated graphics is not
+        // i#9684 Stopping the animated graphics is not
         // necessary during printing or pdf export, because the animation
         // has not been started in this case.
         if( mpDoc && GetWin() )

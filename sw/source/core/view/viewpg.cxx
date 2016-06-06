@@ -118,7 +118,7 @@ void SwViewShell::PrintProspect(
         pNxtPage = sw_getPage(*aShell.GetLayout(), rPagesToPrint.second);
     }
 
-    // consider empty pages on calculation
+    // i#14016 consider empty pages on calculation
     // of page size, used for calculation of scaling.
     Size aSttPageSize;
     if ( pStPage )
