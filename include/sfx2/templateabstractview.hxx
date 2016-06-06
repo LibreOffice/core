@@ -117,7 +117,7 @@ public:
     long getThumbnailWidth() const  { return mnThumbnailWidth;}
     long getThumbnailHeight() const {return mnThumbnailHeight;}
 
-    void RemoveDefaultTemplateIcon( OUString rPath);
+    void RemoveDefaultTemplateIcon( const OUString& rPath);
 
     static BitmapEx scaleImg (const BitmapEx &rImg, long width, long height);
 
