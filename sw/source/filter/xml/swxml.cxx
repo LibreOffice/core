@@ -875,6 +875,13 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, c
                     : "com.sun.star.comp.Writer.XMLContentImporter"),
            aFilterArgs, rName, true );
 
+    if( !nRet && !(IsOrganizerMode() || aOpt.IsFormatsOnly()) )
+        nRet = ReadThroughComponent(
+           xStorage, xModelComp, "undo.xml", nullptr, xContext,
+            (bOASIS ? "com.sun.star.comp.Writer.XMLOasisUndoImporter"
+                    : "com.sun.star.comp.Writer.XMLUndoImporter"),
+           aEmptyArgs, rName, true );
+
     if( !(IsOrganizerMode() || IsBlockMode() || bInsertMode ||
           aOpt.IsFormatsOnly() ) )
     {

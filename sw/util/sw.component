@@ -76,13 +76,17 @@
       constructor="com_sun_star_comp_Writer_XMLOasisContentExporter_get_implementation">
     <service name="com.sun.star.comp.Writer.XMLOasisContentExporter"/>
   </implementation>
+  <implementation name="com.sun.star.comp.Writer.XMLOasisContentImporter"
+      constructor="com_sun_star_comp_Writer_XMLOasisContentImporter_get_implementation">
+    <service name="com.sun.star.comp.Writer.XMLOasisContentImporter"/>
+  </implementation>
   <implementation name="com.sun.star.comp.Writer.XMLOasisUndoExporter"
       constructor="com_sun_star_comp_Writer_XMLOasisUndoExporter_get_implementation">
     <service name="com.sun.star.comp.Writer.XMLOasisUndoExporter"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Writer.XMLOasisContentImporter"
-      constructor="com_sun_star_comp_Writer_XMLOasisContentImporter_get_implementation">
-    <service name="com.sun.star.comp.Writer.XMLOasisContentImporter"/>
+  <implementation name="com.sun.star.comp.Writer.XMLOasisUndoImporter"
+      constructor="com_sun_star_comp_Writer_XMLOasisUndoImporter_get_implementation">
+    <service name="com.sun.star.comp.Writer.XMLOasisUndoImporter"/>
   </implementation>
   <implementation name="com.sun.star.comp.Writer.XMLOasisExporter"
       constructor="com_sun_star_comp_Writer_XMLOasisExporter_get_implementation">
