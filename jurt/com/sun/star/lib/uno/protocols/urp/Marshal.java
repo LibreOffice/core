@@ -18,22 +18,22 @@
  */
 package com.sun.star.lib.uno.protocols.urp;
 
-import com.sun.star.lib.uno.environments.remote.ThreadId;
-import com.sun.star.lib.uno.typedesc.TypeDescription;
-import com.sun.star.uno.Any;
-import com.sun.star.uno.Enum;
-import com.sun.star.uno.IBridge;
-import com.sun.star.uno.IFieldDescription;
-import com.sun.star.uno.Type;
-import com.sun.star.uno.TypeClass;
-import com.sun.star.uno.XInterface;
-
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutput;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
+
+import com.sun.star.lib.uno.environments.remote.ThreadId;
+import com.sun.star.lib.uno.typedesc.FieldDescription;
+import com.sun.star.lib.uno.typedesc.TypeDescription;
+import com.sun.star.uno.Any;
+import com.sun.star.uno.Enum;
+import com.sun.star.uno.IBridge;
+import com.sun.star.uno.Type;
+import com.sun.star.uno.TypeClass;
+import com.sun.star.uno.XInterface;
 
 final class Marshal {
     public Marshal(IBridge bridge, short cacheSize) {
@@ -281,7 +281,7 @@ final class Marshal {
         if (value == null) {
             writeCompressedNumber(0);
         } else {
-            TypeDescription ctype = (TypeDescription) type.getComponentType();
+            TypeDescription ctype = type.getComponentType();
             if (ctype.getTypeClass() == TypeClass.BYTE) {
                 byte[] data = (byte[]) value;
                 writeCompressedNumber(data.length);
@@ -310,10 +310,10 @@ final class Marshal {
     }
 
     private void writeStructValue(TypeDescription type, Object value) throws IllegalAccessException {
-        IFieldDescription[] fields = type.getFieldDescriptions();
+        FieldDescription[] fields = type.getFieldDescriptions();
         for (int i = 0; i < fields.length; ++i) {
             writeValue(
-                (TypeDescription) fields[i].getTypeDescription(),
+                fields[i].getTypeDescription(),
                 value == null ? null : fields[i].getField().get(value));
         }
     }

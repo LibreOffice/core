@@ -20,6 +20,8 @@ package com.sun.star.uno;
 
 import java.util.HashMap;
 
+import com.sun.star.lib.uno.typedesc.TypeDescription;
+
 /**
  * Represents the UNO built-in type <code>TYPE</code>.
  *
@@ -35,7 +37,7 @@ import java.util.HashMap;
  * will never be <code>null</code>.  A <code>Type</code> may have an additional
  * "z class" (a <code>java.lang.Class</code>), giving a Java class type that
  * corresponds to the UNO type.  Also, a <code>Type</code> can cache a type
- * description (a <code>com.sun.star.uno.ITypeDescription</code>), which can be
+ * description (a <code>com.sun.star.uno.typedesc.TypeDescription</code>), which can be
  * computed and set by <code>TypeDescription.getTypeDescription</code>.
  */
 public class Type {
@@ -272,10 +274,11 @@ public class Type {
     /**
      * Constructs a new <code>Type</code> from the given type description.
      *
+     * @internal
      * @param typeDescription a type description.  Must not be
      *     <code>null</code>.
      */
-    public Type(ITypeDescription typeDescription) {
+    public Type(TypeDescription typeDescription) {
         _typeName         = typeDescription.getTypeName();
         _typeClass        = typeDescription.getTypeClass();
         _iTypeDescription = typeDescription;
@@ -367,18 +370,20 @@ public class Type {
     /**
      * Gives the type description of this type.
      *
+     * @internal
      * @return the type description; may be <code>null</code>
      */
-    public ITypeDescription getTypeDescription() {
+    public TypeDescription getTypeDescription() {
         return _iTypeDescription;
     }
 
     /**
      * Sets the type description for this type.
      *
+     * @internal
      * @param typeDescription the type description
      */
-    public void setTypeDescription(ITypeDescription typeDescription) {
+    public void setTypeDescription(TypeDescription typeDescription) {
         _iTypeDescription = typeDescription;
     }
 
@@ -683,9 +688,9 @@ public class Type {
         return typeClass.getValue() < __typeClassToTypeName.length;
     }
 
-    protected TypeClass _typeClass; // TODO should be final
-    protected String _typeName; // TODO should be final
+    private TypeClass _typeClass; // TODO should be final
+    private String _typeName; // TODO should be final
 
-    protected Class<?> _class;
-    protected ITypeDescription _iTypeDescription;
+    private Class<?> _class;
+    private TypeDescription _iTypeDescription;
 }

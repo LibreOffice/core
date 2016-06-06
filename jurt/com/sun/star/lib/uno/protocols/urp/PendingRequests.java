@@ -19,10 +19,11 @@
 
 package com.sun.star.lib.uno.protocols.urp;
 
-import com.sun.star.lib.uno.environments.remote.ThreadId;
-import com.sun.star.uno.IMethodDescription;
 import java.util.HashMap;
 import java.util.Stack;
+
+import com.sun.star.lib.uno.environments.remote.ThreadId;
+import com.sun.star.lib.uno.typedesc.MethodDescription;
 
 final class PendingRequests {
 
@@ -46,7 +47,7 @@ final class PendingRequests {
 
     public static final class Item {
         public Item(
-            boolean internal, IMethodDescription function, Object[] arguments)
+            boolean internal, MethodDescription function, Object[] arguments)
         {
             this.internal = internal;
             this.function = function;
@@ -54,7 +55,7 @@ final class PendingRequests {
         }
 
         public final boolean internal;
-        public final IMethodDescription function;
+        public final MethodDescription function;
         public final Object[] arguments;
     }
 
