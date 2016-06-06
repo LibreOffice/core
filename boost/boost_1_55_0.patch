@@ -1,167 +1,5 @@
-diff -ur misc/boost_1_55_0/boost/asio/ssl/impl/context.ipp misc/build/boost_1_55_0/boost/asio/ssl/impl/context.ipp
---- misc/boost_1_55_0/boost/asio/ssl/impl/context.ipp	2013-10-26 16:25:53.000000000 -0700
-+++ misc/build/boost_1_55_0/boost/asio/ssl/impl/context.ipp	2016-03-23 01:11:12.425434000 -0700
-@@ -87,6 +87,14 @@
-     handle_ = ::SSL_CTX_new(::SSLv2_server_method());
-     break;
- #endif // defined(OPENSSL_NO_SSL2)
-+#if defined(OPENSSL_NO_SSL3)
-+  case context::sslv3:
-+  case context::sslv3_client:
-+  case context::sslv3_server:
-+    boost::asio::detail::throw_error(
-+        boost::asio::error::invalid_argument, "context");
-+    break;
-+#else // defined(OPENSSL_NO_SSL3)
-   case context::sslv3:
-     handle_ = ::SSL_CTX_new(::SSLv3_method());
-     break;
-@@ -96,6 +104,7 @@
-   case context::sslv3_server:
-     handle_ = ::SSL_CTX_new(::SSLv3_server_method());
-     break;
-+#endif // defined(OPENSSL_NO_SSL3)
-   case context::tlsv1:
-     handle_ = ::SSL_CTX_new(::TLSv1_method());
-     break;
-diff -ur misc/boost_1_55_0/boost/asio/ssl/old/detail/openssl_context_service.hpp misc/build/boost_1_55_0/boost/asio/ssl/old/detail/openssl_context_service.hpp
---- misc/boost_1_55_0/boost/asio/ssl/old/detail/openssl_context_service.hpp	2013-05-20 05:32:20.000000000 -0700
-+++ misc/build/boost_1_55_0/boost/asio/ssl/old/detail/openssl_context_service.hpp	2016-03-23 01:11:12.426497000 -0700
-@@ -85,6 +85,13 @@
-       impl = ::SSL_CTX_new(::SSLv2_server_method());
-       break;
- #endif // defined(OPENSSL_NO_SSL2)
-+#if defined(OPENSSL_NO_SSL3)
-+    case context_base::sslv3:
-+    case context_base::sslv3_client:
-+    case context_base::sslv3_server:
-+      boost::asio::detail::throw_error(boost::asio::error::invalid_argument);
-+      break;
-+#else // defined(OPENSSL_NO_SSL3)
-     case context_base::sslv3:
-       impl = ::SSL_CTX_new(::SSLv3_method());
-       break;
-@@ -94,6 +101,7 @@
-     case context_base::sslv3_server:
-       impl = ::SSL_CTX_new(::SSLv3_server_method());
-       break;
-+#endif // defined(OPENSSL_NO_SSL3)
-     case context_base::tlsv1:
-       impl = ::SSL_CTX_new(::TLSv1_method());
-       break;
-diff -ur misc/boost_1_55_0/boost/bind/arg.hpp misc/build/boost_1_55_0/boost/bind/arg.hpp
---- misc/boost_1_55_0/boost/bind/arg.hpp	2007-11-25 10:07:19.000000000 -0800
-+++ misc/build/boost_1_55_0/boost/bind/arg.hpp	2016-03-23 01:11:12.421530000 -0700
-@@ -33,8 +33,7 @@
- 
-     template< class T > arg( T const & /* t */ )
-     {
--        // static assert I == is_placeholder<T>::value
--        typedef char T_must_be_placeholder[ I == is_placeholder<T>::value? 1: -1 ];
-+        BOOST_STATIC_ASSERT( I == is_placeholder<T>::value );
-     }
- };
- 
-diff -ur misc/boost_1_55_0/boost/concept/detail/general.hpp misc/build/boost_1_55_0/boost/concept/detail/general.hpp
---- misc/boost_1_55_0/boost/concept/detail/general.hpp	2010-06-08 12:31:13.000000000 -0700
-+++ misc/build/boost_1_55_0/boost/concept/detail/general.hpp	2016-03-23 01:11:12.388374000 -0700
-@@ -65,10 +65,19 @@
-   
- # endif
- 
-+// Version check from https://svn.boost.org/trac/boost/changeset/82886
-+// (boost/static_assert.hpp)
-+#if defined(__GNUC__) && ((__GNUC__ > 4) || ((__GNUC__ == 4) && (__GNUC_MINOR__ >= 7))) || defined(__clang__)
-+#define BOOST_CONCEPT_UNUSED_TYPEDEF __attribute__((unused))
-+#else
-+#define BOOST_CONCEPT_UNUSED_TYPEDEF /**/
-+#endif
-+
- #  define BOOST_CONCEPT_ASSERT_FN( ModelFnPtr )             \
-     typedef ::boost::concepts::detail::instantiate<          \
-     &::boost::concepts::requirement_<ModelFnPtr>::failed>    \
--      BOOST_PP_CAT(boost_concept_check,__LINE__)
-+      BOOST_PP_CAT(boost_concept_check,__LINE__)             \
-+      BOOST_CONCEPT_UNUSED_TYPEDEF
- 
- }}
- 
-diff -ur misc/boost_1_55_0/boost/math/special_functions/fpclassify.hpp misc/build/boost_1_55_0/boost/math/special_functions/fpclassify.hpp
---- misc/boost_1_55_0/boost/math/special_functions/fpclassify.hpp	2013-09-28 09:19:47.000000000 -0700
-+++ misc/build/boost_1_55_0/boost/math/special_functions/fpclassify.hpp	2016-03-23 01:11:12.392773000 -0700
-@@ -348,7 +348,7 @@
- { //!< \brief return true if floating-point type t is finite.
-    typedef detail::fp_traits<long double>::type traits;
-    typedef traits::method method;
--   typedef boost::is_floating_point<long double>::type fp_tag;
-+   //typedef boost::is_floating_point<long double>::type fp_tag;
-    typedef long double value_type;
-    return detail::isfinite_impl(static_cast<value_type>(x), method());
- }
-@@ -419,7 +419,7 @@
- {
-    typedef detail::fp_traits<long double>::type traits;
-    typedef traits::method method;
--   typedef boost::is_floating_point<long double>::type fp_tag;
-+   //typedef boost::is_floating_point<long double>::type fp_tag;
-    typedef long double value_type;
-    return detail::isnormal_impl(static_cast<value_type>(x), method());
- }
-@@ -508,7 +508,7 @@
- {
-    typedef detail::fp_traits<long double>::type traits;
-    typedef traits::method method;
--   typedef boost::is_floating_point<long double>::type fp_tag;
-+   //typedef boost::is_floating_point<long double>::type fp_tag;
-    typedef long double value_type;
-    return detail::isinf_impl(static_cast<value_type>(x), method());
- }
-@@ -594,7 +594,7 @@
- { //!< \brief return true if floating-point type t is NaN (Not A Number).
-    typedef detail::fp_traits<long double>::type traits;
-    typedef traits::method method;
--   typedef boost::is_floating_point<long double>::type fp_tag;
-+   //typedef boost::is_floating_point<long double>::type fp_tag;
-    return detail::isnan_impl(x, method());
- }
- #endif
-diff -ur misc/boost_1_55_0/boost/spirit/home/classic/core/primitives/primitives.hpp misc/build/boost_1_55_0/boost/spirit/home/classic/core/primitives/primitives.hpp
---- misc/boost_1_55_0/boost/spirit/home/classic/core/primitives/primitives.hpp	2008-06-22 08:05:38.000000000 -0700
-+++ misc/build/boost_1_55_0/boost/spirit/home/classic/core/primitives/primitives.hpp	2016-03-23 01:11:12.407415000 -0700
-@@ -47,7 +47,6 @@
-         typename parser_result<self_t, ScannerT>::type
-         parse(ScannerT const& scan) const
-         {
--            typedef typename parser_result<self_t, ScannerT>::type result_t;
-             typedef typename ScannerT::value_t value_t;
-             typedef typename ScannerT::iterator_t iterator_t;
- 
-diff -ur misc/boost_1_55_0/boost/static_assert.hpp misc/build/boost_1_55_0/boost/static_assert.hpp
---- misc/boost_1_55_0/boost/static_assert.hpp	2013-09-21 13:17:00.000000000 -0700
-+++ misc/build/boost_1_55_0/boost/static_assert.hpp	2016-03-23 01:11:12.430683000 -0700
-@@ -67,7 +67,7 @@
- //
- // If the compiler warns about unused typedefs then enable this:
- //
--#if defined(__GNUC__) && ((__GNUC__ > 4) || ((__GNUC__ == 4) && (__GNUC_MINOR__ >= 7)))
-+#if defined(__GNUC__) && ((__GNUC__ > 4) || ((__GNUC__ == 4) && (__GNUC_MINOR__ >= 7))) || defined(__clang__)
- #  define BOOST_STATIC_ASSERT_UNUSED_ATTRIBUTE __attribute__((unused))
- #else
- #  define BOOST_STATIC_ASSERT_UNUSED_ATTRIBUTE
-diff -ur misc/boost_1_55_0/boost/tuple/detail/tuple_basic.hpp misc/build/boost_1_55_0/boost/tuple/detail/tuple_basic.hpp
---- misc/boost_1_55_0/boost/tuple/detail/tuple_basic.hpp	2011-01-02 12:25:11.000000000 -0800
-+++ misc/build/boost_1_55_0/boost/tuple/detail/tuple_basic.hpp	2016-03-23 01:11:12.435344000 -0700
-@@ -225,7 +225,6 @@
- get(const cons<HT, TT>& c BOOST_APPEND_EXPLICIT_TEMPLATE_NON_TYPE(int, N)) {
-   typedef BOOST_DEDUCED_TYPENAME detail::drop_front<N>::BOOST_NESTED_TEMPLATE
-       apply<cons<HT, TT> > impl;
--  typedef BOOST_DEDUCED_TYPENAME impl::type cons_element;
-   return impl::call(c).head;
- }
- 
-diff -ur misc/boost_1_55_0/boost/unordered/detail/equivalent.hpp misc/build/boost_1_55_0/boost/unordered/detail/equivalent.hpp
---- misc/boost_1_55_0/boost/unordered/detail/equivalent.hpp	2012-12-05 14:06:57.000000000 -0800
-+++ misc/build/boost_1_55_0/boost/unordered/detail/equivalent.hpp	2016-03-23 01:04:46.934774000 -0700
+--- misc/boost_1_55_0/boost/unordered/detail/equivalent.hpp	2012-12-05 23:06:57.000000000 +0100
++++ misc/build/boost_1_55_0/boost/unordered/detail/equivalent.hpp	2014-01-07 10:33:59.550621750 +0100
 @@ -534,11 +534,11 @@
              }
  
@@ -248,9 +86,8 @@ diff -ur misc/boost_1_55_0/boost/unordered/detail/equivalent.hpp misc/build/boos
              }
  
              return prev;
-diff -ur misc/boost_1_55_0/boost/unordered/detail/table.hpp misc/build/boost_1_55_0/boost/unordered/detail/table.hpp
---- misc/boost_1_55_0/boost/unordered/detail/table.hpp	2013-08-18 02:44:14.000000000 -0700
-+++ misc/build/boost_1_55_0/boost/unordered/detail/table.hpp	2016-03-23 01:04:46.936005000 -0700
+--- misc/boost_1_55_0/boost/unordered/detail/table.hpp	2013-08-18 11:44:14.000000000 +0200
++++ misc/build/boost_1_55_0/boost/unordered/detail/table.hpp	2014-01-07 10:18:27.862432325 +0100
 @@ -257,9 +257,9 @@
              return prev ? iterator(prev->next_) : iterator();
          }
@@ -286,9 +123,8 @@ diff -ur misc/boost_1_55_0/boost/unordered/detail/table.hpp misc/build/boost_1_5
              }
          }
          
-diff -ur misc/boost_1_55_0/boost/unordered/detail/unique.hpp misc/build/boost_1_55_0/boost/unordered/detail/unique.hpp
---- misc/boost_1_55_0/boost/unordered/detail/unique.hpp	2013-08-18 02:44:14.000000000 -0700
-+++ misc/build/boost_1_55_0/boost/unordered/detail/unique.hpp	2016-03-23 01:04:46.937066000 -0700
+--- misc/boost_1_55_0/boost/unordered/detail/unique.hpp	2013-08-18 11:44:14.000000000 +0200
++++ misc/build/boost_1_55_0/boost/unordered/detail/unique.hpp	2014-01-07 10:18:27.865432217 +0100
 @@ -529,9 +529,9 @@
  
              link_pointer end = static_cast<node_pointer>(prev->next_)->next_;
@@ -326,3 +162,52 @@ diff -ur misc/boost_1_55_0/boost/unordered/detail/unique.hpp misc/build/boost_1_
          }
  
          ////////////////////////////////////////////////////////////////////////
+--- misc/build/boost_1_55_0/boost/bind/arg.hpp	2011-02-02 14:56:49 +0100
++++ misc/build/boost_1_55_0/boost/bind/arg.hpp	2014-02-10 14:56:49 +0100
+@@ -34,7 +34,8 @@
+     template< class T > arg( T const & /* t */ )
+     {
+         // static assert I == is_placeholder<T>::value
+-        typedef char T_must_be_placeholder[ I == is_placeholder<T>::value? 1: -1 ];
++        char X_must_be_placeholder[ I == is_placeholder<T>::value? 1: -1 ];
++        (void)&X_must_be_placeholder[0];
+     }
+ };
+ 
+--- misc/boost_1_55_0/boost/tuple/detail/tuple_basic.hpp	2011-01-02 21:25:11 +0100
++++ misc/build/boost_1_55_0/boost/tuple/detail/tuple_basic.hpp	2014-02-10 14:56:13 +0100
+@@ -225,7 +225,6 @@
+ get(const cons<HT, TT>& c BOOST_APPEND_EXPLICIT_TEMPLATE_NON_TYPE(int, N)) {
+   typedef BOOST_DEDUCED_TYPENAME detail::drop_front<N>::BOOST_NESTED_TEMPLATE
+       apply<cons<HT, TT> > impl;
+-  typedef BOOST_DEDUCED_TYPENAME impl::type cons_element;
+   return impl::call(c).head;
+ }
+ 
+--- misc/boost_1_55_0/boost/concept/detail/general.hpp	2010-06-08 21:31:13 +0200
++++ misc/build/boost_1_55_0/boost/concept/detail/general.hpp	2014-03-13 17:20:13 +0100
+@@ -65,10 +65,10 @@
+   
+ # endif
+ 
+-#  define BOOST_CONCEPT_ASSERT_FN( ModelFnPtr )             \
+-    typedef ::boost::concepts::detail::instantiate<          \
+-    &::boost::concepts::requirement_<ModelFnPtr>::failed>    \
+-      BOOST_PP_CAT(boost_concept_check,__LINE__)
++#define BOOST_CONCEPT_ASSERT_FN( ModelFnPtr )             \
++    ::boost::concepts::detail::instantiate<               \
++    &::boost::concepts::requirement_<ModelFnPtr>::failed> \
++      BOOST_PP_CAT(boost_concept_check,__LINE__)()
+ 
+ }}
+ 
+--- misc/boost_1_55_0/boost/spirit/home/classic/core/primitives/primitives.hpp	2014-03-12 14:02:51 +0100
++++ misc/build/boost_1_55_0/boost/spirit/home/classic/core/primitives/primitives.hpp	2008-06-22 17:05:38 +0200
+@@ -47,7 +47,6 @@
+         typename parser_result<self_t, ScannerT>::type
+         parse(ScannerT const& scan) const
+         {
+-            typedef typename parser_result<self_t, ScannerT>::type result_t;
+             typedef typename ScannerT::value_t value_t;
+             typedef typename ScannerT::iterator_t iterator_t;
+ 
