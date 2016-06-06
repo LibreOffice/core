@@ -974,11 +974,11 @@ IMPL_LINK_TYPED( ExtMgrDialog, startProgress, void*, _bLockInterface, void )
             m_pProgressBar->SetValue( 100 );
         m_xAbortChannel.clear();
 
-        OSL_TRACE( " startProgress handler: stop" );
+        SAL_INFO( "desktop.deployment", " startProgress handler: stop" );
     }
     else
     {
-        OSL_TRACE( " startProgress handler: start" );
+        SAL_INFO( "desktop.deployment", " startProgress handler: start" );
     }
 
     m_pCancelBtn->Enable( bLockInterface );
@@ -1000,13 +1000,13 @@ void ExtMgrDialog::showProgress( bool _bStart )
     {
         m_nProgress = 0;
         m_bStartProgress = true;
-        OSL_TRACE( "showProgress start" );
+        SAL_INFO( "desktop.deployment", "showProgress start" );
     }
     else
     {
         m_nProgress = 100;
         m_bStopProgress = true;
-        OSL_TRACE( "showProgress stop!" );
+        SAL_INFO( "desktop.deployment", "showProgress stop!" );
     }
 
     DialogHelper::PostUserEvent( LINK( this, ExtMgrDialog, startProgress ), reinterpret_cast<void*>(bStart) );
@@ -1286,11 +1286,11 @@ IMPL_LINK_TYPED( UpdateRequiredDialog, startProgress, void*, _bLockInterface, vo
         if ( m_pProgressBar->IsVisible() )
             m_pProgressBar->SetValue( 100 );
         m_xAbortChannel.clear();
-        OSL_TRACE( " startProgress handler: stop" );
+        SAL_INFO( "desktop.deployment", " startProgress handler: stop" );
     }
     else
     {
-        OSL_TRACE( " startProgress handler: start" );
+        SAL_INFO( "desktop.deployment", " startProgress handler: start" );
     }
 
     m_pCancelBtn->Enable( bLockInterface );
@@ -1309,13 +1309,13 @@ void UpdateRequiredDialog::showProgress( bool _bStart )
     {
         m_nProgress = 0;
         m_bStartProgress = true;
-        OSL_TRACE( "showProgress start" );
+        SAL_INFO( "desktop.deployment", "showProgress start" );
     }
     else
     {
         m_nProgress = 100;
         m_bStopProgress = true;
-        OSL_TRACE( "showProgress stop!" );
+        SAL_INFO( "desktop.deployment", "showProgress stop!" );
     }
 
     DialogHelper::PostUserEvent( LINK( this, UpdateRequiredDialog, startProgress ), reinterpret_cast<void*>(bStart) );
