@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_7f2be630",
+        "filename": "svtools/source/misc/transfer2.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 256,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-06-06T08:41:02Z",
+      "side": 1,
+      "message": "same here (sorry, didn\u0027t originally mention I spotted that pattern twice in the file)",
+      "revId": "df5a56b20d5ec8e71f3b842a7cc850fd0ef8c76d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
