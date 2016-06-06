@@ -556,7 +556,7 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
             pFrame = CreateEmptyDocument( xTargetFrame );
 
             //Launch TemplateSelectionDialog
-            ScopedVclPtrInstance< SfxTemplateSelectionDlg > aTemplDlg;
+            ScopedVclPtrInstance< SfxTemplateSelectionDlg > aTemplDlg( SfxGetpApp()->GetTopWindow());
             aTemplDlg->Execute();
 
             //check to disable the dialog
