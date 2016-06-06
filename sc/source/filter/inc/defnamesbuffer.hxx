@@ -27,10 +27,6 @@
 
 class ScTokenArray;
 
-namespace com { namespace sun { namespace star {
-    namespace sheet { class XNamedRange; }
-} } }
-
 namespace oox {
 namespace xls {
 

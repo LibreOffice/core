@@ -32,7 +32,6 @@ namespace com { namespace sun { namespace star {
     namespace container { class XNameContainer; }
     namespace lang { class XMultiServiceFactory; }
     namespace sheet { class XDatabaseRange; }
-    namespace sheet { class XNamedRange; }
     namespace sheet { class XSpreadsheet; }
     namespace sheet { class XSpreadsheetDocument; }
     namespace sheet { struct FormulaToken; }
