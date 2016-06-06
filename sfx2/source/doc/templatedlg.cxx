@@ -1663,7 +1663,7 @@ SfxTemplateSelectionDlg::SfxTemplateSelectionDlg(vcl::Window* pParent):
     mpMoveButton->Hide();
     mpExportButton->Hide();
     mpCBXHideDlg->Show();
-    mpCBXHideDlg->Check(true);
+    mpCBXHideDlg->Check();
 
     mpLocalView->setOpenTemplateHdl(LINK(this,SfxTemplateSelectionDlg, OpenTemplateHdl));
     mpSearchView->setOpenTemplateHdl(LINK(this,SfxTemplateSelectionDlg, OpenTemplateHdl));
