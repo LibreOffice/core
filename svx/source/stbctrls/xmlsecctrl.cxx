@@ -78,7 +78,6 @@ XmlSecStatusBarControl::XmlSecStatusBarControl( sal_uInt16 _nSlotId,  sal_uInt16
 
 XmlSecStatusBarControl::~XmlSecStatusBarControl()
 {
-    delete mpImpl;
 }
 
 void XmlSecStatusBarControl::StateChanged( sal_uInt16, SfxItemState eState, const SfxPoolItem* pState )
