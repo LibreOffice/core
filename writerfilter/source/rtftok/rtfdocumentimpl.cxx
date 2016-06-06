@@ -1674,12 +1674,12 @@ RTFError RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int n
     {
     case RTF_B:
     case RTF_AB:
-        nSprm =   (m_aStates.top().isRightToLeft || m_aStates.top().eRunType == RTFParserState::RunType::HICH)
+        nSprm = (m_aStates.top().isRightToLeft || m_aStates.top().eRunType == RTFParserState::RunType::HICH)
                 ? NS_ooxml::LN_EG_RPrBase_bCs : NS_ooxml::LN_EG_RPrBase_b;
         break;
     case RTF_I:
     case RTF_AI:
-        nSprm =   (m_aStates.top().isRightToLeft || m_aStates.top().eRunType == RTFParserState::RunType::HICH)
+        nSprm = (m_aStates.top().isRightToLeft || m_aStates.top().eRunType == RTFParserState::RunType::HICH)
                 ? NS_ooxml::LN_EG_RPrBase_iCs : NS_ooxml::LN_EG_RPrBase_i;
         break;
     case RTF_OUTL:

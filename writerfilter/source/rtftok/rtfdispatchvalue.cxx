@@ -151,7 +151,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     {
     case RTF_FS:
     case RTF_AFS:
-        nSprm =  (m_aStates.top().isRightToLeft || m_aStates.top().eRunType == RTFParserState::RunType::HICH)
+        nSprm = (m_aStates.top().isRightToLeft || m_aStates.top().eRunType == RTFParserState::RunType::HICH)
                 ? NS_ooxml::LN_EG_RPrBase_szCs : NS_ooxml::LN_EG_RPrBase_sz;
         break;
     case RTF_ANIMTEXT:
