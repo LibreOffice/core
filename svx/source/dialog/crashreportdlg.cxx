@@ -48,18 +48,6 @@ void CrashReportDialog::dispose()
     Dialog::dispose();
 }
 
-namespace {
-
-OUString getLibDir()
-{
-    OUString aOriginal = "$BRAND_BASE_DIR/" LIBO_LIBEXEC_FOLDER;
-    rtl::Bootstrap::expandMacros(aOriginal);
-
-    return aOriginal;
-}
-
-}
-
 IMPL_LINK_TYPED(CrashReportDialog, BtnHdl, Button*, pBtn, void)
 {
     if (pBtn == mpBtnSend.get())
