@@ -24,18 +24,20 @@
 #include <com/sun/star/view/XSelectionChangeListener.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
+#include <com/sun/star/frame/XInterceptorInfo.hpp>
 #include <cppuhelper/implbase2.hxx>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase4.hxx>
 #include <list>
 #include <osl/mutex.hxx>
 
 class SwView;
 
-class SwXDispatchProviderInterceptor : public cppu::WeakImplHelper3
+class SwXDispatchProviderInterceptor : public cppu::WeakImplHelper4
 <
     ::com::sun::star::frame::XDispatchProviderInterceptor,
     ::com::sun::star::lang::XEventListener,
-    ::com::sun::star::lang::XUnoTunnel
+    ::com::sun::star::lang::XUnoTunnel,
+    ::com::sun::star::frame::XInterceptorInfo
 >
 {
     class DispatchMutexLock_Impl
@@ -82,6 +84,9 @@ public:
     //XUnoTunnel
     static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId();
     virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
+
+    // XInterceptorInfo
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getInterceptedURLs() throw(::com::sun::star::uno::RuntimeException);
 
     // view destroyed
     void    Invalidate();

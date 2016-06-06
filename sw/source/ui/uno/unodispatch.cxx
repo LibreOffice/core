@@ -91,6 +91,14 @@ uno::Reference< frame::XDispatch > SwXDispatchProviderInterceptor::queryDispatch
     return xResult;
 }
 
+uno::Sequence<OUString> SwXDispatchProviderInterceptor::getInterceptedURLs() throw (uno::RuntimeException)
+{
+    uno::Sequence<OUString> aRet(1);
+    aRet[0] = OUString(".uno:DataSourceBrowser/*");
+
+    return aRet;
+}
+
 uno::Sequence< uno::Reference< frame::XDispatch > > SwXDispatchProviderInterceptor::queryDispatches(
     const uno::Sequence< frame::DispatchDescriptor >& aDescripts ) throw(uno::RuntimeException)
 {
