@@ -25,8 +25,6 @@
 #include <com/sun/star/sheet/XDatabaseRange.hpp>
 #include <com/sun/star/sheet/XDatabaseRanges.hpp>
 #include <com/sun/star/sheet/XUnnamedDatabaseRanges.hpp>
-#include <com/sun/star/sheet/XNamedRange.hpp>
-#include <com/sun/star/sheet/XNamedRanges.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/NamedRangeFlag.hpp>

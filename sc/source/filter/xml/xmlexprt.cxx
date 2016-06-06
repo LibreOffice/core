@@ -139,8 +139,6 @@
 #include <com/sun/star/sheet/XArrayFormulaRange.hpp>
 #include <com/sun/star/sheet/XLabelRanges.hpp>
 #include <com/sun/star/sheet/XLabelRange.hpp>
-#include <com/sun/star/sheet/XNamedRanges.hpp>
-#include <com/sun/star/sheet/XNamedRange.hpp>
 #include <com/sun/star/sheet/XCellRangeReferrer.hpp>
 #include <com/sun/star/sheet/NamedRangeFlag.hpp>
 #include <com/sun/star/sheet/XSheetLinkable.hpp>
