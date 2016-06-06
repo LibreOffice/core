@@ -95,6 +95,7 @@ enum SwXMLDocTokens
     XML_TOK_DOC_MASTERSTYLES,
     XML_TOK_DOC_META,
     XML_TOK_DOC_BODY,
+    XML_TOK_DOC_UNDO,
     XML_TOK_DOC_SCRIPT,
     XML_TOK_DOC_SETTINGS,
     XML_TOK_DOC_XFORMS,
@@ -109,6 +110,7 @@ static SvXMLTokenMapEntry aDocTokenMap[] =
     { XML_NAMESPACE_OFFICE, XML_MASTER_STYLES,   XML_TOK_DOC_MASTERSTYLES   },
     { XML_NAMESPACE_OFFICE, XML_META,           XML_TOK_DOC_META        },
     { XML_NAMESPACE_OFFICE, XML_BODY,           XML_TOK_DOC_BODY        },
+    { XML_NAMESPACE_OFFICE, XML_UNDO,           XML_TOK_DOC_UNDO        },
     { XML_NAMESPACE_OFFICE, XML_SCRIPTS,        XML_TOK_DOC_SCRIPT      },
     { XML_NAMESPACE_OFFICE, XML_SETTINGS,       XML_TOK_DOC_SETTINGS    },
     { XML_NAMESPACE_XFORMS, XML_MODEL,          XML_TOK_DOC_XFORMS      },
@@ -1596,4 +1598,13 @@ com_sun_star_comp_Writer_XMLOasisSettingsImporter_get_implementation(css::uno::X
     return cppu::acquire(new SwXMLImport(context, OUString("com.sun.star.comp.Writer.XMLOasisSettingsImporter"),
                 SvXMLImportFlags::SETTINGS));
 }
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
+com_sun_star_comp_Writer_XMLOasisUndoImporter_get_implementation(css::uno::XComponentContext* context,
+        css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new SwXMLImport(context, OUString("com.sun.star.comp.Writer.XMLOasisUndoImporter"),
+                SvXMLImportFlags::UNDO | SvXMLImportFlags::AUTOSTYLES));
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
