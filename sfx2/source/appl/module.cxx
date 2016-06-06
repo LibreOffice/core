@@ -42,7 +42,41 @@
 #include "childwinimpl.hxx"
 #include <ctrlfactoryimpl.hxx>
 
-static std::vector<SfxModule*>* pModules=nullptr;
+class SfxModuleArr_Impl
+{
+    typedef ::std::vector<SfxModule*> DataType;
+    DataType maData;
+public:
+
+    typedef DataType::iterator iterator;
+
+    iterator begin()
+    {
+        return maData.begin();
+    }
+
+    void erase( const iterator& it )
+    {
+        maData.erase(it);
+    }
+
+    SfxModule* operator[] ( size_t i )
+    {
+        return maData[i];
+    }
+
+    void push_back( SfxModule* p )
+    {
+        maData.push_back(p);
+    }
+
+    size_t size() const
+    {
+        return maData.size();
+    }
+};
+
+static SfxModuleArr_Impl* pModules=nullptr;
 
 class SfxModule_Impl
 {
@@ -102,8 +136,9 @@ ResMgr* SfxModule::GetResMgr()
     return pResMgr;
 }
 
-SfxModule::SfxModule( ResMgr* pMgrP, SfxObjectFactory* pFactoryP, ... )
-    : pResMgr( pMgrP ), pImpl(nullptr)
+SfxModule::SfxModule( ResMgr* pMgrP, bool bDummyP,
+                      SfxObjectFactory* pFactoryP, ... )
+    : pResMgr( pMgrP ), bDummy( bDummyP ), pImpl(nullptr)
 {
     Construct_Impl();
     va_list pVarArgs;
@@ -116,42 +151,49 @@ SfxModule::SfxModule( ResMgr* pMgrP, SfxObjectFactory* pFactoryP, ... )
 
 void SfxModule::Construct_Impl()
 {
-    SfxApplication *pApp = SfxGetpApp();
-    std::vector<SfxModule*> &rArr = GetModules_Impl();
-    rArr.push_back( this );
-    pImpl = new SfxModule_Impl;
-    pImpl->pSlotPool = new SfxSlotPool(&pApp->GetAppSlotPool_Impl());
+    if( !bDummy )
+    {
+        SfxApplication *pApp = SfxGetpApp();
+        SfxModuleArr_Impl& rArr = GetModules_Impl();
+        SfxModule* pPtr = this;
+        rArr.push_back( pPtr );
+        pImpl = new SfxModule_Impl;
+        pImpl->pSlotPool = new SfxSlotPool(&pApp->GetAppSlotPool_Impl());
 
-    pImpl->pTbxCtrlFac=nullptr;
-    pImpl->pStbCtrlFac=nullptr;
-    pImpl->pFactArr=nullptr;
-    pImpl->pImgListSmall=nullptr;
-    pImpl->pImgListBig=nullptr;
+        pImpl->pTbxCtrlFac=nullptr;
+        pImpl->pStbCtrlFac=nullptr;
+        pImpl->pFactArr=nullptr;
+        pImpl->pImgListSmall=nullptr;
+        pImpl->pImgListBig=nullptr;
 
-    SetPool( &pApp->GetPool() );
+        SetPool( &pApp->GetPool() );
+    }
 }
 
 
 SfxModule::~SfxModule()
 {
-    if ( SfxGetpApp()->Get_Impl() )
+    if( !bDummy )
     {
-        // The module will be destroyed before the Deinitialize,
-        // so remove from the array
-        std::vector<SfxModule*>& rArr = GetModules_Impl();
-        for( sal_uInt16 nPos = rArr.size(); nPos--; )
+        if ( SfxGetpApp()->Get_Impl() )
         {
-            if( rArr[ nPos ] == this )
+            // The module will be destroyed before the Deinitialize,
+            // so remove from the array
+            SfxModuleArr_Impl& rArr = GetModules_Impl();
+            for( sal_uInt16 nPos = rArr.size(); nPos--; )
             {
-                rArr.erase( rArr.begin() + nPos );
-                break;
+                if( rArr[ nPos ] == this )
+                {
+                    rArr.erase( rArr.begin() + nPos );
+                    break;
+                }
             }
+
+            delete pImpl;
         }
 
+        delete pResMgr;
     }
-
-    delete pImpl;
-    delete pResMgr;
 }
 
 
@@ -250,10 +292,10 @@ VclPtr<SfxTabPage> SfxModule::CreateTabPage( sal_uInt16, vcl::Window*, const Sfx
     return VclPtr<SfxTabPage>();
 }
 
-std::vector<SfxModule*>& SfxModule::GetModules_Impl()
+SfxModuleArr_Impl& SfxModule::GetModules_Impl()
 {
     if( !pModules )
-        pModules = new std::vector<SfxModule*>;
+        pModules = new SfxModuleArr_Impl;
     return *pModules;
 };
 
@@ -261,9 +303,10 @@ void SfxModule::DestroyModules_Impl()
 {
     if ( pModules )
     {
-        for( sal_uInt16 nPos = pModules->size(); nPos--; )
+        SfxModuleArr_Impl& rModules = *pModules;
+        for( sal_uInt16 nPos = rModules.size(); nPos--; )
         {
-            SfxModule* pMod = (*pModules)[nPos];
+            SfxModule* pMod = rModules[nPos];
             delete pMod;
         }
         delete pModules;
