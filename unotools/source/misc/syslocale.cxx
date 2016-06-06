@@ -34,9 +34,6 @@
 using namespace osl;
 using namespace com::sun::star;
 
-SvtSysLocale_Impl*  SvtSysLocale::pImpl = nullptr;
-sal_Int32           SvtSysLocale::nRefCount = 0;
-
 class SvtSysLocale_Impl : public utl::ConfigurationListener
 {
 public:
@@ -115,18 +112,12 @@ SvtSysLocale::SvtSysLocale()
 {
     MutexGuard aGuard( GetMutex() );
     if ( !pImpl )
-        pImpl = new SvtSysLocale_Impl;
-    ++nRefCount;
+        pImpl.reset( new SvtSysLocale_Impl );
 }
 
 SvtSysLocale::~SvtSysLocale()
 {
     MutexGuard aGuard( GetMutex() );
-    if ( !--nRefCount )
-    {
-        delete pImpl;
-        pImpl = nullptr;
-    }
 }
 
 // static
