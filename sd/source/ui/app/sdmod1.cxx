@@ -19,6 +19,7 @@
 
 #include <svl/lckbitem.hxx>
 #include <sfx2/frame.hxx>
+#include <sfx2/app.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <unotools/moduleoptions.hxx>
 #include "framework/FrameworkHelper.hxx"
@@ -552,11 +553,20 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
         }
         else
         {
+            SfxApplication* pApp = SfxGetpApp();
+            vcl::Window* pTopWin = pApp->GetTopWindow();
+
             //create an empty document into frame
             pFrame = CreateEmptyDocument( xTargetFrame );
 
+            if ( pTopWin != pApp->GetTopWindow() )
+            {
+                // opens a document -> a new TopWindow appears
+                pTopWin = pApp->GetTopWindow();
+            }
+
             //Launch TemplateSelectionDialog
-            ScopedVclPtrInstance< SfxTemplateSelectionDlg > aTemplDlg;
+            ScopedVclPtrInstance< SfxTemplateSelectionDlg > aTemplDlg( pTopWin);
             aTemplDlg->Execute();
 
             //pFrame is loaded with the desired template
