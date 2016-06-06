@@ -1849,9 +1849,10 @@ void VCartesianAxis::createShapes()
                 AxisLabelAlignment aLabelAlign = m_aAxisProperties.maLabelAlignment;
                 get2DAxisMainLine(aStart, aEnd, aLabelAlign, fExtraLineCrossesOtherAxis);
                 m_aAxisProperties.maLabelAlignment = aLabelAlign;
-                drawing::PointSequenceSequence aPoints{{
+                drawing::PointSequenceSequence aPoints{std::initializer_list<uno::Sequence<awt::Point>>
+                    {std::initializer_list<awt::Point>{
                         {static_cast<sal_Int32>(aStart.getX()), static_cast<sal_Int32>(aStart.getY())},
-                        {static_cast<sal_Int32>(aEnd.getX()), static_cast<sal_Int32>(aEnd.getY())} }};
+                        {static_cast<sal_Int32>(aEnd.getX()), static_cast<sal_Int32>(aEnd.getY())} }}};
                 Reference< drawing::XShape > xShape = m_pShapeFactory->createLine2D(
                         m_xGroupShape_Shapes, aPoints, &m_aAxisProperties.m_aLineProperties );
             }
