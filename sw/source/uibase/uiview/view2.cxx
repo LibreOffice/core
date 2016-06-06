@@ -76,6 +76,7 @@
 #include <swtypes.hxx>
 #include <swwait.hxx>
 #include <redlndlg.hxx>
+#include <gotodlg.hxx>
 #include <view.hxx>
 #include <uivwimp.hxx>
 #include <docsh.hxx>
@@ -880,20 +881,10 @@ void SwView::Execute(SfxRequest &rReq)
             }
         }
         break;
-        case FN_NAVIGATION_PI_GOTO_PAGE:
+        case FN_GOTO_PAGE:
         {
-            SfxViewFrame* pVFrame = GetViewFrame();
-            SfxChildWindow* pCh = pVFrame->GetChildWindow( SID_NAVIGATOR );
-            if(!pCh)
-            {
-                pVFrame->ToggleChildWindow( SID_NAVIGATOR );
-                pCh = pVFrame->GetChildWindow( SID_NAVIGATOR );
-
-            }
-            if (pCh)
-            {
-                static_cast<SwNavigationPI*>( pCh->GetContextWindow(SW_MOD()))->GotoPage();
-            }
+            ScopedVclPtrInstance< SwGotoPageDlg > aDlg (&GetViewFrame()->GetWindow(), &GetViewFrame()->GetBindings());
+            aDlg->Execute();
         }
         break;
         case  FN_EDIT_CURRENT_TOX:
