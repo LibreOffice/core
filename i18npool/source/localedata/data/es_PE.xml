@@ -181,10 +181,10 @@
       <FormatCode>[CURRENCY]#,##0.--;[RED][CURRENCY]-#,##0.--</FormatCode>
     </FormatElement>
     <FormatElement msgid="PercentFormatskey1" default="true" type="short" usage="PERCENT_NUMBER"  formatindex="8">
-      <FormatCode>0%</FormatCode>
+      <FormatCode>0" "%</FormatCode>
     </FormatElement>
     <FormatElement msgid="PercentFormatskey2" default="true" type="long" usage="PERCENT_NUMBER"  formatindex="9">
-      <FormatCode>0.00%</FormatCode>
+      <FormatCode>0.00" "%</FormatCode>
     </FormatElement>
     <FormatElement msgid="ScientificFormatskey1" default="false" type="medium" usage="SCIENTIFIC_NUMBER"  formatindex="6">
       <FormatCode>0.00E+000</FormatCode>

@@ -81,10 +81,10 @@
       <FormatCode>##0,00E+00</FormatCode>
     </FormatElement>
     <FormatElement msgid="PercentFormatskey1" default="true" type="short" usage="PERCENT_NUMBER" formatindex="8">
-      <FormatCode>0%</FormatCode>
+      <FormatCode>0" "%</FormatCode>
     </FormatElement>
     <FormatElement msgid="PercentFormatskey2" default="true" type="long" usage="PERCENT_NUMBER" formatindex="9">
-      <FormatCode>0,00%</FormatCode>
+      <FormatCode>0,00" "%</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey1" default="true" type="short" usage="CURRENCY" formatindex="12">
       <FormatCode>[CURRENCY]#.##0;([CURRENCY]#.##0)</FormatCode>
