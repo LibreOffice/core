@@ -73,6 +73,12 @@ struct SettingsTable_Impl
     bool                embedSystemFonts;
     bool                m_bDoNotUseHTMLParagraphAutoSpacing;
     bool                m_bSplitPgBreakAndParaMark;
+    bool                m_bProtectForm;
+
+    uno::Sequence<beans::PropertyValue> m_pThemeFontLangProps;
+
+    std::vector<beans::PropertyValue> m_aCompatSettings;
+    uno::Sequence<beans::PropertyValue> m_pCurrentCompatSetting;
 
     SettingsTable_Impl( DomainMapper& rDMapper, const uno::Reference< lang::XMultiServiceFactory > xTextFactory ) :
     m_rDMapper( rDMapper )
@@ -97,6 +103,7 @@ struct SettingsTable_Impl
     , embedSystemFonts(false)
     , m_bDoNotUseHTMLParagraphAutoSpacing(false)
     , m_bSplitPgBreakAndParaMark(false)
+    , m_bProtectForm(false)
     {}
 
 };
@@ -122,6 +129,9 @@ void SettingsTable::lcl_attribute(Id nName, Value & val)
     {
     case NS_ooxml::LN_CT_Zoom_percent:
         m_pImpl->m_nZoomFactor = nIntValue;
+    break;
+    case NS_ooxml::LN_CT_DocProtect_edit:
+        m_pImpl->m_bProtectForm = val.getInt() != NS_ooxml::LN_Value_wordprocessingml_ST_DocProtect_none;
     break;
     default:
     {
@@ -290,6 +300,10 @@ void SettingsTable::ApplyProperties( uno::Reference< text::XTextDocument > xDoc 
         xDocProps->setPropertyValue("RecordChanges", uno::makeAny( m_pImpl->m_bRecordChanges ) );
 }
 
+bool SettingsTable::GetProtectForm() const
+{
+    return m_pImpl->m_bProtectForm;
+}
 
 }//namespace dmapper
 } //namespace writerfilter

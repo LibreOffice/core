@@ -69,6 +69,7 @@
 #include "ww8attributeoutput.hxx"
 #include "docxattributeoutput.hxx"
 #include "rtfattributeoutput.hxx"
+#include <IDocumentSettingAccess.hxx>
 
 using namespace css;
 using namespace sw::util;
@@ -1536,7 +1537,9 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
     AttrOutput().SectFootnoteEndnotePr();
 
     // forms
-    AttrOutput().SectionFormProtection( rSepInfo.IsProtected() );
+    bool formProtection = pDoc->get(IDocumentSettingAccess::PROTECT_FORM);
+    formProtection |= rSepInfo.IsProtected();
+    AttrOutput().SectionFormProtection( formProtection );
 
     // line numbers
     const SwLineNumberInfo& rLnNumInfo = pDoc->GetLineNumberInfo();

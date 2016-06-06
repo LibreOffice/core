@@ -696,6 +696,12 @@ void DocxExport::WriteSettings()
     if( settings.evenAndOddHeaders )
         pFS->singleElementNS( XML_w, XML_evenAndOddHeaders, FSEND );
 
+    // Protect form
+    if( pDoc->get( IDocumentSettingAccess::PROTECT_FORM ))
+    {
+        pFS->singleElementNS( XML_w, XML_documentProtection, FSNS(XML_w, XML_edit), "forms", FSNS(XML_w, XML_enforcement), "1",  FSEND );
+    }
+
     if( m_pAttrOutput->HasFootnotes())
         m_pAttrOutput->WriteFootnoteEndnotePr( pFS, XML_footnotePr, pDoc->GetFtnInfo(), XML_footnote );
     if( m_pAttrOutput->HasEndnotes())

@@ -59,8 +59,9 @@ using namespace ::com::sun::star::beans;
 #define PROPERTYNAME_USEOURTEXTWRAP     COMPATIBILITY_PROPERTYNAME_USEOURTEXTWRAPPING
 #define PROPERTYNAME_CONSIDERWRAPSTYLE  COMPATIBILITY_PROPERTYNAME_CONSIDERWRAPPINGSTYLE
 #define PROPERTYNAME_EXPANDWORDSPACE    COMPATIBILITY_PROPERTYNAME_EXPANDWORDSPACE
+#define PROPERTYNAME_PROTECTFORM        COMPATIBILITY_PROPERTYNAME_PROTECTFORM
 
-#define PROPERTYCOUNT                   13
+#define PROPERTYCOUNT                   14
 
 #define OFFSET_NAME                     0
 #define OFFSET_MODULE                   1
@@ -75,6 +76,7 @@ using namespace ::com::sun::star::beans;
 #define OFFSET_USEOURTEXTWRAPPING       10
 #define OFFSET_CONSIDERWRAPPINGSTYLE    11
 #define OFFSET_EXPANDWORDSPACE          12
+#define OFFSET_PROTECTFORM              13
 
 //_________________________________________________________________________________________________________________
 //  private declarations!
@@ -92,7 +94,7 @@ struct SvtCompatibilityEntry
             bNoExtLeading( false ), bUseLineSpacing( false ),
             bAddTableSpacing( false ), bUseObjPos( false ),
             bUseOurTextWrapping( false ), bConsiderWrappingStyle( false ),
-            bExpandWordSpace( true ) {}
+            bExpandWordSpace( true ), bProtectForm( false ) {}
         SvtCompatibilityEntry(
             const OUString& _rName, const OUString& _rNewModule ) :
                 sName( _rName ), sModule( _rNewModule ),
@@ -101,7 +103,7 @@ struct SvtCompatibilityEntry
                 bNoExtLeading( false ), bUseLineSpacing( false ),
                 bAddTableSpacing( false ), bUseObjPos( false ),
                 bUseOurTextWrapping( false ), bConsiderWrappingStyle( false ),
-                bExpandWordSpace( true ) {}
+                bExpandWordSpace( true ), bProtectForm( false ) {}
 
         inline void     SetUsePrtMetrics( bool _bSet ) { bUsePrtMetrics = _bSet; }
         inline void     SetAddSpacing( bool _bSet ) { bAddSpacing = _bSet; }
@@ -114,6 +116,7 @@ struct SvtCompatibilityEntry
         inline void     SetUseOurTextWrapping( bool _bSet ) { bUseOurTextWrapping = _bSet; }
         inline void     SetConsiderWrappingStyle( bool _bSet ) { bConsiderWrappingStyle = _bSet; }
         inline void     SetExpandWordSpace( bool _bSet ) { bExpandWordSpace = _bSet; }
+        inline void     SetProtectForm( bool _bSet ) { bProtectForm = _bSet; }
 
     public:
         OUString    sName;
@@ -129,6 +132,7 @@ struct SvtCompatibilityEntry
         bool        bUseOurTextWrapping;
         bool        bConsiderWrappingStyle;
         bool        bExpandWordSpace;
+        bool        bProtectForm;
 };
 
 /*-****************************************************************************************************************
@@ -295,7 +299,8 @@ class SvtCompatibilityOptions_Impl : public ConfigItem
                                                             bool _bUseObjPos,
                                                             bool _bUseOurTextWrapping,
                                                             bool _bConsiderWrappingStyle,
-                                                            bool _bExpandWordSpace );
+                                                            bool _bExpandWordSpace,
+                                                            bool _bProtectForm );
 
         inline bool IsUsePrtDevice() const { return m_aDefOptions.bUsePrtMetrics; }
         inline bool IsAddSpacing() const { return m_aDefOptions.bAddSpacing; }
@@ -308,6 +313,7 @@ class SvtCompatibilityOptions_Impl : public ConfigItem
         inline bool IsUseOurTextWrapping() const { return m_aDefOptions.bUseOurTextWrapping; }
         inline bool IsConsiderWrappingStyle() const { return m_aDefOptions.bConsiderWrappingStyle; }
         inline bool IsExpandWordSpace() const { return m_aDefOptions.bExpandWordSpace; }
+        inline bool IsProtectForm() const { return m_aDefOptions.bProtectForm; }
 
     //-------------------------------------------------------------------------------------------------------------
     //  private methods
@@ -491,6 +497,7 @@ void SvtCompatibilityOptions_Impl::Commit()
         lPropertyValues[ OFFSET_USEOURTEXTWRAPPING - 1      ].Name = sNode + PROPERTYNAME_USEOURTEXTWRAP;
         lPropertyValues[ OFFSET_CONSIDERWRAPPINGSTYLE - 1   ].Name = sNode + PROPERTYNAME_CONSIDERWRAPSTYLE;
         lPropertyValues[ OFFSET_EXPANDWORDSPACE - 1         ].Name = sNode + PROPERTYNAME_EXPANDWORDSPACE;
+        lPropertyValues[ OFFSET_PROTECTFORM - 1             ].Name = sNode + PROPERTYNAME_PROTECTFORM;
 
         lPropertyValues[ OFFSET_MODULE - 1                  ].Value <<= aItem.sModule;
         lPropertyValues[ OFFSET_USEPRTMETRICS - 1           ].Value <<= aItem.bUsePrtMetrics;
@@ -504,6 +511,7 @@ void SvtCompatibilityOptions_Impl::Commit()
         lPropertyValues[ OFFSET_USEOURTEXTWRAPPING - 1      ].Value <<= aItem.bUseOurTextWrapping;
         lPropertyValues[ OFFSET_CONSIDERWRAPPINGSTYLE - 1   ].Value <<= aItem.bConsiderWrappingStyle;
         lPropertyValues[ OFFSET_EXPANDWORDSPACE - 1         ].Value <<= aItem.bExpandWordSpace;
+        lPropertyValues[ OFFSET_PROTECTFORM - 1             ].Value <<= aItem.bProtectForm;
 
         SetSetProperties( SETNODE_ALLFILEFORMATS, lPropertyValues );
     }
@@ -544,7 +552,8 @@ void SvtCompatibilityOptions_Impl::AppendItem(  const OUString& _sName,
                                                 bool _bUseObjPos,
                                                 bool _bUseOurTextWrapping,
                                                 bool _bConsiderWrappingStyle,
-                                                bool _bExpandWordSpace )
+                                                bool _bExpandWordSpace,
+                                                bool _bProtectForm )
 {
     SvtCompatibilityEntry aItem( _sName, _sModule );
     aItem.SetUsePrtMetrics( _bUsePrtMetrics );
@@ -558,6 +567,7 @@ void SvtCompatibilityOptions_Impl::AppendItem(  const OUString& _sName,
     aItem.SetUseOurTextWrapping( _bUseOurTextWrapping );
     aItem.SetConsiderWrappingStyle( _bConsiderWrappingStyle );
     aItem.SetExpandWordSpace( _bExpandWordSpace );
+    aItem.SetProtectForm( _bProtectForm );
     m_aOptions.AppendEntry( aItem );
 
     // default item reset?
@@ -709,14 +719,15 @@ void SvtCompatibilityOptions::AppendItem( const OUString& sName,
                                           bool bUseObjPos,
                                           bool bUseOurTextWrapping,
                                           bool bConsiderWrappingStyle,
-                                          bool bExpandWordSpace )
+                                          bool bExpandWordSpace,
+                                          bool bProtectForm )
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     m_pDataContainer->AppendItem(
         sName, sModule, bUsePrtMetrics, bAddSpacing,
         bAddSpacingAtPages, bUseOurTabStops, bNoExtLeading,
         bUseLineSpacing, bAddTableSpacing, bUseObjPos,
-        bUseOurTextWrapping, bConsiderWrappingStyle, bExpandWordSpace );
+        bUseOurTextWrapping, bConsiderWrappingStyle, bExpandWordSpace, bProtectForm );
 }
 
 bool SvtCompatibilityOptions::IsUsePrtDevice() const
@@ -783,6 +794,12 @@ bool SvtCompatibilityOptions::IsExpandWordSpace() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->IsExpandWordSpace();
+}
+
+bool SvtCompatibilityOptions::IsProtectForm() const
+{
+    MutexGuard aGuard( GetOwnStaticMutex() );
+    return m_pDataContainer->IsProtectForm();
 }
 
 Sequence< Sequence< PropertyValue > > SvtCompatibilityOptions::GetList() const

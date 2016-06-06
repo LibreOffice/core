@@ -848,7 +848,20 @@ void Test::testFdo66773()
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(100), static_cast<sal_Int32>(alineSpacing.Height));
 }
 
+/* ToDo for LHM LO 4.1.6 V3: #10584 Import von .docs in LO mit Bereichen
+DECLARE_OOXMLEXPORT_TEST(testTDF99434, "protectedform.docx")
+{
+    css::uno::Reference<css::lang::XMultiServiceFactory> m_xTextFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference< beans::XPropertySet > xSettings(m_xTextFactory->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY);
+    uno::Any aProtect = xSettings->getPropertyValue("ProtectForm");
+    bool bProt = false;
+    aProtect >>= bProt;
+    CPPUNIT_ASSERT(bProt);
+}
+*/
+
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
+
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
