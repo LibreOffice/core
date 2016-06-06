@@ -129,7 +129,7 @@ protected:
 
     virtual void OnItemDblClicked(ThumbnailViewItem *pItem) override;
 
-    bool IsDefaultTemplate(const OUString& rPath);
+    static bool IsDefaultTemplate(const OUString& rPath);
 
 protected:
 
