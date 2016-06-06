@@ -12,6 +12,7 @@
 
 #include "dpitemdata.hxx"
 
+#include <memory>
 #include <map>
 #include <vector>
 #include <unordered_map>
@@ -23,6 +24,7 @@ namespace com { namespace sun { namespace star { namespace sheet {
 struct ScDPResultFilter
 {
     OUString maDimName;
+    OUString maValueName;
     OUString maValue;
 
     bool mbHasValue:1;
@@ -54,12 +56,13 @@ private:
 
     struct MemberNode;
     struct DimensionNode;
-    typedef std::map<OUString, MemberNode*> MembersType;
+    typedef std::map<OUString, std::shared_ptr<MemberNode> > MembersType;
     typedef std::map<OUString, DimensionNode*> DimensionsType;
 
     struct DimensionNode
     {
-        MembersType maChildMembers;
+        MembersType maChildMembersValueNames;
+        MembersType maChildMembersValues;
 
         DimensionNode();
         DimensionNode(const DimensionNode&) = delete;

@@ -99,7 +99,7 @@ public:
     ScDPTableData(ScDocument* pDoc);
     virtual     ~ScDPTableData();
 
-    OUString GetFormattedString(long nDim, const ScDPItemData& rItem) const;
+    OUString GetFormattedString(long nDim, const ScDPItemData& rItem, bool bLocaleIndependent) const;
 
     long        GetDatePart( long nDateVal, long nHierarchy, long nLevel );
 

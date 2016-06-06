@@ -1,0 +1,56 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#ifndef __com_sun_star_container_XMembersAccess_idl__
+#define __com_sun_star_container_XMembersAccess_idl__
+
+#include <com/sun/star/container/XNameAccess.idl>
+
+
+module com {  module sun {  module star {  module sheet {
+
+
+/** is used to access named members in a data pilot source
+    level collection.
+
+    @see com::sun::star::sheet::DataPilotSourceMember
+ */
+interface XMembersAccess: com::sun::star::container::XNameAccess
+{
+
+    /** returns names of data pilot members in a locale independent
+        notation.
+
+        <p> Specifically date values are represented in an ISO 8601
+        YYYY-MM-DD notation and date+time as YYYY-MM-DD HH:MM:SS,
+        whereas the strings returned by
+        com::sun::star::container::XNameAccess::getElementNames() may
+        represent these in a locale dependent or user formatted notation
+        such as MM/DD/YY or DD.MM.YYYY or other. </p>
+
+        <p> The names returned by this function can NOT be used in calls
+        to com::sun::star::container::XNameAccess::getByName(). However,
+        the order returned in two immediately consecutive calls to
+        getElementNames() and getLocaleIndependentElementNames() maps to
+        the same elements in order. </p>
+
+        @returns
+            a sequence of all element names in this container.
+
+     */
+    sequence<string> getLocaleIndependentElementNames();
+
+};
+
+
+}; }; }; };
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

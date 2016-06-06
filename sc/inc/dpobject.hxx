@@ -46,6 +46,7 @@ namespace com { namespace sun { namespace star {
     }
 
     namespace sheet {
+        class XMembersAccess;
         struct DataPilotTablePositionData;
         struct DataPilotTableHeaderData;
         struct DataPilotFieldFilter;
@@ -202,8 +203,8 @@ public:
 
     sal_Int32           GetUsedHierarchy( sal_Int32 nDim );
 
-    bool                GetMembersNA( sal_Int32 nDim, css::uno::Reference< css::container::XNameAccess >& xMembers );
-    bool                GetMembersNA( sal_Int32 nDim, sal_Int32 nHier, css::uno::Reference< css::container::XNameAccess >& xMembers );
+    bool                GetMembersNA( sal_Int32 nDim, css::uno::Reference< css::sheet::XMembersAccess >& xMembers );
+    bool                GetMembersNA( sal_Int32 nDim, sal_Int32 nHier, css::uno::Reference< css::sheet::XMembersAccess >& xMembers );
 
     bool                GetMemberNames( sal_Int32 nDim, css::uno::Sequence< OUString >& rNames );
     bool                GetMembers( sal_Int32 nDim, sal_Int32 nHier, ::std::vector<ScDPLabelData::Member>& rMembers );

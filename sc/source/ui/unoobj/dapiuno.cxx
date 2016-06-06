@@ -1512,9 +1512,9 @@ sal_Int32 ScDataPilotChildObjBase::GetMemberCount() const
     return nRet;
 }
 
-Reference< XNameAccess > ScDataPilotChildObjBase::GetMembers() const
+Reference< XMembersAccess > ScDataPilotChildObjBase::GetMembers() const
 {
-    Reference< XNameAccess > xMembersNA;
+    Reference< XMembersAccess > xMembersNA;
     if( ScDPObject* pDPObj = GetDPObject() )
         pDPObj->GetMembersNA( lcl_GetObjectIndex( pDPObj, maFieldId ), xMembersNA );
     return xMembersNA;
@@ -2617,7 +2617,7 @@ Reference< XDataPilotField > SAL_CALL ScDataPilotFieldObj::createNameGroup( cons
         //! localized prefix string
         OUString aGroupName = pGroupDimension->CreateGroupName( "Group" );
         ScDPSaveGroupItem aGroup( aGroupName );
-        Reference< XNameAccess > xMembers = GetMembers();
+        Reference< XMembersAccess > xMembers = GetMembers();
         if (!xMembers.is())
         {
             delete pNewGroupDim;

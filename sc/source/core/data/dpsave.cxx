@@ -662,7 +662,7 @@ void ScDPSaveDimension::WriteToSource( const uno::Reference<uno::XInterface>& xD
                 uno::Reference<sheet::XMembersSupplier> xMembSupp( xLevel, uno::UNO_QUERY );
                 if ( xMembSupp.is() )
                 {
-                    uno::Reference<container::XNameAccess> xMembers = xMembSupp->getMembers();
+                    uno::Reference<sheet::XMembersAccess> xMembers = xMembSupp->getMembers();
                     if ( xMembers.is() )
                     {
                         sal_Int32 nPosition = -1; // set position only in manual mode
@@ -1362,7 +1362,7 @@ void ScDPSaveData::BuildAllDimensionMembers(ScDPTableData* pData)
         for (size_t j = 0; j < nMemberCount; ++j)
         {
             const ScDPItemData* pMemberData = pData->GetMemberById( nDimIndex, rMembers[j] );
-            OUString aMemName = pData->GetFormattedString(nDimIndex, *pMemberData);
+            OUString aMemName = pData->GetFormattedString(nDimIndex, *pMemberData, false);
             if (iter->GetExistingMemberByName(aMemName))
                 // this member instance already exists. nothing to do.
                 continue;
@@ -1407,7 +1407,7 @@ void ScDPSaveData::SyncAllDimensionMembers(ScDPTableData* pData)
         for (size_t j = 0; j < nMemberCount; ++j)
         {
             const ScDPItemData* pMemberData = pData->GetMemberById(nDimIndex, rMembers[j]);
-            OUString aMemName = pData->GetFormattedString(nDimIndex, *pMemberData);
+            OUString aMemName = pData->GetFormattedString(nDimIndex, *pMemberData, false);
             aMemNames.insert(aMemName);
         }
 

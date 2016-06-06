@@ -46,6 +46,7 @@
 #include "tokenarray.hxx"
 #include "globalnames.hxx"
 #include "stlsheet.hxx"
+#include "dpcache.hxx"
 
 #include <com/sun/star/sheet/DataPilotFieldFilter.hpp>
 
@@ -3306,8 +3307,23 @@ void ScInterpreter::ScGetPivotData()
         sal_uInt16 i = nFilterCount;
         while (i-- > 0)
         {
-            //TODO: should allow numeric constraint values
-            aFilters[i].MatchValue = GetString().getString();
+            /* TODO: should allow numeric constraint values. */
+
+            /* TODO: also, in case of numeric the entire filter match should
+             * not be on a (even if locale independent) formatted string down
+             * below in pDPObj->GetPivotData(). */
+
+            aFilters[i].MatchValueName = GetString().getString();
+
+            // Parse possible number from MatchValueName and format
+            // locale independent as MatchValue.
+            sal_uInt32 nNumFormat;
+            double fValue;
+            if (pFormatter->IsNumberFormat( aFilters[i].MatchValueName, nNumFormat, fValue))
+                aFilters[i].MatchValue = ScDPCache::GetLocaleIndependentFormattedString( fValue, *pFormatter, nNumFormat);
+            else
+                aFilters[i].MatchValue = aFilters[i].MatchValueName;
+
             aFilters[i].FieldName = GetString().getString();
         }
 

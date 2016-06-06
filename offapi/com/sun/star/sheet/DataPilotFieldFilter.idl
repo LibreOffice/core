@@ -29,7 +29,19 @@ struct DataPilotFieldFilter
     /** Field name. */
     string FieldName;
 
-    /** String value that needs to match against. */
+    /** String value that needs to match against, locale dependent.
+
+        <p> This is the value as name/label as also displayed in the
+        filter popup dialog, maybe formatted by user applied number
+        formats. </p>
+     */
+    string MatchValueName;
+
+    /** String value that needs to match against, locale independent.
+
+        <p> This is the underlying value formatted in a standardized
+        way, for example ISO 8601 YYYY-MM-DD for dates.
+     */
     string MatchValue;
 };
 

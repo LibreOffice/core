@@ -530,7 +530,7 @@ void XclExpPCField::InsertNumDateGroupItems( const ScDPObject& rDPObj, const ScD
             const ScDPItemData* pData = aDPData.GetMemberById(nDim, nMemberId);
             if ( pData )
             {
-                OUString aStr = pCache->GetFormattedString(nDim, *pData);
+                OUString aStr = pCache->GetFormattedString(nDim, *pData, false);
                 InsertGroupItem(new XclExpPCItem(aStr));
             }
         }

@@ -398,8 +398,7 @@ protected:
     /** Returns the number of members for the field described by maFieldId. */
     sal_Int32           GetMemberCount() const;
     /** Returns the collection of members for the field described by maFieldId. */
-    css::uno::Reference< css::container::XNameAccess >
-                        GetMembers() const;
+    css::uno::Reference< css::sheet::XMembersAccess > GetMembers() const;
 
     ScDocShell* GetDocShell() const;
 protected:
