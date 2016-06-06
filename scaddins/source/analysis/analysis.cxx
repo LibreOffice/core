@@ -24,6 +24,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/random.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <o3tl/any.hxx>
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/math.hxx>
@@ -1150,7 +1151,7 @@ OUString SAL_CALL AnalysisAddIn::getComplex( double fR, double fI, const uno::An
             break;
         case uno::TypeClass_STRING:
             {
-            const OUString*   pSuff = static_cast<const OUString*>(rSuff.getValue());
+            auto   pSuff = o3tl::forceGet<OUString>(rSuff);
             bi = *pSuff == "i" || pSuff->isEmpty();
             if( !bi && *pSuff != "j" )
                 throw lang::IllegalArgumentException();

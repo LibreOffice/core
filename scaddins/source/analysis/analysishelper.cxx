@@ -22,6 +22,7 @@
 
 #include <string.h>
 #include <stdio.h>
+#include <o3tl/any.hxx>
 #include <tools/resary.hxx>
 #include <rtl/math.hxx>
 #include <sal/macros.h>
@@ -1591,8 +1592,9 @@ void ScaDoubleList::Append(
         const uno::Any& rAny,
         bool bIgnoreEmpty ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
-    if( rAny.getValueTypeClass() == uno::TypeClass_SEQUENCE )
-        Append( rAnyConv, *static_cast< const uno::Sequence< uno::Sequence< uno::Any > >* >( rAny.getValue() ), bIgnoreEmpty );
+    if( auto s = o3tl::tryGet<
+            css::uno::Sequence<css::uno::Sequence<css::uno::Any>>>(rAny) )
+        Append( rAnyConv, *s, bIgnoreEmpty );
     else
     {
         double fValue;
@@ -2120,10 +2122,10 @@ void ComplexList::Append( const uno::Sequence< uno::Any >& aMultPars, ComplListA
             case uno::TypeClass_VOID:       break;
             case uno::TypeClass_STRING:
                 {
-                const OUString*       pStr = static_cast<const OUString*>(r.getValue());
+                auto       pStr = o3tl::forceGet<OUString>(r);
 
                 if( !pStr->isEmpty() )
-                    Append( new Complex( *static_cast<OUString const *>(r.getValue()) ) );
+                    Append( new Complex( *pStr ) );
                 else if( bEmpty0 )
                     Append( new Complex( 0.0 ) );
                 else if( bErrOnEmpty )
@@ -2131,7 +2133,7 @@ void ComplexList::Append( const uno::Sequence< uno::Any >& aMultPars, ComplListA
                 }
                 break;
             case uno::TypeClass_DOUBLE:
-                Append( new Complex( *static_cast<double const *>(r.getValue()), 0.0 ) );
+                Append( new Complex( *o3tl::forceGet<double>(r), 0.0 ) );
                 break;
             case uno::TypeClass_SEQUENCE:
                 {
@@ -2870,7 +2872,7 @@ bool ScaAnyConverter::getDouble(
         break;
         case uno::TypeClass_STRING:
         {
-            const OUString* pString = static_cast< const OUString* >( rAny.getValue() );
+            auto pString = o3tl::forceGet< OUString >( rAny );
             if( !pString->isEmpty() )
                 rfResult = convertToDouble( *pString );
             else
