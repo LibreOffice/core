@@ -12,6 +12,7 @@
 
 #include <sal/config.h>
 
+#include <cassert>
 #include <type_traits>
 #include <utility>
 
@@ -20,16 +21,13 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/XInterface.hpp>
 #include <cppu/unotype.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 
 // Some functionality related to css::uno::Any that would ideally be part of
 // <com/sun/star/uno/Any.hxx>, but (for now) cannot be for some reason.
-
-namespace com { namespace sun { namespace star { namespace uno {
-    class XInterface;
-} } } }
 
 namespace o3tl {
 
@@ -116,7 +114,8 @@ template<typename T> inline boost::optional<T> tryGetConverted(
     @tparam T  the C++ representation of a UNO type that can be contained in a
     UNO ANY (i.e., any UNO type other than ANY itself).  The legacy C++
     representations sal_Bool, cppu::UnoVoidType, cppu::UnoUnsignedShortType,
-    cppu::UnoCharType, and cppu::UnoSequenceType are not supported.
+    cppu::UnoCharType, and cppu::UnoSequenceType are not supported.  Must be a
+    complete type or void.
 
     @param any  an Any value.
 
@@ -126,7 +125,8 @@ template<typename T> inline boost::optional<T> tryGetConverted(
 template<typename T> inline
 typename std::enable_if<
     !(detail::IsDerivedReference<T>::value
-      || detail::IsUnoSequenceType<T>::value),
+      || detail::IsUnoSequenceType<T>::value
+      || std::is_base_of<css::uno::XInterface, T>::value),
     typename detail::Optional<T>::type>::type
 tryGet(css::uno::Any const & any) {
     // CHAR, STRING, TYPE, sequence types, enum types, struct types, exception
@@ -209,6 +209,11 @@ template<> detail::Optional<css::uno::Any>::type tryGet<css::uno::Any>(
 template<> detail::Optional<sal_Bool>::type tryGet<sal_Bool>(
     css::uno::Any const &) = delete;
 
+/*
+
+// Already prevented by std::is_base_of<css::uno::XInterface, T> requiring T to
+// be complete:
+
 template<> detail::Optional<cppu::UnoVoidType>::type tryGet<cppu::UnoVoidType>(
     css::uno::Any const &) = delete;
 
@@ -217,6 +222,8 @@ tryGet<cppu::UnoUnsignedShortType>(css::uno::Any const &) = delete;
 
 template<> detail::Optional<cppu::UnoCharType>::type tryGet<cppu::UnoCharType>(
     css::uno::Any const &) = delete;
+
+*/
 
 template<typename T> inline
 typename std::enable_if<
@@ -254,6 +261,28 @@ template<typename T> inline typename detail::Optional<T>::type doGet(
                     &any, cppu::UnoType<T>::get().getTypeLibType()),
                 SAL_NO_ACQUIRE));
     }
+    return opt;
+}
+
+/** Get the value of a specific type from an Any, knowing the Any contains a
+    value of a matching type.
+
+    @note Ideally this would be a public member function of css::uno::Any.  See
+    tryGet for details.
+
+    @tparam T  the C++ representation of a UNO type that can be contained in a
+    UNO ANY.  See tryGet for details.
+
+    @param any  an Any value.
+
+    @return a positive proxy for the value of the specfied type obtained from
+    the given Any.  See tryGet for details.
+*/
+template<typename T> inline typename detail::Optional<T>::type forceGet(
+    css::uno::Any const & any)
+{
+    auto opt = tryGet<T>(any);
+    assert(opt);
     return opt;
 }
 
