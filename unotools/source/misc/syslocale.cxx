@@ -34,8 +34,7 @@
 using namespace osl;
 using namespace com::sun::star;
 
-SvtSysLocale_Impl*  SvtSysLocale::pImpl = nullptr;
-sal_Int32           SvtSysLocale::nRefCount = 0;
+std::weak_ptr<SvtSysLocale_Impl>  pSysLocale;
 
 class SvtSysLocale_Impl : public utl::ConfigurationListener
 {
@@ -114,19 +113,18 @@ void SvtSysLocale_Impl::setDateAcceptancePatternsConfig()
 SvtSysLocale::SvtSysLocale()
 {
     MutexGuard aGuard( GetMutex() );
+    pImpl = pSysLocale.lock();
     if ( !pImpl )
-        pImpl = new SvtSysLocale_Impl;
-    ++nRefCount;
+    {
+        pImpl = std::make_shared<SvtSysLocale_Impl>();
+        pSysLocale = pImpl;
+    }
 }
 
 SvtSysLocale::~SvtSysLocale()
 {
     MutexGuard aGuard( GetMutex() );
-    if ( !--nRefCount )
-    {
-        delete pImpl;
-        pImpl = nullptr;
-    }
+    pImpl.reset();
 }
 
 // static
