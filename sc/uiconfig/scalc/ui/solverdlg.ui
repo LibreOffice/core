@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.20.0 -->
 <interface>
-  <!-- interface-requires gtk+ 3.0 -->
-  <!-- interface-requires LibreOffice 1.0 -->
+  <requires lib="gtk+" version="3.0"/>
+  <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkDialog" id="SolverDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
@@ -103,45 +104,39 @@
                   <object class="GtkLabel" id="targetlabel">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
                     <property name="label" translatable="yes">_Target cell</property>
                     <property name="use_underline">True</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">0</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkLabel" id="result">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="label" translatable="yes">Optimize result to</property>
                     <property name="xalign">0</property>
                     <property name="yalign">0.029999999329447746</property>
-                    <property name="label" translatable="yes">Optimize result to</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">1</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkLabel" id="changelabel">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
                     <property name="label" translatable="yes">_By changing cells</property>
                     <property name="use_underline">True</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">4</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -161,8 +156,6 @@
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="top_attach">2</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -183,8 +176,6 @@
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="top_attach">1</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -222,8 +213,6 @@
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="top_attach">4</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -261,8 +250,6 @@
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="top_attach">0</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -333,8 +320,6 @@
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="top_attach">3</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -378,30 +363,27 @@
                           <object class="GtkLabel" id="cellreflabel">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes">_Cell reference</property>
                             <property name="use_underline">True</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
                             <property name="top_attach">0</property>
                             <property name="width">2</property>
-                            <property name="height">1</property>
                           </packing>
                         </child>
                         <child>
                           <object class="GtkLabel" id="oplabel">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes">_Operator</property>
                             <property name="use_underline">True</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">2</property>
                             <property name="top_attach">0</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
                           </packing>
                         </child>
                         <child>
@@ -409,15 +391,14 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="margin_left">6</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes">V_alue</property>
                             <property name="use_underline">True</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">3</property>
                             <property name="top_attach">0</property>
                             <property name="width">4</property>
-                            <property name="height">1</property>
                           </packing>
                         </child>
                         <child>
@@ -427,12 +408,15 @@
                             <property name="hexpand">True</property>
                             <property name="invisible_char">●</property>
                             <property name="width_chars">20</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="ref1edit-atkobject">
+                                <property name="AtkObject::accessible-name" translatable="yes">Cell reference</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
                             <property name="top_attach">1</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
                           </packing>
                         </child>
                         <child>
@@ -442,12 +426,15 @@
                             <property name="hexpand">True</property>
                             <property name="invisible_char">●</property>
                             <property name="width_chars">20</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="ref2edit-atkobject">
+                                <property name="AtkObject::accessible-name" translatable="yes">Cell reference</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
                             <property name="top_attach">2</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
                           </packing>
                         </child>
                         <child>
@@ -457,12 +444,15 @@
                             <property name="hexpand">True</property>
                             <property name="invisible_char">●</property>
                             <property name="width_chars">20</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="ref3edit-atkobject">
+                                <property name="AtkObject::accessible-name" translatable="yes">Cell reference</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
                             <property name="top_attach">3</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
                           </packing>
                         </child>
                         <child>
@@ -472,12 +462,15 @@
                             <property name="hexpand">True</property>
                             <property name="invisible_char">●</property>
                             <property name="width_chars">20</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="ref4edit-atkobject">
+                                <property name="AtkObject::accessible-name" translatable="yes">Cell reference</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
                             <property name="top_attach">4</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
                           </packing>
                         </child>
                         <child>
@@ -489,8 +482,6 @@
                           <packing>
                             <property name="left_attach">1</property>
                             <property name="top_attach">1</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
                           </packing>
                         </child>
                         <child>
@@ -502,8 +493,6 @@
                           <packing>
                             <property name="left_attach">1</property>
                             <property name="top_attach">2</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
                           </packing>
                         </child>
                         <child>
@@ -515,8 +504,6 @@
                           <packing>
                             <property name="left_attach">1</property>
                             <property name="top_attach">3</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
                           </packing>
                         </child>
                         <child>
@@ -528,8 +515,6 @@
                           <packing>
                             <property name="left_attach">1</property>
                             <property name="top_attach">4</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
                           </packing>
                         </child>
                         <child>
@@ -545,12 +530,15 @@
                               <item translatable="yes">Integer</item>
                               <item translatable="yes">Binary</item>
                             </items>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="op1list-atkobject">
+                                <property name="AtkObject::accessible-name" translatable="yes">Operator</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">2</property>
                             <property name="top_attach">1</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
                           </packing>
                         </child>
                         <child>
@@ -566,12 +554,15 @@
                               <item translatable="yes">Integer</item>
                               <item translatable="yes">Binary</item>
                             </items>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="op2list-atkobject">
+                                <property name="AtkObject::accessible-name" translatable="yes">Operator</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">2</property>
                             <property name="top_attach">2</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
                           </packing>
                         </child>
                         <child>
@@ -587,12 +578,15 @@
                               <item translatable="yes">Integer</item>
                               <item translatable="yes">Binary</item>
                             </items>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="op3list-atkobject">
+                                <property name="AtkObject::accessible-name" translatable="yes">Operator</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">2</property>
                             <property name="top_attach">3</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
                           </packing>
                         </child>
                         <child>
@@ -608,12 +602,15 @@
                               <item translatable="yes">Integer</item>
                               <item translatable="yes">Binary</item>
                             </items>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="op4list-atkobject">
+                                <property name="AtkObject::accessible-name" translatable="yes">Operator</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">2</property>
                             <property name="top_attach">4</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
                           </packing>
                         </child>
                         <child>
@@ -624,12 +621,15 @@
                             <property name="hexpand">True</property>
                             <property name="invisible_char">●</property>
                             <property name="width_chars">15</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="val1edit-atkobject">
+                                <property name="AtkObject::accessible-name" translatable="yes">Value</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">3</property>
                             <property name="top_attach">1</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
                           </packing>
                         </child>
                         <child>
@@ -640,12 +640,15 @@
                             <property name="hexpand">True</property>
                             <property name="invisible_char">●</property>
                             <property name="width_chars">15</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="val2edit-atkobject">
+                                <property name="AtkObject::accessible-name" translatable="yes">Value</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">3</property>
                             <property name="top_attach">2</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
                           </packing>
                         </child>
                         <child>
@@ -656,12 +659,15 @@
                             <property name="hexpand">True</property>
                             <property name="invisible_char">●</property>
                             <property name="width_chars">15</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="val3edit-atkobject">
+                                <property name="AtkObject::accessible-name" translatable="yes">Value</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">3</property>
                             <property name="top_attach">3</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
                           </packing>
                         </child>
                         <child>
@@ -672,12 +678,15 @@
                             <property name="hexpand">True</property>
                             <property name="invisible_char">●</property>
                             <property name="width_chars">15</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="val4edit-atkobject">
+                                <property name="AtkObject::accessible-name" translatable="yes">Value</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">3</property>
                             <property name="top_attach">4</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
                           </packing>
                         </child>
                         <child>
@@ -689,8 +698,6 @@
                           <packing>
                             <property name="left_attach">4</property>
                             <property name="top_attach">1</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
                           </packing>
                         </child>
                         <child>
@@ -702,8 +709,6 @@
                           <packing>
                             <property name="left_attach">4</property>
                             <property name="top_attach">2</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
                           </packing>
                         </child>
                         <child>
@@ -715,8 +720,6 @@
                           <packing>
                             <property name="left_attach">4</property>
                             <property name="top_attach">3</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
                           </packing>
                         </child>
                         <child>
@@ -728,8 +731,6 @@
                           <packing>
                             <property name="left_attach">4</property>
                             <property name="top_attach">4</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
                           </packing>
                         </child>
                         <child>
@@ -744,8 +745,6 @@
                           <packing>
                             <property name="left_attach">5</property>
                             <property name="top_attach">2</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
                           </packing>
                         </child>
                         <child>
@@ -760,8 +759,6 @@
                           <packing>
                             <property name="left_attach">5</property>
                             <property name="top_attach">1</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
                           </packing>
                         </child>
                         <child>
@@ -776,8 +773,6 @@
                           <packing>
                             <property name="left_attach">5</property>
                             <property name="top_attach">3</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
                           </packing>
                         </child>
                         <child>
@@ -792,8 +787,6 @@
                           <packing>
                             <property name="left_attach">5</property>
                             <property name="top_attach">4</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
                           </packing>
                         </child>
                         <child>
@@ -806,7 +799,6 @@
                           <packing>
                             <property name="left_attach">6</property>
                             <property name="top_attach">1</property>
-                            <property name="width">1</property>
                             <property name="height">4</property>
                           </packing>
                         </child>
