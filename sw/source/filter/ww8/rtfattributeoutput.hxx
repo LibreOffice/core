@@ -134,7 +134,7 @@ public:
     virtual void EndStyles(sal_uInt16 nNumberOfStyles) override;
 
     /// Write default style.
-    virtual void DefaultStyle(sal_uInt16 nStyle) override;
+    virtual void DefaultStyle() override;
 
     /// Start of a style in the styles table.
     virtual void StartStyle(const OUString& rName, StyleType eType,

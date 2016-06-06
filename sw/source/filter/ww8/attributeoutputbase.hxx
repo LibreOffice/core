@@ -267,7 +267,7 @@ public:
     virtual void EndStyles( sal_uInt16 nNumberOfStyles ) = 0;
 
     /// Write default style.
-    virtual void DefaultStyle( sal_uInt16 nStyle ) = 0;
+    virtual void DefaultStyle() = 0;
 
     /// Start of a style in the styles table.
     virtual void StartStyle( const OUString& rName, StyleType eType,

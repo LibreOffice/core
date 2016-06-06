@@ -563,16 +563,9 @@ void MSWordStyles::GetStyleData( SwFormat* pFormat, bool& bFormatColl, sal_uInt1
     nNext = GetSlot( pNext );
 }
 
-void WW8AttributeOutput::DefaultStyle( sal_uInt16 nStyle )
+void WW8AttributeOutput::DefaultStyle()
 {
-    if ( nStyle == 10 )           // Default Char-Style ( only WW )
-    {
-        m_rWW8Export.pTableStrm->WriteUInt16(0);   // empty Style
-    }
-    else
-    {
-        m_rWW8Export.pTableStrm->WriteUInt16(0);   // empty Style
-    }
+    m_rWW8Export.pTableStrm->WriteUInt16(0);   // empty Style
 }
 
 void MSWordStyles::OutputStyle(const SwNumRule* pNumRule, sal_uInt16 nPos)
@@ -588,7 +581,7 @@ void MSWordStyles::OutputStyle(const SwNumRule* pNumRule, sal_uInt16 nPos)
 void MSWordStyles::OutputStyle( SwFormat* pFormat, sal_uInt16 nPos )
 {
     if ( !pFormat )
-        m_rExport.AttrOutput().DefaultStyle( nPos );
+        m_rExport.AttrOutput().DefaultStyle();
     else
     {
         bool bFormatColl;

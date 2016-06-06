@@ -4107,14 +4107,10 @@ void DocxAttributeOutput::EndStyles( sal_uInt16 nNumberOfStyles )
     m_pSerializer->endElementNS( XML_w, XML_styles );
 }
 
-void DocxAttributeOutput::DefaultStyle( sal_uInt16 nStyle )
+void DocxAttributeOutput::DefaultStyle()
 {
     // are these the values of enum ww::sti (see ../inc/wwstyles.hxx)?
-#if OSL_DEBUG_LEVEL > 1
-    OSL_TRACE( "TODO DocxAttributeOutput::DefaultStyle( sal_uInt16 nStyle )- %d", nStyle );
-#else
-    (void) nStyle; // to quiet the warning
-#endif
+    OSL_TRACE("TODO DocxAttributeOutput::DefaultStyle()");
 }
 
 /* Writes <a:srcRect> tag back to document.xml if a file conatins a cropped image.

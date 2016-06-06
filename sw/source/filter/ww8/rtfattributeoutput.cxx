@@ -1129,7 +1129,7 @@ void RtfAttributeOutput::EndStyles(sal_uInt16 /*nNumberOfStyles*/)
     m_rExport.Strm().WriteChar('}');
 }
 
-void RtfAttributeOutput::DefaultStyle(sal_uInt16 /*nStyle*/)
+void RtfAttributeOutput::DefaultStyle()
 {
     /* noop, the default style is always 0 in RTF */
 }

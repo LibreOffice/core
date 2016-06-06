@@ -250,7 +250,7 @@ public:
     virtual void EndStyles( sal_uInt16 nNumberOfStyles ) override;
 
     /// Write default style.
-    virtual void DefaultStyle( sal_uInt16 nStyle ) override;
+    virtual void DefaultStyle() override;
 
     /// Write Doc Defaults
     void DocDefaults( );
