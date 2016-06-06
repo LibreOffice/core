@@ -53,13 +53,13 @@ typedef std::vector<SwCacheObj*> SwCacheObjArr;
 class SwCache
 {
     SwCacheObjArr m_aCacheObjects;
-    std::vector<sal_uInt16> aFreePositions; /// Free positions for the Insert if the maximum has not been reached
+    std::vector<sal_uInt16> m_aFreePositions; /// Free positions for the Insert if the maximum has not been reached
                                             /// Every time an object is deregistered, its position is added here
-    SwCacheObj *pRealFirst;                 /// _ALWAYS_ the real first LRU
-    SwCacheObj *pFirst;                     /// The virtual first
-    SwCacheObj *pLast;
+    SwCacheObj *m_pRealFirst;                 /// _ALWAYS_ the real first LRU
+    SwCacheObj *m_pFirst;                     /// The virtual first
+    SwCacheObj *m_pLast;
 
-    sal_uInt16 nCurMax;                     // Maximum of accepted objects
+    sal_uInt16 m_nCurMax;                     // Maximum of accepted objects
 
     void DeleteObj( SwCacheObj *pObj );
 
@@ -105,12 +105,12 @@ public:
     void Delete( const void *pOwner );
 
     void SetLRUOfst( const sal_uInt16 nOfst );  /// nOfst determines how many are not to be touched
-    void ResetLRUOfst() { pFirst = pRealFirst; }
+    void ResetLRUOfst() { m_pFirst = m_pRealFirst; }
 
     inline void IncreaseMax( const sal_uInt16 nAdd );
     inline void DecreaseMax( const sal_uInt16 nSub );
-    sal_uInt16 GetCurMax() const { return nCurMax; }
-    inline SwCacheObj *First() { return pRealFirst; }
+    sal_uInt16 GetCurMax() const { return m_nCurMax; }
+    inline SwCacheObj *First() { return m_pRealFirst; }
     static inline SwCacheObj *Next( SwCacheObj *pCacheObj);
     inline SwCacheObj* operator[](sal_uInt16 nIndex) { return m_aCacheObjects[nIndex]; }
     inline sal_uInt16 size() { return m_aCacheObjects.size(); }
@@ -214,15 +214,15 @@ public:
 
 inline void SwCache::IncreaseMax( const sal_uInt16 nAdd )
 {
-    nCurMax = nCurMax + sal::static_int_cast< sal_uInt16 >(nAdd);
+    m_nCurMax = m_nCurMax + sal::static_int_cast< sal_uInt16 >(nAdd);
 #ifdef DBG_UTIL
     ++m_nIncreaseMax;
 #endif
 }
 inline void SwCache::DecreaseMax( const sal_uInt16 nSub )
 {
-    if ( nCurMax > nSub )
-        nCurMax = nCurMax - sal::static_int_cast< sal_uInt16 >(nSub);
+    if ( m_nCurMax > nSub )
+        m_nCurMax = m_nCurMax - sal::static_int_cast< sal_uInt16 >(nSub);
 #ifdef DBG_UTIL
     ++m_nDecreaseMax;
 #endif
