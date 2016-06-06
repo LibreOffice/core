@@ -20,7 +20,6 @@ package com.sun.star.wiki;
 
 import java.io.File;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 

@@ -28,7 +28,6 @@ import com.sun.star.awt.XToolkit;
 import com.sun.star.awt.XWindow;
 import com.sun.star.awt.XWindowPeer;
 import com.sun.star.beans.PropertyValue;
-import com.sun.star.beans.PropertyVetoException;
 import com.sun.star.sheet.XCellRangeData;
 import com.sun.star.table.XCellRange;
 import com.sun.star.text.XTextDocument;
