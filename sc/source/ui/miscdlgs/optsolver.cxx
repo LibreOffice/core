@@ -283,16 +283,6 @@ ScOptSolverDlg::ScOptSolverDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Windo
     mpOperator[3]    = m_pLbOp4;
     mpDelButton[3]   = m_pBtnDel4;
 
-    m_pEdLeft2->SetAccessibleName(m_pFtCellRef->GetText());
-    m_pLbOp2->SetAccessibleName(m_pFtOperator->GetText());
-    m_pEdRight2->SetAccessibleName(m_pFtConstraint->GetText());
-    m_pEdLeft3->SetAccessibleName(m_pFtCellRef->GetText());
-    m_pLbOp3->SetAccessibleName(m_pFtOperator->GetText());
-    m_pEdRight3->SetAccessibleName(m_pFtConstraint->GetText());
-    m_pEdLeft4->SetAccessibleName(m_pFtCellRef->GetText());
-    m_pLbOp4->SetAccessibleName(m_pFtOperator->GetText());
-    m_pEdRight4->SetAccessibleName(m_pFtConstraint->GetText());
-
     Init( aCursorPos );
 }
 

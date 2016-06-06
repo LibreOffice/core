@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.20.0 -->
 <interface>
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
@@ -121,6 +121,11 @@
                         <accessibility>
                           <relation type="labelled-by" target="label2"/>
                         </accessibility>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="connect1-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes">Operator 1</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -138,6 +143,11 @@
                         <accessibility>
                           <relation type="labelled-by" target="label2"/>
                         </accessibility>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="connect2-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes">Operator 2</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -152,6 +162,11 @@
                           <item translatable="yes">AND</item>
                           <item translatable="yes">OR</item>
                         </items>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="connect3-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes">Operator 3</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -166,6 +181,11 @@
                           <item translatable="yes">AND</item>
                           <item translatable="yes">OR</item>
                         </items>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="connect4-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes">Operator 4</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -223,6 +243,11 @@
                         <accessibility>
                           <relation type="labelled-by" target="label3"/>
                         </accessibility>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="field1-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes">Field Name 1</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -236,6 +261,11 @@
                         <accessibility>
                           <relation type="labelled-by" target="label3"/>
                         </accessibility>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="field2-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes">Field Name 2</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -249,6 +279,11 @@
                         <accessibility>
                           <relation type="labelled-by" target="label3"/>
                         </accessibility>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="field3-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes">Field Name 3</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -259,6 +294,11 @@
                       <object class="GtkComboBoxText" id="field4">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="field4-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes">Field Name 4</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -290,6 +330,11 @@
                         <accessibility>
                           <relation type="labelled-by" target="label4"/>
                         </accessibility>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="cond1-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes">Condition 1</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">2</property>
@@ -321,6 +366,11 @@
                         <accessibility>
                           <relation type="labelled-by" target="label4"/>
                         </accessibility>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="cond2-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes">Condition 2</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">2</property>
@@ -352,6 +402,11 @@
                         <accessibility>
                           <relation type="labelled-by" target="label4"/>
                         </accessibility>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="cond3-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes">Condition 3</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">2</property>
@@ -380,6 +435,11 @@
                           <item translatable="yes">Ends with</item>
                           <item translatable="yes">Does not end with</item>
                         </items>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="cond4-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes">Condition 4</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">2</property>
@@ -400,6 +460,11 @@
                         <accessibility>
                           <relation type="labelled-by" target="label5"/>
                         </accessibility>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="val1-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes">Value 1</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">3</property>
@@ -420,6 +485,11 @@
                         <accessibility>
                           <relation type="labelled-by" target="label5"/>
                         </accessibility>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="val2-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes">Value 2</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">3</property>
@@ -440,6 +510,11 @@
                         <accessibility>
                           <relation type="labelled-by" target="label5"/>
                         </accessibility>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="val3-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes">Value 3</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">3</property>
@@ -455,6 +530,11 @@
                         <child internal-child="entry">
                           <object class="GtkEntry" id="comboboxtext-entry8">
                             <property name="can_focus">False</property>
+                          </object>
+                        </child>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="val4-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes">Value 4</property>
                           </object>
                         </child>
                       </object>
@@ -627,6 +707,11 @@
                         <accessibility>
                           <relation type="labelled-by" target="copyresult"/>
                         </accessibility>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="lbcopyarea-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes">Copy results to</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -644,6 +729,11 @@
                         <accessibility>
                           <relation type="labelled-by" target="copyresult"/>
                         </accessibility>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="edcopyarea-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes">Copy results to</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -679,8 +769,8 @@
                       <object class="GtkLabel" id="dbarealabel">
                         <property name="sensitive">False</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">Data range:</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -692,8 +782,8 @@
                         <property name="sensitive">False</property>
                         <property name="can_focus">False</property>
                         <property name="hexpand">True</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">dummy</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>

@@ -403,6 +403,11 @@
                               <relation type="labelled-by" target="keytype"/>
                               <relation type="member-of" target="key1"/>
                             </accessibility>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="typelb1-atkobject">
+                                <property name="AtkObject::accessible-name" translatable="yes">Key type</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">2</property>
@@ -421,6 +426,11 @@
                               <relation type="labelled-by" target="keytype"/>
                               <relation type="member-of" target="key2"/>
                             </accessibility>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="typelb2-atkobject">
+                                <property name="AtkObject::accessible-name" translatable="yes">Key type</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">2</property>
@@ -437,6 +447,11 @@
                               <relation type="labelled-by" target="keytype"/>
                               <relation type="member-of" target="key3"/>
                             </accessibility>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="typelb3-atkobject">
+                                <property name="AtkObject::accessible-name" translatable="yes">Key type</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">2</property>

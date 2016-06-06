@@ -109,53 +109,6 @@ ScFilterDlg::ScFilterDlg(SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pPar
     pTimer = new Timer("ScFilterTimer");
     pTimer->SetTimeout( 50 ); // Wait 50ms
     pTimer->SetTimeoutHdl( LINK( this, ScFilterDlg, TimeOutHdl ) );
-
-    OUStringBuffer aBuf;
-
-    OUString sAccName = SC_RESSTR(RID_FILTER_OPERATOR);
-    aBuf.append(sAccName);
-    aBuf.append(" 1");
-    pLbConnect1->SetAccessibleName(aBuf.makeStringAndClear());
-    aBuf.append(sAccName);
-    aBuf.append(" 2");
-    pLbConnect2->SetAccessibleName(aBuf.makeStringAndClear());
-
-    sAccName = SC_RESSTR(RID_FILTER_FIELDNAME);
-    aBuf.append(sAccName);
-    aBuf.append(" 1");
-    pLbField1->SetAccessibleName(aBuf.makeStringAndClear());
-    aBuf.append(sAccName);
-    aBuf.append(" 2");
-    pLbField2->SetAccessibleName(aBuf.makeStringAndClear());
-    aBuf.append(sAccName);
-    aBuf.append(" 3");
-    pLbField3->SetAccessibleName(aBuf.makeStringAndClear());
-
-    sAccName = SC_RESSTR(RID_FILTER_CONDITION);
-    aBuf.append(sAccName);
-    aBuf.append(" 1");
-    pLbCond1->SetAccessibleName(aBuf.makeStringAndClear());
-    aBuf.append(sAccName);
-    aBuf.append(" 2");
-    pLbCond2->SetAccessibleName(aBuf.makeStringAndClear());
-    aBuf.append(sAccName);
-    aBuf.append(" 3");
-    pLbCond3->SetAccessibleName(aBuf.makeStringAndClear());
-
-    sAccName = SC_RESSTR(RID_FILTER_VALUE);
-    aBuf.append(sAccName);
-    aBuf.append(" 1");
-    pEdVal1->SetAccessibleName(aBuf.makeStringAndClear());
-    aBuf.append(sAccName);
-    aBuf.append(" 2");
-    pEdVal2->SetAccessibleName(aBuf.makeStringAndClear());
-    aBuf.append(sAccName);
-    aBuf.append(" 3");
-    pEdVal3->SetAccessibleName(aBuf.makeStringAndClear());
-
-    pLbCopyArea->SetAccessibleName(ScResId(STR_COPY_AREA_TO));
-    pEdCopyArea->SetAccessibleName(ScResId(STR_COPY_AREA_TO));
-
 }
 
 ScFilterDlg::~ScFilterDlg()
