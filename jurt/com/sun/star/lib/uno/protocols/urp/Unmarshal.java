@@ -30,10 +30,10 @@ import com.sun.star.lib.uno.typedesc.TypeDescription;
 import com.sun.star.uno.Any;
 import com.sun.star.uno.Enum;
 import com.sun.star.uno.IBridge;
-import com.sun.star.uno.IFieldDescription;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.TypeClass;
 import com.sun.star.uno.XInterface;
+import com.sun.star.lib.uno.typedesc.FieldDescription;
 
 final class Unmarshal {
     public Unmarshal(IBridge bridge, int cacheSize) {
@@ -329,10 +329,9 @@ final class Unmarshal {
         case TypeClass.SEQUENCE_value:
             {
                 Object value = readSequenceValue(type);
-                TypeDescription ctype = (TypeDescription)
-                    type.getComponentType();
+                TypeDescription ctype = type.getComponentType();
                 while (ctype.getTypeClass() == TypeClass.SEQUENCE) {
-                    ctype = (TypeDescription) ctype.getComponentType();
+                    ctype = ctype.getComponentType();
                 }
                 switch (ctype.getTypeClass().getValue()) {
                 case TypeClass.UNSIGNED_SHORT_value:
@@ -377,7 +376,7 @@ final class Unmarshal {
 
     private Object readSequenceValue(TypeDescription type) throws IOException {
         int len = readCompressedNumber();
-        TypeDescription ctype = (TypeDescription) type.getComponentType();
+        TypeDescription ctype = type.getComponentType();
         if (ctype.getTypeClass() == TypeClass.BYTE) {
             byte[] data = new byte[len];
             readBytes(data);
@@ -454,13 +453,13 @@ final class Unmarshal {
     }
 
     private void readFields(TypeDescription type, Object value) {
-        IFieldDescription[] fields = type.getFieldDescriptions();
+        FieldDescription[] fields = type.getFieldDescriptions();
         for (int i = 0; i < fields.length; ++i) {
             try {
                 fields[i].getField().set(
                     value,
                     readValue(
-                        (TypeDescription) fields[i].getTypeDescription()));
+                        fields[i].getTypeDescription()));
             } catch (IllegalAccessException e) {
                 throw new RuntimeException(e);
             }

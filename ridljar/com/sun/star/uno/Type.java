@@ -20,6 +20,8 @@ package com.sun.star.uno;
 
 import java.util.HashMap;
 
+import com.sun.star.lib.uno.typedesc.TypeDescription;
+
 /**
  * Represents the UNO built-in type <code>TYPE</code>.
  *
@@ -275,7 +277,7 @@ public class Type {
      * @param typeDescription a type description.  Must not be
      *     <code>null</code>.
      */
-    public Type(ITypeDescription typeDescription) {
+    public Type(TypeDescription typeDescription) {
         _typeName         = typeDescription.getTypeName();
         _typeClass        = typeDescription.getTypeClass();
         _iTypeDescription = typeDescription;
@@ -369,7 +371,7 @@ public class Type {
      *
      * @return the type description; may be <code>null</code>
      */
-    public ITypeDescription getTypeDescription() {
+    public TypeDescription getTypeDescription() {
         return _iTypeDescription;
     }
 
@@ -378,7 +380,7 @@ public class Type {
      *
      * @param typeDescription the type description
      */
-    public void setTypeDescription(ITypeDescription typeDescription) {
+    public void setTypeDescription(TypeDescription typeDescription) {
         _iTypeDescription = typeDescription;
     }
 
@@ -687,5 +689,5 @@ public class Type {
     protected String _typeName; // TODO should be final
 
     protected Class<?> _class;
-    protected ITypeDescription _iTypeDescription;
+    protected TypeDescription _iTypeDescription;
 }
