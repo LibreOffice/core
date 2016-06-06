@@ -35,7 +35,6 @@ class SfxObjectFactory;
 class ModalDialog;
 class SfxObjectFactory;
 class SfxModule;
-class SfxModuleArr_Impl;
 class SfxModule_Impl;
 class SfxSlotPool;
 struct SfxChildWinContextFactory;
@@ -54,7 +53,6 @@ class SFX2_DLLPUBLIC SfxModule : public SfxShell
 {
 private:
     ResMgr*                     pResMgr;
-    bool                        bDummy : 1;
     SfxModule_Impl*             pImpl;
 
     SAL_DLLPRIVATE void Construct_Impl();
@@ -68,8 +66,7 @@ private:
 
 public:
 
-                                SfxModule( ResMgr* pMgrP, bool bDummy,
-                                    SfxObjectFactory* pFactoryP, ... );
+                                SfxModule( ResMgr* pMgrP, SfxObjectFactory* pFactoryP, ... );
                                 virtual ~SfxModule();
 
     ResMgr*                     GetResMgr();
@@ -96,7 +93,7 @@ public:
     static FieldUnit            GetModuleFieldUnit( css::uno::Reference< css::frame::XFrame > const & i_frame );
     FieldUnit                   GetFieldUnit() const;
 
-    SAL_DLLPRIVATE static SfxModuleArr_Impl& GetModules_Impl();
+    SAL_DLLPRIVATE static std::vector<SfxModule*>& GetModules_Impl();
     SAL_DLLPRIVATE static void DestroyModules_Impl();
     SAL_DLLPRIVATE SfxTbxCtrlFactArr_Impl* GetTbxCtrlFactories_Impl() const;
     SAL_DLLPRIVATE SfxStbCtrlFactArr_Impl* GetStbCtrlFactories_Impl() const;
