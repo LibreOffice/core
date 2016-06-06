@@ -55,10 +55,10 @@ ScDPTableData::~ScDPTableData()
 {
 }
 
-OUString ScDPTableData::GetFormattedString(long nDim, const ScDPItemData& rItem) const
+OUString ScDPTableData::GetFormattedString(long nDim, const ScDPItemData& rItem, bool bLocaleIndependent) const
 {
     const ScDPCache& rCache = GetCacheTable().getCache();
-    return rCache.GetFormattedString(nDim, rItem);
+    return rCache.GetFormattedString(nDim, rItem, bLocaleIndependent);
 }
 
 long ScDPTableData::GetDatePart( long nDateVal, long nHierarchy, long nLevel )

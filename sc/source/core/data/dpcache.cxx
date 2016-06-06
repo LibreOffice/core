@@ -122,7 +122,7 @@ OUString createLabelString(ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab)
 
 void initFromCell(
     ScDPCache& rCache, ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab,
-    ScDPItemData& rData, sal_uLong& rNumFormat)
+    ScDPItemData& rData, sal_uInt32& rNumFormat)
 {
     OUString aDocStr = pDoc->GetString(nCol, nRow, nTab);
     rNumFormat = 0;
@@ -348,7 +348,7 @@ void ScDPCache::InitFromDoc(ScDocument* pDoc, const ScRange& rRange)
         for (SCROW i = 0, n = nEndRow-nStartRow; i < n; ++i)
         {
             SCROW nRow = i + nOffset;
-            sal_uLong nNumFormat = 0;
+            sal_uInt32 nNumFormat = 0;
             initFromCell(*this, pDoc, nCol, nRow, nDocTab, aData, nNumFormat);
             aBuckets.push_back(Bucket(aData, i));
 
@@ -861,7 +861,7 @@ const ScDPCache::ScDPItemDataVec& ScDPCache::GetDimMemberValues(SCCOL nDim) cons
     return maFields.at(nDim)->maItems;
 }
 
-sal_uLong ScDPCache::GetNumberFormat( long nDim ) const
+sal_uInt32 ScDPCache::GetNumberFormat( long nDim ) const
 {
     if ( nDim >= mnColumnCount )
         return 0;
@@ -975,7 +975,50 @@ SCROW ScDPCache::GetIdByItemData(long nDim, const ScDPItemData& rItem) const
     return -1;
 }
 
-OUString ScDPCache::GetFormattedString(long nDim, const ScDPItemData& rItem) const
+// static
+sal_uInt32 ScDPCache::GetLocaleIndependentFormat( SvNumberFormatter& rFormatter, sal_uInt32 nNumFormat )
+{
+    // For a date or date+time format use ISO format so it works across locales
+    // and can be matched against string based item queries. For time use 24h
+    // format. All others use General format, no currency, percent, ...
+    // Use en-US locale for all.
+    switch (rFormatter.GetType( nNumFormat))
+    {
+        case css::util::NumberFormat::DATE:
+            return rFormatter.GetFormatIndex( NF_DATE_ISO_YYYYMMDD, LANGUAGE_ENGLISH_US);
+        break;
+        case css::util::NumberFormat::TIME:
+            return rFormatter.GetFormatIndex( NF_TIME_HHMMSS, LANGUAGE_ENGLISH_US);
+        break;
+        case css::util::NumberFormat::DATETIME:
+            return rFormatter.GetFormatIndex( NF_DATETIME_ISO_YYYYMMDD_HHMMSS, LANGUAGE_ENGLISH_US);
+        break;
+        default:
+            return rFormatter.GetFormatIndex( NF_NUMBER_STANDARD, LANGUAGE_ENGLISH_US);
+    }
+}
+
+// static
+OUString ScDPCache::GetLocaleIndependentFormattedNumberString( double fValue )
+{
+    return rtl::math::doubleToUString( fValue, rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max, '.', true);
+}
+
+// static
+OUString ScDPCache::GetLocaleIndependentFormattedString( double fValue,
+        SvNumberFormatter& rFormatter, sal_uInt32 nNumFormat )
+{
+    nNumFormat = GetLocaleIndependentFormat( rFormatter, nNumFormat);
+    if ((nNumFormat % SV_COUNTRY_LANGUAGE_OFFSET) == 0)
+        return GetLocaleIndependentFormattedNumberString( fValue);
+
+    OUString aStr;
+    Color* pColor = nullptr;
+    rFormatter.GetOutputString( fValue, nNumFormat, aStr, &pColor);
+    return aStr;
+}
+
+OUString ScDPCache::GetFormattedString(long nDim, const ScDPItemData& rItem, bool bLocaleIndependent) const
 {
     if (nDim < 0)
         return rItem.GetString();
@@ -984,15 +1027,21 @@ OUString ScDPCache::GetFormattedString(long nDim, const ScDPItemData& rItem) con
     if (eType == ScDPItemData::Value)
     {
         // Format value using the stored number format.
-        sal_uLong nNumFormat = GetNumberFormat(nDim);
         SvNumberFormatter* pFormatter = mpDoc->GetFormatTable();
         if (pFormatter)
         {
-            Color* pColor = nullptr;
+            sal_uInt32 nNumFormat = GetNumberFormat(nDim);
+            if (bLocaleIndependent)
+                return GetLocaleIndependentFormattedString( rItem.GetValue(), *pFormatter, nNumFormat);
+
             OUString aStr;
+            Color* pColor = nullptr;
             pFormatter->GetOutputString(rItem.GetValue(), nNumFormat, aStr, &pColor);
             return aStr;
         }
+
+        // Last resort..
+        return GetLocaleIndependentFormattedNumberString( rItem.GetValue());
     }
 
     if (eType == ScDPItemData::GroupValue)
@@ -1021,6 +1070,11 @@ OUString ScDPCache::GetFormattedString(long nDim, const ScDPItemData& rItem) con
     }
 
     return rItem.GetString();
+}
+
+SvNumberFormatter* ScDPCache::GetNumberFormatter() const
+{
+    return mpDoc->GetFormatTable();
 }
 
 long ScDPCache::AppendGroupField()
@@ -1182,14 +1236,14 @@ std::ostream& operator<< (::std::ostream& os, const OUString& str)
 void dumpItems(const ScDPCache& rCache, long nDim, const ScDPCache::ScDPItemDataVec& rItems, size_t nOffset)
 {
     for (size_t i = 0; i < rItems.size(); ++i)
-        cout << "      " << (i+nOffset) << ": " << rCache.GetFormattedString(nDim, rItems[i]) << endl;
+        cout << "      " << (i+nOffset) << ": " << rCache.GetFormattedString(nDim, rItems[i], false) << endl;
 }
 
 void dumpSourceData(const ScDPCache& rCache, long nDim, const ScDPCache::ScDPItemDataVec& rItems, const ScDPCache::IndexArrayType& rArray)
 {
     ScDPCache::IndexArrayType::const_iterator it = rArray.begin(), itEnd = rArray.end();
     for (; it != itEnd; ++it)
-        cout << "      '" << rCache.GetFormattedString(nDim, rItems[*it]) << "'" << endl;
+        cout << "      '" << rCache.GetFormattedString(nDim, rItems[*it], false) << "'" << endl;
 }
 
 const char* getGroupTypeName(sal_Int32 nType)

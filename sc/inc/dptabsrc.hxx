@@ -564,7 +564,7 @@ public:
                                 throw(css::uno::RuntimeException, std::exception) override;
 
                             // XMembersSupplier
-    virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL
+    virtual css::uno::Reference< css::sheet::XMembersAccess > SAL_CALL
                             getMembers() throw(css::uno::RuntimeException, std::exception) override;
 
                             // XDataPilotMemberResults
@@ -657,7 +657,7 @@ public:
 typedef std::unordered_map< OUString, sal_Int32, OUStringHash > ScDPMembersHashMap;
 
 class ScDPMembers : public cppu::WeakImplHelper<
-                            css::container::XNameAccess,
+                            css::sheet::XMembersAccess,
                             css::lang::XServiceInfo >
 {
 private:
@@ -673,6 +673,10 @@ private:
 public:
                             ScDPMembers( ScDPSource* pSrc, long nD, long nH, long nL );
     virtual                 ~ScDPMembers();
+
+                            // XMembersAccess
+    virtual css::uno::Sequence< OUString > SAL_CALL getLocaleIndependentElementNames()
+                                throw(css::uno::RuntimeException, std::exception) override;
 
                             // XNameAccess
     virtual css::uno::Any SAL_CALL getByName( const OUString& aName )
@@ -705,6 +709,10 @@ public:
     sal_Int32               GetIndexFromName( const OUString& rName ) const;     // <0 if not found
     const ScDPItemData*     GetSrcItemDataByIndex(  SCROW nIndex);
     SCROW                   GetSrcItemsCount();
+
+private:
+    css::uno::Sequence< OUString > getElementNames( bool bLocaleIndependent ) const
+                                throw(css::uno::RuntimeException, std::exception);
 };
 
 class ScDPMember : public cppu::WeakImplHelper<
@@ -731,7 +739,7 @@ public:
     ScDPMember(const ScDPMember&) = delete;
     ScDPMember& operator=(const ScDPMember&) = delete;
 
-    OUString GetNameStr() const;
+    OUString GetNameStr( bool bLocaleIndependent ) const;
     void                    FillItemData( ScDPItemData& rData ) const;
     const ScDPItemData*  GetItemData() const;
     SCROW GetItemDataId() const { return mnDataId; }

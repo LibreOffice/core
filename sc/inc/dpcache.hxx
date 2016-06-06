@@ -80,7 +80,7 @@ public:
          */
         IndexArrayType maData;
 
-        sal_uLong mnNumFormat;
+        sal_uInt32 mnNumFormat;
 
         Field();
         Field(const Field&) = delete;
@@ -133,7 +133,13 @@ public:
     const ScDPObjectSet& GetAllReferences() const;
 
     SCROW GetIdByItemData(long nDim, const ScDPItemData& rItem) const;
-    OUString GetFormattedString(long nDim, const ScDPItemData& rItem) const;
+
+    static sal_uInt32 GetLocaleIndependentFormat( SvNumberFormatter& rFormatter, sal_uInt32 nNumFormat );
+    static OUString GetLocaleIndependentFormattedNumberString( double fValue );
+    static OUString GetLocaleIndependentFormattedString( double fValue, SvNumberFormatter& rFormatter, sal_uInt32 nNumFormat );
+    OUString GetFormattedString(long nDim, const ScDPItemData& rItem, bool bLocaleIndependent) const;
+    SvNumberFormatter* GetNumberFormatter() const;
+
     long AppendGroupField();
     void ResetGroupItems(long nDim, const ScDPNumGroupInfo& rNumInfo, sal_Int32 nGroupType);
     SCROW SetGroupItem(long nDim, const ScDPItemData& rData);
@@ -152,7 +158,7 @@ public:
     sal_Int32 GetGroupType(long nDim) const;
 
     SCCOL GetDimensionIndex(const OUString& sName) const;
-    sal_uLong GetNumberFormat( long nDim ) const;
+    sal_uInt32 GetNumberFormat( long nDim ) const;
     bool  IsDateDimension( long nDim ) const ;
     long GetDimMemberCount(long nDim) const;
     static SCROW GetOrder( long nDim, SCROW nIndex );

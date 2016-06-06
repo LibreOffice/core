@@ -1028,7 +1028,7 @@ bool ScDPObject::GetMemberNames( sal_Int32 nDim, Sequence<OUString>& rNames )
 
 bool ScDPObject::GetMembers( sal_Int32 nDim, sal_Int32 nHier, vector<ScDPLabelData::Member>& rMembers )
 {
-    Reference< container::XNameAccess > xMembersNA;
+    Reference< sheet::XMembersAccess > xMembersNA;
     if (!GetMembersNA( nDim, nHier, xMembersNA ))
         return false;
 
@@ -1561,20 +1561,18 @@ bool parseFunction( const OUString& rList, sal_Int32 nStartPos, sal_Int32& rEndP
     return bFound;
 }
 
-bool isAtStart(
-    const OUString& rList, const OUString& rSearch, sal_Int32& rMatched,
-    bool bAllowBracket, sheet::GeneralFunction* pFunc )
+bool extractAtStart( const OUString& rList, sal_Int32& rMatched, bool bAllowBracket, sheet::GeneralFunction* pFunc,
+        OUString& rDequoted )
 {
     sal_Int32 nMatchList = 0;
-    sal_Int32 nMatchSearch = 0;
     sal_Unicode cFirst = rList[0];
+    bool bParsed = false;
     if ( cFirst == '\'' || cFirst == '[' )
     {
         // quoted string or string in brackets must match completely
 
         OUString aDequoted;
         sal_Int32 nQuoteEnd = 0;
-        bool bParsed = false;
 
         if ( cFirst == '\'' )
             bParsed = dequote( rList, 0, nQuoteEnd, aDequoted );
@@ -1635,9 +1633,51 @@ bool isAtStart(
             }
         }
 
-        if ( bParsed && ScGlobal::GetpTransliteration()->isEqual( aDequoted, rSearch ) )
+        if ( bParsed )
         {
             nMatchList = nQuoteEnd;             // match count in the list string, including quotes
+            rDequoted = aDequoted;
+        }
+    }
+
+    if (bParsed)
+    {
+        // look for following space or end of string
+
+        bool bValid = false;
+        if ( sal::static_int_cast<sal_Int32>(nMatchList) >= rList.getLength() )
+            bValid = true;
+        else
+        {
+            sal_Unicode cNext = rList[nMatchList];
+            if ( cNext == ' ' || ( bAllowBracket && cNext == '[' ) )
+                bValid = true;
+        }
+
+        if ( bValid )
+        {
+            rMatched = nMatchList;
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool isAtStart(
+    const OUString& rList, const OUString& rSearch, sal_Int32& rMatched,
+    bool bAllowBracket, sheet::GeneralFunction* pFunc )
+{
+    sal_Int32 nMatchList = 0;
+    sal_Int32 nMatchSearch = 0;
+    sal_Unicode cFirst = rList[0];
+    if ( cFirst == '\'' || cFirst == '[' )
+    {
+        OUString aDequoted;
+        bool bParsed = extractAtStart( rList, rMatched, bAllowBracket, pFunc, aDequoted);
+        if ( bParsed && ScGlobal::GetpTransliteration()->isEqual( aDequoted, rSearch ) )
+        {
+            nMatchList = rMatched;             // match count in the list string, including quotes
             nMatchSearch = rSearch.getLength();
         }
     }
@@ -1686,6 +1726,7 @@ bool ScDPObject::ParseFilters(
     std::vector<OUString> aDataNames;     // data fields (source name)
     std::vector<OUString> aGivenNames;    // data fields (compound name)
     std::vector<OUString> aFieldNames;    // column/row/data fields
+    std::vector< uno::Sequence<OUString> > aFieldValueNames;
     std::vector< uno::Sequence<OUString> > aFieldValues;
 
     // get all the field and item names
@@ -1739,13 +1780,17 @@ bool ScDPObject::ParseFilters(
                         uno::Reference<sheet::XMembersSupplier> xLevSupp( xLevel, uno::UNO_QUERY );
                         if ( xLevNam.is() && xLevSupp.is() )
                         {
-                            uno::Reference<container::XNameAccess> xMembers = xLevSupp->getMembers();
+                            uno::Reference<sheet::XMembersAccess> xMembers = xLevSupp->getMembers();
 
                             OUString aFieldName( xLevNam->getName() );
-                            uno::Sequence<OUString> aMemberNames( xMembers->getElementNames() );
+                            // getElementNames() and getLocaleIndependentElementNames()
+                            // must be consecutive calls to obtain strings in matching order.
+                            uno::Sequence<OUString> aMemberValueNames( xMembers->getElementNames() );
+                            uno::Sequence<OUString> aMemberValues( xMembers->getLocaleIndependentElementNames() );
 
                             aFieldNames.push_back( aFieldName );
-                            aFieldValues.push_back( aMemberNames );
+                            aFieldValueNames.push_back( aMemberValueNames );
+                            aFieldValues.push_back( aMemberValues );
                         }
                     }
                 }
@@ -1757,7 +1802,8 @@ bool ScDPObject::ParseFilters(
 
     SCSIZE nDataFields = aDataNames.size();
     SCSIZE nFieldCount = aFieldNames.size();
-    OSL_ENSURE( aGivenNames.size() == nDataFields && aFieldValues.size() == nFieldCount, "wrong count" );
+    OSL_ENSURE( aGivenNames.size() == nDataFields && aFieldValueNames.size() == nFieldCount &&
+            aFieldValues.size() == nFieldCount, "wrong count" );
 
     bool bError = false;
     bool bHasData = false;
@@ -1823,9 +1869,28 @@ bool ScDPObject::ParseFilters(
             bool bItemFound = false;
             sal_Int32 nMatched = 0;
             OUString aFoundName;
+            OUString aFoundValueName;
             OUString aFoundValue;
             sheet::GeneralFunction eFunc = sheet::GeneralFunction_NONE;
             sheet::GeneralFunction eFoundFunc = sheet::GeneralFunction_NONE;
+
+            OUString aQueryValueName;
+            const bool bHasQuery = extractAtStart( aRemaining, nMatched, false, &eFunc, aQueryValueName);
+
+            OUString aQueryValue = aQueryValueName;
+            if (mpTableData)
+            {
+                SvNumberFormatter* pFormatter = mpTableData->GetCacheTable().getCache().GetNumberFormatter();
+                if (pFormatter)
+                {
+                    // Parse possible number from aQueryValueName and format
+                    // locale independent as aQueryValue.
+                    sal_uInt32 nNumFormat;
+                    double fValue;
+                    if (pFormatter->IsNumberFormat( aQueryValueName, nNumFormat, fValue))
+                        aQueryValue = ScDPCache::GetLocaleIndependentFormattedString( fValue, *pFormatter, nNumFormat);
+                }
+            }
 
             for ( SCSIZE nField=0; nField<nFieldCount; nField++ )
             {
@@ -1833,19 +1898,58 @@ bool ScDPObject::ParseFilters(
                 // aSpecField is initialized from aFieldNames array, so exact comparison can be used.
                 if ( !bHasFieldName || aFieldNames[nField] == aSpecField )
                 {
-                    const uno::Sequence<OUString>& rItems = aFieldValues[nField];
-                    sal_Int32 nItemCount = rItems.getLength();
-                    const OUString* pItemArr = rItems.getConstArray();
+                    const uno::Sequence<OUString>& rItemNames = aFieldValueNames[nField];
+                    const uno::Sequence<OUString>& rItemValues = aFieldValues[nField];
+                    sal_Int32 nItemCount = rItemNames.getLength();
+                    assert(nItemCount == rItemValues.getLength());
+                    const OUString* pItemNamesArr = rItemNames.getConstArray();
+                    const OUString* pItemValuesArr = rItemValues.getConstArray();
                     for ( sal_Int32 nItem=0; nItem<nItemCount; nItem++ )
                     {
-                        if ( isAtStart( aRemaining, pItemArr[nItem], nMatched, false, &eFunc ) )
+                        bool bThisItemFound;
+                        if (bHasQuery)
+                        {
+                            // First check given value name against both.
+                            bThisItemFound = ScGlobal::GetpTransliteration()->isEqual(
+                                    aQueryValueName, pItemNamesArr[nItem]);
+                            if (!bThisItemFound && pItemValuesArr[nItem] != pItemNamesArr[nItem])
+                                bThisItemFound = ScGlobal::GetpTransliteration()->isEqual(
+                                        aQueryValueName, pItemValuesArr[nItem]);
+                            if (!bThisItemFound && aQueryValueName != aQueryValue)
+                            {
+                                // Second check locale independent value
+                                // against both.
+                                /* TODO: or check only value string against
+                                 * value string, not against the value name? */
+                                bThisItemFound = ScGlobal::GetpTransliteration()->isEqual(
+                                        aQueryValue, pItemNamesArr[nItem]);
+                                if (!bThisItemFound && pItemValuesArr[nItem] != pItemNamesArr[nItem])
+                                    bThisItemFound = ScGlobal::GetpTransliteration()->isEqual(
+                                            aQueryValue, pItemValuesArr[nItem]);
+                            }
+                        }
+                        else
+                        {
+                            bThisItemFound = isAtStart( aRemaining, pItemNamesArr[nItem], nMatched, false, &eFunc );
+                            if (!bThisItemFound && pItemValuesArr[nItem] != pItemNamesArr[nItem])
+                                bThisItemFound = isAtStart( aRemaining, pItemValuesArr[nItem], nMatched, false, &eFunc );
+                            /* TODO: this checks only the given value name,
+                             * check also locale independent value. But we'd
+                             * have to do that in each iteration of the loop
+                             * inside isAtStart() since a query could not be
+                             * extracted and a match could be on the passed
+                             * item value name string or item value string
+                             * starting at aRemaining. */
+                        }
+                        if (bThisItemFound)
                         {
                             if ( bItemFound )
                                 bError = true;      // duplicate (also across fields)
                             else
                             {
                                 aFoundName = aFieldNames[nField];
-                                aFoundValue = pItemArr[nItem];
+                                aFoundValueName = pItemNamesArr[nItem];
+                                aFoundValue = pItemValuesArr[nItem];
                                 eFoundFunc = eFunc;
                                 bItemFound = true;
                                 bUsed = true;
@@ -1859,6 +1963,7 @@ bool ScDPObject::ParseFilters(
             {
                 sheet::DataPilotFieldFilter aField;
                 aField.FieldName = aFoundName;
+                aField.MatchValueName = aFoundValueName;
                 aField.MatchValue = aFoundValue;
                 rFilters.push_back(aField);
                 rFilterFuncs.push_back(eFoundFunc);
@@ -1945,7 +2050,7 @@ void ScDPObject::ToggleDetails(const DataPilotTableHeaderData& rElemDesc, ScDPOb
     OSL_ENSURE( xLevel.is(), "level not found" );
     if ( !xLevel.is() ) return;
 
-    uno::Reference<container::XNameAccess> xMembers;
+    uno::Reference<sheet::XMembersAccess> xMembers;
     uno::Reference<sheet::XMembersSupplier> xMbrSupp( xLevel, uno::UNO_QUERY );
     if ( xMbrSupp.is() )
         xMembers = xMbrSupp->getMembers();
@@ -2426,12 +2531,12 @@ sal_Int32 ScDPObject::GetUsedHierarchy( sal_Int32 nDim )
     return nHier;
 }
 
-bool ScDPObject::GetMembersNA( sal_Int32 nDim, uno::Reference< container::XNameAccess >& xMembers )
+bool ScDPObject::GetMembersNA( sal_Int32 nDim, uno::Reference< sheet::XMembersAccess >& xMembers )
 {
     return GetMembersNA( nDim, GetUsedHierarchy( nDim ), xMembers );
 }
 
-bool ScDPObject::GetMembersNA( sal_Int32 nDim, sal_Int32 nHier, uno::Reference< container::XNameAccess >& xMembers )
+bool ScDPObject::GetMembersNA( sal_Int32 nDim, sal_Int32 nHier, uno::Reference< sheet::XMembersAccess >& xMembers )
 {
     bool bRet = false;
     uno::Reference<container::XNameAccess> xDimsName( GetSource()->getDimensions() );

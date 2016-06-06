@@ -110,9 +110,10 @@ public:
         mrFilters.push_back(ScDPResultFilter(rName, bDataLayout));
     }
 
-    void pushDimValue(const OUString& rValue)
+    void pushDimValue(const OUString& rValueName, const OUString& rValue)
     {
         ScDPResultFilter& rFilter = mrFilters.back();
+        rFilter.maValueName = rValueName;
         rFilter.maValue = rValue;
         rFilter.mbHasValue = true;
     }
@@ -953,12 +954,12 @@ OUString ScDPResultMember::GetName() const
 {
   const ScDPMember* pMemberDesc = GetDPMember();
     if (pMemberDesc)
-        return pMemberDesc->GetNameStr();
+        return pMemberDesc->GetNameStr( false );
     else
         return ScGlobal::GetRscString(STR_PIVOT_TOTAL);         // root member
 }
 
-OUString ScDPResultMember::GetDisplayName() const
+OUString ScDPResultMember::GetDisplayName( bool bLocaleIndependent ) const
 {
     const ScDPMember* pDPMember = GetDPMember();
     if (!pDPMember)
@@ -969,7 +970,7 @@ OUString ScDPResultMember::GetDisplayName() const
     if (aParentDimData.mpParentDim)
     {
         long nDim = aParentDimData.mpParentDim->GetDimension();
-        return pResultData->GetSource().GetData()->GetFormattedString(nDim, aItem);
+        return pResultData->GetSource().GetData()->GetFormattedString(nDim, aItem, bLocaleIndependent);
     }
 
     return aItem.GetString();
@@ -1324,7 +1325,7 @@ void ScDPResultMember::FillMemberResults(
         if (aParentDimData.mpParentDim)
         {
             long nDim = aParentDimData.mpParentDim->GetDimension();
-            aName = pResultData->GetSource().GetData()->GetFormattedString(nDim, aItemData);
+            aName = pResultData->GetSource().GetData()->GetFormattedString(nDim, aItemData, false);
         }
         else
         {
@@ -1332,7 +1333,7 @@ void ScDPResultMember::FillMemberResults(
             const ScDPMember* pMem = GetDPMember();
             if (pMem)
                 nDim = pMem->GetDim();
-            aName = pResultData->GetSource().GetData()->GetFormattedString(nDim, aItemData);
+            aName = pResultData->GetSource().GetData()->GetFormattedString(nDim, aItemData, false);
         }
 
         ScDPItemData::Type eType = aItemData.GetType();
@@ -1511,9 +1512,8 @@ void ScDPResultMember::FillDataResults(
     if (pDPMember)
     {
         // Root result has no corresponding DP member. Only take the non-root results.
-        OUString aMemStr = GetDisplayName();
         pFilterStack.reset(new FilterStack(rFilterCxt.maFilters));
-        pFilterStack->pushDimValue(aMemStr);
+        pFilterStack->pushDimValue( GetDisplayName( false), GetDisplayName( true));
     }
 
     //  IsVisible() test is in ScDPResultDimension::FillDataResults
@@ -2017,7 +2017,7 @@ void ScDPDataMember::FillDataRow(
         // since its immediate parent result member is linked to the same
         // dimension member.
         pFilterStack.reset(new FilterStack(rFilterCxt.maFilters));
-        pFilterStack->pushDimValue(pResultMember->GetDisplayName());
+        pFilterStack->pushDimValue( pResultMember->GetDisplayName( false), pResultMember->GetDisplayName( true));
     }
 
     OSL_ENSURE( pRefMember == pResultMember || !pResultMember, "bla" );

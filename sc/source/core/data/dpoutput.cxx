@@ -471,7 +471,7 @@ uno::Sequence<sheet::MemberResult> getVisiblePageMembersAsResults( const uno::Re
     if (!xMSupplier.is())
         return uno::Sequence<sheet::MemberResult>();
 
-    uno::Reference<container::XNameAccess> xNA = xMSupplier->getMembers();
+    uno::Reference<sheet::XMembersAccess> xNA = xMSupplier->getMembers();
     if (!xNA.is())
         return uno::Sequence<sheet::MemberResult>();
 
@@ -1486,7 +1486,7 @@ bool ScDPOutput::GetDataResultPositionData(vector<sheet::DataPilotFieldFilter>& 
         while ( nItem > 0 && (pArray[nItem].Flags & sheet::MemberResultFlags::CONTINUE) )
             --nItem;
 
-        filter.MatchValue = pArray[nItem].Name;
+        filter.MatchValueName = pArray[nItem].Name;
         rFilters.push_back(filter);
     }
 
@@ -1510,7 +1510,7 @@ bool ScDPOutput::GetDataResultPositionData(vector<sheet::DataPilotFieldFilter>& 
         while ( nItem > 0 && (pArray[nItem].Flags & sheet::MemberResultFlags::CONTINUE) )
             --nItem;
 
-        filter.MatchValue = pArray[nItem].Name;
+        filter.MatchValueName = pArray[nItem].Name;
         rFilters.push_back(filter);
     }
 

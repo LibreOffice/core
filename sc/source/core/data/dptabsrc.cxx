@@ -465,7 +465,7 @@ Sequence< Sequence<Any> > SAL_CALL ScDPSource::getDrillDownData(const Sequence<s
                 ScDPDimension* pDim = GetDimensionsObject()->getByIndex( nCol );
                 ScDPMembers* pMembers = pDim->GetHierarchiesObject()->getByIndex(0)->
                                         GetLevelsObject()->getByIndex(0)->GetMembersObject();
-                sal_Int32 nIndex = pMembers->GetIndexFromName( rFilter.MatchValue );
+                sal_Int32 nIndex = pMembers->GetIndexFromName( rFilter.MatchValueName );
                 if ( nIndex >= 0 )
                 {
                     ScDPItemData aItem;
@@ -1458,7 +1458,7 @@ const ScDPItemData& ScDPDimension::GetSelectedData()
             for (long i=0; i<nCount && !pSelectedData; i++)
             {
                 ScDPMember* pMember = pMembers->getByIndex(i);
-                if (aSelectedPage.equals(pMember->GetNameStr()))
+                if (aSelectedPage.equals(pMember->GetNameStr( false)))
                 {
                     pSelectedData = new ScDPItemData();
                     pMember->FillItemData( *pSelectedData );
@@ -2074,7 +2074,7 @@ ScDPMembers* ScDPLevel::GetMembersObject()
     return mxMembers.get();
 }
 
-uno::Reference<container::XNameAccess> SAL_CALL ScDPLevel::getMembers() throw(uno::RuntimeException, std::exception)
+uno::Reference<sheet::XMembersAccess> SAL_CALL ScDPLevel::getMembers() throw(uno::RuntimeException, std::exception)
 {
     return GetMembersObject();
 }
@@ -2366,22 +2366,7 @@ uno::Any SAL_CALL ScDPMembers::getByName( const OUString& aName )
 
 uno::Sequence<OUString> SAL_CALL ScDPMembers::getElementNames() throw(uno::RuntimeException, std::exception)
 {
-    // Return list of names in sorted order,
-    // so it's displayed in that order in the field options dialog.
-    // Sorting is done at the level object (parent of this).
-
-    ScDPLevel* pLevel = pSource->GetDimensionsObject()->getByIndex(nDim)->
-        GetHierarchiesObject()->getByIndex(nHier)->GetLevelsObject()->getByIndex(nLev);
-    pLevel->EvaluateSortOrder();
-    const std::vector<sal_Int32>& rGlobalOrder = pLevel->GetGlobalOrder();
-    bool bSort = !rGlobalOrder.empty();
-
-    long nCount = getCount();
-    uno::Sequence<OUString> aSeq(nCount);
-    OUString* pArr = aSeq.getArray();
-    for (long i=0; i<nCount; i++)
-        pArr[i] = getByIndex(bSort ? rGlobalOrder[i] : i)->getName();
-    return aSeq;
+    return getElementNames( false );
 }
 
 sal_Bool SAL_CALL ScDPMembers::hasByName( const OUString& aName ) throw(uno::RuntimeException, std::exception)
@@ -2400,6 +2385,37 @@ sal_Bool SAL_CALL ScDPMembers::hasElements() throw(uno::RuntimeException, std::e
 }
 
 // end of XNameAccess implementation
+
+// XMembersAccess implementation
+
+uno::Sequence<OUString> SAL_CALL ScDPMembers::getLocaleIndependentElementNames()
+        throw(uno::RuntimeException, std::exception)
+{
+    return getElementNames( true );
+}
+
+// end of XMembersAccess implementation
+
+uno::Sequence<OUString> ScDPMembers::getElementNames( bool bLocaleIndependent ) const
+        throw(uno::RuntimeException, std::exception)
+{
+    // Return list of names in sorted order,
+    // so it's displayed in that order in the field options dialog.
+    // Sorting is done at the level object (parent of this).
+
+    ScDPLevel* pLevel = pSource->GetDimensionsObject()->getByIndex(nDim)->
+        GetHierarchiesObject()->getByIndex(nHier)->GetLevelsObject()->getByIndex(nLev);
+    pLevel->EvaluateSortOrder();
+    const std::vector<sal_Int32>& rGlobalOrder = pLevel->GetGlobalOrder();
+    bool bSort = !rGlobalOrder.empty();
+
+    long nCount = getCount();
+    uno::Sequence<OUString> aSeq(nCount);
+    OUString* pArr = aSeq.getArray();
+    for (long i=0; i<nCount; i++)
+        pArr[i] = getByIndex(bSort ? rGlobalOrder[i] : i)->GetNameStr( bLocaleIndependent);
+    return aSeq;
+}
 
 long ScDPMembers::getMinMembers() const
 {
@@ -2594,17 +2610,17 @@ const OUString* ScDPMember::GetLayoutName() const
     return mpLayoutName.get();
 }
 
-OUString ScDPMember::GetNameStr() const
+OUString ScDPMember::GetNameStr( bool bLocaleIndependent ) const
 {
     const ScDPItemData* pData = GetItemData();
     if (pData)
-        return pSource->GetData()->GetFormattedString(nDim, *pData);
+        return pSource->GetData()->GetFormattedString(nDim, *pData, bLocaleIndependent);
     return OUString();
 }
 
 OUString SAL_CALL ScDPMember::getName() throw(uno::RuntimeException, std::exception)
 {
-    return GetNameStr();
+    return GetNameStr( false );
 }
 
 void SAL_CALL ScDPMember::setName( const OUString& /* rNewName */ ) throw(uno::RuntimeException, std::exception)
