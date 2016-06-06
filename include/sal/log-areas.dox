@@ -470,6 +470,7 @@ certain functionality.
 @li @c sw.level2
 @li @c sw.mailmerge - Writer mail merge
 @li @c sw.rtf - .rtf export filter
+@li @c sw.sidebar
 @li @c sw.tiled
 @li @c sw.ui
 @li @c sw.uno - Writer UNO interfaces
