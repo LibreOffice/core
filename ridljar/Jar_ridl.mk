@@ -37,12 +37,8 @@ $(eval $(call gb_Jar_add_sourcefiles,ridl,\
     ridljar/com/sun/star/uno/Enum \
     ridljar/com/sun/star/uno/IBridge \
     ridljar/com/sun/star/uno/IEnvironment \
-    ridljar/com/sun/star/uno/IFieldDescription \
     ridljar/com/sun/star/uno/IMapping \
-    ridljar/com/sun/star/uno/IMemberDescription \
-    ridljar/com/sun/star/uno/IMethodDescription \
     ridljar/com/sun/star/uno/IQueryInterface \
-    ridljar/com/sun/star/uno/ITypeDescription \
     ridljar/com/sun/star/uno/Type \
     ridljar/com/sun/star/uno/UnoRuntime \
 ))

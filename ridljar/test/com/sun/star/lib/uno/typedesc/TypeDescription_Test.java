@@ -21,9 +21,6 @@ package com.sun.star.lib.uno.typedesc;
 import com.sun.star.lib.uno.typeinfo.MethodTypeInfo;
 import com.sun.star.lib.uno.typeinfo.TypeInfo;
 import com.sun.star.uno.Any;
-import com.sun.star.uno.IFieldDescription;
-import com.sun.star.uno.IMethodDescription;
-import com.sun.star.uno.ITypeDescription;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.TypeClass;
 import com.sun.star.uno.XInterface;
@@ -33,31 +30,31 @@ import static org.junit.Assert.*;
 
 public final class TypeDescription_Test {
     @Test public void test() throws Exception {
-        ITypeDescription voidTD = TypeDescription.getTypeDescription(
+        TypeDescription voidTD = TypeDescription.getTypeDescription(
             void.class);
-        ITypeDescription stringTD = TypeDescription.getTypeDescription(
+        TypeDescription stringTD = TypeDescription.getTypeDescription(
             String.class);
-        ITypeDescription typeTD = TypeDescription.getTypeDescription(
+        TypeDescription typeTD = TypeDescription.getTypeDescription(
             Type.class);
-        ITypeDescription anyTD = TypeDescription.getTypeDescription(Any.class);
-        ITypeDescription interfaceTD = TypeDescription.getTypeDescription(
+        TypeDescription anyTD = TypeDescription.getTypeDescription(Any.class);
+        TypeDescription interfaceTD = TypeDescription.getTypeDescription(
             XInterface.class);
 
         MethodSignature sigBuildinSyncTypeToAny = new MethodSignature(
-            true, false, new ITypeDescription[] { typeTD },
-            new ITypeDescription[1], anyTD);
+            true, false, new TypeDescription[] { typeTD },
+            new TypeDescription[1], anyTD);
         MethodSignature sigBuildinAsyncToVoid = new MethodSignature(
-            true, true, new ITypeDescription[0], new ITypeDescription[0],
+            true, true, new TypeDescription[0], new TypeDescription[0],
             voidTD);
         MethodSignature sigAddonSyncStringToVoid = new MethodSignature(
-            false, false, new ITypeDescription[] { stringTD },
-            new ITypeDescription[1], voidTD);
+            false, false, new TypeDescription[] { stringTD },
+            new TypeDescription[1], voidTD);
         MethodSignature sigAddonSyncStringInterfaceToVoid = new MethodSignature(
-            false, false, new ITypeDescription[] { stringTD, interfaceTD },
-            new ITypeDescription[2], voidTD);
+            false, false, new TypeDescription[] { stringTD, interfaceTD },
+            new TypeDescription[2], voidTD);
         MethodSignature sigAddonSyncStringToInterface = new MethodSignature(
-            false, false, new ITypeDescription[] { stringTD },
-            new ITypeDescription[1], interfaceTD);
+            false, false, new TypeDescription[] { stringTD },
+            new TypeDescription[1], interfaceTD);
 
         TypeSignature emptyTypeSig = new TypeSignature(
             null, new String[0], null, new String[0], null);
@@ -153,8 +150,8 @@ public final class TypeDescription_Test {
 
     private final class MethodSignature {
         public MethodSignature(
-            boolean buildIn, boolean oneWay, ITypeDescription[] inParameters,
-            ITypeDescription[] outParameters, ITypeDescription returnValue)
+            boolean buildIn, boolean oneWay, TypeDescription[] inParameters,
+            TypeDescription[] outParameters, TypeDescription returnValue)
         {
             this.buildIn = buildIn;
             this.oneWay = oneWay;
@@ -164,20 +161,20 @@ public final class TypeDescription_Test {
         }
 
         public void test(String prefix, int index,
-                         IMethodDescription description) {
+                         MethodDescription description) {
             assertEquals(prefix + "; getIndex", index, description.getIndex());
             assertEquals(
                 prefix + "; getMethod", buildIn,
                 description.getMethod() == null);
             assertEquals(prefix + "; isOneway", oneWay, description.isOneway());
-            ITypeDescription[] in = description.getInSignature();
+            TypeDescription[] in = description.getInSignature();
             assertEquals(
                 prefix + "; getInSignature", inParameters.length, in.length);
             for (int i = 0; i < in.length; ++i) {
                 assertEquals(
                     prefix + "; getInSignature " + i, inParameters[i], in[i]);
             }
-            ITypeDescription[] out = description.getOutSignature();
+            TypeDescription[] out = description.getOutSignature();
             assertEquals(
                 prefix + "; getOutSignature", outParameters.length, out.length);
             for (int i = 0; i < out.length; ++i) {
@@ -194,9 +191,9 @@ public final class TypeDescription_Test {
 
         private final boolean buildIn;
         private final boolean oneWay;
-        private final ITypeDescription[] inParameters;
-        private final ITypeDescription[] outParameters;
-        private final ITypeDescription returnValue;
+        private final TypeDescription[] inParameters;
+        private final TypeDescription[] outParameters;
+        private final TypeDescription returnValue;
     }
 
     private final class TypeSignature {
@@ -216,7 +213,7 @@ public final class TypeDescription_Test {
         }
 
         public void test(String prefix, Object[] data,
-                         ITypeDescription description) throws Exception {
+                         TypeDescription description) throws Exception {
             assertEquals(
                 prefix + "; getTypeName", data[0], description.getTypeName());
             assertEquals(
@@ -233,7 +230,7 @@ public final class TypeDescription_Test {
             assertNull(
                 prefix + "; getComponentType", description.getComponentType());
 
-            IMethodDescription[] mds = description.getMethodDescriptions();
+            MethodDescription[] mds = description.getMethodDescriptions();
             assertTrue(
                 prefix + "; getMethodDescriptions",
                 mds == null
@@ -247,7 +244,7 @@ public final class TypeDescription_Test {
                 }
             }
             for (int i = 0; i < methodNames.length; ++i) {
-                IMethodDescription md = description.getMethodDescription(
+                MethodDescription md = description.getMethodDescription(
                     i + methodOffset);
                 assertNotNull(
                     prefix + "; getMethodDescription " + (i + methodOffset),
@@ -257,7 +254,7 @@ public final class TypeDescription_Test {
                     i + methodOffset, md);
             }
             for (int i = 0; i < methodNames.length; ++i) {
-                IMethodDescription md = description.getMethodDescription(
+                MethodDescription md = description.getMethodDescription(
                     methodNames[i]);
                 assertNotNull(
                     prefix + "; getMethodDescription " + methodNames[i], md);
@@ -266,7 +263,7 @@ public final class TypeDescription_Test {
                     i + methodOffset, md);
             }
 
-            IFieldDescription[] fds = description.getFieldDescriptions();
+            FieldDescription[] fds = description.getFieldDescriptions();
             assertTrue(
                 prefix + "; getFieldDescriptions",
                 fds == null
@@ -281,7 +278,7 @@ public final class TypeDescription_Test {
                 }
             }
 
-            ITypeDescription supert = description.getSuperType();
+            TypeDescription supert = description.getSuperType();
             assertEquals(
                 prefix + "; getSuperType", data.length < 6, supert == null);
             if (supert != null && data[5] != null) {

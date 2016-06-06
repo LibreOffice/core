@@ -19,8 +19,8 @@
 
 package com.sun.star.lib.uno.environments.remote;
 
-import com.sun.star.uno.IMethodDescription;
-import com.sun.star.uno.ITypeDescription;
+import com.sun.star.lib.uno.typedesc.MethodDescription;
+import com.sun.star.lib.uno.typedesc.TypeDescription;
 import com.sun.star.uno.XCurrentContext;
 
 /**
@@ -29,7 +29,7 @@ import com.sun.star.uno.XCurrentContext;
 public class Message {
     public Message(
         ThreadId threadId, boolean request, String objectId,
-        ITypeDescription type, IMethodDescription method, boolean synchronous,
+        TypeDescription type, MethodDescription method, boolean synchronous,
         XCurrentContext currentContext, boolean abnormalTermination,
         Object result, Object[] arguments)
     {
@@ -87,7 +87,7 @@ public class Message {
      * @return the (non-<code>null</code>) type for a request, <code>null</code>
      * for a reply.
      */
-    public final ITypeDescription getType() {
+    public final TypeDescription getType() {
         return type;
     }
 
@@ -95,13 +95,13 @@ public class Message {
      * Returns the method description of a request message.
      *
      * <p>Valid only for request messages.  The returned
-     * <code>IMethodDescription</code> is consistent with the type of the
+     * <code>MethodDescription</code> is consistent with the type of the
      * message.</p>
      *
      * @return the (non-<code>null</code>) method description for a request,
      * <code>null</code> for a reply.
      */
-    public final IMethodDescription getMethod() {
+    public final MethodDescription getMethod() {
         return method;
     }
 
@@ -177,8 +177,8 @@ public class Message {
     private final ThreadId threadId;
     private final boolean request;
     private final String objectId;
-    private final ITypeDescription type;
-    private final IMethodDescription method;
+    private final TypeDescription type;
+    private final MethodDescription method;
     private final boolean synchronous;
     private final XCurrentContext currentContext;
     private final boolean abnormalTermination;
