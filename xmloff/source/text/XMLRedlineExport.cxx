@@ -487,6 +487,25 @@ void XMLRedlineExport::ExportChangeInfo(
         rExport.Characters(sBuf.makeStringAndClear());
     }
 
+    aAny = rPropSet->getPropertyValue(sRedlineType);
+    OUString sType;
+    aAny >>= sType;
+    if(sType == sFormat) // TODO: Find out if the style is inserted or deleted to give the proper namespace
+    {
+        SvXMLElementExport aTypeElem( rExport, XML_NAMESPACE_DEL,
+                                          XML_TYPE, true, false );
+        rExport.Characters("style");
+        SvXMLElementExport aNameElem( rExport, XML_NAMESPACE_DEL,
+                                          XML_NAME, true, false );
+        rExport.Characters("bold"); // TODO: Get the correct style name
+        SvXMLElementExport aStartElem( rExport, XML_NAMESPACE_DEL,
+                                          XML_START, true, false );
+        rExport.Characters("start"); // TODO: Get the correct start position
+        SvXMLElementExport aEndElem( rExport, XML_NAMESPACE_DEL,
+                                          XML_END, true, false );
+        rExport.Characters("end"); // TODO: Get the correct end position
+    }
+
     // comment as <text:p> sequence
     aAny = rPropSet->getPropertyValue(sRedlineComment);
     aAny >>= sTmp;
