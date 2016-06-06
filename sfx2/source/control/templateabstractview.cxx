@@ -254,7 +254,6 @@ BitmapEx TemplateAbstractView::scaleImg (const BitmapEx &rImg, long width, long 
 bool TemplateAbstractView::IsDefaultTemplate(const OUString& rPath)
 {
     SvtModuleOptions aModOpt;
-    std::vector<OUString> aList;
     const css::uno::Sequence<OUString> &aServiceNames = aModOpt.GetAllServiceNames();
 
     for( sal_Int32 i=0, nCount = aServiceNames.getLength(); i < nCount; ++i )
