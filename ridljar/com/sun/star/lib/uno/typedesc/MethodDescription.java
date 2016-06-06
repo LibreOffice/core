@@ -18,14 +18,15 @@
 
 package com.sun.star.lib.uno.typedesc;
 
-import com.sun.star.uno.IMethodDescription;
-import com.sun.star.uno.ITypeDescription;
 import java.lang.reflect.Method;
 
-public final class MethodDescription implements IMethodDescription {
+/**
+ * Allows to examine a method in detail. It gives a view to java methods from a UNO point.
+ */
+public final class MethodDescription {
     MethodDescription(
-        String name, int index, boolean oneway, ITypeDescription[] inSignature,
-        ITypeDescription[] outSignature, ITypeDescription returnSignature,
+        String name, int index, boolean oneway, TypeDescription[] inSignature,
+        TypeDescription[] outSignature, TypeDescription returnSignature,
         Method method)
     {
         this.name = name;
@@ -37,7 +38,7 @@ public final class MethodDescription implements IMethodDescription {
         this.method = method;
     }
 
-    MethodDescription(IMethodDescription other, int index) {
+    MethodDescription(MethodDescription other, int index) {
         this(
             other.getName(), index, other.isOneway(), other.getInSignature(),
             other.getOutSignature(), other.getReturnSignature(),
@@ -64,26 +65,54 @@ public final class MethodDescription implements IMethodDescription {
         return index;
     }
 
+    /**
+     * Indicates if this method is <code>oneWay</code>,
+     * respectively if this method may become executed asynchronously.
+     * @return  true means may execute asynchronously .
+     */
     public boolean isOneway() {
         return oneway;
     }
 
+    /**
+     * Indicates if this method is const.
+     * @return true means it is const.
+     */
     public boolean isConst() {
         return false;
     }
 
-    public ITypeDescription[] getInSignature() {
+    /**
+     * Gives any array of <code>TypeDescription</code> of
+     * the [in] parameters.
+     * @return the in parameters
+     */
+    public TypeDescription[] getInSignature() {
         return inSignature;
     }
 
-    public ITypeDescription[] getOutSignature() {
+    /**
+     * Gives any array of <code>TypeDescription</code> of
+     * the [out] parameters.
+     * @return the out parameters
+     */
+    public TypeDescription[] getOutSignature() {
         return outSignature;
     }
 
-    public ITypeDescription getReturnSignature() {
+    /**
+     * Gives the <code>TypeDescription</code> of
+     * the return type.
+     * @return the return type <code>TypeDescription</code>
+     */
+    public TypeDescription getReturnSignature() {
         return returnSignature;
     }
 
+    /**
+     * Gives native java method of this method.
+     * @return the java method
+     */
     public Method getMethod() {
         return method;
     }
@@ -95,8 +124,8 @@ public final class MethodDescription implements IMethodDescription {
     private final String name;
     private final int index;
     private final boolean oneway;
-    private final ITypeDescription[] inSignature;
-    private final ITypeDescription[] outSignature;
-    private final ITypeDescription returnSignature;
+    private final TypeDescription[] inSignature;
+    private final TypeDescription[] outSignature;
+    private final TypeDescription returnSignature;
     private final Method method;
 }
