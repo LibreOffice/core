@@ -108,6 +108,7 @@ void SAL_CALL PresenterWindowManager::disposing()
         {
             (*iPane)->mxBorderWindow->removeWindowListener(this);
             (*iPane)->mxBorderWindow->removeFocusListener(this);
+            (*iPane)->mxBorderWindow->removeMouseListener(this);
         }
     }
 }
@@ -306,7 +307,11 @@ void SAL_CALL PresenterWindowManager::mousePressed (const css::awt::MouseEvent& 
 void SAL_CALL PresenterWindowManager::mouseReleased (const css::awt::MouseEvent& rEvent)
     throw(css::uno::RuntimeException, std::exception)
 {
-    (void)rEvent;
+    if (mbIsMouseClickPending)
+    {
+        mbIsMouseClickPending = false;
+        mpPresenterController->HandleMouseClick(rEvent);
+    }
 }
 
 void SAL_CALL PresenterWindowManager::mouseEntered (const css::awt::MouseEvent& rEvent)
