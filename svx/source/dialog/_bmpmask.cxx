@@ -1123,24 +1123,6 @@ bool SvxBmpMask::IsEyedropping() const
 */
 void SvxBmpMask::SetAccessibleNames()
 {
-    OUString sSourceColor(BMP_RESID(RID_SVXDLG_BMPMASK_STR_SOURCECOLOR).toString());
-    OUString sSourceColorN;
-
-    sSourceColorN = sSourceColor;
-    sSourceColorN += " 1";
-    m_pCbx1->SetAccessibleName (sSourceColorN);
-
-    sSourceColorN = sSourceColor;
-    sSourceColorN += " 2";
-    m_pCbx2->SetAccessibleName (sSourceColorN);
-
-    sSourceColorN = sSourceColor;
-    sSourceColorN += " 3";
-    m_pCbx3->SetAccessibleName (sSourceColorN);
-
-    sSourceColorN = sSourceColor;
-    sSourceColorN += " 4";
-    m_pCbx4->SetAccessibleName (sSourceColorN);
     // set the accessible name for valueset
     OUString sColorPalette (BMP_RESID( RID_SVXDLG_BMPMASK_STR_PALETTE));
     OUString sColorPaletteN;
@@ -1156,36 +1138,6 @@ void SvxBmpMask::SetAccessibleNames()
     sColorPaletteN = sColorPalette;
     sColorPaletteN += " 4";
     m_pQSet4->SetText (sColorPaletteN);
-    // set the accessible for replace with spin boxes.
-    OUString sTolerance(BMP_RESID( RID_SVXDLG_BMPMASK_STR_TOLERANCE));
-    OUString sToleranceN;
-    sToleranceN = sTolerance;
-    sToleranceN += " 1";
-    m_pSp1->SetAccessibleName (sToleranceN);
-    sToleranceN = sTolerance;
-    sToleranceN += " 2";
-    m_pSp2->SetAccessibleName (sToleranceN);
-    sToleranceN = sTolerance;
-    sToleranceN += " 3";
-    m_pSp3->SetAccessibleName (sToleranceN);
-    sToleranceN = sTolerance;
-    sToleranceN += " 4";
-    m_pSp4->SetAccessibleName (sToleranceN);
-    // set the accessible for replace with combo boxes.
-    OUString sReplaceWith(BMP_RESID( RID_SVXDLG_BMPMASK_STR_REPLACEWITH));
-    OUString sReplaceWithN;
-    sReplaceWithN = sReplaceWith;
-    sReplaceWithN += " 1";
-    m_pLbColor1->SetAccessibleName (sReplaceWithN);
-    sReplaceWithN = sReplaceWith;
-    sReplaceWithN += " 2";
-    m_pLbColor2->SetAccessibleName (sReplaceWithN);
-    sReplaceWithN = sReplaceWith;
-    sReplaceWithN += " 3";
-    m_pLbColor3->SetAccessibleName (sReplaceWithN);
-    sReplaceWithN = sReplaceWith;
-    sReplaceWithN += " 4";
-    m_pLbColor4->SetAccessibleName (sReplaceWithN);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
