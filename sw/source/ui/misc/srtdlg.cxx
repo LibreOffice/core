@@ -151,9 +151,6 @@ SwSortDlg::SwSortDlg(vcl::Window* pParent, SwWrtShell &rShell)
     m_pColEdt1->SetAccessibleName(m_pColLbl->GetText());
     m_pColEdt2->SetAccessibleName(m_pColLbl->GetText());
     m_pColEdt3->SetAccessibleName(m_pColLbl->GetText());
-    m_pTypDLB1->SetAccessibleName(m_pTypLbl->GetText());
-    m_pTypDLB2->SetAccessibleName(m_pTypLbl->GetText());
-    m_pTypDLB3->SetAccessibleName(m_pTypLbl->GetText());
 
     m_pDelimEdt->SetMaxTextLen( 1 );
     if(rSh.GetSelectionType() &

@@ -260,14 +260,6 @@ SvxRubyDialog::SvxRubyDialog(SfxBindings* pBind, SfxChildWindow* pCW, vcl::Windo
     }
 
     UpdateColors();
-
-    OUString leftLabelName = m_pLeftFT->GetText(), rightLabelName = m_pRightFT->GetText();
-    m_pLeft2ED->SetAccessibleName(leftLabelName);
-    m_pLeft3ED->SetAccessibleName(leftLabelName);
-    m_pLeft4ED->SetAccessibleName(leftLabelName);
-    m_pRight2ED->SetAccessibleName(rightLabelName);
-    m_pRight3ED->SetAccessibleName(rightLabelName);
-    m_pRight4ED->SetAccessibleName(rightLabelName);
 }
 
 SvxRubyDialog::~SvxRubyDialog()
