@@ -21,6 +21,7 @@
 #include <connectivity/warningscontainer.hxx>
 #include <connectivity/dbexception.hxx>
 
+#include <o3tl/any.hxx>
 #include <osl/diagnose.h>
 
 
@@ -44,7 +45,7 @@ namespace dbtools
             OSL_ENSURE( SQLExceptionInfo( _rChainLeft ).isValid(),
                 "lcl_concatWarnings: invalid warnings chain (this will crash)!" );
 
-            const SQLException* pChainTravel = static_cast< const SQLException* >( _rChainLeft.getValue() );
+            const SQLException* pChainTravel = o3tl::doGet<SQLException>( _rChainLeft );
             SQLExceptionIteratorHelper aReferenceIterHelper( *pChainTravel );
             while ( aReferenceIterHelper.hasMoreElements() )
                 pChainTravel = aReferenceIterHelper.next();

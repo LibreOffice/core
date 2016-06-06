@@ -34,6 +34,9 @@
  *
  ************************************************************************/
 
+#include <sal/config.h>
+
+#include <o3tl/any.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 
@@ -1163,54 +1166,54 @@ bool implSetObject( const Reference< XParameters >& _rxParameters,
             break;
 
         case typelib_TypeClass_STRING:
-            _rxParameters->setString(_nColumnIndex, *static_cast<OUString const *>(_rValue.getValue()));
+            _rxParameters->setString(_nColumnIndex, *o3tl::forceGet<OUString>(_rValue));
             break;
 
         case typelib_TypeClass_BOOLEAN:
-            _rxParameters->setBoolean(_nColumnIndex, *static_cast<sal_Bool const *>(_rValue.getValue()));
+            _rxParameters->setBoolean(_nColumnIndex, *o3tl::forceGet<bool>(_rValue));
             break;
 
         case typelib_TypeClass_BYTE:
-            _rxParameters->setByte(_nColumnIndex, *static_cast<sal_Int8 const *>(_rValue.getValue()));
+            _rxParameters->setByte(_nColumnIndex, *o3tl::forceGet<sal_Int8>(_rValue));
             break;
 
         case typelib_TypeClass_UNSIGNED_SHORT:
         case typelib_TypeClass_SHORT:
-            _rxParameters->setShort(_nColumnIndex, *static_cast<sal_Int16 const *>(_rValue.getValue()));
+            _rxParameters->setShort(_nColumnIndex, *o3tl::forceGet<sal_Int16>(_rValue));
             break;
 
         case typelib_TypeClass_CHAR:
-            _rxParameters->setString(_nColumnIndex, OUString(static_cast<sal_Unicode const *>(_rValue.getValue()),1));
+            _rxParameters->setString(_nColumnIndex, OUString(*o3tl::forceGet<sal_Unicode>(_rValue)));
             break;
 
         case typelib_TypeClass_UNSIGNED_LONG:
         case typelib_TypeClass_LONG:
-            _rxParameters->setInt(_nColumnIndex, *static_cast<sal_Int32 const *>(_rValue.getValue()));
+            _rxParameters->setInt(_nColumnIndex, *o3tl::forceGet<sal_Int32>(_rValue));
             break;
 
         case typelib_TypeClass_FLOAT:
-            _rxParameters->setFloat(_nColumnIndex, *static_cast<float const *>(_rValue.getValue()));
+            _rxParameters->setFloat(_nColumnIndex, *o3tl::forceGet<float>(_rValue));
             break;
 
         case typelib_TypeClass_DOUBLE:
-            _rxParameters->setDouble(_nColumnIndex, *static_cast<double const *>(_rValue.getValue()));
+            _rxParameters->setDouble(_nColumnIndex, *o3tl::forceGet<double>(_rValue));
             break;
 
         case typelib_TypeClass_SEQUENCE:
-            if (_rValue.getValueType() == cppu::UnoType<Sequence< sal_Int8 >>::get())
+            if (auto s = o3tl::tryGet<Sequence< sal_Int8 >>(_rValue))
             {
-                _rxParameters->setBytes(_nColumnIndex, *static_cast<Sequence<sal_Int8> const *>(_rValue.getValue()));
+                _rxParameters->setBytes(_nColumnIndex, *s);
             }
             else
                 bSuccessfullyReRouted = false;
             break;
         case typelib_TypeClass_STRUCT:
-            if (_rValue.getValueType() == cppu::UnoType<css::util::DateTime>::get())
-                _rxParameters->setTimestamp(_nColumnIndex, *static_cast<css::util::DateTime const *>(_rValue.getValue()));
-            else if (_rValue.getValueType() == cppu::UnoType<css::util::Date>::get())
-                _rxParameters->setDate(_nColumnIndex, *static_cast<css::util::Date const *>(_rValue.getValue()));
-            else if (_rValue.getValueType() == cppu::UnoType<css::util::Time>::get())
-                _rxParameters->setTime(_nColumnIndex, *static_cast<css::util::Time const *>(_rValue.getValue()));
+            if (auto s1 = o3tl::tryGet<css::util::DateTime>(_rValue))
+                _rxParameters->setTimestamp(_nColumnIndex, *s1);
+            else if (auto s2 = o3tl::tryGet<css::util::Date>(_rValue))
+                _rxParameters->setDate(_nColumnIndex, *s2);
+            else if (auto s3 = o3tl::tryGet<css::util::Time>(_rValue))
+                _rxParameters->setTime(_nColumnIndex, *s3);
             else
                 bSuccessfullyReRouted = false;
             break;

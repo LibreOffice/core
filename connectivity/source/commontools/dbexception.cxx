@@ -20,6 +20,7 @@
 #include <connectivity/dbexception.hxx>
 #include <comphelper/types.hxx>
 #include <cppuhelper/exc_hlp.hxx>
+#include <o3tl/any.hxx>
 #include <osl/diagnose.h>
 #include <com/sun/star/sdb/SQLContext.hpp>
 #include <com/sun/star/sdbc/SQLWarning.hpp>
@@ -174,14 +175,14 @@ bool SQLExceptionInfo::isKindOf(TYPE _eType) const
 SQLExceptionInfo::operator const css::sdbc::SQLException*() const
 {
     OSL_ENSURE(isKindOf(TYPE::SQLException), "SQLExceptionInfo::operator SQLException* : invalid call !");
-    return static_cast<const css::sdbc::SQLException*>(m_aContent.getValue());
+    return o3tl::doGet<css::sdbc::SQLException>(m_aContent);
 }
 
 
 SQLExceptionInfo::operator const css::sdb::SQLContext*() const
 {
     OSL_ENSURE(isKindOf(TYPE::SQLContext), "SQLExceptionInfo::operator SQLException* : invalid call !");
-    return static_cast<const css::sdb::SQLContext*>(m_aContent.getValue());
+    return o3tl::doGet<css::sdb::SQLContext>(m_aContent);
 }
 
 
@@ -212,10 +213,10 @@ void SQLExceptionInfo::append( TYPE _eType, const OUString& _rErrorMessage, cons
         break;
     }
 
-    SQLException* pAppendException( static_cast< SQLException* >( const_cast< void* >( aAppend.getValue() ) ) );
-    pAppendException->Message = _rErrorMessage;
-    pAppendException->SQLState = _rSQLState;
-    pAppendException->ErrorCode = _nErrorCode;
+    SQLException& pAppendException = const_cast<SQLException &>(*o3tl::forceGet<SQLException>(aAppend));
+    pAppendException.Message = _rErrorMessage;
+    pAppendException.SQLState = _rSQLState;
+    pAppendException.ErrorCode = _nErrorCode;
 
     // find the end of the current chain
     Any* pChainIterator = &m_aContent;
@@ -229,7 +230,7 @@ void SQLExceptionInfo::append( TYPE _eType, const OUString& _rErrorMessage, cons
         if ( !isAssignableFrom( aSQLExceptionType, pChainIterator->getValueType() ) )
             break;
 
-        pLastException = static_cast< SQLException* >( const_cast< void* >( pChainIterator->getValue() ) );
+        pLastException = const_cast< SQLException* >( o3tl::doGet<SQLException>( *pChainIterator ) );
         pChainIterator = &pLastException->NextException;
     }
 
@@ -313,7 +314,7 @@ const css::sdbc::SQLException* SQLExceptionIteratorHelper::next()
         return pReturn;
     }
 
-    m_pCurrent = static_cast< const SQLException* >( m_pCurrent->NextException.getValue() );
+    m_pCurrent = o3tl::doGet< SQLException >( m_pCurrent->NextException );
 
     // no finally determine the proper type of the exception
     const Type aTypeContext( ::cppu::UnoType< SQLContext >::get() );
