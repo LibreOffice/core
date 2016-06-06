@@ -380,7 +380,7 @@ class SmRectangleNode : public SmGraphicNode
     Size  aToSize;
 
 public:
-    SmRectangleNode(const SmToken &rNodeToken)
+    explicit SmRectangleNode(const SmToken &rNodeToken)
     :   SmGraphicNode(NRECTANGLE, rNodeToken)
     {}
 
@@ -405,7 +405,7 @@ class SmPolyLineNode : public SmGraphicNode
     long        nWidth;
 
 public:
-    SmPolyLineNode(const SmToken &rNodeToken);
+    explicit SmPolyLineNode(const SmToken &rNodeToken);
 
     long         GetWidth() const { return nWidth; }
     tools::Polygon &GetPolygon() { return aPoly; }
@@ -497,7 +497,7 @@ protected:
     SmSpecialNode(SmNodeType eNodeType, const SmToken &rNodeToken, sal_uInt16 _nFontDesc);
 
 public:
-    SmSpecialNode(const SmToken &rNodeToken);
+    explicit SmSpecialNode(const SmToken &rNodeToken);
 
     virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell) override;
     virtual void Arrange(OutputDevice &rDev, const SmFormat &rFormat) override;
@@ -518,7 +518,7 @@ public:
 class SmGlyphSpecialNode : public SmSpecialNode
 {
 public:
-    SmGlyphSpecialNode(const SmToken &rNodeToken)
+    explicit SmGlyphSpecialNode(const SmToken &rNodeToken)
     :   SmSpecialNode(NGLYPH_SPECIAL, rNodeToken, FNT_MATH)
     {}
 
@@ -543,7 +543,7 @@ protected:
     }
 
 public:
-    SmMathSymbolNode(const SmToken &rNodeToken);
+    explicit SmMathSymbolNode(const SmToken &rNodeToken);
 
     virtual void AdaptToX(OutputDevice &rDev, sal_uLong nWidth) override;
     virtual void AdaptToY(OutputDevice &rDev, sal_uLong nHeight) override;
@@ -564,7 +564,7 @@ public:
 class SmMathIdentifierNode : public SmMathSymbolNode
 {
 public:
-    SmMathIdentifierNode(const SmToken &rNodeToken)
+    explicit SmMathIdentifierNode(const SmToken &rNodeToken)
     :   SmMathSymbolNode(NMATHIDENT, rNodeToken) {}
 };
 
@@ -580,7 +580,7 @@ class SmRootSymbolNode : public SmMathSymbolNode
     sal_uLong  nBodyWidth;  // width of body (argument) of root sign
 
 public:
-    SmRootSymbolNode(const SmToken &rNodeToken)
+    explicit SmRootSymbolNode(const SmToken &rNodeToken)
         : SmMathSymbolNode(NROOTSYMBOL, rNodeToken)
         , nBodyWidth(0)
     {
@@ -607,7 +607,7 @@ class SmDynIntegralSymbolNode : public SmMathSymbolNode
 
 
 public:
-    SmDynIntegralSymbolNode(const SmToken &rNodeToken)
+    explicit SmDynIntegralSymbolNode(const SmToken &rNodeToken)
     :   SmMathSymbolNode(NDYNINTSYMBOL, rNodeToken)
     {}
 
@@ -626,7 +626,7 @@ public:
 class SmPlaceNode : public SmMathSymbolNode
 {
 public:
-    SmPlaceNode(const SmToken &rNodeToken)
+    explicit SmPlaceNode(const SmToken &rNodeToken)
     :   SmMathSymbolNode(NPLACE, rNodeToken)
     {
     }
@@ -669,7 +669,7 @@ class SmTableNode : public SmStructureNode
 {
     long nFormulaBaseline;
 public:
-    SmTableNode(const SmToken &rNodeToken)
+    explicit SmTableNode(const SmToken &rNodeToken)
         :   SmStructureNode(NTABLE, rNodeToken)
         , nFormulaBaseline(0)
     {
@@ -701,7 +701,7 @@ protected:
     }
 
 public:
-    SmLineNode(const SmToken &rNodeToken)
+    explicit SmLineNode(const SmToken &rNodeToken)
     :   SmStructureNode(NLINE, rNodeToken)
     {
         bUseExtraSpaces = true;
@@ -725,7 +725,7 @@ public:
 class SmExpressionNode : public SmLineNode
 {
 public:
-    SmExpressionNode(const SmToken &rNodeToken)
+    explicit SmExpressionNode(const SmToken &rNodeToken)
     :   SmLineNode(NEXPRESSION, rNodeToken)
     {}
 
@@ -742,7 +742,7 @@ public:
 class SmUnHorNode : public SmStructureNode
 {
 public:
-    SmUnHorNode(const SmToken &rNodeToken)
+    explicit SmUnHorNode(const SmToken &rNodeToken)
     :   SmStructureNode(NUNHOR, rNodeToken)
     {
         SetNumSubNodes(2);
@@ -772,7 +772,7 @@ protected:
     static Point GetExtraPos(const SmRect &rRootSymbol, const SmRect &rExtra);
 
 public:
-    SmRootNode(const SmToken &rNodeToken)
+    explicit SmRootNode(const SmToken &rNodeToken)
     :   SmStructureNode(NROOT, rNodeToken)
     {
         SetNumSubNodes(3);
@@ -802,7 +802,7 @@ public:
 class SmDynIntegralNode : public SmStructureNode
 {
 public:
-    SmDynIntegralNode(const SmToken &rNodeToken)
+    explicit SmDynIntegralNode(const SmToken &rNodeToken)
     :   SmStructureNode(NDYNINT, rNodeToken)
     {
         SetNumSubNodes(2);
@@ -833,7 +833,7 @@ public:
 class SmBinHorNode : public SmStructureNode
 {
 public:
-    SmBinHorNode(const SmToken &rNodeToken)
+    explicit SmBinHorNode(const SmToken &rNodeToken)
     :   SmStructureNode(NBINHOR, rNodeToken)
     {
         SetNumSubNodes(3);
@@ -866,7 +866,7 @@ public:
 class SmBinVerNode : public SmStructureNode
 {
 public:
-    SmBinVerNode(const SmToken &rNodeToken)
+    explicit SmBinVerNode(const SmToken &rNodeToken)
     :   SmStructureNode(NBINVER, rNodeToken)
     {
         SetNumSubNodes(3);
@@ -898,7 +898,7 @@ class SmBinDiagonalNode : public SmStructureNode
                            const Point &rDiagPoint, double fAngleDeg) const;
 
 public:
-    SmBinDiagonalNode(const SmToken &rNodeToken);
+    explicit SmBinDiagonalNode(const SmToken &rNodeToken);
 
     bool    IsAscending() const { return bAscending; }
     void    SetAscending(bool bVal)  { bAscending = bVal; }
@@ -953,7 +953,7 @@ class SmSubSupNode : public SmStructureNode
     bool  bUseLimits;
 
 public:
-    SmSubSupNode(const SmToken &rNodeToken)
+    explicit SmSubSupNode(const SmToken &rNodeToken)
     :   SmStructureNode(NSUBSUP, rNodeToken)
     {
         SetNumSubNodes(1 + SUBSUP_NUM_ENTRIES);
@@ -1004,7 +1004,7 @@ public:
 class SmBraceNode : public SmStructureNode
 {
 public:
-    SmBraceNode(const SmToken &rNodeToken)
+    explicit SmBraceNode(const SmToken &rNodeToken)
     :   SmStructureNode(NBRACE, rNodeToken)
     {
         SetNumSubNodes(3);
@@ -1037,7 +1037,7 @@ class SmBracebodyNode : public SmStructureNode
     long  nBodyHeight;
 
 public:
-    inline SmBracebodyNode(const SmToken &rNodeToken);
+    explicit inline SmBracebodyNode(const SmToken &rNodeToken);
 
     virtual void    Arrange(OutputDevice &rDev, const SmFormat &rFormat) override;
     long            GetBodyHeight() const { return nBodyHeight; }
@@ -1067,7 +1067,7 @@ inline SmBracebodyNode::SmBracebodyNode(const SmToken &rNodeToken) :
 class SmVerticalBraceNode : public SmStructureNode
 {
 public:
-    inline SmVerticalBraceNode(const SmToken &rNodeToken);
+    explicit inline SmVerticalBraceNode(const SmToken &rNodeToken);
 
     SmNode* Body();
     const SmNode* Body() const;
@@ -1101,7 +1101,7 @@ inline SmVerticalBraceNode::SmVerticalBraceNode(const SmToken &rNodeToken) :
 class SmOperNode : public SmStructureNode
 {
 public:
-    SmOperNode(const SmToken &rNodeToken)
+    explicit SmOperNode(const SmToken &rNodeToken)
     :   SmStructureNode(NOPER, rNodeToken)
     {
         SetNumSubNodes(2);
@@ -1127,7 +1127,7 @@ public:
 class SmAlignNode : public SmStructureNode
 {
 public:
-    SmAlignNode(const SmToken &rNodeToken)
+    explicit SmAlignNode(const SmToken &rNodeToken)
     :   SmStructureNode(NALIGN, rNodeToken)
     {}
 
@@ -1149,7 +1149,7 @@ public:
 class SmAttributNode : public SmStructureNode
 {
 public:
-    SmAttributNode(const SmToken &rNodeToken)
+    explicit SmAttributNode(const SmToken &rNodeToken)
     :   SmStructureNode(NATTRIBUT, rNodeToken)
     {}
 
@@ -1174,7 +1174,7 @@ class SmFontNode : public SmStructureNode
     Fraction    aFontSize;
 
 public:
-    SmFontNode(const SmToken &rNodeToken)
+    explicit SmFontNode(const SmToken &rNodeToken)
     :   SmStructureNode(NFONT, rNodeToken)
     {
         nSizeType = FontSizeType::MULTIPLY;
@@ -1203,7 +1203,7 @@ class SmMatrixNode : public SmStructureNode
             nNumCols;
 
 public:
-    SmMatrixNode(const SmToken &rNodeToken)
+    explicit SmMatrixNode(const SmToken &rNodeToken)
     :   SmStructureNode(NMATRIX, rNodeToken)
     {
         nNumRows = nNumCols = 0;
@@ -1230,7 +1230,7 @@ class SmBlankNode : public SmGraphicNode
     sal_uInt16  nNum;
 
 public:
-    SmBlankNode(const SmToken &rNodeToken)
+    explicit SmBlankNode(const SmToken &rNodeToken)
     :   SmGraphicNode(NBLANK, rNodeToken)
     {
         nNum = 0;

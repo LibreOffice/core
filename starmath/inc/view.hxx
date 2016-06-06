@@ -98,7 +98,7 @@ private:
     void CaretBlinkStart();
     void CaretBlinkStop();
 public:
-    SmGraphicWindow(SmViewShell* pShell);
+    explicit SmGraphicWindow(SmViewShell* pShell);
     virtual ~SmGraphicWindow();
     virtual void dispose() override;
 

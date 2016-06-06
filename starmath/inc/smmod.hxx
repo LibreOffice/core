@@ -56,7 +56,7 @@ class VirtualDevice;
 class SmResId : public ResId
 {
 public:
-    SmResId(sal_uInt16 nId);
+    explicit SmResId(sal_uInt16 nId);
 };
 
 #define SM_RESSTR(x) SmResId(x).toString()
@@ -101,7 +101,7 @@ private:
     static void InitInterface_Impl();
 
 public:
-    SmModule(SfxObjectFactory* pObjFact);
+    explicit SmModule(SfxObjectFactory* pObjFact);
     virtual ~SmModule();
 
     virtual void ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 ) override;

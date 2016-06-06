@@ -118,7 +118,7 @@ protected:
     static OUString GetStringItem(const vcl::Font &rItem);
 
 public:
-    SmFontPickList(sal_uInt16 nMax = 5) : nMaxItems(nMax) {}
+    explicit SmFontPickList(sal_uInt16 nMax = 5) : nMaxItems(nMax) {}
     virtual ~SmFontPickList() { Clear(); }
 
     virtual void    Insert(const vcl::Font &rFont);
