@@ -27,26 +27,9 @@ String RID_SVXDLG_BMPMASK_STR_TRANSP
     Text [ en-US ] = "Transparent";
 };
 
-String RID_SVXDLG_BMPMASK_STR_SOURCECOLOR
-{
-    // This string is used by the eyedropper dialog to denote a color in an image
-    // that will be replaced by another color.
-    Text [ en-US ] = "Source Color";
-};
-
 String RID_SVXDLG_BMPMASK_STR_PALETTE
 {
     Text [ en-US ] = "Color Palette";
-};
-
-String RID_SVXDLG_BMPMASK_STR_TOLERANCE
-{
-    Text [ en-US ] = "Tolerance";
-};
-
-String RID_SVXDLG_BMPMASK_STR_REPLACEWITH
-{
-    Text [ en-US ] = "Replace with";
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

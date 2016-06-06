@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.16.1 -->
+<!-- Generated with glade 3.20.0 -->
 <interface>
   <requires lib="gtk+" version="3.0"/>
-  <!-- interface-requires LibreOffice 1.0 -->
+  <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="upper">99</property>
     <property name="value">10</property>
@@ -49,42 +49,37 @@
                       <object class="GtkLabel" id="label2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">Source color</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">0</property>
                         <property name="width">2</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkLabel" id="label3">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">Tolerance</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left_attach">2</property>
                         <property name="top_attach">0</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkLabel" id="label4">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">Replace with...</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left_attach">3</property>
                         <property name="top_attach">0</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
@@ -94,12 +89,15 @@
                         <property name="receives_default">False</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="cbx2-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes" comments="This string is used by the eyedropper dialog to denote a color in an image that will be replaced by another color.">Source Color 2</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">2</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
@@ -109,12 +107,15 @@
                         <property name="receives_default">False</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="cbx3-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes" comments="This string is used by the eyedropper dialog to denote a color in an image that will be replaced by another color.">Source Color 3</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">3</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
@@ -124,12 +125,15 @@
                         <property name="receives_default">False</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="cbx4-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes" comments="This string is used by the eyedropper dialog to denote a color in an image that will be replaced by another color.">Source Color 4</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">4</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
@@ -139,12 +143,15 @@
                         <property name="receives_default">False</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="cbx1-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes" comments="This string is used by the eyedropper dialog to denote a color in an image that will be replaced by another color.">Source Color 1</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">1</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
@@ -161,7 +168,6 @@
                         <property name="left_attach">0</property>
                         <property name="top_attach">5</property>
                         <property name="width">3</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
@@ -169,57 +175,69 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="adjustment">adjustment1</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="tol1:0%-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes">Tolerance 1</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">2</property>
                         <property name="top_attach">1</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkSpinButton" id="tol2:0%">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="text" translatable="no">10</property>
+                        <property name="text">10</property>
                         <property name="adjustment">adjustment1</property>
                         <property name="value">10</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="tol2:0%-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes">Tolerance 2</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">2</property>
                         <property name="top_attach">2</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkSpinButton" id="tol3:0%">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="text" translatable="no">10</property>
+                        <property name="text">10</property>
                         <property name="adjustment">adjustment1</property>
                         <property name="value">10</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="tol3:0%-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes">Tolerance 3</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">2</property>
                         <property name="top_attach">3</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkSpinButton" id="tol4:0%">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="text" translatable="no">10</property>
+                        <property name="text">10</property>
                         <property name="adjustment">adjustment1</property>
                         <property name="value">10</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="tol4:0%-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes">Tolerance 4</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">2</property>
                         <property name="top_attach">4</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
@@ -227,12 +245,15 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="hexpand">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="color1-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes">Replace with 1</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">3</property>
                         <property name="top_attach">1</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
@@ -240,12 +261,15 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="hexpand">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="color2-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes">Replace with 2</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">3</property>
                         <property name="top_attach">2</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
@@ -253,12 +277,15 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="hexpand">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="color3-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes">Replace with 3</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">3</property>
                         <property name="top_attach">3</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
@@ -266,12 +293,15 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="hexpand">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="color4-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes">Replace with 4</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">3</property>
                         <property name="top_attach">4</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
@@ -282,8 +312,6 @@
                       <packing>
                         <property name="left_attach">3</property>
                         <property name="top_attach">5</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
@@ -316,8 +344,6 @@
           <packing>
             <property name="left_attach">0</property>
             <property name="top_attach">1</property>
-            <property name="width">1</property>
-            <property name="height">1</property>
           </packing>
         </child>
         <child>
@@ -340,8 +366,6 @@
               <packing>
                 <property name="left_attach">1</property>
                 <property name="top_attach">0</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
               </packing>
             </child>
             <child>
@@ -374,24 +398,18 @@
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">0</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
               </object>
               <packing>
                 <property name="left_attach">0</property>
                 <property name="top_attach">0</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
               </packing>
             </child>
           </object>
           <packing>
             <property name="left_attach">0</property>
             <property name="top_attach">0</property>
-            <property name="width">1</property>
-            <property name="height">1</property>
           </packing>
         </child>
       </object>
