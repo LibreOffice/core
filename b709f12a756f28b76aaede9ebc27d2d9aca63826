@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_fa0384b6",
+        "filename": "xmloff/source/style/xmlnumfi.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 779,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-06-06T21:52:37Z",
+      "side": 1,
+      "message": "This now changes a format 0;-0 when reading to 0;\"-\"0 which isn\u0027t exactly wrong, but.. rather unexpected.",
+      "revId": "b709f12a756f28b76aaede9ebc27d2d9aca63826",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
