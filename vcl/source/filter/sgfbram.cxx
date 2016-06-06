@@ -35,7 +35,9 @@ SgfHeader::SgfHeader()
 
 SvStream& ReadSgfHeader(SvStream& rIStream, SgfHeader& rHead)
 {
+#if !defined NDEBUG
     sal_uInt64 const nOldPos(rIStream.Tell());
+#endif
     rIStream.ReadUInt16(rHead.Magic);
     rIStream.ReadUInt16(rHead.Version);
     rIStream.ReadUInt16(rHead.Typ);
@@ -66,7 +68,9 @@ SgfEntry::SgfEntry()
 
 SvStream& ReadSgfEntry(SvStream& rIStream, SgfEntry& rEntr)
 {
+#if !defined NDEBUG
     sal_uInt64 const nOldPos(rIStream.Tell());
+#endif
     rIStream.ReadUInt16(rEntr.Typ);
     rIStream.ReadUInt16(rEntr.iFrei);
     rIStream.ReadUInt16(rEntr.lFreiLo);
@@ -83,7 +87,9 @@ sal_uInt32 SgfEntry::GetOffset()
 
 SvStream& ReadSgfVector(SvStream& rIStream, SgfVector& rVect)
 {
+#if !defined NDEBUG
     sal_uInt64 const nOldPos(rIStream.Tell());
+#endif
     rIStream.ReadUInt16(rVect.Flag);
     rIStream.ReadInt16(rVect.x);
     rIStream.ReadInt16(rVect.y);
@@ -95,7 +101,9 @@ SvStream& ReadSgfVector(SvStream& rIStream, SgfVector& rVect)
 
 SvStream& WriteBmpFileHeader(SvStream& rOStream, BmpFileHeader& rHead)
 {
+#if !defined NDEBUG
     sal_uInt64 const nOldPos(rOStream.Tell());
+#endif
     rOStream.WriteUInt16(rHead.Typ);
     rOStream.WriteUInt16(rHead.SizeLo);
     rOStream.WriteUInt16(rHead.SizeHi);
@@ -126,7 +134,9 @@ sal_uInt32 BmpFileHeader::GetOfs()
 
 SvStream& WriteBmpInfoHeader(SvStream& rOStream, BmpInfoHeader& rInfo)
 {
+#if !defined NDEBUG
     sal_uInt64 const nOldPos(rOStream.Tell());
+#endif
     rOStream.WriteUInt32(rInfo.Size);
     rOStream.WriteInt32(rInfo.Width);
     rOStream.WriteInt32(rInfo.Hight);
