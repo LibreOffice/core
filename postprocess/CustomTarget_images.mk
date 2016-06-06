@@ -58,8 +58,7 @@ $(packimages_DIR)/commandimagelist.ilst :
 			grep -e '/cmd/' | sed 's#^.*/icon-themes/[^/]*##' | $(SORT) | uniq | \
 			sed "s#^#%MODULE%#" | \
 			LC_ALL=C $(SORT) > $@.tmp && \
-		$(PERL) $(SRCDIR)/solenv/bin/diffmv.pl $@.tmp $@ \
-			$(if $(findstring s,$(MAKEFLAGS)),2> /dev/null))
+		$(call gb_Helper_replace_if_different_and_touch,$@.tmp,$@))
 
 $(packimages_DIR)/sorted.lst : \
 		$(SRCDIR)/postprocess/packimages/image-sort.lst \
