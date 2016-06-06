@@ -123,6 +123,8 @@ void ScCopyPasteTest::testCopyPasteXLS()
     xComponent->dispose();
 }
 
+namespace {
+
 void lcl_copy( const OUString& rSrcRange, const OUString& rDstRange, ScDocument& rDoc, ScTabViewShell* pViewShell )
 {
     ScDocument aClipDoc(SCDOCMODE_CLIP);
@@ -141,6 +143,8 @@ void lcl_copy( const OUString& rSrcRange, const OUString& rDstRange, ScDocument&
     pViewShell->GetViewData().GetMarkData().SetMarkArea(aDstRange);
     pViewShell->GetViewData().GetView()->PasteFromClip(InsertDeleteFlags::ALL, &aClipDoc);
 }
+
+} // anonymous namespace
 
 void ScCopyPasteTest::testTdf84411()
 {
@@ -202,6 +206,7 @@ void ScCopyPasteTest::testTdf84411()
     // 3. Disable OpenCL
     ScModelObj* pModel = ScModelObj::getImplementation(pFoundShell->GetModel());
     CPPUNIT_ASSERT(pModel != nullptr);
+    bool bOpenCLState = ScCalcConfig::isOpenCLEnabled();
     pModel->enableOpenCL(false);
     CPPUNIT_ASSERT(ScCalcConfig::isOpenCLEnabled() == false);
     pModel->enableAutomaticCalculation(true);
@@ -217,6 +222,7 @@ void ScCopyPasteTest::testTdf84411()
 
 
     // 5. Close the document (Ctrl-W)
+    pModel->enableOpenCL(bOpenCLState);
     xComponent->dispose();
 }
 
@@ -245,6 +251,5 @@ void ScCopyPasteTest::tearDown()
 CPPUNIT_TEST_SUITE_REGISTRATION(ScCopyPasteTest);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
