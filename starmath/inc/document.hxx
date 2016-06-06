@@ -72,7 +72,7 @@ class SmPrinterAccess
     VclPtr<Printer> pPrinter;
     VclPtr<OutputDevice> pRefDev;
 public:
-    SmPrinterAccess( SmDocShell &rDocShell );
+    explicit SmPrinterAccess( SmDocShell &rDocShell );
     ~SmPrinterAccess();
     Printer* GetPrinter()  { return pPrinter.get(); }
     OutputDevice* GetRefDev()  { return pRefDev.get(); }
@@ -149,7 +149,7 @@ private:
     static void InitInterface_Impl();
 
 public:
-                SmDocShell( SfxModelFlags i_nSfxCreationFlags );
+    explicit SmDocShell( SfxModelFlags i_nSfxCreationFlags );
     virtual     ~SmDocShell();
 
     static void LoadSymbols();

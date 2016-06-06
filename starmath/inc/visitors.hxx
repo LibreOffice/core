@@ -293,7 +293,7 @@ class SmCaretPosGraphBuildingVisitor : public SmVisitor
 {
 public:
     /** Builds a caret position graph for pRootNode */
-    SmCaretPosGraphBuildingVisitor( SmNode* pRootNode );
+    explicit SmCaretPosGraphBuildingVisitor( SmNode* pRootNode );
     virtual ~SmCaretPosGraphBuildingVisitor();
     void Visit( SmTableNode* pNode ) override;
     void Visit( SmBraceNode* pNode ) override;

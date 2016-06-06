@@ -83,7 +83,7 @@ class SmEditWindow : public vcl::Window, public DropTargetHelper
     void UpdateStatus(bool bSetDocModified = false);
 
 public:
-    SmEditWindow(SmCmdBoxWindow& rMyCmdBoxWin);
+    explicit SmEditWindow(SmCmdBoxWindow& rMyCmdBoxWin);
     virtual ~SmEditWindow();
     virtual void dispose() override;
 

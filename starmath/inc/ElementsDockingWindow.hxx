@@ -109,7 +109,7 @@ class SmElementsControl : public Control
     void LayoutOrPaintContents(vcl::RenderContext *pContext = nullptr);
 
 public:
-    SmElementsControl(vcl::Window *pParent);
+    explicit SmElementsControl(vcl::Window *pParent);
     virtual ~SmElementsControl();
     virtual void dispose() override;
 
