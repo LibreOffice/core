@@ -2667,11 +2667,22 @@ void AutoRecovery::implts_markDocumentAsSaved(const css::uno::Reference< css::fr
         return;
     aInfo = *pIt;
 
+    /* Since the document has been saved, update its entry in the document
+     * cache. We essentially reset the state of the document from an
+     * autorecovery perspective, updating things like the filename (which
+     * would change in the case of a 'Save as' operation) and the associated
+     * backup file URL.  */
+
     aInfo.DocumentState = AutoRecovery::E_UNKNOWN;
     // TODO replace getLocation() with getURL() ... it's a workaround currently only!
     css::uno::Reference< css::frame::XStorable > xDoc(aInfo.Document, css::uno::UNO_QUERY);
     aInfo.OrgURL = xDoc->getLocation();
 
+    /* Save off the backup file URLs and then clear them. NOTE - it is
+     * important that we clear them - otherwise, we could enter a state
+     * where pIt->OldTempURL == pIt->NewTempURL and our backup algorithm
+     * in implts_saveOneDoc will write to that URL and then delete the file
+     * at that URL (bug #96607) */
     sRemoveURL1 = aInfo.OldTempURL;
     sRemoveURL2 = aInfo.NewTempURL;
     aInfo.OldTempURL.clear();
@@ -2691,6 +2702,8 @@ void AutoRecovery::implts_markDocumentAsSaved(const css::uno::Reference< css::fr
     }
 
     aInfo.UsedForSaving = false;
+
+    *pIt = aInfo;
 
     } /* SAFE */
 
