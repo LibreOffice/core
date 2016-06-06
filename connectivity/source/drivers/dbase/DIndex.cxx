@@ -391,7 +391,7 @@ SvStream& connectivity::dbase::WriteODbaseIndex(SvStream &rStream, ODbaseIndex& 
     rStream.WriteUChar(rIndex.m_aHeader.db_unique);
     rStream.Write(&rIndex.m_aHeader.db_name, 488);
     assert(rStream.GetError() || rStream.Tell() == nOldPos + DINDEX_PAGE_SIZE);
-    SAL_WARN_IF(rStream.GetError(), "connectivity.dbase", "write error");
+    SAL_WARN_IF(rStream.GetError(), "connectivity.drivers", "write error");
     return rStream;
 }
 
