@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "da7fb54a_7ff846e6",
+        "filename": "cppuhelper/source/implbase.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-06-06T07:33:20Z",
+      "side": 1,
+      "message": "the intention of this change was to whack a bunch of warning messages from the helper removeListener method",
+      "parentUuid": "da7fb54a_3feebe22",
+      "revId": "5e53f0a64ced457d99dd913df03383c6ab7778a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da7fb54a_1fe9fa1a",
         "filename": "svtools/source/misc/transfer2.cxx",
         "patchSetId": 2
