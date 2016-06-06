@@ -220,7 +220,7 @@ FieldUnit PageFormatPanel::GetCurrentUnit( SfxItemState eState, const SfxPoolIte
             }
             else
             {
-                SAL_WARN("sw.sidebar", "GetModuleFieldUnit(): no module found");
+                SAL_WARN("sw.ui", "GetModuleFieldUnit(): no module found");
             }
         }
     }
