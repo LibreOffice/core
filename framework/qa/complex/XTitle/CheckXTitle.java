@@ -60,7 +60,6 @@ public class CheckXTitle
     private static final String UNO_URL_FOR_PRINT_PREVIEW         = ".uno:PrintPreview";
     private static final String UNO_URL_FOR_CLOSING_PRINT_PREVIEW = ".uno:ClosePreview";
     private static final String UNO_URL_FOR_CLOSING_DOC           = ".uno:CloseWin";
-    private static final String UNO_URL_FOR_READ_ONLY             = ".uno:OpenReadOnly";
 
     // members
 
