@@ -1840,7 +1840,7 @@ SfxBoolItem GotoNextWrongTableFormula FN_NEXT_TBLFML_ERR
     GroupId = GID_NAVIGATOR;
 ]
 
-SfxVoidItem GotoPage FN_NAVIGATION_PI_GOTO_PAGE
+SfxVoidItem GotoPage FN_GOTO_PAGE
 ()
 [
     AutoUpdate = FALSE,
