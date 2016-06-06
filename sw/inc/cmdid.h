@@ -505,7 +505,7 @@
 #define FN_UPDATE_CUR_TOX           (FN_EXTRA + 54)   /* update current index */
 #define FN_REMOVE_CUR_TOX           (FN_EXTRA + 55)  /* remove the current TOX*/
 
-#define FN_NAVIGATION_PI_GOTO_PAGE  (FN_EXTRA + 59 )  /* goto page from navigation-PI */
+#define FN_GOTO_PAGE                (FN_EXTRA + 59 )  /* goto page */
 
 #define FN_COLL_TYPE                (FN_EXTRA + 98)   /* type for GlobalDoc-Collection*/
 #define FN_COLL_ADD                 (FN_EXTRA + 99)
