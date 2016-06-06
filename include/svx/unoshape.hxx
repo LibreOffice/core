@@ -119,7 +119,7 @@ private:
     OUString maShapeName;
 
     /** these members are used to optimize XMultiProperty calls */
-    SvxShapeImpl* mpImpl;
+    std::unique_ptr<SvxShapeImpl> mpImpl;
     bool mbIsMultiPropertyCall;
 
     css::uno::WeakReference< css::container::XIndexContainer > mxGluePoints;
