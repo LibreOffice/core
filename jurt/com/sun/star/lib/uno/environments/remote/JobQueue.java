@@ -89,9 +89,11 @@ public class JobQueue {
             try {
                   enter(2000, _disposeId);
             } catch(Throwable throwable) {
-                if(!jobList.isEmpty() || _active) { // there was a job in progress, so give a stack
-                    System.err.println(getClass().getName() + " - exception occurred:" + throwable);
-                    throwable.printStackTrace(System.err);
+                synchronized (this) {
+                    if(!jobList.isEmpty() || _active) { // there was a job in progress, so give a stack
+                        System.err.println(getClass().getName() + " - exception occurred:" + throwable);
+                        throwable.printStackTrace(System.err);
+                    }
                 }
             }
             finally {
