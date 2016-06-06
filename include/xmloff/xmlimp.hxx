@@ -96,6 +96,7 @@ enum class SvXMLImportFlags {
     SETTINGS        = 0x0040,
     FONTDECLS       = 0x0080,
     EMBEDDED        = 0x0100,
+    UNDO            = 0x0200,
     ALL             = 0xffff
 };
 namespace o3tl
