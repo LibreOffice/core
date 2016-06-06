@@ -81,7 +81,7 @@ SfxStringListItem::SfxStringListItem( sal_uInt16 which, SvStream& rStream ) :
 
 SfxStringListItem::SfxStringListItem( const SfxStringListItem& rItem ) :
     SfxPoolItem( rItem ),
-    pImpl(rItem.pImpl.get())
+    pImpl(rItem.pImpl)
 {
 }
 
