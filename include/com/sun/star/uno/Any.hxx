@@ -21,6 +21,7 @@
 
 #include <sal/config.h>
 
+#include <algorithm>
 #include <cassert>
 #include <cstddef>
 #include <iomanip>
@@ -119,6 +120,38 @@ inline Any & Any::operator = ( const Any & rAny )
     }
     return *this;
 }
+
+#if defined LIBO_INTERNAL_ONLY
+
+namespace detail {
+
+inline void moveAnyInternals(Any & from, Any & to) {
+    uno_any_construct(&to, nullptr, nullptr, &cpp_acquire);
+    std::swap(from.pType, to.pType);
+    std::swap(from.pData, to.pData);
+    std::swap(from.pReserved, to.pReserved);
+    if (to.pData == &from.pReserved) {
+        to.pData = &to.pReserved;
+    }
+    // This leaves to.pData (where "to" is now VOID) dangling to somewhere (cf.
+    // CONSTRUCT_EMPTY_ANY, cppu/source/uno/prim.hxx), but what's relevant is
+    // only that it isn't a nullptr (as e.g. >>= -> uno_type_assignData ->
+    // _assignData takes a null pSource to mean "construct a default value").
+}
+
+}
+
+Any::Any(Any && other) {
+    detail::moveAnyInternals(other, *this);
+}
+
+Any & Any::operator =(Any && other) {
+    uno_any_destruct(this, &cpp_release);
+    detail::moveAnyInternals(other, *this);
+    return *this;
+}
+
+#endif
 
 inline ::rtl::OUString Any::getValueTypeName() const
 {

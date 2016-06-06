@@ -135,6 +135,11 @@ public:
     */
     inline Any & SAL_CALL operator = ( const Any & rAny );
 
+#if defined LIBO_INTERNAL_ONLY
+    inline Any(Any && other);
+    inline Any & operator =(Any && other);
+#endif
+
     /** Gets the type of the set value.
 
         @return a Type object of the set value
