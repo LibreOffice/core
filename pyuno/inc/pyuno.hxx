@@ -276,7 +276,7 @@ public:
         precondition: The current thread MUST NOT hold the global interpreter lock.
         postcondition: The global interpreter lock is acquired
 
-        @raises css::uno::RuntimeException
+        @throws css::uno::RuntimeException
              in case no pythread state could be created
      */
     PyThreadAttach( PyInterpreterState *interp) throw ( css::uno::RuntimeException );

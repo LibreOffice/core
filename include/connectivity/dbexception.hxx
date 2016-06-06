@@ -208,7 +208,7 @@ public:
 
     @param _eState
         describes the state whose description is to retrieve. Must not be SQL_ERROR_UNSPECIFIED.
-    @raises RuntimeException
+    @throws RuntimeException
         in case of an internal error
 */
 OOO_DLLPUBLIC_DBTOOLS OUString getStandardSQLState( StandardSQLState _eState );

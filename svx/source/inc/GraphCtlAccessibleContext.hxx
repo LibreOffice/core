@@ -176,7 +176,7 @@ protected:
         @return
             The returned rectangle is a bounding box of the object given in
             absolute screen coordinates.
-        @raise DisposedException
+        @throws DisposedException
             When the object is already disposed then a
             <type>DisposedException</type> is thrown.
     */

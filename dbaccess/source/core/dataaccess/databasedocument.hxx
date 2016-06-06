@@ -488,7 +488,7 @@ private:
         determines if the ownership should be transferred to the component which
         possibly vetos the closing
 
-    @raises css::util::CloseVetoException
+    @throws css::util::CloseVetoException
         if the closing was vetoed by any instance
     */
     void    impl_closeControllerFrames_nolck_throw( bool _bDeliverOwnership );
@@ -506,9 +506,9 @@ private:
 
     /** retrieves the forms or reports contained, creates and initializes it, if necessary
 
-        @raises DisposedException
+        @throws DisposedException
             if the instance is already disposed
-        @raises IllegalArgumentException
+        @throws IllegalArgumentException
             if <arg>_eType</arg> is not ODatabaseModelImpl::E_FORM and not ODatabaseModelImpl::E_REPORT
     */
     css::uno::Reference< css::container::XNameAccess >

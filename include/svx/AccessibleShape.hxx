@@ -216,7 +216,7 @@ public:
         @return
             Reference of the requested child which is the accessible object
             of a visible shape.
-        @raises IndexOutOfBoundsException
+        @throws IndexOutOfBoundsException
             Throws an exception if the index is not valid.
     */
     virtual css::uno::Reference<

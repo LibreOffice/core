@@ -131,7 +131,7 @@ public:
             requested accessible child.  This reference is empty if it has
             not been possible to create the accessible object of the
             corresponding shape.
-        @raises
+        @throws
             Throws an IndexOutOfBoundsException if the index is not valid.
     */
     css::uno::Reference<css::accessibility::XAccessible>

@@ -71,7 +71,7 @@ public:
            occurs that does not result in an exception then <FALSE/> is
            returned.
 
-        @raises RuntimeException
+        @throws RuntimeException
            in case something went heavily wrong
     */
     virtual bool ReplaceChild (

@@ -52,7 +52,7 @@ namespace comphelper
                 the component context to operate in
             @param  _bundleBaseName
                 the base name of the resource file which should be accessed (*without* the SUPD!)
-            @raises css::lang::NullPointerException
+            @throws css::lang::NullPointerException
                 if the given component context is <NULL/>
         */
         OfficeResourceBundle(

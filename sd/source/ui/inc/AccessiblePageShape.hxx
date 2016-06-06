@@ -79,7 +79,7 @@ public:
         @return
             Reference of the requested child which is the accessible object
             of a visible shape.
-        @raises IndexOutOfBoundsException
+        @throws IndexOutOfBoundsException
             Throws always an exception because there are no children.
     */
     virtual css::uno::Reference<css::accessibility::XAccessible> SAL_CALL

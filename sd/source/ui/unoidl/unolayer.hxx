@@ -86,7 +86,7 @@ public:
     virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) throw (css::uno::RuntimeException, std::exception) override;
 
     /** Not implemented.  Always throws an exception.
-        @raises NoSupportException.
+        @throws NoSupportException.
     */
     virtual void SAL_CALL setParent( const css::uno::Reference< css::uno::XInterface >& Parent ) throw (css::lang::NoSupportException, css::uno::RuntimeException, std::exception) override;
 

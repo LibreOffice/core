@@ -33,7 +33,7 @@ namespace dbaui
     public:
         /** executes the given dialog asynchronously, but still modal
 
-            @raises IllegalArgumentException
+            @throws IllegalArgumentException
                 if the given dialog is <NULL/>
             @todo
                 allow for a callback for the result

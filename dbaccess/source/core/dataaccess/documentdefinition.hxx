@@ -204,7 +204,7 @@ private:
     static void impl_initFormEditView( const css::uno::Reference< css::frame::XController >& _rxController );
 
     /** removes the given frame from the desktop's frame collection
-        @raises css::uno::RuntimeException
+        @throws css::uno::RuntimeException
     */
     static void impl_removeFrameFromDesktop_throw(
                     const css::uno::Reference< css::uno::XComponentContext >& _rContxt,
