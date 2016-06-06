@@ -55,6 +55,12 @@ class XMLRedlineExport
     const OUString sDeletion;
     const OUString sFormatChange;
     const OUString sInsertion;
+    const OUString sRedlineType;
+    const OUString sRedlineUndoType;
+    const OUString sRedlineUndoName;
+    const OUString sRedlineUndoStart;
+    const OUString sRedlineUndoEnd;
+    const OUString sFormat;
 
     SvXMLExport& rExport;
 

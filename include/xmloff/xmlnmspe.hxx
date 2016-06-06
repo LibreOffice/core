@@ -66,10 +66,12 @@ XML_NAMESPACE( XML_NAMESPACE_OF,              34U )   // OpenFormula aka ODFF
 XML_NAMESPACE( XML_NAMESPACE_XHTML,           35U )
 XML_NAMESPACE( XML_NAMESPACE_GRDDL,           36U )
 XML_NAMESPACE( XML_NAMESPACE_VERSIONS_LIST,   37U )
+XML_NAMESPACE( XML_NAMESPACE_ADD,             38U )
+XML_NAMESPACE( XML_NAMESPACE_DEL,             39U )
 
 // namespaces for odf extended formats
 
-#define XML_NAMESPACE_EXT_BASE 38U
+#define XML_NAMESPACE_EXT_BASE 40U
 #define XML_NAMESPACE_EXT( prefix, index ) \
 const sal_uInt16 prefix = (XML_NAMESPACE_EXT_BASE+index);
 
@@ -82,7 +84,7 @@ XML_NAMESPACE_EXT( XML_NAMESPACE_LO_EXT,           5U )
 
 // namespaces for OOo formats
 
-#define XML_NAMESPACE_OOO_BASE 44U
+#define XML_NAMESPACE_OOO_BASE 46U
 #define XML_NAMESPACE_OOO( prefix, index ) \
 const sal_uInt16 prefix = (XML_NAMESPACE_OOO_BASE+index);
 
