@@ -1021,7 +1021,19 @@ void Sc10Import::LoadFileInfo()
 void Sc10Import::LoadEditStateInfo()
 {
     Sc10EditStateInfo EditStateInfo;
-    rStream.Read(&EditStateInfo, sizeof(EditStateInfo));
+
+    sal_uInt64 const nOldPos(rStream.Tell());
+
+    rStream.ReadUInt16(EditStateInfo.CarretX);
+    rStream.ReadUInt16(EditStateInfo.CarretY);
+    rStream.ReadUInt16(EditStateInfo.CarretZ);
+    rStream.ReadUInt16(EditStateInfo.DeltaX);
+    rStream.ReadUInt16(EditStateInfo.DeltaY);
+    rStream.ReadUInt16(EditStateInfo.DeltaZ);
+    rStream.ReadUChar(EditStateInfo.DataBaseMode);
+    rStream.Read(EditStateInfo.Reserved, sizeof(EditStateInfo.Reserved));
+
+    assert(rStream.GetError() || rStream.Tell() == nOldPos + sizeof(Sc10EditStateInfo));
 
     nError = rStream.GetError();
     nShowTab = static_cast<SCTAB>(EditStateInfo.DeltaZ);
