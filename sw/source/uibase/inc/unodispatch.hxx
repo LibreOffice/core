@@ -24,6 +24,7 @@
 #include <com/sun/star/view/XSelectionChangeListener.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
+#include <com/sun/star/frame/XInterceptorInfo.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <list>
 #include <vcl/svapp.hxx>
@@ -35,7 +36,8 @@ class SwXDispatchProviderInterceptor : public cppu::WeakImplHelper
 <
     ::com::sun::star::frame::XDispatchProviderInterceptor,
     ::com::sun::star::lang::XEventListener,
-    ::com::sun::star::lang::XUnoTunnel
+    ::com::sun::star::lang::XUnoTunnel,
+    ::com::sun::star::frame::XInterceptorInfo
 >
 {
     class DispatchMutexLock_Impl
@@ -82,6 +84,9 @@ public:
     //XUnoTunnel
     static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId();
     virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+    // XInterceptorInfo
+    virtual css::uno::Sequence<OUString> SAL_CALL getInterceptedURLs() throw (css::uno::RuntimeException, std::exception) override;
 
     // view destroyed
     void    Invalidate();
