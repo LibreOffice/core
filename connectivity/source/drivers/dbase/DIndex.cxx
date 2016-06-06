@@ -352,7 +352,9 @@ ONDXPage* ODbaseIndex::CreatePage(sal_uInt32 nPagePos, ONDXPage* pParent, bool b
 void connectivity::dbase::ReadHeader(
         SvStream & rStream, ODbaseIndex::NDXHeader & rHeader)
 {
+#if !defined(NDEBUG)
     sal_uInt64 const nOldPos(rStream.Tell());
+#endif
     rStream.ReadUInt32(rHeader.db_rootpage);
     rStream.ReadUInt32(rHeader.db_pagecount);
     rStream.Read(&rHeader.db_frei, 4);
@@ -379,7 +381,6 @@ SvStream& connectivity::dbase::operator >> (SvStream &rStream, ODbaseIndex& rInd
 SvStream& connectivity::dbase::WriteODbaseIndex(SvStream &rStream, ODbaseIndex& rIndex)
 {
     rStream.Seek(0);
-    sal_uInt64 const nOldPos(rStream.Tell());
     rStream.WriteUInt32(rIndex.m_aHeader.db_rootpage);
     rStream.WriteUInt32(rIndex.m_aHeader.db_pagecount);
     rStream.Write(&rIndex.m_aHeader.db_frei, 4);
@@ -390,8 +391,8 @@ SvStream& connectivity::dbase::WriteODbaseIndex(SvStream &rStream, ODbaseIndex& 
     rStream.Write(&rIndex.m_aHeader.db_frei1, 3);
     rStream.WriteUChar(rIndex.m_aHeader.db_unique);
     rStream.Write(&rIndex.m_aHeader.db_name, 488);
-    assert(rStream.GetError() || rStream.Tell() == nOldPos + DINDEX_PAGE_SIZE);
-    SAL_WARN_IF(rStream.GetError(), "connectivity.drivers", "write error");
+    assert(rStream.GetError() || rStream.Tell() == DINDEX_PAGE_SIZE);
+    SAL_WARN_IF(rStream.GetError(), "connectivity.dbase", "write error");
     return rStream;
 }
 

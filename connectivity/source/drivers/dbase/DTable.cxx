@@ -323,7 +323,9 @@ void ODbaseTable::fillColumns()
     for (; i < nFieldCount; i++)
     {
         DBFColumn aDBFColumn;
+#if !defined(NDEBUG)
         sal_uInt64 const nOldPos(m_pFileStream->Tell());
+#endif
         m_pFileStream->Read(aDBFColumn.db_fnm, 11);
         m_pFileStream->ReadUChar(aDBFColumn.db_typ);
         m_pFileStream->ReadUInt32(aDBFColumn.db_adr);
