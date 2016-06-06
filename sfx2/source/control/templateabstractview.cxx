@@ -267,7 +267,7 @@ bool TemplateAbstractView::IsDefaultTemplate(const OUString& rPath)
     return false;
 }
 
-void TemplateAbstractView::RemoveDefaultTemplateIcon( OUString rPath)
+void TemplateAbstractView::RemoveDefaultTemplateIcon(const OUString& rPath)
 {
     for (ThumbnailViewItem* pItem : mItemList)
     {
