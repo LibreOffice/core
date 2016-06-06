@@ -45,8 +45,7 @@ class UNOTOOLS_DLLPUBLIC SvtSysLocale
 {
     friend class SvtSysLocale_Impl;     // access to mutex
 
-    static  SvtSysLocale_Impl*  pImpl;
-    static  sal_Int32           nRefCount;
+    std::shared_ptr<SvtSysLocale_Impl>  pImpl;
 
     UNOTOOLS_DLLPRIVATE static  ::osl::Mutex&               GetMutex();
 
