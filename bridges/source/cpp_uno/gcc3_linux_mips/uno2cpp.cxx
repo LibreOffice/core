@@ -60,7 +60,6 @@ namespace
     int off;                      // offset used to find function
     int nw;                       // number of words mapped
     long *p;                      // pointer to parameter overflow area
-    int c;                        // character of parameter type being decoded
     int iret, iret2;              // temporary function return values
 
     // never called
@@ -114,7 +113,7 @@ namespace
 
     /* parse the argument list up to the ending ) */
     while (*pPT != 'X') {
-      c = *pPT;
+      int c = *pPT; // character of parameter type being decoded
       switch (c) {
         case 'D':                   /* type is double */
           /* treat the same as long long */
