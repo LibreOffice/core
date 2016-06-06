@@ -1022,7 +1022,9 @@ void Sc10Import::LoadEditStateInfo()
 {
     Sc10EditStateInfo EditStateInfo;
 
+#if !defined(NDEBUG)
     sal_uInt64 const nOldPos(rStream.Tell());
+#endif
 
     rStream.ReadUInt16(EditStateInfo.CarretX);
     rStream.ReadUInt16(EditStateInfo.CarretY);
