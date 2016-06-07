@@ -29,16 +29,13 @@
 
 class Node;
 
-// DVO: remove DEBUG dependency
-// #ifndef DEBUG
 using namespace ::com::sun::star::xml::sax;
-// #endif
 
 class Formula
 {
 public:
-    Formula(char *_eq)
-        : pList(NULL)
+    explicit Formula(char *_eq)
+        : pList(nullptr)
     {
         eq = _eq;
         isHwpEQ = 1;
