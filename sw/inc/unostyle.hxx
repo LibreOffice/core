@@ -317,10 +317,26 @@ class SwXTextCellStyle : public cppu::WeakImplHelper
 >
 {
     SwDocShell* m_pDocShell;
-    SwBoxAutoFormat& m_rBoxAutoFormat;
-    OUString m_sParentStyle;
-public:
-    SwXTextCellStyle(SwDocShell* pDocShell, SwBoxAutoFormat& rBoxAutoFormat, const OUString& sParentStyle);
+    SwBoxAutoFormat* m_pBoxAutoFormat;
+    OUString m_sParentStyle; // used when style is physical
+    OUString m_sName;   // used when style is not physical
+    bool m_bPhysical;
+
+    /**
+    * This function looks for a SwBoxAutoFormat with given name. Parses the name and returns parent name.
+    * @param pDocShell pointer to a SwDocShell.
+    * @param sName Name of a SwBoxAutoFormat to look for.
+    * @param pParentName Optional output. Pointer to a OUString where parsed parent name will be returned.
+    * @return Pointer to a SwBoxAutoFormat, nullptr if not found.
+    */
+    static SwBoxAutoFormat* GetBoxAutoFormat(SwDocShell* pDocShell, const OUString& sName, OUString* pParentName = nullptr);
+ public:
+    SwXTextCellStyle(SwDocShell* pDocShell, SwBoxAutoFormat* pBoxAutoFormat, const OUString& sParentStyle);
+    /// Create non physical style
+    SwXTextCellStyle(SwDocShell* pDocShell, const OUString& sName);
+    ~SwXTextCellStyle();
+
+    void SetPhysical();
 
     //XStyle
     virtual sal_Bool SAL_CALL isUserDefined() throw (css::uno::RuntimeException, std::exception) override;

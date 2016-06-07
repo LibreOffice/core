@@ -4268,12 +4268,12 @@ SwXTextTableStyle::SwXTextTableStyle(SwDocShell* pDocShell, const OUString& rTab
         assert(aTableTemplateMap.size() == STYLE_COUNT && "can not map SwTableAutoFormat to a SwXTextTableStyle");
         for (sal_Int32 i=0; i<STYLE_COUNT; ++i)
         {
-            SwBoxAutoFormat& rBoxFormat = pAutoFormat->GetBoxFormat(aTableTemplateMap[i]);
-            uno::Reference<style::XStyle> xCellStyle(rBoxFormat.GetXObject(), uno::UNO_QUERY);
+            SwBoxAutoFormat* pBoxFormat = &pAutoFormat->GetBoxFormat(aTableTemplateMap[i]);
+            uno::Reference<style::XStyle> xCellStyle(pBoxFormat->GetXObject(), uno::UNO_QUERY);
             if (!xCellStyle.is())
             {
-                xCellStyle.set(new SwXTextCellStyle(m_pDocShell, rBoxFormat, m_sTableAutoFormatName));
-                rBoxFormat.SetXObject(xCellStyle);
+                xCellStyle.set(new SwXTextCellStyle(m_pDocShell, pBoxFormat, m_sTableAutoFormatName));
+                pBoxFormat->SetXObject(xCellStyle);
             }
             m_aCellStyles[i] = xCellStyle;
         }
@@ -4446,52 +4446,101 @@ css::uno::Sequence<OUString> SAL_CALL SwXTextTableStyle::getSupportedServiceName
 }
 
 // SwXTextCellStyle
-SwXTextCellStyle::SwXTextCellStyle(SwDocShell* pDocShell, SwBoxAutoFormat& rBoxAutoFormat, const OUString& sParentStyle) :
-    m_pDocShell(pDocShell), m_rBoxAutoFormat(rBoxAutoFormat), m_sParentStyle(sParentStyle)
+SwXTextCellStyle::SwXTextCellStyle(SwDocShell* pDocShell, SwBoxAutoFormat* pBoxAutoFormat, const OUString& sParentStyle) :
+    m_pDocShell(pDocShell), m_pBoxAutoFormat(pBoxAutoFormat), m_sParentStyle(sParentStyle), m_bPhysical(true)
 { }
+
+SwXTextCellStyle::SwXTextCellStyle(SwDocShell* pDocShell, const OUString& sName) :
+    m_pDocShell(pDocShell), m_sName(sName), m_bPhysical(false)
+{
+    m_pBoxAutoFormat = new SwBoxAutoFormat();
+}
+
+SwXTextCellStyle::~SwXTextCellStyle()
+{
+    if (m_bPhysical)
+        delete m_pBoxAutoFormat;
+}
+
+void SwXTextCellStyle::SetPhysical()
+{
+    if (m_bPhysical)
+    {
+        m_bPhysical = true;
+        SwBoxAutoFormat* pBoxAutoFormat = GetBoxAutoFormat(m_pDocShell, m_sName, &m_sParentStyle);
+        if (pBoxAutoFormat)
+        {
+            delete m_pBoxAutoFormat;
+            m_pBoxAutoFormat = pBoxAutoFormat;
+        }
+        else
+            SAL_WARN("sw.uno", "setting style physical, but SwBoxAutoFormat in document not found");
+    }
+    else
+        SAL_WARN("sw.uno", "calling SetPhysical on a physical SwXTextCellStyle");
+}
+
+SwBoxAutoFormat* SwXTextCellStyle::GetBoxAutoFormat(SwDocShell* pDocShell, const OUString& sName, OUString* pParentName)
+{
+    sal_Int32 nSeparatorIndex;
+    sal_Int32 nTemplateIndex;
+    OUString sParentName, sCellSubName;
+
+    if (sName.isEmpty())
+        return nullptr;
+
+    nSeparatorIndex = sName.lastIndexOf('.');
+    if (0 >= nSeparatorIndex)
+        return nullptr;
+
+    sParentName = sName.copy(0, nSeparatorIndex);
+    sCellSubName = sName.copy(nSeparatorIndex+1);
+    nTemplateIndex = sCellSubName.toInt32()-1; // -1 because cell styles names start from 1, but internally are indexed from 0
+    if (0 > nTemplateIndex)
+        return nullptr;
+
+    const auto& rTableTemplateMap = SwTableAutoFormat::GetTableTemplateMap();
+    if (rTableTemplateMap.size() <= nTemplateIndex )
+        return nullptr;
+
+    SwTableAutoFormat* pFormat = pDocShell->GetDoc()->GetTableStyles().FindAutoFormat(sParentName);
+    if (!pFormat)
+        return nullptr;
+
+    if (pParentName)
+        *pParentName = sParentName;
+    sal_uInt32 nBoxIndex = rTableTemplateMap[nTemplateIndex];
+    return &pFormat->GetBoxFormat(nBoxIndex);
+}
 
 css::uno::Reference<css::style::XStyle> SwXTextCellStyle::CreateXTextCellStyle(SwDocShell* pDocShell, const OUString& sName)
 {
-    SwBoxAutoFormat* pBoxFormat = nullptr;
-    sal_Int32 nSeparatorIndex;
-    sal_uInt32 nTemplateIndex;
-    OUString sParentName, sCellSubName;
-
-    try {
-        nSeparatorIndex = sName.lastIndexOf('.');
-        sParentName = sName.copy(0, nSeparatorIndex);
-        sCellSubName = sName.copy(nSeparatorIndex+1);
-        nTemplateIndex = sCellSubName.toInt32()-1;      // -1 because cell styles names start from 1
-
-        auto rTableTemplateMap = SwTableAutoFormat::GetTableTemplateMap();
-        if (nTemplateIndex >= rTableTemplateMap.size())
-            throw;
-
-        SwTableAutoFormat* pFormat = pDocShell->GetDoc()->GetTableStyles().FindAutoFormat(sParentName);
-        sal_uInt32 nBoxIndex = rTableTemplateMap[nTemplateIndex];
-        pBoxFormat = &pFormat->GetBoxFormat(nBoxIndex);
-    }
-    catch (...)
-    {
-        SAL_WARN("sw.uno", "could not get a BoxFormat to create XTextCellStyle for, unexpected error");
-    }
-
-    if (!pBoxFormat)
-    {
-        // return a default-dummy style to prevent crash
-        static SwBoxAutoFormat* pDefaultBoxFormat;
-        if (!pDefaultBoxFormat)
-            pDefaultBoxFormat = new SwBoxAutoFormat();
-        pBoxFormat = pDefaultBoxFormat;
-    }
-
     uno::Reference<style::XStyle> xTextCellStyle;
-    xTextCellStyle.set(pBoxFormat->GetXObject(), uno::UNO_QUERY);
-    if (!xTextCellStyle.is())
+
+    if (!sName.isEmpty()) // create a cell style for an physical box
     {
-        xTextCellStyle.set(new SwXTextCellStyle(pDocShell, *pBoxFormat, sParentName));
-        pBoxFormat->SetXObject(xTextCellStyle);
+        OUString sParentName;
+        SwBoxAutoFormat* pBoxFormat = GetBoxAutoFormat(pDocShell, sName, &sParentName);
+
+        // something went wrong but we don't want a crash
+        if (!pBoxFormat)
+        {
+            // return a default-dummy style to prevent crash
+            static SwBoxAutoFormat* pDefaultBoxFormat;
+            if (!pDefaultBoxFormat)
+                pDefaultBoxFormat = new SwBoxAutoFormat();
+            pBoxFormat = pDefaultBoxFormat;
+        }
+
+        xTextCellStyle.set(pBoxFormat->GetXObject(), uno::UNO_QUERY);
+        if (!xTextCellStyle.is())
+        {
+            xTextCellStyle.set(new SwXTextCellStyle(pDocShell, pBoxFormat, sParentName));
+            pBoxFormat->SetXObject(xTextCellStyle);
+        }
     }
+    else // create a non physical style
+        xTextCellStyle.set(new SwXTextCellStyle(pDocShell, sName));
 
     return xTextCellStyle;
 }
@@ -4528,7 +4577,7 @@ OUString SAL_CALL SwXTextCellStyle::getName() throw(css::uno::RuntimeException, 
     if (!pTableFormat)
         return OUString();
 
-    return sParentStyle + pTableFormat->GetTableTemplateCellSubName(m_rBoxAutoFormat);
+    return sParentStyle + pTableFormat->GetTableTemplateCellSubName(*m_pBoxAutoFormat);
 }
 
 void SAL_CALL SwXTextCellStyle::setName(const OUString& /*rName*/) throw(css::uno::RuntimeException, std::exception)
@@ -4551,9 +4600,9 @@ void SAL_CALL SwXTextCellStyle::setPropertyValue(const OUString& rPropertyName, 
         {
             case RES_BACKGROUND:
             {
-                SvxBrushItem rBrush( m_rBoxAutoFormat.GetBackground() );
+                SvxBrushItem rBrush( m_pBoxAutoFormat->GetBackground() );
                 rBrush.PutValue(aValue, 0);
-                m_rBoxAutoFormat.SetBackground(rBrush);
+                m_pBoxAutoFormat->SetBackground(rBrush);
                 return;
             }
             default:
@@ -4576,7 +4625,7 @@ css::uno::Any SAL_CALL SwXTextCellStyle::getPropertyValue(const OUString& rPrope
         {
             case RES_BACKGROUND:
             {
-                const SvxBrushItem& rBrush = m_rBoxAutoFormat.GetBackground();
+                const SvxBrushItem& rBrush = m_pBoxAutoFormat->GetBackground();
                 rBrush.QueryValue(aRet);
                 return aRet;
             }
