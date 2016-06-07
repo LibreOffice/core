@@ -39,7 +39,7 @@ OTableKeyHelper::OTableKeyHelper(OTableHelper* _pTable) : connectivity::sdbcx::O
 
 OTableKeyHelper::OTableKeyHelper(   OTableHelper* _pTable
             ,const OUString& Name
-            ,const sdbcx::TKeyProperties& _rProps
+            ,const std::shared_ptr<sdbcx::KeyProperties>& _rProps
             ) : connectivity::sdbcx::OKey(Name,_rProps,true)
                 ,m_pTable(_pTable)
 {

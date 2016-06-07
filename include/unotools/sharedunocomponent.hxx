@@ -137,10 +137,9 @@ namespace utl
     {
     private:
         typedef COMPONENT                           Component;
-        typedef std::shared_ptr<Component>          ComponentPointer;
 
     private:
-        ComponentPointer                            m_xComponent;
+        std::shared_ptr<Component>                            m_xComponent;
         css::uno::Reference< INTERFACE >            m_xTypedComponent;
 
     public:

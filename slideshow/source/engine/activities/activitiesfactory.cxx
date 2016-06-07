@@ -53,7 +53,7 @@ namespace {
 template<typename ValueType> struct FormulaTraits
 {
     static ValueType getPresentationValue(
-        const ValueType& rVal, const ExpressionNodeSharedPtr& )
+        const ValueType& rVal, const std::shared_ptr<ExpressionNode>& )
     {
         return rVal;
     }
@@ -63,7 +63,7 @@ template<typename ValueType> struct FormulaTraits
 template<> struct FormulaTraits<double>
 {
     static double getPresentationValue(
-        double const& rVal, ExpressionNodeSharedPtr const& rFormula )
+        double const& rVal, std::shared_ptr<ExpressionNode> const& rFormula )
     {
         return rFormula ? (*rFormula)(rVal) : rVal;
     }
@@ -352,7 +352,7 @@ private:
     const OptionalValueType                 maTo;
     const OptionalValueType                 maBy;
 
-    ExpressionNodeSharedPtr                 mpFormula;
+    std::shared_ptr<ExpressionNode>                 mpFormula;
 
     ValueType                               maStartValue;
     ValueType                               maEndValue;
@@ -589,7 +589,7 @@ public:
 private:
     ValueVectorType                         maValues;
 
-    ExpressionNodeSharedPtr                 mpFormula;
+    std::shared_ptr<ExpressionNode>                 mpFormula;
 
     std::shared_ptr<AnimationType>        mpAnim;
     Interpolator< ValueType >               maInterpolator;

@@ -182,17 +182,15 @@ public:
 
 private:
     typedef ::std::vector< sal_Int32 >                      BlockIdVector;
-    typedef ::std::unique_ptr< ::oox::ole::EmbeddedForm >   EmbeddedFormPtr;
-    typedef ::std::unique_ptr< ShapeContainer >             ShapeContainerPtr;
     typedef ::std::map< OUString, OleObjectInfo >    OleObjectInfoMap;
     typedef ::std::map< OUString, ControlInfo >      ControlInfoMap;
 
     ::oox::core::XmlFilterBase& mrFilter;   ///< Filter object that imports/exports the VML drawing.
     css::uno::Reference< css::drawing::XDrawPage >
                         mxDrawPage;         ///< UNO draw page used to insert the shapes.
-    mutable EmbeddedFormPtr mxCtrlForm;     ///< The control form used to process embedded controls.
+    mutable std::unique_ptr<::oox::ole::EmbeddedForm> mxCtrlForm;     ///< The control form used to process embedded controls.
     mutable BlockIdVector maBlockIds;       ///< Block identifiers used by this drawing.
-    ShapeContainerPtr   mxShapes;           ///< All shapes and shape templates.
+    std::unique_ptr<ShapeContainer>   mxShapes;           ///< All shapes and shape templates.
     OleObjectInfoMap    maOleObjects;       ///< Info about all embedded OLE objects, mapped by shape id.
     ControlInfoMap      maControls;         ///< Info about all embedded form controls, mapped by control name.
     const DrawingType   meType;             ///< Application type containing the drawing.

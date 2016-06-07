@@ -119,7 +119,6 @@ public:
     virtual css::drawing::EnhancedCustomShapeParameter fillNode(
         std::vector< EnhancedCustomShapeEquation >& rEquations, ExpressionNode* pOptionalArg, sal_uInt32 nFlags ) = 0;
 };
-typedef std::shared_ptr< ExpressionNode > ExpressionNodeSharedPtr;
 
 /** This exception is thrown, when the arithmetic expression
     parser failed to parse a string.
@@ -187,7 +186,7 @@ public:
         @return the generated function object.
        */
 
-    SVX_DLLPUBLIC static ExpressionNodeSharedPtr parseFunction( const OUString& rFunction, const EnhancedCustomShape2d& rCustoShape );
+    SVX_DLLPUBLIC static std::shared_ptr<ExpressionNode> parseFunction( const OUString& rFunction, const EnhancedCustomShape2d& rCustoShape );
 
     // this is a singleton
     FunctionParser() = delete;

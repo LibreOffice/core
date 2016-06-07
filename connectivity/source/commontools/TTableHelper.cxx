@@ -329,7 +329,7 @@ void OTableHelper::refreshPrimaryKeys(TStringVector& _rNames)
 
     if ( xResult.is() )
     {
-        sdbcx::TKeyProperties pKeyProps(new sdbcx::KeyProperties(OUString(),KeyType::PRIMARY,0,0));
+        std::shared_ptr<sdbcx::KeyProperties> pKeyProps(new sdbcx::KeyProperties(OUString(),KeyType::PRIMARY,0,0));
         OUString aPkName;
         bool bAlreadyFetched = false;
         const Reference< XRow > xRow(xResult,UNO_QUERY);
@@ -366,7 +366,7 @@ void OTableHelper::refreshForeignKeys(TStringVector& _rNames)
 
     if ( xRow.is() )
     {
-        sdbcx::TKeyProperties pKeyProps;
+        std::shared_ptr<sdbcx::KeyProperties> pKeyProps;
         OUString aName,sCatalog,aSchema,sOldFKName;
         while( xResult->next() )
         {
@@ -577,9 +577,9 @@ void SAL_CALL OTableHelper::release() throw()
     OTable_TYPEDEF::release();
 }
 
-sdbcx::TKeyProperties OTableHelper::getKeyProperties(const OUString& _sName) const
+std::shared_ptr<sdbcx::KeyProperties> OTableHelper::getKeyProperties(const OUString& _sName) const
 {
-    sdbcx::TKeyProperties pKeyProps;
+    std::shared_ptr<sdbcx::KeyProperties> pKeyProps;
     TKeyMap::const_iterator aFind = m_pImpl->m_aKeys.find(_sName);
     if ( aFind != m_pImpl->m_aKeys.end() )
     {
@@ -594,7 +594,7 @@ sdbcx::TKeyProperties OTableHelper::getKeyProperties(const OUString& _sName) con
     return pKeyProps;
 }
 
-void OTableHelper::addKey(const OUString& _sName,const sdbcx::TKeyProperties& _aKeyProperties)
+void OTableHelper::addKey(const OUString& _sName,const std::shared_ptr<sdbcx::KeyProperties>& _aKeyProperties)
 {
     m_pImpl->m_aKeys.insert(TKeyMap::value_type(_sName,_aKeyProperties));
 }

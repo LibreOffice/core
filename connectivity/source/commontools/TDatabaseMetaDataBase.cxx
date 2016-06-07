@@ -114,7 +114,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaDataBase::getTypeInfo(  ) throw(SQ
                                         ,DataType::INTEGER
                                         ,DataType::INTEGER
                                     };
-            ::std::vector<ExpressionNodeSharedPtr> aConditions;
+            ::std::vector<std::shared_ptr<ExpressionNode>> aConditions;
             if ( aTypeInfoSettings.getLength() > 1 && ((aTypeInfoSettings.getLength() % 2) == 0) )
             {
                 const Any* pIter = aTypeInfoSettings.getConstArray();
@@ -145,8 +145,8 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaDataBase::getTypeInfo(  ) throw(SQ
                     aRow.push_back(new ORowSetValueDecorator(aValue));
                 }
 
-                ::std::vector<ExpressionNodeSharedPtr>::iterator aIter = aConditions.begin();
-                ::std::vector<ExpressionNodeSharedPtr>::const_iterator aEnd = aConditions.end();
+                ::std::vector<std::shared_ptr<ExpressionNode>>::iterator aIter = aConditions.begin();
+                ::std::vector<std::shared_ptr<ExpressionNode>>::const_iterator aEnd = aConditions.end();
                 for (; aIter != aEnd; ++aIter)
                 {
                     if ( (*aIter)->evaluate(aRow)->getValue().getBool() )

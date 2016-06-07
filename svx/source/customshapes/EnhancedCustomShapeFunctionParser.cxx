@@ -325,15 +325,15 @@ public:
 class UnaryFunctionExpression : public ExpressionNode
 {
     const ExpressionFunct   meFunct;
-    ExpressionNodeSharedPtr mpArg;
+    std::shared_ptr<ExpressionNode> mpArg;
 
 public:
-    UnaryFunctionExpression( const ExpressionFunct eFunct, const ExpressionNodeSharedPtr& rArg ) :
+    UnaryFunctionExpression( const ExpressionFunct eFunct, const std::shared_ptr<ExpressionNode>& rArg ) :
         meFunct( eFunct ),
         mpArg( rArg )
     {
     }
-    static double getValue( const ExpressionFunct eFunct, const ExpressionNodeSharedPtr& rArg )
+    static double getValue( const ExpressionFunct eFunct, const std::shared_ptr<ExpressionNode>& rArg )
     {
         double fRet = 0;
         switch( eFunct )
@@ -493,18 +493,18 @@ public:
 class BinaryFunctionExpression : public ExpressionNode
 {
     const ExpressionFunct   meFunct;
-    ExpressionNodeSharedPtr mpFirstArg;
-    ExpressionNodeSharedPtr mpSecondArg;
+    std::shared_ptr<ExpressionNode> mpFirstArg;
+    std::shared_ptr<ExpressionNode> mpSecondArg;
 
 public:
 
-    BinaryFunctionExpression( const ExpressionFunct eFunct, const ExpressionNodeSharedPtr& rFirstArg, const ExpressionNodeSharedPtr& rSecondArg ) :
+    BinaryFunctionExpression( const ExpressionFunct eFunct, const std::shared_ptr<ExpressionNode>& rFirstArg, const std::shared_ptr<ExpressionNode>& rSecondArg ) :
         meFunct( eFunct ),
         mpFirstArg( rFirstArg ),
         mpSecondArg( rSecondArg )
     {
     }
-    static double getValue( const ExpressionFunct eFunct, const ExpressionNodeSharedPtr& rFirstArg, const ExpressionNodeSharedPtr& rSecondArg )
+    static double getValue( const ExpressionFunct eFunct, const std::shared_ptr<ExpressionNode>& rFirstArg, const std::shared_ptr<ExpressionNode>& rSecondArg )
     {
         double fRet = 0;
         switch( eFunct )
@@ -714,15 +714,15 @@ public:
 
 class IfExpression : public ExpressionNode
 {
-    ExpressionNodeSharedPtr mpFirstArg;
-    ExpressionNodeSharedPtr mpSecondArg;
-    ExpressionNodeSharedPtr mpThirdArg;
+    std::shared_ptr<ExpressionNode> mpFirstArg;
+    std::shared_ptr<ExpressionNode> mpSecondArg;
+    std::shared_ptr<ExpressionNode> mpThirdArg;
 
 public:
 
-    IfExpression( const ExpressionNodeSharedPtr& rFirstArg,
-                  const ExpressionNodeSharedPtr& rSecondArg,
-                  const ExpressionNodeSharedPtr& rThirdArg ) :
+    IfExpression( const std::shared_ptr<ExpressionNode>& rFirstArg,
+                  const std::shared_ptr<ExpressionNode>& rSecondArg,
+                  const std::shared_ptr<ExpressionNode>& rThirdArg ) :
         mpFirstArg(  rFirstArg ),
         mpSecondArg( rSecondArg ),
         mpThirdArg(  rThirdArg )
@@ -768,7 +768,7 @@ typedef const sal_Char* StringIteratorT;
 
 struct ParserContext
 {
-    typedef ::std::stack< ExpressionNodeSharedPtr > OperandStack;
+    typedef ::std::stack< std::shared_ptr<ExpressionNode> > OperandStack;
 
     // stores a stack of not-yet-evaluated operands. This is used
     // by the operators (i.e. '+', '*', 'sin' etc.) to pop their
@@ -796,7 +796,7 @@ public:
     }
     void operator()( double n ) const
     {
-        mxContext->maOperandStack.push( ExpressionNodeSharedPtr( new ConstantValueExpression( n ) ) );
+        mxContext->maOperandStack.push( std::shared_ptr<ExpressionNode>( new ConstantValueExpression( n ) ) );
     }
 };
 
@@ -820,17 +820,17 @@ public:
             case ENUM_FUNC_ADJUSTMENT :
             {
                 OUString aVal( rFirst + 1, rSecond - rFirst, RTL_TEXTENCODING_UTF8 );
-                mxContext->maOperandStack.push( ExpressionNodeSharedPtr( new AdjustmentExpression( *mxContext->mpCustoShape, aVal.toInt32() ) ) );
+                mxContext->maOperandStack.push( std::shared_ptr<ExpressionNode>( new AdjustmentExpression( *mxContext->mpCustoShape, aVal.toInt32() ) ) );
             }
             break;
             case ENUM_FUNC_EQUATION :
                 {
                 OUString aVal( rFirst + 1, rSecond - rFirst, RTL_TEXTENCODING_UTF8 );
-                mxContext->maOperandStack.push( ExpressionNodeSharedPtr( new EquationExpression( *mxContext->mpCustoShape, aVal.toInt32() ) ) );
+                mxContext->maOperandStack.push( std::shared_ptr<ExpressionNode>( new EquationExpression( *mxContext->mpCustoShape, aVal.toInt32() ) ) );
             }
             break;
             default:
-                mxContext->maOperandStack.push( ExpressionNodeSharedPtr( new EnumValueExpression( *mxContext->mpCustoShape, meFunct ) ) );
+                mxContext->maOperandStack.push( std::shared_ptr<ExpressionNode>( new EnumValueExpression( *mxContext->mpCustoShape, meFunct ) ) );
         }
     }
 };
@@ -855,13 +855,13 @@ public:
             throw ParseError( "Not enough arguments for unary operator" );
 
         // retrieve arguments
-        ExpressionNodeSharedPtr pArg( rNodeStack.top() );
+        std::shared_ptr<ExpressionNode> pArg( rNodeStack.top() );
         rNodeStack.pop();
 
         if( pArg->isConstant() )    // check for constness
-            rNodeStack.push( ExpressionNodeSharedPtr( new ConstantValueExpression( UnaryFunctionExpression::getValue( meFunct, pArg ) ) ) );
+            rNodeStack.push( std::shared_ptr<ExpressionNode>( new ConstantValueExpression( UnaryFunctionExpression::getValue( meFunct, pArg ) ) ) );
         else                        // push complex node, that calcs the value on demand
-            rNodeStack.push( ExpressionNodeSharedPtr( new UnaryFunctionExpression( meFunct, pArg ) ) );
+            rNodeStack.push( std::shared_ptr<ExpressionNode>( new UnaryFunctionExpression( meFunct, pArg ) ) );
     }
 };
 
@@ -893,16 +893,16 @@ public:
             throw ParseError( "Not enough arguments for binary operator" );
 
         // retrieve arguments
-        ExpressionNodeSharedPtr pSecondArg( rNodeStack.top() );
+        std::shared_ptr<ExpressionNode> pSecondArg( rNodeStack.top() );
         rNodeStack.pop();
-        ExpressionNodeSharedPtr pFirstArg( rNodeStack.top() );
+        std::shared_ptr<ExpressionNode> pFirstArg( rNodeStack.top() );
         rNodeStack.pop();
 
         // create combined ExpressionNode
-        ExpressionNodeSharedPtr pNode = ExpressionNodeSharedPtr( new BinaryFunctionExpression( meFunct, pFirstArg, pSecondArg ) );
+        std::shared_ptr<ExpressionNode> pNode = std::shared_ptr<ExpressionNode>( new BinaryFunctionExpression( meFunct, pFirstArg, pSecondArg ) );
         // check for constness
         if( pFirstArg->isConstant() && pSecondArg->isConstant() )   // call the operator() at pNode, store result in constant value ExpressionNode.
-            rNodeStack.push( ExpressionNodeSharedPtr( new ConstantValueExpression( (*pNode)() ) ) );
+            rNodeStack.push( std::shared_ptr<ExpressionNode>( new ConstantValueExpression( (*pNode)() ) ) );
         else                                                        // push complex node, that calcs the value on demand
             rNodeStack.push( pNode );
     }
@@ -926,18 +926,18 @@ public:
             throw ParseError( "Not enough arguments for ternary operator" );
 
         // retrieve arguments
-        ExpressionNodeSharedPtr pThirdArg( rNodeStack.top() );
+        std::shared_ptr<ExpressionNode> pThirdArg( rNodeStack.top() );
         rNodeStack.pop();
-        ExpressionNodeSharedPtr pSecondArg( rNodeStack.top() );
+        std::shared_ptr<ExpressionNode> pSecondArg( rNodeStack.top() );
         rNodeStack.pop();
-        ExpressionNodeSharedPtr pFirstArg( rNodeStack.top() );
+        std::shared_ptr<ExpressionNode> pFirstArg( rNodeStack.top() );
         rNodeStack.pop();
 
         // create combined ExpressionNode
-        ExpressionNodeSharedPtr pNode( new IfExpression( pFirstArg, pSecondArg, pThirdArg ) );
+        std::shared_ptr<ExpressionNode> pNode( new IfExpression( pFirstArg, pSecondArg, pThirdArg ) );
         // check for constness
         if( pFirstArg->isConstant() && pSecondArg->isConstant() && pThirdArg->isConstant() )
-            rNodeStack.push( ExpressionNodeSharedPtr( new ConstantValueExpression( (*pNode)() ) ) );    // call the operator() at pNode, store result in constant value ExpressionNode.
+            rNodeStack.push( std::shared_ptr<ExpressionNode>( new ConstantValueExpression( (*pNode)() ) ) );    // call the operator() at pNode, store result in constant value ExpressionNode.
         else
             rNodeStack.push( pNode );                                       // push complex node, that calcs the value on demand
     }
@@ -1155,7 +1155,7 @@ const ParserContextSharedPtr& getParserContext()
 namespace EnhancedCustomShape  {
 
 
-ExpressionNodeSharedPtr FunctionParser::parseFunction( const OUString& rFunction, const EnhancedCustomShape2d& rCustoShape )
+std::shared_ptr<ExpressionNode> FunctionParser::parseFunction( const OUString& rFunction, const EnhancedCustomShape2d& rCustoShape )
 {
     // TODO(Q1): Check if a combination of the RTL_UNICODETOTEXT_FLAGS_*
     // gives better conversion robustness here (we might want to map space

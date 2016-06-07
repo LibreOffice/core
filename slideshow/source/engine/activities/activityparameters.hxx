@@ -110,7 +110,7 @@ struct ActivityParameters
     ActivitiesQueue&                            mrActivitiesQueue;
 
     /// Optional formula
-    ExpressionNodeSharedPtr                     mpFormula;
+    std::shared_ptr<ExpressionNode>                     mpFormula;
 
     /// Key times, for discrete and key time activities
     ::std::vector< double >                     maDiscreteTimes;

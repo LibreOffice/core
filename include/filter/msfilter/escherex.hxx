@@ -1124,8 +1124,6 @@ private:
     bool                mbPicStrmQueried;   /// True = ImplQueryPictureStream() has been called.
 };
 
-typedef std::shared_ptr< EscherExGlobal > EscherExGlobalRef;
-
 class SdrObject;
 class SdrPage;
 class ImplEscherExSdr;
@@ -1133,7 +1131,7 @@ class ImplEscherExSdr;
 class MSFILTER_DLLPUBLIC EscherEx : public EscherPersistTable
 {
     protected:
-        EscherExGlobalRef           mxGlobal;
+        std::shared_ptr<EscherExGlobal>           mxGlobal;
         ::std::unique_ptr< ImplEscherExSdr > mpImplEscherExSdr;
         SvStream*                   mpOutStrm;
         bool                        mbOwnsStrm;
@@ -1156,7 +1154,7 @@ class MSFILTER_DLLPUBLIC EscherEx : public EscherPersistTable
         bool DoSeek( sal_uInt32 nKey );
 
 public:
-    explicit            EscherEx( const EscherExGlobalRef& rxGlobal, SvStream* pOutStrm, bool bOOXML = false );
+    explicit            EscherEx( const std::shared_ptr<EscherExGlobal>& rxGlobal, SvStream* pOutStrm, bool bOOXML = false );
     virtual             ~EscherEx();
 
     /** Creates and returns a new shape identifier, updates the internal shape
