@@ -236,7 +236,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                 //UUUU items to hand over XPropertyList things like
                 // XColorList, XHatchList, XGradientList and XBitmapList
                 // to the Area TabPage
-                SID_COLOR_TABLE,        SID_BITMAP_LIST,                        // [10179
+                SID_COLOR_TABLE,        SID_PATTERN_LIST,                        // [10179
 
                 SID_HTML_MODE,SID_HTML_MODE,                                    // [10414
                 FN_GET_PRINT_AREA,FN_GET_PRINT_AREA,                            // [21032
@@ -255,6 +255,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
             aSet.Put(SvxGradientListItem(pDrawModel->GetGradientList(), SID_GRADIENT_LIST));
             aSet.Put(SvxHatchListItem(pDrawModel->GetHatchList(), SID_HATCH_LIST));
             aSet.Put(SvxBitmapListItem(pDrawModel->GetBitmapList(), SID_BITMAP_LIST));
+            aSet.Put(SvxPatternListItem(pDrawModel->GetPatternList(), SID_PATTERN_LIST));
 
             sal_uInt16 nHtmlMode = ::GetHtmlMode(GetView().GetDocShell());
             aSet.Put(SfxUInt16Item(SID_HTML_MODE, nHtmlMode));

@@ -304,6 +304,7 @@ public:
     void Fill( const XHatchListRef    &pList );
     void Fill( const XGradientListRef &pList );
     void Fill( const XBitmapListRef   &pList );
+    void Fill( const XPatternListRef  &pList );
 };
 
 /************************************************************************/

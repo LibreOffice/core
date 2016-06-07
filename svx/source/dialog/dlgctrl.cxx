@@ -1540,6 +1540,27 @@ void FillAttrLB::Fill( const XBitmapListRef &pList )
     ListBox::SetUpdateMode(true);
 }
 
+void FillAttrLB::Fill( const XPatternListRef &pList )
+{
+    const long nCount(pList->Count());
+    XBitmapEntry* pEntry;
+    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+    const Size aSize(rStyleSettings.GetListBoxPreviewDefaultPixelSize());
+
+    ListBox::SetUpdateMode(false);
+
+    for(long i(0); i < nCount; i++)
+    {
+        pEntry = pList->GetBitmap( i );
+        maBitmapEx = pEntry->GetGraphicObject().GetGraphic().GetBitmapEx();
+        formatBitmapExToSize(maBitmapEx, aSize);
+        ListBox::InsertEntry(pEntry->GetName(), Image(maBitmapEx));
+    }
+
+    AdaptDropDownLineCountToMaximum();
+    ListBox::SetUpdateMode(true);
+}
+
 void FillTypeLB::Fill()
 {
     SetUpdateMode( false );
@@ -1549,6 +1570,7 @@ void FillTypeLB::Fill()
     InsertEntry( SVX_RESSTR(RID_SVXSTR_GRADIENT) );
     InsertEntry( SVX_RESSTR(RID_SVXSTR_HATCH) );
     InsertEntry( SVX_RESSTR(RID_SVXSTR_BITMAP) );
+    InsertEntry( SVX_RESSTR(RID_SVXSTR_PATTERN) );
 
     AdaptDropDownLineCountToMaximum();
     SetUpdateMode( true );

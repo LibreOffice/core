@@ -118,6 +118,7 @@ SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg( SfxObjectShell* pDocSh,
     SvxColorListItem aColorListItem(*static_cast<const SvxColorListItem*>( mpDocShell->GetItem( SID_COLOR_TABLE ) ) );
     SvxGradientListItem aGradientListItem(*static_cast<const SvxGradientListItem*>( mpDocShell->GetItem( SID_GRADIENT_LIST ) ) );
     SvxBitmapListItem aBitmapListItem(*static_cast<const SvxBitmapListItem*>( mpDocShell->GetItem( SID_BITMAP_LIST ) ) );
+    SvxPatternListItem aPatternListItem(*static_cast<const SvxPatternListItem*>( mpDocShell->GetItem( SID_PATTERN_LIST ) ) );
     SvxHatchListItem aHatchListItem(*static_cast<const SvxHatchListItem*>( mpDocShell->GetItem( SID_HATCH_LIST ) ) );
     SvxDashListItem aDashListItem(*static_cast<const SvxDashListItem*>( mpDocShell->GetItem( SID_DASH_LIST ) ) );
     SvxLineEndListItem aLineEndListItem(*static_cast<const SvxLineEndListItem*>( mpDocShell->GetItem( SID_LINEEND_LIST ) ) );
@@ -128,6 +129,7 @@ SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg( SfxObjectShell* pDocSh,
     pGradientList = aGradientListItem.GetGradientList();
     pHatchingList = aHatchListItem.GetHatchList();
     pBitmapList = aBitmapListItem.GetBitmapList();
+    pPatternList = aPatternListItem.GetPatternList();
 
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "Dialog creation failed!");
@@ -251,6 +253,7 @@ void SdPresLayoutTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
             aSet.Put (SvxGradientListItem(pGradientList,SID_GRADIENT_LIST));
             aSet.Put (SvxHatchListItem(pHatchingList,SID_HATCH_LIST));
             aSet.Put (SvxBitmapListItem(pBitmapList,SID_BITMAP_LIST));
+            aSet.Put (SvxPatternListItem(pPatternList, SID_PATTERN_LIST));
             aSet.Put (SfxUInt16Item(SID_PAGE_TYPE,nPageType));
             aSet.Put (SfxUInt16Item(SID_DLG_TYPE,nDlgType));
             aSet.Put (SfxUInt16Item(SID_TABPAGE_POS,nPos));

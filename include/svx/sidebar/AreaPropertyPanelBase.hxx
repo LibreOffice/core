@@ -113,6 +113,7 @@ protected:
     sal_Int32                                           mnLastPosGradient;
     sal_Int32                                           mnLastPosHatch;
     sal_Int32                                           mnLastPosBitmap;
+    sal_Int32                                           mnLastPosPattern;
     sal_uInt16                                          mnLastTransSolid;
 
     XGradient                                           maGradientLinear;

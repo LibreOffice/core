@@ -106,6 +106,12 @@ interface BaseTextFrame
     ]
 
     //UUUU
+    SID_PATTERN_LIST
+    [
+        StateMethod = GetDrawAttrStateTextFrame;
+    ]
+
+    //UUUU
     SID_ATTRIBUTES_AREA
     [
         ExecMethod = ExecDrawDlgTextFrame;
