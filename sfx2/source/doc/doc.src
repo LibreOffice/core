@@ -84,6 +84,10 @@ String STR_RENAME_TEMPLATE
 {
     Text [ en-US ] = "Enter New Name: " ;
 };
+String STR_TEMPLATE_TOOLTIP
+{
+    Text [ en-US ] = "Title: $1\nCategory: $1" ;
+};
 String STR_TEMPLATE_SELECTION
 {
     Text [ en-US ] = "Select a Template" ;
