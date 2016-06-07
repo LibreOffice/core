@@ -40,6 +40,7 @@
 #define RID_SVXSTR_GRADIENT                 (RID_SVX_START + 161)
 #define RID_SVXSTR_HATCH                    (RID_SVX_START + 180)
 #define RID_SVXSTR_BITMAP                   (RID_SVX_START + 167)
+#define RID_SVXSTR_PATTERN                  (RID_SVX_START + 168)
 #define RID_SVXSTR_LINESTYLE                (RID_SVX_START + 173)
 #define RID_SVXSTR_FIELDUNIT_TABLE          (RID_SVX_START + 311)
 #define RID_SVXSTR_COLOR_USER               (RID_SVX_START + 250)
@@ -84,6 +85,7 @@
 #define RID_SVXPAGE_HATCH                   (RID_SVX_START +  57)
 #define RID_SVXPAGE_BITMAP                  (RID_SVX_START +  58)
 #define RID_SVXPAGE_GRADIENT                (RID_SVX_START +  59)
+#define RID_SVXPAGE_PATTERN                 (RID_SVX_START +  60)
 #define RID_SVXPAGE_MACROASSIGN             (RID_SVX_START + 296)
 
 // why extra defines for pages that already exist?

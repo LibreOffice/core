@@ -110,6 +110,13 @@ RegistryItem gid_Regitem_Sob
     Value = "soffice.StarConfigFile.6";
 End
 
+RegistryItem gid_Regitem_Sop
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = ".sop"
+    ModuleID = gid_Module_Root;
+    Value = "soffice.StarConfigFile.6";
+End
+
 RegistryItem gid_Regitem_Soc
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = ".soc";

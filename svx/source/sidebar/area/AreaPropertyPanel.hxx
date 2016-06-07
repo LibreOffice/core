@@ -85,6 +85,7 @@ private:
     ::sfx2::sidebar::ControllerItem maGradientListControl;
     ::sfx2::sidebar::ControllerItem maHatchListControl;
     ::sfx2::sidebar::ControllerItem maBitmapListControl;
+    ::sfx2::sidebar::ControllerItem maPatternListControl;
     ::sfx2::sidebar::ControllerItem maFillTransparenceController;
     ::sfx2::sidebar::ControllerItem maFillFloatTransparenceController;
 
