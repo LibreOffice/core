@@ -1324,4 +1324,48 @@ bool SwTableAutoFormatTable::Save( SvStream& rStream ) const
     return bRet;
 }
 
+SwCellStyleTable::SwCellStyleTable()
+{ }
+
+SwCellStyleTable::~SwCellStyleTable()
+{
+    for (size_t i=0; i < m_aCellStyles.size(); ++i)
+        delete m_aCellStyles[i].second;
+}
+
+size_t SwCellStyleTable::size() const
+{
+    return m_aCellStyles.size();
+}
+
+void SwCellStyleTable::clear()
+{
+    for (size_t i=0; i < m_aCellStyles.size(); ++i)
+        delete m_aCellStyles[i].second;
+
+    m_aCellStyles.clear();
+}
+
+SwCellStyleDescriptor SwCellStyleTable::operator[](size_t i) const
+{
+    return SwCellStyleDescriptor(m_aCellStyles[i]);
+}
+
+void SwCellStyleTable::AddBoxFormat(const SwBoxAutoFormat& rBoxFormat, const OUString& sName)
+{
+    m_aCellStyles.push_back(std::make_pair(sName, new SwBoxAutoFormat(rBoxFormat)));
+}
+
+OUString SwCellStyleTable::GetBoxFormatName(const SwBoxAutoFormat& rBoxFormat) const
+{
+    for (size_t i=0; i < m_aCellStyles.size(); ++i)
+    {
+        if (m_aCellStyles[i].second == &rBoxFormat)
+            return m_aCellStyles[i].first;
+    }
+
+    // box format not found
+    return OUString();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
