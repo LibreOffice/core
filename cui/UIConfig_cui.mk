@@ -27,7 +27,6 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/autocorrectdialog \
 	cui/uiconfig/ui/backgroundpage \
 	cui/uiconfig/ui/baselinksdialog \
-	cui/uiconfig/ui/bitmaptabpage \
 	cui/uiconfig/ui/blackorwhitelistentrydialog \
 	cui/uiconfig/ui/borderareatransparencydialog \
 	cui/uiconfig/ui/borderbackgrounddialog \
@@ -145,6 +144,7 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/paratabspage \
 	cui/uiconfig/ui/password \
 	cui/uiconfig/ui/pastespecial \
+	cui/uiconfig/ui/patterntabpage \
 	cui/uiconfig/ui/percentdialog \
 	cui/uiconfig/ui/personalization_tab \
 	cui/uiconfig/ui/pickbulletpage \

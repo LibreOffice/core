@@ -150,35 +150,6 @@
               </packing>
             </child>
             <child>
-              <object class="GtkToolbar" id="selectgradient">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="halign">start</property>
-                <child>
-                  <object class="GtkMenuToolButton" id="gradient">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="has_tooltip">True</property>
-                    <property name="tooltip_markup" translatable="yes">Specify the variation of gradient transparency.</property>
-                    <property name="tooltip_text" translatable="yes">Specify the variation of gradient transparency.</property>
-                    <property name="hexpand">True</property>
-                    <property name="action_name">.uno:sidebargradient</property>
-                    <property name="use_underline">True</property>
-                  </object>
-                  <packing>
-                    <property name="expand">True</property>
-                    <property name="homogeneous">True</property>
-                  </packing>
-                </child>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">5</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
-              </packing>
-            </child>
-            <child>
               <object class="svxlo-ColorLB" id="fillgrad2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
@@ -194,8 +165,58 @@
               </packing>
             </child>
             <child>
-              <object class="GtkSpinButton" id="gradangle:0degrees">
+              <object class="GtkBox" id="box2">
                 <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <child>
+                  <object class="GtkComboBoxText" id="gradientstyle">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="tooltip_markup" translatable="yes">Select the gradient style.</property>
+                    <property name="tooltip_text" translatable="yes">Select the gradient style.</property>
+                    <items>
+                      <item translatable="yes">Linear</item>
+                      <item translatable="yes">Axial</item>
+                      <item translatable="yes">Radial</item>
+                      <item translatable="yes">Ellipsoid</item>
+                      <item translatable="yes">Quadratic</item>
+                      <item translatable="yes">Square</item>
+                    </items>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="gradientstyle-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes">Gradient Type</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="bmpimport">
+                    <property name="label" translatable="yes">_Import</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="use_underline">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">1</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkSpinButton" id="gradangle:0degrees">
                 <property name="can_focus">True</property>
                 <property name="tooltip_markup" translatable="yes">Select the gradient angle.</property>
                 <property name="tooltip_text" translatable="yes">Select the gradient angle.</property>
@@ -214,28 +235,19 @@
               </packing>
             </child>
             <child>
-              <object class="GtkComboBoxText" id="gradientstyle">
+              <object class="GtkLabel" id="transparencylabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="tooltip_markup" translatable="yes">Select the gradient style.</property>
-                <property name="tooltip_text" translatable="yes">Select the gradient style.</property>
-                <items>
-                  <item translatable="yes">Linear</item>
-                  <item translatable="yes">Axial</item>
-                  <item translatable="yes">Radial</item>
-                  <item translatable="yes">Ellipsoid</item>
-                  <item translatable="yes">Quadratic</item>
-                  <item translatable="yes">Square</item>
-                </items>
-                <child internal-child="accessible">
-                  <object class="AtkObject" id="gradientstyle-atkobject">
-                    <property name="AtkObject::accessible-name" translatable="yes">Gradient Type</property>
-                  </object>
-                </child>
+                <property name="has_tooltip">True</property>
+                <property name="tooltip_markup" translatable="yes">Transparency</property>
+                <property name="tooltip_text" translatable="yes">Transparency</property>
+                <property name="xalign">0</property>
+                <property name="label" translatable="yes">_Transparency:</property>
+                <property name="use_underline">True</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
-                <property name="top_attach">1</property>
+                <property name="top_attach">3</property>
                 <property name="width">1</property>
                 <property name="height">1</property>
               </packing>
@@ -265,62 +277,36 @@
               </object>
               <packing>
                 <property name="left_attach">1</property>
-                <property name="top_attach">4</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="transparencylabel">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="has_tooltip">True</property>
-                <property name="tooltip_markup" translatable="yes">Transparency</property>
-                <property name="tooltip_text" translatable="yes">Transparency</property>
-                <property name="xalign">0</property>
-                <property name="label" translatable="yes">_Transparency:</property>
-                <property name="use_underline">True</property>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">4</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="bmpimport">
-                <property name="label" translatable="yes">_Import</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="use_underline">True</property>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
                 <property name="top_attach">3</property>
                 <property name="width">1</property>
                 <property name="height">1</property>
               </packing>
             </child>
             <child>
-              <object class="svxlo-SvxFillAttrBox" id="fillbitmap">
+              <object class="GtkToolbar" id="selectgradient">
+                <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="has_tooltip">True</property>
-                <property name="tooltip_markup" translatable="yes">Select the effect to apply.</property>
-                <property name="tooltip_text" translatable="yes">Select the effect to apply.</property>
-                <accessibility>
-                  <relation type="labelled-by" target="filllabel"/>
-                </accessibility>
-                <child internal-child="accessible">
-                  <object class="AtkObject" id="fillbitmap-atkobject">
-                    <property name="AtkObject::accessible-name" translatable="yes">Hatching/Bitmap</property>
+                <property name="halign">start</property>
+                <child>
+                  <object class="GtkMenuToolButton" id="gradient">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="has_tooltip">True</property>
+                    <property name="tooltip_markup" translatable="yes">Specify the variation of gradient transparency.</property>
+                    <property name="tooltip_text" translatable="yes">Specify the variation of gradient transparency.</property>
+                    <property name="hexpand">True</property>
+                    <property name="action_name">.uno:sidebargradient</property>
+                    <property name="use_underline">True</property>
                   </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
                 </child>
               </object>
               <packing>
                 <property name="left_attach">1</property>
-                <property name="top_attach">3</property>
+                <property name="top_attach">4</property>
                 <property name="width">1</property>
                 <property name="height">1</property>
               </packing>
@@ -404,6 +390,16 @@
     <widgets>
       <widget name="selectcolor"/>
       <widget name="fillattr"/>
+    </widgets>
+  </object>
+  <object class="GtkSizeGroup" id="sizegroup2">
+    <property name="ignore_hidden">True</property>
+    <widgets>
+      <widget name="filllabel"/>
+      <widget name="gradientstyle"/>
+      <widget name="bmpimport"/>
+      <widget name="gradangle:0degrees"/>
+      <widget name="transparencylabel"/>
     </widgets>
   </object>
 </interface>

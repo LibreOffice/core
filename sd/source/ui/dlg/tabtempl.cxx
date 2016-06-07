@@ -61,6 +61,7 @@ SdTabTemplateDlg::SdTabTemplateDlg( vcl::Window* pParent,
     , pGradientList(pModel->GetGradientList())
     , pHatchingList(pModel->GetHatchList())
     , pBitmapList(pModel->GetBitmapList())
+    , pPatternList(pModel->GetPatternList())
     , pDashList(pModel->GetDashList())
     , pLineEndList(pModel->GetLineEndList())
     , m_nLineId(0)
@@ -122,6 +123,7 @@ void SdTabTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
         aSet.Put (SfxUInt16Item(SID_PAGE_TYPE,0));
         aSet.Put (SfxUInt16Item(SID_DLG_TYPE,1));
         aSet.Put (SfxUInt16Item(SID_TABPAGE_POS,0));
+        aSet.Put (SvxPatternListItem(pPatternList,SID_PATTERN_LIST));
         rPage.PageCreated(aSet);
     }
     else if (nId == m_nShadowId)
