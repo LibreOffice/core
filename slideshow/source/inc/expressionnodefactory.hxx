@@ -41,29 +41,29 @@ namespace slideshow
         class ExpressionNodeFactory
         {
         public:
-            static ExpressionNodeSharedPtr createConstantValueExpression( double rConstantValue );
+            static std::shared_ptr<ExpressionNode> createConstantValueExpression( double rConstantValue );
 
-            static ExpressionNodeSharedPtr createValueTExpression    ();
+            static std::shared_ptr<ExpressionNode> createValueTExpression    ();
 
-            static ExpressionNodeSharedPtr createPlusExpression      ( const ExpressionNodeSharedPtr&   rLHS,
-                                                                       const ExpressionNodeSharedPtr&   rRHS );
-            static ExpressionNodeSharedPtr createMinusExpression     ( const ExpressionNodeSharedPtr&   rLHS,
-                                                                       const ExpressionNodeSharedPtr&   rRHS );
-            static ExpressionNodeSharedPtr createMultipliesExpression( const ExpressionNodeSharedPtr&   rLHS,
-                                                                       const ExpressionNodeSharedPtr&   rRHS );
-            static ExpressionNodeSharedPtr createDividesExpression   ( const ExpressionNodeSharedPtr&   rLHS,
-                                                                       const ExpressionNodeSharedPtr&   rRHS );
+            static std::shared_ptr<ExpressionNode> createPlusExpression      ( const std::shared_ptr<ExpressionNode>&   rLHS,
+                                                                       const std::shared_ptr<ExpressionNode>&   rRHS );
+            static std::shared_ptr<ExpressionNode> createMinusExpression     ( const std::shared_ptr<ExpressionNode>&   rLHS,
+                                                                       const std::shared_ptr<ExpressionNode>&   rRHS );
+            static std::shared_ptr<ExpressionNode> createMultipliesExpression( const std::shared_ptr<ExpressionNode>&   rLHS,
+                                                                       const std::shared_ptr<ExpressionNode>&   rRHS );
+            static std::shared_ptr<ExpressionNode> createDividesExpression   ( const std::shared_ptr<ExpressionNode>&   rLHS,
+                                                                       const std::shared_ptr<ExpressionNode>&   rRHS );
 
             /** Composes two ExpressionNode function.
 
                 The resulting expression will calculate
                 rOuterFunction( rInnerFunction(t) ).
              */
-            static ExpressionNodeSharedPtr createMinExpression      ( const ExpressionNodeSharedPtr&    rOuterFunction,
-                                                                      const ExpressionNodeSharedPtr&    rInnerFunction );
+            static std::shared_ptr<ExpressionNode> createMinExpression      ( const std::shared_ptr<ExpressionNode>&    rOuterFunction,
+                                                                      const std::shared_ptr<ExpressionNode>&    rInnerFunction );
 
-            static ExpressionNodeSharedPtr createMaxExpression      ( const ExpressionNodeSharedPtr&    rOuterFunction,
-                                                                      const ExpressionNodeSharedPtr&    rInnerFunction );
+            static std::shared_ptr<ExpressionNode> createMaxExpression      ( const std::shared_ptr<ExpressionNode>&    rOuterFunction,
+                                                                      const std::shared_ptr<ExpressionNode>&    rInnerFunction );
         };
     }
 }

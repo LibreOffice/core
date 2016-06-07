@@ -120,8 +120,6 @@ namespace svt
         DialogController( const DialogController& ) = delete;
         DialogController& operator=( const DialogController& ) = delete;
     };
-    typedef std::shared_ptr< DialogController > PDialogController;
-
 
     //= ControlDependencyManager
 
@@ -175,7 +173,7 @@ namespace svt
             @param _pController
                 the controller to add to the manager. Must not be <NULL/>.
         */
-        void    addController( const PDialogController& _pController );
+        void    addController( const std::shared_ptr<DialogController>& _pController );
 
     private:
         ControlDependencyManager( const ControlDependencyManager& ) = delete;

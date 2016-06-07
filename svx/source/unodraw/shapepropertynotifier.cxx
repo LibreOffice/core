@@ -54,7 +54,7 @@ namespace svx
     using ::com::sun::star::lang::EventObject;
     using ::com::sun::star::beans::XPropertySet;
 
-    typedef std::unordered_map< ShapeProperty, PPropertyValueProvider, ShapePropertyHash  >    PropertyProviders;
+    typedef std::unordered_map< ShapeProperty, std::shared_ptr<IPropertyValueProvider>, ShapePropertyHash  >    PropertyProviders;
 
     typedef cppu::OMultiTypeInterfaceContainerHelperVar<OUString>
         PropertyChangeListenerContainer;
@@ -100,7 +100,7 @@ namespace svx
     {
     }
 
-    void PropertyChangeNotifier::registerProvider(const ShapeProperty _eProperty, const PPropertyValueProvider& _rProvider)
+    void PropertyChangeNotifier::registerProvider(const ShapeProperty _eProperty, const std::shared_ptr<IPropertyValueProvider>& _rProvider)
     {
         ENSURE_OR_THROW( _eProperty != eInvalidShapeProperty, "Illegal ShapeProperty value!" );
         ENSURE_OR_THROW( !!_rProvider, "NULL factory not allowed." );

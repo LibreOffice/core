@@ -36,7 +36,7 @@ namespace connectivity
         OTableKeyHelper(    OTableHelper* _pTable);
         OTableKeyHelper(    OTableHelper* _pTable
                 ,const OUString& Name
-                ,const sdbcx::TKeyProperties& _rProps
+                ,const std::shared_ptr<sdbcx::KeyProperties>& _rProps
             );
         inline OTableHelper* getTable() const { return m_pTable; }
     };
