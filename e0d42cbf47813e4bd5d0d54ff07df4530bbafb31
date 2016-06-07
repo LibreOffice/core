@@ -46,6 +46,30 @@
       "revId": "e0d42cbf47813e4bd5d0d54ff07df4530bbafb31",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_3526dfba",
+        "filename": "ridljar/com/sun/star/uno/Type.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 691,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-06-07T08:47:37Z",
+      "side": 1,
+      "message": "ah, true",
+      "parentUuid": "da7fb54a_da096033",
+      "range": {
+        "startLine": 691,
+        "startChar": 37,
+        "endLine": 691,
+        "endChar": 41
+      },
+      "revId": "e0d42cbf47813e4bd5d0d54ff07df4530bbafb31",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
