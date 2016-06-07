@@ -59,7 +59,7 @@ namespace slideshow
 
             struct ParserContext
             {
-                typedef ::std::stack< ExpressionNodeSharedPtr > OperandStack;
+                typedef ::std::stack< std::shared_ptr<ExpressionNode> > OperandStack;
 
                 // stores a stack of not-yet-evaluated operands. This is used
                 // by the operators (i.e. '+', '*', 'sin' etc.) to pop their
@@ -197,7 +197,7 @@ namespace slideshow
                 {
                 public:
                     UnaryFunctionExpression( const Functor&                 rFunctor,
-                                             const ExpressionNodeSharedPtr& rArg ) :
+                                             const std::shared_ptr<ExpressionNode>& rArg ) :
                         maFunctor( rFunctor ),
                         mpArg( rArg )
                     {
@@ -215,7 +215,7 @@ namespace slideshow
 
                 private:
                     Functor                 maFunctor;
-                    ExpressionNodeSharedPtr mpArg;
+                    std::shared_ptr<ExpressionNode> mpArg;
                 };
 
             public:
@@ -236,7 +236,7 @@ namespace slideshow
                         throw ParseError( "Not enough arguments for unary operator" );
 
                     // retrieve arguments
-                    ExpressionNodeSharedPtr pArg( rNodeStack.top() );
+                    std::shared_ptr<ExpressionNode> pArg( rNodeStack.top() );
                     rNodeStack.pop();
 
                     // check for constness
@@ -250,7 +250,7 @@ namespace slideshow
                     {
                         // push complex node, that calcs the value on demand
                         rNodeStack.push(
-                            ExpressionNodeSharedPtr(
+                            std::shared_ptr<ExpressionNode>(
                                 new UnaryFunctionExpression(
                                     maFunctor,
                                     pArg ) ) );
@@ -311,13 +311,13 @@ namespace slideshow
                         throw ParseError( "Not enough arguments for binary operator" );
 
                     // retrieve arguments
-                    ExpressionNodeSharedPtr pSecondArg( rNodeStack.top() );
+                    std::shared_ptr<ExpressionNode> pSecondArg( rNodeStack.top() );
                     rNodeStack.pop();
-                    ExpressionNodeSharedPtr pFirstArg( rNodeStack.top() );
+                    std::shared_ptr<ExpressionNode> pFirstArg( rNodeStack.top() );
                     rNodeStack.pop();
 
                     // create combined ExpressionNode
-                    ExpressionNodeSharedPtr pNode( maGenerator( pFirstArg,
+                    std::shared_ptr<ExpressionNode> pNode( maGenerator( pFirstArg,
                                                                 pSecondArg ) );
                     // check for constness
                     if( pFirstArg->isConstant() &&
@@ -526,7 +526,7 @@ namespace slideshow
 #endif
         }
 
-        ExpressionNodeSharedPtr SmilFunctionParser::parseSmilValue( const OUString&          rSmilValue,
+        std::shared_ptr<ExpressionNode> SmilFunctionParser::parseSmilValue( const OUString&          rSmilValue,
                                                                     const ::basegfx::B2DRectangle&  rRelativeShapeBounds )
         {
             // TODO(Q1): Check if a combination of the RTL_UNICODETOTEXT_FLAGS_*
@@ -575,7 +575,7 @@ namespace slideshow
             return pContext->maOperandStack.top();
         }
 
-        ExpressionNodeSharedPtr SmilFunctionParser::parseSmilFunction( const OUString&           rSmilFunction,
+        std::shared_ptr<ExpressionNode> SmilFunctionParser::parseSmilFunction( const OUString&           rSmilFunction,
                                                                        const ::basegfx::B2DRectangle&   rRelativeShapeBounds )
         {
             // TODO(Q1): Check if a combination of the RTL_UNICODETOTEXT_FLAGS_*

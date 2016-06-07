@@ -233,9 +233,6 @@ public:
     typedef typename ControlWrpT::ControlType               ControlType;
     typedef typename ControlWrpT::ControlValueType          ControlValueType;
 
-    typedef std::unique_ptr< ItemWrpT >                     ItemWrapperRef;
-    typedef std::unique_ptr< ControlWrpT >                  ControlWrapperRef;
-
     /** Receives pointer to a newly created control wrapper.
         @descr  Takes ownership of the control wrapper. */
     explicit            ItemControlConnection( sal_uInt16 nSlot, ControlWrpT* pNewCtrlWrp,
@@ -258,7 +255,7 @@ protected:
     virtual bool        FillItemSet( SfxItemSet& rDestSet, const SfxItemSet& rOldSet ) override;
 
     ItemWrapperType     maItemWrp;
-    ControlWrapperRef   mxCtrlWrp;
+    std::unique_ptr<ControlWrpT>   mxCtrlWrp;
 };
 
 
