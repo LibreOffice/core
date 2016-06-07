@@ -1,7 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.16.1 -->
 <interface>
-  <!-- interface-requires gtk+ 3.0 -->
+  <requires lib="gtk+" version="3.0"/>
   <!-- interface-requires LibreOffice 1.0 -->
+  <object class="GtkImage" id="image1">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">res/sc05501.png</property>
+  </object>
+  <object class="GtkImage" id="image2">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">res/sc05502.png</property>
+  </object>
   <object class="GtkBox" id="BitmapTabPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -211,20 +222,6 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkButton" id="BTN_IMPORT">
-                        <property name="label" translatable="yes">_Import</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="receives_default">True</property>
-                        <property name="use_underline">True</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">2</property>
-                      </packing>
-                    </child>
-                    <child>
                       <object class="GtkButton" id="BTN_DELETE">
                         <property name="label">gtk-delete</property>
                         <property name="visible">True</property>
@@ -333,15 +330,5 @@
         <property name="position">0</property>
       </packing>
     </child>
-  </object>
-  <object class="GtkImage" id="image1">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">res/sc05501.png</property>
-  </object>
-  <object class="GtkImage" id="image2">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">res/sc05502.png</property>
   </object>
 </interface>

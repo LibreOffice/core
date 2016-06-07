@@ -1406,6 +1406,10 @@ interface DrawView
     [
         StateMethod = GetAttrState ;
     ]
+    SID_PATTERN_LIST
+    [
+        StateMethod = GetAttrState ;
+    ]
     SID_ATTR_LINE_WIDTH // ole : no, status : ?
     [
         ExecMethod = FuTemporary ;
