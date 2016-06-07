@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_7a5a1485",
+        "filename": "sw/source/core/unocore/unostyle.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 4474,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-06-07T07:49:39Z",
+      "side": 1,
+      "message": "Please don\u0027t make this an empty {} block, instead use at least SAL_WARN() to inform the developer that something unexpected happened.",
+      "revId": "078c73a5b5d19d705badbc27c2283c513bfb2732",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_9a5fd871",
+        "filename": "sw/source/core/unocore/unostyle.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 4515,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-06-07T07:49:39Z",
+      "side": 1,
+      "message": "Impress currently writes:\n\n \u003cstyle:style style:name\u003d\"...\" style:family\u003d\"table-cell\" style:parent-style-name\u003d\"default\"\u003e\n\nassuming Writer will write the same, this will be triggered all the time. If so, I would recommend to use SAL_INFO() here, or just a comment; not SAL_WARN().",
+      "revId": "078c73a5b5d19d705badbc27c2283c513bfb2732",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_ba549c54",
+        "filename": "sw/source/uibase/app/docstyle.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-06-07T07:49:39Z",
+      "side": 1,
+      "message": "If \u0027c\u0027 is already taken, then \u0027b\u0027 as in Sw*Box*AutoFormat maybe? \u0027e\u0027 seems to be quite unexpected to me.",
+      "revId": "078c73a5b5d19d705badbc27c2283c513bfb2732",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
