@@ -173,7 +173,7 @@
   <block-list:block block-list:abbreviated-name="zlavný" block-list:name="hlavný"/>
   <block-list:block block-list:abbreviated-name="zýkon" block-list:name="zákon"/>
   <block-list:block block-list:abbreviated-name="zýkona" block-list:name="zákona"/>
-  <block-list:block block-list:abbreviated-name=":cent:" block-list:name="¢"/>
+  <block-list:block block-list:abbreviated-name=":cent:" block-list:name="Â¢"/>
   <block-list:block block-list:abbreviated-name=":_0:" block-list:name="₀"/>
   <block-list:block block-list:abbreviated-name=":^0:" block-list:name="⁰"/>
   <block-list:block block-list:abbreviated-name=":100:" block-list:name="💯"/>
@@ -347,7 +347,7 @@
   <block-list:block block-list:abbreviated-name=":cd:" block-list:name="💿"/>
   <block-list:block block-list:abbreviated-name=":celá nota:" block-list:name="𝅝"/>
   <block-list:block block-list:abbreviated-name=":celá pomlčka:" block-list:name="𝄻"/>
-  <block-list:block block-list:abbreviated-name=":cent:" block-list:name="Â¢"/>
+  <block-list:block block-list:abbreviated-name=":cent:" block-list:name="¢"/>
   <block-list:block block-list:abbreviated-name=":čerešne:" block-list:name="🍒"/>
   <block-list:block block-list:abbreviated-name=":čerpacia stanica:" block-list:name="⛽"/>
   <block-list:block block-list:abbreviated-name=":čertík:" block-list:name="😈"/>
