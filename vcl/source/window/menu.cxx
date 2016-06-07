@@ -1683,7 +1683,7 @@ static void ImplPaintCheckBackground(vcl::RenderContext& rRenderContext, vcl::Wi
         Rectangle           aCtrlRegion( i_rRect );
         ControlState        nState = ControlState::PRESSED | ControlState::ENABLED;
 
-        aControlValue.setTristateVal(BUTTONVALUE_ON);
+        aControlValue.setTristateVal(ButtonValue::On);
 
         bNativeOk = rRenderContext.DrawNativeControl(ControlType::Toolbar, PART_BUTTON,
                                                      aCtrlRegion, nState, aControlValue,

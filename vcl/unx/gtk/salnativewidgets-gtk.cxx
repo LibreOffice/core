@@ -1844,7 +1844,7 @@ bool GtkSalGraphics::NWPaintGTKRadio( GdkDrawable* gdkDrawable,
 {
     GtkStateType    stateType;
     GtkShadowType    shadowType;
-    bool            isChecked = (aValue.getTristateVal()==BUTTONVALUE_ON);
+    bool            isChecked = (aValue.getTristateVal()==ButtonValue::On);
     gint            x, y;
     GdkRectangle    clipRect;
 
@@ -1900,8 +1900,8 @@ bool GtkSalGraphics::NWPaintGTKCheck( GdkDrawable* gdkDrawable,
 {
     GtkStateType    stateType;
     GtkShadowType    shadowType;
-    bool            isChecked = (aValue.getTristateVal() == BUTTONVALUE_ON);
-    bool            isInconsistent = (aValue.getTristateVal() == BUTTONVALUE_MIXED);
+    bool            isChecked = (aValue.getTristateVal() == ButtonValue::On);
+    bool            isInconsistent = (aValue.getTristateVal() == ButtonValue::Mixed);
     GdkRectangle    clipRect;
     gint            x,y;
 
@@ -3081,7 +3081,7 @@ bool GtkSalGraphics::NWPaintGTKToolbar(
     {
         bool bPaintButton = (nState & ControlState::PRESSED)
             || (nState & ControlState::ROLLOVER);
-        if( aValue.getTristateVal() == BUTTONVALUE_ON )
+        if( aValue.getTristateVal() == ButtonValue::On )
         {
             gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(pButtonWidget),TRUE);
             bPaintButton = true;
@@ -3514,8 +3514,8 @@ bool GtkSalGraphics::NWPaintGTKListNode(
 
     switch( aButtonValue )
     {
-        case BUTTONVALUE_ON: eStyle = GTK_EXPANDER_EXPANDED;break;
-        case BUTTONVALUE_OFF: eStyle = GTK_EXPANDER_COLLAPSED; break;
+        case ButtonValue::On: eStyle = GTK_EXPANDER_EXPANDED;break;
+        case ButtonValue::Off: eStyle = GTK_EXPANDER_COLLAPSED; break;
         default:
             break;
     }

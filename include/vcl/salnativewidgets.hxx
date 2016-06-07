@@ -288,11 +288,11 @@ public:
  *   that buttons allow
  */
 
-enum ButtonValue {
-    BUTTONVALUE_DONTKNOW,
-    BUTTONVALUE_ON,
-    BUTTONVALUE_OFF,
-    BUTTONVALUE_MIXED
+enum class ButtonValue {
+    DontKnow,
+    On,
+    Off,
+    Mixed
 };
 
 /* ImplControlValue:
@@ -311,7 +311,7 @@ class VCL_DLLPUBLIC ImplControlValue
     protected:
         ImplControlValue( ControlType i_eType, long i_nNumber )
         : mType( i_eType )
-        , mTristate( BUTTONVALUE_DONTKNOW )
+        , mTristate( ButtonValue::DontKnow )
         , mNumber( i_nNumber )
         {}
 
@@ -319,9 +319,9 @@ class VCL_DLLPUBLIC ImplControlValue
         explicit ImplControlValue( ButtonValue nTristate )
             : mType( ControlType::Generic ), mTristate(nTristate), mNumber(0) {}
         explicit ImplControlValue( long nNumeric )
-            : mType( ControlType::Generic ), mTristate(BUTTONVALUE_DONTKNOW), mNumber( nNumeric) {}
-        inline ImplControlValue()
-            : mType( ControlType::Generic ), mTristate(BUTTONVALUE_DONTKNOW), mNumber(0) {}
+            : mType( ControlType::Generic ), mTristate(ButtonValue::DontKnow), mNumber( nNumeric) {}
+        ImplControlValue()
+            : mType( ControlType::Generic ), mTristate(ButtonValue::DontKnow), mNumber(0) {}
 
         virtual ~ImplControlValue();
 
@@ -329,11 +329,11 @@ class VCL_DLLPUBLIC ImplControlValue
 
         ControlType getType() const { return mType; }
 
-        inline ButtonValue      getTristateVal() const { return mTristate; }
-        inline void         setTristateVal( ButtonValue nTristate ) { mTristate = nTristate; }
+        ButtonValue  getTristateVal() const { return mTristate; }
+        void         setTristateVal( ButtonValue nTristate ) { mTristate = nTristate; }
 
-        inline long         getNumericVal() const { return mNumber; }
-        inline void         setNumericVal( long nNumeric ) { mNumber = nNumeric; }
+        long         getNumericVal() const { return mNumber; }
+        void         setNumericVal( long nNumeric ) { mNumber = nNumeric; }
 };
 
 /* ScrollbarValue:

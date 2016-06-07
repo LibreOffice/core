@@ -109,9 +109,9 @@ QStyle::SFlags vclStateValue2SFlags( ControlState nState,
 
     switch ( aValue.getTristateVal() )
     {
-    case BUTTONVALUE_ON:    nStyle |= QStyle::Style_On;       break;
-    case BUTTONVALUE_OFF:   nStyle |= QStyle::Style_Off;      break;
-    case BUTTONVALUE_MIXED: nStyle |= QStyle::Style_NoChange; break;
+    case ButtonValue::On:    nStyle |= QStyle::Style_On;       break;
+    case ButtonValue::Off:   nStyle |= QStyle::Style_Off;      break;
+    case ButtonValue::Mixed: nStyle |= QStyle::Style_NoChange; break;
     default: break;
     }
 

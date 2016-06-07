@@ -1904,7 +1904,7 @@ void RadioButton::ImplDrawRadioButtonState(vcl::RenderContext& rRenderContext)
     // no native drawing for image radio buttons
     if (!maImage && (bNativeOK = rRenderContext.IsNativeControlSupported(ControlType::Radiobutton, PART_ENTIRE_CONTROL)))
     {
-        ImplControlValue aControlValue( mbChecked ? BUTTONVALUE_ON : BUTTONVALUE_OFF );
+        ImplControlValue aControlValue( mbChecked ? ButtonValue::On : ButtonValue::Off );
         Rectangle aCtrlRect(maStateRect.TopLeft(), maStateRect.GetSize());
         ControlState nState = ControlState::NONE;
 
@@ -3023,7 +3023,7 @@ void CheckBox::ImplDrawCheckBoxState(vcl::RenderContext& rRenderContext)
 
     if ((bNativeOK = rRenderContext.IsNativeControlSupported(ControlType::Checkbox, PART_ENTIRE_CONTROL)))
     {
-        ImplControlValue aControlValue(meState == TRISTATE_TRUE ? BUTTONVALUE_ON : BUTTONVALUE_OFF);
+        ImplControlValue aControlValue(meState == TRISTATE_TRUE ? ButtonValue::On : ButtonValue::Off);
         Rectangle aCtrlRegion(maStateRect);
         ControlState nState = ControlState::NONE;
 
@@ -3037,9 +3037,9 @@ void CheckBox::ImplDrawCheckBoxState(vcl::RenderContext& rRenderContext)
             nState |= ControlState::ENABLED;
 
         if (meState == TRISTATE_TRUE)
-            aControlValue.setTristateVal(BUTTONVALUE_ON);
+            aControlValue.setTristateVal(ButtonValue::On);
         else if (meState == TRISTATE_INDET)
-            aControlValue.setTristateVal(BUTTONVALUE_MIXED);
+            aControlValue.setTristateVal(ButtonValue::Mixed);
 
         if (IsMouseOver() && maMouseRect.IsInside(GetPointerPosPixel()))
             nState |= ControlState::ROLLOVER;
@@ -3857,7 +3857,7 @@ void DisclosureButton::ImplDrawCheckBoxState(vcl::RenderContext& rRenderContext)
 
     Rectangle aStateRect(GetStateRect());
 
-    ImplControlValue aControlValue(GetState() == TRISTATE_TRUE ? BUTTONVALUE_ON : BUTTONVALUE_OFF);
+    ImplControlValue aControlValue(GetState() == TRISTATE_TRUE ? ButtonValue::On : ButtonValue::Off);
     Rectangle aCtrlRegion(aStateRect);
     ControlState nState = ControlState::NONE;
 

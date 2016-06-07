@@ -2972,7 +2972,7 @@ void ToolBox::ImplDrawButton(vcl::RenderContext& rRenderContext, const Rectangle
         if ( highlight == 2 )     nState |= ControlState::ROLLOVER;
         if ( bEnabled )         nState |= ControlState::ENABLED;
 
-        aControlValue.setTristateVal( bChecked ? BUTTONVALUE_ON : BUTTONVALUE_OFF );
+        aControlValue.setTristateVal( bChecked ? ButtonValue::On : ButtonValue::Off );
 
         bNativeOk = rRenderContext.DrawNativeControl( ControlType::Toolbar, PART_BUTTON,
                                               rRect, nState, aControlValue, OUString() );
