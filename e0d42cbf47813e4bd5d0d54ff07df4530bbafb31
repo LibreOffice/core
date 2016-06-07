@@ -22,6 +22,30 @@
       "revId": "e0d42cbf47813e4bd5d0d54ff07df4530bbafb31",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_da096033",
+        "filename": "ridljar/com/sun/star/uno/Type.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 691,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-06-07T08:41:37Z",
+      "side": 1,
+      "message": "not without re-arranging the constructors (it calls into an  init() method), which I\u0027d prefer to do in a follow-up patch.",
+      "parentUuid": "da7fb54a_7a121464",
+      "range": {
+        "startLine": 691,
+        "startChar": 37,
+        "endLine": 691,
+        "endChar": 41
+      },
+      "revId": "e0d42cbf47813e4bd5d0d54ff07df4530bbafb31",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
