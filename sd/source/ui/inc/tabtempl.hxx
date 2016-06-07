@@ -39,6 +39,7 @@ private:
     XGradientListRef      pGradientList;
     XHatchListRef         pHatchingList;
     XBitmapListRef        pBitmapList;
+    XPatternListRef       pPatternList;
     XDashListRef          pDashList;
     XLineEndListRef       pLineEndList;
 

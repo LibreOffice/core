@@ -414,6 +414,7 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/xoutdev/xtabgrdt \
     svx/source/xoutdev/xtabhtch \
     svx/source/xoutdev/xtable \
+    svx/source/xoutdev/xtabptrn \
     svx/source/xoutdev/XPropertyEntry \
     svx/source/xoutdev/xtablend \
 ))

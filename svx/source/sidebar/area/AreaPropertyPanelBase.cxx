@@ -37,6 +37,7 @@
 #include <unotools/pathoptions.hxx>
 #include <svx/svxitems.hrc>
 #include <vcl/toolbox.hxx>
+#include <vcl/salbtype.hxx>
 #include <svtools/toolbarmenu.hxx>
 #include <svx/tbcontrl.hxx>
 #include "sfx2/opengrf.hxx"
@@ -47,6 +48,16 @@ using namespace css::uno;
 const char UNO_SIDEBARGRADIENT[] = ".uno:sidebargradient";
 
 namespace svx { namespace sidebar {
+
+enum eFillStyle
+{
+    NONE,
+    SOLID,
+    GRADIENT,
+    HATCH,
+    BITMAP,
+    PATTERN
+};
 
 const sal_Int32 AreaPropertyPanelBase::DEFAULT_CENTERX = 50;
 const sal_Int32 AreaPropertyPanelBase::DEFAULT_CENTERY = 50;
@@ -63,6 +74,7 @@ AreaPropertyPanelBase::AreaPropertyPanelBase(
       mnLastPosGradient(0),
       mnLastPosHatch(0),
       mnLastPosBitmap(0),
+      mnLastPosPattern(0),
       mnLastTransSolid(50),
       maGradientLinear(),
       maGradientAxial(),
@@ -100,7 +112,6 @@ AreaPropertyPanelBase::AreaPropertyPanelBase(
     get(mpLbFillGradFrom, "fillgrad1");
     get(mpLbFillGradTo, "fillgrad2");
     get(mpGradientStyle, "gradientstyle");
-    get(mpLbFillBitmap, "fillbitmap");
     get(mpBmpImport, "bmpimport");
 
     Initialize();
@@ -126,7 +137,6 @@ void AreaPropertyPanelBase::dispose()
     mpLbFillGradFrom.clear();
     mpLbFillGradTo.clear();
     mpGradientStyle.clear();
-    mpLbFillBitmap.clear();
     mpBmpImport.clear();
 
     PanelLayout::dispose();
@@ -165,7 +175,6 @@ void AreaPropertyPanelBase::Initialize()
     mpGradientStyle->SetSelectHdl( aLink );
     mpLbFillGradFrom->SetSelectHdl( aLink );
     mpLbFillGradTo->SetSelectHdl( aLink );
-    mpLbFillBitmap->SetSelectHdl( aLink );
     mpMTRAngle->SetModifyHdl(LINK(this,AreaPropertyPanelBase, ChangeGradientAngle));
 
     mpLBTransType->SetSelectHdl(LINK(this, AreaPropertyPanelBase, ChangeTrgrTypeHdl_Impl));
@@ -227,229 +236,235 @@ IMPL_LINK_NOARG_TYPED(AreaPropertyPanelBase, ClickImportBitmapHdl, Button*, void
             XBitmapEntry* pEntry = new XBitmapEntry( aGraphic, aName );
             pList->Insert(pEntry);
             pList->Save();
-            mpLbFillBitmap->Clear();
-            mpLbFillBitmap->Fill(pList);
-            mpLbFillBitmap->SelectEntry(aName);
-            SelectFillAttrHdl(*mpLbFillBitmap);
+            mpLbFillAttr->Clear();
+            mpLbFillAttr->Fill(pList);
+            mpLbFillAttr->SelectEntry(aName);
+            SelectFillAttrHdl(*mpLbFillAttr);
         }
     }
 }
 
 IMPL_LINK_NOARG_TYPED(AreaPropertyPanelBase, SelectFillTypeHdl, ListBox&, void)
 {
-    const drawing::FillStyle eXFS = (drawing::FillStyle)mpLbFillType->GetSelectEntryPos();
+    sal_Int32 nPos = (eFillStyle)mpLbFillType->GetSelectEntryPos();
+    mpLbFillAttr->Clear();
+    SfxObjectShell* pSh = SfxObjectShell::Current();
 
-    if((drawing::FillStyle)meLastXFS != eXFS)
+    // #i122676# Do no longer trigger two Execute calls, one for SID_ATTR_FILL_STYLE
+    // and one for setting the fill attribute itself, but add two SfxPoolItems to the
+    // call to get just one action at the SdrObject and to create only one Undo action, too.
+    // Checked that this works in all apps.
+    switch( nPos )
     {
-        mpLbFillAttr->Clear();
-        SfxObjectShell* pSh = SfxObjectShell::Current();
-        const XFillStyleItem aXFillStyleItem(eXFS);
-
-        // #i122676# Do no longer trigger two Execute calls, one for SID_ATTR_FILL_STYLE
-        // and one for setting the fill attribute itself, but add two SfxPoolItems to the
-        // call to get just one action at the SdrObject and to create only one Undo action, too.
-        // Checked that this works in all apps.
-        switch( eXFS )
+        default:
+        case NONE:
         {
-            default:
-            case drawing::FillStyle_NONE:
-            {
-                mpLbFillAttr->Show();
-                mpLbFillGradFrom->Hide();
-                mpLbFillGradTo->Hide();
-                mpGradientStyle->Hide();
-                mpMTRAngle->Hide();
-                mpToolBoxColor->Hide();
-                mpLbFillBitmap->Hide();
-                mpBmpImport->Hide();
-                mpLbFillType->Selected();
-                mpLbFillAttr->Disable();
-
-                // #i122676# need to call a single SID_ATTR_FILL_STYLE change
-                setFillStyle(aXFillStyleItem);
-                break;
-            }
-            case drawing::FillStyle_SOLID:
-            {
-                mpLbFillAttr->Hide();
-                mpLbFillGradFrom->Hide();
-                mpLbFillGradTo->Hide();
-                mpGradientStyle->Hide();
-                mpMTRAngle->Hide();
-                mpLbFillBitmap->Hide();
-                mpBmpImport->Hide();
-                mpToolBoxColor->Show();
-                const OUString aTmpStr;
-                const Color aColor = mpColorItem ? mpColorItem->GetColorValue() : COL_AUTO;
-                const XFillColorItem aXFillColorItem( aTmpStr, aColor );
-
-                // #i122676# change FillStyle and Color in one call
-                setFillStyleAndColor(&aXFillStyleItem, aXFillColorItem);
-                break;
-            }
-            case drawing::FillStyle_GRADIENT:
-            {
-                mpLbFillAttr->Hide();
-                mpLbFillGradFrom->Show();
-                mpLbFillGradTo->Show();
-                mpGradientStyle->Show();
-                mpMTRAngle->Show();
-                mpToolBoxColor->Hide();
-                mpLbFillBitmap->Hide();
-                mpBmpImport->Hide();
-
-                const SvxColorListItem* pColorListItem = static_cast<const SvxColorListItem*>(pSh ? pSh->GetItem(SID_COLOR_TABLE) : nullptr);
-                if (pColorListItem)
-                {
-                    mpLbFillAttr->Enable();
-                    mpLbFillGradTo->Enable();
-                    mpLbFillGradFrom->Enable();
-                    mpGradientStyle->Enable();
-                    mpMTRAngle->Enable();
-                    mpLbFillAttr->Clear();
-                    mpLbFillGradTo->Clear();
-                    mpLbFillGradFrom->Clear();
-                    mpLbFillGradTo->Fill(pColorListItem->GetColorList());
-                    mpLbFillGradFrom->Fill(pColorListItem->GetColorList());
-
-                    mpLbFillGradFrom->AdaptDropDownLineCountToMaximum();
-                    mpLbFillGradTo->AdaptDropDownLineCountToMaximum();
-
-                    if(LISTBOX_ENTRY_NOTFOUND != mnLastPosGradient)
-                    {
-                        const SvxGradientListItem aItem(*static_cast<const SvxGradientListItem*>(pSh->GetItem(SID_GRADIENT_LIST)));
-
-                        if(mnLastPosGradient < aItem.GetGradientList()->Count())
-                        {
-                            const XGradient aGradient = aItem.GetGradientList()->GetGradient(mnLastPosGradient)->GetGradient();
-                            const XFillGradientItem aXFillGradientItem(aGradient);
-
-                            // #i122676# change FillStyle and Gradient in one call
-                            setFillStyleAndGradient(&aXFillStyleItem, aXFillGradientItem);
-                            mpLbFillGradFrom->SelectEntry(aGradient.GetStartColor());
-                            if(mpLbFillGradFrom->GetSelectEntryCount() == 0)
-                            {
-                                mpLbFillGradFrom->InsertEntry(aGradient.GetStartColor(), OUString());
-                                mpLbFillGradFrom->SelectEntry(aGradient.GetStartColor());
-                            }
-                            mpLbFillGradTo->SelectEntry(aGradient.GetEndColor());
-                            if(mpLbFillGradTo->GetSelectEntryCount() == 0)
-                            {
-                                mpLbFillGradTo->InsertEntry(aGradient.GetEndColor(), OUString());
-                                mpLbFillGradTo->SelectEntry(aGradient.GetEndColor());
-                            }
-
-                            mpMTRAngle->SetValue(aGradient.GetAngle() / 10);
-                            css::awt::GradientStyle eXGS = aGradient.GetGradientStyle();
-                            mpGradientStyle->SelectEntryPos(sal::static_int_cast< sal_Int32 >( eXGS ));
-
-                        }
-                    }
-                }
-                else
-                {
-                    mpLbFillGradFrom->Disable();
-                    mpLbFillGradTo->Disable();
-                    mpMTRAngle->Disable();
-                    mpGradientStyle->Disable();
-                }
-                break;
-            }
-            case drawing::FillStyle_HATCH:
-            {
-                mpLbFillAttr->Show();
-                mpLbFillGradFrom->Hide();
-                mpLbFillGradTo->Hide();
-                mpMTRAngle->Hide();
-                mpGradientStyle->Hide();
-                mpToolBoxColor->Hide();
-                mpLbFillBitmap->Hide();
-                mpBmpImport->Hide();
-
-                if(pSh && pSh->GetItem(SID_HATCH_LIST))
-                {
-                    if(!mpLbFillAttr->GetEntryCount())
-                    {
-                        const SvxHatchListItem aItem( *static_cast<const SvxHatchListItem*>(pSh->GetItem(SID_HATCH_LIST)));
-                        mpLbFillAttr->Enable();
-                        mpLbFillAttr->Clear();
-                        mpLbFillAttr->Fill(aItem.GetHatchList());
-                    }
-
-                    mpLbFillAttr->AdaptDropDownLineCountToMaximum();
-
-                    if(LISTBOX_ENTRY_NOTFOUND != mnLastPosHatch)
-                    {
-                        const SvxHatchListItem aItem(*static_cast<const SvxHatchListItem*>(pSh->GetItem(SID_HATCH_LIST)));
-
-                        if(mnLastPosHatch < aItem.GetHatchList()->Count())
-                        {
-                            const XHatch aHatch = aItem.GetHatchList()->GetHatch(mnLastPosHatch)->GetHatch();
-                            const XFillHatchItem aXFillHatchItem(mpLbFillAttr->GetSelectEntry(), aHatch);
-
-                            // #i122676# change FillStyle and Hatch in one call
-                            setFillStyleAndHatch(&aXFillStyleItem, aXFillHatchItem);
-                            mpLbFillAttr->SelectEntryPos(mnLastPosHatch);
-                        }
-                    }
-                }
-                else
-                {
-                    mpLbFillAttr->Disable();
-                }
-                break;
-            }
-            case drawing::FillStyle_BITMAP:
-            {
-                mpLbFillAttr->Hide();
-                mpLbFillGradFrom->Hide();
-                mpLbFillGradTo->Hide();
-                mpMTRAngle->Hide();
-                mpGradientStyle->Hide();
-                mpToolBoxColor->Hide();
-                mpLbFillBitmap->Show();
-                mpBmpImport->Show();
-
-                if(pSh && pSh->GetItem(SID_BITMAP_LIST))
-                {
-                    if(!mpLbFillBitmap->GetEntryCount())
-                    {
-                        const SvxBitmapListItem aItem( *static_cast<const SvxBitmapListItem*>(pSh->GetItem(SID_BITMAP_LIST)));
-                        mpLbFillBitmap->Clear();
-                        mpLbFillBitmap->Fill(aItem.GetBitmapList());
-                    }
-
-                    mpLbFillBitmap->AdaptDropDownLineCountToMaximum();
-
-                    if(LISTBOX_ENTRY_NOTFOUND != mnLastPosBitmap)
-                    {
-                        const SvxBitmapListItem aItem(*static_cast<const SvxBitmapListItem*>(pSh->GetItem(SID_BITMAP_LIST)));
-
-                        if(mnLastPosBitmap < aItem.GetBitmapList()->Count())
-                        {
-                            const XBitmapEntry* pXBitmapEntry = aItem.GetBitmapList()->GetBitmap(mnLastPosBitmap);
-                            const XFillBitmapItem aXFillBitmapItem(mpLbFillBitmap->GetSelectEntry(), pXBitmapEntry->GetGraphicObject());
-
-                            // #i122676# change FillStyle and Bitmap in one call
-                            setFillStyleAndBitmap(&aXFillStyleItem, aXFillBitmapItem);
-                            mpLbFillBitmap->SelectEntryPos(mnLastPosBitmap);
-                        }
-                    }
-                }
-                else
-                {
-                    mpLbFillBitmap->Hide();
-                }
-                break;
-            }
-        }
-
-        meLastXFS = (sal_uInt16)eXFS;
-
-        if(drawing::FillStyle_NONE != eXFS)
-        {
+            mpLbFillAttr->Show();
+            mpLbFillGradFrom->Hide();
+            mpLbFillGradTo->Hide();
+            mpGradientStyle->Hide();
+            mpMTRAngle->Hide();
+            mpToolBoxColor->Hide();
+            mpBmpImport->Hide();
             mpLbFillType->Selected();
+            mpLbFillAttr->Disable();
+
+            // #i122676# need to call a single SID_ATTR_FILL_STYLE change
+            setFillStyle(XFillStyleItem(drawing::FillStyle_NONE));
+            break;
         }
+        case SOLID:
+        {
+            mpLbFillAttr->Hide();
+            mpLbFillGradFrom->Hide();
+            mpLbFillGradTo->Hide();
+            mpGradientStyle->Hide();
+            mpMTRAngle->Hide();
+            mpBmpImport->Hide();
+            mpToolBoxColor->Show();
+            const OUString aTmpStr;
+            const Color aColor = mpColorItem ? mpColorItem->GetColorValue() : COL_AUTO;
+            const XFillColorItem aXFillColorItem( aTmpStr, aColor );
+
+            // #i122676# change FillStyle and Color in one call
+            XFillStyleItem aXFillStyleItem(drawing::FillStyle_SOLID);
+            setFillStyleAndColor(&aXFillStyleItem, aXFillColorItem);
+            break;
+        }
+        case GRADIENT:
+        {
+            mpLbFillAttr->Hide();
+            mpLbFillGradFrom->Show();
+            mpLbFillGradTo->Show();
+            mpGradientStyle->Show();
+            mpMTRAngle->Show();
+            mpToolBoxColor->Hide();
+            mpBmpImport->Hide();
+
+            const SvxColorListItem* pColorListItem = static_cast<const SvxColorListItem*>(pSh ? pSh->GetItem(SID_COLOR_TABLE) : nullptr);
+            if (pColorListItem)
+            {
+                mpLbFillAttr->Enable();
+                mpLbFillGradTo->Enable();
+                mpLbFillGradFrom->Enable();
+                mpGradientStyle->Enable();
+                mpMTRAngle->Enable();
+                mpLbFillAttr->Clear();
+                mpLbFillGradTo->Clear();
+                mpLbFillGradFrom->Clear();
+                mpLbFillGradTo->Fill(pColorListItem->GetColorList());
+                mpLbFillGradFrom->Fill(pColorListItem->GetColorList());
+
+                mpLbFillGradFrom->AdaptDropDownLineCountToMaximum();
+                mpLbFillGradTo->AdaptDropDownLineCountToMaximum();
+
+                if(LISTBOX_ENTRY_NOTFOUND != mnLastPosGradient)
+                {
+                    const SvxGradientListItem aItem(*static_cast<const SvxGradientListItem*>(pSh->GetItem(SID_GRADIENT_LIST)));
+
+                    if(mnLastPosGradient < aItem.GetGradientList()->Count())
+                    {
+                        const XGradient aGradient = aItem.GetGradientList()->GetGradient(mnLastPosGradient)->GetGradient();
+                        const XFillGradientItem aXFillGradientItem(aGradient);
+
+                        // #i122676# change FillStyle and Gradient in one call
+                        XFillStyleItem aXFillStyleItem(drawing::FillStyle_SOLID);
+                        setFillStyleAndGradient(&aXFillStyleItem, aXFillGradientItem);
+                        mpLbFillGradFrom->SelectEntry(aGradient.GetStartColor());
+                        if(mpLbFillGradFrom->GetSelectEntryCount() == 0)
+                        {
+                            mpLbFillGradFrom->InsertEntry(aGradient.GetStartColor(), OUString());
+                            mpLbFillGradFrom->SelectEntry(aGradient.GetStartColor());
+                        }
+                        mpLbFillGradTo->SelectEntry(aGradient.GetEndColor());
+                        if(mpLbFillGradTo->GetSelectEntryCount() == 0)
+                        {
+                            mpLbFillGradTo->InsertEntry(aGradient.GetEndColor(), OUString());
+                            mpLbFillGradTo->SelectEntry(aGradient.GetEndColor());
+                        }
+
+                        mpMTRAngle->SetValue(aGradient.GetAngle() / 10);
+                        css::awt::GradientStyle eXGS = aGradient.GetGradientStyle();
+                        mpGradientStyle->SelectEntryPos(sal::static_int_cast< sal_Int32 >( eXGS ));
+
+                    }
+                }
+            }
+            else
+            {
+                mpLbFillGradFrom->Disable();
+                mpLbFillGradTo->Disable();
+                mpMTRAngle->Disable();
+                mpGradientStyle->Disable();
+            }
+            break;
+        }
+        case HATCH:
+        {
+            mpLbFillAttr->Show();
+            mpLbFillGradFrom->Hide();
+            mpLbFillGradTo->Hide();
+            mpMTRAngle->Hide();
+            mpGradientStyle->Hide();
+            mpToolBoxColor->Hide();
+            mpBmpImport->Hide();
+
+            if(pSh && pSh->GetItem(SID_HATCH_LIST))
+            {
+                const SvxHatchListItem aItem( *static_cast<const SvxHatchListItem*>(pSh->GetItem(SID_HATCH_LIST)));
+                mpLbFillAttr->Enable();
+                mpLbFillAttr->Clear();
+                mpLbFillAttr->Fill(aItem.GetHatchList());
+
+                mpLbFillAttr->AdaptDropDownLineCountToMaximum();
+
+                if(LISTBOX_ENTRY_NOTFOUND != mnLastPosHatch)
+                {
+                    if(mnLastPosHatch < aItem.GetHatchList()->Count())
+                    {
+                        const XHatch aHatch = aItem.GetHatchList()->GetHatch(mnLastPosHatch)->GetHatch();
+                        const XFillHatchItem aXFillHatchItem(mpLbFillAttr->GetSelectEntry(), aHatch);
+
+                        // #i122676# change FillStyle and Hatch in one call
+                        XFillStyleItem aXFillStyleItem(drawing::FillStyle_HATCH);
+                        setFillStyleAndHatch(&aXFillStyleItem, aXFillHatchItem);
+                        mpLbFillAttr->SelectEntryPos(mnLastPosHatch);
+                    }
+                }
+            }
+            else
+            {
+                mpLbFillAttr->Disable();
+            }
+            break;
+        }
+        case BITMAP:
+        case PATTERN:
+        {
+            mpLbFillAttr->Show();
+            mpLbFillAttr->Enable();
+            mpLbFillAttr->Clear();
+            mpLbFillGradFrom->Hide();
+            mpLbFillGradTo->Hide();
+            mpMTRAngle->Hide();
+            mpGradientStyle->Hide();
+            mpToolBoxColor->Hide();
+
+            if(pSh && pSh->GetItem(SID_BITMAP_LIST) && nPos == (sal_Int32)BITMAP)
+            {
+                mpBmpImport->Show();
+                const SvxBitmapListItem aItem( *static_cast<const SvxBitmapListItem*>(pSh->GetItem(SID_BITMAP_LIST)));
+                mpLbFillAttr->Fill(aItem.GetBitmapList());
+
+                mpLbFillAttr->AdaptDropDownLineCountToMaximum();
+
+                if(LISTBOX_ENTRY_NOTFOUND != mnLastPosBitmap)
+                {
+                    if(mnLastPosBitmap < aItem.GetBitmapList()->Count())
+                    {
+                        const XBitmapEntry* pXBitmapEntry = aItem.GetBitmapList()->GetBitmap(mnLastPosBitmap);
+                        const XFillBitmapItem aXFillBitmapItem(mpLbFillAttr->GetSelectEntry(), pXBitmapEntry->GetGraphicObject());
+
+                        // #i122676# change FillStyle and Bitmap in one call
+                        XFillStyleItem aXFillStyleItem(drawing::FillStyle_BITMAP);
+                        setFillStyleAndBitmap(&aXFillStyleItem, aXFillBitmapItem);
+                        mpLbFillAttr->SelectEntryPos(mnLastPosBitmap);
+                    }
+                }
+            }
+            else if(pSh && pSh->GetItem(SID_PATTERN_LIST) && nPos == (sal_Int32)PATTERN)
+            {
+                mpBmpImport->Hide();
+                const SvxPatternListItem aItem( *static_cast<const SvxPatternListItem*>(pSh->GetItem(SID_PATTERN_LIST)));
+                mpLbFillAttr->Fill(aItem.GetPatternList());
+
+                mpLbFillAttr->AdaptDropDownLineCountToMaximum();
+                if(LISTBOX_ENTRY_NOTFOUND != mnLastPosPattern)
+                {
+                    if(mnLastPosPattern < aItem.GetPatternList()->Count())
+                    {
+                        const XBitmapEntry* pXPatternEntry = aItem.GetPatternList()->GetBitmap(mnLastPosPattern);
+                        const XFillBitmapItem aXFillPatternItem(mpLbFillAttr->GetSelectEntry(), pXPatternEntry->GetGraphicObject());
+
+                        XFillStyleItem aXFillStyleItem(drawing::FillStyle_BITMAP);
+                        setFillStyleAndBitmap(&aXFillStyleItem, aXFillPatternItem);
+                        mpLbFillAttr->SelectEntryPos(mnLastPosPattern);
+                    }
+                }
+            }
+            else
+            {
+                mpLbFillAttr->Disable();
+            }
+            break;
+        }
+    }
+
+    meLastXFS = (sal_uInt16)nPos;
+
+    if(eFillStyle::NONE != (eFillStyle)nPos)
+    {
+        mpLbFillType->Selected();
     }
 
     mpSidebarController->NotifyResize();
@@ -477,26 +492,35 @@ void AreaPropertyPanelBase::DataChanged(
 
 void AreaPropertyPanelBase::SelectFillAttrHdl_Impl()
 {
-    const drawing::FillStyle eXFS = (drawing::FillStyle)mpLbFillType->GetSelectEntryPos();
-    const XFillStyleItem aXFillStyleItem(eXFS);
+    sal_Int32 nPosFillStyle = (eFillStyle)mpLbFillType->GetSelectEntryPos();
     SfxObjectShell* pSh = SfxObjectShell::Current();
 
     // #i122676# dependent from bFillStyleChange, do execute a single or two
     // changes in one Execute call
-    const bool bFillStyleChange((drawing::FillStyle) meLastXFS != eXFS);
+    const bool bFillStyleChange((eFillStyle) meLastXFS != (eFillStyle)nPosFillStyle);
 
-    switch(eXFS)
+    switch(nPosFillStyle)
     {
-        case drawing::FillStyle_SOLID:
+        case eFillStyle::NONE:
         {
             if(bFillStyleChange)
             {
-                // #i122676# Single FillStyle change call needed here
+                XFillStyleItem aXFillStyleItem(drawing::FillStyle_NONE);
                 setFillStyle(aXFillStyleItem);
             }
             break;
         }
-        case drawing::FillStyle_GRADIENT:
+        case eFillStyle::SOLID:
+        {
+            if(bFillStyleChange)
+            {
+                // #i122676# Single FillStyle change call needed here
+                XFillStyleItem aXFillStyleItem(drawing::FillStyle_SOLID);
+                setFillStyle(aXFillStyleItem);
+            }
+            break;
+        }
+        case eFillStyle::GRADIENT:
         {
 
             if(pSh && pSh->GetItem(SID_COLOR_TABLE))
@@ -510,12 +534,12 @@ void AreaPropertyPanelBase::SelectFillAttrHdl_Impl()
                 const XFillGradientItem aXFillGradientItem(mpLbFillAttr->GetSelectEntry(), aGradient);
 
                     // #i122676# Change FillStyle and Gradinet in one call
+                XFillStyleItem aXFillStyleItem(drawing::FillStyle_GRADIENT);
                 setFillStyleAndGradient(bFillStyleChange ? &aXFillStyleItem : nullptr, aXFillGradientItem);
             }
-
             break;
         }
-        case drawing::FillStyle_HATCH:
+        case eFillStyle::HATCH:
         {
             sal_Int32 nPos = mpLbFillAttr->GetSelectEntryPos();
 
@@ -534,6 +558,7 @@ void AreaPropertyPanelBase::SelectFillAttrHdl_Impl()
                     const XFillHatchItem aXFillHatchItem( mpLbFillAttr->GetSelectEntry(), aHatch);
 
                     // #i122676# Change FillStyle and Hatch in one call
+                    XFillStyleItem aXFillStyleItem(drawing::FillStyle_HATCH);
                     setFillStyleAndHatch(bFillStyleChange ? &aXFillStyleItem : nullptr, aXFillHatchItem);
                 }
             }
@@ -544,9 +569,9 @@ void AreaPropertyPanelBase::SelectFillAttrHdl_Impl()
             }
             break;
         }
-        case drawing::FillStyle_BITMAP:
+        case eFillStyle::BITMAP:
         {
-            sal_Int32 nPos = mpLbFillBitmap->GetSelectEntryPos();
+            sal_Int32 nPos = mpLbFillAttr->GetSelectEntryPos();
 
             if(LISTBOX_ENTRY_NOTFOUND == nPos)
             {
@@ -560,9 +585,10 @@ void AreaPropertyPanelBase::SelectFillAttrHdl_Impl()
                 if(nPos < aItem.GetBitmapList()->Count())
                 {
                     const XBitmapEntry* pXBitmapEntry = aItem.GetBitmapList()->GetBitmap(nPos);
-                    const XFillBitmapItem aXFillBitmapItem(mpLbFillBitmap->GetSelectEntry(), pXBitmapEntry->GetGraphicObject());
+                    const XFillBitmapItem aXFillBitmapItem(mpLbFillAttr->GetSelectEntry(), pXBitmapEntry->GetGraphicObject());
 
                     // #i122676# Change FillStyle and Bitmap in one call
+                    XFillStyleItem aXFillStyleItem(drawing::FillStyle_BITMAP);
                     setFillStyleAndBitmap(bFillStyleChange ? &aXFillStyleItem : nullptr, aXFillBitmapItem);
                 }
             }
@@ -573,7 +599,36 @@ void AreaPropertyPanelBase::SelectFillAttrHdl_Impl()
             }
             break;
         }
-        default: break;
+        case eFillStyle::PATTERN:
+        {
+            sal_Int32 nPos = mpLbFillAttr->GetSelectEntryPos();
+
+            if(LISTBOX_ENTRY_NOTFOUND == nPos)
+            {
+                nPos = mnLastPosPattern;
+            }
+
+            if(LISTBOX_ENTRY_NOTFOUND != nPos && pSh && pSh->GetItem(SID_PATTERN_LIST))
+            {
+                const SvxPatternListItem aItem(*static_cast<const SvxPatternListItem*>(pSh->GetItem(SID_PATTERN_LIST)));
+
+                if(nPos < aItem.GetPatternList()->Count())
+                {
+                    const XBitmapEntry* pXPatternEntry = aItem.GetPatternList()->GetBitmap(nPos);
+                    const XFillBitmapItem aXFillBitmapItem(mpLbFillAttr->GetSelectEntry(), pXPatternEntry->GetGraphicObject());
+
+                    // #i122676# Change FillStyle and Bitmap in one call
+                    XFillStyleItem aXFillStyleItem(drawing::FillStyle_BITMAP);
+                    setFillStyleAndBitmap(bFillStyleChange ? &aXFillStyleItem : nullptr, aXFillBitmapItem);
+                }
+            }
+
+            if(LISTBOX_ENTRY_NOTFOUND != nPos)
+            {
+                mnLastPosPattern = nPos;
+            }
+            break;
+        }
     }
     mpSidebarController->NotifyResize();
 }
@@ -781,15 +836,42 @@ void AreaPropertyPanelBase::updateFillStyle(bool bDisabled, bool bDefault, const
         mpLbFillType->Enable();
         mpColorTextFT->Enable();
         drawing::FillStyle eXFS = (drawing::FillStyle)mpStyleItem->GetValue();
-        meLastXFS = eXFS;
-        mpLbFillType->SelectEntryPos(sal::static_int_cast< sal_Int32 >(eXFS));
-
-        if(drawing::FillStyle_NONE == eXFS)
+        eFillStyle nPos = NONE;
+        switch(eXFS)
         {
-            mpLbFillAttr->SetNoSelection();
-            mpLbFillAttr->Disable();
+            default:
+            case drawing::FillStyle_NONE:
+            {
+                mpLbFillAttr->SetNoSelection();
+                mpLbFillAttr->Disable();
+                nPos = NONE;
+                break;
+            }
+            case drawing::FillStyle_SOLID:
+                nPos = SOLID;
+                break;
+            case drawing::FillStyle_GRADIENT:
+                nPos = GRADIENT;
+                break;
+            case drawing::FillStyle_HATCH:
+                nPos = HATCH;
+                break;
+            case drawing::FillStyle_BITMAP:
+            {
+                if(mpBitmapItem)
+                {
+                    if(!mpBitmapItem->isPattern())
+                        nPos = BITMAP;
+                    else
+                        nPos = PATTERN;
+                }
+                else
+                    nPos = BITMAP;
+                break;
+            }
         }
-
+        meLastXFS = (sal_uInt16)mpLbFillType->GetSelectEntryPos();
+        mpLbFillType->SelectEntryPos((sal_Int32)nPos);
         Update();
         return;
     }
@@ -822,6 +904,7 @@ void AreaPropertyPanelBase::updateFillGradient(bool bDisabled, bool bDefault, co
 
         if(bDefault)
         {
+            mpLbFillType->SelectEntryPos(GRADIENT);
             Update();
         }
         else if(bDisabled)
@@ -857,6 +940,7 @@ void AreaPropertyPanelBase::updateFillHatch(bool bDisabled, bool bDefault, const
         if(bDefault)
         {
             mpLbFillAttr->Enable();
+            mpLbFillType->SelectEntryPos(HATCH);
             Update();
         }
         else if(bDisabled)
@@ -883,7 +967,7 @@ void AreaPropertyPanelBase::updateFillColor(bool bDefault, const XFillColorItem*
     {
         mpLbFillAttr->Hide();
         mpToolBoxColor->Show();
-
+        mpLbFillType->SelectEntryPos(SOLID);
         Update();
     }
     mpSidebarController->NotifyResize();
@@ -898,20 +982,25 @@ void AreaPropertyPanelBase::updateFillBitmap(bool bDisabled, bool bDefault, cons
 
     if(mpStyleItem && drawing::FillStyle_BITMAP == (drawing::FillStyle)mpStyleItem->GetValue())
     {
-        mpLbFillBitmap->Show();
+        mpLbFillAttr->Show();
         mpToolBoxColor->Hide();
 
         if(bDefault)
         {
+            if(mpBitmapItem->isPattern())
+                mpLbFillType->SelectEntryPos(PATTERN);
+            else
+                mpLbFillType->SelectEntryPos(BITMAP);
             Update();
         }
         else if(bDisabled)
         {
-            mpLbFillBitmap->Hide();
+            mpLbFillAttr->Hide();
+            mpLbFillAttr->SetNoSelection();
         }
         else
         {
-            mpLbFillBitmap->SetNoSelection();
+            mpLbFillAttr->SetNoSelection();
         }
     }
     mpSidebarController->NotifyResize();
@@ -1008,6 +1097,7 @@ void AreaPropertyPanelBase::NotifyItemUpdate(
             break;
         }
         case SID_BITMAP_LIST:
+        case SID_PATTERN_LIST:
         {
             if(bDefault)
             {
@@ -1017,16 +1107,24 @@ void AreaPropertyPanelBase::NotifyItemUpdate(
                     {
                         const OUString aString( mpBitmapItem->GetName() );
                         const SfxObjectShell* pSh = SfxObjectShell::Current();
-                        const SvxBitmapListItem aItem(*static_cast<const SvxBitmapListItem*>(pSh->GetItem(SID_BITMAP_LIST)));
+                        mpLbFillAttr->Clear();
+                        mpLbFillAttr->Show();
+                        if(nSID == SID_BITMAP_LIST)
+                        {
+                            const SvxBitmapListItem aItem(*static_cast<const SvxBitmapListItem*>(pSh->GetItem(SID_BITMAP_LIST)));
 
-                        mpLbFillBitmap->Clear();
-                        mpLbFillBitmap->Show();
-                        mpLbFillBitmap->Fill(aItem.GetBitmapList());
-                        mpLbFillBitmap->SelectEntry(aString);
+                            mpLbFillAttr->Fill(aItem.GetBitmapList());
+                        }
+                        else if(nSID == SID_PATTERN_LIST)
+                        {
+                            const SvxPatternListItem aItem(*static_cast<const SvxPatternListItem*>(pSh->GetItem(SID_PATTERN_LIST)));
+                            mpLbFillAttr->Fill(aItem.GetPatternList());
+                        }
+                        mpLbFillAttr->SelectEntry(aString);
                     }
                     else
                     {
-                        mpLbFillBitmap->SetNoSelection();
+                        mpLbFillAttr->SetNoSelection();
                     }
                 }
             }
@@ -1037,14 +1135,12 @@ void AreaPropertyPanelBase::NotifyItemUpdate(
 
 void AreaPropertyPanelBase::Update()
 {
-    if(mpStyleItem)
-    {
-        const drawing::FillStyle eXFS = (drawing::FillStyle)mpStyleItem->GetValue();
+        const eFillStyle eXFS = (eFillStyle)mpLbFillType->GetSelectEntryPos();
         SfxObjectShell* pSh = SfxObjectShell::Current();
 
         switch( eXFS )
         {
-            case drawing::FillStyle_NONE:
+            case eFillStyle::NONE:
             {
                 mpLbFillAttr->Show();
                 mpLbFillGradFrom->Hide();
@@ -1052,11 +1148,10 @@ void AreaPropertyPanelBase::Update()
                 mpMTRAngle->Hide();
                 mpGradientStyle->Hide();
                 mpToolBoxColor->Hide();
-                mpLbFillBitmap->Hide();
                 mpBmpImport->Hide();
                 break;
             }
-            case drawing::FillStyle_SOLID:
+            case eFillStyle::SOLID:
             {
                 if(mpColorItem)
                 {
@@ -1066,12 +1161,11 @@ void AreaPropertyPanelBase::Update()
                     mpMTRAngle->Hide();
                     mpGradientStyle->Hide();
                     mpToolBoxColor->Show();
-                    mpLbFillBitmap->Hide();
                     mpBmpImport->Hide();
                 }
                 break;
             }
-            case drawing::FillStyle_GRADIENT:
+            case eFillStyle::GRADIENT:
             {
                 mpLbFillAttr->Hide();
                 mpLbFillGradFrom->Show();
@@ -1080,7 +1174,6 @@ void AreaPropertyPanelBase::Update()
                 mpMTRAngle->Show();
                 mpGradientStyle->Show();
                 mpToolBoxColor->Hide();
-                mpLbFillBitmap->Hide();
                 mpBmpImport->Hide();
 
                 if(pSh && pSh->GetItem(SID_GRADIENT_LIST))
@@ -1128,7 +1221,7 @@ void AreaPropertyPanelBase::Update()
                 }
                 break;
             }
-            case drawing::FillStyle_HATCH:
+            case eFillStyle::HATCH:
             {
                 mpLbFillAttr->Show();
                 mpLbFillGradFrom->Hide();
@@ -1136,9 +1229,7 @@ void AreaPropertyPanelBase::Update()
                 mpMTRAngle->Hide();
                 mpGradientStyle->Hide();
                 mpToolBoxColor->Hide();
-                mpLbFillBitmap->Hide();
                 mpBmpImport->Hide();
-                mpLbFillBitmap->Hide();
                 mpBmpImport->Hide();
 
                 if(pSh && pSh->GetItem(SID_HATCH_LIST))
@@ -1165,38 +1256,43 @@ void AreaPropertyPanelBase::Update()
                 }
                 break;
             }
-            case drawing::FillStyle_BITMAP:
+            case eFillStyle::BITMAP:
+            case eFillStyle::PATTERN:
             {
-                mpLbFillAttr->Hide();
+                mpLbFillAttr->Show();
+                mpLbFillAttr->Enable();
+                mpLbFillAttr->Clear();
                 mpToolBoxColor->Hide();
                 mpLbFillGradFrom->Hide();
                 mpLbFillGradTo->Hide();
                 mpMTRAngle->Hide();
                 mpGradientStyle->Hide();
-                mpLbFillBitmap->Show();
-                mpBmpImport->Show();
 
-                if(pSh && pSh->GetItem(SID_BITMAP_LIST))
+                if(mpBitmapItem)
                 {
-                    const SvxBitmapListItem aItem(*static_cast<const SvxBitmapListItem*>(pSh->GetItem(SID_BITMAP_LIST)));
-                    mpLbFillBitmap->Clear();
-                    mpLbFillBitmap->Fill(aItem.GetBitmapList());
-
-                    if(mpBitmapItem)
+                    if(pSh && pSh->GetItem(SID_BITMAP_LIST) && eXFS == BITMAP)
                     {
+                        mpBmpImport->Show();
+                        mpLbFillType->SelectEntryPos((sal_uInt32)BITMAP);
+                        const SvxBitmapListItem aItem(*static_cast<const SvxBitmapListItem*>(pSh->GetItem(SID_BITMAP_LIST)));
+                        mpLbFillAttr->Fill(aItem.GetBitmapList());
+
                         const OUString aString(mpBitmapItem->GetName());
-
-                        mpLbFillBitmap->SelectEntry(aString);
+                        mpLbFillAttr->SelectEntry(aString);
                     }
-                    else
+                    else if(pSh && pSh->GetItem(SID_PATTERN_LIST) && eXFS == PATTERN)
                     {
-                        mpLbFillBitmap->SetNoSelection();
+                        mpBmpImport->Hide();
+                        mpLbFillType->SelectEntryPos((sal_uInt32)PATTERN);
+                        const SvxPatternListItem aItem(*static_cast<const SvxPatternListItem*>(pSh->GetItem(SID_PATTERN_LIST)));
+                        mpLbFillAttr->Fill(aItem.GetPatternList());
+
+                        const OUString aString(mpBitmapItem->GetName());
+                        mpLbFillAttr->SelectEntry(aString);
                     }
                 }
                 else
-                {
-                    mpLbFillBitmap->SetNoSelection();
-                }
+                    mpLbFillAttr->SetNoSelection();
                 break;
             }
             default:
@@ -1204,7 +1300,6 @@ void AreaPropertyPanelBase::Update()
             break;
         }
         mpSidebarController->NotifyResize();
-    }
 }
 
 IMPL_LINK_NOARG_TYPED(AreaPropertyPanelBase, ModifyTransSliderHdl, Slider*, void)

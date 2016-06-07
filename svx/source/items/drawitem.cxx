@@ -28,6 +28,7 @@ SfxPoolItem* SvxColorListItem::CreateDefault() { return new  SvxColorListItem ;}
 SfxPoolItem* SvxGradientListItem::CreateDefault() { return new   SvxGradientListItem ;}
 SfxPoolItem* SvxHatchListItem::CreateDefault() { return new   SvxHatchListItem ;}
 SfxPoolItem* SvxBitmapListItem::CreateDefault() { return new   SvxBitmapListItem ;}
+SfxPoolItem* SvxPatternListItem::CreateDefault() { return new SvxPatternListItem ;}
 SfxPoolItem* SvxDashListItem::CreateDefault() { return new   SvxDashListItem ;}
 SfxPoolItem* SvxLineEndListItem::CreateDefault() { return new   SvxLineEndListItem ;}
 
@@ -225,6 +226,47 @@ SfxPoolItem* SvxBitmapListItem::Clone( SfxItemPool * ) const
 }
 
 QUERY_PUT_IMPL( SvxBitmapListItem, BitmapList )
+
+SvxPatternListItem::SvxPatternListItem()
+{
+}
+
+SvxPatternListItem::SvxPatternListItem( XPatternListRef pList, sal_uInt16 nW ) :
+    SfxPoolItem( nW ),
+    pPatternList( pList )
+{
+}
+
+SvxPatternListItem::SvxPatternListItem( const SvxPatternListItem& rItem ) :
+    SfxPoolItem( rItem ),
+    pPatternList( rItem.pPatternList )
+{
+}
+
+bool SvxPatternListItem::GetPresentation
+(
+    SfxItemPresentation /*ePres*/,
+    SfxMapUnit          /*eCoreUnit*/,
+    SfxMapUnit          /*ePresUnit*/,
+    OUString&           rText, const IntlWrapper *
+)   const
+{
+    rText.clear();
+    return false;
+}
+
+bool SvxPatternListItem::operator==( const SfxPoolItem& rItem ) const
+{
+    DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal type" );
+    return static_cast<const SvxPatternListItem&>(rItem).pPatternList == pPatternList;
+}
+
+SfxPoolItem* SvxPatternListItem::Clone( SfxItemPool * ) const
+{
+    return new SvxPatternListItem( *this );
+}
+
+QUERY_PUT_IMPL( SvxPatternListItem, PatternList )
 
 SvxDashListItem::SvxDashListItem() :
     pDashList( nullptr )

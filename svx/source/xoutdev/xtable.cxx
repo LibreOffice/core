@@ -334,6 +334,9 @@ XPropertyListRef XPropertyList::CreatePropertyList( XPropertyListType aType,
         case XBITMAP_LIST:
             pRet = XPropertyListRef(new XBitmapList(rPath, rReferer));
             break;
+        case XPATTERN_LIST:
+            pRet = XPropertyListRef(new XPatternList(rPath, rReferer));
+            break;
     default:
         OSL_FAIL("unknown xproperty type");
         break;
@@ -381,7 +384,8 @@ static struct {
     { XDASH_LIST,     "sod" },
     { XHATCH_LIST,    "soh" },
     { XGRADIENT_LIST, "sog" },
-    { XBITMAP_LIST,   "sob" }
+    { XBITMAP_LIST,   "sob" },
+    { XPATTERN_LIST,  "sop"}
 };
 
 OUString XPropertyList::GetDefaultExt( XPropertyListType t )

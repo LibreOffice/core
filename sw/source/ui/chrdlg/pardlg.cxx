@@ -266,7 +266,7 @@ void SwParaDlg::PageCreated(sal_uInt16 nId, SfxTabPage& rPage)
     else if (m_nAreaId == nId)
     {
         SfxItemSet aNew(*aSet.GetPool(),
-            SID_COLOR_TABLE, SID_BITMAP_LIST,
+            SID_COLOR_TABLE, SID_PATTERN_LIST,
             SID_OFFER_IMPORT, SID_OFFER_IMPORT, 0, 0);
 
         aNew.Put(*GetInputSetImpl());
