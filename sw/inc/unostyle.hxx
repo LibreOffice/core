@@ -34,6 +34,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #include <calbck.hxx>
+#include <o3tl/enumarray.hxx>
 
 #include <com/sun/star/style/XAutoStyleFamily.hpp>
 #include <com/sun/star/style/XAutoStyles.hpp>
@@ -247,7 +248,20 @@ protected:
 };
 
 class SwTableAutoFormat;
-typedef std::map<OUString, sal_Int32> CellStyleNameMap;
+enum class CellStyles {
+    FirstRow = 0,
+    LastRow,
+    FirstColumn,
+    LastColumn,
+    EvenRows,
+    OddRows,
+    EvenColumns,
+    OddColumns,
+    Body,
+    Background,
+    LAST = Background
+};
+typedef std::map<OUString, CellStyles> CellStyleNameMap;
 
 /// A text table style is a uno api wrapper for a SwTableAutoFormat
 class SwXTextTableStyle : public cppu::WeakImplHelper
@@ -260,23 +274,9 @@ class SwXTextTableStyle : public cppu::WeakImplHelper
     SwDocShell* m_pDocShell;
     OUString m_sTableAutoFormatName;
 
-    enum {
-        FIRST_ROW_STYLE = 0,
-        LAST_ROW_STYLE,
-        FIRST_COLUMN_STYLE,
-        LAST_COLUMN_STYLE,
-        EVEN_ROWS_STYLE,
-        ODD_ROWS_STYLE,
-        EVEN_COLUMNS_STYLE,
-        ODD_COLUMNS_STYLE,
-        BODY_STYLE,
-        BACKGROUND_STYLE,
-        STYLE_COUNT
-    };
-
     SwTableAutoFormat* GetTableAutoFormat();
     static const CellStyleNameMap& GetCellStyleNameMap();
-    css::uno::Reference<css::style::XStyle> m_aCellStyles[STYLE_COUNT];
+    o3tl::enumarray<CellStyles, css::uno::Reference<css::style::XStyle>> m_aCellStyles;
 public:
     SwXTextTableStyle(SwDocShell* pDocShell, const OUString& rTableAutoFormatName);
 

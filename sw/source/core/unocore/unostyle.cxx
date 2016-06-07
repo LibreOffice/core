@@ -4246,16 +4246,16 @@ SwXTextTableStyle::SwXTextTableStyle(SwDocShell* pDocShell, const OUString& rTab
     if (pAutoFormat)
     {
         // TODO fix styles mapping
-        m_aCellStyles[ FIRST_ROW_STYLE    ] = new SwXTextCellStyle(pAutoFormat->GetBoxFormat( 0 ));  // 0
-        m_aCellStyles[ LAST_ROW_STYLE     ] = new SwXTextCellStyle(pAutoFormat->GetBoxFormat( 12 )); // 1
-        m_aCellStyles[ FIRST_COLUMN_STYLE ] = new SwXTextCellStyle(pAutoFormat->GetBoxFormat( 4 ));  // 2
-        m_aCellStyles[ LAST_COLUMN_STYLE  ] = new SwXTextCellStyle(pAutoFormat->GetBoxFormat( 7 ));  // 3
-        m_aCellStyles[ EVEN_ROWS_STYLE    ] = new SwXTextCellStyle(pAutoFormat->GetBoxFormat( 13 )); // 4
-        m_aCellStyles[ ODD_ROWS_STYLE     ] = new SwXTextCellStyle(pAutoFormat->GetBoxFormat( 13 )); // 5
-        m_aCellStyles[ EVEN_COLUMNS_STYLE ] = new SwXTextCellStyle(pAutoFormat->GetBoxFormat( 13 )); // 6
-        m_aCellStyles[ ODD_COLUMNS_STYLE  ] = new SwXTextCellStyle(pAutoFormat->GetBoxFormat( 13 )); // 7
-        m_aCellStyles[ BODY_STYLE         ] = new SwXTextCellStyle(pAutoFormat->GetBoxFormat( 13 )); // 8
-        m_aCellStyles[ BACKGROUND_STYLE   ] = new SwXTextCellStyle(pAutoFormat->GetBoxFormat( 13 )); // 9
+        m_aCellStyles[ CellStyles::FirstRow    ] = new SwXTextCellStyle(pAutoFormat->GetBoxFormat( 0 ));  // 0
+        m_aCellStyles[ CellStyles::LastRow     ] = new SwXTextCellStyle(pAutoFormat->GetBoxFormat( 12 )); // 1
+        m_aCellStyles[ CellStyles::FirstColumn ] = new SwXTextCellStyle(pAutoFormat->GetBoxFormat( 4 ));  // 2
+        m_aCellStyles[ CellStyles::LastColumn  ] = new SwXTextCellStyle(pAutoFormat->GetBoxFormat( 7 ));  // 3
+        m_aCellStyles[ CellStyles::EvenRows    ] = new SwXTextCellStyle(pAutoFormat->GetBoxFormat( 13 )); // 4
+        m_aCellStyles[ CellStyles::OddRows     ] = new SwXTextCellStyle(pAutoFormat->GetBoxFormat( 13 )); // 5
+        m_aCellStyles[ CellStyles::EvenColumns ] = new SwXTextCellStyle(pAutoFormat->GetBoxFormat( 13 )); // 6
+        m_aCellStyles[ CellStyles::OddColumns  ] = new SwXTextCellStyle(pAutoFormat->GetBoxFormat( 13 )); // 7
+        m_aCellStyles[ CellStyles::Body         ] = new SwXTextCellStyle(pAutoFormat->GetBoxFormat( 13 )); // 8
+        m_aCellStyles[ CellStyles::Background   ] = new SwXTextCellStyle(pAutoFormat->GetBoxFormat( 13 )); // 9
     }
 }
 
@@ -4308,16 +4308,16 @@ const CellStyleNameMap& SwXTextTableStyle::GetCellStyleNameMap()
     if(aMap.empty())
     {
         CellStyleNameMap aNewMap;
-        aNewMap[ "first-row"    ] = FIRST_ROW_STYLE;
-        aNewMap[ "last-row"     ] = LAST_ROW_STYLE;
-        aNewMap[ "first-column" ] = FIRST_COLUMN_STYLE;
-        aNewMap[ "last-column"  ] = LAST_COLUMN_STYLE;
-        aNewMap[ "body"         ] = BODY_STYLE;
-        aNewMap[ "even-rows"    ] = EVEN_ROWS_STYLE;
-        aNewMap[ "odd-rows"     ] = ODD_ROWS_STYLE;
-        aNewMap[ "even-columns" ] = EVEN_COLUMNS_STYLE;
-        aNewMap[ "odd-columns"  ] = ODD_COLUMNS_STYLE;
-        aNewMap[ "background"   ] = BACKGROUND_STYLE;
+        aNewMap[ "first-row"    ] = CellStyles::FirstRow;
+        aNewMap[ "last-row"     ] = CellStyles::LastRow;
+        aNewMap[ "first-column" ] = CellStyles::FirstColumn;
+        aNewMap[ "last-column"  ] = CellStyles::LastColumn;
+        aNewMap[ "body"         ] = CellStyles::Body;
+        aNewMap[ "even-rows"    ] = CellStyles::EvenRows;
+        aNewMap[ "odd-rows"     ] = CellStyles::OddRows;
+        aNewMap[ "even-columns" ] = CellStyles::EvenColumns;
+        aNewMap[ "odd-columns"  ] = CellStyles::OddColumns;
+        aNewMap[ "background"   ] = CellStyles::Background;
         aMap.swap(aNewMap);
     }
     return aMap;
