@@ -393,12 +393,6 @@ const SmNode * SmNode::FindNodeWithAccessibleIndex(sal_Int32 nAccIdx) const
     return pResult;
 }
 
-long SmNode::GetFormulaBaseline() const
-{
-    SAL_WARN("starmath", "This dummy implementation should not have been called.");
-    return 0;
-}
-
 
 SmStructureNode::~SmStructureNode()
 {

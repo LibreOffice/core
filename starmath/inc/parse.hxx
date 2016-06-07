@@ -59,7 +59,7 @@ class SmParser
     inline bool     TokenInGroup( TG nGroup );
 
     // grammar
-    void    DoTable();
+    SmTableNode *DoTable();
     void    DoLine();
     void    DoExpression();
     void    DoRelation();
@@ -99,7 +99,7 @@ public:
                  SmParser();
 
     /** Parse rBuffer to formula tree */
-    SmNode      *Parse(const OUString &rBuffer);
+    SmTableNode *Parse(const OUString &rBuffer);
     /** Parse rBuffer to formula subtree that constitutes an expression */
     SmNode      *ParseExpression(const OUString &rBuffer);
 

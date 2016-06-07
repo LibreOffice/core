@@ -944,7 +944,7 @@ void SmParser::NextToken()
 
 // grammar
 
-void SmParser::DoTable()
+SmTableNode *SmParser::DoTable()
 {
     DoLine();
     while (m_aCurToken.eType == TNEWLINE)
@@ -962,9 +962,9 @@ void SmParser::DoTable()
         *rIt = popOrZero(m_aNodeStack);
     }
 
-    std::unique_ptr<SmStructureNode> pSNode(new SmTableNode(m_aCurToken));
+    std::unique_ptr<SmTableNode> pSNode(new SmTableNode(m_aCurToken));
     pSNode->SetSubNodes(LineArray);
-    m_aNodeStack.push_front(std::move(pSNode));
+    return pSNode.release();
 }
 
 void SmParser::DoAlign()
@@ -2326,7 +2326,7 @@ SmParser::SmParser()
 {
 }
 
-SmNode *SmParser::Parse(const OUString &rBuffer)
+SmTableNode *SmParser::Parse(const OUString &rBuffer)
 {
     ClearUsedSymbols();
 
@@ -2342,10 +2342,7 @@ SmNode *SmParser::Parse(const OUString &rBuffer)
     m_aNodeStack.clear();
 
     NextToken();
-    DoTable();
-
-    SmNode* result = popOrZero(m_aNodeStack);
-    return result;
+    return DoTable();
 }
 
 SmNode *SmParser::ParseExpression(const OUString &rBuffer)
