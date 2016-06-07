@@ -274,7 +274,8 @@ public class Type {
     /**
      * Constructs a new <code>Type</code> from the given type description.
      *
-     * @internal
+     * <em>For internal URE use only. Not to be used by client code.</em>
+     *
      * @param typeDescription a type description.  Must not be
      *     <code>null</code>.
      */
@@ -370,7 +371,8 @@ public class Type {
     /**
      * Gives the type description of this type.
      *
-     * @internal
+     * <em>For internal URE use only. Not to be used by client code.</em>
+     *
      * @return the type description; may be <code>null</code>
      */
     public TypeDescription getTypeDescription() {
@@ -380,7 +382,8 @@ public class Type {
     /**
      * Sets the type description for this type.
      *
-     * @internal
+     * <em>For internal URE use only. Not to be used by client code.</em>
+     *
      * @param typeDescription the type description
      */
     public void setTypeDescription(TypeDescription typeDescription) {
