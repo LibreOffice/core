@@ -65,20 +65,27 @@ void ScSolverUtil::GetImplementations( uno::Sequence<OUString>& rImplNames,
                         OUString sName = xInfo->getImplementationName();
                         OUString sDescription;
 
-                        uno::Reference<sheet::XSolver> xSolver(
-                                xCFac->createInstanceWithContext(xCtx), uno::UNO_QUERY );
-                        uno::Reference<sheet::XSolverDescription> xDesc( xSolver, uno::UNO_QUERY );
-                        if ( xDesc.is() )
-                            sDescription = xDesc->getComponentDescription();
+                        try
+                        {
+                            uno::Reference<sheet::XSolver> xSolver(
+                                    xCFac->createInstanceWithContext(xCtx), uno::UNO_QUERY );
+                            uno::Reference<sheet::XSolverDescription> xDesc( xSolver, uno::UNO_QUERY );
+                            if ( xDesc.is() )
+                                sDescription = xDesc->getComponentDescription();
 
-                        if ( sDescription.isEmpty() )
-                            sDescription = sName;          // use implementation name if no description available
+                            if ( sDescription.isEmpty() )
+                                sDescription = sName;          // use implementation name if no description available
 
-                        rImplNames.realloc( nCount+1 );
-                        rImplNames[nCount] = sName;
-                        rDescriptions.realloc( nCount+1 );
-                        rDescriptions[nCount] = sDescription;
-                        ++nCount;
+                            rImplNames.realloc( nCount+1 );
+                            rImplNames[nCount] = sName;
+                            rDescriptions.realloc( nCount+1 );
+                            rDescriptions[nCount] = sDescription;
+                            ++nCount;
+                        }
+                        catch (const css::uno::Exception& e)
+                        {
+                            SAL_INFO("sc", "ScSolverUtil::GetImplementations: cannot instantiate: " << sName << ", because: " << e.Message);
+                        }
                     }
                 }
             }
