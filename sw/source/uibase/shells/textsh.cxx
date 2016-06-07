@@ -846,7 +846,7 @@ SfxItemSet SwTextShell::CreateInsertFrameItemSet(SwFlyFrameAttrMgr& rMgr)
         SID_ATTR_PAGE_SIZE,     SID_ATTR_PAGE_SIZE,
         FN_SET_FRM_NAME,        FN_SET_FRM_NAME,
         SID_HTML_MODE,          SID_HTML_MODE,
-        SID_COLOR_TABLE,        SID_BITMAP_LIST,
+        SID_COLOR_TABLE,        SID_PATTERN_LIST,
         0
     };
 
