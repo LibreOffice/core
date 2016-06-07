@@ -14,6 +14,8 @@ attribute vec4 vertex_color_in;
 #endif
 
 varying float fade_factor; // fade factor for anti-aliasing
+varying float multiply;
+
 #ifdef USE_VERTEX_COLORS
 varying vec4 vertex_color;
 #endif
@@ -30,26 +32,42 @@ uniform int type;
 
 void main()
 {
-   vec4 final_position = vec4(position, 0.0, 1.0);
+   vec2 extrusion_vector = extrusion_vectors.xy;
+
+   float render_thickness = 0.0;
 
    if (type == TYPE_LINE)
    {
-      vec2 extrusion_vector = extrusion_vectors.xy;
       // miter factor to additionaly lenghten the distance of vertex (needed for miter)
       // if 1.0 - miter_factor has no effect
-      float miter_factor = 1.0f / abs(extrusion_vectors.z);
+      float miter_factor = 1.0 / abs(extrusion_vectors.z);
       // fade factor is always -1.0 or 1.0 -> we transport that info together with length
       fade_factor = sign(extrusion_vectors.z);
+#ifdef USE_VERTEX_COLORS
+      float the_feather = (1.0 + sign(extrusion_vectors.w)) / 4.0;
+      float the_line_width = abs(extrusion_vectors.w);
+#else
+      float the_feather = feather;
+      float the_line_width = line_width;
+#endif
+      render_thickness = (the_line_width * miter_factor + the_feather * 2.0 * miter_factor);
 
-      float rendered_thickness = (line_width + feather * 2.0) * miter_factor;
+      // Calculate the multiplier so we can transform the 0->1 fade factor
+      // to take feather and line width into account.
 
-      // lengthen the vertex in directon of the extrusion vector by line width.
-      final_position = vec4(position + (extrusion_vector * (rendered_thickness / 2.0) ), 0.0, 1.0);
+      float start = mix(0.0, (the_line_width / 2.0) - the_feather, the_feather * 2.0);
+      float end   = mix(1.0, (the_line_width / 2.0) + the_feather, the_feather * 2.0);
+
+      multiply = 1.0 / (1.0 - (start / end));
    }
 
+   // lengthen the vertex in directon of the extrusion vector by line width.
+   vec4 final_position = vec4(position + (extrusion_vector * (render_thickness / 2.0) ), 0.0, 1.0);
+
    gl_Position = mvp * final_position;
+
 #ifdef USE_VERTEX_COLORS
-   vertex_color = vertex_color_in;
+   vertex_color = vertex_color_in / 255.0;
 #endif
 }
 

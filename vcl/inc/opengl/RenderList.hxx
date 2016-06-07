@@ -21,18 +21,29 @@
 
 #include "opengl/texture.hxx"
 
+#include <com/sun/star/drawing/LineCap.hpp>
+
+struct Vertex
+{
+    glm::vec2 position;
+    glm::vec4 color;
+    glm::vec4 lineData;
+};
+
+static_assert(sizeof(Vertex) == (2*4 + 4*4 + 4*4), "Vertex struct has wrong size/alignment");
+
+
 struct RenderParameters
 {
-    std::vector<GLfloat>   maVertices;
-    std::vector<GLfloat>   maExtrusionVectors;
-    std::vector<glm::vec4> maColors;
+    std::vector<Vertex> maVertices;
+    std::vector<GLuint> maIndices;
 };
 
 struct RenderTextureParameters
 {
     std::vector<GLfloat>   maVertices;
-    std::vector<glm::vec4> maColors;
     std::vector<GLfloat>   maTextureCoords;
+    std::vector<GLubyte>   maColors;
     OpenGLTexture          maTexture;
 };
 
@@ -42,7 +53,6 @@ struct RenderEntry
 
     RenderParameters maTriangleParameters;
     RenderParameters maLineParameters;
-    RenderParameters maLineAAParameters;
 
     std::unordered_map<GLuint, RenderTextureParameters> maTextureParametersMap;
 
@@ -54,11 +64,6 @@ struct RenderEntry
     bool hasLines()
     {
         return !maLineParameters.maVertices.empty();
-    }
-
-    bool hasLinesAA()
-    {
-        return !maLineAAParameters.maVertices.empty();
     }
 
     bool hasTextures()
@@ -156,6 +161,11 @@ public:
 
     void addDrawPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPolygon, double fTransparency,
                             SalColor nLineColor, SalColor nFillColor, bool bUseAA);
+
+    void addDrawPolyLine(const basegfx::B2DPolygon& rPolygon, double fTransparency,
+                         const basegfx::B2DVector& rLineWidth, basegfx::B2DLineJoin eLineJoin,
+                         css::drawing::LineCap eLineCap, double fMiterMinimumAngle,
+                         SalColor nLineColor, bool bUseAA);
 };
 
 #endif // INCLUDED_VCL_INC_OPENGL_RENDERLIST_H

@@ -11,7 +11,11 @@
 #ifndef INCLUDED_VCL_INC_OPENGL_VERTEXUTILS_H
 #define INCLUDED_VCL_INC_OPENGL_VERTEXUTILS_H
 
+#include <basegfx/numeric/ftools.hxx>
+#include <GL/glew.h>
 #include <glm/gtx/norm.hpp>
+#include <vcl/salgtype.hxx>
+#include <vector>
 
 namespace vcl
 {
@@ -39,89 +43,54 @@ inline void addRectangle<GL_TRIANGLE_FAN>(std::vector<GLfloat>& rVertices, GLflo
     });
 }
 
-template<GLenum TYPE>
-inline void addTrapezoid(std::vector<GLfloat>& rVertices, GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2,
-                                                          GLfloat x3, GLfloat y3, GLfloat x4, GLfloat y4);
-
-template<>
-inline void addTrapezoid<GL_TRIANGLES>(std::vector<GLfloat>& rVertices, GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2,
-                                                                        GLfloat x3, GLfloat y3, GLfloat x4, GLfloat y4)
+inline void createColor(SalColor nColor, GLfloat fTransparency, GLubyte& nR, GLubyte& nG, GLubyte& nB, GLubyte& nA)
 {
-    rVertices.insert(rVertices.end(), {
-        x1, y1, x2, y2, x3, y3,
-        x3, y3, x2, y2, x4, y4
-    });
-}
-
-inline glm::vec4 createGLColor(SalColor nColor, GLfloat rTransparency)
-{
-    return glm::vec4(SALCOLOR_RED(nColor)   / 255.0f,
-                     SALCOLOR_GREEN(nColor) / 255.0f,
-                     SALCOLOR_BLUE(nColor)  / 255.0f,
-                     1.0f - rTransparency);
+    nR = SALCOLOR_RED(nColor);
+    nG = SALCOLOR_GREEN(nColor);
+    nB = SALCOLOR_BLUE(nColor);
+    nA = (1.0f - fTransparency) * 255.0f;
 }
 
 template<GLenum TYPE>
-inline void addQuadColors(std::vector<glm::vec4>& rColors, SalColor nColor, GLfloat rTransparency);
+inline void addQuadColors(std::vector<GLubyte>& rColors, SalColor nColor, GLfloat fTransparency);
 
 template<>
-inline void addQuadColors<GL_TRIANGLES>(std::vector<glm::vec4>& rColors, SalColor nColor, GLfloat rTransparency)
+inline void addQuadColors<GL_TRIANGLES>(std::vector<GLubyte>& rColors, SalColor nColor, GLfloat fTransparency)
 {
-    glm::vec4 color = createGLColor(nColor, rTransparency);
+    GLubyte nR, nG, nB, nA;
+    createColor(nColor, fTransparency, nR, nG, nB, nA);
 
     rColors.insert(rColors.end(), {
-        color, color, color,
-        color, color, color
+        nR, nG, nB, nA,
+        nR, nG, nB, nA,
+        nR, nG, nB, nA,
+        nR, nG, nB, nA,
+        nR, nG, nB, nA,
+        nR, nG, nB, nA,
     });
 }
 
-template<GLenum TYPE>
-inline void addQuadEmptyExtrusionVectors(std::vector<GLfloat>& rExtrusions);
-
-template<>
-inline void addQuadEmptyExtrusionVectors<GL_TRIANGLES>(std::vector<GLfloat>& rExtrusions)
+inline void addLineSegmentVertices(std::vector<GLfloat>& rVertices, std::vector<GLfloat>& rExtrusionVectors,
+                                   glm::vec2 prevPoint, glm::vec2 prevExtrusionVector, GLfloat prevLength,
+                                   glm::vec2 currPoint, glm::vec2 currExtrusionVector, GLfloat currLength)
 {
-    rExtrusions.insert(rExtrusions.end(), {
-        0.0f, 0.0f, 0.0f,
-        0.0f, 0.0f, 0.0f,
-        0.0f, 0.0f, 0.0f,
-        0.0f, 0.0f, 0.0f,
-        0.0f, 0.0f, 0.0f,
-        0.0f, 0.0f, 0.0f,
+    rVertices.insert(rVertices.end(), {
+        prevPoint.x, prevPoint.y,
+        prevPoint.x, prevPoint.y,
+        currPoint.x, currPoint.y,
+        currPoint.x, currPoint.y,
+        prevPoint.x, prevPoint.y,
+        currPoint.x, currPoint.y,
     });
-}
 
-inline void addLineVertex(std::vector<GLfloat>& rVertices, std::vector<GLfloat>& rExtrusionVectors, glm::vec2 point, glm::vec2 extrusionVector, float length)
-{
-    rVertices.push_back(point.x);
-    rVertices.push_back(point.y);
-
-    rExtrusionVectors.push_back(extrusionVector.x);
-    rExtrusionVectors.push_back(extrusionVector.y);
-    rExtrusionVectors.push_back(length);
-}
-
-inline void addLineVertexPair(std::vector<GLfloat>& rVertices, std::vector<GLfloat>& rExtrusionVectors, const glm::vec2& point, const glm::vec2& extrusionVector, float length)
-{
-    addLineVertex(rVertices, rExtrusionVectors, point, -extrusionVector, -length);
-    addLineVertex(rVertices, rExtrusionVectors, point,  extrusionVector,  length);
-}
-
-inline void addLinePointFirst(std::vector<GLfloat>& rVertices, std::vector<GLfloat>& rExtrusionVectors,
-                               glm::vec2 point, glm::vec2 extrusionVector, float length)
-{
-    addLineVertex(rVertices, rExtrusionVectors, point, -extrusionVector, -length);
-    addLineVertex(rVertices, rExtrusionVectors, point,  extrusionVector,  length);
-}
-
-inline void addLinePointNext(std::vector<GLfloat>& rVertices, std::vector<GLfloat>& rExtrusionVectors,
-                             glm::vec2 prevPoint, glm::vec2 prevExtrusionVector, float prevLength,
-                             glm::vec2 currPoint, glm::vec2 currExtrusionVector, float currLength)
-{
-    addLineVertex(rVertices, rExtrusionVectors, currPoint, -currExtrusionVector, -currLength);
-    addLineVertex(rVertices, rExtrusionVectors, currPoint, -currExtrusionVector, -currLength);
-    addLineVertex(rVertices, rExtrusionVectors, prevPoint,  prevExtrusionVector,  prevLength);
-    addLineVertex(rVertices, rExtrusionVectors, currPoint,  currExtrusionVector,  currLength);
+    rExtrusionVectors.insert(rExtrusionVectors.end(), {
+        -prevExtrusionVector.x, -prevExtrusionVector.y, -prevLength,
+         prevExtrusionVector.x,  prevExtrusionVector.y,  prevLength,
+        -currExtrusionVector.x, -currExtrusionVector.y, -currLength,
+        -currExtrusionVector.x, -currExtrusionVector.y, -currLength,
+         prevExtrusionVector.x,  prevExtrusionVector.y,  prevLength,
+         currExtrusionVector.x,  currExtrusionVector.y,  currLength,
+    });
 }
 
 inline glm::vec2 normalize(const glm::vec2& vector)
@@ -129,6 +98,19 @@ inline glm::vec2 normalize(const glm::vec2& vector)
     if (glm::length(vector) > 0.0)
         return glm::normalize(vector);
     return vector;
+}
+
+inline glm::vec2 perpendicular(const glm::vec2& vector)
+{
+    return glm::vec2(-vector.y, vector.x);
+}
+
+inline float lineVectorAngle(const glm::vec2& previous, const glm::vec2& next)
+{
+    float angle = std::atan2(previous.x * next.y - previous.y * next.x,
+                             previous.x * next.x + previous.y * next.y);
+
+    return F_PI - std::fabs(angle);
 }
 
 }} // end vcl::vertex

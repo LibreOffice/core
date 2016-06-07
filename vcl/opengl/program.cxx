@@ -113,11 +113,13 @@ bool OpenGLProgram::EnableVertexAttrib(GLuint& rAttrib, const OString& rName)
     return true;
 }
 
-void OpenGLProgram::SetVertexAttrib( GLuint& rAttrib, const OString& rName, const GLvoid* pData, GLint nSize )
+void OpenGLProgram::SetVertexAttrib(GLuint& rAttrib, const OString& rName, GLint nSize,
+                                    GLenum eType, GLboolean bNormalized, GLsizei aStride,
+                                    const GLvoid* pPointer)
 {
     if (EnableVertexAttrib(rAttrib, rName))
     {
-        glVertexAttribPointer( rAttrib, nSize, GL_FLOAT, GL_FALSE, 0, pData );
+        glVertexAttribPointer(rAttrib, nSize, eType, bNormalized, aStride, pPointer);
         CHECK_GL_ERROR();
     }
     else
@@ -128,32 +130,32 @@ void OpenGLProgram::SetVertexAttrib( GLuint& rAttrib, const OString& rName, cons
 
 void OpenGLProgram::SetVertices( const GLvoid* pData )
 {
-    SetVertexAttrib( mnPositionAttrib, "position", pData );
+    SetVertexAttrib(mnPositionAttrib, "position", 2, GL_FLOAT, GL_FALSE, 0, pData);
 }
 
 void OpenGLProgram::SetTextureCoord( const GLvoid* pData )
 {
-    SetVertexAttrib( mnTexCoordAttrib, "tex_coord_in", pData );
+    SetVertexAttrib(mnTexCoordAttrib, "tex_coord_in", 2, GL_FLOAT, GL_FALSE, 0, pData);
 }
 
 void OpenGLProgram::SetAlphaCoord( const GLvoid* pData )
 {
-    SetVertexAttrib( mnAlphaCoordAttrib, "alpha_coord_in", pData );
+    SetVertexAttrib(mnAlphaCoordAttrib, "alpha_coord_in", 2, GL_FLOAT, GL_FALSE, 0, pData);
 }
 
 void OpenGLProgram::SetMaskCoord(const GLvoid* pData)
 {
-    SetVertexAttrib(mnMaskCoordAttrib, "mask_coord_in", pData);
+    SetVertexAttrib(mnMaskCoordAttrib, "mask_coord_in", 2, GL_FLOAT, GL_FALSE, 0, pData);
 }
 
 void OpenGLProgram::SetExtrusionVectors(const GLvoid* pData)
 {
-    SetVertexAttrib(mnExtrusionVectorsAttrib, "extrusion_vectors", pData, 3);
+    SetVertexAttrib(mnExtrusionVectorsAttrib, "extrusion_vectors", 3, GL_FLOAT, GL_FALSE, 0, pData);
 }
 
-void OpenGLProgram::SetVertexColors(std::vector<glm::vec4>& rColorVector)
+void OpenGLProgram::SetVertexColors(std::vector<GLubyte>& rColorVector)
 {
-    SetVertexAttrib(mnVertexColorsAttrib, "vertex_color_in", glm::value_ptr(rColorVector[0]), 4);
+    SetVertexAttrib(mnVertexColorsAttrib, "vertex_color_in", 4, GL_UNSIGNED_BYTE, GL_FALSE, 0, rColorVector.data());
 }
 
 void OpenGLProgram::SetShaderType(TextureShaderType eTextureShaderType)
@@ -187,6 +189,14 @@ void OpenGLProgram::DrawArrays(GLenum aMode, std::vector<GLfloat>& aVertices)
 
     SetVertices(aVertices.data());
     glDrawArrays(aMode, 0, aVertices.size() / 2);
+}
+
+void OpenGLProgram::DrawElements(GLenum aMode, GLuint nNumberOfVertices)
+{
+    if (!mbBlending)
+        OpenGLContext::getVCLContext()->state()->blend().disable();
+
+    glDrawElements(aMode, nNumberOfVertices, GL_UNSIGNED_INT, nullptr);
 }
 
 void OpenGLProgram::SetUniform1f( const OString& rName, GLfloat v1 )

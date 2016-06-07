@@ -622,6 +622,7 @@ else
 	vcl/opengl/FixedTextureAtlas \
 	vcl/opengl/PackedTextureAtlas \
 	vcl/opengl/RenderList \
+	vcl/opengl/LineRenderUtils \
     vcl/source/opengl/OpenGLContext \
     vcl/source/opengl/OpenGLHelper \
     vcl/source/window/openglwin \

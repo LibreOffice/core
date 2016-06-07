@@ -36,6 +36,7 @@
 #include "opengl/salbmp.hxx"
 #include "opengl/RenderState.hxx"
 #include "opengl/VertexUtils.hxx"
+#include "opengl/BufferObject.hxx"
 
 #include <vector>
 
@@ -616,265 +617,28 @@ bool OpenGLSalGraphicsImpl::UseInvert( SalInvert nFlags )
     return true;
 }
 
-void OpenGLSalGraphicsImpl::DrawLineCap(float x1, float y1, float x2, float y2, css::drawing::LineCap eLineCap, float fLineWidth)
-{
-    if (eLineCap != css::drawing::LineCap_ROUND && eLineCap != css::drawing::LineCap_SQUARE)
-        return;
-
-    OpenGLZone aZone;
-
-    const int nRoundCapIteration = 12;
-
-    std::vector<GLfloat> aVertices;
-    std::vector<GLfloat> aExtrusionVectors;
-
-    glm::vec2 p1(x1, y1);
-    glm::vec2 p2(x2, y2);
-    glm::vec2 lineVector = vcl::vertex::normalize(p2 - p1);
-    glm::vec2 normal = glm::vec2(-lineVector.y, lineVector.x);
-
-    if (eLineCap == css::drawing::LineCap_ROUND)
-    {
-        for (int nFactor = 0; nFactor <= nRoundCapIteration; nFactor++)
-        {
-            float angle = float(nFactor) * (M_PI / float(nRoundCapIteration));
-            glm::vec2 roundNormal(normal.x * glm::cos(angle) - normal.y * glm::sin(angle),
-                                  normal.x * glm::sin(angle) + normal.y * glm::cos(angle));
-
-            vcl::vertex::addLineVertexPair(aVertices, aExtrusionVectors, p1, roundNormal, 1.0f);
-        }
-    }
-    else if (eLineCap == css::drawing::LineCap_SQUARE)
-    {
-        glm::vec2 extrudedPoint = p1 + -lineVector * (fLineWidth / 2.0f);
-
-        vcl::vertex::addLineVertexPair(aVertices, aExtrusionVectors, extrudedPoint, normal, 1.0f);
-        vcl::vertex::addLineVertexPair(aVertices, aExtrusionVectors, p1, normal, 1.0f);
-    }
-
-    ApplyProgramMatrices(0.5f);
-    mpProgram->SetExtrusionVectors(aExtrusionVectors.data());
-    mpProgram->DrawArrays(GL_TRIANGLE_STRIP, aVertices);
-
-    CHECK_GL_ERROR();
-}
-
 void OpenGLSalGraphicsImpl::DrawLineSegment(float x1, float y1, float x2, float y2)
 {
-    glm::vec2 p1(x1, y1);
-    glm::vec2 p2(x2, y2);
-
     std::vector<GLfloat> aVertices;
     std::vector<GLfloat> aExtrusionVectors;
 
     OpenGLZone aZone;
 
-    glm::vec2 lineVector = vcl::vertex::normalize(p2 - p1);
-    glm::vec2 normal = glm::vec2(-lineVector.y, lineVector.x);
+    glm::vec2 aPoint1(x1, y1);
+    glm::vec2 aPoint2(x2, y2);
 
-    vcl::vertex::addLinePointFirst(aVertices, aExtrusionVectors, p1, normal, 1.0f);
-    vcl::vertex::addLinePointNext (aVertices, aExtrusionVectors, p1, normal, 1.0f, p2, normal, 1.0f);
+    glm::vec2 aLineVector = vcl::vertex::normalize(aPoint2 - aPoint1);
+    glm::vec2 aNormal = glm::vec2(-aLineVector.y, aLineVector.x);
+
+    vcl::vertex::addLineSegmentVertices(aVertices, aExtrusionVectors,
+                                        aPoint1, aNormal, 1.0f,
+                                        aPoint2, aNormal, 1.0f);
 
     ApplyProgramMatrices(0.5f);
     mpProgram->SetExtrusionVectors(aExtrusionVectors.data());
     mpProgram->DrawArrays(GL_TRIANGLES, aVertices);
 
     CHECK_GL_ERROR();
-}
-
-/** Draw a simple (non bezier) polyline
- *
- * OpenGL polyline drawing algorithm inspired by:
- * - http://mattdesl.svbtle.com/drawing-lines-is-hard
- * - https://www.mapbox.com/blog/drawing-antialiased-lines/
- * - https://cesiumjs.org/2013/04/22/Robust-Polyline-Rendering-with-WebGL/
- * - http://artgrammer.blogspot.si/2011/05/drawing-nearly-perfect-2d-line-segments.html
- * - http://artgrammer.blogspot.si/2011/07/drawing-polylines-by-tessellation.html
- *
- */
-void OpenGLSalGraphicsImpl::DrawPolyLine(const basegfx::B2DPolygon& rPolygon, float fLineWidth, basegfx::B2DLineJoin eLineJoin, css::drawing::LineCap eLineCap, float fMiterMinimumAngle)
-{
-    sal_uInt32 nPoints = rPolygon.count();
-    bool bClosed = rPolygon.isClosed();
-
-    if (!bClosed && nPoints >= 2)
-    {
-        // draw begin cap
-        {
-            glm::vec2 p1(rPolygon.getB2DPoint(0).getX(), rPolygon.getB2DPoint(0).getY());
-            glm::vec2 p2(rPolygon.getB2DPoint(1).getX(), rPolygon.getB2DPoint(1).getY());
-            DrawLineCap(p1.x, p1.y, p2.x, p2.y, eLineCap, fLineWidth);
-        }
-
-        // draw end cap
-        {
-            glm::vec2 p1(rPolygon.getB2DPoint(nPoints - 1).getX(), rPolygon.getB2DPoint(nPoints - 1).getY());
-            glm::vec2 p2(rPolygon.getB2DPoint(nPoints - 2).getX(), rPolygon.getB2DPoint(nPoints - 2).getY());
-            DrawLineCap(p1.x, p1.y, p2.x, p2.y, eLineCap, fLineWidth);
-        }
-    }
-
-    if (nPoints == 2 || eLineJoin == basegfx::B2DLineJoin::NONE)
-    {
-        // If line joint is NONE or a simple line with 2 points, draw the polyline
-        // each line segment separatly.
-        for (int i = 0; i < int(nPoints) - 1; ++i)
-        {
-            glm::vec2 p1(rPolygon.getB2DPoint(i+0).getX(), rPolygon.getB2DPoint(i+0).getY());
-            glm::vec2 p2(rPolygon.getB2DPoint(i+1).getX(), rPolygon.getB2DPoint(i+1).getY());
-            DrawLineSegment(p1.x, p1.y, p2.x, p2.y);
-        }
-        if (bClosed)
-        {
-            glm::vec2 p1(rPolygon.getB2DPoint(nPoints - 1).getX(), rPolygon.getB2DPoint(nPoints - 1).getY());
-            glm::vec2 p2(rPolygon.getB2DPoint(0).getX(), rPolygon.getB2DPoint(0).getY());
-            DrawLineSegment(p1.x, p1.y, p2.x, p2.y);
-        }
-    }
-    else if (nPoints > 2)
-    {
-        OpenGLZone aZone;
-
-        int i = 0;
-        int lastPoint = int(nPoints);
-
-        std::vector<GLfloat> aVertices;
-        std::vector<GLfloat> aExtrusionVectors;
-
-        // First guess on the size, but we could know relatively exactly
-        // how much vertices we need.
-        aVertices.reserve(nPoints * 4);
-        aExtrusionVectors.reserve(nPoints * 6);
-
-        // Handle first point
-
-        glm::vec2 nextLineVector;
-        glm::vec2 previousLineVector;
-        glm::vec2 normal; // perpendicular to the line vector
-
-        glm::vec2 p0(rPolygon.getB2DPoint(nPoints - 1).getX(), rPolygon.getB2DPoint(nPoints - 1).getY());
-        glm::vec2 p1(rPolygon.getB2DPoint(0).getX(), rPolygon.getB2DPoint(0).getY());
-        glm::vec2 p2(rPolygon.getB2DPoint(1).getX(), rPolygon.getB2DPoint(1).getY());
-
-        nextLineVector = vcl::vertex::normalize(p2 - p1);
-
-        if (!bClosed)
-        {
-            normal = glm::vec2(-nextLineVector.y, nextLineVector.x); // make perpendicular
-            vcl::vertex::addLineVertexPair(aVertices, aExtrusionVectors, p1, normal, 1.0f);
-
-            i++; // first point done already
-            lastPoint--; // last point will be calculated separatly from the loop
-
-            p0 = p1;
-            previousLineVector = nextLineVector;
-        }
-        else
-        {
-            lastPoint++; // we need to connect last point to first point so one more line segment to calculate
-
-            previousLineVector = vcl::vertex::normalize(p1 - p0);
-        }
-
-        for (; i < lastPoint; ++i)
-        {
-            int index1 = (i + 0) % nPoints; // loop indices - important when polyline is closed
-            int index2 = (i + 1) % nPoints;
-
-            p1 = glm::vec2(rPolygon.getB2DPoint(index1).getX(), rPolygon.getB2DPoint(index1).getY());
-            p2 = glm::vec2(rPolygon.getB2DPoint(index2).getX(), rPolygon.getB2DPoint(index2).getY());
-
-            if (p1 == p2) // skip equal points, normals could div-by-0
-                continue;
-
-            nextLineVector = vcl::vertex::normalize(p2 - p1);
-
-            if (eLineJoin == basegfx::B2DLineJoin::Miter)
-            {
-                float angle = std::atan2(previousLineVector.x * nextLineVector.y - previousLineVector.y * nextLineVector.x,
-                                         previousLineVector.x * nextLineVector.x + previousLineVector.y * nextLineVector.y);
-
-                angle = F_PI - std::fabs(angle);
-
-                if (angle < fMiterMinimumAngle)
-                    eLineJoin = basegfx::B2DLineJoin::Bevel;
-            }
-
-            if (eLineJoin == basegfx::B2DLineJoin::Miter)
-            {
-                // With miter join we calculate the extrusion vector by adding normals of
-                // previous and next line segment. The vector shows the way but we also
-                // need the length (otherwise the line will be deformed). Length factor is
-                // calculated as dot product of extrusion vector and one of the normals.
-                // The value we get is the inverse length (used in the shader):
-                // length = line_width / dot(extrusionVector, normal)
-
-                normal = glm::vec2(-previousLineVector.y, previousLineVector.x);
-
-                glm::vec2 tangent = vcl::vertex::normalize(nextLineVector + previousLineVector);
-                glm::vec2 extrusionVector(-tangent.y, tangent.x);
-                GLfloat length = glm::dot(extrusionVector, normal);
-
-                vcl::vertex::addLineVertexPair(aVertices, aExtrusionVectors, p1, extrusionVector, length);
-            }
-            else if (eLineJoin == basegfx::B2DLineJoin::Bevel)
-            {
-                // For bevel join we just add 2 additional vertices and use previous
-                // line segment normal and next line segment normal as extrusion vector.
-                // All the magic is done by the fact that we draw triangle strips, so we
-                // cover the joins correctly.
-
-                glm::vec2 previousNormal = glm::vec2(-previousLineVector.y, previousLineVector.x);
-                glm::vec2 nextNormal = glm::vec2(-nextLineVector.y, nextLineVector.x);
-
-                vcl::vertex::addLineVertexPair(aVertices, aExtrusionVectors, p1, previousNormal, 1.0f);
-                vcl::vertex::addLineVertexPair(aVertices, aExtrusionVectors, p1, nextNormal, 1.0f);
-            }
-            else if (eLineJoin == basegfx::B2DLineJoin::Round)
-            {
-                // For round join we do a similar thing as in bevel, we add more intermediate
-                // vertices and add normals to get extrusion vectors in the between the
-                // both normals.
-
-                // 3 additional extrusion vectors + normals are enough to make most
-                // line joins look round. Ideally the number of vectors could be
-                // calculated.
-
-                glm::vec2 previousNormal = glm::vec2(-previousLineVector.y, previousLineVector.x);
-                glm::vec2 nextNormal = glm::vec2(-nextLineVector.y, nextLineVector.x);
-
-                glm::vec2 middle = vcl::vertex::normalize(previousNormal + nextNormal);
-                glm::vec2 middleLeft  = vcl::vertex::normalize(previousNormal + middle);
-                glm::vec2 middleRight = vcl::vertex::normalize(middle + nextNormal);
-
-                vcl::vertex::addLineVertexPair(aVertices, aExtrusionVectors, p1, previousNormal, 1.0f);
-                vcl::vertex::addLineVertexPair(aVertices, aExtrusionVectors, p1, middleLeft, 1.0f);
-                vcl::vertex::addLineVertexPair(aVertices, aExtrusionVectors, p1, middle, 1.0f);
-                vcl::vertex::addLineVertexPair(aVertices, aExtrusionVectors, p1, middleRight, 1.0f);
-                vcl::vertex::addLineVertexPair(aVertices, aExtrusionVectors, p1, nextNormal, 1.0f);
-            }
-            p0 = p1;
-            previousLineVector = nextLineVector;
-        }
-
-        if (!bClosed)
-        {
-            // Create vertices for the last point. There is no line join so just
-            // use the last line segment normal as the extrusion vector.
-
-            p1 = glm::vec2(rPolygon.getB2DPoint(nPoints - 1).getX(), rPolygon.getB2DPoint(nPoints - 1).getY());
-
-            normal = glm::vec2(-previousLineVector.y, previousLineVector.x);
-
-            vcl::vertex::addLineVertexPair(aVertices, aExtrusionVectors, p1, normal, 1.0f);
-        }
-
-        ApplyProgramMatrices(0.5f);
-        mpProgram->SetExtrusionVectors(aExtrusionVectors.data());
-        mpProgram->DrawArrays(GL_TRIANGLE_STRIP, aVertices);
-
-        CHECK_GL_ERROR();
-    }
 }
 
 bool OpenGLSalGraphicsImpl::UseLine(SalColor nColor, double fTransparency, GLfloat fLineWidth, bool bUseAA)
@@ -1503,6 +1267,42 @@ void OpenGLSalGraphicsImpl::DeferredTextDraw(OpenGLTexture& rTexture, SalColor a
     mpRenderList->addDrawTextureWithMaskColor(rTexture, aMaskColor, rPosAry);
 }
 
+bool OpenGLSalGraphicsImpl::FlushLinesOrTriangles(DrawShaderType eType, RenderParameters& rParameters)
+{
+    if (!UseProgram("combinedVertexShader", "combinedFragmentShader", "#define USE_VERTEX_COLORS"))
+        return false;
+
+    mpProgram->SetShaderType(eType);
+    mpProgram->SetBlendMode(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    ApplyProgramMatrices(0.5f);
+
+    vcl::VertexBufferObject<Vertex> vbo;
+    vbo.upload(rParameters.maVertices);
+
+    GLuint positionAttrib = SAL_MAX_UINT32;
+    GLuint colorAttrib = SAL_MAX_UINT32;
+    GLuint lineDataAttrib = SAL_MAX_UINT32;
+
+    mpProgram->SetVertexAttrib(positionAttrib, "position", 2, GL_FLOAT, GL_FALSE,
+                               sizeof(Vertex), reinterpret_cast<void*>(offsetof(Vertex, position)));
+
+    mpProgram->SetVertexAttrib(colorAttrib, "vertex_color_in", 4, GL_FLOAT, GL_FALSE,
+                               sizeof(Vertex), reinterpret_cast<void*>(offsetof(Vertex, color)));
+
+    mpProgram->SetVertexAttrib(lineDataAttrib, "extrusion_vectors", 4, GL_FLOAT, GL_FALSE,
+                               sizeof(Vertex), reinterpret_cast<void*>(offsetof(Vertex, lineData)));
+
+    vcl::IndexBufferObject ibo;
+    ibo.upload(rParameters.maIndices);
+    ibo.bind();
+
+    mpProgram->DrawElements(GL_TRIANGLES, rParameters.maIndices.size());
+    CHECK_GL_ERROR();
+
+    mpProgram->Clean();
+    return true;
+}
+
 void OpenGLSalGraphicsImpl::FlushDeferredDrawing()
 {
     if (mpRenderList->empty())
@@ -1515,48 +1315,17 @@ void OpenGLSalGraphicsImpl::FlushDeferredDrawing()
     OpenGLZone aZone;
     for (RenderEntry& rRenderEntry : mpRenderList->getEntries())
     {
-        if (rRenderEntry.hasTriangles() && UseProgram("combinedVertexShader", "combinedFragmentShader", "#define USE_VERTEX_COLORS"))
+        if (rRenderEntry.hasTriangles())
         {
             RenderParameters& rParameters = rRenderEntry.maTriangleParameters;
             VCL_GL_INFO("Flush Triangles: " << rParameters.maVertices.size());
-            mpProgram->SetShaderType(DrawShaderType::Normal);
-            mpProgram->SetBlendMode(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-            ApplyProgramMatrices(0.5f);
-            mpProgram->SetExtrusionVectors(rParameters.maExtrusionVectors.data());
-            mpProgram->SetVertexColors(rParameters.maColors);
-            mpProgram->DrawArrays(GL_TRIANGLES, rParameters.maVertices);
-            CHECK_GL_ERROR();
-            mpProgram->Clean();
+            FlushLinesOrTriangles(DrawShaderType::Normal, rParameters);
         }
-        if (rRenderEntry.hasLines() && UseProgram("combinedVertexShader", "combinedFragmentShader", "#define USE_VERTEX_COLORS"))
+        if (rRenderEntry.hasLines())
         {
             RenderParameters& rParameters = rRenderEntry.maLineParameters;
             VCL_GL_INFO("Flush Lines: " << rParameters.maVertices.size());
-            mpProgram->SetShaderType(DrawShaderType::Line);
-            mpProgram->SetUniform1f("line_width", 1.0f);
-            mpProgram->SetUniform1f("feather", 0.0f); // Anti-Aliasing disabled
-            mpProgram->SetBlendMode(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-            ApplyProgramMatrices(0.5f);
-            mpProgram->SetExtrusionVectors(rParameters.maExtrusionVectors.data());
-            mpProgram->SetVertexColors(rParameters.maColors);
-            mpProgram->DrawArrays(GL_TRIANGLES, rParameters.maVertices);
-            CHECK_GL_ERROR();
-            mpProgram->Clean();
-        }
-        if (rRenderEntry.hasLinesAA() && UseProgram("combinedVertexShader", "combinedFragmentShader", "#define USE_VERTEX_COLORS"))
-        {
-            RenderParameters& rParameters = rRenderEntry.maLineAAParameters;
-            VCL_GL_INFO("Flush Lines AA: " << rParameters.maVertices.size());
-            mpProgram->SetShaderType(DrawShaderType::Line);
-            mpProgram->SetUniform1f("line_width", 1.0f);
-            mpProgram->SetUniform1f("feather", 0.5f); // Anti-Aliasing enabled
-            mpProgram->SetBlendMode(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-            ApplyProgramMatrices(0.5f);
-            mpProgram->SetExtrusionVectors(rParameters.maExtrusionVectors.data());
-            mpProgram->SetVertexColors(rParameters.maColors);
-            mpProgram->DrawArrays(GL_TRIANGLES, rParameters.maVertices);
-            CHECK_GL_ERROR();
-            mpProgram->Clean();
+            FlushLinesOrTriangles(DrawShaderType::Line, rParameters);
         }
         if (rRenderEntry.hasTextures() && UseProgram("combinedTextureVertexShader", "combinedTextureFragmentShader", "#define USE_VERTEX_COLORS"))
         {
@@ -1769,34 +1538,14 @@ bool OpenGLSalGraphicsImpl::drawPolyPolygon(const basegfx::B2DPolyPolygon& rPoly
     return true;
 }
 
-bool OpenGLSalGraphicsImpl::drawPolyLine(
-            const basegfx::B2DPolygon& rPolygon,
-            double fTransparency,
-            const basegfx::B2DVector& rLineWidth,
-            basegfx::B2DLineJoin eLineJoin,
-            css::drawing::LineCap eLineCap,
-            double fMiterMinimumAngle)
+bool OpenGLSalGraphicsImpl::drawPolyLine(const basegfx::B2DPolygon& rPolygon, double fTransparency,
+                                         const basegfx::B2DVector& rLineWidth, basegfx::B2DLineJoin eLineJoin,
+                                         css::drawing::LineCap eLineCap, double fMiterMinimumAngle)
 {
-    VCL_GL_INFO( "::drawPolyLine trans " << fTransparency );
-    if( mnLineColor == SALCOLOR_NONE )
-        return true;
+    VCL_GL_INFO("::drawPolyLine " << rPolygon.getB2DRange());
 
-    const bool bIsHairline = (rLineWidth.getX() == rLineWidth.getY()) && (rLineWidth.getX() <= 1.2);
-    const float fLineWidth = bIsHairline ? 1.0f : rLineWidth.getX();
-
-    PreDraw(XOROption::IMPLEMENT_XOR);
-
-    if (UseLine(mnLineColor, 0.0f, fLineWidth, mrParent.getAntiAliasB2DDraw()))
-    {
-        basegfx::B2DPolygon aPolygon(rPolygon);
-
-        if (aPolygon.areControlPointsUsed())
-            aPolygon = aPolygon.getDefaultAdaptiveSubdivision();
-
-        DrawPolyLine(aPolygon, fLineWidth, eLineJoin, eLineCap, fMiterMinimumAngle);
-    }
-    PostDraw();
-
+    mpRenderList->addDrawPolyLine(rPolygon, fTransparency, rLineWidth, eLineJoin, eLineCap,
+                                  fMiterMinimumAngle, mnLineColor, mrParent.getAntiAliasB2DDraw());
     return true;
 }
 

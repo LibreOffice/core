@@ -127,8 +127,6 @@ public:
     void DrawRect( const Rectangle& rRect );
     void DrawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry );
     void DrawLineSegment(float x1, float y1, float x2, float y2);
-    void DrawLineCap(float x1, float y1, float x2, float y2, css::drawing::LineCap eLineCap, float fLineWidth);
-    void DrawPolyLine( const basegfx::B2DPolygon& rPolygon, float fLineWidth, basegfx::B2DLineJoin eLineJoin, css::drawing::LineCap eLineCap, float fMiterMinimumAngle);
     void DrawPolyPolygon( const basegfx::B2DPolyPolygon& rPolyPolygon, bool blockAA = false );
     void DrawRegionBand( const RegionBand& rRegion );
     void DrawTextureRect( OpenGLTexture& rTexture, const SalTwoRect& rPosAry, bool bInverted = false );
@@ -143,7 +141,9 @@ public:
     void DrawAxialGradient( const Gradient& rGradient, const Rectangle& rRect );
     void DrawRadialGradient( const Gradient& rGradient, const Rectangle& rRect );
     void DeferredTextDraw(OpenGLTexture& rTexture, const SalColor nMaskColor, const SalTwoRect& rPosAry);
+
     void FlushDeferredDrawing();
+    bool FlushLinesOrTriangles(DrawShaderType eType, RenderParameters& rParameters);
 
 public:
     // get the width of the device

@@ -8,14 +8,13 @@
  */
 
 varying float fade_factor; // 0->1 fade factor used for AA
+varying float multiply;
 
 #ifdef USE_VERTEX_COLORS
 varying vec4 vertex_color;
 #endif
 
 uniform vec4 color;
-uniform float line_width;
-uniform float feather;
 
 #define TYPE_NORMAL 0
 #define TYPE_LINE   1
@@ -24,8 +23,6 @@ uniform int type;
 
 void main()
 {
-    float alpha = 1.0;
-
 #ifdef USE_VERTEX_COLORS
     vec4 result = vertex_color;
 #else
@@ -34,19 +31,10 @@ void main()
 
     if (type == TYPE_LINE)
     {
-        float start = (line_width / 2.0) - feather; // where we start to apply alpha
-        float end = (line_width / 2.0) + feather; // where we end to apply alpha
-
-        // Calculate the multiplier so we can transform the 0->1 fade factor
-        // to take feather and line width into account.
-        float multiplied = start == end ? 1.0 : 1.0 / (1.0 - (start / end));
-
-        float dist = (1.0 - abs(fade_factor)) * multiplied;
-
-        alpha = clamp(dist, 0.0, 1.0);
+        float dist = (1.0 - abs(fade_factor)) * multiply;
+        float alpha = clamp(dist, 0.0, 1.0);
+        result.a = result.a * alpha;
     }
-
-    result.a = result.a * alpha;
 
     gl_FragColor = result;
 }

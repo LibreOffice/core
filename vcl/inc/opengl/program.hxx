@@ -22,7 +22,6 @@
 #include <tools/color.hxx>
 #include <opengl/texture.hxx>
 
-#include <glm/glm.hpp>
 #include <unordered_map>
 
 typedef std::unordered_map< OString, GLuint, OStringHash > UniformCache;
@@ -82,7 +81,7 @@ public:
     void SetAlphaCoord( const GLvoid* pData );
     void SetMaskCoord(const GLvoid* pData);
     void SetExtrusionVectors(const GLvoid* pData);
-    void SetVertexColors(std::vector<glm::vec4>& rColorVector);
+    void SetVertexColors(std::vector<GLubyte>& rColorVector);
 
     void SetUniform1f( const OString& rName, GLfloat v1 );
     void SetUniform2f( const OString& rName, GLfloat v1, GLfloat v2 );
@@ -107,11 +106,16 @@ public:
 
     bool DrawTexture( const OpenGLTexture& rTexture );
 
-    void DrawArrays(GLenum GLenum, std::vector<GLfloat>& aVertices);
+    void DrawArrays(GLenum aMode, std::vector<GLfloat>& aVertices);
+    void DrawElements(GLenum aMode, GLuint nNumberOfVertices);
+
+    bool EnableVertexAttrib(GLuint& rAttrib, const OString& rName);
+
+    void SetVertexAttrib(GLuint& rAttrib, const OString& rName, GLint nSize,
+                         GLenum eType, GLboolean bNormalized, GLsizei aStride,
+                         const GLvoid* pPointer);
 
 protected:
-    bool EnableVertexAttrib(GLuint& rAttrib, const OString& rName);
-    void SetVertexAttrib( GLuint& rAttrib, const OString& rName, const GLvoid* pData, GLint nSize = 2 );
     GLuint GetUniformLocation( const OString& rName );
 };
 
