@@ -189,8 +189,6 @@ public:
     const SmNode *  FindTokenAt(sal_uInt16 nRow, sal_uInt16 nCol) const;
     const SmNode *  FindRectClosestTo(const Point &rPoint) const;
 
-    virtual long    GetFormulaBaseline() const;
-
     /** Accept a visitor
      * Calls the method for this class on the visitor
      */
@@ -678,7 +676,7 @@ public:
     virtual const SmNode * GetLeftMost() const override;
 
     virtual void Arrange(OutputDevice &rDev, const SmFormat &rFormat) override;
-    virtual long GetFormulaBaseline() const override;
+    long GetFormulaBaseline() const;
 
     void Accept(SmVisitor* pVisitor) override;
 };

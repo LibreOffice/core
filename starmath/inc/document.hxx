@@ -91,7 +91,7 @@ class SM_DLLPUBLIC SmDocShell : public SfxObjectShell, public SfxListener
     SmFormat            maFormat;
     SmParser            maParser;
     OUString            maAccText;
-    SmNode             *mpTree;
+    SmTableNode        *mpTree;
     SfxItemPool        *mpEditEngineItemPool;
     EditEngine         *mpEditEngine;
     VclPtr<SfxPrinter>  mpPrinter;       //q.v. comment to SmPrinter Access!
@@ -177,8 +177,8 @@ public:
 
     void            Parse();
     SmParser &      GetParser() { return maParser; }
-    const SmNode *  GetFormulaTree() const  { return mpTree; }
-    void            SetFormulaTree(SmNode *&rTree) { mpTree = rTree; }
+    const SmTableNode *GetFormulaTree() const  { return mpTree; }
+    void            SetFormulaTree(SmTableNode *pTree) { mpTree = pTree; }
 
     const std::set< OUString > &    GetUsedSymbols() const  { return maUsedSymbols; }
 

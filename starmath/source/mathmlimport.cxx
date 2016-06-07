@@ -484,8 +484,8 @@ void SmXMLImport::endDocument()
     throw(xml::sax::SAXException, uno::RuntimeException, std::exception)
 {
     //Set the resulted tree into the SmDocShell where it belongs
-    SmNode *pTree;
-    if (nullptr != (pTree = GetTree()))
+    SmNode *pTree = GetTree();
+    if (pTree && pTree->GetType() == NTABLE)
     {
         uno::Reference <frame::XModel> xModel = GetModel();
         uno::Reference <lang::XUnoTunnel> xTunnel(xModel,uno::UNO_QUERY);
@@ -496,7 +496,7 @@ void SmXMLImport::endDocument()
         {
             SmDocShell *pDocShell =
                 static_cast<SmDocShell*>(pModel->GetObjectShell());
-            pDocShell->SetFormulaTree(pTree);
+            pDocShell->SetFormulaTree(static_cast<SmTableNode *>(pTree));
             if (aText.isEmpty())  //If we picked up no annotation text
             {
                 // Get text from imported formula
