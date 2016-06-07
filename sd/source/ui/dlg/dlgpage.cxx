@@ -46,6 +46,8 @@ SdPageDlg::SdPageDlg( SfxObjectShell* pDocSh, vcl::Window* pParent, const SfxIte
         ( mpDocShell->GetItem( SID_GRADIENT_LIST ) ) ) );
     SvxBitmapListItem aBitmapListItem(*static_cast<const SvxBitmapListItem*>(
         ( mpDocShell->GetItem( SID_BITMAP_LIST ) ) ) );
+    SvxPatternListItem aPatternListItem(*static_cast<const SvxPatternListItem*>(
+        ( mpDocShell->GetItem( SID_PATTERN_LIST ) ) ) );
     SvxHatchListItem aHatchListItem(*static_cast<const SvxHatchListItem*>(
         ( mpDocShell->GetItem( SID_HATCH_LIST ) ) ) );
 
@@ -53,6 +55,7 @@ SdPageDlg::SdPageDlg( SfxObjectShell* pDocSh, vcl::Window* pParent, const SfxIte
     mpGradientList = aGradientListItem.GetGradientList();
     mpHatchingList = aHatchListItem.GetHatchList();
     mpBitmapList = aBitmapListItem.GetBitmapList();
+    mpPatternList = aPatternListItem.GetPatternList();
 
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "Dialog creation failed!");
@@ -80,6 +83,7 @@ void SdPageDlg::PageCreated(sal_uInt16 nId, SfxTabPage& rPage)
         aSet.Put (SvxGradientListItem(mpGradientList,SID_GRADIENT_LIST));
         aSet.Put (SvxHatchListItem(mpHatchingList,SID_HATCH_LIST));
         aSet.Put (SvxBitmapListItem(mpBitmapList,SID_BITMAP_LIST));
+        aSet.Put (SvxPatternListItem(mpPatternList,SID_PATTERN_LIST));
         aSet.Put (SfxUInt16Item(SID_PAGE_TYPE,0));
         aSet.Put (SfxUInt16Item(SID_DLG_TYPE,1));
         aSet.Put (SfxUInt16Item(SID_TABPAGE_POS,0));

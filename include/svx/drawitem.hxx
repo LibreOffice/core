@@ -123,6 +123,30 @@ public:
     const XBitmapListRef&   GetBitmapList() const { return pBitmapList; }
 };
 
+class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxPatternListItem : public SfxPoolItem
+{
+    XPatternListRef    pPatternList;
+
+public:
+                            static SfxPoolItem* CreateDefault();
+
+                            SvxPatternListItem();
+                            SvxPatternListItem( XPatternListRef pBL,
+                                   sal_uInt16 nWhich   );
+                            SvxPatternListItem( const SvxPatternListItem& );
+
+    virtual bool GetPresentation( SfxItemPresentation ePres,
+                                   SfxMapUnit eCoreMetric,
+                                   SfxMapUnit ePresMetric,
+                                   OUString &rText, const IntlWrapper * = nullptr ) const override;
+    virtual bool            operator==( const SfxPoolItem& ) const override;
+    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+    virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
+    virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
+
+    const XPatternListRef&  GetPatternList() const { return pPatternList; }
+};
+
 class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxDashListItem : public SfxPoolItem
 {
     XDashListRef      pDashList;

@@ -40,6 +40,7 @@
 #define RID_SVXSTR_GRADIENT                 (RID_SVX_START + 161)
 #define RID_SVXSTR_HATCH                    (RID_SVX_START + 180)
 #define RID_SVXSTR_BITMAP                   (RID_SVX_START + 167)
+#define RID_SVXSTR_PATTERN                  (RID_SVX_START + 168)
 #define RID_SVXSTR_LINESTYLE                (RID_SVX_START + 173)
 #define RID_SVXSTR_FIELDUNIT_TABLE          (RID_SVX_START + 311)
 #define RID_SVXSTR_COLOR_USER               (RID_SVX_START + 250)
