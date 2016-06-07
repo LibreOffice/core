@@ -276,7 +276,6 @@ OReportController::OReportController(Reference< XComponentContext > const & xCon
     :OReportController_BASE(xContext)
     ,OPropertyStateContainer(OGenericUnoController_Base::rBHelper)
     ,m_aSelectionListeners( getMutex() )
-    ,m_pClipbordNotifier(nullptr)
     ,m_pGroupsFloater(nullptr)
     ,m_sMode("normal")
     ,m_nSplitPos(-1)
@@ -297,7 +296,6 @@ OReportController::OReportController(Reference< XComponentContext > const & xCon
 {
     // new Observer
     m_pReportControllerObserver = new OXReportControllerObserver(*this);
-    m_pReportControllerObserver->acquire();
     registerProperty("ZoomValue", PROPERTY_ID_ZOOMVALUE,
                      beans::PropertyAttribute::BOUND | beans::PropertyAttribute::TRANSIENT,
                      &m_nZoomValue, ::cppu::UnoType<sal_Int16>::get());
@@ -314,12 +312,11 @@ IMPLEMENT_FORWARD_XINTERFACE2(OReportController,OReportController_BASE,OReportCo
 void OReportController::disposing()
 {
 
-    if ( m_pClipbordNotifier )
+    if ( m_pClipboardNotifier.is() )
     {
-        m_pClipbordNotifier->ClearCallbackLink();
-        m_pClipbordNotifier->AddRemoveListener( getView(), false );
-        m_pClipbordNotifier->release();
-        m_pClipbordNotifier = nullptr;
+        m_pClipboardNotifier->ClearCallbackLink();
+        m_pClipboardNotifier->AddRemoveListener( getView(), false );
+        m_pClipboardNotifier.clear();
     }
     if ( m_pGroupsFloater )
     {
@@ -356,7 +353,7 @@ void OReportController::disposing()
             if ( m_aReportModel )
                 listen(false);
             m_pReportControllerObserver->Clear();
-            m_pReportControllerObserver->release();
+            m_pReportControllerObserver.clear();
         }
         catch(const uno::Exception&)
         {
@@ -1768,9 +1765,8 @@ bool OReportController::Construct(vcl::Window* pParent)
     // now that we have a view we can create the clipboard listener
     m_aSystemClipboard = TransferableDataHelper::CreateFromSystemClipboard( getView() );
     m_aSystemClipboard.StartClipboardListening( );
-    m_pClipbordNotifier = new TransferableClipboardListener( LINK( this, OReportController, OnClipboardChanged ) );
-    m_pClipbordNotifier->acquire();
-    m_pClipbordNotifier->AddRemoveListener( getView(), true );
+    m_pClipboardNotifier = new TransferableClipboardListener( LINK( this, OReportController, OnClipboardChanged ) );
+    m_pClipboardNotifier->AddRemoveListener( getView(), true );
 
     OReportController_BASE::Construct(pParent);
     return true;
