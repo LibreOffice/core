@@ -14,6 +14,10 @@ extern bool rtl_string_unittest_invalid_conversion;
 extern bool rtl_string_unittest_const_literal_function;
 extern bool rtl_string_unittest_non_const_literal_function;
 
+#include <sal/config.h>
+
+#include <utility>
+
 #include <sal/types.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
@@ -49,12 +53,20 @@ CPPUNIT_TEST_SUITE_END();
 
 // reset the flag, evaluate the expression and return
 // whether the string literal ctor was used (i.e. whether the conversion was valid)
-#define VALID_CONVERSION( expression ) \
-    ( \
-    rtl_string_unittest_invalid_conversion = false, \
-    ( void ) rtl::OUString( expression ), \
-    ( void ) rtl::OUStringBuffer( expression ), \
-    !rtl_string_unittest_invalid_conversion )
+template<typename T> bool VALID_CONVERSION( T && expression )
+{
+    rtl_string_unittest_invalid_conversion = false;
+    ( void ) rtl::OUString( std::forward<T>(expression) );
+    ( void ) rtl::OUStringBuffer( std::forward<T>(expression) );
+    return !rtl_string_unittest_invalid_conversion;
+}
+template<typename T> bool VALID_CONVERSION_CALL( T f )
+{
+    rtl_string_unittest_invalid_conversion = false;
+    ( void ) rtl::OUString( f() );
+    ( void ) rtl::OUStringBuffer( f() );
+    return !rtl_string_unittest_invalid_conversion;
+}
 
 void test::oustring::StringLiterals::checkCtors()
 {
@@ -93,7 +105,8 @@ void test::oustring::StringLiterals::checkCtors()
 
 void test::oustring::StringLiterals::testcall( const char str[] )
 {
-    CPPUNIT_ASSERT( !VALID_CONVERSION( rtl::OUString( str )));
+    CPPUNIT_ASSERT(
+        !VALID_CONVERSION_CALL([&str]() { return rtl::OUString(str); }));
 }
 
 void test::oustring::StringLiterals::checkUsage()
@@ -154,9 +167,18 @@ void test::oustring::StringLiterals::checkNonconstChar()
     char bar[] = "bar";
     const char consttest[] = "test";
     const char constbar[] = "bar";
-    CPPUNIT_ASSERT( !VALID_CONVERSION( rtl::OUString( "footest" ).replaceAll( test, bar )));
-    CPPUNIT_ASSERT( !VALID_CONVERSION( rtl::OUString( "footest" ).replaceAll( consttest, bar )));
-    CPPUNIT_ASSERT( !VALID_CONVERSION( rtl::OUString( "footest" ).replaceAll( test, constbar )));
+    CPPUNIT_ASSERT(
+        !VALID_CONVERSION_CALL(
+            [&test, &bar]() {
+                return rtl::OUString("footest").replaceAll(test, bar); }));
+    CPPUNIT_ASSERT(
+        !VALID_CONVERSION_CALL(
+            [&consttest, &bar]() {
+                return rtl::OUString("footest").replaceAll(consttest, bar); }));
+    CPPUNIT_ASSERT(
+        !VALID_CONVERSION(
+            [&test, &constbar]() {
+                return rtl::OUString("footest").replaceAll(test, constbar); }));
     CPPUNIT_ASSERT( rtl::OUString( "foobar" ) == rtl::OUString( "footest" ).replaceAll( consttest, constbar ));
 }
 
