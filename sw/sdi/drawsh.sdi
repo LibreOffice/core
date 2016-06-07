@@ -108,6 +108,11 @@ interface TextDraw : TextDrawBase
         StateMethod = GetDrawAttrState ;
     ]
 
+    SID_PATTERN_LIST
+    [
+        StateMethod = GetDrawAttrState ;
+    ]
+
     SID_ATTR_LINE_WIDTH
     [
         ExecMethod = ExecDrawAttrArgs ;
