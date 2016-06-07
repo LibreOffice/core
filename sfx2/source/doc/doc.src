@@ -60,6 +60,10 @@ String STR_DEFAULT_TEMPLATE
 {
     Text [ en-US ] = "Set As Default" ;
 };
+String STR_RESET_DEFAULT
+{
+    Text [ en-US ] = "Reset Default" ;
+};
 String STR_DELETE
 {
     Text [ en-US ] = "Delete" ;
