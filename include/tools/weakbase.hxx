@@ -31,7 +31,6 @@ template< class reference_type >
 inline WeakReference< reference_type >::WeakReference()
 {
     mpWeakConnection = new WeakConnection<reference_type>( 0 );
-    mpWeakConnection->acquire();
 }
 
 template< class reference_type >
@@ -41,21 +40,17 @@ inline WeakReference< reference_type >::WeakReference( reference_type* pReferenc
         mpWeakConnection = pReference->getWeakConnection();
     else
         mpWeakConnection = new WeakConnection<reference_type>( 0 );
-
-    mpWeakConnection->acquire();
 }
 
 template< class reference_type >
 inline WeakReference< reference_type >::WeakReference( const WeakReference< reference_type >& rWeakRef )
 {
     mpWeakConnection = rWeakRef.mpWeakConnection;
-    mpWeakConnection->acquire();
 }
 
 template< class reference_type >
 inline WeakReference< reference_type >::~WeakReference()
 {
-    mpWeakConnection->release();
 }
 
 template< class reference_type >
@@ -73,20 +68,16 @@ inline reference_type * WeakReference< reference_type >::get() const
 template< class reference_type >
 inline void WeakReference< reference_type >::reset( reference_type* pReference )
 {
-    mpWeakConnection->release();
-
     if( pReference )
         mpWeakConnection = pReference->getWeakConnection();
     else
         mpWeakConnection = new WeakConnection<reference_type>( 0 );
-
-    mpWeakConnection->acquire();
 }
 
 template< class reference_type >
 inline reference_type * WeakReference< reference_type >::operator->() const
 {
-    OSL_PRECOND(mpWeakConnection, "tools::WeakReference::operator->() : null body");
+    OSL_PRECOND(mpWeakConnection.is(), "tools::WeakReference::operator->() : null body");
     return mpWeakConnection->mpReference;
 }
 
@@ -126,10 +117,7 @@ inline WeakReference<reference_type>& WeakReference<reference_type>::operator= (
 {
     if (&rReference != this)
     {
-        mpWeakConnection->release();
-
         mpWeakConnection = rReference.mpWeakConnection;
-        mpWeakConnection->acquire();
     }
     return *this;
 }
@@ -137,36 +125,32 @@ inline WeakReference<reference_type>& WeakReference<reference_type>::operator= (
 template< class reference_type >
 inline WeakBase< reference_type >::WeakBase()
 {
-    mpWeakConnection = nullptr;
 }
 
 template< class reference_type >
 inline WeakBase< reference_type >::~WeakBase()
 {
-    if( mpWeakConnection )
+    if( mpWeakConnection.is() )
     {
         mpWeakConnection->mpReference = 0;
-        mpWeakConnection->release();
-        mpWeakConnection = nullptr;
     }
 }
 
 template< class reference_type >
 inline void WeakBase< reference_type >::clearWeak()
 {
-    if( mpWeakConnection )
+    if( mpWeakConnection.is() )
         mpWeakConnection->mpReference = 0;
 }
 
 template< class reference_type >
 inline WeakConnection< reference_type >* WeakBase< reference_type >::getWeakConnection()
 {
-    if( !mpWeakConnection )
+    if( !mpWeakConnection.is() )
     {
         mpWeakConnection = new WeakConnection< reference_type >( static_cast< reference_type* >( this ) );
-        mpWeakConnection->acquire();
     }
-    return mpWeakConnection;
+    return mpWeakConnection.get();
 }
 
 }
