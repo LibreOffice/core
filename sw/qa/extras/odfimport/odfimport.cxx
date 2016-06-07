@@ -637,5 +637,10 @@ DECLARE_ODFIMPORT_TEST(testTdf96113, "tdf96113.odt")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0x00ff00), getProperty<sal_Int32>(getShape(1), "BackColor"));
 }
 
+DECLARE_ODFIMPORT_TEST(testFdo47267, "fdo47267-3.odt")
+{
+    // This was a Style Families getByName() crash
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
