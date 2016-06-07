@@ -1165,6 +1165,9 @@ OGLTransitionerImpl::OGLTransitionerImpl()
     , mbBrokenTexturesATI(false)
     , mnGLVersion(0)
     , mbValidOpenGLContext(false)
+#if OSL_DEBUG_LEVEL > 0
+    , mnFrameCount(0)
+#endif
 {
 }
 
