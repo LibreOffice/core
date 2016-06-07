@@ -455,7 +455,8 @@ const ProvNamesId_Type aProvNamesId[] =
     { CSS_TEXT_FIELDMASTER_SET_EXPRESSION,            SW_SERVICE_FIELDMASTER_SET_EXP },
     { CSS_TEXT_FIELDMASTER_DATABASE,                  SW_SERVICE_FIELDMASTER_DATABASE },
     { CSS_TEXT_FIELDMASTER_BIBLIOGRAPHY,              SW_SERVICE_FIELDMASTER_BIBLIOGRAPHY },
-    { "com.sun.star.style.TableStyle",                SW_SERVICE_STYLE_TABLE_STYLE }
+    { "com.sun.star.style.TableStyle",                SW_SERVICE_STYLE_TABLE_STYLE },
+    { "com.sun.star.style.CellStyle",                 SW_SERVICE_STYLE_CELL_STYLE }
 };
 
 const SvEventDescription* sw_GetSupportedMacroItems()
@@ -671,6 +672,7 @@ SwXServiceProvider::MakeInstance(sal_uInt16 nObjectType, SwDoc & rDoc)
         case SW_SERVICE_STYLE_PAGE_STYLE:
         case SW_SERVICE_STYLE_NUMBERING_STYLE:
         case SW_SERVICE_STYLE_TABLE_STYLE:
+        case SW_SERVICE_STYLE_CELL_STYLE:
         {
             SfxStyleFamily eFamily = SfxStyleFamily::Char;
             switch(nObjectType)
@@ -693,6 +695,9 @@ SwXServiceProvider::MakeInstance(sal_uInt16 nObjectType, SwDoc & rDoc)
                 break;
                 case SW_SERVICE_STYLE_TABLE_STYLE:
                     eFamily = SfxStyleFamily::Table;
+                break;
+                case SW_SERVICE_STYLE_CELL_STYLE:
+                    eFamily = SfxStyleFamily::Cell;
                 break;
             }
             if(!xRet.is())

@@ -188,7 +188,9 @@ class CheckStyle(unittest.TestCase):
         xCellStyles = xDoc.StyleFamilies["CellStyles"]
         vEmptyDocStyles = ['Default Style.1', 'Default Style.2', 'Default Style.3', 'Default Style.4', 'Default Style.5', 'Default Style.6', 'Default Style.7', 'Default Style.8', 'Default Style.9', 'Default Style.10']
         self.__test_StyleFamily(xCellStyles, vEmptyDocStyles, "SwXTextCellStyle")
-        #possibly more depth tests could be added, to test properties of a cell style... yet to come
+        self.__test_StyleFamilyIndex(xCellStyles, vEmptyDocStyles, "SwXTextCellStyle")
+        self.__test_StyleFamilyInsert(xDoc, xCellStyles, vEmptyDocStyles, "com.sun.star.style.CellStyle", "com.sun.star.style.CharacterStyle")
+        #add more tests when TableStyles will support insertByName
         xDoc.dispose()
 
 if __name__ == '__main__':

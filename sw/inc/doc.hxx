@@ -79,6 +79,7 @@ class SwAutoCompleteWord;
 class SwAutoCorrExceptWord;
 class SwCalc;
 class SwCellFrame;
+class SwCellStyleTable;
 class SwCharFormat;
 class SwCharFormats;
 class SwConditionTextFormatColl;
@@ -344,7 +345,8 @@ class SW_DLLPUBLIC SwDoc :
 
     /// Table styles (autoformats that are applied with table changes).
     std::unique_ptr<SwTableAutoFormatTable> mpTableStyles;
-
+    /// Cell Styles not assigned to a Table Style
+    std::unique_ptr<SwCellStyleTable> mpCellStyles;
 private:
     ::std::unique_ptr< ::sfx2::IXmlIdRegistry > m_pXmlIdRegistry;
 
@@ -1254,6 +1256,9 @@ public:
     /// Return the available table styles.
     SwTableAutoFormatTable& GetTableStyles() { return *mpTableStyles.get(); }
     const SwTableAutoFormatTable& GetTableStyles() const { return *mpTableStyles.get(); }
+
+    const SwCellStyleTable& GetCellStyles() const  { return *mpCellStyles.get(); }
+          SwCellStyleTable& GetCellStyles()        { return *mpCellStyles.get(); }
 
     void AppendUndoForInsertFromDB( const SwPaM& rPam, bool bIsTable );
 
