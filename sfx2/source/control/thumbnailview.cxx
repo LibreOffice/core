@@ -145,6 +145,7 @@ void ThumbnailView::ImplInit()
     mbScroll = false;
     mbHasVisibleItems = false;
     mbShowTooltips = false;
+    mbIsMultiSelectionDisabled = false;
     maFilterFunc = ViewFilterAll();
     maFillColor = GetSettings().GetStyleSettings().GetFieldColor();
     maTextColor = GetSettings().GetStyleSettings().GetWindowTextColor();
@@ -607,7 +608,7 @@ void ThumbnailView::KeyInput( const KeyEvent& rKEvt )
             Control::KeyInput( rKEvt );
     }
 
-    if ( pNext )
+    if ( pNext  && !mbIsMultiSelectionDisabled)
     {
         if (aKeyCode.IsShift() && bValidRange)
         {
@@ -672,6 +673,12 @@ void ThumbnailView::KeyInput( const KeyEvent& rKEvt )
 
         MakeItemVisible(pNext->mnId);
     }
+    else if(pNext && mbIsMultiSelectionDisabled)
+    {
+        deselectItems();
+        SelectItem(pNext->mnId);
+        MakeItemVisible(pNext->mnId);
+    }
 }
 
 void ThumbnailView::MakeItemVisible( sal_uInt16 nItemId )
@@ -724,7 +731,17 @@ void ThumbnailView::MouseButtonDown( const MouseEvent& rMEvt )
         return;
     }
 
-    if ( rMEvt.GetClicks() == 1 )
+    if ( rMEvt.GetClicks() == 1 && mbIsMultiSelectionDisabled )
+    {
+        deselectItems();
+        pItem->setSelection(!pItem->isSelected());
+
+        if (!pItem->isHighlighted())
+            DrawItem(pItem);
+
+        maItemStateHdl.Call(pItem);
+    }
+    else if(rMEvt.GetClicks() == 1)
     {
         if (rMEvt.IsMod1())
         {
@@ -1153,6 +1170,11 @@ void ThumbnailView::deselectItems()
 void ThumbnailView::ShowTooltips( bool bShowTooltips )
 {
     mbShowTooltips = bShowTooltips;
+}
+
+void ThumbnailView::ToggleMultiSelection( bool bIsMultiSelectionDisabled )
+{
+    mbIsMultiSelectionDisabled = bIsMultiSelectionDisabled;
 }
 
 void ThumbnailView::filterItems(const std::function<bool (const ThumbnailViewItem*)> &func)

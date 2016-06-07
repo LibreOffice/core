@@ -1667,6 +1667,10 @@ SfxTemplateSelectionDlg::SfxTemplateSelectionDlg(vcl::Window* pParent):
 
     mpLocalView->setOpenTemplateHdl(LINK(this,SfxTemplateSelectionDlg, OpenTemplateHdl));
     mpSearchView->setOpenTemplateHdl(LINK(this,SfxTemplateSelectionDlg, OpenTemplateHdl));
+
+    mpLocalView->ToggleMultiSelection(true);
+    mpSearchView->ToggleMultiSelection(true);
+
     mpOKButton->SetClickHdl(LINK(this, SfxTemplateSelectionDlg, OkClickHdl));
 }
 
