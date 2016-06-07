@@ -1314,8 +1314,8 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         default:
             break;
         }
-        putNestedSprm(m_aStates.top().aTableCellSprms, NS_ooxml::LN_CT_TcPrBase_tcMar, nSprm, std::make_shared<RTFValue>(aAttributes));
-        putNestedSprm(m_aDefaultState.aTableCellSprms, NS_ooxml::LN_CT_TcPrBase_tcMar, nSprm, std::make_shared<RTFValue>(aAttributes));
+        putNestedAttribute(m_aStates.top().aTableCellSprms, NS_ooxml::LN_CT_TcPrBase_tcMar, nSprm, std::make_shared<RTFValue>(aAttributes));
+        putNestedAttribute(m_aDefaultState.aTableCellSprms, NS_ooxml::LN_CT_TcPrBase_tcMar, nSprm, std::make_shared<RTFValue>(aAttributes));
     }
     break;
     case RTF_TRPADDB:
