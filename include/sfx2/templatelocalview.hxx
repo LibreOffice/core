@@ -47,7 +47,7 @@ public:
 
     void showRegion (const OUString &rName);
 
-    void createContextMenu();
+    void createContextMenu(const bool bIsDefault );
 
     DECL_LINK_TYPED(ContextMenuSelectHdl, Menu*, bool);
 

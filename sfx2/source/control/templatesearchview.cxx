@@ -53,12 +53,17 @@ void TemplateSearchView::MouseButtonDown( const MouseEvent& rMEvt )
     ThumbnailView::MouseButtonDown(rMEvt);
 }
 
-void TemplateSearchView::createContextMenu()
+void TemplateSearchView::createContextMenu( const bool bIsDefault)
 {
     std::unique_ptr<PopupMenu> pItemMenu(new PopupMenu);
     pItemMenu->InsertItem(MNI_OPEN,SfxResId(STR_OPEN).toString());
     pItemMenu->InsertItem(MNI_EDIT,SfxResId(STR_EDIT_TEMPLATE).toString());
-    pItemMenu->InsertItem(MNI_DEFAULT_TEMPLATE,SfxResId(STR_DEFAULT_TEMPLATE).toString());
+
+    if(!bIsDefault)
+        pItemMenu->InsertItem(MNI_DEFAULT_TEMPLATE,SfxResId(STR_DEFAULT_TEMPLATE).toString());
+    else
+        pItemMenu->InsertItem(MNI_DEFAULT_TEMPLATE,SfxResId(STR_RESET_DEFAULT).toString());
+
     pItemMenu->InsertSeparator();
     pItemMenu->InsertItem(MNI_DELETE,SfxResId(STR_DELETE).toString());
     maSelectedItem->setSelection(true);
@@ -140,6 +145,9 @@ void TemplateSearchView::AppendItem(sal_uInt16 nAssocItemId, sal_uInt16 nRegionI
     pItem->maTitle = rTitle;
     pItem->setHelpText(rSubtitle);
     pItem->setPath(rPath);
+
+    if(TemplateAbstractView::IsDefaultTemplate(rPath))
+        pItem->showDefaultIcon(true);
 
     ThumbnailView::AppendItem(pItem);
 

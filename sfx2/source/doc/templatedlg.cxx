@@ -750,9 +750,9 @@ IMPL_LINK_TYPED(SfxTemplateManagerDlg, RightClickHdl, ThumbnailViewItem*, pItem,
         if(mpCurView == mpLocalView)
         {
             if(mpSearchView->IsVisible())
-                mpSearchView->createContextMenu();
+                mpSearchView->createContextMenu(pViewItem->IsDefaultTemplate());
             else
-                mpLocalView->createContextMenu();
+                mpLocalView->createContextMenu(pViewItem->IsDefaultTemplate());
         }
     }
 }
@@ -852,19 +852,30 @@ IMPL_LINK_TYPED(SfxTemplateManagerDlg, DeleteTemplateHdl, ThumbnailViewItem*, pI
 IMPL_LINK_TYPED(SfxTemplateManagerDlg, DefaultTemplateHdl, ThumbnailViewItem*, pItem, void)
 {
     TemplateViewItem *pViewItem = static_cast<TemplateViewItem*>(pItem);
-
     OUString aServiceName;
-    if (lcl_getServiceName(pViewItem->getPath(),aServiceName))
+
+    if(!pViewItem->IsDefaultTemplate())
     {
-        OUString sPrevDefault = SfxObjectFactory::GetStandardTemplate( aServiceName );
-        if(!sPrevDefault.isEmpty())
-            mpLocalView->RemoveDefaultTemplateIcon(sPrevDefault);
+        if (lcl_getServiceName(pViewItem->getPath(),aServiceName))
+        {
+            OUString sPrevDefault = SfxObjectFactory::GetStandardTemplate( aServiceName );
+            if(!sPrevDefault.isEmpty())
+                mpLocalView->RemoveDefaultTemplateIcon(sPrevDefault);
 
-        SfxObjectFactory::SetStandardTemplate(aServiceName,pViewItem->getPath());
-        pViewItem->showDefaultIcon(true);
-
-        createDefaultTemplateMenu();
+            SfxObjectFactory::SetStandardTemplate(aServiceName,pViewItem->getPath());
+            pViewItem->showDefaultIcon(true);
+        }
     }
+    else
+    {
+        if(lcl_getServiceName(pViewItem->getPath(),aServiceName))
+        {
+            SfxObjectFactory::SetStandardTemplate( aServiceName, OUString() );
+            pViewItem->showDefaultIcon(false);
+        }
+    }
+
+    createDefaultTemplateMenu();
 }
 
 IMPL_LINK_NOARG_TYPED(SfxTemplateManagerDlg, SearchUpdateHdl, Edit&, void)
