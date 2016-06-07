@@ -90,11 +90,11 @@ namespace rptui
         css::uno::Sequence< css::beans::PropertyValue>
                                 m_aCollapsedSections;
         TransferableDataHelper  m_aSystemClipboard;     // content of the clipboard
-        TransferableClipboardListener*
-                                m_pClipbordNotifier;    /// notifier for changes in the clipboard
+        rtl::Reference<TransferableClipboardListener>
+                                m_pClipboardNotifier;    /// notifier for changes in the clipboard
         VclPtr<OGroupsSortingDialog>   m_pGroupsFloater;
 
-        OXReportControllerObserver* m_pReportControllerObserver;
+        rtl::Reference<OXReportControllerObserver> m_pReportControllerObserver;
 
         ODesignView*  getDesignView() const   { return static_cast< ODesignView* >( getView() ); }
 
