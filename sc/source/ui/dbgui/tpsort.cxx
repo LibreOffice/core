@@ -519,10 +519,6 @@ ScTabPageSortOptions::ScTabPageSortOptions( vcl::Window*             pParent,
     get(m_pLbLanguage, "language");
     Init();
     SetExchangeSupport();
-
-    m_pLbOutPos->SetAccessibleName(m_pBtnCopyResult->GetText());
-    m_pEdOutPos->SetAccessibleName(m_pBtnCopyResult->GetText());
-    m_pLbSortUser->SetAccessibleName(m_pBtnSortUser->GetText());
 }
 
 ScTabPageSortOptions::~ScTabPageSortOptions()

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.20.0 -->
 <interface>
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -161,10 +161,10 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="margin_top">6</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">Style:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">stylelb</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -210,6 +210,11 @@
                         <accessibility>
                           <relation type="labelled-by" target="pagenumcb"/>
                         </accessibility>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="pagenumsb-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes">Change page number</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>

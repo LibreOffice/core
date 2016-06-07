@@ -551,9 +551,6 @@ SvxTPFilter::SvxTPFilter( vcl::Window * pParent)
     get(m_pCbComment, "comment");
     get(m_pEdComment, "commentedit");
 
-    m_pLbAuthor->SetAccessibleName(m_pCbAuthor->GetText());
-    m_pEdComment->SetAccessibleName(m_pCbComment->GetText());
-
     m_pDfDate->SetShowDateCentury( true );
     m_pDfDate2->SetShowDateCentury( true );
 
