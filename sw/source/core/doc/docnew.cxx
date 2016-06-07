@@ -257,6 +257,7 @@ SwDoc::SwDoc()
     mpLayoutCache( nullptr ),
     mpGrammarContact(createGrammarContact()),
     mpTableStyles(new SwTableAutoFormatTable),
+    mpCellStyles(new SwCellStyleTable),
     m_pXmlIdRegistry(),
     mReferenceCount(0),
     mbDtor(false),

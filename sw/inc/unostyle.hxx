@@ -313,14 +313,39 @@ class SwXTextCellStyle : public cppu::WeakImplHelper
 <
     css::style::XStyle,
     css::beans::XPropertySet,
-    css::lang::XServiceInfo
+    css::lang::XServiceInfo,
+    css::lang::XUnoTunnel
 >
 {
     SwDocShell* m_pDocShell;
-    SwBoxAutoFormat& m_rBoxAutoFormat;
-    OUString m_sParentStyle;
-public:
-    SwXTextCellStyle(SwDocShell* pDocShell, SwBoxAutoFormat& rBoxAutoFormat, const OUString& sParentStyle);
+    SwBoxAutoFormat* m_pBoxAutoFormat;
+    OUString m_sParentStyle; // used when style is physical
+    OUString m_sName;   // used when style is not physical
+    bool m_bPhysical;
+
+ public:
+    SwXTextCellStyle(SwDocShell* pDocShell, SwBoxAutoFormat* pBoxAutoFormat, const OUString& sParentStyle);
+    /// Create non physical style
+    SwXTextCellStyle(SwDocShell* pDocShell, const OUString& sName);
+    ~SwXTextCellStyle();
+
+    /**
+    * This function looks for a SwBoxAutoFormat with given name. Parses the name and returns parent name.
+    * @param pDocShell pointer to a SwDocShell.
+    * @param sName Name of a SwBoxAutoFormat to look for.
+    * @param pParentName Optional output. Pointer to a OUString where parsed parent name will be returned.
+    * @return Pointer to a SwBoxAutoFormat, nullptr if not found.
+    */
+    static SwBoxAutoFormat* GetBoxAutoFormat(SwDocShell* pDocShell, const OUString& sName, OUString* pParentName = nullptr);
+    /// returns box format assigned to this style
+    SwBoxAutoFormat* GetBoxFormat();
+    void SetBoxFormat(SwBoxAutoFormat* pBoxFormat);
+    void SetPhysical();
+
+    static const css::uno::Sequence<sal_Int8>& getUnoTunnelId();
+
+    //XUnoTunnel
+    virtual sal_Int64 SAL_CALL getSomething(const css::uno::Sequence<sal_Int8>& rId) throw(css::uno::RuntimeException, std::exception) override;
 
     //XStyle
     virtual sal_Bool SAL_CALL isUserDefined() throw (css::uno::RuntimeException, std::exception) override;
@@ -330,7 +355,7 @@ public:
 
     //XNamed
     virtual OUString SAL_CALL getName() throw(css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setName(const OUString& rName) throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setName(const OUString& sName) throw(css::uno::RuntimeException, std::exception) override;
 
     //XPropertySet
     virtual css::uno::Reference<css::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() throw(css::uno::RuntimeException, std::exception) override;
