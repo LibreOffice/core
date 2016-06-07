@@ -23,7 +23,6 @@ interface XToolkitExperimental : XToolkit2
      */
     void processEventsToIdle();
 
-
     /** Get the number of OpenGL buffer swaps.
      */
     hyper getOpenGLBufferSwapCounter();
@@ -31,6 +30,10 @@ interface XToolkitExperimental : XToolkit2
     /** Turn on or off deterministic scheduling (off is the default).
      */
     void setDeterministicScheduling([in] boolean bDeterministicMode);
+
+    /** Pause the main thread of LibreOffice for the requested amount of time.
+     */
+    void pause([in] long nMilliseconds);
 };
 
 }; }; }; };

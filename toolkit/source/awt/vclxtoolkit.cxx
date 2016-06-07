@@ -143,6 +143,32 @@ extern "C" typedef vcl::Window* (SAL_CALL *FN_SvtCreateWindow)(
         vcl::Window* pParent,
         WinBits nWinBits );
 
+class Pause : public Idle
+{
+public:
+    Pause(sal_Int32 nPauseMilliseconds) :
+        Idle("pause"),
+        m_nPauseMilliseconds(nPauseMilliseconds)
+    {
+        SetPriority(SchedulerPriority::HIGHEST);
+        Start();
+    }
+
+    virtual ~Pause()
+    {
+    }
+
+    virtual void Invoke() override
+    {
+        SolarMutexGuard aSolarGuard;
+        osl::Thread::wait(std::chrono::milliseconds(m_nPauseMilliseconds));
+        Stop();
+        delete this;
+    }
+
+    sal_Int32 m_nPauseMilliseconds;
+};
+
 class VCLXToolkitMutexHelper
 {
 protected:
@@ -203,6 +229,9 @@ public:
         throw (css::uno::RuntimeException, std::exception) override;
 
     virtual void SAL_CALL setDeterministicScheduling(sal_Bool bDeterministicMode)
+        throw (css::uno::RuntimeException, std::exception) override;
+
+    virtual void SAL_CALL pause(sal_Int32 nMilliseconds)
         throw (css::uno::RuntimeException, std::exception) override;
 
     // css::awt::XToolkit
@@ -1940,6 +1969,12 @@ void SAL_CALL VCLXToolkit::setDeterministicScheduling(sal_Bool bDeterministicMod
 {
     SolarMutexGuard aSolarGuard;
     Scheduler::SetDeterministicMode(bDeterministicMode);
+}
+
+void SAL_CALL VCLXToolkit::pause(sal_Int32 nMilliseconds)
+    throw (css::uno::RuntimeException, std::exception)
+{
+    new Pause(nMilliseconds);
 }
 
 // css:awt:XToolkitRobot
