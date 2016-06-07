@@ -317,10 +317,10 @@ class SwXTextCellStyle : public cppu::WeakImplHelper
 >
 {
     SwDocShell* m_pDocShell;
-    SwBoxAutoFormat& m_rBoxAutoFormat;
+    SwBoxAutoFormat* m_pBoxAutoFormat;
     OUString m_sParentStyle;
 public:
-    SwXTextCellStyle(SwDocShell* pDocShell, SwBoxAutoFormat& rBoxAutoFormat, const OUString& sParentStyle);
+    SwXTextCellStyle(SwDocShell* pDocShell, SwBoxAutoFormat* pBoxAutoFormat, const OUString& sParentStyle);
 
     //XStyle
     virtual sal_Bool SAL_CALL isUserDefined() throw (css::uno::RuntimeException, std::exception) override;

@@ -3005,6 +3005,9 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
                 aLst.Append( cCELLSTYLE, sBoxFormatName );
             }
         }
+        const SwCellStyleTable& rCellStyles = rDoc.GetCellStyles();
+        for(size_t i = 0; i < rCellStyles.size(); ++i)
+            aLst.Append( rCellStyles[i].GetName() );
     }
 
     if(!aLst.empty())

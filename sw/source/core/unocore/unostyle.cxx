@@ -4446,9 +4446,11 @@ css::uno::Sequence<OUString> SAL_CALL SwXTextTableStyle::getSupportedServiceName
 }
 
 // SwXTextCellStyle
-SwXTextCellStyle::SwXTextCellStyle(SwDocShell* pDocShell, SwBoxAutoFormat& rBoxAutoFormat, const OUString& sParentStyle) :
-    m_pDocShell(pDocShell), m_rBoxAutoFormat(rBoxAutoFormat), m_sParentStyle(sParentStyle)
-{ }
+SwXTextCellStyle::SwXTextCellStyle(SwDocShell* pDocShell, SwBoxAutoFormat* pBoxAutoFormat, const OUString& sParentStyle) :
+    m_pDocShell(pDocShell), m_pBoxAutoFormat(pBoxAutoFormat), m_sParentStyle(sParentStyle)
+{
+
+}
 
 css::uno::Reference<css::style::XStyle> SwXTextCellStyle::CreateXTextCellStyle(SwDocShell* pDocShell, const OUString& sName)
 {
@@ -4457,25 +4459,32 @@ css::uno::Reference<css::style::XStyle> SwXTextCellStyle::CreateXTextCellStyle(S
     sal_uInt32 nTemplateIndex;
     OUString sParentName, sCellSubName;
 
-    try {
-        nSeparatorIndex = sName.lastIndexOf('.');
-        sParentName = sName.copy(0, nSeparatorIndex);
-        sCellSubName = sName.copy(nSeparatorIndex+1);
-        nTemplateIndex = sCellSubName.toInt32()-1;      // -1 because cell styles names start from 1
-
-        auto rTableTemplateMap = SwTableAutoFormat::GetTableTemplateMap();
-        if (nTemplateIndex >= rTableTemplateMap.size())
-            throw;
-
-        SwTableAutoFormat* pFormat = pDocShell->GetDoc()->GetTableStyles().FindAutoFormat(sParentName);
-        sal_uInt32 nBoxIndex = rTableTemplateMap[nTemplateIndex];
-        pBoxFormat = &pFormat->GetBoxFormat(nBoxIndex);
-    }
-    catch (...)
+    if (!sName.isEmpty())
     {
-        SAL_WARN("sw.uno", "could not get a BoxFormat to create XTextCellStyle for, unexpected error");
+        try {
+            nSeparatorIndex = sName.lastIndexOf('.');
+            sParentName = sName.copy(0, nSeparatorIndex);
+            sCellSubName = sName.copy(nSeparatorIndex+1);
+            nTemplateIndex = sCellSubName.toInt32()-1;      // -1 because cell styles names start from 1
+
+            auto rTableTemplateMap = SwTableAutoFormat::GetTableTemplateMap();
+            if (nTemplateIndex >= rTableTemplateMap.size())
+                throw;
+
+            SwTableAutoFormat* pFormat = pDocShell->GetDoc()->GetTableStyles().FindAutoFormat(sParentName);
+            if (!pFormat)
+                throw;
+
+            sal_uInt32 nBoxIndex = rTableTemplateMap[nTemplateIndex];
+            pBoxFormat = &pFormat->GetBoxFormat(nBoxIndex);
+        }
+        catch (...)
+        {
+            SAL_WARN("sw.uno", "could not get a BoxFormat to create XTextCellStyle for, unexpected error");
+        }
     }
 
+    // something went wrong but we don't want a crash
     if (!pBoxFormat)
     {
         // return a default-dummy style to prevent crash
@@ -4528,7 +4537,7 @@ OUString SAL_CALL SwXTextCellStyle::getName() throw(css::uno::RuntimeException, 
     if (!pTableFormat)
         return OUString();
 
-    return sParentStyle + pTableFormat->GetTableTemplateCellSubName(m_rBoxAutoFormat);
+    return sParentStyle + pTableFormat->GetTableTemplateCellSubName(*m_pBoxAutoFormat);
 }
 
 void SAL_CALL SwXTextCellStyle::setName(const OUString& /*rName*/) throw(css::uno::RuntimeException, std::exception)
@@ -4551,9 +4560,9 @@ void SAL_CALL SwXTextCellStyle::setPropertyValue(const OUString& rPropertyName, 
         {
             case RES_BACKGROUND:
             {
-                SvxBrushItem rBrush( m_rBoxAutoFormat.GetBackground() );
+                SvxBrushItem rBrush( m_pBoxAutoFormat->GetBackground() );
                 rBrush.PutValue(aValue, 0);
-                m_rBoxAutoFormat.SetBackground(rBrush);
+                m_pBoxAutoFormat->SetBackground(rBrush);
                 return;
             }
             default:
@@ -4576,7 +4585,7 @@ css::uno::Any SAL_CALL SwXTextCellStyle::getPropertyValue(const OUString& rPrope
         {
             case RES_BACKGROUND:
             {
-                const SvxBrushItem& rBrush = m_rBoxAutoFormat.GetBackground();
+                const SvxBrushItem& rBrush = m_pBoxAutoFormat->GetBackground();
                 rBrush.QueryValue(aRet);
                 return aRet;
             }
