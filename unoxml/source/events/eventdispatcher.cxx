@@ -41,16 +41,16 @@ namespace DOM { namespace events {
 
         // get the multimap for the specified type
         ListenerMap *pMap = nullptr;
-        TypeListenerMap::const_iterator tIter = pTMap->find(aType);
+        auto tIter = pTMap->find(aType);
         if (tIter == pTMap->end()) {
             // the map has to be created
-            pMap = new ListenerMap();
-            pTMap->insert(TypeListenerMap::value_type(aType, pMap));
+            auto const pair = pTMap->insert(TypeListenerMap::value_type(aType, ListenerMap()));
+            pMap = & pair.first->second;
         } else {
-            pMap = tIter->second;
+            pMap = & tIter->second;
         }
-        if (pMap !=nullptr)
-            pMap->insert(ListenerMap::value_type(pNode, aListener));
+        assert(pMap != nullptr);
+        pMap->insert(ListenerMap::value_type(pNode, aListener));
     }
 
     void CEventDispatcher::removeListener(xmlNodePtr pNode, const OUString& aType, const Reference<XEventListener>& aListener, bool bCapture)
@@ -59,19 +59,19 @@ namespace DOM { namespace events {
             ? (& m_CaptureListeners) : (& m_TargetListeners);
 
         // get the multimap for the specified type
-        TypeListenerMap::const_iterator tIter = pTMap->find(aType);
+        auto tIter = pTMap->find(aType);
         if (tIter != pTMap->end()) {
-            ListenerMap *pMap = tIter->second;
+            ListenerMap & rMap = tIter->second;
             // find listeners of specified type for specified node
-            ListenerMap::iterator iter = pMap->find(pNode);
-            while (iter != pMap->end() && iter->first == pNode)
+            ListenerMap::iterator iter = rMap.find(pNode);
+            while (iter != rMap.end() && iter->first == pNode)
             {
                 // erase all references to specified listener
                 if ((iter->second).is() && iter->second == aListener)
                 {
                     ListenerMap::iterator tmp_iter = iter;
                     ++iter;
-                    pMap->erase(tmp_iter);
+                    rMap.erase(tmp_iter);
                 }
                 else
                     ++iter;
@@ -81,12 +81,6 @@ namespace DOM { namespace events {
 
     CEventDispatcher::~CEventDispatcher()
     {
-        // delete the multimaps for the various types
-        for (TypeListenerMap::iterator aI = m_CaptureListeners.begin(); aI != m_CaptureListeners.end(); ++aI)
-            delete aI->second;
-
-        for (TypeListenerMap::iterator aI = m_TargetListeners.begin(); aI != m_TargetListeners.end(); ++aI)
-            delete aI->second;
     }
 
     void CEventDispatcher::callListeners(
@@ -97,9 +91,9 @@ namespace DOM { namespace events {
         // get the multimap for the specified type
         TypeListenerMap::const_iterator tIter = rTMap.find(aType);
         if (tIter != rTMap.end()) {
-            ListenerMap *pMap = tIter->second;
-            ListenerMap::const_iterator iter = pMap->lower_bound(pNode);
-            ListenerMap::const_iterator ibound = pMap->upper_bound(pNode);
+            ListenerMap const& rMap = tIter->second;
+            auto iter = rMap.lower_bound(pNode);
+            auto const ibound = rMap.upper_bound(pNode);
             for( ; iter != ibound; ++iter )
             {
                 if((iter->second).is())
