@@ -19,6 +19,23 @@
     },
     {
       "key": {
+        "uuid": "da7fb54a_1a7f48ab",
+        "filename": "sw/source/core/doc/tblafmt.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1043,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-06-07T08:19:07Z",
+      "side": 1,
+      "message": "aTableTemplateMap.size() returns size_t (which is long), while sal_uInt32 is int, so that can cause overflows if you have more than 65k cell styles. Just use size_t instead of sal_uInt32.",
+      "revId": "078c73a5b5d19d705badbc27c2283c513bfb2732",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da7fb54a_7a5a1485",
         "filename": "sw/source/core/unocore/unostyle.cxx",
         "patchSetId": 5
