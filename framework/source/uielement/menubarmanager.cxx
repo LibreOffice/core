@@ -479,8 +479,6 @@ throw ( RuntimeException, std::exception )
                 pMenuItemHandler->xMenuItemDispatch.clear();
             }
         }
-        if ( m_bHasMenuBar && !m_bActive )
-            m_pVCLMenu->UpdateNativeMenu();
     }
 }
 
