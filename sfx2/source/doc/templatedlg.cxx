@@ -252,6 +252,8 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg(vcl::Window *parent)
     mpSearchView->setEditTemplateHdl(LINK(this,SfxTemplateManagerDlg, EditTemplateHdl));
     mpSearchView->setDeleteTemplateHdl(LINK(this,SfxTemplateManagerDlg, DeleteTemplateHdl));
     mpSearchView->setDefaultTemplateHdl(LINK(this,SfxTemplateManagerDlg, DefaultTemplateHdl));
+
+    mpLocalView->ShowTooltips(true);
     mpSearchView->ShowTooltips(true);
 
     mpOKButton->SetClickHdl(LINK(this, SfxTemplateManagerDlg, OkClickHdl));
@@ -379,7 +381,6 @@ void SfxTemplateManagerDlg::fillFolderComboBox()
             mpCBFolder->InsertEntry(aFolderNames[i], i+1);
     }
     mpCBFolder->SelectEntryPos(0);
-    mpLocalView->ShowTooltips(true);
 }
 
 void SfxTemplateManagerDlg::getApplicationSpecificSettings()
@@ -462,7 +463,6 @@ void SfxTemplateManagerDlg::readSettings ()
     {
         //show all categories
         mpCBFolder->SelectEntryPos(0);
-        mpLocalView->ShowTooltips(true);
         mpLocalView->showAllTemplates();
     }
     else
@@ -498,7 +498,6 @@ IMPL_LINK_NOARG_TYPED(SfxTemplateManagerDlg, SelectApplicationHdl, ListBox&, voi
         mpCurView->filterItems(ViewFilter_Application(getCurrentApplicationFilter()));
         mpCurView->showAllTemplates();
         mpCBFolder->SelectEntryPos(0);
-        mpCurView->ShowTooltips(true);
     }
 
     if(mpSearchView->IsVisible())
@@ -513,12 +512,10 @@ IMPL_LINK_NOARG_TYPED(SfxTemplateManagerDlg, SelectRegionHdl, ListBox&, void)
         if(mpCBFolder->GetSelectEntryPos() == 0)
         {
             mpLocalView->showAllTemplates();
-            mpLocalView->ShowTooltips(true);
         }
         else
         {
             mpLocalView->showRegion(sSelectedRegion);
-            mpLocalView->ShowTooltips(false);
         }
     }
 
@@ -726,7 +723,6 @@ IMPL_LINK_NOARG_TYPED(SfxTemplateManagerDlg, ImportClickHdl, Button*, void)
 
     mpLocalView->reload();
     mpLocalView->showAllTemplates();
-    mpLocalView->ShowTooltips(true);
     mpCBApp->SelectEntryPos(0);
     mpCBFolder->SelectEntryPos(0);
 }
@@ -1248,7 +1244,6 @@ void SfxTemplateManagerDlg::OnCategoryRename()
 
                 mpLocalView->reload();
                 mpLocalView->showAllTemplates();
-                mpLocalView->ShowTooltips(true);
                 mpCBApp->SelectEntryPos(0);
                 mpCBFolder->SelectEntryPos(0);
             }
@@ -1294,7 +1289,6 @@ void SfxTemplateManagerDlg::OnCategoryDelete()
 
     mpLocalView->reload();
     mpLocalView->showAllTemplates();
-    mpLocalView->ShowTooltips(true);
     mpCBApp->SelectEntryPos(0);
     mpCBFolder->SelectEntryPos(0);
 }

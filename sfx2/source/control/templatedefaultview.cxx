@@ -48,6 +48,15 @@ void TemplateDefaultView::reload()
     set_width_request(mnTextHeight + mnItemMaxSize + 2*mnItemPadding);
 }
 
+void TemplateDefaultView::showAllTemplates()
+{
+    mnCurRegionId = 0;
+    maCurRegionName.clear();
+
+    insertItems(maAllTemplates, false);
+    maOpenRegionHdl.Call(nullptr);
+}
+
 void TemplateDefaultView::KeyInput( const KeyEvent& rKEvt )
 {
     ThumbnailView::KeyInput(rKEvt);

@@ -125,6 +125,7 @@
 #define STR_CATEGORY_RENAME                 (RID_SFX_DOC_START+109)
 #define STR_TEMPLATE_SELECTION              (RID_SFX_DOC_START+120)
 #define STR_RESET_DEFAULT                   (RID_SFX_DOC_START+122)
+#define STR_TEMPLATE_TOOLTIP                (RID_SFX_DOC_START+169)
 
 // please update to the last id
 #define ACT_SFX_DOC_END IMG_ACTION_REFRESH

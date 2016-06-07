@@ -265,6 +265,7 @@ void BackingWindow::initControls()
     mpLocalView->setRightClickHdl(LINK(this, BackingWindow, RightClickHdl));
     mpLocalView->setOpenTemplateHdl(LINK(this, BackingWindow, OpenTemplateHdl));
     mpLocalView->setEditTemplateHdl(LINK(this, BackingWindow, EditTemplateHdl));
+    mpLocalView->ShowTooltips( true );
 
     setupButton( mpOpenButton );
     setupButton( mpRemoteButton );

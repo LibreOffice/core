@@ -74,7 +74,7 @@ public:
     virtual void dispose() override;
 
     // Fill view with new item list
-    void insertItems (const std::vector<TemplateItemProperties> &rTemplates, bool isRegionSelected = true);
+    void insertItems (const std::vector<TemplateItemProperties> &rTemplates, bool isRegionSelected = true, bool bShowCategoryInTooltip = false);
 
     // Fill view with template folders thumbnails
     virtual void Populate () { }
