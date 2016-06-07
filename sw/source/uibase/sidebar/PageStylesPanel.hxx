@@ -43,7 +43,13 @@
 #include <tools/fldunit.hxx>
 #include <svl/poolitem.hxx>
 #include <svx/rulritem.hxx>
+#include <svx/dlgctrl.hxx>
+#include <svx/xfillit.hxx>
+#include <svx/xfillit0.hxx>
+#include <svx/itemwin.hxx>
+#include <svx/pagenumberlistbox.hxx>
 
+class List;
 namespace sw { namespace sidebar {
 
 class PageStylesPanel:
@@ -53,7 +59,8 @@ class PageStylesPanel:
 public:
     static VclPtr<vcl::Window> Create(
         vcl::Window* pParent,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame);
+        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame,
+        SfxBindings* pBindings);
 
     virtual void NotifyItemUpdate(
         const sal_uInt16 nSId,
@@ -61,11 +68,57 @@ public:
         const SfxPoolItem* pState,
         const bool bIsEnabled) override;
 
+    SfxBindings* GetBindings() const { return mpBindings; }
     PageStylesPanel(
         vcl::Window* pParent,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame);
+        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame,
+        SfxBindings* pBindings);
     virtual ~PageStylesPanel();
     virtual void dispose() override;
+
+private:
+
+    SfxBindings* mpBindings;
+
+    ::std::unique_ptr<SfxInt16Item>      mpPageColumnItem;
+    ::std::unique_ptr<SvxPageItem>       mpPageItem;
+    ::std::unique_ptr<XFillStyleItem>    mpBgFillStyleItem;
+    ::std::unique_ptr<XFillColorItem>    mpBgColorItem;
+    ::std::unique_ptr<XFillGradientItem> mpBgGradientItem;
+    ::std::unique_ptr<XFillHatchItem>    mpBgHatchItem;
+    ::std::unique_ptr<XFillBitmapItem>   mpBgBitmapItem;
+
+    ::sfx2::sidebar::ControllerItem maPageColumnControl;
+    ::sfx2::sidebar::ControllerItem maPageNumFormatControl;
+    ::sfx2::sidebar::ControllerItem maBgColorControl;
+    ::sfx2::sidebar::ControllerItem maBgHatchingControl;
+    ::sfx2::sidebar::ControllerItem maBgGradientControl;
+    ::sfx2::sidebar::ControllerItem maBgBitmapControl;
+    ::sfx2::sidebar::ControllerItem maBgFillStyleControl;
+
+    VclPtr<ColorLB>         mpBgColorLB;
+    VclPtr<SvxFillAttrBox>  mpBgHatchingLB;
+    VclPtr<ColorLB>         mpBgGradientLB;
+    VclPtr<SvxFillAttrBox>  mpBgBitmapLB;
+    VclPtr<ListBox>         mpLayoutSelectLB;
+    VclPtr<ListBox>         mpColumnCount;
+    VclPtr<PageNumberListBox> mpNumberSelectLB;
+    VclPtr<SvxFillTypeBox>  mpBgFillType;
+    VclPtr<FixedText>       mpCustomEntry;
+    OUString aCustomEntry;
+
+    void Initialize();
+    void Update();
+    Color GetColorSetOrDefault();
+    XGradient GetGradientSetOrDefault();
+    const OUString GetHatchingSetOrDefault();
+    const OUString GetBitmapSetOrDefault();
+
+    DECL_LINK_TYPED( ModifyColumnCountHdl, ListBox&, void );
+    DECL_LINK_TYPED( ModifyNumberingHdl, ListBox&, void );
+    DECL_LINK_TYPED( ModifyLayoutHdl, ListBox&, void );
+    DECL_LINK_TYPED( ModifyFillStyleHdl, ListBox&, void );
+    DECL_LINK_TYPED( ModifyFillColorHdl, ListBox&, void );
 };
 
 } } //end of namespace sw::sidebar
