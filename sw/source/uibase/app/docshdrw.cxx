@@ -82,6 +82,7 @@ void InitDrawModelAndDocShell(SwDocShell* pSwDocShell, SwDrawModel* pSwDrawDocum
                 pSwDocShell->PutItem(SvxGradientListItem(pSwDrawDocument->GetGradientList(), SID_GRADIENT_LIST));
                 pSwDocShell->PutItem(SvxHatchListItem(pSwDrawDocument->GetHatchList(), SID_HATCH_LIST));
                 pSwDocShell->PutItem(SvxBitmapListItem(pSwDrawDocument->GetBitmapList(), SID_BITMAP_LIST));
+                pSwDocShell->PutItem(SvxPatternListItem(pSwDrawDocument->GetPatternList(), SID_PATTERN_LIST));
                 pSwDocShell->PutItem(SvxDashListItem(pSwDrawDocument->GetDashList(), SID_DASH_LIST));
                 pSwDocShell->PutItem(SvxLineEndListItem(pSwDrawDocument->GetLineEndList(), SID_LINEEND_LIST));
             }

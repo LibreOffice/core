@@ -118,6 +118,8 @@ private:
     XGradient GetGradientSetOrDefault();
     const OUString GetHatchingSetOrDefault();
     const OUString GetBitmapSetOrDefault();
+    const OUString GetPatternSetOrDefault();
+    bool isPattern();
     void addListener();
     void removeListener();
     void populateMasterSlideDropdown();
