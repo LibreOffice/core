@@ -33,7 +33,7 @@ public:
 class VCL_DLLPUBLIC OpenGLWindow : public vcl::Window
 {
 public:
-                   OpenGLWindow(vcl::Window* pParent);
+                   OpenGLWindow(vcl::Window* pParent, bool bInit = true);
     virtual        ~OpenGLWindow();
     virtual void   dispose() override;
 
@@ -47,6 +47,10 @@ public:
     virtual void MouseButtonUp( const MouseEvent& rMEvt ) override;
     virtual void MouseMove( const MouseEvent& rMEvt ) override;
     virtual void Command( const CommandEvent& rCEvt ) override;
+
+    bool IsInitialized() const;
+
+    void Initialize();
 
 private:
     std::unique_ptr<OpenGLWindowImpl> mxImpl;
