@@ -53,6 +53,9 @@ class SFX2_DLLPUBLIC SfxModule : public SfxShell
 {
 private:
     ResMgr*                     pResMgr;
+
+    // Warning this cannot be turned into a unique_ptr.
+    // SfxInterface destruction in the SfxSlotPool refers again to pImpl after deletion of pImpl has commenced. See tdf#100270
     SfxModule_Impl*             pImpl;
 
     SAL_DLLPRIVATE void Construct_Impl();
