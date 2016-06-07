@@ -21,6 +21,7 @@
 
 #include <sal/types.h>
 #include <osl/diagnose.h>
+#include <rtl/ref.hxx>
 
 /** the template classes in this header are helper to implement weak references
     to implementation objects that are not refcounted.
@@ -113,7 +114,7 @@ public:
     inline WeakReference<reference_type>& operator= (const WeakReference<reference_type> & handle);
 
 private:
-    WeakConnection< reference_type >* mpWeakConnection;
+    rtl::Reference<WeakConnection< reference_type >> mpWeakConnection;
 };
 
 /** derive your implementation classes from this class if you want them to support weak references */
@@ -136,7 +137,7 @@ public:
 
 private:
     inline WeakConnection< reference_type >* getWeakConnection();
-    WeakConnection< reference_type >* mpWeakConnection;
+    rtl::Reference<WeakConnection< reference_type >> mpWeakConnection;
 };
 
 }
