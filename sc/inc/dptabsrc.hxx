@@ -88,7 +88,7 @@ class ScDPSource : public cppu::WeakImplHelper<
 {
 private:
     ScDPTableData*          pData;              // data source (ScDPObject manages its life time)
-    ScDPDimensions*         pDimensions;        // api objects
+    rtl::Reference<ScDPDimensions> pDimensions; // api objects
                                                 // settings:
 
     std::vector<long> maColDims;

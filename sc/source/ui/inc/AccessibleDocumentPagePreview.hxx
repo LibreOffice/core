@@ -135,8 +135,8 @@ private:
     ScNotesChildren* mpNotesChildren;
     ScShapeChildren* mpShapeChildren;
     rtl::Reference<ScAccessiblePreviewTable> mpTable;
-    ScAccessiblePageHeader* mpHeader;
-    ScAccessiblePageHeader* mpFooter;
+    rtl::Reference<ScAccessiblePageHeader> mpHeader;
+    rtl::Reference<ScAccessiblePageHeader> mpFooter;
 
     bool IsDefunc(
         const css::uno::Reference<css::accessibility::XAccessibleStateSet>& rxParentStates);

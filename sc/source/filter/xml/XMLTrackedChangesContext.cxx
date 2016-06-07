@@ -228,7 +228,7 @@ class ScXMLChangeCellContext : public SvXMLImportContext
 
     OUString           sText;
     OUString&          rInputString;
-    ScEditEngineTextObj*    pEditTextObj;
+    rtl::Reference<ScEditEngineTextObj> mpEditTextObj;
     double&                 rDateTimeValue;
     double                  fValue;
     sal_uInt16&             rType;
@@ -254,7 +254,7 @@ public:
                                                     const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList ) override;
 
     void CreateTextPContext(bool bIsNewParagraph);
-    bool IsEditCell() { return pEditTextObj != nullptr; }
+    bool IsEditCell() { return mpEditTextObj.is(); }
     void SetText(const OUString& sTempText) { sText = sTempText; }
 
     virtual void EndElement() override;
@@ -1012,7 +1012,6 @@ ScXMLChangeCellContext::ScXMLChangeCellContext( ScXMLImport& rImport,
     : SvXMLImportContext( rImport, nPrfx, rLName )
     , mrOldCell(rOldCell)
     , rInputString(rTempInputString)
-    , pEditTextObj(nullptr)
     , rDateTimeValue(fDateTimeValue)
     , fValue(0.0)
     , rType(nType)
@@ -1122,7 +1121,7 @@ SvXMLImportContext *ScXMLChangeCellContext::CreateChildContext( sal_uInt16 nPref
         }
         else
         {
-            if (!pEditTextObj)
+            if (!mpEditTextObj.is())
                 CreateTextPContext(true);
             pContext = GetScImport().GetTextImport()->CreateTextChildContext(
                 GetScImport(), nPrefix, rLocalName, xAttrList);
@@ -1139,10 +1138,9 @@ void ScXMLChangeCellContext::CreateTextPContext(bool bIsNewParagraph)
 {
     if (GetScImport().GetDocument())
     {
-        pEditTextObj = new ScEditEngineTextObj();
-        pEditTextObj->acquire();
-        pEditTextObj->GetEditEngine()->SetEditTextObjectPool(GetScImport().GetDocument()->GetEditPool());
-        uno::Reference <text::XText> xText(pEditTextObj);
+        mpEditTextObj = new ScEditEngineTextObj();
+        mpEditTextObj->GetEditEngine()->SetEditTextObjectPool(GetScImport().GetDocument()->GetEditPool());
+        uno::Reference <text::XText> xText(mpEditTextObj.get());
         if (xText.is())
         {
             uno::Reference<text::XTextCursor> xTextCursor(xText->createTextCursor());
@@ -1164,7 +1162,7 @@ void ScXMLChangeCellContext::EndElement()
     if (!bEmpty)
     {
         ScDocument* pDoc = GetScImport().GetDocument();
-        if (pEditTextObj)
+        if (mpEditTextObj.is())
         {
             if (GetImport().GetTextImport()->GetCursor().is())
             {
@@ -1179,9 +1177,9 @@ void ScXMLChangeCellContext::EndElement()
 
             // The cell will own the text object instance.
             mrOldCell.meType = CELLTYPE_EDIT;
-            mrOldCell.mpEditText = pEditTextObj->CreateTextObject();
+            mrOldCell.mpEditText = mpEditTextObj->CreateTextObject();
             GetScImport().GetTextImport()->ResetCursor();
-            pEditTextObj->release();
+            mpEditTextObj.clear();
         }
         else
         {

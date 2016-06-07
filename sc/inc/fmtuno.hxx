@@ -74,7 +74,7 @@ class ScTableConditionalFormat : public cppu::WeakImplHelper<
                             css::lang::XServiceInfo >
 {
 private:
-    std::vector<ScTableConditionalEntry*>   aEntries;
+    std::vector<rtl::Reference<ScTableConditionalEntry>>   maEntries;
 
     ScTableConditionalEntry*    GetObjectByIndex_Impl(sal_uInt16 nIndex) const;
     void                        AddEntry_Impl(const ScCondFormatEntryItem& aEntry);
