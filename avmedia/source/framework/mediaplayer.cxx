@@ -67,14 +67,17 @@ MediaFloater::~MediaFloater()
     disposeOnce();
 }
 
-
 void MediaFloater::dispose()
 {
+    if (IsFloatingMode())
+    {
+        Show(false, ShowFlags::NoFocusChange);
+        SetFloatingMode(false);
+    }
     delete mpMediaWindow;
     mpMediaWindow = nullptr;
     SfxDockingWindow::dispose();
 }
-
 
 void MediaFloater::Resize()
 {
@@ -83,7 +86,6 @@ void MediaFloater::Resize()
     if( mpMediaWindow )
         mpMediaWindow->setPosSize( Rectangle( Point(), GetOutputSizePixel() ) );
 }
-
 
 void MediaFloater::ToggleFloatingMode()
 {
