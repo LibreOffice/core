@@ -41,6 +41,7 @@
 #include "sfxslots.hxx"
 #include "childwinimpl.hxx"
 #include <ctrlfactoryimpl.hxx>
+#include <o3tl/make_unique.hxx>
 
 static std::vector<SfxModule*>* pModules=nullptr;
 
@@ -48,36 +49,20 @@ class SfxModule_Impl
 {
 public:
 
-    SfxSlotPool*                pSlotPool;
-    SfxTbxCtrlFactArr_Impl*     pTbxCtrlFac;
-    SfxStbCtrlFactArr_Impl*     pStbCtrlFac;
-    SfxChildWinFactArr_Impl*    pFactArr;
-    ImageList*                  pImgListSmall;
-    ImageList*                  pImgListBig;
+    std::unique_ptr<SfxSlotPool>                pSlotPool;
+    std::unique_ptr<SfxTbxCtrlFactArr_Impl>     pTbxCtrlFac;
+    std::unique_ptr<SfxStbCtrlFactArr_Impl>     pStbCtrlFac;
+    std::unique_ptr<SfxChildWinFactArr_Impl>    pFactArr;
+    std::unique_ptr<ImageList>                  pImgListSmall;
+    std::unique_ptr<ImageList>                  pImgListBig;
 
-                                SfxModule_Impl();
-                                ~SfxModule_Impl();
     ImageList*                  GetImageList( ResMgr* pResMgr, bool bBig );
 };
 
-SfxModule_Impl::SfxModule_Impl()
- : pSlotPool(nullptr), pTbxCtrlFac(nullptr), pStbCtrlFac(nullptr), pFactArr(nullptr), pImgListSmall(nullptr), pImgListBig(nullptr)
-{
-}
-
-SfxModule_Impl::~SfxModule_Impl()
-{
-    delete pSlotPool;
-    delete pTbxCtrlFac;
-    delete pStbCtrlFac;
-    delete pFactArr;
-    delete pImgListSmall;
-    delete pImgListBig;
-}
 
 ImageList* SfxModule_Impl::GetImageList( ResMgr* pResMgr, bool bBig )
 {
-    ImageList*& rpList = bBig ? pImgListBig : pImgListSmall;
+    auto &rpList = bBig ? pImgListBig : pImgListSmall;
     if ( !rpList )
     {
         ResId aResId( bBig ? ( RID_DEFAULTIMAGELIST_LC ) : ( RID_DEFAULTIMAGELIST_SC ), *pResMgr );
@@ -87,13 +72,13 @@ ImageList* SfxModule_Impl::GetImageList( ResMgr* pResMgr, bool bBig )
         DBG_ASSERT( pResMgr->IsAvailable(aResId), "No default ImageList!" );
 
         if ( pResMgr->IsAvailable(aResId) )
-            rpList = new ImageList( aResId );
+            rpList = o3tl::make_unique<ImageList>( aResId );
         else
-            rpList = new ImageList();
+            rpList = o3tl::make_unique<ImageList>();
     }
 
-    return rpList; }
-
+    return rpList.get();
+}
 
 SFX_IMPL_SUPERCLASS_INTERFACE(SfxModule, SfxShell)
 
@@ -103,9 +88,15 @@ ResMgr* SfxModule::GetResMgr()
 }
 
 SfxModule::SfxModule( ResMgr* pMgrP, SfxObjectFactory* pFactoryP, ... )
-    : pResMgr( pMgrP ), pImpl(nullptr)
+    : pResMgr( pMgrP ), pImpl( new SfxModule_Impl )
 {
-    Construct_Impl();
+    SfxApplication *pApp = SfxGetpApp();
+    std::vector<SfxModule*> &rArr = GetModules_Impl();
+    rArr.push_back( this );
+
+    pImpl->pSlotPool = o3tl::make_unique<SfxSlotPool>(&pApp->GetAppSlotPool_Impl());
+    SetPool( &pApp->GetPool() );
+
     va_list pVarArgs;
     va_start( pVarArgs, pFactoryP );
     for ( SfxObjectFactory *pArg = pFactoryP; pArg;
@@ -113,24 +104,6 @@ SfxModule::SfxModule( ResMgr* pMgrP, SfxObjectFactory* pFactoryP, ... )
         pArg->SetModule_Impl( this );
     va_end(pVarArgs);
 }
-
-void SfxModule::Construct_Impl()
-{
-    SfxApplication *pApp = SfxGetpApp();
-    std::vector<SfxModule*> &rArr = GetModules_Impl();
-    rArr.push_back( this );
-    pImpl = new SfxModule_Impl;
-    pImpl->pSlotPool = new SfxSlotPool(&pApp->GetAppSlotPool_Impl());
-
-    pImpl->pTbxCtrlFac=nullptr;
-    pImpl->pStbCtrlFac=nullptr;
-    pImpl->pFactArr=nullptr;
-    pImpl->pImgListSmall=nullptr;
-    pImpl->pImgListBig=nullptr;
-
-    SetPool( &pApp->GetPool() );
-}
-
 
 SfxModule::~SfxModule()
 {
@@ -150,23 +123,21 @@ SfxModule::~SfxModule()
 
     }
 
-    delete pImpl;
-    delete pResMgr;
+     delete pResMgr;
 }
 
 
 SfxSlotPool* SfxModule::GetSlotPool() const
 {
-    return pImpl->pSlotPool;
+    return pImpl->pSlotPool.get();
 }
-
 
 void SfxModule::RegisterChildWindow(SfxChildWinFactory *pFact)
 {
     DBG_ASSERT( pImpl, "No real Module!" );
 
     if (!pImpl->pFactArr)
-        pImpl->pFactArr = new SfxChildWinFactArr_Impl;
+        pImpl->pFactArr = o3tl::make_unique<SfxChildWinFactArr_Impl>();
 
     for (size_t nFactory=0; nFactory<pImpl->pFactArr->size(); ++nFactory)
     {
@@ -185,7 +156,7 @@ void SfxModule::RegisterChildWindow(SfxChildWinFactory *pFact)
 void SfxModule::RegisterToolBoxControl( const SfxTbxCtrlFactory& rFact )
 {
     if (!pImpl->pTbxCtrlFac)
-        pImpl->pTbxCtrlFac = new SfxTbxCtrlFactArr_Impl;
+        pImpl->pTbxCtrlFac = o3tl::make_unique<SfxTbxCtrlFactArr_Impl>();
 
 #ifdef DBG_UTIL
     for ( size_t n=0; n<pImpl->pTbxCtrlFac->size(); n++ )
@@ -206,7 +177,7 @@ void SfxModule::RegisterToolBoxControl( const SfxTbxCtrlFactory& rFact )
 void SfxModule::RegisterStatusBarControl( const SfxStbCtrlFactory& rFact )
 {
     if (!pImpl->pStbCtrlFac)
-        pImpl->pStbCtrlFac = new SfxStbCtrlFactArr_Impl;
+        pImpl->pStbCtrlFac = o3tl::make_unique<SfxStbCtrlFactArr_Impl>();
 
 #ifdef DBG_UTIL
     for ( size_t n=0; n<pImpl->pStbCtrlFac->size(); n++ )
@@ -226,18 +197,18 @@ void SfxModule::RegisterStatusBarControl( const SfxStbCtrlFactory& rFact )
 
 SfxTbxCtrlFactArr_Impl*  SfxModule::GetTbxCtrlFactories_Impl() const
 {
-    return pImpl->pTbxCtrlFac;
+    return pImpl->pTbxCtrlFac.get();
 }
 
 
 SfxStbCtrlFactArr_Impl*  SfxModule::GetStbCtrlFactories_Impl() const
 {
-    return pImpl->pStbCtrlFac;
+    return pImpl->pStbCtrlFac.get();
 }
 
 SfxChildWinFactArr_Impl* SfxModule::GetChildWinFactories_Impl() const
 {
-    return pImpl->pFactArr;
+    return pImpl->pFactArr.get();
 }
 
 ImageList* SfxModule::GetImageList_Impl( bool bBig )
