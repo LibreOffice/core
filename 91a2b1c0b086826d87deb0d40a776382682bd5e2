@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_7526a769",
+        "filename": "include/sfx2/thumbnailview.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-06-07T12:28:31Z",
+      "side": 1,
+      "message": "Hm maybe better SetMultiSelectionEnabled(bool bEnabled\u003dtrue)\n\nThe word toggle usually indicates that it switches states back and forth as you call it.",
+      "revId": "91a2b1c0b086826d87deb0d40a776382682bd5e2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_952b2b30",
+        "filename": "include/sfx2/thumbnailview.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-06-07T12:28:31Z",
+      "side": 1,
+      "message": "I\u0027d rather name it mbIsMultiSelectionEnabled. Then you can can just assign the value from the SetMultiSelectionEnabled method.",
+      "revId": "91a2b1c0b086826d87deb0d40a776382682bd5e2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
