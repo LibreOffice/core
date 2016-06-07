@@ -219,6 +219,24 @@ const ScDPResultTree::ValuesType* ScDPResultTree::getResults(
         pMember = itMem->second;
     }
 
+    if (pMember->maValues.empty())
+    {
+        // Descend into dimension member children while there is no result and
+        // exactly one dimension field with exactly one member item, for which
+        // no further constraint (filter) has to match.
+        const MemberNode* pFieldMember = pMember;
+        while (pFieldMember->maChildDimensions.size() == 1)
+        {
+            DimensionsType::const_iterator itDim( pFieldMember->maChildDimensions.begin());
+            const DimensionNode* pDim = itDim->second;
+            if (pDim->maChildMembers.size() != 1)
+                break;  // while
+            pFieldMember = pDim->maChildMembers.begin()->second;
+            if (!pFieldMember->maValues.empty())
+                return &pFieldMember->maValues;
+        }
+    }
+
     return &pMember->maValues;
 }
 
