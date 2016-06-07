@@ -26,6 +26,8 @@ public:
 
     void showDefaultIcon(bool bVal) { mbIsDefaultTemplate = bVal; }
 
+    bool IsDefaultTemplate() const { return mbIsDefaultTemplate; }
+
     Rectangle getDefaultIconArea() const;
 
     virtual void Paint (drawinglayer::processor2d::BaseProcessor2D *pProcessor,
