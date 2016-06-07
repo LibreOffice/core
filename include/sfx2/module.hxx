@@ -53,9 +53,10 @@ class SFX2_DLLPUBLIC SfxModule : public SfxShell
 {
 private:
     ResMgr*                     pResMgr;
-    SfxModule_Impl*             pImpl;
 
-    SAL_DLLPRIVATE void Construct_Impl();
+    // This cannot be turned into a unique_ptr. The pImpl contains SfxSlotPool
+    // whose destructor indirectly reads pImpl that would be have already been reset
+    SfxModule_Impl*             pImpl;
 
 public:
                                 SFX_DECL_INTERFACE(SFX_INTERFACE_SFXMODULE)
