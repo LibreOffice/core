@@ -177,10 +177,10 @@
               <placeholder/>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="RID_SVXPAGE_BITMAP">
+              <object class="GtkLabel" id="RID_SVXPAGE_PATTERN">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Bitmaps</property>
+                <property name="label" translatable="yes">Patterns</property>
               </object>
               <packing>
                 <property name="position">6</property>

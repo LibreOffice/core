@@ -934,7 +934,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                             //UUUU items to hand over XPropertyList things like
                             // XColorList, XHatchList, XGradientList and XBitmapList
                             // to the Area TabPage
-                            SID_COLOR_TABLE,        SID_BITMAP_LIST,                // [10179
+                            SID_COLOR_TABLE,        SID_PATTERN_LIST,                // [10179
 
                             SID_HTML_MODE,              SID_HTML_MODE,              // [10414
                             SID_ATTR_PARA_PAGENUM,      SID_ATTR_PARA_PAGENUM,      // [10457
@@ -955,7 +955,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             aCoreSet.Put(SvxGradientListItem(pDrawModel->GetGradientList(), SID_GRADIENT_LIST));
             aCoreSet.Put(SvxHatchListItem(pDrawModel->GetHatchList(), SID_HATCH_LIST));
             aCoreSet.Put(SvxBitmapListItem(pDrawModel->GetBitmapList(), SID_BITMAP_LIST));
-
+            aCoreSet.Put(SvxPatternListItem(pDrawModel->GetPatternList(), SID_PATTERN_LIST));
             aCoreSet.Put(SfxUInt16Item(SID_HTML_MODE,
                             ::GetHtmlMode(GetView().GetDocShell())));
 

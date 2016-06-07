@@ -590,7 +590,7 @@ IMPL_LINK_NOARG_TYPED(SvxHFPage, BackgroundHdl, Button*, void)
             pBBSet = new SfxItemSet(
                 *GetItemSet().GetPool(),
                 XATTR_FILL_FIRST, XATTR_FILL_LAST,  // DrawingLayer FillStyle definitions
-                SID_COLOR_TABLE, SID_BITMAP_LIST,   // XPropertyLists for Color, Gradient, Hatch and Graphic fills
+                SID_COLOR_TABLE, SID_PATTERN_LIST,   // XPropertyLists for Color, Gradient, Hatch and Graphic fills
                 nOuter, nOuter,
                 nInner, nInner,
                 nShadow, nShadow,
@@ -603,6 +603,7 @@ IMPL_LINK_NOARG_TYPED(SvxHFPage, BackgroundHdl, Button*, void)
                 SID_GRADIENT_LIST,
                 SID_HATCH_LIST,
                 SID_BITMAP_LIST,
+                SID_PATTERN_LIST,
                 0
             };
 
