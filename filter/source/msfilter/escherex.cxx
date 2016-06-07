@@ -4954,7 +4954,7 @@ public:
     virtual ~SvNullStream() {}
 };
 
-EscherEx::EscherEx(const EscherExGlobalRef& rxGlobal, SvStream* pOutStrm, bool bOOXML)
+EscherEx::EscherEx(const std::shared_ptr<EscherExGlobal>& rxGlobal, SvStream* pOutStrm, bool bOOXML)
     : mxGlobal(rxGlobal)
     , mpOutStrm(pOutStrm)
     , mbOwnsStrm(false)

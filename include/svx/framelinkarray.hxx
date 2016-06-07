@@ -348,9 +348,7 @@ public:
 
 
 private:
-    typedef std::unique_ptr<ArrayImpl> ArrayImplPtr;
-
-    ArrayImplPtr        mxImpl;
+    std::unique_ptr<ArrayImpl>        mxImpl;
 };
 
 }

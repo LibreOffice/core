@@ -55,8 +55,6 @@ namespace svx
 
         virtual ~IPropertyValueProvider();
     };
-    typedef std::shared_ptr< IPropertyValueProvider >  PPropertyValueProvider;
-
 
     //= PropertyValueProvider
 
@@ -114,7 +112,7 @@ namespace svx
 
         /** registers a IPropertyValueProvider
         */
-        void    registerProvider( const ShapeProperty _eProperty, const PPropertyValueProvider& _rProvider );
+        void    registerProvider( const ShapeProperty _eProperty, const std::shared_ptr<IPropertyValueProvider>& _rProvider );
 
         /** notifies changes in the given property to all registered listeners
 
