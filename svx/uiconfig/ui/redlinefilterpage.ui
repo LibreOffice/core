@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.20.0 -->
 <interface>
-  <!-- interface-requires gtk+ 3.0 -->
+  <requires lib="gtk+" version="3.0"/>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="lower">19851231</property>
     <property name="upper">20501231</property>
@@ -38,8 +39,6 @@
       <packing>
         <property name="left_attach">0</property>
         <property name="top_attach">0</property>
-        <property name="width">1</property>
-        <property name="height">1</property>
       </packing>
     </child>
     <child>
@@ -55,8 +54,6 @@
       <packing>
         <property name="left_attach">0</property>
         <property name="top_attach">2</property>
-        <property name="width">1</property>
-        <property name="height">1</property>
       </packing>
     </child>
     <child>
@@ -75,8 +72,6 @@
       <packing>
         <property name="left_attach">0</property>
         <property name="top_attach">8</property>
-        <property name="width">1</property>
-        <property name="height">1</property>
       </packing>
     </child>
     <child>
@@ -87,13 +82,15 @@
         <property name="margin_left">24</property>
         <property name="hexpand">True</property>
         <property name="invisible_char">•</property>
-        <property name="invisible_char_set">True</property>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="commentedit-atkobject">
+            <property name="AtkObject::accessible-name" translatable="yes">Comment</property>
+          </object>
+        </child>
       </object>
       <packing>
         <property name="left_attach">0</property>
         <property name="top_attach">9</property>
-        <property name="width">1</property>
-        <property name="height">1</property>
       </packing>
     </child>
     <child>
@@ -109,8 +106,6 @@
       <packing>
         <property name="left_attach">0</property>
         <property name="top_attach">6</property>
-        <property name="width">1</property>
-        <property name="height">1</property>
       </packing>
     </child>
     <child>
@@ -120,8 +115,6 @@
         <property name="can_focus">False</property>
         <property name="margin_left">24</property>
         <property name="hexpand">True</property>
-        <property name="entry_text_column">0</property>
-        <property name="id_column">1</property>
         <accessibility>
           <relation type="labelled-by" target="action"/>
         </accessibility>
@@ -134,8 +127,6 @@
       <packing>
         <property name="left_attach">0</property>
         <property name="top_attach">5</property>
-        <property name="width">1</property>
-        <property name="height">1</property>
       </packing>
     </child>
     <child>
@@ -151,8 +142,6 @@
       <packing>
         <property name="left_attach">0</property>
         <property name="top_attach">4</property>
-        <property name="width">1</property>
-        <property name="height">1</property>
       </packing>
     </child>
     <child>
@@ -162,17 +151,18 @@
         <property name="can_focus">False</property>
         <property name="margin_left">24</property>
         <property name="hexpand">True</property>
-        <property name="entry_text_column">0</property>
-        <property name="id_column">1</property>
         <accessibility>
           <relation type="labelled-by" target="author"/>
         </accessibility>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="authorlist-atkobject">
+            <property name="AtkObject::accessible-name" translatable="yes">Author</property>
+          </object>
+        </child>
       </object>
       <packing>
         <property name="left_attach">0</property>
         <property name="top_attach">3</property>
-        <property name="width">1</property>
-        <property name="height">1</property>
       </packing>
     </child>
     <child>
@@ -188,10 +178,14 @@
             <property name="can_focus">True</property>
             <property name="hexpand">True</property>
             <property name="invisible_char">•</property>
-            <property name="invisible_char_set">True</property>
             <accessibility>
               <relation type="labelled-by" target="range"/>
             </accessibility>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="rangeedit-atkobject">
+                <property name="AtkObject::accessible-name" translatable="yes">Range</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -220,8 +214,6 @@
       <packing>
         <property name="left_attach">0</property>
         <property name="top_attach">7</property>
-        <property name="width">1</property>
-        <property name="height">1</property>
       </packing>
     </child>
     <child>
@@ -237,16 +229,6 @@
             <property name="sensitive">False</property>
             <property name="can_focus">False</property>
             <property name="hexpand">True</property>
-            <property name="entry_text_column">0</property>
-            <property name="id_column">1</property>
-            <accessibility>
-              <relation type="labelled-by" target="date"/>
-            </accessibility>
-            <child internal-child="accessible">
-              <object class="AtkObject" id="datecond-atkobject">
-                <property name="AtkObject::accessible-name" translatable="yes">Date Condition</property>
-              </object>
-            </child>
             <items>
               <item translatable="yes">earlier than</item>
               <item translatable="yes">since</item>
@@ -255,6 +237,14 @@
               <item translatable="yes">between</item>
               <item translatable="yes">since saving</item>
             </items>
+            <accessibility>
+              <relation type="labelled-by" target="date"/>
+            </accessibility>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="datecond-atkobject">
+                <property name="AtkObject::accessible-name" translatable="yes">Date Condition</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -274,16 +264,14 @@
                 <property name="visible">True</property>
                 <property name="sensitive">False</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">1</property>
                 <property name="label" translatable="yes">a_nd</property>
                 <property name="use_underline">True</property>
                 <property name="ellipsize">end</property>
+                <property name="xalign">1</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
                 <property name="top_attach">1</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
               </packing>
             </child>
             <child>
@@ -294,7 +282,6 @@
                 <property name="can_focus">True</property>
                 <property name="hexpand">True</property>
                 <property name="invisible_char">•</property>
-                <property name="invisible_char_set">True</property>
                 <property name="adjustment">adjustment1</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="startdate:yy:mm:dd-atkobject">
@@ -305,8 +292,6 @@
               <packing>
                 <property name="left_attach">1</property>
                 <property name="top_attach">0</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
               </packing>
             </child>
             <child>
@@ -317,7 +302,6 @@
                 <property name="can_focus">True</property>
                 <property name="hexpand">True</property>
                 <property name="invisible_char">•</property>
-                <property name="invisible_char_set">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="starttime:hh:mm-atkobject">
                     <property name="AtkObject::accessible-name" translatable="yes">Start Time</property>
@@ -327,8 +311,6 @@
               <packing>
                 <property name="left_attach">2</property>
                 <property name="top_attach">0</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
               </packing>
             </child>
             <child>
@@ -345,8 +327,6 @@
               <packing>
                 <property name="left_attach">3</property>
                 <property name="top_attach">0</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
               </packing>
             </child>
             <child>
@@ -357,7 +337,6 @@
                 <property name="can_focus">True</property>
                 <property name="hexpand">True</property>
                 <property name="invisible_char">•</property>
-                <property name="invisible_char_set">True</property>
                 <property name="adjustment">adjustment1</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="enddate:yy:mm:dd-atkobject">
@@ -368,8 +347,6 @@
               <packing>
                 <property name="left_attach">1</property>
                 <property name="top_attach">1</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
               </packing>
             </child>
             <child>
@@ -380,7 +357,6 @@
                 <property name="can_focus">True</property>
                 <property name="hexpand">True</property>
                 <property name="invisible_char">•</property>
-                <property name="invisible_char_set">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="endtime:hh:mm-atkobject">
                     <property name="AtkObject::accessible-name" translatable="yes">End Time</property>
@@ -390,8 +366,6 @@
               <packing>
                 <property name="left_attach">2</property>
                 <property name="top_attach">1</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
               </packing>
             </child>
             <child>
@@ -408,8 +382,6 @@
               <packing>
                 <property name="left_attach">3</property>
                 <property name="top_attach">1</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
               </packing>
             </child>
             <child>
@@ -426,8 +398,6 @@
       <packing>
         <property name="left_attach">0</property>
         <property name="top_attach">1</property>
-        <property name="width">1</property>
-        <property name="height">1</property>
       </packing>
     </child>
   </object>

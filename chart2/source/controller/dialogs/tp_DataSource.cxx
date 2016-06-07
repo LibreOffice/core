@@ -267,9 +267,6 @@ DataSourceTabPage::DataSourceTabPage(
     if( m_pLB_SERIES->First())
         m_pLB_SERIES->Select( m_pLB_SERIES->First());
     m_pLB_SERIES->GrabFocus();
-
-    m_pBTN_UP->SetAccessibleName(SCH_RESSTR(STR_BUTTON_UP));
-    m_pBTN_DOWN->SetAccessibleName(SCH_RESSTR(STR_BUTTON_DOWN));
 }
 
 DataSourceTabPage::~DataSourceTabPage()

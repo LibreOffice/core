@@ -39,11 +39,6 @@ String STR_PASSWD_EMPTY
     Text [ en-US ] = "(The password can be empty)" ;
 };
 
-String STR_PASSWD
-{
-    Text [ en-US ] = "Password" ;
-};
-
 String STR_MODULENOTINSTALLED
 {
     Text [ en-US ] = "The action could not be executed. The %PRODUCTNAME program module needed for this action is currently not installed.";
