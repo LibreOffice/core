@@ -53,9 +53,7 @@ class SFX2_DLLPUBLIC SfxModule : public SfxShell
 {
 private:
     ResMgr*                     pResMgr;
-    SfxModule_Impl*             pImpl;
-
-    SAL_DLLPRIVATE void Construct_Impl();
+    std::unique_ptr< SfxModule_Impl >             pImpl;
 
 public:
                                 SFX_DECL_INTERFACE(SFX_INTERFACE_SFXMODULE)
