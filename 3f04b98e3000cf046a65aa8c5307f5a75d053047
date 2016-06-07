@@ -1,0 +1,107 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_7ae774e4",
+        "filename": "jurt/com/sun/star/lib/uno/protocols/urp/Marshal.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-06-07T07:19:23Z",
+      "side": 1,
+      "message": "What is the rationale for such shuffling of imports?  (If anything, I\u0027d just sort all imports into a single, lexicographically sorted block.)",
+      "revId": "3f04b98e3000cf046a65aa8c5307f5a75d053047",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_9aec38c9",
+        "filename": "ridljar/com/sun/star/lib/uno/typedesc/FieldDescription.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-06-07T07:19:23Z",
+      "side": 1,
+      "message": "drop the \"I\"",
+      "range": {
+        "startLine": 24,
+        "startChar": 13,
+        "endLine": 24,
+        "endChar": 14
+      },
+      "revId": "3f04b98e3000cf046a65aa8c5307f5a75d053047",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_bad1fcfd",
+        "filename": "ridljar/com/sun/star/lib/uno/typedesc/MethodDescription.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-06-07T07:19:23Z",
+      "side": 1,
+      "message": "drop the \"I\" (also in what follows)",
+      "range": {
+        "startLine": 87,
+        "startChar": 32,
+        "endLine": 87,
+        "endChar": 33
+      },
+      "revId": "3f04b98e3000cf046a65aa8c5307f5a75d053047",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_dacec059",
+        "filename": "ridljar/com/sun/star/lib/uno/typedesc/TypeDescription.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-06-07T07:19:23Z",
+      "side": 1,
+      "message": "drop the \"I\" (also in what follows)",
+      "range": {
+        "startLine": 129,
+        "startChar": 22,
+        "endLine": 129,
+        "endChar": 23
+      },
+      "revId": "3f04b98e3000cf046a65aa8c5307f5a75d053047",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_fadb8419",
+        "filename": "ridljar/com/sun/star/uno/Type.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-06-07T07:19:23Z",
+      "side": 1,
+      "message": "Hm, here it starts to get problematic.  So client code has access to the ctor, get/SetTypeDescription, and even the (unfortunately protected, not private) _iTypeDescription field.  Using the internal TypeDescription here is problematic and hinders future changes to internals (unless we declare these parts of Type exposing TypeDescription as internal).",
+      "revId": "3f04b98e3000cf046a65aa8c5307f5a75d053047",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
