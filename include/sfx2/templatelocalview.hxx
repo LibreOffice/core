@@ -92,7 +92,7 @@ public:
 
     virtual bool renameItem(ThumbnailViewItem* pItem, const OUString& sNewTitle) override;
 
-private:
+protected:
 
     SfxDocumentTemplates *mpDocTemplates;
     std::vector<TemplateContainerItem* > maRegions;
