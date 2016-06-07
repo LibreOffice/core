@@ -505,6 +505,30 @@ void XMLRedlineExport::ExportChangeInfo(
                                           XML_END, true, false );
         rExport.Characters("end"); // TODO: Get the correct end position
     }
+    else if(sType == sInsert)
+    {
+        SvXMLElementExport aTypeElem( rExport, XML_NAMESPACE_DC,
+                                          XML_TYPE, true, false );
+        rExport.Characters("text"); // or paragraph TODO: Find a way to distinguish text and paragraph changes
+        SvXMLElementExport aStartElem( rExport, XML_NAMESPACE_DC,
+                                          XML_START, true, false );
+        rExport.Characters("start"); // TODO: Get the correct start position (NumberingLevel for paragraph)
+        SvXMLElementExport aEndElem( rExport, XML_NAMESPACE_DC,
+                                          XML_END, true, false );
+    }
+    else if(sType == sDelete)
+    {
+        SvXMLElementExport aTypeElem( rExport, XML_NAMESPACE_DC,
+                                          XML_TYPE, true, false );
+        rExport.Characters("text"); // or paragraph TODO: Find a way to distinguish text and paragraph changes
+        SvXMLElementExport aStartElem( rExport, XML_NAMESPACE_DC,
+                                          XML_START, true, false );
+        rExport.Characters("start"); // TODO: Get the correct start position
+        SvXMLElementExport aEndElem( rExport, XML_NAMESPACE_DC,
+                                          XML_END, true, false );
+        // TODO: Check if type is not paragraph
+        rExport.Characters("end"); // TODO: Get the correct end position
+    }
 
     // comment as <text:p> sequence
     aAny = rPropSet->getPropertyValue(sRedlineComment);
