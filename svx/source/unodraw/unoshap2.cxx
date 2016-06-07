@@ -1414,21 +1414,18 @@ bool SvxGraphicObject::setPropertyValueImpl( const OUString& rName, const SfxIte
     {
     case OWN_ATTR_VALUE_FILLBITMAP:
     {
-        if( rValue.getValue() )
+        if( rValue.getValueType() == cppu::UnoType<uno::Sequence< sal_Int8 >>::get() )
         {
-            if( rValue.getValueType() == cppu::UnoType<uno::Sequence< sal_Int8 >>::get() )
+            uno::Sequence<sal_Int8> const * pSeq( static_cast<uno::Sequence<sal_Int8> const *>(rValue.getValue()) );
+            SvMemoryStream  aMemStm;
+            Graphic         aGraphic;
+
+            aMemStm.SetBuffer( const_cast<css::uno::Sequence<sal_Int8> *>(pSeq)->getArray(), pSeq->getLength(), pSeq->getLength() );
+
+            if( GraphicConverter::Import( aMemStm, aGraphic ) == ERRCODE_NONE )
             {
-                uno::Sequence<sal_Int8> const * pSeq( static_cast<uno::Sequence<sal_Int8> const *>(rValue.getValue()) );
-                SvMemoryStream  aMemStm;
-                Graphic         aGraphic;
-
-                aMemStm.SetBuffer( const_cast<css::uno::Sequence<sal_Int8> *>(pSeq)->getArray(), pSeq->getLength(), pSeq->getLength() );
-
-                if( GraphicConverter::Import( aMemStm, aGraphic ) == ERRCODE_NONE )
-                {
-                    static_cast<SdrGrafObj*>(mpObj.get())->SetGraphic(aGraphic);
-                    bOk = true;
-                }
+                static_cast<SdrGrafObj*>(mpObj.get())->SetGraphic(aGraphic);
+                bOk = true;
             }
         }
         else if( (rValue.getValueType() == cppu::UnoType<awt::XBitmap>::get()) || (rValue.getValueType() == cppu::UnoType<graphic::XGraphic>::get()))
