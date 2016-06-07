@@ -185,8 +185,8 @@ void TemplateLocalView::createContextMenu()
     pItemMenu->InsertItem(MNI_EDIT,SfxResId(STR_EDIT_TEMPLATE).toString());
     pItemMenu->InsertItem(MNI_DEFAULT_TEMPLATE,SfxResId(STR_DEFAULT_TEMPLATE).toString());
     pItemMenu->InsertSeparator();
-    pItemMenu->InsertItem(MNI_DELETE,SfxResId(STR_DELETE).toString());
     pItemMenu->InsertItem(MNI_RENAME,SfxResId(STR_RENAME).toString());
+    pItemMenu->InsertItem(MNI_DELETE,SfxResId(STR_DELETE).toString());
     pItemMenu->InsertSeparator();
     deselectItems();
     maSelectedItem->setSelection(true);
@@ -207,9 +207,6 @@ IMPL_LINK_TYPED(TemplateLocalView, ContextMenuSelectHdl, Menu*, pMenu, bool)
     case MNI_EDIT:
         maEditTemplateHdl.Call(maSelectedItem);
         break;
-    case MNI_DELETE:
-        maDeleteTemplateHdl.Call(maSelectedItem);
-        break;
     case MNI_RENAME:
     {
         ScopedVclPtrInstance< InputDialog > m_pTitleEditDlg( SfxResId(STR_RENAME_TEMPLATE).toString(), this);
@@ -226,6 +223,9 @@ IMPL_LINK_TYPED(TemplateLocalView, ContextMenuSelectHdl, Menu*, pMenu, bool)
             maSelectedItem->setTitle(sNewTitle);
         }
     }
+        break;
+    case MNI_DELETE:
+        maDeleteTemplateHdl.Call(maSelectedItem);
         break;
     case MNI_DEFAULT_TEMPLATE:
         maDefaultTemplateHdl.Call(maSelectedItem);
