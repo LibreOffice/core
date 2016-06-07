@@ -54,9 +54,9 @@ QStyle::State vclStateValue2StateFlag( ControlState nControlState,
 
     switch ( aValue.getTristateVal() )
     {
-        case BUTTONVALUE_ON:    nState |= QStyle::State_On;       break;
-        case BUTTONVALUE_OFF:   nState |= QStyle::State_Off;      break;
-        case BUTTONVALUE_MIXED: nState |= QStyle::State_NoChange; break;
+        case ButtonValue::On:    nState |= QStyle::State_On;       break;
+        case ButtonValue::Off:   nState |= QStyle::State_Off;      break;
+        case ButtonValue::Mixed: nState |= QStyle::State_NoChange; break;
         default: break;
     }
 
@@ -411,7 +411,7 @@ bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
         QStyleOption option;
         option.state = QStyle::State_Item | QStyle::State_Children;
 
-        if (value.getTristateVal() == BUTTONVALUE_ON)
+        if (value.getTristateVal() == ButtonValue::On)
             option.state |= QStyle::State_Open;
 
         draw( QStyle::PE_IndicatorBranch, &option, m_image.get(),

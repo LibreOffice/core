@@ -101,16 +101,16 @@ static ThemeButtonValue ImplGetButtonValue( ButtonValue aButtonValue )
 {
     switch( aButtonValue )
     {
-        case BUTTONVALUE_ON:
+        case ButtonValue::On:
             return kThemeButtonOn;
             break;
 
-        case BUTTONVALUE_OFF:
+        case ButtonValue::Off:
             return kThemeButtonOff;
             break;
 
-        case BUTTONVALUE_MIXED:
-        case BUTTONVALUE_DONTKNOW:
+        case ButtonValue::Mixed:
+        case ButtonValue::DontKnow:
         default:
             return kThemeButtonMixed;
             break;
@@ -612,7 +612,7 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
         {
             ButtonValue aButtonValue = aValue.getTristateVal();
 
-            if( AllSettings::GetLayoutRTL() && aButtonValue == BUTTONVALUE_OFF )
+            if( AllSettings::GetLayoutRTL() && aButtonValue == ButtonValue::Off )
             {
                 // FIXME: a value of kThemeDisclosureLeft
                 // should draw a theme compliant left disclosure triangle
@@ -645,9 +645,9 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
                 aInfo.adornment = kThemeAdornmentNone;
 
                 switch( aButtonValue ) {
-                    case BUTTONVALUE_ON: aInfo.value = kThemeDisclosureDown;//expanded
+                    case ButtonValue::On: aInfo.value = kThemeDisclosureDown;//expanded
                         break;
-                    case BUTTONVALUE_OFF:
+                    case ButtonValue::Off:
                         // FIXME: this should have drawn a theme compliant disclosure triangle
                         // (see above)
                         if( AllSettings::GetLayoutRTL() )
@@ -655,7 +655,7 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
                             aInfo.value = kThemeDisclosureLeft;//collapsed, RTL
                         }
                         break;
-                    case BUTTONVALUE_DONTKNOW: //what to do?
+                    case ButtonValue::DontKnow: //what to do?
                     default:
                         break;
                 }
@@ -978,12 +978,12 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
 
                     switch( aValue.getTristateVal() )
                     {
-                        case BUTTONVALUE_ON:        aSpinInfo.value = kThemeButtonOn;
+                        case ButtonValue::On:        aSpinInfo.value = kThemeButtonOn;
                                                     break;
-                        case BUTTONVALUE_OFF:       aSpinInfo.value = kThemeButtonOff;
+                        case ButtonValue::Off:       aSpinInfo.value = kThemeButtonOff;
                                                     break;
-                        case BUTTONVALUE_MIXED:
-                        case BUTTONVALUE_DONTKNOW:
+                        case ButtonValue::Mixed:
+                        case ButtonValue::DontKnow:
                         default:                    aSpinInfo.value = kThemeButtonMixed;
                                                     break;
                     }

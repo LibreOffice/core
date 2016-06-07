@@ -335,7 +335,7 @@ void HeaderBar::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos
     if (rRenderContext.IsNativeControlSupported(ControlType::ListHeader, PART_BUTTON))
     {
         aCtrlRegion = aRect;
-        aControlValue.setTristateVal(BUTTONVALUE_ON);
+        aControlValue.setTristateVal(ButtonValue::On);
         nState |= ControlState::ENABLED;
         if (bHigh)
             nState |= ControlState::PRESSED;

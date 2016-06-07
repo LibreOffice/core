@@ -353,11 +353,11 @@ void SvLBoxButton::Paint(
         if (nStyle != DrawImageFlags::Disable)
             nState |= ControlState::ENABLED;
         if (IsStateChecked())
-            aControlValue.setTristateVal(BUTTONVALUE_ON);
+            aControlValue.setTristateVal(ButtonValue::On);
         else if (IsStateUnchecked())
-            aControlValue.setTristateVal(BUTTONVALUE_OFF);
+            aControlValue.setTristateVal(ButtonValue::Off);
         else if (IsStateTristate())
-            aControlValue.setTristateVal( BUTTONVALUE_MIXED );
+            aControlValue.setTristateVal( ButtonValue::Mixed );
 
         if (isVis)
             bNativeOK = rRenderContext.DrawNativeControl(eCtrlType, PART_ENTIRE_CONTROL,
@@ -386,7 +386,7 @@ void SvLBoxButton::ImplAdjustBoxSize(Size& io_rSize, ControlType i_eType, vcl::R
         Rectangle           aCtrlRegion( Point( 0, 0 ), io_rSize );
         ControlState        nState = ControlState::ENABLED;
 
-        aControlValue.setTristateVal( BUTTONVALUE_ON );
+        aControlValue.setTristateVal( ButtonValue::On );
 
         Rectangle aNativeBounds, aNativeContent;
         bool bNativeOK = rRenderContext.GetNativeControlRegion( i_eType,

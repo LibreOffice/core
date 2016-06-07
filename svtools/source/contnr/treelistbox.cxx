@@ -3041,18 +3041,18 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, long nLine, vcl::Render
                         nState |= ControlState::ENABLED;
 
                     if (IsExpanded(&rEntry))
-                        aControlValue.setTristateVal(BUTTONVALUE_ON); //expanded node
+                        aControlValue.setTristateVal(ButtonValue::On); //expanded node
                     else
                     {
                         if ((!rEntry.HasChildren()) && rEntry.HasChildrenOnDemand() &&
                             (!(rEntry.GetFlags() & SvTLEntryFlags::HAD_CHILDREN)) &&
                             pImpl->GetDontKnowNodeBmp().GetSizePixel().Width())
                         {
-                            aControlValue.setTristateVal( BUTTONVALUE_DONTKNOW ); //don't know
+                            aControlValue.setTristateVal( ButtonValue::DontKnow ); //don't know
                         }
                         else
                         {
-                            aControlValue.setTristateVal( BUTTONVALUE_OFF ); //collapsed node
+                            aControlValue.setTristateVal( ButtonValue::Off ); //collapsed node
                         }
                     }
 

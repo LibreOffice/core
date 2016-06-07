@@ -1298,7 +1298,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
         case PART_BUTTON:
             /* For all checkbuttons in the toolbars */
             flags = (GtkStateFlags)(flags |
-                    ( (rValue.getTristateVal() == BUTTONVALUE_ON) ? GTK_STATE_FLAG_ACTIVE : GTK_STATE_FLAG_NORMAL));
+                    ( (rValue.getTristateVal() == ButtonValue::On) ? GTK_STATE_FLAG_ACTIVE : GTK_STATE_FLAG_NORMAL));
             context = mpToolButtonStyle;
             break;
         case PART_SEPARATOR_VERT:
@@ -1311,14 +1311,14 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
         break;
     case ControlType::Radiobutton:
         flags = (GtkStateFlags)(flags |
-                ( (rValue.getTristateVal() == BUTTONVALUE_ON) ? CHECKED : GTK_STATE_FLAG_NORMAL));
+                ( (rValue.getTristateVal() == ButtonValue::On) ? CHECKED : GTK_STATE_FLAG_NORMAL));
         context = mpRadioButtonStyle;
         renderType = nPart == PART_FOCUS ? RENDER_FOCUS : RENDER_RADIO;
         break;
     case ControlType::Checkbox:
         flags = (GtkStateFlags)(flags |
-                ( (rValue.getTristateVal() == BUTTONVALUE_ON) ? CHECKED :
-                  (rValue.getTristateVal() == BUTTONVALUE_MIXED) ? GTK_STATE_FLAG_INCONSISTENT :
+                ( (rValue.getTristateVal() == ButtonValue::On) ? CHECKED :
+                  (rValue.getTristateVal() == ButtonValue::Mixed) ? GTK_STATE_FLAG_INCONSISTENT :
                   GTK_STATE_FLAG_NORMAL));
         context = mpCheckButtonStyle;
         renderType = nPart == PART_FOCUS ? RENDER_FOCUS : RENDER_CHECK;
@@ -1389,7 +1389,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
     {
         context = mpTreeHeaderButtonStyle;
         ButtonValue aButtonValue = rValue.getTristateVal();
-        if (aButtonValue == BUTTONVALUE_ON)
+        if (aButtonValue == ButtonValue::On)
             flags = (GtkStateFlags) (flags | CHECKED);
         renderType = RENDER_EXPANDER;
         break;

@@ -773,7 +773,7 @@ bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
     if( nType == ControlType::Radiobutton )
     {
         iPart = BP_RADIOBUTTON;
-        bool bChecked = ( aValue.getTristateVal() == BUTTONVALUE_ON );
+        bool bChecked = ( aValue.getTristateVal() == ButtonValue::On );
 
         if( nState & ControlState::PRESSED )
             iState = bChecked ? RBS_CHECKEDPRESSED : RBS_UNCHECKEDPRESSED;
@@ -796,17 +796,17 @@ bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
         ButtonValue v = aValue.getTristateVal();
 
         if( nState & ControlState::PRESSED )
-            iState = (v == BUTTONVALUE_ON)  ? CBS_CHECKEDPRESSED :
-                    ( (v == BUTTONVALUE_OFF) ? CBS_UNCHECKEDPRESSED : CBS_MIXEDPRESSED );
+            iState = (v == ButtonValue::On)  ? CBS_CHECKEDPRESSED :
+                    ( (v == ButtonValue::Off) ? CBS_UNCHECKEDPRESSED : CBS_MIXEDPRESSED );
         else if( !(nState & ControlState::ENABLED) )
-            iState = (v == BUTTONVALUE_ON)  ? CBS_CHECKEDDISABLED :
-                    ( (v == BUTTONVALUE_OFF) ? CBS_UNCHECKEDDISABLED : CBS_MIXEDDISABLED );
+            iState = (v == ButtonValue::On)  ? CBS_CHECKEDDISABLED :
+                    ( (v == ButtonValue::Off) ? CBS_UNCHECKEDDISABLED : CBS_MIXEDDISABLED );
         else if( nState & ControlState::ROLLOVER )
-            iState = (v == BUTTONVALUE_ON)  ? CBS_CHECKEDHOT :
-                    ( (v == BUTTONVALUE_OFF) ? CBS_UNCHECKEDHOT : CBS_MIXEDHOT );
+            iState = (v == ButtonValue::On)  ? CBS_CHECKEDHOT :
+                    ( (v == ButtonValue::Off) ? CBS_UNCHECKEDHOT : CBS_MIXEDHOT );
         else
-            iState = (v == BUTTONVALUE_ON)  ? CBS_CHECKEDNORMAL :
-                    ( (v == BUTTONVALUE_OFF) ? CBS_UNCHECKEDNORMAL : CBS_MIXEDNORMAL );
+            iState = (v == ButtonValue::On)  ? CBS_CHECKEDNORMAL :
+                    ( (v == ButtonValue::Off) ? CBS_UNCHECKEDNORMAL : CBS_MIXEDNORMAL );
 
         //if( nState & ControlState::FOCUSED )
         //    iState |= PBS_DEFAULTED;    // may need to draw focus rect
@@ -904,7 +904,7 @@ bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
         if( nPart == PART_BUTTON )
         {
             iPart = TP_BUTTON;
-            bool bChecked = ( aValue.getTristateVal() == BUTTONVALUE_ON );
+            bool bChecked = ( aValue.getTristateVal() == ButtonValue::On );
             if( !(nState & ControlState::ENABLED) )
                 //iState = TS_DISABLED;
                 // disabled buttons are typically not painted at all but we need visual
@@ -1051,10 +1051,10 @@ bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
         iPart = TVP_GLYPH;
         switch( aButtonValue )
         {
-        case BUTTONVALUE_ON:
+        case ButtonValue::On:
             iState = GLPS_OPENED;
             break;
-        case BUTTONVALUE_OFF:
+        case ButtonValue::Off:
             iState = GLPS_CLOSED;
             break;
         default:
