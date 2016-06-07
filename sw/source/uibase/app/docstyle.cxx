@@ -323,22 +323,25 @@ static const SwTableAutoFormat* lcl_FindTableStyle(SwDoc& rDoc, const OUString& 
 
 static const SwBoxAutoFormat* lcl_FindCellStyle(SwDoc& rDoc, const OUString& rName, SwDocStyleSheet *pStyle = nullptr)
 {
-    const SwBoxAutoFormat* pFormat = nullptr;
+    const SwBoxAutoFormat* pFormat = rDoc.GetCellStyles().GetBoxFormat(rName);
 
-    auto aTableTemplateMap = SwTableAutoFormat::GetTableTemplateMap();
-    SwTableAutoFormatTable& rTableStyles = rDoc.GetTableStyles();
-    for (size_t i=0; i < rTableStyles.size() && !pFormat; ++i)
+    if (!pFormat)
     {
-        const SwTableAutoFormat& rTableStyle = rTableStyles[i];
-        for (size_t nBoxFormat=0; nBoxFormat < aTableTemplateMap.size() && !pFormat; ++nBoxFormat)
+        const auto& aTableTemplateMap = SwTableAutoFormat::GetTableTemplateMap();
+        SwTableAutoFormatTable& rTableStyles = rDoc.GetTableStyles();
+        for (size_t i=0; i < rTableStyles.size() && !pFormat; ++i)
         {
-                const sal_uInt32 nBoxIndex = aTableTemplateMap[nBoxFormat];
-                const SwBoxAutoFormat& rBoxFormat = rTableStyle.GetBoxFormat(nBoxIndex);
-                OUString sBoxFormatName;
-                SwStyleNameMapper::FillProgName(rTableStyle.GetName(), sBoxFormatName, nsSwGetPoolIdFromName::GET_POOLID_CELLSTYLE, true);
-                sBoxFormatName += rTableStyle.GetTableTemplateCellSubName(rBoxFormat);
-                if (rName == sBoxFormatName)
-                    pFormat = &rBoxFormat;
+            const SwTableAutoFormat& rTableStyle = rTableStyles[i];
+            for (size_t nBoxFormat=0; nBoxFormat < aTableTemplateMap.size() && !pFormat; ++nBoxFormat)
+            {
+                    const sal_uInt32 nBoxIndex = aTableTemplateMap[nBoxFormat];
+                    const SwBoxAutoFormat& rBoxFormat = rTableStyle.GetBoxFormat(nBoxIndex);
+                    OUString sBoxFormatName;
+                    SwStyleNameMapper::FillProgName(rTableStyle.GetName(), sBoxFormatName, nsSwGetPoolIdFromName::GET_POOLID_CELLSTYLE, true);
+                    sBoxFormatName += rTableStyle.GetTableTemplateCellSubName(rBoxFormat);
+                    if (rName == sBoxFormatName)
+                        pFormat = &rBoxFormat;
+            }
         }
     }
 
@@ -2993,7 +2996,7 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
     if( nSearchFamily == SfxStyleFamily::Cell ||
         nSearchFamily == SfxStyleFamily::All )
     {
-        const std::vector<sal_Int32> aTableTemplateMap = SwTableAutoFormat::GetTableTemplateMap();
+        const auto& aTableTemplateMap = SwTableAutoFormat::GetTableTemplateMap();
         const SwTableAutoFormatTable& rTableStyles = rDoc.GetTableStyles();
         for(size_t i = 0; i < rTableStyles.size(); ++i)
         {
@@ -3008,6 +3011,9 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
                 aLst.Append( cCELLSTYLE, sBoxFormatName );
             }
         }
+        const SwCellStyleTable& rCellStyles = rDoc.GetCellStyles();
+        for(size_t i = 0; i < rCellStyles.size(); ++i)
+            aLst.Append( cCELLSTYLE, rCellStyles[i].GetName() );
     }
 
     if(!aLst.empty())

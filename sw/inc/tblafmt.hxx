@@ -344,6 +344,37 @@ public:
     bool Save() const;
 };
 
+class SwCellStyleDescriptor
+{
+    const std::pair<OUString, SwBoxAutoFormat*>& m_rCellStyleDesc;
+public:
+    SwCellStyleDescriptor(const std::pair<OUString, SwBoxAutoFormat*>& rCellStyleDesc) : m_rCellStyleDesc(rCellStyleDesc) { }
+
+    const OUString&  GetName()   { return m_rCellStyleDesc.first; }
+    SwBoxAutoFormat* GetFormat() { return m_rCellStyleDesc.second; }
+};
+
+class SwCellStyleTable
+{
+    std::vector<std::pair<OUString, SwBoxAutoFormat*>> m_aCellStyles;
+public:
+    SwCellStyleTable();
+    ~SwCellStyleTable();
+
+    size_t size() const;
+    SwCellStyleDescriptor operator[](size_t i) const;
+    void clear();
+
+    /// Add a copy of rBoxFormat
+    void AddBoxFormat(const SwBoxAutoFormat& rBoxFormat, const OUString& sName);
+    void RemoveBoxFormat(const OUString& sName);
+    void ChangeBoxFormatName(const OUString& sFromName, const OUString& sToName);
+    /// If found returns its name. If not found returns an empty OUString
+    OUString GetBoxFormatName(const SwBoxAutoFormat& rBoxFormat) const;
+    /// If found returns a ptr to a BoxFormat. If not found returns nullptr
+    SwBoxAutoFormat* GetBoxFormat(const OUString& sName) const;
+};
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
