@@ -60,14 +60,18 @@ void TemplateViewItem::Paint(drawinglayer::processor2d::BaseProcessor2D *pProces
 
     int nCount = 5;
     drawinglayer::primitive2d::Primitive2DContainer aSeq(nCount);
+
     double fTransparence = 0.0;
 
     // Draw background
-    if ( mbSelected || mbHover )
+    if( mbSelected && mbHover)
+        aFillColor = pAttrs->aSelectHighlightColor;
+    else if (mbSelected || mbHover)
         aFillColor = pAttrs->aHighlightColor;
 
     if (mbHover)
         fTransparence = pAttrs->fHighlightTransparence;
+
 
     aSeq[0] = drawinglayer::primitive2d::Primitive2DReference(
             new PolyPolygonSelectionPrimitive2D( B2DPolyPolygon(::tools::Polygon(maDrawArea,5,5).getB2DPolygon()),
