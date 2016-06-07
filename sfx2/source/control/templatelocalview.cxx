@@ -178,12 +178,17 @@ TemplateContainerItem* TemplateLocalView::getRegion(OUString const & rName)
     return nullptr;
 }
 
-void TemplateLocalView::createContextMenu()
+void TemplateLocalView::createContextMenu(const bool bIsDefault)
 {
     std::unique_ptr<PopupMenu> pItemMenu(new PopupMenu);
     pItemMenu->InsertItem(MNI_OPEN,SfxResId(STR_OPEN).toString());
     pItemMenu->InsertItem(MNI_EDIT,SfxResId(STR_EDIT_TEMPLATE).toString());
-    pItemMenu->InsertItem(MNI_DEFAULT_TEMPLATE,SfxResId(STR_DEFAULT_TEMPLATE).toString());
+
+    if(!bIsDefault)
+        pItemMenu->InsertItem(MNI_DEFAULT_TEMPLATE,SfxResId(STR_DEFAULT_TEMPLATE).toString());
+    else
+        pItemMenu->InsertItem(MNI_DEFAULT_TEMPLATE,SfxResId(STR_RESET_DEFAULT).toString());
+
     pItemMenu->InsertSeparator();
     pItemMenu->InsertItem(MNI_DELETE,SfxResId(STR_DELETE).toString());
     pItemMenu->InsertItem(MNI_RENAME,SfxResId(STR_RENAME).toString());
