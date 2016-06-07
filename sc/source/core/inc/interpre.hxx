@@ -388,6 +388,8 @@ double GetDouble();
 double GetDoubleWithDefault(double nDefault);
 bool IsMissing();
 bool GetBool() { return GetDouble() != 0.0; }
+/// returns TRUE if double (or error, check nGlobalError), else FALSE
+bool GetDoubleOrString( double& rValue, svl::SharedString& rString );
 svl::SharedString GetString();
 svl::SharedString GetStringFromMatrix(const ScMatrixRef& pMat);
 // pop matrix and obtain one element, upper left or according to jump matrix

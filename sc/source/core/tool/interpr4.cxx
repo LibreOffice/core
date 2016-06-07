@@ -2061,6 +2061,66 @@ double ScInterpreter::GetDoubleWithDefault(double nDefault)
     return nResultVal;
 }
 
+bool ScInterpreter::GetDoubleOrString( double& rDouble, svl::SharedString& rString )
+{
+    bool bDouble = true;
+    switch( GetRawStackType() )
+    {
+        case svDouble:
+            rDouble = PopDouble();
+        break;
+        case svString:
+            rString = PopString();
+            bDouble = false;
+        break;
+        case svDoubleRef :
+        case svSingleRef :
+        {
+            ScAddress aAdr;
+            if (!PopDoubleRefOrSingleRef( aAdr))
+            {
+                rDouble = 0.0;
+                return true;    // caller needs to check nGlobalError
+            }
+            ScRefCellValue aCell( *pDok, aAdr);
+            if (aCell.hasNumeric())
+            {
+                rDouble = GetCellValue( aAdr, aCell);
+            }
+            else
+            {
+                GetCellString( rString, aCell);
+                bDouble = false;
+            }
+        }
+        break;
+        case svExternalSingleRef:
+        case svExternalDoubleRef:
+        case svMatrix:
+        {
+            ScMatValType nType = GetDoubleOrStringFromMatrix( rDouble, rString);
+            bDouble = ScMatrix::IsValueType( nType);
+        }
+        break;
+        case svError:
+            PopError();
+            rDouble = 0.0;
+        break;
+        case svEmptyCell:
+        case svMissing:
+            Pop();
+            rDouble = 0.0;
+        break;
+        default:
+            PopError();
+            SetError( errIllegalParameter);
+            rDouble = 0.0;
+    }
+    if ( nFuncFmtType == nCurFmtType )
+        nFuncFmtIndex = nCurFmtIndex;
+    return bDouble;
+}
+
 svl::SharedString ScInterpreter::GetString()
 {
     switch (GetRawStackType())

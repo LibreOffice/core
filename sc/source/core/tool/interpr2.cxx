@@ -3307,22 +3307,57 @@ void ScInterpreter::ScGetPivotData()
         sal_uInt16 i = nFilterCount;
         while (i-- > 0)
         {
-            /* TODO: should allow numeric constraint values. */
-
             /* TODO: also, in case of numeric the entire filter match should
              * not be on a (even if locale independent) formatted string down
              * below in pDPObj->GetPivotData(). */
 
-            aFilters[i].MatchValueName = GetString().getString();
+            /* TODO: obtaining the current format before a double is popped
+             * works only by chance, e.g. if the very recent function call was
+             * DATE() or some such. We really need to transport format/type
+             * information in tokens. */
+            short nThisFmtType = nCurFmtType;
+            sal_uInt32 nThisFmtIndex = nCurFmtIndex;
 
-            // Parse possible number from MatchValueName and format
-            // locale independent as MatchValue.
-            sal_uInt32 nNumFormat;
-            double fValue;
-            if (pFormatter->IsNumberFormat( aFilters[i].MatchValueName, nNumFormat, fValue))
-                aFilters[i].MatchValue = ScDPCache::GetLocaleIndependentFormattedString( fValue, *pFormatter, nNumFormat);
+            double fDouble;
+            svl::SharedString aSharedString;
+            bool bDouble = GetDoubleOrString( fDouble, aSharedString);
+            if (nGlobalError)
+            {
+                PushError( nGlobalError);
+                return;
+            }
+
+            if (bDouble)
+            {
+                sal_uInt32 nNumFormat;
+                if (nThisFmtIndex)
+                    nNumFormat = nThisFmtIndex;
+                else
+                {
+                    if (nThisFmtType == css::util::NumberFormat::UNDEFINED)
+                        nNumFormat = 0;
+                    else
+                        nNumFormat = pFormatter->GetStandardFormat( nThisFmtType, ScGlobal::eLnge);
+                }
+                Color* pColor;
+                pFormatter->GetOutputString( fDouble, nNumFormat, aFilters[i].MatchValueName, &pColor);
+                aFilters[i].MatchValue = ScDPCache::GetLocaleIndependentFormattedString(
+                        fDouble, *pFormatter, nNumFormat);
+            }
             else
-                aFilters[i].MatchValue = aFilters[i].MatchValueName;
+            {
+                aFilters[i].MatchValueName = aSharedString.getString();
+
+                // Parse possible number from MatchValueName and format
+                // locale independent as MatchValue.
+                sal_uInt32 nNumFormat;
+                double fValue;
+                if (pFormatter->IsNumberFormat( aFilters[i].MatchValueName, nNumFormat, fValue))
+                    aFilters[i].MatchValue = ScDPCache::GetLocaleIndependentFormattedString(
+                            fValue, *pFormatter, nNumFormat);
+                else
+                    aFilters[i].MatchValue = aFilters[i].MatchValueName;
+            }
 
             aFilters[i].FieldName = GetString().getString();
         }
@@ -3345,6 +3380,13 @@ void ScInterpreter::ScGetPivotData()
         }
 
         aDataFieldName = GetString().getString(); // First parameter is data field name.
+    }
+
+    // Early bail-out, don't grind through data pilot cache and all.
+    if (nGlobalError)
+    {
+        PushError( nGlobalError);
+        return;
     }
 
     // NOTE : MS Excel docs claim to use the 'most recent' which is not
