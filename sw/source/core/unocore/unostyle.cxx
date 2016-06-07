@@ -4468,6 +4468,9 @@ css::uno::Reference<css::style::XStyle> SwXTextCellStyle::CreateXTextCellStyle(S
             throw;
 
         SwTableAutoFormat* pFormat = pDocShell->GetDoc()->GetTableStyles().FindAutoFormat(sParentName);
+        if (!pFormat)
+            throw;
+
         sal_uInt32 nBoxIndex = rTableTemplateMap[nTemplateIndex];
         pBoxFormat = &pFormat->GetBoxFormat(nBoxIndex);
     }
