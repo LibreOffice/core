@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_15d9db21",
+        "filename": "sw/source/uibase/uiview/viewtab.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2051,
+      "author": {
+        "id": 1001174
+      },
+      "writtenOn": "2016-06-07T14:53:15Z",
+      "side": 1,
+      "message": "I asked mst__, and he suggested me - rDesc.GetMaster().GetHeader().GetHeaderFormat()-\u003eGetAttrSet().GetItem(XATTR_FILLSTYLE) as an alternative to this. I tried it, and it still throws a SegFault at SfxItemSet::GetItem(). What am I missing?",
+      "revId": "70b367122dda33d0a4f9cc58d382d360fe6dd2dd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
