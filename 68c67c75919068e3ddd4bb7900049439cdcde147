@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_55bb63c4",
+        "filename": "external/firebird/ExternalPackage_firebird.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000934
+      },
+      "writtenOn": "2016-06-07T14:40:25Z",
+      "side": 1,
+      "message": "my guess is that libfbclient.dll should be ifbclient.dll on windows also iEngine12.dll should be added",
+      "range": {
+        "startLine": 16,
+        "startChar": 70,
+        "endLine": 16,
+        "endChar": 85
+      },
+      "revId": "68c67c75919068e3ddd4bb7900049439cdcde147",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_95b5ebce",
+        "filename": "external/firebird/ExternalPackage_firebird.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000934
+      },
+      "writtenOn": "2016-06-07T14:40:25Z",
+      "side": 1,
+      "message": "libEngine12.dylib should be added on osx",
+      "range": {
+        "startLine": 17,
+        "startChar": 5,
+        "endLine": 17,
+        "endChar": 24
+      },
+      "revId": "68c67c75919068e3ddd4bb7900049439cdcde147",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
