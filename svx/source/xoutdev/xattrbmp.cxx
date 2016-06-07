@@ -523,11 +523,14 @@ XFillBitmapItem* XFillBitmapItem::checkForUniqueItem( SdrModel* pModel ) const
 {
     if( pModel )
     {
+        XPropertyListType aListType = XBITMAP_LIST;
+        if(isPattern())
+            aListType = XPATTERN_LIST;
         const OUString aUniqueName = NameOrIndex::CheckNamedItem(
                 this, XATTR_FILLBITMAP, &pModel->GetItemPool(),
                 pModel->GetStyleSheetPool() ? &pModel->GetStyleSheetPool()->GetPool() : nullptr,
                 XFillBitmapItem::CompareValueFunc, RID_SVXSTR_BMP21,
-                pModel->GetPropertyList( XBITMAP_LIST ) );
+                pModel->GetPropertyList( aListType ) );
 
         // if the given name is not valid, replace it!
         if( aUniqueName != GetName() )

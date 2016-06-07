@@ -32,6 +32,14 @@ String RID_SVXSTR_BITMAP
 {
     Text [ en-US ] = "Bitmap" ;
 };
+String RID_SVXSTR_PATTERN
+{
+    Text [ en-US ] = "Pattern";
+};
+String RID_SVXSTR_PATTERN_UNTITLED
+{
+    Text [ en-US ] = "Untitled Pattern";
+};
 String RID_SVXSTR_LINESTYLE
 {
     Text [ en-US ] = "Line Style" ;
@@ -1659,7 +1667,7 @@ String RID_SVXSTR_BMP21_DEF
 
 String RID_SVXSTR_BMP0
 {
-    Text [ en-US ] = "Blank";
+    Text [ en-US ] = "Empty";
 };
 String RID_SVXSTR_BMP1
 {
