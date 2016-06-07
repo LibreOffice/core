@@ -492,16 +492,16 @@ void XMLRedlineExport::ExportChangeInfo(
     aAny >>= sType;
     if(sType == sFormat) // TODO: Find out if the style is inserted or deleted to give the proper namespace
     {
-        SvXMLElementExport aTypeElem( rExport, XML_NAMESPACE_DEL,
+        SvXMLElementExport aTypeElem( rExport, XML_NAMESPACE_DC,
                                           XML_TYPE, true, false );
         rExport.Characters("style");
-        SvXMLElementExport aNameElem( rExport, XML_NAMESPACE_DEL,
+        SvXMLElementExport aNameElem( rExport, XML_NAMESPACE_DC,
                                           XML_NAME, true, false );
         rExport.Characters("bold"); // TODO: Get the correct style name
-        SvXMLElementExport aStartElem( rExport, XML_NAMESPACE_DEL,
+        SvXMLElementExport aStartElem( rExport, XML_NAMESPACE_DC,
                                           XML_START, true, false );
         rExport.Characters("start"); // TODO: Get the correct start position
-        SvXMLElementExport aEndElem( rExport, XML_NAMESPACE_DEL,
+        SvXMLElementExport aEndElem( rExport, XML_NAMESPACE_DC,
                                           XML_END, true, false );
         rExport.Characters("end"); // TODO: Get the correct end position
     }
