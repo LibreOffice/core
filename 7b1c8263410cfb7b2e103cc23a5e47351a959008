@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_1a7588f8",
+        "filename": "include/svtools/transfer.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 401,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-06-07T07:37:18Z",
+      "side": 1,
+      "message": "(If there\u0027s a set of member vars that is \"controlled\" by a mutex member var, I\u0027d place them into a block of their own, with the mutex member var at the head of the block, as a means of documentation.)",
+      "revId": "7b1c8263410cfb7b2e103cc23a5e47351a959008",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_3a608c35",
+        "filename": "svtools/source/misc/transfer2.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2016-06-07T07:37:18Z",
+      "side": 1,
+      "message": "oh, and this \"remote\" call shouldn\u0027t be done with the mutex locked  (sorry, didn\u0027t have much coffee yesterday...)",
+      "revId": "7b1c8263410cfb7b2e103cc23a5e47351a959008",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
