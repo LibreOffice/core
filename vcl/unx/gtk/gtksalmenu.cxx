@@ -1025,6 +1025,7 @@ void GtkSalMenu::Activate(const gchar* pCommand)
     Menu* pVclMenu = pSalMenu->GetMenu();
     Menu* pVclSubMenu = pVclMenu->GetPopupMenu(aMenuAndId.second);
     pTopLevel->GetMenu()->HandleMenuActivateEvent(pVclSubMenu);
+    pVclSubMenu->UpdateNativeMenu();
 }
 
 void GtkSalMenu::Deactivate(const gchar* pCommand)
