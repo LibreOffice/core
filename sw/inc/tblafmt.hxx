@@ -344,6 +344,23 @@ public:
     bool Save() const;
 };
 
+class SwCellStyleTable
+{
+    std::vector<std::pair<OUString, SwBoxAutoFormat*>> m_aCellStyles;
+public:
+    SwCellStyleTable();
+    ~SwCellStyleTable();
+
+    size_t size() const;
+    const SwBoxAutoFormat& operator[](size_t i) const;
+    SwBoxAutoFormat& operator[](size_t i);
+    void clear();
+
+    /// Creates a new box format and returns it
+    SwBoxAutoFormat* GetNewBoxFormat(const OUString& sName);
+    OUString GetBoxFormatName(const SwBoxAutoFormat& rBoxFormat) const;
+};
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

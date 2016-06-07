@@ -4457,25 +4457,38 @@ css::uno::Reference<css::style::XStyle> SwXTextCellStyle::CreateXTextCellStyle(S
     sal_uInt32 nTemplateIndex;
     OUString sParentName, sCellSubName;
 
-    try {
-        nSeparatorIndex = sName.lastIndexOf('.');
-        sParentName = sName.copy(0, nSeparatorIndex);
-        sCellSubName = sName.copy(nSeparatorIndex+1);
-        nTemplateIndex = sCellSubName.toInt32()-1;      // -1 because cell styles names start from 1
-
-        auto rTableTemplateMap = SwTableAutoFormat::GetTableTemplateMap();
-        if (nTemplateIndex >= rTableTemplateMap.size())
-            throw;
-
-        SwTableAutoFormat* pFormat = pDocShell->GetDoc()->GetTableStyles().FindAutoFormat(sParentName);
-        sal_uInt32 nBoxIndex = rTableTemplateMap[nTemplateIndex];
-        pBoxFormat = &pFormat->GetBoxFormat(nBoxIndex);
-    }
-    catch (...)
+    if (!sName.isEmpty())
     {
-        SAL_WARN("sw.uno", "could not get a BoxFormat to create XTextCellStyle for, unexpected error");
+        try {
+            nSeparatorIndex = sName.lastIndexOf('.');
+            sParentName = sName.copy(0, nSeparatorIndex);
+            sCellSubName = sName.copy(nSeparatorIndex+1);
+            nTemplateIndex = sCellSubName.toInt32()-1;      // -1 because cell styles names start from 1
+
+            auto rTableTemplateMap = SwTableAutoFormat::GetTableTemplateMap();
+            if (nTemplateIndex >= rTableTemplateMap.size())
+                throw;
+
+            SwTableAutoFormat* pFormat = pDocShell->GetDoc()->GetTableStyles().FindAutoFormat(sParentName);
+            if (!pFormat)
+                throw;
+
+            sal_uInt32 nBoxIndex = rTableTemplateMap[nTemplateIndex];
+            pBoxFormat = &pFormat->GetBoxFormat(nBoxIndex);
+        }
+        catch (...)
+        {
+            SAL_WARN("sw.uno", "could not get a BoxFormat to create XTextCellStyle for, unexpected error");
+        }
+    }
+    else
+    {
+        // initializing with an empty name means creating a new SwBoxAutoFormat
+        // new SwBoxAutoFormats are waiting to be assigned to a table style in SwDoc::mpCellStyles
+        pBoxFormat = pDocShell->GetDoc()->GetCellStyles().GetNewBoxFormat(sName);
     }
 
+    // something went wrong but we don't want a crash
     if (!pBoxFormat)
     {
         // return a default-dummy style to prevent crash
