@@ -250,6 +250,8 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg(vcl::Window *parent)
     mpSearchView->setEditTemplateHdl(LINK(this,SfxTemplateManagerDlg, EditTemplateHdl));
     mpSearchView->setDeleteTemplateHdl(LINK(this,SfxTemplateManagerDlg, DeleteTemplateHdl));
     mpSearchView->setDefaultTemplateHdl(LINK(this,SfxTemplateManagerDlg, DefaultTemplateHdl));
+
+    mpLocalView->ShowTooltips(true);
     mpSearchView->ShowTooltips(true);
 
     mpOKButton->SetClickHdl(LINK(this, SfxTemplateManagerDlg, OkClickHdl));
@@ -737,7 +739,6 @@ IMPL_LINK_NOARG_TYPED(SfxTemplateManagerDlg, ImportClickHdl, Button*, void)
 
     mpLocalView->reload();
     mpLocalView->showAllTemplates();
-    mpLocalView->ShowTooltips(true);
     mpCBApp->SelectEntryPos(0);
     mpCBFolder->SelectEntryPos(0);
     mpActionMenu->HideItem(MNI_ACTION_RENAME_FOLDER);
@@ -1297,7 +1298,6 @@ void SfxTemplateManagerDlg::OnCategoryDelete()
 
     mpLocalView->reload();
     mpLocalView->showAllTemplates();
-    mpLocalView->ShowTooltips(true);
     mpCBApp->SelectEntryPos(0);
     mpCBFolder->SelectEntryPos(0);
     mpActionMenu->HideItem(MNI_ACTION_RENAME_FOLDER);
