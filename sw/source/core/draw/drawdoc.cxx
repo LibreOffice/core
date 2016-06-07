@@ -154,6 +154,7 @@ void SwDrawModel::PutAreaListItems(SfxItemSet& rSet) const
     rSet.Put(SvxGradientListItem(GetGradientList(), SID_GRADIENT_LIST));
     rSet.Put(SvxHatchListItem(GetHatchList(), SID_HATCH_LIST));
     rSet.Put(SvxBitmapListItem(GetBitmapList(), SID_BITMAP_LIST));
+    rSet.Put(SvxPatternListItem(GetPatternList(), SID_PATTERN_LIST));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

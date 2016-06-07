@@ -32,6 +32,10 @@ String RID_SVXSTR_BITMAP
 {
     Text [ en-US ] = "Bitmap" ;
 };
+String RID_SVXSTR_PATTERN
+{
+    Text [ en-US ] = "Pattern";
+};
 String RID_SVXSTR_LINESTYLE
 {
     Text [ en-US ] = "Line Style" ;

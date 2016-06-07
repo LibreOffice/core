@@ -244,6 +244,7 @@ item String                 SvxColorListItem;
 item String                 SvxGradientListItem;
 item String                 SvxHatchListItem;
 item String                 SvxBitmapListItem;
+item String                 SvxPatternListItem;
 item String                 SfxLockBytesItem;
 item String                 SvxFontListItem;
 item String                 avmedia_MediaItem;

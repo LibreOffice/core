@@ -17,38 +17,43 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SD_SOURCE_UI_INC_DLGPAGE_HXX
-#define INCLUDED_SD_SOURCE_UI_INC_DLGPAGE_HXX
+#include "svx/XPropertyTable.hxx"
 
-#include <sfx2/tabdlg.hxx>
+#include <vcl/virdev.hxx>
+#include <svl/itemset.hxx>
+#include <sfx2/docfile.hxx>
+#include <svx/dialogs.hrc>
+#include <svx/dialmgr.hxx>
+#include <svx/xtable.hxx>
+#include <svx/xpool.hxx>
+#include <svx/xbtmpit.hxx>
 
-class SfxObjectShell;
-enum class ChangeType;
+using namespace com::sun::star;
 
-/**
- * Page configuration-tab-dialog
- */
-class SdPageDlg : public SfxTabDialog
+XBitmapEntry* XPatternList::Remove(long nIndex)
 {
-private:
-    const SfxObjectShell* mpDocShell;
+    return static_cast<XBitmapEntry*>( XPropertyList::Remove(nIndex) );
+}
 
-    XColorListRef         mpColorList;
-    XGradientListRef      mpGradientList;
-    XHatchListRef         mpHatchingList;
-    XBitmapListRef        mpBitmapList;
-    XPatternListRef       mpPatternList;
-    sal_uInt16            mnArea;
-    sal_uInt16            mnPage;
+XBitmapEntry* XPatternList::GetBitmap(long nIndex) const
+{
+    return static_cast<XBitmapEntry*>( XPropertyList::Get(nIndex) );
+}
 
-public:
+uno::Reference< container::XNameContainer > XPatternList::createInstance()
+{
+    return uno::Reference< container::XNameContainer >(
+        SvxUnoXBitmapTable_createInstance( this ), uno::UNO_QUERY );
+}
 
-    SdPageDlg( SfxObjectShell* pDocSh, vcl::Window* pParent, const SfxItemSet* pAttr, bool bAreaPage = true );
-    virtual ~SdPageDlg() {};
+bool XPatternList::Create()
+{
+    return true;
+}
 
-    virtual void PageCreated(sal_uInt16 nId, SfxTabPage& rPage) override;
-};
-
-#endif // INCLUDED_SD_SOURCE_UI_INC_DLGPAGE_HXX
+Bitmap XPatternList::CreateBitmapForUI( long /*nIndex*/ )
+{
+    return Bitmap();
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

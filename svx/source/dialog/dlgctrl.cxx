@@ -1549,6 +1549,7 @@ void FillTypeLB::Fill()
     InsertEntry( SVX_RESSTR(RID_SVXSTR_GRADIENT) );
     InsertEntry( SVX_RESSTR(RID_SVXSTR_HATCH) );
     InsertEntry( SVX_RESSTR(RID_SVXSTR_BITMAP) );
+    InsertEntry( SVX_RESSTR(RID_SVXSTR_PATTERN) );
 
     AdaptDropDownLineCountToMaximum();
     SetUpdateMode( true );

@@ -151,6 +151,7 @@ enum XPropertyListType {
     XHATCH_LIST,
     XGRADIENT_LIST,
     XBITMAP_LIST,
+    XPATTERN_LIST,
     XPROPERTY_LIST_COUNT
 };
 
@@ -160,6 +161,7 @@ class XDashList ; typedef rtl::Reference< class XDashList > XDashListRef;
 class XHatchList ; typedef rtl::Reference< class XHatchList > XHatchListRef;
 class XColorList ; typedef rtl::Reference< class XColorList > XColorListRef;
 class XBitmapList ; typedef rtl::Reference< class XBitmapList > XBitmapListRef;
+class XPatternList ; typedef rtl::Reference< class XPatternList > XPatternListRef;
 class XLineEndList ; typedef rtl::Reference< class XLineEndList > XLineEndListRef;
 class XGradientList ; typedef rtl::Reference< class XGradientList > XGradientListRef;
 
@@ -244,6 +246,8 @@ public:
     static inline XColorListRef AsColorList(
         rtl::Reference<XPropertyList> const & plist);
     static inline XBitmapListRef AsBitmapList(
+        rtl::Reference<XPropertyList> const & plist);
+    static inline XPatternListRef AsPatternList(
         rtl::Reference<XPropertyList> const & plist);
     static inline XLineEndListRef AsLineEndList(
         rtl::Reference<XPropertyList> const & plist);
@@ -381,6 +385,25 @@ public:
     virtual bool Create() override;
 };
 
+class SVX_DLLPUBLIC XPatternList : public XPropertyList
+{
+protected:
+    virtual Bitmap CreateBitmapForUI(long nIndex) override;
+
+public:
+    XPatternList(const OUString& rPath, const OUString& rReferer)
+        : XPropertyList(XPATTERN_LIST, rPath, rReferer) {}
+
+    using XPropertyList::Replace;
+    using XPropertyList::Remove;
+
+    XBitmapEntry* Remove(long nIndex);
+    XBitmapEntry* GetBitmap(long nIndex) const;
+
+    virtual css::uno::Reference< css::container::XNameContainer > createInstance() override;
+    virtual bool Create() override;
+};
+
 // FIXME: could add type checking too ...
 inline XDashListRef  XPropertyList::AsDashList(
     rtl::Reference<XPropertyList> const & plist)
@@ -394,6 +417,9 @@ inline XColorListRef XPropertyList::AsColorList(
 inline XBitmapListRef XPropertyList::AsBitmapList(
     rtl::Reference<XPropertyList> const & plist)
 { return XBitmapListRef( static_cast<XBitmapList *> (plist.get()) ); }
+inline XPatternListRef XPropertyList::AsPatternList(
+    rtl::Reference<XPropertyList> const & plist)
+{ return XPatternListRef( static_cast<XPatternList *> (plist.get()) ); }
 inline XLineEndListRef XPropertyList::AsLineEndList(
     rtl::Reference<XPropertyList> const & plist)
 { return XLineEndListRef( static_cast<XLineEndList *> (plist.get()) ); }
