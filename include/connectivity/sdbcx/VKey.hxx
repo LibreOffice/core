@@ -56,7 +56,6 @@ namespace connectivity
             {}
             KeyProperties():m_Type(0),m_UpdateRule(0),m_DeleteRule(0){}
         };
-        typedef std::shared_ptr< KeyProperties > TKeyProperties;
         typedef ::cppu::ImplHelper1< css::sdbcx::XDataDescriptorFactory > OKey_BASE;
         class OCollection;
 
@@ -69,7 +68,7 @@ namespace connectivity
                                 public OKey_BASE
         {
         protected:
-            TKeyProperties   m_aProps;
+            std::shared_ptr<KeyProperties>   m_aProps;
             OCollection*    m_pColumns;
 
             using ODescriptor_BASE::rBHelper;
@@ -79,7 +78,7 @@ namespace connectivity
             virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
         public:
             OKey(bool _bCase);
-            OKey(const OUString& Name,const TKeyProperties& _rProps,bool _bCase);
+            OKey(const OUString& Name,const std::shared_ptr<KeyProperties>& _rProps,bool _bCase);
 
             virtual ~OKey( );
 

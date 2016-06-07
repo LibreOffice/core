@@ -72,7 +72,7 @@ namespace connectivity
     };
     typedef connectivity::sdbcx::OTable OTable_TYPEDEF;
 
-    typedef std::map<OUString, sdbcx::TKeyProperties> TKeyMap;
+    typedef std::map<OUString, std::shared_ptr<sdbcx::KeyProperties>> TKeyMap;
 
     struct OTableHelperImpl;
 
@@ -150,8 +150,8 @@ namespace connectivity
         virtual OUString SAL_CALL getName() throw(css::uno::RuntimeException, std::exception) override;
 
         // helper method to get key properties
-        sdbcx::TKeyProperties getKeyProperties(const OUString& _sName) const;
-        void addKey(const OUString& _sName,const sdbcx::TKeyProperties& _aKeyProperties);
+        std::shared_ptr<sdbcx::KeyProperties> getKeyProperties(const OUString& _sName) const;
+        void addKey(const OUString& _sName,const std::shared_ptr<sdbcx::KeyProperties>& _aKeyProperties);
 
         virtual OUString getTypeCreatePattern() const;
 

@@ -155,7 +155,7 @@ namespace dbaui
         m_aControlDependencies.enableOnRadioCheck( *m_pSocketRadio, *m_pSocket );
         m_aControlDependencies.enableOnRadioCheck( *m_pNamedPipeRadio, *m_pNamedPipe );
 
-        m_aControlDependencies.addController( ::svt::PDialogController(
+        m_aControlDependencies.addController( std::shared_ptr<svt::DialogController>(
             new TextResetOperatorController( *m_pHostName, OUString("localhost") )
         ) );
 
