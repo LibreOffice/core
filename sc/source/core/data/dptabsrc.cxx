@@ -400,7 +400,7 @@ uno::Sequence<double> ScDPSource::getFilteredResults(
 
     // Get result values from the tree.
     const ScDPResultTree::ValuesType* pVals = maResFilterSet.getResults(aFilters);
-    if (pVals)
+    if (pVals && !pVals->empty())
     {
         size_t n = pVals->size();
         uno::Sequence<double> aRet(n);
