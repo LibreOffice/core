@@ -64,12 +64,23 @@
 #include <algorithm>
 #include "EventMultiplexer.hxx"
 #include "glob.hrc"
+#include <vcl/salbtype.hxx>
 
 using namespace ::com::sun::star;
 
 using ::com::sun::star::uno::Reference;
 
 namespace sd { namespace sidebar {
+
+enum eFillStyle
+{
+    NONE,
+    SOLID,
+    GRADIENT,
+    HATCH,
+    BITMAP,
+    PATTERN
+};
 
 SlideBackground::SlideBackground(
     Window * pParent,
@@ -168,21 +179,22 @@ void SlideBackground::HandleContextChange(
 
 void SlideBackground::Update()
 {
-    const drawing::FillStyle eXFS = (drawing::FillStyle)mpFillStyle->GetSelectEntryPos();
+    const eFillStyle nPos = (eFillStyle)mpFillStyle->GetSelectEntryPos();
+
     SfxObjectShell* pSh = SfxObjectShell::Current();
     if (!pSh)
         return;
 
-    switch(eXFS)
+    switch(nPos)
     {
-        case drawing::FillStyle_NONE:
+        case NONE:
         {
             mpFillLB->Hide();
             mpFillAttr->Hide();
             mpFillGrad->Hide();
         }
         break;
-        case drawing::FillStyle_SOLID:
+        case SOLID:
         {
             mpFillAttr->Hide();
             mpFillGrad->Hide();
@@ -201,7 +213,7 @@ void SlideBackground::Update()
             }
         }
         break;
-        case drawing::FillStyle_GRADIENT:
+        case GRADIENT:
         {
             mpFillLB->Show();
             const SvxColorListItem aItem(*static_cast<const SvxColorListItem*>(pSh->GetItem(SID_COLOR_TABLE)));
@@ -232,7 +244,7 @@ void SlideBackground::Update()
         }
         break;
 
-        case drawing::FillStyle_HATCH:
+        case HATCH:
         {
             mpFillLB->Hide();
             const SvxHatchListItem aItem(*static_cast<const SvxHatchListItem*>(pSh->GetItem(SID_HATCH_LIST)));
@@ -246,7 +258,7 @@ void SlideBackground::Update()
         }
         break;
 
-        case drawing::FillStyle_BITMAP:
+        case BITMAP:
         {
             mpFillLB->Hide();
             const SvxBitmapListItem aItem(*static_cast<const SvxBitmapListItem*>(pSh->GetItem(SID_BITMAP_LIST)));
@@ -260,6 +272,20 @@ void SlideBackground::Update()
         }
         break;
 
+        case PATTERN:
+        {
+            mpFillLB->Hide();
+            const SvxPatternListItem aItem(*static_cast<const SvxPatternListItem*>(pSh->GetItem(SID_PATTERN_LIST)));
+            mpFillAttr->Show();
+            mpFillAttr->Clear();
+            XPatternListRef pList = aItem.GetPatternList();
+            mpFillAttr->Fill(pList);
+            mpFillGrad->Hide();
+
+            const OUString aPatternName = GetPatternSetOrDefault();
+            mpFillAttr->SelectEntry( aPatternName );
+        }
+        break;
         default:
             break;
     }
@@ -479,7 +505,7 @@ const OUString SlideBackground::GetHatchingSetOrDefault()
 
 const OUString SlideBackground::GetBitmapSetOrDefault()
 {
-    if( !mpBitmapItem )
+    if( !mpBitmapItem || mpBitmapItem->isPattern())
     {
         SfxObjectShell* pSh = SfxObjectShell::Current();
         const SvxBitmapListItem aBmpListItem(*static_cast<const SvxBitmapListItem*>(pSh->GetItem(SID_BITMAP_LIST)));
@@ -487,6 +513,21 @@ const OUString SlideBackground::GetBitmapSetOrDefault()
         const OUString aBmpName = aBmpListItem.GetBitmapList()->GetBitmap(0)->GetName();
 
         mpBitmapItem.reset( new XFillBitmapItem( aBmpName, aGraphObj ) );
+    }
+
+    return mpBitmapItem->GetName();
+}
+
+const OUString SlideBackground::GetPatternSetOrDefault()
+{
+    if( !mpBitmapItem || !(mpBitmapItem->isPattern()))
+    {
+        SfxObjectShell* pSh = SfxObjectShell::Current();
+        const SvxPatternListItem aPtrnListItem(*static_cast<const SvxPatternListItem*>(pSh->GetItem(SID_PATTERN_LIST)));
+        const GraphicObject aGraphObj = aPtrnListItem.GetPatternList()->GetBitmap(0)->GetGraphicObject();
+        const OUString aPtrnName = aPtrnListItem.GetPatternList()->GetBitmap(0)->GetName();
+
+        mpBitmapItem.reset( new XFillBitmapItem( aPtrnName, aGraphObj ) );
     }
 
     return mpBitmapItem->GetName();
@@ -544,8 +585,16 @@ void SlideBackground::NotifyItemUpdate(
         {
             if(eState >= SfxItemState::DEFAULT)
             {
-                mpFillStyle->SelectEntryPos(4);
                 mpBitmapItem.reset(pState ? static_cast< XFillBitmapItem* >(pState->Clone()) : nullptr);
+                if(mpBitmapItem)
+                {
+                    if(mpBitmapItem->isPattern())
+                        mpFillStyle->SelectEntryPos(5);
+                    else
+                        mpFillStyle->SelectEntryPos(4);
+                }
+                else
+                    mpFillStyle->SelectEntryPos(4);
                 Update();
             }
         }
@@ -574,8 +623,13 @@ void SlideBackground::NotifyItemUpdate(
                         mpFillStyle->SelectEntryPos(3);
                         break;
                     case drawing::FillStyle_BITMAP:
-                        mpFillStyle->SelectEntryPos(4);
-                        break;
+                    {
+                        if(mpBitmapItem->isPattern())
+                            mpFillStyle->SelectEntryPos(5);
+                        else
+                            mpFillStyle->SelectEntryPos(4);
+                    }
+                    break;
                     default:
                         break;
                 }
@@ -650,40 +704,61 @@ void SlideBackground::NotifyItemUpdate(
 
 IMPL_LINK_NOARG_TYPED(SlideBackground, FillStyleModifyHdl, ListBox&, void)
 {
-    const drawing::FillStyle eXFS = (drawing::FillStyle)mpFillStyle->GetSelectEntryPos();
+    const eFillStyle nPos = (eFillStyle)mpFillStyle->GetSelectEntryPos();
+    drawing::FillStyle eXFS = drawing::FillStyle_NONE;
+    switch(nPos)
+    {
+        case NONE:
+            eXFS = drawing::FillStyle_NONE;
+            break;
+        case SOLID:
+            eXFS = drawing::FillStyle_SOLID;
+            break;
+        case GRADIENT:
+            eXFS = drawing::FillStyle_GRADIENT;
+            break;
+        case HATCH:
+            eXFS = drawing::FillStyle_HATCH;
+            break;
+        case BITMAP:
+        case PATTERN:
+            eXFS = drawing::FillStyle_BITMAP;
+            break;
+    }
     const XFillStyleItem aXFillStyleItem(eXFS);
     Update();
 
-    switch (eXFS)
+    switch (nPos)
     {
-        case drawing::FillStyle_NONE:
+        case NONE:
         {
             GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_FILLSTYLE, SfxCallMode::RECORD, { &aXFillStyleItem });
         }
         break;
 
-        case drawing::FillStyle_SOLID:
+        case SOLID:
         {
             XFillColorItem aItem( OUString(), mpColorItem->GetColorValue() );
             GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_COLOR, SfxCallMode::RECORD, { &aItem });
         }
         break;
 
-        case drawing::FillStyle_GRADIENT:
+        case GRADIENT:
         {
             XFillGradientItem aItem( mpGradientItem->GetName(), mpGradientItem->GetGradientValue() );
             GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_GRADIENT, SfxCallMode::RECORD, { &aItem });
         }
         break;
 
-        case drawing::FillStyle_HATCH:
+        case HATCH:
         {
             XFillHatchItem aItem( mpHatchItem->GetName(), mpHatchItem->GetHatchValue() );
             GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_HATCH, SfxCallMode::RECORD, { &aItem });
         }
         break;
 
-        case drawing::FillStyle_BITMAP:
+        case BITMAP:
+        case PATTERN:
         {
             XFillBitmapItem aItem( mpBitmapItem->GetName(), mpBitmapItem->GetGraphicObject() );
             GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_BITMAP, SfxCallMode::RECORD, { &aItem });
@@ -736,12 +811,12 @@ IMPL_LINK_NOARG_TYPED(SlideBackground, FillColorHdl, ListBox&, void)
 
 IMPL_LINK_NOARG_TYPED(SlideBackground, FillBackgroundHdl, ListBox&, void)
 {
-    const drawing::FillStyle eXFS = (drawing::FillStyle)mpFillStyle->GetSelectEntryPos();
+    const eFillStyle nFillPos = (eFillStyle)mpFillStyle->GetSelectEntryPos();
     SfxObjectShell* pSh = SfxObjectShell::Current();
-    switch(eXFS)
+    switch(nFillPos)
     {
 
-        case drawing::FillStyle_HATCH:
+        case HATCH:
         {
             const SvxHatchListItem aHatchListItem(*static_cast<const SvxHatchListItem*>(pSh->GetItem(SID_HATCH_LIST)));
             sal_uInt16 nPos = mpFillAttr->GetSelectEntryPos();
@@ -753,7 +828,7 @@ IMPL_LINK_NOARG_TYPED(SlideBackground, FillBackgroundHdl, ListBox&, void)
         }
         break;
 
-        case drawing::FillStyle_BITMAP:
+        case BITMAP:
         {
             SvxBitmapListItem aBitmapListItem(*static_cast<const SvxBitmapListItem*>(pSh->GetItem(SID_BITMAP_LIST)));
             sal_Int16 nPos = mpFillAttr->GetSelectEntryPos();
@@ -764,6 +839,19 @@ IMPL_LINK_NOARG_TYPED(SlideBackground, FillBackgroundHdl, ListBox&, void)
             GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_BITMAP, SfxCallMode::RECORD, { &aItem });
         }
         break;
+
+        case PATTERN:
+        {
+            SvxPatternListItem aPatternListItem(*static_cast<const SvxPatternListItem*>(pSh->GetItem(SID_PATTERN_LIST)));
+            sal_uInt16 nPos = mpFillAttr->GetSelectEntryPos();
+            GraphicObject aPattern = aPatternListItem.GetPatternList()->GetBitmap(nPos)->GetGraphicObject();
+            OUString aPatternName = aPatternListItem.GetPatternList()->GetBitmap(nPos)->GetName();
+
+            XFillBitmapItem aItem(aPatternName, aPattern);
+            GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_BITMAP, SfxCallMode::RECORD, { &aItem });
+        }
+        break;
+
         default:
             break;
     }

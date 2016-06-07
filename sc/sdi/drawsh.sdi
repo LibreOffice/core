@@ -57,6 +57,7 @@ interface TableDraw
     SID_GRADIENT_LIST       [ StateMethod = GetDrawAttrState; Export = FALSE; ]
     SID_HATCH_LIST          [ StateMethod = GetDrawAttrState; Export = FALSE; ]
     SID_BITMAP_LIST         [ StateMethod = GetDrawAttrState; Export = FALSE; ]
+    SID_PATTERN_LIST        [ StateMethod = GetDrawAttrState; Export = FALSE; ]
     SID_DASH_LIST           [ StateMethod = GetDrawAttrState; Export = FALSE; ]
     SID_LINEEND_LIST        [ StateMethod = GetDrawAttrState; Export = FALSE; ]
 

@@ -10412,6 +10412,22 @@ SvxBitmapListItem BitmapListState SID_BITMAP_LIST
     GroupId = GID_EDIT;
 ]
 
+SvxPatternListItem PatternListState SID_PATTERN_LIST
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_EDIT;
+]
+
 SvxEmphasisMarkItem EmphasisMark SID_ATTR_CHAR_EMPHASISMARK
 
 [

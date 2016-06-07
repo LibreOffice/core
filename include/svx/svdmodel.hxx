@@ -544,6 +544,7 @@ public:
     XHatchListRef    GetHatchList() const    { return XPropertyList::AsHatchList(GetPropertyList( XHATCH_LIST )); }
     XColorListRef    GetColorList() const    { return XPropertyList::AsColorList(GetPropertyList( XCOLOR_LIST )); }
     XBitmapListRef   GetBitmapList() const   { return XPropertyList::AsBitmapList(GetPropertyList( XBITMAP_LIST )); }
+    XPatternListRef  GetPatternList() const  { return XPropertyList::AsPatternList(GetPropertyList( XPATTERN_LIST )); }
     XLineEndListRef  GetLineEndList() const  { return XPropertyList::AsLineEndList(GetPropertyList( XLINE_END_LIST )); }
     XGradientListRef GetGradientList() const { return XPropertyList::AsGradientList(GetPropertyList( XGRADIENT_LIST )); }
 
