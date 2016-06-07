@@ -59,6 +59,7 @@ bool OpenGLWindowImpl::IsInitialized() const
 void OpenGLWindowImpl::Initialize()
 {
     mxContext->init(mxChildWindow.get());
+    mbInitialized = true;
 }
 
 OpenGLWindow::OpenGLWindow(vcl::Window* pParent, bool bInit):
