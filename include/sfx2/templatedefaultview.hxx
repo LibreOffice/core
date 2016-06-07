@@ -19,6 +19,8 @@ public:
 
     virtual void reload() override;
 
+    virtual void showAllTemplates () override;
+
     virtual void KeyInput( const KeyEvent& rKEvt ) override;
 
     void createContextMenu();

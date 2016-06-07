@@ -107,7 +107,7 @@ void TemplateAbstractView::dispose()
     ThumbnailView::dispose();
 }
 
-void TemplateAbstractView::insertItems(const std::vector<TemplateItemProperties> &rTemplates, bool isRegionSelected)
+void TemplateAbstractView::insertItems(const std::vector<TemplateItemProperties> &rTemplates, bool isRegionSelected, bool bShowCategoryInTooltip)
 {
     mItemList.clear();
 
@@ -126,7 +126,16 @@ void TemplateAbstractView::insertItems(const std::vector<TemplateItemProperties>
         pChild->mnRegionId = pCur->nRegionId;
         pChild->maTitle = pCur->aName;
         pChild->setPath(pCur->aPath);
-        pChild->setHelpText(pCur->aRegionName);
+
+        if(!bShowCategoryInTooltip)
+            pChild->setHelpText(pCur->aName);
+        else
+        {
+            OUString sHelpText = SfxResId(STR_TEMPLATE_TOOLTIP).toString();
+            sHelpText = (sHelpText.replaceFirst("$1", pCur->aName)).replaceFirst("$1", pCur->aRegionName);
+            pChild->setHelpText(sHelpText);
+        }
+
         pChild->maPreview1 = pCur->aThumbnail;
 
         if(IsDefaultTemplate(pCur->aPath))

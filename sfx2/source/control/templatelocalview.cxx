@@ -143,7 +143,8 @@ void TemplateLocalView::showAllTemplates()
     mnCurRegionId = 0;
     maCurRegionName.clear();
 
-    insertItems(maAllTemplates, false);
+    insertItems(maAllTemplates, false, true);
+
     maOpenRegionHdl.Call(nullptr);
 }
 
