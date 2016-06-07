@@ -139,6 +139,7 @@ public:
 
     virtual Size                GetSize() const override;
     virtual sal_uInt16          GetBitCount() const override;
+    virtual sal_uInt16          GetColorChannelBitCount() const override;
 
     virtual BitmapBuffer*       AcquireBuffer( BitmapAccessMode nMode ) override;
     virtual void                ReleaseBuffer( BitmapBuffer* pBuffer, BitmapAccessMode nMode ) override;

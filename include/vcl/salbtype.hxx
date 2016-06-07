@@ -267,7 +267,18 @@ struct VCL_DLLPUBLIC BitmapBuffer
     long            mnWidth;
     long            mnHeight;
     long            mnScanlineSize;
+
+    /**
+     * Bitcount of one pixel in the buffer.
+     * color + alpha channels with padding (for example in an RGBX format)
+     */
     sal_uInt16      mnBitCount;
+
+    /**
+     * Bitcount color channels of one pixel.
+     * color + alpha channels only (i.e. 8, 16, 24, 32)
+     */
+    sal_uInt16      mnColorChannelBitCount;
     ColorMask       maColorMask;
     BitmapPalette   maPalette;
     sal_uInt8*      mpBits;

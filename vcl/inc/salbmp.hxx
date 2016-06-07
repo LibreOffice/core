@@ -61,6 +61,7 @@ public:
     virtual void            Destroy() = 0;
     virtual Size            GetSize() const = 0;
     virtual sal_uInt16      GetBitCount() const = 0;
+    virtual sal_uInt16      GetColorChannelBitCount() const = 0;
 
     virtual BitmapBuffer*   AcquireBuffer( BitmapAccessMode nMode ) = 0;
     virtual void            ReleaseBuffer( BitmapBuffer* pBuffer, BitmapAccessMode nMode ) = 0;

@@ -73,9 +73,15 @@ Size ImpBitmap::ImplGetSize() const
 
 sal_uInt16 ImpBitmap::ImplGetBitCount() const
 {
-    sal_uInt16 nBitCount = mpSalBitmap->GetBitCount();
-    return ( nBitCount <= 4 ) ? ( ( nBitCount <= 1 ) ? 1 : 4 ):
-                                ( ( nBitCount <= 8 ) ? 8 : 24);
+    sal_uInt16 nBitCount = mpSalBitmap->GetColorChannelBitCount();
+    if (nBitCount <= 1)
+        return 1;
+    else if (nBitCount <= 4)
+        return 4;
+    else if (nBitCount <= 8)
+        return 8;
+    else
+        return 24;
 }
 
 BitmapBuffer* ImpBitmap::ImplAcquireBuffer( BitmapAccessMode nMode )

@@ -70,6 +70,7 @@ BitmapBuffer* ImplCreateDIB(
         {
             const sal_uInt16 nColors = ( nBitCount <= 8 ) ? ( 1 << nBitCount ) : 0;
 
+            pDIB->mnColorChannelBitCount = nBitCount;
             switch (nBitCount)
             {
                 case 1:
@@ -229,16 +230,14 @@ Size SvpSalBitmap::GetSize() const
     return aSize;
 }
 
+sal_uInt16 SvpSalBitmap::GetColorChannelBitCount() const
+{
+    return (mpDIB) ? mpDIB->mnColorChannelBitCount : 0;
+}
+
 sal_uInt16 SvpSalBitmap::GetBitCount() const
 {
-    sal_uInt16 nBitCount;
-
-    if (mpDIB)
-        nBitCount = mpDIB->mnBitCount;
-    else
-        nBitCount = 0;
-
-    return nBitCount;
+    return (mpDIB) ? mpDIB->mnBitCount : 0;
 }
 
 BitmapBuffer* SvpSalBitmap::AcquireBuffer(BitmapAccessMode)

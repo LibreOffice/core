@@ -627,6 +627,11 @@ sal_uInt16 OpenGLSalBitmap::GetBitCount() const
     return mnBits;
 }
 
+sal_uInt16 OpenGLSalBitmap::GetColorChannelBitCount() const
+{
+    return mnBits;
+}
+
 bool OpenGLSalBitmap::calcChecksumGL(OpenGLTexture& rInputTexture, ChecksumType& rChecksum) const
 {
     OUString FragShader("areaHashCRC64TFragmentShader");
