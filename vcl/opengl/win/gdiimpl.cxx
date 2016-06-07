@@ -357,6 +357,10 @@ namespace
 
 void disableOpenGLAndTerminateForRestart()
 {
+    // Detect LO build-time
+    if (getenv("VCL_HIDE_WINDOWS"))
+        return;
+
     OpenGLZone::hardDisable();
     TerminateProcess(GetCurrentProcess(), EXITHELPER_NORMAL_RESTART);
 }
