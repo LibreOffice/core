@@ -55,7 +55,7 @@ void SfxSlotPool::RegisterInterface( SfxInterface& rInterface )
 {
     // add to the list of SfxObjectInterface instances
     if(!_pInterfaces)
-        _pInterfaces.reset(new SfxInterfaceArr_Impl);
+        _pInterfaces.reset(new std::vector<SfxInterface*> );
     _pInterfaces->push_back(&rInterface);
 
     // Stop at a (single) Null-slot (for syntactic reasons the interfaces
@@ -106,7 +106,7 @@ void SfxSlotPool::ReleaseInterface( SfxInterface& rInterface )
         return ;
 
     // remove from the list of SfxInterface instances
-    SfxInterfaceArr_Impl::iterator i = std::find(_pInterfaces->begin(), _pInterfaces->end(), &rInterface);
+    auto i = std::find(_pInterfaces->begin(), _pInterfaces->end(), &rInterface);
     if(i != _pInterfaces->end())
         _pInterfaces->erase(i);
 }

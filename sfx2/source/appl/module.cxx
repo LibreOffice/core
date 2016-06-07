@@ -92,7 +92,8 @@ ImageList* SfxModule_Impl::GetImageList( ResMgr* pResMgr, bool bBig )
             rpList = new ImageList();
     }
 
-    return rpList; }
+    return rpList;
+}
 
 
 SFX_IMPL_SUPERCLASS_INTERFACE(SfxModule, SfxShell)
@@ -147,7 +148,6 @@ SfxModule::~SfxModule()
                 break;
             }
         }
-
     }
 
     delete pImpl;
