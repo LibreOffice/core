@@ -35,6 +35,10 @@ String RID_SVXSTR_DESC_EXT_BITMAP
 {
     Text [ en-US ] = "Please enter a name for the external bitmap:" ;
 };
+String RID_SVXSTR_DESC_NEW_PATTERN
+{
+    Text [ en-US ] = "Please enter a name for the pattern:" ;
+};
 String RID_SVXSTR_ASK_CHANGE_BITMAP
 {
     Text [ en-US ] = "The bitmap was modified without saving. \nModify the selected bitmap or add a new bitmap." ;
