@@ -2595,6 +2595,14 @@ DECLARE_RTFIMPORT_TEST(testTdf77349, "tdf77349.rtf")
     CPPUNIT_ASSERT_EQUAL(OUString("graphic1"), xImage->getName());
 }
 
+DECLARE_RTFIMPORT_TEST(testTdf50821, "tdf50821.rtf")
+{
+    uno::Reference<text::XTextTable> xTable(getParagraphOrTable(2), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A1"), uno::UNO_QUERY);
+    // This was 0, \trpaddfl was mishandled on import.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(191), getProperty<sal_Int32>(xCell, "LeftBorderDistance"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
