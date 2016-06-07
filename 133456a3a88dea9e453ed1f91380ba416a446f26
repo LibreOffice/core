@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_15ab9b75",
+        "filename": "vcl/source/window/openglwin.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-06-07T14:25:49Z",
+      "side": 1,
+      "message": "probably this should set mbInitialized too?",
+      "revId": "133456a3a88dea9e453ed1f91380ba416a446f26",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
