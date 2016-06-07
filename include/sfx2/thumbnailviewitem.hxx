@@ -57,6 +57,8 @@ struct ThumbnailItemAttributes
     basegfx::BColor aTextColor;
     basegfx::BColor aHighlightColor;
     basegfx::BColor aHighlightTextColor;
+    basegfx::BColor aSelectHighlightColor;
+    basegfx::BColor aSelectHighlightTextColor;
     double fHighlightTransparence;
     basegfx::B2DVector aFontSize;
     drawinglayer::attribute::FontAttribute aFontAttr;
