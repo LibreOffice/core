@@ -50,7 +50,7 @@ ChartWindow::ChartWindow( ChartController* pController, vcl::Window* pParent, Wi
         , m_pWindowController( pController )
         , m_bInPaint(false)
 #if HAVE_FEATURE_OPENGL
-        , m_pOpenGLWindow(VclPtr<OpenGLWindow>::Create(this))
+        , m_pOpenGLWindow(VclPtr<OpenGLWindow>::Create(this, false))
 #else
         , m_pOpenGLWindow(nullptr)
 #endif
