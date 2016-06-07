@@ -1324,4 +1324,90 @@ bool SwTableAutoFormatTable::Save( SvStream& rStream ) const
     return bRet;
 }
 
+SwCellStyleTable::SwCellStyleTable()
+{ }
+
+SwCellStyleTable::~SwCellStyleTable()
+{
+    for (size_t i=0; i < m_aCellStyles.size(); ++i)
+        delete m_aCellStyles[i].second;
+}
+
+size_t SwCellStyleTable::size() const
+{
+    return m_aCellStyles.size();
+}
+
+void SwCellStyleTable::clear()
+{
+    for (size_t i=0; i < m_aCellStyles.size(); ++i)
+        delete m_aCellStyles[i].second;
+
+    m_aCellStyles.clear();
+}
+
+SwCellStyleDescriptor SwCellStyleTable::operator[](size_t i) const
+{
+    return SwCellStyleDescriptor(m_aCellStyles[i]);
+}
+
+void SwCellStyleTable::AddBoxFormat(const SwBoxAutoFormat& rBoxFormat, const OUString& sName)
+{
+    m_aCellStyles.push_back(std::make_pair(sName, new SwBoxAutoFormat(rBoxFormat)));
+}
+
+void SwCellStyleTable::RemoveBoxFormat(const OUString& sName)
+{
+    for (size_t i=0; i < m_aCellStyles.size(); ++i)
+    {
+        if (m_aCellStyles[i].first == sName)
+        {
+            m_aCellStyles.erase(m_aCellStyles.begin() + i);
+            return;
+        }
+    }
+    SAL_INFO("sw.core", "SwCellStyleTable::RemoveBoxFormat, format with given name doesn't exists");
+}
+
+OUString SwCellStyleTable::GetBoxFormatName(const SwBoxAutoFormat& rBoxFormat) const
+{
+    for (size_t i=0; i < m_aCellStyles.size(); ++i)
+    {
+        if (m_aCellStyles[i].second == &rBoxFormat)
+            return m_aCellStyles[i].first;
+    }
+
+    // box format not found
+    return OUString();
+}
+
+SwBoxAutoFormat* SwCellStyleTable::GetBoxFormat(const OUString& sName) const
+{
+    for (size_t i=0; i < m_aCellStyles.size(); ++i)
+    {
+        if (m_aCellStyles[i].first == sName)
+            return m_aCellStyles[i].second;
+    }
+
+    return nullptr;
+}
+
+void SwCellStyleTable::ChangeBoxFormatName(const OUString& sFromName, const OUString& sToName)
+{
+    if (!GetBoxFormat(sToName))
+    {
+        SAL_INFO("sw.core", "SwCellStyleTable::ChangeBoxName, box with given name already exists");
+        return;
+    }
+    for (size_t i=0; i < m_aCellStyles.size(); ++i)
+    {
+        if (m_aCellStyles[i].first == sFromName)
+        {
+            m_aCellStyles[i].first = sToName;
+            // changed succesfully
+            return;
+        }
+    }
+    SAL_INFO("sw.core", "SwCellStyleTable::ChangeBoxName, box with given name not found");
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
