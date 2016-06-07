@@ -15,21 +15,33 @@
 class OpenGLWindowImpl
 {
 public:
-    explicit OpenGLWindowImpl(vcl::Window* pWindow);
+    explicit OpenGLWindowImpl(vcl::Window* pWindow, bool bInit);
     ~OpenGLWindowImpl();
     OpenGLContext& getContext() { return *mxContext.get(); }
+
+    bool IsInitialized() const;
+
+    void Initialize();
+
 private:
+
     rtl::Reference<OpenGLContext> mxContext;
     VclPtr<SystemChildWindow> mxChildWindow;
+
+    bool mbInitialized;
 };
 
-OpenGLWindowImpl::OpenGLWindowImpl(vcl::Window* pWindow)
-    : mxContext(OpenGLContext::Create())
+OpenGLWindowImpl::OpenGLWindowImpl(vcl::Window* pWindow, bool bInit)
+    : mxContext(OpenGLContext::Create()),
+    mbInitialized(bInit)
 {
     SystemWindowData aData = OpenGLContext::generateWinData(pWindow, false);
     mxChildWindow.reset(VclPtr<SystemChildWindow>::Create(pWindow, 0, &aData));
     mxChildWindow->Show();
-    mxContext->init(mxChildWindow.get());
+
+    if (bInit)
+        mxContext->init(mxChildWindow.get());
+
     pWindow->SetMouseTransparent(false);
 }
 
@@ -39,9 +51,20 @@ OpenGLWindowImpl::~OpenGLWindowImpl()
     mxChildWindow.disposeAndClear();
 }
 
-OpenGLWindow::OpenGLWindow(vcl::Window* pParent):
+bool OpenGLWindowImpl::IsInitialized() const
+{
+    return mbInitialized;
+}
+
+void OpenGLWindowImpl::Initialize()
+{
+    mxContext->init(mxChildWindow.get());
+    mbInitialized = true;
+}
+
+OpenGLWindow::OpenGLWindow(vcl::Window* pParent, bool bInit):
     Window(pParent, 0),
-    mxImpl(new OpenGLWindowImpl(this)),
+    mxImpl(new OpenGLWindowImpl(this, bInit)),
     mpRenderer(nullptr)
 {
 }
@@ -116,6 +139,17 @@ void OpenGLWindow::MouseMove( const MouseEvent& /*rMEvt*/ )
 void OpenGLWindow::setRenderer(IRenderer* pRenderer)
 {
     mpRenderer = pRenderer;
+}
+
+bool OpenGLWindow::IsInitialized() const
+{
+    return mxImpl->IsInitialized();
+}
+
+void OpenGLWindow::Initialize()
+{
+    if (!IsInitialized())
+        mxImpl->Initialize();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
