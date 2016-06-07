@@ -1020,17 +1020,21 @@ void GtkSalMenu::ClearActionGroupAndMenuModel()
 void GtkSalMenu::Activate(const gchar* pCommand)
 {
     MenuAndId aMenuAndId = decode_command(pCommand);
-    GtkSalMenu* pSalSubMenu = aMenuAndId.first;
-    GtkSalMenu* pTopLevel = pSalSubMenu->GetTopLevel();
-    pTopLevel->GetMenu()->HandleMenuActivateEvent(pSalSubMenu->GetMenu());
+    GtkSalMenu* pSalMenu = aMenuAndId.first;
+    GtkSalMenu* pTopLevel = pSalMenu->GetTopLevel();
+    Menu* pVclMenu = pSalMenu->GetMenu();
+    Menu* pVclSubMenu = pVclMenu->GetPopupMenu(aMenuAndId.second);
+    pTopLevel->GetMenu()->HandleMenuActivateEvent(pVclSubMenu);
 }
 
 void GtkSalMenu::Deactivate(const gchar* pCommand)
 {
     MenuAndId aMenuAndId = decode_command(pCommand);
-    GtkSalMenu* pSalSubMenu = aMenuAndId.first;
-    GtkSalMenu* pTopLevel = pSalSubMenu->GetTopLevel();
-    pTopLevel->GetMenu()->HandleMenuDeActivateEvent(pSalSubMenu->GetMenu());
+    GtkSalMenu* pSalMenu = aMenuAndId.first;
+    GtkSalMenu* pTopLevel = pSalMenu->GetTopLevel();
+    Menu* pVclMenu = pSalMenu->GetMenu();
+    Menu* pVclSubMenu = pVclMenu->GetPopupMenu(aMenuAndId.second);
+    pTopLevel->GetMenu()->HandleMenuDeActivateEvent(pVclSubMenu);
 }
 
 void GtkSalMenu::EnableUnity(bool bEnable)
