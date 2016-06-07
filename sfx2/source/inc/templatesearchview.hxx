@@ -33,7 +33,7 @@ public:
 
     void setDefaultTemplateHdl(const Link<ThumbnailViewItem*,void> &rLink);
 
-    void createContextMenu();
+    void createContextMenu(const bool bIsDefault);
 
     void AppendItem(sal_uInt16 nAssocItemId, sal_uInt16 nRegionId, sal_uInt16 nIdx,
                     const OUString &rTitle, const OUString &rSubtitle,

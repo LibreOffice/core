@@ -124,6 +124,7 @@ protected:
 
     virtual void OnItemDblClicked(ThumbnailViewItem *pItem) override;
 
+public:
     static bool IsDefaultTemplate(const OUString& rPath);
 
 protected:
