@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_fa76243d",
+        "filename": "sd/source/ui/app/sdmod1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 569,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-06-07T06:01:00Z",
+      "side": 1,
+      "message": "Why not just do here:\n\naTemplDlg(SfxGetpApp()-\u003eGetTopWindow())\n\nand remove the other code above? Should make no difference, or am I missing something?",
+      "revId": "a4a4318fd9f8c30efd58cb28d9a74c371e0eed50",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
