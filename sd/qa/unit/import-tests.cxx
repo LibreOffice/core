@@ -1297,18 +1297,25 @@ void SdImportTest::testTdf93124()
     SvFileStream aFileStream(aTempFile.GetURL(), StreamMode::READ);
     vcl::PNGReader aPNGReader(aFileStream);
     BitmapEx aBMPEx = aPNGReader.Read();
+
+    // make sure the bitmap is not empty and correct size (PNG export->import was successful)
+    CPPUNIT_ASSERT_EQUAL(Size(320, 180), aBMPEx.GetSizePixel());
     Bitmap aBMP = aBMPEx.GetBitmap();
-    BitmapReadAccess* pRead = aBMP.AcquireReadAccess();
-    int nNonWhiteCount = 0;
-    // The word "Top" should be in rectangle 34,4 - 76,30. If text alignment is wrong, the rectangle will be white.
-    for (long nX = 34; nX < (34 + 43); ++nX)
+    {
+        Bitmap::ScopedReadAccess pReadAccess(aBMP);
+        int nNonWhiteCount = 0;
+        // The word "Top" should be in rectangle 34,4 - 76,30. If text alignment is wrong, the rectangle will be white.
         for (long nY = 4; nY < (4 + 26); ++nY)
         {
-            const Color aColor = pRead->GetColor(nY, nX);
-            if ((aColor.GetRed() != 0xff) || (aColor.GetGreen() != 0xff) || (aColor.GetBlue() != 0xff))
-                ++nNonWhiteCount;
+            for (long nX = 34; nX < (34 + 43); ++nX)
+            {
+                const Color aColor = pReadAccess->GetColor(nY, nX);
+                if ((aColor.GetRed() != 0xff) || (aColor.GetGreen() != 0xff) || (aColor.GetBlue() != 0xff))
+                    ++nNonWhiteCount;
+            }
         }
-    CPPUNIT_ASSERT_MESSAGE("Tdf93124: vertical alignment of text is incorrect!", nNonWhiteCount>100);
+        CPPUNIT_ASSERT_MESSAGE("Tdf93124: vertical alignment of text is incorrect!", nNonWhiteCount>100);
+    }
     xDocShRef->DoClose();
 }
 
