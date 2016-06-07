@@ -1229,7 +1229,9 @@ void SwFrameShell::ExecDrawAttrArgsTextFrame(SfxRequest& rReq)
         switch(rReq.GetSlot())
         {
             case SID_ATTR_FILL_STYLE:
+            case SID_ATTR_PAGE_FILLSTYLE:
             case SID_ATTR_FILL_COLOR:
+            case SID_ATTR_PAGE_COLOR:
             case SID_ATTR_FILL_GRADIENT:
             case SID_ATTR_FILL_HATCH:
             case SID_ATTR_FILL_BITMAP:
@@ -1278,7 +1280,9 @@ void SwFrameShell::ExecDrawDlgTextFrame(SfxRequest& rReq)
                     static sal_uInt16 aInval[] =
                     {
                         SID_ATTR_FILL_STYLE,
+                        SID_ATTR_PAGE_FILLSTYLE,
                         SID_ATTR_FILL_COLOR,
+                        SID_ATTR_PAGE_COLOR,
                         SID_ATTR_FILL_TRANSPARENCE,
                         SID_ATTR_FILL_FLOATTRANSPARENCE,
                         0
@@ -1289,6 +1293,8 @@ void SwFrameShell::ExecDrawDlgTextFrame(SfxRequest& rReq)
                     rBnd.Invalidate(aInval);
                     rBnd.Update(SID_ATTR_FILL_STYLE);
                     rBnd.Update(SID_ATTR_FILL_COLOR);
+                    rBnd.Update(SID_ATTR_PAGE_FILLSTYLE);
+                    rBnd.Update(SID_ATTR_PAGE_COLOR);
                     rBnd.Update(SID_ATTR_FILL_TRANSPARENCE);
                     rBnd.Update(SID_ATTR_FILL_FLOATTRANSPARENCE);
                 }

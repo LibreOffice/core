@@ -30,6 +30,8 @@
 #include <svl/eitem.hxx>
 #include <svl/whiter.hxx>
 #include <svx/ruler.hxx>
+#include <svx/xfillit.hxx>
+#include <svx/xfillit0.hxx>
 #include <editeng/protitem.hxx>
 #include <svl/rectitem.hxx>
 #include <sfx2/bindings.hxx>
@@ -974,6 +976,68 @@ void SwView::ExecTabWin( SfxRequest& rReq )
             }
         }
         break;
+
+    case SID_ATTR_PAGE_COLOR:
+    case SID_ATTR_PAGE_FILLSTYLE:
+    case SID_ATTR_PAGE_GRADIENT:
+    case SID_ATTR_PAGE_HATCH:
+    case SID_ATTR_PAGE_BITMAP:
+    {
+        if(pReqArgs)
+        {
+            SwPageDesc aDesc(rDesc);
+            SwFrameFormat &rMaster = aDesc.GetMaster();
+            switch (nSlot)
+            {
+                case(SID_ATTR_PAGE_FILLSTYLE):
+                {
+                    XFillStyleItem aFSItem( static_cast<const XFillStyleItem&>(pReqArgs->Get( XATTR_FILLSTYLE )) );
+                    drawing::FillStyle eXFS = aFSItem.GetValue();
+
+                    if ( eXFS == drawing::FillStyle_NONE )
+                         rMaster.SetFormatAttr( XFillStyleItem( eXFS ) );
+                }
+                break;
+
+                case(SID_ATTR_PAGE_COLOR):
+                {
+                    XFillColorItem aColorItem( static_cast<const XFillColorItem&>(pReqArgs->Get( XATTR_FILLCOLOR )) );
+                    rMaster.SetFormatAttr( XFillStyleItem( drawing::FillStyle_SOLID ) );
+                    rMaster.SetFormatAttr( XFillColorItem( aColorItem ));
+                }
+                break;
+
+                case(SID_ATTR_PAGE_GRADIENT):
+                {
+                    XFillGradientItem aGradientItem( static_cast<const XFillGradientItem&>(pReqArgs->Get( XATTR_FILLGRADIENT )) );
+                    rMaster.SetFormatAttr( XFillStyleItem( drawing::FillStyle_GRADIENT ) );
+                    rMaster.SetFormatAttr( XFillGradientItem( aGradientItem ) );
+                }
+                break;
+
+                case(SID_ATTR_PAGE_HATCH):
+                {
+                    XFillHatchItem aHatchItem( static_cast<const XFillHatchItem&>(pReqArgs->Get( XATTR_FILLHATCH )) );
+                    rMaster.SetFormatAttr( XFillStyleItem( drawing::FillStyle_HATCH ) );
+                    rMaster.SetFormatAttr( XFillHatchItem( aHatchItem ));
+                }
+                break;
+
+                case(SID_ATTR_PAGE_BITMAP):
+                {
+                    XFillBitmapItem aBitmapItem( static_cast<const XFillBitmapItem&>(pReqArgs->Get( XATTR_FILLBITMAP )) );
+                    rMaster.SetFormatAttr( XFillStyleItem( drawing::FillStyle_BITMAP ) );
+                    rMaster.SetFormatAttr( XFillBitmapItem( aBitmapItem ));
+                }
+                break;
+
+                default:
+                break;
+            }
+            rSh.ChgPageDesc(rSh.GetCurPageDesc(), aDesc);
+        }
+    }
+    break;
 
     default:
         OSL_ENSURE( false, "wrong SlotId");
@@ -2034,6 +2098,65 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                     aProtect.SetPosProtect(true);
                 }
                 rSet.Put(aProtect);
+            }
+        }
+        break;
+
+        case SID_ATTR_PAGE_COLOR:
+        case SID_ATTR_PAGE_FILLSTYLE:
+        case SID_ATTR_PAGE_GRADIENT:
+        case SID_ATTR_PAGE_HATCH:
+        case SID_ATTR_PAGE_BITMAP:
+        {
+            SfxItemSet aSet = rDesc.GetMaster().GetAttrSet();
+            drawing::FillStyle eXFS = (drawing::FillStyle) ( static_cast<const XFillStyleItem*>(
+                                        aSet.GetItem(XATTR_FILLSTYLE) )->GetValue() );
+            XFillStyleItem aFillStyleItem( eXFS );
+            aFillStyleItem.SetWhich( SID_ATTR_PAGE_FILLSTYLE );
+            rSet.Put(aFillStyleItem);
+            switch(eXFS)
+            {
+                case (drawing::FillStyle_SOLID):
+                {
+                    Color aColor =  static_cast<const XFillColorItem*>( aSet.GetItem( XATTR_FILLCOLOR, false ) )->GetColorValue();
+                    XFillColorItem aFillColorItem( OUString(), aColor );
+                    aFillColorItem.SetWhich( SID_ATTR_PAGE_COLOR );
+                    rSet.Put( aFillColorItem );
+                }
+                break;
+
+                case (drawing::FillStyle_GRADIENT):
+                {
+                    const XGradient& xGradient =  static_cast<const XFillGradientItem*>( aSet.GetItem( XATTR_FILLGRADIENT ) )->GetGradientValue();
+                    XFillGradientItem aFillGradientItem( OUString(), xGradient, SID_ATTR_PAGE_GRADIENT  );
+                    rSet.Put( aFillGradientItem );
+                }
+                break;
+
+                case (drawing::FillStyle_HATCH):
+                {
+                    const XFillHatchItem *pFillHatchItem( static_cast<const XFillHatchItem*>( aSet.GetItem( XATTR_FILLHATCH ) ) );
+                    XFillHatchItem aFillHatchItem( pFillHatchItem->GetName(), pFillHatchItem->GetHatchValue());
+                    aFillHatchItem.SetWhich( SID_ATTR_PAGE_HATCH );
+                    rSet.Put( aFillHatchItem );
+                }
+                break;
+
+                case (drawing::FillStyle_BITMAP):
+                {
+                    const XFillBitmapItem *pFillBitmapItem = static_cast<const XFillBitmapItem*>( aSet.GetItem( XATTR_FILLBITMAP ) );
+                    XFillBitmapItem aFillBitmapItem( pFillBitmapItem->GetName(), pFillBitmapItem->GetGraphicObject() );
+                    aFillBitmapItem.SetWhich( SID_ATTR_PAGE_BITMAP );
+                    rSet.Put( aFillBitmapItem );
+                }
+                break;
+                case (drawing::FillStyle_NONE):
+                {
+                }
+                break;
+
+                default:
+                break;
             }
         }
         break;
