@@ -92,7 +92,6 @@ static bool lcl_GetBoolFromAny( const uno::Any& aAny )
 
 ScDPSource::ScDPSource( ScDPTableData* pD ) :
     pData( pD ),
-    pDimensions( nullptr ),
     bColumnGrand( true ),       // default is true
     bRowGrand( true ),
     bIgnoreEmptyRows( false ),
@@ -111,9 +110,6 @@ ScDPSource::ScDPSource( ScDPTableData* pD ) :
 
 ScDPSource::~ScDPSource()
 {
-    if (pDimensions)
-        pDimensions->release();     // ref-counted
-
     // free lists
 
     delete[] pColResults;
@@ -299,12 +295,11 @@ bool ScDPSource::IsDateDimension(long nDim)
 
 ScDPDimensions* ScDPSource::GetDimensionsObject()
 {
-    if (!pDimensions)
+    if (!pDimensions.is())
     {
         pDimensions = new ScDPDimensions(this);
-        pDimensions->acquire();                     // ref-counted
     }
-    return pDimensions;
+    return pDimensions.get();
 }
 
 uno::Reference<container::XNameAccess> SAL_CALL ScDPSource::getDimensions() throw(uno::RuntimeException, std::exception)
@@ -319,7 +314,7 @@ void ScDPSource::SetDupCount( long nNew )
 
 ScDPDimension* ScDPSource::AddDuplicated(long /* nSource */, const OUString& rNewName)
 {
-    OSL_ENSURE( pDimensions, "AddDuplicated without dimensions?" );
+    OSL_ENSURE( pDimensions.is(), "AddDuplicated without dimensions?" );
 
     //  re-use
 
@@ -539,11 +534,7 @@ void ScDPSource::disposeData()
         aRowLevelList.clear();
     }
 
-    if ( pDimensions )
-    {
-        pDimensions->release(); // ref-counted
-        pDimensions = nullptr;     //  settings have to be applied (from SaveData) again!
-    }
+    pDimensions.clear(); // settings have to be applied (from SaveData) again!
     SetDupCount( 0 );
 
     maColDims.clear();

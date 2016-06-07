@@ -57,8 +57,7 @@ SC_SIMPLE_SERVICE_INFO( ScAnnotationObj, "ScAnnotationObj", "com.sun.star.sheet.
 
 ScAnnotationObj::ScAnnotationObj(ScDocShell* pDocSh, const ScAddress& rPos) :
     pDocShell( pDocSh ),
-    aCellPos( rPos ),
-    pUnoText( nullptr )
+    aCellPos( rPos )
 {
     pDocShell->GetDocument().AddUnoObject(*this);
 
@@ -72,9 +71,6 @@ ScAnnotationObj::~ScAnnotationObj()
 
     if (pDocShell)
         pDocShell->GetDocument().RemoveUnoObject(*this);
-
-    if (pUnoText)
-        pUnoText->release();
 }
 
 void ScAnnotationObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
@@ -237,14 +233,13 @@ uno::Reference < drawing::XShape > SAL_CALL ScAnnotationObj::getAnnotationShape(
 
 SvxUnoText& ScAnnotationObj::GetUnoText()
 {
-    if (!pUnoText)
+    if (!pUnoText.is())
     {
         ScAnnotationEditSource aEditSource( pDocShell, aCellPos );
         pUnoText = new SvxUnoText( &aEditSource, lcl_GetAnnotationPropertySet(),
                                     uno::Reference<text::XText>() );
-        pUnoText->acquire();
     }
-    return *pUnoText;
+    return *pUnoText.get();
 }
 
 const ScPostIt* ScAnnotationObj::ImplGetNote() const
