@@ -472,7 +472,7 @@ SwDocStyleSheet::SwDocStyleSheet(   SwDoc&          rDocument,
             //UUUU items to hand over XPropertyList things like
             // XColorList, XHatchList, XGradientList and XBitmapList
             // to the Area TabPage
-            SID_COLOR_TABLE,        SID_BITMAP_LIST,                // [10179
+            SID_COLOR_TABLE,        SID_PATTERN_LIST,                // [10179
 
             SID_SWREGISTER_COLLECTION, SID_SWREGISTER_COLLECTION,   // [10451
             SID_ATTR_PARA_PAGENUM, SID_ATTR_PARA_PAGENUM,           // [10457
@@ -1353,6 +1353,7 @@ SfxItemSet&   SwDocStyleSheet::GetItemSet()
                     aCoreSet.Put(SvxGradientListItem(pDrawModel->GetGradientList(), SID_GRADIENT_LIST));
                     aCoreSet.Put(SvxHatchListItem(pDrawModel->GetHatchList(), SID_HATCH_LIST));
                     aCoreSet.Put(SvxBitmapListItem(pDrawModel->GetBitmapList(), SID_BITMAP_LIST));
+                    aCoreSet.Put(SvxPatternListItem(pDrawModel->GetPatternList(), SID_PATTERN_LIST));
                 }
             }
             break;

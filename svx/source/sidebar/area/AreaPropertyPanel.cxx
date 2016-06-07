@@ -57,6 +57,7 @@ AreaPropertyPanel::AreaPropertyPanel(
       maGradientListControl(SID_GRADIENT_LIST, *pBindings, *this),
       maHatchListControl(SID_HATCH_LIST, *pBindings, *this),
       maBitmapListControl(SID_BITMAP_LIST, *pBindings, *this),
+      maPatternListControl(SID_PATTERN_LIST, *pBindings, *this),
       maFillTransparenceController(SID_ATTR_FILL_TRANSPARENCE, *pBindings, *this),
       maFillFloatTransparenceController(SID_ATTR_FILL_FLOATTRANSPARENCE, *pBindings, *this),
       mpBindings(pBindings)
@@ -79,6 +80,7 @@ void AreaPropertyPanel::dispose()
     maGradientListControl.dispose();
     maHatchListControl.dispose();
     maBitmapListControl.dispose();
+    maPatternListControl.dispose();
     maFillTransparenceController.dispose();
     maFillFloatTransparenceController.dispose();
 
