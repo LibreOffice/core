@@ -83,6 +83,8 @@ public:
 
     virtual void MouseButtonDown( const MouseEvent& rMEvt ) override;
 
+    virtual void Command( const CommandEvent& rCEvt ) override;
+
     virtual void KeyInput( const KeyEvent& rKEvt ) override;
 
     virtual void showAllTemplates () = 0;
