@@ -338,6 +338,13 @@ sal_Int32 SAL_CALL TableModel::getColumnCount() throw (RuntimeException, std::ex
     return getColumnCountImpl();
 }
 
+std::vector<sal_Int32> TableModel::getColumnWidths()
+{
+    std::vector<sal_Int32> aRet;
+    for (const TableColumnRef& xColumn : maColumns)
+        aRet.push_back(xColumn->getWidth());
+    return aRet;
+}
 
 // XComponent
 
