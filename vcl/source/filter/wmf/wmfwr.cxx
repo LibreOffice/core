@@ -1633,6 +1633,8 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                 }
                 break;
 
+                case MetaActionType::TEXTLANGUAGE:
+                    SAL_FALLTHROUGH;
                 case( MetaActionType::COMMENT ): // ignore
                 break;
 
