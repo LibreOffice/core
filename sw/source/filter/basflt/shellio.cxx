@@ -858,7 +858,6 @@ sal_uLong SwWriter::Write( WriterRef& rxWriter, const OUString* pRealFileName )
 
     const bool bOrigPurgeOle = pOutDoc->getIDocumentSettingAccess().get(DocumentSettingId::PURGE_OLE);
     pOutDoc->getIDocumentSettingAccess().set(DocumentSettingId::PURGE_OLE, false);
-    const RedlineMode_t nOrigRedlineMode = pOutDoc->getIDocumentRedlineAccess().GetRedlineMode();
 
     sal_uLong nError = 0;
     if( pMedium )
@@ -888,12 +887,10 @@ sal_uLong SwWriter::Write( WriterRef& rxWriter, const OUString* pRealFileName )
             else
                 delete pPam;
         }
-        pOutDoc->getIDocumentRedlineAccess().SetRedlineMode(nOrigRedlineMode);
     }
     else
     {
         delete pPam;            // delete the created Pam
-        pOutDoc->getIDocumentRedlineAccess().SetRedlineMode(nOrigRedlineMode);
         // Everything was written successfully? Tell the document!
         if ( !IsError( nError ) && !pDoc )
         {

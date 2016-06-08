@@ -50,41 +50,7 @@ $(eval $(call gb_CppunitTest_use_api,sw_globalfilter,\
 $(eval $(call gb_CppunitTest_use_ure,sw_globalfilter))
 $(eval $(call gb_CppunitTest_use_vcl,sw_globalfilter))
 
-$(eval $(call gb_CppunitTest_use_components,sw_globalfilter,\
-	basic/util/sb \
-	comphelper/util/comphelp \
-	configmgr/source/configmgr \
-	dbaccess/util/dba \
-	drawinglayer/drawinglayer \
-	embeddedobj/util/embobj \
-	filter/source/config/cache/filterconfig1 \
-	filter/source/storagefilterdetect/storagefd \
-	filter/source/textfilterdetect/textfd \
-	forms/util/frm \
-	framework/util/fwk \
-	i18npool/util/i18npool \
-	linguistic/source/lng \
-	oox/util/oox \
-	package/source/xstor/xstor \
-	package/util/package2 \
-	sax/source/expatwrap/expwrap \
-	sfx2/util/sfx \
-	svl/source/fsstor/fsstorage \
-	svtools/util/svt \
-	sw/util/msword \
-	sw/util/sw \
-	sw/util/swd \
-	toolkit/util/tk \
-	ucb/source/core/ucb1 \
-	ucb/source/ucp/file/ucpfile1 \
-	unotools/util/utl \
-	unoxml/source/rdf/unordf \
-	unoxml/source/service/unoxml \
-	uui/util/uui \
-	$(if $(filter DESKTOP,$(BUILD_TYPE)),xmlhelp/util/ucpchelp1) \
-	writerfilter/util/writerfilter \
-	xmloff/util/xo \
-))
+$(eval $(call gb_CppunitTest_use_rdb,sw_globalfilter,services))
 
 $(eval $(call gb_CppunitTest_use_custom_headers,sw_globalfilter,\
 	officecfg/registry \
