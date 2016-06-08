@@ -531,7 +531,8 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
         bool bStartWithTemplate = pOpt->IsStartWithTemplate();
 
         bool bNewDocDirect = rReq.GetSlot() == SID_NEWSD;
-        if( bNewDocDirect && !bStartWithTemplate )
+
+        if( bNewDocDirect )
         {
             //we start without wizard
 
@@ -550,11 +551,9 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
                 pFrame = CreateEmptyDocument( xTargetFrame );
             }
         }
-        else
-        {
-            //create an empty document into frame
-            pFrame = CreateEmptyDocument( xTargetFrame );
 
+        if(bStartWithTemplate)
+        {
             //Launch TemplateSelectionDialog
             ScopedVclPtrInstance< SfxTemplateSelectionDlg > aTemplDlg( SfxGetpApp()->GetTopWindow());
             aTemplDlg->Execute();
