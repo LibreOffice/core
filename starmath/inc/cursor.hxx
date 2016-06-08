@@ -306,9 +306,9 @@ private:
     /** Clone list of nodes in a clipboard (creates a deep clone) */
     static SmNodeList* CloneList(SmClipboard &rClipboard);
 
-    /** Find an iterator pointing to the node in pLineList following aCaretPos
+    /** Find an iterator pointing to the node in pLineList following rCaretPos
      *
-     * If aCaretPos::pSelectedNode cannot be found it is assumed that it's in front of pLineList,
+     * If rCaretPos.pSelectedNode cannot be found it is assumed that it's in front of pLineList,
      * thus not an element in pLineList. In this case this method returns an iterator to the
      * first element in pLineList.
      *
@@ -316,7 +316,8 @@ private:
      * reason you should beaware that iterators to elements in pLineList may be invalidated, and
      * that you should call PatchLineList() with this iterator if no action is taken.
      */
-    static SmNodeList::iterator FindPositionInLineList(SmNodeList* pLineList, SmCaretPos aCaretPos);
+    static SmNodeList::iterator FindPositionInLineList(SmNodeList* pLineList,
+                                                       const SmCaretPos& rCaretPos);
 
     /** Patch a line list after modification, merge SmTextNode, remove SmPlaceNode etc.
      *
