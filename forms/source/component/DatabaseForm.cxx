@@ -261,11 +261,9 @@ ODatabaseForm::ODatabaseForm(const Reference<XComponentContext>& _rxContext)
     ,m_aResetListeners( *this, m_aMutex )
     ,m_aPropertyBagHelper( *this )
     ,m_pAggregatePropertyMultiplexer(nullptr)
-    ,m_pGroupManager( nullptr )
     ,m_aParameterManager( m_aMutex, _rxContext )
     ,m_aFilterManager()
     ,m_pLoadTimer(nullptr)
-    ,m_pThread(nullptr)
     ,m_nResetsPending(0)
     ,m_nPrivileges(0)
     ,m_bInsertOnly( false )
@@ -299,11 +297,9 @@ ODatabaseForm::ODatabaseForm( const ODatabaseForm& _cloneSource )
     ,m_aResetListeners( *this, m_aMutex )
     ,m_aPropertyBagHelper( *this )
     ,m_pAggregatePropertyMultiplexer( nullptr )
-    ,m_pGroupManager( nullptr )
     ,m_aParameterManager( m_aMutex, _cloneSource.m_xContext )
     ,m_aFilterManager()
     ,m_pLoadTimer( nullptr )
-    ,m_pThread( nullptr )
     ,m_nResetsPending( 0 )
     ,m_nPrivileges( 0 )
     ,m_bInsertOnly( _cloneSource.m_bInsertOnly )
@@ -423,15 +419,12 @@ void ODatabaseForm::impl_construct()
     osl_atomic_decrement( &m_refCount );
 
     m_pGroupManager = new OGroupManager( this );
-    m_pGroupManager->acquire();
 }
 
 
 ODatabaseForm::~ODatabaseForm()
 {
-
-    m_pGroupManager->release();
-    m_pGroupManager = nullptr;
+    m_pGroupManager.clear();
 
     if (m_xAggregate.is())
         m_xAggregate->setDelegator( nullptr );
@@ -1281,11 +1274,7 @@ void ODatabaseForm::disposing()
     // cancel the submit/reset-thread
     {
         ::osl::MutexGuard aGuard( m_aMutex );
-        if (m_pThread)
-        {
-            m_pThread->release();
-            m_pThread = nullptr;
-        }
+        m_pThread.clear();
     }
 
     EventObject aEvt(static_cast<XWeak*>(this));
@@ -1937,10 +1926,9 @@ void SAL_CALL ODatabaseForm::reset() throw( RuntimeException, std::exception )
         ++m_nResetsPending;
         // create an own thread if we have (approve-)reset-listeners (so the listeners can't do that much damage
         // to this thread which is probably the main one)
-        if (!m_pThread)
+        if (!m_pThread.is())
         {
             m_pThread = new OFormSubmitResetThread(this);
-            m_pThread->acquire();
             m_pThread->create();
         }
         EventObject aEvt;
@@ -2108,10 +2096,9 @@ void SAL_CALL ODatabaseForm::submit( const Reference<XControl>& Control,
     {
         // create an own thread if we have (approve-)submit-listeners (so the listeners can't do that much damage
         // to this thread which is probably the main one)
-        if (!m_pThread)
+        if (!m_pThread.is())
         {
             m_pThread = new OFormSubmitResetThread(this);
-            m_pThread->acquire();
             m_pThread->create();
         }
         m_pThread->addEvent(&MouseEvt, Control, true);

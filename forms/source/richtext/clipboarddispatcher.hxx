@@ -22,6 +22,7 @@
 
 #include "featuredispatcher.hxx"
 #include <tools/link.hxx>
+#include <rtl/ref.hxx>
 
 class TransferableClipboardListener;
 class TransferableDataHelper;
@@ -65,7 +66,7 @@ namespace frm
     class OPasteClipboardDispatcher : public OClipboardDispatcher
     {
     private:
-        TransferableClipboardListener*  m_pClipListener;
+        rtl::Reference<TransferableClipboardListener>  m_pClipListener;
         bool                        m_bPastePossible;
 
     public:
