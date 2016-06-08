@@ -342,7 +342,7 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="cuilo-HexColorControl" id="hexEntry">
+                              <object class="svxcorelo-HexColorControl" id="hexEntry">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="hexpand">True</property>

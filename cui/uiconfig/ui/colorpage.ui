@@ -361,7 +361,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="cuilo-HexColorControl" id="hex_custom">
+                          <object class="svxcorelo-HexColorControl" id="hex_custom">
                             <property name="width_request">6</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
