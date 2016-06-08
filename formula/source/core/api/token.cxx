@@ -42,6 +42,8 @@ namespace formula
 
 // Need a lot of FormulaDoubleToken
 IMPL_FIXEDMEMPOOL_NEWDEL_DLL( FormulaDoubleToken )
+// Need quite some FormulaTypedDoubleToken
+IMPL_FIXEDMEMPOOL_NEWDEL_DLL( FormulaTypedDoubleToken )
 // Need a lot of FormulaByteToken
 IMPL_FIXEDMEMPOOL_NEWDEL_DLL( FormulaByteToken )
 // Need several FormulaStringToken
@@ -197,6 +199,12 @@ double & FormulaToken::GetDoubleAsReference()
     SAL_WARN( "formula.core", "FormulaToken::GetDouble: virtual dummy called" );
     static double fVal = 0.0;
     return fVal;
+}
+
+short FormulaToken::GetDoubleType() const
+{
+    SAL_WARN( "formula.core", "FormulaToken::GetDoubleType: virtual dummy called" );
+    return 0;
 }
 
 svl::SharedString FormulaToken::GetString() const
@@ -1656,9 +1664,27 @@ bool FormulaTokenIterator::IsEndOfPath() const
 
 double      FormulaDoubleToken::GetDouble() const            { return fDouble; }
 double &    FormulaDoubleToken::GetDoubleAsReference()       { return fDouble; }
+
+short FormulaDoubleToken::GetDoubleType() const
+{
+    // This is a plain double value without type information, don't emit a
+    // warning via FormulaToken::GetDoubleType().
+    return 0;
+}
+
 bool FormulaDoubleToken::operator==( const FormulaToken& r ) const
 {
     return FormulaToken::operator==( r ) && fDouble == r.GetDouble();
+}
+
+short FormulaTypedDoubleToken::GetDoubleType() const
+{
+    return mnType;
+}
+
+bool FormulaTypedDoubleToken::operator==( const FormulaToken& r ) const
+{
+    return FormulaDoubleToken::operator==( r ) && mnType == r.GetDoubleType();
 }
 
 FormulaStringToken::FormulaStringToken( const svl::SharedString& r ) :
