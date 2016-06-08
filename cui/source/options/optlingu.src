@@ -83,17 +83,5 @@ String RID_SVXSTR_HYPH_SPECIAL
 {
     Text [ en-US ] = "Hyphenate special regions";
 };
-String RID_SVXSTR_LINGU_MODULES_EDIT
-{
-    Text [ en-US ] = "Edit Available language modules";
-};
-String RID_SVXSTR_LINGU_DICS_EDIT_DIC
-{
-    Text [ en-US ] = "Edit User-defined dictionaries";
-};
-String RID_SVXSTR_LINGU_OPTIONS_EDIT
-{
-    Text [ en-US ] = "Edit Options";
-};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
