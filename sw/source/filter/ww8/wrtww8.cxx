@@ -3134,6 +3134,16 @@ void MSWordExportBase::ExportDocument( bool bWriteAll )
         m_pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage( 0 )->RecalcObjOrdNums();
 
     ExportDocument_Impl();
+
+    // park m_pCurPam in a "safe place" now that document is fully exported
+    // before toggling redline mode to avoid ~SwIndexReg assert e.g. export
+    // ooo103014-1.odt to .doc
+    // park m_pOrigPam as well, as needed for exporting abi9915-1.odt to doc
+    m_pOrigPam->DeleteMark();
+    *m_pOrigPam->GetPoint() = SwPosition(m_pDoc->GetNodes().GetEndOfContent());
+    *m_pCurPam = *m_pOrigPam;
+
+    m_pDoc->getIDocumentRedlineAccess().SetRedlineMode(m_nOrigRedlineMode);
 }
 
 bool SwWW8Writer::InitStd97CodecUpdateMedium( ::msfilter::MSCodec_Std97& rCodec )
