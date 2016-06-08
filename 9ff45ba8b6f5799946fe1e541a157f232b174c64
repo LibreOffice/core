@@ -16,6 +16,24 @@
       "revId": "9ff45ba8b6f5799946fe1e541a157f232b174c64",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_30126db5",
+        "filename": "sfx2/source/control/templateabstractview.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1001193
+      },
+      "writtenOn": "2016-06-08T11:13:02Z",
+      "side": 1,
+      "message": "We would need an argument to call delete template hdl. When multi-selection is enabled, mItemList must be iterated to check which items have been selected. mItemList.empty() check was an optional choice though.",
+      "parentUuid": "da7fb54a_f09f255d",
+      "revId": "9ff45ba8b6f5799946fe1e541a157f232b174c64",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
