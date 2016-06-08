@@ -39,23 +39,23 @@ inline void lclAddLineSegmentVertices(RenderParameters& rRenderParameter, GLfloa
 
 } // end anonymous namespace
 
-void RenderList::addDrawPixel(long nX, long nY, const SalColor& rColor)
+void RenderList::addDrawPixel(long nX, long nY, SalColor nColor)
 {
-    if (rColor == SALCOLOR_NONE)
+    if (nColor == SALCOLOR_NONE)
         return;
 
     checkOverlapping(basegfx::B2DRange(nX, nY, nX, nY));
 
     RenderParameters& rRenderParameter = maRenderEntries.back().maTriangleParameters;
     vcl::vertex::addRectangle<GL_TRIANGLES>(rRenderParameter.maVertices, nX - 0.5f, nY - 0.5f, nX + 0.5f, nY + 0.5f);
-    vcl::vertex::addQuadColors<GL_TRIANGLES>(rRenderParameter.maColors, rColor, 0.0f);
+    vcl::vertex::addQuadColors<GL_TRIANGLES>(rRenderParameter.maColors, nColor, 0.0f);
     vcl::vertex::addQuadEmptyExtrusionVectors<GL_TRIANGLES>(rRenderParameter.maExtrusionVectors);
 }
 
 void RenderList::addDrawRectangle(long nX, long nY, long nWidth, long nHeight, double fTransparency,
-                                  const SalColor& rLineColor, const SalColor& rFillColor)
+                                  SalColor nLineColor, SalColor nFillColor)
 {
-    if (rLineColor == SALCOLOR_NONE && rFillColor == SALCOLOR_NONE)
+    if (nLineColor == SALCOLOR_NONE && nFillColor == SALCOLOR_NONE)
         return;
     if (fTransparency == 1.0f)
         return;
@@ -70,17 +70,17 @@ void RenderList::addDrawRectangle(long nX, long nY, long nWidth, long nHeight, d
     RenderParameters& rRenderParameter = maRenderEntries.back().maTriangleParameters;
 
     // Draw rectangle stroke with line color
-    if (rLineColor != SALCOLOR_NONE)
+    if (nLineColor != SALCOLOR_NONE)
     {
         vcl::vertex::addRectangle<GL_TRIANGLES>(rRenderParameter.maVertices, fX1 - 0.5f, fY1 - 0.5f, fX1 + 0.5f, fY2 + 0.5f);
         vcl::vertex::addRectangle<GL_TRIANGLES>(rRenderParameter.maVertices, fX1 - 0.5f, fY1 - 0.5f, fX2 + 0.5f, fY1 + 0.5f);
         vcl::vertex::addRectangle<GL_TRIANGLES>(rRenderParameter.maVertices, fX2 - 0.5f, fY1 - 0.5f, fX2 + 0.5f, fY2 + 0.5f);
         vcl::vertex::addRectangle<GL_TRIANGLES>(rRenderParameter.maVertices, fX1 - 0.5f, fY2 - 0.5f, fX2 + 0.5f, fY2 + 0.5f);
 
-        vcl::vertex::addQuadColors<GL_TRIANGLES>(rRenderParameter.maColors, rLineColor, fTransparency);
-        vcl::vertex::addQuadColors<GL_TRIANGLES>(rRenderParameter.maColors, rLineColor, fTransparency);
-        vcl::vertex::addQuadColors<GL_TRIANGLES>(rRenderParameter.maColors, rLineColor, fTransparency);
-        vcl::vertex::addQuadColors<GL_TRIANGLES>(rRenderParameter.maColors, rLineColor, fTransparency);
+        vcl::vertex::addQuadColors<GL_TRIANGLES>(rRenderParameter.maColors, nLineColor, fTransparency);
+        vcl::vertex::addQuadColors<GL_TRIANGLES>(rRenderParameter.maColors, nLineColor, fTransparency);
+        vcl::vertex::addQuadColors<GL_TRIANGLES>(rRenderParameter.maColors, nLineColor, fTransparency);
+        vcl::vertex::addQuadColors<GL_TRIANGLES>(rRenderParameter.maColors, nLineColor, fTransparency);
 
         vcl::vertex::addQuadEmptyExtrusionVectors<GL_TRIANGLES>(rRenderParameter.maExtrusionVectors);
         vcl::vertex::addQuadEmptyExtrusionVectors<GL_TRIANGLES>(rRenderParameter.maExtrusionVectors);
@@ -88,9 +88,9 @@ void RenderList::addDrawRectangle(long nX, long nY, long nWidth, long nHeight, d
         vcl::vertex::addQuadEmptyExtrusionVectors<GL_TRIANGLES>(rRenderParameter.maExtrusionVectors);
     }
 
-    if (rFillColor != SALCOLOR_NONE)
+    if (nFillColor != SALCOLOR_NONE)
     {
-        if (rLineColor == SALCOLOR_NONE)
+        if (nLineColor == SALCOLOR_NONE)
         {
             // Draw rectangle stroke with fill color
             vcl::vertex::addRectangle<GL_TRIANGLES>(rRenderParameter.maVertices, fX1 - 0.5f, fY1 - 0.5f, fX1 + 0.5f, fY2 + 0.5f);
@@ -98,10 +98,10 @@ void RenderList::addDrawRectangle(long nX, long nY, long nWidth, long nHeight, d
             vcl::vertex::addRectangle<GL_TRIANGLES>(rRenderParameter.maVertices, fX2 - 0.5f, fY1 - 0.5f, fX2 + 0.5f, fY2 + 0.5f);
             vcl::vertex::addRectangle<GL_TRIANGLES>(rRenderParameter.maVertices, fX1 - 0.5f, fY2 - 0.5f, fX2 + 0.5f, fY2 + 0.5f);
 
-            vcl::vertex::addQuadColors<GL_TRIANGLES>(rRenderParameter.maColors, rFillColor, fTransparency);
-            vcl::vertex::addQuadColors<GL_TRIANGLES>(rRenderParameter.maColors, rFillColor, fTransparency);
-            vcl::vertex::addQuadColors<GL_TRIANGLES>(rRenderParameter.maColors, rFillColor, fTransparency);
-            vcl::vertex::addQuadColors<GL_TRIANGLES>(rRenderParameter.maColors, rFillColor, fTransparency);
+            vcl::vertex::addQuadColors<GL_TRIANGLES>(rRenderParameter.maColors, nFillColor, fTransparency);
+            vcl::vertex::addQuadColors<GL_TRIANGLES>(rRenderParameter.maColors, nFillColor, fTransparency);
+            vcl::vertex::addQuadColors<GL_TRIANGLES>(rRenderParameter.maColors, nFillColor, fTransparency);
+            vcl::vertex::addQuadColors<GL_TRIANGLES>(rRenderParameter.maColors, nFillColor, fTransparency);
 
             vcl::vertex::addQuadEmptyExtrusionVectors<GL_TRIANGLES>(rRenderParameter.maExtrusionVectors);
             vcl::vertex::addQuadEmptyExtrusionVectors<GL_TRIANGLES>(rRenderParameter.maExtrusionVectors);
@@ -110,29 +110,29 @@ void RenderList::addDrawRectangle(long nX, long nY, long nWidth, long nHeight, d
         }
         // Draw rectangle fill with fill color
         vcl::vertex::addRectangle<GL_TRIANGLES>(rRenderParameter.maVertices, fX1 + 0.5f, fY1 + 0.5f, fX2 - 0.5f, fY2 - 0.5f);
-        vcl::vertex::addQuadColors<GL_TRIANGLES>(rRenderParameter.maColors, rFillColor, fTransparency);
+        vcl::vertex::addQuadColors<GL_TRIANGLES>(rRenderParameter.maColors, nFillColor, fTransparency);
         vcl::vertex::addQuadEmptyExtrusionVectors<GL_TRIANGLES>(rRenderParameter.maExtrusionVectors);
     }
 }
 
-void RenderList::addDrawLine(long nX1, long nY1, long nX2, long nY2, const SalColor& rLineColor, bool bUseAA)
+void RenderList::addDrawLine(long nX1, long nY1, long nX2, long nY2, SalColor nLineColor, bool bUseAA)
 {
-    if (rLineColor == SALCOLOR_NONE)
+    if (nLineColor == SALCOLOR_NONE)
         return;
 
     checkOverlapping(basegfx::B2DRange(nX1, nY1, nX2, nY2));
 
     RenderParameters& rRenderParameter = bUseAA ? maRenderEntries.back().maLineAAParameters :
                                                   maRenderEntries.back().maLineParameters;
-    lclAddLineSegmentVertices(rRenderParameter, nX1, nY1, nX2, nY2, rLineColor, 0.0f);
+    lclAddLineSegmentVertices(rRenderParameter, nX1, nY1, nX2, nY2, nLineColor, 0.0f);
 }
 
 void RenderList::addDrawPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPolygon, double fTransparency,
-                        const SalColor& rLineColor, const SalColor& rFillColor, bool bUseAA)
+                        SalColor nLineColor, SalColor nFillColor, bool bUseAA)
 {
     if (rPolyPolygon.count() <= 0)
         return;
-    if (rLineColor == SALCOLOR_NONE && rFillColor == SALCOLOR_NONE)
+    if (nLineColor == SALCOLOR_NONE && nFillColor == SALCOLOR_NONE)
         return;
     if (fTransparency == 1.0)
         return;
@@ -142,7 +142,7 @@ void RenderList::addDrawPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPolygon,
     RenderParameters& rLineParameter = maRenderEntries.back().maLineParameters;
     RenderParameters& rLineAAParameter = maRenderEntries.back().maLineAAParameters;
 
-    if (rFillColor != SALCOLOR_NONE)
+    if (nFillColor != SALCOLOR_NONE)
     {
         RenderParameters& rTriangleParameter = maRenderEntries.back().maTriangleParameters;
 
@@ -167,25 +167,25 @@ void RenderList::addDrawPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPolygon,
                                                          topX2,    topY,
                                                          bottomX1, bottomY,
                                                          bottomX2, bottomY);
-                vcl::vertex::addQuadColors<GL_TRIANGLES>(rTriangleParameter.maColors, rFillColor, fTransparency);
+                vcl::vertex::addQuadColors<GL_TRIANGLES>(rTriangleParameter.maColors, nFillColor, fTransparency);
                 vcl::vertex::addQuadEmptyExtrusionVectors<GL_TRIANGLES>(rTriangleParameter.maExtrusionVectors);
 
                 if (bUseAA)
                 {
                     lclAddLineSegmentVertices(rLineAAParameter, topX1, topY, topX2, topY,
-                                              rFillColor, fTransparency);
+                                              nFillColor, fTransparency);
                     lclAddLineSegmentVertices(rLineAAParameter, topX2, topY, bottomX2, bottomY,
-                                              rFillColor, fTransparency);
+                                              nFillColor, fTransparency);
                     lclAddLineSegmentVertices(rLineAAParameter, bottomX2, bottomY, bottomX1, bottomY,
-                                              rFillColor, fTransparency);
+                                              nFillColor, fTransparency);
                     lclAddLineSegmentVertices(rLineAAParameter, bottomX1, bottomY, topX1, topY,
-                                              rFillColor, fTransparency);
+                                              nFillColor, fTransparency);
                 }
             }
         }
     }
 
-    if (rLineColor != SALCOLOR_NONE && rLineColor != rFillColor)
+    if (nLineColor != SALCOLOR_NONE && nLineColor != nFillColor)
     {
         RenderParameters& rParameter = bUseAA ? rLineAAParameter : rLineParameter;
 
@@ -210,13 +210,13 @@ void RenderList::addDrawPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPolygon,
                 x2 = aPolygon.getB2DPoint(index2).getX();
                 y2 = aPolygon.getB2DPoint(index2).getY();
 
-                lclAddLineSegmentVertices(rParameter, x1, y1, x2, y2, rLineColor, fTransparency);
+                lclAddLineSegmentVertices(rParameter, x1, y1, x2, y2, nLineColor, fTransparency);
             }
         }
     }
 }
 
-bool RenderList::addDrawTextureWithMaskColor(OpenGLTexture& rTexture, const SalColor& rColor, const SalTwoRect& r2Rect)
+bool RenderList::addDrawTextureWithMaskColor(OpenGLTexture& rTexture, SalColor nColor, const SalTwoRect& r2Rect)
 {
     if (!rTexture)
         return false;
@@ -236,7 +236,7 @@ bool RenderList::addDrawTextureWithMaskColor(OpenGLTexture& rTexture, const SalC
     rTexture.FillCoords<GL_TRIANGLES>(rTextureParameter.maTextureCoords, r2Rect, false);
 
     vcl::vertex::addRectangle<GL_TRIANGLES>(rTextureParameter.maVertices, fX1, fY1, fX2, fY2);
-    vcl::vertex::addQuadColors<GL_TRIANGLES>(rTextureParameter.maColors, rColor, 0.0f);
+    vcl::vertex::addQuadColors<GL_TRIANGLES>(rTextureParameter.maColors, nColor, 0.0f);
 
     return true;
 }

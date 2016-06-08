@@ -145,17 +145,17 @@ public:
         return maRenderEntries;
     }
 
-    bool addDrawTextureWithMaskColor(OpenGLTexture& rTexture, const SalColor& rColor, const SalTwoRect& r2Rect);
+    bool addDrawTextureWithMaskColor(OpenGLTexture& rTexture, SalColor nColor, const SalTwoRect& r2Rect);
 
-    void addDrawPixel(long nX, long nY, const SalColor& rColor);
+    void addDrawPixel(long nX, long nY, SalColor nColor);
 
     void addDrawRectangle(long nX, long nY, long nWidth, long nHeight, double fTransparency,
-                          const SalColor& rLineColor, const SalColor& rFillColor);
+                          SalColor nLineColor, SalColor nFillColor);
 
-    void addDrawLine(long nX1, long nY1, long nX2, long nY2, const SalColor& rLineColor, bool bUseAA);
+    void addDrawLine(long nX1, long nY1, long nX2, long nY2, SalColor nLineColor, bool bUseAA);
 
     void addDrawPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPolygon, double fTransparency,
-                            const SalColor& rLineColor, const SalColor& rFillColor, bool bUseAA);
+                            SalColor nLineColor, SalColor nFillColor, bool bUseAA);
 };
 
 #endif // INCLUDED_VCL_INC_OPENGL_RENDERLIST_H
