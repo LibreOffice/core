@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_d0c14182",
+        "filename": "sw/source/core/unocore/unostyle.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 4470,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2016-06-08T06:58:30Z",
+      "side": 1,
+      "message": "Can\u0027t this be \"const auto\u0026\"? After all you\u0027re only invoking opeartor[] on it, nothing else. Currently this code copies the map again and again.",
+      "revId": "74f8c5654ef03397ae751e2ae5b1200d96574587",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
