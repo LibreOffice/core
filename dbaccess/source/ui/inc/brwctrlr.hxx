@@ -93,8 +93,8 @@ namespace dbaui
         AutoTimer               m_aInvalidateClipboard;             // for testing the state of the CUT/COPY/PASTE-slots
 
         TransferableDataHelper  m_aSystemClipboard;     // content of the clipboard
-        TransferableClipboardListener*
-                                m_pClipbordNotifier;    // notifier for changes in the clipboard
+        rtl::Reference<TransferableClipboardListener>
+                                m_pClipboardNotifier;    // notifier for changes in the clipboard
 
         OAsynchronousLink       m_aAsyncGetCellFocus;
         OAsynchronousLink       m_aAsyncDisplayError;

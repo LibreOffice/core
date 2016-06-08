@@ -109,8 +109,8 @@ namespace dbaui
         ::dbaccess::ODsnTypeCollection
                                 m_aTypeCollection;
         OTableCopyHelper        m_aTableCopyHelper;
-        TransferableClipboardListener*
-                                m_pClipbordNotifier;        // notifier for changes in the clipboard
+        rtl::Reference<TransferableClipboardListener>
+                                m_pClipboardNotifier;        // notifier for changes in the clipboard
         ImplSVEvent *           m_nAsyncDrop;
         OAsynchronousLink       m_aSelectContainerEvent;
         PreviewMode             m_ePreviewMode;             // the mode of the preview

@@ -533,7 +533,6 @@ Any SAL_CALL SbaXDataBrowserController::queryInterface(const Type& _rType) throw
 SbaXDataBrowserController::SbaXDataBrowserController(const Reference< css::uno::XComponentContext >& _rM)
     :SbaXDataBrowserController_Base(_rM)
     ,m_nRowSetPrivileges(0)
-    ,m_pClipbordNotifier( nullptr )
     ,m_aAsyncGetCellFocus(LINK(this, SbaXDataBrowserController, OnAsyncGetCellFocus))
     ,m_aAsyncDisplayError( LINK( this, SbaXDataBrowserController, OnAsyncDisplayError ) )
     ,m_sStateSaveRecord(ModuleRes(RID_STR_SAVE_CURRENT_RECORD))
@@ -784,9 +783,8 @@ bool SbaXDataBrowserController::Construct(vcl::Window* pParent)
     m_aSystemClipboard = TransferableDataHelper::CreateFromSystemClipboard( getView() );
     m_aSystemClipboard.StartClipboardListening( );
 
-    m_pClipbordNotifier = new TransferableClipboardListener( LINK( this, SbaXDataBrowserController, OnClipboardChanged ) );
-    m_pClipbordNotifier->acquire();
-    m_pClipbordNotifier->AddListener( getView() );
+    m_pClipboardNotifier = new TransferableClipboardListener( LINK( this, SbaXDataBrowserController, OnClipboardChanged ) );
+    m_pClipboardNotifier->AddListener( getView() );
 
     // this call create the toolbox
     SbaXDataBrowserController_Base::Construct(pParent);
@@ -1194,12 +1192,11 @@ void SbaXDataBrowserController::disposing()
 
     removeModelListeners(getControlModel());
 
-    if ( getView() && m_pClipbordNotifier  )
+    if ( getView() && m_pClipboardNotifier.is()  )
     {
-        m_pClipbordNotifier->ClearCallbackLink();
-        m_pClipbordNotifier->RemoveListener( getView() );
-        m_pClipbordNotifier->release();
-        m_pClipbordNotifier = nullptr;
+        m_pClipboardNotifier->ClearCallbackLink();
+        m_pClipboardNotifier->RemoveListener( getView() );
+        m_pClipboardNotifier.clear();
     }
 
     if (getBrowserView())
