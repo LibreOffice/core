@@ -142,7 +142,7 @@ void SAL_CALL java_sql_PreparedStatement::setString( sal_Int32 parameterIndex, c
 
 css::uno::Reference< css::sdbc::XConnection > SAL_CALL java_sql_PreparedStatement::getConnection(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
-    return Reference< XConnection >(m_pConnection);
+    return Reference< XConnection >(m_pConnection.get());
 }
 
 

@@ -71,7 +71,7 @@ namespace connectivity
             ::std::list< OUString>   m_aBatchList;
             OUString                 m_sSqlStatement;
 
-            OConnection*                    m_pConnection;// The owning Connection object
+            rtl::Reference<OConnection>     m_pConnection;// The owning Connection object
             SQLHANDLE                       m_aStatementHandle;
             SQLUSMALLINT*                   m_pRowStatusArray;
 
@@ -188,7 +188,7 @@ namespace connectivity
 
             // other methods
             SQLHANDLE getConnectionHandle() { return m_pConnection->getConnection(); }
-            OConnection* getOwnConnection() const { return m_pConnection;}
+            OConnection* getOwnConnection() const { return m_pConnection.get();}
             /** getCursorProperties return the properties for a specific cursor type
                 @param _nCursorType     the CursorType
                 @param bFirst           when true the first property set is returned

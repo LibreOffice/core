@@ -179,7 +179,7 @@ Reference< XConnection > SAL_CALL OPreparedStatement::getConnection(  ) throw(SQ
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OCommonStatement_IBASE::rBHelper.bDisposed);
 
-    return Reference< XConnection >(m_pConnection);
+    return Reference< XConnection >(m_pConnection.get());
 }
 
 
