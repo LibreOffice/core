@@ -340,17 +340,22 @@ void SmCursor::InsertNodes(SmNodeList* pNewNodes){
     FinishEdit(pLineList, pLineParent, nParentIndex, PosAfterInsert);
 }
 
-SmNodeList::iterator SmCursor::FindPositionInLineList(SmNodeList* pLineList, SmCaretPos aCaretPos) {
+SmNodeList::iterator SmCursor::FindPositionInLineList(SmNodeList* pLineList,
+                                                      const SmCaretPos& rCaretPos)
+{
     //Find iterator for position
     SmNodeList::iterator it;
     for(it = pLineList->begin(); it != pLineList->end(); ++it){
-        if(*it == aCaretPos.pSelectedNode){
-            if((*it)->GetType() == NTEXT){
+        if(*it == rCaretPos.pSelectedNode)
+        {
+            if((*it)->GetType() == NTEXT)
+            {
                 //Split textnode if needed
-                if(aCaretPos.Index > 0){
-                    SmTextNode* pText = static_cast<SmTextNode*>(aCaretPos.pSelectedNode);
-                    OUString str1 = pText->GetText().copy(0, aCaretPos.Index);
-                    OUString str2 = pText->GetText().copy(aCaretPos.Index);
+                if(rCaretPos.Index > 0)
+                {
+                    SmTextNode* pText = static_cast<SmTextNode*>(rCaretPos.pSelectedNode);
+                    OUString str1 = pText->GetText().copy(0, rCaretPos.Index);
+                    OUString str2 = pText->GetText().copy(rCaretPos.Index);
                     pText->ChangeText(str1);
                     ++it;
                     //Insert str2 as new text node
