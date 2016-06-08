@@ -259,9 +259,9 @@
       </menu:menu>
       <menu:menuitem menu:id=".uno:InsertCaptionDialog"/>
       <menu:menuseparator/>
+      <menu:menuitem menu:id=".uno:HyperlinkDialog"/>
       <menu:menu menu:id=".uno:InsertLinkMenu">
         <menu:menupopup>
-          <menu:menuitem menu:id=".uno:HyperlinkDialog"/>
           <menu:menuitem menu:id=".uno:InsertBookmark"/>
           <menu:menuitem menu:id=".uno:InsertReferenceField"/>
         </menu:menupopup>
