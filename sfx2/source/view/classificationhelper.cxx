@@ -390,7 +390,7 @@ void SfxClassificationHelper::Impl::setStartValidity(SfxClassificationPolicyType
         return;
 
     SfxClassificationCategory& rCategory = itCategory->second;
-    std::map<OUString, OUString>::iterator it = rCategory.m_aLabels.find(policyTypeToString(eType) + PROP_STARTVALIDITY());
+    auto it = rCategory.m_aLabels.find(policyTypeToString(eType) + PROP_STARTVALIDITY());
     if (it != rCategory.m_aLabels.end())
     {
         if (it->second == PROP_NONE())
@@ -554,7 +554,7 @@ bool SfxClassificationHelper::HasImpactLevel()
         return false;
 
     SfxClassificationCategory& rCategory = itCategory->second;
-    std::map<OUString, OUString>::iterator it = rCategory.m_aLabels.find(PROP_PREFIX_INTELLECTUALPROPERTY() + PROP_IMPACTSCALE());
+    auto it = rCategory.m_aLabels.find(PROP_PREFIX_INTELLECTUALPROPERTY() + PROP_IMPACTSCALE());
     if (it == rCategory.m_aLabels.end())
         return false;
 
@@ -572,7 +572,7 @@ bool SfxClassificationHelper::HasDocumentHeader()
         return false;
 
     SfxClassificationCategory& rCategory = itCategory->second;
-    std::map<OUString, OUString>::iterator it = rCategory.m_aLabels.find(PROP_PREFIX_INTELLECTUALPROPERTY() + PROP_DOCHEADER());
+    auto it = rCategory.m_aLabels.find(PROP_PREFIX_INTELLECTUALPROPERTY() + PROP_DOCHEADER());
     if (it == rCategory.m_aLabels.end() || it->second.isEmpty())
         return false;
 
@@ -586,7 +586,7 @@ bool SfxClassificationHelper::HasDocumentFooter()
         return false;
 
     SfxClassificationCategory& rCategory = itCategory->second;
-    std::map<OUString, OUString>::iterator it = rCategory.m_aLabels.find(PROP_PREFIX_INTELLECTUALPROPERTY() + PROP_DOCFOOTER());
+    auto it = rCategory.m_aLabels.find(PROP_PREFIX_INTELLECTUALPROPERTY() + PROP_DOCFOOTER());
     if (it == rCategory.m_aLabels.end() || it->second.isEmpty())
         return false;
 
@@ -602,7 +602,7 @@ basegfx::BColor SfxClassificationHelper::GetImpactLevelColor()
         return aRet;
 
     SfxClassificationCategory& rCategory = itCategory->second;
-    std::map<OUString, OUString>::iterator it = rCategory.m_aLabels.find(PROP_PREFIX_INTELLECTUALPROPERTY() + PROP_IMPACTSCALE());
+    auto it = rCategory.m_aLabels.find(PROP_PREFIX_INTELLECTUALPROPERTY() + PROP_IMPACTSCALE());
     if (it == rCategory.m_aLabels.end())
         return aRet;
     OUString aScale = it->second;
@@ -624,7 +624,7 @@ basegfx::BColor SfxClassificationHelper::GetImpactLevelColor()
             aColors["2"] = basegfx::BColor(1.0, 0.5, 0.0);
             aColors["3"] = basegfx::BColor(0.5, 0.0, 0.0);
         }
-        std::map<OUString, basegfx::BColor>::iterator itColor = aColors.find(aLevel);
+        auto itColor = aColors.find(aLevel);
         if (itColor == aColors.end())
             return aRet;
         aRet = itColor->second;
@@ -639,7 +639,7 @@ basegfx::BColor SfxClassificationHelper::GetImpactLevelColor()
             aColors["Moderate"] = basegfx::BColor(1.0, 0.5, 0.0);
             aColors["High"] = basegfx::BColor(0.5, 0.0, 0.0);
         }
-        std::map<OUString, basegfx::BColor>::iterator itColor = aColors.find(aLevel);
+        auto itColor = aColors.find(aLevel);
         if (itColor == aColors.end())
             return aRet;
         aRet = itColor->second;
@@ -657,7 +657,7 @@ sal_Int32 SfxClassificationHelper::GetImpactLevel()
         return nRet;
 
     SfxClassificationCategory& rCategory = itCategory->second;
-    std::map<OUString, OUString>::iterator it = rCategory.m_aLabels.find(PROP_PREFIX_INTELLECTUALPROPERTY() + PROP_IMPACTSCALE());
+    auto it = rCategory.m_aLabels.find(PROP_PREFIX_INTELLECTUALPROPERTY() + PROP_IMPACTSCALE());
     if (it == rCategory.m_aLabels.end())
         return nRet;
     OUString aScale = it->second;
@@ -683,7 +683,7 @@ sal_Int32 SfxClassificationHelper::GetImpactLevel()
             aValues["Moderate"] = 1;
             aValues["High"] = 2;
         }
-        std::map<OUString, sal_Int32>::iterator itValues = aValues.find(aLevel);
+        auto itValues = aValues.find(aLevel);
         if (itValues == aValues.end())
             return nRet;
         nRet = itValues->second;
@@ -699,7 +699,7 @@ OUString SfxClassificationHelper::GetImpactScale()
         return OUString();
 
     SfxClassificationCategory& rCategory = itCategory->second;
-    std::map<OUString, OUString>::iterator it = rCategory.m_aLabels.find(PROP_PREFIX_INTELLECTUALPROPERTY() + PROP_IMPACTSCALE());
+    auto it = rCategory.m_aLabels.find(PROP_PREFIX_INTELLECTUALPROPERTY() + PROP_IMPACTSCALE());
     if (it != rCategory.m_aLabels.end())
         return it->second;
 
@@ -713,7 +713,7 @@ OUString SfxClassificationHelper::GetDocumentWatermark()
         return OUString();
 
     SfxClassificationCategory& rCategory = itCategory->second;
-    std::map<OUString, OUString>::iterator it = rCategory.m_aLabels.find(PROP_PREFIX_INTELLECTUALPROPERTY() + PROP_DOCWATERMARK());
+    auto it = rCategory.m_aLabels.find(PROP_PREFIX_INTELLECTUALPROPERTY() + PROP_DOCWATERMARK());
     if (it != rCategory.m_aLabels.end())
         return it->second;
 
@@ -738,7 +738,7 @@ void SfxClassificationHelper::SetBACName(const OUString& rName, SfxClassificatio
     if (m_pImpl->m_aCategories.empty())
         m_pImpl->parsePolicy();
 
-    std::vector<SfxClassificationCategory>::iterator it = std::find_if(m_pImpl->m_aCategories.begin(), m_pImpl->m_aCategories.end(), [&](const SfxClassificationCategory& rCategory)
+    auto it = std::find_if(m_pImpl->m_aCategories.begin(), m_pImpl->m_aCategories.end(), [&](const SfxClassificationCategory& rCategory)
     {
         return rCategory.m_aName == rName;
     });
