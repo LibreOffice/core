@@ -417,13 +417,11 @@ sal_Int32 StgDirEntry::Seek( sal_Int32 nNew )
         if( nNew < 0 )
             nNew = nSize;
 
-        // try to enlarge, the readonly streams should not allow this
+        // try to enlarge, readonly streams do not allow this
         if( nNew > nSize )
         {
             if ( !( m_nMode & StreamMode::WRITE ) || !SetSize( nNew ) )
             {
-                SAL_WARN_IF(!(m_nMode & StreamMode::WRITE), "sot",
-                    "Trying to resize readonly stream by seeking, could be a wrong offset: " << nNew);
                 return m_nPos;
             }
             else
