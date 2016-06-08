@@ -47,35 +47,31 @@
 struct DebugData
 {
     DbgTestSolarMutexProc   pDbgTestSolarMutex;
+    bool                    bTestSolarMutexWasSet;
 
     DebugData()
-        :pDbgTestSolarMutex( nullptr )
+        :pDbgTestSolarMutex( nullptr ), bTestSolarMutexWasSet(false)
     {
     }
 };
 
 static DebugData aDebugData;
 
-void* DbgFunc( sal_uInt16 nAction, void* pParam )
+void DbgSetTestSolarMutex( DbgTestSolarMutexProc pParam )
 {
-    DebugData* pDebugData = &aDebugData;
+    aDebugData.pDbgTestSolarMutex = pParam;
+    if (pParam)
+        aDebugData.bTestSolarMutexWasSet = true;
+}
 
-    switch ( nAction )
-    {
-    case DBG_FUNC_SETTESTSOLARMUTEX:
-        pDebugData->pDbgTestSolarMutex = reinterpret_cast<DbgTestSolarMutexProc>(reinterpret_cast<sal_uIntPtr>(pParam));
-        break;
-
-    case DBG_FUNC_TESTSOLARMUTEX:
-        SAL_WARN_IF(
-            pDebugData->pDbgTestSolarMutex == nullptr, "tools.debug",
-            "no DbgTestSolarMutex function set");
-        if ( pDebugData->pDbgTestSolarMutex )
-            pDebugData->pDbgTestSolarMutex();
-        break;
-    }
-
-    return nullptr;
+void DbgTestSolarMutex()
+{
+    // don't warn if it was set at least once, because then we're probably just post-DeInitVCL()
+    SAL_WARN_IF(
+        !aDebugData.bTestSolarMutexWasSet && aDebugData.pDbgTestSolarMutex == nullptr, "tools.debug",
+        "no DbgTestSolarMutex function set");
+    if ( aDebugData.pDbgTestSolarMutex )
+        aDebugData.pDbgTestSolarMutex();
 }
 
 #endif
