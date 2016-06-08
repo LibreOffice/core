@@ -2236,11 +2236,11 @@ void XclExpXF::SaveXml( XclExpXmlStream& rStrm )
             // OOXTODO: XML_quotePrefix,
             // OOXTODO: XML_pivotButton,
             // OOXTODO: XML_applyNumberFormat,  ;
-            XML_applyFont,          XclXmlUtils::ToPsz( mbFontUsed ),
+            XML_applyFont,          mbFontUsed ? XclXmlUtils::ToPsz( mbFontUsed ) : nullptr,
             // OOXTODO: XML_applyFill,
-            XML_applyBorder,        XclXmlUtils::ToPsz( mbBorderUsed ),
-            XML_applyAlignment,     XclXmlUtils::ToPsz( mbAlignUsed ),
-            XML_applyProtection,    XclXmlUtils::ToPsz( mbProtUsed ),
+            XML_applyBorder,        mbBorderUsed ? XclXmlUtils::ToPsz( mbBorderUsed ) : nullptr,
+            XML_applyAlignment,     mbAlignUsed ? XclXmlUtils::ToPsz( mbAlignUsed ) : nullptr,
+            XML_applyProtection,    mbProtUsed ? XclXmlUtils::ToPsz( mbProtUsed ) : nullptr,
             FSEND );
     if( mbAlignUsed )
         maAlignment.SaveXml( rStrm );

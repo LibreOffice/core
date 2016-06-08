@@ -1648,9 +1648,9 @@ void XclExpColinfo::SaveXml( XclExpXmlStream& rStrm )
 
     rStrm.GetCurrentStream()->singleElement( XML_col,
             // OOXTODO: XML_bestFit,
-            XML_collapsed,      XclXmlUtils::ToPsz( ::get_flag( mnFlags, EXC_COLINFO_COLLAPSED ) ),
+            XML_collapsed,      ::get_flag( mnFlags, EXC_COLINFO_COLLAPSED ) ? XclXmlUtils::ToPsz( ::get_flag( mnFlags, EXC_COLINFO_COLLAPSED ) ) : nullptr,
             // OOXTODO: XML_customWidth,
-            XML_hidden,         XclXmlUtils::ToPsz( ::get_flag( mnFlags, EXC_COLINFO_HIDDEN ) ),
+            XML_hidden,         ::get_flag( mnFlags, EXC_COLINFO_HIDDEN ) ? XclXmlUtils::ToPsz( ::get_flag( mnFlags, EXC_COLINFO_HIDDEN ) ) : nullptr,
             XML_max,            OString::number(  (nLastXclCol+1) ).getStr(),
             XML_min,            OString::number(  (mnFirstXclCol+1) ).getStr(),
             // OOXTODO: XML_outlineLevel,
@@ -2066,15 +2066,15 @@ void XclExpRow::SaveXml( XclExpXmlStream& rStrm )
     for ( sal_uInt32 i=0; i<mnXclRowRpt; ++i )
     {
         rWorksheet->startElement( XML_row,
-                XML_r,              OString::number(  (mnCurrentRow++) ).getStr(),
+                XML_r,              OString::number( (mnCurrentRow++) ).getStr(),
                 // OOXTODO: XML_spans,          optional
                 XML_s,              haveFormat ? lcl_GetStyleId( rStrm, mnXFIndex ).getStr() : nullptr,
-                XML_customFormat,   XclXmlUtils::ToPsz( haveFormat ),
-                XML_ht,             OString::number( (double) mnHeight / 20.0 ).getStr(),
-                XML_hidden,         XclXmlUtils::ToPsz( ::get_flag( mnFlags, EXC_ROW_HIDDEN ) ),
-                XML_customHeight,   XclXmlUtils::ToPsz( ::get_flag( mnFlags, EXC_ROW_UNSYNCED ) ),
-                XML_outlineLevel,   OString::number(  mnOutlineLevel ).getStr(),
-                XML_collapsed,      XclXmlUtils::ToPsz( ::get_flag( mnFlags, EXC_ROW_COLLAPSED ) ),
+                XML_customFormat,   haveFormat ? XclXmlUtils::ToPsz( haveFormat ) : nullptr,
+                XML_ht,             ::get_flag( mnFlags, EXC_ROW_UNSYNCED ) ? OString::number( (double) mnHeight / 20.0 ).getStr() : nullptr,
+                XML_hidden,         ::get_flag( mnFlags, EXC_ROW_HIDDEN ) ? XclXmlUtils::ToPsz( ::get_flag( mnFlags, EXC_ROW_HIDDEN ) ) : nullptr,
+                XML_customHeight,   ::get_flag( mnFlags, EXC_ROW_UNSYNCED ) ? XclXmlUtils::ToPsz( ::get_flag( mnFlags, EXC_ROW_UNSYNCED ) ) : nullptr,
+                XML_outlineLevel,   ( mnOutlineLevel != 0 ) ? OString::number( mnOutlineLevel ).getStr() : nullptr,
+                XML_collapsed,      ::get_flag( mnFlags, EXC_ROW_COLLAPSED ) ? XclXmlUtils::ToPsz( ::get_flag( mnFlags, EXC_ROW_COLLAPSED ) ) : nullptr,
                 // OOXTODO: XML_thickTop,       bool
                 // OOXTODO: XML_thickBot,       bool
                 // OOXTODO: XML_ph,             bool
