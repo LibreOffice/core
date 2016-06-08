@@ -31,6 +31,7 @@
 #include <ViewShell.hxx>
 #include <sdpage.hxx>
 #include <unomodel.hxx>
+#include <drawdoc.hxx>
 
 using namespace css;
 
@@ -57,6 +58,7 @@ public:
     void testSearchAll();
     void testSearchAllSelections();
     void testResizeTable();
+    void testResizeTableColumn();
 #endif
 
     CPPUNIT_TEST_SUITE(SdTiledRenderingTest);
@@ -72,6 +74,7 @@ public:
     CPPUNIT_TEST(testSearchAll);
     CPPUNIT_TEST(testSearchAllSelections);
     CPPUNIT_TEST(testResizeTable);
+    CPPUNIT_TEST(testResizeTableColumn);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -80,6 +83,7 @@ private:
     SdXImpressDocument* createDoc(const char* pName);
     static void callback(int nType, const char* pPayload, void* pData);
     void callbackImpl(int nType, const char* pPayload);
+    xmlDocPtr parseXmlDump();
 #endif
 
     uno::Reference<lang::XComponent> mxComponent;
@@ -90,13 +94,15 @@ private:
     sal_Int32 m_nPart;
     std::vector<OString> m_aSearchResultSelection;
     std::vector<int> m_aSearchResultPart;
+    xmlBufferPtr m_pXmlBuffer;
 #endif
 };
 
 SdTiledRenderingTest::SdTiledRenderingTest()
 #if !defined(WNT) && !defined(MACOSX)
     : m_bFound(true),
-      m_nPart(0)
+      m_nPart(0),
+      m_pXmlBuffer(nullptr)
 #endif
 {
 }
@@ -112,6 +118,11 @@ void SdTiledRenderingTest::tearDown()
 {
     if (mxComponent.is())
         mxComponent->dispose();
+
+#if !defined(_WIN32) && !defined(MACOSX)
+    if (m_pXmlBuffer)
+        xmlBufferFree(m_pXmlBuffer);
+#endif
 
     test::BootstrapFixture::tearDown();
 }
@@ -209,6 +220,28 @@ void SdTiledRenderingTest::callbackImpl(int nType, const char* pPayload)
     }
     break;
     }
+}
+
+xmlDocPtr SdTiledRenderingTest::parseXmlDump()
+{
+    if (m_pXmlBuffer)
+        xmlBufferFree(m_pXmlBuffer);
+
+    // Create the xml writer.
+    m_pXmlBuffer = xmlBufferCreate();
+    xmlTextWriterPtr pXmlWriter = xmlNewTextWriterMemory(m_pXmlBuffer, 0);
+    xmlTextWriterStartDocument(pXmlWriter, nullptr, nullptr, nullptr);
+
+    // Create the dump.
+    SdXImpressDocument* pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pImpressDocument);
+    pImpressDocument->GetDoc()->dumpAsXml(pXmlWriter);
+
+    // Delete the xml writer.
+    xmlTextWriterEndDocument(pXmlWriter);
+    xmlFreeTextWriter(pXmlWriter);
+
+    return xmlParseMemory(reinterpret_cast<const char*>(xmlBufferContent(m_pXmlBuffer)), xmlBufferLength(m_pXmlBuffer));
 }
 
 void SdTiledRenderingTest::testRegisterCallback()
@@ -499,6 +532,60 @@ void SdTiledRenderingTest::testResizeTable()
     sal_Int32 nActualRow2 = xRow2->getPropertyValue("Size").get<sal_Int32>();
     // Expected was 4000, actual was 4572, i.e. the second row after undo was larger than expected.
     CPPUNIT_ASSERT_EQUAL(nExpectedRow2, nActualRow2);
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void SdTiledRenderingTest::testResizeTableColumn()
+{
+    // Load the document.
+    comphelper::LibreOfficeKit::setActive();
+    SdXImpressDocument* pXImpressDocument = createDoc("table-column.odp");
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdPage* pActualPage = pViewShell->GetActualPage();
+    SdrObject* pObject = pActualPage->GetObj(0);
+    auto pTableObject = dynamic_cast<sdr::table::SdrTableObj*>(pObject);
+    CPPUNIT_ASSERT(pTableObject);
+
+    // Select the table by marking it + starting and ending text edit.
+    SdrView* pView = pViewShell->GetView();
+    pView->MarkObj(pObject, pView->GetSdrPageView());
+    pView->SdrBeginTextEdit(pObject);
+    pView->SdrEndTextEdit();
+
+    // Remember the original cell widths.
+    xmlDocPtr pXmlDoc = parseXmlDump();
+    OString aPrefix = "/sdrModel/sdPage/sdrObjList/sdrTableObj/sdrTableObjImpl/tableLayouter/columns/";
+    sal_Int32 nExpectedColumn1 = getXPath(pXmlDoc, aPrefix + "layout[1]", "size").toInt32();
+    sal_Int32 nExpectedColumn2 = getXPath(pXmlDoc, aPrefix + "layout[2]", "size").toInt32();
+    xmlFreeDoc(pXmlDoc);
+    pXmlDoc = nullptr;
+
+    // Resize the left column, decrease its width by 1 cm.
+    Point aInnerRowEdge = pObject->GetSnapRect().Center();
+    pXImpressDocument->setGraphicSelection(LOK_SETGRAPHICSELECTION_START, convertMm100ToTwip(aInnerRowEdge.getX()), convertMm100ToTwip(aInnerRowEdge.getY()));
+    pXImpressDocument->setGraphicSelection(LOK_SETGRAPHICSELECTION_END, convertMm100ToTwip(aInnerRowEdge.getX() - 1000), convertMm100ToTwip(aInnerRowEdge.getY()));
+
+    // Remember the resized column widths.
+    pXmlDoc = parseXmlDump();
+    sal_Int32 nResizedColumn1 = getXPath(pXmlDoc, aPrefix + "layout[1]", "size").toInt32();
+    CPPUNIT_ASSERT(nResizedColumn1 < nExpectedColumn1);
+    sal_Int32 nResizedColumn2 = getXPath(pXmlDoc, aPrefix + "layout[2]", "size").toInt32();
+    CPPUNIT_ASSERT(nResizedColumn2 > nExpectedColumn2);
+    xmlFreeDoc(pXmlDoc);
+    pXmlDoc = nullptr;
+
+    // Now undo the resize.
+    pXImpressDocument->GetDocShell()->GetUndoManager()->Undo();
+
+    // Check the undo result.
+    pXmlDoc = parseXmlDump();
+    sal_Int32 nActualColumn1 = getXPath(pXmlDoc, aPrefix + "layout[1]", "size").toInt32();
+    // Expected was 7049, actual was 6048, i.e. the first column width after undo was 1cm smaller than expected.
+    CPPUNIT_ASSERT_EQUAL(nExpectedColumn1, nActualColumn1);
+    sal_Int32 nActualColumn2 = getXPath(pXmlDoc, aPrefix + "layout[2]", "size").toInt32();
+    CPPUNIT_ASSERT_EQUAL(nExpectedColumn2, nActualColumn2);
+    xmlFreeDoc(pXmlDoc);
+    pXmlDoc = nullptr;
     comphelper::LibreOfficeKit::setActive(false);
 }
 

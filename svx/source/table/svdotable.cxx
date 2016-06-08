@@ -57,6 +57,7 @@
 #include "svx/xflftrit.hxx"
 #include "svx/xfltrit.hxx"
 #include <cppuhelper/implbase.hxx>
+#include <libxml/xmlwriter.h>
 
 
 using ::com::sun::star::uno::Any;
@@ -223,6 +224,8 @@ public:
     void dispose();
 
     sal_Int32 getColumnCount() const;
+    /// Get widths of the columns in the table.
+    std::vector<sal_Int32> getColumnWidths() const;
     sal_Int32 getRowCount() const;
 
     void DragEdge( bool mbHorizontal, int nEdge, sal_Int32 nOffset );
@@ -240,6 +243,7 @@ public:
     void connectTableStyle();
     void disconnectTableStyle();
     virtual bool isInUse() override;
+    void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 private:
     static SdrTableObjImpl* lastLayoutTable;
     static Rectangle lastLayoutInputRectangle;
@@ -249,6 +253,7 @@ private:
     static WritingMode lastLayoutMode;
     static sal_Int32 lastRowCount;
     static sal_Int32 lastColCount;
+    static std::vector<sal_Int32> lastColWidths;
 };
 
 SdrTableObjImpl* SdrTableObjImpl::lastLayoutTable = nullptr;
@@ -259,6 +264,7 @@ bool SdrTableObjImpl::lastLayoutFitHeight;
 WritingMode SdrTableObjImpl::lastLayoutMode;
 sal_Int32 SdrTableObjImpl::lastRowCount;
 sal_Int32 SdrTableObjImpl::lastColCount;
+std::vector<sal_Int32> SdrTableObjImpl::lastColWidths;
 
 SdrTableObjImpl::SdrTableObjImpl()
 : mpTableObj( nullptr )
@@ -641,6 +647,14 @@ bool SdrTableObjImpl::isInUse()
     return mpTableObj && mpTableObj->IsInserted();
 }
 
+void SdrTableObjImpl::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("sdrTableObjImpl"));
+    if (mpLayouter)
+        mpLayouter->dumpAsXml(pWriter);
+    xmlTextWriterEndElement(pWriter);
+}
+
 
 // XEventListener
 
@@ -680,6 +694,15 @@ sal_Int32 SdrTableObjImpl::getColumnCount() const
     return mxTable.is() ? mxTable->getColumnCount() : 0;
 }
 
+std::vector<sal_Int32> SdrTableObjImpl::getColumnWidths() const
+{
+    std::vector<sal_Int32> aRet;
+
+    if (mxTable.is())
+        aRet = mxTable->getColumnWidths();
+
+    return aRet;
+}
 
 
 sal_Int32 SdrTableObjImpl::getRowCount() const
@@ -701,7 +724,8 @@ void SdrTableObjImpl::LayoutTable( Rectangle& rArea, bool bFitWidth, bool bFitHe
             || lastLayoutFitWidth != bFitWidth || lastLayoutFitHeight != bFitHeight
             || lastLayoutMode != writingMode
             || lastRowCount != getRowCount()
-            || lastColCount != getColumnCount() )
+            || lastColCount != getColumnCount()
+            || lastColWidths != getColumnWidths() )
         {
             lastLayoutTable = this;
             lastLayoutInputRectangle = rArea;
@@ -710,6 +734,9 @@ void SdrTableObjImpl::LayoutTable( Rectangle& rArea, bool bFitWidth, bool bFitHe
             lastLayoutMode = writingMode;
             lastRowCount = getRowCount();
             lastColCount = getColumnCount();
+            // Column resize, when the total width and column count of the
+            // table is unchanged, but re-layout is still needed.
+            lastColWidths = getColumnWidths();
             TableModelNotifyGuard aGuard( mxTable.get() );
             mpLayouter->LayoutTable( rArea, bFitWidth, bFitHeight );
             lastLayoutResultRectangle = rArea;
@@ -2609,6 +2636,17 @@ void SdrTableObj::uno_unlock()
         mpImpl->mxTable->unlockBroadcasts();
 }
 
+void SdrTableObj::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("sdrTableObj"));
+    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+
+    SdrObject::dumpAsXml(pWriter);
+
+    mpImpl->dumpAsXml(pWriter);
+
+    xmlTextWriterEndElement(pWriter);
+}
 
 
 
