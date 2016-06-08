@@ -12,6 +12,7 @@
 #include <sfx2/templateabstractview.hxx>
 #include <sfx2/sfxresid.hxx>
 #include <tools/urlobj.hxx>
+#include <vcl/layout.hxx>
 
 #include "../doc/doc.hrc"
 
@@ -58,7 +59,22 @@ void TemplateSearchView::KeyInput( const KeyEvent& rKEvt )
 {
     vcl::KeyCode aKeyCode = rKEvt.GetKeyCode();
 
-    if(aKeyCode == (KEY_SHIFT | KEY_F10 ))
+    if(aKeyCode == ( KEY_MOD1 | KEY_A ) )
+    {
+        for (ThumbnailViewItem* pItem : mFilteredItemList)
+        {
+            if (!pItem->isSelected())
+            {
+                pItem->setSelection(true);
+                maItemStateHdl.Call(pItem);
+            }
+        }
+
+        if (IsReallyVisible() && IsUpdateMode())
+            Invalidate();
+        return;
+    }
+    else if(aKeyCode == (KEY_SHIFT | KEY_F10 ) || aKeyCode == KEY_CONTEXTMENU)
     {
         for (ThumbnailViewItem* pItem : mFilteredItemList)
         {
@@ -75,6 +91,22 @@ void TemplateSearchView::KeyInput( const KeyEvent& rKEvt )
                 break;
             }
         }
+    }
+    else if( aKeyCode == KEY_DELETE && !mFilteredItemList.empty())
+    {
+        ScopedVclPtrInstance< MessageDialog > aQueryDlg(this, SfxResId(STR_QMSG_SEL_TEMPLATE_DELETE), VclMessageType::Question, VCL_BUTTONS_YES_NO);
+
+        if ( aQueryDlg->Execute() != RET_YES )
+            return;
+
+        for (ThumbnailViewItem* pItem : mFilteredItemList)
+        {
+            if (pItem->isSelected())
+            {
+                maDeleteTemplateHdl.Call(pItem);
+            }
+        }
+        reload();
     }
 
     ThumbnailView::KeyInput(rKEvt);
@@ -113,7 +145,16 @@ IMPL_LINK_TYPED(TemplateSearchView, ContextMenuSelectHdl, Menu*, pMenu, bool)
         maEditTemplateHdl.Call(maSelectedItem);
         break;
     case MNI_DELETE:
+    {
+        ScopedVclPtrInstance< MessageDialog > aQueryDlg(this, SfxResId(STR_QMSG_SEL_TEMPLATE_DELETE), VclMessageType::Question, VCL_BUTTONS_YES_NO);
+        if ( aQueryDlg->Execute() != RET_YES )
+            break;
+
         maDeleteTemplateHdl.Call(maSelectedItem);
+        RemoveItem(maSelectedItem->mnId);
+
+        CalculateItemPositions();
+    }
         break;
     case MNI_DEFAULT_TEMPLATE:
         maDefaultTemplateHdl.Call(maSelectedItem);
