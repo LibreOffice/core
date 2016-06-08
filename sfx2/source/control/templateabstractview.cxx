@@ -193,6 +193,18 @@ void TemplateAbstractView::KeyInput( const KeyEvent& rKEvt )
             Invalidate();
         return;
     }
+    else if( aKeyCode == KEY_DELETE && !mItemList.empty())
+    {
+        auto itItemList = mItemList.begin();
+        while (itItemList != mItemList.end())
+        {
+            ThumbnailViewItem* pItem = *itItemList;
+            if(pItem->isSelected())
+                maDeleteTemplateHdl.Call(pItem);
+            ++itItemList;
+        }
+        delete *itItemList;
+    }
 
     ThumbnailView::KeyInput(rKEvt);
 }
