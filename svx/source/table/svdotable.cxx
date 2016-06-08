@@ -57,6 +57,7 @@
 #include "svx/xflftrit.hxx"
 #include "svx/xfltrit.hxx"
 #include <cppuhelper/implbase.hxx>
+#include <libxml/xmlwriter.h>
 
 
 using ::com::sun::star::uno::Any;
@@ -238,6 +239,7 @@ public:
     void connectTableStyle();
     void disconnectTableStyle();
     virtual bool isInUse() override;
+    void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 private:
     static SdrTableObjImpl* lastLayoutTable;
     static Rectangle lastLayoutInputRectangle;
@@ -622,6 +624,14 @@ void SdrTableObjImpl::disconnectTableStyle()
 bool SdrTableObjImpl::isInUse()
 {
     return mpTableObj && mpTableObj->IsInserted();
+}
+
+void SdrTableObjImpl::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("sdrTableObjImpl"));
+    if (mpLayouter)
+        mpLayouter->dumpAsXml(pWriter);
+    xmlTextWriterEndElement(pWriter);
 }
 
 
@@ -2497,6 +2507,17 @@ void SdrTableObj::uno_unlock()
         mpImpl->mxTable->unlockBroadcasts();
 }
 
+void SdrTableObj::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("sdrTableObj"));
+    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+
+    SdrObject::dumpAsXml(pWriter);
+
+    mpImpl->dumpAsXml(pWriter);
+
+    xmlTextWriterEndElement(pWriter);
+}
 
 } }
 
