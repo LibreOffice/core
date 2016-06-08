@@ -148,16 +148,13 @@ namespace connectivity
 {
 
 //=============================================================================
-struct OSQLParser_Data
+//= OSQLParser_Data
+//=============================================================================
+//-----------------------------------------------------------------------------
+OSQLParser_Data::OSQLParser_Data( const Reference< XMultiServiceFactory >& _xServiceFactory )
+    :aErrors( _xServiceFactory )
 {
-    ::com::sun::star::lang::Locale  aLocale;
-    ::connectivity::SQLError        aErrors;
-
-    OSQLParser_Data( const Reference< XMultiServiceFactory >& _xServiceFactory )
-        :aErrors( _xServiceFactory )
-    {
-    }
-};
+}
 
 //=============================================================================
 //= SQLParseNodeParameter
