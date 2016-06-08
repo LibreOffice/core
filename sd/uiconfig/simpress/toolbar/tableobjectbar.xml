@@ -29,7 +29,7 @@
  <toolbar:toolbaritem xlink:href=".uno:MergeCells"/>
  <toolbar:toolbaritem xlink:href=".uno:SplitCell"/>
  <toolbar:toolbaritem xlink:href=".uno:OptimizeTable"/>
- <toolbar:toolbarbreak/>
+ <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:CellVertTop"/>
  <toolbar:toolbaritem xlink:href=".uno:CellVertCenter"/>
  <toolbar:toolbaritem xlink:href=".uno:CellVertBottom"/>

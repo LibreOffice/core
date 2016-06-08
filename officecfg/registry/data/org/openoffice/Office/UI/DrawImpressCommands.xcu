@@ -133,7 +133,7 @@
       </node>
       <node oor:name=".uno:TextFitToSizeTool" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Fit Text to Frame</value>
+          <value xml:lang="en-US">Fit Text in Textbox Size</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
