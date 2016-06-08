@@ -33,6 +33,23 @@
       "revId": "4619afeda01af1390312e2ebe905e2487c38ce6e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_2b059cc1",
+        "filename": "sw/source/core/unocore/unostyle.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 4513,
+      "author": {
+        "id": 1001243
+      },
+      "writtenOn": "2016-06-08T22:51:09Z",
+      "side": 1,
+      "message": "stack vars",
+      "revId": "4619afeda01af1390312e2ebe905e2487c38ce6e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
