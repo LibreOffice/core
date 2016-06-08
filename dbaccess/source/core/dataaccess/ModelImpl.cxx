@@ -395,7 +395,6 @@ void SAL_CALL DocumentStorageAccess::disposing( const css::lang::EventObject& So
 ODatabaseModelImpl::ODatabaseModelImpl( const Reference< XComponentContext >& _rxContext, ODatabaseContext& _rDBContext )
             :m_xModel()
             ,m_xDataSource()
-            ,m_pStorageAccess( nullptr )
             ,m_aMutex()
             ,m_aMutexFacade( m_aMutex )
             ,m_aContainer(4)
@@ -430,7 +429,6 @@ ODatabaseModelImpl::ODatabaseModelImpl(
                     )
             :m_xModel()
             ,m_xDataSource()
-            ,m_pStorageAccess( nullptr )
             ,m_aMutex()
             ,m_aMutexFacade( m_aMutex )
             ,m_aContainer(4)
@@ -615,11 +613,10 @@ void ODatabaseModelImpl::reset()
     ::std::vector< TContentPtr > aEmptyContainers( 4 );
     m_aContainer.swap( aEmptyContainers );
 
-    if ( m_pStorageAccess )
+    if ( m_pStorageAccess.is() )
     {
         m_pStorageAccess->dispose();
-        m_pStorageAccess->release();
-        m_pStorageAccess = nullptr;
+        m_pStorageAccess.clear();
     }
 }
 
@@ -723,11 +720,10 @@ void ODatabaseModelImpl::dispose()
         DBG_UNHANDLED_EXCEPTION();
     }
 
-    if ( m_pStorageAccess )
+    if ( m_pStorageAccess.is() )
     {
         m_pStorageAccess->dispose();
-        m_pStorageAccess->release();
-        m_pStorageAccess = nullptr;
+        m_pStorageAccess.clear();
     }
 }
 
@@ -857,12 +853,11 @@ Reference< XStorage > ODatabaseModelImpl::getOrCreateRootStorage()
 
 DocumentStorageAccess* ODatabaseModelImpl::getDocumentStorageAccess()
 {
-    if ( !m_pStorageAccess )
+    if ( !m_pStorageAccess.is() )
     {
         m_pStorageAccess = new DocumentStorageAccess( *this );
-        m_pStorageAccess->acquire();
     }
-    return m_pStorageAccess;
+    return m_pStorageAccess.get();
 }
 
 void ODatabaseModelImpl::modelIsDisposing( const bool _wasInitialized, ResetModelAccess )

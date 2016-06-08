@@ -276,7 +276,6 @@ OApplicationController::OApplicationController(const Reference< XComponentContex
     ,m_pSubComponentManager( new SubComponentManager( *this, getSharedMutex() ) )
     ,m_aTypeCollection( _rxORB )
     ,m_aTableCopyHelper(this)
-    ,m_pClipbordNotifier(nullptr)
     ,m_nAsyncDrop(nullptr)
     ,m_aSelectContainerEvent( LINK( this, OApplicationController, OnSelectContainer ) )
     ,m_ePreviewMode(E_PREVIEWNONE)
@@ -341,10 +340,9 @@ void SAL_CALL OApplicationController::disposing()
     if ( getView() )
     {
         getContainer()->showPreview(nullptr);
-        m_pClipbordNotifier->ClearCallbackLink();
-        m_pClipbordNotifier->RemoveListener( getView() );
-        m_pClipbordNotifier->release();
-        m_pClipbordNotifier = nullptr;
+        m_pClipboardNotifier->ClearCallbackLink();
+        m_pClipboardNotifier->RemoveListener( getView() );
+        m_pClipboardNotifier.clear();
     }
 
     disconnect();
@@ -446,9 +444,8 @@ bool OApplicationController::Construct(vcl::Window* _pParent)
     m_aSystemClipboard = TransferableDataHelper::CreateFromSystemClipboard( getView() );
     m_aSystemClipboard.StartClipboardListening( );
 
-    m_pClipbordNotifier = new TransferableClipboardListener( LINK( this, OApplicationController, OnClipboardChanged ) );
-    m_pClipbordNotifier->acquire();
-    m_pClipbordNotifier->AddListener( getView() );
+    m_pClipboardNotifier = new TransferableClipboardListener( LINK( this, OApplicationController, OnClipboardChanged ) );
+    m_pClipboardNotifier->AddListener( getView() );
 
     OGenericUnoController::Construct( _pParent );
     getView()->Show();

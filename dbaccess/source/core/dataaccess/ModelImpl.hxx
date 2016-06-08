@@ -170,7 +170,7 @@ private:
     css::uno::WeakReference< css::frame::XModel >                     m_xModel;
     css::uno::WeakReference< css::sdbc::XDataSource >                 m_xDataSource;
 
-    DocumentStorageAccess*                                            m_pStorageAccess;
+    rtl::Reference<DocumentStorageAccess>                             m_pStorageAccess;
     ::comphelper::SharedMutex                                         m_aMutex;
     VosMutexFacade                                                    m_aMutexFacade;
     ::std::vector< TContentPtr >                                      m_aContainer;   // one for each ObjectType
