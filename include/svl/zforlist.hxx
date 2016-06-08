@@ -339,7 +339,7 @@ public:
     LanguageType GetLanguage() const;
 
     // Determine whether two format types are input compatible or not
-    bool IsCompatible(short eOldType, short eNewType);
+    static bool IsCompatible(short eOldType, short eNewType);
 
     /** Get table of formats of a specific type of a locale. A format FIndex is
         tested whether it has the type and locale requested, if it doesn't

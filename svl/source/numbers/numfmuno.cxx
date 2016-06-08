@@ -622,14 +622,7 @@ sal_Bool SAL_CALL SvNumberFormatsObj::isTypeCompatible( sal_Int16 nOldType, sal_
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    bool bRet = false;
-    SvNumberFormatter* pFormatter = rSupplier.GetNumberFormatter();
-    if (pFormatter)
-        bRet = pFormatter->IsCompatible( nOldType, nNewType );
-    else
-        throw uno::RuntimeException();
-
-    return bRet;
+    return SvNumberFormatter::IsCompatible( nOldType, nNewType );
 }
 
 sal_Int32 SAL_CALL SvNumberFormatsObj::getFormatForLocale( sal_Int32 nKey, const lang::Locale& nLocale )

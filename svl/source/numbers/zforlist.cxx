@@ -1146,8 +1146,8 @@ LanguageType SvNumberFormatter::GetLanguage() const
     return IniLnge;
 }
 
-bool SvNumberFormatter::IsCompatible(short eOldType,
-                                     short eNewType)
+// static
+bool SvNumberFormatter::IsCompatible(short eOldType, short eNewType)
 {
     if (eOldType == eNewType)
     {
@@ -1168,9 +1168,9 @@ bool SvNumberFormatter::IsCompatible(short eOldType,
             case css::util::NumberFormat::CURRENCY:
             case css::util::NumberFormat::SCIENTIFIC:
             case css::util::NumberFormat::FRACTION:
-//          case css::util::NumberFormat::LOGICAL:
             case css::util::NumberFormat::DEFINED:
                 return true;
+            case css::util::NumberFormat::LOGICAL:
             default:
                 return false;
             }

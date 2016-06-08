@@ -524,7 +524,7 @@ void ScColumn::ApplyPatternIfNumberformatIncompatible( const ScRange& rRange,
             nRow1, nRow2, nRow );
         sal_uInt32 nFormat = pPattern->GetNumberFormat( pFormatter );
         short nOldType = pFormatter->GetType( nFormat );
-        if ( nOldType == nNewType || pFormatter->IsCompatible( nOldType, nNewType ) )
+        if ( nOldType == nNewType || SvNumberFormatter::IsCompatible( nOldType, nNewType ) )
             nRow = nRow2;
         else
         {
