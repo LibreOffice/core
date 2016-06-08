@@ -3311,12 +3311,16 @@ void ScInterpreter::ScGetPivotData()
              * not be on a (even if locale independent) formatted string down
              * below in pDPObj->GetPivotData(). */
 
-            /* TODO: obtaining the current format before a double is popped
-             * works only by chance, e.g. if the very recent function call was
-             * DATE() or some such. We really need to transport format/type
-             * information in tokens. */
-            short nThisFmtType = nCurFmtType;
-            sal_uInt32 nThisFmtIndex = nCurFmtIndex;
+            bool bEvaluateFormatIndex;
+            switch (GetRawStackType())
+            {
+                case svSingleRef:
+                case svDoubleRef:
+                    bEvaluateFormatIndex = true;
+                break;
+                default:
+                    bEvaluateFormatIndex = false;
+            }
 
             double fDouble;
             svl::SharedString aSharedString;
@@ -3330,14 +3334,14 @@ void ScInterpreter::ScGetPivotData()
             if (bDouble)
             {
                 sal_uInt32 nNumFormat;
-                if (nThisFmtIndex)
-                    nNumFormat = nThisFmtIndex;
+                if (bEvaluateFormatIndex && nCurFmtIndex)
+                    nNumFormat = nCurFmtIndex;
                 else
                 {
-                    if (nThisFmtType == css::util::NumberFormat::UNDEFINED)
+                    if (nCurFmtType == css::util::NumberFormat::UNDEFINED)
                         nNumFormat = 0;
                     else
-                        nNumFormat = pFormatter->GetStandardFormat( nThisFmtType, ScGlobal::eLnge);
+                        nNumFormat = pFormatter->GetStandardFormat( nCurFmtType, ScGlobal::eLnge);
                 }
                 Color* pColor;
                 pFormatter->GetOutputString( fDouble, nNumFormat, aFilters[i].MatchValueName, &pColor);
