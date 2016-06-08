@@ -10,11 +10,12 @@
 $(eval $(call gb_Executable_Executable,minidump_upload))
 
 $(eval $(call gb_Executable_use_libraries,minidump_upload,\
+	crashreport \
     sal \
 ))
 
-$(eval $(call gb_Executable_use_static_libraries,minidump_upload,\
-	minidump \
+$(eval $(call gb_Executable_add_defs,minidump_upload,\
+	-DUNICODE \
 ))
 
 $(eval $(call gb_Executable_use_external,minidump_upload,curl))
