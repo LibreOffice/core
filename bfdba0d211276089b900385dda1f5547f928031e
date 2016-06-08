@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_508d3130",
+        "filename": "svx/source/sidebar/paragraph/ParaSpacingWindow.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2016-06-08T10:07:58Z",
+      "side": 1,
+      "message": "When I do this directly in the constructor pView is NULL",
+      "revId": "bfdba0d211276089b900385dda1f5547f928031e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
