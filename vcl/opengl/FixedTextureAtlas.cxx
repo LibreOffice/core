@@ -25,8 +25,8 @@ struct FixedTexture
     int mnFreeSlots;
     std::vector<bool> maAllocatedSlots;
 
-    FixedTexture(ImplOpenGLTexture* pTexture, int nNumberOfSlots)
-        : mpTexture(pTexture)
+    FixedTexture(int nTextureWidth, int nTextureHeight, int nNumberOfSlots)
+        : mpTexture(new ImplOpenGLTexture(nTextureWidth, nTextureHeight, true))
         , mnFreeSlots(nNumberOfSlots)
         , maAllocatedSlots(nNumberOfSlots, false)
     {
@@ -37,6 +37,12 @@ struct FixedTexture
 
         mpTexture->SetSlotDeallocateCallback(aDeallocateFunction);
         mpTexture->InitializeSlotMechanism(nNumberOfSlots);
+    }
+
+    ~FixedTexture()
+    {
+        mpTexture->ResetSlotDeallocateCallback();
+        mpTexture->DecreaseRefCount(-1);
     }
 
     void allocateSlot(int nSlot)
@@ -74,20 +80,13 @@ FixedTextureAtlasManager::FixedTextureAtlasManager(int nWidthFactor, int nHeight
 
 FixedTextureAtlasManager::~FixedTextureAtlasManager()
 {
-    for (std::unique_ptr<FixedTexture>& pFixedTexture : maFixedTextures)
-    {
-        // Free texture early in VCL shutdown while we have a context.
-        delete pFixedTexture->mpTexture;
-    }
 }
 
 void FixedTextureAtlasManager::CreateNewTexture()
 {
     int nTextureWidth = mWidthFactor  * mSubTextureSize;
     int nTextureHeight = mHeightFactor * mSubTextureSize;
-    maFixedTextures.push_back(o3tl::make_unique<FixedTexture>(new ImplOpenGLTexture(nTextureWidth, nTextureHeight, true),
-                                    mWidthFactor * mHeightFactor));
-
+    maFixedTextures.push_back(o3tl::make_unique<FixedTexture>(nTextureWidth, nTextureHeight, mWidthFactor * mHeightFactor));
 }
 
 OpenGLTexture FixedTextureAtlasManager::Reserve(int nWidth, int nHeight)
