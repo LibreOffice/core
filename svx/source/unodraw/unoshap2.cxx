@@ -1084,7 +1084,7 @@ bool SvxShapePolyPolygon::setPropertyValueImpl( const OUString& rName, const Sfx
     }
     case OWN_ATTR_VALUE_POLYGON:
     {
-        if( rValue.getValue() && (rValue.getValueType() == cppu::UnoType<drawing::PointSequenceSequence>::get() ))
+        if( rValue.getValue() && (rValue.getValueType() == cppu::UnoType<drawing::PointSequence>::get() ))
         {
             drawing::PointSequence const * pSequence = static_cast<drawing::PointSequence const *>(rValue.getValue());
 
