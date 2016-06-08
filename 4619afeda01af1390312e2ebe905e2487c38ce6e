@@ -16,6 +16,23 @@
       "revId": "4619afeda01af1390312e2ebe905e2487c38ce6e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_eb6c949e",
+        "filename": "sw/source/core/unocore/unostyle.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 906,
+      "author": {
+        "id": 1001243
+      },
+      "writtenOn": "2016-06-08T22:40:56Z",
+      "side": 1,
+      "message": "will get rid of return and do a if {} else {}",
+      "revId": "4619afeda01af1390312e2ebe905e2487c38ce6e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
