@@ -195,7 +195,6 @@ bool TableStyleSettings::operator==( const TableStyleSettings& rStyle ) const
 }
 
 
-
 class SdrTableObjImpl : public TableDesignUser, public ::cppu::WeakImplHelper< css::util::XModifyListener >
 {
 public:
@@ -274,13 +273,11 @@ SdrTableObjImpl::SdrTableObjImpl()
 }
 
 
-
 SdrTableObjImpl::~SdrTableObjImpl()
 {
     if( lastLayoutTable == this )
         lastLayoutTable = nullptr;
 }
-
 
 
 void SdrTableObjImpl::init( SdrTableObj* pTable, sal_Int32 nColumns, sal_Int32 nRows )
@@ -294,7 +291,6 @@ void SdrTableObjImpl::init( SdrTableObj* pTable, sal_Int32 nColumns, sal_Int32 n
     LayoutTable( mpTableObj->maRect, true, true );
     mpTableObj->maLogicRect = mpTableObj->maRect;
 }
-
 
 
 SdrTableObjImpl& SdrTableObjImpl::operator=( const SdrTableObjImpl& rSource )
@@ -332,7 +328,6 @@ SdrTableObjImpl& SdrTableObjImpl::operator=( const SdrTableObjImpl& rSource )
     }
     return *this;
 }
-
 
 
 void SdrTableObjImpl::SetModel(SdrModel* /*pOldModel*/, SdrModel* pNewModel)
@@ -472,7 +467,6 @@ bool SdrTableObjImpl::ApplyCellStyles()
 }
 
 
-
 void SdrTableObjImpl::dispose()
 {
     disconnectTableStyle();
@@ -492,7 +486,6 @@ void SdrTableObjImpl::dispose()
         mxTable.clear();
     }
 }
-
 
 
 void SdrTableObjImpl::DragEdge( bool mbHorizontal, int nEdge, sal_Int32 nOffset )
@@ -611,7 +604,6 @@ void SdrTableObjImpl::update()
 }
 
 
-
 void SdrTableObjImpl::connectTableStyle()
 {
     if( mxTableStyle.is() )
@@ -626,7 +618,6 @@ void SdrTableObjImpl::connectTableStyle()
 }
 
 
-
 void SdrTableObjImpl::disconnectTableStyle()
 {
     if( mxTableStyle.is() )
@@ -639,7 +630,6 @@ void SdrTableObjImpl::disconnectTableStyle()
         }
     }
 }
-
 
 
 bool SdrTableObjImpl::isInUse()
@@ -672,7 +662,6 @@ void SAL_CALL SdrTableObjImpl::disposing( const css::lang::EventObject& /*Source
 }
 
 
-
 CellRef SdrTableObjImpl::getCell(  const CellPos& rPos  ) const
 {
     CellRef xCell;
@@ -686,7 +675,6 @@ CellRef SdrTableObjImpl::getCell(  const CellPos& rPos  ) const
     }
     return xCell;
 }
-
 
 
 sal_Int32 SdrTableObjImpl::getColumnCount() const
@@ -777,16 +765,11 @@ sdr::contact::ViewContact* SdrTableObj::CreateObjectSpecificViewContact()
 }
 
 
-
-
-
-
 SdrTableObj::SdrTableObj(SdrModel* _pModel)
 {
     pModel = _pModel;
     init( 1, 1 );
 }
-
 
 
 SdrTableObj::SdrTableObj(SdrModel* _pModel, const ::Rectangle& rNewRect, sal_Int32 nColumns, sal_Int32 nRows)
@@ -805,7 +788,6 @@ SdrTableObj::SdrTableObj(SdrModel* _pModel, const ::Rectangle& rNewRect, sal_Int
 }
 
 
-
 void SdrTableObj::init( sal_Int32 nColumns, sal_Int32 nRows )
 {
     bClosedObj = true;
@@ -814,7 +796,6 @@ void SdrTableObj::init( sal_Int32 nColumns, sal_Int32 nRows )
     mpImpl->acquire();
     mpImpl->init( this, nColumns, nRows );
 }
-
 
 
 SdrTableObj::~SdrTableObj()
@@ -833,19 +814,16 @@ Reference< XTable > SdrTableObj::getTable() const
 }
 
 
-
 bool SdrTableObj::isValid( const CellPos& rPos ) const
 {
     return (rPos.mnCol >= 0) && (rPos.mnCol < mpImpl->getColumnCount()) && (rPos.mnRow >= 0) && (rPos.mnRow < mpImpl->getRowCount());
 }
 
 
-
 CellPos SdrTableObj::getFirstCell()
 {
     return CellPos( 0,0 );
 }
-
 
 
 CellPos SdrTableObj::getLastCell() const
@@ -858,7 +836,6 @@ CellPos SdrTableObj::getLastCell() const
     }
     return aPos;
 }
-
 
 
 CellPos SdrTableObj::getLeftCell( const CellPos& rPos, bool bEdgeTravel ) const
@@ -876,7 +853,6 @@ CellPos SdrTableObj::getLeftCell( const CellPos& rPos, bool bEdgeTravel ) const
 }
 
 
-
 CellPos SdrTableObj::getRightCell( const CellPos& rPos, bool bEdgeTravel  ) const
 {
     switch( GetWritingMode() )
@@ -890,7 +866,6 @@ CellPos SdrTableObj::getRightCell( const CellPos& rPos, bool bEdgeTravel  ) cons
         return getNextRow( rPos, bEdgeTravel );
     }
 }
-
 
 
 CellPos SdrTableObj::getUpCell( const CellPos& rPos, bool bEdgeTravel ) const
@@ -907,7 +882,6 @@ CellPos SdrTableObj::getUpCell( const CellPos& rPos, bool bEdgeTravel ) const
 }
 
 
-
 CellPos SdrTableObj::getDownCell( const CellPos& rPos, bool bEdgeTravel ) const
 {
     switch( GetWritingMode() )
@@ -920,7 +894,6 @@ CellPos SdrTableObj::getDownCell( const CellPos& rPos, bool bEdgeTravel ) const
         return getNextCell( rPos, bEdgeTravel );
     }
 }
-
 
 
 CellPos SdrTableObj::getPreviousCell( const CellPos& rPos, bool bEdgeTravel ) const
@@ -948,7 +921,6 @@ CellPos SdrTableObj::getPreviousCell( const CellPos& rPos, bool bEdgeTravel ) co
     }
     return aPos;
 }
-
 
 
 CellPos SdrTableObj::getNextCell( const CellPos& rPos, bool bEdgeTravel ) const
@@ -993,7 +965,6 @@ CellPos SdrTableObj::getNextCell( const CellPos& rPos, bool bEdgeTravel ) const
 }
 
 
-
 CellPos SdrTableObj::getPreviousRow( const CellPos& rPos, bool bEdgeTravel ) const
 {
     CellPos aPos( rPos );
@@ -1021,7 +992,6 @@ CellPos SdrTableObj::getPreviousRow( const CellPos& rPos, bool bEdgeTravel ) con
     }
     return aPos;
 }
-
 
 
 CellPos SdrTableObj::getNextRow( const CellPos& rPos, bool bEdgeTravel ) const
@@ -1067,7 +1037,6 @@ CellPos SdrTableObj::getNextRow( const CellPos& rPos, bool bEdgeTravel ) const
 }
 
 
-
 const TableStyleSettings& SdrTableObj::getTableStyleSettings() const
 {
     if( mpImpl )
@@ -1080,7 +1049,6 @@ const TableStyleSettings& SdrTableObj::getTableStyleSettings() const
         return aTmp;
     }
 }
-
 
 
 void SdrTableObj::setTableStyleSettings( const TableStyleSettings& rStyle )
@@ -1221,7 +1189,6 @@ const SfxItemSet& SdrTableObj::GetActiveCellItemSet() const
 }
 
 
-
 void SdrTableObj::setTableStyle( const Reference< XIndexAccess >& xTableStyle )
 {
     if( mpImpl && (mpImpl->mxTableStyle != xTableStyle) )
@@ -1232,7 +1199,6 @@ void SdrTableObj::setTableStyle( const Reference< XIndexAccess >& xTableStyle )
         mpImpl->update();
     }
 }
-
 
 
 const Reference< XIndexAccess >& SdrTableObj::getTableStyle() const
@@ -1257,7 +1223,6 @@ SdrText* SdrTableObj::getActiveText() const
 {
     return dynamic_cast< SdrText* >( getActiveCell().get() );
 }
-
 
 
 /** returns the nth available text. */
@@ -1313,7 +1278,6 @@ void SdrTableObj::setActiveText( sal_Int32 nIndex )
 }
 
 
-
 /** returns the index of the text that contains the given point or -1 */
 sal_Int32 SdrTableObj::CheckTextHit(const Point& rPnt) const
 {
@@ -1362,7 +1326,6 @@ bool SdrTableObj::IsTextEditActive( const CellPos& rPos )
 }
 
 
-
 void SdrTableObj::onEditOutlinerStatusEvent( EditStatus* pEditStatus )
 {
     if( (pEditStatus->GetStatusWord() & EditStatusFlags::TEXTHEIGHTCHANGED) && mpImpl && mpImpl->mpLayouter )
@@ -1377,7 +1340,6 @@ void SdrTableObj::onEditOutlinerStatusEvent( EditStatus* pEditStatus )
             SendUserCall(SDRUSERCALL_RESIZE,aRect0);
     }
 }
-
 
 
 void SdrTableObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
@@ -1406,19 +1368,16 @@ void SdrTableObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 }
 
 
-
 sal_uInt16 SdrTableObj::GetObjIdentifier() const
 {
     return static_cast<sal_uInt16>(OBJ_TABLE);
 }
 
 
-
 void SdrTableObj::SetPage(SdrPage* pNewPage)
 {
     SdrTextObj::SetPage(pNewPage);
 }
-
 
 
 void SdrTableObj::SetModel(SdrModel* pNewModel)
@@ -1442,13 +1401,11 @@ void SdrTableObj::SetModel(SdrModel* pNewModel)
 }
 
 
-
 void SdrTableObj::TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, bool bNoEditText, Rectangle* pAnchorRect, bool bLineWidth ) const
 {
     if( mpImpl )
         TakeTextRect( mpImpl->maEditPos, rOutliner, rTextRect, bNoEditText, pAnchorRect, bLineWidth );
 }
-
 
 
 void SdrTableObj::TakeTextRect( const CellPos& rPos, SdrOutliner& rOutliner, Rectangle& rTextRect, bool bNoEditText, Rectangle* pAnchorRect, bool /*bLineWidth*/ ) const
@@ -1483,7 +1440,6 @@ void SdrTableObj::TakeTextRect( const CellPos& rPos, SdrOutliner& rOutliner, Rec
 //  {
 //      rOutliner.SetMinAutoPaperSize(Size(0, aAnkRect.GetHeight()));
 //  }
-
 
 
     // set text at outliner, maybe from edit outliner
@@ -1532,7 +1488,6 @@ void SdrTableObj::TakeTextRect( const CellPos& rPos, SdrOutliner& rOutliner, Rec
 
     rTextRect=Rectangle(aTextPos,aTextSiz);
 }
-
 
 
 const CellRef& SdrTableObj::getActiveCell() const
@@ -2100,7 +2055,6 @@ void SdrTableObj::SetVerticalWriting(bool bVertical )
 }
 
 
-
 WritingMode SdrTableObj::GetWritingMode() const
 {
     SfxStyleSheet* pStyle = GetStyleSheet();
@@ -2135,7 +2089,6 @@ void SdrTableObj::SetSkipChangeLayout(bool bSkipChangeLayout)
 {
     mpImpl->mbSkipChangeLayout = bSkipChangeLayout;
 }
-
 
 // gets base transformation and rectangle of object. If it's an SdrPathObj it fills the PolyPolygon
 // with the base geometry and returns TRUE. Otherwise it returns FALSE.
@@ -2434,7 +2387,6 @@ bool SdrTableObj::BegCreate(SdrDragStat& rStat)
 }
 
 
-
 bool SdrTableObj::MovCreate(SdrDragStat& rStat)
 {
     Rectangle aRect1;
@@ -2446,7 +2398,6 @@ bool SdrTableObj::MovCreate(SdrDragStat& rStat)
     bSnapRectDirty=true;
     return true;
 }
-
 
 
 bool SdrTableObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
@@ -2461,12 +2412,10 @@ void SdrTableObj::BrkCreate(SdrDragStat& /*rStat*/)
 }
 
 
-
 bool SdrTableObj::BckCreate(SdrDragStat& /*rStat*/)
 {
     return true;
 }
-
 
 
 basegfx::B2DPolyPolygon SdrTableObj::TakeCreatePoly(const SdrDragStat& rDrag) const
@@ -2482,12 +2431,10 @@ basegfx::B2DPolyPolygon SdrTableObj::TakeCreatePoly(const SdrDragStat& rDrag) co
 }
 
 
-
 Pointer SdrTableObj::GetCreatePointer() const
 {
     return Pointer(PointerStyle::Cross);
 }
-
 
 
 void SdrTableObj::createCell( CellRef& xNewCell )
@@ -2496,12 +2443,10 @@ void SdrTableObj::createCell( CellRef& xNewCell )
 }
 
 
-
 SdrObjGeoData *SdrTableObj::NewGeoData() const
 {
     return new TableObjectGeoData;
 }
-
 
 
 void SdrTableObj::SaveGeoData(SdrObjGeoData& rGeo) const
@@ -2511,7 +2456,6 @@ void SdrTableObj::SaveGeoData(SdrObjGeoData& rGeo) const
 
     static_cast<TableObjectGeoData &>(rGeo).maLogicRect = maLogicRect;
 }
-
 
 
 void SdrTableObj::RestGeoData(const SdrObjGeoData& rGeo)
@@ -2526,7 +2470,6 @@ void SdrTableObj::RestGeoData(const SdrObjGeoData& rGeo)
         mpImpl->LayoutTable(maRect, false, false);
     ActionChanged();
 }
-
 
 
 SdrTableObj* SdrTableObj::CloneRange( const CellPos& rStart, const CellPos& rEnd )
@@ -2587,7 +2530,6 @@ SdrTableObj* SdrTableObj::CloneRange( const CellPos& rStart, const CellPos& rEnd
 }
 
 
-
 void SdrTableObj::DistributeColumns( sal_Int32 nFirstColumn, sal_Int32 nLastColumn )
 {
     if( mpImpl && mpImpl->mpLayouter )
@@ -2598,7 +2540,6 @@ void SdrTableObj::DistributeColumns( sal_Int32 nFirstColumn, sal_Int32 nLastColu
 }
 
 
-
 void SdrTableObj::DistributeRows( sal_Int32 nFirstRow, sal_Int32 nLastRow )
 {
     if( mpImpl && mpImpl->mpLayouter )
@@ -2607,7 +2548,6 @@ void SdrTableObj::DistributeRows( sal_Int32 nFirstRow, sal_Int32 nLastRow )
         mpImpl->mpLayouter->DistributeRows( maRect, nFirstRow, nLastRow );
     }
 }
-
 
 
 void SdrTableObj::SetChanged()
@@ -2621,13 +2561,11 @@ void SdrTableObj::SetChanged()
 }
 
 
-
 void SdrTableObj::uno_lock()
 {
     if( mpImpl && mpImpl->mxTable.is() )
         mpImpl->mxTable->lockBroadcasts();
 }
-
 
 
 void SdrTableObj::uno_unlock()
@@ -2647,9 +2585,6 @@ void SdrTableObj::dumpAsXml(xmlTextWriterPtr pWriter) const
 
     xmlTextWriterEndElement(pWriter);
 }
-
-
-
 
 } }
 
