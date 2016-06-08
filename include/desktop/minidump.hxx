@@ -12,7 +12,13 @@
 
 #include <string>
 
-bool readConfig(const std::string& iniPath, std::string& response);
+#include <desktop/dllapi.h>
+
+namespace crashreport {
+
+CRASHREPORT_DLLPUBLIC bool readConfig(const std::string& iniPath, std::string& response);
+
+}
 
 #endif
 
