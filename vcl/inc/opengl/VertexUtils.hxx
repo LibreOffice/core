@@ -53,11 +53,11 @@ inline void addTrapezoid<GL_TRIANGLES>(std::vector<GLfloat>& rVertices, GLfloat 
     });
 }
 
-inline glm::vec4 createGLColor(const SalColor& rColor, GLfloat rTransparency)
+inline glm::vec4 createGLColor(SalColor nColor, GLfloat rTransparency)
 {
-    return glm::vec4(SALCOLOR_RED(rColor)   / 255.0f,
-                     SALCOLOR_GREEN(rColor) / 255.0f,
-                     SALCOLOR_BLUE(rColor)  / 255.0f,
+    return glm::vec4(SALCOLOR_RED(nColor)   / 255.0f,
+                     SALCOLOR_GREEN(nColor) / 255.0f,
+                     SALCOLOR_BLUE(nColor)  / 255.0f,
                      1.0f - rTransparency);
 }
 

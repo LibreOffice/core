@@ -20,7 +20,7 @@ namespace
 {
 
 inline void lclAddLineSegmentVertices(RenderParameters& rRenderParameter, GLfloat fX1, GLfloat fY1, GLfloat fX2, GLfloat fY2,
-                                   const SalColor& rColor, double fTransparency)
+                                      SalColor nColor, double fTransparency)
 {
     glm::vec2 aPoint1(fX1, fY1);
     glm::vec2 aPoint2(fX2, fY2);
@@ -34,7 +34,7 @@ inline void lclAddLineSegmentVertices(RenderParameters& rRenderParameter, GLfloa
                                    aPoint1, aNormal, 1.0f,
                                    aPoint2, aNormal, 1.0f);
 
-    vcl::vertex::addQuadColors<GL_TRIANGLES>(rRenderParameter.maColors, rColor, fTransparency);
+    vcl::vertex::addQuadColors<GL_TRIANGLES>(rRenderParameter.maColors, nColor, fTransparency);
 }
 
 } // end anonymous namespace
