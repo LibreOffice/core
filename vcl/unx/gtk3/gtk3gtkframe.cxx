@@ -799,8 +799,10 @@ GtkSalFrame::~GtkSalFrame()
 
     InvalidateGraphics();
 
-    if( m_pParent )
+    if (m_pParent)
+    {
         m_pParent->m_aChildren.remove( this );
+    }
 
     getDisplay()->deregisterFrame( this );
 
@@ -1198,6 +1200,12 @@ void GtkSalFrame::Init( SalFrame* pParent, SalFrameStyleFlags nStyle )
         if (!(m_pParent->m_nStyle & SalFrameStyleFlags::PLUG))
             gtk_window_set_transient_for( GTK_WINDOW(m_pWindow), GTK_WINDOW(m_pParent->m_pWindow) );
         m_pParent->m_aChildren.push_back( this );
+        gtk_window_group_add_window(gtk_window_get_group(GTK_WINDOW(m_pParent->m_pWindow)), GTK_WINDOW(m_pWindow));
+    }
+    else
+    {
+        gtk_window_group_add_window(gtk_window_group_new(), GTK_WINDOW(m_pWindow));
+        g_object_unref(gtk_window_get_group(GTK_WINDOW(m_pWindow)));
     }
 
     // set window type
@@ -2346,11 +2354,17 @@ const SystemEnvData* GtkSalFrame::GetSystemData() const
 
 void GtkSalFrame::SetParent( SalFrame* pNewParent )
 {
-    if( m_pParent )
-        m_pParent->m_aChildren.remove( this );
+    if (m_pParent)
+    {
+        gtk_window_group_remove_window(gtk_window_get_group(GTK_WINDOW(m_pParent->m_pWindow)), GTK_WINDOW(m_pWindow));
+        m_pParent->m_aChildren.remove(this);
+    }
     m_pParent = static_cast<GtkSalFrame*>(pNewParent);
-    if( m_pParent )
-        m_pParent->m_aChildren.push_back( this );
+    if (m_pParent)
+    {
+        m_pParent->m_aChildren.push_back(this);
+        gtk_window_group_add_window(gtk_window_get_group(GTK_WINDOW(m_pParent->m_pWindow)), GTK_WINDOW(m_pWindow));
+    }
     if( ! isChild() )
         gtk_window_set_transient_for( GTK_WINDOW(m_pWindow),
                                       (m_pParent && ! m_pParent->isChild(true,false)) ? GTK_WINDOW(m_pParent->m_pWindow) : nullptr
