@@ -22,6 +22,7 @@
 #include <com/sun/star/awt/XLayoutConstrains.hpp>
 
 #include <tools/gen.hxx>
+#include <libxml/xmlwriter.h>
 
 #include "cell.hxx"
 #include "cellrange.hxx"
@@ -1149,6 +1150,34 @@ void TableLayouter::DistributeRows( ::Rectangle& rArea, sal_Int32 nFirstRow, sal
         (void)e;
         OSL_FAIL("sdr::table::TableLayouter::DistributeRows(), exception caught!");
     }
+}
+
+void TableLayouter::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("tableLayouter"));
+
+    xmlTextWriterStartElement(pWriter, BAD_CAST("columns"));
+    for (const auto& rColumn : maColumns)
+        rColumn.dumpAsXml(pWriter);
+    xmlTextWriterEndElement(pWriter);
+
+    xmlTextWriterStartElement(pWriter, BAD_CAST("rows"));
+    for (const auto& rRow : maRows)
+        rRow.dumpAsXml(pWriter);
+    xmlTextWriterEndElement(pWriter);
+
+    xmlTextWriterEndElement(pWriter);
+}
+
+void TableLayouter::Layout::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("layout"));
+
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("pos"), BAD_CAST(OString::number(mnPos).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("size"), BAD_CAST(OString::number(mnSize).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("minSize"), BAD_CAST(OString::number(mnMinSize).getStr()));
+
+    xmlTextWriterEndElement(pWriter);
 }
 
 } }

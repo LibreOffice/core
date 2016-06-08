@@ -294,6 +294,15 @@ rtl::Reference< FastPropertySetInfo > TableColumn::getStaticPropertySetInfo()
     return xInfo;
 }
 
+TableModelRef TableColumn::getModel() const
+{
+    return mxTableModel;
+}
+
+sal_Int32 TableColumn::getWidth() const
+{
+    return mnWidth;
+}
 
 
 } }

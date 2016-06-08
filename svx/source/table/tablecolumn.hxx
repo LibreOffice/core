@@ -59,6 +59,11 @@ public:
     virtual void SAL_CALL setFastPropertyValue( ::sal_Int32 nHandle, const css::uno::Any& aValue ) throw (css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Any SAL_CALL getFastPropertyValue( ::sal_Int32 nHandle ) throw (css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
 
+    /// Get the table that owns this column.
+    TableModelRef getModel() const;
+    /// Get the width of this column.
+    sal_Int32 getWidth() const;
+
 private:
     static rtl::Reference< FastPropertySetInfo > getStaticPropertySetInfo();
 
