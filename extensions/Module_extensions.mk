@@ -11,10 +11,6 @@ $(eval $(call gb_Module_Module,extensions))
 
 $(eval $(call gb_Module_add_targets,extensions,\
 	Library_res \
-	$(if $(filter IOS ANDROID,$(OS)),, \
-		Library_abp \
-		Library_log \
-		Library_scn) \
 ))
 
 $(eval $(call gb_Module_add_l10n_targets,extensions,\
@@ -27,7 +23,10 @@ $(eval $(call gb_Module_add_l10n_targets,extensions,\
 
 ifneq ($(filter-out IOS ANDROID,$(OS)),)
 $(eval $(call gb_Module_add_targets,extensions,\
+	Library_abp \
 	Library_ldapbe2 \
+	Library_log \
+	Library_scn \
 ))
 endif
 
