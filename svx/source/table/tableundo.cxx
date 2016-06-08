@@ -423,6 +423,9 @@ void TableColumnUndo::setData( const Data& rData )
     mxCol->mbIsVisible = rData.mbIsVisible;
     mxCol->mbIsStartOfNewPage = rData.mbIsStartOfNewPage;
     mxCol->maName = rData.maName;
+
+    // Trigger re-layout of the table.
+    mxCol->getModel()->setModified(true);
 }
 
 

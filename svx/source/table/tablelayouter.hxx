@@ -97,6 +97,7 @@ public:
 
     void DistributeColumns( ::Rectangle& rArea, sal_Int32 nFirstCol, sal_Int32 nLastCol );
     void DistributeRows( ::Rectangle& rArea, sal_Int32 nFirstRow, sal_Int32 nLastRow );
+    void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 
 private:
     CellRef getCell( const CellPos& rPos ) const;
@@ -126,6 +127,7 @@ private:
 
         Layout() : mnPos( 0 ), mnSize( 0 ), mnMinSize( 0 ) {}
         void clear() { mnPos = 0; mnSize = 0; mnMinSize = 0; }
+        void dumpAsXml(struct _xmlTextWriter* pWriter) const;
     };
     typedef std::vector< Layout > LayoutVector;
 

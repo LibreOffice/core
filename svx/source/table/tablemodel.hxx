@@ -82,6 +82,8 @@ public:
 
     /// merges the cell at the given position with the given span
     void merge( sal_Int32 nCol, sal_Int32 nRow, sal_Int32 nColSpan, sal_Int32 nRowSpan );
+    /// Get the width of all columns in this table.
+    std::vector<sal_Int32> getColumnWidths();
 
     // ICellRange
     virtual sal_Int32 getLeft() override;
