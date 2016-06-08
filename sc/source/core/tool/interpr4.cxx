@@ -4299,10 +4299,24 @@ StackVar ScInterpreter::Interpret()
                     nGlobalError = pCur->GetError();
                 break;
                 case svDouble :
-                    if ( nFuncFmtType == css::util::NumberFormat::UNDEFINED )
                     {
-                        nRetTypeExpr = css::util::NumberFormat::NUMBER;
-                        nRetIndexExpr = 0;
+                        // If typed, pop token to obtain type information and
+                        // push a plain untyped double so the result token to
+                        // be transfered to the formula cell result does not
+                        // unnecessarily duplicate the information.
+                        if (pCur->GetDoubleType())
+                        {
+                            const double fVal = PopDouble();
+                            if (nCurFmtType != nFuncFmtType)
+                                nRetIndexExpr = 0;  // carry format index only for matching type
+                            nRetTypeExpr = nFuncFmtType = nCurFmtType;
+                            PushTempToken( new FormulaDoubleToken( fVal));
+                        }
+                        if ( nFuncFmtType == css::util::NumberFormat::UNDEFINED )
+                        {
+                            nRetTypeExpr = css::util::NumberFormat::NUMBER;
+                            nRetIndexExpr = 0;
+                        }
                     }
                 break;
                 case svString :
