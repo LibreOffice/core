@@ -148,7 +148,7 @@ public:
     {
         if( m_pLoader )
             if (m_pLoader->release()==0)
-                m_pStaticLoader = nullptr;
+                m_pStaticLoader = NULL;
     }
 
     /// Assign operator
