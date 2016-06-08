@@ -283,7 +283,7 @@ rtl::Reference< FastPropertySetInfo > TableColumn::getStaticPropertySetInfo()
     return xInfo;
 }
 
-TableModelRef TableColumn::getModel() const
+TableModelRef const & TableColumn::getModel() const
 {
     return mxTableModel;
 }
