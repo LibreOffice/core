@@ -73,7 +73,7 @@ namespace connectivity
             css::uno::Reference< css::sdbc::XResultSetMetaData>
                                                         m_xMetaData;
             SQLUSMALLINT*                               m_pRowStatusArray;
-            OConnection*                                m_pConnection;
+            rtl::Reference<OConnection>                 m_pConnection;
             rtl_TextEncoding                            m_nTextEncoding;
             sal_Int32                                   m_nRowPos;
             sal_Int32                                   m_nDriverColumnCount;   // column count of the driver which can sometimes be less than the metadata count

@@ -90,7 +90,7 @@ namespace connectivity
             OSortIndex*                             m_pSortIndex;
             ::rtl::Reference<connectivity::OSQLColumns> m_xColumns; // this are the select columns
             ::rtl::Reference<connectivity::OSQLColumns> m_xParamColumns;
-            OFileTable*                             m_pTable;
+            rtl::Reference<OFileTable>              m_pTable;
             connectivity::OSQLParseNode*            m_pParseTree;
 
             OSQLAnalyzer*                           m_pSQLAnalyzer;

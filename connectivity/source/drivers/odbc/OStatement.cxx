@@ -41,7 +41,7 @@
 using namespace ::comphelper;
 
 #define THROW_SQL(x) \
-    OTools::ThrowException(m_pConnection,x,m_aStatementHandle,SQL_HANDLE_STMT,*this)
+    OTools::ThrowException(m_pConnection.get(),x,m_aStatementHandle,SQL_HANDLE_STMT,*this)
 
 
 using namespace connectivity::odbc;
@@ -63,7 +63,6 @@ OStatement_Base::OStatement_Base(OConnection* _pConnection )
     ,m_pRowStatusArray(nullptr)
 {
     osl_atomic_increment( &m_refCount );
-    m_pConnection->acquire();
     m_aStatementHandle = m_pConnection->createStatementHandle();
 
     //setMaxFieldSize(0);
@@ -101,11 +100,10 @@ void SAL_CALL OStatement_Base::disposing()
     ::comphelper::disposeComponent(m_xGeneratedStatement);
 
     OSL_ENSURE(m_aStatementHandle,"OStatement_BASE2::disposing: StatementHandle is null!");
-    if (m_pConnection)
+    if (m_pConnection.is())
     {
         m_pConnection->freeStatementHandle(m_aStatementHandle);
-        m_pConnection->release();
-        m_pConnection = nullptr;
+        m_pConnection.clear();
     }
     OSL_ENSURE(!m_aStatementHandle,"Sohould ne null here!");
 
@@ -127,7 +125,7 @@ void SAL_CALL OStatement_BASE2::release() throw()
 
 Any SAL_CALL OStatement_Base::queryInterface( const Type & rType ) throw(RuntimeException, std::exception)
 {
-    if ( m_pConnection && !m_pConnection->isAutoRetrievingEnabled() && rType == cppu::UnoType<XGeneratedResultSet>::get())
+    if ( m_pConnection.is() && !m_pConnection->isAutoRetrievingEnabled() && rType == cppu::UnoType<XGeneratedResultSet>::get())
         return Any();
     Any aRet = OStatement_BASE::queryInterface(rType);
     return aRet.hasValue() ? aRet : OPropertySetHelper::queryInterface(rType);
@@ -139,7 +137,7 @@ Sequence< Type > SAL_CALL OStatement_Base::getTypes(  ) throw(RuntimeException, 
                                     cppu::UnoType<XFastPropertySet>::get(),
                                     cppu::UnoType<XPropertySet>::get());
     Sequence< Type > aOldTypes = OStatement_BASE::getTypes();
-    if ( m_pConnection && !m_pConnection->isAutoRetrievingEnabled() )
+    if ( m_pConnection.is() && !m_pConnection->isAutoRetrievingEnabled() )
     {
         ::std::remove(aOldTypes.getArray(),aOldTypes.getArray() + aOldTypes.getLength(),
                         cppu::UnoType<XGeneratedResultSet>::get());
@@ -151,9 +149,9 @@ Sequence< Type > SAL_CALL OStatement_Base::getTypes(  ) throw(RuntimeException, 
 
 Reference< XResultSet > SAL_CALL OStatement_Base::getGeneratedValues(  ) throw (SQLException, RuntimeException, std::exception)
 {
-    OSL_ENSURE( m_pConnection && m_pConnection->isAutoRetrievingEnabled(),"Illegal call here. isAutoRetrievingEnabled is false!");
+    OSL_ENSURE( m_pConnection.is() && m_pConnection->isAutoRetrievingEnabled(),"Illegal call here. isAutoRetrievingEnabled is false!");
     Reference< XResultSet > xRes;
-    if ( m_pConnection )
+    if ( m_pConnection.is() )
     {
         OUString sStmt = m_pConnection->getTransformedGeneratedStatement(m_sSqlStatement);
         if ( !sStmt.isEmpty() )
@@ -465,7 +463,7 @@ Reference< XConnection > SAL_CALL OStatement_Base::getConnection(  ) throw(SQLEx
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
-    return Reference< XConnection >(m_pConnection);
+    return Reference< XConnection >(m_pConnection.get());
 }
 
 
