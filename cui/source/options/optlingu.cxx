@@ -1088,14 +1088,6 @@ SvxLinguTabPage::SvxLinguTabPage( vcl::Window* pParent, const SfxItemSet& rSet )
     else
         m_pMoreDictsLink->Hide();
 
-    OUString sAccessibleNameModuleEdit(CUI_RES(RID_SVXSTR_LINGU_MODULES_EDIT));
-    OUString sAccessibleNameDicsEdit  (CUI_RES(RID_SVXSTR_LINGU_DICS_EDIT_DIC));
-    OUString sAccessibleNameOptionEdit(CUI_RES(RID_SVXSTR_LINGU_OPTIONS_EDIT));
-
-    m_pLinguModulesEditPB->SetAccessibleName(sAccessibleNameModuleEdit);
-    m_pLinguDicsEditPB->SetAccessibleName(sAccessibleNameDicsEdit);
-    m_pLinguOptionsEditPB->SetAccessibleName(sAccessibleNameOptionEdit);
-
     xProp = SvxGetLinguPropertySet();
     xDicList.set( SvxGetDictionaryList(), UNO_QUERY );
     if (xDicList.is())

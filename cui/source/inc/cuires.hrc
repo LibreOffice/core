@@ -378,9 +378,7 @@
 #define RID_SVXSTR_HYPH_SPECIAL                             (RID_SVX_START + 1232)
 #define RID_SVXSTR_NUM_MIN_WORDLEN                          (RID_SVX_START + 1233)
 #define RID_SVXSTR_GRAMMAR_AUTO                             (RID_SVX_START + 1234)
-#define RID_SVXSTR_LINGU_MODULES_EDIT                       (RID_SVX_START + 1235)
-#define RID_SVXSTR_LINGU_DICS_EDIT_DIC                      (RID_SVX_START + 1236)
-#define RID_SVXSTR_LINGU_OPTIONS_EDIT                       (RID_SVX_START + 1237)
+// There is a gap here because of removed strings
 
 #define RID_SVXSTR_CHG_MATH                                 (RID_SVX_START + 1238)
 #define RID_SVXSTR_CHG_WRITER                               (RID_SVX_START + 1239)

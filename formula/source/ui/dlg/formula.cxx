@@ -295,7 +295,6 @@ FormulaDlg_Impl::FormulaDlg_Impl(Dialog* pParent
 
     pMEdit = m_pMEFormula->GetEdit();
 
-    m_pMEFormula->SetAccessibleName(m_pFtFormula->GetText());
     pMEdit->SetAccessibleName(m_pFtFormula->GetText());
 
     m_aEditHelpId = pMEdit->GetHelpId();
