@@ -26,4 +26,14 @@
  <toolbar:toolbaritem xlink:href=".uno:AssignLayout"/>
  <toolbar:toolbaritem xlink:href=".uno:PresentationLayout" toolbar:visible="false" toolbar:helpid="27064"/>
  <toolbar:toolbaritem xlink:href=".uno:ExpandPage" toolbar:visible="false" toolbar:helpid="27343"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:FirstSlide" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:PreviousSlide" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:NextSlide" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:LastSlide" toolbar:visible="false"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:MoveSlideFirst" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:MoveSlideUp" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:MoveSlideDown" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:MoveSlideLast" toolbar:visible="false"/>
 </toolbar:toolbar>
