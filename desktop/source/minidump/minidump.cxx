@@ -14,6 +14,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <string>
 
 #include <curl/curl.h>
 
@@ -183,6 +184,8 @@ bool uploadContent(std::map<std::string, std::string>& parameters, std::string& 
     return true;
 }
 
+namespace crashreport {
+
 bool readConfig(const std::string& iniPath, std::string& response)
 {
     std::ifstream file(iniPath);
@@ -202,6 +205,8 @@ bool readConfig(const std::string& iniPath, std::string& response)
     }
 
     return uploadContent(parameters, response);
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
