@@ -12,6 +12,7 @@
 #include <sfx2/templateabstractview.hxx>
 #include <sfx2/sfxresid.hxx>
 #include <tools/urlobj.hxx>
+#include <vcl/layout.hxx>
 
 #include "../doc/doc.hrc"
 
@@ -86,7 +87,16 @@ IMPL_LINK_TYPED(TemplateSearchView, ContextMenuSelectHdl, Menu*, pMenu, bool)
         maEditTemplateHdl.Call(maSelectedItem);
         break;
     case MNI_DELETE:
+    {
+        ScopedVclPtrInstance< MessageDialog > aQueryDlg(this, SfxResId(STR_QMSG_SEL_TEMPLATE_DELETE), VclMessageType::Question, VCL_BUTTONS_YES_NO);
+        if ( aQueryDlg->Execute() != RET_YES )
+            break;
+
         maDeleteTemplateHdl.Call(maSelectedItem);
+        RemoveItem(maSelectedItem->mnId);
+
+        CalculateItemPositions();
+    }
         break;
     case MNI_DEFAULT_TEMPLATE:
         maDefaultTemplateHdl.Call(maSelectedItem);

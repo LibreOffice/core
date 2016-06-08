@@ -17,6 +17,7 @@
 #include <tools/urlobj.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/pngread.hxx>
+#include <vcl/layout.hxx>
 #include <unotools/moduleoptions.hxx>
 
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -180,7 +181,7 @@ void TemplateAbstractView::KeyInput( const KeyEvent& rKEvt )
 
     if(aKeyCode == ( KEY_MOD1 | KEY_A ) )
     {
-        for (ThumbnailViewItem* pItem : mItemList)
+        for (ThumbnailViewItem* pItem : mFilteredItemList)
         {
             if (!pItem->isSelected())
             {
@@ -192,6 +193,22 @@ void TemplateAbstractView::KeyInput( const KeyEvent& rKEvt )
         if (IsReallyVisible() && IsUpdateMode())
             Invalidate();
         return;
+    }
+    else if( aKeyCode == KEY_DELETE && !mFilteredItemList.empty())
+    {
+        ScopedVclPtrInstance< MessageDialog > aQueryDlg(this, SfxResId(STR_QMSG_SEL_TEMPLATE_DELETE), VclMessageType::Question, VCL_BUTTONS_YES_NO);
+
+        if ( aQueryDlg->Execute() != RET_YES )
+            return;
+
+        for (ThumbnailViewItem* pItem : mFilteredItemList)
+        {
+            if (pItem->isSelected())
+            {
+                maDeleteTemplateHdl.Call(pItem);
+            }
+        }
+        reload();
     }
 
     ThumbnailView::KeyInput(rKEvt);
