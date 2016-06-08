@@ -25,6 +25,7 @@
 #include <com/sun/star/frame/XUIControllerFactory.hpp>
 
 #include <rtl/ustrbuf.hxx>
+#include <rtl/ref.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -60,9 +61,9 @@ public:
 
 protected:
     UIControllerFactory( const css::uno::Reference< css::uno::XComponentContext >& xContext, const rtl::OUString &rUINode  );
-    bool                                                                         m_bConfigRead;
-    css::uno::Reference< css::uno::XComponentContext >     m_xContext;
-    ConfigurationAccess_ControllerFactory*                                           m_pConfigAccess;
+    bool                                                    m_bConfigRead;
+    css::uno::Reference< css::uno::XComponentContext >       m_xContext;
+    rtl::Reference<ConfigurationAccess_ControllerFactory>    m_pConfigAccess;
 
 private:
     virtual void SAL_CALL disposing() override;
@@ -78,7 +79,6 @@ UIControllerFactory::UIControllerFactory(
 {
     m_pConfigAccess = new ConfigurationAccess_ControllerFactory(m_xContext,
             "/org.openoffice.Office.UI.Controller/Registered/" + rConfigurationNode);
-    m_pConfigAccess->acquire();
 }
 
 UIControllerFactory::~UIControllerFactory()
@@ -89,12 +89,7 @@ UIControllerFactory::~UIControllerFactory()
 void SAL_CALL UIControllerFactory::disposing()
 {
     osl::MutexGuard g(rBHelper.rMutex);
-    if (m_pConfigAccess)
-    {
-        // reduce reference count
-        m_pConfigAccess->release();
-        m_pConfigAccess = nullptr;
-    }
+    m_pConfigAccess.clear();
 }
 
 // XMultiComponentFactory
