@@ -64,7 +64,7 @@ namespace connectivity
             //  for this Statement
 
             OTable*                                     m_pTable;
-            OConnection*                                m_pConnection;  // The owning Connection object
+            rtl::Reference<OConnection>                 m_pConnection;  // The owning Connection object
 
             OValueRow                                   m_aRow;
 
@@ -130,7 +130,7 @@ namespace connectivity
 
         public:
             // other methods
-            OConnection* getOwnConnection() const { return m_pConnection;}
+            OConnection* getOwnConnection() const { return m_pConnection.get(); }
 
             explicit OCommonStatement(OConnection* _pConnection );
             using OCommonStatement_IBASE::operator css::uno::Reference< css::uno::XInterface >;

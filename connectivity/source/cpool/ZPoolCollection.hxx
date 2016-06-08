@@ -39,6 +39,7 @@
 #include <com/sun/star/reflection/XProxyFactory.hpp>
 #include <comphelper/stl_types.hxx>
 #include <osl/mutex.hxx>
+#include <rtl/ref.hxx>
 
 namespace connectivity
 {
@@ -59,7 +60,7 @@ namespace connectivity
 
 
         typedef ::comphelper::OInterfaceCompare< css::sdbc::XDriver >  ODriverCompare;
-        typedef std::map<OUString, OConnectionPool*> OConnectionPools;
+        typedef std::map<OUString, rtl::Reference<OConnectionPool>> OConnectionPools;
 
         typedef std::map<
                 css::uno::Reference< css::sdbc::XDriver >,

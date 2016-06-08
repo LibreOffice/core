@@ -284,11 +284,9 @@ void OPoolCollection::clearConnectionPools(bool _bDispose)
     while(aIter != m_aPools.end())
     {
         aIter->second->clear(_bDispose);
-        aIter->second->release();
-        OUString sKeyValue = aIter->first;
         ++aIter;
-        m_aPools.erase(sKeyValue);
     }
+    m_aPools.clear();
 }
 
 OConnectionPool* OPoolCollection::getConnectionPool(const OUString& _sImplName,
@@ -298,16 +296,15 @@ OConnectionPool* OPoolCollection::getConnectionPool(const OUString& _sImplName,
     OConnectionPool *pRet = nullptr;
     OConnectionPools::const_iterator aFind = m_aPools.find(_sImplName);
     if (aFind != m_aPools.end())
-        pRet = aFind->second;
+        pRet = aFind->second.get();
     else if (_xDriver.is() && _xDriverNode.is())
     {
         Reference<XPropertySet> xProp(_xDriverNode,UNO_QUERY);
         if(xProp.is())
             xProp->addPropertyChangeListener(getEnableNodeName(),this);
         OConnectionPool* pConnectionPool = new OConnectionPool(_xDriver,_xDriverNode,m_xProxyFactory);
-        pConnectionPool->acquire();
         aFind = m_aPools.insert(OConnectionPools::value_type(_sImplName,pConnectionPool)).first;
-        pRet = aFind->second;
+        pRet = aFind->second.get();
     }
 
     OSL_ENSURE(pRet, "Could not query DriverManager from ConnectionPool!");
@@ -456,10 +453,8 @@ void SAL_CALL OPoolCollection::propertyChange( const css::beans::PropertyChangeE
             for(;aIter != m_aPools.end();++aIter)
             {
                 aIter->second->clear(false);
-                aIter->second->release();
             }
             m_aPools.clear();
-            m_aPools         = OConnectionPools();
         }
     }
     else if(evt.Source.is())
@@ -484,10 +479,9 @@ void SAL_CALL OPoolCollection::propertyChange( const css::beans::PropertyChangeE
 
             // 2nd clear the connectionpool
             OConnectionPools::iterator aFind = m_aPools.find(sThisDriverName);
-            if(aFind != m_aPools.end() && aFind->second)
+            if(aFind != m_aPools.end())
             {
                 aFind->second->clear(false);
-                aFind->second->release();
                 m_aPools.erase(aFind);
             }
         }

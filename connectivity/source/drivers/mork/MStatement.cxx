@@ -69,7 +69,6 @@ OCommonStatement::OCommonStatement(OConnection* _pConnection )
 {
     m_xDBMetaData = _pConnection->getMetaData();
     m_pParseTree = nullptr;
-    m_pConnection->acquire();
 }
 
 
@@ -85,9 +84,7 @@ void OCommonStatement::disposing()
     clearWarnings();
     clearCachedResultSet();
 
-    if (m_pConnection)
-        m_pConnection->release();
-    m_pConnection = nullptr;
+    m_pConnection.clear();
 
     m_pSQLIterator->dispose();
     delete m_pParseTree;
@@ -276,7 +273,7 @@ Reference< XConnection > SAL_CALL OCommonStatement::getConnection(  ) throw(SQLE
     checkDisposed(OCommonStatement_IBASE::rBHelper.bDisposed);
 
     // just return our connection here
-    return Reference< XConnection >(m_pConnection);
+    return Reference< XConnection >(m_pConnection.get());
 }
 
 Any SAL_CALL OStatement::queryInterface( const Type & rType ) throw(RuntimeException, std::exception)

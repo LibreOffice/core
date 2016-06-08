@@ -76,11 +76,11 @@ namespace connectivity
             connectivity::OSQLParser                    m_aParser;
             connectivity::OSQLParseTreeIterator         m_aSQLIterator;
 
-            OConnection*                                m_pConnection;// The owning Connection object
+            rtl::Reference<OConnection>                 m_pConnection;// The owning Connection object
             connectivity::OSQLParseNode*                m_pParseTree;
             OSQLAnalyzer*                               m_pSQLAnalyzer; //the sql analyzer used by the resultset
 
-            OFileTable*                                 m_pTable;       // the current table
+            rtl::Reference<OFileTable>                  m_pTable;       // the current table
             OValueRefRow                                m_aSelectRow;
             OValueRefRow                                m_aRow;
             OValueRefRow                                m_aEvaluateRow; // contains all values of a row
@@ -133,7 +133,7 @@ namespace connectivity
 
             OStatement_Base(OConnection* _pConnection );
 
-            OConnection* getOwnConnection() const { return m_pConnection;}
+            OConnection* getOwnConnection() const { return m_pConnection.get(); }
 
             using OStatement_BASE::operator css::uno::Reference< css::uno::XInterface >;
 

@@ -79,7 +79,7 @@ namespace connectivity
 
     protected:
         css::uno::Reference< css::sdbc::XStatement>       m_xGeneratedStatement;
-        java_sql_Connection*        m_pConnection;
+        rtl::Reference<java_sql_Connection>               m_pConnection;
         java::sql::ConnectionLog    m_aLogger;
         OUString             m_sSqlStatement;
         // Properties

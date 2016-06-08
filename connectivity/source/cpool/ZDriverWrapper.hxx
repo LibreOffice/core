@@ -23,6 +23,7 @@
 #include <com/sun/star/sdbc/XDriver.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <osl/mutex.hxx>
+#include <rtl/ref.hxx>
 #include <com/sun/star/uno/XAggregation.hpp>
 
 
@@ -41,7 +42,8 @@ namespace connectivity
                             m_xDriverAggregate;
         css::uno::Reference< css::sdbc::XDriver >
                             m_xDriver;
-        OConnectionPool*    m_pConnectionPool;
+        rtl::Reference<OConnectionPool>
+                            m_pConnectionPool;
 
     public:
         /** creates a new wrapper for a driver
