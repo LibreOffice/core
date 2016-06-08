@@ -147,7 +147,8 @@ public:
     ~ODynamicLoader()
     {
         if( m_pLoader )
-            m_pLoader->release();
+            if (m_pLoader->release()==0)
+                m_pStaticLoader = nullptr;
     }
 
     /// Assign operator
@@ -175,7 +176,7 @@ public:
         return static_cast<API*>(m_pLoader->getApi());
     }
 
-    /// cast operator, which cast to a poiner with the initialized API function structure.
+    /// cast operator, which cast to a pointer with the initialized API function structure.
     API* SAL_CALL operator->() const
     {
         return static_cast<API*>(m_pLoader->getApi());
