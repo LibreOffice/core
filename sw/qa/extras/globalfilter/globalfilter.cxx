@@ -15,6 +15,8 @@
 #include <comphelper/processfactory.hxx>
 #include <unotxdoc.hxx>
 #include <docsh.hxx>
+#include <IDocumentRedlineAccess.hxx>
+#include <IDocumentContentOperations.hxx>
 #include <doc.hxx>
 #include <ndgrf.hxx>
 #include <drawdoc.hxx>
@@ -37,6 +39,7 @@ public:
 #if !defined(_WIN32)
     void testSkipImages();
 #endif
+    void testRedlineMode();
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testSwappedOutImageExport);
@@ -50,6 +53,7 @@ public:
 #if !defined(_WIN32)
     CPPUNIT_TEST(testSkipImages);
 #endif
+    CPPUNIT_TEST(testRedlineMode);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -816,6 +820,58 @@ void Test::testSkipImages()
     }
 }
 #endif
+
+void Test::testRedlineMode()
+{
+    const char* aFilterNames[] = {
+        "writer8",
+        "Rich Text Format",
+        "MS Word 97",
+        "Office Open XML Text",
+    };
+
+    mxComponent = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+
+    SwPaM pam(SwPosition(SwNodeIndex(pDoc->GetNodes().GetEndOfContent(), -1)));
+    pDoc->getIDocumentContentOperations().InsertString(pam, "foo bar baz");
+
+    IDocumentRedlineAccess & rIDRA(pDoc->getIDocumentRedlineAccess());
+    // enable change tracking
+    rIDRA.SetRedlineMode(rIDRA.GetRedlineMode()
+        | nsRedlineMode_t::REDLINE_ON | nsRedlineMode_t::REDLINE_SHOW_DELETE);
+
+    // need a delete redline to trigger mode switching
+    pam.Move(fnMoveForward, fnGoDoc);
+    pam.SetMark();
+    pam.Move(fnMoveBackward, fnGoDoc);
+    pDoc->getIDocumentContentOperations().DeleteAndJoin(pam);
+
+    // hide delete redlines
+    RedlineMode_t const nRedlineMode =
+        rIDRA.GetRedlineMode() & ~nsRedlineMode_t::REDLINE_SHOW_DELETE;
+    rIDRA.SetRedlineMode(nRedlineMode);
+
+    for (size_t nFilter = 0; nFilter < SAL_N_ELEMENTS(aFilterNames); ++nFilter)
+    {
+        // export the document
+        uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+
+        utl::MediaDescriptor aMediaDescriptor;
+        aMediaDescriptor["FilterName"] <<= OUString::createFromAscii(aFilterNames[nFilter]);
+        utl::TempFile aTempFile;
+        aTempFile.EnableKillingFile();
+        xStorable->storeToURL(aTempFile.GetURL(),
+                aMediaDescriptor.getAsConstPropertyValueList());
+
+        // tdf#97103 check that redline mode is properly restored
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(
+            OString(OString("redline mode not restored in ") + aFilterNames[nFilter]).getStr(),
+            nRedlineMode, rIDRA.GetRedlineMode());
+    }
+}
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
 
