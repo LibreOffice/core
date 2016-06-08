@@ -21,6 +21,7 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/builderfactory.hxx>
 #include <vcl/pngread.hxx>
+#include <vcl/layout.hxx>
 
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
@@ -232,7 +233,13 @@ IMPL_LINK_TYPED(TemplateLocalView, ContextMenuSelectHdl, Menu*, pMenu, bool)
     }
         break;
     case MNI_DELETE:
+    {
+        ScopedVclPtrInstance< MessageDialog > aQueryDlg(this, SfxResId(STR_QMSG_SEL_TEMPLATE_DELETE), VclMessageType::Question, VCL_BUTTONS_YES_NO);
+        if ( aQueryDlg->Execute() != RET_YES )
+            break;
+
         maDeleteTemplateHdl.Call(maSelectedItem);
+    }
         break;
     case MNI_DEFAULT_TEMPLATE:
         maDefaultTemplateHdl.Call(maSelectedItem);

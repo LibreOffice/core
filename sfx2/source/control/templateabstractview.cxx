@@ -17,6 +17,7 @@
 #include <tools/urlobj.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/pngread.hxx>
+#include <vcl/layout.hxx>
 #include <unotools/moduleoptions.hxx>
 
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -163,24 +164,49 @@ void TemplateAbstractView::updateThumbnailDimensions(long itemMaxSize)
 void TemplateAbstractView::MouseButtonDown( const MouseEvent& rMEvt )
 {
     GrabFocus();
+    ThumbnailView::MouseButtonDown(rMEvt);
+}
 
-    if (rMEvt.IsRight())
+void TemplateAbstractView::Command( const CommandEvent& rCEvt )
+{
+    if ( rCEvt.GetCommand() == CommandEventId::ContextMenu )
     {
-        deselectItems();
-        size_t nPos = ImplGetItem(rMEvt.GetPosPixel());
-        Point aPosition (rMEvt.GetPosPixel());
-        maPosition = aPosition;
-        ThumbnailViewItem* pItem = ImplGetItem(nPos);
-        const TemplateViewItem *pViewItem = dynamic_cast<const TemplateViewItem*>(pItem);
-
-        if(pViewItem)
+        if(rCEvt.IsMouseEvent())
         {
-            maSelectedItem = dynamic_cast<TemplateViewItem*>(pItem);
-            maCreateContextMenuHdl.Call(pItem);
+            deselectItems();
+            size_t nPos = ImplGetItem(rCEvt.GetMousePosPixel());
+            Point aPosition (rCEvt.GetMousePosPixel());
+            maPosition = aPosition;
+            ThumbnailViewItem* pItem = ImplGetItem(nPos);
+            const TemplateViewItem *pViewItem = dynamic_cast<const TemplateViewItem*>(pItem);
+
+            if(pViewItem)
+            {
+                maSelectedItem = dynamic_cast<TemplateViewItem*>(pItem);
+                maCreateContextMenuHdl.Call(pItem);
+            }
+        }
+        else
+        {
+            for (ThumbnailViewItem* pItem : mFilteredItemList)
+            {
+                //create context menu for the first selected item
+                if (pItem->isSelected())
+                {
+                    deselectItems();
+                    pItem->setSelection(true);
+                    maItemStateHdl.Call(pItem);
+                    Rectangle aRect = pItem->getDrawArea();
+                    maPosition = aRect.Center();
+                    maSelectedItem = dynamic_cast<TemplateViewItem*>(pItem);
+                    maCreateContextMenuHdl.Call(pItem);
+                    break;
+                }
+            }
         }
     }
 
-    ThumbnailView::MouseButtonDown(rMEvt);
+    ThumbnailView::Command(rCEvt);
 }
 
 void TemplateAbstractView::KeyInput( const KeyEvent& rKEvt )
@@ -189,7 +215,7 @@ void TemplateAbstractView::KeyInput( const KeyEvent& rKEvt )
 
     if(aKeyCode == ( KEY_MOD1 | KEY_A ) )
     {
-        for (ThumbnailViewItem* pItem : mItemList)
+        for (ThumbnailViewItem* pItem : mFilteredItemList)
         {
             if (!pItem->isSelected())
             {
@@ -202,23 +228,21 @@ void TemplateAbstractView::KeyInput( const KeyEvent& rKEvt )
             Invalidate();
         return;
     }
-    else if(aKeyCode == (KEY_SHIFT | KEY_F10 ))
+    else if( aKeyCode == KEY_DELETE && !mFilteredItemList.empty())
     {
+        ScopedVclPtrInstance< MessageDialog > aQueryDlg(this, SfxResId(STR_QMSG_SEL_TEMPLATE_DELETE), VclMessageType::Question, VCL_BUTTONS_YES_NO);
+
+        if ( aQueryDlg->Execute() != RET_YES )
+            return;
+
         for (ThumbnailViewItem* pItem : mFilteredItemList)
         {
-            //create context menu for the first selected item
             if (pItem->isSelected())
             {
-                deselectItems();
-                pItem->setSelection(true);
-                maItemStateHdl.Call(pItem);
-                Rectangle aRect = pItem->getDrawArea();
-                maPosition = aRect.Center();
-                maSelectedItem = dynamic_cast<TemplateViewItem*>(pItem);
-                maCreateContextMenuHdl.Call(pItem);
-                break;
+                maDeleteTemplateHdl.Call(pItem);
             }
         }
+        reload();
     }
 
     ThumbnailView::KeyInput(rKEvt);

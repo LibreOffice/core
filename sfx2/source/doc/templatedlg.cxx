@@ -825,11 +825,6 @@ IMPL_LINK_TYPED(SfxTemplateManagerDlg, EditTemplateHdl, ThumbnailViewItem*, pIte
 
 IMPL_LINK_TYPED(SfxTemplateManagerDlg, DeleteTemplateHdl, ThumbnailViewItem*, pItem, void)
 {
-    ScopedVclPtrInstance< MessageDialog > aQueryDlg(this, SfxResId(STR_QMSG_SEL_TEMPLATE_DELETE), VclMessageType::Question, VCL_BUTTONS_YES_NO);
-
-    if ( aQueryDlg->Execute() != RET_YES )
-        return;
-
     OUString aDeletedTemplate;
 
     if(mpSearchView->IsVisible())
@@ -857,8 +852,6 @@ IMPL_LINK_TYPED(SfxTemplateManagerDlg, DeleteTemplateHdl, ThumbnailViewItem*, pI
         OUString aMsg( SfxResId(STR_MSG_ERROR_DELETE_TEMPLATE).toString() );
         ScopedVclPtrInstance<MessageDialog>::Create(this, aMsg.replaceFirst("$1",aDeletedTemplate))->Execute();
     }
-
-    mpLocalView->reload();
 
     if(mpSearchView->IsVisible())
         SearchUpdateHdl(*mpSearchFilter);
@@ -936,6 +929,7 @@ IMPL_LINK_NOARG_TYPED(SfxTemplateManagerDlg, SearchUpdateHdl, Edit&, void)
         mpCurView->filterItems(ViewFilter_Application(getCurrentApplicationFilter()));
         if(mpCurView == mpLocalView)
         {
+            mpLocalView->reload();
             OUString sLastFolder = mpCBFolder->GetSelectEntry();
             mpLocalView->showRegion(sLastFolder);
             mpActionMenu->ShowItem(MNI_ACTION_RENAME_FOLDER);

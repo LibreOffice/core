@@ -12,6 +12,7 @@
 #include <sfx2/templateabstractview.hxx>
 #include <sfx2/sfxresid.hxx>
 #include <tools/urlobj.hxx>
+#include <vcl/layout.hxx>
 
 #include "../doc/doc.hrc"
 
@@ -34,50 +35,87 @@ VCL_BUILDER_FACTORY(TemplateSearchView)
 void TemplateSearchView::MouseButtonDown( const MouseEvent& rMEvt )
 {
     GrabFocus();
-    if (rMEvt.IsRight())
-    {
-        deselectItems();
-        size_t nPos = ImplGetItem(rMEvt.GetPosPixel());
-        Point aPosition (rMEvt.GetPosPixel());
-        maPosition = aPosition;
-        ThumbnailViewItem* pItem = ImplGetItem(nPos);
-        const TemplateViewItem *pViewItem = dynamic_cast<const TemplateViewItem*>(pItem);
-
-        if(pViewItem)
-        {
-            maSelectedItem = dynamic_cast<TemplateViewItem*>(pItem);
-            maCreateContextMenuHdl.Call(pItem);
-        }
-    }
-
     ThumbnailView::MouseButtonDown(rMEvt);
 }
-
 
 void TemplateSearchView::KeyInput( const KeyEvent& rKEvt )
 {
     vcl::KeyCode aKeyCode = rKEvt.GetKeyCode();
 
-    if(aKeyCode == (KEY_SHIFT | KEY_F10 ))
+    if(aKeyCode == ( KEY_MOD1 | KEY_A ) )
     {
         for (ThumbnailViewItem* pItem : mFilteredItemList)
         {
-            //create context menu for the first selected item
-            if (pItem->isSelected())
+            if (!pItem->isSelected())
             {
-                deselectItems();
                 pItem->setSelection(true);
                 maItemStateHdl.Call(pItem);
-                Rectangle aRect = pItem->getDrawArea();
-                maPosition = aRect.Center();
-                maSelectedItem = dynamic_cast<TemplateViewItem*>(pItem);
-                maCreateContextMenuHdl.Call(pItem);
-                break;
+            }
+        }
+
+        if (IsReallyVisible() && IsUpdateMode())
+            Invalidate();
+        return;
+    }
+    else if( aKeyCode == KEY_DELETE && !mFilteredItemList.empty())
+    {
+        ScopedVclPtrInstance< MessageDialog > aQueryDlg(this, SfxResId(STR_QMSG_SEL_TEMPLATE_DELETE), VclMessageType::Question, VCL_BUTTONS_YES_NO);
+
+        if ( aQueryDlg->Execute() != RET_YES )
+            return;
+
+        for (ThumbnailViewItem* pItem : mFilteredItemList)
+        {
+            if (pItem->isSelected())
+            {
+                maDeleteTemplateHdl.Call(pItem);
             }
         }
     }
 
     ThumbnailView::KeyInput(rKEvt);
+}
+
+void TemplateSearchView::Command( const CommandEvent& rCEvt )
+{
+    if ( rCEvt.GetCommand() == CommandEventId::ContextMenu )
+    {
+        if(rCEvt.IsMouseEvent())
+        {
+            deselectItems();
+            size_t nPos = ImplGetItem(rCEvt.GetMousePosPixel());
+            Point aPosition (rCEvt.GetMousePosPixel());
+            maPosition = aPosition;
+            ThumbnailViewItem* pItem = ImplGetItem(nPos);
+            const TemplateViewItem *pViewItem = dynamic_cast<const TemplateViewItem*>(pItem);
+
+            if(pViewItem)
+            {
+                maSelectedItem = dynamic_cast<TemplateViewItem*>(pItem);
+                maCreateContextMenuHdl.Call(pItem);
+            }
+        }
+        else
+        {
+            for (ThumbnailViewItem* pItem : mFilteredItemList)
+            {
+                //create context menu for the first selected item
+                if (pItem->isSelected())
+                {
+                    deselectItems();
+                    pItem->setSelection(true);
+                    maItemStateHdl.Call(pItem);
+                    Rectangle aRect = pItem->getDrawArea();
+                    maPosition = aRect.Center();
+                    maSelectedItem = dynamic_cast<TemplateViewItem*>(pItem);
+                    maCreateContextMenuHdl.Call(pItem);
+                    break;
+                }
+            }
+        }
+    }
+
+    ThumbnailView::Command(rCEvt);
 }
 
 void TemplateSearchView::createContextMenu( const bool bIsDefault)
@@ -113,7 +151,16 @@ IMPL_LINK_TYPED(TemplateSearchView, ContextMenuSelectHdl, Menu*, pMenu, bool)
         maEditTemplateHdl.Call(maSelectedItem);
         break;
     case MNI_DELETE:
+    {
+        ScopedVclPtrInstance< MessageDialog > aQueryDlg(this, SfxResId(STR_QMSG_SEL_TEMPLATE_DELETE), VclMessageType::Question, VCL_BUTTONS_YES_NO);
+        if ( aQueryDlg->Execute() != RET_YES )
+            break;
+
         maDeleteTemplateHdl.Call(maSelectedItem);
+        RemoveItem(maSelectedItem->mnId);
+
+        CalculateItemPositions();
+    }
         break;
     case MNI_DEFAULT_TEMPLATE:
         maDefaultTemplateHdl.Call(maSelectedItem);
