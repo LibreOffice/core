@@ -689,7 +689,7 @@ IMPL_LINK_TYPED(SvxColorTabPage, ModifiedHdl_Impl, Edit&, rEdit, void)
     {
         // read current MtrFields, if cmyk, then k-value as transparency
         if(&rEdit == m_pHexcustom)
-            aCurrentColor = (Color)m_pHexcustom->GetColor();
+            aCurrentColor = Color(m_pHexcustom->GetColor());
         else
         {
             aCurrentColor.SetColor ( Color( (sal_uInt8)PercentToColor_Impl( (sal_uInt16) m_pRcustom->GetValue() ),
