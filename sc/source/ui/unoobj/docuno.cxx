@@ -770,7 +770,21 @@ OString ScModelObj::getTextSelection(const char* pMimeType, OString& rUsedMimeTy
     if (!xTransferable.is() || !xTransferable->isDataFlavorSupported(aFlavor))
         return OString();
 
-    uno::Any aAny(xTransferable->getTransferData(aFlavor));
+    uno::Any aAny;
+    try
+    {
+        aAny = xTransferable->getTransferData(aFlavor);
+    }
+    catch (const datatransfer::UnsupportedFlavorException e)
+    {
+        OSL_TRACE("Caught UnsupportedFlavorException '%s'", OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr());
+        return OString();
+    }
+    catch (const css::uno::Exception& e)
+    {
+        OSL_TRACE("Caught UNO Exception '%s'", OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr());
+        return OString();
+    }
 
     OString aRet;
     if (aFlavor.DataType == cppu::UnoType<OUString>::get())
