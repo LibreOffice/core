@@ -1015,11 +1015,15 @@ OUString ComboBox::GetEntry( sal_Int32 nPos ) const
 
 sal_Int32 ComboBox::GetEntryCount() const
 {
+    if (!m_pImpl->m_pImplLB)
+        return 0;
     return m_pImpl->m_pImplLB->GetEntryList()->GetEntryCount() - m_pImpl->m_pImplLB->GetEntryList()->GetMRUCount();
 }
 
 bool ComboBox::IsTravelSelect() const
 {
+    if (!m_pImpl->m_pImplLB)
+        return false;
     return m_pImpl->m_pImplLB->IsTravelSelect();
 }
 
@@ -1036,6 +1040,8 @@ void ComboBox::EnableMultiSelection( bool bMulti )
 
 bool ComboBox::IsMultiSelectionEnabled() const
 {
+    if (!m_pImpl->m_pImplLB)
+        return false;
     return m_pImpl->m_pImplLB->IsMultiSelectionEnabled();
 }
 
