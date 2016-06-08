@@ -812,7 +812,12 @@ double ScInterpreter::PopDouble()
                 nGlobalError = p->GetError();
                 break;
             case svDouble:
-                return p->GetDouble();
+                {
+                    short nType = p->GetDoubleType();
+                    if (nType && nType != css::util::NumberFormat::UNDEFINED)
+                        nCurFmtType = nType;
+                    return p->GetDouble();
+                }
             case svEmptyCell:
             case svMissing:
                 return 0.0;
@@ -1650,17 +1655,27 @@ void ScInterpreter::QueryMatrixType(ScMatrixRef& xMat, short& rRetTypeExpr, sal_
         SetError( errUnknownStackVariable);
 }
 
+formula::FormulaToken* ScInterpreter::CreateDoubleOrTypedToken( double fVal )
+{
+    // NumberFormat::NUMBER is the default untyped double.
+    if (nFuncFmtType && nFuncFmtType != css::util::NumberFormat::NUMBER &&
+            nFuncFmtType != css::util::NumberFormat::UNDEFINED)
+        return new FormulaTypedDoubleToken( fVal, nFuncFmtType);
+    else
+        return new FormulaDoubleToken( fVal);
+}
+
 void ScInterpreter::PushDouble(double nVal)
 {
     TreatDoubleError( nVal );
     if (!IfErrorPushError())
-        PushTempTokenWithoutError( new FormulaDoubleToken( nVal ) );
+        PushTempTokenWithoutError( CreateDoubleOrTypedToken( nVal));
 }
 
 void ScInterpreter::PushInt(int nVal)
 {
     if (!IfErrorPushError())
-        PushTempTokenWithoutError( new FormulaDoubleToken( nVal ) );
+        PushTempTokenWithoutError( CreateDoubleOrTypedToken( nVal));
 }
 
 void ScInterpreter::PushStringBuffer( const sal_Unicode* pString )

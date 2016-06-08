@@ -354,6 +354,8 @@ ScMatrixRef PopMatrix();
 sc::RangeMatrix PopRangeMatrix();
 void QueryMatrixType(ScMatrixRef& xMat, short& rRetTypeExpr, sal_uLong& rRetIndexExpr);
 
+formula::FormulaToken* CreateDoubleOrTypedToken( double fVal );
+
 void PushDouble(double nVal);
 void PushInt( int nVal );
 void PushStringBuffer( const sal_Unicode* pString );
