@@ -179,7 +179,7 @@ DrawViewShell::~DrawViewShell()
 
     if ( mxClipEvtLstnr.is() )
     {
-        mxClipEvtLstnr->AddRemoveListener( GetActiveWindow(), false );
+        mxClipEvtLstnr->RemoveListener( GetActiveWindow() );
         mxClipEvtLstnr->ClearCallbackLink();        // prevent callback if another thread is waiting
         mxClipEvtLstnr.clear();
     }

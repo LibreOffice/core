@@ -134,7 +134,7 @@ ScDrawTextObjectBar::~ScDrawTextObjectBar()
 {
     if ( mxClipEvtLstnr.is() )
     {
-        mxClipEvtLstnr->AddRemoveListener( pViewData->GetActiveWin(), false );
+        mxClipEvtLstnr->RemoveListener( pViewData->GetActiveWin() );
 
         //  The listener may just now be waiting for the SolarMutex and call the link
         //  afterwards, in spite of RemoveListener. So the link has to be reset, too.
@@ -494,7 +494,7 @@ void ScDrawTextObjectBar::GetClipState( SfxItemSet& rSet )
         // create listener
         mxClipEvtLstnr = new TransferableClipboardListener( LINK( this, ScDrawTextObjectBar, ClipboardChanged ) );
         vcl::Window* pWin = pViewData->GetActiveWin();
-        mxClipEvtLstnr->AddRemoveListener( pWin, true );
+        mxClipEvtLstnr->AddListener( pWin );
 
         // get initial state
         TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( pViewData->GetActiveWin() ) );

@@ -786,7 +786,7 @@ bool SbaXDataBrowserController::Construct(vcl::Window* pParent)
 
     m_pClipbordNotifier = new TransferableClipboardListener( LINK( this, SbaXDataBrowserController, OnClipboardChanged ) );
     m_pClipbordNotifier->acquire();
-    m_pClipbordNotifier->AddRemoveListener( getView(), true );
+    m_pClipbordNotifier->AddListener( getView() );
 
     // this call create the toolbox
     SbaXDataBrowserController_Base::Construct(pParent);
@@ -1197,7 +1197,7 @@ void SbaXDataBrowserController::disposing()
     if ( getView() && m_pClipbordNotifier  )
     {
         m_pClipbordNotifier->ClearCallbackLink();
-        m_pClipbordNotifier->AddRemoveListener( getView(), false );
+        m_pClipbordNotifier->RemoveListener( getView() );
         m_pClipbordNotifier->release();
         m_pClipbordNotifier = nullptr;
     }

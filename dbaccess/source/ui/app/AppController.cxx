@@ -342,7 +342,7 @@ void SAL_CALL OApplicationController::disposing()
     {
         getContainer()->showPreview(nullptr);
         m_pClipbordNotifier->ClearCallbackLink();
-        m_pClipbordNotifier->AddRemoveListener( getView(), false );
+        m_pClipbordNotifier->RemoveListener( getView() );
         m_pClipbordNotifier->release();
         m_pClipbordNotifier = nullptr;
     }
@@ -448,7 +448,7 @@ bool OApplicationController::Construct(vcl::Window* _pParent)
 
     m_pClipbordNotifier = new TransferableClipboardListener( LINK( this, OApplicationController, OnClipboardChanged ) );
     m_pClipbordNotifier->acquire();
-    m_pClipbordNotifier->AddRemoveListener( getView(), true );
+    m_pClipbordNotifier->AddListener( getView() );
 
     OGenericUnoController::Construct( _pParent );
     getView()->Show();

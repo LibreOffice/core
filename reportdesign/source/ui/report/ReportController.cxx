@@ -315,7 +315,7 @@ void OReportController::disposing()
     if ( m_pClipboardNotifier.is() )
     {
         m_pClipboardNotifier->ClearCallbackLink();
-        m_pClipboardNotifier->AddRemoveListener( getView(), false );
+        m_pClipboardNotifier->RemoveListener( getView() );
         m_pClipboardNotifier.clear();
     }
     if ( m_pGroupsFloater )
@@ -1766,7 +1766,7 @@ bool OReportController::Construct(vcl::Window* pParent)
     m_aSystemClipboard = TransferableDataHelper::CreateFromSystemClipboard( getView() );
     m_aSystemClipboard.StartClipboardListening( );
     m_pClipboardNotifier = new TransferableClipboardListener( LINK( this, OReportController, OnClipboardChanged ) );
-    m_pClipboardNotifier->AddRemoveListener( getView(), true );
+    m_pClipboardNotifier->AddListener( getView() );
 
     OReportController_BASE::Construct(pParent);
     return true;
