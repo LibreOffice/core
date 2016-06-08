@@ -233,7 +233,13 @@ IMPL_LINK_TYPED(TemplateLocalView, ContextMenuSelectHdl, Menu*, pMenu, bool)
     }
         break;
     case MNI_DELETE:
+    {
+        ScopedVclPtrInstance< MessageDialog > aQueryDlg(this, SfxResId(STR_QMSG_SEL_TEMPLATE_DELETE), VclMessageType::VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
+        if ( aQueryDlg->Execute() != RET_YES )
+            break;
+
         maDeleteTemplateHdl.Call(maSelectedItem);
+    }
         break;
     case MNI_DEFAULT_TEMPLATE:
         maDefaultTemplateHdl.Call(maSelectedItem);
