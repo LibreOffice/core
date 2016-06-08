@@ -407,12 +407,10 @@ ODocumentDefinition::ODocumentDefinition( const Reference< XInterface >& _rxCont
                                           const TContentPtr& _pImpl, bool _bForm )
     :OContentHelper(_xORB,_rxContainer,_pImpl)
     ,OPropertyStateContainer(OContentHelper::rBHelper)
-    ,m_pInterceptor(nullptr)
     ,m_bForm(_bForm)
     ,m_bOpenInDesign(false)
     ,m_bInExecute(false)
     ,m_bRemoveListener(false)
-    ,m_pClientHelper(nullptr)
 {
     registerProperties();
 }
@@ -435,11 +433,10 @@ ODocumentDefinition::~ODocumentDefinition()
         dispose();
     }
 
-    if ( m_pInterceptor )
+    if ( m_pInterceptor.is() )
     {
         m_pInterceptor->dispose();
-        m_pInterceptor->release();
-        m_pInterceptor = nullptr;
+        m_pInterceptor.clear();
     }
 }
 
@@ -458,11 +455,10 @@ void ODocumentDefinition::closeObject()
         {
         }
         m_xEmbeddedObject = nullptr;
-        if ( m_pClientHelper )
+        if ( m_pClientHelper.is() )
         {
             m_pClientHelper->resetClient(nullptr);
-            m_pClientHelper->release();
-            m_pClientHelper = nullptr;
+            m_pClientHelper.clear();
         }
     }
 }
@@ -1492,16 +1488,14 @@ Sequence< PropertyValue > ODocumentDefinition::fillLoadArgs( const Reference< XC
         const Sequence< PropertyValue >& i_rOpenCommandArguments, Sequence< PropertyValue >& _out_rEmbeddedObjectDescriptor )
 {
     // (re-)create interceptor, and put it into the descriptor of the embedded object
-    if ( m_pInterceptor )
+    if ( m_pInterceptor.is() )
     {
         m_pInterceptor->dispose();
-        m_pInterceptor->release();
-        m_pInterceptor = nullptr;
+        m_pInterceptor.clear();
     }
 
     m_pInterceptor = new OInterceptor( this );
-    m_pInterceptor->acquire();
-    Reference<XDispatchProviderInterceptor> xInterceptor = m_pInterceptor;
+    Reference<XDispatchProviderInterceptor> xInterceptor = m_pInterceptor.get();
 
     ::comphelper::NamedValueCollection aEmbeddedDescriptor;
     aEmbeddedDescriptor.put( "OutplaceDispatchInterceptor", xInterceptor );
@@ -1625,12 +1619,11 @@ void ODocumentDefinition::loadEmbeddedObject( const Reference< XConnection >& i_
                                                                         ),UNO_QUERY);
             if ( m_xEmbeddedObject.is() )
             {
-                if ( !m_pClientHelper )
+                if ( !m_pClientHelper.is() )
                 {
                     m_pClientHelper = new OEmbeddedClientHelper(this);
-                    m_pClientHelper->acquire();
                 }
-                Reference<XEmbeddedClient> xClient = m_pClientHelper;
+                Reference<XEmbeddedClient> xClient = m_pClientHelper.get();
                 m_xEmbeddedObject->setClientSite(xClient);
                 m_xEmbeddedObject->changeState(EmbedStates::RUNNING);
                 if ( bSetSize )
@@ -1648,12 +1641,11 @@ void ODocumentDefinition::loadEmbeddedObject( const Reference< XConnection >& i_
         sal_Int32 nCurrentState = m_xEmbeddedObject->getCurrentState();
         if ( nCurrentState == EmbedStates::LOADED )
         {
-            if ( !m_pClientHelper )
+            if ( !m_pClientHelper.is() )
             {
                 m_pClientHelper = new OEmbeddedClientHelper(this);
-                m_pClientHelper->acquire();
             }
-            Reference<XEmbeddedClient> xClient = m_pClientHelper;
+            Reference<XEmbeddedClient> xClient = m_pClientHelper.get();
             m_xEmbeddedObject->setClientSite(xClient);
 
             Sequence< PropertyValue > aEmbeddedObjectDescriptor;

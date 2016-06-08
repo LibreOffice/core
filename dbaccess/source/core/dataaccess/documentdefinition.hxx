@@ -64,12 +64,12 @@ class ODocumentDefinition
     css::uno::Reference< css::embed::XStateChangeListener >   m_xListener;
     css::uno::Reference< css::sdbc::XConnection >             m_xLastKnownConnection;
 
-    OInterceptor*                                             m_pInterceptor;
+    rtl::Reference<OInterceptor>                              m_pInterceptor;
     bool                                                      m_bForm; // <TRUE/> if it is a form
     bool                                                      m_bOpenInDesign;
     bool                                                      m_bInExecute;
     bool                                                      m_bRemoveListener;
-    OEmbeddedClientHelper*                                    m_pClientHelper;
+    rtl::Reference<OEmbeddedClientHelper>                     m_pClientHelper;
 
 protected:
     virtual ~ODocumentDefinition();
