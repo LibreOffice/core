@@ -59,7 +59,7 @@ public:
     virtual css::uno::Any SAL_CALL getFastPropertyValue( ::sal_Int32 nHandle ) throw (css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
 
     /// Get the table that owns this column.
-    TableModelRef getModel() const;
+    TableModelRef const & getModel() const;
     /// Get the width of this column.
     sal_Int32 getWidth() const;
 
