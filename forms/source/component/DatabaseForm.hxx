@@ -175,12 +175,12 @@ class ODatabaseForm :public OFormComponents
     ::dbtools::WarningsContainer    m_aWarnings;
     OPropertyChangeMultiplexer* m_pAggregatePropertyMultiplexer;
     // Management of the Control Groups
-    OGroupManager*              m_pGroupManager;
+    rtl::Reference<OGroupManager>   m_pGroupManager;
     ::dbtools::ParameterManager m_aParameterManager;
     ::dbtools::FilterManager    m_aFilterManager;
     Timer*                      m_pLoadTimer;
 
-    OFormSubmitResetThread*     m_pThread;
+    rtl::Reference<OFormSubmitResetThread>  m_pThread;
     OUString                    m_sCurrentErrorContext;
     // will be used as additional context information
     // when an exception is catched and forwarded to the listeners

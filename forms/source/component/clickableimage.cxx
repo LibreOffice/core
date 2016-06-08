@@ -83,7 +83,6 @@ namespace frm
 
     OClickableImageBaseControl::OClickableImageBaseControl(const Reference<XComponentContext>& _rxFactory, const OUString& _aService)
         :OControl(_rxFactory, _aService)
-        ,m_pThread(nullptr)
         ,m_aSubmissionVetoListeners( m_aMutex )
         ,m_aApproveActionListeners( m_aMutex )
         ,m_aActionListeners( m_aMutex )
@@ -150,11 +149,7 @@ namespace frm
 
         {
             ::osl::MutexGuard aGuard( m_aMutex );
-            if( m_pThread )
-            {
-                m_pThread->release();
-                m_pThread = nullptr;
-            }
+            m_pThread.clear();
         }
 
         OControl::disposing();
@@ -163,13 +158,12 @@ namespace frm
 
     OImageProducerThread_Impl* OClickableImageBaseControl::getImageProducerThread()
     {
-        if ( !m_pThread )
+        if ( !m_pThread.is() )
         {
             m_pThread = new OImageProducerThread_Impl( this );
-            m_pThread->acquire();
             m_pThread->create();
         }
-        return m_pThread;
+        return m_pThread.get();
     }
 
 
