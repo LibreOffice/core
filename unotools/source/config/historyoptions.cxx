@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <osl/file.hxx>
 #include <sal/log.hxx>
 #include <unotools/historyoptions.hxx>
 #include <unotools/configmgr.hxx>
@@ -264,18 +263,6 @@ void SvtHistoryOptions_Impl::Clear( EHistoryType eHistory )
     }
 }
 
-static bool lcl_fileOpenable(const OUString &rURL)
-{
-    osl::File aRecentFile(rURL);
-    if(!aRecentFile.open(osl_File_OpenFlag_Read))
-    {
-        aRecentFile.close();
-        return true;
-    }
-    else
-        return false;
-}
-
 Sequence< Sequence<PropertyValue> > SvtHistoryOptions_Impl::GetList(EHistoryType eHistory)
 {
     uno::Reference<container::XNameAccess> xListAccess(GetListAccess(eHistory));
@@ -316,22 +303,14 @@ Sequence< Sequence<PropertyValue> > SvtHistoryOptions_Impl::GetList(EHistoryType
             xOrderList->getByName(OUString::number(nItem)) >>= xSet;
             xSet->getPropertyValue(s_sHistoryItemRef) >>= sUrl;
 
-            // Check if file is openable, but for performance reasons try to
-            // only do so for files on a local filesystem.  For Windows,
-            // checking for "file:///" nicely filters out UNC paths (that only
-            // have two slashes), but of course misses to filter out remote
-            // mounts on Unix-like systems:
-            if (!sUrl.startsWith("file:///") || lcl_fileOpenable(sUrl))
-            {
-                xItemList->getByName(sUrl) >>= xSet;
-                seqProperties[s_nOffsetURL  ].Value <<= sUrl;
+            xItemList->getByName(sUrl) >>= xSet;
+            seqProperties[s_nOffsetURL  ].Value <<= sUrl;
 
-                xSet->getPropertyValue(s_sFilter)   >>= seqProperties[s_nOffsetFilter   ].Value;
-                xSet->getPropertyValue(s_sTitle)    >>= seqProperties[s_nOffsetTitle    ].Value;
-                xSet->getPropertyValue(s_sPassword) >>= seqProperties[s_nOffsetPassword ].Value;
-                xSet->getPropertyValue(s_sThumbnail)>>= seqProperties[s_nOffsetThumbnail].Value;
-                aRet[nCount++] = seqProperties;
-            }
+            xSet->getPropertyValue(s_sFilter)   >>= seqProperties[s_nOffsetFilter   ].Value;
+            xSet->getPropertyValue(s_sTitle)    >>= seqProperties[s_nOffsetTitle    ].Value;
+            xSet->getPropertyValue(s_sPassword) >>= seqProperties[s_nOffsetPassword ].Value;
+            xSet->getPropertyValue(s_sThumbnail)>>= seqProperties[s_nOffsetThumbnail].Value;
+            aRet[nCount++] = seqProperties;
         }
         catch(const uno::Exception& ex)
         {
