@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.20.0 -->
 <interface>
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
@@ -146,6 +146,11 @@
             <property name="height_request">100</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="filterlist-atkobject">
+                <property name="AtkObject::accessible-name" translatable="yes">XML Filter List</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="expand">True</property>

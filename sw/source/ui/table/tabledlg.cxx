@@ -1301,12 +1301,6 @@ SwTextFlowPage::SwTextFlowPage(vcl::Window* pParent, const SfxItemSet& rSet)
     get(m_pTextDirectionLB, "textdirection");
     get(m_pVertOrientLB, "vertorient");
 
-    m_pPgBrkRB->SetAccessibleRelationMemberOf(m_pPgBrkCB);
-    m_pColBrkRB->SetAccessibleRelationMemberOf(m_pPgBrkCB);
-    m_pPgBrkBeforeRB->SetAccessibleRelationMemberOf(m_pPgBrkCB);
-    m_pPgBrkAfterRB->SetAccessibleRelationMemberOf(m_pPgBrkCB);
-    m_pPageCollLB->SetAccessibleName(m_pPageCollCB->GetText());
-
     m_pPgBrkCB->SetClickHdl(LINK(this, SwTextFlowPage, PageBreakHdl_Impl));
     m_pPgBrkBeforeRB->SetClickHdl(
         LINK( this, SwTextFlowPage, PageBreakPosHdl_Impl ) );

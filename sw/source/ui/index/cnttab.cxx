@@ -314,7 +314,6 @@ SwMultiTOXTabDialog::SwMultiTOXTabDialog(vcl::Window* pParent, const SfxItemSet&
 
     m_pShowExampleCB->Check( SW_MOD()->GetModuleConfig()->IsShowIndexPreview());
 
-    m_pExampleContainerWIN->SetAccessibleName(m_pShowExampleCB->GetText());
     SetViewAlign( WindowAlign::Left );
     // SetViewWindow does not work if the dialog is visible!
 
