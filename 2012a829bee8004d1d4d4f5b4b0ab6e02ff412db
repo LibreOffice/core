@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_f06c859e",
+        "filename": "svx/source/svdraw/svdograf.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 569,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2016-06-08T08:31:25Z",
+      "side": 1,
+      "message": "You could use this to fill initially with GetGrafPrefSize()",
+      "range": {
+        "startLine": 569,
+        "startChar": 4,
+        "endLine": 569,
+        "endChar": 15
+      },
+      "revId": "2012a829bee8004d1d4d4f5b4b0ab6e02ff412db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_106ac980",
+        "filename": "svx/source/svdraw/svdograf.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 581,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2016-06-08T08:31:25Z",
+      "side": 1,
+      "message": "Here you could instead copy the cropped size to aSize using\naSize \u003d Size ( aCroppedWidth, aCroppedHeight)\nThen you would not need the doubled if-else code following, just use aSize in the code below",
+      "range": {
+        "startLine": 581,
+        "startChar": 8,
+        "endLine": 581,
+        "endChar": 11
+      },
+      "revId": "2012a829bee8004d1d4d4f5b4b0ab6e02ff412db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_500a91d3",
+        "filename": "svx/source/svdraw/svdograf.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 595,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2016-06-08T08:31:25Z",
+      "side": 1,
+      "message": "Make this the standard case and use aSize as input. If not cropped, it will be inited to GetGrafPrefSize(), else it will be inited to Size ( aCroppedWidth, aCroppedHeight)",
+      "range": {
+        "startLine": 594,
+        "startChar": 4,
+        "endLine": 595,
+        "endChar": 5
+      },
+      "revId": "2012a829bee8004d1d4d4f5b4b0ab6e02ff412db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_700f95e1",
+        "filename": "svx/source/svdraw/svdograf.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 597,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2016-06-08T08:31:25Z",
+      "side": 1,
+      "message": "use aSize here",
+      "range": {
+        "startLine": 597,
+        "startChar": 67,
+        "endLine": 597,
+        "endChar": 84
+      },
+      "revId": "2012a829bee8004d1d4d4f5b4b0ab6e02ff412db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_901419f6",
+        "filename": "svx/source/svdraw/svdograf.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 601,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2016-06-08T08:31:25Z",
+      "side": 1,
+      "message": "use aSize here",
+      "range": {
+        "startLine": 601,
+        "startChar": 48,
+        "endLine": 601,
+        "endChar": 65
+      },
+      "revId": "2012a829bee8004d1d4d4f5b4b0ab6e02ff412db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
