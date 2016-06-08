@@ -67,6 +67,7 @@ void TemplateSearchView::createContextMenu( const bool bIsDefault)
     pItemMenu->InsertSeparator();
     pItemMenu->InsertItem(MNI_DELETE,SfxResId(STR_DELETE).toString());
     maSelectedItem->setSelection(true);
+    maItemStateHdl.Call(maSelectedItem);
     pItemMenu->SetSelectHdl(LINK(this, TemplateSearchView, ContextMenuSelectHdl));
     pItemMenu->Execute(this, Rectangle(maPosition,Size(1,1)), PopupMenuFlags::ExecuteDown);
     Invalidate();
