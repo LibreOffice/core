@@ -364,7 +364,7 @@ void OpenGLTexture::GetCoord( GLfloat* pCoord, const SalTwoRect& rPosAry, bool b
 {
     VCL_GL_INFO( "Getting coord " << Id() << " [" << maRect.Left() << "," << maRect.Top() << "] " << GetWidth() << "x" << GetHeight() );
 
-    if( mpImpl == nullptr )
+    if (!IsValid())
     {
         pCoord[0] = pCoord[1] = pCoord[2] = pCoord[3] = 0.0f;
         pCoord[4] = pCoord[5] = pCoord[6] = pCoord[7] = 0.0f;
@@ -398,7 +398,7 @@ void OpenGLTexture::FillCoords<GL_TRIANGLES>(std::vector<GLfloat>& aCoord, const
     GLfloat y1 = 0.0f;
     GLfloat y2 = 0.0f;
 
-    if (mpImpl)
+    if (IsValid())
     {
         double fTextureWidth(mpImpl->mnWidth);
         double fTextureHeight(mpImpl->mnHeight);
@@ -457,7 +457,7 @@ void OpenGLTexture::GetWholeCoord( GLfloat* pCoord ) const
 
 OpenGLTexture OpenGLTexture::GetWholeTexture()
 {
-    if (mpImpl)
+    if (IsValid())
         return OpenGLTexture(mpImpl, Rectangle(Point(0, 0), Size(mpImpl->mnWidth, mpImpl->mnHeight)), -1);
     return OpenGLTexture();
 }
@@ -471,7 +471,7 @@ GLenum OpenGLTexture::GetFilter() const
 
 bool OpenGLTexture::CopyData(int nWidth, int nHeight, int nFormat, int nType, sal_uInt8* pData)
 {
-    if (!pData || mpImpl == nullptr)
+    if (!pData || !IsValid())
         return false;
 
     int nX = maRect.Left();
@@ -494,7 +494,7 @@ void OpenGLTexture::SetFilter( GLenum nFilter )
 
 void OpenGLTexture::Bind()
 {
-    if (mpImpl)
+    if (IsValid())
     {
         std::unique_ptr<RenderState>& rState = OpenGLContext::getVCLContext()->state();
         rState->texture().bind(mpImpl->mnTexture);
@@ -507,7 +507,7 @@ void OpenGLTexture::Bind()
 
 void OpenGLTexture::Unbind()
 {
-    if (mpImpl)
+    if (IsValid())
     {
         std::unique_ptr<RenderState>& rState = OpenGLContext::getVCLContext()->state();
         rState->texture().unbind(mpImpl->mnTexture);
@@ -534,7 +534,7 @@ void OpenGLTexture::SaveToFile(const OUString& rFileName)
 
 void OpenGLTexture::Read( GLenum nFormat, GLenum nType, sal_uInt8* pData )
 {
-    if( mpImpl == nullptr )
+    if (!IsValid())
     {
         SAL_WARN( "vcl.opengl", "Can't read invalid texture" );
         return;
@@ -575,7 +575,7 @@ void OpenGLTexture::Read( GLenum nFormat, GLenum nType, sal_uInt8* pData )
 
 OpenGLTexture::operator bool() const
 {
-    return ( mpImpl != nullptr );
+    return IsValid();
 }
 
 OpenGLTexture&  OpenGLTexture::operator=( const OpenGLTexture& rTexture )

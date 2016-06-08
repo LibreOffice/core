@@ -66,6 +66,11 @@ public:
         mFunctSlotDeallocateCallback = aCallback;
     }
 
+    void ResetSlotDeallocateCallback()
+    {
+        mFunctSlotDeallocateCallback = std::function<void(int)>();
+    }
+
     GLuint AddStencil();
 };
 
@@ -77,6 +82,11 @@ private:
     Rectangle maRect;
     ImplOpenGLTexture* mpImpl;
     int mnSlotNumber;
+
+    inline bool IsValid() const
+    {
+        return (mpImpl && mpImpl->mnTexture != 0);
+    }
 
 public:
                     OpenGLTexture();
