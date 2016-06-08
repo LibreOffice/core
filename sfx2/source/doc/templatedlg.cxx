@@ -101,7 +101,7 @@ class SearchView_Keyword
 public:
 
     SearchView_Keyword (const OUString &rKeyword, FILTER_APPLICATION App)
-        : maKeyword(rKeyword), meApp(App)
+        : maKeyword(rKeyword.toAsciiLowerCase()), meApp(App)
     {}
 
     bool operator() (const TemplateItemProperties &rItem)
@@ -131,13 +131,11 @@ public:
         return bRet && MatchSubstring(rItem.aName);
     }
 
-    bool MatchSubstring( OUString sItemName )
+    bool MatchSubstring( OUString const & sItemName )
     {
         if(maKeyword.isEmpty())
             return false;
-        sItemName = sItemName.toAsciiLowerCase();
-        maKeyword = maKeyword.toAsciiLowerCase();
-        if(sItemName.indexOf(maKeyword) >= 0)
+        if(sItemName.toAsciiLowerCase().indexOf(maKeyword) >= 0)
             return true;
         return false;
     }

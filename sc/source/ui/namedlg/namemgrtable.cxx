@@ -238,7 +238,7 @@ void ScRangeManagerTable::SetEntry(const ScRangeNameLine& rLine)
 namespace {
 
 //ensure that the minimum column size is respected
-void CalculateItemSize(const long& rTableSize, long& rItemNameSize, long& rItemRangeSize)
+void CalculateItemSize(long rTableSize, long& rItemNameSize, long& rItemRangeSize)
 {
     long aItemScopeSize = rTableSize - rItemNameSize - rItemRangeSize;
 

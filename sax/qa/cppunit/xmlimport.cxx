@@ -44,7 +44,7 @@ using namespace css::io;
 using namespace std;
 
 Reference< XInputStream > createStreamFromFile (
-    const OUString filePath)
+    const OUString & filePath)
 {
     Reference<  XInputStream >  xInputStream;
     OUString aInStr;

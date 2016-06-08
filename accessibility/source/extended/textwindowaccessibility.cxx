@@ -979,7 +979,7 @@ struct IndexCompare
         : pValues(pVals)
     {
     }
-    bool operator() ( const sal_Int32& a, const sal_Int32& b ) const
+    bool operator() ( sal_Int32 a, sal_Int32 b ) const
     {
         return pValues[a].Name < pValues[b].Name;
     }

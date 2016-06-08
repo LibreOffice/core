@@ -96,7 +96,7 @@ public:
     virtual ~SwFormatCol();
     //#i120133#
     sal_Int16 GetAdjustValue() const { return m_aWidthAdjustValue; }
-    void SetAdjustValue( const sal_Int16& n ) { m_aWidthAdjustValue = n; }
+    void SetAdjustValue( sal_Int16 n ) { m_aWidthAdjustValue = n; }
 
     SwFormatCol& operator=( const SwFormatCol& );
 

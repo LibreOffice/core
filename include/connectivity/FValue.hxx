@@ -120,7 +120,7 @@ namespace connectivity
             operator=(_rRH);
         }
 
-        ORowSetValue(const float& _rRH)
+        ORowSetValue(float _rRH)
             :m_eTypeKind(css::sdbc::DataType::FLOAT)
             ,m_bNull(true)
             ,m_bBound(true)
@@ -131,7 +131,7 @@ namespace connectivity
             operator=(_rRH);
         }
 
-        ORowSetValue(const sal_Int8& _rRH)
+        ORowSetValue(sal_Int8 _rRH)
             :m_eTypeKind(css::sdbc::DataType::TINYINT)
             ,m_bNull(true)
             ,m_bBound(true)
@@ -142,7 +142,7 @@ namespace connectivity
             operator=(_rRH);
         }
 
-        ORowSetValue(const sal_uInt8& _rRH)
+        ORowSetValue(sal_uInt8 _rRH)
             :m_eTypeKind(css::sdbc::DataType::TINYINT)
             ,m_bNull(true)
             ,m_bBound(true)
@@ -152,7 +152,7 @@ namespace connectivity
             m_aValue.m_pString = nullptr;
             operator=(_rRH);
         }
-        ORowSetValue(const sal_Int16& _rRH)
+        ORowSetValue(sal_Int16 _rRH)
             :m_eTypeKind(css::sdbc::DataType::SMALLINT)
             ,m_bNull(true)
             ,m_bBound(true)
@@ -162,7 +162,7 @@ namespace connectivity
             m_aValue.m_pString = nullptr;
             operator=(_rRH);
         }
-        ORowSetValue(const sal_uInt16& _rRH)
+        ORowSetValue(sal_uInt16 _rRH)
             :m_eTypeKind(css::sdbc::DataType::SMALLINT)
             ,m_bNull(true)
             ,m_bBound(true)
@@ -172,7 +172,7 @@ namespace connectivity
             m_aValue.m_pString = nullptr;
             operator=(_rRH);
         }
-        ORowSetValue(const sal_Int32& _rRH)
+        ORowSetValue(sal_Int32 _rRH)
             :m_eTypeKind(css::sdbc::DataType::INTEGER)
             ,m_bNull(true)
             ,m_bBound(true)
@@ -182,7 +182,7 @@ namespace connectivity
             m_aValue.m_pString = nullptr;
             operator=(_rRH);
         }
-        ORowSetValue(const sal_uInt32& _rRH)
+        ORowSetValue(sal_uInt32 _rRH)
             :m_eTypeKind(css::sdbc::DataType::INTEGER)
             ,m_bNull(true)
             ,m_bBound(true)
@@ -192,7 +192,7 @@ namespace connectivity
             m_aValue.m_pString = nullptr;
             operator=(_rRH);
         }
-        ORowSetValue(const sal_Int64& _rRH)
+        ORowSetValue(sal_Int64 _rRH)
             :m_eTypeKind(css::sdbc::DataType::BIGINT)
             ,m_bNull(true)
             ,m_bBound(true)
@@ -202,7 +202,7 @@ namespace connectivity
             m_aValue.m_pString = nullptr;
             operator=(_rRH);
         }
-        ORowSetValue(const sal_uInt64& _rRH)
+        ORowSetValue(sal_uInt64 _rRH)
             :m_eTypeKind(css::sdbc::DataType::BIGINT)
             ,m_bNull(true)
             ,m_bBound(true)
@@ -213,7 +213,7 @@ namespace connectivity
             operator=(_rRH);
         }
 
-        ORowSetValue(const bool& _rRH)
+        ORowSetValue(bool _rRH)
             :m_eTypeKind(css::sdbc::DataType::BIT)
             ,m_bNull(true)
             ,m_bBound(true)

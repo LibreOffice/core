@@ -1026,7 +1026,7 @@ static SfxObjectShell* lcl_CreateWorkingDocument(
 uno::Reference< mail::XMailMessage > lcl_CreateMailFromDoc(
     const SwMergeDescriptor &rMergeDescriptor,
     const OUString &sFileURL, const OUString &sMailRecipient,
-    const OUString &sMailBodyMimeType, const rtl_TextEncoding &sMailEncoding,
+    const OUString &sMailBodyMimeType, rtl_TextEncoding sMailEncoding,
     const OUString &sAttachmentMimeType )
 {
     SwMailMessage* pMessage = new SwMailMessage;

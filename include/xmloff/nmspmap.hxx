@@ -52,7 +52,7 @@ public:
 
 struct uInt32lt
 {
-    bool operator()( const sal_uInt32 &r1, const sal_uInt32 &r2) const
+    bool operator()( sal_uInt32 r1, sal_uInt32 r2) const
     {
         return r1 < r2;
     }

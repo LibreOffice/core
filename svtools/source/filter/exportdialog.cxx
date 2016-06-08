@@ -821,7 +821,7 @@ void ExportDialog::setupControls()
         mpInfo->Show();
 }
 
-static OUString ImpValueOfInKB( const sal_Int64& rVal )
+static OUString ImpValueOfInKB( sal_Int64 rVal )
 {
     double fVal( static_cast<double>( rVal ) );
     fVal /= ( 1 << 10 );

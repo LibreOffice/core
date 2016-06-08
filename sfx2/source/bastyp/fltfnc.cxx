@@ -874,7 +874,7 @@ std::shared_ptr<const SfxFilter> SfxFilterMatcherIter::Next()
     using given separator
   ---------------------------------------------------------------*/
 OUString implc_convertStringlistToString( const uno::Sequence< OUString >& lList     ,
-                                                 const sal_Unicode&                                        cSeparator,
+                                                 sal_Unicode                                        cSeparator,
                                                  const OUString&                                    sPrefix   )
 {
     OUStringBuffer   sString ( 1000 )           ;

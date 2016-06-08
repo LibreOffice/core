@@ -194,7 +194,7 @@ public:
         return msSelectedCategory;
     };
 
-    inline void SetSelectLabelText(OUString sText) const {
+    inline void SetSelectLabelText(OUString const & sText) const {
         mpSelectLabel->SetText(sText);
     };
 

@@ -144,7 +144,7 @@ public:
         m_bGettingHasProtection = false;
         return bRet;
     }
-    double GetMarginsValue(const sal_uInt8& nWhichSide)
+    double GetMarginsValue(sal_uInt8 nWhichSide)
     {
         if (m_bGettingMarginsValue)
             throw std::runtime_error("recursion in layout");
@@ -153,7 +153,7 @@ public:
         m_bGettingMarginsValue = false;
         return fRet;
     }
-    double GetExtMarginsValue(const sal_uInt8& nWhichSide)
+    double GetExtMarginsValue(sal_uInt8 nWhichSide)
     {
         if (m_bGettingExtMarginsValue)
             throw std::runtime_error("recursion in layout");
@@ -214,8 +214,8 @@ protected:
     bool HasProtection();
     virtual bool HonorProtection();
     virtual bool IsProtected();
-    virtual double MarginsValue(const sal_uInt8& /*nWhichSide*/){return 0;}
-    virtual double ExtMarginsValue(const sal_uInt8& /*nWhichSide*/){return 0;}
+    virtual double MarginsValue(sal_uInt8 /*nWhichSide*/){return 0;}
+    virtual double ExtMarginsValue(sal_uInt8 /*nWhichSide*/){return 0;}
     virtual bool MarginsSameAsParent();
 protected:
     bool m_bGettingHonorProtection;
@@ -387,8 +387,8 @@ public:
 protected:
     void Read() override;
     virtual bool MarginsSameAsParent() override;
-    virtual double MarginsValue(const sal_uInt8& nWhichSide) override;
-    virtual double ExtMarginsValue(const sal_uInt8& nWhichSide) override;
+    virtual double MarginsValue(sal_uInt8 nWhichSide) override;
+    virtual double ExtMarginsValue(sal_uInt8 nWhichSide) override;
 private:
     LwpObjectID m_BasedOnStyle;
     LwpLayoutGeometry* Geometry();

@@ -348,11 +348,11 @@ public:
     // the other types methods are here just to reflect the orig code and for
     // completeness.
 
-    void visitElem( long nCol, long nRow, const sal_Int16& elem )
+    void visitElem( long nCol, long nRow, sal_Int16 elem )
     {
         mpDoc->SetValue( (SCCOL) nCol, (SCROW) nRow, 0, elem );
     }
-    void visitElem( long nCol, long nRow, const sal_Int32& elem )
+    void visitElem( long nCol, long nRow, sal_Int32 elem )
     {
         mpDoc->SetValue( (SCCOL) nCol, (SCROW) nRow, 0, elem );
     }

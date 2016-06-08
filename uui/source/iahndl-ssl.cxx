@@ -179,7 +179,7 @@ executeSSLWarnDialog(
     vcl::Window * pParent,
     uno::Reference< uno::XComponentContext > const & xContext,
     const uno::Reference< security::XCertificate >& rXCert,
-    sal_Int32 const & failure,
+    sal_Int32 failure,
     const OUString & hostName )
 {
     try

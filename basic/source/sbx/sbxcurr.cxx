@@ -26,7 +26,7 @@
 #include "sbxconv.hxx"
 
 
-static OUString ImpCurrencyToString( const sal_Int64 &rVal )
+static OUString ImpCurrencyToString( sal_Int64 rVal )
 {
     bool isNeg = ( rVal < 0 );
     sal_Int64 absVal = isNeg ? -rVal : rVal;

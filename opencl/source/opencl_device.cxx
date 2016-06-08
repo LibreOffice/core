@@ -465,7 +465,7 @@ class LogWriter
 private:
     SvFileStream maStream;
 public:
-    explicit LogWriter(OUString aFileName)
+    explicit LogWriter(OUString const & aFileName)
         : maStream(aFileName, StreamMode::WRITE)
     {}
 
@@ -495,7 +495,7 @@ public:
 };
 
 
-void writeDevicesLog(std::unique_ptr<ds_profile>& rProfile, OUString sProfilePath, int nSelectedIndex)
+void writeDevicesLog(std::unique_ptr<ds_profile>& rProfile, OUString const & sProfilePath, int nSelectedIndex)
 {
     OUString aCacheFile(sProfilePath + "opencl_devices.log");
     LogWriter aWriter(aCacheFile);

@@ -58,8 +58,11 @@ bool PassStuffByRef::VisitFunctionDecl(const FunctionDecl * functionDecl) {
     if (ignoreLocation(functionDecl)) {
         return true;
     }
-    if (functionDecl->isDeleted())
+    if (functionDecl->isDeleted()
+        || functionDecl->isFunctionTemplateSpecialization())
+    {
         return true;
+    }
     // only consider base declarations, not overriden ones, or we warn on methods that
     // are overriding stuff from external libraries
     const CXXMethodDecl * methodDecl = dyn_cast<CXXMethodDecl>(functionDecl);
@@ -73,9 +76,8 @@ bool PassStuffByRef::VisitFunctionDecl(const FunctionDecl * functionDecl) {
 }
 
 void PassStuffByRef::checkParams(const FunctionDecl * functionDecl) {
-    // only warn on the definition/prototype of the function,
-    // not on the function implementation
-    if (functionDecl->isThisDeclarationADefinition()) {
+    // Only warn on the definition of the function:
+    if (!functionDecl->isThisDeclarationADefinition()) {
         return;
     }
     unsigned n = functionDecl->getNumParams();
@@ -109,6 +111,13 @@ void PassStuffByRef::checkParams(const FunctionDecl * functionDecl) {
                 ("passing primitive type param %0 by const &, rather pass by value"),
                 pvDecl->getLocation())
                 << t << pvDecl->getSourceRange();
+            auto can = functionDecl->getCanonicalDecl();
+            if (can->getLocation() != functionDecl->getLocation()) {
+                report(
+                    DiagnosticsEngine::Note, "function is declared here:",
+                    can->getLocation())
+                    << can->getSourceRange();
+            }
         }
     }
 }
@@ -223,10 +232,10 @@ bool PassStuffByRef::isPrimitiveConstRef(QualType type) {
     if (type->isIncompleteType()) {
         return false;
     }
-    if (!type->isReferenceType()) {
+    const clang::ReferenceType* referenceType = type->getAs<ReferenceType>();
+    if (referenceType == nullptr) {
         return false;
     }
-    const clang::ReferenceType* referenceType = dyn_cast<ReferenceType>(type);
     QualType pointeeQT = referenceType->getPointeeType();
     if (!pointeeQT.isConstQualified()) {
         return false;

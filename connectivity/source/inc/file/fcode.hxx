@@ -65,7 +65,7 @@ namespace connectivity
         protected:
             sal_Int32 m_eDBType;
 
-            OOperand(const sal_Int32& _rType) : m_eDBType(_rType){}
+            OOperand(sal_Int32 _rType) : m_eDBType(_rType){}
             OOperand() : m_eDBType(css::sdbc::DataType::OTHER){}
 
         public:

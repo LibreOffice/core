@@ -189,7 +189,7 @@ OUString InsertButton( InformationDialog& rInformationDialog, const OUString& rC
 }
 
 
-static OUString ImpValueOfInMB( const sal_Int64& rVal )
+static OUString ImpValueOfInMB( sal_Int64 rVal )
 {
     double fVal( static_cast<double>( rVal ) );
     fVal /= ( 1 << 20 );

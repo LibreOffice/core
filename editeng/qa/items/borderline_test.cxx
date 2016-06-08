@@ -32,12 +32,12 @@ CPPUNIT_NS_BEGIN
 
 template<> struct assertion_traits<SvxBorderStyle>
 {
-    static bool equal( const SvxBorderStyle& x, const SvxBorderStyle& y )
+    static bool equal( SvxBorderStyle x, SvxBorderStyle y )
     {
         return x == y;
     }
 
-    static std::string toString( const SvxBorderStyle& x )
+    static std::string toString( SvxBorderStyle x )
     {
         OStringStream ost;
         ost << static_cast<unsigned int>(x);

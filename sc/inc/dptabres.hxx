@@ -220,7 +220,7 @@ class ScDPDataMember;
 
 struct MemberHashIndexFunc : public std::unary_function< const SCROW &, size_t >
 {
-    size_t operator() (const SCROW &rDataIndex) const { return rDataIndex; }
+    size_t operator() (SCROW rDataIndex) const { return rDataIndex; }
 };
 
 struct ScDPParentDimData

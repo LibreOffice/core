@@ -135,7 +135,7 @@ inline void XRenderPeer::CompositeTrapezoids( int nOp,
         nXSrc, nYSrc, pXT, nCount );
 }
 
-inline XRenderColor GetXRenderColor( const SalColor& rSalColor, double fTransparency = 0.0 )
+inline XRenderColor GetXRenderColor( SalColor rSalColor, double fTransparency = 0.0 )
 {
     XRenderColor aRetVal;
     // convert the SalColor

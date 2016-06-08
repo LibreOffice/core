@@ -89,7 +89,7 @@ struct NameWithToken
     OUString msName;
     sal_Int32 mnToken;
 
-    NameWithToken(const OUString& sName, const sal_Int32& nToken) :
+    NameWithToken(const OUString& sName, sal_Int32 nToken) :
         msName(sName), mnToken(nToken) {}
 };
 

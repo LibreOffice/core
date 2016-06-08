@@ -156,7 +156,7 @@ namespace dbaui
     struct CompareFeatureById : ::std::binary_function< SupportedFeatures::value_type, sal_Int32, bool >
     {
 
-        inline bool operator()( const SupportedFeatures::value_type& _aType, const sal_Int32& _nId ) const
+        inline bool operator()( const SupportedFeatures::value_type& _aType, sal_Int32 _nId ) const
         {
             return !!( _nId == _aType.second.nFeatureId );
         }

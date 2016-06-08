@@ -2254,7 +2254,7 @@ ScVbaRange::Select() throw (uno::RuntimeException, std::exception)
     }
 }
 
-bool cellInRange( const table::CellRangeAddress& rAddr, const sal_Int32& nCol, const sal_Int32& nRow )
+bool cellInRange( const table::CellRangeAddress& rAddr, sal_Int32 nCol, sal_Int32 nRow )
 {
     if ( nCol >= rAddr.StartColumn && nCol <= rAddr.EndColumn &&
         nRow >= rAddr.StartRow && nRow <= rAddr.EndRow )
@@ -2262,7 +2262,7 @@ bool cellInRange( const table::CellRangeAddress& rAddr, const sal_Int32& nCol, c
     return false;
 }
 
-void setCursor(  const SCCOL& nCol, const SCROW& nRow, const uno::Reference< frame::XModel >& xModel,  bool bInSel = true )
+void setCursor( SCCOL nCol, SCROW nRow, const uno::Reference< frame::XModel >& xModel,  bool bInSel = true )
 {
     ScTabViewShell* pShell = excel::getBestViewShell( xModel );
     if ( pShell )

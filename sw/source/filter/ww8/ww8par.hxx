@@ -512,7 +512,7 @@ public:
     const OUString& GetHlink() const { return maHlink; }
     void SetTarFrame( const OUString& rTarFrame ) { maTarFrame = rTarFrame; }
     const OUString& GetTarFrame() const { return maTarFrame; }
-    void SetShapeId( const sal_Int32& rShapeId ) { mnShapeId = rShapeId; }
+    void SetShapeId( sal_Int32 rShapeId ) { mnShapeId = rShapeId; }
     const sal_Int32& GetShapeId() const { return mnShapeId; }
     void SetName( const OUString& rName ) { maNameStr = rName; }
     const OUString& GetName() const { return maNameStr; }

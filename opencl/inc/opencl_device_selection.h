@@ -81,7 +81,7 @@ struct ds_profile
     std::vector<ds_device> devices;
     OString version;
 
-    ds_profile(OString& inVersion)
+    ds_profile(OString const & inVersion)
         : version(inVersion)
     {}
 };
@@ -125,7 +125,7 @@ inline bool getDeviceInfoBool(cl_device_id aDeviceId, cl_device_info aDeviceInfo
     return bCLBool == CL_TRUE;
 }
 
-inline ds_status initDSProfile(std::unique_ptr<ds_profile>& rProfile, OString rVersion)
+inline ds_status initDSProfile(std::unique_ptr<ds_profile>& rProfile, OString const & rVersion)
 {
     int numDevices;
     cl_uint numPlatforms;
