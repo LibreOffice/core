@@ -190,6 +190,7 @@ void TemplateLocalView::createContextMenu()
     pItemMenu->InsertSeparator();
     deselectItems();
     maSelectedItem->setSelection(true);
+    maItemStateHdl.Call(maSelectedItem);
     pItemMenu->SetSelectHdl(LINK(this, TemplateLocalView, ContextMenuSelectHdl));
     pItemMenu->Execute(this, Rectangle(maPosition,Size(1,1)), PopupMenuFlags::ExecuteDown);
     Invalidate();
