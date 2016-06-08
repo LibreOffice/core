@@ -130,11 +130,9 @@ namespace frm
 
     OPasteClipboardDispatcher::OPasteClipboardDispatcher( EditView& _rView )
         :OClipboardDispatcher( _rView, ePaste )
-        ,m_pClipListener( nullptr )
         ,m_bPastePossible( false )
     {
         m_pClipListener = new TransferableClipboardListener( LINK( this, OPasteClipboardDispatcher, OnClipboardChanged ) );
-        m_pClipListener->acquire();
         m_pClipListener->AddListener( _rView.GetWindow() );
 
         // initial state
@@ -166,13 +164,12 @@ namespace frm
     void OPasteClipboardDispatcher::disposing( ::osl::ClearableMutexGuard& _rClearBeforeNotify )
     {
         OSL_ENSURE( getEditView() && getEditView()->GetWindow(), "OPasteClipboardDispatcher::disposing: EditView should not (yet) be disfunctional here!" );
-        if (m_pClipListener)
+        if (m_pClipListener.is())
         {
             if (getEditView() && getEditView()->GetWindow())
                 m_pClipListener->RemoveListener( getEditView()->GetWindow() );
 
-            m_pClipListener->release();
-            m_pClipListener = nullptr;
+            m_pClipListener.clear();
         }
 
         OClipboardDispatcher::disposing( _rClearBeforeNotify );

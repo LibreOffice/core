@@ -187,10 +187,10 @@ namespace frm
         friend class OImageProducerThread_Impl;
 
     private:
-        OImageProducerThread_Impl*          m_pThread;
+        rtl::Reference<OImageProducerThread_Impl>  m_pThread;
         ::comphelper::OInterfaceContainerHelper2   m_aSubmissionVetoListeners;
         ::std::unique_ptr< ControlFeatureInterception >
-                                            m_pFeatureInterception;
+                                                   m_pFeatureInterception;
 
     protected:
         ::comphelper::OInterfaceContainerHelper2 m_aApproveActionListeners;
