@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_2b4d9c72",
+        "filename": "chart2/source/controller/dialogs/tp_DataSource.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-06-08T15:09:43Z",
+      "side": 0,
+      "message": "... and actually the same is true here, STR_BUTTON_UP and _DOWN becomes unused once this is committed",
+      "revId": "916b3e30099ee01f6c33ba01c7a8adc24cf965cc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_0b3298f1",
+        "filename": "sfx2/source/dialog/passwd.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-06-08T15:09:43Z",
+      "side": 0,
+      "message": "... and since STR_PASSWD is now unused (or so it seems to me), you can as well remove it from related sfx.hrc and sfx.src file ... but please leave some comment in .hrc indicating there\u0027s a gap now",
+      "revId": "916b3e30099ee01f6c33ba01c7a8adc24cf965cc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
