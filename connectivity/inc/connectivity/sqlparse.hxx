@@ -137,7 +137,7 @@ namespace connectivity
         ::com::sun::star::lang::Locale  aLocale;
         ::connectivity::SQLError        aErrors;
 
-        ::connectivity::OSQLParser_Data( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xServiceFactory );
+        OSQLParser_Data( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xServiceFactory );
 
     };
     /** Parser for SQL92
