@@ -68,7 +68,6 @@ java_sql_Statement_Base::java_sql_Statement_Base( JNIEnv * pEnv, java_sql_Connec
     ,m_nResultSetType(ResultSetType::FORWARD_ONLY)
     ,m_bEscapeProcessing(true)
 {
-    m_pConnection->acquire();
 }
 
 
@@ -88,9 +87,7 @@ void SAL_CALL OStatement_BASE2::disposing()
     }
 
     ::comphelper::disposeComponent(m_xGeneratedStatement);
-    if (m_pConnection)
-        m_pConnection->release();
-    m_pConnection = nullptr;
+    m_pConnection.clear();
 
     dispose_ChildImpl();
     java_sql_Statement_Base::disposing();
@@ -120,7 +117,7 @@ void SAL_CALL OStatement_BASE2::release() throw()
 
 Any SAL_CALL java_sql_Statement_Base::queryInterface( const Type & rType ) throw(RuntimeException, std::exception)
 {
-    if ( m_pConnection && !m_pConnection->isAutoRetrievingEnabled() && rType == cppu::UnoType<XGeneratedResultSet>::get())
+    if ( m_pConnection.is() && !m_pConnection->isAutoRetrievingEnabled() && rType == cppu::UnoType<XGeneratedResultSet>::get())
         return Any();
     Any aRet( java_sql_Statement_BASE::queryInterface(rType) );
     return aRet.hasValue() ? aRet : OPropertySetHelper::queryInterface(rType);
@@ -133,7 +130,7 @@ Sequence< Type > SAL_CALL java_sql_Statement_Base::getTypes(  ) throw(RuntimeExc
                                     cppu::UnoType<css::beans::XPropertySet>::get());
 
     Sequence< Type > aOldTypes = java_sql_Statement_BASE::getTypes();
-    if ( m_pConnection && !m_pConnection->isAutoRetrievingEnabled() )
+    if ( m_pConnection.is() && !m_pConnection->isAutoRetrievingEnabled() )
     {
         ::std::remove(aOldTypes.getArray(),aOldTypes.getArray() + aOldTypes.getLength(),
                         cppu::UnoType<XGeneratedResultSet>::get());
@@ -166,8 +163,8 @@ Reference< XResultSet > SAL_CALL java_sql_Statement_Base::getGeneratedValues(  )
     Reference< XResultSet > xRes;
     if ( !out )
     {
-        OSL_ENSURE( m_pConnection && m_pConnection->isAutoRetrievingEnabled(),"Illegal call here. isAutoRetrievingEnabled is false!");
-        if ( m_pConnection )
+        OSL_ENSURE( m_pConnection.is() && m_pConnection->isAutoRetrievingEnabled(),"Illegal call here. isAutoRetrievingEnabled is false!");
+        if ( m_pConnection.is() )
         {
             OUString sStmt = m_pConnection->getTransformedGeneratedStatement(m_sSqlStatement);
             if ( !sStmt.isEmpty() )
@@ -238,7 +235,7 @@ sal_Bool SAL_CALL java_sql_Statement_Base::execute( const OUString& sql ) throw(
         jdbc::LocalRef< jstring > str( t.env(), convertwchar_tToJavaString( t.pEnv, sql ) );
         {
             jdbc::ContextClassLoaderScope ccl( t.env(),
-                m_pConnection ? m_pConnection->getDriverClassLoader() : jdbc::GlobalRef< jobject >(),
+                m_pConnection.is() ? m_pConnection->getDriverClassLoader() : jdbc::GlobalRef< jobject >(),
                 m_aLogger,
                 *this
             );
@@ -273,7 +270,7 @@ Reference< XResultSet > SAL_CALL java_sql_Statement_Base::executeQuery( const OU
         jdbc::LocalRef< jstring > str( t.env(), convertwchar_tToJavaString( t.pEnv, sql ) );
         {
             jdbc::ContextClassLoaderScope ccl( t.env(),
-                m_pConnection ? m_pConnection->getDriverClassLoader() : jdbc::GlobalRef< jobject >(),
+                m_pConnection.is() ? m_pConnection->getDriverClassLoader() : jdbc::GlobalRef< jobject >(),
                 m_aLogger,
                 *this
             );
@@ -290,7 +287,7 @@ Reference< XConnection > SAL_CALL java_sql_Statement_Base::getConnection(  ) thr
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
-    return Reference< XConnection >(m_pConnection);
+    return Reference< XConnection >(m_pConnection.get());
 }
 
 

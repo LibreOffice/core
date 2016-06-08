@@ -34,10 +34,7 @@ namespace connectivity
         :m_pConnectionPool(_pPool)
     {
         OSL_ENSURE(_rxAggregateDriver.is(), "ODriverWrapper::ODriverWrapper: invalid aggregate!");
-        OSL_ENSURE(m_pConnectionPool, "ODriverWrapper::ODriverWrapper: invalid connection pool!");
-
-        if (m_pConnectionPool)
-            m_pConnectionPool->acquire();
+        OSL_ENSURE(m_pConnectionPool.is(), "ODriverWrapper::ODriverWrapper: invalid connection pool!");
 
         osl_atomic_increment( &m_refCount );
         if (_rxAggregateDriver.is())
@@ -61,10 +58,6 @@ namespace connectivity
     {
         if (m_xDriverAggregate.is())
             m_xDriverAggregate->setDelegator(nullptr);
-
-        if (m_pConnectionPool)
-            m_pConnectionPool->release();
-        m_pConnectionPool = nullptr;
     }
 
 
@@ -78,7 +71,7 @@ namespace connectivity
     Reference< XConnection > SAL_CALL ODriverWrapper::connect( const OUString& url, const Sequence< PropertyValue >& info ) throw (SQLException, RuntimeException, std::exception)
     {
         Reference< XConnection > xConnection;
-        if (m_pConnectionPool)
+        if (m_pConnectionPool.is())
             // route this through the pool
             xConnection = m_pConnectionPool->getConnectionWithInfo( url, info );
         else if (m_xDriver.is())

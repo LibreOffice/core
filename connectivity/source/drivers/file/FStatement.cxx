@@ -60,7 +60,6 @@ OStatement_Base::OStatement_Base(OConnection* _pConnection )
     ,m_pConnection(_pConnection)
     ,m_pParseTree(nullptr)
     ,m_pSQLAnalyzer(nullptr)
-    ,m_pTable(nullptr)
     ,m_nMaxFieldSize(0)
     ,m_nMaxRows(0)
     ,m_nQueryTimeOut(0)
@@ -70,8 +69,6 @@ OStatement_Base::OStatement_Base(OConnection* _pConnection )
     ,m_nResultSetConcurrency(ResultSetConcurrency::UPDATABLE)
     ,m_bEscapeProcessing(true)
 {
-    m_pConnection->acquire();
-
     sal_Int32 nAttrib = 0;
 
     registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_CURSORNAME),      PROPERTY_ID_CURSORNAME,         nAttrib,&m_aCursorName,     ::cppu::UnoType<OUString>::get());
@@ -121,17 +118,9 @@ void OStatement_BASE2::disposing()
 
     m_aSQLIterator.dispose();
 
-    if(m_pTable)
-    {
-        m_pTable->release();
-        m_pTable = nullptr;
-    }
+    m_pTable.clear();
 
-    if (m_pConnection)
-    {
-        m_pConnection->release();
-        m_pConnection = nullptr;
-    }
+    m_pConnection.clear();
 
     dispose_ChildImpl();
 
@@ -279,7 +268,7 @@ Reference< XResultSet > SAL_CALL OStatement::executeQuery( const OUString& sql )
 
 Reference< XConnection > SAL_CALL OStatement::getConnection(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return Reference< XConnection >(m_pConnection);
+    return Reference< XConnection >(m_pConnection.get());
 }
 
 sal_Int32 SAL_CALL OStatement::executeUpdate( const OUString& sql ) throw(SQLException, RuntimeException, std::exception)
@@ -321,7 +310,7 @@ Any SAL_CALL OStatement::queryInterface( const Type & rType ) throw(RuntimeExcep
 
 OSQLAnalyzer* OStatement_Base::createAnalyzer()
 {
-    return new OSQLAnalyzer(m_pConnection);
+    return new OSQLAnalyzer(m_pConnection.get());
 }
 
 void OStatement_Base::anylizeSQL()
@@ -424,14 +413,10 @@ void OStatement_Base::construct(const OUString& sql)  throw(SQLException, Runtim
         Reference< css::lang::XUnoTunnel> xTunnel(rTabs.begin()->second,UNO_QUERY);
         if(xTunnel.is())
         {
-            if(m_pTable)
-                m_pTable->release();
             m_pTable = reinterpret_cast<OFileTable*>(xTunnel->getSomething(OFileTable::getUnoTunnelImplementationId()));
-            if(m_pTable)
-                m_pTable->acquire();
         }
-        OSL_ENSURE(m_pTable,"No table!");
-        if ( m_pTable )
+        OSL_ENSURE(m_pTable.is(),"No table!");
+        if ( m_pTable.is() )
             m_xColNames     = m_pTable->getColumns();
         Reference<XIndexAccess> xNames(m_xColNames,UNO_QUERY);
         // set the binding of the resultrow
