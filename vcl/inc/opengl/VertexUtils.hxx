@@ -62,12 +62,12 @@ inline glm::vec4 createGLColor(const SalColor& rColor, GLfloat rTransparency)
 }
 
 template<GLenum TYPE>
-inline void addQuadColors(std::vector<glm::vec4>& rColors, const SalColor& rColor, GLfloat rTransparency);
+inline void addQuadColors(std::vector<glm::vec4>& rColors, SalColor nColor, GLfloat rTransparency);
 
 template<>
-inline void addQuadColors<GL_TRIANGLES>(std::vector<glm::vec4>& rColors, const SalColor& rColor, GLfloat rTransparency)
+inline void addQuadColors<GL_TRIANGLES>(std::vector<glm::vec4>& rColors, SalColor nColor, GLfloat rTransparency)
 {
-    glm::vec4 color = createGLColor(rColor, rTransparency);
+    glm::vec4 color = createGLColor(nColor, rTransparency);
 
     rColors.insert(rColors.end(), {
         color, color, color,
