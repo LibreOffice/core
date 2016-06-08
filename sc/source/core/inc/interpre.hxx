@@ -299,11 +299,22 @@ inline bool IfErrorPushError()
 }
 
 /** Obtain cell result / content from address and push as temp token.
-    bDisplayEmptyAsString is passed to ScEmptyCell in case of an empty cell
-    result. Also obtain number format and type if _both_, type and index
-    pointer, are not NULL. */
+
+    @param  bDisplayEmptyAsString
+            is passed to ScEmptyCell in case of an empty cell result.
+
+    @param  pRetTypeExpr
+    @param  pRetIndexExpr
+            Obtain number format and type if _both_, type and index pointer,
+            are not NULL.
+
+    @param  bFinalResult
+            If TRUE, only a standard FormulaDoubleToken is pushed.
+            If FALSE, PushDouble() is used that may push either a
+            FormulaDoubleToken or a FormulaTypedDoubleToken.
+ */
 void PushCellResultToken( bool bDisplayEmptyAsString, const ScAddress & rAddress,
-        short * pRetTypeExpr, sal_uLong * pRetIndexExpr );
+        short * pRetTypeExpr, sal_uLong * pRetIndexExpr, bool bFinalResult = false );
 
 formula::FormulaTokenRef PopToken();
 void Pop();

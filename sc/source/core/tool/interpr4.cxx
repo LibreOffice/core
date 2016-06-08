@@ -714,7 +714,7 @@ void ScInterpreter::PushTempToken( const FormulaToken& r )
 }
 
 void ScInterpreter::PushCellResultToken( bool bDisplayEmptyAsString,
-        const ScAddress & rAddress, short * pRetTypeExpr, sal_uLong * pRetIndexExpr )
+        const ScAddress & rAddress, short * pRetTypeExpr, sal_uLong * pRetIndexExpr, bool bFinalResult )
 {
     ScRefCellValue aCell(*pDok, rAddress);
     if (aCell.hasEmptyValue())
@@ -751,7 +751,16 @@ void ScInterpreter::PushCellResultToken( bool bDisplayEmptyAsString,
     else
     {
         double fVal = GetCellValue(rAddress, aCell);
-        PushDouble( fVal);
+        if (bFinalResult)
+        {
+            TreatDoubleError( fVal);
+            if (!IfErrorPushError())
+                PushTempTokenWithoutError( new FormulaDoubleToken( fVal));
+        }
+        else
+        {
+            PushDouble( fVal);
+        }
         if (pRetTypeExpr)
             *pRetTypeExpr = nCurFmtType;
         if (pRetIndexExpr)
@@ -4328,8 +4337,7 @@ StackVar ScInterpreter::Interpret()
                     ScAddress aAdr;
                     PopSingleRef( aAdr );
                     if( !nGlobalError )
-                        PushCellResultToken( false, aAdr,
-                                &nRetTypeExpr, &nRetIndexExpr);
+                        PushCellResultToken( false, aAdr, &nRetTypeExpr, &nRetIndexExpr, true);
                 }
                 break;
                 case svRefList :
@@ -4350,8 +4358,7 @@ StackVar ScInterpreter::Interpret()
                         PopDoubleRef( aRange );
                         ScAddress aAdr;
                         if ( !nGlobalError && DoubleRefToPosSingleRef( aRange, aAdr))
-                            PushCellResultToken( false, aAdr,
-                                    &nRetTypeExpr, &nRetIndexExpr);
+                            PushCellResultToken( false, aAdr, &nRetTypeExpr, &nRetIndexExpr, true);
                     }
                 }
                 break;
