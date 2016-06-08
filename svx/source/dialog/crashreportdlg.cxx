@@ -72,7 +72,7 @@ IMPL_LINK_TYPED(CrashReportDialog, BtnHdl, Button*, pBtn, void)
         std::string ini_path = CrashReporter::getIniFileName();
 
         std::string response;
-        bool bSuccess = readConfig(ini_path, response);
+        bool bSuccess = crashreport::readConfig(ini_path, response);
 
         OUString aCrashID = OUString::createFromAscii(response.c_str());
 
