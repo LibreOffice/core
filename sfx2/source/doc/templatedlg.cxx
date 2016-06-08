@@ -379,6 +379,7 @@ void SfxTemplateManagerDlg::fillFolderComboBox()
             mpCBFolder->InsertEntry(aFolderNames[i], i+1);
     }
     mpCBFolder->SelectEntryPos(0);
+    mpActionMenu->HideItem(MNI_ACTION_RENAME_FOLDER);
     mpLocalView->ShowTooltips(true);
 }
 
@@ -388,6 +389,7 @@ void SfxTemplateManagerDlg::getApplicationSpecificSettings()
     {
         mpCBApp->SelectEntryPos(0);
         mpCBFolder->SelectEntryPos(0);
+        mpActionMenu->HideItem(MNI_ACTION_RENAME_FOLDER);
         mpCurView->filterItems(ViewFilter_Application(getCurrentApplicationFilter()));
         mpLocalView->showAllTemplates();
         return;
@@ -418,6 +420,7 @@ void SfxTemplateManagerDlg::getApplicationSpecificSettings()
 
     mpCurView->filterItems(ViewFilter_Application(getCurrentApplicationFilter()));
     mpCBFolder->SelectEntryPos(0);
+    mpActionMenu->HideItem(MNI_ACTION_RENAME_FOLDER);
     mpLocalView->showAllTemplates();
 }
 
@@ -462,6 +465,7 @@ void SfxTemplateManagerDlg::readSettings ()
     {
         //show all categories
         mpCBFolder->SelectEntryPos(0);
+        mpActionMenu->HideItem(MNI_ACTION_RENAME_FOLDER);
         mpLocalView->ShowTooltips(true);
         mpLocalView->showAllTemplates();
     }
@@ -469,6 +473,7 @@ void SfxTemplateManagerDlg::readSettings ()
     {
         mpCBFolder->SelectEntry(aLastFolder);
         mpLocalView->showRegion(aLastFolder);
+        mpActionMenu->ShowItem(MNI_ACTION_RENAME_FOLDER);
     }
 }
 
@@ -498,6 +503,7 @@ IMPL_LINK_NOARG_TYPED(SfxTemplateManagerDlg, SelectApplicationHdl, ListBox&, voi
         mpCurView->filterItems(ViewFilter_Application(getCurrentApplicationFilter()));
         mpCurView->showAllTemplates();
         mpCBFolder->SelectEntryPos(0);
+        mpActionMenu->HideItem(MNI_ACTION_RENAME_FOLDER);
         mpCurView->ShowTooltips(true);
     }
 
@@ -514,11 +520,13 @@ IMPL_LINK_NOARG_TYPED(SfxTemplateManagerDlg, SelectRegionHdl, ListBox&, void)
         {
             mpLocalView->showAllTemplates();
             mpLocalView->ShowTooltips(true);
+            mpActionMenu->HideItem(MNI_ACTION_RENAME_FOLDER);
         }
         else
         {
             mpLocalView->showRegion(sSelectedRegion);
             mpLocalView->ShowTooltips(false);
+            mpActionMenu->ShowItem(MNI_ACTION_RENAME_FOLDER);
         }
     }
 
@@ -729,6 +737,7 @@ IMPL_LINK_NOARG_TYPED(SfxTemplateManagerDlg, ImportClickHdl, Button*, void)
     mpLocalView->ShowTooltips(true);
     mpCBApp->SelectEntryPos(0);
     mpCBFolder->SelectEntryPos(0);
+    mpActionMenu->HideItem(MNI_ACTION_RENAME_FOLDER);
 }
 
 IMPL_STATIC_LINK_NOARG_TYPED(SfxTemplateManagerDlg, LinkClickHdl, Button*, void)
@@ -914,6 +923,7 @@ IMPL_LINK_NOARG_TYPED(SfxTemplateManagerDlg, SearchUpdateHdl, Edit&, void)
         {
             OUString sLastFolder = mpCBFolder->GetSelectEntry();
             mpLocalView->showRegion(sLastFolder);
+            mpActionMenu->ShowItem(MNI_ACTION_RENAME_FOLDER);
         }
     }
 }
@@ -1211,41 +1221,31 @@ void SfxTemplateManagerDlg::OnCategoryNew()
 
 void SfxTemplateManagerDlg::OnCategoryRename()
 {
-    ScopedVclPtrInstance< SfxTemplateCategoryDialog > aDlg;
-    aDlg->SetCategoryLBEntries(mpLocalView->getFolderNames());
-    aDlg->HideNewCategoryOption();
-    aDlg->SetText(SfxResId(STR_CATEGORY_RENAME).toString());
-    aDlg->SetSelectLabelText(SfxResId(STR_CATEGORY_SELECT).toString());
+    OUString sCategory = mpCBFolder->GetSelectEntry();
+    ScopedVclPtrInstance< InputDialog > dlg(SfxResId(STR_INPUT_NEW).toString(),this);
 
-    if(aDlg->Execute() == RET_OK)
+    dlg->SetEntryText(sCategory);
+    int ret = dlg->Execute();
+
+    if (ret)
     {
-        OUString sCategory = aDlg->GetSelectedCategory();
-        ScopedVclPtrInstance< InputDialog > dlg(SfxResId(STR_INPUT_NEW).toString(),this);
+        OUString aName = dlg->GetEntryText();
 
-        dlg->SetEntryText(sCategory);
-        int ret = dlg->Execute();
-
-        if (ret)
+        if(mpLocalView->renameRegion(sCategory, aName))
         {
-            OUString aName = dlg->GetEntryText();
+            sal_Int32 nPos = mpCBFolder->GetEntryPos(sCategory);
+            mpCBFolder->RemoveEntry(nPos);
+            mpCBFolder->InsertEntry(aName, nPos);
+            mpCBFolder->SelectEntryPos(nPos);
 
-            if(mpLocalView->renameRegion(sCategory, aName))
-            {
-                sal_Int32 nPos = mpCBFolder->GetEntryPos(sCategory);
-                mpCBFolder->RemoveEntry(nPos);
-                mpCBFolder->InsertEntry(aName, nPos);
-
-                mpLocalView->reload();
-                mpLocalView->showAllTemplates();
-                mpLocalView->ShowTooltips(true);
-                mpCBApp->SelectEntryPos(0);
-                mpCBFolder->SelectEntryPos(0);
-            }
-            else
-            {
-                OUString aMsg( SfxResId(STR_CREATE_ERROR).toString() );
-                ScopedVclPtrInstance<MessageDialog>::Create(this, aMsg.replaceFirst("$1", aName))->Execute();
-            }
+            mpLocalView->reload();
+            mpLocalView->showRegion(aName);
+            mpLocalView->ShowTooltips(true);
+        }
+        else
+        {
+            OUString aMsg( SfxResId(STR_CREATE_ERROR).toString() );
+            ScopedVclPtrInstance<MessageDialog>::Create(this, aMsg.replaceFirst("$1", aName))->Execute();
         }
     }
 }
@@ -1286,6 +1286,7 @@ void SfxTemplateManagerDlg::OnCategoryDelete()
     mpLocalView->ShowTooltips(true);
     mpCBApp->SelectEntryPos(0);
     mpCBFolder->SelectEntryPos(0);
+    mpActionMenu->HideItem(MNI_ACTION_RENAME_FOLDER);
 }
 
 void SfxTemplateManagerDlg::createRepositoryMenu()
