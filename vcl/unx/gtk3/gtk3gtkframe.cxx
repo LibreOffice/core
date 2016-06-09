@@ -75,6 +75,9 @@
 #  include <cstdio>
 #endif
 
+#include <cstdlib>
+#include <cmath>
+
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
@@ -2674,7 +2677,7 @@ gboolean GtkSalFrame::signalScroll( GtkWidget*, GdkEvent* pEvent, gpointer frame
         if (aEvent.mnDelta == 0)
             aEvent.mnDelta = aEvent.mnNotchDelta;
         aEvent.mbHorz = true;
-        aEvent.mnScrollLines = abs(aEvent.mnDelta) / 40;
+        aEvent.mnScrollLines = std::abs(aEvent.mnDelta) / 40;
         if (aEvent.mnScrollLines == 0)
             aEvent.mnScrollLines = 1;
 
@@ -2688,7 +2691,7 @@ gboolean GtkSalFrame::signalScroll( GtkWidget*, GdkEvent* pEvent, gpointer frame
         if (aEvent.mnDelta == 0)
             aEvent.mnDelta = aEvent.mnNotchDelta;
         aEvent.mbHorz = false;
-        aEvent.mnScrollLines = abs(aEvent.mnDelta) / 40;
+        aEvent.mnScrollLines = std::abs(aEvent.mnDelta) / 40;
         if (aEvent.mnScrollLines == 0)
             aEvent.mnScrollLines = 1;
 
