@@ -232,7 +232,13 @@ void SdrMarkView::ModelHasChanged()
             sSelection = aSelection.toString();
         }
 
-        GetModel()->libreOfficeKitCallback(LOK_CALLBACK_INVALIDATE_TILES, sSelection.getStr());
+        if (comphelper::LibreOfficeKit::isViewCallback())
+        {
+            if(SfxViewShell* pViewShell = SfxViewShell::Current())
+                pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_TILES, sSelection.getStr());
+        }
+        else
+            GetModel()->libreOfficeKitCallback(LOK_CALLBACK_INVALIDATE_TILES, sSelection.getStr());
     }
 }
 
