@@ -373,26 +373,27 @@ void SvtCTLOptions_Impl::SetCTLTextNumerals( SvtCTLOptions::TextNumerals _eNumer
     }
 }
 // global
+std::weak_ptr<SvtCTLOptions_Impl>  pCTLOptions;
 
-static SvtCTLOptions_Impl*  pCTLOptions = nullptr;
-static sal_Int32            nCTLRefCount = 0;
 namespace { struct CTLMutex : public rtl::Static< osl::Mutex, CTLMutex > {}; }
 
 SvtCTLOptions::SvtCTLOptions( bool bDontLoad )
 {
     // Global access, must be guarded (multithreading)
     ::osl::MutexGuard aGuard( CTLMutex::get() );
-    if ( !pCTLOptions )
+
+    m_pImpl = pCTLOptions.lock();
+    if ( !m_pImpl )
     {
-        pCTLOptions = new SvtCTLOptions_Impl;
+        m_pImpl = std::make_shared<SvtCTLOptions_Impl>();
+        pCTLOptions = m_pImpl;
         ItemHolder2::holdConfigItem(E_CTLOPTIONS);
     }
-    if( !bDontLoad && !pCTLOptions->IsLoaded() )
-        pCTLOptions->Load();
 
-    ++nCTLRefCount;
-    m_pImp = pCTLOptions;
-    m_pImp->AddListener(this);
+    if( !bDontLoad && !m_pImpl->IsLoaded() )
+        m_pImpl->Load();
+
+    m_pImpl->AddListener(this);
 }
 
 
@@ -401,87 +402,86 @@ SvtCTLOptions::~SvtCTLOptions()
     // Global access, must be guarded (multithreading)
     ::osl::MutexGuard aGuard( CTLMutex::get() );
 
-    m_pImp->RemoveListener(this);
-    if ( !--nCTLRefCount )
-        DELETEZ( pCTLOptions );
+    m_pImpl->RemoveListener(this);
+    m_pImpl.reset();
 }
 
 void SvtCTLOptions::SetCTLFontEnabled( bool _bEnabled )
 {
-    assert(pCTLOptions->IsLoaded());
-    pCTLOptions->SetCTLFontEnabled( _bEnabled );
+    assert(m_pImpl->IsLoaded());
+    m_pImpl->SetCTLFontEnabled( _bEnabled );
 }
 
 bool SvtCTLOptions::IsCTLFontEnabled() const
 {
-    assert(pCTLOptions->IsLoaded());
-    return pCTLOptions->IsCTLFontEnabled();
+    assert(m_pImpl->IsLoaded());
+    return m_pImpl->IsCTLFontEnabled();
 }
 
 void SvtCTLOptions::SetCTLSequenceChecking( bool _bEnabled )
 {
-    assert(pCTLOptions->IsLoaded());
-    pCTLOptions->SetCTLSequenceChecking(_bEnabled);
+    assert(m_pImpl->IsLoaded());
+    m_pImpl->SetCTLSequenceChecking(_bEnabled);
 }
 
 bool SvtCTLOptions::IsCTLSequenceChecking() const
 {
-    assert(pCTLOptions->IsLoaded());
-    return pCTLOptions->IsCTLSequenceChecking();
+    assert(m_pImpl->IsLoaded());
+    return m_pImpl->IsCTLSequenceChecking();
 }
 
 void SvtCTLOptions::SetCTLSequenceCheckingRestricted( bool _bEnable )
 {
-    assert(pCTLOptions->IsLoaded());
-    pCTLOptions->SetCTLSequenceCheckingRestricted(_bEnable);
+    assert(m_pImpl->IsLoaded());
+    m_pImpl->SetCTLSequenceCheckingRestricted(_bEnable);
 }
 
 bool SvtCTLOptions::IsCTLSequenceCheckingRestricted() const
 {
-    assert(pCTLOptions->IsLoaded());
-    return pCTLOptions->IsCTLSequenceCheckingRestricted();
+    assert(m_pImpl->IsLoaded());
+    return m_pImpl->IsCTLSequenceCheckingRestricted();
 }
 
 void SvtCTLOptions::SetCTLSequenceCheckingTypeAndReplace( bool _bEnable )
 {
-    assert(pCTLOptions->IsLoaded());
-    pCTLOptions->SetCTLSequenceCheckingTypeAndReplace(_bEnable);
+    assert(m_pImpl->IsLoaded());
+    m_pImpl->SetCTLSequenceCheckingTypeAndReplace(_bEnable);
 }
 
 bool SvtCTLOptions::IsCTLSequenceCheckingTypeAndReplace() const
 {
-    assert(pCTLOptions->IsLoaded());
-    return pCTLOptions->IsCTLSequenceCheckingTypeAndReplace();
+    assert(m_pImpl->IsLoaded());
+    return m_pImpl->IsCTLSequenceCheckingTypeAndReplace();
 }
 
 void SvtCTLOptions::SetCTLCursorMovement( SvtCTLOptions::CursorMovement _eMovement )
 {
-    assert(pCTLOptions->IsLoaded());
-    pCTLOptions->SetCTLCursorMovement( _eMovement );
+    assert(m_pImpl->IsLoaded());
+    m_pImpl->SetCTLCursorMovement( _eMovement );
 }
 
 SvtCTLOptions::CursorMovement SvtCTLOptions::GetCTLCursorMovement() const
 {
-    assert(pCTLOptions->IsLoaded());
-    return pCTLOptions->GetCTLCursorMovement();
+    assert(m_pImpl->IsLoaded());
+    return m_pImpl->GetCTLCursorMovement();
 }
 
 void SvtCTLOptions::SetCTLTextNumerals( SvtCTLOptions::TextNumerals _eNumerals )
 {
-    assert(pCTLOptions->IsLoaded());
-    pCTLOptions->SetCTLTextNumerals( _eNumerals );
+    assert(m_pImpl->IsLoaded());
+    m_pImpl->SetCTLTextNumerals( _eNumerals );
 }
 
 SvtCTLOptions::TextNumerals SvtCTLOptions::GetCTLTextNumerals() const
 {
-    assert(pCTLOptions->IsLoaded());
-    return pCTLOptions->GetCTLTextNumerals();
+    assert(m_pImpl->IsLoaded());
+    return m_pImpl->GetCTLTextNumerals();
 }
 
 bool SvtCTLOptions::IsReadOnly(EOption eOption) const
 {
-    assert(pCTLOptions->IsLoaded());
-    return pCTLOptions->IsReadOnly(eOption);
+    assert(m_pImpl->IsLoaded());
+    return m_pImpl->IsReadOnly(eOption);
 }
 
 
