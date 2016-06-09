@@ -2144,12 +2144,25 @@ bool OpenGLSalGraphicsImpl::drawAlphaBitmap(
 
     const OpenGLSalBitmap& rBitmap = static_cast<const OpenGLSalBitmap&>(rSalBitmap);
     const OpenGLSalBitmap& rAlpha = static_cast<const OpenGLSalBitmap&>(rAlphaBitmap);
-    OpenGLTexture& rTexture( rBitmap.GetTexture() );
-    OpenGLTexture& rAlphaTex( rAlpha.GetTexture() );
+    OpenGLTexture& rTexture(rBitmap.GetTexture());
+    OpenGLTexture& rAlphaTexture(rAlpha.GetTexture());
 
     VCL_GL_INFO( "::drawAlphaBitmap" );
     PreDraw();
-    DrawTextureWithMask( rTexture, rAlphaTex, rPosAry );
+
+    if (rPosAry.mnSrcWidth  != rPosAry.mnDestWidth ||
+        rPosAry.mnSrcHeight != rPosAry.mnDestHeight)
+    {
+        basegfx::B2DPoint aNull(rPosAry.mnDestX,rPosAry.mnDestY);
+        basegfx::B2DPoint aX(rPosAry.mnDestX + rPosAry.mnDestWidth, rPosAry.mnDestY);
+        basegfx::B2DPoint aY(rPosAry.mnDestX, rPosAry.mnDestY + rPosAry.mnDestHeight);
+        DrawTransformedTexture(rTexture, rAlphaTexture, aNull, aX, aY);
+    }
+    else
+    {
+        DrawTextureWithMask( rTexture, rAlphaTexture, rPosAry );
+    }
+
     PostDraw();
     return true;
 }
