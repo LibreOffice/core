@@ -1874,11 +1874,6 @@ AC_ARG_WITH(libloader-jar,
         [Specify path to jarfile manually.]),
     LIBLOADER_JAR=$withval)
 
-AC_ARG_WITH(libloader-jar,
-    AS_HELP_STRING([--with-libloader-jar=JARFILE],
-        [Specify path to jarfile manually.]),
-    LIBLOADER_JAR=$withval)
-
 AC_ARG_WITH(libformula-jar,
     AS_HELP_STRING([--with-libformula-jar=JARFILE],
         [Specify path to jarfile manually.]),
