@@ -73,7 +73,6 @@ extern int DBG_DRAW_ROUNDS, DBG_DRAW_COUNTER, DBG_DRAW_DEPTH;
 
 using namespace vcl;
 
-typedef std::vector<unsigned char> ByteVector;
 
 static const basegfx::B2DPoint aHalfPointOfs ( 0.5, 0.5 );
 
@@ -195,7 +194,7 @@ bool AquaSalGraphics::CreateFontSubset( const OUString& rToFile,
     }
 
     // get the raw-bytes from the font to be subset
-    ByteVector aBuffer;
+    std::vector<unsigned char> aBuffer;
     bool bCffOnly = false;
     if( !GetRawFontData( pFontData, aBuffer, &bCffOnly ) )
     {

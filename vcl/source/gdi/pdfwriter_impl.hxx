@@ -306,7 +306,6 @@ public:
 
         explicit FontEmit( sal_Int32 nID ) : m_nFontID( nID ) {}
     };
-    typedef std::list< FontEmit > FontEmitList;
     struct Glyph
     {
         sal_Int32   m_nFontID;
@@ -315,7 +314,7 @@ public:
     typedef std::map< sal_GlyphId, Glyph > FontMapping;
     struct FontSubset
     {
-        FontEmitList        m_aSubsets;
+        std::list< FontEmit >        m_aSubsets;
         FontMapping         m_aMapping;
     };
     typedef std::map< const PhysicalFontFace*, FontSubset > FontSubsetData;

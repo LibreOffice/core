@@ -136,8 +136,7 @@ private:
 
     void                    ReadGsubTable( HDC ) const;
 
-    typedef std::unordered_set<sal_UCS4> UcsHashSet;
-    mutable UcsHashSet      maGsubTable;
+    mutable std::unordered_set<sal_UCS4>      maGsubTable;
     mutable bool            mbGsubRead;
 public:
     bool                    HasGSUBstitutions( HDC ) const;
@@ -442,7 +441,7 @@ public:
     virtual void            FreeEmbedFontData( const void* pData, long nDataLen ) override;
     virtual void            GetGlyphWidths( const PhysicalFontFace*,
                                             bool bVertical,
-                                            Int32Vector& rWidths,
+                                            std::vector< sal_Int32 >& rWidths,
                                             Ucs2UIntMap& rUnicodeEnc ) override;
             int             GetMinKashidaWidth();
 

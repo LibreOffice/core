@@ -96,8 +96,7 @@ class ImplDirectFontSubstitution
 :   public ImplFontSubstitution
 {
 private:
-    typedef std::list<ImplFontSubstEntry> FontSubstList;
-    FontSubstList maFontSubstList;
+    std::list<ImplFontSubstEntry> maFontSubstList;
 public:
     void    AddFontSubstitute( const OUString& rFontName, const OUString& rSubstName, AddFontSubstituteFlags nFlags );
     void    RemoveFontSubstitute( int nIndex );

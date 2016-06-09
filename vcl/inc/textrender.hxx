@@ -65,7 +65,7 @@ public:
     virtual void                    GetGlyphWidths(
                                         const PhysicalFontFace*,
                                         bool bVertical,
-                                        Int32Vector& rWidths,
+                                        std::vector< sal_Int32 >& rWidths,
                                         Ucs2UIntMap& rUnicodeEnc ) = 0;
 
     virtual bool                    GetGlyphBoundRect( sal_GlyphId nIndex, Rectangle& ) = 0;

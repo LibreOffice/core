@@ -36,10 +36,9 @@ class VCL_PLUGIN_PUBLIC FontCache
     struct FontFile;
     friend struct FontFile;
 
-    typedef std::list< PrintFontManager::PrintFont* > FontCacheEntry;
     struct FontFile
     {
-        FontCacheEntry      m_aEntry;
+        std::list< PrintFontManager::PrintFont* >      m_aEntry;
     };
 
     typedef std::unordered_map< OString, FontFile, OStringHash > FontDirMap;

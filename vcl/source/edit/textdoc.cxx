@@ -68,7 +68,7 @@ void TextCharAttribList::InsertAttrib( TextCharAttrib* pAttrib )
 
     const sal_Int32 nStart = pAttrib->GetStart(); // maybe better for Comp.Opt.
     bool bInserted = false;
-    for (TextCharAttribs::iterator it = maAttribs.begin(); it != maAttribs.end(); ++it)
+    for (std::vector<std::unique_ptr<TextCharAttrib> >::iterator it = maAttribs.begin(); it != maAttribs.end(); ++it)
     {
         if ( (*it)->GetStart() > nStart )
         {
@@ -88,7 +88,7 @@ void TextCharAttribList::ResortAttribs()
 
 TextCharAttrib* TextCharAttribList::FindAttrib( sal_uInt16 nWhich, sal_Int32 nPos )
 {
-    for (TextCharAttribs::reverse_iterator it = maAttribs.rbegin(); it != maAttribs.rend(); ++it)
+    for (std::vector<std::unique_ptr<TextCharAttrib> >::reverse_iterator it = maAttribs.rbegin(); it != maAttribs.rend(); ++it)
     {
         if ( (*it)->GetEnd() < nPos )
             return nullptr;
@@ -102,7 +102,7 @@ TextCharAttrib* TextCharAttribList::FindAttrib( sal_uInt16 nWhich, sal_Int32 nPo
 const TextCharAttrib* TextCharAttribList::FindNextAttrib( sal_uInt16 nWhich, sal_Int32 nFromPos, sal_Int32 nMaxPos ) const
 {
     DBG_ASSERT( nWhich, "FindNextAttrib: Which?" );
-    for (TextCharAttribs::const_iterator it = maAttribs.begin(); it != maAttribs.end(); ++it)
+    for (std::vector<std::unique_ptr<TextCharAttrib> >::const_iterator it = maAttribs.begin(); it != maAttribs.end(); ++it)
     {
         if ( ( (*it)->GetStart() >= nFromPos ) &&
              ( (*it)->GetEnd() <= nMaxPos ) &&
@@ -114,7 +114,7 @@ const TextCharAttrib* TextCharAttribList::FindNextAttrib( sal_uInt16 nWhich, sal
 
 bool TextCharAttribList::HasAttrib( sal_uInt16 nWhich ) const
 {
-    for (TextCharAttribs::const_reverse_iterator it = maAttribs.rbegin(); it != maAttribs.rend(); ++it)
+    for (std::vector<std::unique_ptr<TextCharAttrib> >::const_reverse_iterator it = maAttribs.rbegin(); it != maAttribs.rend(); ++it)
     {
         if ( (*it)->Which() == nWhich )
             return true;
@@ -124,7 +124,7 @@ bool TextCharAttribList::HasAttrib( sal_uInt16 nWhich ) const
 
 bool TextCharAttribList::HasBoundingAttrib( sal_Int32 nBound )
 {
-    for (TextCharAttribs::reverse_iterator it = maAttribs.rbegin(); it != maAttribs.rend(); ++it)
+    for (std::vector<std::unique_ptr<TextCharAttrib> >::reverse_iterator it = maAttribs.rbegin(); it != maAttribs.rend(); ++it)
     {
         if ( (*it)->GetEnd() < nBound )
             return false;
@@ -140,7 +140,7 @@ TextCharAttrib* TextCharAttribList::FindEmptyAttrib( sal_uInt16 nWhich, sal_Int3
     if ( !mbHasEmptyAttribs )
         return nullptr;
 
-    for (TextCharAttribs::iterator it = maAttribs.begin(); it != maAttribs.end(); ++it)
+    for (std::vector<std::unique_ptr<TextCharAttrib> >::iterator it = maAttribs.begin(); it != maAttribs.end(); ++it)
     {
         if ( (*it)->GetStart() > nPos )
             return nullptr;

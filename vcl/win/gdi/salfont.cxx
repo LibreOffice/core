@@ -2505,7 +2505,7 @@ const Ucs2SIntMap* WinSalGraphics::GetFontEncodingVector( const PhysicalFontFace
 
 void WinSalGraphics::GetGlyphWidths( const PhysicalFontFace* pFont,
                                      bool bVertical,
-                                     Int32Vector& rWidths,
+                                     std::vector< sal_Int32 >& rWidths,
                                      Ucs2UIntMap& rUnicodeEnc )
 {
     // create matching FontSelectPattern

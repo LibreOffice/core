@@ -1592,7 +1592,7 @@ void WinMtfOutput::ImplDrawBitmap( const Point& rPos, const Size& rSize, const B
         mpGDIMetaFile->AddAction( new MetaBmpScaleAction( rPos, rSize, aBmpEx.GetBitmap() ) );
 }
 
-void WinMtfOutput::ResolveBitmapActions( BSaveStructList_impl& rSaveList )
+void WinMtfOutput::ResolveBitmapActions( std::vector<std::unique_ptr<BSaveStruct>>& rSaveList )
 {
     UpdateClipRegion();
 
@@ -2056,7 +2056,7 @@ void WinMtfOutput::ModifyWorldTransform( const XForm& rXForm, sal_uInt32 nMode )
 void WinMtfOutput::Push()                       // !! to be able to access the original ClipRegion it
 {                                               // is not allowed to use the MetaPushAction()
     UpdateClipRegion();                         // (the original clip region is on top of the stack) (SJ)
-    SaveStructPtr pSave( new SaveStruct );
+    std::shared_ptr<SaveStruct> pSave( new SaveStruct );
 
     pSave->aLineStyle = maLineStyle;
     pSave->aFillStyle = maFillStyle;
@@ -2096,7 +2096,7 @@ void WinMtfOutput::Pop()
     if( !vSaveStack.empty() )
     {
         // Backup the current data on the stack
-        SaveStructPtr pSave( vSaveStack.back() );
+        std::shared_ptr<SaveStruct> pSave( vSaveStack.back() );
 
         maLineStyle = pSave->aLineStyle;
         maFillStyle = pSave->aFillStyle;

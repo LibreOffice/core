@@ -55,10 +55,9 @@ class FilterConfigCache
         static const char* ExternalPixelFilterNameList[];
     };
 
-    typedef std::vector< FilterConfigCacheEntry > CacheVector;
 
-    CacheVector         aImport;
-    CacheVector         aExport;
+    std::vector< FilterConfigCacheEntry >         aImport;
+    std::vector< FilterConfigCacheEntry >         aExport;
     bool            bUseConfig;
 
     static bool   bInitialized;

@@ -60,7 +60,6 @@ typedef sal_Unicode sal_Ucs; // TODO: use sal_UCS4 instead of sal_Unicode
 typedef std::map< sal_Ucs, sal_Int32 >    Ucs2SIntMap;
 typedef std::map< sal_Ucs, sal_uInt32 >   Ucs2UIntMap;
 typedef std::map< sal_Ucs, OString > Ucs2OStrMap;
-typedef std::vector< sal_Int32 > Int32Vector;
 
 // note: if you add any new methods to class SalGraphics using coordinates
 //       make sure they have a corresponding protected pure virtual method
@@ -210,7 +209,7 @@ public:
     virtual void                GetGlyphWidths(
                                     const PhysicalFontFace* pFont,
                                     bool bVertical,
-                                    Int32Vector& rWidths,
+                                    std::vector< sal_Int32 >& rWidths,
                                     Ucs2UIntMap& rUnicodeEnc ) = 0;
 
     virtual bool                GetGlyphBoundRect( sal_GlyphId, Rectangle& ) = 0;

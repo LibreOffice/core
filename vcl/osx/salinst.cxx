@@ -109,8 +109,8 @@ void AquaSalInstance::delayedSettingsChanged( bool bInvalidate )
     pIdle->Start();
 }
 
-// the AppEventList must be available before any SalData/SalInst/etc. objects are ready
-AquaSalInstance::AppEventList AquaSalInstance::aAppEventList;
+// the std::list<const ApplicationEvent*> must be available before any SalData/SalInst/etc. objects are ready
+std::list<const ApplicationEvent*> AquaSalInstance::aAppEventList;
 
 NSMenu* AquaSalInstance::GetDynamicDockMenu()
 {
