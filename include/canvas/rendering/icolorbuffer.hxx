@@ -71,8 +71,6 @@ namespace canvas
          */
         virtual Format getFormat() const = 0;
     };
-
-    typedef std::shared_ptr< IColorBuffer > IColorBufferSharedPtr;
 }
 
 #endif // INCLUDED_CANVAS_RENDERING_ICOLORBUFFER_HXX

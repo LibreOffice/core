@@ -23,7 +23,7 @@
 
 namespace canvas
 {
-    Page::Page( const IRenderModuleSharedPtr &rRenderModule ) :
+    Page::Page( const std::shared_ptr<IRenderModule> &rRenderModule ) :
         mpRenderModule(rRenderModule),
         mpSurface(rRenderModule->createSurface(::basegfx::B2ISize()))
     {

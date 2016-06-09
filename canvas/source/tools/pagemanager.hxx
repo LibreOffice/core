@@ -32,7 +32,7 @@ namespace canvas
     class PageManager
     {
     public:
-        explicit PageManager(const canvas::IRenderModuleSharedPtr& rRenderModule)
+        explicit PageManager(const std::shared_ptr<canvas::IRenderModule>& rRenderModule)
             : mpRenderModule(rRenderModule)
         {
         }
@@ -41,7 +41,7 @@ namespace canvas
         // accelerated page, e.g. OpenGL texture.
         ::basegfx::B2ISize getPageSize() const;
 
-        const canvas::IRenderModuleSharedPtr& getRenderModule() const { return mpRenderModule; }
+        const std::shared_ptr<canvas::IRenderModule>& getRenderModule() const { return mpRenderModule; }
 
         FragmentSharedPtr allocateSpace( const ::basegfx::B2ISize& rSize );
         void              free( const FragmentSharedPtr& pFragment );
@@ -53,7 +53,7 @@ namespace canvas
     private:
         // the pagemanager needs access to the rendermodule
         // since we query for system resources from it.
-        canvas::IRenderModuleSharedPtr mpRenderModule;
+        std::shared_ptr<canvas::IRenderModule> mpRenderModule;
 
         // here we collect all fragments that will be created
         // since we need them for relocation purposes.

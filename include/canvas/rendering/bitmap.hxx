@@ -67,7 +67,7 @@ namespace canvas
             false otherwise
          */
         Bitmap( const ::basegfx::B2IVector&          rSize,
-                const ISurfaceProxyManagerSharedPtr& rMgr,
+                const std::shared_ptr<ISurfaceProxyManager>& rMgr,
                 bool                                 bWithAlpha );
         ~Bitmap();
 
@@ -185,14 +185,14 @@ namespace canvas
                          const css::rendering::ViewState&          viewState,
                          const css::rendering::RenderState&        renderState );
         /// See XCanvas interface
-        ICachedPrimitiveSharedPtr drawPolyPolygon(
+        std::shared_ptr<ICachedPrimitive> drawPolyPolygon(
             const css::uno::Reference<
                   css::rendering::XPolyPolygon2D >&    xPolyPolygon,
             const css::rendering::ViewState&           viewState,
             const css::rendering::RenderState&         renderState );
 
         /// See XCanvas interface
-        ICachedPrimitiveSharedPtr strokePolyPolygon(
+        std::shared_ptr<ICachedPrimitive> strokePolyPolygon(
             const css::uno::Reference<
                   css::rendering::XPolyPolygon2D >&    xPolyPolygon,
             const css::rendering::ViewState&           viewState,
@@ -206,7 +206,7 @@ namespace canvas
             sequence. This is to decouple this interface from the
             client's XBitmap-implementation class.
          */
-        ICachedPrimitiveSharedPtr strokeTexturedPolyPolygon(
+        std::shared_ptr<ICachedPrimitive> strokeTexturedPolyPolygon(
             const css::uno::Reference< css::rendering::XPolyPolygon2D >&    xPolyPolygon,
             const css::rendering::ViewState&                                viewState,
             const css::rendering::RenderState&                              renderState,
@@ -221,7 +221,7 @@ namespace canvas
             sequence. This is to decouple this interface from the
             client's XBitmap-implementation class.
          */
-        ICachedPrimitiveSharedPtr strokeTextureMappedPolyPolygon(
+        std::shared_ptr<ICachedPrimitive> strokeTextureMappedPolyPolygon(
             const css::uno::Reference< css::rendering::XPolyPolygon2D >&    xPolyPolygon,
             const css::rendering::ViewState&                                viewState,
             const css::rendering::RenderState&                              renderState,
@@ -230,7 +230,7 @@ namespace canvas
             const css::uno::Reference< css::geometry::XMapping2D >&         xMapping,
             const css::rendering::StrokeAttributes&                         strokeAttributes );
         /// See XCanvas interface
-        ICachedPrimitiveSharedPtr fillPolyPolygon(
+        std::shared_ptr<ICachedPrimitive> fillPolyPolygon(
             const css::uno::Reference< css::rendering::XPolyPolygon2D >&    xPolyPolygon,
             const css::rendering::ViewState&                                viewState,
             const css::rendering::RenderState&                              renderState );
@@ -242,7 +242,7 @@ namespace canvas
             sequence. This is to decouple this interface from the
             client's XBitmap-implementation class.
          */
-        ICachedPrimitiveSharedPtr fillTexturedPolyPolygon(
+        std::shared_ptr<ICachedPrimitive> fillTexturedPolyPolygon(
             const css::uno::Reference< css::rendering::XPolyPolygon2D >&    xPolyPolygon,
             const css::rendering::ViewState&                                viewState,
             const css::rendering::RenderState&                              renderState,
@@ -256,7 +256,7 @@ namespace canvas
             sequence. This is to decouple this interface from the
             client's XBitmap-implementation class.
          */
-        ICachedPrimitiveSharedPtr fillTextureMappedPolyPolygon(
+        std::shared_ptr<ICachedPrimitive> fillTextureMappedPolyPolygon(
             const css::uno::Reference< css::rendering::XPolyPolygon2D >&    xPolyPolygon,
             const css::rendering::ViewState&                                viewState,
             const css::rendering::RenderState&                              renderState,
@@ -265,25 +265,25 @@ namespace canvas
             const css::uno::Reference< css::geometry::XMapping2D >&         xMapping );
 
         /// See XCanvas interface
-        ICachedPrimitiveSharedPtr drawBitmap(
+        std::shared_ptr<ICachedPrimitive> drawBitmap(
             const css::uno::Reference<
                   css::rendering::XBitmap >&   xBitmap,
             const css::rendering::ViewState&   viewState,
             const css::rendering::RenderState& renderState );
         /// See XCanvas interface
-        ICachedPrimitiveSharedPtr drawBitmap(
+        std::shared_ptr<ICachedPrimitive> drawBitmap(
             const std::shared_ptr<Bitmap>&     rImage,
             const css::rendering::ViewState&   viewState,
             const css::rendering::RenderState& renderState );
 
         /// See XCanvas interface
-        ICachedPrimitiveSharedPtr drawBitmapModulated(
+        std::shared_ptr<ICachedPrimitive> drawBitmapModulated(
             const css::uno::Reference<
                   css::rendering::XBitmap >&       xBitmap,
             const css::rendering::ViewState&       viewState,
             const css::rendering::RenderState&     renderState );
         /// See XCanvas interface
-        ICachedPrimitiveSharedPtr drawBitmapModulated(
+        std::shared_ptr<ICachedPrimitive> drawBitmapModulated(
             const std::shared_ptr<Bitmap>&         rImage,
             const css::rendering::ViewState&       viewState,
             const css::rendering::RenderState&     renderState );

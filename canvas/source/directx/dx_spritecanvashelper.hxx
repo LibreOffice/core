@@ -46,7 +46,7 @@ namespace dxcanvas
         void init( SpriteCanvas&                                    rParent,
                    ::canvas::SpriteRedrawManager&                   rManager,
                    const IDXRenderModuleSharedPtr&                  rRenderModule,
-                   const ::canvas::ISurfaceProxyManagerSharedPtr&   rSurfaceProxy,
+                   const ::std::shared_ptr<canvas::ISurfaceProxyManager>&   rSurfaceProxy,
                    const DXSurfaceBitmapSharedPtr&                  rBackBuffer,
                    const ::basegfx::B2ISize&                        rOutputOffset );
 
@@ -134,7 +134,7 @@ namespace dxcanvas
         /// DX device, handling all low-level rendering
         IDXRenderModuleSharedPtr                        mpRenderModule;
 
-        ::canvas::ISurfaceProxyManagerSharedPtr         mpSurfaceProxy;
+        ::std::shared_ptr<canvas::ISurfaceProxyManager>         mpSurfaceProxy;
 
         /// Backbuffer, contains the static canvas render output
         DXSurfaceBitmapSharedPtr                        mpBackBuffer;
