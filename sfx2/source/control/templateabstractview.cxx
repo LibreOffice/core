@@ -274,6 +274,7 @@ void TemplateAbstractView::RemoveDefaultTemplateIcon(const OUString& rPath)
         if(pViewItem->getPath().match(rPath))
         {
             pViewItem->showDefaultIcon(false);
+            Invalidate();
             return;
         }
     }
