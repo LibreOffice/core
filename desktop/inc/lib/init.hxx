@@ -54,7 +54,7 @@ namespace desktop {
     {
         css::uno::Reference<css::lang::XComponent> mxComponent;
         std::shared_ptr< LibreOfficeKitDocumentClass > m_pDocumentClass;
-        std::shared_ptr<CallbackFlushHandler> mpCallbackFlushHandler;
+        std::map<size_t, std::shared_ptr<CallbackFlushHandler>> mpCallbackFlushHandlers;
 
         explicit LibLODocument_Impl(const css::uno::Reference <css::lang::XComponent> &xComponent);
         ~LibLODocument_Impl();
