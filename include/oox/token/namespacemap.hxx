@@ -21,8 +21,10 @@
 #define INCLUDED_OOX_TOKEN_NAMESPACEMAP_HXX
 
 #include <map>
+
 #include <rtl/instance.hxx>
 #include <rtl/ustring.hxx>
+#include <sal/types.h>
 
 namespace oox {
 
