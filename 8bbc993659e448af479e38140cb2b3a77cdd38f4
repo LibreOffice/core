@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_8bb5c8ce",
+        "filename": "sax/qa/cppunit/xmlimport.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 385,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-06-09T07:07:03Z",
+      "side": 1,
+      "message": "CPPUNIT_ASSERT_EQUAL would be better here",
+      "revId": "8bbc993659e448af479e38140cb2b3a77cdd38f4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
