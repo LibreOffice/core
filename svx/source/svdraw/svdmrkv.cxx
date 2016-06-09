@@ -53,6 +53,7 @@
 #include <editeng/editdata.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>
+#include <sfx2/viewsh.hxx>
 
 using namespace com::sun::star;
 
@@ -716,8 +717,16 @@ void SdrMarkView::SetMarkHandles()
                 if(pSdrTextObj && pSdrTextObj->IsInEditMode())
                 {
                     if (bTiledRendering)
+                    {
                         // Suppress handles -> empty graphic selection.
-                        GetModel()->libreOfficeKitCallback(LOK_CALLBACK_GRAPHIC_SELECTION, "EMPTY");
+                        if (comphelper::LibreOfficeKit::isViewCallback())
+                        {
+                            if(SfxViewShell* pViewShell = SfxViewShell::Current())
+                                pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_GRAPHIC_SELECTION, "EMPTY");
+                        }
+                        else
+                            GetModel()->libreOfficeKitCallback(LOK_CALLBACK_GRAPHIC_SELECTION, "EMPTY");
+                    }
                     return;
                 }
             }
@@ -736,7 +745,13 @@ void SdrMarkView::SetMarkHandles()
                 if (xController.is() && xController->hasSelectedCells())
                 {
                     // The table shape has selected cells, which provide text selection already -> no graphic selection.
-                    GetModel()->libreOfficeKitCallback(LOK_CALLBACK_GRAPHIC_SELECTION, "EMPTY");
+                    if (comphelper::LibreOfficeKit::isViewCallback())
+                    {
+                        if(SfxViewShell* pViewShell = SfxViewShell::Current())
+                            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_GRAPHIC_SELECTION, "EMPTY");
+                    }
+                    else
+                        GetModel()->libreOfficeKitCallback(LOK_CALLBACK_GRAPHIC_SELECTION, "EMPTY");
                     return;
                 }
             }
@@ -767,7 +782,13 @@ void SdrMarkView::SetMarkHandles()
                 // hide the text selection too
                 GetModel()->libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION, "");
             }
-            GetModel()->libreOfficeKitCallback(LOK_CALLBACK_GRAPHIC_SELECTION, sSelection.getStr());
+            if (comphelper::LibreOfficeKit::isViewCallback())
+            {
+                if(SfxViewShell* pViewShell = SfxViewShell::Current())
+                    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_GRAPHIC_SELECTION, sSelection.getStr());
+            }
+            else
+                GetModel()->libreOfficeKitCallback(LOK_CALLBACK_GRAPHIC_SELECTION, sSelection.getStr());
         }
 
         if (bFrmHdl)
