@@ -51,8 +51,6 @@ namespace canvas
          */
         virtual sal_Int8 redraw( const css::rendering::ViewState& aState ) const = 0;
     };
-
-    typedef std::shared_ptr< ICachedPrimitive > ICachedPrimitiveSharedPtr;
 }
 
 #endif // INCLUDED_CANVAS_RENDERING_ICACHEDPRIMITIVE_HXX

@@ -33,7 +33,7 @@ namespace dxcanvas
     {
     public:
         DXSurfaceBitmap( const ::basegfx::B2IVector&                    rSize,
-                         const canvas::ISurfaceProxyManagerSharedPtr&   rMgr,
+                         const std::shared_ptr<canvas::ISurfaceProxyManager>&   rMgr,
                          const IDXRenderModuleSharedPtr&                rRenderModule,
                          bool                                           bWithAlpha );
 
@@ -100,7 +100,7 @@ namespace dxcanvas
 
         // pointer to the surface manager, needed in case clients
         // want to resize the bitmap.
-        canvas::ISurfaceProxyManagerSharedPtr mpSurfaceManager;
+        std::shared_ptr<canvas::ISurfaceProxyManager> mpSurfaceManager;
 
         // access point to the surface proxy which handles
         // the hardware-dependent rendering stuff.
@@ -118,7 +118,7 @@ namespace dxcanvas
         GraphicsSharedPtr mpGraphics;
 
         // internal implementation of the iColorBuffer interface
-        canvas::IColorBufferSharedPtr mpColorBuffer;
+        std::shared_ptr<canvas::IColorBuffer> mpColorBuffer;
 
         // indicates whether the associated surface needs
         // to refresh its contents or not. in other words,

@@ -183,7 +183,7 @@ namespace dxcanvas
 
 
     DXSurfaceBitmap::DXSurfaceBitmap( const ::basegfx::B2IVector&                   rSize,
-                                      const canvas::ISurfaceProxyManagerSharedPtr&  rMgr,
+                                      const std::shared_ptr<canvas::ISurfaceProxyManager>&  rMgr,
                                       const IDXRenderModuleSharedPtr&               rRenderModule,
                                       bool                                          bWithAlpha ) :
         mpGdiPlusUser( GDIPlusUser::createInstance() ),

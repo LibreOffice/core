@@ -28,7 +28,7 @@
 namespace canvas
 {
     Surface::Surface( const PageManagerSharedPtr&  rPageManager,
-                      const IColorBufferSharedPtr& rColorBuffer,
+                      const std::shared_ptr<IColorBuffer>& rColorBuffer,
                       const ::basegfx::B2IPoint&   rPos,
                       const ::basegfx::B2ISize&    rSize ) :
         mpColorBuffer(rColorBuffer),
@@ -93,7 +93,7 @@ namespace canvas
                         const ::basegfx::B2DPoint&      rPos,
                         const ::basegfx::B2DHomMatrix&  rTransform )
     {
-        IRenderModuleSharedPtr pRenderModule(mpPageManager->getRenderModule());
+        std::shared_ptr<IRenderModule> pRenderModule(mpPageManager->getRenderModule());
 
         RenderModuleGuard aGuard( pRenderModule );
 
@@ -193,7 +193,7 @@ namespace canvas
         if( rArea.isEmpty() )
             return true; // immediate exit for empty area
 
-        IRenderModuleSharedPtr pRenderModule(mpPageManager->getRenderModule());
+        std::shared_ptr<IRenderModule> pRenderModule(mpPageManager->getRenderModule());
 
         RenderModuleGuard aGuard( pRenderModule );
 
@@ -310,7 +310,7 @@ namespace canvas
                                 const ::basegfx::B2DPolygon&    rClipPoly,
                                 const ::basegfx::B2DHomMatrix&  rTransform )
     {
-        IRenderModuleSharedPtr pRenderModule(mpPageManager->getRenderModule());
+        std::shared_ptr<IRenderModule> pRenderModule(mpPageManager->getRenderModule());
 
         RenderModuleGuard aGuard( pRenderModule );
 

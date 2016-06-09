@@ -30,7 +30,7 @@ namespace canvas
     {
     public:
 
-        explicit SurfaceProxyManager( const IRenderModuleSharedPtr& rRenderModule ) :
+        explicit SurfaceProxyManager( const std::shared_ptr<IRenderModule>& rRenderModule ) :
             mpPageManager( new PageManager(rRenderModule) )
         {
         }
@@ -48,7 +48,7 @@ namespace canvas
             texture may be distributed to several real hardware
             surfaces.
         */
-        virtual std::shared_ptr<ISurfaceProxy> createSurfaceProxy( const IColorBufferSharedPtr& pBuffer ) const override
+        virtual std::shared_ptr<ISurfaceProxy> createSurfaceProxy( const std::shared_ptr<IColorBuffer>& pBuffer ) const override
         {
             // not much to do for now, simply allocate a new surface
             // proxy from our internal pool and initialize this thing
@@ -60,9 +60,9 @@ namespace canvas
         PageManagerSharedPtr mpPageManager;
     };
 
-    ISurfaceProxyManagerSharedPtr createSurfaceProxyManager( const IRenderModuleSharedPtr& rRenderModule )
+    std::shared_ptr<ISurfaceProxyManager> createSurfaceProxyManager( const std::shared_ptr<IRenderModule>& rRenderModule )
     {
-        return ISurfaceProxyManagerSharedPtr(
+        return std::shared_ptr<ISurfaceProxyManager>(
             new SurfaceProxyManager(
                 rRenderModule));
     }
