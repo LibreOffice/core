@@ -326,7 +326,6 @@ SvxColorTabPage::SvxColorTabPage(vcl::Window* pParent, const SfxItemSet& rInAttr
     get(m_pBtnSave, "save");
     get(m_pTableName, "colortableft");
 
-    get(m_pEdtName, "name");
     get(m_pLbColor, "colorlb");
     get(m_pValSetColorList, "colorset");
     Size aSize = LogicToPixel(Size(94 , 117), MAP_APPFONT);
@@ -434,7 +433,6 @@ void SvxColorTabPage::dispose()
     m_pBtnLoad.clear();
     m_pBtnSave.clear();
     m_pTableName.clear();
-    m_pEdtName.clear();
     m_pLbColor.clear();
     m_pValSetColorList.clear();
     m_pCtlPreviewOld.clear();
@@ -499,7 +497,6 @@ void SvxColorTabPage::ActivatePage( const SfxItemSet& )
             {
                 m_pLbColor->SelectEntryPos( *pPos );
                 m_pValSetColorList->SelectItem( m_pLbColor->GetSelectEntryPos() + 1 );
-                m_pEdtName->SetText( m_pLbColor->GetSelectEntry() );
                 XColorEntry* pEntry = pColorList->GetColor( *pPos );
                 aPreviousColor = pEntry->GetColor();
                 ChangeColor(pEntry->GetColor());
@@ -515,7 +512,6 @@ void SvxColorTabPage::ActivatePage( const SfxItemSet& )
                     aPreviousColor = static_cast<const XFillColorItem*>(pPoolItem)->GetColorValue();
                     ChangeColor( aPreviousColor );
 
-                    m_pEdtName->SetText( static_cast<const XFillColorItem*>( pPoolItem )->GetName() );
 
                     m_pRcustom->SetValue( ColorToPercent_Impl( aCurrentColor.GetRed() ) );
                     m_pGcustom->SetValue( ColorToPercent_Impl( aCurrentColor.GetGreen() ) );
@@ -557,15 +553,13 @@ long SvxColorTabPage::CheckChanges_Impl()
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         Color aColor = pColorList->GetColor( nPos )->GetColor();
-        OUString aString = m_pLbColor->GetSelectEntry();
 
         // aNewColor, because COL_USER != COL_something, even if RGB values are the same
         // Color aNewColor( aColor.GetRed(), aColor.GetGreen(), aColor.GetBlue() );
 
         if( ColorToPercent_Impl( aCurrentColor.GetRed() ) != ColorToPercent_Impl( aColor.GetRed() ) ||
             ColorToPercent_Impl( aCurrentColor.GetGreen() ) != ColorToPercent_Impl( aColor.GetGreen() ) ||
-            ColorToPercent_Impl( aCurrentColor.GetBlue() ) != ColorToPercent_Impl( aColor.GetBlue() ) ||
-            aString != m_pEdtName->GetText() )
+            ColorToPercent_Impl( aCurrentColor.GetBlue() ) != ColorToPercent_Impl( aColor.GetBlue() ) )
         {
             ResMgr& rMgr = CUI_MGR();
             Image aWarningBoxImage = WarningBox::GetStandardImage();
@@ -661,7 +655,6 @@ void SvxColorTabPage::Reset( const SfxItemSet* rSet )
         aNewColor = aColorItem.GetColorValue();
         m_pLbColor->SelectEntry(aNewColor);
         m_pValSetColorList->SelectItem( m_pLbColor->GetSelectEntryPos() + 1 );
-        m_pEdtName->SetText( m_pLbColor->GetSelectEntry() );
     }
 
     // set color model
@@ -720,26 +713,15 @@ IMPL_LINK_NOARG_TYPED(SvxColorTabPage, ClickAddHdl_Impl, Button*, void)
 {
     OUString aNewName( SVX_RES( RID_SVXSTR_COLOR ) );
     OUString aDesc( CUI_RES( RID_SVXSTR_DESC_COLOR ) );
-    OUString aName( m_pEdtName->GetText() );
+    OUString aName;
 
-    long nCount = pColorList->Count();
     long j = 1;
-
+    bool bValidColorName = false;
     // check if name is already existing
-    while (true)
+    while (!bValidColorName)
     {
-        bool bDifferent = true;
-
-        for( long i = 0; i < nCount && bDifferent; i++ )
-            if ( aName == pColorList->GetColor( i )->GetName() )
-                bDifferent = false;
-
-        if (bDifferent)
-            break;
-
-        aName = aNewName;
-        aName += " ";
-        aName += OUString::number( j++ );
+        aName = aNewName + " " + OUString::number( j++ );
+        bValidColorName = (SearchColorList(aName) == LISTBOX_ENTRY_NOTFOUND);
     }
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
@@ -751,15 +733,8 @@ IMPL_LINK_NOARG_TYPED(SvxColorTabPage, ClickAddHdl_Impl, Button*, void)
     {
         pDlg->GetName( aName );
 
-        bool bDifferent = true;
-
-        for (long i = 0; i < nCount && bDifferent; ++i)
-        {
-            if( aName == pColorList->GetColor( i )->GetName() )
-                bDifferent = false;
-        }
-
-        if (bDifferent)
+        bValidColorName = (SearchColorList(aName) == LISTBOX_ENTRY_NOTFOUND);
+        if (bValidColorName)
         {
             nError = 0;
             break;
@@ -809,61 +784,46 @@ IMPL_LINK_NOARG_TYPED(SvxColorTabPage, ClickModifyHdl_Impl, Button*, void)
     {
         ResMgr& rMgr = CUI_MGR();
         OUString aDesc( ResId( RID_SVXSTR_DESC_COLOR, rMgr ) );
-        OUString aName( m_pEdtName->GetText() );
-        long nCount = pColorList->Count();
-        bool bDifferent = true;
+        OUString aName( m_pLbColor->GetSelectEntry() );
 
-        // check if name is already existing
-        for ( long i = 0; i < nCount && bDifferent; i++ )
-            if ( aName == pColorList->GetColor( i )->GetName() && nPos != i )
-                bDifferent = false;
+        SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+        std::unique_ptr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog( GetParentDialog(), aName, aDesc ));
+        DBG_ASSERT(pFact, "Dialog Creation Failed");
 
-        // if yes, it is repeated and a new name is demanded
-        if ( !bDifferent )
+        bool bLoop = true;
+
+        while( bLoop && pDlg->Execute() == RET_OK )
         {
-            ScopedVclPtrInstance<MessageDialog> aWarningBox( GetParentDialog()
-                                                             ,"DuplicateNameDialog"
-                                                             ,"cui/ui/queryduplicatedialog.ui");
-            aWarningBox->Execute();
+            pDlg->GetName( aName );
+            bool bValidColorName = (SearchColorList(aName) == nPos) || (SearchColorList(aName) == LISTBOX_ENTRY_NOTFOUND);
 
-            SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-            std::unique_ptr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog( GetParentDialog(), aName, aDesc ));
-            bool bLoop = true;
-
-            while ( !bDifferent && bLoop && pDlg->Execute() == RET_OK )
+            if( bValidColorName )
             {
-                pDlg->GetName( aName );
-                bDifferent = true;
+                bLoop = false;
+                // #123497# Need to replace the existing entry with a new one (old returned needs to be deleted)
+                XColorEntry* pEntry = new XColorEntry(aCurrentColor, aName);
+                delete pColorList->Replace(pEntry, nPos);
 
-                for ( long i = 0; i < nCount && bDifferent; i++ )
-                    if( aName == pColorList->GetColor( i )->GetName() && nPos != i )
-                        bDifferent = false;
+                m_pLbColor->Modify( *pEntry, nPos );
+                m_pLbColor->SelectEntryPos( nPos );
 
-                if( bDifferent )
-                    bLoop = false;
-                else
-                    aWarningBox->Execute();
+                m_pValSetColorList->Clear();
+                m_pValSetColorList->addEntriesForXColorList( *pColorList );
+                m_pValSetColorList->SelectItem( nPos + 1 );
+
+                m_pCtlPreviewOld->Invalidate();
+
+                *pnColorListState |= ChangeType::MODIFIED;
             }
-        }
 
-        // if not existing the entry is entered
-        if( bDifferent )
-        {
-            // #123497# Need to replace the existing entry with a new one (old returned needs to be deleted)
-            XColorEntry* pEntry = new XColorEntry(aCurrentColor, aName);
-            delete pColorList->Replace(pEntry, nPos);
-
-            m_pLbColor->Modify( *pEntry, nPos );
-            m_pLbColor->SelectEntryPos( nPos );
-
-            m_pValSetColorList->Clear();
-            m_pValSetColorList->addEntriesForXColorList( *pColorList );
-            m_pValSetColorList->SelectItem( nPos + 1 );
-            m_pEdtName->SetText( aName );
-
-            m_pCtlPreviewOld->Invalidate();
-
-            *pnColorListState |= ChangeType::MODIFIED;
+            // if yes, it is repeated and a new name is demanded
+            else
+            {
+                ScopedVclPtrInstance<MessageDialog> aWarningBox( GetParentDialog()
+                                                                 ,"DuplicateNameDialog"
+                                                                 ,"cui/ui/queryduplicatedialog.ui");
+                aWarningBox->Execute();
+            }
         }
     }
 }
@@ -941,7 +901,6 @@ IMPL_LINK_NOARG_TYPED(SvxColorTabPage, SelectColorLBHdl_Impl, ListBox&, void)
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         m_pValSetColorList->SelectItem( nPos + 1 );
-        m_pEdtName->SetText( m_pLbColor->GetSelectEntry() );
 
         rXFSet.Put( XFillColorItem( OUString(),
                                     m_pLbColor->GetSelectEntryColor() ) );
@@ -960,7 +919,6 @@ IMPL_LINK_NOARG_TYPED(SvxColorTabPage, SelectValSetHdl_Impl, ValueSet*, void)
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         m_pLbColor->SelectEntryPos( nPos - 1 );
-        m_pEdtName->SetText( m_pLbColor->GetSelectEntry() );
 
         rXFSet.Put( XFillColorItem( OUString(),
                                     m_pLbColor->GetSelectEntryColor() ) );
@@ -1077,6 +1035,23 @@ void SvxColorTabPage::UpdateColorValues()
         m_pHexcustom->SetColor( aCurrentColor.GetColor() );
         m_pHexpreset->SetColor( aPreviousColor.GetColor() );
     }
+}
+
+sal_Int32 SvxColorTabPage::SearchColorList(OUString aColorName)
+{
+    long nCount = pColorList->Count();
+    bool bValidColorName = true;
+    sal_Int32 nPos = LISTBOX_ENTRY_NOTFOUND;
+
+    for(long i = 0;i < nCount && bValidColorName;i++)
+    {
+        if(aColorName == pColorList->GetColor( i )->GetName())
+        {
+            nPos = i;
+            bValidColorName = false;
+        }
+    }
+    return nPos;
 }
 
 //void SvxColorTabPage::FillValueSet_Impl( ValueSet& rVs )

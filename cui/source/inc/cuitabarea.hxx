@@ -664,7 +664,6 @@ private:
     void EnableSave( bool bCanSave );
 
     SvxColorTabPageShadow *pShadow;
-    VclPtr<Edit>               m_pEdtName;
     VclPtr<ColorLB>            m_pLbColor;
 
     VclPtr<SvxColorValueSet>   m_pValSetColorList;
@@ -743,6 +742,7 @@ private:
     void SetColorModel(ColorModel eModel);
     void ChangeColorModel();
     void UpdateColorValues();
+    sal_Int32 SearchColorList(OUString aColorName);
     DECL_LINK_TYPED( ModifiedHdl_Impl, Edit&, void );
 
     long CheckChanges_Impl();
