@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <oox/helper/attributelist.hxx>
 #include "oox/vml/vmlformatting.hxx"
 #include "oox/vml/vmltextboxcontext.hxx"
 #include "oox/vml/vmlshape.hxx"

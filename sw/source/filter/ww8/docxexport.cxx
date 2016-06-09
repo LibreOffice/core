@@ -36,6 +36,7 @@
 #include <oox/export/vmlexport.hxx>
 #include <oox/export/chartexport.hxx>
 #include <oox/export/shapes.hxx>
+#include <oox/helper/propertyset.hxx>
 
 #include <map>
 #include <algorithm>

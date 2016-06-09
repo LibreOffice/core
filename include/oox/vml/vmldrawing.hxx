@@ -23,14 +23,15 @@
 #include <map>
 #include <memory>
 #include <vector>
-#include <oox/ole/axcontrol.hxx>
-#include <oox/ole/oleobjecthelper.hxx>
-#include <oox/vml/vmlshapecontainer.hxx>
+
+#include <com/sun/star/uno/Reference.hxx>
 #include <oox/dllapi.h>
+#include <oox/ole/oleobjecthelper.hxx>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
 
 namespace com { namespace sun { namespace star {
     namespace awt { struct Rectangle; }
-    namespace awt { class XControlModel; }
     namespace drawing { class XDrawPage; }
     namespace drawing { class XShape; }
     namespace drawing { class XShapes; }
@@ -39,13 +40,14 @@ namespace com { namespace sun { namespace star {
 namespace oox {
     namespace core { class XmlFilterBase; }
     namespace ole { class EmbeddedControl; }
+    namespace ole { class EmbeddedForm; }
+    namespace vml { class ShapeContainer; }
 }
 
 namespace oox {
 namespace vml {
 
 class ShapeBase;
-struct ClientData;
 
 
 /** Enumerates different types of VML drawings. */

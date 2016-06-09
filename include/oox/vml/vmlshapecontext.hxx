@@ -20,8 +20,13 @@
 #ifndef INCLUDED_OOX_VML_VMLSHAPECONTEXT_HXX
 #define INCLUDED_OOX_VML_VMLSHAPECONTEXT_HXX
 
+#include <oox/core/contexthandler.hxx>
 #include <oox/core/contexthandler2.hxx>
 #include <oox/helper/helper.hxx>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
+
+namespace oox { class AttributeList; }
 
 namespace oox {
 namespace vml {
