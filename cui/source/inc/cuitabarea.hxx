@@ -664,7 +664,6 @@ private:
     void EnableSave( bool bCanSave );
 
     SvxColorTabPageShadow *pShadow;
-    VclPtr<Edit>               m_pEdtName;
     VclPtr<ColorLB>            m_pLbColor;
 
     VclPtr<SvxColorValueSet>   m_pValSetColorList;
