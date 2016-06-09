@@ -208,8 +208,8 @@ namespace osl_Security
             ::osl::Security aSec;
             bRes = aSec.isAdministrator(  );
 
-            CPPUNIT_ASSERT_MESSAGE( "#test comment#: check if the user is administrator at beginning, compare here.",
-                                     bRes == isAdmin );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( "#test comment#: check if the user is administrator at beginning, compare here.",
+                                     isAdmin, bRes );
         }
 
         CPPUNIT_TEST_SUITE( isAdministrator );
@@ -278,7 +278,7 @@ namespace osl_Security
 
                 oslSecurityError erg = osl_loginUserOnFileServer(suUserName.pData, suPassword.pData, suFileServer.pData, &pSec);
 
-                CPPUNIT_ASSERT_MESSAGE( "empty function.", erg == osl_Security_E_UserUnknown );
+                CPPUNIT_ASSERT_EQUAL_MESSAGE( "empty function.", osl_Security_E_UserUnknown, erg );
             }
 
         CPPUNIT_TEST_SUITE( loginUserOnFileServer );
@@ -339,8 +339,8 @@ void MyTestPlugInImpl::initialize( CPPUNIT_NS::TestFactoryRegistry *,
     char *pw_dir = pw->pw_dir;
     if( getenv( "FAKEROOTKEY" ) )
         pw_dir = getenv("HOME");
-    CPPUNIT_ASSERT_MESSAGE( "#Convert from system path to URL failed.",
-                            ::osl::File::E_None == ::osl::File::getFileURLFromSystemPath( ::rtl::OUString::createFromAscii( pw_dir ), strHomeDirectory ) );
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "#Convert from system path to URL failed.",
+                            ::osl::File::E_None, ::osl::File::getFileURLFromSystemPath( ::rtl::OUString::createFromAscii( pw_dir ), strHomeDirectory ) );
 
     /// get config directory;
     strConfigDirectory = strHomeDirectory.copy(0);

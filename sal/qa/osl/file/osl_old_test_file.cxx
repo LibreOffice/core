@@ -95,7 +95,7 @@ void oldtestfile::test_file_001()
         OUString target;
         OUString rel = OUString::createFromAscii( aSource1[i] );
         oslFileError e = osl_getAbsoluteFileURL( base1.pData, rel.pData , &target.pData );
-        CPPUNIT_ASSERT_MESSAGE("failure #1",  osl_File_E_None == e );
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("failure #1",  osl_File_E_None, e );
         if( osl_File_E_None == e )
         {
             CPPUNIT_ASSERT_MESSAGE("failure #1.1",  target.equalsAscii( aSource1[i+1] ) );
@@ -114,7 +114,7 @@ void oldtestfile::test_file_002()
         OUString target;
         OUString rel = OUString::createFromAscii( aSource2[i] );
         oslFileError e = osl_getAbsoluteFileURL( base2.pData, rel.pData , &target.pData );
-        CPPUNIT_ASSERT_MESSAGE("failure #2",  osl_File_E_None == e );
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("failure #2",  osl_File_E_None, e );
         if( osl_File_E_None == e )
         {
             CPPUNIT_ASSERT_MESSAGE("failure #2.1",  target.equalsAscii( aSource2[i+1] ) );
@@ -133,7 +133,7 @@ void oldtestfile::test_file_004()
         OUString target;
         OUString rel = OUString::createFromAscii( aSource1[i] );
         oslFileError e = osl_getAbsoluteFileURL( base4.pData, rel.pData , &target.pData );
-        CPPUNIT_ASSERT_MESSAGE("failure #10",  osl_File_E_None == e );
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("failure #10", osl_File_E_None, e );
         if( osl_File_E_None == e )
         {
             CPPUNIT_ASSERT_MESSAGE("failure #10.1",  target.equalsAscii( aSource1[i+1] ) );

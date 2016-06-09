@@ -116,10 +116,10 @@ public:
             0,
             &hProcess );
 
-        CPPUNIT_ASSERT_MESSAGE
+        CPPUNIT_ASSERT_EQUAL_MESSAGE
         (
             "osl_createProcess failed",
-            osl_error == osl_Process_E_None
+            osl_Process_E_None, osl_error
         );
     //we could get return value only after the process terminated
         osl_joinProcess(hProcess);
@@ -133,14 +133,14 @@ public:
     //you will get unknown error when call osl_getProcessInfo
     pInfo->Size = sizeof(oslProcessInfo);
     osl_error = osl_getProcessInfo( hProcess, osl_Process_EXITCODE, pInfo );
-    CPPUNIT_ASSERT_MESSAGE
+    CPPUNIT_ASSERT_EQUAL_MESSAGE
         (
             "osl_getProcessInfo returned with failure",
-            osl_Process_E_None == osl_error
+            osl_error, osl_Process_E_None
         );
 
     printf("the exit code is %" SAL_PRIuUINT32 ".\n", pInfo->Code );
-    CPPUNIT_ASSERT_MESSAGE("rtl_getAppCommandArg or rtl_getAppCommandArgCount error.", pInfo->Code == 2);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("rtl_getAppCommandArg or rtl_getAppCommandArgCount error.", static_cast<oslProcessExitCode>(2), pInfo->Code);
     delete pInfo;
     }
 
@@ -246,10 +246,10 @@ public:
         pChildOutputRead,
         nullptr);
 
-        CPPUNIT_ASSERT_MESSAGE
+        CPPUNIT_ASSERT_EQUAL_MESSAGE
         (
             "osl_createProcess failed",
-            osl_error == osl_Process_E_None
+            osl_Process_E_None, osl_error
         );
     //we could get return value only after the process terminated
         osl_joinProcess(hProcess);
