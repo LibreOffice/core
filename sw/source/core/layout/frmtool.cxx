@@ -1258,7 +1258,7 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
         // Attention: the SwLayHelper class uses references to the content-,
         // page-, layout-frame etc. and may change them!
         pPageMaker = new SwLayHelper( pDoc, pFrame, pPrv, pPage, pLay,
-                pActualSection, bBreakAfter, nIndex, 0 == nEndIndex );
+                pActualSection, nIndex, 0 == nEndIndex );
         if( bStartPercent )
         {
             const sal_uLong nPageCount = pPageMaker->CalcPageCount();

@@ -461,14 +461,14 @@ SwActualSection::SwActualSection( SwActualSection *pUp,
  * a guess, but a guess with statistical background.
  */
 SwLayHelper::SwLayHelper( SwDoc *pD, SwFrame* &rpF, SwFrame* &rpP, SwPageFrame* &rpPg,
-                          SwLayoutFrame* &rpL, SwActualSection* &rpA, bool &rB,
+                          SwLayoutFrame* &rpL, SwActualSection* &rpA,
                           sal_uLong nNodeIndex, bool bCache )
     : rpFrame( rpF )
     , rpPrv( rpP )
     , rpPage( rpPg )
     , rpLay( rpL )
     , rpActualSection( rpA )
-    , rbBreakAfter(rB)
+    , mbBreakAfter(false)
     , pDoc(pD)
     , nMaxParaPerPage( 25 )
     , nParagraphCnt( bCache ? 0 : USHRT_MAX )
@@ -588,8 +588,8 @@ bool SwLayHelper::CheckInsertPage()
                               nullptr :
                               rDesc.GetPageDesc();
 
-    bool bBrk = nParagraphCnt > nMaxParaPerPage || rbBreakAfter;
-    rbBreakAfter = rBrk.GetBreak() == SVX_BREAK_PAGE_AFTER ||
+    bool bBrk = nParagraphCnt > nMaxParaPerPage || mbBreakAfter;
+    mbBreakAfter = rBrk.GetBreak() == SVX_BREAK_PAGE_AFTER ||
                    rBrk.GetBreak() == SVX_BREAK_PAGE_BOTH;
     if ( !bBrk )
         bBrk = rBrk.GetBreak() == SVX_BREAK_PAGE_BEFORE ||
@@ -734,7 +734,7 @@ bool SwLayHelper::CheckInsert( sal_uLong nNodeIndex )
                 sal_uInt16 nType = SW_LAYCACHE_IO_REC_PAGES;
                 if( bLongTab )
                 {
-                    rbBreakAfter = true;
+                    mbBreakAfter = true;
                     nOfst = static_cast<sal_Int32>(nRowCount + nMaxRowPerPage);
                 }
                 else
@@ -747,7 +747,7 @@ bool SwLayHelper::CheckInsert( sal_uLong nNodeIndex )
                     {
                         nType = pImpl->GetBreakType( nIndex );
                         nOfst = pImpl->GetBreakOfst( nIndex++ );
-                        rbBreakAfter = true;
+                        mbBreakAfter = true;
                     }
                 }
 
