@@ -80,11 +80,10 @@ css::uno::Any SAL_CALL DispatchHelper::executeDispatch(
                                 const css::uno::Sequence< css::beans::PropertyValue >&      lArguments        )
     throw(css::uno::RuntimeException, std::exception)
 {
-    css::uno::Reference< css::uno::XInterface > xTHIS(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY);
-
     // check for valid parameters
     if (
         (!xDispatchProvider.is()) ||
+        (!m_xContext.is())        ||
         (sURL.isEmpty()         )
        )
     {
