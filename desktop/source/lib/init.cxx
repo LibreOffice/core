@@ -1264,7 +1264,8 @@ void doc_paintPartTile(LibreOfficeKitDocument* pThis,
 
     // Disable callbacks while we are painting.
     LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
-    pDocument->mpCallbackFlushHandler->setPartTilePainting(true);
+    std::size_t nView = SfxLokHelper::getView();
+    pDocument->mpCallbackFlushHandlers[nView]->setPartTilePainting(true);
     try
     {
         // Text documents have a single coordinate system; don't change part.
@@ -1291,7 +1292,7 @@ void doc_paintPartTile(LibreOfficeKitDocument* pThis,
         // Nothing to do but restore the PartTilePainting flag.
     }
 
-    pDocument->mpCallbackFlushHandler->setPartTilePainting(false);
+    pDocument->mpCallbackFlushHandlers[nView]->setPartTilePainting(false);
 }
 
 static int doc_getTileMode(LibreOfficeKitDocument* /*pThis*/)
@@ -1333,14 +1334,16 @@ static void doc_registerCallback(LibreOfficeKitDocument* pThis,
                                  LibreOfficeKitCallback pCallback,
                                  void* pData)
 {
+    SolarMutexGuard aGuard;
     LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
 
-    pDocument->mpCallbackFlushHandler.reset(new CallbackFlushHandler(pCallback, pData));
+    std::size_t nView = comphelper::LibreOfficeKit::isViewCallback() ? SfxLokHelper::getView() : 0;
+    pDocument->mpCallbackFlushHandlers[nView].reset(new CallbackFlushHandler(pCallback, pData));
 
     if (comphelper::LibreOfficeKit::isViewCallback())
     {
         if (SfxViewShell* pViewShell = SfxViewFrame::Current()->GetViewShell())
-            pViewShell->registerLibreOfficeKitViewCallback(CallbackFlushHandler::callback, pDocument->mpCallbackFlushHandler.get());
+            pViewShell->registerLibreOfficeKitViewCallback(CallbackFlushHandler::callback, pDocument->mpCallbackFlushHandlers[nView].get());
     }
     else
     {
@@ -1351,7 +1354,7 @@ static void doc_registerCallback(LibreOfficeKitDocument* pThis,
             return;
         }
 
-        pDoc->registerCallback(CallbackFlushHandler::callback, pDocument->mpCallbackFlushHandler.get());
+        pDoc->registerCallback(CallbackFlushHandler::callback, pDocument->mpCallbackFlushHandlers[nView].get());
     }
 }
 
@@ -1433,10 +1436,11 @@ static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pComma
 
     bool bResult = false;
 
-    if (bNotifyWhenFinished && pDocument->mpCallbackFlushHandler)
+    std::size_t nView = comphelper::LibreOfficeKit::isViewCallback() ? SfxLokHelper::getView() : 0;
+    if (bNotifyWhenFinished && pDocument->mpCallbackFlushHandlers[nView])
     {
         bResult = comphelper::dispatchCommand(aCommand, comphelper::containerToSequence(aPropertyValuesVector),
-                new DispatchResultListener(pCommand, pDocument->mpCallbackFlushHandler));
+                new DispatchResultListener(pCommand, pDocument->mpCallbackFlushHandlers[nView]));
     }
     else
         bResult = comphelper::dispatchCommand(aCommand, comphelper::containerToSequence(aPropertyValuesVector));
@@ -1468,9 +1472,10 @@ static void doc_postMouseEvent(LibreOfficeKitDocument* pThis, int nType, int nX,
     }
 
     LibLODocument_Impl* pLib = static_cast<LibLODocument_Impl*>(pThis);
-    if (pLib->mpCallbackFlushHandler)
+    std::size_t nView = comphelper::LibreOfficeKit::isViewCallback() ? SfxLokHelper::getView() : 0;
+    if (pLib->mpCallbackFlushHandlers[nView])
     {
-        pLib->mpCallbackFlushHandler->queue(LOK_CALLBACK_MOUSE_POINTER, aPointerString.getStr());
+        pLib->mpCallbackFlushHandlers[nView]->queue(LOK_CALLBACK_MOUSE_POINTER, aPointerString.getStr());
     }
 }
 
