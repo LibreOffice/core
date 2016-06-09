@@ -1547,7 +1547,7 @@ void FormulaCompiler::Factor()
                     pFacToken->GetJump()[ 0 ] = 2;  // if, behind
                     break;
                 default:
-                    SAL_WARN("formula.core","Jump OpCode: " << eOp);
+                    SAL_WARN("formula.core","Jump OpCode: " << +eOp);
                     assert(!"FormulaCompiler::Factor: someone forgot to add a jump count case");
             }
             eOp = NextToken();
@@ -1580,7 +1580,7 @@ void FormulaCompiler::Factor()
                     break;
                 default:
                     nJumpMax = 0;
-                    SAL_WARN("formula.core","Jump OpCode: " << eFacOpCode);
+                    SAL_WARN("formula.core","Jump OpCode: " << +eFacOpCode);
                     assert(!"FormulaCompiler::Factor: someone forgot to add a jump max case");
             }
             short nJumpCount = 0;
@@ -1619,7 +1619,7 @@ void FormulaCompiler::Factor()
                         break;
                     default:
                         bLimitOk = false;
-                        SAL_WARN("formula.core","Jump OpCode: " << eFacOpCode);
+                        SAL_WARN("formula.core","Jump OpCode: " << +eFacOpCode);
                         assert(!"FormulaCompiler::Factor: someone forgot to add a jump limit case");
                 }
                 if (bLimitOk)
