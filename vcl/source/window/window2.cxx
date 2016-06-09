@@ -421,21 +421,17 @@ VclPtr<vcl::Window> Window::SaveFocus()
         return nullptr;
 }
 
-bool Window::EndSaveFocus( const VclPtr<vcl::Window>& xFocusWin, bool bRestore )
+void Window::EndSaveFocus( const VclPtr<vcl::Window>& xFocusWin, bool bRestore )
 {
     if ( xFocusWin == nullptr )
-        return false;
+        return;
     else
     {
-        bool                bOK = true;
         if ( !xFocusWin->IsDisposed() )
         {
             if ( bRestore )
                 xFocusWin->GrabFocus();
         }
-        else
-            bOK = !bRestore;
-        return bOK;
     }
 }
 
