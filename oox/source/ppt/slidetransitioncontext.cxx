@@ -125,13 +125,6 @@ SlideTransitionContext::~SlideTransitionContext() throw()
         }
         return this;
     case PPT_TOKEN( circle ):
-    case PPT_TOKEN( oval ) :
-        if (!mbHasTransition)
-        {
-            mbHasTransition = true;
-            maTransition.setOoxTransitionType( aElementToken, rAttribs.getToken( XML_dir, XML_vert), 0);
-        }
-        return this;
     case PPT_TOKEN( diamond ):
     case PPT_TOKEN( dissolve ):
     case PPT_TOKEN( newsflash ):

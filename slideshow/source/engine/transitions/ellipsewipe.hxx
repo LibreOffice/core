@@ -30,10 +30,8 @@ namespace internal {
 class EllipseWipe : public ParametricPolyPolygon
 {
 public:
-    explicit EllipseWipe( sal_Int32 nSubType ): mnSubType( nSubType ) {}
+    explicit EllipseWipe( sal_Int32 /*nTransitionSubType xxx todo */ ) {}
     virtual ::basegfx::B2DPolyPolygon operator () ( double x ) override;
-private:
-    sal_Int32 mnSubType;
 };
 
 }

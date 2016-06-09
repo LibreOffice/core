@@ -371,17 +371,6 @@ namespace oox { namespace ppt {
             mnTransitionType = TransitionType::ELLIPSEWIPE;
             mnTransitionSubType = TransitionSubType::CIRCLE;
             break;
-        case PPT_TOKEN( oval ):
-            mnTransitionType = TransitionType::ELLIPSEWIPE;
-            if( ooxToOdpDirection( param1 ) == TransitionSubType::VERTICAL )
-            {
-                mnTransitionSubType = TransitionSubType::VERTICAL;
-            }
-            else
-            {
-                mnTransitionSubType = TransitionSubType::HORIZONTAL;
-            }
-            break;
         case PPT_TOKEN( diamond ):
             mnTransitionType = TransitionType::IRISWIPE;
             mnTransitionSubType = TransitionSubType::DIAMOND;

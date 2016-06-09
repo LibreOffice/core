@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/animations/TransitionSubType.hpp>
+
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include "ellipsewipe.hxx"
@@ -29,23 +29,12 @@ namespace internal {
 
 ::basegfx::B2DPolyPolygon EllipseWipe::operator () ( double t )
 {
-    ::basegfx::B2DPoint rCenter(0.5,0.5);
-    double fRadius = ::basegfx::pruneScaleValue( t * M_SQRT2 / 2.0 );
-
-    if( mnSubType == com::sun::star::animations::TransitionSubType::VERTICAL )
-    {
-        //oval :
-        ::basegfx::B2DPolygon poly (
-            ::basegfx::tools::createPolygonFromEllipse( rCenter, fRadius*2, fRadius ) ); //Horizontal Ellipse is rotated by 90 degress
-        return ::basegfx::B2DPolyPolygon( poly );
-    }
-    else
-    {
-         // circle:
-        ::basegfx::B2DPolygon poly(
-            ::basegfx::tools::createPolygonFromCircle( rCenter, fRadius ) );
-        return ::basegfx::B2DPolyPolygon( poly );
-    }
+    // currently only circle:
+    ::basegfx::B2DPolygon poly(
+        ::basegfx::tools::createPolygonFromCircle(
+            ::basegfx::B2DPoint( 0.5, 0.5 ),
+            ::basegfx::pruneScaleValue( t * M_SQRT2 / 2.0 ) ) );
+    return ::basegfx::B2DPolyPolygon( poly );
 }
 
 }

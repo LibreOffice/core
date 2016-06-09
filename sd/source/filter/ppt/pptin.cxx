@@ -1720,18 +1720,6 @@ void ImplSdPPTImport::ImportPageEffect( SdPage* pPage, const bool bNewAnimations
                                         pPage->setTransitionSubtype( animations::TransitionSubType::CIRCLE );
                                     }
                                     break;
-                                    case PPT_TRANSITION_TYPE_OVAL_VERTICAL :
-                                    {
-                                        pPage->setTransitionType( animations::TransitionType::ELLIPSEWIPE );
-                                        pPage->setTransitionSubtype( animations::TransitionSubType::VERTICAL );
-                                    }
-                                    break;
-                                    case PPT_TRANSITION_TYPE_OVAL_HORIZONTAL :
-                                    {
-                                        pPage->setTransitionType( animations::TransitionType::ELLIPSEWIPE );
-                                        pPage->setTransitionSubtype( animations::TransitionSubType::HORIZONTAL );
-                                    }
-                                    break;
                                     case PPT_TRANSITION_TYPE_WEDGE :
                                     {
                                         pPage->setTransitionType( animations::TransitionType::FANWIPE );
