@@ -401,7 +401,6 @@ void MenuFloatingWindow::StopExecute( VclPtr<vcl::Window> xFocusId )
     // (could have been restored in Select)
     if ( xSaveFocusId != nullptr )
     {
-        Window::EndSaveFocus( xFocusId, false );
         xFocusId = xSaveFocusId;
         if ( xFocusId != nullptr )
         {
