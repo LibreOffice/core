@@ -210,7 +210,6 @@ class GtkSalFrame : public SalFrame
 #if GTK_CHECK_VERSION(3,0,0)
     OUString                        m_aTooltip;
     Rectangle                       m_aHelpArea;
-    guint32                         m_nLastScrollEventTime;
     long                            m_nWidthRequest;
     long                            m_nHeightRequest;
     cairo_region_t*                 m_pRegion;
