@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_cba0b093",
+        "filename": "svl/source/config/cjkoptions.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 392,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-06-09T06:58:47Z",
+      "side": 1,
+      "message": "this should be \n  pImp \u003d pCJKOptions.lock()\n  if ( !pImp )\n  {\n      pImp.reset(new SvtCJKOptions_Impl);\n      pCJKOptions \u003d pImp;\n  }",
+      "revId": "45053cbc0a427c6e0aec239699337b6e428449d7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_ebad7489",
+        "filename": "svl/source/config/cjkoptions.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 396,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-06-09T06:58:47Z",
+      "side": 1,
+      "message": "and then this can be\n  if( !bDontLoad \u0026\u0026 !pImp-\u003eIsLoaded())\n        pImp-\u003eLoad();",
+      "revId": "45053cbc0a427c6e0aec239699337b6e428449d7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
