@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_ab260c14",
+        "filename": "svl/source/config/cjkoptions.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 391,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-06-09T08:31:01Z",
+      "side": 1,
+      "message": "and again, sorry, please use\n   pImpl \u003d std::make_shared\u003cSvtCJKOptions_Impl\u003e()\nhere",
+      "revId": "c8d57f10bf3d844da34321e816ccc187942b7cd8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_8b1148af",
+        "filename": "svl/source/config/cjkoptions.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 409,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-06-09T08:31:01Z",
+      "side": 1,
+      "message": "sorry, didn\u0027t see this earlier\n\nrather use the pImp member to do this here and elsewhere further down - calling lock() repeatedly seems inefficient to me, when we already have a shared_ptr member",
+      "revId": "c8d57f10bf3d844da34321e816ccc187942b7cd8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
