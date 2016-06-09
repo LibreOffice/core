@@ -25,7 +25,7 @@ public:
 
     DECL_LINK_TYPED(ContextMenuSelectHdl, Menu*, bool);
 
-    void setRightClickHdl(const Link<ThumbnailViewItem*,void> &rLink);
+    void setCreateContextMenuHdl(const Link<ThumbnailViewItem*,void> &rLink);
 
     void setEditTemplateHdl(const Link<ThumbnailViewItem*,void> &rLink);
 
@@ -46,13 +46,15 @@ protected:
 
     virtual void MouseButtonDown( const MouseEvent& rMEvt ) override;
 
+    virtual void KeyInput( const KeyEvent& rKEvt ) override;
+
 protected:
     TemplateViewItem *maSelectedItem;
 
     Point maPosition;
 
     Link<ThumbnailViewItem*, void> maOpenTemplateHdl;
-    Link<ThumbnailViewItem*, void> maRightClickHdl;
+    Link<ThumbnailViewItem*, void> maCreateContextMenuHdl;
     Link<ThumbnailViewItem*,void> maEditTemplateHdl;
     Link<ThumbnailViewItem*,void> maDeleteTemplateHdl;
     Link<ThumbnailViewItem*,void> maDefaultTemplateHdl;
