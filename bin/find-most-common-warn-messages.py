@@ -14,6 +14,7 @@ process = subprocess.Popen("find workdir -name '*.log' | xargs grep -h 'warn:' |
                             shell=True, stdout=subprocess.PIPE, universal_newlines=True)
 
 messages = dict() # dict of sourceAndLine->count
+sampleOfMessage = dict() # dict of sourceAndLine->string
 for line in process.stdout:
     line = line.strip()
     # a sample line is:
@@ -24,12 +25,13 @@ for line in process.stdout:
         messages[sourceAndLine] = messages[sourceAndLine] + 1
     else:
         messages[sourceAndLine] = 1
+        sampleOfMessage[sourceAndLine] = tokens[6]
 
 tmplist = list() # set of tuple (count, sourceAndLine)
 for key, value in messages.iteritems():
     tmplist.append([value,key])
 
 for i in sorted(tmplist, key=lambda v: v[0]):
-    print i
+    print( "%6d %s %s" % (i[0], i[1], sampleOfMessage[i[1]]) )
 
 
