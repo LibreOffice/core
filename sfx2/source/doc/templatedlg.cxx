@@ -628,6 +628,11 @@ IMPL_LINK_TYPED(SfxTemplateManagerDlg, DefaultTemplateMenuSelectHdl, Menu*, pMen
     sal_uInt16 nId = pMenu->GetCurItemId();
 
     OUString aServiceName = SfxObjectShell::GetServiceNameFromFactory( mpTemplateDefaultMenu->GetItemCommand(nId));
+
+    OUString sPrevDefault = SfxObjectFactory::GetStandardTemplate( aServiceName );
+    if(!sPrevDefault.isEmpty())
+        mpLocalView->RemoveDefaultTemplateIcon(sPrevDefault);
+
     SfxObjectFactory::SetStandardTemplate( aServiceName, OUString() );
 
     createDefaultTemplateMenu();
