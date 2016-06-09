@@ -650,7 +650,7 @@ bool ODbTypeWizDialogSetup::leaveState(WizardState _nState)
         resetPages(m_pImpl->getCurrentDataSource());
     }
     SfxTabPage* pPage = static_cast<SfxTabPage*>(WizardDialog::GetPage(_nState));
-    return pPage && pPage->DeactivatePage(m_pOutSet) != DeactivateRC::LeavePage;
+    return pPage && pPage->DeactivatePage(m_pOutSet) != DeactivateRC::KeepPage;
 }
 
 void ODbTypeWizDialogSetup::setTitle(const OUString& /*_sTitle*/)
