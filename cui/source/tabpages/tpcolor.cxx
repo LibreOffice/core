@@ -855,8 +855,9 @@ IMPL_LINK_NOARG_TYPED(SvxColorTabPage, ClickModifyHdl_Impl, Button*, void)
             m_pLbColor->Modify( *pEntry, nPos );
             m_pLbColor->SelectEntryPos( nPos );
 
-            m_pValSetColorList->SetItemColor( nPos + 1, pEntry->GetColor() );
-            m_pValSetColorList->SetItemText( nPos + 1, pEntry->GetName() );
+            m_pValSetColorList->Clear();
+            m_pValSetColorList->addEntriesForXColorList( *pColorList );
+            m_pValSetColorList->SelectItem( nPos + 1 );
             m_pEdtName->SetText( aName );
 
             m_pCtlPreviewOld->Invalidate();
