@@ -15,6 +15,7 @@
 #include <svtools/treelistbox.hxx>
 #include <svtools/treelistentry.hxx>
 #include <ucbhelper/content.hxx>
+#include <o3tl/make_unique.hxx>
 
 #include <orcus/spreadsheet/import_interface.hpp>
 #include <orcus/xml_structure_tree.hpp>
@@ -34,11 +35,18 @@ using namespace com::sun::star;
 namespace {
 
 ScOrcusXMLTreeParam::EntryData& setUserDataToEntry(
-    SvTreeListEntry& rEntry, ScOrcusXMLTreeParam::EntryDataVec& rStore, ScOrcusXMLTreeParam::EntryType eType)
+    SvTreeListEntry& rEntry, ScOrcusXMLTreeParam::UserDataStoreType& rStore, ScOrcusXMLTreeParam::EntryType eType)
 {
-    rStore.push_back(ScOrcusXMLTreeParam::EntryData(eType));
-    rEntry.SetUserData(&rStore.back());
-    return rStore.back();
+    rStore.push_back(o3tl::make_unique<ScOrcusXMLTreeParam::EntryData>(eType));
+    rEntry.SetUserData(rStore.back().get());
+    return *rStore.back();
+}
+
+void setEntityNameToUserData(
+    ScOrcusXMLTreeParam::EntryData& rEntryData,
+    const orcus::xml_structure_tree::entity_name& entity, const orcus::xml_structure_tree::walker& walker)
+{
+    rEntryData.mnNamespaceID = walker.get_xmlns_index(entity.ns);
 }
 
 OUString toString(const orcus::xml_structure_tree::entity_name& entity, const orcus::xml_structure_tree::walker& walker)
@@ -66,9 +74,10 @@ void populateTree(
         return;
 
     ScOrcusXMLTreeParam::EntryData& rEntryData = setUserDataToEntry(
-        *pEntry, rParam.maUserDataStore,
+        *pEntry, rParam.m_UserDataStore,
         bRepeat ? ScOrcusXMLTreeParam::ElementRepeat : ScOrcusXMLTreeParam::ElementDefault);
-    rEntryData.mnNamespaceID = rWalker.get_xmlns_index(rElemName.ns);
+
+    setEntityNameToUserData(rEntryData, rElemName, rWalker);
 
     if (bRepeat)
     {
@@ -95,8 +104,8 @@ void populateTree(
             continue;
 
         ScOrcusXMLTreeParam::EntryData& rAttrData =
-            setUserDataToEntry(*pAttr, rParam.maUserDataStore, ScOrcusXMLTreeParam::Attribute);
-        rAttrData.mnNamespaceID = rWalker.get_xmlns_index(rAttrName.ns);
+            setUserDataToEntry(*pAttr, rParam.m_UserDataStore, ScOrcusXMLTreeParam::Attribute);
+        setEntityNameToUserData(rAttrData, rAttrName, rWalker);
 
         rTreeCtrl.SetExpandedEntryBmp(pAttr, rParam.maImgAttribute);
         rTreeCtrl.SetCollapsedEntryBmp(pAttr, rParam.maImgAttribute);
@@ -172,7 +181,7 @@ ScOrcusXMLContextImpl::~ScOrcusXMLContextImpl() {}
 
 bool ScOrcusXMLContextImpl::loadXMLStructure(SvTreeListBox& rTreeCtrl, ScOrcusXMLTreeParam& rParam)
 {
-    rParam.maUserDataStore.clear();
+    rParam.m_UserDataStore.clear();
 
     std::string aStrm;
     loadContentFromURL(maPath, aStrm);
