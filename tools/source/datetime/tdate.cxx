@@ -29,6 +29,17 @@
 static const sal_uInt16 aDaysInMonth[12] = { 31, 28, 31, 30, 31, 30,
                                              31, 31, 30, 31, 30, 31 };
 
+// The number of days we internally handle.
+// Assuming the first valid positive date in a proleptic Gregorian calendar is
+// 0001-01-01, this results in an end date of 9957-06-26.
+// Hence we documented that years up to and including 9956 are handled.
+/* XXX: it is unclear history why this value was chosen, the representable
+ * 9999-12-31 would be 3652060 days from 0001-01-01. Even 9998-12-31 to
+ * distinguish from a maximum possible date would be 3651695. Better keep the
+ * value in case something somewhere relies on it or there is another reason
+ * beyond..
+ * At least connectivity/source/commontools/dbconversion.cxx has the same
+ * value to calculate with css::util::Date */
 #define MAX_DAYS    3636532
 
 namespace
