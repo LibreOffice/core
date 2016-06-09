@@ -189,7 +189,10 @@ void SwVisibleCursor::_SetPosAndShow()
         {
             m_nPageLastTime = nPage;
             OString aPayload = OString::number(nPage - 1);
-            m_pCursorShell->libreOfficeKitCallback(LOK_CALLBACK_SET_PART, aPayload.getStr());
+            if (comphelper::LibreOfficeKit::isViewCallback())
+                m_pCursorShell->GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_SET_PART, aPayload.getStr());
+            else
+                m_pCursorShell->libreOfficeKitCallback(LOK_CALLBACK_SET_PART, aPayload.getStr());
         }
 
         // notify about the cursor position & size
