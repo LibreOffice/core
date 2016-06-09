@@ -1307,8 +1307,7 @@ void ServerFont::ApplyGSUB( const FontSelectPattern& rFSD )
 {
 #define MKTAG(s) ((((((s[0]<<8)+s[1])<<8)+s[2])<<8)+s[3])
 
-    typedef std::vector<sal_uLong> ReqFeatureTagList;
-    ReqFeatureTagList aReqFeatureTagList;
+    std::vector<sal_uInt32> aReqFeatureTagList;
     if( rFSD.mbVertical )
         aReqFeatureTagList.push_back( MKTAG("vert") );
     // TODO: request more features depending on script and language system
@@ -1458,8 +1457,7 @@ void ServerFont::ApplyGSUB( const FontSelectPattern& rFSD )
             pSubLookup += 4;
 
             typedef std::pair<sal_uInt16,sal_uInt16> GlyphSubst;
-            typedef std::vector<GlyphSubst> SubstVector;
-            SubstVector aSubstVector;
+            std::vector<GlyphSubst> aSubstVector;
 
             const FT_Byte* pCoverage    = pGsubBase + nOfsLookupList + nOfsLookupTable + nOfsSubLookupTable + nOfsCoverage;
             const sal_uInt16 nFmtCoverage   = GetUShort( pCoverage+0 );
@@ -1497,7 +1495,7 @@ void ServerFont::ApplyGSUB( const FontSelectPattern& rFSD )
                     break;
             }
 
-            SubstVector::iterator it( aSubstVector.begin() );
+            std::vector<GlyphSubst>::iterator it( aSubstVector.begin() );
 
             switch( nFmtSubstitution )
             {

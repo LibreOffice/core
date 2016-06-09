@@ -95,7 +95,7 @@ void SvpSalGraphics::FreeEmbedFontData( const void* pData, long nLen )
 
 void SvpSalGraphics::GetGlyphWidths( const PhysicalFontFace* pFont,
                                    bool bVertical,
-                                   Int32Vector& rWidths,
+                                   std::vector< sal_Int32 >& rWidths,
                                    Ucs2UIntMap& rUnicodeEnc )
 {
     m_aTextRenderImpl.GetGlyphWidths(pFont, bVertical, rWidths, rUnicodeEnc);

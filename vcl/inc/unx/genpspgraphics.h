@@ -67,7 +67,7 @@ public:
                                                        std::set<sal_Unicode> const** ppPriority);
     static void             DoGetGlyphWidths( psp::fontID aFont,
                                               bool bVertical,
-                                              Int32Vector& rWidths,
+                                              std::vector< sal_Int32 >& rWidths,
                                               Ucs2UIntMap& rUnicodeEnc );
 
     static FontAttributes Info2FontAttributes( const psp::FastPrintFontInfo& );
@@ -126,7 +126,7 @@ public:
     virtual void            FreeEmbedFontData( const void* pData, long nDataLen ) override;
     virtual void            GetGlyphWidths( const PhysicalFontFace*,
                                             bool bVertical,
-                                            Int32Vector& rWidths,
+                                            std::vector< sal_Int32 >& rWidths,
                                             Ucs2UIntMap& rUnicodeEnc ) override;
     virtual bool            GetGlyphBoundRect( sal_GlyphId, Rectangle& ) override;
     virtual bool            GetGlyphOutline( sal_GlyphId, basegfx::B2DPolyPolygon& ) override;

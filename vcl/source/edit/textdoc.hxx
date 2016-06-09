@@ -32,8 +32,7 @@ private:
     TextCharAttribList(const TextCharAttribList&) = delete;
     TextCharAttribList& operator=(const TextCharAttribList&) = delete;
 
-    typedef std::vector<std::unique_ptr<TextCharAttrib> > TextCharAttribs;
-    TextCharAttribs maAttribs;
+    std::vector<std::unique_ptr<TextCharAttrib> > maAttribs;
     bool            mbHasEmptyAttribs;
 
 public:

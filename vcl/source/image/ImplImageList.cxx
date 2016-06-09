@@ -40,7 +40,7 @@ ImplImageList::ImplImageList( const ImplImageList &aSrc )
     , mnRefCount(1)
 {
     maImages.reserve( aSrc.maImages.size() );
-    for ( ImageAryDataVec::const_iterator aIt = aSrc.maImages.begin(), aEnd = aSrc.maImages.end(); aIt != aEnd; ++aIt )
+    for ( std::vector<ImageAryData *>::const_iterator aIt = aSrc.maImages.begin(), aEnd = aSrc.maImages.end(); aIt != aEnd; ++aIt )
     {
         ImageAryData* pAryData = new ImageAryData( **aIt );
         maImages.push_back( pAryData );
@@ -51,7 +51,7 @@ ImplImageList::ImplImageList( const ImplImageList &aSrc )
 
 ImplImageList::~ImplImageList()
 {
-    for ( ImageAryDataVec::iterator aIt = maImages.begin(), aEnd = maImages.end(); aIt != aEnd; ++aIt )
+    for ( std::vector<ImageAryData *>::iterator aIt = maImages.begin(), aEnd = maImages.end(); aIt != aEnd; ++aIt )
         delete *aIt;
 }
 

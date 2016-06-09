@@ -319,7 +319,6 @@ public:
 };
 
 typedef std::list<GlyphItem> GlyphList;
-typedef std::vector<GlyphItem> GlyphVector;
 
 class VCL_PLUGIN_PUBLIC GenericSalLayout : public SalLayout
 {
@@ -356,7 +355,7 @@ protected:
 
     bool            GetCharWidths( DeviceCoordinate* pCharWidths ) const;
 
-    GlyphVector     m_GlyphItems;
+    std::vector<GlyphItem>     m_GlyphItems;
 
 private:
     mutable Point   maBasePoint;

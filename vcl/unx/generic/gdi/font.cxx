@@ -157,7 +157,7 @@ const Ucs2SIntMap* X11SalGraphics::GetFontEncodingVector( const PhysicalFontFace
 
 void X11SalGraphics::GetGlyphWidths( const PhysicalFontFace* pFont,
                                    bool bVertical,
-                                   Int32Vector& rWidths,
+                                   std::vector< sal_Int32 >& rWidths,
                                    Ucs2UIntMap& rUnicodeEnc )
 {
     mxTextRenderImpl->GetGlyphWidths(pFont, bVertical, rWidths, rUnicodeEnc);

@@ -440,7 +440,6 @@ struct SaveStruct
     bool                bFillStyleSelected;
 };
 
-typedef std::shared_ptr<SaveStruct> SaveStructPtr;
 
 struct BSaveStruct
 {
@@ -461,7 +460,6 @@ struct BSaveStruct
     {}
 };
 
-typedef std::vector<std::unique_ptr<BSaveStruct>> BSaveStructList_impl;
 
 class WinMtfOutput
 {
@@ -499,7 +497,7 @@ class WinMtfOutput
     bool            mbClipNeedsUpdate;
     bool            mbComplexClip;
 
-    std::vector< SaveStructPtr > vSaveStack;
+    std::vector< std::shared_ptr<SaveStruct> > vSaveStack;
 
     sal_uInt32          mnGfxMode;
     sal_uInt32          mnMapMode;
@@ -632,7 +630,7 @@ public:
                                   bool bRecordPath = false,
                                   sal_Int32 nGraphicsMode = GM_COMPATIBLE);
 
-    void                ResolveBitmapActions( BSaveStructList_impl& rSaveList );
+    void                ResolveBitmapActions( std::vector<std::unique_ptr<BSaveStruct>>& rSaveList );
 
     void                IntersectClipRect( const Rectangle& rRect );
     void                ExcludeClipRect( const Rectangle& rRect );
@@ -661,7 +659,7 @@ protected:
     SvStream*               pWMF;               // the WMF/EMF file to be read
 
     sal_uInt32              nStartPos, nEndPos;
-    BSaveStructList_impl    aBmpSaveList;
+    std::vector<std::unique_ptr<BSaveStruct>>    aBmpSaveList;
 
     FilterConfigItem*   pFilterConfigItem;
 

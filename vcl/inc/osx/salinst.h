@@ -75,8 +75,7 @@ public:
     osl::Mutex                              maUserEventListMutex;
     oslCondition                            maWaitingYieldCond;
 
-    typedef std::list<const ApplicationEvent*> AppEventList;
-    static AppEventList aAppEventList;
+    static std::list<const ApplicationEvent*> aAppEventList;
 
 public:
     AquaSalInstance();

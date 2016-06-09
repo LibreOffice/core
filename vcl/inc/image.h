@@ -45,11 +45,10 @@ struct ImageAryData
 
 struct ImplImageList
 {
-    typedef std::vector<ImageAryData *> ImageAryDataVec;
     typedef std::unordered_map< OUString, ImageAryData *, OUStringHash >
         ImageAryDataNameHash;
 
-    ImageAryDataVec        maImages;
+    std::vector<ImageAryData *>        maImages;
     ImageAryDataNameHash   maNameHash;
     OUString               maPrefix;
     Size                   maImageSize;

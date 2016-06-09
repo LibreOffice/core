@@ -80,7 +80,6 @@ public:
     long                mnMaxSize;
 };
 
-typedef std::vector< ImplSplitItem* > ImplSplitItems;
 
 class ImplSplitSet
 {
@@ -89,7 +88,7 @@ public:
     ~ImplSplitSet();
     void dispose();
 
-    ImplSplitItems      mpItems;
+    std::vector< ImplSplitItem* >      mpItems;
     Wallpaper*          mpWallpaper;
     Bitmap*             mpBitmap;
     long                mnLastSize;
@@ -341,7 +340,7 @@ static ImplSplitSet* ImplFindSet( ImplSplitSet* pSet, sal_uInt16 nId )
 
     sal_uInt16          i;
     size_t              nItems = pSet->mpItems.size();
-    ImplSplitItems&     rItems = pSet->mpItems;
+    std::vector< ImplSplitItem* >&     rItems = pSet->mpItems;
 
     for ( i = 0; i < nItems; i++ )
     {
@@ -366,7 +365,7 @@ static ImplSplitSet* ImplFindItem( ImplSplitSet* pSet, sal_uInt16 nId, sal_uInt1
 {
     sal_uInt16          i;
     size_t              nItems = pSet->mpItems.size();
-    ImplSplitItems&     rItems = pSet->mpItems;
+    std::vector< ImplSplitItem* >&     rItems = pSet->mpItems;
 
     for ( i = 0; i < nItems; i++ )
     {
@@ -394,7 +393,7 @@ static sal_uInt16 ImplFindItem( ImplSplitSet* pSet, vcl::Window* pWindow )
 {
     sal_uInt16          i;
     size_t              nItems = pSet->mpItems.size();
-    ImplSplitItems&     rItems = pSet->mpItems;
+    std::vector< ImplSplitItem* >&     rItems = pSet->mpItems;
 
     for ( i = 0; i < nItems; i++ )
     {
@@ -419,7 +418,7 @@ static sal_uInt16 ImplFindItem( ImplSplitSet* pSet, const Point& rPos,
 {
     sal_uInt16          i;
     size_t              nItems = pSet->mpItems.size();
-    ImplSplitItems&     rItems = pSet->mpItems;
+    std::vector< ImplSplitItem* >&     rItems = pSet->mpItems;
 
     for ( i = 0; i < nItems; i++ )
     {
@@ -477,7 +476,7 @@ static void ImplCalcSet( ImplSplitSet* pSet,
     long                nCalcSize;
     long                nPos;
     long                nMaxPos;
-    ImplSplitItems&     rItems = pSet->mpItems;
+    std::vector< ImplSplitItem* >&     rItems = pSet->mpItems;
     bool                bEmpty;
 
     // get number of visible items
@@ -827,7 +826,7 @@ void SplitWindow::ImplCalcSet2( SplitWindow* pWindow, ImplSplitSet* pSet, bool b
 {
     sal_uInt16          i;
     size_t              nItems = pSet->mpItems.size();
-    ImplSplitItems&     rItems = pSet->mpItems;
+    std::vector< ImplSplitItem* >&     rItems = pSet->mpItems;
 
     if ( pWindow->IsReallyVisible() && pWindow->IsUpdateMode() && pWindow->mbInvalidate )
     {
@@ -923,7 +922,7 @@ void SplitWindow::ImplCalcSet2( SplitWindow* pWindow, ImplSplitSet* pSet, bool b
     }
 }
 
-static void ImplCalcLogSize( ImplSplitItems rItems, size_t nItems )
+static void ImplCalcLogSize( std::vector< ImplSplitItem* > rItems, size_t nItems )
 {
     // update original sizes
     size_t  i;
@@ -992,7 +991,7 @@ void SplitWindow::ImplDrawBack(vcl::RenderContext& rRenderContext, ImplSplitSet*
 {
     sal_uInt16      i;
     size_t          nItems = pSet->mpItems.size();
-    ImplSplitItems& rItems = pSet->mpItems;
+    std::vector< ImplSplitItem* >& rItems = pSet->mpItems;
 
     // also draw background for mainset
     if (pSet->mnId == 0)
@@ -1039,7 +1038,7 @@ static void ImplDrawSplit(vcl::RenderContext& rRenderContext, ImplSplitSet* pSet
     long       nPos;
     long       nTop;
     long       nBottom;
-    ImplSplitItems& rItems = pSet->mpItems;
+    std::vector< ImplSplitItem* >& rItems = pSet->mpItems;
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
 
     for (i = 0; i < nItems-1; i++)
@@ -1140,7 +1139,7 @@ sal_uInt16 SplitWindow::ImplTestSplit( ImplSplitSet* pSet, const Point& rPos,
     long            nPos;
     long            nTop;
     long            nBottom;
-    ImplSplitItems& rItems = pSet->mpItems;
+    std::vector< ImplSplitItem* >& rItems = pSet->mpItems;
 
     if ( bRows )
     {
@@ -2177,7 +2176,7 @@ void SplitWindow::ImplStartSplit( const MouseEvent& rMEvt )
         }
         else
         {
-            ImplSplitItems&  rItems = mpSplitSet->mpItems;
+            std::vector< ImplSplitItem* >&  rItems = mpSplitSet->mpItems;
             sal_uInt16       nItems = mpSplitSet->mpItems.size();
             mpLastSizes = new long[nItems*2];
             for ( sal_uInt16 i = 0; i < nItems; i++ )
@@ -2418,7 +2417,7 @@ void SplitWindow::Tracking( const TrackingEvent& rTEvt )
             {
                 if ( rTEvt.IsTrackingCanceled() )
                 {
-                    ImplSplitItems& rItems = mpSplitSet->mpItems;
+                    std::vector< ImplSplitItem* >& rItems = mpSplitSet->mpItems;
                     size_t          nItems = rItems.size();
                     for ( size_t i = 0; i < nItems; i++ )
                     {
@@ -2784,7 +2783,7 @@ void SplitWindow::SplitItem( sal_uInt16 nId, long nNewSize,
         return;
 
     size_t           nItems = pSet->mpItems.size();
-    ImplSplitItems&  rItems = pSet->mpItems;
+    std::vector< ImplSplitItem* >&  rItems = pSet->mpItems;
 
     // When there is an explicit minimum or maximum size then move nNewSize
     // into that range (when it is not yet already in it.)
@@ -3050,7 +3049,7 @@ long SplitWindow::GetItemSize( sal_uInt16 nId, SplitWindowItemFlags nBits ) cons
             SplitWindowItemFlags nTempBits;
             sal_uInt16              i;
             nItems = pSet->mpItems.size();
-            ImplSplitItems& rItems = pSet->mpItems;
+            std::vector< ImplSplitItem* >& rItems = pSet->mpItems;
             for ( i = 0; i < nItems; i++ )
             {
                 if ( i == nPos )

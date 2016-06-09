@@ -214,7 +214,7 @@ void WinSalBitmap::Destroy()
     mnBitCount = 0;
 }
 
-GdiPlusBmpPtr WinSalBitmap::ImplGetGdiPlusBitmap(const WinSalBitmap* pAlphaSource) const
+std::shared_ptr< Gdiplus::Bitmap > WinSalBitmap::ImplGetGdiPlusBitmap(const WinSalBitmap* pAlphaSource) const
 {
     WinSalBitmap* pThat = const_cast< WinSalBitmap* >(this);
 
