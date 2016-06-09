@@ -74,6 +74,9 @@
 #  include <cstdio>
 #endif
 
+#include <cstdlib>
+#include <cmath>
+
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
@@ -1074,7 +1077,6 @@ void GtkSalFrame::InitCommon()
     m_bSpanMonitorsWhenFullscreen = false;
     m_nState            = GDK_WINDOW_STATE_WITHDRAWN;
     m_nVisibility       = GDK_VISIBILITY_FULLY_OBSCURED;
-    m_nLastScrollEventTime = GDK_CURRENT_TIME;
     m_bSendModChangeOnRelease = false;
     m_pIMHandler        = nullptr;
     m_hBackgroundPixmap = None;
@@ -2559,63 +2561,53 @@ gboolean GtkSalFrame::signalButton( GtkWidget*, GdkEventButton* pEvent, gpointer
 
 gboolean GtkSalFrame::signalScroll( GtkWidget*, GdkEvent* pEvent, gpointer frame )
 {
-    GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
     GdkEventScroll* pSEvent = reinterpret_cast<GdkEventScroll*>(pEvent);
+    if (pSEvent->direction != GDK_SCROLL_SMOOTH)
+        return false;
 
-    // gnome#726878 check for duplicate legacy scroll event
-    if (pSEvent->direction != GDK_SCROLL_SMOOTH &&
-        pThis->m_nLastScrollEventTime == pSEvent->time)
-    {
-        return true;
-    }
+    GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
 
     SalWheelMouseEvent aEvent;
 
     aEvent.mnTime = pSEvent->time;
     aEvent.mnX = (sal_uLong)pSEvent->x;
+    // --- RTL --- (mirror mouse pos)
+    if (AllSettings::GetLayoutRTL())
+        aEvent.mnX = pThis->maGeometry.nWidth - 1 - aEvent.mnX;
     aEvent.mnY = (sal_uLong)pSEvent->y;
     aEvent.mnCode = GetMouseModCode( pSEvent->state );
-    aEvent.mnScrollLines = 3;
 
-    switch (pSEvent->direction)
+    // rhbz#1344042 "Traditionally" in gtk3 we tool a single up/down event as
+    // equating to 3 scroll lines and a delta of 120. So scale the delta here
+    // by 120 where a single mouse wheel click is an incoming delta_x of 1
+    // and divide that by 40 to get the number of scrollines
+    if (pSEvent->delta_x != 0.0)
     {
-        case GDK_SCROLL_SMOOTH:
-        {
-            //pick the bigger one I guess
-            aEvent.mbHorz = fabs(pSEvent->delta_x) > fabs(pSEvent->delta_y);
-            if (aEvent.mbHorz)
-                aEvent.mnDelta = -pSEvent->delta_x * 40;
-            else
-                aEvent.mnDelta = -pSEvent->delta_y * 40;
+        aEvent.mnDelta = -pSEvent->delta_x * 120;
+        aEvent.mnNotchDelta = aEvent.mnDelta < 0 ? -1 : +1;
+        if (aEvent.mnDelta == 0)
+            aEvent.mnDelta = aEvent.mnNotchDelta;
+        aEvent.mbHorz = true;
+        aEvent.mnScrollLines = std::abs(aEvent.mnDelta) / 40;
+        if (aEvent.mnScrollLines == 0)
             aEvent.mnScrollLines = 1;
-            pThis->m_nLastScrollEventTime = pSEvent->time;
-            break;
-        }
-        case GDK_SCROLL_UP:
-            aEvent.mnDelta = 120;
-            aEvent.mbHorz = false;
-            break;
-        case GDK_SCROLL_DOWN:
-            aEvent.mnDelta = -120;
-            aEvent.mbHorz = false;
-            break;
-        case GDK_SCROLL_LEFT:
-            aEvent.mbHorz = true;
-            aEvent.mnDelta = 120;
-            break;
-        case GDK_SCROLL_RIGHT:
-            aEvent.mnDelta = -120;
-            aEvent.mbHorz = true;
-            break;
-    };
 
-    aEvent.mnNotchDelta     = aEvent.mnDelta < 0 ? -1 : 1;
+        pThis->CallCallback(SALEVENT_WHEELMOUSE, &aEvent);
+    }
 
-    // --- RTL --- (mirror mouse pos)
-    if( AllSettings::GetLayoutRTL() )
-        aEvent.mnX = pThis->maGeometry.nWidth-1-aEvent.mnX;
+    if (pSEvent->delta_y != 0.0)
+    {
+        aEvent.mnDelta = -pSEvent->delta_y * 120;
+        aEvent.mnNotchDelta = aEvent.mnDelta < 0 ? -1 : +1;
+        if (aEvent.mnDelta == 0)
+            aEvent.mnDelta = aEvent.mnNotchDelta;
+        aEvent.mbHorz = false;
+        aEvent.mnScrollLines = std::abs(aEvent.mnDelta) / 40;
+        if (aEvent.mnScrollLines == 0)
+            aEvent.mnScrollLines = 1;
 
-    pThis->CallCallback( SALEVENT_WHEELMOUSE, &aEvent );
+        pThis->CallCallback(SALEVENT_WHEELMOUSE, &aEvent);
+    }
 
     return true;
 }
