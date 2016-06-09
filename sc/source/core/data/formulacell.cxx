@@ -623,6 +623,7 @@ ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos ) :
     bTableOpDirty(false),
     bNeedListening(false),
     mbNeedsNumberFormat(false),
+    mbAllowNumberFormatChange(false),
     mbPostponedDirty(false),
     mbIsExtRef(false),
     aPos(rPos)
@@ -654,6 +655,7 @@ ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos,
     bTableOpDirty( false ),
     bNeedListening( false ),
     mbNeedsNumberFormat( false ),
+    mbAllowNumberFormatChange(false),
     mbPostponedDirty(false),
     mbIsExtRef(false),
     aPos(rPos)
@@ -689,6 +691,7 @@ ScFormulaCell::ScFormulaCell(
     bTableOpDirty( false ),
     bNeedListening( false ),
     mbNeedsNumberFormat( false ),
+    mbAllowNumberFormatChange(false),
     mbPostponedDirty(false),
     mbIsExtRef(false),
     aPos(rPos)
@@ -739,6 +742,7 @@ ScFormulaCell::ScFormulaCell(
     bTableOpDirty( false ),
     bNeedListening( false ),
     mbNeedsNumberFormat( false ),
+    mbAllowNumberFormatChange(false),
     mbPostponedDirty(false),
     mbIsExtRef(false),
     aPos(rPos)
@@ -789,6 +793,7 @@ ScFormulaCell::ScFormulaCell(
     bTableOpDirty( false ),
     bNeedListening( false ),
     mbNeedsNumberFormat( false ),
+    mbAllowNumberFormatChange(false),
     mbPostponedDirty(false),
     mbIsExtRef(false),
     aPos(rPos)
@@ -821,6 +826,7 @@ ScFormulaCell::ScFormulaCell( const ScFormulaCell& rCell, ScDocument& rDoc, cons
     bTableOpDirty( false ),
     bNeedListening( false ),
     mbNeedsNumberFormat( false ),
+    mbAllowNumberFormatChange(false),
     mbPostponedDirty(false),
     mbIsExtRef(false),
     aPos(rPos)
@@ -1112,7 +1118,10 @@ void ScFormulaCell::SetNeedsDirty( bool bVar )
     mbPostponedDirty = bVar;
 }
 
-void ScFormulaCell::SetNeedNumberFormat( bool bVal ) { mbNeedsNumberFormat = bVal; }
+void ScFormulaCell::SetNeedNumberFormat( bool bVal )
+{
+    mbNeedsNumberFormat = mbAllowNumberFormatChange = bVal;
+}
 
 void ScFormulaCell::Compile( const OUString& rFormula, bool bNoListening,
                             const FormulaGrammar::Grammar eGrammar )
@@ -1874,7 +1883,76 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
 
         ScFormulaResult aNewResult( p->GetResultToken().get());
 
-        if( mbNeedsNumberFormat )
+        // For IF() and other jumps or changed formatted source data the result
+        // format may change for different runs, e.g. =IF(B1,B1) with first
+        // B1:0 boolean FALSE next B1:23 numeric 23, we don't want the 23
+        // displayed as TRUE. Do not force a general format though if
+        // mbNeedsNumberFormat is set (because there was a general format..).
+        // Note that nFormatType may be out of sync here if a format was
+        // applied or cleared after the last run, but obtaining the current
+        // format always just to check would be expensive. There may be
+        // cases where the format should be changed but is not. If that turns
+        // out to be a real problem then obtain the current format type after
+        // the initial check when needed.
+        bool bForceNumberFormat = (mbAllowNumberFormatChange && !mbNeedsNumberFormat &&
+                !SvNumberFormatter::IsCompatible( nFormatType, p->GetRetFormatType()));
+
+        // We have some requirements additionally to IsCompatible().
+        // * Do not apply a NumberFormat::LOGICAL if the result value is not
+        //   1.0 or 0.0
+        // * Do not override an already set numeric number format if the result
+        //   is of type NumberFormat::LOGICAL, it could be user applied.
+        //   On the other hand, for an empty jump path instead of FALSE an
+        //   unexpected for example 0% could be displayed. YMMV.
+        // * Never override a non-standard number format that indicates user
+        //   applied.
+        // * NumberFormat::TEXT does not force a change.
+        if (bForceNumberFormat)
+        {
+            sal_uInt32 nOldFormatIndex = NUMBERFORMAT_ENTRY_NOT_FOUND;
+            const short nRetType = p->GetRetFormatType();
+            if (nRetType == css::util::NumberFormat::LOGICAL)
+            {
+                double fVal;
+                if ((fVal = aNewResult.GetDouble()) != 1.0 && fVal != 0.0)
+                    bForceNumberFormat = false;
+                else
+                {
+                    nOldFormatIndex = pDocument->GetNumberFormat( aPos);
+                    nFormatType = pDocument->GetFormatTable()->GetType( nOldFormatIndex);
+                    switch (nFormatType)
+                    {
+                        case css::util::NumberFormat::PERCENT:
+                        case css::util::NumberFormat::CURRENCY:
+                        case css::util::NumberFormat::SCIENTIFIC:
+                        case css::util::NumberFormat::FRACTION:
+                            bForceNumberFormat = false;
+                        break;
+                        case css::util::NumberFormat::NUMBER:
+                            if ((nOldFormatIndex % SV_COUNTRY_LANGUAGE_OFFSET) != 0)
+                                bForceNumberFormat = false;
+                        break;
+                    }
+                }
+            }
+            else if (nRetType == css::util::NumberFormat::TEXT)
+            {
+                bForceNumberFormat = false;
+            }
+            if (bForceNumberFormat)
+            {
+                if (nOldFormatIndex == NUMBERFORMAT_ENTRY_NOT_FOUND)
+                {
+                    nOldFormatIndex = pDocument->GetNumberFormat( aPos);
+                    nFormatType = pDocument->GetFormatTable()->GetType( nOldFormatIndex);
+                }
+                if (nOldFormatIndex !=
+                        ScGlobal::GetStandardFormat( *pDocument->GetFormatTable(), nOldFormatIndex, nFormatType))
+                    bForceNumberFormat = false;
+            }
+        }
+
+        if( mbNeedsNumberFormat || bForceNumberFormat )
         {
             bool bSetFormat = true;
             const short nOldFormatType = nFormatType;
@@ -1915,7 +1993,7 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
                 }
             }
 
-            if (bSetFormat && (nFormatIndex % SV_COUNTRY_LANGUAGE_OFFSET) == 0)
+            if (bSetFormat && (bForceNumberFormat || ((nFormatIndex % SV_COUNTRY_LANGUAGE_OFFSET) == 0)))
                 nFormatIndex = ScGlobal::GetStandardFormat(*pDocument->GetFormatTable(),
                         nFormatIndex, nFormatType);
 
@@ -1927,7 +2005,7 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
             // XXX if mbNeedsNumberFormat was set even if the current format
             // was not General then we'd have to obtain the current format here
             // and check at least the types.
-            if (bSetFormat && (nFormatIndex % SV_COUNTRY_LANGUAGE_OFFSET) != 0)
+            if (bSetFormat && (bForceNumberFormat || ((nFormatIndex % SV_COUNTRY_LANGUAGE_OFFSET) != 0)))
             {
                 // set number format explicitly
                 pDocument->SetNumberFormat( aPos, nFormatIndex );

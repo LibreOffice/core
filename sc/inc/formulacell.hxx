@@ -129,6 +129,8 @@ private:
     bool            bTableOpDirty  : 1; // Dirty flag for TableOp
     bool            bNeedListening : 1; // Listeners need to be re-established after UpdateReference
     bool            mbNeedsNumberFormat : 1; // set the calculated number format as hard number format
+    bool            mbAllowNumberFormatChange : 1; /* allow setting further calculated
+                                                      number formats as hard number format */
     bool            mbPostponedDirty : 1;   // if cell needs to be set dirty later
     bool            mbIsExtRef       : 1; // has references in ScExternalRefManager; never cleared after set
 
