@@ -564,7 +564,7 @@
 #define SIP_SA_XMLATTRIBUTES                (SIP_Begin + 121)
 #define SIP_SA_TEXT_USEFIXEDCELLHEIGHT      (SIP_Begin + 122)
 #define SIP_SA_WORDWRAP                     (SIP_Begin + 123)
-#define SIP_SA_AUTOGROWSIZE                 (SIP_Begin + 124)
+#define SIP_SA_CHAINNEXTNAME                (SIP_Begin + 124)
 #define SIP_SA_RESERVE18                    (SIP_Begin + 125)
 #define SIP_SA_RESERVE19                    (SIP_Begin + 126)
 #define SIP_SA_EDGEKIND                     (SIP_Begin + 128)
@@ -709,7 +709,6 @@
 #define STR_TABLE_STYLE_SETTINGS            (SIP_Begin + 275)
 #define SIP_SA_CROP_MARKERS                 (SIP_Begin + 276)
 #define STR_TABLE_DELETE_CELL_CONTENTS      (SIP_Begin + 277)
-#define SIP_SA_CHAINNEXTNAME                (SIP_Begin + 278)
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

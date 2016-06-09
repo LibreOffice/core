@@ -2091,12 +2091,6 @@ String SIP_SA_CHAINNEXTNAME
     Text[ en-US ] = "Next link in text chain";
 };
 
-
-String SIP_SA_AUTOGROWSIZE
-{
-    Text[ en-US ] = "Auto grow shape to fit text";
-};
-
 String SIP_SA_RESERVE18
 {
     Text [ en-US ] = "SvDraw reserved for 18";
