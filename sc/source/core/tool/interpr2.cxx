@@ -282,6 +282,12 @@ void ScInterpreter::ScEasterSunday()
         nYear = (sal_Int16) ::rtl::math::approxFloor( GetDouble() );
         if ( nYear < 100 )
             nYear = pFormatter->ExpandTwoDigitYear( nYear );
+        if (nYear < 1583 || nYear > 9956)
+        {
+            // Valid Gregorian and maximum year constraints not met.
+            PushIllegalArgument();
+            return;
+        }
         // don't worry, be happy :)
         int B,C,D,E,F,G,H,I,K,L,M,N,O;
         N = nYear % 19;
