@@ -91,6 +91,7 @@
 #include <memory>
 #include <libxml/xmlwriter.h>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <comphelper/lok.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -834,6 +835,9 @@ void SdrModel::registerLibreOfficeKitCallback(LibreOfficeKitCallback pCallback, 
 
 void SdrModel::libreOfficeKitCallback(int nType, const char* pPayload) const
 {
+    // Per-view callbacks should always invoke SfxViewShell::libreOfficeKitViewCallback().
+    assert(!comphelper::LibreOfficeKit::isViewCallback());
+
     if (mbTiledSearching)
     {
         switch (nType)
