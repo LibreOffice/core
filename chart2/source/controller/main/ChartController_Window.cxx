@@ -58,7 +58,6 @@
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/propertyvalue.hxx>
 
-#include <svtools/contextmenuhelper.hxx>
 #include <toolkit/awt/vclxmenu.hxx>
 
 #include <svx/svxids.hrc>
@@ -962,31 +961,10 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
                 aPos = m_pChartWindow->GetPointerState().maPos;
         }
 
+        OUString aMenuName;
         if ( isShapeContext() )
-        {
             // #i12587# support for shapes in chart
-            OUString aMenuName = m_pDrawViewWrapper->IsTextEdit() ? OUString( "drawtext" ) : OUString( "draw" );
-            css::uno::Sequence< css::uno::Any > aArgs( 3 );
-            aArgs[0] <<= comphelper::makePropertyValue( "Value", aMenuName );
-            aArgs[1] <<= comphelper::makePropertyValue( "Frame", m_xFrame );
-            aArgs[2] <<= comphelper::makePropertyValue( "IsContextMenu", true );
-
-            css::uno::Reference< css::frame::XPopupMenuController > xPopupController(
-                m_xCC->getServiceManager()->createInstanceWithArgumentsAndContext(
-                "com.sun.star.comp.framework.ResourceMenuController", aArgs, m_xCC ), css::uno::UNO_QUERY );
-
-            if ( !xPopupController.is() || !xPopupMenu.is() )
-                return;
-
-            xPopupController->setPopupMenu( xPopupMenu );
-            xPopupMenu->execute( css::uno::Reference< css::awt::XWindowPeer >( m_xFrame->getContainerWindow(), css::uno::UNO_QUERY ),
-                                 css::awt::Rectangle( aPos.X(), aPos.Y(), 0, 0 ),
-                                 css::awt::PopupMenuDirection::EXECUTE_DEFAULT );
-
-            css::uno::Reference< css::lang::XComponent > xComponent( xPopupController, css::uno::UNO_QUERY );
-            if ( xComponent.is() )
-                xComponent->dispose();
-        }
+            aMenuName = m_pDrawViewWrapper->IsTextEdit() ? OUString( "drawtext" ) : OUString( "draw" );
         else
         {
             // todo: the context menu should be specified by an xml file in uiconfig
@@ -1236,11 +1214,30 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
                 lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:DataRanges" );
                 lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:DiagramData" );
                 lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:View3D" );
-
-                ::svt::ContextMenuHelper aContextMenuHelper( m_xFrame );
-                aContextMenuHelper.completeAndExecute( aPos, xPopupMenu );
             }
         }
+
+        css::uno::Sequence< css::uno::Any > aArgs( aMenuName.isEmpty() ? 2 : 3 );
+        aArgs[0] <<= comphelper::makePropertyValue( "IsContextMenu", true );
+        aArgs[1] <<= comphelper::makePropertyValue( "Frame", m_xFrame );
+        if ( !aMenuName.isEmpty() )
+            aArgs[2] <<= comphelper::makePropertyValue( "Value", aMenuName );
+
+        css::uno::Reference< css::frame::XPopupMenuController > xPopupController(
+            m_xCC->getServiceManager()->createInstanceWithArgumentsAndContext(
+            "com.sun.star.comp.framework.ResourceMenuController", aArgs, m_xCC ), css::uno::UNO_QUERY );
+
+        if ( !xPopupController.is() || !xPopupMenu.is() )
+            return;
+
+        xPopupController->setPopupMenu( xPopupMenu );
+        xPopupMenu->execute( css::uno::Reference< css::awt::XWindowPeer >( m_xFrame->getContainerWindow(), css::uno::UNO_QUERY ),
+                             css::awt::Rectangle( aPos.X(), aPos.Y(), 0, 0 ),
+                             css::awt::PopupMenuDirection::EXECUTE_DEFAULT );
+
+        css::uno::Reference< css::lang::XComponent > xComponent( xPopupController, css::uno::UNO_QUERY );
+        if ( xComponent.is() )
+            xComponent->dispose();
     }
     else if( ( rCEvt.GetCommand() == CommandEventId::StartExtTextInput ) ||
              ( rCEvt.GetCommand() == CommandEventId::ExtTextInput ) ||
