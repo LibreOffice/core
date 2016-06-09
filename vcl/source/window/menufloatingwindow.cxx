@@ -100,6 +100,12 @@ void MenuFloatingWindow::doShutdown()
         }
         pMenu = nullptr;
         RemoveEventListener( LINK( this, MenuFloatingWindow, ShowHideListener ) );
+
+        aScrollTimer.Stop();
+        aSubmenuCloseTimer.Stop();
+        aSubmenuCloseTimer.Stop();
+        aHighlightChangedTimer.Stop();
+        aHighlightChangedTimer.Stop();
     }
 }
 
