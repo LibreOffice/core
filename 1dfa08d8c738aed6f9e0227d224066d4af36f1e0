@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_aea0d9f5",
+        "filename": "pyuno/source/module/uno.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2016-06-09T20:59:08Z",
+      "side": 1,
+      "message": "this should be self.value, not value?\n\nand if so we don\u0027t need to assert it here since the __init__ already ensures it\n\nor do you want to assert \"that\" is unicode? that would change the behavior compared to the old code, which would have accepted a python 2 \"str\".\n\noops, i wrote a \"same here\" comment on a previous patch here, which i now notice isn\u0027t the same at all. this \"asymmetry\" of __init__ requiring \"unicode\" and __eq__ accepting \"str\" as well has been there since the very first revision.",
+      "revId": "1dfa08d8c738aed6f9e0227d224066d4af36f1e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
