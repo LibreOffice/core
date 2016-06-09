@@ -231,7 +231,7 @@ SfxItemSet& SdStyleSheet::GetItemSet()
                                         SDRATTR_SHADOW_FIRST,           SDRATTR_SHADOW_LAST,
                                         SDRATTR_TEXT_MINFRAMEHEIGHT,    SDRATTR_TEXT_CONTOURFRAME,
 
-                                        SDRATTR_TEXT_WORDWRAP,          SDRATTR_TEXT_AUTOGROWSIZE,
+                                        SDRATTR_TEXT_WORDWRAP,          SDRATTR_TEXT_WORDWRAP,
 
                                         SDRATTR_EDGE_FIRST,             SDRATTR_EDGE_LAST,
                                         SDRATTR_MEASURE_FIRST,          SDRATTR_MEASURE_LAST,
@@ -260,7 +260,7 @@ SfxItemSet& SdStyleSheet::GetItemSet()
                                         SDRATTR_SHADOW_FIRST,           SDRATTR_SHADOW_LAST,
                                         SDRATTR_TEXT_MINFRAMEHEIGHT,    SDRATTR_TEXT_CONTOURFRAME,
 
-                                        SDRATTR_TEXT_WORDWRAP,          SDRATTR_TEXT_AUTOGROWSIZE,
+                                        SDRATTR_TEXT_WORDWRAP,          SDRATTR_TEXT_WORDWRAP,
 
                                         EE_PARA_START,                  EE_CHAR_END,
 
@@ -297,7 +297,7 @@ SfxItemSet& SdStyleSheet::GetItemSet()
                                              SDRATTR_SHADOW_FIRST,          SDRATTR_SHADOW_LAST,
                                              SDRATTR_TEXT_MINFRAMEHEIGHT,   SDRATTR_TEXT_CONTOURFRAME,
 
-                                             SDRATTR_TEXT_WORDWRAP,         SDRATTR_TEXT_AUTOGROWSIZE,
+                                             SDRATTR_TEXT_WORDWRAP,         SDRATTR_TEXT_WORDWRAP,
 
                                              SDRATTR_EDGE_FIRST,            SDRATTR_EDGE_LAST,
                                              SDRATTR_MEASURE_FIRST,         SDRATTR_MEASURE_LAST,

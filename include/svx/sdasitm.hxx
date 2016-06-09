@@ -96,10 +96,6 @@ inline SdrOnOffItem makeSdrTextWordWrapItem( bool bAuto ) {
     return SdrOnOffItem( SDRATTR_TEXT_WORDWRAP, bAuto );
 }
 
-inline SdrOnOffItem makeSdrTextAutoGrowSizeItem( bool bAuto ) {
-    return SdrOnOffItem( SDRATTR_TEXT_AUTOGROWSIZE, bAuto ) ;
-}
-
 // some useful inline methods
 
 inline size_t SdrCustomShapeGeometryItem::PropertyPairHash::operator()( const SdrCustomShapeGeometryItem::PropertyPair &r1 ) const
