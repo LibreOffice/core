@@ -36,7 +36,6 @@ typedef sal_Int32 GlyphWidth;
 typedef float RealType;
 typedef RealType ValType;
 #include <vector>
-typedef std::vector<ValType> ValVector;
 
 static const char* pStringIds[] = {
 /*0*/   ".notdef",      "space",            "exclam",           "quotedbl",
@@ -275,8 +274,8 @@ struct CffGlobal
     int     mnFontDictBase;
     int     mnFDAryCount;
 
-    ValVector   maFontBBox;
-    ValVector   maFontMatrix;
+    std::vector<ValType>   maFontBBox;
+    std::vector<ValType>   maFontMatrix;
 
     int     mnFontNameSID;
     int     mnFullNameSID;
@@ -300,12 +299,12 @@ struct CffLocal
     // ATM hinting related values
     ValType     maStemStdHW;
     ValType     maStemStdVW;
-    ValVector   maStemSnapH;
-    ValVector   maStemSnapV;
-    ValVector   maBlueValues;
-    ValVector   maOtherBlues;
-    ValVector   maFamilyBlues;
-    ValVector   maFamilyOtherBlues;
+    std::vector<ValType>   maStemSnapH;
+    std::vector<ValType>   maStemSnapV;
+    std::vector<ValType>   maBlueValues;
+    std::vector<ValType>   maOtherBlues;
+    std::vector<ValType>   maFamilyBlues;
+    std::vector<ValType>   maFamilyOtherBlues;
     RealType    mfBlueScale;
     RealType    mfBlueShift;
     RealType    mfBlueFuzz;
@@ -1712,7 +1711,7 @@ public:
     void        emitAllCrypted();
     int         tellPos() const;
     void        updateLen( int nTellPos, size_t nLength);
-    void        emitValVector( const char* pLineHead, const char* pLineTail, const ValVector&);
+    void        emitValVector( const char* pLineHead, const char* pLineTail, const std::vector<ValType>&);
 private:
     FILE*       mpFileOut;
     bool        mbCloseOutfile;
@@ -1844,7 +1843,7 @@ inline int dbl2str( char* pOut, double fVal)
 }
 
 void Type1Emitter::emitValVector( const char* pLineHead, const char* pLineTail,
-    const ValVector& rVector)
+    const std::vector<ValType>& rVector)
 {
     // ignore empty vectors
     if( rVector.empty())
@@ -1853,8 +1852,8 @@ void Type1Emitter::emitValVector( const char* pLineHead, const char* pLineTail,
     // emit the line head
     mpPtr += sprintf( mpPtr, "%s", pLineHead);
     // emit the vector values
-    ValVector::value_type aVal = 0;
-    for( ValVector::const_iterator it = rVector.begin();;) {
+    std::vector<ValType>::value_type aVal = 0;
+    for( std::vector<ValType>::const_iterator it = rVector.begin();;) {
         aVal = *it;
         if( ++it == rVector.end() )
             break;

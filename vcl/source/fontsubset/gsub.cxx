@@ -72,8 +72,7 @@ bool ReadGSUB( struct TrueTypeFont* pTTFile,
         if( nVersion != 0x00001000 )    // workaround for SunBatang etc.
             return false;               // unknown format or broken
 
-    typedef std::vector<sal_uInt32> ReqFeatureTagList;
-    ReqFeatureTagList aReqFeatureTagList;
+    std::vector<sal_uInt32> aReqFeatureTagList;
 
     aReqFeatureTagList.push_back( MKTAG("vert") );
 
@@ -231,8 +230,7 @@ bool ReadGSUB( struct TrueTypeFont* pTTFile,
             const sal_uInt16 nOfsCoverage       = NEXT_UShort( pSubLookup );
 
             typedef std::pair<sal_uInt16,sal_uInt16> GlyphSubst;
-            typedef std::vector<GlyphSubst> SubstVector;
-            SubstVector aSubstVector;
+            std::vector<GlyphSubst> aSubstVector;
 
             const FT_Byte* pCoverage    = pGsubBase
                 + nOfsLookupList + nOfsLookupTable + nOfsSubLookupTable + nOfsCoverage;
@@ -274,7 +272,7 @@ bool ReadGSUB( struct TrueTypeFont* pTTFile,
                 break;
             }
 
-            SubstVector::iterator subst_it( aSubstVector.begin() );
+            std::vector<GlyphSubst>::iterator subst_it( aSubstVector.begin() );
 
             switch( nFmtSubstitution )
             {

@@ -51,7 +51,7 @@ namespace vcl
         };
         struct FontData
         {
-            Int32Vector  m_nWidths;
+            std::vector< sal_Int32 >  m_nWidths;
             Ucs2UIntMap  m_aGlyphIdToIndex;
         };
         typedef std::map< FontIdentifier, sal_uInt32 > FontToIndexMap;

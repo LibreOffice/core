@@ -2959,7 +2959,7 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitSystemFont( const PhysicalFo
     else if( pFont->CanSubset() )
     {
         aSubType = OString( "/TrueType" );
-        Int32Vector aGlyphWidths;
+        std::vector< sal_Int32 > aGlyphWidths;
         Ucs2UIntMap aUnicodeMap;
         pGraphics->GetGlyphWidths( pFont, false, aGlyphWidths, aUnicodeMap );
 
@@ -3893,7 +3893,7 @@ bool PDFWriterImpl::emitFonts()
     osl_createTempFile( nullptr, nullptr, &aTmpName.pData );
     for( FontSubsetData::iterator it = m_aSubsets.begin(); it != m_aSubsets.end(); ++it )
     {
-        for( FontEmitList::iterator lit = it->second.m_aSubsets.begin(); lit != it->second.m_aSubsets.end(); ++lit )
+        for( std::list< FontEmit >::iterator lit = it->second.m_aSubsets.begin(); lit != it->second.m_aSubsets.end(); ++lit )
         {
             sal_GlyphId aGlyphIds[ 256 ];
             sal_Int32 pWidths[ 256 ];

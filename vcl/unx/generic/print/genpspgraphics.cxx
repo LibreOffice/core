@@ -1049,7 +1049,7 @@ const Ucs2SIntMap* GenPspGraphics::GetFontEncodingVector( const PhysicalFontFace
 
 void GenPspGraphics::GetGlyphWidths( const PhysicalFontFace* pFont,
                                   bool bVertical,
-                                  Int32Vector& rWidths,
+                                  std::vector< sal_Int32 >& rWidths,
                                   Ucs2UIntMap& rUnicodeEnc )
 {
     // in this context the pFont->GetFontId() is a valid PSP
@@ -1078,7 +1078,7 @@ const Ucs2SIntMap* GenPspGraphics::DoGetFontEncodingVector( fontID aFont, const 
 
 void GenPspGraphics::DoGetGlyphWidths( psp::fontID aFont,
                                     bool bVertical,
-                                    Int32Vector& rWidths,
+                                    std::vector< sal_Int32 >& rWidths,
                                     Ucs2UIntMap& rUnicodeEnc )
 {
     psp::PrintFontManager& rMgr = psp::PrintFontManager::get();

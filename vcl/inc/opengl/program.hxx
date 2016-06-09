@@ -25,7 +25,6 @@
 #include <unordered_map>
 
 typedef std::unordered_map< OString, GLuint, OStringHash > UniformCache;
-typedef std::list< OpenGLTexture > TextureList;
 
 enum class TextureShaderType
 {
@@ -55,7 +54,7 @@ private:
     GLuint          mnExtrusionVectorsAttrib;
     GLuint          mnVertexColorsAttrib;
 
-    TextureList     maTextures;
+    std::list< OpenGLTexture >     maTextures;
     bool            mbBlending;
 
     float mfLastWidth;

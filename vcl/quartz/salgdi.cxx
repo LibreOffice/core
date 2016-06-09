@@ -108,7 +108,7 @@ const FontCharMapPtr CoreTextFontFace::GetFontCharMap() const
         return mxCharMap;
 
     // get the CMAP raw data
-    ByteVector aBuffer( nBufSize );
+    std::vector<unsigned char> aBuffer( nBufSize );
     const int nRawLength = GetFontTable( "cmap", &aBuffer[0] );
     DBG_ASSERT( (nRawLength > 0), "CoreTextFontFace::GetFontCharMap : GetFontTable2 failed!\n");
     if( nRawLength <= 0 )
@@ -144,7 +144,7 @@ bool CoreTextFontFace::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilit
     if( nBufSize > 0 )
     {
         // allocate a buffer for the GSUB raw data
-        ByteVector aBuffer( nBufSize );
+        std::vector<unsigned char> aBuffer( nBufSize );
         // get the GSUB raw data
         const int nRawLength = GetFontTable( "GSUB", &aBuffer[0] );
         if( nRawLength > 0 )
@@ -157,7 +157,7 @@ bool CoreTextFontFace::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilit
     if( nBufSize > 0 )
     {
         // allocate a buffer for the OS/2 raw data
-        ByteVector aBuffer( nBufSize );
+        std::vector<unsigned char> aBuffer( nBufSize );
         // get the OS/2 raw data
         const int nRawLength = GetFontTable( "OS/2", &aBuffer[0] );
         if( nRawLength > 0 )
@@ -188,7 +188,7 @@ void CoreTextFontFace::ReadOs2Table() const
         return;
 
     // get the OS/2 raw data
-    ByteVector aBuffer( nBufSize );
+    std::vector<unsigned char> aBuffer( nBufSize );
     const int nRawLength = GetFontTable( "cmap", &aBuffer[0] );
     DBG_ASSERT( (nRawLength > 0), "CoreTextFontFace::ReadOs2Table : GetFontTable2 failed!\n");
     if( nRawLength <= 0 )
@@ -214,7 +214,7 @@ void CoreTextFontFace::ReadMacCmapEncoding() const
         return;
 
     // get the CMAP raw data
-    ByteVector aBuffer( nBufSize );
+    std::vector<unsigned char> aBuffer( nBufSize );
     const int nRawLength = GetFontTable( "cmap", &aBuffer[0] );
     if( nRawLength < 24 )
         return;
@@ -503,7 +503,7 @@ static void FakeDirEntry( const char aTag[5], ByteCount nOfs, ByteCount nLen,
 // fake a TTF or CFF font as directly accessing font file is not possible
 // when only the fontid is known. This approach also handles *.font fonts.
 bool AquaSalGraphics::GetRawFontData( const PhysicalFontFace* pFontData,
-                                      ByteVector& rBuffer, bool* pJustCFF )
+                                      std::vector<unsigned char>& rBuffer, bool* pJustCFF )
 {
     const CoreTextFontFace* pMacFont = static_cast<const CoreTextFontFace*>(pFontData);
 
@@ -689,7 +689,7 @@ bool AquaSalGraphics::GetRawFontData( const PhysicalFontFace* pFontData,
 }
 
 void AquaSalGraphics::GetGlyphWidths( const PhysicalFontFace* pFontData, bool bVertical,
-    Int32Vector& rGlyphWidths, Ucs2UIntMap& rUnicodeEnc )
+    std::vector< sal_Int32 >& rGlyphWidths, Ucs2UIntMap& rUnicodeEnc )
 {
     rGlyphWidths.clear();
     rUnicodeEnc.clear();
@@ -704,7 +704,7 @@ void AquaSalGraphics::GetGlyphWidths( const PhysicalFontFace* pFontData, bool bV
         return;
     }
 
-    ByteVector aBuffer;
+    std::vector<unsigned char> aBuffer;
     if( !GetRawFontData( pFontData, aBuffer, nullptr ) )
         return;
 

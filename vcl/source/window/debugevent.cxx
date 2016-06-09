@@ -57,9 +57,8 @@ vcl::Window *DebugEventInjector::ChooseWindow()
     return aChildren[ aChildren.size() * getRandom() ];
 }
 
-typedef std::vector< SalMenuEvent > MenuItemIds;
 
-static void CollectMenuItemIds( Menu *pMenu, MenuItemIds &rIds )
+static void CollectMenuItemIds( Menu *pMenu, std::vector< SalMenuEvent > &rIds )
 {
     sal_uInt16 nItems = pMenu->GetItemCount();
     for (sal_uInt16 i = 0; i < nItems; i++)
@@ -99,7 +98,7 @@ void DebugEventInjector::InjectMenuEvent()
         SalEvent::MenuButtonCommand,
     };
 
-    MenuItemIds aIds;
+    std::vector< SalMenuEvent > aIds;
     CollectMenuItemIds( pMenuBar, aIds );
 
     SalEvent nEvent = nEvents[ (int)(getRandom() * SAL_N_ELEMENTS( nEvents )) ];

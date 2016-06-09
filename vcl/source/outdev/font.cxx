@@ -720,7 +720,7 @@ void OutputDevice::RemoveFontSubstitute( sal_uInt16 n )
 
 void ImplDirectFontSubstitution::RemoveFontSubstitute( int nIndex )
 {
-    FontSubstList::iterator it = maFontSubstList.begin();
+    std::list<ImplFontSubstEntry>::iterator it = maFontSubstList.begin();
     for( int nCount = 0; (it != maFontSubstList.end()) && (nCount++ != nIndex); ++it ) ;
     if( it != maFontSubstList.end() )
         maFontSubstList.erase( it );
@@ -739,7 +739,7 @@ bool ImplDirectFontSubstitution::FindFontSubstitute( OUString& rSubstName,
     const OUString& rSearchName ) const
 {
     // TODO: get rid of O(N) searches
-    FontSubstList::const_iterator it = maFontSubstList.begin();
+    std::list<ImplFontSubstEntry>::const_iterator it = maFontSubstList.begin();
     for(; it != maFontSubstList.end(); ++it )
     {
         const ImplFontSubstEntry& rEntry = *it;

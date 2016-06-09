@@ -52,7 +52,6 @@ class CoreTextStyle;
 class XorEmulation;
 
 typedef sal_uInt32 sal_GlyphId;
-typedef std::vector<unsigned char> ByteVector;
 
 // CoreText-specific physically available font face
 class CoreTextFontFace : public PhysicalFontFace
@@ -395,7 +394,7 @@ public:
 
     virtual void            GetGlyphWidths( const PhysicalFontFace*,
                                             bool bVertical,
-                                            Int32Vector& rWidths,
+                                            std::vector< sal_Int32 >& rWidths,
                                             Ucs2UIntMap& rUnicodeEnc ) override;
 
     virtual bool            GetGlyphBoundRect( sal_GlyphId, Rectangle& ) override;
