@@ -102,13 +102,13 @@ public:
         memset(pBuffer, 0, nBufLen);
 
         rtlRandomError aError = rtl_random_addBytes(nullptr, nullptr, 0);
-        CPPUNIT_ASSERT_MESSAGE("wrong parameter", aError == rtl_Random_E_Argument);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong parameter", rtl_Random_E_Argument, aError);
 
         /* rtlRandomError */ aError = rtl_random_addBytes(aPool, nullptr, 0);
-        CPPUNIT_ASSERT_MESSAGE("wrong parameter", aError == rtl_Random_E_Argument);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong parameter", rtl_Random_E_Argument, aError);
 
         /* rtlRandomError */ aError = rtl_random_addBytes(aPool, pBuffer, nBufLen);
-        CPPUNIT_ASSERT_MESSAGE("wrong parameter", aError == rtl_Random_E_None);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong parameter", rtl_Random_E_None, aError);
 
         rtl_random_destroyPool(aPool);
         delete [] pBuffer;
@@ -225,13 +225,13 @@ public:
         memset(pBuffer, 0, nBufLen);
 
         rtlRandomError aError = rtl_random_getBytes(nullptr, nullptr, 0);
-        CPPUNIT_ASSERT_MESSAGE("wrong parameter", aError == rtl_Random_E_Argument);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong parameter", rtl_Random_E_Argument, aError);
 
         /* rtlRandomError */ aError = rtl_random_getBytes(aPool, nullptr, 0);
-        CPPUNIT_ASSERT_MESSAGE("wrong parameter", aError == rtl_Random_E_Argument);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong parameter", rtl_Random_E_Argument, aError);
 
         /* rtlRandomError */ aError = rtl_random_getBytes(aPool, pBuffer, nBufLen);
-        CPPUNIT_ASSERT_MESSAGE("wrong parameter", aError == rtl_Random_E_None);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong parameter", rtl_Random_E_None, aError);
 
         rtl_random_destroyPool(aPool);
         delete [] pBuffer;
@@ -246,7 +246,7 @@ public:
         memset(pBuffer, 0, nBufLen);
 
         rtlRandomError aError = rtl_random_getBytes(aPool, pBuffer, nBufLen);
-        CPPUNIT_ASSERT_MESSAGE("wrong parameter", aError == rtl_Random_E_None);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong parameter", rtl_Random_E_None, aError);
 
         printf("%2x %2x %2x %2x\n", pBuffer[0], pBuffer[1], pBuffer[2], pBuffer[3]);
 
@@ -265,7 +265,7 @@ public:
         CPPUNIT_ASSERT_MESSAGE("memset failed", pBuffer[4] == 0 && pBuffer[5] == 0 && pBuffer[6] == 0 && pBuffer[7] == 0);
 
         rtlRandomError aError = rtl_random_getBytes(aPool, pBuffer, nBufLen);
-        CPPUNIT_ASSERT_MESSAGE("wrong parameter", aError == rtl_Random_E_None);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("wrong parameter", rtl_Random_E_None, aError);
 
         printf("%2x %2x %2x %2x %2x %2x %2x %2x\n", pBuffer[0], pBuffer[1], pBuffer[2], pBuffer[3], pBuffer[4], pBuffer[5], pBuffer[6], pBuffer[7]);
 
@@ -285,7 +285,7 @@ public:
 
         Statistics aStat;
 
-        CPPUNIT_ASSERT_MESSAGE("memset failed", pBuffer[0] == 0);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("memset failed", static_cast<sal_uInt8>(0), pBuffer[0]);
 
         int nCount = 0;
 
@@ -317,7 +317,7 @@ public:
 
         Statistics aStat;
 
-        CPPUNIT_ASSERT_MESSAGE("memset failed", pBuffer[0] == 0);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("memset failed", static_cast<sal_uInt8>(0), pBuffer[0]);
 
         int nCount = 0;
 
