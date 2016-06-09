@@ -3437,16 +3437,10 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Rulers</value>
         </prop>
-        <prop oor:name="Properties" oor:type="xs:int">
-          <value>1</value>
-        </prop>
       </node>
       <node oor:name=".uno:ScrollBarMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Scrollbars</value>
-        </prop>
-        <prop oor:name="Properties" oor:type="xs:int">
-          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:SidebarMenu" oor:op="replace">
@@ -5727,9 +5721,6 @@
       <node oor:name=".uno:ThesaurusFromContext" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Synony~ms</value>
-        </prop>
-        <prop oor:name="Properties" oor:type="xs:int">
-          <value>1</value>
         </prop>
       </node>
     </node>

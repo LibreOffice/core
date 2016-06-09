@@ -103,7 +103,9 @@ cmd/sc_pagesetup.png cmd/sc_setdocumentproperties.png
 cmd/lc_closepreview.png cmd/lc_closedoc.png
 cmd/sc_closepreview.png cmd/sc_closedoc.png
 cmd/lc_objectmirrorvertical.png cmd/sc_flipvertical.png
+cmd/sc_objectmirrorvertical.png cmd/sc_flipvertical.png
 cmd/lc_objectmirrorhorizontal.png cmd/sc_fliphorizontal.png
+cmd/sc_objectmirrorhorizontal.png cmd/sc_fliphorizontal.png
 cmd/sc_exporttopdf.png cmd/sc_exportdirecttopdf.png
 cmd/sc_numberformattime.png cmd/sc_timefield.png
 
@@ -577,3 +579,16 @@ cmd/sc_lastslide.png cmd/sc_lastpage.png
 cmd/sc_previousslide.png cmd/sc_navigateback.png
 cmd/sc_nextslide.png cmd/sc_navigateforward.png
 cmd/sc_slidesetup.png cmd/sc_setdocumentproperties.png
+
+# just here to smother warnings about missing icons
+cmd/sc_trackchangesbar.png cmd/sc_ok.png
+cmd/sc_setoutline.png cmd/sc_outlineformat.png
+cmd/sc_diagramaxisall.png cmd/sc_diagramtype.png
+cmd/sc_diagramaxisz.png cmd/sc_diagramtype.png
+cmd/sc_diagramarea.png cmd/sc_diagramtype.png
+cmd/sc_insertmenutitles.png cmd/sc_insert.png
+cmd/sc_diagramwall.png cmd/sc_diagramtype.png
+cmd/sc_displaymode.png cmd/sc_ok.png
+cmd/sc_legend.png cmd/sc_ok.png
+cmd/sc_dataranges.png cmd/sc_ok.png
+cmd/sc_jumptospecificpage.png cmd/sc_ok.png
