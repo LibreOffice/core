@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_0b42973e",
+        "filename": "svl/source/config/cjkoptions.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 404,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-06-09T11:47:20Z",
+      "side": 1,
+      "message": "tricky, this one is. the mutex will get dropped before the compiler destructs the shared_ptr, which means that the weak_ptr may get updated outside the lock, which is bad.\n\nwhich means we have to clear the pImp here, even though it\u0027s a smart pointer",
+      "revId": "0487cae3b77257ddd749d7aaf090eb9cb7bffc56",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
