@@ -81,7 +81,7 @@ protected:
     DECL_LINK_TYPED(DefaultTemplateMenuSelectHdl, Menu*, bool);
 
     DECL_LINK_TYPED(OpenRegionHdl, void*, void);
-    DECL_LINK_TYPED(RightClickHdl, ThumbnailViewItem*, void);
+    DECL_LINK_TYPED(CreateContextMenuHdl, ThumbnailViewItem*, void);
     DECL_LINK_TYPED(OpenTemplateHdl, ThumbnailViewItem*, void);
     DECL_LINK_TYPED(EditTemplateHdl, ThumbnailViewItem*, void);
     DECL_LINK_TYPED(DeleteTemplateHdl, ThumbnailViewItem*, void);
