@@ -20,21 +20,15 @@ $(eval $(call gb_Jar_use_jars,officebean,\
 $(eval $(call gb_Jar_set_packageroot,officebean,com))
 
 $(eval $(call gb_Jar_add_sourcefiles,officebean,\
-	bean/com/sun/star/comp/beans/ContainerFactory \
 	bean/com/sun/star/comp/beans/Controller \
 	bean/com/sun/star/comp/beans/Frame \
 	bean/com/sun/star/comp/beans/HasConnectionException \
-	bean/com/sun/star/comp/beans/InvalidArgumentException \
 	bean/com/sun/star/comp/beans/JavaWindowPeerFake \
 	bean/com/sun/star/comp/beans/LocalOfficeConnection \
 	bean/com/sun/star/comp/beans/LocalOfficeWindow \
-	bean/com/sun/star/comp/beans/NativeConnection \
-	bean/com/sun/star/comp/beans/NativeService \
 	bean/com/sun/star/comp/beans/NoConnectionException \
 	bean/com/sun/star/comp/beans/NoDocumentException \
-	bean/com/sun/star/comp/beans/OfficeConnection \
 	bean/com/sun/star/comp/beans/OfficeDocument \
-	bean/com/sun/star/comp/beans/OfficeWindow \
 	bean/com/sun/star/comp/beans/OOoBean \
 	bean/com/sun/star/comp/beans/SystemWindowException \
 	bean/com/sun/star/comp/beans/Wrapper \

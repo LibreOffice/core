@@ -180,12 +180,6 @@ class WriterFrame extends java.awt.Frame
 
     public void removeOOoBean() throws Exception
     {
-        //OOoBean.releaseSystemWindow need not be called because
-        //LocalOfficeWindow overrides removeNotify.
-        //However because of bt4745222 which was fixed in 1.4.2_04,
-        //this is very very slow. The workaround is use releaseSystemWindow
-        //beforehand.
-        m_bean.releaseSystemWindow();
         remove(m_bean);
     }
 

@@ -29,13 +29,8 @@ import com.sun.star.uno.UnoRuntime;
     @since OOo 2.0.0
  */
 public class OOoBean
-
     // @requirement FUNC.BEAN.VIEW/0.4
     extends java.awt.Container
-
-    implements
-        // @requirement FUNC.PER/0.2
-        java.io.Externalizable
 {
     // timeout values (milli secs)
     private int nOOoStartTimeOut = 60000;
@@ -43,14 +38,14 @@ public class OOoBean
     private int nOOoCheckCycle =    1000;
 
     // This member contains the connection to an OOo instance if established.
-    private transient OfficeConnection      iConnection;
+    private transient LocalOfficeConnection iConnection;
     private transient EventListener         xConnectionListener;
 
     // @requirement FUNC.BEAN.VIEW/0.4
     // @requirement FUNC.BEAN.EDIT/0.4
     // This member contains the OOo window if a connection is established.
     // It is a child of the OOoBean canvas.
-    private OfficeWindow xFrameWindow;
+    private LocalOfficeWindow xFrameWindow;
 
     // application environment
     private transient com.sun.star.lang.XMultiServiceFactory xServiceFactory;
@@ -77,26 +72,6 @@ public class OOoBean
     {
     }
 
-    // @requirement FUNC.PER/0.2
-    // @internal
-    /**
-     */
-    @Deprecated
-    public void writeExternal( java.io.ObjectOutput aObjOut )
-    {
-        // TBD
-    }
-
-    // @requirement FUNC.PER/0.2
-    // @internal
-    /**
-     */
-    @Deprecated
-    public void readExternal( java.io.ObjectInput aObjIn )
-    {
-        // TBD
-    }
-
     /** Generic constructor of the OOoBean.
 
         Neither a connection is established nor any document loaded.
@@ -119,7 +94,7 @@ public class OOoBean
         the dispose method of the OfficeConnection or the OOoBean's stopOOoConnection
         method would make all instances of OOoBean stop working.
      */
-    public OOoBean( OfficeConnection iConnection )
+    public OOoBean( LocalOfficeConnection iConnection )
         throws NoConnectionException
     {
         setLayout(new java.awt.BorderLayout());
@@ -158,7 +133,7 @@ public class OOoBean
     // @internal
     /** Sets a connection to an OOo instance.
      */
-    private synchronized void setOOoConnection(OfficeConnection iNewConnection)
+    private synchronized void setOOoConnection(LocalOfficeConnection iNewConnection)
             throws HasConnectionException, NoConnectionException {
         // the connection cannot be exchanged
         if (iConnection != null)
@@ -203,20 +178,6 @@ public class OOoBean
         setOOoConnection( aConnection );
     }
 
-    // @requirement FUNC.CON.CHK/0.7
-    /** Returns true if this OOoBean is connected to an OOo instance,
-        false otherwise.
-
-        @deprecated This method is not useful in a multithreaded environment. Then
-        all threads accessing the instance would have to be synchronized in order to
-        make is method work. It is better to call OOoBean's methods and be prepared
-        to catch a NoConnectionException.
-     */
-    public boolean isOOoConnected()
-    {
-        return iConnection != null;
-    }
-
     // @requirement FUNC.CON.STOP/0.4
     /** Disconnects from the connected OOo instance.
 
@@ -232,7 +193,7 @@ public class OOoBean
         clear();
 
         // cut the connection
-        OfficeConnection iExConnection = iConnection;
+        LocalOfficeConnection iExConnection = iConnection;
         if ( iConnection != null )
         {
             if ( xConnectionListener != null )
@@ -262,7 +223,7 @@ public class OOoBean
             if no connection can be established
 
      */
-    public synchronized OfficeConnection getOOoConnection()
+    public synchronized LocalOfficeConnection getOOoConnection()
         throws NoConnectionException
     {
         if ( iConnection == null )
@@ -287,7 +248,7 @@ public class OOoBean
         if ( xServiceFactory == null )
         {
             // avoid concurrent access from multiple threads
-            final OfficeConnection iConn = getOOoConnection();
+            final LocalOfficeConnection iConn = getOOoConnection();
 
             Thread aConnectorThread = new Thread("getServiceManager") {
                 @Override
@@ -331,32 +292,6 @@ public class OOoBean
         }
 
         return xDesktop;
-    }
-
-    /** Resets this bean to an empty document.
-
-       If a document is loaded and the content modified,
-       the changes are dismissed.  Otherwise nothing happens.
-
-       This method is intended to be overridden in derived classes.
-       This implementation simply calls clear.
-
-       @param bClearStateToo
-           Not only the document content but also the state of the bean,
-        like visibility of child components is cleared.
-
-        @deprecated There is currently no way to dismiss changes, except for loading
-        of the unchanged initial document. Furthermore it is unclear how derived classes
-        handle this and what exactly their state is (e.g. what members make up their state).
-        Calling this method on a derived class requires knowledge about their implementation.
-        Therefore a deriving class should declare their own clearDocument if needed. Clients
-        should call the clearDocument of the deriving class or {@link #clear} which discards
-        the currently displayed document.
-     */
-    public synchronized void clearDocument( boolean bClearStateToo )
-    {
-        // TBD
-        clear();
     }
 
     /** Resets the OOoBean to an empty status.
@@ -997,51 +932,9 @@ public class OOoBean
         return aDocument;
     }
 
-    /** Sets visibility of all tool bars known by this OOoBean version.
-
-        Initially all tool bars are visible.  By hiding all tool bars
-        utilizing this method, it is possible to turn just a subset of
-        toolbars on afterwards, no matter whether all available tool
-        bars are known or not.
-        <p>
-        If an older OOoBean instance is used with a newer OOo instance,
-        some tool bars might not be affected by this method.
-        <p>
-        If no connection is established or no document is loaded,
-        the setting is memorized until a document is loaded.  Same
-        is valid when the connection dies within this function call.
-
-        @deprecated Clients should use the service com.sun.star.frame.LayoutManager,
-        which can be obtained from a frame, to control toolbars. For example:
-        <pre>
-com.sun.star.beans.XPropertySet xPropSet =
-  (com.sun.star.beans.XPropertySet) UnoRuntime.queryInterface(
-    com.sun.star.beans.XPropertySet.class, aFrame );
-com.sun.star.frame.XLayoutManager xLayoutManager =
-  (com.sun.star.frame.XLayoutManager) UnoRuntime.queryInterface(
-    com.sun.star.frame.XLayoutManager.class,
-    xPropSet.getPropertyValue( "LayoutManager" ) );
-xLayoutManager.showElement("private:resource/menubar/menubar");
-        </pre>
+    /** Applies all tool visibilities to the real thing.
      */
-    public void setAllBarsVisible( boolean bVisible )
-    {
-        bIgnoreVisibility = true;
-        setMenuBarVisible( bVisible );
-        setStandardBarVisible( bVisible );
-        setToolBarVisible( bVisible );
-        setStatusBarVisible( bVisible );
-        bIgnoreVisibility = false;
-    }
-
-
-    /** Applies all tool visiblities to the real thing.
-
-        @deprecated Clients should use the service com.sun.star.frame.LayoutManager,
-        which can be obtained from a frame, to control toolbars. See also
-        {@link #setAllBarsVisible setAllBarsVisible}.
-     */
-    protected void applyToolVisibilities()
+    private void applyToolVisibilities()
     {
         bIgnoreVisibility = true;
         setMenuBarVisible( bMenuBarVisible );
@@ -1051,17 +944,13 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
         bIgnoreVisibility = false;
     }
 
-    /** Helper method to set tool bar visibilty.
+    /** Helper method to set tool bar visibility.
 
          @param bNewValue
             If false, the tool bar is disabled,
             If true, the tool bar is visible.
-
-        @deprecated Clients should use the service com.sun.star.frame.LayoutManager,
-        which can be obtained from a frame, to control toolbars. See also
-        {@link #setAllBarsVisible}.
      */
-    protected boolean setToolVisible( String aProperty, String aResourceURL,
+    private boolean setToolVisible( String aProperty, String aResourceURL,
         boolean bOldValue, boolean bNewValue )
 
         throws
@@ -1122,12 +1011,8 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
          @param bVisible
             If false, the menu bar is disabled,
             If true, the menu bar is visible.
-
-        @deprecated Clients should use the service com.sun.star.frame.LayoutManager,
-        which can be obtained from a frame, to control toolbars. See also
-        {@link #setAllBarsVisible}.
      */
-    public void setMenuBarVisible(boolean bVisible)
+    private void setMenuBarVisible(boolean bVisible)
     {
         try
         {
@@ -1138,25 +1023,6 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
         {
             bMenuBarVisible = bVisible;
         }
-    }
-
-      /** Returns the visibility of the menu bar.
-
-        This method works independently from a connection or loaded document.
-        If no connection is established or no document is loaded,
-        this method just returns a memorized status.
-
-        @return
-            True if the menu bar is visible,
-            false if the menu bar is hidden.
-
-        @deprecated Clients should use the service com.sun.star.frame.LayoutManager,
-        which can be obtained from a frame, to control toolbars. See also
-        {@link #setAllBarsVisible}.
-     */
-    public boolean isMenuBarVisible()
-    {
-        return bMenuBarVisible;
     }
 
     /** Sets the main function bar visibilty.
@@ -1170,12 +1036,8 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
          @param bVisible
             If false, the main function bar is disabled,
             If true, the main function bar is visible.
-
-        @deprecated Clients should use the service com.sun.star.frame.LayoutManager,
-        which can be obtained from a frame, to control toolbars. See also
-        {@link #setAllBarsVisible}.
      */
-    public void setStandardBarVisible(boolean bVisible)
+    private void setStandardBarVisible(boolean bVisible)
     {
         try
         {
@@ -1188,26 +1050,7 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
         }
     }
 
-      /** Returns the visibility of the main function bar.
-
-           This method works independently from a connection or loaded document.
-        If no connection is established or no document is loaded,
-        this method just returns a memorized status.
-
-        @return
-            True if the main function bar is visible,
-            false if the main function bar is hidden.
-
-        @deprecated Clients should use the service com.sun.star.frame.LayoutManager,
-        which can be obtained from a frame, to control toolbars. See also
-        {@link #setAllBarsVisible}.
-    */
-    public boolean isStandardBarVisible()
-    {
-        return bStandardBarVisible;
-    }
-
-    /** Sets the tool function bar visibilty.
+    /** Sets the tool function bar visibility.
 
         Initially the tool bar is visible.
 
@@ -1218,12 +1061,8 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
          @param bVisible
             If false, the tool function bar is disabled,
             If true, the tool function bar is visible.
-
-        @deprecated Clients should use the service com.sun.star.frame.LayoutManager,
-        which can be obtained from a frame, to control toolbars. See also
-        {@link #setAllBarsVisible}.
      */
-    public void setToolBarVisible(boolean bVisible)
+    private void setToolBarVisible(boolean bVisible)
     {
         try
         {
@@ -1234,25 +1073,6 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
         {
             bMenuBarVisible = bVisible;
         }
-    }
-
-      /** Returns the visibility of the tool function bar.
-
-           This method works independently from a connection or loaded document.
-        If no connection is established or no document is loaded,
-        this method just returns a memorized status.
-
-        @return
-            True if the tool function bar is visible,
-            false if the tool function bar is hidden.
-
-        @deprecated Clients should use the service com.sun.star.frame.LayoutManager,
-        which can be obtained from a frame, to control toolbars. See also
-        {@link #setAllBarsVisible}.
-     */
-    public boolean isToolBarVisible()
-    {
-        return bToolBarVisible;
     }
 
     /** Sets the status function bar visibilty.
@@ -1266,12 +1086,8 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
          @param bVisible
             If false, the status function bar is disabled,
             If true, the status function bar is visible.
-
-        @deprecated Clients should use the service com.sun.star.frame.LayoutManager,
-        which can be obtained from a frame, to control toolbars. See also
-        {@link #setAllBarsVisible}.
      */
-    public void setStatusBarVisible(boolean bVisible)
+    private void setStatusBarVisible(boolean bVisible)
     {
         try
         {
@@ -1284,34 +1100,8 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
         }
     }
 
-      /**   Returns the visibility of the status function bar.
-
-           This method works independently from a connection or loaded document.
-        If no connection is established or no document is loaded,
-        this method just returns a memorized status.
-
-        @return
-            True if the status function bar is visible,
-            false if the status function bar is hidden.
-
-        @deprecated Clients should use the service com.sun.star.frame.LayoutManager,
-        which can be obtained from a frame, to control toolbars. See also
-        {@link #setAllBarsVisible}.
-     */
-    public boolean isStatusBarVisible()
-    {
-        return bStatusBarVisible;
-    }
-
-
     // Helper Methods / Internal Methods
 
-
-    @Deprecated
-    @Override
-    public void paint( java.awt.Graphics aGraphics )
-    {
-    }
 
     /** Adds a single argument to an array of arguments.
 
@@ -1467,7 +1257,7 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
                 catch ( java.lang.RuntimeException aExc )
                 {
                     // hung
-                    OfficeConnection iDeadConn = iConnection;
+                    LocalOfficeConnection iDeadConn = iConnection;
                     iConnection = null;
                     iDeadConn.dispose();
                 }
