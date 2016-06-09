@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_0e970591",
+        "filename": "sw/inc/tblafmt.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 373,
+      "author": {
+        "id": 1001243
+      },
+      "writtenOn": "2016-06-09T20:46:13Z",
+      "side": 1,
+      "message": "unify method names",
+      "revId": "ef0c79eff86cfcdcc83608d0bd26fef166bff7f5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_ce7c3d75",
+        "filename": "sw/inc/unostyle.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 321,
+      "author": {
+        "id": 1001243
+      },
+      "writtenOn": "2016-06-09T20:46:13Z",
+      "side": 1,
+      "message": "shared_ptr",
+      "revId": "ef0c79eff86cfcdcc83608d0bd26fef166bff7f5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_ee81014c",
+        "filename": "sw/qa/python/check_styles.py",
+        "patchSetId": 7
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1001243
+      },
+      "writtenOn": "2016-06-09T20:46:13Z",
+      "side": 1,
+      "message": "cleanup",
+      "revId": "ef0c79eff86cfcdcc83608d0bd26fef166bff7f5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_8e823551",
+        "filename": "sw/source/core/unocore/unostyle.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 732,
+      "author": {
+        "id": 1001243
+      },
+      "writtenOn": "2016-06-09T20:46:13Z",
+      "side": 1,
+      "message": "remove block",
+      "revId": "ef0c79eff86cfcdcc83608d0bd26fef166bff7f5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
