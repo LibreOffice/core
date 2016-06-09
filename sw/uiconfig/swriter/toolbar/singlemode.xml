@@ -28,21 +28,21 @@
  <toolbar:toolbaritem xlink:href=".uno:Undo" toolbar:helpid="5701"/>
  <toolbar:toolbaritem xlink:href=".uno:Redo" toolbar:helpid="5700"/>
  <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:SearchDialog"/>
+ <toolbar:toolbaritem xlink:href=".uno:FormatPaintbrush" toolbar:helpid="5715"/>
+ <toolbar:toolbaritem xlink:href=".uno:SpellingAndGrammarDialog" toolbar:visible="false" toolbar:helpid="20622"/>
+ <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:Bold"/>
  <toolbar:toolbaritem xlink:href=".uno:Italic"/>
  <toolbar:toolbaritem xlink:href=".uno:Underline"/>
  <toolbar:toolbaritem xlink:href=".uno:Strikeout" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:FontColor"/>
  <toolbar:toolbaritem xlink:href=".uno:BackColor" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:FormatPaintbrush" toolbar:helpid="5715"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:LeftPara"/>
  <toolbar:toolbaritem xlink:href=".uno:CenterPara"/>
  <toolbar:toolbaritem xlink:href=".uno:RightPara"/>
  <toolbar:toolbaritem xlink:href=".uno:JustifyPara"/>
- <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:HyperlinkDialog" toolbar:helpid="5678"/>
- <toolbar:toolbaritem xlink:href=".uno:InsertAnnotation" toolbar:helpid="20329"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:StyleApply"/>
  <toolbar:toolbaritem xlink:href=".uno:StyleUpdateByExample" toolbar:visible="false"/>
@@ -61,9 +61,10 @@
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:InsertTable" toolbar:helpid="20330"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertGraphic" toolbar:helpid="10241"/>
+ <toolbar:toolbaritem xlink:href=".uno:HyperlinkDialog" toolbar:helpid="5678"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertAnnotation" toolbar:helpid="20329"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:SpellingAndGrammarDialog" toolbar:visible="false" toolbar:helpid="20622"/>
- <toolbar:toolbaritem xlink:href=".uno:SearchDialog"/>
- <toolbar:toolbaritem xlink:href=".uno:ControlCodes" toolbar:helpid="20224"/>
+ <toolbar:toolbaritem xlink:href=".uno:TrackChanges"/>
+ <toolbar:toolbaritem xlink:href=".uno:ControlCodes"/>
  <toolbar:toolbaritem xlink:href=".uno:Zoom" toolbar:visible="false"/>
 </toolbar:toolbar>
