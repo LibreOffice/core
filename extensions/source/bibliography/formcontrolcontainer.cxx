@@ -23,7 +23,6 @@
 #include <algorithm>
 #include <functional>
 
-
 namespace bib
 {
 
@@ -41,7 +40,7 @@ namespace bib
 
     FormControlContainer::~FormControlContainer( )
     {
-        DBG_ASSERT( !isFormConnected(), "FormControlContainer::~FormControlContainer: you should disconnect in your derived class!" );
+        SAL_WARN_IF( isFormConnected(), "extensions.biblio", "FormControlContainer::~FormControlContainer: you should disconnect in your derived class!" );
         if ( isFormConnected() )
             disconnectForm();
     }
@@ -49,7 +48,7 @@ namespace bib
     void FormControlContainer::disconnectForm()
     {
         ::osl::MutexGuard aGuard( m_aMutex );
-        DBG_ASSERT( isFormConnected(), "FormControlContainer::connectForm: not connected!" );
+        SAL_WARN_IF( !isFormConnected(), "extensions.biblio", "FormControlContainer::connectForm: not connected!" );
         if ( isFormConnected() )
         {
             m_pFormAdapter->dispose();
@@ -60,9 +59,9 @@ namespace bib
 
     void FormControlContainer::connectForm( const Reference< XLoadable >& _rxForm )
     {
-        DBG_ASSERT( !isFormConnected(), "FormControlContainer::connectForm: already connected!" );
+        SAL_WARN_IF( isFormConnected(), "extensions.biblio", "FormControlContainer::connectForm: already connected!" );
 
-        DBG_ASSERT( _rxForm.is(), "FormControlContainer::connectForm: invalid form!" );
+        SAL_WARN_IF( !_rxForm.is(), "extensions.biblio", "FormControlContainer::connectForm: invalid form!" );
         if ( !isFormConnected() && _rxForm.is() )
         {
             m_pFormAdapter = new OLoadListenerAdapter( _rxForm );
