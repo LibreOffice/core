@@ -102,7 +102,7 @@ public:
 
     void setOpenRegionHdl(const Link<void*,void> &rLink);
 
-    void setRightClickHdl(const Link<ThumbnailViewItem*,void> &rLink);
+    void setCreateContextMenuHdl(const Link<ThumbnailViewItem*,void> &rLink);
 
     void setOpenTemplateHdl(const Link<ThumbnailViewItem*,void> &rLink);
 
@@ -145,7 +145,7 @@ protected:
     Point maPosition;
 
     Link<void*,void>              maOpenRegionHdl;
-    Link<ThumbnailViewItem*,void> maRightClickHdl;
+    Link<ThumbnailViewItem*,void> maCreateContextMenuHdl;
     Link<ThumbnailViewItem*,void> maOpenTemplateHdl;
     Link<ThumbnailViewItem*,void> maEditTemplateHdl;
     Link<ThumbnailViewItem*,void> maDeleteTemplateHdl;

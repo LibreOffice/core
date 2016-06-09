@@ -46,11 +46,38 @@ void TemplateSearchView::MouseButtonDown( const MouseEvent& rMEvt )
         if(pViewItem)
         {
             maSelectedItem = dynamic_cast<TemplateViewItem*>(pItem);
-            maRightClickHdl.Call(pItem);
+            maCreateContextMenuHdl.Call(pItem);
         }
     }
 
     ThumbnailView::MouseButtonDown(rMEvt);
+}
+
+
+void TemplateSearchView::KeyInput( const KeyEvent& rKEvt )
+{
+    vcl::KeyCode aKeyCode = rKEvt.GetKeyCode();
+
+    if(aKeyCode == (KEY_SHIFT | KEY_F10 ))
+    {
+        for (ThumbnailViewItem* pItem : mFilteredItemList)
+        {
+            //create context menu for the first selected item
+            if (pItem->isSelected())
+            {
+                deselectItems();
+                pItem->setSelection(true);
+                maItemStateHdl.Call(pItem);
+                Rectangle aRect = pItem->getDrawArea();
+                maPosition = aRect.Center();
+                maSelectedItem = dynamic_cast<TemplateViewItem*>(pItem);
+                maCreateContextMenuHdl.Call(pItem);
+                break;
+            }
+        }
+    }
+
+    ThumbnailView::KeyInput(rKEvt);
 }
 
 void TemplateSearchView::createContextMenu( const bool bIsDefault)
@@ -98,9 +125,9 @@ IMPL_LINK_TYPED(TemplateSearchView, ContextMenuSelectHdl, Menu*, pMenu, bool)
     return false;
 }
 
-void TemplateSearchView::setRightClickHdl(const Link<ThumbnailViewItem*,void> &rLink)
+void TemplateSearchView::setCreateContextMenuHdl(const Link<ThumbnailViewItem*,void> &rLink)
 {
-    maRightClickHdl = rLink;
+    maCreateContextMenuHdl = rLink;
 }
 
 void TemplateSearchView::setOpenTemplateHdl(const Link<ThumbnailViewItem*, void> &rLink)
