@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_8e74f59c",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/CalcCommands.xcu",
+        "patchSetId": 4
+      },
+      "lineNbr": 1688,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-06-09T20:32:06Z",
+      "side": 1,
+      "message": "This skipped my attention earlier.. I think this is misleading, \"insert sheet after\" to me sounds as if it would insert a sheet after the current sheet, which is not the case. The sheet will be unconditionally inserted at the end after all sheets, hence appended..",
+      "revId": "a90edb718355c1fe4e9d606b0ddb5770ddef5699",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_2e6689ed",
+        "filename": "sc/uiconfig/scalc/menubar/menubar.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2016-06-09T20:32:06Z",
+      "side": 1,
+      "message": "This one displays no menu entry, only blank.",
+      "range": {
+        "startLine": 142,
+        "startChar": 0,
+        "endLine": 142,
+        "endChar": 46
+      },
+      "revId": "a90edb718355c1fe4e9d606b0ddb5770ddef5699",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
