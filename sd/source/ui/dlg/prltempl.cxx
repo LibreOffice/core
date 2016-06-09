@@ -278,6 +278,11 @@ void SdPresLayoutTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
     {
         rPage.PageCreated(aSet);
     }
+    else if (nId == mnTextAtt)
+    {
+        aSet.Put(CntUInt16Item(SID_SVXTEXTATTRPAGE_OBJKIND, OBJ_TEXT));
+        rPage.PageCreated(aSet);
+    }
 }
 
 const SfxItemSet* SdPresLayoutTemplateDlg::GetOutputItemSet() const

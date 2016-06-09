@@ -24,8 +24,10 @@
 #include <svx/drawitem.hxx>
 #include <svl/intitem.hxx>
 #include <svx/ofaitem.hxx>
-#include <svx/svxgrahicitem.hxx>
+#include <svx/svdmark.hxx>
 #include <svx/svdmodel.hxx>
+#include <svx/svdview.hxx>
+#include <svx/svxgrahicitem.hxx>
 #include <svl/cjkoptions.hxx>
 
 #include <svx/dialogs.hrc>
@@ -156,7 +158,6 @@ void SdTabTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
     }
     else if (nId == m_nTextId)
     {
-        aSet.Put(OfaPtrItem(SID_SVXTEXTATTRPAGE_VIEW,pSdrView));
         rPage.PageCreated(aSet);
     }
     else if (nId == m_nDimensionId)

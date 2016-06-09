@@ -27,6 +27,8 @@
 #include "textattr.hxx"
 #include <dialmgr.hxx>
 #include "svx/dlgutil.hxx"
+#include "svx/svdmark.hxx"
+#include "svx/svdview.hxx"
 
 const sal_uInt16 SvxTextAnimationPage::pRanges[] =
 {
@@ -63,10 +65,21 @@ SvxTextTabDialog::SvxTextTabDialog( vcl::Window* pParent,
 void SvxTextTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 {
     if (nId == m_nTextId)
+    {
+        const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
+        bool bHasMarked = rMarkList.GetMarkCount() > 0;
+        SdrObjKind eKind = OBJ_NONE;
+        if (bHasMarked)
         {
-            static_cast<SvxTextAttrPage&>(rPage).SetView( pView );
-            static_cast<SvxTextAttrPage&>(rPage).Construct();
+            if (rMarkList.GetMarkCount() == 1)
+            {
+                const SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
+                eKind = (SdrObjKind)pObj->GetObjIdentifier();
+            }
         }
+        static_cast<SvxTextAttrPage&>(rPage).SetObjKind(eKind);
+        static_cast<SvxTextAttrPage&>(rPage).Construct();
+    }
 }
 
 

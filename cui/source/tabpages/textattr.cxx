@@ -56,7 +56,7 @@ const sal_uInt16 SvxTextAttrPage::pRanges[] =
 SvxTextAttrPage::SvxTextAttrPage(vcl::Window* pWindow, const SfxItemSet& rInAttrs)
     : SvxTabPage(pWindow,"TextAttributesPage","cui/ui/textattrtabpage.ui", rInAttrs)
     , rOutAttrs(rInAttrs)
-    , pView(nullptr)
+    , m_eObjKind(OBJ_NONE)
     , bAutoGrowSizeEnabled(false)
     , bContourEnabled(false)
     , bAutoGrowWidthEnabled(false)
@@ -64,6 +64,8 @@ SvxTextAttrPage::SvxTextAttrPage(vcl::Window* pWindow, const SfxItemSet& rInAttr
     , bWordWrapTextEnabled(false)
     , bFitToSizeEnabled(false)
 {
+    get(m_pDrawingText, "drawingtext");
+    get(m_pCustomShapeText, "customshapetext");
     get(m_pTsbAutoGrowWidth,"TSB_AUTOGROW_WIDTH");
     get(m_pTsbAutoGrowHeight,"TSB_AUTOGROW_HEIGHT");
     get(m_pTsbFitToSize,"TSB_FIT_TO_SIZE");
@@ -90,6 +92,7 @@ SvxTextAttrPage::SvxTextAttrPage(vcl::Window* pWindow, const SfxItemSet& rInAttr
     Link<Button*,void> aLink( LINK( this, SvxTextAttrPage, ClickHdl_Impl ) );
     m_pTsbAutoGrowWidth->SetClickHdl( aLink );
     m_pTsbAutoGrowHeight->SetClickHdl( aLink );
+    m_pTsbAutoGrowSize->SetClickHdl( aLink );
     m_pTsbFitToSize->SetClickHdl( aLink );
     m_pTsbContour->SetClickHdl( aLink );
 
@@ -103,6 +106,8 @@ SvxTextAttrPage::~SvxTextAttrPage()
 
 void SvxTextAttrPage::dispose()
 {
+    m_pDrawingText.clear();
+    m_pCustomShapeText.clear();
     m_pTsbAutoGrowWidth.clear();
     m_pTsbAutoGrowHeight.clear();
     m_pTsbFitToSize.clear();
@@ -181,16 +186,24 @@ void SvxTextAttrPage::Reset( const SfxItemSet* rAttrs )
         m_pMtrFldBottom->SetText( "" );
     m_pMtrFldBottom->SaveValue();
 
-    // adjust to height
+    // adjust to height and autogrowsize
     if ( rAttrs->GetItemState( SDRATTR_TEXT_AUTOGROWHEIGHT ) != SfxItemState::DONTCARE )
     {
         m_pTsbAutoGrowHeight->SetState( static_cast<const SdrOnOffItem&>( rAttrs->Get( SDRATTR_TEXT_AUTOGROWHEIGHT ) ).
                         GetValue() ? TRISTATE_TRUE : TRISTATE_FALSE );
         m_pTsbAutoGrowHeight->EnableTriState( false );
+
+        m_pTsbAutoGrowSize->SetState( static_cast<const SdrOnOffItem&>( rAttrs->Get( SDRATTR_TEXT_AUTOGROWHEIGHT ) ).
+                        GetValue() ? TRISTATE_TRUE : TRISTATE_FALSE );
+        m_pTsbAutoGrowSize->EnableTriState( false );
     }
     else
+    {
         m_pTsbAutoGrowHeight->SetState( TRISTATE_INDET );
+        m_pTsbAutoGrowSize->SetState( TRISTATE_INDET );
+    }
     m_pTsbAutoGrowHeight->SaveValue();
+    m_pTsbAutoGrowSize->SaveValue();
 
     // adjust to width
     if ( rAttrs->GetItemState( SDRATTR_TEXT_AUTOGROWWIDTH ) != SfxItemState::DONTCARE )
@@ -202,17 +215,6 @@ void SvxTextAttrPage::Reset( const SfxItemSet* rAttrs )
     else
         m_pTsbAutoGrowWidth->SetState( TRISTATE_INDET );
     m_pTsbAutoGrowWidth->SaveValue();
-
-    // autogrowsize
-    if ( rAttrs->GetItemState( SDRATTR_TEXT_AUTOGROWHEIGHT ) != SfxItemState::DONTCARE )
-    {
-        m_pTsbAutoGrowSize->SetState( static_cast<const SdrOnOffItem&>( rAttrs->Get( SDRATTR_TEXT_AUTOGROWHEIGHT ) ).
-                        GetValue() ? TRISTATE_TRUE : TRISTATE_FALSE );
-        m_pTsbAutoGrowSize->EnableTriState( false );
-    }
-    else
-        m_pTsbAutoGrowSize->SetState( TRISTATE_INDET );
-    m_pTsbAutoGrowSize->SaveValue();
 
     // wordwrap text
     if ( rAttrs->GetItemState( SDRATTR_TEXT_WORDWRAP ) != SfxItemState::DONTCARE )
@@ -481,52 +483,47 @@ bool SvxTextAttrPage::FillItemSet( SfxItemSet* rAttrs)
 
 void SvxTextAttrPage::Construct()
 {
-    DBG_ASSERT( pView, "Keine gueltige View Uebergeben!" );
-
-    bFitToSizeEnabled = bContourEnabled = true;
-    bWordWrapTextEnabled = bAutoGrowSizeEnabled = bAutoGrowWidthEnabled = bAutoGrowHeightEnabled = false;
-
-    const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
-    if( rMarkList.GetMarkCount() == 1 )
+    switch (m_eObjKind)
     {
-        const SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
-        SdrObjKind eKind = (SdrObjKind) pObj->GetObjIdentifier();
-        if( pObj->GetObjInventor() == SdrInventor )
-        {
-            switch( eKind )
-            {
-                case OBJ_TEXT :
-                case OBJ_TITLETEXT :
-                case OBJ_OUTLINETEXT :
-                case OBJ_CAPTION :
-                {
-                    if(pObj->HasText())
-                    {
-                        // contour NOT possible for pure text objects
-                        bContourEnabled = false;
+        case OBJ_NONE:
+            // indeterminate, show them all
+            bFitToSizeEnabled = bContourEnabled = bWordWrapTextEnabled =
+            bAutoGrowSizeEnabled = bAutoGrowWidthEnabled = bAutoGrowHeightEnabled = true;
+            m_pCustomShapeText->Show();
+            m_pDrawingText->Show();
+            break;
+        case OBJ_TEXT:
+        case OBJ_TITLETEXT:
+        case OBJ_OUTLINETEXT:
+        case OBJ_CAPTION:
+            // contour NOT possible for pure text objects
+            bContourEnabled = bWordWrapTextEnabled = bAutoGrowSizeEnabled = false;
 
-                        // adjusting width and height is ONLY possible for pure text objects
-                        bAutoGrowWidthEnabled = bAutoGrowHeightEnabled = true;
-                    }
-                }
-                break;
-                case OBJ_CUSTOMSHAPE :
-                {
-                    bFitToSizeEnabled = bContourEnabled = false;
-                    bAutoGrowSizeEnabled = true;
-                    bWordWrapTextEnabled = true;
-                }
-                break;
-                default: ;//prevent warning
-            }
-        }
+            // adjusting width and height is ONLY possible for pure text objects
+            bFitToSizeEnabled = bAutoGrowWidthEnabled = bAutoGrowHeightEnabled = true;
+            m_pCustomShapeText->Hide();
+            m_pDrawingText->Show();
+            break;
+        case OBJ_CUSTOMSHAPE:
+            bFitToSizeEnabled = bContourEnabled = bAutoGrowWidthEnabled = bAutoGrowHeightEnabled = false;
+            bWordWrapTextEnabled = bAutoGrowSizeEnabled = true;
+            m_pDrawingText->Hide();
+            m_pCustomShapeText->Show();
+            break;
+        default:
+            bFitToSizeEnabled = bContourEnabled = true;
+            bWordWrapTextEnabled = bAutoGrowSizeEnabled = bAutoGrowWidthEnabled = bAutoGrowHeightEnabled = false;
+            m_pCustomShapeText->Hide();
+            m_pDrawingText->Show();
+            break;
     }
-    m_pTsbAutoGrowHeight->Enable( bAutoGrowHeightEnabled );
-    m_pTsbAutoGrowWidth->Enable( bAutoGrowWidthEnabled );
-    m_pTsbFitToSize->Enable( bFitToSizeEnabled );
-    m_pTsbContour->Enable( bContourEnabled );
-    m_pTsbAutoGrowSize->Enable( bAutoGrowSizeEnabled );
-    m_pTsbWordWrapText->Enable( bWordWrapTextEnabled );
+
+    m_pTsbAutoGrowHeight->Show( bAutoGrowHeightEnabled );
+    m_pTsbAutoGrowWidth->Show( bAutoGrowWidthEnabled );
+    m_pTsbFitToSize->Show( bFitToSizeEnabled );
+    m_pTsbContour->Show( bContourEnabled );
+    m_pTsbAutoGrowSize->Show( bAutoGrowSizeEnabled );
+    m_pTsbWordWrapText->Show( bWordWrapTextEnabled );
 }
 
 VclPtr<SfxTabPage> SvxTextAttrPage::Create( vcl::Window* pWindow,
@@ -639,8 +636,20 @@ IMPL_LINK_NOARG_TYPED(SvxTextAttrPage, ClickFullWidthHdl_Impl, Button*, void)
 |*
 \************************************************************************/
 
-IMPL_LINK_NOARG_TYPED(SvxTextAttrPage, ClickHdl_Impl, Button*, void)
+IMPL_LINK_TYPED(SvxTextAttrPage, ClickHdl_Impl, Button*, pButton, void)
 {
+    if (pButton == m_pTsbAutoGrowSize)
+    {
+        m_pTsbAutoGrowHeight->SetState(m_pTsbAutoGrowSize->GetState());
+        if (m_pTsbAutoGrowSize->GetState() == TRISTATE_TRUE)
+        {
+            m_pTsbFitToSize->SetState(TRISTATE_FALSE);
+            m_pTsbContour->SetState(TRISTATE_FALSE);
+        }
+    }
+    else if (pButton == m_pTsbAutoGrowHeight)
+        m_pTsbAutoGrowSize->SetState(m_pTsbAutoGrowHeight->GetState());
+
     bool bAutoGrowWidth  = m_pTsbAutoGrowWidth->GetState() == TRISTATE_TRUE;
     bool bAutoGrowHeight = m_pTsbAutoGrowHeight->GetState() == TRISTATE_TRUE;
     bool bFitToSize      = m_pTsbFitToSize->GetState() == TRISTATE_TRUE;
@@ -701,10 +710,10 @@ bool SvxTextAttrPage::IsTextDirectionLeftToRight() const
 
 void SvxTextAttrPage::PageCreated(const SfxAllItemSet& aSet)
 {
-    const OfaPtrItem* pViewItem = aSet.GetItem<OfaPtrItem>(SID_SVXTEXTATTRPAGE_VIEW, false);
+    const CntUInt16Item* pObjTypeItem = aSet.GetItem<CntUInt16Item>(SID_SVXTEXTATTRPAGE_OBJKIND, false);
 
-    if (pViewItem)
-        SetView( static_cast<SdrView *>(pViewItem->GetValue()));
+    if (pObjTypeItem)
+        SetObjKind(static_cast<SdrObjKind>(pObjTypeItem->GetValue()));
 
     Construct();
 }

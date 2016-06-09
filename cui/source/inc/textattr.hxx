@@ -20,6 +20,7 @@
 #define INCLUDED_CUI_SOURCE_INC_TEXTATTR_HXX
 
 #include <svx/dlgctrl.hxx>
+#include <svx/svdobj.hxx>
 
 #include <vcl/group.hxx>
 
@@ -39,6 +40,9 @@ class SvxTextAttrPage : public SvxTabPage
 private:
     static const sal_uInt16 pRanges[];
 
+    VclPtr<VclContainer>        m_pDrawingText;
+    VclPtr<VclContainer>        m_pCustomShapeText;
+
     VclPtr<TriStateBox>         m_pTsbAutoGrowWidth;
     VclPtr<TriStateBox>         m_pTsbAutoGrowHeight;
     VclPtr<TriStateBox>         m_pTsbFitToSize;
@@ -57,7 +61,7 @@ private:
     VclPtr<TriStateBox>         m_pTsbFullWidth;
 
     const SfxItemSet&   rOutAttrs;
-    const SdrView*      pView;
+    SdrObjKind    m_eObjKind;
 
     bool                bAutoGrowSizeEnabled;
     bool                bContourEnabled;
@@ -89,7 +93,7 @@ public:
     virtual void        PointChanged( vcl::Window* pWindow, RECT_POINT eRP ) override;
 
     void         Construct();
-    void         SetView( const SdrView* pSdrView ) { pView = pSdrView; }
+    void         SetObjKind(SdrObjKind eObjKind) { m_eObjKind = eObjKind; }
     virtual void PageCreated(const SfxAllItemSet& aSet) override;
 };
 
