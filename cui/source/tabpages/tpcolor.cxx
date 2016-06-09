@@ -787,6 +787,7 @@ IMPL_LINK_NOARG_TYPED(SvxColorTabPage, ClickAddHdl_Impl, Button*, void)
 
         m_pLbColor->Append( *pEntry );
         m_pValSetColorList->InsertItem( m_pValSetColorList->GetItemCount() + 1, pEntry->GetColor(), pEntry->GetName() );
+        m_pValSetColorList->Resize();
         ImpColorCountChanged();
 
         m_pLbColor->SelectEntryPos( m_pLbColor->GetEntryCount() - 1 );
@@ -855,8 +856,9 @@ IMPL_LINK_NOARG_TYPED(SvxColorTabPage, ClickModifyHdl_Impl, Button*, void)
             m_pLbColor->Modify( *pEntry, nPos );
             m_pLbColor->SelectEntryPos( nPos );
 
-            m_pValSetColorList->SetItemColor( nPos + 1, pEntry->GetColor() );
-            m_pValSetColorList->SetItemText( nPos + 1, pEntry->GetName() );
+            m_pValSetColorList->Clear();
+            m_pValSetColorList->addEntriesForXColorList( *pColorList );
+            m_pValSetColorList->SelectItem( nPos + 1 );
             m_pEdtName->SetText( aName );
 
             m_pCtlPreviewOld->Invalidate();
@@ -907,11 +909,21 @@ IMPL_LINK_NOARG_TYPED(SvxColorTabPage, ClickDeleteHdl_Impl, Button*, void)
             m_pLbColor->RemoveEntry( nPos );
             m_pValSetColorList->Clear();
             m_pValSetColorList->addEntriesForXColorList(*pColorList);
+            m_pValSetColorList->Resize();
             ImpColorCountChanged();
             //FillValueSet_Impl(*m_pValSetColorList);
 
             // positioning
-            m_pLbColor->SelectEntryPos( nPos );
+            long nColorCount = pColorList->Count();
+            if( nColorCount != 0 )
+            {
+                if( nPos >= nColorCount  )
+                    nPos = nColorCount - 1;
+                m_pLbColor->SelectEntryPos( nPos );
+            }
+            else
+                m_pLbColor->SetNoSelection();
+
             SelectColorLBHdl_Impl( *m_pLbColor );
 
             m_pCtlPreviewOld->Invalidate();
