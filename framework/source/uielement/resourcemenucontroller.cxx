@@ -112,8 +112,7 @@ ResourceMenuController::~ResourceMenuController()
 void ResourceMenuController::updatePopupMenu()
     throw ( css::uno::RuntimeException, std::exception )
 {
-    if ( m_xMenuContainer.is() && !m_bContextMenu )
-        // Container is still valid, no need to do anything on our side.
+    if ( ( m_xMenuContainer.is() && !m_bContextMenu ) || m_aMenuURL.isEmpty() )
         return;
 
     if ( m_aModuleName.isEmpty() )

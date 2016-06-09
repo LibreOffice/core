@@ -213,7 +213,6 @@ $(eval $(call gb_Library_add_exception_objects,svt,\
     svtools/source/table/cellvalueconversion \
     svtools/source/table/tablegeometry \
     svtools/source/uno/addrtempuno \
-    svtools/source/uno/contextmenuhelper \
     svtools/source/uno/fpicker \
     svtools/source/uno/framestatuslistener \
     svtools/source/uno/generictoolboxcontroller \
