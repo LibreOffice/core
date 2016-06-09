@@ -262,7 +262,7 @@ void BackingWindow::initControls()
     mpTemplateButton->SetMenuMode( MENUBUTTON_MENUMODE_TIMED );
 
     //set handlers
-    mpLocalView->setRightClickHdl(LINK(this, BackingWindow, RightClickHdl));
+    mpLocalView->setCreateContextMenuHdl(LINK(this, BackingWindow, CreateContextMenuHdl));
     mpLocalView->setOpenTemplateHdl(LINK(this, BackingWindow, OpenTemplateHdl));
     mpLocalView->setEditTemplateHdl(LINK(this, BackingWindow, EditTemplateHdl));
 
@@ -625,7 +625,7 @@ IMPL_LINK_TYPED( BackingWindow, MenuSelectHdl, MenuButton*, pButton, void )
     mpLocalView->GrabFocus();
 }
 
-IMPL_LINK_TYPED(BackingWindow, RightClickHdl, ThumbnailViewItem*, pItem, void)
+IMPL_LINK_TYPED(BackingWindow, CreateContextMenuHdl, ThumbnailViewItem*, pItem, void)
 {
     const TemplateViewItem *pViewItem = dynamic_cast<TemplateViewItem*>(pItem);
 
