@@ -46,9 +46,9 @@ import com.sun.star.beans.NamedValue;
  */
 public class LocalOfficeWindow
     extends java.awt.Canvas
-    implements OfficeWindow, XEventListener
+    implements XEventListener
 {
-    private transient OfficeConnection  mConnection;
+    private transient LocalOfficeConnection  mConnection;
     private transient XWindowPeer       mParentProxy;
     private transient XWindowPeer       mWindow;
     private boolean             bPeer = false;
@@ -59,7 +59,7 @@ public class LocalOfficeWindow
      * @param connection The office connection object the window
      *  belongs to.
      */
-    protected LocalOfficeWindow(OfficeConnection connection)
+    protected LocalOfficeWindow(LocalOfficeConnection connection)
     {
         mConnection = connection;
         mConnection.addEventListener(this);
@@ -103,7 +103,7 @@ public class LocalOfficeWindow
     }
 
     /// called when system parent is available, reparents the bean window
-    private synchronized void aquireSystemWindow()
+    private synchronized void acquireSystemWindow()
     {
         if ( !bPeer )
         {
@@ -146,7 +146,7 @@ public class LocalOfficeWindow
         // Java-Bug: componentShown() is never called :-(
         // is still at least in Java 1.4.1_02
         if ( b )
-            aquireSystemWindow();
+            acquireSystemWindow();
         else
             releaseSystemWindow();
     }

@@ -46,7 +46,6 @@ import com.sun.star.uno.XComponentContext;
  * @since OOo 2.0.0
  */
 public class LocalOfficeConnection
-    implements OfficeConnection
 {
     public static final String      OFFICE_APP_NAME     = "soffice";
     public static final String       OFFICE_LIB_NAME     = "officebean";
@@ -201,17 +200,6 @@ public class LocalOfficeConnection
     }
 
     /**
-     * Sets an AWT container factory.
-     *
-     * @param containerFactory This is a application provided AWT container
-     *  factory.
-     */
-    @Deprecated
-    public void setContainerFactory(ContainerFactory containerFactory)
-    {
-    }
-
-    /**
      * Retrieves the UNO component context.
      * Establishes a connection if necessary and initialises the
      * UNO service manager if it has not already been initialised.
@@ -233,8 +221,7 @@ public class LocalOfficeConnection
      * @param container This is an AWT container.
      * @return The office window instance.
      */
-    @Deprecated
-    public OfficeWindow createOfficeWindow(Container container)
+    public LocalOfficeWindow createOfficeWindow(Container container)
     {
         return new LocalOfficeWindow(this);
     }
@@ -653,14 +640,13 @@ public class LocalOfficeConnection
      * @para This is an implementation of the native office service.
      */
     private class OfficeService
-        implements NativeService
     {
         /**
          * Retrieve the office service identifier.
          *
          * @return The identifier of the office service.
          */
-        public String getIdentifier()
+        private String getIdentifier()
         {
             String identifier = null;
             try
