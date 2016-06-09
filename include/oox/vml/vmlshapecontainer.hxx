@@ -20,10 +20,16 @@
 #ifndef INCLUDED_OOX_VML_VMLSHAPECONTAINER_HXX
 #define INCLUDED_OOX_VML_VMLSHAPECONTAINER_HXX
 
+#include <cstddef>
+#include <functional>
+#include <memory>
+#include <stack>
+
 #include <com/sun/star/awt/Rectangle.hpp>
+#include <com/sun/star/uno/Reference.hxx>
 #include <oox/helper/refmap.hxx>
 #include <oox/helper/refvector.hxx>
-#include <stack>
+#include <rtl/ustring.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace drawing { class XShapes; }

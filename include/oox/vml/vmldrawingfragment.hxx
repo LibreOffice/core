@@ -20,8 +20,19 @@
 #ifndef INCLUDED_OOX_VML_VMLDRAWINGFRAGMENT_HXX
 #define INCLUDED_OOX_VML_VMLDRAWINGFRAGMENT_HXX
 
+#include <com/sun/star/uno/Reference.hxx>
+#include <oox/core/contexthandler.hxx>
 #include <oox/core/fragmenthandler2.hxx>
 #include <oox/dllapi.h>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
+
+namespace com { namespace sun { namespace star {
+    namespace io { class XInputStream; }
+} } }
+
+namespace oox { class AttributeList; }
+namespace oox { namespace core { class XmlFilterBase; } }
 
 namespace oox {
 namespace vml {

@@ -19,6 +19,7 @@
 
 #include "ShapeFilterBase.hxx"
 #include "oox/drawingml/chart/chartconverter.hxx"
+#include <oox/helper/graphichelper.hxx>
 #include "oox/ole/vbaproject.hxx"
 #include "oox/drawingml/theme.hxx"
 

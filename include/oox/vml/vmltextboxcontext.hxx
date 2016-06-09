@@ -20,11 +20,16 @@
 #ifndef INCLUDED_OOX_VML_VMLTEXTBOXCONTEXT_HXX
 #define INCLUDED_OOX_VML_VMLTEXTBOXCONTEXT_HXX
 
+#include <cstddef>
+
+#include <oox/core/contexthandler.hxx>
 #include <oox/core/contexthandler2.hxx>
-#include <oox/helper/attributelist.hxx>
 #include <oox/vml/vmltextbox.hxx>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
 
 namespace oox {
+    class AttributeList;
     class GraphicHelper;
 
 namespace vml {

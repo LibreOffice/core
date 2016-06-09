@@ -30,6 +30,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include "oox/vml/vmldrawingfragment.hxx"
 #include "oox/vml/vmlshape.hxx"
+#include <oox/vml/vmlshapecontainer.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
 #include "oox/drawingml/themefragmenthandler.hxx"
