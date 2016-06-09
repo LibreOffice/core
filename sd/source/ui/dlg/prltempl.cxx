@@ -237,52 +237,47 @@ void SdPresLayoutTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
     SfxAllItemSet aSet(*(aInputSet.GetPool()));
 
     if (nId == mnLine)
-        {
-            aSet.Put (SvxColorListItem(pColorTab,SID_COLOR_TABLE));
-            aSet.Put (SvxDashListItem(pDashList,SID_DASH_LIST));
-            aSet.Put (SvxLineEndListItem(pLineEndList,SID_LINEEND_LIST));
-            aSet.Put (SfxUInt16Item(SID_DLG_TYPE,nDlgType));
+    {
+        aSet.Put (SvxColorListItem(pColorTab,SID_COLOR_TABLE));
+        aSet.Put (SvxDashListItem(pDashList,SID_DASH_LIST));
+        aSet.Put (SvxLineEndListItem(pLineEndList,SID_LINEEND_LIST));
+        aSet.Put (SfxUInt16Item(SID_DLG_TYPE,nDlgType));
         rPage.PageCreated(aSet);
-        }
-
+    }
     else if (nId == mnArea)
-        {
-            aSet.Put (SvxColorListItem(pColorTab,SID_COLOR_TABLE));
-            aSet.Put (SvxGradientListItem(pGradientList,SID_GRADIENT_LIST));
-            aSet.Put (SvxHatchListItem(pHatchingList,SID_HATCH_LIST));
-            aSet.Put (SvxBitmapListItem(pBitmapList,SID_BITMAP_LIST));
-            aSet.Put (SfxUInt16Item(SID_PAGE_TYPE,nPageType));
-            aSet.Put (SfxUInt16Item(SID_DLG_TYPE,nDlgType));
-            aSet.Put (SfxUInt16Item(SID_TABPAGE_POS,nPos));
-            rPage.PageCreated(aSet);
-        }
-
+    {
+        aSet.Put (SvxColorListItem(pColorTab,SID_COLOR_TABLE));
+        aSet.Put (SvxGradientListItem(pGradientList,SID_GRADIENT_LIST));
+        aSet.Put (SvxHatchListItem(pHatchingList,SID_HATCH_LIST));
+        aSet.Put (SvxBitmapListItem(pBitmapList,SID_BITMAP_LIST));
+        aSet.Put (SfxUInt16Item(SID_PAGE_TYPE,nPageType));
+        aSet.Put (SfxUInt16Item(SID_DLG_TYPE,nDlgType));
+        aSet.Put (SfxUInt16Item(SID_TABPAGE_POS,nPos));
+        rPage.PageCreated(aSet);
+    }
     else if (nId == mnShadow)
-        {
-            aSet.Put (SvxColorListItem(pColorTab,SID_COLOR_TABLE));
-            aSet.Put (SfxUInt16Item(SID_PAGE_TYPE,nPageType));
-            aSet.Put (SfxUInt16Item(SID_DLG_TYPE,nDlgType));
-            rPage.PageCreated(aSet);
-        }
-
+    {
+        aSet.Put (SvxColorListItem(pColorTab,SID_COLOR_TABLE));
+        aSet.Put (SfxUInt16Item(SID_PAGE_TYPE,nPageType));
+        aSet.Put (SfxUInt16Item(SID_DLG_TYPE,nDlgType));
+        rPage.PageCreated(aSet);
+    }
     else if (nId == mnTransparency)
-        {
-            aSet.Put (SfxUInt16Item(SID_PAGE_TYPE,nPageType));
-            aSet.Put (SfxUInt16Item(SID_DLG_TYPE,nDlgType));
-            rPage.PageCreated(aSet);
-        }
-
+    {
+        aSet.Put (SfxUInt16Item(SID_PAGE_TYPE,nPageType));
+        aSet.Put (SfxUInt16Item(SID_DLG_TYPE,nDlgType));
+        rPage.PageCreated(aSet);
+    }
     else if (nId == mnFont)
-        {
-            SvxFontListItem aItem(*static_cast<const SvxFontListItem*>(mpDocShell->GetItem( SID_ATTR_CHAR_FONTLIST) ) );
-            aSet.Put (SvxFontListItem( aItem.GetFontList(), SID_ATTR_CHAR_FONTLIST));
-            rPage.PageCreated(aSet);
-        }
-
+    {
+        SvxFontListItem aItem(*static_cast<const SvxFontListItem*>(mpDocShell->GetItem( SID_ATTR_CHAR_FONTLIST) ) );
+        aSet.Put (SvxFontListItem( aItem.GetFontList(), SID_ATTR_CHAR_FONTLIST));
+        rPage.PageCreated(aSet);
+    }
     else if (nId == mnEffects)
-        {
-            rPage.PageCreated(aSet);
-        }
+    {
+        rPage.PageCreated(aSet);
+    }
 }
 
 const SfxItemSet* SdPresLayoutTemplateDlg::GetOutputItemSet() const
