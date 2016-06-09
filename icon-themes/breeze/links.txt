@@ -1338,3 +1338,8 @@ vcl/res/index.png cmd/sc_insertmultiindex.png
 # ==============================================
 xmlsecurity/res/key_12.png dbaccess/res/pkey.png
 xmlsecurity/res/signet_11x16.png xmlsecurity/res/notcertificate_16.png
+
+
+cmd/lc_diagramaxisall.png cmd/sc_diagramarea.png
+cmd/sc_diagramaxisz.png cmd/sc_diagramarea.png
+cmd/sc_setoutline.png cmd/lc_outlineformat.png

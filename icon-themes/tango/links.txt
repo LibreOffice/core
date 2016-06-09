@@ -103,13 +103,16 @@ cmd/sc_pagesetup.png cmd/sc_setdocumentproperties.png
 cmd/lc_closepreview.png cmd/lc_closedoc.png
 cmd/sc_closepreview.png cmd/sc_closedoc.png
 cmd/lc_objectmirrorvertical.png cmd/sc_flipvertical.png
+cmd/sc_objectmirrorvertical.png cmd/sc_flipvertical.png
 cmd/lc_objectmirrorhorizontal.png cmd/sc_fliphorizontal.png
+cmd/sc_objectmirrorhorizontal.png cmd/sc_fliphorizontal.png
 cmd/sc_exporttopdf.png cmd/sc_exportdirecttopdf.png
 cmd/sc_numberformattime.png cmd/sc_timefield.png
 
 # Duplicates
 cmd/lc_thesaurusdialog.png cmd/lc_thesaurus.png
 cmd/sc_thesaurusdialog.png cmd/sc_thesaurus.png
+cmd/sc_thesaurusfromcontext.png cmd/sc_thesaurus.png
 cmd/lc_outlineleft.png cmd/lc_incrementlevel.png
 cmd/lc_outlineright.png cmd/lc_decrementlevel.png
 cmd/lc_outlineup.png cmd/lc_moveup.png
@@ -577,3 +580,5 @@ cmd/sc_lastslide.png cmd/sc_lastpage.png
 cmd/sc_previousslide.png cmd/sc_navigateback.png
 cmd/sc_nextslide.png cmd/sc_navigateforward.png
 cmd/sc_slidesetup.png cmd/sc_setdocumentproperties.png
+
+cmd/sc_trackchangesbar.png cmd/sc_ok.png
