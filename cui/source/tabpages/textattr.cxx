@@ -204,9 +204,9 @@ void SvxTextAttrPage::Reset( const SfxItemSet* rAttrs )
     m_pTsbAutoGrowWidth->SaveValue();
 
     // autogrowsize
-    if ( rAttrs->GetItemState( SDRATTR_TEXT_AUTOGROWSIZE ) != SfxItemState::DONTCARE )
+    if ( rAttrs->GetItemState( SDRATTR_TEXT_AUTOGROWHEIGHT ) != SfxItemState::DONTCARE )
     {
-        m_pTsbAutoGrowSize->SetState( static_cast<const SdrOnOffItem&>( rAttrs->Get( SDRATTR_TEXT_AUTOGROWSIZE ) ).
+        m_pTsbAutoGrowSize->SetState( static_cast<const SdrOnOffItem&>( rAttrs->Get( SDRATTR_TEXT_AUTOGROWHEIGHT ) ).
                         GetValue() ? TRISTATE_TRUE : TRISTATE_FALSE );
         m_pTsbAutoGrowSize->EnableTriState( false );
     }
@@ -384,7 +384,7 @@ bool SvxTextAttrPage::FillItemSet( SfxItemSet* rAttrs)
     eState = m_pTsbAutoGrowSize->GetState();
     if( m_pTsbAutoGrowSize->IsValueChangedFromSaved() )
     {
-        rAttrs->Put( makeSdrTextAutoGrowSizeItem ( TRISTATE_TRUE == eState ) );
+        rAttrs->Put( makeSdrTextAutoGrowHeightItem( TRISTATE_TRUE == eState ) );
     }
 
     eState = m_pTsbWordWrapText->GetState();
