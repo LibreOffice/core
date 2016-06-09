@@ -1,20 +1,30 @@
+merge (anonymous namespace)::C2 with (anonymous namespace)::C3
+merge (anonymous namespace)::C3 with (anonymous namespace)::C4
+merge (anonymous namespace)::C4 with (anonymous namespace)::C5
+merge (anonymous namespace)::Char1 with (anonymous namespace)::Char2
+merge (anonymous namespace)::Char2 with (anonymous namespace)::Char3
+merge (anonymous namespace)::DIBInfoHeader with (anonymous namespace)::DIBV5Header
 merge (anonymous namespace)::Data with cppu::PropertySetMixinImpl::Impl
+merge (anonymous namespace)::N with (anonymous namespace)::P
+merge (anonymous namespace)::O with (anonymous namespace)::O2
 merge (anonymous namespace)::ParserData with (anonymous namespace)::Entity
 merge (anonymous namespace)::RecursiveTest with (anonymous namespace)::SimpleRecursiveTest
+merge (anonymous namespace)::ReflectionTransition with (anonymous namespace)::RochadeTransition
+merge (anonymous namespace)::SimpleTransition with (anonymous namespace)::DiamondTransition
 merge (anonymous namespace)::StrEntries with (anonymous namespace)::RemoveEditAttribsHandler
+merge (anonymous namespace)::empty with (anonymous namespace)::second
 merge AbstractMailMergeWizard with AbstractMailMergeWizard_Impl
 merge AbstractSwInsertDBColAutoPilot with AbstractSwInsertDBColAutoPilot_Impl
 merge AddressWalker with AddressWalkerWriter
 merge B3dTransformationSet with B3dViewport
 merge B3dViewport with B3dCamera
 merge BibTabPage with BibGeneralPage
-merge BroadcasterHelperHolder with PluginModel
 merge CGMOutAct with CGMImpressOutAct
 merge CSS1Parser with SvxCSS1Parser
 merge CffGlobal with CffSubsetterContext
-merge DIBInfoHeader with DIBV5Header
 merge DbGridControl with FmGridControl
 merge DdeItem with DdeGetPutItem
+merge DdeLink with DdeHotLink
 merge DomVisitor with DomExport
 merge DownloadInteractionHandler with UpdateCheck
 merge E3dScene with E3dPolyScene
@@ -28,6 +38,7 @@ merge FillTypeLB with SvxFillTypeBox
 merge FmGridListener with FmXGridPeer::GridListenerDelegator
 merge FmXDisposeListener with DisposeListenerGridBridge
 merge FontSelectPatternAttributes with FontSelectPattern
+merge GLWindow with GLX11Window
 merge GraphiteLayout with GraphiteLayoutImpl
 merge GroupTable with PPTWriterBase
 merge HostDetailsContainer with DavDetailsContainer
@@ -64,27 +75,25 @@ merge IXFStream with XFSaxStream
 merge IXFStyle with XFStyle
 merge IconChoicePage with SvxHyperlinkTabPageBase
 merge ImplEESdrWriter with ImplEscherExSdr
-merge ImplGlyphFallbackFontSubstitution with FcGlyphFallbackSubstititution
-merge ImplPreMatchFontSubstitution with FcPreMatchSubstititution
+merge ImplGlyphFallbackFontSubstitution with FcGlyphFallbackSubstitution
+merge ImplPreMatchFontSubstitution with FcPreMatchSubstitution
 merge LineLB with SvxLineBox
 merge LineProperties with chart::ErrorBar
 merge LwpDLList with LwpParaProperty
 merge LwpDLVListHead with LwpPropList
 merge LwpMarker with LwpStoryMarker
-merge Mediator with PluginConnector
 merge ObservableThread with SwAsyncRetrieveInputStreamThread
 merge OldBasicPassword with basic::SfxScriptLibraryContainer
 merge OpenGLDeviceInfo with X11OpenGLDeviceInfo
-merge OpenGLSalBitmapOp with ScaleOp
 merge OpenGLSalGraphicsImpl with X11OpenGLSalGraphicsImpl
 merge PPTExBulletProvider with PPTWriter
-merge PluginComm with UnxPluginComm
-merge PluginControl_Impl with XPlugin_Impl
 merge RefNode with RscTop
 merge SOParagraph with ParagraphObj
 merge SalData with SalGenericData
 merge SalInfoPrinter with PspSalInfoPrinter
 merge SalInstance with SalGenericInstance
+merge SalMenu with GtkSalMenu
+merge SalMenuItem with GtkSalMenuItem
 merge SalPrinter with PspSalPrinter
 merge SalSession with (anonymous namespace)::IceSalSession
 merge SalSystem with SalGenericSystem
@@ -107,7 +116,7 @@ merge ScTabView with ScViewFunc
 merge ScVbaControlContainer with ScVbaButtonContainer
 merge ScVbaObjectContainer with ScVbaControlContainer
 merge ScViewFunc with ScDBFunc
-merge SceneObject with Iris
+merge SceneObject with (anonymous namespace)::Iris
 merge SdOptionsGrid with SdOptions
 merge SdOptionsZoom with SdOptions
 merge SdTransferable::UserData with sd::slidesorter::controller::TransferableData
@@ -117,6 +126,7 @@ merge SdrEditView with SdrPolyEditView
 merge SdrEscherImport with SdrPowerPointImport
 merge SdrExchangeView with SdrDragView
 merge SdrGlueEditView with SdrObjEditView
+merge SdrItemBrowserWindow with SdrItemBrowser
 merge SdrMarkView with SdrEditView
 merge SdrObjEditView with SdrExchangeView
 merge SdrPaintView with SdrSnapView
@@ -125,12 +135,13 @@ merge SdrPowerPointImport with ImplSdPPTImport
 merge SdrSnapView with SdrMarkView
 merge SdwTextBoxRecord with SdwTextArt
 merge ServerFontLayoutEngine with HbLayoutEngine
-merge SfxMenuManager with SfxPopupMenuManager
+merge SfxMacroTabPage_ with SfxMacroTabPage
 merge SfxModelSubComponent with sfx2::DocumentUndoManager
 merge SfxMultiFixRecordWriter with SfxMultiVarRecordWriter
 merge SfxSingleRecordReader with SfxMultiRecordReader
 merge SfxSingleRecordWriter with SfxMultiFixRecordWriter
 merge SfxWorkWindow with SfxFrameWorkWin_Impl
+merge SmElement with SmElementSeparator
 merge SmFontPickList with SmFontPickListBox
 merge StarSymbolToMSMultiFont with StarSymbolToMSMultiFontImpl
 merge StgAvlIterator with StgIterator
@@ -149,21 +160,23 @@ merge SvxRTFParser with EditRTFParser
 merge SvxShapeMaster with SdXShape
 merge SvxUnoDrawMSFactory with SvxFmMSFactory
 merge SwAccessibleFrame with SwAccessibleContext
-merge SwCrsrShell with SwEditShell
+merge SwComboBox with CaptionComboBox
+merge SwCursorShell with SwEditShell
 merge SwEditShell with SwFEShell
 merge SwFEShell with SwWrtShell
 merge SwImpBlocks with SwXMLTextBlocks
 merge SwInterHyphInfo with SwHyphArgs
 merge SwNumberTreeNode with SwNodeNum
-merge SwSelPaintRects with SwShellCrsr
+merge SwSelPaintRects with SwShellCursor
 merge SwSidebarItem with SwAnnotationItem
 merge SwTextAdjuster with SwTextCursor
 merge SwTextAttrIterator with SwLanguageIterator
-merge SwUnoCrsr with SwUnoTableCrsr
+merge SwUnoCursor with SwUnoTableCursor
 merge SwXParaFrameEnumeration with SwXParaFrameEnumerationImpl
 merge SwXParagraphEnumeration with SwXParagraphEnumerationImpl
 merge SwXTextRanges with SwXTextRangesImpl
 merge TextObj with TextObjBinary
+merge TextRenderImpl with CairoTextRender
 merge TextView with ExtTextView
 merge UniqueIndexImpl with UniqueIndex
 merge UpdateCheckConfigListener with UpdateCheck
@@ -181,9 +194,8 @@ merge XMLTransformer with XMLTransformerBase
 merge XclDebugObjCounter with XclRootData
 merge XclExpFutureRecord with XclExpChFutureRecordBase
 merge XclExpSubStream with XclExpChart
+merge XclImpCachedValue with XclImpCrn
 merge XclNumFmtBuffer with XclImpNumFmtBuffer
-merge SdrItemBrowserWindow with SdrItemBrowser
-merge SfxMacroTabPage_ with SfxMacroTabPage
 merge abp::OModuleResourceClient with abp::OABSPilotUno
 merge accessibility::GridControlAccessibleElement with accessibility::AccessibleGridControlTableBase
 merge accessibility::IComboListBoxHelper with VCLListBoxHelper
@@ -204,7 +216,9 @@ merge chart::ResourceChangeListener with chart::ChartTypeTabPage
 merge comphelper::ChainablePropertySet with comphelper::ChainableHelperNoState
 merge comphelper::NameContainerImpl with comphelper::NameContainer
 merge comphelper::OAccessibleContextHelper with comphelper::OCommonAccessibleComponent
+merge comphelper::OAnyEnumeration_BASE with comphelper::OAnyEnumeration
 merge comphelper::OComponentProxyAggregation with comphelper::OAccessibleWrapper
+merge comphelper::OContainerListenerAdapter_BASE with comphelper::OContainerListenerAdapter
 merge comphelper::OProxyAggregation with comphelper::OComponentProxyAggregationHelper
 merge comphelper::OSeekableInputWrapper_BASE with comphelper::OSeekableInputWrapper
 merge comphelper::PropertySetInfo_BASE with comphelper::PropertySetInfo
@@ -230,6 +244,7 @@ merge dbaccess::OColumnWrapper with dbaccess::OTableColumnDescriptorWrapper
 merge dbaccess::StorageInputStream with dbaccess::StorageXMLInputStream
 merge dbaui::DBSubComponentController with rptui::OReportController
 merge dbaui::IEntryFilter with dbaui::(anonymous namespace)::FilterByEntryDataId
+merge dbaui::IUpdateHelper with dbaui::OParameterUpdateHelper
 merge dbaui::OGenericUnoController with dbaui::OApplicationController
 merge dbaui::OQueryView with dbaui::OQueryDesignView
 merge dbaui::OSplitterView with dbaui::OApplicationDetailView
@@ -245,7 +260,6 @@ merge drawinglayer::primitive2d::ObjectAndViewTransformationDependentPrimitive2D
 merge drawinglayer::primitive2d::ViewTransformationDependentPrimitive2D with drawinglayer::primitive2d::WallpaperBitmapPrimitive2D
 merge drawinglayer::processor3d::DefaultProcessor3D with drawinglayer::processor3d::ZBufferProcessor3D
 merge fileaccess::TaskManager with fileaccess::shell
-merge frm::ICommandDescriptionProvider with frm::DefaultCommandDescriptionProvider
 merge frm::ICommandImageProvider with frm::DocumentCommandImageProvider
 merge frm::IEngineStatusListener with frm::RichTextControlImpl
 merge frm::IEngineTextChangeListener with frm::ORichTextModel
@@ -261,7 +275,6 @@ merge i_xml_parser_event_handler with (anonymous namespace)::recently_used_file_
 merge oglcanvas::CanvasHelper with oglcanvas::BitmapCanvasHelper
 merge oglcanvas::IBufferContext with oglcanvas::(anonymous namespace)::BufferContextImpl
 merge old_SdrDownCompat with SdIOCompat
-merge oox::dump::Address with oox::dump::TokenAddress
 merge oox::dump::ConstList with oox::dump::MultiList
 merge oox::dump::FlagsList with oox::dump::CombiList
 merge oox::dump::ItemFormat with oox::dump::CombiList::ExtItemFormat
@@ -271,7 +284,6 @@ merge oox::ole::OleObjectInfo with oox::vml::OleObjectInfo
 merge oox::ole::VbaFilterConfig with oox::ole::VbaProject
 merge oox::vml::CustomShape with oox::vml::ComplexShape
 merge oox::xls::BiffFragmentHandler with oox::xls::BiffWorkbookFragmentBase
-merge oox::xls::BiffInputStreamPos with oox::xls::BiffInputStreamPosGuard
 merge oox::xls::FunctionProvider with oox::xls::OpCodeProvider
 merge oox::xls::IWorksheetProgress with oox::xls::WorksheetGlobals
 merge pcr::(anonymous namespace)::ISQLCommandPropertyUI with pcr::(anonymous namespace)::SQLCommandPropertyUI
@@ -298,6 +310,7 @@ merge sc::opencl::RRI with sc::opencl::OpRRI
 merge sc::opencl::SumOfProduct with sc::opencl::OpSumProduct
 merge sc::opencl::XNPV with sc::opencl::OpXNPV
 merge sd::BroadcastHelperOwner with sd::DrawController
+merge sd::ClientInfo with sd::ClientInfoInternal
 merge sd::FuOutline with sd::FuOutlineText
 merge sd::IBluetoothSocket with sd::BufferedStreamSocket
 merge sd::ICustomAnimationListController with sd::CustomAnimationPane
@@ -369,7 +382,8 @@ merge svx::RegistrationItemSetHolder with svx::DatabaseRegistrationDialog
 merge svxform::(anonymous namespace)::IScript with svxform::(anonymous namespace)::NewStyleUNOScript
 merge svxform::DispatchInterceptor with svxform::FormController
 merge svxform::IFormScriptingEnvironment with svxform::FormScriptingEnvironment
-merge sw::IShellCursorSupplier with SwCrsrShell
+merge sw::ICoreFrameStyle with SwXFrameStyle
+merge sw::IShellCursorSupplier with SwCursorShell
 merge sw::WriterListener with SwClient
 merge sw::mark::ContentIdxStore with (anonymous namespace)::ContentIdxStoreImpl
 merge sw::mark::IBookmark with sw::mark::Bookmark
@@ -380,6 +394,7 @@ merge tdoc_ucp::OfficeDocumentsEventListener with tdoc_ucp::ContentProvider
 merge toolkit::NameContainer_Impl with toolkit::ScriptEventContainer
 merge toolkit::ScrollableInterface with toolkit::ScrollableWrapper
 merge unographic::GraphicTransformer with unographic::Graphic
+merge vcl::DeletionNotifier with SalFrame
 merge vcl::DisplayConnectionDispatch with vcl::DisplayConnection
 merge vcl::ExtOutDevData with vcl::PDFExtOutDevData
 merge vcl::SolarThreadExecutor with vcl::solarthread::detail::GenericSolarThreadExecutor
@@ -403,3 +418,4 @@ merge xmloff::OElementImport with xmloff::OControlImport
 merge xmloff::OPropertyExport with xmloff::OElementExport
 merge xmloff::OPropertyImport with xmloff::OElementImport
 merge xmloff::OURLReferenceImport with xmloff::OButtonImport
+merge xmlsecurity::Certificate with X509Certificate_NssImpl

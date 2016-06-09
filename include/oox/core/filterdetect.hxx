@@ -95,9 +95,7 @@ private:
 };
 
 
-class SAL_DLLPUBLIC_TEMPLATE FilterDetect_BASE : public ::cppu::WeakImplHelper<css::document::XExtendedFilterDetection, css::lang::XServiceInfo> {};
-
-class OOX_DLLPUBLIC FilterDetect : public FilterDetect_BASE
+class OOX_DLLPUBLIC FilterDetect : public ::cppu::WeakImplHelper<css::document::XExtendedFilterDetection, css::lang::XServiceInfo>
 {
 public:
     explicit            FilterDetect( const css::uno::Reference< css::uno::XComponentContext >& rxContext )
