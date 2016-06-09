@@ -122,19 +122,16 @@ css::uno::Sequence<OUString> SAL_CALL ShutdownIcon::getSupportedServiceNames()
 bool ShutdownIcon::bModalMode = false;
 ShutdownIcon* ShutdownIcon::pShutdownIcon = nullptr;
 
-#if !defined( ENABLE_QUICKSTART_APPLET )
-// To remove conditionals
 extern "C" {
     static void disabled_initSystray() { }
     static void disabled_deInitSystray() { }
 }
-#endif
 
 namespace {
 
 boost::logic::tribool loaded(boost::logic::indeterminate);
-oslGenericFunction pInitSystray(nullptr);
-oslGenericFunction pDeInitSystray(nullptr);
+oslGenericFunction pInitSystray = disabled_initSystray;
+oslGenericFunction pDeInitSystray = disabled_deInitSystray;
 
 bool LoadModule()
 {
@@ -170,10 +167,6 @@ bool LoadModule()
             loaded = true;
         }
 #  endif // UNX
-#else
-        pInitSystray = disabled_initSystray;
-        pDeInitSystray = disabled_deInitSystray;
-        loaded = false;
 #endif // ENABLE_QUICKSTART_APPLET
     }
     assert(!boost::logic::indeterminate(loaded));
