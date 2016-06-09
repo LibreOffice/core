@@ -1440,11 +1440,15 @@ void GtkSalFrame::Show( bool bVisible, bool bNoActivate )
                 m_nFloats++;
                 if( ! getDisplay()->GetCaptureFrame() && m_nFloats == 1 )
                 {
-                    GdkDeviceManager* pDeviceManager = gdk_display_get_device_manager(getGdkDisplay());
-                    GdkDevice* pPointer = gdk_device_manager_get_client_pointer(pDeviceManager);
-                    GdkDevice* pKeyboard = gdk_device_get_associated_device(pPointer);
-                    gtk_device_grab_add(m_pParent->getWindow(), pPointer, false);
-                    gtk_device_grab_add(m_pParent->getWindow(), pKeyboard, false);
+                    GtkWidget* pGrabWidgetBeforeShowFloat;
+                    while ((pGrabWidgetBeforeShowFloat = gtk_grab_get_current()))
+                    {
+                        m_aGrabWidgetsBeforeShowFloat.push_back(pGrabWidgetBeforeShowFloat);
+                        gtk_grab_remove(pGrabWidgetBeforeShowFloat);
+                    }
+                    grabPointer(true, true);
+                    GtkSalFrame *pKeyboardFrame = m_pParent ? m_pParent : this;
+                    pKeyboardFrame->grabKeyboard(true);
                 }
                 // #i44068# reset parent's IM context
                 if( m_pParent )
@@ -1460,11 +1464,12 @@ void GtkSalFrame::Show( bool bVisible, bool bNoActivate )
                 m_nFloats--;
                 if( ! getDisplay()->GetCaptureFrame() && m_nFloats == 0)
                 {
-                    GdkDeviceManager* pDeviceManager = gdk_display_get_device_manager(getGdkDisplay());
-                    GdkDevice* pPointer = gdk_device_manager_get_client_pointer(pDeviceManager);
-                    GdkDevice* pKeyboard = gdk_device_get_associated_device(pPointer);
-                    gtk_device_grab_remove(m_pParent->getWindow(), pKeyboard);
-                    gtk_device_grab_remove(m_pParent->getWindow(), pPointer);
+                    GtkSalFrame *pKeyboardFrame = m_pParent ? m_pParent : this;
+                    pKeyboardFrame->grabKeyboard(false);
+                    grabPointer(false);
+                    for (auto i = m_aGrabWidgetsBeforeShowFloat.rbegin(); i != m_aGrabWidgetsBeforeShowFloat.rend(); ++i)
+                        gtk_grab_add(*i);
+                    m_aGrabWidgetsBeforeShowFloat.clear();
                 }
             }
             gtk_widget_hide( m_pWindow );
