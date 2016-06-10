@@ -20,6 +20,7 @@
 #include <recording/dispatchrecorder.hxx>
 #include <com/sun/star/frame/DispatchStatement.hpp>
 #include <com/sun/star/script/Converter.hpp>
+#include <o3tl/any.hxx>
 #include <services.h>
 #include <vcl/svapp.hxx>
 #include <comphelper/processfactory.hxx>
@@ -251,15 +252,14 @@ void SAL_CALL DispatchRecorder::AppendToBuffer( const css::uno::Any& aValue, OUS
         else
             aArgumentBuffer.append("\"\"");
     }
-    else if (aValue.getValueType() == cppu::UnoType<cppu::UnoCharType>::get())
+    else if (auto nVal = o3tl::tryAccess<sal_Unicode>(aValue))
     {
         // character variables are recorded as strings, back conversion must be handled in client code
-        sal_Unicode nVal = *static_cast<sal_Unicode const *>(aValue.getValue());
         aArgumentBuffer.append("\"");
-        if ( (sal_Unicode(nVal) == '\"') )
+        if ( (*nVal == '\"') )
             // encode \" to \"\"
-            aArgumentBuffer.append((sal_Unicode)nVal);
-        aArgumentBuffer.append((sal_Unicode)nVal);
+            aArgumentBuffer.append(*nVal);
+        aArgumentBuffer.append(*nVal);
         aArgumentBuffer.append("\"");
     }
     else
@@ -416,9 +416,7 @@ void SAL_CALL DispatchRecorder::replaceByIndex(sal_Int32 idx, const css::uno::An
 
         }
 
-    css::frame::DispatchStatement const *pStatement;
-
-    pStatement = static_cast<css::frame::DispatchStatement const *>(element.getValue());
+    auto pStatement = o3tl::doAccess<css::frame::DispatchStatement>(element);
 
     css::frame::DispatchStatement aStatement(
         pStatement->aCommand,
