@@ -721,7 +721,14 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
                     {
                         // execute with arguments - call directly
                         pItem = pDispatcher->Execute(GetId(), nCall, xSet.get(), &aInternalSet, nModifier);
-                        bSuccess = (pItem != NULL);
+                        if ( pItem != NULL )
+                        {
+                            if ( dynamic_cast< const SfxBoolItem *>( pItem ) !=  NULL )
+                                bSuccess = dynamic_cast< const SfxBoolItem *>( pItem )->GetValue();
+                            else if ( dynamic_cast< const SfxVoidItem *>( pItem ) ==  NULL )
+                                bSuccess = sal_True;  // all other types are true
+                         }
+                         // else bSuccess = false look above, it is false
                     }
                     else
                     {
