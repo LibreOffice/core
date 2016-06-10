@@ -21,6 +21,8 @@
 
 #include <cstdlib>
 
+#include <basegfx/numeric/ftools.hxx>
+#include <o3tl/any.hxx>
 #include <osl/endian.h>
 #include <eppt.hxx>
 #include "text.hxx"
@@ -1380,7 +1382,7 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_u
 void PPTWriter::ImplWriteObjectEffect( SvStream& rSt,
     css::presentation::AnimationEffect eAe,
     css::presentation::AnimationEffect eTe,
-    sal_uInt16 nOrder )
+    sal_Int32 nOrder )
 {
     EscherExContainer aAnimationInfo( rSt, EPP_AnimationInfo );
     EscherExAtom aAnimationInfoAtom( rSt, EPP_AnimationInfoAtom, 0, 1 );
@@ -1888,7 +1890,7 @@ void PPTWriter::ImplWriteObjectEffect( SvStream& rSt,
         nDimColor = EscherEx::GetColor( *static_cast<sal_uInt32 const *>(mAny.getValue()) ) | 0xfe000000;
 
     rSt.WriteUInt32( nDimColor ).WriteUInt32( nFlags ).WriteUInt32( nSoundRef ).WriteUInt32( nDelayTime )
-       .WriteUInt16( nOrder )                                   // order of build ( 1.. )
+       .WriteUInt16( basegfx::clamp<sal_Int32>(nOrder, 0, SAL_MAX_UINT16) ) // order of build ( 1.. )
        .WriteUInt16( nSlideCount ).WriteUChar( nBuildType ).WriteUChar( nFlyMethod ).WriteUChar( nFlyDirection )
        .WriteUChar( nAfterEffect ).WriteUChar( nSubEffect ).WriteUChar( nOleVerb )
        .WriteUInt16( 0 );                               // PadWord
@@ -2155,7 +2157,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
     // sal_uInt32  nGroupLevel = 0;
 
     sal_uInt32  nInstance, nGroups, nShapes, nShapeCount, nPer, nLastPer, nIndices, nOlePictureId;
-    sal_uInt16  nEffectCount;
+    sal_Int32  nEffectCount;
     css::awt::Point   aTextRefPoint;
 
     ResetGroupTable( nShapes = mXShapes->getCount() );
@@ -2205,7 +2207,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
             css::presentation::AnimationEffect eTe;
 
             if ( ImplGetPropertyValue( "PresentationOrder" ) )
-                nEffectCount = *static_cast<sal_uInt16 const *>(mAny.getValue());
+                nEffectCount = *o3tl::doAccess<sal_Int32>(mAny);
 
             bool bEffect = ImplGetEffect( mXPropSet, eAe, eTe, bIsSound );
             css::presentation::ClickAction eCa = css::presentation::ClickAction_NONE;
