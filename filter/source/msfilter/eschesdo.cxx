@@ -860,6 +860,9 @@ ImplEscherExSdr::ImplEscherExSdr( EscherEx& rEx )
 ImplEscherExSdr::~ImplEscherExSdr()
 {
     DBG_ASSERT( !mpSolverContainer, "ImplEscherExSdr::~ImplEscherExSdr: unwritten SolverContainer" );
+    Reference<css::lang::XComponent> xComp(mXDrawPage, UNO_QUERY);
+    if (xComp.is())
+        xComp->dispose();
     delete mpSolverContainer;
 }
 
@@ -873,6 +876,9 @@ bool ImplEscherExSdr::ImplInitPage( const SdrPage& rPage )
         ImplFlushSolverContainer();
 
         mpSdrPage = nullptr;
+        Reference<css::lang::XComponent> xOldDrawPage(mXDrawPage, UNO_QUERY);
+        if (xOldDrawPage.is())
+            xOldDrawPage->dispose();
         mXDrawPage = pSvxDrawPage = new SvxFmDrawPage( const_cast<SdrPage*>(&rPage) );
         mXShapes.set( mXDrawPage, UNO_QUERY );
         if ( !mXShapes.is() )

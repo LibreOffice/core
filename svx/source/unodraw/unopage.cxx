@@ -80,7 +80,7 @@ SvxDrawPage::~SvxDrawPage() throw()
 {
     if( !mrBHelper.bDisposed )
     {
-        SAL_WARN("svx", "SvxDrawPage must be disposed!");
+        assert("SvxDrawPage must be disposed!");
         acquire();
         dispose();
     }
@@ -124,13 +124,13 @@ void SvxDrawPage::dispose()
     // Remark: It is an error to call dispose more than once
     bool bDoDispose = false;
     {
-    osl::MutexGuard aGuard( mrBHelper.rMutex );
-    if( !mrBHelper.bDisposed && !mrBHelper.bInDispose )
-    {
-        // only one call go into this section
-        mrBHelper.bInDispose = true;
-        bDoDispose = true;
-    }
+        osl::MutexGuard aGuard( mrBHelper.rMutex );
+        if( !mrBHelper.bDisposed && !mrBHelper.bInDispose )
+        {
+            // only one call go into this section
+            mrBHelper.bInDispose = true;
+            bDoDispose = true;
+        }
     }
 
     // Do not hold the mutex because we are broadcasting
@@ -153,13 +153,13 @@ void SvxDrawPage::dispose()
             // catch exception and throw again but signal that
             // the object was disposed. Dispose should be called
             // only once.
+            osl::MutexGuard aGuard( mrBHelper.rMutex );
             mrBHelper.bDisposed = true;
             mrBHelper.bInDispose = false;
             throw;
         }
 
-        // the values bDispose and bInDisposing must set in this order.
-        // No multithread call overcome the "!rBHelper.bDisposed && !rBHelper.bInDispose" guard.
+        osl::MutexGuard aGuard( mrBHelper.rMutex );
         mrBHelper.bDisposed = true;
         mrBHelper.bInDispose = false;
     }
