@@ -23,6 +23,7 @@
 
 #include <comphelper/unwrapargs.hxx>
 #include <comphelper/processfactory.hxx>
+#include <o3tl/any.hxx>
 #include <sfx2/objsh.hxx>
 
 #include <com/sun/star/script/ArrayWrapper.hpp>
@@ -950,7 +951,7 @@ protected:
     ValueGetter& mValueGetter;
     void processValue( sal_Int32 x, sal_Int32 y, const uno::Any& aValue )
     {
-        uno::Sequence< uno::Sequence< uno::Any > >& aMatrix = *const_cast<css::uno::Sequence<css::uno::Sequence<css::uno::Any>> *>(static_cast<uno::Sequence< uno::Sequence< uno::Any > > const *>(maValue.getValue()));
+        uno::Sequence< uno::Sequence< uno::Any > >& aMatrix = const_cast<css::uno::Sequence<css::uno::Sequence<css::uno::Any>> &>(*o3tl::doAccess<uno::Sequence<uno::Sequence<uno::Any>>>(maValue));
         aMatrix[x][y] = aValue;
     }
 

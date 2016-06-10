@@ -82,7 +82,7 @@ ScVbaWorkbook::ResetColors(  ) throw (::script::BasicErrorException, ::uno::Runt
 ScVbaWorkbook::Colors( const ::uno::Any& Index ) throw (::script::BasicErrorException, ::uno::RuntimeException, std::exception)
 {
     uno::Any aRet;
-    if ( Index.getValue() )
+    if ( Index.hasValue() )
     {
         sal_Int32 nIndex = 0;
         Index >>= nIndex;

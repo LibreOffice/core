@@ -22,6 +22,7 @@
 #include "scitems.hxx"
 #include <editeng/editview.hxx>
 #include <editeng/outliner.hxx>
+#include <o3tl/any.hxx>
 #include <svx/fmdpage.hxx>
 #include <svx/fmview.hxx>
 #include <svx/svditer.hxx>
@@ -1035,11 +1036,10 @@ uno::Sequence<uno::Type> SAL_CALL ScModelObj::getTypes() throw(uno::RuntimeExcep
         {
             const uno::Type& rProvType = cppu::UnoType<lang::XTypeProvider>::get();
             uno::Any aNumProv(xNumberAgg->queryAggregation(rProvType));
-            if(aNumProv.getValueType() == rProvType)
+            if(auto xNumProv
+               = o3tl::tryAccess<uno::Reference<lang::XTypeProvider>>(aNumProv))
             {
-                uno::Reference<lang::XTypeProvider> xNumProv(
-                    *static_cast<uno::Reference<lang::XTypeProvider> const *>(aNumProv.getValue()));
-                aAggTypes = xNumProv->getTypes();
+                aAggTypes = (*xNumProv)->getTypes();
             }
         }
         long nAggLen = aAggTypes.getLength();
@@ -2626,11 +2626,10 @@ sal_Int64 SAL_CALL ScModelObj::getSomething(
     {
         const uno::Type& rTunnelType = cppu::UnoType<lang::XUnoTunnel>::get();
         uno::Any aNumTunnel(xNumberAgg->queryAggregation(rTunnelType));
-        if(aNumTunnel.getValueType() == rTunnelType)
+        if(auto xTunnelAgg = o3tl::tryAccess<uno::Reference<lang::XUnoTunnel>>(
+               aNumTunnel))
         {
-            uno::Reference<lang::XUnoTunnel> xTunnelAgg(
-                *static_cast<uno::Reference<lang::XUnoTunnel> const *>(aNumTunnel.getValue()));
-            return xTunnelAgg->getSomething( rId );
+            return (*xTunnelAgg)->getSomething( rId );
         }
     }
 

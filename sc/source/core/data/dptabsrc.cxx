@@ -24,6 +24,7 @@
 #include <unordered_set>
 #include <vector>
 
+#include <o3tl/any.hxx>
 #include <rtl/math.hxx>
 #include <svl/itemprop.hxx>
 #include <svl/intitem.hxx>
@@ -85,9 +86,8 @@ SC_SIMPLE_SERVICE_INFO( ScDPMember,      "ScDPMember",      "com.sun.star.sheet.
 //TODO: move to a header?
 static bool lcl_GetBoolFromAny( const uno::Any& aAny )
 {
-    if ( aAny.getValueTypeClass() == uno::TypeClass_BOOLEAN )
-        return *static_cast<sal_Bool const *>(aAny.getValue());
-    return false;
+    auto b = o3tl::tryAccess<bool>(aAny);
+    return b && *b;
 }
 
 ScDPSource::ScDPSource( ScDPTableData* pD ) :

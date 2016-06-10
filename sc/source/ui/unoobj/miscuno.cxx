@@ -18,6 +18,7 @@
  */
 
 #include <cppuhelper/supportsservice.hxx>
+#include <o3tl/any.hxx>
 #include <vcl/svapp.hxx>
 
 #include "miscuno.hxx"
@@ -45,14 +46,7 @@ bool ScUnoHelpFunctions::GetBoolProperty( const uno::Reference<beans::XPropertyS
     {
         try
         {
-            uno::Any aAny(xProp->getPropertyValue( rName ));
-            //! type conversion???
-            //  operator >>= shouldn't be used for bool (?)
-            if ( aAny.getValueTypeClass() == uno::TypeClass_BOOLEAN )
-            {
-                //! safe way to get bool value from any???
-                bRet = *static_cast<sal_Bool const *>(aAny.getValue());
-            }
+            xProp->getPropertyValue( rName ) >>= bRet;
         }
         catch(uno::Exception&)
         {
@@ -131,9 +125,8 @@ OUString ScUnoHelpFunctions::GetStringProperty(
 
 bool ScUnoHelpFunctions::GetBoolFromAny( const uno::Any& aAny )
 {
-    if ( aAny.getValueTypeClass() == uno::TypeClass_BOOLEAN )
-        return *static_cast<sal_Bool const *>(aAny.getValue());
-    return false;
+    auto b = o3tl::tryAccess<bool>(aAny);
+    return b && *b;
 }
 
 sal_Int16 ScUnoHelpFunctions::GetInt16FromAny( const uno::Any& aAny )
