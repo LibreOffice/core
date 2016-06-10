@@ -24,23 +24,25 @@
 #include <svx/dlgctrl.hxx>
 #include <vcl/scrbar.hxx>
 
-#include <document.hxx>
-#include <node.hxx>
+#include "format.hxx"
 #include <memory>
+
+class SmDocShell;
+class SmNode;
 
 class SmElement
 {
-    SmNodePointer   mpNode;
+    std::unique_ptr<SmNode> mpNode;
     OUString        maText;
     OUString        maHelpText;
 public:
     Point mBoxLocation;
     Size  mBoxSize;
 
-    SmElement(SmNodePointer pNode, const OUString& aText, const OUString& aHelpText);
+    SmElement(std::unique_ptr<SmNode>&& pNode, const OUString& aText, const OUString& aHelpText);
     virtual ~SmElement();
 
-    const SmNodePointer& getNode();
+    const std::unique_ptr<SmNode>& getNode();
     const OUString& getText()
     {
         return maText;
