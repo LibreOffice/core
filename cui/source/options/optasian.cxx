@@ -21,6 +21,7 @@
 #include <optasian.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/unolingu.hxx>
+#include <o3tl/any.hxx>
 #include <dialmgr.hxx>
 #include <cuires.hrc>
 #include <i18nlangtag/mslangid.hxx>
@@ -263,7 +264,7 @@ void SvxAsianLayoutPage::Reset( const SfxItemSet* )
         if(pImpl->xPrSetInfo->hasPropertyByName(sPunct))
         {
             Any aVal = pImpl->xPrSet->getPropertyValue(sPunct);
-            bKernWesternText = !*static_cast<sal_Bool const *>(aVal.getValue());
+            bKernWesternText = !*o3tl::doAccess<bool>(aVal);
         }
     }
     else
