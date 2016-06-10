@@ -1246,7 +1246,6 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
     SwPageFrame *pPage = pLay->FindPageFrame();
     const SwFrameFormats *pTable = pDoc->GetSpzFrameFormats();
     SwFrame       *pFrame = nullptr;
-    bool bBreakAfter = false;
     SwActualSection *pActualSection = nullptr;
     SwLayHelper *pPageMaker;
 
