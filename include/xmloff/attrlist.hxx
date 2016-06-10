@@ -31,12 +31,12 @@
 #include <com/sun/star/xml/sax/XLocator.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <memory>
 
 struct SvXMLAttributeList_Impl;
 
-class XMLOFF_DLLPUBLIC SvXMLAttributeList : public ::cppu::WeakImplHelper3<
+class XMLOFF_DLLPUBLIC SvXMLAttributeList : public ::cppu::WeakImplHelper<
         css::xml::sax::XAttributeList,
         css::util::XCloneable,
         css::lang::XUnoTunnel>
