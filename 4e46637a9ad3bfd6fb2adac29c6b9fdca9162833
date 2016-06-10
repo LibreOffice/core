@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_ce5a7d83",
+        "filename": "icon-themes/breeze/links.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 1345,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2016-06-10T08:39:02Z",
+      "side": 1,
+      "message": "Why is this needed? cmd/sc_setoutline.png actually exists in breeze. Also this links small image (sc_*) to a large one (lc_*), which probably isn\u0027t a good idea.",
+      "revId": "4e46637a9ad3bfd6fb2adac29c6b9fdca9162833",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
