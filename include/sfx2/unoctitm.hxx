@@ -172,8 +172,6 @@ public:
     void                UnBindController();
     SfxDispatcher*      GetDispatcher();
     void                SetFrame(const css::uno::Reference< css::frame::XFrame >& xFrame);
-
-    static void InterceptLOKStateChangeEvent(const SfxObjectShell* objSh, const css::frame::FeatureStateEvent& aEvent);
 };
 
 #endif

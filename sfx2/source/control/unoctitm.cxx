@@ -66,6 +66,11 @@
 #include "statcach.hxx"
 #include <sfx2/msgpool.hxx>
 #include <sfx2/objsh.hxx>
+#include <sfx2/viewsh.hxx>
+#include <osl/file.hxx>
+#include <rtl/ustring.hxx>
+#include <unotools/pathoptions.hxx>
+#include <osl/time.h>
 
 #include <iostream>
 #include <map>
@@ -73,6 +78,7 @@
 
 #include <sal/log.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <comphelper/lok.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -259,6 +265,8 @@ void SfxUnoControllerItem::ReleaseBindings()
         pBindings->ReleaseUnoController_Impl( this );
     pBindings = nullptr;
 }
+
+static void InterceptLOKStateChangeEvent(const SfxViewFrame* pViewFrame, const css::frame::FeatureStateEvent& aEvent);
 
 void SfxStatusDispatcher::ReleaseAll()
 {
@@ -1060,8 +1068,7 @@ void SfxDispatchController_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
 
         if (pDispatcher && pDispatcher->GetFrame())
         {
-            InterceptLOKStateChangeEvent(
-                    pDispatcher->GetFrame()->GetObjectShell(), aEvent);
+            InterceptLOKStateChangeEvent(pDispatcher->GetFrame(), aEvent);
         }
 
         ::cppu::OInterfaceContainerHelper* pContnr = pDispatch->GetListeners().getContainer ( aDispatchURL.Complete );
@@ -1087,9 +1094,9 @@ void SfxDispatchController_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
     StateChanged( nSID, eState, pState, nullptr );
 }
 
-void SfxDispatchController_Impl::InterceptLOKStateChangeEvent(const SfxObjectShell* objSh, const css::frame::FeatureStateEvent& aEvent)
+static void InterceptLOKStateChangeEvent(const SfxViewFrame* pViewFrame, const css::frame::FeatureStateEvent& aEvent)
 {
-    if (!objSh || !objSh->isTiledRendering())
+    if (!comphelper::LibreOfficeKit::isActive())
         return;
 
     OUStringBuffer aBuffer;
@@ -1242,7 +1249,16 @@ void SfxDispatchController_Impl::InterceptLOKStateChangeEvent(const SfxObjectShe
     }
 
     OUString payload = aBuffer.makeStringAndClear();
-    objSh->libreOfficeKitCallback(LOK_CALLBACK_STATE_CHANGED, payload.toUtf8().getStr());
+    if (comphelper::LibreOfficeKit::isViewCallback())
+    {
+        if (const SfxViewShell* pViewShell = pViewFrame->GetViewShell())
+            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED, payload.toUtf8().getStr());
+    }
+    else
+    {
+        const SfxObjectShell* pObjectShell = pViewFrame->GetObjectShell();
+        pObjectShell->libreOfficeKitCallback(LOK_CALLBACK_STATE_CHANGED, payload.toUtf8().getStr());
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
