@@ -2350,15 +2350,15 @@ void dump_pset(Reference< XPropertySet > rXPropSet)
         RectanglePoint pointValue;
 
         if( value >>= strValue )
-            SAL_WARN("sd.eppt", name << " = \"" << strValue << "\"");
+            SAL_INFO("sd.eppt", name << " = \"" << strValue << "\"");
         else if( value >>= intValue )
-            SAL_WARN("sd.eppt", name << " = " << intValue << "(hex : " << std::hex << intValue << ")");
+            SAL_INFO("sd.eppt", name << " = " << intValue << "(hex : " << std::hex << intValue << ")");
         else if( value >>= boolValue )
-            SAL_WARN("sd.eppt", name << " = " << boolValue << "           (bool)");
+            SAL_INFO("sd.eppt", name << " = " << boolValue << "           (bool)");
         else if( value >>= pointValue )
-            SAL_WARN("sd.eppt", name << " = " << pointValue << "    (RectanglePoint)");
+            SAL_INFO("sd.eppt", name << " = " << pointValue << "    (RectanglePoint)");
         else
-            SAL_WARN("sd.eppt", "???          <unhandled type>");
+            SAL_INFO("sd.eppt", "???          <unhandled type>");
     }
 }
 
