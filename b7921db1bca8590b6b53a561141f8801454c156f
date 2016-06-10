@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_f15c8627",
+        "filename": "sfx2/source/sidebar/SidebarController.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 647,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-06-10T13:40:58Z",
+      "side": 1,
+      "message": "Please use one of the context enums from EnumContext.hxx (from sfx2 headers) to decide which application we\u0027re in. It\u0027s much less ugly and less verbose",
+      "revId": "b7921db1bca8590b6b53a561141f8801454c156f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_1142ca3e",
+        "filename": "sfx2/source/sidebar/SidebarController.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 648,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-06-10T13:40:58Z",
+      "side": 1,
+      "message": "This will not work. The title is going to be localized ( \u003d different in different languages) so the condition will be false in any other language than English",
+      "revId": "b7921db1bca8590b6b53a561141f8801454c156f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_514c5270",
+        "filename": "sfx2/source/sidebar/SidebarController.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 649,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-06-10T13:40:58Z",
+      "side": 1,
+      "message": "Please don\u0027t introduce untranslatable strings like this. There are ways how to either make a new string or reuse an existent one so that it can be localized",
+      "revId": "b7921db1bca8590b6b53a561141f8801454c156f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
