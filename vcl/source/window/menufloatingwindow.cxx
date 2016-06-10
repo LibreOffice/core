@@ -132,7 +132,7 @@ void MenuFloatingWindow::ApplySettings(vcl::RenderContext& rRenderContext)
 
     SetPointFont(rRenderContext, rStyleSettings.GetMenuFont());
 
-    if (rRenderContext.IsNativeControlSupported(ControlType::MenuPopup, PART_ENTIRE_CONTROL))
+    if (rRenderContext.IsNativeControlSupported(ControlType::MenuPopup, ControlPart::Entire))
     {
         rRenderContext.SetBackground(); // background will be drawn by NWF
     }
@@ -799,19 +799,19 @@ void MenuFloatingWindow::RenderHighlightItem(vcl::RenderContext& rRenderContext,
                     aItemRect.Right() -= nFontHeight + nFontHeight / 4;
                 }
 
-                if (rRenderContext.IsNativeControlSupported(ControlType::MenuPopup, PART_ENTIRE_CONTROL))
+                if (rRenderContext.IsNativeControlSupported(ControlType::MenuPopup, ControlPart::Entire))
                 {
                     Size aPxSize(GetOutputSizePixel());
                     rRenderContext.Push(PushFlags::CLIPREGION);
                     rRenderContext.IntersectClipRegion(Rectangle(Point(nX, nY), Size(aSz.Width(), pData->aSz.Height())));
                     Rectangle aCtrlRect(Point(nX, 0), Size(aPxSize.Width()-nX, aPxSize.Height()));
                     MenupopupValue aVal(pMenu->nTextPos-GUTTERBORDER, aItemRect);
-                    rRenderContext.DrawNativeControl(ControlType::MenuPopup, PART_ENTIRE_CONTROL,
+                    rRenderContext.DrawNativeControl(ControlType::MenuPopup, ControlPart::Entire,
                                                      aCtrlRect, ControlState::ENABLED, aVal, OUString());
-                    if (rRenderContext.IsNativeControlSupported(ControlType::MenuPopup, PART_MENU_ITEM))
+                    if (rRenderContext.IsNativeControlSupported(ControlType::MenuPopup, ControlPart::MenuItem))
                     {
                         bDrawItemRect = false;
-                        if (!rRenderContext.DrawNativeControl(ControlType::MenuPopup, PART_MENU_ITEM, aItemRect,
+                        if (!rRenderContext.DrawNativeControl(ControlType::MenuPopup, ControlPart::MenuItem, aItemRect,
                                                               ControlState::SELECTED | (pData->bEnabled
                                                                                             ? ControlState::ENABLED
                                                                                             : ControlState::NONE),
@@ -1143,14 +1143,14 @@ void MenuFloatingWindow::Paint(vcl::RenderContext& rRenderContext, const Rectang
     rRenderContext.Push( PushFlags::CLIPREGION );
     rRenderContext.SetClipRegion(vcl::Region(rPaintRect));
 
-    if (rRenderContext.IsNativeControlSupported(ControlType::MenuPopup, PART_ENTIRE_CONTROL))
+    if (rRenderContext.IsNativeControlSupported(ControlType::MenuPopup, ControlPart::Entire))
     {
         rRenderContext.SetClipRegion();
         long nX = pMenu->pLogo ? pMenu->pLogo->aBitmap.GetSizePixel().Width() : 0;
         Size aPxSize(GetOutputSizePixel());
         aPxSize.Width() -= nX;
         ImplControlValue aVal(pMenu->nTextPos - GUTTERBORDER);
-        rRenderContext.DrawNativeControl(ControlType::MenuPopup, PART_ENTIRE_CONTROL,
+        rRenderContext.DrawNativeControl(ControlType::MenuPopup, ControlPart::Entire,
                                          Rectangle(Point(nX, 0), aPxSize),
                                          ControlState::ENABLED, aVal, OUString());
         InitMenuClipRegion(rRenderContext);

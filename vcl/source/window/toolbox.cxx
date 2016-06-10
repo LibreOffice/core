@@ -147,7 +147,7 @@ static ImplTBDragMgr* ImplGetTBDragMgr()
 int ToolBox::ImplGetDragWidth( ToolBox* pThis )
 {
     int nWidth = TB_DRAGWIDTH;
-    if( pThis->IsNativeControlSupported( ControlType::Toolbar, PART_ENTIRE_CONTROL ) )
+    if( pThis->IsNativeControlSupported( ControlType::Toolbar, ControlPart::Entire ) )
     {
 
         ImplControlValue aControlValue;
@@ -155,7 +155,7 @@ int ToolBox::ImplGetDragWidth( ToolBox* pThis )
         Rectangle aContent, aBound;
         Rectangle aArea( aPoint, pThis->GetOutputSizePixel() );
 
-        if ( pThis->GetNativeControlRegion(ControlType::Toolbar, pThis->mbHorz ? PART_THUMB_VERT : PART_THUMB_HORZ,
+        if ( pThis->GetNativeControlRegion(ControlType::Toolbar, pThis->mbHorz ? ControlPart::ThumbVert : ControlPart::ThumbHorz,
                 aArea, ControlState::NONE, aControlValue, OUString(), aBound, aContent) )
         {
             nWidth = pThis->mbHorz ? aContent.GetWidth() : aContent.GetHeight();
@@ -268,7 +268,7 @@ void ToolBox::ImplDrawGrip(vcl::RenderContext& rRenderContext)
         ImplCheckUpdate(this);
 
         bool bNativeOk = false;
-        if (rRenderContext.IsNativeControlSupported(ControlType::Toolbar, mbHorz ? PART_THUMB_HORZ : PART_THUMB_VERT))
+        if (rRenderContext.IsNativeControlSupported(ControlType::Toolbar, mbHorz ? ControlPart::ThumbHorz : ControlPart::ThumbVert))
         {
             ToolbarValue aToolbarValue;
             aToolbarValue.maGripRect = pWrapper->GetDragArea();
@@ -277,7 +277,7 @@ void ToolBox::ImplDrawGrip(vcl::RenderContext& rRenderContext)
             Rectangle aCtrlRegion(aPt, GetOutputSizePixel());
             ControlState nState = ControlState::ENABLED;
 
-            bNativeOk = rRenderContext.DrawNativeControl( ControlType::Toolbar, mbHorz ? PART_THUMB_VERT : PART_THUMB_HORZ,
+            bNativeOk = rRenderContext.DrawNativeControl( ControlType::Toolbar, mbHorz ? ControlPart::ThumbVert : ControlPart::ThumbHorz,
                                             aCtrlRegion, nState, aToolbarValue, OUString() );
         }
 
@@ -450,7 +450,7 @@ bool ToolBox::ImplDrawNativeBackground(vcl::RenderContext& rRenderContext, const
     Rectangle aCtrlRegion(aPt, GetOutputSizePixel());
     ControlState  nState = ControlState::ENABLED;
 
-    return rRenderContext.DrawNativeControl( ControlType::Toolbar, mbHorz ? PART_DRAW_BACKGROUND_HORZ : PART_DRAW_BACKGROUND_VERT,
+    return rRenderContext.DrawNativeControl( ControlType::Toolbar, mbHorz ? ControlPart::DrawBackgroundHorz : ControlPart::DrawBackgroundVert,
                                     aCtrlRegion, nState, ImplControlValue(), OUString() );
 }
 
@@ -514,7 +514,7 @@ void ToolBox::ImplDrawBackground(vcl::RenderContext& rRenderContext, const Recta
         // docked toolbars are transparent and NWF is already used in the docking area which is their common background
         // so NWF is used here for floating toolbars only
         bool bNativeOk = false;
-        if( ImplIsFloatingMode() && rRenderContext.IsNativeControlSupported( ControlType::Toolbar, PART_ENTIRE_CONTROL) )
+        if( ImplIsFloatingMode() && rRenderContext.IsNativeControlSupported( ControlType::Toolbar, ControlPart::Entire) )
             bNativeOk = ImplDrawNativeBackground(rRenderContext, aPaintRegion);
         const StyleSettings rSetting = Application::GetSettings().GetStyleSettings();
         if (!bNativeOk)
@@ -1415,7 +1415,7 @@ void ToolBox::ImplInit( vcl::Window* pParent, WinBits nStyle )
 
 void ToolBox::ApplySettings(vcl::RenderContext& rRenderContext)
 {
-    mpData->mbNativeButtons = rRenderContext.IsNativeControlSupported(ControlType::Toolbar, PART_BUTTON);
+    mpData->mbNativeButtons = rRenderContext.IsNativeControlSupported(ControlType::Toolbar, ControlPart::Button);
 
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
 
@@ -1445,7 +1445,7 @@ void ToolBox::ApplySettings(vcl::RenderContext& rRenderContext)
     }
     else
     {
-        if (rRenderContext.IsNativeControlSupported(ControlType::Toolbar, PART_ENTIRE_CONTROL)
+        if (rRenderContext.IsNativeControlSupported(ControlType::Toolbar, ControlPart::Entire)
             || (GetAlign() == WindowAlign::Top && !Application::GetSettings().GetStyleSettings().GetPersonaHeader().IsEmpty())
             || (GetAlign() == WindowAlign::Bottom && !Application::GetSettings().GetStyleSettings().GetPersonaFooter().IsEmpty()))
         {
@@ -1471,7 +1471,7 @@ void ToolBox::ApplySettings(vcl::RenderContext& rRenderContext)
 
 void ToolBox::ImplInitSettings(bool bFont, bool bForeground, bool bBackground)
 {
-    mpData->mbNativeButtons = IsNativeControlSupported( ControlType::Toolbar, PART_BUTTON );
+    mpData->mbNativeButtons = IsNativeControlSupported( ControlType::Toolbar, ControlPart::Button );
 
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
 
@@ -1508,7 +1508,7 @@ void ToolBox::ImplInitSettings(bool bFont, bool bForeground, bool bBackground)
         }
         else
         {
-            if (IsNativeControlSupported(ControlType::Toolbar, PART_ENTIRE_CONTROL)
+            if (IsNativeControlSupported(ControlType::Toolbar, ControlPart::Entire)
                 || (GetAlign() == WindowAlign::Top && !Application::GetSettings().GetStyleSettings().GetPersonaHeader().IsEmpty())
                 || (GetAlign() == WindowAlign::Bottom && !Application::GetSettings().GetStyleSettings().GetPersonaFooter().IsEmpty()))
             {
@@ -1730,9 +1730,9 @@ bool ToolBox::ImplCalcItem()
         Rectangle aReg( aRect );
         ImplControlValue aVal;
         Rectangle aNativeBounds, aNativeContent;
-        if( IsNativeControlSupported( ControlType::Toolbar, PART_BUTTON ) )
+        if( IsNativeControlSupported( ControlType::Toolbar, ControlPart::Button ) )
         {
-            if( GetNativeControlRegion( ControlType::Toolbar, PART_BUTTON,
+            if( GetNativeControlRegion( ControlType::Toolbar, ControlPart::Button,
                                         aReg,
                                         ControlState::ENABLED | ControlState::ROLLOVER,
                                         aVal, OUString(),
@@ -1757,7 +1757,7 @@ bool ToolBox::ImplCalcItem()
         // greater of those values to prevent toolbar flickering (#i103385#)
         aRect = Rectangle( Point( 0, 0 ), Size( nMinWidth, nMinHeight ) );
         aReg = aRect;
-        if( GetNativeControlRegion( ControlType::Combobox, PART_ENTIRE_CONTROL,
+        if( GetNativeControlRegion( ControlType::Combobox, ControlPart::Entire,
                                     aReg,
                                     ControlState::ENABLED | ControlState::ROLLOVER,
                                     aVal, OUString(),
@@ -1769,7 +1769,7 @@ bool ToolBox::ImplCalcItem()
         }
         aRect = Rectangle( Point( 0, 0 ), Size( nMinWidth, nMinHeight ) );
         aReg = aRect;
-        if( GetNativeControlRegion( ControlType::Listbox, PART_ENTIRE_CONTROL,
+        if( GetNativeControlRegion( ControlType::Listbox, ControlPart::Entire,
                                     aReg,
                                     ControlState::ENABLED | ControlState::ROLLOVER,
                                     aVal, OUString(),
@@ -1781,7 +1781,7 @@ bool ToolBox::ImplCalcItem()
         }
         aRect = Rectangle( Point( 0, 0 ), Size( nMinWidth, nMinHeight ) );
         aReg = aRect;
-        if( GetNativeControlRegion( ControlType::Spinbox, PART_ENTIRE_CONTROL,
+        if( GetNativeControlRegion( ControlType::Spinbox, ControlPart::Entire,
                                     aReg,
                                     ControlState::ENABLED | ControlState::ROLLOVER,
                                     aVal, OUString(),
@@ -2925,7 +2925,7 @@ void ToolBox::ImplDrawSeparator(vcl::RenderContext& rRenderContext, sal_uInt16 n
         return;
 
     bool bNativeOk = false;
-    ControlPart nPart = IsHorizontal() ? PART_SEPARATOR_VERT : PART_SEPARATOR_HORZ;
+    ControlPart nPart = IsHorizontal() ? ControlPart::SeparatorVert : ControlPart::SeparatorHorz;
     if (rRenderContext.IsNativeControlSupported(ControlType::Toolbar, nPart))
     {
         ImplControlValue aControlValue;
@@ -2963,7 +2963,7 @@ void ToolBox::ImplDrawButton(vcl::RenderContext& rRenderContext, const Rectangle
     // if bIsWindow is true, the corresponding item is a control and only a selection border will be drawn
 
     bool bNativeOk = false;
-    if( !bIsWindow && rRenderContext.IsNativeControlSupported( ControlType::Toolbar, PART_BUTTON ) )
+    if( !bIsWindow && rRenderContext.IsNativeControlSupported( ControlType::Toolbar, ControlPart::Button ) )
     {
         ImplControlValue    aControlValue;
         ControlState        nState = ControlState::NONE;
@@ -2974,7 +2974,7 @@ void ToolBox::ImplDrawButton(vcl::RenderContext& rRenderContext, const Rectangle
 
         aControlValue.setTristateVal( bChecked ? ButtonValue::On : ButtonValue::Off );
 
-        bNativeOk = rRenderContext.DrawNativeControl( ControlType::Toolbar, PART_BUTTON,
+        bNativeOk = rRenderContext.DrawNativeControl( ControlType::Toolbar, ControlPart::Button,
                                               rRect, nState, aControlValue, OUString() );
     }
 

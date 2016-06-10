@@ -1026,11 +1026,11 @@ void SvImpLBox::DrawNet(vcl::RenderContext& rRenderContext)
 
     // for platforms that don't have nets, DrawNativeControl does nothing and returns true
     // so that SvImpLBox::DrawNet() doesn't draw anything either
-     if (rRenderContext.IsNativeControlSupported(ControlType::ListNet, PART_ENTIRE_CONTROL))
+     if (rRenderContext.IsNativeControlSupported(ControlType::ListNet, ControlPart::Entire))
      {
         ImplControlValue aControlValue;
         ControlState nState = ControlState::ENABLED;
-        if (rRenderContext.DrawNativeControl(ControlType::ListNet, PART_ENTIRE_CONTROL,
+        if (rRenderContext.DrawNativeControl(ControlType::ListNet, ControlPart::Entire,
                                              Rectangle(), nState, aControlValue, OUString()))
         {
             return;

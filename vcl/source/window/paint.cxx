@@ -1490,7 +1490,7 @@ void Window::Erase(vcl::RenderContext& rRenderContext)
     bool bNativeOK = false;
 
     ControlPart aCtrlPart = ImplGetWindowImpl()->mnNativeBackground;
-    if (aCtrlPart != 0 && ! IsControlBackground())
+    if (aCtrlPart != ControlPart::NONE && ! IsControlBackground())
     {
         Rectangle aCtrlRegion(Point(), GetOutputSizePixel());
         ControlState nState = ControlState::NONE;

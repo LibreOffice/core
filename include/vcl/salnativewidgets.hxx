@@ -48,7 +48,7 @@ enum class ControlType {
     Editbox            =  30,
 // Control that allows text entry, but without the usual border
 // Has to be handled separately, because this one cannot handle
-// HAS_BACKGROUND_TEXTURE, which is drawn in the edit box'es
+// ControlPart::HasBackgroundTexture, which is drawn in the edit box'es
 // border window.
     EditboxNoBorder    =  31,
 // Control that allows text entry
@@ -120,32 +120,33 @@ enum class ControlType {
  *   for example the slider of a scroll bar.
  */
 
-typedef sal_uInt32      ControlPart;
-
-#define PART_ENTIRE_CONTROL         1
-#define PART_WINDOW                 5       // the static listbox window containing the list
-#define PART_BUTTON                 100
-#define PART_BUTTON_UP              101
-#define PART_BUTTON_DOWN            102 // Also for ComboBoxes/ListBoxes
-#define PART_BUTTON_LEFT            103
-#define PART_BUTTON_RIGHT           104
-#define PART_ALL_BUTTONS            105
-#define PART_SEPARATOR_HORZ         106
-#define PART_SEPARATOR_VERT         107
-#define PART_TRACK_HORZ_LEFT        200
-#define PART_TRACK_VERT_UPPER       201
-#define PART_TRACK_HORZ_RIGHT       202
-#define PART_TRACK_VERT_LOWER       203
-#define PART_TRACK_HORZ_AREA        204
-#define PART_TRACK_VERT_AREA        205
-#define PART_THUMB_HORZ             210 // Also used as toolbar grip
-#define PART_THUMB_VERT             211 // Also used as toolbar grip
-#define PART_ARROW                  220
-#define PART_MENU_ITEM              250
-#define PART_MENU_ITEM_CHECK_MARK   251
-#define PART_MENU_ITEM_RADIO_MARK   252
-#define PART_MENU_SEPARATOR         253
-#define PART_MENU_SUBMENU_ARROW     254
+enum class ControlPart
+{
+    NONE               = 0,
+    Entire             = 1,
+    ListboxWindow      = 5,   // the static listbox window containing the list
+    Button             = 100,
+    ButtonUp           = 101,
+    ButtonDown         = 102, // Also for ComboBoxes/ListBoxes
+    ButtonLeft         = 103,
+    ButtonRight        = 104,
+    AllButtons         = 105,
+    SeparatorHorz      = 106,
+    SeparatorVert      = 107,
+    TrackHorzLeft      = 200,
+    TrackVertUpper     = 201,
+    TrackHorzRight     = 202,
+    TrackVertLower     = 203,
+    TrackHorzArea      = 204,
+    TrackVertArea      = 205,
+    Arrow              = 220,
+    ThumbHorz          = 210, // Also used as toolbar grip
+    ThumbVert          = 211, // Also used as toolbar grip
+    MenuItem           = 250,
+    MenuItemCheckMark  = 251,
+    MenuItemRadioMark  = 252,
+    Separator          = 253,
+    SubmenuArrow       = 254,
 
 /*  #i77549#
     HACK: for scrollbars in case of thumb rect, page up and page down rect we
@@ -158,8 +159,8 @@ typedef sal_uInt32      ControlPart;
     However since there is only this one small exception we will deviate a little and
     instead pass the respective rect as control region to allow for a small correction.
 
-    So all places using HitTestNativeControl on PART_THUMB_HORZ, PART_THUMB_VERT,
-    PART_TRACK_HORZ_LEFT, PART_TRACK_HORZ_RIGHT, PART_TRACK_VERT_UPPER, PART_TRACK_VERT_LOWER
+    So all places using HitTestNativeControl on ControlPart::ThumbHorz, ControlPart::ThumbVert,
+    ControlPart::TrackHorzLeft, ControlPart::TrackHorzRight, ControlPart::TrackVertUpper, ControlPart::TrackVertLower
     do not use the control rectangle as region but the actuall part rectangle, making
     only small deviations feasible.
 */
@@ -167,10 +168,10 @@ typedef sal_uInt32      ControlPart;
 /** The edit field part of a control, e.g. of the combo box.
 
     Currently used just for combo boxes and just for GetNativeControlRegion().
-    It is valid only if GetNativeControlRegion() supports PART_BUTTON_DOWN as
+    It is valid only if GetNativeControlRegion() supports ControlPart::ButtonDown as
     well.
 */
-#define PART_SUB_EDIT           300
+    SubEdit                 = 300,
 
 // For controls that require the entire background
 // to be drawn first, and then other pieces over top.
@@ -178,30 +179,31 @@ typedef sal_uInt32      ControlPart;
 // in to draw this part is expected to be the entire
 // area of the control.
 // A control may respond to one or both.
-#define PART_DRAW_BACKGROUND_HORZ       1000
-#define PART_DRAW_BACKGROUND_VERT       1001
+    DrawBackgroundHorz      = 1000,
+    DrawBackgroundVert      = 1001,
 
 // GTK+ also draws tabs right->left since there is a
 // hardcoded 2 pixel overlap between adjacent tabs
-#define PART_TABS_DRAW_RTL          3000
+    TabsDrawRtl             = 3000,
 
 // For themes that do not want to have the focus
 // rectangle part drawn by VCL but take care of the
 // whole inner control part by themselves
 // eg, listboxes or comboboxes or spinbuttons
-#define HAS_BACKGROUND_TEXTURE  4000
+    HasBackgroundTexture    = 4000,
 
 // For scrollbars that have 3 buttons (most KDE themes)
-#define HAS_THREE_BUTTONS       5000
+    HasThreeButtons         = 5000,
 
-#define PART_BACKGROUND_WINDOW  6000
-#define PART_BACKGROUND_DIALOG  6001
+    BackgroundWindow        = 6000,
+    BackgroundDialog        = 6001,
 
 //to draw natively the border of frames
-#define PART_BORDER             7000
+    Border                  = 7000,
 
 //to draw natively the focus rects
-#define PART_FOCUS              8000
+    Focus                   = 8000
+};
 
 /* Control State:
  *
@@ -271,7 +273,7 @@ public:
                 return false;
 
             case ControlType::Menubar:
-                if (mnPart == PART_ENTIRE_CONTROL)
+                if (mnPart == ControlPart::Entire)
                     return false;
                 break;
 
@@ -440,15 +442,15 @@ class VCL_DLLPUBLIC SpinbuttonValue : public ImplControlValue
         Rectangle       maLowerRect;
         ControlState    mnUpperState;
         ControlState    mnLowerState;
-        int         mnUpperPart;
-        int         mnLowerPart;
+        ControlPart     mnUpperPart;
+        ControlPart     mnLowerPart;
 
         SpinbuttonValue()
             : ImplControlValue( ControlType::SpinButtons, 0 )
             , mnUpperState(ControlState::NONE)
             , mnLowerState(ControlState::NONE)
-            , mnUpperPart(0)
-            , mnLowerPart(0)
+            , mnUpperPart(ControlPart::NONE)
+            , mnLowerPart(ControlPart::NONE)
         {
         }
 
