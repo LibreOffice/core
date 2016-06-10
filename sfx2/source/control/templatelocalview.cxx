@@ -21,6 +21,7 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/builderfactory.hxx>
 #include <vcl/pngread.hxx>
+#include <vcl/layout.hxx>
 
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
@@ -457,6 +458,12 @@ bool TemplateLocalView::moveTemplate (const ThumbnailViewItem *pItem, const sal_
 
         if (bCopy)
         {
+            OUString sQuery = (OUString(SfxResId(STR_MSG_QUERY_COPY).toString()).replaceFirst("$1", pViewItem->maTitle)).replaceFirst("$2",
+                getRegionName(nTargetRegion));
+            ScopedVclPtrInstance< MessageDialog > aQueryDlg(this, sQuery, VclMessageType::Question, VCL_BUTTONS_YES_NO);
+            if ( aQueryDlg->Execute() != RET_YES )
+                return false;
+
             if (!mpDocTemplates->Copy(nTargetRegion,nTargetIdx,nSrcRegionId,pViewItem->mnDocId))
                 return false;
         }
@@ -552,6 +559,19 @@ bool TemplateLocalView::moveTemplates(const std::set<const ThumbnailViewItem*, s
 
                 if (bCopy)
                 {
+                    OUString sQuery = (OUString(SfxResId(STR_MSG_QUERY_COPY).toString()).replaceFirst("$1", pViewItem->maTitle)).replaceFirst("$2",
+                        getRegionName(nTargetRegion));
+                    ScopedVclPtrInstance< MessageDialog > aQueryDlg(this, sQuery, VclMessageType::Question, VCL_BUTTONS_YES_NO);
+
+                    if ( aQueryDlg->Execute() != RET_YES )
+                    {
+                        OUString sMsg(SfxResId(STR_MSG_ERROR_LOCAL_MOVE).toString());
+                        sMsg = sMsg.replaceFirst("$1",getRegionName(nTargetRegion));
+                        ScopedVclPtrInstance<MessageDialog>::Create(this, sMsg.replaceFirst( "$2",pViewItem->maTitle))->Execute();
+
+                        return false; //return if any single move operation fails
+                    }
+
                     if (!mpDocTemplates->Copy(nTargetRegion,nTargetIdx,nSrcRegionId,pViewItem->mnDocId))
                     {
                         ret = false;
