@@ -844,12 +844,7 @@ PropertyState OControlModel::getPropertyStateByHandle( sal_Int32 _nHandle )
     Any aCurrentValue = getPropertyDefaultByHandle( _nHandle );
     Any aDefaultValue;  getFastPropertyValue( aDefaultValue, _nHandle );
 
-    bool bEqual = uno_type_equalData(
-            const_cast< void* >( aCurrentValue.getValue() ), aCurrentValue.getValueType().getTypeLibType(),
-            const_cast< void* >( aDefaultValue.getValue() ), aDefaultValue.getValueType().getTypeLibType(),
-            reinterpret_cast< uno_QueryInterfaceFunc >(cpp_queryInterface),
-            reinterpret_cast< uno_ReleaseFunc >(cpp_release)
-        );
+    bool bEqual = aCurrentValue == aDefaultValue;
     return bEqual ? PropertyState_DEFAULT_VALUE : PropertyState_DIRECT_VALUE;
 }
 

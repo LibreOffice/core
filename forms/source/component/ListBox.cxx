@@ -49,6 +49,7 @@
 #include <connectivity/formattedcolumnvalue.hxx>
 #include <connectivity/dbconversion.hxx>
 #include <cppuhelper/queryinterface.hxx>
+#include <o3tl/any.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <unotools/sharedunocomponent.hxx>
@@ -1886,8 +1887,8 @@ namespace frm
                     bool bModified(false);
                     Any aValue = xSet->getPropertyValue(PROPERTY_SELECT_SEQ);
 
-                    Sequence<sal_Int16> const & rSelection = *static_cast<Sequence<sal_Int16> const *>(aValue.getValue());
-                    Sequence<sal_Int16> const & rOldSelection = *static_cast<Sequence<sal_Int16> const *>(m_aCurrentSelection.getValue());
+                    Sequence<sal_Int16> const & rSelection = *o3tl::doAccess<Sequence<sal_Int16>>(aValue);
+                    Sequence<sal_Int16> const & rOldSelection = *o3tl::doAccess<Sequence<sal_Int16>>(m_aCurrentSelection);
                     sal_Int32 nLen = rSelection.getLength();
                     if (nLen != rOldSelection.getLength())
                         bModified = true;

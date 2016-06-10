@@ -25,6 +25,7 @@
 #include <comphelper/streamsection.hxx>
 #include <comphelper/basicio.hxx>
 #include <comphelper/processfactory.hxx>
+#include <o3tl/any.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
@@ -445,7 +446,7 @@ IMPL_LINK_NOARG_TYPED(OButtonControl, OnClick, void*, void)
         if (!xSet.is())
             return;
 
-        if (FormButtonType_PUSH == *static_cast<FormButtonType const *>(xSet->getPropertyValue(PROPERTY_BUTTONTYPE).getValue()))
+        if (FormButtonType_PUSH == *o3tl::doAccess<FormButtonType>(xSet->getPropertyValue(PROPERTY_BUTTONTYPE)))
         {
             // notify the action listeners for a push button
             ::comphelper::OInterfaceIteratorHelper2 aIter(m_aActionListeners);

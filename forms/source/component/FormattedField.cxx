@@ -27,6 +27,7 @@
 #include <comphelper/numbers.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbconversion.hxx>
+#include <o3tl/any.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/numuno.hxx>
 #include <vcl/svapp.hxx>
@@ -683,9 +684,8 @@ void OFormattedModel::write(const Reference<XObjectOutputStream>& _rxOutStream) 
         {
             Any aLocale = xFormat->getPropertyValue(s_aLocaleProp);
             DBG_ASSERT(aLocale.has<Locale>(), "OFormattedModel::write : invalid language property !");
-            if (aLocale.has<Locale>())
+            if (auto pLocale = o3tl::tryAccess<Locale>(aLocale))
             {
-                Locale const * pLocale = static_cast<Locale const *>(aLocale.getValue());
                 eFormatLanguage = LanguageTag::convertToLanguageType( *pLocale, false);
             }
         }

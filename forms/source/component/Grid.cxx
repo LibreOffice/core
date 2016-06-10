@@ -521,7 +521,7 @@ sal_Bool OGridControlModel::convertFastPropertyValue( Any& rConvertedValue, Any&
                 }
                 rOldValue = m_aCursorColor;
                 rConvertedValue = rValue;
-                bModified = (rOldValue.getValue() != rConvertedValue.getValue());
+                bModified = rOldValue != rConvertedValue;
             }
             else
                 bModified = tryPropertyValue(rConvertedValue, rOldValue, rValue, getINT32(m_aCursorColor));
