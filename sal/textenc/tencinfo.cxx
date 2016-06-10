@@ -896,6 +896,7 @@ rtl_getTextEncodingFromWindowsCodePage(sal_uInt32 nCodePage)
     case 57002: return RTL_TEXTENCODING_ISCII_DEVANAGARI;
     case 65000: return RTL_TEXTENCODING_UTF7;
     case 65001: return RTL_TEXTENCODING_UTF8;
+    case 42:    return RTL_TEXTENCODING_ASCII_US; // not really, but close enough for CP_SYMBOL
     default: return RTL_TEXTENCODING_DONTKNOW;
     }
 }
