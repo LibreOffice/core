@@ -115,13 +115,13 @@ void ListBox::ImplInit( vcl::Window* pParent, WinBits nStyle )
         mnDDHeight = (sal_uInt16)(GetTextHeight() + nTop + nBottom + 4);
 
         if( IsNativeWidgetEnabled() &&
-            IsNativeControlSupported( ControlType::Listbox, PART_ENTIRE_CONTROL ) )
+            IsNativeControlSupported( ControlType::Listbox, ControlPart::Entire ) )
         {
                 ImplControlValue aControlValue;
                 Rectangle aCtrlRegion( Point( 0, 0 ), Size( 20, mnDDHeight ) );
                 Rectangle aBoundingRgn( aCtrlRegion );
                 Rectangle aContentRgn( aCtrlRegion );
-                if( GetNativeControlRegion( ControlType::Listbox, PART_ENTIRE_CONTROL, aCtrlRegion,
+                if( GetNativeControlRegion( ControlType::Listbox, ControlPart::Entire, aCtrlRegion,
                                             ControlState::ENABLED, aControlValue, OUString(),
                                             aBoundingRgn, aContentRgn ) )
                 {
@@ -619,7 +619,7 @@ void ListBox::Resize()
         // Use the full extent of the control
         Rectangle aArea( aPoint, pBorder->GetOutputSizePixel() );
 
-        if ( GetNativeControlRegion( ControlType::Listbox, PART_BUTTON_DOWN,
+        if ( GetNativeControlRegion( ControlType::Listbox, ControlPart::ButtonDown,
                     aArea, ControlState::NONE, aControlValue, OUString(), aBound, aContent) )
         {
             long nTop = 0;
@@ -632,7 +632,7 @@ void ListBox::Resize()
             mpBtn->setPosSizePixel( aContent.Left(), nTop, aContent.Right(), (nBottom-nTop) );
 
             // Adjust the size of the edit field
-            if ( GetNativeControlRegion( ControlType::Listbox, PART_SUB_EDIT,
+            if ( GetNativeControlRegion( ControlType::Listbox, ControlPart::SubEdit,
                         aArea, ControlState::NONE, aControlValue, OUString(), aBound, aContent) )
             {
                 // Convert back from border space to local coordinates
@@ -768,8 +768,8 @@ void ListBox::StateChanged( StateChangedType nType )
         if( mpImplWin )
         {
             mpImplWin->Enable( IsEnabled() );
-            if ( IsNativeControlSupported(ControlType::Listbox, PART_ENTIRE_CONTROL)
-                    && ! IsNativeControlSupported(ControlType::Listbox, PART_BUTTON_DOWN) )
+            if ( IsNativeControlSupported(ControlType::Listbox, ControlPart::Entire)
+                    && ! IsNativeControlSupported(ControlType::Listbox, ControlPart::ButtonDown) )
             {
                 GetWindow( GetWindowType::Border )->Invalidate( InvalidateFlags::NoErase );
             }
@@ -821,7 +821,7 @@ void ListBox::StateChanged( StateChangedType nType )
         mpImplLB->SetControlBackground( GetControlBackground() );
         if ( mpImplWin )
         {
-            if ( mpImplWin->IsNativeControlSupported(ControlType::Listbox, PART_ENTIRE_CONTROL) )
+            if ( mpImplWin->IsNativeControlSupported(ControlType::Listbox, ControlPart::Entire) )
             {
                 // Transparent background
                 mpImplWin->SetBackground();
@@ -1221,7 +1221,7 @@ Size ListBox::CalcMinimumSize() const
         Rectangle aContent, aBound;
         Size aTestSize( 100, 20 );
         Rectangle aArea( aPoint, aTestSize );
-        if( GetNativeControlRegion( ControlType::Listbox, PART_SUB_EDIT, aArea, ControlState::NONE,
+        if( GetNativeControlRegion( ControlType::Listbox, ControlPart::SubEdit, aArea, ControlState::NONE,
                     aControlValue, OUString(), aBound, aContent) )
         {
             // use the themes drop down size
@@ -1238,7 +1238,7 @@ Size ListBox::CalcMinimumSize() const
         ImplControlValue aControlValue;
         Rectangle aRect( Point( 0, 0 ), aSz );
         Rectangle aContent, aBound;
-        if( GetNativeControlRegion( ControlType::Listbox, PART_ENTIRE_CONTROL, aRect, ControlState::NONE,
+        if( GetNativeControlRegion( ControlType::Listbox, ControlPart::Entire, aRect, ControlState::NONE,
                     aControlValue, OUString(), aBound, aContent) )
         {
             if( aBound.GetHeight() > aSz.Height() )

@@ -451,10 +451,10 @@ void Dialog::ApplySettings(vcl::RenderContext& rRenderContext)
         // user override
         SetBackground(GetControlBackground());
     }
-    else if (rRenderContext.IsNativeControlSupported(ControlType::WindowBackground, PART_BACKGROUND_DIALOG))
+    else if (rRenderContext.IsNativeControlSupported(ControlType::WindowBackground, ControlPart::BackgroundDialog))
     {
         // NWF background
-        mpWindowImpl->mnNativeBackground = PART_BACKGROUND_DIALOG;
+        mpWindowImpl->mnNativeBackground = ControlPart::BackgroundDialog;
         EnableChildTransparentMode();
     }
     else
@@ -470,9 +470,9 @@ void Dialog::ImplInitSettings()
     if (IsControlBackground())
         SetBackground(GetControlBackground());
     // NWF background
-    else if( IsNativeControlSupported(ControlType::WindowBackground, PART_BACKGROUND_DIALOG))
+    else if( IsNativeControlSupported(ControlType::WindowBackground, ControlPart::BackgroundDialog))
     {
-        mpWindowImpl->mnNativeBackground = PART_BACKGROUND_DIALOG;
+        mpWindowImpl->mnNativeBackground = ControlPart::BackgroundDialog;
         EnableChildTransparentMode();
     }
     // fallback to settings color

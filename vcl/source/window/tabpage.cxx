@@ -42,7 +42,7 @@ void TabPage::ImplInit( vcl::Window* pParent, WinBits nStyle )
 
     // if the tabpage is drawn (ie filled) by a native widget, make sure all controls will have transparent background
     // otherwise they will paint with a wrong background
-    if( IsNativeControlSupported(ControlType::TabBody, PART_ENTIRE_CONTROL) && GetParent() && (GetParent()->GetType() == WINDOW_TABCONTROL) )
+    if( IsNativeControlSupported(ControlType::TabBody, ControlPart::Entire) && GetParent() && (GetParent()->GetType() == WINDOW_TABCONTROL) )
         EnableChildTransparentMode();
 }
 
@@ -129,12 +129,12 @@ void TabPage::DataChanged( const DataChangedEvent& rDCEvt )
 void TabPage::Paint( vcl::RenderContext& rRenderContext, const Rectangle& )
 {
     // draw native tabpage only inside tabcontrols, standalone tabpages look ugly (due to bad dialog design)
-    if( IsNativeControlSupported(ControlType::TabBody, PART_ENTIRE_CONTROL) && GetParent() && (GetParent()->GetType() == WINDOW_TABCONTROL) )
+    if( IsNativeControlSupported(ControlType::TabBody, ControlPart::Entire) && GetParent() && (GetParent()->GetType() == WINDOW_TABCONTROL) )
     {
         const ImplControlValue aControlValue;
 
         ControlState nState = ControlState::ENABLED;
-        int part = PART_ENTIRE_CONTROL;
+        ControlPart part = ControlPart::Entire;
         if ( !IsEnabled() )
             nState &= ~ControlState::ENABLED;
         if ( HasFocus() )

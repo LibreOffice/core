@@ -51,8 +51,8 @@ void ImplInitDropDownButton( PushButton* pButton )
 {
     pButton->SetSymbol( SymbolType::SPIN_DOWN );
 
-    if ( pButton->IsNativeControlSupported(ControlType::Listbox, PART_ENTIRE_CONTROL)
-            && ! pButton->IsNativeControlSupported(ControlType::Listbox, PART_BUTTON_DOWN) )
+    if ( pButton->IsNativeControlSupported(ControlType::Listbox, ControlPart::Entire)
+            && ! pButton->IsNativeControlSupported(ControlType::Listbox, ControlPart::ButtonDown) )
         pButton->SetBackground();
 }
 
@@ -2572,8 +2572,8 @@ void ImplListBox::SetEdgeBlending(bool bNew)
 ImplWin::ImplWin( vcl::Window* pParent, WinBits nWinStyle ) :
     Control ( pParent, nWinStyle )
 {
-    if ( IsNativeControlSupported(ControlType::Listbox, PART_ENTIRE_CONTROL)
-            && ! IsNativeControlSupported(ControlType::Listbox, PART_BUTTON_DOWN) )
+    if ( IsNativeControlSupported(ControlType::Listbox, ControlPart::Entire)
+            && ! IsNativeControlSupported(ControlType::Listbox, ControlPart::ButtonDown) )
         SetBackground();
     else
         SetBackground( Wallpaper( GetSettings().GetStyleSettings().GetFieldColor() ) );
@@ -2616,8 +2616,8 @@ bool ImplWin::PreNotify( NotifyEvent& rNEvt )
         if( pMouseEvt->IsEnterWindow() || pMouseEvt->IsLeaveWindow() )
         {
             // trigger redraw as mouse over state has changed
-            if ( IsNativeControlSupported(ControlType::Listbox, PART_ENTIRE_CONTROL)
-            && ! IsNativeControlSupported(ControlType::Listbox, PART_BUTTON_DOWN) )
+            if ( IsNativeControlSupported(ControlType::Listbox, ControlPart::Entire)
+            && ! IsNativeControlSupported(ControlType::Listbox, ControlPart::ButtonDown) )
             {
                 GetParent()->GetWindow( GetWindowType::Border )->Invalidate( InvalidateFlags::NoErase );
                 GetParent()->GetWindow( GetWindowType::Border )->Update();
@@ -2637,8 +2637,8 @@ void ImplWin::ImplDraw(vcl::RenderContext& rRenderContext, bool bLayout)
         bool bNativeOK = false;
 
         ControlState nState = ControlState::ENABLED;
-        if (rRenderContext.IsNativeControlSupported(ControlType::Listbox, PART_ENTIRE_CONTROL)
-            && rRenderContext.IsNativeControlSupported(ControlType::Listbox, HAS_BACKGROUND_TEXTURE) )
+        if (rRenderContext.IsNativeControlSupported(ControlType::Listbox, ControlPart::Entire)
+            && rRenderContext.IsNativeControlSupported(ControlType::Listbox, ControlPart::HasBackgroundTexture) )
         {
             // Repaint the (focused) area similarly to
             // ImplSmallBorderWindowView::DrawWindow() in
@@ -2676,11 +2676,11 @@ void ImplWin::ImplDraw(vcl::RenderContext& rRenderContext, bool bLayout)
             if( ! (nParentStyle & WB_BORDER) || (nParentStyle & WB_NOBORDER) )
             {
                 Rectangle aParentRect( Point( 0, 0 ), pWin->GetSizePixel() );
-                pWin->DrawNativeControl( ControlType::Listbox, PART_ENTIRE_CONTROL, aParentRect,
+                pWin->DrawNativeControl( ControlType::Listbox, ControlPart::Entire, aParentRect,
                                          nState, aControlValue, OUString() );
             }
 
-            bNativeOK = rRenderContext.DrawNativeControl(ControlType::Listbox, PART_ENTIRE_CONTROL, aCtrlRegion,
+            bNativeOK = rRenderContext.DrawNativeControl(ControlType::Listbox, ControlPart::Entire, aCtrlRegion,
                                                          nState, aControlValue, OUString());
         }
 
@@ -2847,7 +2847,7 @@ void ImplWin::GetFocus()
     ShowFocus( maFocusRect );
     if( ImplGetSVData()->maNWFData.mbNoFocusRects &&
         IsNativeWidgetEnabled() &&
-        IsNativeControlSupported( ControlType::Listbox, PART_ENTIRE_CONTROL ) )
+        IsNativeControlSupported( ControlType::Listbox, ControlPart::Entire ) )
     {
         vcl::Window* pWin = GetParent()->GetWindow( GetWindowType::Border );
         if( ! pWin )
@@ -2864,7 +2864,7 @@ void ImplWin::LoseFocus()
     HideFocus();
     if( ImplGetSVData()->maNWFData.mbNoFocusRects &&
         IsNativeWidgetEnabled() &&
-        IsNativeControlSupported( ControlType::Listbox, PART_ENTIRE_CONTROL ) )
+        IsNativeControlSupported( ControlType::Listbox, ControlPart::Entire ) )
     {
         vcl::Window* pWin = GetParent()->GetWindow( GetWindowType::Border );
         if( ! pWin )
@@ -2878,13 +2878,13 @@ void ImplWin::LoseFocus()
 
 void ImplWin::ShowFocus(const Rectangle& rRect)
 {
-    if (IsNativeControlSupported(ControlType::Listbox, PART_FOCUS))
+    if (IsNativeControlSupported(ControlType::Listbox, ControlPart::Focus))
     {
         ImplControlValue aControlValue;
 
         vcl::Window *pWin = GetParent();
         Rectangle aParentRect(Point(0, 0), pWin->GetSizePixel());
-        pWin->DrawNativeControl(ControlType::Listbox, PART_FOCUS, aParentRect,
+        pWin->DrawNativeControl(ControlType::Listbox, ControlPart::Focus, aParentRect,
                                 ControlState::FOCUSED, aControlValue, OUString());
     }
     Control::ShowFocus(rRect);
