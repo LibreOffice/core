@@ -43,12 +43,13 @@
 #include <svx/xbtmpit.hxx>
 #include <svx/xflhtit.hxx>
 #include "EventMultiplexer.hxx"
-
+#include <sfx2/sidebar/IContextChangeReceiver.hxx>
 
 namespace sd { namespace sidebar {
 
 class SlideBackground :
     public PanelLayout,
+    public ::sfx2::sidebar::IContextChangeReceiver,
     public ::sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface
 {
 public:
@@ -67,6 +68,8 @@ public:
         const SfxItemState eState,
         const SfxPoolItem* pState,
         const bool bIsEnabled) override;
+    virtual void HandleContextChange(
+        const ::sfx2::sidebar::EnumContext& rContext) override;
 
 private:
 
@@ -100,6 +103,8 @@ private:
     std::unique_ptr< XFillBitmapItem > mpBitmapItem;
 
     css::uno::Reference<css::frame::XFrame> mxFrame;
+    ::sfx2::sidebar::EnumContext            maContext;
+    bool         mbTitle;
     SfxBindings* mpBindings;
 
     SfxMapUnit meUnit;
@@ -115,7 +120,6 @@ private:
 
     void Initialize();
     void Update();
-    //DO NOT REMOVE, will be used in follow-up commits
     void SetPanelTitle(const OUString& rTitle);
 
     Color GetColorSetOrDefault();

@@ -63,6 +63,7 @@
 #include <svx/dlgutil.hxx>
 #include <algorithm>
 #include "EventMultiplexer.hxx"
+#include "glob.hrc"
 
 using namespace ::com::sun::star;
 
@@ -94,6 +95,8 @@ SlideBackground::SlideBackground(
     mpHatchItem(),
     mpBitmapItem(),
     mxFrame(rxFrame),
+    maContext(),
+    mbTitle(false),
     mpBindings(pBindings)
 {
     get(mpPaperSizeBox,"paperformat");
@@ -153,6 +156,14 @@ void SlideBackground::Initialize()
     mpDspMasterObjects->SetClickHdl(LINK(this,SlideBackground, DspObjects));
 
     Update();
+}
+
+void SlideBackground::HandleContextChange(
+    const ::sfx2::sidebar::EnumContext& rContext)
+{
+    if (maContext == rContext)
+        return;
+    maContext = rContext;
 }
 
 void SlideBackground::Update()
@@ -290,7 +301,8 @@ void SlideBackground::addListener()
         aLink,
         tools::EventMultiplexerEvent::EID_CURRENT_PAGE |
         tools::EventMultiplexerEvent::EID_MAIN_VIEW_ADDED |
-        tools::EventMultiplexerEvent::EID_SHAPE_CHANGED );
+        tools::EventMultiplexerEvent::EID_SHAPE_CHANGED |
+        tools::EventMultiplexerEvent::EID_VIEW_ADDED);
 }
 
 void SlideBackground::removeListener()
@@ -336,6 +348,27 @@ IMPL_LINK_TYPED(SlideBackground, EventMultiplexerListener,
                 0 };
             updateMasterSlideSelection();
             GetBindings()->Invalidate( SidArray );
+        }
+        break;
+        case tools::EventMultiplexerEvent::EID_VIEW_ADDED:
+        {
+            if(!mbTitle)
+            {
+                sfx2::sidebar::EnumContext rDrawContext(sfx2::sidebar::EnumContext::Application_Draw,
+                                                        sfx2::sidebar::EnumContext::Context_DrawPage);
+                sfx2::sidebar::EnumContext rImpressContext(sfx2::sidebar::EnumContext::Application_Impress,
+                                                        sfx2::sidebar::EnumContext::Context_DrawPage);
+                if(maContext == rDrawContext)
+                {
+                    SetPanelTitle(SD_RESSTR(STR_PAGE_NAME));
+                    mbTitle = true;
+                }
+                else if(maContext == rImpressContext)
+                {
+                    SetPanelTitle(SD_RESSTR(STR_SLIDE_NAME));
+                    mbTitle = true;
+                }
+            }
         }
         break;
         default:
