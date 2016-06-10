@@ -102,7 +102,7 @@ namespace XSLT
                 return "Not Found:";// + streamName;
             }
         ;
-        Reference<XInputStream> subStream(*static_cast<Reference< XInterface > const *>(m_storage->getByName(streamName).getValue()), UNO_QUERY);
+        Reference<XInputStream> subStream(m_storage->getByName(streamName), UNO_QUERY);
         if (!subStream.is())
             {
                 return "Not Found:";// + streamName;

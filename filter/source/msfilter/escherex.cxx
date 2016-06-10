@@ -18,6 +18,7 @@
  */
 
 #include "eschesdo.hxx"
+#include <o3tl/any.hxx>
 #include <svx/svdxcgv.hxx>
 #include <svx/svdomedia.hxx>
 #include <svx/xflftrit.hxx>
@@ -437,7 +438,7 @@ void EscherPropertyContainer::CreateGradientProperties(
     if (bTransparentGradient &&  EscherPropertyValueHelper::GetPropertyValue(
         aAny, rXPropSet, "FillTransparenceGradient" ) )
     {
-        pGradient = static_cast<css::awt::Gradient const *>(aAny.getValue());
+        pGradient = o3tl::doAccess<css::awt::Gradient>(aAny);
 
         css::uno::Any          aAnyTemp;
         const rtl::OUString aPropName( "FillStyle" );
@@ -453,8 +454,8 @@ void EscherPropertyContainer::CreateGradientProperties(
                 if ( EscherPropertyValueHelper::GetPropertyValue(
                     aAnyTemp, rXPropSet, "FillColor" ) )
                 {
-                    const_cast<css::awt::Gradient *>(pGradient)->StartColor = ImplGetColor( *static_cast<sal_uInt32 const *>(aAnyTemp.getValue()), false );
-                    const_cast<css::awt::Gradient *>(pGradient)->EndColor = ImplGetColor( *static_cast<sal_uInt32 const *>(aAnyTemp.getValue()), false );
+                    const_cast<css::awt::Gradient *>(pGradient)->StartColor = ImplGetColor( *o3tl::doAccess<sal_uInt32>(aAnyTemp), false );
+                    const_cast<css::awt::Gradient *>(pGradient)->EndColor = ImplGetColor( *o3tl::doAccess<sal_uInt32>(aAnyTemp), false );
                 }
             }
             // gradient and transparency.
@@ -462,7 +463,7 @@ void EscherPropertyContainer::CreateGradientProperties(
             {
                 if ( EscherPropertyValueHelper::GetPropertyValue(
                     aAny, rXPropSet, "FillGradient" ) )
-                    pGradient = static_cast<css::awt::Gradient const *>(aAny.getValue());
+                    pGradient = o3tl::doAccess<css::awt::Gradient>(aAny);
             }
         }
 
@@ -471,7 +472,7 @@ void EscherPropertyContainer::CreateGradientProperties(
     else if ( EscherPropertyValueHelper::GetPropertyValue(
         aAny, rXPropSet, "FillGradient" ) )
     {
-        pGradient = static_cast<css::awt::Gradient const *>(aAny.getValue());
+        pGradient = o3tl::doAccess<css::awt::Gradient>(aAny);
     }
 
     if ( pGradient )
@@ -540,7 +541,7 @@ void EscherPropertyContainer::CreateGradientProperties(
     if (bTransparentGradient &&  EscherPropertyValueHelper::GetPropertyValue(
         aAny, rXPropSet, "FillTransparenceGradient" ) )
     {
-        pGradient = static_cast<css::awt::Gradient const *>(aAny.getValue());
+        pGradient = o3tl::doAccess<css::awt::Gradient>(aAny);
         if ( pGradient )
         {
             sal_uInt32  nBlue =  GetGradientColor( pGradient, nFirstColor ) >> 16;
@@ -622,7 +623,7 @@ void EscherPropertyContainer::CreateFillProperties(
                     if ( EscherPropertyValueHelper::GetPropertyValue(
                             aAny, rXPropSet, "FillColor" ) )
                     {
-                        sal_uInt32 nFillColor = ImplGetColor( *static_cast<sal_uInt32 const *>(aAny.getValue()) );
+                        sal_uInt32 nFillColor = ImplGetColor( *o3tl::doAccess<sal_uInt32>(aAny) );
                         nFillBackColor = nFillColor ^ 0xffffff;
                         AddOpt( ESCHER_Prop_fillColor, nFillColor );
                     }
@@ -639,7 +640,7 @@ void EscherPropertyContainer::CreateFillProperties(
         {
             sal_uInt16 nTransparency = ( EscherPropertyValueHelper::GetPropertyValue(
                 aAny, rXPropSet, "FillTransparence", true ) )
-                ? *static_cast<sal_Int16 const *>(aAny.getValue()) : 0;
+                ? *o3tl::doAccess<sal_Int16>(aAny) : 0;
             if (  nTransparency )
                 AddOpt( ESCHER_Prop_fillOpacity, ( ( 100 - nTransparency ) << 16 ) / 100 );
         }
@@ -825,7 +826,7 @@ void EscherPropertyContainer::CreateTextProperties(
     {
         sal_uInt16 nAngle = EscherPropertyValueHelper::GetPropertyValue(
             aAny, rXPropSet, "RotateAngle", true ) ?
-                (sal_uInt16)( ( *static_cast<sal_Int32 const *>(aAny.getValue()) ) + 5 ) / 10 : 0;
+                (sal_uInt16)( ( *o3tl::doAccess<sal_Int32>(aAny) ) + 5 ) / 10 : 0;
         if (nAngle==900)
         {
             AddOpt( ESCHER_Prop_txflTextFlow, ESCHER_txflBtoT );
@@ -865,7 +866,7 @@ bool EscherPropertyContainer::GetLineArrow( const bool bLineStart,
 
             if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, sLineName ) )
             {
-                OUString        aArrowStartName = *static_cast<OUString const *>(aAny.getValue());
+                OUString        aArrowStartName = *o3tl::doAccess<OUString>(aAny);
                 sal_Int16       nWhich = bLineStart ? XATTR_LINESTART : XATTR_LINEEND;
 
                 OUString aApiName = SvxUnogetApiNameForItem(nWhich, aArrowStartName);
@@ -1018,7 +1019,7 @@ void EscherPropertyContainer::CreateLineProperties(
                     if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, "LineDash" ) )
                     {
                         ESCHER_LineDashing eDash = ESCHER_LineSolid;
-                        css::drawing::LineDash const * pLineDash = static_cast<css::drawing::LineDash const *>(aAny.getValue());
+                        auto pLineDash = o3tl::doAccess<css::drawing::LineDash>(aAny);
                         sal_Int32 nDistance = pLineDash->Distance << 1;
                         switch ( pLineDash->Style )
                         {
@@ -1074,14 +1075,14 @@ void EscherPropertyContainer::CreateLineProperties(
         }
         if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, "LineColor" ) )
         {
-            sal_uInt32 nLineColor = ImplGetColor( *static_cast<sal_uInt32 const *>(aAny.getValue()) );
+            sal_uInt32 nLineColor = ImplGetColor( *o3tl::doAccess<sal_uInt32>(aAny) );
             AddOpt( ESCHER_Prop_lineColor, nLineColor );
             AddOpt( ESCHER_Prop_lineBackColor, nLineColor ^ 0xffffff );
         }
     }
 
     sal_uInt32 nLineSize = ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, "LineWidth" ) )
-        ? *static_cast<sal_uInt32 const *>(aAny.getValue()) : 0;
+        ? *o3tl::doAccess<sal_uInt32>(aAny) : 0;
     if ( nLineSize > 1 )
         AddOpt( ESCHER_Prop_lineWidth, nLineSize * 360 );       // 100TH MM -> PT , 1PT = 12700 EMU
 
@@ -1441,8 +1442,8 @@ bool EscherPropertyContainer::CreateGraphicProperties(
         sal_uInt16 nAngle = 0;
         if ( rSource == "MetaFile" )
         {
-            css::uno::Sequence<sal_Int8> aSeq = *static_cast<css::uno::Sequence<sal_Int8> const *>(aAny.getValue());
-            const sal_Int8*    pAry = aSeq.getArray();
+            auto & aSeq = *o3tl::doAccess<css::uno::Sequence<sal_Int8>>(aAny);
+            const sal_Int8*    pAry = aSeq.getConstArray();
             sal_uInt32          nAryLen = aSeq.getLength();
 
             // the metafile is already rotated
@@ -1480,11 +1481,11 @@ bool EscherPropertyContainer::CreateGraphicProperties(
         }
         else if ( rSource == "FillBitmapURL" )
         {
-            aGraphicUrl = *static_cast<OUString const *>(aAny.getValue());
+            aGraphicUrl = *o3tl::doAccess<OUString>(aAny);
         }
         else if ( rSource == "GraphicURL" )
         {
-            aGraphicUrl = *static_cast<OUString const *>(aAny.getValue());
+            aGraphicUrl = *o3tl::doAccess<OUString>(aAny);
             bCreateFillStyles = true;
         }
         else if ( rSource == "FillHatch" )
@@ -1495,7 +1496,7 @@ bool EscherPropertyContainer::CreateGraphicProperties(
                 Color aBackColor;
                 if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, "FillColor" ) )
                 {
-                    aBackColor = ImplGetColor( *static_cast<sal_uInt32 const *>(aAny.getValue()), false );
+                    aBackColor = ImplGetColor( *o3tl::doAccess<sal_uInt32>(aAny), false );
                 }
                 bool bFillBackground = false;
                 if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, "FillBackground", true ) )
@@ -1549,7 +1550,7 @@ bool EscherPropertyContainer::CreateGraphicProperties(
         else
         {
             nAngle = bRotate && EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, "RotateAngle", true )
-                ? (sal_uInt16)( ( *static_cast<sal_Int32 const *>(aAny.getValue()) ) + 5 ) / 10
+                ? (sal_uInt16)( ( *o3tl::doAccess<sal_Int32>(aAny) ) + 5 ) / 10
                 : 0;
         }
 
@@ -1791,8 +1792,8 @@ tools::PolyPolygon EscherPropertyContainer::GetPolyPolygon( const css::uno::Any&
 
     if ( rAny.getValueType() == cppu::UnoType<css::drawing::PolyPolygonBezierCoords>::get())
     {
-        css::drawing::PolyPolygonBezierCoords const * pSourcePolyPolygon
-            = static_cast<css::drawing::PolyPolygonBezierCoords const *>(rAny.getValue());
+        auto pSourcePolyPolygon
+            = o3tl::doAccess<css::drawing::PolyPolygonBezierCoords>(rAny);
         sal_uInt16 nOuterSequenceCount = (sal_uInt16)pSourcePolyPolygon->Coordinates.getLength();
 
         // get pointer of inner sequences
@@ -1838,10 +1839,8 @@ tools::PolyPolygon EscherPropertyContainer::GetPolyPolygon( const css::uno::Any&
             }
         }
     }
-    else if ( rAny.getValueType() == cppu::UnoType<css::drawing::PointSequenceSequence>::get() )
+    else if ( auto pSourcePolyPolygon = o3tl::tryAccess<css::drawing::PointSequenceSequence>(rAny) )
     {
-        css::drawing::PointSequenceSequence const * pSourcePolyPolygon
-            = static_cast<css::drawing::PointSequenceSequence const *>(rAny.getValue());
         sal_uInt16 nOuterSequenceCount = (sal_uInt16)pSourcePolyPolygon->getLength();
 
         // get pointer to inner sequences
@@ -1876,11 +1875,8 @@ tools::PolyPolygon EscherPropertyContainer::GetPolyPolygon( const css::uno::Any&
             }
         }
     }
-    else if ( rAny.getValueType() == cppu::UnoType<css::drawing::PointSequence>::get() )
+    else if ( auto pInnerSequence = o3tl::tryAccess<css::drawing::PointSequence>(rAny) )
     {
-        css::drawing::PointSequence const * pInnerSequence =
-            static_cast<css::drawing::PointSequence const *>(rAny.getValue());
-
         bNoError = pInnerSequence != nullptr;
         if ( bNoError )
         {
@@ -2232,10 +2228,10 @@ bool EscherPropertyContainer::CreateConnectorProperties(
                 aAny >>= eCt;
                 if ( EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, sEdgeStartPoint ) )
                 {
-                    aStartPoint = *static_cast<css::awt::Point const *>(aAny.getValue());
+                    aStartPoint = *o3tl::doAccess<css::awt::Point>(aAny);
                     if ( EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, sEdgeEndPoint ) )
                     {
-                        aEndPoint = *static_cast<css::awt::Point const *>(aAny.getValue());
+                        aEndPoint = *o3tl::doAccess<css::awt::Point>(aAny);
 
                         rShapeFlags = SHAPEFLAG_HAVEANCHOR | SHAPEFLAG_HAVESPT | SHAPEFLAG_CONNECTOR;
                         rGeoRect = css::awt::Rectangle( aStartPoint.X, aStartPoint.Y,
@@ -2348,13 +2344,13 @@ void EscherPropertyContainer::CreateShadowProperties(
                 {
                     nShadowFlags |= 2;
                     if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, "ShadowColor" ) )
-                        AddOpt( ESCHER_Prop_shadowColor, ImplGetColor( *static_cast<sal_uInt32 const *>(aAny.getValue()) ) );
+                        AddOpt( ESCHER_Prop_shadowColor, ImplGetColor( *o3tl::doAccess<sal_uInt32>(aAny) ) );
                     if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, "ShadowXDistance" ) )
-                        AddOpt( ESCHER_Prop_shadowOffsetX, *static_cast<sal_Int32 const *>(aAny.getValue()) * 360 );
+                        AddOpt( ESCHER_Prop_shadowOffsetX, *o3tl::doAccess<sal_Int32>(aAny) * 360 );
                     if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, "ShadowYDistance" ) )
-                        AddOpt( ESCHER_Prop_shadowOffsetY, *static_cast<sal_Int32 const *>(aAny.getValue()) * 360 );
+                        AddOpt( ESCHER_Prop_shadowOffsetY, *o3tl::doAccess<sal_Int32>(aAny) * 360 );
                     if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, "ShadowTransparence" ) )
-                        AddOpt( ESCHER_Prop_shadowOpacity,  0x10000 - (((sal_uInt32)*static_cast<sal_uInt16 const *>(aAny.getValue())) * 655 ) );
+                        AddOpt( ESCHER_Prop_shadowOpacity,  0x10000 - (((sal_uInt32)*o3tl::doAccess<sal_uInt16>(aAny)) * 655 ) );
                 }
             }
         }
@@ -2971,7 +2967,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                         uno::Any aFillColor2;
                                         if ( EscherPropertyValueHelper::GetPropertyValue( aFillColor2, aXPropSet, "FillColor2", true ) )
                                         {
-                                            sal_uInt32 nFillColor = ImplGetColor( *static_cast<sal_uInt32 const *>(aFillColor2.getValue()) );
+                                            sal_uInt32 nFillColor = ImplGetColor( *o3tl::doAccess<sal_uInt32>(aFillColor2) );
                                             AddOpt( DFF_Prop_c3DExtrusionColor, nFillColor );
                                         }
                                     }
@@ -4529,8 +4525,8 @@ sal_uInt32 EscherConnectorListEntry::GetConnectorRule( bool bFirst )
         {
             if ( EscherPropertyValueHelper::GetPropertyValue( aAny, aPropertySet, "PolyPolygon" ) )
             {
-                css::drawing::PointSequenceSequence const * pSourcePolyPolygon =
-                    static_cast<css::drawing::PointSequenceSequence const *>(aAny.getValue());
+                auto pSourcePolyPolygon =
+                    o3tl::doAccess<css::drawing::PointSequenceSequence>(aAny);
                 sal_Int32 nOuterSequenceCount = pSourcePolyPolygon->getLength();
                 css::drawing::PointSequence const * pOuterSequence = pSourcePolyPolygon->getConstArray();
 
@@ -4571,8 +4567,8 @@ sal_uInt32 EscherConnectorListEntry::GetConnectorRule( bool bFirst )
         {
             if ( EscherPropertyValueHelper::GetPropertyValue( aAny, aPropertySet2, "PolyPolygonBezier" ) )
             {
-                css::drawing::PolyPolygonBezierCoords const * pSourcePolyPolygon =
-                    static_cast<css::drawing::PolyPolygonBezierCoords const *>(aAny.getValue());
+                auto pSourcePolyPolygon =
+                    o3tl::doAccess<css::drawing::PolyPolygonBezierCoords>(aAny);
                 sal_Int32 nOuterSequenceCount = pSourcePolyPolygon->Coordinates.getLength();
 
                 // Zeiger auf innere sequences holen
@@ -4715,7 +4711,7 @@ sal_uInt32 EscherConnectorListEntry::GetConnectorRule( bool bFirst )
             aPoly[ 3 ] = Point( aRect.Right(), aCenter.Y() );
 
             sal_Int32 nAngle = ( EscherPropertyValueHelper::GetPropertyValue( aAny, aPropertySet, "RotateAngle", true ) )
-                    ? *static_cast<sal_Int32 const *>(aAny.getValue()) : 0;
+                    ? *o3tl::doAccess<sal_Int32>(aAny) : 0;
             if ( nAngle )
                 aPoly.Rotate( aRect.TopLeft(), (sal_uInt16)( ( nAngle + 5 ) / 10 ) );
             nRule = GetClosestPoint( aPoly, aRefPoint );

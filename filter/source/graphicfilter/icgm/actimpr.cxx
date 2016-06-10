@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <o3tl/any.hxx>
 #include <vcl/bitmapex.hxx>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
@@ -65,7 +68,7 @@ CGMImpressOutAct::CGMImpressOutAct( CGM& rCGM, const uno::Reference< frame::XMod
                 maXMultiServiceFactory.set( rModel, uno::UNO_QUERY);
                 if( maXMultiServiceFactory.is() )
                 {
-                    maXDrawPage = *static_cast<uno::Reference< drawing::XDrawPage > const *>(maXDrawPages->getByIndex( 0 ).getValue());
+                    maXDrawPage = *o3tl::doAccess<uno::Reference<drawing::XDrawPage>>(maXDrawPages->getByIndex( 0 ));
                     if ( ImplInitPage() )
                         bStatRet = true;
                 }
@@ -397,7 +400,7 @@ void CGMImpressOutAct::EndGroup()
                 uno::Reference< drawing::XShapes >  aXShapes = drawing::ShapeCollection::create(comphelper::getProcessComponentContext());
                 for ( sal_uInt32 i = nFirstIndex; i < nCurrentCount; i++ )
                 {
-                    uno::Reference< drawing::XShape >  aXShape = *static_cast<uno::Reference< drawing::XShape > const *>(maXShapes->getByIndex( i ).getValue());
+                    uno::Reference< drawing::XShape >  aXShape = *o3tl::doAccess<uno::Reference<drawing::XShape>>(maXShapes->getByIndex( i ));
                     if (aXShape.is() )
                     {
                         aXShapes->add( aXShape );
@@ -840,7 +843,7 @@ void CGMImpressOutAct::AppendText( char* pString, sal_uInt32 /*nSize*/, FinalFla
 {
     if ( nFinalTextCount )
     {
-        uno::Reference< drawing::XShape >  aShape = *static_cast<uno::Reference< drawing::XShape > const *>(maXShapes->getByIndex( nFinalTextCount - 1 ).getValue());
+        uno::Reference< drawing::XShape >  aShape = *o3tl::doAccess<uno::Reference<drawing::XShape>>(maXShapes->getByIndex( nFinalTextCount - 1 ));
         if ( aShape.is() )
         {
             uno::Reference< text::XText >  xText;

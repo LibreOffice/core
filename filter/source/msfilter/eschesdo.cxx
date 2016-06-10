@@ -18,6 +18,7 @@
  */
 
 #include "eschesdo.hxx"
+#include <o3tl/any.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/svdoashp.hxx>
@@ -211,8 +212,8 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                 for( sal_uInt32 n = 0, nCnt = xXIndexAccess->getCount();
                         n < nCnt; ++n )
                 {
-                    ImplEESdrObject aObj( *this, *static_cast<Reference< XShape > const *>(
-                                    xXIndexAccess->getByIndex( n ).getValue()) );
+                    ImplEESdrObject aObj( *this, *o3tl::doAccess<Reference<XShape>>(
+                                    xXIndexAccess->getByIndex( n )) );
                     if( aObj.IsValid() )
                     {
                         aObj.SetOOXML(bOOxmlExport);
@@ -332,7 +333,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             PolyStyle   ePolyKind = PolyStyle();
             if ( rObj.ImplGetPropertyValue( OUString( "CircleKind" ) ) )
             {
-                eCircleKind = *( static_cast<CircleKind const *>(rObj.GetUsrAny().getValue()) );
+                eCircleKind = *o3tl::doAccess<CircleKind>(rObj.GetUsrAny());
                 switch ( eCircleKind )
                 {
                     case CircleKind_SECTION :
@@ -367,10 +368,10 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                 sal_Int32 nStartAngle, nEndAngle;
                 if ( !rObj.ImplGetPropertyValue( OUString( "CircleStartAngle" ) ) )
                     break;
-                nStartAngle = *( static_cast<sal_Int32 const *>(rObj.GetUsrAny().getValue()) );
+                nStartAngle = *o3tl::doAccess<sal_Int32>(rObj.GetUsrAny());
                 if( !rObj.ImplGetPropertyValue( OUString( "CircleEndAngle" ) ) )
                     break;
-                nEndAngle = *( static_cast<sal_Int32 const *>(rObj.GetUsrAny().getValue()) );
+                nEndAngle = *o3tl::doAccess<sal_Int32>(rObj.GetUsrAny());
 
                 Point aStart, aEnd, aCenter;
                 aStart.X() = (sal_Int32)( ( cos( (double)( nStartAngle *
@@ -653,7 +654,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
 
         if( USHRT_MAX != mpEscherEx->GetHellLayerId() &&
             rObj.ImplGetPropertyValue( OUString( "LayerID" ) ) &&
-            (*static_cast<sal_uInt16 const *>(rObj.GetUsrAny().getValue()) ) == mpEscherEx->GetHellLayerId() )
+            *o3tl::doAccess<sal_uInt16>(rObj.GetUsrAny()) == mpEscherEx->GetHellLayerId() )
         {
             aPropOpt.AddOpt( ESCHER_Prop_fPrint, 0x200020 );
         }
@@ -838,8 +839,8 @@ void ImplEESdrWriter::ImplWritePage(
                 mXStatusIndicator->setValue( nValue );
         }
 
-        ImplEESdrObject aObj( *this, *static_cast<Reference< XShape > const *>(
-                                    mXShapes->getByIndex( n ).getValue()) );
+        ImplEESdrObject aObj( *this, *o3tl::doAccess<Reference<XShape>>(
+                                    mXShapes->getByIndex( n )) );
         if( aObj.IsValid() )
         {
             ImplWriteShape( aObj, rSolverContainer );

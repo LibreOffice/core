@@ -19,6 +19,7 @@
 #ifndef INCLUDED_FILTER_SOURCE_MSFILTER_ESCHESDO_HXX
 #define INCLUDED_FILTER_SOURCE_MSFILTER_ESCHESDO_HXX
 #include <filter/msfilter/escherex.hxx>
+#include <o3tl/any.hxx>
 #include <svx/unopage.hxx>
 #include <vcl/mapmod.hxx>
 
@@ -57,7 +58,7 @@ public:
     bool ImplGetPropertyValue( const OUString& rString ) { return ImplGetPropertyValue(rString.getStr()); }
 
     sal_Int32 ImplGetInt32PropertyValue( const sal_Unicode* pStr )
-    { return ImplGetPropertyValue( pStr ) ? *static_cast<sal_Int32 const *>(mAny.getValue()) : 0; }
+    { return ImplGetPropertyValue( pStr ) ? *o3tl::doAccess<sal_Int32>(mAny) : 0; }
     sal_Int32 ImplGetInt32PropertyValue( const OUString& rStr )
     { return ImplGetInt32PropertyValue(rStr.getStr()); }
 
