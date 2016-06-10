@@ -885,12 +885,15 @@ static void signalCommand(LOKDocView* pLOKDocView, char* pPayload, gpointer /*pD
         {
             GtkToolItem* pItem = rWindow.m_aCommandNameToolItems[aKey];
             gboolean bEdit = aValue == "true";
-            if (gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(pItem)) != bEdit)
+            if (GTK_IS_TOGGLE_TOOL_BUTTON(pItem))
             {
-                // Avoid invoking lok_doc_view_post_command().
-                rWindow.m_bToolItemBroadcast = false;
-                gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(pItem), bEdit);
-                rWindow.m_bToolItemBroadcast = true;
+                if (gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(pItem)) != bEdit)
+                {
+                    // Avoid invoking lok_doc_view_post_command().
+                    rWindow.m_bToolItemBroadcast = false;
+                    gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(pItem), bEdit);
+                    rWindow.m_bToolItemBroadcast = true;
+                }
             }
         }
     }
