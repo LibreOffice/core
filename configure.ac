@@ -1178,10 +1178,6 @@ AC_ARG_ENABLE(lto,
          linker. For MSVC, this option is broken at the moment. This is experimental work
          in progress that shouldn't be used unless you are working on it.)]))
 
-AC_ARG_ENABLE(crashdump,
-    AS_HELP_STRING([--enable-crashdump],
-        [Enable the crashdump feature.]))
-
 AC_ARG_ENABLE(python,
     AS_HELP_STRING([--enable-python=<no/auto/system/internal/fully-internal>],
         [Enables or disables Python support at run-time and build-time.
