@@ -376,7 +376,7 @@ void XMLPropStyleContext::CreateAndInsert( bool bOverwrite )
         if( !bNew && xPropSetInfo->hasPropertyByName( msIsPhysical ) )
         {
             Any aAny = xPropSet->getPropertyValue( msIsPhysical );
-            bNew = !*o3tl::doGet<bool>(aAny);
+            bNew = !*o3tl::doAccess<bool>(aAny);
         }
         SetNew( bNew );
         if( rName != GetName() )

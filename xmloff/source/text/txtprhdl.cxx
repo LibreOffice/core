@@ -354,7 +354,7 @@ bool XMLOpaquePropHdl_Impl::exportXML(
         const Any& rValue,
         const SvXMLUnitConverter& ) const
 {
-    if( *o3tl::doGet<bool>(rValue) )
+    if( *o3tl::doAccess<bool>(rValue) )
            rStrExpValue = GetXMLToken( XML_FOREGROUND );
     else
            rStrExpValue = GetXMLToken( XML_BACKGROUND );
@@ -404,7 +404,7 @@ bool XMLContourModePropHdl_Impl::exportXML(
         const Any& rValue,
         const SvXMLUnitConverter& ) const
 {
-    if( *o3tl::doGet<bool>(rValue) )
+    if( *o3tl::doAccess<bool>(rValue) )
            rStrExpValue = GetXMLToken( XML_OUTSIDE );
     else
            rStrExpValue = GetXMLToken( XML_FULL );
@@ -457,7 +457,7 @@ bool XMLParagraphOnlyPropHdl_Impl::exportXML(
         const Any& rValue,
         const SvXMLUnitConverter& ) const
 {
-    if( *o3tl::doGet<bool>(rValue) )
+    if( *o3tl::doAccess<bool>(rValue) )
            rStrExpValue = GetXMLToken( XML_1 );
     else
            rStrExpValue = GetXMLToken( XML_NO_LIMIT );
@@ -583,7 +583,7 @@ bool XMLFrameProtectPropHdl_Impl::exportXML(
         const Any& rValue,
         const SvXMLUnitConverter& ) const
 {
-    if( *o3tl::doGet<bool>(rValue) )
+    if( *o3tl::doAccess<bool>(rValue) )
     {
         if( rStrExpValue.isEmpty() ||
             IsXMLToken( rStrExpValue, XML_NONE ) )
@@ -825,7 +825,7 @@ bool XMLGrfMirrorPropHdl_Impl::exportXML(
         const Any& rValue,
         const SvXMLUnitConverter& ) const
 {
-    if( *o3tl::doGet<bool>(rValue) )
+    if( *o3tl::doAccess<bool>(rValue) )
     {
         if( rStrExpValue.isEmpty() ||
             IsXMLToken( rStrExpValue, XML_NONE ) )
@@ -1100,7 +1100,7 @@ bool XMLTextSyncWidthHeightPropHdl_Impl::exportXML(
         const SvXMLUnitConverter& ) const
 {
     bool bRet = false;
-    if( *o3tl::doGet<bool>(rValue) )
+    if( *o3tl::doAccess<bool>(rValue) )
     {
         rStrExpValue = sValue;
         bRet = true;

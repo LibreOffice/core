@@ -674,7 +674,7 @@ void XMLTextImportPropertyMapper::finished(
     // #i5775# don't overwrite %transparency with binary transparency
     if( ( pBackTransparency != nullptr ) && ( pBackTransparent != nullptr ) )
     {
-        if( ! *o3tl::doGet<bool>(pBackTransparent->maValue) )
+        if( ! *o3tl::doAccess<bool>(pBackTransparent->maValue) )
             pBackTransparent->mnIndex = -1;
     }
 

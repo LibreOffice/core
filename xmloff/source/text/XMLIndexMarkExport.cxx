@@ -92,7 +92,7 @@ void XMLIndexMarkExport::ExportIndexMark(
 
         // collapsed/alternative text entry?
         aAny = rPropSet->getPropertyValue(sIsCollapsed);
-        if (*o3tl::doGet<bool>(aAny))
+        if (*o3tl::doAccess<bool>(aAny))
         {
             // collapsed entry: needs alternative text
             nElementNo = 0;
@@ -108,7 +108,7 @@ void XMLIndexMarkExport::ExportIndexMark(
         {
             // start and end entries: has ID
             aAny = rPropSet->getPropertyValue(sIsStart);
-            nElementNo = *o3tl::doGet<bool>(aAny) ? 1 : 2;
+            nElementNo = *o3tl::doAccess<bool>(aAny) ? 1 : 2;
 
             // generate ID
             OUStringBuffer sBuf;

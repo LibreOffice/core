@@ -99,7 +99,7 @@ bool XMLStyleExport::exportStyle(
     if( xPropSetInfo->hasPropertyByName( sIsPhysical ) )
     {
         aAny = xPropSet->getPropertyValue( sIsPhysical );
-        if( !*o3tl::doGet<bool>(aAny) )
+        if( !*o3tl::doAccess<bool>(aAny) )
             return false;
     }
 
@@ -167,7 +167,7 @@ bool XMLStyleExport::exportStyle(
     if( xPropSetInfo->hasPropertyByName( sIsAutoUpdate ) )
     {
         aAny = xPropSet->getPropertyValue( sIsAutoUpdate );
-        if( *o3tl::doGet<bool>(aAny) )
+        if( *o3tl::doAccess<bool>(aAny) )
             GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_AUTO_UPDATE,
                                       XML_TRUE );
     }
@@ -477,7 +477,7 @@ void XMLStyleExport::exportStyleFamily(
             if (xPropSetInfo->hasPropertyByName( sIsPhysical ))
             {
                 Any aAny( xPropSet->getPropertyValue( sIsPhysical ) );
-                if (!*o3tl::doGet<bool>(aAny))
+                if (!*o3tl::doAccess<bool>(aAny))
                     continue;
             }
 

@@ -214,7 +214,7 @@ void XMLRedlineExport::ExportChangesListElements()
         Reference<XPropertySet> aDocPropertySet( rExport.GetModel(),
                                                  uno::UNO_QUERY );
         // redlining enabled?
-        bool bEnabled = *o3tl::doGet<bool>(aDocPropertySet->getPropertyValue(
+        bool bEnabled = *o3tl::doAccess<bool>(aDocPropertySet->getPropertyValue(
                                                 sRecordChanges ));
 
         // only export if we have redlines or attributes
@@ -249,7 +249,7 @@ void XMLRedlineExport::ExportChangesListElements()
                     // export only if not in header or footer
                     // (those must be exported with their XText)
                     aAny = xPropSet->getPropertyValue(sIsInHeaderFooter);
-                    if (! *o3tl::doGet<bool>(aAny))
+                    if (! *o3tl::doAccess<bool>(aAny))
                     {
                         // and finally, export change
                         ExportChangedRegion(xPropSet);
@@ -273,8 +273,8 @@ void XMLRedlineExport::ExportChangeAutoStyle(
         Any aIsStart = rPropSet->getPropertyValue(sIsStart);
         Any aIsCollapsed = rPropSet->getPropertyValue(sIsCollapsed);
 
-        if ( *o3tl::doGet<bool>(aIsStart) ||
-             *o3tl::doGet<bool>(aIsCollapsed) )
+        if ( *o3tl::doAccess<bool>(aIsStart) ||
+             *o3tl::doAccess<bool>(aIsCollapsed) )
             pCurrentChangesList->push_back(rPropSet);
     }
 
@@ -316,7 +316,7 @@ void XMLRedlineExport::ExportChangesListAutoStyles()
                     // export only if not in header or footer
                     // (those must be exported with their XText)
                     aAny = xPropSet->getPropertyValue(sIsInHeaderFooter);
-                    if (! *o3tl::doGet<bool>(aAny))
+                    if (! *o3tl::doAccess<bool>(aAny))
                     {
                         ExportChangeAutoStyle(xPropSet);
                     }
@@ -332,7 +332,7 @@ void XMLRedlineExport::ExportChangeInline(
     // determine element name (depending on collapsed, start/end)
     enum XMLTokenEnum eElement = XML_TOKEN_INVALID;
     Any aAny = rPropSet->getPropertyValue(sIsCollapsed);
-    bool bCollapsed = *o3tl::doGet<bool>(aAny);
+    bool bCollapsed = *o3tl::doAccess<bool>(aAny);
     if (bCollapsed)
     {
         eElement = XML_CHANGE;
@@ -340,7 +340,7 @@ void XMLRedlineExport::ExportChangeInline(
     else
     {
         aAny = rPropSet->getPropertyValue(sIsStart);
-        const bool bStart = *o3tl::doGet<bool>(aAny);
+        const bool bStart = *o3tl::doAccess<bool>(aAny);
         eElement = bStart ? XML_CHANGE_START : XML_CHANGE_END;
     }
 
@@ -365,7 +365,7 @@ void XMLRedlineExport::ExportChangedRegion(
 
     // merge-last-paragraph
     Any aAny = rPropSet->getPropertyValue(sMergeLastPara);
-    if( ! *o3tl::doGet<bool>(aAny) )
+    if( ! *o3tl::doAccess<bool>(aAny) )
         rExport.AddAttribute(XML_NAMESPACE_TEXT, XML_MERGE_LAST_PARAGRAPH,
                              XML_FALSE);
 
@@ -582,11 +582,11 @@ void XMLRedlineExport::ExportStartOrEndRedline(
         }
         else if (sIsCollapsed.equals(pValues[i].Name))
         {
-            bIsCollapsed = *o3tl::doGet<bool>(pValues[i].Value);
+            bIsCollapsed = *o3tl::doAccess<bool>(pValues[i].Value);
         }
         else if (sIsStart.equals(pValues[i].Name))
         {
-            bIsStart = *o3tl::doGet<bool>(pValues[i].Value);
+            bIsStart = *o3tl::doAccess<bool>(pValues[i].Value);
         }
     }
 

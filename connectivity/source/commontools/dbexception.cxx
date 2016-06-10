@@ -175,14 +175,14 @@ bool SQLExceptionInfo::isKindOf(TYPE _eType) const
 SQLExceptionInfo::operator const css::sdbc::SQLException*() const
 {
     OSL_ENSURE(isKindOf(TYPE::SQLException), "SQLExceptionInfo::operator SQLException* : invalid call !");
-    return o3tl::doGet<css::sdbc::SQLException>(m_aContent);
+    return o3tl::doAccess<css::sdbc::SQLException>(m_aContent);
 }
 
 
 SQLExceptionInfo::operator const css::sdb::SQLContext*() const
 {
     OSL_ENSURE(isKindOf(TYPE::SQLContext), "SQLExceptionInfo::operator SQLException* : invalid call !");
-    return o3tl::doGet<css::sdb::SQLContext>(m_aContent);
+    return o3tl::doAccess<css::sdb::SQLContext>(m_aContent);
 }
 
 
@@ -213,7 +213,7 @@ void SQLExceptionInfo::append( TYPE _eType, const OUString& _rErrorMessage, cons
         break;
     }
 
-    SQLException& pAppendException = const_cast<SQLException &>(*o3tl::forceGet<SQLException>(aAppend));
+    SQLException& pAppendException = const_cast<SQLException &>(*o3tl::forceAccess<SQLException>(aAppend));
     pAppendException.Message = _rErrorMessage;
     pAppendException.SQLState = _rSQLState;
     pAppendException.ErrorCode = _nErrorCode;
@@ -230,7 +230,7 @@ void SQLExceptionInfo::append( TYPE _eType, const OUString& _rErrorMessage, cons
         if ( !isAssignableFrom( aSQLExceptionType, pChainIterator->getValueType() ) )
             break;
 
-        pLastException = const_cast< SQLException* >( o3tl::doGet<SQLException>( *pChainIterator ) );
+        pLastException = const_cast< SQLException* >( o3tl::doAccess<SQLException>( *pChainIterator ) );
         pChainIterator = &pLastException->NextException;
     }
 
@@ -314,7 +314,7 @@ const css::sdbc::SQLException* SQLExceptionIteratorHelper::next()
         return pReturn;
     }
 
-    m_pCurrent = o3tl::doGet< SQLException >( m_pCurrent->NextException );
+    m_pCurrent = o3tl::doAccess< SQLException >( m_pCurrent->NextException );
 
     // no finally determine the proper type of the exception
     const Type aTypeContext( ::cppu::UnoType< SQLContext >::get() );

@@ -75,7 +75,7 @@ void XMLTextColumnsExport::exportXML( const Any& rAny )
     if( xPropSet.is() )
     {
         Any aAny = xPropSet->getPropertyValue( sIsAutomatic );
-        if ( *o3tl::doGet<bool>(aAny) )
+        if ( *o3tl::doAccess<bool>(aAny) )
         {
             aAny = xPropSet->getPropertyValue( sAutomaticDistance );
             sal_Int32 nDistance = 0;
@@ -95,7 +95,7 @@ void XMLTextColumnsExport::exportXML( const Any& rAny )
     if( xPropSet.is() )
     {
         Any aAny = xPropSet->getPropertyValue( sSeparatorLineIsOn );
-        if( *o3tl::doGet<bool>(aAny) )
+        if( *o3tl::doAccess<bool>(aAny) )
         {
             // style:width
             aAny = xPropSet->getPropertyValue( sSeparatorLineWidth );

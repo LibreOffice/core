@@ -59,7 +59,7 @@ XMLTextHeaderFooterContext::XMLTextHeaderFooterContext( SvXMLImport& rImport, sa
         Any aAny;
 
         aAny = xPropSet->getPropertyValue( sOn );
-        bool bOn = *o3tl::doGet<bool>(aAny);
+        bool bOn = *o3tl::doAccess<bool>(aAny);
 
         if( bOn )
         {
@@ -125,7 +125,7 @@ SvXMLImportContext *XMLTextHeaderFooterContext::CreateChildContext(
             else
             {
                 aAny = xPropSet->getPropertyValue( sOn );
-                bool bOn = *o3tl::doGet<bool>(aAny);
+                bool bOn = *o3tl::doAccess<bool>(aAny);
 
                 if( !bOn )
                 {
@@ -139,7 +139,7 @@ SvXMLImportContext *XMLTextHeaderFooterContext::CreateChildContext(
 
                 // If a header or footer is not shared, share it now.
                 aAny = xPropSet->getPropertyValue( sShareContent );
-                bool bShared = *o3tl::doGet<bool>(aAny);
+                bool bShared = *o3tl::doAccess<bool>(aAny);
                 if( !bShared )
                 {
                     xPropSet->setPropertyValue( sShareContent, Any(true) );

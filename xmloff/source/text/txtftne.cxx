@@ -319,7 +319,7 @@ void XMLTextParagraphExport::exportTextFootnoteConfigurationHelper(
         aAny = rFootnoteConfig->getPropertyValue(
             sPositionEndOfDoc);
         GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_FOOTNOTES_POSITION,
-                                 ( (*o3tl::doGet<bool>(aAny)) ?
+                                 ( (*o3tl::doAccess<bool>(aAny)) ?
                                         XML_DOCUMENT : XML_PAGE ) );
 
         aAny = rFootnoteConfig->getPropertyValue(sFootnoteCounting);

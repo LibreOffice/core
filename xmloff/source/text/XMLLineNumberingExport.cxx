@@ -90,7 +90,7 @@ void XMLLineNumberingExport::Export()
 
             // enable
             aAny = xLineNumbering->getPropertyValue(sIsOn);
-            if (! *o3tl::doGet<bool>(aAny))
+            if (! *o3tl::doAccess<bool>(aAny))
             {
                 rExport.AddAttribute(XML_NAMESPACE_TEXT,
                                      XML_NUMBER_LINES, XML_FALSE);
@@ -98,7 +98,7 @@ void XMLLineNumberingExport::Export()
 
             // count empty lines
             aAny = xLineNumbering->getPropertyValue(sCountEmptyLines);
-            if (! *o3tl::doGet<bool>(aAny))
+            if (! *o3tl::doAccess<bool>(aAny))
             {
                 rExport.AddAttribute(XML_NAMESPACE_TEXT,
                                      XML_COUNT_EMPTY_LINES, XML_FALSE);
@@ -106,7 +106,7 @@ void XMLLineNumberingExport::Export()
 
             // count in frames
             aAny = xLineNumbering->getPropertyValue(sCountLinesInFrames);
-            if (*o3tl::doGet<bool>(aAny))
+            if (*o3tl::doAccess<bool>(aAny))
             {
                 rExport.AddAttribute(XML_NAMESPACE_TEXT,
                                      XML_COUNT_IN_TEXT_BOXES, XML_TRUE);
@@ -114,7 +114,7 @@ void XMLLineNumberingExport::Export()
 
             // restart numbering
             aAny = xLineNumbering->getPropertyValue(sRestartAtEachPage);
-            if (*o3tl::doGet<bool>(aAny))
+            if (*o3tl::doAccess<bool>(aAny))
             {
                 rExport.AddAttribute(XML_NAMESPACE_TEXT,
                                      XML_RESTART_ON_PAGE, XML_TRUE);

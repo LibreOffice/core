@@ -95,7 +95,7 @@ template<typename T> inline boost::optional<T const> tryGetConverted(
 
 }
 
-/** Try to get the value of a specific type from an Any.
+/** Try to access the value of a specific type stored in an Any.
 
     In trying to obtain a value, the same set of conversions as supported by
     ">>=" are considere.
@@ -107,6 +107,19 @@ template<typename T> inline boost::optional<T const> tryGetConverted(
     type T.  (Technically, the proxy is either a plain pointer or a
     boost::optional, depending on whether a plain pointer into the given Any can
     be returned for the specified type.)
+
+    @attention A proxy returned from this function must not outlive the
+    corresponding Any passed into this function (as it may constitute a pointer
+    into the Any's internals).  That is the reason why this function is
+    restricted to lvalue arguments (i.e., to non-temporary Any objects), to
+    avoid misuses like
+    @code
+      css::uno::Any f();
+
+      if (auto p = o3tl::tryAccess<css::beans::NamedValue>(f())) {
+        return p->Name;
+      }
+    @endcode
 
     @note Ideally this would be a public member function of css::uno::Any (at
     least conditional on LIBO_INTERNAL_ONLY, as it requires C++11).  However, as
@@ -132,14 +145,14 @@ typename std::enable_if<
       || detail::IsUnoSequenceType<T>::value
       || std::is_base_of<css::uno::XInterface, T>::value),
     typename detail::Optional<T>::type>::type
-tryGet(css::uno::Any const & any) {
+tryAccess(css::uno::Any const & any) {
     // CHAR, STRING, TYPE, sequence types, enum types, struct types, exception
     // types, and com.sun.star.uno.XInterface interface type:
     return cppu::UnoType<T>::get().isAssignableFrom(any.getValueType())
         ? static_cast<T const *>(any.getValue()) : nullptr;
 }
 
-template<> inline detail::Optional<void>::type tryGet<void>(
+template<> inline detail::Optional<void>::type tryAccess<void>(
     css::uno::Any const & any)
 {
     return any.hasValue()
@@ -147,70 +160,70 @@ template<> inline detail::Optional<void>::type tryGet<void>(
         : boost::optional<detail::Void const>(detail::Void());
 }
 
-template<> inline detail::Optional<bool>::type tryGet<bool>(
+template<> inline detail::Optional<bool>::type tryAccess<bool>(
     css::uno::Any const & any)
 {
     return detail::tryGetConverted<bool>(any);
 }
 
-template<> inline detail::Optional<sal_Int8>::type tryGet<sal_Int8>(
+template<> inline detail::Optional<sal_Int8>::type tryAccess<sal_Int8>(
     css::uno::Any const & any)
 {
     return detail::tryGetConverted<sal_Int8>(any);
 }
 
-template<> inline detail::Optional<sal_Int16>::type tryGet<sal_Int16>(
+template<> inline detail::Optional<sal_Int16>::type tryAccess<sal_Int16>(
     css::uno::Any const & any)
 {
     return detail::tryGetConverted<sal_Int16>(any);
 }
 
-template<> inline detail::Optional<sal_uInt16>::type tryGet<sal_uInt16>(
+template<> inline detail::Optional<sal_uInt16>::type tryAccess<sal_uInt16>(
     css::uno::Any const & any)
 {
     return detail::tryGetConverted<sal_uInt16>(any);
 }
 
-template<> inline detail::Optional<sal_Int32>::type tryGet<sal_Int32>(
+template<> inline detail::Optional<sal_Int32>::type tryAccess<sal_Int32>(
     css::uno::Any const & any)
 {
     return detail::tryGetConverted<sal_Int32>(any);
 }
 
-template<> inline detail::Optional<sal_uInt32>::type tryGet<sal_uInt32>(
+template<> inline detail::Optional<sal_uInt32>::type tryAccess<sal_uInt32>(
     css::uno::Any const & any)
 {
     return detail::tryGetConverted<sal_uInt32>(any);
 }
 
-template<> inline detail::Optional<sal_Int64>::type tryGet<sal_Int64>(
+template<> inline detail::Optional<sal_Int64>::type tryAccess<sal_Int64>(
     css::uno::Any const & any)
 {
     return detail::tryGetConverted<sal_Int64>(any);
 }
 
-template<> inline detail::Optional<sal_uInt64>::type tryGet<sal_uInt64>(
+template<> inline detail::Optional<sal_uInt64>::type tryAccess<sal_uInt64>(
     css::uno::Any const & any)
 {
     return detail::tryGetConverted<sal_uInt64>(any);
 }
 
-template<> inline detail::Optional<float>::type tryGet<float>(
+template<> inline detail::Optional<float>::type tryAccess<float>(
     css::uno::Any const & any)
 {
     return detail::tryGetConverted<float>(any);
 }
 
-template<> inline detail::Optional<double>::type tryGet<double>(
+template<> inline detail::Optional<double>::type tryAccess<double>(
     css::uno::Any const & any)
 {
     return detail::tryGetConverted<double>(any);
 }
 
-template<> detail::Optional<css::uno::Any>::type tryGet<css::uno::Any>(
+template<> detail::Optional<css::uno::Any>::type tryAccess<css::uno::Any>(
     css::uno::Any const &) = delete;
 
-template<> detail::Optional<sal_Bool>::type tryGet<sal_Bool>(
+template<> detail::Optional<sal_Bool>::type tryAccess<sal_Bool>(
     css::uno::Any const &) = delete;
 
 /*
@@ -218,14 +231,14 @@ template<> detail::Optional<sal_Bool>::type tryGet<sal_Bool>(
 // Already prevented by std::is_base_of<css::uno::XInterface, T> requiring T to
 // be complete:
 
-template<> detail::Optional<cppu::UnoVoidType>::type tryGet<cppu::UnoVoidType>(
-    css::uno::Any const &) = delete;
+template<> detail::Optional<cppu::UnoVoidType>::type
+tryAccess<cppu::UnoVoidType>(css::uno::Any const &) = delete;
 
 template<> detail::Optional<cppu::UnoUnsignedShortType>::type
-tryGet<cppu::UnoUnsignedShortType>(css::uno::Any const &) = delete;
+tryAccess<cppu::UnoUnsignedShortType>(css::uno::Any const &) = delete;
 
-template<> detail::Optional<cppu::UnoCharType>::type tryGet<cppu::UnoCharType>(
-    css::uno::Any const &) = delete;
+template<> detail::Optional<cppu::UnoCharType>::type
+tryAccess<cppu::UnoCharType>(css::uno::Any const &) = delete;
 
 */
 
@@ -233,31 +246,40 @@ template<typename T> inline
 typename std::enable_if<
     detail::IsDerivedReference<T>::value,
     typename detail::Optional<T>::type>::type
-tryGet(css::uno::Any const & any) {
+tryAccess(css::uno::Any const & any) {
     return detail::tryGetConverted<T>(any);
 }
 
-/** Get the value of a specific type from an Any, throwing an exception on
-    failure.
+template<typename T> typename detail::Optional<T>::type tryAccess(
+    css::uno::Any const volatile &&) = delete;
+
+/** Access the value of a specific type stored in an Any, throwing an exception
+    on failure.
+
+    @attention A proxy returned from this function must not outlive the
+    corresponding Any passed into this function (as it may constitute a pointer
+    into the Any's internals).  However, unlike with tryAccess, the benefit of
+    allowing this function to operate on temporaries appears to outweigh its
+    dangers.
 
     @note Ideally this would be a public member function of css::uno::Any.  See
-    tryGet for details.
+    tryAccess for details.
 
     @tparam T  the C++ representation of a UNO type that can be contained in a
-    UNO ANY.  See tryGet for details.
+    UNO ANY.  See tryAccess for details.
 
     @param any  an Any value.
 
     @return a positive proxy for the value of the specfied type obtained from
-    the given Any.  See tryGet for details.
+    the given Any.  See tryAccess for details.
 
     @throws css::uno::RuntimeException  when a value of the requested type
     cannot be obtained.
 */
-template<typename T> inline typename detail::Optional<T>::type doGet(
+template<typename T> inline typename detail::Optional<T>::type doAccess(
     css::uno::Any const & any)
 {
-    auto opt = tryGet<T>(any);
+    auto opt = tryAccess<T>(any);
     if (!opt) {
         throw css::uno::RuntimeException(
             OUString(
@@ -268,24 +290,30 @@ template<typename T> inline typename detail::Optional<T>::type doGet(
     return opt;
 }
 
-/** Get the value of a specific type from an Any, knowing the Any contains a
-    value of a matching type.
+/** Access the value of a specific type stored in an Any, knowing the Any
+    contains a value of a matching type.
+
+    @attention A proxy returned from this function must not outlive the
+    corresponding Any passed into this function (as it may constitute a pointer
+    into the Any's internals).  However, unlike with tryAccess, the benefit of
+    allowing this function to operate on temporaries appears to outweigh its
+    dangers.
 
     @note Ideally this would be a public member function of css::uno::Any.  See
-    tryGet for details.
+    tryAccess for details.
 
     @tparam T  the C++ representation of a UNO type that can be contained in a
-    UNO ANY.  See tryGet for details.
+    UNO ANY.  See tryAccess for details.
 
     @param any  an Any value.
 
     @return a positive proxy for the value of the specfied type obtained from
-    the given Any.  See tryGet for details.
+    the given Any.  See tryAccess for details.
 */
-template<typename T> inline typename detail::Optional<T>::type forceGet(
+template<typename T> inline typename detail::Optional<T>::type forceAccess(
     css::uno::Any const & any)
 {
-    auto opt = tryGet<T>(any);
+    auto opt = tryAccess<T>(any);
     assert(opt);
     return opt;
 }

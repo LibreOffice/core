@@ -45,7 +45,7 @@ namespace dbtools
             OSL_ENSURE( SQLExceptionInfo( _rChainLeft ).isValid(),
                 "lcl_concatWarnings: invalid warnings chain (this will crash)!" );
 
-            const SQLException* pChainTravel = o3tl::doGet<SQLException>( _rChainLeft );
+            const SQLException* pChainTravel = o3tl::doAccess<SQLException>( _rChainLeft );
             SQLExceptionIteratorHelper aReferenceIterHelper( *pChainTravel );
             while ( aReferenceIterHelper.hasMoreElements() )
                 pChainTravel = aReferenceIterHelper.next();

@@ -93,7 +93,7 @@ bool XMLPageExport::exportStyle(
     if( xPropSetInfo->hasPropertyByName( sIsPhysical ) )
     {
         Any aAny = xPropSet->getPropertyValue( sIsPhysical );
-        if( !*o3tl::doGet<bool>(aAny) )
+        if( !*o3tl::doAccess<bool>(aAny) )
             return false;
     }
 

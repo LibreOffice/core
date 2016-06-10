@@ -694,7 +694,7 @@ bool XMLIsTransparentPropHdl::exportXML( OUString& rStrExpValue, const Any& rVal
     // MIB: This looks a bit strange, because bTransPropValue == bValue should
     // do the same, but this only applies if 'true' is represented by the same
     // 8 bit value in bValue and bTransPropValue. Who will ensure this?
-    bool bValue = *o3tl::doGet<bool>(rValue);
+    bool bValue = *o3tl::doAccess<bool>(rValue);
     bool bIsTrans = bTransPropValue ? bValue : !bValue;
 
     if( bIsTrans )

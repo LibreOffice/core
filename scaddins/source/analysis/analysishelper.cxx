@@ -1592,7 +1592,7 @@ void ScaDoubleList::Append(
         const uno::Any& rAny,
         bool bIgnoreEmpty ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
-    if( auto s = o3tl::tryGet<
+    if( auto s = o3tl::tryAccess<
             css::uno::Sequence<css::uno::Sequence<css::uno::Any>>>(rAny) )
         Append( rAnyConv, *s, bIgnoreEmpty );
     else
@@ -2122,7 +2122,7 @@ void ComplexList::Append( const uno::Sequence< uno::Any >& aMultPars, ComplListA
             case uno::TypeClass_VOID:       break;
             case uno::TypeClass_STRING:
                 {
-                auto       pStr = o3tl::forceGet<OUString>(r);
+                auto       pStr = o3tl::forceAccess<OUString>(r);
 
                 if( !pStr->isEmpty() )
                     Append( new Complex( *pStr ) );
@@ -2133,7 +2133,7 @@ void ComplexList::Append( const uno::Sequence< uno::Any >& aMultPars, ComplListA
                 }
                 break;
             case uno::TypeClass_DOUBLE:
-                Append( new Complex( *o3tl::forceGet<double>(r), 0.0 ) );
+                Append( new Complex( *o3tl::forceAccess<double>(r), 0.0 ) );
                 break;
             case uno::TypeClass_SEQUENCE:
                 {
@@ -2872,7 +2872,7 @@ bool ScaAnyConverter::getDouble(
         break;
         case uno::TypeClass_STRING:
         {
-            auto pString = o3tl::forceGet< OUString >( rAny );
+            auto pString = o3tl::forceAccess< OUString >( rAny );
             if( !pString->isEmpty() )
                 rfResult = convertToDouble( *pString );
             else

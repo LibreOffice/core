@@ -200,7 +200,7 @@ void XMLImageMapExport::ExportMapEntry(
 
         // is-active
         aAny = rPropertySet->getPropertyValue(msIsActive);
-        if (! *o3tl::doGet<bool>(aAny))
+        if (! *o3tl::doAccess<bool>(aAny))
         {
             mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_NOHREF, XML_NOHREF);
         }

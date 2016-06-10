@@ -1166,41 +1166,41 @@ bool implSetObject( const Reference< XParameters >& _rxParameters,
             break;
 
         case typelib_TypeClass_STRING:
-            _rxParameters->setString(_nColumnIndex, *o3tl::forceGet<OUString>(_rValue));
+            _rxParameters->setString(_nColumnIndex, *o3tl::forceAccess<OUString>(_rValue));
             break;
 
         case typelib_TypeClass_BOOLEAN:
-            _rxParameters->setBoolean(_nColumnIndex, *o3tl::forceGet<bool>(_rValue));
+            _rxParameters->setBoolean(_nColumnIndex, *o3tl::forceAccess<bool>(_rValue));
             break;
 
         case typelib_TypeClass_BYTE:
-            _rxParameters->setByte(_nColumnIndex, *o3tl::forceGet<sal_Int8>(_rValue));
+            _rxParameters->setByte(_nColumnIndex, *o3tl::forceAccess<sal_Int8>(_rValue));
             break;
 
         case typelib_TypeClass_UNSIGNED_SHORT:
         case typelib_TypeClass_SHORT:
-            _rxParameters->setShort(_nColumnIndex, *o3tl::forceGet<sal_Int16>(_rValue));
+            _rxParameters->setShort(_nColumnIndex, *o3tl::forceAccess<sal_Int16>(_rValue));
             break;
 
         case typelib_TypeClass_CHAR:
-            _rxParameters->setString(_nColumnIndex, OUString(*o3tl::forceGet<sal_Unicode>(_rValue)));
+            _rxParameters->setString(_nColumnIndex, OUString(*o3tl::forceAccess<sal_Unicode>(_rValue)));
             break;
 
         case typelib_TypeClass_UNSIGNED_LONG:
         case typelib_TypeClass_LONG:
-            _rxParameters->setInt(_nColumnIndex, *o3tl::forceGet<sal_Int32>(_rValue));
+            _rxParameters->setInt(_nColumnIndex, *o3tl::forceAccess<sal_Int32>(_rValue));
             break;
 
         case typelib_TypeClass_FLOAT:
-            _rxParameters->setFloat(_nColumnIndex, *o3tl::forceGet<float>(_rValue));
+            _rxParameters->setFloat(_nColumnIndex, *o3tl::forceAccess<float>(_rValue));
             break;
 
         case typelib_TypeClass_DOUBLE:
-            _rxParameters->setDouble(_nColumnIndex, *o3tl::forceGet<double>(_rValue));
+            _rxParameters->setDouble(_nColumnIndex, *o3tl::forceAccess<double>(_rValue));
             break;
 
         case typelib_TypeClass_SEQUENCE:
-            if (auto s = o3tl::tryGet<Sequence< sal_Int8 >>(_rValue))
+            if (auto s = o3tl::tryAccess<Sequence< sal_Int8 >>(_rValue))
             {
                 _rxParameters->setBytes(_nColumnIndex, *s);
             }
@@ -1208,11 +1208,11 @@ bool implSetObject( const Reference< XParameters >& _rxParameters,
                 bSuccessfullyReRouted = false;
             break;
         case typelib_TypeClass_STRUCT:
-            if (auto s1 = o3tl::tryGet<css::util::DateTime>(_rValue))
+            if (auto s1 = o3tl::tryAccess<css::util::DateTime>(_rValue))
                 _rxParameters->setTimestamp(_nColumnIndex, *s1);
-            else if (auto s2 = o3tl::tryGet<css::util::Date>(_rValue))
+            else if (auto s2 = o3tl::tryAccess<css::util::Date>(_rValue))
                 _rxParameters->setDate(_nColumnIndex, *s2);
-            else if (auto s3 = o3tl::tryGet<css::util::Time>(_rValue))
+            else if (auto s3 = o3tl::tryAccess<css::util::Time>(_rValue))
                 _rxParameters->setTime(_nColumnIndex, *s3);
             else
                 bSuccessfullyReRouted = false;

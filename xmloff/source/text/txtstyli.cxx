@@ -484,7 +484,7 @@ void XMLTextStyleContext::FillPropertySet(
         if ( nIndex != -1 )
         {
             Any& rAny = GetProperties()[nIndex].maValue;
-            bool bVal = *o3tl::doGet<bool>(rAny);
+            bool bVal = *o3tl::doAccess<bool>(rAny);
             bHasCombinedCharactersLetter = bVal;
         }
 

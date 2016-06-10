@@ -1998,7 +1998,7 @@ void XMLShapeExport::ImpExportLineShape(
         // get the two points
         uno::Any aAny(xPropSet->getPropertyValue("Geometry"));
         if (auto pSourcePolyPolygon
-                = o3tl::tryGet<drawing::PointSequenceSequence>(aAny))
+                = o3tl::tryAccess<drawing::PointSequenceSequence>(aAny))
         {
             drawing::PointSequence* pOuterSequence = const_cast<css::drawing::PointSequenceSequence *>(pSourcePolyPolygon)->getArray();
             if(pOuterSequence)
@@ -2173,7 +2173,7 @@ void XMLShapeExport::ImpExportPolygonShape(
             // get PolygonBezier
             uno::Any aAny( xPropSet->getPropertyValue("Geometry") );
             const basegfx::B2DPolyPolygon aPolyPolygon(
-                basegfx::tools::UnoPolyPolygonBezierCoordsToB2DPolyPolygon(*o3tl::doGet<drawing::PolyPolygonBezierCoords>(aAny)));
+                basegfx::tools::UnoPolyPolygonBezierCoordsToB2DPolyPolygon(*o3tl::doAccess<drawing::PolyPolygonBezierCoords>(aAny)));
 
             if(aPolyPolygon.count())
             {
@@ -2194,7 +2194,7 @@ void XMLShapeExport::ImpExportPolygonShape(
             // get non-bezier polygon
             uno::Any aAny( xPropSet->getPropertyValue("Geometry") );
             const basegfx::B2DPolyPolygon aPolyPolygon(
-                basegfx::tools::UnoPointSequenceSequenceToB2DPolyPolygon(*o3tl::doGet<drawing::PointSequenceSequence>(aAny)));
+                basegfx::tools::UnoPointSequenceSequenceToB2DPolyPolygon(*o3tl::doAccess<drawing::PointSequenceSequence>(aAny)));
 
             if(!aPolyPolygon.areControlPointsUsed() && 1 == aPolyPolygon.count())
             {
@@ -2586,7 +2586,7 @@ void XMLShapeExport::ImpExportConnectorShape(
     if( xProps->getPropertyValue("PolyPolygonBezier") >>= aAny )
     {
         // get PolygonBezier
-        auto pSourcePolyPolygon = o3tl::tryGet<drawing::PolyPolygonBezierCoords>(aAny);
+        auto pSourcePolyPolygon = o3tl::tryAccess<drawing::PolyPolygonBezierCoords>(aAny);
 
         if(pSourcePolyPolygon && pSourcePolyPolygon->Coordinates.getLength())
         {

@@ -158,7 +158,7 @@ sal_Bool SAL_CALL SvUnoAttributeContainer::hasByName(const OUString& aName) thro
 void SAL_CALL SvUnoAttributeContainer::replaceByName(const OUString& aName, const uno::Any& aElement)
     throw( lang::IllegalArgumentException, container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
 {
-    if( auto pData = o3tl::tryGet<xml::AttributeData>(aElement) )
+    if( auto pData = o3tl::tryAccess<xml::AttributeData>(aElement) )
     {
         sal_uInt16 nAttr = getIndexByName(aName );
         if( nAttr == USHRT_MAX )
@@ -198,7 +198,7 @@ void SAL_CALL SvUnoAttributeContainer::replaceByName(const OUString& aName, cons
 void SAL_CALL SvUnoAttributeContainer::insertByName(const OUString& aName, const uno::Any& aElement)
 throw( lang::IllegalArgumentException, container::ElementExistException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
 {
-    auto pData = o3tl::tryGet<xml::AttributeData>(aElement);
+    auto pData = o3tl::tryAccess<xml::AttributeData>(aElement);
     if( !pData )
         throw lang::IllegalArgumentException();
 

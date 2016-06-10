@@ -148,7 +148,7 @@ XMLTextMasterPageContext::XMLTextMasterPageContext( SvXMLImport& rImport,
     if( !bNew && xPropSetInfo->hasPropertyByName( sIsPhysical ) )
     {
         aAny = xPropSet->getPropertyValue( sIsPhysical );
-        bNew = !*o3tl::doGet<bool>(aAny);
+        bNew = !*o3tl::doAccess<bool>(aAny);
     }
     SetNew( bNew );
 

@@ -1220,7 +1220,7 @@ void XMLEnhancedCustomShapeContext::EndElement()
                 case EAS_GluePoints :
                 {
                     uno::Sequence< css::drawing::EnhancedCustomShapeParameterPair > const & rSeq =
-                        *o3tl::doGet<uno::Sequence< css::drawing::EnhancedCustomShapeParameterPair > >(
+                        *o3tl::doAccess<uno::Sequence< css::drawing::EnhancedCustomShapeParameterPair > >(
                             aPathIter->Value);
                     for ( i = 0; i < rSeq.getLength(); i++ )
                     {
@@ -1232,7 +1232,7 @@ void XMLEnhancedCustomShapeContext::EndElement()
                 case EAS_TextFrames :
                 {
                     uno::Sequence< css::drawing::EnhancedCustomShapeTextFrame > const & rSeq =
-                        *o3tl::doGet<uno::Sequence< css::drawing::EnhancedCustomShapeTextFrame > >(
+                        *o3tl::doAccess<uno::Sequence< css::drawing::EnhancedCustomShapeTextFrame > >(
                             aPathIter->Value);
                     for ( i = 0; i < rSeq.getLength(); i++ )
                     {
@@ -1264,7 +1264,7 @@ void XMLEnhancedCustomShapeContext::EndElement()
                     case EAS_RadiusRangeMinimum :
                     case EAS_RadiusRangeMaximum :
                     {
-                        CheckAndResolveEquationParameter( const_cast<css::drawing::EnhancedCustomShapeParameter &>(*o3tl::doGet<css::drawing::EnhancedCustomShapeParameter>(
+                        CheckAndResolveEquationParameter( const_cast<css::drawing::EnhancedCustomShapeParameter &>(*o3tl::doAccess<css::drawing::EnhancedCustomShapeParameter>(
                             pValues->Value)), pH );
                     }
                     break;
@@ -1272,9 +1272,9 @@ void XMLEnhancedCustomShapeContext::EndElement()
                     case EAS_Position :
                     case EAS_Polar :
                     {
-                        CheckAndResolveEquationParameter( const_cast<css::drawing::EnhancedCustomShapeParameter &>((*o3tl::doGet<css::drawing::EnhancedCustomShapeParameterPair>(
+                        CheckAndResolveEquationParameter( const_cast<css::drawing::EnhancedCustomShapeParameter &>((*o3tl::doAccess<css::drawing::EnhancedCustomShapeParameterPair>(
                             pValues->Value)).First), pH );
-                        CheckAndResolveEquationParameter( const_cast<css::drawing::EnhancedCustomShapeParameter &>((*o3tl::doGet<css::drawing::EnhancedCustomShapeParameterPair>(
+                        CheckAndResolveEquationParameter( const_cast<css::drawing::EnhancedCustomShapeParameter &>((*o3tl::doAccess<css::drawing::EnhancedCustomShapeParameterPair>(
                             pValues->Value)).Second), pH );
                     }
                     break;

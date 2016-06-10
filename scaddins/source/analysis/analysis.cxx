@@ -1151,7 +1151,7 @@ OUString SAL_CALL AnalysisAddIn::getComplex( double fR, double fI, const uno::An
             break;
         case uno::TypeClass_STRING:
             {
-            auto   pSuff = o3tl::forceGet<OUString>(rSuff);
+            auto   pSuff = o3tl::forceAccess<OUString>(rSuff);
             bi = *pSuff == "i" || pSuff->isEmpty();
             if( !bi && *pSuff != "j" )
                 throw lang::IllegalArgumentException();

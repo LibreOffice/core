@@ -149,7 +149,7 @@ void XMLTextExportPropertySetMapper::handleSpecialItem(
     {
     case CTF_DROPCAPWHOLEWORD:
         DBG_ASSERT( !bDropWholeWord, "drop whole word is set already!" );
-        pThis->bDropWholeWord = *o3tl::doGet<bool>(rProperty.maValue);
+        pThis->bDropWholeWord = *o3tl::doAccess<bool>(rProperty.maValue);
         break;
     case CTF_DROPCAPCHARSTYLE:
         DBG_ASSERT( sDropCharStyle.isEmpty(), "drop char style is set already!" );
@@ -1005,7 +1005,7 @@ void XMLTextExportPropertySetMapper::ContextFilter(
         }
         if( pWrapContourModeState  &&
             (!pWrapContourState ||
-             !*o3tl::doGet<bool>(pWrapContourState ->maValue) ) )
+             !*o3tl::doAccess<bool>(pWrapContourState ->maValue) ) )
             pWrapContourModeState->mnIndex = -1;
     }
 
@@ -1023,7 +1023,7 @@ void XMLTextExportPropertySetMapper::ContextFilter(
         if( pHoriOrientState && pHoriOrientMirroredState )
         {
             if( pHoriOrientMirrorState &&
-                *o3tl::doGet<bool>(pHoriOrientMirrorState->maValue) )
+                *o3tl::doAccess<bool>(pHoriOrientMirrorState->maValue) )
                 pHoriOrientState->mnIndex = -1;
             else
                 pHoriOrientMirroredState->mnIndex = -1;
@@ -1099,7 +1099,7 @@ void XMLTextExportPropertySetMapper::ContextFilter(
         if( pShapeHoriOrientState && pShapeHoriOrientMirroredState )
         {
             if( pShapeHoriOrientMirrorState &&
-                *o3tl::doGet<bool>(pShapeHoriOrientMirrorState->maValue) )
+                *o3tl::doAccess<bool>(pShapeHoriOrientMirrorState->maValue) )
                 pShapeHoriOrientState->mnIndex = -1;
             else
                 pShapeHoriOrientMirroredState->mnIndex = -1;

@@ -1442,7 +1442,7 @@ void AnimationsExporterImpl::convertValue( XMLTokenEnum eAttributeName, OUString
     if( !rValue.hasValue() )
         return;
 
-    if( auto pValuePair = o3tl::tryGet<ValuePair>(rValue) )
+    if( auto pValuePair = o3tl::tryAccess<ValuePair>(rValue) )
     {
         OUStringBuffer sTmp2;
         convertValue( eAttributeName, sTmp, pValuePair->First );
@@ -1450,7 +1450,7 @@ void AnimationsExporterImpl::convertValue( XMLTokenEnum eAttributeName, OUString
         convertValue( eAttributeName, sTmp2, pValuePair->Second );
         sTmp.append( sTmp2.makeStringAndClear() );
     }
-    else if( auto pSequence = o3tl::tryGet<Sequence<Any>>(rValue) )
+    else if( auto pSequence = o3tl::tryAccess<Sequence<Any>>(rValue) )
     {
         const sal_Int32 nLength = pSequence->getLength();
         sal_Int32 nElement;
@@ -1479,11 +1479,11 @@ void AnimationsExporterImpl::convertValue( XMLTokenEnum eAttributeName, OUString
         case XML_ANIMATETRANSFORM:
         case XML_ANIMATEMOTION:
         {
-            if( auto aString = o3tl::tryGet<OUString>(rValue) )
+            if( auto aString = o3tl::tryAccess<OUString>(rValue) )
             {
                 sTmp.append( *aString );
             }
-            else if( auto x = o3tl::tryGet<double>(rValue) )
+            else if( auto x = o3tl::tryAccess<double>(rValue) )
             {
                 sTmp.append( *x );
             }
@@ -1531,7 +1531,7 @@ void AnimationsExporterImpl::convertTiming( OUStringBuffer& sTmp, const Any& rVa
     if( !rValue.hasValue() )
         return;
 
-    if( auto pSequence = o3tl::tryGet<Sequence<Any>>(rValue) )
+    if( auto pSequence = o3tl::tryAccess<Sequence<Any>>(rValue) )
     {
         const sal_Int32 nLength = pSequence->getLength();
         sal_Int32 nElement;
@@ -1547,16 +1547,16 @@ void AnimationsExporterImpl::convertTiming( OUStringBuffer& sTmp, const Any& rVa
             sTmp.append( sTmp2.makeStringAndClear() );
         }
     }
-    else if( auto x = o3tl::tryGet<double>(rValue) )
+    else if( auto x = o3tl::tryAccess<double>(rValue) )
     {
         sTmp.append( *x );
         sTmp.append( 's');
     }
-    else if( auto pTiming = o3tl::tryGet<Timing>(rValue) )
+    else if( auto pTiming = o3tl::tryAccess<Timing>(rValue) )
     {
         sTmp.append( GetXMLToken( (*pTiming == Timing_MEDIA) ? XML_MEDIA : XML_INDEFINITE ) );
     }
-    else if( auto pEvent = o3tl::tryGet<Event>(rValue) )
+    else if( auto pEvent = o3tl::tryAccess<Event>(rValue) )
     {
         OUStringBuffer sTmp2;
 
@@ -1603,7 +1603,7 @@ void AnimationsExporterImpl::convertTarget( OUStringBuffer& sTmp, const Any& rTa
 
     if( !(rTarget >>= xRef) )
     {
-        if( auto pt = o3tl::tryGet<ParagraphTarget>(rTarget) )
+        if( auto pt = o3tl::tryAccess<ParagraphTarget>(rTarget) )
         {
             xRef = getParagraphTarget( *pt );
         }
@@ -1623,12 +1623,12 @@ void AnimationsExporterImpl::prepareValue( const Any& rValue )
     if( !rValue.hasValue() )
         return;
 
-    if( auto pValuePair = o3tl::tryGet<ValuePair>(rValue) )
+    if( auto pValuePair = o3tl::tryAccess<ValuePair>(rValue) )
     {
         prepareValue( pValuePair->First );
         prepareValue( pValuePair->Second );
     }
-    else if( auto pSequence = o3tl::tryGet<Sequence<Any>>(rValue) )
+    else if( auto pSequence = o3tl::tryAccess<Sequence<Any>>(rValue) )
     {
         const sal_Int32 nLength = pSequence->getLength();
         sal_Int32 nElement;
@@ -1643,13 +1643,13 @@ void AnimationsExporterImpl::prepareValue( const Any& rValue )
         if( xRef.is() )
             mrExport.getInterfaceToIdentifierMapper().registerReference( xRef );
     }
-    else if( auto pt = o3tl::tryGet<ParagraphTarget>(rValue) )
+    else if( auto pt = o3tl::tryAccess<ParagraphTarget>(rValue) )
     {
         Reference< XInterface> xRef( getParagraphTarget( *pt ) );
         if( xRef.is() )
             mrExport.getInterfaceToIdentifierMapper().registerReference( xRef );
     }
-    else if( auto pEvent = o3tl::tryGet<Event>(rValue) )
+    else if( auto pEvent = o3tl::tryAccess<Event>(rValue) )
     {
         prepareValue( pEvent->Source );
     }
