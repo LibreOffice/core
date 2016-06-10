@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_11c56a8d",
+        "filename": "svx/source/sdr/contact/viewcontactofsdrpathobj.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2016-06-10T14:41:46Z",
+      "side": 1,
+      "message": "This is not reliable. count() maybe !\u003d 0, but still the contained Polygons may have no points. That\u0027s why ensureGeometry() test exactly that. Please do not return early, there is a reason to have that fallback to a default line. It is e.g. needed to be able to handle that object in the UI at all (be it select and delete). It s an error when it has no geometry, but please leave this workaround",
+      "range": {
+        "startLine": 77,
+        "startChar": 12,
+        "endLine": 78,
+        "endChar": 73
+      },
+      "revId": "0da4f723d2295f5b1fc369522ce9fb73d35ca460",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
