@@ -1037,49 +1037,41 @@ void SdrItemBrowserControl::SetAttributes(const SfxItemSet* pSet, const SfxItemS
     SetMode(MYBROWSEMODE);
 }
 
-// - SdrItemBrowserWindow -
-
-SdrItemBrowserWindow::SdrItemBrowserWindow(vcl::Window* pParent, WinBits nBits):
-    FloatingWindow(pParent,nBits),
-    aBrowse(VclPtr<SdrItemBrowserControl>::Create(this))
+SdrItemBrowser::SdrItemBrowser(SdrView& rView):
+    FloatingWindow(ImpGetViewWin(rView), WB_STDDOCKWIN|WB_3DLOOK|WB_CLOSEABLE|WB_SIZEMOVE),
+    aBrowse(VclPtr<SdrItemBrowserControl>::Create(this)),
+    aIdle("svx svdraw SdrItemBrowser"),
+    pView(&rView),
+    bDirty(false)
 {
     SetOutputSizePixel(aBrowse->GetSizePixel());
     SetText("Joe's ItemBrowser");
     aBrowse->Show();
+    aIdle.SetIdleHdl(LINK(this,SdrItemBrowser,IdleHdl));
+    GetBrowserControl()->SetEntryChangedHdl(LINK(this,SdrItemBrowser,ChangedHdl));
+    GetBrowserControl()->SetSetDirtyHdl(LINK(this,SdrItemBrowser,SetDirtyHdl));
+    SetDirty();
 }
 
-SdrItemBrowserWindow::~SdrItemBrowserWindow()
+SdrItemBrowser::~SdrItemBrowser()
 {
     disposeOnce();
 }
 
-void SdrItemBrowserWindow::dispose()
+void SdrItemBrowser::dispose()
 {
     aBrowse.disposeAndClear();
     FloatingWindow::dispose();
 }
 
-void SdrItemBrowserWindow::Resize()
+void SdrItemBrowser::Resize()
 {
     aBrowse->SetSizePixel(GetOutputSizePixel());
 }
 
-void SdrItemBrowserWindow::GetFocus()
+void SdrItemBrowser::GetFocus()
 {
     aBrowse->GrabFocus();
-}
-
-
-SdrItemBrowser::SdrItemBrowser(SdrView& rView):
-    SdrItemBrowserWindow(ImpGetViewWin(rView)),
-    aIdle("svx svdraw SdrItemBrowser"),
-    pView(&rView),
-    bDirty(false)
-{
-    aIdle.SetIdleHdl(LINK(this,SdrItemBrowser,IdleHdl));
-    GetBrowserControl()->SetEntryChangedHdl(LINK(this,SdrItemBrowser,ChangedHdl));
-    GetBrowserControl()->SetSetDirtyHdl(LINK(this,SdrItemBrowser,SetDirtyHdl));
-    SetDirty();
 }
 
 vcl::Window* SdrItemBrowser::ImpGetViewWin(SdrView& rView)

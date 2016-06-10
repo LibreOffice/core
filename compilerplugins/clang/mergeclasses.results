@@ -126,7 +126,6 @@ merge SdrEditView with SdrPolyEditView
 merge SdrEscherImport with SdrPowerPointImport
 merge SdrExchangeView with SdrDragView
 merge SdrGlueEditView with SdrObjEditView
-merge SdrItemBrowserWindow with SdrItemBrowser
 merge SdrMarkView with SdrEditView
 merge SdrObjEditView with SdrExchangeView
 merge SdrPaintView with SdrSnapView
