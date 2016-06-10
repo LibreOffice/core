@@ -18,6 +18,7 @@
  */
 
 #include <stdio.h>
+#include <o3tl/any.hxx>
 #include <oox/drawingml/chart/chartconverter.hxx>
 #include <oox/token/tokens.hxx>
 #include <oox/ole/vbaproject.hxx>
@@ -800,7 +801,7 @@ void PowerPointExport::WriteAnimationProperty( const FSHelperPtr& pFS, const Any
     switch( rAny.getValueType().getTypeClass() ) {
     case TypeClass_STRING:
         pFS->singleElementNS( XML_p, XML_strVal,
-                  XML_val, USS( *static_cast< const OUString* >( rAny.getValue() ) ),
+                  XML_val, USS( *o3tl::doAccess<OUString>(rAny) ),
                   FSEND );
         break;
     default:

@@ -41,6 +41,7 @@
 #include <editeng/frmdir.hxx>
 #include <filter/msfilter/util.hxx>
 #include <i18nutil/scripttypedetector.hxx>
+#include <o3tl/any.hxx>
 #include <sfx2/app.hxx>
 #include <svl/languageoptions.hxx>
 #include <oox/export/drawingml.hxx>
@@ -231,7 +232,7 @@ void PortionObj::ImplGetPortionValues( FontCollection& rFontCollection, bool bGe
     meFontName = ePropState;
     if ( bOk )
     {
-        FontCollectionEntry aFontDesc( *static_cast<OUString const *>(mAny.getValue()) );
+        FontCollectionEntry aFontDesc( *o3tl::doAccess<OUString>(mAny) );
         sal_uInt32  nCount = rFontCollection.GetCount();
         mnFont = (sal_uInt16)rFontCollection.GetId( aFontDesc );
         if ( mnFont == nCount )
@@ -258,7 +259,7 @@ void PortionObj::ImplGetPortionValues( FontCollection& rFontCollection, bool bGe
         meAsianOrComplexFont = ePropState;
         if ( bOk )
         {
-            FontCollectionEntry aFontDesc( *static_cast<OUString const *>(mAny.getValue()) );
+            FontCollectionEntry aFontDesc( *o3tl::doAccess<OUString>(mAny) );
             sal_uInt32  nCount = rFontCollection.GetCount();
             mnAsianOrComplexFont = (sal_uInt16)rFontCollection.GetId( aFontDesc );
             if ( mnAsianOrComplexFont == nCount )
@@ -279,7 +280,7 @@ void PortionObj::ImplGetPortionValues( FontCollection& rFontCollection, bool bGe
         meAsianOrComplexFont = ePropState;
         if ( bOk )
         {
-            FontCollectionEntry aFontDesc( *static_cast<OUString const *>(mAny.getValue()) );
+            FontCollectionEntry aFontDesc( *o3tl::doAccess<OUString>(mAny) );
             sal_uInt32  nCount = rFontCollection.GetCount();
             mnAsianOrComplexFont = (sal_uInt16)rFontCollection.GetId( aFontDesc );
             if ( mnAsianOrComplexFont == nCount )
@@ -407,7 +408,7 @@ void PortionObj::ImplGetPortionValues( FontCollection& rFontCollection, bool bGe
 
     if ( ImplGetPropertyValue( "CharColor", bGetPropStateValue ) )
     {
-        sal_uInt32 nSOColor = *( static_cast<sal_uInt32 const *>(mAny.getValue()) );
+        sal_uInt32 nSOColor = *( o3tl::doAccess<sal_uInt32>(mAny) );
         mnCharColor = nSOColor & 0xff00ff00;                            // green and hibyte
         mnCharColor |= (sal_uInt8)( nSOColor ) << 16;                   // red and blue is switched
         mnCharColor |= (sal_uInt8)( nSOColor >> 16 );
@@ -495,10 +496,10 @@ sal_uInt32 PortionObj::ImplGetTextField( css::uno::Reference< css::text::XTextRa
     css::uno::Any aAny;
     if ( GetPropertyValue( aAny, rXPropSet, "TextPortionType", true ) )
     {
-        OUString  aTextFieldType( *static_cast<OUString const *>(aAny.getValue()) );
-        if ( aTextFieldType == "TextField" )
+        auto aTextFieldType = o3tl::doAccess<OUString>(aAny);
+        if ( *aTextFieldType == "TextField" )
         {
-            if ( GetPropertyValue( aAny, rXPropSet, aTextFieldType, true ) )
+            if ( GetPropertyValue( aAny, rXPropSet, *aTextFieldType, true ) )
             {
                 css::uno::Reference< css::text::XTextField > aXTextField;
                 if ( aAny >>= aXTextField )
@@ -519,7 +520,7 @@ sal_uInt32 PortionObj::ImplGetTextField( css::uno::Reference< css::text::XTextRa
                                     {
                                         if ( GetPropertyValue( aAny, xFieldPropSet, "Format", true ) )
                                         {
-                                            nFormat = *static_cast<sal_Int32 const *>(aAny.getValue());
+                                            nFormat = *o3tl::doAccess<sal_Int32>(aAny);
                                             switch ( nFormat )
                                             {
                                                 default:
@@ -540,7 +541,7 @@ sal_uInt32 PortionObj::ImplGetTextField( css::uno::Reference< css::text::XTextRa
                             else if ( aFieldKind == "URL" )
                             {
                                 if ( GetPropertyValue( aAny, xFieldPropSet, "URL", true ) )
-                                    rURL = *static_cast<OUString const *>(aAny.getValue());
+                                    rURL = *o3tl::doAccess<OUString>(aAny);
                                 nRetValue = 4 << 28;
                             }
                             else if ( aFieldKind == "Page" )
@@ -561,7 +562,7 @@ sal_uInt32 PortionObj::ImplGetTextField( css::uno::Reference< css::text::XTextRa
                                     {
                                         if ( GetPropertyValue( aAny, xFieldPropSet, "IsFix", true ) )
                                         {
-                                            nFormat = *static_cast<sal_Int32 const *>(aAny.getValue());
+                                            nFormat = *o3tl::doAccess<sal_Int32>(aAny);
                                             nRetValue |= ( ( ( 2 << 4 ) | nFormat ) << 24 ) | 0x800000;
                                         }
                                     }
@@ -585,7 +586,7 @@ sal_uInt32 PortionObj::ImplGetTextField( css::uno::Reference< css::text::XTextRa
                                     {
                                         if ( GetPropertyValue( aAny, xFieldPropSet, "Format", true ) )
                                         {
-                                            nFormat = *static_cast<sal_Int32 const *>(aAny.getValue());
+                                            nFormat = *o3tl::doAccess<sal_Int32>(aAny);
                                             switch ( nFormat )
                                             {
                                                 default:
@@ -799,12 +800,11 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider* pBuProv, sal_Int1
         if ( ( mAny >>= aXIndexReplace ) && nNumberingDepth < aXIndexReplace->getCount() )
         {
             mAny <<= aXIndexReplace->getByIndex( nNumberingDepth );
-            css::uno::Sequence< css::beans::PropertyValue>
-                aPropertySequence( *static_cast<css::uno::Sequence< css::beans::PropertyValue> const *>(mAny.getValue()) );
+            auto aPropertySequence = o3tl::doAccess<css::uno::Sequence<css::beans::PropertyValue>>(mAny);
 
-            const css::beans::PropertyValue* pPropValue = aPropertySequence.getArray();
+            const css::beans::PropertyValue* pPropValue = aPropertySequence->getConstArray();
 
-            sal_Int32 nPropertyCount = aPropertySequence.getLength();
+            sal_Int32 nPropertyCount = aPropertySequence->getLength();
             if ( nPropertyCount )
             {
                 bExtendedParameters = true;
@@ -814,77 +814,71 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider* pBuProv, sal_Int1
                 OUString aGraphicURL;
                 for ( sal_Int32 i = 0; i < nPropertyCount; i++ )
                 {
-                    const void* pValue = pPropValue[ i ].Value.getValue();
-                    if ( pValue )
+                    OUString aPropName( pPropValue[ i ].Name );
+                    if ( aPropName == "NumberingType" )
+                        nNumberingType = *o3tl::doAccess<sal_Int16>(pPropValue[i].Value);
+                    else if ( aPropName == "Adjust" )
+                        nHorzAdjust = *o3tl::doAccess<sal_Int16>(pPropValue[i].Value);
+                    else if ( aPropName == "BulletChar" )
                     {
-                        OUString aPropName( pPropValue[ i ].Name );
-                        if ( aPropName == "NumberingType" )
-                            nNumberingType = *( static_cast<sal_Int16 const *>(pValue) );
-                        else if ( aPropName == "Adjust" )
-                            nHorzAdjust = *( static_cast<sal_Int16 const *>(pValue) );
-                        else if ( aPropName == "BulletChar" )
-                        {
-                            OUString aString( *( static_cast<OUString const *>(pValue) ) );
-                            if ( !aString.isEmpty() )
-                                cBulletId = aString[ 0 ];
-                        }
-                        else if ( aPropName == "BulletFont" )
-                        {
-                            aFontDesc = *static_cast<css::awt::FontDescriptor const *>(pValue);
-
-                            // Our numbullet dialog has set the wrong textencoding for our "StarSymbol" font,
-                            // instead of a Unicode encoding the encoding RTL_TEXTENCODING_SYMBOL was used.
-                            // Because there might exist a lot of damaged documemts I added this two lines
-                            // which fixes the bullet problem for the export.
-                            if ( aFontDesc.Name.equalsIgnoreAsciiCase("StarSymbol") )
-                                aFontDesc.CharSet = RTL_TEXTENCODING_MS_1252;
-
-                        }
-                        else if ( aPropName == "GraphicURL" )
-                            aGraphicURL = *static_cast<OUString const *>(pValue);
-                        else if ( aPropName == "GraphicSize" )
-                        {
-                            if ( pPropValue[ i ].Value.getValueType() == cppu::UnoType<css::awt::Size>::get())
-                            {
-                                // don't cast awt::Size to Size as on 64-bits they are not the same.
-                                css::awt::Size aSize;
-                                pPropValue[ i ].Value >>= aSize;
-                                aBuGraSize.A() = aSize.Width;
-                                aBuGraSize.B() = aSize.Height;
-                            }
-                        }
-                        else if ( aPropName == "StartWith" )
-                            nStartWith = *static_cast<sal_Int16 const *>(pValue);
-                        else if ( aPropName == "LeftMargin" )
-                            nTextOfs = nTextOfs + static_cast< sal_Int16 >( *static_cast<sal_Int32 const *>(pValue) / ( 2540.0 / 576 ) );
-                        else if ( aPropName == "FirstLineOffset" )
-                            nBulletOfs += (sal_Int16)( *static_cast<sal_Int32 const *>(pValue) / ( 2540.0 / 576 ) );
-                        else if ( aPropName == "BulletColor" )
-                        {
-                            sal_uInt32 nSOColor = *static_cast<sal_uInt32 const *>(pValue);
-                            nBulletColor = nSOColor & 0xff00ff00;                       // green and hibyte
-                            nBulletColor |= (sal_uInt8)( nSOColor ) << 16;              // red
-                            nBulletColor |= (sal_uInt8)( nSOColor >> 16 ) | 0xfe000000; // blue
-                        }
-                        else if ( aPropName == "BulletRelSize" )
-                        {
-                            nBulletRealSize = *static_cast<sal_Int16 const *>(pValue);
-                            nParaFlags |= 0x40;
-                            nBulletFlags |= 8;
-                        }
-                        else if ( aPropName == "Prefix" )
-                            sPrefix = *static_cast<OUString const *>(pValue);
-                        else if ( aPropName == "Suffix" )
-                            sSuffix = *static_cast<OUString const *>(pValue);
-#ifdef DBG_UTIL
-                        else if ( ! (
-                                ( aPropName == "SymbolTextDistance" )
-                            ||  ( aPropName == "Graphic" ) ) )
-                        {
-                            OSL_FAIL( "Unknown Property" );
-                        }
-#endif
+                        OUString aString( *o3tl::doAccess<OUString>(pPropValue[i].Value) );
+                        if ( !aString.isEmpty() )
+                            cBulletId = aString[ 0 ];
                     }
+                    else if ( aPropName == "BulletFont" )
+                    {
+                        aFontDesc = *o3tl::doAccess<css::awt::FontDescriptor>(pPropValue[i].Value);
+
+                        // Our numbullet dialog has set the wrong textencoding for our "StarSymbol" font,
+                        // instead of a Unicode encoding the encoding RTL_TEXTENCODING_SYMBOL was used.
+                        // Because there might exist a lot of damaged documemts I added this two lines
+                        // which fixes the bullet problem for the export.
+                        if ( aFontDesc.Name.equalsIgnoreAsciiCase("StarSymbol") )
+                            aFontDesc.CharSet = RTL_TEXTENCODING_MS_1252;
+
+                    }
+                    else if ( aPropName == "GraphicURL" )
+                        aGraphicURL = *o3tl::doAccess<OUString>(pPropValue[i].Value);
+                    else if ( aPropName == "GraphicSize" )
+                    {
+                        if (auto aSize = o3tl::tryAccess<css::awt::Size>(pPropValue[i].Value))
+                        {
+                            // don't cast awt::Size to Size as on 64-bits they are not the same.
+                            aBuGraSize.A() = aSize->Width;
+                            aBuGraSize.B() = aSize->Height;
+                        }
+                    }
+                    else if ( aPropName == "StartWith" )
+                        nStartWith = *o3tl::doAccess<sal_Int16>(pPropValue[i].Value);
+                    else if ( aPropName == "LeftMargin" )
+                        nTextOfs = nTextOfs + static_cast< sal_Int16 >( *o3tl::doAccess<sal_Int32>(pPropValue[i].Value) / ( 2540.0 / 576 ) );
+                    else if ( aPropName == "FirstLineOffset" )
+                        nBulletOfs += (sal_Int16)( *o3tl::doAccess<sal_Int32>(pPropValue[i].Value) / ( 2540.0 / 576 ) );
+                    else if ( aPropName == "BulletColor" )
+                    {
+                        sal_uInt32 nSOColor = *o3tl::doAccess<sal_uInt32>(pPropValue[i].Value);
+                        nBulletColor = nSOColor & 0xff00ff00;                       // green and hibyte
+                        nBulletColor |= (sal_uInt8)( nSOColor ) << 16;              // red
+                        nBulletColor |= (sal_uInt8)( nSOColor >> 16 ) | 0xfe000000; // blue
+                    }
+                    else if ( aPropName == "BulletRelSize" )
+                    {
+                        nBulletRealSize = *o3tl::doAccess<sal_Int16>(pPropValue[i].Value);
+                        nParaFlags |= 0x40;
+                        nBulletFlags |= 8;
+                    }
+                    else if ( aPropName == "Prefix" )
+                        sPrefix = *o3tl::doAccess<OUString>(pPropValue[i].Value);
+                    else if ( aPropName == "Suffix" )
+                        sSuffix = *o3tl::doAccess<OUString>(pPropValue[i].Value);
+#ifdef DBG_UTIL
+                    else if ( ! (
+                            ( aPropName == "SymbolTextDistance" )
+                        ||  ( aPropName == "Graphic" ) ) )
+                    {
+                        OSL_FAIL( "Unknown Property" );
+                    }
+#endif
                 }
 
                 if ( !aGraphicURL.isEmpty() )
@@ -1098,7 +1092,7 @@ void ParagraphObj::ImplGetParagraphValues( PPTExBulletProvider* pBuProv, bool bG
     {
         if ( bGetPropStateValue )
             meBullet = GetPropertyState( mXPropSet, "NumberingLevel" );
-        nDepth = *static_cast<sal_Int16 const *>(aAny.getValue());
+        nDepth = *o3tl::doAccess<sal_Int16>(aAny);
 
         if ( nDepth < 0 )
         {
@@ -1120,7 +1114,7 @@ void ParagraphObj::ImplGetParagraphValues( PPTExBulletProvider* pBuProv, bool bG
     ImplGetNumberingLevel( pBuProv, nDepth, mbIsBullet, bGetPropStateValue );
 
     if ( ImplGetPropertyValue( "ParaTabStops", bGetPropStateValue ) )
-        maTabStop = *static_cast<css::uno::Sequence< css::style::TabStop> const *>(mAny.getValue());
+        maTabStop = *o3tl::doAccess<css::uno::Sequence<css::style::TabStop>>(mAny);
     sal_Int16 eTextAdjust( css::style::ParagraphAdjust_LEFT );
     if ( GetPropertyValue( aAny, mXPropSet, "ParaAdjust", bGetPropStateValue ) )
         aAny >>= eTextAdjust;
@@ -1145,7 +1139,7 @@ void ParagraphObj::ImplGetParagraphValues( PPTExBulletProvider* pBuProv, bool bG
     if ( ImplGetPropertyValue( "ParaLineSpacing", bGetPropStateValue ) )
     {
         css::style::LineSpacing aLineSpacing
-            = *static_cast<css::style::LineSpacing const *>(mAny.getValue());
+            = *o3tl::doAccess<css::style::LineSpacing>(mAny);
         switch ( aLineSpacing.Mode )
         {
             case css::style::LineSpacingMode::FIX :
@@ -1168,14 +1162,14 @@ void ParagraphObj::ImplGetParagraphValues( PPTExBulletProvider* pBuProv, bool bG
 
     if ( ImplGetPropertyValue( "ParaBottomMargin", bGetPropStateValue ) )
     {
-        double fSpacing = *static_cast<sal_uInt32 const *>(mAny.getValue()) + ( 2540.0 / 576.0 ) - 1;
+        double fSpacing = *o3tl::doAccess<sal_uInt32>(mAny) + ( 2540.0 / 576.0 ) - 1;
         mnLineSpacingBottom = (sal_Int16)(-( fSpacing * 576.0 / 2540.0 ) );
     }
     meLineSpacingBottom = ePropState;
 
     if ( ImplGetPropertyValue( "ParaTopMargin", bGetPropStateValue ) )
     {
-        double fSpacing = *static_cast<sal_uInt32 const *>(mAny.getValue()) + ( 2540.0 / 576.0 ) - 1;
+        double fSpacing = *o3tl::doAccess<sal_uInt32>(mAny) + ( 2540.0 / 576.0 ) - 1;
         mnLineSpacingTop = (sal_Int16)(-( fSpacing * 576.0 / 2540.0 ) );
     }
     meLineSpacingTop = ePropState;

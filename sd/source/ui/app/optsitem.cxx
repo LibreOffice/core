@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <o3tl/any.hxx>
 #include <svx/svdmodel.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/sfx.hrc>
@@ -233,13 +236,13 @@ void SdOptionsLayout::GetPropNameArray( const char**& ppNames, sal_uLong& rCount
 
 bool SdOptionsLayout::ReadData( const Any* pValues )
 {
-    if( pValues[0].hasValue() ) SetRulerVisible( *static_cast<sal_Bool const *>(pValues[ 0 ].getValue()) );
-    if( pValues[1].hasValue() ) SetHandlesBezier( *static_cast<sal_Bool const *>(pValues[ 1 ].getValue()) );
-    if( pValues[2].hasValue() ) SetMoveOutline( *static_cast<sal_Bool const *>(pValues[ 2 ].getValue()) );
-    if( pValues[3].hasValue() ) SetDragStripes( *static_cast<sal_Bool const *>(pValues[ 3 ].getValue()) );
-    if( pValues[4].hasValue() ) SetHelplines( *static_cast<sal_Bool const *>(pValues[ 4 ].getValue()) );
-    if( pValues[5].hasValue() ) SetMetric( (sal_uInt16) *static_cast<sal_Int32 const *>(pValues[ 5 ].getValue()) );
-    if( pValues[6].hasValue() ) SetDefTab( (sal_uInt16) *static_cast<sal_Int32 const *>(pValues[ 6 ].getValue()) );
+    if( pValues[0].hasValue() ) SetRulerVisible( *o3tl::doAccess<bool>(pValues[ 0 ]) );
+    if( pValues[1].hasValue() ) SetHandlesBezier( *o3tl::doAccess<bool>(pValues[ 1 ]) );
+    if( pValues[2].hasValue() ) SetMoveOutline( *o3tl::doAccess<bool>(pValues[ 2 ]) );
+    if( pValues[3].hasValue() ) SetDragStripes( *o3tl::doAccess<bool>(pValues[ 3 ]) );
+    if( pValues[4].hasValue() ) SetHelplines( *o3tl::doAccess<bool>(pValues[ 4 ]) );
+    if( pValues[5].hasValue() ) SetMetric( (sal_uInt16) *o3tl::doAccess<sal_Int32>(pValues[ 5 ]) );
+    if( pValues[6].hasValue() ) SetDefTab( (sal_uInt16) *o3tl::doAccess<sal_Int32>(pValues[ 6 ]) );
 
     return true;
 }
@@ -523,46 +526,46 @@ void SdOptionsMisc::GetPropNameArray( const char**& ppNames, sal_uLong& rCount )
 
 bool SdOptionsMisc::ReadData( const Any* pValues )
 {
-    if( pValues[0].hasValue() ) SetMarkedHitMovesAlways( *static_cast<sal_Bool const *>(pValues[ 0 ].getValue()) );
-    if( pValues[1].hasValue() ) SetCrookNoContortion( *static_cast<sal_Bool const *>(pValues[ 1 ].getValue()) );
-    if( pValues[2].hasValue() ) SetQuickEdit( *static_cast<sal_Bool const *>(pValues[ 2 ].getValue()) );
-    if( pValues[3].hasValue() ) SetMasterPagePaintCaching( *static_cast<sal_Bool const *>(pValues[ 3 ].getValue()) );
-    if( pValues[4].hasValue() ) SetDragWithCopy( *static_cast<sal_Bool const *>(pValues[ 4 ].getValue()) );
-    if( pValues[5].hasValue() ) SetPickThrough( *static_cast<sal_Bool const *>(pValues[ 5 ].getValue()) );
-    if( pValues[6].hasValue() ) SetDoubleClickTextEdit( *static_cast<sal_Bool const *>(pValues[ 6 ].getValue()) );
-    if( pValues[7].hasValue() ) SetClickChangeRotation( *static_cast<sal_Bool const *>(pValues[ 7 ].getValue()) );
-    if( pValues[9].hasValue() ) SetSolidDragging( *static_cast<sal_Bool const *>(pValues[ 9 ].getValue()) );
-    if( pValues[10].hasValue() ) SetDefaultObjectSizeWidth( *static_cast<sal_uInt32 const *>(pValues[ 10 ].getValue()) );
-    if( pValues[11].hasValue() ) SetDefaultObjectSizeHeight( *static_cast<sal_uInt32 const *>(pValues[ 11 ].getValue()) );
-    if( pValues[12].hasValue() ) SetPrinterIndependentLayout( *static_cast<sal_uInt16 const *>(pValues[ 12 ].getValue()) );
+    if( pValues[0].hasValue() ) SetMarkedHitMovesAlways( *o3tl::doAccess<bool>(pValues[ 0 ]) );
+    if( pValues[1].hasValue() ) SetCrookNoContortion( *o3tl::doAccess<bool>(pValues[ 1 ]) );
+    if( pValues[2].hasValue() ) SetQuickEdit( *o3tl::doAccess<bool>(pValues[ 2 ]) );
+    if( pValues[3].hasValue() ) SetMasterPagePaintCaching( *o3tl::doAccess<bool>(pValues[ 3 ]) );
+    if( pValues[4].hasValue() ) SetDragWithCopy( *o3tl::doAccess<bool>(pValues[ 4 ]) );
+    if( pValues[5].hasValue() ) SetPickThrough( *o3tl::doAccess<bool>(pValues[ 5 ]) );
+    if( pValues[6].hasValue() ) SetDoubleClickTextEdit( *o3tl::doAccess<bool>(pValues[ 6 ]) );
+    if( pValues[7].hasValue() ) SetClickChangeRotation( *o3tl::doAccess<bool>(pValues[ 7 ]) );
+    if( pValues[9].hasValue() ) SetSolidDragging( *o3tl::doAccess<bool>(pValues[ 9 ]) );
+    if( pValues[10].hasValue() ) SetDefaultObjectSizeWidth( *o3tl::doAccess<sal_uInt32>(pValues[ 10 ]) );
+    if( pValues[11].hasValue() ) SetDefaultObjectSizeHeight( *o3tl::doAccess<sal_uInt32>(pValues[ 11 ]) );
+    if( pValues[12].hasValue() ) SetPrinterIndependentLayout( *o3tl::doAccess<sal_uInt16>(pValues[ 12 ]) );
 
     if( pValues[13].hasValue() )
-        SetShowComments(  *static_cast<sal_Bool const *>(pValues[ 13 ].getValue()) );
+        SetShowComments(  *o3tl::doAccess<bool>(pValues[ 13 ]) );
 
     // just for Impress
     if( GetConfigId() == SDCFG_IMPRESS )
     {
         if( pValues[14].hasValue() )
-            SetStartWithTemplate( *static_cast<sal_Bool const *>(pValues[ 14 ].getValue()) );
+            SetStartWithTemplate( *o3tl::doAccess<bool>(pValues[ 14 ]) );
         if( pValues[15].hasValue() )
-            SetSummationOfParagraphs( *static_cast<sal_Bool const *>(pValues[ 15 ].getValue()) );
+            SetSummationOfParagraphs( *o3tl::doAccess<bool>(pValues[ 15 ]) );
         if( pValues[16].hasValue() )
-            SetShowUndoDeleteWarning( *static_cast<sal_Bool const *>(pValues[ 16 ].getValue()) );
+            SetShowUndoDeleteWarning( *o3tl::doAccess<bool>(pValues[ 16 ]) );
 
         if( pValues[17].hasValue() )
-            SetSlideshowRespectZOrder(*static_cast<sal_Bool const *>(pValues[ 17 ].getValue()));
+            SetSlideshowRespectZOrder(*o3tl::doAccess<bool>(pValues[ 17 ]));
 
         if( pValues[18].hasValue() )
-            SetPreviewNewEffects(*static_cast<sal_Bool const *>(pValues[ 18 ].getValue()));
+            SetPreviewNewEffects(*o3tl::doAccess<bool>(pValues[ 18 ]));
 
         if( pValues[19].hasValue() )
-            SetPreviewChangedEffects(*static_cast<sal_Bool const *>(pValues[ 19 ].getValue()));
+            SetPreviewChangedEffects(*o3tl::doAccess<bool>(pValues[ 19 ]));
 
         if( pValues[20].hasValue() )
-            SetPreviewTransitions(*static_cast<sal_Bool const *>(pValues[ 20 ].getValue()));
+            SetPreviewTransitions(*o3tl::doAccess<bool>(pValues[ 20 ]));
 
         if( pValues[21].hasValue() )
-            SetDisplay(*static_cast<sal_Int32 const *>(pValues[ 21 ].getValue()));
+            SetDisplay(*o3tl::doAccess<sal_Int32>(pValues[ 21 ]));
 
         if( pValues[22].hasValue() )
             SetPresentationPenColor( getSafeValue< sal_Int32 >( pValues[ 22 ] ) );
@@ -571,13 +574,13 @@ bool SdOptionsMisc::ReadData( const Any* pValues )
             SetPresentationPenWidth( getSafeValue< double >( pValues[ 23 ] ) );
 
         if( pValues[24].hasValue() )
-            SetEnableSdremote( *static_cast<sal_Bool const *>(pValues[ 24 ].getValue()) );
+            SetEnableSdremote( *o3tl::doAccess<bool>(pValues[ 24 ]) );
 
         if( pValues[25].hasValue() )
-            SetEnablePresenterScreen( *static_cast<sal_Bool const *>(pValues[ 25 ].getValue()) );
+            SetEnablePresenterScreen( *o3tl::doAccess<bool>(pValues[ 25 ]) );
 
         if( pValues[26].hasValue() ) {
-            SetTabBarVisible( *static_cast<sal_Bool const *>(pValues[ 26 ].getValue()) );
+            SetTabBarVisible( *o3tl::doAccess<bool>(pValues[ 26 ]) );
         }
     }
 
@@ -808,16 +811,16 @@ void SdOptionsSnap::GetPropNameArray( const char**& ppNames, sal_uLong& rCount )
 
 bool SdOptionsSnap::ReadData( const Any* pValues )
 {
-    if( pValues[0].hasValue() ) SetSnapHelplines( *static_cast<sal_Bool const *>(pValues[ 0 ].getValue()) );
-    if( pValues[1].hasValue() ) SetSnapBorder( *static_cast<sal_Bool const *>(pValues[ 1 ].getValue()) );
-    if( pValues[2].hasValue() ) SetSnapFrame( *static_cast<sal_Bool const *>(pValues[ 2 ].getValue()) );
-    if( pValues[3].hasValue() ) SetSnapPoints( *static_cast<sal_Bool const *>(pValues[ 3 ].getValue()) );
-    if( pValues[4].hasValue() ) SetOrtho( *static_cast<sal_Bool const *>(pValues[ 4 ].getValue()) );
-    if( pValues[5].hasValue() ) SetBigOrtho( *static_cast<sal_Bool const *>(pValues[ 5 ].getValue()) );
-    if( pValues[6].hasValue() ) SetRotate( *static_cast<sal_Bool const *>(pValues[ 6 ].getValue()) );
-    if( pValues[7].hasValue() ) SetSnapArea( (sal_Int16) *static_cast<sal_Int32 const *>(pValues[ 7 ].getValue()) );
-    if( pValues[8].hasValue() ) SetAngle( (sal_Int16) *static_cast<sal_Int32 const *>(pValues[ 8 ].getValue()) );
-    if( pValues[9].hasValue() ) SetEliminatePolyPointLimitAngle( (sal_Int16) *static_cast<sal_Int32 const *>(pValues[ 9 ].getValue()) );
+    if( pValues[0].hasValue() ) SetSnapHelplines( *o3tl::doAccess<bool>(pValues[ 0 ]) );
+    if( pValues[1].hasValue() ) SetSnapBorder( *o3tl::doAccess<bool>(pValues[ 1 ]) );
+    if( pValues[2].hasValue() ) SetSnapFrame( *o3tl::doAccess<bool>(pValues[ 2 ]) );
+    if( pValues[3].hasValue() ) SetSnapPoints( *o3tl::doAccess<bool>(pValues[ 3 ]) );
+    if( pValues[4].hasValue() ) SetOrtho( *o3tl::doAccess<bool>(pValues[ 4 ]) );
+    if( pValues[5].hasValue() ) SetBigOrtho( *o3tl::doAccess<bool>(pValues[ 5 ]) );
+    if( pValues[6].hasValue() ) SetRotate( *o3tl::doAccess<bool>(pValues[ 6 ]) );
+    if( pValues[7].hasValue() ) SetSnapArea( (sal_Int16) *o3tl::doAccess<sal_Int32>(pValues[ 7 ]) );
+    if( pValues[8].hasValue() ) SetAngle( (sal_Int16) *o3tl::doAccess<sal_Int32>(pValues[ 8 ]) );
+    if( pValues[9].hasValue() ) SetEliminatePolyPointLimitAngle( (sal_Int16) *o3tl::doAccess<sal_Int32>(pValues[ 9 ]) );
 
     return true;
 }
@@ -944,8 +947,8 @@ bool SdOptionsZoom::ReadData( const Any* pValues )
 {
     sal_Int32 x = 1, y = 1;
 
-    if( pValues[0].hasValue() ) x = ( *static_cast<sal_Int32 const *>(pValues[ 0 ].getValue()) );
-    if( pValues[1].hasValue() ) y = ( *static_cast<sal_Int32 const *>(pValues[ 1 ].getValue()) );
+    if( pValues[0].hasValue() ) x = *o3tl::doAccess<sal_Int32>(pValues[ 0 ]);
+    if( pValues[1].hasValue() ) y = *o3tl::doAccess<sal_Int32>(pValues[ 1 ]);
 
     SetScale( x, y );
 
@@ -1044,27 +1047,27 @@ void SdOptionsGrid::GetPropNameArray( const char**& ppNames, sal_uLong& rCount )
 
 bool SdOptionsGrid::ReadData( const Any* pValues )
 {
-    if( pValues[0].hasValue() ) SetFieldDrawX( *static_cast<sal_Int32 const *>(pValues[ 0 ].getValue()) );
-    if( pValues[1].hasValue() ) SetFieldDrawY( *static_cast<sal_Int32 const *>(pValues[ 1 ].getValue()) );
+    if( pValues[0].hasValue() ) SetFieldDrawX( *o3tl::doAccess<sal_Int32>(pValues[ 0 ]) );
+    if( pValues[1].hasValue() ) SetFieldDrawY( *o3tl::doAccess<sal_Int32>(pValues[ 1 ]) );
 
     if( pValues[2].hasValue() )
     {
-        const sal_uInt32 nDivX = FRound( *static_cast<double const *>(pValues[ 2 ].getValue()) );
+        const sal_uInt32 nDivX = FRound( *o3tl::doAccess<double>(pValues[ 2 ]) );
         SetFieldDivisionX( SvxOptionsGrid::GetFieldDrawX() / ( nDivX + 1 ) );
     }
 
     if( pValues[3].hasValue() )
     {
-        const sal_uInt32 nDivY = FRound( *static_cast<double const *>(pValues[ 3 ].getValue()) );
+        const sal_uInt32 nDivY = FRound( *o3tl::doAccess<double>(pValues[ 3 ]) );
         SetFieldDivisionY( SvxOptionsGrid::GetFieldDrawY() / ( nDivY + 1 ) );
     }
 
-    if( pValues[4].hasValue() ) SetFieldSnapX( *static_cast<sal_Int32 const *>(pValues[ 4 ].getValue()) );
-    if( pValues[5].hasValue() ) SetFieldSnapY( *static_cast<sal_Int32 const *>(pValues[ 5 ].getValue()) );
-    if( pValues[6].hasValue() ) SetUseGridSnap( *static_cast<sal_Bool const *>(pValues[ 6 ].getValue()) );
-    if( pValues[7].hasValue() ) SetSynchronize( *static_cast<sal_Bool const *>(pValues[ 7 ].getValue()) );
-    if( pValues[8].hasValue() ) SetGridVisible( *static_cast<sal_Bool const *>(pValues[ 8 ].getValue()) );
-    if( pValues[9].hasValue() ) SetEqualGrid( *static_cast<sal_Bool const *>(pValues[ 9 ].getValue()) );
+    if( pValues[4].hasValue() ) SetFieldSnapX( *o3tl::doAccess<sal_Int32>(pValues[ 4 ]) );
+    if( pValues[5].hasValue() ) SetFieldSnapY( *o3tl::doAccess<sal_Int32>(pValues[ 5 ]) );
+    if( pValues[6].hasValue() ) SetUseGridSnap( *o3tl::doAccess<bool>(pValues[ 6 ]) );
+    if( pValues[7].hasValue() ) SetSynchronize( *o3tl::doAccess<bool>(pValues[ 7 ]) );
+    if( pValues[8].hasValue() ) SetGridVisible( *o3tl::doAccess<bool>(pValues[ 8 ]) );
+    if( pValues[9].hasValue() ) SetEqualGrid( *o3tl::doAccess<bool>(pValues[ 9 ]) );
 
     return true;
 }
@@ -1256,27 +1259,27 @@ void SdOptionsPrint::GetPropNameArray( const char**& ppNames, sal_uLong& rCount 
 
 bool SdOptionsPrint::ReadData( const Any* pValues )
 {
-    if( pValues[0].hasValue() ) SetDate( *static_cast<sal_Bool const *>(pValues[ 0 ].getValue()) );
-    if( pValues[1].hasValue() ) SetTime( *static_cast<sal_Bool const *>(pValues[ 1 ].getValue()) );
-    if( pValues[2].hasValue() ) SetPagename( *static_cast<sal_Bool const *>(pValues[ 2 ].getValue()) );
-    if( pValues[3].hasValue() ) SetHiddenPages( *static_cast<sal_Bool const *>(pValues[ 3 ].getValue()) );
-    if( pValues[4].hasValue() ) SetPagesize( *static_cast<sal_Bool const *>(pValues[ 4 ].getValue()) );
-    if( pValues[5].hasValue() ) SetPagetile( *static_cast<sal_Bool const *>(pValues[ 5 ].getValue()) );
-    if( pValues[6].hasValue() ) SetBooklet( *static_cast<sal_Bool const *>(pValues[ 6 ].getValue()) );
-    if( pValues[7].hasValue() ) SetFrontPage( *static_cast<sal_Bool const *>(pValues[ 7 ].getValue()) );
-    if( pValues[8].hasValue() ) SetBackPage( *static_cast<sal_Bool const *>(pValues[ 8 ].getValue()) );
-    if( pValues[9].hasValue() ) SetPaperbin( *static_cast<sal_Bool const *>(pValues[ 9 ].getValue()) );
-    if( pValues[10].hasValue() ) SetOutputQuality( (sal_uInt16) *static_cast<sal_Int32 const *>(pValues[ 10 ].getValue()) );
-    if( pValues[11].hasValue() ) SetDraw( *static_cast<sal_Bool const *>(pValues[ 11 ].getValue()) );
+    if( pValues[0].hasValue() ) SetDate( *o3tl::doAccess<bool>(pValues[ 0 ]) );
+    if( pValues[1].hasValue() ) SetTime( *o3tl::doAccess<bool>(pValues[ 1 ]) );
+    if( pValues[2].hasValue() ) SetPagename( *o3tl::doAccess<bool>(pValues[ 2 ]) );
+    if( pValues[3].hasValue() ) SetHiddenPages( *o3tl::doAccess<bool>(pValues[ 3 ]) );
+    if( pValues[4].hasValue() ) SetPagesize( *o3tl::doAccess<bool>(pValues[ 4 ]) );
+    if( pValues[5].hasValue() ) SetPagetile( *o3tl::doAccess<bool>(pValues[ 5 ]) );
+    if( pValues[6].hasValue() ) SetBooklet( *o3tl::doAccess<bool>(pValues[ 6 ]) );
+    if( pValues[7].hasValue() ) SetFrontPage( *o3tl::doAccess<bool>(pValues[ 7 ]) );
+    if( pValues[8].hasValue() ) SetBackPage( *o3tl::doAccess<bool>(pValues[ 8 ]) );
+    if( pValues[9].hasValue() ) SetPaperbin( *o3tl::doAccess<bool>(pValues[ 9 ]) );
+    if( pValues[10].hasValue() ) SetOutputQuality( (sal_uInt16) *o3tl::doAccess<sal_Int32>(pValues[ 10 ]) );
+    if( pValues[11].hasValue() ) SetDraw( *o3tl::doAccess<bool>(pValues[ 11 ]) );
 
     // just for impress
     if( GetConfigId() == SDCFG_IMPRESS )
     {
-        if( pValues[12].hasValue() ) SetNotes( *static_cast<sal_Bool const *>(pValues[ 12 ].getValue()) );
-        if( pValues[13].hasValue() ) SetHandout( *static_cast<sal_Bool const *>(pValues[ 13 ].getValue()) );
-        if( pValues[14].hasValue() ) SetOutline( *static_cast<sal_Bool const *>(pValues[ 14 ].getValue()) );
-        if( pValues[15].hasValue() ) SetHandoutHorizontal( *static_cast<sal_Bool const *>(pValues[15].getValue()) );
-        if( pValues[16].hasValue() ) SetHandoutPages( (sal_uInt16)*static_cast<sal_Int32 const *>(pValues[16].getValue()) );
+        if( pValues[12].hasValue() ) SetNotes( *o3tl::doAccess<bool>(pValues[ 12 ]) );
+        if( pValues[13].hasValue() ) SetHandout( *o3tl::doAccess<bool>(pValues[ 13 ]) );
+        if( pValues[14].hasValue() ) SetOutline( *o3tl::doAccess<bool>(pValues[ 14 ]) );
+        if( pValues[15].hasValue() ) SetHandoutHorizontal( *o3tl::doAccess<bool>(pValues[15]) );
+        if( pValues[16].hasValue() ) SetHandoutPages( (sal_uInt16)*o3tl::doAccess<sal_Int32>(pValues[16]) );
     }
 
     return true;

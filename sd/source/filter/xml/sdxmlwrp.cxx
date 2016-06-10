@@ -363,8 +363,8 @@ sal_Int32 ReadThroughComponent(
 
         Any aAny = xProps->getPropertyValue( "Encrypted" );
 
-        bool bEncrypted = aAny.getValueType() == cppu::UnoType<bool>::get() &&
-                *static_cast<sal_Bool const *>(aAny.getValue());
+        bool bEncrypted = false;
+        aAny >>= bEncrypted;
 
         Reference <io::XInputStream> xInputStream = xStream->getInputStream();
 

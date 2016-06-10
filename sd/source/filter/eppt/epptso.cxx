@@ -843,7 +843,7 @@ void PPTWriter::ImplWritePortions( SvStream& rOut, TextObj& rTextObj )
                     case css::drawing::FillStyle_SOLID :
                     {
                         if ( PropValue::GetPropertyValue( aAny, mXPropSet, "FillColor" ) )
-                            nBackgroundColor = EscherEx::GetColor( *static_cast<sal_uInt32 const *>(aAny.getValue()) );
+                            nBackgroundColor = EscherEx::GetColor( *o3tl::doAccess<sal_uInt32>(aAny) );
                     }
                     break;
                     case css::drawing::FillStyle_NONE :
@@ -866,7 +866,7 @@ void PPTWriter::ImplWritePortions( SvStream& rOut, TextObj& rTextObj )
                             case css::drawing::FillStyle_SOLID :
                             {
                                 if ( PropValue::GetPropertyValue( aAny, mXBackgroundPropSet, "FillColor" ) )
-                                    nBackgroundColor = EscherEx::GetColor( *static_cast<sal_uInt32 const *>(aAny.getValue()) );
+                                    nBackgroundColor = EscherEx::GetColor( *o3tl::doAccess<sal_uInt32>(aAny) );
                             }
                             break;
                             default:
@@ -901,7 +901,7 @@ void PPTWriter::ImplWritePortions( SvStream& rOut, TextObj& rTextObj )
                                 if ( PropValue::GetPropertyValue( aAny, aPropSetOfNextShape,
                                                     "FillColor", true ) )
                                 {
-                                    if ( nCharColor == EscherEx::GetColor( *static_cast<sal_uInt32 const *>(aAny.getValue()) ) )
+                                    if ( nCharColor == EscherEx::GetColor( *o3tl::doAccess<sal_uInt32>(aAny) ) )
                                     {
                                         nCharAttr |= 0x200;
                                     }
@@ -1870,7 +1870,7 @@ void PPTWriter::ImplWriteObjectEffect( SvStream& rSt,
         {
             if ( ImplGetPropertyValue( "Sound" ) )
             {
-                nSoundRef = maSoundCollection.GetId( *static_cast<OUString const *>(mAny.getValue()) );
+                nSoundRef = maSoundCollection.GetId( *o3tl::doAccess<OUString>(mAny) );
                 if ( nSoundRef )
                     nFlags |= 0x10;
             }
@@ -1887,7 +1887,7 @@ void PPTWriter::ImplWriteObjectEffect( SvStream& rSt,
     if ( bDimHide )
         nAfterEffect |= 2;
     if ( ImplGetPropertyValue( "DimColor" ) )
-        nDimColor = EscherEx::GetColor( *static_cast<sal_uInt32 const *>(mAny.getValue()) ) | 0xfe000000;
+        nDimColor = EscherEx::GetColor( *o3tl::doAccess<sal_uInt32>(mAny) ) | 0xfe000000;
 
     rSt.WriteUInt32( nDimColor ).WriteUInt32( nFlags ).WriteUInt32( nSoundRef ).WriteUInt32( nDelayTime )
        .WriteUInt16( basegfx::clamp<sal_Int32>(nOrder, 0, SAL_MAX_UINT16) ) // order of build ( 1.. )
@@ -1956,14 +1956,14 @@ void PPTWriter::ImplWriteClickAction( SvStream& rSt, css::presentation::ClickAct
         case css::presentation::ClickAction_SOUND :
         {
             if ( ImplGetPropertyValue( "Bookmark" ) )
-                nSoundRef = maSoundCollection.GetId( *static_cast<OUString const *>(mAny.getValue()) );
+                nSoundRef = maSoundCollection.GetId( *o3tl::doAccess<OUString>(mAny) );
         }
         break;
         case css::presentation::ClickAction_PROGRAM :
         {
             if ( ImplGetPropertyValue( "Bookmark" ) )
             {
-                INetURLObject aUrl( *static_cast<OUString const *>(mAny.getValue()) );
+                INetURLObject aUrl( *o3tl::doAccess<OUString>(mAny) );
                 if ( INetProtocol::File == aUrl.GetProtocol() )
                 {
                     aFile = aUrl.PathToFileName();
@@ -1977,7 +1977,7 @@ void PPTWriter::ImplWriteClickAction( SvStream& rSt, css::presentation::ClickAct
         {
             if ( ImplGetPropertyValue( "Bookmark" ) )
             {
-                OUString  aBookmark( *static_cast<OUString const *>(mAny.getValue()) );
+                OUString  aBookmark( *o3tl::doAccess<OUString>(mAny) );
                 sal_uInt32 nIndex = 0;
                 std::vector<OUString>::const_iterator pIter;
                 for ( pIter = maSlideNameList.begin(); pIter != maSlideNameList.end(); ++pIter, nIndex++ )
@@ -2004,7 +2004,7 @@ void PPTWriter::ImplWriteClickAction( SvStream& rSt, css::presentation::ClickAct
         {
             if ( ImplGetPropertyValue( "Bookmark" ) )
             {
-                OUString aBookmark( *static_cast<OUString const *>(mAny.getValue()) );
+                OUString aBookmark( *o3tl::doAccess<OUString>(mAny) );
                 if ( !aBookmark.isEmpty() )
                 {
                     nAction = 4;
@@ -2266,9 +2266,9 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                 {
                     if ( ImplGetPropertyValue( "BoundRect" ) )
                     {
-                        css::awt::Rectangle aRect( *static_cast<css::awt::Rectangle const *>(mAny.getValue()) );
-                        maPosition = MapPoint( css::awt::Point( aRect.X, aRect.Y ) );
-                        maSize = MapSize( css::awt::Size( aRect.Width, aRect.Height ) );
+                        auto aRect = o3tl::doAccess<css::awt::Rectangle>(mAny);
+                        maPosition = MapPoint( css::awt::Point( aRect->X, aRect->Y ) );
+                        maSize = MapSize( css::awt::Size( aRect->Width, aRect->Height ) );
                         maRect = Rectangle( Point( maPosition.X, maPosition.Y ), Size( maSize.Width, maSize.Height ) );
                     }
                     mType = "drawing.dontknow";
@@ -2387,10 +2387,10 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                     sal_Int32 nStartAngle, nEndAngle;
                     if ( !ImplGetPropertyValue( "CircleStartAngle" ) )
                         continue;
-                    nStartAngle = *static_cast<sal_Int32 const *>(mAny.getValue());
+                    nStartAngle = *o3tl::doAccess<sal_Int32>(mAny);
                     if( !ImplGetPropertyValue( "CircleEndAngle" ) )
                         continue;
-                    nEndAngle = *static_cast<sal_Int32 const *>(mAny.getValue());
+                    nEndAngle = *o3tl::doAccess<sal_Int32>(mAny);
                     css::awt::Point aPoint( mXShape->getPosition() );
                     css::awt::Size  aSize( mXShape->getSize() );
                     css::awt::Point aStart, aEnd, aCenter;
@@ -3409,7 +3409,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
             EscherPropertyContainer     aPropOpt;
             mnAngle = ( PropValue::GetPropertyValue( aAny,
                 mXPropSet, "RotateAngle", true ) )
-                    ? *static_cast<sal_Int32 const *>(aAny.getValue())
+                    ? *o3tl::doAccess<sal_Int32>(aAny)
                     : 0;
 
             aPropOpt.AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x90000 );
