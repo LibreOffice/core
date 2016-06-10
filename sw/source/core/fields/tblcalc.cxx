@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <o3tl/any.hxx>
+
 #include <calbck.hxx>
 #include <cntfrm.hxx>
 #include <doc.hxx>
@@ -188,7 +192,7 @@ bool SwTableField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         }
         break;
     case FIELD_PROP_BOOL1:
-        if(*static_cast<sal_Bool const *>(rAny.getValue()))
+        if(*o3tl::doAccess<bool>(rAny))
             nSubType = nsSwGetSetExpType::GSE_FORMULA|nsSwExtendedSubType::SUB_CMD;
         else
             nSubType = nsSwGetSetExpType::GSE_FORMULA;

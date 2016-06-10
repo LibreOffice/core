@@ -49,6 +49,7 @@
 #include "unotbl.hxx"
 #include "xmltexte.hxx"
 #include "xmlexp.hxx"
+#include <o3tl/any.hxx>
 #include <o3tl/sorted_vector.hxx>
 #include <textboxhelper.hxx>
 
@@ -843,7 +844,7 @@ void SwXMLExport::ExportTableBox( const SwTableBox& rBox,
 
                     // cell protection
                     aAny = xCellPropertySet->getPropertyValue(g_sIsProtected);
-                    if (*static_cast<sal_Bool const *>(aAny.getValue()))
+                    if (*o3tl::doAccess<bool>(aAny))
                     {
                         AddAttribute( XML_NAMESPACE_TABLE, XML_PROTECTED,
                                         XML_TRUE );

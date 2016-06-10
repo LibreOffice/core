@@ -29,6 +29,7 @@
 #include <com/sun/star/frame/XModule.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/genericpropertyset.hxx>
+#include <o3tl/any.hxx>
 #include <unotools/streamwrap.hxx>
 #include <svx/xmlgrhlp.hxx>
 #include <svx/xmleohlp.hxx>
@@ -402,7 +403,7 @@ sal_uInt32 SwXMLWriter::Write_( const uno::Reference < task::XStatusIndicator >&
     nRedlineMode = pDoc->getIDocumentRedlineAccess().GetRedlineMode();
     nRedlineMode &= ~nsRedlineMode_t::REDLINE_SHOW_MASK;
     nRedlineMode |= nsRedlineMode_t::REDLINE_SHOW_INSERT;
-    if ( *static_cast<sal_Bool const *>(aAny.getValue()) )
+    if ( *o3tl::doAccess<bool>(aAny) )
         nRedlineMode |= nsRedlineMode_t::REDLINE_SHOW_DELETE;
     pDoc->getIDocumentRedlineAccess().SetRedlineMode((RedlineMode_t)( nRedlineMode ));
 

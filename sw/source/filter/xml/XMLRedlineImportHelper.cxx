@@ -27,6 +27,7 @@
 #include <tools/datetime.hxx>
 #include "poolfmt.hxx"
 #include "unoredline.hxx"
+#include <o3tl/any.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
@@ -265,12 +266,12 @@ XMLRedlineImportHelper::XMLRedlineImportHelper(
     }
 
     // get redline mode
-    bShowChanges = *static_cast<sal_Bool const *>(
+    bShowChanges = *o3tl::doAccess<bool>(
         ( bHandleShowChanges ? xModelPropertySet : xImportInfoPropertySet )
-        ->getPropertyValue( g_sShowChanges ).getValue());
-    bRecordChanges = *static_cast<sal_Bool const *>(
+        ->getPropertyValue( g_sShowChanges ));
+    bRecordChanges = *o3tl::doAccess<bool>(
         ( bHandleRecordChanges ? xModelPropertySet : xImportInfoPropertySet )
-        ->getPropertyValue( g_sRecordChanges ).getValue());
+        ->getPropertyValue( g_sRecordChanges ));
     {
         Any aAny = (bHandleProtectionKey  ? xModelPropertySet
                                           : xImportInfoPropertySet )

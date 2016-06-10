@@ -21,6 +21,7 @@
 
 #include <UndoTable.hxx>
 #include <hintids.hxx>
+#include <o3tl/any.hxx>
 #include <unotools/collatorwrapper.hxx>
 #include <unotools/charclass.hxx>
 #include <editeng/unolingu.hxx>
@@ -443,7 +444,7 @@ bool SwGetExpField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     switch( nWhichId )
     {
     case FIELD_PROP_DOUBLE:
-        SwValueField::SetValue(*static_cast<double const *>(rAny.getValue()));
+        SwValueField::SetValue(*o3tl::doAccess<double>(rAny));
         break;
     case FIELD_PROP_FORMAT:
         rAny >>= nTmp;
@@ -466,7 +467,7 @@ bool SwGetExpField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
             SetSubType( static_cast<sal_uInt16>((GetSubType() & 0xff00) | nTmp));
         break;
     case FIELD_PROP_BOOL2:
-        if(*static_cast<sal_Bool const *>(rAny.getValue()))
+        if(*o3tl::doAccess<bool>(rAny))
             nSubType |= nsSwExtendedSubType::SUB_CMD;
         else
             nSubType &= (~nsSwExtendedSubType::SUB_CMD);
@@ -973,7 +974,7 @@ bool SwSetExpField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     switch( nWhichId )
     {
     case FIELD_PROP_BOOL2:
-        if(*static_cast<sal_Bool const *>(rAny.getValue()))
+        if(*o3tl::doAccess<bool>(rAny))
             nSubType &= ~nsSwExtendedSubType::SUB_INVISIBLE;
         else
             nSubType |= nsSwExtendedSubType::SUB_INVISIBLE;
@@ -1031,13 +1032,13 @@ bool SwSetExpField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         rAny >>= aPText;
         break;
     case FIELD_PROP_BOOL3:
-        if(*static_cast<sal_Bool const *>(rAny.getValue()))
+        if(*o3tl::doAccess<bool>(rAny))
             nSubType |= nsSwExtendedSubType::SUB_CMD;
         else
             nSubType &= (~nsSwExtendedSubType::SUB_CMD);
         break;
     case FIELD_PROP_BOOL1:
-        SetInputFlag(*static_cast<sal_Bool const *>(rAny.getValue()));
+        SetInputFlag(*o3tl::doAccess<bool>(rAny));
         break;
     case FIELD_PROP_PAR4:
         {

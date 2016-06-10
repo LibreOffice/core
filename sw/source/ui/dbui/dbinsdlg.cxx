@@ -89,6 +89,7 @@
 #include <unomid.h>
 #include <IDocumentMarkAccess.hxx>
 
+#include <o3tl/any.hxx>
 #include <o3tl/make_unique.hxx>
 
 #include <memory>
@@ -1664,13 +1665,13 @@ void SwInsertDBColAutoPilot::Load()
             pDataSourceProps[5] >>= pNewData->sTmplNm;
             pDataSourceProps[6] >>= pNewData->sTAutoFormatNm;
             if(pDataSourceProps[7].hasValue())
-                pNewData->bIsTable = *static_cast<sal_Bool const *>(pDataSourceProps[7].getValue());
+                pNewData->bIsTable = *o3tl::doAccess<bool>(pDataSourceProps[7]);
             if(pDataSourceProps[8].hasValue())
-                 pNewData->bIsField = *static_cast<sal_Bool const *>(pDataSourceProps[8].getValue());
+                 pNewData->bIsField = *o3tl::doAccess<bool>(pDataSourceProps[8]);
             if(pDataSourceProps[9].hasValue())
-                 pNewData->bIsHeadlineOn = *static_cast<sal_Bool const *>(pDataSourceProps[9].getValue());
+                 pNewData->bIsHeadlineOn = *o3tl::doAccess<bool>(pDataSourceProps[9]);
             if(pDataSourceProps[10].hasValue())
-                 pNewData->bIsEmptyHeadln = *static_cast<sal_Bool const *>(pDataSourceProps[10].getValue());
+                 pNewData->bIsEmptyHeadln = *o3tl::doAccess<bool>(pDataSourceProps[10]);
 
             const OUString sSubNodeName(pNames[nNode] + "/ColumnSet/");
             Sequence <OUString> aSubNames = GetNodeNames(sSubNodeName);
@@ -1700,9 +1701,9 @@ void SwInsertDBColAutoPilot::Load()
                 pSubProps[1] >>= nIndex;
                 SwInsDBColumn* pInsDBColumn = new SwInsDBColumn(sColumn);
                 if(pSubProps[2].hasValue())
-                    pInsDBColumn->bHasFormat = *static_cast<sal_Bool const *>(pSubProps[2].getValue());
+                    pInsDBColumn->bHasFormat = *o3tl::doAccess<bool>(pSubProps[2]);
                 if(pSubProps[3].hasValue())
-                    pInsDBColumn->bIsDBFormat = *static_cast<sal_Bool const *>(pSubProps[3].getValue());
+                    pInsDBColumn->bIsDBFormat = *o3tl::doAccess<bool>(pSubProps[3]);
 
                 pSubProps[4] >>= pInsDBColumn->sUsrNumFormat;
                 OUString sNumberFormatLocale;

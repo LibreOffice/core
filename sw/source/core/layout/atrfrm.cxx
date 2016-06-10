@@ -21,6 +21,7 @@
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/text/TextGridMode.hpp>
+#include <o3tl/any.hxx>
 #include <svtools/unoimap.hxx>
 #include <svtools/imap.hxx>
 #include <svtools/imapobj.hxx>
@@ -322,7 +323,7 @@ bool SwFormatFrameSize::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         break;
         case MID_FRMSIZE_IS_SYNC_HEIGHT_TO_WIDTH:
         {
-            bool bSet = *static_cast<sal_Bool const *>(rVal.getValue());
+            bool bSet = *o3tl::doAccess<bool>(rVal);
             if(bSet)
                 SetHeightPercent(SwFormatFrameSize::SYNCED);
             else if( SwFormatFrameSize::SYNCED == GetHeightPercent() )
@@ -331,7 +332,7 @@ bool SwFormatFrameSize::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         break;
         case MID_FRMSIZE_IS_SYNC_WIDTH_TO_HEIGHT:
         {
-            bool bSet = *static_cast<sal_Bool const *>(rVal.getValue());
+            bool bSet = *o3tl::doAccess<bool>(rVal);
             if(bSet)
                 SetWidthPercent(SwFormatFrameSize::SYNCED);
             else if( SwFormatFrameSize::SYNCED == GetWidthPercent() )
@@ -381,7 +382,7 @@ bool SwFormatFrameSize::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         break;
         case MID_FRMSIZE_IS_AUTO_HEIGHT:
         {
-            bool bSet = *static_cast<sal_Bool const *>(rVal.getValue());
+            bool bSet = *o3tl::doAccess<bool>(rVal);
             SetHeightSizeType(bSet ? ATT_VAR_SIZE : ATT_FIX_SIZE);
         }
         break;
@@ -1261,13 +1262,13 @@ bool SwFormatSurround::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         break;
 
         case MID_SURROUND_ANCHORONLY:
-            SetAnchorOnly( *static_cast<sal_Bool const *>(rVal.getValue()) );
+            SetAnchorOnly( *o3tl::doAccess<bool>(rVal) );
             break;
         case MID_SURROUND_CONTOUR:
-            SetContour( *static_cast<sal_Bool const *>(rVal.getValue()) );
+            SetContour( *o3tl::doAccess<bool>(rVal) );
             break;
         case MID_SURROUND_CONTOUROUTSIDE:
-            SetOutside( *static_cast<sal_Bool const *>(rVal.getValue()) );
+            SetOutside( *o3tl::doAccess<bool>(rVal) );
             break;
         default:
             OSL_ENSURE( false, "unknown MemberId" );
@@ -1497,7 +1498,7 @@ bool SwFormatHoriOrient::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         }
         break;
         case MID_HORIORIENT_PAGETOGGLE:
-                SetPosToggle( *static_cast<sal_Bool const *>(rVal.getValue()));
+                SetPosToggle( *o3tl::doAccess<bool>(rVal));
             break;
         default:
             OSL_ENSURE( false, "unknown MemberId" );
@@ -1886,7 +1887,7 @@ bool SwFormatURL::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         }
         break;
         case MID_URL_SERVERMAP:
-            bIsServerMap = *static_cast<sal_Bool const *>(rVal.getValue());
+            bIsServerMap = *o3tl::doAccess<bool>(rVal);
             break;
         default:
             OSL_ENSURE( false, "unknown MemberId" );
@@ -1982,7 +1983,7 @@ bool SwFormatFootnoteEndAtTextEnd::PutValue( const uno::Any& rVal, sal_uInt8 nMe
     {
         case MID_COLLECT     :
         {
-            bool bVal = *static_cast<sal_Bool const *>(rVal.getValue());
+            bool bVal = *o3tl::doAccess<bool>(rVal);
             if(!bVal && GetValue() >= FTNEND_ATTXTEND)
                 SetValue(FTNEND_ATPGORDOCEND);
             else if(bVal && GetValue() < FTNEND_ATTXTEND)
@@ -1991,7 +1992,7 @@ bool SwFormatFootnoteEndAtTextEnd::PutValue( const uno::Any& rVal, sal_uInt8 nMe
         break;
         case MID_RESTART_NUM :
         {
-            bool bVal = *static_cast<sal_Bool const *>(rVal.getValue());
+            bool bVal = *o3tl::doAccess<bool>(rVal);
             if(!bVal && GetValue() >= FTNEND_ATTXTEND_OWNNUMSEQ)
                 SetValue(FTNEND_ATTXTEND);
             else if(bVal && GetValue() < FTNEND_ATTXTEND_OWNNUMSEQ)
@@ -2010,7 +2011,7 @@ bool SwFormatFootnoteEndAtTextEnd::PutValue( const uno::Any& rVal, sal_uInt8 nMe
         break;
         case MID_OWN_NUM     :
         {
-            bool bVal = *static_cast<sal_Bool const *>(rVal.getValue());
+            bool bVal = *o3tl::doAccess<bool>(rVal);
             if(!bVal && GetValue() >= FTNEND_ATTXTEND_OWNNUMANDFMT)
                 SetValue(FTNEND_ATTXTEND_OWNNUMSEQ);
             else if(bVal && GetValue() < FTNEND_ATTXTEND_OWNNUMANDFMT)
@@ -2182,7 +2183,7 @@ bool SwFormatLineNumber::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     switch ( nMemberId )
     {
         case MID_LINENUMBER_COUNT:
-            SetCountLines( *static_cast<sal_Bool const *>(rVal.getValue()) );
+            SetCountLines( *o3tl::doAccess<bool>(rVal) );
             break;
         case MID_LINENUMBER_STARTVALUE:
         {
@@ -2344,13 +2345,13 @@ bool SwTextGridItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         }
         break;
         case MID_GRID_RUBY_BELOW:
-            SetRubyTextBelow( *static_cast<sal_Bool const *>(rVal.getValue()) );
+            SetRubyTextBelow( *o3tl::doAccess<bool>(rVal) );
             break;
         case MID_GRID_PRINT:
-            SetPrintGrid( *static_cast<sal_Bool const *>(rVal.getValue()) );
+            SetPrintGrid( *o3tl::doAccess<bool>(rVal) );
             break;
         case MID_GRID_DISPLAY:
-            SetDisplayGrid( *static_cast<sal_Bool const *>(rVal.getValue()) );
+            SetDisplayGrid( *o3tl::doAccess<bool>(rVal) );
             break;
         case MID_GRID_BASEHEIGHT:
         case MID_GRID_BASEWIDTH:
@@ -2409,11 +2410,11 @@ bool SwTextGridItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             break;
         }
         case MID_GRID_SNAPTOCHARS:
-            SetSnapToChars( *static_cast<sal_Bool const *>(rVal.getValue()) );
+            SetSnapToChars( *o3tl::doAccess<bool>(rVal) );
             break;
         case MID_GRID_STANDARD_MODE:
         {
-            bool bStandard = *static_cast<sal_Bool const *>(rVal.getValue());
+            bool bStandard = *o3tl::doAccess<bool>(rVal);
                SetSquaredMode( !bStandard );
             break;
         }

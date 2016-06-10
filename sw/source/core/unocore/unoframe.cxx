@@ -29,6 +29,7 @@
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
+#include <o3tl/any.hxx>
 #include <svx/svxids.hrc>
 #include <svx/xfillit0.hxx>
 #include <svx/xflgrit.hxx>
@@ -1495,7 +1496,7 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
                 }
                 else if(pEntry->nWID == FN_UNO_IS_AUTOMATIC_CONTOUR )
                 {
-                    pNoText->SetAutomaticContour( *static_cast<sal_Bool const *>(aValue.getValue()) );
+                    pNoText->SetAutomaticContour( *o3tl::doAccess<bool>(aValue) );
                 }
                 else if(pEntry->nWID == FN_UNO_IS_PIXEL_CONTOUR )
                 {
@@ -1505,7 +1506,7 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
                     // used already).
                     if( !pNoText->HasContour_() ||
                         !pNoText->IsContourMapModeValid() )
-                        pNoText->SetPixelContour( *static_cast<sal_Bool const *>(aValue.getValue()) );
+                        pNoText->SetPixelContour( *o3tl::doAccess<bool>(aValue) );
                     else
                         throw lang::IllegalArgumentException();
                 }
@@ -3106,7 +3107,7 @@ void SwXFrame::setPosition(const awt::Point& /*aPosition*/) throw( uno::RuntimeE
 awt::Size SwXFrame::getSize() throw( uno::RuntimeException, std::exception )
 {
     const ::uno::Any aVal = getPropertyValue("Size");
-    awt::Size const * pRet =  static_cast<awt::Size const *>(aVal.getValue());
+    awt::Size const * pRet =  o3tl::doAccess<awt::Size>(aVal);
     return *pRet;
 }
 

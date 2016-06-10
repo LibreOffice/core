@@ -19,6 +19,7 @@
 
 #include <hintids.hxx>
 
+#include <o3tl/any.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/help.hxx>
@@ -637,7 +638,7 @@ IMPL_LINK_NOARG_TYPED(SwGlossaryDlg, BibHdl, Button*, void)
                 Any aAny = aTestContent.getPropertyValue( "IsReadOnly" );
                 if(aAny.hasValue())
                 {
-                    bIsWritable = !*static_cast<sal_Bool const *>(aAny.getValue());
+                    bIsWritable = !*o3tl::doAccess<bool>(aAny);
                 }
             }
             catch (const Exception&)

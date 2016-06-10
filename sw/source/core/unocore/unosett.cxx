@@ -51,6 +51,7 @@
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/style/VerticalAlignment.hpp>
+#include <o3tl/any.hxx>
 #include <vcl/font.hxx>
 #include <editeng/flstitem.hxx>
 #include <vcl/metric.hxx>
@@ -385,7 +386,7 @@ void SwXFootnoteProperties::setPropertyValue(const OUString& rPropertyName, cons
                 break;
                 case WID_POSITION_END_OF_DOC:
                 {
-                    bool bVal = *static_cast<sal_Bool const *>(aValue.getValue());
+                    bool bVal = *o3tl::doAccess<bool>(aValue);
                     aFootnoteInfo.ePos = bVal ? FTNPOS_CHAPTER : FTNPOS_PAGE;
                 }
                 break;
@@ -833,7 +834,7 @@ void SwXLineNumberingProperties::setPropertyValue(
             {
                 case WID_NUM_ON:
                 {
-                    bool bVal = *static_cast<sal_Bool const *>(aValue.getValue());
+                    bool bVal = *o3tl::doAccess<bool>(aValue);
                     aFontMetric.SetPaintLineNumbers(bVal);
                 }
                 break;
@@ -909,19 +910,19 @@ void SwXLineNumberingProperties::setPropertyValue(
                 break;
                 case WID_COUNT_EMPTY_LINES :
                 {
-                    bool bVal = *static_cast<sal_Bool const *>(aValue.getValue());
+                    bool bVal = *o3tl::doAccess<bool>(aValue);
                     aFontMetric.SetCountBlankLines(bVal);
                 }
                 break;
                 case WID_COUNT_LINES_IN_FRAMES :
                 {
-                    bool bVal = *static_cast<sal_Bool const *>(aValue.getValue());
+                    bool bVal = *o3tl::doAccess<bool>(aValue);
                     aFontMetric.SetCountInFlys(bVal);
                 }
                 break;
                 case WID_RESTART_AT_EACH_PAGE :
                 {
-                    bool bVal = *static_cast<sal_Bool const *>(aValue.getValue());
+                    bool bVal = *o3tl::doAccess<bool>(aValue);
                     aFontMetric.SetRestartEachPage(bVal);
                 }
                 break;
@@ -1182,20 +1183,20 @@ void SwXNumberingRules::replaceByIndex(sal_Int32 nIndex, const uno::Any& rElemen
     if(nIndex < 0 || MAXLEVEL <= nIndex)
         throw lang::IndexOutOfBoundsException();
 
-    if(rElement.getValueType().getTypeClass() != uno::TypeClass_SEQUENCE)
+    auto rProperties = o3tl::tryAccess<uno::Sequence<beans::PropertyValue>>(
+        rElement);
+    if(!rProperties)
         throw lang::IllegalArgumentException();
-    const uno::Sequence<beans::PropertyValue>& rProperties =
-                    *static_cast<const uno::Sequence<beans::PropertyValue>*>(rElement.getValue());
     SwNumRule* pRule = nullptr;
     if(pNumRule)
         SwXNumberingRules::SetNumberingRuleByIndex( *pNumRule,
-                            rProperties, nIndex);
+                            *rProperties, nIndex);
     else if(pDocShell)
     {
         // #i87650# - correction of cws swwarnings:
         SwNumRule aNumRule( *(pDocShell->GetDoc()->GetOutlineNumRule()) );
         SwXNumberingRules::SetNumberingRuleByIndex( aNumRule,
-                            rProperties, nIndex);
+                            *rProperties, nIndex);
         // set character format if needed
         const SwCharFormats* pFormats = pDocShell->GetDoc()->GetCharFormats();
         const size_t nChCount = pFormats->size();
@@ -1236,7 +1237,7 @@ void SwXNumberingRules::replaceByIndex(sal_Int32 nIndex, const uno::Any& rElemen
         nullptr != (pRule = pDoc->FindNumRulePtr( m_sCreatedNumRuleName )))
     {
         SwXNumberingRules::SetNumberingRuleByIndex( *pRule,
-                            rProperties, nIndex);
+                            *rProperties, nIndex);
 
         pRule->Validate();
     }
@@ -2123,13 +2124,13 @@ void SwXNumberingRules::setPropertyValue( const OUString& rPropertyName, const A
 
     if(rPropertyName == UNO_NAME_IS_AUTOMATIC)
     {
-        bool bVal = *static_cast<sal_Bool const *>(rValue.getValue());
+        bool bVal = *o3tl::doAccess<bool>(rValue);
         if(!pCreatedRule)
             pDocRule ? pDocRule->SetAutoRule(bVal) : pNumRule->SetAutoRule(bVal);
     }
     else if(rPropertyName == UNO_NAME_IS_CONTINUOUS_NUMBERING)
     {
-        bool bVal = *static_cast<sal_Bool const *>(rValue.getValue());
+        bool bVal = *o3tl::doAccess<bool>(rValue);
         pDocRule ? pDocRule->SetContinusNum(bVal) :
             pCreatedRule ? pCreatedRule->SetContinusNum(bVal) : pNumRule->SetContinusNum(bVal);
     }
@@ -2140,13 +2141,13 @@ void SwXNumberingRules::setPropertyValue( const OUString& rPropertyName, const A
     }
     else if(rPropertyName == UNO_NAME_IS_ABSOLUTE_MARGINS)
     {
-        bool bVal = *static_cast<sal_Bool const *>(rValue.getValue());
+        bool bVal = *o3tl::doAccess<bool>(rValue);
         pDocRule ? pDocRule->SetAbsSpaces(bVal) :
             pCreatedRule ? pCreatedRule->SetAbsSpaces(bVal) : pNumRule->SetAbsSpaces(bVal);
     }
     else if(rPropertyName == UNO_NAME_NUMBERING_IS_OUTLINE)
     {
-        bool bVal = *static_cast<sal_Bool const *>(rValue.getValue());
+        bool bVal = *o3tl::doAccess<bool>(rValue);
         SwNumRuleType eNumRuleType = bVal ? OUTLINE_RULE : NUM_RULE;
         pDocRule ? pDocRule->SetRuleType(eNumRuleType) :
             pCreatedRule ? pCreatedRule->SetRuleType(eNumRuleType) : pNumRule->SetRuleType(eNumRuleType);
@@ -2499,7 +2500,7 @@ void SwXTextColumns::setPropertyValue( const OUString& rPropertyName, const Any&
         }
         break;
         case WID_TXTCOL_LINE_IS_ON:
-            bSepLineIsOn = *static_cast<sal_Bool const *>(aValue.getValue());
+            bSepLineIsOn = *o3tl::doAccess<bool>(aValue);
         break;
         case WID_TXTCOL_AUTO_DISTANCE:
         {

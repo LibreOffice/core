@@ -41,6 +41,7 @@
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/Duration.hpp>
+#include <o3tl/any.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <editeng/unolingu.hxx>
 #include <comphelper/processfactory.hxx>
@@ -385,11 +386,11 @@ bool SwAuthorField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     switch( nWhichId )
     {
     case FIELD_PROP_BOOL1:
-        SetFormat( *static_cast<sal_Bool const *>(rAny.getValue()) ? AF_NAME : AF_SHORTCUT );
+        SetFormat( *o3tl::doAccess<bool>(rAny) ? AF_NAME : AF_SHORTCUT );
         break;
 
     case FIELD_PROP_BOOL2:
-        if( *static_cast<sal_Bool const *>(rAny.getValue()) )
+        if( *o3tl::doAccess<bool>(rAny) )
             SetFormat( GetFormat() | AF_FIXED);
         else
             SetFormat( GetFormat() & ~AF_FIXED);
@@ -562,7 +563,7 @@ bool SwFileNameField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         break;
 
     case FIELD_PROP_BOOL2:
-        if( *static_cast<sal_Bool const *>(rAny.getValue()) )
+        if( *o3tl::doAccess<bool>(rAny) )
             SetFormat( GetFormat() | FF_FIXED);
         else
             SetFormat( GetFormat() & ~FF_FIXED);
@@ -1233,7 +1234,7 @@ bool SwDocInfoField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         break;
 
     case FIELD_PROP_BOOL1:
-        if(*static_cast<sal_Bool const *>(rAny.getValue()))
+        if(*o3tl::doAccess<bool>(rAny))
             nSubType |= DI_SUB_FIXED;
         else
             nSubType &= ~DI_SUB_FIXED;
@@ -1251,7 +1252,7 @@ bool SwDocInfoField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         break;
     case FIELD_PROP_BOOL2:
         nSubType &= 0xf0ff;
-        if(*static_cast<sal_Bool const *>(rAny.getValue()))
+        if(*o3tl::doAccess<bool>(rAny))
             nSubType |= DI_SUB_DATE;
         else
             nSubType |= DI_SUB_TIME;
@@ -1510,7 +1511,7 @@ bool SwHiddenTextField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         rAny >>= aFALSEText;
         break;
     case FIELD_PROP_BOOL1:
-        bIsHidden = *static_cast<sal_Bool const *>(rAny.getValue());
+        bIsHidden = *o3tl::doAccess<bool>(rAny);
         break;
     case FIELD_PROP_PAR4:
         rAny >>= aContent;
@@ -1609,7 +1610,7 @@ bool SwHiddenParaField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         rAny >>= aCond;
         break;
     case FIELD_PROP_BOOL1:
-        bIsHidden = *static_cast<sal_Bool const *>(rAny.getValue());
+        bIsHidden = *o3tl::doAccess<bool>(rAny);
         break;
 
     default:
@@ -1815,10 +1816,9 @@ bool SwPostItField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         OSL_FAIL("Not implemented!");
         break;
     case FIELD_PROP_DATE:
-        if( rAny.getValueType() == ::cppu::UnoType<util::Date>::get() )
+        if( auto aSetDate = o3tl::tryAccess<util::Date>(rAny) )
         {
-            util::Date aSetDate = *static_cast<util::Date const *>(rAny.getValue());
-            aDateTime = Date(aSetDate.Day, aSetDate.Month, aSetDate.Year);
+            aDateTime = Date(aSetDate->Day, aSetDate->Month, aSetDate->Year);
         }
         break;
     case FIELD_PROP_DATE_TIME:
@@ -1970,7 +1970,7 @@ bool SwExtUserField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         }
         break;
     case FIELD_PROP_BOOL1:
-        if( *static_cast<sal_Bool const *>(rAny.getValue()) )
+        if( *o3tl::doAccess<bool>(rAny) )
             SetFormat(GetFormat() | AF_FIXED);
         else
             SetFormat(GetFormat() & ~AF_FIXED);
@@ -2047,7 +2047,7 @@ bool SwRefPageSetField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     switch( nWhichId )
     {
     case FIELD_PROP_BOOL1:
-        bOn = *static_cast<sal_Bool const *>(rAny.getValue());
+        bOn = *o3tl::doAccess<bool>(rAny);
         break;
     case FIELD_PROP_USHORT1:
         rAny >>=nOffset;

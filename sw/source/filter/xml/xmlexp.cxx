@@ -26,6 +26,7 @@
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/xforms/XFormsSupplier.hpp>
 
+#include <o3tl/any.hxx>
 #include <sax/tools/converter.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
@@ -122,9 +123,11 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
                         sAutoTextMode ) )
             {
                 Any aAny = rInfoSet->getPropertyValue(sAutoTextMode);
-                if( aAny.getValueType() == cppu::UnoType<bool>::get() &&
-                    *static_cast<const sal_Bool*>(aAny.getValue()) )
-                    setBlockMode();
+                if( auto b = o3tl::tryAccess<bool>(aAny) )
+                {
+                    if( *b )
+                        setBlockMode();
+                }
             }
         }
     }
@@ -380,8 +383,8 @@ void SwXMLExport::GetViewSettings(Sequence<PropertyValue>& aProps)
         const OUString sShowChanges( "ShowChanges" );
         if( xInfoSet->getPropertySetInfo()->hasPropertyByName( sShowChanges ) )
         {
-            bShowRedlineChanges = *static_cast<sal_Bool const *>(xInfoSet->
-                                   getPropertyValue( sShowChanges ).getValue());
+            bShowRedlineChanges = *o3tl::doAccess<bool>(xInfoSet->
+                                   getPropertyValue( sShowChanges ));
         }
     }
 

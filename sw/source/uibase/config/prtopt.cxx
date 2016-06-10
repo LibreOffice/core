@@ -19,6 +19,7 @@
 
 #include <unotools/configmgr.hxx>
 #include <prtopt.hxx>
+#include <o3tl/any.hxx>
 #include <osl/diagnose.h>
 #include <com/sun/star/uno/Sequence.hxx>
 
@@ -84,11 +85,11 @@ SwPrintOptions::SwPrintOptions(bool bWeb) :
             {
                 switch(nProp)
                 {
-                    case  0: m_bPrintGraphic      = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break;
-                    case  1: m_bPrintTable            = *static_cast<sal_Bool const *>(pValues[nProp].getValue());  break;
-                    case  2: m_bPrintControl      = *static_cast<sal_Bool const *>(pValues[nProp].getValue());  break;
-                    case  3: m_bPrintPageBackground= *static_cast<sal_Bool const *>(pValues[nProp].getValue());  break;
-                    case  4: m_bPrintBlackFont        = *static_cast<sal_Bool const *>(pValues[nProp].getValue());  break;
+                    case  0: m_bPrintGraphic      = *o3tl::doAccess<bool>(pValues[nProp]); break;
+                    case  1: m_bPrintTable            = *o3tl::doAccess<bool>(pValues[nProp]);  break;
+                    case  2: m_bPrintControl      = *o3tl::doAccess<bool>(pValues[nProp]);  break;
+                    case  3: m_bPrintPageBackground= *o3tl::doAccess<bool>(pValues[nProp]);  break;
+                    case  4: m_bPrintBlackFont        = *o3tl::doAccess<bool>(pValues[nProp]);  break;
                     case  5:
                     {
                         sal_Int32 nTmp = 0;
@@ -96,18 +97,18 @@ SwPrintOptions::SwPrintOptions(bool bWeb) :
                         m_nPrintPostIts = static_cast<SwPostItMode>(nTmp);
                     }
                     break;
-                    case  6: m_bPrintReverse      = *static_cast<sal_Bool const *>(pValues[nProp].getValue());  break;
-                    case  7: m_bPrintProspect      = *static_cast<sal_Bool const *>(pValues[nProp].getValue());  break;
-                    case  8: m_bPrintProspectRTL  = *static_cast<sal_Bool const *>(pValues[nProp].getValue());  break;
-                    case  9: m_bPrintSingleJobs   = *static_cast<sal_Bool const *>(pValues[nProp].getValue());  break;
+                    case  6: m_bPrintReverse      = *o3tl::doAccess<bool>(pValues[nProp]);  break;
+                    case  7: m_bPrintProspect      = *o3tl::doAccess<bool>(pValues[nProp]);  break;
+                    case  8: m_bPrintProspectRTL  = *o3tl::doAccess<bool>(pValues[nProp]);  break;
+                    case  9: m_bPrintSingleJobs   = *o3tl::doAccess<bool>(pValues[nProp]);  break;
                     case 10: pValues[nProp] >>= m_sFaxName;  break;
-                    case 11: m_bPaperFromSetup    = *static_cast<sal_Bool const *>(pValues[nProp].getValue());  break;
-                    case 12: m_bPrintDraw         = *static_cast<sal_Bool const *>(pValues[nProp].getValue());  break;
-                    case 13: m_bPrintLeftPages    = *static_cast<sal_Bool const *>(pValues[nProp].getValue());  break;
-                    case 14: m_bPrintRightPages       = *static_cast<sal_Bool const *>(pValues[nProp].getValue());  break;
-                    case 15: m_bPrintEmptyPages       = *static_cast<sal_Bool const *>(pValues[nProp].getValue());  break;
-                    case 16: m_bPrintTextPlaceholder = *static_cast<sal_Bool const *>(pValues[nProp].getValue());  break;
-                    case 17: m_bPrintHiddenText = *static_cast<sal_Bool const *>(pValues[nProp].getValue());  break;
+                    case 11: m_bPaperFromSetup    = *o3tl::doAccess<bool>(pValues[nProp]);  break;
+                    case 12: m_bPrintDraw         = *o3tl::doAccess<bool>(pValues[nProp]);  break;
+                    case 13: m_bPrintLeftPages    = *o3tl::doAccess<bool>(pValues[nProp]);  break;
+                    case 14: m_bPrintRightPages       = *o3tl::doAccess<bool>(pValues[nProp]);  break;
+                    case 15: m_bPrintEmptyPages       = *o3tl::doAccess<bool>(pValues[nProp]);  break;
+                    case 16: m_bPrintTextPlaceholder = *o3tl::doAccess<bool>(pValues[nProp]);  break;
+                    case 17: m_bPrintHiddenText = *o3tl::doAccess<bool>(pValues[nProp]);  break;
                 }
             }
         }

@@ -18,6 +18,7 @@
  */
 
 #include <float.h>
+#include <o3tl/any.hxx>
 #include <sfx2/app.hxx>
 #include <svl/zforlist.hxx>
 #include <svx/pageitem.hxx>
@@ -391,7 +392,7 @@ bool SwDBField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     switch( nWhichId )
     {
     case FIELD_PROP_BOOL1:
-        if( *static_cast<sal_Bool const *>(rAny.getValue()) )
+        if( *o3tl::doAccess<bool>(rAny) )
             SetSubType(GetSubType()&~nsSwExtendedSubType::SUB_OWN_FMT);
         else
             SetSubType(GetSubType()|nsSwExtendedSubType::SUB_OWN_FMT);

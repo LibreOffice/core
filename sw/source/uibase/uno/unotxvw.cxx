@@ -18,6 +18,7 @@
  */
 
 #include "viscrs.hxx"
+#include <o3tl/any.hxx>
 #include <sfx2/frame.hxx>
 #include <sfx2/printer.hxx>
 #include <cmdid.h>
@@ -623,7 +624,7 @@ void SAL_CALL SwXTextView::setRubyList(
             else if(pProperties[nProp].Name == UNO_NAME_RUBY_IS_ABOVE)
             {
                 bool bValue = !pProperties[nProp].Value.hasValue() ||
-                    *static_cast<sal_Bool const *>(pProperties[nProp].Value.getValue());
+                    *o3tl::doAccess<bool>(pProperties[nProp].Value);
                 pEntry->GetRubyAttr().SetPosition(bValue ? 0 : 1);
             }
         }

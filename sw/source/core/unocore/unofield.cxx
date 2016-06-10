@@ -88,6 +88,7 @@
 #include <tools/datetime.hxx>
 #include <tools/urlobj.hxx>
 #include <svx/dataaccessdescriptor.hxx>
+#include <o3tl/any.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <textapi.hxx>
@@ -2252,11 +2253,11 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
         break;
         case FIELD_PROP_DATE :
         {
-            if(rValue.getValueType() != ::cppu::UnoType<util::Date>::get())
+            auto aTemp = o3tl::tryAccess<util::Date>(rValue);
+            if(!aTemp)
                 throw lang::IllegalArgumentException();
 
-            util::Date aTemp = *static_cast<const util::Date*>(rValue.getValue());
-            m_pImpl->m_pProps->aDate = Date(aTemp.Day, aTemp.Month, aTemp.Year);
+            m_pImpl->m_pProps->aDate = Date(aTemp->Day, aTemp->Month, aTemp->Year);
         }
         break;
         case FIELD_PROP_USHORT1:
@@ -2293,8 +2294,8 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
         }
         if (pBool)
         {
-            if( rValue.getValueType() == cppu::UnoType<bool>::get() )
-                *pBool = *static_cast<sal_Bool const *>(rValue.getValue());
+            if( auto b = o3tl::tryAccess<bool>(rValue) )
+                *pBool = *b;
             else
                 throw lang::IllegalArgumentException();
         }

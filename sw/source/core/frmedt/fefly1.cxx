@@ -18,6 +18,7 @@
  */
 
 #include <hintids.hxx>
+#include <o3tl/any.hxx>
 #include <svl/itemiter.hxx>
 #include <svtools/imapobj.hxx>
 #include <svtools/soerr.hxx>
@@ -1643,7 +1644,7 @@ ObjCntType SwFEShell::GetObjCntType( const SdrObject& rObj ) const
             if(xInfo->hasPropertyByName( sName ))
             {
                 aVal = xSet->getPropertyValue( sName );
-                if( aVal.getValue() && form::FormButtonType_URL == *static_cast<form::FormButtonType const *>(aVal.getValue()) )
+                if( aVal.hasValue() && form::FormButtonType_URL == *o3tl::doAccess<form::FormButtonType>(aVal) )
                     eType = OBJCNT_URLBUTTON;
             }
         }

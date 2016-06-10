@@ -29,6 +29,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/types.hxx>
+#include <o3tl/any.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/datetime.hxx>
 #include <rtl/ustring.hxx>
@@ -147,7 +148,7 @@ bool UCB_IsReadOnlyFileName( const OUString& rURL )
         ucbhelper::Content aCnt( rURL, css::uno::Reference< css::ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
         css::uno::Any aAny = aCnt.getPropertyValue("IsReadOnly");
         if(aAny.hasValue())
-            bIsReadOnly = *static_cast<sal_Bool const *>(aAny.getValue());
+            bIsReadOnly = *o3tl::doAccess<bool>(aAny);
     }
     catch( css::uno::Exception& )
     {

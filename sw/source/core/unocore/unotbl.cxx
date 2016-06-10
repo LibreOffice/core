@@ -24,6 +24,7 @@
 #include <vector>
 #include <algorithm>
 
+#include <o3tl/any.hxx>
 #include <svx/svxids.hrc>
 #include <editeng/memberids.hrc>
 #include <float.h>
@@ -678,8 +679,8 @@ static void lcl_SetTableSeparators(const uno::Any& rVal, SwTable* pTable, SwTabl
     if( !nOldCount )
         return;
 
-    const uno::Sequence< text::TableColumnSeparator>* pSepSeq =
-                static_cast<uno::Sequence< text::TableColumnSeparator> const *>(rVal.getValue());
+    auto pSepSeq =
+                o3tl::tryAccess<uno::Sequence<text::TableColumnSeparator>>(rVal);
     if(!pSepSeq || static_cast<size_t>(pSepSeq->getLength()) != nOldCount)
         return;
     SwTabCols aCols(aOldCols);
@@ -1342,7 +1343,7 @@ void SwXTextTableRow::setPropertyValue(const OUString& rPropertyName, const uno:
                     SwFormatFrameSize aFrameSize(pLn->GetFrameFormat()->GetFrameSize());
                     if(FN_UNO_ROW_AUTO_HEIGHT== pEntry->nWID)
                     {
-                        bool bSet = *static_cast<sal_Bool const *>(aValue.getValue());
+                        bool bSet = *o3tl::doAccess<bool>(aValue);
                         aFrameSize.SetHeightSizeType(bSet ? ATT_VAR_SIZE : ATT_FIX_SIZE);
                     }
                     else
@@ -2588,7 +2589,7 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName, const uno::An
 
                 case FN_UNO_RANGE_ROW_LABEL:
                 {
-                    bool bTmp = *static_cast<sal_Bool const *>(aValue.getValue());
+                    bool bTmp = *o3tl::doAccess<bool>(aValue);
                     if (m_pImpl->m_bFirstRowAsLabel != bTmp)
                     {
                         lcl_SendChartEvent(*this, m_pImpl->m_Listeners);
@@ -2599,7 +2600,7 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName, const uno::An
 
                 case FN_UNO_RANGE_COL_LABEL:
                 {
-                    bool bTmp = *static_cast<sal_Bool const *>(aValue.getValue());
+                    bool bTmp = *o3tl::doAccess<bool>(aValue);
                     if (m_pImpl->m_bFirstColumnAsLabel != bTmp)
                     {
                         lcl_SendChartEvent(*this, m_pImpl->m_Listeners);
@@ -3530,7 +3531,7 @@ SwXCellRange::setPropertyValue(const OUString& rPropertyName, const uno::Any& aV
                 break;
                 case FN_UNO_RANGE_ROW_LABEL:
                 {
-                    bool bTmp = *static_cast<sal_Bool const *>(aValue.getValue());
+                    bool bTmp = *o3tl::doAccess<bool>(aValue);
                     if (m_pImpl->m_bFirstRowAsLabel != bTmp)
                     {
                         lcl_SendChartEvent(*this, m_pImpl->m_ChartListeners);
@@ -3540,7 +3541,7 @@ SwXCellRange::setPropertyValue(const OUString& rPropertyName, const uno::Any& aV
                 break;
                 case FN_UNO_RANGE_COL_LABEL:
                 {
-                    bool bTmp = *static_cast<sal_Bool const *>(aValue.getValue());
+                    bool bTmp = *o3tl::doAccess<bool>(aValue);
                     if (m_pImpl->m_bFirstColumnAsLabel != bTmp)
                     {
                         lcl_SendChartEvent(*this, m_pImpl->m_ChartListeners);

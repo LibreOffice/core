@@ -21,6 +21,7 @@
 #include <comphelper/string.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <o3tl/any.hxx>
 #include <osl/endian.h>
 #include <rtl/ustrbuf.hxx>
 #include <unotools/collatorwrapper.hxx>
@@ -2675,9 +2676,9 @@ bool SwUnoCursorHelper::ConvertSortProperties(
         // old and new sortdescriptor
         if ( rPropName == "IsSortInTable" )
         {
-            if (aValue.getValueType() == cppu::UnoType<bool>::get())
+            if (auto b = o3tl::tryAccess<bool>(aValue))
             {
-                rSortOpt.bTable = *static_cast<sal_Bool const *>(aValue.getValue());
+                rSortOpt.bTable = *b;
             }
             else
             {
@@ -2782,10 +2783,10 @@ bool SwUnoCursorHelper::ConvertSortProperties(
             bOldSortdescriptor = true;
             sal_uInt16 nIndex = rPropName[13];
             nIndex = nIndex - '0';
-            if (aValue.getValueType() == cppu::UnoType<bool>::get() && nIndex < 3)
+            auto bTemp = o3tl::tryAccess<bool>(aValue);
+            if (bTemp && nIndex < 3)
             {
-                bool bTemp = *static_cast<sal_Bool const *>(aValue.getValue());
-                aKeys[nIndex]->bIsNumeric = bTemp;
+                aKeys[nIndex]->bIsNumeric = *bTemp;
             }
             else
             {
@@ -2799,10 +2800,10 @@ bool SwUnoCursorHelper::ConvertSortProperties(
             bOldSortdescriptor = true;
             sal_uInt16 nIndex = rPropName[15];
             nIndex -= '0';
-            if (aValue.getValueType() == cppu::UnoType<bool>::get() && nIndex < 3)
+            auto bTemp = o3tl::tryAccess<bool>(aValue);
+            if (bTemp && nIndex < 3)
             {
-                bool bTemp = *static_cast<sal_Bool const *>(aValue.getValue());
-                aKeys[nIndex]->eSortOrder = (bTemp)
+                aKeys[nIndex]->eSortOrder = (*bTemp)
                     ? SRT_ASCENDING : SRT_DESCENDING;
             }
             else
@@ -2814,10 +2815,9 @@ bool SwUnoCursorHelper::ConvertSortProperties(
         else if ( rPropName == "IsSortColumns" )
         {
             bNewSortdescriptor = true;
-            if (aValue.getValueType() == cppu::UnoType<bool>::get())
+            if (auto bTemp = o3tl::tryAccess<bool>(aValue))
             {
-                bool bTemp = *static_cast<sal_Bool const *>(aValue.getValue());
-                rSortOpt.eDirection = bTemp ? SRT_COLUMNS : SRT_ROWS;
+                rSortOpt.eDirection = *bTemp ? SRT_COLUMNS : SRT_ROWS;
             }
             else
             {

@@ -20,6 +20,7 @@
 #include <swtypes.hxx>
 #include <navicfg.hxx>
 #include <swcont.hxx>
+#include <o3tl/any.hxx>
 #include <osl/diagnose.h>
 #include <com/sun/star/uno/Sequence.hxx>
 
@@ -89,8 +90,8 @@ SwNavigationConfig::SwNavigationConfig() :
                             break;
                     }
                     case 4: pValues[nProp] >>= nActiveBlock;    break;
-                    case 5: bIsSmall        = *static_cast<sal_Bool const *>(pValues[nProp].getValue());  break;
-                    case 6: bIsGlobalActive = *static_cast<sal_Bool const *>(pValues[nProp].getValue());  break;
+                    case 5: bIsSmall        = *o3tl::doAccess<bool>(pValues[nProp]);  break;
+                    case 6: bIsGlobalActive = *o3tl::doAccess<bool>(pValues[nProp]);  break;
                 }
             }
         }

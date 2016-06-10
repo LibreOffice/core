@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <o3tl/any.hxx>
 #include <osl/thread.h>
 #include <sfx2/linkmgr.hxx>
 #include <doc.hxx>
@@ -341,7 +344,7 @@ bool SwDDEFieldType::PutValue( const uno::Any& rVal, sal_uInt16 nWhichId )
     case FIELD_PROP_PAR4:      nPart = 1; break;
     case FIELD_PROP_SUBTYPE:   nPart = 0; break;
     case FIELD_PROP_BOOL1:
-        SetType( *static_cast<sal_Bool const *>(rVal.getValue()) ?
+        SetType( *o3tl::doAccess<bool>(rVal) ?
                  SfxLinkUpdateMode::ALWAYS :
                  SfxLinkUpdateMode::ONCALL );
         break;

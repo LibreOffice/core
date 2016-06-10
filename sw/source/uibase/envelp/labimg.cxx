@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <o3tl/any.hxx>
 #include <tools/stream.hxx>
 #include <tools/resid.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -286,7 +289,7 @@ SwLabCfgItem::SwLabCfgItem(bool bLabel) :
                     bNoConfigValues = false;
                 switch(nProperty)
                 {
-                    case  0: aItem.m_bCont = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break;// "Medium/Continuous",
+                    case  0: aItem.m_bCont = *o3tl::doAccess<bool>(pValues[nProp]); break;// "Medium/Continuous",
                     case  1: pValues[nProp] >>= aItem.m_aMake;            break;// "Medium/Brand",
                     case  2: pValues[nProp] >>= aItem.m_aType;            break;// "Medium/Type",
                     case  3: pValues[nProp] >>= aItem.m_nCols;            break;// "Format/Column",
@@ -323,11 +326,11 @@ SwLabCfgItem::SwLabCfgItem(bool bLabel) :
                         pValues[nProp] >>= aItem.m_lPHeight;
                         aItem.m_lPHeight = convertMm100ToTwip(aItem.m_lPHeight);
                     break;// "Format/PageHeight",
-                    case 13: aItem.m_bSynchron = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break;// "Option/Synchronize",
-                    case 14: aItem.m_bPage = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break;// "Option/Page",
+                    case 13: aItem.m_bSynchron = *o3tl::doAccess<bool>(pValues[nProp]); break;// "Option/Synchronize",
+                    case 14: aItem.m_bPage = *o3tl::doAccess<bool>(pValues[nProp]); break;// "Option/Page",
                     case 15: pValues[nProp] >>= aItem.m_nCol;             break;// "Option/Column",
                     case 16: pValues[nProp] >>= aItem.m_nRow;             break;// "Option/Row"
-                    case 17: aItem.m_bAddr = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break;// "Inscription/UseAddress",
+                    case 17: aItem.m_bAddr = *o3tl::doAccess<bool>(pValues[nProp]); break;// "Inscription/UseAddress",
                     case 18: pValues[nProp] >>= aItem.m_aWriting;         break;// "Inscription/Address",
                     case 19: pValues[nProp] >>= aItem.m_sDBName;          break;// "Inscription/Database"
                     case 20: pValues[nProp] >>= aItem.m_aPrivFirstName;   break;// "PrivateAddress/FirstName",

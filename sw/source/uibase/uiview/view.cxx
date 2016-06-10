@@ -23,6 +23,7 @@
 #include <stdlib.h>
 #include <hintids.hxx>
 #include <comphelper/string.hxx>
+#include <o3tl/any.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/inputctx.hxx>
@@ -1317,7 +1318,7 @@ void SwView::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >
             }
             else if ( pValue->Name == "ViewLayoutBookMode" )
             {
-               bViewLayoutBookMode = * static_cast<sal_Bool const *>(pValue->Value.getValue());
+               bViewLayoutBookMode = *o3tl::doAccess<bool>(pValue->Value);
                bGotViewLayoutBookMode = true;
             }
             else if ( pValue->Name == "IsSelectedFrame" )

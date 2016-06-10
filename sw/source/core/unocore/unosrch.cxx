@@ -24,6 +24,7 @@
 #include <unobaseclass.hxx>
 #include <unomid.h>
 
+#include <o3tl/any.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <editeng/unolingu.hxx>
@@ -563,8 +564,8 @@ void SwXTextSearch::setPropertyValue(const OUString& rPropertyName, const uno::A
         if ( pEntry->nFlags & beans::PropertyAttribute::READONLY)
             throw beans::PropertyVetoException ("Property is read-only: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
         bool bVal = false;
-        if(aValue.getValueType() == cppu::UnoType<bool>::get())
-            bVal = *static_cast<sal_Bool const *>(aValue.getValue());
+        if(auto b = o3tl::tryAccess<bool>(aValue))
+            bVal = *b;
         switch(pEntry->nWID)
         {
             case WID_SEARCH_ALL :           bAll        = bVal; break;

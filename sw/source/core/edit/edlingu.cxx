@@ -23,6 +23,7 @@
 #include <com/sun/star/text/XFlatParagraph.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <comphelper/string.hxx>
+#include <o3tl/any.hxx>
 
 #include <unoflatpara.hxx>
 
@@ -412,8 +413,8 @@ uno::Any SwConvIter::Continue( sal_uInt16* pPageCnt, sal_uInt16* pPageSt )
 bool SwHyphIter::IsAuto()
 {
     uno::Reference< beans::XPropertySet >  xProp( ::GetLinguPropertySet() );
-    return xProp.is() && *static_cast<sal_Bool const *>(xProp->getPropertyValue(
-                                UPN_IS_HYPH_AUTO ).getValue());
+    return xProp.is() && *o3tl::doAccess<bool>(xProp->getPropertyValue(
+                                UPN_IS_HYPH_AUTO ));
 }
 
 void SwHyphIter::ShowSelection()

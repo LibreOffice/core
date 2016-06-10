@@ -23,6 +23,7 @@
 #include "unomid.h"
 
 #include <basic/sbxvar.hxx>
+#include <o3tl/any.hxx>
 #include <svl/macitem.hxx>
 #include <svl/stritem.hxx>
 #include <svl/stylepool.hxx>
@@ -503,7 +504,7 @@ bool SwFormatRuby::PutValue( const uno::Any& rVal,
             const uno::Type& rType = cppu::UnoType<bool>::get();
             if(rVal.hasValue() && rVal.getValueType() == rType)
             {
-                bool bAbove = *static_cast<sal_Bool const *>(rVal.getValue());
+                bool bAbove = *o3tl::doAccess<bool>(rVal);
                 nPosition = bAbove ? 0 : 1;
             }
         }

@@ -20,6 +20,7 @@
 #include <docufld.hxx>
 #include <unofldmid.h>
 #include <comcore.hrc>
+#include <o3tl/any.hxx>
 #include <tools/resid.hxx>
 
 using namespace ::com::sun::star;
@@ -107,7 +108,7 @@ bool SwScriptField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         rAny >>= sCode;
         break;
     case FIELD_PROP_BOOL1:
-        bCodeURL = *static_cast<sal_Bool const *>(rAny.getValue());
+        bCodeURL = *o3tl::doAccess<bool>(rAny);
         break;
     default:
         assert(false);

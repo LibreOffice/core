@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <o3tl/any.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/image.hxx>
 #include <vcl/virdev.hxx>
@@ -1140,8 +1143,12 @@ void SwXTextDocument::setPagePrintSettings(const Sequence< beans::PropertyValue 
             }
             else if(sName == "IsLandscape")
             {
-                bException =  (cppu::UnoType<bool>::get() != rVal.getValueType());
-                aData.SetLandscape(*static_cast<sal_Bool const *>(rVal.getValue()));
+                auto b = o3tl::tryAccess<bool>(rVal);
+                bException = bool(b);
+                if (b)
+                {
+                    aData.SetLandscape(*b);
+                }
             }
             else
                 bException = true;
@@ -1197,9 +1204,9 @@ void SwXTextDocument::printPages(const Sequence< beans::PropertyValue >& xOption
             // Collate-Property
             else if ( rProp.Name == UNO_NAME_COLLATE )
             {
-                if ( rProp.Value.getValueType() == cppu::UnoType<bool>::get())
+                if ( auto b = o3tl::tryAccess<bool>(rProp.Value) )
 
-                    aReq.AppendItem(SfxBoolItem( SID_PRINT_COLLATE, *static_cast<sal_Bool const *>(rProp.Value.getValue()) ) );
+                    aReq.AppendItem(SfxBoolItem( SID_PRINT_COLLATE, *b ) );
                 else
                     throw IllegalArgumentException();
             }
@@ -1207,8 +1214,8 @@ void SwXTextDocument::printPages(const Sequence< beans::PropertyValue >& xOption
             // Sort-Property
             else if ( rProp.Name == UNO_NAME_SORT )
             {
-                if ( rProp.Value.getValueType() == cppu::UnoType<bool>::get() )
-                    aReq.AppendItem(SfxBoolItem( SID_PRINT_SORT, *static_cast<sal_Bool const *>(rProp.Value.getValue()) ) );
+                if ( auto b = o3tl::tryAccess<bool>(rProp.Value) )
+                    aReq.AppendItem(SfxBoolItem( SID_PRINT_SORT, *b ) );
                 else
                     throw IllegalArgumentException();
             }
@@ -1835,7 +1842,7 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName, const Any&
         case WID_DOC_CHANGES_RECORD:
         case WID_DOC_CHANGES_SHOW:
         {
-            bool bSet = *static_cast<sal_Bool const *>(aValue.getValue());
+            bool bSet = *o3tl::doAccess<bool>(aValue);
             sal_uInt16 eMode = pDocShell->GetDoc()->getIDocumentRedlineAccess().GetRedlineMode();
             if(WID_DOC_CHANGES_SHOW == pEntry->nWID)
             {
@@ -1875,7 +1882,7 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName, const Any&
         }
         break;
         case WID_DOC_HIDE_TIPS :
-            SW_MOD()->GetModuleConfig()->SetHideFieldTips(*static_cast<sal_Bool const *>(aValue.getValue()));
+            SW_MOD()->GetModuleConfig()->SetHideFieldTips(*o3tl::doAccess<bool>(aValue));
         break;
         case WID_DOC_REDLINE_DISPLAY:
         {
@@ -1908,7 +1915,7 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName, const Any&
         case WID_DOC_AUTOMATIC_CONTROL_FOCUS:
         {
             SwDrawModel * pDrawDoc;
-            bool bAuto = *static_cast<sal_Bool const *>(aValue.getValue());
+            bool bAuto = *o3tl::doAccess<bool>(aValue);
 
             if ( nullptr != ( pDrawDoc = pDocShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel() ) )
                 pDrawDoc->SetAutoControlFocus( bAuto );
@@ -1928,7 +1935,7 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName, const Any&
         case WID_DOC_APPLY_FORM_DESIGN_MODE:
         {
             SwDrawModel * pDrawDoc;
-            bool bMode = *static_cast<sal_Bool const *>(aValue.getValue());
+            bool bMode = *o3tl::doAccess<bool>(aValue);
 
             if ( nullptr != ( pDrawDoc = pDocShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel() ) )
                 pDrawDoc->SetOpenInDesignMode( bMode );

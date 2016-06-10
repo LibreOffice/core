@@ -29,6 +29,7 @@
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 
+#include <o3tl/any.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmlictxt.hxx>
@@ -542,9 +543,11 @@ void SwXMLImport::startDocument()
                 if( xPropertySetInfo->hasPropertyByName(sStyleInsertModeOverwrite) )
                 {
                     aAny = xImportInfo->getPropertyValue(sStyleInsertModeOverwrite);
-                    if( aAny.getValueType() == cppu::UnoType<bool>::get() &&
-                        *static_cast<const sal_Bool*>(aAny.getValue()) )
-                        bOverwrite = true;
+                    if( auto b = o3tl::tryAccess<bool>(aAny) )
+                    {
+                        if( *b )
+                            bOverwrite = true;
+                    }
                 }
 
                 setStyleInsertMode( nFamilyMask, bOverwrite );
@@ -566,9 +569,11 @@ void SwXMLImport::startDocument()
         if( xPropertySetInfo->hasPropertyByName(sAutoTextMode) )
         {
             aAny = xImportInfo->getPropertyValue(sAutoTextMode);
-            if( aAny.getValueType() == cppu::UnoType<bool>::get() &&
-                *static_cast<const sal_Bool*>(aAny.getValue()) )
+            if( auto b = o3tl::tryAccess<bool>(aAny) )
+            {
+                if( *b )
                     setBlockMode();
+            }
         }
 
         // organizer mode
@@ -576,9 +581,11 @@ void SwXMLImport::startDocument()
         if( xPropertySetInfo->hasPropertyByName(sOrganizerMode) )
         {
             aAny = xImportInfo->getPropertyValue(sOrganizerMode);
-            if( aAny.getValueType() == cppu::UnoType<bool>::get() &&
-                *static_cast<const sal_Bool*>(aAny.getValue()) )
+            if( auto b = o3tl::tryAccess<bool>(aAny) )
+            {
+                if( *b )
                     setOrganizerMode();
+            }
         }
     }
 
@@ -1046,13 +1053,13 @@ void SwXMLImport::SetViewSettings(const Sequence < PropertyValue > & aViewProps)
         }
         else if ( pValue->Name == "ShowRedlineChanges" )
         {
-            bShowRedlineChanges = *static_cast<sal_Bool const *>(pValue->Value.getValue());
+            bShowRedlineChanges = *o3tl::doAccess<bool>(pValue->Value);
             bChangeShowRedline = true;
         }
 // Headers and footers are not displayed in BrowseView anymore
         else if ( pValue->Name == "InBrowseMode" )
         {
-            bBrowseMode = *static_cast<sal_Bool const *>(pValue->Value.getValue());
+            bBrowseMode = *o3tl::doAccess<bool>(pValue->Value);
             bChangeBrowseMode = true;
         }
         pValue++;

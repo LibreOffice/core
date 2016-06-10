@@ -19,6 +19,7 @@
 
 #include <hintids.hxx>
 #include <comphelper/string.hxx>
+#include <o3tl/any.hxx>
 #include <tools/stream.hxx>
 #include <tools/resid.hxx>
 #include <sfx2/app.hxx>
@@ -188,7 +189,7 @@ SwEnvCfgItem::SwEnvCfgItem() :
                 {
                     case  0: pValues[nProp] >>= aEnvItem.aAddrText; break;// "Inscription/Addressee",
                     case  1: pValues[nProp] >>= aEnvItem.aSendText; break;// "Inscription/Sender",
-                    case  2: aEnvItem.bSend = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break;// "Inscription/UseSender",
+                    case  2: aEnvItem.bSend = *o3tl::doAccess<bool>(pValues[nProp]); break;// "Inscription/UseSender",
                     case  3:
                         pValues[nProp] >>= aEnvItem.lAddrFromLeft;// "Format/AddresseeFromLeft",
                         aEnvItem.lAddrFromLeft = convertMm100ToTwip(aEnvItem.lAddrFromLeft);
@@ -218,7 +219,7 @@ SwEnvCfgItem::SwEnvCfgItem() :
                         sal_Int32 nTemp = 0;
                         pValues[nProp] >>= nTemp; aEnvItem.eAlign = (SwEnvAlign)nTemp; break;// "Print/Alignment",
                     }
-                    case 10: aEnvItem.bPrintFromAbove = *static_cast<sal_Bool const *>(pValues[nProp].getValue()); break;// "Print/FromAbove",
+                    case 10: aEnvItem.bPrintFromAbove = *o3tl::doAccess<bool>(pValues[nProp]); break;// "Print/FromAbove",
                     case 11:
                         pValues[nProp] >>= aEnvItem.lShiftRight;
                         aEnvItem.lShiftRight = convertMm100ToTwip(aEnvItem.lShiftRight);// "Print/Right",

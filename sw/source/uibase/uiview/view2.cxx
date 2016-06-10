@@ -23,6 +23,7 @@
 #include <com/sun/star/util/SearchAlgorithms2.hpp>
 #include <com/sun/star/util/SearchFlags.hpp>
 #include <com/sun/star/i18n/TransliterationModules.hpp>
+#include <o3tl/any.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <com/sun/star/sdb/DatabaseContext.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
@@ -388,7 +389,7 @@ bool SwView::InsertGraphicDlg( SfxRequest& rReq )
                 {
                     Any aVal = xCtrlAcc->getValue( ExtendedFilePickerElementIds::CHECKBOX_LINK, 0);
                     OSL_ENSURE(aVal.hasValue(), "Value CBX_INSERT_AS_LINK not found");
-                    bAsLink = !aVal.hasValue() || *static_cast<sal_Bool const *>(aVal.getValue());
+                    bAsLink = !aVal.hasValue() || *o3tl::doAccess<bool>(aVal);
                     Any aTemplateValue = xCtrlAcc->getValue(
                         ExtendedFilePickerElementIds::LISTBOX_IMAGE_TEMPLATE,
                         ListboxControlActions::GET_SELECTED_ITEM );
@@ -423,7 +424,7 @@ bool SwView::InsertGraphicDlg( SfxRequest& rReq )
             {
                 Any aVal = xCtrlAcc->getValue( ExtendedFilePickerElementIds::CHECKBOX_LINK, 0);
                 OSL_ENSURE(aVal.hasValue(), "Value CBX_INSERT_AS_LINK not found");
-                bAsLink = !aVal.hasValue() || *static_cast<sal_Bool const *>(aVal.getValue());
+                bAsLink = !aVal.hasValue() || *o3tl::doAccess<bool>(aVal);
                 Any aTemplateValue = xCtrlAcc->getValue(
                     ExtendedFilePickerElementIds::LISTBOX_IMAGE_TEMPLATE,
                     ListboxControlActions::GET_SELECTED_ITEM );

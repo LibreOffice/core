@@ -21,6 +21,7 @@
 
 #include <hintids.hxx>
 
+#include <o3tl/any.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <vcl/virdev.hxx>
 #include <com/sun/star/drawing/XShape.hpp>
@@ -404,7 +405,7 @@ void WW8Export::DoComboBox(uno::Reference<beans::XPropertySet> xPropSet)
     if (nNoStrings)
     {
         uno::Any aTmp = xPropSet->getPropertyValue("DefaultText");
-        const OUString *pStr = static_cast<const OUString *>(aTmp.getValue());
+        auto pStr = o3tl::tryAccess<OUString>(aTmp);
         if (pStr)
             sSelected = *pStr;
     }
@@ -412,7 +413,7 @@ void WW8Export::DoComboBox(uno::Reference<beans::XPropertySet> xPropSet)
     OUString sName;
     {
         uno::Any aTmp = xPropSet->getPropertyValue("Name");
-        const OUString *pStr = static_cast<const OUString *>(aTmp.getValue());
+        auto pStr = o3tl::tryAccess<OUString>(aTmp);
         if (pStr)
             sName = *pStr;
     }
@@ -423,7 +424,7 @@ void WW8Export::DoComboBox(uno::Reference<beans::XPropertySet> xPropSet)
         try
         {
             uno::Any aTmp = xPropSet->getPropertyValue("HelpText");
-            const OUString *pStr = static_cast<const OUString *>(aTmp.getValue());
+            auto pStr = o3tl::tryAccess<OUString>(aTmp);
             if (pStr)
                 sHelp = *pStr;
         }
@@ -434,7 +435,7 @@ void WW8Export::DoComboBox(uno::Reference<beans::XPropertySet> xPropSet)
     OUString sToolTip;
     {
         uno::Any aTmp = xPropSet->getPropertyValue("Name");
-        const OUString *pStr = static_cast<const OUString *>(aTmp.getValue());
+        auto pStr = o3tl::tryAccess<OUString>(aTmp);
         if (pStr)
             sToolTip = *pStr;
     }

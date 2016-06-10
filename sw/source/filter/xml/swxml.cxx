@@ -36,6 +36,7 @@
 #include <com/sun/star/packages/zip/ZipIOException.hpp>
 #include <com/sun/star/packages/WrongPasswordException.hpp>
 #include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
+#include <o3tl/any.hxx>
 #include <sfx2/docfile.hxx>
 #include <svtools/sfxecode.hxx>
 #include <svl/stritem.hxx>
@@ -343,8 +344,8 @@ sal_Int32 ReadThroughComponent(
 
         Any aAny = xProps->getPropertyValue("Encrypted");
 
-        bool bEncrypted = aAny.getValueType() == cppu::UnoType<bool>::get() &&
-                *static_cast<sal_Bool const *>(aAny.getValue());
+        auto b = o3tl::tryAccess<bool>(aAny);
+        bool bEncrypted = b && *b;
 
         uno::Reference <io::XInputStream> xInputStream = xStream->getInputStream();
 
@@ -910,10 +911,10 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, c
     // restore redline mode from import info property set
     sal_Int16 nRedlineMode = nsRedlineMode_t::REDLINE_SHOW_INSERT;
     aAny = xInfoSet->getPropertyValue( sShowChanges );
-    if ( *static_cast<sal_Bool const *>(aAny.getValue()) )
+    if ( *o3tl::doAccess<bool>(aAny) )
         nRedlineMode |= nsRedlineMode_t::REDLINE_SHOW_DELETE;
     aAny = xInfoSet->getPropertyValue( sRecordChanges );
-    if ( *static_cast<sal_Bool const *>(aAny.getValue()) || (aKey.getLength() > 0) )
+    if ( *o3tl::doAccess<bool>(aAny) || (aKey.getLength() > 0) )
         nRedlineMode |= nsRedlineMode_t::REDLINE_ON;
     else
         nRedlineMode |= nsRedlineMode_t::REDLINE_NONE;

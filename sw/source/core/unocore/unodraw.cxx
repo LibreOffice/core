@@ -54,6 +54,7 @@
 #include <rootfrm.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
+#include <o3tl/any.hxx>
 #include <svx/shapepropertynotifier.hxx>
 #include <crstate.hxx>
 #include <comphelper/extract.hxx>
@@ -854,8 +855,7 @@ SwFmDrawPage*   SwXDrawPage::GetSvxPage()
             pDrawPage = new SwFmDrawPage(pPage);
             uno::Reference< drawing::XDrawPage >  xPage = pDrawPage;
             uno::Any aAgg = xPage->queryInterface(cppu::UnoType<uno::XAggregation>::get());
-            if(aAgg.getValueType() == cppu::UnoType<uno::XAggregation>::get())
-                xPageAgg = *static_cast<uno::Reference< uno::XAggregation > const *>(aAgg.getValue());
+            aAgg >>= xPageAgg;
         }
         if( xPageAgg.is() )
             xPageAgg->setDelegator( static_cast<cppu::OWeakObject*>(this) );
@@ -901,12 +901,11 @@ sal_Int64 SAL_CALL SwXShape::getSomething( const uno::Sequence< sal_Int8 >& rId 
     {
         const uno::Type& rTunnelType = cppu::UnoType<lang::XUnoTunnel>::get();
         uno::Any aAgg = xShapeAgg->queryAggregation( rTunnelType );
-        if(aAgg.getValueType() == rTunnelType)
+        if(auto xAggTunnel = o3tl::tryAccess<uno::Reference<lang::XUnoTunnel>>(
+               aAgg))
         {
-            uno::Reference<lang::XUnoTunnel> xAggTunnel =
-                    *static_cast<uno::Reference<lang::XUnoTunnel> const *>(aAgg.getValue());
-            if(xAggTunnel.is())
-                return xAggTunnel->getSomething(rId);
+            if(xAggTunnel->is())
+                return (*xAggTunnel)->getSomething(rId);
         }
     }
     return 0;
@@ -932,8 +931,7 @@ SwXShape::SwXShape(uno::Reference< uno::XInterface > & xShape) :
         //aAgg contains a reference of the SvxShape!
         {
             uno::Any aAgg = xShape->queryInterface(rAggType);
-            if(aAgg.getValueType() == rAggType)
-                xShapeAgg = *static_cast<uno::Reference< uno::XAggregation > const *>(aAgg.getValue());
+            aAgg >>= xShapeAgg;
             // #i31698#
             if ( xShapeAgg.is() )
             {
@@ -1071,11 +1069,10 @@ uno::Reference< beans::XPropertySetInfo >  SwXShape::getPropertySetInfo() throw(
     {
         const uno::Type& rPropSetType = cppu::UnoType<beans::XPropertySet>::get();
         uno::Any aPSet = xShapeAgg->queryAggregation( rPropSetType );
-        if(aPSet.getValueType() == rPropSetType && aPSet.getValue())
+        if(auto xPrSet = o3tl::tryAccess<uno::Reference<beans::XPropertySet>>(
+               aPSet))
         {
-            uno::Reference< beans::XPropertySet >  xPrSet =
-                    *static_cast<uno::Reference< beans::XPropertySet > const *>(aPSet.getValue());
-            uno::Reference< beans::XPropertySetInfo >  xInfo = xPrSet->getPropertySetInfo();
+            uno::Reference< beans::XPropertySetInfo >  xInfo = (*xPrSet)->getPropertySetInfo();
             // Expand PropertySetInfo!
             const uno::Sequence<beans::Property> aPropSeq = xInfo->getProperties();
             aRet = new SfxExtItemPropertySetInfo( m_pPropertyMapEntries, aPropSeq );
@@ -1147,7 +1144,7 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                         bool bIsVisible = pDoc->getIDocumentDrawModelAccess().IsVisibleLayerId( pObj->GetLayer() );
                         if(FmFormInventor != pObj->GetObjInventor())
                         {
-                            pObj->SetLayer( *static_cast<sal_Bool const *>(aValue.getValue())
+                            pObj->SetLayer( *o3tl::doAccess<bool>(aValue)
                                             ? ( bIsVisible ? pDoc->getIDocumentDrawModelAccess().GetHeavenId() : pDoc->getIDocumentDrawModelAccess().GetInvisibleHeavenId() )
                                             : ( bIsVisible ? pDoc->getIDocumentDrawModelAccess().GetHellId() : pDoc->getIDocumentDrawModelAccess().GetInvisibleHellId() ));
                         }
@@ -1413,18 +1410,15 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                         pItem = pImpl->GetSurround(true);
                     break;
                     case  FN_TEXT_RANGE:
-                    {
-                        const uno::Type rTextRangeType =
-                            cppu::UnoType<text::XTextRange>::get();
-                        if(aValue.getValueType() == rTextRangeType)
+                        if(auto tr = o3tl::tryAccess<
+                               uno::Reference<text::XTextRange>>(aValue))
                         {
                             uno::Reference< text::XTextRange > & rRange = pImpl->GetTextRange();
-                            rRange = *static_cast<uno::Reference< text::XTextRange > const *>(aValue.getValue());
+                            rRange = *tr;
                         }
-                    }
                     break;
                     case RES_OPAQUE :
-                        pImpl->SetOpaque(*static_cast<sal_Bool const *>(aValue.getValue()));
+                        pImpl->SetOpaque(*o3tl::doAccess<bool>(aValue));
                     break;
                     // #i26791#
                     case RES_FOLLOW_TEXT_FLOW:
@@ -1453,13 +1447,13 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
         }
         else
         {
-            uno::Reference< beans::XPropertySet >  xPrSet;
             const uno::Type& rPSetType =
                 cppu::UnoType<beans::XPropertySet>::get();
             uno::Any aPSet = xShapeAgg->queryAggregation(rPSetType);
-            if(aPSet.getValueType() != rPSetType || !aPSet.getValue())
+            auto xPrSet = o3tl::tryAccess<uno::Reference<beans::XPropertySet>>(
+                aPSet);
+            if(!xPrSet)
                 throw uno::RuntimeException();
-            xPrSet = *static_cast<uno::Reference< beans::XPropertySet > const *>(aPSet.getValue());
             // #i31698# - setting the caption point of a
             // caption object doesn't have to change the object position.
             // Thus, keep the position, before the caption point is set and
@@ -1472,10 +1466,10 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
             if( pFormat && pFormat->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell() )
             {
                 UnoActionContext aCtx(pFormat->GetDoc());
-                xPrSet->setPropertyValue(rPropertyName, aValue);
+                (*xPrSet)->setPropertyValue(rPropertyName, aValue);
             }
             else
-                xPrSet->setPropertyValue(rPropertyName, aValue);
+                (*xPrSet)->setPropertyValue(rPropertyName, aValue);
 
             if (pFormat)
             {
@@ -1786,16 +1780,15 @@ uno::Any SwXShape::_getPropAtAggrObj( const OUString& _rPropertyName )
 {
     uno::Any aRet;
 
-    uno::Reference< beans::XPropertySet >  xPrSet;
     const uno::Type& rPSetType =
                 cppu::UnoType<beans::XPropertySet>::get();
     uno::Any aPSet = xShapeAgg->queryAggregation(rPSetType);
-    if ( aPSet.getValueType() != rPSetType || !aPSet.getValue() )
+    auto xPrSet = o3tl::tryAccess<uno::Reference<beans::XPropertySet>>(aPSet);
+    if ( !xPrSet )
     {
         throw uno::RuntimeException();
     }
-    xPrSet = *static_cast<uno::Reference< beans::XPropertySet > const *>(aPSet.getValue());
-    aRet = xPrSet->getPropertyValue( _rPropertyName );
+    aRet = (*xPrSet)->getPropertyValue( _rPropertyName );
 
     return aRet;
 }
@@ -1910,9 +1903,11 @@ uno::Sequence< beans::PropertyState > SwXShape::getPropertyStates(
                 {
                     const uno::Type& rPStateType = cppu::UnoType<XPropertyState>::get();
                     uno::Any aPState = xShapeAgg->queryAggregation(rPStateType);
-                    if(aPState.getValueType() != rPStateType || !aPState.getValue())
+                    auto ps = o3tl::tryAccess<uno::Reference<XPropertyState>>(
+                        aPState);
+                    if(!ps)
                         throw uno::RuntimeException();
-                    xShapePrState = *static_cast<uno::Reference< XPropertyState > const *>(aPState.getValue());
+                    xShapePrState = *ps;
                 }
                 pRet[nProperty] = xShapePrState->getPropertyState(pNames[nProperty]);
             }
@@ -1975,10 +1970,11 @@ void SwXShape::setPropertyToDefault( const OUString& rPropertyName )
         {
             const uno::Type& rPStateType = cppu::UnoType<XPropertyState>::get();
             uno::Any aPState = xShapeAgg->queryAggregation(rPStateType);
-            if(aPState.getValueType() != rPStateType || !aPState.getValue())
+            auto xShapePrState = o3tl::tryAccess<uno::Reference<XPropertyState>>(
+                aPState);
+            if(!xShapePrState)
                 throw uno::RuntimeException();
-            uno::Reference< XPropertyState > xShapePrState = *static_cast<uno::Reference< XPropertyState > const *>(aPState.getValue());
-            xShapePrState->setPropertyToDefault( rPropertyName );
+            (*xShapePrState)->setPropertyToDefault( rPropertyName );
         }
     }
     else
@@ -2010,10 +2006,11 @@ uno::Any SwXShape::getPropertyDefault( const OUString& rPropertyName )
         {
             const uno::Type& rPStateType = cppu::UnoType<XPropertyState>::get();
             uno::Any aPState = xShapeAgg->queryAggregation(rPStateType);
-            if(aPState.getValueType() != rPStateType || !aPState.getValue())
+            auto xShapePrState = o3tl::tryAccess<uno::Reference<XPropertyState>>(
+                aPState);
+            if(!xShapePrState)
                 throw uno::RuntimeException();
-            uno::Reference< XPropertyState > xShapePrState = *static_cast<uno::Reference< XPropertyState > const *>(aPState.getValue());
-            xShapePrState->getPropertyDefault( rPropertyName );
+            (*xShapePrState)->getPropertyDefault( rPropertyName );
         }
     }
     else

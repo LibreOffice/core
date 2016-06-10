@@ -27,6 +27,7 @@
 #include <com/sun/star/embed/XVisualObject.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
+#include <o3tl/any.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/classids.hxx>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
@@ -804,13 +805,13 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertFloatingFra
                     {
                     case CTF_FRAME_DISPLAY_SCROLLBAR:
                         {
-                            bool bYes = *static_cast<sal_Bool const *>(rProp.maValue.getValue());
+                            bool bYes = *o3tl::doAccess<bool>(rProp.maValue);
                             eScrollMode = bYes ? ScrollingYes : ScrollingNo;
                         }
                         break;
                     case CTF_FRAME_DISPLAY_BORDER:
                         {
-                            bHasBorder = *static_cast<sal_Bool const *>(rProp.maValue.getValue());
+                            bHasBorder = *o3tl::doAccess<bool>(rProp.maValue);
                             bIsBorderSet = true;
                         }
                         break;

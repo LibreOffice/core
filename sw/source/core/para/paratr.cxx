@@ -34,6 +34,7 @@
 #include <com/sun/star/text/SizeType.hpp>
 #include <com/sun/star/text/VertOrientationFormat.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
+#include <o3tl/any.hxx>
 #include <unostyle.hxx>
 #include <SwStyleNameMapper.hxx>
 #include "paratr.hxx"
@@ -188,7 +189,7 @@ bool SwFormatDrop::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         {
             if(rVal.getValueType()  == ::cppu::UnoType<style::DropCapFormat>::get())
             {
-                const style::DropCapFormat* pDrop = static_cast<const style::DropCapFormat*>(rVal.getValue());
+                auto pDrop = o3tl::doAccess<style::DropCapFormat>(rVal);
                 nLines      = pDrop->Lines;
                 nChars      = pDrop->Count;
                 nDistance   = convertMm100ToTwip(pDrop->Distance);
@@ -198,7 +199,7 @@ bool SwFormatDrop::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         }
         break;
         case MID_DROPCAP_WHOLE_WORD:
-            bWholeWord = *static_cast<sal_Bool const *>(rVal.getValue());
+            bWholeWord = *o3tl::doAccess<bool>(rVal);
         break;
         case MID_DROPCAP_CHAR_STYLE_NAME :
             OSL_FAIL("char format cannot be set in PutValue()!");
