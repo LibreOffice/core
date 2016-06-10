@@ -98,7 +98,7 @@ namespace dxcanvas
          */
         CanvasCustomSprite( const css::geometry::RealSize2D&   rSpriteSize,
                             const SpriteCanvasRef&                          rRefDevice,
-                            const IDXRenderModuleSharedPtr&                 rRenderModule,
+                            const std::shared_ptr< IDXRenderModule >&                 rRenderModule,
                             const ::std::shared_ptr<canvas::ISurfaceProxyManager>&  rSurfaceProxy,
                             bool                                            bShowSpriteBounds );
 
@@ -124,7 +124,7 @@ namespace dxcanvas
             raw pointer (without refcounting)
         */
         SpriteCanvasRef          mpSpriteCanvas;
-        DXSurfaceBitmapSharedPtr mpSurface;
+        std::shared_ptr< DXSurfaceBitmap > mpSurface;
     };
 }
 

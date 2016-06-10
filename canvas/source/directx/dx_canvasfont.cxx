@@ -153,7 +153,7 @@ namespace dxcanvas
         return mpFontFamily->GetEmHeight(0); // TODO(F1): rFontRequest.styleName
     }
 
-    FontSharedPtr CanvasFont::getFont() const
+    std::shared_ptr< Gdiplus::Font > CanvasFont::getFont() const
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 

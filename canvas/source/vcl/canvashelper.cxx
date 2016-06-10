@@ -125,7 +125,7 @@ namespace vclcanvas
     }
 
     void CanvasHelper::init( rendering::XGraphicDevice&     rDevice,
-                             const OutDevProviderSharedPtr& rOutDev,
+                             const std::shared_ptr< OutDevProvider >& rOutDev,
                              bool                           bProtect,
                              bool                           bHaveAlpha )
     {
@@ -137,7 +137,7 @@ namespace vclcanvas
         setOutDev( rOutDev, bProtect );
     }
 
-    void CanvasHelper::setOutDev( const OutDevProviderSharedPtr& rOutDev,
+    void CanvasHelper::setOutDev( const std::shared_ptr< OutDevProvider >& rOutDev,
                                   bool                           bProtect )
     {
         if( bProtect )
@@ -148,7 +148,7 @@ namespace vclcanvas
         mpOutDev = rOutDev;
     }
 
-    void CanvasHelper::setBackgroundOutDev( const OutDevProviderSharedPtr& rOutDev )
+    void CanvasHelper::setBackgroundOutDev( const std::shared_ptr< OutDevProvider >& rOutDev )
     {
         mp2ndOutDev = rOutDev;
         mp2ndOutDev->getOutDev().EnableMapMode( false );
@@ -769,7 +769,7 @@ namespace vclcanvas
                 aMatrix.decompose( aScale, aOutputPos, nRotate, nShearX );
 
                 GraphicAttr             aGrfAttr;
-                GraphicObjectSharedPtr  pGrfObj;
+                std::shared_ptr< GraphicObject >  pGrfObj;
 
                 ::Size aBmpSize( aBmpEx.GetSizePixel() );
 
@@ -1324,7 +1324,7 @@ namespace vclcanvas
         return true;
     }
 
-    bool CanvasHelper::repaint( const GraphicObjectSharedPtr&   rGrf,
+    bool CanvasHelper::repaint( const std::shared_ptr< GraphicObject >&   rGrf,
                                 const rendering::ViewState&     viewState,
                                 const rendering::RenderState&   renderState,
                                 const ::Point&                  rPt,

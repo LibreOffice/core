@@ -154,21 +154,21 @@ namespace dxcanvas
         return OUString( SPRITECANVAS_SERVICE_NAME );
     }
 
-    const IDXRenderModuleSharedPtr& SpriteCanvas::getRenderModule() const
+    const std::shared_ptr< IDXRenderModule >& SpriteCanvas::getRenderModule() const
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
         return maDeviceHelper.getRenderModule();
     }
 
-    const DXSurfaceBitmapSharedPtr& SpriteCanvas::getBackBuffer() const
+    const std::shared_ptr< DXSurfaceBitmap >& SpriteCanvas::getBackBuffer() const
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
         return maDeviceHelper.getBackBuffer();
     }
 
-    IBitmapSharedPtr SpriteCanvas::getBitmap() const
+    std::shared_ptr<IBitmap> SpriteCanvas::getBitmap() const
     {
         return maDeviceHelper.getBackBuffer();
     }

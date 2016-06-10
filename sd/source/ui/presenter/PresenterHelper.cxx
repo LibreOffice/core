@@ -408,7 +408,7 @@ Reference<rendering::XBitmap> SAL_CALL PresenterHelper::loadBitmap (
     if (pCanvas.get() != nullptr)
     {
         BitmapEx aBitmapEx = SdResId(nid);
-        cppcanvas::BitmapSharedPtr xBitmap(
+        std::shared_ptr< cppcanvas::Bitmap > xBitmap(
             cppcanvas::VCLFactory::createBitmap(pCanvas,
                 aBitmapEx));
         if (xBitmap.get() == nullptr)

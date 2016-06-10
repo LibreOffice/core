@@ -59,7 +59,7 @@ namespace slideshow
         class SlideBitmap
         {
         public:
-            explicit SlideBitmap( const ::cppcanvas::BitmapSharedPtr& rBitmap );
+            explicit SlideBitmap( const ::std::shared_ptr< cppcanvas::Bitmap >& rBitmap );
             SlideBitmap(const SlideBitmap&) = delete;
             SlideBitmap& operator=(const SlideBitmap&) = delete;
 

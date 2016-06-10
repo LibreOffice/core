@@ -37,7 +37,7 @@ namespace vclcanvas
     CanvasBitmap::CanvasBitmap( const ::Size&                  rSize,
                                 bool                           bAlphaBitmap,
                                 rendering::XGraphicDevice&     rDevice,
-                                const OutDevProviderSharedPtr& rOutDevProvider )
+                                const std::shared_ptr< OutDevProvider >& rOutDevProvider )
     {
         // create bitmap for given reference device
         // ========================================
@@ -68,7 +68,7 @@ namespace vclcanvas
 
     CanvasBitmap::CanvasBitmap( const BitmapEx&                rBitmap,
                                 rendering::XGraphicDevice&     rDevice,
-                                const OutDevProviderSharedPtr& rOutDevProvider )
+                                const std::shared_ptr< OutDevProvider >& rOutDevProvider )
     {
         maCanvasHelper.init( rBitmap, rDevice, rOutDevProvider );
     }
@@ -100,7 +100,7 @@ namespace vclcanvas
         return maCanvasHelper.getBitmap();
     }
 
-    bool CanvasBitmap::repaint( const GraphicObjectSharedPtr& rGrf,
+    bool CanvasBitmap::repaint( const std::shared_ptr< GraphicObject >& rGrf,
                                 const rendering::ViewState&   viewState,
                                 const rendering::RenderState& renderState,
                                 const ::Point&                rPt,

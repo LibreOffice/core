@@ -63,7 +63,7 @@ namespace dxcanvas
             @param rDevice
             Reference device, with which bitmap should be compatible
          */
-        CanvasBitmap( const IBitmapSharedPtr& rSurface,
+        CanvasBitmap( const std::shared_ptr<IBitmap>& rSurface,
                       const DeviceRef&        rDevice );
 
         /// Dispose all internal references
@@ -75,7 +75,7 @@ namespace dxcanvas
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (css::uno::RuntimeException) override;
 
         // BitmapProvider
-        virtual IBitmapSharedPtr getBitmap() const override { return mpBitmap; }
+        virtual std::shared_ptr<IBitmap> getBitmap() const override { return mpBitmap; }
 
         virtual css::uno::Any SAL_CALL getFastPropertyValue(sal_Int32 nHandle)  throw (css::uno::RuntimeException) override;
         virtual void SAL_CALL setFastPropertyValue(sal_Int32, const css::uno::Any&)  throw (css::uno::RuntimeException) override {}
@@ -85,7 +85,7 @@ namespace dxcanvas
             raw pointer (without refcounting)
         */
         DeviceRef        mpDevice;
-        IBitmapSharedPtr mpBitmap;
+        std::shared_ptr<IBitmap> mpBitmap;
     };
 }
 

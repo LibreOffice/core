@@ -66,7 +66,7 @@ namespace cppcanvas
             new internal::ImplSpriteCanvas( xCanvas ) );
     }
 
-    BitmapSharedPtr VCLFactory::createBitmap( const CanvasSharedPtr&    rCanvas,
+    std::shared_ptr< Bitmap > VCLFactory::createBitmap( const CanvasSharedPtr&    rCanvas,
                                               const ::BitmapEx&         rBmpEx )
     {
         OSL_ENSURE( rCanvas.get() != nullptr &&
@@ -74,13 +74,13 @@ namespace cppcanvas
                     "VCLFactory::createBitmap(): Invalid canvas" );
 
         if( rCanvas.get() == nullptr )
-            return BitmapSharedPtr();
+            return std::shared_ptr< Bitmap >();
 
         uno::Reference< rendering::XCanvas > xCanvas( rCanvas->getUNOCanvas() );
         if( !xCanvas.is() )
-            return BitmapSharedPtr();
+            return std::shared_ptr< Bitmap >();
 
-        return BitmapSharedPtr( new internal::ImplBitmap( rCanvas,
+        return std::shared_ptr< Bitmap >( new internal::ImplBitmap( rCanvas,
                                                           vcl::unotools::xBitmapFromBitmapEx(
                                                               xCanvas->getDevice(),
                                                               rBmpEx) ) );

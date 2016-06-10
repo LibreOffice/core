@@ -342,7 +342,7 @@ namespace cppcanvas
 
 
                     // update buffered bitmap and transformation
-                    BitmapSharedPtr aBmp( VCLFactory::createBitmap(
+                    std::shared_ptr< Bitmap > aBmp( VCLFactory::createBitmap(
                                               mpCanvas,
                                               aVDev->GetBitmapEx(
                                                   aEmptyPoint,

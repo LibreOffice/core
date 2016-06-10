@@ -28,7 +28,7 @@
 namespace canvas
 {
     SurfaceProxy::SurfaceProxy( const std::shared_ptr<canvas::IColorBuffer>& pBuffer,
-                                const PageManagerSharedPtr&          pPageManager ) :
+                                const std::shared_ptr< PageManager >&          pPageManager ) :
         mpPageManager( pPageManager ),
         maSurfaceList(),
         mpBuffer( pBuffer )

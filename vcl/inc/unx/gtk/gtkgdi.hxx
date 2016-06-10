@@ -90,8 +90,8 @@ public:
                                                     Rectangle &rNativeBoundingRegion,
                                                     Rectangle &rNativeContentRegion ) override;
     virtual bool        SupportsCairo() const override;
-    virtual cairo::SurfaceSharedPtr CreateSurface(const cairo::CairoSurfaceSharedPtr& rSurface) const override;
-    virtual cairo::SurfaceSharedPtr CreateSurface(const OutputDevice& rRefDevice, int x, int y, int width, int height) const override;
+    virtual std::shared_ptr< cairo::Surface > CreateSurface(const cairo::CairoSurfaceSharedPtr& rSurface) const override;
+    virtual std::shared_ptr< cairo::Surface > CreateSurface(const OutputDevice& rRefDevice, int x, int y, int width, int height) const override;
     void WidgetQueueDraw() const;
 
     void updateSettings( AllSettings& rSettings );

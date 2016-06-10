@@ -1233,22 +1233,22 @@ bool GenPspGraphics::SupportsCairo() const
     return false;
 }
 
-cairo::SurfaceSharedPtr GenPspGraphics::CreateSurface(const cairo::CairoSurfaceSharedPtr& /*rSurface*/) const
+std::shared_ptr< cairo::Surface > GenPspGraphics::CreateSurface(const cairo::CairoSurfaceSharedPtr& /*rSurface*/) const
 {
-    return cairo::SurfaceSharedPtr();
+    return std::shared_ptr< cairo::Surface >();
 }
 
-cairo::SurfaceSharedPtr GenPspGraphics::CreateSurface(const OutputDevice& /*rRefDevice*/, int /*x*/, int /*y*/, int /*width*/, int /*height*/) const
+std::shared_ptr< cairo::Surface > GenPspGraphics::CreateSurface(const OutputDevice& /*rRefDevice*/, int /*x*/, int /*y*/, int /*width*/, int /*height*/) const
 {
-    return cairo::SurfaceSharedPtr();
+    return std::shared_ptr< cairo::Surface >();
 }
 
-cairo::SurfaceSharedPtr GenPspGraphics::CreateBitmapSurface(const OutputDevice& /*rRefDevice*/, const BitmapSystemData& /*rData*/, const Size& /*rSize*/) const
+std::shared_ptr< cairo::Surface > GenPspGraphics::CreateBitmapSurface(const OutputDevice& /*rRefDevice*/, const BitmapSystemData& /*rData*/, const Size& /*rSize*/) const
 {
-    return cairo::SurfaceSharedPtr();
+    return std::shared_ptr< cairo::Surface >();
 }
 
-css::uno::Any GenPspGraphics::GetNativeSurfaceHandle(cairo::SurfaceSharedPtr& /*rSurface*/, const basegfx::B2ISize& /*rSize*/) const
+css::uno::Any GenPspGraphics::GetNativeSurfaceHandle(std::shared_ptr< cairo::Surface >& /*rSurface*/, const basegfx::B2ISize& /*rSize*/) const
 {
     return css::uno::Any();
 }

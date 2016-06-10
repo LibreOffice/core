@@ -62,7 +62,7 @@ namespace vclcanvas
 
     void CanvasBitmapHelper::init( const BitmapEx&                rBitmap,
                                    rendering::XGraphicDevice&     rDevice,
-                                   const OutDevProviderSharedPtr& rOutDevReference )
+                                   const std::shared_ptr< OutDevProvider >& rOutDevReference )
     {
         mpOutDevReference = rOutDevReference;
         mpBackBuffer.reset( new BitmapBackBuffer( rBitmap, rOutDevReference->getOutDev() ));
