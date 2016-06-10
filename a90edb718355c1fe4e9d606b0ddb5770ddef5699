@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "da7fb54a_71b79639",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/CalcCommands.xcu",
+        "patchSetId": 4
+      },
+      "lineNbr": 1688,
+      "author": {
+        "id": 1000796
+      },
+      "writtenOn": "2016-06-10T13:43:02Z",
+      "side": 1,
+      "message": "Yes you are correct that the label wasnt completely correct as it always adds it to the end. I was changing \u0027Append\u0027 in the label to \u0027Insert\u0027 as we have \u0027Insert Sheet...\u0027 and \u0027Insert Sheet from File...\u0027 next to this command, so what do you think of \u0027Insert Sheet at End...\u0027",
+      "parentUuid": "da7fb54a_8e74f59c",
+      "revId": "a90edb718355c1fe4e9d606b0ddb5770ddef5699",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da7fb54a_2e6689ed",
         "filename": "sc/uiconfig/scalc/menubar/menubar.xml",
         "patchSetId": 4
@@ -30,6 +48,30 @@
       "writtenOn": "2016-06-09T20:32:06Z",
       "side": 1,
       "message": "This one displays no menu entry, only blank.",
+      "range": {
+        "startLine": 142,
+        "startChar": 0,
+        "endLine": 142,
+        "endChar": 46
+      },
+      "revId": "a90edb718355c1fe4e9d606b0ddb5770ddef5699",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_91825a51",
+        "filename": "sc/uiconfig/scalc/menubar/menubar.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1000796
+      },
+      "writtenOn": "2016-06-10T13:43:02Z",
+      "side": 1,
+      "message": "Likely in your build as it is defined in GenericCommands.xcu.\n\nhttp://opengrok.libreoffice.org/xref/core/officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu#2018",
+      "parentUuid": "da7fb54a_2e6689ed",
       "range": {
         "startLine": 142,
         "startChar": 0,
