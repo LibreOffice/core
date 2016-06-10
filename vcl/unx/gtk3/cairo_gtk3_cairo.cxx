@@ -86,9 +86,9 @@ namespace cairo
      *
      * @return new surface or NULL
      **/
-    SurfaceSharedPtr Gtk3Surface::getSimilar(int cairo_content_type, int width, int height ) const
+    std::shared_ptr< Surface > Gtk3Surface::getSimilar(int cairo_content_type, int width, int height ) const
     {
-        return SurfaceSharedPtr(
+        return std::shared_ptr< Surface >(
             new Gtk3Surface(
                             CairoSurfaceSharedPtr(
                                 cairo_surface_create_similar( mpSurface.get(),

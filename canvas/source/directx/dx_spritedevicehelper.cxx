@@ -114,7 +114,7 @@ namespace dxcanvas
         if( !getDevice() )
             return uno::Reference< rendering::XBitmap >(); // we're disposed
 
-        DXSurfaceBitmapSharedPtr pBitmap(
+        std::shared_ptr< DXSurfaceBitmap > pBitmap(
             new DXSurfaceBitmap(
                 ::basegfx::unotools::b2ISizeFromIntegerSize2D(size),
                 mpSurfaceProxyManager,
@@ -139,7 +139,7 @@ namespace dxcanvas
         if( !getDevice() )
             return uno::Reference< rendering::XBitmap >(); // we're disposed
 
-        DXSurfaceBitmapSharedPtr pBitmap(
+        std::shared_ptr< DXSurfaceBitmap > pBitmap(
             new DXSurfaceBitmap(
                 ::basegfx::unotools::b2ISizeFromIntegerSize2D(size),
                 mpSurfaceProxyManager,

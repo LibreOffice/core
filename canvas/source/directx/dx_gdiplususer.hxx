@@ -30,17 +30,13 @@ namespace dxcanvas
     class GDIPlusUser
     {
     public:
-        typedef std::shared_ptr< GDIPlusUser > GDIPlusUserSharedPtr;
 
-        static GDIPlusUserSharedPtr createInstance();
+        static std::shared_ptr< GDIPlusUser > createInstance();
         ~GDIPlusUser();
 
     private:
         GDIPlusUser(); // create us via factory method
     };
-
-    typedef GDIPlusUser::GDIPlusUserSharedPtr GDIPlusUserSharedPtr;
-
 }
 
 #endif // INCLUDED_CANVAS_SOURCE_DIRECTX_DX_GDIPLUSUSER_HXX
