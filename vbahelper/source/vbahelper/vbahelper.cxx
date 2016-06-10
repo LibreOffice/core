@@ -362,10 +362,7 @@ void PrintOutHelper( SfxViewShell* pViewShell, const uno::Any& From, const uno::
             sRange += OUString::number( nTo );
     }
 
-    if (  PrToFileName.getValue() )
-    {
-        PrToFileName >>= sFileName;
-    }
+    PrToFileName >>= sFileName;
     SfxViewFrame* pViewFrame = nullptr;
     if ( pViewShell )
         pViewFrame = pViewShell->GetViewFrame();
