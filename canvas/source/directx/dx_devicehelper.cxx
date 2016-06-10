@@ -137,7 +137,7 @@ namespace dxcanvas
         if( !mpDevice )
             return uno::Reference< rendering::XBitmap >(); // we're disposed
 
-        DXBitmapSharedPtr pBitmap(
+        std::shared_ptr< DXBitmap > pBitmap(
             new DXBitmap(
                 ::basegfx::unotools::b2ISizeFromIntegerSize2D(size),
                 false));
@@ -160,7 +160,7 @@ namespace dxcanvas
         if( !mpDevice )
             return uno::Reference< rendering::XBitmap >(); // we're disposed
 
-        DXBitmapSharedPtr pBitmap(
+        std::shared_ptr< DXBitmap > pBitmap(
             new DXBitmap(
                 ::basegfx::unotools::b2ISizeFromIntegerSize2D(size),
                 true));

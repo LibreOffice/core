@@ -197,7 +197,7 @@ namespace cairo
      *
      * @return new surface or NULL
      **/
-    SurfaceSharedPtr X11Surface::getSimilar(int cairo_content_type, int width, int height ) const
+    std::shared_ptr< Surface > X11Surface::getSimilar(int cairo_content_type, int width, int height ) const
     {
         Pixmap hPixmap;
 
@@ -227,7 +227,7 @@ namespace cairo
 
             X11SysData aSysData(maSysData);
             aSysData.pRenderFormat = pFormat;
-            return SurfaceSharedPtr(
+            return std::shared_ptr< Surface >(
                 new X11Surface( aSysData,
                                 std::make_shared<X11Pixmap>(hPixmap, maSysData.pDisplay),
                                 CairoSurfaceSharedPtr(
@@ -239,7 +239,7 @@ namespace cairo
                                     &cairo_surface_destroy) ));
         }
         else
-            return SurfaceSharedPtr(
+            return std::shared_ptr< Surface >(
                 new X11Surface( maSysData,
                                 X11PixmapSharedPtr(),
                                 CairoSurfaceSharedPtr(

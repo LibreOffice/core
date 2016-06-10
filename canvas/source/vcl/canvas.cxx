@@ -102,7 +102,7 @@ namespace vclcanvas
                 OUString( "Passed OutDev invalid!" ),
                 nullptr);
 
-        OutDevProviderSharedPtr pOutdevProvider( new OutDevHolder(*pOutDev) );
+        std::shared_ptr< OutDevProvider > pOutdevProvider( new OutDevHolder(*pOutDev) );
 
         // setup helper
         maDeviceHelper.init( pOutdevProvider );
@@ -134,7 +134,7 @@ namespace vclcanvas
         return OUString( CANVAS_SERVICE_NAME );
     }
 
-    bool Canvas::repaint( const GraphicObjectSharedPtr& rGrf,
+    bool Canvas::repaint( const std::shared_ptr< GraphicObject >& rGrf,
                           const rendering::ViewState&   viewState,
                           const rendering::RenderState& renderState,
                           const ::Point&                rPt,

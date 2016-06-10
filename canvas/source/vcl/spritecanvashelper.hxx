@@ -43,7 +43,7 @@ namespace vclcanvas
         SpriteCanvasHelper();
         ~SpriteCanvasHelper();
 
-        void init( const OutDevProviderSharedPtr& rOutDev,
+        void init( const std::shared_ptr< OutDevProvider >& rOutDev,
                    SpriteCanvas&                  rOwningSpriteCanvas,
                    ::canvas::SpriteRedrawManager& rManager,
                    bool                           bProtect,

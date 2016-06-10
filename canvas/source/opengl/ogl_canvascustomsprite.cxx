@@ -150,7 +150,7 @@ namespace oglcanvas
                 };
             glMultMatrixd(aGLTransform);
 
-            IBufferContextSharedPtr pBufferContext;
+            std::shared_ptr<IBufferContext> pBufferContext;
             if( mfAlpha != 1.0 || mxClip.is() )
             {
                 // drafts. Need to render to temp surface before, and then

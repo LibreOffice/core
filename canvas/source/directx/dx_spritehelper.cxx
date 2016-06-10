@@ -50,8 +50,8 @@ namespace dxcanvas
 
     void SpriteHelper::init( const geometry::RealSize2D&     rSpriteSize,
                              const SpriteCanvasRef&          rSpriteCanvas,
-                             const IDXRenderModuleSharedPtr& rRenderModule,
-                             const DXSurfaceBitmapSharedPtr& rBitmap,
+                             const std::shared_ptr< IDXRenderModule >& rRenderModule,
+                             const std::shared_ptr< DXSurfaceBitmap >& rBitmap,
                              bool                            bShowSpriteBounds )
     {
         ENSURE_OR_THROW( rSpriteCanvas.get() &&

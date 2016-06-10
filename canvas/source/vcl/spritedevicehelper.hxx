@@ -41,7 +41,7 @@ namespace vclcanvas
     public:
         SpriteDeviceHelper();
 
-        void init( const OutDevProviderSharedPtr& rOutDev );
+        void init( const std::shared_ptr< OutDevProvider >& rOutDev );
 
         /// Dispose all internal references
         void disposing();
@@ -54,13 +54,13 @@ namespace vclcanvas
         css::uno::Any getSurfaceHandle() const;
 
         void dumpScreenContent() const;
-        const BackBufferSharedPtr& getBackBuffer() const { return mpBackBuffer; }
+        const std::shared_ptr< BackBuffer >& getBackBuffer() const { return mpBackBuffer; }
 
         void notifySizeUpdate( const css::awt::Rectangle& rBounds );
 
     private:
         /// This buffer holds the background content for all associated canvases
-        BackBufferSharedPtr     mpBackBuffer;
+        std::shared_ptr< BackBuffer >     mpBackBuffer;
     };
 }
 

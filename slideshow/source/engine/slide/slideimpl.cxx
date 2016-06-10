@@ -669,7 +669,7 @@ SlideBitmapSharedPtr SlideImpl::createCurrentSlideBitmap( const UnoViewSharedPtr
     ::cppcanvas::CanvasSharedPtr pCanvas( rView->getCanvas() );
 
     // create a bitmap of appropriate size
-    ::cppcanvas::BitmapSharedPtr pBitmap(
+    ::std::shared_ptr< cppcanvas::Bitmap > pBitmap(
         ::cppcanvas::BaseGfxFactory::createBitmap(
             pCanvas,
             rBmpSize ) );

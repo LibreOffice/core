@@ -49,7 +49,7 @@ namespace vclcanvas
     CanvasCustomSprite::CanvasCustomSprite( const geometry::RealSize2D&               rSpriteSize,
                                             rendering::XGraphicDevice&                rDevice,
                                             const ::canvas::SpriteSurface::Reference& rOwningSpriteCanvas,
-                                            const OutDevProviderSharedPtr&            rOutDevProvider,
+                                            const std::shared_ptr< OutDevProvider >&            rOutDevProvider,
                                             bool                                      bShowSpriteBounds )
     {
         ENSURE_OR_THROW( rOwningSpriteCanvas.get() &&
@@ -68,11 +68,11 @@ namespace vclcanvas
                                                 ceil( rSpriteSize.Height ))) );
 
         // create content backbuffer in screen depth
-        BackBufferSharedPtr pBackBuffer( new BackBuffer( rOutDevProvider->getOutDev() ) );
+        std::shared_ptr< BackBuffer > pBackBuffer( new BackBuffer( rOutDevProvider->getOutDev() ) );
         pBackBuffer->setSize( aSize );
 
         // create mask backbuffer, with one bit color depth
-        BackBufferSharedPtr pBackBufferMask( new BackBuffer( rOutDevProvider->getOutDev(),
+        std::shared_ptr< BackBuffer > pBackBufferMask( new BackBuffer( rOutDevProvider->getOutDev(),
                                                              true ) );
         pBackBufferMask->setSize( aSize );
 
@@ -155,7 +155,7 @@ namespace vclcanvas
         mbSurfaceDirty = false;
     }
 
-    bool CanvasCustomSprite::repaint( const GraphicObjectSharedPtr& rGrf,
+    bool CanvasCustomSprite::repaint( const std::shared_ptr< GraphicObject >& rGrf,
                                       const rendering::ViewState&   viewState,
                                       const rendering::RenderState& renderState,
                                       const ::Point&                rPt,

@@ -39,8 +39,6 @@
 
 namespace dxcanvas
 {
-    typedef std::shared_ptr< Gdiplus::Font >        FontSharedPtr;
-    typedef std::shared_ptr< Gdiplus::FontFamily >  FontFamilySharedPtr;
 
     typedef ::cppu::WeakComponentImplHelper< css::rendering::XCanvasFont,
                                              css::lang::XServiceInfo > CanvasFont_Base;
@@ -75,13 +73,13 @@ namespace dxcanvas
 
         double              getCellAscent() const;
         double              getEmHeight() const;
-        FontSharedPtr       getFont() const;
+        std::shared_ptr< Gdiplus::Font >       getFont() const;
         const css::geometry::Matrix2D& getFontMatrix() const;
 
     private:
-        GDIPlusUserSharedPtr                        mpGdiPlusUser;
-        FontFamilySharedPtr                         mpFontFamily;
-        FontSharedPtr                               mpFont;
+        std::shared_ptr< GDIPlusUser >                        mpGdiPlusUser;
+        std::shared_ptr< Gdiplus::FontFamily >                         mpFontFamily;
+        std::shared_ptr< Gdiplus::Font >                               mpFont;
         css::rendering::FontRequest    maFontRequest;
         css::geometry::Matrix2D        maFontMatrix;
     };

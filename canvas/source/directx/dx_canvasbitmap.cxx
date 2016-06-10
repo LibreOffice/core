@@ -36,7 +36,7 @@ using namespace ::com::sun::star;
 
 namespace dxcanvas
 {
-    CanvasBitmap::CanvasBitmap( const IBitmapSharedPtr& rBitmap,
+    CanvasBitmap::CanvasBitmap( const std::shared_ptr<IBitmap>& rBitmap,
                                 const DeviceRef&        rDevice ) :
         mpDevice( rDevice ),
         mpBitmap( rBitmap )
@@ -134,7 +134,7 @@ namespace dxcanvas
                     aBmpData.PixelFormat = PixelFormat32bppARGB;
                     aBmpData.Scan0       = NULL;
                     const Gdiplus::Rect aRect( 0,0,aSize.getX(),aSize.getY() );
-                    BitmapSharedPtr pGDIPlusBitmap=mpBitmap->getBitmap();
+                    std::shared_ptr< Gdiplus::Bitmap > pGDIPlusBitmap=mpBitmap->getBitmap();
                     if( Gdiplus::Ok != pGDIPlusBitmap->LockBits( &aRect,
                                                                  Gdiplus::ImageLockModeRead,
                                                                  PixelFormat32bppARGB, // outputs ARGB (big endian)
@@ -195,7 +195,7 @@ namespace dxcanvas
                     aBmpData.PixelFormat = PixelFormat32bppARGB;
                     aBmpData.Scan0       = NULL;
                     const Gdiplus::Rect aRect( 0,0,aSize.getX(),aSize.getY() );
-                    BitmapSharedPtr pGDIPlusBitmap=mpBitmap->getBitmap();
+                    std::shared_ptr< Gdiplus::Bitmap > pGDIPlusBitmap=mpBitmap->getBitmap();
                     if( Gdiplus::Ok != pGDIPlusBitmap->LockBits( &aRect,
                                                                  Gdiplus::ImageLockModeRead,
                                                                  PixelFormat32bppARGB, // outputs ARGB (big endian)

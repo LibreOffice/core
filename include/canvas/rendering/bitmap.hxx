@@ -294,7 +294,6 @@ namespace canvas
         const std::unique_ptr< ImplBitmap > mxImpl;
     };
 
-    typedef std::shared_ptr< Bitmap > BitmapSharedPtr;
 }
 
 #endif // INCLUDED_CANVAS_RENDERING_BITMAP_HXX

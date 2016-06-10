@@ -40,7 +40,7 @@ namespace slideshow
     namespace internal
     {
 
-        SlideBitmap::SlideBitmap( const ::cppcanvas::BitmapSharedPtr& rBitmap ) :
+        SlideBitmap::SlideBitmap( const ::std::shared_ptr< cppcanvas::Bitmap >& rBitmap ) :
             maOutputPos(),
             maClipPoly(),
             mxBitmap()

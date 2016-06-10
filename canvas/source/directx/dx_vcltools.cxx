@@ -68,7 +68,7 @@ namespace dxcanvas
                              const void*                                     hDIB )
             {
                 bool            bRet( false );
-                BitmapSharedPtr pBitmap;
+                std::shared_ptr< Gdiplus::Bitmap > pBitmap;
 
                 const BITMAPINFO* pBI = (BITMAPINFO*)GlobalLock( (HGLOBAL)hDIB );
 

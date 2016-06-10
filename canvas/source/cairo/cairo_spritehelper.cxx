@@ -60,7 +60,7 @@ namespace cairocanvas
                                         rSpriteCanvas.get() );
     }
 
-    void SpriteHelper::setSurface( const SurfaceSharedPtr& pBufferSurface )
+    void SpriteHelper::setSurface( const std::shared_ptr< Surface >& pBufferSurface )
     {
         mpBufferSurface = pBufferSurface;
     }

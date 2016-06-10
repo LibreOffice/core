@@ -28,10 +28,9 @@ namespace dxcanvas
     struct BitmapProvider
     {
         virtual ~BitmapProvider() {}
-        virtual IBitmapSharedPtr getBitmap() const = 0;
+        virtual std::shared_ptr<IBitmap> getBitmap() const = 0;
     };
 
-    typedef std::shared_ptr<BitmapProvider> BitmapProviderSharedPtr;
 }
 
 #endif

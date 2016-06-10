@@ -58,7 +58,7 @@ namespace vclcanvas
                     const css::uno::Sequence< css::beans::PropertyValue >&                 extraFontProperties,
                     const css::geometry::Matrix2D&                                         rFontMatrix,
                     css::rendering::XGraphicDevice&                                        rDevice,
-                    const OutDevProviderSharedPtr&                                                      rOutDevProvider );
+                    const std::shared_ptr< OutDevProvider >&                                                      rOutDevProvider );
 
         /// Dispose all internal references
         virtual void SAL_CALL disposing() override;
@@ -81,7 +81,7 @@ namespace vclcanvas
         ::canvas::vcltools::VCLObject<vcl::Font>                          maFont;
         css::rendering::FontRequest                                       maFontRequest;
         css::uno::Reference< css::rendering::XGraphicDevice>              mpRefDevice;
-        OutDevProviderSharedPtr                                           mpOutDevProvider;
+        std::shared_ptr< OutDevProvider >                                           mpOutDevProvider;
     };
 
 }

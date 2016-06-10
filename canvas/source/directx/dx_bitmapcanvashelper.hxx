@@ -52,7 +52,7 @@ namespace dxcanvas
             @param rTarget
             Render target
          */
-        void setTarget( const IBitmapSharedPtr& rTarget );
+        void setTarget( const std::shared_ptr<IBitmap>& rTarget );
 
         /** Set the target for rendering operations
 
@@ -62,7 +62,7 @@ namespace dxcanvas
             @param rOutputOffset
             Output offset in pixel
          */
-        void setTarget( const IBitmapSharedPtr&   rTarget,
+        void setTarget( const std::shared_ptr<IBitmap>&   rTarget,
                         const ::basegfx::B2ISize& rOutputOffset );
 
 
@@ -120,7 +120,7 @@ namespace dxcanvas
 
     protected:
         /// Render target
-        IBitmapSharedPtr mpTarget;
+        std::shared_ptr<IBitmap> mpTarget;
     };
 }
 
