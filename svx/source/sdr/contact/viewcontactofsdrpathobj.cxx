@@ -53,7 +53,7 @@ namespace sdr
 
             if(!nPointCount)
             {
-                OSL_FAIL("PolyPolygon object without geometry detected, this should not be created (!)");
+                assert("PolyPolygon object must have geometry");
                 basegfx::B2DPolygon aFallbackLine;
                 aFallbackLine.append(basegfx::B2DPoint(0.0, 0.0));
                 aFallbackLine.append(basegfx::B2DPoint(1000.0, 1000.0));
@@ -74,6 +74,8 @@ namespace sdr
                     GetPathObj().getText(0),
                     false));
             basegfx::B2DPolyPolygon aUnitPolyPolygon(GetPathObj().GetPathPoly());
+            if (aUnitPolyPolygon.count()==0)
+                return drawinglayer::primitive2d::Primitive2DContainer();
             Point aGridOff = GetPathObj().GetGridOffset();
             // Hack for calc, transform position of object according
             // to current zoom so as objects relative position to grid
