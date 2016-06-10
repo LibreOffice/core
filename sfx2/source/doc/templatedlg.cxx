@@ -1096,6 +1096,7 @@ void SfxTemplateManagerDlg::OnTemplateExport()
     xFolderPicker->setDisplayDirectory(SvtPathOptions().GetWorkPath());
 
     sal_Int16 nResult = xFolderPicker->execute();
+    sal_Int16 nCount = maSelTemplates.size();
 
     if( nResult == ExecutableDialogResults::OK )
     {
@@ -1170,6 +1171,11 @@ void SfxTemplateManagerDlg::OnTemplateExport()
         {
             OUString aText( SfxResId(STR_MSG_ERROR_EXPORT).toString() );
             ScopedVclPtrInstance<MessageDialog>::Create(this, aText.replaceFirst("$1",aTemplateList))->Execute();
+        }
+        else
+        {
+            OUString sText( SfxResId(STR_MSG_EXPORT_SUCCESS).toString() );
+            ScopedVclPtrInstance<MessageDialog>::Create(this, sText.replaceFirst("$1", OUString::number(nCount)), VclMessageType::VCL_MESSAGE_INFO)->Execute();
         }
     }
 }
@@ -1375,24 +1381,7 @@ void SfxTemplateManagerDlg::localMoveTo(sal_uInt16 nItemId)
     {
         // Move templates to desired folder if for some reason move fails
         // try copying them.
-        if (!mpLocalView->moveTemplates(maSelTemplates,nItemId))
-        {
-            OUString aTemplateList;
-
-            std::set<const ThumbnailViewItem*,selection_cmp_fn>::const_iterator pIter;
-            for (pIter = maSelTemplates.begin(); pIter != maSelTemplates.end(); ++pIter)
-            {
-                if (aTemplateList.isEmpty())
-                    aTemplateList = (*pIter)->maTitle;
-                else
-                    aTemplateList = aTemplateList + "\n" + (*pIter)->maTitle;
-            }
-
-            OUString aDst = mpLocalView->getRegionItemName(nItemId);
-            OUString aMsg(SfxResId(STR_MSG_ERROR_LOCAL_MOVE).toString());
-            aMsg = aMsg.replaceFirst("$1",aDst);
-            ScopedVclPtrInstance<MessageDialog>::Create(this, aMsg.replaceFirst( "$2",aTemplateList))->Execute();
-        }
+        mpLocalView->moveTemplates(maSelTemplates,nItemId);
     }
 }
 
@@ -1433,8 +1422,6 @@ void SfxTemplateManagerDlg::localSearchMoveTo(sal_uInt16 nItemId)
 {
     if (nItemId)
     {
-        OUString aTemplateList;
-
         // Move templates to desired folder if for some reason move fails
         // try copying them.
         std::set<const ThumbnailViewItem*,selection_cmp_fn>::const_iterator aIter;
@@ -1447,19 +1434,11 @@ void SfxTemplateManagerDlg::localSearchMoveTo(sal_uInt16 nItemId)
 
             if(!mpLocalView->moveTemplate(pItem,pItem->mnRegionId,nItemId))
             {
-                if (aTemplateList.isEmpty())
-                    aTemplateList = (*aIter)->maTitle;
-                else
-                    aTemplateList = aTemplateList + "\n" + (*aIter)->maTitle;
+                OUString sDst = mpLocalView->getRegionItemName(nItemId);
+                OUString sMsg(SfxResId(STR_MSG_ERROR_LOCAL_MOVE).toString());
+                sMsg = sMsg.replaceFirst("$1",sDst);
+                ScopedVclPtrInstance<MessageDialog>::Create(this, sMsg.replaceFirst( "$2",pItem->maTitle))->Execute();
             }
-        }
-
-        if (!aTemplateList.isEmpty())
-        {
-            OUString aDst = mpLocalView->getRegionItemName(nItemId);
-            OUString aMsg(SfxResId(STR_MSG_ERROR_LOCAL_MOVE).toString());
-            aMsg = aMsg.replaceFirst("$1",aDst);
-            ScopedVclPtrInstance<MessageDialog>::Create(this, aMsg.replaceFirst( "$2",aTemplateList))->Execute();
         }
     }
 
