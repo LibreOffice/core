@@ -109,7 +109,7 @@ void TabControl::ImplInit( vcl::Window* pParent, WinBits nStyle )
 
     // if the tabcontrol is drawn (ie filled) by a native widget, make sure all controls will have transparent background
     // otherwise they will paint with a wrong background
-    if( IsNativeControlSupported(ControlType::TabPane, PART_ENTIRE_CONTROL) )
+    if( IsNativeControlSupported(ControlType::TabPane, ControlPart::Entire) )
         EnableChildTransparentMode();
 
     if (pParent && pParent->IsDialog())
@@ -136,8 +136,8 @@ void TabControl::ImplInitSettings( bool bFont,
         vcl::Window* pParent = GetParent();
         if ( !IsControlBackground() &&
             (pParent->IsChildTransparentModeEnabled()
-            || IsNativeControlSupported(ControlType::TabPane, PART_ENTIRE_CONTROL)
-            || IsNativeControlSupported(ControlType::TabItem, PART_ENTIRE_CONTROL) ) )
+            || IsNativeControlSupported(ControlType::TabPane, ControlPart::Entire)
+            || IsNativeControlSupported(ControlType::TabItem, ControlPart::Entire) ) )
 
         {
             // set transparent mode for NWF tabcontrols to have
@@ -235,7 +235,7 @@ Size TabControl::ImplGetItemSize( ImplTabItem* pItem, long nMaxWidth )
     const TabitemValue aControlValue(Rectangle(TAB_TABOFFSET_X, TAB_TABOFFSET_Y,
                                                aSize.Width() - TAB_TABOFFSET_X * 2,
                                                aSize.Height() - TAB_TABOFFSET_Y * 2));
-    if(GetNativeControlRegion( ControlType::TabItem, PART_ENTIRE_CONTROL, aCtrlRegion,
+    if(GetNativeControlRegion( ControlType::TabItem, ControlPart::Entire, aCtrlRegion,
                                            ControlState::ENABLED, aControlValue, OUString(),
                                            aBoundingRgn, aContentRgn ) )
     {
@@ -664,7 +664,7 @@ void TabControl::ImplChangeTabPage( sal_uInt16 nId, sal_uInt16 nOldId )
     // Invalidate the same region that will be send to NWF
     // to always allow for bitmap caching
     // see Window::DrawNativeControl()
-    if( IsNativeControlSupported( ControlType::TabPane, PART_ENTIRE_CONTROL ) )
+    if( IsNativeControlSupported( ControlType::TabPane, ControlPart::Entire ) )
     {
         aRect.Left()   -= TAB_OFFSET;
         aRect.Top()    -= TAB_OFFSET;
@@ -839,7 +839,7 @@ void TabControl::ImplDrawItem(vcl::RenderContext& rRenderContext, ImplTabItem* p
         }
     }
 
-    if ( (bNativeOK = rRenderContext.IsNativeControlSupported(ControlType::TabItem, PART_ENTIRE_CONTROL)) )
+    if ( (bNativeOK = rRenderContext.IsNativeControlSupported(ControlType::TabItem, ControlPart::Entire)) )
     {
         TabitemValue tiValue(Rectangle(pItem->maRect.Left() + TAB_TABOFFSET_X,
                                        pItem->maRect.Top() + TAB_TABOFFSET_Y,
@@ -855,7 +855,7 @@ void TabControl::ImplDrawItem(vcl::RenderContext& rRenderContext, ImplTabItem* p
             tiValue.mnAlignment |= TabitemFlags::LastInGroup;
 
         Rectangle aCtrlRegion( pItem->maRect );
-        bNativeOK = rRenderContext.DrawNativeControl(ControlType::TabItem, PART_ENTIRE_CONTROL,
+        bNativeOK = rRenderContext.DrawNativeControl(ControlType::TabItem, ControlPart::Entire,
                                                      aCtrlRegion, nState, tiValue, OUString() );
     }
 
@@ -1084,7 +1084,7 @@ void TabControl::ImplPaint(vcl::RenderContext& rRenderContext, const Rectangle& 
         aRect.Right() += 10;
     }
 
-    if (rRenderContext.IsNativeControlSupported(ControlType::TabPane, PART_ENTIRE_CONTROL))
+    if (rRenderContext.IsNativeControlSupported(ControlType::TabPane, ControlPart::Entire))
     {
         const ImplControlValue aControlValue;
 
@@ -1101,11 +1101,11 @@ void TabControl::ImplPaint(vcl::RenderContext& rRenderContext, const Rectangle& 
 
         if (!aClipRgn.IsEmpty())
         {
-            rRenderContext.DrawNativeControl(ControlType::TabPane, PART_ENTIRE_CONTROL,
+            rRenderContext.DrawNativeControl(ControlType::TabPane, ControlPart::Entire,
                                              aRect, nState, aControlValue, OUString());
         }
 
-        if (rRenderContext.IsNativeControlSupported(ControlType::TabHeader, PART_ENTIRE_CONTROL))
+        if (rRenderContext.IsNativeControlSupported(ControlType::TabHeader, ControlPart::Entire))
         {
             Rectangle aHeaderRect(aRect.Left(), 0, aRect.Right(), aRect.Top());
 
@@ -1116,7 +1116,7 @@ void TabControl::ImplPaint(vcl::RenderContext& rRenderContext, const Rectangle& 
 
             if (!aClipRgn.IsEmpty())
             {
-                rRenderContext.DrawNativeControl(ControlType::TabHeader, PART_ENTIRE_CONTROL,
+                rRenderContext.DrawNativeControl(ControlType::TabHeader, ControlPart::Entire,
                                                  aHeaderRect, nState, aControlValue, OUString());
             }
         }
@@ -1174,7 +1174,7 @@ void TabControl::ImplPaint(vcl::RenderContext& rRenderContext, const Rectangle& 
     {
         // Some native toolkits (GTK+) draw tabs right-to-left, with an
         // overlap between adjacent tabs
-        bool bDrawTabsRTL = rRenderContext.IsNativeControlSupported(ControlType::TabItem, PART_TABS_DRAW_RTL);
+        bool bDrawTabsRTL = rRenderContext.IsNativeControlSupported(ControlType::TabItem, ControlPart::TabsDrawRtl);
         ImplTabItem* pFirstTab = nullptr;
         ImplTabItem* pLastTab = nullptr;
         size_t idx;
@@ -1544,7 +1544,7 @@ bool TabControl::PreNotify( NotifyEvent& rNEvt )
         if( !pMouseEvt->GetButtons() && !pMouseEvt->IsSynthetic() && !pMouseEvt->IsModifierChanged() )
         {
             // trigger redraw if mouse over state has changed
-            if( IsNativeControlSupported(ControlType::TabItem, PART_ENTIRE_CONTROL) )
+            if( IsNativeControlSupported(ControlType::TabItem, ControlPart::Entire) )
             {
                 Rectangle* pRect = ImplFindPartRect( GetPointerPosPixel() );
                 Rectangle* pLastRect = ImplFindPartRect( GetLastPointerPosPixel() );

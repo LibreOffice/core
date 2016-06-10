@@ -720,7 +720,7 @@ WindowImpl::WindowImpl( WindowType nType )
     mbSuppressAccessibilityEvents       = false;                     // true: do not send any accessibility events
     mbDrawSelectionBackground           = false;                     // true: draws transparent window background to indicate (toolbox) selection
     mbIsInTaskPaneList                  = false;                     // true: window was added to the taskpanelist in the topmost system window
-    mnNativeBackground                  = 0;                         // initialize later, depends on type
+    mnNativeBackground                  = ControlPart::NONE;         // initialize later, depends on type
     mbCallHandlersDuringInputDisabled   = false;                     // true: call event handlers even if input is disabled
     mbHelpTextDynamic                   = false;                     // true: append help id in HELP_DEBUG case
     mbFakeFocusSet                      = false;                     // true: pretend as if the window has focus.
@@ -1201,7 +1201,7 @@ void Window::ImplInitAppFontData( vcl::Window* pWindow )
         Rectangle aCtrlRegion( Point(), Size( nTextWidth < 10 ? 10 : nTextWidth, nTextHeight < 10 ? 10 : nTextHeight ) );
         Rectangle aBoundingRgn( aCtrlRegion );
         Rectangle aContentRgn( aCtrlRegion );
-        if( pWindow->GetNativeControlRegion( ControlType::Editbox, PART_ENTIRE_CONTROL, aCtrlRegion,
+        if( pWindow->GetNativeControlRegion( ControlType::Editbox, ControlPart::Entire, aCtrlRegion,
                                              ControlState::ENABLED, aControlValue, OUString(),
                                              aBoundingRgn, aContentRgn ) )
         {

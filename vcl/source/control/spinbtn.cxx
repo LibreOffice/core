@@ -446,8 +446,8 @@ bool SpinButton::PreNotify( NotifyEvent& rNEvt )
         if (!pMouseEvt->GetButtons() && !pMouseEvt->IsSynthetic() && !pMouseEvt->IsModifierChanged())
         {
             // trigger redraw if mouse over state has changed
-            if (IsNativeControlSupported(ControlType::Spinbox, PART_ENTIRE_CONTROL) ||
-                IsNativeControlSupported(ControlType::Spinbox, PART_ALL_BUTTONS) )
+            if (IsNativeControlSupported(ControlType::Spinbox, ControlPart::Entire) ||
+                IsNativeControlSupported(ControlType::Spinbox, ControlPart::AllButtons) )
             {
                 Rectangle* pRect = ImplFindPartRect( GetPointerPosPixel() );
                 Rectangle* pLastRect = ImplFindPartRect( GetLastPointerPosPixel() );

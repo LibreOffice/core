@@ -169,7 +169,7 @@ void ComboBox::ImplCalcEditHeight()
     Rectangle aBoundRegion, aContentRegion;
     ImplControlValue aControlValue;
     ControlType aType = IsDropDownBox() ? ControlType::Combobox : ControlType::Editbox;
-    if( GetNativeControlRegion( aType, PART_ENTIRE_CONTROL,
+    if( GetNativeControlRegion( aType, ControlPart::Entire,
                                 aCtrlRegion,
                                 ControlState::ENABLED,
                                 aControlValue, OUString(),
@@ -1069,7 +1069,7 @@ long ComboBox::getMaxWidthScrollBarAndDownButton() const
     // use the full extent of the control
     Rectangle aArea( aPoint, pBorder->GetOutputSizePixel() );
 
-    if ( GetNativeControlRegion(ControlType::Combobox, PART_BUTTON_DOWN,
+    if ( GetNativeControlRegion(ControlType::Combobox, ControlPart::ButtonDown,
         aArea, ControlState::NONE, aControlValue, OUString(), aBound, aContent) )
     {
         nButtonDownWidth = aContent.getWidth();
@@ -1507,7 +1507,7 @@ ComboBoxBounds ComboBox::Impl::calcComboBoxDropDownComponentBounds(
     // use the full extent of the control
     Rectangle aArea( aPoint, rBorderOutSz );
 
-    if (m_rThis.GetNativeControlRegion(ControlType::Combobox, PART_BUTTON_DOWN,
+    if (m_rThis.GetNativeControlRegion(ControlType::Combobox, ControlPart::ButtonDown,
             aArea, ControlState::NONE, aControlValue, OUString(), aBound, aContent) )
     {
         // convert back from border space to local coordinates
@@ -1518,7 +1518,7 @@ ComboBoxBounds ComboBox::Impl::calcComboBoxDropDownComponentBounds(
         aBounds.aButtonSize = Size(aContent.getWidth(), (nBottom-nTop));
 
         // adjust the size of the edit field
-        if (m_rThis.GetNativeControlRegion(ControlType::Combobox, PART_SUB_EDIT,
+        if (m_rThis.GetNativeControlRegion(ControlType::Combobox, ControlPart::SubEdit,
                     aArea, ControlState::NONE, aControlValue, OUString(), aBound, aContent) )
         {
             // convert back from border space to local coordinates

@@ -533,7 +533,7 @@ void ImplSmallBorderWindowView::Init( OutputDevice* pDev, long nWidth, long nHei
                 Rectangle aCtrlRegion( (const Point&)Point(), Size( mnWidth < 10 ? 10 : mnWidth, mnHeight < 10 ? 10 : mnHeight ) );
                 Rectangle aBounds( aCtrlRegion );
                 Rectangle aContent( aCtrlRegion );
-                if( pWin->GetNativeControlRegion( aCtrlType, PART_ENTIRE_CONTROL, aCtrlRegion,
+                if( pWin->GetNativeControlRegion( aCtrlType, ControlPart::Entire, aCtrlRegion,
                                                   ControlState::ENABLED, aControlValue, OUString(),
                                                   aBounds, aContent ) )
                 {
@@ -638,7 +638,7 @@ void ImplSmallBorderWindowView::DrawWindow(vcl::RenderContext& rRenderContext, B
     vcl::Window* pCtrl = mpBorderWindow->GetWindow(GetWindowType::Client);
 
     ControlType aCtrlType = ControlType::Generic;
-    ControlPart aCtrlPart = PART_ENTIRE_CONTROL;
+    ControlPart aCtrlPart = ControlPart::Entire;
     if (pCtrl)
     {
         switch (pCtrl->GetType())
@@ -667,14 +667,14 @@ void ImplSmallBorderWindowView::DrawWindow(vcl::RenderContext& rRenderContext, B
             case WINDOW_TREELISTBOX:
                 aCtrlType = ControlType::Listbox;
                 if (pCtrl->GetStyle() & WB_DROPDOWN)
-                    aCtrlPart = PART_ENTIRE_CONTROL;
+                    aCtrlPart = ControlPart::Entire;
                 else
-                    aCtrlPart = PART_WINDOW;
+                    aCtrlPart = ControlPart::Window;
                 break;
 
             case WINDOW_LISTBOXWINDOW:
                 aCtrlType = ControlType::Listbox;
-                aCtrlPart = PART_WINDOW;
+                aCtrlPart = ControlPart::Window;
                 break;
 
             case WINDOW_COMBOBOX:
@@ -688,12 +688,12 @@ void ImplSmallBorderWindowView::DrawWindow(vcl::RenderContext& rRenderContext, B
                 if (pCtrl->GetStyle() & WB_DROPDOWN)
                 {
                     aCtrlType = ControlType::Combobox;
-                    aCtrlPart = PART_ENTIRE_CONTROL;
+                    aCtrlPart = ControlPart::Entire;
                 }
                 else
                 {
                     aCtrlType = ControlType::Listbox;
-                    aCtrlPart = PART_WINDOW;
+                    aCtrlPart = ControlPart::Window;
                 }
                 break;
 
@@ -748,7 +748,7 @@ void ImplSmallBorderWindowView::DrawWindow(vcl::RenderContext& rRenderContext, B
 
         // if the native theme draws the spinbuttons in one call, make sure the proper settings
         // are passed, this might force a redraw though.... (TODO: improve)
-        if ((aCtrlType == ControlType::Spinbox) && !pCtrl->IsNativeControlSupported(ControlType::Spinbox, PART_BUTTON_UP))
+        if ((aCtrlType == ControlType::Spinbox) && !pCtrl->IsNativeControlSupported(ControlType::Spinbox, ControlPart::ButtonUp))
         {
             Edit* pEdit = static_cast<Edit*>(pCtrl)->GetSubEdit();
             if (pEdit && !pEdit->SupportsDoubleBuffering())

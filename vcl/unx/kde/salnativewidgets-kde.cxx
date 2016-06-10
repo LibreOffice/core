@@ -355,7 +355,7 @@ class WidgetPainter
         bool drawStyledWidget( QWidget *pWidget,
                 ControlState nState, const ImplControlValue& aValue,
                 X11SalGraphics* pGraphics,
-                ControlPart nPart = PART_ENTIRE_CONTROL );
+                ControlPart nPart = ControlPart::Entire );
 
     /** 'Get' method for push button.
 
@@ -785,7 +785,7 @@ bool WidgetPainter::drawStyledWidget( QWidget *pWidget,
         QApplication::style().drawPrimitive( QStyle::PE_PanelDockWindow,
                 &qPainter, qRect, pWidget->colorGroup(), nStyle );
 
-        if ( nPart == PART_THUMB_HORZ || nPart == PART_THUMB_VERT )
+        if ( nPart == ControlPart::ThumbHorz || nPart == ControlPart::ThumbVert )
         {
             const ToolbarValue *pValue = static_cast< const ToolbarValue * >( &aValue );
 
@@ -824,13 +824,13 @@ bool WidgetPainter::drawStyledWidget( QWidget *pWidget,
     }
     else if ( strcmp( QMenuBar_String, pClassName ) == 0 )
     {
-        if ( nPart == PART_ENTIRE_CONTROL )
+        if ( nPart == ControlPart::Entire )
         {
             QApplication::style().drawControl( QStyle::CE_MenuBarEmptyArea,
                     &qPainter, pWidget, qRect,
                     pWidget->colorGroup(), nStyle );
         }
-        else if ( nPart == PART_MENU_ITEM )
+        else if ( nPart == ControlPart::MenuItem )
         {
             int nMenuItem = ( nStyle & QStyle::Style_Enabled )? m_nMenuBarEnabledItem: m_nMenuBarDisabledItem;
             QMenuItem *pMenuItem = static_cast<QMenuBar*>( pWidget )->findItem( nMenuItem );
@@ -1268,28 +1268,28 @@ class KDESalGraphics : public X11SalGraphics
 bool KDESalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nPart )
 {
     return
-    ( (nType == ControlType::Pushbutton)  && (nPart == PART_ENTIRE_CONTROL) ) ||
-    ( (nType == ControlType::Radiobutton) && (nPart == PART_ENTIRE_CONTROL) ) ||
-    ( (nType == ControlType::Checkbox)    && (nPart == PART_ENTIRE_CONTROL) ) ||
-    ( (nType == ControlType::Combobox)    && (nPart == PART_ENTIRE_CONTROL || nPart == HAS_BACKGROUND_TEXTURE) ) ||
-    ( (nType == ControlType::Editbox)     && (nPart == PART_ENTIRE_CONTROL || nPart == HAS_BACKGROUND_TEXTURE) ) ||
-    ( (nType == ControlType::Listbox)     && (nPart == PART_ENTIRE_CONTROL || nPart == PART_WINDOW || nPart == HAS_BACKGROUND_TEXTURE ) ) ||
-    ( (nType == ControlType::Spinbox)     && (nPart == PART_ENTIRE_CONTROL || nPart == HAS_BACKGROUND_TEXTURE) ) ||
+    ( (nType == ControlType::Pushbutton)  && (nPart == ControlPart::Entire) ) ||
+    ( (nType == ControlType::Radiobutton) && (nPart == ControlPart::Entire) ) ||
+    ( (nType == ControlType::Checkbox)    && (nPart == ControlPart::Entire) ) ||
+    ( (nType == ControlType::Combobox)    && (nPart == ControlPart::Entire || nPart == ControlPart::HasBackgroundTexture) ) ||
+    ( (nType == ControlType::Editbox)     && (nPart == ControlPart::Entire || nPart == ControlPart::HasBackgroundTexture) ) ||
+    ( (nType == ControlType::Listbox)     && (nPart == ControlPart::Entire || nPart == ControlPart::Window || nPart == ControlPart::HasBackgroundTexture ) ) ||
+    ( (nType == ControlType::Spinbox)     && (nPart == ControlPart::Entire || nPart == ControlPart::HasBackgroundTexture) ) ||
     // no ControlType::SpinButtons for KDE
-    ( (nType == ControlType::TabItem)    && (nPart == PART_ENTIRE_CONTROL) ) ||
-    ( (nType == ControlType::TabPane)    && (nPart == PART_ENTIRE_CONTROL) ) ||
+    ( (nType == ControlType::TabItem)    && (nPart == ControlPart::Entire) ) ||
+    ( (nType == ControlType::TabPane)    && (nPart == ControlPart::Entire) ) ||
     // no ControlType::TabBody for KDE
-    ( (nType == ControlType::Scrollbar)   && (nPart == PART_ENTIRE_CONTROL || nPart == PART_DRAW_BACKGROUND_HORZ || nPart == PART_DRAW_BACKGROUND_VERT) ) ||
-    ( (nType == ControlType::Scrollbar)   && (nPart == HAS_THREE_BUTTONS) ) || // TODO small optimization is possible here: return this only if the style really has 3 buttons
+    ( (nType == ControlType::Scrollbar)   && (nPart == ControlPart::Entire || nPart == ControlPart::DrawBackgroundHorz || nPart == ControlPart::DrawBackgroundVert) ) ||
+    ( (nType == ControlType::Scrollbar)   && (nPart == ControlPart::HasThreeButtons) ) || // TODO small optimization is possible here: return this only if the style really has 3 buttons
     // ControlType::Groupbox not supported
     // ControlType::Fixedline not supported
-    ( (nType == ControlType::Toolbar)     && (nPart == PART_ENTIRE_CONTROL ||
-                                      nPart == PART_DRAW_BACKGROUND_HORZ || nPart == PART_DRAW_BACKGROUND_VERT ||
-                                      nPart == PART_THUMB_HORZ || nPart == PART_THUMB_VERT ||
-                                      nPart == PART_BUTTON) ) ||
-    ( (nType == ControlType::Menubar)     && (nPart == PART_ENTIRE_CONTROL || nPart == PART_MENU_ITEM) ) ||
-    ( (nType == ControlType::MenuPopup)  && (nPart == PART_ENTIRE_CONTROL || nPart == PART_MENU_ITEM) ) ||
-    ( (nType == ControlType::Progress)    && (nPart == PART_ENTIRE_CONTROL) )
+    ( (nType == ControlType::Toolbar)     && (nPart == ControlPart::Entire ||
+                                      nPart == ControlPart::DrawBackgroundHorz || nPart == ControlPart::DrawBackgroundVert ||
+                                      nPart == ControlPart::ThumbHorz || nPart == ControlPart::ThumbVert ||
+                                      nPart == ControlPart::Button) ) ||
+    ( (nType == ControlType::Menubar)     && (nPart == ControlPart::Entire || nPart == ControlPart::MenuItem) ) ||
+    ( (nType == ControlType::MenuPopup)  && (nPart == ControlPart::Entire || nPart == ControlPart::MenuItem) ) ||
+    ( (nType == ControlType::Progress)    && (nPart == ControlPart::Entire) )
         ;
 }
 
@@ -1309,7 +1309,7 @@ bool KDESalGraphics::hitTestNativeControl( ControlType nType, ControlPart nPart,
     Point aPos = rPos - rControlRegion.TopLeft();
     rIsInside = false;
 
-    bool bHorizontal = ( nPart == PART_BUTTON_LEFT || nPart == PART_BUTTON_RIGHT );
+    bool bHorizontal = ( nPart == ControlPart::ButtonLeft || nPart == ControlPart::ButtonRight );
 
     QScrollBar *pScrollBar = pWidgetPainter->scrollBar( rControlRegion,
         bHorizontal, ImplControlValue() );
@@ -1349,7 +1349,7 @@ bool KDESalGraphics::hitTestNativeControl( ControlType nType, ControlPart nPart,
 
     switch ( nPart )
     {
-        case PART_BUTTON_LEFT:
+        case ControlPart::ButtonLeft:
         if ( !bPlatinumStyle && qRectSubLine.contains( aPos.getX(), aPos.getY() ) )
             rIsInside = true;
         else if ( bTwoSubButtons )
@@ -1359,7 +1359,7 @@ bool KDESalGraphics::hitTestNativeControl( ControlType nType, ControlPart nPart,
         }
         break;
 
-        case PART_BUTTON_UP:
+        case ControlPart::ButtonUp:
         if ( !bPlatinumStyle && qRectSubLine.contains( aPos.getX(), aPos.getY() ) )
             rIsInside = true;
         else if ( bTwoSubButtons )
@@ -1369,21 +1369,21 @@ bool KDESalGraphics::hitTestNativeControl( ControlType nType, ControlPart nPart,
         }
         break;
 
-        case PART_BUTTON_RIGHT:
+        case ControlPart::ButtonRight:
         if ( bTwoSubButtons )
             qRectAddLine.setLeft( qRectAddLine.left() + qRectAddLine.width() / 2 );
 
         rIsInside = qRectAddLine.contains( aPos.getX(), aPos.getY() );
         break;
 
-        case PART_BUTTON_DOWN:
+        case ControlPart::ButtonDown:
         if ( bTwoSubButtons )
             qRectAddLine.setTop( qRectAddLine.top() + qRectAddLine.height() / 2 );
 
         rIsInside = qRectAddLine.contains( aPos.getX(), aPos.getY() );
         break;
 
-        // cases PART_TRACK_HORZ_AREA and PART_TRACK_VERT_AREA
+        // cases ControlPart::TrackHorzArea and ControlPart::TrackVertArea
         default:
         return false;
     }
@@ -1412,97 +1412,97 @@ bool KDESalGraphics::drawNativeControl( ControlType nType, ControlPart nPart,
 {
     bool bReturn = false;
 
-    if ( (nType == ControlType::Pushbutton) && (nPart == PART_ENTIRE_CONTROL) )
+    if ( (nType == ControlType::Pushbutton) && (nPart == ControlPart::Entire) )
     {
     bReturn = pWidgetPainter->drawStyledWidget(
         pWidgetPainter->pushButton( rControlRegion, bool(nState & ControlState::DEFAULT) ),
         nState, aValue, this );
     }
-    else if ( (nType == ControlType::Radiobutton) && (nPart == PART_ENTIRE_CONTROL) )
+    else if ( (nType == ControlType::Radiobutton) && (nPart == ControlPart::Entire) )
     {
     bReturn = pWidgetPainter->drawStyledWidget(
         pWidgetPainter->radioButton( rControlRegion ),
         nState, aValue, this );
     }
-    else if ( (nType == ControlType::Checkbox) && (nPart == PART_ENTIRE_CONTROL) )
+    else if ( (nType == ControlType::Checkbox) && (nPart == ControlPart::Entire) )
     {
     bReturn = pWidgetPainter->drawStyledWidget(
         pWidgetPainter->checkBox( rControlRegion ),
         nState, aValue, this );
     }
-    else if ( (nType == ControlType::Combobox) && (nPart == PART_ENTIRE_CONTROL) )
+    else if ( (nType == ControlType::Combobox) && (nPart == ControlPart::Entire) )
     {
     bReturn = pWidgetPainter->drawStyledWidget(
         pWidgetPainter->comboBox( rControlRegion, true ),
         nState, aValue, this );
     }
-    else if ( (nType == ControlType::Editbox) && (nPart == PART_ENTIRE_CONTROL) )
+    else if ( (nType == ControlType::Editbox) && (nPart == ControlPart::Entire) )
     {
     bReturn = pWidgetPainter->drawStyledWidget(
         pWidgetPainter->lineEdit( rControlRegion ),
         nState, aValue, this );
     }
-    else if ( (nType == ControlType::Listbox) && (nPart == PART_ENTIRE_CONTROL) )
+    else if ( (nType == ControlType::Listbox) && (nPart == ControlPart::Entire) )
     {
     bReturn = pWidgetPainter->drawStyledWidget(
         pWidgetPainter->comboBox( rControlRegion, false ),
         nState, aValue, this );
     }
-    else if ( (nType == ControlType::Listbox) && (nPart == PART_WINDOW) )
+    else if ( (nType == ControlType::Listbox) && (nPart == ControlPart::Window) )
     {
     bReturn = pWidgetPainter->drawStyledWidget(
         pWidgetPainter->listView( rControlRegion ),
         nState, aValue, this );
     }
-    else if ( (nType == ControlType::Spinbox) && (nPart == PART_ENTIRE_CONTROL) )
+    else if ( (nType == ControlType::Spinbox) && (nPart == ControlPart::Entire) )
     {
     bReturn = pWidgetPainter->drawStyledWidget(
         pWidgetPainter->spinWidget( rControlRegion ),
         nState, aValue, this );
     }
-    else if ( (nType==ControlType::TabItem) && (nPart == PART_ENTIRE_CONTROL) )
+    else if ( (nType==ControlType::TabItem) && (nPart == ControlPart::Entire) )
     {
     bReturn = pWidgetPainter->drawStyledWidget(
         pWidgetPainter->tabBar( rControlRegion ),
         nState, aValue, this );
     }
-    else if ( (nType==ControlType::TabPane) && (nPart == PART_ENTIRE_CONTROL) )
+    else if ( (nType==ControlType::TabPane) && (nPart == ControlPart::Entire) )
     {
     bReturn = pWidgetPainter->drawStyledWidget(
         pWidgetPainter->tabWidget( rControlRegion ),
         nState, aValue, this );
     }
-    else if ( (nType == ControlType::Scrollbar) && (nPart == PART_DRAW_BACKGROUND_HORZ || nPart == PART_DRAW_BACKGROUND_VERT) )
+    else if ( (nType == ControlType::Scrollbar) && (nPart == ControlPart::DrawBackgroundHorz || nPart == ControlPart::DrawBackgroundVert) )
     {
     bReturn = pWidgetPainter->drawStyledWidget(
-        pWidgetPainter->scrollBar( rControlRegion, nPart == PART_DRAW_BACKGROUND_HORZ, aValue ),
+        pWidgetPainter->scrollBar( rControlRegion, nPart == ControlPart::DrawBackgroundHorz, aValue ),
         nState, aValue, this );
     }
-    else if ( (nType == ControlType::Toolbar) && (nPart == PART_DRAW_BACKGROUND_HORZ || nPart == PART_DRAW_BACKGROUND_VERT || nPart == PART_THUMB_HORZ || nPart == PART_THUMB_VERT) )
+    else if ( (nType == ControlType::Toolbar) && (nPart == ControlPart::DrawBackgroundHorz || nPart == ControlPart::DrawBackgroundVert || nPart == ControlPart::ThumbHorz || nPart == ControlPart::ThumbVert) )
     {
         bReturn = pWidgetPainter->drawStyledWidget(
-                pWidgetPainter->toolBar( rControlRegion, nPart == PART_DRAW_BACKGROUND_HORZ || nPart == PART_THUMB_VERT ),
+                pWidgetPainter->toolBar( rControlRegion, nPart == ControlPart::DrawBackgroundHorz || nPart == ControlPart::ThumbVert ),
                 nState, aValue, this, nPart );
     }
-    else if ( (nType == ControlType::Toolbar) && (nPart == PART_BUTTON) )
+    else if ( (nType == ControlType::Toolbar) && (nPart == ControlPart::Button) )
     {
         bReturn = pWidgetPainter->drawStyledWidget(
                 pWidgetPainter->toolButton( rControlRegion ),
                 nState, aValue, this, nPart );
     }
-    else if ( (nType == ControlType::Menubar) && (nPart == PART_ENTIRE_CONTROL || nPart == PART_MENU_ITEM) )
+    else if ( (nType == ControlType::Menubar) && (nPart == ControlPart::Entire || nPart == ControlPart::MenuItem) )
     {
         bReturn = pWidgetPainter->drawStyledWidget(
                 pWidgetPainter->menuBar( rControlRegion ),
                 nState, aValue, this, nPart );
     }
-    else if ( (nType == ControlType::MenuPopup) && (nPart == PART_ENTIRE_CONTROL || nPart == PART_MENU_ITEM) )
+    else if ( (nType == ControlType::MenuPopup) && (nPart == ControlPart::Entire || nPart == ControlPart::MenuItem) )
     {
         bReturn = pWidgetPainter->drawStyledWidget(
                 pWidgetPainter->popupMenu( rControlRegion ),
                 nState, aValue, this );
     }
-    else if ( (nType == ControlType::Progress) && (nPart == PART_ENTIRE_CONTROL) )
+    else if ( (nType == ControlType::Progress) && (nPart == ControlPart::Entire) )
     {
         bReturn = pWidgetPainter->drawStyledWidget(
                 pWidgetPainter->progressBar( rControlRegion ),
@@ -1548,7 +1548,7 @@ bool KDESalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
 
         switch ( nPart )
         {
-        case PART_ENTIRE_CONTROL:
+        case ControlPart::Entire:
             qRect = qBoundingRect;
 
             if ( nState & ControlState::DEFAULT )
@@ -1567,7 +1567,7 @@ bool KDESalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
         case ControlType::Radiobutton:
             pWidget = pWidgetPainter->radioButton( rControlRegion );
 
-            if ( nPart == PART_ENTIRE_CONTROL )
+            if ( nPart == ControlPart::Entire )
             {
                 qRect.setWidth( QApplication::style().pixelMetric( QStyle::PM_ExclusiveIndicatorWidth, pWidget ) );
                 qRect.setHeight( QApplication::style().pixelMetric( QStyle::PM_ExclusiveIndicatorHeight, pWidget ) );
@@ -1580,7 +1580,7 @@ bool KDESalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
         case ControlType::Checkbox:
             pWidget = pWidgetPainter->checkBox( rControlRegion );
 
-            if ( nPart == PART_ENTIRE_CONTROL )
+            if ( nPart == ControlPart::Entire )
             {
                 qRect.setWidth( QApplication::style().pixelMetric( QStyle::PM_IndicatorWidth, pWidget ) );
                 qRect.setHeight( QApplication::style().pixelMetric( QStyle::PM_IndicatorHeight, pWidget ) );
@@ -1595,7 +1595,7 @@ bool KDESalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
         pWidget = pWidgetPainter->comboBox( rControlRegion, ( nType == ControlType::Combobox ) );
         switch ( nPart )
         {
-        case PART_BUTTON_DOWN:
+        case ControlPart::ButtonDown:
             qRect = QApplication::style().querySubControlMetrics(
                 QStyle::CC_ComboBox, pWidget, QStyle::SC_ComboBoxArrow );
             qRect.setLeft( QApplication::style().querySubControlMetrics(
@@ -1605,7 +1605,7 @@ bool KDESalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
             bReturn = true;
             break;
 
-        case PART_SUB_EDIT:
+        case ControlPart::SubEdit:
             qRect = QApplication::style().querySubControlMetrics(
                 QStyle::CC_ComboBox, pWidget, QStyle::SC_ComboBoxEditField );
             qRect.moveBy( qBoundingRect.left(), qBoundingRect.top() );
@@ -1619,21 +1619,21 @@ bool KDESalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
         pWidget = pWidgetPainter->spinWidget( rControlRegion );
         switch ( nPart )
         {
-        case PART_BUTTON_UP:
+        case ControlPart::ButtonUp:
             qRect = QApplication::style().querySubControlMetrics(
                 QStyle::CC_SpinWidget, pWidget, QStyle::SC_SpinWidgetUp );
             bReturn = true;
             qRect.moveBy( qBoundingRect.left(), qBoundingRect.top() );
             break;
 
-        case PART_BUTTON_DOWN:
+        case ControlPart::ButtonDown:
             qRect = QApplication::style().querySubControlMetrics(
                 QStyle::CC_SpinWidget, pWidget, QStyle::SC_SpinWidgetDown );
             bReturn = true;
             qRect.moveBy( qBoundingRect.left(), qBoundingRect.top() );
             break;
 
-        case PART_SUB_EDIT:
+        case ControlPart::SubEdit:
             qRect = QApplication::style().querySubControlMetrics(
                 QStyle::CC_SpinWidget, pWidget, QStyle::SC_SpinWidgetEditField );
             qRect.moveBy( qBoundingRect.left(), qBoundingRect.top() );
@@ -1645,18 +1645,18 @@ bool KDESalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
     // Metrics of the scroll bar
     case ControlType::Scrollbar:
         pWidget = pWidgetPainter->scrollBar( rControlRegion,
-            ( nPart == PART_BUTTON_LEFT || nPart == PART_BUTTON_RIGHT ),
+            ( nPart == ControlPart::ButtonLeft || nPart == ControlPart::ButtonRight ),
             ImplControlValue() );
         switch ( nPart )
         {
-        case PART_BUTTON_LEFT:
-        case PART_BUTTON_UP:
+        case ControlPart::ButtonLeft:
+        case ControlPart::ButtonUp:
             qRect = QApplication::style().querySubControlMetrics(
                 QStyle::CC_ScrollBar, pWidget, QStyle::SC_ScrollBarSubLine );
 
             // Workaround for Platinum style scroll bars. It makes the
             // left/up button invisible.
-            if ( nPart == PART_BUTTON_LEFT )
+            if ( nPart == ControlPart::ButtonLeft )
             {
             if ( qRect.left() > QApplication::style().querySubControlMetrics(
                     QStyle::CC_ScrollBar, pWidget,
@@ -1682,14 +1682,14 @@ bool KDESalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
             bReturn = true;
             break;
 
-        case PART_BUTTON_RIGHT:
-        case PART_BUTTON_DOWN:
+        case ControlPart::ButtonRight:
+        case ControlPart::ButtonDown:
             qRect = QApplication::style().querySubControlMetrics(
                 QStyle::CC_ScrollBar, pWidget, QStyle::SC_ScrollBarAddLine );
 
             // Workaround for Platinum and 3 button style scroll bars.
             // It makes the right/down button bigger.
-            if ( nPart == PART_BUTTON_RIGHT )
+            if ( nPart == ControlPart::ButtonRight )
                 qRect.setLeft( QApplication::style().querySubControlMetrics(
                     QStyle::CC_ScrollBar, pWidget,
                     QStyle::SC_ScrollBarAddPage ).right() + 1 );

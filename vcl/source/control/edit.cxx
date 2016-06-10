@@ -319,14 +319,14 @@ void Edit::ImplInitEditData()
 bool Edit::ImplUseNativeBorder(vcl::RenderContext& rRenderContext, WinBits nStyle)
 {
     bool bRet = rRenderContext.IsNativeControlSupported(ImplGetNativeControlType(),
-                                                        HAS_BACKGROUND_TEXTURE)
+                                                        ControlPart::HasBackgroundTexture)
                                  && ((nStyle & WB_BORDER) && !(nStyle & WB_NOBORDER));
     if (!bRet && mbIsSubEdit)
     {
         vcl::Window* pWindow = GetParent();
         nStyle = pWindow->GetStyle();
         bRet = pWindow->IsNativeControlSupported(ImplGetNativeControlType(),
-                                                 HAS_BACKGROUND_TEXTURE)
+                                                 ControlPart::HasBackgroundTexture)
                && ((nStyle & WB_BORDER) && !(nStyle & WB_NOBORDER));
     }
     return bRet;
@@ -1925,7 +1925,7 @@ void Edit::GetFocus()
         // check for other platforms that need similar handling
         if( ImplGetSVData()->maNWFData.mbNoFocusRects &&
             IsNativeWidgetEnabled() &&
-            IsNativeControlSupported( ControlType::Editbox, PART_ENTIRE_CONTROL ) )
+            IsNativeControlSupported( ControlType::Editbox, ControlPart::Entire ) )
         {
             ImplInvalidateOutermostBorder( mbIsSubEdit ? GetParent() : this );
         }
@@ -1959,7 +1959,7 @@ void Edit::LoseFocus()
         // check for other platforms that need similar handling
         if( ImplGetSVData()->maNWFData.mbNoFocusRects &&
             IsNativeWidgetEnabled() &&
-            IsNativeControlSupported( ControlType::Editbox, PART_ENTIRE_CONTROL ) )
+            IsNativeControlSupported( ControlType::Editbox, ControlPart::Entire ) )
         {
             ImplInvalidateOutermostBorder( mbIsSubEdit ? GetParent() : this );
         }
@@ -2400,7 +2400,7 @@ void Edit::Modify()
         // check for other platforms that need similar handling
         if( ImplGetSVData()->maNWFData.mbNoFocusRects &&
             IsNativeWidgetEnabled() &&
-            IsNativeControlSupported( ControlType::Editbox, PART_ENTIRE_CONTROL ) )
+            IsNativeControlSupported( ControlType::Editbox, ControlPart::Entire ) )
         {
             ImplInvalidateOutermostBorder( this );
         }
@@ -2765,7 +2765,7 @@ Size Edit::CalcMinimumSizeForText(const OUString &rString) const
     ImplControlValue aControlValue;
     Rectangle aRect( Point( 0, 0 ), aSize );
     Rectangle aContent, aBound;
-    if (GetNativeControlRegion(eCtrlType, PART_ENTIRE_CONTROL, aRect, ControlState::NONE,
+    if (GetNativeControlRegion(eCtrlType, ControlPart::Entire, aRect, ControlState::NONE,
                                aControlValue, OUString(), aBound, aContent))
     {
         if (aBound.GetHeight() > aSize.Height())

@@ -102,7 +102,7 @@ enum ScNameInputType
 ScTextWndBase::ScTextWndBase( vcl::Window* pParent,  WinBits nStyle )
     : Window ( pParent, nStyle )
 {
-    if ( IsNativeControlSupported( ControlType::Editbox, PART_ENTIRE_CONTROL ) )
+    if ( IsNativeControlSupported( ControlType::Editbox, ControlPart::Entire ) )
     {
         SetType( WINDOW_CALCINPUTLINE );
         SetBorderStyle( WindowBorderStyle::NWF );

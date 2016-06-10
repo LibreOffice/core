@@ -141,7 +141,7 @@ void Slider::ImplUpdateRects( bool bUpdate )
 
             const Rectangle aControlRegion( Rectangle( Point(0,0), Size( SLIDER_THUMB_SIZE, 10 ) ) );
             Rectangle aThumbBounds, aThumbContent;
-            if ( GetNativeControlRegion( ControlType::Slider, PART_THUMB_HORZ,
+            if ( GetNativeControlRegion( ControlType::Slider, ControlPart::ThumbHorz,
                                          aControlRegion, ControlState::NONE, ImplControlValue(), OUString(),
                                          aThumbBounds, aThumbContent ) )
             {
@@ -175,7 +175,7 @@ void Slider::ImplUpdateRects( bool bUpdate )
 
             const Rectangle aControlRegion( Rectangle( Point(0,0), Size( 10, SLIDER_THUMB_SIZE ) ) );
             Rectangle aThumbBounds, aThumbContent;
-            if ( GetNativeControlRegion( ControlType::Slider, PART_THUMB_VERT,
+            if ( GetNativeControlRegion( ControlType::Slider, ControlPart::ThumbVert,
                                          aControlRegion, ControlState::NONE, ImplControlValue(), OUString(),
                                          aThumbBounds, aThumbContent ) )
             {
@@ -326,7 +326,7 @@ void Slider::ImplDraw(vcl::RenderContext& rRenderContext)
     if (mbCalcSize)
         ImplCalc(false);
 
-    ControlPart nPart = (GetStyle() & WB_HORZ) ? PART_TRACK_HORZ_AREA : PART_TRACK_VERT_AREA;
+    ControlPart nPart = (GetStyle() & WB_HORZ) ? ControlPart::TrackHorzArea : ControlPart::TrackVertArea;
     ControlState nState = (IsEnabled() ? ControlState::ENABLED : ControlState::NONE);
     nState |= (HasFocus() ? ControlState::FOCUSED : ControlState::NONE);
     SliderValue sldValue;

@@ -651,7 +651,7 @@ void ImplDrawFrame( OutputDevice *const pDev, Rectangle& rRect,
         nFlags |= DrawFrameFlags::Mono;
 
     if( nStyle != DrawFrameStyle::NWF &&
-        pWin && pWin->IsNativeControlSupported(ControlType::Frame, PART_BORDER) )
+        pWin && pWin->IsNativeControlSupported(ControlType::Frame, ControlPart::Border) )
     {
         long nControlFlags = static_cast<long>(nStyle);
         nControlFlags |= static_cast<long>(nFlags);
@@ -661,13 +661,13 @@ void ImplDrawFrame( OutputDevice *const pDev, Rectangle& rRect,
 
         Rectangle aBound, aContent;
         Rectangle aNatRgn( rRect );
-        if( pWin->GetNativeControlRegion(ControlType::Frame, PART_BORDER,
+        if( pWin->GetNativeControlRegion(ControlType::Frame, ControlPart::Border,
             aNatRgn, ControlState::NONE, aControlValue, OUString(), aBound, aContent) )
         {
             // if bNoDraw is true then don't call the drawing routine
             // but just update the target rectangle
             if( bNoDraw ||
-                pWin->DrawNativeControl( ControlType::Frame, PART_BORDER, aContent, ControlState::ENABLED,
+                pWin->DrawNativeControl( ControlType::Frame, ControlPart::Border, aContent, ControlState::ENABLED,
                                          aControlValue, OUString()) )
             {
                 rRect = aContent;
@@ -1058,7 +1058,7 @@ void DecorationView::DrawSeparator( const Point& rStart, const Point& rStop, boo
     vcl::Window *const pWin = (mpOutDev->GetOutDevType()==OUTDEV_WINDOW) ? static_cast<vcl::Window*>(mpOutDev.get()) : nullptr;
     if(pWin)
     {
-        ControlPart nPart = ( bVertical ? PART_SEPARATOR_VERT : PART_SEPARATOR_HORZ );
+        ControlPart nPart = ( bVertical ? ControlPart::SeparatorVert : ControlPart::SeparatorHorz );
         bool nativeSupported = pWin->IsNativeControlSupported( ControlType::Fixedline, nPart );
         ImplControlValue    aValue;
         ControlState        nState = ControlState::NONE;
