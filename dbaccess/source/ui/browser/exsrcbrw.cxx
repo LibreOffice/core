@@ -28,6 +28,7 @@
 #include <comphelper/processfactory.hxx>
 #include "dbustrings.hrc"
 #include "dbu_reghelper.hxx"
+#include <o3tl/any.hxx>
 #include <tools/diagnose_ex.h>
 #include <rtl/strbuf.hxx>
 
@@ -142,24 +143,25 @@ void SAL_CALL SbaExternalSourceBrowser::dispatch(const css::util::URL& aURL, con
         {
             if ( pArguments->Name == "ColumnType" )
             {
-                bool bCorrectType = pArguments->Value.getValueType().equals(::cppu::UnoType<OUString>::get());
-                OSL_ENSURE(bCorrectType, "invalid type for argument \"ColumnType\" !");
-                if (bCorrectType)
-                    sControlType = ::comphelper::getString(pArguments->Value);
+                auto s = o3tl::tryAccess<OUString>(pArguments->Value);
+                OSL_ENSURE(s, "invalid type for argument \"ColumnType\" !");
+                if (s)
+                    sControlType = *s;
             }
             else if ( pArguments->Name == "ColumnPosition" )
             {
-                bool bCorrectType = pArguments->Value.getValueType().equals(::cppu::UnoType<sal_Int16>::get());
-                OSL_ENSURE(bCorrectType, "invalid type for argument \"ColumnPosition\" !");
-                if (bCorrectType)
-                    nControlPos = ::comphelper::getINT16(pArguments->Value);
+                auto n = o3tl::tryAccess<sal_Int16>(pArguments->Value);
+                OSL_ENSURE(n, "invalid type for argument \"ColumnPosition\" !");
+                if (n)
+                    nControlPos = *n;
             }
             else if ( pArguments->Name == "ColumnProperties" )
             {
-                bool bCorrectType = pArguments->Value.getValueType().equals(cppu::UnoType<Sequence< css::beans::PropertyValue>>::get());
-                OSL_ENSURE(bCorrectType, "invalid type for argument \"ColumnProperties\" !");
-                if (bCorrectType)
-                    aControlProps = *static_cast<Sequence< css::beans::PropertyValue> const *>(pArguments->Value.getValue());
+                auto s = o3tl::tryAccess<Sequence<css::beans::PropertyValue>>(
+                    pArguments->Value);
+                OSL_ENSURE(s, "invalid type for argument \"ColumnProperties\" !");
+                if (s)
+                    aControlProps = *s;
             }
             else
                 SAL_WARN("dbaccess.ui", "SbaExternalSourceBrowser::dispatch(AddGridColumn) : unknown argument (" << pArguments->Name << ") !");
@@ -221,7 +223,7 @@ void SAL_CALL SbaExternalSourceBrowser::dispatch(const css::util::URL& aURL, con
         {
             if ( (pArguments->Name == "MasterForm") && (pArguments->Value.getValueTypeClass() == TypeClass_INTERFACE) )
             {
-                xMasterForm.set(*static_cast<Reference< XInterface > const *>(pArguments->Value.getValue()), UNO_QUERY);
+                xMasterForm.set(pArguments->Value, UNO_QUERY);
                 break;
             }
         }
