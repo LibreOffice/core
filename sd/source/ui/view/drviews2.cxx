@@ -219,6 +219,15 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
                 mpDrawView->AddUndo(GetDoc()->GetSdrUndoFactory().CreateUndoAttrObject(*pObj));
 
+                if (!bSet)
+                {
+                    //If we are turning on AutoFit we have to turn these off if already on
+                    if (static_cast<const SdrOnOffItem*>(pObj->GetMergedItemSet().GetItem(SDRATTR_TEXT_AUTOGROWHEIGHT))->GetValue())
+                        pObj->SetMergedItem(makeSdrTextAutoGrowHeightItem(false));
+                    if (static_cast<const SdrOnOffItem*>(pObj->GetMergedItemSet().GetItem(SDRATTR_TEXT_AUTOGROWWIDTH))->GetValue())
+                        pObj->SetMergedItem(makeSdrTextAutoGrowWidthItem(false));
+                }
+
                 pObj->SetMergedItem(SdrTextFitToSizeTypeItem(bSet ? SDRTEXTFIT_NONE : SDRTEXTFIT_AUTOFIT));
 
                 mpDrawView->EndUndo();
