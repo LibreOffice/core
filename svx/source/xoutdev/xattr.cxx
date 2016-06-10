@@ -28,6 +28,7 @@
 #include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <o3tl/any.hxx>
 #include <svl/itempool.hxx>
 #include <editeng/memberids.hrc>
 #include <tools/stream.hxx>
@@ -1321,12 +1322,13 @@ bool XLineStartItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
     {
         maPolyPolygon.clear();
 
-        if( rVal.hasValue() && rVal.getValue() )
+        if( rVal.hasValue() )
         {
-            if( rVal.getValueType() != cppu::UnoType<css::drawing::PolyPolygonBezierCoords>::get())
+            auto pCoords = o3tl::tryAccess<css::drawing::PolyPolygonBezierCoords>(
+                rVal);
+            if( !pCoords )
                 return false;
 
-            css::drawing::PolyPolygonBezierCoords const * pCoords = static_cast<css::drawing::PolyPolygonBezierCoords const *>(rVal.getValue());
             if( pCoords->Coordinates.getLength() > 0 )
             {
                 maPolyPolygon = basegfx::unotools::polyPolygonBezierToB2DPolyPolygon( *pCoords );
@@ -1883,12 +1885,13 @@ bool XLineEndItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
     {
         maPolyPolygon.clear();
 
-        if( rVal.hasValue() && rVal.getValue() )
+        if( rVal.hasValue() )
         {
-            if( rVal.getValueType() != cppu::UnoType<css::drawing::PolyPolygonBezierCoords>::get())
+            auto pCoords = o3tl::tryAccess<css::drawing::PolyPolygonBezierCoords>(
+                rVal);
+            if( !pCoords )
                 return false;
 
-            css::drawing::PolyPolygonBezierCoords const * pCoords = static_cast<css::drawing::PolyPolygonBezierCoords const *>(rVal.getValue());
             if( pCoords->Coordinates.getLength() > 0 )
             {
                 maPolyPolygon = basegfx::unotools::polyPolygonBezierToB2DPolyPolygon( *pCoords );
@@ -2045,10 +2048,11 @@ bool XLineStartCenterItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMemberI
 
 bool XLineStartCenterItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMemberId*/)
 {
-    if( !rVal.hasValue() || rVal.getValueType() != cppu::UnoType<bool>::get() )
+    auto b = o3tl::tryAccess<bool>(rVal);
+    if( !b )
         return false;
 
-    SetValue( *static_cast<sal_Bool const *>(rVal.getValue()) );
+    SetValue( *b );
     return true;
 }
 
@@ -2096,10 +2100,11 @@ bool XLineEndCenterItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMemberId*
 
 bool XLineEndCenterItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMemberId*/)
 {
-    if( !rVal.hasValue() || rVal.getValueType() != cppu::UnoType<bool>::get() )
+    auto b = o3tl::tryAccess<bool>(rVal);
+    if( !b )
         return false;
 
-    SetValue( *static_cast<sal_Bool const *>(rVal.getValue()) );
+    SetValue( *b );
     return true;
 }
 

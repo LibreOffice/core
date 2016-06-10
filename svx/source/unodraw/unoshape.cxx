@@ -26,6 +26,7 @@
 #include <vcl/svapp.hxx>
 #include <svl/itemprop.hxx>
 #include <vcl/fltcall.hxx>
+#include <o3tl/any.hxx>
 #include <osl/mutex.hxx>
 #include <editeng/unotext.hxx>
 #include <svx/svdobj.hxx>
@@ -2247,17 +2248,17 @@ bool SvxShape::setPropertyValueImpl( const OUString&, const SfxItemPropertySimpl
                     basegfx::B2DPolyPolygon aNewPolyPolygon;
 
                     // #123616# be a little bit more flexible regarding the data type used
-                    if( rValue.getValueType() == cppu::UnoType<drawing::PointSequenceSequence>::get())
+                    if( auto s = o3tl::tryAccess<drawing::PointSequenceSequence>(rValue) )
                     {
                         // get polygpon data from PointSequenceSequence
                         aNewPolyPolygon = basegfx::tools::UnoPointSequenceSequenceToB2DPolyPolygon(
-                            *static_cast<const drawing::PointSequenceSequence*>(rValue.getValue()));
+                            *s);
                     }
-                    else if( rValue.getValueType() == cppu::UnoType<drawing::PolyPolygonBezierCoords>::get())
+                    else if( auto cs = o3tl::tryAccess<drawing::PolyPolygonBezierCoords>(rValue) )
                     {
                         // get polygpon data from PolyPolygonBezierCoords
                         aNewPolyPolygon = basegfx::tools::UnoPolyPolygonBezierCoordsToB2DPolyPolygon(
-                            *static_cast<const drawing::PolyPolygonBezierCoords*>(rValue.getValue()));
+                            *cs);
                     }
 
                     if(aNewPolyPolygon.count())

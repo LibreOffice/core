@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <o3tl/any.hxx>
 #include <svx/rubydialog.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
@@ -485,7 +488,7 @@ void SvxRubyDialog::Update()
             }
             if (nPosition > -2 && pProps[nProp].Name == cRubyIsAbove)
             {
-                bool bTmp = *static_cast<sal_Bool const *>(pProps[nProp].Value.getValue());
+                bool bTmp = *o3tl::doAccess<bool>(pProps[nProp].Value);
                 if (!nRuby)
                     nPosition = bTmp ? 0 : 1;
                 else if ((!nPosition && !bTmp) || (nPosition == 1 && bTmp))

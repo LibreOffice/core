@@ -27,6 +27,7 @@
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
 #include <com/sun/star/drawing/PointSequence.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
+#include <o3tl/any.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/file.hxx>
@@ -1057,9 +1058,9 @@ bool SvxShapePolyPolygon::setPropertyValueImpl( const OUString& rName, const Sfx
     {
     case OWN_ATTR_VALUE_POLYPOLYGON:
     {
-        if( rValue.getValue() && (rValue.getValueType() == cppu::UnoType<drawing::PointSequenceSequence>::get() ) )
+        if( auto s = o3tl::tryAccess<drawing::PointSequenceSequence>(rValue) )
         {
-            basegfx::B2DPolyPolygon aNewPolyPolygon(ImplSvxPointSequenceSequenceToB2DPolyPolygon( static_cast<drawing::PointSequenceSequence const *>(rValue.getValue())));
+            basegfx::B2DPolyPolygon aNewPolyPolygon(ImplSvxPointSequenceSequenceToB2DPolyPolygon(s));
             SetPolygon(aNewPolyPolygon);
             return true;
         }
@@ -1067,7 +1068,7 @@ bool SvxShapePolyPolygon::setPropertyValueImpl( const OUString& rName, const Sfx
     }
     case OWN_ATTR_BASE_GEOMETRY:
     {
-        if( rValue.getValue() && (rValue.getValueType() == cppu::UnoType<drawing::PointSequenceSequence>::get()))
+        if( auto s = o3tl::tryAccess<drawing::PointSequenceSequence>(rValue) )
         {
             if( mpObj.is() )
             {
@@ -1075,7 +1076,7 @@ bool SvxShapePolyPolygon::setPropertyValueImpl( const OUString& rName, const Sfx
                 basegfx::B2DHomMatrix aNewHomogenMatrix;
 
                 mpObj->TRGetBaseGeometry(aNewHomogenMatrix, aNewPolyPolygon);
-                aNewPolyPolygon = ImplSvxPointSequenceSequenceToB2DPolyPolygon(static_cast<drawing::PointSequenceSequence const *>(rValue.getValue()));
+                aNewPolyPolygon = ImplSvxPointSequenceSequenceToB2DPolyPolygon(s);
                 mpObj->TRSetBaseGeometry(aNewHomogenMatrix, aNewPolyPolygon);
             }
             return true;
@@ -1084,10 +1085,8 @@ bool SvxShapePolyPolygon::setPropertyValueImpl( const OUString& rName, const Sfx
     }
     case OWN_ATTR_VALUE_POLYGON:
     {
-        if( rValue.getValue() && (rValue.getValueType() == cppu::UnoType<drawing::PointSequence>::get() ))
+        if( auto pSequence = o3tl::tryAccess<drawing::PointSequence>(rValue) )
         {
-            drawing::PointSequence const * pSequence = static_cast<drawing::PointSequence const *>(rValue.getValue());
-
             // prepare new polygon
             basegfx::B2DPolygon aNewPolygon;
 
@@ -1284,11 +1283,10 @@ bool SvxShapePolyPolygonBezier::setPropertyValueImpl( const OUString& rName, con
     {
     case OWN_ATTR_VALUE_POLYPOLYGONBEZIER:
     {
-        if( rValue.getValue() && (rValue.getValueType() == cppu::UnoType<drawing::PolyPolygonBezierCoords>::get()) )
+        if( auto s = o3tl::tryAccess<drawing::PolyPolygonBezierCoords>(rValue) )
         {
             basegfx::B2DPolyPolygon aNewPolyPolygon(
-                basegfx::unotools::polyPolygonBezierToB2DPolyPolygon(
-                    *static_cast<drawing::PolyPolygonBezierCoords const *>(rValue.getValue())));
+                basegfx::unotools::polyPolygonBezierToB2DPolyPolygon(*s));
             SetPolygon(aNewPolyPolygon);
             return true;
         }
@@ -1296,7 +1294,7 @@ bool SvxShapePolyPolygonBezier::setPropertyValueImpl( const OUString& rName, con
     }
     case OWN_ATTR_BASE_GEOMETRY:
     {
-        if( rValue.getValue() && (rValue.getValueType() == cppu::UnoType<drawing::PolyPolygonBezierCoords>::get()) )
+        if( auto s = o3tl::tryAccess<drawing::PolyPolygonBezierCoords>(rValue) )
         {
             if( mpObj.is() )
             {
@@ -1305,7 +1303,7 @@ bool SvxShapePolyPolygonBezier::setPropertyValueImpl( const OUString& rName, con
 
                 mpObj->TRGetBaseGeometry(aNewHomogenMatrix, aNewPolyPolygon);
                 aNewPolyPolygon = basegfx::unotools::polyPolygonBezierToB2DPolyPolygon(
-                    *static_cast<drawing::PolyPolygonBezierCoords const *>(rValue.getValue()));
+                    *s);
                 mpObj->TRSetBaseGeometry(aNewHomogenMatrix, aNewPolyPolygon);
             }
             return true;
@@ -1414,9 +1412,8 @@ bool SvxGraphicObject::setPropertyValueImpl( const OUString& rName, const SfxIte
     {
     case OWN_ATTR_VALUE_FILLBITMAP:
     {
-        if( rValue.getValueType() == cppu::UnoType<uno::Sequence< sal_Int8 >>::get() )
+        if( auto pSeq = o3tl::tryAccess<uno::Sequence<sal_Int8>>(rValue) )
         {
-            uno::Sequence<sal_Int8> const * pSeq( static_cast<uno::Sequence<sal_Int8> const *>(rValue.getValue()) );
             SvMemoryStream  aMemStm;
             Graphic         aGraphic;
 

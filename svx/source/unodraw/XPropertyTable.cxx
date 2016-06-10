@@ -25,6 +25,7 @@
 #include <com/sun/star/drawing/Hatch.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
+#include <o3tl/any.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
@@ -334,11 +335,11 @@ uno::Any SvxUnoXLineEndTable::getAny( const XPropertyEntry* pEntry ) const throw
 
 XPropertyEntry* SvxUnoXLineEndTable::getEntry( const OUString& rName, const uno::Any& rAny ) const throw(lang::IllegalArgumentException)
 {
-    if( !rAny.getValue() || rAny.getValueType() != cppu::UnoType<drawing::PolyPolygonBezierCoords>::get())
+    auto pCoords = o3tl::tryAccess<drawing::PolyPolygonBezierCoords>(rAny);
+    if( !pCoords )
         return nullptr;
 
     basegfx::B2DPolyPolygon aPolyPolygon;
-    drawing::PolyPolygonBezierCoords const * pCoords = static_cast<drawing::PolyPolygonBezierCoords const *>(rAny.getValue());
     if( pCoords->Coordinates.getLength() > 0 )
         aPolyPolygon = basegfx::unotools::polyPolygonBezierToB2DPolyPolygon( *pCoords );
 

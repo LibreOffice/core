@@ -28,6 +28,7 @@
 
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
+#include <o3tl/any.hxx>
 #include <svl/style.hxx>
 #include <svl/itemset.hxx>
 
@@ -1011,11 +1012,8 @@ void SAL_CALL Cell::setPropertyValue( const OUString& rPropertyName, const Any& 
         }
         case OWN_ATTR_TABLEBORDER:
         {
-            if(rValue.getValueType() != cppu::UnoType<TableBorder>::get())
-                break;
-
-            const TableBorder* pBorder = static_cast<const TableBorder*>(rValue.getValue());
-            if( pBorder == nullptr )
+            auto pBorder = o3tl::tryAccess<TableBorder>(rValue);
+            if(!pBorder)
                 break;
 
             SvxBoxItem aBox( SDRATTR_TABLE_BORDER );
