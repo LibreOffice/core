@@ -786,7 +786,13 @@ void SdrMarkView::SetMarkHandles()
                 sSelection = aSelection.toString();
 
                 // hide the text selection too
-                GetModel()->libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION, "");
+                if (comphelper::LibreOfficeKit::isViewCallback())
+                {
+                    if(SfxViewShell* pViewShell = SfxViewShell::Current())
+                        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, "");
+                }
+                else
+                    GetModel()->libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION, "");
             }
             if (comphelper::LibreOfficeKit::isViewCallback())
             {
