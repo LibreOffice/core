@@ -27,7 +27,7 @@
 # in non-product builds, ensure that tools-based assertions do not pop up as message box, but are routed to the shell
 DBGSV_ERROR_OUT := shell
 export DBGSV_ERROR_OUT
-DISABLE_SAL_DBGBOX=1
+DISABLE_SAL_DBGBOX := 1
 export DISABLE_SAL_DBGBOX
 
 # defined by platform
