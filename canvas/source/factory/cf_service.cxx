@@ -58,17 +58,15 @@ class CanvasFactory
 {
     typedef std::pair< OUString, Sequence< OUString > > AvailPair;
     typedef std::pair< OUString, OUString >             CachePair;
-    typedef std::vector< AvailPair >                    AvailVector;
-    typedef std::vector< CachePair >                    CacheVector;
 
 
     mutable ::osl::Mutex              m_mutex;
     Reference<XComponentContext>      m_xContext;
     Reference<container::XNameAccess> m_xCanvasConfigNameAccess;
-    AvailVector                       m_aAvailableImplementations;
-    AvailVector                       m_aAcceleratedImplementations;
-    AvailVector                       m_aAAImplementations;
-    mutable CacheVector               m_aCachedImplementations;
+    std::vector< AvailPair >          m_aAvailableImplementations;
+    std::vector< AvailPair >          m_aAcceleratedImplementations;
+    std::vector< AvailPair >          m_aAAImplementations;
+    mutable std::vector< CachePair >  m_aCachedImplementations;
     mutable bool                      m_bCacheHasForcedLastImpl;
     mutable bool                      m_bCacheHasUseAcceleratedEntry;
     mutable bool                      m_bCacheHasUseAAEntry;
@@ -330,8 +328,8 @@ Reference<XInterface> CanvasFactory::lookupAndUse(
                      "UseAcceleratedCanvas" );
 
     // try to reuse last working implementation for given service name
-    const CacheVector::iterator aEnd(m_aCachedImplementations.end());
-    CacheVector::iterator aMatch;
+    const std::vector< CachePair >::iterator aEnd(m_aCachedImplementations.end());
+    std::vector< CachePair >::iterator aMatch;
     if( (aMatch=std::find_if(
                     m_aCachedImplementations.begin(),
                     aEnd,
@@ -344,8 +342,8 @@ Reference<XInterface> CanvasFactory::lookupAndUse(
     }
 
     // lookup in available service list
-    const AvailVector::const_iterator aAvailEnd(m_aAvailableImplementations.end());
-    AvailVector::const_iterator aAvailImplsMatch;
+    const std::vector< AvailPair >::const_iterator aAvailEnd(m_aAvailableImplementations.end());
+    std::vector< AvailPair >::const_iterator aAvailImplsMatch;
     if( (aAvailImplsMatch=std::find_if(
                     m_aAvailableImplementations.begin(),
                     aAvailEnd,
@@ -355,8 +353,8 @@ Reference<XInterface> CanvasFactory::lookupAndUse(
         return Reference<XInterface>();
     }
 
-    const AvailVector::const_iterator aAAEnd(m_aAAImplementations.end());
-    AvailVector::const_iterator aAAImplsMatch;
+    const std::vector< AvailPair >::const_iterator aAAEnd(m_aAAImplementations.end());
+    std::vector< AvailPair >::const_iterator aAAImplsMatch;
     if( (aAAImplsMatch=std::find_if(
                     m_aAAImplementations.begin(),
                     aAAEnd,
@@ -366,8 +364,8 @@ Reference<XInterface> CanvasFactory::lookupAndUse(
         return Reference<XInterface>();
     }
 
-    const AvailVector::const_iterator aAccelEnd(m_aAcceleratedImplementations.end());
-    AvailVector::const_iterator aAccelImplsMatch;
+    const std::vector< AvailPair >::const_iterator aAccelEnd(m_aAcceleratedImplementations.end());
+    std::vector< AvailPair >::const_iterator aAccelImplsMatch;
     if( (aAccelImplsMatch=std::find_if(
                     m_aAcceleratedImplementations.begin(),
                     aAccelEnd,

@@ -43,10 +43,10 @@ namespace canvas
 
         const std::shared_ptr<canvas::IRenderModule>& getRenderModule() const { return mpRenderModule; }
 
-        FragmentSharedPtr allocateSpace( const ::basegfx::B2ISize& rSize );
-        void              free( const FragmentSharedPtr& pFragment );
+        std::shared_ptr< PageFragment > allocateSpace( const ::basegfx::B2ISize& rSize );
+        void              free( const std::shared_ptr< PageFragment >& pFragment );
 
-        void              nakedFragment( const FragmentSharedPtr& pFragment );
+        void              nakedFragment( const std::shared_ptr< PageFragment >& pFragment );
 
         void              validatePages();
 
@@ -57,22 +57,19 @@ namespace canvas
 
         // here we collect all fragments that will be created
         // since we need them for relocation purposes.
-        typedef std::list<FragmentSharedPtr> FragmentContainer_t;
-        FragmentContainer_t maFragments;
+        std::list<std::shared_ptr< PageFragment >> maFragments;
 
         // this is the container holding all created pages,
         // behind the scenes these are real hardware surfaces.
-        typedef std::list<PageSharedPtr> PageContainer_t;
-        PageContainer_t maPages;
+        std::list<std::shared_ptr< Page >> maPages;
 
-        bool relocate( const FragmentSharedPtr& pFragment );
+        bool relocate( const std::shared_ptr< PageFragment >& pFragment );
     };
 
 
-    // PageManagerSharedPtr
+    // std::shared_ptr< PageManager >
 
 
-    typedef std::shared_ptr< PageManager > PageManagerSharedPtr;
 }
 
 #endif

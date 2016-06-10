@@ -56,7 +56,7 @@ namespace dxcanvas
         CanvasHelper::disposing();
     }
 
-    void BitmapCanvasHelper::setTarget( const IBitmapSharedPtr& rTarget )
+    void BitmapCanvasHelper::setTarget( const std::shared_ptr<IBitmap>& rTarget )
     {
         ENSURE_OR_THROW( rTarget,
                           "BitmapCanvasHelper::setTarget(): Invalid target" );
@@ -67,7 +67,7 @@ namespace dxcanvas
         CanvasHelper::setTarget(rTarget);
     }
 
-    void BitmapCanvasHelper::setTarget( const IBitmapSharedPtr&   rTarget,
+    void BitmapCanvasHelper::setTarget( const std::shared_ptr<IBitmap>& rTarget,
                                         const ::basegfx::B2ISize& rOutputOffset )
     {
         ENSURE_OR_THROW( rTarget,
@@ -83,7 +83,7 @@ namespace dxcanvas
     {
         if( needOutput() )
         {
-            GraphicsSharedPtr pGraphics( mpTarget->getGraphics() );
+            std::shared_ptr< Gdiplus::Graphics > pGraphics( mpTarget->getGraphics() );
 
             Gdiplus::Color aClearColor = hasAlpha() ?
                 Gdiplus::Color( 0,255,255,255 ) : Gdiplus::Color((Gdiplus::ARGB)Gdiplus::Color::White);

@@ -41,7 +41,7 @@ namespace vclcanvas
         mpOutDev()
     {}
 
-    void DeviceHelper::init( const OutDevProviderSharedPtr& rOutDev )
+    void DeviceHelper::init( const std::shared_ptr< OutDevProvider >& rOutDev )
     {
         mpOutDev = rOutDev;
     }

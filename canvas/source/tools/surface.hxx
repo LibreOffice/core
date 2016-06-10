@@ -45,7 +45,7 @@ namespace canvas
     {
     public:
 
-        Surface( const PageManagerSharedPtr&  rPageManager,
+        Surface( const std::shared_ptr< PageManager >&  rPageManager,
                  const std::shared_ptr<IColorBuffer>& rColorBuffer,
                  const ::basegfx::B2IPoint&   rPos,
                  const ::basegfx::B2ISize&    rSize );
@@ -115,9 +115,9 @@ namespace canvas
 
         // invoking any of the above defined 'draw' methods
         // will forward primitive commands to the rendermodule.
-        PageManagerSharedPtr  mpPageManager;
+        std::shared_ptr< PageManager >  mpPageManager;
 
-        FragmentSharedPtr     mpFragment;
+        std::shared_ptr< PageFragment >     mpFragment;
 
         // the offset of this surface with regard to the source
         // image. if the source image had to be tiled into multiple
@@ -142,7 +142,6 @@ namespace canvas
                                            const ::basegfx::B2ISize&  rSize ) const;
     };
 
-    typedef std::shared_ptr< Surface > SurfaceSharedPtr;
 }
 
 #endif

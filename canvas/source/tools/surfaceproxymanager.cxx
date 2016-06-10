@@ -57,7 +57,7 @@ namespace canvas
         }
 
     private:
-        PageManagerSharedPtr mpPageManager;
+        std::shared_ptr< PageManager > mpPageManager;
     };
 
     std::shared_ptr<ISurfaceProxyManager> createSurfaceProxyManager( const std::shared_ptr<IRenderModule>& rRenderModule )

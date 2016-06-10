@@ -30,7 +30,6 @@ namespace oglcanvas
         virtual GLuint getTextureId() = 0;
     };
 
-    typedef std::shared_ptr<IBufferContext> IBufferContextSharedPtr;
 }
 
 #endif

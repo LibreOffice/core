@@ -84,7 +84,7 @@ namespace cairocanvas
                    css::rendering::XGraphicDevice* pDevice );
 
         void setSize( const ::basegfx::B2ISize& rSize );
-        void setSurface( const ::cairo::SurfaceSharedPtr& pSurface, bool bHasAlpha );
+        void setSurface( const std::shared_ptr< cairo::Surface >& pSurface, bool bHasAlpha );
 
         // CanvasHelper functionality
         // ==========================
@@ -225,15 +225,15 @@ namespace cairocanvas
                                 cairo_t* pCairo=nullptr ) const;
 
         css::uno::Reference< css::rendering::XCachedPrimitive > implDrawBitmapSurface(
-                   const css::rendering::XCanvas*      pCanvas,
-                   const ::cairo::SurfaceSharedPtr&                 pSurface,
-                   const css::rendering::ViewState&    viewState,
-                   const css::rendering::RenderState&  renderState,
-                   const css::geometry::IntegerSize2D& rSize,
+                   const css::rendering::XCanvas*           pCanvas,
+                   const std::shared_ptr< cairo::Surface >& pSurface,
+                   const css::rendering::ViewState&         viewState,
+                   const css::rendering::RenderState&       renderState,
+                   const css::geometry::IntegerSize2D&      rSize,
                    bool bModulateColors,
                    bool bHasAlpha );
 
-        bool repaint( const ::cairo::SurfaceSharedPtr& pSurface,
+        bool repaint( const std::shared_ptr< cairo::Surface >& pSurface,
               const css::rendering::ViewState& viewState,
               const css::rendering::RenderState& renderState );
 
@@ -266,9 +266,9 @@ namespace cairocanvas
         /// When true, content is able to represent alpha
         bool mbHaveAlpha;
 
-        ::cairo::CairoSharedPtr     mpCairo;
-        ::cairo::SurfaceSharedPtr   mpSurface;
-        ::basegfx::B2ISize maSize;
+        ::cairo::CairoSharedPtr             mpCairo;
+        std::shared_ptr< cairo::Surface >   mpSurface;
+        ::basegfx::B2ISize                  maSize;
 
         void clip_cairo_from_dev(::OutputDevice& rOutDev);
 

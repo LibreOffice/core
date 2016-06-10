@@ -216,8 +216,7 @@ namespace dxcanvas
             ::std::shared_ptr<canvas::ISurface>                 mpTexture;
             VclPtr<SystemChildWindow>                   mpWindow;
             ::basegfx::B2IVector                        maSize;
-            typedef std::vector<canvas::Vertex>         vertexCache_t;
-            vertexCache_t                               maVertexCache;
+            std::vector<canvas::Vertex>                               maVertexCache;
             std::size_t                                 mnCount;
             int                                         mnBeginSceneCount;
             bool                                        mbCanUseDynamicTextures;
@@ -1198,7 +1197,7 @@ namespace dxcanvas
             const ::basegfx::B2IVector aPageSize(getPageSize());
             const float nHalfPixelSizeX(0.5f/aPageSize.getX());
             const float nHalfPixelSizeY(0.5f/aPageSize.getY());
-            vertexCache_t::const_iterator it(maVertexCache.begin());
+            std::vector<canvas::Vertex>::const_iterator it(maVertexCache.begin());
 
             while( nSize )
             {
@@ -1256,9 +1255,9 @@ namespace dxcanvas
     // createRenderModule
 
 
-    IDXRenderModuleSharedPtr createRenderModule( const vcl::Window& rParent )
+    std::shared_ptr< IDXRenderModule > createRenderModule( const vcl::Window& rParent )
     {
-        return IDXRenderModuleSharedPtr( new DXRenderModule(rParent) );
+        return std::shared_ptr< IDXRenderModule >( new DXRenderModule(rParent) );
     }
 }
 

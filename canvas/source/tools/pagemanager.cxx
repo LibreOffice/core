@@ -23,14 +23,14 @@
 
 namespace canvas
 {
-    FragmentSharedPtr PageManager::allocateSpace( const ::basegfx::B2ISize& rSize )
+    std::shared_ptr< PageFragment > PageManager::allocateSpace( const ::basegfx::B2ISize& rSize )
     {
         // we are asked to find a location for the requested size.
         // first we try to satisfy the request from the
         // remaining space in the existing pages.
         for( const auto& pPage : maPages )
         {
-            FragmentSharedPtr pFragment( pPage->allocateSpace(rSize) );
+            std::shared_ptr< PageFragment > pFragment( pPage->allocateSpace(rSize) );
             if(pFragment)
             {
                 // the page created a new fragment, since we maybe want
@@ -42,11 +42,11 @@ namespace canvas
         }
 
         // otherwise try to create a new page and allocate space there...
-        PageSharedPtr pPage(new Page(mpRenderModule));
+        std::shared_ptr< Page > pPage(new Page(mpRenderModule));
         if(pPage->isValid())
         {
             maPages.push_back(pPage);
-            FragmentSharedPtr pFragment(pPage->allocateSpace(rSize));
+            std::shared_ptr< PageFragment > pFragment(pPage->allocateSpace(rSize));
             if (pFragment)
                 maFragments.push_back(pFragment);
             return pFragment;
@@ -56,16 +56,16 @@ namespace canvas
         // of videomemory], and all other pages could not take
         // the new request. we decide to create a 'naked' fragment
         // which will receive its location later.
-        FragmentSharedPtr pFragment(new PageFragment(rSize));
+        std::shared_ptr< PageFragment > pFragment(new PageFragment(rSize));
         maFragments.push_back(pFragment);
         return pFragment;
     }
 
-    void PageManager::free( const FragmentSharedPtr& pFragment )
+    void PageManager::free( const std::shared_ptr< PageFragment >& pFragment )
     {
         // erase the reference to the given fragment from our
         // internal container.
-        FragmentContainer_t::iterator it(
+        std::list<std::shared_ptr< PageFragment >>::iterator it(
             std::remove(
                 maFragments.begin(),maFragments.end(),pFragment));
         maFragments.erase(it,maFragments.end());
@@ -77,7 +77,7 @@ namespace canvas
         pFragment->free(pFragment);
     }
 
-    void PageManager::nakedFragment( const FragmentSharedPtr& pFragment )
+    void PageManager::nakedFragment( const std::shared_ptr< PageFragment >& pFragment )
     {
         if(maPages.empty())
             return;
@@ -116,7 +116,7 @@ namespace canvas
         }
     }
 
-    bool PageManager::relocate( const FragmentSharedPtr& pFragment )
+    bool PageManager::relocate( const std::shared_ptr< PageFragment >& pFragment )
     {
         // the fragment passed as argument is assumed to
         // be naked, that is it is not located on any page.

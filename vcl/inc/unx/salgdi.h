@@ -261,10 +261,10 @@ public:
 
     virtual SystemGraphicsData      GetGraphicsData() const override;
     virtual bool                    SupportsCairo() const override;
-    virtual cairo::SurfaceSharedPtr CreateSurface(const cairo::CairoSurfaceSharedPtr& rSurface) const override;
-    virtual cairo::SurfaceSharedPtr CreateSurface(const OutputDevice& rRefDevice, int x, int y, int width, int height) const override;
-    virtual cairo::SurfaceSharedPtr CreateBitmapSurface(const OutputDevice& rRefDevice, const BitmapSystemData& rData, const Size& rSize) const override;
-    virtual css::uno::Any           GetNativeSurfaceHandle(cairo::SurfaceSharedPtr& rSurface, const basegfx::B2ISize& rSize) const override;
+    virtual std::shared_ptr< cairo::Surface > CreateSurface(const cairo::CairoSurfaceSharedPtr& rSurface) const override;
+    virtual std::shared_ptr< cairo::Surface > CreateSurface(const OutputDevice& rRefDevice, int x, int y, int width, int height) const override;
+    virtual std::shared_ptr< cairo::Surface > CreateBitmapSurface(const OutputDevice& rRefDevice, const BitmapSystemData& rData, const Size& rSize) const override;
+    virtual css::uno::Any           GetNativeSurfaceHandle(std::shared_ptr< cairo::Surface >& rSurface, const basegfx::B2ISize& rSize) const override;
     virtual SystemFontData          GetSysFontData( int nFallbackLevel ) const override;
 
     bool TryRenderCachedNativeControl(ControlCacheKey& aControlCacheKey,

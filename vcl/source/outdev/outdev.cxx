@@ -280,37 +280,37 @@ bool OutputDevice::SupportsCairo() const
     return mpGraphics->SupportsCairo();
 }
 
-cairo::SurfaceSharedPtr OutputDevice::CreateSurface(const cairo::CairoSurfaceSharedPtr& rSurface) const
+std::shared_ptr< cairo::Surface > OutputDevice::CreateSurface(const cairo::CairoSurfaceSharedPtr& rSurface) const
 {
     if (!mpGraphics)
     {
         if (!AcquireGraphics())
-            return cairo::SurfaceSharedPtr();
+            return std::shared_ptr< cairo::Surface >();
     }
     return mpGraphics->CreateSurface(rSurface);
 }
 
-cairo::SurfaceSharedPtr OutputDevice::CreateSurface(int x, int y, int width, int height) const
+std::shared_ptr< cairo::Surface > OutputDevice::CreateSurface(int x, int y, int width, int height) const
 {
     if (!mpGraphics)
     {
         if (!AcquireGraphics())
-            return cairo::SurfaceSharedPtr();
+            return std::shared_ptr< cairo::Surface >();
     }
     return mpGraphics->CreateSurface(*this, x, y, width, height);
 }
 
-cairo::SurfaceSharedPtr OutputDevice::CreateBitmapSurface(const BitmapSystemData& rData, const Size& rSize) const
+std::shared_ptr< cairo::Surface > OutputDevice::CreateBitmapSurface(const BitmapSystemData& rData, const Size& rSize) const
 {
     if (!mpGraphics)
     {
         if (!AcquireGraphics())
-            return cairo::SurfaceSharedPtr();
+            return std::shared_ptr< cairo::Surface >();
     }
     return mpGraphics->CreateBitmapSurface(*this, rData, rSize);
 }
 
-css::uno::Any OutputDevice::GetNativeSurfaceHandle(cairo::SurfaceSharedPtr& rSurface, const basegfx::B2ISize& rSize) const
+css::uno::Any OutputDevice::GetNativeSurfaceHandle(std::shared_ptr< cairo::Surface >& rSurface, const basegfx::B2ISize& rSize) const
 {
     if (!mpGraphics)
     {

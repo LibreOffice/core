@@ -59,7 +59,7 @@ namespace canvas
     {
     }
 
-    void PropertySetHelper::initProperties( const InputMap& rMap )
+    void PropertySetHelper::initProperties( const std::vector< MapType::MapEntry >& rMap )
     {
         mpMap.reset();
         maMapEntries = rMap;
@@ -74,9 +74,9 @@ namespace canvas
                                      true) );
     }
 
-    void PropertySetHelper::addProperties( const InputMap& rMap )
+    void PropertySetHelper::addProperties( const std::vector< MapType::MapEntry >& rMap )
     {
-        InputMap aMerged( getPropertyMap() );
+        std::vector< MapType::MapEntry > aMerged( getPropertyMap() );
         aMerged.insert( aMerged.end(),
                         rMap.begin(),
                         rMap.end() );

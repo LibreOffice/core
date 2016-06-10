@@ -37,11 +37,11 @@ using namespace ::com::sun::star;
 
 namespace dxcanvas
 {
-    CanvasCustomSprite::CanvasCustomSprite( const css::geometry::RealSize2D&   rSpriteSize,
-                                            const SpriteCanvasRef&                          rRefDevice,
-                                            const IDXRenderModuleSharedPtr&                 rRenderModule,
+    CanvasCustomSprite::CanvasCustomSprite( const css::geometry::RealSize2D&                        rSpriteSize,
+                                            const SpriteCanvasRef&                                  rRefDevice,
+                                            const std::shared_ptr< IDXRenderModule >&               rRenderModule,
                                             const ::std::shared_ptr<canvas::ISurfaceProxyManager>&  rSurfaceProxy,
-                                            bool                                            bShowSpriteBounds ) :
+                                            bool                                                    bShowSpriteBounds ) :
         mpSpriteCanvas( rRefDevice ),
         mpSurface()
     {

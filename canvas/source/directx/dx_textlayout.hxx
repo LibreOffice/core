@@ -80,19 +80,19 @@ namespace dxcanvas
         virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw( css::uno::RuntimeException );
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()  throw( css::uno::RuntimeException );
 
-        bool draw( const GraphicsSharedPtr&                              rGraphics,
+        bool draw( const std::shared_ptr< Gdiplus::Graphics >& rGraphics,
                    const css::rendering::ViewState&         rViewState,
                    const css::rendering::RenderState&       rRenderState,
-                   const ::basegfx::B2ISize&                             rOutputOffset,
+                   const ::basegfx::B2ISize&                rOutputOffset,
                    const css::uno::Reference<
                    css::rendering::XGraphicDevice >&        xGraphicDevice,
-                   bool                                                  bAlphaSurface ) const;
+                   bool                                     bAlphaSurface ) const;
 
     protected:
         ~TextLayout(); // we're a ref-counted UNO class. _We_ destroy ourselves.
 
     private:
-        // NOTE: no need for GDIPlusUserSharedPtr, mpFont implicitly has one already
+        // NOTE: no need for std::shared_ptr< GDIPlusUser >, mpFont implicitly has one already
 
         css::rendering::StringContext              maText;
         css::uno::Sequence< double >               maLogicalAdvancements;

@@ -39,9 +39,9 @@ namespace cairocanvas
         virtual ~RepaintTarget() {}
 
         // call this when a bitmap is repainted
-        virtual bool repaint( const ::cairo::SurfaceSharedPtr&                pSurface,
-                              const css::rendering::ViewState&   viewState,
-                              const css::rendering::RenderState& renderState ) = 0;
+        virtual bool repaint( const std::shared_ptr< cairo::Surface >&  pSurface,
+                              const css::rendering::ViewState&          viewState,
+                              const css::rendering::RenderState&        renderState ) = 0;
     };
 }
 

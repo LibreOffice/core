@@ -70,7 +70,7 @@ namespace vclcanvas
          */
         void init( const BitmapEx&                              rBitmap,
                    css::rendering::XGraphicDevice&              rDevice,
-                   const OutDevProviderSharedPtr&               rOutDevProvider );
+                   const std::shared_ptr< OutDevProvider >&     rOutDevProvider );
 
 
         // Overridden CanvasHelper functionality
@@ -113,8 +113,8 @@ namespace vclcanvas
 
         void setBitmap( const BitmapEx& rBitmap );
 
-        BitmapBackBufferSharedPtr   mpBackBuffer;
-        OutDevProviderSharedPtr     mpOutDevReference;
+        std::shared_ptr< BitmapBackBuffer >   mpBackBuffer;
+        std::shared_ptr< OutDevProvider >     mpOutDevReference;
     };
 }
 

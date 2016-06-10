@@ -487,9 +487,9 @@ bool X11SalGraphics::SupportsCairo() const
     return XQueryExtension(pDisplay, "RENDER", &nDummy, &nDummy, &nDummy);
 }
 
-cairo::SurfaceSharedPtr X11SalGraphics::CreateSurface(const cairo::CairoSurfaceSharedPtr& rSurface) const
+std::shared_ptr< cairo::Surface > X11SalGraphics::CreateSurface(const cairo::CairoSurfaceSharedPtr& rSurface) const
 {
-    return cairo::SurfaceSharedPtr(new cairo::X11Surface(rSurface));
+    return std::shared_ptr< cairo::Surface >(new cairo::X11Surface(rSurface));
 }
 
 namespace
@@ -510,19 +510,19 @@ namespace
     }
 }
 
-cairo::SurfaceSharedPtr X11SalGraphics::CreateSurface( const OutputDevice& rRefDevice,
+std::shared_ptr< cairo::Surface > X11SalGraphics::CreateSurface( const OutputDevice& rRefDevice,
                                 int x, int y, int width, int height ) const
 {
     if( rRefDevice.GetOutDevType() == OUTDEV_WINDOW )
-        return cairo::SurfaceSharedPtr(new cairo::X11Surface(getSysData(static_cast<const vcl::Window&>(rRefDevice)),
+        return std::shared_ptr< cairo::Surface >(new cairo::X11Surface(getSysData(static_cast<const vcl::Window&>(rRefDevice)),
                                                x,y,width,height));
     if( rRefDevice.GetOutDevType() == OUTDEV_VIRDEV )
-        return cairo::SurfaceSharedPtr(new cairo::X11Surface(getSysData(static_cast<const VirtualDevice&>(rRefDevice)),
+        return std::shared_ptr< cairo::Surface >(new cairo::X11Surface(getSysData(static_cast<const VirtualDevice&>(rRefDevice)),
                                                x,y,width,height));
-    return cairo::SurfaceSharedPtr();
+    return std::shared_ptr< cairo::Surface >();
 }
 
-cairo::SurfaceSharedPtr X11SalGraphics::CreateBitmapSurface( const OutputDevice&     rRefDevice,
+std::shared_ptr< cairo::Surface > X11SalGraphics::CreateBitmapSurface( const OutputDevice&     rRefDevice,
                                       const BitmapSystemData& rData,
                                       const Size&             rSize ) const
 {
@@ -534,15 +534,15 @@ cairo::SurfaceSharedPtr X11SalGraphics::CreateBitmapSurface( const OutputDevice&
     if ( rData.mnWidth == rSize.Width() && rData.mnHeight == rSize.Height() )
     {
         if( rRefDevice.GetOutDevType() == OUTDEV_WINDOW )
-            return cairo::SurfaceSharedPtr(new cairo::X11Surface(getSysData(static_cast<const vcl::Window&>(rRefDevice)), rData ));
+            return std::shared_ptr< cairo::Surface >(new cairo::X11Surface(getSysData(static_cast<const vcl::Window&>(rRefDevice)), rData ));
         else if( rRefDevice.GetOutDevType() == OUTDEV_VIRDEV )
-            return cairo::SurfaceSharedPtr(new cairo::X11Surface(getSysData(static_cast<const VirtualDevice&>(rRefDevice)), rData ));
+            return std::shared_ptr< cairo::Surface >(new cairo::X11Surface(getSysData(static_cast<const VirtualDevice&>(rRefDevice)), rData ));
     }
 
-    return cairo::SurfaceSharedPtr();
+    return std::shared_ptr< cairo::Surface >();
 }
 
-css::uno::Any X11SalGraphics::GetNativeSurfaceHandle(cairo::SurfaceSharedPtr& rSurface, const basegfx::B2ISize& /*rSize*/) const
+css::uno::Any X11SalGraphics::GetNativeSurfaceHandle(std::shared_ptr< cairo::Surface >& rSurface, const basegfx::B2ISize& /*rSize*/) const
 {
     cairo::X11Surface& rXlibSurface=dynamic_cast<cairo::X11Surface&>(*rSurface.get());
     css::uno::Sequence< css::uno::Any > args( 3 );

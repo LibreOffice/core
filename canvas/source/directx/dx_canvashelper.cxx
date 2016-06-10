@@ -118,7 +118,7 @@ namespace dxcanvas
         mpDevice = &rDevice;
     }
 
-    void CanvasHelper::setTarget( const GraphicsProviderSharedPtr& rTarget )
+    void CanvasHelper::setTarget( const std::shared_ptr< GraphicsProvider >& rTarget )
     {
         ENSURE_OR_THROW( rTarget,
                           "CanvasHelper::setTarget(): Invalid target" );
@@ -128,7 +128,7 @@ namespace dxcanvas
         mpGraphicsProvider = rTarget;
     }
 
-    void CanvasHelper::setTarget( const GraphicsProviderSharedPtr& rTarget,
+    void CanvasHelper::setTarget( const std::shared_ptr< GraphicsProvider >& rTarget,
                                   const ::basegfx::B2ISize&        rOutputOffset )
     {
         ENSURE_OR_THROW( rTarget,
@@ -144,7 +144,7 @@ namespace dxcanvas
     {
         if( needOutput() )
         {
-            GraphicsSharedPtr pGraphics( mpGraphicsProvider->getGraphics() );
+            std::shared_ptr< Gdiplus::Graphics > pGraphics( mpGraphicsProvider->getGraphics() );
             Gdiplus::Color aClearColor = Gdiplus::Color((Gdiplus::ARGB)Gdiplus::Color::White);
 
             ENSURE_OR_THROW(
@@ -164,7 +164,7 @@ namespace dxcanvas
     {
         if( needOutput() )
         {
-            GraphicsSharedPtr pGraphics( mpGraphicsProvider->getGraphics() );
+            std::shared_ptr< Gdiplus::Graphics > pGraphics( mpGraphicsProvider->getGraphics() );
 
             setupGraphicsState( pGraphics, viewState, renderState );
 
@@ -200,7 +200,7 @@ namespace dxcanvas
     {
         if( needOutput() )
         {
-            GraphicsSharedPtr pGraphics( mpGraphicsProvider->getGraphics() );
+            std::shared_ptr< Gdiplus::Graphics > pGraphics( mpGraphicsProvider->getGraphics() );
 
             setupGraphicsState( pGraphics, viewState, renderState );
 
@@ -239,7 +239,7 @@ namespace dxcanvas
     {
         if( needOutput() )
         {
-            GraphicsSharedPtr pGraphics( mpGraphicsProvider->getGraphics() );
+            std::shared_ptr< Gdiplus::Graphics > pGraphics( mpGraphicsProvider->getGraphics() );
 
             setupGraphicsState( pGraphics, viewState, renderState );
 
@@ -285,7 +285,7 @@ namespace dxcanvas
 
         if( needOutput() )
         {
-            GraphicsSharedPtr pGraphics( mpGraphicsProvider->getGraphics() );
+            std::shared_ptr< Gdiplus::Graphics > pGraphics( mpGraphicsProvider->getGraphics() );
 
             setupGraphicsState( pGraphics, viewState, renderState );
 
@@ -303,7 +303,7 @@ namespace dxcanvas
                 pGraphics->GetPixelOffsetMode() );
             pGraphics->SetPixelOffsetMode( Gdiplus::PixelOffsetModeNone );
 
-            GraphicsPathSharedPtr pPath( tools::graphicsPathFromXPolyPolygon2D( xPolyPolygon ) );
+            std::shared_ptr< Gdiplus::GraphicsPath > pPath( tools::graphicsPathFromXPolyPolygon2D( xPolyPolygon ) );
 
             // TODO(E1): Return value
             Gdiplus::Status hr = pGraphics->DrawPath( &aPen, pPath.get() );
@@ -330,7 +330,7 @@ namespace dxcanvas
 
         if( needOutput() )
         {
-            GraphicsSharedPtr pGraphics( mpGraphicsProvider->getGraphics() );
+            std::shared_ptr< Gdiplus::Graphics > pGraphics( mpGraphicsProvider->getGraphics() );
 
             setupGraphicsState( pGraphics, viewState, renderState );
 
@@ -372,7 +372,7 @@ namespace dxcanvas
             if(!bIsNone)
                 aPen.SetLineJoin( gdiJoinFromJoin(strokeAttributes.JoinType) );
 
-            GraphicsPathSharedPtr pPath( tools::graphicsPathFromXPolyPolygon2D( xPolyPolygon, bIsNone ) );
+            std::shared_ptr< Gdiplus::GraphicsPath > pPath( tools::graphicsPathFromXPolyPolygon2D( xPolyPolygon, bIsNone ) );
 
             // TODO(E1): Return value
             Gdiplus::Status hr = pGraphics->DrawPath( &aPen, pPath.get() );
@@ -431,14 +431,14 @@ namespace dxcanvas
 
         if( needOutput() )
         {
-            GraphicsSharedPtr pGraphics( mpGraphicsProvider->getGraphics() );
+            std::shared_ptr< Gdiplus::Graphics > pGraphics( mpGraphicsProvider->getGraphics() );
 
             setupGraphicsState( pGraphics, viewState, renderState );
 
             Gdiplus::SolidBrush aBrush(
                 tools::sequenceToArgb(renderState.DeviceColor));
 
-            GraphicsPathSharedPtr pPath( tools::graphicsPathFromXPolyPolygon2D( xPolyPolygon ) );
+            std::shared_ptr< Gdiplus::GraphicsPath > pPath( tools::graphicsPathFromXPolyPolygon2D( xPolyPolygon ) );
 
             // TODO(F1): FillRule
             ENSURE_OR_THROW( Gdiplus::Ok == pGraphics->FillPath( &aBrush, pPath.get() ),
@@ -494,7 +494,7 @@ namespace dxcanvas
 
         if( needOutput() )
         {
-            GraphicsSharedPtr pGraphics( mpGraphicsProvider->getGraphics() );
+            std::shared_ptr< Gdiplus::Graphics > pGraphics( mpGraphicsProvider->getGraphics() );
 
             setupGraphicsState( pGraphics, viewState, renderState );
 
@@ -575,16 +575,16 @@ namespace dxcanvas
             // bitmap _before_ calling
             // GraphicsProvider::getGraphics(), to avoid locking our
             // own surface.
-            BitmapSharedPtr pGdiBitmap;
+            std::shared_ptr< Gdiplus::Bitmap > pGdiBitmap;
             BitmapProvider* pBitmap = dynamic_cast< BitmapProvider* >(xBitmap.get());
             if( pBitmap )
             {
-                IBitmapSharedPtr pDXBitmap( pBitmap->getBitmap() );
+                std::shared_ptr<IBitmap> pDXBitmap( pBitmap->getBitmap() );
                 if( pDXBitmap )
                     pGdiBitmap = pDXBitmap->getBitmap();
             }
 
-            GraphicsSharedPtr pGraphics( mpGraphicsProvider->getGraphics() );
+            std::shared_ptr< Gdiplus::Graphics > pGraphics( mpGraphicsProvider->getGraphics() );
             setupGraphicsState( pGraphics, viewState, renderState );
 
             if( pGdiBitmap )
@@ -612,11 +612,11 @@ namespace dxcanvas
 
         if( needOutput() )
         {
-            GraphicsSharedPtr pGraphics( mpGraphicsProvider->getGraphics() );
+            std::shared_ptr< Gdiplus::Graphics > pGraphics( mpGraphicsProvider->getGraphics() );
 
             setupGraphicsState( pGraphics, viewState, renderState );
 
-            BitmapSharedPtr pBitmap( tools::bitmapFromXBitmap( xBitmap ) );
+            std::shared_ptr< Gdiplus::Bitmap > pBitmap( tools::bitmapFromXBitmap( xBitmap ) );
             Gdiplus::Rect aRect( 0, 0,
                                  pBitmap->GetWidth(),
                                  pBitmap->GetHeight() );
@@ -707,9 +707,9 @@ namespace dxcanvas
         return aRet;
     }
 
-    void CanvasHelper::setupGraphicsState( GraphicsSharedPtr&            rGraphics,
-                                           const rendering::ViewState&   viewState,
-                                           const rendering::RenderState& renderState )
+    void CanvasHelper::setupGraphicsState( std::shared_ptr< Gdiplus::Graphics >&    rGraphics,
+                                           const rendering::ViewState&              viewState,
+                                           const rendering::RenderState&            renderState )
     {
         ENSURE_OR_THROW( needOutput(),
                           "CanvasHelper::setupGraphicsState: primary graphics invalid" );
@@ -742,7 +742,7 @@ namespace dxcanvas
 
         if( viewState.Clip.is() )
         {
-            GraphicsPathSharedPtr aClipPath( tools::graphicsPathFromXPolyPolygon2D( viewState.Clip ) );
+            std::shared_ptr< Gdiplus::GraphicsPath > aClipPath( tools::graphicsPathFromXPolyPolygon2D( viewState.Clip ) );
 
             // TODO(P3): Cache clip. SetClip( GraphicsPath ) performs abyssmally on GDI+.
             // Try SetClip( Rect ) or similar for simple clip paths (need some support in
@@ -775,7 +775,7 @@ namespace dxcanvas
 
         if( renderState.Clip.is() )
         {
-            GraphicsPathSharedPtr aClipPath( tools::graphicsPathFromXPolyPolygon2D( renderState.Clip ) );
+            std::shared_ptr< Gdiplus::GraphicsPath > aClipPath( tools::graphicsPathFromXPolyPolygon2D( renderState.Clip ) );
 
             // TODO(P3): Cache clip. SetClip( GraphicsPath ) performs abyssmally on GDI+.
             // Try SetClip( Rect ) or similar for simple clip paths (need some support in
