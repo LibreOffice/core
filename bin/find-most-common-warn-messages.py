@@ -25,7 +25,7 @@ for line in process.stdout:
         messages[sourceAndLine] = messages[sourceAndLine] + 1
     else:
         messages[sourceAndLine] = 1
-        sampleOfMessage[sourceAndLine] = tokens[6]
+        sampleOfMessage[sourceAndLine] = line[line.find(tokens[6]):]
 
 tmplist = list() # set of tuple (count, sourceAndLine)
 for key, value in messages.iteritems():
