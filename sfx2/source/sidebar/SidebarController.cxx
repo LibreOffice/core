@@ -643,6 +643,10 @@ void SidebarController::CreatePanels(const ::rtl::OUString& rDeckId, const Conte
                         pTitleBar->SetMoreOptionsCommand(
                             rPanelContexDescriptor.msMenuCommand,
                             mxFrame, xController);
+                        // rename Slide panel for Draw as Page Panel
+                        if(rContext.msApplication == "com.sun.star.drawing.DrawingDocument"
+                            && pTitleBar->GetTitle() == "Slide")
+                            pTitleBar->SetTitle("Page");
                     }
                     ++nWriteIndex;
                 }
