@@ -161,14 +161,14 @@ Rectangle GtkSalGraphics::NWGetSpinButtonRect( ControlPart nPart, Rectangle aAre
     buttonRect.setY(aAreaRect.Top());
     buttonRect.Bottom() = buttonRect.Top() + aAreaRect.GetHeight();
     Rectangle partRect(buttonRect);
-    if ( nPart == PART_BUTTON_UP )
+    if ( nPart == ControlPart::ButtonUp )
     {
         if (AllSettings::GetLayoutRTL())
             partRect.setX(aAreaRect.Left());
         else
             partRect.setX(aAreaRect.Left() + (aAreaRect.GetWidth() - buttonRect.GetWidth()));
     }
-    else if( nPart == PART_BUTTON_DOWN )
+    else if( nPart == ControlPart::ButtonDown )
     {
         if (AllSettings::GetLayoutRTL())
             partRect.setX(aAreaRect.Left() + buttonRect.GetWidth());
@@ -197,9 +197,9 @@ Rectangle GtkSalGraphics::NWGetSpinButtonRect( ControlPart nPart, Rectangle aAre
 Rectangle GtkSalGraphics::NWGetScrollButtonRect( ControlPart nPart, Rectangle aAreaRect )
 {
     GtkStyleContext* pScrollbarStyle = nullptr;
-    if ((nPart == PART_BUTTON_LEFT) || (nPart == PART_BUTTON_RIGHT))
+    if ((nPart == ControlPart::ButtonLeft) || (nPart == ControlPart::ButtonRight))
         pScrollbarStyle = mpHScrollbarStyle;
-    else // (nPart == PART_BUTTON_UP) || (nPart == PART_BUTTON_DOWN)
+    else // (nPart == ControlPart::ButtonUp) || (nPart == ControlPart::ButtonDown)
         pScrollbarStyle = mpVScrollbarStyle;
 
     gint slider_width;
@@ -236,7 +236,7 @@ Rectangle GtkSalGraphics::NWGetScrollButtonRect( ControlPart nPart, Rectangle aA
     if ( has_backward )  nFirst  += 1;
     if ( has_backward2 ) nSecond += 1;
 
-    if ( ( nPart == PART_BUTTON_UP ) || ( nPart == PART_BUTTON_DOWN ) )
+    if ( ( nPart == ControlPart::ButtonUp ) || ( nPart == ControlPart::ButtonDown ) )
     {
         buttonWidth = slider_width + 2 * trough_border;
         buttonHeight = stepper_size + trough_border + stepper_spacing;
@@ -247,27 +247,27 @@ Rectangle GtkSalGraphics::NWGetScrollButtonRect( ControlPart nPart, Rectangle aA
         buttonHeight = slider_width + 2 * trough_border;
     }
 
-    if ( nPart == PART_BUTTON_UP )
+    if ( nPart == ControlPart::ButtonUp )
     {
         buttonHeight *= nFirst;
         buttonHeight -= 1;
         buttonRect.setX( aAreaRect.Left() );
         buttonRect.setY( aAreaRect.Top() );
     }
-    else if ( nPart == PART_BUTTON_LEFT )
+    else if ( nPart == ControlPart::ButtonLeft )
     {
         buttonWidth *= nFirst;
         buttonWidth -= 1;
         buttonRect.setX( aAreaRect.Left() );
         buttonRect.setY( aAreaRect.Top() );
     }
-    else if ( nPart == PART_BUTTON_DOWN )
+    else if ( nPart == ControlPart::ButtonDown )
     {
         buttonHeight *= nSecond;
         buttonRect.setX( aAreaRect.Left() );
         buttonRect.setY( aAreaRect.Top() + aAreaRect.GetHeight() - buttonHeight );
     }
-    else if ( nPart == PART_BUTTON_RIGHT )
+    else if ( nPart == ControlPart::ButtonRight )
     {
         buttonWidth *= nSecond;
         buttonRect.setX( aAreaRect.Left() + aAreaRect.GetWidth() - buttonWidth );
@@ -352,7 +352,7 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
     gint magic = trough_border ? 1 : 0;
     gint slider_side = slider_width + (trough_border * 2);
 
-    if ( nPart == PART_DRAW_BACKGROUND_HORZ )
+    if ( nPart == ControlPart::DrawBackgroundHorz )
     {
         scrollbarRect.Move( 0, (scrollbarRect.GetHeight() - slider_side) / 2 );
         scrollbarRect.SetSize( Size( scrollbarRect.GetWidth(), slider_side ) );
@@ -615,7 +615,7 @@ void GtkSalGraphics::PaintOneSpinButton( GtkStyleContext *context,
     gint iconWidth = (buttonRect.GetWidth() - padding.left - padding.right - border.left - border.right);
     gint iconHeight = (buttonRect.GetHeight() - padding.top - padding.bottom - border.top - border.bottom);
 
-    const char* icon = (nPart == PART_BUTTON_UP) ? "list-add-symbolic" : "list-remove-symbolic";
+    const char* icon = (nPart == ControlPart::ButtonUp) ? "list-add-symbolic" : "list-remove-symbolic";
     GtkIconTheme *pIconTheme = gtk_icon_theme_get_for_screen(gtk_widget_get_screen(mpWindow));
 
     GtkIconInfo *info = gtk_icon_theme_lookup_icon(pIconTheme, icon, std::min(iconWidth, iconHeight),
@@ -643,9 +643,9 @@ void GtkSalGraphics::PaintSpinButton(GtkStyleContext *context,
                                      const ImplControlValue& rValue )
 {
     const SpinbuttonValue *pSpinVal = (rValue.getType() == ControlType::SpinButtons) ? static_cast<const SpinbuttonValue *>(&rValue) : nullptr;
-    ControlPart upBtnPart = PART_BUTTON_UP;
+    ControlPart upBtnPart = ControlPart::ButtonUp;
     ControlState upBtnState = ControlState::NONE;
-    ControlPart downBtnPart = PART_BUTTON_DOWN;
+    ControlPart downBtnPart = ControlPart::ButtonDown;
     ControlState downBtnState = ControlState::NONE;
 
     if ( pSpinVal )
@@ -657,7 +657,7 @@ void GtkSalGraphics::PaintSpinButton(GtkStyleContext *context,
         downBtnState = pSpinVal->mnLowerState;
     }
 
-    if (nPart == PART_ENTIRE_CONTROL)
+    if (nPart == ControlPart::Entire)
     {
         gtk_render_background(context, cr,
                               0, 0,
@@ -687,7 +687,7 @@ Rectangle GtkSalGraphics::NWGetComboBoxButtonRect( ControlType nType,
 
     gint nArrowWidth = ARROW_SIZE;
     gint nButtonWidth = nArrowWidth + padding.left + padding.right;
-    if( nPart == PART_BUTTON_DOWN )
+    if( nPart == ControlPart::ButtonDown )
     {
         Point aPos = Point(aAreaRect.Left() + aAreaRect.GetWidth() - nButtonWidth, aAreaRect.Top());
         if (AllSettings::GetLayoutRTL())
@@ -695,7 +695,7 @@ Rectangle GtkSalGraphics::NWGetComboBoxButtonRect( ControlType nType,
         aButtonRect.SetSize( Size( nButtonWidth, aAreaRect.GetHeight() ) );
         aButtonRect.SetPos(aPos);
     }
-    else if( nPart == PART_SUB_EDIT )
+    else if( nPart == ControlPart::SubEdit )
     {
         gint adjust_left = padding.left;
         gint adjust_top = padding.top;
@@ -730,8 +730,8 @@ void GtkSalGraphics::PaintCombobox( GtkStateFlags flags, cairo_t *cr,
     // plus its actual draw rect excluding adornment
     areaRect = rControlRectangle;
 
-    buttonRect = NWGetComboBoxButtonRect( nType, PART_BUTTON_DOWN, areaRect );
-    if( nPart == PART_BUTTON_DOWN )
+    buttonRect = NWGetComboBoxButtonRect( nType, ControlPart::ButtonDown, areaRect );
+    if( nPart == ControlPart::ButtonDown )
         buttonRect.Left() += 1;
 
     Rectangle        aEditBoxRect( areaRect );
@@ -750,7 +750,7 @@ void GtkSalGraphics::PaintCombobox( GtkStateFlags flags, cairo_t *cr,
         gtk_style_context_save(mpComboboxButtonStyle);
         gtk_style_context_set_state(mpComboboxButtonStyle, flags);
 
-        if( nPart == PART_ENTIRE_CONTROL )
+        if( nPart == ControlPart::Entire )
         {
             GtkJunctionSides eJuncSides = gtk_style_context_get_junction_sides(mpEntryStyle);
             gtk_style_context_set_state(mpEntryStyle, flags);
@@ -794,7 +794,7 @@ void GtkSalGraphics::PaintCombobox( GtkStateFlags flags, cairo_t *cr,
     }
     else if (nType == ControlType::Listbox)
     {
-        if( nPart == PART_WINDOW )
+        if( nPart == ControlPart::ListboxWindow )
         {
             /* render the popup window with the menu style */
             gtk_render_frame(mpMenuStyle, cr,
@@ -1196,7 +1196,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
                                             ControlState nState, const ImplControlValue& rValue,
                                             const OUString& )
 {
-    RenderType renderType = nPart == PART_FOCUS ? RenderType::Focus : RenderType::BackgroundAndFrame;
+    RenderType renderType = nPart == ControlPart::Focus ? RenderType::Focus : RenderType::BackgroundAndFrame;
     GtkStyleContext *context = nullptr;
 #if !GTK_CHECK_VERSION(3,19,2)
     const gchar *styleClass = nullptr;
@@ -1225,22 +1225,22 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
         break;
     case ControlType::Listbox:
         context = mpListboxStyle;
-        renderType = nPart == PART_FOCUS ? RenderType::Focus : RenderType::Combobox;
+        renderType = nPart == ControlPart::Focus ? RenderType::Focus : RenderType::Combobox;
         break;
     case ControlType::MenuPopup:
         bInMenu = true;
 
         // map selected menu entries in vcl parlance to gtk prelight
-        if (nPart >= PART_MENU_ITEM && nPart <= PART_MENU_SUBMENU_ARROW && (nState & ControlState::SELECTED))
+        if (nPart >= ControlPart::MenuItem && nPart <= ControlPart::SubmenuArrow && (nState & ControlState::SELECTED))
             flags = (GtkStateFlags) (flags | GTK_STATE_FLAG_PRELIGHT);
         flags = (GtkStateFlags)(flags & ~GTK_STATE_FLAG_ACTIVE);
         switch(nPart)
         {
-        case PART_MENU_ITEM:
+        case ControlPart::MenuItem:
             context = mpMenuItemStyle;
             renderType = RenderType::BackgroundAndFrame;
             break;
-        case PART_MENU_ITEM_CHECK_MARK:
+        case ControlPart::MenuItemCheckMark:
 #if GTK_CHECK_VERSION(3,19,2)
             context = mpCheckMenuItemStyle;
 #else
@@ -1254,7 +1254,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
                 flags = (GtkStateFlags)(flags | CHECKED);
             }
             break;
-        case PART_MENU_ITEM_RADIO_MARK:
+        case ControlPart::MenuItemRadioMark:
 #if GTK_CHECK_VERSION(3,19,2)
             context = mpRadioMenuItemStyle;
 #else
@@ -1268,12 +1268,12 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
                 flags = (GtkStateFlags)(flags | CHECKED);
             }
             break;
-        case PART_MENU_SEPARATOR:
+        case ControlPart::Separator:
             context = mpSeparatorMenuItemStyle;
             flags = (GtkStateFlags)(GTK_STATE_FLAG_BACKDROP | GTK_STATE_FLAG_INSENSITIVE); //GTK_STATE_FLAG_BACKDROP hack ?
             renderType = RenderType::MenuSeparator;
             break;
-        case PART_MENU_SUBMENU_ARROW:
+        case ControlPart::SubmenuArrow:
 #if GTK_CHECK_VERSION(3,19,2)
             context = mpMenuItemArrowStyle;
 #else
@@ -1282,26 +1282,27 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
 #endif
             renderType = RenderType::Arrow;
             break;
-        case PART_ENTIRE_CONTROL:
+        case ControlPart::Entire:
             context = mpMenuStyle;
             renderType = RenderType::Background;
             break;
+        default: break;
         }
         break;
     case ControlType::Toolbar:
         switch(nPart)
         {
-        case PART_DRAW_BACKGROUND_HORZ:
-        case PART_DRAW_BACKGROUND_VERT:
+        case ControlPart::DrawBackgroundHorz:
+        case ControlPart::DrawBackgroundVert:
             context = mpToolbarStyle;
             break;
-        case PART_BUTTON:
+        case ControlPart::Button:
             /* For all checkbuttons in the toolbars */
             flags = (GtkStateFlags)(flags |
                     ( (rValue.getTristateVal() == ButtonValue::On) ? GTK_STATE_FLAG_ACTIVE : GTK_STATE_FLAG_NORMAL));
             context = mpToolButtonStyle;
             break;
-        case PART_SEPARATOR_VERT:
+        case ControlPart::SeparatorVert:
             context = mpToolbarSeperatorStyle;
             renderType = RenderType::ToolbarSeparator;
             break;
@@ -1313,7 +1314,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
         flags = (GtkStateFlags)(flags |
                 ( (rValue.getTristateVal() == ButtonValue::On) ? CHECKED : GTK_STATE_FLAG_NORMAL));
         context = mpRadioButtonStyle;
-        renderType = nPart == PART_FOCUS ? RenderType::Focus : RenderType::Radio;
+        renderType = nPart == ControlPart::Focus ? RenderType::Focus : RenderType::Radio;
         break;
     case ControlType::Checkbox:
         flags = (GtkStateFlags)(flags |
@@ -1321,7 +1322,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
                   (rValue.getTristateVal() == ButtonValue::Mixed) ? GTK_STATE_FLAG_INCONSISTENT :
                   GTK_STATE_FLAG_NORMAL));
         context = mpCheckButtonStyle;
-        renderType = nPart == PART_FOCUS ? RenderType::Focus : RenderType::Check;
+        renderType = nPart == ControlPart::Focus ? RenderType::Focus : RenderType::Check;
         break;
     case ControlType::Pushbutton:
         context = mpButtonStyle;
@@ -1329,12 +1330,13 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
     case ControlType::Scrollbar:
         switch(nPart)
         {
-        case PART_DRAW_BACKGROUND_VERT:
-        case PART_DRAW_BACKGROUND_HORZ:
-            context = (nPart == PART_DRAW_BACKGROUND_VERT)
+        case ControlPart::DrawBackgroundVert:
+        case ControlPart::DrawBackgroundHorz:
+            context = (nPart == ControlPart::DrawBackgroundVert)
                 ? mpVScrollbarStyle : mpHScrollbarStyle;
             renderType = RenderType::Scrollbar;
             break;
+        default: break;
         }
         break;
     case ControlType::ListNet:
@@ -1367,7 +1369,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
         break;
     }
     case ControlType::Menubar:
-        if (nPart == PART_MENU_ITEM)
+        if (nPart == ControlPart::MenuItem)
         {
             context = mpMenuBarItemStyle;
 
@@ -1382,7 +1384,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
         }
         break;
     case ControlType::Fixedline:
-        context = nPart == PART_SEPARATOR_HORZ ? mpFixedHoriLineStyle : mpFixedVertLineStyle;
+        context = nPart == ControlPart::SeparatorHorz ? mpFixedHoriLineStyle : mpFixedVertLineStyle;
         renderType = RenderType::Separator;
         break;
     case ControlType::ListNode:
@@ -1396,7 +1398,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
     }
     case ControlType::ListHeader:
         context = mpTreeHeaderButtonStyle;
-        if (nPart == PART_ARROW)
+        if (nPart == ControlPart::Arrow)
         {
             const char* icon = (rValue.getNumericVal() & 1) ? "pan-down-symbolic" : "pan-up-symbolic";
             GtkIconTheme *pIconTheme = gtk_icon_theme_get_for_screen(gtk_widget_get_screen(mpWindow));
@@ -1483,7 +1485,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
                         rControlRegion.GetWidth() / 2, rControlRegion.GetHeight() * 0.8 );
         break;
     case RenderType::Separator:
-        if (nPart == PART_SEPARATOR_HORZ)
+        if (nPart == ControlPart::SeparatorHorz)
             gtk_render_line(context, cr, 0, nHeight / 2, nWidth - 1, nHeight / 2);
         else
             gtk_render_line(context, cr, nWidth / 2, 0, nWidth / 2, nHeight - 1);
@@ -1602,7 +1604,7 @@ bool GtkSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
     gint indicator_size, indicator_spacing, point;
 
     if(((nType == ControlType::Checkbox) || (nType == ControlType::Radiobutton)) &&
-       nPart == PART_ENTIRE_CONTROL)
+       nPart == ControlPart::Entire)
     {
         rNativeBoundingRegion = rControlRegion;
 
@@ -1631,12 +1633,12 @@ bool GtkSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
     }
     else if( nType == ControlType::MenuPopup)
     {
-        if (((nPart == PART_MENU_ITEM_CHECK_MARK) ||
-              (nPart == PART_MENU_ITEM_RADIO_MARK) ))
+        if (((nPart == ControlPart::MenuItemCheckMark) ||
+              (nPart == ControlPart::MenuItemRadioMark) ))
         {
             indicator_size = 0;
 
-            GtkStyleContext *pMenuItemStyle = (nPart == PART_MENU_ITEM_CHECK_MARK ) ? mpCheckMenuItemStyle : mpRadioMenuItemStyle;
+            GtkStyleContext *pMenuItemStyle = (nPart == ControlPart::MenuItemCheckMark ) ? mpCheckMenuItemStyle : mpRadioMenuItemStyle;
 
             gtk_style_context_get_style( pMenuItemStyle,
                                          "indicator-size", &indicator_size,
@@ -1646,7 +1648,7 @@ bool GtkSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
             aEditRect = Rectangle( Point( 0, point / 2),
                                    Size( indicator_size, indicator_size ) );
         }
-        else if (nPart == PART_MENU_SEPARATOR)
+        else if (nPart == ControlPart::Separator)
         {
             gint separator_height, separator_width, wide_separators;
 
@@ -1659,7 +1661,7 @@ bool GtkSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
             aEditRect = Rectangle( aEditRect.TopLeft(),
                                    Size( aEditRect.GetWidth(), wide_separators ? separator_height : 1 ) );
         }
-        else if (nPart == PART_MENU_SUBMENU_ARROW)
+        else if (nPart == ControlPart::SubmenuArrow)
         {
             gfloat arrow_size = getArrowSize(mpMenuItemArrowStyle);
             aEditRect = Rectangle( aEditRect.TopLeft(),
@@ -1667,8 +1669,8 @@ bool GtkSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
         }
     }
     else if ( (nType==ControlType::Scrollbar) &&
-              ((nPart==PART_BUTTON_LEFT) || (nPart==PART_BUTTON_RIGHT) ||
-               (nPart==PART_BUTTON_UP) || (nPart==PART_BUTTON_DOWN)  ) )
+              ((nPart==ControlPart::ButtonLeft) || (nPart==ControlPart::ButtonRight) ||
+               (nPart==ControlPart::ButtonUp) || (nPart==ControlPart::ButtonDown)  ) )
     {
         rNativeBoundingRegion = NWGetScrollButtonRect( nPart, rControlRegion );
         rNativeContentRegion = rNativeBoundingRegion;
@@ -1680,44 +1682,44 @@ bool GtkSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
 
         return true;
     }
-    if( (nType == ControlType::Menubar) && (nPart == PART_ENTIRE_CONTROL) )
+    if( (nType == ControlType::Menubar) && (nPart == ControlPart::Entire) )
     {
         aEditRect = GetWidgetSize(rControlRegion, gMenuBarWidget);
     }
     else if ( (nType==ControlType::Spinbox) &&
-              ((nPart==PART_BUTTON_UP) || (nPart==PART_BUTTON_DOWN) ||
-               (nPart==PART_SUB_EDIT)) )
+              ((nPart==ControlPart::ButtonUp) || (nPart==ControlPart::ButtonDown) ||
+               (nPart==ControlPart::SubEdit)) )
     {
         Rectangle aControlRegion(GetWidgetSize(rControlRegion, gSpinBox));
         aEditRect = NWGetSpinButtonRect(nPart, aControlRegion);
     }
     else if ( (nType==ControlType::Combobox) &&
-              ((nPart==PART_BUTTON_DOWN) || (nPart==PART_SUB_EDIT)) )
+              ((nPart==ControlPart::ButtonDown) || (nPart==ControlPart::SubEdit)) )
     {
         aEditRect = NWGetComboBoxButtonRect( nType, nPart, rControlRegion );
     }
     else if ( (nType==ControlType::Listbox) &&
-              ((nPart==PART_BUTTON_DOWN) || (nPart==PART_SUB_EDIT)) )
+              ((nPart==ControlPart::ButtonDown) || (nPart==ControlPart::SubEdit)) )
     {
         aEditRect = NWGetComboBoxButtonRect( nType, nPart, rControlRegion );
     }
-    else if (nType == ControlType::Editbox && nPart == PART_ENTIRE_CONTROL)
+    else if (nType == ControlType::Editbox && nPart == ControlPart::Entire)
     {
         aEditRect = GetWidgetSize(rControlRegion, gEntryBox);
     }
-    else if (nType == ControlType::Listbox && nPart == PART_ENTIRE_CONTROL)
+    else if (nType == ControlType::Listbox && nPart == ControlPart::Entire)
     {
         aEditRect = GetWidgetSize(rControlRegion, gListBox);
     }
-    else if (nType == ControlType::Combobox && nPart == PART_ENTIRE_CONTROL)
+    else if (nType == ControlType::Combobox && nPart == ControlPart::Entire)
     {
         aEditRect = GetWidgetSize(rControlRegion, gComboBox);
     }
-    else if (nType == ControlType::Spinbox && nPart == PART_ENTIRE_CONTROL)
+    else if (nType == ControlType::Spinbox && nPart == ControlPart::Entire)
     {
         aEditRect = GetWidgetSize(rControlRegion, gSpinBox);
     }
-    else if (nType == ControlType::TabItem && nPart == PART_ENTIRE_CONTROL)
+    else if (nType == ControlType::TabItem && nPart == ControlPart::Entire)
     {
         const TabitemValue& rTabitemValue = static_cast<const TabitemValue&>(rValue);
         const Rectangle& rTabitemRect = rTabitemValue.getContentRect();
@@ -1725,7 +1727,7 @@ bool GtkSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
         aEditRect = AdjustRectForTextBordersPadding(mpNotebookHeaderTabsTabStyle, rTabitemRect.GetWidth(),
                                                     rTabitemRect.GetHeight(), rControlRegion);
     }
-    else if (nType == ControlType::Frame && nPart == PART_BORDER)
+    else if (nType == ControlType::Frame && nPart == ControlPart::Border)
     {
         aEditRect = rControlRegion;
         DrawFrameFlags nStyle = static_cast<DrawFrameFlags>(rValue.getNumericVal() & 0xfff0);
@@ -2176,34 +2178,34 @@ bool GtkSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nP
         case ControlType::Progress:
         case ControlType::ListNode:
         case ControlType::ListNet:
-            if (nPart==PART_ENTIRE_CONTROL || nPart == PART_FOCUS)
+            if (nPart==ControlPart::Entire || nPart == ControlPart::Focus)
                 return true;
             break;
 
         case ControlType::Scrollbar:
-            if(nPart==PART_DRAW_BACKGROUND_HORZ || nPart==PART_DRAW_BACKGROUND_VERT ||
-               nPart==PART_ENTIRE_CONTROL       || nPart==HAS_THREE_BUTTONS)
+            if(nPart==ControlPart::DrawBackgroundHorz || nPart==ControlPart::DrawBackgroundVert ||
+               nPart==ControlPart::Entire       || nPart==ControlPart::HasThreeButtons)
                 return true;
             break;
 
         case ControlType::Editbox:
         case ControlType::MultilineEditbox:
-            if (nPart==PART_ENTIRE_CONTROL || nPart==HAS_BACKGROUND_TEXTURE)
+            if (nPart==ControlPart::Entire || nPart==ControlPart::HasBackgroundTexture)
                 return true;
             break;
 
         case ControlType::Combobox:
-            if (nPart==PART_ENTIRE_CONTROL || nPart==HAS_BACKGROUND_TEXTURE || nPart == PART_ALL_BUTTONS)
+            if (nPart==ControlPart::Entire || nPart==ControlPart::HasBackgroundTexture || nPart == ControlPart::AllButtons)
                 return true;
             break;
 
         case ControlType::Spinbox:
-            if (nPart==PART_ENTIRE_CONTROL || nPart==HAS_BACKGROUND_TEXTURE || nPart == PART_ALL_BUTTONS || nPart == PART_BUTTON_UP || nPart == PART_BUTTON_DOWN)
+            if (nPart==ControlPart::Entire || nPart==ControlPart::HasBackgroundTexture || nPart == ControlPart::AllButtons || nPart == ControlPart::ButtonUp || nPart == ControlPart::ButtonDown)
                 return true;
             break;
 
         case ControlType::SpinButtons:
-            if (nPart==PART_ENTIRE_CONTROL || nPart==PART_ALL_BUTTONS)
+            if (nPart==ControlPart::Entire || nPart==ControlPart::AllButtons)
                 return true;
             break;
 
@@ -2215,62 +2217,62 @@ bool GtkSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nP
         case ControlType::TabHeader:
         case ControlType::TabPane:
         case ControlType::TabBody:
-            if(nPart==PART_ENTIRE_CONTROL || nPart==PART_TABS_DRAW_RTL)
+            if(nPart==ControlPart::Entire || nPart==ControlPart::TabsDrawRtl)
                 return true;
             break;
 
         case ControlType::Listbox:
-            if (nPart==PART_ENTIRE_CONTROL || nPart==PART_WINDOW || nPart==HAS_BACKGROUND_TEXTURE || nPart == PART_FOCUS)
+            if (nPart==ControlPart::Entire || nPart==ControlPart::ListboxWindow || nPart==ControlPart::HasBackgroundTexture || nPart == ControlPart::Focus)
                 return true;
             break;
 
         case ControlType::Toolbar:
-            if( nPart==PART_ENTIRE_CONTROL
-//                ||  nPart==PART_DRAW_BACKGROUND_HORZ
-//                ||  nPart==PART_DRAW_BACKGROUND_VERT
-//                ||  nPart==PART_THUMB_HORZ
-//                ||  nPart==PART_THUMB_VERT
-                ||  nPart==PART_BUTTON
-//                ||  nPart==PART_SEPARATOR_HORZ
-                ||  nPart==PART_SEPARATOR_VERT
+            if( nPart==ControlPart::Entire
+//                ||  nPart==ControlPart::DrawBackgroundHorz
+//                ||  nPart==ControlPart::DrawBackgroundVert
+//                ||  nPart==ControlPart::ThumbHorz
+//                ||  nPart==ControlPart::ThumbVert
+                ||  nPart==ControlPart::Button
+//                ||  nPart==ControlPart::SeparatorHorz
+                ||  nPart==ControlPart::SeparatorVert
                 )
                 return true;
             break;
 
         case ControlType::Menubar:
-            if (nPart==PART_ENTIRE_CONTROL || nPart==PART_MENU_ITEM)
+            if (nPart==ControlPart::Entire || nPart==ControlPart::MenuItem)
                 return true;
             break;
 
         case ControlType::MenuPopup:
-            if (nPart==PART_ENTIRE_CONTROL
-                ||  nPart==PART_MENU_ITEM
-                ||  nPart==PART_MENU_ITEM_CHECK_MARK
-                ||  nPart==PART_MENU_ITEM_RADIO_MARK
-                ||  nPart==PART_MENU_SEPARATOR
-                ||  nPart==PART_MENU_SUBMENU_ARROW
+            if (nPart==ControlPart::Entire
+                ||  nPart==ControlPart::MenuItem
+                ||  nPart==ControlPart::MenuItemCheckMark
+                ||  nPart==ControlPart::MenuItemRadioMark
+                ||  nPart==ControlPart::Separator
+                ||  nPart==ControlPart::SubmenuArrow
             )
                 return true;
             break;
 
 //        case ControlType::Slider:
-//            if(nPart == PART_TRACK_HORZ_AREA || nPart == PART_TRACK_VERT_AREA)
+//            if(nPart == ControlPart::TrackHorzArea || nPart == ControlPart::TrackVertArea)
 //                return true;
 //            break;
 
         case ControlType::Fixedline:
-            if (nPart == PART_SEPARATOR_VERT || nPart == PART_SEPARATOR_HORZ)
+            if (nPart == ControlPart::SeparatorVert || nPart == ControlPart::SeparatorHorz)
                 return true;
             break;
 
         case ControlType::ListHeader:
-            if (nPart == PART_BUTTON || nPart == PART_ARROW)
+            if (nPart == ControlPart::Button || nPart == ControlPart::Arrow)
                 return true;
             break;
         default: break;
     }
 
-    SAL_INFO("vcl.gtk", "Unhandled is native supported for Type:" << (int)nType << ", Part" << nPart);
+    SAL_INFO("vcl.gtk", "Unhandled is native supported for Type:" << (int)nType << ", Part" << (int)nPart);
 
     return false;
 }

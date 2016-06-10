@@ -39,7 +39,7 @@ static WinBits clearProgressBarBorder( vcl::Window* pParent, WinBits nOrgStyle )
     WinBits nOutStyle = nOrgStyle;
     if( pParent && (nOrgStyle & WB_BORDER) != 0 )
     {
-        if( pParent->IsNativeControlSupported( ControlType::Progress, PART_ENTIRE_CONTROL ) )
+        if( pParent->IsNativeControlSupported( ControlType::Progress, ControlPart::Entire ) )
             nOutStyle &= WB_BORDER;
     }
     return nOutStyle;
@@ -76,7 +76,7 @@ void ProgressBar::ImplInitSettings( bool bFont,
     if ( bBackground )
     {
         if( !IsControlBackground() &&
-            IsNativeControlSupported( ControlType::Progress, PART_ENTIRE_CONTROL ) )
+            IsNativeControlSupported( ControlType::Progress, ControlPart::Entire ) )
         {
             if( (GetStyle() & WB_BORDER) )
                 SetBorderStyle( WindowBorderStyle::REMOVEBORDER );
