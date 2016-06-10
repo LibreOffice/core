@@ -1026,7 +1026,10 @@ void SwViewShell::SizeChgNotify()
                     std::stringstream ss;
                     ss << aDocSize.Width() + 2L * DOCUMENTBORDER << ", " << aDocSize.Height() + 2L * DOCUMENTBORDER;
                     OString sRect = ss.str().c_str();
-                    libreOfficeKitCallback(LOK_CALLBACK_DOCUMENT_SIZE_CHANGED, sRect.getStr());
+                    if (comphelper::LibreOfficeKit::isViewCallback())
+                        GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_DOCUMENT_SIZE_CHANGED, sRect.getStr());
+                    else
+                        libreOfficeKitCallback(LOK_CALLBACK_DOCUMENT_SIZE_CHANGED, sRect.getStr());
                 }
             }
         }
