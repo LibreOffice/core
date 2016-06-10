@@ -36,33 +36,37 @@ namespace detail {
 struct Void {};
 
 template<typename T> struct Optional { using type = T const *; };
-template<> struct Optional<void> { using type = boost::optional<Void>; };
-template<> struct Optional<bool> { using type = boost::optional<bool>; };
+template<> struct Optional<void> { using type = boost::optional<Void const>; };
+template<> struct Optional<bool> { using type = boost::optional<bool const>; };
 template<> struct Optional<sal_Int8> {
-    using type = boost::optional<sal_Int8>;
+    using type = boost::optional<sal_Int8 const>;
 };
 template<> struct Optional<sal_Int16> {
-    using type = boost::optional<sal_Int16>;
+    using type = boost::optional<sal_Int16 const>;
 };
 template<> struct Optional<sal_uInt16> {
-    using type = boost::optional<sal_uInt16>;
+    using type = boost::optional<sal_uInt16 const>;
 };
 template<> struct Optional<sal_Int32> {
-    using type = boost::optional<sal_Int32>;
+    using type = boost::optional<sal_Int32 const>;
 };
 template<> struct Optional<sal_uInt32> {
-    using type = boost::optional<sal_uInt32>;
+    using type = boost::optional<sal_uInt32 const>;
 };
 template<> struct Optional<sal_Int64> {
-    using type = boost::optional<sal_Int64>;
+    using type = boost::optional<sal_Int64 const>;
 };
 template<> struct Optional<sal_uInt64> {
-    using type = boost::optional<sal_uInt64>;
+    using type = boost::optional<sal_uInt64 const>;
 };
-template<> struct Optional<float> { using type = boost::optional<float>; };
-template<> struct Optional<double> { using type = boost::optional<double>; };
+template<> struct Optional<float> {
+    using type = boost::optional<float const>;
+};
+template<> struct Optional<double> {
+    using type = boost::optional<double const>;
+};
 template<typename T> struct Optional<css::uno::Reference<T>> {
-    using type = boost::optional<css::uno::Reference<T>>;
+    using type = boost::optional<css::uno::Reference<T> const>;
 };
 template<> struct Optional<css::uno::Reference<css::uno::XInterface>> {
     using type = css::uno::Reference<css::uno::XInterface> const *;
@@ -81,12 +85,12 @@ template<typename T> struct IsUnoSequenceType<cppu::UnoSequenceType<T>>:
     std::true_type
 {};
 
-template<typename T> inline boost::optional<T> tryGetConverted(
+template<typename T> inline boost::optional<T const> tryGetConverted(
     css::uno::Any const & any)
 {
     T v;
     return (any >>= v)
-        ? boost::optional<T>(std::move(v)) : boost::optional<T>();
+        ? boost::optional<T const>(std::move(v)) : boost::optional<T const>();
 }
 
 }
@@ -139,8 +143,8 @@ template<> inline detail::Optional<void>::type tryGet<void>(
     css::uno::Any const & any)
 {
     return any.hasValue()
-        ? boost::optional<detail::Void>()
-        : boost::optional<detail::Void>(detail::Void());
+        ? boost::optional<detail::Void const>()
+        : boost::optional<detail::Void const>(detail::Void());
 }
 
 template<> inline detail::Optional<bool>::type tryGet<bool>(
