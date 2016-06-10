@@ -109,7 +109,7 @@ SfxEventAsyncer_Impl::SfxEventAsyncer_Impl( const SfxEventHint& rHint )
 {
     if( rHint.GetObjShell() )
         StartListening( *rHint.GetObjShell() );
-    pIdle = new Idle;
+    pIdle = new Idle("SfxEventASyncer");
     pIdle->SetIdleHdl( LINK(this, SfxEventAsyncer_Impl, IdleHdl) );
     pIdle->SetPriority( SchedulerPriority::HIGHEST );
     pIdle->Start();
