@@ -33,6 +33,7 @@
 #include <com/sun/star/ui/dialogs/XFilePickerNotifier.hpp>
 #include <com/sun/star/ui/dialogs/XFilePreview.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
+#include <o3tl/any.hxx>
 #include <svl/urihelper.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <svtools/transfer.hxx>
@@ -232,7 +233,7 @@ bool SvxOpenGraphicDialog::IsAsLink() const
         {
             Any aVal = mpImpl->xCtrlAcc->getValue( ExtendedFilePickerElementIds::CHECKBOX_LINK, 0 );
             DBG_ASSERT(aVal.hasValue(), "Value CBX_INSERT_AS_LINK not found");
-            return aVal.hasValue() && ( *static_cast<sal_Bool const *>(aVal.getValue()) );
+            return aVal.hasValue() && *o3tl::doAccess<bool>(aVal);
         }
     }
     catch(const IllegalArgumentException&)
