@@ -35,9 +35,7 @@
 
 using namespace css;
 
-#if !defined(WNT) && !defined(MACOSX)
 static const char* DATA_DIRECTORY = "/sd/qa/unit/tiledrendering/data/";
-#endif
 
 class SdTiledRenderingTest : public test::BootstrapFixture, public unotest::MacrosTest, public XmlTestTools
 {
@@ -46,8 +44,6 @@ public:
     virtual void setUp() override;
     virtual void tearDown() override;
 
-#if !defined(WNT) && !defined(MACOSX)
-    void testInsertDeletePage();
     void testRegisterCallback();
     void testPostKeyEvent();
     void testPostMouseEvent();
@@ -58,16 +54,15 @@ public:
     void testSearch();
     void testSearchAll();
     void testSearchAllSelections();
-    void testResizeTable();
-    void testResizeTableColumn();
     void testSearchAllNotifications();
     void testSearchAllFollowedBySearch();
+    void testInsertDeletePage();
+    void testInsertTable();
     void testPartHash();
-#endif
+    void testResizeTable();
+    void testResizeTableColumn();
 
     CPPUNIT_TEST_SUITE(SdTiledRenderingTest);
-#if !defined(WNT) && !defined(MACOSX)
-    CPPUNIT_TEST(testInsertDeletePage);
     CPPUNIT_TEST(testRegisterCallback);
     CPPUNIT_TEST(testPostKeyEvent);
     CPPUNIT_TEST(testPostMouseEvent);
@@ -78,47 +73,42 @@ public:
     CPPUNIT_TEST(testSearch);
     CPPUNIT_TEST(testSearchAll);
     CPPUNIT_TEST(testSearchAllSelections);
-    CPPUNIT_TEST(testResizeTable);
-    CPPUNIT_TEST(testResizeTableColumn);
     CPPUNIT_TEST(testSearchAllNotifications);
     CPPUNIT_TEST(testSearchAllFollowedBySearch);
+    CPPUNIT_TEST(testInsertDeletePage);
+    CPPUNIT_TEST(testInsertTable);
     CPPUNIT_TEST(testPartHash);
-#endif
+    CPPUNIT_TEST(testResizeTable);
+    CPPUNIT_TEST(testResizeTableColumn);
     CPPUNIT_TEST_SUITE_END();
 
 private:
-#if !defined(WNT) && !defined(MACOSX)
     SdXImpressDocument* createDoc(const char* pName);
     static void callback(int nType, const char* pPayload, void* pData);
     void callbackImpl(int nType, const char* pPayload);
     xmlDocPtr parseXmlDump();
-#endif
 
     uno::Reference<lang::XComponent> mxComponent;
-#if !defined(WNT) && !defined(MACOSX)
     Rectangle m_aInvalidation;
     std::vector<Rectangle> m_aSelection;
     bool m_bFound;
     sal_Int32 m_nPart;
     std::vector<OString> m_aSearchResultSelection;
     std::vector<int> m_aSearchResultPart;
-    xmlBufferPtr m_pXmlBuffer;
     int m_nSelectionBeforeSearchResult;
     int m_nSelectionAfterSearchResult;
 
     /// For document size changed callback.
     osl::Condition m_aDocumentSizeCondition;
-#endif
+    xmlBufferPtr m_pXmlBuffer;
 };
 
 SdTiledRenderingTest::SdTiledRenderingTest()
-#if !defined(WNT) && !defined(MACOSX)
     : m_bFound(true),
       m_nPart(0),
-      m_pXmlBuffer(nullptr),
       m_nSelectionBeforeSearchResult(0),
-      m_nSelectionAfterSearchResult(0)
-#endif
+      m_nSelectionAfterSearchResult(0),
+      m_pXmlBuffer(nullptr)
 {
 }
 
@@ -134,15 +124,12 @@ void SdTiledRenderingTest::tearDown()
     if (mxComponent.is())
         mxComponent->dispose();
 
-#if !defined(_WIN32) && !defined(MACOSX)
     if (m_pXmlBuffer)
         xmlBufferFree(m_pXmlBuffer);
-#endif
 
     test::BootstrapFixture::tearDown();
 }
 
-#if !defined(WNT) && !defined(MACOSX)
 SdXImpressDocument* SdTiledRenderingTest::createDoc(const char* pName)
 {
     if (mxComponent.is())
@@ -298,7 +285,8 @@ void SdTiledRenderingTest::testPostKeyEvent()
     SdrView* pView = pViewShell->GetView();
     pView->MarkObj(pTextObj, pView->GetSdrPageView());
     SfxStringItem aInputString(SID_ATTR_CHAR, "x");
-    pViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_ATTR_CHAR, SfxCallMode::SYNCHRON, &aInputString, 0);
+    pViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_ATTR_CHAR,
+            SfxCallMode::SYNCHRON, { &aInputString });
 
     pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', 0);
     pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'x', 0);
@@ -315,6 +303,7 @@ void SdTiledRenderingTest::testPostKeyEvent()
 
 void SdTiledRenderingTest::testPostMouseEvent()
 {
+    comphelper::LibreOfficeKit::setActive();
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
     SdPage* pActualPage = pViewShell->GetActualPage();
@@ -324,7 +313,8 @@ void SdTiledRenderingTest::testPostMouseEvent()
     SdrView* pView = pViewShell->GetView();
     pView->MarkObj(pTextObj, pView->GetSdrPageView());
     SfxStringItem aInputString(SID_ATTR_CHAR, "x");
-    pViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_ATTR_CHAR, SfxCallMode::SYNCHRON, &aInputString, 0);
+    pViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_ATTR_CHAR,
+            SfxCallMode::SYNCHRON, { &aInputString });
     CPPUNIT_ASSERT(pView->GetTextEditObject());
     EditView& rEditView = pView->GetTextEditOutlinerView()->GetEditView();
     // Did we manage to go after the first character?
@@ -338,6 +328,7 @@ void SdTiledRenderingTest::testPostMouseEvent()
     CPPUNIT_ASSERT(pView->GetTextEditObject());
     // The new cursor position must be before the first word.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), rEditView.GetSelection().nStartPos);
+    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void SdTiledRenderingTest::testSetTextSelection()
@@ -450,6 +441,7 @@ static void lcl_search(const OUString& rKey, bool bFindAll = false)
 
 void SdTiledRenderingTest::testSearch()
 {
+    comphelper::LibreOfficeKit::setActive();
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
     pXImpressDocument->registerCallback(&SdTiledRenderingTest::callback, this);
     uno::Reference<container::XIndexAccess> xDrawPage(pXImpressDocument->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
@@ -465,24 +457,26 @@ void SdTiledRenderingTest::testSearch()
     CPPUNIT_ASSERT_EQUAL(OUString("bbb"), rEditView.GetSelected());
 
     // Did the selection callback fire?
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), m_aSelection.size());
+    CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(1), m_aSelection.size());
 
     // Search for something on the second slide, and make sure that the set-part callback fired.
     lcl_search("bbb");
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), m_nPart);
     CPPUNIT_ASSERT_EQUAL(true, m_bFound);
     // This was 0; should be 1 match for "find".
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), m_aSearchResultSelection.size());
+    CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(1), m_aSearchResultSelection.size());
     // Result is on the second slide.
     CPPUNIT_ASSERT_EQUAL(1, m_aSearchResultPart[0]);
 
     // This should trigger the not-found callback.
     lcl_search("ccc");
     CPPUNIT_ASSERT_EQUAL(false, m_bFound);
+    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void SdTiledRenderingTest::testSearchAll()
 {
+    comphelper::LibreOfficeKit::setActive();
     SdXImpressDocument* pXImpressDocument = createDoc("search-all.odp");
     pXImpressDocument->registerCallback(&SdTiledRenderingTest::callback, this);
 
@@ -497,10 +491,12 @@ void SdTiledRenderingTest::testSearchAll()
     lcl_search("second", /*bFindAll=*/true);
     // This was 0: no SET_PART was emitted.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), m_nPart);
+    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void SdTiledRenderingTest::testSearchAllSelections()
 {
+    comphelper::LibreOfficeKit::setActive();
     SdXImpressDocument* pXImpressDocument = createDoc("search-all.odp");
     pXImpressDocument->registerCallback(&SdTiledRenderingTest::callback, this);
 
@@ -508,7 +504,198 @@ void SdTiledRenderingTest::testSearchAllSelections()
     // Make sure this is found on the 3rd slide.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), m_nPart);
     // This was 1: only the first match was highlighted.
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), m_aSelection.size());
+    CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(2), m_aSelection.size());
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void SdTiledRenderingTest::testSearchAllNotifications()
+{
+    comphelper::LibreOfficeKit::setActive();
+    SdXImpressDocument* pXImpressDocument = createDoc("search-all.odp");
+    pXImpressDocument->registerCallback(&SdTiledRenderingTest::callback, this);
+
+    lcl_search("third", /*bFindAll=*/true);
+    // Make sure that we get no notifications about selection changes during search.
+    CPPUNIT_ASSERT_EQUAL(0, m_nSelectionBeforeSearchResult);
+    // But we do get the selection of the first hit.
+    CPPUNIT_ASSERT(m_nSelectionAfterSearchResult > 0);
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void SdTiledRenderingTest::testSearchAllFollowedBySearch()
+{
+    comphelper::LibreOfficeKit::setActive();
+    SdXImpressDocument* pXImpressDocument = createDoc("search-all.odp");
+    pXImpressDocument->registerCallback(&SdTiledRenderingTest::callback, this);
+
+    lcl_search("third", /*bFindAll=*/true);
+    lcl_search("match" /*,bFindAll=false*/);
+
+    OString aUsedFormat;
+    // This used to give wrong result: 'search' after 'search all' still
+    // returned 'third'
+    CPPUNIT_ASSERT_EQUAL(OString("match"), pXImpressDocument->getTextSelection("text/plain;charset=utf-8", aUsedFormat));
+}
+
+namespace
+{
+
+std::vector<OUString> getCurrentParts(SdXImpressDocument* pDocument)
+{
+    int parts = pDocument->getParts();
+    std::vector<OUString> result;
+
+    for (int i = 0; i < parts; i++)
+    {
+        result.push_back(pDocument->getPartName(i));
+    }
+
+    return result;
+}
+
+}
+
+void SdTiledRenderingTest::testInsertDeletePage()
+{
+    comphelper::LibreOfficeKit::setActive();
+    SdXImpressDocument* pXImpressDocument = createDoc("insert-delete.odp");
+    pXImpressDocument->registerCallback(&SdTiledRenderingTest::callback, this);
+
+    SdDrawDocument* pDoc = pXImpressDocument->GetDocShell()->GetDoc();
+    CPPUNIT_ASSERT(pDoc);
+
+    std::vector<OUString> aInserted =
+    {
+        "Slide 1", "Slide 2", "Slide 3", "Slide 4", "Slide 5",
+        "Slide 6", "Slide 7", "Slide 8", "Slide 9", "Slide 10", "Slide 11"
+    };
+
+    std::vector<OUString> aDeleted =
+    {
+        "Slide 1"
+    };
+
+    // the document has 1 slide
+    CPPUNIT_ASSERT(pDoc->GetSdPageCount(PK_STANDARD) == 1);
+
+    uno::Sequence<beans::PropertyValue> aArgs;
+
+    // Insert slides
+    m_aDocumentSizeCondition.reset();
+    for (unsigned it = 1; it <= 10; it++)
+        comphelper::dispatchCommand(".uno:InsertPage", aArgs);
+
+    TimeValue aTimeValue = { 2 , 0 }; // 2 seconds max
+    osl::Condition::Result aResult = m_aDocumentSizeCondition.wait(aTimeValue);
+    CPPUNIT_ASSERT_EQUAL(aResult, osl::Condition::result_ok);
+
+    // Verify inserted slides
+    std::vector<OUString> aPageList(getCurrentParts(pXImpressDocument));
+    CPPUNIT_ASSERT_EQUAL(aPageList.size(), aInserted.size());
+
+    for (auto it1 = aPageList.begin(), it2 = aInserted.begin(); it1 != aPageList.end(); ++it1, ++it2)
+    {
+        CPPUNIT_ASSERT_EQUAL(*it1, *it2);
+    }
+
+    // Delete slides
+    m_aDocumentSizeCondition.reset();
+    for (unsigned it = 1; it <= 10; it++)
+        comphelper::dispatchCommand(".uno:DeletePage", aArgs);
+
+    aResult = m_aDocumentSizeCondition.wait(aTimeValue);
+    CPPUNIT_ASSERT_EQUAL(aResult, osl::Condition::result_ok);
+
+    // Verify deleted slides
+    aPageList = getCurrentParts(pXImpressDocument);
+    CPPUNIT_ASSERT_EQUAL(aPageList.size(), aDeleted.size());
+    for (auto it1 = aPageList.begin(), it2 = aDeleted.begin(); it1 != aPageList.end(); ++it1, ++it2)
+    {
+        CPPUNIT_ASSERT_EQUAL(*it1, *it2);
+    }
+
+    // Undo deleted slides
+    m_aDocumentSizeCondition.reset();
+    for (unsigned it = 1; it <= 10; it++)
+        comphelper::dispatchCommand(".uno:Undo", aArgs);
+
+    aResult = m_aDocumentSizeCondition.wait(aTimeValue);
+    CPPUNIT_ASSERT_EQUAL(aResult, osl::Condition::result_ok);
+
+    // Verify inserted slides
+    aPageList = getCurrentParts(pXImpressDocument);
+    CPPUNIT_ASSERT_EQUAL(aPageList.size(), aInserted.size());
+    for (auto it1 = aPageList.begin(), it2 = aInserted.begin(); it1 != aPageList.end(); ++it1, ++it2)
+    {
+        CPPUNIT_ASSERT_EQUAL(*it1, *it2);
+    }
+
+    // Redo deleted slides
+    m_aDocumentSizeCondition.reset();
+    for (unsigned it = 1; it <= 10; it++)
+        comphelper::dispatchCommand(".uno:Redo", aArgs);
+
+    aResult = m_aDocumentSizeCondition.wait(aTimeValue);
+    CPPUNIT_ASSERT_EQUAL(aResult, osl::Condition::result_ok);
+
+    // Verify deleted slides
+    aPageList = getCurrentParts(pXImpressDocument);
+    CPPUNIT_ASSERT_EQUAL(aPageList.size(), aDeleted.size());
+    for (auto it1 = aPageList.begin(), it2 = aDeleted.begin(); it1 != aPageList.end(); ++it1, ++it2)
+    {
+        CPPUNIT_ASSERT_EQUAL(*it1, *it2);
+    }
+
+    // the document has 1 slide
+    CPPUNIT_ASSERT(pDoc->GetSdPageCount(PK_STANDARD) == 1);
+
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void SdTiledRenderingTest::testInsertTable()
+{
+    comphelper::LibreOfficeKit::setActive();
+    SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
+
+    uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
+    {
+        { "Rows", uno::makeAny(sal_Int32(3)) },
+        { "Columns", uno::makeAny(sal_Int32(5)) }
+    }
+    ));
+
+    comphelper::dispatchCommand(".uno:InsertTable", aArgs);
+    Scheduler::ProcessEventsToIdle();
+
+    // get the table
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdPage* pActualPage = pViewShell->GetActualPage();
+    SdrObject* pObject = pActualPage->GetObj(1);
+    CPPUNIT_ASSERT(pObject);
+
+    // check that the table is not in the top left corner
+    Point aPos(pObject->GetRelativePos());
+
+    CPPUNIT_ASSERT(aPos.X() != 0);
+    CPPUNIT_ASSERT(aPos.Y() != 0);
+
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void SdTiledRenderingTest::testPartHash()
+{
+    comphelper::LibreOfficeKit::setActive();
+    SdXImpressDocument* pDoc = createDoc("dummy.odp");
+
+    int nParts = pDoc->getParts();
+    for (int it = 0; it < nParts; it++)
+    {
+        CPPUNIT_ASSERT(!pDoc->getPartHash(it).isEmpty());
+    }
+
+    // check part that it does not exists
+    CPPUNIT_ASSERT(pDoc->getPartHash(100).isEmpty());
+    comphelper::LibreOfficeKit::setActive(false);
 }
 
 void SdTiledRenderingTest::testResizeTable()
@@ -612,165 +799,6 @@ void SdTiledRenderingTest::testResizeTableColumn()
     pXmlDoc = nullptr;
     comphelper::LibreOfficeKit::setActive(false);
 }
-
-void SdTiledRenderingTest::testSearchAllNotifications()
-{
-    comphelper::LibreOfficeKit::setActive();
-    SdXImpressDocument* pXImpressDocument = createDoc("search-all.odp");
-    pXImpressDocument->registerCallback(&SdTiledRenderingTest::callback, this);
-
-    lcl_search("third", /*bFindAll=*/true);
-    // Make sure that we get no notifications about selection changes during search.
-    CPPUNIT_ASSERT_EQUAL(0, m_nSelectionBeforeSearchResult);
-    // But we do get the selection of the first hit.
-    CPPUNIT_ASSERT(m_nSelectionAfterSearchResult > 0);
-    comphelper::LibreOfficeKit::setActive(false);
-}
-
-void SdTiledRenderingTest::testSearchAllFollowedBySearch()
-{
-    comphelper::LibreOfficeKit::setActive();
-    SdXImpressDocument* pXImpressDocument = createDoc("search-all.odp");
-    pXImpressDocument->registerCallback(&SdTiledRenderingTest::callback, this);
-
-    lcl_search("third", /*bFindAll=*/true);
-    lcl_search("match", /*bFindAll=*/false);
-
-    OString aUsedFormat;
-    // This used to give wrong result: 'search' after 'search all' still
-    // returned 'third'
-    CPPUNIT_ASSERT_EQUAL(OString("match"), pXImpressDocument->getTextSelection("text/plain;charset=utf-8", aUsedFormat));
-}
-
-namespace {
-
-std::vector<OUString> getCurrentParts(SdXImpressDocument* pDocument)
-{
-    int parts = pDocument->getParts();
-    std::vector<OUString> result;
-
-    for (int i = 0; i < parts; i++)
-    {
-        result.push_back(pDocument->getPartName(i));
-    }
-
-    return result;
-}
-
-}
-
-void SdTiledRenderingTest::testInsertDeletePage()
-{
-    comphelper::LibreOfficeKit::setActive();
-    SdXImpressDocument* pXImpressDocument = createDoc("insert-delete.odp");
-    pXImpressDocument->registerCallback(&SdTiledRenderingTest::callback, this);
-
-    SdDrawDocument *pDoc = pXImpressDocument->GetDocShell()->GetDoc();
-    CPPUNIT_ASSERT(pDoc);
-
-    std::vector<OUString> aInserted = {
-        "Slide 1", "Slide 2", "Slide 3", "Slide 4", "Slide 5",
-        "Slide 6", "Slide 7", "Slide 8", "Slide 9", "Slide 10", "Slide 11"
-    };
-
-    std::vector<OUString> aDeleted = {
-        "Slide 1"
-    };
-
-    // the document has 1 slide
-    CPPUNIT_ASSERT(pDoc->GetSdPageCount(PK_STANDARD) == 1);
-
-    uno::Sequence<beans::PropertyValue> aArgs;
-
-    // Insert slides
-    m_aDocumentSizeCondition.reset();
-    for (unsigned it = 1; it <= 10; it++)
-        comphelper::dispatchCommand(".uno:InsertPage", aArgs);
-
-    TimeValue aTimeValue = { 2 , 0 }; // 2 seconds max
-    osl::Condition::Result aResult = m_aDocumentSizeCondition.wait(aTimeValue);
-    CPPUNIT_ASSERT_EQUAL(aResult, osl::Condition::result_ok);
-
-    // Verify inserted slides
-    std::vector<OUString> aPageList(getCurrentParts(pXImpressDocument));
-    CPPUNIT_ASSERT_EQUAL(aPageList.size(), aInserted.size());
-
-    for (auto it1 = aPageList.begin(), it2 = aInserted.begin(); it1 != aPageList.end(); ++it1, ++it2)
-    {
-        CPPUNIT_ASSERT_EQUAL(*it1, *it2);
-    }
-
-    // Delete slides
-    m_aDocumentSizeCondition.reset();
-    for (unsigned it = 1; it <= 10; it++)
-        comphelper::dispatchCommand(".uno:DeletePage", aArgs);
-
-    aResult = m_aDocumentSizeCondition.wait(aTimeValue);
-    CPPUNIT_ASSERT_EQUAL(aResult, osl::Condition::result_ok);
-
-    // Verify deleted slides
-    aPageList = getCurrentParts(pXImpressDocument);
-    CPPUNIT_ASSERT_EQUAL(aPageList.size(), aDeleted.size());
-    for (auto it1 = aPageList.begin(), it2 = aDeleted.begin(); it1 != aPageList.end(); ++it1, ++it2)
-    {
-        CPPUNIT_ASSERT_EQUAL(*it1, *it2);
-    }
-
-    // Undo deleted slides
-    m_aDocumentSizeCondition.reset();
-    for (unsigned it = 1; it <= 10; it++)
-        comphelper::dispatchCommand(".uno:Undo", aArgs);
-
-    aResult = m_aDocumentSizeCondition.wait(aTimeValue);
-    CPPUNIT_ASSERT_EQUAL(aResult, osl::Condition::result_ok);
-
-    // Verify inserted slides
-    aPageList = getCurrentParts(pXImpressDocument);
-    CPPUNIT_ASSERT_EQUAL(aPageList.size(), aInserted.size());
-    for (auto it1 = aPageList.begin(), it2 = aInserted.begin(); it1 != aPageList.end(); ++it1, ++it2)
-    {
-        CPPUNIT_ASSERT_EQUAL(*it1, *it2);
-    }
-
-    // Redo deleted slides
-    m_aDocumentSizeCondition.reset();
-    for (unsigned it = 1; it <= 10; it++)
-        comphelper::dispatchCommand(".uno:Redo", aArgs);
-
-    aResult = m_aDocumentSizeCondition.wait(aTimeValue);
-    CPPUNIT_ASSERT_EQUAL(aResult, osl::Condition::result_ok);
-
-    // Verify deleted slides
-    aPageList = getCurrentParts(pXImpressDocument);
-    CPPUNIT_ASSERT_EQUAL(aPageList.size(), aDeleted.size());
-    for (auto it1 = aPageList.begin(), it2 = aDeleted.begin(); it1 != aPageList.end(); ++it1, ++it2)
-    {
-        CPPUNIT_ASSERT_EQUAL(*it1, *it2);
-    }
-
-    // the document has 1 slide
-    CPPUNIT_ASSERT(pDoc->GetSdPageCount(PK_STANDARD) == 1);
-
-    comphelper::LibreOfficeKit::setActive(false);
-}
-
-void SdTiledRenderingTest::testPartHash()
-{
-    comphelper::LibreOfficeKit::setActive();
-    SdXImpressDocument* pDoc = createDoc("dummy.odp");
-
-    int nParts = pDoc->getParts();
-    for (int it = 0; it < nParts; it++)
-    {
-        CPPUNIT_ASSERT(!pDoc->getPartHash(it).isEmpty());
-    }
-
-    // check part that it does not exists
-    CPPUNIT_ASSERT(pDoc->getPartHash(100).isEmpty());
-    comphelper::LibreOfficeKit::setActive(false);
-}
-
-#endif
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdTiledRenderingTest);
 
