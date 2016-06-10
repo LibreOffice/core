@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_0ea465a4",
+        "filename": "sfx2/source/doc/doc.src",
+        "patchSetId": 2
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-06-10T07:18:32Z",
+      "side": 1,
+      "message": "I\u0027d change the message a little bit:\n\n\"$number templates successfully exported.\"\n\nor something like that.",
+      "revId": "25a40505fa2625d7993a6f216d8af1d4c19d0653",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_2ea12995",
+        "filename": "sfx2/source/doc/doc.src",
+        "patchSetId": 2
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2016-06-10T07:18:32Z",
+      "side": 1,
+      "message": "\"Do you want to copy the template *instead*\" please.",
+      "revId": "25a40505fa2625d7993a6f216d8af1d4c19d0653",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
