@@ -1440,8 +1440,9 @@ void GtkSalFrame::Show( bool bVisible, bool bNoActivate )
                 m_nFloats++;
                 if( ! getDisplay()->GetCaptureFrame() && m_nFloats == 1 )
                 {
+                    GtkWindowGroup *pWindowGroup = gtk_window_get_group(GTK_WINDOW(m_pWindow));
                     GtkWidget* pGrabWidgetBeforeShowFloat;
-                    while ((pGrabWidgetBeforeShowFloat = gtk_grab_get_current()))
+                    while ((pGrabWidgetBeforeShowFloat = gtk_window_group_get_current_grab(pWindowGroup)))
                     {
                         m_aGrabWidgetsBeforeShowFloat.push_back(pGrabWidgetBeforeShowFloat);
                         gtk_grab_remove(pGrabWidgetBeforeShowFloat);
