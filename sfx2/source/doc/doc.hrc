@@ -126,9 +126,11 @@
 #define STR_TEMPLATE_SELECTION              (RID_SFX_DOC_START+120)
 #define STR_RESET_DEFAULT                   (RID_SFX_DOC_START+122)
 #define STR_TEMPLATE_TOOLTIP                (RID_SFX_DOC_START+169)
+#define STR_MSG_EXPORT_SUCCESS              (RID_SFX_DOC_START+170)
+#define STR_MSG_QUERY_COPY                  (RID_SFX_DOC_START+171)
 
 // please update to the last id
-#define ACT_SFX_DOC_END IMG_ACTION_REFRESH
+#define ACT_SFX_DOC_END STR_MSG_QUERY_COPY
 #if ACT_SFX_DOC_END > RID_SFX_DOC_END
 #error resource overflow in #line, #file
 #endif

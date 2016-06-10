@@ -132,7 +132,7 @@ void TemplateAbstractView::insertItems(const std::vector<TemplateItemProperties>
         else
         {
             OUString sHelpText = SfxResId(STR_TEMPLATE_TOOLTIP).toString();
-            sHelpText = (sHelpText.replaceFirst("$1", pCur->aName)).replaceFirst("$1", pCur->aRegionName);
+            sHelpText = (sHelpText.replaceFirst("$1", pCur->aName)).replaceFirst("$2", pCur->aRegionName);
             pChild->setHelpText(sHelpText);
         }
 
