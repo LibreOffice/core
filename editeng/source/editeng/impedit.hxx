@@ -222,7 +222,10 @@ private:
     EditView*           pEditView;
     vcl::Cursor*        pCursor;
     Color*              pBackgroundColor;
+    /// Model callback.
     OutlinerSearchable* mpLibreOfficeKitSearchable;
+    /// Per-view callback.
+    OutlinerViewCallable* mpLibreOfficeKitViewCallable;
     EditEngine*         pEditEngine;
     VclPtr<vcl::Window> pOutWin;
     Pointer*            pPointer;
@@ -369,8 +372,12 @@ public:
 
     /// @see vcl::ITiledRenderable::registerCallback().
     void registerLibreOfficeKitCallback(OutlinerSearchable* pSearchable);
-    /// Invokes the registered callback, if there are any.
+    /// Invokes the registered model callback, if there are any.
     void libreOfficeKitCallback(int nType, const char* pPayload) const;
+    /// @see vcl::ITiledRenderable::registerCallback().
+    void registerLibreOfficeKitViewCallback(OutlinerViewCallable* pCallable);
+    /// Invokes the registered view callback, if there are any.
+    void libreOfficeKitViewCallback(int nType, const char* pPayload) const;
 
     bool            IsWrongSpelledWord( const EditPaM& rPaM, bool bMarkIfWrong );
     OUString        SpellIgnoreWord();

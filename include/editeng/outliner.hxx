@@ -73,6 +73,7 @@ class SvxForbiddenCharactersTable;
 class OverflowingText;
 class NonOverflowingText;
 class OutlinerSearchable;
+class OutlinerViewCallable;
 
 namespace svl
 {
@@ -273,8 +274,10 @@ public:
     void        SetBackgroundColor( const Color& rColor );
     Color       GetBackgroundColor();
 
-    /// @see vcl::ITiledRenderable::registerCallback().
+    /// Registers a LOK model callback.
     void registerLibreOfficeKitCallback(OutlinerSearchable* pSearchable);
+    /// Registers a LOK view callback.
+    void registerLibreOfficeKitViewCallback(OutlinerViewCallable* pCallable);
 
     SfxItemSet  GetAttribs();
 
@@ -383,6 +386,16 @@ public:
     virtual ~OutlinerSearchable();
 
     virtual void libreOfficeKitCallback(int nType, const char* pPayload) const = 0;
+};
+
+/// Interface class to not depend on SfxViewShell in editeng, meant to replace OutlinerSearchable at the end.
+class SAL_NO_VTABLE SAL_DLLPUBLIC_RTTI OutlinerViewCallable
+{
+public:
+    virtual void libreOfficeKitViewCallback(int nType, const char* pPayload) const = 0;
+
+protected:
+    ~OutlinerViewCallable() throw () {}
 };
 
 // some thesaurus functionality to avoid code duplication in different projects...

@@ -80,6 +80,7 @@ ImpEditView::ImpEditView( EditView* pView, EditEngine* pEng, vcl::Window* pWindo
     pPointer            = nullptr;
     pBackgroundColor    = nullptr;
     mpLibreOfficeKitSearchable = nullptr;
+    mpLibreOfficeKitViewCallable = nullptr;
     nScrollDiffX        = 0;
     nExtraCursorFlags   = 0;
     nCursorBidiLevel    = CURSOR_BIDILEVEL_DONTKNOW;
@@ -119,6 +120,8 @@ void ImpEditView::SetBackgroundColor( const Color& rColor )
 
 void ImpEditView::registerLibreOfficeKitCallback(OutlinerSearchable* pSearchable)
 {
+    // Per-view callbacks should always invoke ImpEditView::registerLibreOfficeKitViewCallback().
+    assert(!comphelper::LibreOfficeKit::isViewCallback());
     mpLibreOfficeKitSearchable = pSearchable;
 }
 
@@ -126,6 +129,17 @@ void ImpEditView::libreOfficeKitCallback(int nType, const char* pPayload) const
 {
     if (mpLibreOfficeKitSearchable)
         mpLibreOfficeKitSearchable->libreOfficeKitCallback(nType, pPayload);
+}
+
+void ImpEditView::registerLibreOfficeKitViewCallback(OutlinerViewCallable* pCallable)
+{
+    mpLibreOfficeKitViewCallable = pCallable;
+}
+
+void ImpEditView::libreOfficeKitViewCallback(int nType, const char* pPayload) const
+{
+    if (mpLibreOfficeKitViewCallable)
+        mpLibreOfficeKitViewCallable->libreOfficeKitViewCallback(nType, pPayload);
 }
 
 void ImpEditView::SetEditSelection( const EditSelection& rEditSelection )
@@ -1001,7 +1015,10 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
             aRect.setWidth(0);
 
             OString sRect = aRect.toString();
-            libreOfficeKitCallback(LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, sRect.getStr());
+            if (comphelper::LibreOfficeKit::isViewCallback())
+                libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, sRect.getStr());
+            else
+                libreOfficeKitCallback(LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, sRect.getStr());
         }
 
         CursorDirection nCursorDir = CursorDirection::NONE;

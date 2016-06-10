@@ -63,6 +63,7 @@
 #include <svx/sdr/table/tablecontroller.hxx>
 #include <drawinglayer/processor2d/processor2dtools.hxx>
 #include <comphelper/lok.hxx>
+#include <sfx2/viewsh.hxx>
 
 #include <memory>
 
@@ -460,7 +461,10 @@ OutlinerView* SdrObjEditView::ImpMakeOutlinerView(vcl::Window* pWin, bool /*bNoP
     }
     pOutlView->SetControlWord(nStat);
     pOutlView->SetBackgroundColor( aBackground );
-    pOutlView->registerLibreOfficeKitCallback(GetModel());
+    if (comphelper::LibreOfficeKit::isViewCallback())
+        pOutlView->registerLibreOfficeKitViewCallback(SfxViewShell::Current());
+    else
+        pOutlView->registerLibreOfficeKitCallback(GetModel());
     if (pText!=nullptr)
     {
         pOutlView->SetAnchorMode((EVAnchorMode)(pText->GetOutlinerViewAnchorMode()));

@@ -588,6 +588,11 @@ void EditView::registerLibreOfficeKitCallback(OutlinerSearchable *pSearchable)
     pImpEditView->registerLibreOfficeKitCallback(pSearchable);
 }
 
+void EditView::registerLibreOfficeKitViewCallback(OutlinerViewCallable *pCallable)
+{
+    pImpEditView->registerLibreOfficeKitViewCallback(pCallable);
+}
+
 void EditView::SetControlWord( EVControlBits nWord )
 {
     pImpEditView->nControl = nWord;

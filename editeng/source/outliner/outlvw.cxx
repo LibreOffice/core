@@ -1432,6 +1432,11 @@ void OutlinerView::registerLibreOfficeKitCallback(OutlinerSearchable* pSearchabl
     pEditView->registerLibreOfficeKitCallback(pSearchable);
 }
 
+void OutlinerView::registerLibreOfficeKitViewCallback(OutlinerViewCallable* pCallable)
+{
+    pEditView->registerLibreOfficeKitViewCallback(pCallable);
+}
+
 Color OutlinerView::GetBackgroundColor()
 {
     return pEditView->GetBackgroundColor();
