@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <o3tl/any.hxx>
 #include <osl/mutex.hxx>
 #include <sfx2/printer.hxx>
 #include <vcl/svapp.hxx>
@@ -383,13 +386,9 @@ sal_Int64 SAL_CALL SmModel::getSomething( const uno::Sequence< sal_Int8 >& rId )
 
 static sal_Int16 lcl_AnyToINT16(const uno::Any& rAny)
 {
-    uno::TypeClass eType = rAny.getValueType().getTypeClass();
-
     sal_Int16 nRet = 0;
-    if( eType == uno::TypeClass_DOUBLE )
-        nRet = static_cast<sal_Int16>(*static_cast<double const *>(rAny.getValue()));
-    else if( eType == uno::TypeClass_FLOAT )
-        nRet = static_cast<sal_Int16>(*static_cast<float const *>(rAny.getValue()));
+    if( auto x = o3tl::tryAccess<double>(rAny) )
+        nRet = static_cast<sal_Int16>(*x);
     else
         rAny >>= nRet;
     return nRet;
@@ -471,11 +470,11 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
             case HANDLE_FONT_NUMBERS_POSTURE     :
             case HANDLE_FONT_TEXT_POSTURE        :
             {
-                if((*pValues).getValueType() != cppu::UnoType<bool>::get())
+                auto bVal = o3tl::tryAccess<bool>(*pValues);
+                if(!bVal)
                     throw IllegalArgumentException();
-                bool bVal = *static_cast<sal_Bool const *>((*pValues).getValue());
                 vcl::Font aNewFont(aFormat.GetFont((*ppEntries)->mnMemberId));
-                aNewFont.SetItalic((bVal) ? ITALIC_NORMAL : ITALIC_NONE);
+                aNewFont.SetItalic(*bVal ? ITALIC_NORMAL : ITALIC_NONE);
                 aFormat.SetFont((*ppEntries)->mnMemberId, aNewFont);
             }
             break;
@@ -487,11 +486,11 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
             case HANDLE_FONT_NUMBERS_WEIGHT      :
             case HANDLE_FONT_TEXT_WEIGHT         :
             {
-                if((*pValues).getValueType() != cppu::UnoType<bool>::get())
+                auto bVal = o3tl::tryAccess<bool>(*pValues);
+                if(!bVal)
                     throw IllegalArgumentException();
-                bool bVal = *static_cast<sal_Bool const *>((*pValues).getValue());
                 vcl::Font aNewFont(aFormat.GetFont((*ppEntries)->mnMemberId));
-                aNewFont.SetWeight((bVal) ? WEIGHT_BOLD : WEIGHT_NORMAL);
+                aNewFont.SetWeight(*bVal ? WEIGHT_BOLD : WEIGHT_NORMAL);
                 aFormat.SetFont((*ppEntries)->mnMemberId, aNewFont);
             }
             break;
@@ -529,7 +528,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
 
             case HANDLE_IS_TEXT_MODE                       :
             {
-                aFormat.SetTextmode(*static_cast<sal_Bool const *>((*pValues).getValue()));
+                aFormat.SetTextmode(*o3tl::doAccess<bool>(*pValues));
             }
             break;
 
@@ -587,7 +586,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
             }
             break;
             case HANDLE_IS_SCALE_ALL_BRACKETS              :
-                aFormat.SetScaleNormalBrackets(*static_cast<sal_Bool const *>((*pValues).getValue()));
+                aFormat.SetScaleNormalBrackets(*o3tl::doAccess<bool>(*pValues));
             break;
             case HANDLE_PRINTER_NAME:
             {
