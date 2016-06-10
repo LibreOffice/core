@@ -21,6 +21,7 @@
 #include <hintids.hxx>
 #include <i18nlangtag/lang.h>
 #include <i18nlangtag/languagetag.hxx>
+#include <o3tl/any.hxx>
 #include <vcl/msgbox.hxx>
 #include <svtools/parhtml.hxx>
 #include <sot/storage.hxx>
@@ -236,14 +237,14 @@ bool StgWriter::IsStgWriter() const { return true; }
 #define FILTER_OPTION_ROOT      OUString("Office.Writer/FilterFlags")
 
 SwFilterOptions::SwFilterOptions( sal_uInt16 nCnt, const sal_Char** ppNames,
-                                                                sal_uInt32* pValues )
+                                                                sal_uInt64* pValues )
     : ConfigItem( FILTER_OPTION_ROOT )
 {
     GetValues( nCnt, ppNames, pValues );
 }
 
 void SwFilterOptions::GetValues( sal_uInt16 nCnt, const sal_Char** ppNames,
-                                                                        sal_uInt32* pValues )
+                                                                        sal_uInt64* pValues )
 {
     Sequence<OUString> aNames( nCnt );
     OUString* pNames = aNames.getArray();
@@ -258,7 +259,7 @@ void SwFilterOptions::GetValues( sal_uInt16 nCnt, const sal_Char** ppNames,
         const Any* pAnyValues = aValues.getConstArray();
         for( n = 0; n < nCnt; ++n )
             pValues[ n ] = pAnyValues[ n ].hasValue()
-                                            ? *static_cast<sal_uInt32 const *>(pAnyValues[ n ].getValue())
+                                            ? *o3tl::doAccess<sal_uInt64>(pAnyValues[ n ])
                                             : 0;
     }
     else

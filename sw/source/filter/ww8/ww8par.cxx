@@ -6060,7 +6060,7 @@ sal_uLong SwWW8ImplReader::LoadDoc(WW8Glossary *pGloss)
             "WinWord/WWFB0", "WinWord/WWFB1", "WinWord/WWFB2",
             "WinWord/RegardHindiDigits"
         };
-        sal_uInt32 aVal[ 13 ];
+        sal_uInt64 aVal[ 13 ];
 
         SwFilterOptions aOpt( 13, aNames, aVal );
 
