@@ -1223,6 +1223,21 @@ void SfxTabDialog::ShowPage( sal_uInt16 nId )
     ActivatePageHdl( m_pTabCtrl );
 }
 
+OString SfxTabDialog::GetScreenshotId() const
+{
+    SfxTabPage *pActiveTabPage = GetCurTabPage();
+    OString aScreenshotId = GetHelpId();
+
+    if ( pActiveTabPage )
+    {
+        vcl::Window* pToplevelBox = pActiveTabPage->GetWindow( GetWindowType::FirstChild );
+
+        if ( pToplevelBox )
+            aScreenshotId = aScreenshotId + OString("#") + pToplevelBox->GetHelpId();
+    }
+
+    return aScreenshotId;
+}
 
 const sal_uInt16* SfxTabDialog::GetInputRanges( const SfxItemPool& rPool )
 
