@@ -40,11 +40,14 @@ using namespace com::sun::star;
 static SvtHelpOptions_Impl* pOptions = nullptr;
 static sal_Int32           nRefCount = 0;
 
-#define EXTENDEDHELP        0
-#define HELPTIPS            1
-#define LOCALE              2
-#define SYSTEM              3
-#define STYLESHEET          4
+enum class HelpProperty
+{
+    ExtendedHelp    = 0,
+    HelpTips        = 1,
+    Locale          = 2,
+    System          = 3,
+    StyleSheet      = 4
+};
 
 class SvtHelpOptions_Impl : public utl::ConfigItem
 {
@@ -158,12 +161,13 @@ void  SvtHelpOptions_Impl::Load(const uno::Sequence< OUString>& rPropertyNames)
                 sal_Int32 nTmpInt = 0;
                 if ( pValues[nProp] >>= bTmp )
                 {
-                    switch ( lcl_MapPropertyName(rPropertyNames[nProp], aInternalPropertyNames) )
+                    switch ( static_cast< HelpProperty >(
+                        lcl_MapPropertyName(rPropertyNames[nProp], aInternalPropertyNames) ) )
                     {
-                        case EXTENDEDHELP :
+                        case HelpProperty::ExtendedHelp:
                             bExtendedHelp = bTmp;
                             break;
-                        case HELPTIPS :
+                        case HelpProperty::HelpTips:
                             bHelpTips = bTmp;
                             break;
                         default:
@@ -173,16 +177,16 @@ void  SvtHelpOptions_Impl::Load(const uno::Sequence< OUString>& rPropertyNames)
                 }
                 else if ( pValues[nProp] >>= aTmpStr )
                 {
-                    switch ( nProp )
+                    switch ( static_cast< HelpProperty >(nProp) )
                     {
-                        case LOCALE:
+                        case HelpProperty::Locale:
                             aLocale = aTmpStr;
                             break;
 
-                        case SYSTEM:
+                        case HelpProperty::System:
                             aSystem = aTmpStr;
                             break;
-                        case STYLESHEET :
+                        case HelpProperty::StyleSheet:
                             sHelpStyleSheet = aTmpStr;
                         break;
                         default:
@@ -215,24 +219,24 @@ void SvtHelpOptions_Impl::ImplCommit()
     Any* pValues = aValues.getArray();
     for ( int nProp = 0; nProp < aNames.getLength(); nProp++ )
     {
-        switch ( nProp )
+        switch ( static_cast< HelpProperty >(nProp) )
         {
-            case EXTENDEDHELP :
+            case HelpProperty::ExtendedHelp:
                 pValues[nProp] <<= bExtendedHelp;
                 break;
 
-            case HELPTIPS :
+            case HelpProperty::HelpTips:
                 pValues[nProp] <<= bHelpTips;
                 break;
 
-            case LOCALE:
+            case HelpProperty::Locale:
                 pValues[nProp] <<= OUString(aLocale);
                 break;
 
-            case SYSTEM:
+            case HelpProperty::System:
                 pValues[nProp] <<= OUString(aSystem);
                 break;
-            case STYLESHEET :
+            case HelpProperty::StyleSheet:
                 pValues[nProp] <<= OUString(sHelpStyleSheet);
             break;
 
