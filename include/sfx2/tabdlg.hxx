@@ -163,6 +163,8 @@ public:
         return GetTabPage(m_pTabCtrl->GetCurPageId());
     }
 
+    virtual OString GetScreenshotId() const override;
+
     OUString            GetPageText( sal_uInt16 nPageId ) const
     {
         return m_pTabCtrl->GetPageText(nPageId);
