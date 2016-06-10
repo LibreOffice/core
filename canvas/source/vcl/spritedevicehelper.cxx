@@ -39,7 +39,7 @@ namespace vclcanvas
     {
     }
 
-    void SpriteDeviceHelper::init( const OutDevProviderSharedPtr& pOutDev )
+    void SpriteDeviceHelper::init( const std::shared_ptr< OutDevProvider >& pOutDev )
     {
         DeviceHelper::init(pOutDev);
 

@@ -39,7 +39,7 @@ namespace dxcanvas
     {
         void repaintBackground( const ::basegfx::B2DRange&      rUpdateArea,
                                 const ::basegfx::B2IRange&      rOutputArea,
-                                const DXSurfaceBitmapSharedPtr& rBackBuffer )
+                                const std::shared_ptr< DXSurfaceBitmap >& rBackBuffer )
         {
             // TODO(E1): Use numeric_cast to catch overflow here
             ::basegfx::B2IRange aActualArea( 0, 0,
@@ -78,9 +78,9 @@ namespace dxcanvas
 
     void SpriteCanvasHelper::init( SpriteCanvas&                                    rParent,
                                    ::canvas::SpriteRedrawManager&                   rManager,
-                                   const IDXRenderModuleSharedPtr&                  rRenderModule,
-                                   const ::std::shared_ptr<canvas::ISurfaceProxyManager>&   rSurfaceProxy,
-                                   const DXSurfaceBitmapSharedPtr&                  rBackBuffer,
+                                   const std::shared_ptr< IDXRenderModule >&        rRenderModule,
+                                   const ::std::shared_ptr<canvas::ISurfaceProxyManager>& rSurfaceProxy,
+                                   const std::shared_ptr< DXSurfaceBitmap >&        rBackBuffer,
                                    const ::basegfx::B2ISize&                        rOutputOffset )
     {
         // init base

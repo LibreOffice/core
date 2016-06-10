@@ -72,7 +72,7 @@ namespace cppcanvas
 
         /** Create a bitmap from a VCL Bitmap
          */
-        static BitmapSharedPtr   createBitmap( const CanvasSharedPtr&, const ::BitmapEx& rBmpEx );
+        static std::shared_ptr< Bitmap >   createBitmap( const CanvasSharedPtr&, const ::BitmapEx& rBmpEx );
 
         /** Create a renderer object from a Metafile
 

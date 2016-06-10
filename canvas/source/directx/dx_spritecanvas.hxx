@@ -128,13 +128,13 @@ namespace dxcanvas
         virtual OUString SAL_CALL getServiceName(  ) throw (css::uno::RuntimeException) override;
 
         /// Retrieve rendermodule object for this Canvas
-        const IDXRenderModuleSharedPtr& getRenderModule() const;
+        const std::shared_ptr< IDXRenderModule >& getRenderModule() const;
 
         /// Get backbuffer for this canvas
-        const DXSurfaceBitmapSharedPtr& getBackBuffer() const;
+        const std::shared_ptr< DXSurfaceBitmap >& getBackBuffer() const;
 
         // BitmapProvider
-        virtual IBitmapSharedPtr getBitmap() const override;
+        virtual std::shared_ptr<IBitmap> getBitmap() const override;
 
      private:
         css::uno::Sequence< css::uno::Any >                maArguments;

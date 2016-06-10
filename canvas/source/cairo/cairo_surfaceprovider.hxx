@@ -49,18 +49,18 @@ namespace cairocanvas
 
             This should return the default surface to render on.
          */
-        virtual ::cairo::SurfaceSharedPtr getSurface() = 0;
+        virtual std::shared_ptr< cairo::Surface > getSurface() = 0;
 
         /// create new surface in given size
-        virtual ::cairo::SurfaceSharedPtr createSurface( const ::basegfx::B2ISize& rSize,
+        virtual std::shared_ptr< cairo::Surface > createSurface( const ::basegfx::B2ISize& rSize,
                                                          int aContent = CAIRO_CONTENT_COLOR_ALPHA ) = 0;
         /// create new surface from given bitmap
-        virtual ::cairo::SurfaceSharedPtr createSurface( ::Bitmap& rBitmap ) = 0;
+        virtual std::shared_ptr< cairo::Surface > createSurface( ::Bitmap& rBitmap ) = 0;
 
         /** convert surface from alpha to non-alpha, does not copy content
             channel. returns new surface on success, NULL otherwise
         */
-        virtual ::cairo::SurfaceSharedPtr changeSurface() = 0;
+        virtual std::shared_ptr< cairo::Surface > changeSurface() = 0;
 
         /** Provides the underlying vcl outputdevice this surface renders on
          */

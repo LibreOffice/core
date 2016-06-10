@@ -62,10 +62,10 @@ namespace dxcanvas
     /// Actual canonical implementation of the GraphicsProvider interface
     class GraphicsProviderImpl : public GraphicsProvider
     {
-        GraphicsSharedPtr mpGraphics;
+        std::shared_ptr< Gdiplus::Graphics > mpGraphics;
     public:
         explicit GraphicsProviderImpl( Gdiplus::Graphics* pGraphics ) : mpGraphics( pGraphics ) {}
-        virtual GraphicsSharedPtr getGraphics() { return mpGraphics; }
+        virtual std::shared_ptr< Gdiplus::Graphics > getGraphics() { return mpGraphics; }
     };
 
     Canvas::Canvas( const uno::Sequence< uno::Any >&                aArguments,
@@ -109,7 +109,7 @@ namespace dxcanvas
         maDeviceHelper.init( pSysData->hDC, pOutDev, *this );
         maCanvasHelper.setDevice( *this );
         maCanvasHelper.setTarget(
-            GraphicsProviderSharedPtr(
+            std::shared_ptr< GraphicsProvider >(
                 new GraphicsProviderImpl(
                     Gdiplus::Graphics::FromHDC(pSysData->hDC))));
 
@@ -181,7 +181,7 @@ namespace dxcanvas
         }
 
         mpTarget.reset( new DXBitmap(
-                            BitmapSharedPtr(
+                            std::shared_ptr< Gdiplus::Bitmap >(
                                 Gdiplus::Bitmap::FromHBITMAP(
                                     hBmp, 0) ),
                             false ));
@@ -207,7 +207,7 @@ namespace dxcanvas
         return OUString( BITMAPCANVAS_SERVICE_NAME );
     }
 
-    IBitmapSharedPtr BitmapCanvas::getBitmap() const
+    std::shared_ptr<IBitmap> BitmapCanvas::getBitmap() const
     {
         return mpTarget;
     }

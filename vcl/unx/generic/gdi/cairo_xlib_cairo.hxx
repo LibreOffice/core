@@ -80,7 +80,7 @@ namespace cairo {
         // Surface interface
         virtual CairoSharedPtr getCairo() const override;
         virtual CairoSurfaceSharedPtr getCairoSurface() const override { return mpSurface; }
-        virtual SurfaceSharedPtr getSimilar(int cairo_content_type, int width, int height) const override;
+        virtual std::shared_ptr< Surface > getSimilar(int cairo_content_type, int width, int height) const override;
 
         virtual VclPtr<VirtualDevice> createVirtualDevice() const override;
 

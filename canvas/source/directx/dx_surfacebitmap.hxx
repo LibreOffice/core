@@ -33,20 +33,20 @@ namespace dxcanvas
     {
     public:
         DXSurfaceBitmap( const ::basegfx::B2IVector&                    rSize,
-                         const std::shared_ptr<canvas::ISurfaceProxyManager>&   rMgr,
-                         const IDXRenderModuleSharedPtr&                rRenderModule,
+                         const std::shared_ptr<canvas::ISurfaceProxyManager>& rMgr,
+                         const std::shared_ptr< IDXRenderModule >&      rRenderModule,
                          bool                                           bWithAlpha );
 
         bool resize( const ::basegfx::B2IVector& rSize );
         void clear();
 
-        virtual GraphicsSharedPtr         getGraphics();
+        virtual std::shared_ptr< Gdiplus::Graphics >    getGraphics();
 
-        virtual BitmapSharedPtr           getBitmap() const;
-        virtual ::basegfx::B2IVector      getSize() const;
-        virtual bool                      hasAlpha() const;
+        virtual std::shared_ptr< Gdiplus::Bitmap >      getBitmap() const;
+        virtual ::basegfx::B2IVector                    getSize() const;
+        virtual bool                                    hasAlpha() const;
 
-        COMReference<surface_type>              getSurface() const { return mpSurface; }
+        COMReference<surface_type>                      getSurface() const { return mpSurface; }
 
         bool draw( double                           fAlpha,
                    const ::basegfx::B2DPoint&       rPos,
@@ -86,7 +86,7 @@ namespace dxcanvas
         void init();
 
         // Refcounted global GDI+ state container
-        GDIPlusUserSharedPtr mpGdiPlusUser;
+        std::shared_ptr< GDIPlusUser > mpGdiPlusUser;
 
         // size of this image in pixels [integral unit]
         ::basegfx::B2IVector maSize;
@@ -96,7 +96,7 @@ namespace dxcanvas
         // generally we could use any kind of storage, but GDI+
         // is not willing to render antialiased fonts unless we
         // use this special kind of container, don't ask me why...
-        IDXRenderModuleSharedPtr mpRenderModule;
+        std::shared_ptr< IDXRenderModule > mpRenderModule;
 
         // pointer to the surface manager, needed in case clients
         // want to resize the bitmap.
@@ -113,9 +113,9 @@ namespace dxcanvas
         // since GDI+ does not work correctly in case we
         // run on a 16bit display [don't ask me why] we need
         // to occasionally render to a native GDI+ bitmap.
-        BitmapSharedPtr mpGDIPlusBitmap;
+        std::shared_ptr< Gdiplus::Bitmap > mpGDIPlusBitmap;
         // Graphics for the mpGDIPlusBitmap
-        GraphicsSharedPtr mpGraphics;
+        std::shared_ptr< Gdiplus::Graphics > mpGraphics;
 
         // internal implementation of the iColorBuffer interface
         std::shared_ptr<canvas::IColorBuffer> mpColorBuffer;
@@ -130,7 +130,6 @@ namespace dxcanvas
         bool mbAlpha;
     };
 
-    typedef std::shared_ptr< DXSurfaceBitmap > DXSurfaceBitmapSharedPtr;
 }
 
 #endif
