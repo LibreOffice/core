@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_f1e2c602",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-06-10T16:44:25Z",
+      "side": 1,
+      "message": "Perhaps this (\"moved margin ...\") is a better headline for a commit message",
+      "revId": "630f9fd5d73814e6d88db16cacfc4ac3f3ad01cc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_91d33a38",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/Sidebar.xcu",
+        "patchSetId": 2
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2016-06-10T16:44:25Z",
+      "side": 1,
+      "message": "Please make a separate commit outta those changes (change of title and change of icon). They are unrelated to the rest of the patch",
+      "revId": "630f9fd5d73814e6d88db16cacfc4ac3f3ad01cc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
