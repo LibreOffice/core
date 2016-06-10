@@ -447,13 +447,13 @@ public:
     SystemGraphicsData          GetSystemGfxData() const;
     bool                        SupportsCairo() const;
     /// Create Surface from given cairo surface
-    cairo::SurfaceSharedPtr     CreateSurface(const cairo::CairoSurfaceSharedPtr& rSurface) const;
+    std::shared_ptr< cairo::Surface >     CreateSurface(const cairo::CairoSurfaceSharedPtr& rSurface) const;
     /// Create surface with given dimensions
-    cairo::SurfaceSharedPtr     CreateSurface(int x, int y, int width, int height) const;
+    std::shared_ptr< cairo::Surface >     CreateSurface(int x, int y, int width, int height) const;
     /// Create Surface for given bitmap data
-    cairo::SurfaceSharedPtr     CreateBitmapSurface(const BitmapSystemData& rData, const Size& rSize) const;
+    std::shared_ptr< cairo::Surface >     CreateBitmapSurface(const BitmapSystemData& rData, const Size& rSize) const;
     /// Return native handle for underlying surface
-    css::uno::Any               GetNativeSurfaceHandle(cairo::SurfaceSharedPtr& rSurface, const basegfx::B2ISize& rSize) const;
+    css::uno::Any               GetNativeSurfaceHandle(std::shared_ptr< cairo::Surface >& rSurface, const basegfx::B2ISize& rSize) const;
     css::uno::Any               GetSystemGfxDataAny() const;
 
     void                        SetRefPoint();

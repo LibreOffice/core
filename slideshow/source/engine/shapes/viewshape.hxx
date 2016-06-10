@@ -230,7 +230,7 @@ namespace slideshow
                 ::cppcanvas::CanvasSharedPtr        mpDestinationCanvas;
                 ::cppcanvas::RendererSharedPtr      mpRenderer;
                 GDIMetaFileSharedPtr                mpMtf;
-                ::cppcanvas::BitmapSharedPtr        mpLastBitmap;
+                ::std::shared_ptr< cppcanvas::Bitmap >        mpLastBitmap;
                 ::cppcanvas::BitmapCanvasSharedPtr  mpLastBitmapCanvas;
             };
 

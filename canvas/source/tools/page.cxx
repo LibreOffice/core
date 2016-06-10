@@ -43,20 +43,20 @@ namespace canvas
         return mpSurface && mpSurface->isValid();
     }
 
-    FragmentSharedPtr Page::allocateSpace( const ::basegfx::B2ISize& rSize )
+    std::shared_ptr< PageFragment > Page::allocateSpace( const ::basegfx::B2ISize& rSize )
     {
         SurfaceRect rect(rSize);
         if(insert(rect))
         {
-            FragmentSharedPtr pFragment(new PageFragment(rect,this));
+            std::shared_ptr< PageFragment > pFragment(new PageFragment(rect,this));
             mpFragments.push_back(pFragment);
             return pFragment;
         }
 
-        return FragmentSharedPtr();
+        return std::shared_ptr< PageFragment >();
     }
 
-    bool Page::nakedFragment( const FragmentSharedPtr& pFragment )
+    bool Page::nakedFragment( const std::shared_ptr< PageFragment >& pFragment )
     {
         SurfaceRect rect(pFragment->getSize());
         if(insert(rect))
@@ -69,14 +69,14 @@ namespace canvas
         return false;
     }
 
-    void Page::free( const FragmentSharedPtr& pFragment )
+    void Page::free( const std::shared_ptr< PageFragment >& pFragment )
     {
         // the fragment passes as argument is no longer
         // dedicated to this page. either it is about to
         // be relocated to some other page or it will
         // currently be deleted. in either case, simply
         // remove the reference from our internal storage.
-        FragmentContainer_t::iterator it(
+        std::list<std::shared_ptr< PageFragment >>::iterator it(
             std::remove(
                 mpFragments.begin(),mpFragments.end(),pFragment));
         mpFragments.erase(it,mpFragments.end());

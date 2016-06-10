@@ -38,10 +38,9 @@ namespace dxcanvas
         GraphicsProvider(const GraphicsProvider&) = delete;
         GraphicsProvider& operator=(const GraphicsProvider&) = delete;
 
-        virtual GraphicsSharedPtr getGraphics() = 0;
+        virtual std::shared_ptr< Gdiplus::Graphics > getGraphics() = 0;
     };
 
-    typedef std::shared_ptr< GraphicsProvider > GraphicsProviderSharedPtr;
 }
 
 #endif // INCLUDED_CANVAS_SOURCE_DIRECTX_DX_GRAPHICSPROVIDER_HXX

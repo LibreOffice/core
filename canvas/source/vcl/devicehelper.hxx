@@ -44,7 +44,7 @@ namespace vclcanvas
         DeviceHelper(const DeviceHelper&) = delete;
         const DeviceHelper& operator=(const DeviceHelper&) = delete;
 
-        void init( const OutDevProviderSharedPtr& rOutDev );
+        void init( const std::shared_ptr< OutDevProvider >& rOutDev );
 
         /// Dispose all internal references
         void disposing();
@@ -77,7 +77,7 @@ namespace vclcanvas
         css::uno::Reference<
             css::rendering::XColorSpace > getColorSpace() const;
 
-        const OutDevProviderSharedPtr& getOutDev() const { return mpOutDev; }
+        const std::shared_ptr< OutDevProvider >& getOutDev() const { return mpOutDev; }
 
         /** called when DumpScreenContent property is enabled on
             XGraphicDevice, and writes out bitmaps of current screen.
@@ -86,7 +86,7 @@ namespace vclcanvas
 
     private:
         /// For retrieving device info
-        OutDevProviderSharedPtr mpOutDev;
+        std::shared_ptr< OutDevProvider > mpOutDev;
     };
 }
 

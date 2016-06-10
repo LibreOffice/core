@@ -836,7 +836,7 @@ namespace vclcanvas
                     aTotalTransform.decompose( aScale, aOutputPos, nRotate, nShearX );
 
                     GraphicAttr             aGrfAttr;
-                    GraphicObjectSharedPtr  pGrfObj;
+                    std::shared_ptr< GraphicObject >  pGrfObj;
 
                     if( ::basegfx::fTools::equalZero( nShearX ) )
                     {

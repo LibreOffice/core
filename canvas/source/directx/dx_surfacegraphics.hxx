@@ -28,10 +28,10 @@ namespace dxcanvas
 
         This wrapper class transparently handles allocation and
         release of surface resources the RAII way (the
-        GraphicsSharedPtr returned has a deleter that does all the
+        std::shared_ptr< Gdiplus::Graphics > returned has a deleter that does all the
         necessary DX cleanup work).
      */
-    GraphicsSharedPtr createSurfaceGraphics(const COMReference<surface_type>& rSurface );
+    std::shared_ptr< Gdiplus::Graphics > createSurfaceGraphics(const COMReference<surface_type>& rSurface );
 }
 
 #endif // INCLUDED_CANVAS_SOURCE_DIRECTX_DX_SURFACEGRAPHICS_HXX

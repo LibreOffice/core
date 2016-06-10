@@ -134,7 +134,7 @@ namespace dxcanvas
             return pRet;
         }
 
-        Gdiplus::Graphics* createGraphicsFromBitmap(const BitmapSharedPtr& rBitmap)
+        Gdiplus::Graphics* createGraphicsFromBitmap(const std::shared_ptr< Gdiplus::Bitmap >& rBitmap)
         {
             Gdiplus::Graphics* pRet = Gdiplus::Graphics::FromImage(rBitmap.get());
             if( pRet )
@@ -173,9 +173,9 @@ namespace dxcanvas
                                         static_cast<Gdiplus::REAL>(rPoint.Y) );
             }
 
-            void graphicsPathFromB2DPolygon( GraphicsPathSharedPtr&             rOutput,
-                                             ::std::vector< Gdiplus::PointF >&  rPoints,
-                                             const ::basegfx::B2DPolygon&       rPoly,
+            void graphicsPathFromB2DPolygon( std::shared_ptr< Gdiplus::GraphicsPath >&  rOutput,
+                                             ::std::vector< Gdiplus::PointF >&          rPoints,
+                                             const ::basegfx::B2DPolygon&               rPoly,
                                              bool bNoLineJoin)
             {
                 const sal_uInt32 nPoints( rPoly.count() );
@@ -421,9 +421,9 @@ namespace dxcanvas
             return aColor;
         }
 
-        GraphicsPathSharedPtr graphicsPathFromRealPoint2DSequence( const uno::Sequence< uno::Sequence< geometry::RealPoint2D > >& points )
+        std::shared_ptr< Gdiplus::GraphicsPath > graphicsPathFromRealPoint2DSequence( const uno::Sequence< uno::Sequence< geometry::RealPoint2D > >& points )
         {
-            GraphicsPathSharedPtr pRes( new Gdiplus::GraphicsPath() );
+            std::shared_ptr< Gdiplus::GraphicsPath > pRes( new Gdiplus::GraphicsPath() );
             ::std::vector< Gdiplus::PointF > aPoints;
 
             sal_Int32 nCurrPoly;
@@ -449,9 +449,9 @@ namespace dxcanvas
             return pRes;
         }
 
-        GraphicsPathSharedPtr graphicsPathFromB2DPolygon( const ::basegfx::B2DPolygon& rPoly, bool bNoLineJoin )
+        std::shared_ptr< Gdiplus::GraphicsPath > graphicsPathFromB2DPolygon( const ::basegfx::B2DPolygon& rPoly, bool bNoLineJoin )
         {
-            GraphicsPathSharedPtr               pRes( new Gdiplus::GraphicsPath() );
+            std::shared_ptr< Gdiplus::GraphicsPath >               pRes( new Gdiplus::GraphicsPath() );
             ::std::vector< Gdiplus::PointF >    aPoints;
 
             graphicsPathFromB2DPolygon( pRes, aPoints, rPoly, bNoLineJoin );
@@ -459,9 +459,9 @@ namespace dxcanvas
             return pRes;
         }
 
-        GraphicsPathSharedPtr graphicsPathFromB2DPolyPolygon( const ::basegfx::B2DPolyPolygon& rPoly, bool bNoLineJoin )
+        std::shared_ptr< Gdiplus::GraphicsPath > graphicsPathFromB2DPolyPolygon( const ::basegfx::B2DPolyPolygon& rPoly, bool bNoLineJoin )
         {
-            GraphicsPathSharedPtr               pRes( new Gdiplus::GraphicsPath() );
+            std::shared_ptr< Gdiplus::GraphicsPath >               pRes( new Gdiplus::GraphicsPath() );
             ::std::vector< Gdiplus::PointF >    aPoints;
 
             const sal_uInt32 nPolies( rPoly.count() );
@@ -476,7 +476,7 @@ namespace dxcanvas
             return pRes;
         }
 
-        GraphicsPathSharedPtr graphicsPathFromXPolyPolygon2D( const uno::Reference< rendering::XPolyPolygon2D >& xPoly, bool bNoLineJoin )
+        std::shared_ptr< Gdiplus::GraphicsPath > graphicsPathFromXPolyPolygon2D( const uno::Reference< rendering::XPolyPolygon2D >& xPoly, bool bNoLineJoin )
         {
             LinePolyPolygon* pPolyImpl = dynamic_cast< LinePolyPolygon* >( xPoly.get() );
 
@@ -491,19 +491,19 @@ namespace dxcanvas
             }
         }
 
-        bool drawGdiPlusBitmap( const GraphicsSharedPtr& rGraphics,
-                                const BitmapSharedPtr&   rBitmap )
+        bool drawGdiPlusBitmap( const std::shared_ptr< Gdiplus::Graphics >& rGraphics,
+                                const std::shared_ptr< Gdiplus::Bitmap >&   rBitmap )
         {
             Gdiplus::PointF aPoint;
             return (Gdiplus::Ok == rGraphics->DrawImage( rBitmap.get(),
                                                          aPoint ) );
         }
 
-        bool drawDIBits( const GraphicsSharedPtr& rGraphics,
+        bool drawDIBits( const std::shared_ptr< Gdiplus::Graphics >& rGraphics,
                          const BITMAPINFO&        rBI,
                          const void*              pBits )
         {
-            BitmapSharedPtr pBitmap(
+            std::shared_ptr< Gdiplus::Bitmap > pBitmap(
                 Gdiplus::Bitmap::FromBITMAPINFO( &rBI,
                                                  (void*)pBits ) );
 
@@ -511,10 +511,10 @@ namespace dxcanvas
                                       pBitmap );
         }
 
-        bool drawRGBABits( const GraphicsSharedPtr& rGraphics,
+        bool drawRGBABits( const std::shared_ptr< Gdiplus::Graphics >& rGraphics,
                            const RawRGBABitmap&     rRawRGBAData )
         {
-            BitmapSharedPtr pBitmap( new Gdiplus::Bitmap( rRawRGBAData.mnWidth,
+            std::shared_ptr< Gdiplus::Bitmap > pBitmap( new Gdiplus::Bitmap( rRawRGBAData.mnWidth,
                                                           rRawRGBAData.mnHeight,
                                                           PixelFormat32bppARGB ) );
 
@@ -541,13 +541,13 @@ namespace dxcanvas
                                       pBitmap );
         }
 
-        BitmapSharedPtr bitmapFromXBitmap( const uno::Reference< rendering::XBitmap >& xBitmap )
+        std::shared_ptr< Gdiplus::Bitmap > bitmapFromXBitmap( const uno::Reference< rendering::XBitmap >& xBitmap )
         {
             BitmapProvider* pBitmapProvider = dynamic_cast< BitmapProvider* >(xBitmap.get());
 
             if( pBitmapProvider )
             {
-                IBitmapSharedPtr pBitmap( pBitmapProvider->getBitmap() );
+                std::shared_ptr<IBitmap> pBitmap( pBitmapProvider->getBitmap() );
                 return pBitmap->getBitmap();
             }
             else
@@ -557,7 +557,7 @@ namespace dxcanvas
                 // =================================================
 
                 const geometry::IntegerSize2D aBmpSize( xBitmap->getSize() );
-                BitmapSharedPtr               pBitmap;
+                std::shared_ptr< Gdiplus::Bitmap > pBitmap;
 
                 if( xBitmap->hasAlpha() )
                 {
@@ -579,7 +579,7 @@ namespace dxcanvas
                                                         PixelFormat24bppRGB ) );
                 }
 
-                GraphicsSharedPtr pGraphics(createGraphicsFromBitmap(pBitmap));
+                std::shared_ptr< Gdiplus::Graphics > pGraphics(createGraphicsFromBitmap(pBitmap));
                 tools::setupGraphics(*pGraphics);
                 if( !drawVCLBitmapFromXBitmap(
                         pGraphics,

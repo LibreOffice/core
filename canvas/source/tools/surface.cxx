@@ -27,7 +27,7 @@
 
 namespace canvas
 {
-    Surface::Surface( const PageManagerSharedPtr&  rPageManager,
+    Surface::Surface( const std::shared_ptr< PageManager >&  rPageManager,
                       const std::shared_ptr<IColorBuffer>& rColorBuffer,
                       const ::basegfx::B2IPoint&   rPos,
                       const ::basegfx::B2ISize&    rSize ) :

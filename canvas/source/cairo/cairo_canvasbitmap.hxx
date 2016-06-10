@@ -92,15 +92,15 @@ namespace cairocanvas
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (css::uno::RuntimeException, std::exception) override;
 
         // SurfaceProvider
-        virtual ::cairo::SurfaceSharedPtr getSurface() override;
-        virtual ::cairo::SurfaceSharedPtr createSurface( const ::basegfx::B2ISize& rSize, int aContent = CAIRO_CONTENT_COLOR_ALPHA ) override;
-        virtual ::cairo::SurfaceSharedPtr createSurface( ::Bitmap& rBitmap ) override;
-        virtual ::cairo::SurfaceSharedPtr changeSurface() override;
+        virtual std::shared_ptr< cairo::Surface > getSurface() override;
+        virtual std::shared_ptr< cairo::Surface > createSurface( const ::basegfx::B2ISize& rSize, int aContent = CAIRO_CONTENT_COLOR_ALPHA ) override;
+        virtual std::shared_ptr< cairo::Surface > createSurface( ::Bitmap& rBitmap ) override;
+        virtual std::shared_ptr< cairo::Surface > changeSurface() override;
         virtual OutputDevice* getOutputDevice() override;
 
         // RepaintTarget
-        virtual bool repaint( const ::cairo::SurfaceSharedPtr&                pSurface,
-                              const css::rendering::ViewState&   viewState,
+        virtual bool repaint( const std::shared_ptr< cairo::Surface >& pSurface,
+                              const css::rendering::ViewState& viewState,
                               const css::rendering::RenderState& renderState ) override;
 
         // XFastPropertySet
@@ -118,7 +118,7 @@ namespace cairocanvas
 
     private:
         SurfaceProviderRef        mpSurfaceProvider;
-        ::cairo::SurfaceSharedPtr mpBufferSurface;
+        std::shared_ptr< cairo::Surface > mpBufferSurface;
         ::cairo::CairoSharedPtr   mpBufferCairo;
 
         const ::basegfx::B2ISize  maSize;

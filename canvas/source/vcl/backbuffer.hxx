@@ -53,7 +53,6 @@ namespace vclcanvas
         VclPtr< VirtualDevice > maVDev;
     };
 
-    typedef std::shared_ptr< BackBuffer > BackBufferSharedPtr;
 }
 
 #endif // INCLUDED_CANVAS_SOURCE_VCL_BACKBUFFER_HXX

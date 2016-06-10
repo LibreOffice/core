@@ -63,8 +63,6 @@ namespace cppcanvas
 
         virtual css::uno::Reference< css::rendering::XBitmap >  getUNOBitmap() const = 0;
     };
-
-    typedef std::shared_ptr< ::cppcanvas::Bitmap > BitmapSharedPtr;
 }
 
 #endif // INCLUDED_CPPCANVAS_BITMAP_HXX

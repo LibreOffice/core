@@ -135,17 +135,17 @@ namespace vclcanvas
         virtual OUString SAL_CALL getServiceName(  ) throw (css::uno::RuntimeException, std::exception) override;
 
         // RepaintTarget
-        virtual bool repaint( const GraphicObjectSharedPtr&                   rGrf,
-                              const css::rendering::ViewState&   viewState,
-                              const css::rendering::RenderState& renderState,
-                              const ::Point&                                  rPt,
-                              const ::Size&                                   rSz,
-                              const GraphicAttr&                              rAttr ) const override;
+        virtual bool repaint( const std::shared_ptr< GraphicObject >&   rGrf,
+                              const css::rendering::ViewState&          viewState,
+                              const css::rendering::RenderState&        renderState,
+                              const ::Point&                            rPt,
+                              const ::Size&                             rSz,
+                              const GraphicAttr&                        rAttr ) const override;
 
         /// Get backbuffer for this canvas
-        OutDevProviderSharedPtr getFrontBuffer() const { return maDeviceHelper.getOutDev(); }
+        std::shared_ptr< OutDevProvider > getFrontBuffer() const { return maDeviceHelper.getOutDev(); }
         /// Get window for this canvas
-        BackBufferSharedPtr getBackBuffer() const { return maDeviceHelper.getBackBuffer(); }
+        std::shared_ptr< BackBuffer > getBackBuffer() const { return maDeviceHelper.getBackBuffer(); }
 
     private:
         css::uno::Sequence< css::uno::Any >                maArguments;
