@@ -391,4 +391,9 @@ String STR_DEAUTHORISE_CLIENT
     Text [ en-US ] = "Remove client authorisation";
 };
 
+String STR_DRAW_PAGE_PANEL
+{
+    Text [ en-US ] = "Page";
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

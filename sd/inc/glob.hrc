@@ -136,6 +136,7 @@
 
 #define RID_SLIDESORTER_ICONS                   RID_GLOB_START+227
 #define STR_DEAUTHORISE_CLIENT                  RID_GLOB_START+229
+#define STR_DRAW_PAGE_PANEL                     RID_GLOB_START+230
 
 #endif
 

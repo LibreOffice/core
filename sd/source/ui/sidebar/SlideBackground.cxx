@@ -62,6 +62,7 @@
 #include <svx/dlgutil.hxx>
 #include <algorithm>
 #include "EventMultiplexer.hxx"
+#include "glob.hrc"
 
 using namespace ::com::sun::star;
 
@@ -93,6 +94,7 @@ SlideBackground::SlideBackground(
     mpHatchItem(),
     mpBitmapItem(),
     mxFrame(rxFrame),
+    maContext(),
     mpBindings(pBindings)
 {
     get(mpPaperSizeBox,"paperformat");
@@ -145,6 +147,14 @@ void SlideBackground::Initialize()
     mpDspMasterObjects->SetClickHdl(LINK(this,SlideBackground, DspObjects));
 
     Update();
+}
+
+void SlideBackground::HandleContextChange(
+    const ::sfx2::sidebar::EnumContext& rContext)
+{
+    if (maContext == rContext)
+        return;
+    maContext = rContext;
 }
 
 void SlideBackground::Update()
@@ -278,7 +288,8 @@ void SlideBackground::addListener()
     mrBase.GetEventMultiplexer()->AddEventListener (
         aLink,
         tools::EventMultiplexerEvent::EID_CURRENT_PAGE |
-        tools::EventMultiplexerEvent::EID_SHAPE_CHANGED );
+        tools::EventMultiplexerEvent::EID_SHAPE_CHANGED |
+        tools::EventMultiplexerEvent::EID_VIEW_ADDED);
 }
 
 void SlideBackground::removeListener()
@@ -310,6 +321,14 @@ IMPL_LINK_TYPED(SlideBackground, EventMultiplexerListener,
                 0 };
             updateMasterSlideSelection();
             GetBindings()->Invalidate( SidArray );
+        }
+        break;
+        case tools::EventMultiplexerEvent::EID_VIEW_ADDED:
+        {
+            sfx2::sidebar::EnumContext rContext(sfx2::sidebar::EnumContext::Application_Draw,
+                                                sfx2::sidebar::EnumContext::Context_DrawPage);
+            if(maContext == rContext)
+                SetPanelTitle(SD_RESSTR(STR_DRAW_PAGE_PANEL));
         }
         break;
         default:
