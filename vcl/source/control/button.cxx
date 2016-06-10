@@ -707,7 +707,7 @@ void PushButton::ImplInitSettings( bool bFont,
         // #i38498#: do not check for GetParent()->IsChildTransparentModeEnabled()
         // otherwise the formcontrol button will be overdrawn due to ParentClipMode::NoClip
         // for radio and checkbox this is ok as they should appear transparent in documents
-        if ( IsNativeControlSupported( ControlType::Pushbutton, PART_ENTIRE_CONTROL ) ||
+        if ( IsNativeControlSupported( ControlType::Pushbutton, ControlPart::Entire ) ||
              (GetStyle() & WB_FLATBUTTON) != 0 )
         {
             EnableChildTransparentMode();
@@ -846,7 +846,7 @@ void PushButton::ImplDrawPushButtonContent(OutputDevice* pDev, DrawFlags nDrawFl
 
     if ( nDrawFlags & DrawFlags::Mono )
         aColor = Color( COL_BLACK );
-    else if( (nDrawFlags & DrawFlags::NoRollover) && IsNativeControlSupported(ControlType::Pushbutton, PART_ENTIRE_CONTROL) )
+    else if( (nDrawFlags & DrawFlags::NoRollover) && IsNativeControlSupported(ControlType::Pushbutton, ControlPart::Entire) )
         aColor = rStyleSettings.GetButtonRolloverTextColor();
     else if ( IsControlForeground() )
         aColor = GetControlForeground();
@@ -982,7 +982,7 @@ void PushButton::ImplDrawPushButton(vcl::RenderContext& rRenderContext)
 
     if( bDropDown && (aCtrlType == ControlType::Combobox || aCtrlType == ControlType::Listbox))
     {
-        if (GetParent()->IsNativeControlSupported(aCtrlType, PART_ENTIRE_CONTROL))
+        if (GetParent()->IsNativeControlSupported(aCtrlType, ControlPart::Entire))
         {
             // skip painting if the button was already drawn by the theme
             if (aCtrlType == ControlType::Combobox)
@@ -991,15 +991,15 @@ void PushButton::ImplDrawPushButton(vcl::RenderContext& rRenderContext)
                 if (pEdit->ImplUseNativeBorder(rRenderContext, pEdit->GetStyle()))
                     bNativeOK = true;
             }
-            else if (GetParent()->IsNativeControlSupported(aCtrlType, HAS_BACKGROUND_TEXTURE))
+            else if (GetParent()->IsNativeControlSupported(aCtrlType, ControlPart::HasBackgroundTexture))
             {
                 bNativeOK = true;
             }
 
-            if (!bNativeOK && GetParent()->IsNativeControlSupported(aCtrlType, PART_BUTTON_DOWN))
+            if (!bNativeOK && GetParent()->IsNativeControlSupported(aCtrlType, ControlPart::ButtonDown))
             {
                 // let the theme draw it, note we then need support
-                // for ControlType::Listbox/PART_BUTTON_DOWN and ControlType::Combobox/PART_BUTTON_DOWN
+                // for ControlType::Listbox/ControlPart::ButtonDown and ControlType::Combobox/ControlPart::ButtonDown
 
                 ImplControlValue aControlValue;
                 ControlState nState = ControlState::NONE;
@@ -1018,7 +1018,7 @@ void PushButton::ImplDrawPushButton(vcl::RenderContext& rRenderContext)
                 if (IsMouseOver() && aInRect.IsInside(GetPointerPosPixel()))
                     nState |= ControlState::ROLLOVER;
 
-                bNativeOK = rRenderContext.DrawNativeControl(aCtrlType, PART_BUTTON_DOWN, aInRect, nState,
+                bNativeOK = rRenderContext.DrawNativeControl(aCtrlType, ControlPart::ButtonDown, aInRect, nState,
                                                              aControlValue, OUString());
             }
         }
@@ -1034,7 +1034,7 @@ void PushButton::ImplDrawPushButton(vcl::RenderContext& rRenderContext)
         if (!bRollOver && !HasFocus())
             bDrawMenuSep = false;
     }
-    if ((bNativeOK = rRenderContext.IsNativeControlSupported(ControlType::Pushbutton, PART_ENTIRE_CONTROL)))
+    if ((bNativeOK = rRenderContext.IsNativeControlSupported(ControlType::Pushbutton, ControlPart::Entire)))
     {
         PushButtonValue aControlValue;
         Rectangle aCtrlRegion(aInRect);
@@ -1078,7 +1078,7 @@ void PushButton::ImplDrawPushButton(vcl::RenderContext& rRenderContext)
 
         if (((nState & ControlState::ROLLOVER)) || !(GetStyle() & WB_FLATBUTTON))
         {
-            bNativeOK = rRenderContext.DrawNativeControl(ControlType::Pushbutton, PART_ENTIRE_CONTROL, aCtrlRegion, nState,
+            bNativeOK = rRenderContext.DrawNativeControl(ControlType::Pushbutton, ControlPart::Entire, aCtrlRegion, nState,
                                                          aControlValue, OUString() /*PushButton::GetText()*/);
         }
         else
@@ -1129,7 +1129,7 @@ void PushButton::ImplSetDefButton( bool bSet )
     int dLeft(0), dRight(0), dTop(0), dBottom(0);
     bool bSetPos = false;
 
-    if ( IsNativeControlSupported(ControlType::Pushbutton, PART_ENTIRE_CONTROL) )
+    if ( IsNativeControlSupported(ControlType::Pushbutton, ControlPart::Entire) )
     {
         Rectangle aBound, aCont;
         Rectangle aCtrlRect( 0, 0, 80, 20 ); // use a constant size to avoid accumulating
@@ -1140,7 +1140,7 @@ void PushButton::ImplSetDefButton( bool bSet )
 
         // get native size of a 'default' button
         // and adjust the VCL button if more space for adornment is required
-        if( GetNativeControlRegion( ControlType::Pushbutton, PART_ENTIRE_CONTROL, aCtrlRegion,
+        if( GetNativeControlRegion( ControlType::Pushbutton, ControlPart::Entire, aCtrlRegion,
                                 nState, aControlValue, OUString(),
                                 aBound, aCont ) )
         {
@@ -1525,8 +1525,8 @@ bool PushButton::PreNotify( NotifyEvent& rNEvt )
 
             bool bDropDown = ( IsSymbol() && (GetSymbol()==SymbolType::SPIN_DOWN) && GetText().isEmpty() );
 
-            if( bDropDown && GetParent()->IsNativeControlSupported( aCtrlType, PART_ENTIRE_CONTROL) &&
-                   !GetParent()->IsNativeControlSupported( aCtrlType, PART_BUTTON_DOWN) )
+            if( bDropDown && GetParent()->IsNativeControlSupported( aCtrlType, ControlPart::Entire) &&
+                   !GetParent()->IsNativeControlSupported( aCtrlType, ControlPart::ButtonDown) )
             {
                 vcl::Window *pBorder = GetParent()->GetWindow( GetWindowType::Border );
                 if(aCtrlType == ControlType::Combobox)
@@ -1544,7 +1544,7 @@ bool PushButton::PreNotify( NotifyEvent& rNEvt )
                 }
             }
             else if( (GetStyle() & WB_FLATBUTTON) ||
-                     IsNativeControlSupported(ControlType::Pushbutton, PART_ENTIRE_CONTROL) )
+                     IsNativeControlSupported(ControlType::Pushbutton, ControlPart::Entire) )
             {
                 Invalidate();
             }
@@ -1691,11 +1691,11 @@ bool PushButton::set_property(const OString &rKey, const OString &rValue)
 
 void PushButton::ShowFocus(const Rectangle& rRect)
 {
-    if (IsNativeControlSupported(ControlType::Pushbutton, PART_FOCUS))
+    if (IsNativeControlSupported(ControlType::Pushbutton, ControlPart::Focus))
     {
         ImplControlValue aControlValue;
         Rectangle aInRect(Point(), GetOutputSizePixel());
-        GetOutDev()->DrawNativeControl(ControlType::Pushbutton, PART_FOCUS, aInRect,
+        GetOutDev()->DrawNativeControl(ControlType::Pushbutton, ControlPart::Focus, aInRect,
                                        ControlState::FOCUSED, aControlValue, OUString());
     }
     Button::ShowFocus(rRect);
@@ -1878,13 +1878,13 @@ void RadioButton::ImplInitSettings( bool bFont,
     {
         vcl::Window* pParent = GetParent();
         if ( !IsControlBackground() &&
-            (pParent->IsChildTransparentModeEnabled() || IsNativeControlSupported( ControlType::Radiobutton, PART_ENTIRE_CONTROL ) ) )
+            (pParent->IsChildTransparentModeEnabled() || IsNativeControlSupported( ControlType::Radiobutton, ControlPart::Entire ) ) )
         {
             EnableChildTransparentMode();
             SetParentClipMode( ParentClipMode::NoClip );
             SetPaintTransparent( true );
             SetBackground();
-            if( IsNativeControlSupported( ControlType::Radiobutton, PART_ENTIRE_CONTROL ) )
+            if( IsNativeControlSupported( ControlType::Radiobutton, ControlPart::Entire ) )
                 mpWindowImpl->mbUseNativeFocus = ImplGetSVData()->maNWFData.mbNoFocusRects;
         }
         else
@@ -1911,7 +1911,7 @@ void RadioButton::ImplDrawRadioButtonState(vcl::RenderContext& rRenderContext)
     bool bNativeOK = false;
 
     // no native drawing for image radio buttons
-    if (!maImage && (bNativeOK = rRenderContext.IsNativeControlSupported(ControlType::Radiobutton, PART_ENTIRE_CONTROL)))
+    if (!maImage && (bNativeOK = rRenderContext.IsNativeControlSupported(ControlType::Radiobutton, ControlPart::Entire)))
     {
         ImplControlValue aControlValue( mbChecked ? ButtonValue::On : ButtonValue::Off );
         Rectangle aCtrlRect(maStateRect.TopLeft(), maStateRect.GetSize());
@@ -1929,7 +1929,7 @@ void RadioButton::ImplDrawRadioButtonState(vcl::RenderContext& rRenderContext)
         if (IsMouseOver() && maMouseRect.IsInside(GetPointerPosPixel()))
             nState |= ControlState::ROLLOVER;
 
-        bNativeOK = rRenderContext.DrawNativeControl(ControlType::Radiobutton, PART_ENTIRE_CONTROL, aCtrlRect,
+        bNativeOK = rRenderContext.DrawNativeControl(ControlType::Radiobutton, ControlPart::Entire, aCtrlRect,
                                                      nState, aControlValue, OUString());
     }
 
@@ -2627,7 +2627,7 @@ bool RadioButton::PreNotify( NotifyEvent& rNEvt )
         if( !pMouseEvt->GetButtons() && !pMouseEvt->IsSynthetic() && !pMouseEvt->IsModifierChanged() )
         {
             // trigger redraw if mouse over state has changed
-            if( IsNativeControlSupported(ControlType::Radiobutton, PART_ENTIRE_CONTROL) )
+            if( IsNativeControlSupported(ControlType::Radiobutton, ControlPart::Entire) )
             {
                 if( ( maMouseRect.IsInside( GetPointerPosPixel()) &&
                      !maMouseRect.IsInside( GetLastPointerPosPixel()) ) ||
@@ -2750,7 +2750,7 @@ Size RadioButton::ImplGetRadioImageSize() const
 {
     Size aSize;
     bool bDefaultSize = true;
-    if( IsNativeControlSupported( ControlType::Radiobutton, PART_ENTIRE_CONTROL ) )
+    if( IsNativeControlSupported( ControlType::Radiobutton, ControlPart::Entire ) )
     {
         ImplControlValue aControlValue;
         // #i45896# workaround gcc3.3 temporary problem
@@ -2759,7 +2759,7 @@ Size RadioButton::ImplGetRadioImageSize() const
         Rectangle aBoundingRgn, aContentRgn;
 
         // get native size of a radio button
-        if( GetNativeControlRegion( ControlType::Radiobutton, PART_ENTIRE_CONTROL, aCtrlRegion,
+        if( GetNativeControlRegion( ControlType::Radiobutton, ControlPart::Entire, aCtrlRegion,
                                            nState, aControlValue, OUString(),
                                            aBoundingRgn, aContentRgn ) )
         {
@@ -2866,7 +2866,7 @@ void RadioButton::ImplSetMinimumNWFSize()
     Rectangle aBoundingRgn, aContentRgn;
 
     // get native size of a radiobutton
-    if( GetNativeControlRegion( ControlType::Radiobutton, PART_ENTIRE_CONTROL, aCtrlRegion,
+    if( GetNativeControlRegion( ControlType::Radiobutton, ControlPart::Entire, aCtrlRegion,
                                 ControlState::DEFAULT|ControlState::ENABLED, aControlValue, OUString(),
                                 aBoundingRgn, aContentRgn ) )
     {
@@ -2930,7 +2930,7 @@ Size RadioButton::GetOptimalSize() const
 
 void RadioButton::ShowFocus(const Rectangle& rRect)
 {
-    if (IsNativeControlSupported(ControlType::Radiobutton, PART_FOCUS))
+    if (IsNativeControlSupported(ControlType::Radiobutton, ControlPart::Focus))
     {
         ImplControlValue aControlValue;
         Rectangle aInRect(Point(0, 0), GetSizePixel());
@@ -2943,7 +2943,7 @@ void RadioButton::ShowFocus(const Rectangle& rRect)
         aInRect.Top()-=2;
         aInRect.Bottom()+=2;
 
-        DrawNativeControl(ControlType::Radiobutton, PART_FOCUS, aInRect,
+        DrawNativeControl(ControlType::Radiobutton, ControlPart::Focus, aInRect,
                           ControlState::FOCUSED, aControlValue, OUString());
     }
     Button::ShowFocus(rRect);
@@ -2998,13 +2998,13 @@ void CheckBox::ImplInitSettings( bool bFont,
     {
         vcl::Window* pParent = GetParent();
         if ( !IsControlBackground() &&
-            (pParent->IsChildTransparentModeEnabled() || IsNativeControlSupported( ControlType::Checkbox, PART_ENTIRE_CONTROL ) ) )
+            (pParent->IsChildTransparentModeEnabled() || IsNativeControlSupported( ControlType::Checkbox, ControlPart::Entire ) ) )
         {
             EnableChildTransparentMode();
             SetParentClipMode( ParentClipMode::NoClip );
             SetPaintTransparent( true );
             SetBackground();
-            if( IsNativeControlSupported( ControlType::Checkbox, PART_ENTIRE_CONTROL ) )
+            if( IsNativeControlSupported( ControlType::Checkbox, ControlPart::Entire ) )
                 ImplGetWindowImpl()->mbUseNativeFocus = ImplGetSVData()->maNWFData.mbNoFocusRects;
         }
         else
@@ -3035,7 +3035,7 @@ void CheckBox::ImplDrawCheckBoxState(vcl::RenderContext& rRenderContext)
 {
     bool bNativeOK = true;
 
-    if ((bNativeOK = rRenderContext.IsNativeControlSupported(ControlType::Checkbox, PART_ENTIRE_CONTROL)))
+    if ((bNativeOK = rRenderContext.IsNativeControlSupported(ControlType::Checkbox, ControlPart::Entire)))
     {
         ImplControlValue aControlValue(meState == TRISTATE_TRUE ? ButtonValue::On : ButtonValue::Off);
         Rectangle aCtrlRegion(maStateRect);
@@ -3058,7 +3058,7 @@ void CheckBox::ImplDrawCheckBoxState(vcl::RenderContext& rRenderContext)
         if (IsMouseOver() && maMouseRect.IsInside(GetPointerPosPixel()))
             nState |= ControlState::ROLLOVER;
 
-        bNativeOK = rRenderContext.DrawNativeControl(ControlType::Checkbox, PART_ENTIRE_CONTROL, aCtrlRegion,
+        bNativeOK = rRenderContext.DrawNativeControl(ControlType::Checkbox, ControlPart::Entire, aCtrlRegion,
                                                      nState, aControlValue, OUString());
     }
 
@@ -3569,7 +3569,7 @@ bool CheckBox::PreNotify( NotifyEvent& rNEvt )
         if( !pMouseEvt->GetButtons() && !pMouseEvt->IsSynthetic() && !pMouseEvt->IsModifierChanged() )
         {
             // trigger redraw if mouse over state has changed
-            if( IsNativeControlSupported(ControlType::Checkbox, PART_ENTIRE_CONTROL) )
+            if( IsNativeControlSupported(ControlType::Checkbox, ControlPart::Entire) )
             {
                 if( ( maMouseRect.IsInside( GetPointerPosPixel()) &&
                      !maMouseRect.IsInside( GetLastPointerPosPixel()) ) ||
@@ -3635,7 +3635,7 @@ Size CheckBox::ImplGetCheckImageSize() const
 {
     Size aSize;
     bool bDefaultSize = true;
-    if( IsNativeControlSupported( ControlType::Checkbox, PART_ENTIRE_CONTROL ) )
+    if( IsNativeControlSupported( ControlType::Checkbox, ControlPart::Entire ) )
     {
         ImplControlValue aControlValue;
         // #i45896# workaround gcc3.3 temporary problem
@@ -3644,7 +3644,7 @@ Size CheckBox::ImplGetCheckImageSize() const
         Rectangle aBoundingRgn, aContentRgn;
 
         // get native size of a check box
-        if( GetNativeControlRegion( ControlType::Checkbox, PART_ENTIRE_CONTROL, aCtrlRegion,
+        if( GetNativeControlRegion( ControlType::Checkbox, ControlPart::Entire, aCtrlRegion,
                                            nState, aControlValue, OUString(),
                                            aBoundingRgn, aContentRgn ) )
         {
@@ -3730,7 +3730,7 @@ void CheckBox::ImplSetMinimumNWFSize()
     Rectangle aBoundingRgn, aContentRgn;
 
     // get native size of a radiobutton
-    if( GetNativeControlRegion( ControlType::Checkbox, PART_ENTIRE_CONTROL, aCtrlRegion,
+    if( GetNativeControlRegion( ControlType::Checkbox, ControlPart::Entire, aCtrlRegion,
                                 ControlState::DEFAULT|ControlState::ENABLED, aControlValue, OUString(),
                                 aBoundingRgn, aContentRgn ) )
     {
@@ -3786,7 +3786,7 @@ Size CheckBox::GetOptimalSize() const
 
 void CheckBox::ShowFocus(const Rectangle& rRect)
 {
-    if (IsNativeControlSupported(ControlType::Checkbox, PART_FOCUS))
+    if (IsNativeControlSupported(ControlType::Checkbox, ControlPart::Focus))
     {
         ImplControlValue aControlValue;
         Rectangle aInRect(Point(0, 0), GetSizePixel());
@@ -3799,7 +3799,7 @@ void CheckBox::ShowFocus(const Rectangle& rRect)
         aInRect.Top()-=2;
         aInRect.Bottom()+=2;
 
-        DrawNativeControl(ControlType::Checkbox, PART_FOCUS, aInRect,
+        DrawNativeControl(ControlType::Checkbox, ControlPart::Focus, aInRect,
                           ControlState::FOCUSED, aControlValue, OUString());
     }
     Button::ShowFocus(rRect);
@@ -3889,7 +3889,7 @@ void DisclosureButton::ImplDrawCheckBoxState(vcl::RenderContext& rRenderContext)
     if (IsMouseOver() && GetMouseRect().IsInside(GetPointerPosPixel()))
         nState |= ControlState::ROLLOVER;
 
-    if (!rRenderContext.DrawNativeControl(ControlType::ListNode, PART_ENTIRE_CONTROL, aCtrlRegion,
+    if (!rRenderContext.DrawNativeControl(ControlType::ListNode, ControlPart::Entire, aCtrlRegion,
                                           nState, aControlValue, OUString()))
     {
         ImplSVCtrlData& rCtrlData(ImplGetSVData()->maCtrlData);

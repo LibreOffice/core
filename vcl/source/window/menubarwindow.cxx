@@ -596,8 +596,8 @@ void MenuBarWindow::HighlightItem(vcl::RenderContext& rRenderContext, sal_uInt16
                 rRenderContext.Push(PushFlags::CLIPREGION);
                 rRenderContext.IntersectClipRegion(aRect);
                 bool bRollover = nPos != nHighlightedItem;
-                if (rRenderContext.IsNativeControlSupported(ControlType::Menubar, PART_MENU_ITEM) &&
-                    rRenderContext.IsNativeControlSupported(ControlType::Menubar, PART_ENTIRE_CONTROL))
+                if (rRenderContext.IsNativeControlSupported(ControlType::Menubar, ControlPart::MenuItem) &&
+                    rRenderContext.IsNativeControlSupported(ControlType::Menubar, ControlPart::Entire))
                 {
                     // draw background (transparency)
                     MenubarValue aControlValue;
@@ -608,7 +608,7 @@ void MenuBarWindow::HighlightItem(vcl::RenderContext& rRenderContext, sal_uInt16
                     else
                     {
                         Rectangle aBgRegion(Point(), GetOutputSizePixel());
-                        rRenderContext.DrawNativeControl(ControlType::Menubar, PART_ENTIRE_CONTROL, aBgRegion,
+                        rRenderContext.DrawNativeControl(ControlType::Menubar, ControlPart::Entire, aBgRegion,
                                                          ControlState::ENABLED, aControlValue, OUString());
                     }
 
@@ -620,7 +620,7 @@ void MenuBarWindow::HighlightItem(vcl::RenderContext& rRenderContext, sal_uInt16
                         nState |= ControlState::ROLLOVER;
                     else
                         nState |= ControlState::SELECTED;
-                    rRenderContext.DrawNativeControl(ControlType::Menubar, PART_MENU_ITEM,
+                    rRenderContext.DrawNativeControl(ControlType::Menubar, ControlPart::MenuItem,
                                                      aRect, nState, aControlValue, OUString() );
                 }
                 else
@@ -846,7 +846,7 @@ void MenuBarWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
         return;
     }
 
-    if (rRenderContext.IsNativeControlSupported(ControlType::Menubar, PART_ENTIRE_CONTROL))
+    if (rRenderContext.IsNativeControlSupported(ControlType::Menubar, ControlPart::Entire))
     {
         MenubarValue aMenubarValue;
         aMenubarValue.maTopDockingAreaHeight = ImplGetTopDockingAreaHeight(this);
@@ -858,7 +858,7 @@ void MenuBarWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
             Point aPt;
             Rectangle aCtrlRegion( aPt, GetOutputSizePixel() );
 
-            rRenderContext.DrawNativeControl(ControlType::Menubar, PART_ENTIRE_CONTROL, aCtrlRegion,
+            rRenderContext.DrawNativeControl(ControlType::Menubar, ControlPart::Entire, aCtrlRegion,
                                              ControlState::ENABLED, aMenubarValue, OUString());
         }
 
@@ -871,7 +871,7 @@ void MenuBarWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
         HighlightItem(rRenderContext, nHighlightedItem);
 
     // in high contrast mode draw a separating line on the lower edge
-    if (!rRenderContext.IsNativeControlSupported( ControlType::Menubar, PART_ENTIRE_CONTROL) &&
+    if (!rRenderContext.IsNativeControlSupported( ControlType::Menubar, ControlPart::Entire) &&
         rStyleSettings.GetHighContrastMode())
     {
         rRenderContext.Push(PushFlags::LINECOLOR | PushFlags::MAPMODE);
@@ -1013,7 +1013,7 @@ void MenuBarWindow::ApplySettings(vcl::RenderContext& rRenderContext)
         SetPaintTransparent(false);
         SetParentClipMode();
     }
-    else if (rRenderContext.IsNativeControlSupported(ControlType::Menubar, PART_ENTIRE_CONTROL))
+    else if (rRenderContext.IsNativeControlSupported(ControlType::Menubar, ControlPart::Entire))
     {
         rRenderContext.SetBackground(); // background will be drawn by NWF
     }
@@ -1033,8 +1033,8 @@ void MenuBarWindow::ApplySettings(vcl::RenderContext& rRenderContext)
 
 void MenuBarWindow::ImplInitStyleSettings()
 {
-    if (IsNativeControlSupported(ControlType::Menubar, PART_MENU_ITEM) &&
-        IsNativeControlSupported(ControlType::Menubar, PART_ENTIRE_CONTROL))
+    if (IsNativeControlSupported(ControlType::Menubar, ControlPart::MenuItem) &&
+        IsNativeControlSupported(ControlType::Menubar, ControlPart::Entire))
     {
         AllSettings aSettings(GetSettings());
         ImplGetFrame()->UpdateSettings(aSettings); // to update persona
