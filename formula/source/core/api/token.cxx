@@ -1393,7 +1393,8 @@ FormulaTokenArray * FormulaTokenArray::RewriteMissing( const MissingConvention &
             if (pCtx[ pOcds[ i ] ].mnCurArg == nOmitDcountArg)
             {
                 // Omit only a literal 0 value, nothing else.
-                if (pOcds[ i ] == nFn && pCur->GetOpCode() == ocPush && pCur->GetDouble() == 0.0)
+                if (pOcds[ i ] == nFn && pCur->GetOpCode() == ocPush && pCur->GetType() == svDouble &&
+                        pCur->GetDouble() == 0.0)
                 {
                     // No other expression, between separators.
                     FormulaToken* p = PeekPrevNoSpaces();
