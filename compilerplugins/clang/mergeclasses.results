@@ -134,7 +134,6 @@ merge SdrPowerPointImport with ImplSdPPTImport
 merge SdrSnapView with SdrMarkView
 merge SdwTextBoxRecord with SdwTextArt
 merge ServerFontLayoutEngine with HbLayoutEngine
-merge SfxMacroTabPage_ with SfxMacroTabPage
 merge SfxModelSubComponent with sfx2::DocumentUndoManager
 merge SfxMultiFixRecordWriter with SfxMultiVarRecordWriter
 merge SfxSingleRecordReader with SfxMultiRecordReader
