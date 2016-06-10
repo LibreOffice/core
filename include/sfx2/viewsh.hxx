@@ -40,6 +40,7 @@
 #include <vcl/vclptr.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <LibreOfficeKit/LibreOfficeKitTypes.h>
+#include <editeng/outliner.hxx>
 #include <functional>
 
 class SfxBaseController;
@@ -140,7 +141,7 @@ template<class T> bool checkSfxViewShell(const SfxViewShell* pShell)
     return dynamic_cast<const T*>(pShell) != nullptr;
 }
 
-class SFX2_DLLPUBLIC SfxViewShell: public SfxShell, public SfxListener
+class SFX2_DLLPUBLIC SfxViewShell: public SfxShell, public SfxListener, public OutlinerViewCallable
 {
 #ifdef INCLUDED_SFX2_VIEWSH_HXX
 friend class SfxViewFrame;
@@ -325,7 +326,7 @@ public:
     /// The actual per-view implementation of lok::Document::registerCallback().
     void registerLibreOfficeKitViewCallback(LibreOfficeKitCallback pCallback, void* pLibreOfficeKitData);
     /// Invokes the registered callback, if there are any.
-    void libreOfficeKitViewCallback(int nType, const char* pPayload) const;
+    void libreOfficeKitViewCallback(int nType, const char* pPayload) const override;
 };
 
 
