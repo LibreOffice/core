@@ -86,7 +86,7 @@ String STR_RENAME_TEMPLATE
 };
 String STR_TEMPLATE_TOOLTIP
 {
-    Text [ en-US ] = "Title: $1\nCategory: $1" ;
+    Text [ en-US ] = "Title: $1\nCategory: $2" ;
 };
 String STR_TEMPLATE_SELECTION
 {
@@ -264,6 +264,16 @@ String STR_CATEGORY_DELETE
 String STR_CATEGORY_SELECT
 {
     Text [ en-US ] = "Select Category";
+};
+
+String STR_MSG_EXPORT_SUCCESS
+{
+    Text [ en-US ] = "$1 templates successfully exported." ;
+};
+
+String STR_MSG_QUERY_COPY
+{
+    Text [ en-US ] = "$1 could not be moved to the category \"$2\". Do you want to copy the template instead?";
 };
 
 String STR_CREATE_ERROR
