@@ -67,6 +67,7 @@
 #include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/style/CaseMap.hpp>
+#include <o3tl/any.hxx>
 #include <tools/stream.hxx>
 #include <unotools/fontdefs.hxx>
 #include <vcl/cvtgrf.hxx>
@@ -350,7 +351,7 @@ void DrawingML::WriteGradientFill( const Reference< XPropertySet >& rXPropSet )
     awt::Gradient aGradient;
     if( GETA( FillGradient ) )
     {
-        aGradient = *static_cast< const awt::Gradient* >( mAny.getValue() );
+        aGradient = *o3tl::doAccess<awt::Gradient>(mAny);
 
         // get InteropGrabBag and search the relevant attributes
         awt::Gradient aOriginalGradient;
@@ -1220,10 +1221,10 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
     sal_Int32 nCharKerning = 0;
 
     if( GETA( CharHeight ) )
-        nSize = (sal_Int32) (100*(*static_cast<float const *>(mAny.getValue())));
+        nSize = (sal_Int32) (100*(*o3tl::doAccess<float>(mAny)));
 
      if( GETA( CharKerning ) )
-        nCharKerning = (sal_Int32)(*static_cast<short const *>(mAny.getValue()));
+        nCharKerning = (sal_Int32)(*o3tl::doAccess<sal_Int16>(mAny));
     /**  While setting values in propertymap,
     *    CharKerning converted using GetTextSpacingPoint
     *    i.e set @ http://opengrok.libreoffice.org/xref/core/oox/source/drawingml/textcharacterproperties.cxx#129
@@ -1234,12 +1235,12 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
 
     if ( ( bComplex && GETA( CharWeightComplex ) ) || GETA( CharWeight ) )
     {
-        if ( *static_cast<float const *>(mAny.getValue()) >= awt::FontWeight::SEMIBOLD )
+        if ( *o3tl::doAccess<float>(mAny) >= awt::FontWeight::SEMIBOLD )
             bold = "1";
     }
 
     if ( ( bComplex && GETA( CharPostureComplex ) ) || GETA( CharPosture ) )
-        switch ( *static_cast<awt::FontSlant const *>(mAny.getValue()) )
+        switch ( *o3tl::doAccess<awt::FontSlant>(mAny) )
         {
             case awt::FontSlant_OBLIQUE :
             case awt::FontSlant_ITALIC :
@@ -1251,7 +1252,7 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
 
     if ( CGETAD( CharUnderline ) )
     {
-        switch ( *static_cast<sal_Int16 const *>(mAny.getValue()) )
+        switch ( *o3tl::doAccess<sal_Int16>(mAny) )
         {
             case awt::FontUnderline::SINGLE :
                 underline = "sng";
@@ -1306,7 +1307,7 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
 
     if ( CGETAD( CharStrikeout ) )
     {
-        switch ( *static_cast<sal_Int16 const *>(mAny.getValue()) )
+        switch ( *o3tl::doAccess<sal_Int16>(mAny) )
         {
             case awt::FontStrikeout::NONE :
                strikeout = "noStrike";
@@ -1353,7 +1354,7 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
 
     if( GETA( CharCaseMap ) )
     {
-        switch ( *static_cast<sal_Int16 const *>(mAny.getValue()) )
+        switch ( *o3tl::doAccess<sal_Int16>(mAny) )
         {
             case CaseMap::UPPERCASE :
                 cap = "all";
@@ -1380,7 +1381,7 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
     // mso doesn't like text color to be placed after typeface
     if( CGETAD( CharColor ) )
     {
-        sal_uInt32 color = *static_cast<sal_uInt32 const *>(mAny.getValue());
+        sal_uInt32 color = *o3tl::doAccess<sal_uInt32>(mAny);
         SAL_INFO("oox.shape", "run color: " << color << " auto: " << COL_AUTO);
 
         if( color == COL_AUTO )  // nCharColor depends to the background color
@@ -1396,7 +1397,7 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
 
     if( CGETAD( CharUnderlineColor ) )
     {
-        sal_uInt32 color = *static_cast<sal_uInt32 const *>(mAny.getValue());
+        sal_uInt32 color = *o3tl::doAccess<sal_uInt32>(mAny);
 
         mpFS->startElementNS( XML_a, XML_uFill,FSEND);
         WriteSolidFill( color );
@@ -1470,7 +1471,7 @@ OUString DrawingML::GetFieldValue( const css::uno::Reference< css::text::XTextRa
 
     if( GETA( TextPortionType ) )
     {
-        aFieldType = OUString( *static_cast<OUString const *>(mAny.getValue()) );
+        aFieldType = *o3tl::doAccess<OUString>(mAny);
         SAL_INFO("oox.shape", "field type: " << aFieldType);
     }
 
@@ -1719,73 +1720,68 @@ void DrawingML::WriteParagraphNumbering( const Reference< XPropertySet >& rXProp
 
     for ( sal_Int32 i = 0; i < nPropertyCount; i++ )
     {
-        const void* pValue = pPropValue[ i ].Value.getValue();
-        if ( pValue )
+        OUString aPropName( pPropValue[ i ].Name );
+        SAL_INFO("oox.shape", "pro name: " << aPropName);
+        if ( aPropName == "NumberingType" )
         {
-            OUString aPropName( pPropValue[ i ].Name );
-            SAL_INFO("oox.shape", "pro name: " << aPropName);
-            if ( aPropName == "NumberingType" )
-            {
-                nNumberingType = *( static_cast<sal_Int16 const *>(pValue) );
-            }
-            else if ( aPropName == "Prefix" )
-            {
-                if( *static_cast<OUString const *>(pValue) == ")")
-                    bPBoth = true;
-            }
-            else if ( aPropName == "Suffix" )
-            {
-                if( *static_cast<OUString const *>(pValue) == ".")
-                    bSDot = true;
-                else if( *static_cast<OUString const *>(pValue) == ")")
-                    bPBehind = true;
-            }
-            else if(aPropName == "BulletColor")
-            {
-                nBulletColor = *static_cast<sal_uInt32 const *>(pValue);
-                bHasBulletColor = true;
-            }
-            else if ( aPropName == "BulletChar" )
-            {
-                aBulletChar = OUString ( *( static_cast<OUString const *>(pValue) ) )[ 0 ];
-            }
-            else if ( aPropName == "BulletFont" )
-            {
-                aFontDesc = *static_cast<awt::FontDescriptor const *>(pValue);
-                bHasFontDesc = true;
+            nNumberingType = *o3tl::doAccess<sal_Int16>(pPropValue[i].Value);
+        }
+        else if ( aPropName == "Prefix" )
+        {
+            if( *o3tl::doAccess<OUString>(pPropValue[i].Value) == ")")
+                bPBoth = true;
+        }
+        else if ( aPropName == "Suffix" )
+        {
+            auto s = o3tl::doAccess<OUString>(pPropValue[i].Value);
+            if( *s == ".")
+                bSDot = true;
+            else if( *s == ")")
+                bPBehind = true;
+        }
+        else if(aPropName == "BulletColor")
+        {
+            nBulletColor = *o3tl::doAccess<sal_uInt32>(pPropValue[i].Value);
+            bHasBulletColor = true;
+        }
+        else if ( aPropName == "BulletChar" )
+        {
+            aBulletChar = (*o3tl::doAccess<OUString>(pPropValue[i].Value))[ 0 ];
+        }
+        else if ( aPropName == "BulletFont" )
+        {
+            aFontDesc = *o3tl::doAccess<awt::FontDescriptor>(pPropValue[i].Value);
+            bHasFontDesc = true;
 
-                // Our numbullet dialog has set the wrong textencoding for our "StarSymbol" font,
-                // instead of a Unicode encoding the encoding RTL_TEXTENCODING_SYMBOL was used.
-                // Because there might exist a lot of damaged documemts I added this two lines
-                // which fixes the bullet problem for the export.
-                if ( aFontDesc.Name.equalsIgnoreAsciiCase("StarSymbol") )
-                    aFontDesc.CharSet = RTL_TEXTENCODING_MS_1252;
+            // Our numbullet dialog has set the wrong textencoding for our "StarSymbol" font,
+            // instead of a Unicode encoding the encoding RTL_TEXTENCODING_SYMBOL was used.
+            // Because there might exist a lot of damaged documemts I added this two lines
+            // which fixes the bullet problem for the export.
+            if ( aFontDesc.Name.equalsIgnoreAsciiCase("StarSymbol") )
+                aFontDesc.CharSet = RTL_TEXTENCODING_MS_1252;
 
-            }
-            else if ( aPropName == "BulletRelSize" )
+        }
+        else if ( aPropName == "BulletRelSize" )
+        {
+            nBulletRelSize = *o3tl::doAccess<sal_Int16>(pPropValue[i].Value);
+        }
+        else if ( aPropName == "StartWith" )
+        {
+            nStartWith = *o3tl::doAccess<sal_Int16>(pPropValue[i].Value);
+        }
+        else if ( aPropName == "GraphicURL" )
+        {
+            aGraphicURL = *o3tl::doAccess<OUString>(pPropValue[i].Value);
+            SAL_INFO("oox.shape", "graphic url: " << aGraphicURL);
+        }
+        else if ( aPropName == "GraphicSize" )
+        {
+            if (auto aSize = o3tl::tryAccess<awt::Size>(pPropValue[i].Value))
             {
-                nBulletRelSize = *static_cast<sal_Int16 const *>(pValue);
-            }
-            else if ( aPropName == "StartWith" )
-            {
-                nStartWith = *static_cast<sal_Int16 const *>(pValue);
-            }
-            else if ( aPropName == "GraphicURL" )
-            {
-                aGraphicURL = *static_cast<OUString const *>(pValue);
-                SAL_INFO("oox.shape", "graphic url: " << aGraphicURL);
-            }
-            else if ( aPropName == "GraphicSize" )
-            {
-                if ( pPropValue[ i ].Value.getValueType() == cppu::UnoType<awt::Size>::get())
-                {
-                    // don't cast awt::Size to Size as on 64-bits they are not the same.
-                    css::awt::Size aSize;
-                    pPropValue[ i ].Value >>= aSize;
-                    //aBuGraSize.nA = aSize.Width;
-                    //aBuGraSize.nB = aSize.Height;
-                    SAL_INFO("oox.shape", "graphic size: " << aSize.Width << "x" << aSize.Height);
-                }
+                // don't cast awt::Size to Size as on 64-bits they are not the same.
+                //aBuGraSize.nA = aSize.Width;
+                //aBuGraSize.nB = aSize.Height;
+                SAL_INFO("oox.shape", "graphic size: " << aSize->Width << "x" << aSize->Height);
             }
         }
     }
@@ -1867,14 +1863,10 @@ sal_Int32 DrawingML::getBulletMarginIndentation (const Reference< XPropertySet >
 
     for ( sal_Int32 i = 0; i < nPropertyCount; i++ )
     {
-        const void* pValue = pPropValue[ i ].Value.getValue();
-        if ( pValue )
-        {
-            OUString aPropName( pPropValue[ i ].Name );
-            SAL_INFO("oox.shape", "pro name: " << aPropName);
-            if ( aPropName == propName )
-                return *( static_cast<sal_Int32 const *>(pValue) );
-        }
+        OUString aPropName( pPropValue[ i ].Name );
+        SAL_INFO("oox.shape", "pro name: " << aPropName);
+        if ( aPropName == propName )
+            return *o3tl::doAccess<sal_Int32>(pPropValue[i].Value);
     }
 
     return 0;
@@ -2298,8 +2290,7 @@ void DrawingML::WriteCustomGeometry( const Reference< XShape >& rXShape )
     }
 
 
-    uno::Sequence< beans::PropertyValue > const * pGeometrySeq =
-        static_cast<uno::Sequence< beans::PropertyValue > const *>(aAny.getValue());
+    auto pGeometrySeq = o3tl::tryAccess<uno::Sequence<beans::PropertyValue>>(aAny);
 
     if ( pGeometrySeq )
     {

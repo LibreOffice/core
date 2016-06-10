@@ -30,6 +30,7 @@
 #include <com/sun/star/xml/sax/XFastParser.hpp>
 #include <com/sun/star/xml/sax/XFastSAXSerializable.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
+#include <o3tl/any.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <unotools/docinfohelper.hxx>
 #include <sax/fshelper.hxx>
@@ -762,8 +763,7 @@ writeCustomProperties( XmlFilterBase& rSelf, const Reference< XDocumentPropertie
                 break;
                 case TypeClass_BOOLEAN:
                 {
-                    bool val ;
-                    val = *static_cast<sal_Bool const *>(( aprop[n].Value ).getValue());
+                    bool val = *o3tl::forceAccess<bool>(aprop[n].Value);
                     writeElement( pAppProps, FSNS( XML_vt, XML_bool ), val ? 1 : 0);
                 }
                 break;
