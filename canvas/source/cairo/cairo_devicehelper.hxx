@@ -91,9 +91,9 @@ namespace cairocanvas
         void dumpScreenContent() const;
 
         OutputDevice* getOutputDevice() const { return mpRefDevice; }
-        const ::cairo::SurfaceSharedPtr& getSurface() { return mpSurface; }
-        ::cairo::SurfaceSharedPtr createSurface( const ::basegfx::B2ISize& rSize, int aContent = CAIRO_CONTENT_COLOR_ALPHA );
-        ::cairo::SurfaceSharedPtr createSurface( BitmapSystemData& rData, const Size& rSize );
+        const std::shared_ptr< cairo::Surface >& getSurface() { return mpSurface; }
+        std::shared_ptr< cairo::Surface > createSurface( const ::basegfx::B2ISize& rSize, int aContent = CAIRO_CONTENT_COLOR_ALPHA );
+        std::shared_ptr< cairo::Surface > createSurface( BitmapSystemData& rData, const Size& rSize );
 
     protected:
         /** init helper
@@ -119,7 +119,7 @@ namespace cairocanvas
         SurfaceProvider*          mpSurfaceProvider;
 
         VclPtr<OutputDevice>      mpRefDevice;
-        ::cairo::SurfaceSharedPtr mpSurface;
+        std::shared_ptr< cairo::Surface > mpSurface;
     };
 }
 

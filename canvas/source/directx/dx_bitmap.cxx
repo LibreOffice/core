@@ -35,7 +35,7 @@ namespace dxcanvas
     // DXBitmap::DXBitmap
 
 
-    DXBitmap::DXBitmap( const BitmapSharedPtr& rBitmap,
+    DXBitmap::DXBitmap( const std::shared_ptr< Gdiplus::Bitmap >& rBitmap,
                         bool                   bWithAlpha ) :
         mpGdiPlusUser( GDIPlusUser::createInstance() ),
         maSize(rBitmap->GetWidth(),rBitmap->GetHeight()),
@@ -74,12 +74,12 @@ namespace dxcanvas
         mpGraphics.reset( tools::createGraphicsFromBitmap(mpBitmap) );
     }
 
-    BitmapSharedPtr DXBitmap::getBitmap() const
+    std::shared_ptr< Gdiplus::Bitmap > DXBitmap::getBitmap() const
     {
         return mpBitmap;
     }
 
-    GraphicsSharedPtr DXBitmap::getGraphics()
+    std::shared_ptr< Gdiplus::Graphics > DXBitmap::getGraphics()
     {
         return mpGraphics;
     }

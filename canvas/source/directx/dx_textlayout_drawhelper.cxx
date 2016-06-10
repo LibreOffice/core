@@ -60,7 +60,7 @@ namespace dxcanvas
     }
 
     void TextLayoutDrawHelper::drawText(
-        const GraphicsSharedPtr&               rGraphics,
+        const std::shared_ptr< Gdiplus::Graphics >& rGraphics,
         const css::rendering::ViewState&       rViewState,
         const css::rendering::RenderState&     rRenderState,
         const ::basegfx::B2ISize&              rOutputOffset,

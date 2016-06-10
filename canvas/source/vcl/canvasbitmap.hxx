@@ -74,12 +74,12 @@ namespace vclcanvas
         CanvasBitmap( const ::Size&                                rSize,
                       bool                                         bAlphaBitmap,
                       css::rendering::XGraphicDevice&              rDevice,
-                      const OutDevProviderSharedPtr&               rOutDevProvider );
+                      const std::shared_ptr< OutDevProvider >&     rOutDevProvider );
 
         /// Must be called with locked Solar mutex
         CanvasBitmap( const BitmapEx&                              rBitmap,
                       css::rendering::XGraphicDevice&              rDevice,
-                      const OutDevProviderSharedPtr&               rOutDevProvider );
+                      const std::shared_ptr< OutDevProvider >&     rOutDevProvider );
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName(  ) throw (css::uno::RuntimeException, std::exception) override;
@@ -87,12 +87,12 @@ namespace vclcanvas
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (css::uno::RuntimeException, std::exception) override;
 
         // RepaintTarget interface
-        virtual bool repaint( const GraphicObjectSharedPtr&                   rGrf,
-                              const css::rendering::ViewState&   viewState,
-                              const css::rendering::RenderState& renderState,
-                              const ::Point&                                  rPt,
-                              const ::Size&                                   rSz,
-                              const GraphicAttr&                              rAttr ) const override;
+        virtual bool repaint( const std::shared_ptr< GraphicObject >&   rGrf,
+                              const css::rendering::ViewState&          viewState,
+                              const css::rendering::RenderState&        renderState,
+                              const ::Point&                            rPt,
+                              const ::Size&                             rSz,
+                              const GraphicAttr&                        rAttr ) const override;
 
         /// Not threadsafe! Returned object is shared!
         BitmapEx getBitmap() const;

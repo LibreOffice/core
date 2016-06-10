@@ -209,7 +209,7 @@ namespace dxcanvas
         return maText;
     }
 
-    bool TextLayout::draw( const GraphicsSharedPtr&                           rGraphics,
+    bool TextLayout::draw( const std::shared_ptr< Gdiplus::Graphics >&                           rGraphics,
                            const rendering::ViewState&                        rViewState,
                            const rendering::RenderState&                      rRenderState,
                            const ::basegfx::B2ISize&                          rOutputOffset,

@@ -36,14 +36,14 @@ namespace dxcanvas
     class DXBitmap : public IBitmap
     {
     public:
-        DXBitmap( const BitmapSharedPtr& rBitmap,
-                  bool                   bWithAlpha );
+        DXBitmap( const std::shared_ptr< Gdiplus::Bitmap >& rBitmap,
+                  bool                                      bWithAlpha );
         DXBitmap( const ::basegfx::B2IVector& rSize,
                   bool                        bWithAlpha );
 
-        virtual GraphicsSharedPtr         getGraphics();
+        virtual std::shared_ptr< Gdiplus::Graphics > getGraphics();
 
-        virtual BitmapSharedPtr           getBitmap() const;
+        virtual std::shared_ptr< Gdiplus::Bitmap > getBitmap() const;
         virtual ::basegfx::B2IVector      getSize() const;
         virtual bool                      hasAlpha() const;
 
@@ -67,19 +67,18 @@ namespace dxcanvas
 
     private:
         // Refcounted global GDI+ state container
-        GDIPlusUserSharedPtr mpGdiPlusUser;
+        std::shared_ptr< GDIPlusUser > mpGdiPlusUser;
 
         // size of this image in pixels [integral unit]
         ::basegfx::B2IVector maSize;
 
-        BitmapSharedPtr      mpBitmap;
-        GraphicsSharedPtr    mpGraphics;
+        std::shared_ptr< Gdiplus::Bitmap >      mpBitmap;
+        std::shared_ptr< Gdiplus::Graphics >    mpGraphics;
 
         // true if the bitmap contains an alpha channel
         bool                 mbAlpha;
     };
 
-    typedef std::shared_ptr< DXBitmap > DXBitmapSharedPtr;
 }
 
 #endif

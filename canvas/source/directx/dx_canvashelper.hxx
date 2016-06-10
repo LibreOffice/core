@@ -71,7 +71,7 @@ namespace dxcanvas
             @param rTarget
             Render target
          */
-        void setTarget( const GraphicsProviderSharedPtr& rTarget );
+        void setTarget( const std::shared_ptr< GraphicsProvider >& rTarget );
 
         /** Set the target for rendering operations
 
@@ -81,7 +81,7 @@ namespace dxcanvas
             @param rOutputOffset
             Output offset in pixel
          */
-        void setTarget( const GraphicsProviderSharedPtr& rTarget,
+        void setTarget( const std::shared_ptr< GraphicsProvider >& rTarget,
                         const ::basegfx::B2ISize&        rOutputOffset );
 
 
@@ -224,7 +224,7 @@ namespace dxcanvas
 
     protected:
         /// Refcounted global GDI+ state container
-        GDIPlusUserSharedPtr            mpGdiPlusUser;
+        std::shared_ptr< GDIPlusUser > mpGdiPlusUser;
 
         /** Phyical output device
 
@@ -234,14 +234,14 @@ namespace dxcanvas
         css::rendering::XGraphicDevice* mpDevice;
 
         /// Provides the Gdiplus::Graphics to render into
-        GraphicsProviderSharedPtr                  mpGraphicsProvider;
+        std::shared_ptr< GraphicsProvider > mpGraphicsProvider;
 
         bool needOutput() const { return mpGraphicsProvider.get() != NULL; };
 
         // returns transparency of color
-        void setupGraphicsState( GraphicsSharedPtr&                              rGraphics,
-                                 const css::rendering::ViewState&   viewState,
-                                 const css::rendering::RenderState& renderState );
+        void setupGraphicsState( std::shared_ptr< Gdiplus::Graphics >&  rGraphics,
+                                 const css::rendering::ViewState&       viewState,
+                                 const css::rendering::RenderState&     renderState );
 
         Gdiplus::CompositingMode    calcCompositingMode( sal_Int8 nMode );
 

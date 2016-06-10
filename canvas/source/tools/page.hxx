@@ -35,7 +35,6 @@ namespace canvas
 {
     class PageFragment;
 
-    typedef std::shared_ptr< PageFragment > FragmentSharedPtr;
 
     /** One page of IRenderModule-provided texture space
      */
@@ -44,25 +43,22 @@ namespace canvas
     public:
         explicit Page( const std::shared_ptr<IRenderModule>& rRenderModule );
 
-        FragmentSharedPtr        allocateSpace( const ::basegfx::B2ISize& rSize );
-        bool                     nakedFragment( const FragmentSharedPtr& pFragment );
-        void                     free( const FragmentSharedPtr& pFragment );
+        std::shared_ptr< PageFragment > allocateSpace( const ::basegfx::B2ISize& rSize );
+        bool                     nakedFragment( const std::shared_ptr< PageFragment >& pFragment );
+        void                     free( const std::shared_ptr< PageFragment >& pFragment );
         const std::shared_ptr<ISurface>& getSurface() const { return mpSurface; }
         bool                     isValid() const;
         void                     validate();
 
     private:
-        typedef std::list<FragmentSharedPtr> FragmentContainer_t;
-
         std::shared_ptr<IRenderModule>  mpRenderModule;
         std::shared_ptr<ISurface>       mpSurface;
-        FragmentContainer_t     mpFragments;
+        std::list<std::shared_ptr< PageFragment >> mpFragments;
 
         bool insert( SurfaceRect& r );
         bool isValidLocation( const SurfaceRect& r ) const;
     };
 
-    typedef std::shared_ptr< Page > PageSharedPtr;
 
 
     /** A part of a page, which gets allocated to a surface
@@ -96,7 +92,7 @@ namespace canvas
         void                        setSourceOffset( const ::basegfx::B2IPoint& rOffset ) { maSourceOffset=rOffset; }
         void                        setPage( Page* pPage ) { mpPage=pPage; }
 
-        void free( const FragmentSharedPtr& pFragment )
+        void free( const std::shared_ptr< PageFragment >& pFragment )
         {
             if(mpPage)
                 mpPage->free(pFragment);

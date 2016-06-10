@@ -54,7 +54,7 @@ namespace vclcanvas
                     const CanvasFont::Reference&                        rFont,
                     const css::uno::Reference<
                           css::rendering::XGraphicDevice>&              xDevice,
-                    const OutDevProviderSharedPtr&                      rOutDev );
+                    const std::shared_ptr< OutDevProvider >&            rOutDev );
 
         /// Dispose all internal references
         virtual void SAL_CALL disposing() override;
@@ -98,7 +98,7 @@ namespace vclcanvas
         css::uno::Sequence< double >                     maLogicalAdvancements;
         CanvasFont::Reference                            mpFont;
         css::uno::Reference< css::rendering::XGraphicDevice> mxDevice;
-        OutDevProviderSharedPtr                          mpOutDevProvider;
+        std::shared_ptr< OutDevProvider >                mpOutDevProvider;
         sal_Int8                                         mnTextDirection;
     };
 

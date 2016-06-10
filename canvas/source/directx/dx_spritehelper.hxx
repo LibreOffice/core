@@ -69,8 +69,8 @@ namespace dxcanvas
          */
         void init( const css::geometry::RealSize2D&                 rSpriteSize,
                    const SpriteCanvasRef&                           rSpriteCanvas,
-                   const IDXRenderModuleSharedPtr&                  rRenderModule,
-                   const DXSurfaceBitmapSharedPtr&                  rBitmap,
+                   const std::shared_ptr< IDXRenderModule >&        rRenderModule,
+                   const std::shared_ptr< DXSurfaceBitmap >&        rBitmap,
                    bool                                             bShowSpriteBounds );
 
         void disposing();
@@ -94,7 +94,7 @@ namespace dxcanvas
 
         SpriteCanvasRef             mpSpriteCanvas;
 
-        DXSurfaceBitmapSharedPtr    mpBitmap;
+        std::shared_ptr< DXSurfaceBitmap > mpBitmap;
         mutable bool                mbTextureDirty;  // when true, texture needs update
         bool                        mbShowSpriteBounds; // when true, debug bound rect for sprites is shown
     };

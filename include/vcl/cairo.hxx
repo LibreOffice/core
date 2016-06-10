@@ -59,8 +59,6 @@ namespace cairo {
         /// Flush all pending output to surface
         virtual void flush() const = 0;
     };
-
-    typedef std::shared_ptr<Surface> SurfaceSharedPtr;
 }
 
 #endif

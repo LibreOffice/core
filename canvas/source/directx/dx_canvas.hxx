@@ -151,12 +151,12 @@ namespace dxcanvas
         virtual OUString SAL_CALL getServiceName(  ) throw (css::uno::RuntimeException) override;
 
         // BitmapProvider
-        virtual IBitmapSharedPtr getBitmap() const override;
+        virtual std::shared_ptr<IBitmap> getBitmap() const override;
 
      private:
         css::uno::Sequence< css::uno::Any >                maArguments;
         css::uno::Reference< css::uno::XComponentContext > mxComponentContext;
-        IBitmapSharedPtr                                                             mpTarget;
+        std::shared_ptr<IBitmap>                           mpTarget;
     };
 
     typedef ::rtl::Reference< BitmapCanvas > BitmapCanvasRef;

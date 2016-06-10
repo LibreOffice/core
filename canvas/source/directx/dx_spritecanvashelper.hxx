@@ -45,9 +45,9 @@ namespace dxcanvas
 
         void init( SpriteCanvas&                                    rParent,
                    ::canvas::SpriteRedrawManager&                   rManager,
-                   const IDXRenderModuleSharedPtr&                  rRenderModule,
-                   const ::std::shared_ptr<canvas::ISurfaceProxyManager>&   rSurfaceProxy,
-                   const DXSurfaceBitmapSharedPtr&                  rBackBuffer,
+                   const std::shared_ptr< IDXRenderModule >&        rRenderModule,
+                   const ::std::shared_ptr<canvas::ISurfaceProxyManager>& rSurfaceProxy,
+                   const std::shared_ptr< DXSurfaceBitmap >&        rBackBuffer,
                    const ::basegfx::B2ISize&                        rOutputOffset );
 
         /// Dispose all internal references
@@ -132,12 +132,12 @@ namespace dxcanvas
         ::canvas::SpriteRedrawManager*                  mpRedrawManager;
 
         /// DX device, handling all low-level rendering
-        IDXRenderModuleSharedPtr                        mpRenderModule;
+        std::shared_ptr< IDXRenderModule >              mpRenderModule;
 
-        ::std::shared_ptr<canvas::ISurfaceProxyManager>         mpSurfaceProxy;
+        ::std::shared_ptr<canvas::ISurfaceProxyManager> mpSurfaceProxy;
 
         /// Backbuffer, contains the static canvas render output
-        DXSurfaceBitmapSharedPtr                        mpBackBuffer;
+        std::shared_ptr< DXSurfaceBitmap >              mpBackBuffer;
 
         /// Completely temporary rect storage (used by sprite repaint)
         mutable ::basegfx::B2IRange                     maUpdateRect;

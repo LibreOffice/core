@@ -33,7 +33,7 @@ using namespace ::com::sun::star;
 
 namespace vclcanvas
 {
-    CachedBitmap::CachedBitmap( const GraphicObjectSharedPtr&               rGraphicObject,
+    CachedBitmap::CachedBitmap( const std::shared_ptr< GraphicObject >&     rGraphicObject,
                                 const ::Point&                              rPoint,
                                 const ::Size&                               rSize,
                                 const GraphicAttr&                          rAttr,

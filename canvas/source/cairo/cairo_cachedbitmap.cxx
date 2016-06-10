@@ -34,7 +34,7 @@ using namespace ::com::sun::star;
 
 namespace cairocanvas
 {
-    CachedBitmap::CachedBitmap( const SurfaceSharedPtr&                     pSurface,
+    CachedBitmap::CachedBitmap( const std::shared_ptr< Surface >&           pSurface,
                                 const rendering::ViewState&                 rUsedViewState,
                                 const rendering::RenderState&               rUsedRenderState,
                                 const uno::Reference< rendering::XCanvas >& rTarget ) :

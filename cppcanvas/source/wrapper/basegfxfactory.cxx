@@ -65,7 +65,7 @@ namespace cppcanvas
                                                rPoly) ) );
     }
 
-    BitmapSharedPtr BaseGfxFactory::createBitmap( const CanvasSharedPtr&    rCanvas,
+    std::shared_ptr< Bitmap > BaseGfxFactory::createBitmap( const CanvasSharedPtr&    rCanvas,
                                                   const ::basegfx::B2ISize& rSize )
     {
         OSL_ENSURE( rCanvas.get() != nullptr &&
@@ -73,19 +73,19 @@ namespace cppcanvas
                     "BaseGfxFactory::createBitmap(): Invalid canvas" );
 
         if( rCanvas.get() == nullptr )
-            return BitmapSharedPtr();
+            return std::shared_ptr< Bitmap >();
 
         uno::Reference< rendering::XCanvas > xCanvas( rCanvas->getUNOCanvas() );
         if( !xCanvas.is() )
-            return BitmapSharedPtr();
+            return std::shared_ptr< Bitmap >();
 
-        return BitmapSharedPtr(
+        return std::shared_ptr< Bitmap >(
             new internal::ImplBitmap( rCanvas,
                                       xCanvas->getDevice()->createCompatibleBitmap(
                                           ::basegfx::unotools::integerSize2DFromB2ISize(rSize) ) ) );
     }
 
-    BitmapSharedPtr BaseGfxFactory::createAlphaBitmap( const CanvasSharedPtr&   rCanvas,
+    std::shared_ptr< Bitmap > BaseGfxFactory::createAlphaBitmap( const CanvasSharedPtr&   rCanvas,
                                                        const ::basegfx::B2ISize& rSize )
     {
         OSL_ENSURE( rCanvas.get() != nullptr &&
@@ -93,13 +93,13 @@ namespace cppcanvas
                     "BaseGfxFactory::createBitmap(): Invalid canvas" );
 
         if( rCanvas.get() == nullptr )
-            return BitmapSharedPtr();
+            return std::shared_ptr< Bitmap >();
 
         uno::Reference< rendering::XCanvas > xCanvas( rCanvas->getUNOCanvas() );
         if( !xCanvas.is() )
-            return BitmapSharedPtr();
+            return std::shared_ptr< Bitmap >();
 
-        return BitmapSharedPtr(
+        return std::shared_ptr< Bitmap >(
             new internal::ImplBitmap( rCanvas,
                                       xCanvas->getDevice()->createCompatibleAlphaBitmap(
                                           ::basegfx::unotools::integerSize2DFromB2ISize(rSize) ) ) );

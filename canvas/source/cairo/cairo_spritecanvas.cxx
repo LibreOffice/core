@@ -143,17 +143,17 @@ namespace cairocanvas
         return OUString( SPRITECANVAS_SERVICE_NAME );
     }
 
-    SurfaceSharedPtr SpriteCanvas::getSurface()
+    std::shared_ptr< Surface > SpriteCanvas::getSurface()
     {
         return maDeviceHelper.getBufferSurface();
     }
 
-    SurfaceSharedPtr SpriteCanvas::createSurface( const ::basegfx::B2ISize& rSize, int aContent )
+    std::shared_ptr< Surface > SpriteCanvas::createSurface( const ::basegfx::B2ISize& rSize, int aContent )
     {
         return maDeviceHelper.createSurface( rSize, aContent );
     }
 
-    SurfaceSharedPtr SpriteCanvas::createSurface( ::Bitmap& rBitmap )
+    std::shared_ptr< Surface > SpriteCanvas::createSurface( ::Bitmap& rBitmap )
     {
         BitmapSystemData aData;
         if( rBitmap.GetSystemData( aData ) ) {
@@ -162,13 +162,13 @@ namespace cairocanvas
             return maDeviceHelper.createSurface( aData, rSize );
         }
 
-        return SurfaceSharedPtr();
+        return std::shared_ptr< Surface >();
     }
 
-    SurfaceSharedPtr SpriteCanvas::changeSurface()
+    std::shared_ptr< Surface > SpriteCanvas::changeSurface()
     {
         // non-modifiable surface here
-        return SurfaceSharedPtr();
+        return std::shared_ptr< Surface >();
     }
 
     OutputDevice* SpriteCanvas::getOutputDevice()
@@ -176,12 +176,12 @@ namespace cairocanvas
         return maDeviceHelper.getOutputDevice();
     }
 
-    SurfaceSharedPtr SpriteCanvas::getBufferSurface()
+    std::shared_ptr< Surface > SpriteCanvas::getBufferSurface()
     {
         return maDeviceHelper.getBufferSurface();
     }
 
-    SurfaceSharedPtr SpriteCanvas::getWindowSurface()
+    std::shared_ptr< Surface > SpriteCanvas::getWindowSurface()
     {
         return maDeviceHelper.getWindowSurface();
     }
@@ -204,9 +204,9 @@ namespace cairocanvas
         maDeviceHelper.flush();
     }
 
-    bool SpriteCanvas::repaint( const SurfaceSharedPtr&       pSurface,
-                                const rendering::ViewState&   viewState,
-                                const rendering::RenderState& renderState )
+    bool SpriteCanvas::repaint( const std::shared_ptr< Surface >&   pSurface,
+                                const rendering::ViewState&         viewState,
+                                const rendering::RenderState&       renderState )
     {
         return maCanvasHelper.repaint( pSurface, viewState, renderState );
     }

@@ -68,8 +68,8 @@ namespace vclcanvas
          */
         void init( const css::geometry::RealSize2D&              rSpriteSize,
                    const ::canvas::SpriteSurface::Reference&     rOwningSpriteCanvas,
-                   const BackBufferSharedPtr&                    rBackBuffer,
-                   const BackBufferSharedPtr&                    rBackBufferMask,
+                   const std::shared_ptr< BackBuffer >&          rBackBuffer,
+                   const std::shared_ptr< BackBuffer >&          rBackBufferMask,
                    bool                                          bShowSpriteBounds );
 
         void disposing();
@@ -98,8 +98,8 @@ namespace vclcanvas
             css::uno::Reference< css::rendering::XPolyPolygon2D >& xPoly ) const override;
 
         // for the redraw
-        BackBufferSharedPtr                                 mpBackBuffer;
-        BackBufferSharedPtr                                 mpBackBufferMask;
+        std::shared_ptr< BackBuffer > mpBackBuffer;
+        std::shared_ptr< BackBuffer > mpBackBufferMask;
 
         /// Cached bitmap for the current sprite content
         mutable ::canvas::vcltools::VCLObject<BitmapEx>     maContent;

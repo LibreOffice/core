@@ -38,7 +38,7 @@ namespace vclcanvas
                             const uno::Sequence< beans::PropertyValue >&    ,
                             const geometry::Matrix2D&                       rFontMatrix,
                             rendering::XGraphicDevice&                      rDevice,
-                            const OutDevProviderSharedPtr&                  rOutDevProvider ) :
+                            const std::shared_ptr< OutDevProvider >&        rOutDevProvider ) :
         CanvasFont_Base( m_aMutex ),
         maFont( vcl::Font( rFontRequest.FontDescription.FamilyName,
                       rFontRequest.FontDescription.StyleName,

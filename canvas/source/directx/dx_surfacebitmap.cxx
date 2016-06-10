@@ -109,8 +109,8 @@ namespace dxcanvas
         {
         public:
 
-            GDIColorBuffer( const BitmapSharedPtr&      rSurface,
-                            const ::basegfx::B2IVector& rSize ) :
+            GDIColorBuffer( const std::shared_ptr< Gdiplus::Bitmap >&   rSurface,
+                            const ::basegfx::B2IVector&                 rSize ) :
                 maSize(rSize),
                 mpGDIPlusBitmap(rSurface)
             {
@@ -130,7 +130,7 @@ namespace dxcanvas
 
             ::basegfx::B2IVector maSize;
             mutable Gdiplus::BitmapData aBmpData;
-            BitmapSharedPtr mpGDIPlusBitmap;
+            std::shared_ptr< Gdiplus::Bitmap > mpGDIPlusBitmap;
         };
 
         sal_uInt8* GDIColorBuffer::lock() const
@@ -184,7 +184,7 @@ namespace dxcanvas
 
     DXSurfaceBitmap::DXSurfaceBitmap( const ::basegfx::B2IVector&                   rSize,
                                       const std::shared_ptr<canvas::ISurfaceProxyManager>&  rMgr,
-                                      const IDXRenderModuleSharedPtr&               rRenderModule,
+                                      const std::shared_ptr< IDXRenderModule >&     rRenderModule,
                                       bool                                          bWithAlpha ) :
         mpGdiPlusUser( GDIPlusUser::createInstance() ),
         maSize(rSize),
@@ -269,7 +269,7 @@ namespace dxcanvas
 
     void DXSurfaceBitmap::clear()
     {
-        GraphicsSharedPtr pGraphics(getGraphics());
+        std::shared_ptr< Gdiplus::Graphics > pGraphics(getGraphics());
         Gdiplus::Color transColor(255,0,0,0);
         pGraphics->SetCompositingMode( Gdiplus::CompositingModeSourceCopy );
         pGraphics->Clear( transColor );
@@ -288,7 +288,7 @@ namespace dxcanvas
     // DXSurfaceBitmap::getGraphics
 
 
-    GraphicsSharedPtr DXSurfaceBitmap::getGraphics()
+    std::shared_ptr< Gdiplus::Graphics > DXSurfaceBitmap::getGraphics()
     {
         // since clients will most probably draw directly
         // to the GDI+ bitmap, we need to mark it as dirty
@@ -306,12 +306,12 @@ namespace dxcanvas
     // DXSurfaceBitmap::getBitmap
 
 
-    BitmapSharedPtr DXSurfaceBitmap::getBitmap() const
+    std::shared_ptr< Gdiplus::Bitmap > DXSurfaceBitmap::getBitmap() const
     {
         if(hasAlpha())
             return mpGDIPlusBitmap;
 
-        BitmapSharedPtr pResult;
+        std::shared_ptr< Gdiplus::Bitmap > pResult;
 
         D3DLOCKED_RECT aLockedRect;
         if(SUCCEEDED(mpSurface->LockRect(&aLockedRect,NULL,D3DLOCK_NOSYSLOCK|D3DLOCK_READONLY)))

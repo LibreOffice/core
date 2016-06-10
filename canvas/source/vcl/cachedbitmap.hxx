@@ -29,7 +29,6 @@
 
 namespace vclcanvas
 {
-    typedef std::shared_ptr< GraphicObject > GraphicObjectSharedPtr;
 
     class CachedBitmap : public ::canvas::CachedPrimitiveBase
     {
@@ -37,7 +36,7 @@ namespace vclcanvas
 
         /** Create an XCachedPrimitive for given GraphicObject
          */
-        CachedBitmap( const GraphicObjectSharedPtr&                   rGraphicObject,
+        CachedBitmap( const std::shared_ptr< GraphicObject >&         rGraphicObject,
                       const ::Point&                                  rPoint,
                       const ::Size&                                   rSize,
                       const GraphicAttr&                              rAttr,
@@ -55,7 +54,7 @@ namespace vclcanvas
                                      bool                              bSameViewTransform ) override;
 
 
-        GraphicObjectSharedPtr                                         mpGraphicObject;
+        std::shared_ptr< GraphicObject >                               mpGraphicObject;
         const css::rendering::RenderState                              maRenderState;
         const ::Point                                                  maPoint;
         const ::Size                                                   maSize;

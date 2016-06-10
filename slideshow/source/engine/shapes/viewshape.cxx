@@ -609,7 +609,7 @@ namespace slideshow
                             aCompositingSurface->mpLastBitmapCanvas->getSize() != aBmpSize )
                         {
                             // create a bitmap of appropriate size
-                            ::cppcanvas::BitmapSharedPtr pBitmap(
+                            ::std::shared_ptr< cppcanvas::Bitmap > pBitmap(
                                 ::cppcanvas::BaseGfxFactory::createAlphaBitmap(
                                     rDestinationCanvas,
                                     aBmpSize ) );
@@ -628,7 +628,7 @@ namespace slideshow
                         ::cppcanvas::BitmapCanvasSharedPtr pBitmapCanvas(
                             aCompositingSurface->mpLastBitmapCanvas );
 
-                        ::cppcanvas::BitmapSharedPtr pBitmap(
+                        ::std::shared_ptr< cppcanvas::Bitmap > pBitmap(
                             aCompositingSurface->mpLastBitmap);
 
                         // setup bitmap canvas transformation -

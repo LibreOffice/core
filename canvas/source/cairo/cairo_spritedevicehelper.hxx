@@ -60,10 +60,10 @@ namespace cairocanvas
         void notifySizeUpdate( const css::awt::Rectangle& rBounds );
         void setSize( const ::basegfx::B2ISize& rSize );
 
-        const ::cairo::SurfaceSharedPtr& getBufferSurface() { return mpBufferSurface; }
-        ::cairo::SurfaceSharedPtr getWindowSurface();
-        ::cairo::SurfaceSharedPtr createSurface( const ::basegfx::B2ISize& rSize, int aContent = CAIRO_CONTENT_COLOR_ALPHA );
-        ::cairo::SurfaceSharedPtr createSurface( BitmapSystemData& rData, const Size& rSize );
+        const std::shared_ptr< cairo::Surface >& getBufferSurface() { return mpBufferSurface; }
+        std::shared_ptr< cairo::Surface > getWindowSurface();
+        std::shared_ptr< cairo::Surface > createSurface( const ::basegfx::B2ISize& rSize, int aContent = CAIRO_CONTENT_COLOR_ALPHA );
+        std::shared_ptr< cairo::Surface > createSurface( BitmapSystemData& rData, const Size& rSize );
         const ::basegfx::B2ISize& getSizePixel() { return maSize; }
         void flush();
 
@@ -71,7 +71,7 @@ namespace cairocanvas
         /// Pointer to sprite canvas (owner of this helper), needed to create bitmaps
         SpriteCanvas*             mpSpriteCanvas;
 
-        ::cairo::SurfaceSharedPtr mpBufferSurface;
+        std::shared_ptr< cairo::Surface > mpBufferSurface;
 
         ::basegfx::B2ISize        maSize;
         bool                      mbFullScreen;

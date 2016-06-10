@@ -95,29 +95,29 @@ namespace cairocanvas
         mbSurfaceDirty = false;
     }
 
-    bool CanvasCustomSprite::repaint( const SurfaceSharedPtr&       pSurface,
-                                      const rendering::ViewState&   viewState,
-                                      const rendering::RenderState& renderState )
+    bool CanvasCustomSprite::repaint( const std::shared_ptr< Surface >& pSurface,
+                                      const rendering::ViewState&       viewState,
+                                      const rendering::RenderState&     renderState )
     {
         return maCanvasHelper.repaint( pSurface, viewState, renderState );
     }
 
-    SurfaceSharedPtr CanvasCustomSprite::getSurface()
+    std::shared_ptr< Surface > CanvasCustomSprite::getSurface()
     {
         return mpBufferSurface;
     }
 
-    SurfaceSharedPtr CanvasCustomSprite::createSurface( const ::basegfx::B2ISize& rSize, int aContent )
+    std::shared_ptr< Surface > CanvasCustomSprite::createSurface( const ::basegfx::B2ISize& rSize, int aContent )
     {
         return mpSpriteCanvas->createSurface(rSize,aContent);
     }
 
-    SurfaceSharedPtr CanvasCustomSprite::createSurface( ::Bitmap& rBitmap )
+    std::shared_ptr< Surface > CanvasCustomSprite::createSurface( ::Bitmap& rBitmap )
     {
         return mpSpriteCanvas->createSurface(rBitmap);
     }
 
-    SurfaceSharedPtr CanvasCustomSprite::changeSurface()
+    std::shared_ptr< Surface > CanvasCustomSprite::changeSurface()
     {
         SAL_INFO( "canvas.cairo", "replacing sprite background surface");
 

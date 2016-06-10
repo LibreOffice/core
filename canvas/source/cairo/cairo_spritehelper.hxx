@@ -72,7 +72,7 @@ namespace cairocanvas
 
         void disposing();
 
-        void setSurface( const ::cairo::SurfaceSharedPtr& pBufferSurface );
+        void setSurface( const std::shared_ptr< cairo::Surface >& pBufferSurface );
 
         /** Repaint sprite content to associated sprite canvas
 
@@ -99,7 +99,7 @@ namespace cairocanvas
 
 
         SpriteCanvasRef           mpSpriteCanvas;
-        ::cairo::SurfaceSharedPtr mpBufferSurface;
+        std::shared_ptr< cairo::Surface > mpBufferSurface;
         mutable bool              mbTextureDirty;  // when true, texture needs update
     };
 }

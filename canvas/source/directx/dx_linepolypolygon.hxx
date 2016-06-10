@@ -34,14 +34,14 @@ namespace dxcanvas
     public:
         explicit LinePolyPolygon( const ::basegfx::B2DPolyPolygon& );
 
-        GraphicsPathSharedPtr getGraphicsPath( bool bNoLineJoin = false) const;
+        std::shared_ptr< Gdiplus::GraphicsPath > getGraphicsPath( bool bNoLineJoin = false) const;
 
     private:
         // overridden, to clear mpPath
         virtual void modifying() const override;
 
-        GDIPlusUserSharedPtr            mpGdiPlusUser;
-        mutable GraphicsPathSharedPtr   mpPath;
+        std::shared_ptr< GDIPlusUser >                      mpGdiPlusUser;
+        mutable std::shared_ptr< Gdiplus::GraphicsPath >    mpPath;
     };
 }
 

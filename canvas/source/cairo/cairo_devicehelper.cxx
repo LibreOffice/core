@@ -253,20 +253,20 @@ namespace cairocanvas
         }
     }
 
-    SurfaceSharedPtr DeviceHelper::createSurface( const ::basegfx::B2ISize& rSize, int aContent )
+    std::shared_ptr< Surface > DeviceHelper::createSurface( const ::basegfx::B2ISize& rSize, int aContent )
     {
         if( mpSurface )
             return mpSurface->getSimilar( aContent, rSize.getX(), rSize.getY() );
 
-        return SurfaceSharedPtr();
+        return std::shared_ptr< Surface >();
     }
 
-    SurfaceSharedPtr DeviceHelper::createSurface( BitmapSystemData& rData, const Size& rSize )
+    std::shared_ptr< Surface > DeviceHelper::createSurface( BitmapSystemData& rData, const Size& rSize )
     {
         if (mpRefDevice)
             return mpRefDevice->CreateBitmapSurface(rData, rSize);
 
-        return SurfaceSharedPtr();
+        return std::shared_ptr< Surface >();
     }
 }
 

@@ -431,12 +431,12 @@ public:
     /// Check whether cairo will work
     virtual bool                SupportsCairo() const = 0;
     /// Create Surface from given cairo surface
-    virtual cairo::SurfaceSharedPtr CreateSurface(const cairo::CairoSurfaceSharedPtr& rSurface) const = 0;
+    virtual std::shared_ptr< cairo::Surface > CreateSurface(const cairo::CairoSurfaceSharedPtr& rSurface) const = 0;
     /// Create surface with given dimensions
-    virtual cairo::SurfaceSharedPtr CreateSurface(const OutputDevice& rRefDevice, int x, int y, int width, int height) const = 0;
+    virtual std::shared_ptr< cairo::Surface > CreateSurface(const OutputDevice& rRefDevice, int x, int y, int width, int height) const = 0;
     /// Create Surface for given bitmap data
-    virtual cairo::SurfaceSharedPtr CreateBitmapSurface(const OutputDevice& rRefDevice, const BitmapSystemData& rData, const Size& rSize) const = 0;
-    virtual css::uno::Any       GetNativeSurfaceHandle(cairo::SurfaceSharedPtr& rSurface, const basegfx::B2ISize& rSize) const = 0;
+    virtual std::shared_ptr< cairo::Surface > CreateBitmapSurface(const OutputDevice& rRefDevice, const BitmapSystemData& rData, const Size& rSize) const = 0;
+    virtual css::uno::Any       GetNativeSurfaceHandle(std::shared_ptr< cairo::Surface >& rSurface, const basegfx::B2ISize& rSize) const = 0;
 
     virtual SystemFontData      GetSysFontData( int nFallbacklevel ) const = 0;
 

@@ -48,13 +48,12 @@ namespace dxcanvas
 {
     namespace
     {
-        typedef std::shared_ptr< Gdiplus::PathGradientBrush >   PathGradientBrushSharedPtr;
 
-        bool fillLinearGradient( GraphicsSharedPtr&                             rGraphics,
+        bool fillLinearGradient( std::shared_ptr< Gdiplus::Graphics >&          rGraphics,
                                  const ::canvas::ParametricPolyPolygon::Values& /*rValues*/,
                                  const std::vector< Gdiplus::Color >&           rColors,
                                  const std::vector< Gdiplus::REAL >&            rStops,
-                                 const GraphicsPathSharedPtr&                   rFillPath,
+                                 const std::shared_ptr< Gdiplus::GraphicsPath >& rFillPath,
                                  const rendering::Texture&                      texture )
         {
             // setup a linear gradient with given colors
@@ -196,18 +195,18 @@ namespace dxcanvas
         bool fillPolygonalGradient( const ::canvas::ParametricPolyPolygon::Values& rValues,
                                     const std::vector< Gdiplus::Color >&           rColors,
                                     const std::vector< Gdiplus::REAL >&            rStops,
-                                    GraphicsSharedPtr&                             rGraphics,
-                                    const GraphicsPathSharedPtr&                   rPath,
+                                    std::shared_ptr< Gdiplus::Graphics >&          rGraphics,
+                                    const std::shared_ptr< Gdiplus::GraphicsPath >& rPath,
                                     const rendering::ViewState&                    viewState,
                                     const rendering::RenderState&                  renderState,
                                     const rendering::Texture&                      texture )
         {
             // copy original fill path object, might have to change it
             // below
-            GraphicsPathSharedPtr pFillPath( rPath );
+            std::shared_ptr< Gdiplus::GraphicsPath > pFillPath( rPath );
             const ::basegfx::B2DPolygon& rGradientPoly( rValues.maGradientPoly );
 
-            PathGradientBrushSharedPtr pGradientBrush;
+            std::shared_ptr< Gdiplus::PathGradientBrush > pGradientBrush;
 
             // fill background uniformly with end color
             Gdiplus::SolidBrush aBackgroundBrush( rColors[0] );
@@ -372,7 +371,7 @@ namespace dxcanvas
 
                 tools::gdiPlusMatrixFromAffineMatrix2D( aMatrix,
                                                         texture.AffineTransform );
-                GraphicsPathSharedPtr pGradientPath(
+                std::shared_ptr< Gdiplus::GraphicsPath > pGradientPath(
                     tools::graphicsPathFromB2DPolygon( rValues.maGradientPoly ));
                 pGradientPath->Transform( &aMatrix );
 
@@ -422,8 +421,8 @@ namespace dxcanvas
         bool fillGradient( const ::canvas::ParametricPolyPolygon::Values& rValues,
                            const std::vector< Gdiplus::Color >&           rColors,
                            const std::vector< Gdiplus::REAL >&            rStops,
-                           GraphicsSharedPtr&                             rGraphics,
-                           const GraphicsPathSharedPtr&                   rPath,
+                           std::shared_ptr< Gdiplus::Graphics >&          rGraphics,
+                           const std::shared_ptr< Gdiplus::GraphicsPath >& rPath,
                            const rendering::ViewState&                    viewState,
                            const rendering::RenderState&                  renderState,
                            const rendering::Texture&                      texture )
@@ -460,10 +459,10 @@ namespace dxcanvas
             return true;
         }
 
-        void fillBitmap( const uno::Reference< rendering::XBitmap >& xBitmap,
-                         GraphicsSharedPtr&                          rGraphics,
-                         const GraphicsPathSharedPtr&                rPath,
-                         const rendering::Texture&                   rTexture )
+        void fillBitmap( const uno::Reference< rendering::XBitmap >&    xBitmap,
+                         std::shared_ptr< Gdiplus::Graphics >&          rGraphics,
+                         const std::shared_ptr< Gdiplus::GraphicsPath >& rPath,
+                         const rendering::Texture&                      rTexture )
         {
             OSL_ENSURE( rTexture.RepeatModeX ==
                         rTexture.RepeatModeY,
@@ -483,10 +482,10 @@ namespace dxcanvas
             // GDI+ bitmap (this is significant, because drawing
             // layer presents background object bitmap in that
             // way!)
-            BitmapSharedPtr pBitmap(
+            std::shared_ptr< Gdiplus::Bitmap > pBitmap(
                 tools::bitmapFromXBitmap( xBitmap ) );
 
-            TextureBrushSharedPtr pBrush;
+            std::shared_ptr< Gdiplus::TextureBrush > pBrush;
             if( ::rtl::math::approxEqual( rTexture.Alpha,
                                           1.0 ) )
             {
@@ -550,7 +549,7 @@ namespace dxcanvas
 
         if( needOutput() )
         {
-            GraphicsSharedPtr pGraphics( mpGraphicsProvider->getGraphics() );
+            std::shared_ptr< Gdiplus::Graphics > pGraphics( mpGraphicsProvider->getGraphics() );
 
             setupGraphicsState( pGraphics, viewState, renderState );
 

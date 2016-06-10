@@ -131,19 +131,19 @@ namespace cairocanvas
         virtual OUString SAL_CALL getServiceName(  ) throw (css::uno::RuntimeException, std::exception) override;
 
         // SurfaceProvider
-        virtual ::cairo::SurfaceSharedPtr getSurface() override;
-        virtual ::cairo::SurfaceSharedPtr createSurface( const ::basegfx::B2ISize& rSize, int aContent = CAIRO_CONTENT_COLOR_ALPHA ) override;
-        virtual ::cairo::SurfaceSharedPtr createSurface( ::Bitmap& rBitmap ) override;
-        virtual ::cairo::SurfaceSharedPtr changeSurface() override;
+        virtual std::shared_ptr< cairo::Surface > getSurface() override;
+        virtual std::shared_ptr< cairo::Surface > createSurface( const ::basegfx::B2ISize& rSize, int aContent = CAIRO_CONTENT_COLOR_ALPHA ) override;
+        virtual std::shared_ptr< cairo::Surface > createSurface( ::Bitmap& rBitmap ) override;
+        virtual std::shared_ptr< cairo::Surface > changeSurface() override;
         virtual OutputDevice* getOutputDevice() override;
 
         // RepaintTarget
-        virtual bool repaint( const ::cairo::SurfaceSharedPtr&                pSurface,
-                              const css::rendering::ViewState&   viewState,
-                              const css::rendering::RenderState& renderState ) override;
+        virtual bool repaint( const std::shared_ptr< cairo::Surface >&  pSurface,
+                              const css::rendering::ViewState&          viewState,
+                              const css::rendering::RenderState&        renderState ) override;
 
-        ::cairo::SurfaceSharedPtr getWindowSurface();
-        ::cairo::SurfaceSharedPtr getBufferSurface();
+        std::shared_ptr< cairo::Surface > getWindowSurface();
+        std::shared_ptr< cairo::Surface > getBufferSurface();
 
         const ::basegfx::B2ISize& getSizePixel();
         void setSizePixel( const ::basegfx::B2ISize& rSize );

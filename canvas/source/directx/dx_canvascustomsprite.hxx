@@ -96,11 +96,11 @@ namespace dxcanvas
             @param rDevice
             Target DX device
          */
-        CanvasCustomSprite( const css::geometry::RealSize2D&   rSpriteSize,
-                            const SpriteCanvasRef&                          rRefDevice,
-                            const IDXRenderModuleSharedPtr&                 rRenderModule,
+        CanvasCustomSprite( const css::geometry::RealSize2D&                        rSpriteSize,
+                            const SpriteCanvasRef&                                  rRefDevice,
+                            const std::shared_ptr< IDXRenderModule >&               rRenderModule,
                             const ::std::shared_ptr<canvas::ISurfaceProxyManager>&  rSurfaceProxy,
-                            bool                                            bShowSpriteBounds );
+                            bool                                                    bShowSpriteBounds );
 
         virtual void disposeThis() override;
 
@@ -124,7 +124,7 @@ namespace dxcanvas
             raw pointer (without refcounting)
         */
         SpriteCanvasRef          mpSpriteCanvas;
-        DXSurfaceBitmapSharedPtr mpSurface;
+        std::shared_ptr< DXSurfaceBitmap > mpSurface;
     };
 }
 

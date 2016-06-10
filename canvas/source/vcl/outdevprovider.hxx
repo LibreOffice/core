@@ -46,7 +46,6 @@ namespace vclcanvas
         virtual const OutputDevice& getOutDev() const = 0;
     };
 
-    typedef std::shared_ptr< OutDevProvider > OutDevProviderSharedPtr;
 }
 
 #endif // INCLUDED_CANVAS_SOURCE_VCL_OUTDEVPROVIDER_HXX

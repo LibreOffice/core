@@ -66,8 +66,8 @@ namespace dxcanvas
         sal_Bool  showBuffer( bool bIsVisible, sal_Bool bUpdateAll );
         sal_Bool  switchBuffer( bool bIsVisible, sal_Bool bUpdateAll );
 
-        const IDXRenderModuleSharedPtr& getRenderModule() const { return mpRenderModule; }
-        const DXSurfaceBitmapSharedPtr& getBackBuffer() const { return mpBackBuffer; }
+        const std::shared_ptr< IDXRenderModule >& getRenderModule() const { return mpRenderModule; }
+        const std::shared_ptr< DXSurfaceBitmap >& getBackBuffer() const { return mpBackBuffer; }
         const ::std::shared_ptr<canvas::ISurfaceProxyManager> &getSurfaceProxy() const { return mpSurfaceProxyManager; }
 
         css::uno::Any isAccelerated() const;
@@ -86,13 +86,13 @@ namespace dxcanvas
         /// Pointer to sprite canvas (owner of this helper), needed to create bitmaps
         SpriteCanvas*                           mpSpriteCanvas;
 
-        DXSurfaceBitmapSharedPtr                mpBackBuffer;
+        std::shared_ptr< DXSurfaceBitmap >      mpBackBuffer;
 
         /// Instance passing out HW textures
         ::std::shared_ptr<canvas::ISurfaceProxyManager> mpSurfaceProxyManager;
 
         /// Our encapsulation interface to DirectX
-        IDXRenderModuleSharedPtr                mpRenderModule;
+        std::shared_ptr< IDXRenderModule >      mpRenderModule;
     };
 }
 

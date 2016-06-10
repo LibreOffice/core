@@ -62,11 +62,11 @@ namespace cppcanvas
 
         /** Create an uninitialized bitmap with the given size
          */
-        static BitmapSharedPtr         createBitmap( const CanvasSharedPtr&, const ::basegfx::B2ISize& rSize );
+        static std::shared_ptr< Bitmap > createBitmap( const CanvasSharedPtr&, const ::basegfx::B2ISize& rSize );
 
         /** Create an uninitialized alpha bitmap with the given size
          */
-        static BitmapSharedPtr         createAlphaBitmap( const CanvasSharedPtr&, const ::basegfx::B2ISize& rSize );
+        static std::shared_ptr< Bitmap > createAlphaBitmap( const CanvasSharedPtr&, const ::basegfx::B2ISize& rSize );
 
     private:
         BaseGfxFactory() = delete;

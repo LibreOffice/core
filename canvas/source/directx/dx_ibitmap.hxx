@@ -33,9 +33,9 @@ namespace dxcanvas
     /// Interface for internal canvas bitmap objects
     struct IBitmap : public GraphicsProvider
     {
-        virtual BitmapSharedPtr           getBitmap() const = 0;
-        virtual ::basegfx::B2IVector      getSize() const = 0;
-        virtual bool                      hasAlpha() const = 0;
+        virtual std::shared_ptr< Gdiplus::Bitmap >  getBitmap() const = 0;
+        virtual ::basegfx::B2IVector                getSize() const = 0;
+        virtual bool                                hasAlpha() const = 0;
 
         virtual css::uno::Sequence< sal_Int8 > getData(
             css::rendering::IntegerBitmapLayout&       bitmapLayout,
@@ -56,7 +56,6 @@ namespace dxcanvas
             const css::geometry::IntegerPoint2D&       pos ) = 0;
     };
 
-    typedef std::shared_ptr<IBitmap> IBitmapSharedPtr;
 }
 
 #endif

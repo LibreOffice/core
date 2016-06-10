@@ -71,25 +71,25 @@ namespace cairocanvas
         CanvasBitmap_Base::disposeThis();
     }
 
-    SurfaceSharedPtr CanvasBitmap::getSurface()
+    std::shared_ptr< Surface > CanvasBitmap::getSurface()
     {
         return mpBufferSurface;
     }
 
-    SurfaceSharedPtr CanvasBitmap::createSurface( const ::basegfx::B2ISize& rSize, int aContent )
+    std::shared_ptr< Surface > CanvasBitmap::createSurface( const ::basegfx::B2ISize& rSize, int aContent )
     {
         return mpSurfaceProvider->createSurface(rSize,aContent);
     }
 
-    SurfaceSharedPtr CanvasBitmap::createSurface( ::Bitmap& rBitmap )
+    std::shared_ptr< Surface > CanvasBitmap::createSurface( ::Bitmap& rBitmap )
     {
         return mpSurfaceProvider->createSurface(rBitmap);
     }
 
-    SurfaceSharedPtr CanvasBitmap::changeSurface()
+    std::shared_ptr< Surface > CanvasBitmap::changeSurface()
     {
         // non-modifiable surface here
-        return SurfaceSharedPtr();
+        return std::shared_ptr< Surface >();
     }
 
     OutputDevice* CanvasBitmap::getOutputDevice()
@@ -97,9 +97,9 @@ namespace cairocanvas
         return mpSurfaceProvider->getOutputDevice();
     }
 
-    bool CanvasBitmap::repaint( const SurfaceSharedPtr&       pSurface,
-                                const rendering::ViewState&   viewState,
-                                const rendering::RenderState& renderState )
+    bool CanvasBitmap::repaint( const std::shared_ptr< Surface >&   pSurface,
+                                const rendering::ViewState&         viewState,
+                                const rendering::RenderState&       renderState )
     {
         return maCanvasHelper.repaint( pSurface, viewState, renderState );
     }
