@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <o3tl/any.hxx>
 #include <osl/mutex.hxx>
 #include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
@@ -134,7 +137,7 @@ Reference< XConnection >    getConnection(const Reference< XInterface > & xRowSe
         if (!xFormProps.is())
             return xConn;
 
-        xConn.set(*static_cast<Reference< XInterface > const *>(xFormProps->getPropertyValue("ActiveConnection").getValue()), UNO_QUERY);
+        xConn.set(xFormProps->getPropertyValue("ActiveConnection"), UNO_QUERY);
         if (!xConn.is())
         {
             SAL_INFO("extensions.biblio", "no active connection");
@@ -166,14 +169,13 @@ Reference< XNameAccess >  getColumns(const Reference< XForm > & _rxForm)
         {
             try
             {
-                DBG_ASSERT((*static_cast<sal_Int32 const *>(xFormProps->getPropertyValue("CommandType").getValue())) == CommandType::TABLE,
+                DBG_ASSERT(*o3tl::forceAccess<sal_Int32>(xFormProps->getPropertyValue("CommandType")) == CommandType::TABLE,
                     "::getColumns : invalid form (has no table as data source) !");
                 OUString sTable;
                 xFormProps->getPropertyValue("Command") >>= sTable;
                 Reference< XNameAccess >  xTables = xSupplyTables->getTables();
                 if (xTables.is() && xTables->hasByName(sTable))
-                    xSupplyCols.set(
-                        *static_cast<Reference< XInterface > const *>(xTables->getByName(sTable).getValue()), UNO_QUERY);
+                    xSupplyCols.set(xTables->getByName(sTable), UNO_QUERY);
                 if (xSupplyCols.is())
                     xReturn = xSupplyCols->getColumns();
             }
@@ -1428,7 +1430,7 @@ void BibDataManager::propertyChange(const beans::PropertyChangeEvent& evt) throw
             if( evt.NewValue.getValueType() == cppu::UnoType<io::XInputStream>::get())
             {
                 Reference< io::XDataInputStream >  xStream(
-                    *static_cast<const Reference< io::XInputStream > *>(evt.NewValue.getValue()), UNO_QUERY );
+                    evt.NewValue, UNO_QUERY );
                 aUID <<= xStream->readUTF();
             }
             else
@@ -1472,13 +1474,12 @@ void BibDataManager::SetMeAsUidListener()
 
         if(!theFieldName.isEmpty())
         {
-            Reference< XPropertySet >  xPropSet;
             Any aElement;
 
             aElement = xFields->getByName(theFieldName);
-            xPropSet = *static_cast<Reference< XPropertySet > const *>(aElement.getValue());
+            auto xPropSet = o3tl::doAccess<Reference<XPropertySet>>(aElement);
 
-            xPropSet->addPropertyChangeListener(FM_PROP_VALUE, this);
+            (*xPropSet)->addPropertyChangeListener(FM_PROP_VALUE, this);
         }
 
     }
@@ -1516,13 +1517,12 @@ void BibDataManager::RemoveMeAsUidListener()
 
         if(!theFieldName.isEmpty())
         {
-            Reference< XPropertySet >  xPropSet;
             Any aElement;
 
             aElement = xFields->getByName(theFieldName);
-            xPropSet = *static_cast<Reference< XPropertySet > const *>(aElement.getValue());
+            auto xPropSet = o3tl::doAccess<Reference<XPropertySet>>(aElement);
 
-            xPropSet->removePropertyChangeListener(FM_PROP_VALUE, this);
+            (*xPropSet)->removePropertyChangeListener(FM_PROP_VALUE, this);
         }
 
     }

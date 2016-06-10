@@ -24,6 +24,7 @@
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <datman.hxx>
+#include <o3tl/any.hxx>
 #include <svx/svxids.hrc>
 #include <svtools/miscopt.hxx>
 #include <svtools/imgdef.hxx>
@@ -65,10 +66,9 @@ void BibToolBarListener::statusChanged(const css::frame::FeatureStateEvent& rEvt
         pToolBar->EnableItem(nIndex,rEvt.IsEnabled);
 
         css::uno::Any aState=rEvt.State;
-        if(aState.getValueType()==cppu::UnoType<bool>::get())
+        if(auto bChecked = o3tl::tryAccess<bool>(aState))
         {
-            bool bChecked= *static_cast<sal_Bool const *>(aState.getValue());
-            pToolBar->CheckItem(nIndex, bChecked);
+            pToolBar->CheckItem(nIndex, *bChecked);
         }
 
     }
@@ -92,12 +92,11 @@ void BibTBListBoxListener::statusChanged(const css::frame::FeatureStateEvent& rE
         pToolBar->EnableSourceList(rEvt.IsEnabled);
 
         Any aState = rEvt.State;
-        if(aState.getValueType() == cppu::UnoType<Sequence<OUString>>::get())
+        if(auto pStringSeq = o3tl::tryAccess<Sequence<OUString>>(aState))
         {
             pToolBar->UpdateSourceList(false);
             pToolBar->ClearSourceList();
 
-            Sequence<OUString> const * pStringSeq = static_cast<Sequence<OUString> const *>(aState.getValue());
             const OUString* pStringArray = pStringSeq->getConstArray();
 
             sal_uInt32 nCount = pStringSeq->getLength();
@@ -131,11 +130,10 @@ void BibTBQueryMenuListener::statusChanged(const frame::FeatureStateEvent& rEvt)
         pToolBar->EnableSourceList(rEvt.IsEnabled);
 
         uno::Any aState=rEvt.State;
-        if(aState.getValueType()==cppu::UnoType<Sequence<OUString>>::get())
+        if(auto pStringSeq = o3tl::tryAccess<Sequence<OUString>>(aState))
         {
             pToolBar->ClearFilterMenu();
 
-            Sequence<OUString> const * pStringSeq = static_cast<Sequence<OUString> const *>(aState.getValue());
             const OUString* pStringArray = pStringSeq->getConstArray();
 
             sal_uInt32 nCount = pStringSeq->getLength();
@@ -168,10 +166,9 @@ void BibTBEditListener::statusChanged(const frame::FeatureStateEvent& rEvt)throw
         pToolBar->EnableQuery(rEvt.IsEnabled);
 
         uno::Any aState=rEvt.State;
-        if(aState.getValueType()== ::cppu::UnoType<OUString>::get())
+        if(auto aStr = o3tl::tryAccess<OUString>(aState))
         {
-            OUString aStr = *static_cast<OUString const *>(aState.getValue());
-            pToolBar->SetQueryString(aStr);
+            pToolBar->SetQueryString(*aStr);
         }
     }
 }

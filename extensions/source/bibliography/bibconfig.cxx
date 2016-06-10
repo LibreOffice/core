@@ -25,6 +25,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/sdb/DatabaseContext.hpp>
 #include <comphelper/processfactory.hxx>
+#include <o3tl/any.hxx>
 #include <o3tl/make_unique.hxx>
 
 using namespace ::com::sun::star::uno;
@@ -116,7 +117,7 @@ BibConfig::BibConfig()
                     case  5: pValues[nProp] >>= sQueryText ;  break;
                     case  6: pValues[nProp] >>= sQueryField;  break;
                     case  7:
-                        bShowColumnAssignmentWarning = *static_cast<sal_Bool const *>(pValues[nProp].getValue());
+                        bShowColumnAssignmentWarning = *o3tl::doAccess<bool>(pValues[nProp]);
                     break;
                 }
             }
