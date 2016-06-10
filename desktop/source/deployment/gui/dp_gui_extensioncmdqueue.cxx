@@ -50,6 +50,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/TypeClass.hpp>
+#include <o3tl/any.hxx>
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 #include <rtl/ref.hxx>
@@ -562,8 +563,8 @@ void ProgressCmdEnv::update_( uno::Any const & rStatus )
     OUString text;
     if ( rStatus.hasValue() && !( rStatus >>= text) )
     {
-        if ( rStatus.getValueTypeClass() == uno::TypeClass_EXCEPTION )
-            text = static_cast< uno::Exception const *>( rStatus.getValue() )->Message;
+        if ( auto e = o3tl::tryAccess<uno::Exception>(rStatus) )
+            text = e->Message;
         if ( text.isEmpty() )
             text = ::comphelper::anyToString( rStatus ); // fallback
 
@@ -800,11 +801,13 @@ void ExtensionCmdQueue::Thread::execute()
                 uno::Any exc( ::cppu::getCaughtException() );
                 OUString msg;
                 deployment::DeploymentException dpExc;
-                if ((exc >>= dpExc) &&
-                    dpExc.Cause.getValueTypeClass() == uno::TypeClass_EXCEPTION)
+                if (exc >>= dpExc)
                 {
-                    // notify error cause only:
-                    msg = static_cast< uno::Exception const * >( dpExc.Cause.getValue() )->Message;
+                    if (auto e = o3tl::tryAccess<uno::Exception>(dpExc.Cause))
+                    {
+                        // notify error cause only:
+                        msg = e->Message;
+                    }
                 }
                 if (msg.isEmpty()) // fallback for debugging purposes
                     msg = ::comphelper::anyToString(exc);
