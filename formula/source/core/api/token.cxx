@@ -190,7 +190,8 @@ void FormulaToken::SetInForceArray( bool )
 
 double FormulaToken::GetDouble() const
 {
-    SAL_WARN( "formula.core", "FormulaToken::GetDouble: virtual dummy called" );
+    // This one is worth an assert.
+    assert( !"FormulaToken::GetDouble: virtual dummy called" );
     return 0.0;
 }
 
