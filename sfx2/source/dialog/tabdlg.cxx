@@ -1223,6 +1223,19 @@ void SfxTabDialog::ShowPage( sal_uInt16 nId )
     ActivatePageHdl( m_pTabCtrl );
 }
 
+OString SfxTabDialog::GetScreenshotId() const
+{
+    SfxTabPage *pActiveTabPage = GetCurTabPage();
+    OString activeTabPage;
+
+    if ( pActiveTabPage )
+    {
+        activeTabPage = pActiveTabPage->GetHelpId();
+    }
+
+    return activeTabPage;
+}
+
 
 const sal_uInt16* SfxTabDialog::GetInputRanges( const SfxItemPool& rPool )
 
