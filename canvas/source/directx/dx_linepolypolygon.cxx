@@ -35,7 +35,7 @@ namespace dxcanvas
     {
     }
 
-    GraphicsPathSharedPtr LinePolyPolygon::getGraphicsPath( bool bNoLineJoin ) const
+    std::shared_ptr< Gdiplus::GraphicsPath > LinePolyPolygon::getGraphicsPath( bool bNoLineJoin ) const
     {
         // generate GraphicsPath only on demand (gets deleted as soon
         // as any of the modifying methods above touches the

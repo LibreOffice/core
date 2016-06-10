@@ -58,9 +58,8 @@ namespace canvas
             SetterType setter;
         };
         typedef tools::ValueMap< Callbacks >     MapType;
-        typedef std::vector< MapType::MapEntry > InputMap;
 
-        class MakeMap : public InputMap
+        class MakeMap : public std::vector< MapType::MapEntry >
         {
         public:
             MakeMap(const char*        name,
@@ -104,7 +103,7 @@ namespace canvas
             a property, and reading/writing to this property is passed
             on to the given function pointer.
          */
-        void initProperties( const InputMap& rMap );
+        void initProperties( const std::vector< MapType::MapEntry >& rMap );
 
         /** Add given properties to helper
 
@@ -114,7 +113,7 @@ namespace canvas
             on to the given function pointer. These name/function
             pairs are added to the already existing ones.
          */
-        void addProperties( const InputMap& rMap );
+        void addProperties( const std::vector< MapType::MapEntry >& rMap );
 
         /** Checks whether the given string corresponds to a valid
             property name.
@@ -125,7 +124,7 @@ namespace canvas
 
         /** Request the currently active map
          */
-        const InputMap& getPropertyMap() const { return maMapEntries; }
+        const std::vector< MapType::MapEntry >& getPropertyMap() const { return maMapEntries; }
 
         // XPropertySet implementation
         css::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo() const;
@@ -139,7 +138,7 @@ namespace canvas
 
     private:
         std::unique_ptr<MapType> mpMap;
-        InputMap                maMapEntries;
+        std::vector< MapType::MapEntry > maMapEntries;
     };
 }
 

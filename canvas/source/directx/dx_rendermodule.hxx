@@ -69,13 +69,12 @@ namespace dxcanvas
         virtual HWND getHWND() const = 0;
     };
 
-    typedef std::shared_ptr< IDXRenderModule > IDXRenderModuleSharedPtr;
 
 
     /** Factory method, to create an IRenderModule instance for the
         given VCL window instance
      */
-    IDXRenderModuleSharedPtr createRenderModule( const vcl::Window& rParent );
+    std::shared_ptr< IDXRenderModule > createRenderModule( const vcl::Window& rParent );
 }
 
 #endif

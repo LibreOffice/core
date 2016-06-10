@@ -89,7 +89,7 @@ namespace vclcanvas
         uno::Reference< awt::XWindow > xParentWindow;
         maArguments[4] >>= xParentWindow;
 
-        OutDevProviderSharedPtr pOutDev( new WindowOutDevHolder(xParentWindow) );
+        std::shared_ptr< OutDevProvider > pOutDev( new WindowOutDevHolder(xParentWindow) );
 
         // setup helper
         maDeviceHelper.init( pOutDev );
@@ -145,7 +145,7 @@ namespace vclcanvas
         return OUString( SPRITECANVAS_SERVICE_NAME );
     }
 
-    bool SpriteCanvas::repaint( const GraphicObjectSharedPtr&   rGrf,
+    bool SpriteCanvas::repaint( const std::shared_ptr< GraphicObject >&   rGrf,
                                 const rendering::ViewState&     viewState,
                                 const rendering::RenderState&   renderState,
                                 const ::Point&                  rPt,

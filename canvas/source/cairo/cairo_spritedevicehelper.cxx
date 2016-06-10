@@ -125,25 +125,25 @@ namespace cairocanvas
         setSize( ::basegfx::B2ISize(rBounds.Width, rBounds.Height) );
     }
 
-    SurfaceSharedPtr SpriteDeviceHelper::getWindowSurface()
+    std::shared_ptr< Surface > SpriteDeviceHelper::getWindowSurface()
     {
         return DeviceHelper::getSurface();
     }
 
-    SurfaceSharedPtr SpriteDeviceHelper::createSurface( const ::basegfx::B2ISize& rSize, int aContent )
+    std::shared_ptr< Surface > SpriteDeviceHelper::createSurface( const ::basegfx::B2ISize& rSize, int aContent )
     {
         if( mpBufferSurface )
             return mpBufferSurface->getSimilar( aContent, rSize.getX(), rSize.getY() );
 
-        return SurfaceSharedPtr();
+        return std::shared_ptr< Surface >();
     }
 
-    SurfaceSharedPtr SpriteDeviceHelper::createSurface( BitmapSystemData& rData, const Size& rSize )
+    std::shared_ptr< Surface > SpriteDeviceHelper::createSurface( BitmapSystemData& rData, const Size& rSize )
     {
         OutputDevice *pDevice = getOutputDevice();
         if (pDevice)
             return pDevice->CreateBitmapSurface(rData, rSize);
-        return SurfaceSharedPtr();
+        return std::shared_ptr< Surface >();
     }
 
     /** SpriteDeviceHelper::flush  Flush the platform native window
@@ -153,7 +153,7 @@ namespace cairocanvas
      **/
     void SpriteDeviceHelper::flush()
     {
-        SurfaceSharedPtr pWinSurface=getWindowSurface();
+        std::shared_ptr< Surface > pWinSurface=getWindowSurface();
         if( pWinSurface )
             pWinSurface->flush();
     }

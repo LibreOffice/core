@@ -62,15 +62,6 @@ typedef IDirect3DSurface9 surface_type;
 
 namespace dxcanvas
 {
-    // some shared pointer typedefs to Gdiplus objects
-    typedef std::shared_ptr< Gdiplus::Graphics >        GraphicsSharedPtr;
-    typedef std::shared_ptr< Gdiplus::GraphicsPath >    GraphicsPathSharedPtr;
-    typedef std::shared_ptr< Gdiplus::Bitmap >          BitmapSharedPtr;
-    typedef std::shared_ptr< Gdiplus::CachedBitmap >    CachedBitmapSharedPtr;
-    typedef std::shared_ptr< Gdiplus::Font >            FontSharedPtr;
-    typedef std::shared_ptr< Gdiplus::Brush >           BrushSharedPtr;
-    typedef std::shared_ptr< Gdiplus::TextureBrush >    TextureBrushSharedPtr;
-
     /** COM object RAII wrapper
 
         This template wraps a Windows COM object, transparently

@@ -98,7 +98,7 @@ namespace cairocanvas
         maSize = rSize;
     }
 
-    void CanvasHelper::setSurface( const SurfaceSharedPtr& pSurface, bool bHasAlpha )
+    void CanvasHelper::setSurface( const std::shared_ptr< Surface >& pSurface, bool bHasAlpha )
     {
         mbHaveAlpha = bHasAlpha;
         mpVirtualDevice.disposeAndClear();
@@ -299,7 +299,7 @@ namespace cairocanvas
      *
      * @return created surface or NULL
      **/
-    static SurfaceSharedPtr surfaceFromXBitmap( const uno::Reference< rendering::XBitmap >& xBitmap )
+    static std::shared_ptr< Surface > surfaceFromXBitmap( const uno::Reference< rendering::XBitmap >& xBitmap )
     {
         CanvasBitmap* pBitmapImpl = dynamic_cast< CanvasBitmap* >( xBitmap.get() );
         if( pBitmapImpl )
@@ -309,7 +309,7 @@ namespace cairocanvas
         if( pSurfaceProvider )
             return pSurfaceProvider->getSurface();
 
-        return SurfaceSharedPtr();
+        return std::shared_ptr< Surface >();
     }
 
     static ::BitmapEx bitmapExFromXBitmap( const uno::Reference< rendering::XBitmap >& xBitmap )
@@ -404,10 +404,10 @@ namespace cairocanvas
      *
      * @return created surface or NULL
      **/
-    static SurfaceSharedPtr surfaceFromXBitmap( const uno::Reference< rendering::XBitmap >& xBitmap, const SurfaceProviderRef& rSurfaceProvider, unsigned char*& data, bool& bHasAlpha )
+    static std::shared_ptr< Surface > surfaceFromXBitmap( const uno::Reference< rendering::XBitmap >& xBitmap, const SurfaceProviderRef& rSurfaceProvider, unsigned char*& data, bool& bHasAlpha )
     {
         bHasAlpha = xBitmap->hasAlpha();
-        SurfaceSharedPtr pSurface = surfaceFromXBitmap( xBitmap );
+        std::shared_ptr< Surface > pSurface = surfaceFromXBitmap( xBitmap );
         if( pSurface )
             data = nullptr;
         else
@@ -641,7 +641,7 @@ namespace cairocanvas
                 if( pAlphaReadAcc )
                     aAlpha.ReleaseAccess( pAlphaReadAcc );
 
-                SurfaceSharedPtr pImageSurface = rSurfaceProvider->getOutputDevice()->CreateSurface(
+                std::shared_ptr< Surface > pImageSurface = rSurfaceProvider->getOutputDevice()->CreateSurface(
                     CairoSurfaceSharedPtr(
                         cairo_image_surface_create_for_data(
                             data,
@@ -753,7 +753,7 @@ namespace cairocanvas
                     {
                         unsigned char* data = nullptr;
                         bool bHasAlpha = false;
-                        SurfaceSharedPtr pSurface = surfaceFromXBitmap( (*pTextures)[0].Bitmap, pDevice, data, bHasAlpha );
+                        std::shared_ptr< Surface > pSurface = surfaceFromXBitmap( (*pTextures)[0].Bitmap, pDevice, data, bHasAlpha );
 
                         if( pSurface )
                         {
@@ -1346,14 +1346,14 @@ namespace cairocanvas
     }
 
     uno::Reference< rendering::XCachedPrimitive > CanvasHelper::implDrawBitmapSurface( const rendering::XCanvas*        pCanvas,
-                                                                                       const SurfaceSharedPtr&          pInputSurface,
+                                                                                       const std::shared_ptr< Surface >& pInputSurface,
                                                                                        const rendering::ViewState&      viewState,
                                                                                        const rendering::RenderState&    renderState,
                                                                                        const geometry::IntegerSize2D&   rSize,
                                                                                        bool                             bModulateColors,
                                                                                        bool                             bHasAlpha )
     {
-        SurfaceSharedPtr pSurface=pInputSurface;
+        std::shared_ptr< Surface > pSurface=pInputSurface;
         uno::Reference< rendering::XCachedPrimitive > rv(nullptr);
         geometry::IntegerSize2D aBitmapSize = rSize;
 
@@ -1383,7 +1383,7 @@ namespace cairocanvas
                 aBitmapSize.Width = static_cast<sal_Int32>( dWidth );
                 aBitmapSize.Height = static_cast<sal_Int32>( dHeight );
 
-                SurfaceSharedPtr pScaledSurface = mpSurfaceProvider->createSurface(
+                std::shared_ptr< Surface > pScaledSurface = mpSurfaceProvider->createSurface(
                     ::basegfx::B2ISize( aBitmapSize.Width, aBitmapSize.Height ),
                     bHasAlpha ? CAIRO_CONTENT_COLOR_ALPHA : CAIRO_CONTENT_COLOR );
                 CairoSharedPtr pCairo = pScaledSurface->getCairo();
@@ -1425,7 +1425,7 @@ namespace cairocanvas
                 {
                     SAL_INFO( "canvas.cairo","trying to change surface to rgb");
                     if( mpSurfaceProvider ) {
-                        SurfaceSharedPtr pNewSurface = mpSurfaceProvider->changeSurface();
+                        std::shared_ptr< Surface > pNewSurface = mpSurfaceProvider->changeSurface();
 
                         if( pNewSurface )
                             setSurface( pNewSurface, false );
@@ -1474,7 +1474,7 @@ namespace cairocanvas
         uno::Reference< rendering::XCachedPrimitive > rv;
         unsigned char* data = nullptr;
         bool bHasAlpha = false;
-        SurfaceSharedPtr pSurface = surfaceFromXBitmap( xBitmap, mpSurfaceProvider, data, bHasAlpha );
+        std::shared_ptr< Surface > pSurface = surfaceFromXBitmap( xBitmap, mpSurfaceProvider, data, bHasAlpha );
         geometry::IntegerSize2D aSize = xBitmap->getSize();
 
         if( pSurface )
@@ -1507,7 +1507,7 @@ namespace cairocanvas
         uno::Reference< rendering::XCachedPrimitive > rv;
         unsigned char* data = nullptr;
         bool bHasAlpha = false;
-        SurfaceSharedPtr pSurface = surfaceFromXBitmap( xBitmap, mpSurfaceProvider, data, bHasAlpha );
+        std::shared_ptr< Surface > pSurface = surfaceFromXBitmap( xBitmap, mpSurfaceProvider, data, bHasAlpha );
         geometry::IntegerSize2D aSize = xBitmap->getSize();
 
         if( pSurface )
@@ -2294,7 +2294,7 @@ namespace cairocanvas
     }
 
 
-    bool CanvasHelper::repaint( const SurfaceSharedPtr&          pSurface,
+    bool CanvasHelper::repaint( const std::shared_ptr< Surface >& pSurface,
                                 const rendering::ViewState&      viewState,
                                 const rendering::RenderState&    renderState )
     {

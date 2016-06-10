@@ -88,7 +88,7 @@ namespace vclcanvas
         CanvasCustomSprite( const css::geometry::RealSize2D&              rSpriteSize,
                             css::rendering::XGraphicDevice&               rDevice,
                             const ::canvas::SpriteSurface::Reference&     rOwningSpriteCanvas,
-                            const OutDevProviderSharedPtr&                rOutDevProvider,
+                            const std::shared_ptr< OutDevProvider >&      rOutDevProvider,
                             bool                                          bShowSpriteBounds );
 
         // Forwarding the XComponent implementation to the
@@ -111,12 +111,12 @@ namespace vclcanvas
                              bool                       bBufferedUpdate ) const override;
 
         // RepaintTarget
-        virtual bool repaint( const GraphicObjectSharedPtr&                   rGrf,
-                              const css::rendering::ViewState&   viewState,
-                              const css::rendering::RenderState& renderState,
-                              const ::Point&                                  rPt,
-                              const ::Size&                                   rSz,
-                              const GraphicAttr&                              rAttr ) const override;
+        virtual bool repaint( const std::shared_ptr< GraphicObject >&   rGrf,
+                              const css::rendering::ViewState&          viewState,
+                              const css::rendering::RenderState&        renderState,
+                              const ::Point&                            rPt,
+                              const ::Size&                             rSz,
+                              const GraphicAttr&                        rAttr ) const override;
     };
 }
 

@@ -117,9 +117,9 @@ namespace cairocanvas
                             const ::std::vector< ::canvas::Sprite::Reference >& rSortedUpdateSprites );
 
     private:
-        ::cairo::SurfaceSharedPtr getCompositingSurface( const ::basegfx::B2ISize& rNeededSize );
-        ::cairo::SurfaceSharedPtr getTemporarySurface();
-        ::cairo::SurfaceSharedPtr createSurface( const ::basegfx::B2ISize& rNeededSize ) const;
+        std::shared_ptr< cairo::Surface > getCompositingSurface( const ::basegfx::B2ISize& rNeededSize );
+        std::shared_ptr< cairo::Surface > getTemporarySurface();
+        std::shared_ptr< cairo::Surface > createSurface( const ::basegfx::B2ISize& rNeededSize ) const;
 
         /// Set from the SpriteCanvas: instance coordinating sprite redraw
         ::canvas::SpriteRedrawManager*  mpRedrawManager;
@@ -128,12 +128,12 @@ namespace cairocanvas
         SpriteCanvas*                   mpOwningSpriteCanvas;
 
         /// a surface used to composite the frontbuffer image
-        ::cairo::SurfaceSharedPtr       mpCompositingSurface;
+        std::shared_ptr< cairo::Surface > mpCompositingSurface;
         ::basegfx::B2ISize              maCompositingSurfaceSize;
         bool                            mbCompositingSurfaceDirty;
         /// a temporary surface that is guaranteed to be the same size
         //as the compositing surface
-        ::cairo::SurfaceSharedPtr       mpTemporarySurface;
+        std::shared_ptr< cairo::Surface > mpTemporarySurface;
     };
 }
 

@@ -64,7 +64,7 @@ namespace dxcanvas
         polyPolygonFromXPolyPolygon2D( const css::uno::Reference< css::rendering::XPolyPolygon2D >& );
 
         Gdiplus::Graphics* createGraphicsFromHDC(HDC);
-        Gdiplus::Graphics* createGraphicsFromBitmap(const BitmapSharedPtr&);
+        Gdiplus::Graphics* createGraphicsFromBitmap(const std::shared_ptr< Gdiplus::Bitmap >&);
 
         void setupGraphics( Gdiplus::Graphics& rGraphics );
 
@@ -89,23 +89,23 @@ namespace dxcanvas
         Gdiplus::ARGB sequenceToArgb( const css::uno::Sequence< sal_Int8 >& rColor );
         Gdiplus::ARGB sequenceToArgb( const css::uno::Sequence< double >&  rColor );
 
-        GraphicsPathSharedPtr graphicsPathFromRealPoint2DSequence( const css::uno::Sequence<
+        std::shared_ptr< Gdiplus::GraphicsPath > graphicsPathFromRealPoint2DSequence( const css::uno::Sequence<
                                                                  css::uno::Sequence< css::geometry::RealPoint2D > >& );
 
-        GraphicsPathSharedPtr graphicsPathFromB2DPolygon(
+        std::shared_ptr< Gdiplus::GraphicsPath > graphicsPathFromB2DPolygon(
             const ::basegfx::B2DPolygon& rPoly,
             bool bNoLineJoin = false);
 
-        GraphicsPathSharedPtr graphicsPathFromB2DPolyPolygon(
+        std::shared_ptr< Gdiplus::GraphicsPath > graphicsPathFromB2DPolyPolygon(
             const ::basegfx::B2DPolyPolygon& rPoly,
             bool bNoLineJoin = false);
 
-        GraphicsPathSharedPtr graphicsPathFromXPolyPolygon2D(
+        std::shared_ptr< Gdiplus::GraphicsPath > graphicsPathFromXPolyPolygon2D(
             const css::uno::Reference< css::rendering::XPolyPolygon2D >&,
             bool bNoLineJoin = false );
 
-        bool drawGdiPlusBitmap( const GraphicsSharedPtr& rGraphics,
-                                const BitmapSharedPtr&   rBitmap );
+        bool drawGdiPlusBitmap( const std::shared_ptr< Gdiplus::Graphics >& rGraphics,
+                                const std::shared_ptr< Gdiplus::Bitmap >&   rBitmap );
         bool drawDIBits( const std::shared_ptr< Gdiplus::Graphics >& rGraphics,
                          const BITMAPINFO&                               rBI,
                          const void*                                     pBits );
@@ -113,7 +113,7 @@ namespace dxcanvas
         bool drawRGBABits( const std::shared_ptr< Gdiplus::Graphics >& rGraphics,
                            const RawRGBABitmap&                            rRawRGBAData );
 
-        BitmapSharedPtr bitmapFromXBitmap( const css::uno::Reference< css::rendering::XBitmap >&  xBitmap );
+        std::shared_ptr< Gdiplus::Bitmap > bitmapFromXBitmap( const css::uno::Reference< css::rendering::XBitmap >&  xBitmap );
 
         CanvasFont::ImplRef canvasFontFromXFont( const css::uno::Reference< css::rendering::XCanvasFont >& xFont );
 

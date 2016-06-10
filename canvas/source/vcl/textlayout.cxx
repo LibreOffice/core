@@ -77,7 +77,7 @@ namespace vclcanvas
                             sal_Int64                                        nRandomSeed,
                             const CanvasFont::Reference&                     rFont,
                             const uno::Reference<rendering::XGraphicDevice>& xDevice,
-                            const OutDevProviderSharedPtr&                   rOutDev ) :
+                            const std::shared_ptr< OutDevProvider >&                   rOutDev ) :
         TextLayout_Base( m_aMutex ),
         maText( aText ),
         maLogicalAdvancements(),

@@ -56,8 +56,8 @@ namespace vclcanvas
 
     void SpriteHelper::init( const geometry::RealSize2D&               rSpriteSize,
                              const ::canvas::SpriteSurface::Reference& rOwningSpriteCanvas,
-                             const BackBufferSharedPtr&                rBackBuffer,
-                             const BackBufferSharedPtr&                rBackBufferMask,
+                             const std::shared_ptr< BackBuffer >&      rBackBuffer,
+                             const std::shared_ptr< BackBuffer >&      rBackBufferMask,
                              bool                                      bShowSpriteBounds )
     {
         ENSURE_OR_THROW( rOwningSpriteCanvas.get() && rBackBuffer && rBackBufferMask,
