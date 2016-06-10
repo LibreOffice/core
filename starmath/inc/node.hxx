@@ -76,7 +76,6 @@ class SmDocShell;
 class SmNode;
 class SmStructureNode;
 
-typedef std::shared_ptr<SmNode> SmNodePointer;
 typedef std::deque<std::unique_ptr<SmNode>> SmNodeStack;
 typedef std::vector< SmNode * > SmNodeArray;
 

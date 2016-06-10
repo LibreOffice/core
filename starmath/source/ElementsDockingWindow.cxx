@@ -23,6 +23,8 @@
 #include <smmod.hxx>
 #include <view.hxx>
 #include <visitors.hxx>
+#include "document.hxx"
+#include "node.hxx"
 
 #include <o3tl/make_unique.hxx>
 #include <svl/stritem.hxx>
@@ -31,8 +33,8 @@
 #include <vcl/help.hxx>
 #include <vcl/settings.hxx>
 
-SmElement::SmElement(SmNodePointer pNode, const OUString& aText, const OUString& aHelpText) :
-    mpNode(pNode),
+SmElement::SmElement(std::unique_ptr<SmNode>&& pNode, const OUString& aText, const OUString& aHelpText) :
+    mpNode(std::move(pNode)),
     maText(aText),
     maHelpText(aHelpText)
 {}
@@ -40,13 +42,13 @@ SmElement::SmElement(SmNodePointer pNode, const OUString& aText, const OUString&
 SmElement::~SmElement()
 {}
 
-const SmNodePointer& SmElement::getNode()
+const std::unique_ptr<SmNode>& SmElement::getNode()
 {
     return mpNode;
 }
 
 SmElementSeparator::SmElementSeparator() :
-    SmElement(SmNodePointer(), OUString(), OUString())
+    SmElement(std::unique_ptr<SmNode>(), OUString(), OUString())
 {}
 
 const sal_uInt16 SmElementsControl::aUnaryBinaryOperatorsList[][2] =
@@ -505,7 +507,7 @@ void SmElementsControl::addSeparator()
 
 void SmElementsControl::addElement(const OUString& aElementVisual, const OUString& aElementSource, const OUString& aHelpText)
 {
-    SmNodePointer pNode(SmParser().ParseExpression(aElementVisual));
+    std::unique_ptr<SmNode> pNode(SmParser().ParseExpression(aElementVisual));
 
     pNode->Prepare(maFormat, *mpDocShell);
     pNode->SetSize(Fraction(10,8));
@@ -520,7 +522,7 @@ void SmElementsControl::addElement(const OUString& aElementVisual, const OUStrin
         maMaxElementDimensions.Height() = aSizePixel.Height();
     }
 
-    maElementList.push_back(o3tl::make_unique<SmElement>(pNode, aElementSource, aHelpText));
+    maElementList.push_back(o3tl::make_unique<SmElement>(std::move(pNode), aElementSource, aHelpText));
 }
 
 void SmElementsControl::setElementSetId(sal_uInt16 aSetId)
