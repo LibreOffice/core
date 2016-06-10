@@ -35,9 +35,7 @@
 
 using namespace css;
 
-#if !defined(_WIN32) && !defined(MACOSX)
 static const char* DATA_DIRECTORY = "/sd/qa/unit/tiledrendering/data/";
-#endif
 
 class SdTiledRenderingTest : public test::BootstrapFixture, public unotest::MacrosTest, public XmlTestTools
 {
@@ -46,7 +44,6 @@ public:
     virtual void setUp() override;
     virtual void tearDown() override;
 
-#if !defined(_WIN32) && !defined(MACOSX)
     void testRegisterCallback();
     void testPostKeyEvent();
     void testPostMouseEvent();
@@ -64,10 +61,8 @@ public:
     void testPartHash();
     void testResizeTable();
     void testResizeTableColumn();
-#endif
 
     CPPUNIT_TEST_SUITE(SdTiledRenderingTest);
-#if !defined(_WIN32) && !defined(MACOSX)
     CPPUNIT_TEST(testRegisterCallback);
     CPPUNIT_TEST(testPostKeyEvent);
     CPPUNIT_TEST(testPostMouseEvent);
@@ -85,19 +80,15 @@ public:
     CPPUNIT_TEST(testPartHash);
     CPPUNIT_TEST(testResizeTable);
     CPPUNIT_TEST(testResizeTableColumn);
-#endif
     CPPUNIT_TEST_SUITE_END();
 
 private:
-#if !defined(_WIN32) && !defined(MACOSX)
     SdXImpressDocument* createDoc(const char* pName);
     static void callback(int nType, const char* pPayload, void* pData);
     void callbackImpl(int nType, const char* pPayload);
     xmlDocPtr parseXmlDump();
-#endif
 
     uno::Reference<lang::XComponent> mxComponent;
-#if !defined(_WIN32) && !defined(MACOSX)
     Rectangle m_aInvalidation;
     std::vector<Rectangle> m_aSelection;
     bool m_bFound;
@@ -110,17 +101,14 @@ private:
     /// For document size changed callback.
     osl::Condition m_aDocumentSizeCondition;
     xmlBufferPtr m_pXmlBuffer;
-#endif
 };
 
 SdTiledRenderingTest::SdTiledRenderingTest()
-#if !defined(_WIN32) && !defined(MACOSX)
     : m_bFound(true),
       m_nPart(0),
       m_nSelectionBeforeSearchResult(0),
       m_nSelectionAfterSearchResult(0),
       m_pXmlBuffer(nullptr)
-#endif
 {
 }
 
@@ -136,15 +124,12 @@ void SdTiledRenderingTest::tearDown()
     if (mxComponent.is())
         mxComponent->dispose();
 
-#if !defined(_WIN32) && !defined(MACOSX)
     if (m_pXmlBuffer)
         xmlBufferFree(m_pXmlBuffer);
-#endif
 
     test::BootstrapFixture::tearDown();
 }
 
-#if !defined(_WIN32) && !defined(MACOSX)
 SdXImpressDocument* SdTiledRenderingTest::createDoc(const char* pName)
 {
     if (mxComponent.is())
@@ -814,8 +799,6 @@ void SdTiledRenderingTest::testResizeTableColumn()
     pXmlDoc = nullptr;
     comphelper::LibreOfficeKit::setActive(false);
 }
-
-#endif
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdTiledRenderingTest);
 
