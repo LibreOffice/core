@@ -28,6 +28,8 @@
             <menu:menu menu:id=".uno:TemplateMenu">
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:NewDoc"/>
+                    <menu:menuseparator/>
+                    <menu:menuitem menu:id=".uno:OpenTemplate"/>
                     <menu:menuitem menu:id=".uno:SaveAsTemplate"/>
                 </menu:menupopup>
             </menu:menu>
