@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_115f2a42",
+        "filename": "unotools/source/config/saveopt.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 843,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-06-11T12:57:07Z",
+      "side": 1,
+      "message": "all of this stuff (after the mutex) needs to be moved into a destructor on the SvtSaveOptions_Impl class, since it only needs to be called when the last shared_ptr to the SvtSaveOptions_Impl is reset()",
+      "revId": "7f1d43122d63231ae86347b3408528a794846ec2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
