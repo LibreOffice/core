@@ -54,16 +54,21 @@
 
 css::uno::Reference< css::i18n::XBreakIterator > xPPTBreakIter;
 
-PortionObj::PortionObj( const css::uno::Reference< css::beans::XPropertySet > & rXPropSet,
-                FontCollection& rFontCollection ) :
-    mnCharAttrHard      ( 0 ),
-    mnCharAttr          ( 0 ),
-    mnFont              ( 0 ),
-    mnAsianOrComplexFont( 0xffff ),
-    mnTextSize          ( 0 ),
-    mbLastPortion       ( true ),
-    mpText              ( nullptr ),
-    mpFieldEntry        ( nullptr )
+PortionObj::PortionObj(const css::uno::Reference< css::beans::XPropertySet > & rXPropSet,
+                FontCollection& rFontCollection)
+    : meCharColor(css::beans::PropertyState_AMBIGUOUS_VALUE)
+    , meCharHeight(css::beans::PropertyState_AMBIGUOUS_VALUE)
+    , meFontName(css::beans::PropertyState_AMBIGUOUS_VALUE)
+    , meAsianOrComplexFont(css::beans::PropertyState_AMBIGUOUS_VALUE)
+    , meCharEscapement(css::beans::PropertyState_AMBIGUOUS_VALUE)
+    , mnCharAttrHard(0)
+    , mnCharAttr(0)
+    , mnFont(0)
+    , mnAsianOrComplexFont(0xffff)
+    , mnTextSize(0)
+    , mbLastPortion(true)
+    , mpText(nullptr)
+    , mpFieldEntry(nullptr)
 {
     mXPropSet = rXPropSet;
 
