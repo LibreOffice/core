@@ -23,5 +23,6 @@ $(eval $(call gb_ExternalPackage_add_file,firebird,$(LIBO_LIB_FOLDER)/libEngine1
 endif
 
 $(eval $(call gb_ExternalPackage_add_file,firebird,$(LIBO_SHARE_FOLDER)/firebird/firebird.msg,gen/Release/firebird/firebird.msg))
+$(eval $(call gb_ExternalPackage_add_file,firebird,$(LIBO_SHARE_FOLDER)/firebird/security3.fdb,gen/Release/firebird/security3.fdb))
 
 # vim: set noet sw=4 ts=4:
