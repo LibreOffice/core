@@ -137,22 +137,6 @@ static SvXMLEnumMapEntry const pXML_HoriMirror_Enum[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-static SvXMLEnumMapEntry const pXML_VertPos_Enum[] =
-{
-    { XML_FROM_TOP,         VertOrientation::NONE       },
-    { XML_TOP,              VertOrientation::TOP        },
-    { XML_TOP,              VertOrientation::CHAR_TOP   },  // export only
-    { XML_TOP,              VertOrientation::LINE_TOP   },  // export only
-    { XML_MIDDLE,           VertOrientation::CENTER     },
-    { XML_MIDDLE,           VertOrientation::CHAR_CENTER    },  // export only
-    { XML_MIDDLE,           VertOrientation::LINE_CENTER    },  // export only
-    { XML_BOTTOM,           VertOrientation::BOTTOM     },
-    { XML_BOTTOM,           VertOrientation::CHAR_BOTTOM    },  // export only
-    { XML_BOTTOM,           VertOrientation::LINE_BOTTOM    },  // export only
-    { XML_BELOW,            VertOrientation::CHAR_BOTTOM    },  // import only
-    { XML_TOKEN_INVALID, 0 }
-};
-
 static SvXMLEnumMapEntry const pXML_VertPosAtChar_Enum[] =
 {
     { XML_FROM_TOP,         VertOrientation::NONE       },
@@ -1271,9 +1255,6 @@ static const XMLPropertyHandler *GetPropertyHandler
         break;
     case XML_TYPE_TEXT_HORIZONTAL_MIRROR:
         pHdl = new XMLHoriMirrorPropHdl_Impl;
-        break;
-    case XML_TYPE_TEXT_VERTICAL_POS:
-        pHdl = new XMLConstantsPropertyHandler( pXML_VertPos_Enum, XML_TOKEN_INVALID );
         break;
     case XML_TYPE_TEXT_VERTICAL_POS_AT_CHAR:
         pHdl = new XMLConstantsPropertyHandler( pXML_VertPosAtChar_Enum, XML_TOKEN_INVALID );

@@ -3067,6 +3067,14 @@ namespace xmloff { namespace token {
         XML_ODD_ROWS,
         XML_EVEN_COLUMNS,
         XML_ODD_COLUMNS,
+        // table styles
+        XML_FIRST_ROW_EVEN_COLUMN,
+        XML_LAST_ROW_EVEN_COLUMN,
+        XML_FIRST_ROW_END_COLUMN,
+        XML_FIRST_ROW_START_COLUMN,
+        XML_LAST_ROW_END_COLUMN,
+        XML_LAST_ROW_START_COLUMN,
+
         XML_HORIZONTAL_ON_ODD,
         // Password error from 1.4 to 2.0 Beta (#i45874#)
         XML_RESTART_NUMBERING,

@@ -25,6 +25,7 @@
 #include <svtools/ctrltool.hxx>
 #include <svl/style.hxx>
 #include <svl/itemiter.hxx>
+#include <svl/zforlist.hxx>
 #include <svx/pageitem.hxx>
 #include <editeng/sizeitem.hxx>
 #include <editeng/ulspitem.hxx>
@@ -4401,6 +4402,14 @@ const CellStyleNameMap& SwXTextTableStyle::GetCellStyleNameMap()
         aNewMap[ "even-columns" ] = EVEN_COLUMNS_STYLE;
         aNewMap[ "odd-columns"  ] = ODD_COLUMNS_STYLE;
         aNewMap[ "background"   ] = BACKGROUND_STYLE;
+        // loext namespace
+        aNewMap[ "first-row-start-column" ] = FIRST_ROW_START_COLUMN_STYLE;
+        aNewMap[ "first-row-end-column"   ] = FIRST_ROW_END_COLUMN_STYLE;
+        aNewMap[ "last-row-start-column"  ] = LAST_ROW_START_COLUMN_STYLE;
+        aNewMap[ "last-row-end-column"    ] = LAST_ROW_END_COLUMN_STYLE;
+        aNewMap[ "first-row-even-column"  ] = FIRST_ROW_EVEN_COLUMN_STYLE;
+        aNewMap[ "last-row-even-column"   ] = LAST_ROW_EVEN_COLUMN_STYLE;
+
         aMap.swap(aNewMap);
     }
     return aMap;
@@ -4827,6 +4836,37 @@ css::uno::Any SAL_CALL SwXTextCellStyle::getPropertyValue(const OUString& rPrope
             {
                 const SvxBrushItem& rBrush = m_pBoxAutoFormat->GetBackground();
                 rBrush.QueryValue(aRet);
+                return aRet;
+            }
+            case RES_BOX:
+            {
+                const SvxBoxItem& rBox = m_pBoxAutoFormat->GetBox();
+                rBox.QueryValue(aRet, pEntry->nMemberId);
+                return aRet;
+            }
+            case RES_VERT_ORIENT:
+            {
+                const SwFormatVertOrient& rVertOrient = m_pBoxAutoFormat->GetVerticalAlignment();
+                rVertOrient.QueryValue(aRet, pEntry->nMemberId);
+                return aRet;
+            }
+            case RES_FRAMEDIR:
+            {
+                const SvxFrameDirectionItem& rDirItem = m_pBoxAutoFormat->GetTextOrientation();
+                rDirItem.QueryValue(aRet, pEntry->nMemberId);
+                return aRet;
+            }
+            case RES_BOXATR_FORMAT:
+            {
+                OUString sFormat;
+                LanguageType eLng, eSys;
+                m_pBoxAutoFormat->GetValueFormat(sFormat, eLng, eSys);
+                if(!sFormat.isEmpty())
+                {
+                    short nType; bool bNew; sal_Int32 nCheckPos;
+                    sal_uInt32 nKey = m_pDocShell->GetDoc()->GetNumberFormatter()->GetIndexPuttingAndConverting(sFormat, eLng, eSys, nType, bNew, nCheckPos);
+                    aRet <<= nKey;
+                }
                 return aRet;
             }
             default:
