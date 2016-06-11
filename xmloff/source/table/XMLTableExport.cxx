@@ -61,6 +61,7 @@ using namespace ::com::sun::star::style;
 #define MAP_(name,prefix,token,type,context)  { name, sizeof(name)-1, prefix, token, type, context, SvtSaveOptions::ODFVER_010, false }
 #define CMAP(name,prefix,token,type,context) MAP_(name,prefix,token,type|XML_TYPE_PROP_TABLE_COLUMN,context)
 #define RMAP(name,prefix,token,type,context) MAP_(name,prefix,token,type|XML_TYPE_PROP_TABLE_ROW,context)
+#define CELLMAP(name,prefix,token,type,context) MAP_(name,prefix,token,type|XML_TYPE_PROP_TABLE_CELL,context)
 #define MAP_END { nullptr, 0, 0, XML_EMPTY, 0, 0, SvtSaveOptions::ODFVER_010, false }
 
 const XMLPropertyMapEntry* getColumnPropertiesMap()
@@ -86,6 +87,29 @@ const XMLPropertyMapEntry* getRowPropertiesMap()
     };
 
     return &aXMLRowProperties[0];
+}
+
+const XMLPropertyMapEntry* getSwCellStylePropertiesMap()
+{
+    static const XMLPropertyMapEntry aXMLSwCellStyleProperties[] =
+    {
+        CELLMAP( "BackColor",            XML_NAMESPACE_FO,    XML_BACKGROUND_COLOR, XML_TYPE_COLORTRANSPARENT|MID_FLAG_MULTI_PROPERTY, 0 ),
+        CELLMAP( "LeftBorder",           XML_NAMESPACE_FO,    XML_BORDER_LEFT,      XML_TYPE_BORDER,                                   0 ),
+        CELLMAP( "RightBorder",          XML_NAMESPACE_FO,    XML_BORDER_RIGHT,     XML_TYPE_BORDER,                                   0 ),
+        CELLMAP( "TopBorder",            XML_NAMESPACE_FO,    XML_BORDER_TOP,       XML_TYPE_BORDER,                                   0 ),
+        CELLMAP( "BottomBorder",         XML_NAMESPACE_FO,    XML_BORDER_BOTTOM,    XML_TYPE_BORDER,                                   0 ),
+        CELLMAP( "BorderDistance",       XML_NAMESPACE_FO,    XML_PADDING,          XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY,          0 ),
+        CELLMAP( "LeftBorderDistance",   XML_NAMESPACE_FO,    XML_PADDING_LEFT,     XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY,          0 ),
+        CELLMAP( "RightBorderDistance",  XML_NAMESPACE_FO,    XML_PADDING_RIGHT,    XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY,          0 ),
+        CELLMAP( "TopBorderDistance",    XML_NAMESPACE_FO,    XML_PADDING_TOP,      XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY,          0 ),
+        CELLMAP( "BottomBorderDistance", XML_NAMESPACE_FO,    XML_PADDING_BOTTOM,   XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY,          0 ),
+        CELLMAP( "VertOrient",           XML_NAMESPACE_STYLE, XML_VERTICAL_ALIGN,   XML_TYPE_TEXT_VERTICAL_POS,                        0 ),
+        CELLMAP( "WritingMode",          XML_NAMESPACE_STYLE, XML_WRITING_MODE,     XML_TYPE_TEXT_WRITING_MODE_WITH_DEFAULT,           0 ),
+        CELLMAP( "NumberFormat",         XML_NAMESPACE_STYLE, XML_DATA_STYLE_NAME,  XML_TYPE_NUMBER,                                   0 ),
+        MAP_END
+    };
+
+    return &aXMLSwCellStyleProperties[0];
 }
 
 class StringStatisticHelper
@@ -135,6 +159,7 @@ sal_Int32 StringStatisticHelper::getModeString( OUString& rStyleName )
 XMLTableExport::XMLTableExport(SvXMLExport& rExp, const rtl::Reference< SvXMLExportPropertyMapper  >& xExportPropertyMapper, const rtl::Reference< XMLPropertyHandlerFactory >& xFactoryRef )
 : mrExport( rExp )
 , mbExportTables( false )
+, mbWriter( false )
 {
     Reference< XMultiServiceFactory > xFac( rExp.GetModel(), UNO_QUERY );
     if( xFac.is() ) try
@@ -144,19 +169,28 @@ XMLTableExport::XMLTableExport(SvXMLExport& rExp, const rtl::Reference< SvXMLExp
         const OUString* pSNS( sSNS.getConstArray() );
         while( --n > 0 )
         {
-            if( (*pSNS++) == "com.sun.star.drawing.TableShape" )
+            if( *pSNS == "com.sun.star.drawing.TableShape" || *pSNS == "com.sun.star.style.TableStyle" )
             {
                 mbExportTables = true;
+                mbWriter = (*pSNS == "com.sun.star.style.TableStyle");
                 break;
             }
+            pSNS++;
         }
     }
     catch(const Exception&)
     {
     }
 
-    mxCellExportPropertySetMapper = xExportPropertyMapper;
-    mxCellExportPropertySetMapper->ChainExportMapper(XMLTextParagraphExport::CreateParaExtPropMapper(rExp));
+    if (mbWriter)
+    {
+        mxCellExportPropertySetMapper = new SvXMLExportPropertyMapper( new XMLPropertySetMapper( getSwCellStylePropertiesMap(), xFactoryRef.get(), true ) );
+    }
+    else
+    {
+        mxCellExportPropertySetMapper = xExportPropertyMapper;
+        mxCellExportPropertySetMapper->ChainExportMapper(XMLTextParagraphExport::CreateParaExtPropMapper(rExp));
+    }
 
     mxRowExportPropertySetMapper = new SvXMLExportPropertyMapper( new XMLPropertySetMapper( getRowPropertiesMap(), xFactoryRef.get(), true ) );
     mxColumnExportPropertySetMapper = new SvXMLExportPropertyMapper( new XMLPropertySetMapper( getColumnPropertiesMap(), xFactoryRef.get(), true ) );
@@ -456,10 +490,21 @@ void XMLTableExport::exportTableStyles()
      if( !mbExportTables )
          return;
 
-    rtl::Reference<XMLStyleExport> aStEx(new XMLStyleExport(mrExport, OUString(), mrExport.GetAutoStylePool().get()));
+    rtl::Reference<XMLStyleExport> aStEx;
+    OUString sCellStyleName;
+    if (mbWriter)
+    {
+        sCellStyleName = OUString("CellStyles");
+        aStEx.set(new XMLStyleExport(mrExport, OUString()));
+    }
+    else
+    {
+        // write graphic family styles
+        sCellStyleName = OUString("cell");
+        aStEx.set(new XMLStyleExport(mrExport, OUString(), mrExport.GetAutoStylePool().get()));
+    }
 
-    // write graphic family styles
-    aStEx->exportStyleFamily("cell", OUString(XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME), mxCellExportPropertySetMapper.get(), true, XML_STYLE_FAMILY_TABLE_CELL);
+    aStEx->exportStyleFamily(sCellStyleName, OUString(XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME), mxCellExportPropertySetMapper.get(), true, XML_STYLE_FAMILY_TABLE_CELL);
 
     exportTableTemplates();
 }
@@ -484,15 +529,45 @@ const TableStyleElement* getTableStyleMap()
         { XML_LAST_ROW, OUString("last-row") },
         { XML_FIRST_COLUMN, OUString("first-column") },
         { XML_LAST_COLUMN, OUString("last-column") },
+        { XML_BODY, OUString("body") },
         { XML_EVEN_ROWS, OUString("even-rows") },
         { XML_ODD_ROWS, OUString("odd-rows") },
         { XML_EVEN_COLUMNS, OUString("even-columns") },
         { XML_ODD_COLUMNS, OUString("odd-columns") },
-        { XML_BODY, OUString("body") },
         { XML_TOKEN_END, OUString() }
     };
 
     return &gTableStyleElements[0];
+}
+
+const TableStyleElement* getWriterSpecificTableStyleMap()
+{
+    static const struct TableStyleElement gWriterSpecificTableStyleElements[] =
+    {
+        { XML_FIRST_ROW_EVEN_COLUMN, OUString("first-row-even-column") },
+        { XML_LAST_ROW_EVEN_COLUMN, OUString("last-row-even-column") },
+        { XML_FIRST_ROW_END_COLUMN, OUString("first-row-end-column") },
+        { XML_FIRST_ROW_START_COLUMN, OUString("first-row-start-column") },
+        { XML_LAST_ROW_END_COLUMN, OUString("last-row-end-column") },
+        { XML_LAST_ROW_START_COLUMN, OUString("last-row-start-column") },
+        { XML_TOKEN_END, OUString() }
+    };
+
+    return &gWriterSpecificTableStyleElements[0];
+}
+
+const TableStyleElement* getWriterSpecificTableStyleAttributes()
+{
+    static const struct TableStyleElement gWriterSpecifitTableStyleAttributes[] =
+    {
+        { XML_FIRST_ROW_END_COLUMN, OUString("FirstRowEndColumn") },
+        { XML_FIRST_ROW_START_COLUMN, OUString("FirstRowStartColumn") },
+        { XML_LAST_ROW_END_COLUMN, OUString("LastRowEndColumn") },
+        { XML_LAST_ROW_START_COLUMN, OUString("LastRowStartColumn") },
+        { XML_TOKEN_END, OUString() }
+    };
+
+    return &gWriterSpecifitTableStyleAttributes[0];
 }
 
 void XMLTableExport::exportTableTemplates()
@@ -504,7 +579,12 @@ void XMLTableExport::exportTableTemplates()
     {
         Reference< XStyleFamiliesSupplier > xFamiliesSupp( mrExport.GetModel(), UNO_QUERY_THROW );
         Reference< XNameAccess > xFamilies( xFamiliesSupp->getStyleFamilies() );
-        const OUString sFamilyName( "table" );
+        OUString sFamilyName;
+        if (mbWriter)
+            sFamilyName = OUString("TableStyles");
+        else
+            sFamilyName = OUString("table");
+
         Reference< XIndexAccess > xTableFamily( xFamilies->getByName( sFamilyName ), UNO_QUERY_THROW );
 
         for( sal_Int32 nIndex = 0; nIndex < xTableFamily->getCount(); nIndex++ ) try
@@ -513,12 +593,34 @@ void XMLTableExport::exportTableTemplates()
             if( !xTableStyle->isInUse() )
                 continue;
 
-            Reference< XNameAccess > xStyleNames( xTableStyle, UNO_QUERY_THROW );
+            const TableStyleElement* pElements;
+            if (mbWriter)
+            {
+                mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_NAME, GetExport().EncodeStyleName(xTableStyle->getName()));
+                Reference<XPropertySet> xTableStylePropSet(xTableStyle.get(), UNO_QUERY_THROW);
+                pElements = getWriterSpecificTableStyleAttributes();
+                while(pElements->meElement != XML_TOKEN_END)
+                {
+                    try
+                    {
+                        OUString sVal;
+                        xTableStylePropSet->getPropertyValue(pElements->msStyleName) >>= sVal;
+                        mrExport.AddAttribute(XML_NAMESPACE_TABLE, pElements->meElement, sVal);
+                    }
+                    catch(const Exception&)
+                    {
+                        SAL_WARN("xmloff", "XMLTableExport::exportTableTemplates(), export Writer specific attributes, exception caught!");
+                    }
+                    pElements++;
+                }
+            }
+            else
+                mrExport.AddAttribute(XML_NAMESPACE_TEXT, XML_STYLE_NAME, GetExport().EncodeStyleName( xTableStyle->getName() ) );
 
-            mrExport.AddAttribute(XML_NAMESPACE_TEXT, XML_STYLE_NAME, GetExport().EncodeStyleName( xTableStyle->getName() ) );
              SvXMLElementExport tableTemplate( mrExport, XML_NAMESPACE_TABLE, XML_TABLE_TEMPLATE, true, true );
 
-            const TableStyleElement* pElements = getTableStyleMap();
+            Reference< XNameAccess > xStyleNames( xTableStyle, UNO_QUERY_THROW );
+            pElements = getTableStyleMap();
             while( pElements->meElement != XML_TOKEN_END )
             {
                 try
@@ -536,6 +638,28 @@ void XMLTableExport::exportTableTemplates()
                 }
 
                 pElements++;
+            }
+
+            if (mbWriter)
+            {
+                pElements = getWriterSpecificTableStyleMap();
+                while(pElements->meElement != XML_TOKEN_END)
+                {
+                    try
+                    {
+                        Reference<XStyle> xStyle(xStyleNames->getByName(pElements->msStyleName), UNO_QUERY);
+                        if(xStyle.is())
+                        {
+                            mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_STYLE_NAME, GetExport().EncodeStyleName(xStyle->getName()));
+                            SvXMLElementExport element(mrExport, XML_NAMESPACE_LO_EXT, pElements->meElement, true, true);
+                        }
+                    }
+                    catch(const Exception&)
+                    {
+                        SAL_WARN("xmloff", "XMLTableExport::exportTableTemplates(), export Writer specific styles, exception caught!");
+                    }
+                    pElements++;
+                }
             }
         }
         catch(const Exception&)

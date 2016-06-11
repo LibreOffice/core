@@ -206,7 +206,7 @@ class CheckStyle(unittest.TestCase):
     def test_CellFamily(self):
         xDoc = CheckStyle._uno.openEmptyWriterDoc()
         xCellStyles = xDoc.StyleFamilies["CellStyles"]
-        vEmptyDocStyles = ['Default Style.1', 'Default Style.2', 'Default Style.3', 'Default Style.4', 'Default Style.5', 'Default Style.6', 'Default Style.7', 'Default Style.8', 'Default Style.9', 'Default Style.10']
+        vEmptyDocStyles = ['Default Style.1', 'Default Style.2', 'Default Style.3', 'Default Style.4', 'Default Style.5', 'Default Style.6', 'Default Style.7', 'Default Style.8', 'Default Style.9', 'Default Style.10', 'Default Style.11', 'Default Style.12', 'Default Style.13', 'Default Style.14', 'Default Style.15', 'Default Style.16']
         self.__test_StyleFamily(xCellStyles, vEmptyDocStyles, "SwXTextCellStyle")
         self.__test_StyleFamilyIndex(xCellStyles, vEmptyDocStyles, "SwXTextCellStyle")
         self.__test_StyleFamilyInsert(xDoc, xCellStyles, vEmptyDocStyles, "com.sun.star.style.CellStyle", "com.sun.star.style.CharacterStyle")
