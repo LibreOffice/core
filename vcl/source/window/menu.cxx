@@ -1710,7 +1710,7 @@ Size Menu::ImplCalcSize( vcl::Window* pWin )
             if( pWindow->GetNativeControlRegion( ControlType(CTRL_MENUBAR),
                                                  ControlPart(PART_ENTIRE_CONTROL),
                                                  aCtrlRegion,
-                                                 ControlState(ControlState::ENABLED),
+                                                 ControlState::ENABLED,
                                                  aVal,
                                                  OUString(),
                                                  aNativeBounds,
