@@ -63,6 +63,7 @@ $(call gb_ExternalProject_get_state_target,firebird,build):
 			--without-editline \
 			--without-fbsample --without-fbsample-db \
 			--with-fbplugins=$(INSTDIR)/$(LIBO_LIB_FOLDER) \
+			--with-fbsecure-db=$(INSTDIR)/$(LIBO_SHARE_FOLDER) \
 			$(if $(filter-out MSC,$(COM)),$(if $(ENABLE_DEBUG),--enable-debug)) \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 			$(if $(DISABLE_DYNLOADING), \
