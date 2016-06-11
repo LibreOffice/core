@@ -1073,22 +1073,47 @@ OUString SwTableAutoFormat::GetTableTemplateCellSubName(const SwBoxAutoFormat& r
     return OUString();
 }
 
+/*
+ * Mapping schema
+ *          0            1            2           3           4           5
+ *      +-----------------------------------------------------------------------+
+ *   0  |   FRSC    |  FR       |  FREC     |           |           |  FRENC    |
+ *      +-----------------------------------------------------------------------+
+ *   1  |   FC      |  ER       |  EC       |           |           |  LC       |
+ *      +-----------------------------------------------------------------------+
+ *   2  |   OR      |  OC       |  BODY     |           |           |  BCKG     |
+ *      +-----------------------------------------------------------------------+
+ *   3  |           |           |           |           |           |           |
+ *      +-----------------------------------------------------------------------+
+ *   4  |           |           |           |           |           |           |
+ *      +-----------------------------------------------------------------------+
+ *   5  |   LRSC    |  LR       |  LRENC    |           |           |  LRENC    |
+ *      +-----------+-----------+-----------+-----------+-----------+-----------+
+ * ODD  = 1, 3, 5, ...
+ * EVEN = 2, 4, 6, ...
+ */
 const std::vector<sal_Int32>& SwTableAutoFormat::GetTableTemplateMap()
 {
     static std::vector<sal_Int32>* pTableTemplateMap;
     if (!pTableTemplateMap)
     {
         pTableTemplateMap = new std::vector<sal_Int32>;
-        pTableTemplateMap->push_back(0); // FIRST_ROW
-        pTableTemplateMap->push_back(1); // LAST_ROW
-        pTableTemplateMap->push_back(2); // FIRST_COLUMN
-        pTableTemplateMap->push_back(3); // LAST_COLUMN
-        pTableTemplateMap->push_back(4); // EVEN_ROWS
-        pTableTemplateMap->push_back(5); // ODD_ROWS
-        pTableTemplateMap->push_back(6); // EVEN_COLUMNS
-        pTableTemplateMap->push_back(7); // ODD_COLUMNS
-        pTableTemplateMap->push_back(8); // BODY
-        pTableTemplateMap->push_back(9); // BACKGROUND
+        pTableTemplateMap->push_back(1 ); // FIRST_ROW              // FR
+        pTableTemplateMap->push_back(13); // LAST_ROW               // LR
+        pTableTemplateMap->push_back(4 ); // FIRST_COLUMN           // FC
+        pTableTemplateMap->push_back(7 ); // LAST_COLUMN            // LC
+        pTableTemplateMap->push_back(5 ); // EVEN_ROWS              // ER
+        pTableTemplateMap->push_back(8 ); // ODD_ROWS               // OR
+        pTableTemplateMap->push_back(6 ); // EVEN_COLUMNS           // EC
+        pTableTemplateMap->push_back(9 ); // ODD_COLUMNS            // OC
+        pTableTemplateMap->push_back(10); // BODY
+        pTableTemplateMap->push_back(11); // BACKGROUND             // BCKG
+        pTableTemplateMap->push_back(0 ); // FIRST_ROW_START_COLUMN // FRSC
+        pTableTemplateMap->push_back(3 ); // FIRST_ROW_END_COLUMN   // FRENC
+        pTableTemplateMap->push_back(12); // LAST_ROW_START_COLUMN  // LRSC
+        pTableTemplateMap->push_back(15); // LAST_ROW_END_COLUMN    // LRENC
+        pTableTemplateMap->push_back(2 ); // FIRST_ROW_EVEN_COLUMN  // FREC
+        pTableTemplateMap->push_back(14); // LAST_ROW_EVEN_COLUMN   // LREC
     }
     return *pTableTemplateMap;
 }
