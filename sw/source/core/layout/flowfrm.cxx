@@ -1161,7 +1161,7 @@ bool SwFlowFrm::IsColBreak( bool bAct ) const
         {
             // Determine predecessor
             const SwFrm *pPrev = m_rThis.FindPrev();
-            while( pPrev && ( ( !pPrev->IsInDocBody() && !m_rThis.IsInFly() ) ||
+            while( pPrev && ( ( !pPrev->IsInDocBody() && !m_rThis.IsInFly() && !m_rThis.FindFooterOrHeader() ) ||
                    ( pPrev->IsTextFrm() && static_cast<const SwTextFrm*>(pPrev)->IsHiddenNow() ) ) )
                     pPrev = pPrev->FindPrev();
 
