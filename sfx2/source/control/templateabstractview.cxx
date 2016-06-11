@@ -322,7 +322,7 @@ void TemplateAbstractView::RemoveDefaultTemplateIcon(const OUString& rPath)
     for (ThumbnailViewItem* pItem : mItemList)
     {
         TemplateViewItem* pViewItem = dynamic_cast<TemplateViewItem*>(pItem);
-        if(pViewItem->getPath().match(rPath))
+        if (pViewItem && pViewItem->getPath().match(rPath))
         {
             pViewItem->showDefaultIcon(false);
             Invalidate();
