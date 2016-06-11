@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_5159b259",
+        "filename": "sfx2/source/appl/appcfg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2016-06-11T12:59:23Z",
+      "side": 1,
+      "message": "rather SfxEventAsync please, to make it obvious which module it belongs to",
+      "revId": "80cab123840b0be04f46ebdce8bcef303aae6e0a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
