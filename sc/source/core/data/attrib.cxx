@@ -43,7 +43,7 @@ using namespace com::sun::star;
 
 
 SfxPoolItem* ScProtectionAttr::CreateDefault() { return new ScProtectionAttr; }
-SfxPoolItem* ScDoubleItem::CreateDefault() { DBG_ASSERT(false, "No ScDoubleItem factory available"); return nullptr; }
+SfxPoolItem* ScDoubleItem::CreateDefault() { SAL_WARN( "sc", "No ScDoubleItem factory available"); return nullptr; }
 
 /**
  * General Help Function

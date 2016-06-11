@@ -200,7 +200,7 @@ int MasterPageDescriptor::UpdatePageObject (
         }
         else
         {
-            DBG_ASSERT(false, "UpdatePageObject: master page is NULL");
+            SAL_WARN( "sd", "UpdatePageObject: master page is NULL");
             return -1;
         }
 

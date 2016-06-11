@@ -18,6 +18,7 @@
  */
 
 #include <osl/endian.h>
+#include <sal/log.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/tempfile.hxx>
 #include <math.h>
@@ -4220,7 +4221,7 @@ PPTStyleSheet::PPTStyleSheet( const DffRecordHeader& rSlideHd, SvStream& rIn, Sd
                     }
                 }
                 if ( rIn.Tell() != aTxMasterStyleHd.GetRecEndFilePos() )
-                    DBG_ASSERT(false, "SJ: Falsche Anzahl von Bytes gelesen beim Import der PPT-Formatvorlagen");
+                    SAL_WARN( "SJ: Falsche Anzahl von Bytes gelesen beim Import der PPT-Formatvorlagen");
             }
 #endif
         }

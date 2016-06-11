@@ -397,7 +397,7 @@ void BrowseBox::GrabTableFocus()
 
 OUString BrowseBox::GetCellText(long, sal_uInt16 ) const
 {
-    DBG_ASSERT(false,"This method has to be implemented by the derived classes! BUG!!");
+    SAL_WARN("svtools", "This method has to be implemented by the derived classes! BUG!!");
     return OUString();
 }
 
