@@ -15,7 +15,7 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,firebird,0))
 
 $(eval $(call gb_UnpackedTarball_add_patches,firebird,\
         external/firebird/firebird.disable-ib-util-not-found.patch.1 \
-		external/firebird/firebird-rpath-Engine12.patch \
+		external/firebird/firebird-rpath-shared.patch \
 ))
 
 #ifeq ($(OS)-$(COM),WNT-MSC)

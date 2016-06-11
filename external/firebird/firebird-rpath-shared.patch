@@ -1,0 +1,23 @@
+--- src/common/utils.cpp
++++ src/common/utils.cpp
+@@ -1026,6 +1026,20 @@
+ 			PathUtils::concatPath(s, configDir[prefType], name);
+ 			return s;
+ 		}
++
++                // Set relative path to Engine12 dynamic library
++                if(prefType == Firebird::IConfigManager::DIR_PLUGINS)
++                {
++                    s = name;
++                    return s; 
++                }
++                // Set relative path to security3.fdb
++                if(prefType == Firebird::IConfigManager::DIR_SECDB)
++                {
++                    s = "share/firebird/";
++                    s += name;
++                    return s;
++                }
+ 	}
+ 
+ 	switch(prefType)
