@@ -1460,8 +1460,7 @@ void Window::PaintToDevice( OutputDevice* pDev, const Point& rPos, const Size& /
     if( ! mpWindowImpl->mbVisible )
     {
         vcl::Window* pTempParent = ImplGetDefaultWindow();
-        if( pTempParent )
-            pTempParent->EnableChildTransparentMode();
+        pTempParent->EnableChildTransparentMode();
         pRealParent = GetParent();
         SetParent( pTempParent );
         // trigger correct visibility flags for children
