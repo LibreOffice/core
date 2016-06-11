@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_7104f616",
+        "filename": "xmloff/source/table/XMLTableExport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 524,
+      "author": {
+        "id": 1001243
+      },
+      "writtenOn": "2016-06-11T16:07:18Z",
+      "side": 1,
+      "message": "that was missing, suspicious",
+      "revId": "0efe3e2651d69086fde8b50b601bf54648911252",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
