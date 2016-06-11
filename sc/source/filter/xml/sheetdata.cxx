@@ -28,7 +28,7 @@
 ScSheetSaveData::ScSheetSaveData() :
     mnStartTab( -1 ),
     mnStartOffset( -1 ),
-    maPreviousNote( OUString(), OUString(), ScAddress(ScAddress::INITIALIZE_INVALID) ),
+    maPreviousNote( OUString(), OUString(), ScAddress::INITIALIZE_INVALID ),
     mbInSupportedSave( false )
 {
 }

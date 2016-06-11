@@ -7226,7 +7226,7 @@ void Test::testMatConcat()
         for (SCROW nRow = 12; nRow < 22; ++nRow)
         {
             OUString aStr = m_pDoc->GetString(ScAddress(nCol, nRow, 0));
-            CPPUNIT_ASSERT_EQUAL(OUString(OUString::number(nCol * (nRow - 12)) + OUString::number(nCol * (nRow - 12))), aStr);
+            CPPUNIT_ASSERT_EQUAL(OUString::number(nCol * (nRow - 12)) + OUString::number(nCol * (nRow - 12)), aStr);
         }
     }
     m_pDoc->DeleteTab(0);
@@ -7255,7 +7255,7 @@ void Test::testMatConcatReplication()
         for (SCROW nRow = 12; nRow < 22; ++nRow)
         {
             OUString aStr = m_pDoc->GetString(ScAddress(nCol, nRow, 0));
-            CPPUNIT_ASSERT_EQUAL(OUString(OUString::number(nCol * (nRow - 12)) + "0"), aStr);
+            CPPUNIT_ASSERT_EQUAL(OUString::number(nCol * (nRow - 12)) + "0", aStr);
         }
     }
 
