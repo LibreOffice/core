@@ -75,7 +75,8 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::uno;
 
-const OUString Connection::our_sDBLocation( "firebird.fdb" );
+const OUString Connection::our_sFBKLocation( "firebird.fbk" );
+const OUString Connection::our_sFDBLocation( "firebird.fdb" );
 
 Connection::Connection(FirebirdDriver*    _pDriver)
     : Connection_BASE(m_aMutex)
@@ -132,6 +133,9 @@ void Connection::construct(const ::rtl::OUString& url, const Sequence< PropertyV
         m_sConnectionURL = url;
 
         bool bIsNewDatabase = false;
+        // the database may be stored as an
+        // fdb file in older versions
+        bool bIsFdbStored = false;
         OUString aStorageURL;
         if (url == "sdbc:embedded:firebird")
         {
@@ -165,35 +169,36 @@ void Connection::construct(const ::rtl::OUString& url, const Sequence< PropertyV
 
             bIsNewDatabase = !m_xEmbeddedStorage->hasElements();
 
-            m_pExtractedFDBFile.reset(new ::utl::TempFile(nullptr, true));
-            m_sFirebirdURL = m_pExtractedFDBFile->GetFileName() + "/firebird.fdb";
+            m_pDatabaseFileDir.reset(new ::utl::TempFile(nullptr, true));
+            m_pDatabaseFileDir->EnableKillingFile();
+            m_sFirebirdURL = m_pDatabaseFileDir->GetFileName() + "/firebird.fdb";
+            m_sFBKPath = m_pDatabaseFileDir->GetFileName() + "/firebird.fbk";
 
             SAL_INFO("connectivity.firebird", "Temporary .fdb location:  " << m_sFirebirdURL);
 
             if (!bIsNewDatabase)
             {
-                SAL_INFO("connectivity.firebird", "Extracting .fdb from .odb" );
-                if (!m_xEmbeddedStorage->isStreamElement(our_sDBLocation))
+                if (m_xEmbeddedStorage->hasByName(our_sFBKLocation) &&
+                    m_xEmbeddedStorage->isStreamElement(our_sFBKLocation))
+                {
+                    SAL_INFO("connectivity.firebird", "Extracting* .fbk from .odb" );
+                    loadDatabaseFile(our_sFBKLocation, m_sFBKPath);
+                }
+                else if(m_xEmbeddedStorage->hasByName(our_sFDBLocation) &&
+                        m_xEmbeddedStorage->isStreamElement(our_sFDBLocation))
+                {
+                    SAL_INFO("connectivity.firebird", "Found .fdb instead of .fbk");
+                    bIsFdbStored = true;
+                    loadDatabaseFile(our_sFDBLocation, m_sFirebirdURL);
+                }
+                else
                 {
                     ::connectivity::SharedResources aResources;
+                    // TODO FIXME: this does _not_ look like the right error message
                     const OUString sMessage = aResources.getResourceString(STR_ERROR_NEW_VERSION);
                     ::dbtools::throwGenericSQLException(sMessage ,*this);
+
                 }
-
-                Reference< XStream > xDBStream(m_xEmbeddedStorage->openStreamElement(our_sDBLocation,
-                                                                ElementModes::READ));
-
-                uno::Reference< ucb::XSimpleFileAccess2 > xFileAccess(
-                        ucb::SimpleFileAccess::create( comphelper::getProcessComponentContext() ),
-                                                                    uno::UNO_QUERY );
-                if ( !xFileAccess.is() )
-                {
-                    ::connectivity::SharedResources aResources;
-                    const OUString sMessage = aResources.getResourceString(STR_ERROR_NEW_VERSION);
-                    ::dbtools::throwGenericSQLException(sMessage ,*this);
-                }
-
-                xFileAccess->writeFile(m_sFirebirdURL,xDBStream->getInputStream());
             }
             // TODO: Get DB properties from XML
 
@@ -280,6 +285,11 @@ void Connection::construct(const ::rtl::OUString& url, const Sequence< PropertyV
         }
         else
         {
+            if (m_bIsEmbedded && !bIsFdbStored) // We need to restore the .fbk first
+            {
+            runBackupService(isc_action_svc_restore);
+            }
+
             aErr = isc_attach_database(status,
                                        m_sFirebirdURL.getLength(),
                                        OUStringToOString(m_sFirebirdURL, RTL_TEXTENCODING_UTF8).getStr(),
@@ -294,12 +304,6 @@ void Connection::construct(const ::rtl::OUString& url, const Sequence< PropertyV
 
         if (m_bIsEmbedded) // Add DocumentEventListener to save the .fdb as needed
         {
-            // TODO: this is only needed when we change icu versions, so ideally
-            // we somehow keep track of which icu version we have. There might
-            // be something db internal that we can check, or we might have to store
-            // it in the .odb.
-            rebuildIndexes();
-
             // We need to attach as a document listener in order to be able to store
             // the temporary db back into the .odb when saving
             uno::Reference<XDocumentEventBroadcaster> xBroadcaster(m_xParentDocument, UNO_QUERY);
@@ -544,6 +548,143 @@ void SAL_CALL Connection::commit() throw(SQLException, RuntimeException, std::ex
     }
 }
 
+void Connection::loadDatabaseFile(const OUString& srcLocation, const OUString& tmpLocation)
+{
+    Reference< XStream > xDBStream(m_xEmbeddedStorage->openStreamElement(srcLocation,
+            ElementModes::READ));
+
+    uno::Reference< ucb::XSimpleFileAccess2 > xFileAccess(
+        ucb::SimpleFileAccess::create( comphelper::getProcessComponentContext() ),
+                        uno::UNO_QUERY );
+    if ( !xFileAccess.is() )
+    {
+        ::connectivity::SharedResources aResources;
+        // TODO FIXME: this does _not_ look like the right error message
+        const OUString sMessage = aResources.getResourceString(STR_ERROR_NEW_VERSION);
+        ::dbtools::throwGenericSQLException(sMessage ,*this);
+    }
+    xFileAccess->writeFile(tmpLocation,xDBStream->getInputStream());
+}
+
+isc_svc_handle Connection::attachServiceManager()
+{
+    ISC_STATUS_ARRAY aStatusVector;
+    isc_svc_handle aServiceHandle = 0;
+
+    char aSPBBuffer[256];
+    char* pSPB = aSPBBuffer;
+    *pSPB++ = isc_spb_version;
+    *pSPB++ = isc_spb_current_version;
+    *pSPB++ = isc_spb_user_name;
+    OUString sUserName("SYSDBA");
+    char aLength = (char) sUserName.getLength();
+    *pSPB++ = aLength;
+    strncpy(pSPB,
+            OUStringToOString(sUserName,
+                              RTL_TEXTENCODING_UTF8).getStr(),
+            aLength);
+    pSPB += aLength;
+    // TODO: do we need ", isc_dpb_trusted_auth, 1, 1" -- probably not but ...
+    if (isc_service_attach(aStatusVector,
+                            0, // Denotes null-terminated string next
+                            "service_mgr",
+                            &aServiceHandle,
+                            pSPB - aSPBBuffer,
+                            aSPBBuffer))
+    {
+        evaluateStatusVector(aStatusVector,
+                             "isc_service_attach",
+                             *this);
+    }
+
+    return aServiceHandle;
+}
+
+void Connection::detachServiceManager(isc_svc_handle aServiceHandle)
+{
+    ISC_STATUS_ARRAY aStatusVector;
+    if (isc_service_detach(aStatusVector,
+                            &aServiceHandle))
+    {
+        evaluateStatusVector(aStatusVector,
+                             "isc_service_detach",
+                             *this);
+    }
+}
+
+void Connection::runBackupService(const short nAction)
+{
+    assert(nAction == isc_action_svc_backup
+           || nAction == isc_action_svc_restore);
+
+    ISC_STATUS_ARRAY aStatusVector;
+
+    sal_uInt16 nURLLength = m_sFirebirdURL.getLength();
+    sal_uInt16 nPathLength = m_sFBKPath.getLength();
+
+    char sRequest[256];
+
+    // check if we need a bigger buffer
+    assert(nURLLength + nPathLength < sizeof(sRequest) - 32);
+
+    char* pRequest = sRequest;
+    *pRequest++ = nAction;
+
+    *pRequest++ = isc_spb_dbname;  // The .fdb
+    *((sal_uInt16*) pRequest) = nURLLength;
+    pRequest += 2;
+    strncpy(pRequest,
+            OUStringToOString(m_sFirebirdURL,
+                              RTL_TEXTENCODING_UTF8).getStr(),
+            nURLLength);
+    pRequest += nURLLength;
+
+    *pRequest++ = isc_spb_bkp_file; // The fbk
+    *((sal_uInt16*) pRequest) = nPathLength;
+    pRequest += 2;
+    strncpy(pRequest,
+            OUStringToOString(m_sFBKPath,
+                              RTL_TEXTENCODING_UTF8).getStr(),
+            nPathLength);
+    pRequest += nPathLength;
+
+    if (nAction == isc_action_svc_restore)
+    {
+        *pRequest++ = isc_spb_options;
+        ADD_SPB_NUMERIC(pRequest, isc_spb_res_create);
+    }
+
+    isc_svc_handle aServiceHandle = attachServiceManager();
+
+    if (isc_service_start(aStatusVector,
+                          &aServiceHandle,
+                          NULL,
+                          pRequest - sRequest,
+                          sRequest))
+    {
+        evaluateStatusVector(aStatusVector, "isc_service_start", *this);
+    }
+
+    char aInfoSPB = isc_info_svc_line;
+    char aResults[256];
+
+    // query blocks until success or error
+    if(isc_service_query(aStatusVector,
+                      &aServiceHandle,
+                      0, // Reserved null
+                      0,0, // "send" spb -- size and spb -- not needed?
+                      1,
+                      &aInfoSPB,
+                      sizeof(aResults),
+                      aResults))
+    {
+        evaluateStatusVector(aStatusVector, "isc_service_query", *this);
+    }
+
+    detachServiceManager(aServiceHandle);
+}
+
+
 void SAL_CALL Connection::rollback() throw(SQLException, RuntimeException, std::exception)
 {
     MutexGuard aGuard( m_aMutex );
@@ -681,21 +822,24 @@ void SAL_CALL Connection::documentEventOccured( const DocumentEvent& Event )
         commit(); // Commit and close transaction
         if ( m_bIsEmbedded && m_xEmbeddedStorage.is() )
         {
-            SAL_INFO("connectivity.firebird", "Writing .fdb into .odb" );
+            SAL_INFO("connectivity.firebird", "Writing .fbk from running db");
+            runBackupService(isc_action_svc_backup);
 
-            Reference< XStream > xDBStream(m_xEmbeddedStorage->openStreamElement(our_sDBLocation,
+            Reference< XStream > xDBStream(m_xEmbeddedStorage->openStreamElement(our_sFBKLocation,
                                                             ElementModes::WRITE));
 
+            // TODO: verify the backup actually exists -- the backup service
+            // can fail without giving any sane error messages / telling us
+            // that it failed.
             using namespace ::comphelper;
             Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
             Reference< XInputStream > xInputStream;
             if (xContext.is())
                 xInputStream =
-                        OStorageHelper::GetInputStreamFromURL(m_sFirebirdURL, xContext);
+                        OStorageHelper::GetInputStreamFromURL(m_sFBKPath, xContext);
             if (xInputStream.is())
                 OStorageHelper::CopyInputToOutput( xInputStream,
                                                 xDBStream->getOutputStream());
-            // TODO: ensure db is in safe state
         }
     }
 }
@@ -786,10 +930,10 @@ void Connection::disposing()
     cppu::WeakComponentImplHelperBase::disposing();
     m_xDriver.clear();
 
-    if (m_pExtractedFDBFile)
+    if (m_pDatabaseFileDir)
     {
-        ::utl::removeTree(m_pExtractedFDBFile->GetURL());
-        m_pExtractedFDBFile.reset();
+        ::utl::removeTree((m_pDatabaseFileDir)->GetURL());
+        m_pDatabaseFileDir.reset();
     }
 }
 
@@ -824,81 +968,4 @@ uno::Reference< XTablesSupplier > Connection::createCatalog()
 
 }
 
-void Connection::rebuildIndexes() throw (SQLException, RuntimeException, std::exception)
-{
-    MutexGuard aGuard(m_aMutex);
 
-    try
-    {
-        // We only need to do this for character based columns on user-created tables.
-
-        // Ideally we'd use a FOR SELECT ... INTO .... DO ..., but that seems to
-        // only be possible using PSQL, i.e. using a stored procedure.
-        OUString sSql(
-            // multiple columns possible per index, only select once
-            "SELECT DISTINCT indices.RDB$INDEX_NAME "
-            "FROM RDB$INDICES indices "
-            "JOIN RDB$INDEX_SEGMENTS index_segments "
-            "ON (indices.RDB$INDEX_NAME = index_segments.RDB$INDEX_NAME) "
-            "JOIN RDB$RELATION_FIELDS relation_fields "
-            "ON (index_segments.RDB$FIELD_NAME = relation_fields.RDB$FIELD_NAME) "
-            "JOIN RDB$FIELDS fields "
-            "ON (relation_fields.RDB$FIELD_SOURCE = fields.RDB$FIELD_NAME) "
-
-            "WHERE (indices.RDB$SYSTEM_FLAG = 0) "
-            // TODO: what about blr_text2 etc. ?
-            "AND ((fields.RDB$FIELD_TYPE = " + OUString::number((int) blr_text) + ") "
-            "     OR (fields.RDB$FIELD_TYPE = " + OUString::number((int) blr_varying) + ")) "
-            "AND (indices.RDB$INDEX_INACTIVE IS NULL OR indices.RDB$INDEX_INACTIVE = 0) "
-        );
-
-        uno::Reference< XStatement > xCharIndicesStatement = createStatement();
-        uno::Reference< XResultSet > xCharIndices =
-                                        xCharIndicesStatement->executeQuery(sSql);
-        uno::Reference< XRow > xRow(xCharIndices, UNO_QUERY_THROW);
-
-        uno::Reference< XStatement > xAlterIndexStatement = createStatement();
-
-        // ALTER is a DDL statement, hence using Statement will cause a commit
-        // after every alter -- in this case this is inappropriate (xCharIndicesStatement
-        // and its ResultSet become invalidated) hence we use the native api.
-        while (xCharIndices->next())
-        {
-            OUString sIndexName(sanitizeIdentifier(xRow->getString(1)));
-            SAL_INFO("connectivity.firebird", "rebuilding index " + sIndexName);
-            OString sAlterIndex = "ALTER INDEX \""
-                                   + OUStringToOString(sIndexName, RTL_TEXTENCODING_UTF8)
-                                   + "\" ACTIVE";
-
-            ISC_STATUS_ARRAY aStatusVector;
-            ISC_STATUS aErr;
-
-            aErr = isc_dsql_execute_immediate(aStatusVector,
-                                              &getDBHandle(),
-                                              &getTransaction(),
-                                              0, // Length: 0 for null terminated
-                                              sAlterIndex.getStr(),
-                                              FIREBIRD_SQL_DIALECT,
-                                              nullptr);
-            if (aErr)
-                evaluateStatusVector(aStatusVector,
-                                     "rebuildIndexes:isc_dsql_execute_immediate",
-                                     *this);
-        }
-        commit();
-    }
-    catch (const Exception&)
-    {
-        throw;
-    }
-    catch (const std::exception&)
-    {
-        throw;
-    }
-    catch (...) // const Firebird::Exception& firebird throws this, but doesn't install the fb_exception.h that declares it
-    {
-        throw std::runtime_error("Generic Firebird::Exception");
-    }
-
-}
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
