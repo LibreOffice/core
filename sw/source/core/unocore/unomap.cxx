@@ -1501,7 +1501,16 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
             {
                 static SfxItemPropertyMapEntry const aCellStyleMap[] =
                 {
-                    { OUString(UNO_NAME_BACK_COLOR), RES_BACKGROUND, cppu::UnoType<sal_Int32>::get(), PROPERTY_NONE , 0 },
+                    { OUString(UNO_NAME_BACK_COLOR),             RES_BACKGROUND, cppu::UnoType<sal_Int32>::get(),               PROPERTY_NONE,  0                                       },
+                    { OUString(UNO_NAME_LEFT_BORDER),            RES_BOX,        cppu::UnoType<css::table::BorderLine>::get(),  0,              LEFT_BORDER           |CONVERT_TWIPS    },
+                    { OUString(UNO_NAME_RIGHT_BORDER),           RES_BOX,        cppu::UnoType<css::table::BorderLine>::get(),  0,              RIGHT_BORDER          |CONVERT_TWIPS    },
+                    { OUString(UNO_NAME_TOP_BORDER),             RES_BOX,        cppu::UnoType<css::table::BorderLine>::get(),  0,              TOP_BORDER            |CONVERT_TWIPS    },
+                    { OUString(UNO_NAME_BOTTOM_BORDER),          RES_BOX,        cppu::UnoType<css::table::BorderLine>::get(),  0,              BOTTOM_BORDER         |CONVERT_TWIPS    },
+                    // is need? { OUString(UNO_NAME_BORDER_DISTANCE),        RES_BOX,        cppu::UnoType<sal_Int32>::get(),               0,              BORDER_DISTANCE       |CONVERT_TWIPS    },
+                    // is need? { OUString(UNO_NAME_LEFT_BORDER_DISTANCE),   RES_BOX,        cppu::UnoType<sal_Int32>::get(),               0,              LEFT_BORDER_DISTANCE  |CONVERT_TWIPS    },
+                    // is need? { OUString(UNO_NAME_RIGHT_BORDER_DISTANCE),  RES_BOX,        cppu::UnoType<sal_Int32>::get(),               0,              RIGHT_BORDER_DISTANCE |CONVERT_TWIPS    },
+                    // is need? { OUString(UNO_NAME_TOP_BORDER_DISTANCE),    RES_BOX,        cppu::UnoType<sal_Int32>::get(),               0,              TOP_BORDER_DISTANCE   |CONVERT_TWIPS    },
+                    // is need? { OUString(UNO_NAME_BOTTOM_BORDER_DISTANCE), RES_BOX,        cppu::UnoType<sal_Int32>::get(),               0,              BOTTOM_BORDER_DISTANCE|CONVERT_TWIPS    },
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
                 m_aMapEntriesArr[nPropertyId] = aCellStyleMap;

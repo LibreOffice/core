@@ -46,6 +46,7 @@
 #include <xmloff/xmltypes.hxx>
 #include <xmloff/maptype.hxx>
 #include <xmloff/prhdlfac.hxx>
+#include <xmloff/txtprmap.hxx>
 #include <tools/debug.hxx>
 #include "table.hxx"
 
@@ -61,6 +62,7 @@ using namespace ::com::sun::star::style;
 #define MAP_(name,prefix,token,type,context)  { name, sizeof(name)-1, prefix, token, type, context, SvtSaveOptions::ODFVER_010, false }
 #define CMAP(name,prefix,token,type,context) MAP_(name,prefix,token,type|XML_TYPE_PROP_TABLE_COLUMN,context)
 #define RMAP(name,prefix,token,type,context) MAP_(name,prefix,token,type|XML_TYPE_PROP_TABLE_ROW,context)
+#define CELLMAP(name,prefix,token,type,context) MAP_(name,prefix,token,type|XML_TYPE_PROP_TABLE_CELL,context)
 #define MAP_END { nullptr, 0, 0, XML_EMPTY, 0, 0, SvtSaveOptions::ODFVER_010, false }
 
 const XMLPropertyMapEntry* getColumnPropertiesMap()
@@ -86,6 +88,22 @@ const XMLPropertyMapEntry* getRowPropertiesMap()
     };
 
     return &aXMLRowProperties[0];
+}
+
+const XMLPropertyMapEntry* getSwCellStylePropertiesMap()
+{
+    // Taken from xmloff/source/text/txtprmap.cxx
+    static const XMLPropertyMapEntry aXMLSwCellStyleProperties[] =
+    {
+        CELLMAP( "BackColor",           XML_NAMESPACE_FO, XML_BACKGROUND_COLOR, XML_TYPE_COLORTRANSPARENT|MID_FLAG_MULTI_PROPERTY, 0                ),
+        CELLMAP( "LeftBorder",          XML_NAMESPACE_FO, XML_BORDER_LEFT,      XML_TYPE_BORDER,                                   CTF_LEFTBORDER   ),
+        CELLMAP( "RightBorder",         XML_NAMESPACE_FO, XML_BORDER_RIGHT,     XML_TYPE_BORDER,                                   CTF_RIGHTBORDER  ),
+        CELLMAP( "TopBorder",           XML_NAMESPACE_FO, XML_BORDER_TOP,       XML_TYPE_BORDER,                                   CTF_TOPBORDER    ),
+        CELLMAP( "BottomBorder",        XML_NAMESPACE_FO, XML_BORDER_BOTTOM,    XML_TYPE_BORDER,                                   CTF_BOTTOMBORDER ),
+        MAP_END
+    };
+
+    return &aXMLSwCellStyleProperties[0];
 }
 
 class StringStatisticHelper
@@ -135,6 +153,7 @@ sal_Int32 StringStatisticHelper::getModeString( OUString& rStyleName )
 XMLTableExport::XMLTableExport(SvXMLExport& rExp, const rtl::Reference< SvXMLExportPropertyMapper  >& xExportPropertyMapper, const rtl::Reference< XMLPropertyHandlerFactory >& xFactoryRef )
 : mrExport( rExp )
 , mbExportTables( false )
+, mbWriter( false )
 {
     Reference< XMultiServiceFactory > xFac( rExp.GetModel(), UNO_QUERY );
     if( xFac.is() ) try
@@ -144,9 +163,10 @@ XMLTableExport::XMLTableExport(SvXMLExport& rExp, const rtl::Reference< SvXMLExp
         const OUString* pSNS( sSNS.getConstArray() );
         while( --n > 0 )
         {
-            if( (*pSNS++) == "com.sun.star.drawing.TableShape" )
+            if( (*pSNS++) == "com.sun.star.drawing.TableShape" || (*pSNS) == "com.sun.star.style.TableStyle" )
             {
                 mbExportTables = true;
+                mbWriter = ((*pSNS) == "com.sun.star.style.TableStyle");
                 break;
             }
         }
@@ -155,8 +175,15 @@ XMLTableExport::XMLTableExport(SvXMLExport& rExp, const rtl::Reference< SvXMLExp
     {
     }
 
-    mxCellExportPropertySetMapper = xExportPropertyMapper;
-    mxCellExportPropertySetMapper->ChainExportMapper(XMLTextParagraphExport::CreateParaExtPropMapper(rExp));
+    if (mbWriter)
+    {
+        mxCellExportPropertySetMapper = new SvXMLExportPropertyMapper( new XMLPropertySetMapper( getSwCellStylePropertiesMap(), xFactoryRef.get(), true ) );
+    }
+    else
+    {
+        mxCellExportPropertySetMapper = xExportPropertyMapper;
+        mxCellExportPropertySetMapper->ChainExportMapper(XMLTextParagraphExport::CreateParaExtPropMapper(rExp));
+    }
 
     mxRowExportPropertySetMapper = new SvXMLExportPropertyMapper( new XMLPropertySetMapper( getRowPropertiesMap(), xFactoryRef.get(), true ) );
     mxColumnExportPropertySetMapper = new SvXMLExportPropertyMapper( new XMLPropertySetMapper( getColumnPropertiesMap(), xFactoryRef.get(), true ) );
@@ -456,10 +483,21 @@ void XMLTableExport::exportTableStyles()
      if( !mbExportTables )
          return;
 
-    rtl::Reference<XMLStyleExport> aStEx(new XMLStyleExport(mrExport, OUString(), mrExport.GetAutoStylePool().get()));
+    rtl::Reference<XMLStyleExport> aStEx;
+    OUString sCellStyleName;
+    if (mbWriter)
+    {
+        sCellStyleName = OUString("CellStyles");
+        aStEx.set(new XMLStyleExport(mrExport, OUString()));
+    }
+    else
+    {
+        // write graphic family styles
+        sCellStyleName = OUString("cell");
+        aStEx.set(new XMLStyleExport(mrExport, OUString(), mrExport.GetAutoStylePool().get()));
+    }
 
-    // write graphic family styles
-    aStEx->exportStyleFamily("cell", OUString(XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME), mxCellExportPropertySetMapper.get(), true, XML_STYLE_FAMILY_TABLE_CELL);
+    aStEx->exportStyleFamily(sCellStyleName, OUString(XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME), mxCellExportPropertySetMapper.get(), true, XML_STYLE_FAMILY_TABLE_CELL);
 
     exportTableTemplates();
 }
@@ -489,6 +527,7 @@ const TableStyleElement* getTableStyleMap()
         { XML_EVEN_COLUMNS, OUString("even-columns") },
         { XML_ODD_COLUMNS, OUString("odd-columns") },
         { XML_BODY, OUString("body") },
+        { XML_BACKGROUND, OUString("background") },
         { XML_TOKEN_END, OUString() }
     };
 
@@ -504,7 +543,12 @@ void XMLTableExport::exportTableTemplates()
     {
         Reference< XStyleFamiliesSupplier > xFamiliesSupp( mrExport.GetModel(), UNO_QUERY_THROW );
         Reference< XNameAccess > xFamilies( xFamiliesSupp->getStyleFamilies() );
-        const OUString sFamilyName( "table" );
+        OUString sFamilyName;
+        if (mbWriter)
+            sFamilyName = OUString("TableStyles");
+        else
+            sFamilyName = OUString("table");
+
         Reference< XIndexAccess > xTableFamily( xFamilies->getByName( sFamilyName ), UNO_QUERY_THROW );
 
         for( sal_Int32 nIndex = 0; nIndex < xTableFamily->getCount(); nIndex++ ) try
