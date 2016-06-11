@@ -347,7 +347,14 @@ void AccessibleGridControl::commitTableEvent(sal_Int16 _nEventId,const Any& _rNe
     {
         if(_nEventId == AccessibleEventId::ACTIVE_DESCENDANT_CHANGED)
         {
-            Reference< XAccessible > xChild = m_xImpl->m_pTable->getAccessibleChild(m_aTable.GetCurrentRow()*m_aTable.GetColumnCount()+m_aTable.GetCurrentColumn());
+            const sal_Int32 nCurrentRow = m_aTable.GetCurrentRow();
+            const sal_Int32 nCurrentCol = m_aTable.GetCurrentColumn();
+            css::uno::Reference< css::accessibility::XAccessible > xChild;
+            if (nCurrentRow > -1 && nCurrentCol > -1)
+            {
+                sal_Int32 nColumnCount = m_aTable.GetColumnCount();
+                xChild = m_xImpl->m_pTable->getAccessibleChild(nCurrentRow * nCurrentCol + nColumnCount);
+            }
             m_xImpl->m_pTable->commitEvent(_nEventId, makeAny(xChild),_rOldValue);
         }
         else if(_nEventId == AccessibleEventId::TABLE_MODEL_CHANGED)
