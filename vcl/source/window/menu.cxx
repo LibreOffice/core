@@ -1369,7 +1369,7 @@ Size Menu::ImplGetNativeCheckAndRadioSize(vcl::RenderContext& rRenderContext, lo
         if (rRenderContext.IsNativeControlSupported(ControlType::MenuPopup, PART_MENU_ITEM_CHECK_MARK))
         {
             if (rRenderContext.GetNativeControlRegion(ControlType::MenuPopup, ControlPart(PART_MENU_ITEM_CHECK_MARK),
-                                              aCtrlRegion, ControlState(ControlState::ENABLED), aVal, OUString(),
+                                              aCtrlRegion, ControlState::ENABLED, aVal, OUString(),
                                               aNativeBounds, aNativeContent))
             {
                 rCheckHeight = aNativeBounds.GetHeight();
@@ -1379,7 +1379,7 @@ Size Menu::ImplGetNativeCheckAndRadioSize(vcl::RenderContext& rRenderContext, lo
         if (rRenderContext.IsNativeControlSupported(ControlType::MenuPopup, PART_MENU_ITEM_RADIO_MARK))
         {
             if (rRenderContext.GetNativeControlRegion(ControlType::MenuPopup, ControlPart(PART_MENU_ITEM_RADIO_MARK),
-                                                      aCtrlRegion, ControlState(ControlState::ENABLED), aVal, OUString(),
+                                                      aCtrlRegion, ControlState::ENABLED, aVal, OUString(),
                                                       aNativeBounds, aNativeContent))
             {
                 rRadioHeight = aNativeBounds.GetHeight();
@@ -1399,7 +1399,7 @@ bool Menu::ImplGetNativeSubmenuArrowSize(vcl::RenderContext& rRenderContext, Siz
     if (rRenderContext.IsNativeControlSupported(ControlType::MenuPopup, PART_MENU_SUBMENU_ARROW))
     {
         if (rRenderContext.GetNativeControlRegion(ControlType::MenuPopup, ControlPart(PART_MENU_SUBMENU_ARROW),
-                                                  aCtrlRegion, ControlState(ControlState::ENABLED),
+                                                  aCtrlRegion, ControlState::ENABLED,
                                                   aVal, OUString(), aNativeBounds, aNativeContent))
         {
             Size aSize(aNativeContent.GetWidth(), aNativeContent.GetHeight());
@@ -1648,7 +1648,7 @@ Size Menu::ImplCalcSize( vcl::Window* pWin )
             if( pWindow->GetNativeControlRegion( ControlType::Menubar,
                                                  ControlPart(PART_ENTIRE_CONTROL),
                                                  aCtrlRegion,
-                                                 ControlState(ControlState::ENABLED),
+                                                 ControlState::ENABLED,
                                                  aVal,
                                                  OUString(),
                                                  aNativeBounds,
