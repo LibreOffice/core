@@ -272,6 +272,13 @@ class SwXTextTableStyle : public cppu::WeakImplHelper
         ODD_COLUMNS_STYLE,
         BODY_STYLE,
         BACKGROUND_STYLE,
+        // loext namespace
+        FIRST_ROW_START_COLUMN_STYLE,
+        FIRST_ROW_END_COLUMN_STYLE,
+        LAST_ROW_START_COLUMN_STYLE,
+        LAST_ROW_END_COLUMN_STYLE,
+        FIRST_ROW_EVEN_COLUMN_STYLE,
+        LAST_ROW_EVEN_COLUMN_STYLE,
         STYLE_COUNT
     };
 
