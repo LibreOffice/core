@@ -1502,6 +1502,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                 static SfxItemPropertyMapEntry const aCellStyleMap[] =
                 {
                     { OUString(UNO_NAME_BACK_COLOR), RES_BACKGROUND, cppu::UnoType<sal_Int32>::get(), PROPERTY_NONE , 0 },
+                    //{ OUString(UNO_NAME_LEFT_BORDER), RES_BOX,    cppu::UnoType<css::table::BorderLine>::get(),    0, LEFT_BORDER  |CONVERT_TWIPS },
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
                 m_aMapEntriesArr[nPropertyId] = aCellStyleMap;

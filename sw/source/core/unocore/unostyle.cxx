@@ -4413,7 +4413,7 @@ sal_Bool SAL_CALL SwXTextTableStyle::isUserDefined() throw (uno::RuntimeExceptio
 
 sal_Bool SAL_CALL SwXTextTableStyle::isInUse() throw (uno::RuntimeException, std::exception)
 {
-    return false;
+    return true;
 }
 
 OUString SAL_CALL SwXTextTableStyle::getParentStyle() throw (uno::RuntimeException, std::exception)
@@ -4630,7 +4630,7 @@ sal_Bool SAL_CALL SwXTextCellStyle::isUserDefined() throw (css::uno::RuntimeExce
 
 sal_Bool SAL_CALL SwXTextCellStyle::isInUse() throw (css::uno::RuntimeException, std::exception)
 {
-    return false;
+    return true;
 }
 
 OUString SAL_CALL SwXTextCellStyle::getParentStyle() throw (css::uno::RuntimeException, std::exception)
@@ -4725,6 +4725,14 @@ css::uno::Any SAL_CALL SwXTextCellStyle::getPropertyValue(const OUString& rPrope
                 rBrush.QueryValue(aRet);
                 return aRet;
             }
+            /*case RES_BOX:
+            {
+                {
+                    const SvxBoxItem& rBox = m_pBoxAutoFormat->GetBox();
+                    rBox.QueryValue(aRet, pEntry->nMemberId);
+                    return aRet;
+                }
+            }*/
             default:
                 SAL_WARN("sw.uno", "SwXTextCellStyle unknown nWID");
                 throw css::uno::RuntimeException();
