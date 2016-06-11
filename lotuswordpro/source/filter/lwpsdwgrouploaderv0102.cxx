@@ -115,12 +115,12 @@ void LwpSdwGroupLoaderV0102::BeginDrawObjects(std::vector< rtl::Reference<XFFram
     // topObj, botObj
     m_pStream->SeekRel(4);
     //record count
-    unsigned short nRecCount;
+    unsigned short nRecCount(0);
     m_pStream->ReadUInt16(nRecCount);
     // selCount
     m_pStream->SeekRel(2);
     //boundrect
-    unsigned short left,top,right,bottom;
+    unsigned short left(0),top(0),right(0),bottom(0);
     m_pStream->ReadUInt16(left);
     m_pStream->ReadUInt16(top);
     m_pStream->ReadUInt16(right);
@@ -222,6 +222,12 @@ void LwpSdwGroupLoaderV0102::BeginDrawObjects(std::vector< rtl::Reference<XFFram
         }
     }
 
+    if (nRecCount > m_pStream->remainingSize())
+    {
+        SAL_WARN("lwp", "stream too short for claimed no of records");
+        nRecCount = m_pStream->remainingSize();
+    }
+
     //load draw object
     for (unsigned short i = 0; i < nRecCount; i++)
     {
@@ -260,12 +266,12 @@ XFDrawGroup* LwpSdwGroupLoaderV0102::CreateDrawGroupObject()
     // topObj, botObj
     m_pStream->SeekRel(4);
     //record count
-    unsigned short nRecCount;
+    unsigned short nRecCount(0);
     m_pStream->ReadUInt16(nRecCount);
     // selCount
     m_pStream->SeekRel(2);
     //boundrect
-    unsigned short left,top,right,bottom;
+    unsigned short left(0),top(0),right(0),bottom(0);
     m_pStream->ReadUInt16(left);
     m_pStream->ReadUInt16(top);
     m_pStream->ReadUInt16(right);
@@ -274,6 +280,12 @@ XFDrawGroup* LwpSdwGroupLoaderV0102::CreateDrawGroupObject()
     m_pStream->SeekRel(2);
 
     XFDrawGroup* pXFDrawGroup = new XFDrawGroup();
+
+    if (nRecCount > m_pStream->remainingSize())
+    {
+        SAL_WARN("lwp", "stream too short for claimed no of records");
+        nRecCount = m_pStream->remainingSize();
+    }
 
     //load draw object
     for (unsigned short i = 0; i < nRecCount; i++)
@@ -303,7 +315,7 @@ XFDrawGroup* LwpSdwGroupLoaderV0102::CreateDrawGroupObject()
 XFFrame* LwpSdwGroupLoaderV0102::CreateDrawObject()
 {
     //record type
-    unsigned char recType;
+    unsigned char recType(0);
     m_pStream->ReadUChar(recType);
 
     LwpDrawObj* pDrawObj = nullptr;
