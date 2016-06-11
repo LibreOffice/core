@@ -3065,6 +3065,14 @@ namespace xmloff { namespace token {
         TOKEN( "odd-rows",              XML_ODD_ROWS        ),
         TOKEN( "even-columns",          XML_EVEN_COLUMNS    ),
         TOKEN( "odd-columns",           XML_ODD_COLUMNS     ),
+        // table styles GSoC 2016
+        TOKEN( "first-row-even-column",  XML_FIRST_ROW_EVEN_COLUMN    ),
+        TOKEN( "last-row-even-column",   XML_LAST_ROW_EVEN_COLUMN     ),
+        TOKEN( "first-row-end-column",   XML_FIRST_ROW_END_COLUMN     ),
+        TOKEN( "first-row-start-column", XML_FIRST_ROW_START_COLUMN   ),
+        TOKEN( "last-row-end-column",    XML_LAST_ROW_END_COLUMN      ),
+        TOKEN( "last-row-start-column",  XML_LAST_ROW_START_COLUMN    ),
+
         TOKEN( "horizontal-on-odd",         XML_HORIZONTAL_ON_ODD ),
         // Password error from 1.4 to 2.0 Beta (#i45874#)
         TOKEN( "restart-numbering",               XML_RESTART_NUMBERING),

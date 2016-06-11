@@ -170,6 +170,7 @@ void SwXMLExport::ExportStyles_( bool bUsed )
     GetTextParagraphExport()->exportTextStyles( bUsed
                                              ,IsShowProgress()
                                               );
+    GetShapeExport()->GetShapeTableExport()->exportTableStyles();
     //page defaults
     GetPageExport()->exportDefaultStyle();
 }

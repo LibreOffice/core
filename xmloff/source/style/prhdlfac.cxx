@@ -22,6 +22,8 @@
 #include <com/sun/star/drawing/ColorMode.hpp>
 #include <com/sun/star/text/HorizontalAdjust.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
+#include <com/sun/star/text/VertOrientation.hpp>
+#include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 
 #include <tools/debug.hxx>
 
@@ -95,6 +97,15 @@ static SvXMLEnumMapEntry const aXML_WritingDirection_Enum[] =
     { XML_RL,       text::WritingMode2::RL_TB },
     { XML_TB,       text::WritingMode2::TB_RL },
 
+    { XML_TOKEN_INVALID, 0 }
+};
+
+static SvXMLEnumMapEntry const pXML_VertPos_Enum[] =
+{
+    { XML__EMPTY,    text::VertOrientation::NONE   },
+    { XML_TOP,       text::VertOrientation::TOP    },
+    { XML_MIDDLE,    text::VertOrientation::CENTER },
+    { XML_BOTTOM,    text::VertOrientation::BOTTOM },
     { XML_TOKEN_INVALID, 0 }
 };
 
@@ -446,6 +457,10 @@ const XMLPropertyHandler* XMLPropertyHandlerFactory::CreatePropertyHandler( sal_
         case XML_TYPE_NUMBER16_AUTO:
             pPropHdl = new XMLNumberWithAutoInsteadZeroPropHdl();
             break;
+        case XML_TYPE_TEXT_VERTICAL_ALIGN:
+            pPropHdl = new XMLConstantsPropertyHandler( pXML_VertPos_Enum, XML_TOKEN_INVALID );
+        break;
+
     }
 
     return pPropHdl;
