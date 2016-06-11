@@ -631,6 +631,12 @@ DECLARE_ODFIMPORT_TEST(testBnc800714, "bnc800714.fodt")
     CPPUNIT_ASSERT(getProperty<bool>(getParagraph(2), "ParaKeepTogether"));
 }
 
+DECLARE_ODFIMPORT_TEST(testTdf76322_columnBreakInHeader, "tdf76322_columnBreakInHeader.docx")
+{
+// column breaks were ignored. First line should start in column 2
+    CPPUNIT_ASSERT_EQUAL( OUString("Test1"), parseDump("/root/page[1]/header/section/column[2]/body/txt/text()") );
+}
+
 DECLARE_ODFIMPORT_TEST(testTdf96113, "tdf96113.odt")
 {
     // Background of the formula frame was white (0xffffff), not green.
