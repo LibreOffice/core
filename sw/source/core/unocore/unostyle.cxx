@@ -4408,12 +4408,16 @@ const CellStyleNameMap& SwXTextTableStyle::GetCellStyleNameMap()
 // XStyle
 sal_Bool SAL_CALL SwXTextTableStyle::isUserDefined() throw (uno::RuntimeException, std::exception)
 {
-    return false;
+    // only first style is not user defined
+    if (m_pDocShell->GetDoc()->GetTableStyles()[0].GetName() == m_sTableAutoFormatName)
+        return false;
+
+    return true;
 }
 
 sal_Bool SAL_CALL SwXTextTableStyle::isInUse() throw (uno::RuntimeException, std::exception)
 {
-    return false;
+    return true;
 }
 
 OUString SAL_CALL SwXTextTableStyle::getParentStyle() throw (uno::RuntimeException, std::exception)
@@ -4630,7 +4634,7 @@ sal_Bool SAL_CALL SwXTextCellStyle::isUserDefined() throw (css::uno::RuntimeExce
 
 sal_Bool SAL_CALL SwXTextCellStyle::isInUse() throw (css::uno::RuntimeException, std::exception)
 {
-    return false;
+    return true;
 }
 
 OUString SAL_CALL SwXTextCellStyle::getParentStyle() throw (css::uno::RuntimeException, std::exception)
@@ -4723,6 +4727,12 @@ css::uno::Any SAL_CALL SwXTextCellStyle::getPropertyValue(const OUString& rPrope
             {
                 const SvxBrushItem& rBrush = m_pBoxAutoFormat->GetBackground();
                 rBrush.QueryValue(aRet);
+                return aRet;
+            }
+            case RES_BOX:
+            {
+                const SvxBoxItem& rBox = m_pBoxAutoFormat->GetBox();
+                rBox.QueryValue(aRet, pEntry->nMemberId);
                 return aRet;
             }
             default:

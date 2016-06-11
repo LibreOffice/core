@@ -80,9 +80,11 @@ private:
     rtl::Reference< SvXMLExportPropertyMapper >     mxCellExportPropertySetMapper;
     rtl::Reference< SvXMLExportPropertyMapper >     mxRowExportPropertySetMapper;
     rtl::Reference< SvXMLExportPropertyMapper >     mxColumnExportPropertySetMapper;
+
     std::map< const css::uno::Reference< css::table::XColumnRowRange >, std::shared_ptr< XMLTableInfo > >
                                                     maTableInfoMap;
     bool                                            mbExportTables;
+    bool                                            mbWriter;
 
 protected:
     SvXMLExport& GetExport() { return mrExport; }
