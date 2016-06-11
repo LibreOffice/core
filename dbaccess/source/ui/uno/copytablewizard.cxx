@@ -966,7 +966,7 @@ namespace
     class ValueTransfer
     {
     public:
-        ValueTransfer( sal_Int32 _rSourcePos, sal_Int32 _rDestPos, const ::std::vector< sal_Int32 >& _rColTypes,
+        ValueTransfer( const sal_Int32& _rSourcePos, const sal_Int32& _rDestPos, const ::std::vector< sal_Int32 >& _rColTypes,
             const Reference< XRow >& _rxSource, const Reference< XParameters >& _rxDest )
             :m_rSourcePos( _rSourcePos )
             ,m_rDestPos( _rDestPos )
