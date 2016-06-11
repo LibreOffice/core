@@ -292,11 +292,8 @@ bool SlideSorterViewShell::RelocateToParentWindow (vcl::Window* pParentWindow)
     if ( ! mpSlideSorter)
         return false;
 
-    if (pParentWindow == nullptr)
-        WriteFrameViewData();
     const bool bSuccess (mpSlideSorter->RelocateToWindow(pParentWindow));
-    if (pParentWindow != nullptr)
-        ReadFrameViewData(mpFrameView);
+    ReadFrameViewData(mpFrameView);
 
     return bSuccess;
 }
