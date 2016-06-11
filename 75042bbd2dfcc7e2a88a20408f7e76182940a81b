@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_b14f5e91",
+        "filename": "sw/inc/swtable.hxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1000026
+      },
+      "writtenOn": "2016-06-11T12:15:32Z",
+      "side": 1,
+      "message": "Perhaps the way they did it for SwTableBoxes is more simple, don\u0027t ou think ?",
+      "range": {
+        "startLine": 124,
+        "startChar": 0,
+        "endLine": 124,
+        "endChar": 46
+      },
+      "revId": "75042bbd2dfcc7e2a88a20408f7e76182940a81b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
