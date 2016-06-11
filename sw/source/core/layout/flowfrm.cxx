@@ -1120,8 +1120,11 @@ bool SwFlowFrm::IsPageBreak( bool bAct ) const
                     return false;
             }
 
+            //for compatibility, also break at column break if no columns exist
             const SvxBreak eBreak = pSet->GetBreak().GetBreak();
-            if ( eBreak == SVX_BREAK_PAGE_BEFORE || eBreak == SVX_BREAK_PAGE_BOTH )
+            if ( eBreak == SVX_BREAK_PAGE_BEFORE ||
+                 eBreak == SVX_BREAK_PAGE_BOTH ||
+                 (eBreak == SVX_BREAK_COLUMN_BEFORE && !m_rThis.FindColFrm()) )
                 return true;
             else
             {
