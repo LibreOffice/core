@@ -1098,7 +1098,7 @@ void ThumbnailView::SelectItem( sal_uInt16 nItemId )
         bool bNewOut = IsReallyVisible() && IsUpdateMode();
 
         // if necessary scroll to the visible area
-        if ( mbScroll && nItemId )
+        if (mbScroll && nItemId && mnCols)
         {
             sal_uInt16 nNewLine = (sal_uInt16)(nItemPos / mnCols);
             if ( nNewLine < mnFirstLine )
