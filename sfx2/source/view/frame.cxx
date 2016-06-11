@@ -75,7 +75,7 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::container;
 
-SfxPoolItem* SfxUsrAnyItem::CreateDefault() { DBG_ASSERT(false, "No SfxUsrAnyItem factory available"); return nullptr; }
+SfxPoolItem* SfxUsrAnyItem::CreateDefault() { SAL_WARN( "sfx2", "No SfxUsrAnyItem factory available"); return nullptr; }
 
 SfxPoolItem* SfxUnoFrameItem::CreateDefault()
 {

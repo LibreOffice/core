@@ -259,7 +259,7 @@ DocumentDigitalSignatures::ImplVerifySignatures(
 {
     if (!rxStorage.is())
     {
-        DBG_ASSERT(false, "Error, no XStorage provided");
+        SAL_WARN( "xmlsecurity", "Error, no XStorage provided");
         return Sequence<css::security::DocumentSignatureInformation>();
     }
     // First check for the InputStream, to avoid unnecessary initialization of the security environment...

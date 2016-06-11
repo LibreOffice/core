@@ -51,7 +51,7 @@ static Fraction ImplMakeFraction( long nN1, long nN2, long nD1, long nD2 )
 {
     if( nD1 == 0 || nD2 == 0 ) //under these bad circumstances the following while loop will be endless
     {
-        DBG_ASSERT(false,"Invalid parameter for ImplMakeFraction");
+        SAL_WARN("vcl", "Invalid parameter for ImplMakeFraction");
         return Fraction( 1, 1 );
     }
 

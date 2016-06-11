@@ -918,7 +918,7 @@ OUString ViewShellBase::GetInitialViewShellType()
                         // The page kind is invalid.  This is probably an
                         // error by the caller.  We use the standard type to
                         // keep things going.
-                        DBG_ASSERT(false, "ViewShellBase::GetInitialViewShellType: invalid page kind");
+                        SAL_WARN( "sd", "ViewShellBase::GetInitialViewShellType: invalid page kind");
                         sRequestedView = FrameworkHelper::msImpressViewURL;
                         break;
                 }
@@ -1400,7 +1400,7 @@ void CurrentPageSetter::operator() (bool)
         }
         catch (const beans::UnknownPropertyException&)
         {
-            DBG_ASSERT(false,"CurrentPage property unknown");
+            SAL_WARN("sd", "CurrentPage property unknown");
         }
     }
 }

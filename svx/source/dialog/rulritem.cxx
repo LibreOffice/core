@@ -29,7 +29,7 @@ SfxPoolItem* SvxPagePosSizeItem::CreateDefault() { return new SvxPagePosSizeItem
 SfxPoolItem* SvxLongLRSpaceItem::CreateDefault() { return new SvxLongLRSpaceItem; }
 SfxPoolItem* SvxLongULSpaceItem::CreateDefault() { return new SvxLongULSpaceItem; }
 SfxPoolItem* SvxColumnItem::CreateDefault() { return new SvxColumnItem; }
-SfxPoolItem* SvxObjectItem::CreateDefault() { DBG_ASSERT(false, "No SvxObjectItem factory available"); return nullptr; }
+SfxPoolItem* SvxObjectItem::CreateDefault() { SAL_WARN( "svx", "No SvxObjectItem factory available"); return nullptr; }
 
 /* SvxLongLRSpaceItem */
 

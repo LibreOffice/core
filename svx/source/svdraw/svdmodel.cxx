@@ -25,6 +25,7 @@
 
 #include <osl/endian.h>
 #include <rtl/strbuf.hxx>
+#include <sal/log.hxx>
 
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
@@ -1817,7 +1818,7 @@ void SdrModel::SetStarDrawPreviewMode(bool bPreview)
     if (!bPreview && bStarDrawPreviewMode && GetPageCount())
     {
         // Resetting is not allowed, because the Model might not be loaded completely
-        DBG_ASSERT(false,"SdrModel::SetStarDrawPreviewMode(): Resetting not allowed, because Model might not be complete.");
+        SAL_WARN("svx", "SdrModel::SetStarDrawPreviewMode(): Resetting not allowed, because Model might not be complete.");
     }
     else
     {

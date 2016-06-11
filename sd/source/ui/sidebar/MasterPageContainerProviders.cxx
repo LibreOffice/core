@@ -197,7 +197,7 @@ SdPage* DefaultPageObjectProvider::operator () (SdDrawDocument* pContainerDocume
 
     if (pLocalMasterPage == nullptr)
     {
-        DBG_ASSERT(false, "can not create master page for slide");
+        SAL_WARN( "sd", "can not create master page for slide");
     }
 
     return pLocalMasterPage;

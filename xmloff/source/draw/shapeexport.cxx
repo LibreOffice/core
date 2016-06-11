@@ -350,7 +350,7 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
                 catch(const beans::UnknownPropertyException&)
                 {
                     // Ignored.
-                    DBG_ASSERT(false,
+                    SAL_WARN( "xmloff",
                         "XMLShapeExport::collectShapeAutoStyles: style has no 'Family' property");
                 }
 

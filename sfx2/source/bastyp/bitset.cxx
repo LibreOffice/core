@@ -18,6 +18,7 @@
  */
 
 #include <tools/debug.hxx>
+#include <sal/log.hxx>
 
 #include "bitset.hxx"
 
@@ -303,7 +304,7 @@ sal_uInt16 IndexBitSet::GetFreeIndex()
         *this|=i;
         return i;
       }
-  DBG_ASSERT(false, "IndexBitSet enthaelt mehr als USHRT_MAX Eintraege");
+  SAL_WARN( "sfx2", "IndexBitSet enthaelt mehr als USHRT_MAX Eintraege");
   return 0;
 }
 

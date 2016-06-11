@@ -19,7 +19,7 @@
 
 #include <sfx2/minfitem.hxx>
 
-SfxPoolItem* SfxMacroInfoItem::CreateDefault() { DBG_ASSERT(false, "No SfxMacroInfItem factory available"); return nullptr; }
+SfxPoolItem* SfxMacroInfoItem::CreateDefault() { SAL_WARN( "sfx2", "No SfxMacroInfItem factory available"); return nullptr; }
 
 
 SfxMacroInfoItem::SfxMacroInfoItem(

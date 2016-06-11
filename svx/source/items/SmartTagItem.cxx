@@ -26,7 +26,7 @@
 using namespace ::com::sun::star;
 
 
-SfxPoolItem* SvxSmartTagItem::CreateDefault() { DBG_ASSERT(false, "No SvxSmartTagItem factory available"); return nullptr; }
+SfxPoolItem* SvxSmartTagItem::CreateDefault() { SAL_WARN( "svx", "No SvxSmartTagItem factory available"); return nullptr; }
 
 SvxSmartTagItem::SvxSmartTagItem( const sal_uInt16 nId,
                                   const css::uno::Sequence < css::uno::Sequence< css::uno::Reference< css::smarttags::XSmartTagAction > > >& rActionComponentsSequence,

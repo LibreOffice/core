@@ -483,7 +483,7 @@ void Layer::RemovePainter (const SharedILayerPainter& rpPainter)
     }
     else
     {
-        DBG_ASSERT(false,"LayeredDevice::RemovePainter called for painter that is not registered");
+        SAL_WARN("sd", "LayeredDevice::RemovePainter called for painter that is not registered");
     }
 }
 

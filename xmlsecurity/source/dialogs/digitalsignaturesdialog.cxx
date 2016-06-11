@@ -450,7 +450,7 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
                 //in the digital signature dialog.
                 //Comparing the X509IssuerName with the one from the X509Certificate in order
                 //to find out if the X509IssuerName was modified does not work. See #i62684
-                DBG_ASSERT(false, "Could not find embedded certificate!");
+                SAL_WARN( "xmlsecurity", "Could not find embedded certificate!");
             }
 
             //In case there is no embedded certificate we try to get it from a local store
