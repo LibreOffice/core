@@ -4220,7 +4220,7 @@ PPTStyleSheet::PPTStyleSheet( const DffRecordHeader& rSlideHd, SvStream& rIn, Sd
                     }
                 }
                 if ( rIn.Tell() != aTxMasterStyleHd.GetRecEndFilePos() )
-                    DBG_ASSERT(false, "SJ: Falsche Anzahl von Bytes gelesen beim Import der PPT-Formatvorlagen");
+                    SAL_WARN( "filter", "SJ: Falsche Anzahl von Bytes gelesen beim Import der PPT-Formatvorlagen");
             }
 #endif
         }
