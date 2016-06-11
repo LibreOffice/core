@@ -438,7 +438,7 @@ void ViewShellManager::Implementation::ActivateViewShell (ViewShell* pViewShell)
         }
         else
         {
-            DBG_ASSERT(false,
+            SAL_WARN("sd",
                 "ViewShellManager::ActivateViewShell: "
                 "new view shell has no active window");
         }
@@ -1132,7 +1132,7 @@ void ViewShellManager::Implementation::Shutdown()
             }
             else
             {
-                DBG_ASSERT(false,
+                SAL_WARN("sd",
                     "ViewShellManager::Implementation::Shutdown(): empty active shell descriptor");
                 maActiveViewShells.pop_front();
             }
