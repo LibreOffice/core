@@ -154,6 +154,7 @@ public:
     void testMathObject();
     void testMathObjectPPT2010();
     void testTdf80224();
+    void testPresetShapesExport();
     void testTdf92527();
     void testTdf99224();
 
@@ -201,6 +202,7 @@ public:
     CPPUNIT_TEST(testTdf80224);
 
     CPPUNIT_TEST(testExportTransitionsPPTX);
+    CPPUNIT_TEST(testPresetShapesExport);
     CPPUNIT_TEST(testTdf92527);
     CPPUNIT_TEST(testDatetimeFieldNumberFormat);
     CPPUNIT_TEST(testDatetimeFieldNumberFormatPPTX);
@@ -1499,6 +1501,85 @@ void SdExportTest::testExportTransitionsPPTX()
     CPPUNIT_ASSERT(checkTransitionOnPage(xDoc, 74, TransitionType::ZOOM, TransitionSubType::ROTATEIN));
 
     xDocShRef->DoClose();
+}
+
+void SdExportTest::testPresetShapesExport()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/odp/preset-shapes-export.odp"), ODP);
+    const sal_Char *sShapeTypeAndValues[] =
+    {
+        "wedgeEllipseCallout",
+        "adj1","val 45310",
+        "adj2","val 97194",
+        "wedgeRoundRectCallout",
+        "adj1","val 46694",
+        "adj2","val 129726",
+        "adj3","val 16667",
+        "wedgeRectCallout",
+        "adj1","val 40037",
+        "adj2","val 111694",
+        "smileyFace",
+        "adj","val -9282",
+        "can",
+        "adj","val 50000",
+        "frame",
+        "adj1","val 10490",
+        "donut",
+        "adj","val 9601",
+        "noSmoking",
+        "adj","val 16118",
+        "bevel",
+        "adj","val 42587",
+        "foldedCorner",
+        "adj","val 10750",
+        "verticalScroll",
+        "adj","val 25000",
+        "horizontalScroll",
+        "adj","val 25000",
+        "cube",
+        "adj","val 85129",
+        "bracketPair",
+        "adj","val 50000",
+        "sun",
+        "adj","val 12500",
+        "bracePair",
+        "adj","val 25000",
+        "cloudCallout",
+        "adj1","val 77611",
+        "adj2","val -47819",
+        "borderCallout1",
+        "adj1","val 18750",
+        "adj2","val -8333",
+        "adj3","val 170013",
+        "adj4","val 143972",
+        "borderCallout2",
+        "adj1","val 18750",
+        "adj2","val -8333",
+        "adj3","val 113768",
+        "adj4","val -81930",
+        "adj5","val -22374",
+        "adj6","val -134550",
+    };
+
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload( xDocShRef, PPTX, &tempFile );
+
+    xmlDocPtr pXmlDocCT = parseExport(tempFile, "ppt/slides/slide1.xml");
+    const OString sPattern( "/p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:prstGeom[@prst='_T_']/a:avLst/a:gd[_N_]" );
+    const OString sT( "_T_" );
+    const OString sN( "_N_" );
+    const OString sPropertyName("name");
+    const OString sPropertyFmla("fmla");
+
+    size_t i = 0;
+    while(i < SAL_N_ELEMENTS( sShapeTypeAndValues )) {
+        OString sType = OString( sShapeTypeAndValues[ i++ ] );
+        for ( size_t j = 1 ; i < SAL_N_ELEMENTS( sShapeTypeAndValues ) && OString(sShapeTypeAndValues[i]).startsWith("adj") ; ++j ) {
+            OString sXPath= sPattern.replaceFirst( sT, sType).replaceFirst( sN, OString::number(j) );
+            assertXPath(pXmlDocCT, sXPath, sPropertyName , OUString::createFromAscii(sShapeTypeAndValues[ i++ ]) );
+            assertXPath(pXmlDocCT, sXPath, sPropertyFmla , OUString::createFromAscii(sShapeTypeAndValues[ i++ ]) );
+        }
+    }
 }
 
 void SdExportTest::testTdf92527()

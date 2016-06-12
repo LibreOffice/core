@@ -201,6 +201,7 @@ public:
     void WriteRun( const css::uno::Reference< css::text::XTextRange >& rRun );
     void WriteRunProperties( const css::uno::Reference< css::beans::XPropertySet >& rRun, bool bIsField, sal_Int32 nElement = XML_rPr ,bool bCheckDirect = true);
 
+    void WritePresetShape( const char* pShape , std::vector< std::pair<sal_Int32,sal_Int32>> & rAvList );
     void WritePresetShape( const char* pShape );
     void WritePresetShape( const char* pShape, MSO_SPT eShapeType, bool bPredefinedHandlesUsed, sal_Int32 nAdjustmentsWhichNeedsToBeConverted, const css::beans::PropertyValue& rProp );
     void WriteCustomGeometry( const css::uno::Reference<css::drawing::XShape>& rXShape );

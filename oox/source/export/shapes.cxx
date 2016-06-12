@@ -550,6 +550,9 @@ static bool lcl_IsOnBlacklist(OUString& rShapeType)
         OUStringLiteral("col-60da8460"),
         OUStringLiteral("col-502ad400"),
         OUStringLiteral("quad-bevel"),
+        OUStringLiteral("round-rectangular-callout"),
+        OUStringLiteral("rectangular-callout"),
+        OUStringLiteral("round-callout"),
         OUStringLiteral("cloud-callout"),
         OUStringLiteral("line-callout-1"),
         OUStringLiteral("line-callout-2"),
@@ -607,6 +610,90 @@ static bool lcl_IsOnWhitelist(OUString& rShapeType)
     return std::find(vWhitelist.begin(), vWhitelist.end(), rShapeType) != vWhitelist.end();
 }
 
+bool lcl_GetHandlePosition( sal_Int32 &nValue, const EnhancedCustomShapeParameter &rParam, Sequence< EnhancedCustomShapeAdjustmentValue > &rSeq)
+{
+    bool bAdj = false;
+    if ( rParam.Value.getValueTypeClass() == TypeClass_DOUBLE )
+    {
+        double fValue(0.0);
+        if ( rParam.Value >>= fValue )
+            nValue = (sal_Int32)fValue;
+    }
+    else
+        rParam.Value >>= nValue;
+
+    if ( rParam.Type == EnhancedCustomShapeParameterType::ADJUSTMENT)
+    {
+        bAdj = true;
+        sal_Int32 nIdx = nValue;
+        if ( nIdx < rSeq.getLength() )
+        {
+            if ( rSeq[ nIdx ] .Value.getValueTypeClass() == TypeClass_DOUBLE )
+            {
+                double fValue(0.0);
+                rSeq[ nIdx ].Value >>= fValue;
+                nValue = fValue;
+
+            }
+            else
+            {
+                rSeq[ nIdx ].Value >>= nValue;
+            }
+        }
+    }
+    return bAdj;
+}
+
+void lcl_AnalyzeHandles( const uno::Sequence<beans::PropertyValues> & rHandles,
+        std::vector< std::pair< sal_Int32, sal_Int32> > &rHandlePositionList,
+        Sequence< EnhancedCustomShapeAdjustmentValue > &rSeq)
+{
+    sal_uInt16 k, j;
+    sal_uInt16 nHandles = rHandles.getLength();
+    for ( k = 0; k < nHandles ; k++ )
+    {
+        const OUString sSwitched( "Switched"  );
+        const OUString sPosition( "Position"  );
+        const OUString sPolar   ( "Polar"  );
+        sal_Int32 nXPosition = 0;
+        sal_Int32 nYPosition = 0;
+        bool bSwitched = false;
+        bool bPolar = false;
+        bool bPosition = false;
+        EnhancedCustomShapeParameterPair aPosition;
+        EnhancedCustomShapeParameterPair aPolar;
+        const Sequence< PropertyValue >& rPropSeq = rHandles[ k ];
+        for ( j = 0; j < rPropSeq.getLength(); j++ )
+        {
+            const PropertyValue& rPropVal = rPropSeq[ j ];
+            if ( rPropVal.Name.equals( sPosition ) )
+            {
+                if ( rPropVal.Value >>= aPosition )
+                    bPosition = true;
+            }
+            else if ( rPropVal.Name.equals( sSwitched ) )
+            {
+                rPropVal.Value >>= bSwitched ;
+            }
+            else if ( rPropVal.Name.equals( sPolar ) )
+            {
+                if ( rPropVal.Value >>= aPolar )
+                    bPolar = true;
+            }
+        }
+        if ( bPosition )
+        {
+            lcl_GetHandlePosition( nXPosition, aPosition.First , rSeq );
+            lcl_GetHandlePosition( nYPosition, aPosition.Second, rSeq );
+            rHandlePositionList.push_back( std::pair<sal_Int32, sal_Int32> ( nXPosition, nYPosition ) );
+        }
+    }
+}
+
+void lcl_AppendAdjustmentValue( std::vector< std::pair< sal_Int32, sal_Int32> > &rAvList, sal_Int32 nAdjIdx, sal_Int32 nValue )
+{
+    rAvList.push_back( std::pair<sal_Int32, sal_Int32> ( nAdjIdx , nValue ) );
+}
 
 ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
 {
@@ -615,6 +702,7 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
     Reference< XPropertySet > rXPropSet( xShape, UNO_QUERY );
     bool bPredefinedHandlesUsed = true;
     bool bHasHandles = false;
+
     OUString sShapeType;
     sal_uInt32 nMirrorFlags = 0;
     MSO_SPT eShapeType = EscherPropertyContainer::GetCustomShapeType( xShape, nMirrorFlags, sShapeType );
@@ -624,6 +712,8 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
     SAL_INFO("oox.shape", "custom shape type: " << sShapeType << " ==> " << sPresetShape);
     Sequence< PropertyValue > aGeometrySeq;
     sal_Int32 nAdjustmentValuesIndex = -1;
+    awt::Rectangle aViewBox;
+    uno::Sequence<beans::PropertyValues> aHandles;
 
     bool bFlipH = false;
     bool bFlipV = false;
@@ -646,7 +736,6 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
                     nAdjustmentValuesIndex = i;
                 else if ( rProp.Name == "Handles" )
                 {
-                    uno::Sequence<beans::PropertyValues> aHandles;
                     rProp.Value >>= aHandles;
                     if ( aHandles.getLength() )
                         bHasHandles = true;
@@ -658,6 +747,8 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
                 {
                     rProp.Value >>= m_presetWarp;
                 }
+                else if ( rProp.Name == "ViewBox" )
+                    rProp.Value >>= aViewBox;
             }
         }
     }
@@ -716,6 +807,7 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
     // but our WritePolyPolygon()/WriteCustomGeometry() functions are incomplete, therefore we use a blacklist
     // we use a whitelist for shapes where mapping to MSO preset shape is not optimal
     bool bCustGeom = true;
+    bool bOnBlacklist = false;
     if( sShapeType == "ooxml-non-primitive" )
         bCustGeom = true;
     else if( sShapeType.startsWith("ooxml") )
@@ -723,7 +815,10 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
     else if( lcl_IsOnWhitelist(sShapeType) )
         bCustGeom = true;
     else if( lcl_IsOnBlacklist(sShapeType) )
+    {
         bCustGeom = false;
+        bOnBlacklist = true;
+    }
     else if( bHasHandles )
         bCustGeom = true;
 
@@ -745,6 +840,130 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
     {
         WriteShapeTransformation( xShape, XML_a, bFlipH, bFlipV );
         WriteCustomGeometry( xShape );
+    }
+    else if (bOnBlacklist && bHasHandles && nAdjustmentValuesIndex !=-1 )
+    {
+        WriteShapeTransformation( xShape, XML_a, bFlipH, bFlipV );
+        Sequence< EnhancedCustomShapeAdjustmentValue > aAdjustmentSeq;
+        std::vector< std::pair< sal_Int32, sal_Int32> > aHandlePositionList;
+        std::vector< std::pair< sal_Int32, sal_Int32> > aAvList;
+        aGeometrySeq[ nAdjustmentValuesIndex ].Value >>= aAdjustmentSeq ;
+
+        lcl_AnalyzeHandles( aHandles, aHandlePositionList, aAdjustmentSeq );
+
+        sal_Int32 nXPosition = 0;
+        sal_Int32 nYPosition = 0;
+        if ( !aHandlePositionList.empty() )
+        {
+            nXPosition = aHandlePositionList[0].first ;
+            nYPosition = aHandlePositionList[0].second ;
+        }
+        switch( eShapeType )
+        {
+            case mso_sptBorderCallout1:
+            {
+                sal_Int32 adj3 =  (float(nYPosition)/aViewBox.Height - 0.0 ) *100000;
+                sal_Int32 adj4 =  (float(nXPosition)/aViewBox.Width - 0.0) *100000;
+                lcl_AppendAdjustmentValue( aAvList, 1, 18750 );
+                lcl_AppendAdjustmentValue( aAvList, 2, -8333 );
+                lcl_AppendAdjustmentValue( aAvList, 3, adj3 );
+                lcl_AppendAdjustmentValue( aAvList, 4, adj4 );
+                break;
+            }
+            case mso_sptBorderCallout2:
+            {
+                sal_Int32 adj5 =  (float(nYPosition)/aViewBox.Height - 0.0 ) *100000;
+                sal_Int32 adj6 =  (float(nXPosition)/aViewBox.Width - 0.0) *100000;
+                sal_Int32 adj3 =  18750;
+                sal_Int32 adj4 =  -16667;
+                lcl_AppendAdjustmentValue( aAvList, 1, 18750 );
+                lcl_AppendAdjustmentValue( aAvList, 2, -8333 );
+                if ( aHandlePositionList.size() > 1 )
+                {
+                    nXPosition = aHandlePositionList[1].first ;
+                    nYPosition = aHandlePositionList[1].second ;
+                    adj3 =  (float(nYPosition)/aViewBox.Height - 0.0) *100000;
+                    adj4 =  (float(nXPosition)/aViewBox.Width - 0.0) *100000;
+                }
+                lcl_AppendAdjustmentValue( aAvList, 3, adj3 );
+                lcl_AppendAdjustmentValue( aAvList, 4, adj4 );
+                lcl_AppendAdjustmentValue( aAvList, 5, adj5 );
+                lcl_AppendAdjustmentValue( aAvList, 6, adj6 );
+                break;
+            }
+            case mso_sptWedgeRectCallout:
+            case mso_sptWedgeRRectCallout:
+            case mso_sptWedgeEllipseCallout:
+            case mso_sptCloudCallout:
+            {
+                sal_Int32 adj1 =  (float(nXPosition)/aViewBox.Width -0.5) *100000;
+                sal_Int32 adj2 =  (float(nYPosition)/aViewBox.Height -0.5) *100000;
+                lcl_AppendAdjustmentValue( aAvList, 1, adj1 );
+                lcl_AppendAdjustmentValue( aAvList, 2, adj2 );
+                if ( eShapeType == mso_sptWedgeRRectCallout)
+                {
+                    lcl_AppendAdjustmentValue( aAvList, 3, 16667);
+                }
+
+                break;
+            }
+            case mso_sptFoldedCorner:
+            {
+                sal_Int32 adj =  float( aViewBox.Width - nXPosition) / std::min( aViewBox.Width,aViewBox.Height ) * 100000;
+                lcl_AppendAdjustmentValue( aAvList, 0, adj );
+                break;
+            }
+            case mso_sptNoSmoking:
+            {
+                sal_Int32 adj =  float( nXPosition )/7200 *50000 ;
+                lcl_AppendAdjustmentValue( aAvList, 0, adj );
+                break;
+            }
+            case mso_sptDonut:
+            case mso_sptSun:
+            case mso_sptMoon:
+            case mso_sptHorizontalScroll:
+            case mso_sptBevel:
+            case mso_sptBracketPair:
+            {
+                sal_Int32 adj =  float( nXPosition )/aViewBox.Width*100000 ;
+                lcl_AppendAdjustmentValue( aAvList, 0, adj );
+                break;
+            }
+            case mso_sptCan:
+            case mso_sptCube:
+            case mso_sptBracePair:
+            {
+                sal_Int32 adj =  float( nYPosition )/aViewBox.Height *100000 ;
+                lcl_AppendAdjustmentValue( aAvList, 0, adj );
+                break;
+            }
+            case mso_sptVerticalScroll:
+            {
+                sal_Int32 adj =  float( nYPosition )/aViewBox.Height *100000 ;
+                lcl_AppendAdjustmentValue( aAvList, 0, adj );
+                break;
+            }
+            case mso_sptSmileyFace:
+            {
+                sal_Int32 adj =  float( nYPosition )/aViewBox.Height *100000 - 76458.0;
+                lcl_AppendAdjustmentValue( aAvList, 0, adj );
+                break;
+            }
+            // case mso_sptNil:
+            // case mso_sptBentConnector3:
+            // case mso_sptBorderCallout3:
+            default:
+            {
+                if (!strcmp( sPresetShape, "frame" ))
+                {
+                    sal_Int32 adj1 =  float( nYPosition )/aViewBox.Height *100000 ;
+                    lcl_AppendAdjustmentValue( aAvList, 1, adj1 );
+                }
+                break;
+            }
+        }
+        WritePresetShape( sPresetShape  , aAvList );
     }
     else // preset geometry
     {
