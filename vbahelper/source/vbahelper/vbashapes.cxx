@@ -22,7 +22,12 @@
 #include <ooo/vba/msforms/XShapeRange.hpp>
 #include <ooo/vba/office/MsoAutoShapeType.hpp>
 #include <ooo/vba/office/MsoTextOrientation.hpp>
+#include <com/sun/star/awt/Point.hpp>
+#include <com/sun/star/awt/Size.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/script/XTypeConverter.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextContent.hpp>
@@ -33,6 +38,9 @@
 #include <com/sun/star/text/SizeType.hpp>
 #include <com/sun/star/text/WritingMode.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
+#include <com/sun/star/drawing/XDrawPage.hpp>
+#include <com/sun/star/drawing/XShape.hpp>
+#include <com/sun/star/drawing/XShapes.hpp>
 
 #include <vbahelper/vbahelper.hxx>
 #include <vbahelper/vbashape.hxx>

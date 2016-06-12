@@ -18,7 +18,9 @@
  */
 #include <vbahelper/helperdecl.hxx>
 #include <com/sun/star/drawing/TextFitToSizeType.hpp>
+#include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/text/XText.hpp>
+#include <sfx2/objsh.hxx>
 #include "vbatextframe.hxx"
 #include "vbacharacters.hxx"
 

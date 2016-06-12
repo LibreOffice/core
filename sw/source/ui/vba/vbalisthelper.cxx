@@ -19,6 +19,8 @@
 #include "vbalisthelper.hxx"
 #include <tools/diagnose_ex.h>
 #include <ooo/vba/word/WdListGalleryType.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>

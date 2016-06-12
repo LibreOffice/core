@@ -20,6 +20,7 @@
 #include "vbaformatconditions.hxx"
 #include "unonames.hxx"
 #include <ooo/vba/excel/XlFormatConditionType.hpp>
+#include <basic/sberrors.hxx>
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;

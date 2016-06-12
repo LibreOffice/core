@@ -18,9 +18,11 @@
  */
 #include "vbarange.hxx"
 #include <vbahelper/vbahelper.hxx>
+#include <basic/sberrors.hxx>
 #include <tools/diagnose_ex.h>
 #include "vbarangehelper.hxx"
 #include <ooo/vba/word/WdBreakType.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/style/BreakType.hpp>
 #include <com/sun/star/text/ControlCharacter.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>

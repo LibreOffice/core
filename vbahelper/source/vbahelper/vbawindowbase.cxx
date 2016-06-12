@@ -20,6 +20,10 @@
 #include "vbahelper/vbawindowbase.hxx"
 #include "vbahelper/helperdecl.hxx"
 #include <com/sun/star/awt/PosSize.hpp>
+#include <com/sun/star/awt/XWindow.hpp>
+#include <com/sun/star/awt/XWindow2.hpp>
+#include <com/sun/star/frame/XFrame.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;

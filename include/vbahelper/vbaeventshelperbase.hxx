@@ -21,19 +21,35 @@
 #define INCLUDED_VBAHELPER_VBAEVENTSHELPERBASE_HXX
 
 #include <deque>
+#include <exception>
 #include <map>
 #include <unordered_map>
+
 #include <com/sun/star/document/XEventListener.hpp>
+#include <com/sun/star/lang/EventObject.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/script/vba/XVBAEventProcessor.hpp>
+#include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/RuntimeException.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/util/VetoException.hpp>
 #include <com/sun/star/util/XChangesListener.hpp>
 #include <cppuhelper/implbase.hxx>
-#include <vbahelper/vbahelper.hxx>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
+#include <vbahelper/vbadllapi.h>
 
 namespace com { namespace sun { namespace star {
+    namespace document { struct EventObject; }
+    namespace frame { class XModel; }
     namespace script { namespace vba { class XVBAModuleInfo; } }
     namespace uno { class XComponentContext; }
+    namespace util { struct ChangesEvent; }
 } } }
 
+class SfxObjectShell;
 
 typedef ::cppu::WeakImplHelper<
     css::script::vba::XVBAEventProcessor,

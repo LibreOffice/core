@@ -28,7 +28,9 @@
 #include <comphelper/string.hxx>
 #include <ooo/vba/word/WdFieldType.hpp>
 #include <swtypes.hxx>
+#include <basic/sberrors.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <osl/diagnose.h>
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;

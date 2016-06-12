@@ -19,7 +19,9 @@
 #include "vbawrapformat.hxx"
 #include <ooo/vba/word/WdWrapSideType.hpp>
 #include <ooo/vba/word/WdWrapType.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
+#include <basic/sberrors.hxx>
 #include <vbahelper/vbahelper.hxx>
 #include <vbahelper/helperdecl.hxx>
 

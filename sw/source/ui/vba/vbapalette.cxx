@@ -20,6 +20,7 @@
 #include "vbapalette.hxx"
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <ooo/vba/word/WdColor.hpp>
 #include <ooo/vba/word/WdColorIndex.hpp>
 #include <sal/macros.h>

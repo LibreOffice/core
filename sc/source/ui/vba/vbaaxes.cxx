@@ -20,6 +20,7 @@
 #include "vbaaxes.hxx"
 #include "vbaaxis.hxx"
 #include "vbachart.hxx"
+#include <basic/sberrors.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <ooo/vba/excel/XlAxisType.hpp>
 #include <ooo/vba/excel/XlAxisGroup.hpp>

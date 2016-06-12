@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include "vbapagesetup.hxx"
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/XPageCursor.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>

@@ -35,6 +35,7 @@
 
 #include <filter/msfilter/msvbahelper.hxx>
 #include <tools/datetime.hxx>
+#include <vcl/timer.hxx>
 
 #include <basic/sbx.hxx>
 #include <basic/sbstar.hxx>

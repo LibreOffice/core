@@ -18,6 +18,7 @@
  */
 
 #include "vbastyle.hxx"
+#include <basic/sberrors.hxx>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 
 using namespace ::ooo::vba;

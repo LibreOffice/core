@@ -37,6 +37,7 @@
 #include <unotools/eventcfg.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
+#include <vbahelper/vbaaccesshelper.hxx>
 
 #include "cellsuno.hxx"
 #include "convuno.hxx"

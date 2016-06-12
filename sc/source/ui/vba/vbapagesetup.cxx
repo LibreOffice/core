@@ -30,6 +30,7 @@
 #include <ooo/vba/excel/XlPageOrientation.hpp>
 #include <ooo/vba/excel/XlOrder.hpp>
 #include <ooo/vba/excel/Constants.hpp>
+#include <basic/sberrors.hxx>
 #include <i18nutil/paper.hxx>
 #include <sal/macros.h>
 #include <algorithm>

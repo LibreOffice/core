@@ -18,6 +18,7 @@
  */
 #include "vbacommandbarcontrols.hxx"
 #include "vbacommandbarcontrol.hxx"
+#include <com/sun/star/lang/XSingleComponentFactory.hpp>
 
 using namespace com::sun::star;
 using namespace ooo::vba;

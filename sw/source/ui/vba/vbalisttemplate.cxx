@@ -20,6 +20,7 @@
 #include <vbahelper/vbahelper.hxx>
 #include <tools/diagnose_ex.h>
 #include "vbalistlevels.hxx"
+#include <com/sun/star/beans/XPropertySet.hpp>
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;

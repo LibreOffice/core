@@ -19,11 +19,30 @@
 #ifndef INCLUDED_VBAHELPER_VBAAPPLICATIONBASE_HXX
 #define INCLUDED_VBAHELPER_VBAAPPLICATIONBASE_HXX
 
-#include <ooo/vba/XHelperInterface.hpp>
-#include <ooo/vba/XApplicationBase.hpp>
-#include <vbahelper/vbahelperinterface.hxx>
-#include <sfx2/objsh.hxx>
+#include <exception>
 #include <memory>
+
+#include <com/sun/star/script/BasicErrorException.hpp>
+#include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/RuntimeException.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
+#include <ooo/vba/XApplicationBase.hpp>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
+#include <vbahelper/vbadllapi.h>
+#include <vbahelper/vbahelper.hxx>
+#include <vbahelper/vbahelperinterface.hxx>
+
+namespace com { namespace sun { namespace star {
+    namespace frame { class XModel; }
+    namespace uno { class XComponentContext; }
+} } }
+
+namespace ooo { namespace vba {
+    class XApplicationBase;
+    class XHelperInterface;
+} }
 
 typedef InheritedHelperInterfaceWeakImpl< ov::XApplicationBase > ApplicationBase_BASE;
 

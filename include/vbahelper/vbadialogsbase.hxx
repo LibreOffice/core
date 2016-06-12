@@ -19,10 +19,26 @@
 #ifndef INCLUDED_VBAHELPER_VBADIALOGSBASE_HXX
 #define INCLUDED_VBAHELPER_VBADIALOGSBASE_HXX
 
-#include <ooo/vba/XHelperInterface.hpp>
+#include <exception>
+
+#include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/RuntimeException.hpp>
 #include <ooo/vba/XDialogsBase.hpp>
+#include <sal/types.h>
+#include <vbahelper/vbadllapi.h>
+#include <vbahelper/vbahelper.hxx>
 #include <vbahelper/vbahelperinterface.hxx>
-#include <com/sun/star/frame/XModel.hpp>
+
+namespace com { namespace sun { namespace star {
+    namespace frame { class XModel; }
+    namespace uno { class XComponentContext; }
+} } }
+
+namespace ooo { namespace vba {
+    class XDialogsBase;
+    class XHelperInterface;
+} }
 
 typedef InheritedHelperInterfaceWeakImpl< ov::XDialogsBase > VbaDialogsBase_BASE;
 

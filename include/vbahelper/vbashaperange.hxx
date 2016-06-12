@@ -19,12 +19,35 @@
 #ifndef INCLUDED_VBAHELPER_VBASHAPERANGE_HXX
 #define INCLUDED_VBAHELPER_VBASHAPERANGE_HXX
 
-#include <com/sun/star/drawing/XShapes.hpp>
+#include <exception>
+
+#include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/RuntimeException.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/uno/Type.hxx>
 #include <ooo/vba/msforms/XShapeRange.hpp>
-#include <com/sun/star/drawing/XDrawPage.hpp>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
 #include <vbahelper/vbacollectionimpl.hxx>
-#include <ooo/vba/msforms/XLineFormat.hpp>
-#include <ooo/vba/msforms/XFillFormat.hpp>
+#include <vbahelper/vbadllapi.h>
+#include <vbahelper/vbahelper.hxx>
+
+namespace com { namespace sun { namespace star {
+    namespace container { class XEnumeration; }
+    namespace container { class XIndexAccess; }
+    namespace drawing { class XDrawPage; }
+    namespace drawing { class XShapes; }
+    namespace frame { class XModel; }
+    namespace uno { class XComponentContext; }
+} } }
+
+namespace ooo { namespace vba {
+    class XHelperInterface;
+    namespace msforms { class XFillFormat; }
+    namespace msforms { class XLineFormat; }
+    namespace msforms { class XShape; }
+} }
 
 typedef CollTestImplHelper< ov::msforms::XShapeRange > ScVbaShapeRange_BASE;
 

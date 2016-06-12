@@ -30,6 +30,7 @@
 #include <com/sun/star/text/WritingMode.hpp>
 #include <com/sun/star/util/CellProtection.hpp>
 
+#include <basic/sberrors.hxx>
 #include <rtl/math.hxx>
 
 #include "excelvbahelper.hxx"

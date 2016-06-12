@@ -20,19 +20,41 @@
 #ifndef INCLUDED_VBAHELPER_VBACOLLECTIONIMPL_HXX
 #define INCLUDED_VBAHELPER_VBACOLLECTIONIMPL_HXX
 
+#include <exception>
+#include <vector>
+
+#include <com/sun/star/container/NoSuchElementException.hpp>
+#include <com/sun/star/container/XEnumeration.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
+#include <com/sun/star/lang/WrappedTargetException.hpp>
+#include <com/sun/star/script/BasicErrorException.hpp>
+#include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/RuntimeException.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/uno/Type.hxx>
+#include <com/sun/star/uno/TypeClass.hpp>
+#include <cppu/unotype.hxx>
+#include <cppuhelper/implbase.hxx>
+#include <cppuhelper/weakref.hxx>
 #include <ooo/vba/XCollection.hpp>
-#include <com/sun/star/container/XEnumerationAccess.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/script/XDefaultMethod.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNamed.hpp>
-
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
+#include <vbahelper/vbadllapi.h>
 #include <vbahelper/vbahelper.hxx>
 #include <vbahelper/vbahelperinterface.hxx>
 
-#include <vector>
+namespace com { namespace sun { namespace star {
+    namespace container { class XEnumerationAccess; }
+    namespace uno { class XComponentContext; }
+} } }
 
+namespace ooo { namespace vba {
+    class XHelperInterface;
+} }
 
 typedef ::cppu::WeakImplHelper< css::container::XEnumeration > EnumerationHelper_BASE;
 

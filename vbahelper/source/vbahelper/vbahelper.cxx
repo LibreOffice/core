@@ -33,9 +33,11 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/theIntrospection.hpp>
 #include <com/sun/star/util/MeasureUnit.hpp>
+#include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/awt/XDialog.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
+#include <com/sun/star/drawing/XShape.hpp>
 
 #include <ooo/vba/msforms/XShape.hpp>
 

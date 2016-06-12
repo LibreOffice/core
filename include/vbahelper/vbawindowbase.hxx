@@ -20,10 +20,31 @@
 #ifndef INCLUDED_VBAHELPER_VBAWINDOWBASE_HXX
 #define INCLUDED_VBAHELPER_VBAWINDOWBASE_HXX
 
+#include <exception>
+
+#include <cppuhelper/weakref.hxx>
+#include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/RuntimeException.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
 #include <ooo/vba/XWindowBase.hpp>
-#include <com/sun/star/awt/XWindow2.hpp>
-#include <com/sun/star/frame/XController.hpp>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
+#include <vbahelper/vbadllapi.h>
+#include <vbahelper/vbahelper.hxx>
 #include <vbahelper/vbahelperinterface.hxx>
+
+namespace com { namespace sun { namespace star {
+    namespace awt { class XWindow2; }
+    namespace awt { class XWindow; }
+    namespace frame { class XController; }
+    namespace frame { class XModel; }
+    namespace uno { class XComponentContext; }
+} } }
+
+namespace ooo { namespace vba {
+    class XHelperInterface;
+} }
 
 typedef InheritedHelperInterfaceWeakImpl< ov::XWindowBase > WindowBaseImpl_BASE;
 

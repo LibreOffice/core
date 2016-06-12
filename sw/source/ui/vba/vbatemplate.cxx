@@ -24,6 +24,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <tools/urlobj.hxx>
+#include <rtl/character.hxx>
 #include <osl/file.hxx>
 
 using namespace ::ooo::vba;

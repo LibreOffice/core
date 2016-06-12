@@ -29,6 +29,7 @@
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/table/XCell.hpp>
 #include <com/sun/star/text/XText.hpp>
+#include <ooo/vba/office/MsoShapeType.hpp>
 
 #include <vbahelper/vbashape.hxx>
 #include "vbaglobals.hxx"

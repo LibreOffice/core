@@ -20,6 +20,7 @@
 #include <vbalistcontrolhelper.hxx>
 #include <vector>
 #include <vbahelper/vbapropvalue.hxx>
+#include <com/sun/star/beans/XPropertySet.hpp>
 
 using namespace com::sun::star;
 using namespace ooo::vba;

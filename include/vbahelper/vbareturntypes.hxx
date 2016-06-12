@@ -19,15 +19,13 @@
 #ifndef INCLUDED_VBAHELPER_VBARETURNTYPES_HXX
 #define INCLUDED_VBAHELPER_VBARETURNTYPES_HXX
 
-#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/script/XDefaultProperty.hpp>
+#include <com/sun/star/uno/RuntimeException.hpp>
+#include <cppuhelper/implbase.hxx>
 #include <ooo/vba/msforms/XReturnInteger.hpp>
-#include <ooo/vba/msforms/XReturnBoolean.hpp>
-#include <ooo/vba/msforms/XReturnSingle.hpp>
-#include <ooo/vba/msforms/XReturnEffect.hpp>
-
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
 #include <vbahelper/vbahelper.hxx>
-#include <vbahelper/vbahelperinterface.hxx>
 
 namespace ooo
 {

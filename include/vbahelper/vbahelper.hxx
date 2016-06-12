@@ -19,25 +19,38 @@
 #ifndef INCLUDED_VBAHELPER_VBAHELPER_HXX
 #define INCLUDED_VBAHELPER_VBAHELPER_HXX
 
-#include <com/sun/star/drawing/XShape.hpp>
-#include <com/sun/star/beans/XIntrospectionAccess.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/script/BasicErrorException.hpp>
-#include <com/sun/star/script/XTypeConverter.hpp>
-#include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <com/sun/star/awt/XControl.hpp>
-#include <com/sun/star/awt/XDevice.hpp>
-#include <com/sun/star/awt/XUnitConversion.hpp>
-#include <basic/basmgr.hxx>
-#include <basic/sberrors.hxx>
-#include <com/sun/star/frame/XModel.hpp>
-#include <sfx2/dispatch.hxx>
-#include <sfx2/objsh.hxx>
-#include <sfx2/docfilt.hxx>
-#include <sfx2/docfile.hxx>
-#include <vcl/pointr.hxx>
 #include <memory>
-#include <vbahelper/vbaaccesshelper.hxx>
+
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <com/sun/star/script/BasicErrorException.hpp>
+#include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/RuntimeException.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
+#include <vbahelper/vbadllapi.h>
+#include <vcl/pointr.hxx>
+#include <vcl/ptrstyle.hxx>
+
+namespace com { namespace sun { namespace star {
+    namespace awt { class XControl; }
+    namespace awt { class XDevice; }
+    namespace awt { class XUnitConversion; }
+    namespace awt { class XWindow; }
+    namespace beans { class XIntrospectionAccess; }
+    namespace beans { class XPropertySet; }
+    namespace beans { struct PropertyValue; }
+    namespace drawing { class XShape; }
+    namespace frame { class XModel; }
+    namespace script { class XTypeConverter; }
+    namespace uno { class Exception; }
+    namespace uno { class XComponentContext; }
+} } }
+
+class SfxObjectShell;
+class SfxViewFrame;
+class SfxViewShell;
 
 namespace ooo
 {
@@ -147,10 +160,6 @@ public:
     virtual double getOffsetX() const { return 0.0; }
     virtual double getOffsetY() const { return 0.0; }
 };
-
-namespace msforms {
-    class XShape;
-}
 
 class VBAHELPER_DLLPUBLIC ShapeHelper
 {

@@ -21,7 +21,6 @@
 #define INCLUDED_VBAHELPER_HELPERDECL_HXX
 
 #include <comphelper/servicedecl.hxx>
-#include <ooo/vba/XHelperInterface.hpp>
 
 namespace comphelper {
 namespace service_decl {

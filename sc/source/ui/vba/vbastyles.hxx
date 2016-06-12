@@ -20,6 +20,7 @@
 #define INCLUDED_SC_SOURCE_UI_VBA_VBASTYLES_HXX
 #include <ooo/vba/excel/XStyles.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <vbahelper/vbacollectionimpl.hxx>
 
 typedef CollTestImplHelper< ov::excel::XStyles > ScVbaStyles_BASE;

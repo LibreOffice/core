@@ -19,10 +19,22 @@
 #ifndef INCLUDED_VBAHELPER_VBAHELPERINTERFACE_HXX
 #define INCLUDED_VBAHELPER_VBAHELPERINTERFACE_HXX
 
-#include <cppuhelper/implbase.hxx>
-#include <ooo/vba/XHelperInterface.hpp>
-#include <vbahelper/vbahelper.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/script/BasicErrorException.hpp>
+#include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/RuntimeException.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
+#include <cppuhelper/implbase.hxx>
+#include <cppuhelper/weakref.hxx>
+#include <ooo/vba/XHelperInterface.hpp>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
+#include <vbahelper/vbahelper.hxx>
+
+namespace com { namespace sun { namespace star {
+    namespace uno { class XComponentContext; } }
+} }
 
 // use this class when you have an a object like
 // interface  XAnInterface which contains XHelperInterface in its inheritance hierarchy

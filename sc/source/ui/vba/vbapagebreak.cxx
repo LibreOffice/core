@@ -18,6 +18,7 @@
  */
 #include "vbapagebreak.hxx"
 #include "vbarange.hxx"
+#include <basic/sberrors.hxx>
 #include <ooo/vba/excel/XlPageBreak.hpp>
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;

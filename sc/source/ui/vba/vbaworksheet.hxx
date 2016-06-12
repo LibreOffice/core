@@ -34,6 +34,7 @@
 #include <ooo/vba/excel/XHPageBreaks.hpp>
 #include <ooo/vba/excel/XVPageBreaks.hpp>
 #include <com/sun/star/container/XNamed.hpp>
+#include <rtl/ref.hxx>
 
 #include <vbahelper/vbahelperinterface.hxx>
 #include "address.hxx"

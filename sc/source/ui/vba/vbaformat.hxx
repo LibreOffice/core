@@ -28,6 +28,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
+#include <svl/itemset.hxx>
 #include <vbahelper/vbahelperinterface.hxx>
 
 class ScCellRangesBase;
