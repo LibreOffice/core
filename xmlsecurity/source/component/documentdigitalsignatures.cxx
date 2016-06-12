@@ -224,7 +224,7 @@ bool DocumentDigitalSignatures::ImplViewSignatures(
         nullptr, mxCtx, eMode, bReadOnly, m_sODFVersion,
         m_bHasDocumentSignature);
     bool bInit = aSignaturesDialog->Init();
-    DBG_ASSERT( bInit, "Error initializing security context!" );
+    SAL_WARN_IF( !bInit, "xmlsecurity", "Error initializing security context!" );
     if ( bInit )
     {
         aSignaturesDialog->SetStorage( rxStorage );
@@ -281,7 +281,7 @@ DocumentDigitalSignatures::ImplVerifySignatures(
 
     bool bInit = aSignatureHelper.Init();
 
-    DBG_ASSERT( bInit, "Error initializing security context!" );
+    SAL_WARN_IF( !bInit, "xmlsecurity", "Error initializing security context!" );
 
     if ( !bInit )
         return Sequence< css::security::DocumentSignatureInformation >(0);
@@ -404,7 +404,7 @@ void DocumentDigitalSignatures::showCertificate(
 
     bool bInit = aSignatureHelper.Init();
 
-    DBG_ASSERT( bInit, "Error initializing security context!" );
+    SAL_WARN_IF( !bInit, "xmlsecurity", "Error initializing security context!" );
 
     if ( bInit )
     {

@@ -383,7 +383,7 @@ SignatureStreamHelper DocumentSignatureHelper::OpenSignatureStream(
         catch(css::io::IOException& )
         {
             // Doesn't have to exist...
-            DBG_ASSERT( nOpenMode == css::embed::ElementModes::READ, "Error creating signature stream..." );
+            SAL_WARN_IF( nOpenMode != css::embed::ElementModes::READ, "xmlsecurity", "Error creating signature stream..." );
         }
     }
     else if(xNameAccess->hasByName("[Content_Types].xml"))

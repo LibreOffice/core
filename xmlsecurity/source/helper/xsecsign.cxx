@@ -306,7 +306,7 @@ bool XSecController::WriteSignature(
 {
     bool rc = false;
 
-    DBG_ASSERT( xDocumentHandler.is(), "I really need a document handler!" );
+    SAL_WARN_IF( !xDocumentHandler.is(), "xmlsecurity", "I really need a document handler!" );
 
     /*
      * chain the SAXEventKeeper to the SAX chain
