@@ -303,7 +303,7 @@ bool XMLDropCapPropHdl_Impl::importXML(
            Any&,
         const SvXMLUnitConverter& ) const
 {
-    DBG_ASSERT( false, "drop caps are an element import property" );
+    SAL_WARN( "xmloff", "drop caps are an element import property" );
     return false;
 }
 
@@ -312,7 +312,7 @@ bool XMLDropCapPropHdl_Impl::exportXML(
         const Any&,
         const SvXMLUnitConverter& ) const
 {
-    DBG_ASSERT( false, "drop caps are an element export property" );
+    SAL_WARN( "xmloff", "drop caps are an element export property" );
     return false;
 }
 
@@ -710,7 +710,7 @@ bool XMLTextColumnsPropertyHandler::importXML(
            Any&,
         const SvXMLUnitConverter& ) const
 {
-    DBG_ASSERT( false, "columns are an element import property" );
+    SAL_WARN( "xmloff", "columns are an element import property" );
     return false;
 }
 
@@ -719,7 +719,7 @@ bool XMLTextColumnsPropertyHandler::exportXML(
         const Any&,
         const SvXMLUnitConverter& ) const
 {
-    DBG_ASSERT( false, "columns are an element export property" );
+    SAL_WARN( "xmloff", "columns are an element export property" );
     return false;
 }
 
@@ -760,7 +760,7 @@ bool XMLHoriMirrorPropHdl_Impl::exportXML(
         const Any&,
         const SvXMLUnitConverter& ) const
 {
-    DBG_ASSERT( false, "HorMirror properyt shouldn't be exported" );
+    SAL_WARN( "xmloff", "HorMirror properyt shouldn't be exported" );
 
     return false;
 }

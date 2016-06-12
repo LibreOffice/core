@@ -242,7 +242,7 @@ SbxVariable* SbxObject::Find( const OUString& rName, SbxClassType t )
         case SbxClassType::Property: pArray = pProps;    break;
         case SbxClassType::Method:   pArray = pMethods;  break;
         case SbxClassType::Object:   pArray = pObjs;     break;
-        default: DBG_ASSERT( false, "Invalid SBX-Class" ); break;
+        default: SAL_WARN( "basic", "Invalid SBX-Class" ); break;
         }
         if( pArray )
         {
@@ -338,7 +338,7 @@ SbxArray* SbxObject::FindVar( SbxVariable* pVar, sal_uInt16& nArrayIdx )
     case SbxClassType::Property: pArray = pProps;    break;
     case SbxClassType::Method:   pArray = pMethods;  break;
     case SbxClassType::Object:   pArray = pObjs;     break;
-    default: DBG_ASSERT( false, "Invalid SBX-Class" ); break;
+    default: SAL_WARN( "basic", "Invalid SBX-Class" ); break;
     }
     if( pArray )
     {
@@ -374,7 +374,7 @@ SbxVariable* SbxObject::Make( const OUString& rName, SbxClassType ct, SbxDataTyp
     case SbxClassType::Property: pArray = pProps;    break;
     case SbxClassType::Method:   pArray = pMethods;  break;
     case SbxClassType::Object:   pArray = pObjs;     break;
-    default: DBG_ASSERT( false, "Invalid SBX-Class" ); break;
+    default: SAL_WARN( "basic", "Invalid SBX-Class" ); break;
     }
     if( !pArray )
     {
@@ -487,7 +487,7 @@ void SbxObject::QuickInsert( SbxVariable* pVar )
         case SbxClassType::Property: pArray = pProps;    break;
         case SbxClassType::Method:   pArray = pMethods;  break;
         case SbxClassType::Object:   pArray = pObjs;     break;
-        default: DBG_ASSERT( false, "Invalid SBX-Class" ); break;
+        default: SAL_WARN( "basic", "Invalid SBX-Class" ); break;
         }
     }
     if( pArray )

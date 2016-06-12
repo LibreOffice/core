@@ -183,7 +183,7 @@ void SAL_CALL Svx3DSceneObject::remove( const Reference< drawing::XShape >& xSha
         }
         else
         {
-            DBG_ASSERT( false, "Fatality! SdrObject is not belonging to its SdrObjList! [CL]" );
+            SAL_WARN( "svx", "Fatality! SdrObject is not belonging to its SdrObjList! [CL]" );
         }
     }
 }
