@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_d40cd096",
+        "filename": "svx/sdi/svx.sdi",
+        "patchSetId": 5
+      },
+      "lineNbr": 5308,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2016-06-12T22:35:48Z",
+      "side": 1,
+      "message": "I think it\u0027s better to leave those as FALSE, so it won\u0027t show in the customization dialog - as it\u0027s not supposed to be added to a \"normal\" toolbar (unless you could split those fields even further to one field per control, or at least put them in a row)?",
+      "revId": "24447f9b19c949664f1f16b2f667b1799c61bf93",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_947968ff",
+        "filename": "svx/source/sidebar/paragraph/ParaSpacingWindow.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2016-06-12T22:35:48Z",
+      "side": 1,
+      "message": "There should be also a corresponding \"remove listener\" call in dispose(). (And if you\u0027re going to hold a hard reference to the multiplexer, then you should also clear it in dispose() and also in disposing().)",
+      "revId": "24447f9b19c949664f1f16b2f667b1799c61bf93",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_14271813",
+        "filename": "svx/source/sidebar/paragraph/ParaSpacingWindow.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2016-06-12T22:35:48Z",
+      "side": 1,
+      "message": "Hmm implementing UNO interfaces directly on windows was historically problematic, but I guess it\u0027s fine now due to the similar acquire/release mechanism used because of VclPtr? I guess kendy knows better about it.",
+      "revId": "24447f9b19c949664f1f16b2f667b1799c61bf93",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7fb54a_5421a0fa",
+        "filename": "svx/source/sidebar/paragraph/ParaSpacingWindow.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2016-06-12T22:35:48Z",
+      "side": 1,
+      "message": "queryInterface should be properly implemented. Same for acquire / release (those can be delegated to the base class).",
+      "revId": "24447f9b19c949664f1f16b2f667b1799c61bf93",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
