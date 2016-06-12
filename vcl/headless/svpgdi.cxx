@@ -886,7 +886,7 @@ void SvpSalGraphics::applyColor(cairo_t *cr, SalColor aColor)
         cairo_set_source_rgba(cr, SALCOLOR_RED(aColor)/255.0,
                                   SALCOLOR_GREEN(aColor)/255.0,
                                   SALCOLOR_BLUE(aColor)/255.0,
-                                  1.0);
+                                  SALCOLOR_ALPHA(aColor)/255.0);
     }
     else
     {
@@ -1101,7 +1101,7 @@ void SvpSalGraphics::drawMask( const SalTwoRect& rTR,
 SalBitmap* SvpSalGraphics::getBitmap( long nX, long nY, long nWidth, long nHeight )
 {
     SvpSalBitmap* pBitmap = new SvpSalBitmap();
-    pBitmap->Create(Size(nWidth, nHeight), 32, BitmapPalette());
+    pBitmap->Create(Size(nWidth, nHeight), 24, BitmapPalette());
 
     cairo_surface_t* target = SvpSalGraphics::createCairoSurface(pBitmap->GetBuffer());
     cairo_t* cr = cairo_create(target);
@@ -1125,10 +1125,12 @@ SalColor SvpSalGraphics::getPixel( long nX, long nY )
     unsigned char *surface_data = cairo_image_surface_get_data(m_pSurface);
     unsigned char *row = surface_data + (nStride*nY);
     unsigned char *data = row + (nX * 4);
-    sal_uInt8 b = unpremultiply(data[SVP_CAIRO_BLUE], data[SVP_CAIRO_ALPHA]);
-    sal_uInt8 g = unpremultiply(data[SVP_CAIRO_GREEN], data[SVP_CAIRO_ALPHA]);
-    sal_uInt8 r = unpremultiply(data[SVP_CAIRO_RED], data[SVP_CAIRO_ALPHA]);
-    return MAKE_SALCOLOR(r, g, b);
+    sal_uInt8 alpha = data[SVP_CAIRO_ALPHA];
+    sal_uInt8 b = unpremultiply(data[SVP_CAIRO_BLUE], alpha);
+    sal_uInt8 g = unpremultiply(data[SVP_CAIRO_GREEN], alpha);
+    sal_uInt8 r = unpremultiply(data[SVP_CAIRO_RED], alpha);
+    SalColor aSalColor = MAKE_SALCOLOR_ALPHA(r, g, b, alpha);
+    return aSalColor;
 }
 
 namespace

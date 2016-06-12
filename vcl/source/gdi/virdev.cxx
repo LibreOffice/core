@@ -191,11 +191,11 @@ void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
     }
 
     // virtual devices have white background by default
-    SetBackground( Wallpaper( Color( COL_WHITE ) ) );
+    SetBackground( Wallpaper( Color( COL_TRANSPARENT ) ) );
 
     // #i59283# don't erase user-provided surface
     if( !pData && bErase)
-        Erase();
+        //Erase();
 
     // register VirDev in the list
     mpNext = pSVData->maGDIData.mpFirstVirDev;

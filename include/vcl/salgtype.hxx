@@ -33,11 +33,14 @@ enum class DeviceFormat {
                         };
 
 typedef sal_uInt32 SalColor;
-#define MAKE_SALCOLOR( r, g, b )    ((SalColor)(((sal_uInt32)((sal_uInt8)(b))))|(((sal_uInt32)((sal_uInt8)(g)))<<8)|(((sal_uInt32)((sal_uInt8)(r)))<<16))
+
+#define MAKE_SALCOLOR(r, g, b) MAKE_SALCOLOR_ALPHA(r, g, b, 0xFF)
+#define MAKE_SALCOLOR_ALPHA(r, g, b, a) ((SalColor)(((sal_uInt32)((sal_uInt8)(b))))|(((sal_uInt32)((sal_uInt8)(g)))<<8)|(((sal_uInt32)((sal_uInt8)(r)))<<16)|(((sal_uInt32)((sal_uInt8)(a)))<<24))
+#define SALCOLOR_ALPHA( n )         ((sal_uInt8)((n)>>24))
 #define SALCOLOR_RED( n )           ((sal_uInt8)((n)>>16))
 #define SALCOLOR_GREEN( n )         ((sal_uInt8)(((sal_uInt16)(n)) >> 8))
 #define SALCOLOR_BLUE( n )          ((sal_uInt8)(n))
-#define SALCOLOR_NONE           (~(SalColor)0)
+#define SALCOLOR_NONE           ((SalColor)0)
 
 // must equal to class Point
 struct SalPoint

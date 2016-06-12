@@ -44,9 +44,7 @@ Color OutputDevice::GetPixel( const Point& rPt ) const
             const long nX = ImplLogicXToDevicePixel( rPt.X() );
             const long nY = ImplLogicYToDevicePixel( rPt.Y() );
             const SalColor aSalCol = mpGraphics->GetPixel( nX, nY, this );
-            aColor.SetRed( SALCOLOR_RED( aSalCol ) );
-            aColor.SetGreen( SALCOLOR_GREEN( aSalCol ) );
-            aColor.SetBlue( SALCOLOR_BLUE( aSalCol ) );
+            aColor = ImplSalToColor(aSalCol);
         }
     }
     return aColor;
@@ -91,7 +89,7 @@ void OutputDevice::DrawPixel( const Point& rPt, const Color& rColor )
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaPixelAction( rPt, aColor ) );
 
-    if ( !IsDeviceOutputNecessary() || ImplIsColorTransparent( aColor ) || ImplIsRecordLayout() )
+    if ( !IsDeviceOutputNecessary() || ImplIsRecordLayout() )
         return;
 
     Point aPt = ImplLogicToDevicePixel( rPt );
@@ -105,7 +103,7 @@ void OutputDevice::DrawPixel( const Point& rPt, const Color& rColor )
     if ( mbOutputClipped )
         return;
 
-    mpGraphics->DrawPixel( aPt.X(), aPt.Y(), ImplColorToSal( aColor ), this );
+    mpGraphics->DrawPixel( aPt.X(), aPt.Y(), ImplColorToSalWithAlpha( aColor ), this );
 
     if( mpAlphaVDev )
         mpAlphaVDev->DrawPixel( rPt );

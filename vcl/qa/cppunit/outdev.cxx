@@ -24,11 +24,35 @@ public:
     VclOutdevTest() : BootstrapFixture(true, false) {}
 
     void testVirtualDevice();
+    void testAlphaVirtualDevice();
 
     CPPUNIT_TEST_SUITE(VclOutdevTest);
     CPPUNIT_TEST(testVirtualDevice);
+    CPPUNIT_TEST(testAlphaVirtualDevice);
     CPPUNIT_TEST_SUITE_END();
 };
+
+void VclOutdevTest::testAlphaVirtualDevice()
+{
+    Size aSize(32,32);
+    ScopedVclPtrInstance< VirtualDevice > pVDev;
+    pVDev->SetOutputSizePixel(aSize);
+    pVDev->DrawPixel(Point(1,1), Color(0x00, 0x11, 0x22, 0x33));
+    pVDev->DrawPixel(Point(2,2), Color(0x10, 0xEE, 0xEE, 0xEE));
+    pVDev->DrawPixel(Point(3,3), Color(0xEE, 0xEE, 0xEE, 0xEE));
+
+    CPPUNIT_ASSERT_EQUAL(TRGB_COLORDATA(0xFF, 0x00, 0x00, 0x00), pVDev->GetPixel(Point(0,0)).GetColor());
+    CPPUNIT_ASSERT_EQUAL(TRGB_COLORDATA(0x00, 0x11, 0x22, 0x33), pVDev->GetPixel(Point(1,1)).GetColor());
+    CPPUNIT_ASSERT_EQUAL(TRGB_COLORDATA(0x10, 0xEE, 0xEE, 0xEE), pVDev->GetPixel(Point(2,2)).GetColor());
+
+    Bitmap aBitmap = pVDev->GetBitmap(Point(), aSize);
+
+    Bitmap::ScopedReadAccess pReadAccess(aBitmap);
+    CPPUNIT_ASSERT_EQUAL(TRGB_COLORDATA(0xFF, 0x00, 0x00, 0x00), Color(pReadAccess->GetPixel(0, 0)).GetColor());
+    CPPUNIT_ASSERT_EQUAL(TRGB_COLORDATA(0x00, 0x11, 0x22, 0x33), Color(pReadAccess->GetPixel(1, 1)).GetColor());
+    //CPPUNIT_ASSERT_EQUAL(TRGB_COLORDATA(0xEE, 0xEE, 0xEE, 0xEE), Color(pReadAccess->GetPixel(3, 3)).GetColor());
+    //CPPUNIT_ASSERT_EQUAL(TRGB_COLORDATA(0x10, 0xEE, 0xEE, 0xEE), Color(pReadAccess->GetPixel(2, 2)).GetColor());
+}
 
 void VclOutdevTest::testVirtualDevice()
 {

@@ -367,23 +367,11 @@ void OutputDevice::SetFillColor( const Color& rColor )
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaFillColorAction( aColor, true ) );
 
-    if ( ImplIsColorTransparent( aColor ) )
+    if ( maFillColor != aColor )
     {
-        if ( mbFillColor )
-        {
-            mbInitFillColor = true;
-            mbFillColor = false;
-            maFillColor = Color( COL_TRANSPARENT );
-        }
-    }
-    else
-    {
-        if ( maFillColor != aColor )
-        {
-            mbInitFillColor = true;
-            mbFillColor = true;
-            maFillColor = aColor;
-        }
+        mbInitFillColor = true;
+        mbFillColor = true;
+        maFillColor = aColor;
     }
 
     if( mpAlphaVDev )
@@ -415,23 +403,11 @@ void OutputDevice::SetLineColor( const Color& rColor )
     if( mpMetaFile )
         mpMetaFile->AddAction( new MetaLineColorAction( aColor, true ) );
 
-    if( ImplIsColorTransparent( aColor ) )
+    if( maLineColor != aColor )
     {
-        if ( mbLineColor )
-        {
-            mbInitLineColor = true;
-            mbLineColor = false;
-            maLineColor = Color( COL_TRANSPARENT );
-        }
-    }
-    else
-    {
-        if( maLineColor != aColor )
-        {
-            mbInitLineColor = true;
-            mbLineColor = true;
-            maLineColor = aColor;
-        }
+        mbInitLineColor = true;
+        mbLineColor = true;
+        maLineColor = aColor;
     }
 
     if( mpAlphaVDev )
@@ -583,7 +559,7 @@ void OutputDevice::InitLineColor()
         else if( RasterOp::Invert == meRasterOp )
             mpGraphics->SetROPLineColor( SalROPColor::Invert );
         else
-            mpGraphics->SetLineColor( ImplColorToSal( maLineColor ) );
+            mpGraphics->SetLineColor( ImplColorToSalWithAlpha( maLineColor ) );
     }
     else
         mpGraphics->SetLineColor();
@@ -605,7 +581,7 @@ void OutputDevice::InitFillColor()
         else if( RasterOp::Invert == meRasterOp )
             mpGraphics->SetROPFillColor( SalROPColor::Invert );
         else
-            mpGraphics->SetFillColor( ImplColorToSal( maFillColor ) );
+            mpGraphics->SetFillColor( ImplColorToSalWithAlpha( maFillColor ) );
     }
     else
         mpGraphics->SetFillColor();
