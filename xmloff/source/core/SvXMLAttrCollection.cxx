@@ -159,7 +159,7 @@ sal_uInt16 SvXMLAttrCollection::GetNextNamespaceIndex( sal_uInt16 nIdx ) const
 
 sal_uInt16 SvXMLAttrCollection::GetPrefixPos( size_t i ) const
 {
-//  DBG_ASSERT( i >= 0 && i < aAttrs.size(),
+//  SAL_WARN_IF( i < 0 || i >= aAttrs.size()), "xmloff",
 //              "SvXMLAttrCollection::GetPrefixPos: illegal index" );
     return aAttrs[i].getPrefixPos();
 }

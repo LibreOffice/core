@@ -89,7 +89,7 @@ void XMLSectionFootnoteConfigExport::exportXML(
                     rState.maValue >>= sNumSuffix;
                     break;
                 case CTF_SECTION_FOOTNOTE_END:
-                    DBG_ASSERT( i == nIdx,
+                    SAL_WARN_IF( i != nIdx, "xmloff",
                                 "received wrong property state index" );
                     rState.maValue >>= bEnd;
                     break;
@@ -118,7 +118,7 @@ void XMLSectionFootnoteConfigExport::exportXML(
                     rState.maValue >>= sNumSuffix;
                     break;
                 case CTF_SECTION_ENDNOTE_END:
-                    DBG_ASSERT( i == nIdx,
+                    SAL_WARN_IF( i != nIdx, "xmloff",
                                 "received wrong property state index" );
                     rState.maValue >>= bEnd;
                     break;

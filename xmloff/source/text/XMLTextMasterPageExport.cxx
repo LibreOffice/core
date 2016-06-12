@@ -57,7 +57,7 @@ void XMLTextMasterPageExport::exportHeaderFooterContent(
             const Reference< XText >& rText,
             bool bAutoStyles, bool bExportParagraph )
 {
-    DBG_ASSERT( rText.is(), "There is the text" );
+    SAL_WARN_IF( !rText.is(), "xmloff", "There is the text" );
 
     // tracked changes (autostyles + changes list)
     GetExport().GetTextParagraphExport()->recordTrackedChangesForXText(rText);

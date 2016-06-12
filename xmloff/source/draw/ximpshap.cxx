@@ -1785,7 +1785,7 @@ void SdXMLControlShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
     AddShape("com.sun.star.drawing.ControlShape");
     if( mxShape.is() )
     {
-        DBG_ASSERT( !maFormId.isEmpty(), "draw:control without a form:id attribute!" );
+        SAL_WARN_IF( !!maFormId.isEmpty(), "xmloff", "draw:control without a form:id attribute!" );
         if( !maFormId.isEmpty() )
         {
             if( GetImport().IsFormsSupported() )
@@ -2825,7 +2825,7 @@ SvXMLImportContext* SdXMLObjectShapeContext::CreateChildContext(
 
                 uno::Reference< lang::XComponent > xComp;
                 xPropSet->getPropertyValue("Model") >>= xComp;
-                DBG_ASSERT( xComp.is(), "no xModel for own OLE format" );
+                SAL_WARN_IF( !xComp.is(), "xmloff", "no xModel for own OLE format" );
                 pEContext->SetComponent( xComp );
             }
         }

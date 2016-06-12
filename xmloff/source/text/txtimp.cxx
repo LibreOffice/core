@@ -929,7 +929,7 @@ XMLTextImportHelper::XMLTextImportHelper(
     }
 
     Reference< XStyleFamiliesSupplier > xFamiliesSupp( rModel, UNO_QUERY );
-//  DBG_ASSERT( xFamiliesSupp.is(), "no chapter numbering supplier" ); for clipboard there may be documents without styles
+//  SAL_WARN_IF( !xFamiliesSupp.is(), "xmloff", "no chapter numbering supplier" ); for clipboard there may be documents without styles
 
     if( xFamiliesSupp.is() )
     {

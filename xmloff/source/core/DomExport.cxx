@@ -151,7 +151,7 @@ DomExport::DomExport( SvXMLExport& rExport ) :
 
 DomExport::~DomExport()
 {
-    DBG_ASSERT( maNamespaces.size() == 1, "namespace missing" );
+    SAL_WARN_IF( maNamespaces.size() != 1, "xmloff", "namespace missing" );
     maNamespaces.clear();
 }
 

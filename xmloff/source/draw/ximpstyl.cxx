@@ -260,7 +260,7 @@ void SdXMLDrawingPageStyleContext::FillPropertySet(
 
     rtl::Reference < SvXMLImportPropertyMapper > xImpPrMap =
         GetStyles()->GetImportPropertyMapper( GetFamily() );
-    DBG_ASSERT( xImpPrMap.is(), "There is the import prop mapper" );
+    SAL_WARN_IF( !xImpPrMap.is(), "xmloff", "There is the import prop mapper" );
     if( xImpPrMap.is() )
         xImpPrMap->FillPropertySet( GetProperties(), rPropSet, aContextIDs );
 
@@ -1334,7 +1334,7 @@ void SdXMLStylesContext::ImpSetGraphicStyles( uno::Reference< container::XNameAc
                     {
                         rtl::Reference < XMLPropertySetMapper > xPrMap;
                         rtl::Reference < SvXMLImportPropertyMapper > xImpPrMap = GetImportPropertyMapper( nFamily );
-                        DBG_ASSERT( xImpPrMap.is(), "There is the import prop mapper" );
+                        SAL_WARN_IF( !xImpPrMap.is(), "xmloff", "There is the import prop mapper" );
                         if( xImpPrMap.is() )
                             xPrMap = xImpPrMap->getPropertySetMapper();
                         if( xPrMap.is() )

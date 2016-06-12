@@ -90,7 +90,7 @@ SchemaRestrictionContext::SchemaRestrictionContext(
         msTypeName( sTypeName ),
         msBaseName()
 {
-    DBG_ASSERT( mxRepository.is(), "need repository" );
+    SAL_WARN_IF( !mxRepository.is(), "xmloff", "need repository" );
 }
 
 SchemaRestrictionContext::~SchemaRestrictionContext()
@@ -103,8 +103,8 @@ void SchemaRestrictionContext::CreateDataType()
     if( mxDataType.is() )
         return;
 
-    DBG_ASSERT( !msBaseName.isEmpty(), "no base name?" );
-    DBG_ASSERT( mxRepository.is(), "no repository?" );
+    SAL_WARN_IF( msBaseName.isEmpty(), "xmloff", "no base name?" );
+    SAL_WARN_IF( !mxRepository.is(), "xmloff", "no repository?" );
 
     try
     {
@@ -121,7 +121,7 @@ void SchemaRestrictionContext::CreateDataType()
     {
         OSL_FAIL( "exception during type creation" );
     }
-    DBG_ASSERT( mxDataType.is(), "can't create type" );
+    SAL_WARN_IF( !mxDataType.is(), "xmloff", "can't create type" );
 }
 
 void SchemaRestrictionContext::HandleAttribute(

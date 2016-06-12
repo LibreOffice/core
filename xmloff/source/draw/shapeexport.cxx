@@ -338,7 +338,7 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
             {
                 // get family ID
                 uno::Reference< beans::XPropertySet > xStylePropSet(xStyle, uno::UNO_QUERY);
-                DBG_ASSERT( xStylePropSet.is(), "style without a XPropertySet?" );
+                SAL_WARN_IF( !xStylePropSet.is(), "xmloff", "style without a XPropertySet?" );
                 try
                 {
                     if(xStylePropSet.is())
@@ -637,7 +637,7 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
     if( xChild.is() )
     {
         uno::Reference< drawing::XShapes > xParent( xChild->getParent(), uno::UNO_QUERY );
-        DBG_ASSERT( xParent.is() && xParent.get() == (*maCurrentShapesIter).first.get(), "XMLShapeExport::exportShape(): Wrong call to XMLShapeExport::seekShapes()" );
+        SAL_WARN_IF( !xParent.is() && xParent.get() == (*maCurrentShapesIter).first.get(), "xmloff", "XMLShapeExport::exportShape(): Wrong call to XMLShapeExport::seekShapes()" );
     }
 
     // first compute the shapes type
@@ -1004,10 +1004,10 @@ void XMLShapeExport::seekShapes( const uno::Reference< drawing::XShapes >& xShap
 
             maCurrentShapesIter = maShapesInfos.find( xShapes );
 
-            DBG_ASSERT( maCurrentShapesIter != maShapesInfos.end(), "XMLShapeExport::seekShapes(): insert into stl::map failed" );
+            SAL_WARN_IF( maCurrentShapesIter == maShapesInfos.end(), "xmloff", "XMLShapeExport::seekShapes(): insert into stl::map failed" );
         }
 
-        DBG_ASSERT( (*maCurrentShapesIter).second.size() == (ShapesInfos::size_type)xShapes->getCount(), "XMLShapeExport::seekShapes(): XShapes size varied between calls" );
+        SAL_WARN_IF( (*maCurrentShapesIter).second.size() != (ShapesInfos::size_type)xShapes->getCount(), "xmloff", "XMLShapeExport::seekShapes(): XShapes size varied between calls" );
 
     }
     else
@@ -1527,7 +1527,7 @@ void XMLShapeExport::ImpExportEvents( const uno::Reference< drawing::XShape >& x
         return;
 
     uno::Reference< container::XNameAccess > xEvents( xEventsSupplier->getEvents(), uno::UNO_QUERY );
-    DBG_ASSERT( xEvents.is(), "XEventsSupplier::getEvents() returned NULL" );
+    SAL_WARN_IF( !xEvents.is(), "xmloff", "XEventsSupplier::getEvents() returned NULL" );
     if( !xEvents.is() )
         return;
 
@@ -2401,11 +2401,11 @@ void XMLShapeExport::ImpExportControlShape(
     }
 
     uno::Reference< drawing::XControlShape > xControl( xShape, uno::UNO_QUERY );
-    DBG_ASSERT( xControl.is(), "Control shape is not supporting XControlShape" );
+    SAL_WARN_IF( !xControl.is(), "xmloff", "Control shape is not supporting XControlShape" );
     if( xControl.is() )
     {
         uno::Reference< beans::XPropertySet > xControlModel( xControl->getControl(), uno::UNO_QUERY );
-        DBG_ASSERT( xControlModel.is(), "Control shape has not XControlModel" );
+        SAL_WARN_IF( !xControlModel.is(), "xmloff", "Control shape has not XControlModel" );
         if( xControlModel.is() )
         {
             mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_CONTROL, mrExport.GetFormExport()->getControlId( xControlModel ) );
@@ -2735,7 +2735,7 @@ void XMLShapeExport::ImpExportOLE2Shape(
     uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
     uno::Reference< container::XNamed > xNamed(xShape, uno::UNO_QUERY);
 
-    DBG_ASSERT( xPropSet.is() && xNamed.is(), "ole shape is not implementing needed interfaces");
+    SAL_WARN_IF( !xPropSet.is() || !xNamed.is(), "xmloff", "ole shape is not implementing needed interfaces");
     if(xPropSet.is() && xNamed.is())
     {
         // Transformation
@@ -2839,7 +2839,7 @@ void XMLShapeExport::ImpExportOLE2Shape(
                     // embedded XML
                     uno::Reference< lang::XComponent > xComp;
                     xPropSet->getPropertyValue("Model") >>= xComp;
-                    DBG_ASSERT( xComp.is(), "no xModel for own OLE format" );
+                    SAL_WARN_IF( !xComp.is(), "xmloff", "no xModel for own OLE format" );
                     mrExport.ExportEmbeddedOwnObject( xComp );
                 }
                 else
@@ -3409,7 +3409,7 @@ void XMLShapeExport::ImpExport3DSceneShape( const uno::Reference< drawing::XShap
     if(xShapes.is() && xShapes->getCount())
     {
         uno::Reference< beans::XPropertySet > xPropSet( xShape, uno::UNO_QUERY );
-        DBG_ASSERT( xPropSet.is(), "XMLShapeExport::ImpExport3DSceneShape can't export a scene without a propertyset" );
+        SAL_WARN_IF( !xPropSet.is(), "xmloff", "XMLShapeExport::ImpExport3DSceneShape can't export a scene without a propertyset" );
         if( xPropSet.is() )
         {
             // Transformation
@@ -4874,7 +4874,7 @@ void XMLShapeExport::ImpExportTableShape( const uno::Reference< drawing::XShape 
     uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
     uno::Reference< container::XNamed > xNamed(xShape, uno::UNO_QUERY);
 
-    DBG_ASSERT( xPropSet.is() && xNamed.is(), "xmloff::XMLShapeExport::ImpExportTableShape(), tabe shape is not implementing needed interfaces");
+    SAL_WARN_IF( !xPropSet.is() || !xNamed.is(), "xmloff", "xmloff::XMLShapeExport::ImpExportTableShape(), table shape is not implementing needed interfaces");
     if(xPropSet.is() && xNamed.is()) try
     {
         // Transformation

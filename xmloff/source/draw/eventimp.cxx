@@ -285,7 +285,7 @@ void SdXMLEventContext::EndElement()
             break;
 
         Reference< XNameReplace > xEvents( xEventsSupplier->getEvents() );
-        DBG_ASSERT( xEvents.is(), "XEventsSupplier::getEvents() returned NULL" );
+        SAL_WARN_IF( !xEvents.is(), "xmloff", "XEventsSupplier::getEvents() returned NULL" );
         if( !xEvents.is() )
             break;
 

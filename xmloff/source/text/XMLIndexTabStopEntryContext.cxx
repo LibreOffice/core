@@ -154,7 +154,7 @@ void XMLIndexTabStopEntryContext::FillPropertyValues(
     nNextEntry++;
 
     // check whether we really filled all elements of the sequence
-    DBG_ASSERT( nNextEntry == rValues.getLength(),
+    SAL_WARN_IF( nNextEntry != rValues.getLength(), "xmloff",
                 "length incorrectly precumputed!" );
 }
 

@@ -657,7 +657,7 @@ void SvXMLUnitConverter::convertNumFormat( OUStringBuffer& rBuffer,
     case NumberingType::CHAR_SPECIAL:
     case NumberingType::PAGE_DESCRIPTOR:
     case NumberingType::BITMAP:
-        DBG_ASSERT( eFormat != XML_TOKEN_INVALID, "invalid number format" );
+        SAL_WARN_IF( eFormat == XML_TOKEN_INVALID, "xmloff", "invalid number format" );
         break;
     default:
         break;
@@ -697,7 +697,7 @@ void SvXMLUnitConverter::convertNumLetterSync( OUStringBuffer& rBuffer,
     case NumberingType::CHAR_SPECIAL:
     case NumberingType::PAGE_DESCRIPTOR:
     case NumberingType::BITMAP:
-        DBG_ASSERT( eSync != XML_TOKEN_INVALID, "invalid number format" );
+        SAL_WARN_IF( eSync == XML_TOKEN_INVALID, "xmloff", "invalid number format" );
         break;
     }
     if( eSync != XML_TOKEN_INVALID )
