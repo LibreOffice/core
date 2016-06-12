@@ -99,7 +99,7 @@ void XMLChartStyleContext::FillPropertySet(
     }
     catch( beans::UnknownPropertyException&  )
     {
-        DBG_ASSERT( false, "unknown property exception -> shape style not completely imported for chart style" );
+        SAL_WARN( "xmloff", "unknown property exception -> shape style not completely imported for chart style" );
     }
 
     lcl_NumberFormatStyleToProperty( msDataStyleName, "NumberFormat", mrStyles, rPropSet );

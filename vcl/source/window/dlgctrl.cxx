@@ -368,7 +368,7 @@ vcl::Window* ImplFindDlgCtrlWindow( vcl::Window* pParent, vcl::Window* pWindow, 
             if ( nIteration >= 2 )
             {
                 // this is an unexpected scenario
-                DBG_ASSERT( false, "It seems to be an endless loop!" );
+                SAL_WARN( "vcl", "It seems to be an endless loop!" );
                 rFormStart = 0;
                 break;
             }

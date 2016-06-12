@@ -321,7 +321,7 @@ sal_Int32 Outliner::GetBulletsNumberingStatus(
     if ( nParaStart > nParaEnd
          || nParaEnd >= pParaList->GetParagraphCount() )
     {
-        DBG_ASSERT( false,"<Outliner::GetBulletsNumberingStatus> - unexpected parameter values" );
+        SAL_WARN("editeng", "<Outliner::GetBulletsNumberingStatus> - unexpected parameter values" );
         return 2;
     }
 

@@ -106,7 +106,7 @@ inline static void SwapDouble( double& r )
     {
         if( sizeof(double) != 8 )
         {
-          DBG_ASSERT( false, "Can only swap 8-Byte-doubles\n" );
+          SAL_WARN( "tools", "Can only swap 8-Byte-doubles\n" );
         }
         else
         {
