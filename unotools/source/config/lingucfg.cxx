@@ -29,6 +29,7 @@
 #include <rtl/instance.hxx>
 #include <sal/log.hxx>
 #include <osl/mutex.hxx>
+#include <tools/diagnose_ex.h>
 #include <i18nlangtag/mslangid.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <tools/debug.hxx>
@@ -393,7 +394,7 @@ uno::Any SvtLinguConfigItem::GetProperty( sal_Int32 nPropertyHandle ) const
         case UPH_IS_GRAMMAR_AUTO:                       pbVal = &rOpt.bIsGrammarAuto; break;
         case UPH_IS_GRAMMAR_INTERACTIVE:                pbVal = &rOpt.bIsGrammarInteractive; break;
         default :
-            DBG_ASSERT( false, "unexpected property handle" );
+            SAL_WARN( "unotools", "unexpected property handle" );
     }
 
     if (pbVal)
@@ -492,7 +493,7 @@ bool SvtLinguConfigItem::SetProperty( sal_Int32 nPropertyHandle, const uno::Any 
         case UPH_IS_GRAMMAR_AUTO:                       pbVal = &rOpt.bIsGrammarAuto; break;
         case UPH_IS_GRAMMAR_INTERACTIVE:                pbVal = &rOpt.bIsGrammarInteractive; break;
         default :
-            DBG_ASSERT( false, "unexpected property handle" );
+            SAL_WARN( "unotools", "unexpected property handle" );
     }
 
     if (pbVal)
@@ -654,7 +655,7 @@ bool SvtLinguConfigItem::LoadOptions( const uno::Sequence< OUString > &rProperyN
                 break;
 
                 default:
-                    DBG_ASSERT( false, "unexpected case" );
+                    SAL_WARN( "unotools", "unexpected case" );
             }
         }
 
@@ -784,7 +785,7 @@ bool SvtLinguConfigItem::IsReadOnly( sal_Int32 nPropertyHandle ) const
         case UPH_IS_GRAMMAR_AUTO:                       bReadOnly = rOpt.bROIsGrammarAuto; break;
         case UPH_IS_GRAMMAR_INTERACTIVE:                bReadOnly = rOpt.bROIsGrammarInteractive; break;
         default :
-            DBG_ASSERT( false, "unexpected property handle" );
+            SAL_WARN( "unotools", "unexpected property handle" );
     }
     return bReadOnly;
 }
@@ -1119,7 +1120,7 @@ OUString SvtLinguConfig::GetVendorImageUrl_Impl(
     }
     catch (uno::Exception &)
     {
-        DBG_ASSERT( false, "exception caught. GetVendorImageUrl_Impl failed" );
+        DBG_UNHANDLED_EXCEPTION();
     }
     return aRes;
 }

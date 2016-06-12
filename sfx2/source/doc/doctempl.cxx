@@ -881,12 +881,12 @@ bool SfxDocumentTemplates::CopyFrom
             }
             else
             {
-                DBG_ASSERT( false, "CopyFrom(): The content should contain target URL!" );
+                SAL_WARN( "sfx2", "CopyFrom(): The content should contain target URL!" );
             }
         }
         else
         {
-            DBG_ASSERT( false, "CopyFrom(): The content just was created!" );
+            SAL_WARN( "sfx2", "CopyFrom(): The content just was created!" );
         }
     }
 

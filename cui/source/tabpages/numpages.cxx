@@ -3236,7 +3236,7 @@ void SvxNumPositionTabPage::InitPosAndSpaceMode()
 {
     if ( pActNum == nullptr )
     {
-        DBG_ASSERT( false,
+        SAL_WARN( "cui",
                 "<SvxNumPositionTabPage::InitPosAndSpaceMode()> - misusage of method -> <pAktNum> has to be already set!" );
         return;
     }

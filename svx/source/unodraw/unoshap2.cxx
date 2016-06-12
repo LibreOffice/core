@@ -279,7 +279,7 @@ void SAL_CALL SvxShapeGroup::remove( const uno::Reference< drawing::XShape >& xS
     }
     else
     {
-        DBG_ASSERT( false, "Fatality! SdrObject is not belonging to its SdrObjList! [CL]" );
+        SAL_WARN( "svx", "Fatality! SdrObject is not belonging to its SdrObjList! [CL]" );
     }
 
     if( mpModel )

@@ -467,7 +467,7 @@ void VirtualDevice::SetReferenceDevice( RefDevMode i_eRefDevMode )
     {
     case REFDEV_NONE:
     default:
-        DBG_ASSERT( false, "VDev::SetRefDev illegal argument!" );
+        SAL_WARN( "vcl", "VDev::SetRefDev illegal argument!" );
         break;
     case REFDEV_MODE06:
         nDPIX = nDPIY = 600;

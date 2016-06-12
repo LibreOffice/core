@@ -85,7 +85,7 @@ void ReadThroughDic( const OUString &rMainURL, ConvDicXMLImport &rImport )
     }
     catch (const uno::Exception &)
     {
-        DBG_ASSERT( false, "failed to get input stream" );
+        SAL_WARN( "linguistic", "failed to get input stream" );
     }
     if (!xIn.is())
         return;
@@ -245,7 +245,7 @@ void ConvDic::Save()
     }
     catch (const uno::Exception &)
     {
-        DBG_ASSERT( false, "failed to get input stream" );
+        SAL_WARN( "linguistic", "failed to get input stream" );
     }
     if (!xStream.is())
         return;

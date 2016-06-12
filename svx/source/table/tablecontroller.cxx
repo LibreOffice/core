@@ -1817,7 +1817,7 @@ void SvxTableController::MergeRange( sal_Int32 nFirstCol, sal_Int32 nFirstRow, s
     }
     catch( Exception& )
     {
-        DBG_ASSERT( false, "sdr::table::SvxTableController::MergeRange(), exception caught!" );
+        SAL_WARN( "svx", "sdr::table::SvxTableController::MergeRange(), exception caught!" );
     }
 }
 

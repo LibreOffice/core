@@ -857,7 +857,7 @@ static bool IsVers2OrNewer( const OUString& rFileURL, sal_uInt16& nLng, bool& bN
     }
     catch (const uno::Exception &)
     {
-        DBG_ASSERT( false, "failed to get input stream" );
+        SAL_WARN( "linguistic", "failed to get input stream" );
     }
     DBG_ASSERT( xStream.is(), "failed to get stream for read" );
     if (!xStream.is())

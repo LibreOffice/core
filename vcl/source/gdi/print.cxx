@@ -327,21 +327,21 @@ void Printer::EmulateDrawTransparent ( const tools::PolyPolygon& rPolyPoly,
 void Printer::DrawOutDev( const Point& /*rDestPt*/, const Size& /*rDestSize*/,
                                const Point& /*rSrcPt*/,  const Size& /*rSrcSize*/ )
 {
-    DBG_ASSERT( false, "Don't use OutputDevice::DrawOutDev(...) with printer devices!" );
+    SAL_WARN( "vcl", "Don't use OutputDevice::DrawOutDev(...) with printer devices!" );
 }
 
 void Printer::DrawOutDev( const Point& /*rDestPt*/, const Size& /*rDestSize*/,
                                const Point& /*rSrcPt*/,  const Size& /*rSrcSize*/,
                                const OutputDevice& /*rOutDev*/ )
 {
-    DBG_ASSERT( false, "Don't use OutputDevice::DrawOutDev(...) with printer devices!" );
+    SAL_WARN( "vcl", "Don't use OutputDevice::DrawOutDev(...) with printer devices!" );
 }
 
 void Printer::CopyArea( const Point& /*rDestPt*/,
                         const Point& /*rSrcPt*/,  const Size& /*rSrcSize*/,
                         bool /*bWindowInvalidate*/ )
 {
-    DBG_ASSERT( false, "Don't use OutputDevice::CopyArea(...) with printer devices!" );
+    SAL_WARN( "vcl", "Don't use OutputDevice::CopyArea(...) with printer devices!" );
 }
 
 void Printer::SetPrinterOptions( const PrinterOptions& i_rOptions )

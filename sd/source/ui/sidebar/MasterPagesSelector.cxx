@@ -278,7 +278,7 @@ void MasterPagesSelector::ExecuteCommand (const sal_Int32 nCommandId)
             break;
 
         case SID_TP_USE_FOR_NEW_PRESENTATIONS:
-            DBG_ASSERT (false,
+            SAL_WARN ( "sd",
                 "Using slides as default for new presentations"
                 " is not yet implemented");
             break;

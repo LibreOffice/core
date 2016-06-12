@@ -271,7 +271,7 @@ bool SvXMLEmbeddedObjectHelper::ImplGetStorageNames(
             }
             else
             {
-                DBG_ASSERT( false, "invalid arguments was found in URL!" );
+                SAL_WARN( "svx", "invalid arguments was found in URL!" );
             }
         }
     }

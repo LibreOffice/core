@@ -1018,7 +1018,7 @@ void Menu::ShowItem( sal_uInt16 nItemId, bool bVisible )
         vcl::Window* pWin = ImplGetWindow();
         if ( pWin && pWin->IsVisible() )
         {
-            DBG_ASSERT( false, "Menu::ShowItem - ignored for visible popups!" );
+            SAL_WARN( "vcl", "Menu::ShowItem - ignored for visible popups!" );
             return;
         }
         pData->bVisible = bVisible;

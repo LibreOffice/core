@@ -95,7 +95,7 @@ void XMLTextNumRuleInfo::Set(
     // Assertion saving writer document (#i97312#)
     if ( mxNumRules.is() && mxNumRules->getCount() < 1 )
     {
-        DBG_ASSERT( false,
+        SAL_WARN("xmloff",
                     "<XMLTextNumRuleInfo::Set(..)> - numbering rules instance does not contain any numbering rule" );
         Reset();
         return;
@@ -103,7 +103,7 @@ void XMLTextNumRuleInfo::Set(
 
     if ( mnListLevel < 0 )
     {
-        DBG_ASSERT( false,
+        SAL_WARN("xmloff",
                     "<XMLTextNumRuleInfo::Set(..)> - unexpected numbering level" );
         Reset();
         return;

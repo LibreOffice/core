@@ -8225,7 +8225,7 @@ void PDFWriterImpl::sortWidgets()
         }
         else
         {
-            DBG_ASSERT( false, "wrong number of sorted annotations" );
+            SAL_WARN( "vcl", "wrong number of sorted annotations" );
             #if OSL_DEBUG_LEVEL > 0
             fprintf( stderr, "PDFWriterImpl::sortWidgets(): wrong number of sorted assertions on page nr %ld\n"
                      "    %ld sorted and %ld unsorted\n", (long int)it->first, (long int)it->second.aSortedAnnots.size(), (long int)nAnnots );
@@ -12528,7 +12528,7 @@ sal_Int32 PDFWriterImpl::beginStructureElement( PDFWriter::StructElement eType, 
             if( childType == PDFWriter::Document )
             {
                 m_nCurrentStructElement = nNewCurElement;
-                DBG_ASSERT( false, "Structure element inserted to StructTreeRoot that is not a document" );
+                SAL_WARN( "vcl", "Structure element inserted to StructTreeRoot that is not a document" );
             }
             else {
                 OSL_FAIL( "document structure in disorder !" );

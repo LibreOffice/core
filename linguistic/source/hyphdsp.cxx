@@ -371,7 +371,7 @@ Reference< XHyphenatedWord > SAL_CALL
                 }
                 catch (uno::Exception &)
                 {
-                    DBG_ASSERT( false, "createInstanceWithArguments failed" );
+                    SAL_WARN( "linguistic", "createInstanceWithArguments failed" );
                 }
                 pRef [i] = xHyph;
 
@@ -503,7 +503,7 @@ Reference< XHyphenatedWord > SAL_CALL
                 }
                 catch (uno::Exception &)
                 {
-                    DBG_ASSERT( false, "createInstanceWithArguments failed" );
+                    SAL_WARN( "linguistic", "createInstanceWithArguments failed" );
                 }
                 pRef [i] = xHyph;
 
@@ -626,7 +626,7 @@ Reference< XPossibleHyphens > SAL_CALL
                 }
                 catch (uno::Exception &)
                 {
-                    DBG_ASSERT( false, "createWithArguments failed" );
+                    SAL_WARN( "linguistic", "createWithArguments failed" );
                 }
                 pRef [i] = xHyph;
 

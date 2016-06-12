@@ -799,13 +799,13 @@ XMLCompareOnlyPropHdl::~XMLCompareOnlyPropHdl()
 
 bool XMLCompareOnlyPropHdl::importXML( const OUString&, Any&, const SvXMLUnitConverter& ) const
 {
-    DBG_ASSERT( false, "importXML called for compare-only-property" );
+    SAL_WARN( "xmloff", "importXML called for compare-only-property" );
     return false;
 }
 
 bool XMLCompareOnlyPropHdl::exportXML( OUString&, const Any&, const SvXMLUnitConverter& ) const
 {
-    DBG_ASSERT( false, "exportXML called for compare-only-property" );
+    SAL_WARN( "xmloff", "exportXML called for compare-only-property" );
     return false;
 }
 

@@ -362,7 +362,7 @@ SvtDynamicMenuOptions_Impl::~SvtDynamicMenuOptions_Impl()
 
 void SvtDynamicMenuOptions_Impl::Notify( const Sequence< OUString >& )
 {
-    DBG_ASSERT( false, "SvtDynamicMenuOptions_Impl::Notify()\nNot implemented yet! I don't know how I can handle a dynamical list of unknown properties ...\n" );
+    SAL_WARN( "unotools", "SvtDynamicMenuOptions_Impl::Notify()\nNot implemented yet! I don't know how I can handle a dynamical list of unknown properties ...\n" );
 }
 
 //  public method

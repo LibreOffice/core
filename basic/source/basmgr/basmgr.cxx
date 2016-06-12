@@ -755,7 +755,7 @@ void BasicManager::LoadBasicManager( SotStorage& rStorage, const OUString& rBase
     // Plausibility!
     if( nLibs & 0xF000 )
     {
-        DBG_ASSERT( false, "BasicManager-Stream defect!" );
+        SAL_WARN( "basic", "BasicManager-Stream defect!" );
         return;
     }
     const size_t nMinBasicLibSize(8);

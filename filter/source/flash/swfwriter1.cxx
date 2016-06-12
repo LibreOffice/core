@@ -795,7 +795,7 @@ sal_uInt16 Writer::defineBitmap( const BitmapEx &bmpSource, sal_Int32 nJPEGQuali
 #ifdef DBG_UTIL
     if(compress2(pCompressed.get(), &compressed_size, pImageData, raw_size, Z_BEST_COMPRESSION) != Z_OK)
     {
-        DBG_ASSERT( false, "compress2 failed!" ); ((void)0);
+        SAL_WARN( "filter", "compress2 failed!" ); ((void)0);
     }
 #else
     compress2(pCompressed.get(), &compressed_size, pImageData, raw_size, Z_BEST_COMPRESSION);
@@ -813,7 +813,7 @@ sal_uInt16 Writer::defineBitmap( const BitmapEx &bmpSource, sal_Int32 nJPEGQuali
 #ifdef DBG_UTIL
         if(compress2(pAlphaCompressed.get(), &alpha_compressed_size, pAlphaData, width * height, Z_BEST_COMPRESSION) != Z_OK)
         {
-            DBG_ASSERT( false, "compress2 failed!" ); ((void)0);
+            SAL_WARN( "filter", "compress2 failed!" ); ((void)0);
         }
 #else
         compress2(pAlphaCompressed.get(), &alpha_compressed_size, pAlphaData, width * height, Z_BEST_COMPRESSION);

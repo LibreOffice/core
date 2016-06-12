@@ -1131,7 +1131,7 @@ void SfxObjectShell::SetInitialized_Impl( const bool i_fromInitNew )
 bool SfxObjectShell::IsChangeRecording() const
 {
     // currently this function needs to be overwritten by Writer and Calc only
-    DBG_ASSERT( false, "function not implemented" );
+    SAL_WARN( "sfx2", "function not implemented" );
     return false;
 }
 
@@ -1139,7 +1139,7 @@ bool SfxObjectShell::IsChangeRecording() const
 bool SfxObjectShell::HasChangeRecordProtection() const
 {
     // currently this function needs to be overwritten by Writer and Calc only
-    DBG_ASSERT( false, "function not implemented" );
+    SAL_WARN( "sfx2", "function not implemented" );
     return false;
 }
 
@@ -1147,7 +1147,7 @@ bool SfxObjectShell::HasChangeRecordProtection() const
 void SfxObjectShell::SetChangeRecording( bool /*bActivate*/ )
 {
     // currently this function needs to be overwritten by Writer and Calc only
-    DBG_ASSERT( false, "function not implemented" );
+    SAL_WARN( "sfx2", "function not implemented" );
 }
 
 
@@ -1162,7 +1162,7 @@ bool SfxObjectShell::SetProtectionPassword( const OUString & /*rPassword*/ )
 bool SfxObjectShell::GetProtectionHash( /*out*/ css::uno::Sequence< sal_Int8 > & /*rPasswordHash*/ )
 {
     // currently this function needs to be overwritten by Writer and Calc only
-    DBG_ASSERT( false, "function not implemented" );
+    SAL_WARN( "sfx2", "function not implemented" );
     return false;
 }
 

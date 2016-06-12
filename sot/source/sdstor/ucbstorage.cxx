@@ -1696,8 +1696,8 @@ void UCBStorage_Impl::Init()
             }
             catch (const Exception&)
             {
-                DBG_ASSERT( false,
-                            "getPropertyValue has thrown an exception! Please let developers know the scenario!" );
+                SAL_WARN( "sot",
+                          "getPropertyValue has thrown an exception! Please let developers know the scenario!" );
             }
         }
     }

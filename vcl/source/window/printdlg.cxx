@@ -1714,7 +1714,7 @@ void PrintDialog::updateWindowFromProperty( const OUString& i_rProperty )
                 }
                 else
                 {
-                    DBG_ASSERT( false, "missing a checkbox" );
+                    SAL_WARN( "vcl", "missing a checkbox" );
                 }
             }
             else if( pValue->Value >>= nVal )

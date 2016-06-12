@@ -377,7 +377,7 @@ bool SpellCheckerDispatcher::isValid_Impl(
                 }
                 catch (uno::Exception &)
                 {
-                    DBG_ASSERT( false, "createInstanceWithArguments failed" );
+                    SAL_WARN( "linguistic", "createInstanceWithArguments failed" );
                 }
                 pRef [i] = xSpell;
 
@@ -562,7 +562,7 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
                 }
                 catch (uno::Exception &)
                 {
-                    DBG_ASSERT( false, "createInstanceWithArguments failed" );
+                    SAL_WARN( "linguistic", "createInstanceWithArguments failed" );
                 }
                 pRef [i] = xSpell;
 
@@ -735,7 +735,7 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
             {
                 if (xRes.is())
                 {
-                    DBG_ASSERT( false, "XSetSpellAlternatives not implemented!" );
+                    SAL_WARN( "linguistic", "XSetSpellAlternatives not implemented!" );
                 }
                 else if (aProposals.getLength() > 0)
                 {

@@ -140,7 +140,7 @@ static sal_uInt16 getSlotIDFromMode( sal_Int8 nStoreMode )
     else if ( nStoreMode == SAVEASREMOTE_REQUESTED )
         nResult = SID_SAVEASREMOTE;
     else {
-        DBG_ASSERT( false, "Unacceptable slot name is provided!\n" );
+        SAL_WARN( "sfx2", "Unacceptable slot name is provided!\n" );
     }
 
     return nResult;
@@ -1617,7 +1617,7 @@ bool SfxStoringHelper::GUIStoreModel( uno::Reference< frame::XModel > xModel,
     }
     else
     {
-        DBG_ASSERT( false, "This code must be unreachable!\n" );
+        SAL_WARN( "sfx2", "This code must be unreachable!\n" );
         throw task::ErrorCodeIOException(
             "SfxStoringHelper::GUIStoreModel: ERRCODE_IO_INVALIDPARAMETER",
             uno::Reference< uno::XInterface >(), ERRCODE_IO_INVALIDPARAMETER);

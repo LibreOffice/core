@@ -80,7 +80,7 @@ void SdGlobalResourceContainer::AddResource (
     {
         // Because the given resource is a unique_ptr it is highly unlikely
         // that we come here.  But who knows?
-        DBG_ASSERT (false,
+        SAL_WARN ( "sd",
             "SdGlobalResourceContainer:AddResource(): Resource added twice.");
     }
     // We can not put the unique_ptr into the vector so we release the
@@ -102,7 +102,7 @@ void SdGlobalResourceContainer::AddResource (
         mpImpl->maSharedResources.push_back(pResource);
     else
     {
-        DBG_ASSERT (false,
+        SAL_WARN ("sd",
             "SdGlobalResourceContainer:AddResource(): Resource added twice.");
     }
 }
@@ -120,7 +120,7 @@ void SdGlobalResourceContainer::AddResource (const Reference<XInterface>& rxReso
         mpImpl->maXInterfaceResources.push_back(rxResource);
     else
     {
-        DBG_ASSERT (false,
+        SAL_WARN ("sd",
             "SdGlobalResourceContainer:AddResource(): Resource added twice.");
     }
 }

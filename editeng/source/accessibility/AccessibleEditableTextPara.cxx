@@ -27,6 +27,7 @@
 #include <osl/mutex.hxx>
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
+#include <tools/diagnose_ex.h>
 #include <editeng/flditem.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
@@ -2759,7 +2760,7 @@ namespace accessibility
                     catch (const lang::IndexOutOfBoundsException&)
                     {
                         // this is not the exception that should be raised in this function ...
-                        DBG_ASSERT( false, "unexpected exception" );
+                        DBG_UNHANDLED_EXCEPTION();
                     }
                 }
             }

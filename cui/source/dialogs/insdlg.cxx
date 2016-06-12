@@ -121,7 +121,7 @@ IMPL_LINK_NOARG_TYPED(SvInsertOleDlg, BrowseHdl, Button*, void)
     }
     catch( const IllegalArgumentException& )
     {
-        DBG_ASSERT( false, "caught IllegalArgumentException when registering filter\n" );
+        SAL_WARN( "cui", "caught IllegalArgumentException when registering filter\n" );
     }
 
     if( xFilePicker->execute() == ExecutableDialogResults::OK )

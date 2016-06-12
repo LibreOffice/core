@@ -446,7 +446,7 @@ bool PropertyHelper_Spell::propertyChange_Impl( const PropertyChangeEvent& rEvt 
                 break;
             }
             default:
-                DBG_ASSERT( false, "unknown property" );
+                SAL_WARN( "linguistic", "unknown property" );
         }
         if (pbVal)
             rEvt.NewValue >>= *pbVal;
@@ -510,7 +510,7 @@ void PropertyHelper_Spell::SetTmpPropVals( const PropertyValues &rPropVals )
                     case UPH_IS_SPELL_WITH_DIGITS    : pbResVal = &bResIsSpellWithDigits; break;
                     case UPH_IS_SPELL_CAPITALIZATION : pbResVal = &bResIsSpellCapitalization; break;
                     default:
-                        DBG_ASSERT( false, "unknown property" );
+                        SAL_WARN( "linguistic", "unknown property" );
                 }
                 if (pbResVal)
                     pVal[i].Value >>= *pbResVal;
@@ -607,7 +607,7 @@ bool PropertyHelper_Hyphen::propertyChange_Impl( const PropertyChangeEvent& rEvt
             case UPH_HYPH_MIN_TRAILING    : pnVal = &nHyphMinTrailing; break;
             case UPH_HYPH_MIN_WORD_LENGTH : pnVal = &nHyphMinWordLength; break;
             default:
-                DBG_ASSERT( false, "unknown property" );
+                SAL_WARN( "linguistic", "unknown property" );
         }
         if (pnVal)
             rEvt.NewValue >>= *pnVal;

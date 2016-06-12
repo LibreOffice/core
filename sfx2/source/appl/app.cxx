@@ -206,7 +206,7 @@ SfxApplication::SfxApplication()
             aStr.append(static_cast<sal_Int32>(GetDdeService()->GetError()));
         else
             aStr.append('?');
-        DBG_ASSERT( false, aStr.getStr() );
+        SAL_WARN( "sfx2.appl", aStr.getStr() );
     }
 #else
     (void)bOk;

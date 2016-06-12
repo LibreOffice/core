@@ -135,7 +135,7 @@ void SvParser::SetSrcEncoding( rtl_TextEncoding eEnc )
         }
         else
         {
-            DBG_ASSERT( false,
+            SAL_WARN( "svtools",
                         "SvParser::SetSrcEncoding: invalid source encoding" );
             eSrcEnc = RTL_TEXTENCODING_DONTKNOW;
         }

@@ -175,7 +175,7 @@ Sequence< Reference< XMeaning > > SAL_CALL
                 }
                 catch (uno::Exception &)
                 {
-                    DBG_ASSERT( false, "createInstanceWithArguments failed" );
+                    SAL_WARN( "linguistic", "createInstanceWithArguments failed" );
                 }
                 pRef[i] = xThes;
 

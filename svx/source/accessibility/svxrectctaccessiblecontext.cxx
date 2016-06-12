@@ -520,7 +520,7 @@ sal_Bool SAL_CALL SvxRectCtlAccessibleContext::isAccessibleChildSelected( sal_In
 
 void SAL_CALL SvxRectCtlAccessibleContext::clearAccessibleSelection() throw( RuntimeException, std::exception )
 {
-    DBG_ASSERT( false, "SvxRectCtlAccessibleContext::clearAccessibleSelection() is not possible!" );
+    SAL_WARN( "svx", "SvxRectCtlAccessibleContext::clearAccessibleSelection() is not possible!" );
 }
 
 void SAL_CALL SvxRectCtlAccessibleContext::selectAllAccessibleChildren() throw( RuntimeException, std::exception )
@@ -551,7 +551,7 @@ void SAL_CALL SvxRectCtlAccessibleContext::deselectAccessibleChild( sal_Int32 /*
 {
     OUString aMessage( "deselectAccessibleChild is not possible in this context" );
 
-    DBG_ASSERT( false, "SvxRectCtlAccessibleContext::deselectAccessibleChild() is not possible!" );
+    SAL_WARN( "svx", "SvxRectCtlAccessibleContext::deselectAccessibleChild() is not possible!" );
 
     throw lang::IndexOutOfBoundsException( aMessage, *this );   // never possible
 }

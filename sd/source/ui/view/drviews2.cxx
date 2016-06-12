@@ -2920,7 +2920,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
         default:
         {
-            DBG_ASSERT( false, "Slot without function" );
+            SAL_WARN( "sd", "Slot without function" );
             Cancel();
             rReq.Ignore ();
         }

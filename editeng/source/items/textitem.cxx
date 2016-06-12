@@ -3335,7 +3335,7 @@ void SvxScriptSetItem::GetSlotIds( sal_uInt16 nSlotId, sal_uInt16& rLatin,
     switch( nSlotId )
     {
     default:
-        DBG_ASSERT( false, "wrong SlotId for class SvxScriptSetItem" );
+        SAL_WARN( "editeng", "wrong SlotId for class SvxScriptSetItem" );
         SAL_FALLTHROUGH; // default to font - Id Range !!
 
     case SID_ATTR_CHAR_FONT:

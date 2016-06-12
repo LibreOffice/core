@@ -20,6 +20,7 @@
 #include <osl/endian.h>
 #include <vcl/svapp.hxx>
 #include <unotools/tempfile.hxx>
+#include <tools/diagnose_ex.h>
 #include <math.h>
 #include <editeng/eeitem.hxx>
 #include <editeng/editdata.hxx>
@@ -7398,7 +7399,7 @@ void MergeCells( const Reference< XTable >& xTable, sal_Int32 nCol, sal_Int32 nR
    }
    catch( const Exception& )
    {
-       DBG_ASSERT( false, "exception caught!" );
+       DBG_UNHANDLED_EXCEPTION();
    }
 }
 
