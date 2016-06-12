@@ -743,6 +743,7 @@ private:
     sal_uInt16          mnWidth;            /// Excel width of the column.
     sal_uInt16          mnScWidth;          /// Calc width of the column.
     sal_uInt16          mnFlags;            /// Additional column flags.
+    sal_uInt16          mnOutlineLevel;     /// Outline Level (for OOXML)
     sal_uInt16          mnFirstXclCol;      /// Index to first column.
     sal_uInt16          mnLastXclCol;       /// Index to last column.
 };
