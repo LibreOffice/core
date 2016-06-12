@@ -290,7 +290,7 @@ namespace xmloff
     bool OFormLayerXMLExport_Impl::pageContainsForms( const Reference< XDrawPage >& _rxDrawPage )
     {
         Reference< XFormsSupplier2 > xFormsSupp( _rxDrawPage, UNO_QUERY );
-        DBG_ASSERT( xFormsSupp.is(), "OFormLayerXMLExport_Impl::pageContainsForms: no XFormsSupplier2!" );
+        SAL_WARN_IF( !xFormsSupp.is(), "xmloff", "OFormLayerXMLExport_Impl::pageContainsForms: no XFormsSupplier2!" );
         return xFormsSupp.is() && xFormsSupp->hasForms();
     }
 

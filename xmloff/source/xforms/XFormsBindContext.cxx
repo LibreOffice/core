@@ -72,7 +72,7 @@ XFormsBindContext::XFormsBindContext(
 {
     // attach binding to model
     mxBinding = mxModel->createBinding();
-    DBG_ASSERT( mxBinding.is(), "can't create binding" );
+    SAL_WARN_IF( !mxBinding.is(), "xmloff", "can't create binding" );
     mxModel->getBindings()->insert( makeAny( mxBinding ) );
 }
 
@@ -126,7 +126,7 @@ void XFormsBindContext::StartElement(
         mxBinding->getPropertyValue( "BindingNamespaces" ),
         UNO_QUERY );
 
-    DBG_ASSERT( xContainer.is(), "binding should have a namespace container" );
+    SAL_WARN_IF( !xContainer.is(), "xmloff", "binding should have a namespace container" );
     if( xContainer.is() )
         lcl_fillNamespaceContainer( GetImport().GetNamespaceMap(), xContainer);
 
@@ -158,7 +158,7 @@ static void lcl_fillNamespaceContainer(
         const OUString& sNamespace = aMap.GetNameByKey( nKeyIter );
 
         // as a hack, we will ignore our own 'default' namespaces
-        DBG_ASSERT( !sPrefix.isEmpty(), "no prefix?" );
+        SAL_WARN_IF( sPrefix.isEmpty(), "xmloff", "no prefix?" );
         if( !sPrefix.startsWith("_") &&
             nKeyIter >= XML_OLD_NAMESPACE_META_IDX )
         {

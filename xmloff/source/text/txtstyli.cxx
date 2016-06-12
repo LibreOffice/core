@@ -496,7 +496,7 @@ void XMLTextStyleContext::FillPropertySet(
         if(IsDefaultStyle() && XML_STYLE_FAMILY_TABLE_ROW == GetFamily())
         {
             OUString sIsSplitAllowed("IsSplitAllowed");
-            DBG_ASSERT( rPropSet->getPropertySetInfo()->hasPropertyByName( sIsSplitAllowed ), "property missing?" );
+            SAL_WARN_IF( !rPropSet->getPropertySetInfo()->hasPropertyByName( sIsSplitAllowed ), "xmloff", "property missing?" );
             rPropSet->setPropertyValue(
                 sIsSplitAllowed,
                 (aContextIDs[1].nIndex == -1) ? makeAny( false ) : GetProperties()[aContextIDs[1].nIndex].maValue );
@@ -505,7 +505,7 @@ void XMLTextStyleContext::FillPropertySet(
         if(IsDefaultStyle() && XML_STYLE_FAMILY_TABLE_TABLE == GetFamily())
         {
             OUString sCollapsingBorders("CollapsingBorders");
-            DBG_ASSERT( rPropSet->getPropertySetInfo()->hasPropertyByName( sCollapsingBorders ), "property missing?" );
+            SAL_WARN_IF( !rPropSet->getPropertySetInfo()->hasPropertyByName( sCollapsingBorders ), "xmloff", "property missing?" );
             rPropSet->setPropertyValue(
                 sCollapsingBorders,
                 (aContextIDs[2].nIndex == -1)

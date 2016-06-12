@@ -239,7 +239,7 @@ void SvxXMLNumRuleExport::exportLevelStyle( sal_Int32 nLevel,
     if( bOutline && (NumberingType::CHAR_SPECIAL == eType ||
                      NumberingType::BITMAP == eType) )
     {
-        DBG_ASSERT( !bOutline,
+        SAL_WARN_IF( bOutline, "xmloff",
            "SvxXMLNumRuleExport::exportLevelStyle: invalid style for outline" );
         return;
     }
@@ -315,7 +315,7 @@ void SvxXMLNumRuleExport::exportLevelStyle( sal_Int32 nLevel,
         }
         else
         {
-            DBG_ASSERT( !xBitmap.is(),
+            SAL_WARN_IF( xBitmap.is(), "xmloff",
                         "embedded images are not supported by now" );
         }
     }
@@ -728,12 +728,12 @@ void SvxXMLNumRuleExport::exportOutline()
 {
     Reference< XChapterNumberingSupplier > xCNSupplier( GetExport().GetModel(),
                                                         UNO_QUERY );
-    DBG_ASSERT( xCNSupplier.is(), "no chapter numbering supplier" );
+    SAL_WARN_IF( !xCNSupplier.is(), "xmloff", "no chapter numbering supplier" );
 
     if( xCNSupplier.is() )
     {
         Reference< XIndexReplace > xNumRule( xCNSupplier->getChapterNumberingRules() );
-        DBG_ASSERT( xNumRule.is(), "no chapter numbering rules" );
+        SAL_WARN_IF( !xNumRule.is(), "xmloff", "no chapter numbering rules" );
 
         if( xNumRule.is() )
         {
@@ -793,11 +793,11 @@ void SvxXMLNumRuleExport::exportStyles( bool bUsed,
         exportOutline();
 
     Reference< XStyleFamiliesSupplier > xFamiliesSupp( GetExport().GetModel(), UNO_QUERY );
-    DBG_ASSERT( xFamiliesSupp.is(), "No XStyleFamiliesSupplier from XModel for export!" );
+    SAL_WARN_IF( !xFamiliesSupp.is(), "xmloff", "No XStyleFamiliesSupplier from XModel for export!" );
     if( xFamiliesSupp.is() )
     {
         Reference< XNameAccess > xFamilies( xFamiliesSupp->getStyleFamilies() );
-        DBG_ASSERT( xFamiliesSupp.is(), "getStyleFamilies() from XModel failed for export!" );
+        SAL_WARN_IF( !xFamiliesSupp.is(), "xmloff", "getStyleFamilies() from XModel failed for export!" );
 
         if( xFamilies.is() )
         {
@@ -808,7 +808,7 @@ void SvxXMLNumRuleExport::exportStyles( bool bUsed,
             {
                 xFamilies->getByName( aNumberStyleName ) >>= xStyles;
 
-                DBG_ASSERT( xStyles.is(), "Style not found for export!" );
+                SAL_WARN_IF( !xStyles.is(), "xmloff", "Style not found for export!" );
 
                 if( xStyles.is() )
                 {

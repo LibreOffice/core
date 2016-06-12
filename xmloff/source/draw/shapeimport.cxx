@@ -162,7 +162,7 @@ XMLShapeImportHelper::XMLShapeImportHelper(
 
 XMLShapeImportHelper::~XMLShapeImportHelper()
 {
-    DBG_ASSERT( mpImpl->maConnections.empty(), "XMLShapeImportHelper::restoreConnections() was not called!" );
+    SAL_WARN_IF( !mpImpl->maConnections.empty(), "xmloff", "XMLShapeImportHelper::restoreConnections() was not called!" );
 
     // cleanup factory, decrease refcount. Should lead to destruction.
     mpSdPropHdlFactory.clear();
@@ -782,7 +782,7 @@ void ShapeSortContext::moveShape( sal_Int32 nSourcePos, sal_Int32 nDestPos )
         {
             if( rHint.nIs < nSourcePos )
             {
-                DBG_ASSERT( rHint.nIs >= nDestPos, "shape sorting failed" );
+                SAL_WARN_IF( rHint.nIs < nDestPos, "xmloff", "shape sorting failed" );
                 rHint.nIs++;
             }
         }
@@ -862,7 +862,7 @@ void XMLShapeImportHelper::pushGroupForSorting( uno::Reference< drawing::XShapes
 
 void XMLShapeImportHelper::popGroupAndSort()
 {
-    DBG_ASSERT( mpImpl->mpSortContext, "No context to sort!" );
+    SAL_WARN_IF( !mpImpl->mpSortContext, "xmloff", "No context to sort!" );
     if( mpImpl->mpSortContext == nullptr )
         return;
 
@@ -1060,7 +1060,7 @@ void XMLShapeImportHelper::startPage( css::uno::Reference< css::drawing::XShapes
 /** this method must be calling after the last shape is imported for the given page */
 void XMLShapeImportHelper::endPage( css::uno::Reference< css::drawing::XShapes >& rShapes )
 {
-    DBG_ASSERT( mpPageContext && (mpPageContext->mxShapes == rShapes), "wrong call to endPage(), no startPage called or wrong page" );
+    SAL_WARN_IF( !mpPageContext || (mpPageContext->mxShapes != rShapes), "xmloff", "wrong call to endPage(), no startPage called or wrong page" );
     if( nullptr == mpPageContext )
         return;
 

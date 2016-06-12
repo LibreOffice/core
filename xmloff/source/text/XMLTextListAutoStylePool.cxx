@@ -258,7 +258,7 @@ void XMLTextListAutoStylePool::exportXML() const
     for( i=0; i < nCount; i++ )
     {
         XMLTextListAutoStylePoolEntry_Impl *pEntry = (*pPool)[i];
-        DBG_ASSERT( pEntry->GetPos() < nCount, "Illegal pos" );
+        SAL_WARN_IF( pEntry->GetPos() >= nCount, "xmloff", "Illegal pos" );
         aExpEntries[pEntry->GetPos()] = pEntry;
     }
 

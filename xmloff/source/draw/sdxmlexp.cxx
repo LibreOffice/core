@@ -2070,7 +2070,7 @@ void SdXMLExport::exportPresentationSettings()
                 AddAttribute(XML_NAMESPACE_PRESENTATION, XML_NAME, *pShowNames );
 
                 xShows->getByName( *pShowNames ) >>= xShow;
-                DBG_ASSERT( xShow.is(), "invalid custom show!" );
+                SAL_WARN_IF( !xShow.is(), "xmloff", "invalid custom show!" );
                 if( !xShow.is() )
                     continue;
 

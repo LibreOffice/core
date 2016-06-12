@@ -104,8 +104,8 @@ XMLIndexTemplateContext::XMLIndexTemplateContext(
     DBG_ASSERT( ((XML_TOKEN_INVALID != eLevelAttrName) &&  (nullptr != pLevelNameMap))
                 || ((XML_TOKEN_INVALID == eLevelAttrName) &&  (nullptr == pLevelNameMap)),
                 "need both, attribute name and value map, or neither" );
-    DBG_ASSERT( nullptr != pOutlineLevelStylePropMap, "need property name map" );
-    DBG_ASSERT( nullptr != pAllowedTokenTypes, "need allowed tokens map" );
+    SAL_WARN_IF( nullptr == pOutlineLevelStylePropMap, "xmloff", "need property name map" );
+    SAL_WARN_IF( nullptr == pAllowedTokenTypes, "xmloff", "need allowed tokens map" );
 
     // no map for outline-level? then use 1
     if (nullptr == pLevelNameMap)

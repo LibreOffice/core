@@ -562,7 +562,7 @@ void exportXFormsSchemas( SvXMLExport& rExport,
         if( xTypes.is() )
         {
             Reference<XEnumeration> xEnum = xTypes->createEnumeration();
-            DBG_ASSERT( xEnum.is(), "no enum?" );
+            SAL_WARN_IF( !xEnum.is(), "xmloff", "no enum?" );
             while( xEnum->hasMoreElements() )
             {
                 Reference<XPropertySet> xType( xEnum->nextElement(), UNO_QUERY );

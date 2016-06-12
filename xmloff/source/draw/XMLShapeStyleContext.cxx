@@ -151,7 +151,7 @@ void XMLShapeStyleContext::FillPropertySet( const Reference< beans::XPropertySet
         if( (property == end) && ( !m_sListStyleName.isEmpty() ) )
         {
             sal_Int32 nIndex = rMapper->FindEntryIndex( CTF_SD_NUMBERINGRULES_NAME );
-            DBG_ASSERT( -1 != nIndex, "can't find numbering rules property entry, can't set numbering rule!" );
+            SAL_WARN_IF( -1 == nIndex, "xmloff", "can't find numbering rules property entry, can't set numbering rule!" );
 
             XMLPropertyState aNewState( nIndex );
             rProperties.push_back( aNewState );
@@ -170,7 +170,7 @@ void XMLShapeStyleContext::FillPropertySet( const Reference< beans::XPropertySet
 
             const SvxXMLListStyleContext *pListStyle = GetImport().GetTextImport()->FindAutoListStyle( m_sListStyleName );
 
-            DBG_ASSERT( pListStyle, "list-style not found for shape style" );
+            SAL_WARN_IF( !pListStyle, "xmloff", "list-style not found for shape style" );
             if( pListStyle )
             {
                 uno::Reference< container::XIndexReplace > xNumRule( SvxXMLListStyleContext::CreateNumRule( GetImport().GetModel() ) );
@@ -212,7 +212,7 @@ void XMLShapeStyleContext::FillPropertySet( const Reference< beans::XPropertySet
 
     rtl::Reference < SvXMLImportPropertyMapper > xImpPrMap =
         GetStyles()->GetImportPropertyMapper( GetFamily() );
-    DBG_ASSERT( xImpPrMap.is(), "There is the import prop mapper" );
+    SAL_WARN_IF( !xImpPrMap.is(), "xmloff", "There is the import prop mapper" );
     if( xImpPrMap.is() )
         xImpPrMap->FillPropertySet( GetProperties(), rPropSet, aContextIDs );
 

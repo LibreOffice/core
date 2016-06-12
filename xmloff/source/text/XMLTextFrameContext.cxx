@@ -547,7 +547,7 @@ void XMLTextFrameContext_Impl::Create( bool /*bHRefOrBase64*/ )
                     case XML_TEXT_FRAME_GRAPHIC: sServiceName = sGraphicServiceName; break;
                 }
                 Reference<XInterface> xIfc = xFactory->createInstance( sServiceName );
-                DBG_ASSERT( xIfc.is(), "couldn't create frame" );
+                SAL_WARN_IF( !xIfc.is(), "xmloff", "couldn't create frame" );
                 if( xIfc.is() )
                     xPropSet.set( xIfc, UNO_QUERY );
             }

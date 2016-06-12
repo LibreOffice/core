@@ -55,7 +55,7 @@ namespace xmloff
             if (pEvents->ScriptType == EVENT_STARBASIC)
             {   // for StarBasic, the library name is part of the ScriptCode
                 sal_Int32 nPrefixLen = sLocalMacroName.indexOf( ':' );
-                DBG_ASSERT( 0 <= nPrefixLen, "OEventDescriptorMapper::OEventDescriptorMapper: invalid script code prefix!" );
+                SAL_WARN_IF( 0 > nPrefixLen, "xmloff", "OEventDescriptorMapper::OEventDescriptorMapper: invalid script code prefix!" );
                 if ( 0 <= nPrefixLen )
                 {
                     // the export handler for StarBasic expects "StarOffice", not "application" for application modules ...

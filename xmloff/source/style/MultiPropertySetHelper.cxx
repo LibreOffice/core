@@ -64,7 +64,7 @@ MultiPropertySetHelper::~MultiPropertySetHelper()
 void MultiPropertySetHelper::hasProperties(
     const Reference<XPropertySetInfo> & rInfo )
 {
-    DBG_ASSERT( rInfo.is(), "I'd really like an XPropertySetInfo here." );
+    SAL_WARN_IF( !rInfo.is(), "xmloff", "I'd really like an XPropertySetInfo here." );
 
     // allocate sequence index
     if ( nullptr == pSequenceIndex )
@@ -107,7 +107,7 @@ bool MultiPropertySetHelper::checkedProperties()
 void MultiPropertySetHelper::getValues(
     const Reference<XMultiPropertySet> & rMultiPropertySet )
 {
-    DBG_ASSERT( rMultiPropertySet.is(), "We need an XMultiPropertySet." );
+    SAL_WARN_IF( !rMultiPropertySet.is(), "xmloff", "We need an XMultiPropertySet." );
 
     aValues = rMultiPropertySet->getPropertyValues( aPropertySequence );
     pValues = aValues.getConstArray();
@@ -116,7 +116,7 @@ void MultiPropertySetHelper::getValues(
 void MultiPropertySetHelper::getValues(
     const Reference<XPropertySet> & rPropertySet )
 {
-    DBG_ASSERT( rPropertySet.is(), "We need an XPropertySet." );
+    SAL_WARN_IF( !rPropertySet.is(), "xmloff", "We need an XPropertySet." );
 
     // re-alloc aValues (if necessary) and fill with values from XPropertySet
     sal_Int16 nSupportedPropertiesCount =

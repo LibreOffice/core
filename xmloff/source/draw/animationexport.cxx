@@ -1609,7 +1609,7 @@ void AnimationsExporterImpl::convertTarget( OUStringBuffer& sTmp, const Any& rTa
         }
     }
 
-    DBG_ASSERT( xRef.is(), "xmloff::AnimationsExporterImpl::convertTarget(), invalid target type!" );
+    SAL_WARN_IF( !xRef.is(), "xmloff", "xmloff::AnimationsExporterImpl::convertTarget(), invalid target type!" );
     if( xRef.is() )
     {
         const OUString& rIdentifier = mrExport.getInterfaceToIdentifierMapper().getIdentifier(xRef);

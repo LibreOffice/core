@@ -62,7 +62,7 @@ void XMLPropStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
 {
     if( XML_NAMESPACE_STYLE == nPrefixKey && IsXMLToken( rLocalName, XML_FAMILY ) )
     {
-        DBG_ASSERT( GetFamily() == static_cast<SvXMLStylesContext *>(&mxStyles)->GetFamily( rValue ), "unexpected style family" );
+        SAL_WARN_IF( GetFamily() != static_cast<SvXMLStylesContext *>(&mxStyles)->GetFamily( rValue ), "xmloff", "unexpected style family" );
     }
     else
     {
@@ -220,7 +220,7 @@ void XMLPropStyleContext::FillPropertySet(
     rtl::Reference < SvXMLImportPropertyMapper > xImpPrMap =
         static_cast<SvXMLStylesContext *>(&mxStyles)->GetImportPropertyMapper(
                                                                 GetFamily() );
-    DBG_ASSERT( xImpPrMap.is(), "There is the import prop mapper" );
+    SAL_WARN_IF( !xImpPrMap.is(), "xmloff", "There is the import prop mapper" );
     if( xImpPrMap.is() )
         xImpPrMap->FillPropertySet( maProperties, rPropSet );
 }
@@ -443,7 +443,7 @@ void XMLPropStyleContext::Finish( bool bOverwrite )
         // The families container must exist
         Reference < XNameContainer > xFamilies =
             static_cast<SvXMLStylesContext *>(&mxStyles)->GetStylesContainer( GetFamily() );
-        DBG_ASSERT( xFamilies.is(), "Families lost" );
+        SAL_WARN_IF( !xFamilies.is(), "xmloff", "Families lost" );
         if( !xFamilies.is() )
             return;
 

@@ -148,11 +148,11 @@ void XMLTextExportPropertySetMapper::handleSpecialItem(
     switch( getPropertySetMapper()->GetEntryContextId( rProperty.mnIndex ) )
     {
     case CTF_DROPCAPWHOLEWORD:
-        DBG_ASSERT( !bDropWholeWord, "drop whole word is set already!" );
+        SAL_WARN_IF( !!bDropWholeWord, "xmloff", "drop whole word is set already!" );
         pThis->bDropWholeWord = *o3tl::doAccess<bool>(rProperty.maValue);
         break;
     case CTF_DROPCAPCHARSTYLE:
-        DBG_ASSERT( sDropCharStyle.isEmpty(), "drop char style is set already!" );
+        SAL_WARN_IF( !sDropCharStyle.isEmpty(), "xmloff", "drop char style is set already!" );
         rProperty.maValue >>= pThis->sDropCharStyle;
         break;
     case CTF_NUMBERINGSTYLENAME:
@@ -1172,7 +1172,7 @@ bool lcl_IsOutlineStyle(const SvXMLExport &rExport, const OUString & rName)
     {
         Reference<XPropertySet> xNumRule(
             xCNSupplier->getChapterNumberingRules(), UNO_QUERY );
-        DBG_ASSERT( xNumRule.is(), "no chapter numbering rules" );
+        SAL_WARN_IF( !xNumRule.is(), "xmloff", "no chapter numbering rules" );
         if (xNumRule.is())
         {
             xNumRule->getPropertyValue("Name") >>= sOutlineName;

@@ -94,7 +94,7 @@ void XMLTextNumRuleInfo::Set(
     // Assertion saving writer document (#i97312#)
     if ( mxNumRules.is() && mxNumRules->getCount() < 1 )
     {
-        DBG_ASSERT( false,
+        SAL_WARN( "xmloff",
                     "<XMLTextNumRuleInfo::Set(..)> - numbering rules instance does not contain any numbering rule" );
         Reset();
         return;
@@ -102,7 +102,7 @@ void XMLTextNumRuleInfo::Set(
 
     if ( mnListLevel < 0 )
     {
-        DBG_ASSERT( false,
+        SAL_WARN( "xmloff",
                     "<XMLTextNumRuleInfo::Set(..)> - unexpected numbering level" );
         Reset();
         return;
@@ -134,14 +134,14 @@ void XMLTextNumRuleInfo::Set(
         if ( msNumRulesName.isEmpty() )
         {
             Reference < XNamed > xNamed( mxNumRules, UNO_QUERY );
-            DBG_ASSERT( xNamed.is(),
+            SAL_WARN_IF( !xNamed.is(), "xmloff",
                         "<XMLTextNumRuleInfo::Set(..)> - numbering rules instance have to be named. Serious defect." );
             if( xNamed.is() )
             {
                 msNumRulesName = xNamed->getName();
             }
         }
-        DBG_ASSERT( !msNumRulesName.isEmpty(),
+        SAL_WARN_IF( msNumRulesName.isEmpty(), "xmloff",
                     "<XMLTextNumRuleInfo::Set(..)> - no name found for numbering rules instance. Serious defect." );
 
         if( xPropSetInfo->hasPropertyByName( msPropNameListId ) )

@@ -592,7 +592,7 @@ void XMLRedlineExport::ExportStartOrEndRedline(
 
     if( bIdOK )
     {
-        DBG_ASSERT( !sId.isEmpty(), "Redlines must have IDs" );
+        SAL_WARN_IF( sId.isEmpty(), "xmloff", "Redlines must have IDs" );
 
         // TODO: use GetRedlineID or eliminate that function
         OUStringBuffer sBuffer(sChangePrefix);

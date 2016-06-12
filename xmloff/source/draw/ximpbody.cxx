@@ -178,7 +178,7 @@ SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
                 }
             }
 
-            DBG_ASSERT( bDone, "xmloff::SdXMLDrawPageContext::SdXMLDrawPageContext(), could not find a slide master!" );
+            SAL_WARN_IF( !bDone, "xmloff", "xmloff::SdXMLDrawPageContext::SdXMLDrawPageContext(), could not find a slide master!" );
         }
     }
 

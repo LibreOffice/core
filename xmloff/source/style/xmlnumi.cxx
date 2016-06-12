@@ -582,7 +582,7 @@ Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties()
             pProps[nPos++].Value <<= m_nColor;
         }
 
-        DBG_ASSERT( nPos == nCount, "array under/overflow" );
+        SAL_WARN_IF( nPos != nCount, "xmloff", "array under/overflow" );
     }
 
     return aPropSeq;
@@ -1162,7 +1162,7 @@ void SvxXMLListStyleContext::CreateAndInsertLate( bool bOverwrite )
         {
             Reference< XMultiServiceFactory > xFactory( GetImport().GetModel(),
                                                         UNO_QUERY );
-            DBG_ASSERT( xFactory.is(), "no factory" );
+            SAL_WARN_IF( !xFactory.is(), "xmloff", "no factory" );
             if( !xFactory.is() )
                 return;
 
@@ -1213,8 +1213,8 @@ void SvxXMLListStyleContext::CreateAndInsertLate( bool bOverwrite )
 
 void SvxXMLListStyleContext::CreateAndInsertAuto() const
 {
-    DBG_ASSERT( !bOutline, "Outlines cannot be inserted here" );
-    DBG_ASSERT( !xNumRules.is(), "Numbering Rule is existing already" );
+    SAL_WARN_IF( bOutline, "xmloff", "Outlines cannot be inserted here" );
+    SAL_WARN_IF( xNumRules.is(), "xmloff", "Numbering Rule is existing already" );
 
     const OUString& rName = GetName();
     if( bOutline || xNumRules.is() || rName.isEmpty() )
@@ -1236,7 +1236,7 @@ Reference < XIndexReplace > SvxXMLListStyleContext::CreateNumRule(
     Reference<XIndexReplace> xNumRule;
 
     Reference< XMultiServiceFactory > xFactory( rModel, UNO_QUERY );
-    DBG_ASSERT( xFactory.is(), "no factory" );
+    SAL_WARN_IF( !xFactory.is(), "xmloff", "no factory" );
     if( !xFactory.is() )
         return xNumRule;
 
@@ -1245,7 +1245,7 @@ Reference < XIndexReplace > SvxXMLListStyleContext::CreateNumRule(
         return xNumRule;
 
     xNumRule.set( xIfc, UNO_QUERY );
-    DBG_ASSERT( xNumRule.is(), "go no numbering rule" );
+    SAL_WARN_IF( !xNumRule.is(), "xmloff", "go no numbering rule" );
 
     return xNumRule;
 }
