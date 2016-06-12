@@ -272,7 +272,7 @@ IMPL_LINK_NOARG_TYPED(MenuFloatingWindow, PopupEnd, FloatingWindow*, void)
     {
         if ( pActivePopup )
         {
-            //DBG_ASSERT( !pActivePopup->ImplGetWindow(), "PopupEnd, obwohl pActivePopup MIT Window!" );
+            //SAL_WARN_IF( pActivePopup->ImplGetWindow(), "vcl", "PopupEnd, obwohl pActivePopup MIT Window!" );
             KillActivePopup(); // should be ok to just remove it
             //pActivePopup->bCanceled = true;
         }
@@ -585,7 +585,7 @@ void MenuFloatingWindow::ImplScroll( bool bUp )
     if ( bScrollUp && bUp )
     {
         nFirstEntry = pMenu->ImplGetPrevVisible( nFirstEntry );
-        DBG_ASSERT( nFirstEntry != ITEMPOS_INVALID, "Scroll?!" );
+        SAL_WARN_IF( nFirstEntry == ITEMPOS_INVALID, "vcl", "Scroll?!" );
 
         long nScrollEntryHeight = pMenu->GetItemList()->GetDataFromPos( nFirstEntry )->aSz.Height();
 
@@ -608,7 +608,7 @@ void MenuFloatingWindow::ImplScroll( bool bUp )
         long nScrollEntryHeight = pMenu->GetItemList()->GetDataFromPos( nFirstEntry )->aSz.Height();
 
         nFirstEntry = pMenu->ImplGetNextVisible( nFirstEntry );
-        DBG_ASSERT( nFirstEntry != ITEMPOS_INVALID, "Scroll?!" );
+        SAL_WARN_IF( nFirstEntry == ITEMPOS_INVALID, "vcl", "Scroll?!" );
 
         if ( !bScrollUp )
         {
@@ -688,7 +688,7 @@ void MenuFloatingWindow::ChangeHighlightItem( sal_uInt16 n, bool bStartPopupTime
     }
 
     nHighlightedItem = (sal_uInt16)n;
-    DBG_ASSERT( pMenu->ImplIsVisible( nHighlightedItem ) || nHighlightedItem == ITEMPOS_INVALID, "ChangeHighlightItem: Not visible!" );
+    SAL_WARN_IF( !pMenu->ImplIsVisible( nHighlightedItem ) && nHighlightedItem != ITEMPOS_INVALID, "vcl", "ChangeHighlightItem: Not visible!" );
     if( nHighlightedItem != ITEMPOS_INVALID )
     {
         if (pMenu->pStartedFrom && !pMenu->pStartedFrom->IsMenuBar())
@@ -785,7 +785,7 @@ void MenuFloatingWindow::RenderHighlightItem(vcl::RenderContext& rRenderContext,
         MenuItemData* pData = pMenu->pItemList->GetDataFromPos( n );
         if (n == nPos)
         {
-            DBG_ASSERT(pMenu->ImplIsVisible(n), "Highlight: Item not visible!");
+            SAL_WARN_IF(!pMenu->ImplIsVisible(n), "vcl", "Highlight: Item not visible!");
             if (pData->eType != MenuItemType::SEPARATOR)
             {
                 bool bRestoreLineColor = false;
@@ -869,7 +869,7 @@ Rectangle MenuFloatingWindow::ImplGetItemRect( sal_uInt16 nPos )
         MenuItemData* pData = pMenu->pItemList->GetDataFromPos( n );
         if ( n == nPos )
         {
-            DBG_ASSERT( pMenu->ImplIsVisible( n ), "ImplGetItemRect: Item not visible!" );
+            SAL_WARN_IF( !pMenu->ImplIsVisible( n ), "vcl", "ImplGetItemRect: Item not visible!" );
             if ( pData->eType != MenuItemType::SEPARATOR )
             {
                 aRect = Rectangle( Point( nX, nY ), Size( aSz.Width(), pData->aSz.Height() ) );

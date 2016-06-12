@@ -1685,7 +1685,7 @@ PropertyValue* PrintDialog::getValueForWindow( vcl::Window* i_pWindow ) const
     if( it != maControlToPropertyMap.end() )
     {
         pVal = maPController->getValue( it->second );
-        DBG_ASSERT( pVal, "property value not found" );
+        SAL_WARN_IF( !pVal, "vcl", "property value not found" );
     }
     else
     {
@@ -1737,7 +1737,7 @@ void PrintDialog::updateWindowFromProperty( const OUString& i_rProperty )
                 else if( nVal >= 0 && nVal < sal_Int32(rWindows.size() ) )
                 {
                     RadioButton* pBtn = dynamic_cast< RadioButton* >( rWindows[nVal].get() );
-                    DBG_ASSERT( pBtn, "unexpected control for property" );
+                    SAL_WARN_IF( !pBtn, "vcl", "unexpected control for property" );
                     if( pBtn )
                         pBtn->Check();
                 }

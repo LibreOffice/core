@@ -507,7 +507,7 @@ ImplLayoutArgs::ImplLayoutArgs(const OUString& rStr,
 // add a run after splitting it up to get rid of control chars
 void ImplLayoutArgs::AddRun( int nCharPos0, int nCharPos1, bool bRTL )
 {
-    DBG_ASSERT( nCharPos0 <= nCharPos1, "ImplLayoutArgs::AddRun() nCharPos0>=nCharPos1" );
+    SAL_WARN_IF( nCharPos0 > nCharPos1, "vcl", "ImplLayoutArgs::AddRun() nCharPos0>=nCharPos1" );
 
     // remove control characters from runs by splitting them up
     if( !bRTL )

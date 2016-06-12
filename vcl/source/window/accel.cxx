@@ -176,7 +176,7 @@ void Accelerator::ImplDeleteData()
 void Accelerator::ImplInsertAccel( sal_uInt16 nItemId, const vcl::KeyCode& rKeyCode,
                                    bool bEnable, Accelerator* pAutoAccel )
 {
-    DBG_ASSERT( nItemId, "Accelerator::InsertItem(): ItemId == 0" );
+    SAL_WARN_IF( !nItemId, "vcl", "Accelerator::InsertItem(): ItemId == 0" );
 
     if ( rKeyCode.IsFunction() )
     {

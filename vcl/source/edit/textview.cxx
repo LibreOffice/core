@@ -345,7 +345,7 @@ void TextView::ImpHighlight( const TextSelection& rSel )
     {
         mpImpl->mpCursor->Hide();
 
-        DBG_ASSERT( !mpImpl->mpTextEngine->mpIdleFormatter->IsActive(), "ImpHighlight: Not formatted!" );
+        SAL_WARN_IF( mpImpl->mpTextEngine->mpIdleFormatter->IsActive(), "vcl", "ImpHighlight: Not formatted!" );
 
         Rectangle aVisArea( mpImpl->maStartDocPos, mpImpl->mpWindow->GetOutputSizePixel() );
         long nY = 0;
@@ -859,7 +859,7 @@ void TextView::Command( const CommandEvent& rCEvt )
     }
     else if ( rCEvt.GetCommand() == CommandEventId::EndExtTextInput )
     {
-        DBG_ASSERT( mpImpl->mpTextEngine->mpIMEInfos, "CommandEventId::EndExtTextInput => No Start ?" );
+        SAL_WARN_IF( !mpImpl->mpTextEngine->mpIMEInfos, "vcl", "CommandEventId::EndExtTextInput => No Start ?" );
         if( mpImpl->mpTextEngine->mpIMEInfos )
         {
             TEParaPortion* pPortion = mpImpl->mpTextEngine->mpTEParaPortions->GetObject( mpImpl->mpTextEngine->mpIMEInfos->aPos.GetPara() );
@@ -881,7 +881,7 @@ void TextView::Command( const CommandEvent& rCEvt )
     }
     else if ( rCEvt.GetCommand() == CommandEventId::ExtTextInput )
     {
-        DBG_ASSERT( mpImpl->mpTextEngine->mpIMEInfos, "CommandEventId::ExtTextInput => No Start ?" );
+        SAL_WARN_IF( !mpImpl->mpTextEngine->mpIMEInfos, "vcl", "CommandEventId::ExtTextInput => No Start ?" );
         if( mpImpl->mpTextEngine->mpIMEInfos )
         {
             const CommandExtTextInputData* pData = rCEvt.GetExtTextInputData();
@@ -912,7 +912,7 @@ void TextView::Command( const CommandEvent& rCEvt )
                     {
                         // overwrite
                         const sal_Int32 nOverwrite = std::min( nNewIMETextLen, mpImpl->mpTextEngine->mpIMEInfos->aOldTextAfterStartPos.getLength() ) - nOldIMETextLen;
-                        DBG_ASSERT( nOverwrite && (nOverwrite < 0xFF00), "IME Overwrite?!" );
+                        SAL_WARN_IF( !nOverwrite || (nOverwrite >= 0xFF00), "vcl", "IME Overwrite?!" );
                         TextPaM aPaM( mpImpl->mpTextEngine->mpIMEInfos->aPos );
                         aPaM.GetIndex() += nNewIMETextLen;
                         TextSelection aSel( aPaM );
@@ -995,7 +995,7 @@ void TextView::HideCursor()
 
 void TextView::Scroll( long ndX, long ndY )
 {
-    DBG_ASSERT( mpImpl->mpTextEngine->IsFormatted(), "Scroll: Not formatted!" );
+    SAL_WARN_IF( !mpImpl->mpTextEngine->IsFormatted(), "vcl", "Scroll: Not formatted!" );
 
     if ( !ndX && !ndY )
         return;
@@ -1901,7 +1901,7 @@ void TextView::dragGestureRecognized( const css::datatransfer::dnd::DragGestureE
     {
         SolarMutexGuard aVclGuard;
 
-        DBG_ASSERT( mpImpl->maSelection.HasRange(), "TextView::dragGestureRecognized: mpImpl->mbClickedInSelection, but no selection?" );
+        SAL_WARN_IF( !mpImpl->maSelection.HasRange(), "vcl", "TextView::dragGestureRecognized: mpImpl->mbClickedInSelection, but no selection?" );
 
         delete mpImpl->mpDDInfo;
         mpImpl->mpDDInfo = new TextDDInfo;

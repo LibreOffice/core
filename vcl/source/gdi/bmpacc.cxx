@@ -50,7 +50,7 @@ void BitmapInfoAccess::ImplCreate( Bitmap& rBitmap )
 {
     std::shared_ptr<ImpBitmap> xImpBmp = rBitmap.ImplGetImpBitmap();
 
-    DBG_ASSERT( xImpBmp, "Forbidden Access to empty bitmap!" );
+    SAL_WARN_IF( !xImpBmp, "vcl", "Forbidden Access to empty bitmap!" );
 
     if( xImpBmp )
     {
@@ -404,8 +404,8 @@ BitmapWriteAccess::~BitmapWriteAccess()
 void BitmapWriteAccess::CopyScanline( long nY, const BitmapReadAccess& rReadAcc )
 {
     assert(nY >= 0 && nY < mpBuffer->mnHeight && "y-coordinate in destination out of range!");
-    DBG_ASSERT( nY < rReadAcc.Height(), "y-coordinate in source out of range!" );
-    DBG_ASSERT( ( HasPalette() && rReadAcc.HasPalette() ) || ( !HasPalette() && !rReadAcc.HasPalette() ), "No copying possible between palette bitmap and TC bitmap!" );
+    SAL_WARN_IF( nY >= rReadAcc.Height(), "vcl", "y-coordinate in source out of range!" );
+    SAL_WARN_IF( ( !HasPalette() || !rReadAcc.HasPalette() ) && ( HasPalette() || rReadAcc.HasPalette() ), "vcl", "No copying possible between palette bitmap and TC bitmap!" );
 
     if( ( GetScanlineFormat() == rReadAcc.GetScanlineFormat() ) &&
         ( GetScanlineSize() >= rReadAcc.GetScanlineSize() ) )
@@ -481,7 +481,7 @@ void BitmapWriteAccess::CopyScanline( long nY, ConstScanline aSrcScanline,
 
 void BitmapWriteAccess::CopyBuffer( const BitmapReadAccess& rReadAcc )
 {
-    DBG_ASSERT( ( HasPalette() && rReadAcc.HasPalette() ) || ( !HasPalette() && !rReadAcc.HasPalette() ), "No copying possible between palette bitmap and TC bitmap!" );
+    SAL_WARN_IF( ( !HasPalette() || !rReadAcc.HasPalette() ) && ( HasPalette() || rReadAcc.HasPalette() ), "vcl", "No copying possible between palette bitmap and TC bitmap!" );
 
     if( ( GetScanlineFormat() == rReadAcc.GetScanlineFormat() ) &&
         ( GetScanlineSize() == rReadAcc.GetScanlineSize() ) )

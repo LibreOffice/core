@@ -390,7 +390,7 @@ void GenPspGraphics::SetROPFillColor( SalROPColor )
 void GenPspGraphics::SetXORMode( bool bSet )
 {
     (void)bSet;
-    DBG_ASSERT( !bSet, "Error: PrinterGfx::SetXORMode() not implemented" );
+    SAL_WARN_IF( bSet, "vcl", "Error: PrinterGfx::SetXORMode() not implemented" );
 }
 
 void GenPspGraphics::drawPixel( long nX, long nY )

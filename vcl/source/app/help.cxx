@@ -452,7 +452,7 @@ IMPL_LINK_TYPED( HelpTextWindow, TimerHdl, Timer*, pTimer, void)
     }
     else
     {
-        DBG_ASSERT( pTimer == &maHideTimer, "HelpTextWindow::TimerHdl with bad Timer" );
+        SAL_WARN_IF( pTimer != &maHideTimer, "vcl", "HelpTextWindow::TimerHdl with bad Timer" );
           ImplDestroyHelpWindow( true );
     }
 }
@@ -495,7 +495,7 @@ void ImplShowHelpWindow( vcl::Window* pParent, sal_uInt16 nHelpWinStyle, QuickHe
     sal_uInt16 nDelayMode = HELPDELAY_NORMAL;
     if ( pHelpWin )
     {
-        DBG_ASSERT( pHelpWin != pParent, "HelpInHelp ?!" );
+        SAL_WARN_IF( pHelpWin == pParent, "vcl", "HelpInHelp ?!" );
 
         if  (   (   ( pHelpWin->GetHelpText() != rHelpText )
                 ||  ( pHelpWin->GetWinStyle() != nHelpWinStyle )
@@ -539,7 +539,7 @@ void ImplShowHelpWindow( vcl::Window* pParent, sal_uInt16 nHelpWinStyle, QuickHe
             )
             nDelayMode = HELPDELAY_NONE;
 
-        DBG_ASSERT( !pHelpWin, "Noch ein HelpWin ?!" );
+        SAL_WARN_IF( pHelpWin, "vcl", "Noch ein HelpWin ?!" );
         pHelpWin = VclPtr<HelpTextWindow>::Create( pParent, rHelpText, nHelpWinStyle, nStyle );
         pSVData->maHelpData.mpHelpWin = pHelpWin;
         pHelpWin->SetStatusText( rStatusText );

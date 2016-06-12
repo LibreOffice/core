@@ -2289,8 +2289,8 @@ bool WinSalGraphics::CreateFontSubset( const OUString& rToFile,
     if( !::GetTextMetricsA( getHDC(), &aWinMetric ) )
         return FALSE;
 
-    DBG_ASSERT( !(aWinMetric.tmPitchAndFamily & TMPF_DEVICE), "cannot subset device font" );
-    DBG_ASSERT( aWinMetric.tmPitchAndFamily & TMPF_TRUETYPE, "can only subset TT font" );
+    SAL_WARN_IF( (aWinMetric.tmPitchAndFamily & TMPF_DEVICE), "vcl", "cannot subset device font" );
+    SAL_WARN_IF( !aWinMetric.tmPitchAndFamily & TMPF_TRUETYPE, "vcl", "can only subset TT font" );
 #endif
 
     OUString aSysPath;
@@ -2398,7 +2398,7 @@ bool WinSalGraphics::CreateFontSubset( const OUString& rToFile,
         aShortIDs[0] = 0;
         aTempEncs[0] = 0;
     }
-    DBG_ASSERT( nGlyphCount < 257, "too many glyphs for subsetting" );
+    SAL_WARN_IF( nGlyphCount >= 257, "vcl", "too many glyphs for subsetting" );
 
     // fill pWidth array
     TTSimpleGlyphMetrics* pMetrics =
@@ -2556,7 +2556,7 @@ void WinSalGraphics::GetGlyphWidths( const PhysicalFontFace* pFont,
             }
             const WinFontFace* pWinFont = static_cast<const WinFontFace*>(pFont);
             FontCharMapPtr xFCMap = pWinFont->GetFontCharMap();
-            DBG_ASSERT( xFCMap && xFCMap->GetCharCount(), "no map" );
+            SAL_WARN_IF( !xFCMap || !xFCMap->GetCharCount(), "vcl", "no map" );
 
             int nCharCount = xFCMap->GetCharCount();
             sal_uInt32 nChar = xFCMap->GetFirstChar();

@@ -2027,7 +2027,7 @@ void AquaSalGraphics::SetXORMode( bool bSet )
 
 void AquaSalGraphics::updateResolution()
 {
-    DBG_ASSERT( mbWindow, "updateResolution on inappropriate graphics" );
+    SAL_WARN_IF( !mbWindow, "vcl", "updateResolution on inappropriate graphics" );
 
     initResolution( (mbWindow && mpFrame) ? mpFrame->getNSWindow() : nil );
 }

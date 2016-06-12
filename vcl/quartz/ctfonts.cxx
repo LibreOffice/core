@@ -248,7 +248,7 @@ LogicalFontInstance* CoreTextFontFace::CreateFontInstance( /*const*/ FontSelectP
 
 int CoreTextFontFace::GetFontTable( const char pTagName[5], unsigned char* pResultBuf ) const
 {
-    DBG_ASSERT( pTagName[4]=='\0', "CoreTextFontFace::GetFontTable with invalid tagname!\n" );
+    SAL_WARN_IF( pTagName[4]!='\0', "vcl", "CoreTextFontFace::GetFontTable with invalid tagname!\n" );
 
     const CTFontTableTag nTagCode = (pTagName[0]<<24) + (pTagName[1]<<16) + (pTagName[2]<<8) + (pTagName[3]<<0);
 

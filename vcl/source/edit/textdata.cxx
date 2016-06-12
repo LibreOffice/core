@@ -64,7 +64,7 @@ void TETextPortionList::Reset()
 
 void TETextPortionList::DeleteFromPortion( sal_uInt16 nDelFrom )
 {
-    DBG_ASSERT( ( nDelFrom < size() ) || ( (nDelFrom == 0) && (size() == 0) ), "DeleteFromPortion: Out of range" );
+    SAL_WARN_IF( ( nDelFrom >= size() ) && ( (nDelFrom != 0) || (size() != 0) ), "vcl", "DeleteFromPortion: Out of range" );
     for ( iterator it = begin() + nDelFrom; it != end(); ++it )
         delete *it;
     erase( begin() + nDelFrom, end() );
@@ -128,7 +128,7 @@ void TEParaPortion::MarkInvalid( sal_Int32 nStart, sal_Int32 nDiff )
         }
         else
         {
-            DBG_ASSERT( ( nDiff >= 0 ) || ( (nStart+nDiff) >= 0 ), "MarkInvalid: Diff out of Range" );
+            SAL_WARN_IF( ( nDiff < 0 ) && ( (nStart+nDiff) < 0 ), "vcl", "MarkInvalid: Diff out of Range" );
             mnInvalidPosStart = std::min( mnInvalidPosStart, nDiff < 0 ? nStart+nDiff : nDiff );
             mnInvalidDiff = 0;
             mbSimple = false;
@@ -181,7 +181,7 @@ sal_uInt16 TEParaPortion::GetLineNumber( sal_Int32 nChar, bool bInclEnd )
 void TEParaPortion::CorrectValuesBehindLastFormattedLine( sal_uInt16 nLastFormattedLine )
 {
     sal_uInt16 nLines = maLines.size();
-    DBG_ASSERT( nLines, "CorrectPortionNumbersFromLine: Leere Portion?" );
+    SAL_WARN_IF( !nLines, "vcl", "CorrectPortionNumbersFromLine: Leere Portion?" );
     if ( nLastFormattedLine < ( nLines - 1 ) )
     {
         const TextLine& rLastFormatted = maLines[ nLastFormattedLine ];

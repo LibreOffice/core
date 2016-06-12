@@ -546,7 +546,7 @@ const PrinterInfo& PrinterInfoManager::getPrinterInfo( const OUString& rPrinter 
     static PrinterInfo aEmptyInfo;
     std::unordered_map< OUString, Printer, OUStringHash >::const_iterator it = m_aPrinters.find( rPrinter );
 
-    DBG_ASSERT( it != m_aPrinters.end(), "Do not ask for info about nonexistent printers" );
+    SAL_WARN_IF( it == m_aPrinters.end(), "vcl", "Do not ask for info about nonexistent printers" );
 
     return it != m_aPrinters.end() ? it->second.m_aInfo : aEmptyInfo;
 }
@@ -555,7 +555,7 @@ void PrinterInfoManager::changePrinterInfo( const OUString& rPrinter, const Prin
 {
     std::unordered_map< OUString, Printer, OUStringHash >::iterator it = m_aPrinters.find( rPrinter );
 
-    DBG_ASSERT( it != m_aPrinters.end(), "Do not change nonexistent printers" );
+    SAL_WARN_IF( it == m_aPrinters.end(), "vcl", "Do not change nonexistent printers" );
 
     if( it != m_aPrinters.end() )
     {

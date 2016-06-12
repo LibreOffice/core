@@ -425,7 +425,7 @@ GC X11SalGraphicsImpl::SelectBrush()
 {
     Display *pDisplay = mrParent.GetXDisplay();
 
-    DBG_ASSERT( mnBrushColor != SALCOLOR_NONE, "Brush Transparent" );
+    SAL_WARN_IF( mnBrushColor == SALCOLOR_NONE, "vcl", "Brush Transparent" );
 
     if( !mpBrushGC )
     {
@@ -670,7 +670,7 @@ void X11SalGraphicsImpl::drawBitmap( const SalTwoRect& rPosAry,
                                  const SalBitmap& rSrcBitmap,
                                  const SalBitmap& rMaskBitmap )
 {
-    DBG_ASSERT( !mrParent.bPrinter_, "Drawing of transparent bitmaps on printer devices is strictly forbidden" );
+    SAL_WARN_IF( mrParent.bPrinter_, "vcl", "Drawing of transparent bitmaps on printer devices is strictly forbidden" );
 
     // decide if alpha masking or transparency masking is needed
     BitmapBuffer* pAlphaBuffer = const_cast<SalBitmap&>(rMaskBitmap).AcquireBuffer( BitmapAccessMode::Read );

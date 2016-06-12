@@ -332,7 +332,7 @@ bool ImplHandleMouseEvent( const VclPtr<vcl::Window>& xWindow, MouseNotifyEvent 
     {
         pChild = pSVData->maWinData.mpCaptureWin;
 
-        DBG_ASSERT( xWindow == pChild->ImplGetFrameWindow(),
+        SAL_WARN_IF( xWindow != pChild->ImplGetFrameWindow(), "vcl",
                     "ImplHandleMouseEvent: mouse event is not sent to capture window" );
 
         // java client cannot capture mouse correctly
@@ -601,7 +601,7 @@ bool ImplHandleMouseEvent( const VclPtr<vcl::Window>& xWindow, MouseNotifyEvent 
         pSVData->maAppData.mnLastInputTime = tools::Time::GetSystemTicks();
     }
 
-    DBG_ASSERT( pChild, "ImplHandleMouseEvent: pChild == NULL" );
+    SAL_WARN_IF( !pChild, "vcl", "ImplHandleMouseEvent: pChild == NULL" );
 
     if (!pChild)
         return false;
@@ -631,7 +631,7 @@ bool ImplHandleMouseEvent( const VclPtr<vcl::Window>& xWindow, MouseNotifyEvent 
     // call handler
     bool bDrag = false;
     bool bCallHelpRequest = true;
-    DBG_ASSERT( pChild, "ImplHandleMouseEvent: pChild is NULL" );
+    SAL_WARN_IF( !pChild, "vcl", "ImplHandleMouseEvent: pChild is NULL" );
 
     if (!pChild)
         return false;

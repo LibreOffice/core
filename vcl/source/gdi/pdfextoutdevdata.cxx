@@ -120,7 +120,7 @@ sal_Int32 GlobalSyncData::GetMappedId()
         else
             nLinkId = -1;
 
-        DBG_ASSERT( nLinkId >= 0, "unmapped id in GlobalSyncData" );
+        SAL_WARN_IF( nLinkId < 0, "vcl", "unmapped id in GlobalSyncData" );
     }
 
     return nLinkId;
@@ -133,7 +133,7 @@ sal_Int32 GlobalSyncData::GetMappedStructId( sal_Int32 nStructId )
     else
         nStructId = -1;
 
-    DBG_ASSERT( nStructId >= 0, "unmapped structure id in GlobalSyncData" );
+    SAL_WARN_IF( nStructId < 0, "vcl", "unmapped structure id in GlobalSyncData" );
 
     return nStructId;
 }
@@ -313,7 +313,7 @@ struct PageSyncData
 void PageSyncData::PushAction( const OutputDevice& rOutDev, const PDFExtOutDevDataSync::Action eAct )
 {
     GDIMetaFile* pMtf = rOutDev.GetConnectMetaFile();
-    DBG_ASSERT( pMtf, "PageSyncData::PushAction -> no ConnectMetaFile !!!" );
+    SAL_WARN_IF( !pMtf, "vcl", "PageSyncData::PushAction -> no ConnectMetaFile !!!" );
 
     PDFExtOutDevDataSync aSync;
     aSync.eAct = eAct;
@@ -387,7 +387,7 @@ bool PageSyncData::PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIMtfAc
             case PDFExtOutDevDataSync::CreateControl:
             {
                 std::shared_ptr< PDFWriter::AnyWidget > pControl( mControls.front() );
-                DBG_ASSERT( pControl.get(), "PageSyncData::PlaySyncPageAct: invalid widget!" );
+                SAL_WARN_IF( !pControl.get(), "vcl", "PageSyncData::PlaySyncPageAct: invalid widget!" );
                 if ( pControl.get() )
                     rWriter.CreateControl( *pControl );
                 mControls.pop_front();

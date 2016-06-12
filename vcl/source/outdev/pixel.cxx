@@ -121,7 +121,7 @@ void OutputDevice::DrawPixel( const tools::Polygon& rPts, const Color* pColors )
     }
     else
     {
-        DBG_ASSERT( pColors, "OutputDevice::DrawPixel: No color array specified" );
+        SAL_WARN_IF( !pColors, "vcl", "OutputDevice::DrawPixel: No color array specified" );
 
         const sal_uInt16 nSize = rPts.GetSize();
 
