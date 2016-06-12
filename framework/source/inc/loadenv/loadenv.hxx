@@ -57,7 +57,7 @@ public:
 
         @desrc  Such features must outcome without
                 any special parameters.
-                To make enableing/disabling of
+                To make enabling/disabling of
                 features very easy (e.g. at the ctor of
                 this class) these values must be combinable
                 as flags. That means: its values must be in

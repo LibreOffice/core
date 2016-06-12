@@ -319,7 +319,7 @@ void DicList::SearchForDictionaries(
                 continue;          // andere Files
         }
 
-        // Record in the list of Dictoinaries
+        // Record in the list of Dictionaries
         // When it already exists don't record
         sal_Int16 nSystemLanguage = MsLangId::getSystemLanguage();
         OUString aTmp1 = ToLower( aURL, nSystemLanguage );

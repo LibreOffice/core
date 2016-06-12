@@ -215,7 +215,7 @@ bool ConstantFunction::VisitFunctionDecl(const FunctionDecl * pFunctionDecl) {
     if (aFunctionName == "ExceptionThrower_acquire_release_nop") {
         return true;
     }
-    // differetnt hook function is called on different platforms, /vcl/source/app/svmainhook.cxx
+    // different hook function is called on different platforms, /vcl/source/app/svmainhook.cxx
     if (aFunctionName == "ImplSVMainHook") {
         return true;
     }

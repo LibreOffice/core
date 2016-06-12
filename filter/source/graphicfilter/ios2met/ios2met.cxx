@@ -54,10 +54,10 @@ enum PenStyle { PEN_NULL, PEN_SOLID, PEN_DOT, PEN_DASH, PEN_DASHDOT };
 #define BegObEnv1Magic 0xC7A8 /* Begin Object Environment Group */
 #define EndObEnv1Magic 0xC7A9 /* End Object Environment Group   */
 
-#define BegGrfObjMagic 0xBBA8 /* Begin Graphics Object   */
-#define EndGrfObjMagic 0xBBA9 /* End Graphics Object     */
-#define DscGrfObjMagic 0xBBA6 /* Graphics Data Descritor */
-#define DatGrfObjMagic 0xBBEE /* Graphics Data           */
+#define BegGrfObjMagic 0xBBA8 /* Begin Graphics Object    */
+#define EndGrfObjMagic 0xBBA9 /* End Graphics Object      */
+#define DscGrfObjMagic 0xBBA6 /* Graphics Data Descriptor */
+#define DatGrfObjMagic 0xBBEE /* Graphics Data            */
 
 #define MapCodFntMagic 0x8AAB /* Map Coded Font    */
 #define MapDatResMagic 0xC3AB /* Map Data Resource */

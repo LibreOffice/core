@@ -463,7 +463,7 @@ public:
 
     // font administration functions
 
-    /*  system dependendent font matching
+    /*  system dependent font matching
 
     <p>
     <code>matchFont</code> matches a pattern of font characteristics

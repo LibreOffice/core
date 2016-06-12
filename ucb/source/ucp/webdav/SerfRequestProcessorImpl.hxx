@@ -47,7 +47,7 @@ public:
 
     void activateChunkedEncoding();
 
-    /** Turn chunked encoding on or off, dependeing on the result of
+    /** Turn chunked encoding on or off, depending on the result of
         useChunkedEncoding().
     */
     void handleChunkedEncoding (
