@@ -643,7 +643,7 @@
       </node>
       <node oor:name=".uno:ToggleRelative" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Relative/Absolute References</value>
+          <value xml:lang="en-US">Cycle Cell Reference Types</value>
         </prop>
       </node>
       <node oor:name=".uno:PasteSpecial" oor:op="replace">
@@ -1249,10 +1249,10 @@
       </node>
       <node oor:name=".uno:InsertName" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Insert Name...</value>
+          <value xml:lang="en-US">~Insert Named Range or Expression...</value>
         </prop>
         <prop oor:name="ContextLabel" oor:type="xs:string">
-          <value xml:lang="en-US">~Insert...</value>
+          <value xml:lang="en-US">~Named Range or Expression...</value>
         </prop>
       </node>
       <node oor:name=".uno:CreateNames" oor:op="replace">
@@ -1685,7 +1685,7 @@
       </node>
       <node oor:name=".uno:Add" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Append Sheet</value>
+          <value xml:lang="en-US">Insert Sheet At End...</value>
         </prop>
       </node>
       <node oor:name=".uno:AlignLeft" oor:op="replace">
@@ -1999,7 +1999,7 @@
       </node>
       <node oor:name=".uno:NamesMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Named Expressions</value>
+          <value xml:lang="en-US">~Named Ranges and Expressions</value>
         </prop>
       </node>
       <node oor:name=".uno:EditAnnotation" oor:op="replace">
@@ -2044,12 +2044,12 @@
       </node>
       <node oor:name=".uno:RowMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Ro~w</value>
+          <value xml:lang="en-US">Ro~ws</value>
         </prop>
       </node>
       <node oor:name=".uno:ColumnMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Colu~mn</value>
+          <value xml:lang="en-US">Colu~mns</value>
         </prop>
       </node>
       <node oor:name=".uno:SheetMenu" oor:op="replace">
