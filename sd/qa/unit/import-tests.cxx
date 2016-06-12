@@ -1173,7 +1173,7 @@ void SdImportTest::testTdf93097()
 
 void SdImportTest::testTdf93124()
 {
-#if defined(MACOSX) || defined(WNT)
+#if 0
     sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/ppt/tdf93124.ppt"), PPT);
     uno::Reference < uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
     uno::Reference< drawing::XGraphicExportFilter > xGraphicExporter = drawing::GraphicExportFilter::create(xContext);
