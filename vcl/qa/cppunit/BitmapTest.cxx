@@ -16,6 +16,7 @@
 
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapaccess.hxx>
+#include <vcl/alpha.hxx>
 #include <vcl/virdev.hxx>
 
 #include <rtl/strbuf.hxx>
@@ -33,17 +34,56 @@ namespace
 
 class BitmapTest : public CppUnit::TestFixture
 {
+    void testBitmap32();
+    void testErase();
     void testConvert();
     void testScale();
     void testCRC();
-    void testBitmap32();
 
     CPPUNIT_TEST_SUITE(BitmapTest);
+    CPPUNIT_TEST(testBitmap32);
+    CPPUNIT_TEST(testErase);
     CPPUNIT_TEST(testConvert);
     CPPUNIT_TEST(testScale);
     CPPUNIT_TEST(testCRC);
     CPPUNIT_TEST_SUITE_END();
 };
+
+void BitmapTest::testErase()
+{
+    Bitmap aBitmap(Size(3, 3), 24);
+    {
+        Bitmap::ScopedWriteAccess pWriteAccess(aBitmap);
+        pWriteAccess->Erase(Color(0x11, 0x22, 0x33));
+    }
+    {
+        Bitmap::ScopedReadAccess pReadAccess(aBitmap);
+        Color aColor((Color)pReadAccess->GetPixel(0, 0));
+        CPPUNIT_ASSERT_EQUAL(RGB_COLORDATA(0x11, 0x22, 0x33), aColor.GetColor());
+    }
+}
+
+void BitmapTest::testBitmap32()
+{
+    Bitmap aBitmap(Size(3, 3), 32);
+    {
+        Bitmap::ScopedWriteAccess pWriteAccess(aBitmap);
+        pWriteAccess->Erase(TRGB_COLORDATA(0xFF, 0x11, 0x22, 0x33));
+        pWriteAccess->SetPixel(1, 1, BitmapColor(0x44, 0xFF, 0xBB, 0x00));
+        pWriteAccess->SetPixel(2, 2, BitmapColor(0x88, 0x77, 0x66, 0x55));
+    }
+    {
+        Bitmap::ScopedReadAccess pReadAccess(aBitmap);
+        BitmapColor aColor = pReadAccess->GetPixel(0, 0);
+        CPPUNIT_ASSERT_EQUAL(TRGB_COLORDATA(0xFF, 0x00, 0x00, 0x00), Color(aColor).GetColor());
+
+        aColor = pReadAccess->GetPixel(1, 1);
+        CPPUNIT_ASSERT_EQUAL(TRGB_COLORDATA(0x00, 0x44, 0xFF, 0xBB), Color(aColor).GetColor());
+
+        aColor = pReadAccess->GetPixel(2, 2);
+        CPPUNIT_ASSERT_EQUAL(TRGB_COLORDATA(0x55, 0x88, 0x77, 0x66), Color(aColor).GetColor());
+    }
+}
 
 void BitmapTest::testConvert()
 {
