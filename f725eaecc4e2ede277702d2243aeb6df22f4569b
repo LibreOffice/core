@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_54ae0086",
+        "filename": "sw/inc/swtable.hxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1001256
+      },
+      "writtenOn": "2016-06-12T18:33:41Z",
+      "side": 1,
+      "message": "typedef and commented line works similar.",
+      "range": {
+        "startLine": 78,
+        "startChar": 46,
+        "endLine": 78,
+        "endChar": 47
+      },
+      "revId": "f725eaecc4e2ede277702d2243aeb6df22f4569b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
