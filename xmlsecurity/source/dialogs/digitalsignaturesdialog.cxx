@@ -201,7 +201,7 @@ bool DigitalSignaturesDialog::Init()
 {
     bool bInit = maSignatureManager.maSignatureHelper.Init();
 
-    DBG_ASSERT( bInit, "Error initializing security context!" );
+    SAL_WARN_IF( !bInit, "xmlsecurity", "Error initializing security context!" );
 
     if ( bInit )
     {
@@ -455,7 +455,7 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
             if (!xCert.is())
                 xCert = xSecEnv->getCertificate( rInfo.ouX509IssuerName, xSerialNumberAdapter->toSequence( rInfo.ouX509SerialNumber ) );
 
-            DBG_ASSERT( xCert.is(), "Certificate not found and can't be created!" );
+            SAL_WARN_IF( !xCert.is(), "xmlsecurity", "Certificate not found and can't be created!" );
 
             OUString aSubject;
             OUString aIssuer;
@@ -587,7 +587,7 @@ void DigitalSignaturesDialog::ImplShowSignaturesDetails()
         if (!xCert.is())
             xCert = xSecEnv->getCertificate( rInfo.ouX509IssuerName, xSerialNumberAdapter->toSequence( rInfo.ouX509SerialNumber ) );
 
-        DBG_ASSERT( xCert.is(), "Error getting Certificate!" );
+        SAL_WARN_IF( !xCert.is(), "xmlsecurity", "Error getting Certificate!" );
         if ( xCert.is() )
         {
             ScopedVclPtrInstance< CertificateViewer > aViewer( this, maSignatureManager.maSignatureHelper.GetSecurityEnvironment(), xCert, false );
