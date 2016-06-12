@@ -49,19 +49,6 @@ namespace
     };
 }
 
-void Splitter::ImplInitSplitterData()
-{
-    ImplGetWindowImpl()->mbSplitter        = true;
-    mpRefWin          = nullptr;
-    mnSplitPos        = 0;
-    mnLastSplitPos    = 0;
-    mnStartSplitPos   = 0;
-    mbDragFull        = false;
-    mbKbdSplitting    = false;
-    mbInKeyEvent      = 0;
-    mnKeyboardStepSize = SPLITTER_DEFAULTSTEPSIZE;
-}
-
 // Should only be called from a ImplInit method for initialization or
 // after checking bNew is different from the current mbHorzSplit value.
 // The public method that does that check is Splitter::SetHorizontal().
@@ -140,9 +127,18 @@ void Splitter::ImplDrawSplitter()
 }
 
 Splitter::Splitter( vcl::Window* pParent, WinBits nStyle ) :
-    Window( WINDOW_SPLITTER )
+    Window( WINDOW_SPLITTER ),
+    mpRefWin( nullptr ),
+    mnSplitPos( 0 ),
+    mnLastSplitPos( 0 ),
+    mnStartSplitPos( 0 ),
+    mbDragFull( false ),
+    mbKbdSplitting( false ),
+    mbInKeyEvent( 0 ),
+    mnKeyboardStepSize( SPLITTER_DEFAULTSTEPSIZE )
 {
-    ImplInitSplitterData();
+    ImplGetWindowImpl()->mbSplitter        = true;
+
     ImplInit( pParent, nStyle );
 
     SetLineColor();

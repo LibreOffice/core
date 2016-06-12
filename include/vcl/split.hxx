@@ -43,7 +43,6 @@ private:
     Link<Splitter*,void>   maSplitHdl;
     Link<Splitter*,void>   maEndSplitHdl;
 
-    SAL_DLLPRIVATE void      ImplInitSplitterData();
     SAL_DLLPRIVATE void      ImplDrawSplitter();
     SAL_DLLPRIVATE void      ImplSplitMousePos( Point& rPos );
     SAL_DLLPRIVATE void      ImplStartKbdSplitting();
