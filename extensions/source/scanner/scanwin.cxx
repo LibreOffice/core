@@ -324,7 +324,10 @@ bool ImpTwain::ImplHandleMsg( void* pMsg )
     PTWAINMSG   pMess = (PTWAINMSG) pMsg;
     TW_EVENT    aEvt = { pMess, MSG_NULL };
 
-    nRet = PFUNC( &aAppIdent, &aSrcIdent, DG_CONTROL, DAT_EVENT, MSG_PROCESSEVENT, &aEvt );
+    if (pDSM)
+        nRet = PFUNC( &aAppIdent, &aSrcIdent, DG_CONTROL, DAT_EVENT, MSG_PROCESSEVENT, &aEvt );
+    else
+        nRet = TWRC_NOTDSEVENT;
 
     if( aEvt.TWMessage != MSG_NULL )
     {
