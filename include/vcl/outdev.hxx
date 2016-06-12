@@ -418,7 +418,6 @@ private:
     mutable bool                    mbTextSpecial : 1;
     mutable bool                    mbRefPoint : 1;
     mutable bool                    mbEnableRTL : 1;
-    mutable bool                    mbDisposed : 1;
 
     /** @name Initialization and accessor functions
      */
@@ -426,13 +425,8 @@ private:
 
 protected:
                                 OutputDevice();
-public:
-    virtual                     ~OutputDevice();
 protected:
     virtual void                dispose() override;
-
-public:
-    void                        disposeOnce();
 
 public:
 

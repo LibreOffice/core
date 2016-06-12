@@ -137,28 +137,6 @@ OutputDevice::OutputDevice() :
     // #i75163#
     mpOutDevData->mpViewTransform   = nullptr;
     mpOutDevData->mpInverseViewTransform = nullptr;
-
-    mbDisposed = false;
-}
-
-OutputDevice::~OutputDevice()
-{
-    disposeOnce();
-}
-
-void OutputDevice::disposeOnce()
-{
-    if ( mbDisposed )
-        return;
-    mbDisposed = true;
-
-    // catch badness where our OutputDevice sub-class was not
-    // wrapped safely in a VclPtr cosily.
-    // FIXME: as/when we make our destructors all protected,
-    // we should introduce this assert:
-    //    assert( mnRefCnt > 0 );
-
-    dispose();
 }
 
 void OutputDevice::dispose()
