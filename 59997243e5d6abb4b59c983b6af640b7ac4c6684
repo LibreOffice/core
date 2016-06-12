@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7fb54a_14de386d",
+        "filename": "sw/source/core/fields/docufld.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1001077
+      },
+      "writtenOn": "2016-06-12T10:05:56Z",
+      "side": 1,
+      "message": "What is that good for? Didn\u0027t you replace all the usages of this method?",
+      "revId": "59997243e5d6abb4b59c983b6af640b7ac4c6684",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
