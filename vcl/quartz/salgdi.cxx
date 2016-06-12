@@ -103,18 +103,18 @@ const FontCharMapPtr CoreTextFontFace::GetFontCharMap() const
     // get the CMAP byte size
     // allocate a buffer for the CMAP raw data
     const int nBufSize = GetFontTable( "cmap", nullptr );
-    DBG_ASSERT( (nBufSize > 0), "CoreTextFontFace::GetFontCharMap : GetFontTable1 failed!\n");
+    SAL_WARN_IF( (nBufSize <= 0), "vcl", "CoreTextFontFace::GetFontCharMap : GetFontTable1 failed!\n");
     if( nBufSize <= 0 )
         return mxCharMap;
 
     // get the CMAP raw data
     std::vector<unsigned char> aBuffer( nBufSize );
     const int nRawLength = GetFontTable( "cmap", &aBuffer[0] );
-    DBG_ASSERT( (nRawLength > 0), "CoreTextFontFace::GetFontCharMap : GetFontTable2 failed!\n");
+    SAL_WARN_IF( (nRawLength <= 0), "vcl", "CoreTextFontFace::GetFontCharMap : GetFontTable2 failed!\n");
     if( nRawLength <= 0 )
         return mxCharMap;
 
-    DBG_ASSERT( (nBufSize==nRawLength), "CoreTextFontFace::GetFontCharMap : ByteCount mismatch!\n");
+    SAL_WARN_IF( (nBufSize!=nRawLength), "vcl", "CoreTextFontFace::GetFontCharMap : ByteCount mismatch!\n");
 
     // parse the CMAP
     CmapResult aCmapResult;
@@ -183,18 +183,18 @@ void CoreTextFontFace::ReadOs2Table() const
 
     // prepare to get the OS/2 table raw data
     const int nBufSize = GetFontTable( "OS/2", nullptr );
-    DBG_ASSERT( (nBufSize > 0), "CoreTextFontFace::ReadOs2Table : GetFontTable1 failed!\n");
+    SAL_WARN_IF( (nBufSize <= 0), "vcl", "CoreTextFontFace::ReadOs2Table : GetFontTable1 failed!\n");
     if( nBufSize <= 0 )
         return;
 
     // get the OS/2 raw data
     std::vector<unsigned char> aBuffer( nBufSize );
     const int nRawLength = GetFontTable( "cmap", &aBuffer[0] );
-    DBG_ASSERT( (nRawLength > 0), "CoreTextFontFace::ReadOs2Table : GetFontTable2 failed!\n");
+    SAL_WARN_IF( (nRawLength <= 0), "vcl", "CoreTextFontFace::ReadOs2Table : GetFontTable2 failed!\n");
     if( nRawLength <= 0 )
         return;
 
-    DBG_ASSERT( (nBufSize==nRawLength), "CoreTextFontFace::ReadOs2Table : ByteCount mismatch!\n");
+    SAL_WARN_IF( (nBufSize!=nRawLength), "vcl", "CoreTextFontFace::ReadOs2Table : ByteCount mismatch!\n");
     mbHasOs2Table = true;
 
     // parse the OS/2 raw data
@@ -218,7 +218,7 @@ void CoreTextFontFace::ReadMacCmapEncoding() const
     const int nRawLength = GetFontTable( "cmap", &aBuffer[0] );
     if( nRawLength < 24 )
         return;
-    DBG_ASSERT( (nBufSize==nRawLength), "CoreTextFontFace::ReadMacCmapEncoding : ByteCount mismatch!\n");
+    SAL_WARN_IF( (nBufSize!=nRawLength), "vcl", "CoreTextFontFace::ReadMacCmapEncoding : ByteCount mismatch!\n");
 
     const unsigned char* pCmap = &aBuffer[0];
     if( GetUShort( pCmap ) != 0x0000 )
@@ -368,7 +368,7 @@ static void AddLocalTempFontDirs()
 
 void AquaSalGraphics::GetDevFontList( PhysicalFontCollection* pFontCollection )
 {
-    DBG_ASSERT( pFontCollection, "AquaSalGraphics::GetDevFontList(NULL) !");
+    SAL_WARN_IF( !pFontCollection, "vcl", "AquaSalGraphics::GetDevFontList(NULL) !");
 
     AddLocalTempFontDirs();
 
@@ -683,7 +683,7 @@ bool AquaSalGraphics::GetRawFontData( const PhysicalFontFace* pFontData,
         nOfs += nPrepSize;
     }
 
-    DBG_ASSERT( (nOfs==nTotalSize), "AquaSalGraphics::CreateFontSubset (nOfs!=nTotalSize)");
+    SAL_WARN_IF( (nOfs!=nTotalSize), "vcl", "AquaSalGraphics::CreateFontSubset (nOfs!=nTotalSize)");
 
     return true;
 }
@@ -741,7 +741,7 @@ void AquaSalGraphics::GetGlyphWidths( const PhysicalFontFace* pFontData, bool bV
         }
 
         FontCharMapPtr xFCMap = mpFontData->GetFontCharMap();
-        DBG_ASSERT( xFCMap && xFCMap->GetCharCount(), "no charmap" );
+        SAL_WARN_IF( !xFCMap || !xFCMap->GetCharCount(), "vcl", "no charmap" );
 
         // get unicode<->glyph encoding
         // TODO? avoid sft mapping by using the xFCMap itself
@@ -788,7 +788,7 @@ void AquaSalGraphics::FreeEmbedFontData( const void* pData, long /*nDataLen*/ )
     // TODO: implementing this only makes sense when the implementation of
     //      AquaSalGraphics::GetEmbedFontData() returns non-NULL
     (void)pData;
-    DBG_ASSERT( (pData!=nullptr), "AquaSalGraphics::FreeEmbedFontData() is not implemented\n");
+    SAL_WARN_IF( (pData==nullptr), "vcl", "AquaSalGraphics::FreeEmbedFontData() is not implemented\n");
 }
 
 bool AquaSalGraphics::IsFlipped() const

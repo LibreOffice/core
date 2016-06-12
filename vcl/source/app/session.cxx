@@ -127,7 +127,7 @@ void VCLSession::callSaveRequested( bool bShutdown )
         m_bInteractionRequested = m_bInteractionGranted = !m_xSession;
 
         // answer the session manager even if no listeners available anymore
-        DBG_ASSERT( ! aListeners.empty(), "saveRequested but no listeners !" );
+        SAL_WARN_IF(  aListeners.empty(), "vcl", "saveRequested but no listeners !" );
         if( aListeners.empty() )
         {
             if (m_xSession)
@@ -154,7 +154,7 @@ void VCLSession::callInteractionGranted( bool bInteractionGranted )
         m_bInteractionGranted = bInteractionGranted;
 
         // answer the session manager even if no listeners available anymore
-        DBG_ASSERT( ! aListeners.empty(), "interactionGranted but no listeners !" );
+        SAL_WARN_IF(  aListeners.empty(), "vcl", "interactionGranted but no listeners !" );
         if( aListeners.empty() )
         {
             if (m_xSession)

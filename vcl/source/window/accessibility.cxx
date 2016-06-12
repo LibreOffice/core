@@ -269,7 +269,7 @@ vcl::Window* Window::GetAccessibleChildWindow( sal_uInt16 n )
     if( GetType() == WINDOW_BORDERWINDOW && pChild && pChild->GetType() == WINDOW_MENUBARWINDOW )
     {
         do pChild = pChild->mpWindowImpl->mpNext; while( pChild && ! pChild->IsVisible() );
-        DBG_ASSERT( pChild, "GetAccessibleChildWindow(): wrong index in border window");
+        SAL_WARN_IF( !pChild, "vcl", "GetAccessibleChildWindow(): wrong index in border window");
     }
 
     if ( pChild && ( pChild->GetType() == WINDOW_BORDERWINDOW ) && ( pChild->GetChildCount() == 1 ) )
@@ -284,7 +284,7 @@ void Window::SetAccessibleRole( sal_uInt16 nRole )
     if ( !mpWindowImpl->mpAccessibleInfos )
         mpWindowImpl->mpAccessibleInfos = new ImplAccessibleInfos;
 
-    DBG_ASSERT( mpWindowImpl->mpAccessibleInfos->nAccessibleRole == 0xFFFF, "AccessibleRole already set!" );
+    SAL_WARN_IF( mpWindowImpl->mpAccessibleInfos->nAccessibleRole != 0xFFFF, "vcl", "AccessibleRole already set!" );
     mpWindowImpl->mpAccessibleInfos->nAccessibleRole = nRole;
 }
 
@@ -516,7 +516,7 @@ void Window::SetAccessibleDescription( const OUString& rDescription )
    if ( ! mpWindowImpl->mpAccessibleInfos )
         mpWindowImpl->mpAccessibleInfos = new ImplAccessibleInfos;
 
-    DBG_ASSERT( !mpWindowImpl->mpAccessibleInfos->pAccessibleDescription, "AccessibleDescription already set!" );
+    SAL_WARN_IF( mpWindowImpl->mpAccessibleInfos->pAccessibleDescription, "vcl", "AccessibleDescription already set!" );
     delete mpWindowImpl->mpAccessibleInfos->pAccessibleDescription;
     mpWindowImpl->mpAccessibleInfos->pAccessibleDescription = new OUString( rDescription );
 }

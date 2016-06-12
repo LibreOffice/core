@@ -1552,7 +1552,7 @@ bool EnhWMFReader::ReadEnhWMF()
                     if ( nOptions & ETO_RTLREADING )
                         nTextLayoutMode = ComplexTextLayoutFlags::BiDiRtl | ComplexTextLayoutFlags::TextOriginLeft;
                     pOut->SetTextLayoutMode( nTextLayoutMode );
-                    DBG_ASSERT( ( nOptions & ( ETO_PDY | ETO_GLYPH_INDEX ) ) == 0, "SJ: ETO_PDY || ETO_GLYPH_INDEX in EMF" );
+                    SAL_WARN_IF( ( nOptions & ( ETO_PDY | ETO_GLYPH_INDEX ) ) != 0, "vcl", "SJ: ETO_PDY || ETO_GLYPH_INDEX in EMF" );
 
                     Point aPos( ptlReferenceX, ptlReferenceY );
                     bool bLenSane = nLen > 0 && nLen < static_cast<sal_Int32>( SAL_MAX_UINT32 / sizeof(sal_Int32) );

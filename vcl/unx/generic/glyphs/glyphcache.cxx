@@ -252,7 +252,7 @@ void GlyphCache::GarbageCollect()
     }
     else // current GC font is unreferenced
     {
-        DBG_ASSERT( (pServerFont->GetRefCount() == 0),
+        SAL_WARN_IF( (pServerFont->GetRefCount() != 0), "vcl",
             "GlyphCache::GC detected RefCount underflow" );
 
         // free all pServerFont related data
@@ -313,7 +313,7 @@ void ServerFont::ReleaseFromGarbageCollect()
 
 long ServerFont::Release() const
 {
-    DBG_ASSERT( mnRefCount > 0, "ServerFont: RefCount underflow" );
+    SAL_WARN_IF( mnRefCount <= 0, "vcl", "ServerFont: RefCount underflow" );
     return --mnRefCount;
 }
 

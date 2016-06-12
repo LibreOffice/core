@@ -524,7 +524,7 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
                     {
                         nSoftBreak = nPos;
                     }
-                    DBG_ASSERT( nSoftBreak < nBreakPos, "Break?!" );
+                    SAL_WARN_IF( nSoftBreak >= nBreakPos, "vcl", "Break?!" );
                     css::i18n::LineBreakHyphenationOptions aHyphOptions( xHyph, css::uno::Sequence <css::beans::PropertyValue>(), 1 );
                     css::i18n::LineBreakUserOptions aUserOptions;
                     css::i18n::LineBreakResults aLBR = xBI->getLineBreak( rStr, nSoftBreak, rDefLocale, nPos, aHyphOptions, aUserOptions );
@@ -547,13 +547,13 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
                             css::i18n::Boundary aBoundary = xBI->getWordBoundary( rStr, nBreakPos, rDefLocale, css::i18n::WordType::DICTIONARY_WORD, true );
                             sal_Int32 nWordStart = nPos;
                             sal_Int32 nWordEnd = aBoundary.endPos;
-                            DBG_ASSERT( nWordEnd > nWordStart, "ImpBreakLine: Start >= End?" );
+                            SAL_WARN_IF( nWordEnd <= nWordStart, "vcl", "ImpBreakLine: Start >= End?" );
 
                             sal_Int32 nWordLen = nWordEnd - nWordStart;
                             if ( ( nWordEnd >= nSoftBreak ) && ( nWordLen > 3 ) )
                             {
                                 // #104415# May happen, because getLineBreak may differ from getWordBoudary with DICTIONARY_WORD
-                                // DBG_ASSERT( nWordEnd >= nMaxBreakPos, "Hyph: Break?" );
+                                // SAL_WARN_IF( nWordEnd < nMaxBreakPos, "vcl", "Hyph: Break?" );
                                 OUString aWord = rStr.copy( nWordStart, nWordLen );
                                 sal_Int32 nMinTrail = nWordEnd-nSoftBreak+1;  //+1: Before the "broken off" char
                                 css::uno::Reference< css::linguistic2::XHyphenatedWord > xHyphWord;
@@ -611,7 +611,7 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
                                                 ++nTxtEnd;
                                             }
 
-                                            DBG_ASSERT( ( nAltEnd - nAltStart ) == 1, "Alternate: Wrong assumption!" );
+                                            SAL_WARN_IF( ( nAltEnd - nAltStart ) != 1, "vcl", "Alternate: Wrong assumption!" );
 
                                             if ( nTxtEnd > nTxtStart )
                                                 cAlternateReplChar = aAlt[ nAltStart ];
@@ -676,8 +676,8 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
     {
         ImplTextLineInfo* pLine = rLineInfo.GetLine( nL );
         OUString aLine = rStr.copy( pLine->GetIndex(), pLine->GetLen() );
-        DBG_ASSERT( aLine.indexOf( '\r' ) == -1, "ImplGetTextLines - Found CR!" );
-        DBG_ASSERT( aLine.indexOf( '\n' ) == -1, "ImplGetTextLines - Found LF!" );
+        SAL_WARN_IF( aLine.indexOf( '\r' ) != -1, "vcl", "ImplGetTextLines - Found CR!" );
+        SAL_WARN_IF( aLine.indexOf( '\n' ) != -1, "vcl", "ImplGetTextLines - Found LF!" );
     }
 #endif
 
@@ -2186,7 +2186,7 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const OUString& rStr,
             {
                 if( nMnemonicPos < (nIndex+nLen) )
                     --nLen;
-                DBG_ASSERT( nMnemonicPos < (nIndex+nLen), "Mnemonic underline marker after last character" );
+                SAL_WARN_IF( nMnemonicPos >= (nIndex+nLen), "vcl", "Mnemonic underline marker after last character" );
             }
             bool bInvalidPos = false;
 

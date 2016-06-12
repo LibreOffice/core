@@ -238,7 +238,7 @@ sal_uInt16 ImageList::ImplGetImageId( const OUString& rImageName ) const
 
 void ImageList::AddImage( const OUString& rImageName, const Image& rImage )
 {
-    DBG_ASSERT( GetImagePos( rImageName ) == IMAGELIST_IMAGE_NOTFOUND, "ImageList::AddImage() - ImageName already exists" );
+    SAL_WARN_IF( GetImagePos( rImageName ) != IMAGELIST_IMAGE_NOTFOUND, "vcl", "ImageList::AddImage() - ImageName already exists" );
 
     if( !mpImplData )
         ImplInit( 0, rImage.GetSizePixel() );

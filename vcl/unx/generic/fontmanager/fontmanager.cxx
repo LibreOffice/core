@@ -1957,9 +1957,9 @@ bool PrintFontManager::createFontSubset(
         }
         else
         {
-            DBG_ASSERT( !(pGlyphIds[i] & 0x007f0000), "overlong glyph id" );
-            DBG_ASSERT( (int)pNewEncoding[i] < nGlyphs, "encoding wrong" );
-            DBG_ASSERT( pEnc[pNewEncoding[i]] == 0 && pGID[pNewEncoding[i]] == 0, "duplicate encoded glyph" );
+            SAL_WARN_IF( (pGlyphIds[i] & 0x007f0000), "vcl", "overlong glyph id" );
+            SAL_WARN_IF( (int)pNewEncoding[i] >= nGlyphs, "vcl", "encoding wrong" );
+            SAL_WARN_IF( pEnc[pNewEncoding[i]] != 0 || pGID[pNewEncoding[i]] != 0, "vcl", "duplicate encoded glyph" );
             pEnc[ pNewEncoding[i] ] = pNewEncoding[i];
             pGID[ pNewEncoding[i] ] = (sal_uInt16)pGlyphIds[ i ];
             pOldIndex[ pNewEncoding[i] ] = i;

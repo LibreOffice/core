@@ -324,7 +324,7 @@ SalInstance* CreateSalInstance()
         initNSApp();
 
     SalData* pSalData = GetSalData();
-    DBG_ASSERT( pSalData->mpFirstInstance == nullptr, "more than one instance created" );
+    SAL_WARN_IF( pSalData->mpFirstInstance != nullptr, "vcl", "more than one instance created" );
     AquaSalInstance* pInst = new AquaSalInstance;
 
     // init instance (only one instance in this version !!!)
@@ -807,7 +807,7 @@ void AquaSalInstance::GetPrinterQueueInfo( ImplPrnQueueList* pList )
     NSArray* pTypes = [NSPrinter printerTypes];
     unsigned int nNameCount = pNames ? [pNames count] : 0;
     unsigned int nTypeCount = pTypes ? [pTypes count] : 0;
-    DBG_ASSERT( nTypeCount == nNameCount, "type count not equal to printer count" );
+    SAL_WARN_IF( nTypeCount != nNameCount, "vcl", "type count not equal to printer count" );
     for( unsigned int i = 0; i < nNameCount; i++ )
     {
         NSString* pName = [pNames objectAtIndex: i];
@@ -844,15 +844,15 @@ OUString AquaSalInstance::GetDefaultPrinter()
     if( maDefaultPrinter.isEmpty() )
     {
         NSPrintInfo* pPI = [NSPrintInfo sharedPrintInfo];
-        DBG_ASSERT( pPI, "no print info" );
+        SAL_WARN_IF( !pPI, "vcl", "no print info" );
         if( pPI )
         {
             NSPrinter* pPr = [pPI printer];
-            DBG_ASSERT( pPr, "no printer in default info" );
+            SAL_WARN_IF( !pPr, "vcl", "no printer in default info" );
             if( pPr )
             {
                 NSString* pDefName = [pPr name];
-                DBG_ASSERT( pDefName, "printer has no name" );
+                SAL_WARN_IF( !pDefName, "vcl", "printer has no name" );
                 maDefaultPrinter = GetOUString( pDefName );
             }
         }

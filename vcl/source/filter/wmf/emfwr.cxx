@@ -176,7 +176,7 @@ void EMFWriter::ImplEndCommentRecord()
 
 void EMFWriter::ImplBeginPlusRecord( EmfPlusRecordType nType, sal_uInt16 nFlags )
 {
-    DBG_ASSERT( !mbRecordPlusOpen, "Another EMF+ record is already opened!" );
+    SAL_WARN_IF( mbRecordPlusOpen, "vcl", "Another EMF+ record is already opened!" );
 
     if( !mbRecordPlusOpen )
     {
@@ -190,7 +190,7 @@ void EMFWriter::ImplBeginPlusRecord( EmfPlusRecordType nType, sal_uInt16 nFlags 
 
 void EMFWriter::ImplEndPlusRecord()
 {
-    DBG_ASSERT( mbRecordPlusOpen, "EMF+ Record was not opened!" );
+    SAL_WARN_IF( !mbRecordPlusOpen, "vcl", "EMF+ Record was not opened!" );
 
     if( mbRecordPlusOpen )
     {
@@ -384,19 +384,19 @@ sal_uLong EMFWriter::ImplAcquireHandle()
         }
     }
 
-    DBG_ASSERT( nHandle != HANDLE_INVALID, "No more handles available" );
+    SAL_WARN_IF( nHandle == HANDLE_INVALID, "vcl", "No more handles available" );
     return( nHandle != HANDLE_INVALID ? nHandle + 1 : HANDLE_INVALID );
 }
 
 void EMFWriter::ImplReleaseHandle( sal_uLong nHandle )
 {
-    DBG_ASSERT( nHandle && ( nHandle < mHandlesUsed.size() ), "Handle out of range" );
+    SAL_WARN_IF( !nHandle || ( nHandle >= mHandlesUsed.size() ), "vcl", "Handle out of range" );
     mHandlesUsed[ nHandle - 1 ] = false;
 }
 
 void EMFWriter::ImplBeginRecord( sal_uInt32 nType )
 {
-    DBG_ASSERT( !mbRecordOpen, "Another record is already opened!" );
+    SAL_WARN_IF( mbRecordOpen, "vcl", "Another record is already opened!" );
 
     if( !mbRecordOpen )
     {
@@ -410,7 +410,7 @@ void EMFWriter::ImplBeginRecord( sal_uInt32 nType )
 
 void EMFWriter::ImplEndRecord()
 {
-    DBG_ASSERT( mbRecordOpen, "Record was not opened!" );
+    SAL_WARN_IF( !mbRecordOpen, "vcl", "Record was not opened!" );
 
     if( mbRecordOpen )
     {

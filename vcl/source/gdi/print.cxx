@@ -964,8 +964,8 @@ Printer::~Printer()
 
 void Printer::dispose()
 {
-    DBG_ASSERT( !IsPrinting(), "Printer::~Printer() - Job is printing" );
-    DBG_ASSERT( !IsJobActive(), "Printer::~Printer() - Job is active" );
+    SAL_WARN_IF( IsPrinting(), "vcl", "Printer::~Printer() - Job is printing" );
+    SAL_WARN_IF( IsJobActive(), "vcl", "Printer::~Printer() - Job is active" );
 
     delete mpPrinterOptions;
     mpPrinterOptions = nullptr;
@@ -1650,7 +1650,7 @@ bool Printer::EndJob()
     if ( !IsJobActive() )
         return bRet;
 
-    DBG_ASSERT( !mbInPrintPage, "Printer::EndJob() - StartPage() without EndPage() called" );
+    SAL_WARN_IF( mbInPrintPage, "vcl", "Printer::EndJob() - StartPage() without EndPage() called" );
 
     mbJobActive = false;
 

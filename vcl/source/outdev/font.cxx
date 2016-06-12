@@ -1523,8 +1523,8 @@ sal_Int32 OutputDevice::HasGlyphs( const vcl::Font& rTempFont, const OUString& r
     else
         nEnd = std::min( rStr.getLength(), nIndex + nLen );
 
-    DBG_ASSERT( nIndex < nEnd, "StartPos >= EndPos?" );
-    DBG_ASSERT( nEnd <= rStr.getLength(), "String too short" );
+    SAL_WARN_IF( nIndex >= nEnd, "vcl", "StartPos >= EndPos?" );
+    SAL_WARN_IF( nEnd > rStr.getLength(), "vcl", "String too short" );
 
     // to get the map temporarily set font
     const vcl::Font aOrigFont = GetFont();

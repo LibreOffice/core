@@ -684,7 +684,7 @@ void WinSalObject::EndSetClipRegion()
             delete [] (BYTE*)mpClipRgnData;
     }
 
-    DBG_ASSERT( hRegion, "SalObject::EndSetClipRegion() - Can't create ClipRegion" );
+    SAL_WARN_IF( !hRegion, "vcl", "SalObject::EndSetClipRegion() - Can't create ClipRegion" );
     SetWindowRgn( mhWnd, hRegion, TRUE );
 }
 

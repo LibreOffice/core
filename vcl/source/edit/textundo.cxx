@@ -101,7 +101,7 @@ bool TextUndoManager::Redo()
 
 void TextUndoManager::UndoRedoStart()
 {
-    DBG_ASSERT( GetView(), "Undo/Redo: Active View?" );
+    SAL_WARN_IF( !GetView(), "vcl", "Undo/Redo: Active View?" );
 }
 
 void TextUndoManager::UndoRedoEnd()

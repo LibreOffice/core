@@ -65,12 +65,12 @@ void FloatingWindow::ImplInit( vcl::Window* pParent, WinBits nStyle )
     mbInCleanUp = false;
     mbGrabFocus = false;
 
-    DBG_ASSERT(pParent, "FloatWindow::FloatingWindow(): - pParent == NULL!");
+    SAL_WARN_IF(!pParent, "vcl", "FloatWindow::FloatingWindow(): - pParent == NULL!");
 
     if (!pParent)
         pParent = ImplGetSVData()->maWinData.mpAppWin;
 
-    DBG_ASSERT(pParent, "FloatWindow::FloatingWindow(): - pParent == NULL and no AppWindow exists");
+    SAL_WARN_IF(!pParent, "vcl", "FloatWindow::FloatingWindow(): - pParent == NULL and no AppWindow exists");
 
     // no Border, then we don't need a border window
     if (!nStyle)

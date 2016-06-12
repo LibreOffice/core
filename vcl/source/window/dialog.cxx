@@ -820,11 +820,11 @@ bool Dialog::ImplStartExecuteModal()
     if ( pParent )
     {
         pParent = pParent->ImplGetFirstOverlapWindow();
-        DBG_ASSERT( pParent->IsReallyVisible(),
+        SAL_WARN_IF( !pParent->IsReallyVisible(), "vcl",
                     "Dialog::StartExecuteModal() - Parent not visible" );
-        DBG_ASSERT( pParent->IsInputEnabled(),
+        SAL_WARN_IF( !pParent->IsInputEnabled(), "vcl",
                     "Dialog::StartExecuteModal() - Parent input disabled, use another parent to ensure modality!" );
-        DBG_ASSERT( ! pParent->IsInModalMode(),
+        SAL_WARN_IF(  pParent->IsInModalMode(), "vcl",
                     "Dialog::StartExecuteModal() - Parent already modally disabled, use another parent to ensure modality!" );
 
     }

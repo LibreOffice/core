@@ -172,13 +172,13 @@ void ImplPointArray::ImplSetSize( sal_uLong nSize )
 
 inline Point& ImplPointArray::operator[]( sal_uLong nPos )
 {
-    DBG_ASSERT( nPos < mnSize, "ImplPointArray::operator[]: nPos out of range!" );
+    SAL_WARN_IF( nPos >= mnSize, "vcl", "ImplPointArray::operator[]: nPos out of range!" );
     return mpArray[ nPos ];
 }
 
 inline const Point& ImplPointArray::operator[]( sal_uLong nPos ) const
 {
-    DBG_ASSERT( nPos < mnSize, "ImplPointArray::operator[]: nPos out of range!" );
+    SAL_WARN_IF( nPos >= mnSize, "vcl", "ImplPointArray::operator[]: nPos out of range!" );
     return mpArray[ nPos ];
 }
 

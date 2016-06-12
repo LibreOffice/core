@@ -1059,11 +1059,11 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
             // add aTotalComponents as a new entry to aCCList
             aCCList.push_back( aTotalComponents );
 
-            DBG_ASSERT( !aTotalComponents.aComponentList.empty(),
+            SAL_WARN_IF( aTotalComponents.aComponentList.empty(), "vcl",
                         "Printer::GetPreparedMetaFile empty component" );
-            DBG_ASSERT( !aTotalComponents.aBounds.IsEmpty() || (aTotalComponents.aComponentList.size() == 1),
+            SAL_WARN_IF( aTotalComponents.aBounds.IsEmpty() && (aTotalComponents.aComponentList.size() != 1), "vcl",
                         "Printer::GetPreparedMetaFile non-output generating actions must be solitary");
-            DBG_ASSERT( !aTotalComponents.bIsFullyTransparent || (aTotalComponents.aComponentList.size() == 1),
+            SAL_WARN_IF( aTotalComponents.bIsFullyTransparent && (aTotalComponents.aComponentList.size() != 1), "vcl",
                         "Printer::GetPreparedMetaFile fully transparent actions must be solitary");
         }
 

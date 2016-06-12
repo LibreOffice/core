@@ -634,7 +634,7 @@ void OutputDevice::drawOutDevDirect( const OutputDevice* pSrcDev, SalTwoRect& rP
                     if ( !AcquireGraphics() )
                         return;
                 }
-                DBG_ASSERT( mpGraphics && pSrcDev->mpGraphics,
+                SAL_WARN_IF( !mpGraphics || !pSrcDev->mpGraphics, "vcl",
                             "OutputDevice::DrawOutDev(): We need more than one Graphics" );
             }
         }

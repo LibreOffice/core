@@ -731,7 +731,7 @@ sal_uInt16 WinSalBitmap::ImplGetDIBColorCount( HGLOBAL hDIB )
 
 HGLOBAL WinSalBitmap::ImplCreateDIB( const Size& rSize, sal_uInt16 nBits, const BitmapPalette& rPal )
 {
-    DBG_ASSERT( nBits == 1 || nBits == 4 || nBits == 8 || nBits == 16 || nBits == 24, "Unsupported BitCount!" );
+    SAL_WARN_IF( nBits != 1 && nBits != 4 && nBits != 8 && nBits != 16 && nBits != 24, "vcl", "Unsupported BitCount!" );
 
     HGLOBAL hDIB = 0;
 

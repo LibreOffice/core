@@ -753,7 +753,7 @@ void SpinField::Resize()
             {
                 if (maUpperRect.IsEmpty())
                 {
-                    DBG_ASSERT( !maDropDownRect.IsEmpty(), "SpinField::Resize: SPIN && DROPDOWN, but all empty rects?" );
+                    SAL_WARN_IF( maDropDownRect.IsEmpty(), "vcl", "SpinField::Resize: SPIN && DROPDOWN, but all empty rects?" );
                     aSize.Width() = maDropDownRect.Left();
                 }
                 else

@@ -83,7 +83,7 @@ void X11SalBitmap::ImplCreateCache()
 
 void X11SalBitmap::ImplDestroyCache()
 {
-    DBG_ASSERT( mnCacheInstCount, "X11SalBitmap::ImplDestroyCache(): underflow" );
+    SAL_WARN_IF( !mnCacheInstCount, "vcl", "X11SalBitmap::ImplDestroyCache(): underflow" );
 
     if( mnCacheInstCount && !--mnCacheInstCount )
     {

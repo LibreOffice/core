@@ -383,8 +383,8 @@ MenuItemData* Menu::NbcInsertItem(sal_uInt16 nId, MenuItemBits nBits,
 void Menu::InsertItem(sal_uInt16 nItemId, const OUString& rStr, MenuItemBits nItemBits,
     const OString &rIdent, sal_uInt16 nPos)
 {
-    DBG_ASSERT( nItemId, "Menu::InsertItem(): ItemId == 0" );
-    DBG_ASSERT( GetItemPos( nItemId ) == MENU_ITEM_NOTFOUND,
+    SAL_WARN_IF( !nItemId, "vcl", "Menu::InsertItem(): ItemId == 0" );
+    SAL_WARN_IF( GetItemPos( nItemId ) != MENU_ITEM_NOTFOUND, "vcl",
                 "Menu::InsertItem(): ItemId already exists" );
 
     // if Position > ItemCount, append
@@ -597,7 +597,7 @@ void ImplCopyItem( Menu* pThis, const Menu& rMenu, sal_uInt16 nPos, sal_uInt16 n
     {
         sal_uInt16 nId = rMenu.GetItemId( nPos );
 
-        DBG_ASSERT( pThis->GetItemPos( nId ) == MENU_ITEM_NOTFOUND,
+        SAL_WARN_IF( pThis->GetItemPos( nId ) != MENU_ITEM_NOTFOUND, "vcl",
                     "Menu::CopyItem(): ItemId already exists" );
 
         MenuItemData* pData = rMenu.GetItemList()->GetData( nId );
@@ -965,7 +965,7 @@ void Menu::EnableItem( sal_uInt16 nItemId, bool bEnable )
         vcl::Window* pWin = ImplGetWindow();
         if ( pWin && pWin->IsVisible() )
         {
-            DBG_ASSERT(IsMenuBar(), "Menu::EnableItem - Popup visible!" );
+            SAL_WARN_IF(!IsMenuBar(), "vcl", "Menu::EnableItem - Popup visible!" );
             long nX = 0;
             size_t nCount = pItemList->size();
             for ( size_t n = 0; n < nCount; n++ )
@@ -1003,7 +1003,7 @@ void Menu::ShowItem( sal_uInt16 nItemId, bool bVisible )
     size_t          nPos;
     MenuItemData*   pData = pItemList->GetData( nItemId, nPos );
 
-    DBG_ASSERT(!IsMenuBar(), "Menu::ShowItem - ignored for menu bar entries!");
+    SAL_WARN_IF(IsMenuBar(), "vcl", "Menu::ShowItem - ignored for menu bar entries!");
     if (!IsMenuBar()&& pData && (pData->bVisible != bVisible))
     {
         vcl::Window* pWin = ImplGetWindow();
@@ -1413,7 +1413,7 @@ bool Menu::ImplGetNativeSubmenuArrowSize(vcl::RenderContext& rRenderContext, Siz
 
 void Menu::ImplAddDel( ImplMenuDelData& rDel )
 {
-    DBG_ASSERT( !rDel.mpMenu, "Menu::ImplAddDel(): cannot add ImplMenuDelData twice !" );
+    SAL_WARN_IF( rDel.mpMenu, "vcl", "Menu::ImplAddDel(): cannot add ImplMenuDelData twice !" );
     if( !rDel.mpMenu )
     {
         rDel.mpMenu = this;
@@ -1435,7 +1435,7 @@ void Menu::ImplRemoveDel( ImplMenuDelData& rDel )
         while ( pData && (pData->mpNext != &rDel) )
             pData = pData->mpNext;
 
-        DBG_ASSERT( pData, "Menu::ImplRemoveDel(): ImplMenuDelData not registered !" );
+        SAL_WARN_IF( !pData, "vcl", "Menu::ImplRemoveDel(): ImplMenuDelData not registered !" );
         if( pData )
             pData->mpNext = rDel.mpNext;
     }
@@ -1499,7 +1499,7 @@ Size Menu::ImplCalcSize( vcl::Window* pWin )
             // Separator
             if (!IsMenuBar()&& (pData->eType == MenuItemType::SEPARATOR))
             {
-                //Useless: DBG_ASSERT( !IsMenuBar(), "Separator in MenuBar ?! " );
+                //Useless: SAL_WARN_IF( IsMenuBar(), "vcl", "Separator in MenuBar ?! " );
                 pData->aSz.Height() = 4;
             }
 
@@ -2899,7 +2899,7 @@ sal_uInt16 PopupMenu::ImplExecute( const VclPtr<vcl::Window>& pW, const Rectangl
             pSVData->maWinData.mpFirstFloat->EndPopupMode( FloatWinPopupEndFlags::Cancel | FloatWinPopupEndFlags::CloseAll );
     }
 
-    DBG_ASSERT( !ImplGetWindow(), "Win?!" );
+    SAL_WARN_IF( ImplGetWindow(), "vcl", "Win?!" );
     Rectangle aRect( rRect );
     aRect.SetPos( pW->OutputToScreenPixel( aRect.TopLeft() ) );
 
@@ -3074,7 +3074,7 @@ sal_uInt16 PopupMenu::ImplExecute( const VclPtr<vcl::Window>& pW, const Rectangl
 
         pWin->Execute();
 
-        DBG_ASSERT( ! pW->IsDisposed(), "window for popup died, modal count incorrect !" );
+        SAL_WARN_IF(  pW->IsDisposed(), "vcl", "window for popup died, modal count incorrect !" );
         if( ! pW->IsDisposed() )
             pW->ImplDecModalCount();
 

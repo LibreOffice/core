@@ -2256,7 +2256,7 @@ int UniscribeLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphs, Point& rPos,
     // get the range of relevant glyphs in this visual item
     int nMinGlyphPos, nEndGlyphPos;
     bool bRC = GetItemSubrange( *pVI, nMinGlyphPos, nEndGlyphPos );
-    DBG_ASSERT( bRC, "USPLayout::GNG GISR() returned false" );
+    SAL_WARN_IF( !bRC, "vcl", "USPLayout::GNG GISR() returned false" );
     if( !bRC )
     {
         nStartx8 = (mnGlyphCount + 1) << 8;
@@ -2465,7 +2465,7 @@ int UniscribeLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphs, Point& rPos,
 
 void UniscribeLayout::MoveGlyph( int nStartx8, long nNewXPos )
 {
-    DBG_ASSERT( !(nStartx8 & 0xff), "USP::MoveGlyph(): glyph injection not disabled!" );
+    SAL_WARN_IF( (nStartx8 & 0xff), "vcl", "USP::MoveGlyph(): glyph injection not disabled!" );
     int nStart = nStartx8 >> 8;
     if( nStart > mnGlyphCount )
         return;
@@ -2478,7 +2478,7 @@ void UniscribeLayout::MoveGlyph( int nStartx8, long nNewXPos )
             if( GetItemSubrange( *pVI, nMinGlyphPos, nEndGlyphPos ) )
                 break;
         nStart = nMinGlyphPos;
-        DBG_ASSERT( nStart <= mnGlyphCount, "USPLayout::MoveG overflow" );
+        SAL_WARN_IF( nStart > mnGlyphCount, "vcl", "USPLayout::MoveG overflow" );
     }
     else //if( nStart > 0 )         // nStart>0 means absolute_glyphpos+1
     {
@@ -2488,7 +2488,7 @@ void UniscribeLayout::MoveGlyph( int nStartx8, long nNewXPos )
                 break;
         bool bRC = GetItemSubrange( *pVI, nMinGlyphPos, nEndGlyphPos );
     (void)bRC; // avoid var-not-used warning
-        DBG_ASSERT( bRC, "USPLayout::MoveG GISR() returned false" );
+        SAL_WARN_IF( !bRC, "vcl", "USPLayout::MoveG GISR() returned false" );
     }
 
     long nDelta = nNewXPos - pVI->mnXOffset;
@@ -2530,7 +2530,7 @@ void UniscribeLayout::MoveGlyph( int nStartx8, long nNewXPos )
 
 void UniscribeLayout::DropGlyph( int nStartx8 )
 {
-    DBG_ASSERT( !(nStartx8 & 0xff), "USP::DropGlyph(): glyph injection not disabled!" );
+    SAL_WARN_IF( (nStartx8 & 0xff), "vcl", "USP::DropGlyph(): glyph injection not disabled!" );
     int nStart = nStartx8 >> 8;
     assert(nStart <= mnGlyphCount);
 
@@ -3217,7 +3217,7 @@ void UniscribeLayout::ApplyDXArray( const ImplLayoutArgs& rArgs )
     // increase char widths in string range to desired values
     bool bModified = false;
     int nOldWidth = 0;
-    DBG_ASSERT( mnUnitsPerPixel==1, "UniscribeLayout.mnUnitsPerPixel != 1" );
+    SAL_WARN_IF( mnUnitsPerPixel!=1, "vcl", "UniscribeLayout.mnUnitsPerPixel != 1" );
     int i,j;
     for( i = mnMinCharPos, j = 0; i < mnEndCharPos; ++i, ++j )
     {

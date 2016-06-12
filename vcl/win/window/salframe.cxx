@@ -1086,8 +1086,8 @@ void WinSalFrame::SetIcon( sal_uInt16 nIcon )
 
     ImplLoadSalIcon( nIcon, hIcon, hSmIcon );
 
-    DBG_ASSERT( hIcon ,   "WinSalFrame::SetIcon(): Could not load large icon !" );
-    DBG_ASSERT( hSmIcon , "WinSalFrame::SetIcon(): Could not load small icon !" );
+    SAL_WARN_IF( !hIcon , "vcl",   "WinSalFrame::SetIcon(): Could not load large icon !" );
+    SAL_WARN_IF( !hSmIcon , "vcl", "WinSalFrame::SetIcon(): Could not load small icon !" );
 
     SendMessageW( mhWnd, WM_SETICON, ICON_BIG, (LPARAM)hIcon );
     SendMessageW( mhWnd, WM_SETICON, ICON_SMALL, (LPARAM)hSmIcon );
@@ -1257,7 +1257,7 @@ void WinSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight,
         nPosSize |= SWP_NOMOVE;
     else
     {
-        //DBG_ASSERT( nX && nY, " Windowposition of (0,0) requested!" );
+        //SAL_WARN_IF( !nX || !nY, "vcl", " Windowposition of (0,0) requested!" );
         nEvent = SalEvent::Move;
     }
     if ( !(nFlags & (SAL_FRAME_POSSIZE_WIDTH | SAL_FRAME_POSSIZE_HEIGHT)) )
@@ -1513,7 +1513,7 @@ static void ImplSetParentFrame( WinSalFrame* pThis, HWND hNewParentWnd, bool bAs
                                         (WPARAM) hWndParent, (LPARAM)pThis->mhWnd );
 
     // succeeded ?
-    DBG_ASSERT( IsWindow( hWnd ), "WinSalFrame::SetParent not successful");
+    SAL_WARN_IF( !IsWindow( hWnd ), "vcl", "WinSalFrame::SetParent not successful");
 
     // recreate DCs
     if( bNeedGraphics )
@@ -1550,7 +1550,7 @@ static void ImplSetParentFrame( WinSalFrame* pThis, HWND hNewParentWnd, bool bAs
 
                     pSalData->mnCacheDCInUse++;
 
-                    DBG_ASSERT( oldCount == pSalData->mnCacheDCInUse, "WinSalFrame::SetParent() hDC count corrupted");
+                    SAL_WARN_IF( oldCount != pSalData->mnCacheDCInUse, "vcl", "WinSalFrame::SetParent() hDC count corrupted");
                 }
             }
         }
@@ -1571,7 +1571,7 @@ static void ImplSetParentFrame( WinSalFrame* pThis, HWND hNewParentWnd, bool bAs
     }
 
     // TODO: add SetParent() call for SalObjects
-    DBG_ASSERT( systemChildren.empty(), "WinSalFrame::SetParent() parent of living system child window will be destroyed!");
+    SAL_WARN_IF( !systemChildren.empty(), "vcl", "WinSalFrame::SetParent() parent of living system child window will be destroyed!");
 
     // reparent children before old parent is destroyed
     for( ::std::vector< WinSalFrame* >::iterator iChild = children.begin(); iChild != children.end(); ++iChild )
@@ -2293,7 +2293,7 @@ static void ImplGetKeyNameText( LONG lParam, sal_Unicode* pBuf,
         if( aRet.isEmpty() )
         {
             nKeyLen = GetKeyNameTextW( lParam, aKeyBuf, nMaxKeyLen );
-            DBG_ASSERT( nKeyLen <= nMaxKeyLen, "Invalid key name length!" );
+            SAL_WARN_IF( nKeyLen > nMaxKeyLen, "vcl", "Invalid key name length!" );
             if( nKeyLen > nMaxKeyLen )
                 nKeyLen = 0;
             else if( nKeyLen > 0 )
@@ -2984,7 +2984,7 @@ void WinSalFrame::EndSetClipRegion()
     delete [] (BYTE*)mpClipRgnData;
     mpClipRgnData = NULL;
 
-    DBG_ASSERT( hRegion, "WinSalFrame::EndSetClipRegion() - Can't create ClipRegion" );
+    SAL_WARN_IF( !hRegion, "vcl", "WinSalFrame::EndSetClipRegion() - Can't create ClipRegion" );
     if( hRegion )
     {
         RECT aWindowRect;

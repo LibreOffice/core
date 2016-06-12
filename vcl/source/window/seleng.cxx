@@ -352,7 +352,7 @@ void SelectionEngine::Command( const CommandEvent& rCEvt )
     {
         if ( nFlags & SelectionEngineFlags::DRG_ENAB )
         {
-            DBG_ASSERT( rCEvt.IsMouseEvent(), "STARTDRAG: Not a MouseEvent" );
+            SAL_WARN_IF( !rCEvt.IsMouseEvent(), "vcl", "STARTDRAG: Not a MouseEvent" );
             if ( pFunctionSet->IsSelectionAtPoint( rCEvt.GetMousePosPixel() ) )
             {
                 aLastMove = MouseEvent( rCEvt.GetMousePosPixel(),

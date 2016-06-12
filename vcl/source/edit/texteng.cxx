@@ -464,7 +464,7 @@ void TextEngine::SetText( const OUString& rText )
     FormatAndUpdate();
 
     EnableUndo( bUndoCurrentlyEnabled );
-    DBG_ASSERT( !HasUndoManager() || !GetUndoManager().GetUndoActionCount(), "SetText: Undo!" );
+    SAL_WARN_IF( HasUndoManager() && GetUndoManager().GetUndoActionCount(), "vcl", "SetText: Undo!" );
 }
 
 void TextEngine::CursorMoved( sal_uInt32 nNode )
@@ -477,7 +477,7 @@ void TextEngine::CursorMoved( sal_uInt32 nNode )
 
 void TextEngine::ImpRemoveChars( const TextPaM& rPaM, sal_Int32 nChars )
 {
-    DBG_ASSERT( nChars, "ImpRemoveChars: 0 Chars?!" );
+    SAL_WARN_IF( !nChars, "vcl", "ImpRemoveChars: 0 Chars?!" );
     if ( IsUndoEnabled() && !IsInUndo() )
     {
         // attributes have to be saved for UNDO before RemoveChars!
@@ -504,7 +504,7 @@ void TextEngine::ImpRemoveChars( const TextPaM& rPaM, sal_Int32 nChars )
 
 TextPaM TextEngine::ImpConnectParagraphs( sal_uInt32 nLeft, sal_uInt32 nRight )
 {
-    DBG_ASSERT( nLeft != nRight, "ImpConnectParagraphs: connect the very same paragraph ?" );
+    SAL_WARN_IF( nLeft == nRight, "vcl", "ImpConnectParagraphs: connect the very same paragraph ?" );
 
     TextNode* pLeft = mpDoc->GetNodes()[ nLeft ];
     TextNode* pRight = mpDoc->GetNodes()[ nRight ];
@@ -515,8 +515,8 @@ TextPaM TextEngine::ImpConnectParagraphs( sal_uInt32 nLeft, sal_uInt32 nRight )
     // first lookup Portions, as pRight is gone after ConnectParagraphs
     TEParaPortion* pLeftPortion = mpTEParaPortions->GetObject( nLeft );
     TEParaPortion* pRightPortion = mpTEParaPortions->GetObject( nRight );
-    DBG_ASSERT( pLeft && pLeftPortion, "ImpConnectParagraphs(1): Hidden Portion" );
-    DBG_ASSERT( pRight && pRightPortion, "ImpConnectParagraphs(2): Hidden Portion" );
+    SAL_WARN_IF( !pLeft || !pLeftPortion, "vcl", "ImpConnectParagraphs(1): Hidden Portion" );
+    SAL_WARN_IF( !pRight || !pRightPortion, "vcl", "ImpConnectParagraphs(2): Hidden Portion" );
 
     TextPaM aPaM = mpDoc->ConnectParagraphs( pLeft, pRight );
     ImpParagraphRemoved( nRight );
@@ -543,8 +543,8 @@ TextPaM TextEngine::ImpDeleteText( const TextSelection& rSel )
     CursorMoved( aStartPaM.GetPara() ); // so that newly-adjusted attributes vanish
     CursorMoved( aEndPaM.GetPara() );   // so that newly-adjusted attributes vanish
 
-    DBG_ASSERT( mpDoc->IsValidPaM( aStartPaM ), "ImpDeleteText(1): bad Index" );
-    DBG_ASSERT( mpDoc->IsValidPaM( aEndPaM ), "ImpDeleteText(2): bad Index" );
+    SAL_WARN_IF( !mpDoc->IsValidPaM( aStartPaM ), "vcl", "ImpDeleteText(1): bad Index" );
+    SAL_WARN_IF( !mpDoc->IsValidPaM( aEndPaM ), "vcl", "ImpDeleteText(2): bad Index" );
 
     const sal_uInt32 nStartNode = aStartPaM.GetPara();
     sal_uInt32 nEndNode = aEndPaM.GetPara();
@@ -565,7 +565,7 @@ TextPaM TextEngine::ImpDeleteText( const TextSelection& rSel )
         {
             ImpRemoveChars( aStartPaM, nChars );
             TEParaPortion* pPortion = mpTEParaPortions->GetObject( nStartNode );
-            DBG_ASSERT( pPortion, "ImpDeleteText(3): bad Index" );
+            SAL_WARN_IF( !pPortion, "vcl", "ImpDeleteText(3): bad Index" );
             pPortion->MarkSelectionInvalid( aStartPaM.GetIndex(), pLeft->GetText().getLength() );
         }
 
@@ -578,7 +578,7 @@ TextPaM TextEngine::ImpDeleteText( const TextSelection& rSel )
             aEndPaM.GetIndex() = 0;
             ImpRemoveChars( aEndPaM, nChars );
             TEParaPortion* pPortion = mpTEParaPortions->GetObject( nEndNode );
-            DBG_ASSERT( pPortion, "ImpDeleteText(4): bad Index" );
+            SAL_WARN_IF( !pPortion, "vcl", "ImpDeleteText(4): bad Index" );
             pPortion->MarkSelectionInvalid( 0, pPortion->GetNode()->GetText().getLength() );
         }
 
@@ -590,7 +590,7 @@ TextPaM TextEngine::ImpDeleteText( const TextSelection& rSel )
         const sal_Int32 nChars = aEndPaM.GetIndex() - aStartPaM.GetIndex();
         ImpRemoveChars( aStartPaM, nChars );
         TEParaPortion* pPortion = mpTEParaPortions->GetObject( nStartNode );
-        DBG_ASSERT( pPortion, "ImpDeleteText(5): bad Index" );
+        SAL_WARN_IF( !pPortion, "vcl", "ImpDeleteText(5): bad Index" );
         pPortion->MarkInvalid( aEndPaM.GetIndex(), aStartPaM.GetIndex() - aEndPaM.GetIndex() );
     }
 
@@ -654,8 +654,8 @@ TextPaM TextEngine::ImpInsertText( const TextSelection& rCurSel, sal_Unicode c, 
 
 TextPaM TextEngine::ImpInsertText( sal_Unicode c, const TextSelection& rCurSel, bool bOverwrite, bool bIsUserInput )
 {
-    DBG_ASSERT( c != '\n', "InsertText: NewLine!" );
-    DBG_ASSERT( c != '\r', "InsertText: NewLine!" );
+    SAL_WARN_IF( c == '\n', "vcl", "InsertText: NewLine!" );
+    SAL_WARN_IF( c == '\r', "vcl", "InsertText: NewLine!" );
 
     TextPaM aPaM( rCurSel.GetStart() );
     TextNode* pNode = mpDoc->GetNodes()[ aPaM.GetPara() ];
@@ -825,7 +825,7 @@ TextPaM TextEngine::ImpInsertParaBreak( const TextPaM& rPaM )
     TextPaM aPaM( mpDoc->InsertParaBreak( rPaM ) );
 
     TEParaPortion* pPortion = mpTEParaPortions->GetObject( rPaM.GetPara() );
-    DBG_ASSERT( pPortion, "ImpInsertParaBreak: Hidden Portion" );
+    SAL_WARN_IF( !pPortion, "vcl", "ImpInsertParaBreak: Hidden Portion" );
     pPortion->MarkInvalid( rPaM.GetIndex(), 0 );
 
     TextNode* pNewNode = mpDoc->GetNodes()[ aPaM.GetPara() ];
@@ -844,7 +844,7 @@ TextPaM TextEngine::ImpInsertParaBreak( const TextPaM& rPaM )
 
 Rectangle TextEngine::PaMtoEditCursor( const TextPaM& rPaM, bool bSpecial )
 {
-    DBG_ASSERT( GetUpdateMode(), "PaMtoEditCursor: GetUpdateMode()" );
+    SAL_WARN_IF( !GetUpdateMode(), "vcl", "PaMtoEditCursor: GetUpdateMode()" );
 
     Rectangle aEditCursor;
     long nY = 0;
@@ -901,7 +901,7 @@ Rectangle TextEngine::GetEditCursor( const TextPaM& rPaM, bool bSpecial, bool bP
     if ( !pLine )
     {
         // Cursor at end of paragraph
-        DBG_ASSERT( rPaM.GetIndex() == nCurIndex, "GetEditCursor: Bad Index!" );
+        SAL_WARN_IF( rPaM.GetIndex() != nCurIndex, "vcl", "GetEditCursor: Bad Index!" );
 
         pLine = & ( pPortion->GetLines().back() );
         nY -= mnCharHeight;
@@ -921,7 +921,7 @@ Rectangle TextEngine::GetEditCursor( const TextPaM& rPaM, bool bSpecial, bool bP
 
 long TextEngine::ImpGetXPos( sal_uInt32 nPara, TextLine* pLine, sal_Int32 nIndex, bool bPreferPortionStart )
 {
-    DBG_ASSERT( ( nIndex >= pLine->GetStart() ) && ( nIndex <= pLine->GetEnd() ) , "ImpGetXPos: Bad parameters!" );
+    SAL_WARN_IF( ( nIndex < pLine->GetStart() ) || ( nIndex > pLine->GetEnd() ) , "vcl", "ImpGetXPos: Bad parameters!" );
 
     bool bDoPreferPortionStart = bPreferPortionStart;
     // Assure that the portion belongs to this line
@@ -935,7 +935,7 @@ long TextEngine::ImpGetXPos( sal_uInt32 nPara, TextLine* pLine, sal_Int32 nIndex
     sal_Int32 nTextPortionStart = 0;
     size_t nTextPortion = pParaPortion->GetTextPortions().FindPortion( nIndex, nTextPortionStart, bDoPreferPortionStart );
 
-    DBG_ASSERT( ( nTextPortion >= pLine->GetStartPortion() ) && ( nTextPortion <= pLine->GetEndPortion() ), "GetXPos: Portion not in current line!" );
+    SAL_WARN_IF( ( nTextPortion < pLine->GetStartPortion() ) || ( nTextPortion > pLine->GetEndPortion() ), "vcl", "GetXPos: Portion not in current line!" );
 
     TETextPortion* pPortion = pParaPortion->GetTextPortions()[ nTextPortion ];
 
@@ -963,7 +963,7 @@ long TextEngine::ImpGetXPos( sal_uInt32 nPara, TextLine* pLine, sal_Int32 nIndex
                     {
 //                        nX += pNextPortion->GetWidth();
                         // End of the tab portion, use start of next for cursor pos
-                        DBG_ASSERT( !bPreferPortionStart, "ImpGetXPos: How can we get here!" );
+                        SAL_WARN_IF( bPreferPortionStart, "vcl", "ImpGetXPos: How can we get here!" );
                         nX = ImpGetXPos( nPara, pLine, nIndex, true );
                     }
 
@@ -972,7 +972,7 @@ long TextEngine::ImpGetXPos( sal_uInt32 nPara, TextLine* pLine, sal_Int32 nIndex
         }
         else if ( pPortion->GetKind() == PORTIONKIND_TEXT )
         {
-            DBG_ASSERT( nIndex != pLine->GetStart(), "ImpGetXPos: Strange behavior" );
+            SAL_WARN_IF( nIndex == pLine->GetStart(), "vcl", "ImpGetXPos: Strange behavior" );
 
             long nPosInPortion = CalcTextWidth( nPara, nTextPortionStart, nIndex-nTextPortionStart );
 
@@ -1031,7 +1031,7 @@ bool TextEngine::HasAttrib( sal_uInt16 nWhich ) const
 
 TextPaM TextEngine::GetPaM( const Point& rDocPos, bool bSmart )
 {
-    DBG_ASSERT( GetUpdateMode(), "GetPaM: GetUpdateMode()" );
+    SAL_WARN_IF( !GetUpdateMode(), "vcl", "GetPaM: GetUpdateMode()" );
 
     long nY = 0;
     for ( sal_uInt32 nPortion = 0; nPortion < mpTEParaPortions->Count(); ++nPortion )
@@ -1059,7 +1059,7 @@ TextPaM TextEngine::GetPaM( const Point& rDocPos, bool bSmart )
 
 sal_Int32 TextEngine::ImpFindIndex( sal_uInt32 nPortion, const Point& rPosInPara, bool bSmart )
 {
-    DBG_ASSERT( IsFormatted(), "GetPaM: Not formatted" );
+    SAL_WARN_IF( !IsFormatted(), "vcl", "GetPaM: Not formatted" );
     TEParaPortion* pPortion = mpTEParaPortions->GetObject( nPortion );
 
     sal_Int32 nCurIndex = 0;
@@ -1133,7 +1133,7 @@ sal_Int32 TextEngine::GetCharPos( sal_uInt32 nPortion, sal_uInt16 nLine, long nX
 
 long TextEngine::GetTextHeight() const
 {
-    DBG_ASSERT( GetUpdateMode(), "GetTextHeight: GetUpdateMode()" );
+    SAL_WARN_IF( !GetUpdateMode(), "vcl", "GetTextHeight: GetUpdateMode()" );
 
     if ( !IsFormatted() && !IsFormatting() )
         const_cast<TextEngine*>(this)->FormatAndUpdate();
@@ -1143,7 +1143,7 @@ long TextEngine::GetTextHeight() const
 
 long TextEngine::GetTextHeight( sal_uInt32 nParagraph ) const
 {
-    DBG_ASSERT( GetUpdateMode(), "GetTextHeight: GetUpdateMode()" );
+    SAL_WARN_IF( !GetUpdateMode(), "vcl", "GetTextHeight: GetUpdateMode()" );
 
     if ( !IsFormatted() && !IsFormatting() )
         const_cast<TextEngine*>(this)->FormatAndUpdate();
@@ -1190,7 +1190,7 @@ long TextEngine::CalcTextWidth()
 
 long TextEngine::CalcTextHeight()
 {
-    DBG_ASSERT( GetUpdateMode(), "CalcTextHeight: GetUpdateMode()" );
+    SAL_WARN_IF( !GetUpdateMode(), "vcl", "CalcTextHeight: GetUpdateMode()" );
 
     long nY = 0;
     for ( auto nPortion = mpTEParaPortions->Count(); nPortion; )
@@ -1203,7 +1203,7 @@ long TextEngine::CalcTextWidth( sal_uInt32 nPara, sal_Int32 nPortionStart, sal_I
 #ifdef DBG_UTIL
     // within the text there must not be a Portion change (attribute/tab)!
     sal_Int32 nTabPos = mpDoc->GetNodes()[ nPara ]->GetText().indexOf( '\t', nPortionStart );
-    DBG_ASSERT( nTabPos == -1 || nTabPos >= (nPortionStart+nLen), "CalcTextWidth: Tab!" );
+    SAL_WARN_IF( nTabPos != -1 && nTabPos < (nPortionStart+nLen), "vcl", "CalcTextWidth: Tab!" );
 #endif
 
     long nWidth;
@@ -1225,7 +1225,7 @@ long TextEngine::CalcTextWidth( sal_uInt32 nPara, sal_Int32 nPortionStart, sal_I
 
 sal_uInt16 TextEngine::GetLineCount( sal_uInt32 nParagraph ) const
 {
-    DBG_ASSERT( nParagraph < mpTEParaPortions->Count(), "GetLineCount: Out of range" );
+    SAL_WARN_IF( nParagraph >= mpTEParaPortions->Count(), "vcl", "GetLineCount: Out of range" );
 
     TEParaPortion* pPPortion = mpTEParaPortions->GetObject( nParagraph );
     if ( pPPortion )
@@ -1236,7 +1236,7 @@ sal_uInt16 TextEngine::GetLineCount( sal_uInt32 nParagraph ) const
 
 sal_Int32 TextEngine::GetLineLen( sal_uInt32 nParagraph, sal_uInt16 nLine ) const
 {
-    DBG_ASSERT( nParagraph < mpTEParaPortions->Count(), "GetLineCount: Out of range" );
+    SAL_WARN_IF( nParagraph >= mpTEParaPortions->Count(), "vcl", "GetLineCount: Out of range" );
 
     TEParaPortion* pPPortion = mpTEParaPortions->GetObject( nParagraph );
     if ( pPPortion && ( nLine < pPPortion->GetLines().size() ) )
@@ -1252,7 +1252,7 @@ long TextEngine::CalcParaHeight( sal_uInt32 nParagraph ) const
     long nHeight = 0;
 
     TEParaPortion* pPPortion = mpTEParaPortions->GetObject( nParagraph );
-    DBG_ASSERT( pPPortion, "GetParaHeight: paragraph not found" );
+    SAL_WARN_IF( !pPPortion, "vcl", "GetParaHeight: paragraph not found" );
     if ( pPPortion )
         nHeight = pPPortion->GetLines().size() * mnCharHeight;
 
@@ -1326,7 +1326,7 @@ void TextEngine::UndoActionEnd()
 
 void TextEngine::InsertUndo( TextUndo* pUndo, bool bTryMerge )
 {
-    DBG_ASSERT( !IsInUndo(), "InsertUndo: in Undo mode!" );
+    SAL_WARN_IF( IsInUndo(), "vcl", "InsertUndo: in Undo mode!" );
     GetUndoManager().AddUndoAction( pUndo, bTryMerge );
 }
 
@@ -1338,8 +1338,8 @@ void TextEngine::ResetUndo()
 
 void TextEngine::InsertContent( TextNode* pNode, sal_uInt32 nPara )
 {
-    DBG_ASSERT( pNode, "InsertContent: NULL-Pointer!" );
-    DBG_ASSERT( IsInUndo(), "InsertContent: only in Undo()!" );
+    SAL_WARN_IF( !pNode, "vcl", "InsertContent: NULL-Pointer!" );
+    SAL_WARN_IF( !IsInUndo(), "vcl", "InsertContent: only in Undo()!" );
     TEParaPortion* pNew = new TEParaPortion( pNode );
     mpTEParaPortions->Insert( pNew, nPara );
     mpDoc->GetNodes().insert( mpDoc->GetNodes().begin() + nPara, pNode );
@@ -1350,9 +1350,9 @@ TextPaM TextEngine::SplitContent( sal_uInt32 nNode, sal_Int32 nSepPos )
 {
 #ifdef DBG_UTIL
     TextNode* pNode = mpDoc->GetNodes()[ nNode ];
-    DBG_ASSERT( pNode, "SplitContent: Invalid Node!" );
-    DBG_ASSERT( IsInUndo(), "SplitContent: only in Undo()!" );
-    DBG_ASSERT( nSepPos <= pNode->GetText().getLength(), "SplitContent: Bad index" );
+    SAL_WARN_IF( !pNode, "vcl", "SplitContent: Invalid Node!" );
+    SAL_WARN_IF( !IsInUndo(), "vcl", "SplitContent: only in Undo()!" );
+    SAL_WARN_IF( nSepPos > pNode->GetText().getLength(), "vcl", "SplitContent: Bad index" );
 #endif
     TextPaM aPaM( nNode, nSepPos );
     return ImpInsertParaBreak( aPaM );
@@ -1360,7 +1360,7 @@ TextPaM TextEngine::SplitContent( sal_uInt32 nNode, sal_Int32 nSepPos )
 
 TextPaM TextEngine::ConnectContents( sal_uInt32 nLeftNode )
 {
-    DBG_ASSERT( IsInUndo(), "ConnectContent: only in Undo()!" );
+    SAL_WARN_IF( !IsInUndo(), "vcl", "ConnectContent: only in Undo()!" );
     return ImpConnectParagraphs( nLeftNode, nLeftNode+1 );
 }
 
@@ -1459,7 +1459,7 @@ void TextEngine::UpdateViews( TextView* pCurView )
     if ( !GetUpdateMode() || IsFormatting() || maInvalidRect.IsEmpty() )
         return;
 
-    DBG_ASSERT( IsFormatted(), "UpdateViews: Doc not formatted!" );
+    SAL_WARN_IF( !IsFormatted(), "vcl", "UpdateViews: Doc not formatted!" );
 
     for (TextView* pView : *mpViews)
     {
@@ -1638,7 +1638,7 @@ void TextEngine::ImpBreakLine( sal_uInt32 nPara, TextLine* pLine, TETextPortion*
     // Font still should be adjusted
     sal_Int32 nMaxBreakPos = mpRefDev->GetTextBreak( pNode->GetText(), nRemainingWidth, nPortionStart );
 
-    DBG_ASSERT( nMaxBreakPos < pNode->GetText().getLength(), "ImpBreakLine: Break?!" );
+    SAL_WARN_IF( nMaxBreakPos >= pNode->GetText().getLength(), "vcl", "ImpBreakLine: Break?!" );
 
     if ( nMaxBreakPos == -1 )   // GetTextBreak() != GetTextSize()
         nMaxBreakPos = pNode->GetText().getLength() - 1;
@@ -1674,7 +1674,7 @@ void TextEngine::ImpBreakLine( sal_uInt32 nPara, TextLine* pLine, TETextPortion*
         // generally suppress blanks at the end of line
         TEParaPortion* pTEParaPortion = mpTEParaPortions->GetObject( nPara );
         TETextPortion* pTP = pTEParaPortion->GetTextPortions()[ nEndPortion ];
-        DBG_ASSERT( nBreakPos > pLine->GetStart(), "ImpBreakLine: SplitTextPortion at beginning of line?" );
+        SAL_WARN_IF( nBreakPos <= pLine->GetStart(), "vcl", "ImpBreakLine: SplitTextPortion at beginning of line?" );
         pTP->GetWidth() = CalcTextWidth( nPara, nBreakPos-pTP->GetLen(), pTP->GetLen()-1 );
     }
     pLine->SetEndPortion( nEndPortion );
@@ -1705,7 +1705,7 @@ sal_uInt16 TextEngine::SplitTextPortion( sal_uInt32 nPara, sal_Int32 nPos )
         }
     }
 
-    DBG_ASSERT( pTextPortion, "SplitTextPortion: position outside of region!" );
+    SAL_WARN_IF( !pTextPortion, "vcl", "SplitTextPortion: position outside of region!" );
 
     const sal_Int32 nOverlapp = nTmpPos - nPos;
     pTextPortion->GetLen() -= nOverlapp;
@@ -1720,7 +1720,7 @@ void TextEngine::CreateTextPortions( sal_uInt32 nPara, sal_Int32 nStartPos )
 {
     TEParaPortion* pTEParaPortion = mpTEParaPortions->GetObject( nPara );
     TextNode* pNode = pTEParaPortion->GetNode();
-    DBG_ASSERT( !pNode->GetText().isEmpty(), "CreateTextPortions: should not be used for empty paragraphs!" );
+    SAL_WARN_IF( pNode->GetText().isEmpty(), "vcl", "CreateTextPortions: should not be used for empty paragraphs!" );
 
     std::set<sal_Int32> aPositions;
     std::set<sal_Int32>::iterator aPositionsIt;
@@ -1795,7 +1795,7 @@ void TextEngine::CreateTextPortions( sal_uInt32 nPara, sal_Int32 nStartPos )
     aPositions.insert( nPortionStart );
 
     aPositionsIt = aPositions.find( nPortionStart );
-    DBG_ASSERT( aPositionsIt != aPositions.end(), "CreateTextPortions: nPortionStart not found" );
+    SAL_WARN_IF( aPositionsIt == aPositions.end(), "vcl", "CreateTextPortions: nPortionStart not found" );
 
     if ( aPositionsIt != aPositions.end() )
     {
@@ -1849,7 +1849,7 @@ void TextEngine::RecalcTextPortion( sal_uInt32 nPara, sal_Int32 nStartPos, sal_I
             sal_Int32 nPortionStart {0};
             const sal_uInt16 nTP = pTEParaPortion->GetTextPortions().FindPortion( nStartPos, nPortionStart );
             TETextPortion* const pTP = pTEParaPortion->GetTextPortions()[ nTP ];
-            DBG_ASSERT( pTP, "RecalcTextPortion: Portion not found!"  );
+            SAL_WARN_IF( !pTP, "vcl", "RecalcTextPortion: Portion not found!"  );
             pTP->GetLen() += nNewChars;
             pTP->GetWidth() = (-1);
         }
@@ -1871,13 +1871,13 @@ void TextEngine::RecalcTextPortion( sal_uInt32 nPara, sal_Int32 nStartPos, sal_I
             pTP = pTEParaPortion->GetTextPortions()[ nPortion ];
             if ( ( nPos+pTP->GetLen() ) > nStartPos )
             {
-                DBG_ASSERT( nPos <= nStartPos, "RecalcTextPortion: Bad Start!" );
-                DBG_ASSERT( nPos+pTP->GetLen() >= nEnd, "RecalcTextPortion: Bad End!" );
+                SAL_WARN_IF( nPos > nStartPos, "vcl", "RecalcTextPortion: Bad Start!" );
+                SAL_WARN_IF( nPos+pTP->GetLen() < nEnd, "vcl", "RecalcTextPortion: Bad End!" );
                 break;
             }
             nPos += pTP->GetLen();
         }
-        DBG_ASSERT( pTP, "RecalcTextPortion: Portion not found!" );
+        SAL_WARN_IF( !pTP, "vcl", "RecalcTextPortion: Portion not found!" );
         if ( ( nPos == nStartPos ) && ( (nPos+pTP->GetLen()) == nEnd ) )
         {
             // remove Portion
@@ -1886,7 +1886,7 @@ void TextEngine::RecalcTextPortion( sal_uInt32 nPara, sal_Int32 nStartPos, sal_I
         }
         else
         {
-            DBG_ASSERT( pTP->GetLen() > (-nNewChars), "RecalcTextPortion: Portion too small to shrink!" );
+            SAL_WARN_IF( pTP->GetLen() <= (-nNewChars), "vcl", "RecalcTextPortion: Portion too small to shrink!" );
             pTP->GetLen() += nNewChars;
         }
         OSL_ENSURE( pTEParaPortion->GetTextPortions().size(),
@@ -1915,7 +1915,7 @@ void TextEngine::ImpPaint( OutputDevice* pOutDev, const Point& rStartPos, Rectan
         pSelStart = !bInvers ? &pSelection->GetStart() : &pSelection->GetEnd();
         pSelEnd = bInvers ? &pSelection->GetStart() : &pSelection->GetEnd();
     }
-    DBG_ASSERT( !pPaintRange || ( pPaintRange->GetStart() < pPaintRange->GetEnd() ), "ImpPaint: Paint-Range?!" );
+    SAL_WARN_IF( !pPaintRange || ( pPaintRange->GetStart() < pPaintRange->GetEnd() ), "vcl", "ImpPaint: Paint-Range?!" );
 
     const StyleSettings& rStyleSettings = pOutDev->GetSettings().GetStyleSettings();
 
@@ -1949,7 +1949,7 @@ void TextEngine::ImpPaint( OutputDevice* pOutDev, const Point& rStartPos, Rectan
                         OSL_ENSURE(pPortion->GetTextPortions().size(),
                                 "ImpPaint: Line without Textportion!");
                         TETextPortion* pTextPortion = pPortion->GetTextPortions()[ y ];
-                        DBG_ASSERT( pTextPortion, "ImpPaint: Bad pTextPortion!" );
+                        SAL_WARN_IF( !pTextPortion, "vcl", "ImpPaint: Bad pTextPortion!" );
 
                         ImpInitLayoutMode( pOutDev /*, pTextPortion->IsRightToLeft() */);
 
@@ -2100,7 +2100,7 @@ bool TextEngine::CreateLines( sal_uInt32 nPara )
 
     TextNode* pNode = mpDoc->GetNodes()[ nPara ];
     TEParaPortion* pTEParaPortion = mpTEParaPortions->GetObject( nPara );
-    DBG_ASSERT( pTEParaPortion->IsInvalid(), "CreateLines: Portion not invalid!" );
+    SAL_WARN_IF( !pTEParaPortion->IsInvalid(), "vcl", "CreateLines: Portion not invalid!" );
 
     const auto nOldLineCount = pTEParaPortion->GetLines().size();
 
@@ -2208,7 +2208,7 @@ bool TextEngine::CreateLines( sal_uInt32 nPara )
         {
             nPortionStart = nTmpPos;
             pPortion = pTEParaPortion->GetTextPortions()[ nTmpPortion ];
-            DBG_ASSERT( pPortion->GetLen(), "CreateLines: Empty Portion!" );
+            SAL_WARN_IF( !pPortion->GetLen(), "vcl", "CreateLines: Empty Portion!" );
             if ( pNode->GetText()[ nTmpPos ] == '\t' )
             {
                 long nCurPos = nTmpWidth-mpDoc->GetLeftMargin();
@@ -2278,7 +2278,7 @@ bool TextEngine::CreateLines( sal_uInt32 nPara )
         }
         else if ( !bEOL )
         {
-            DBG_ASSERT( (nPortionEnd-nPortionStart) == pPortion->GetLen(), "CreateLines: There is a Portion after all?!" );
+            SAL_WARN_IF( (nPortionEnd-nPortionStart) != pPortion->GetLen(), "vcl", "CreateLines: There is a Portion after all?!" );
             const long nRemainingWidth = mnMaxTextWidth - nTmpWidth;
             ImpBreakLine( nPara, pLine, pPortion, nPortionStart, nRemainingWidth );
         }
@@ -2395,7 +2395,7 @@ bool TextEngine::CreateLines( sal_uInt32 nPara )
                                           pTEParaPortion->GetLines().end() );
     }
 
-    DBG_ASSERT( pTEParaPortion->GetLines().size(), "CreateLines: No Line!" );
+    SAL_WARN_IF( !pTEParaPortion->GetLines().size(), "vcl", "CreateLines: No Line!" );
 
     pTEParaPortion->SetValid();
 
@@ -2808,7 +2808,7 @@ uno::Reference< i18n::XBreakIterator > TextEngine::GetBreakIterator()
 {
     if ( !mxBreakIterator.is() )
         mxBreakIterator = vcl::unohelper::CreateBreakIterator();
-    DBG_ASSERT( mxBreakIterator.is(), "BreakIterator: Failed to create!" );
+    SAL_WARN_IF( !mxBreakIterator.is(), "vcl", "BreakIterator: Failed to create!" );
     return mxBreakIterator;
 }
 

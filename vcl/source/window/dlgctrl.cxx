@@ -186,7 +186,7 @@ vcl::Window* Window::ImplGetDlgWindow( sal_uInt16 nIndex, GetDlgWindowType nType
                                   sal_uInt16 nFormStart, sal_uInt16 nFormEnd,
                                   sal_uInt16* pIndex )
 {
-    DBG_ASSERT( (nIndex >= nFormStart) && (nIndex <= nFormEnd),
+    SAL_WARN_IF( (nIndex < nFormStart) || (nIndex > nFormEnd), "vcl",
                 "Window::ImplGetDlgWindow() - nIndex not in Form" );
 
     vcl::Window* pWindow = nullptr;
@@ -383,7 +383,7 @@ vcl::Window* ImplFindDlgCtrlWindow( vcl::Window* pParent, vcl::Window* pWindow, 
 vcl::Window* ImplFindAccelWindow( vcl::Window* pParent, sal_uInt16& rIndex, sal_Unicode cCharCode,
                              sal_uInt16 nFormStart, sal_uInt16 nFormEnd, bool bCheckEnable )
 {
-    DBG_ASSERT( (rIndex >= nFormStart) && (rIndex <= nFormEnd),
+    SAL_WARN_IF( (rIndex < nFormStart) || (rIndex > nFormEnd), "vcl",
                 "Window::ImplFindAccelWindow() - rIndex not in Form" );
 
     sal_Unicode cCompareChar;
