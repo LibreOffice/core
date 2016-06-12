@@ -67,13 +67,7 @@ bool matchStringIgnoreCase(sal_Unicode const ** pBegin,
 
     while (q != qEnd)
     {
-        sal_Unicode c1 = *p++;
-        sal_Unicode c2 = *q++;
-        if (c1 >= 'a' && c1 <= 'z')
-            c1 -= 'a' - 'A';
-        if (c2 >= 'a' && c2 <= 'z')
-            c2 -= 'a' - 'A';
-        if (c1 != c2)
+        if (rtl::compareIgnoreAsciiCase(*p++, *q++) != 0)
             return false;
     }
 
@@ -183,7 +177,7 @@ bool isScheme(OUString const & rString, bool bColon)
             if (p == pEnd)
                 return !bColon;
             sal_Unicode c = *p++;
-            if (!(rtl::isAsciiAlpha(c) || rtl::isAsciiDigit(c)
+            if (!(rtl::isAsciiAlphanumeric(c)
                   || c == '+' || c == '-' || c == '.'))
                 return bColon && c == ':' && p == pEnd;
         }
