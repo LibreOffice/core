@@ -2196,6 +2196,33 @@ void DrawingML::WriteText( const Reference< XInterface >& rXIface, const OUStrin
 
 }
 
+void DrawingML::WritePresetShape( const char* pShape , std::vector< std::pair<sal_Int32,sal_Int32>> & rAvList )
+{
+    mpFS->startElementNS( XML_a, XML_prstGeom,
+                          XML_prst, pShape,
+                          FSEND );
+    if ( !rAvList.empty() )
+    {
+
+        mpFS->startElementNS( XML_a, XML_avLst, FSEND );
+        for(auto iter = rAvList.begin() ; iter != rAvList.end() ; ++iter)
+        {
+            OString sName = OString("adj") + ( ( iter->first > 0 ) ? OString::number(iter->first) : OString("") );
+            OString sFmla = OString("val ") + OString::number( iter->second );
+
+            mpFS->singleElementNS( XML_a, XML_gd,
+                    XML_name, sName.getStr(),
+                    XML_fmla, sFmla.getStr(),
+                    FSEND );
+        }
+        mpFS->endElementNS( XML_a, XML_avLst );
+    }
+    else
+        mpFS->singleElementNS( XML_a, XML_avLst, FSEND );
+
+    mpFS->endElementNS(  XML_a, XML_prstGeom );
+}
+
 void DrawingML::WritePresetShape( const char* pShape )
 {
     mpFS->startElementNS( XML_a, XML_prstGeom,
