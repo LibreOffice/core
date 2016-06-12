@@ -51,7 +51,7 @@ BigInt ImplPower10( sal_uInt16 n )
 
 OUString ImplGetCurr( const LocaleDataWrapper& rLocaleDataWrapper, const BigInt &rNumber, sal_uInt16 nDigits, const OUString& rCurrSymbol, bool bShowThousandSep )
 {
-    DBG_ASSERT( nDigits < 10, "LongCurrency may only have 9 decimal places" );
+    SAL_WARN_IF( nDigits >= 10, "vcl", "LongCurrency may only have 9 decimal places" );
 
     if ( rNumber.IsZero() || (long)rNumber )
         return rLocaleDataWrapper.getCurr( (long)rNumber, nDigits, rCurrSymbol, bShowThousandSep );

@@ -530,7 +530,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
             sal_Int32 nActBegin = rIStm.Tell();
             rIStm.ReadInt32( nActionSize );
 
-            DBG_ASSERT( ( nType <= 33 ) || ( nType >= 1024 ), "Unknown GDIMetaAction while converting!" );
+            SAL_WARN_IF( ( nType > 33 ) && ( nType < 1024 ), "vcl", "Unknown GDIMetaAction while converting!" );
 
             switch( nType )
             {
@@ -863,7 +863,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                         OString aByteStr = read_uInt8s_ToOString(rIStm, nTmp);
                         sal_uInt8 nTerminator = 0;
                         rIStm.ReadUChar( nTerminator );
-                        DBG_ASSERT( nTerminator == 0, "expected string to be NULL terminated" );
+                        SAL_WARN_IF( nTerminator != 0, "vcl", "expected string to be NULL terminated" );
 
                         OUString aStr(OStringToOUString(aByteStr, eActualCharSet));
                         if ( nUnicodeCommentActionNumber == i )
@@ -884,7 +884,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                         OString aByteStr = read_uInt8s_ToOString(rIStm, nTmp);
                         sal_uInt8 nTerminator = 0;
                         rIStm.ReadUChar( nTerminator );
-                        DBG_ASSERT( nTerminator == 0, "expected string to be NULL terminated" );
+                        SAL_WARN_IF( nTerminator != 0, "vcl", "expected string to be NULL terminated" );
 
                         OUString aStr(OStringToOUString(aByteStr, eActualCharSet));
 
@@ -943,7 +943,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                         OString aByteStr = read_uInt8s_ToOString(rIStm, nTmp);
                         sal_uInt8 nTerminator = 0;
                         rIStm.ReadUChar( nTerminator );
-                        DBG_ASSERT( nTerminator == 0, "expected string to be NULL terminated" );
+                        SAL_WARN_IF( nTerminator != 0, "vcl", "expected string to be NULL terminated" );
 
                         OUString aStr(OStringToOUString(aByteStr, eActualCharSet));
                         if ( nUnicodeCommentActionNumber == i )

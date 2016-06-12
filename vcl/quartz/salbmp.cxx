@@ -109,7 +109,7 @@ QuartzSalBitmap::~QuartzSalBitmap()
 bool QuartzSalBitmap::Create( CGLayerRef xLayer, int nBitmapBits,
     int nX, int nY, int nWidth, int nHeight )
 {
-    DBG_ASSERT( xLayer, "QuartzSalBitmap::Create() from non-layered context" );
+    SAL_WARN_IF( !xLayer, "vcl", "QuartzSalBitmap::Create() from non-layered context" );
 
     // sanitize input parameters
     if( nX < 0 ) {

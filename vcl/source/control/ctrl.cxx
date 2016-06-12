@@ -109,7 +109,7 @@ void Control::FillLayoutData() const
 
 void Control::CreateLayoutData() const
 {
-    DBG_ASSERT( !mpControlData->mpLayoutData, "Control::CreateLayoutData: should be called with non-existent layout data only!" );
+    SAL_WARN_IF( mpControlData->mpLayoutData, "vcl", "Control::CreateLayoutData: should be called with non-existent layout data only!" );
     mpControlData->mpLayoutData = new vcl::ControlLayoutData();
 }
 
@@ -223,7 +223,7 @@ long ControlLayoutData::ToRelativeLineIndex( long nIndex ) const
             }
             if( nLine < 0 )
             {
-                DBG_ASSERT( nLine >= 0, "ToRelativeLineIndex failed" );
+                SAL_WARN_IF( nLine < 0, "vcl", "ToRelativeLineIndex failed" );
                 nIndex = -1;
             }
         }

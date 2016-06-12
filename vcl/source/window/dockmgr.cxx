@@ -110,7 +110,7 @@ void ImplDockFloatWin2::dispose()
 
 IMPL_LINK_NOARG_TYPED(ImplDockFloatWin2, DockTimerHdl, Idle *, void)
 {
-    DBG_ASSERT( mpDockWin->IsFloatingMode(), "docktimer called but not floating" );
+    SAL_WARN_IF( !mpDockWin->IsFloatingMode(), "vcl", "docktimer called but not floating" );
 
     maDockIdle.Stop();
     PointerState aState = GetPointerState();
@@ -136,7 +136,7 @@ IMPL_LINK_NOARG_TYPED(ImplDockFloatWin2, DockTimerHdl, Idle *, void)
 
 IMPL_LINK_NOARG_TYPED(ImplDockFloatWin2, EndDockTimerHdl, Idle *, void)
 {
-    DBG_ASSERT( mpDockWin->IsFloatingMode(), "enddocktimer called but not floating" );
+    SAL_WARN_IF( !mpDockWin->IsFloatingMode(), "vcl", "enddocktimer called but not floating" );
 
     maEndDockIdle.Stop();
     PointerState aState = GetPointerState();

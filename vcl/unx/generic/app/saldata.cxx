@@ -588,8 +588,8 @@ void SalXLib::Insert( int nFD, void* data,
                       YieldFunc     queued,
                       YieldFunc     handle )
 {
-    DBG_ASSERT( nFD, "can not insert stdin descriptor" );
-    DBG_ASSERT( !yieldTable[nFD].fd, "SalXLib::Insert fd twice" );
+    SAL_WARN_IF( !nFD, "vcl", "can not insert stdin descriptor" );
+    SAL_WARN_IF( yieldTable[nFD].fd, "vcl", "SalXLib::Insert fd twice" );
 
     yieldTable[nFD].fd      = nFD;
     yieldTable[nFD].data    = data;
@@ -679,7 +679,7 @@ SalXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
         YieldEntry* pEntry = &(yieldTable[nFD]);
         if ( pEntry->fd )
         {
-            DBG_ASSERT( nFD == pEntry->fd, "wrong fd in Yield()" );
+            SAL_WARN_IF( nFD != pEntry->fd, "vcl", "wrong fd in Yield()" );
             for( int i = 0; i < nMaxEvents && pEntry->HasPendingEvent(); i++ )
             {
                 pEntry->HandleNextEvent();

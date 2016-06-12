@@ -836,7 +836,7 @@ void Edit::ImplInsertText( const OUString& rStr, const Selection* pNewSel, bool 
     // take care of input-sequence-checking now
     if (bIsUserInput && !rStr.isEmpty())
     {
-        DBG_ASSERT( rStr.getLength() == 1, "unexpected string length. User input is expected to provide 1 char only!" );
+        SAL_WARN_IF( rStr.getLength() != 1, "vcl", "unexpected string length. User input is expected to provide 1 char only!" );
 
         // determine if input-sequence-checking should be applied or not
 

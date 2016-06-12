@@ -80,7 +80,7 @@ X11SalObject* X11SalObject::CreateObject( SalFrame* pParent, SystemWindowData* p
     int nVisuals = 0;
     XVisualInfo* pInfo = XGetVisualInfo( pDisp, VisualIDMask, &aTemplate, &nVisuals );
     // only one VisualInfo structure can match the visual id
-    DBG_ASSERT( nVisuals == 1, "match count for visual id is not 1" );
+    SAL_WARN_IF( nVisuals != 1, "vcl", "match count for visual id is not 1" );
     unsigned int nDepth     = pInfo->depth;
     XFree( pInfo );
     XSetWindowAttributes aAttribs;

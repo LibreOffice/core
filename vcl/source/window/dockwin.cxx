@@ -128,7 +128,7 @@ void ImplDockFloatWin::dispose()
 
 IMPL_LINK_NOARG_TYPED(ImplDockFloatWin, DockTimerHdl, Idle *, void)
 {
-    DBG_ASSERT( mpDockWin->IsFloatingMode(), "docktimer called but not floating" );
+    SAL_WARN_IF( !mpDockWin->IsFloatingMode(), "vcl", "docktimer called but not floating" );
 
     maDockIdle.Stop();
     PointerState aState = GetPointerState();

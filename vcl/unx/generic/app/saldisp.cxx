@@ -153,7 +153,7 @@ static bool sal_GetVisualInfo( Display *pDisplay, XID nVID, XVisualInfo &rVI )
     rVI = *pInfo;
     XFree( pInfo );
 
-    DBG_ASSERT( rVI.visualid == nVID,
+    SAL_WARN_IF( rVI.visualid != nVID, "vcl",
                 "sal_GetVisualInfo: could not get correct visual by visualId" );
     return true;
 }
@@ -308,7 +308,7 @@ SalDisplay::SalDisplay( Display *display ) :
 #endif
     SalGenericData *pData = GetGenericData();
 
-    DBG_ASSERT( ! pData->GetDisplay(), "Second SalDisplay created !!!\n" );
+    SAL_WARN_IF(  pData->GetDisplay(), "vcl", "Second SalDisplay created !!!\n" );
     pData->SetDisplay( this );
 
     m_nXDefaultScreen = SalX11Screen( DefaultScreen( pDisp_ ) );
@@ -385,7 +385,7 @@ void SalDisplay::doDestruct()
 static int DisplayHasEvent( int fd, SalX11Display *pDisplay  )
 {
   (void)fd;
-  DBG_ASSERT( ConnectionNumber( pDisplay->GetDisplay() ) == fd,
+  SAL_WARN_IF( ConnectionNumber( pDisplay->GetDisplay() ) != fd, "vcl",
               "wrong fd in DisplayHasEvent" );
   if( ! pDisplay->IsDisplay() )
       return 0;
@@ -400,7 +400,7 @@ static int DisplayHasEvent( int fd, SalX11Display *pDisplay  )
 static int DisplayQueue( int fd, SalX11Display *pDisplay )
 {
   (void)fd;
-  DBG_ASSERT( ConnectionNumber( pDisplay->GetDisplay() ) == fd,
+  SAL_WARN_IF( ConnectionNumber( pDisplay->GetDisplay() ) != fd, "vcl",
               "wrong fd in DisplayHasEvent" );
   int result;
 
@@ -414,7 +414,7 @@ static int DisplayQueue( int fd, SalX11Display *pDisplay )
 static int DisplayYield( int fd, SalX11Display *pDisplay )
 {
   (void)fd;
-  DBG_ASSERT( ConnectionNumber( pDisplay->GetDisplay() ) == fd,
+  SAL_WARN_IF( ConnectionNumber( pDisplay->GetDisplay() ) != fd, "vcl",
               "wrong fd in DisplayHasEvent" );
 
   GetSalData()->m_pInstance->GetYieldMutex()->acquire();
@@ -1533,54 +1533,54 @@ Cursor SalDisplay::GetPointer( PointerStyle ePointerStyle )
             break;
         case PointerStyle::Arrow:
             aCur = XCreateFontCursor( pDisp_, XC_left_ptr );
-            DBG_ASSERT( aCur != None, "GetPointer: Could not define cursor" );
+            SAL_WARN_IF( aCur == None, "vcl", "GetPointer: Could not define cursor" );
             break;
         case PointerStyle::Wait:
             aCur = XCreateFontCursor( pDisp_, XC_watch );
             break;
         case PointerStyle::Text:          // Mouse Pointer is a "I" Beam
             aCur = XCreateFontCursor( pDisp_, XC_xterm );
-            DBG_ASSERT( aCur != None, "GetPointer: Could not define cursor" );
+            SAL_WARN_IF( aCur == None, "vcl", "GetPointer: Could not define cursor" );
             break;
         case PointerStyle::Help:
             aCur = XCreateFontCursor( pDisp_, XC_question_arrow );
-            DBG_ASSERT( aCur != None, "GetPointer: Could not define cursor" );
+            SAL_WARN_IF( aCur == None, "vcl", "GetPointer: Could not define cursor" );
             break;
         case PointerStyle::Cross:         // Mouse Pointer is a cross
             aCur = XCreateFontCursor( pDisp_, XC_crosshair );
-            DBG_ASSERT( aCur != None, "GetPointer: Could not define cursor" );
+            SAL_WARN_IF( aCur == None, "vcl", "GetPointer: Could not define cursor" );
             break;
         case PointerStyle::NSize:
             aCur = XCreateFontCursor( pDisp_, XC_sb_v_double_arrow );
-            DBG_ASSERT( aCur != None, "GetPointer: Could not define cursor" );
+            SAL_WARN_IF( aCur == None, "vcl", "GetPointer: Could not define cursor" );
             break;
         case PointerStyle::SSize:
             aCur = XCreateFontCursor( pDisp_, XC_sb_v_double_arrow );
-            DBG_ASSERT( aCur != None, "GetPointer: Could not define cursor" );
+            SAL_WARN_IF( aCur == None, "vcl", "GetPointer: Could not define cursor" );
             break;
         case PointerStyle::WSize:
             aCur = XCreateFontCursor( pDisp_, XC_sb_h_double_arrow );
-            DBG_ASSERT( aCur != None, "GetPointer: Could not define cursor" );
+            SAL_WARN_IF( aCur == None, "vcl", "GetPointer: Could not define cursor" );
             break;
         case PointerStyle::ESize:
             aCur = XCreateFontCursor( pDisp_, XC_sb_h_double_arrow );
-            DBG_ASSERT( aCur != None, "GetPointer: Could not define cursor" );
+            SAL_WARN_IF( aCur == None, "vcl", "GetPointer: Could not define cursor" );
             break;
         case PointerStyle::WindowNSize:
             aCur = XCreateFontCursor( pDisp_, XC_top_side );
-            DBG_ASSERT( aCur != None, "GetPointer: Could not define cursor" );
+            SAL_WARN_IF( aCur == None, "vcl", "GetPointer: Could not define cursor" );
             break;
         case PointerStyle::WindowSSize:
             aCur = XCreateFontCursor( pDisp_, XC_bottom_side );
-            DBG_ASSERT( aCur != None, "GetPointer: Could not define cursor" );
+            SAL_WARN_IF( aCur == None, "vcl", "GetPointer: Could not define cursor" );
             break;
         case PointerStyle::WindowWSize:
             aCur = XCreateFontCursor( pDisp_, XC_left_side );
-            DBG_ASSERT( aCur != None, "GetPointer: Could not define cursor" );
+            SAL_WARN_IF( aCur == None, "vcl", "GetPointer: Could not define cursor" );
             break;
         case PointerStyle::WindowESize:
             aCur = XCreateFontCursor( pDisp_, XC_right_side );
-            DBG_ASSERT( aCur != None, "GetPointer: Could not define cursor" );
+            SAL_WARN_IF( aCur == None, "vcl", "GetPointer: Could not define cursor" );
             break;
         case PointerStyle::NWSize:
             aCur = XCreateFontCursor( pDisp_, XC_top_left_corner );
@@ -1596,19 +1596,19 @@ Cursor SalDisplay::GetPointer( PointerStyle ePointerStyle )
             break;
         case PointerStyle::WindowNWSize:
             aCur = XCreateFontCursor( pDisp_, XC_top_left_corner );
-            DBG_ASSERT( aCur != None, "GetPointer: Could not define cursor" );
+            SAL_WARN_IF( aCur == None, "vcl", "GetPointer: Could not define cursor" );
             break;
         case PointerStyle::WindowNESize:
             aCur = XCreateFontCursor( pDisp_, XC_top_right_corner );
-            DBG_ASSERT( aCur != None, "GetPointer: Could not define cursor" );
+            SAL_WARN_IF( aCur == None, "vcl", "GetPointer: Could not define cursor" );
             break;
         case PointerStyle::WindowSWSize:
             aCur = XCreateFontCursor( pDisp_, XC_bottom_left_corner );
-            DBG_ASSERT( aCur != None, "GetPointer: Could not define cursor" );
+            SAL_WARN_IF( aCur == None, "vcl", "GetPointer: Could not define cursor" );
             break;
         case PointerStyle::WindowSESize:
             aCur = XCreateFontCursor( pDisp_, XC_bottom_right_corner );
-            DBG_ASSERT( aCur != None, "GetPointer: Could not define cursor" );
+            SAL_WARN_IF( aCur == None, "vcl", "GetPointer: Could not define cursor" );
             break;
         case PointerStyle::HSplit:
             aCur = XCreateFontCursor( pDisp_, XC_sb_h_double_arrow );
@@ -1618,15 +1618,15 @@ Cursor SalDisplay::GetPointer( PointerStyle ePointerStyle )
             break;
         case PointerStyle::HSizeBar:
             aCur = XCreateFontCursor( pDisp_, XC_sb_h_double_arrow ); // ???
-            DBG_ASSERT( aCur != None, "GetPointer: Could not define cursor" );
+            SAL_WARN_IF( aCur == None, "vcl", "GetPointer: Could not define cursor" );
             break;
         case PointerStyle::VSizeBar:
             aCur = XCreateFontCursor( pDisp_, XC_sb_v_double_arrow ); // ???
-            DBG_ASSERT( aCur != None, "GetPointer: Could not define cursor" );
+            SAL_WARN_IF( aCur == None, "vcl", "GetPointer: Could not define cursor" );
             break;
         case PointerStyle::RefHand:
             aCur = XCreateFontCursor( pDisp_, XC_hand1 );
-            DBG_ASSERT( aCur != None, "GetPointer: Could not define cursor" );
+            SAL_WARN_IF( aCur == None, "vcl", "GetPointer: Could not define cursor" );
             break;
         case PointerStyle::Hand:
             aCur = XCreateFontCursor( pDisp_, XC_hand2 );
@@ -1723,7 +1723,7 @@ Cursor SalDisplay::GetPointer( PointerStyle ePointerStyle )
             break;
         case PointerStyle::Pen:       // Mouse Pointer is a pencil
             aCur = XCreateFontCursor( pDisp_, XC_pencil );
-            DBG_ASSERT( aCur != None, "GetPointer: Could not define cursor" );
+            SAL_WARN_IF( aCur == None, "vcl", "GetPointer: Could not define cursor" );
             break;
         case PointerStyle::LinkData:
             MAKE_CURSOR( linkdata_ );

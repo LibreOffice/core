@@ -159,7 +159,7 @@ int ImplSVMain()
     // The 'real' SVMain()
     ImplSVData* pSVData = ImplGetSVData();
 
-    DBG_ASSERT( pSVData->mpApp, "no instance of class Application" );
+    SAL_WARN_IF( !pSVData->mpApp, "vcl", "no instance of class Application" );
 
     int nReturn = EXIT_FAILURE;
 
@@ -383,7 +383,7 @@ void DeInitVCL()
             aBuf.append( "\n" );
         }
     }
-    DBG_ASSERT( nBadTopWindows==0, aBuf.getStr() );
+    SAL_WARN_IF( nBadTopWindows!=0, "vcl", aBuf.getStr() );
 #endif
 
     ImplImageTree::get().shutDown();

@@ -261,7 +261,7 @@ OUString Application::GetCommandLineParam( sal_uInt16 nParam )
 OUString Application::GetAppFileName()
 {
     ImplSVData* pSVData = ImplGetSVData();
-    DBG_ASSERT( pSVData->maAppData.mpAppFileName, "AppFileName should be set to something after SVMain!" );
+    SAL_WARN_IF( !pSVData->maAppData.mpAppFileName, "vcl", "AppFileName should be set to something after SVMain!" );
     if ( pSVData->maAppData.mpAppFileName )
         return *pSVData->maAppData.mpAppFileName;
 
@@ -1083,9 +1083,9 @@ void Application::RemoveUserEvent( ImplSVEvent * nUserEvent )
 {
     if(nUserEvent)
     {
-        DBG_ASSERT( !nUserEvent->mpWindow,
+        SAL_WARN_IF( nUserEvent->mpWindow, "vcl",
                     "Application::RemoveUserEvent(): Event is send to a window" );
-        DBG_ASSERT( nUserEvent->mbCall,
+        SAL_WARN_IF( !nUserEvent->mbCall, "vcl",
                     "Application::RemoveUserEvent(): Event is already removed" );
 
         nUserEvent->mpWindow.clear();
@@ -1551,7 +1551,7 @@ UnoWrapperBase* Application::GetUnoWrapper( bool bCreateIfNotExist )
             }
             aTkLib.release();
         }
-        DBG_ASSERT( pSVData->mpUnoWrapper, "UnoWrapper could not be created!" );
+        SAL_WARN_IF( !pSVData->mpUnoWrapper, "vcl", "UnoWrapper could not be created!" );
 #else
         pSVData->mpUnoWrapper = CreateUnoWrapper();
 #endif
@@ -1563,7 +1563,7 @@ UnoWrapperBase* Application::GetUnoWrapper( bool bCreateIfNotExist )
 void Application::SetUnoWrapper( UnoWrapperBase* pWrapper )
 {
     ImplSVData* pSVData = ImplGetSVData();
-    DBG_ASSERT( !pSVData->mpUnoWrapper, "SetUnoWrapper: Wrapper already exists" );
+    SAL_WARN_IF( pSVData->mpUnoWrapper, "vcl", "SetUnoWrapper: Wrapper already exists" );
     pSVData->mpUnoWrapper = pWrapper;
 }
 

@@ -32,29 +32,29 @@ extern "C" BOOL WINAPI DllMain(HINSTANCE hInst, DWORD nReason, LPVOID)
 
 HCURSOR ImplLoadSalCursor( int nId )
 {
-    DBG_ASSERT( aSalShlData.mhInst, "no DLL instance handle" );
+    SAL_WARN_IF( !aSalShlData.mhInst, "vcl", "no DLL instance handle" );
 
     HCURSOR hCursor = LoadCursor( aSalShlData.mhInst, MAKEINTRESOURCE( nId ) );
 
-    DBG_ASSERT( hCursor, "cursor not found in sal resource" );
+    SAL_WARN_IF( !hCursor, "vcl", "cursor not found in sal resource" );
 
     return hCursor;
 }
 
 HBITMAP ImplLoadSalBitmap( int nId )
 {
-    DBG_ASSERT( aSalShlData.mhInst, "no DLL instance handle" );
+    SAL_WARN_IF( !aSalShlData.mhInst, "vcl", "no DLL instance handle" );
 
     HBITMAP hBitmap = LoadBitmap( aSalShlData.mhInst, MAKEINTRESOURCE( nId ) );
 
-    DBG_ASSERT( hBitmap, "bitmap not found in sal resource" );
+    SAL_WARN_IF( !hBitmap, "vcl", "bitmap not found in sal resource" );
 
     return hBitmap;
 }
 
 bool ImplLoadSalIcon( int nId, HICON& rIcon, HICON& rSmallIcon )
 {
-    DBG_ASSERT( aSalShlData.mhInst, "no DLL instance handle" );
+    SAL_WARN_IF( !aSalShlData.mhInst, "vcl", "no DLL instance handle" );
 
     SalData* pSalData = GetSalData();
 

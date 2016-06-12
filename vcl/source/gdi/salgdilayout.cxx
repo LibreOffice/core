@@ -247,7 +247,7 @@ basegfx::B2DPoint SalGraphics::mirror( const basegfx::B2DPoint& i_rPoint, const 
     else
         w = GetGraphicsWidth();
 
-    DBG_ASSERT( w, "missing graphics width" );
+    SAL_WARN_IF( !w, "vcl", "missing graphics width" );
 
     basegfx::B2DPoint aRet( i_rPoint );
     if( w )
@@ -273,7 +273,7 @@ basegfx::B2DPolygon SalGraphics::mirror( const basegfx::B2DPolygon& i_rPoly, con
     else
         w = GetGraphicsWidth();
 
-    DBG_ASSERT( w, "missing graphics width" );
+    SAL_WARN_IF( !w, "vcl", "missing graphics width" );
 
     basegfx::B2DPolygon aRet;
     if( w )
@@ -303,7 +303,7 @@ basegfx::B2DPolyPolygon SalGraphics::mirror( const basegfx::B2DPolyPolygon& i_rP
     else
         w = GetGraphicsWidth();
 
-    DBG_ASSERT( w, "missing graphics width" );
+    SAL_WARN_IF( !w, "vcl", "missing graphics width" );
 
     basegfx::B2DPolyPolygon aRet;
     if( w )

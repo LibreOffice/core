@@ -1465,7 +1465,7 @@ void PrinterController::setValue( const css::beans::PropertyValue& i_rPropertyVa
 
 void PrinterController::setUIOptions( const css::uno::Sequence< css::beans::PropertyValue >& i_rOptions )
 {
-    DBG_ASSERT( mpImplData->maUIOptions.getLength() == 0, "setUIOptions called twice !" );
+    SAL_WARN_IF( mpImplData->maUIOptions.getLength() != 0, "vcl", "setUIOptions called twice !" );
 
     mpImplData->maUIOptions = i_rOptions;
 
@@ -1911,7 +1911,7 @@ css::uno::Any PrinterOptionsHelper::setUIControlOpt(const css::uno::Sequence< OU
     for( sal_Int32 i = 0; i < nAddProps; i++ )
         aCtrl[ nUsed++ ] = i_rControlOptions.maAddProps[i];
 
-    DBG_ASSERT( nUsed == nElements, "nUsed != nElements, probable heap corruption" );
+    SAL_WARN_IF( nUsed != nElements, "vcl", "nUsed != nElements, probable heap corruption" );
 
     return css::uno::makeAny( aCtrl );
 }

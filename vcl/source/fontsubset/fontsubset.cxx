@@ -51,7 +51,7 @@ bool FontSubsetInfo::LoadFont(
     FontSubsetInfo::FontType eInFontType,
     const unsigned char* pInFontBytes, int nInByteLength)
 {
-    DBG_ASSERT( (mpSftTTFont == nullptr), "Subset from SFT and from mapped font-file requested");
+    SAL_WARN_IF( (mpSftTTFont != nullptr), "vcl", "Subset from SFT and from mapped font-file requested");
     meInFontType = eInFontType;
     mpInFontBytes = pInFontBytes;
     mnInByteLength = nInByteLength;
@@ -61,7 +61,7 @@ bool FontSubsetInfo::LoadFont(
 // prepare subsetting for fonts that are known to the SFT-parser
 bool FontSubsetInfo::LoadFont( vcl::TrueTypeFont* pSftTTFont )
 {
-    DBG_ASSERT( (mpInFontBytes == nullptr), "Subset from SFT and from mapped font-file requested");
+    SAL_WARN_IF( (mpInFontBytes != nullptr), "vcl", "Subset from SFT and from mapped font-file requested");
     mpSftTTFont = pSftTTFont;
     meInFontType = ANY_SFNT;
     return (mpSftTTFont == nullptr);

@@ -61,7 +61,7 @@ ConverterCache::~ConverterCache()
 
 void ConverterCache::ensureConverter( int nSelect )
 {
-    // DBG_ASSERT( (2<=nSelect) && (nSelect<=MAX_CVT_SELECT)), "invalid XLAT.Converter requested" );
+    // SAL_WARN_IF( (2>nSelect) || (nSelect>MAX_CVT_SELECT)), "vcl", "invalid XLAT.Converter requested" );
     rtl_UnicodeToTextContext aContext = maContexts[ nSelect ];
     if( !aContext )
     {

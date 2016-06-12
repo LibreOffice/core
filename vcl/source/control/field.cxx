@@ -1244,8 +1244,8 @@ double MetricField::ConvertDoubleValue( double nValue, sal_Int64 mnBaseValue, sa
             nDiv  = aImplFactor[eInUnit][eOutUnit];
             nMult = aImplFactor[eOutUnit][eInUnit];
 
-            DBG_ASSERT( nMult > 0, "illegal *" );
-            DBG_ASSERT( nDiv  > 0, "illegal /" );
+            SAL_WARN_IF( nMult <= 0, "vcl", "illegal *" );
+            SAL_WARN_IF( nDiv  <= 0, "vcl", "illegal /" );
         }
 
         if ( nMult != 1 && nMult > 0 )
@@ -1297,8 +1297,8 @@ double MetricField::ConvertDoubleValue( double nValue, sal_uInt16 nDigits,
         sal_Int64 nDiv  = aImplFactor[eFieldUnit][eOutUnit];
         sal_Int64 nMult = aImplFactor[eOutUnit][eFieldUnit];
 
-        DBG_ASSERT( nMult > 0, "illegal *" );
-        DBG_ASSERT( nDiv  > 0, "illegal /" );
+        SAL_WARN_IF( nMult <= 0, "vcl", "illegal *" );
+        SAL_WARN_IF( nDiv  <= 0, "vcl", "illegal /" );
 
         if ( nMult != 1 && nMult > 0)
             nValue *= nMult;
@@ -1347,8 +1347,8 @@ double MetricField::ConvertDoubleValue( double nValue, sal_uInt16 nDigits,
         sal_Int64 nDiv  = aImplFactor[eInUnit][eFieldUnit];
         sal_Int64 nMult = aImplFactor[eFieldUnit][eInUnit];
 
-        DBG_ASSERT( nMult > 0, "illegal *" );
-        DBG_ASSERT( nDiv  > 0, "illegal /" );
+        SAL_WARN_IF( nMult <= 0, "vcl", "illegal *" );
+        SAL_WARN_IF( nDiv  <= 0, "vcl", "illegal /" );
 
         if( nMult != 1 && nMult > 0 )
             nValue *= nMult;

@@ -506,8 +506,8 @@ void ToolBox::InsertItem( const ResId& rResId )
     {
         bNewCalc = true;
 
-        DBG_ASSERT( aItem.mnId, "ToolBox::InsertItem(): ItemId == 0" );
-        DBG_ASSERT( GetItemPos( aItem.mnId ) == TOOLBOX_ITEM_NOTFOUND, "ToolBox::InsertItem(): ItemId already exists" );
+        SAL_WARN_IF( !aItem.mnId, "vcl", "ToolBox::InsertItem(): ItemId == 0" );
+        SAL_WARN_IF( GetItemPos( aItem.mnId ) != TOOLBOX_ITEM_NOTFOUND, "vcl", "ToolBox::InsertItem(): ItemId already exists" );
     }
 
     // create item and add to list
@@ -524,8 +524,8 @@ void ToolBox::InsertItem( const ResId& rResId )
 
 void ToolBox::InsertItem( sal_uInt16 nItemId, const Image& rImage, ToolBoxItemBits nBits, sal_uInt16 nPos )
 {
-    DBG_ASSERT( nItemId, "ToolBox::InsertItem(): ItemId == 0" );
-    DBG_ASSERT( GetItemPos( nItemId ) == TOOLBOX_ITEM_NOTFOUND,
+    SAL_WARN_IF( !nItemId, "vcl", "ToolBox::InsertItem(): ItemId == 0" );
+    SAL_WARN_IF( GetItemPos( nItemId ) != TOOLBOX_ITEM_NOTFOUND, "vcl",
                 "ToolBox::InsertItem(): ItemId already exists" );
 
     // create item and add to list
@@ -544,8 +544,8 @@ void ToolBox::InsertItem( sal_uInt16 nItemId, const Image& rImage, ToolBoxItemBi
 void ToolBox::InsertItem( sal_uInt16 nItemId, const Image& rImage, const OUString& rText, ToolBoxItemBits nBits,
                           sal_uInt16 nPos )
 {
-    DBG_ASSERT( nItemId, "ToolBox::InsertItem(): ItemId == 0" );
-    DBG_ASSERT( GetItemPos( nItemId ) == TOOLBOX_ITEM_NOTFOUND,
+    SAL_WARN_IF( !nItemId, "vcl", "ToolBox::InsertItem(): ItemId == 0" );
+    SAL_WARN_IF( GetItemPos( nItemId ) != TOOLBOX_ITEM_NOTFOUND, "vcl",
                 "ToolBox::InsertItem(): ItemId already exists" );
 
     // create item and add to list
@@ -563,8 +563,8 @@ void ToolBox::InsertItem( sal_uInt16 nItemId, const Image& rImage, const OUStrin
 
 void ToolBox::InsertItem( sal_uInt16 nItemId, const OUString& rText, ToolBoxItemBits nBits, sal_uInt16 nPos )
 {
-    DBG_ASSERT( nItemId, "ToolBox::InsertItem(): ItemId == 0" );
-    DBG_ASSERT( GetItemPos( nItemId ) == TOOLBOX_ITEM_NOTFOUND,
+    SAL_WARN_IF( !nItemId, "vcl", "ToolBox::InsertItem(): ItemId == 0" );
+    SAL_WARN_IF( GetItemPos( nItemId ) != TOOLBOX_ITEM_NOTFOUND, "vcl",
                 "ToolBox::InsertItem(): ItemId already exists" );
 
     // create item and add to list
@@ -601,8 +601,8 @@ void ToolBox::InsertItem(const OUString& rCommand, const css::uno::Reference<css
 void ToolBox::InsertWindow( sal_uInt16 nItemId, vcl::Window* pWindow,
                             ToolBoxItemBits nBits, sal_uInt16 nPos )
 {
-    DBG_ASSERT( nItemId, "ToolBox::InsertWindow(): ItemId == 0" );
-    DBG_ASSERT( GetItemPos( nItemId ) == TOOLBOX_ITEM_NOTFOUND,
+    SAL_WARN_IF( !nItemId, "vcl", "ToolBox::InsertWindow(): ItemId == 0" );
+    SAL_WARN_IF( GetItemPos( nItemId ) != TOOLBOX_ITEM_NOTFOUND, "vcl",
                 "ToolBox::InsertWindow(): ItemId already exists" );
 
     // create item and add to list
@@ -708,7 +708,7 @@ void ToolBox::RemoveItem( sal_uInt16 nPos )
 
 void ToolBox::CopyItem( const ToolBox& rToolBox, sal_uInt16 nItemId )
 {
-    DBG_ASSERT( GetItemPos( nItemId ) == TOOLBOX_ITEM_NOTFOUND,
+    SAL_WARN_IF( GetItemPos( nItemId ) != TOOLBOX_ITEM_NOTFOUND, "vcl",
                 "ToolBox::CopyItem(): ItemId already exists" );
 
     sal_uInt16 nPos = rToolBox.GetItemPos( nItemId );
@@ -1943,8 +1943,8 @@ void ToolBox::ExecuteCustomMenu()
 // checks override first, useful during calculation of sizes
 bool ToolBox::ImplIsFloatingMode() const
 {
-    DBG_ASSERT( !(mpData->mbAssumeDocked && mpData->mbAssumeFloating),
-        "ToolBox::ImplIsFloatingMode(): cannot assume docked and floating" );
+    SAL_WARN_IF( mpData->mbAssumeDocked && mpData->mbAssumeFloating, "vcl",
+        "cannot assume docked and floating" );
 
     if( mpData->mbAssumeDocked )
         return false;
