@@ -327,7 +327,7 @@ void XSecController::setPropertyId( OUString& ouPropertyId )
 /* public: for signature verify */
 void XSecController::collectToVerify( const OUString& referenceId )
 {
-    /* DBG_ASSERT( m_xSAXEventKeeper.is(), "the SAXEventKeeper is NULL" ); */
+    /* SAL_WARN_IF( !m_xSAXEventKeeper.is(), "xmlsecurity", "the SAXEventKeeper is NULL" ); */
 
     if ( m_nStatusOfSecurityComponents == INITIALIZED )
     /*
@@ -392,7 +392,7 @@ void XSecController::collectToVerify( const OUString& referenceId )
 
 void XSecController::addSignature( sal_Int32 nSignatureId )
 {
-    DBG_ASSERT( m_xSecParser.is(), "No XSecParser initialized" );
+    SAL_WARN_IF( !m_xSecParser.is(), "xmlsecurity", "No XSecParser initialized" );
 
     m_nReservedSignatureId = nSignatureId;
     m_bVerifyCurrentSignature = true;

@@ -417,7 +417,7 @@ cssu::Reference< css::io::XInputStream >
 {
         cssu::Reference< css::io::XInputStream > xObjectInputStream;
 
-    DBG_ASSERT( m_xUriBinding.is(), "Need XUriBinding!" );
+    SAL_WARN_IF( !m_xUriBinding.is(), "xmlsecurity", "Need XUriBinding!" );
 
     xObjectInputStream = m_xUriBinding->getUriBinding(objectURL);
 
@@ -864,7 +864,7 @@ SignatureInformation XSecController::getSignatureInformation( sal_Int32 nSecurit
 {
     SignatureInformation aInf( 0 );
     int nIndex = findSignatureInfor(nSecurityId);
-    DBG_ASSERT( nIndex != -1, "getSignatureInformation - SecurityId is invalid!" );
+    SAL_WARN_IF( nIndex == -1, "xmlsecurity", "getSignatureInformation - SecurityId is invalid!" );
     if ( nIndex != -1)
     {
         aInf = m_vInternalSignatureInformations[nIndex].signatureInfor;
