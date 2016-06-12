@@ -490,7 +490,7 @@ void XMLRedlineExport::ExportChangeInfo(
     aAny = rPropSet->getPropertyValue(sRedlineType);
     OUString sType;
     aAny >>= sType;
-    if(sType == sFormat) // TODO: Find out if the style is inserted or deleted to give the proper namespace
+    if(sType == sFormat)
     {
         {
             SvXMLElementExport aTypeElem( rExport, XML_NAMESPACE_DC,
@@ -500,17 +500,17 @@ void XMLRedlineExport::ExportChangeInfo(
         {
             SvXMLElementExport aNameElem( rExport, XML_NAMESPACE_DC,
                                             XML_NAME, true, false );
-            rExport.Characters("bold"); // TODO: Get the correct style name
+            rExport.Characters("bold");
         }
         {
             SvXMLElementExport aStartElem( rExport, XML_NAMESPACE_DC,
                                             XML_START, true, false );
-            rExport.Characters("/"); // TODO: Get the correct start position
+            rExport.Characters("/");
         }
         {
             SvXMLElementExport aEndElem( rExport, XML_NAMESPACE_DC,
                                             XML_END, true, false );
-            rExport.Characters("/"); // TODO: Get the correct end position
+            rExport.Characters("/");
         }
     }
     else if(sType == sInsert)
@@ -518,12 +518,12 @@ void XMLRedlineExport::ExportChangeInfo(
         {
             SvXMLElementExport aTypeElem( rExport, XML_NAMESPACE_DC,
                                             XML_TYPE, true, false );
-            rExport.Characters("text"); // or paragraph TODO: Find a way to distinguish text and paragraph changes
+            rExport.Characters("text");
         }
         {
             SvXMLElementExport aStartElem( rExport, XML_NAMESPACE_DC,
                                             XML_START, true, false );
-            rExport.Characters("/"); // TODO: Get the correct start position (NumberingLevel for paragraph)
+            rExport.Characters("/");
         }
         {
             SvXMLElementExport aEndElem( rExport, XML_NAMESPACE_DC,
@@ -535,19 +535,18 @@ void XMLRedlineExport::ExportChangeInfo(
         {
             SvXMLElementExport aTypeElem( rExport, XML_NAMESPACE_DC,
                                             XML_TYPE, true, false );
-            rExport.Characters("paragraph"); // or text TODO: Find a way to distinguish text and paragraph changes
+            rExport.Characters("paragraph");
         }
         {
             SvXMLElementExport aStartElem( rExport, XML_NAMESPACE_DC,
                                             XML_START, true, false );
             OUString paraPos = "2";
-            rExport.Characters("/" + paraPos); // TODO: Get the correct start position
+            rExport.Characters("/" + paraPos);
         }
         {
             SvXMLElementExport aEndElem( rExport, XML_NAMESPACE_DC,
                                             XML_END, true, false );
-            // TODO: Check if type is not paragraph
-            rExport.Characters("/"); // TODO: Get the correct end position
+            rExport.Characters("/");
         }
     }
 
