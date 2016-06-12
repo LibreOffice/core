@@ -130,6 +130,9 @@ LibLODocument_Impl* DesktopLOKTest::loadDoc(const char* pName, LibreOfficeKitDoc
     case LOK_DOCTYPE_SPREADSHEET:
         aService = "com.sun.star.sheet.SpreadsheetDocument";
         break;
+    case LOK_DOCTYPE_PRESENTATION:
+        aService = "com.sun.star.presentation.PresentationDocument";
+        break;
     default:
         CPPUNIT_ASSERT(false);
         break;
