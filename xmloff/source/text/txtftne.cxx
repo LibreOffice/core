@@ -234,7 +234,7 @@ static void lcl_exportString(
     bool bEncodeName,
     bool bOmitIfEmpty)
 {
-    DBG_ASSERT( eElement != XML_TOKEN_INVALID, "need element token");
+    SAL_WARN_IF( eElement == XML_TOKEN_INVALID, "xmloff", "need element token");
 
     Any aAny = rPropSet->getPropertyValue(sProperty);
     OUString sTmp;

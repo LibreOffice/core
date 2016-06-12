@@ -67,9 +67,9 @@ DomBuilderContext::DomBuilderContext( SvXMLImport& rImport,
     mxNode( lcl_createElement( rImport, nPrefix, rLocalName,
                                lcl_createDomInstance() ) )
 {
-    DBG_ASSERT( mxNode.is(), "empty XNode not allowed" );
-    DBG_ASSERT( Reference<XElement>( mxNode, UNO_QUERY ).is(), "need element" );
-    DBG_ASSERT( mxNode->getNodeType() == NodeType_ELEMENT_NODE, "need element" );
+    SAL_WARN_IF( !mxNode.is(), "xmloff", "empty XNode not allowed" );
+    SAL_WARN_IF( !Reference<XElement>( mxNode, UNO_QUERY ).is(), "xmloff", "need element" );
+    SAL_WARN_IF( mxNode->getNodeType() != NodeType_ELEMENT_NODE, "xmloff", "need element" );
 }
 
 DomBuilderContext::DomBuilderContext( SvXMLImport& rImport,
@@ -79,9 +79,9 @@ DomBuilderContext::DomBuilderContext( SvXMLImport& rImport,
     SvXMLImportContext( rImport, nPrefix, rLocalName ),
     mxNode( lcl_createElement( rImport, nPrefix, rLocalName, xParent ) )
 {
-    DBG_ASSERT( mxNode.is(), "empty XNode not allowed" );
-    DBG_ASSERT( Reference<XElement>( mxNode, UNO_QUERY ).is(), "need element" );
-    DBG_ASSERT( mxNode->getNodeType() == NodeType_ELEMENT_NODE, "need element" );
+    SAL_WARN_IF( !mxNode.is(), "xmloff", "empty XNode not allowed" );
+    SAL_WARN_IF( !Reference<XElement>( mxNode, UNO_QUERY ).is(), "xmloff", "need element" );
+    SAL_WARN_IF( mxNode->getNodeType() != NodeType_ELEMENT_NODE, "xmloff", "need element" );
 }
 
 DomBuilderContext::~DomBuilderContext()
@@ -90,7 +90,7 @@ DomBuilderContext::~DomBuilderContext()
 
 Reference<XDocument> DomBuilderContext::getTree()
 {
-    DBG_ASSERT( mxNode.is(), "empty XNode not allowed" );
+    SAL_WARN_IF( !mxNode.is(), "xmloff", "empty XNode not allowed" );
     return mxNode->getOwnerDocument();
 }
 
@@ -107,8 +107,8 @@ SvXMLImportContext* DomBuilderContext::CreateChildContext(
 void DomBuilderContext::StartElement(
     const Reference<XAttributeList>& xAttrList )
 {
-    DBG_ASSERT( mxNode.is(), "empty XNode not allowed" );
-    DBG_ASSERT( mxNode->getOwnerDocument().is(), "XNode must have XDocument" );
+    SAL_WARN_IF( !mxNode.is(), "xmloff", "empty XNode not allowed" );
+    SAL_WARN_IF( !mxNode->getOwnerDocument().is(), "xmloff", "XNode must have XDocument" );
 
     // add attribute nodes to new node
     sal_Int16 nAttributeCount = xAttrList->getLength();
@@ -161,7 +161,7 @@ void DomBuilderContext::EndElement()
 
 void DomBuilderContext::Characters( const OUString& rCharacters )
 {
-    DBG_ASSERT( mxNode.is(), "empty XNode not allowed" );
+    SAL_WARN_IF( !mxNode.is(), "xmloff", "empty XNode not allowed" );
 
     // TODO: I assume adjacent text nodes should be joined, to preserve
     // processinf model? (I.e., if the SAX parser breaks a string into 2
@@ -181,7 +181,7 @@ void DomBuilderContext::Characters( const OUString& rCharacters )
 static Reference<XNode> lcl_createDomInstance()
 {
     Reference<XComponentContext> xContext = comphelper::getProcessComponentContext();
-    DBG_ASSERT( xContext.is(), "can't get service factory" );
+    SAL_WARN_IF( !xContext.is(), "xmloff", "can't get service factory" );
 
     Reference<XDocumentBuilder> xBuilder( DocumentBuilder::create(xContext) );
 
@@ -193,10 +193,10 @@ static Reference<XNode> lcl_createElement( SvXMLImport& rImport,
                                     const OUString& rLocalName,
                                     const Reference<XNode>& xParent)
 {
-    DBG_ASSERT( xParent.is(), "need parent node" );
+    SAL_WARN_IF( !xParent.is(), "xmloff", "need parent node" );
 
     Reference<XDocument> xDocument = xParent->getOwnerDocument();
-    DBG_ASSERT( xDocument.is(), "no XDocument found!" );
+    SAL_WARN_IF( !xDocument.is(), "xmloff", "no XDocument found!" );
 
     // TODO: come up with proper way of handling namespaces; re-creating the
     // namespace from the key is NOT a good idea, and will not work for
@@ -229,7 +229,7 @@ static Reference<XNode> lcl_createElement( SvXMLImport& rImport,
             rImport.GetNamespaceMap().GetQNameByKey( nPrefix, rLocalName ) );
         break;
     }
-    DBG_ASSERT( xElement.is(), "can't create element" );
+    SAL_WARN_IF( !xElement.is(), "xmloff", "can't create element" );
 
     // add new element to parent and return
     xParent->appendChild( xElement );

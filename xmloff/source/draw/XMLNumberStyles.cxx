@@ -379,7 +379,7 @@ static void SdXMLExportStyle( SdXMLExport& rExport, const SdXMLFixedDataStyle* p
 
 void SdXMLNumberStylesExporter::exportTimeStyle( SdXMLExport& rExport, sal_Int32 nStyle )
 {
-    DBG_ASSERT( (nStyle >= 0) && (nStyle < SdXMLTimeFormatCount), "Unknown time style!" );
+    SAL_WARN_IF( (nStyle < 0) || (nStyle >= SdXMLTimeFormatCount), "xmloff", "Unknown time style!" );
     if( (nStyle >= 0) && (nStyle < SdXMLTimeFormatCount) )
         SdXMLExportStyle( rExport, aSdXMLFixedTimeFormats[ nStyle ] );
 }
@@ -394,7 +394,7 @@ void SdXMLNumberStylesExporter::exportDateStyle( SdXMLExport& rExport, sal_Int32
         if( nDateStyle > 1 )
             nDateStyle -= 2;
 
-        DBG_ASSERT( (nDateStyle >= 0) && (nDateStyle < SdXMLDateFormatCount), "unknown date style!" );
+        SAL_WARN_IF( (nDateStyle < 0) || (nDateStyle >= SdXMLDateFormatCount), "xmloff", "unknown date style!" );
 
         int nTimeStyle = (nStyle >> 4) & 0x0f;
         bool bHasTime = nTimeStyle != 0;
@@ -402,7 +402,7 @@ void SdXMLNumberStylesExporter::exportDateStyle( SdXMLExport& rExport, sal_Int32
         if( nTimeStyle > 1 )
             nTimeStyle -= 2;
 
-        DBG_ASSERT( (nTimeStyle >= 0) && (nTimeStyle < SdXMLTimeFormatCount), "Unknown time style!" );
+        SAL_WARN_IF( (nTimeStyle < 0) || (nTimeStyle >= SdXMLTimeFormatCount), "xmloff", "Unknown time style!" );
 
         if( (nDateStyle >= 0) && (nDateStyle < SdXMLDateFormatCount) && (nTimeStyle >= 0) && (nTimeStyle < SdXMLTimeFormatCount) )
         {
@@ -425,7 +425,7 @@ void SdXMLNumberStylesExporter::exportDateStyle( SdXMLExport& rExport, sal_Int32
     }
     else
     {
-        DBG_ASSERT( (nStyle >= 0) && (nStyle < SdXMLDateFormatCount), "unknown date style!" );
+        SAL_WARN_IF( (nStyle < 0) || (nStyle >= SdXMLDateFormatCount), "xmloff", "unknown date style!" );
         if( (nStyle >= 0) && (nStyle < SdXMLDateFormatCount) )
             SdXMLExportStyle( rExport, aSdXMLFixedDateFormats[ nStyle ] );
     }

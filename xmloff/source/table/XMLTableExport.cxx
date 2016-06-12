@@ -415,7 +415,7 @@ static bool has_states( const std::vector< XMLPropertyState >& xPropStates )
             nRowSpan = xMerge->getRowSpan();
             nColSpan = xMerge->getColumnSpan();
         }
-        DBG_ASSERT( (nRowSpan >= 1) && (nColSpan >= 1), "xmloff::XMLTableExport::ExportCell(), illegal row or col span < 1?" );
+        SAL_WARN_IF( (nRowSpan < 1) || (nColSpan < 1), "xmloff", "xmloff::XMLTableExport::ExportCell(), illegal row or col span < 1?" );
     }
     catch (const Exception&)
     {

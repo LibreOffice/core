@@ -468,7 +468,7 @@ void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
         xPropMapper = GetRubyPropMapper();
         break;
     }
-    DBG_ASSERT( xPropMapper.is(), "There is the property mapper?" );
+    SAL_WARN_IF( !xPropMapper.is(), "xmloff", "There is the property mapper?" );
 
     vector< XMLPropertyState > aPropStates =
             xPropMapper->Filter( rPropSet );
@@ -599,7 +599,7 @@ void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
         xPropMapper = GetParaPropMapper();
         break;
     }
-    DBG_ASSERT( xPropMapper.is(), "There is the property mapper?" );
+    SAL_WARN_IF( !xPropMapper.is(), "xmloff", "There is the property mapper?" );
 
     vector< XMLPropertyState > aPropStates(xPropMapper->Filter( rPropSet ));
 
@@ -693,7 +693,7 @@ OUString XMLTextParagraphExport::Find(
         xPropMapper = GetRubyPropMapper();
         break;
     }
-    DBG_ASSERT( xPropMapper.is(), "There is the property mapper?" );
+    SAL_WARN_IF( !xPropMapper.is(), "xmloff", "There is the property mapper?" );
     if( !xPropMapper.is() )
         return sName;
     vector< XMLPropertyState > aPropStates(xPropMapper->Filter( rPropSet ));
@@ -806,7 +806,7 @@ void XMLTextParagraphExport::exportListChange(
         else if ( rPrevInfo.GetLevel() > rNextInfo.GetLevel() )
         {
             // close corresponding sub lists
-            DBG_ASSERT( rNextInfo.GetLevel() > 0,
+            SAL_WARN_IF( rNextInfo.GetLevel() <= 0, "xmloff",
                         "<rPrevInfo.GetLevel() > 0> not hold. Serious defect." );
             nListLevelsToBeClosed = rPrevInfo.GetLevel() - rNextInfo.GetLevel();
         }
@@ -851,7 +851,7 @@ void XMLTextParagraphExport::exportListChange(
         else if ( rNextInfo.GetLevel() > rPrevInfo.GetLevel() )
         {
             // open corresponding sub lists
-            DBG_ASSERT( rPrevInfo.GetLevel() > 0,
+            SAL_WARN_IF( rPrevInfo.GetLevel() <= 0, "xmloff",
                         "<rPrevInfo.GetLevel() > 0> not hold. Serious defect." );
             nListLevelsToBeOpened = rNextInfo.GetLevel() - rPrevInfo.GetLevel();
         }
@@ -1324,7 +1324,7 @@ XMLTextParagraphExport::~XMLTextParagraphExport()
     txtparae_bContainsIllegalCharacters = false;
 #endif
     PopTextListsHelper();
-    DBG_ASSERT( maTextListsHelperStack.empty(),
+    SAL_WARN_IF( !maTextListsHelperStack.empty(), "xmloff",
                 "misusage of text lists helper stack - it is not empty. Serious defect" );
 }
 
@@ -1648,7 +1648,7 @@ void XMLTextParagraphExport::exportText(
 
     // #97718# footnotes don't supply paragraph enumerations in some cases
     // This is always a bug, but at least we don't want to crash.
-    DBG_ASSERT( xParaEnum.is(), "We need a paragraph enumeration" );
+    SAL_WARN_IF( !xParaEnum.is(), "xmloff", "We need a paragraph enumeration" );
     if( ! xParaEnum.is() )
         return;
 
@@ -1733,7 +1733,7 @@ bool XMLTextParagraphExport::exportTextContentEnumeration(
         const Reference < XPropertySet > *pRangePropSet,
         bool bExportLevels, TextPNS eExtensionNS )
 {
-    DBG_ASSERT( rContEnum.is(), "No enumeration to export!" );
+    SAL_WARN_IF( !rContEnum.is(), "xmloff", "No enumeration to export!" );
     bool bHasMoreElements = rContEnum->hasMoreElements();
     if( !bHasMoreElements )
         return false;
@@ -1866,7 +1866,7 @@ bool XMLTextParagraphExport::exportTextContentEnumeration(
         }
         else
         {
-            DBG_ASSERT( !xTxtCntnt.is(), "unknown text content" );
+            SAL_WARN_IF( xTxtCntnt.is(), "xmloff", "unknown text content" );
         }
 
         if( !bAutoStyles )
@@ -2026,7 +2026,7 @@ void XMLTextParagraphExport::exportParagraph(
                             if (xCNSupplier.is())
                             {
                                 Reference< XIndexReplace > xNumRule ( xCNSupplier->getChapterNumberingRules() );
-                                DBG_ASSERT( xNumRule.is(), "no chapter numbering rules" );
+                                SAL_WARN_IF( !xNumRule.is(), "xmloff", "no chapter numbering rules" );
 
                                 if (xNumRule.is())
                                 {
@@ -2427,7 +2427,7 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
     }
 
 // now that there are nested enumerations for meta(-field), this may be valid!
-//  DBG_ASSERT( !bOpenRuby, "Red Alert: Ruby still open!" );
+//  SAL_WARN_IF( bOpenRuby, "xmloff", "Red Alert: Ruby still open!" );
 }
 
 void XMLTextParagraphExport::exportTable(
@@ -2445,7 +2445,7 @@ void XMLTextParagraphExport::exportTextField(
     if (xPropSet->getPropertySetInfo()->hasPropertyByName( sTextField ))
     {
         Reference < XTextField > xTxtFld(xPropSet->getPropertyValue( sTextField ), uno::UNO_QUERY);
-        DBG_ASSERT( xTxtFld.is(), "text field missing" );
+        SAL_WARN_IF( !xTxtFld.is(), "xmloff", "text field missing" );
         if( xTxtFld.is() )
         {
             exportTextField(xTxtFld, bAutoStyles, bIsProgress, true);
@@ -2681,7 +2681,7 @@ XMLShapeExportFlags XMLTextParagraphExport::addTextFrameAttributes(
     {
         sal_Int16 nRelWidth =  0;
         rPropSet->getPropertyValue( sRelativeWidth ) >>= nRelWidth;
-        DBG_ASSERT( nRelWidth >= 0 && nRelWidth <= 254,
+        SAL_WARN_IF( nRelWidth < 0 || nRelWidth > 254, "xmloff",
                     "Got illegal relative width from API" );
         if( nRelWidth > 0 )
         {
@@ -3436,7 +3436,7 @@ void XMLTextParagraphExport::exportText( const OUString& rText,
            // the text that has not been exported by now has to be exported now.
         if( nPos > nExpStartPos && !bExpCharAsText )
         {
-            DBG_ASSERT( 0==nSpaceChars, "pending spaces" );
+            SAL_WARN_IF( 0 != nSpaceChars, "xmloff", "pending spaces" );
             OUString sExp( rText.copy( nExpStartPos, nPos - nExpStartPos ) );
             GetExport().Characters( sExp );
             nExpStartPos = nPos;
@@ -3447,7 +3447,7 @@ void XMLTextParagraphExport::exportText( const OUString& rText,
         // exported now.
         if( nSpaceChars > 0 && !bCurrCharIsSpace )
         {
-            DBG_ASSERT( nExpStartPos == nPos, " pending characters" );
+            SAL_WARN_IF( nExpStartPos != nPos, "xmloff", " pending characters" );
 
             if( nSpaceChars > 1 )
             {
@@ -3497,14 +3497,14 @@ void XMLTextParagraphExport::exportText( const OUString& rText,
         // position for text is the position behind the current position.
         if( !bExpCharAsText )
         {
-            DBG_ASSERT( nExpStartPos == nPos, "wrong export start pos" );
+            SAL_WARN_IF( nExpStartPos != nPos, "xmloff", "wrong export start pos" );
             nExpStartPos = nPos+1;
         }
     }
 
     if( nExpStartPos < nEndPos )
     {
-        DBG_ASSERT( 0==nSpaceChars, " pending spaces " );
+        SAL_WARN_IF( 0 != nSpaceChars, "xmloff", " pending spaces " );
         OUString sExp( rText.copy( nExpStartPos, nEndPos - nExpStartPos ) );
         GetExport().Characters( sExp );
     }
@@ -3751,7 +3751,7 @@ void XMLTextParagraphExport::PreventExportOfControlsInMuteSections(
         // if we don't have shapes or a form export, there's nothing to do
         return;
     }
-    DBG_ASSERT( pSectionExport != nullptr, "We need the section export." );
+    SAL_WARN_IF( pSectionExport == nullptr, "xmloff", "We need the section export." );
 
     Reference<XEnumeration> xShapesEnum = pBoundFrameSets->GetShapes()->createEnumeration();
     if(!xShapesEnum.is())

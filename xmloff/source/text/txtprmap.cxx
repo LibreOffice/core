@@ -1037,7 +1037,7 @@ static XMLPropertyMapEntry *lcl_txtprmap_getMap( TextPropMap nType )
         pMap = aXMLTableRowDefaultsMap;
         break;
     }
-    DBG_ASSERT( pMap, "illegal map type" );
+    SAL_WARN_IF( !pMap, "xmloff", "illegal map type" );
     return pMap;
 }
 

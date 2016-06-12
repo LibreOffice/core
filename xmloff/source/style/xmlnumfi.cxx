@@ -363,7 +363,7 @@ SvXMLNumImpData::SvXMLNumImpData(
     pLocaleData(nullptr),
     m_xContext(rxContext)
 {
-    DBG_ASSERT( rxContext.is(), "got no service manager" );
+    SAL_WARN_IF( !rxContext.is(), "xmloff", "got no service manager" );
 }
 
 SvXMLNumImpData::~SvXMLNumImpData()
@@ -2245,7 +2245,7 @@ SvXMLNumFmtHelper::SvXMLNumFmtHelper(
     const uno::Reference<util::XNumberFormatsSupplier>& rSupp,
     const uno::Reference<uno::XComponentContext>& rxContext )
 {
-    DBG_ASSERT( rxContext.is(), "got no service manager" );
+    SAL_WARN_IF( !rxContext.is(), "xmloff", "got no service manager" );
 
     SvNumberFormatter* pFormatter = nullptr;
     SvNumberFormatsSupplierObj* pObj =
@@ -2260,7 +2260,7 @@ SvXMLNumFmtHelper::SvXMLNumFmtHelper(
     SvNumberFormatter* pNumberFormatter,
     const uno::Reference<uno::XComponentContext>& rxContext )
 {
-    DBG_ASSERT( rxContext.is(), "got no service manager" );
+    SAL_WARN_IF( !rxContext.is(), "xmloff", "got no service manager" );
 
     pData = new SvXMLNumImpData( pNumberFormatter, rxContext );
 }

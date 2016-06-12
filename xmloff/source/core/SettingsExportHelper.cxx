@@ -425,7 +425,7 @@ void XMLSettingsExportHelper::exportForbiddenCharacters(
     rAny >>= xForbChars;
     rAny >>= xLocales;
 
-    DBG_ASSERT( xForbChars.is() && xLocales.is(),"XMLSettingsExportHelper::exportForbiddenCharacters: got illegal forbidden characters!" );
+    SAL_WARN_IF( !(xForbChars.is() && xLocales.is()), "xmloff","XMLSettingsExportHelper::exportForbiddenCharacters: got illegal forbidden characters!" );
 
     if( !xForbChars.is() || !xLocales.is() )
         return;

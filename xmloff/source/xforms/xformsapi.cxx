@@ -90,7 +90,7 @@ void xforms_addXFormsModel(
     }
 
     // TODO: implement proper error handling
-    DBG_ASSERT( bSuccess, "can't import model" );
+    SAL_WARN_IF( !bSuccess, "xmloff", "can't import model" );
     (void)bSuccess;
 }
 
@@ -203,7 +203,7 @@ sal_uInt16 xforms_getTypeClass(
     if( nToken != XML_TOK_UNKNOWN )
     {
         // we found an XSD name: then get the proper API name for it
-        DBG_ASSERT( xRepository.is(), "can't find type without repository");
+        SAL_WARN_IF( !xRepository.is(), "xmloff", "can't find type without repository");
         switch( nToken )
         {
         case XML_STRING:
