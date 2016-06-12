@@ -65,8 +65,8 @@
             <menu:menuitem menu:id=".uno:Print"/>
             <menu:menuitem menu:id=".uno:PrinterSetup"/>
             <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:SetDocumentProperties"/>
             <menu:menuitem menu:id=".uno:Signature"/>
+            <menu:menuitem menu:id=".uno:SetDocumentProperties"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:Quit"/>
         </menu:menupopup>
@@ -81,7 +81,26 @@
             <menu:menuitem menu:id=".uno:Copy"/>
             <menu:menuitem menu:id=".uno:Paste"/>
             <menu:menuitem menu:id=".uno:PasteSpecial"/>
+            <menu:menu menu:id=".uno:PasteOnly">
+                <menu:menupopup>
+                    <menu:menuitem menu:id=".uno:PasteOnlyText"/>
+                    <menu:menuitem menu:id=".uno:PasteOnlyValue"/>
+                    <menu:menuitem menu:id=".uno:PasteOnlyFormula"/>
+                </menu:menupopup>
+            </menu:menu>
             <menu:menuitem menu:id=".uno:SelectAll"/>
+            <menu:menu menu:id=".uno:EditSelectMenu">
+                <menu:menupopup>
+                    <menu:menuitem menu:id=".uno:TableSelectAll"/>
+                    <menu:menuseparator/>
+                    <menu:menuitem menu:id=".uno:JumpToNextTableSel"/>
+                    <menu:menuitem menu:id=".uno:JumpToPrevTableSel"/>
+                    <menu:menuseparator/>
+                    <menu:menuitem menu:id=".uno:SelectRow"/>
+                    <menu:menuitem menu:id=".uno:SelectColumn"/>
+                    <menu:menuitem menu:id=".uno:SelectData"/>
+                </menu:menupopup>
+            </menu:menu>
             <menu:menuseparator/>
             <menu:menuitem menu:id="vnd.sun.star.findbar:FocusToFindbar"/>
             <menu:menuitem menu:id=".uno:SearchDialog"/>
@@ -89,16 +108,18 @@
             <menu:menu menu:id=".uno:ChangesMenu">
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:TraceChangeMode"/>
-                    <menu:menuitem menu:id=".uno:ProtectTraceChangeMode"/>
                     <menu:menuitem menu:id=".uno:ShowChanges"/>
                     <menu:menuseparator/>
                     <menu:menuitem menu:id=".uno:AcceptChanges"/>
+                    <menu:menuseparator/>
                     <menu:menuitem menu:id=".uno:CommentChange"/>
+                    <menu:menuitem menu:id=".uno:ProtectTraceChangeMode"/>
                 </menu:menupopup>
             </menu:menu>
             <menu:menuitem menu:id=".uno:CompareDocuments"/>
             <menu:menuitem menu:id=".uno:MergeDocuments"/>
             <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:SetInputMode"/>
             <menu:menuitem menu:id=".uno:EditLinks"/>
             <menu:menuitem menu:id=".uno:ImageMapDialog"/>
             <menu:menuitem menu:id=".uno:ObjectMenue"/>
@@ -119,6 +140,14 @@
             <menu:menuitem menu:id=".uno:ViewRowColumnHeaders"/>
             <menu:menuitem menu:id=".uno:ToggleSheetGrid"/>
             <menu:menuitem menu:id=".uno:ViewValueHighlighting"/>
+            <menu:menuitem menu:id=".uno:ToggleFormula"/>
+            <menu:menu menu:id=".uno:GridMenu">
+                <menu:menupopup>
+                    <menu:menuitem menu:id=".uno:GridVisible"/>
+                    <menu:menuitem menu:id=".uno:GridUse"/>
+                    <menu:menuitem menu:id=".uno:HelplinesMove"/>
+                </menu:menupopup>
+            </menu:menu>
             <menu:menuseparator/>
             <menu:menu menu:id=".uno:FreezeCellsMenu">
                 <menu:menupopup>
@@ -178,28 +207,28 @@
                 </menu:menupopup>
             </menu:menu>
             <menu:menu menu:id=".uno:ShapesMenu">
-              <menu:menupopup>
-                <menu:menuitem menu:id=".uno:Line"/>
-                <menu:menuitem menu:id=".uno:Freeline_Unfilled"/>
-                <menu:menuitem menu:id=".uno:BasicShapes.rectangle"/>
-                <menu:menuitem menu:id=".uno:BasicShapes.ellipse"/>
-                <menu:menuitem menu:id=".uno:Polygon_Unfilled"/>
-              </menu:menupopup>
+                <menu:menupopup>
+                    <menu:menu menu:id=".uno:ShapesLineMenu">
+                        <menu:menupopup>
+                            <menu:menuitem menu:id=".uno:Line"/>
+                            <menu:menuitem menu:id=".uno:Freeline_Unfilled"/>
+                            <menu:menuitem menu:id=".uno:Freeline"/>
+                            <menu:menuitem menu:id=".uno:Bezier_Unfilled"/>
+                            <menu:menuitem menu:id=".uno:BezierFill"/>
+                            <menu:menuitem menu:id=".uno:Polygon_Unfilled"/>
+                            <menu:menuitem menu:id=".uno:Polygon_Diagonal_Unfilled"/>
+                            <menu:menuitem menu:id=".uno:Polygon_Diagonal"/>
+                        </menu:menupopup>
+                    </menu:menu>
+                    <menu:menuitem menu:id=".uno:BasicShapes"/>
+                    <menu:menuitem menu:id=".uno:SymbolShapes"/>
+                </menu:menupopup>
             </menu:menu>
             <menu:menuitem menu:id=".uno:FontworkGalleryFloater"/>
             <menu:menuitem menu:id=".uno:DataDataPilotRun"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:FunctionDialog"/>
-            <menu:menu menu:id=".uno:NamesMenu">
-                <menu:menupopup>
-                    <menu:menuitem menu:id=".uno:AddName"/>
-                    <menu:menuitem menu:id=".uno:DefineName"/>
-                    <menu:menuitem menu:id=".uno:InsertName"/>
-                    <menu:menuseparator/>
-                    <menu:menuitem menu:id=".uno:CreateNames"/>
-                    <menu:menuitem menu:id=".uno:DefineLabelRange"/>
-                </menu:menupopup>
-            </menu:menu>
+            <menu:menuitem menu:id=".uno:InsertName"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:DrawText"/>
             <menu:menuitem menu:id=".uno:InsertAnnotation"/>
@@ -220,6 +249,8 @@
                 </menu:menupopup>
             </menu:menu>
             <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:InsertCurrentDate"/>
+            <menu:menuitem menu:id=".uno:InsertCurrentTime"/>
             <menu:menuitem menu:id=".uno:EditHeaderAndFooter"/>
         </menu:menupopup>
     </menu:menu>
@@ -244,18 +275,16 @@
                 <menu:menuseparator/>
                 <menu:menuitem menu:id=".uno:ChangeCaseToUpper"/>
                 <menu:menuitem menu:id=".uno:ChangeCaseToLower"/>
-                <menu:menu menu:id=".uno:TransliterateMenu">
-                  <menu:menupopup>
-                    <menu:menuitem menu:id=".uno:ChangeCaseToSentenceCase"/>
-                    <menu:menuitem menu:id=".uno:ChangeCaseToTitleCase"/>
-                    <menu:menuitem menu:id=".uno:ChangeCaseToToggleCase"/>
-                    <menu:menuseparator/>
-                    <menu:menuitem menu:id=".uno:ChangeCaseToHalfWidth"/>
-                    <menu:menuitem menu:id=".uno:ChangeCaseToFullWidth"/>
-                    <menu:menuitem menu:id=".uno:ChangeCaseToHiragana"/>
-                    <menu:menuitem menu:id=".uno:ChangeCaseToKatakana"/>
-                  </menu:menupopup>
-                </menu:menu>
+                <menu:menuitem menu:id=".uno:ChangeCaseRotateCase"/>
+                <menu:menuseparator/>
+                <menu:menuitem menu:id=".uno:ChangeCaseToSentenceCase"/>
+                <menu:menuitem menu:id=".uno:ChangeCaseToTitleCase"/>
+                <menu:menuitem menu:id=".uno:ChangeCaseToToggleCase"/>
+                <menu:menuseparator/>
+                <menu:menuitem menu:id=".uno:ChangeCaseToHalfWidth"/>
+                <menu:menuitem menu:id=".uno:ChangeCaseToFullWidth"/>
+                <menu:menuitem menu:id=".uno:ChangeCaseToHiragana"/>
+                <menu:menuitem menu:id=".uno:ChangeCaseToKatakana"/>
               </menu:menupopup>
             </menu:menu>
             <menu:menu menu:id=".uno:FormatSpacingMenu">
@@ -303,6 +332,7 @@
                     <menu:menuitem menu:id=".uno:DesignerDialog"/>
                 </menu:menupopup>
             </menu:menu>
+            <menu:menuitem menu:id=".uno:FormatPaintbrush"/>
             <menu:menuitem menu:id=".uno:ResetAttributes"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:FormatCellDialog"/>
@@ -353,6 +383,11 @@
                     <menu:menuitem menu:id=".uno:ChangePicture"/>
                     <menu:menuitem menu:id=".uno:CompressGraphic"/>
                     <menu:menuitem menu:id=".uno:SaveGraphic"/>
+                </menu:menupopup>
+            </menu:menu>
+            <menu:menu menu:id=".uno:ChartMenu">
+                <menu:menupopup>
+                    <menu:menuitem menu:id=".uno:ExportAsGraphic"/>
                 </menu:menupopup>
             </menu:menu>
             <menu:menu menu:id=".uno:ObjectMenu">
@@ -433,6 +468,7 @@
             </menu:menu>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:Insert"/>
+            <menu:menuitem menu:id=".uno:Add"/>
             <menu:menuitem menu:id=".uno:InsertSheetFromFile"/>
             <menu:menuitem menu:id=".uno:InsertExternalDataSource"/>
             <menu:menuitem menu:id=".uno:Remove"/>
@@ -446,6 +482,15 @@
                     <menu:menuitem menu:id=".uno:FillTable"/>
                     <menu:menuitem menu:id=".uno:FillSeries"/>
                     <menu:menuitem menu:id=".uno:RandomNumberGeneratorDialog"/>
+                </menu:menupopup>
+            </menu:menu>
+            <menu:menu menu:id=".uno:NamesMenu">
+                <menu:menupopup>
+                    <menu:menuitem menu:id=".uno:AddName"/>
+                    <menu:menuitem menu:id=".uno:DefineName"/>
+                    <menu:menuseparator/>
+                    <menu:menuitem menu:id=".uno:CreateNames"/>
+                    <menu:menuitem menu:id=".uno:DefineLabelRange"/>
                 </menu:menupopup>
             </menu:menu>
             <menu:menuitem menu:id=".uno:ToggleRelative"/>
@@ -464,9 +509,11 @@
             <menu:menuitem menu:id=".uno:Hide"/>
             <menu:menuitem menu:id=".uno:Show"/>
             <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:JumpToPrevTable"/>
+            <menu:menuitem menu:id=".uno:JumpToNextTable"/>
             <menu:menuitem menu:id=".uno:SelectTables"/>
-            <menu:menuitem menu:id=".uno:SetTabBgColor"/>
             <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:SetTabBgColor"/>
             <menu:menuitem menu:id=".uno:TableEvents"/>
             <menu:menuitem menu:id=".uno:SheetRightToLeft"/>
         </menu:menupopup>
@@ -594,9 +641,10 @@
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:MacroRecorder"/>
                     <menu:menuitem menu:id=".uno:RunMacro"/>
+                    <menu:menuitem menu:id=".uno:BasicIDEAppear"/>
                     <menu:menu menu:id=".uno:ScriptOrganizer"/>
-                    <menu:menuitem menu:id=".uno:MacroSignature"/>
                     <menu:menuseparator/>
+                    <menu:menuitem menu:id=".uno:MacroSignature"/>
                     <menu:menuitem menu:id=".uno:MacroOrganizer?TabId:short=1"/>
                 </menu:menupopup>
             </menu:menu>
